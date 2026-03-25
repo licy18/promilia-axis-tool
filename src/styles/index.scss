@@ -1,0 +1,264 @@
+// 导入样式重置文件
+@import './reset.scss';
+// 导入主题样式
+@import './theme.scss';
+
+// 全局变量
+:root {
+  // 颜色变量
+  --primary-color: #409eff;
+  --success-color: #67c23a;
+  --warning-color: #e6a23c;
+  --danger-color: #f56c6c;
+  --info-color: #909399;
+
+  // 背景颜色
+  --bg-color: #121212;
+  --bg-color-light: #1e1e1e;
+  --bg-color-lighter: #2a2a2a;
+
+  // 文本颜色
+  --text-color: #ffffff;
+  --text-color-secondary: #a0a0a0;
+  --text-color-disabled: #666666;
+
+  // 边框颜色
+  --border-color: #333333;
+  --border-color-light: #444444;
+
+  // 阴影
+  --box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.5);
+
+  // 圆角
+  --border-radius: 4px;
+
+  // 字体
+  --font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+
+  // 过渡
+  --transition: all 0.3s ease;
+}
+
+// 全局样式
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// 链接样式
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: var(--transition);
+
+  &:hover {
+    color: #66b1ff;
+  }
+}
+
+// 按钮基础样式
+.btn {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+
+  &.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+
+    &:hover {
+      background-color: #66b1ff;
+      border-color: #66b1ff;
+    }
+  }
+
+  &.btn-success {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+    color: #ffffff;
+
+    &:hover {
+      background-color: #85ce61;
+      border-color: #85ce61;
+    }
+  }
+
+  &.btn-warning {
+    background-color: var(--warning-color);
+    border-color: var(--warning-color);
+    color: #ffffff;
+
+    &:hover {
+      background-color: #ebb563;
+      border-color: #ebb563;
+    }
+  }
+
+  &.btn-danger {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+    color: #ffffff;
+
+    &:hover {
+      background-color: #f78989;
+      border-color: #f78989;
+    }
+  }
+
+  &.btn-info {
+    background-color: var(--info-color);
+    border-color: var(--info-color);
+    color: #ffffff;
+
+    &:hover {
+      background-color: #a6a9ad;
+      border-color: #a6a9ad;
+    }
+  }
+}
+
+// 容器样式
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+// 卡片样式
+.card {
+  background-color: var(--bg-color-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+// 标题样式
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 16px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+h1 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+// 段落样式
+p {
+  margin-bottom: 16px;
+  color: var(--text-color-secondary);
+}
+
+// 表单样式
+.form-group {
+  margin-bottom: 16px;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-color);
+    background-color: var(--bg-color-lighter);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+
+    &:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+}
+
+// 加载动画
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 0.8s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .container {
+    padding: 0 10px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  h3 {
+    font-size: 14px;
+  }
+}

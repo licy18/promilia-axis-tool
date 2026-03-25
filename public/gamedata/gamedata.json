@@ -1,0 +1,1729 @@
+{
+  "version": "1.0.0",
+  "gameVersion": "最新适配游戏版本",
+  "updateTime": "2026-03-25",
+  "characters": [
+    {
+      "id": "character_moyin",
+      "name": "末音",
+      "element": "lightning",
+      "weapon": "sword",
+      "rarity": 5,
+      "position": "主C",
+      "stats": {
+        "attack": 1200,
+        "defense": 450,
+        "hp": 9500,
+        "speed": 105,
+        "criticalRate": 0.05,
+        "criticalDamage": 0.5,
+        "elementalMastery": 120,
+        "elementalBonuses": {
+          "lightning": 0.25,
+          "physical": 0.1
+        }
+      },
+      "skills": [
+        {
+          "id": "skill_moyin_1",
+          "name": "普通攻击·雷光剑",
+          "type": "normal",
+          "element": "physical",
+          "damageMultiplier": [0.5, 0.6, 0.7, 0.8],
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.2,
+          "frames": {
+            "start": 0,
+            "end": 72,
+            "recovery": 18
+          },
+          "energyGain": 2,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_moyin_2",
+          "name": "重击·雷暴斩",
+          "type": "charge",
+          "element": "lightning",
+          "damageMultiplier": 2.5,
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.5,
+          "frames": {
+            "start": 0,
+            "end": 90,
+            "recovery": 24
+          },
+          "energyGain": 5,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_moyin_3",
+          "name": "星鸣技·雷光闪",
+          "type": "skill",
+          "element": "lightning",
+          "damageMultiplier": 2.52,
+          "cooldown": 12,
+          "energyCost": 0,
+          "animationTime": 1.8,
+          "frames": {
+            "start": 0,
+            "end": 108,
+            "recovery": 30
+          },
+          "energyGain": 10,
+          "snapshot": "start",
+          "level": 1,
+          "maxLevel": 10,
+          "chargeCount": 2,
+          "multiHit": [
+            {
+              "multiplier": 2.52,
+              "element": "lightning",
+              "hitType": "physical"
+            }
+          ],
+          "marks": {
+            "add": [],
+            "consume": []
+          },
+          "conditionalDamage": [
+            {
+              "condition": "enemyHasMarks",
+              "element": "lightning",
+              "minCount": 2,
+              "multiplier": 0.4,
+              "hitType": "physical"
+            }
+          ],
+          "buffs": [
+            {
+              "condition": "enemyHasMarks",
+              "element": "wind",
+              "minCount": 2,
+              "buff": {
+                "name": "暴击率提升",
+                "type": "criticalRate",
+                "value": 0.03,
+                "duration": 8
+              }
+            }
+          ],
+          "followUp": {
+            "trigger": "pressAttack",
+            "damage": {
+              "multiplier": 3.28,
+              "element": "lightning",
+              "hitType": "physical"
+            },
+            "buff": {
+              "name": "璀璨",
+              "type": "special",
+              "value": 1,
+              "duration": 8
+            },
+            "canCombo": true
+          },
+          "judgmentPoints": [
+            {
+              "time": 30,
+              "multiplier": 2.52,
+              "element": "lightning",
+              "hitType": "physical",
+              "description": "第一段伤害"
+            }
+          ],
+          "timing": {
+            "cooldown": 12,
+            "buffs": [
+              {
+                "name": "璀璨",
+                "duration": 8,
+                "startTime": 0
+              }
+            ]
+          },
+          "statusEffects": [
+            {
+              "type": "mark",
+              "element": "lightning",
+              "count": 2,
+              "duration": 10,
+              "operation": "add"
+            }
+          ]
+        },
+        {
+          "id": "skill_moyin_4",
+          "name": "星决技·雷狱降临",
+          "type": "ultimate",
+          "element": "lightning",
+          "damageMultiplier": 6.0,
+          "cooldown": 25,
+          "energyCost": 80,
+          "animationTime": 2.5,
+          "frames": {
+            "start": 0,
+            "end": 150,
+            "recovery": 36
+          },
+          "energyGain": 0,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_moyin_5",
+          "name": "星携技·雷影连斩",
+          "type": "combo",
+          "element": "lightning",
+          "damageMultiplier": 4.5,
+          "cooldown": 18,
+          "energyCost": 0,
+          "animationTime": 2.2,
+          "frames": {
+            "start": 0,
+            "end": 132,
+            "recovery": 30
+          },
+          "energyGain": 12,
+          "snapshot": "start"
+        }
+      ],
+      "passives": [
+        {
+          "id": "passive_moyin_1",
+          "name": "雷之共鸣",
+          "description": "普通攻击命中后，增加15%雷元素伤害，持续6秒"
+        },
+        {
+          "id": "passive_moyin_2",
+          "name": "雷光增幅",
+          "description": "星决技命中后，回复25点能量"
+        },
+        {
+          "id": "passive_moyin_3",
+          "name": "雷狱之主",
+          "description": "雷元素伤害提高20%"
+        }
+      ],
+      "exclusiveResource": {
+        "name": "雷光能量",
+        "max": 100,
+        "initial": 0
+      },
+      "avatar": "/avatars/default.webp",
+      "icon": "/icons/default_icon.webp"
+    },
+    {
+      "id": "character_luoqing",
+      "name": "洛卿",
+      "element": "water",
+      "weapon": "staff",
+      "rarity": 5,
+      "position": "辅助",
+      "stats": {
+        "attack": 800,
+        "defense": 600,
+        "hp": 12000,
+        "speed": 100,
+        "criticalRate": 0.05,
+        "criticalDamage": 0.5,
+        "elementalMastery": 150,
+        "elementalBonuses": {
+          "water": 0.2,
+          "physical": 0.1
+        }
+      },
+      "skills": [
+        {
+          "id": "skill_luoqing_1",
+          "name": "普通攻击·水之触",
+          "type": "normal",
+          "element": "physical",
+          "damageMultiplier": [0.4, 0.5, 0.6],
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.0,
+          "frames": {
+            "start": 0,
+            "end": 60,
+            "recovery": 15
+          },
+          "energyGain": 2,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_luoqing_2",
+          "name": "重击·水之涌",
+          "type": "charge",
+          "element": "water",
+          "damageMultiplier": 1.8,
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.3,
+          "frames": {
+            "start": 0,
+            "end": 78,
+            "recovery": 20
+          },
+          "energyGain": 4,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_luoqing_3",
+          "name": "星鸣技·水之守护",
+          "type": "skill",
+          "element": "water",
+          "damageMultiplier": 2.0,
+          "cooldown": 10,
+          "energyCost": 0,
+          "animationTime": 1.6,
+          "frames": {
+            "start": 0,
+            "end": 96,
+            "recovery": 25
+          },
+          "energyGain": 8,
+          "snapshot": "start",
+          "buff": {
+            "name": "水之守护",
+            "type": "defense",
+            "value": 0.2,
+            "duration": 10
+          }
+        },
+        {
+          "id": "skill_luoqing_4",
+          "name": "星决技·水之祝福",
+          "type": "ultimate",
+          "element": "water",
+          "damageMultiplier": 4.0,
+          "cooldown": 20,
+          "energyCost": 70,
+          "animationTime": 2.0,
+          "frames": {
+            "start": 0,
+            "end": 120,
+            "recovery": 30
+          },
+          "energyGain": 0,
+          "snapshot": "start",
+          "buff": {
+            "name": "水之祝福",
+            "type": "attack",
+            "value": 0.25,
+            "duration": 12
+          }
+        },
+        {
+          "id": "skill_luoqing_5",
+          "name": "星携技·水之涟漪",
+          "type": "combo",
+          "element": "water",
+          "damageMultiplier": 3.0,
+          "cooldown": 15,
+          "energyCost": 0,
+          "animationTime": 1.9,
+          "frames": {
+            "start": 0,
+            "end": 114,
+            "recovery": 28
+          },
+          "energyGain": 10,
+          "snapshot": "start"
+        }
+      ],
+      "passives": [
+        {
+          "id": "passive_luoqing_1",
+          "name": "水之亲和",
+          "description": "普通攻击命中后，为队友回复2%最大生命值"
+        },
+        {
+          "id": "passive_luoqing_2",
+          "name": "水之祝福",
+          "description": "星决技命中后，为队友增加20%攻击速度，持续8秒"
+        },
+        {
+          "id": "passive_luoqing_3",
+          "name": "水之守护",
+          "description": "水元素伤害提高15%，治疗效果提高10%"
+        }
+      ],
+      "exclusiveResource": {
+        "name": "水之能量",
+        "max": 100,
+        "initial": 0
+      },
+      "avatar": "/avatars/default.webp",
+      "icon": "/icons/default_icon.webp"
+    },
+    {
+      "id": "character_genchiyo",
+      "name": "源千代",
+      "element": "fire",
+      "weapon": "bow",
+      "rarity": 5,
+      "position": "副C",
+      "stats": {
+        "attack": 1000,
+        "defense": 500,
+        "hp": 10000,
+        "speed": 102,
+        "criticalRate": 0.05,
+        "criticalDamage": 0.5,
+        "elementalMastery": 130,
+        "elementalBonuses": {
+          "fire": 0.22,
+          "physical": 0.1
+        }
+      },
+      "skills": [
+        {
+          "id": "skill_genchiyo_1",
+          "name": "普通攻击·火矢",
+          "type": "normal",
+          "element": "physical",
+          "damageMultiplier": [0.5, 0.55, 0.6, 0.65],
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.1,
+          "frames": {
+            "start": 0,
+            "end": 66,
+            "recovery": 16
+          },
+          "energyGain": 2,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_genchiyo_2",
+          "name": "重击·爆炎箭",
+          "type": "charge",
+          "element": "fire",
+          "damageMultiplier": 2.2,
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.4,
+          "frames": {
+            "start": 0,
+            "end": 84,
+            "recovery": 22
+          },
+          "energyGain": 5,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_genchiyo_3",
+          "name": "星鸣技·火焰箭雨",
+          "type": "skill",
+          "element": "fire",
+          "damageMultiplier": 3.2,
+          "cooldown": 11,
+          "energyCost": 0,
+          "animationTime": 1.7,
+          "frames": {
+            "start": 0,
+            "end": 102,
+            "recovery": 28
+          },
+          "energyGain": 9,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_genchiyo_4",
+          "name": "星决技·炎狱爆发",
+          "type": "ultimate",
+          "element": "fire",
+          "damageMultiplier": 5.5,
+          "cooldown": 22,
+          "energyCost": 75,
+          "animationTime": 2.3,
+          "frames": {
+            "start": 0,
+            "end": 138,
+            "recovery": 32
+          },
+          "energyGain": 0,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_genchiyo_5",
+          "name": "星携技·烈焰穿刺",
+          "type": "combo",
+          "element": "fire",
+          "damageMultiplier": 4.0,
+          "cooldown": 16,
+          "energyCost": 0,
+          "animationTime": 2.0,
+          "frames": {
+            "start": 0,
+            "end": 120,
+            "recovery": 26
+          },
+          "energyGain": 11,
+          "snapshot": "start"
+        }
+      ],
+      "passives": [
+        {
+          "id": "passive_genchiyo_1",
+          "name": "火之热情",
+          "description": "普通攻击命中后，增加12%火元素伤害，持续5秒"
+        },
+        {
+          "id": "passive_genchiyo_2",
+          "name": "炎狱增幅",
+          "description": "星决技命中后，为自身增加20%暴击率，持续8秒"
+        },
+        {
+          "id": "passive_genchiyo_3",
+          "name": "火焰大师",
+          "description": "火元素伤害提高18%"
+        }
+      ],
+      "exclusiveResource": {
+        "name": "火焰能量",
+        "max": 100,
+        "initial": 0
+      },
+      "avatar": "/avatars/default.webp",
+      "icon": "/icons/default_icon.webp"
+    },
+    {
+      "id": "character_yunjin",
+      "name": "云堇",
+      "element": "wind",
+      "weapon": "polearm",
+      "rarity": 4,
+      "position": "辅助",
+      "stats": {
+        "attack": 750,
+        "defense": 650,
+        "hp": 11000,
+        "speed": 101,
+        "criticalRate": 0.05,
+        "criticalDamage": 0.5,
+        "elementalMastery": 140,
+        "elementalBonuses": {
+          "wind": 0.18,
+          "physical": 0.1
+        }
+      },
+      "skills": [
+        {
+          "id": "skill_yunjin_1",
+          "name": "普通攻击·枪舞",
+          "type": "normal",
+          "element": "physical",
+          "damageMultiplier": [0.45, 0.5, 0.55, 0.6],
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.1,
+          "frames": {
+            "start": 0,
+            "end": 66,
+            "recovery": 15
+          },
+          "energyGain": 2,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_yunjin_2",
+          "name": "重击·枪挑",
+          "type": "charge",
+          "element": "physical",
+          "damageMultiplier": 1.9,
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.4,
+          "frames": {
+            "start": 0,
+            "end": 84,
+            "recovery": 20
+          },
+          "energyGain": 4,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_yunjin_3",
+          "name": "星鸣技·飞云旗阵",
+          "type": "skill",
+          "element": "wind",
+          "damageMultiplier": 2.2,
+          "cooldown": 12,
+          "energyCost": 0,
+          "animationTime": 1.7,
+          "frames": {
+            "start": 0,
+            "end": 102,
+            "recovery": 28
+          },
+          "energyGain": 8,
+          "snapshot": "start",
+          "buff": {
+            "name": "飞云旗阵",
+            "type": "attack",
+            "value": 0.2,
+            "duration": 12
+          }
+        },
+        {
+          "id": "skill_yunjin_4",
+          "name": "星决技·破云见日",
+          "type": "ultimate",
+          "element": "wind",
+          "damageMultiplier": 4.5,
+          "cooldown": 18,
+          "energyCost": 60,
+          "animationTime": 2.0,
+          "frames": {
+            "start": 0,
+            "end": 120,
+            "recovery": 30
+          },
+          "energyGain": 0,
+          "snapshot": "start",
+          "buff": {
+            "name": "破云见日",
+            "type": "physicalDamage",
+            "value": 0.3,
+            "duration": 15
+          }
+        },
+        {
+          "id": "skill_yunjin_5",
+          "name": "星携技·枪影如风",
+          "type": "combo",
+          "element": "wind",
+          "damageMultiplier": 3.5,
+          "cooldown": 14,
+          "energyCost": 0,
+          "animationTime": 1.9,
+          "frames": {
+            "start": 0,
+            "end": 114,
+            "recovery": 26
+          },
+          "energyGain": 10,
+          "snapshot": "start"
+        }
+      ],
+      "passives": [
+        {
+          "id": "passive_yunjin_1",
+          "name": "风之舞",
+          "description": "普通攻击命中后，为队友增加10%攻击速度，持续4秒"
+        },
+        {
+          "id": "passive_yunjin_2",
+          "name": "旗阵增幅",
+          "description": "星鸣技命中后，为队友增加15%物理伤害，持续8秒"
+        },
+        {
+          "id": "passive_yunjin_3",
+          "name": "风之守护",
+          "description": "风元素伤害提高12%，防御提高10%"
+        }
+      ],
+      "exclusiveResource": {
+        "name": "旗阵能量",
+        "max": 100,
+        "initial": 0
+      },
+      "avatar": "/avatars/default.webp",
+      "icon": "/icons/default_icon.webp"
+    },
+    {
+      "id": "character_zhongli",
+      "name": "钟离",
+      "element": "earth",
+      "weapon": "polearm",
+      "rarity": 5,
+      "position": "辅助",
+      "stats": {
+        "attack": 900,
+        "defense": 800,
+        "hp": 15000,
+        "speed": 98,
+        "criticalRate": 0.05,
+        "criticalDamage": 0.5,
+        "elementalMastery": 100,
+        "elementalBonuses": {
+          "earth": 0.2,
+          "physical": 0.1
+        }
+      },
+      "skills": [
+        {
+          "id": "skill_zhongli_1",
+          "name": "普通攻击·岩雨",
+          "type": "normal",
+          "element": "physical",
+          "damageMultiplier": [0.5, 0.55, 0.6, 0.65, 0.7],
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.2,
+          "frames": {
+            "start": 0,
+            "end": 72,
+            "recovery": 16
+          },
+          "energyGain": 2,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_zhongli_2",
+          "name": "重击·岩坠",
+          "type": "charge",
+          "element": "earth",
+          "damageMultiplier": 2.3,
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.5,
+          "frames": {
+            "start": 0,
+            "end": 90,
+            "recovery": 22
+          },
+          "energyGain": 5,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_zhongli_3",
+          "name": "星鸣技·地心",
+          "type": "skill",
+          "element": "earth",
+          "damageMultiplier": 2.5,
+          "cooldown": 12,
+          "energyCost": 0,
+          "animationTime": 1.8,
+          "frames": {
+            "start": 0,
+            "end": 108,
+            "recovery": 30
+          },
+          "energyGain": 9,
+          "snapshot": "start",
+          "buff": {
+            "name": "地心护盾",
+            "type": "defense",
+            "value": 0.3,
+            "duration": 15
+          }
+        },
+        {
+          "id": "skill_zhongli_4",
+          "name": "星决技·天星",
+          "type": "ultimate",
+          "element": "earth",
+          "damageMultiplier": 5.0,
+          "cooldown": 20,
+          "energyCost": 70,
+          "animationTime": 2.2,
+          "frames": {
+            "start": 0,
+            "end": 132,
+            "recovery": 32
+          },
+          "energyGain": 0,
+          "snapshot": "start",
+          "debuff": {
+            "name": "岩元素减抗",
+            "type": "resistanceReduction",
+            "value": 0.2,
+            "duration": 10
+          }
+        },
+        {
+          "id": "skill_zhongli_5",
+          "name": "星携技·岩潮",
+          "type": "combo",
+          "element": "earth",
+          "damageMultiplier": 4.0,
+          "cooldown": 16,
+          "energyCost": 0,
+          "animationTime": 2.0,
+          "frames": {
+            "start": 0,
+            "end": 120,
+            "recovery": 28
+          },
+          "energyGain": 11,
+          "snapshot": "start"
+        }
+      ],
+      "passives": [
+        {
+          "id": "passive_zhongli_1",
+          "name": "岩之共鸣",
+          "description": "普通攻击命中后，为自身增加10%防御，持续6秒"
+        },
+        {
+          "id": "passive_zhongli_2",
+          "name": "天星增幅",
+          "description": "星决技命中后，为队友增加15%元素伤害，持续10秒"
+        },
+        {
+          "id": "passive_zhongli_3",
+          "name": "岩王帝君",
+          "description": "岩元素伤害提高20%，护盾效果提高25%"
+        }
+      ],
+      "exclusiveResource": {
+        "name": "岩之能量",
+        "max": 100,
+        "initial": 0
+      },
+      "avatar": "/avatars/default.webp",
+      "icon": "/icons/default_icon.webp"
+    },
+    {
+      "id": "character_ganyu",
+      "name": "甘雨",
+      "element": "ice",
+      "weapon": "bow",
+      "rarity": 5,
+      "position": "主C",
+      "stats": {
+        "attack": 1100,
+        "defense": 400,
+        "hp": 9000,
+        "speed": 100,
+        "criticalRate": 0.05,
+        "criticalDamage": 0.5,
+        "elementalMastery": 130,
+        "elementalBonuses": {
+          "ice": 0.25,
+          "physical": 0.1
+        }
+      },
+      "skills": [
+        {
+          "id": "skill_ganyu_1",
+          "name": "普通攻击·弓术",
+          "type": "normal",
+          "element": "physical",
+          "damageMultiplier": [0.5, 0.55, 0.6, 0.65, 0.7],
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.1,
+          "frames": {
+            "start": 0,
+            "end": 66,
+            "recovery": 15
+          },
+          "energyGain": 2,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_ganyu_2",
+          "name": "重击·霜华矢",
+          "type": "charge",
+          "element": "ice",
+          "damageMultiplier": 2.8,
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.6,
+          "frames": {
+            "start": 0,
+            "end": 96,
+            "recovery": 24
+          },
+          "energyGain": 6,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_ganyu_3",
+          "name": "星鸣技·冰莲",
+          "type": "skill",
+          "element": "ice",
+          "damageMultiplier": 3.0,
+          "cooldown": 10,
+          "energyCost": 0,
+          "animationTime": 1.5,
+          "frames": {
+            "start": 0,
+            "end": 90,
+            "recovery": 25
+          },
+          "energyGain": 8,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_ganyu_4",
+          "name": "星决技·莫问红尘",
+          "type": "ultimate",
+          "element": "ice",
+          "damageMultiplier": 6.5,
+          "cooldown": 25,
+          "energyCost": 80,
+          "animationTime": 2.5,
+          "frames": {
+            "start": 0,
+            "end": 150,
+            "recovery": 36
+          },
+          "energyGain": 0,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_ganyu_5",
+          "name": "星携技·霜寒箭",
+          "type": "combo",
+          "element": "ice",
+          "damageMultiplier": 4.8,
+          "cooldown": 18,
+          "energyCost": 0,
+          "animationTime": 2.2,
+          "frames": {
+            "start": 0,
+            "end": 132,
+            "recovery": 30
+          },
+          "energyGain": 12,
+          "snapshot": "start"
+        }
+      ],
+      "passives": [
+        {
+          "id": "passive_ganyu_1",
+          "name": "冰之共鸣",
+          "description": "普通攻击命中后，增加15%冰元素伤害，持续6秒"
+        },
+        {
+          "id": "passive_ganyu_2",
+          "name": "霜华增幅",
+          "description": "星决技命中后，为自身增加20%暴击率，持续8秒"
+        },
+        {
+          "id": "passive_ganyu_3",
+          "name": "冰神之眼",
+          "description": "冰元素伤害提高20%，暴击伤害提高15%"
+        }
+      ],
+      "exclusiveResource": {
+        "name": "冰之能量",
+        "max": 100,
+        "initial": 0
+      },
+      "avatar": "/avatars/default.webp",
+      "icon": "/icons/default_icon.webp"
+    },
+    {
+      "id": "character_raiden",
+      "name": "雷电将军",
+      "element": "lightning",
+      "weapon": "polearm",
+      "rarity": 5,
+      "position": "主C",
+      "stats": {
+        "attack": 1150,
+        "defense": 480,
+        "hp": 10000,
+        "speed": 103,
+        "criticalRate": 0.05,
+        "criticalDamage": 0.5,
+        "elementalMastery": 125,
+        "elementalBonuses": {
+          "lightning": 0.28,
+          "physical": 0.1
+        }
+      },
+      "skills": [
+        {
+          "id": "skill_raiden_1",
+          "name": "普通攻击·神变·恶曜开眼",
+          "type": "normal",
+          "element": "physical",
+          "damageMultiplier": [0.5, 0.55, 0.6, 0.65, 0.7],
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.2,
+          "frames": {
+            "start": 0,
+            "end": 72,
+            "recovery": 16
+          },
+          "energyGain": 2,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_raiden_2",
+          "name": "重击·神变·恶曜开眼",
+          "type": "charge",
+          "element": "lightning",
+          "damageMultiplier": 2.6,
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.5,
+          "frames": {
+            "start": 0,
+            "end": 90,
+            "recovery": 24
+          },
+          "energyGain": 5,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_raiden_3",
+          "name": "星鸣技·神变·恶曜开眼",
+          "type": "skill",
+          "element": "lightning",
+          "damageMultiplier": 3.8,
+          "cooldown": 12,
+          "energyCost": 0,
+          "animationTime": 1.8,
+          "frames": {
+            "start": 0,
+            "end": 108,
+            "recovery": 30
+          },
+          "energyGain": 10,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_raiden_4",
+          "name": "星决技·愿力",
+          "type": "ultimate",
+          "element": "lightning",
+          "damageMultiplier": 7.0,
+          "cooldown": 28,
+          "energyCost": 90,
+          "animationTime": 2.8,
+          "frames": {
+            "start": 0,
+            "end": 168,
+            "recovery": 38
+          },
+          "energyGain": 0,
+          "snapshot": "start",
+          "buff": {
+            "name": "愿力增幅",
+            "type": "attack",
+            "value": 0.3,
+            "duration": 15
+          }
+        },
+        {
+          "id": "skill_raiden_5",
+          "name": "星携技·雷罚恶曜",
+          "type": "combo",
+          "element": "lightning",
+          "damageMultiplier": 5.0,
+          "cooldown": 20,
+          "energyCost": 0,
+          "animationTime": 2.3,
+          "frames": {
+            "start": 0,
+            "end": 138,
+            "recovery": 32
+          },
+          "energyGain": 13,
+          "snapshot": "start"
+        }
+      ],
+      "passives": [
+        {
+          "id": "passive_raiden_1",
+          "name": "雷之共鸣",
+          "description": "普通攻击命中后，增加15%雷元素伤害，持续6秒"
+        },
+        {
+          "id": "passive_raiden_2",
+          "name": "愿力增幅",
+          "description": "星决技命中后，为队友回复30点能量"
+        },
+        {
+          "id": "passive_raiden_3",
+          "name": "雷电将军",
+          "description": "雷元素伤害提高25%，能量恢复速度提高20%"
+        }
+      ],
+      "exclusiveResource": {
+        "name": "愿力",
+        "max": 100,
+        "initial": 0
+      },
+      "avatar": "/avatars/default.webp",
+      "icon": "/icons/default_icon.webp"
+    },
+    {
+      "id": "character_venti",
+      "name": "温迪",
+      "element": "wind",
+      "weapon": "bow",
+      "rarity": 5,
+      "position": "辅助",
+      "stats": {
+        "attack": 850,
+        "defense": 420,
+        "hp": 8500,
+        "speed": 104,
+        "criticalRate": 0.05,
+        "criticalDamage": 0.5,
+        "elementalMastery": 160,
+        "elementalBonuses": {
+          "wind": 0.22,
+          "physical": 0.1
+        }
+      },
+      "skills": [
+        {
+          "id": "skill_venti_1",
+          "name": "普通攻击·神代射术",
+          "type": "normal",
+          "element": "physical",
+          "damageMultiplier": [0.45, 0.5, 0.55, 0.6],
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.1,
+          "frames": {
+            "start": 0,
+            "end": 66,
+            "recovery": 15
+          },
+          "energyGain": 2,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_venti_2",
+          "name": "重击·神代射术",
+          "type": "charge",
+          "element": "wind",
+          "damageMultiplier": 2.0,
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.4,
+          "frames": {
+            "start": 0,
+            "end": 84,
+            "recovery": 20
+          },
+          "energyGain": 4,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_venti_3",
+          "name": "星鸣技·高天之歌",
+          "type": "skill",
+          "element": "wind",
+          "damageMultiplier": 2.5,
+          "cooldown": 8,
+          "energyCost": 0,
+          "animationTime": 1.5,
+          "frames": {
+            "start": 0,
+            "end": 90,
+            "recovery": 22
+          },
+          "energyGain": 7,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_venti_4",
+          "name": "星决技·风神之诗",
+          "type": "ultimate",
+          "element": "wind",
+          "damageMultiplier": 4.2,
+          "cooldown": 15,
+          "energyCost": 60,
+          "animationTime": 2.0,
+          "frames": {
+            "start": 0,
+            "end": 120,
+            "recovery": 28
+          },
+          "energyGain": 0,
+          "snapshot": "start",
+          "debuff": {
+            "name": "风元素减抗",
+            "type": "resistanceReduction",
+            "value": 0.15,
+            "duration": 10
+          }
+        },
+        {
+          "id": "skill_venti_5",
+          "name": "星携技·风之诗",
+          "type": "combo",
+          "element": "wind",
+          "damageMultiplier": 3.2,
+          "cooldown": 12,
+          "energyCost": 0,
+          "animationTime": 1.8,
+          "frames": {
+            "start": 0,
+            "end": 108,
+            "recovery": 26
+          },
+          "energyGain": 9,
+          "snapshot": "start"
+        }
+      ],
+      "passives": [
+        {
+          "id": "passive_venti_1",
+          "name": "风之共鸣",
+          "description": "普通攻击命中后，为队友增加10%元素伤害，持续4秒"
+        },
+        {
+          "id": "passive_venti_2",
+          "name": "风神祝福",
+          "description": "星决技命中后，为队友增加15%攻击速度，持续8秒"
+        },
+        {
+          "id": "passive_venti_3",
+          "name": "风之引导",
+          "description": "风元素伤害提高18%，元素充能效率提高20%"
+        }
+      ],
+      "exclusiveResource": {
+        "name": "风之能量",
+        "max": 100,
+        "initial": 0
+      },
+      "avatar": "/avatars/default.webp",
+      "icon": "/icons/default_icon.webp"
+    },
+    {
+      "id": "character_klee",
+      "name": "可莉",
+      "element": "fire",
+      "weapon": "catalyst",
+      "rarity": 5,
+      "position": "主C",
+      "stats": {
+        "attack": 1050,
+        "defense": 400,
+        "hp": 8000,
+        "speed": 100,
+        "criticalRate": 0.05,
+        "criticalDamage": 0.5,
+        "elementalMastery": 140,
+        "elementalBonuses": {
+          "fire": 0.25,
+          "physical": 0.1
+        }
+      },
+      "skills": [
+        {
+          "id": "skill_klee_1",
+          "name": "普通攻击·砰砰砰",
+          "type": "normal",
+          "element": "fire",
+          "damageMultiplier": [0.5, 0.55, 0.6, 0.65],
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.2,
+          "frames": {
+            "start": 0,
+            "end": 72,
+            "recovery": 16
+          },
+          "energyGain": 2,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_klee_2",
+          "name": "重击·轰轰轰",
+          "type": "charge",
+          "element": "fire",
+          "damageMultiplier": 2.3,
+          "cooldown": 0,
+          "energyCost": 0,
+          "animationTime": 1.5,
+          "frames": {
+            "start": 0,
+            "end": 90,
+            "recovery": 22
+          },
+          "energyGain": 5,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_klee_3",
+          "name": "星鸣技·蹦蹦炸弹",
+          "type": "skill",
+          "element": "fire",
+          "damageMultiplier": 3.0,
+          "cooldown": 10,
+          "energyCost": 0,
+          "animationTime": 1.6,
+          "frames": {
+            "start": 0,
+            "end": 96,
+            "recovery": 25
+          },
+          "energyGain": 8,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_klee_4",
+          "name": "星决技·轰轰火花",
+          "type": "ultimate",
+          "element": "fire",
+          "damageMultiplier": 5.8,
+          "cooldown": 20,
+          "energyCost": 70,
+          "animationTime": 2.2,
+          "frames": {
+            "start": 0,
+            "end": 132,
+            "recovery": 30
+          },
+          "energyGain": 0,
+          "snapshot": "start"
+        },
+        {
+          "id": "skill_klee_5",
+          "name": "星携技·大爆发",
+          "type": "combo",
+          "element": "fire",
+          "damageMultiplier": 4.5,
+          "cooldown": 16,
+          "energyCost": 0,
+          "animationTime": 2.0,
+          "frames": {
+            "start": 0,
+            "end": 120,
+            "recovery": 28
+          },
+          "energyGain": 11,
+          "snapshot": "start"
+        }
+      ],
+      "passives": [
+        {
+          "id": "passive_klee_1",
+          "name": "火之热情",
+          "description": "普通攻击命中后，增加12%火元素伤害，持续5秒"
+        },
+        {
+          "id": "passive_klee_2",
+          "name": "炸弹专家",
+          "description": "星决技命中后，为自身增加20%暴击率，持续8秒"
+        },
+        {
+          "id": "passive_klee_3",
+          "name": "火花骑士",
+          "description": "火元素伤害提高20%，元素充能效率提高15%"
+        }
+      ],
+      "exclusiveResource": {
+        "name": "火花能量",
+        "max": 100,
+        "initial": 0
+      },
+      "avatar": "/avatars/default.webp",
+      "icon": "/icons/default_icon.webp"
+    }
+  ],
+  "chippo": [
+    {
+      "id": "chippo_001",
+      "name": "示例奇波",
+      "rarity": 4,
+      "type": "attack",
+      "effects": [
+        {
+          "id": "effect_001_1",
+          "name": "攻击提升",
+          "description": "增加10%攻击力",
+          "value": 0.1
+        },
+        {
+          "id": "effect_001_2",
+          "name": "火元素伤害提升",
+          "description": "增加15%火元素伤害",
+          "value": 0.15
+        }
+      ],
+      "icon": "/icons/default_icon.webp"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "enemy_constant_order",
+      "name": "恒序测试Boss",
+      "type": "boss",
+      "level": 80,
+      "stats": {
+        "hp": 500000,
+        "attack": 1500,
+        "defense": 2000,
+        "resistance": {
+          "physical": 0.15,
+          "fire": 0.1,
+          "water": 0.1,
+          "wind": 0.1,
+          "earth": 0.1,
+          "lightning": 0.05
+        },
+        "weaknesses": [
+          "lightning"
+        ],
+        "resistanceLevels": {
+          "physical": 2,
+          "fire": 1,
+          "water": 1,
+          "wind": 1,
+          "earth": 1,
+          "lightning": 0
+        },
+        "staminaThreshold": 3000,
+        "weakWindowDuration": 10
+      },
+      "abilities": [
+        {
+          "id": "ability_boss_1",
+          "name": "普通攻击",
+          "type": "normal",
+          "damageMultiplier": 1.5,
+          "cooldown": 3
+        },
+        {
+          "id": "ability_boss_2",
+          "name": "技能攻击",
+          "type": "skill",
+          "damageMultiplier": 3.0,
+          "cooldown": 8
+        },
+        {
+          "id": "ability_boss_3",
+          "name": "大招",
+          "type": "ultimate",
+          "damageMultiplier": 5.0,
+          "cooldown": 15
+        }
+      ],
+      "icon": "/Icon_Enemy/default_enemy.webp"
+    },
+    {
+      "id": "enemy_frost_giant",
+      "name": "冰霜巨人",
+      "type": "boss",
+      "level": 85,
+      "stats": {
+        "hp": 600000,
+        "attack": 1800,
+        "defense": 2200,
+        "resistance": {
+          "physical": 0.2,
+          "fire": 0.05,
+          "water": 0.25,
+          "wind": 0.15,
+          "earth": 0.15,
+          "lightning": 0.15,
+          "ice": 0.3
+        },
+        "weaknesses": [
+          "fire"
+        ],
+        "resistanceLevels": {
+          "physical": 3,
+          "fire": 0,
+          "water": 4,
+          "wind": 2,
+          "earth": 2,
+          "lightning": 2,
+          "ice": 5
+        },
+        "staminaThreshold": 3500,
+        "weakWindowDuration": 12
+      },
+      "abilities": [
+        {
+          "id": "ability_frost_1",
+          "name": "冰拳重击",
+          "type": "normal",
+          "damageMultiplier": 2.0,
+          "cooldown": 4
+        },
+        {
+          "id": "ability_frost_2",
+          "name": "冰霜新星",
+          "type": "skill",
+          "damageMultiplier": 3.5,
+          "cooldown": 10
+        },
+        {
+          "id": "ability_frost_3",
+          "name": "暴风雪",
+          "type": "ultimate",
+          "damageMultiplier": 6.0,
+          "cooldown": 18
+        }
+      ],
+      "icon": "/Icon_Enemy/default_enemy.webp"
+    },
+    {
+      "id": "enemy_fire_dragon",
+      "name": "炎龙",
+      "type": "boss",
+      "level": 90,
+      "stats": {
+        "hp": 800000,
+        "attack": 2000,
+        "defense": 2500,
+        "resistance": {
+          "physical": 0.15,
+          "fire": 0.3,
+          "water": 0.05,
+          "wind": 0.15,
+          "earth": 0.2,
+          "lightning": 0.15
+        },
+        "weaknesses": [
+          "water"
+        ],
+        "resistanceLevels": {
+          "physical": 2,
+          "fire": 5,
+          "water": 0,
+          "wind": 2,
+          "earth": 3,
+          "lightning": 2
+        },
+        "staminaThreshold": 4000,
+        "weakWindowDuration": 15
+      },
+      "abilities": [
+        {
+          "id": "ability_fire_1",
+          "name": "龙爪攻击",
+          "type": "normal",
+          "damageMultiplier": 2.2,
+          "cooldown": 3
+        },
+        {
+          "id": "ability_fire_2",
+          "name": "火焰喷射",
+          "type": "skill",
+          "damageMultiplier": 4.0,
+          "cooldown": 8
+        },
+        {
+          "id": "ability_fire_3",
+          "name": "炎爆",
+          "type": "ultimate",
+          "damageMultiplier": 7.0,
+          "cooldown": 20
+        }
+      ],
+      "icon": "/Icon_Enemy/default_enemy.webp"
+    },
+    {
+      "id": "enemy_thunder_lord",
+      "name": "雷之领主",
+      "type": "boss",
+      "level": 95,
+      "stats": {
+        "hp": 900000,
+        "attack": 2200,
+        "defense": 2800,
+        "resistance": {
+          "physical": 0.2,
+          "fire": 0.15,
+          "water": 0.15,
+          "wind": 0.15,
+          "earth": 0.05,
+          "lightning": 0.3
+        },
+        "weaknesses": [
+          "earth"
+        ],
+        "resistanceLevels": {
+          "physical": 3,
+          "fire": 2,
+          "water": 2,
+          "wind": 2,
+          "earth": 0,
+          "lightning": 5
+        },
+        "staminaThreshold": 4500,
+        "weakWindowDuration": 18
+      },
+      "abilities": [
+        {
+          "id": "ability_thunder_1",
+          "name": "雷刃斩",
+          "type": "normal",
+          "damageMultiplier": 2.5,
+          "cooldown": 3
+        },
+        {
+          "id": "ability_thunder_2",
+          "name": "闪电链",
+          "type": "skill",
+          "damageMultiplier": 4.5,
+          "cooldown": 9
+        },
+        {
+          "id": "ability_thunder_3",
+          "name": "雷神之怒",
+          "type": "ultimate",
+          "damageMultiplier": 8.0,
+          "cooldown": 22
+        }
+      ],
+      "icon": "/Icon_Enemy/default_enemy.webp"
+    },
+    {
+      "id": "enemy_earth_golem",
+      "name": "土元素巨像",
+      "type": "boss",
+      "level": 88,
+      "stats": {
+        "hp": 700000,
+        "attack": 1900,
+        "defense": 3000,
+        "resistance": {
+          "physical": 0.25,
+          "fire": 0.15,
+          "water": 0.15,
+          "wind": 0.05,
+          "earth": 0.3
+        },
+        "weaknesses": [
+          "wind"
+        ],
+        "resistanceLevels": {
+          "physical": 4,
+          "fire": 2,
+          "water": 2,
+          "wind": 0,
+          "earth": 5
+        },
+        "staminaThreshold": 3800,
+        "weakWindowDuration": 14
+      },
+      "abilities": [
+        {
+          "id": "ability_earth_1",
+          "name": "巨石砸击",
+          "type": "normal",
+          "damageMultiplier": 2.8,
+          "cooldown": 4
+        },
+        {
+          "id": "ability_earth_2",
+          "name": "地震波",
+          "type": "skill",
+          "damageMultiplier": 3.8,
+          "cooldown": 11
+        },
+        {
+          "id": "ability_earth_3",
+          "name": "岩崩",
+          "type": "ultimate",
+          "damageMultiplier": 6.5,
+          "cooldown": 19
+        }
+      ],
+      "icon": "/Icon_Enemy/default_enemy.webp"
+    }
+  ],
+  "buffs": [
+    {
+      "id": "buff_001",
+      "name": "攻击提升",
+      "type": "attack",
+      "value": 0.1,
+      "duration": 10,
+      "stacks": 1
+    },
+    {
+      "id": "buff_002",
+      "name": "火元素伤害提升",
+      "type": "elementalDamage",
+      "element": "fire",
+      "value": 0.2,
+      "duration": 15,
+      "stacks": 1
+    },
+    {
+      "id": "buff_003",
+      "name": "雷元素伤害提升",
+      "type": "elementalDamage",
+      "element": "lightning",
+      "value": 0.2,
+      "duration": 15,
+      "stacks": 1
+    },
+    {
+      "id": "buff_004",
+      "name": "水元素伤害提升",
+      "type": "elementalDamage",
+      "element": "water",
+      "value": 0.2,
+      "duration": 15,
+      "stacks": 1
+    },
+    {
+      "id": "buff_005",
+      "name": "防御提升",
+      "type": "defense",
+      "value": 0.2,
+      "duration": 10,
+      "stacks": 1
+    }
+  ],
+  "elements": [
+    {
+      "id": "element_fire",
+      "name": "火",
+      "color": "#ff4500",
+      "reactions": {
+        "water": "vaporize",
+        "wind": "swirl",
+        "earth": "melt"
+      }
+    },
+    {
+      "id": "element_water",
+      "name": "水",
+      "color": "#1e90ff",
+      "reactions": {
+        "fire": "vaporize",
+        "wind": "swirl",
+        "earth": "hydrocryo"
+      }
+    },
+    {
+      "id": "element_wind",
+      "name": "风",
+      "color": "#00ff80",
+      "reactions": {
+        "fire": "swirl",
+        "water": "swirl",
+        "earth": "swirl"
+      }
+    },
+    {
+      "id": "element_earth",
+      "name": "地",
+      "color": "#8b4513",
+      "reactions": {
+        "fire": "melt",
+        "water": "hydrocryo",
+        "wind": "swirl"
+      }
+    },
+    {
+      "id": "element_lightning",
+      "name": "雷",
+      "color": "#9400d3",
+      "reactions": {
+        "water": "electro-charged",
+        "wind": "swirl"
+      }
+    },
+    {
+      "id": "element_physical",
+      "name": "物理",
+      "color": "#c0c0c0",
+      "reactions": {}
+    }
+  ]
+}
