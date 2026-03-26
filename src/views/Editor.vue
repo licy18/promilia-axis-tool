@@ -65,16 +65,121 @@
 
     <!-- 主编辑区域 -->
     <div class="editor-content">
-      <!-- 左侧技能库 -->
+      <!-- 左侧功能模块 -->
       <div class="left-panel">
         <div class="panel-header">
-          <h3>技能库</h3>
+          <h3>角色管理</h3>
         </div>
-        <SkillLibrary
-          :characters="teamCharacters"
-          :elements="gamedataStore.elements"
-          @skill-drag-start="onSkillDragStart"
-        />
+        <div class="character-tabs">
+          <el-tabs v-model="activeLeftTab" class="demo-tabs" @tab-click="handleTabClick">
+            <el-tab-pane label="角色" name="character">
+              <div class="character-section">
+                <div class="character-selector">
+                  <el-select v-model="selectedCharacterId" placeholder="选择角色" size="small" style="width: 100%">
+                    <el-option
+                      v-for="character in teamCharacters"
+                      :key="character.id"
+                      :label="character.name"
+                      :value="character.id"
+                    />
+                  </el-select>
+                </div>
+                <div v-if="selectedCharacter" class="character-details">
+                  <div class="character-avatar">
+                    <img :src="selectedCharacter.avatar" :alt="selectedCharacter.name" />
+                  </div>
+                  <div class="character-info">
+                    <h4>{{ selectedCharacter.name }}</h4>
+                    <div class="character-stats">
+                      <div class="stat-item">
+                        <span class="stat-label">元素:</span>
+                        <span class="stat-value">{{ selectedCharacter.element }}</span>
+                      </div>
+                      <div class="stat-item">
+                        <span class="stat-label">生命:</span>
+                        <span class="stat-value">{{ selectedCharacter.maxHealth }}</span>
+                      </div>
+                      <div class="stat-item">
+                        <span class="stat-label">攻击力:</span>
+                        <span class="stat-value">{{ selectedCharacter.attack }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div v-if="selectedCharacter" class="skills-section">
+                  <h4>技能列表</h4>
+                  <div class="skills-grid">
+                    <div
+                      v-for="skill in selectedCharacter.skills"
+                      :key="skill.id"
+                      class="skill-item"
+                      draggable="true"
+                      @dragstart="onSkillDragStart($event, skill, selectedCharacter.id)"
+                      @click="selectSkill(skill)"
+                    >
+                      <div class="skill-icon">
+                        <img :src="skill.icon" :alt="skill.name" />
+                      </div>
+                      <div class="skill-info">
+                        <div class="skill-name">{{ skill.name }}</div>
+                        <div class="skill-description">{{ skill.description }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="奇波" name="chip">
+              <div class="chip-section">
+                <div v-if="selectedCharacter" class="chip-list">
+                  <!-- 当前已选择的奇波 -->
+                  <div v-if="getCharacterChip(selectedCharacter.id)" class="selected-chip-info">
+                    <h4>当前奇波</h4>
+                    <div class="chip-item selected">
+                      <div class="chip-icon">
+                        <img :src="getCharacterChip(selectedCharacter.id).icon" :alt="getCharacterChip(selectedCharacter.id).name" />
+                      </div>
+                      <div class="chip-info">
+                        <div class="chip-name">{{ getCharacterChip(selectedCharacter.id).name }}</div>
+                        <div class="chip-effect">{{ getCharacterChip(selectedCharacter.id).effect }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <h4>奇波列表</h4>
+                  <div class="chips-grid">
+                    <div
+                      v-for="chip in characterChips"
+                      :key="chip.id"
+                      class="chip-item"
+                      :class="{ 'is-selected': getCharacterChip(selectedCharacter.id)?.id === chip.id }"
+                      @click="selectChipForCharacter(chip)"
+                    >
+                      <div class="chip-icon">
+                        <img :src="chip.icon" :alt="chip.name" />
+                      </div>
+                      <div class="chip-info">
+                        <div class="chip-name">{{ chip.name }}</div>
+                        <div class="chip-effect">{{ chip.effect }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div v-else class="no-character">
+                  请先选择角色
+                </div>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="装备" name="equipment">
+              <EquipmentLibrary
+                :characters="teamCharacters"
+                :equipment-categories="gamedataStore.equipmentCategories"
+                :selected-character="selectedCharacter"
+                :project="project"
+                @equipment-select="onEquipmentSelect"
+              />
+            </el-tab-pane>
+          </el-tabs>
+        </div>
       </div>
 
       <!-- 中间时间轴 -->
@@ -137,352 +242,395 @@
         </div>
 
         <!-- 时间轴编辑区 -->
-        <div class="timeline-container" ref="timelineContainer">
-          <!-- 时间刻度 -->
-          <div
-            class="timeline-header"
-            :style="{ width: `${totalWidth}px` }"
-            @click="addKeyframeAtPosition"
-          >
-            <div class="time-scale">
-              <div
-                v-for="tick in timeTicks"
-                :key="tick.frame"
-                class="time-tick"
-                :style="{ left: `${tick.position}px` }"
-              >
-                <div class="tick-mark"></div>
-                <div class="tick-label">{{ tick.label }}</div>
+        <div class="timeline-container" ref="timelineContainer" @wheel="handleTimelineScroll">
+          <!-- 时间轴网格布局 -->
+          <div class="timeline-grid-layout">
+            <!-- 左侧角色信息栏 -->
+            <div class="tracks-sidebar">
+              <div class="sidebar-header">
+                <span class="header-text">角色</span>
               </div>
-            </div>
-            <!-- 关键时间点 -->
-            <div class="keyframes">
-              <Keyframe
-                v-for="keyframe in project?.keyframes"
-                :key="keyframe.id"
-                :keyframe="keyframe"
-                :scale="scale"
-                @select="selectKeyframe"
-              />
-            </div>
-          </div>
-
-          <!-- 轨道区域 -->
-          <div class="timeline-tracks" :style="{ width: `${totalWidth}px` }">
-            <!-- 技能依赖连接线 -->
-            <LinkLine
-              v-for="dependency in getSkillDependencies()"
-              :key="dependency.id"
-              :source-block="getSkillBlockById(dependency.sourceBlockId)"
-              :target-block="getSkillBlockById(dependency.targetBlockId)"
-              :source-track-index="
-                getTrackIndexByCharacterId(
-                  getSkillBlockById(dependency.sourceBlockId)?.characterId
-                )
-              "
-              :target-track-index="
-                getTrackIndexByCharacterId(
-                  getSkillBlockById(dependency.targetBlockId)?.characterId
-                )
-              "
-              :scale="scale"
-              :is-satisfied="
-                isSkillDependencySatisfied(
-                  getSkillBlockById(dependency.sourceBlockId),
-                  getSkillBlockById(dependency.targetBlockId)
-                )
-              "
-              @select="handleLinkLineClick"
-            />
-
-            <div
-              v-for="(character, index) in teamCharacters"
-              :key="character.id"
-              class="track"
-            >
-              <div class="track-header">
-                <div class="track-info">
-                  <div class="character-avatar">
-                    <img :src="character.avatar" :alt="character.name" />
-                  </div>
-                  <span class="character-name">{{ character.name }}</span>
-                </div>
-                <div class="track-controls">
-                  <el-button
-                    size="small"
-                    @click="toggleTrackVisibility(character.id)"
-                  >
-                    {{ visibleTracks.includes(character.id) ? '隐藏' : '显示' }}
-                  </el-button>
-                </div>
-              </div>
-
-              <!-- 子轨道容器 -->
-              <div
-                class="sub-tracks"
-                :class="{ hidden: !visibleTracks.includes(character.id) }"
-              >
-                <!-- 技能释放轨道 -->
+              <div class="sidebar-tracks">
                 <div
-                  class="sub-track skill-track"
-                  @dragover.prevent
-                  @drop="onSkillDrop($event, character.id)"
+                  v-for="(character, index) in teamCharacters"
+                  :key="character.id"
+                  class="sidebar-track"
+                  :class="{ 'is-selected': selectedCharacterId === character.id }"
+                  @click="selectTrack(character.id)"
                 >
-                  <div class="sub-track-header">技能释放</div>
-                  <div class="sub-track-content">
-                    <!-- 技能块 -->
-                    <SkillBlock
-                      v-for="skillBlock in getCharacterSkillBlocks(
-                        character.id
-                      )"
-                      :key="skillBlock.id"
-                      :skill-block="skillBlock"
-                      :scale="scale"
-                      :is-selected="selectedSkillBlock?.id === skillBlock.id"
-                      :element-color="getElementColor(character.element)"
-                      @select="selectSkillBlock"
-                      @edit="openSkillEditPanel"
-                      @drag-start="onSkillBlockDragStart"
-                      @drag-move="onSkillBlockDragMove"
-                      @drag-end="onSkillBlockDragEnd"
-                      @resize-start="onSkillBlockResizeStart"
-                      @resize-move="onSkillBlockResizeMove"
-                      @resize-end="onSkillBlockResizeEnd"
-                    />
+                  <div class="track-info" draggable="true" @dragstart="onTrackDragStart($event, index)" @dragover="onTrackDragOver($event, index)" @drop="onTrackDrop($event, index)" @dragend="onTrackDragEnd">
+                    <div class="character-avatar" @click.stop="openCharacterSelector(index)">
+                      <img :src="character.avatar" :alt="character.name" />
+                    </div>
+                    <span class="character-name">{{ character.name }}</span>
+                    <div class="track-order-controls">
+                      <el-button size="small" @click.stop="moveTrackUp(index)" :disabled="index === 0">
+                        <el-icon><ArrowUp /></el-icon>
+                      </el-button>
+                      <el-button size="small" @click.stop="moveTrackDown(index)" :disabled="index === teamCharacters.length - 1">
+                        <el-icon><ArrowDown /></el-icon>
+                      </el-button>
+                    </div>
+                  </div>
+                  <div class="track-controls">
+                    <div class="equipment-slots">
+                      <div class="slot chip-slot" @click.stop="openChipSelector(index)">
+                        <template v-if="getCharacterChip(character.id)">
+                          <img :src="getCharacterChip(character.id).icon" :alt="getCharacterChip(character.id).name" class="slot-image" />
+                        </template>
+                        <template v-else>
+                          <span class="slot-label">奇波</span>
+                        </template>
+                      </div>
+                      <div class="slot equipment-slot" @click.stop="openEquipmentSelector(index, 'armor')">
+                        <template v-if="getCharacterEquipment(character.id, 'armor')">
+                          <img :src="getCharacterEquipment(character.id, 'armor').icon" :alt="getCharacterEquipment(character.id, 'armor').name" class="slot-image" />
+                        </template>
+                        <template v-else>
+                          <span class="slot-label">装备</span>
+                        </template>
+                      </div>
+                    </div>
+                    <el-button
+                      size="small"
+                      @click.stop="toggleTrackVisibility(character.id)"
+                    >
+                      {{ visibleTracks.includes(character.id) ? '隐藏' : '显示' }}
+                    </el-button>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                <!-- Buff生效轨道 -->
-                <div class="sub-track buff-track">
-                  <div class="sub-track-header">Buff生效</div>
-                  <div class="sub-track-content">
-                    <!-- Buff块 -->
-                    <BuffBlock
-                      v-for="buffBlock in getCharacterBuffBlocks(character.id)"
-                      :key="buffBlock.id"
-                      :buff-block="buffBlock"
-                      :scale="scale"
-                      @select="selectBuffBlock"
-                    />
+            <!-- 右侧时间轴内容 -->
+            <div class="timeline-content" @contextmenu="onTimelineContextMenu" @click="onTimelineClick">
+              <!-- 时间刻度 -->
+              <div
+                class="timeline-header"
+                :style="{ width: `${totalWidth}px` }"
+                @click="addKeyframeAtPosition"
+              >
+                <div class="time-scale">
+                  <div
+                    v-for="tick in timeTicks"
+                    :key="tick.frame"
+                    class="time-tick"
+                    :style="{ left: `${tick.position}px` }"
+                  >
+                    <div class="tick-mark"></div>
+                    <div class="tick-label">{{ tick.label }}</div>
                   </div>
                 </div>
+                <!-- 关键时间点 -->
+                <div class="keyframes">
+                  <Keyframe
+                    v-for="keyframe in project?.keyframes"
+                    :key="keyframe.id"
+                    :keyframe="keyframe"
+                    :scale="scale"
+                    @select="selectKeyframe"
+                  />
+                </div>
+                
+                <!-- 循环分界线 -->
+                <div class="loop-dividers">
+                  <div
+                    v-for="divider in loopDividers"
+                    :key="divider.id"
+                    class="loop-divider"
+                    :style="{
+                      left: `${divider.frame * scale}px`,
+                      borderLeftColor: divider.color
+                    }"
+                    :title="`${divider.label}: ${formatTime(divider.frame)}`"
+                  >
+                    <div class="loop-divider-label">{{ divider.label }}</div>
+                  </div>
+                </div>
+              </div>
 
-                <!-- 资源变化轨道 -->
-                <div class="sub-track resource-track">
-                  <div class="sub-track-header">资源变化</div>
-                  <div class="sub-track-content">
-                    <!-- 资源变化块 -->
-                    <ResourceBlock
-                      v-for="resourceBlock in getCharacterResourceBlocks(
-                        character.id
-                      )"
-                      :key="resourceBlock.id"
-                      :resource-block="resourceBlock"
-                      :scale="scale"
-                      @select="selectResourceBlock"
-                    />
+              <!-- 轨道区域 -->
+              <div class="timeline-tracks" :style="{ width: `${totalWidth}px` }">
+                <!-- 技能依赖连接线 -->
+                <LinkLine
+                  v-for="dependency in getSkillDependencies()"
+                  :key="dependency.id"
+                  :source-block="getSkillBlockById(dependency.sourceBlockId)"
+                  :target-block="getSkillBlockById(dependency.targetBlockId)"
+                  :source-track-index="
+                    getTrackIndexByCharacterId(
+                      getSkillBlockById(dependency.sourceBlockId)?.characterId
+                    )
+                  "
+                  :target-track-index="
+                    getTrackIndexByCharacterId(
+                      getSkillBlockById(dependency.targetBlockId)?.characterId
+                    )
+                  "
+                  :scale="scale"
+                  :is-satisfied="
+                    isSkillDependencySatisfied(
+                      getSkillBlockById(dependency.sourceBlockId),
+                      getSkillBlockById(dependency.targetBlockId)
+                    )
+                  "
+                  @select="handleLinkLineClick"
+                />
+
+                <div
+                  v-for="(character, index) in teamCharacters"
+                  :key="character.id"
+                  class="track"
+                >
+                  <!-- 子轨道容器 -->
+                  <div
+                    class="sub-tracks"
+                    :class="{ hidden: !visibleTracks.includes(character.id) }"
+                  >
+                    <!-- 技能释放轨道 -->
+                    <div
+                      class="sub-track skill-track"
+                      @dragover="onSkillDragOver"
+                      @drop="onSkillDrop($event, character.id)"
+                    >
+                      <div class="sub-track-header">技能释放</div>
+                      <div class="sub-track-content">
+                        <!-- 技能块 -->
+                        <SkillBlock
+                          v-for="skillBlock in getCharacterSkillBlocks(
+                            character.id
+                          )"
+                          :key="skillBlock.id"
+                          :skill-block="skillBlock"
+                          :scale="scale"
+                          :is-selected="selectedSkillBlock?.id === skillBlock.id"
+                          :element-color="getElementColor(character.element)"
+                          @select="selectSkillBlock"
+                          @edit="openSkillEditPanel"
+                          @drag-start="onSkillBlockDragStart"
+                          @drag-move="onSkillBlockDragMove"
+                          @drag-end="onSkillBlockDragEnd"
+                          @resize-start="onSkillBlockResizeStart"
+                          @resize-move="onSkillBlockResizeMove"
+                          @resize-end="onSkillBlockResizeEnd"
+                          @context-menu="onSkillBlockContextMenu"
+                        />
+                      </div>
+                    </div>
+
+                    <!-- 奇波技能轨道 -->
+                    <div class="sub-track chip-track">
+                      <div class="sub-track-header">奇波技能</div>
+                      <div class="sub-track-content">
+                        <!-- 奇波技能块 -->
+                        <SkillBlock
+                          v-for="skillBlock in getCharacterChipSkillBlocks(
+                            character.id
+                          )"
+                          :key="skillBlock.id"
+                          :skill-block="skillBlock"
+                          :scale="scale"
+                          :is-selected="selectedSkillBlock?.id === skillBlock.id"
+                          :element-color="getElementColor('physical')"
+                          @select="selectSkillBlock"
+                          @edit="openSkillEditPanel"
+                          @drag-start="onSkillBlockDragStart"
+                          @drag-move="onSkillBlockDragMove"
+                          @drag-end="onSkillBlockDragEnd"
+                          @resize-start="onSkillBlockResizeStart"
+                          @resize-move="onSkillBlockResizeMove"
+                          @resize-end="onSkillBlockResizeEnd"
+                          @context-menu="onSkillBlockContextMenu"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- 资源曲线 -->
-          <ResourceCurve
+        <!-- 资源曲线 -->
+        <ResourceCurve
+          :project="project"
+          :characters="teamCharacters"
+          :scale="scale"
+          @jump-to-frame="jumpToFrame"
+        />
+
+        <!-- 缩放控制 -->
+        <div class="timeline-footer">
+          <div class="zoom-controls">
+            <el-button @click="zoomOut" icon="el-icon-zoom-out"></el-button>
+            <el-slider
+              v-model="scale"
+              :min="0.5"
+              :max="5"
+              :step="0.1"
+              style="width: 200px; margin: 0 10px"
+            />
+            <el-button @click="zoomIn" icon="el-icon-zoom-in"></el-button>
+            <span style="margin-left: 10px"
+              >{{ Math.round(scale * 100) }}%</span
+            >
+          </div>
+          <div class="snap-control">
+            <el-checkbox v-model="snapToGrid">吸附到网格</el-checkbox>
+          </div>
+        </div>
+
+        <!-- 底部boss时间轴 -->
+        <div class="boss-timeline">
+          <BossTimeline
+            :boss-events="project?.bossEvents || []"
+            :scale="scale"
+            :total-width="totalWidth"
+            @event-select="selectBossEvent"
+            @event-add="addBossEvent"
+            @event-update="updateBossEvent"
+            @event-delete="deleteBossEvent"
+          />
+        </div>
+
+        <!-- 资源监控面板 -->
+        <div class="resource-monitor">
+          <ResourceMonitor
             :project="project"
             :characters="teamCharacters"
-            :scale="scale"
-            @jump-to-frame="jumpToFrame"
+            :current-frame="currentFrame"
           />
-
-          <!-- 缩放控制 -->
-          <div class="timeline-footer">
-            <div class="zoom-controls">
-              <el-button @click="zoomOut" icon="el-icon-zoom-out"></el-button>
-              <el-slider
-                v-model="scale"
-                :min="0.5"
-                :max="5"
-                :step="0.1"
-                style="width: 200px; margin: 0 10px"
-              />
-              <el-button @click="zoomIn" icon="el-icon-zoom-in"></el-button>
-              <span style="margin-left: 10px"
-                >{{ Math.round(scale * 100) }}%</span
-              >
-            </div>
-            <div class="snap-control">
-              <el-checkbox v-model="snapToGrid">吸附到网格</el-checkbox>
-            </div>
-          </div>
         </div>
       </div>
 
-      <!-- 右侧属性面板 -->
+      <!-- 右侧详细技能编辑面板 -->
       <div class="right-panel">
-        <!-- 项目信息 -->
-        <div class="panel-section">
-          <h3>项目信息</h3>
-          <div class="project-info">
-            <div class="info-item">
-              <span class="info-label">项目名称:</span>
-              <span class="info-value">{{ project?.name || '未命名' }}</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">上场角色:</span>
-              <span class="info-value">{{ teamCharacters.length }} 名</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">目标敌人:</span>
-              <span class="info-value">{{ enemy?.name || '未选择' }}</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">总时长:</span>
-              <span class="info-value">{{
-                formatTime(project?.duration || 1200)
-              }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 伤害统计 -->
-        <div class="panel-section">
-          <h3>伤害统计</h3>
-          <div class="damage-stats">
-            <div class="stat-item">
-              <span class="stat-label">总伤害:</span>
-              <span class="stat-value">{{
-                damageStats.totalDamage.toLocaleString()
-              }}</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">平均DPS:</span>
-              <span class="stat-value">{{
-                damageStats.dps.toLocaleString()
-              }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 角色伤害占比 -->
-        <div class="panel-section">
-          <h3>角色伤害占比</h3>
-          <div class="chart-container" style="height: 200px">
-            <div
-              ref="characterChartRef"
-              style="width: 100%; height: 100%"
-            ></div>
-          </div>
-        </div>
-
-        <!-- 技能类型占比 -->
-        <div class="panel-section">
-          <h3>技能类型占比</h3>
-          <div class="chart-container" style="height: 200px">
-            <div
-              ref="skillTypeChartRef"
-              style="width: 100%; height: 100%"
-            ></div>
-          </div>
-        </div>
-
-        <!-- 选中技能块详情 -->
-        <div v-if="selectedSkillBlock" class="panel-section">
-          <h3>技能详情</h3>
-          <div class="skill-details">
-            <div class="detail-item">
-              <span class="detail-label">技能名称:</span>
-              <span class="detail-value">{{
-                selectedSkillBlock.skillName
-              }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">释放时间:</span>
-              <span class="detail-value"
-                >{{ selectedSkillBlock.startFrame }} 帧</span
-              >
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">结束时间:</span>
-              <span class="detail-value"
-                >{{ selectedSkillBlock.endFrame }} 帧</span
-              >
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">持续时间:</span>
-              <span class="detail-value"
-                >{{
-                  selectedSkillBlock.endFrame - selectedSkillBlock.startFrame
-                }}
-                帧</span
-              >
-            </div>
-            <el-button
-              type="primary"
-              size="small"
-              style="width: 100%; margin-top: 10px"
-              @click="openSkillEditPanel(selectedSkillBlock.id)"
-            >
-              编辑技能
+        <!-- 技能编辑面板（覆盖模式） -->
+        <div v-if="skillEditPanelVisible" class="skill-edit-overlay">
+          <div class="skill-edit-header">
+            <h3>技能编辑</h3>
+            <el-button type="text" @click="skillEditPanelVisible = false">
+              <el-icon><Close /></el-icon>
             </el-button>
           </div>
-        </div>
-
-        <!-- 技能依赖管理 -->
-        <div v-if="selectedSkillBlocks.length > 0" class="panel-section">
-          <h3>技能依赖管理</h3>
-          <div class="dependency-controls">
-            <el-button
-              v-if="selectedSkillBlocks.length === 2"
-              type="success"
-              size="small"
-              style="width: 100%; margin-bottom: 8px"
-              @click="addSkillDependency"
-            >
-              添加依赖关系
-            </el-button>
-            <el-button
-              v-else-if="selectedSkillBlocks.length === 2"
-              type="danger"
-              size="small"
-              style="width: 100%"
-              @click="
-                removeSkillDependency(
-                  selectedSkillBlocks[0].id,
-                  selectedSkillBlocks[1].id
-                )
-              "
-            >
-              删除依赖关系
-            </el-button>
-            <div v-else class="dependency-info">
-              <p>选择两个技能块以添加依赖关系</p>
-            </div>
+          <div class="skill-edit-content">
+            <SkillEditPanel
+              :skill-block="selectedSkillBlock"
+              :original-skill="getOriginalSkill(selectedSkillBlock?.skillId)"
+              :character="getCharacter(selectedSkillBlock?.characterId)"
+              :max-duration="project?.duration || 1200"
+              :elements="gamedataStore.elements"
+              @save="saveSkillBlockChanges"
+              @close="() => { skillEditPanelVisible = false; calculateDamageStats(); }"
+            />
           </div>
         </div>
+        
+        <!-- 普通右侧面板内容 -->
+        <div v-else class="right-panel-content">
+          <!-- 装备详情面板 -->
+          <div v-if="selectedEquipment" class="panel-section">
+            <h3>装备详情</h3>
+            <div class="equipment-details">
+              <div class="detail-item">
+                <span class="detail-label">装备名称:</span>
+                <span class="detail-value">{{ selectedEquipment.name }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">装备类型:</span>
+                <span class="detail-value">{{ selectedEquipment.category }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">装备等级:</span>
+                <span class="detail-value">{{ selectedEquipment.level }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">装备效果:</span>
+                <span class="detail-value">{{ selectedEquipment.effect }}</span>
+              </div>
+            </div>
+          </div>
 
-        <!-- 循环校验面板 -->
-        <div class="panel-section validate-panel-container">
-          <ValidatePanel
-            :project="project"
-            :gamedata="{ characters: gamedataStore.characters }"
-            @jump-to-frame="jumpToFrame"
-            @select-skill-block="selectSkillBlock"
-          />
+          <!-- 项目信息 -->
+          <div class="panel-section">
+            <h3>项目信息</h3>
+            <div class="project-info">
+              <div class="info-item">
+                <span class="info-label">项目名称:</span>
+                <span class="info-value">{{ project?.name || '未命名' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">上场角色:</span>
+                <span class="info-value">{{ teamCharacters.length }} 名</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">目标敌人:</span>
+                <span class="info-value">{{ enemy?.name || '未选择' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">总时长:</span>
+                <span class="info-value">{{
+                  formatTime(project?.duration || 1200)
+                }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 伤害统计 -->
+          <div class="panel-section">
+            <h3>伤害统计</h3>
+            <div class="damage-stats">
+              <div class="stat-item">
+                <span class="stat-label">总伤害:</span>
+                <span class="stat-value">{{
+                  damageStats.totalDamage.toLocaleString()
+                }}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">平均DPS:</span>
+                <span class="stat-value">{{
+                  damageStats.dps.toLocaleString()
+                }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 角色伤害占比 -->
+          <div class="panel-section">
+            <h3>角色伤害占比</h3>
+            <div class="chart-container" style="height: 200px">
+              <div
+                ref="characterChartRef"
+                style="width: 100%; height: 100%"
+              ></div>
+            </div>
+          </div>
+
+          <!-- 技能类型占比 -->
+          <div class="panel-section">
+            <h3>技能类型占比</h3>
+            <div class="chart-container" style="height: 200px">
+              <div
+                ref="skillTypeChartRef"
+                style="width: 100%; height: 100%"
+              ></div>
+            </div>
+          </div>
+
+          <!-- 循环校验面板 -->
+          <div class="panel-section validate-panel-container">
+            <ValidatePanel
+              :project="project"
+              :gamedata="{ characters: gamedataStore.characters }"
+              @jump-to-frame="jumpToFrame"
+              @select-skill-block="selectSkillBlock"
+            />
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 技能编辑面板 -->
-    <SkillEditPanel
-      v-model:visible="skillEditPanelVisible"
-      :skill-block="selectedSkillBlock"
-      :original-skill="getOriginalSkill(selectedSkillBlock?.skillId)"
-      :character="getCharacter(selectedSkillBlock?.characterId)"
-      :max-duration="project?.duration || 1200"
-      :elements="gamedataStore.elements"
-      @save="saveSkillBlockChanges"
-    />
+
 
     <!-- 关键帧编辑对话框 -->
     <ElDialog
@@ -589,11 +737,153 @@
 
     <!-- 新手引导 -->
     <GuideTour ref="guideTour" />
+
+    <!-- 角色选择对话框 -->
+    <ElDialog v-model="isCharacterSelectorVisible" title="选择角色" width="600px" align-center>
+      <div class="character-selector-dialog">
+        <div class="search-box">
+          <el-input v-model="characterSearchQuery" placeholder="搜索角色" prefix-icon="el-icon-search" />
+        </div>
+        <div class="character-list">
+          <div
+            v-for="character in filteredCharacters"
+            :key="character.id"
+            class="character-item"
+            @click="confirmCharacterSelection(character.id)"
+          >
+            <div class="character-avatar">
+              <img :src="character.avatar" :alt="character.name" />
+            </div>
+            <div class="character-info">
+              <div class="character-name">{{ character.name }}</div>
+              <div class="character-element">{{ character.element }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <ElButton @click="isCharacterSelectorVisible = false">取消</ElButton>
+        </span>
+      </template>
+    </ElDialog>
+
+    <!-- 奇波选择对话框 -->
+    <ElDialog v-model="isChipSelectorVisible" title="选择奇波" width="600px" align-center>
+      <div class="chip-selector-dialog">
+        <div class="chip-list">
+          <div
+            v-for="chip in characterChips"
+            :key="chip.id"
+            class="chip-item"
+            @click="confirmChipSelection(chip.id)"
+          >
+            <div class="chip-icon">
+              <img :src="chip.icon" :alt="chip.name" />
+            </div>
+            <div class="chip-info">
+              <div class="chip-name">{{ chip.name }}</div>
+              <div class="chip-effect">{{ chip.effect }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <ElButton @click="isChipSelectorVisible = false">取消</ElButton>
+        </span>
+      </template>
+    </ElDialog>
+
+    <!-- 装备选择对话框 -->
+    <ElDialog v-model="isEquipmentSelectorVisible" title="选择装备" width="600px" align-center>
+      <div class="equipment-selector-dialog">
+        <div class="equipment-list">
+          <div
+            v-for="equipment in filteredEquipment"
+            :key="equipment.id"
+            class="equipment-item"
+            @click="confirmEquipmentSelection(equipment.id)"
+          >
+            <div class="equipment-icon">
+              <img :src="equipment.icon" :alt="equipment.name" />
+            </div>
+            <div class="equipment-info">
+              <div class="equipment-name">{{ equipment.name }}</div>
+              <div class="equipment-category">{{ equipment.category }}</div>
+              <div class="equipment-effect">{{ equipment.effect }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <ElButton @click="isEquipmentSelectorVisible = false">取消</ElButton>
+        </span>
+      </template>
+    </ElDialog>
+
+    <!-- 右键菜单 -->
+    <ContextMenu
+      :visible="contextMenuVisible"
+      :position="contextMenuPosition"
+      :menu-items="contextMenuItems"
+      @select="handleContextMenuSelect"
+      @close="contextMenuVisible = false"
+    />
+
+    <!-- 角色切换菜单 -->
+    <div 
+      v-if="showCharacterSwitchMenu" 
+      class="character-switch-menu"
+      :style="{
+        left: `${characterSwitchMenuPosition.x}px`,
+        top: `${characterSwitchMenuPosition.y}px`
+      }"
+      @click.stop
+    >
+      <div class="menu-header">选择角色</div>
+      <div 
+        v-for="character in gamedataStore.characters" 
+        :key="character.id"
+        class="character-switch-item"
+        @click="handleCharacterSwitch(character.id)"
+      >
+        <div class="character-avatar small">
+          <img :src="character.avatar" :alt="character.name" />
+        </div>
+        <span class="character-name">{{ character.name }}</span>
+      </div>
+    </div>
+
+    <!-- 颜色选择菜单 -->
+    <div 
+      v-if="showColorSelectMenu" 
+      class="color-select-menu"
+      :style="{
+        left: `${colorSelectMenuPosition.x}px`,
+        top: `${colorSelectMenuPosition.y}px`
+      }"
+      @click.stop
+    >
+      <div class="menu-header">选择颜色</div>
+      <div class="color-grid">
+        <div 
+          v-for="color in availableColors" 
+          :key="color"
+          class="color-item"
+          :style="{ backgroundColor: color }"
+          :title="color"
+          @click="handleColorSelect(color)"
+        ></div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { useThrottleFn } from '@vueuse/core';
 import { useRouter, useRoute } from 'vue-router';
 import { useProjectStore } from '../store/project';
 import { useGamedataStore } from '../store/gamedata';
@@ -630,15 +920,20 @@ import {
   Link,
   Setting,
   Help,
+  Close,
 } from '@element-plus/icons-vue';
 import * as echarts from 'echarts';
 import SkillLibrary from '../components/editor/SkillLibrary.vue';
+import EquipmentLibrary from '../components/editor/EquipmentLibrary.vue';
+import ContextMenu from '../components/editor/ContextMenu.vue';
 import SkillBlock from '../components/timeline/SkillBlock.vue';
 import BuffBlock from '../components/timeline/BuffBlock.vue';
 import ResourceBlock from '../components/timeline/ResourceBlock.vue';
 import Keyframe from '../components/timeline/Keyframe.vue';
 import LinkLine from '../components/timeline/LinkLine.vue';
 import ResourceCurve from '../components/timeline/ResourceCurve.vue';
+import ResourceMonitor from '../components/timeline/ResourceMonitor.vue';
+import BossTimeline from '../components/timeline/BossTimeline.vue';
 import SkillEditPanel from '../components/editor/SkillEditPanel.vue';
 import ValidatePanel from '../components/editor/ValidatePanel.vue';
 import GuideTour from '../components/editor/GuideTour.vue';
@@ -668,6 +963,12 @@ const selectedSkillBlocks = ref([]);
 const selectedBuffBlock = ref(null);
 const selectedResourceBlock = ref(null);
 const selectedKeyframe = ref(null);
+const selectedEquipment = ref(null);
+const selectedBossEvent = ref(null);
+const selectedCharacterId = ref('');
+const selectedSkill = ref(null);
+const selectedChip = ref(null);
+const activeLeftTab = ref('character');
 const skillEditPanelVisible = ref(false);
 const keyframeEditPanelVisible = ref(false);
 const keyframeEditForm = ref({
@@ -682,6 +983,9 @@ const loopSettings = ref({
   endFrame: 600,
   loopCount: -1, // -1 表示无限循环
 });
+
+// 循环分界线数据
+const loopDividers = ref([]);
 const shortcutSettings = ref({
   undo: 'Ctrl+Z',
   redo: 'Ctrl+Y',
@@ -703,6 +1007,90 @@ const damageStats = ref({
   damageByCharacter: {},
   damageBySkillType: {},
 });
+
+// 计算属性
+const selectedCharacter = computed(() => {
+  if (!selectedCharacterId.value) return null;
+  return gamedataStore.characters.find(c => c.id === selectedCharacterId.value);
+});
+
+const characterChips = computed(() => {
+  // 模拟奇波数据
+  return [
+    {
+      id: 'chip1',
+      name: '攻击奇波',
+      icon: '/icons/chip/attack.png',
+      effect: '物理伤害+10%'
+    },
+    {
+      id: 'chip2',
+      name: '防御奇波',
+      icon: '/icons/chip/defense.png',
+      effect: '物理防御+15%'
+    },
+    {
+      id: 'chip3',
+      name: '元素奇波',
+      icon: '/icons/chip/element.png',
+      effect: '元素伤害+12%'
+    },
+    {
+      id: 'chip4',
+      name: '生命奇波',
+      icon: '/icons/chip/health.png',
+      effect: '最大生命值+10%'
+    }
+  ];
+});
+
+// 计算属性：过滤后的角色列表
+const filteredCharacters = computed(() => {
+  let characters = gamedataStore.characters;
+  if (characterSearchQuery.value) {
+    const query = characterSearchQuery.value.toLowerCase();
+    characters = characters.filter(char => 
+      char.name.toLowerCase().includes(query) || 
+      char.element.toLowerCase().includes(query)
+    );
+  }
+  return characters;
+});
+
+// 计算属性：过滤后的装备列表
+const filteredEquipment = computed(() => {
+  // 模拟装备数据
+  return [
+    {
+      id: 'equipment1',
+      name: '铁制护甲',
+      icon: '/icons/equipment/armor.png',
+      category: '护甲',
+      effect: '物理防御+20'
+    },
+    {
+      id: 'equipment2',
+      name: '皮质手套',
+      icon: '/icons/equipment/gloves.png',
+      category: '手套',
+      effect: '攻击力+15'
+    },
+    {
+      id: 'equipment3',
+      name: '魔法项链',
+      icon: '/icons/equipment/accessory.png',
+      category: '饰品',
+      effect: '元素伤害+10%'
+    },
+    {
+      id: 'equipment4',
+      name: '钢盔',
+      icon: '/icons/equipment/helmet.png',
+      category: '头部',
+      effect: '生命值+50'
+    }
+  ];
+});
 const characterChartRef = ref(null);
 const skillTypeChartRef = ref(null);
 const characterChart = ref(null);
@@ -711,6 +1099,12 @@ const loopIntervalId = ref(null);
 const guideTour = ref(null);
 const draggingSkillBlock = ref(null); // 正在拖拽的技能块
 const resizingSkillBlock = ref(null); // 正在调整大小的技能块
+
+// 右键菜单相关
+const contextMenuVisible = ref(false);
+const contextMenuPosition = ref({ x: 0, y: 0 });
+const contextMenuItems = ref([]);
+const contextMenuTarget = ref(null); // 右键菜单的目标（技能块或时间轴空白区域）
 
 // 计算属性
 const isDark = computed(() => settingStore.theme === 'dark');
@@ -772,7 +1166,7 @@ const copySkillBlock = () => {
   }
 };
 
-// 粘贴技能块
+// 粘贴技能动作
 const pasteSkillBlock = () => {
   if (!project.value) return;
 
@@ -780,16 +1174,15 @@ const pasteSkillBlock = () => {
   if (copiedBlock) {
     try {
       const blockData = JSON.parse(copiedBlock);
-      // 创建新技能块，调整位置
+      // 创建新技能动作，调整位置
       const newBlock = {
         ...blockData,
-        startFrame: blockData.startFrame + 60, // 偏移60帧
-        endFrame: blockData.endFrame + 60,
+        startTime: blockData.startTime + 60, // 偏移60帧
         id: Date.now().toString(36) + Math.random().toString(36).substr(2),
       };
-      projectStore.addSkillBlock(project.value.id, newBlock);
+      projectStore.addAction(project.value.id, newBlock);
       calculateDamageStats();
-      ElMessage.success('技能块已粘贴');
+      ElMessage.success('技能动作已粘贴');
     } catch (error) {
       console.error('Failed to paste skill block:', error);
       ElMessage.error('粘贴失败');
@@ -797,7 +1190,7 @@ const pasteSkillBlock = () => {
   }
 };
 
-// 删除技能块
+// 删除技能动作
 const deleteSkillBlock = () => {
   if (selectedSkillBlock.value && project.value) {
     historyStore.recordSkillBlockAction(
@@ -805,13 +1198,13 @@ const deleteSkillBlock = () => {
       selectedSkillBlock.value,
       selectedSkillBlock.value
     );
-    projectStore.removeSkillBlock(
+    projectStore.removeAction(
       project.value.id,
       selectedSkillBlock.value.id
     );
     selectedSkillBlock.value = null;
     calculateDamageStats();
-    ElMessage.success('技能块已删除');
+    ElMessage.success('技能动作已删除');
   }
 };
 
@@ -888,7 +1281,7 @@ const handleKeydown = event => {
 
 const selectAllSkillBlocks = () => {
   if (!project.value) return;
-  selectedSkillBlocks.value = [...project.value.skillBlocks];
+  selectedSkillBlocks.value = [...project.value.actions];
 };
 
 const toggleCharacterGroup = characterId => {
@@ -909,45 +1302,263 @@ const toggleTrackVisibility = characterId => {
   }
 };
 
-const onSkillDragStart = data => {
-  // 由 SkillLibrary 组件触发
-  console.log('技能拖拽开始', data);
+const handleTabClick = (tab) => {
+  activeLeftTab.value = tab.props.name;
+};
+
+
+
+const selectSkill = (skill) => {
+  selectedSkill.value = skill;
+};
+
+const selectTrack = (characterId) => {
+  selectedCharacterId.value = characterId;
+};
+
+const selectChip = (chip) => {
+  selectedChip.value = chip;
+};
+
+// 为当前选中角色选择奇波
+const selectChipForCharacter = (chip) => {
+  if (selectedCharacter.value && project.value) {
+    projectStore.updateCharacterChip(project.value.id, selectedCharacter.value.id, chip.id);
+    selectedChip.value = chip;
+    ElMessage.success(`已为 ${selectedCharacter.value.name} 选择奇波: ${chip.name}`);
+  }
+};
+
+// 角色选择弹窗
+const isCharacterSelectorVisible = ref(false);
+const targetTrackIndex = ref(null);
+const characterSearchQuery = ref('');
+
+// 奇波选择弹窗
+const isChipSelectorVisible = ref(false);
+const chipTargetIndex = ref(null);
+
+// 装备选择弹窗
+const isEquipmentSelectorVisible = ref(false);
+const equipmentTargetIndex = ref(null);
+const equipmentSlotKey = ref('armor');
+
+// 轨道拖拽状态
+const draggingTrackIndex = ref(null);
+const dropTargetIndex = ref(null);
+
+// 打开角色选择器
+const openCharacterSelector = (index) => {
+  targetTrackIndex.value = index;
+  characterSearchQuery.value = '';
+  isCharacterSelectorVisible.value = true;
+};
+
+// 确认角色选择
+const confirmCharacterSelection = (charId) => {
+  if (targetTrackIndex.value !== null && project.value) {
+    // 实现角色更换逻辑
+    const characters = [...project.value.characters];
+    characters[targetTrackIndex.value] = charId;
+    projectStore.updateProjectCharacters(project.value.id, characters);
+    selectedCharacterId.value = charId;
+    ElMessage.success('角色已更换');
+  }
+  isCharacterSelectorVisible.value = false;
+};
+
+// 打开奇波选择器
+const openChipSelector = (index) => {
+  chipTargetIndex.value = index;
+  isChipSelectorVisible.value = true;
+};
+
+// 确认奇波选择
+const confirmChipSelection = (chipId) => {
+  if (chipTargetIndex.value !== null && project.value) {
+    const character = teamCharacters.value[chipTargetIndex.value];
+    if (character) {
+      projectStore.updateCharacterChip(project.value.id, character.id, chipId);
+      ElMessage.success('奇波已选择');
+    }
+  }
+  isChipSelectorVisible.value = false;
+};
+
+// 打开装备选择器
+const openEquipmentSelector = (index, slotKey) => {
+  equipmentTargetIndex.value = index;
+  equipmentSlotKey.value = slotKey;
+  isEquipmentSelectorVisible.value = true;
+};
+
+// 确认装备选择
+const confirmEquipmentSelection = (equipmentId) => {
+  if (equipmentTargetIndex.value !== null && project.value) {
+    const character = teamCharacters.value[equipmentTargetIndex.value];
+    if (character) {
+      projectStore.updateCharacterEquipment(project.value.id, character.id, equipmentSlotKey.value, equipmentId);
+      ElMessage.success('装备已选择');
+    }
+  }
+  isEquipmentSelectorVisible.value = false;
+};
+
+// 获取角色的奇波数据
+const getCharacterChip = (characterId) => {
+  if (!project.value) return null;
+  const characterData = projectStore.getCharacterData(project.value.id, characterId);
+  if (characterData && characterData.chipId) {
+    return characterChips.value.find(chip => chip.id === characterData.chipId);
+  }
+  return null;
+};
+
+// 获取角色的装备数据
+const getCharacterEquipment = (characterId, slotKey) => {
+  if (!project.value) return null;
+  const characterData = projectStore.getCharacterData(project.value.id, characterId);
+  if (characterData && characterData.equipment && characterData.equipment[slotKey]) {
+    return filteredEquipment.value.find(eq => eq.id === characterData.equipment[slotKey]);
+  }
+  return null;
+};
+
+// 轨道拖拽开始
+const onTrackDragStart = (event, index) => {
+  draggingTrackIndex.value = index;
+  event.dataTransfer.effectAllowed = 'move';
+  const trackInfoEl = event.target.closest('.track-info');
+  if (trackInfoEl) {
+    const rect = trackInfoEl.getBoundingClientRect();
+    const offsetX = event.clientX - rect.left;
+    const offsetY = event.clientY - rect.top;
+    event.dataTransfer.setDragImage(trackInfoEl, offsetX, offsetY);
+  }
+};
+
+// 轨道拖拽经过
+const onTrackDragOver = (event, index) => {
+  if (draggingTrackIndex.value === null) return;
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'move';
+  dropTargetIndex.value = index;
+};
+
+// 轨道拖拽结束
+const onTrackDrop = (event, targetIndex) => {
+  event.preventDefault();
+  if (draggingTrackIndex.value !== null && draggingTrackIndex.value !== targetIndex && project.value) {
+    // 实现轨道顺序调整逻辑
+    const characters = [...project.value.characters];
+    const [movedCharacter] = characters.splice(draggingTrackIndex.value, 1);
+    characters.splice(targetIndex, 0, movedCharacter);
+    projectStore.updateProjectCharacters(project.value.id, characters);
+    ElMessage.success('角色顺序已调整');
+  }
+  resetDragState();
+};
+
+// 轨道拖拽结束
+const onTrackDragEnd = () => {
+  resetDragState();
+};
+
+// 重置拖拽状态
+const resetDragState = () => {
+  draggingTrackIndex.value = null;
+  dropTargetIndex.value = null;
+};
+
+// 向上移动轨道
+const moveTrackUp = (index) => {
+  if (index > 0 && project.value) {
+    // 实现轨道上移逻辑
+    const characters = [...project.value.characters];
+    const [movedCharacter] = characters.splice(index, 1);
+    characters.splice(index - 1, 0, movedCharacter);
+    projectStore.updateProjectCharacters(project.value.id, characters);
+    ElMessage.success('角色顺序已调整');
+  }
+};
+
+// 向下移动轨道
+const moveTrackDown = (index) => {
+  if (index < teamCharacters.value.length - 1 && project.value) {
+    // 实现轨道下移逻辑
+    const characters = [...project.value.characters];
+    const [movedCharacter] = characters.splice(index, 1);
+    characters.splice(index + 1, 0, movedCharacter);
+    projectStore.updateProjectCharacters(project.value.id, characters);
+    ElMessage.success('角色顺序已调整');
+  }
+};
+
+const onSkillDragStart = (event, skill, characterId) => {
+  event.dataTransfer.setData('application/json', JSON.stringify({
+    skill,
+    characterId
+  }));
+  event.dataTransfer.effectAllowed = 'copy';
+};
+
+const onSkillDragOver = (event) => {
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'copy';
 };
 
 const onSkillDrop = (event, characterId) => {
   const data = JSON.parse(event.dataTransfer.getData('application/json'));
   if (data.characterId === characterId) {
-    // 计算技能块的起始位置（基于鼠标位置和时间轴缩放）
+    // 计算技能动作的起始位置（基于鼠标位置和时间轴缩放）
     const timelineRect = timelineContainer.value.getBoundingClientRect();
     const dropX = event.clientX - timelineRect.left;
-    let startFrame = Math.round(dropX / scale.value);
+    let startTime = Math.round(dropX / scale.value);
 
     // 吸附到网格
     if (snapToGrid.value) {
-      startFrame = Math.round(startFrame / 10) * 10;
+      startTime = Math.round(startTime / 10) * 10;
     }
 
-    // 计算技能块的结束位置
-    const endFrame = startFrame + data.skill.frames.end;
+    // 计算技能动作的结束位置
+    const duration = data.skill.frames?.end || 60; // 默认60帧
+    const endTime = startTime + duration;
 
-    // 创建技能块
-    const newSkillBlock = projectStore.addSkillBlock(project.value.id, {
+    // 创建技能动作，包含伤害判定点、CD等信息
+    const newAction = projectStore.addAction(project.value.id, {
       characterId,
       skillId: data.skill.id,
-      skillName: data.skill.name,
-      startFrame,
-      endFrame,
+      name: data.skill.name,
+      startTime,
+      duration,
+      type: data.skill.type || 'skill',
+      spCost: data.skill.energyCost || 0,
+      element: data.skill.element || 'physical',
+      cooldown: data.skill.cooldown || 0,
+      damageTicks: data.skill.damageTicks || [],
+      physicalAnomaly: data.skill.physicalAnomaly || [],
+      triggerWindow: data.skill.triggerWindow || 0,
+      enhancementTime: data.skill.enhancementTime || 0,
     });
-    if (newSkillBlock) {
-      historyStore.recordSkillBlockAction('add', newSkillBlock);
+    if (newAction) {
+      historyStore.recordSkillBlockAction('add', newAction);
+      // 重新计算伤害统计
+      calculateDamageStats();
     }
   }
 };
 
 const getCharacterSkillBlocks = characterId => {
   if (!project.value) return [];
-  return project.value.skillBlocks.filter(
-    block => block.characterId === characterId
+  return project.value.actions.filter(
+    action => action.characterId === characterId && !action.isChipSkill
+  );
+};
+
+const getCharacterChipSkillBlocks = characterId => {
+  if (!project.value) return [];
+  return project.value.actions.filter(
+    action => action.characterId === characterId && action.isChipSkill
   );
 };
 
@@ -962,13 +1573,14 @@ const getCharacterResourceBlocks = characterId => {
 };
 
 const selectSkillBlock = skillBlockId => {
-  selectedSkillBlock.value = project.value.skillBlocks.find(
-    block => block.id === skillBlockId
+  selectedSkillBlock.value = project.value.actions.find(
+    action => action.id === skillBlockId
   );
   selectedSkillBlocks.value = [selectedSkillBlock.value];
   selectedBuffBlock.value = null;
   selectedResourceBlock.value = null;
   selectedKeyframe.value = null;
+  skillEditPanelVisible.value = true;
 };
 
 const selectSkillBlocks = blocks => {
@@ -986,6 +1598,283 @@ const selectBuffBlock = buffBlockId => {
   selectedSkillBlocks.value = [];
   selectedResourceBlock.value = null;
   selectedKeyframe.value = null;
+};
+
+// 右键菜单相关方法
+const onSkillBlockContextMenu = (skillBlockId, position) => {
+  const skillBlock = project.value.actions.find(action => action.id === skillBlockId);
+  if (skillBlock) {
+    selectSkillBlock(skillBlockId);
+    contextMenuTarget.value = { type: 'skill', id: skillBlockId };
+    contextMenuPosition.value = position;
+    contextMenuItems.value = [
+      {
+        id: 'copy',
+        label: '复制',
+        shortcut: 'Ctrl+C',
+        action: 'copySkillBlock'
+      },
+      {
+        id: 'paste',
+        label: '粘贴',
+        shortcut: 'Ctrl+V',
+        action: 'pasteSkillBlock'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        id: 'delete',
+        label: '删除',
+        shortcut: 'Delete',
+        action: 'deleteSkillBlock'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        id: 'lock',
+        label: skillBlock.isLocked ? '解锁位置' : '锁定位置',
+        action: 'toggleSkillBlockLock',
+        data: skillBlockId
+      },
+      {
+        id: 'disable',
+        label: skillBlock.isDisabled ? '启用' : '禁用',
+        action: 'toggleSkillBlockDisable',
+        data: skillBlockId
+      },
+      {
+        type: 'separator'
+      },
+      {
+        id: 'color',
+        label: '调整颜色',
+        action: 'adjustSkillBlockColor',
+        data: skillBlockId
+      }
+    ];
+    contextMenuVisible.value = true;
+  }
+};
+
+const onTimelineContextMenu = (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  
+  contextMenuTarget.value = { type: 'timeline', position: event.clientX };
+  contextMenuPosition.value = {
+    x: event.clientX,
+    y: event.clientY
+  };
+  contextMenuItems.value = [
+    {
+      id: 'paste',
+      label: '粘贴技能',
+      shortcut: 'Ctrl+V',
+      action: 'pasteSkillBlockAtPosition',
+      data: event.clientX
+    },
+    {
+      id: 'addDivider',
+      label: '添加循环分界线',
+      action: 'addLoopDivider',
+      data: event.clientX
+    },
+    {
+      id: 'switchCharacter',
+      label: '在此处切人',
+      action: 'switchCharacterAtPosition',
+      data: event.clientX
+    }
+  ];
+  contextMenuVisible.value = true;
+};
+
+const handleContextMenuSelect = (action, data) => {
+  switch (action) {
+    case 'copySkillBlock':
+      copySkillBlock();
+      break;
+    case 'pasteSkillBlock':
+      pasteSkillBlock();
+      break;
+    case 'deleteSkillBlock':
+      deleteSkillBlock();
+      break;
+    case 'toggleSkillBlockLock':
+      toggleSkillBlockLock(data);
+      break;
+    case 'toggleSkillBlockDisable':
+      toggleSkillBlockDisable(data);
+      break;
+    case 'adjustSkillBlockColor':
+      adjustSkillBlockColor(data, event);
+      break;
+    case 'pasteSkillBlockAtPosition':
+      pasteSkillBlockAtPosition(data);
+      break;
+    case 'addLoopDivider':
+      addLoopDivider(data);
+      break;
+    case 'switchCharacterAtPosition':
+      switchCharacterAtPosition(data, event);
+      break;
+  }
+};
+
+const toggleSkillBlockLock = (skillBlockId) => {
+  if (!project.value) return;
+  const skillBlock = project.value.actions.find(action => action.id === skillBlockId);
+  if (skillBlock) {
+    skillBlock.isLocked = !skillBlock.isLocked;
+    projectStore.updateAction(project.value.id, skillBlock);
+    ElMessage.success(skillBlock.isLocked ? '技能已锁定' : '技能已解锁');
+  }
+};
+
+const toggleSkillBlockDisable = (skillBlockId) => {
+  if (!project.value) return;
+  const skillBlock = project.value.actions.find(action => action.id === skillBlockId);
+  if (skillBlock) {
+    skillBlock.isDisabled = !skillBlock.isDisabled;
+    projectStore.updateAction(project.value.id, skillBlock);
+    ElMessage.success(skillBlock.isDisabled ? '技能已禁用' : '技能已启用');
+    // 重新计算伤害统计
+    calculateDamageStats();
+  }
+};
+
+const adjustSkillBlockColor = (skillBlockId, event) => {
+  if (!project.value) return;
+  const skillBlock = project.value.actions.find(action => action.id === skillBlockId);
+  if (skillBlock) {
+    // 显示颜色选择菜单
+    colorSelectSkillBlockId.value = skillBlockId;
+    colorSelectMenuPosition.value = {
+      x: event.clientX,
+      y: event.clientY
+    };
+    showColorSelectMenu.value = true;
+  }
+};
+
+const handleColorSelect = (color) => {
+  if (!project.value) return;
+  const skillBlock = project.value.actions.find(action => action.id === colorSelectSkillBlockId.value);
+  if (skillBlock) {
+    skillBlock.customColor = color;
+    projectStore.updateAction(project.value.id, skillBlock);
+    ElMessage.success('技能颜色已调整');
+  }
+  showColorSelectMenu.value = false;
+};
+
+const pasteSkillBlockAtPosition = (clientX) => {
+  if (!project.value || !timelineContainer.value) return;
+  
+  const copiedBlock = localStorage.getItem('promilia_copied_skill_block');
+  if (copiedBlock) {
+    try {
+      const blockData = JSON.parse(copiedBlock);
+      const timelineRect = timelineContainer.value.getBoundingClientRect();
+      const dropX = clientX - timelineRect.left;
+      let startTime = Math.round(dropX / scale.value);
+      
+      if (snapToGrid.value) {
+        startTime = Math.round(startTime / 10) * 10;
+      }
+      
+      const newBlock = {
+        ...blockData,
+        startTime,
+        id: Date.now().toString(36) + Math.random().toString(36).substr(2),
+      };
+      projectStore.addAction(project.value.id, newBlock);
+      calculateDamageStats();
+      ElMessage.success('技能动作已粘贴');
+    } catch (error) {
+      console.error('Failed to paste skill block:', error);
+      ElMessage.error('粘贴失败');
+    }
+  }
+};
+
+const addLoopDivider = (clientX) => {
+  if (!project.value || !timelineContainer.value) return;
+  
+  const timelineRect = timelineContainer.value.getBoundingClientRect();
+  const dropX = clientX - timelineRect.left;
+  let frame = Math.round(dropX / scale.value);
+  
+  if (snapToGrid.value) {
+    frame = Math.round(frame / 10) * 10;
+  }
+  
+  // 添加循环分界线
+  const newDivider = {
+    id: Date.now().toString(36) + Math.random().toString(36).substr(2),
+    frame: frame,
+    color: '#E6A23C',
+    label: `循环分界 ${loopDividers.value.length + 1}`
+  };
+  
+  loopDividers.value.push(newDivider);
+  ElMessage.success(`在 ${formatTime(frame)} 添加循环分界线`);
+};
+
+// 角色切换相关
+const showCharacterSwitchMenu = ref(false);
+const characterSwitchMenuPosition = ref({ x: 0, y: 0 });
+const characterSwitchFrame = ref(0);
+
+// 颜色选择相关
+const showColorSelectMenu = ref(false);
+const colorSelectMenuPosition = ref({ x: 0, y: 0 });
+const colorSelectSkillBlockId = ref('');
+
+// 可用颜色列表
+const availableColors = [
+  '#409EFF', // 蓝色
+  '#67C23A', // 绿色
+  '#E6A23C', // 橙色
+  '#F56C6C', // 红色
+  '#909399', // 灰色
+  '#722ED1', // 紫色
+  '#13C2C2', // 青色
+  '#FAAD14', // 黄色
+  '#EB2F96', // 粉色
+  '#52C41A', // 深绿色
+  '#1890FF', // 深蓝色
+  '#FA541C'  // 橙红色
+];
+
+const switchCharacterAtPosition = (clientX, event) => {
+  if (!project.value || !timelineContainer.value) return;
+  
+  const timelineRect = timelineContainer.value.getBoundingClientRect();
+  const dropX = clientX - timelineRect.left;
+  let frame = Math.round(dropX / scale.value);
+  
+  if (snapToGrid.value) {
+    frame = Math.round(frame / 10) * 10;
+  }
+  
+  // 显示角色选择菜单
+  characterSwitchFrame.value = frame;
+  characterSwitchMenuPosition.value = {
+    x: clientX,
+    y: event.clientY
+  };
+  showCharacterSwitchMenu.value = true;
+};
+
+const handleCharacterSwitch = (characterId) => {
+  const character = gamedataStore.characters.find(c => c.id === characterId);
+  if (character) {
+    ElMessage.success(`在 ${formatTime(characterSwitchFrame.value)} 切换到角色: ${character.name}`);
+  }
+  showCharacterSwitchMenu.value = false;
 };
 
 const selectResourceBlock = resourceBlockId => {
@@ -1025,28 +1914,28 @@ const saveKeyframeChanges = () => {
 };
 
 const openSkillEditPanel = skillBlockId => {
-  selectedSkillBlock.value = project.value.skillBlocks.find(
-    block => block.id === skillBlockId
+  selectedSkillBlock.value = project.value.actions.find(
+    action => action.id === skillBlockId
   );
   skillEditPanelVisible.value = true;
 };
 
 const saveSkillBlockChanges = updatedSkillBlock => {
-  const oldBlock = project.value.skillBlocks.find(
-    block => block.id === updatedSkillBlock.id
+  const oldBlock = project.value.actions.find(
+    action => action.id === updatedSkillBlock.id
   );
   if (oldBlock) {
     historyStore.recordSkillBlockAction('update', updatedSkillBlock, oldBlock);
   }
-  projectStore.updateSkillBlock(project.value.id, updatedSkillBlock);
+  projectStore.updateAction(project.value.id, updatedSkillBlock);
   selectedSkillBlock.value = updatedSkillBlock;
   // 重新计算伤害统计
   calculateDamageStats();
 };
 
 const onSkillBlockDragStart = skillBlockId => {
-  const skillBlock = project.value.skillBlocks.find(
-    block => block.id === skillBlockId
+  const skillBlock = project.value.actions.find(
+    action => action.id === skillBlockId
   );
   if (skillBlock) {
     draggingSkillBlock.value = { ...skillBlock }; // 保存拖拽前的状态
@@ -1059,26 +1948,24 @@ const onSkillBlockDragMove = (skillBlockId, newStartFrame) => {
     newStartFrame = Math.round(newStartFrame / 10) * 10;
   }
 
-  // 更新技能块位置
-  const skillBlock = project.value.skillBlocks.find(
-    block => block.id === skillBlockId
+  // 更新技能动作位置
+  const skillBlock = project.value.actions.find(
+    action => action.id === skillBlockId
   );
   if (skillBlock) {
-    const duration = skillBlock.endFrame - skillBlock.startFrame;
     const updatedBlock = {
       ...skillBlock,
-      startFrame: newStartFrame,
-      endFrame: newStartFrame + duration,
+      startTime: newStartFrame,
     };
-    projectStore.updateSkillBlock(project.value.id, updatedBlock);
+    projectStore.updateAction(project.value.id, updatedBlock);
     // 重新计算伤害统计
     calculateDamageStats();
   }
 };
 
 const onSkillBlockDragEnd = skillBlockId => {
-  const skillBlock = project.value.skillBlocks.find(
-    block => block.id === skillBlockId
+  const skillBlock = project.value.actions.find(
+    action => action.id === skillBlockId
   );
   if (skillBlock && draggingSkillBlock.value) {
     historyStore.recordSkillBlockAction(
@@ -1091,8 +1978,8 @@ const onSkillBlockDragEnd = skillBlockId => {
 };
 
 const onSkillBlockResizeStart = skillBlockId => {
-  const skillBlock = project.value.skillBlocks.find(
-    block => block.id === skillBlockId
+  const skillBlock = project.value.actions.find(
+    action => action.id === skillBlockId
   );
   if (skillBlock) {
     resizingSkillBlock.value = { ...skillBlock }; // 保存调整前的状态
@@ -1105,24 +1992,25 @@ const onSkillBlockResizeMove = (skillBlockId, newEndFrame) => {
     newEndFrame = Math.round(newEndFrame / 10) * 10;
   }
 
-  // 更新技能块结束时间
-  const skillBlock = project.value.skillBlocks.find(
-    block => block.id === skillBlockId
+  // 更新技能动作持续时间
+  const skillBlock = project.value.actions.find(
+    action => action.id === skillBlockId
   );
   if (skillBlock) {
+    const duration = newEndFrame - skillBlock.startTime;
     const updatedBlock = {
       ...skillBlock,
-      endFrame: newEndFrame,
+      duration,
     };
-    projectStore.updateSkillBlock(project.value.id, updatedBlock);
+    projectStore.updateAction(project.value.id, updatedBlock);
     // 重新计算伤害统计
     calculateDamageStats();
   }
 };
 
 const onSkillBlockResizeEnd = skillBlockId => {
-  const skillBlock = project.value.skillBlocks.find(
-    block => block.id === skillBlockId
+  const skillBlock = project.value.actions.find(
+    action => action.id === skillBlockId
   );
   if (skillBlock && resizingSkillBlock.value) {
     historyStore.recordSkillBlockAction(
@@ -1316,13 +2204,27 @@ const jumpToFrame = frame => {
   currentFrame.value = frame;
 };
 
-const zoomIn = () => {
+// 优化后的缩放函数
+const zoomIn = useThrottleFn(() => {
   scale.value = Math.min(scale.value + 0.5, 5);
-};
+}, 100);
 
-const zoomOut = () => {
+const zoomOut = useThrottleFn(() => {
   scale.value = Math.max(scale.value - 0.5, 0.5);
-};
+}, 100);
+
+// 优化时间轴滚动
+const handleTimelineScroll = useThrottleFn((e) => {
+  if (Math.abs(e.deltaX) > 0 || e.shiftKey) {
+    e.preventDefault();
+    let delta = e.deltaX;
+    if (e.shiftKey && delta === 0) delta = e.deltaY;
+    
+    // 计算新的滚动位置
+    const newLeft = store.timelineShift + delta;
+    store.setTimelineShift(newLeft);
+  }
+}, 16);
 
 const toggleTimeUnit = () => {
   timeUnit.value = timeUnit.value === 'frame' ? 'second' : 'frame';
@@ -1394,25 +2296,25 @@ const handleUndoAction = (action, mode) => {
   }
 };
 
-// 处理技能块操作
+// 处理技能动作操作
 const handleSkillBlockAction = (action, mode) => {
   const actionType = action.type.replace('skillBlock_', '');
   switch (actionType) {
     case 'add':
       if (mode === 'undo') {
-        projectStore.removeSkillBlock(
+        projectStore.removeAction(
           project.value.id,
           action.data.skillBlock.id
         );
       } else if (mode === 'redo') {
-        projectStore.addSkillBlock(project.value.id, action.data.skillBlock);
+        projectStore.addAction(project.value.id, action.data.skillBlock);
       }
       break;
     case 'delete':
       if (mode === 'undo') {
-        projectStore.addSkillBlock(project.value.id, action.data.skillBlock);
+        projectStore.addAction(project.value.id, action.data.skillBlock);
       } else if (mode === 'redo') {
-        projectStore.removeSkillBlock(
+        projectStore.removeAction(
           project.value.id,
           action.data.skillBlock.id
         );
@@ -1420,9 +2322,9 @@ const handleSkillBlockAction = (action, mode) => {
       break;
     case 'update':
       if (mode === 'undo') {
-        projectStore.updateSkillBlock(project.value.id, action.data.oldData);
+        projectStore.updateAction(project.value.id, action.data.oldData);
       } else if (mode === 'redo') {
-        projectStore.updateSkillBlock(project.value.id, action.data.skillBlock);
+        projectStore.updateAction(project.value.id, action.data.skillBlock);
       }
       break;
     default:
@@ -1648,6 +2550,34 @@ const startGuideTour = () => {
   guideTour.value?.startTour();
 };
 
+// 装备选择处理
+const onEquipmentSelect = (equipment) => {
+  selectedEquipment.value = equipment;
+};
+
+// Boss事件处理
+const selectBossEvent = (eventId) => {
+  selectedBossEvent.value = project.value.bossEvents.find(event => event.id === eventId);
+};
+
+const addBossEvent = (event) => {
+  if (project.value) {
+    projectStore.addBossEvent(project.value.id, event);
+  }
+};
+
+const updateBossEvent = (event) => {
+  if (project.value) {
+    projectStore.updateBossEvent(project.value.id, event);
+  }
+};
+
+const deleteBossEvent = (eventId) => {
+  if (project.value) {
+    projectStore.removeBossEvent(project.value.id, eventId);
+  }
+};
+
 // 添加关键时间点
 const addKeyframeAtPosition = event => {
   if (!project.value) return;
@@ -1681,7 +2611,7 @@ const getSkillDependencies = () => {
 
 const getSkillBlockById = blockId => {
   if (!project.value) return null;
-  return project.value.skillBlocks.find(block => block.id === blockId);
+  return project.value.actions.find(action => action.id === blockId);
 };
 
 const getTrackIndexByCharacterId = characterId => {
@@ -1690,15 +2620,17 @@ const getTrackIndexByCharacterId = characterId => {
 
 const isSkillDependencySatisfied = (sourceBlock, targetBlock) => {
   // 简单的满足条件：源技能结束时间 <= 目标技能开始时间
-  return sourceBlock.endFrame <= targetBlock.startFrame;
+  return sourceBlock.startTime + sourceBlock.duration <= targetBlock.startTime;
 };
 
 const addSkillDependency = () => {
   if (selectedSkillBlocks.value.length === 2) {
     const [block1, block2] = selectedSkillBlocks.value;
     // 确保源技能在目标技能之前
-    const sourceBlock = block1.endFrame < block2.startFrame ? block1 : block2;
-    const targetBlock = block1.endFrame < block2.startFrame ? block2 : block1;
+    const sourceBlockEnd = block1.startTime + block1.duration;
+    const targetBlockStart = block2.startTime;
+    const sourceBlock = sourceBlockEnd < targetBlockStart ? block1 : block2;
+    const targetBlock = sourceBlockEnd < targetBlockStart ? block2 : block1;
 
     projectStore.addSkillDependency(
       project.value.id,
@@ -1724,6 +2656,14 @@ const handleLinkLineClick = data => {
   if (sourceBlock && targetBlock) {
     selectSkillBlocks([sourceBlock, targetBlock]);
   }
+};
+
+// 点击时间轴空白处，取消技能选中并关闭编辑面板
+const onTimelineClick = () => {
+  selectedSkillBlock.value = null;
+  selectedSkillBlocks.value = [];
+  skillEditPanelVisible.value = false;
+  calculateDamageStats();
 };
 
 // 生命周期
@@ -1801,22 +2741,27 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* App Layout */
 .editor {
-  min-height: 100vh;
-  padding: 0;
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #2c2c2c;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 /* 顶部导航栏 */
 .editor-header {
+  height: 50px;
+  flex-shrink: 0;
+  border-bottom: 1px solid #444;
+  background-color: #3a3a3a;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
-  background-color: var(--bg-color-light);
-  border-bottom: 1px solid var(--border-color);
-  box-shadow: var(--box-shadow);
+  justify-content: space-between;
+  padding: 0 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .header-left {
@@ -1828,7 +2773,7 @@ onUnmounted(() => {
 .header-left h1 {
   font-size: 20px;
   font-weight: 600;
-  color: var(--text-color);
+  color: #f0f0f0;
   margin: 0;
 }
 
@@ -1841,75 +2786,129 @@ onUnmounted(() => {
 .header-right {
   display: flex;
   gap: 8px;
+  align-items: center;
 }
 
 /* 主编辑区域 */
 .editor-content {
   display: grid;
-  grid-template-columns: 250px 1fr 280px;
+  grid-template-columns: 260px 1fr 280px;
   flex: 1;
   overflow: hidden;
 }
 
-/* 左侧技能库 */
+/* 左侧功能模块 */
 .left-panel {
-  background-color: var(--bg-color-light);
-  border-right: 1px solid var(--border-color);
+  background-color: #252525;
+  border-right: 1px solid #333;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow: hidden;
+  z-index: 10;
 }
 
 .panel-header {
   padding: 16px;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid #333;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
 }
 
 .panel-header h3 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
-  color: var(--text-color);
+  color: #fff;
   margin: 0;
+  letter-spacing: 1px;
 }
 
-.skill-library {
-  padding: 16px;
+/* 标签栏样式 */
+.character-tabs {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-
-.character-group {
-  background-color: var(--bg-color-lighter);
-  border-radius: 6px;
   overflow: hidden;
 }
 
-.character-header {
+.demo-tabs {
+  flex: 1;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  cursor: pointer;
-  transition: background-color 0.2s;
+  flex-direction: column;
 }
 
-.character-header:hover {
-  background-color: var(--bg-color-hover);
+:deep(.el-tabs__header) {
+  background-color: #1f1f1f;
+  border-bottom: 1px solid #333;
+  margin: 0;
+  padding: 0 16px;
 }
 
-.character-info {
+:deep(.el-tabs__nav) {
+  height: 40px;
+}
+
+:deep(.el-tabs__item) {
+  color: #bbb;
+  font-size: 14px;
+  height: 40px;
+  line-height: 40px;
+  margin-right: 20px;
+}
+
+:deep(.el-tabs__item:hover) {
+  color: #fff;
+}
+
+:deep(.el-tabs__item.is-active) {
+  color: #ffd700;
+}
+
+:deep(.el-tabs__active-bar) {
+  background-color: #ffd700;
+  height: 2px;
+}
+
+:deep(.el-tabs__content) {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+}
+
+/* 角色选择器 */
+.character-selector {
+  margin-bottom: 16px;
+}
+
+:deep(.el-select) {
+  width: 100%;
+}
+
+:deep(.el-select .el-input__wrapper) {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+}
+
+:deep(.el-select .el-input__inner) {
+  color: #fff;
+}
+
+/* 角色详情 */
+.character-details {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  gap: 16px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border-radius: 6px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .character-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
   overflow: hidden;
-  background-color: var(--bg-color);
+  flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .character-avatar img {
@@ -1918,80 +2917,678 @@ onUnmounted(() => {
   object-fit: cover;
 }
 
-.character-name {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-color);
+.character-info {
+  flex: 1;
 }
 
-.rotated {
-  transform: rotate(180deg);
-  transition: transform 0.3s;
+.character-info h4 {
+  margin: 0 0 8px 0;
+  color: #fff;
+  font-size: 16px;
 }
 
-.skill-list {
-  padding: 8px;
+.character-stats {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.stat-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.stat-value {
+  color: #ffd700;
+  font-weight: 600;
+}
+
+/* 技能列表 */
+.skills-section {
+  margin-top: 16px;
+}
+
+.skills-section h4 {
+  margin: 0 0 12px 0;
+  color: #fff;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.skills-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .skill-item {
   display: flex;
-  align-items: center;
   gap: 12px;
-  padding: 10px;
-  background-color: var(--bg-color);
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 4px;
   cursor: grab;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .skill-item:hover {
-  background-color: var(--bg-color-hover);
-}
-
-.skill-item:active {
-  cursor: grabbing;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #ffd700;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.1);
 }
 
 .skill-icon {
-  width: 32px;
-  height: 32px;
+  width: 48px;
+  height: 48px;
   border-radius: 4px;
-  background-color: var(--primary-color-light);
+  overflow: hidden;
+  flex-shrink: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skill-icon img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
 }
 
 .skill-info {
   flex: 1;
+  min-width: 0;
 }
 
 .skill-name {
   font-size: 14px;
-  font-weight: 500;
-  color: var(--text-color);
-  margin-bottom: 2px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.skill-meta {
-  display: flex;
-  gap: 8px;
+.skill-description {
   font-size: 12px;
-  color: var(--text-color-secondary);
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.meta-item {
-  padding: 2px 6px;
-  background-color: var(--bg-color-light);
+/* 奇波列表 */
+.chip-section {
+  height: 100%;
+}
+
+.chip-list h4 {
+  margin: 0 0 12px 0;
+  color: #fff;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.chips-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chip-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chip-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #00e5ff;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 229, 255, 0.1);
+}
+
+.chip-item.is-selected {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: #00e5ff;
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.2);
+}
+
+.chip-item.selected {
+  background: rgba(0, 229, 255, 0.1);
+  border-color: #00e5ff;
+  margin-bottom: 16px;
+}
+
+.selected-chip-info {
+  margin-bottom: 16px;
+}
+
+.selected-chip-info h4 {
+  margin: 0 0 8px 0;
+  color: #00e5ff;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.chip-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chip-icon img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+
+.chip-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.chip-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chip-effect {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.no-character {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 14px;
+  border: 1px dashed #333;
+  border-radius: 4px;
+}
+
+/* 对话框样式 */
+:deep(.el-dialog) {
+  background-color: #2b2b2b;
+  border: 1px solid #444;
   border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+:deep(.el-dialog__header) {
+  margin-right: 0;
+  border-bottom: 1px solid #3a3a3a;
+  padding: 15px 20px;
+}
+
+:deep(.el-dialog__title) {
+  color: #f0f0f0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+:deep(.el-dialog__body) {
+  color: #ccc;
+  padding: 25px 25px 10px 25px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+:deep(.el-dialog__footer) {
+  padding: 15px 25px 20px;
+  border-top: 1px solid #3a3a3a;
+}
+
+:deep(.el-input__wrapper) {
+  background-color: #1f1f1f;
+  box-shadow: 0 0 0 1px #444 inset;
+  padding: 4px 11px;
+}
+
+:deep(.el-input__inner) {
+  color: white;
+  height: 36px;
+  line-height: 36px;
+}
+
+:deep(.el-input__wrapper:hover) {
+  box-shadow: 0 0 0 1px #666 inset;
+}
+
+:deep(.el-input__wrapper.is-focus) {
+  box-shadow: 0 0 0 1px #ffd700 inset;
+}
+
+/* 角色选择对话框 */
+.character-selector-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.search-box {
+  margin-bottom: 8px;
+}
+
+.character-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* 循环分界线样式 */
+.loop-dividers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.loop-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  border-left: 2px dashed var(--primary-color);
+  z-index: 50;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.loop-divider:hover {
+  border-left-style: solid;
+  border-left-width: 3px;
+}
+
+.loop-divider-label {
+  position: absolute;
+  top: -20px;
+  left: 5px;
+  background-color: var(--bg-color);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: var(--text-color);
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* 角色切换菜单样式 */
+.character-switch-menu {
+  position: fixed;
+  z-index: 10000;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  min-width: 150px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.menu-header {
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.character-switch-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.character-switch-item:hover {
+  background-color: var(--primary-color-light);
+}
+
+.character-avatar.small {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 8px;
+}
+
+.character-avatar.small img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 颜色选择菜单样式 */
+.color-select-menu {
+  position: fixed;
+  z-index: 10000;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  min-width: 150px;
+  padding: 8px;
+}
+
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.color-item {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  border: 1px solid var(--border-color);
+}
+
+.color-item:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+/* 技能编辑覆盖层样式 */
+.skill-edit-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #333;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-left: 1px solid #444;
+}
+
+.skill-edit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #444;
+  background-color: #3a3a3a;
+}
+
+.skill-edit-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #f0f0f0;
+}
+
+.skill-edit-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.right-panel {
+  position: relative;
+  width: 100%;
+  background-color: #333;
+  border-left: 1px solid #444;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.right-panel-content {
+  padding: 16px;
+}
+
+.character-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.character-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #ffd700;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.1);
+}
+
+.character-item .character-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.character-item .character-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.character-item .character-info {
+  text-align: center;
+}
+
+.character-item .character-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.character-item .character-element {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* 奇波选择对话框 */
+.chip-selector-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.chip-selector-dialog .chip-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.chip-selector-dialog .chip-item {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.chip-selector-dialog .chip-icon {
+  margin-bottom: 8px;
+}
+
+/* 装备选择对话框 */
+.equipment-selector-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.equipment-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.equipment-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.equipment-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #52c41a;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(82, 196, 26, 0.1);
+}
+
+.equipment-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.equipment-icon img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+
+.equipment-info {
+  text-align: center;
+}
+
+.equipment-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.equipment-category {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 4px;
+}
+
+.equipment-effect {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 对话框底部按钮 */
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  width: 100%;
+}
+
+:deep(.el-button) {
+  border-radius: 4px;
+  font-size: 14px;
+  padding: 6px 12px;
+}
+
+:deep(.el-button--primary) {
+  background-color: #ffd700;
+  border-color: #ffd700;
+  color: #222;
+}
+
+:deep(.el-button--primary:hover) {
+  background-color: #ffed4e;
+  border-color: #ffed4e;
+  color: #222;
+}
+
+:deep(.el-button--default) {
+  background-color: transparent;
+  border-color: #666;
+  color: #ccc;
+}
+
+:deep(.el-button--default:hover) {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: #888;
+  color: #fff;
 }
 
 /* 中间时间轴 */
 .main-panel {
-  background-color: var(--bg-color);
+  background-color: #282828;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  z-index: 1;
+  border-right: 1px solid #444;
 }
 
 /* 播放控制条 */
@@ -2000,8 +3597,8 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background-color: var(--bg-color-light);
-  border-bottom: 1px solid var(--border-color);
+  background-color: #3a3a3a;
+  border-bottom: 1px solid #444;
 }
 
 .control-buttons {
@@ -2024,17 +3621,86 @@ onUnmounted(() => {
 /* 时间轴容器 */
 .timeline-container {
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
   position: relative;
+}
+
+/* 时间轴网格布局 */
+.timeline-grid-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+}
+
+/* 左侧角色信息栏 */
+.tracks-sidebar {
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
+  background: #3a3a3a;
+  display: flex;
+  flex-direction: column;
+  z-index: 6;
+  border-right: 1px solid #444;
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  height: 31px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #444;
+  background: #333;
+}
+
+.header-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f0f0f0;
+}
+
+.sidebar-tracks {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sidebar-track {
+  border-bottom: 1px solid #444;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  height: 200px;
+  box-sizing: border-box;
+}
+
+.sidebar-track:hover {
+  background-color: #444;
+}
+
+.sidebar-track.is-selected {
+  background-color: #4a4a4a;
+  border-left: 3px solid #ffd700;
+}
+
+/* 右侧时间轴内容 */
+.timeline-content {
+  grid-column: 2 / 3;
+  grid-row: 1 / 3;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 /* 时间刻度 */
 .timeline-header {
   height: 40px;
-  border-bottom: 1px solid var(--border-color);
-  position: relative;
-  background-color: var(--bg-color-light);
+  border-bottom: 1px solid #444;
+  position: sticky;
+  top: 0;
+  background-color: #333;
   cursor: pointer;
+  z-index: 5;
 }
 
 .time-scale {
@@ -2054,12 +3720,12 @@ onUnmounted(() => {
 .tick-mark {
   width: 1px;
   flex: 1;
-  background-color: var(--border-color);
+  background-color: #555;
 }
 
 .tick-label {
   font-size: 12px;
-  color: var(--text-color-secondary);
+  color: #aaa;
   margin-top: 4px;
 }
 
@@ -2075,34 +3741,128 @@ onUnmounted(() => {
 /* 轨道区域 */
 .timeline-tracks {
   position: relative;
+  flex: 1;
 }
 
 .track {
-  border-bottom: 1px solid var(--border-color);
-}
-
-.track-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 16px;
-  background-color: var(--bg-color-light);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid #444;
+  transition: all 0.2s;
 }
 
 .track-info {
   display: flex;
   align-items: center;
   gap: 8px;
+  cursor: grab;
+  transition: all 0.2s;
+}
+
+.track-info:hover {
+  opacity: 0.9;
+}
+
+.track-info:active {
+  cursor: grabbing;
+}
+
+.character-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #282828;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.character-avatar:hover {
+  border-color: #ffd700;
+  transform: scale(1.05);
+}
+
+.character-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.character-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #f0f0f0;
+  flex-shrink: 0;
+}
+
+.track-order-controls {
+  display: flex;
+  gap: 4px;
+  margin-left: 12px;
 }
 
 .track-controls {
   display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.equipment-slots {
+  display: flex;
   gap: 8px;
 }
 
+.slot {
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid #555;
+  background-color: #2a2a2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  overflow: hidden;
+}
+
+.slot:hover {
+  border-color: #ffd700;
+  background-color: #3a3a3a;
+}
+
+.slot-label {
+  font-size: 12px;
+  color: #f0f0f0;
+}
+
+.slot-image {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.chip-slot {
+  border-color: #00e5ff;
+}
+
+.chip-slot:hover {
+  border-color: #00e5ff;
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
+}
+
+.equipment-slot {
+  border-color: #52c41a;
+}
+
+.equipment-slot:hover {
+  border-color: #52c41a;
+  box-shadow: 0 0 8px rgba(82, 196, 26, 0.2);
+}
+
 .sub-tracks {
-  background-color: var(--bg-color);
+  background-color: #282828;
 }
 
 .sub-tracks.hidden {
@@ -2110,22 +3870,120 @@ onUnmounted(() => {
 }
 
 .sub-track {
-  border-bottom: 1px solid var(--border-color-light);
+  border-bottom: 1px solid #444;
 }
 
 .sub-track-header {
-  padding: 4px 16px;
+  padding: 20px 16px;
   font-size: 12px;
-  color: var(--text-color-secondary);
-  background-color: var(--bg-color-lighter);
-  border-bottom: 1px solid var(--border-color-light);
+  color: #aaa;
+  background-color: #333;
+  border-bottom: 1px solid #444;
+  height: 59px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
 }
 
 .sub-track-content {
   position: relative;
   height: 40px;
   padding: 4px 0;
-  border-left: 1px solid var(--border-color);
+  border-left: 1px solid #444;
+}
+
+/* 装备详情 */
+.equipment-details {
+  background-color: #333;
+  border-radius: 4px;
+  padding: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: 16px;
+  border: 1px solid #444;
+}
+
+.equipment-details .detail-item {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.equipment-details .detail-label {
+  font-weight: 500;
+  color: #aaa;
+}
+
+.equipment-details .detail-value {
+  color: #f0f0f0;
+  font-weight: 400;
+}
+
+/* Boss时间轴 */
+.boss-timeline {
+  height: 100px;
+  border-top: 1px solid #444;
+  border-bottom: 1px solid #444;
+  overflow: hidden;
+  background-color: #333;
+}
+
+/* 资源监控面板 */
+.resource-monitor {
+  height: 150px;
+  border-top: 1px solid #444;
+  overflow: hidden;
+  background-color: #333;
+}
+
+/* 右侧面板 */
+.right-panel {
+  background-color: #333;
+  overflow: hidden;
+  z-index: 10;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.panel-section {
+  margin-bottom: 20px;
+  padding: 16px;
+  background-color: #282828;
+  border-radius: 6px;
+  border: 1px solid #444;
+}
+
+.panel-section h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f0f0f0;
+  margin: 0 0 12px 0;
+}
+
+.project-info, .damage-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-item, .stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.info-label, .stat-label {
+  color: #aaa;
+}
+
+.info-value, .stat-value {
+  color: #f0f0f0;
+  font-weight: 500;
+}
+
+.chart-container {
+  margin-top: 12px;
 }
 
 /* 技能块 */
@@ -2133,8 +3991,8 @@ onUnmounted(() => {
   position: absolute;
   top: 4px;
   height: 32px;
-  background-color: var(--primary-color-light);
-  border: 1px solid var(--primary-color);
+  background-color: rgba(64, 158, 255, 0.2);
+  border: 1px solid #409EFF;
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
@@ -2142,14 +4000,14 @@ onUnmounted(() => {
 }
 
 .skill-block:hover {
-  background-color: var(--primary-color);
+  background-color: rgba(64, 158, 255, 0.3);
   transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(64, 158, 255, 0.4);
 }
 
 .skill-block.selected {
-  border: 2px solid var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+  border: 2px solid #409EFF;
+  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.3);
 }
 
 .skill-block-content {
@@ -2164,11 +4022,78 @@ onUnmounted(() => {
   width: 20px;
   height: 20px;
   border-radius: 3px;
-  background-color: var(--primary-color);
+  background-color: #409EFF;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   font-size: 12px;
+}
+
+/* 底部缩放控制 */
+.timeline-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #333;
+  border-top: 1px solid #444;
+}
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.snap-control {
+  display: flex;
+  align-items: center;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .editor-content {
+    grid-template-columns: 180px 1fr 220px;
+  }
+}
+
+@media (max-width: 992px) {
+  .editor-content {
+    grid-template-columns: 160px 1fr 200px;
+  }
+  
+  .header-left h1 {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .editor-content {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
+  
+  .left-panel,
+  .right-panel {
+    height: 200px;
+    border-right: none;
+    border-bottom: 1px solid #444;
+  }
+  
+  .header-left h1 {
+    font-size: 16px;
+  }
+  
+  .timeline-controls {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+  
+  .control-buttons,
+  .time-info {
+    justify-content: center;
+  }
 }
 </style>

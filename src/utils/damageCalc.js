@@ -1033,7 +1033,7 @@ export function calculateSkillDamage(
  * @returns {object} 排轴统计数据
  */
 export function calculateTimelineDamage(project, gamedata) {
-  if (!project || !project.skillBlocks || project.skillBlocks.length === 0) {
+  if (!project || !project.actions || project.actions.length === 0) {
     return {
       totalDamage: 0,
       dps: 0,
@@ -1057,8 +1057,13 @@ export function calculateTimelineDamage(project, gamedata) {
     }
   });
 
-  // 计算每个技能块的伤害
-  project.skillBlocks.forEach(skillBlock => {
+  // 计算每个技能动作的伤害
+  project.actions.forEach(skillBlock => {
+    // 跳过被禁用的技能
+    if (skillBlock.isDisabled) {
+      return;
+    }
+
     const character = gamedata.characters.find(
       c => c.id === skillBlock.characterId
     );
@@ -1180,7 +1185,7 @@ export function calculateSkillEnergyGain(skill, buffs = {}) {
  * @returns {object} 逐帧伤害数据
  */
 export function calculateFrameByFrameDamage(project, gamedata, frameRate = 60) {
-  if (!project || !project.skillBlocks || project.skillBlocks.length === 0) {
+  if (!project || !project.actions || project.actions.length === 0) {
     return {
       totalDamage: 0,
       frames: [],
@@ -1209,9 +1214,9 @@ export function calculateFrameByFrameDamage(project, gamedata, frameRate = 60) {
     }
   });
 
-  // 准备技能块，按时间排序
-  const sortedSkillBlocks = [...project.skillBlocks].sort(
-    (a, b) => a.startFrame - b.startFrame
+  // 准备技能动作，按时间排序
+  const sortedSkillBlocks = [...project.actions].sort(
+    (a, b) => a.startTime - b.startTime
   );
 
   // 初始化游戏状态
@@ -1263,7 +1268,7 @@ export function calculateFrameByFrameDamage(project, gamedata, frameRate = 60) {
     // 处理技能释放
     while (
       gameState.nextSkillIndex < gameState.skillBlocks.length &&
-      gameState.skillBlocks[gameState.nextSkillIndex].startFrame ===
+      gameState.skillBlocks[gameState.nextSkillIndex].startTime ===
         gameState.currentFrame
     ) {
       const skillBlock = gameState.skillBlocks[gameState.nextSkillIndex];

@@ -39,7 +39,33 @@
             "recovery": 18
           },
           "energyGain": 2,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 15,
+              "multiplier": 0.5,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 30,
+              "multiplier": 0.6,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 45,
+              "multiplier": 0.7,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 60,
+              "multiplier": 0.8,
+              "element": "physical",
+              "hitType": "normal"
+            }
+          ]
         },
         {
           "id": "skill_moyin_2",
@@ -56,7 +82,15 @@
             "recovery": 24
           },
           "energyGain": 5,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 45,
+              "multiplier": 2.5,
+              "element": "lightning",
+              "hitType": "charge"
+            }
+          ]
         },
         {
           "id": "skill_moyin_3",
@@ -125,9 +159,9 @@
             },
             "canCombo": true
           },
-          "judgmentPoints": [
+          "damageTicks": [
             {
-              "time": 30,
+              "offset": 30,
               "multiplier": 2.52,
               "element": "lightning",
               "hitType": "physical",
@@ -169,7 +203,16 @@
             "recovery": 36
           },
           "energyGain": 0,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 75,
+              "multiplier": 6.0,
+              "element": "lightning",
+              "hitType": "ultimate",
+              "description": "星决技伤害"
+            }
+          ]
         },
         {
           "id": "skill_moyin_5",
@@ -186,7 +229,16 @@
             "recovery": 30
           },
           "energyGain": 12,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 66,
+              "multiplier": 4.5,
+              "element": "lightning",
+              "hitType": "combo",
+              "description": "星携技伤害"
+            }
+          ]
         }
       ],
       "passives": [
@@ -250,7 +302,27 @@
             "recovery": 15
           },
           "energyGain": 2,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 15,
+              "multiplier": 0.4,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 30,
+              "multiplier": 0.5,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 45,
+              "multiplier": 0.6,
+              "element": "physical",
+              "hitType": "normal"
+            }
+          ]
         },
         {
           "id": "skill_luoqing_2",
@@ -267,7 +339,15 @@
             "recovery": 20
           },
           "energyGain": 4,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 39,
+              "multiplier": 1.8,
+              "element": "water",
+              "hitType": "charge"
+            }
+          ]
         },
         {
           "id": "skill_luoqing_3",
@@ -290,7 +370,25 @@
             "type": "defense",
             "value": 0.2,
             "duration": 10
-          }
+          },
+          "damageTicks": [
+            {
+              "offset": 48,
+              "multiplier": 2.0,
+              "element": "water",
+              "hitType": "skill"
+            }
+          ],
+          "buffs": [
+            {
+              "name": "水之守护",
+              "type": "defense",
+              "value": 0.2,
+              "duration": 10,
+              "trigger": "onHit",
+              "target": "self"
+            }
+          ]
         },
         {
           "id": "skill_luoqing_4",
@@ -313,7 +411,25 @@
             "type": "attack",
             "value": 0.25,
             "duration": 12
-          }
+          },
+          "damageTicks": [
+            {
+              "offset": 60,
+              "multiplier": 4.0,
+              "element": "water",
+              "hitType": "ultimate"
+            }
+          ],
+          "buffs": [
+            {
+              "name": "水之祝福",
+              "type": "attack",
+              "value": 0.25,
+              "duration": 12,
+              "trigger": "onCast",
+              "target": "team"
+            }
+          ]
         },
         {
           "id": "skill_luoqing_5",
@@ -330,7 +446,15 @@
             "recovery": 28
           },
           "energyGain": 10,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 57,
+              "multiplier": 3.0,
+              "element": "water",
+              "hitType": "combo"
+            }
+          ]
         }
       ],
       "passives": [
@@ -394,7 +518,33 @@
             "recovery": 16
           },
           "energyGain": 2,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 15,
+              "multiplier": 0.5,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 30,
+              "multiplier": 0.55,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 45,
+              "multiplier": 0.6,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 60,
+              "multiplier": 0.65,
+              "element": "physical",
+              "hitType": "normal"
+            }
+          ]
         },
         {
           "id": "skill_genchiyo_2",
@@ -411,7 +561,15 @@
             "recovery": 22
           },
           "energyGain": 5,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 42,
+              "multiplier": 2.2,
+              "element": "fire",
+              "hitType": "charge"
+            }
+          ]
         },
         {
           "id": "skill_genchiyo_3",
@@ -428,7 +586,15 @@
             "recovery": 28
           },
           "energyGain": 9,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 51,
+              "multiplier": 3.2,
+              "element": "fire",
+              "hitType": "skill"
+            }
+          ]
         },
         {
           "id": "skill_genchiyo_4",
@@ -445,7 +611,15 @@
             "recovery": 32
           },
           "energyGain": 0,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 69,
+              "multiplier": 5.5,
+              "element": "fire",
+              "hitType": "ultimate"
+            }
+          ]
         },
         {
           "id": "skill_genchiyo_5",
@@ -462,7 +636,15 @@
             "recovery": 26
           },
           "energyGain": 11,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 60,
+              "multiplier": 4.0,
+              "element": "fire",
+              "hitType": "combo"
+            }
+          ]
         }
       ],
       "passives": [
@@ -526,7 +708,33 @@
             "recovery": 15
           },
           "energyGain": 2,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 15,
+              "multiplier": 0.45,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 30,
+              "multiplier": 0.5,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 45,
+              "multiplier": 0.55,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 60,
+              "multiplier": 0.6,
+              "element": "physical",
+              "hitType": "normal"
+            }
+          ]
         },
         {
           "id": "skill_yunjin_2",
@@ -543,7 +751,15 @@
             "recovery": 20
           },
           "energyGain": 4,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 42,
+              "multiplier": 1.9,
+              "element": "physical",
+              "hitType": "charge"
+            }
+          ]
         },
         {
           "id": "skill_yunjin_3",
@@ -566,7 +782,25 @@
             "type": "attack",
             "value": 0.2,
             "duration": 12
-          }
+          },
+          "damageTicks": [
+            {
+              "offset": 51,
+              "multiplier": 2.2,
+              "element": "wind",
+              "hitType": "skill"
+            }
+          ],
+          "buffs": [
+            {
+              "name": "飞云旗阵",
+              "type": "attack",
+              "value": 0.2,
+              "duration": 12,
+              "trigger": "onHit",
+              "target": "team"
+            }
+          ]
         },
         {
           "id": "skill_yunjin_4",
@@ -589,7 +823,25 @@
             "type": "physicalDamage",
             "value": 0.3,
             "duration": 15
-          }
+          },
+          "damageTicks": [
+            {
+              "offset": 60,
+              "multiplier": 4.5,
+              "element": "wind",
+              "hitType": "ultimate"
+            }
+          ],
+          "buffs": [
+            {
+              "name": "破云见日",
+              "type": "physicalDamage",
+              "value": 0.3,
+              "duration": 15,
+              "trigger": "onCast",
+              "target": "team"
+            }
+          ]
         },
         {
           "id": "skill_yunjin_5",
@@ -606,7 +858,15 @@
             "recovery": 26
           },
           "energyGain": 10,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 57,
+              "multiplier": 3.5,
+              "element": "wind",
+              "hitType": "combo"
+            }
+          ]
         }
       ],
       "passives": [
@@ -670,7 +930,39 @@
             "recovery": 16
           },
           "energyGain": 2,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 12,
+              "multiplier": 0.5,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 24,
+              "multiplier": 0.55,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 36,
+              "multiplier": 0.6,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 48,
+              "multiplier": 0.65,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 60,
+              "multiplier": 0.7,
+              "element": "physical",
+              "hitType": "normal"
+            }
+          ]
         },
         {
           "id": "skill_zhongli_2",
@@ -687,7 +979,15 @@
             "recovery": 22
           },
           "energyGain": 5,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 45,
+              "multiplier": 2.3,
+              "element": "earth",
+              "hitType": "charge"
+            }
+          ]
         },
         {
           "id": "skill_zhongli_3",
@@ -710,7 +1010,25 @@
             "type": "defense",
             "value": 0.3,
             "duration": 15
-          }
+          },
+          "damageTicks": [
+            {
+              "offset": 54,
+              "multiplier": 2.5,
+              "element": "earth",
+              "hitType": "skill"
+            }
+          ],
+          "buffs": [
+            {
+              "name": "地心护盾",
+              "type": "defense",
+              "value": 0.3,
+              "duration": 15,
+              "trigger": "onCast",
+              "target": "self"
+            }
+          ]
         },
         {
           "id": "skill_zhongli_4",
@@ -733,7 +1051,25 @@
             "type": "resistanceReduction",
             "value": 0.2,
             "duration": 10
-          }
+          },
+          "damageTicks": [
+            {
+              "offset": 66,
+              "multiplier": 5.0,
+              "element": "earth",
+              "hitType": "ultimate"
+            }
+          ],
+          "debuffs": [
+            {
+              "name": "岩元素减抗",
+              "type": "resistanceReduction",
+              "value": 0.2,
+              "duration": 10,
+              "trigger": "onHit",
+              "target": "enemy"
+            }
+          ]
         },
         {
           "id": "skill_zhongli_5",
@@ -750,7 +1086,15 @@
             "recovery": 28
           },
           "energyGain": 11,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 60,
+              "multiplier": 4.0,
+              "element": "earth",
+              "hitType": "combo"
+            }
+          ]
         }
       ],
       "passives": [
@@ -814,7 +1158,39 @@
             "recovery": 15
           },
           "energyGain": 2,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 12,
+              "multiplier": 0.5,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 24,
+              "multiplier": 0.55,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 36,
+              "multiplier": 0.6,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 48,
+              "multiplier": 0.65,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 60,
+              "multiplier": 0.7,
+              "element": "physical",
+              "hitType": "normal"
+            }
+          ]
         },
         {
           "id": "skill_ganyu_2",
@@ -831,7 +1207,15 @@
             "recovery": 24
           },
           "energyGain": 6,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 48,
+              "multiplier": 2.8,
+              "element": "ice",
+              "hitType": "charge"
+            }
+          ]
         },
         {
           "id": "skill_ganyu_3",
@@ -848,7 +1232,15 @@
             "recovery": 25
           },
           "energyGain": 8,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 45,
+              "multiplier": 3.0,
+              "element": "ice",
+              "hitType": "skill"
+            }
+          ]
         },
         {
           "id": "skill_ganyu_4",
@@ -865,7 +1257,15 @@
             "recovery": 36
           },
           "energyGain": 0,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 75,
+              "multiplier": 6.5,
+              "element": "ice",
+              "hitType": "ultimate"
+            }
+          ]
         },
         {
           "id": "skill_ganyu_5",
@@ -882,7 +1282,15 @@
             "recovery": 30
           },
           "energyGain": 12,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 66,
+              "multiplier": 4.8,
+              "element": "ice",
+              "hitType": "combo"
+            }
+          ]
         }
       ],
       "passives": [
@@ -946,7 +1354,39 @@
             "recovery": 16
           },
           "energyGain": 2,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 12,
+              "multiplier": 0.5,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 24,
+              "multiplier": 0.55,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 36,
+              "multiplier": 0.6,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 48,
+              "multiplier": 0.65,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 60,
+              "multiplier": 0.7,
+              "element": "physical",
+              "hitType": "normal"
+            }
+          ]
         },
         {
           "id": "skill_raiden_2",
@@ -963,7 +1403,15 @@
             "recovery": 24
           },
           "energyGain": 5,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 45,
+              "multiplier": 2.6,
+              "element": "lightning",
+              "hitType": "charge"
+            }
+          ]
         },
         {
           "id": "skill_raiden_3",
@@ -980,7 +1428,15 @@
             "recovery": 30
           },
           "energyGain": 10,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 54,
+              "multiplier": 3.8,
+              "element": "lightning",
+              "hitType": "skill"
+            }
+          ]
         },
         {
           "id": "skill_raiden_4",
@@ -1003,7 +1459,25 @@
             "type": "attack",
             "value": 0.3,
             "duration": 15
-          }
+          },
+          "damageTicks": [
+            {
+              "offset": 84,
+              "multiplier": 7.0,
+              "element": "lightning",
+              "hitType": "ultimate"
+            }
+          ],
+          "buffs": [
+            {
+              "name": "愿力增幅",
+              "type": "attack",
+              "value": 0.3,
+              "duration": 15,
+              "trigger": "onCast",
+              "target": "self"
+            }
+          ]
         },
         {
           "id": "skill_raiden_5",
@@ -1020,7 +1494,15 @@
             "recovery": 32
           },
           "energyGain": 13,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 69,
+              "multiplier": 5.0,
+              "element": "lightning",
+              "hitType": "combo"
+            }
+          ]
         }
       ],
       "passives": [
@@ -1084,7 +1566,33 @@
             "recovery": 15
           },
           "energyGain": 2,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 15,
+              "multiplier": 0.45,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 30,
+              "multiplier": 0.5,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 45,
+              "multiplier": 0.55,
+              "element": "physical",
+              "hitType": "normal"
+            },
+            {
+              "offset": 60,
+              "multiplier": 0.6,
+              "element": "physical",
+              "hitType": "normal"
+            }
+          ]
         },
         {
           "id": "skill_venti_2",
@@ -1101,7 +1609,15 @@
             "recovery": 20
           },
           "energyGain": 4,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 42,
+              "multiplier": 2.0,
+              "element": "wind",
+              "hitType": "charge"
+            }
+          ]
         },
         {
           "id": "skill_venti_3",
@@ -1118,7 +1634,15 @@
             "recovery": 22
           },
           "energyGain": 7,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 45,
+              "multiplier": 2.5,
+              "element": "wind",
+              "hitType": "skill"
+            }
+          ]
         },
         {
           "id": "skill_venti_4",
@@ -1141,7 +1665,25 @@
             "type": "resistanceReduction",
             "value": 0.15,
             "duration": 10
-          }
+          },
+          "damageTicks": [
+            {
+              "offset": 60,
+              "multiplier": 4.2,
+              "element": "wind",
+              "hitType": "ultimate"
+            }
+          ],
+          "debuffs": [
+            {
+              "name": "风元素减抗",
+              "type": "resistanceReduction",
+              "value": 0.15,
+              "duration": 10,
+              "trigger": "onHit",
+              "target": "enemy"
+            }
+          ]
         },
         {
           "id": "skill_venti_5",
@@ -1158,7 +1700,15 @@
             "recovery": 26
           },
           "energyGain": 9,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 54,
+              "multiplier": 3.2,
+              "element": "wind",
+              "hitType": "combo"
+            }
+          ]
         }
       ],
       "passives": [
@@ -1222,7 +1772,33 @@
             "recovery": 16
           },
           "energyGain": 2,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 15,
+              "multiplier": 0.5,
+              "element": "fire",
+              "hitType": "normal"
+            },
+            {
+              "offset": 30,
+              "multiplier": 0.55,
+              "element": "fire",
+              "hitType": "normal"
+            },
+            {
+              "offset": 45,
+              "multiplier": 0.6,
+              "element": "fire",
+              "hitType": "normal"
+            },
+            {
+              "offset": 60,
+              "multiplier": 0.65,
+              "element": "fire",
+              "hitType": "normal"
+            }
+          ]
         },
         {
           "id": "skill_klee_2",
@@ -1239,7 +1815,15 @@
             "recovery": 22
           },
           "energyGain": 5,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 45,
+              "multiplier": 2.3,
+              "element": "fire",
+              "hitType": "charge"
+            }
+          ]
         },
         {
           "id": "skill_klee_3",
@@ -1256,7 +1840,15 @@
             "recovery": 25
           },
           "energyGain": 8,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 48,
+              "multiplier": 3.0,
+              "element": "fire",
+              "hitType": "skill"
+            }
+          ]
         },
         {
           "id": "skill_klee_4",
@@ -1273,7 +1865,15 @@
             "recovery": 30
           },
           "energyGain": 0,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 66,
+              "multiplier": 5.8,
+              "element": "fire",
+              "hitType": "ultimate"
+            }
+          ]
         },
         {
           "id": "skill_klee_5",
@@ -1290,7 +1890,15 @@
             "recovery": 28
           },
           "energyGain": 11,
-          "snapshot": "start"
+          "snapshot": "start",
+          "damageTicks": [
+            {
+              "offset": 60,
+              "multiplier": 4.5,
+              "element": "fire",
+              "hitType": "combo"
+            }
+          ]
         }
       ],
       "passives": [

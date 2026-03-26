@@ -62,10 +62,11 @@ export const useProjectStore = defineStore('project', {
         id: generateId(),
         name: options.name || '未命名项目',
         characters: options.characters || [],
+        characterData: {}, // 存储角色的装备和奇波数据
         enemy: options.enemy || '',
         fps: options.fps || 60,
         duration: options.duration || 1200,
-        skillBlocks: [],
+        actions: [],
         buffBlocks: [],
         resourceBlocks: [],
         keyframes: [],
@@ -109,48 +110,56 @@ export const useProjectStore = defineStore('project', {
       }
       return null;
     },
-    // 更新技能块
-    updateSkillBlock(projectId, updatedBlock) {
+    // 更新技能动作
+    updateAction(projectId, updatedAction) {
       const project = this.projects.find(p => p.id === projectId);
       if (project) {
-        const index = project.skillBlocks.findIndex(
-          block => block.id === updatedBlock.id
+        const index = project.actions.findIndex(
+          action => action.id === updatedAction.id
         );
         if (index !== -1) {
-          project.skillBlocks[index] = updatedBlock;
+          project.actions[index] = updatedAction;
           project.updatedTime = new Date().toISOString();
           this.saveProjects();
         }
       }
     },
-    // 添加技能块
-    addSkillBlock(projectId, skillBlock) {
+    // 添加技能动作
+    addAction(projectId, action) {
       const project = this.projects.find(p => p.id === projectId);
       if (project) {
-        const newBlock = {
-          ...skillBlock,
+        const newAction = {
+          ...action,
           id: generateId(),
+          instanceId: generateId(),
+          logicalStartTime: action.startTime,
+          gaugeCost: action.gaugeCost || 0,
+          gaugeGain: action.gaugeGain || 0,
+          teamGaugeGain: action.teamGaugeGain || 0,
+          allowedTypes: action.allowedTypes || [],
+          damageTicks: action.damageTicks || [],
+          physicalAnomaly: action.physicalAnomaly || [],
           createdTime: new Date().toISOString(),
         };
-        project.skillBlocks.push(newBlock);
+        project.actions.push(newAction);
         project.updatedTime = new Date().toISOString();
         this.saveProjects();
-        return newBlock;
+        return newAction;
       }
       return null;
     },
-    // 删除技能块
-    removeSkillBlock(projectId, skillBlockId) {
+    // 删除技能动作
+    removeAction(projectId, actionId) {
       const project = this.projects.find(p => p.id === projectId);
       if (project) {
-        project.skillBlocks = project.skillBlocks.filter(
-          block => block.id !== skillBlockId
+        project.actions = project.actions.filter(
+          action => action.id !== actionId
         );
         // 同时删除相关的依赖关系
         project.skillDependencies = project.skillDependencies.filter(
           dep =>
-            dep.sourceBlockId !== skillBlockId &&
-            dep.targetBlockId !== skillBlockId
+            dep.sourceBlockId !== actionId &&
+            dep.targetBlockId !== actionId
         );
         project.updatedTime = new Date().toISOString();
         this.saveProjects();
@@ -355,6 +364,62 @@ export const useProjectStore = defineStore('project', {
         return true;
       }
       return false;
+    },
+    // 更新项目角色列表
+    updateProjectCharacters(projectId, characters) {
+      const project = this.projects.find(p => p.id === projectId);
+      if (project) {
+        project.characters = characters;
+        project.updatedTime = new Date().toISOString();
+        this.saveProjects();
+        return project;
+      }
+      return null;
+    },
+    // 更新角色奇波
+    updateCharacterChip(projectId, characterId, chipId) {
+      const project = this.projects.find(p => p.id === projectId);
+      if (project) {
+        if (!project.characterData) {
+          project.characterData = {};
+        }
+        if (!project.characterData[characterId]) {
+          project.characterData[characterId] = {};
+        }
+        project.characterData[characterId].chipId = chipId;
+        project.updatedTime = new Date().toISOString();
+        this.saveProjects();
+        return project;
+      }
+      return null;
+    },
+    // 更新角色装备
+    updateCharacterEquipment(projectId, characterId, slotKey, equipmentId) {
+      const project = this.projects.find(p => p.id === projectId);
+      if (project) {
+        if (!project.characterData) {
+          project.characterData = {};
+        }
+        if (!project.characterData[characterId]) {
+          project.characterData[characterId] = {};
+        }
+        if (!project.characterData[characterId].equipment) {
+          project.characterData[characterId].equipment = {};
+        }
+        project.characterData[characterId].equipment[slotKey] = equipmentId;
+        project.updatedTime = new Date().toISOString();
+        this.saveProjects();
+        return project;
+      }
+      return null;
+    },
+    // 获取角色数据
+    getCharacterData(projectId, characterId) {
+      const project = this.projects.find(p => p.id === projectId);
+      if (project && project.characterData && project.characterData[characterId]) {
+        return project.characterData[characterId];
+      }
+      return null;
     },
     // 保存所有项目到本地存储
     saveProjects() {
