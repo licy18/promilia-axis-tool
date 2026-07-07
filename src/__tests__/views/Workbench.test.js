@@ -68,6 +68,30 @@ describe('Workbench view', () => {
     expect(
       wrapper.findAll('[data-testid="workbench-candidate-value-chart-row"]')
     ).toHaveLength(3);
+    const candidateMarkers = wrapper.findAll(
+      '[data-testid="workbench-timeline-candidate-value-marker"]'
+    );
+    expect(candidateMarkers).toHaveLength(15);
+    expect(
+      candidateMarkers.every(
+        marker => marker.attributes('data-lane-id') === 'actor-109001'
+      )
+    ).toBe(true);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-candidate-value-marker"][data-series-key="hpDamageFormulaParamCandidate"][data-hit-index="1"]'
+        )
+        .attributes('data-frame-label')
+    ).toBe('0s12f');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-candidate-value-marker"][data-series-key="hpDamageFormulaParamCandidate"][data-hit-index="5"]'
+        )
+        .attributes('data-frame-label')
+    ).toBe('3s4f');
+    expect(text).toContain('候选三值');
     expect(text).toContain(
       '候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 12f/13f/16f/19f · Skill0_6/Skill0_1 · 绑定候选 普攻->Skill0_1 12f/13f · 状态证据 Skill0_1 动画+命中 / Skill0_6 动画+命中 · 普攻链 10900102->Skill0_2 / 10900103->Skill0_3 / +2 · 命中候选 5/5段 · 三值候选 5/5段 · 目标缺失 80102'
     );

@@ -4038,3 +4038,69 @@ Workbench 显示：
 - 绝对帧是 EventBridge 与 HP timeline 的中置信候选，不是最终 timing profile。
 - `candidateTimeMs` 已从本地帧时间升级为绝对候选时间；本地时间保留在 `localCandidateTimeMs`。
 - 仍需继续验证输入条件、取消窗口、桥接 `type/bridge/frameIndex` 语义和运行时实际命中触发。
+
+## 58. 阶段 5-8AE：TimelineGrid 候选三值 marker
+
+阶段 5-8AE 不改变项目 JSON 或仿真数据结构，只把 `candidateValueSeries.chart` 投影到主时间轴 UI。
+
+### 58.1 TimelineGridPreview 输入
+
+`TimelineGridPreview` 新增：
+
+```vue
+<TimelineGridPreview
+  :candidate-value-chart="simulationResult.candidateValueSeries.chart"
+/>
+```
+
+输入来源仍是 `candidateValueSeries.chart.series[].points[]`。
+
+### 58.2 UI marker 投影
+
+每个 chart point 生成一个时间轴候选 marker：
+
+- `seriesKey`
+- `seriesLabel`
+- `valueKind`
+- `unit`
+- `actionId`
+- `hitIndex`
+- `timeMs = displayTimeMs || sourceTimeMs`
+- `frameLabel`
+- `value`
+
+轨道归属沿用 action 归属：若 `actionId` 能找到对应 action，则使用 `resolveTimelineActionLaneId(action)`；否则进入系统轨。
+
+### 58.3 稳定测试标记
+
+候选 marker 使用独立测试标记：
+
+```html
+data-testid="workbench-timeline-candidate-value-marker"
+data-series-key="hpDamageFormulaParamCandidate"
+data-hit-index="1"
+data-frame-label="0s12f"
+```
+
+真实伤害 marker 仍使用：
+
+```html
+data-testid="workbench-timeline-damage-marker"
+```
+
+两者语义必须保持分离。
+
+### 58.4 当前样本
+
+默认末音普攻样本：
+
+- 候选 marker 总数：15。
+- 全部归属：`actor-109001`。
+- HP 首点：`hitIndex = 1`，`frameLabel = 0s12f`。
+- HP 末点：`hitIndex = 5`，`frameLabel = 3s4f`。
+
+### 58.5 当前边界
+
+- 时间轴当前是 marker 点，不是连续曲线轨。
+- marker 值仍是未应用候选字段值。
+- 下一阶段应补多曲线轨或悬浮提示，避免用户只能靠 marker 形状判断来源。

@@ -33,14 +33,20 @@
         >
           <Plus class="control-icon" />
         </button>
-        <span class="zoom-value" data-testid="workbench-timeline-zoom-value">{{ formatZoom(timelineZoom) }}</span>
+        <span class="zoom-value" data-testid="workbench-timeline-zoom-value">{{
+          formatZoom(timelineZoom)
+        }}</span>
       </div>
     </div>
 
     <div class="timeline-scale">
       <span class="scale-spacer" />
       <div class="scale-viewport">
-        <div class="scale-track" :style="timelineTrackStyle" data-testid="workbench-timeline-scale-track">
+        <div
+          class="scale-track"
+          :style="timelineTrackStyle"
+          data-testid="workbench-timeline-scale-track"
+        >
           <span v-for="tick in ticks" :key="tick.timeMs">{{ tick.label }}</span>
         </div>
       </div>
@@ -72,10 +78,13 @@
             v-for="lane in timelineLanes"
             :key="lane.id"
             class="lane-row"
-            :class="{ 'drop-target': lane.id === dragTargetLaneId && lane.id !== dragInitialLaneId }"
+            :class="{
+              'drop-target':
+                lane.id === dragTargetLaneId && lane.id !== dragInitialLaneId,
+            }"
             :data-lane-id="lane.id"
             data-testid="workbench-timeline-row"
-            :ref="(element) => setLaneRowRef(element, lane.id)"
+            :ref="element => setLaneRowRef(element, lane.id)"
           >
             <div
               v-for="action in lane.actions"
@@ -96,7 +105,9 @@
               :data-action-id="action.id"
               :data-lane-id="lane.id"
               :data-batch-id="action.generationBatch?.batchId || ''"
-              :data-batch-highlight="isActionInSelectedBatch(action) ? 'true' : 'false'"
+              :data-batch-highlight="
+                isActionInSelectedBatch(action) ? 'true' : 'false'
+              "
               data-testid="workbench-timeline-action"
               tabindex="0"
               @click="$emit('select-action', action.id)"
@@ -108,7 +119,9 @@
               @pointerdown="beginDrag($event, action)"
             >
               <span>{{ actionLabel(action) }}</span>
-              <small v-if="actionDetail(action)">{{ actionDetail(action) }}</small>
+              <small v-if="actionDetail(action)">{{
+                actionDetail(action)
+              }}</small>
               <span
                 v-if="overlapActionIds.has(action.id)"
                 class="overlap-badge"
@@ -143,8 +156,25 @@
               :title="`${damage.segmentLabel}: ${damage.rawDamage}`"
               :data-action-id="damage.actionId"
               :data-lane-id="lane.id"
-              :data-batch-highlight="isDamageInSelectedBatch(damage) ? 'true' : 'false'"
+              :data-batch-highlight="
+                isDamageInSelectedBatch(damage) ? 'true' : 'false'
+              "
               data-testid="workbench-timeline-damage-marker"
+            />
+
+            <div
+              v-for="marker in lane.candidateValueMarkers"
+              :key="marker.id"
+              class="candidate-value-marker"
+              :class="`candidate-${marker.seriesKey}`"
+              :style="candidateValueMarkerStyle(marker)"
+              :title="formatCandidateValueMarkerTitle(marker)"
+              :data-action-id="marker.actionId"
+              :data-lane-id="lane.id"
+              :data-series-key="marker.seriesKey"
+              :data-hit-index="marker.hitIndex"
+              :data-frame-label="marker.frameLabel"
+              data-testid="workbench-timeline-candidate-value-marker"
             />
           </div>
         </div>
@@ -158,6 +188,7 @@
     <div class="legend">
       <span><i class="legend-action" /> 动作</span>
       <span><i class="legend-damage" /> 伤害投影</span>
+      <span><i class="legend-candidate" /> 候选三值</span>
       <span><i class="legend-system" /> 系统轨</span>
       <span><i class="legend-overlap" /> 重叠</span>
       <span><i class="legend-delay" /> 自动推迟</span>
@@ -173,12 +204,21 @@ import {
   DEFAULT_TIMELINE_ACTION_DURATION_MS,
   resolveTimelineActionLaneId,
 } from './timelineDiagnostics';
-import { WORKBENCH_FRAME_MS, formatFrameTime, snapMsToFrame } from '../../domain/timebase';
+import {
+  WORKBENCH_FRAME_MS,
+  formatFrameTime,
+  snapMsToFrame,
+} from '../../domain/timebase';
 
 const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
 const ZOOM_STEP = 0.25;
+const CANDIDATE_VALUE_SERIES_OFFSETS = {
+  hpDamageFormulaParamCandidate: 70,
+  toughnessDamageCandidate: 82,
+  selfEnergyCandidate: 94,
+};
 
 const props = defineProps({
   actors: {
@@ -192,6 +232,15 @@ const props = defineProps({
   damageTimeline: {
     type: Array,
     required: true,
+  },
+  candidateValueChart: {
+    type: Object,
+    default: () => ({
+      series: [],
+      summary: {
+        pointCount: 0,
+      },
+    }),
   },
   durationMs: {
     type: Number,
@@ -230,7 +279,7 @@ const timelineZoom = ref(1);
 
 const ticks = computed(() => {
   const durationSeconds = props.durationMs / 1000;
-  return [0, 0.25, 0.5, 0.75, 1].map((ratio) => {
+  return [0, 0.25, 0.5, 0.75, 1].map(ratio => {
     const seconds = Math.round(durationSeconds * ratio);
     return {
       timeMs: seconds * 1000,
@@ -240,29 +289,38 @@ const ticks = computed(() => {
 });
 
 const draggingActionId = computed(() => dragState.value?.actionId ?? null);
-const dragInitialLaneId = computed(() => dragState.value?.initialLaneId ?? null);
+const dragInitialLaneId = computed(
+  () => dragState.value?.initialLaneId ?? null
+);
 const dragTargetLaneId = computed(() => dragState.value?.targetLaneId ?? null);
 const resizingActionId = computed(() => resizeState.value?.actionId ?? null);
 const timelineTrackStyle = computed(() => ({
   width: `${timelineZoom.value * 100}%`,
 }));
-const actionsById = computed(() => new Map(props.actions.map((action) => [action.id, action])));
-const actorLaneIds = computed(() => new Set(props.actors.map((actor) => actor.id)));
-const overlapActionIds = computed(() => new Set(props.timelineDiagnostics?.overlapActionIds ?? []));
+const actionsById = computed(
+  () => new Map(props.actions.map(action => [action.id, action]))
+);
+const actorLaneIds = computed(
+  () => new Set(props.actors.map(actor => actor.id))
+);
+const overlapActionIds = computed(
+  () => new Set(props.timelineDiagnostics?.overlapActionIds ?? [])
+);
 const selectedBatchId = computed(() => {
   const selectedAction = actionsById.value.get(props.selectedActionId);
   return selectedAction?.generationBatch?.batchId ?? null;
 });
 const timelineLanes = computed(() => {
-  const actorLanes = props.actors.map((actor) => ({
+  const actorLanes = props.actors.map(actor => ({
     id: actor.id,
     type: 'actor',
     name: actor.name,
     detail: actor.role || '角色轨',
     actions: [],
     damageMarkers: [],
+    candidateValueMarkers: [],
   }));
-  const lanesById = new Map(actorLanes.map((lane) => [lane.id, lane]));
+  const lanesById = new Map(actorLanes.map(lane => [lane.id, lane]));
   const systemLane = {
     id: 'system',
     type: 'system',
@@ -270,25 +328,37 @@ const timelineLanes = computed(() => {
     detail: '事件轨',
     actions: [],
     damageMarkers: [],
+    candidateValueMarkers: [],
   };
 
-  props.actions.forEach((action) => {
+  props.actions.forEach(action => {
     const lane = lanesById.get(resolveActionLaneId(action)) ?? systemLane;
     lane.actions.push(action);
   });
 
-  props.damageTimeline.forEach((damage) => {
+  props.damageTimeline.forEach(damage => {
     const lane = lanesById.get(resolveDamageLaneId(damage)) ?? systemLane;
     lane.damageMarkers.push(damage);
   });
 
-  return systemLane.actions.length > 0 || systemLane.damageMarkers.length > 0
+  createCandidateValueTimelineMarkers().forEach(marker => {
+    const lane =
+      lanesById.get(resolveCandidateValueLaneId(marker)) ?? systemLane;
+    lane.candidateValueMarkers.push(marker);
+  });
+
+  return systemLane.actions.length > 0 ||
+    systemLane.damageMarkers.length > 0 ||
+    systemLane.candidateValueMarkers.length > 0
     ? [...actorLanes, systemLane]
     : actorLanes;
 });
 
 function isActionInSelectedBatch(action) {
-  return Boolean(selectedBatchId.value && action.generationBatch?.batchId === selectedBatchId.value);
+  return Boolean(
+    selectedBatchId.value &&
+    action.generationBatch?.batchId === selectedBatchId.value
+  );
 }
 
 function isDamageInSelectedBatch(damage) {
@@ -299,9 +369,11 @@ function isDamageInSelectedBatch(damage) {
 function actionStyle(action) {
   const left = clampPercent((action.startMs / props.durationMs) * 100);
   const width = clampPercent(
-    ((action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS) / props.durationMs) * 100,
+    ((action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS) /
+      props.durationMs) *
+      100,
     8,
-    100,
+    100
   );
   return {
     left: `${left}%`,
@@ -313,6 +385,14 @@ function markerStyle(damage) {
   const left = clampPercent((damage.timeMs / props.durationMs) * 100);
   return {
     left: `${left}%`,
+  };
+}
+
+function candidateValueMarkerStyle(marker) {
+  const left = clampPercent((marker.timeMs / props.durationMs) * 100);
+  return {
+    left: `${left}%`,
+    top: `${marker.offsetTop}px`,
   };
 }
 
@@ -352,6 +432,40 @@ function resolveDamageLaneId(damage) {
   return action ? resolveActionLaneId(action) : 'system';
 }
 
+function resolveCandidateValueLaneId(marker) {
+  const action = actionsById.value.get(marker.actionId);
+  return action ? resolveActionLaneId(action) : 'system';
+}
+
+function createCandidateValueTimelineMarkers() {
+  return (props.candidateValueChart?.series ?? []).flatMap(series =>
+    (series.points ?? []).map((point, index) => ({
+      id: `${series.key}-${point.actionId}-${point.hitIndex}-${index}`,
+      seriesKey: series.key,
+      seriesLabel: series.label,
+      valueKind: series.valueKind,
+      unit: series.unit,
+      actionId: point.actionId,
+      hitIndex: point.hitIndex,
+      timeMs: point.displayTimeMs ?? point.sourceTimeMs ?? 0,
+      frameLabel:
+        point.displayFrameLabel ?? formatFrameTime(point.displayTimeMs ?? 0),
+      value: point.value,
+      offsetTop:
+        CANDIDATE_VALUE_SERIES_OFFSETS[series.key] ??
+        CANDIDATE_VALUE_SERIES_OFFSETS.hpDamageFormulaParamCandidate,
+    }))
+  );
+}
+
+function formatCandidateValueMarkerTitle(marker) {
+  return `${marker.seriesLabel} ${marker.frameLabel} hit${marker.hitIndex}: ${formatTimelineNumber(marker.value)} ${marker.unit}`;
+}
+
+function formatTimelineNumber(value) {
+  return Math.round(Number(value) || 0).toLocaleString('zh-CN');
+}
+
 function formatSigned(value) {
   const number = Number(value) || 0;
   return `${number > 0 ? '+' : ''}${number}`;
@@ -383,7 +497,11 @@ function beginDrag(event, action) {
     laneWidth: rect.width,
     initialClientX: event.clientX,
     initialStartMs: action.startMs,
-    maxStartMs: Math.max(0, props.durationMs - (action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS)),
+    maxStartMs: Math.max(
+      0,
+      props.durationMs -
+        (action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS)
+    ),
   };
 
   window.addEventListener('pointermove', handleDragMove);
@@ -410,7 +528,10 @@ function beginResize(event, action) {
     laneWidth: rect.width,
     initialClientX: event.clientX,
     initialDurationMs: action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS,
-    maxDurationMs: Math.max(MIN_ACTION_DURATION_MS, props.durationMs - action.startMs),
+    maxDurationMs: Math.max(
+      MIN_ACTION_DURATION_MS,
+      props.durationMs - action.startMs
+    ),
   };
 
   window.addEventListener('pointermove', handleResizeMove);
@@ -420,7 +541,11 @@ function beginResize(event, action) {
 
 function nudgeAction(event, action, direction) {
   const stepMs = event.shiftKey ? props.snapMs * 4 : props.snapMs;
-  const maxStartMs = Math.max(0, props.durationMs - (action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS));
+  const maxStartMs = Math.max(
+    0,
+    props.durationMs -
+      (action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS)
+  );
   emit('select-action', action.id);
   emit('update-action-time', {
     actionId: action.id,
@@ -433,11 +558,20 @@ function handleResizeMove(event) {
     return;
   }
 
-  const deltaMs = ((event.clientX - resizeState.value.initialClientX) / resizeState.value.laneWidth) * props.durationMs;
-  const nextDurationMs = snapTimeMs(resizeState.value.initialDurationMs + deltaMs);
+  const deltaMs =
+    ((event.clientX - resizeState.value.initialClientX) /
+      resizeState.value.laneWidth) *
+    props.durationMs;
+  const nextDurationMs = snapTimeMs(
+    resizeState.value.initialDurationMs + deltaMs
+  );
   emit('update-action-duration', {
     actionId: resizeState.value.actionId,
-    durationMs: clampNumber(nextDurationMs, MIN_ACTION_DURATION_MS, resizeState.value.maxDurationMs),
+    durationMs: clampNumber(
+      nextDurationMs,
+      MIN_ACTION_DURATION_MS,
+      resizeState.value.maxDurationMs
+    ),
   });
 }
 
@@ -453,7 +587,10 @@ function handleDragMove(event) {
     };
   }
 
-  const deltaMs = ((event.clientX - dragState.value.initialClientX) / dragState.value.laneWidth) * props.durationMs;
+  const deltaMs =
+    ((event.clientX - dragState.value.initialClientX) /
+      dragState.value.laneWidth) *
+    props.durationMs;
   const nextStartMs = snapTimeMs(dragState.value.initialStartMs + deltaMs);
   emit('update-action-time', {
     actionId: dragState.value.actionId,
@@ -524,12 +661,19 @@ function resolveActorLaneAtPoint(clientY) {
 }
 
 function formatZoom(value) {
-  return `${Number(value).toFixed(2).replace(/\.?0+$/, '')}x`;
+  return `${Number(value)
+    .toFixed(2)
+    .replace(/\.?0+$/, '')}x`;
 }
 
 function snapTimeMs(value) {
-  const snap = Math.max(WORKBENCH_FRAME_MS, Number(props.snapMs) || WORKBENCH_FRAME_MS);
-  return snap === WORKBENCH_FRAME_MS ? snapMsToFrame(value) : Math.round(value / snap) * snap;
+  const snap = Math.max(
+    WORKBENCH_FRAME_MS,
+    Number(props.snapMs) || WORKBENCH_FRAME_MS
+  );
+  return snap === WORKBENCH_FRAME_MS
+    ? snapMsToFrame(value)
+    : Math.round(value / snap) * snap;
 }
 
 function clampNumber(value, min, max) {
@@ -664,7 +808,7 @@ h2 {
 .lane-label {
   display: grid;
   align-content: center;
-  min-height: 72px;
+  min-height: 110px;
   padding: 8px 10px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 6px;
@@ -691,7 +835,7 @@ h2 {
 
 .lane-row {
   position: relative;
-  min-height: 72px;
+  min-height: 110px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 6px;
   background:
@@ -733,12 +877,16 @@ h2 {
 }
 
 .action-block.selected {
-  box-shadow: 0 0 0 2px rgba(121, 199, 185, 0.3), 0 12px 30px rgba(0, 0, 0, 0.28);
+  box-shadow:
+    0 0 0 2px rgba(121, 199, 185, 0.3),
+    0 12px 30px rgba(0, 0, 0, 0.28);
 }
 
 .action-block.batch-selected {
   border-color: rgba(121, 199, 185, 0.92);
-  box-shadow: 0 0 0 2px rgba(121, 199, 185, 0.2), 0 12px 30px rgba(0, 0, 0, 0.28);
+  box-shadow:
+    0 0 0 2px rgba(121, 199, 185, 0.2),
+    0 12px 30px rgba(0, 0, 0, 0.28);
 }
 
 .action-block.dragging {
@@ -824,7 +972,9 @@ h2 {
 .action-block.overlap {
   border-color: rgba(245, 108, 108, 0.82);
   background: linear-gradient(180deg, #5a3334 0%, #3b272b 100%);
-  box-shadow: 0 0 0 2px rgba(245, 108, 108, 0.18), 0 12px 30px rgba(0, 0, 0, 0.28);
+  box-shadow:
+    0 0 0 2px rgba(245, 108, 108, 0.18),
+    0 12px 30px rgba(0, 0, 0, 0.28);
 }
 
 .action-block.auto-delayed {
@@ -840,8 +990,12 @@ h2 {
   border: 0;
   border-left: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 3px;
-  background:
-    linear-gradient(90deg, transparent 0 3px, rgba(255, 255, 255, 0.48) 3px 4px, transparent 4px 7px);
+  background: linear-gradient(
+    90deg,
+    transparent 0 3px,
+    rgba(255, 255, 255, 0.48) 3px 4px,
+    transparent 4px 7px
+  );
   cursor: ew-resize;
 }
 
@@ -864,6 +1018,29 @@ h2 {
 .damage-marker.batch-selected {
   background: #79c7b9;
   box-shadow: 0 0 18px rgba(121, 199, 185, 0.62);
+}
+
+.candidate-value-marker {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 50%;
+  background: #f2b366;
+  box-shadow: 0 0 14px rgba(242, 179, 102, 0.48);
+  transform: translateX(-50%);
+}
+
+.candidate-value-marker.candidate-toughnessDamageCandidate {
+  border-radius: 2px;
+  background: #79c7b9;
+  box-shadow: 0 0 14px rgba(121, 199, 185, 0.48);
+}
+
+.candidate-value-marker.candidate-selfEnergyCandidate {
+  background: #a6b7ff;
+  box-shadow: 0 0 14px rgba(166, 183, 255, 0.48);
+  transform: translateX(-50%) rotate(45deg);
 }
 
 .empty-lane {
@@ -902,6 +1079,15 @@ h2 {
 
 .legend-damage {
   background: #e6a23c;
+}
+
+.legend-candidate {
+  background: linear-gradient(
+    90deg,
+    #f2b366 0 33%,
+    #79c7b9 33% 66%,
+    #a6b7ff 66% 100%
+  );
 }
 
 .legend-system {

@@ -3069,6 +3069,41 @@ HP参数候选 0s12f-3s4f · 2,500-13,000 · raw-param
 - 阶段 5-8AE 目标：把 `candidateValueSeries.chart` 的 HP、削韧、能量候选点同步到主时间轴 marker/曲线轨，让时间轴区域也能看到三值候选变化，而不只在分析面板显示。
 - 继续明确区分：真实伤害投影 marker、候选三值 marker、未应用公式字段。
 
+### 2026-07-08：阶段 5-8AE 主时间轴候选三值 marker
+
+本轮完成：
+
+- `TimelineGridPreview` 新增 `candidateValueChart` 输入，读取 `candidateValueSeries.chart`。
+- 主时间轴按 action 所在 actor 轨道渲染候选三值 marker，当前三类候选分别为：
+  - HP 参数候选：圆点，`hpDamageFormulaParamCandidate`。
+  - 削韧候选：方点，`toughnessDamageCandidate`。
+  - 能量候选：菱形点，`selfEnergyCandidate`。
+- 候选 marker 与真实伤害投影 marker 分开使用 `data-testid` 和图例，不混用语义。
+- Workbench 测试覆盖默认样本的 15 个候选三值 marker、actor 轨道归属和首尾 HP marker 帧标签。
+
+当前末音 `10900101` 默认普攻主时间轴显示：
+
+- 真实伤害投影 marker：1 个，仍来自 raw HP 投影。
+- 候选三值 marker：15 个，全部位于 `actor-109001` 轨。
+- HP 首点：`hitIndex = 1`，`frameLabel = 0s12f`。
+- HP 末点：`hitIndex = 5`，`frameLabel = 3s4f`。
+- 图例新增：`候选三值`。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、33 条测试通过。
+
+当前边界：
+
+- 主时间轴当前显示的是候选三值 marker 点，还不是连续曲线轨。
+- 候选 marker 的数值仍来自 `TDamageElementParams` 字段候选，`applied = false`，不能当作最终伤害/削韧/充能。
+- marker 的绝对帧来自 5-8AD 的 EventBridge 候选链，仍需继续验证运行时触发条件。
+
+下一步：
+
+- 阶段 5-8AF 目标：把主时间轴候选 marker 升级为更接近 Endaxis 的多曲线轨/悬浮提示体验，支持同时查看 HP、削韧、能量三个候选值的帧点和来源。
+- 同时继续拆分“真实投影曲线”和“候选字段曲线”的视觉层级，避免用户误把候选当最终结果。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

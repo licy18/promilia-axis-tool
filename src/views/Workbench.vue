@@ -72,6 +72,7 @@
         :actors="scenario.actors"
         :actions="scenario.actions"
         :damage-timeline="simulationResult.damageTimeline"
+        :candidate-value-chart="simulationResult.candidateValueSeries.chart"
         :duration-ms="scenario.time.durationMs"
         :selected-action-id="selectedActionId"
         :timeline-diagnostics="timelineDiagnostics"
