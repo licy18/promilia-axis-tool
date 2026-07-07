@@ -68,4 +68,49 @@ describe('Workbench view', () => {
     expect(wrapper.text()).toContain(`工作台：${nextCharacter.name} / ${nextSkill.name}`);
     expect(wrapper.text()).toContain('DAMAGE_PROJECTED');
   });
+
+  it('adds, selects, edits, and deletes timeline actions', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('2 action');
+    expect(wrapper.find('[data-testid="scenario-hit-count"]').text()).toBe('2');
+    expect(wrapper.findAll('[data-testid="workbench-delete-action"]')).toHaveLength(2);
+
+    await wrapper.find('[data-testid="workbench-start-input"]').setValue('2400');
+    expect(wrapper.text()).toContain('2400ms');
+
+    await wrapper.findAll('[data-testid="workbench-delete-action"]')[1].trigger('click');
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('1 action');
+    expect(wrapper.find('[data-testid="scenario-hit-count"]').text()).toBe('1');
+  });
+
+  it('keeps generated action ids unique after deleting the first action', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await wrapper.findAll('[data-testid="workbench-delete-action"]')[0].trigger('click');
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+
+    const actionIds = wrapper.findAll('.action-item').map((action) => action.attributes('data-action-id'));
+    expect(actionIds).toEqual(['action-0002', 'action-0003']);
+    expect(new Set(actionIds).size).toBe(actionIds.length);
+  });
 });

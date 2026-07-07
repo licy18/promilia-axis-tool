@@ -24,6 +24,8 @@
         :actions="scenario.actions"
         :selected-action-id="selectedActionId"
         @select-action="selectedActionId = $event"
+        @add-action="addAction"
+        @delete-action="deleteAction"
       />
 
       <TimelineGridPreview
@@ -73,10 +75,12 @@ import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import {
   DEFAULT_WORKBENCH_SELECTION,
+  createWorkbenchActionDraft,
   createWorkbenchProject,
   getSkillsForCharacter,
   getWorkbenchGameData,
   getWorkbenchSeed,
+  normalizeWorkbenchActionDrafts,
   normalizeWorkbenchSelection,
 } from '../domain/workbenchProjectFactory';
 import { compileProject } from '../simulation/compiler/compileProject';
@@ -85,43 +89,95 @@ import { simulateScenario } from '../simulation/engine/simulateScenario';
 const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
 const selection = ref({ ...DEFAULT_WORKBENCH_SELECTION });
-const actionPatch = ref({
-  startMs: 0,
-  level: 1,
-});
+const actionDrafts = ref([createWorkbenchActionDraft()]);
 const selectedActionId = ref('action-0001');
 
 const availableSkills = computed(() => getSkillsForCharacter(selection.value.characterId));
-const project = computed(() => createWorkbenchProject(selection.value, actionPatch.value));
+const project = computed(() =>
+  createWorkbenchProject(selection.value, {
+    actions: actionDrafts.value,
+  }),
+);
 const scenario = computed(() => compileProject(project.value, gameData));
 const simulationResult = computed(() => simulateScenario(scenario.value));
 const selectedAction = computed(() => {
   return scenario.value.actions.find((action) => action.id === selectedActionId.value) ?? scenario.value.actions[0];
 });
+const selectedDraft = computed(() => {
+  return actionDrafts.value.find((action) => action.id === selectedActionId.value) ?? actionDrafts.value[0];
+});
 
 function updateSelection(patch) {
-  const previousSkillId = selection.value.skillId;
+  const characterChanged = patch.characterId != null && Number(patch.characterId) !== selection.value.characterId;
   const nextSelection = normalizeWorkbenchSelection({
     ...selection.value,
     ...patch,
   });
   selection.value = nextSelection;
 
-  if (nextSelection.skillId !== previousSkillId || patch.characterId != null) {
-    actionPatch.value = {
-      ...actionPatch.value,
-      level: 1,
-    };
+  if (characterChanged) {
+    actionDrafts.value = normalizeWorkbenchActionDrafts(actionDrafts.value, nextSelection.characterId);
+    selectedActionId.value = actionDrafts.value[0].id;
   }
 }
 
 function updateAction(patch) {
-  actionPatch.value = {
-    ...actionPatch.value,
-    ...patch,
-    startMs: clampNumber(patch.startMs ?? actionPatch.value.startMs, 0, project.value.time.durationMs),
-    level: clampNumber(patch.level ?? actionPatch.value.level, 1, selectedAction.value.source.skill.level.values.length),
-  };
+  actionDrafts.value = actionDrafts.value.map((action) => {
+    if (action.id !== selectedActionId.value) {
+      return action;
+    }
+
+    const nextSkillId = patch.skillId ?? action.skillId;
+    const skill = findSkillById(nextSkillId) ?? findSkillById(action.skillId);
+    const nextLevel = patch.skillId != null ? 1 : patch.level ?? action.level;
+
+    return createWorkbenchActionDraft({
+      ...action,
+      ...patch,
+      skillId: skill.id,
+      startMs: clampNumber(patch.startMs ?? action.startMs, 0, project.value.time.durationMs),
+      level: clampNumber(nextLevel, 1, skill.level.values.length),
+    });
+  });
+}
+
+function addAction() {
+  const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
+  const nextAction = createWorkbenchActionDraft({
+    id: createNextActionId(),
+    skillId: selectedDraft.value.skillId,
+    startMs: clampNumber((lastAction?.startMs ?? 0) + 2000, 0, project.value.time.durationMs),
+    level: selectedDraft.value.level,
+  });
+
+  actionDrafts.value = [...actionDrafts.value, nextAction];
+  selectedActionId.value = nextAction.id;
+}
+
+function deleteAction(actionId) {
+  if (actionDrafts.value.length <= 1) {
+    return;
+  }
+
+  const index = actionDrafts.value.findIndex((action) => action.id === actionId);
+  actionDrafts.value = actionDrafts.value.filter((action) => action.id !== actionId);
+
+  if (selectedActionId.value === actionId) {
+    const nextIndex = Math.min(index, actionDrafts.value.length - 1);
+    selectedActionId.value = actionDrafts.value[nextIndex].id;
+  }
+}
+
+function findSkillById(skillId) {
+  return availableSkills.value.find((skill) => skill.id === Number(skillId)) ?? null;
+}
+
+function createNextActionId() {
+  const maxIndex = actionDrafts.value.reduce((max, action) => {
+    const match = String(action.id).match(/^action-(\d+)$/);
+    return match ? Math.max(max, Number(match[1])) : max;
+  }, 0);
+  return `action-${String(maxIndex + 1).padStart(4, '0')}`;
 }
 
 function clampNumber(value, min, max) {

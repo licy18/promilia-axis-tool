@@ -55,7 +55,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；7 个测试文件、40 条测试通过。
+- `npm run test -- --run`：通过；10 个测试文件、53 条测试通过。
 
 ## 3. 目录速览
 
@@ -574,6 +574,45 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 支持删除动作和选择不同动作编辑。
 - 支持在 TimelineGridPreview 中通过拖动或输入调整动作时间。
 - 为多动作运行时结果增加基础排序和总伤害汇总测试。
+
+### 2026-07-07：阶段 4-3 时间轴最小交互落地
+
+本轮完成：
+
+- `Workbench.vue` 从单动作 `actionPatch` 升级为多动作 `actionDrafts`，支持当前选中动作。
+- `ActionLibraryPanel` 支持追加动作、选择动作和删除动作；删除时至少保留 1 个动作。
+- `TimelineGridPreview` 支持点击或键盘选择时间轴动作块，并显示选中状态。
+- `PropertiesPanel` 改为编辑当前选中动作的技能、开始时间和等级。
+- `workbenchProjectFactory` 支持从动作草稿数组生成新版 `Project`，并为 actor 汇总多技能等级。
+- 模拟链路增加多动作排序、命中数和总伤害汇总测试。
+- `ScenarioHeader` 增加动作数和命中数的稳定测试标记，便于后续交互测试。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、9 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、53 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- 浏览器检查 `http://127.0.0.1:5175/#/workbench`：
+  - 初始为 1 个动作、1 次命中。
+  - 点击“+ 动作”后变为 2 个动作、2 次命中。
+  - 选中新增动作后开始时间可改为 `2400ms`，事件投影同步更新。
+  - 删除第二个动作后回到 1 个动作、1 次命中。
+  - 删除第一个动作后再次新增，动作 ID 保持递增为 `action-0002`、`action-0003`，未出现重复 key。
+  - 控制台无 error。
+
+当前结论：
+
+- 新版工作台已从单动作垂直切片推进到多动作最小交互。
+- 多动作排序和伤害汇总已经进入运行时测试。
+- 当前动作时间仍主要靠数字输入，尚未实现时间轴拖拽、吸附、多轨和新版项目保存。
+
+下一步：
+
+- 阶段 4-4 目标：补齐时间轴编辑的基础手感和草稿持久化。
+- 支持在 `TimelineGridPreview` 上拖动动作并按毫秒/网格吸附更新 `startMs`。
+- 为动作块提供复制、快速删除和边界 clamp 的测试。
+- 建立新版 workbench 项目草稿保存/恢复入口，优先保存到 localStorage，不接旧 `skillBlocks`。
+- 继续保持 `compileProject()` / `simulateScenario()` 作为 UI 结果唯一来源。
 
 ## 10. 文档维护规则
 

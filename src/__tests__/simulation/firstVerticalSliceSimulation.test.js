@@ -3,6 +3,7 @@ import {
   createFirstVerticalSliceProject,
   getFirstVerticalSliceGameData,
 } from '../../domain/fixtures/firstVerticalSlice';
+import { createWorkbenchProject, getWorkbenchGameData } from '../../domain/workbenchProjectFactory';
 import { compileProject, CompileProjectError, runSimulation } from '../../simulation';
 
 describe('first vertical slice simulation', () => {
@@ -59,5 +60,29 @@ describe('first vertical slice simulation', () => {
     };
 
     expect(() => compileProject(project, getFirstVerticalSliceGameData())).toThrow(CompileProjectError);
+  });
+
+  it('sorts multiple actions and summarizes projected damage', () => {
+    const project = createWorkbenchProject(
+      {},
+      {
+        actions: [
+          { id: 'action-late', skillId: 10900101, startMs: 2000, level: 1 },
+          { id: 'action-early', skillId: 10900101, startMs: 500, level: 2 },
+        ],
+      },
+    );
+    const gameData = getWorkbenchGameData();
+    const scenario = compileProject(project, gameData);
+    const result = runSimulation(project, gameData);
+
+    expect(scenario.actions.map((action) => action.id)).toEqual(['action-early', 'action-late']);
+    expect(result.damageTimeline).toHaveLength(2);
+    expect(result.damageTimeline.map((entry) => entry.actionId)).toEqual(['action-early', 'action-late']);
+    expect(result.summary.projectedHitCount).toBe(2);
+    expect(result.summary.actionCount).toBe(2);
+    expect(result.summary.totalRawDamage).toBe(
+      result.damageTimeline.reduce((sum, entry) => sum + entry.rawDamage, 0),
+    );
   });
 });

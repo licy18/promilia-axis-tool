@@ -23,8 +23,8 @@
         <span>技能</span>
         <select
           data-testid="workbench-skill-select"
-          :value="selection.skillId"
-          @change="emitSelection('skillId', $event.target.value)"
+          :value="selectedAction.skillId"
+          @change="emitActionPatch('skillId', $event.target.value)"
         >
           <option v-for="skill in skills" :key="skill.id" :value="skill.id">
             {{ skill.name }}
@@ -128,9 +128,11 @@ function emitActionPatch(key, value) {
   if (!Number.isFinite(number)) {
     return;
   }
-  emit('update-action', {
-    [key]: number,
-  });
+  const patch = { [key]: number };
+  if (key === 'skillId') {
+    patch.level = 1;
+  }
+  emit('update-action', patch);
 }
 </script>
 

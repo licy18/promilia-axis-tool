@@ -9,7 +9,7 @@
       <div class="meta-row">
         <span>{{ scenario.durationMs / 1000 }}s</span>
         <span>{{ scenario.actorCount }} actor</span>
-        <span>{{ scenario.actionCount }} action</span>
+        <span data-testid="scenario-action-count">{{ scenario.actionCount }} action</span>
         <span>{{ scenario.enemyName }}</span>
       </div>
     </div>
@@ -21,7 +21,7 @@
       </div>
       <div class="summary-item">
         <span class="label">Hits</span>
-        <strong>{{ summary.projectedHitCount }}</strong>
+        <strong data-testid="scenario-hit-count">{{ summary.projectedHitCount }}</strong>
       </div>
       <div class="summary-item warning">
         <span class="label">Timing Gaps</span>

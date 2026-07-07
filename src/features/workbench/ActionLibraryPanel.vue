@@ -3,6 +3,9 @@
     <div class="panel-title">
       <Collection class="panel-icon" />
       <h2>动作库</h2>
+      <button class="icon-button add-button" data-testid="workbench-add-action" type="button" @click="$emit('add-action')">
+        + 动作
+      </button>
     </div>
 
     <div class="actor-block">
@@ -16,6 +19,7 @@
         :key="action.id"
         class="action-item"
         :class="{ selected: action.id === selectedActionId }"
+        :data-action-id="action.id"
         tabindex="0"
         @click="$emit('select-action', action.id)"
         @keydown.enter="$emit('select-action', action.id)"
@@ -24,6 +28,14 @@
           <span class="action-name">{{ action.name }}</span>
           <span class="action-time">{{ action.startMs }}ms</span>
         </div>
+        <button
+          class="delete-button"
+          data-testid="workbench-delete-action"
+          type="button"
+          @click.stop="$emit('delete-action', action.id)"
+        >
+          删除
+        </button>
         <dl>
           <div>
             <dt>技能</dt>
@@ -68,7 +80,7 @@ defineProps({
   },
 });
 
-defineEmits(['select-action']);
+defineEmits(['select-action', 'add-action', 'delete-action']);
 </script>
 
 <style scoped>
@@ -96,6 +108,36 @@ defineEmits(['select-action']);
 h2 {
   margin: 0;
   font-size: 15px;
+}
+
+.icon-button,
+.delete-button {
+  border: 1px solid rgba(121, 199, 185, 0.32);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.1);
+  color: #dff6f1;
+  cursor: pointer;
+  font: inherit;
+}
+
+.icon-button {
+  margin-left: auto;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.delete-button {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 5px 8px;
+  border-color: rgba(245, 108, 108, 0.34);
+  background: rgba(245, 108, 108, 0.1);
+  color: #f8b6b6;
+}
+
+.icon-button:hover,
+.delete-button:hover {
+  filter: brightness(1.18);
 }
 
 .actor-block {

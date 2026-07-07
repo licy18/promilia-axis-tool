@@ -42,6 +42,7 @@
 - 用途：阶段 3 `src/simulation/` 的 compiler / engine / projection 输入样本。
 - 当前快照文件：`src/data/generated/first-vertical-slice.json`。该文件由 `npm run data:generate` 输出，供工作台和测试读取，避免首屏加载全量生成数据。
 - 当前工作台 seed：`src/data/generated/workbench-seed.json`。该文件由 `npm run data:generate` 输出，包含 20 个角色、120 个技能和 199 个带战斗属性的敌人，字段已裁剪到工作台与运行时当前需要的范围。
+- 当前工作台动作草稿：`src/domain/workbenchProjectFactory.js` 使用 `actionDrafts[]` 生成新版 `Project.actions[]`。每个草稿包含 `id`、`skillId`、`startMs`、`level`，并在生成项目时汇总为 actor 的 `skillLevels` 和 `metadata.sourceSkillIds`。
 
 ## 2026-07-07：最小模拟运行时输出
 
