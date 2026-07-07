@@ -792,12 +792,16 @@ function formatFormulaExecutionMatrixSummary(summary) {
     external?.gapsWithRuntimeParameterSourceCandidates > 0
       ? ` · 参数来源候选 ${external.gapsWithRuntimeParameterSourceCandidates}/${external.gapCount}`
       : '';
+  const runtimeApplicationText =
+    external?.gapsWithRuntimeApplicationTraceEvidence > 0
+      ? ` · 应用入口候选 ${external.gapsWithRuntimeApplicationTraceEvidence}/${external.gapCount}`
+      : '';
   const alignment = gap?.elementSourceAlignmentSummary;
   const alignmentText =
     alignment?.gapCount > 0
       ? ` · 来源差异 ${alignment.divergentGapCount}/${alignment.gapCount}`
       : '';
-  return `执行矩阵摘要 ${summary.matrixActionCount} 动作 · ${summary.rowCount} 行 · ${summary.elementCount} element · 缩放 ${scaleRange}${perHitText}${spreadText}${hitBindingText}${gapText}${externalText}${relatedLevelText}${runtimeParameterText}${alignmentText}`;
+  return `执行矩阵摘要 ${summary.matrixActionCount} 动作 · ${summary.rowCount} 行 · ${summary.elementCount} element · 缩放 ${scaleRange}${perHitText}${spreadText}${hitBindingText}${gapText}${externalText}${relatedLevelText}${runtimeParameterText}${runtimeApplicationText}${alignmentText}`;
 }
 
 function formatScaleRange(min, max) {

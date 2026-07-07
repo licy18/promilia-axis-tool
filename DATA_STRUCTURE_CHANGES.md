@@ -5325,3 +5325,103 @@ hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1
 - `10900125` 的 `A = 4500-9450` 仍不能直接覆盖 `TDamageElementParams.formulaParamValues[1] = 1000`。
 - HP、削韧、自身能量三条公式链仍保持 `applied: false`。
 - 下一阶段应继续追 `DamageElement.Parse/Execute`、`FormulaUtility`、`RecoverSP` 和弱点击破相关执行点，确认参数覆盖顺序和三值应用点。
+
+## 72. 阶段 5-8AS：runtimeApplicationTraceEvidence 三值运行时应用入口候选
+
+阶段 5-8AS 在 `hitBindingGap.externalElementBinding` 下新增 `runtimeApplicationTraceEvidence`。该字段用于记录 HP、削韧、自身能量三条曲线在 IL2CPP dump 中能确认到的运行时入口和数据载体。
+
+### 72.1 hitBindingGap.externalElementBinding.runtimeApplicationTraceEvidence
+
+重击样例：
+
+```json
+{
+  "status": "runtime-application-entrypoints-found-method-bodies-missing",
+  "sourceKind": "azpr-runtime-application-trace-evidence",
+  "damageElementConfigIds": [109001251],
+  "damageElementPathIds": ["-5633710717881758712"],
+  "trackedValueChainCount": 3,
+  "methodBodyStatus": "il2cpp-dump-signatures-only",
+  "parameterOverrideStatus": "related-skill-level-candidate-found-execution-override-order-unconfirmed",
+  "applied": false
+}
+```
+
+### 72.2 hpDamage
+
+`runtimeApplicationTraceEvidence.hpDamage` 记录：
+
+- 输入字段：`TDamageElementParams.formulaParams.function_1`、`function_2`、`formulaParamValues`。
+- 当前函数 ID：`[1, 2]`。
+- 入口方法：
+  - `DamageElement.ExecuteEffect / Execute / BaseExecute / Parse`
+  - `FormulaUtility.GetOutput / GetOutputDamage / Calculate / innerCalculate / GetFunctionParams / SkillDmgUp / WeaknessPointChange`
+  - `FormulaUtility.OutputDamageData.outputDamage / realDamage / isCritical / isShield`
+
+当前状态为 `formula-output-entrypoints-found-application-order-unconfirmed`。
+
+### 72.3 toughnessDamage
+
+`runtimeApplicationTraceEvidence.toughnessDamage` 记录：
+
+- 输入字段：`TDamageElementParams.weakBreakDamageRate`、`TDamageElementParams.useOneBreak`。
+- 当前样例值：`weakBreakDamageRates = [7000]`。
+- 入口方法：
+  - `FormulaUtility.GetOutputWeaknessDamage / WeaknessPointChange`
+  - `WeakBreakSystem.OnTransmit / UpdateWeakState / WeakBreaking / WeakBreakEnding / WeakBreakEnd / WeaknessPointUpdate`
+
+当前状态为 `weak-break-entrypoints-found-unit-scale-unconfirmed`。
+
+### 72.4 selfEnergyChange
+
+`runtimeApplicationTraceEvidence.selfEnergyChange` 记录：
+
+- 输入字段：`TDamageElementParams.recoverSP`、`petRecoverSP`、`recoverInterval`。
+- 当前样例值：`recoverSPValues = [5899]`、`petRecoverSPValues = [22999]`、`recoverIntervals = [9999]`。
+- 入口方法/载体：
+  - `DamageElement.RecoverSP`
+  - `RecoverSPArgs.baseDelta / delta / interval / tagType / skillId / sharePercent / petSharePercent / petDelta / mainPetSharePercent`
+  - `SPSystem.OnTransmit / RecoverSP / m_recoverTimerMap`
+
+当前状态为 `recover-sp-entrypoints-found-owner-share-unconfirmed`。
+
+### 72.5 externalElementBindingSummary
+
+`hitBindingGapSummary.externalElementBindingSummary` 新增：
+
+- `runtimeApplicationTraceStatuses`
+- `runtimeApplicationTraceChainCount`
+- `gapsWithRuntimeApplicationTraceEvidence`
+
+四动作样例当前为：
+
+```json
+{
+  "runtimeApplicationTraceStatuses": [
+    "runtime-application-entrypoints-found-method-bodies-missing"
+  ],
+  "runtimeApplicationTraceChainCount": 9,
+  "gapsWithRuntimeApplicationTraceEvidence": 3
+}
+```
+
+### 72.6 Workbench 摘要
+
+Workbench 执行矩阵摘要新增：
+
+```text
+应用入口候选 3/3
+```
+
+单个重击动作切换时显示：
+
+```text
+hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1/1 · 参数来源候选 1/1 · 应用入口候选 1/1 · 来源差异 1/1
+```
+
+### 72.7 当前边界
+
+- `runtimeApplicationTraceEvidence` 只证明三条曲线存在运行时入口和数据载体，不证明最终公式已经确认。
+- `methodBodyStatus = il2cpp-dump-signatures-only` 必须保留；当前没有方法体，不能确认覆盖顺序、单位和触发条件。
+- `runtimeApplicationTraceEvidence.applied = false`，HP、削韧、自身能量最终公式仍不能应用。
+- 下一阶段需要寻找方法体、native 符号/字符串交叉引用、反编译产物或运行时采样证据。

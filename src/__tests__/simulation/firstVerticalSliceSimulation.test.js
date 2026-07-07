@@ -1659,6 +1659,11 @@ describe('first vertical slice simulation', () => {
           runtimeParameterSourceCandidateCount: 3,
           runtimeParameterSourceSkillIds: [10900125],
           gapsWithRuntimeParameterSourceCandidates: 3,
+          runtimeApplicationTraceStatuses: [
+            'runtime-application-entrypoints-found-method-bodies-missing',
+          ],
+          runtimeApplicationTraceChainCount: 9,
+          gapsWithRuntimeApplicationTraceEvidence: 3,
           applied: false,
         }),
         elementSourceAlignmentSummary: expect.objectContaining({
@@ -1778,6 +1783,81 @@ describe('first vertical slice simulation', () => {
                     inheritanceStatus:
                       'related-skill-level-inheritance-unconfirmed',
                   }),
+                ]),
+                applied: false,
+              }),
+              runtimeApplicationTraceStatuses: [
+                'runtime-application-entrypoints-found-method-bodies-missing',
+              ],
+              runtimeApplicationTraceChainCount: 3,
+              runtimeApplicationTraceEvidence: expect.objectContaining({
+                status:
+                  'runtime-application-entrypoints-found-method-bodies-missing',
+                methodBodyStatus: 'il2cpp-dump-signatures-only',
+                parameterOverrideStatus:
+                  'related-skill-level-candidate-found-execution-override-order-unconfirmed',
+                trackedValueChainCount: 3,
+                hpDamage: expect.objectContaining({
+                  status:
+                    'formula-output-entrypoints-found-application-order-unconfirmed',
+                  formulaFunctionIds: [1, 2],
+                  runtimeEntryPoints: expect.arrayContaining([
+                    expect.objectContaining({
+                      className: 'FormulaUtility',
+                      methods: expect.arrayContaining([
+                        'GetOutput',
+                        'GetOutputDamage',
+                        'Calculate',
+                        'GetFunctionParams',
+                      ]),
+                    }),
+                  ]),
+                  applied: false,
+                }),
+                toughnessDamage: expect.objectContaining({
+                  status: 'weak-break-entrypoints-found-unit-scale-unconfirmed',
+                  weakBreakDamageRates: [7000],
+                  runtimeEntryPoints: expect.arrayContaining([
+                    expect.objectContaining({
+                      className: 'WeakBreakSystem',
+                      methods: expect.arrayContaining([
+                        'OnTransmit',
+                        'WeaknessPointUpdate',
+                        'WeakBreaking',
+                      ]),
+                    }),
+                  ]),
+                  applied: false,
+                }),
+                selfEnergyChange: expect.objectContaining({
+                  status:
+                    'recover-sp-entrypoints-found-owner-share-unconfirmed',
+                  recoverSPValues: [5899],
+                  petRecoverSPValues: [22999],
+                  recoverIntervals: [9999],
+                  runtimeEntryPoints: expect.arrayContaining([
+                    expect.objectContaining({
+                      className: 'SPSystem',
+                      methods: expect.arrayContaining([
+                        'OnTransmit',
+                        'RecoverSP',
+                      ]),
+                    }),
+                    expect.objectContaining({
+                      className: 'RecoverSPArgs',
+                      fields: expect.arrayContaining([
+                        'skillId',
+                        'sharePercent',
+                        'petDelta',
+                      ]),
+                    }),
+                  ]),
+                  applied: false,
+                }),
+                unresolved: expect.arrayContaining([
+                  'il2cpp-method-body-missing',
+                  'runtime-parameter-override-order-unconfirmed',
+                  'hp-toughness-energy-application-points-unconfirmed',
                 ]),
                 applied: false,
               }),

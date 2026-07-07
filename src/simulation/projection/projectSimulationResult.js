@@ -1502,6 +1502,11 @@ function createHitBindingGapExternalElementBinding({
       sourceCandidates,
       damageElementRefs: uniqueDamageElementRefs,
     });
+  const runtimeApplicationTraceEvidence =
+    createHitBindingGapRuntimeApplicationTraceEvidence({
+      damageElementRefs: uniqueDamageElementRefs,
+      runtimeParameterSourceEvidence,
+    });
   const unresolved = uniqueStrings([
     'hit-index-binding-unconfirmed',
     'damage-element-execution-order-unconfirmed',
@@ -1516,6 +1521,9 @@ function createHitBindingGapExternalElementBinding({
       : []),
     ...(runtimeParameterSourceEvidence?.candidateCount > 0
       ? ['runtime-parameter-source-application-unconfirmed']
+      : []),
+    ...(runtimeApplicationTraceEvidence?.trackedValueChainCount > 0
+      ? ['runtime-application-method-body-missing']
       : []),
     'toughness-unit-scale',
     'self-energy-owner-and-share-rule',
@@ -1638,6 +1646,12 @@ function createHitBindingGapExternalElementBinding({
       runtimeParameterSourceEvidence?.candidateCount ?? 0,
     runtimeParameterSourceSkillIds:
       runtimeParameterSourceEvidence?.relatedSkillIds ?? [],
+    runtimeApplicationTraceEvidence,
+    runtimeApplicationTraceStatuses: runtimeApplicationTraceEvidence
+      ? [runtimeApplicationTraceEvidence.status]
+      : [],
+    runtimeApplicationTraceChainCount:
+      runtimeApplicationTraceEvidence?.trackedValueChainCount ?? 0,
     candidates,
     unresolved,
     applied: false,
@@ -1779,6 +1793,216 @@ function createHitBindingGapRuntimeParameterSourceEvidence({
     ]),
     applied: false,
     note: 'This groups source subSkill, external DamageElement and related skill-level rows as a runtime parameter-source candidate only; it is not applied to final HP/toughness/energy formulas.',
+  };
+}
+
+function createHitBindingGapRuntimeApplicationTraceEvidence({
+  damageElementRefs,
+  runtimeParameterSourceEvidence,
+}) {
+  const refs = uniqueElementRefsByPath(damageElementRefs);
+  const damageElementConfigIds = uniqueNumbers(
+    refs.map(ref => ref.elementConfigId)
+  );
+  const hasDamageElement = refs.length > 0;
+  const hpFormulaFunctionIds = uniqueNumbers(
+    refs.flatMap(ref =>
+      Object.values(
+        ref.damageElementFieldMapping?.hpDamage?.formulaFunctionIds ?? {}
+      )
+    )
+  );
+  const weakBreakDamageRates = uniqueNumbers(
+    refs.map(
+      ref => ref.damageElementFieldMapping?.toughnessDamage?.weakBreakDamageRate
+    )
+  );
+  const recoverSPValues = uniqueNumbers(
+    refs.map(ref => ref.damageElementFieldMapping?.selfEnergyChange?.recoverSP)
+  );
+  const petRecoverSPValues = uniqueNumbers(
+    refs.map(
+      ref => ref.damageElementFieldMapping?.selfEnergyChange?.petRecoverSP
+    )
+  );
+  const recoverIntervals = uniqueNumbers(
+    refs.map(
+      ref => ref.damageElementFieldMapping?.selfEnergyChange?.recoverInterval
+    )
+  );
+  const trackedValueChainCount = [
+    hpFormulaFunctionIds.length > 0,
+    weakBreakDamageRates.length > 0,
+    recoverSPValues.length > 0 ||
+      petRecoverSPValues.length > 0 ||
+      recoverIntervals.length > 0,
+  ].filter(Boolean).length;
+
+  return {
+    status: hasDamageElement
+      ? 'runtime-application-entrypoints-found-method-bodies-missing'
+      : 'runtime-application-entrypoints-missing',
+    sourceKind: 'azpr-runtime-application-trace-evidence',
+    file: SKILL_ASSET_EVIDENCE_PATH,
+    damageElementConfigIds,
+    damageElementPathIds: uniqueStrings(
+      refs.map(ref => ref.pathId).filter(value => value != null)
+    ),
+    trackedValueChainCount,
+    methodBodyStatus: 'il2cpp-dump-signatures-only',
+    parameterOverrideStatus:
+      (runtimeParameterSourceEvidence?.candidateCount ?? 0) > 0
+        ? 'related-skill-level-candidate-found-execution-override-order-unconfirmed'
+        : 'related-skill-level-candidate-missing',
+    hpDamage: {
+      status:
+        hpFormulaFunctionIds.length > 0
+          ? 'formula-output-entrypoints-found-application-order-unconfirmed'
+          : 'formula-output-entrypoints-missing',
+      inputFieldSources: [
+        'TDamageElementParams.formulaParams.function_1',
+        'TDamageElementParams.formulaParams.function_2',
+        'TDamageElementParams.formulaParams.formulaParamValues',
+      ],
+      formulaFunctionIds: hpFormulaFunctionIds,
+      runtimeEntryPoints: [
+        {
+          className: 'DamageElement',
+          methods: [
+            'ExecuteEffect',
+            'Execute',
+            'BaseExecute',
+            'Parse(TElementParams param, int skillId, CustomBattleVerifyInfo verifyInfo)',
+          ],
+          source: 'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs',
+          sourceLineRange: 'dump.cs:274573-274708',
+        },
+        {
+          className: 'FormulaUtility',
+          methods: [
+            'GetOutput',
+            'GetOutputDamage',
+            'Calculate',
+            'innerCalculate',
+            'GetFunctionParams',
+            'SkillDmgUp',
+            'WeaknessPointChange',
+          ],
+          source: 'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs',
+          sourceLineRange: 'dump.cs:336831-336898',
+        },
+        {
+          className: 'FormulaUtility.OutputDamageData',
+          fields: ['outputDamage', 'realDamage', 'isCritical', 'isShield'],
+          source: 'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs',
+          sourceLineRange: 'dump.cs:336798-336814',
+        },
+      ],
+      unresolved: [
+        'function-combination-order-unconfirmed',
+        'formula-param-override-order-unconfirmed',
+        'enemy-defense-resistance-critical-target-state-unconfirmed',
+      ],
+      applied: false,
+    },
+    toughnessDamage: {
+      status:
+        weakBreakDamageRates.length > 0
+          ? 'weak-break-entrypoints-found-unit-scale-unconfirmed'
+          : 'weak-break-entrypoints-missing',
+      inputFieldSources: [
+        'TDamageElementParams.weakBreakDamageRate',
+        'TDamageElementParams.useOneBreak',
+      ],
+      weakBreakDamageRates,
+      runtimeEntryPoints: [
+        {
+          className: 'FormulaUtility',
+          methods: ['GetOutputWeaknessDamage', 'WeaknessPointChange'],
+          source: 'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs',
+          sourceLineRange: 'dump.cs:336887-336898',
+        },
+        {
+          className: 'WeakBreakSystem',
+          methods: [
+            'OnTransmit',
+            'UpdateWeakState',
+            'WeakBreaking',
+            'WeakBreakEnding',
+            'WeakBreakEnd',
+            'WeaknessPointUpdate',
+          ],
+          source: 'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs',
+          sourceLineRange: 'dump.cs:289239-289419',
+        },
+      ],
+      unresolved: [
+        'weak-break-unit-scale-unconfirmed',
+        'weak-break-state-gating-unconfirmed',
+        'target-weakness-state-application-unconfirmed',
+      ],
+      applied: false,
+    },
+    selfEnergyChange: {
+      status:
+        recoverSPValues.length > 0 ||
+        petRecoverSPValues.length > 0 ||
+        recoverIntervals.length > 0
+          ? 'recover-sp-entrypoints-found-owner-share-unconfirmed'
+          : 'recover-sp-entrypoints-missing',
+      inputFieldSources: [
+        'TDamageElementParams.recoverSP',
+        'TDamageElementParams.petRecoverSP',
+        'TDamageElementParams.recoverInterval',
+      ],
+      recoverSPValues,
+      petRecoverSPValues,
+      recoverIntervals,
+      runtimeEntryPoints: [
+        {
+          className: 'DamageElement',
+          methods: ['RecoverSP'],
+          source: 'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs',
+          sourceLineRange: 'dump.cs:274596-274672',
+        },
+        {
+          className: 'RecoverSPArgs',
+          fields: [
+            'baseDelta',
+            'delta',
+            'interval',
+            'tagType',
+            'skillId',
+            'sharePercent',
+            'petSharePercent',
+            'petDelta',
+            'mainPetSharePercent',
+          ],
+          source: 'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs',
+          sourceLineRange: 'dump.cs:256196-256211',
+        },
+        {
+          className: 'SPSystem',
+          methods: ['OnTransmit', 'RecoverSP'],
+          fields: ['m_recoverTimerMap'],
+          source: 'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs',
+          sourceLineRange: 'dump.cs:288763-288851',
+        },
+      ],
+      unresolved: [
+        'self-energy-owner-unconfirmed',
+        'sp-share-percent-rule-unconfirmed',
+        'recover-interval-trigger-rule-unconfirmed',
+      ],
+      applied: false,
+    },
+    unresolved: [
+      'il2cpp-method-body-missing',
+      'runtime-parameter-override-order-unconfirmed',
+      'hp-toughness-energy-application-points-unconfirmed',
+    ],
+    applied: false,
+    note: 'This records runtime entry points and data carriers for HP, toughness and self energy. The dump currently exposes signatures and fields only, so formulas remain evidence-only.',
   };
 }
 
@@ -2067,6 +2291,18 @@ function createHitBindingGapExternalElementBindingSummary(gaps) {
     gapsWithRuntimeParameterSourceCandidates: bindings.filter(
       binding =>
         (numberOrNull(binding.runtimeParameterSourceCandidateCount) ?? 0) > 0
+    ).length,
+    runtimeApplicationTraceStatuses: uniqueStrings(
+      bindings.flatMap(binding => binding.runtimeApplicationTraceStatuses ?? [])
+    ),
+    runtimeApplicationTraceChainCount: bindings.reduce(
+      (sum, binding) =>
+        sum + (numberOrNull(binding.runtimeApplicationTraceChainCount) ?? 0),
+      0
+    ),
+    gapsWithRuntimeApplicationTraceEvidence: bindings.filter(
+      binding =>
+        (numberOrNull(binding.runtimeApplicationTraceChainCount) ?? 0) > 0
     ).length,
     unresolved: uniqueStrings(
       bindings.flatMap(binding => binding.unresolved ?? [])

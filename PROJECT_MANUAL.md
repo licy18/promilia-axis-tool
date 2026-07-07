@@ -3606,6 +3606,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8AS 目标：继续追 `DamageElement.Parse/Execute`、`SkillElementInjector.ExecuteDamageElement`、`FormulaUtility`、`RecoverSP` 和弱点击破相关执行点，确认 `TDamageElementParams.formulaParamValues` 与 `skillsub_ele_value.valueParam` 的覆盖顺序，以及 HP、削韧、自身能量三条曲线各自的真实应用点。
 - 如果当前 IL2CPP dump 仍只有签名，优先在 AzPr Extractor 产物中查找反编译方法体、native 符号/字符串交叉引用或可运行时采样的日志证据。
 
+### 2026-07-08：阶段 5-8AS 三值运行时应用入口候选固化
+
+本轮完成：
+
+- 投影层在 `hitBindingGap.externalElementBinding` 下新增 `runtimeApplicationTraceEvidence`，用于按 HP、削韧、自身能量三条曲线记录运行时执行入口。
+- `runtimeApplicationTraceEvidence.hpDamage` 记录 `DamageElement.Execute/ExecuteEffect/BaseExecute/Parse`、`FormulaUtility.GetOutput/GetOutputDamage/Calculate/GetFunctionParams/SkillDmgUp/WeaknessPointChange` 和 `FormulaUtility.OutputDamageData` 字段。
+- `runtimeApplicationTraceEvidence.toughnessDamage` 记录 `TDamageElementParams.weakBreakDamageRate/useOneBreak`、`FormulaUtility.GetOutputWeaknessDamage/WeaknessPointChange` 和 `WeakBreakSystem` 的状态更新/广播入口。
+- `runtimeApplicationTraceEvidence.selfEnergyChange` 记录 `TDamageElementParams.recoverSP/petRecoverSP/recoverInterval`、`DamageElement.RecoverSP`、`RecoverSPArgs` 和 `SPSystem.OnTransmit/RecoverSP`。
+- `externalElementBindingSummary` 新增 `runtimeApplicationTraceStatuses`、`runtimeApplicationTraceChainCount` 和 `gapsWithRuntimeApplicationTraceEvidence`。
+- Workbench 执行矩阵摘要新增 `应用入口候选 x/y`，切换到重击动作时可以看到 `应用入口候选 1/1`。
+- 仿真测试覆盖 HP/韧性/能量三条入口的 class/method/field 证据，Workbench 测试覆盖 `应用入口候选 1/1` 展示。
+
+当前四动作应用入口候选结果：
+
+- `externalElementBindingSummary.gapsWithRuntimeApplicationTraceEvidence = 3/3`。
+- `runtimeApplicationTraceStatuses = ["runtime-application-entrypoints-found-method-bodies-missing"]`。
+- `runtimeApplicationTraceChainCount = 9`，即 3 个缺口动作各自有 HP、削韧、自身能量 3 条链路入口。
+- 单动作 `runtimeApplicationTraceEvidence.trackedValueChainCount = 3`。
+- `parameterOverrideStatus = related-skill-level-candidate-found-execution-override-order-unconfirmed`，说明已知关联等级链候选存在，但 `formulaParamValues` 与 `skillsub_ele_value.valueParam` 的覆盖顺序仍未知。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+
+当前边界：
+
+- 阶段 5-8AS 证明的是三条曲线的运行时入口和数据载体已经能在 IL2CPP dump 中对上。
+- 当前 dump 仍只有签名/字段，没有方法体；因此不能确认 `FormulaUtility` 的 function 组合顺序，不能确认削韧单位，也不能确认充能归属和共享规则。
+- `runtimeApplicationTraceEvidence.applied = false`，不能直接改写 HP、削韧或自身能量最终公式。
+
+下一步：
+
+- 阶段 5-8AT 目标：优先寻找 `DamageElement`、`FormulaUtility`、`SPSystem`、`WeakBreakSystem` 的方法体或等价运行时证据，确认 `formulaParamValues`、`skillsub_ele_value.valueParam`、`weakBreakDamageRate`、`recoverSP/petRecoverSP/recoverInterval` 的实际应用顺序和单位。
+- 若 IL2CPP dump 无法提供方法体，改走 AzPr Extractor 里的 native 符号/字符串交叉引用、反编译产物或可插桩运行时日志。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
