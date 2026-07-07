@@ -6,6 +6,7 @@ import equipment from './generated/equipment.json';
 import kibos from './generated/kibos.json';
 import manifest from './generated/manifest.json';
 import mediaIndex from './generated/media-index.json';
+import skillLogicIndex from './generated/skill-logic-index.json';
 import skillLevelCrossCheck from './generated/skill-level-crosscheck.json';
 import skills from './generated/skills.json';
 import soulessences from './generated/soulessences.json';
@@ -26,6 +27,7 @@ export const azprGeneratedData = Object.freeze({
   manifest,
   validationReport,
   mediaIndex,
+  skillLogicIndex,
   skillLevelCrossCheck,
   tables: generatedTables,
 });
@@ -40,6 +42,10 @@ export function getAzprValidationReport() {
 
 export function getAzprSkillLevelCrossCheck() {
   return skillLevelCrossCheck;
+}
+
+export function getAzprSkillLogicIndex() {
+  return skillLogicIndex;
 }
 
 export function getAzprElements() {

@@ -20,6 +20,8 @@ const sourceFiles = {
   enemyLang: path.join(sourceRoot, 'Assets', 'ResourcesLang', 'chs', 'Table', 'lang_enemy.json'),
   skillLevel: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'skill_level.json'),
   skillLevelLang: path.join(sourceRoot, 'Assets', 'ResourcesLang', 'chs', 'Table', 'lang_skill_level.json'),
+  skillsubLogic: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'skillsub_logic.json'),
+  skillsubEleValue: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'skillsub_ele_value.json'),
   unitProperty: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'unit_property.json'),
   templateValue: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'template_value.json'),
   battleInfo: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'battle_info.json'),
@@ -40,6 +42,8 @@ const [
   enemyLangTable,
   skillLevelTable,
   skillLevelLangTable,
+  skillsubLogicTable,
+  skillsubEleValueTable,
   unitPropertyTable,
   templateValueTable,
   battleInfoTable,
@@ -53,6 +57,8 @@ const [
   readJson(sourceFiles.enemyLang),
   readJson(sourceFiles.skillLevel),
   readJson(sourceFiles.skillLevelLang),
+  readJson(sourceFiles.skillsubLogic),
+  readJson(sourceFiles.skillsubEleValue),
   readJson(sourceFiles.unitProperty),
   readJson(sourceFiles.templateValue),
   readJson(sourceFiles.battleInfo),
@@ -90,6 +96,7 @@ const equipment = mapEquipment(equipmentForms);
 const soulessences = mapSoulessences(soulessenceForms);
 const mediaIndex = await mapMediaIndex(sourceFiles.mediaImages);
 const skillLevelCrossCheck = buildSkillLevelCrossCheck({ skills, skillLevelTable, skillLevelLang });
+const skillLogicIndex = buildSkillLogicIndex({ skills, skillLevelTable, skillsubLogicTable, skillsubEleValueTable });
 const firstVerticalSlice = buildFirstVerticalSliceData({ characters, skills, enemies });
 const workbenchSeed = buildWorkbenchSeedData({ characters, skills, enemies });
 const validationReport = buildValidationReport({
@@ -102,6 +109,7 @@ const validationReport = buildValidationReport({
   soulessences,
   mediaIndex,
   skillLevelCrossCheck,
+  skillLogicIndex,
 });
 
 await Promise.all([
@@ -116,6 +124,7 @@ await Promise.all([
   writeJson('soulessences.json', wrapItems(soulessences, sourceFiles.soulessences)),
   writeJson('media-index.json', mediaIndex),
   writeJson('skill-level-crosscheck.json', skillLevelCrossCheck),
+  writeJson('skill-logic-index.json', skillLogicIndex),
   writeJson('first-vertical-slice.json', firstVerticalSlice),
   writeJson('workbench-seed.json', workbenchSeed),
   writeJson('validation-report.json', validationReport),
@@ -174,6 +183,7 @@ function buildManifest(validationReport) {
       soulessences: 'soulessences.json',
       mediaIndex: 'media-index.json',
       skillLevelCrossCheck: 'skill-level-crosscheck.json',
+      skillLogicIndex: 'skill-logic-index.json',
       firstVerticalSlice: 'first-vertical-slice.json',
       workbenchSeed: 'workbench-seed.json',
       validationReport: 'validation-report.json',
@@ -500,6 +510,286 @@ function statusFromDiagnostics(diagnostics) {
   return 'matched';
 }
 
+function buildSkillLogicIndex({ skills, skillLevelTable, skillsubLogicTable, skillsubEleValueTable }) {
+  const skillIds = new Set(skills.map((skill) => Number(skill.id)));
+  const skillLevelRowsBySkillId = groupRowsByNumberKey(
+    (skillLevelTable.rows ?? []).filter((row) => skillIds.has(Number(row.skillId))),
+    'skillId',
+  );
+  const logicRowsBySubSkillId = new Map(
+    (skillsubLogicTable.rows ?? [])
+      .map((row) => [Number(row.skillId), row])
+      .filter(([skillId]) => Number.isFinite(skillId)),
+  );
+  const elementRowsBySubSkillAndLevel = new Map();
+  for (const row of skillsubEleValueTable.rows ?? []) {
+    const key = `${Number(row.skillId)}:${Number(row.level)}`;
+    const rows = elementRowsBySubSkillAndLevel.get(key) ?? [];
+    rows.push(row);
+    elementRowsBySubSkillAndLevel.set(key, rows);
+  }
+
+  const items = skills.map((skill) =>
+    buildSkillLogicIndexItem(skill, skillLevelRowsBySkillId, logicRowsBySubSkillId, elementRowsBySubSkillAndLevel),
+  );
+  const summary = summarizeSkillLogicIndex(items);
+
+  return {
+    schemaVersion: 1,
+    generatedAt,
+    sourceKind: 'azpr-newtable-skill-logic-index',
+    source: {
+      skillLevelTable: normalizePath(sourceFiles.skillLevel),
+      skillsubLogicTable: normalizePath(sourceFiles.skillsubLogic),
+      skillsubEleValueTable: normalizePath(sourceFiles.skillsubEleValue),
+    },
+    count: items.length,
+    summary,
+    items,
+  };
+}
+
+function buildSkillLogicIndexItem(skill, skillLevelRowsBySkillId, logicRowsBySubSkillId, elementRowsBySubSkillAndLevel) {
+  const skillLevelRows = (skillLevelRowsBySkillId.get(Number(skill.id)) ?? []).sort(
+    (left, right) => Number(left.level) - Number(right.level),
+  );
+  const diagnostics = [];
+
+  if (skillLevelRows.length === 0) {
+    diagnostics.push({
+      code: 'skill-logic-skill-level-missing',
+      severity: 'warning',
+      skillId: skill.id,
+      message: 'skill_level.json 中缺少该技能等级行，无法映射 skillsub_logic。',
+    });
+  }
+
+  const subSkills = uniqueNumbers(skillLevelRows.map((row) => row.subSkillId)).map((subSkillId) =>
+    buildSubSkillLogicIndex(subSkillId, skill, skillLevelRows, logicRowsBySubSkillId),
+  );
+  const levels = skillLevelRows.map((row, index) =>
+    buildSkillLogicLevelIndex(row, index, elementRowsBySubSkillAndLevel),
+  );
+
+  for (const subSkill of subSkills) {
+    diagnostics.push(...subSkill.diagnostics);
+  }
+  for (const level of levels) {
+    diagnostics.push(...level.diagnostics);
+  }
+
+  return {
+    skillId: skill.id,
+    characterId: skill.characterId,
+    characterName: skill.characterName,
+    skillName: skill.name ?? skill.displayName ?? null,
+    status: statusFromSkillLogicDiagnostics(diagnostics),
+    levelCount: levels.length,
+    subSkillIds: subSkills.map((subSkill) => subSkill.subSkillId),
+    subSkills,
+    levels,
+    diagnostics,
+  };
+}
+
+function buildSubSkillLogicIndex(subSkillId, skill, skillLevelRows, logicRowsBySubSkillId) {
+  const diagnostics = [];
+  const logicRow = logicRowsBySubSkillId.get(subSkillId);
+  const displayPairs = uniqueDisplayTimingPairs(
+    skillLevelRows.filter((row) => Number(row.subSkillId) === Number(subSkillId)),
+  );
+
+  if (!logicRow) {
+    return {
+      subSkillId,
+      status: 'missing',
+      logic: null,
+      displayPairs,
+      displayMatchesLogic: false,
+      diagnostics: [
+        {
+          code: 'skill-logic-row-missing',
+          severity: 'warning',
+          skillId: skill.id,
+          subSkillId,
+          message: 'skillsub_logic.json 中缺少 subSkillId 对应的逻辑行。',
+        },
+      ],
+    };
+  }
+
+  const logic = compactSkillLogicRow(logicRow);
+  const displayMatchesLogic = displayPairs.some(
+    (pair) => pair.cooldownMs === logic.cooldownMs && pair.spCost === logic.spCost,
+  );
+
+  if (!displayMatchesLogic) {
+    diagnostics.push({
+      code: 'skill-display-logic-timing-mismatch',
+      severity: 'info',
+      skillId: skill.id,
+      subSkillId,
+      displayPairs,
+      logicPair: {
+        cooldownMs: logic.cooldownMs,
+        spCost: logic.spCost,
+      },
+      message: 'skill_level 显示层冷却/能量与 skillsub_logic 逻辑层冷却/能量不一致。',
+    });
+  }
+
+  return {
+    subSkillId,
+    status: diagnostics.length > 0 ? 'mismatch' : 'mapped',
+    logic,
+    displayPairs,
+    displayMatchesLogic,
+    diagnostics,
+  };
+}
+
+function buildSkillLogicLevelIndex(row, levelIndex, elementRowsBySubSkillAndLevel) {
+  const subSkillId = Number(row.subSkillId);
+  const level = Number(row.level);
+  const elementRows = elementRowsBySubSkillAndLevel.get(`${subSkillId}:${level}`) ?? [];
+  const diagnostics = [];
+
+  if (elementRows.length === 0) {
+    diagnostics.push({
+      code: 'skill-element-value-row-missing',
+      severity: 'info',
+      skillId: Number(row.skillId),
+      subSkillId,
+      level,
+      message: 'skillsub_ele_value.json 中没有该 subSkillId/level 的数值参数行。',
+    });
+  }
+
+  return {
+    level,
+    levelIndex,
+    skillLevelRowId: Number(row.id),
+    subSkillId,
+    display: {
+      cooldownMs: numberOrNull(row.coolDown) ?? 0,
+      spCost: numberOrNull(row.spCost) ?? 0,
+    },
+    elementValues: elementRows.map((elementRow) => ({
+      rowId: Number(elementRow.id),
+      elementId: Number(elementRow.elementId),
+      valueParam: elementRow.valueParam ?? '',
+    })),
+    diagnostics,
+  };
+}
+
+function compactSkillLogicRow(row) {
+  return {
+    skillLogicType: numberOrNull(row.skillLogicType),
+    skillTag: row.skillTag ?? '',
+    petSkillLogicTag: row.petSkillLogicTag ?? '',
+    cooldownMs: numberOrNull(row.coolDown) ?? 0,
+    mountCooldownMs: numberOrNull(row.mountCoolDown) ?? 0,
+    kiboCooldownDefaultMs: numberOrNull(row.kiBoCoolDownDefault) ?? 0,
+    kiboVersusCooldownMs: numberOrNull(row.kiBoVersusCoolDown) ?? 0,
+    cooldownDefaultMs: numberOrNull(row.coolDownDefault) ?? 0,
+    cooldownCount: numberOrNull(row.coolDownCount) ?? 0,
+    cooldownCountDefault: numberOrNull(row.coolDownCountDefault) ?? 0,
+    spCost: numberOrNull(row.spCost) ?? 0,
+    selfCooldownGroup: numberOrNull(row.selfCDGroup) ?? 0,
+    selfCooldownMs: numberOrNull(row.selfCD) ?? 0,
+    publicCooldownGroup: numberOrNull(row.publicCDGroup) ?? 0,
+    publicCooldownMs: numberOrNull(row.publicCD) ?? 0,
+    gcdMs: numberOrNull(row.GCD) ?? 0,
+    priority: numberOrNull(row.priority) ?? 0,
+    castPriority: numberOrNull(row.castPriority) ?? 0,
+    targetType: numberOrNull(row.targetType) ?? 0,
+  };
+}
+
+function summarizeSkillLogicIndex(items) {
+  const subSkills = items.flatMap((item) => item.subSkills);
+  const levels = items.flatMap((item) => item.levels);
+  const elementValueRows = levels.reduce((sum, level) => sum + level.elementValues.length, 0);
+  return {
+    mappedSkills: items.filter((item) => item.status === 'mapped').length,
+    missingSkills: items.filter((item) => item.status === 'missing').length,
+    mismatchedSkills: items.filter((item) => item.status === 'mismatch').length,
+    subSkillIds: subSkills.length,
+    missingLogicRows: subSkills.filter((subSkill) => subSkill.status === 'missing').length,
+    displayLogicMismatchSubSkills: subSkills.filter((subSkill) => !subSkill.displayMatchesLogic).length,
+    levelRows: levels.length,
+    elementValueRows,
+    levelsMissingElementValues: levels.filter((level) => level.elementValues.length === 0).length,
+    logicRowsWithNonZeroTiming: subSkills.filter((subSkill) => hasNonZeroLogicTiming(subSkill.logic)).length,
+  };
+}
+
+function statusFromSkillLogicDiagnostics(diagnostics) {
+  if (diagnostics.some((diagnostic) => diagnostic.code === 'skill-logic-row-missing')) {
+    return 'missing';
+  }
+  if (diagnostics.some((diagnostic) => diagnostic.code === 'skill-display-logic-timing-mismatch')) {
+    return 'mismatch';
+  }
+  return 'mapped';
+}
+
+function hasNonZeroLogicTiming(logic) {
+  if (!logic) {
+    return false;
+  }
+  return [
+    logic.cooldownMs,
+    logic.mountCooldownMs,
+    logic.kiboCooldownDefaultMs,
+    logic.kiboVersusCooldownMs,
+    logic.cooldownDefaultMs,
+    logic.spCost,
+    logic.selfCooldownMs,
+    logic.publicCooldownMs,
+    logic.gcdMs,
+  ].some((value) => Number(value) !== 0);
+}
+
+function uniqueDisplayTimingPairs(rows) {
+  const pairs = rows.map((row) => ({
+    cooldownMs: numberOrNull(row.coolDown) ?? 0,
+    spCost: numberOrNull(row.spCost) ?? 0,
+  }));
+  return uniqueByKey(pairs, (pair) => `${pair.cooldownMs}:${pair.spCost}`);
+}
+
+function uniqueNumbers(values) {
+  return [...new Set(values.map((value) => Number(value)).filter(Number.isFinite))].sort((left, right) => left - right);
+}
+
+function uniqueByKey(items, createKey) {
+  const seen = new Set();
+  return items.filter((item) => {
+    const key = createKey(item);
+    if (seen.has(key)) {
+      return false;
+    }
+    seen.add(key);
+    return true;
+  });
+}
+
+function groupRowsByNumberKey(rows, key) {
+  const groups = new Map();
+  for (const row of rows) {
+    const value = Number(row[key]);
+    if (!Number.isFinite(value)) {
+      continue;
+    }
+    const group = groups.get(value) ?? [];
+    group.push(row);
+    groups.set(value, group);
+  }
+  return groups;
+}
+
 async function loadHeroModules(heroModulesDir) {
   const names = await fs.readdir(heroModulesDir);
   const jsonNames = names.filter((name) => /^\d+\.hero-module\.local\.json$/.test(name)).sort();
@@ -818,6 +1108,7 @@ function buildValidationReport(data) {
     (skillLevelCrossCheckSummary.missingSkills ?? 0) + (skillLevelCrossCheckSummary.missingLevels ?? 0);
   const skillLevelCrossCheckMismatchCount =
     (skillLevelCrossCheckSummary.mismatchedSkills ?? 0) + (skillLevelCrossCheckSummary.mismatchedLevels ?? 0);
+  const skillLogicSummary = data.skillLogicIndex?.summary ?? {};
   const nonAzPrPlaceholderNames = ['云堇', '钟离', '甘雨', '雷电将军', '温迪', '可莉'];
   const placeholderCharacters = data.characters
     .filter((character) => nonAzPrPlaceholderNames.includes(character.name))
@@ -873,6 +1164,27 @@ function buildValidationReport(data) {
       message: 'hero-module 聚合倍率与 NewTable/skill_level.json 还原结果存在差异。',
     },
     {
+      code: 'skill-logic-row-missing',
+      severity: (skillLogicSummary.missingLogicRows ?? 0) > 0 ? 'warning' : 'ok',
+      count: skillLogicSummary.missingLogicRows ?? 0,
+      summary: skillLogicSummary,
+      message: 'skillsub_logic.json 中缺少当前角色技能引用的 subSkillId。',
+    },
+    {
+      code: 'skill-display-logic-timing-mismatch',
+      severity: (skillLogicSummary.displayLogicMismatchSubSkills ?? 0) > 0 ? 'info' : 'ok',
+      count: skillLogicSummary.displayLogicMismatchSubSkills ?? 0,
+      summary: skillLogicSummary,
+      message: 'skill_level 显示层 coolDown/spCost 与 skillsub_logic 逻辑层 coolDown/spCost 不一致，排轴应优先区分字段来源。',
+    },
+    {
+      code: 'skill-element-value-row-missing',
+      severity: (skillLogicSummary.levelsMissingElementValues ?? 0) > 0 ? 'info' : 'ok',
+      count: skillLogicSummary.levelsMissingElementValues ?? 0,
+      summary: skillLogicSummary,
+      message: '部分技能等级没有 skillsub_ele_value 数值参数行，可能是被动、纯逻辑或无需倍率参数的技能。',
+    },
+    {
       code: 'non-azpr-placeholder-character',
       severity: placeholderCharacters.length > 0 ? 'error' : 'ok',
       count: placeholderCharacters.length,
@@ -903,6 +1215,7 @@ function buildValidationReport(data) {
       soulessences: data.soulessences.length,
       mediaFiles: data.mediaIndex.count,
       skillLevelCrossCheck: data.skillLevelCrossCheck?.count ?? 0,
+      skillLogicIndex: data.skillLogicIndex?.count ?? 0,
     },
     warnings,
   };

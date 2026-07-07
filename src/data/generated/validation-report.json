@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-07T11:39:11.457Z",
+  "generatedAt": "2026-07-07T11:45:59.901Z",
   "sourceRoot": "C:/PC2/Codex/AzPr",
   "counts": {
     "attributes": 184,
@@ -12,7 +12,8 @@
     "equipment": 137,
     "soulessences": 62,
     "mediaFiles": 3059,
-    "skillLevelCrossCheck": 120
+    "skillLevelCrossCheck": 120,
+    "skillLogicIndex": 120
   },
   "warnings": [
     {
@@ -259,6 +260,60 @@
         "mismatchedLevels": 2
       },
       "message": "hero-module 聚合倍率与 NewTable/skill_level.json 还原结果存在差异。"
+    },
+    {
+      "code": "skill-logic-row-missing",
+      "severity": "ok",
+      "count": 0,
+      "summary": {
+        "mappedSkills": 76,
+        "missingSkills": 0,
+        "mismatchedSkills": 44,
+        "subSkillIds": 120,
+        "missingLogicRows": 0,
+        "displayLogicMismatchSubSkills": 44,
+        "levelRows": 1000,
+        "elementValueRows": 2808,
+        "levelsMissingElementValues": 100,
+        "logicRowsWithNonZeroTiming": 60
+      },
+      "message": "skillsub_logic.json 中缺少当前角色技能引用的 subSkillId。"
+    },
+    {
+      "code": "skill-display-logic-timing-mismatch",
+      "severity": "info",
+      "count": 44,
+      "summary": {
+        "mappedSkills": 76,
+        "missingSkills": 0,
+        "mismatchedSkills": 44,
+        "subSkillIds": 120,
+        "missingLogicRows": 0,
+        "displayLogicMismatchSubSkills": 44,
+        "levelRows": 1000,
+        "elementValueRows": 2808,
+        "levelsMissingElementValues": 100,
+        "logicRowsWithNonZeroTiming": 60
+      },
+      "message": "skill_level 显示层 coolDown/spCost 与 skillsub_logic 逻辑层 coolDown/spCost 不一致，排轴应优先区分字段来源。"
+    },
+    {
+      "code": "skill-element-value-row-missing",
+      "severity": "info",
+      "count": 100,
+      "summary": {
+        "mappedSkills": 76,
+        "missingSkills": 0,
+        "mismatchedSkills": 44,
+        "subSkillIds": 120,
+        "missingLogicRows": 0,
+        "displayLogicMismatchSubSkills": 44,
+        "levelRows": 1000,
+        "elementValueRows": 2808,
+        "levelsMissingElementValues": 100,
+        "logicRowsWithNonZeroTiming": 60
+      },
+      "message": "部分技能等级没有 skillsub_ele_value 数值参数行，可能是被动、纯逻辑或无需倍率参数的技能。"
     },
     {
       "code": "non-azpr-placeholder-character",

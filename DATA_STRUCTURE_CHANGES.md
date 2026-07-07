@@ -740,3 +740,152 @@ Workbench 草稿新增可选 `segmentSplitOptions` 配置块，用于保存动�
 
 - 本阶段确认的是技能等级显示倍率字段可信度，不代表真实命中帧、动作帧、取消窗口或完整伤害公式已经接入。
 - `skill_level.coolDown` / `spCost` 仍按显示层处理，真实技能时序和资源逻辑需要继续向 `skillsub_logic`、技能 asset 或运行时捕获推进。
+
+## 21. 2026-07-07 技能逻辑字段来源索引补充
+
+阶段 5-3 新增 `skill-logic-index.json`，用于把当前角色技能的 `skill_level.subSkillId` 映射到 `skillsub_logic.json` 和 `skillsub_ele_value.json`。
+
+### 21.1 来源字段
+
+本阶段使用三张本地 NewTable：
+
+- 技能等级表：`C:\PC2\Codex\AzPr\Assets\ResourcesAssets\Config\NewTable\skill_level.json`
+- 技能逻辑表：`C:\PC2\Codex\AzPr\Assets\ResourcesAssets\Config\NewTable\skillsub_logic.json`
+- 技能元素数值表：`C:\PC2\Codex\AzPr\Assets\ResourcesAssets\Config\NewTable\skillsub_ele_value.json`
+
+映射关系：
+
+- `skill_level.skillId` 对应角色技能 ID。
+- `skill_level.subSkillId` 对应 `skillsub_logic.skillId`。
+- `skillsub_ele_value.skillId + level` 对应某个 `subSkillId` 在指定等级的数值参数。
+
+### 21.2 生成文件
+
+`src/data/generated/skill-logic-index.json` 的单个技能结构：
+
+```javascript
+{
+  "skillId": 10900101,
+  "characterId": 109001,
+  "status": "mapped",
+  "levelCount": 12,
+  "subSkillIds": [10900101],
+  "subSkills": [
+    {
+      "subSkillId": 10900101,
+      "logic": {
+        "cooldownMs": 0,
+        "spCost": 0,
+        "selfCooldownMs": 0,
+        "publicCooldownMs": 0,
+        "gcdMs": 0
+      },
+      "displayPairs": [
+        {
+          "cooldownMs": 0,
+          "spCost": 0
+        }
+      ],
+      "displayMatchesLogic": true
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "skillLevelRowId": 1657,
+      "subSkillId": 10900101,
+      "display": {
+        "cooldownMs": 0,
+        "spCost": 0
+      },
+      "elementValues": [
+        {
+          "rowId": 973,
+          "elementId": 109001081,
+          "valueParam": "1#1600|7#10000"
+        }
+      ]
+    }
+  ]
+}
+```
+
+当前统计：
+
+- `mappedSkills`: 76
+- `missingSkills`: 0
+- `mismatchedSkills`: 44
+- `subSkillIds`: 120
+- `missingLogicRows`: 0
+- `displayLogicMismatchSubSkills`: 44
+- `levelRows`: 1000
+- `elementValueRows`: 2808
+- `levelsMissingElementValues`: 100
+- `logicRowsWithNonZeroTiming`: 60
+
+`displayLogicMismatchSubSkills` 是信息级诊断，不代表原表错误；它表示 `skill_level.coolDown/spCost` 与 `skillsub_logic.coolDown/spCost` 在字段语义上不同，排轴和模拟必须保留来源区别。
+
+### 21.3 `logicModel` 结构
+
+`createSkillAction()` 现在会附带 `logicModel`：
+
+```javascript
+{
+  "sourceKind": "azpr-newtable-skill-logic-index",
+  "status": "mapped",
+  "skillId": 10900101,
+  "level": 1,
+  "subSkillId": 10900101,
+  "skillLevelRowId": 1657,
+  "display": {
+    "sourceKind": "azpr-newtable-skill-level-display",
+    "cooldownMs": 0,
+    "spCost": 0,
+    "fieldPaths": {
+      "cooldownMs": "skill_level.rows[id=1657].coolDown",
+      "spCost": "skill_level.rows[id=1657].spCost",
+      "subSkillId": "skill_level.rows[id=1657].subSkillId"
+    }
+  },
+  "logic": {
+    "sourceKind": "azpr-newtable-skill-logic-index",
+    "cooldownMs": 0,
+    "spCost": 0,
+    "selfCooldownMs": 0,
+    "publicCooldownMs": 0,
+    "gcdMs": 0,
+    "fieldPaths": {
+      "cooldownMs": "skillsub_logic.rows[skillId=10900101].coolDown",
+      "spCost": "skillsub_logic.rows[skillId=10900101].spCost",
+      "selfCooldownMs": "skillsub_logic.rows[skillId=10900101].selfCD",
+      "gcdMs": "skillsub_logic.rows[skillId=10900101].GCD"
+    }
+  },
+  "elementValues": [
+    {
+      "rowId": 973,
+      "elementId": 109001081,
+      "valueParam": "1#1600|7#10000",
+      "params": [
+        { "id": 1, "value": 1600 },
+        { "id": 7, "value": 10000 }
+      ]
+    }
+  ]
+}
+```
+
+### 21.4 新增诊断码
+
+- `skill-logic-skill-missing`：缺少技能 ID，无法解析逻辑字段。
+- `skill-logic-entry-missing`：生成索引中缺少该技能。
+- `skill-logic-level-missing`：生成索引中缺少该技能等级。
+- `skill-logic-skill-level-missing`：`skill_level.json` 缺少该技能等级行。
+- `skill-logic-row-missing`：`skillsub_logic.json` 缺少 `subSkillId` 对应逻辑行。
+- `skill-display-logic-timing-mismatch`：显示层 `coolDown/spCost` 与逻辑层 `coolDown/spCost` 不一致。
+- `skill-element-value-row-missing`：该等级没有 `skillsub_ele_value` 数值参数行。
+
+### 21.5 当前边界
+
+- 当前只建立字段来源和显示/逻辑区分，还没有把 `valueParam` 的参数 ID 解释为具体命中段、伤害类型、附着或资源效果。
+- 真实命中帧、动画帧、取消窗口仍需继续从技能 asset、`skillsub_logic` 关联表或运行时捕获补齐。

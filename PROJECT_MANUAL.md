@@ -1714,6 +1714,46 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 把显示层 `coolDown` / `spCost` 与逻辑层 `coolDown` / `spCost` / `selfCD` / `GCD` 区分记录，避免后续排轴误用显示字段。
 - 补充首个技能的逻辑字段来源测试，并在手册中标记仍缺少真实命中帧/取消窗口的部分。
 
+### 2026-07-07：阶段 5-3 `skillsub_logic` 技能逻辑字段索引雏形落地
+
+本轮完成：
+
+- `scripts/generate-azpr-data.mjs` 接入 `skillsub_logic.json` 和 `skillsub_ele_value.json`。
+- 新增 `src/data/generated/skill-logic-index.json`，按技能记录 `skill_level.subSkillId -> skillsub_logic.skillId -> skillsub_ele_value.skillId + level` 的映射。
+- 新增 `src/domain/skillLogicModel.js`，运行时可按技能与等级解析显示层字段、逻辑层字段和元素数值参数。
+- `createSkillAction()` 现在会附带 `logicModel`，明确区分 `skill_level` 显示层 `coolDown/spCost` 与 `skillsub_logic` 逻辑层 `coolDown/spCost/selfCD/publicCD/GCD`。
+- 首个技能 `10900101` 已能追溯到 `skill_level.rows[id=1657]`、`skillsub_logic.rows[skillId=10900101]` 和 `skillsub_ele_value.rows[id=973/985]`。
+- 新增/扩展生成数据、领域层和模拟竖切测试，覆盖逻辑字段来源、显示/逻辑不一致诊断、等级夹紧和 `valueParam` 参数解析。
+
+数据结论：
+
+- 当前 120 个角色技能对应 1000 条 `skill_level` 等级行和 120 个 `subSkillId`。
+- 120 个 `subSkillId` 全部能在 `skillsub_logic.json` 找到逻辑行。
+- 76 个技能显示层与逻辑层冷却/能量一致；44 个技能存在显示/逻辑不一致，这些被标记为 info 级来源差异。
+- 相关 `skillsub_ele_value` 数值参数行共 2808 条；100 个技能等级没有元素值参数行，暂按 info 级诊断记录。
+- 60 个逻辑行存在非零冷却、能量、selfCD、publicCD、GCD 或相关时序字段。
+
+验收结果：
+
+- `npx vitest run src/__tests__/domain/skillLogicModel.test.js src/__tests__/data/azprGenerated.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，3 个测试文件、19 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、100 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 因新增逻辑索引增至约 1199 KB，后续可拆包或懒加载优化。
+- `git diff --check`：通过；仅有仓库既有 LF/CRLF 工作区提示。
+- `http://127.0.0.1:5175/#/workbench` 本地页面服务返回 200。
+
+当前边界：
+
+- 本阶段只建立字段来源和显示/逻辑区分，还没有解释 `skillsub_ele_value.valueParam` 中参数 ID 的具体战斗语义。
+- `logicModel` 仍不代表真实命中帧、动画帧、取消窗口或完整伤害公式。
+- 下一阶段需要把这些来源信息真正暴露到工作台，避免用户在排轴时看不到字段差异。
+
+下一步：
+
+- 阶段 5-4 目标：在 Workbench 中展示技能逻辑来源与显示/逻辑差异诊断。
+- 在当前技能动作详情中显示 `skill_level` 显示冷却/能量、`skillsub_logic` 逻辑冷却/能量/selfCD/GCD，以及 `skillsub_ele_value` 当前等级参数行。
+- 对 `skill-display-logic-timing-mismatch` 给出清晰的来源提示，避免把显示字段误当作真实排轴字段。
+- 补充 UI 测试和模拟投影断言，确保保存/恢复后逻辑来源仍可追溯。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

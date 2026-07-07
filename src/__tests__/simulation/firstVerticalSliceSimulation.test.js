@@ -36,6 +36,37 @@ describe('first vertical slice simulation', () => {
       },
     });
     expect(scenario.actions[0].damageModel.sourcePath).toContain('109001.hero-module.local.json');
+    expect(scenario.actions[0].logicModel).toMatchObject({
+      sourceKind: 'azpr-newtable-skill-logic-index',
+      status: 'mapped',
+      skillId: 10900101,
+      subSkillId: 10900101,
+      skillLevelRowId: 1657,
+      display: {
+        sourceKind: 'azpr-newtable-skill-level-display',
+        cooldownMs: 0,
+        spCost: 0,
+      },
+      logic: {
+        cooldownMs: 0,
+        spCost: 0,
+        selfCooldownMs: 0,
+        gcdMs: 0,
+        displayMatchesLogic: true,
+      },
+      elementValues: [
+        {
+          rowId: 973,
+          elementId: 109001081,
+          valueParam: '1#1600|7#10000',
+        },
+        {
+          rowId: 985,
+          elementId: 109001306,
+          valueParam: '1#1600|7#10000',
+        },
+      ],
+    });
     expect(scenario.actions[0].selectedDamageSegment.source).toMatchObject({
       kind: 'azpr-local-hero-module-skill-level',
       skillId: 10900101,

@@ -1,4 +1,5 @@
 import { createSkillDamageModel } from './skillDamageSegments';
+import { createSkillLogicModel } from './skillLogicModel';
 
 export const PROJECT_SCHEMA_VERSION = 1;
 export const PROJECT_TIME_UNIT = 'ms';
@@ -149,6 +150,7 @@ export function createSkillAction({
     spCost: skill.spCost,
     elementId: skill.elementId,
     damageModel: createSkillDamageModel(skill, level),
+    logicModel: createSkillLogicModel(skill, level),
     timing: {
       needsTimingData: Boolean(skill.needsTimingData),
       source: skill.timingSource ?? 'unknown',
