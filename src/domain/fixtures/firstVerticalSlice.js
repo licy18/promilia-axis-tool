@@ -1,0 +1,79 @@
+import {
+  getAzprCharacterById,
+  getAzprCharacters,
+  getAzprEnemies,
+  getAzprEnemyById,
+  getAzprSkills,
+  getAzprSkillsByCharacterId,
+} from '../../data/azprGenerated';
+import {
+  createActorFromCharacter,
+  createEnemyFromData,
+  createProject,
+  createSkillAction,
+} from '../projectSchema';
+
+export const FIRST_SLICE_CHARACTER_ID = 109001;
+export const FIRST_SLICE_SKILL_ID = 10900101;
+export const FIRST_SLICE_ENEMY_ID = 300032;
+
+export function createFirstVerticalSliceProject() {
+  const character = getAzprCharacterById(FIRST_SLICE_CHARACTER_ID) ?? getAzprCharacters()[0];
+  const skills = getAzprSkillsByCharacterId(character.id);
+  const skill = skills.find((item) => item.id === FIRST_SLICE_SKILL_ID) ?? skills[0];
+  const enemy = getAzprEnemyById(FIRST_SLICE_ENEMY_ID) ?? getFirstEnemyWithBattleProperty();
+
+  const actor = createActorFromCharacter(character, {
+    actorId: `actor-${character.id}`,
+    level: 80,
+    skillLevels: {
+      [skill.id]: 1,
+    },
+  });
+  const enemyInstance = createEnemyFromData(enemy, {
+    enemyInstanceId: `enemy-${enemy.id}`,
+    level: 80,
+  });
+
+  return createProject({
+    id: 'fixture-first-vertical-slice',
+    name: '首条垂直切片：末音普攻对迅狼',
+    durationMs: 30000,
+    actors: [actor],
+    enemy: enemyInstance,
+    actions: [
+      createSkillAction({
+        id: 'action-0001',
+        actorId: actor.id,
+        skill,
+        targetId: enemyInstance.id,
+        startMs: 0,
+        level: 1,
+        note: '真实 AzPr 数据最小动作；精确命中帧等待 asset 或运行时捕获补充。',
+      }),
+    ],
+    metadata: {
+      fixture: true,
+      fixturePurpose: 'stage-2-domain-schema-and-stage-3-simulation-seed',
+      sourceCharacterId: character.id,
+      sourceSkillId: skill.id,
+      sourceEnemyId: enemy.id,
+    },
+  });
+}
+
+export function getFirstVerticalSliceGameData() {
+  return {
+    characters: getAzprCharacters(),
+    skills: getAzprSkills(),
+    enemies: getAzprEnemies(),
+  };
+}
+
+function getFirstEnemyWithBattleProperty() {
+  const enemy = getAzprEnemies().find((item) => item.property?.exists);
+  if (!enemy) {
+    throw new Error('No generated enemy has battle property data');
+  }
+  return enemy;
+}

@@ -36,6 +36,8 @@ npm run dev
 
 - 游戏数据当前来自 `public/gamedata/gamedata.json`，由 `src/store/gamedata.js` 通过 `/gamedata/gamedata.json` 加载。
 - 新版真实 AzPr 数据管线已建立：`npm run data:generate` 从 `C:\PC2\Codex\AzPr` 生成 `src/data/generated/`，访问层位于 `src/data/azprGenerated.js`。
+- 新版最小领域模型已建立：`src/domain/projectSchema.js` 定义 `Project` / `Actor` / `Enemy` / `Action` schema 与校验器。
+- 第一条真实数据垂直切片位于 `src/domain/fixtures/firstVerticalSlice.js`，当前使用末音、哈库茵剑舞和迅狼。
 - 项目状态核心在 `src/store/project.js`。
 - 主编辑器在 `src/views/Editor.vue`，当前承担了大量 UI、交互和业务协调职责。
 - 时间轴组件位于 `src/components/timeline/`。
@@ -104,7 +106,7 @@ npm run test -- --run
 截至 2026-07-07 的基线：
 
 - `npm run build` 可以通过。
-- `npm run test -- --run` 可以通过；当前为 7 个测试文件、40 条测试。
+- `npm run test -- --run` 可以通过；当前为 8 个测试文件、44 条测试。
 - `npm run data:generate` 可以从 `C:\PC2\Codex\AzPr` 重新生成真实 AzPr 数据拆表。
 
 ## 开发规则

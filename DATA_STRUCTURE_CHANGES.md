@@ -1,5 +1,46 @@
 # 数据结构变更文档
 
+## 2026-07-07：新版项目领域模型
+
+当前重构主线已从旧原型技能字段扩展，进入新版项目领域模型阶段。新模型入口位于 `src/domain/projectSchema.js`，第一条真实数据 fixture 位于 `src/domain/fixtures/firstVerticalSlice.js`。
+
+### 新版 Project 最小结构
+
+```javascript
+{
+  schemaVersion: 1,
+  game: 'azur-promilia',
+  id: 'fixture-first-vertical-slice',
+  name: '首条垂直切片：末音普攻对迅狼',
+  time: {
+    unit: 'ms',
+    durationMs: 30000,
+    fps: 60
+  },
+  actors: [],
+  enemy: {},
+  actions: [],
+  resources: [],
+  buffs: [],
+  loadouts: [],
+  metadata: {}
+}
+```
+
+### 当前约束
+
+- 内部时间单位固定为 `ms`，旧 UI 可以继续显示秒或帧，但进入运行时前必须转换。
+- `actors[].characterId`、`enemy.enemyId`、`actions[].skillId` 必须能对应 `src/data/generated/` 中的真实 AzPr 数据。
+- 技能动作必须保留 `timing.needsTimingData` 和 `timing.source`，直到获得可靠 asset、运行时捕获或人工标注。
+- 新版项目不再使用 `skillBlocks` 作为主模型；旧字段只作为迁移输入或旧 UI 兼容来源。
+
+### 第一条垂直切片
+
+- 角色：末音，`characterId = 109001`
+- 技能：哈库茵剑舞，`skillId = 10900101`
+- 敌人：迅狼，`enemyId = 300032`
+- 用途：阶段 3 `src/simulation/` 的 compiler / engine / projection 输入样本。
+
 ## 1. 变更背景和目标
 
 为了适应新的技能系统架构，提高技能数据的灵活性和扩展性，我们对角色和技能数据结构进行了系统性重构。本次重构的主要目标是：

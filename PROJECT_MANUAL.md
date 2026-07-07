@@ -400,6 +400,49 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 阶段 3 前置目标：基于 `src/data/azprGenerated.js` 准备第一条垂直切片 fixture。
 - 阶段 3 目标：建立 `src/simulation/` 最小编译与模拟链路，先支持一个真实角色、一个真实敌人、一个技能动作和基础伤害日志。
 
+### 2026-07-07：阶段 2 最小领域模型落地
+
+本轮完成：
+
+- 新增 `src/domain/projectSchema.js`，定义最小新版项目契约：
+  - `schemaVersion: 1`
+  - `game: azur-promilia`
+  - 内部时间单位 `ms`
+  - `actors`
+  - `enemy`
+  - `actions`
+  - `loadouts`
+  - `metadata`
+- 新增 `createProject()`、`createActorFromCharacter()`、`createEnemyFromData()`、`createSkillAction()`、`validateProject()`。
+- 新增 `src/domain/fixtures/firstVerticalSlice.js`，用真实数据生成第一条垂直切片：
+  - 角色：末音，`characterId = 109001`
+  - 技能：哈库茵剑舞，`skillId = 10900101`
+  - 敌人：迅狼，`enemyId = 300032`
+- 新增 `src/__tests__/domain/projectSchema.test.js`，覆盖：
+  - fixture 可通过 schema 校验。
+  - 项目 JSON 往返后仍有效。
+  - 未知 actor / skill 引用会被拒绝。
+  - 技能动作保留 `needsTimingData` 时序缺口 warning。
+
+验收结果：
+
+- `npx vitest run src/__tests__/domain/projectSchema.test.js`：通过，1 个测试文件、4 条测试通过。
+- `npm run test -- --run`：通过，8 个测试文件、44 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和 chunk 体积提示，暂不阻塞本阶段。
+
+当前结论：
+
+- 新版项目已经有可测试的最小 schema，不再只依赖旧 `project.actions` / `skillBlocks` 的隐式结构。
+- 第一条真实数据垂直切片已经准备好，可作为阶段 3 模拟运行时输入。
+- 精确技能时序仍按 `needsTimingData` 暴露，不在 schema 层伪造。
+
+下一步：
+
+- 阶段 3 目标：建立 `src/simulation/` 最小运行时。
+- 先实现 `compileProject(project, gameData)`：把领域模型编译成 actor/enemy/action 场景。
+- 再实现 `simulateScenario(scenario)`：输出基础事件日志、技能命中占位、冷却/SP 记录和总伤害框架。
+- 投影层先输出 `damageTimeline`、`resourceTimeline`、`eventLog`、`summary`，后续再接 UI。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

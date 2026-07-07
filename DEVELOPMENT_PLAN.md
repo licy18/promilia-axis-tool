@@ -190,9 +190,15 @@ Endaxis 当前值得对标的模块如下：
 3. 已完成：生成敌人、奇波、装备、灵子和图片索引。
 4. 已完成：为技能补 `needsTimingData` / `timingSource`。
 5. 已完成：建立数据访问层 `src/data/azprGenerated.js` 和校验报告。
-6. 下一步：定义最小 `Project` / `Action` / `Actor` / `Enemy` schema。
-7. 下一步：准备第一条垂直切片 fixture。
+6. 已完成：定义最小 `Project` / `Action` / `Actor` / `Enemy` schema。
+7. 已完成：准备第一条垂直切片 fixture。
 8. 下一步：建立 `src/simulation/` 最小编译和模拟测试。
+
+2026-07-07 更新：
+
+- 已完成：最小 `Project` / `Action` / `Actor` / `Enemy` schema，文件为 `src/domain/projectSchema.js`。
+- 已完成：第一条真实数据垂直切片 fixture，文件为 `src/domain/fixtures/firstVerticalSlice.js`。
+- 下一步：建立 `src/simulation/`，先完成 `compileProject()`、`simulateScenario()` 和 projection 测试。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 
