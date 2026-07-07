@@ -240,7 +240,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8M，新增 `damageElementFieldMappingEvidence`，把 `TDamageElementParams` 的 `formulaParams`、`weakBreakDamageRate`、`recoverSP/petRecoverSP` 分别映射到 HP 伤害、敌人韧性削减、自身能量变化三条候选链；末音 `10900101` 的 3 个 damage element 均完成字段映射，其中 `109001081` / `109001306` 已桥接到 12 行 `skillsub_ele_value.valueParam` 等级值。
 - 已完成：阶段 5-8N，把 `damageElementFieldMappingEvidence` 接入 `actionResultTimeline[]` 的 `sourceEvidence` 层和 Workbench 分析面板“三值来源”展示；末音 `10900101` 当前动作可显示 HP、削韧、充能候选 elementId `109001081 / 109001306`，并保留 `109001251` 未桥接记录。
 - 已完成：阶段 5-8O，新增 `formulaParamAlignment.parameterSummaries`，确认末音 `109001081 / 109001306` 的参数 `1 / A` 是 1-12 级线性增长的等级覆盖候选，参数 `7 / G` 是 1-12 级恒定的同槽直连匹配；这些仍是公式槽位关系证据，不是最终公式应用。
-- 下一步：阶段 5-8P，把 `formulaParamAlignment.parameterSummaries` 接入 `actionResultTimeline[].sourceEvidence` 和 Workbench 展示层，形成未应用 HP 公式候选视图，再继续追 `formulaParams.function_1/function_2` 与 `element_formula` / IL2CPP `DamageElement` 的实际执行链。
+- 已完成：阶段 5-8P，把 `formulaParamAlignment.parameterSummaries` 接入 `actionResultTimeline[].sourceEvidence`，并在 Workbench 三值来源中展示未应用公式候选；当前显示 `A 覆盖候选 1,600-3,360 / G 常量匹配 10,000`，但不改变 raw HP、削韧或充能数值。
+- 下一步：阶段 5-8Q，追踪 `TDamageElementParams.formulaParams.function_1/function_2` 到 `element_formula` 或 IL2CPP `DamageElement` 执行链，确认 functionId 的真实公式入口；若不能闭环，先建立 functionId 证据索引。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

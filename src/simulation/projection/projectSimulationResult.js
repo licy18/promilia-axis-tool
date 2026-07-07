@@ -518,6 +518,9 @@ function compactDamageElementMapping(mapping) {
       levelRows: mapping.skillLevelBridge?.levelRows ?? 0,
       parameterIds: mapping.skillLevelBridge?.parameterIds ?? [],
       varyingParameterIds: mapping.skillLevelBridge?.varyingParameterIds ?? [],
+      formulaSlotAlignment: compactFormulaSlotAlignment(
+        mapping.skillLevelBridge?.formulaParamAlignment
+      ),
       firstLevel: mapping.skillLevelBridge?.firstLevel
         ? {
             level: mapping.skillLevelBridge.firstLevel.level,
@@ -564,9 +567,66 @@ function createDamageElementChainSource(damageElementSource, chainKey) {
     unbridgedElementConfigIds: damageElementSource.unbridgedElementConfigIds,
     candidateCount: candidates.length,
     bridgeMatchedLevelRows: damageElementSource.bridgeMatchedLevelRows ?? 0,
+    formulaSlotAlignmentSummary:
+      createFormulaSlotAlignmentSummary(candidates),
     candidates,
     note: damageElementSource.note,
   };
+}
+
+function compactFormulaSlotAlignment(alignment) {
+  if (!alignment) {
+    return null;
+  }
+
+  return {
+    status: alignment.status ?? 'unknown',
+    conclusion: alignment.conclusion ?? 'unknown',
+    directSlotMatchParamIds: alignment.directSlotMatchParamIds ?? [],
+    overrideCandidateParamIds: alignment.overrideCandidateParamIds ?? [],
+    parameterSummaries: (alignment.parameterSummaries ?? []).map(parameter => ({
+      id: parameter.id,
+      variable: parameter.variable,
+      relationStatus: parameter.relationStatus,
+      formulaParamValue: parameter.formulaParamValue,
+      firstLevelValue: parameter.firstLevelValue,
+      lastLevelValue: parameter.lastLevelValue,
+      minValue: parameter.minValue,
+      maxValue: parameter.maxValue,
+      isConstantAcrossLevels: parameter.isConstantAcrossLevels,
+      levelRows: parameter.levelRows,
+      progression: parameter.progression
+        ? {
+            status: parameter.progression.status,
+            step: parameter.progression.step,
+            isArithmetic: parameter.progression.isArithmetic,
+          }
+        : null,
+    })),
+  };
+}
+
+function createFormulaSlotAlignmentSummary(candidates) {
+  const summaries = candidates.flatMap(
+    candidate =>
+      candidate.skillLevelBridge?.formulaSlotAlignment?.parameterSummaries ?? []
+  );
+  const byParam = new Map();
+
+  for (const summary of summaries) {
+    const key = `${summary.id}:${summary.relationStatus}`;
+    if (!byParam.has(key)) {
+      byParam.set(key, {
+        ...summary,
+        candidateCount: 0,
+      });
+    }
+    byParam.get(key).candidateCount += 1;
+  }
+
+  return [...byParam.values()].sort(
+    (left, right) => Number(left.id) - Number(right.id)
+  );
 }
 
 function attachDamageElementSourceToHpBreakdown(

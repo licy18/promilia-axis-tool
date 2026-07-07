@@ -2598,3 +2598,72 @@ Workbench 分析面板新增“三值来源”列表，当前展示：
 - `level-scaling-override-candidate` 不是最终公式确认，只说明 `valueParam` 和同编号 `formulaParamValues` 槽存在强候选覆盖关系。
 - `constant-direct-slot-match` 不是最终公式确认，只说明同编号槽位值一致。
 - 下一阶段应把这些参数级关系接入动作级 `sourceEvidence` 和 Workbench 展示层，再继续追 `formulaParams.function_1/function_2` 的实际执行公式。
+
+## 41. 2026-07-08 actionResultTimeline 公式槽位 sourceEvidence 摘要
+
+阶段 5-8P 把 `formulaParamAlignment.parameterSummaries` 接入动作级 `sourceEvidence`，并在 Workbench 三值来源里显示未应用公式候选。
+
+### 41.1 sourceEvidence.formulaSlotAlignmentSummary
+
+`actionResultTimeline[].hpDamage.sourceEvidence` 新增：
+
+```javascript
+{
+  "formulaSlotAlignmentSummary": [
+    {
+      "id": 1,
+      "variable": "A",
+      "relationStatus": "level-scaling-override-candidate",
+      "formulaParamValue": 1000,
+      "firstLevelValue": 1600,
+      "lastLevelValue": 3360,
+      "progression": {
+        "status": "arithmetic-progression",
+        "step": 160
+      },
+      "candidateCount": 2
+    },
+    {
+      "id": 7,
+      "variable": "G",
+      "relationStatus": "constant-direct-slot-match",
+      "formulaParamValue": 10000,
+      "candidateCount": 2
+    }
+  ]
+}
+```
+
+含义：
+
+- `candidateCount`：当前动作桥接到的候选 element 中，有多少个给出相同参数关系。
+- `relationStatus`：仍是未应用公式候选，不改变 `hpDamage.value`。
+
+### 41.2 candidates[].skillLevelBridge.formulaSlotAlignment
+
+每个候选 element 的 `skillLevelBridge` 新增 compact 字段：
+
+```javascript
+{
+  "formulaSlotAlignment": {
+    "status": "same-element-id-found-slot-alignment-unverified",
+    "conclusion": "slot-override-candidate-unconfirmed",
+    "directSlotMatchParamIds": [7],
+    "overrideCandidateParamIds": [1],
+    "parameterSummaries": []
+  }
+}
+```
+
+### 41.3 Workbench 展示
+
+Workbench 分析面板三值来源当前会显示：
+
+```text
+公式候选 A 覆盖候选 1,600-3,360 / G 常量匹配 10,000
+```
+
+### 41.4 当前边界
+
+- 这些字段只是把 5-8O 的槽位关系带入动作结果和 UI，不应用最终公式。
+- 下一阶段需要继续确认 `function_1/function_2` 的公式入口和执行链，否则不能把 A/G 候选推进到 applied 层。

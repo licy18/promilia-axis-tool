@@ -261,6 +261,31 @@ describe('first vertical slice simulation', () => {
           unbridgedElementConfigIds: [109001251],
           candidateCount: 2,
           bridgeMatchedLevelRows: 24,
+          formulaSlotAlignmentSummary: [
+            expect.objectContaining({
+              id: 1,
+              variable: 'A',
+              relationStatus: 'level-scaling-override-candidate',
+              formulaParamValue: 1000,
+              firstLevelValue: 1600,
+              lastLevelValue: 3360,
+              progression: {
+                status: 'arithmetic-progression',
+                step: 160,
+                isArithmetic: true,
+              },
+              candidateCount: 2,
+            }),
+            expect.objectContaining({
+              id: 7,
+              variable: 'G',
+              relationStatus: 'constant-direct-slot-match',
+              formulaParamValue: 10000,
+              firstLevelValue: 10000,
+              lastLevelValue: 10000,
+              candidateCount: 2,
+            }),
+          ],
           candidates: expect.arrayContaining([
             expect.objectContaining({
               elementConfigId: 109001081,
@@ -275,6 +300,23 @@ describe('first vertical slice simulation', () => {
               skillLevelBridge: expect.objectContaining({
                 status: 'skillsub-element-level-bridge-found',
                 levelRows: 12,
+                formulaSlotAlignment: expect.objectContaining({
+                  conclusion: 'slot-override-candidate-unconfirmed',
+                  directSlotMatchParamIds: [7],
+                  overrideCandidateParamIds: [1],
+                  parameterSummaries: expect.arrayContaining([
+                    expect.objectContaining({
+                      id: 1,
+                      variable: 'A',
+                      relationStatus: 'level-scaling-override-candidate',
+                    }),
+                    expect.objectContaining({
+                      id: 7,
+                      variable: 'G',
+                      relationStatus: 'constant-direct-slot-match',
+                    }),
+                  ]),
+                }),
               }),
             }),
           ]),

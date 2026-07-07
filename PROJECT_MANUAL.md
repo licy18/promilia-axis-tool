@@ -2383,6 +2383,34 @@ Endaxis 参考边界：
 - 为 HP 候选增加未应用公式候选视图，例如“槽 A 使用当前等级 valueParam 覆盖候选，槽 G 为常量匹配”，但仍保持 `applied: false`。
 - 随后继续追 `formulaParams.function_1/function_2` 与 `element_formula` / IL2CPP `DamageElement` 的实际公式执行链。
 
+### 2026-07-08：阶段 5-8P 公式槽位候选接入动作结果与 Workbench
+
+本轮完成：
+
+- `actionResultTimeline[].*.sourceEvidence.candidates[].skillLevelBridge` 新增 compact `formulaSlotAlignment`，把 `parameterSummaries` 带入运行时结果。
+- `sourceEvidence.formulaSlotAlignmentSummary` 汇总当前动作匹配到的参数级槽位关系，避免 UI 直接深挖 generated JSON。
+- Workbench 分析面板“三值来源”新增“公式候选”行，当前可显示 `A 覆盖候选 1,600-3,360 / G 常量匹配 10,000`。
+- HP 公式候选仍挂在未应用 source 层；当前 `hpDamage.value` 仍是 raw 投影，不使用 A/G 候选计算最终伤害。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、11 条测试通过。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、33 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1385 KB。
+
+当前边界：
+
+- `formulaSlotAlignmentSummary` 只是动作级可见证据，不证明 A/G 槽已经进入最终伤害公式。
+- 当前仍没有确认 `formulaParams.function_1/function_2` 的公式入口、变量含义、单位缩放和与 `element_formula` 的关联。
+- 动作形态与 element 仍是技能等级 elementId 级桥接，尚未精确到动作段或命中帧。
+
+下一步：
+
+- 阶段 5-8Q 目标：追踪 `TDamageElementParams.formulaParams.function_1/function_2` 到 `element_formula` 或 IL2CPP `DamageElement` 执行链。
+- 优先确认 `function_1 = 1`、`function_2 = 2` 是否对应 `element_formula` 行、运行时公式函数或固定计算分支。
+- 若仍不能闭环，则建立 `formulaFunctionEvidence` 索引，记录 functionId 的所有本地出现位置、候选源码/IL2CPP 方法和未解析原因。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

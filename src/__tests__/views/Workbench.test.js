@@ -35,6 +35,7 @@ describe('Workbench view', () => {
     expect(text).toContain(
       'HP 2 个候选 (109001081, 109001306) / 削韧 2 个候选 (109001081, 109001306) / 充能 2 个候选 (109001081, 109001306)'
     );
+    expect(text).toContain('公式候选 A 覆盖候选 1,600-3,360 / G 常量匹配 10,000');
     expect(text).toContain('伤害 12,461 · 韧性 0 · 能量 0');
     expect(text).toContain('low');
   });

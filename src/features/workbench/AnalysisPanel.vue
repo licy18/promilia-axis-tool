@@ -48,6 +48,9 @@
         <div class="damage-row-main">
           <span>{{ entry.actionName }}</span>
           <small>{{ formatActionResultSource(entry) }}</small>
+          <small v-if="formatFormulaSlotAlignment(entry.hpDamage?.sourceEvidence)">
+            {{ formatFormulaSlotAlignment(entry.hpDamage?.sourceEvidence) }}
+          </small>
         </div>
         <strong>{{ formatActionResultValues(entry) }}</strong>
       </div>
@@ -189,6 +192,26 @@ function formatChainSource(sourceEvidence) {
     return `未桥接 ${formatElementIds(sourceEvidence.logicElementIds)}`;
   }
   return '未映射';
+}
+
+function formatFormulaSlotAlignment(sourceEvidence) {
+  const summaries = sourceEvidence?.formulaSlotAlignmentSummary ?? [];
+  if (summaries.length === 0) {
+    return '';
+  }
+
+  return `公式候选 ${summaries.map(formatFormulaSlotSummary).join(' / ')}`;
+}
+
+function formatFormulaSlotSummary(summary) {
+  const variable = summary.variable || `#${summary.id}`;
+  if (summary.relationStatus === 'level-scaling-override-candidate') {
+    return `${variable} 覆盖候选 ${formatNumber(summary.firstLevelValue)}-${formatNumber(summary.lastLevelValue)}`;
+  }
+  if (summary.relationStatus === 'constant-direct-slot-match') {
+    return `${variable} 常量匹配 ${formatNumber(summary.formulaParamValue)}`;
+  }
+  return `${variable} ${summary.relationStatus}`;
 }
 
 function formatElementIds(ids = []) {
