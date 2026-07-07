@@ -3757,6 +3757,45 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8AW 目标：继续沿 `SPSystem.RecoverSP`、`SPSystem.OnTransmit`、`RecoverSPArgs` 和 `DamageElement.RecoverSP` 的反汇编追 `baseDelta/delta` 构造、共享比例、recoverInterval 节流和 recoverTagType 枚举。
 - 如果静态反汇编继续只给出片段事实，就优先做 runtime hook 采样点设计，把 `RecoverSPArgs` 字段和最终 SP 曲线按角色分别记录。
 
+### 2026-07-08：阶段 5-8AW 归属/共享/间隔充能子探针
+
+本轮完成：
+
+- 已把 `SPSystem.OnTransmit@0x14837F0` 加入 `nativeDisassemblyEvidence`，目标函数总数从 7 个推进到 8 个。
+- 已确认 `SPSystem.OnTransmit` 会按 transmit type `0x12F` 进入 `RecoverSPArgs` 分支，并调用 `SPSystem.RecoverSP`。
+- 已确认 `RecoverSPArgs` 关键字段布局：`id@0x18`、`baseDelta@0x1C`、`delta@0x20`、`interval@0x24`、`tagType@0x28`、`skillId@0x2C`、`sharePercent@0x30`、`petSharePercent@0x34`、`petDelta@0x38`、`isAddition@0x3C`、`additionId@0x40`、`mainPetSharePercent@0x44`。
+- 已确认 `isAddition = false` 时存在 `id + interval` 的节流路径，使用 `SPSystem.m_recoverTimerMap@0x20`；`isAddition = true` 时走直接恢复路径。
+- 已确认共享回传路径会改写 `baseDelta/delta/petDelta` 后重新发送 type `0x12F`：`sharePercent` 对普通共享目标缩放 `baseDelta/delta`，`petSharePercent` 与 `mainPetSharePercent` 对宠物相关目标缩放 `petDelta`。
+- 新增 `ownerShareIntervalProbe`，挂在 `selfEnergyRuntimeFormulaProbe.ownerShareIntervalProbe` 下；action-level、每 hit 候选和非普攻缺口都能复用同一结构。
+- `externalElementBindingSummary` 新增 `runtimeSelfEnergyOwnerShareIntervalProbeStatuses`、`runtimeSelfEnergyOwnerShareIntervalProbeCandidateCount`、`runtimeSelfEnergyOwnerShareIntervalProbeGateOpenCount`、`gapsWithRuntimeSelfEnergyOwnerShareIntervalProbe`。
+- Workbench 执行矩阵摘要新增 `归属探针 x/y`，切换到重击动作时可以看到 `归属探针 1/1`。
+
+当前样例结果：
+
+- 默认普通攻击 action-level：`ownerShareIntervalProbe.candidateCount = 2`、`gateOpenCount = 2`。
+- 默认普通攻击每 hit：第 1 段 `ownerShareIntervalProbe.candidateCount = 2`、`gateOpenCount = 2`。
+- 非普攻外部 DamageElement：`109001251` 可生成 1 条归属/共享/间隔子探针样本，`petDelta` 候选来自 `petRecoverSP = 22999`，per-10000 候选为 `2.2999`。
+- 四动作缺口摘要：`gapsWithRuntimeSelfEnergyOwnerShareIntervalProbe = 3/3`，`runtimeSelfEnergyOwnerShareIntervalProbeCandidateCount = 3`，`runtimeSelfEnergyOwnerShareIntervalProbeGateOpenCount = 3`。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+- `npm run lint`：通过，0 error，16 个既有 warning。
+- `npm test -- --run`：通过，13 个测试文件、105 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
+
+当前边界：
+
+- 阶段 5-8AW 确认的是 `RecoverSPArgs` 在 `SPSystem.OnTransmit` 里的使用方式，不等于最终充能公式已经可应用。
+- `TDamageElementParams.recoverSP/petRecoverSP/recoverInterval` 到 `RecoverSPArgs.baseDelta/delta/petDelta/interval` 的构造来源仍未确认。
+- `recoverTagType` 枚举语义、共享目标筛选、recoverInterval 时间基准、角色/宠物归属和 runtime 曲线应用仍未确认。
+- `ownerShareIntervalProbe.applied = false`，`selfEnergyChange.value` 仍只应用显式资源事件，不应用候选充能。
+
+下一步：
+
+- 阶段 5-8AX 目标：继续沿 `DamageElement.RecoverSP`、`RecoverSPArgs..ctor` / `OnReset` 和 `SPSystem.OnTransmit` 追 source-to-args 映射，优先确认 `recoverSP -> baseDelta/delta`、`petRecoverSP -> petDelta`、`recoverInterval -> interval` 的构造点。
+- 如果静态反汇编仍无法确定构造来源，设计 runtime hook 采样点，按角色分别记录 `RecoverSPArgs` 字段快照、最终 SP 曲线、share rebroadcast 目标和间隔节流命中结果。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

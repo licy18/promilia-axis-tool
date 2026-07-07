@@ -5779,3 +5779,109 @@ hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1
 - `selfEnergyRuntimeFormulaProbe.applied = false`，最终自身能量值仍不能从候选字段直接计算。
 - `baseDelta-vs-delta-role-unconfirmed`、`recover-tag-type-unconfirmed`、`pet-recover-sp-share-rule-unconfirmed`、`recover-interval-timebase-unconfirmed` 必须继续保留。
 - 下一阶段应追 `RecoverSPArgs` 构造来源、`SPSystem.OnTransmit` 类型映射和 runtime hook 采样点。
+
+## 76. 阶段 5-8AW：ownerShareIntervalProbe 归属/共享/间隔子探针
+
+阶段 5-8AW 在 `selfEnergyRuntimeFormulaProbe` 下新增 `ownerShareIntervalProbe`，用于记录 `SPSystem.OnTransmit` 中 RecoverSPArgs type `0x12F` 的归属、共享和 interval 节流证据。该结构仍为证据层，不参与最终自身能量值计算。
+
+### 76.1 selfEnergyRuntimeFormulaProbe
+
+新增字段：
+
+```json
+{
+  "recoverSpArgsFieldMap": [
+    {
+      "field": "baseDelta",
+      "offset": "0x1C",
+      "runtimeUse": "sp-system-recover-sp-argument"
+    }
+  ],
+  "ownerShareIntervalProbe": {
+    "status": "owner-share-interval-subprobe-built-unapplied",
+    "sourceKind": "azpr-self-energy-owner-share-interval-subprobe",
+    "sourceFunction": "SPSystem.OnTransmit@0x14837F0",
+    "candidateCount": 2,
+    "gateOpenCount": 2,
+    "confirmedRuntimeRules": {},
+    "candidateMappings": {},
+    "samples": [],
+    "applied": false
+  }
+}
+```
+
+### 76.2 recoverSpArgsFieldMap
+
+固定记录 `RecoverSPArgs` 字段：
+
+- `id@0x18`: interval timer map key。
+- `baseDelta@0x1C`: `SPSystem.RecoverSP` 参数。
+- `delta@0x20`: `SPSystem.RecoverSP` 参数与资源更新值。
+- `interval@0x24`: 恢复节流间隔。
+- `tagType@0x28`: `TSpElementParams.ERecoverTagType`。
+- `skillId@0x2C`: 来源技能 ID 载体。
+- `sharePercent@0x30`: 普通共享目标缩放。
+- `petSharePercent@0x34`: pet 共享缩放。
+- `petDelta@0x38`: pet 共享 delta 来源。
+- `isAddition@0x3C`: 直接恢复路径选择。
+- `additionId@0x40`: 恢复后 addition 记录。
+- `mainPetSharePercent@0x44`: main pet 共享缩放。
+
+### 76.3 confirmedRuntimeRules
+
+`ownerShareIntervalProbe.confirmedRuntimeRules` 当前固定记录：
+
+- `transmitType.value = 303`，`hex = "0x12F"`。
+- `directRecoverCall.method = "SPSystem.RecoverSP@0x1483F40"`。
+- 直接调用字段：`tagType@0x28`、`baseDelta@0x1C`、`delta@0x20`。
+- interval 节流字段：`id@0x18`、`interval@0x24`、`SPSystem.m_recoverTimerMap@0x20`。
+- 共享回传路径：`background-entity-share`、`pet-share`、`main-pet-share`，均重新发送 type `0x12F`。
+
+### 76.4 externalElementBinding
+
+非普攻缺口 `hitBindingGap.externalElementBinding` 新增：
+
+- `runtimeSelfEnergyOwnerShareIntervalProbeStatuses`
+- `runtimeSelfEnergyOwnerShareIntervalProbeCandidateCount`
+- `runtimeSelfEnergyOwnerShareIntervalProbeGateOpenCount`
+
+`hitBindingGapSummary.externalElementBindingSummary` 新增：
+
+- `runtimeSelfEnergyOwnerShareIntervalProbeStatuses`
+- `runtimeSelfEnergyOwnerShareIntervalProbeCandidateCount`
+- `runtimeSelfEnergyOwnerShareIntervalProbeGateOpenCount`
+- `gapsWithRuntimeSelfEnergyOwnerShareIntervalProbe`
+
+四动作样例当前为：
+
+```json
+{
+  "runtimeSelfEnergyOwnerShareIntervalProbeStatuses": [
+    "owner-share-interval-subprobe-built-unapplied"
+  ],
+  "runtimeSelfEnergyOwnerShareIntervalProbeCandidateCount": 3,
+  "runtimeSelfEnergyOwnerShareIntervalProbeGateOpenCount": 3,
+  "gapsWithRuntimeSelfEnergyOwnerShareIntervalProbe": 3
+}
+```
+
+### 76.5 Workbench 摘要
+
+Workbench 执行矩阵摘要新增：
+
+```text
+归属探针 3/3
+```
+
+单动作切换到重击时可见：
+
+```text
+hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1/1 · 参数来源候选 1/1 · 应用入口候选 1/1 · 原生入口 1/1 · 反汇编片段 1/1 · 充能探针 1/1 · 归属探针 1/1 · 来源差异 1/1
+```
+
+### 76.6 当前边界
+
+- `ownerShareIntervalProbe.applied = false`。
+- 已确认 `SPSystem.OnTransmit` 使用 `RecoverSPArgs` 字段的方式，但尚未确认 `DamageElement.RecoverSP` 如何构造这些 args。
+- 下一阶段应追 `recoverSP -> baseDelta/delta`、`petRecoverSP -> petDelta`、`recoverInterval -> interval` 的 source-to-args 映射，并确认 `recoverTagType` 枚举与共享目标筛选。

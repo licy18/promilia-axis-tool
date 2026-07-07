@@ -421,7 +421,7 @@ const RUNTIME_NATIVE_DISASSEMBLY_EVIDENCE = {
     finding:
       'DummyDll exposes [Address] attributes and default-return method stubs, not executable C# bodies.',
   },
-  functionCount: 7,
+  functionCount: 8,
   targetFunctions: [
     {
       chains: ['hpDamage'],
@@ -525,6 +525,31 @@ const RUNTIME_NATIVE_DISASSEMBLY_EVIDENCE = {
       unresolved: [
         'pet-recover-sp-share-rule-unconfirmed',
         'recover-interval-runtime-throttle-unconfirmed',
+      ],
+    },
+    {
+      chains: ['selfEnergyChange'],
+      className: 'SPSystem',
+      method: 'OnTransmit',
+      rva: '0x14837F0',
+      va: '0x1814837F0',
+      disassemblyRange: '0x1814837F0-0x181483F40',
+      observations: [
+        'Branches on transmit type 0x12F before casting args to RecoverSPArgs.',
+        'Uses RecoverSPArgs.id and interval for a recover timer throttle before direct recovery when isAddition is false.',
+        'Calls SPSystem.RecoverSP with tagType from +0x28, baseDelta from +0x1C and delta from +0x20.',
+        'Uses sharePercent, petSharePercent, petDelta and mainPetSharePercent to mutate baseDelta/delta before rebroadcasting type 0x12F to related entities.',
+      ],
+      confirmed: [
+        'recover-sp-transmit-type-0x12f-branch-confirmed',
+        'recover-sp-args-call-fields-confirmed',
+        'recover-sp-interval-throttle-fields-confirmed',
+        'recover-sp-share-rebroadcast-fields-confirmed',
+      ],
+      unresolved: [
+        'recover-tag-type-enum-semantics-unconfirmed',
+        'share-target-filter-semantics-unconfirmed',
+        'recover-interval-timebase-unconfirmed',
       ],
     },
     {
@@ -640,6 +665,127 @@ const SELF_ENERGY_RUNTIME_UNIT_HYPOTHESES = [
     status: 'common-config-scale-candidate-unconfirmed',
   },
 ];
+const RECOVER_SP_ARGS_FIELD_MAP = [
+  {
+    field: 'id',
+    offset: '0x18',
+    type: 'int',
+    runtimeUse: 'timer-map-key',
+  },
+  {
+    field: 'baseDelta',
+    offset: '0x1C',
+    type: 'float',
+    runtimeUse: 'sp-system-recover-sp-argument',
+  },
+  {
+    field: 'delta',
+    offset: '0x20',
+    type: 'float',
+    runtimeUse: 'sp-system-recover-sp-argument-and-resource-update',
+  },
+  {
+    field: 'interval',
+    offset: '0x24',
+    type: 'float',
+    runtimeUse: 'recover-timer-throttle',
+  },
+  {
+    field: 'tagType',
+    offset: '0x28',
+    type: 'TSpElementParams.ERecoverTagType',
+    runtimeUse: 'sp-system-recover-sp-argument',
+  },
+  {
+    field: 'skillId',
+    offset: '0x2C',
+    type: 'int',
+    runtimeUse: 'source-skill-id-carrier',
+  },
+  {
+    field: 'sharePercent',
+    offset: '0x30',
+    type: 'float',
+    runtimeUse: 'other-entity-baseDelta-and-delta-share-scale',
+  },
+  {
+    field: 'petSharePercent',
+    offset: '0x34',
+    type: 'float',
+    runtimeUse: 'pet-delta-share-scale',
+  },
+  {
+    field: 'petDelta',
+    offset: '0x38',
+    type: 'float',
+    runtimeUse: 'pet-share-delta-source',
+  },
+  {
+    field: 'isAddition',
+    offset: '0x3C',
+    type: 'bool',
+    runtimeUse: 'direct-recover-path-selector',
+  },
+  {
+    field: 'additionId',
+    offset: '0x40',
+    type: 'int',
+    runtimeUse: 'post-recover-addition-record-carrier',
+  },
+  {
+    field: 'mainPetSharePercent',
+    offset: '0x44',
+    type: 'float',
+    runtimeUse: 'main-pet-delta-share-scale',
+  },
+];
+const SELF_ENERGY_OWNER_SHARE_INTERVAL_RULES = {
+  status: 'sp-system-ontransmit-owner-share-interval-path-confirmed',
+  sourceFunction: 'SPSystem.OnTransmit@0x14837F0',
+  transmitType: {
+    value: 303,
+    hex: '0x12F',
+    status: 'recover-sp-args-transmit-branch-confirmed',
+  },
+  directRecoverCall: {
+    method: 'SPSystem.RecoverSP@0x1483F40',
+    recoverTagTypeField: 'tagType@0x28',
+    baseDeltaField: 'baseDelta@0x1C',
+    deltaField: 'delta@0x20',
+    status: 'call-argument-fields-confirmed',
+  },
+  intervalThrottle: {
+    idField: 'id@0x18',
+    intervalField: 'interval@0x24',
+    timerMapField: 'SPSystem.m_recoverTimerMap@0x20',
+    bypassWhen: 'isAddition@0x3C == true',
+    status: 'id-and-interval-throttle-fields-confirmed',
+  },
+  shareRebroadcast: [
+    {
+      path: 'background-entity-share',
+      percentField: 'sharePercent@0x30',
+      baseDeltaSource: 'baseDelta@0x1C',
+      deltaSource: 'delta@0x20',
+      transmitType: '0x12F',
+      status: 'baseDelta-and-delta-scaled-before-rebroadcast',
+    },
+    {
+      path: 'pet-share',
+      percentField: 'petSharePercent@0x34',
+      deltaSource: 'petDelta@0x38',
+      transmitType: '0x12F',
+      status: 'pet-delta-scaled-before-rebroadcast',
+    },
+    {
+      path: 'main-pet-share',
+      percentField: 'mainPetSharePercent@0x44',
+      deltaSource: 'petDelta@0x38',
+      transmitType: '0x12F',
+      status: 'main-pet-delta-scaled-before-rebroadcast',
+    },
+  ],
+};
 
 export function projectSimulationResult({
   scenario,
@@ -2307,6 +2453,16 @@ function createHitBindingGapExternalElementBinding({
       runtimeSelfEnergyFormulaProbe.candidateCount,
     runtimeSelfEnergyFormulaProbeGateOpenCount:
       runtimeSelfEnergyFormulaProbe.gateOpenCount,
+    runtimeSelfEnergyOwnerShareIntervalProbeStatuses:
+      runtimeSelfEnergyFormulaProbe.ownerShareIntervalProbe?.status !==
+      'owner-share-interval-subprobe-missing'
+        ? [runtimeSelfEnergyFormulaProbe.ownerShareIntervalProbe.status]
+        : [],
+    runtimeSelfEnergyOwnerShareIntervalProbeCandidateCount:
+      runtimeSelfEnergyFormulaProbe.ownerShareIntervalProbe?.candidateCount ??
+      0,
+    runtimeSelfEnergyOwnerShareIntervalProbeGateOpenCount:
+      runtimeSelfEnergyFormulaProbe.ownerShareIntervalProbe?.gateOpenCount ?? 0,
     candidates,
     unresolved,
     applied: false,
@@ -3127,6 +3283,34 @@ function createHitBindingGapExternalElementBindingSummary(gaps) {
       binding =>
         (numberOrNull(binding.runtimeSelfEnergyFormulaProbeCandidateCount) ??
           0) > 0
+    ).length,
+    runtimeSelfEnergyOwnerShareIntervalProbeStatuses: uniqueStrings(
+      bindings.flatMap(
+        binding =>
+          binding.runtimeSelfEnergyOwnerShareIntervalProbeStatuses ?? []
+      )
+    ),
+    runtimeSelfEnergyOwnerShareIntervalProbeCandidateCount: bindings.reduce(
+      (sum, binding) =>
+        sum +
+        (numberOrNull(
+          binding.runtimeSelfEnergyOwnerShareIntervalProbeCandidateCount
+        ) ?? 0),
+      0
+    ),
+    runtimeSelfEnergyOwnerShareIntervalProbeGateOpenCount: bindings.reduce(
+      (sum, binding) =>
+        sum +
+        (numberOrNull(
+          binding.runtimeSelfEnergyOwnerShareIntervalProbeGateOpenCount
+        ) ?? 0),
+      0
+    ),
+    gapsWithRuntimeSelfEnergyOwnerShareIntervalProbe: bindings.filter(
+      binding =>
+        (numberOrNull(
+          binding.runtimeSelfEnergyOwnerShareIntervalProbeCandidateCount
+        ) ?? 0) > 0
     ).length,
     unresolved: uniqueStrings(
       bindings.flatMap(binding => binding.unresolved ?? [])
@@ -5160,6 +5344,8 @@ function createSelfEnergyRuntimeFormulaProbe(candidates, options = {}) {
   const recoverIntervals = uniqueNumbers(
     samples.map(sample => sample.recoverInterval).filter(value => value != null)
   );
+  const ownerShareIntervalProbe =
+    createSelfEnergyOwnerShareIntervalProbe(samples);
 
   return {
     status:
@@ -5174,6 +5360,8 @@ function createSelfEnergyRuntimeFormulaProbe(candidates, options = {}) {
     runtimeFieldMap: SELF_ENERGY_RUNTIME_FIELD_MAP,
     runtimeChainSteps: SELF_ENERGY_RUNTIME_CHAIN_STEPS,
     unitHypotheses: SELF_ENERGY_RUNTIME_UNIT_HYPOTHESES,
+    recoverSpArgsFieldMap: RECOVER_SP_ARGS_FIELD_MAP,
+    ownerShareIntervalProbe,
     recoverSPValues,
     petRecoverSPValues,
     recoverIntervals,
@@ -5199,6 +5387,68 @@ function createSelfEnergyRuntimeFormulaProbe(candidates, options = {}) {
       'recover-interval-timebase-unconfirmed',
       'recover-tag-type-unconfirmed',
       'baseDelta-vs-delta-role-unconfirmed',
+    ],
+    applied: false,
+  };
+}
+
+function createSelfEnergyOwnerShareIntervalProbe(samples) {
+  const candidateCount = samples.length;
+  const gateOpenCount = samples.filter(sample => sample.gateOpen).length;
+
+  return {
+    status:
+      candidateCount > 0
+        ? 'owner-share-interval-subprobe-built-unapplied'
+        : 'owner-share-interval-subprobe-missing',
+    sourceKind: 'azpr-self-energy-owner-share-interval-subprobe',
+    sourceFunction: 'SPSystem.OnTransmit@0x14837F0',
+    candidateCount,
+    gateOpenCount,
+    fieldMap: RECOVER_SP_ARGS_FIELD_MAP,
+    confirmedRuntimeRules: SELF_ENERGY_OWNER_SHARE_INTERVAL_RULES,
+    candidateMappings: {
+      recoverSP: {
+        candidateSourceField: 'TDamageElementParams.recoverSP',
+        recoverSpArgsCandidates: ['baseDelta@0x1C', 'delta@0x20'],
+        status: 'source-to-args-field-not-yet-confirmed',
+      },
+      petRecoverSP: {
+        candidateSourceField: 'TDamageElementParams.petRecoverSP',
+        recoverSpArgsCandidates: ['petDelta@0x38'],
+        status: 'source-to-pet-delta-field-not-yet-confirmed',
+      },
+      recoverInterval: {
+        candidateSourceField: 'TDamageElementParams.recoverInterval',
+        recoverSpArgsCandidates: ['interval@0x24'],
+        status: 'source-to-interval-field-not-yet-confirmed',
+      },
+    },
+    samples: samples.map(sample => ({
+      elementConfigId: sample.elementConfigId,
+      pathId: sample.pathId,
+      gateOpen: sample.gateOpen,
+      recoverSpArgsCandidates: {
+        baseDelta: sample.scaledCandidates,
+        delta: sample.scaledCandidates,
+        petDelta: {
+          rawField: sample.petRecoverSP,
+          perTenThousand: scalePerTenThousand(sample.petRecoverSP),
+        },
+        interval: {
+          rawField: sample.recoverInterval,
+          perTenThousand: scalePerTenThousand(sample.recoverInterval),
+        },
+      },
+      applied: false,
+    })),
+    unresolved: [
+      'recover-sp-source-to-baseDelta-delta-construction-unconfirmed',
+      'owner-entity-selection-unconfirmed',
+      'background-share-target-filter-unconfirmed',
+      'pet-share-target-filter-unconfirmed',
+      'recover-interval-timebase-unconfirmed',
+      'recover-tag-type-enum-semantics-unconfirmed',
     ],
     applied: false,
   };

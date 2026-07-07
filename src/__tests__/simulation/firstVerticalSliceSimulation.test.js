@@ -670,6 +670,33 @@ describe('first vertical slice simulation', () => {
             gateOpenCount: 2,
             recoverSPValues: [2700],
             perTenThousandRecoverSPValues: [0.27],
+            ownerShareIntervalProbe: expect.objectContaining({
+              status: 'owner-share-interval-subprobe-built-unapplied',
+              sourceFunction: 'SPSystem.OnTransmit@0x14837F0',
+              candidateCount: 2,
+              gateOpenCount: 2,
+              confirmedRuntimeRules: expect.objectContaining({
+                transmitType: expect.objectContaining({
+                  hex: '0x12F',
+                  status: 'recover-sp-args-transmit-branch-confirmed',
+                }),
+                directRecoverCall: expect.objectContaining({
+                  recoverTagTypeField: 'tagType@0x28',
+                  baseDeltaField: 'baseDelta@0x1C',
+                  deltaField: 'delta@0x20',
+                }),
+                intervalThrottle: expect.objectContaining({
+                  idField: 'id@0x18',
+                  intervalField: 'interval@0x24',
+                  timerMapField: 'SPSystem.m_recoverTimerMap@0x20',
+                }),
+                shareRebroadcast: expect.arrayContaining([
+                  expect.objectContaining({ path: 'background-entity-share' }),
+                  expect.objectContaining({ path: 'pet-share' }),
+                  expect.objectContaining({ path: 'main-pet-share' }),
+                ]),
+              }),
+            }),
           }),
           candidates: expect.arrayContaining([
             expect.objectContaining({
@@ -693,6 +720,49 @@ describe('first vertical slice simulation', () => {
               runtimeOffset: '0x240',
             }),
           ]),
+          recoverSpArgsFieldMap: expect.arrayContaining([
+            expect.objectContaining({
+              field: 'baseDelta',
+              offset: '0x1C',
+            }),
+            expect.objectContaining({
+              field: 'delta',
+              offset: '0x20',
+            }),
+            expect.objectContaining({
+              field: 'interval',
+              offset: '0x24',
+            }),
+            expect.objectContaining({
+              field: 'sharePercent',
+              offset: '0x30',
+            }),
+            expect.objectContaining({
+              field: 'petSharePercent',
+              offset: '0x34',
+            }),
+            expect.objectContaining({
+              field: 'mainPetSharePercent',
+              offset: '0x44',
+            }),
+          ]),
+          ownerShareIntervalProbe: expect.objectContaining({
+            status: 'owner-share-interval-subprobe-built-unapplied',
+            sourceFunction: 'SPSystem.OnTransmit@0x14837F0',
+            candidateCount: 2,
+            gateOpenCount: 2,
+            samples: expect.arrayContaining([
+              expect.objectContaining({
+                elementConfigId: 109001081,
+                recoverSpArgsCandidates: expect.objectContaining({
+                  interval: expect.objectContaining({
+                    rawField: 9999,
+                    perTenThousand: 0.9999,
+                  }),
+                }),
+              }),
+            ]),
+          }),
           runtimeChainSteps: expect.arrayContaining([
             expect.objectContaining({
               method: 'DamageElement.Parse',
@@ -831,6 +901,11 @@ describe('first vertical slice simulation', () => {
           candidateCount: 2,
           gateOpenCount: 2,
           perTenThousandRecoverSPValues: [0.27],
+          ownerShareIntervalProbe: expect.objectContaining({
+            status: 'owner-share-interval-subprobe-built-unapplied',
+            candidateCount: 2,
+            gateOpenCount: 2,
+          }),
         }),
         applied: false,
       }),
@@ -1724,7 +1799,7 @@ describe('first vertical slice simulation', () => {
           runtimeNativeDisassemblyStatuses: [
             'native-disassembly-snippets-extracted-formula-semantics-unconfirmed',
           ],
-          runtimeNativeDisassemblyFunctionCount: 7,
+          runtimeNativeDisassemblyFunctionCount: 8,
           gapsWithRuntimeNativeDisassembly: 3,
           runtimeSelfEnergyFormulaProbeStatuses: [
             'recover-sp-runtime-probe-built-unapplied',
@@ -1732,6 +1807,12 @@ describe('first vertical slice simulation', () => {
           runtimeSelfEnergyFormulaProbeCandidateCount: 3,
           runtimeSelfEnergyFormulaProbeGateOpenCount: 3,
           gapsWithRuntimeSelfEnergyFormulaProbe: 3,
+          runtimeSelfEnergyOwnerShareIntervalProbeStatuses: [
+            'owner-share-interval-subprobe-built-unapplied',
+          ],
+          runtimeSelfEnergyOwnerShareIntervalProbeCandidateCount: 3,
+          runtimeSelfEnergyOwnerShareIntervalProbeGateOpenCount: 3,
+          gapsWithRuntimeSelfEnergyOwnerShareIntervalProbe: 3,
           applied: false,
         }),
         elementSourceAlignmentSummary: expect.objectContaining({
@@ -1861,10 +1942,11 @@ describe('first vertical slice simulation', () => {
               runtimeNativeDisassemblyStatuses: [
                 'native-disassembly-snippets-extracted-formula-semantics-unconfirmed',
               ],
-              runtimeNativeDisassemblyFunctionCount: 7,
+              runtimeNativeDisassemblyFunctionCount: 8,
               runtimeNativeDisassemblyFunctionKeys: expect.arrayContaining([
                 'FormulaUtility.GetOutputDamage@0x187F360',
                 'DamageElement.Parse@0x138E5E0',
+                'SPSystem.OnTransmit@0x14837F0',
                 'SPSystem.RecoverSP@0x1483F40',
                 'WeakBreakSystem.OnTransmit@0x14C05A0',
               ]),
@@ -1873,6 +1955,11 @@ describe('first vertical slice simulation', () => {
               ],
               runtimeSelfEnergyFormulaProbeCandidateCount: 1,
               runtimeSelfEnergyFormulaProbeGateOpenCount: 1,
+              runtimeSelfEnergyOwnerShareIntervalProbeStatuses: [
+                'owner-share-interval-subprobe-built-unapplied',
+              ],
+              runtimeSelfEnergyOwnerShareIntervalProbeCandidateCount: 1,
+              runtimeSelfEnergyOwnerShareIntervalProbeGateOpenCount: 1,
               runtimeSelfEnergyFormulaProbe: expect.objectContaining({
                 status: 'recover-sp-runtime-probe-built-unapplied',
                 sourceStatus: 'external-damage-element-candidates',
@@ -1884,6 +1971,22 @@ describe('first vertical slice simulation', () => {
                 perTenThousandRecoverSPValues: [0.5899],
                 perTenThousandPetRecoverSPValues: [2.2999],
                 perTenThousandRecoverIntervals: [0.9999],
+                ownerShareIntervalProbe: expect.objectContaining({
+                  status: 'owner-share-interval-subprobe-built-unapplied',
+                  candidateCount: 1,
+                  gateOpenCount: 1,
+                  samples: expect.arrayContaining([
+                    expect.objectContaining({
+                      elementConfigId: 109001251,
+                      recoverSpArgsCandidates: expect.objectContaining({
+                        petDelta: expect.objectContaining({
+                          rawField: 22999,
+                          perTenThousand: 2.2999,
+                        }),
+                      }),
+                    }),
+                  ]),
+                }),
                 samples: expect.arrayContaining([
                   expect.objectContaining({
                     elementConfigId: 109001251,
@@ -1906,10 +2009,11 @@ describe('first vertical slice simulation', () => {
                   'Lens.Gameplay.Modules.BigWorld.WeakBreakSystem$$OnTransmit@0x14C05A0',
                   'Lens.Gameplay.Modules.BigWorld.SPSystem$$RecoverSP@0x1483F40',
                 ]),
-                runtimeNativeDisassemblyFunctionCount: 7,
+                runtimeNativeDisassemblyFunctionCount: 8,
                 runtimeNativeDisassemblyFunctionKeys: expect.arrayContaining([
                   'FormulaUtility.GetOutputDamage@0x187F360',
                   'DamageElement.RecoverSP@0x138EEE0',
+                  'SPSystem.OnTransmit@0x14837F0',
                   'WeakBreakSystem.OnTransmit@0x14C05A0',
                 ]),
                 nativeMethodSymbolEvidence: expect.objectContaining({
@@ -1974,7 +2078,7 @@ describe('first vertical slice simulation', () => {
                   nativeDisassemblyEvidence: expect.objectContaining({
                     status:
                       'native-disassembly-snippets-extracted-formula-semantics-unconfirmed',
-                    functionCount: 7,
+                    functionCount: 8,
                   }),
                   applied: false,
                 }),
@@ -1998,6 +2102,14 @@ describe('first vertical slice simulation', () => {
                       confirmed: expect.arrayContaining([
                         'recover-sp-fields-copied-during-damage-element-parse',
                         'damage-element-runtime-field-materialization-confirmed',
+                      ]),
+                    }),
+                    expect.objectContaining({
+                      className: 'SPSystem',
+                      method: 'OnTransmit',
+                      confirmed: expect.arrayContaining([
+                        'recover-sp-transmit-type-0x12f-branch-confirmed',
+                        'recover-sp-share-rebroadcast-fields-confirmed',
                       ]),
                     }),
                     expect.objectContaining({

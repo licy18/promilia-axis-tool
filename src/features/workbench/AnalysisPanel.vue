@@ -447,8 +447,13 @@ function formatChainSource(sourceEvidence) {
     runtimeProbe?.candidateCount > 0
       ? ` · 充能探针 ${runtimeProbe.gateOpenCount}/${runtimeProbe.candidateCount}`
       : '';
+  const ownerShareProbe = runtimeProbe?.ownerShareIntervalProbe;
+  const ownerShareProbeText =
+    ownerShareProbe?.candidateCount > 0
+      ? ` · 归属探针 ${ownerShareProbe.gateOpenCount}/${ownerShareProbe.candidateCount}`
+      : '';
   if (sourceEvidence.candidateCount > 0) {
-    return `${sourceEvidence.candidateCount} 个候选 ${formatElementIds(sourceEvidence.matchedElementConfigIds)}${probeText}`;
+    return `${sourceEvidence.candidateCount} 个候选 ${formatElementIds(sourceEvidence.matchedElementConfigIds)}${probeText}${ownerShareProbeText}`;
   }
   if (sourceEvidence.logicElementIds?.length > 0) {
     return `未桥接 ${formatElementIds(sourceEvidence.logicElementIds)}`;
@@ -813,12 +818,16 @@ function formatFormulaExecutionMatrixSummary(summary) {
     external?.gapsWithRuntimeSelfEnergyFormulaProbe > 0
       ? ` · 充能探针 ${external.gapsWithRuntimeSelfEnergyFormulaProbe}/${external.gapCount}`
       : '';
+  const ownerShareProbeText =
+    external?.gapsWithRuntimeSelfEnergyOwnerShareIntervalProbe > 0
+      ? ` · 归属探针 ${external.gapsWithRuntimeSelfEnergyOwnerShareIntervalProbe}/${external.gapCount}`
+      : '';
   const alignment = gap?.elementSourceAlignmentSummary;
   const alignmentText =
     alignment?.gapCount > 0
       ? ` · 来源差异 ${alignment.divergentGapCount}/${alignment.gapCount}`
       : '';
-  return `执行矩阵摘要 ${summary.matrixActionCount} 动作 · ${summary.rowCount} 行 · ${summary.elementCount} element · 缩放 ${scaleRange}${perHitText}${spreadText}${hitBindingText}${gapText}${externalText}${relatedLevelText}${runtimeParameterText}${runtimeApplicationText}${nativeMethodText}${nativeDisassemblyText}${selfEnergyProbeText}${alignmentText}`;
+  return `执行矩阵摘要 ${summary.matrixActionCount} 动作 · ${summary.rowCount} 行 · ${summary.elementCount} element · 缩放 ${scaleRange}${perHitText}${spreadText}${hitBindingText}${gapText}${externalText}${relatedLevelText}${runtimeParameterText}${runtimeApplicationText}${nativeMethodText}${nativeDisassemblyText}${selfEnergyProbeText}${ownerShareProbeText}${alignmentText}`;
 }
 
 function formatScaleRange(min, max) {
