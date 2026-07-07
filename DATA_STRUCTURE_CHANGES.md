@@ -4879,3 +4879,98 @@ data-element-config-id="109001306" data-status="未应用 · function组合待�
 - `hitBindingGapSummary` 证明“缺口动作有 skill_control 候选”，不证明该候选已绑定到最终 hit 或最终 `TDamageElementParams`。
 - `shared-action-family-candidate-unconfirmed` 仍需继续追外部 element 对象、hitEffect、subSkill 与 IL2CPP runtime 执行顺序。
 - 下一阶段应沿 `elementPathIds` / `elementRoundedPathIds` / `subSkillIds` 把非普攻动作候选推进到 hit 级三值字段映射。
+
+## 68. 阶段 5-8AO：非普攻缺口外部 DamageElement 候选桥接
+
+阶段 5-8AO 在 `actionSummaries[].hitBindingGap` 下新增 `externalElementBinding`，并在 `hitBindingGapSummary` 下新增 `externalElementBindingSummary`。该字段用于把缺 hit 绑定动作的 skill_control 行为候选，继续按 `skillId + elementPathIds[]` 桥接到外部 element 对象和 `TDamageElementParams` 字段映射。
+
+### 68.1 actionSummaries[].hitBindingGap.externalElementBinding
+
+重击样例：
+
+```json
+{
+  "status": "damage-element-field-candidates-found-hit-binding-unconfirmed",
+  "skillId": 10900101,
+  "sourceCandidateCount": 3,
+  "elementBaseRefCount": 9,
+  "resolvedElementRefCount": 9,
+  "uniqueExternalElementObjectCount": 3,
+  "damageElementRefCount": 3,
+  "damageElementCandidateCount": 1,
+  "sourceNames": ["攻击碰撞"],
+  "sourceStartFrames": [13, 16, 19],
+  "stateNames": ["Skill0_6"],
+  "hitEffects": ["11_109001_133", "11_109001_005"],
+  "subSkillIds": [109001011],
+  "scriptClassNames": [
+    "TDamageElementParams",
+    "TFreezeFrameElementParams",
+    "TFxElementParams"
+  ],
+  "damageElementPathIds": ["-5633710717881758712"],
+  "damageElementConfigIds": [109001251],
+  "damageElementNames": ["ast_109001251"],
+  "hpFormulaFunctionIds": [1, 2],
+  "hpFormulaFunctionOutputs": ["G/10000", "(self.ATK[0]*A)/10000"],
+  "weakBreakDamageRates": [7000],
+  "recoverSPValues": [5899],
+  "petRecoverSPValues": [22999],
+  "skillLevelBridgeStatuses": ["skillsub-element-level-bridge-missing"],
+  "applied": false
+}
+```
+
+### 68.2 externalElementBinding.candidates[]
+
+每个候选对应一个最高置信度 `behaviorBindingEvidence.candidates[]` 来源窗口。字段要点：
+
+- `elementRefs[]`：候选窗口里的每个外部 element PathID。
+- `elementRefs[].objectStatus`：是否在 `externalElementObjectEvidence.objects[]` 中解析到对象本体。
+- `elementRefs[].scriptClassName`：外部对象脚本类型候选，例如 `TDamageElementParams`、`TFreezeFrameElementParams`、`TFxElementParams`。
+- `elementRefs[].damageElementFieldMapping`：当 PathID 命中 `damageElementFieldMappingEvidence.fieldMappings[]` 时，嵌入 HP / 削韧 / 充能三值字段摘要。
+- `damageElementFieldMapping.skillLevelBridge.status`：必须保留等级桥接状态；当前 `109001251` 为 `skillsub-element-level-bridge-missing`。
+
+### 68.3 hitBindingGapSummary.externalElementBindingSummary
+
+四动作样本当前输出：
+
+```json
+{
+  "status": "all-candidate-gaps-have-damage-element-field-candidates",
+  "gapCount": 3,
+  "gapsWithExternalElementCandidates": 3,
+  "gapsWithDamageElementCandidates": 3,
+  "damageElementCandidateCount": 1,
+  "damageElementConfigIds": [109001251],
+  "damageElementPathIds": ["-5633710717881758712"],
+  "sourceStartFrames": [13, 16, 19],
+  "stateNames": ["Skill0_6"],
+  "subSkillIds": [109001011],
+  "hpFormulaFunctionIds": [1, 2],
+  "weakBreakDamageRates": [7000],
+  "recoverSPValues": [5899],
+  "skillLevelBridgeStatuses": ["skillsub-element-level-bridge-missing"],
+  "applied": false
+}
+```
+
+### 68.4 Workbench 摘要
+
+当存在缺口外部 DamageElement 候选时，`AnalysisPanel` 的跨动作矩阵摘要会追加：
+
+```text
+伤害元素候选 3/3
+```
+
+单个重击动作切换时会显示：
+
+```text
+hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1
+```
+
+### 68.5 当前边界
+
+- `externalElementBinding` 证明候选 PathID 能追到外部对象和 DamageElement 字段，不证明该 DamageElement 已绑定到最终 hit。
+- `109001251` 与动作级矩阵当前使用的 `109001081 / 109001306` 不一致；下一阶段必须解释这条差异，不能直接把二者合并计算。
+- `skillsub-element-level-bridge-missing` 表明 `109001251` 暂未找到当前等级 `valueParam` 覆盖点；最终公式仍保持 `applied: false`。

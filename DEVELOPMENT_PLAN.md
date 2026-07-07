@@ -267,7 +267,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8AL，在 `actionResultTimeline[].hpDamage.sourceEvidence` 新增 `formulaExecutionEvidenceMatrix`，按 element / hit / action 汇总 function 组合候选、A 槽覆盖候选、G 常量匹配和每 hit 倍率缺口；当前默认普攻矩阵为 2 个 element，首选 f2 等级值预览 `307` 对比 raw `12,461`，仍需约 `×40.6 / 每 hit ×8.1`，并固化三类未确认 diagnostics，保持 `applied: false`。
 - 已完成：阶段 5-8AM，在 `simulation.summary` 新增 `formulaExecutionMatrixSummary`，按 action / element 聚合公式执行矩阵；当前四动作样本覆盖【普通攻击】【重击】【闪击】【跃击】4 个动作、8 行、2 个 element，缩放范围约 `×2.5-×40.6`，每 hit 缩放约 `×2.5-×11.9`，并明确只有普攻 2/8 行存在 hit 绑定。
 - 已完成：阶段 5-8AN，在 `formulaExecutionMatrixSummary` 新增 `hitBindingGapSummary`，把重击/闪击/跃击的 6 行 hit 绑定缺口与 skill_control 最高置信度候选对齐；当前三个缺口动作都命中 `攻击碰撞 / Skill0_6 / subSkill 109001011` 候选，但仍保持 `shared-action-family-candidate-unconfirmed` 和 `applied: false`。
-- 下一步：阶段 5-8AO，沿 `hitBindingGap.behaviorBindingEvidence.candidates[]` 的外部 element PathID / subSkill / hitEffect 继续追非普攻动作的 `TDamageElementParams` 绑定；必要时用 AzPr Extractor 提取原始对象体和 IL2CPP `DamageElement` 执行证据。
+- 已完成：阶段 5-8AO，在 `hitBindingGap` 新增 `externalElementBinding`，把重击/闪击/跃击的 `攻击碰撞 / Skill0_6 / subSkill 109001011` 候选 PathID 桥接到外部对象；当前三个缺口动作都能追到 `109001251 / ast_109001251 / TDamageElementParams`，并暴露 HP `function_1/function_2`、削韧 `weakBreakDamageRate = 7000`、充能 `recoverSP = 5899` 候选，但 `skillsub-element-level-bridge-missing` 和 hit 归属仍未确认。
+- 下一步：阶段 5-8AP，对齐非普攻 `109001251` 与动作级矩阵 `109001081 / 109001306` 的来源差异，继续追 `subSkillId = 109001011`、`hitEffects`、`skill_logic` / `skillsub_ele_value` 与动作形态的真实绑定关系；必要时用 AzPr Extractor / IL2CPP 证据确认固定参数、继承参数或运行时覆盖链。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

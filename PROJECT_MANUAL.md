@@ -3442,6 +3442,44 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8AO 目标：沿 `hitBindingGap.behaviorBindingEvidence.candidates[]` 的 `elementPathIds` / `elementRoundedPathIds` / `subSkillIds` 继续追非普攻动作的外部 element 对象，把 `攻击碰撞 / Skill0_6` 候选进一步桥接到具体 `TDamageElementParams` 和 hit 级三值字段。
 - 若当前生成证据没有足够对象体，使用 AzPr Extractor 从原始资源补齐对应外部 element 对象、typetree 和 IL2CPP `DamageElement` 执行链锚点。
 
+### 2026-07-08：阶段 5-8AO 非普攻缺口外部 DamageElement 候选桥接
+
+本轮完成：
+
+- `hitBindingGap` 新增 `externalElementBinding`，会沿最高置信度 `behaviorBindingEvidence.candidates[]` 的 `elementPathIds`，按 `skillId + PathID` 查 `externalElementObjectEvidence.objects[]` 和 `damageElementFieldMappingEvidence.fieldMappings[]`。
+- `hitBindingGapSummary` 新增 `externalElementBindingSummary`，汇总缺口动作中有多少已解析外部对象、有多少进一步命中 `TDamageElementParams` 三值字段候选。
+- `AnalysisPanel` 的 `执行矩阵摘要` 追加 `伤害元素候选 x/y`，让工作台能直接显示缺口动作是否已经桥到 DamageElement 候选。
+- 仿真测试覆盖四动作样本的重击缺口：`攻击碰撞 / Skill0_6 / subSkill 109001011` 的 3 个最高置信度窗口均解析到同一组外部 element，其中 `-5633710717881758712 -> ast_109001251 / TDamageElementParams`。
+
+当前四动作外部 element 桥接结果：
+
+- `externalElementBindingSummary.status = all-candidate-gaps-have-damage-element-field-candidates`。
+- `gapsWithDamageElementCandidates = 3/3`，重击、闪击、跃击都能从缺口候选追到 DamageElement 字段。
+- 唯一 DamageElement 候选为 `elementConfigId = 109001251`、`pathId = -5633710717881758712`、`mName = ast_109001251`。
+- 同组外部对象还包括 `7848597992417622553 -> TFreezeFrameElementParams / ast_109001252` 与 `2740651767650299388 -> TFxElementParams / ast_109001253`。
+- `109001251` 的三值候选字段：`function_1 = 1`、`function_2 = 2`、`formulaParamValues = [1000, 3000, 8500, 10000, 10000...]`、`weakBreakDamageRate = 7000`、`recoverSP = 5899`、`petRecoverSP = 22999`。
+- 该对象 `skillLevelBridge.status = skillsub-element-level-bridge-missing`，暂未在当前技能等级 `valueParam` 中找到同 elementId 桥接。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，11 条测试通过。
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+- `npm exec eslint -- --no-warn-ignored src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npm test -- --run`：通过，13 个测试文件、105 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
+- `npm exec prettier -- --check AGENTS.md PROJECT_MANUAL.md DEVELOPMENT_PLAN.md ARCHITECTURE.md DATA_STRUCTURE_CHANGES.md src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+
+当前边界：
+
+- 这一步证明“非普攻缺口动作的 skill_control 候选能追到外部 `TDamageElementParams` 对象”，但仍不证明该对象已绑定到最终 hit，也不证明 DamageElement 执行公式。
+- 新发现的关键差异：缺口行为链落到 `109001251`，而当前动作级 `formulaExecutionEvidenceMatrix` 仍来自 action logic 的 `109001081 / 109001306`。这说明动作级矩阵的 element 选择还没有按动作形态 / subSkill / hitEffect 正确收敛。
+- `109001251` 缺少 `skillsub_ele_value` 等级桥接，因此不能把它直接用于最终 HP、削韧或充能计算。
+
+下一步：
+
+- 阶段 5-8AP 目标：对齐非普攻 `109001251` 与动作级矩阵 `109001081 / 109001306` 的来源差异，继续追 `subSkillId = 109001011`、`hitEffects = 11_109001_133 / 11_109001_005`、`skill_logic` / `skillsub_ele_value` 与动作形态的真实绑定关系。
+- 若表格侧没有 `109001251` 的等级桥接，继续用 AzPr Extractor / IL2CPP 证据确认该 DamageElement 是否使用固定参数、继承参数、运行时覆盖或另一条等级配置链。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

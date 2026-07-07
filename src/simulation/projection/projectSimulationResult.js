@@ -12,6 +12,14 @@ const DAMAGE_ELEMENT_FIELD_MAPPING_BY_SKILL_ID = new Map(
     .map(skill => [Number(skill.skillId), skill])
     .filter(([skillId]) => Number.isFinite(skillId))
 );
+const DAMAGE_ELEMENT_FIELD_MAPPING_BY_SKILL_ID_AND_PATH_ID =
+  createDamageElementFieldMappingBySkillIdAndPathId(
+    DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE
+  );
+const EXTERNAL_ELEMENT_OBJECT_BY_SKILL_ID_AND_PATH_ID =
+  createExternalElementObjectBySkillIdAndPathId(
+    skillAssetEvidence.externalElementObjectEvidence
+  );
 const CURRENT_SKILL_CONTROL_EVIDENCE_BY_SKILL_ID = new Map(
   (skillAssetEvidence.currentSkillControlEvidence ?? [])
     .map(skill => [Number(skill.skillId), skill])
@@ -926,6 +934,7 @@ function createFormulaExecutionMatrixActionSummary(
   const hitBindingGap = createFormulaExecutionHitBindingGap({
     actionId: entry.actionId,
     actionName: entry.actionName,
+    skillId: entry.skillId,
     actionVariantLabel: matrix.actionVariantLabel,
     rowCount: rows.length,
     rowsWithHitBindings,
@@ -1209,6 +1218,7 @@ function compactFormulaPatternBindingCandidate(candidate) {
 function createFormulaExecutionHitBindingGap({
   actionId,
   actionName,
+  skillId,
   actionVariantLabel,
   rowCount,
   rowsWithHitBindings,
@@ -1220,6 +1230,7 @@ function createFormulaExecutionHitBindingGap({
       status: 'hit-bindings-complete',
       actionId,
       actionName,
+      skillId: numberOrNull(skillId),
       actionVariantLabel,
       matrixRowCount: rowCount,
       rowsWithHitBindings,
@@ -1232,6 +1243,10 @@ function createFormulaExecutionHitBindingGap({
 
   const behaviorBindingCandidateCount =
     numberOrNull(behaviorBindingEvidence?.candidateCount) ?? 0;
+  const externalElementBinding = createHitBindingGapExternalElementBinding({
+    skillId,
+    behaviorBindingEvidence,
+  });
   return {
     status:
       behaviorBindingCandidateCount > 0
@@ -1239,6 +1254,7 @@ function createFormulaExecutionHitBindingGap({
         : 'skill-control-binding-candidate-missing',
     actionId,
     actionName,
+    skillId: numberOrNull(skillId),
     actionVariantLabel,
     matrixRowCount: rowCount,
     rowsWithHitBindings,
@@ -1256,9 +1272,12 @@ function createFormulaExecutionHitBindingGap({
     stateTimingEvidenceStatus:
       behaviorBindingEvidence?.stateTimingEvidenceStatus ?? null,
     behaviorBindingEvidence: behaviorBindingEvidence ?? null,
+    externalElementBinding,
     unresolved: [
       'hit-damage-element-binding-unresolved',
-      'external-element-object-binding-unconfirmed',
+      externalElementBinding.damageElementCandidateCount > 0
+        ? 'external-damage-element-hit-binding-unconfirmed'
+        : 'external-element-object-binding-unconfirmed',
     ],
     applied: false,
   };
@@ -1271,6 +1290,8 @@ function createFormulaExecutionHitBindingGapSummary(actionSummaries) {
   const gapsWithBindingCandidates = gaps.filter(
     gap => (gap.behaviorBindingCandidateCount ?? 0) > 0
   );
+  const externalElementBindingSummary =
+    createHitBindingGapExternalElementBindingSummary(gaps);
   const missingRowCount = gaps.reduce(
     (sum, gap) => sum + (gap.missingRowCount ?? 0),
     0
@@ -1307,9 +1328,450 @@ function createFormulaExecutionHitBindingGapSummary(actionSummaries) {
     bindingStatuses: uniqueStrings(
       gaps.flatMap(gap => gap.bindingStatuses ?? [])
     ),
+    externalElementBindingSummary,
     gaps,
     applied: false,
   };
+}
+
+function createHitBindingGapExternalElementBinding({
+  skillId,
+  behaviorBindingEvidence,
+}) {
+  const numericSkillId = numberOrNull(skillId);
+  const sourceCandidates = selectPrimaryHitBindingBehaviorCandidates(
+    behaviorBindingEvidence
+  );
+  if (!Number.isFinite(numericSkillId)) {
+    return {
+      status: 'skill-id-missing-for-external-element-binding',
+      sourceKind: 'azpr-hit-binding-external-element-candidate',
+      file: SKILL_ASSET_EVIDENCE_PATH,
+      skillId: null,
+      sourceCandidateCount: sourceCandidates.length,
+      elementBaseRefCount: 0,
+      resolvedElementRefCount: 0,
+      damageElementRefCount: 0,
+      damageElementCandidateCount: 0,
+      candidates: [],
+      unresolved: ['skill-id-missing'],
+      applied: false,
+    };
+  }
+
+  const candidates = sourceCandidates.map(candidate =>
+    createHitBindingGapExternalElementCandidate({
+      skillId: numericSkillId,
+      candidate,
+    })
+  );
+  const elementRefs = candidates.flatMap(candidate => candidate.elementRefs);
+  const resolvedElementRefs = elementRefs.filter(
+    ref => ref.objectStatus === 'resolved-in-element-assets-bundle'
+  );
+  const damageElementRefs = elementRefs.filter(ref => ref.isDamageElement);
+  const uniqueDamageElementRefs = uniqueElementRefsByPath(damageElementRefs);
+  const uniqueExternalRefs = uniqueElementRefsByPath(resolvedElementRefs);
+  const skillLevelBridgeStatuses = uniqueStrings(
+    uniqueDamageElementRefs
+      .map(ref => ref.damageElementFieldMapping?.skillLevelBridge?.status)
+      .filter(value => value != null)
+  );
+  const unresolved = uniqueStrings([
+    'hit-index-binding-unconfirmed',
+    'damage-element-execution-order-unconfirmed',
+    'per-action-hit-count-unconfirmed',
+    ...(skillLevelBridgeStatuses.includes(
+      'skillsub-element-level-bridge-missing'
+    )
+      ? ['damage-element-level-bridge-missing']
+      : []),
+    'toughness-unit-scale',
+    'self-energy-owner-and-share-rule',
+  ]);
+
+  return {
+    status: createExternalElementBindingStatus({
+      sourceCandidateCount: sourceCandidates.length,
+      resolvedElementRefCount: resolvedElementRefs.length,
+      damageElementRefCount: damageElementRefs.length,
+    }),
+    sourceKind: 'azpr-hit-binding-external-element-candidate',
+    file: SKILL_ASSET_EVIDENCE_PATH,
+    skillId: numericSkillId,
+    sourceCandidateCount: sourceCandidates.length,
+    elementBaseRefCount: elementRefs.length,
+    resolvedElementRefCount: resolvedElementRefs.length,
+    uniqueExternalElementObjectCount: uniqueExternalRefs.length,
+    damageElementRefCount: damageElementRefs.length,
+    damageElementCandidateCount: uniqueDamageElementRefs.length,
+    sourceNames: uniqueStrings(
+      sourceCandidates
+        .map(candidate => candidate.sourceName)
+        .filter(value => value != null)
+    ),
+    sourceTrackNames: uniqueStrings(
+      sourceCandidates
+        .map(candidate => candidate.sourceTrackName)
+        .filter(value => value != null)
+    ),
+    sourceStartFrames: uniqueNumbers(
+      sourceCandidates.map(candidate => candidate.sourceStartFrame)
+    ),
+    sourceEndFrames: uniqueNumbers(
+      sourceCandidates.map(candidate => candidate.sourceEndFrame)
+    ),
+    stateNames: uniqueStrings(
+      sourceCandidates.flatMap(candidate => candidate.stateNames)
+    ),
+    hitEffects: uniqueStrings(
+      sourceCandidates.flatMap(candidate => candidate.hitEffects)
+    ),
+    subSkillIds: uniqueNumbers(
+      sourceCandidates.flatMap(candidate => candidate.subSkillIds)
+    ),
+    elementPathIds: uniqueStrings(
+      elementRefs.map(ref => ref.pathId).filter(value => value != null)
+    ),
+    elementRoundedPathIds: uniqueStrings(
+      sourceCandidates.flatMap(candidate => candidate.elementRoundedPathIds)
+    ),
+    scriptClassNames: uniqueStrings(
+      uniqueExternalRefs
+        .map(ref => ref.scriptClassName)
+        .filter(value => value != null)
+    ),
+    damageElementPathIds: uniqueStrings(
+      uniqueDamageElementRefs
+        .map(ref => ref.pathId)
+        .filter(value => value != null)
+    ),
+    damageElementConfigIds: uniqueNumbers(
+      uniqueDamageElementRefs.map(ref => ref.elementConfigId)
+    ),
+    damageElementNames: uniqueStrings(
+      uniqueDamageElementRefs
+        .map(ref => ref.mName ?? ref.elementName)
+        .filter(value => value != null)
+    ),
+    hpFormulaFunctionIds: uniqueNumbers(
+      uniqueDamageElementRefs.flatMap(ref =>
+        Object.values(
+          ref.damageElementFieldMapping?.hpDamage?.formulaFunctionIds ?? {}
+        )
+      )
+    ),
+    hpFormulaFunctionOutputs: uniqueStrings(
+      uniqueDamageElementRefs.flatMap(ref =>
+        collectFormulaFunctionOutputs(
+          ref.damageElementFieldMapping?.hpDamage?.formulaFunctionEvidence
+        )
+      )
+    ),
+    hpRawFormulaParamValueSamples: uniqueNumbers(
+      uniqueDamageElementRefs.flatMap(
+        ref => ref.damageElementFieldMapping?.hpDamage?.rawFormulaParamValues
+      )
+    ).slice(0, 12),
+    weakBreakDamageRates: uniqueNumbers(
+      uniqueDamageElementRefs.map(
+        ref =>
+          ref.damageElementFieldMapping?.toughnessDamage?.weakBreakDamageRate
+      )
+    ),
+    recoverSPValues: uniqueNumbers(
+      uniqueDamageElementRefs.map(
+        ref => ref.damageElementFieldMapping?.selfEnergyChange?.recoverSP
+      )
+    ),
+    petRecoverSPValues: uniqueNumbers(
+      uniqueDamageElementRefs.map(
+        ref => ref.damageElementFieldMapping?.selfEnergyChange?.petRecoverSP
+      )
+    ),
+    recoverIntervals: uniqueNumbers(
+      uniqueDamageElementRefs.map(
+        ref => ref.damageElementFieldMapping?.selfEnergyChange?.recoverInterval
+      )
+    ),
+    skillLevelBridgeStatuses,
+    candidates,
+    unresolved,
+    applied: false,
+    note: 'External element refs are resolved as hit-binding candidates only; final hit index, DamageElement execution and HP/toughness/energy formulas remain unconfirmed.',
+  };
+}
+
+function selectPrimaryHitBindingBehaviorCandidates(behaviorBindingEvidence) {
+  const candidates = behaviorBindingEvidence?.candidates ?? [];
+  const primaryCandidates = candidates.filter(
+    candidate => candidate.confidence === behaviorBindingEvidence?.confidence
+  );
+  return primaryCandidates.length > 0 ? primaryCandidates : candidates;
+}
+
+function createHitBindingGapExternalElementCandidate({ skillId, candidate }) {
+  const elementPathIds = uniqueStrings(candidate.elementPathIds ?? []);
+  const elementRefs = elementPathIds.map(pathId =>
+    createHitBindingGapExternalElementRef({ skillId, pathId })
+  );
+  const damageElementRefCount = elementRefs.filter(
+    ref => ref.isDamageElement
+  ).length;
+  const resolvedElementRefCount = elementRefs.filter(
+    ref => ref.objectStatus === 'resolved-in-element-assets-bundle'
+  ).length;
+
+  return {
+    sourceName: candidate.sourceName ?? null,
+    sourceTrackName: candidate.sourceTrackName ?? null,
+    sourceStartFrame: numberOrNull(candidate.sourceStartFrame),
+    sourceEndFrame: numberOrNull(candidate.sourceEndFrame),
+    stateNames: candidate.stateNames ?? [],
+    hitEffects: candidate.hitEffects ?? [],
+    subSkillIds: candidate.subSkillIds ?? [],
+    confidence: candidate.confidence ?? 'none',
+    bindingStatus: candidate.bindingStatus ?? null,
+    reasons: candidate.reasons ?? [],
+    elementPathIds,
+    elementRoundedPathIds: candidate.elementRoundedPathIds ?? [],
+    elementBaseRefCount: elementRefs.length,
+    resolvedElementRefCount,
+    damageElementRefCount,
+    damageElementConfigIds: uniqueNumbers(
+      elementRefs
+        .filter(ref => ref.isDamageElement)
+        .map(ref => ref.elementConfigId)
+    ),
+    status:
+      damageElementRefCount > 0
+        ? 'damage-element-field-candidate-found'
+        : resolvedElementRefCount > 0
+          ? 'external-elements-resolved-without-damage-fields'
+          : 'external-element-objects-unresolved',
+    elementRefs,
+    applied: false,
+  };
+}
+
+function createHitBindingGapExternalElementRef({ skillId, pathId }) {
+  const externalObject = findExternalElementObjectBySkillPathId(
+    skillId,
+    pathId
+  );
+  const fieldMapping = findDamageElementFieldMappingBySkillPathId(
+    skillId,
+    pathId
+  );
+  const scriptClassName =
+    externalObject?.scriptTypeCandidate?.className ??
+    fieldMapping?.scriptTypeCandidate?.className ??
+    null;
+
+  return {
+    pathId: pathId ?? null,
+    objectStatus:
+      externalObject?.status ?? 'external-element-object-not-resolved',
+    elementConfigId: numberOrNull(
+      externalObject?.elementConfigId ?? fieldMapping?.elementConfigId
+    ),
+    mName: externalObject?.mName ?? null,
+    elementName:
+      externalObject?.elementName ?? fieldMapping?.elementName ?? null,
+    describe: externalObject?.describe ?? fieldMapping?.describe ?? null,
+    scriptClassName,
+    mediaPackNames: uniqueStrings([
+      ...(externalObject?.mediaPackNames ?? []),
+      ...(fieldMapping?.mediaPackNames ?? []),
+    ]),
+    isDamageElement:
+      Boolean(fieldMapping) || scriptClassName === 'TDamageElementParams',
+    damageElementFieldMapping: fieldMapping
+      ? compactHitBindingDamageElementFieldMapping(fieldMapping)
+      : null,
+    applied: false,
+  };
+}
+
+function compactHitBindingDamageElementFieldMapping(mapping) {
+  return {
+    elementConfigId: numberOrNull(mapping.elementConfigId),
+    pathId: mapping.pathId ?? null,
+    containerPath: mapping.containerPath ?? null,
+    mediaPackNames: mapping.mediaPackNames ?? [],
+    hpDamage: mapping.hpDamage
+      ? {
+          status: mapping.hpDamage.status ?? null,
+          formulaFunctionIds: mapping.hpDamage.formulaFunctionIds ?? {},
+          formulaFunctionEvidence: compactFormulaFunctionEvidence(
+            mapping.hpDamage.formulaFunctionEvidence
+          ),
+          formulaSlotCandidates: mapping.hpDamage.formulaSlotCandidates ?? [],
+          rawFormulaParamValues: mapping.hpDamage.rawFormulaParamValues ?? [],
+          damageFields: compactDamageFieldPatternValues(
+            mapping.hpDamage.damageFields
+          ),
+        }
+      : null,
+    toughnessDamage: mapping.toughnessDamage
+      ? {
+          status: mapping.toughnessDamage.status ?? null,
+          weakBreakDamageRate: numberOrNull(
+            mapping.toughnessDamage.weakBreakDamageRate
+          ),
+          hitType: numberOrNull(mapping.toughnessDamage.hitType),
+          knockBackId: numberOrNull(mapping.toughnessDamage.knockBackId),
+          knockBackForce: numberOrNull(mapping.toughnessDamage.knockBackForce),
+          interruptPriority: numberOrNull(
+            mapping.toughnessDamage.interruptPriority
+          ),
+          useOneBreak: numberOrNull(mapping.toughnessDamage.useOneBreak),
+        }
+      : null,
+    selfEnergyChange: mapping.selfEnergyChange
+      ? {
+          status: mapping.selfEnergyChange.status ?? null,
+          recoverSP: numberOrNull(mapping.selfEnergyChange.recoverSP),
+          petRecoverSP: numberOrNull(mapping.selfEnergyChange.petRecoverSP),
+          recoverInterval: numberOrNull(
+            mapping.selfEnergyChange.recoverInterval
+          ),
+          ownerScope: mapping.selfEnergyChange.ownerScope ?? null,
+        }
+      : null,
+    skillLevelBridge: {
+      status: mapping.skillLevelBridge?.status ?? null,
+      levelRows: numberOrNull(mapping.skillLevelBridge?.levelRows) ?? 0,
+      parameterIds: mapping.skillLevelBridge?.parameterIds ?? [],
+      varyingParameterIds: mapping.skillLevelBridge?.varyingParameterIds ?? [],
+      formulaSlotAlignment: compactFormulaSlotAlignment(
+        mapping.skillLevelBridge?.formulaParamAlignment
+      ),
+      firstLevel: mapping.skillLevelBridge?.firstLevel
+        ? {
+            level: numberOrNull(mapping.skillLevelBridge.firstLevel.level),
+            valueParam: mapping.skillLevelBridge.firstLevel.valueParam ?? null,
+          }
+        : null,
+      lastLevel: mapping.skillLevelBridge?.lastLevel
+        ? {
+            level: numberOrNull(mapping.skillLevelBridge.lastLevel.level),
+            valueParam: mapping.skillLevelBridge.lastLevel.valueParam ?? null,
+          }
+        : null,
+    },
+    unresolved: mapping.unresolved ?? [],
+    applied: false,
+  };
+}
+
+function createExternalElementBindingStatus({
+  sourceCandidateCount,
+  resolvedElementRefCount,
+  damageElementRefCount,
+}) {
+  if (sourceCandidateCount <= 0) {
+    return 'behavior-binding-candidates-missing';
+  }
+  if (damageElementRefCount > 0) {
+    return 'damage-element-field-candidates-found-hit-binding-unconfirmed';
+  }
+  if (resolvedElementRefCount > 0) {
+    return 'external-elements-resolved-no-damage-field-candidates';
+  }
+  return 'external-element-objects-unresolved';
+}
+
+function createHitBindingGapExternalElementBindingSummary(gaps) {
+  const bindings = gaps.map(gap => gap.externalElementBinding).filter(Boolean);
+  const bindingsWithResolvedElements = bindings.filter(
+    binding => (binding.resolvedElementRefCount ?? 0) > 0
+  );
+  const bindingsWithDamageElements = bindings.filter(
+    binding => (binding.damageElementCandidateCount ?? 0) > 0
+  );
+  const damageElementRefs = uniqueElementRefsByPath(
+    bindings.flatMap(binding =>
+      (binding.candidates ?? []).flatMap(candidate =>
+        (candidate.elementRefs ?? []).filter(ref => ref.isDamageElement)
+      )
+    )
+  );
+
+  return {
+    status:
+      gaps.length === 0
+        ? 'no-hit-binding-gaps'
+        : bindingsWithDamageElements.length === gaps.length
+          ? 'all-candidate-gaps-have-damage-element-field-candidates'
+          : bindingsWithDamageElements.length > 0
+            ? 'some-candidate-gaps-have-damage-element-field-candidates'
+            : bindingsWithResolvedElements.length > 0
+              ? 'external-elements-resolved-no-damage-field-candidates'
+              : 'external-element-binding-candidates-missing',
+    gapCount: gaps.length,
+    gapsWithExternalElementCandidates: bindingsWithResolvedElements.length,
+    gapsWithDamageElementCandidates: bindingsWithDamageElements.length,
+    damageElementCandidateCount: damageElementRefs.length,
+    damageElementConfigIds: uniqueNumbers(
+      damageElementRefs.map(ref => ref.elementConfigId)
+    ),
+    damageElementPathIds: uniqueStrings(
+      damageElementRefs.map(ref => ref.pathId).filter(value => value != null)
+    ),
+    sourceStartFrames: uniqueNumbers(
+      bindings.flatMap(binding => binding.sourceStartFrames ?? [])
+    ),
+    stateNames: uniqueStrings(
+      bindings.flatMap(binding => binding.stateNames ?? [])
+    ),
+    hitEffects: uniqueStrings(
+      bindings.flatMap(binding => binding.hitEffects ?? [])
+    ),
+    subSkillIds: uniqueNumbers(
+      bindings.flatMap(binding => binding.subSkillIds ?? [])
+    ),
+    scriptClassNames: uniqueStrings(
+      bindings.flatMap(binding => binding.scriptClassNames ?? [])
+    ),
+    hpFormulaFunctionIds: uniqueNumbers(
+      bindings.flatMap(binding => binding.hpFormulaFunctionIds ?? [])
+    ),
+    hpFormulaFunctionOutputs: uniqueStrings(
+      bindings.flatMap(binding => binding.hpFormulaFunctionOutputs ?? [])
+    ),
+    weakBreakDamageRates: uniqueNumbers(
+      bindings.flatMap(binding => binding.weakBreakDamageRates ?? [])
+    ),
+    recoverSPValues: uniqueNumbers(
+      bindings.flatMap(binding => binding.recoverSPValues ?? [])
+    ),
+    skillLevelBridgeStatuses: uniqueStrings(
+      bindings.flatMap(binding => binding.skillLevelBridgeStatuses ?? [])
+    ),
+    unresolved: uniqueStrings(
+      bindings.flatMap(binding => binding.unresolved ?? [])
+    ),
+    applied: false,
+  };
+}
+
+function uniqueElementRefsByPath(refs) {
+  const byPath = new Map();
+  for (const ref of refs ?? []) {
+    const key = ref?.pathId == null ? null : String(ref.pathId);
+    if (!key || byPath.has(key)) {
+      continue;
+    }
+    byPath.set(key, ref);
+  }
+  return [...byPath.values()];
+}
+
+function collectFormulaFunctionOutputs(evidence) {
+  return (evidence?.functionRefs ?? [])
+    .map(ref => ref.elementFormulaRow?.functionOutput)
+    .filter(value => value != null);
 }
 
 function attachFormulaExecutionEvidenceMatrix(hpDamage, action, hitCandidates) {
@@ -4381,6 +4843,68 @@ function parseValueParamPairs(rawValue) {
       };
     })
     .filter(item => Number.isFinite(item.id) && Number.isFinite(item.value));
+}
+
+function createDamageElementFieldMappingBySkillIdAndPathId(evidence) {
+  return createSkillPathLookup(evidence?.skills, 'fieldMappings');
+}
+
+function createExternalElementObjectBySkillIdAndPathId(evidence) {
+  return createSkillPathLookup(evidence?.skills, 'objects');
+}
+
+function createSkillPathLookup(skills = [], collectionKey) {
+  const bySkillId = new Map();
+  for (const skill of skills ?? []) {
+    const skillId = numberOrNull(skill.skillId);
+    if (!Number.isFinite(skillId)) {
+      continue;
+    }
+
+    const byPathId = new Map();
+    for (const item of skill[collectionKey] ?? []) {
+      addPathLookupItem(byPathId, item?.pathId, item);
+    }
+    bySkillId.set(skillId, byPathId);
+  }
+  return bySkillId;
+}
+
+function addPathLookupItem(byPathId, pathId, item) {
+  const key = pathLookupKey(pathId);
+  if (key && !byPathId.has(key)) {
+    byPathId.set(key, item);
+  }
+}
+
+function findExternalElementObjectBySkillPathId(skillId, pathId) {
+  return findSkillPathLookupItem(
+    EXTERNAL_ELEMENT_OBJECT_BY_SKILL_ID_AND_PATH_ID,
+    skillId,
+    pathId
+  );
+}
+
+function findDamageElementFieldMappingBySkillPathId(skillId, pathId) {
+  return findSkillPathLookupItem(
+    DAMAGE_ELEMENT_FIELD_MAPPING_BY_SKILL_ID_AND_PATH_ID,
+    skillId,
+    pathId
+  );
+}
+
+function findSkillPathLookupItem(bySkillId, skillId, pathId) {
+  const numericSkillId = numberOrNull(skillId);
+  const key = pathLookupKey(pathId);
+  if (!Number.isFinite(numericSkillId) || !key) {
+    return null;
+  }
+  return bySkillId.get(numericSkillId)?.get(key) ?? null;
+}
+
+function pathLookupKey(pathId) {
+  const key = String(pathId ?? '').trim();
+  return key.length > 0 ? key : null;
 }
 
 function numberOrNull(value) {
