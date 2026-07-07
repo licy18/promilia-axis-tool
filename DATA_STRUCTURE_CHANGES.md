@@ -41,6 +41,43 @@
 - 敌人：迅狼，`enemyId = 300032`
 - 用途：阶段 3 `src/simulation/` 的 compiler / engine / projection 输入样本。
 
+## 2026-07-07：最小模拟运行时输出
+
+阶段 3 新增 `src/simulation/`，当前输出结构如下：
+
+```javascript
+{
+  schemaVersion: 1,
+  scenario: {
+    projectId: 'fixture-first-vertical-slice',
+    projectName: '首条垂直切片：末音普攻对迅狼',
+    durationMs: 30000,
+    actorCount: 1,
+    actionCount: 1,
+    enemyId: 'enemy-300032',
+    enemyName: '迅狼'
+  },
+  eventLog: [],
+  damageTimeline: [],
+  resourceTimeline: [],
+  summary: {
+    totalRawDamage: 0,
+    projectedHitCount: 0,
+    actionCount: 0,
+    formulaVersion: 'stage3-raw-attack-multiplier-v1',
+    confidence: 'low',
+    timingMissingActionCount: 0,
+    timingMissingActionIds: []
+  },
+  diagnostics: {
+    validationWarnings: [],
+    limitations: []
+  }
+}
+```
+
+当前 `damageTimeline` 是低置信度原始伤害投影，只使用角色 `ATK` 与技能等级倍率。最终防御、抗性、暴击、Buff、奇波、装备、灵子和精确命中帧尚未纳入。
+
 ## 1. 变更背景和目标
 
 为了适应新的技能系统架构，提高技能数据的灵活性和扩展性，我们对角色和技能数据结构进行了系统性重构。本次重构的主要目标是：

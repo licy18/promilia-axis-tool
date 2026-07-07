@@ -42,6 +42,18 @@ src/
 │   └── index.js         # 国际化配置
 ├── router/             # 路由配置
 │   └── index.js         # 路由定义
+├── data/               # 新版真实 AzPr 数据访问层
+│   ├── generated/       # 由 npm run data:generate 生成的拆表数据
+│   └── azprGenerated.js # 生成数据访问入口
+├── domain/             # 新版项目领域模型
+│   ├── fixtures/        # 真实数据垂直切片 fixture
+│   └── projectSchema.js # Project / Actor / Enemy / Action schema
+├── simulation/         # 新版无 UI 模拟运行时
+│   ├── compiler/        # Project -> Scenario
+│   ├── engine/          # Scenario -> EventLog
+│   ├── mechanics/       # 机制与公式
+│   ├── projection/      # EventLog -> UI/分析投影
+│   └── index.js         # 运行时入口
 ├── store/              # Pinia 状态管理
 │   ├── gamedata.js      # 游戏数据存储
 │   ├── history.js       # 历史记录存储
@@ -54,7 +66,7 @@ src/
 ├── utils/              # 工具函数
 │   ├── common.js        # 通用工具函数
 │   ├── constants.js     # 常量定义
-│   ├── damageCalc.js    # 伤害计算引擎
+│   ├── damageCalc.js    # 旧原型伤害计算；新版逻辑逐步迁移到 simulation/
 │   ├── statCalc.js      # 统计计算工具
 │   └── validate.js      # 循环验证工具
 ├── views/              # 页面组件
@@ -74,6 +86,32 @@ public/
 └── avatars/            # 角色头像
 ```
 
+### 2.1 新版重构主线
+
+当前重构目标不是继续加厚旧 `Editor.vue`，而是建立以下链路：
+
+```text
+C:\PC2\Codex\AzPr
+  -> scripts/generate-azpr-data.mjs
+  -> src/data/generated/
+  -> src/data/azprGenerated.js
+  -> src/domain/projectSchema.js
+  -> src/simulation/compiler/compileProject.js
+  -> src/simulation/engine/simulateScenario.js
+  -> src/simulation/projection/projectSimulationResult.js
+  -> 新版编辑器工作台
+```
+
+当前已完成：
+
+- 阶段 1：真实 AzPr 数据管线。
+- 阶段 2：最小项目领域模型和第一条真实数据 fixture。
+- 阶段 3：无 UI 最小模拟运行时。
+
+下一阶段：
+
+- 阶段 4：建立新版编辑器工作台骨架，让 UI 读取领域模型和 simulation 投影，而不是直接拼旧 `gamedata.json` 或旧 `skillBlocks`。
+
 ## 3. 核心模块设计
 
 ### 3.1 编辑器核心 (Editor.vue)
@@ -88,6 +126,7 @@ public/
 
 ### 3.2 伤害计算引擎 (damageCalc.js)
 - **功能**: 计算技能伤害和相关属性
+- **状态**: 旧原型兼容层。新版运行时入口是 `src/simulation/`，当前第一版只输出低置信度原始伤害投影，后续真实 AzPr 公式应进入 `src/simulation/mechanics/`。
 - **核心函数**:
   - `calcBaseDamage()`: 计算基础伤害
   - `calcAttack()`: 计算攻击力区

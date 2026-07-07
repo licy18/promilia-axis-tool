@@ -443,6 +443,44 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 再实现 `simulateScenario(scenario)`：输出基础事件日志、技能命中占位、冷却/SP 记录和总伤害框架。
 - 投影层先输出 `damageTimeline`、`resourceTimeline`、`eventLog`、`summary`，后续再接 UI。
 
+### 2026-07-07：阶段 3 最小模拟运行时落地
+
+本轮完成：
+
+- 新增 `src/simulation/compiler/compileProject.js`：
+  - 校验新版 `Project`。
+  - 解析 actor / enemy / skill 引用。
+  - 将项目编译为运行时 `scenario`。
+- 新增 `src/simulation/mechanics/damage.js`：
+  - 解析技能等级倍率，例如 `649% -> 6.49`。
+  - 读取角色基础攻击等属性。
+  - 输出 `stage3-raw-attack-multiplier-v1` 原始伤害投影。
+- 新增 `src/simulation/engine/simulateScenario.js`：
+  - 输出 `SCENARIO_START`、`ACTION_START`、`TIMING_DATA_MISSING`、`DAMAGE_PROJECTED`、`SCENARIO_END` 等事件。
+  - 对仍缺精确时序的技能动作标记 `timingAccuracy: placeholder`。
+- 新增 `src/simulation/projection/projectSimulationResult.js`：
+  - 输出 `damageTimeline`、`resourceTimeline`、`eventLog`、`summary`、`diagnostics`。
+- 新增 `src/simulation/index.js`，提供 `compileProject()`、`simulateScenario()`、`runSimulation()` 单入口。
+- 新增 `src/__tests__/simulation/firstVerticalSliceSimulation.test.js`，使用阶段 2 的真实数据 fixture 跑通 `compile -> simulate -> projection`。
+
+验收结果：
+
+- `npx vitest run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、3 条测试通过。
+- `npm run test -- --run`：通过，9 个测试文件、47 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和 chunk 体积提示，暂不阻塞本阶段。
+
+当前结论：
+
+- 项目已经具备无 UI 的最小模拟链路。
+- 当前伤害为“原始攻击 * 技能倍率”的低置信度投影，只用于打通运行时结构，不代表最终 AzPr 精确公式。
+- 技能命中帧、动作时长、取消窗口、最终防御/抗性/暴击/Buff/奇波/装备/灵子计算仍未完成，已通过 `diagnostics.limitations` 和 `TIMING_DATA_MISSING` 暴露。
+
+下一步：
+
+- 阶段 4 目标：建立新版编辑器骨架的第一屏，不再加厚旧 `Editor.vue`。
+- 先新增一个轻量工作台入口，能读取第一条垂直切片并展示角色、敌人、动作、事件日志和 `damageTimeline`。
+- 再把 ActionLibrary / TimelineGrid / PropertiesPanel / AnalysisPanel 拆成可替换组件，为后续真实交互打底。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

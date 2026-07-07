@@ -198,7 +198,8 @@ Endaxis 当前值得对标的模块如下：
 
 - 已完成：最小 `Project` / `Action` / `Actor` / `Enemy` schema，文件为 `src/domain/projectSchema.js`。
 - 已完成：第一条真实数据垂直切片 fixture，文件为 `src/domain/fixtures/firstVerticalSlice.js`。
-- 下一步：建立 `src/simulation/`，先完成 `compileProject()`、`simulateScenario()` 和 projection 测试。
+- 已完成：建立 `src/simulation/`，先完成 `compileProject()`、`simulateScenario()` 和 projection 测试。
+- 下一步：进入阶段 4，新建编辑器工作台骨架，先展示第一条垂直切片的 actor / enemy / action / eventLog / damageTimeline。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 
