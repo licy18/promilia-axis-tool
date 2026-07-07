@@ -57,6 +57,9 @@
           <small v-if="formatFormulaCandidatePreview(entry.hpDamage?.sourceEvidence)">
             {{ formatFormulaCandidatePreview(entry.hpDamage?.sourceEvidence) }}
           </small>
+          <small v-if="formatFormulaCombinationPreview(entry.hpDamage?.sourceEvidence)">
+            {{ formatFormulaCombinationPreview(entry.hpDamage?.sourceEvidence) }}
+          </small>
         </div>
         <strong>{{ formatActionResultValues(entry) }}</strong>
       </div>
@@ -301,6 +304,42 @@ function formatFormulaCandidatePreviewItem(preview) {
   return `${label} 等级值 ${formatNumber(candidateValue)} vs raw ${formatNumber(rawValue)}${ratioText}`;
 }
 
+function formatFormulaCombinationPreview(sourceEvidence) {
+  const previews = sourceEvidence?.formulaCandidatePreview?.combinationPreviews ?? [];
+  const preferred =
+    previews.find(
+      (preview) =>
+        preview.strategy === 'function_2-current-level-value-param' &&
+        preview.comparison?.status === 'compared-to-raw-projection'
+    ) ??
+    previews.find(
+      (preview) => preview.comparison?.status === 'compared-to-raw-projection'
+    );
+  if (!preferred) {
+    return '';
+  }
+
+  const scale = preferred.comparison?.requiredScaleToRaw;
+  const perHitScale = preferred.comparison?.requiredPerHitScaleToRaw;
+  const perHitText = Number.isFinite(perHitScale)
+    ? ` / 每 hit ×${formatFixed(perHitScale)}`
+    : '';
+  return `组合诊断 ${formatCombinationLabel(preferred)} 需 ×${formatFixed(scale)} 才接近 raw${perHitText}`;
+}
+
+function formatCombinationLabel(preview) {
+  if (preview.strategy?.startsWith('function_2')) {
+    return 'f2';
+  }
+  if (preview.strategy?.startsWith('function_1-times-function_2')) {
+    return 'f1*f2';
+  }
+  if (preview.strategy?.startsWith('function_1-plus-function_2')) {
+    return 'f1+f2';
+  }
+  return preview.expression ?? preview.strategy ?? '候选';
+}
+
 function formatElementIds(ids = []) {
   const values = ids.filter((id) => Number.isFinite(Number(id)));
   return values.length > 0 ? `(${values.join(', ')})` : '';
@@ -317,6 +356,14 @@ function formatPercent(value) {
     return '-';
   }
   return `${(number * 100).toFixed(1)}%`;
+}
+
+function formatFixed(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return '-';
+  }
+  return number.toFixed(1);
 }
 
 function formatOverlapRange(item) {

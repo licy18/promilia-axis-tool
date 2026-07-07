@@ -2507,6 +2507,42 @@ Endaxis 参考边界：
 - 优先从 IL2CPP `ExecuteDamageElement` / `FormulaUtility.OutputDamageData`、`DamageElement.Parse/BaseExecute`、`skill_control` 行为节点命中帧与 element 绑定入手。
 - 若仍无法闭环，则扩大样本到其他角色/动作，比较 `formulaCandidatePreview` 与 `skill_level` 描述倍率的差异模式，判断公式候选是单 hit、子段、额外倍率还是中间量。
 
+### 2026-07-08：阶段 5-8T function 组合诊断矩阵
+
+本轮完成：
+
+- `formulaCandidatePreview` 新增 `combinationPreviews`，按候选 element 计算简单 function 组合：
+  - `function_2`
+  - `function_1 * function_2`
+  - `function_1 + function_2`
+- 每种组合分别用 `TDamageElementParams.formulaParamValues` 和当前等级 `skill_logic.currentLevel.valueParam` 两套输入计算，并与 raw HP 投影比较。
+- 当前末音 `10900101` 普攻样本：
+  - `function_2-current-level-value-param` 仍为 `307`。
+  - `function_1 * function_2` 因 `function_1 = G/10000 = 1`，仍为 `307`。
+  - `function_1 + function_2` 为 `308`。
+  - 要接近 raw HP `12461`，`f2` 等级值还需要约 `×40.6`；按当前描述中的 5 hit 平均，也仍需要每 hit 约 `×8.1`。
+- Workbench 三值来源新增组合诊断行：`组合诊断 f2 需 ×40.6 才接近 raw / 每 hit ×8.1`。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `node --check src/simulation/projection/projectSimulationResult.js`：通过。
+- `npx eslint src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过；当前 ESLint 配置会忽略 Vue 文件并给出提示。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1408 KB。
+
+当前边界：
+
+- 简单的 `function_1/function_2` 加法或乘法不能解释当前 raw HP 投影。
+- 这不证明候选公式无效，只说明还缺命中段绑定、动作描述倍率关系、运行时额外缩放或其他 DamageElement 逻辑。
+- 仍没有把 formula candidate 加入 `appliedLayerKeys`。
+
+下一步：
+
+- 阶段 5-8U 目标：扩大样本并分析差异模式。
+- 至少选择同角色多个动作形态或其他已有 `TDamageElementParams` 技能，生成 `formulaCandidatePreview` / `combinationPreviews` 的跨动作摘要。
+- 判断 `requiredScaleToRaw` 是否稳定、是否与 hitCount、描述倍率、`formulaParamValues` 特定槽、`amp`、`physicalRatio`、`elementCalFactor` 或命中行为节点数量相关。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -811,6 +811,10 @@ function createFormulaCandidatePreview(sourceEvidence, damagePayload) {
   const largeDifferencePreviews = comparablePreviews.filter(
     item => item.comparison?.differenceStatus === 'large-difference'
   );
+  const combinationPreviews = createFormulaCombinationPreviews({
+    functionPreviews,
+    damagePayload,
+  });
 
   return {
     status:
@@ -833,22 +837,194 @@ function createFormulaCandidatePreview(sourceEvidence, damagePayload) {
       source: 'current-skill-level-description-raw-projection',
     },
     functionPreviews,
+    combinationPreviews,
     diagnostics: {
       comparablePreviewCount: comparablePreviews.length,
       largeDifferenceCount: largeDifferencePreviews.length,
+      combinationPreviewCount: combinationPreviews.length,
+      combinationLargeDifferenceCount: combinationPreviews.filter(
+        item => item.comparison?.differenceStatus === 'large-difference'
+      ).length,
       statuses: uniqueStrings(
-        functionPreviews
-          .map(
+        [
+          ...functionPreviews.map(
             item =>
               item.comparison?.differenceStatus ??
               item.comparison?.status ??
               item.status
-          )
+          ),
+          ...combinationPreviews.map(
+            item =>
+              item.comparison?.differenceStatus ??
+              item.comparison?.status ??
+              item.status
+          ),
+        ]
           .filter(Boolean)
       ),
       note:
         'Preview values are evidence diagnostics only. They do not define DamageElement function combination order or final damage.',
     },
+  };
+}
+
+function createFormulaCombinationPreviews({ functionPreviews, damagePayload }) {
+  const byElement = new Map();
+  for (const preview of functionPreviews) {
+    if (!byElement.has(preview.elementConfigId)) {
+      byElement.set(preview.elementConfigId, []);
+    }
+    byElement.get(preview.elementConfigId).push(preview);
+  }
+
+  return [...byElement.entries()].flatMap(([elementConfigId, previews]) =>
+    createFormulaCombinationPreviewsForElement({
+      elementConfigId,
+      previews,
+      damagePayload,
+    })
+  );
+}
+
+function createFormulaCombinationPreviewsForElement({
+  elementConfigId,
+  previews,
+  damagePayload,
+}) {
+  const f1 = previews.find(item => item.field === 'function_1');
+  const f2 = previews.find(item => item.field === 'function_2');
+  const hitCount = numberOrNull(damagePayload.segment?.hitModel?.hitCount);
+  const variants = [];
+
+  for (const source of ['formulaParamPreview', 'currentLevelPreview']) {
+    const sourceLabel =
+      source === 'currentLevelPreview'
+        ? 'current-level-value-param'
+        : 'formula-param-values';
+    const f1Value = numberOrNull(f1?.[source]?.value);
+    const f2Value = numberOrNull(f2?.[source]?.value);
+
+    if (Number.isFinite(f2Value)) {
+      variants.push(
+        createFormulaCombinationPreview({
+          elementConfigId,
+          strategy: `function_2-${sourceLabel}`,
+          expression: 'function_2',
+          value: f2Value,
+          source,
+          functionValues: { function_2: f2Value },
+          hitCount,
+          rawProjectionValue: damagePayload.rawDamage,
+        })
+      );
+    }
+
+    if (Number.isFinite(f1Value) && Number.isFinite(f2Value)) {
+      variants.push(
+        createFormulaCombinationPreview({
+          elementConfigId,
+          strategy: `function_1-times-function_2-${sourceLabel}`,
+          expression: 'function_1 * function_2',
+          value: f1Value * f2Value,
+          source,
+          functionValues: {
+            function_1: f1Value,
+            function_2: f2Value,
+          },
+          hitCount,
+          rawProjectionValue: damagePayload.rawDamage,
+        }),
+        createFormulaCombinationPreview({
+          elementConfigId,
+          strategy: `function_1-plus-function_2-${sourceLabel}`,
+          expression: 'function_1 + function_2',
+          value: f1Value + f2Value,
+          source,
+          functionValues: {
+            function_1: f1Value,
+            function_2: f2Value,
+          },
+          hitCount,
+          rawProjectionValue: damagePayload.rawDamage,
+        })
+      );
+    }
+  }
+
+  return variants;
+}
+
+function createFormulaCombinationPreview({
+  elementConfigId,
+  strategy,
+  expression,
+  value,
+  source,
+  functionValues,
+  hitCount,
+  rawProjectionValue,
+}) {
+  const roundedValue = Math.round(value);
+  const comparison = createCombinationPreviewComparison({
+    rawProjectionValue,
+    roundedValue,
+    hitCount,
+  });
+
+  return {
+    elementConfigId,
+    strategy,
+    expression,
+    inputSource:
+      source === 'currentLevelPreview'
+        ? 'skill_logic.currentLevel.valueParam'
+        : 'TDamageElementParams.formulaParamValues',
+    functionValues,
+    value,
+    roundedValue,
+    hitCount,
+    comparison,
+    status: 'combination-preview-computed',
+    applied: false,
+  };
+}
+
+function createCombinationPreviewComparison({
+  rawProjectionValue,
+  roundedValue,
+  hitCount,
+}) {
+  const rawValue = numberOrNull(rawProjectionValue);
+  if (!Number.isFinite(rawValue) || !Number.isFinite(roundedValue)) {
+    return {
+      status: 'not-compared',
+      reason: 'missing-raw-or-preview-value',
+    };
+  }
+
+  const delta = roundedValue - rawValue;
+  const ratioToRawProjection = rawValue === 0 ? null : roundedValue / rawValue;
+  const requiredScaleToRaw =
+    roundedValue === 0 ? null : rawValue / roundedValue;
+  const requiredPerHitScaleToRaw =
+    Number.isFinite(hitCount) && hitCount > 0 && Number.isFinite(requiredScaleToRaw)
+      ? requiredScaleToRaw / hitCount
+      : null;
+  const absoluteRatio =
+    ratioToRawProjection == null ? null : Math.abs(1 - ratioToRawProjection);
+
+  return {
+    status: 'compared-to-raw-projection',
+    rawProjectionValue: rawValue,
+    previewRoundedValue: roundedValue,
+    delta,
+    ratioToRawProjection,
+    requiredScaleToRaw,
+    requiredPerHitScaleToRaw,
+    differenceStatus:
+      absoluteRatio != null && absoluteRatio > 0.1
+        ? 'large-difference'
+        : 'close-to-raw-projection',
   };
 }
 

@@ -2934,3 +2934,77 @@ Workbench 分析面板三值来源当前会显示：
 - `formulaCandidatePreview.applied` 必须保持 `false`。
 - 当前 f2 预览与 raw 投影差距巨大，不能把 `element_formula` 候选直接迁入最终公式。
 - 下一阶段必须继续追 `DamageElement` function 组合顺序、命中段绑定、等级覆盖规则和动作描述倍率之间的关系。
+
+## 45. 2026-07-08 formulaCandidatePreview 组合诊断矩阵
+
+阶段 5-8T 在 `formulaCandidatePreview` 中新增 `combinationPreviews`，用于验证简单 function 组合是否能解释当前 raw HP 投影。
+
+### 45.1 formulaCandidatePreview.combinationPreviews
+
+示例：
+
+```javascript
+{
+  "combinationPreviews": [
+    {
+      "elementConfigId": 109001081,
+      "strategy": "function_2-current-level-value-param",
+      "expression": "function_2",
+      "inputSource": "skill_logic.currentLevel.valueParam",
+      "functionValues": {
+        "function_2": 307.2
+      },
+      "value": 307.2,
+      "roundedValue": 307,
+      "hitCount": 5,
+      "comparison": {
+        "status": "compared-to-raw-projection",
+        "rawProjectionValue": 12461,
+        "previewRoundedValue": 307,
+        "delta": -12154,
+        "ratioToRawProjection": 0.0246,
+        "requiredScaleToRaw": 40.59,
+        "requiredPerHitScaleToRaw": 8.12,
+        "differenceStatus": "large-difference"
+      },
+      "status": "combination-preview-computed",
+      "applied": false
+    }
+  ]
+}
+```
+
+当前会生成以下简单组合：
+
+- `function_2`
+- `function_1 * function_2`
+- `function_1 + function_2`
+
+每组组合分别使用 `TDamageElementParams.formulaParamValues` 和当前等级 `skill_logic.currentLevel.valueParam` 两套输入。
+
+### 45.2 diagnostics 新增字段
+
+```javascript
+{
+  "combinationPreviewCount": 12,
+  "combinationLargeDifferenceCount": 12
+}
+```
+
+含义：
+
+- `combinationPreviewCount`：当前动作所有候选 element 的简单组合预览条数。
+- `combinationLargeDifferenceCount`：与 raw HP 投影差异超过阈值的组合条数。
+
+### 45.3 Workbench 展示
+
+Workbench 分析面板三值来源当前会显示：
+
+```text
+组合诊断 f2 需 ×40.6 才接近 raw / 每 hit ×8.1
+```
+
+### 45.4 当前边界
+
+- `combinationPreviews` 只验证简单组合，不代表真实 `DamageElement` 运行顺序。
+- 当前简单组合仍远低于 raw HP，说明下一步应扩大样本并继续追命中段绑定、运行时额外缩放和动作描述倍率之间的关系。

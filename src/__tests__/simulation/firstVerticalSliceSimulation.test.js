@@ -414,9 +414,47 @@ describe('first vertical slice simulation', () => {
                 }),
               }),
             ]),
+            combinationPreviews: expect.arrayContaining([
+              expect.objectContaining({
+                elementConfigId: 109001081,
+                strategy: 'function_2-current-level-value-param',
+                expression: 'function_2',
+                inputSource: 'skill_logic.currentLevel.valueParam',
+                functionValues: {
+                  function_2: 307.2,
+                },
+                value: 307.2,
+                roundedValue: 307,
+                hitCount: 5,
+                comparison: expect.objectContaining({
+                  status: 'compared-to-raw-projection',
+                  rawProjectionValue: 12461,
+                  previewRoundedValue: 307,
+                  delta: -12154,
+                  differenceStatus: 'large-difference',
+                }),
+                status: 'combination-preview-computed',
+                applied: false,
+              }),
+              expect.objectContaining({
+                elementConfigId: 109001081,
+                strategy: 'function_1-plus-function_2-current-level-value-param',
+                expression: 'function_1 + function_2',
+                value: 308.2,
+                roundedValue: 308,
+                hitCount: 5,
+                comparison: expect.objectContaining({
+                  status: 'compared-to-raw-projection',
+                  differenceStatus: 'large-difference',
+                }),
+                applied: false,
+              }),
+            ]),
             diagnostics: {
               comparablePreviewCount: 2,
               largeDifferenceCount: 2,
+              combinationPreviewCount: 12,
+              combinationLargeDifferenceCount: 12,
               statuses: [
                 'not-compared-scalar-candidate',
                 'large-difference',
@@ -568,6 +606,21 @@ describe('first vertical slice simulation', () => {
         },
       },
     });
+    const combinationPreview =
+      result.actionResultTimeline[0].hpDamage.sourceEvidence
+        .formulaCandidatePreview.combinationPreviews.find(
+          item =>
+            item.elementConfigId === 109001081 &&
+            item.strategy === 'function_2-current-level-value-param'
+        );
+    expect(combinationPreview.comparison.requiredScaleToRaw).toBeCloseTo(
+      40.59,
+      2
+    );
+    expect(combinationPreview.comparison.requiredPerHitScaleToRaw).toBeCloseTo(
+      8.12,
+      2
+    );
     expect(result.summary).toMatchObject({
       projectedHitCount: 1,
       actionResultCount: 1,
