@@ -1309,6 +1309,15 @@ describe('first vertical slice simulation', () => {
           damageElementCandidateCount: 0,
           applied: false,
         },
+        elementSourceAlignmentSummary: {
+          status: 'no-hit-binding-gaps',
+          gapCount: 0,
+          alignedGapCount: 0,
+          divergentGapCount: 0,
+          overlappingGapCount: 0,
+          missingGapCount: 0,
+          applied: false,
+        },
         gaps: [],
         applied: false,
       },
@@ -1637,6 +1646,31 @@ describe('first vertical slice simulation', () => {
           skillLevelBridgeStatuses: ['skillsub-element-level-bridge-missing'],
           applied: false,
         }),
+        elementSourceAlignmentSummary: expect.objectContaining({
+          status:
+            'all-candidate-gaps-have-action-level-external-element-divergence',
+          gapCount: 3,
+          alignedGapCount: 3,
+          divergentGapCount: 3,
+          overlappingGapCount: 0,
+          actionLevelElementConfigIds: [109001081, 109001306],
+          matrixElementConfigIds: [109001081, 109001306],
+          externalDamageElementConfigIds: [109001251],
+          overlapElementConfigIds: [],
+          actionLevelOnlyElementConfigIds: [109001081, 109001306],
+          externalOnlyElementConfigIds: [109001251],
+          actionLevelSubSkillIds: [10900101],
+          externalSubSkillIds: [109001011],
+          externalStateNames: ['Skill0_6'],
+          externalHitEffects: ['11_109001_133', '11_109001_005'],
+          externalSkillLevelBridgeStatuses: [
+            'skillsub-element-level-bridge-missing',
+          ],
+          findings: [
+            'skill-control-subskill-damage-element-not-in-action-level-values',
+          ],
+          applied: false,
+        }),
         gaps: expect.arrayContaining([
           expect.objectContaining({
             actionId: 'action-segment-1',
@@ -1711,9 +1745,55 @@ describe('first vertical slice simulation', () => {
               ]),
               applied: false,
             }),
+            elementSourceAlignment: expect.objectContaining({
+              status:
+                'external-damage-elements-diverge-from-action-level-elements',
+              actionLevelSourceKind: 'skill_logic.currentLevel.elementValues',
+              actionLevelSourceTable:
+                'C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/skillsub_ele_value.json',
+              actionLevelSkillId: 10900101,
+              actionLevelSubSkillId: 10900101,
+              actionLevel: 1,
+              actionLevelSkillLevelRowId: 1657,
+              actionLevelElementConfigIds: [109001081, 109001306],
+              actionLevelRows: [
+                expect.objectContaining({
+                  rowId: 973,
+                  elementConfigId: 109001081,
+                  valueParam: '1#1600|7#10000',
+                }),
+                expect.objectContaining({
+                  rowId: 985,
+                  elementConfigId: 109001306,
+                  valueParam: '1#1600|7#10000',
+                }),
+              ],
+              matrixElementConfigIds: [109001081, 109001306],
+              externalElementSourceKind: 'skill_control.elementBaseDatas',
+              externalStateNames: ['Skill0_6'],
+              externalSubSkillIds: [109001011],
+              externalHitEffects: ['11_109001_133', '11_109001_005'],
+              externalDamageElementConfigIds: [109001251],
+              overlapElementConfigIds: [],
+              actionLevelOnlyElementConfigIds: [109001081, 109001306],
+              externalOnlyElementConfigIds: [109001251],
+              matrixMatchesActionLevel: true,
+              externalSkillLevelBridgeStatuses: [
+                'skillsub-element-level-bridge-missing',
+              ],
+              finding:
+                'skill-control-subskill-damage-element-not-in-action-level-values',
+              unresolved: expect.arrayContaining([
+                'action-variant-element-selection-unconfirmed',
+                'skill-control-subskill-to-skill-level-bridge-unconfirmed',
+                'external-damage-element-level-bridge-missing',
+              ]),
+              applied: false,
+            }),
             unresolved: expect.arrayContaining([
               'hit-damage-element-binding-unresolved',
               'external-damage-element-hit-binding-unconfirmed',
+              'action-level-and-skill-control-element-source-divergence',
             ]),
             applied: false,
           }),

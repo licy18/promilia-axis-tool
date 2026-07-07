@@ -931,6 +931,9 @@ function createFormulaExecutionMatrixActionSummary(
     row => row.differenceStatus === 'large-difference'
   ).length;
   const rowsWithHitBindings = rows.filter(row => row.boundHitCount > 0).length;
+  const matrixElementConfigIds = uniqueNumbers(
+    rows.map(row => row.elementConfigId)
+  );
   const hitBindingGap = createFormulaExecutionHitBindingGap({
     actionId: entry.actionId,
     actionName: entry.actionName,
@@ -938,6 +941,9 @@ function createFormulaExecutionMatrixActionSummary(
     actionVariantLabel: matrix.actionVariantLabel,
     rowCount: rows.length,
     rowsWithHitBindings,
+    matrixElementConfigIds,
+    actionLevelElementSource:
+      entry.hpDamage?.sourceEvidence?.actionLevelElementSource ?? null,
     behaviorBindingEvidence,
   });
 
@@ -953,7 +959,7 @@ function createFormulaExecutionMatrixActionSummary(
     rawMultiplier: rawProjection.rawMultiplier ?? null,
     actionMultiplier: numberOrNull(rawProjection.actionMultiplier),
     rowCount: rows.length,
-    elementConfigIds: uniqueNumbers(rows.map(row => row.elementConfigId)),
+    elementConfigIds: matrixElementConfigIds,
     requiredScaleMin: minNumber(requiredScales),
     requiredScaleMax: maxNumber(requiredScales),
     requiredPerHitScaleMin: minNumber(requiredPerHitScales),
@@ -1222,6 +1228,8 @@ function createFormulaExecutionHitBindingGap({
   actionVariantLabel,
   rowCount,
   rowsWithHitBindings,
+  matrixElementConfigIds = [],
+  actionLevelElementSource = null,
   behaviorBindingEvidence,
 }) {
   const missingRowCount = Math.max(0, rowCount - rowsWithHitBindings);
@@ -1246,6 +1254,11 @@ function createFormulaExecutionHitBindingGap({
   const externalElementBinding = createHitBindingGapExternalElementBinding({
     skillId,
     behaviorBindingEvidence,
+  });
+  const elementSourceAlignment = createHitBindingGapElementSourceAlignment({
+    actionLevelElementSource,
+    matrixElementConfigIds,
+    externalElementBinding,
   });
   return {
     status:
@@ -1273,11 +1286,16 @@ function createFormulaExecutionHitBindingGap({
       behaviorBindingEvidence?.stateTimingEvidenceStatus ?? null,
     behaviorBindingEvidence: behaviorBindingEvidence ?? null,
     externalElementBinding,
+    elementSourceAlignment,
     unresolved: [
       'hit-damage-element-binding-unresolved',
       externalElementBinding.damageElementCandidateCount > 0
         ? 'external-damage-element-hit-binding-unconfirmed'
         : 'external-element-object-binding-unconfirmed',
+      ...(elementSourceAlignment.status ===
+      'external-damage-elements-diverge-from-action-level-elements'
+        ? ['action-level-and-skill-control-element-source-divergence']
+        : []),
     ],
     applied: false,
   };
@@ -1292,6 +1310,8 @@ function createFormulaExecutionHitBindingGapSummary(actionSummaries) {
   );
   const externalElementBindingSummary =
     createHitBindingGapExternalElementBindingSummary(gaps);
+  const elementSourceAlignmentSummary =
+    createHitBindingGapElementSourceAlignmentSummary(gaps);
   const missingRowCount = gaps.reduce(
     (sum, gap) => sum + (gap.missingRowCount ?? 0),
     0
@@ -1329,6 +1349,7 @@ function createFormulaExecutionHitBindingGapSummary(actionSummaries) {
       gaps.flatMap(gap => gap.bindingStatuses ?? [])
     ),
     externalElementBindingSummary,
+    elementSourceAlignmentSummary,
     gaps,
     applied: false,
   };
@@ -1756,6 +1777,221 @@ function createHitBindingGapExternalElementBindingSummary(gaps) {
   };
 }
 
+function createHitBindingGapElementSourceAlignment({
+  actionLevelElementSource,
+  matrixElementConfigIds,
+  externalElementBinding,
+}) {
+  const actionLevelElementConfigIds = uniqueNumbers(
+    actionLevelElementSource?.elementConfigIds ?? []
+  );
+  const matrixIds = uniqueNumbers(matrixElementConfigIds ?? []);
+  const externalDamageElementConfigIds = uniqueNumbers(
+    externalElementBinding?.damageElementConfigIds ?? []
+  );
+  const overlapElementConfigIds = intersectNumbers(
+    actionLevelElementConfigIds,
+    externalDamageElementConfigIds
+  );
+  const actionLevelOnlyElementConfigIds = differenceNumbers(
+    actionLevelElementConfigIds,
+    externalDamageElementConfigIds
+  );
+  const externalOnlyElementConfigIds = differenceNumbers(
+    externalDamageElementConfigIds,
+    actionLevelElementConfigIds
+  );
+
+  return {
+    status: createElementSourceAlignmentStatus({
+      actionLevelElementConfigIds,
+      externalDamageElementConfigIds,
+      overlapElementConfigIds,
+    }),
+    sourceKind: 'azpr-hit-binding-element-source-alignment',
+    actionLevelSourceKind:
+      actionLevelElementSource?.sourceKind ??
+      'skill_logic.currentLevel.elementValues',
+    actionLevelSourceTable:
+      actionLevelElementSource?.skillsubEleValueTablePath ?? null,
+    actionLevelSkillId: numberOrNull(actionLevelElementSource?.skillId),
+    actionLevelSubSkillId: numberOrNull(actionLevelElementSource?.subSkillId),
+    actionLevel: numberOrNull(actionLevelElementSource?.level),
+    actionLevelSkillLevelRowId: numberOrNull(
+      actionLevelElementSource?.skillLevelRowId
+    ),
+    actionLevelElementConfigIds,
+    actionLevelRows: actionLevelElementSource?.rows ?? [],
+    matrixElementConfigIds: matrixIds,
+    externalSourceKind:
+      externalElementBinding?.sourceKind ??
+      'azpr-hit-binding-external-element-candidate',
+    externalElementSourceKind: 'skill_control.elementBaseDatas',
+    externalStateNames: externalElementBinding?.stateNames ?? [],
+    externalSubSkillIds: externalElementBinding?.subSkillIds ?? [],
+    externalHitEffects: externalElementBinding?.hitEffects ?? [],
+    externalDamageElementConfigIds,
+    externalDamageElementPathIds:
+      externalElementBinding?.damageElementPathIds ?? [],
+    overlapElementConfigIds,
+    actionLevelOnlyElementConfigIds,
+    externalOnlyElementConfigIds,
+    actionLevelOnlyCount: actionLevelOnlyElementConfigIds.length,
+    externalOnlyCount: externalOnlyElementConfigIds.length,
+    overlapCount: overlapElementConfigIds.length,
+    matrixMatchesActionLevel:
+      differenceNumbers(matrixIds, actionLevelElementConfigIds).length === 0 &&
+      differenceNumbers(actionLevelElementConfigIds, matrixIds).length === 0,
+    externalSkillLevelBridgeStatuses:
+      externalElementBinding?.skillLevelBridgeStatuses ?? [],
+    finding: createElementSourceAlignmentFinding({
+      actionLevelElementConfigIds,
+      externalDamageElementConfigIds,
+      overlapElementConfigIds,
+    }),
+    unresolved: uniqueStrings([
+      'action-variant-element-selection-unconfirmed',
+      'skill-control-subskill-to-skill-level-bridge-unconfirmed',
+      ...((externalElementBinding?.skillLevelBridgeStatuses ?? []).includes(
+        'skillsub-element-level-bridge-missing'
+      )
+        ? ['external-damage-element-level-bridge-missing']
+        : []),
+      'runtime-parameter-inheritance-or-override-unconfirmed',
+    ]),
+    applied: false,
+  };
+}
+
+function createElementSourceAlignmentStatus({
+  actionLevelElementConfigIds,
+  externalDamageElementConfigIds,
+  overlapElementConfigIds,
+}) {
+  if (externalDamageElementConfigIds.length === 0) {
+    return 'external-damage-elements-missing';
+  }
+  if (actionLevelElementConfigIds.length === 0) {
+    return 'action-level-elements-missing';
+  }
+  if (overlapElementConfigIds.length === 0) {
+    return 'external-damage-elements-diverge-from-action-level-elements';
+  }
+  if (
+    overlapElementConfigIds.length === actionLevelElementConfigIds.length &&
+    overlapElementConfigIds.length === externalDamageElementConfigIds.length
+  ) {
+    return 'external-damage-elements-match-action-level-elements';
+  }
+  return 'external-damage-elements-partially-overlap-action-level-elements';
+}
+
+function createElementSourceAlignmentFinding({
+  actionLevelElementConfigIds,
+  externalDamageElementConfigIds,
+  overlapElementConfigIds,
+}) {
+  if (externalDamageElementConfigIds.length === 0) {
+    return 'skill-control-damage-element-candidates-missing';
+  }
+  if (actionLevelElementConfigIds.length === 0) {
+    return 'action-level-skill-logic-element-values-missing';
+  }
+  if (overlapElementConfigIds.length === 0) {
+    return 'skill-control-subskill-damage-element-not-in-action-level-values';
+  }
+  if (
+    overlapElementConfigIds.length === actionLevelElementConfigIds.length &&
+    overlapElementConfigIds.length === externalDamageElementConfigIds.length
+  ) {
+    return 'skill-control-damage-elements-match-action-level-values';
+  }
+  return 'skill-control-damage-elements-partially-overlap-action-level-values';
+}
+
+function createHitBindingGapElementSourceAlignmentSummary(gaps) {
+  const alignments = gaps
+    .map(gap => gap.elementSourceAlignment)
+    .filter(Boolean);
+  const divergent = alignments.filter(
+    alignment =>
+      alignment.status ===
+      'external-damage-elements-diverge-from-action-level-elements'
+  );
+  const overlapping = alignments.filter(alignment =>
+    [
+      'external-damage-elements-match-action-level-elements',
+      'external-damage-elements-partially-overlap-action-level-elements',
+    ].includes(alignment.status)
+  );
+  const missing = alignments.filter(alignment =>
+    [
+      'external-damage-elements-missing',
+      'action-level-elements-missing',
+    ].includes(alignment.status)
+  );
+
+  return {
+    status:
+      gaps.length === 0
+        ? 'no-hit-binding-gaps'
+        : divergent.length === gaps.length
+          ? 'all-candidate-gaps-have-action-level-external-element-divergence'
+          : divergent.length > 0
+            ? 'some-candidate-gaps-have-action-level-external-element-divergence'
+            : overlapping.length === gaps.length
+              ? 'all-candidate-gaps-overlap-action-level-elements'
+              : missing.length > 0
+                ? 'some-candidate-gaps-missing-element-source-alignment'
+                : 'element-source-alignment-unclassified',
+    gapCount: gaps.length,
+    alignedGapCount: alignments.length,
+    divergentGapCount: divergent.length,
+    overlappingGapCount: overlapping.length,
+    missingGapCount: missing.length,
+    actionLevelElementConfigIds: uniqueNumbers(
+      alignments.flatMap(alignment => alignment.actionLevelElementConfigIds)
+    ),
+    matrixElementConfigIds: uniqueNumbers(
+      alignments.flatMap(alignment => alignment.matrixElementConfigIds)
+    ),
+    externalDamageElementConfigIds: uniqueNumbers(
+      alignments.flatMap(alignment => alignment.externalDamageElementConfigIds)
+    ),
+    overlapElementConfigIds: uniqueNumbers(
+      alignments.flatMap(alignment => alignment.overlapElementConfigIds)
+    ),
+    actionLevelOnlyElementConfigIds: uniqueNumbers(
+      alignments.flatMap(alignment => alignment.actionLevelOnlyElementConfigIds)
+    ),
+    externalOnlyElementConfigIds: uniqueNumbers(
+      alignments.flatMap(alignment => alignment.externalOnlyElementConfigIds)
+    ),
+    actionLevelSubSkillIds: uniqueNumbers(
+      alignments.map(alignment => alignment.actionLevelSubSkillId)
+    ),
+    externalSubSkillIds: uniqueNumbers(
+      alignments.flatMap(alignment => alignment.externalSubSkillIds)
+    ),
+    externalStateNames: uniqueStrings(
+      alignments.flatMap(alignment => alignment.externalStateNames)
+    ),
+    externalHitEffects: uniqueStrings(
+      alignments.flatMap(alignment => alignment.externalHitEffects)
+    ),
+    externalSkillLevelBridgeStatuses: uniqueStrings(
+      alignments.flatMap(
+        alignment => alignment.externalSkillLevelBridgeStatuses
+      )
+    ),
+    findings: uniqueStrings(alignments.map(alignment => alignment.finding)),
+    unresolved: uniqueStrings(
+      alignments.flatMap(alignment => alignment.unresolved ?? [])
+    ),
+    applied: false,
+  };
+}
+
 function uniqueElementRefsByPath(refs) {
   const byPath = new Map();
   for (const ref of refs ?? []) {
@@ -1772,6 +2008,16 @@ function collectFormulaFunctionOutputs(evidence) {
   return (evidence?.functionRefs ?? [])
     .map(ref => ref.elementFormulaRow?.functionOutput)
     .filter(value => value != null);
+}
+
+function intersectNumbers(left, right) {
+  const rightSet = new Set(uniqueNumbers(right));
+  return uniqueNumbers(left).filter(value => rightSet.has(value));
+}
+
+function differenceNumbers(left, right) {
+  const rightSet = new Set(uniqueNumbers(right));
+  return uniqueNumbers(left).filter(value => !rightSet.has(value));
 }
 
 function attachFormulaExecutionEvidenceMatrix(hpDamage, action, hitCandidates) {
@@ -3922,6 +4168,12 @@ function createActionDamageElementSource(action) {
   const logicElementIds = uniqueNumbers(
     logicElementRows.map(row => row.elementId)
   );
+  const actionLevelElementSource = createActionLevelElementSource({
+    action,
+    skillId,
+    logicElementRows,
+    logicElementIds,
+  });
   const logicElementRowByElementId = new Map(
     logicElementRows
       .map(row => [Number(row.elementId), row])
@@ -3941,6 +4193,7 @@ function createActionDamageElementSource(action) {
         action.selectedActionVariant?.label ??
         action.selectedDamageSegment?.label ??
         null,
+      actionLevelElementSource,
       logicElementIds,
       matchedElementConfigIds: [],
       unbridgedElementConfigIds: [],
@@ -3981,6 +4234,7 @@ function createActionDamageElementSource(action) {
       action.selectedActionVariant?.label ??
       action.selectedDamageSegment?.label ??
       null,
+    actionLevelElementSource,
     logicElementIds,
     matchedElementConfigIds: matchedMappings.map(mapping =>
       Number(mapping.elementConfigId)
@@ -4065,6 +4319,36 @@ function compactDamageElementMapping(mapping, currentLogicElementValue = null) {
   };
 }
 
+function createActionLevelElementSource({
+  action,
+  skillId,
+  logicElementRows,
+  logicElementIds,
+}) {
+  const logicModel = action.logicModel ?? {};
+  return {
+    sourceKind: 'skill_logic.currentLevel.elementValues',
+    sourcePath: 'skill-logic-index.json.levels.elementValues',
+    skillsubEleValueTablePath: logicModel.skillsubEleValueTablePath ?? null,
+    skillId: numberOrNull(skillId),
+    level: numberOrNull(logicModel.level),
+    levelIndex: numberOrNull(logicModel.levelIndex),
+    subSkillId: numberOrNull(logicModel.subSkillId),
+    skillLevelRowId: numberOrNull(logicModel.skillLevelRowId),
+    elementConfigIds: logicElementIds,
+    rowCount: logicElementRows.length,
+    rows: logicElementRows.map(row => ({
+      rowId: numberOrNull(row.rowId),
+      elementConfigId: numberOrNull(row.elementId),
+      valueParam: row.valueParam ?? '',
+      paramPairs: parseValueParamPairs(row.valueParam),
+      fieldPaths: row.fieldPaths ?? null,
+      applied: false,
+    })),
+    applied: false,
+  };
+}
+
 function createDamageElementChainSource(damageElementSource, chainKey) {
   if (!damageElementSource) {
     return null;
@@ -4091,6 +4375,7 @@ function createDamageElementChainSource(damageElementSource, chainKey) {
     skillId: damageElementSource.skillId,
     actionVariantIndex: damageElementSource.actionVariantIndex,
     actionVariantLabel: damageElementSource.actionVariantLabel,
+    actionLevelElementSource: damageElementSource.actionLevelElementSource,
     logicElementIds: damageElementSource.logicElementIds,
     matchedElementConfigIds: damageElementSource.matchedElementConfigIds,
     unbridgedElementConfigIds: damageElementSource.unbridgedElementConfigIds,

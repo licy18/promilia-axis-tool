@@ -3480,6 +3480,48 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8AP 目标：对齐非普攻 `109001251` 与动作级矩阵 `109001081 / 109001306` 的来源差异，继续追 `subSkillId = 109001011`、`hitEffects = 11_109001_133 / 11_109001_005`、`skill_logic` / `skillsub_ele_value` 与动作形态的真实绑定关系。
 - 若表格侧没有 `109001251` 的等级桥接，继续用 AzPr Extractor / IL2CPP 证据确认该 DamageElement 是否使用固定参数、继承参数、运行时覆盖或另一条等级配置链。
 
+### 2026-07-08：阶段 5-8AP action-level 与 skill_control element 来源差异固化
+
+本轮完成：
+
+- `actionResultTimeline[].hpDamage.sourceEvidence` 新增 `actionLevelElementSource`，记录动作级矩阵来自 `skill_logic.currentLevel.elementValues` / `skillsub_ele_value` 的 element 行。
+- `actionSummaries[].hitBindingGap` 新增 `elementSourceAlignment`，把动作级矩阵 element 与 `skill_control.elementBaseDatas` 外部 DamageElement 候选放在同一结构里比较。
+- `hitBindingGapSummary` 新增 `elementSourceAlignmentSummary`，跨缺口动作汇总来源差异、重叠关系、subSkill、state、hitEffect 和未解项。
+- `AnalysisPanel` 的 `执行矩阵摘要` 追加 `来源差异 x/y`，让工作台能直接看到缺口动作是否存在 action-level 与 skill_control element 分叉。
+- 仿真测试覆盖单动作无缺口、四动作 3 个缺口的来源差异摘要，以及重击缺口的 `elementSourceAlignment` 明细；Workbench 测试覆盖重击切换后的 `来源差异 1/1` 展示。
+
+当前四动作来源对齐结果：
+
+- `elementSourceAlignmentSummary.status = all-candidate-gaps-have-action-level-external-element-divergence`。
+- `gapCount = 3`，`alignedGapCount = 3`，`divergentGapCount = 3`，缺口动作仍是【重击】【闪击】【跃击】。
+- 动作级来源为 `skill_logic.currentLevel.elementValues`，当前等级 `1`、`skillLevelRowId = 1657`、`subSkillId = 10900101`。
+- 动作级与矩阵 element 均为 `[109001081, 109001306]`，两行 `valueParam` 均是 `1#1600|7#10000`。
+- 外部来源为 `skill_control.elementBaseDatas`，最高置信度候选来自 `Skill0_6`、`subSkillId = 109001011`、`hitEffects = 11_109001_133 / 11_109001_005`。
+- 外部 DamageElement 候选为 `[109001251]`，与 action-level element 的 `overlapElementConfigIds = []`。
+- 结构化 finding 为 `skill-control-subskill-damage-element-not-in-action-level-values`。
+- 当前 unresolved 保留 `action-variant-element-selection-unconfirmed`、`skill-control-subskill-to-skill-level-bridge-unconfirmed`、`external-damage-element-level-bridge-missing`、`runtime-parameter-inheritance-or-override-unconfirmed`。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，11 条测试通过。
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+- `npm exec eslint -- --no-warn-ignored src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npm test -- --run`：通过，13 个测试文件、105 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
+- `npm exec prettier -- --check AGENTS.md PROJECT_MANUAL.md DEVELOPMENT_PLAN.md ARCHITECTURE.md DATA_STRUCTURE_CHANGES.md src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `git diff --check`：通过；仅有本机 CRLF 转换提示。
+
+当前边界：
+
+- 阶段 5-8AP 证明的是“动作级矩阵来源”和“skill_control 外部 DamageElement 来源”确实分叉，不证明运行时最终使用哪一条链。
+- 不能把 `109001251` 直接合并进 `109001081 / 109001306` 的矩阵，也不能反向用 action-level `valueParam` 覆盖 `109001251`。
+- `109001251` 仍缺等级桥接；HP、削韧、充能三条最终公式继续保持 `applied: false`。
+
+下一步：
+
+- 阶段 5-8AQ 目标：继续追 `109001251` 的运行时参数来源，确认它是固定 `formulaParamValues`、继承 action-level `valueParam`、由运行时覆盖，还是存在另一条等级配置链。
+- 优先从 AzPr Extractor / IL2CPP 侧追 `DamageElement`、`SkillElementInjector`、`FormulaParams`、`skillsub_ele_value` 交叉引用，以及 `subSkillId = 109001011` 与动作形态的真实选择规则。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

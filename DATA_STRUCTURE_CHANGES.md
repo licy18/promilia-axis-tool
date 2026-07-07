@@ -4974,3 +4974,143 @@ hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1
 - `externalElementBinding` 证明候选 PathID 能追到外部对象和 DamageElement 字段，不证明该 DamageElement 已绑定到最终 hit。
 - `109001251` 与动作级矩阵当前使用的 `109001081 / 109001306` 不一致；下一阶段必须解释这条差异，不能直接把二者合并计算。
 - `skillsub-element-level-bridge-missing` 表明 `109001251` 暂未找到当前等级 `valueParam` 覆盖点；最终公式仍保持 `applied: false`。
+
+## 69. 阶段 5-8AP：action-level 与 skill_control element 来源差异摘要
+
+阶段 5-8AP 在 HP source、hit 绑定缺口和跨动作摘要中补充 element 来源对齐信息。新增字段仍全部是 evidence-only，用于解释为什么当前动作级矩阵使用 `109001081 / 109001306`，而非普攻 skill_control 缺口候选落到 `109001251`。
+
+### 69.1 hpDamage.sourceEvidence.actionLevelElementSource
+
+`actionResultTimeline[].hpDamage.sourceEvidence` 新增：
+
+```json
+{
+  "actionLevelElementSource": {
+    "sourceKind": "skill_logic.currentLevel.elementValues",
+    "sourcePath": "skill-logic-index.json.levels.elementValues",
+    "skillsubEleValueTablePath": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/skillsub_ele_value.json",
+    "skillId": 10900101,
+    "level": 1,
+    "levelIndex": 0,
+    "subSkillId": 10900101,
+    "skillLevelRowId": 1657,
+    "elementConfigIds": [109001081, 109001306],
+    "rowCount": 2,
+    "rows": [
+      {
+        "rowId": 973,
+        "elementConfigId": 109001081,
+        "valueParam": "1#1600|7#10000"
+      },
+      {
+        "rowId": 985,
+        "elementConfigId": 109001306,
+        "valueParam": "1#1600|7#10000"
+      }
+    ],
+    "applied": false
+  }
+}
+```
+
+该字段只记录动作级 `skill_logic.currentLevel.elementValues` 的来源，不表示这些行已经绑定到每个 hit 或最终公式。
+
+### 69.2 actionSummaries[].hitBindingGap.elementSourceAlignment
+
+`summary.formulaExecutionMatrixSummary.actionSummaries[].hitBindingGap` 新增：
+
+```json
+{
+  "elementSourceAlignment": {
+    "status": "external-damage-elements-diverge-from-action-level-elements",
+    "actionLevelSourceKind": "skill_logic.currentLevel.elementValues",
+    "actionLevelSkillId": 10900101,
+    "actionLevelSubSkillId": 10900101,
+    "actionLevelElementConfigIds": [109001081, 109001306],
+    "matrixElementConfigIds": [109001081, 109001306],
+    "externalElementSourceKind": "skill_control.elementBaseDatas",
+    "externalStateNames": ["Skill0_6"],
+    "externalSubSkillIds": [109001011],
+    "externalHitEffects": ["11_109001_133", "11_109001_005"],
+    "externalDamageElementConfigIds": [109001251],
+    "overlapElementConfigIds": [],
+    "actionLevelOnlyElementConfigIds": [109001081, 109001306],
+    "externalOnlyElementConfigIds": [109001251],
+    "matrixMatchesActionLevel": true,
+    "externalSkillLevelBridgeStatuses": [
+      "skillsub-element-level-bridge-missing"
+    ],
+    "finding": "skill-control-subskill-damage-element-not-in-action-level-values",
+    "unresolved": [
+      "action-variant-element-selection-unconfirmed",
+      "skill-control-subskill-to-skill-level-bridge-unconfirmed",
+      "external-damage-element-level-bridge-missing",
+      "runtime-parameter-inheritance-or-override-unconfirmed"
+    ],
+    "applied": false
+  }
+}
+```
+
+`status` 当前可见值：
+
+- `external-damage-elements-diverge-from-action-level-elements`：外部 DamageElement 与动作级 element 均存在，但没有重叠。
+- `external-damage-elements-overlap-action-level-elements`：两侧存在重叠。
+- `external-damage-elements-match-action-level-elements`：外部 DamageElement 完全落在动作级 element 集合中。
+- `action-level-or-external-element-source-missing`：缺少其中一侧来源。
+
+### 69.3 hitBindingGapSummary.elementSourceAlignmentSummary
+
+四动作样本当前输出：
+
+```json
+{
+  "status": "all-candidate-gaps-have-action-level-external-element-divergence",
+  "gapCount": 3,
+  "alignedGapCount": 3,
+  "divergentGapCount": 3,
+  "overlappingGapCount": 0,
+  "missingGapCount": 0,
+  "actionLevelElementConfigIds": [109001081, 109001306],
+  "matrixElementConfigIds": [109001081, 109001306],
+  "externalDamageElementConfigIds": [109001251],
+  "overlapElementConfigIds": [],
+  "actionLevelOnlyElementConfigIds": [109001081, 109001306],
+  "externalOnlyElementConfigIds": [109001251],
+  "actionLevelSubSkillIds": [10900101],
+  "externalSubSkillIds": [109001011],
+  "externalStateNames": ["Skill0_6"],
+  "externalHitEffects": ["11_109001_133", "11_109001_005"],
+  "externalSkillLevelBridgeStatuses": ["skillsub-element-level-bridge-missing"],
+  "findings": [
+    "skill-control-subskill-damage-element-not-in-action-level-values"
+  ],
+  "unresolved": [
+    "action-variant-element-selection-unconfirmed",
+    "skill-control-subskill-to-skill-level-bridge-unconfirmed",
+    "external-damage-element-level-bridge-missing",
+    "runtime-parameter-inheritance-or-override-unconfirmed"
+  ],
+  "applied": false
+}
+```
+
+### 69.4 Workbench 摘要
+
+当存在来源分叉时，`AnalysisPanel` 的跨动作矩阵摘要会追加：
+
+```text
+来源差异 3/3
+```
+
+单个重击动作切换时会显示：
+
+```text
+hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 来源差异 1/1
+```
+
+### 69.5 当前边界
+
+- `elementSourceAlignment` 只解释两条证据链的来源差异，不决定最终 runtime 采用哪一组 element。
+- 不能把 `109001251` 直接合并到 action-level 矩阵，也不能用 `109001081 / 109001306` 的 `valueParam` 直接覆盖 `109001251`。
+- 下一阶段应追 `109001251` 的运行时参数来源：固定 `formulaParamValues`、继承 action-level `valueParam`、运行时覆盖或另一条等级配置链。
