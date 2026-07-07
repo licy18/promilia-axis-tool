@@ -167,15 +167,19 @@ function compileAction(action, actorsById, enemy, skillsById) {
   const actor = actorsById.get(action.actorId);
   const skill = skillsById.get(Number(action.skillId));
   const damageSegments = parseDamageSegments(action);
+  const actionVariantIndex = Number(action.actionVariantIndex ?? action.damageSegmentIndex);
   const selectedDamageSegment =
     damageSegments.find(
-      segment => Number(segment.index) === Number(action.damageSegmentIndex)
+      segment => Number(segment.index) === actionVariantIndex
     ) ??
     damageSegments[0] ??
     null;
 
   return {
     ...action,
+    actionVariantIndex: selectedDamageSegment?.index ?? actionVariantIndex,
+    actionVariants: damageSegments,
+    selectedActionVariant: selectedDamageSegment,
     actor,
     target: action.targetId === enemy.id ? enemy : null,
     source: {

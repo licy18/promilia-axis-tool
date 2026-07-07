@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { getWorkbenchGameData } from '../../domain/workbenchProjectFactory';
 import {
+  SKILL_ACTION_VARIANT_SOURCE_KIND,
   SKILL_DAMAGE_SEGMENT_SOURCE_KIND,
   createSkillDamageModel,
+  resolveSkillActionVariants,
   resolveSkillDamageSegments,
 } from '../../domain/skillDamageSegments';
 import {
@@ -11,12 +13,13 @@ import {
   resolveSkillLevelCrossCheck,
 } from '../../domain/skillLevelCrossCheck';
 
-describe('skill damage segment adapter', () => {
-  it('resolves AzPr hero-module skill level values with source metadata', () => {
+describe('skill action variant adapter', () => {
+  it('resolves AzPr hero-module skill level values as action variants with source metadata', () => {
     const skill = getWorkbenchGameData().skills.find((item) => item.id === 10900101);
-    const resolved = resolveSkillDamageSegments(skill, 1);
+    const resolved = resolveSkillActionVariants(skill, 1);
 
-    expect(resolved.sourceKind).toBe(SKILL_DAMAGE_SEGMENT_SOURCE_KIND);
+    expect(SKILL_DAMAGE_SEGMENT_SOURCE_KIND).toBe(SKILL_ACTION_VARIANT_SOURCE_KIND);
+    expect(resolved.sourceKind).toBe(SKILL_ACTION_VARIANT_SOURCE_KIND);
     expect(resolved.sourcePath).toContain('BWiki/data/hero-modules/local-all/109001.hero-module.local.json');
     expect(resolved.fieldPaths).toMatchObject({
       labels: 'skillSystem.10900101.skillLevel.name',
@@ -24,6 +27,7 @@ describe('skill damage segment adapter', () => {
       description: 'skillSystem.10900101.skillDescribe',
     });
     expect(resolved.diagnostics).toEqual([]);
+    expect(resolved.segments).toBe(resolved.variants);
     expect(resolved.crossCheck).toMatchObject({
       sourceKind: SKILL_LEVEL_CROSSCHECK_SOURCE_KIND,
       status: 'matched',
@@ -43,14 +47,36 @@ describe('skill damage segment adapter', () => {
         values: true,
       },
     });
-    expect(resolved.segments.map((segment) => [segment.label, segment.rawValue, segment.multiplier])).toEqual([
-      ['普攻', '649%', 6.49],
-      ['重击', '190%', 1.9],
-      ['闪击', '40%', 0.4],
-      ['跃击', '136%', 1.36],
+    expect(resolved.variants.map((variant) => [variant.kind, variant.label, variant.rawValue, variant.multiplier])).toEqual([
+      ['normal-attack', '普攻', '649%', 6.49],
+      ['charged-attack', '重击', '190%', 1.9],
+      ['dodge-attack', '闪击', '40%', 0.4],
+      ['plunging-attack', '跃击', '136%', 1.36],
     ]);
-    expect(resolved.segments[0].source).toMatchObject({
-      kind: SKILL_DAMAGE_SEGMENT_SOURCE_KIND,
+    expect(resolved.variants[0]).toMatchObject({
+      displayLabel: '普通攻击',
+      descriptionSection: {
+        title: '普通攻击',
+      },
+      hitModel: {
+        kind: 'normal-attack',
+        source: 'description',
+        hitCount: 5,
+        totalRawValue: '649%',
+        totalMultiplier: 6.49,
+        distributionStatus: 'total-only',
+      },
+    });
+    expect(resolved.variants[0].hitSegments).toHaveLength(5);
+    expect(resolved.variants[0].hitSegments[0]).toMatchObject({
+      label: '普攻 1段',
+      rawValue: null,
+      multiplier: null,
+      totalRawValue: '649%',
+      sourceStatus: 'description-hit-count-only',
+    });
+    expect(resolved.variants[0].source).toMatchObject({
+      kind: SKILL_ACTION_VARIANT_SOURCE_KIND,
       skillId: 10900101,
       characterId: 109001,
       level: 1,
@@ -71,8 +97,8 @@ describe('skill damage segment adapter', () => {
     const model = createSkillDamageModel(skill, 99);
 
     expect(model).toMatchObject({
-      source: SKILL_DAMAGE_SEGMENT_SOURCE_KIND,
-      sourceKind: SKILL_DAMAGE_SEGMENT_SOURCE_KIND,
+      source: SKILL_ACTION_VARIANT_SOURCE_KIND,
+      sourceKind: SKILL_ACTION_VARIANT_SOURCE_KIND,
       skillId: 10900101,
       characterId: 109001,
       level: 12,
@@ -80,6 +106,9 @@ describe('skill damage segment adapter', () => {
     });
     expect(model.sourcePath).toContain('109001.hero-module.local.json');
     expect(model.values).toEqual(['1363%', '399%', '84%', '286%']);
+    expect(model.variants.map((variant) => variant.rawValue)).toEqual(model.values);
+    expect(model.actionVariants).toBe(model.variants);
+    expect(model.segments).toBe(model.variants);
     expect(model.crossCheck).toMatchObject({
       status: 'matched',
       rowId: 1668,
@@ -132,8 +161,8 @@ describe('skill damage segment adapter', () => {
       1,
     );
 
-    expect(resolved.segments).toHaveLength(1);
-    expect(resolved.segments[0]).toMatchObject({
+    expect(resolved.variants).toHaveLength(1);
+    expect(resolved.variants[0]).toMatchObject({
       index: 1,
       label: '可用值',
       rawValue: '250%',

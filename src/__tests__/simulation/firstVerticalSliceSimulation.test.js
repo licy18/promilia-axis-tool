@@ -36,9 +36,16 @@ describe('first vertical slice simulation', () => {
     expect(scenario.actions[0].selectedDamageSegment.multiplier).toBeCloseTo(
       6.49
     );
+    expect(scenario.actions[0].selectedActionVariant).toBe(
+      scenario.actions[0].selectedDamageSegment
+    );
+    expect(scenario.actions[0].selectedDamageSegment.hitModel).toMatchObject({
+      hitCount: 5,
+      distributionStatus: 'total-only',
+    });
     expect(scenario.actions[0].damageModel).toMatchObject({
-      source: 'azpr-local-hero-module-skill-level',
-      sourceKind: 'azpr-local-hero-module-skill-level',
+      source: 'azpr-local-hero-module-skill-level-action-variant',
+      sourceKind: 'azpr-local-hero-module-skill-level-action-variant',
       skillId: 10900101,
       characterId: 109001,
       fieldPaths: {
@@ -102,7 +109,7 @@ describe('first vertical slice simulation', () => {
       unmatchedParamIds: [1, 7],
     });
     expect(scenario.actions[0].selectedDamageSegment.source).toMatchObject({
-      kind: 'azpr-local-hero-module-skill-level',
+      kind: 'azpr-local-hero-module-skill-level-action-variant',
       skillId: 10900101,
       characterId: 109001,
       valueField: 'skillSystem.10900101.skillLevel.values[0][0]',
@@ -115,7 +122,7 @@ describe('first vertical slice simulation', () => {
       valueParamLink: {
         segmentIndex: 0,
         rawValue: '649%',
-        status: 'unmatched',
+          status: 'unmatched',
         unmatchedParamIds: [1, 7],
       },
     });
@@ -148,7 +155,7 @@ describe('first vertical slice simulation', () => {
       timingAccuracy: 'placeholder',
       segment: {
         source: {
-          kind: 'azpr-local-hero-module-skill-level',
+          kind: 'azpr-local-hero-module-skill-level-action-variant',
           valueField: 'skillSystem.10900101.skillLevel.values[0][0]',
           crossCheck: {
             kind: 'azpr-newtable-skill-level-crosscheck',
@@ -291,10 +298,11 @@ describe('first vertical slice simulation', () => {
   it('preserves generated skill segment batch metadata through compilation', () => {
     const generationBatch = {
       batchId: 'segment-batch-test',
-      source: 'skill-segment-split',
+      source: 'skill-action-variant-split',
       skillId: 10900101,
       actorCharacterId: 109001,
       level: 1,
+      variantCount: 2,
       segmentCount: 2,
       createdAt: '2026-07-07T00:00:00.000Z',
     };

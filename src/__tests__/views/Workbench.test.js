@@ -177,7 +177,7 @@ describe('Workbench view', () => {
     ).toBe('unmatched');
     expect(
       wrapper.find('[data-testid="workbench-skill-value-param-link"]').text()
-    ).toContain('倍率段 普攻 / 649%');
+    ).toContain('动作形态倍率 普攻 / 649%');
     expect(
       wrapper.find('[data-testid="workbench-skill-value-param-link"]').text()
     ).toContain('未解释参数 1, 7');
@@ -210,7 +210,7 @@ describe('Workbench view', () => {
     ).toContain('显示 CD 13000ms / SP 0，逻辑 CD 20000ms / SP 0');
     expect(
       wrapper.find('[data-testid="workbench-skill-value-param-link"]').text()
-    ).toContain('倍率段 星鸣技 / 180%');
+    ).toContain('动作形态倍率 星鸣技 / 180%');
     expect(
       wrapper.find('[data-testid="workbench-skill-value-param-link"]').text()
     ).toContain('未解释参数 1, 7');
@@ -260,7 +260,7 @@ describe('Workbench view', () => {
     ).toContain('语义未确认');
   });
 
-  it('selects a skill damage segment and saves the projection choice', async () => {
+  it('selects a skill action variant and saves the projection choice', async () => {
     const wrapper = mount(Workbench, {
       global: {
         stubs: {
@@ -279,7 +279,7 @@ describe('Workbench view', () => {
 
     expect(segmentSelect.element.value).toBe('0');
     expect(segmentOptions).toEqual(
-      expect.arrayContaining(['普攻 / 649%', '重击 / 190%'])
+      expect.arrayContaining(['普通攻击 / 649% / 普攻5段总值', '重击 / 190%'])
     );
 
     await segmentSelect.setValue('1');
@@ -301,11 +301,12 @@ describe('Workbench view', () => {
     expect(savedDraft.actionDrafts[0]).toMatchObject({
       id: 'action-0001',
       skillId: workbenchSeed.defaults.skillId,
+      actionVariantIndex: 1,
       damageSegmentIndex: 1,
     });
   });
 
-  it('splits a skill into per-segment draft actions from the action library', async () => {
+  it('splits a skill into per-action-variant draft actions from the action library', async () => {
     const wrapper = mount(Workbench, {
       global: {
         stubs: {
@@ -325,7 +326,7 @@ describe('Workbench view', () => {
       wrapper,
       workbenchSeed.defaults.skillId
     );
-    expect(splitButton.text()).toBe('拆段 4');
+    expect(splitButton.text()).toBe('形态 4');
     expect(splitButton.attributes('disabled')).toBeUndefined();
 
     await splitButton.trigger('click');
@@ -422,6 +423,9 @@ describe('Workbench view', () => {
     expect(generatedActions.map(action => action.damageSegmentIndex)).toEqual([
       0, 1, 2, 3,
     ]);
+    expect(generatedActions.map(action => action.actionVariantIndex)).toEqual([
+      0, 1, 2, 3,
+    ]);
     expect(generatedActions.map(action => action.startMs)).toEqual([
       4000, 6000, 8000, 10000,
     ]);
@@ -434,10 +438,11 @@ describe('Workbench view', () => {
       'segment-batch-0001',
     ]);
     expect(generatedActions[0].generationBatch).toMatchObject({
-      source: 'skill-segment-split',
+      source: 'skill-action-variant-split',
       skillId: workbenchSeed.defaults.skillId,
       actorCharacterId: workbenchSeed.defaults.characterId,
       level: 1,
+      variantCount: 4,
       segmentCount: 4,
     });
     expect(generatedActions[0].generationBatch.createdAt).toEqual(
@@ -457,7 +462,7 @@ describe('Workbench view', () => {
       null,
       null,
     ]);
-    expect(generatedActions[1].note).toContain('倍率段拆分：重击 / 190%');
+    expect(generatedActions[1].note).toContain('动作形态拆分：重击 / 190%');
     expect(generatedActions[1].note).toContain('非真实命中帧');
   });
 

@@ -11,9 +11,9 @@ import {
   createSwitchAction,
   createWaitAction,
 } from './projectSchema';
-import { getSkillDamageSegments } from './skillDamageSegments';
+import { getSkillActionVariants, getSkillDamageSegments } from './skillDamageSegments';
 
-export { getSkillDamageSegments } from './skillDamageSegments';
+export { getSkillActionVariants, getSkillDamageSegments } from './skillDamageSegments';
 
 const DEFAULT_SECONDARY_CHARACTER_ID =
   workbenchSeed.gameData.characters.find((character) => character.id !== workbenchSeed.defaults.characterId)?.id ??
@@ -55,6 +55,7 @@ export function createWorkbenchActionDraft({
   durationMs = 1000,
   level = 1,
   damageSegmentIndex = 0,
+  actionVariantIndex = damageSegmentIndex,
   targetCharacterId = DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId,
   resource = 'sp',
   change = 50,
@@ -64,6 +65,7 @@ export function createWorkbenchActionDraft({
   insertion = null,
   generationBatch = null,
 } = {}) {
+  const normalizedActionVariantIndex = Math.max(0, Number(actionVariantIndex ?? damageSegmentIndex) || 0);
   return {
     id,
     type,
@@ -72,7 +74,8 @@ export function createWorkbenchActionDraft({
     startMs: Number(startMs) || 0,
     durationMs: Math.max(1, Number(durationMs) || 1000),
     level: Math.max(1, Number(level) || 1),
-    damageSegmentIndex: Math.max(0, Number(damageSegmentIndex) || 0),
+    actionVariantIndex: normalizedActionVariantIndex,
+    damageSegmentIndex: normalizedActionVariantIndex,
     targetCharacterId: Number(targetCharacterId) || DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId,
     resource,
     change: Number(change) || 0,
@@ -209,6 +212,7 @@ export function normalizeWorkbenchActionDrafts(
           durationMs: draft.durationMs,
           level: draft.level,
           damageSegmentIndex: draft.damageSegmentIndex,
+          actionVariantIndex: draft.actionVariantIndex,
           targetCharacterId: draft.targetCharacterId ?? selection.secondaryCharacterId,
           resource: draft.resource,
           change: draft.change,
@@ -230,7 +234,11 @@ export function normalizeWorkbenchActionDrafts(
         startMs: draft.startMs,
         durationMs: draft.durationMs,
         level: clampLevel(draft.level, skill),
-        damageSegmentIndex: clampDamageSegmentIndex(draft.damageSegmentIndex, skill, draft.level),
+        actionVariantIndex: clampActionVariantIndex(
+          draft.actionVariantIndex ?? draft.damageSegmentIndex,
+          skill,
+          draft.level,
+        ),
         targetCharacterId: draft.targetCharacterId ?? selection.secondaryCharacterId,
         resource: draft.resource,
         change: draft.change,
@@ -315,7 +323,8 @@ function createProjectActionFromDraft(draft, actorsByCharacterId, primaryCharact
     startMs: draft.startMs,
     durationMs: draft.durationMs,
     level: draft.level,
-    damageSegmentIndex: draft.damageSegmentIndex,
+    actionVariantIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
+    damageSegmentIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
     note: draft.note || '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
     insertion: draft.insertion,
     generationBatch: draft.generationBatch,
@@ -378,8 +387,12 @@ function clampLevel(level, skill) {
 }
 
 function clampDamageSegmentIndex(damageSegmentIndex, skill, level) {
-  const segmentCount = Math.max(1, getSkillDamageSegments(skill, level).length);
-  return Math.min(segmentCount - 1, Math.max(0, Number(damageSegmentIndex) || 0));
+  return clampActionVariantIndex(damageSegmentIndex, skill, level);
+}
+
+function clampActionVariantIndex(actionVariantIndex, skill, level) {
+  const segmentCount = Math.max(1, getSkillActionVariants(skill, level).length);
+  return Math.min(segmentCount - 1, Math.max(0, Number(actionVariantIndex) || 0));
 }
 
 function normalizeWorkbenchInsertion(insertion) {
@@ -412,11 +425,12 @@ function normalizeWorkbenchGenerationBatch(generationBatch) {
 
   return {
     batchId,
-    source: generationBatch.source ? String(generationBatch.source) : 'skill-segment-split',
+    source: generationBatch.source ? String(generationBatch.source) : 'skill-action-variant-split',
     skillId: Number(generationBatch.skillId) || null,
     actorCharacterId: Number(generationBatch.actorCharacterId) || null,
     level: Math.max(1, Number(generationBatch.level) || 1),
-    segmentCount: Math.max(1, Number(generationBatch.segmentCount) || 1),
+    variantCount: Math.max(1, Number(generationBatch.variantCount ?? generationBatch.segmentCount) || 1),
+    segmentCount: Math.max(1, Number(generationBatch.variantCount ?? generationBatch.segmentCount) || 1),
     createdAt: generationBatch.createdAt ? String(generationBatch.createdAt) : null,
   };
 }

@@ -1245,3 +1245,78 @@ Workbench 技能逻辑来源区现在会展示当前参数语义状态：
 - 本阶段只解决角色面板值来源，不代表最终伤害公式完成。
 - 当前排行口径固定为 80 级、临阶 7、当前阶星赐全选；后续配装/练度编辑需要新 schema。
 - 防御、抗性、暴击、增伤、减伤、buff、装备、奇波、灵子仍需后续分层接入。
+
+## 26. 2026-07-07 技能动作形态模型修正
+
+本阶段修正技能倍率表语义：`skillLevel.name/value` 中的 `普攻`、`重击`、`闪击`、`跃击` 等不再视为“同一个技能的多段伤害”，而是技能可生成的动作形态。
+
+### 26.1 Damage model 派生字段
+
+`createSkillDamageModel()` 现在输出：
+
+```javascript
+{
+  "sourceKind": "azpr-local-hero-module-skill-level-action-variant",
+  "variants": [
+    {
+      "index": 0,
+      "actionVariantIndex": 0,
+      "kind": "normal-attack",
+      "label": "普攻",
+      "displayLabel": "普通攻击",
+      "rawValue": "649%",
+      "multiplier": 6.49,
+      "hitModel": {
+        "hitCount": 5,
+        "distributionStatus": "total-only",
+        "totalRawValue": "649%"
+      }
+    }
+  ],
+  "actionVariants": "<same as variants>",
+  "segments": "<compat alias>"
+}
+```
+
+兼容字段：
+
+- `segments` 仍保留为 `variants` 的别名，避免旧编译和测试入口一次性断裂。
+- `selectedDamageSegment` 仍保留为 `selectedActionVariant` 的兼容别名，后续可在项目 schema 版本升级时再清理命名。
+
+### 26.2 草稿索引字段
+
+技能动作草稿新增：
+
+```javascript
+{
+  "actionVariantIndex": 1,
+  "damageSegmentIndex": 1
+}
+```
+
+- 新逻辑优先读取 `actionVariantIndex`。
+- `damageSegmentIndex` 暂时保留并同步写入，用来兼容既有 `workbench-draft`。
+- `skill-segment-split` 旧批次来源仍可读取；新生成批次来源为 `skill-action-variant-split`，并新增 `variantCount`，同时保留 `segmentCount`。
+
+### 26.3 普攻段数来源
+
+普攻多段不再来自 `skillLevel.values[0]` 的拆分，因为当前数据只有总倍率。
+
+当前策略：
+
+- 从技能描述的 `【普通攻击】` 段落解析 `进行至多五段的普通攻击`。
+- 生成 `hitModel.hitCount = 5`。
+- `hitModel.distributionStatus = "total-only"`，表示只有总倍率 `649%`，每段真实倍率仍未确认。
+- 不编造 `普攻 1段` 至 `普攻 5段` 的单段倍率。
+
+### 26.4 Workbench 展示
+
+- 右侧属性面板从“伤害段”改为“动作形态”。
+- 动作库批量入口从“拆段”改为“形态”，按 `variants` 生成动作。
+- `valueParam` 关联提示从“倍率段”改为“动作形态倍率”。
+
+### 26.5 当前边界
+
+- 本阶段修正动作建模，不等于拿到了普攻每一段的真实倍率、命中帧或取消窗口。
+- 当前 raw 投影仍使用所选动作形态的总倍率。
+- 下一步真实伤害公式分层必须以 `actionVariantIndex + hitModel` 为输入，不能再把普攻、重击、闪击、跃击当成同一动作的多段命中。

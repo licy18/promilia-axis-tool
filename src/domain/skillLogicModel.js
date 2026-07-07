@@ -175,8 +175,8 @@ function createDamageParameterLinks(damageModel, elementValues) {
               unmatchedParamIds: uniqueNumbers(params.map((param) => param.paramId)),
               message:
                 status === 'unparseable'
-                  ? '技能倍率段无法解析，无法与 skillsub_ele_value.valueParam 建立数值关联。'
-                  : '技能倍率段与当前等级 valueParam 未发现直接数值匹配，暂不能把 valueParam 当作倍率公式来源。',
+                  ? '技能动作形态倍率无法解析，无法与 skillsub_ele_value.valueParam 建立数值关联。'
+                  : '技能动作形态倍率与当前等级 valueParam 未发现直接数值匹配，暂不能把 valueParam 当作倍率公式来源。',
             },
           ];
 

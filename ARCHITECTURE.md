@@ -251,6 +251,13 @@ App.vue
 - **流程**: 数据序列化 → 文件下载/上传 → 数据解析
 - **特点**: 支持 .promilia 格式、Markdown 报告、JSON 源文件
 
+### 6.7 新版工作台动作模型
+- **主链路**: `actionDrafts` → `Project.actions` → `compileProject()` → `runSimulation()`。
+- **技能动作形态**: `skillLevel.name/value` 解析为 `actionVariants`，用于表达 `普攻`、`重击`、`闪击`、`跃击` 等独立动作形态。
+- **普攻段数**: 从技能描述 `【普通攻击】` 中解析，例如 `进行至多五段的普通攻击`；当前只记录总倍率和段数，不编造每段倍率。
+- **兼容字段**: `damageSegmentIndex`、`damageSegments`、`selectedDamageSegment` 暂时作为旧命名兼容层；新逻辑优先使用 `actionVariantIndex`、`actionVariants`、`selectedActionVariant`。
+- **当前边界**: 动作形态倍率可用于 raw 投影，但真实命中帧、每段倍率、取消窗口和完整伤害公式仍需后续数据接入。
+
 ## 7. 扩展指南
 
 ### 7.1 添加新角色

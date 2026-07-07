@@ -134,7 +134,7 @@ import {
   DEFAULT_WORKBENCH_SELECTION,
   createWorkbenchActionDraft,
   createWorkbenchProject,
-  getSkillDamageSegments,
+  getSkillActionVariants,
   getSkillsForCharacter,
   getWorkbenchGameData,
   getWorkbenchSeed,
@@ -275,7 +275,12 @@ function updateAction(patch) {
     const skill = resolveSkillForActionPatch(action, normalizedPatch, nextActorCharacterId);
     const skillChanged = Number(skill.id) !== Number(action.skillId);
     const nextLevel = skillChanged ? 1 : normalizedPatch.level ?? action.level;
-    const nextDamageSegmentIndex = skillChanged ? 0 : normalizedPatch.damageSegmentIndex ?? action.damageSegmentIndex;
+    const nextActionVariantIndex = skillChanged
+      ? 0
+      : normalizedPatch.actionVariantIndex ??
+        normalizedPatch.damageSegmentIndex ??
+        action.actionVariantIndex ??
+        action.damageSegmentIndex;
 
     return createWorkbenchActionDraft({
       ...action,
@@ -284,7 +289,8 @@ function updateAction(patch) {
       actorCharacterId: nextActorCharacterId,
       startMs: clampNumber(normalizedPatch.startMs ?? action.startMs, 0, project.value.time.durationMs),
       level: clampNumber(nextLevel, 1, skill.level.values.length),
-      damageSegmentIndex: nextDamageSegmentIndex,
+      actionVariantIndex: nextActionVariantIndex,
+      damageSegmentIndex: nextActionVariantIndex,
     });
   });
   if (patch.actorCharacterId != null) {
@@ -375,6 +381,7 @@ function updateActionLane({ actionId, laneId }) {
         if (nextSkill) {
           patch.skillId = nextSkill.id;
           patch.level = 1;
+          patch.actionVariantIndex = 0;
           patch.damageSegmentIndex = 0;
         }
       }
@@ -435,8 +442,9 @@ function confirmSkillSegmentActions() {
         skillId: preview.skillId,
         actorCharacterId: preview.actorCharacterId,
         level: preview.level,
+        actionVariantIndex: item.actionVariantIndex,
         damageSegmentIndex: item.damageSegmentIndex,
-        note: `倍率段拆分：${item.label} / ${item.rawValue}；非真实命中帧。`,
+        note: `动作形态拆分：${formatActionVariantPreview(item)}；非真实命中帧。`,
         generationBatch,
       },
       {
@@ -698,10 +706,11 @@ function findSkillById(skillId) {
 function createSegmentGenerationBatch(preview) {
   return {
     batchId: createNextSegmentBatchId(),
-    source: 'skill-segment-split',
+    source: 'skill-action-variant-split',
     skillId: preview.skillId,
     actorCharacterId: preview.actorCharacterId,
     level: preview.level,
+    variantCount: preview.generatedCount,
     segmentCount: preview.generatedCount,
     createdAt: new Date().toISOString(),
   };
@@ -755,7 +764,7 @@ function createSkillSegmentSplitPreview(skillId) {
   const skill = resolveContextSkill(actorCharacterId, skillId);
   const level = resolveSkillInsertLevel(actorCharacterId, skill);
   const options = normalizeWorkbenchSegmentSplitOptions(segmentSplitOptions.value);
-  const allSegments = getSkillDamageSegments(skill, level);
+  const allSegments = getSkillActionVariants(skill, level);
   const includedSegments = allSegments.filter((segment) => {
     if (!options.skipExistingSegments) {
       return true;
@@ -764,6 +773,7 @@ function createSkillSegmentSplitPreview(skillId) {
       actorCharacterId,
       skillId: skill.id,
       level,
+      actionVariantIndex: segment.index,
       damageSegmentIndex: segment.index,
     });
   });
@@ -810,9 +820,10 @@ function simulateSegmentSplitPlacements({ actorCharacterId, skill, level, segmen
       skillId: skill.id,
       actorCharacterId,
       level,
+      actionVariantIndex: segment.index,
       damageSegmentIndex: segment.index,
       startMs: requestedStartMs,
-      note: `倍率段拆分：${segment.label} / ${segment.rawValue}；非真实命中帧。`,
+      note: `动作形态拆分：${formatActionVariantPreview(segment)}；非真实命中帧。`,
     });
     const placement = resolveInsertPlacement(candidateAction, insertIndex, simulatedDrafts);
     const simulatedAction = createWorkbenchActionDraft({
@@ -830,9 +841,12 @@ function simulateSegmentSplitPlacements({ actorCharacterId, skill, level, segmen
     insertIndex = placement.insertIndex + 1;
     previousResolvedStartMs = placement.startMs;
     actions.push({
+      actionVariantIndex: segment.index,
       damageSegmentIndex: segment.index,
       label: segment.label,
+      displayLabel: segment.displayLabel,
       rawValue: segment.rawValue,
+      hitModel: segment.hitModel,
       requestedStartMs: placement.requestedStartMs,
       resolvedStartMs: placement.startMs,
       autoDelayed: placement.autoDelayed,
@@ -843,6 +857,12 @@ function simulateSegmentSplitPlacements({ actorCharacterId, skill, level, segmen
   return {
     actions,
   };
+}
+
+function formatActionVariantPreview(variant) {
+  const hitCount = Number(variant.hitModel?.hitCount) || 1;
+  const hitSuffix = hitCount > 1 ? `；普攻 ${hitCount} 段总倍率，单段倍率待补` : '';
+  return `${variant.displayLabel ?? variant.label} / ${variant.rawValue}${hitSuffix}`;
 }
 
 function resolveSegmentSplitBaseStartMs(options) {
@@ -856,14 +876,15 @@ function resolveSegmentSplitBaseStartMs(options) {
   return clampNumber(startMs + durationMs, 0, project.value.time.durationMs);
 }
 
-function hasExistingSkillSegmentAction({ actorCharacterId, skillId, level, damageSegmentIndex }) {
+function hasExistingSkillSegmentAction({ actorCharacterId, skillId, level, actionVariantIndex, damageSegmentIndex }) {
+  const selectedIndex = actionVariantIndex ?? damageSegmentIndex;
   return actionDrafts.value.some(
     (action) =>
       action.type === ACTION_TYPES.SKILL &&
       Number(action.actorCharacterId) === Number(actorCharacterId) &&
       Number(action.skillId) === Number(skillId) &&
       Number(action.level) === Number(level) &&
-      Number(action.damageSegmentIndex) === Number(damageSegmentIndex),
+      Number(action.actionVariantIndex ?? action.damageSegmentIndex) === Number(selectedIndex),
   );
 }
 
@@ -1103,6 +1124,11 @@ function resolveSkillInsertLevel(actorCharacterId, skill) {
 
 function normalizeActionPatch(action, patch) {
   const normalizedPatch = { ...patch };
+  if (normalizedPatch.actionVariantIndex != null || normalizedPatch.damageSegmentIndex != null) {
+    const actionVariantIndex = Number(normalizedPatch.actionVariantIndex ?? normalizedPatch.damageSegmentIndex);
+    normalizedPatch.actionVariantIndex = actionVariantIndex;
+    normalizedPatch.damageSegmentIndex = actionVariantIndex;
+  }
   if (normalizedPatch.actorCharacterId != null) {
     normalizedPatch.actorCharacterId = Number(normalizedPatch.actorCharacterId);
 

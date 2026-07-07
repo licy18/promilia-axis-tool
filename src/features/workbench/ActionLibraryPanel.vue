@@ -60,7 +60,7 @@
 
     <div class="segment-options">
       <label>
-        <span>拆段间隔 ms</span>
+        <span>动作间隔 ms</span>
         <input
           type="number"
           min="100"
@@ -87,7 +87,7 @@
           :checked="segmentSplitOptions.skipExistingSegments"
           @change="emitSegmentSplitOption('skipExistingSegments', $event.target.checked)"
         />
-        <span>跳过已有段</span>
+        <span>跳过已有动作</span>
       </label>
     </div>
 
@@ -117,7 +117,7 @@
           :title="formatSkillSplitTitle(skill)"
           @click="$emit('preview-skill-segment-actions', skill.id)"
         >
-          拆段 {{ getSkillSegmentCount(skill) }}
+          形态 {{ getSkillSegmentCount(skill) }}
         </button>
       </div>
     </div>
@@ -161,12 +161,12 @@
           data-testid="workbench-segment-preview-item"
           :data-segment-index="action.damageSegmentIndex"
         >
-          <span>{{ action.label }} / {{ action.rawValue }}</span>
+          <span>{{ formatActionVariantPreview(action) }}</span>
           <small>{{ formatPreviewRange(action) }}</small>
         </li>
       </ul>
       <p v-else class="segment-preview-empty" data-testid="workbench-segment-preview-empty">
-        没有可生成段
+        没有可生成动作
       </p>
       <div class="segment-preview-actions">
         <button
@@ -380,7 +380,7 @@
 <script setup>
 import { computed, reactive } from 'vue';
 import { Collection } from '@element-plus/icons-vue';
-import { getSkillDamageSegments } from '../../domain/workbenchProjectFactory';
+import { getSkillActionVariants } from '../../domain/workbenchProjectFactory';
 
 const props = defineProps({
   actor: {
@@ -524,7 +524,7 @@ function actionTypeLabel(type) {
 
 function actionDetailLabel(action) {
   if (action.type === 'skill') {
-    return '倍率';
+    return '动作';
   }
   if (action.type === 'resource') {
     return '变化';
@@ -543,7 +543,7 @@ function actionDetailValue(action) {
     if (!action.selectedDamageSegment) {
       return '待补';
     }
-    return `${action.selectedDamageSegment.label} / ${action.selectedDamageSegment.rawValue}`;
+    return formatActionVariantPreview(action.selectedDamageSegment);
   }
   if (action.type === 'resource') {
     return `${String(action.resource ?? 'sp').toUpperCase()} ${formatSigned(action.change)}`;
@@ -581,18 +581,27 @@ function resolveBatchSkillName(batch, action) {
 
 function formatBatchSource(source) {
   if (source === 'skill-segment-split') {
-    return '拆段生成';
+    return '旧动作形态生成';
+  }
+  if (source === 'skill-action-variant-split') {
+    return '动作形态生成';
   }
   return source || '批次生成';
 }
 
 function getSkillSegmentCount(skill) {
-  return getSkillDamageSegments(skill, 1).length;
+  return getSkillActionVariants(skill, 1).length;
 }
 
 function formatSkillSplitTitle(skill) {
   const count = getSkillSegmentCount(skill);
-  return count > 1 ? `按 ${count} 个倍率段生成动作` : '该技能只有一个可解析倍率段';
+  return count > 1 ? `按 ${count} 个动作形态生成动作` : '该技能只有一个可解析动作形态';
+}
+
+function formatActionVariantPreview(action) {
+  const hitCount = Number(action.hitModel?.hitCount) || 1;
+  const hitSuffix = hitCount > 1 ? `；${hitCount} 段总倍率` : '';
+  return `${action.displayLabel ?? action.label} / ${action.rawValue}${hitSuffix}`;
 }
 
 function emitSegmentSplitOption(key, value) {
@@ -658,7 +667,7 @@ function formatPreviewRange(action) {
 }
 
 function formatGenerationBatch(batch) {
-  return `拆段批次 ${batch.batchId} / ${batch.segmentCount} 段`;
+  return `动作形态批次 ${batch.batchId} / ${batch.variantCount ?? batch.segmentCount} 个`;
 }
 
 function formatInsertionNote(insertion) {

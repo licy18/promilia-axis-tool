@@ -1899,9 +1899,42 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 
 下一步：
 
-- 阶段 5-8 目标：建立真实伤害公式分层雏形。
-- 先在 `src/simulation/mechanics/` 中拆出攻击区、倍率区、防御/抗性占位、暴击/增伤占位和数据来源标签。
-- 用当前面板攻击、技能倍率段、敌人防御面板建立第一版可诊断公式链；未确认字段必须输出 limitation，不伪装成最终伤害。
+- 阶段 5-8A 目标：先修正技能动作形态模型，避免把普攻、重击、闪击、跃击误当成同一技能的多段伤害。
+- 从技能描述 `【普通攻击】` 中解析普攻段数，只记录段数与总倍率，不编造每段倍率。
+- 在 Workbench 中把“伤害段/倍率段”入口改为“动作形态”，保留旧字段兼容草稿。
+- 完成后再进入阶段 5-8B：建立真实伤害公式分层雏形。
+
+### 2026-07-07：阶段 5-8A 技能动作形态模型修正落地
+
+本轮完成：
+
+- 修正 `src/domain/skillDamageSegments.js` 语义：`skillLevel.name/value` 现在解析为 `variants/actionVariants`，`segments` 仅作为兼容别名保留。
+- `普攻`、`重击`、`闪击`、`跃击` 被视为不同动作形态；其中 `闪击` 归类为闪避攻击形态，`跃击` 归类为下落/空中攻击形态。
+- `workbench-seed.json` 补入技能 `description` 和 `skillType`；`scripts/generate-azpr-data.mjs` 的 `compactSkill()` 同步保留这些字段，后续重新生成不会丢失描述。
+- 从 `10900101 哈库茵剑舞` 的 `【普通攻击】进行至多五段的普通攻击` 描述中解析出 `hitModel.hitCount = 5`。
+- 普攻 `649%` 明确标记为总倍率：`distributionStatus = total-only`，不拆出虚假的每段倍率。
+- 新增 `actionVariantIndex`，并继续同步 `damageSegmentIndex` 兼容已有草稿；新批次来源改为 `skill-action-variant-split`，同时保留 `segmentCount` 兼容旧批次逻辑。
+- Workbench 右侧属性面板、动作库批量生成、批次说明和 `valueParam` 关联提示都改为“动作形态”口径。
+- 编译后的场景新增 `actionVariants` 与 `selectedActionVariant`，同时保留 `damageSegments` 与 `selectedDamageSegment` 兼容既有投影链路。
+- 更新领域、模拟和 Workbench 测试，覆盖普攻 5 段描述解析、动作形态生成、草稿保存和旧字段兼容。
+
+验收结果：
+
+- `npm run test -- --run`：通过，12 个测试文件、107 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1352 KB，后续仍需做数据拆包/懒加载。
+- `git diff --check`：通过；仅有仓库既有 LF/CRLF 工作区提示。
+
+当前边界：
+
+- 当前仍没有每段普攻的真实倍率、命中帧、动作帧或取消窗口。
+- `hitModel` 只说明普攻有多少段，以及当前只有总倍率可用；伤害投影仍按所选动作形态总倍率计算。
+- 旧字段名 `damageSegmentIndex`、`selectedDamageSegment`、`damageSegments` 仍保留为兼容层，后续 schema 升级时应逐步迁移。
+
+下一步：
+
+- 阶段 5-8B 目标：建立真实伤害公式分层雏形。
+- 以 `actionVariantIndex + hitModel + 当前角色面板` 为输入，拆出攻击区、动作形态倍率区、防御/抗性占位、暴击/增伤占位和数据来源标签。
+- 用当前面板攻击、动作形态总倍率、敌人防御面板建立第一版可诊断公式链；未确认字段必须输出 limitation，不伪装成最终伤害。
 - 随后再回到 `elementId -> asset/公式/效果节点` 追踪，把命中段和公式节点补到技能逻辑模型中。
 
 ## 10. 文档维护规则

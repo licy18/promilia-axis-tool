@@ -167,18 +167,18 @@
       </label>
 
       <label v-if="isSkillAction">
-        <span>伤害段</span>
+        <span>动作形态</span>
         <select
           data-testid="workbench-damage-segment-select"
           :value="selectedDamageSegmentIndex"
-          @change="emitActionPatch('damageSegmentIndex', $event.target.value)"
+          @change="emitActionPatch('actionVariantIndex', $event.target.value)"
         >
           <option
             v-for="segment in damageSegmentOptions"
             :key="segment.index"
             :value="segment.index"
           >
-            {{ segment.label }} / {{ segment.rawValue }}
+            {{ formatActionVariantOption(segment) }}
           </option>
         </select>
       </label>
@@ -298,7 +298,7 @@
         data-testid="workbench-skill-value-param-link"
         :data-link-status="selectedDamageParameterLink.status"
       >
-        倍率段 {{ selectedDamageParameterLink.label }} /
+        动作形态倍率 {{ selectedDamageParameterLink.label }} /
         {{ selectedDamageParameterLink.rawValue }}：
         {{ valueParamLinkLabel }}
       </p>
@@ -461,6 +461,7 @@ const damageSegmentOptions = computed(() =>
 const selectedDamageSegmentIndex = computed(() => {
   return (
     props.selectedAction.selectedDamageSegment?.index ??
+    props.selectedAction.actionVariantIndex ??
     props.selectedAction.damageSegmentIndex ??
     0
   );
@@ -626,7 +627,7 @@ const secondaryControlLabel = computed(() => {
 });
 const selectedActionSummary = computed(() => {
   if (isSkillAction.value) {
-    return props.selectedAction.selectedDamageSegment?.rawValue ?? '倍率待补';
+    return formatActionVariantOption(props.selectedAction.selectedDamageSegment) || '倍率待补';
   }
   if (isWaitAction.value) {
     return `${props.selectedAction.durationMs ?? 0}ms`;
@@ -660,6 +661,7 @@ function emitActionPatch(key, value) {
   const patch = { [key]: number };
   if (key === 'skillId') {
     patch.level = 1;
+    patch.actionVariantIndex = 0;
     patch.damageSegmentIndex = 0;
   }
   emit('update-action', patch);
@@ -701,6 +703,15 @@ function formatAttributeDetail(attribute) {
     return '';
   }
   return `黑字 ${attribute.fixedPanelValue} / 绿字 +${attribute.percentBonusValue}`;
+}
+
+function formatActionVariantOption(segment) {
+  if (!segment) {
+    return '';
+  }
+  const hitCount = Number(segment.hitModel?.hitCount) || 1;
+  const hitSuffix = hitCount > 1 ? ` / 普攻${hitCount}段总值` : '';
+  return `${segment.displayLabel ?? segment.label} / ${segment.rawValue}${hitSuffix}`;
 }
 
 function resolveCharacterName(characterId) {

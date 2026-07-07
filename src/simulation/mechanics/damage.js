@@ -9,6 +9,20 @@ export function parsePercentMultiplier(value) {
 }
 
 export function parseDamageSegments(action) {
+  if (Array.isArray(action.damageModel?.variants) && action.damageModel.variants.length > 0) {
+    return action.damageModel.variants.map((variant) => ({
+      ...variant,
+      index: Number(variant.index),
+      actionVariantIndex: Number(variant.actionVariantIndex ?? variant.index),
+      source: createDamageSegmentSource(
+        action.damageModel,
+        Number(variant.index),
+        action.logicModel,
+        variant.source
+      ),
+    }));
+  }
+
   const labels = action.damageModel?.labels ?? [];
   const values = action.damageModel?.values ?? [];
 
@@ -27,14 +41,25 @@ export function parseDamageSegments(action) {
         source: createDamageSegmentSource(
           action.damageModel,
           index,
-          action.logicModel
+          action.logicModel,
+          null
         ),
       };
     })
     .filter(Boolean);
 }
 
-function createDamageSegmentSource(damageModel = {}, index, logicModel = null) {
+function createDamageSegmentSource(damageModel = {}, index, logicModel = null, variantSource = null) {
+  if (variantSource) {
+    return {
+      ...variantSource,
+      valueParamLink:
+        logicModel?.damageParameterLinks?.find(
+          link => Number(link.segmentIndex) === Number(index)
+        ) ?? null,
+    };
+  }
+
   const fieldPaths = damageModel.fieldPaths ?? {};
   return {
     kind: damageModel.sourceKind ?? damageModel.source ?? 'unknown',
