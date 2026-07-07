@@ -2667,3 +2667,105 @@ Workbench 分析面板三值来源当前会显示：
 
 - 这些字段只是把 5-8O 的槽位关系带入动作结果和 UI，不应用最终公式。
 - 下一阶段需要继续确认 `function_1/function_2` 的公式入口和执行链，否则不能把 A/G 候选推进到 applied 层。
+
+## 42. 2026-07-08 TDamageElementParams formulaFunctionEvidence
+
+阶段 5-8Q 在 `skill-asset-evidence.json.damageElementFieldMappingEvidence` 中新增 `hpDamage.formulaFunctionEvidence`，用于记录 `TDamageElementParams.formulaParams.function_1/function_2` 到 `element_formula.id` 的候选公式行。
+
+### 42.1 summary 新增字段
+
+```javascript
+{
+  "formulaFunctionCheckedObjects": 3,
+  "formulaFunctionDirectElementFormulaObjects": 3,
+  "formulaFunctionRefs": 6,
+  "formulaFunctionMatchedRefs": 6,
+  "formulaFunctionUnmatchedRefs": 0,
+  "formulaFunctionUniqueIds": [1, 2]
+}
+```
+
+含义：
+
+- `formulaFunctionCheckedObjects`：包含可检查 `function_1/function_2` 的 `TDamageElementParams` 对象数。
+- `formulaFunctionRefs`：检查到的 function 引用条数；当前 3 个对象各 2 条，共 6 条。
+- `formulaFunctionMatchedRefs` / `formulaFunctionUnmatchedRefs`：functionId 是否能在 `element_formula.id` 中找到同 ID 行。
+- `formulaFunctionUniqueIds`：当前命中的唯一 functionId；末音 `10900101` 为 `[1, 2]`。
+
+### 42.2 hpDamage.formulaFunctionEvidence
+
+每个 `fieldMappings[].hpDamage` 新增：
+
+```javascript
+{
+  "formulaFunctionEvidence": {
+    "status": "direct-element-formula-id-candidates-found",
+    "relationStatus": "function-id-matches-element_formula-id-candidate",
+    "applied": false,
+    "functionRefs": [
+      {
+        "field": "function_1",
+        "functionId": 1,
+        "status": "element_formula-row-found",
+        "elementFormulaRow": {
+          "id": 1,
+          "functionOutput": "G/10000",
+          "variables": ["G"]
+        },
+        "variableInputs": [
+          {
+            "variable": "G",
+            "paramId": 7,
+            "formulaParamSlot": 7,
+            "formulaParamValue": 10000,
+            "slotStatus": "formula-param-slot-found"
+          }
+        ],
+        "applied": false
+      },
+      {
+        "field": "function_2",
+        "functionId": 2,
+        "status": "element_formula-row-found",
+        "elementFormulaRow": {
+          "id": 2,
+          "functionOutput": "(self.ATK[0]*A)/10000",
+          "variables": ["A"]
+        },
+        "variableInputs": [
+          {
+            "variable": "A",
+            "paramId": 1,
+            "formulaParamSlot": 1,
+            "formulaParamValue": 1000,
+            "slotStatus": "formula-param-slot-found"
+          }
+        ],
+        "applied": false
+      }
+    ],
+    "matchedFunctionIds": [1, 2],
+    "unmatchedFunctionIds": []
+  }
+}
+```
+
+### 42.3 IL2CPP 证据锚点
+
+`runtimeEvidence[]` 当前记录：
+
+- `FormulaParams.function_1/function_2/formulaParamValues`
+- `DamageElement.ExecuteEffect/Execute/BaseExecute/Parse`
+- `SkillElementInjector.OnExecuteDamageElement/ExecuteDamageElement`
+- `BattleConfigManager.elementFormulaConfig`
+- `ElementFormulaData`
+- `TDElementFormula`
+
+这些锚点说明 functionId 与公式配置存在候选关联，但仍不能证明 `DamageElement` 的最终组合顺序。
+
+### 42.4 当前边界
+
+- `formulaFunctionEvidence.applied` 必须保持 `false`，直到确认真实执行顺序和完整公式。
+- 当前只确认 `function_1 = 1 -> G/10000`、`function_2 = 2 -> (self.ATK[0]*A)/10000` 的候选直连。
+- 还未确认 `function_1/function_2` 是加法、乘法、兜底/主公式、前后处理，还是其他运行时分支。
+- 下一阶段应把该证据接入动作级 `sourceEvidence` 和 Workbench 展示层，继续保持不参与数值计算。

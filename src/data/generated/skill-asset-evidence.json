@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-07T16:20:51.586Z",
+  "generatedAt": "2026-07-07T16:34:05.635Z",
   "sourceKind": "azpr-skill-asset-evidence-index",
   "source": {
     "sourceRoot": "C:/PC2/Codex/AzPr",
@@ -1180,13 +1180,15 @@
   },
   "damageElementFieldMappingEvidence": {
     "schemaVersion": 1,
-    "generatedAt": "2026-07-07T16:20:51.586Z",
+    "generatedAt": "2026-07-07T16:34:05.635Z",
     "sourceKind": "azpr-damage-element-field-mapping-evidence",
     "status": "damage-element-field-candidates-found",
     "source": {
       "externalElementObjectEvidence": "skill-asset-evidence.json.externalElementObjectEvidence",
       "skillLogicIndex": "skill-logic-index.json",
       "skillsubEleValueTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/skillsub_ele_value.json",
+      "elementFormulaTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json",
+      "il2cppDump": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
       "note": "Field mappings are source evidence for the HP, toughness and self-energy chains; they are not final combat formulas yet."
     },
     "summary": {
@@ -1201,7 +1203,16 @@
       "skillsubElementBridgeLevelRows": 24,
       "valueParamFormulaSlotDirectMatchObjects": 2,
       "valueParamFormulaSlotOverrideCandidateObjects": 2,
-      "valueParamFormulaSlotUnresolvedObjects": 2
+      "valueParamFormulaSlotUnresolvedObjects": 2,
+      "formulaFunctionCheckedObjects": 3,
+      "formulaFunctionDirectElementFormulaObjects": 3,
+      "formulaFunctionRefs": 6,
+      "formulaFunctionMatchedRefs": 6,
+      "formulaFunctionUnmatchedRefs": 0,
+      "formulaFunctionUniqueIds": [
+        1,
+        2
+      ]
     },
     "skills": [
       {
@@ -1259,6 +1270,128 @@
               "formulaFunctionIds": {
                 "function_1": 1,
                 "function_2": 2
+              },
+              "formulaFunctionEvidence": {
+                "status": "direct-element-formula-id-candidates-found",
+                "relationStatus": "function-id-matches-element_formula-id-candidate",
+                "applied": false,
+                "source": {
+                  "elementFormulaTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json",
+                  "il2cppDump": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                  "note": "formulaParams.function_1/function_2 are matched to element_formula.id as evidence candidates only; DamageElement execution order and final formula application are still unconfirmed."
+                },
+                "functionRefs": [
+                  {
+                    "field": "function_1",
+                    "functionId": 1,
+                    "status": "element_formula-row-found",
+                    "relationStatus": "function-id-matches-element_formula-id-candidate",
+                    "elementFormulaRow": {
+                      "id": 1,
+                      "functionOutput": "G/10000",
+                      "variables": [
+                        "G"
+                      ],
+                      "source": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json"
+                    },
+                    "variableInputs": [
+                      {
+                        "variable": "G",
+                        "paramId": 7,
+                        "formulaParamSlot": 7,
+                        "formulaParamValue": 10000,
+                        "slotStatus": "formula-param-slot-found"
+                      }
+                    ],
+                    "applied": false
+                  },
+                  {
+                    "field": "function_2",
+                    "functionId": 2,
+                    "status": "element_formula-row-found",
+                    "relationStatus": "function-id-matches-element_formula-id-candidate",
+                    "elementFormulaRow": {
+                      "id": 2,
+                      "functionOutput": "(self.ATK[0]*A)/10000",
+                      "variables": [
+                        "A"
+                      ],
+                      "source": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json"
+                    },
+                    "variableInputs": [
+                      {
+                        "variable": "A",
+                        "paramId": 1,
+                        "formulaParamSlot": 1,
+                        "formulaParamValue": 1000,
+                        "slotStatus": "formula-param-slot-found"
+                      }
+                    ],
+                    "applied": false
+                  }
+                ],
+                "matchedFunctionIds": [
+                  1,
+                  2
+                ],
+                "unmatchedFunctionIds": [],
+                "runtimeEvidence": [
+                  {
+                    "kind": "il2cpp-config-field",
+                    "className": "FormulaParams",
+                    "sourceLineRange": "dump.cs:394316,394437-394439",
+                    "fields": [
+                      "function_1",
+                      "function_2",
+                      "formulaParamValues"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-runtime-method",
+                    "className": "DamageElement",
+                    "sourceLineRange": "dump.cs:274573-274708",
+                    "methods": [
+                      "ExecuteEffect",
+                      "Execute",
+                      "BaseExecute",
+                      "Parse"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-runtime-method",
+                    "className": "SkillElementInjector",
+                    "sourceLineRange": "dump.cs:272567-272576",
+                    "methods": [
+                      "OnExecuteDamageElement",
+                      "ExecuteDamageElement"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-config-entry",
+                    "className": "BattleConfigManager",
+                    "sourceLineRange": "dump.cs:314761-314807",
+                    "properties": [
+                      "elementFormulaConfig"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-config-table",
+                    "className": "ElementFormulaData",
+                    "sourceLineRange": "dump.cs:396498",
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-config-row",
+                    "className": "TDElementFormula",
+                    "sourceLineRange": "dump.cs:634105",
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  }
+                ],
+                "calculationBoundary": "These formula rows are not applied to damage yet; HP damage still needs execution order, character panel binding, enemy defense/resistance, target state and hit frame validation."
               },
               "formulaSlotCandidates": [
                 {
@@ -1435,6 +1568,128 @@
               "formulaFunctionIds": {
                 "function_1": 1,
                 "function_2": 2
+              },
+              "formulaFunctionEvidence": {
+                "status": "direct-element-formula-id-candidates-found",
+                "relationStatus": "function-id-matches-element_formula-id-candidate",
+                "applied": false,
+                "source": {
+                  "elementFormulaTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json",
+                  "il2cppDump": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                  "note": "formulaParams.function_1/function_2 are matched to element_formula.id as evidence candidates only; DamageElement execution order and final formula application are still unconfirmed."
+                },
+                "functionRefs": [
+                  {
+                    "field": "function_1",
+                    "functionId": 1,
+                    "status": "element_formula-row-found",
+                    "relationStatus": "function-id-matches-element_formula-id-candidate",
+                    "elementFormulaRow": {
+                      "id": 1,
+                      "functionOutput": "G/10000",
+                      "variables": [
+                        "G"
+                      ],
+                      "source": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json"
+                    },
+                    "variableInputs": [
+                      {
+                        "variable": "G",
+                        "paramId": 7,
+                        "formulaParamSlot": 7,
+                        "formulaParamValue": 10000,
+                        "slotStatus": "formula-param-slot-found"
+                      }
+                    ],
+                    "applied": false
+                  },
+                  {
+                    "field": "function_2",
+                    "functionId": 2,
+                    "status": "element_formula-row-found",
+                    "relationStatus": "function-id-matches-element_formula-id-candidate",
+                    "elementFormulaRow": {
+                      "id": 2,
+                      "functionOutput": "(self.ATK[0]*A)/10000",
+                      "variables": [
+                        "A"
+                      ],
+                      "source": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json"
+                    },
+                    "variableInputs": [
+                      {
+                        "variable": "A",
+                        "paramId": 1,
+                        "formulaParamSlot": 1,
+                        "formulaParamValue": 1000,
+                        "slotStatus": "formula-param-slot-found"
+                      }
+                    ],
+                    "applied": false
+                  }
+                ],
+                "matchedFunctionIds": [
+                  1,
+                  2
+                ],
+                "unmatchedFunctionIds": [],
+                "runtimeEvidence": [
+                  {
+                    "kind": "il2cpp-config-field",
+                    "className": "FormulaParams",
+                    "sourceLineRange": "dump.cs:394316,394437-394439",
+                    "fields": [
+                      "function_1",
+                      "function_2",
+                      "formulaParamValues"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-runtime-method",
+                    "className": "DamageElement",
+                    "sourceLineRange": "dump.cs:274573-274708",
+                    "methods": [
+                      "ExecuteEffect",
+                      "Execute",
+                      "BaseExecute",
+                      "Parse"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-runtime-method",
+                    "className": "SkillElementInjector",
+                    "sourceLineRange": "dump.cs:272567-272576",
+                    "methods": [
+                      "OnExecuteDamageElement",
+                      "ExecuteDamageElement"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-config-entry",
+                    "className": "BattleConfigManager",
+                    "sourceLineRange": "dump.cs:314761-314807",
+                    "properties": [
+                      "elementFormulaConfig"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-config-table",
+                    "className": "ElementFormulaData",
+                    "sourceLineRange": "dump.cs:396498",
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-config-row",
+                    "className": "TDElementFormula",
+                    "sourceLineRange": "dump.cs:634105",
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  }
+                ],
+                "calculationBoundary": "These formula rows are not applied to damage yet; HP damage still needs execution order, character panel binding, enemy defense/resistance, target state and hit frame validation."
               },
               "formulaSlotCandidates": [
                 {
@@ -1772,6 +2027,128 @@
                 "function_1": 1,
                 "function_2": 2
               },
+              "formulaFunctionEvidence": {
+                "status": "direct-element-formula-id-candidates-found",
+                "relationStatus": "function-id-matches-element_formula-id-candidate",
+                "applied": false,
+                "source": {
+                  "elementFormulaTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json",
+                  "il2cppDump": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                  "note": "formulaParams.function_1/function_2 are matched to element_formula.id as evidence candidates only; DamageElement execution order and final formula application are still unconfirmed."
+                },
+                "functionRefs": [
+                  {
+                    "field": "function_1",
+                    "functionId": 1,
+                    "status": "element_formula-row-found",
+                    "relationStatus": "function-id-matches-element_formula-id-candidate",
+                    "elementFormulaRow": {
+                      "id": 1,
+                      "functionOutput": "G/10000",
+                      "variables": [
+                        "G"
+                      ],
+                      "source": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json"
+                    },
+                    "variableInputs": [
+                      {
+                        "variable": "G",
+                        "paramId": 7,
+                        "formulaParamSlot": 7,
+                        "formulaParamValue": 10000,
+                        "slotStatus": "formula-param-slot-found"
+                      }
+                    ],
+                    "applied": false
+                  },
+                  {
+                    "field": "function_2",
+                    "functionId": 2,
+                    "status": "element_formula-row-found",
+                    "relationStatus": "function-id-matches-element_formula-id-candidate",
+                    "elementFormulaRow": {
+                      "id": 2,
+                      "functionOutput": "(self.ATK[0]*A)/10000",
+                      "variables": [
+                        "A"
+                      ],
+                      "source": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json"
+                    },
+                    "variableInputs": [
+                      {
+                        "variable": "A",
+                        "paramId": 1,
+                        "formulaParamSlot": 1,
+                        "formulaParamValue": 1000,
+                        "slotStatus": "formula-param-slot-found"
+                      }
+                    ],
+                    "applied": false
+                  }
+                ],
+                "matchedFunctionIds": [
+                  1,
+                  2
+                ],
+                "unmatchedFunctionIds": [],
+                "runtimeEvidence": [
+                  {
+                    "kind": "il2cpp-config-field",
+                    "className": "FormulaParams",
+                    "sourceLineRange": "dump.cs:394316,394437-394439",
+                    "fields": [
+                      "function_1",
+                      "function_2",
+                      "formulaParamValues"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-runtime-method",
+                    "className": "DamageElement",
+                    "sourceLineRange": "dump.cs:274573-274708",
+                    "methods": [
+                      "ExecuteEffect",
+                      "Execute",
+                      "BaseExecute",
+                      "Parse"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-runtime-method",
+                    "className": "SkillElementInjector",
+                    "sourceLineRange": "dump.cs:272567-272576",
+                    "methods": [
+                      "OnExecuteDamageElement",
+                      "ExecuteDamageElement"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-config-entry",
+                    "className": "BattleConfigManager",
+                    "sourceLineRange": "dump.cs:314761-314807",
+                    "properties": [
+                      "elementFormulaConfig"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-config-table",
+                    "className": "ElementFormulaData",
+                    "sourceLineRange": "dump.cs:396498",
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-config-row",
+                    "className": "TDElementFormula",
+                    "sourceLineRange": "dump.cs:634105",
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  }
+                ],
+                "calculationBoundary": "These formula rows are not applied to damage yet; HP damage still needs execution order, character panel binding, enemy defense/resistance, target state and hit frame validation."
+              },
               "formulaSlotCandidates": [
                 {
                   "slot": 1,
@@ -2108,6 +2485,8 @@
     "toughnessDamageFieldCandidateRefs": 3,
     "selfEnergyFieldCandidateRefs": 3,
     "damageElementSkillLogicBridgeMatches": 2,
+    "damageElementFormulaFunctionMatchedRefs": 6,
+    "damageElementFormulaFunctionUnmatchedRefs": 0,
     "relationStatus": "skill-control-assets-found-in-azpr-extractor"
   },
   "tableEvidence": [

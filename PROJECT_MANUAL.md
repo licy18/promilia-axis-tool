@@ -2411,6 +2411,36 @@ Endaxis 参考边界：
 - 优先确认 `function_1 = 1`、`function_2 = 2` 是否对应 `element_formula` 行、运行时公式函数或固定计算分支。
 - 若仍不能闭环，则建立 `formulaFunctionEvidence` 索引，记录 functionId 的所有本地出现位置、候选源码/IL2CPP 方法和未解析原因。
 
+### 2026-07-08：阶段 5-8Q functionId 到 element_formula 证据索引
+
+本轮完成：
+
+- `scripts/generate-azpr-data.mjs` 将 `element_formula.json` 接入 `damageElementFieldMappingEvidence`。
+- `hpDamage.formulaFunctionEvidence` 新增 `functionRefs`，逐条记录 `formulaParams.function_1/function_2` 到 `element_formula.id` 的候选匹配。
+- 当前末音 `10900101` 的 3 个 `TDamageElementParams` 均为 `function_1 = 1`、`function_2 = 2`；合计 6 条引用全部命中 `element_formula`。
+- `function_1 = 1` 对应 `element_formula[1].functionOutput = G/10000`，变量 `G` 对应 `formulaParamValues[6] = 10000`。
+- `function_2 = 2` 对应 `element_formula[2].functionOutput = (self.ATK[0]*A)/10000`，变量 `A` 对应 `formulaParamValues[0] = 1000`；对已桥接的 `109001081 / 109001306`，同变量在 `skillsub_ele_value.valueParam` 中表现为 1-12 级 `1600 -> 3360` 的等级覆盖候选。
+- 证据同时记录 IL2CPP 锚点：`FormulaParams.function_1/function_2/formulaParamValues`、`DamageElement.ExecuteEffect/Execute/BaseExecute/Parse`、`SkillElementInjector.ExecuteDamageElement`、`BattleConfigManager.elementFormulaConfig`、`ElementFormulaData` 和 `TDElementFormula`。
+
+验收结果：
+
+- `npm run data:generate`：通过，重新生成 `src/data/generated/*`。
+- `npx vitest run src/__tests__/data/azprGenerated.test.js`：通过，1 个测试文件、9 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1394 KB。
+
+当前边界：
+
+- `formulaFunctionEvidence.applied` 固定为 `false`；它只证明 functionId 可以候选匹配到公式行，不证明最终 HP 伤害已经应用这些公式。
+- 还未确认 `function_1` 与 `function_2` 的组合顺序、加乘关系、命中次数、目标防御/抗性、元素减免、暴击/增伤和目标状态。
+- 还未把公式函数候选显示到动作结果和 Workbench；当前 UI 仍只显示 A/G 槽位关系摘要。
+
+下一步：
+
+- 阶段 5-8R 目标：把 `hpDamage.formulaFunctionEvidence` 接入 `actionResultTimeline[].hpDamage.sourceEvidence` 和 Workbench 三值来源展示。
+- UI 只显示未应用公式候选，例如 `f1 G/10000 / f2 self.ATK*A/10000`，并继续保持 raw HP、削韧和充能数值不变。
+- 随后再进入公式执行层验证：确认 `DamageElement` 如何组合 `function_1/function_2`、如何使用 `valueParam` 覆盖 A 槽，以及如何叠加敌方防御/抗性。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

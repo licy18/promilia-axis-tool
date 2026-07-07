@@ -473,6 +473,48 @@ const FORMULA_PARAM_RELATION_INTERPRETATIONS = Object.freeze({
   'slot-alignment-unresolved':
     'No clear direct match or override pattern was found for this parameter.',
 });
+const DAMAGE_ELEMENT_FORMULA_FUNCTION_RUNTIME_EVIDENCE = Object.freeze([
+  {
+    kind: 'il2cpp-config-field',
+    className: 'FormulaParams',
+    sourceLineRange: 'dump.cs:394316,394437-394439',
+    fields: ['function_1', 'function_2', 'formulaParamValues'],
+    source: IL2CPP_DUMP_SOURCE,
+  },
+  {
+    kind: 'il2cpp-runtime-method',
+    className: 'DamageElement',
+    sourceLineRange: 'dump.cs:274573-274708',
+    methods: ['ExecuteEffect', 'Execute', 'BaseExecute', 'Parse'],
+    source: IL2CPP_DUMP_SOURCE,
+  },
+  {
+    kind: 'il2cpp-runtime-method',
+    className: 'SkillElementInjector',
+    sourceLineRange: 'dump.cs:272567-272576',
+    methods: ['OnExecuteDamageElement', 'ExecuteDamageElement'],
+    source: IL2CPP_DUMP_SOURCE,
+  },
+  {
+    kind: 'il2cpp-config-entry',
+    className: 'BattleConfigManager',
+    sourceLineRange: 'dump.cs:314761-314807',
+    properties: ['elementFormulaConfig'],
+    source: IL2CPP_DUMP_SOURCE,
+  },
+  {
+    kind: 'il2cpp-config-table',
+    className: 'ElementFormulaData',
+    sourceLineRange: 'dump.cs:396498',
+    source: IL2CPP_DUMP_SOURCE,
+  },
+  {
+    kind: 'il2cpp-config-row',
+    className: 'TDElementFormula',
+    sourceLineRange: 'dump.cs:634105',
+    source: IL2CPP_DUMP_SOURCE,
+  },
+]);
 const SKILL_ASSET_EVIDENCE_TABLES = Object.freeze([
   {
     key: 'heroTable',
@@ -662,6 +704,7 @@ const skillAssetEvidence = await buildSkillAssetEvidenceIndex({
   characters,
   skills,
   skillLogicIndex,
+  elementFormulaTable,
   tables: {
     skillTable,
     heroTable,
@@ -2042,6 +2085,7 @@ async function buildSkillAssetEvidenceIndex({
   characters,
   skills,
   skillLogicIndex,
+  elementFormulaTable,
   tables,
 }) {
   const currentSkillIds = new Set(skills.map(skill => Number(skill.id)));
@@ -2142,6 +2186,7 @@ async function buildSkillAssetEvidenceIndex({
     buildDamageElementFieldMappingEvidence({
       externalElementObjectEvidence,
       skillLogicIndex,
+      elementFormulaTable,
     });
 
   return {
@@ -2228,6 +2273,12 @@ async function buildSkillAssetEvidenceIndex({
       damageElementSkillLogicBridgeMatches:
         damageElementFieldMappingEvidence.summary
           ?.skillsubElementBridgeMatchedObjects ?? 0,
+      damageElementFormulaFunctionMatchedRefs:
+        damageElementFieldMappingEvidence.summary
+          ?.formulaFunctionMatchedRefs ?? 0,
+      damageElementFormulaFunctionUnmatchedRefs:
+        damageElementFieldMappingEvidence.summary
+          ?.formulaFunctionUnmatchedRefs ?? 0,
       relationStatus:
         foundCurrentSkillControls.length > 0
           ? 'skill-control-assets-found-in-azpr-extractor'
@@ -2345,11 +2396,17 @@ async function buildExternalElementObjectEvidence(currentSkillControlEvidence) {
 function buildDamageElementFieldMappingEvidence({
   externalElementObjectEvidence,
   skillLogicIndex,
+  elementFormulaTable,
 }) {
   const skillLogicById = new Map(
     (skillLogicIndex?.items ?? [])
       .map(item => [Number(item.skillId), item])
       .filter(([skillId]) => Number.isFinite(skillId))
+  );
+  const elementFormulaRowsById = new Map(
+    (elementFormulaTable?.rows ?? [])
+      .map(row => [Number(row.id), row])
+      .filter(([id]) => Number.isFinite(id))
   );
   const skills = [];
 
@@ -2363,7 +2420,11 @@ function buildDamageElementFieldMappingEvidence({
 
     const skillLogicItem = skillLogicById.get(Number(skill.skillId));
     const fieldMappings = damageElementObjects.map(object =>
-      buildDamageElementFieldMappingItem(object, skillLogicItem)
+      buildDamageElementFieldMappingItem(
+        object,
+        skillLogicItem,
+        elementFormulaRowsById
+      )
     );
 
     skills.push({
@@ -2386,6 +2447,15 @@ function buildDamageElementFieldMappingEvidence({
   const alignmentSummaries = fieldMappings.map(
     item => item.skillLevelBridge.formulaParamAlignment
   );
+  const formulaFunctionRefs = fieldMappings.flatMap(
+    item => item.hpDamage.formulaFunctionEvidence?.functionRefs ?? []
+  );
+  const formulaFunctionMatchedRefs = formulaFunctionRefs.filter(
+    item => item.status === 'element_formula-row-found'
+  );
+  const formulaFunctionUnmatchedRefs = formulaFunctionRefs.filter(
+    item => item.status === 'element_formula-row-missing'
+  );
 
   return {
     schemaVersion: 1,
@@ -2400,6 +2470,8 @@ function buildDamageElementFieldMappingEvidence({
         'skill-asset-evidence.json.externalElementObjectEvidence',
       skillLogicIndex: 'skill-logic-index.json',
       skillsubEleValueTable: normalizePath(sourceFiles.skillsubEleValue),
+      elementFormulaTable: normalizePath(sourceFiles.elementFormula),
+      il2cppDump: normalizePath(IL2CPP_DUMP_SOURCE),
       note:
         'Field mappings are source evidence for the HP, toughness and self-energy chains; they are not final combat formulas yet.',
     },
@@ -2428,6 +2500,21 @@ function buildDamageElementFieldMappingEvidence({
           item?.status ===
           'same-element-id-found-slot-alignment-unverified'
       ).length,
+      formulaFunctionCheckedObjects: fieldMappings.filter(
+        item => (item.hpDamage.formulaFunctionEvidence?.functionRefs ?? [])
+          .length > 0
+      ).length,
+      formulaFunctionDirectElementFormulaObjects: fieldMappings.filter(
+        item =>
+          item.hpDamage.formulaFunctionEvidence?.status ===
+          'direct-element-formula-id-candidates-found'
+      ).length,
+      formulaFunctionRefs: formulaFunctionRefs.length,
+      formulaFunctionMatchedRefs: formulaFunctionMatchedRefs.length,
+      formulaFunctionUnmatchedRefs: formulaFunctionUnmatchedRefs.length,
+      formulaFunctionUniqueIds: uniqueNumbers(
+        formulaFunctionRefs.map(item => item.functionId)
+      ),
     },
     skills,
   };
@@ -2440,7 +2527,11 @@ function isResolvedDamageElementParamsObject(object) {
   );
 }
 
-function buildDamageElementFieldMappingItem(object, skillLogicItem) {
+function buildDamageElementFieldMappingItem(
+  object,
+  skillLogicItem,
+  elementFormulaRowsById
+) {
   const formulaParamValues = normalizeNumberArray(
     object.formulaParams?.formulaParamValues ?? object.functionParams
   );
@@ -2462,7 +2553,8 @@ function buildDamageElementFieldMappingItem(object, skillLogicItem) {
     hpDamage: buildHpDamageFieldCandidate(
       object.formulaParams,
       formulaParamValues,
-      damageFields
+      damageFields,
+      elementFormulaRowsById
     ),
     toughnessDamage: buildToughnessDamageFieldCandidate(damageFields),
     selfEnergyChange: buildSelfEnergyFieldCandidate(damageFields),
@@ -2480,7 +2572,8 @@ function buildDamageElementFieldMappingItem(object, skillLogicItem) {
 function buildHpDamageFieldCandidate(
   formulaParams,
   formulaParamValues,
-  damageFields
+  damageFields,
+  elementFormulaRowsById
 ) {
   return {
     status: 'candidate-from-TDamageElementParams-formulaParams',
@@ -2498,6 +2591,11 @@ function buildHpDamageFieldCandidate(
       function_1: numberOrNull(formulaParams?.function_1),
       function_2: numberOrNull(formulaParams?.function_2),
     },
+    formulaFunctionEvidence: buildFormulaFunctionEvidence({
+      formulaParams,
+      formulaParamValues,
+      elementFormulaRowsById,
+    }),
     formulaSlotCandidates: buildFormulaSlotCandidates(formulaParamValues),
     rawFormulaParamValues: formulaParamValues,
     damageFields: {
@@ -2514,6 +2612,132 @@ function buildHpDamageFieldCandidate(
     calculationBoundary:
       'This identifies raw HP damage inputs only; final damage still needs character panel, enemy defense/resistance, target state and hit frame validation.',
   };
+}
+
+function buildFormulaFunctionEvidence({
+  formulaParams,
+  formulaParamValues,
+  elementFormulaRowsById,
+}) {
+  const functionRefs = ['function_1', 'function_2']
+    .map(field =>
+      buildFormulaFunctionRef({
+        field,
+        functionId: formulaParams?.[field],
+        formulaParamValues,
+        elementFormulaRowsById,
+      })
+    )
+    .filter(Boolean);
+  const matchedFunctionIds = functionRefs
+    .filter(item => item.status === 'element_formula-row-found')
+    .map(item => item.functionId);
+  const unmatchedFunctionIds = functionRefs
+    .filter(item => item.status === 'element_formula-row-missing')
+    .map(item => item.functionId);
+
+  return {
+    status:
+      functionRefs.length === 0
+        ? 'no-formula-function-ids'
+        : matchedFunctionIds.length === functionRefs.length
+          ? 'direct-element-formula-id-candidates-found'
+          : matchedFunctionIds.length > 0
+            ? 'partial-direct-element-formula-id-candidates-found'
+            : 'no-direct-element-formula-id-candidates-found',
+    relationStatus:
+      functionRefs.length > 0 && matchedFunctionIds.length === functionRefs.length
+        ? 'function-id-matches-element_formula-id-candidate'
+        : 'function-id-to-element_formula-id-unresolved',
+    applied: false,
+    source: {
+      elementFormulaTable: normalizePath(sourceFiles.elementFormula),
+      il2cppDump: normalizePath(IL2CPP_DUMP_SOURCE),
+      note:
+        'formulaParams.function_1/function_2 are matched to element_formula.id as evidence candidates only; DamageElement execution order and final formula application are still unconfirmed.',
+    },
+    functionRefs,
+    matchedFunctionIds: uniqueNumbers(matchedFunctionIds),
+    unmatchedFunctionIds: uniqueNumbers(unmatchedFunctionIds),
+    runtimeEvidence: DAMAGE_ELEMENT_FORMULA_FUNCTION_RUNTIME_EVIDENCE.map(
+      item => ({
+        ...item,
+        source: normalizePath(item.source),
+      })
+    ),
+    calculationBoundary:
+      'These formula rows are not applied to damage yet; HP damage still needs execution order, character panel binding, enemy defense/resistance, target state and hit frame validation.',
+  };
+}
+
+function buildFormulaFunctionRef({
+  field,
+  functionId,
+  formulaParamValues,
+  elementFormulaRowsById,
+}) {
+  const id = numberOrNull(functionId);
+  if (!Number.isFinite(id)) {
+    return null;
+  }
+
+  const elementFormulaRow = elementFormulaRowsById?.get(id) ?? null;
+  const functionOutput = elementFormulaRow?.functionOutput ?? null;
+  const variables = extractFormulaVariables(functionOutput);
+
+  return {
+    field,
+    functionId: id,
+    status: elementFormulaRow
+      ? 'element_formula-row-found'
+      : 'element_formula-row-missing',
+    relationStatus: elementFormulaRow
+      ? 'function-id-matches-element_formula-id-candidate'
+      : 'function-id-has-no-element_formula-row',
+    elementFormulaRow: elementFormulaRow
+      ? {
+          id,
+          functionOutput,
+          variables,
+          source: normalizePath(sourceFiles.elementFormula),
+        }
+      : null,
+    variableInputs: variables.map(variable =>
+      buildFormulaFunctionVariableInput({
+        variable,
+        formulaParamValues,
+      })
+    ),
+    applied: false,
+  };
+}
+
+function buildFormulaFunctionVariableInput({ variable, formulaParamValues }) {
+  const paramId = formulaVariableToParamId(variable);
+  const formulaParamValue =
+    Number.isFinite(paramId) && paramId > 0
+      ? formulaParamValues[paramId - 1]
+      : null;
+
+  return {
+    variable,
+    paramId,
+    formulaParamSlot: paramId,
+    formulaParamValue: Number.isFinite(formulaParamValue)
+      ? formulaParamValue
+      : null,
+    slotStatus: Number.isFinite(formulaParamValue)
+      ? 'formula-param-slot-found'
+      : 'formula-param-slot-missing',
+  };
+}
+
+function formulaVariableToParamId(variable) {
+  const text = String(variable ?? '').trim();
+  if (!/^[A-Z]$/.test(text)) {
+    return null;
+  }
+  return text.charCodeAt(0) - 64;
 }
 
 function buildToughnessDamageFieldCandidate(damageFields) {

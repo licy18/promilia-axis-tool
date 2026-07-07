@@ -484,6 +484,12 @@ describe('generated AzPr data', () => {
         valueParamFormulaSlotDirectMatchObjects: 2,
         valueParamFormulaSlotOverrideCandidateObjects: 2,
         valueParamFormulaSlotUnresolvedObjects: 2,
+        formulaFunctionCheckedObjects: 3,
+        formulaFunctionDirectElementFormulaObjects: 3,
+        formulaFunctionRefs: 6,
+        formulaFunctionMatchedRefs: 6,
+        formulaFunctionUnmatchedRefs: 0,
+        formulaFunctionUniqueIds: [1, 2],
       },
       skills: [
         expect.objectContaining({
@@ -499,6 +505,69 @@ describe('generated AzPr data', () => {
                   function_1: 1,
                   function_2: 2,
                 },
+                formulaFunctionEvidence: expect.objectContaining({
+                  status: 'direct-element-formula-id-candidates-found',
+                  relationStatus:
+                    'function-id-matches-element_formula-id-candidate',
+                  applied: false,
+                  matchedFunctionIds: [1, 2],
+                  unmatchedFunctionIds: [],
+                  functionRefs: expect.arrayContaining([
+                    expect.objectContaining({
+                      field: 'function_1',
+                      functionId: 1,
+                      status: 'element_formula-row-found',
+                      elementFormulaRow: expect.objectContaining({
+                        id: 1,
+                        functionOutput: 'G/10000',
+                        variables: ['G'],
+                      }),
+                      variableInputs: [
+                        {
+                          variable: 'G',
+                          paramId: 7,
+                          formulaParamSlot: 7,
+                          formulaParamValue: 10000,
+                          slotStatus: 'formula-param-slot-found',
+                        },
+                      ],
+                      applied: false,
+                    }),
+                    expect.objectContaining({
+                      field: 'function_2',
+                      functionId: 2,
+                      status: 'element_formula-row-found',
+                      elementFormulaRow: expect.objectContaining({
+                        id: 2,
+                        functionOutput: '(self.ATK[0]*A)/10000',
+                        variables: ['A'],
+                      }),
+                      variableInputs: [
+                        {
+                          variable: 'A',
+                          paramId: 1,
+                          formulaParamSlot: 1,
+                          formulaParamValue: 1000,
+                          slotStatus: 'formula-param-slot-found',
+                        },
+                      ],
+                      applied: false,
+                    }),
+                  ]),
+                  runtimeEvidence: expect.arrayContaining([
+                    expect.objectContaining({
+                      className: 'FormulaParams',
+                      fields: ['function_1', 'function_2', 'formulaParamValues'],
+                    }),
+                    expect.objectContaining({
+                      className: 'DamageElement',
+                    }),
+                    expect.objectContaining({
+                      className: 'BattleConfigManager',
+                      properties: ['elementFormulaConfig'],
+                    }),
+                  ]),
+                }),
                 formulaSlotCandidates: expect.arrayContaining([
                   {
                     slot: 2,
