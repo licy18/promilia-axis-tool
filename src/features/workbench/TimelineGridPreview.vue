@@ -9,16 +9,19 @@
       <span v-for="tick in ticks" :key="tick.timeMs">{{ tick.label }}</span>
     </div>
 
-    <div class="timeline-lane">
+    <div ref="laneRef" class="timeline-lane" data-testid="workbench-timeline-lane">
       <div
         v-for="action in actions"
         :key="action.id"
         class="action-block"
-        :class="{ selected: action.id === selectedActionId }"
+        :class="{ selected: action.id === selectedActionId, dragging: action.id === draggingActionId }"
         :style="actionStyle(action)"
+        :data-action-id="action.id"
+        data-testid="workbench-timeline-action"
         tabindex="0"
         @click="$emit('select-action', action.id)"
         @keydown.enter="$emit('select-action', action.id)"
+        @pointerdown="beginDrag($event, action)"
       >
         <span>{{ action.name }}</span>
       </div>
@@ -41,8 +44,10 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, onBeforeUnmount, ref } from 'vue';
 import { Clock } from '@element-plus/icons-vue';
+
+const DEFAULT_ACTION_DURATION_MS = 1800;
 
 const props = defineProps({
   actions: {
@@ -61,9 +66,15 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  snapMs: {
+    type: Number,
+    default: 500,
+  },
 });
 
-defineEmits(['select-action']);
+const emit = defineEmits(['select-action', 'update-action-time']);
+const laneRef = ref(null);
+const dragState = ref(null);
 
 const ticks = computed(() => {
   const durationSeconds = props.durationMs / 1000;
@@ -76,9 +87,11 @@ const ticks = computed(() => {
   });
 });
 
+const draggingActionId = computed(() => dragState.value?.actionId ?? null);
+
 function actionStyle(action) {
   const left = clampPercent((action.startMs / props.durationMs) * 100);
-  const width = clampPercent(((action.durationMs ?? 1800) / props.durationMs) * 100, 8, 42);
+  const width = clampPercent(((action.durationMs ?? DEFAULT_ACTION_DURATION_MS) / props.durationMs) * 100, 8, 42);
   return {
     left: `${left}%`,
     width: `${width}%`,
@@ -95,6 +108,66 @@ function markerStyle(damage) {
 function clampPercent(value, min = 0, max = 100) {
   return Math.min(max, Math.max(min, Number(value) || 0));
 }
+
+function beginDrag(event, action) {
+  if ((event.button ?? 0) !== 0) {
+    return;
+  }
+
+  const rect = laneRef.value?.getBoundingClientRect();
+  if (!rect || rect.width <= 0) {
+    emit('select-action', action.id);
+    return;
+  }
+
+  event.preventDefault();
+  event.currentTarget?.setPointerCapture?.(event.pointerId);
+  emit('select-action', action.id);
+  dragState.value = {
+    actionId: action.id,
+    laneWidth: rect.width,
+    initialClientX: event.clientX,
+    initialStartMs: action.startMs,
+    maxStartMs: Math.max(0, props.durationMs - (action.durationMs ?? DEFAULT_ACTION_DURATION_MS)),
+  };
+
+  window.addEventListener('pointermove', handleDragMove);
+  window.addEventListener('pointerup', endDrag);
+  window.addEventListener('pointercancel', endDrag);
+}
+
+function handleDragMove(event) {
+  if (!dragState.value) {
+    return;
+  }
+
+  const deltaMs = ((event.clientX - dragState.value.initialClientX) / dragState.value.laneWidth) * props.durationMs;
+  const nextStartMs = snapTimeMs(dragState.value.initialStartMs + deltaMs);
+  emit('update-action-time', {
+    actionId: dragState.value.actionId,
+    startMs: clampNumber(nextStartMs, 0, dragState.value.maxStartMs),
+  });
+}
+
+function endDrag() {
+  dragState.value = null;
+  window.removeEventListener('pointermove', handleDragMove);
+  window.removeEventListener('pointerup', endDrag);
+  window.removeEventListener('pointercancel', endDrag);
+}
+
+function snapTimeMs(value) {
+  const snap = Math.max(1, Number(props.snapMs) || 1);
+  return Math.round(value / snap) * snap;
+}
+
+function clampNumber(value, min, max) {
+  return Math.min(max, Math.max(min, Number(value) || 0));
+}
+
+onBeforeUnmount(() => {
+  endDrag();
+});
 </script>
 
 <style scoped>
@@ -181,6 +254,10 @@ h2 {
 
 .action-block.selected {
   box-shadow: 0 0 0 2px rgba(121, 199, 185, 0.3), 0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+.action-block.dragging {
+  cursor: grabbing;
 }
 
 .action-block span {

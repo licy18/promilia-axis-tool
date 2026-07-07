@@ -35,6 +35,7 @@
         :duration-ms="scenario.time.durationMs"
         :selected-action-id="selectedActionId"
         @select-action="selectedActionId = $event"
+        @update-action-time="updateActionTime"
       />
 
       <div class="side-stack">
@@ -137,6 +138,20 @@ function updateAction(patch) {
       skillId: skill.id,
       startMs: clampNumber(patch.startMs ?? action.startMs, 0, project.value.time.durationMs),
       level: clampNumber(nextLevel, 1, skill.level.values.length),
+    });
+  });
+}
+
+function updateActionTime({ actionId, startMs }) {
+  selectedActionId.value = actionId;
+  actionDrafts.value = actionDrafts.value.map((action) => {
+    if (action.id !== actionId) {
+      return action;
+    }
+
+    return createWorkbenchActionDraft({
+      ...action,
+      startMs: clampNumber(startMs, 0, project.value.time.durationMs),
     });
   });
 }

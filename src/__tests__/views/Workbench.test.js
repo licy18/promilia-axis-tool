@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils';
+import { nextTick } from 'vue';
 import { describe, expect, it } from 'vitest';
 import workbenchSeed from '../../data/generated/workbench-seed.json';
 import Workbench from '../../views/Workbench.vue';
@@ -112,5 +113,46 @@ describe('Workbench view', () => {
     const actionIds = wrapper.findAll('.action-item').map((action) => action.attributes('data-action-id'));
     expect(actionIds).toEqual(['action-0002', 'action-0003']);
     expect(new Set(actionIds).size).toBe(actionIds.length);
+  });
+
+  it('drags a timeline action and snaps its start time', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    const lane = wrapper.find('[data-testid="workbench-timeline-lane"]').element;
+    lane.getBoundingClientRect = () => ({
+      width: 600,
+      height: 210,
+      left: 0,
+      right: 600,
+      top: 0,
+      bottom: 210,
+      x: 0,
+      y: 0,
+      toJSON: () => {},
+    });
+
+    const pointerDown = new MouseEvent('pointerdown', {
+      bubbles: true,
+      button: 0,
+      clientX: 100,
+    });
+    Object.defineProperty(pointerDown, 'pointerId', { value: 1 });
+    wrapper.find('[data-testid="workbench-timeline-action"]').element.dispatchEvent(pointerDown);
+    await nextTick();
+    window.dispatchEvent(new MouseEvent('pointermove', { clientX: 169 }));
+    await nextTick();
+    window.dispatchEvent(new MouseEvent('pointerup', { clientX: 169 }));
+    await nextTick();
+
+    expect(wrapper.find('[data-testid="workbench-start-input"]').element.value).toBe('3500');
+    expect(wrapper.text()).toContain('3500ms');
+    expect(wrapper.text()).toContain('DAMAGE_PROJECTED');
   });
 });

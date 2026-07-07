@@ -42,6 +42,7 @@ npm run dev
 - 新版工作台第一屏已建立：`src/views/Workbench.vue`，路由为 `/workbench`，组件位于 `src/features/workbench/`。
 - 工作台最小可编辑能力已建立：`src/features/workbench/PropertiesPanel.vue` 可选择真实角色/技能/敌人并编辑动作开始时间和等级。
 - 工作台时间轴最小交互已建立：可追加动作、选择动作、删除动作，并让多动作进入同一模拟汇总。
+- 工作台时间轴拖动已建立：`TimelineGridPreview` 可水平拖动动作块，并按 `500ms` 网格吸附更新 `startMs`。
 - 项目状态核心在 `src/store/project.js`。
 - 主编辑器在 `src/views/Editor.vue`，当前承担了大量 UI、交互和业务协调职责。
 - 时间轴组件位于 `src/components/timeline/`。
@@ -76,7 +77,7 @@ Endaxis 只作为架构和交互成熟度参考，不是蓝色星原数据来源
 
 ## 已知开发阶段
 
-当前已完成阶段 1-3 的最小闭环，并完成阶段 4-3 的多动作最小交互工作台。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 4-4，让新版时间轴支持拖动/吸附和 workbench 草稿保存。
+当前已完成阶段 1-3 的最小闭环，并完成阶段 4-4A 的时间轴拖动/吸附。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 4-4B，让新版 workbench 支持草稿保存和恢复。
 
 完整对标 Endaxis 的后续路线见 `DEVELOPMENT_PLAN.md`。
 
@@ -109,7 +110,7 @@ npm run test -- --run
 截至 2026-07-07 的基线：
 
 - `npm run build` 可以通过。
-- `npm run test -- --run` 可以通过；当前为 10 个测试文件、53 条测试。
+- `npm run test -- --run` 可以通过；当前为 10 个测试文件、54 条测试。
 - `npm run data:generate` 可以从 `C:\PC2\Codex\AzPr` 重新生成真实 AzPr 数据拆表。
 
 ## 开发规则

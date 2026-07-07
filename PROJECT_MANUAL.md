@@ -55,7 +55,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；10 个测试文件、53 条测试通过。
+- `npm run test -- --run`：通过；10 个测试文件、54 条测试通过。
 
 ## 3. 目录速览
 
@@ -613,6 +613,38 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 为动作块提供复制、快速删除和边界 clamp 的测试。
 - 建立新版 workbench 项目草稿保存/恢复入口，优先保存到 localStorage，不接旧 `skillBlocks`。
 - 继续保持 `compileProject()` / `simulateScenario()` 作为 UI 结果唯一来源。
+
+### 2026-07-07：阶段 4-4A 时间轴拖动与吸附落地
+
+本轮完成：
+
+- `TimelineGridPreview` 增加动作块 pointer 拖动。
+- 拖动时按时间轴宽度换算为 `startMs`，默认按 `500ms` 网格吸附。
+- 拖动结果通过 `update-action-time` 事件回到 `Workbench.vue`，由动作草稿更新后重新生成新版 `Project` 并重新运行 simulation。
+- 动作块增加稳定测试标记和 `data-action-id`，便于后续拖拽、复制、删除和多轨测试。
+- 拖动边界按动作时长 clamp，避免动作块拖出当前 30s 时间轴。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、10 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、54 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- 浏览器检查 `http://127.0.0.1:5175/#/workbench`：
+  - 真实拖动第一段动作块后，开始时间从 `0` 更新为吸附后的 `3500`。
+  - 属性面板、动作库文本和事件投影同步显示 `3500ms`。
+  - 页面保留 `DAMAGE_PROJECTED`，控制台无 error。
+
+当前结论：
+
+- 新版工作台已经具备基础时间轴拖动手感。
+- 当前拖动只支持水平移动动作起点，尚未支持复制、键盘移动、多轨、缩放、持续时间调整和保存恢复。
+
+下一步：
+
+- 阶段 4-4B 目标：建立新版 workbench 草稿保存/恢复入口。
+- 保存字段应使用 `selection`、`actionDrafts`、`selectedActionId` 和版本号，不接旧 `skillBlocks`。
+- 增加 localStorage 读写的容错、重置草稿入口和恢复测试。
+- 草稿恢复后仍必须通过 `createWorkbenchProject()`、`compileProject()`、`simulateScenario()` 验证。
 
 ## 10. 文档维护规则
 

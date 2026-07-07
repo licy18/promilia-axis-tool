@@ -1,5 +1,23 @@
 # 时间轴功能详解
 
+## 0. 新版 Workbench 时间轴状态
+
+当前重构主线在 `src/features/workbench/TimelineGridPreview.vue` 中实现新版工作台时间轴，旧 `src/components/timeline/` 仍作为原型参考。
+
+已完成：
+
+- 多动作渲染和选中态。
+- 动作块点击/键盘选择。
+- 动作块水平拖动。
+- `500ms` 网格吸附更新 `startMs`。
+- 拖动后通过 `Workbench.vue` 更新动作草稿，并重新运行 `compileProject()` / `simulateScenario()`。
+
+下一步：
+
+- 新版 workbench 草稿保存/恢复。
+- 动作复制、快捷删除、键盘微调。
+- 多轨道、缩放和持续时间调整。
+
 ## 1. 技能拖放系统
 
 ### 1.1 功能介绍
