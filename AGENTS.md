@@ -54,6 +54,7 @@ npm run dev
 - 工作台技能动作形态模型已修正：`普攻`、`重击`、`闪击`、`跃击` 等按独立动作形态处理；普攻段数从技能描述解析，当前不编造单段倍率。
 - 工作台动作库已切换为 Endaxis 风格直接动作目录：只列 `普通攻击`、`重击`、`闪击`、`跃击`、`星鸣技`、`星结合击`、`星决技`、`星携技`、`极限反击`、`完美招架`，被动技能不列入动作库。
 - 工作台伤害投影已建立公式分层雏形：`formulaBreakdown` 中当前攻击和动作形态倍率是已应用层，敌人防御/抗性/暴击/增伤仍是 `applied: false` 的未应用层；其中敌人防御/抗性 source 已接入 `combat-formula-evidence.json`。
+- 模拟结果必须按动作追踪三类数值变化：敌人 HP 伤害、敌人韧性削减、自身能量变化。当前 `actionResultTimeline[]` 已固定三槽结构；HP 使用现有 raw 投影，韧性和充能公式仍是待解析占位，不能混入 HP 伤害公式。
 - 数据生成器已建立 `combat-formula-evidence.json`：敌人属性链和元素减免字段来源可追溯，但 `skillsub_ele_value.elementId -> element_formula.id` 当前无直接匹配，仍需 asset/效果节点追踪。
 - 数据生成器已建立 `skill-asset-evidence.json`：`C:\PC2\Codex\AzPr` 当前没有 `Config/Battle/Skill`、`SkillPreload`、`SkillList` 实体资源时，应按项目规则使用 `C:\Codex\AzPr Extractor` 的 Unity 导出资源；当前 `SkillList` 中 4134 个 `skill_control_*.asset` 目录可用，120 个当前技能中 116 个已匹配，4 个 `*62` 技能缺失。
 - 若后续 AzPr 数据库中缺少游戏原始资源文件，优先在 `C:\Codex\AzPr Extractor` 继续导出或索引；表格/Lua 走 `raw_nostreaming_package` 导出流程，Unity 技能/动作/效果资源走 Extractor 的 Unity/default_package 导出结果。
@@ -77,6 +78,8 @@ Endaxis 只作为架构和交互成熟度参考，不是蓝色星原数据来源
 
 除游戏内容、游戏机制命名和伤害计算逻辑外，其他功能设计、操作流程、页面布局、信息密度、组件拆分和交互习惯都应尽量复用 Endaxis 的成熟做法；偏离 Endaxis 时需要有明确的蓝色星原机制原因或更好的用户体验理由。
 
+韧性/失衡和自身能量曲线可以参考 Endaxis/终末地的 `stagger`、`spRecovery`、`spReturn` 多指标追踪与绘制方式；但蓝色星原的削韧、充能、角色独立能量上限和最终公式必须从蓝原本地数据、`skill_control`、效果节点或运行时证据确认。
+
 优先学习：
 
 - 数据访问层和业务层分离。
@@ -94,7 +97,7 @@ Endaxis 只作为架构和交互成熟度参考，不是蓝色星原数据来源
 
 ## 已知开发阶段
 
-当前已完成阶段 1-3 的最小闭环、阶段 4 工作台主链路、阶段 5-1 至 5-8F 的真实数据/数值/动作形态、直接动作库、60fps 帧时间轴、公式分层雏形、战斗公式证据索引、公式 source 接入和 skill asset/effect node 候选索引。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 5-8G，把 `skill_control` MonoBehaviour 候选节点解析成动作时长、命中帧和公式映射候选。
+当前已完成阶段 1-3 的最小闭环、阶段 4 工作台主链路、阶段 5-1 至 5-8G 的真实数据/数值/动作形态、直接动作库、60fps 帧时间轴、公式分层雏形、战斗公式证据索引、公式 source 接入、skill asset/effect node 候选索引和每动作三值结果契约。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 5-8H，把 `skill_control` MonoBehaviour 候选节点解析成 HP 伤害、削韧、充能三类公式映射候选。
 
 完整对标 Endaxis 的后续路线见 `DEVELOPMENT_PLAN.md`。
 

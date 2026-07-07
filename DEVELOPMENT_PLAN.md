@@ -231,7 +231,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8D，新增 `combat-formula-evidence.json`，确认敌人属性链和元素减免字段来源，同时记录 `skillsub_ele_value.elementId` 与 `element_formula.id` 当前无直接匹配。
 - 已完成：阶段 5-8E，把 `combat-formula-evidence.json` 接入 `formulaBreakdown.layers.enemyDefense.source` / `enemyResistance.source`，使防御/抗性层显示“证据已找到、公式未映射”，但仍保持 `applied: false`。
 - 已完成：阶段 5-8F，新增 `skill-asset-evidence.json`，确认 `C:\PC2\Codex\AzPr` 缺少 `Config/Battle/Skill` 实体资源，并按规则从 `C:\Codex\AzPr Extractor` 的 `SkillList/skill_control_*.asset` 建立候选索引；当前 120 个技能中 116 个匹配，4 个 `*62` 技能缺失。
-- 下一步：阶段 5-8G，解析 `skill_control` MonoBehaviour 候选节点，把 `startFrame/endFrame/frameCount/eventType/eventID/elementList` 组织成动作时长、命中帧、效果节点和 `skillsub_ele_value.elementId -> effect node -> formula` 的候选映射。
+- 已完成：阶段 5-8G，新增每动作三值结果契约，`actionResultTimeline[]` 对每个动作固定追踪敌人 HP 伤害、敌人韧性削减、自身能量变化；当前 HP 走 raw 投影，削韧和充能公式保持独立占位。
+- 下一步：阶段 5-8H，解析 `skill_control` MonoBehaviour 候选节点，把 `startFrame/endFrame/frameCount/eventType/eventID/elementList` 组织成动作时长、命中帧、HP 伤害节点、削韧节点、充能节点和公式映射候选。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

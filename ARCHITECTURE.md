@@ -258,10 +258,11 @@ App.vue
 - **时间基准**: Workbench 使用 `src/domain/timebase.js` 统一到 60fps 的 1 帧网格，新增动作、拖动吸附、持续时间和批次快捷偏移都按帧对齐。
 - **普攻段数**: 从技能描述 `【普通攻击】` 中解析，例如 `进行至多五段的普通攻击`；当前只记录总倍率和段数，不编造每段倍率。
 - **公式分层**: `damageTimeline[].formulaBreakdown` 将当前攻击和动作形态倍率标记为已应用层，将敌人防御、抗性、暴击、增伤标记为未应用层。
+- **动作三值结果**: `actionResultTimeline[]` 是新版模拟结果主入口，每个动作都必须同时输出 `hpDamage`、`toughnessDamage`、`selfEnergyChange`。HP 伤害、削韧和自身能量变化是三条独立公式链，不能只用伤害公式推导另外两项。
 - **公式证据**: `src/data/generated/combat-formula-evidence.json` 记录敌人属性链、元素减免字段、弱点倍率字段和 `element_formula` 公式行；当前没有 `elementId -> element_formula.id` 直接匹配。敌人防御/抗性层的 `source` 已引用该证据索引，但仍保持 `applied: false`。
 - **技能资源证据**: `src/data/generated/skill-asset-evidence.json` 记录 `skillBytesPath` 表格引用、`C:/PC2/Codex/AzPr` 技能资源缺口、`C:/Codex/AzPr Extractor` 的 `SkillList/skill_control_*.asset` 匹配结果和 MonoBehaviour 节点样本；当前只作为动作帧/效果节点候选索引，不能直接视为已确认公式。
 - **兼容字段**: `damageSegmentIndex`、`damageSegments`、`selectedDamageSegment` 暂时作为旧命名兼容层；新逻辑优先使用 `actionVariantIndex`、`actionVariants`、`selectedActionVariant`。
-- **当前边界**: 动作形态倍率可用于 raw 投影；`skill_control` 已能给出候选帧范围和节点样本，但真实命中帧、每段倍率、取消窗口和完整伤害公式仍需后续解析确认。
+- **当前边界**: 动作形态倍率可用于 raw HP 投影；`skill_control` 已能给出候选帧范围和节点样本，但真实命中帧、每段倍率、削韧、充能、取消窗口和完整公式仍需后续解析确认。
 
 ## 7. 扩展指南
 

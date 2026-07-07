@@ -244,8 +244,52 @@ describe('first vertical slice simulation', () => {
       },
     });
     expect(result.damageTimeline[0].rawDamage).toBeGreaterThan(0);
+    expect(result.actionResultTimeline).toHaveLength(1);
+    expect(result.actionResultTimeline[0]).toMatchObject({
+      actionId: 'action-0001',
+      hpDamage: {
+        value: 12461,
+        applied: true,
+        status: 'raw-hp-projection',
+      },
+      toughnessDamage: {
+        value: 0,
+        applied: false,
+        status: 'formula-unmapped',
+        formulaBreakdown: {
+          unappliedLayerKeys: [
+            'actionToughnessValue',
+            'enemyToughnessState',
+            'weaknessOrBreakModifier',
+          ],
+        },
+      },
+      selfEnergyChange: {
+        value: 0,
+        applied: false,
+        status: 'charge-formula-unmapped',
+        formulaBreakdown: {
+          unappliedLayerKeys: [
+            'actionChargeGain',
+            'hitEnergyGain',
+            'passiveEnergyModifiers',
+          ],
+        },
+      },
+    });
     expect(result.summary).toMatchObject({
       projectedHitCount: 1,
+      actionResultCount: 1,
+      totalProjectedToughnessDamage: 0,
+      totalSelfEnergyDelta: 0,
+      selfEnergyDeltaByActor: [
+        {
+          actorId: 'actor-109001',
+          actorName: '末音',
+          resource: 'sp',
+          delta: 0,
+        },
+      ],
       actionCount: 1,
       formulaVersion: 'stage5-damage-layer-breakdown-v1',
       confidence: 'low',
@@ -257,6 +301,9 @@ describe('first vertical slice simulation', () => {
     );
     expect(result.diagnostics.limitations.join('\n')).toContain(
       'Formula breakdown exposes unapplied layers'
+    );
+    expect(result.diagnostics.limitations.join('\n')).toContain(
+      'Every action result tracks HP damage, toughness damage, and self energy delta'
     );
   });
 
@@ -507,6 +554,21 @@ describe('first vertical slice simulation', () => {
       },
     });
     expect(result.summary.resourceEventCount).toBe(1);
+    expect(result.summary.totalSelfEnergyDelta).toBe(-Number(spSkill.spCost));
+    expect(result.summary.selfEnergyDeltaByActor).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actorId: 'actor-101003',
+          actorName: '寒悠悠',
+          delta: -Number(spSkill.spCost),
+        }),
+        expect.objectContaining({
+          actorId: 'actor-101007',
+          actorName: '芃芃',
+          delta: 0,
+        }),
+      ])
+    );
     expect(result.resourceTimeline).toEqual([
       expect.objectContaining({
         timeMs: 700,
@@ -516,6 +578,19 @@ describe('first vertical slice simulation', () => {
         reason: 'skill-cost',
       }),
     ]);
+    expect(result.actionResultTimeline[0].selfEnergyChange).toMatchObject({
+      value: -Number(spSkill.spCost),
+      applied: true,
+      status: 'explicit-cost-applied-charge-formula-unmapped',
+      formulaBreakdown: {
+        appliedLayerKeys: ['explicitResourceDelta'],
+        unappliedLayerKeys: [
+          'actionChargeGain',
+          'hitEnergyGain',
+          'passiveEnergyModifiers',
+        ],
+      },
+    });
     expect(result.eventLog.map(event => event.type)).toContain(
       'RESOURCE_CHANGE'
     );
@@ -562,6 +637,7 @@ describe('first vertical slice simulation', () => {
     );
 
     expect(result.summary.actionCount).toBe(3);
+    expect(result.summary.actionResultCount).toBe(3);
     expect(result.summary.projectedHitCount).toBe(1);
     expect(result.summary.resourceEventCount).toBe(1);
     expect(result.resourceTimeline).toEqual([
@@ -579,6 +655,18 @@ describe('first vertical slice simulation', () => {
         note: '扣除测试资源',
       },
     });
+    expect(
+      result.actionResultTimeline.map(entry => [
+        entry.actionId,
+        entry.hpDamage.value,
+        entry.toughnessDamage.value,
+        entry.selfEnergyChange.value,
+      ])
+    ).toEqual([
+      ['action-skill', 12461, 0, 0],
+      ['action-resource', 0, 0, -35],
+      ['action-enemy', 0, 0, 0],
+    ]);
     expect(enemyEvent).toMatchObject({
       type: 'ENEMY_EVENT',
       payload: {

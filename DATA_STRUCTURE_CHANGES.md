@@ -1744,3 +1744,127 @@ getAzprSkillAssetEvidence()
 ```
 
 读取方应把它作为证据索引使用；在阶段 5-8G 之前，不应把其中的帧范围直接当成最终动作时长或命中帧。
+
+## 32. 2026-07-07 每动作三值结果契约
+
+阶段 5-8G 新增 `simulationResult.actionResultTimeline[]`，用于保证每个动作都同时追踪三类数值变化：
+
+- 敌人 HP 伤害。
+- 敌人韧性削减。
+- 自身能量变化。
+
+### 32.1 新增顶层字段
+
+`projectSimulationResult()` 输出新增：
+
+```javascript
+{
+  "actionResultTimeline": [
+    {
+      "actionId": "action-0001",
+      "actionType": "skill",
+      "hpDamage": {},
+      "toughnessDamage": {},
+      "selfEnergyChange": {}
+    }
+  ]
+}
+```
+
+旧字段 `damageTimeline` 和 `resourceTimeline` 保留，作为兼容和专门视图使用；后续工作台分析面板应优先按 `actionResultTimeline` 展示动作级结果。
+
+### 32.2 `hpDamage`
+
+当前 HP 伤害沿用已有 raw 投影：
+
+```javascript
+{
+  "value": 12461,
+  "applied": true,
+  "status": "raw-hp-projection",
+  "formulaBreakdown": {
+    "expression": "round(baseAttack.value * actionMultiplier.value)"
+  }
+}
+```
+
+这仍不是最终实战伤害公式；防御、抗性、暴击、增伤等层仍保持未应用。
+
+### 32.3 `toughnessDamage`
+
+当前削韧固定独立占位：
+
+```javascript
+{
+  "value": 0,
+  "applied": false,
+  "status": "formula-unmapped",
+  "formulaBreakdown": {
+    "unappliedLayerKeys": [
+      "actionToughnessValue",
+      "enemyToughnessState",
+      "weaknessOrBreakModifier"
+    ]
+  }
+}
+```
+
+削韧公式不得从 HP 伤害公式直接推导；必须后续从 `skill_control`、效果节点、敌人韧性字段或相邻 battle 表中确认。
+
+### 32.4 `selfEnergyChange`
+
+当前自身能量变化会应用显式资源变化，例如技能 `spCost` 或手动资源动作：
+
+```javascript
+{
+  "value": -30,
+  "applied": true,
+  "status": "explicit-cost-applied-charge-formula-unmapped",
+  "formulaBreakdown": {
+    "appliedLayerKeys": ["explicitResourceDelta"],
+    "unappliedLayerKeys": [
+      "actionChargeGain",
+      "hitEnergyGain",
+      "passiveEnergyModifiers"
+    ]
+  }
+}
+```
+
+充能获取公式仍未确认；显式消耗和手动资源变化只是已知 delta，不能代表完整自身能量公式。
+
+### 32.5 摘要字段
+
+`summary` 新增：
+
+```javascript
+{
+  "actionResultCount": 1,
+  "totalProjectedToughnessDamage": 0,
+  "totalSelfEnergyDelta": 0,
+  "selfEnergyDeltaByActor": [
+    {
+      "actorId": "actor-109001",
+      "actorName": "末音",
+      "resource": "sp",
+      "delta": 0
+    }
+  ]
+}
+```
+
+当前 `totalProjectedToughnessDamage` 为占位汇总，后续解析削韧公式后才会有真实含义。
+
+### 32.6 Endaxis 参考边界
+
+这类结果曲线可以参考 Endaxis/终末地：
+
+- `stagger` 作为失衡/韧性类指标。
+- `spRecovery`、`spReturn` 作为角色 SP 变化指标。
+- 时间轴上多条曲线、标签和命中点并行展示的方式。
+
+但机制来源必须保持蓝色星原优先：
+
+- 蓝色星原韧性值只可类比终末地失衡值，不可直接复用终末地公式。
+- 自身能量类似 SP，但必须按角色 actor 独立记录。
+- 削韧、充能和 HP 伤害需要分别从蓝原表、`skill_control`、效果节点或运行时证据确认。

@@ -2102,8 +2102,47 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 
 下一步：
 
-- 阶段 5-8G 目标：解析 `skill_control` MonoBehaviour 候选节点，把 `startFrame/endFrame/frameCount/eventType/eventID/elementList` 组织成动作时长、命中帧、效果节点和公式映射候选。
-- 优先从 `10900101` 末音普通攻击入手，追踪 MonoBehaviour 引用对象、行为组、节点类型和 `skillsub_ele_value.elementId` 的关系；若链路不完整，记录缺口和需要追加导出的资源包。
+- 阶段 5-8G 目标：先建立每动作三值结果契约，确保敌人 HP 伤害、敌人韧性削减、自身能量变化三条公式链不会混在一起。
+- 随后解析 `skill_control` MonoBehaviour 候选节点，把 `startFrame/endFrame/frameCount/eventType/eventID/elementList` 组织成动作时长、命中帧、效果节点和公式映射候选。
+
+### 2026-07-07：阶段 5-8G 每动作三值结果契约落地
+
+本轮完成：
+
+- `simulationResult` 新增 `actionResultTimeline[]`。
+- 每个动作现在固定输出：
+  - `hpDamage`：敌人 HP 伤害。
+  - `toughnessDamage`：敌人韧性削减。
+  - `selfEnergyChange`：自身能量变化。
+- `hpDamage` 当前沿用已有 raw 投影：`round(baseAttack.value * actionMultiplier.value)`。
+- `toughnessDamage` 当前独立占位，状态为 `formula-unmapped`，明确削韧公式不能从 HP 伤害公式直接推导。
+- `selfEnergyChange` 当前会应用显式 `spCost` 或手动资源动作；充能获取公式仍是 `charge-formula-unmapped`。
+- `summary` 新增 `actionResultCount`、`totalProjectedToughnessDamage`、`totalSelfEnergyDelta`、`selfEnergyDeltaByActor`。
+- `selfEnergyDeltaByActor` 按 actor 单独汇总，自身能量类似 Endaxis 的 SP 追踪方式，但必须分角色记录，不能做成全队单值。
+
+Endaxis 参考边界：
+
+- 可以参考 Endaxis/终末地对 `spRecovery`、`spReturn`、`stagger` 的多指标追踪方式，以及时间轴多条曲线/标签的绘制方式。
+- 韧性值可类比终末地的失衡值，用于 UI 表达和曲线组织。
+- 蓝色星原的削韧值、韧性状态、充能获取、角色能量上限和消耗机制必须继续从蓝原本地表、`skill_control`、效果节点和运行时证据中找，不能直接套用终末地公式。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、11 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1359 KB。
+
+当前边界：
+
+- `actionResultTimeline[]` 是结果契约，不代表削韧/充能真实公式已确认。
+- 当前 `totalProjectedToughnessDamage` 仍为占位汇总。
+- 当前 `selfEnergyChange` 只应用显式 delta，例如技能消耗或手动资源动作；普攻/命中充能、被动回能、角色独立能量上限尚未确认。
+- UI 仍未绘制三值多曲线；后续应参考 Endaxis 多曲线显示，但使用蓝原数据。
+
+下一步：
+
+- 阶段 5-8H 目标：解析 `skill_control` MonoBehaviour 候选节点，区分 HP 伤害节点、削韧节点、充能节点。
+- 优先从 `10900101` 末音普通攻击入手，追踪 MonoBehaviour 引用对象、行为组、节点类型和 `skillsub_ele_value.elementId` 的关系；同时记录是否存在韧性/充能专用字段。
 
 ## 10. 文档维护规则
 
