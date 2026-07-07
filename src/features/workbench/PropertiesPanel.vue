@@ -63,7 +63,7 @@
       </label>
 
       <label>
-        <span>技能等级</span>
+        <span>{{ secondaryControlLabel }}</span>
         <input
           v-if="isSkillAction"
           type="number"
@@ -75,12 +75,48 @@
           @input="emitActionPatch('level', $event.target.value)"
         />
         <input
-          v-else
+          v-else-if="isWaitAction || isAnnotationAction"
           type="number"
           data-testid="workbench-duration-input"
           min="1"
           :value="selectedAction.durationMs"
           @input="emitActionPatch('durationMs', $event.target.value)"
+        />
+        <input
+          v-else-if="isResourceAction"
+          type="number"
+          data-testid="workbench-resource-change-input"
+          :value="selectedAction.change"
+          @input="emitActionPatch('change', $event.target.value)"
+        />
+        <input
+          v-else-if="isEnemyEventAction"
+          type="text"
+          data-testid="workbench-enemy-event-type-input"
+          :value="selectedAction.eventType"
+          @input="emitTextPatch('eventType', $event.target.value)"
+        />
+      </label>
+    </div>
+
+    <div v-if="isResourceAction" class="action-controls contextual-controls">
+      <label>
+        <span>资源</span>
+        <input
+          type="text"
+          data-testid="workbench-resource-type-input"
+          :value="selectedAction.resource"
+          @input="emitTextPatch('resource', $event.target.value)"
+        />
+      </label>
+
+      <label>
+        <span>原因</span>
+        <input
+          type="text"
+          data-testid="workbench-resource-reason-input"
+          :value="selectedAction.reason"
+          @input="emitTextPatch('reason', $event.target.value)"
         />
       </label>
     </div>
@@ -137,6 +173,10 @@ const maxSkillLevel = computed(() =>
   Math.max(1, props.selectedAction.source?.skill?.level?.values?.length ?? props.selectedAction.level ?? 1),
 );
 const isSkillAction = computed(() => props.selectedAction.type === 'skill');
+const isWaitAction = computed(() => props.selectedAction.type === 'wait');
+const isAnnotationAction = computed(() => props.selectedAction.type === 'annotation');
+const isResourceAction = computed(() => props.selectedAction.type === 'resource');
+const isEnemyEventAction = computed(() => props.selectedAction.type === 'enemyEvent');
 const actionTypeLabel = computed(() => {
   if (props.selectedAction.type === 'wait') {
     return '等待动作';
@@ -144,14 +184,38 @@ const actionTypeLabel = computed(() => {
   if (props.selectedAction.type === 'annotation') {
     return '注释动作';
   }
+  if (props.selectedAction.type === 'resource') {
+    return '资源动作';
+  }
+  if (props.selectedAction.type === 'enemyEvent') {
+    return '敌人事件';
+  }
   return '技能动作';
+});
+const secondaryControlLabel = computed(() => {
+  if (isSkillAction.value) {
+    return '技能等级';
+  }
+  if (isResourceAction.value) {
+    return '资源变化';
+  }
+  if (isEnemyEventAction.value) {
+    return '事件类型';
+  }
+  return '持续时间 ms';
 });
 const selectedActionSummary = computed(() => {
   if (isSkillAction.value) {
     return props.selectedAction.damageModel?.values?.[0] ?? '倍率待补';
   }
-  if (props.selectedAction.type === 'wait') {
+  if (isWaitAction.value) {
     return `${props.selectedAction.durationMs ?? 0}ms`;
+  }
+  if (isResourceAction.value) {
+    return `${String(props.selectedAction.resource ?? 'sp').toUpperCase()} ${formatSigned(props.selectedAction.change)}`;
+  }
+  if (isEnemyEventAction.value) {
+    return props.selectedAction.eventType || 'phase';
   }
   return props.selectedAction.note || '备注';
 });
@@ -178,6 +242,11 @@ function emitTextPatch(key, value) {
   emit('update-action', {
     [key]: value,
   });
+}
+
+function formatSigned(value) {
+  const number = Number(value) || 0;
+  return `${number > 0 ? '+' : ''}${number}`;
 }
 </script>
 
@@ -218,6 +287,10 @@ h2 {
 .action-controls {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   padding-top: 0;
+}
+
+.contextual-controls {
+  padding-bottom: 0;
 }
 
 .note-control {

@@ -44,6 +44,9 @@ function formatPayload(event) {
   if (event.type === 'ANNOTATION') {
     return event.payload.note;
   }
+  if (event.type === 'ENEMY_EVENT') {
+    return `${event.payload.eventType} / ${event.payload.note}`;
+  }
   if (event.type === 'SCENARIO_START') {
     return event.payload.projectName;
   }
@@ -136,6 +139,11 @@ li {
 .type.resource_change {
   background: rgba(121, 199, 185, 0.12);
   color: #79c7b9;
+}
+
+.type.enemy_event {
+  background: rgba(245, 108, 108, 0.12);
+  color: #f8b6b6;
 }
 
 .type.wait,

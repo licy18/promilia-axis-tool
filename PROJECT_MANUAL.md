@@ -55,7 +55,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；10 个测试文件、61 条测试通过。
+- `npm run test -- --run`：通过；10 个测试文件、63 条测试通过。
 
 ## 3. 目录速览
 
@@ -804,6 +804,48 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 先实现 `resource` 动作草稿、项目 action、运行时 `RESOURCE_CHANGE` 事件和属性面板编辑。
 - 再实现 `enemyEvent` 动作的最小日志事件，为 Boss 机制/阶段转换/可攻击窗口预留结构。
 - 保持事件动作不投射伤害，所有资源变化必须从 simulation 事件进入 `resourceTimeline`。
+
+### 2026-07-07：阶段 4-8 资源事件和敌人事件动作落地
+
+本轮完成：
+
+- `src/domain/projectSchema.js` 增加：
+  - `createResourceAction()`：生成 `resource` 动作，字段包含 `resource`、`change`、`reason`、`note`。
+  - `createEnemyEventAction()`：生成 `enemyEvent` 动作，字段包含 `eventType`、`note`。
+  - schema 校验补齐 `resource`、`change`、`reason`、`eventType`。
+- `src/domain/workbenchProjectFactory.js` 让 `actionDrafts[]` 保留并生成 `resource` / `enemyEvent` 新版项目动作。
+- `simulateScenario()` 对资源动作输出 `RESOURCE_CHANGE`，并把它纳入 `resourceTimeline`；对敌人动作输出 `ENEMY_EVENT`。
+- `ActionLibraryPanel` 工具箱新增“+ 资源”“+ 敌人”。
+- `PropertiesPanel` 支持编辑：
+  - 资源动作：资源名、变化量、原因、备注。
+  - 敌人事件：事件类型、备注。
+- `EventLogPanel` 支持 `ENEMY_EVENT` 展示，并保持 `RESOURCE_CHANGE` 显示资源变化详情。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、19 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、63 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- 浏览器检查 `http://127.0.0.1:5175/#/workbench`：
+  - 新增资源动作后，资源面板显示 1 个事件和 `SP -35`。
+  - 事件日志显示 `RESOURCE_CHANGE SP -35 / manual-test`。
+  - 新增敌人事件后，事件日志显示 `ENEMY_EVENT phase-2 / 进入二阶段`。
+  - 动作数为 3，命中数仍为 1，没有产生 `DAMAGE_SKIPPED`。
+  - 验证结束后已重置 workbench 草稿，应用控制台无 error。
+
+当前结论：
+
+- 新版工作台动作工具箱已覆盖技能、等待、注释、资源事件、敌人事件。
+- 资源变化已经由 simulation 事件驱动资源面板，不再需要 UI 侧补算。
+- 敌人事件目前是日志型事件，还没有影响敌人状态、可攻击窗口或 Boss 机制。
+- `switch` 切人动作仍只是 `ACTION_TYPES` 预留，尚未接入多角色 actor 模型。
+
+下一步：
+
+- 阶段 4-9 目标：建立切人动作和多角色 actor 雏形。
+- 先让 workbench 选择第二个真实角色，并在 `createWorkbenchProject()` 中生成多个 actors。
+- 接入 `switch` 动作草稿、项目 action、运行时 `SWITCH` 事件和属性面板编辑。
+- 切人动作先作为非伤害事件，不直接改变伤害公式；后续再接入当前前台角色、队伍资源和多轨显示。
 
 ## 10. 文档维护规则
 

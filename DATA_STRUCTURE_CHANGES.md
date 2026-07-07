@@ -55,8 +55,10 @@
 | `skill` | 真实角色技能动作 | 进入伤害投影、冷却、资源消耗和时序缺口日志 |
 | `wait` | 排轴中的等待窗口 | 输出 `WAIT` 事件，记录 `durationMs` 和 `note`，不投射伤害 |
 | `annotation` | 排轴备注/阶段标记 | 输出 `ANNOTATION` 事件，记录 `note`，不投射伤害 |
+| `resource` | 手动资源变化 | 输出 `RESOURCE_CHANGE` 事件，记录 `resource`、`change`、`reason`、`note`，并进入 `resourceTimeline` |
+| `enemyEvent` | 敌人/Boss 事件标记 | 输出 `ENEMY_EVENT` 事件，记录 `eventType` 和 `note`，不投射伤害 |
 
-`switch`、`enemyEvent` 和 `resource` 已在 `ACTION_TYPES` 中预留，但尚未接入工作台和运行时。
+`switch` 已在 `ACTION_TYPES` 中预留，但尚未接入工作台和运行时。
 
 ## 2026-07-07：最小模拟运行时输出
 
@@ -95,7 +97,7 @@
 
 当前 `damageTimeline` 是低置信度原始伤害投影，只使用角色 `ATK` 与技能等级倍率。最终防御、抗性、暴击、Buff、奇波、装备、灵子和精确命中帧尚未纳入。
 
-当前 `resourceTimeline` 只收集 simulation engine 明确输出的资源事件，例如技能 `spCost` 产生的 `RESOURCE_CHANGE`。UI 资源面板不得从动作列表或技能描述里另行推算资源。
+当前 `resourceTimeline` 只收集 simulation engine 明确输出的资源事件，例如技能 `spCost` 或手动 `resource` 动作产生的 `RESOURCE_CHANGE`。UI 资源面板不得从动作列表或技能描述里另行推算资源。
 
 ## 1. 变更背景和目标
 

@@ -189,6 +189,48 @@ export function createAnnotationAction({
   };
 }
 
+export function createResourceAction({
+  id,
+  actorId = null,
+  startMs = 0,
+  resource = 'sp',
+  change = 50,
+  reason = 'manual-axis-resource',
+  note = '',
+} = {}) {
+  return {
+    id: id ?? createStableId('action'),
+    type: ACTION_TYPES.RESOURCE,
+    actorId,
+    name: '资源事件',
+    startMs,
+    durationMs: 600,
+    resource,
+    change: Number(change) || 0,
+    reason,
+    note,
+  };
+}
+
+export function createEnemyEventAction({
+  id,
+  targetId = null,
+  startMs = 0,
+  eventType = 'phase',
+  note = '敌人阶段标记',
+} = {}) {
+  return {
+    id: id ?? createStableId('action'),
+    type: ACTION_TYPES.ENEMY_EVENT,
+    targetId,
+    name: '敌人事件',
+    startMs,
+    durationMs: 600,
+    eventType,
+    note,
+  };
+}
+
 export function validateProject(project, gameData = {}) {
   const errors = [];
   const warnings = [];
@@ -346,6 +388,25 @@ function validateActions(actions, project, gameData, errors, warnings) {
       }
     } else if (action.type === ACTION_TYPES.ANNOTATION && typeof action.note !== 'string') {
       errors.push(issue('action.note.invalid', 'Annotation action note must be a string', `${path}.note`));
+    } else if (action.type === ACTION_TYPES.RESOURCE) {
+      if (typeof action.resource !== 'string' || action.resource.trim() === '') {
+        errors.push(issue('action.resource.invalid', 'Resource action resource must be a non-empty string', `${path}.resource`));
+      }
+      if (!Number.isFinite(action.change)) {
+        errors.push(issue('action.change.invalid', 'Resource action change must be a finite number', `${path}.change`));
+      }
+      if (typeof action.reason !== 'string') {
+        errors.push(issue('action.reason.invalid', 'Resource action reason must be a string', `${path}.reason`));
+      }
+    } else if (action.type === ACTION_TYPES.ENEMY_EVENT) {
+      if (typeof action.eventType !== 'string' || action.eventType.trim() === '') {
+        errors.push(
+          issue('action.eventType.invalid', 'Enemy event action eventType must be a non-empty string', `${path}.eventType`),
+        );
+      }
+      if (typeof action.note !== 'string') {
+        errors.push(issue('action.note.invalid', 'Enemy event action note must be a string', `${path}.note`));
+      }
     }
   });
 }

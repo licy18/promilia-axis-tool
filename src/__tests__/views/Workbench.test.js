@@ -220,6 +220,47 @@ describe('Workbench view', () => {
     expect(wrapper.text()).toContain('RESOURCE_CHANGE');
   });
 
+  it('adds resource and enemy event actions without projecting extra damage', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper.find('[data-testid="workbench-add-resource-action"]').trigger('click');
+
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('2 action');
+    expect(wrapper.find('[data-testid="scenario-hit-count"]').text()).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-action-type"]').element.value).toBe('资源动作');
+    expect(wrapper.find('[data-testid="workbench-resource-change-input"]').element.value).toBe('50');
+
+    await wrapper.find('[data-testid="workbench-resource-change-input"]').setValue('-35');
+    await wrapper.find('[data-testid="workbench-resource-reason-input"]').setValue('manual-test');
+    await wrapper.find('[data-testid="workbench-note-input"]').setValue('扣除测试资源');
+
+    expect(wrapper.find('[data-testid="workbench-resource-event-count"]').text()).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-resource-sp-total"]').text()).toBe('-35');
+    expect(wrapper.text()).toContain('RESOURCE_CHANGE');
+    expect(wrapper.text()).toContain('SP -35 / manual-test');
+
+    await wrapper.find('[data-testid="workbench-add-enemy-event-action"]').trigger('click');
+
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('3 action');
+    expect(wrapper.find('[data-testid="scenario-hit-count"]').text()).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-action-type"]').element.value).toBe('敌人事件');
+
+    await wrapper.find('[data-testid="workbench-enemy-event-type-input"]').setValue('phase-2');
+    await wrapper.find('[data-testid="workbench-note-input"]').setValue('进入二阶段');
+
+    expect(wrapper.text()).toContain('ENEMY_EVENT');
+    expect(wrapper.text()).toContain('phase-2 / 进入二阶段');
+    expect(wrapper.text()).not.toContain('DAMAGE_SKIPPED');
+  });
+
   it('keeps generated action ids unique after deleting the first action', async () => {
     const wrapper = mount(Workbench, {
       global: {

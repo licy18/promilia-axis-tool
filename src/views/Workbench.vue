@@ -39,6 +39,8 @@
         @select-action="selectedActionId = $event"
         @add-action="addAction"
         @add-annotation-action="addAnnotationAction"
+        @add-enemy-event-action="addEnemyEventAction"
+        @add-resource-action="addResourceAction"
         @add-wait-action="addWaitAction"
         @copy-action="copyAction"
         @delete-action="deleteAction"
@@ -271,6 +273,44 @@ function addAnnotationAction() {
     durationMs: 600,
     level: selectedDraft.value.level,
     note: '备注',
+  });
+
+  actionDrafts.value = [...actionDrafts.value, nextAction];
+  selectedActionId.value = nextAction.id;
+  markDraftDirty();
+}
+
+function addResourceAction() {
+  const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
+  const nextAction = createWorkbenchActionDraft({
+    id: createNextActionId(),
+    type: ACTION_TYPES.RESOURCE,
+    skillId: selectedDraft.value.skillId,
+    startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
+    durationMs: 600,
+    level: selectedDraft.value.level,
+    resource: 'sp',
+    change: 50,
+    reason: 'manual-axis-resource',
+    note: '手动资源变化',
+  });
+
+  actionDrafts.value = [...actionDrafts.value, nextAction];
+  selectedActionId.value = nextAction.id;
+  markDraftDirty();
+}
+
+function addEnemyEventAction() {
+  const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
+  const nextAction = createWorkbenchActionDraft({
+    id: createNextActionId(),
+    type: ACTION_TYPES.ENEMY_EVENT,
+    skillId: selectedDraft.value.skillId,
+    startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
+    durationMs: 600,
+    level: selectedDraft.value.level,
+    eventType: 'phase',
+    note: '敌人阶段标记',
   });
 
   actionDrafts.value = [...actionDrafts.value, nextAction];

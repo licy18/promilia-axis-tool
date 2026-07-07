@@ -4,7 +4,9 @@ import {
   createActorFromCharacter,
   createAnnotationAction,
   createEnemyFromData,
+  createEnemyEventAction,
   createProject,
+  createResourceAction,
   createSkillAction,
   createWaitAction,
 } from './projectSchema';
@@ -42,6 +44,10 @@ export function createWorkbenchActionDraft({
   startMs = 0,
   durationMs = 1000,
   level = 1,
+  resource = 'sp',
+  change = 50,
+  reason = 'manual-axis-resource',
+  eventType = 'phase',
   note = '',
 } = {}) {
   return {
@@ -51,6 +57,10 @@ export function createWorkbenchActionDraft({
     startMs: Number(startMs) || 0,
     durationMs: Math.max(1, Number(durationMs) || 1000),
     level: Math.max(1, Number(level) || 1),
+    resource,
+    change: Number(change) || 0,
+    reason,
+    eventType,
     note,
   };
 }
@@ -144,7 +154,7 @@ export function normalizeWorkbenchActionDrafts(actionDrafts = [], characterId = 
 
   return actionDrafts
     .map((draft, index) => {
-      if (draft.type === ACTION_TYPES.WAIT || draft.type === ACTION_TYPES.ANNOTATION) {
+      if (isNonSkillDraftType(draft.type)) {
         return createWorkbenchActionDraft({
           id: draft.id ?? `action-${String(index + 1).padStart(4, '0')}`,
           type: draft.type,
@@ -152,6 +162,10 @@ export function normalizeWorkbenchActionDrafts(actionDrafts = [], characterId = 
           startMs: draft.startMs,
           durationMs: draft.durationMs,
           level: draft.level,
+          resource: draft.resource,
+          change: draft.change,
+          reason: draft.reason,
+          eventType: draft.eventType,
           note: draft.note,
         });
       }
@@ -165,6 +179,10 @@ export function normalizeWorkbenchActionDrafts(actionDrafts = [], characterId = 
         startMs: draft.startMs,
         durationMs: draft.durationMs,
         level: clampLevel(draft.level, skill),
+        resource: draft.resource,
+        change: draft.change,
+        reason: draft.reason,
+        eventType: draft.eventType,
         note: draft.note,
       });
     })
@@ -189,6 +207,28 @@ function createProjectActionFromDraft(draft, actorId, targetId) {
     });
   }
 
+  if (draft.type === ACTION_TYPES.RESOURCE) {
+    return createResourceAction({
+      id: draft.id,
+      actorId,
+      startMs: draft.startMs,
+      resource: draft.resource || 'sp',
+      change: draft.change,
+      reason: draft.reason || 'manual-axis-resource',
+      note: draft.note,
+    });
+  }
+
+  if (draft.type === ACTION_TYPES.ENEMY_EVENT) {
+    return createEnemyEventAction({
+      id: draft.id,
+      targetId,
+      startMs: draft.startMs,
+      eventType: draft.eventType || 'phase',
+      note: draft.note || '敌人阶段标记',
+    });
+  }
+
   const skill = findById(workbenchSeed.gameData.skills, draft.skillId);
   return createSkillAction({
     id: draft.id,
@@ -209,7 +249,22 @@ function actionTypeLabel(type) {
   if (type === ACTION_TYPES.ANNOTATION) {
     return '注释';
   }
+  if (type === ACTION_TYPES.RESOURCE) {
+    return '资源事件';
+  }
+  if (type === ACTION_TYPES.ENEMY_EVENT) {
+    return '敌人事件';
+  }
   return '动作';
+}
+
+function isNonSkillDraftType(type) {
+  return [
+    ACTION_TYPES.WAIT,
+    ACTION_TYPES.ANNOTATION,
+    ACTION_TYPES.RESOURCE,
+    ACTION_TYPES.ENEMY_EVENT,
+  ].includes(type);
 }
 
 function clampLevel(level, skill) {

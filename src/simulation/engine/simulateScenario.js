@@ -20,6 +20,13 @@ export function simulateScenario(scenario) {
   for (const action of scenario.actions) {
     eventLog.push(createActionStartEvent(action));
 
+    const resourceActionEvent = createResourceActionEvent(action);
+    if (resourceActionEvent) {
+      resourceEvents.push(resourceActionEvent);
+      eventLog.push(resourceActionEvent);
+      continue;
+    }
+
     const nonCombatEvent = createNonCombatEvent(action);
     if (nonCombatEvent) {
       eventLog.push(nonCombatEvent);
@@ -128,7 +135,42 @@ function createNonCombatEvent(action) {
     };
   }
 
+  if (action.type === ACTION_TYPES.ENEMY_EVENT) {
+    return {
+      type: 'ENEMY_EVENT',
+      timeMs: action.startMs,
+      actionId: action.id,
+      targetId: action.target?.id,
+      payload: {
+        actionName: action.name,
+        enemyName: action.target?.name,
+        eventType: action.eventType,
+        note: action.note,
+      },
+    };
+  }
+
   return null;
+}
+
+function createResourceActionEvent(action) {
+  if (action.type !== ACTION_TYPES.RESOURCE) {
+    return null;
+  }
+
+  return {
+    type: 'RESOURCE_CHANGE',
+    timeMs: action.startMs,
+    actionId: action.id,
+    actorId: action.actorId,
+    payload: {
+      resource: action.resource,
+      change: Number(action.change) || 0,
+      reason: action.reason || 'manual-axis-resource',
+      confidence: 'manual',
+      note: action.note,
+    },
+  };
 }
 
 function createActionStartEvent(action) {
@@ -183,8 +225,9 @@ function eventPriority(type) {
     COOLDOWN_START: 4,
     DAMAGE_PROJECTED: 5,
     WAIT: 6,
-    ANNOTATION: 7,
-    DAMAGE_SKIPPED: 8,
+    ENEMY_EVENT: 7,
+    ANNOTATION: 8,
+    DAMAGE_SKIPPED: 9,
     SCENARIO_END: 99,
   };
 

@@ -170,4 +170,65 @@ describe('first vertical slice simulation', () => {
     ]);
     expect(result.eventLog.map((event) => event.type)).toContain('RESOURCE_CHANGE');
   });
+
+  it('keeps manual resource and enemy event actions as non-damage timeline events', () => {
+    const project = createWorkbenchProject(
+      {},
+      {
+        actions: [
+          { id: 'action-skill', type: 'skill', skillId: 10900101, startMs: 0, level: 1 },
+          {
+            id: 'action-resource',
+            type: 'resource',
+            startMs: 1200,
+            resource: 'sp',
+            change: -35,
+            reason: 'manual-test',
+            note: '扣除测试资源',
+          },
+          {
+            id: 'action-enemy',
+            type: 'enemyEvent',
+            startMs: 1800,
+            eventType: 'phase-2',
+            note: '进入二阶段',
+          },
+        ],
+      },
+    );
+    const result = runSimulation(project, getWorkbenchGameData());
+    const resourceEvent = result.eventLog.find(
+      (event) => event.actionId === 'action-resource' && event.type === 'RESOURCE_CHANGE',
+    );
+    const enemyEvent = result.eventLog.find(
+      (event) => event.actionId === 'action-enemy' && event.type === 'ENEMY_EVENT',
+    );
+
+    expect(result.summary.actionCount).toBe(3);
+    expect(result.summary.projectedHitCount).toBe(1);
+    expect(result.summary.resourceEventCount).toBe(1);
+    expect(result.resourceTimeline).toEqual([
+      expect.objectContaining({
+        actionId: 'action-resource',
+        resource: 'sp',
+        change: -35,
+        reason: 'manual-test',
+      }),
+    ]);
+    expect(resourceEvent).toMatchObject({
+      type: 'RESOURCE_CHANGE',
+      payload: {
+        confidence: 'manual',
+        note: '扣除测试资源',
+      },
+    });
+    expect(enemyEvent).toMatchObject({
+      type: 'ENEMY_EVENT',
+      payload: {
+        eventType: 'phase-2',
+        note: '进入二阶段',
+      },
+    });
+    expect(result.eventLog.map((event) => event.type)).not.toContain('DAMAGE_SKIPPED');
+  });
 });

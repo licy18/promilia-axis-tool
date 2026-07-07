@@ -20,6 +20,22 @@
       >
         + 注释
       </button>
+      <button
+        class="icon-button"
+        data-testid="workbench-add-resource-action"
+        type="button"
+        @click="$emit('add-resource-action')"
+      >
+        + 资源
+      </button>
+      <button
+        class="icon-button"
+        data-testid="workbench-add-enemy-event-action"
+        type="button"
+        @click="$emit('add-enemy-event-action')"
+      >
+        + 敌人
+      </button>
     </div>
 
     <div class="actor-block">
@@ -68,8 +84,8 @@
             <dd>{{ actionTypeLabel(action.type) }}</dd>
           </div>
           <div>
-            <dt>{{ action.type === 'skill' ? '倍率' : '时长' }}</dt>
-            <dd>{{ action.type === 'skill' ? action.selectedDamageSegment?.rawValue ?? '待补' : `${action.durationMs ?? 0}ms` }}</dd>
+            <dt>{{ actionDetailLabel(action) }}</dt>
+            <dd>{{ actionDetailValue(action) }}</dd>
           </div>
           <div>
             <dt>冷却</dt>
@@ -109,7 +125,16 @@ defineProps({
   },
 });
 
-defineEmits(['select-action', 'add-action', 'add-wait-action', 'add-annotation-action', 'copy-action', 'delete-action']);
+defineEmits([
+  'select-action',
+  'add-action',
+  'add-wait-action',
+  'add-annotation-action',
+  'add-resource-action',
+  'add-enemy-event-action',
+  'copy-action',
+  'delete-action',
+]);
 
 function actionTypeLabel(type) {
   if (type === 'wait') {
@@ -118,7 +143,44 @@ function actionTypeLabel(type) {
   if (type === 'annotation') {
     return '注释';
   }
+  if (type === 'resource') {
+    return '资源';
+  }
+  if (type === 'enemyEvent') {
+    return '敌人';
+  }
   return '技能';
+}
+
+function actionDetailLabel(action) {
+  if (action.type === 'skill') {
+    return '倍率';
+  }
+  if (action.type === 'resource') {
+    return '变化';
+  }
+  if (action.type === 'enemyEvent') {
+    return '事件';
+  }
+  return '时长';
+}
+
+function actionDetailValue(action) {
+  if (action.type === 'skill') {
+    return action.selectedDamageSegment?.rawValue ?? '待补';
+  }
+  if (action.type === 'resource') {
+    return `${String(action.resource ?? 'sp').toUpperCase()} ${formatSigned(action.change)}`;
+  }
+  if (action.type === 'enemyEvent') {
+    return action.eventType ?? 'phase';
+  }
+  return `${action.durationMs ?? 0}ms`;
+}
+
+function formatSigned(value) {
+  const number = Number(value) || 0;
+  return `${number > 0 ? '+' : ''}${number}`;
 }
 </script>
 
@@ -166,7 +228,7 @@ h2 {
 
 .toolbox {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   padding: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
