@@ -61,6 +61,21 @@
           )
         }}
       </p>
+      <p
+        v-if="
+          formatFormulaExecutionMatrixSummary(
+            summary.formulaExecutionMatrixSummary
+          )
+        "
+        class="diagnostic-empty formula-pattern-summary"
+        data-testid="workbench-formula-execution-matrix-summary"
+      >
+        {{
+          formatFormulaExecutionMatrixSummary(
+            summary.formulaExecutionMatrixSummary
+          )
+        }}
+      </p>
       <div
         v-for="entry in actionResultTimeline"
         :key="entry.actionId"
@@ -735,6 +750,31 @@ function formatFormulaCandidatePatternSummary(summary) {
   );
 
   return `候选模式 ${summary.comparableActionCount} 动作 · ${formatStrategyLabel(summary.preferredStrategy)} 缩放 ${scaleRange}${perHitText}${hint}${behaviorText}`;
+}
+
+function formatFormulaExecutionMatrixSummary(summary) {
+  if (!summary || summary.matrixActionCount <= 0) {
+    return '';
+  }
+
+  const scaleRange = formatScaleRange(
+    summary.requiredScaleMin,
+    summary.requiredScaleMax
+  );
+  const perHitRange = formatScaleRange(
+    summary.requiredPerHitScaleMin,
+    summary.requiredPerHitScaleMax
+  );
+  const perHitText = perHitRange ? ` / 每 hit ${perHitRange}` : '';
+  const spreadText =
+    summary.scaleSpreadStatus === 'varies-by-action-variant'
+      ? '，随动作变化'
+      : '';
+  const hitBindingText =
+    summary.rowCount > 0
+      ? ` · hit绑定 ${summary.rowsWithHitBindings}/${summary.rowCount}`
+      : '';
+  return `执行矩阵摘要 ${summary.matrixActionCount} 动作 · ${summary.rowCount} 行 · ${summary.elementCount} element · 缩放 ${scaleRange}${perHitText}${spreadText}${hitBindingText}`;
 }
 
 function formatScaleRange(min, max) {

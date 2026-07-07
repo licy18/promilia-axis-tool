@@ -3364,6 +3364,45 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8AM 目标：把 `formulaExecutionEvidenceMatrix` 扩展到更多动作形态/技能样本，生成跨动作矩阵摘要，并继续沿 IL2CPP / Extractor 证据追 `DamageElement` 的 function 组合顺序、等级覆盖应用点和每 hit 缩放来源。
 - 若本地 AzPr 数据仍不足，按项目规则使用 AzPr Extractor 提取原始资源补齐证据链。
 
+### 2026-07-08：阶段 5-8AM 跨动作公式执行矩阵摘要
+
+本轮完成：
+
+- `simulation.summary` 新增 `formulaExecutionMatrixSummary`，聚合所有动作的 `formulaExecutionEvidenceMatrix`。
+- 摘要按 action 生成 `actionSummaries[]`，记录每个动作形态的矩阵行数、element 列表、缩放范围、A/G 槽位候选数、hit 绑定覆盖和未确认项。
+- 摘要按 element 生成 `elementSummaries[]`，记录同一 element 在多个动作形态下的缩放范围、hit 绑定覆盖、A 槽覆盖候选和 G 槽直连候选。
+- `AnalysisPanel` 新增 `执行矩阵摘要` 行，能在三值来源顶部看到跨动作矩阵规模、缩放范围和 hit 绑定覆盖。
+- 仿真测试复用【普通攻击 / 重击 / 闪击 / 跃击】四动作 fixture，覆盖单动作与四动作两种摘要；Workbench 测试覆盖默认页面摘要文本。
+
+当前四动作矩阵摘要：
+
+- `matrixActionCount = 4`，覆盖【普通攻击】【重击】【闪击】【跃击】。
+- `rowCount = 8`，每个动作 2 个 element 行，跨动作仍只有 `109001081 / 109001306` 两个 action-level element。
+- `scaleSpreadStatus = varies-by-action-variant`，说明 f2 当前等级值预览不随描述倍率变化，而 raw HP 会随动作形态倍率变化。
+- 缩放范围约 `×2.5-×40.6`；每 hit 缩放范围约 `×2.5-×11.9`。
+- `rowsWithHitBindings = 2/8`：只有【普通攻击】两行能绑定逐 hit 候选，重击/闪击/跃击仍缺 hit 级 DamageElement 绑定证据。
+- `slotOverrideCoverageStatus = all-rows-have-slot-override-candidates`：所有矩阵行都有 A 槽等级覆盖候选。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+- `npm exec prettier -- --check AGENTS.md PROJECT_MANUAL.md DEVELOPMENT_PLAN.md ARCHITECTURE.md DATA_STRUCTURE_CHANGES.md src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npm exec eslint -- --no-warn-ignored src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npm test -- --run`：通过，13 个测试文件、105 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
+- `git diff --check`：通过。
+
+当前边界：
+
+- `formulaExecutionMatrixSummary` 仍是 evidence-only，所有聚合行保持 `applied: false`。
+- 四动作样本仍来自同一技能 `10900101` 的动作形态拆分，尚未覆盖更多角色/技能。
+- 非普攻动作缺逐 hit 绑定不是失败，而是当前证据链真实缺口；需要从 skill_control/Extractor 或 IL2CPP runtime 继续追重击、闪击、跃击的 DamageElement 绑定。
+
+下一步：
+
+- 阶段 5-8AN 目标：围绕 `formulaExecutionMatrixSummary` 的 hit 绑定缺口，继续追重击/闪击/跃击的 skill_control 行为链和外部 element 对象，优先确认非普攻动作的 hit 级 DamageElement 绑定来源。
+- 若本地 AzPr 表和已生成证据不足，则使用 AzPr Extractor 提取原始资源，补齐对应 `skill_control`、`elementBaseDatas`、外部 element 对象和 IL2CPP 执行链锚点。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

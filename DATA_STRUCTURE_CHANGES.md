@@ -4675,3 +4675,129 @@ data-element-config-id="109001306" data-status="未应用 · function组合待�
 - `formulaExecutionEvidenceMatrix.applied` 必须保持 `false`，直到 `DamageElement` runtime 执行顺序确认。
 - 该矩阵只接在 HP 伤害的 sourceEvidence 下；削韧和充能仍分别由各自 sourceEvidence 追踪候选字段。
 - 下一阶段需要扩展到更多动作/技能样本，验证 `hitIndexes`、A 槽覆盖点和缩放缺口是否跨动作稳定。
+
+## 66. 阶段 5-8AM：跨动作公式执行矩阵摘要
+
+阶段 5-8AM 在 `simulation.summary` 下新增 `formulaExecutionMatrixSummary`，用于把多个动作的 `formulaExecutionEvidenceMatrix` 聚合为跨动作/跨 element 的诊断摘要。该字段仍然是 evidence-only，不参与 HP、削韧或充能计算。
+
+### 66.1 字段位置
+
+```json
+{
+  "summary": {
+    "formulaExecutionMatrixSummary": {
+      "status": "formula-execution-matrices-found",
+      "applied": false
+    }
+  }
+}
+```
+
+### 66.2 顶层摘要
+
+四动作样本当前输出：
+
+```json
+{
+  "status": "formula-execution-matrices-found",
+  "actionCount": 4,
+  "matrixActionCount": 4,
+  "actionVariantCount": 4,
+  "actionVariantLabels": ["普攻", "重击", "闪击", "跃击"],
+  "rowCount": 8,
+  "elementCount": 2,
+  "preferredStrategy": "function_2-current-level-value-param",
+  "requiredScaleMin": 2.501628664495114,
+  "requiredScaleMax": 40.58957654723127,
+  "requiredPerHitScaleMin": 2.501628664495114,
+  "requiredPerHitScaleMax": 11.882736156351792,
+  "scaleSpreadStatus": "varies-by-action-variant",
+  "perHitScaleSpreadStatus": "varies-by-action-variant",
+  "hitBindingCoverageStatus": "some-rows-missing-hit-bindings",
+  "slotOverrideCoverageStatus": "all-rows-have-slot-override-candidates",
+  "rowsWithLargeDifference": 8,
+  "rowsWithSlotOverrideCandidates": 8,
+  "rowsWithDirectSlotMatches": 8,
+  "rowsWithHitBindings": 2,
+  "applied": false
+}
+```
+
+字段说明：
+
+- `matrixActionCount`：有 `formulaExecutionEvidenceMatrix` 的动作数量。
+- `rowCount`：所有矩阵行总数。
+- `elementCount`：跨动作唯一 `elementConfigId` 数量。
+- `requiredScaleMin/Max`：首选 function 组合候选对齐 raw HP 所需的缩放范围。
+- `requiredPerHitScaleMin/Max`：按当前 hitCount 归一后的缩放范围。
+- `hitBindingCoverageStatus`：矩阵行是否有逐 hit 绑定。
+- `slotOverrideCoverageStatus`：矩阵行是否有 A 槽等级覆盖候选。
+
+### 66.3 actionSummaries
+
+`actionSummaries[]` 按动作聚合：
+
+```json
+{
+  "actionId": "action-segment-1",
+  "actionVariantLabel": "重击",
+  "rawMultiplier": "190%",
+  "rowCount": 2,
+  "elementConfigIds": [109001081, 109001306],
+  "requiredScaleMin": 11.882736156351792,
+  "requiredScaleMax": 11.882736156351792,
+  "rowsWithHitBindings": 0,
+  "hitBindingCoverageStatus": "no-rows-have-hit-bindings",
+  "slotOverrideCandidateCount": 2,
+  "directSlotMatchCount": 2,
+  "applied": false
+}
+```
+
+当前含义：
+
+- 【普通攻击】两行都有 hit 绑定。
+- 【重击】【闪击】【跃击】都有动作级矩阵，但 `rowsWithHitBindings = 0`，说明还缺 hit 级 DamageElement 绑定证据。
+
+### 66.4 elementSummaries
+
+`elementSummaries[]` 按 element 聚合：
+
+```json
+{
+  "elementConfigId": 109001081,
+  "actionCount": 4,
+  "actionVariantLabels": ["普攻", "重击", "闪击", "跃击"],
+  "hitIndexes": [1],
+  "rowCount": 4,
+  "requiredScaleMin": 2.501628664495114,
+  "requiredScaleMax": 40.58957654723127,
+  "rowsWithHitBindings": 1,
+  "hitBindingCoverageStatus": "some-rows-missing-hit-bindings",
+  "slotOverrideCandidateVariables": ["A"],
+  "directSlotMatchVariables": ["G"],
+  "applied": false
+}
+```
+
+该摘要用于判断同一 element 的缩放缺口是否跨动作稳定，以及某个 element 是否只在部分动作中能绑定 hit。
+
+### 66.5 Workbench 摘要
+
+`AnalysisPanel` 在三值来源顶部新增：
+
+```text
+执行矩阵摘要 4 动作 · 8 行 · 2 element · 缩放 ×2.5-×40.6 / 每 hit ×2.5-×11.9，随动作变化 · hit绑定 2/8
+```
+
+默认单动作样本显示：
+
+```text
+执行矩阵摘要 1 动作 · 2 行 · 2 element · 缩放 ×40.6 / 每 hit ×8.1 · hit绑定 2/2
+```
+
+### 66.6 当前边界
+
+- `formulaExecutionMatrixSummary.applied` 必须保持 `false`。
+- 该摘要不能证明 f2、f1\*f2 或 f1+f2 就是真实 `DamageElement` 执行顺序。
+- 下一阶段应优先补非普攻动作的 hit 绑定来源，再判断缩放缺口是否来自 hit 分配、等级覆盖点、运行时常量或其他 `DamageElement` 逻辑。

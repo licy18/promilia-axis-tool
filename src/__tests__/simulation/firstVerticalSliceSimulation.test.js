@@ -1280,6 +1280,55 @@ describe('first vertical slice simulation', () => {
     expect(
       result.summary.formulaCandidatePatternSummary.requiredScaleMax
     ).toBeCloseTo(40.59, 2);
+    expect(result.summary.formulaExecutionMatrixSummary).toMatchObject({
+      status: 'single-formula-execution-matrix',
+      actionCount: 1,
+      matrixActionCount: 1,
+      actionVariantLabels: ['普攻'],
+      rowCount: 2,
+      elementCount: 2,
+      preferredStrategy: 'function_2-current-level-value-param',
+      scaleSpreadStatus: 'stable-across-action-variants',
+      hitBindingCoverageStatus: 'all-rows-have-hit-bindings',
+      slotOverrideCoverageStatus: 'all-rows-have-slot-override-candidates',
+      rowsWithLargeDifference: 2,
+      rowsWithSlotOverrideCandidates: 2,
+      rowsWithDirectSlotMatches: 2,
+      rowsWithHitBindings: 2,
+      diagnostics: expect.objectContaining({
+        functionCombinationOrderStatus: 'unconfirmed',
+        levelOverrideApplicationStatus: 'unconfirmed',
+        perHitMultiplierAllocationStatus: 'unconfirmed',
+        crossActionMatrixStatus: 'needs-more-action-samples',
+      }),
+      actionSummaries: [
+        expect.objectContaining({
+          actionId: 'action-0001',
+          actionVariantLabel: '普攻',
+          rowCount: 2,
+          rowsWithHitBindings: 2,
+          hitBindingCoverageStatus: 'all-rows-have-hit-bindings',
+        }),
+      ],
+      elementSummaries: expect.arrayContaining([
+        expect.objectContaining({
+          elementConfigId: 109001081,
+          actionCount: 1,
+          actionVariantLabels: ['普攻'],
+          hitIndexes: [1],
+          rowCount: 1,
+          rowsWithHitBindings: 1,
+          hitBindingCoverageStatus: 'all-rows-have-hit-bindings',
+        }),
+      ]),
+      applied: false,
+    });
+    expect(
+      result.summary.formulaExecutionMatrixSummary.requiredScaleMin
+    ).toBeCloseTo(40.59, 2);
+    expect(
+      result.summary.formulaExecutionMatrixSummary.requiredPerHitScaleMin
+    ).toBeCloseTo(8.12, 2);
     expect(result.summary).toMatchObject({
       projectedHitCount: 1,
       actionResultCount: 1,
@@ -1516,6 +1565,76 @@ describe('first vertical slice simulation', () => {
       previewRoundedValues: [307],
       applied: false,
     });
+    expect(result.summary.formulaExecutionMatrixSummary).toMatchObject({
+      status: 'formula-execution-matrices-found',
+      actionCount: 4,
+      matrixActionCount: 4,
+      actionVariantCount: 4,
+      actionVariantLabels: ['普攻', '重击', '闪击', '跃击'],
+      rowCount: 8,
+      elementCount: 2,
+      preferredStrategy: 'function_2-current-level-value-param',
+      scaleSpreadStatus: 'varies-by-action-variant',
+      perHitScaleSpreadStatus: 'varies-by-action-variant',
+      hitBindingCoverageStatus: 'some-rows-missing-hit-bindings',
+      slotOverrideCoverageStatus: 'all-rows-have-slot-override-candidates',
+      rowsWithLargeDifference: 8,
+      rowsWithSlotOverrideCandidates: 8,
+      rowsWithDirectSlotMatches: 8,
+      rowsWithHitBindings: 2,
+      diagnostics: expect.objectContaining({
+        functionCombinationOrderStatus: 'unconfirmed',
+        levelOverrideApplicationStatus: 'unconfirmed',
+        perHitMultiplierAllocationStatus: 'unconfirmed',
+        crossActionMatrixStatus: 'cross-action-matrix-summary-built',
+        scaleSpreadStatus: 'varies-by-action-variant',
+        hitBindingCoverageStatus: 'some-rows-missing-hit-bindings',
+      }),
+      actionSummaries: expect.arrayContaining([
+        expect.objectContaining({
+          actionId: 'action-segment-0',
+          actionVariantLabel: '普攻',
+          rawMultiplier: '649%',
+          rowCount: 2,
+          rowsWithHitBindings: 2,
+          hitBindingCoverageStatus: 'all-rows-have-hit-bindings',
+        }),
+        expect.objectContaining({
+          actionId: 'action-segment-1',
+          actionVariantLabel: '重击',
+          rawMultiplier: '190%',
+          rowCount: 2,
+          rowsWithHitBindings: 0,
+          hitBindingCoverageStatus: 'no-rows-have-hit-bindings',
+        }),
+      ]),
+      elementSummaries: expect.arrayContaining([
+        expect.objectContaining({
+          elementConfigId: 109001081,
+          actionCount: 4,
+          actionVariantLabels: ['普攻', '重击', '闪击', '跃击'],
+          hitIndexes: [1],
+          rowCount: 4,
+          rowsWithHitBindings: 1,
+          hitBindingCoverageStatus: 'some-rows-missing-hit-bindings',
+          slotOverrideCandidateVariables: ['A'],
+          directSlotMatchVariables: ['G'],
+        }),
+      ]),
+      applied: false,
+    });
+    expect(
+      result.summary.formulaExecutionMatrixSummary.requiredScaleMin
+    ).toBeCloseTo(2.5, 1);
+    expect(
+      result.summary.formulaExecutionMatrixSummary.requiredScaleMax
+    ).toBeCloseTo(40.59, 2);
+    expect(
+      result.summary.formulaExecutionMatrixSummary.requiredPerHitScaleMin
+    ).toBeCloseTo(2.5, 1);
+    expect(
+      result.summary.formulaExecutionMatrixSummary.requiredPerHitScaleMax
+    ).toBeCloseTo(11.88, 2);
     expect(
       result.summary.formulaCandidatePatternSummary.actionSummaries.map(
         item => [

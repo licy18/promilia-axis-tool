@@ -81,6 +81,8 @@ export function projectSimulationResult({
   );
   const formulaCandidatePatternSummary =
     summarizeFormulaCandidatePatterns(actionResultTimeline);
+  const formulaExecutionMatrixSummary =
+    summarizeFormulaExecutionMatrices(actionResultTimeline);
   const timingMissingActionIds = scenario.diagnostics.missingTimingActionIds;
 
   return {
@@ -114,6 +116,7 @@ export function projectSimulationResult({
       candidateValueSeriesSummary: candidateValueSeries.summary,
       formulaVersion: damageEvents[0]?.payload.formulaVersion ?? null,
       formulaCandidatePatternSummary,
+      formulaExecutionMatrixSummary,
       confidence: damageTimeline.some(entry => entry.confidence === 'low')
         ? 'low'
         : 'medium',
@@ -749,6 +752,335 @@ function selectComparableFormulaCombinationPreview(previews) {
     ) ??
     null
   );
+}
+
+function summarizeFormulaExecutionMatrices(actionResultTimeline) {
+  const actionSummaries = actionResultTimeline
+    .map(createFormulaExecutionMatrixActionSummary)
+    .filter(Boolean);
+  const rows = actionSummaries.flatMap(summary => summary.rows ?? []);
+
+  if (rows.length === 0) {
+    return {
+      status: 'no-formula-execution-matrices',
+      actionCount: actionResultTimeline.length,
+      matrixActionCount: 0,
+      rowCount: 0,
+      elementCount: 0,
+      preferredStrategy: PREFERRED_FORMULA_CANDIDATE_STRATEGY,
+      actionSummaries: [],
+      elementSummaries: [],
+      applied: false,
+      note: 'Formula execution matrix summary is evidence-only until DamageElement runtime execution is confirmed.',
+    };
+  }
+
+  const requiredScales = finiteValues(rows.map(row => row.requiredScaleToRaw));
+  const requiredPerHitScales = finiteValues(
+    rows.map(row => row.requiredPerHitScaleToRaw)
+  );
+  const previewRoundedValues = finiteValues(
+    rows.map(row => row.previewRoundedValue)
+  );
+  const rawProjectionValues = finiteValues(
+    rows.map(row => row.rawProjectionValue)
+  );
+  const rowsWithLargeDifference = rows.filter(
+    row => row.differenceStatus === 'large-difference'
+  ).length;
+  const rowsWithSlotOverrideCandidates = rows.filter(
+    row => row.slotOverrideCandidateCount > 0
+  ).length;
+  const rowsWithDirectSlotMatches = rows.filter(
+    row => row.directSlotMatchCount > 0
+  ).length;
+  const rowsWithHitBindings = rows.filter(row => row.boundHitCount > 0).length;
+  const elementSummaries = createFormulaExecutionElementSummaries(rows);
+  const requiredScaleMin = minNumber(requiredScales);
+  const requiredScaleMax = maxNumber(requiredScales);
+  const requiredPerHitScaleMin = minNumber(requiredPerHitScales);
+  const requiredPerHitScaleMax = maxNumber(requiredPerHitScales);
+
+  return {
+    status:
+      actionSummaries.length > 1
+        ? 'formula-execution-matrices-found'
+        : 'single-formula-execution-matrix',
+    actionCount: actionResultTimeline.length,
+    matrixActionCount: actionSummaries.length,
+    actionVariantCount: uniqueStrings(
+      actionSummaries.map(summary => summary.actionVariantLabel)
+    ).length,
+    actionVariantLabels: uniqueStrings(
+      actionSummaries.map(summary => summary.actionVariantLabel)
+    ),
+    rowCount: rows.length,
+    elementCount: elementSummaries.length,
+    preferredStrategy: PREFERRED_FORMULA_CANDIDATE_STRATEGY,
+    requiredScaleMin,
+    requiredScaleMax,
+    requiredScaleRange: numberRange(requiredScaleMin, requiredScaleMax),
+    requiredPerHitScaleMin,
+    requiredPerHitScaleMax,
+    requiredPerHitScaleRange: numberRange(
+      requiredPerHitScaleMin,
+      requiredPerHitScaleMax
+    ),
+    rawProjectionMin: minNumber(rawProjectionValues),
+    rawProjectionMax: maxNumber(rawProjectionValues),
+    previewRoundedValueCount: uniqueNumbers(previewRoundedValues).length,
+    previewRoundedValues: uniqueNumbers(previewRoundedValues),
+    scaleSpreadStatus: createScaleSpreadStatus(requiredScales),
+    perHitScaleSpreadStatus: createScaleSpreadStatus(requiredPerHitScales),
+    hitBindingCoverageStatus: createFormulaMatrixCoverageStatus({
+      matchedCount: rowsWithHitBindings,
+      totalCount: rows.length,
+      allStatus: 'all-rows-have-hit-bindings',
+      partialStatus: 'some-rows-missing-hit-bindings',
+      noneStatus: 'no-rows-have-hit-bindings',
+    }),
+    slotOverrideCoverageStatus: createFormulaMatrixCoverageStatus({
+      matchedCount: rowsWithSlotOverrideCandidates,
+      totalCount: rows.length,
+      allStatus: 'all-rows-have-slot-override-candidates',
+      partialStatus: 'some-rows-missing-slot-override-candidates',
+      noneStatus: 'no-rows-have-slot-override-candidates',
+    }),
+    rowsWithLargeDifference,
+    rowsWithSlotOverrideCandidates,
+    rowsWithDirectSlotMatches,
+    rowsWithHitBindings,
+    unresolved: uniqueStrings(rows.flatMap(row => row.unresolved ?? [])),
+    diagnostics: {
+      functionCombinationOrderStatus: 'unconfirmed',
+      levelOverrideApplicationStatus: 'unconfirmed',
+      perHitMultiplierAllocationStatus: 'unconfirmed',
+      crossActionMatrixStatus:
+        actionSummaries.length > 1
+          ? 'cross-action-matrix-summary-built'
+          : 'needs-more-action-samples',
+      scaleSpreadStatus: createScaleSpreadStatus(requiredScales),
+      hitBindingCoverageStatus: createFormulaMatrixCoverageStatus({
+        matchedCount: rowsWithHitBindings,
+        totalCount: rows.length,
+        allStatus: 'all-rows-have-hit-bindings',
+        partialStatus: 'some-rows-missing-hit-bindings',
+        noneStatus: 'no-rows-have-hit-bindings',
+      }),
+    },
+    actionSummaries,
+    elementSummaries,
+    applied: false,
+    note: 'Formula execution matrices aggregate unconfirmed per-action DamageElement diagnostics; they do not define final HP/toughness/energy formulas.',
+  };
+}
+
+function createFormulaExecutionMatrixActionSummary(entry) {
+  const matrix = entry.hpDamage?.sourceEvidence?.formulaExecutionEvidenceMatrix;
+  if (!matrix || matrix.rowCount <= 0) {
+    return null;
+  }
+
+  const rawProjection =
+    entry.hpDamage?.sourceEvidence?.formulaCandidatePreview?.rawProjection ??
+    {};
+  const rows = (matrix.rows ?? [])
+    .map(row =>
+      compactFormulaExecutionMatrixSummaryRow({
+        entry,
+        matrix,
+        rawProjection,
+        row,
+      })
+    )
+    .filter(Boolean);
+  const requiredScales = finiteValues(rows.map(row => row.requiredScaleToRaw));
+  const requiredPerHitScales = finiteValues(
+    rows.map(row => row.requiredPerHitScaleToRaw)
+  );
+  const rowsWithLargeDifference = rows.filter(
+    row => row.differenceStatus === 'large-difference'
+  ).length;
+  const rowsWithHitBindings = rows.filter(row => row.boundHitCount > 0).length;
+
+  return {
+    actionId: entry.actionId,
+    actionName: entry.actionName,
+    actionType: entry.actionType,
+    actorId: entry.actorId,
+    actorName: entry.actorName,
+    skillId: entry.skillId,
+    actionVariantIndex: matrix.actionVariantIndex,
+    actionVariantLabel: matrix.actionVariantLabel,
+    rawMultiplier: rawProjection.rawMultiplier ?? null,
+    actionMultiplier: numberOrNull(rawProjection.actionMultiplier),
+    rowCount: rows.length,
+    elementConfigIds: uniqueNumbers(rows.map(row => row.elementConfigId)),
+    requiredScaleMin: minNumber(requiredScales),
+    requiredScaleMax: maxNumber(requiredScales),
+    requiredPerHitScaleMin: minNumber(requiredPerHitScales),
+    requiredPerHitScaleMax: maxNumber(requiredPerHitScales),
+    rowsWithLargeDifference,
+    rowsWithHitBindings,
+    slotOverrideCandidateCount: rows.reduce(
+      (sum, row) => sum + row.slotOverrideCandidateCount,
+      0
+    ),
+    directSlotMatchCount: rows.reduce(
+      (sum, row) => sum + row.directSlotMatchCount,
+      0
+    ),
+    hitBindingCoverageStatus: createFormulaMatrixCoverageStatus({
+      matchedCount: rowsWithHitBindings,
+      totalCount: rows.length,
+      allStatus: 'all-rows-have-hit-bindings',
+      partialStatus: 'some-rows-missing-hit-bindings',
+      noneStatus: 'no-rows-have-hit-bindings',
+    }),
+    unresolved: uniqueStrings(rows.flatMap(row => row.unresolved ?? [])),
+    rows,
+    status: 'formula-execution-matrix-action-summary',
+    applied: false,
+  };
+}
+
+function compactFormulaExecutionMatrixSummaryRow({
+  entry,
+  matrix,
+  rawProjection,
+  row,
+}) {
+  const preferred = row.preferredFunctionOrderCandidate;
+  if (!preferred) {
+    return null;
+  }
+
+  const gap = row.perHitScaleGap ?? {};
+  const slotOverrideCandidateVariables = uniqueStrings(
+    (row.slotOverrideCandidates ?? []).map(slot => slot.variable)
+  );
+  const directSlotMatchVariables = uniqueStrings(
+    (row.directSlotMatches ?? []).map(slot => slot.variable)
+  );
+
+  return {
+    actionId: entry.actionId,
+    actionName: entry.actionName,
+    actionVariantIndex: matrix.actionVariantIndex,
+    actionVariantLabel: matrix.actionVariantLabel,
+    skillId: entry.skillId,
+    elementConfigId: row.elementConfigId,
+    pathId: row.pathId ?? null,
+    hitIndexes: row.hitIndexes ?? [],
+    hitBindingStatus: row.hitBindingStatus,
+    preferredStrategy: preferred.strategy ?? null,
+    expression: preferred.expression ?? null,
+    inputSource: preferred.inputSource ?? null,
+    rawMultiplier: rawProjection.rawMultiplier ?? null,
+    actionMultiplier: numberOrNull(rawProjection.actionMultiplier),
+    rawProjectionValue: numberOrNull(gap.rawProjectionValue),
+    previewRoundedValue: numberOrNull(gap.previewRoundedValue),
+    ratioToRawProjection: numberOrNull(gap.ratioToRawProjection),
+    requiredScaleToRaw: numberOrNull(gap.requiredScaleToRaw),
+    requiredPerHitScaleToRaw: numberOrNull(gap.requiredPerHitScaleToRaw),
+    hitCount: numberOrNull(gap.hitCount),
+    boundHitCount: numberOrNull(gap.boundHitCount) ?? 0,
+    differenceStatus: gap.differenceStatus ?? null,
+    functionOrderCandidateCount: row.functionOrderCandidates?.length ?? 0,
+    slotOverrideCandidateCount: row.slotOverrideCandidates?.length ?? 0,
+    slotOverrideCandidateVariables,
+    directSlotMatchCount: row.directSlotMatches?.length ?? 0,
+    directSlotMatchVariables,
+    unresolved: row.unresolved ?? [],
+    applied: false,
+  };
+}
+
+function createFormulaExecutionElementSummaries(rows) {
+  const byElement = new Map();
+
+  for (const row of rows) {
+    if (!byElement.has(row.elementConfigId)) {
+      byElement.set(row.elementConfigId, []);
+    }
+    byElement.get(row.elementConfigId).push(row);
+  }
+
+  return [...byElement.entries()]
+    .map(([elementConfigId, elementRows]) => {
+      const requiredScales = finiteValues(
+        elementRows.map(row => row.requiredScaleToRaw)
+      );
+      const requiredPerHitScales = finiteValues(
+        elementRows.map(row => row.requiredPerHitScaleToRaw)
+      );
+      const rowsWithHitBindings = elementRows.filter(
+        row => row.boundHitCount > 0
+      ).length;
+      const requiredScaleMin = minNumber(requiredScales);
+      const requiredScaleMax = maxNumber(requiredScales);
+      const requiredPerHitScaleMin = minNumber(requiredPerHitScales);
+      const requiredPerHitScaleMax = maxNumber(requiredPerHitScales);
+
+      return {
+        elementConfigId,
+        actionCount: uniqueStrings(elementRows.map(row => row.actionId)).length,
+        actionIds: uniqueStrings(elementRows.map(row => row.actionId)),
+        actionVariantLabels: uniqueStrings(
+          elementRows.map(row => row.actionVariantLabel)
+        ),
+        hitIndexes: uniqueNumbers(elementRows.flatMap(row => row.hitIndexes)),
+        rowCount: elementRows.length,
+        requiredScaleMin,
+        requiredScaleMax,
+        requiredScaleRange: numberRange(requiredScaleMin, requiredScaleMax),
+        requiredPerHitScaleMin,
+        requiredPerHitScaleMax,
+        requiredPerHitScaleRange: numberRange(
+          requiredPerHitScaleMin,
+          requiredPerHitScaleMax
+        ),
+        scaleSpreadStatus: createScaleSpreadStatus(requiredScales),
+        slotOverrideCandidateVariables: uniqueStrings(
+          elementRows.flatMap(row => row.slotOverrideCandidateVariables)
+        ),
+        directSlotMatchVariables: uniqueStrings(
+          elementRows.flatMap(row => row.directSlotMatchVariables)
+        ),
+        rowsWithLargeDifference: elementRows.filter(
+          row => row.differenceStatus === 'large-difference'
+        ).length,
+        rowsWithHitBindings,
+        hitBindingCoverageStatus: createFormulaMatrixCoverageStatus({
+          matchedCount: rowsWithHitBindings,
+          totalCount: elementRows.length,
+          allStatus: 'all-rows-have-hit-bindings',
+          partialStatus: 'some-rows-missing-hit-bindings',
+          noneStatus: 'no-rows-have-hit-bindings',
+        }),
+        unresolved: uniqueStrings(
+          elementRows.flatMap(row => row.unresolved ?? [])
+        ),
+        applied: false,
+      };
+    })
+    .sort(
+      (left, right) =>
+        Number(left.elementConfigId) - Number(right.elementConfigId)
+    );
+}
+
+function createFormulaMatrixCoverageStatus({
+  matchedCount,
+  totalCount,
+  allStatus,
+  partialStatus,
+  noneStatus,
+}) {
+  if (totalCount <= 0 || matchedCount <= 0) {
+    return noneStatus;
+  }
+  return matchedCount >= totalCount ? allStatus : partialStatus;
 }
 
 function attachFormulaExecutionEvidenceMatrix(hpDamage, action, hitCandidates) {
