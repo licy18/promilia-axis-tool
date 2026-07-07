@@ -122,7 +122,7 @@ describe('first vertical slice simulation', () => {
       valueParamLink: {
         segmentIndex: 0,
         rawValue: '649%',
-          status: 'unmatched',
+        status: 'unmatched',
         unmatchedParamIds: [1, 7],
       },
     });
@@ -181,8 +181,7 @@ describe('first vertical slice simulation', () => {
               kind: 'azpr-combat-formula-evidence-index',
               file: 'src/data/generated/combat-formula-evidence.json',
               status: 'enemy-property-attributes-found',
-              relationStatus:
-                'no-direct-elementId-to-element_formula-id-match',
+              relationStatus: 'no-direct-elementId-to-element_formula-id-match',
               sourceChain:
                 'enemy.propertyId -> unit_property.baseAttributeId -> template_value.baseAttribute -> battle_info.attrVal',
               propertyId: 300032,
@@ -438,7 +437,8 @@ describe('first vertical slice simulation', () => {
               }),
               expect.objectContaining({
                 elementConfigId: 109001081,
-                strategy: 'function_1-plus-function_2-current-level-value-param',
+                strategy:
+                  'function_1-plus-function_2-current-level-value-param',
                 expression: 'function_1 + function_2',
                 value: 308.2,
                 roundedValue: 308,
@@ -455,12 +455,8 @@ describe('first vertical slice simulation', () => {
               largeDifferenceCount: 2,
               combinationPreviewCount: 12,
               combinationLargeDifferenceCount: 12,
-              statuses: [
-                'not-compared-scalar-candidate',
-                'large-difference',
-              ],
-              note:
-                'Preview values are evidence diagnostics only. They do not define DamageElement function combination order or final damage.',
+              statuses: ['not-compared-scalar-candidate', 'large-difference'],
+              note: 'Preview values are evidence diagnostics only. They do not define DamageElement function combination order or final damage.',
             },
           },
           candidates: expect.arrayContaining([
@@ -525,9 +521,7 @@ describe('first vertical slice simulation', () => {
           ]),
         },
         formulaBreakdown: {
-          unappliedLayerKeys: expect.arrayContaining([
-            'damageElementFields',
-          ]),
+          unappliedLayerKeys: expect.arrayContaining(['damageElementFields']),
           layers: {
             damageElementFields: expect.objectContaining({
               applied: false,
@@ -607,12 +601,11 @@ describe('first vertical slice simulation', () => {
       },
     });
     const combinationPreview =
-      result.actionResultTimeline[0].hpDamage.sourceEvidence
-        .formulaCandidatePreview.combinationPreviews.find(
-          item =>
-            item.elementConfigId === 109001081 &&
-            item.strategy === 'function_2-current-level-value-param'
-        );
+      result.actionResultTimeline[0].hpDamage.sourceEvidence.formulaCandidatePreview.combinationPreviews.find(
+        item =>
+          item.elementConfigId === 109001081 &&
+          item.strategy === 'function_2-current-level-value-param'
+      );
     expect(combinationPreview.comparison.requiredScaleToRaw).toBeCloseTo(
       40.59,
       2
@@ -621,6 +614,35 @@ describe('first vertical slice simulation', () => {
       8.12,
       2
     );
+    expect(result.summary.formulaCandidatePatternSummary).toMatchObject({
+      status: 'single-formula-candidate-pattern',
+      actionCount: 1,
+      comparableActionCount: 1,
+      preferredStrategy: 'function_2-current-level-value-param',
+      scaleSpreadStatus: 'single-sample',
+      previewValueStatus: 'same-preview-across-actions',
+      missingRuntimeScaleStatus: 'needs-more-action-samples',
+      applied: false,
+      actionSummaries: [
+        expect.objectContaining({
+          actionId: 'action-0001',
+          actionVariantLabel: '普攻',
+          rawMultiplier: '649%',
+          previewRoundedValue: 307,
+          damageFields: expect.objectContaining({
+            amp: 6553,
+            physicalRatio: 10000,
+            elementCalFactor: 10000,
+          }),
+        }),
+      ],
+    });
+    expect(
+      result.summary.formulaCandidatePatternSummary.requiredScaleMin
+    ).toBeCloseTo(40.59, 2);
+    expect(
+      result.summary.formulaCandidatePatternSummary.requiredScaleMax
+    ).toBeCloseTo(40.59, 2);
     expect(result.summary).toMatchObject({
       projectedHitCount: 1,
       actionResultCount: 1,
@@ -759,6 +781,43 @@ describe('first vertical slice simulation', () => {
       ['action-segment-3', '跃击', 1.36],
     ]);
     expect(result.summary.projectedHitCount).toBe(4);
+    expect(result.summary.formulaCandidatePatternSummary).toMatchObject({
+      status: 'formula-candidate-patterns-found',
+      actionCount: 4,
+      comparableActionCount: 4,
+      preferredStrategy: 'function_2-current-level-value-param',
+      scaleSpreadStatus: 'varies-by-action-variant',
+      previewValueStatus: 'same-preview-across-actions',
+      missingRuntimeScaleStatus:
+        'tracks-description-multiplier-before-runtime-hit-mapping',
+      previewRoundedValues: [307],
+      applied: false,
+    });
+    expect(
+      result.summary.formulaCandidatePatternSummary.actionSummaries.map(
+        item => [
+          item.actionVariantLabel,
+          item.rawMultiplier,
+          item.previewRoundedValue,
+        ]
+      )
+    ).toEqual([
+      ['普攻', '649%', 307],
+      ['重击', '190%', 307],
+      ['闪击', '40%', 307],
+      ['跃击', '136%', 307],
+    ]);
+    expect(
+      result.summary.formulaCandidatePatternSummary.requiredScaleMin
+    ).toBeCloseTo(2.5, 1);
+    expect(
+      result.summary.formulaCandidatePatternSummary.requiredScaleMax
+    ).toBeCloseTo(40.59, 2);
+    expect(
+      result.summary.formulaCandidatePatternSummary.actionSummaries.find(
+        item => item.actionVariantLabel === '重击'
+      ).requiredScaleToRaw
+    ).toBeCloseTo(11.88, 2);
   });
 
   it('preserves generated skill segment batch metadata through compilation', () => {
@@ -888,7 +947,9 @@ describe('first vertical slice simulation', () => {
       enemyHpMultiplier: 2,
       enemyDefenseMultiplier: 1.5,
     });
-    expect(result.damageTimeline[0].formulaBreakdown.layers.enemyDefense).toMatchObject({
+    expect(
+      result.damageTimeline[0].formulaBreakdown.layers.enemyDefense
+    ).toMatchObject({
       applied: false,
       status: 'evidence-found-formula-unmapped',
       defenseMultiplier: 1.5,

@@ -245,7 +245,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8R，把 `formulaFunctionEvidence` 接入 `actionResultTimeline[].hpDamage.sourceEvidence.formulaFunctionSummary` 和 Workbench 三值来源展示；当前显示 `公式函数候选 f1 G/10000 / f2 self.ATK[0]*A/10000`，仍不改变 raw HP、削韧或充能数值。
 - 已完成：阶段 5-8S，新增 `formulaCandidatePreview` 未应用预览，当前末音 `10900101` 的 f2 公式用等级 A=1600 得到 307，约为现有 raw HP 12461 的 2.5%，诊断为 `large-difference`；Workbench 显示 `候选预览 f2 等级值 307 vs raw 12,461，约 2.5%`，仍不改变最终数值。
 - 已完成：阶段 5-8T，新增 `formulaCandidatePreview.combinationPreviews`，验证 `function_2`、`function_1*function_2`、`function_1+function_2` 等简单组合仍远低于 raw HP；当前 f2 等级值需约 `×40.6` 才接近 raw，按 5 hit 平均仍需每 hit `×8.1`，Workbench 显示组合诊断。
-- 下一步：阶段 5-8U，扩大样本并分析 `requiredScaleToRaw` 差异模式，判断缺失倍率是否与 hitCount、描述倍率、`amp`、`physicalRatio`、`elementCalFactor` 或命中行为节点数量相关。
+- 已完成：阶段 5-8U，新增 `summary.formulaCandidatePatternSummary`，把四动作样本【普通攻击 / 重击 / 闪击 / 跃击】的 f2 候选值与 raw HP 投影做跨动作差异摘要；当前 f2 候选值在四动作中均为 `307`，`requiredScaleToRaw` 随描述倍率变化，范围约 `×2.5` 到 `×40.6`，Workbench 显示候选模式摘要，仍保持 `applied: false`。
+- 下一步：阶段 5-8V，把 `requiredScaleToRaw` 差异模式与 `skill_control` 行为节点命中数量、命中帧和 element 绑定关系关联起来，判断 f2 候选值是单 hit、中间值、动作总倍率的一部分还是额外公式入口。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

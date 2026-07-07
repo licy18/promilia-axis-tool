@@ -122,11 +122,11 @@ C:\PC2\Codex\AzPr
 - 阶段 4-9：新版工作台切人动作和多角色 actor 雏形，默认主/副角色 actor、`SWITCH` 事件和切人属性编辑已进入统一链路。
 - 阶段 4-10：新版工作台时间轴角色轨道雏形，动作和伤害 marker 按 actor 或系统轨显示。
 - 阶段 4-11：新版工作台时间轴缩放和动作持续时间调整雏形，`durationMs` 通过工作台草稿链路回写。
-- 阶段 4-12 至 5-8T：已继续补齐轨道诊断、动作形态、60fps 帧时间轴、公式分层、战斗公式证据、skill asset 候选索引、每动作 HP/韧性/能量三值结果契约、`skill_control` 效果轨道候选分类、本地行为链解引用、elementBaseDatas 资源映射归属、行为脚本类型候选、IL2CPP element 类型目录、外部 element 对象本体解析、`TDamageElementParams` 三值字段候选映射、Workbench 三值来源展示、`valueParam` / `formulaParamValues` 槽位关系诊断、未应用公式槽位候选展示、`function_1/function_2 -> element_formula` 候选证据索引、动作级 `formulaFunctionSummary` 展示、`formulaCandidatePreview` 未应用数值预览，以及 `combinationPreviews` 简单组合诊断矩阵。
+- 阶段 4-12 至 5-8U：已继续补齐轨道诊断、动作形态、60fps 帧时间轴、公式分层、战斗公式证据、skill asset 候选索引、每动作 HP/韧性/能量三值结果契约、`skill_control` 效果轨道候选分类、本地行为链解引用、elementBaseDatas 资源映射归属、行为脚本类型候选、IL2CPP element 类型目录、外部 element 对象本体解析、`TDamageElementParams` 三值字段候选映射、Workbench 三值来源展示、`valueParam` / `formulaParamValues` 槽位关系诊断、未应用公式槽位候选展示、`function_1/function_2 -> element_formula` 候选证据索引、动作级 `formulaFunctionSummary` 展示、`formulaCandidatePreview` 未应用数值预览、`combinationPreviews` 简单组合诊断矩阵，以及 `formulaCandidatePatternSummary` 跨动作差异模式摘要。
 
 下一阶段：
 
-- 阶段 5-8U：扩大样本并分析 formula candidate 与 raw HP 的差异模式。
+- 阶段 5-8V：把 formula candidate 与 raw HP 的差异模式关联到 `skill_control` 行为节点命中数量、命中帧和 element 绑定关系。
 
 ## 3. 核心模块设计
 

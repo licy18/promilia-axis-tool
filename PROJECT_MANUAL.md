@@ -2543,6 +2543,56 @@ Endaxis 参考边界：
 - 至少选择同角色多个动作形态或其他已有 `TDamageElementParams` 技能，生成 `formulaCandidatePreview` / `combinationPreviews` 的跨动作摘要。
 - 判断 `requiredScaleToRaw` 是否稳定、是否与 hitCount、描述倍率、`formulaParamValues` 特定槽、`amp`、`physicalRatio`、`elementCalFactor` 或命中行为节点数量相关。
 
+### 2026-07-08：阶段 5-8U 跨动作 formula candidate 差异模式摘要
+
+本轮完成：
+
+- 在仿真 `summary` 中新增 `formulaCandidatePatternSummary`，聚合 `actionResultTimeline[].hpDamage.sourceEvidence.formulaCandidatePreview.combinationPreviews`。
+- 默认优先比较 `function_2-current-level-value-param`，并保留每个动作的：
+  - 动作名、动作形态、`rawMultiplier`、raw HP 投影值。
+  - 候选公式预览值、`requiredScaleToRaw`、`requiredPerHitScaleToRaw`。
+  - 候选 `TDamageElementParams.damageFields` 原始字段：`amp`、`physicalRatio`、`elementCalFactor`、`formulaParamsCount`。
+- Workbench 分析面板“三值来源”下新增候选模式摘要。单动作默认显示：
+
+```text
+候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1
+```
+
+- 现有四动作样本【普通攻击 / 重击 / 闪击 / 跃击】已纳入测试：
+  - 四个动作的 `function_2-current-level-value-param` 候选值均为 `307`。
+  - raw 描述倍率分别为 `649% / 190% / 40% / 136%`。
+  - `requiredScaleToRaw` 随动作描述倍率变化，当前范围约 `×2.5` 到 `×40.6`。
+  - `formulaCandidatePatternSummary.previewValueStatus = same-preview-across-actions`。
+  - `formulaCandidatePatternSummary.scaleSpreadStatus = varies-by-action-variant`。
+  - `formulaCandidatePatternSummary.missingRuntimeScaleStatus = tracks-description-multiplier-before-runtime-hit-mapping`。
+
+初步判断：
+
+- 当前 `element_formula` f2 预览更像一个尚未绑定动作描述倍率/命中节点的中间值，而不是可直接替代 `skill_level` 描述倍率的最终 HP 公式。
+- `amp = 6553`、`physicalRatio = 10000`、`elementCalFactor = 10000` 仍按原始缩放值记录，暂不擅自归一化。
+- 四动作样本仍无法解释 `skill_level` 描述倍率和 runtime DamageElement 的真实关系；必须继续追命中行为节点数量、命中帧、element 绑定和额外缩放。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+- `npm test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `npx eslint src/simulation/projection/projectSimulationResult.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npx prettier --check src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
+- `npx eslint . --ext .vue,.js,.jsx,.cjs,.mjs`：未通过，阻塞点是既有 `scripts/generate-azpr-data.mjs` 顶层 `await` 被当前 ESLint 配置解析为 `Cannot use keyword 'await' outside an async function`；本阶段未修改该脚本。
+
+当前边界：
+
+- `formulaCandidatePatternSummary.applied` 必须保持 `false`。
+- `formulaCandidatePatternSummary` 只做证据聚合，不改变 HP、削韧、充能数值。
+- 不能基于当前差异模式把 f2 或 `amp/physicalRatio/elementCalFactor` 推入最终公式。
+
+下一步：
+
+- 阶段 5-8V 目标：把 `requiredScaleToRaw` 差异模式与 `skill_control` 行为节点命中数量、命中帧和 element 绑定关系关联起来。
+- 优先统计末音 `10900101` 的 `InjectToTargetKeyFrameBehaviorData`、`elementBaseDatas`、hitEffects、stateName 与动作形态之间的绑定数量。
+- 对四动作样本补充“行为节点候选数 / element 引用数 / 帧窗口”字段，判断 `f2` 候选值是否是单 hit、行为节点中间值、动作总倍率的一部分或额外公式入口。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

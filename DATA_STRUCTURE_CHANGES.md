@@ -3008,3 +3008,92 @@ Workbench 分析面板三值来源当前会显示：
 
 - `combinationPreviews` 只验证简单组合，不代表真实 `DamageElement` 运行顺序。
 - 当前简单组合仍远低于 raw HP，说明下一步应扩大样本并继续追命中段绑定、运行时额外缩放和动作描述倍率之间的关系。
+
+## 46. 2026-07-08 formulaCandidatePatternSummary 跨动作差异模式
+
+阶段 5-8U 在仿真 `summary` 中新增 `formulaCandidatePatternSummary`，用于把多个动作的候选公式预览与 raw HP 投影做同口径比较。
+
+### 46.1 summary.formulaCandidatePatternSummary
+
+示例：
+
+```javascript
+{
+  "formulaCandidatePatternSummary": {
+    "status": "formula-candidate-patterns-found",
+    "actionCount": 4,
+    "comparableActionCount": 4,
+    "preferredStrategy": "function_2-current-level-value-param",
+    "strategies": ["function_2-current-level-value-param"],
+    "requiredScaleMin": 2.5,
+    "requiredScaleMax": 40.59,
+    "requiredScaleRange": 38.09,
+    "previewRoundedValueCount": 1,
+    "previewRoundedValues": [307],
+    "scaleSpreadStatus": "varies-by-action-variant",
+    "previewValueStatus": "same-preview-across-actions",
+    "missingRuntimeScaleStatus": "tracks-description-multiplier-before-runtime-hit-mapping",
+    "applied": false
+  }
+}
+```
+
+含义：
+
+- `preferredStrategy`：当前优先比较的候选组合，默认为 `function_2-current-level-value-param`。
+- `requiredScaleMin` / `requiredScaleMax`：各动作候选值需要乘上的缩放范围，才能接近 raw HP 投影。
+- `previewRoundedValues`：候选公式预览值集合；当前四动作样本均为 `307`。
+- `scaleSpreadStatus`：判断所需缩放是否随动作形态明显变化。
+- `missingRuntimeScaleStatus`：阶段性解释标签；当前表示候选值一致，但 raw 投影随描述倍率变化。
+- `applied`：必须保持 `false`，该摘要只做证据诊断。
+
+### 46.2 actionSummaries
+
+每个动作保留一条可比较摘要：
+
+```javascript
+{
+  "actionId": "action-segment-0",
+  "actionName": "普通攻击",
+  "actionVariantIndex": 0,
+  "actionVariantLabel": "普攻",
+  "rawMultiplier": "649%",
+  "rawProjectionValue": 12461,
+  "previewRoundedValue": 307,
+  "requiredScaleToRaw": 40.59,
+  "requiredPerHitScaleToRaw": 8.12,
+  "damageFields": {
+    "amp": 6553,
+    "physicalRatio": 10000,
+    "elementCalFactor": 10000,
+    "formulaParamsCount": 0
+  },
+  "applied": false
+}
+```
+
+注意：
+
+- `damageFields` 保留 `TDamageElementParams` 原始缩放值，不在该层归一化。
+- 当前 `formulaParamsCount = 0` 来自已压缩的 source evidence；若后续需要分析每个公式参数，应从 `formulaSlotAlignmentSummary` 或原始 generated evidence 补链。
+- 四动作样本只证明 f2 候选值未随动作描述倍率变化，不证明 f2 无效。
+
+### 46.3 Workbench 展示
+
+Workbench 分析面板三值来源下会显示：
+
+```text
+候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1
+```
+
+多动作时会显示缩放范围，例如：
+
+```text
+候选模式 4 动作 · f2 缩放 ×2.5-×40.6 / 每 hit ×2.5-×11.9，随描述倍率变化
+```
+
+### 46.4 当前边界
+
+- `formulaCandidatePatternSummary` 不参与 HP、削韧、充能计算。
+- 不能把 `requiredScaleToRaw` 当作真实公式常量；它只是“候选预览值与当前 raw 投影之间缺多少”的诊断值。
+- 下一阶段需要把这些差异与 `skill_control` 行为节点命中数量、命中帧、element 绑定和 hitEffects 关联。

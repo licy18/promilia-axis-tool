@@ -25,7 +25,11 @@
     </div>
 
     <div class="damage-list">
-      <div v-for="damage in damageTimeline" :key="damage.actionId" class="damage-row">
+      <div
+        v-for="damage in damageTimeline"
+        :key="damage.actionId"
+        class="damage-row"
+      >
         <div class="damage-row-main">
           <span>{{ damage.segmentLabel }}</span>
           <small>{{ formatDamageFormula(damage) }}</small>
@@ -34,11 +38,29 @@
       </div>
     </div>
 
-    <div class="action-result-list" data-testid="workbench-action-result-sources">
+    <div
+      class="action-result-list"
+      data-testid="workbench-action-result-sources"
+    >
       <div class="diagnostic-heading source-heading">
         <span>三值来源</span>
         <strong>{{ actionResultTimeline.length }}</strong>
       </div>
+      <p
+        v-if="
+          formatFormulaCandidatePatternSummary(
+            summary.formulaCandidatePatternSummary
+          )
+        "
+        class="diagnostic-empty formula-pattern-summary"
+        data-testid="workbench-formula-pattern-summary"
+      >
+        {{
+          formatFormulaCandidatePatternSummary(
+            summary.formulaCandidatePatternSummary
+          )
+        }}
+      </p>
       <div
         v-for="entry in actionResultTimeline"
         :key="entry.actionId"
@@ -48,17 +70,29 @@
         <div class="damage-row-main">
           <span>{{ entry.actionName }}</span>
           <small>{{ formatActionResultSource(entry) }}</small>
-          <small v-if="formatFormulaSlotAlignment(entry.hpDamage?.sourceEvidence)">
+          <small
+            v-if="formatFormulaSlotAlignment(entry.hpDamage?.sourceEvidence)"
+          >
             {{ formatFormulaSlotAlignment(entry.hpDamage?.sourceEvidence) }}
           </small>
-          <small v-if="formatFormulaFunctionSummary(entry.hpDamage?.sourceEvidence)">
+          <small
+            v-if="formatFormulaFunctionSummary(entry.hpDamage?.sourceEvidence)"
+          >
             {{ formatFormulaFunctionSummary(entry.hpDamage?.sourceEvidence) }}
           </small>
-          <small v-if="formatFormulaCandidatePreview(entry.hpDamage?.sourceEvidence)">
+          <small
+            v-if="formatFormulaCandidatePreview(entry.hpDamage?.sourceEvidence)"
+          >
             {{ formatFormulaCandidatePreview(entry.hpDamage?.sourceEvidence) }}
           </small>
-          <small v-if="formatFormulaCombinationPreview(entry.hpDamage?.sourceEvidence)">
-            {{ formatFormulaCombinationPreview(entry.hpDamage?.sourceEvidence) }}
+          <small
+            v-if="
+              formatFormulaCombinationPreview(entry.hpDamage?.sourceEvidence)
+            "
+          >
+            {{
+              formatFormulaCombinationPreview(entry.hpDamage?.sourceEvidence)
+            }}
           </small>
         </div>
         <strong>{{ formatActionResultValues(entry) }}</strong>
@@ -68,13 +102,23 @@
     <div class="timeline-diagnostics">
       <div class="diagnostic-heading">
         <span>时间轴诊断</span>
-        <strong data-testid="workbench-overlap-count">{{ overlapCount }}</strong>
+        <strong data-testid="workbench-overlap-count">{{
+          overlapCount
+        }}</strong>
       </div>
-      <p v-if="overlapItems.length === 0" class="diagnostic-empty" data-testid="workbench-overlap-empty">
+      <p
+        v-if="overlapItems.length === 0"
+        class="diagnostic-empty"
+        data-testid="workbench-overlap-empty"
+      >
         暂无轨道重叠
       </p>
       <ul v-else class="overlap-list">
-        <li v-for="item in overlapItems" :key="item.id" data-testid="workbench-overlap-item">
+        <li
+          v-for="item in overlapItems"
+          :key="item.id"
+          data-testid="workbench-overlap-item"
+        >
           <span>{{ item.laneName }}</span>
           <strong>{{ item.actionNames.join(' / ') }}</strong>
           <small>{{ formatOverlapRange(item) }}</small>
@@ -85,13 +129,23 @@
     <div class="insertion-diagnostics">
       <div class="diagnostic-heading neutral">
         <span>插入提示</span>
-        <strong data-testid="workbench-insert-delay-count">{{ autoDelayedCount }}</strong>
+        <strong data-testid="workbench-insert-delay-count">{{
+          autoDelayedCount
+        }}</strong>
       </div>
-      <p v-if="autoDelayedItems.length === 0" class="diagnostic-empty" data-testid="workbench-insert-delay-empty">
+      <p
+        v-if="autoDelayedItems.length === 0"
+        class="diagnostic-empty"
+        data-testid="workbench-insert-delay-empty"
+      >
         暂无自动推迟
       </p>
       <ul v-else class="insertion-list">
-        <li v-for="item in autoDelayedItems" :key="item.id" data-testid="workbench-insert-delay-item">
+        <li
+          v-for="item in autoDelayedItems"
+          :key="item.id"
+          data-testid="workbench-insert-delay-item"
+        >
           <span>{{ item.laneName }}</span>
           <strong>{{ item.actionName }}</strong>
           <small>{{ formatDelayRange(item) }}</small>
@@ -143,10 +197,16 @@ const props = defineProps({
 });
 
 const overlapItems = computed(() => props.timelineDiagnostics?.overlaps ?? []);
-const overlapCount = computed(() => props.timelineDiagnostics?.overlapCount ?? overlapItems.value.length);
-const autoDelayedItems = computed(() => props.insertionDiagnostics?.autoDelayedItems ?? []);
+const overlapCount = computed(
+  () => props.timelineDiagnostics?.overlapCount ?? overlapItems.value.length
+);
+const autoDelayedItems = computed(
+  () => props.insertionDiagnostics?.autoDelayedItems ?? []
+);
 const autoDelayedCount = computed(
-  () => props.insertionDiagnostics?.autoDelayedCount ?? autoDelayedItems.value.length,
+  () =>
+    props.insertionDiagnostics?.autoDelayedCount ??
+    autoDelayedItems.value.length
 );
 
 function formatNumber(value) {
@@ -160,7 +220,9 @@ function formatDamageFormula(damage) {
   }
 
   const attack = formatNumber(layers.baseAttack?.value);
-  const multiplier = layers.actionMultiplier?.rawValue ?? formatMultiplier(layers.actionMultiplier?.value);
+  const multiplier =
+    layers.actionMultiplier?.rawValue ??
+    formatMultiplier(layers.actionMultiplier?.value);
   const pending = damage.formulaBreakdown.unappliedLayerKeys?.length
     ? ' / 防御、抗性、暴击未应用'
     : '';
@@ -258,9 +320,12 @@ function trimFormulaParentheses(value) {
 }
 
 function formatFormulaCandidatePreview(sourceEvidence) {
-  const previews = sourceEvidence?.formulaCandidatePreview?.functionPreviews ?? [];
+  const previews =
+    sourceEvidence?.formulaCandidatePreview?.functionPreviews ?? [];
   const comparable = uniqueFormulaCandidatePreviews(
-    previews.filter((preview) => preview.comparison?.status === 'compared-to-raw-projection')
+    previews.filter(
+      preview => preview.comparison?.status === 'compared-to-raw-projection'
+    )
   );
   if (comparable.length === 0) {
     return '';
@@ -305,15 +370,16 @@ function formatFormulaCandidatePreviewItem(preview) {
 }
 
 function formatFormulaCombinationPreview(sourceEvidence) {
-  const previews = sourceEvidence?.formulaCandidatePreview?.combinationPreviews ?? [];
+  const previews =
+    sourceEvidence?.formulaCandidatePreview?.combinationPreviews ?? [];
   const preferred =
     previews.find(
-      (preview) =>
+      preview =>
         preview.strategy === 'function_2-current-level-value-param' &&
         preview.comparison?.status === 'compared-to-raw-projection'
     ) ??
     previews.find(
-      (preview) => preview.comparison?.status === 'compared-to-raw-projection'
+      preview => preview.comparison?.status === 'compared-to-raw-projection'
     );
   if (!preferred) {
     return '';
@@ -325,6 +391,39 @@ function formatFormulaCombinationPreview(sourceEvidence) {
     ? ` / 每 hit ×${formatFixed(perHitScale)}`
     : '';
   return `组合诊断 ${formatCombinationLabel(preferred)} 需 ×${formatFixed(scale)} 才接近 raw${perHitText}`;
+}
+
+function formatFormulaCandidatePatternSummary(summary) {
+  if (!summary || summary.comparableActionCount <= 0) {
+    return '';
+  }
+
+  const scaleRange = formatScaleRange(
+    summary.requiredScaleMin,
+    summary.requiredScaleMax
+  );
+  const perHitRange = formatScaleRange(
+    summary.requiredPerHitScaleMin,
+    summary.requiredPerHitScaleMax
+  );
+  const perHitText = perHitRange ? ` / 每 hit ${perHitRange}` : '';
+  const hint =
+    summary.missingRuntimeScaleStatus ===
+    'tracks-description-multiplier-before-runtime-hit-mapping'
+      ? '，随描述倍率变化'
+      : '';
+
+  return `候选模式 ${summary.comparableActionCount} 动作 · ${formatStrategyLabel(summary.preferredStrategy)} 缩放 ${scaleRange}${perHitText}${hint}`;
+}
+
+function formatScaleRange(min, max) {
+  if (!Number.isFinite(Number(min)) || !Number.isFinite(Number(max))) {
+    return '';
+  }
+  if (Math.abs(Number(max) - Number(min)) < 0.05) {
+    return `×${formatFixed(min)}`;
+  }
+  return `×${formatFixed(min)}-×${formatFixed(max)}`;
 }
 
 function formatCombinationLabel(preview) {
@@ -340,14 +439,29 @@ function formatCombinationLabel(preview) {
   return preview.expression ?? preview.strategy ?? '候选';
 }
 
+function formatStrategyLabel(strategy) {
+  if (String(strategy).startsWith('function_2')) {
+    return 'f2';
+  }
+  if (String(strategy).startsWith('function_1-times-function_2')) {
+    return 'f1*f2';
+  }
+  if (String(strategy).startsWith('function_1-plus-function_2')) {
+    return 'f1+f2';
+  }
+  return strategy ?? '候选';
+}
+
 function formatElementIds(ids = []) {
-  const values = ids.filter((id) => Number.isFinite(Number(id)));
+  const values = ids.filter(id => Number.isFinite(Number(id)));
   return values.length > 0 ? `(${values.join(', ')})` : '';
 }
 
 function formatSignedNumber(value) {
   const number = Math.round(Number(value) || 0);
-  return number > 0 ? `+${number.toLocaleString('zh-CN')}` : number.toLocaleString('zh-CN');
+  return number > 0
+    ? `+${number.toLocaleString('zh-CN')}`
+    : number.toLocaleString('zh-CN');
 }
 
 function formatPercent(value) {

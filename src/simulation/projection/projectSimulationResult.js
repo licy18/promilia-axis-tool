@@ -68,6 +68,8 @@ export function projectSimulationResult({
     scenario,
     actionResultTimeline
   );
+  const formulaCandidatePatternSummary =
+    summarizeFormulaCandidatePatterns(actionResultTimeline);
   const timingMissingActionIds = scenario.diagnostics.missingTimingActionIds;
 
   return {
@@ -98,6 +100,7 @@ export function projectSimulationResult({
       actionResultCount: actionResultTimeline.length,
       actionCount: scenario.actions.length,
       formulaVersion: damageEvents[0]?.payload.formulaVersion ?? null,
+      formulaCandidatePatternSummary,
       confidence: damageTimeline.some(entry => entry.confidence === 'low')
         ? 'low'
         : 'medium',
@@ -147,6 +150,212 @@ function summarizeSelfEnergyByActor(scenario, actionResultTimeline) {
   }
 
   return [...summaries.values()];
+}
+
+const PREFERRED_FORMULA_CANDIDATE_STRATEGY =
+  'function_2-current-level-value-param';
+
+function summarizeFormulaCandidatePatterns(actionResultTimeline) {
+  const actionSummaries = actionResultTimeline
+    .map(createFormulaCandidatePatternActionSummary)
+    .filter(Boolean);
+
+  if (actionSummaries.length === 0) {
+    return {
+      status: 'no-comparable-formula-candidate-patterns',
+      actionCount: actionResultTimeline.length,
+      comparableActionCount: 0,
+      preferredStrategy: PREFERRED_FORMULA_CANDIDATE_STRATEGY,
+      strategies: [],
+      actionSummaries: [],
+      applied: false,
+      note: 'Formula candidate pattern summary is evidence-only until the runtime DamageElement execution chain is confirmed.',
+    };
+  }
+
+  const requiredScales = finiteValues(
+    actionSummaries.map(item => item.requiredScaleToRaw)
+  );
+  const requiredPerHitScales = finiteValues(
+    actionSummaries.map(item => item.requiredPerHitScaleToRaw)
+  );
+  const actionMultipliers = finiteValues(
+    actionSummaries.map(item => item.actionMultiplier)
+  );
+  const rawProjectionValues = finiteValues(
+    actionSummaries.map(item => item.rawProjectionValue)
+  );
+  const previewRoundedValues = finiteValues(
+    actionSummaries.map(item => item.previewRoundedValue)
+  );
+  const requiredScaleMin = minNumber(requiredScales);
+  const requiredScaleMax = maxNumber(requiredScales);
+  const actionMultiplierMin = minNumber(actionMultipliers);
+  const actionMultiplierMax = maxNumber(actionMultipliers);
+  const uniquePreviewRoundedValues = uniqueNumbers(previewRoundedValues);
+
+  return {
+    status:
+      actionSummaries.length > 1
+        ? 'formula-candidate-patterns-found'
+        : 'single-formula-candidate-pattern',
+    actionCount: actionResultTimeline.length,
+    comparableActionCount: actionSummaries.length,
+    preferredStrategy: PREFERRED_FORMULA_CANDIDATE_STRATEGY,
+    strategies: uniqueStrings(actionSummaries.map(item => item.strategy)),
+    requiredScaleMin,
+    requiredScaleMax,
+    requiredScaleRange: numberRange(requiredScaleMin, requiredScaleMax),
+    requiredPerHitScaleMin: minNumber(requiredPerHitScales),
+    requiredPerHitScaleMax: maxNumber(requiredPerHitScales),
+    actionMultiplierMin,
+    actionMultiplierMax,
+    actionMultiplierRange: numberRange(
+      actionMultiplierMin,
+      actionMultiplierMax
+    ),
+    rawProjectionMin: minNumber(rawProjectionValues),
+    rawProjectionMax: maxNumber(rawProjectionValues),
+    previewRoundedValueCount: uniquePreviewRoundedValues.length,
+    previewRoundedValues: uniquePreviewRoundedValues,
+    scaleSpreadStatus: createScaleSpreadStatus(requiredScales),
+    previewValueStatus:
+      uniquePreviewRoundedValues.length <= 1
+        ? 'same-preview-across-actions'
+        : 'preview-varies-by-action',
+    missingRuntimeScaleStatus: inferMissingRuntimeScaleStatus({
+      actionSummaries,
+      actionMultiplierMin,
+      actionMultiplierMax,
+      uniquePreviewRoundedValues,
+    }),
+    actionSummaries,
+    applied: false,
+    note: 'Formula candidate patterns compare unconfirmed DamageElement previews against current raw HP projection; they are diagnostics only.',
+  };
+}
+
+function createFormulaCandidatePatternActionSummary(entry) {
+  const sourceEvidence = entry.hpDamage?.sourceEvidence;
+  const preview = selectComparableFormulaCombinationPreview(
+    sourceEvidence?.formulaCandidatePreview?.combinationPreviews ?? []
+  );
+  const comparison = preview?.comparison;
+  if (
+    !preview ||
+    comparison?.status !== 'compared-to-raw-projection' ||
+    !Number.isFinite(numberOrNull(comparison.requiredScaleToRaw))
+  ) {
+    return null;
+  }
+
+  const rawProjection =
+    sourceEvidence?.formulaCandidatePreview?.rawProjection ?? {};
+  const candidate = (sourceEvidence?.candidates ?? []).find(
+    item => Number(item.elementConfigId) === Number(preview.elementConfigId)
+  );
+
+  return {
+    actionId: entry.actionId,
+    actionName: entry.actionName,
+    actionType: entry.actionType,
+    actorId: entry.actorId,
+    actorName: entry.actorName,
+    skillId: entry.skillId,
+    actionVariantIndex: numberOrNull(sourceEvidence?.actionVariantIndex),
+    actionVariantLabel: sourceEvidence?.actionVariantLabel ?? null,
+    elementConfigId: numberOrNull(preview.elementConfigId),
+    strategy: preview.strategy,
+    expression: preview.expression,
+    inputSource: preview.inputSource,
+    rawProjectionValue: numberOrNull(comparison.rawProjectionValue),
+    previewRoundedValue: numberOrNull(comparison.previewRoundedValue),
+    ratioToRawProjection: numberOrNull(comparison.ratioToRawProjection),
+    requiredScaleToRaw: numberOrNull(comparison.requiredScaleToRaw),
+    requiredPerHitScaleToRaw: numberOrNull(comparison.requiredPerHitScaleToRaw),
+    actionMultiplier: numberOrNull(rawProjection.actionMultiplier),
+    rawMultiplier: rawProjection.rawMultiplier ?? null,
+    hitCount: numberOrNull(preview.hitCount),
+    damageFields: compactDamageFieldPatternValues(
+      candidate?.fieldCandidate?.damageFields
+    ),
+    status: 'formula-candidate-pattern-comparable',
+    applied: false,
+  };
+}
+
+function selectComparableFormulaCombinationPreview(previews) {
+  return (
+    previews.find(
+      preview =>
+        preview.strategy === PREFERRED_FORMULA_CANDIDATE_STRATEGY &&
+        preview.comparison?.status === 'compared-to-raw-projection'
+    ) ??
+    previews.find(
+      preview => preview.comparison?.status === 'compared-to-raw-projection'
+    ) ??
+    null
+  );
+}
+
+function compactDamageFieldPatternValues(damageFields = {}) {
+  return {
+    amp: numberOrNull(damageFields.amp),
+    physicalRatio: numberOrNull(damageFields.physicalRatio),
+    elementCalFactor: numberOrNull(damageFields.elementCalFactor),
+    formulaParamsCount: Array.isArray(damageFields.formulaParams)
+      ? damageFields.formulaParams.length
+      : 0,
+  };
+}
+
+function inferMissingRuntimeScaleStatus({
+  actionSummaries,
+  actionMultiplierMin,
+  actionMultiplierMax,
+  uniquePreviewRoundedValues,
+}) {
+  if (actionSummaries.length < 2) {
+    return 'needs-more-action-samples';
+  }
+  if (
+    uniquePreviewRoundedValues.length <= 1 &&
+    Number.isFinite(actionMultiplierMin) &&
+    Number.isFinite(actionMultiplierMax) &&
+    Math.abs(actionMultiplierMax - actionMultiplierMin) > 0.01
+  ) {
+    return 'tracks-description-multiplier-before-runtime-hit-mapping';
+  }
+  return 'needs-runtime-hit-node-correlation';
+}
+
+function createScaleSpreadStatus(values) {
+  const min = minNumber(values);
+  const max = maxNumber(values);
+  if (!Number.isFinite(min) || !Number.isFinite(max) || values.length < 2) {
+    return 'single-sample';
+  }
+  return Math.abs(max - min) > 0.1
+    ? 'varies-by-action-variant'
+    : 'stable-across-action-variants';
+}
+
+function finiteValues(values) {
+  return values.map(numberOrNull).filter(Number.isFinite);
+}
+
+function minNumber(values) {
+  const finite = finiteValues(values);
+  return finite.length > 0 ? Math.min(...finite) : null;
+}
+
+function maxNumber(values) {
+  const finite = finiteValues(values);
+  return finite.length > 0 ? Math.max(...finite) : null;
+}
+
+function numberRange(min, max) {
+  return Number.isFinite(min) && Number.isFinite(max) ? max - min : null;
 }
 
 function buildActionResultTimeline({ scenario, damageEvents, resourceEvents }) {
@@ -202,7 +411,9 @@ function createHpDamageResult(action, damageEvent, damageElementSource) {
     return {
       value: 0,
       applied: false,
-      status: isSkillAction(action) ? 'no-parseable-hp-damage' : 'not-applicable',
+      status: isSkillAction(action)
+        ? 'no-parseable-hp-damage'
+        : 'not-applicable',
       formulaBreakdown: createNotApplicableBreakdown({
         kind: 'hp-damage',
         status: isSkillAction(action)
@@ -242,7 +453,8 @@ function createToughnessDamageResult(action, damageEvent, damageElementSource) {
     damageElementSource,
     'toughnessDamage'
   );
-  const hasCandidateFields = sourceEvidence?.status === 'candidate-fields-found';
+  const hasCandidateFields =
+    sourceEvidence?.status === 'candidate-fields-found';
 
   return {
     value: 0,
@@ -325,7 +537,8 @@ function createSelfEnergyChangeResult(
     damageElementSource,
     'selfEnergyChange'
   );
-  const hasCandidateFields = sourceEvidence?.status === 'candidate-fields-found';
+  const hasCandidateFields =
+    sourceEvidence?.status === 'candidate-fields-found';
 
   return {
     value: explicitDelta,
@@ -387,7 +600,8 @@ function createSelfEnergyChangeResult(
               : 'formula-unmapped'
             : 'not-applicable',
           source: sourceEvidence ?? {
-            status: 'pending-skill-control-effect-node-and-skillsub-logic-mapping',
+            status:
+              'pending-skill-control-effect-node-and-skillsub-logic-mapping',
             note: 'pending skill_control/effect node and skillsub_logic energy mapping',
           },
         },
@@ -443,7 +657,9 @@ function createActionDamageElementSource(action) {
 
   const fieldMappings = skillMapping.fieldMappings ?? [];
   const matchedMappings = fieldMappings
-    .filter(mapping => logicElementIds.includes(Number(mapping.elementConfigId)))
+    .filter(mapping =>
+      logicElementIds.includes(Number(mapping.elementConfigId))
+    )
     .sort(
       (left, right) =>
         Number(left.elementConfigId) - Number(right.elementConfigId)
@@ -488,8 +704,7 @@ function createActionDamageElementSource(action) {
         logicElementRowByElementId.get(Number(mapping.elementConfigId))
       )
     ),
-    note:
-      'TDamageElementParams fields are linked as candidate source evidence only; final HP/toughness/energy formulas remain unmapped.',
+    note: 'TDamageElementParams fields are linked as candidate source evidence only; final HP/toughness/energy formulas remain unmapped.',
   };
 }
 
@@ -588,8 +803,7 @@ function createDamageElementChainSource(damageElementSource, chainKey) {
     unbridgedElementConfigIds: damageElementSource.unbridgedElementConfigIds,
     candidateCount: candidates.length,
     bridgeMatchedLevelRows: damageElementSource.bridgeMatchedLevelRows ?? 0,
-    formulaSlotAlignmentSummary:
-      createFormulaSlotAlignmentSummary(candidates),
+    formulaSlotAlignmentSummary: createFormulaSlotAlignmentSummary(candidates),
     formulaFunctionSummary:
       chainKey === 'hpDamage' ? createFormulaFunctionSummary(candidates) : [],
     formulaCandidatePreview: null,
@@ -859,11 +1073,9 @@ function createFormulaCandidatePreview(sourceEvidence, damagePayload) {
               item.comparison?.status ??
               item.status
           ),
-        ]
-          .filter(Boolean)
+        ].filter(Boolean)
       ),
-      note:
-        'Preview values are evidence diagnostics only. They do not define DamageElement function combination order or final damage.',
+      note: 'Preview values are evidence diagnostics only. They do not define DamageElement function combination order or final damage.',
     },
   };
 }
@@ -1007,7 +1219,9 @@ function createCombinationPreviewComparison({
   const requiredScaleToRaw =
     roundedValue === 0 ? null : rawValue / roundedValue;
   const requiredPerHitScaleToRaw =
-    Number.isFinite(hitCount) && hitCount > 0 && Number.isFinite(requiredScaleToRaw)
+    Number.isFinite(hitCount) &&
+    hitCount > 0 &&
+    Number.isFinite(requiredScaleToRaw)
       ? requiredScaleToRaw / hitCount
       : null;
   const absoluteRatio =
@@ -1133,7 +1347,8 @@ function buildFormulaPreviewInputs({ ref, candidate, damagePayload, mode }) {
     const paramId = Number(input.paramId);
     const currentPair = currentParamPairs.get(paramId);
     const selectedValue =
-      mode === 'current-level-value-param' && Number.isFinite(currentPair?.value)
+      mode === 'current-level-value-param' &&
+      Number.isFinite(currentPair?.value)
         ? currentPair.value
         : input.formulaParamValue;
 
@@ -1143,7 +1358,8 @@ function buildFormulaPreviewInputs({ ref, candidate, damagePayload, mode }) {
       paramId,
       value: numberOrNull(selectedValue),
       source:
-        mode === 'current-level-value-param' && Number.isFinite(currentPair?.value)
+        mode === 'current-level-value-param' &&
+        Number.isFinite(currentPair?.value)
           ? 'skill_logic.currentLevel.valueParam'
           : 'TDamageElementParams.formulaParamValues',
       fallbackUsed:
@@ -1304,7 +1520,8 @@ function createFormulaPreviewComparison({
   const roundedValue = evaluation.roundedValue;
   const delta = roundedValue - rawValue;
   const ratioToRawProjection = rawValue === 0 ? null : roundedValue / rawValue;
-  const absoluteRatio = ratioToRawProjection == null ? null : Math.abs(1 - ratioToRawProjection);
+  const absoluteRatio =
+    ratioToRawProjection == null ? null : Math.abs(1 - ratioToRawProjection);
 
   return {
     status: 'compared-to-raw-projection',

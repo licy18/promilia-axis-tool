@@ -35,16 +35,13 @@ describe('Workbench view', () => {
     expect(text).toContain(
       'HP 2 个候选 (109001081, 109001306) / 削韧 2 个候选 (109001081, 109001306) / 充能 2 个候选 (109001081, 109001306)'
     );
-    expect(text).toContain('公式候选 A 覆盖候选 1,600-3,360 / G 常量匹配 10,000');
     expect(text).toContain(
-      '公式函数候选 f1 G/10000 / f2 self.ATK[0]*A/10000'
+      '公式候选 A 覆盖候选 1,600-3,360 / G 常量匹配 10,000'
     );
-    expect(text).toContain(
-      '候选预览 f2 等级值 307 vs raw 12,461，约 2.5%'
-    );
-    expect(text).toContain(
-      '组合诊断 f2 需 ×40.6 才接近 raw / 每 hit ×8.1'
-    );
+    expect(text).toContain('公式函数候选 f1 G/10000 / f2 self.ATK[0]*A/10000');
+    expect(text).toContain('候选预览 f2 等级值 307 vs raw 12,461，约 2.5%');
+    expect(text).toContain('组合诊断 f2 需 ×40.6 才接近 raw / 每 hit ×8.1');
+    expect(text).toContain('候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1');
     expect(text).toContain('伤害 12,461 · 韧性 0 · 能量 0');
     expect(text).toContain('low');
   });
@@ -335,7 +332,9 @@ describe('Workbench view', () => {
     });
 
     const entries = wrapper.findAll('[data-testid="workbench-skill-entry"]');
-    expect(entries.map(entry => entry.find('.skill-entry-name').text())).toEqual([
+    expect(
+      entries.map(entry => entry.find('.skill-entry-name').text())
+    ).toEqual([
       '普通攻击',
       '重击',
       '闪击',
@@ -359,10 +358,16 @@ describe('Workbench view', () => {
       'limit-counter',
       'perfect-parry',
     ]);
-    expect(entries.map(entry => entry.text()).join(' ')).not.toContain('哈库茵剑舞');
-    expect(entries.map(entry => entry.text()).join(' ')).not.toContain('暴击率');
+    expect(entries.map(entry => entry.text()).join(' ')).not.toContain(
+      '哈库茵剑舞'
+    );
+    expect(entries.map(entry => entry.text()).join(' ')).not.toContain(
+      '暴击率'
+    );
     expect(
-      entries.find(entry => entry.attributes('data-action-kind') === 'star-skill')?.attributes('data-skill-id')
+      entries
+        .find(entry => entry.attributes('data-action-kind') === 'star-skill')
+        ?.attributes('data-skill-id')
     ).toBe('10900112');
   });
 
@@ -383,9 +388,15 @@ describe('Workbench view', () => {
     expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe(
       '2 action'
     );
-    expect(wrapper.find('.action-item[data-action-id="action-0002"]').text()).toContain('星鸣技');
-    expect(wrapper.find('.action-item[data-action-id="action-0002"]').text()).toContain('1s30f');
-    expect(wrapper.findAll('.damage-row').some(row => row.text().includes('星鸣技'))).toBe(true);
+    expect(
+      wrapper.find('.action-item[data-action-id="action-0002"]').text()
+    ).toContain('星鸣技');
+    expect(
+      wrapper.find('.action-item[data-action-id="action-0002"]').text()
+    ).toContain('1s30f');
+    expect(
+      wrapper.findAll('.damage-row').some(row => row.text().includes('星鸣技'))
+    ).toBe(true);
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     const savedDraft = JSON.parse(
@@ -421,7 +432,9 @@ describe('Workbench view', () => {
       '3 action'
     );
     expect(
-      wrapper.findAll('.action-item').map(action => action.find('.action-name').text())
+      wrapper
+        .findAll('.action-item')
+        .map(action => action.find('.action-name').text())
     ).toEqual(['普通攻击', '重击', '闪击']);
     expect(
       wrapper.find('.action-item[data-action-id="action-0002"]').text()
@@ -1203,10 +1216,9 @@ describe('Workbench view', () => {
       findActionLibraryEntry(wrapper, selectedSecondaryEntry.kind).exists()
     ).toBe(true);
 
-    await findActionLibraryEntry(
-      wrapper,
-      selectedSecondaryEntry.kind
-    ).trigger('click');
+    await findActionLibraryEntry(wrapper, selectedSecondaryEntry.kind).trigger(
+      'click'
+    );
 
     expect(
       wrapper

@@ -106,7 +106,7 @@ Endaxis 只作为架构和交互成熟度参考，不是蓝色星原数据来源
 
 ## 已知开发阶段
 
-当前已完成阶段 1-3 的最小闭环、阶段 4 工作台主链路、阶段 5-1 至 5-8T 的真实数据/数值/动作形态、直接动作库、60fps 帧时间轴、公式分层雏形、战斗公式证据索引、公式 source 接入、skill asset/effect node 候选索引、每动作三值结果契约、`skill_control` 效果轨道候选分类、本地行为链解引用、elementBaseDatas 资源映射归属、行为脚本类型候选、IL2CPP element 类型目录、外部 element 对象本体解析、`TDamageElementParams` 三值字段候选映射、Workbench 三值来源展示、`valueParam` / `formulaParamValues` 槽位关系诊断、未应用公式槽位候选展示、`function_1/function_2 -> element_formula` 候选索引、动作级 `formulaFunctionSummary` 展示、`formulaCandidatePreview` 未应用预览和 `combinationPreviews` 简单组合诊断矩阵。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 5-8U，扩大样本并分析 formula candidate 与 raw HP 的差异模式。
+当前已完成阶段 1-3 的最小闭环、阶段 4 工作台主链路、阶段 5-1 至 5-8U 的真实数据/数值/动作形态、直接动作库、60fps 帧时间轴、公式分层雏形、战斗公式证据索引、公式 source 接入、skill asset/effect node 候选索引、每动作三值结果契约、`skill_control` 效果轨道候选分类、本地行为链解引用、elementBaseDatas 资源映射归属、行为脚本类型候选、IL2CPP element 类型目录、外部 element 对象本体解析、`TDamageElementParams` 三值字段候选映射、Workbench 三值来源展示、`valueParam` / `formulaParamValues` 槽位关系诊断、未应用公式槽位候选展示、`function_1/function_2 -> element_formula` 候选索引、动作级 `formulaFunctionSummary` 展示、`formulaCandidatePreview` 未应用预览、`combinationPreviews` 简单组合诊断矩阵和 `formulaCandidatePatternSummary` 跨动作差异模式摘要。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 5-8V，把差异模式关联到 `skill_control` 行为节点命中数量、命中帧和 element 绑定关系。
 
 完整对标 Endaxis 的后续路线见 `DEVELOPMENT_PLAN.md`。
 
