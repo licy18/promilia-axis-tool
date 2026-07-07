@@ -379,7 +379,29 @@ describe('generated AzPr data', () => {
       externalElementBaseReferenceSkills: 1,
       resourceMapMatchedElementBaseReferenceSkills: 1,
       resourceMapUnmatchedElementBaseReferenceSkills: 0,
+      scriptTypeCandidateSkills: 1,
+      elementTypeCatalogCandidates: 2,
       relationStatus: 'skill-control-assets-found-in-azpr-extractor',
+    });
+    expect(evidence.elementTypeCatalogEvidence).toMatchObject({
+      status: 'il2cpp-element-type-candidates-found',
+      elementTypes: expect.arrayContaining([
+        expect.objectContaining({
+          className: 'TSpElementParams',
+          label: '能量',
+          evidenceKind: 'config-element-params',
+          fields: expect.arrayContaining(['recoverType', 'shareType']),
+        }),
+        expect.objectContaining({
+          className: 'DamageElement',
+          evidenceKind: 'runtime-element',
+          fields: expect.arrayContaining([
+            'm_recoverSP',
+            'm_petRecoverSP',
+            'outputDamageData',
+          ]),
+        }),
+      ]),
     });
     expect(
       evidence.currentSkillControlEvidence
@@ -429,6 +451,7 @@ describe('generated AzPr data', () => {
       externalElementBaseRefs: 13,
       resourceMapMatchedElementBaseRefs: 13,
       resourceMapUnmatchedElementBaseRefs: 0,
+      scriptTypeCandidateBehaviorRefs: 5,
       resolvedBehaviorRefsByLane: {
         hpDamage: 5,
         toughnessDamage: 0,
@@ -467,6 +490,17 @@ describe('generated AzPr data', () => {
             expect.objectContaining({
               pathId: '1081335820946113461',
               scriptPathId: '8289252000250858251',
+              scriptTypeCandidate: expect.objectContaining({
+                status: 'field-signature-matched',
+                confidence: 'medium',
+                className: 'InjectToTargetKeyFrameBehaviorData',
+                typeDefIndex: 7239,
+                matchedFields: expect.arrayContaining([
+                  'elementBaseDatas',
+                  'toOwnElementBaseDatas',
+                  'damageEffectId',
+                ]),
+              }),
               startFrame: 19,
               frameCount: 1,
               collisionLayer: 5,

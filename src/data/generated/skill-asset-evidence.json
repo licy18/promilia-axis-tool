@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-07T15:23:11.019Z",
+  "generatedAt": "2026-07-07T15:34:22.182Z",
   "sourceKind": "azpr-skill-asset-evidence-index",
   "source": {
     "sourceRoot": "C:/PC2/Codex/AzPr",
@@ -42,6 +42,55 @@
       "exists": true
     }
   },
+  "elementTypeCatalogEvidence": {
+    "status": "il2cpp-element-type-candidates-found",
+    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+    "note": "These IL2CPP type candidates are evidence for later element object tracing only; they do not prove the unresolved m_FileID=2 objects are already parsed.",
+    "elementTypes": [
+      {
+        "role": "self-energy-change",
+        "sourceLineRange": "dump.cs:396084-396104",
+        "namespace": "Lens.Gameplay.Modules.BigWorld.Config",
+        "className": "TSpElementParams",
+        "label": "能量",
+        "typeDefIndex": 9754,
+        "baseType": "TElementParams",
+        "evidenceKind": "config-element-params",
+        "fields": [
+          "recoverType",
+          "recoverTagType",
+          "shareType",
+          "enhanceable",
+          "slot",
+          "stopSharing",
+          "cdRecoveryType",
+          "switchEnergyPointType",
+          "petShareType",
+          "mainPetShareType"
+        ],
+        "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+      },
+      {
+        "role": "hp-damage-runtime",
+        "sourceLineRange": "dump.cs:274573-274622",
+        "namespace": "Lens.Gameplay.Modules.BigWorld",
+        "className": "DamageElement",
+        "typeDefIndex": 6976,
+        "baseType": "BaseElement",
+        "evidenceKind": "runtime-element",
+        "fields": [
+          "m_damageEffectId",
+          "m_recoverSP",
+          "m_petRecoverSP",
+          "m_recoverInterval",
+          "m_amp",
+          "useOneBreak",
+          "outputDamageData"
+        ],
+        "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+      }
+    ]
+  },
   "summary": {
     "skillTableRows": 3200,
     "currentSkillCount": 120,
@@ -72,6 +121,8 @@
     "externalElementBaseReferenceSkills": 1,
     "resourceMapMatchedElementBaseReferenceSkills": 1,
     "resourceMapUnmatchedElementBaseReferenceSkills": 0,
+    "scriptTypeCandidateSkills": 1,
+    "elementTypeCatalogCandidates": 2,
     "relationStatus": "skill-control-assets-found-in-azpr-extractor"
   },
   "tableEvidence": [
@@ -4958,6 +5009,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -5030,6 +5082,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -5102,6 +5155,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -5174,6 +5228,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -5244,6 +5299,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -5314,6 +5370,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -5386,6 +5443,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -5458,6 +5516,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -5530,6 +5589,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -5602,6 +5662,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -5672,6 +5733,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -5740,6 +5802,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -5812,6 +5875,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -5884,6 +5948,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -5956,6 +6021,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -6028,6 +6094,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -6096,6 +6163,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -6176,6 +6244,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -6248,6 +6317,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -6320,6 +6390,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -6392,6 +6463,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -6462,6 +6534,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -6530,6 +6603,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -6602,6 +6676,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -6674,6 +6749,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -6746,6 +6822,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -6818,6 +6895,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -6886,6 +6964,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -6954,6 +7033,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -7026,6 +7106,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -7098,6 +7179,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -7170,6 +7252,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -7242,6 +7325,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -7314,6 +7398,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -7386,6 +7471,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -7458,6 +7544,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -7530,6 +7617,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -7602,6 +7690,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -7674,6 +7763,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -7742,6 +7832,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -7822,6 +7913,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -7894,6 +7986,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -7966,6 +8059,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -8038,6 +8132,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -8108,6 +8203,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -8176,6 +8272,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -8248,6 +8345,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -8320,6 +8418,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -8392,6 +8491,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -8464,6 +8564,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -8534,6 +8635,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -8606,6 +8708,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -8678,6 +8781,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -8750,6 +8854,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -8822,6 +8927,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -8894,6 +9000,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -8964,6 +9071,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -9032,6 +9140,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -9104,6 +9213,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -9176,6 +9286,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -9248,6 +9359,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -9320,6 +9432,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -9390,6 +9503,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -9458,6 +9572,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -9530,6 +9645,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -9602,6 +9718,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -9674,6 +9791,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -9746,6 +9864,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -9816,6 +9935,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -10178,6 +10298,7 @@
         "externalElementBaseRefs": 13,
         "resourceMapMatchedElementBaseRefs": 13,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 5,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 5,
           "toughnessDamage": 0,
@@ -10279,6 +10400,37 @@
               "file": "MonoBehaviour_1081335820946113461__1081335820946113461.json",
               "pathId": "1081335820946113461",
               "scriptPathId": "8289252000250858251",
+              "scriptTypeCandidate": {
+                "status": "field-signature-matched",
+                "confidence": "medium",
+                "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                "sourceLineRange": "dump.cs:286170-286206",
+                "scriptPathId": "8289252000250858251",
+                "namespace": "Lens.Gameplay.Modules.BigWorld",
+                "className": "InjectToTargetKeyFrameBehaviorData",
+                "typeDefIndex": 7239,
+                "baseType": "SkillBehaviorData",
+                "interfaces": [
+                  "IElementSkillBehaviourData"
+                ],
+                "matchedFields": [
+                  "selectedStateName",
+                  "selectedClipName",
+                  "effectPath",
+                  "collisionLayer",
+                  "elementalType",
+                  "targetType",
+                  "keyFrameDatas",
+                  "elementBaseDatas",
+                  "toOwnElementBaseDatas",
+                  "damageEffectId"
+                ],
+                "methods": [
+                  "GetDirectlyUsedElements",
+                  "CollectReferencedElements"
+                ],
+                "note": "Matched by script PathID plus exported MonoBehaviour field signature; this is not yet a direct MonoScript asset-name resolution."
+              },
               "behaviorGroupId": 0,
               "timelineGroupIndex": 0,
               "behaviorIndex": -64529606,
@@ -10618,6 +10770,37 @@
               "file": "MonoBehaviour_866122991869149596__866122991869149596.json",
               "pathId": "866122991869149596",
               "scriptPathId": "8289252000250858251",
+              "scriptTypeCandidate": {
+                "status": "field-signature-matched",
+                "confidence": "medium",
+                "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                "sourceLineRange": "dump.cs:286170-286206",
+                "scriptPathId": "8289252000250858251",
+                "namespace": "Lens.Gameplay.Modules.BigWorld",
+                "className": "InjectToTargetKeyFrameBehaviorData",
+                "typeDefIndex": 7239,
+                "baseType": "SkillBehaviorData",
+                "interfaces": [
+                  "IElementSkillBehaviourData"
+                ],
+                "matchedFields": [
+                  "selectedStateName",
+                  "selectedClipName",
+                  "effectPath",
+                  "collisionLayer",
+                  "elementalType",
+                  "targetType",
+                  "keyFrameDatas",
+                  "elementBaseDatas",
+                  "toOwnElementBaseDatas",
+                  "damageEffectId"
+                ],
+                "methods": [
+                  "GetDirectlyUsedElements",
+                  "CollectReferencedElements"
+                ],
+                "note": "Matched by script PathID plus exported MonoBehaviour field signature; this is not yet a direct MonoScript asset-name resolution."
+              },
               "behaviorGroupId": 0,
               "timelineGroupIndex": 0,
               "behaviorIndex": 1941816578,
@@ -10691,6 +10874,37 @@
               "file": "MonoBehaviour_-7113223423314558027__-7113223423314558027.json",
               "pathId": "-7113223423314558027",
               "scriptPathId": "8289252000250858251",
+              "scriptTypeCandidate": {
+                "status": "field-signature-matched",
+                "confidence": "medium",
+                "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                "sourceLineRange": "dump.cs:286170-286206",
+                "scriptPathId": "8289252000250858251",
+                "namespace": "Lens.Gameplay.Modules.BigWorld",
+                "className": "InjectToTargetKeyFrameBehaviorData",
+                "typeDefIndex": 7239,
+                "baseType": "SkillBehaviorData",
+                "interfaces": [
+                  "IElementSkillBehaviourData"
+                ],
+                "matchedFields": [
+                  "selectedStateName",
+                  "selectedClipName",
+                  "effectPath",
+                  "collisionLayer",
+                  "elementalType",
+                  "targetType",
+                  "keyFrameDatas",
+                  "elementBaseDatas",
+                  "toOwnElementBaseDatas",
+                  "damageEffectId"
+                ],
+                "methods": [
+                  "GetDirectlyUsedElements",
+                  "CollectReferencedElements"
+                ],
+                "note": "Matched by script PathID plus exported MonoBehaviour field signature; this is not yet a direct MonoScript asset-name resolution."
+              },
               "behaviorGroupId": 0,
               "timelineGroupIndex": 0,
               "behaviorIndex": -276268340,
@@ -11261,6 +11475,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -12133,6 +12348,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -12962,6 +13178,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -13593,6 +13810,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -13755,6 +13973,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -13833,6 +14052,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -13905,6 +14125,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -13977,6 +14198,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -14049,6 +14271,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -14119,6 +14342,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -14187,6 +14411,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -14259,6 +14484,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -14331,6 +14557,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -14403,6 +14630,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -14475,6 +14703,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -14545,6 +14774,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -14615,6 +14845,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -14687,6 +14918,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -14759,6 +14991,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -14831,6 +15064,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -14903,6 +15137,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -14973,6 +15208,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -15043,6 +15279,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -15115,6 +15352,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -15187,6 +15425,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -15259,6 +15498,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -15331,6 +15571,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -15401,6 +15642,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -15481,6 +15723,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -15553,6 +15796,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -15625,6 +15869,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -15697,6 +15942,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -15767,6 +16013,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -15835,6 +16082,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -15907,6 +16155,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -15979,6 +16228,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -16051,6 +16301,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -16123,6 +16374,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -16193,6 +16445,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -16261,6 +16514,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -16333,6 +16587,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -16405,6 +16660,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -16477,6 +16733,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -16549,6 +16806,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -16619,6 +16877,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -16689,6 +16948,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -16763,6 +17023,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -16835,6 +17096,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -16907,6 +17169,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -16979,6 +17242,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -17049,6 +17313,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -17119,6 +17384,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -17191,6 +17457,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -17263,6 +17530,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -17335,6 +17603,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -17407,6 +17676,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -17477,6 +17747,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -17545,6 +17816,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -17617,6 +17889,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -17689,6 +17962,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -17761,6 +18035,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -17833,6 +18108,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -17901,6 +18177,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -17973,6 +18250,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -18045,6 +18323,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,
@@ -18117,6 +18396,7 @@
         "externalElementBaseRefs": 0,
         "resourceMapMatchedElementBaseRefs": 0,
         "resourceMapUnmatchedElementBaseRefs": 0,
+        "scriptTypeCandidateBehaviorRefs": 0,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 0,
           "toughnessDamage": 0,

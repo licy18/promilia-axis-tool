@@ -235,7 +235,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8H，对 `skill_control` MonoBehaviour 样本建立效果轨道候选分类，输出 `effectLaneCandidateSummary` / `effectLaneCandidates`；当前确认末音 `10900101` 有 `攻击碰撞` HP 候选，但削韧、充能仍未在该技能样本中确认。
 - 已完成：阶段 5-8I，解引用 `behaviorList` / PathID / MonoBehaviour 关联链，末音 `10900101` 的 36 条 behaviorList 引用全部解到本地行为对象，HP 候选行为链已追到 `collisionLayer/elementalType/targetType/elementBaseDatas` 等字段。
 - 已完成：阶段 5-8J，新增 `skillResourceMapEvidence`，把行为对象里的外部 `elementBaseDatas` 引用匹配到根 `skillResourceMaps[].elements`；末音 `10900101` 的 13 条外部 element 引用全部匹配到对应 `subSkillId`、`stateName` 和 hitEffects。
-- 下一步：阶段 5-8K，追踪 `m_FileID = 2` element 对象本体和 `scriptPathId = 8289252000250858251` 的脚本类型名，确认是否能找到 `elementId`、`valueParam`、削韧、充能或公式 ID。
+- 已完成：阶段 5-8K，新增行为脚本类型候选和 IL2CPP element 类型目录；末音 `10900101` 的 HP 候选行为已匹配 `InjectToTargetKeyFrameBehaviorData` 字段签名，当前全局有 1 个技能命中脚本类型候选、2 个 element 类型候选。
+- 下一步：阶段 5-8L，解析 `skill_control_10900101` 所在 bundle `ypm6fu6ccxdszvz7zhuinq` 的 `m_FileID = 2` 外部 element 对象表，继续确认 `elementId`、`valueParam`、削韧、充能或公式 ID。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

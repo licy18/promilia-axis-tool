@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-07T15:23:11.019Z",
+  "generatedAt": "2026-07-07T15:34:22.182Z",
   "sourceRoot": "C:/PC2/Codex/AzPr",
   "counts": {
     "attributes": 184,
@@ -430,6 +430,8 @@
         "externalElementBaseReferenceSkills": 1,
         "resourceMapMatchedElementBaseReferenceSkills": 1,
         "resourceMapUnmatchedElementBaseReferenceSkills": 0,
+        "scriptTypeCandidateSkills": 1,
+        "elementTypeCatalogCandidates": 2,
         "relationStatus": "skill-control-assets-found-in-azpr-extractor"
       },
       "message": "C:/PC2/Codex/AzPr 当前缺少 Config/Battle/Skill 实体资源；已按规则从 AzPr Extractor SkillList 建立 skill_control 候选索引，但还未解析为命中帧/效果节点/公式映射。"

@@ -2234,11 +2234,34 @@ Endaxis 参考边界：
 - Yoo index 当前只定位到 `skill_control_10900101` 所在 bundle `ypm6fu6ccxdszvz7zhuinq`，没有直接列出这些 PathID 的对象落点；当前 Unity 导出目录中也没有对应独立 JSON。
 - 下一步仍需要从 bundle typetree、Extractor 脚本或 IL2CPP 类型信息中找外部 element 对象结构。
 
+### 2026-07-07：阶段 5-8K 行为脚本类型候选和 element 类型目录落地
+
+本轮完成：
+
+- `skill-asset-evidence.json` 新增顶层 `elementTypeCatalogEvidence`，把 IL2CPP dump 中和后续追踪最相关的 element 类型先固化为候选目录。
+- 当前候选目录包含 `TSpElementParams` 和 `DamageElement` 两类证据：前者标注为能量配置参数，后者标注为伤害运行时 element。
+- `effectLaneBehaviorChains[].resolvedBehaviors[].scriptTypeCandidate` 会在 `scriptPathId` 和导出字段签名吻合时输出行为脚本候选。
+- 末音 `10900101` 的 HP 候选行为对象 `scriptPathId = 8289252000250858251` 已匹配到 `InjectToTargetKeyFrameBehaviorData` 候选，字段签名包含 `collisionLayer`、`elementalType`、`targetType`、`elementBaseDatas`、`toOwnElementBaseDatas`、`damageEffectId`。
+- 全局当前样本统计显示：1 个当前技能存在脚本类型候选，element 类型目录候选数为 2。
+
+验收结果：
+
+- `npm run data:generate`：通过，重新生成 `skill-asset-evidence.json`。
+- `npm run test -- --run src/__tests__/data/azprGenerated.test.js`：通过，1 个测试文件、9 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1359 KB。
+
+当前边界：
+
+- `InjectToTargetKeyFrameBehaviorData` 是基于 `scriptPathId` 加字段签名的中置信候选，不是直接 MonoScript 资源名解析。
+- `TSpElementParams` / `DamageElement` 只是 IL2CPP 类型候选目录，尚未证明 `m_FileID = 2` 的外部 element 对象本体就是这些类型。
+- 当前仍没有解析外部 element 对象中的 `elementId`、`valueParam`、削韧、充能或公式 ID，不能把这些候选直接用于计算。
+
 下一步：
 
-- 阶段 5-8K 目标：追踪 `m_FileID = 2` element 对象本体和行为脚本类型。
-- 优先确认 `scriptPathId = 8289252000250858251` 的脚本类型名，并查找 `skill_control_10900101` bundle 内 `m_FileID = 2` 的对象表。
-- 若能解析 element 对象，继续验证它是否包含 `elementId`、`valueParam`、削韧、充能或公式 ID；若不能解析，产出 Extractor 侧最小复现和缺失 typetree 清单。
+- 阶段 5-8L 目标：解析 `skill_control_10900101` 所在 bundle `ypm6fu6ccxdszvz7zhuinq` 的外部 `m_FileID = 2` 对象表。
+- 优先定位 `-5633710717881758712`、`7848597992417622553`、`2740651767650299388` 等 element PathID 的对象本体和 typetree。
+- 若能解析对象体，继续验证它们是否对应 `TSpElementParams`、`DamageElement`、`skillsub_ele_value.elementId`、`valueParam`、削韧或充能字段；若不能解析，产出 Extractor 侧最小复现和缺失对象类型清单。
 
 ## 10. 文档维护规则
 

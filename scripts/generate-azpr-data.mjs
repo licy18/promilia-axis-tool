@@ -383,6 +383,81 @@ const SKILL_EFFECT_LANES = Object.freeze([
     patterns: [/SFX/i, /特效/, /镜头/, /\bVO\b/i, /武器/, /广播/, /宠物响应/],
   },
 ]);
+const IL2CPP_DUMP_SOURCE = path.join(
+  extractorRoot,
+  'outputs',
+  'il2cpp-dump',
+  'dump.cs'
+);
+const SKILL_BEHAVIOR_SCRIPT_TYPE_CANDIDATES = Object.freeze([
+  {
+    status: 'field-signature-matched',
+    confidence: 'medium',
+    source: IL2CPP_DUMP_SOURCE,
+    sourceLineRange: 'dump.cs:286170-286206',
+    scriptPathId: '8289252000250858251',
+    namespace: 'Lens.Gameplay.Modules.BigWorld',
+    className: 'InjectToTargetKeyFrameBehaviorData',
+    typeDefIndex: 7239,
+    baseType: 'SkillBehaviorData',
+    interfaces: ['IElementSkillBehaviourData'],
+    signatureFields: [
+      'selectedStateName',
+      'selectedClipName',
+      'effectPath',
+      'collisionLayer',
+      'elementalType',
+      'targetType',
+      'keyFrameDatas',
+      'elementBaseDatas',
+      'toOwnElementBaseDatas',
+      'damageEffectId',
+    ],
+    methods: ['GetDirectlyUsedElements', 'CollectReferencedElements'],
+  },
+]);
+const SKILL_ELEMENT_TYPE_CATALOG = Object.freeze([
+  {
+    role: 'self-energy-change',
+    sourceLineRange: 'dump.cs:396084-396104',
+    namespace: 'Lens.Gameplay.Modules.BigWorld.Config',
+    className: 'TSpElementParams',
+    label: '能量',
+    typeDefIndex: 9754,
+    baseType: 'TElementParams',
+    evidenceKind: 'config-element-params',
+    fields: [
+      'recoverType',
+      'recoverTagType',
+      'shareType',
+      'enhanceable',
+      'slot',
+      'stopSharing',
+      'cdRecoveryType',
+      'switchEnergyPointType',
+      'petShareType',
+      'mainPetShareType',
+    ],
+  },
+  {
+    role: 'hp-damage-runtime',
+    sourceLineRange: 'dump.cs:274573-274622',
+    namespace: 'Lens.Gameplay.Modules.BigWorld',
+    className: 'DamageElement',
+    typeDefIndex: 6976,
+    baseType: 'BaseElement',
+    evidenceKind: 'runtime-element',
+    fields: [
+      'm_damageEffectId',
+      'm_recoverSP',
+      'm_petRecoverSP',
+      'm_recoverInterval',
+      'm_amp',
+      'useOneBreak',
+      'outputDamageData',
+    ],
+  },
+]);
 const SKILL_ASSET_EVIDENCE_TABLES = Object.freeze([
   {
     key: 'heroTable',
@@ -2039,6 +2114,7 @@ async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
   const existingSkillBytesPathCount = skillBytesPathStatuses.filter(
     item => item.existsInAzPrAssets
   ).length;
+  const elementTypeCatalogEvidence = buildSkillElementTypeCatalogEvidence();
 
   return {
     schemaVersion: 1,
@@ -2060,6 +2136,7 @@ async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
         'If C:/PC2/Codex/AzPr lacks Config/Battle/Skill assets, use AzPr Extractor Unity exports under default_package/ResourcesAssets/Config/Battle/SkillList.',
     },
     probes,
+    elementTypeCatalogEvidence,
     summary: {
       skillTableRows: skillTableRows.length,
       currentSkillCount: skills.length,
@@ -2097,6 +2174,10 @@ async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
         behaviorReferenceSkillCounts.resourceMapMatchedElementBaseRefs,
       resourceMapUnmatchedElementBaseReferenceSkills:
         behaviorReferenceSkillCounts.resourceMapUnmatchedElementBaseRefs,
+      scriptTypeCandidateSkills:
+        behaviorReferenceSkillCounts.scriptTypeCandidateBehaviorRefs,
+      elementTypeCatalogCandidates:
+        elementTypeCatalogEvidence.elementTypes.length,
       relationStatus:
         foundCurrentSkillControls.length > 0
           ? 'skill-control-assets-found-in-azpr-extractor'
@@ -2110,6 +2191,19 @@ async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
     currentSkillControlEvidence,
     sampleSkillControls: foundCurrentSkillControls.slice(0, 20),
     nextTraceTargets: buildSkillControlTraceTargets(foundCurrentSkillControls),
+  };
+}
+
+function buildSkillElementTypeCatalogEvidence() {
+  return {
+    status: 'il2cpp-element-type-candidates-found',
+    source: normalizePath(IL2CPP_DUMP_SOURCE),
+    note:
+      'These IL2CPP type candidates are evidence for later element object tracing only; they do not prove the unresolved m_FileID=2 objects are already parsed.',
+    elementTypes: SKILL_ELEMENT_TYPE_CATALOG.map(item => ({
+      ...item,
+      source: normalizePath(IL2CPP_DUMP_SOURCE),
+    })),
   };
 }
 
@@ -2413,6 +2507,7 @@ function createEmptySkillControlNodeEvidence() {
       externalElementBaseRefs: 0,
       resourceMapMatchedElementBaseRefs: 0,
       resourceMapUnmatchedElementBaseRefs: 0,
+      scriptTypeCandidateBehaviorRefs: 0,
       resolvedBehaviorRefsByLane: Object.fromEntries(
         SKILL_EFFECT_LANES.map(lane => [lane.key, 0])
       ),
@@ -2600,6 +2695,7 @@ function compactMonoBehaviourBehaviorTarget(
   pathId,
   skillResourceMapIndex
 ) {
+  const scriptPathId = extractScriptPathId(text);
   const elementBaseDataRefs = extractObjectRefsFromArraySection(
     text,
     'elementBaseDatas',
@@ -2614,7 +2710,12 @@ function compactMonoBehaviourBehaviorTarget(
   return compactObject({
     file: fileName,
     pathId,
-    scriptPathId: extractScriptPathId(text),
+    scriptPathId,
+    scriptTypeCandidate: buildBehaviorScriptTypeCandidate(
+      value,
+      text,
+      scriptPathId
+    ),
     behaviorGroupId: numberOrNull(value.behaviorGroupId),
     timelineGroupIndex: numberOrNull(value.timelineGroupIndex),
     behaviorIndex: numberOrNull(value.behaviorIndex),
@@ -2642,6 +2743,40 @@ function compactMonoBehaviourBehaviorTarget(
   });
 }
 
+function buildBehaviorScriptTypeCandidate(value, text, scriptPathId) {
+  const candidate = SKILL_BEHAVIOR_SCRIPT_TYPE_CANDIDATES.find(
+    item => item.scriptPathId === String(scriptPathId)
+  );
+  if (!candidate) {
+    return null;
+  }
+
+  const matchedFields = candidate.signatureFields.filter(field =>
+    Object.prototype.hasOwnProperty.call(value, field) ||
+    text.includes(`"${field}"`)
+  );
+  if (matchedFields.length < 6) {
+    return null;
+  }
+
+  return {
+    status: candidate.status,
+    confidence: candidate.confidence,
+    source: normalizePath(candidate.source),
+    sourceLineRange: candidate.sourceLineRange,
+    scriptPathId: candidate.scriptPathId,
+    namespace: candidate.namespace,
+    className: candidate.className,
+    typeDefIndex: candidate.typeDefIndex,
+    baseType: candidate.baseType,
+    interfaces: candidate.interfaces,
+    matchedFields,
+    methods: candidate.methods,
+    note:
+      'Matched by script PathID plus exported MonoBehaviour field signature; this is not yet a direct MonoScript asset-name resolution.',
+  };
+}
+
 function pushSkillBehaviorChain(evidence, chain) {
   if (!chain) {
     return;
@@ -2665,6 +2800,9 @@ function pushSkillBehaviorChain(evidence, chain) {
       sum + (behavior.resourceMapMatchedElementBaseRefCount ?? 0),
     0
   );
+  const scriptTypeCandidateBehaviorRefs = (chain.resolvedBehaviors ?? []).filter(
+    behavior => behavior.scriptTypeCandidate
+  ).length;
 
   evidence.behaviorReferenceSummary.behaviorListRefs += refs.length;
   evidence.behaviorReferenceSummary.resolvedBehaviorListRefs +=
@@ -2677,6 +2815,8 @@ function pushSkillBehaviorChain(evidence, chain) {
     resourceMapMatchedElementBaseRefs;
   evidence.behaviorReferenceSummary.resourceMapUnmatchedElementBaseRefs +=
     externalElementBaseRefs - resourceMapMatchedElementBaseRefs;
+  evidence.behaviorReferenceSummary.scriptTypeCandidateBehaviorRefs +=
+    scriptTypeCandidateBehaviorRefs;
 
   for (const lane of chain.laneHints ?? []) {
     if (
@@ -2708,6 +2848,8 @@ function mergeBehaviorReferenceSummary(target, source) {
     source.resourceMapMatchedElementBaseRefs;
   target.resourceMapUnmatchedElementBaseRefs +=
     source.resourceMapUnmatchedElementBaseRefs;
+  target.scriptTypeCandidateBehaviorRefs +=
+    source.scriptTypeCandidateBehaviorRefs;
   for (const [lane, count] of Object.entries(source.resolvedBehaviorRefsByLane)) {
     target.resolvedBehaviorRefsByLane[lane] =
       (target.resolvedBehaviorRefsByLane[lane] ?? 0) + count;
@@ -2734,6 +2876,11 @@ function summarizeBehaviorReferenceSkillCounts(currentSkillControlEvidence) {
       item =>
         (item.behaviorReferenceSummary?.resourceMapUnmatchedElementBaseRefs ??
           0) > 0
+    ).length,
+    scriptTypeCandidateBehaviorRefs: foundItems.filter(
+      item =>
+        (item.behaviorReferenceSummary?.scriptTypeCandidateBehaviorRefs ?? 0) >
+        0
     ).length,
     ...Object.fromEntries(
       SKILL_EFFECT_LANES.map(lane => [

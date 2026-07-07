@@ -2128,3 +2128,91 @@ Unity `m_PathID` 是 64 位整数，JavaScript `JSON.parse` 会把它读成普�
 - `effects` / `hitEffects` 是资源名线索，不等同于伤害公式、削韧公式或充能公式。
 - 这些资源映射帮助缩小追踪范围：下一步应沿 `subSkillId`、`stateName`、`hitEffects` 和 element PathID 继续找对象结构。
 - 当前仍不能把 `elementBaseDatas` 直接映射到 `skillsub_ele_value.elementId` 或 `valueParam`。
+
+## 36. 2026-07-07 行为脚本类型候选和 element 类型目录
+
+阶段 5-8K 在 `skill-asset-evidence.json` 中新增行为脚本类型候选和 IL2CPP element 类型候选目录，用于继续追踪 HP 伤害、削韧和自身能量的真实效果节点。
+
+### 36.1 summary 新增字段
+
+`skill-asset-evidence.json.summary` 新增：
+
+```javascript
+{
+  "scriptTypeCandidateSkills": 1,
+  "elementTypeCatalogCandidates": 2
+}
+```
+
+含义：
+
+- `scriptTypeCandidateSkills`：至少一个已解出的行为对象带有 `scriptTypeCandidate` 的当前技能数。
+- `elementTypeCatalogCandidates`：当前固化到 IL2CPP 类型目录中的候选类型数量。
+
+### 36.2 顶层新增 elementTypeCatalogEvidence
+
+```javascript
+{
+  "elementTypeCatalogEvidence": {
+    "status": "il2cpp-element-type-candidates-found",
+    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+    "elementTypes": [
+      {
+        "role": "self-energy-change",
+        "className": "TSpElementParams",
+        "label": "能量",
+        "typeDefIndex": 9754,
+        "baseType": "TElementParams",
+        "evidenceKind": "config-element-params"
+      },
+      {
+        "role": "hp-damage-runtime",
+        "className": "DamageElement",
+        "typeDefIndex": 6976,
+        "baseType": "BaseElement",
+        "evidenceKind": "runtime-element"
+      }
+    ]
+  }
+}
+```
+
+### 36.3 resolvedBehaviors 新增 scriptTypeCandidate
+
+`effectLaneBehaviorChains[].resolvedBehaviors[]` 在字段签名吻合时新增：
+
+```javascript
+{
+  "scriptPathId": "8289252000250858251",
+  "scriptTypeCandidate": {
+    "status": "field-signature-matched",
+    "confidence": "medium",
+    "className": "InjectToTargetKeyFrameBehaviorData",
+    "typeDefIndex": 7239,
+    "baseType": "SkillBehaviorData",
+    "interfaces": ["IElementSkillBehaviourData"],
+    "matchedFields": [
+      "collisionLayer",
+      "elementalType",
+      "targetType",
+      "elementBaseDatas",
+      "toOwnElementBaseDatas",
+      "damageEffectId"
+    ]
+  }
+}
+```
+
+`behaviorReferenceSummary` 新增：
+
+```javascript
+{
+  "scriptTypeCandidateBehaviorRefs": 5
+}
+```
+
+### 36.4 当前边界
+
+- `scriptTypeCandidate` 是 `scriptPathId` 加导出字段签名的候选，不是直接 MonoScript 资源名解析。
+- `elementTypeCatalogEvidence` 只是后续查找对象体的类型目录，不证明 `m_FileID = 2` 外部对象已经被解析。
+- 仍必须继续解析 bundle 外部对象表，才能确认 `elementId`、`valueParam`、削韧、充能或公式 ID。
