@@ -2216,3 +2216,98 @@ Unity `m_PathID` 是 64 位整数，JavaScript `JSON.parse` 会把它读成普�
 - `scriptTypeCandidate` 是 `scriptPathId` 加导出字段签名的候选，不是直接 MonoScript 资源名解析。
 - `elementTypeCatalogEvidence` 只是后续查找对象体的类型目录，不证明 `m_FileID = 2` 外部对象已经被解析。
 - 仍必须继续解析 bundle 外部对象表，才能确认 `elementId`、`valueParam`、削韧、充能或公式 ID。
+
+## 37. 2026-07-07 external element 对象本体摘要
+
+阶段 5-8L 在 `skill-asset-evidence.json` 中新增 `externalElementObjectEvidence`，用于把 `skill_control` 中的 `m_FileID = 2` external element PathID 解析到 `d_assets_resourcesassets_config_battle_element_assets` 共享对象池。
+
+### 37.1 summary 新增字段
+
+`skill-asset-evidence.json.summary` 新增：
+
+```javascript
+{
+  "externalElementObjectResolvedSkills": 1,
+  "externalElementObjectResolvedRefs": 8,
+  "externalElementObjectUnresolvedRefs": 0
+}
+```
+
+含义：
+
+- `externalElementObjectResolvedSkills`：至少一个 external element 对象本体已解析的当前技能数。
+- `externalElementObjectResolvedRefs`：已解析到对象本体的 PathID 数量。
+- `externalElementObjectUnresolvedRefs`：仍未解析到对象本体的 PathID 数量。
+
+### 37.2 顶层新增 externalElementObjectEvidence
+
+```javascript
+{
+  "externalElementObjectEvidence": {
+    "status": "element-objects-resolved",
+    "summary": {
+      "skillCount": 1,
+      "resolvedSkills": 1,
+      "requestedPathIds": 8,
+      "resolvedPathIds": 8,
+      "unresolvedPathIds": 0
+    },
+    "skills": [
+      {
+        "skillId": 10900101,
+        "skillControlBundle": {
+          "bundleIndex": 75402,
+          "logicalName": "d_assets_resourcesassets_config_battle_skilllist_skill_control_10900101",
+          "packName": "ypm6fu6ccxdszvz7zhuinq"
+        },
+        "elementAssetsBundle": {
+          "bundleIndex": 74227,
+          "logicalName": "d_assets_resourcesassets_config_battle_element_assets"
+        },
+        "scriptClassCounts": {
+          "TDamageElementParams": 3,
+          "TFxElementParams": 2,
+          "TFreezeFrameElementParams": 2,
+          "TBuffElementParams": 1
+        }
+      }
+    ]
+  }
+}
+```
+
+### 37.3 对象摘要字段
+
+`externalElementObjectEvidence.skills[].objects[]` 的关键字段：
+
+```javascript
+{
+  "pathId": "-5633710717881758712",
+  "status": "resolved-in-element-assets-bundle",
+  "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001251.asset",
+  "scriptPathId": "3156599909451817364",
+  "elementConfigId": 109001251,
+  "scriptTypeCandidate": {
+    "className": "TDamageElementParams",
+    "typeDefIndex": 9720
+  },
+  "formulaParams": {
+    "function_1": 1,
+    "function_2": 2,
+    "formulaParamValues": [1000, 3000, 0, 0, 0, 8500, 10000, 10000]
+  },
+  "damageFields": {
+    "weakBreakDamageRate": 7000,
+    "recoverSP": 5899,
+    "petRecoverSP": 22999,
+    "recoverInterval": 9999
+  },
+  "mediaPackNames": ["11_109001_133"]
+}
+```
+
+### 37.4 当前边界
+
+- 已解析对象本体，不等于已确认最终公式。
+- `TDamageElementParams` 中的 `formulaParams`、`weakBreakDamageRate`、`recoverSP`、`petRecoverSP` 是 HP、削韧、充能三条计算链的候选字段。
+- 下一阶段必须确认这些字段的缩放、触发次数、目标归属和与 `skillsub_ele_value` / `element_formula` 的关系。

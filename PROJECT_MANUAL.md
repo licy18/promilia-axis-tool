@@ -2263,6 +2263,36 @@ Endaxis 参考边界：
 - 优先定位 `-5633710717881758712`、`7848597992417622553`、`2740651767650299388` 等 element PathID 的对象本体和 typetree。
 - 若能解析对象体，继续验证它们是否对应 `TSpElementParams`、`DamageElement`、`skillsub_ele_value.elementId`、`valueParam`、削韧或充能字段；若不能解析，产出 Extractor 侧最小复现和缺失对象类型清单。
 
+### 2026-07-07：阶段 5-8L 外部 element 对象本体解析落地
+
+本轮完成：
+
+- 新增 `scripts/resolve-azpr-element-objects.py`，复用 `C:\Codex\AzPr Extractor` 的 compact manifest 与 UnityPy 配置，从逻辑 bundle 切片中读取 element 对象本体。
+- `skill-asset-evidence.json` 新增顶层 `externalElementObjectEvidence`，记录 `skill_control` 的 `m_FileID = 2` 外部 element PathID 到 `battle_element_assets` 对象本体的解析结果。
+- 末音 `10900101` 的 `skill_control` 逻辑 bundle 为 `d_assets_resourcesassets_config_battle_skilllist_skill_control_10900101`，位于 pack `ypm6fu6ccxdszvz7zhuinq`，bundleIndex `75402`，offset `4741809`，size `18106`。
+- 外部 element 对象本体位于共享池 `d_assets_resourcesassets_config_battle_element_assets`，bundleIndex `74227`，pack `fwtvymrpqatpf4ytyfvwqg`。
+- 末音 `10900101` 的 8 个 `m_FileID = 2` preload PathID 已全部解析，未解析数为 0。
+- 解析到的脚本类型分布：`TDamageElementParams = 3`、`TFxElementParams = 2`、`TFreezeFrameElementParams = 2`、`TBuffElementParams = 1`。
+- 关键 HP element `ast_109001251 / elementConfigId = 109001251` 已解析出 `formulaParams.function_1 = 1`、`function_2 = 2`、`formulaParamValues` 包含 `3000` 和 `8500`，并带有 `weakBreakDamageRate = 7000`、`recoverSP = 5899`、`petRecoverSP = 22999`、`recoverInterval = 9999`、`mediaPackName = 11_109001_133`。
+
+验收结果：
+
+- `python scripts\resolve-azpr-element-objects.py --extractor "C:\Codex\AzPr Extractor" --skill-ids 10900101`：通过，8 个对象全部解析。
+- `npm run data:generate`：通过，重新生成 `skill-asset-evidence.json`。
+- `npm run test -- --run src/__tests__/data/azprGenerated.test.js`：通过，1 个测试文件、9 条测试通过。
+
+当前边界：
+
+- 已确认外部 element 对象本体和字段，不等于已完成最终伤害/削韧/充能公式映射。
+- `TDamageElementParams` 同时暴露 HP 参数、弱点/削韧倍率线索和 SP 回复字段，但各字段的单位、缩放和最终公式仍需继续验证。
+- `formulaParams.function_1/function_2` 与 `skillsub_ele_value.valueParam`、`element_formula` 的关系尚未闭环，不能直接把 `formulaParamValues` 当成最终倍率。
+
+下一步：
+
+- 阶段 5-8M 目标：把 `externalElementObjectEvidence` 映射到动作三值计算链。
+- 优先建立 `TDamageElementParams` 的字段语义表：HP 倍率候选、削韧候选、角色自身能量回复候选分别对应哪些字段、缩放和触发条件。
+- 将末音 `10900101` 的 `ast_109001251` 作为第一条公式样本，和 `skill_level` 描述倍率、`skillsub_ele_value`、`element_formula`、角色面板攻击进行交叉校验。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

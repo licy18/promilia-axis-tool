@@ -381,6 +381,9 @@ describe('generated AzPr data', () => {
       resourceMapUnmatchedElementBaseReferenceSkills: 0,
       scriptTypeCandidateSkills: 1,
       elementTypeCatalogCandidates: 2,
+      externalElementObjectResolvedSkills: 1,
+      externalElementObjectResolvedRefs: 8,
+      externalElementObjectUnresolvedRefs: 0,
       relationStatus: 'skill-control-assets-found-in-azpr-extractor',
     });
     expect(evidence.elementTypeCatalogEvidence).toMatchObject({
@@ -402,6 +405,63 @@ describe('generated AzPr data', () => {
           ]),
         }),
       ]),
+    });
+    expect(evidence.externalElementObjectEvidence).toMatchObject({
+      status: 'element-objects-resolved',
+      summary: {
+        skillCount: 1,
+        resolvedSkills: 1,
+        requestedPathIds: 8,
+        resolvedPathIds: 8,
+        unresolvedPathIds: 0,
+      },
+      skills: [
+        expect.objectContaining({
+          skillId: 10900101,
+          status: 'element-objects-resolved',
+          skillControlBundle: expect.objectContaining({
+            bundleIndex: 75402,
+            logicalName:
+              'd_assets_resourcesassets_config_battle_skilllist_skill_control_10900101',
+            packName: 'ypm6fu6ccxdszvz7zhuinq',
+          }),
+          elementAssetsBundle: expect.objectContaining({
+            bundleIndex: 74227,
+            logicalName: 'd_assets_resourcesassets_config_battle_element_assets',
+          }),
+          scriptClassCounts: {
+            TDamageElementParams: 3,
+            TFxElementParams: 2,
+            TFreezeFrameElementParams: 2,
+            TBuffElementParams: 1,
+          },
+          objects: expect.arrayContaining([
+            expect.objectContaining({
+              pathId: '-5633710717881758712',
+              status: 'resolved-in-element-assets-bundle',
+              containerPath:
+                'Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001251.asset',
+              elementConfigId: 109001251,
+              scriptTypeCandidate: expect.objectContaining({
+                className: 'TDamageElementParams',
+                typeDefIndex: 9720,
+              }),
+              formulaParams: expect.objectContaining({
+                function_1: 1,
+                function_2: 2,
+                formulaParamValues: expect.arrayContaining([3000, 8500]),
+              }),
+              damageFields: expect.objectContaining({
+                weakBreakDamageRate: 7000,
+                recoverSP: 5899,
+                petRecoverSP: 22999,
+                recoverInterval: 9999,
+              }),
+              mediaPackNames: ['11_109001_133'],
+            }),
+          ]),
+        }),
+      ],
     });
     expect(
       evidence.currentSkillControlEvidence

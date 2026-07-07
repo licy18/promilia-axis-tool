@@ -1,11 +1,14 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
 
 const repoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   '..'
 );
+const execFileAsync = promisify(execFile);
 const defaultSourceRoot = 'C:\\PC2\\Codex\\AzPr';
 const defaultExtractorRoot = 'C:\\Codex\\AzPr Extractor';
 const defaultOutputRoot = path.join(repoRoot, 'src', 'data', 'generated');
@@ -2115,6 +2118,8 @@ async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
     item => item.existsInAzPrAssets
   ).length;
   const elementTypeCatalogEvidence = buildSkillElementTypeCatalogEvidence();
+  const externalElementObjectEvidence =
+    await buildExternalElementObjectEvidence(currentSkillControlEvidence);
 
   return {
     schemaVersion: 1,
@@ -2137,6 +2142,7 @@ async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
     },
     probes,
     elementTypeCatalogEvidence,
+    externalElementObjectEvidence,
     summary: {
       skillTableRows: skillTableRows.length,
       currentSkillCount: skills.length,
@@ -2178,6 +2184,12 @@ async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
         behaviorReferenceSkillCounts.scriptTypeCandidateBehaviorRefs,
       elementTypeCatalogCandidates:
         elementTypeCatalogEvidence.elementTypes.length,
+      externalElementObjectResolvedSkills:
+        externalElementObjectEvidence.summary?.resolvedSkills ?? 0,
+      externalElementObjectResolvedRefs:
+        externalElementObjectEvidence.summary?.resolvedPathIds ?? 0,
+      externalElementObjectUnresolvedRefs:
+        externalElementObjectEvidence.summary?.unresolvedPathIds ?? 0,
       relationStatus:
         foundCurrentSkillControls.length > 0
           ? 'skill-control-assets-found-in-azpr-extractor'
@@ -2205,6 +2217,91 @@ function buildSkillElementTypeCatalogEvidence() {
       source: normalizePath(IL2CPP_DUMP_SOURCE),
     })),
   };
+}
+
+async function buildExternalElementObjectEvidence(currentSkillControlEvidence) {
+  const skillIds = currentSkillControlEvidence
+    .filter(
+      item =>
+        item.status === 'found' &&
+        (item.behaviorReferenceSummary?.resourceMapMatchedElementBaseRefs ?? 0) >
+          0
+    )
+    .map(item => Number(item.skillId))
+    .filter(Number.isFinite);
+  const uniqueSkillIds = uniqueNumbers(skillIds);
+  if (uniqueSkillIds.length === 0) {
+    return {
+      schemaVersion: 1,
+      sourceKind: 'azpr-skill-external-element-object-evidence',
+      status: 'no-external-element-object-trace-targets',
+      summary: {
+        skillCount: 0,
+        resolvedSkills: 0,
+        requestedPathIds: 0,
+        resolvedPathIds: 0,
+        unresolvedPathIds: 0,
+      },
+      skills: [],
+    };
+  }
+
+  const resolverPath = path.join(repoRoot, 'scripts', 'resolve-azpr-element-objects.py');
+  if (!(await pathExists(resolverPath))) {
+    return {
+      schemaVersion: 1,
+      sourceKind: 'azpr-skill-external-element-object-evidence',
+      status: 'resolver-script-missing',
+      resolverPath: normalizePath(resolverPath),
+      summary: {
+        skillCount: uniqueSkillIds.length,
+        resolvedSkills: 0,
+        requestedPathIds: 0,
+        resolvedPathIds: 0,
+        unresolvedPathIds: 0,
+      },
+      skills: [],
+    };
+  }
+
+  try {
+    const { stdout, stderr } = await execFileAsync(
+      process.env.PYTHON ?? 'python',
+      [
+        resolverPath,
+        '--extractor',
+        extractorRoot,
+        '--skill-ids',
+        uniqueSkillIds.join(','),
+      ],
+      {
+        maxBuffer: 50 * 1024 * 1024,
+        windowsHide: true,
+      }
+    );
+    const parsed = JSON.parse(stdout);
+    if (stderr?.trim()) {
+      parsed.stderr = stderr.trim().slice(0, 2000);
+    }
+    return parsed;
+  } catch (error) {
+    return {
+      schemaVersion: 1,
+      sourceKind: 'azpr-skill-external-element-object-evidence',
+      status: 'resolver-failed',
+      resolverPath: normalizePath(resolverPath),
+      error: `${error?.name ?? 'Error'}: ${error?.message ?? String(error)}`,
+      stderr: String(error?.stderr ?? '').slice(0, 2000),
+      summary: {
+        skillCount: uniqueSkillIds.length,
+        resolvedSkills: 0,
+        requestedPathIds: 0,
+        resolvedPathIds: 0,
+        unresolvedPathIds: 0,
+      },
+      skills: [],
+    };
+  }
 }
 
 function buildSkillAssetTableEvidence(spec, table, currentSkillIds) {

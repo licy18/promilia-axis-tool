@@ -122,11 +122,11 @@ C:\PC2\Codex\AzPr
 - 阶段 4-9：新版工作台切人动作和多角色 actor 雏形，默认主/副角色 actor、`SWITCH` 事件和切人属性编辑已进入统一链路。
 - 阶段 4-10：新版工作台时间轴角色轨道雏形，动作和伤害 marker 按 actor 或系统轨显示。
 - 阶段 4-11：新版工作台时间轴缩放和动作持续时间调整雏形，`durationMs` 通过工作台草稿链路回写。
-- 阶段 4-12 至 5-8K：已继续补齐轨道诊断、动作形态、60fps 帧时间轴、公式分层、战斗公式证据、skill asset 候选索引、每动作 HP/韧性/能量三值结果契约、`skill_control` 效果轨道候选分类、本地行为链解引用、elementBaseDatas 资源映射归属、行为脚本类型候选和 IL2CPP element 类型目录。
+- 阶段 4-12 至 5-8L：已继续补齐轨道诊断、动作形态、60fps 帧时间轴、公式分层、战斗公式证据、skill asset 候选索引、每动作 HP/韧性/能量三值结果契约、`skill_control` 效果轨道候选分类、本地行为链解引用、elementBaseDatas 资源映射归属、行为脚本类型候选、IL2CPP element 类型目录和外部 element 对象本体解析。
 
 下一阶段：
 
-- 阶段 5-8L：解析 `skill_control_10900101` 所在 bundle `ypm6fu6ccxdszvz7zhuinq` 的 `m_FileID = 2` 外部 element 对象表，把 HP 伤害、削韧、充能候选继续追到实际公式/效果节点。
+- 阶段 5-8M：把 `externalElementObjectEvidence` 中的 `TDamageElementParams` 字段映射到每动作 HP 伤害、敌人韧性削减、自身能量变化三条计算链。
 
 ## 3. 核心模块设计
 
@@ -261,9 +261,9 @@ App.vue
 - **公式分层**: `damageTimeline[].formulaBreakdown` 将当前攻击和动作形态倍率标记为已应用层，将敌人防御、抗性、暴击、增伤标记为未应用层。
 - **动作三值结果**: `actionResultTimeline[]` 是新版模拟结果主入口，每个动作都必须同时输出 `hpDamage`、`toughnessDamage`、`selfEnergyChange`。HP 伤害、削韧和自身能量变化是三条独立公式链，不能只用伤害公式推导另外两项。
 - **公式证据**: `src/data/generated/combat-formula-evidence.json` 记录敌人属性链、元素减免字段、弱点倍率字段和 `element_formula` 公式行；当前没有 `elementId -> element_formula.id` 直接匹配。敌人防御/抗性层的 `source` 已引用该证据索引，但仍保持 `applied: false`。
-- **技能资源证据**: `src/data/generated/skill-asset-evidence.json` 记录 `skillBytesPath` 表格引用、`C:/PC2/Codex/AzPr` 技能资源缺口、`C:/Codex/AzPr Extractor` 的 `SkillList/skill_control_*.asset` 匹配结果、MonoBehaviour 节点样本、`effectLaneCandidateSummary` / `effectLaneCandidates` 效果轨道候选分类、`behaviorReferenceSummary` / `effectLaneBehaviorChains` 本地行为链解引用、`skillResourceMapEvidence` / `resourceMapMatches` 资源映射归属、`scriptTypeCandidate` 行为脚本类型候选，以及 `elementTypeCatalogEvidence` IL2CPP element 类型候选目录；当前只作为动作帧/效果节点候选索引，不能直接视为已确认公式。
+- **技能资源证据**: `src/data/generated/skill-asset-evidence.json` 记录 `skillBytesPath` 表格引用、`C:/PC2/Codex/AzPr` 技能资源缺口、`C:/Codex/AzPr Extractor` 的 `SkillList/skill_control_*.asset` 匹配结果、MonoBehaviour 节点样本、`effectLaneCandidateSummary` / `effectLaneCandidates` 效果轨道候选分类、`behaviorReferenceSummary` / `effectLaneBehaviorChains` 本地行为链解引用、`skillResourceMapEvidence` / `resourceMapMatches` 资源映射归属、`scriptTypeCandidate` 行为脚本类型候选、`elementTypeCatalogEvidence` IL2CPP element 类型候选目录，以及 `externalElementObjectEvidence` 外部 element 对象本体摘要；当前仍是公式映射证据层，不能直接视为已应用最终公式。
 - **兼容字段**: `damageSegmentIndex`、`damageSegments`、`selectedDamageSegment` 暂时作为旧命名兼容层；新逻辑优先使用 `actionVariantIndex`、`actionVariants`、`selectedActionVariant`。
-- **当前边界**: 动作形态倍率可用于 raw HP 投影；`skill_control` 已能给出候选帧范围、节点样本、HP/韧性/能量等轨道候选分类、本地行为对象链、外部 element 引用的资源映射归属和脚本类型候选，但真实命中帧、每段倍率、削韧、充能、取消窗口和完整公式仍需继续解析 `m_FileID = 2` element 对象本体与公式/效果节点。
+- **当前边界**: 动作形态倍率可用于 raw HP 投影；`skill_control` 已能给出候选帧范围、节点样本、HP/韧性/能量等轨道候选分类、本地行为对象链、外部 element 引用的资源映射归属、脚本类型候选和外部 element 对象字段，但真实命中帧、每段倍率、削韧、充能、取消窗口和完整公式仍需继续映射 `TDamageElementParams` 与 `skillsub_ele_value` / `element_formula`。
 
 ## 7. 扩展指南
 

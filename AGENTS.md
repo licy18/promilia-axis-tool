@@ -61,6 +61,7 @@ npm run dev
 - `skill-asset-evidence.json` 已新增 `behaviorReferenceSummary` / `effectLaneBehaviorChains`：用于把 `behaviorList[].m_PathID` 解到同目录目标 MonoBehaviour；当前末音 `10900101` 的 HP 候选已能追到碰撞行为字段和外部 `elementBaseDatas` 引用，但 `m_FileID = 2` 外部对象仍未解析成公式。
 - `skill-asset-evidence.json` 已新增 `skillResourceMapEvidence`，并会把行为对象里的外部 `elementBaseDatas` 匹配到根 `skillResourceMaps[].elements`；当前末音 `10900101` 的外部 element 引用已能归属到 `subSkillId`、`stateName` 和 hitEffects，但 element 对象本体仍未导出。
 - `skill-asset-evidence.json` 已新增 `scriptTypeCandidate` 和 `elementTypeCatalogEvidence`：当前末音 `10900101` 的 HP 候选行为以字段签名匹配 `InjectToTargetKeyFrameBehaviorData`，IL2CPP element 类型目录记录 `TSpElementParams` 与 `DamageElement`；这些仍是候选证据，不能当作已解析出的外部 element 对象或最终公式。
+- `skill-asset-evidence.json` 已新增 `externalElementObjectEvidence`：通过 `scripts/resolve-azpr-element-objects.py` 解析 `skill_control` 的 `m_FileID = 2` external element 对象本体；当前末音 `10900101` 的 8 个 PathID 全部解析到 `d_assets_resourcesassets_config_battle_element_assets`，其中 `TDamageElementParams` 暴露 `formulaParams`、`weakBreakDamageRate`、`recoverSP/petRecoverSP` 等三值计算候选字段，但最终公式映射仍未完成。
 - 若后续 AzPr 数据库中缺少游戏原始资源文件，优先在 `C:\Codex\AzPr Extractor` 继续导出或索引；表格/Lua 走 `raw_nostreaming_package` 导出流程，Unity 技能/动作/效果资源走 Extractor 的 Unity/default_package 导出结果。
 - 项目状态核心在 `src/store/project.js`。
 - 主编辑器在 `src/views/Editor.vue`，当前承担了大量 UI、交互和业务协调职责。
@@ -101,7 +102,7 @@ Endaxis 只作为架构和交互成熟度参考，不是蓝色星原数据来源
 
 ## 已知开发阶段
 
-当前已完成阶段 1-3 的最小闭环、阶段 4 工作台主链路、阶段 5-1 至 5-8K 的真实数据/数值/动作形态、直接动作库、60fps 帧时间轴、公式分层雏形、战斗公式证据索引、公式 source 接入、skill asset/effect node 候选索引、每动作三值结果契约、`skill_control` 效果轨道候选分类、本地行为链解引用、elementBaseDatas 资源映射归属、行为脚本类型候选和 IL2CPP element 类型目录。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 5-8L，解析 `skill_control_10900101` 所在 bundle 的 `m_FileID = 2` 外部 element 对象表。
+当前已完成阶段 1-3 的最小闭环、阶段 4 工作台主链路、阶段 5-1 至 5-8L 的真实数据/数值/动作形态、直接动作库、60fps 帧时间轴、公式分层雏形、战斗公式证据索引、公式 source 接入、skill asset/effect node 候选索引、每动作三值结果契约、`skill_control` 效果轨道候选分类、本地行为链解引用、elementBaseDatas 资源映射归属、行为脚本类型候选、IL2CPP element 类型目录和外部 element 对象本体解析。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 5-8M，把 `TDamageElementParams` 字段映射到每动作 HP 伤害、敌人韧性削减、自身能量变化三条计算链。
 
 完整对标 Endaxis 的后续路线见 `DEVELOPMENT_PLAN.md`。
 
