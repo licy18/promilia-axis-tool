@@ -1968,6 +1968,37 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 用当前面板攻击、动作形态总倍率、敌人防御面板建立第一版可诊断公式链；未确认字段必须输出 limitation，不伪装成最终伤害。
 - 随后再回到 `elementId -> asset/公式/效果节点` 追踪，把命中段和公式节点补到技能逻辑模型中。
 
+### 2026-07-07：阶段 5-8C 真实伤害公式分层雏形落地
+
+本轮完成：
+
+- `src/simulation/mechanics/damage.js` 的公式版本升级为 `stage5-damage-layer-breakdown-v1`。
+- 新增 `formulaBreakdown` 结构，把当前 raw 投影拆成已应用层和未应用层。
+- 已应用层：`baseAttack` 读取编译后的当前角色面板攻击，`actionMultiplier` 读取当前动作形态倍率与 `hitModel`。
+- 未应用占位层：`enemyDefense`、`enemyResistance`、`critical`、`damageBonus`，均明确 `applied: false`、`status: "placeholder"`、`multiplier: 1`。
+- 敌人防御占位层会保留 Workbench 敌人配置中的 `defenseMultiplier`，但不参与最终伤害计算。
+- 编译 actor stats 补入 `damageAmplification`、`damageReduction`，供后续增伤/减伤层接入。
+- `damageTimeline[]` 现在保留 `formulaVersion` 和 `formulaBreakdown`，Analysis 面板显示 `攻击 × 倍率 / 防御、抗性、暴击未应用`。
+- 诊断 limitation 增加公式分层提示，避免把占位层误解为已实现真实公式。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、102 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1351 KB。
+
+当前边界：
+
+- 当前最终数值仍等于 `round(当前攻击 * 动作形态倍率)`，防御、抗性、暴击、增伤、装备、奇波、灵子都没有真实应用。
+- `formulaBreakdown` 是接入位和诊断链，不是已确认的完整蓝色星原公式。
+- 敌人防御倍率目前只进入占位层；需要找到真实敌人防御公式和抗性来源后才能从 `applied: false` 改为已应用层。
+
+下一步：
+
+- 阶段 5-8D 目标：追踪敌人防御/抗性与 `elementId -> asset/公式/效果节点` 证据。
+- 优先从 `C:\PC2\Codex\AzPr` 的 NewTable、battle/skill asset、Lua 或导出索引中寻找敌人防御、抗性、元素伤害公式和 `elementId` 关联。
+- 若找到可验证公式来源，将 `enemyDefense` 或 `enemyResistance` 从占位层升级为可应用层；若找不到，则产出诊断索引和缺口清单。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

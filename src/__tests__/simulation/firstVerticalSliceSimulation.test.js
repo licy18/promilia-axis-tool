@@ -149,6 +149,49 @@ describe('first vertical slice simulation', () => {
       attack: 1920,
       attackSource: 'character-attribute-panel-current-rank',
       rawDamage: 12461,
+      formulaVersion: 'stage5-damage-layer-breakdown-v1',
+      formulaBreakdown: {
+        status: 'partial',
+        expression: 'round(baseAttack.value * actionMultiplier.value)',
+        result: 12461,
+        appliedLayerKeys: ['baseAttack', 'actionMultiplier'],
+        unappliedLayerKeys: [
+          'enemyDefense',
+          'enemyResistance',
+          'critical',
+          'damageBonus',
+        ],
+        layers: {
+          baseAttack: {
+            value: 1920,
+            source: 'character-attribute-panel-current-rank',
+            applied: true,
+          },
+          actionMultiplier: {
+            value: 6.49,
+            rawValue: '649%',
+            actionVariantIndex: 0,
+            applied: true,
+          },
+          enemyDefense: {
+            applied: false,
+            status: 'placeholder',
+            defenseMultiplier: 1,
+          },
+          enemyResistance: {
+            applied: false,
+            status: 'placeholder',
+          },
+          critical: {
+            applied: false,
+            status: 'placeholder',
+          },
+          damageBonus: {
+            applied: false,
+            status: 'placeholder',
+          },
+        },
+      },
       segmentLabel: '普攻',
       confidence: 'low',
       precision: 'raw-pre-mitigation',
@@ -175,13 +218,16 @@ describe('first vertical slice simulation', () => {
     expect(result.summary).toMatchObject({
       projectedHitCount: 1,
       actionCount: 1,
-      formulaVersion: 'stage5-current-panel-attack-multiplier-v1',
+      formulaVersion: 'stage5-damage-layer-breakdown-v1',
       confidence: 'low',
       timingMissingActionCount: 1,
       timingMissingActionIds: ['action-0001'],
     });
     expect(result.diagnostics.limitations.join('\n')).toContain(
       'Raw damage projection only'
+    );
+    expect(result.diagnostics.limitations.join('\n')).toContain(
+      'Formula breakdown exposes unapplied layers'
     );
   });
 
@@ -421,6 +467,11 @@ describe('first vertical slice simulation', () => {
       enemyLevel: 95,
       enemyHpMultiplier: 2,
       enemyDefenseMultiplier: 1.5,
+    });
+    expect(result.damageTimeline[0].formulaBreakdown.layers.enemyDefense).toMatchObject({
+      applied: false,
+      status: 'placeholder',
+      defenseMultiplier: 1.5,
     });
     expect(result.summary.resourceEventCount).toBe(1);
     expect(result.resourceTimeline).toEqual([

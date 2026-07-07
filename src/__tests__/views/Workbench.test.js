@@ -29,7 +29,8 @@ describe('Workbench view', () => {
     expect(text).toContain('迅狼');
     expect(text).toContain('哈库茵剑舞');
     expect(text).toContain('DAMAGE_PROJECTED');
-    expect(text).toContain('stage5-current-panel-attack-multiplier-v1');
+    expect(text).toContain('stage5-damage-layer-breakdown-v1');
+    expect(text).toContain('攻击 1,920 × 倍率 649%');
     expect(text).toContain('low');
   });
 

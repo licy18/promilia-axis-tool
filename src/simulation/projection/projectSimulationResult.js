@@ -12,6 +12,8 @@ export function projectSimulationResult({
     attack: event.payload.attack,
     attackSource: event.payload.attackSource,
     rawDamage: event.payload.rawDamage,
+    formulaVersion: event.payload.formulaVersion,
+    formulaBreakdown: event.payload.formulaBreakdown,
     segmentLabel: event.payload.segment.label,
     multiplier: event.payload.segment.multiplier,
     segment: event.payload.segment,
@@ -69,6 +71,7 @@ export function projectSimulationResult({
       validationWarnings: scenario.diagnostics.validationWarnings,
       limitations: [
         'Raw damage projection only; final AzPr formula is not implemented yet.',
+        'Formula breakdown exposes unapplied layers before they are confirmed.',
         'Skill timing is placeholder when timingMissingActionCount is greater than 0.',
       ],
     },

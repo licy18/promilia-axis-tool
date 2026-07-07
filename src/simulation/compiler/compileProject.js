@@ -93,6 +93,16 @@ function compileActor(actor, charactersById) {
         'critDamage',
         getAttributeValue(actor.baseAttributes, 'CRI_DMG')
       ),
+      damageAmplification: getPanelCoreValue(
+        actor.attributePanel,
+        'damageAmplification',
+        0
+      ),
+      damageReduction: getPanelCoreValue(
+        actor.attributePanel,
+        'damageReduction',
+        0
+      ),
       maxSp: getAttributeValue(actor.baseAttributes, 'MAXSP'),
       source: actor.attributePanel
         ? 'character-attribute-panel-current-rank'

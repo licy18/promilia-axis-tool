@@ -26,7 +26,10 @@
 
     <div class="damage-list">
       <div v-for="damage in damageTimeline" :key="damage.actionId" class="damage-row">
-        <span>{{ damage.segmentLabel }}</span>
+        <div class="damage-row-main">
+          <span>{{ damage.segmentLabel }}</span>
+          <small>{{ formatDamageFormula(damage) }}</small>
+        </div>
         <strong>{{ formatNumber(damage.rawDamage) }}</strong>
       </div>
     </div>
@@ -115,6 +118,28 @@ function formatNumber(value) {
   return Math.round(Number(value) || 0).toLocaleString('zh-CN');
 }
 
+function formatDamageFormula(damage) {
+  const layers = damage.formulaBreakdown?.layers;
+  if (!layers) {
+    return `攻击 ${formatNumber(damage.attack)} × 倍率 ${formatMultiplier(damage.multiplier)}`;
+  }
+
+  const attack = formatNumber(layers.baseAttack?.value);
+  const multiplier = layers.actionMultiplier?.rawValue ?? formatMultiplier(layers.actionMultiplier?.value);
+  const pending = damage.formulaBreakdown.unappliedLayerKeys?.length
+    ? ' / 防御、抗性、暴击未应用'
+    : '';
+  return `攻击 ${attack} × 倍率 ${multiplier}${pending}`;
+}
+
+function formatMultiplier(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return '-';
+  }
+  return `${number.toFixed(2)}x`;
+}
+
 function formatOverlapRange(item) {
   return `${Math.round(item.overlapStartMs)}-${Math.round(item.overlapEndMs)}ms`;
 }
@@ -196,8 +221,19 @@ h2 {
   background: rgba(230, 162, 60, 0.1);
 }
 
+.damage-row-main {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
 .damage-row span {
   color: #efc574;
+}
+
+.damage-row small {
+  color: #b8c0c7;
+  font-size: 11px;
 }
 
 .timeline-diagnostics {

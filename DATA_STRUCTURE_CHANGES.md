@@ -1389,3 +1389,94 @@ Workbench 的新增动作、拖动吸附、持续时间编辑和批次快捷偏�
 - `durationFrames` 只是交互占位默认值，不是正式动作帧、命中帧或取消窗口。
 - 技能名仍作为底层数据来源保留，但动作库主显示以直接动作名为准。
 - `damageSegmentIndex` 继续作为兼容字段保留，后续 schema 升级时再迁移到更干净的 action variant 命名。
+
+## 28. 2026-07-07 伤害公式分层雏形
+
+阶段 5-8C 将原先单一 `rawDamage = attack * multiplier` 投影改为结构化公式分层输出。当前仍是 raw 投影，但每一层是否已应用会明确记录。
+
+### 28.1 公式版本
+
+当前模拟公式版本：
+
+```javascript
+"stage5-damage-layer-breakdown-v1"
+```
+
+### 28.2 damageTimeline 字段
+
+`damageTimeline[]` 新增：
+
+```javascript
+{
+  "formulaVersion": "stage5-damage-layer-breakdown-v1",
+  "formulaBreakdown": {
+    "status": "partial",
+    "expression": "round(baseAttack.value * actionMultiplier.value)",
+    "result": 12461,
+    "appliedLayerKeys": ["baseAttack", "actionMultiplier"],
+    "unappliedLayerKeys": [
+      "enemyDefense",
+      "enemyResistance",
+      "critical",
+      "damageBonus"
+    ],
+    "layers": {
+      "baseAttack": {
+        "label": "角色当前攻击",
+        "value": 1920,
+        "source": "character-attribute-panel-current-rank",
+        "applied": true
+      },
+      "actionMultiplier": {
+        "label": "动作形态倍率",
+        "value": 6.49,
+        "rawValue": "649%",
+        "actionVariantIndex": 0,
+        "applied": true
+      },
+      "enemyDefense": {
+        "label": "敌人防御",
+        "applied": false,
+        "status": "placeholder",
+        "multiplier": 1,
+        "defenseMultiplier": 1
+      },
+      "enemyResistance": {
+        "applied": false,
+        "status": "placeholder",
+        "multiplier": 1
+      },
+      "critical": {
+        "applied": false,
+        "status": "placeholder",
+        "multiplier": 1
+      },
+      "damageBonus": {
+        "applied": false,
+        "status": "placeholder",
+        "multiplier": 1
+      }
+    }
+  }
+}
+```
+
+### 28.3 编译 stats 补充
+
+`compileActor().stats` 新增：
+
+```javascript
+{
+  "damageAmplification": 0,
+  "damageReduction": 0
+}
+```
+
+这两个字段来自角色当前面板 `attributePanel.core`，本阶段只进入 `damageBonus` 占位层，不参与最终伤害。
+
+### 28.4 当前边界
+
+- 只有 `baseAttack` 与 `actionMultiplier` 会参与当前 `rawDamage`。
+- `enemyDefense.defenseMultiplier` 会保留 Workbench 敌人配置，但目前仍 `applied: false`。
+- `enemyResistance`、`critical`、`damageBonus` 均是明确占位层，不得把它们解释为真实公式已完成。
+- 下一步需要用本地数据证据确认敌人防御/抗性和 `elementId` 公式节点后，才能升级对应层的 `applied` 状态。

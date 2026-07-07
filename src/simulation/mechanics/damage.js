@@ -2,7 +2,7 @@ import { createSkillLevelCrossCheckSegmentSource } from '../../domain/skillLevel
 import { parseSkillDamageMultiplier } from '../../domain/skillDamageSegments';
 
 export const DAMAGE_FORMULA_VERSION =
-  'stage5-current-panel-attack-multiplier-v1';
+  'stage5-damage-layer-breakdown-v1';
 
 export function parsePercentMultiplier(value) {
   return parseSkillDamageMultiplier(value);
@@ -90,7 +90,14 @@ export function createRawDamageProjection({ actor, enemy, action, segment }) {
   const attack = Number.isFinite(actor.stats?.attack)
     ? actor.stats.attack
     : getAttributeValue(actor.baseAttributes, 'ATK');
-  const rawDamage = Math.max(0, Math.round(attack * segment.multiplier));
+  const formulaBreakdown = createDamageFormulaBreakdown({
+    actor,
+    enemy,
+    action,
+    segment,
+    attack,
+  });
+  const rawDamage = formulaBreakdown.result;
 
   return {
     formulaVersion: DAMAGE_FORMULA_VERSION,
@@ -107,9 +114,87 @@ export function createRawDamageProjection({ actor, enemy, action, segment }) {
     attack,
     attackSource: actor.stats?.source ?? 'baseAttributes',
     rawDamage,
+    formulaBreakdown,
     notes: [
-      'Uses compiled actor ATK and selected skill multiplier only.',
-      'Does not apply final AzPr defense, resistance, crit, buff, equipment, kibo, or soulessence formulas yet.',
+      'Applies compiled actor ATK and selected action multiplier.',
+      'Defense, resistance, crit, buff, equipment, kibo, and soulessence layers are structured placeholders until confirmed AzPr formulas are mapped.',
+    ],
+  };
+}
+
+export function createDamageFormulaBreakdown({ actor, enemy, action, segment, attack }) {
+  const multiplier = Number(segment.multiplier) || 0;
+  const result = Math.max(0, Math.round(attack * multiplier));
+
+  return {
+    version: DAMAGE_FORMULA_VERSION,
+    status: 'partial',
+    expression: 'round(baseAttack.value * actionMultiplier.value)',
+    result,
+    appliedLayerKeys: ['baseAttack', 'actionMultiplier'],
+    unappliedLayerKeys: [
+      'enemyDefense',
+      'enemyResistance',
+      'critical',
+      'damageBonus',
+    ],
+    layers: {
+      baseAttack: {
+        label: '角色当前攻击',
+        value: attack,
+        source: actor.stats?.source ?? 'baseAttributes',
+        applied: true,
+      },
+      actionMultiplier: {
+        label: '动作形态倍率',
+        value: multiplier,
+        rawValue: segment.rawValue,
+        actionVariantIndex: Number(segment.actionVariantIndex ?? segment.index ?? 0),
+        hitModel: segment.hitModel ?? null,
+        applied: true,
+      },
+      enemyDefense: {
+        label: '敌人防御',
+        applied: false,
+        status: 'placeholder',
+        multiplier: 1,
+        source: 'enemy-config-and-base-attributes-placeholder',
+        defenseMultiplier: Number(enemy.defenseMultiplier) || 1,
+        physicalDefense: Number(enemy.stats?.physicalDefense) || 0,
+        magicalDefense: Number(enemy.stats?.magicalDefense) || 0,
+      },
+      enemyResistance: {
+        label: '敌人抗性',
+        applied: false,
+        status: 'placeholder',
+        multiplier: 1,
+        source: 'enemy-resistance-formula-unmapped',
+        elementId: action.elementId ?? null,
+      },
+      critical: {
+        label: '暴击期望',
+        applied: false,
+        status: 'placeholder',
+        multiplier: 1,
+        source: actor.stats?.source ?? 'baseAttributes',
+        critRate: Number(actor.stats?.critRate) || 0,
+        critDamage: Number(actor.stats?.critDamage) || 0,
+      },
+      damageBonus: {
+        label: '增伤/减伤',
+        applied: false,
+        status: 'placeholder',
+        multiplier: 1,
+        source: actor.stats?.source ?? 'baseAttributes',
+        damageAmplification: Number(actor.stats?.damageAmplification) || 0,
+        damageReduction: Number(actor.stats?.damageReduction) || 0,
+      },
+    },
+    limitations: [
+      'enemyDefense layer is recorded but not applied.',
+      'enemyResistance layer is recorded but not applied.',
+      'critical layer is recorded but not applied.',
+      'damageBonus layer is recorded but not applied.',
     ],
   };
 }
