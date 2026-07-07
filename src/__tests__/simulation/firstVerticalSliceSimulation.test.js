@@ -800,6 +800,40 @@ describe('first vertical slice simulation', () => {
           hpDamage: expect.objectContaining({
             rawFormulaParamValues: [1000, 1800, 2500],
             formulaFunctionIds: [1, 2],
+            formulaFunctionRefs: expect.arrayContaining([
+              expect.objectContaining({
+                field: 'function_1',
+                functionId: 1,
+                functionOutput: 'G/10000',
+              }),
+              expect.objectContaining({
+                field: 'function_2',
+                functionId: 2,
+                functionOutput: '(self.ATK[0]*A)/10000',
+              }),
+            ]),
+          }),
+          skillLevelBridge: expect.objectContaining({
+            levelRows: 12,
+            formulaSlotAlignment: expect.objectContaining({
+              directSlotMatchParamIds: [7],
+              overrideCandidateParamIds: [1],
+              parameterSummaries: expect.arrayContaining([
+                expect.objectContaining({
+                  id: 1,
+                  variable: 'A',
+                  relationStatus: 'level-scaling-override-candidate',
+                  firstLevelValue: 1600,
+                  lastLevelValue: 3360,
+                }),
+                expect.objectContaining({
+                  id: 7,
+                  variable: 'G',
+                  relationStatus: 'constant-direct-slot-match',
+                  formulaParamValue: 10000,
+                }),
+              ]),
+            }),
           }),
           toughnessDamage: expect.objectContaining({
             weakBreakDamageRate: 7000,

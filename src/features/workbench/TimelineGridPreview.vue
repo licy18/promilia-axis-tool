@@ -1022,6 +1022,10 @@ function formatCandidateElementDetail(element) {
   const elementId = element.elementConfigId ?? '未知';
   const parts = [
     formatCandidateElementHpDetail(element.hpDamage),
+    formatCandidateElementFormulaFunctionDetail(element.hpDamage),
+    formatCandidateElementSlotAlignmentDetail(
+      element.skillLevelBridge?.formulaSlotAlignment
+    ),
     formatCandidateElementToughnessDetail(element.toughnessDamage),
     formatCandidateElementEnergyDetail(element.selfEnergyChange),
   ].filter(Boolean);
@@ -1038,6 +1042,59 @@ function formatCandidateElementHpDetail(hpDamage) {
     null
   );
   return values ? `HP${values}` : null;
+}
+
+function formatCandidateElementFormulaFunctionDetail(hpDamage) {
+  const refs = hpDamage?.formulaFunctionRefs ?? [];
+  if (refs.length === 0) {
+    return null;
+  }
+  return `函数${refs.map(formatCandidateFormulaFunctionRef).join('/')}`;
+}
+
+function formatCandidateFormulaFunctionRef(ref) {
+  const label =
+    ref.field === 'function_1'
+      ? 'f1'
+      : ref.field === 'function_2'
+        ? 'f2'
+        : (ref.field ?? `f${ref.functionId ?? '?'}`);
+  return `${label}:${trimFormulaParentheses(
+    ref.functionOutput ?? `#${ref.functionId ?? '?'}`
+  )}`;
+}
+
+function formatCandidateElementSlotAlignmentDetail(alignment) {
+  const summaries = alignment?.parameterSummaries ?? [];
+  if (summaries.length === 0) {
+    return null;
+  }
+  return `槽${summaries.map(formatCandidateElementSlotSummary).join('/')}`;
+}
+
+function formatCandidateElementSlotSummary(summary) {
+  const variable = summary.variable || `#${summary.id}`;
+  if (summary.relationStatus === 'level-scaling-override-candidate') {
+    return `${variable}覆盖${formatTimelineNumber(
+      summary.firstLevelValue
+    )}-${formatTimelineNumber(summary.lastLevelValue)}`;
+  }
+  if (summary.relationStatus === 'constant-direct-slot-match') {
+    return `${variable}直连${formatTimelineNumber(summary.formulaParamValue)}`;
+  }
+  return `${variable}${summary.relationStatus ?? '未确认'}`;
+}
+
+function trimFormulaParentheses(value) {
+  const text = String(value ?? '').trim();
+  const parenthesizedNumerator = text.match(/^\(([^()]+)\)(\/.+)$/);
+  if (parenthesizedNumerator) {
+    return `${parenthesizedNumerator[1]}${parenthesizedNumerator[2]}`;
+  }
+  if (text.startsWith('(') && text.endsWith(')')) {
+    return text.slice(1, -1);
+  }
+  return text;
 }
 
 function formatCandidateElementToughnessDetail(toughnessDamage) {

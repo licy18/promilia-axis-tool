@@ -226,10 +226,10 @@ describe('Workbench view', () => {
     );
     expect(hpFrameDetail.attributes('data-element-detail-count')).toBe('2');
     expect(hpFrameDetail.text()).toContain(
-      '109001306 HP1,000/1,800/2,500 韧性7,000 能量2,700/宠物10,399/间隔9,999'
+      '109001306 HP1,000/1,800/2,500 函数f1:G/10000/f2:self.ATK[0]*A/10000 槽A覆盖1,600-3,360/G直连10,000 韧性7,000 能量2,700/宠物10,399/间隔9,999'
     );
     expect(hpFrameDetail.text()).toContain(
-      '109001081 HP1,000/1,900/2,500 韧性7,000 能量2,700/宠物10,399/间隔9,999'
+      '109001081 HP1,000/1,900/2,500 函数f1:G/10000/f2:self.ATK[0]*A/10000 槽A覆盖1,600-3,360/G直连10,000 韧性7,000 能量2,700/宠物10,399/间隔9,999'
     );
     expect(
       wrapper

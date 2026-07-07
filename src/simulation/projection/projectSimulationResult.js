@@ -501,6 +501,11 @@ function createCandidateElementDetails(hitCandidate) {
           formulaFunctionMatchedIds: uniqueNumbers(
             candidate.hpDamage.formulaFunctionMatchedIds ?? []
           ),
+          formulaFunctionRefs: createCandidateFormulaFunctionRefs(
+            candidate.hpDamage.formulaFunctionEvidence
+          ),
+          formulaFunctionEvidence:
+            candidate.hpDamage.formulaFunctionEvidence ?? null,
         }
       : null,
     toughnessDamage: candidate.toughnessDamage
@@ -527,8 +532,55 @@ function createCandidateElementDetails(hitCandidate) {
           ownerScope: candidate.selfEnergyChange.ownerScope ?? null,
         }
       : null,
+    skillLevelBridge: compactCandidateSkillLevelBridge(
+      candidate.skillLevelBridge
+    ),
     applied: false,
   }));
+}
+
+function createCandidateFormulaFunctionRefs(evidence) {
+  return (evidence?.functionRefs ?? []).map(ref => ({
+    field: ref.field ?? null,
+    functionId: numberOrNull(ref.functionId),
+    functionOutput: ref.elementFormulaRow?.functionOutput ?? null,
+    variables: ref.elementFormulaRow?.variables ?? [],
+    variableInputs: (ref.variableInputs ?? []).map(input => ({
+      variable: input.variable ?? null,
+      paramId: numberOrNull(input.paramId),
+      formulaParamSlot: numberOrNull(input.formulaParamSlot),
+      formulaParamValue: numberOrNull(input.formulaParamValue),
+      slotStatus: input.slotStatus ?? null,
+    })),
+    applied: ref.applied === true,
+  }));
+}
+
+function compactCandidateSkillLevelBridge(bridge) {
+  if (!bridge) {
+    return null;
+  }
+  return {
+    status: bridge.status ?? null,
+    levelRows: numberOrNull(bridge.levelRows) ?? 0,
+    parameterIds: bridge.parameterIds ?? [],
+    varyingParameterIds: bridge.varyingParameterIds ?? [],
+    formulaSlotAlignment:
+      bridge.formulaSlotAlignment ??
+      compactFormulaSlotAlignment(bridge.formulaParamAlignment),
+    firstLevel: bridge.firstLevel
+      ? {
+          level: numberOrNull(bridge.firstLevel.level),
+          valueParam: bridge.firstLevel.valueParam ?? null,
+        }
+      : null,
+    lastLevel: bridge.lastLevel
+      ? {
+          level: numberOrNull(bridge.lastLevel.level),
+          valueParam: bridge.lastLevel.valueParam ?? null,
+        }
+      : null,
+  };
 }
 
 const PREFERRED_FORMULA_CANDIDATE_STRATEGY =
@@ -1303,6 +1355,9 @@ function compactNormalAttackHitDamageElementFieldMapping(mapping) {
       formulaFunctionStatus: mapping.hpDamage?.formulaFunctionStatus ?? null,
       formulaFunctionMatchedIds:
         mapping.hpDamage?.formulaFunctionMatchedIds ?? [],
+      formulaFunctionEvidence: compactFormulaFunctionEvidence(
+        mapping.hpDamage?.formulaFunctionEvidence
+      ),
       rawFormulaParamValues: mapping.hpDamage?.rawFormulaParamValues ?? [],
       damageFields: compactDamageFieldPatternValues(
         mapping.hpDamage?.damageFields
@@ -1331,6 +1386,23 @@ function compactNormalAttackHitDamageElementFieldMapping(mapping) {
       levelRows: numberOrNull(mapping.skillLevelBridge?.levelRows) ?? 0,
       parameterIds: mapping.skillLevelBridge?.parameterIds ?? [],
       varyingParameterIds: mapping.skillLevelBridge?.varyingParameterIds ?? [],
+      formulaSlotAlignment:
+        mapping.skillLevelBridge?.formulaSlotAlignment ??
+        compactFormulaSlotAlignment(
+          mapping.skillLevelBridge?.formulaParamAlignment
+        ),
+      firstLevel: mapping.skillLevelBridge?.firstLevel
+        ? {
+            level: numberOrNull(mapping.skillLevelBridge.firstLevel.level),
+            valueParam: mapping.skillLevelBridge.firstLevel.valueParam ?? null,
+          }
+        : null,
+      lastLevel: mapping.skillLevelBridge?.lastLevel
+        ? {
+            level: numberOrNull(mapping.skillLevelBridge.lastLevel.level),
+            valueParam: mapping.skillLevelBridge.lastLevel.valueParam ?? null,
+          }
+        : null,
     },
     applied: false,
   };
@@ -1895,6 +1967,17 @@ function createHitCandidatePreview({
   sequenceTimingEvidence,
 }) {
   const mappings = hitGroup.damageElementFieldMappings ?? [];
+  const actionLevelCandidateByElementId = new Map(
+    (damageElementSource?.candidates ?? [])
+      .map(candidate => [Number(candidate.elementConfigId), candidate])
+      .filter(([elementConfigId]) => Number.isFinite(elementConfigId))
+  );
+  const mergedMappings = mappings.map(mapping =>
+    mergeHitCandidateMappingEvidence(
+      mapping,
+      actionLevelCandidateByElementId.get(Number(mapping.elementConfigId))
+    )
+  );
   const frameStartFrames = uniqueNumbers(hitGroup.hpFrameStartFrames ?? []);
   const primaryFrame = frameStartFrames[0] ?? null;
   const localCandidateTimeMs =
@@ -1970,10 +2053,10 @@ function createHitCandidatePreview({
     damageElementElementConfigIds: uniqueNumbers(
       mappings.map(mapping => mapping.elementConfigId)
     ),
-    hpDamage: summarizeHitCandidateHpDamage(mappings),
-    toughnessDamage: summarizeHitCandidateToughnessDamage(mappings),
-    selfEnergyChange: summarizeHitCandidateSelfEnergyChange(mappings),
-    candidates: mappings.map(compactHitCandidateDamageElementMapping),
+    hpDamage: summarizeHitCandidateHpDamage(mergedMappings),
+    toughnessDamage: summarizeHitCandidateToughnessDamage(mergedMappings),
+    selfEnergyChange: summarizeHitCandidateSelfEnergyChange(mergedMappings),
+    candidates: mergedMappings.map(compactHitCandidateDamageElementMapping),
     sequenceTiming: hitTiming
       ? {
           status: hitTiming.status,
@@ -2001,6 +2084,51 @@ function createHitCandidatePreview({
       'self-energy-owner-and-interval-rule',
     ],
     applied: false,
+  };
+}
+
+function mergeHitCandidateMappingEvidence(mapping, actionLevelCandidate) {
+  if (!actionLevelCandidate) {
+    return mapping;
+  }
+
+  return {
+    ...mapping,
+    hpDamage: mapping.hpDamage
+      ? {
+          ...actionLevelCandidate.hpDamage,
+          ...mapping.hpDamage,
+          formulaFunctionEvidence:
+            mapping.hpDamage.formulaFunctionEvidence ??
+            actionLevelCandidate.hpDamage?.formulaFunctionEvidence ??
+            null,
+          formulaSlotCandidates:
+            mapping.hpDamage.formulaSlotCandidates ??
+            actionLevelCandidate.hpDamage?.formulaSlotCandidates ??
+            [],
+        }
+      : mapping.hpDamage,
+    skillLevelBridge: {
+      ...actionLevelCandidate.skillLevelBridge,
+      ...mapping.skillLevelBridge,
+      formulaParamAlignment:
+        mapping.skillLevelBridge?.formulaParamAlignment ??
+        actionLevelCandidate.skillLevelBridge?.formulaParamAlignment ??
+        actionLevelCandidate.skillLevelBridge?.formulaSlotAlignment ??
+        null,
+      formulaSlotAlignment:
+        mapping.skillLevelBridge?.formulaSlotAlignment ??
+        actionLevelCandidate.skillLevelBridge?.formulaSlotAlignment ??
+        null,
+      firstLevel:
+        mapping.skillLevelBridge?.firstLevel ??
+        actionLevelCandidate.skillLevelBridge?.firstLevel ??
+        null,
+      lastLevel:
+        mapping.skillLevelBridge?.lastLevel ??
+        actionLevelCandidate.skillLevelBridge?.lastLevel ??
+        null,
+    },
   };
 }
 
@@ -2096,6 +2224,9 @@ function compactHitCandidateDamageElementMapping(mapping) {
           formulaFunctionStatus: mapping.hpDamage.formulaFunctionStatus ?? null,
           formulaFunctionMatchedIds:
             mapping.hpDamage.formulaFunctionMatchedIds ?? [],
+          formulaFunctionEvidence: compactFormulaFunctionEvidence(
+            mapping.hpDamage.formulaFunctionEvidence
+          ),
           rawFormulaParamValues: mapping.hpDamage.rawFormulaParamValues ?? [],
           damageFields: compactDamageFieldPatternValues(
             mapping.hpDamage.damageFields
@@ -2131,6 +2262,23 @@ function compactHitCandidateDamageElementMapping(mapping) {
       levelRows: numberOrNull(mapping.skillLevelBridge?.levelRows) ?? 0,
       parameterIds: mapping.skillLevelBridge?.parameterIds ?? [],
       varyingParameterIds: mapping.skillLevelBridge?.varyingParameterIds ?? [],
+      formulaSlotAlignment:
+        mapping.skillLevelBridge?.formulaSlotAlignment ??
+        compactFormulaSlotAlignment(
+          mapping.skillLevelBridge?.formulaParamAlignment
+        ),
+      firstLevel: mapping.skillLevelBridge?.firstLevel
+        ? {
+            level: numberOrNull(mapping.skillLevelBridge.firstLevel.level),
+            valueParam: mapping.skillLevelBridge.firstLevel.valueParam ?? null,
+          }
+        : null,
+      lastLevel: mapping.skillLevelBridge?.lastLevel
+        ? {
+            level: numberOrNull(mapping.skillLevelBridge.lastLevel.level),
+            valueParam: mapping.skillLevelBridge.lastLevel.valueParam ?? null,
+          }
+        : null,
     },
     applied: false,
   };

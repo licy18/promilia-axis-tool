@@ -3255,6 +3255,42 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8AJ 目标：把 per-element 详情与 `formulaFunctionIds`、`formulaFunctionMatchedIds`、`formulaParamAlignment` 和 `skillsub_ele_value` 等级槽位关系联动展示。
 - 同时准备多动作样本或构造测试 fixture，验证 actor/action/series 组合过滤在非单动作时间轴上的行为。
 
+### 2026-07-08：阶段 5-8AJ per-element 公式槽位联动与多动作过滤 fixture
+
+本轮完成：
+
+- `actionResultTimeline[].hitCandidates[].candidates[]` 会按 `elementConfigId` 合并每 hit 三值字段候选与动作级 `damageElementSource.candidates[]`，避免公式函数和等级槽位证据在 per-hit 摘要里丢失。
+- `candidateValueSeries.chart.series[].points[].elementDetails[]` 现在继续保留 `hpDamage.formulaFunctionRefs[]`、`hpDamage.formulaFunctionEvidence` 和 `skillLevelBridge.formulaSlotAlignment`。
+- `TimelineGridPreview` 的选中帧详情在每个 element 后展示 `function_1/function_2` 候选公式，以及 `skillsub_ele_value.valueParam` 与 `formulaParamValues` 的 A/G 槽位关系。
+- 新增 `TimelineGridPreview` 组件级多动作 fixture，覆盖两个 actor、两个 action、HP/韧性/能量三条 series 下的 actor/action/series 组合过滤。
+- 仿真测试覆盖首帧 element 的公式函数和槽位摘要，Workbench 测试覆盖 per-element 公式文本。
+
+当前末音 `10900101` 默认普攻首帧 per-element 公式详情：
+
+- `109001306`：HP `1,000 / 1,800 / 2,500`，函数 `f1:G/10000`、`f2:self.ATK[0]*A/10000`，槽 `A覆盖1,600-3,360 / G直连10,000`，削韧 `7,000`，自身能量 `2,700`。
+- `109001081`：HP `1,000 / 1,900 / 2,500`，函数 `f1:G/10000`、`f2:self.ATK[0]*A/10000`，槽 `A覆盖1,600-3,360 / G直连10,000`，削韧 `7,000`，自身能量 `2,700`。
+- 多动作过滤 fixture：初始 6 个候选 marker；选择 `actor-b` 后 3 个；再叠加 `action-a` 后 0 个；恢复全部 actor 且保留 `action-a` 后 3 个；关闭 HP series 后 2 个。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js src/__tests__/features/TimelineGridPreview.test.js`：通过，3 个测试文件、45 条测试通过。
+- `npm exec prettier -- --check AGENTS.md PROJECT_MANUAL.md DEVELOPMENT_PLAN.md ARCHITECTURE.md DATA_STRUCTURE_CHANGES.md src/simulation/projection/projectSimulationResult.js src/features/workbench/TimelineGridPreview.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js src/__tests__/features/TimelineGridPreview.test.js`：通过。
+- `npm exec eslint -- --no-warn-ignored src/simulation/projection/projectSimulationResult.js src/features/workbench/TimelineGridPreview.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js src/__tests__/features/TimelineGridPreview.test.js`：通过。
+- `npm test -- --run`：通过，13 个测试文件、105 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
+- `git diff --check`：通过。
+
+当前边界：
+
+- 本阶段仍只展示未应用公式候选，不改变 raw HP、削韧或充能数值。
+- `formulaFunctionRefs` 和 `formulaSlotAlignment` 证明“候选关系可同屏观察”，不证明 `DamageElement` 已按该组合执行最终公式。
+- 多动作过滤 fixture 是组件级验证；真实业务样本仍需要继续扩大到更多角色、动作形态和技能。
+
+下一步：
+
+- 阶段 5-8AK 目标：把 per-element 详情整理成更适合比较的候选详情模型/tooltip，支持按 action、hit、element 横向对比 HP 参数、公式函数、A/G 槽位、削韧和能量字段。
+- 开始用该详情模型追踪 `DamageElement` 的 function 组合顺序、等级覆盖应用点和每 hit 倍率分配，仍保持最终公式 `applied: false`。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

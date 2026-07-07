@@ -4390,3 +4390,110 @@ data-testid="workbench-candidate-value-action-filter"
 
 - `elementDetails[]` 是候选字段明细，不代表执行顺序、同 hit 多候选组合方式或最终公式。
 - 组合过滤已接入 UI，但当前默认 fixture 只有一个 actor 和一个 action；多动作验证需要后续样本。
+
+## 63. 阶段 5-8AJ：per-element 公式函数 / 槽位详情
+
+阶段 5-8AJ 扩展 `elementDetails[]`，把每 hit 的三值字段候选与动作级同 `elementConfigId` 的公式函数、`skillsub_ele_value` 等级槽位证据合并到同一详情对象中。该字段仍只服务 Workbench 候选详情展示，不进入最终公式计算。
+
+### 63.1 elementDetails[].hpDamage
+
+新增或继续透传：
+
+```json
+{
+  "hpDamage": {
+    "formulaFunctionRefs": [
+      {
+        "field": "function_1",
+        "functionId": 1,
+        "functionOutput": "G/10000",
+        "variables": ["G"],
+        "applied": false
+      },
+      {
+        "field": "function_2",
+        "functionId": 2,
+        "functionOutput": "(self.ATK[0]*A)/10000",
+        "variables": ["A"],
+        "applied": false
+      }
+    ],
+    "formulaFunctionEvidence": {
+      "status": "formula-functions-matched",
+      "applied": false
+    }
+  }
+}
+```
+
+字段说明：
+
+- `formulaFunctionRefs[]` 是每个 element 的轻量展示字段，来自 `TDamageElementParams.formulaParams.function_1/function_2 -> element_formula` 候选关系。
+- `formulaFunctionEvidence` 保留更完整的证据摘要，供后续详情表或 tooltip 使用。
+- `applied` 必须保持 `false`，不能据此直接计算最终 HP。
+
+### 63.2 elementDetails[].skillLevelBridge
+
+新增或继续透传：
+
+```json
+{
+  "skillLevelBridge": {
+    "status": "skillsub-element-level-bridge-found",
+    "levelRows": 12,
+    "parameterIds": [1, 7],
+    "varyingParameterIds": [1],
+    "formulaSlotAlignment": {
+      "directSlotMatchParamIds": [7],
+      "overrideCandidateParamIds": [1],
+      "parameterSummaries": [
+        {
+          "id": 1,
+          "variable": "A",
+          "relationStatus": "level-scaling-override-candidate",
+          "firstLevelValue": 1600,
+          "lastLevelValue": 3360
+        },
+        {
+          "id": 7,
+          "variable": "G",
+          "relationStatus": "constant-direct-slot-match",
+          "formulaParamValue": 10000
+        }
+      ]
+    }
+  }
+}
+```
+
+字段说明：
+
+- `formulaSlotAlignment` 表示 `skillsub_ele_value.valueParam` 与 `TDamageElementParams.formulaParamValues` 的槽位候选关系。
+- 默认末音普攻样本中，`A` 是等级覆盖候选 `1,600 -> 3,360`，`G` 是常量直连 `10,000`。
+- 这仍不证明覆盖规则已经确认，只说明候选关系已能按 element 展示。
+
+### 63.3 hit candidate merge
+
+`createHitCandidatePreview()` 会按 `elementConfigId` 将：
+
+- `normalAttackHitChainCandidate.hitGroups[].damageElementFieldMappings[]` 的每 hit 三值字段候选；
+- `damageElementSource.candidates[]` 的动作级公式函数、槽位、等级桥接证据；
+
+合并后再写入 `hitCandidates[].candidates[]`。这样 `candidateValueSeries.chart.points[].elementDetails[]` 可以同时展示 HP 参数、削韧、能量、公式函数和等级槽位。
+
+### 63.4 多动作过滤 fixture
+
+新增 `src/__tests__/features/TimelineGridPreview.test.js`，构造：
+
+- 2 个 actor；
+- 2 个 action；
+- HP / 韧性 / 能量 3 条 candidate series；
+- 每条 series 各 2 个点。
+
+验证结果：
+
+- 初始 marker 数为 6。
+- 选择 `actor-b` 后为 3。
+- 叠加 `action-a` 后为 0。
+- 恢复全部 actor 且保留 `action-a` 后为 3。
+- 再关闭 HP series 后为 2。
