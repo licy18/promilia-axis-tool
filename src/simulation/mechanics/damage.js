@@ -1,8 +1,13 @@
 import { createSkillLevelCrossCheckSegmentSource } from '../../domain/skillLevelCrossCheck';
 import { parseSkillDamageMultiplier } from '../../domain/skillDamageSegments';
+import combatFormulaEvidence from '../../data/generated/combat-formula-evidence.json';
 
 export const DAMAGE_FORMULA_VERSION =
   'stage5-damage-layer-breakdown-v1';
+const COMBAT_FORMULA_EVIDENCE_PATH =
+  'src/data/generated/combat-formula-evidence.json';
+const COMBAT_FORMULA_EVIDENCE_KIND =
+  combatFormulaEvidence.sourceKind ?? 'azpr-combat-formula-evidence-index';
 
 export function parsePercentMultiplier(value) {
   return parseSkillDamageMultiplier(value);
@@ -156,9 +161,9 @@ export function createDamageFormulaBreakdown({ actor, enemy, action, segment, at
       enemyDefense: {
         label: '敌人防御',
         applied: false,
-        status: 'placeholder',
+        status: 'evidence-found-formula-unmapped',
         multiplier: 1,
-        source: 'enemy-config-and-base-attributes-placeholder',
+        source: createEnemyDefenseEvidenceSource(enemy),
         defenseMultiplier: Number(enemy.defenseMultiplier) || 1,
         physicalDefense: Number(enemy.stats?.physicalDefense) || 0,
         magicalDefense: Number(enemy.stats?.magicalDefense) || 0,
@@ -166,9 +171,9 @@ export function createDamageFormulaBreakdown({ actor, enemy, action, segment, at
       enemyResistance: {
         label: '敌人抗性',
         applied: false,
-        status: 'placeholder',
+        status: 'evidence-found-formula-unmapped',
         multiplier: 1,
-        source: 'enemy-resistance-formula-unmapped',
+        source: createEnemyResistanceEvidenceSource(enemy, action),
         elementId: action.elementId ?? null,
       },
       critical: {
@@ -197,4 +202,61 @@ export function createDamageFormulaBreakdown({ actor, enemy, action, segment, at
       'damageBonus layer is recorded but not applied.',
     ],
   };
+}
+
+function createEnemyDefenseEvidenceSource(enemy) {
+  const evidence = combatFormulaEvidence.enemyAttributeEvidence ?? {};
+
+  return {
+    kind: COMBAT_FORMULA_EVIDENCE_KIND,
+    file: COMBAT_FORMULA_EVIDENCE_PATH,
+    status: evidence.status ?? 'unknown',
+    formulaStatus: combatFormulaEvidence.formulaEvidence?.status ?? 'unknown',
+    relationStatus:
+      combatFormulaEvidence.summary?.relationStatus ?? 'unknown',
+    sourceChain: evidence.sourceChain ?? null,
+    propertyId: enemy.propertyId ?? null,
+    baseAttributeId: enemy.source?.enemy?.property?.baseAttributeId ?? null,
+    attributeValues: mapEvidenceAttributeValues(
+      enemy,
+      evidence.baseDefenseAttributes ?? []
+    ),
+    note:
+      'Enemy DEF/MDEF source fields are mapped, but defense formula application is still unconfirmed.',
+  };
+}
+
+function createEnemyResistanceEvidenceSource(enemy, action) {
+  const evidence = combatFormulaEvidence.enemyAttributeEvidence ?? {};
+
+  return {
+    kind: COMBAT_FORMULA_EVIDENCE_KIND,
+    file: COMBAT_FORMULA_EVIDENCE_PATH,
+    status: evidence.status ?? 'unknown',
+    formulaStatus: combatFormulaEvidence.formulaEvidence?.status ?? 'unknown',
+    relationStatus:
+      combatFormulaEvidence.summary?.relationStatus ?? 'unknown',
+    elementValueStatus:
+      combatFormulaEvidence.elementValueEvidence?.status ?? 'unknown',
+    sourceChain: evidence.sourceChain ?? null,
+    propertyId: enemy.propertyId ?? null,
+    baseAttributeId: enemy.source?.enemy?.property?.baseAttributeId ?? null,
+    actionElementId: action.elementId ?? null,
+    attributeValues: mapEvidenceAttributeValues(
+      enemy,
+      evidence.elementDefenseAttributes ?? []
+    ),
+    note:
+      'Enemy element defense fields are mapped, but elementId/formula application remains unconfirmed.',
+  };
+}
+
+function mapEvidenceAttributeValues(enemy, attributes) {
+  return attributes.map(attribute => ({
+    key: attribute.key,
+    id: attribute.id ?? null,
+    name: attribute.name ?? attribute.key,
+    isRatio: Boolean(attribute.isRatio),
+    value: getAttributeValue(enemy.baseAttributes, attribute.key, null),
+  }));
 }

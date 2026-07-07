@@ -1590,3 +1590,68 @@ enemy.propertyId -> unit_property.baseAttributeId -> template_value.baseAttribut
 - `combat-formula-evidence.json` 是证据索引，不是公式执行层。
 - 当前 `formulaBreakdown.layers.enemyDefense` 和 `enemyResistance` 仍必须保持 `applied: false`。
 - 下一步需要继续追踪 skill asset / effect node，把 `skillsub_ele_value.elementId` 连接到具体公式或效果节点。
+
+## 30. 2026-07-07 公式证据 source 接入
+
+阶段 5-8E 将 5-8D 的证据索引接入模拟结果，但不改变最终伤害公式。
+
+### 30.1 `formulaBreakdown.layers.enemyDefense`
+
+`enemyDefense.status` 从纯占位升级为：
+
+```javascript
+"evidence-found-formula-unmapped"
+```
+
+`enemyDefense.source` 由字符串升级为对象：
+
+```javascript
+{
+  "kind": "azpr-combat-formula-evidence-index",
+  "file": "src/data/generated/combat-formula-evidence.json",
+  "status": "enemy-property-attributes-found",
+  "formulaStatus": "formula-rows-found-without-elementId-direct-link",
+  "relationStatus": "no-direct-elementId-to-element_formula-id-match",
+  "sourceChain": "enemy.propertyId -> unit_property.baseAttributeId -> template_value.baseAttribute -> battle_info.attrVal",
+  "propertyId": 300032,
+  "baseAttributeId": 300032,
+  "attributeValues": [
+    { "key": "DEF", "value": 9000 },
+    { "key": "MDEF", "value": 9000 }
+  ]
+}
+```
+
+`defenseMultiplier`、`physicalDefense`、`magicalDefense` 仍保留在 layer 顶层，且 `applied` 仍为 `false`。
+
+### 30.2 `formulaBreakdown.layers.enemyResistance`
+
+`enemyResistance.status` 同样为：
+
+```javascript
+"evidence-found-formula-unmapped"
+```
+
+`enemyResistance.source` 记录动作元素和敌人元素防御字段：
+
+```javascript
+{
+  "kind": "azpr-combat-formula-evidence-index",
+  "file": "src/data/generated/combat-formula-evidence.json",
+  "elementValueStatus": "element-values-have-params-but-no-direct-formula-id-link",
+  "actionElementId": 4,
+  "attributeValues": [
+    { "key": "NORMAL_DEFENSE", "value": 0 },
+    { "key": "FIRE_DEFENSE", "value": 0 }
+  ]
+}
+```
+
+`actionElementId` 只记录动作元素，不代表已经确认应套用哪个元素防御字段。
+
+### 30.3 兼容边界
+
+- `source` 的类型从字符串变为对象，读取方应按对象处理；若旧逻辑只展示 source 文本，需要先做格式化。
+- 最终伤害仍是 `round(baseAttack.value * actionMultiplier.value)`。
+- `appliedLayerKeys` 仍只有 `baseAttack` 和 `actionMultiplier`；`enemyDefense` / `enemyResistance` 仍在 `unappliedLayerKeys`。
+- 下一步应生成 skill asset / effect node 候选索引，继续追踪 `skillsub_ele_value.elementId` 到真实公式节点的链路。

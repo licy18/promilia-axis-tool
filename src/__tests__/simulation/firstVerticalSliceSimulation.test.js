@@ -175,12 +175,41 @@ describe('first vertical slice simulation', () => {
           },
           enemyDefense: {
             applied: false,
-            status: 'placeholder',
+            status: 'evidence-found-formula-unmapped',
             defenseMultiplier: 1,
+            source: {
+              kind: 'azpr-combat-formula-evidence-index',
+              file: 'src/data/generated/combat-formula-evidence.json',
+              status: 'enemy-property-attributes-found',
+              relationStatus:
+                'no-direct-elementId-to-element_formula-id-match',
+              sourceChain:
+                'enemy.propertyId -> unit_property.baseAttributeId -> template_value.baseAttribute -> battle_info.attrVal',
+              propertyId: 300032,
+              baseAttributeId: 300032,
+              attributeValues: expect.arrayContaining([
+                expect.objectContaining({ key: 'DEF', value: 9000 }),
+                expect.objectContaining({ key: 'MDEF', value: 9000 }),
+              ]),
+            },
           },
           enemyResistance: {
             applied: false,
-            status: 'placeholder',
+            status: 'evidence-found-formula-unmapped',
+            source: {
+              kind: 'azpr-combat-formula-evidence-index',
+              file: 'src/data/generated/combat-formula-evidence.json',
+              elementValueStatus:
+                'element-values-have-params-but-no-direct-formula-id-link',
+              actionElementId: 4,
+              attributeValues: expect.arrayContaining([
+                expect.objectContaining({
+                  key: 'NORMAL_DEFENSE',
+                  value: 0,
+                }),
+                expect.objectContaining({ key: 'FIRE_DEFENSE', value: 0 }),
+              ]),
+            },
           },
           critical: {
             applied: false,
@@ -470,8 +499,12 @@ describe('first vertical slice simulation', () => {
     });
     expect(result.damageTimeline[0].formulaBreakdown.layers.enemyDefense).toMatchObject({
       applied: false,
-      status: 'placeholder',
+      status: 'evidence-found-formula-unmapped',
       defenseMultiplier: 1.5,
+      source: {
+        kind: 'azpr-combat-formula-evidence-index',
+        status: 'enemy-property-attributes-found',
+      },
     });
     expect(result.summary.resourceEventCount).toBe(1);
     expect(result.resourceTimeline).toEqual([

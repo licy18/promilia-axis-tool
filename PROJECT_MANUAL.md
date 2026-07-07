@@ -2030,6 +2030,36 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 阶段 5-8E 目标：继续追踪 skill asset / effect node，将 `skillsub_ele_value.elementId` 连接到具体公式或效果节点。
 - 若仍找不到直接链路，先把 `combat-formula-evidence` 接入 `formulaBreakdown.layers.enemyDefense.source` / `enemyResistance.source`，让 UI 能显示“有属性来源、公式未确认”的更细状态。
 
+### 2026-07-07：阶段 5-8E 公式证据接入伤害分层 source
+
+本轮完成：
+
+- `src/simulation/mechanics/damage.js` 引入 `combat-formula-evidence.json`，把 5-8D 的证据索引接入 `formulaBreakdown`。
+- `formulaBreakdown.layers.enemyDefense.status` 从纯 `placeholder` 升级为 `evidence-found-formula-unmapped`。
+- `enemyDefense.source` 现在记录证据文件、来源链、`relationStatus`、敌人 `propertyId/baseAttributeId`，以及当前敌人的 `DEF/MDEF` 属性值。
+- `formulaBreakdown.layers.enemyResistance.status` 同步升级为 `evidence-found-formula-unmapped`。
+- `enemyResistance.source` 现在记录 `elementValueStatus`、动作 `elementId` 和敌人的元素防御字段值，例如 `NORMAL_DEFENSE/FIRE_DEFENSE`。
+- 最终伤害表达式仍保持 `round(baseAttack.value * actionMultiplier.value)`；已应用层仍只有 `baseAttack` 与 `actionMultiplier`，防御/抗性没有参与数值计算。
+- `firstVerticalSliceSimulation` 测试已覆盖 `300032 迅狼` 的 `DEF/MDEF = 9000` 和元素防御字段证据。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、11 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、103 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1354 KB。
+
+当前边界：
+
+- `source` 对象只是诊断证据，不代表真实防御/抗性公式已确认。
+- 仍未找到 `skillsub_ele_value.elementId -> effect node -> element_formula.id` 的完整链路。
+- 仍不能把 `enemyDefense` / `enemyResistance` 改为 `applied: true`。
+- 动作 `elementId` 已能记录到抗性层，但还不能自动判断应套哪个元素减免字段。
+
+下一步：
+
+- 阶段 5-8F 目标：专门追踪 `skill.skillBytesPath`、`Config/Battle/Skill/*.asset`、效果节点或相邻 battle 表，建立 skill asset / effect node 候选索引。
+- 若找到 `skillsub_ele_value.elementId` 到公式节点的链路，生成可验证的关系索引；若仍找不到，记录缺口和候选表字段，避免重复大范围盲搜。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
