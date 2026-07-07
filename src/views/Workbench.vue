@@ -56,6 +56,7 @@
         :selected-action-id="selectedActionId"
         @select-action="selectedActionId = $event"
         @delete-action="deleteAction"
+        @update-action-duration="updateActionDuration"
         @update-action-time="updateActionTime"
       />
 
@@ -245,6 +246,21 @@ function updateActionTime({ actionId, startMs }) {
     return createWorkbenchActionDraft({
       ...action,
       startMs: clampNumber(startMs, 0, project.value.time.durationMs),
+    });
+  });
+  markDraftDirty();
+}
+
+function updateActionDuration({ actionId, durationMs }) {
+  selectedActionId.value = actionId;
+  actionDrafts.value = actionDrafts.value.map((action) => {
+    if (action.id !== actionId) {
+      return action;
+    }
+
+    return createWorkbenchActionDraft({
+      ...action,
+      durationMs: clampNumber(durationMs, 1, Math.max(1, project.value.time.durationMs - action.startMs)),
     });
   });
   markDraftDirty();

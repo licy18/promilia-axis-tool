@@ -55,7 +55,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；10 个测试文件、66 条测试通过。
+- `npm run test -- --run`：通过；10 个测试文件、67 条测试通过。
 
 ## 3. 目录速览
 
@@ -923,6 +923,39 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 先增加时间轴缩放/视窗比例状态，让 30s 轴可以从固定全览走向可横向细看。
 - 再为可持续动作增加拖拽调整 `durationMs` 的最小手柄，并保持边界 clamp 和测试覆盖。
 - 继续只通过 `actionDrafts -> Project -> simulation` 更新结果，不在时间轴组件内直接改业务事实。
+
+### 2026-07-07：阶段 4-11 时间轴缩放和动作持续时间调整雏形落地
+
+本轮完成：
+
+- `TimelineGridPreview` 新增 1x-4x 缩放状态和紧凑缩放控件。
+- 时间刻度轨和动作轨共用同一 `timelineTrackStyle`，缩放后宽度同步变化，例如 2x 时轨道宽度为 `200%`。
+- 时间轴轨道区域支持横向溢出，为后续局部细看、水平滚动和更长排轴做准备。
+- 动作块右侧新增持续时间手柄，可拖拽调整 `durationMs`。
+- 新增 `update-action-duration` 事件，由 `Workbench.vue` 回写 `actionDrafts[]`，再重新生成 `Project -> Scenario -> simulation`。
+- 持续时间调整按 `snapMs` 吸附，并按 `project.time.durationMs - action.startMs` 做边界 clamp。
+- 动作块宽度最大值放开到 100%，避免长持续时间动作被旧 42% 上限截断。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、23 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、67 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- `http://127.0.0.1:5175/#/workbench` 本地页面服务返回 200。
+- 应用内浏览器交互验证尝试执行缩放和持续时间操作时，浏览器控制层连续超时并重置；本阶段未把该工具超时记为页面通过证据。缩放、手柄拖拽、持续时间更新和草稿脏状态已由新增组件测试覆盖。
+
+当前结论：
+
+- 新版工作台时间轴已经具备最小缩放视图和拖拽持续时间能力。
+- 缩放和持续时间调整仍是组件内最小实现，尚未持久化到草稿，也没有做横向滚动位置保存。
+- 当前仍未做轨道内重叠检测、动作碰撞提示、跨轨拖拽改变 actor 或动作持续时间与真实技能帧数据的关联。
+
+下一步：
+
+- 阶段 4-12 目标：建立轨道内重叠检测和时间轴诊断雏形。
+- 在 `scenario.actions[]` 投影层或工作台层计算同一轨道内动作时间范围重叠。
+- 在时间轴动作块和分析/诊断区域显示基础重叠告警，避免缩放和持续时间调整后用户看不到冲突。
+- 保持诊断是 UI/投影层提示，不先改战斗公式或动作合法性 hard fail。
 
 ## 10. 文档维护规则
 

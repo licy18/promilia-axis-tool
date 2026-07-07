@@ -403,6 +403,56 @@ describe('Workbench view', () => {
     expect(wrapper.text()).toContain('DAMAGE_PROJECTED');
   });
 
+  it('zooms the timeline and resizes an action duration from the timeline', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    const lane = wrapper.find('[data-testid="workbench-timeline-lane"]').element;
+    lane.getBoundingClientRect = () => ({
+      width: 600,
+      height: 210,
+      left: 0,
+      right: 600,
+      top: 0,
+      bottom: 210,
+      x: 0,
+      y: 0,
+      toJSON: () => {},
+    });
+
+    await wrapper.find('[data-testid="workbench-timeline-zoom-input"]').setValue('2');
+    expect(wrapper.find('[data-testid="workbench-timeline-zoom-value"]').text()).toBe('2x');
+    expect(wrapper.find('[data-testid="workbench-timeline-lane"]').attributes('style')).toContain('width: 200%');
+    expect(wrapper.find('[data-testid="workbench-timeline-scale-track"]').attributes('style')).toContain('width: 200%');
+
+    await wrapper.find('[data-testid="workbench-add-wait-action"]').trigger('click');
+    const handle = wrapper.find(
+      '[data-testid="workbench-action-duration-handle"][data-action-id="action-0002"]',
+    ).element;
+    const pointerDown = new MouseEvent('pointerdown', {
+      bubbles: true,
+      button: 0,
+      clientX: 100,
+    });
+    Object.defineProperty(pointerDown, 'pointerId', { value: 2 });
+    handle.dispatchEvent(pointerDown);
+    await nextTick();
+    window.dispatchEvent(new MouseEvent('pointermove', { clientX: 140 }));
+    await nextTick();
+    window.dispatchEvent(new MouseEvent('pointerup', { clientX: 140 }));
+    await nextTick();
+
+    expect(wrapper.find('[data-testid="workbench-action-type"]').element.value).toBe('等待动作');
+    expect(wrapper.find('[data-testid="workbench-duration-input"]').element.value).toBe('3000');
+    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe('有未保存改动');
+  });
+
   it('saves, restores, and resets a versioned workbench draft', async () => {
     const wrapper = mount(Workbench, {
       global: {
