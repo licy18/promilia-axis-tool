@@ -55,6 +55,7 @@
         @copy-action="copyAction"
         @delete-action="deleteAction"
         @delete-action-batch="deleteActionBatch"
+        @align-action-batch="alignActionBatch"
         @shift-action-batch="shiftActionBatch"
         @update-active-actor="setActionLibraryCharacterId"
         @update-segment-split-options="updateSegmentSplitOptions"
@@ -594,6 +595,24 @@ function deleteActionBatch(batchId) {
     syncActionLibraryCharacterIdFromDraft(actionDrafts.value[nextIndex]);
   }
   markDraftDirty();
+}
+
+function alignActionBatch({ batchId, startMs }) {
+  const targetStartMs = Number(startMs);
+  if (!batchId || !Number.isFinite(targetStartMs)) {
+    return;
+  }
+
+  const batchActions = actionDrafts.value.filter((action) => action.generationBatch?.batchId === batchId);
+  if (batchActions.length === 0) {
+    return;
+  }
+
+  const minStartMs = Math.min(...batchActions.map((action) => Math.max(0, Number(action.startMs) || 0)));
+  shiftActionBatch({
+    batchId,
+    offsetMs: targetStartMs - minStartMs,
+  });
 }
 
 function shiftActionBatch({ batchId, offsetMs }) {

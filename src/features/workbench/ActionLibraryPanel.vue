@@ -271,6 +271,27 @@
           >
             应用偏移
           </button>
+          <label v-if="action.generationBatch?.batchId" class="batch-shift-control">
+            <span>批次起点 ms</span>
+            <input
+              type="number"
+              step="100"
+              data-testid="workbench-batch-align-start-input"
+              :data-batch-id="action.generationBatch.batchId"
+              :value="getBatchAlignStart(action.generationBatch.batchId)"
+              @click.stop
+              @input.stop="setBatchAlignStart(action.generationBatch.batchId, $event.target.value)"
+            />
+          </label>
+          <button
+            v-if="action.generationBatch?.batchId"
+            class="tool-button"
+            data-testid="workbench-apply-action-batch-align"
+            type="button"
+            @click.stop="applyBatchAlign(action.generationBatch.batchId)"
+          >
+            对齐起点
+          </button>
         </div>
         <dl>
           <div>
@@ -374,11 +395,13 @@ const emit = defineEmits([
   'copy-action',
   'delete-action',
   'delete-action-batch',
+  'align-action-batch',
   'shift-action-batch',
   'update-active-actor',
   'update-segment-split-options',
 ]);
 
+const batchAlignStarts = reactive({});
 const batchShiftOffsets = reactive({});
 
 function actionTypeLabel(type) {
@@ -489,6 +512,30 @@ function applyBatchShift(batchId) {
 
   emitBatchShift(batchId, offsetMs);
   batchShiftOffsets[batchId] = 0;
+}
+
+function getBatchAlignStart(batchId) {
+  return batchAlignStarts[batchId] ?? '';
+}
+
+function setBatchAlignStart(batchId, value) {
+  batchAlignStarts[batchId] = value;
+}
+
+function applyBatchAlign(batchId) {
+  if (batchAlignStarts[batchId] == null || batchAlignStarts[batchId] === '') {
+    return;
+  }
+
+  const startMs = Number(batchAlignStarts[batchId]);
+  if (!Number.isFinite(startMs)) {
+    return;
+  }
+
+  emit('align-action-batch', {
+    batchId,
+    startMs,
+  });
 }
 
 function formatPreviewRange(action) {

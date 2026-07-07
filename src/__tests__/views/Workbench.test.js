@@ -328,6 +328,64 @@ describe('Workbench view', () => {
     ]);
   });
 
+  it('aligns a generated skill segment batch to a target start and restores it', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await findActionLibrarySkillSplitButton(wrapper, workbenchSeed.defaults.skillId).trigger('click');
+    await wrapper.find('[data-testid="workbench-segment-preview-confirm"]').trigger('click');
+
+    await wrapper.find('[data-testid="workbench-batch-align-start-input"]').setValue('-5000');
+    await wrapper.find('[data-testid="workbench-apply-action-batch-align"]').trigger('click');
+
+    expect(wrapper.find('.action-item[data-action-id="action-0002"]').text()).toContain('0ms');
+    expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-overlap-item"]').text()).toContain('0-1000ms');
+
+    await wrapper.find('[data-testid="workbench-batch-align-start-input"]').setValue('3500');
+    await wrapper.find('[data-testid="workbench-apply-action-batch-align"]').trigger('click');
+
+    expect(wrapper.find('.action-item[data-action-id="action-0002"]').text()).toContain('3500ms');
+    expect(wrapper.find('.action-item[data-action-id="action-0005"]').text()).toContain('9500ms');
+    expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe('0');
+    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe('有未保存改动');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(savedDraft.actionDrafts.map((action) => action.startMs)).toEqual([0, 3500, 5500, 7500, 9500]);
+
+    wrapper.unmount();
+
+    const restored = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await nextTick();
+
+    expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe('已恢复草稿');
+    expect(restored.find('.action-item[data-action-id="action-0002"]').text()).toContain('3500ms');
+    expect(restored.findAll('[data-testid="workbench-action-batch-note"]')).toHaveLength(4);
+
+    await restored.find('[data-testid="workbench-batch-align-start-input"]').setValue('40000');
+    await restored.find('[data-testid="workbench-apply-action-batch-align"]').trigger('click');
+    await restored.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const clampedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(clampedDraft.actionDrafts.map((action) => action.startMs)).toEqual([0, 24000, 26000, 28000, 30000]);
+    expect(restored.find('[data-testid="workbench-overlap-count"]').text()).toBe('0');
+  });
+
   it('cancels a skill segment split preview without writing actions', async () => {
     const wrapper = mount(Workbench, {
       global: {
