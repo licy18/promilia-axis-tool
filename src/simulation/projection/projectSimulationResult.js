@@ -27,6 +27,360 @@ const CURRENT_SKILL_CONTROL_EVIDENCE_BY_SKILL_ID = new Map(
 );
 const AZPR_TIMELINE_FRAME_RATE = 60;
 const AZPR_TIMELINE_FRAME_MS = 1000 / AZPR_TIMELINE_FRAME_RATE;
+const AZPR_IL2CPP_DUMP_CS_PATH =
+  'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs';
+const AZPR_IL2CPP_SCRIPT_JSON_PATH =
+  'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/script.json';
+const AZPR_IL2CPP_HEADER_PATH =
+  'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/il2cpp.h';
+const AZPR_IL2CPP_STRING_LITERAL_PATH =
+  'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/stringliteral.json';
+const AZPR_IL2CPP_DUMMY_DLL_PATH =
+  'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/DummyDll/Assembly-CSharp.dll';
+const RUNTIME_NATIVE_METHOD_SYMBOLS = [
+  {
+    chains: ['selfEnergyChange'],
+    className: 'RecoverSPArgs',
+    method: '.ctor',
+    qualifiedName: 'Lens.Gameplay.Modules.BigWorld.RecoverSPArgs$$.ctor',
+    address: 19218704,
+    rva: '0x1254110',
+    signature:
+      'void RecoverSPArgs..ctor(RecoverSPArgs* __this, const MethodInfo* method)',
+  },
+  {
+    chains: ['hpDamage'],
+    className: 'AliveElementSystem',
+    method: 'ExecuteDamageElement',
+    qualifiedName:
+      'Lens.Gameplay.Modules.BigWorld.AliveElementSystem$$ExecuteDamageElement',
+    address: 20009456,
+    rva: '0x13151F0',
+    signature:
+      'OutputDamageData AliveElementSystem.ExecuteDamageElement(DamageElement* element)',
+  },
+  {
+    chains: ['hpDamage'],
+    className: 'AliveElementSystem',
+    method: 'OnExecuteDamageElement',
+    qualifiedName:
+      'Lens.Gameplay.Modules.BigWorld.AliveElementSystem$$OnExecuteDamageElement',
+    address: 20023296,
+    rva: '0x1318800',
+    signature:
+      'void AliveElementSystem.OnExecuteDamageElement(DamageElement* damageElement)',
+  },
+  {
+    chains: ['hpDamage'],
+    className: 'DamageElement',
+    method: 'BaseExecute',
+    qualifiedName: 'Lens.Gameplay.Modules.BigWorld.DamageElement$$BaseExecute',
+    address: 20490112,
+    rva: '0x138A780',
+    signature: 'void DamageElement.BaseExecute()',
+  },
+  {
+    chains: ['hpDamage'],
+    className: 'DamageElement',
+    method: 'ExecuteEffect',
+    qualifiedName:
+      'Lens.Gameplay.Modules.BigWorld.DamageElement$$ExecuteEffect',
+    address: 20500464,
+    rva: '0x138CFF0',
+    signature: 'void DamageElement.ExecuteEffect()',
+  },
+  {
+    chains: ['hpDamage'],
+    className: 'DamageElement',
+    method: 'Execute',
+    qualifiedName: 'Lens.Gameplay.Modules.BigWorld.DamageElement$$Execute',
+    address: 20500704,
+    rva: '0x138D0E0',
+    signature: 'void DamageElement.Execute()',
+  },
+  {
+    chains: ['hpDamage'],
+    className: 'DamageElement',
+    method: 'Parse',
+    qualifiedName: 'Lens.Gameplay.Modules.BigWorld.DamageElement$$Parse',
+    address: 20506080,
+    rva: '0x138E5E0',
+    signature:
+      'void DamageElement.Parse(TElementParams* param, int32 skillId, CustomBattleVerifyInfo verifyInfo)',
+  },
+  {
+    chains: ['selfEnergyChange'],
+    className: 'DamageElement',
+    method: 'RecoverSP',
+    qualifiedName: 'Lens.Gameplay.Modules.BigWorld.DamageElement$$RecoverSP',
+    address: 20508384,
+    rva: '0x138EEE0',
+    signature: 'void DamageElement.RecoverSP()',
+  },
+  {
+    chains: ['selfEnergyChange'],
+    className: 'SPSystem',
+    method: 'OnTransmit',
+    qualifiedName: 'Lens.Gameplay.Modules.BigWorld.SPSystem$$OnTransmit',
+    address: 21510128,
+    rva: '0x14837F0',
+    signature: 'void SPSystem.OnTransmit(int32 type, ITransmitArgs* args)',
+  },
+  {
+    chains: ['selfEnergyChange'],
+    className: 'SPSystem',
+    method: 'RecoverSP',
+    qualifiedName: 'Lens.Gameplay.Modules.BigWorld.SPSystem$$RecoverSP',
+    address: 21512000,
+    rva: '0x1483F40',
+    signature:
+      'void SPSystem.RecoverSP(int32 recoverTagType, float baseDelta, float delta)',
+  },
+  {
+    chains: ['toughnessDamage'],
+    className: 'WeakBreakSystem',
+    method: 'OnSelfTakenDamage',
+    qualifiedName:
+      'Lens.Gameplay.Modules.BigWorld.WeakBreakSystem$$OnSelfTakenDamage',
+    address: 21759056,
+    rva: '0x14C0450',
+    signature: 'void WeakBreakSystem.OnSelfTakenDamage(DamageRecord* record)',
+  },
+  {
+    chains: ['toughnessDamage'],
+    className: 'WeakBreakSystem',
+    method: 'OnSelfTakenDamage',
+    qualifiedName:
+      'Lens.Gameplay.Modules.BigWorld.WeakBreakSystem$$OnSelfTakenDamage',
+    address: 21759264,
+    rva: '0x14C0520',
+    signature: 'void WeakBreakSystem.OnSelfTakenDamage()',
+  },
+  {
+    chains: ['toughnessDamage'],
+    className: 'WeakBreakSystem',
+    method: 'OnTransmit',
+    qualifiedName: 'Lens.Gameplay.Modules.BigWorld.WeakBreakSystem$$OnTransmit',
+    address: 21759392,
+    rva: '0x14C05A0',
+    signature:
+      'void WeakBreakSystem.OnTransmit(int32 type, ITransmitArgs* args)',
+  },
+  {
+    chains: ['toughnessDamage'],
+    className: 'WeakBreakSystem',
+    method: 'OnWeakPointChange',
+    qualifiedName:
+      'Lens.Gameplay.Modules.BigWorld.WeakBreakSystem$$OnWeakPointChange',
+    address: 21762384,
+    rva: '0x14C1150',
+    signature: 'void WeakBreakSystem.OnWeakPointChange(EntityHandle* attacker)',
+  },
+  {
+    chains: ['toughnessDamage'],
+    className: 'WeakBreakSystem',
+    method: 'UpdateWeakState',
+    qualifiedName:
+      'Lens.Gameplay.Modules.BigWorld.WeakBreakSystem$$UpdateWeakState',
+    address: 21765248,
+    rva: '0x14C1C80',
+    signature: 'void WeakBreakSystem.UpdateWeakState()',
+  },
+  {
+    chains: ['toughnessDamage'],
+    className: 'WeakBreakSystem',
+    method: 'WeakBreakEnd',
+    qualifiedName:
+      'Lens.Gameplay.Modules.BigWorld.WeakBreakSystem$$WeakBreakEnd',
+    address: 21769568,
+    rva: '0x14C2D60',
+    signature: 'void WeakBreakSystem.WeakBreakEnd()',
+  },
+  {
+    chains: ['toughnessDamage'],
+    className: 'WeakBreakSystem',
+    method: 'WeakBreakEnding',
+    qualifiedName:
+      'Lens.Gameplay.Modules.BigWorld.WeakBreakSystem$$WeakBreakEnding',
+    address: 21769648,
+    rva: '0x14C2DB0',
+    signature: 'void WeakBreakSystem.WeakBreakEnding()',
+  },
+  {
+    chains: ['toughnessDamage'],
+    className: 'WeakBreakSystem',
+    method: 'WeakBreaking',
+    qualifiedName:
+      'Lens.Gameplay.Modules.BigWorld.WeakBreakSystem$$WeakBreaking',
+    address: 21771216,
+    rva: '0x14C33D0',
+    signature: 'void WeakBreakSystem.WeakBreaking()',
+  },
+  {
+    chains: ['toughnessDamage'],
+    className: 'WeakBreakSystem',
+    method: 'WeaknessPointUpdate',
+    qualifiedName:
+      'Lens.Gameplay.Modules.BigWorld.WeakBreakSystem$$WeaknessPointUpdate',
+    address: 21772752,
+    rva: '0x14C39D0',
+    signature: 'void WeakBreakSystem.WeaknessPointUpdate()',
+  },
+  {
+    chains: ['hpDamage'],
+    className: 'FormulaUtility',
+    method: 'Calculate',
+    qualifiedName: 'Lens.Gameplay.Modules.BigWorld.FormulaUtility$$Calculate',
+    address: 25675840,
+    rva: '0x187C840',
+    signature:
+      'MyFloat FormulaUtility.Calculate(TElement_formula* formulaData, IElement* element, List<int>* functionParams, AliveData* self, AliveData* target, AliveData* source)',
+  },
+  {
+    chains: ['hpDamage'],
+    className: 'FormulaUtility',
+    method: 'GetFunctionParams',
+    qualifiedName:
+      'Lens.Gameplay.Modules.BigWorld.FormulaUtility$$GetFunctionParams',
+    address: 25684448,
+    rva: '0x187E9E0',
+    signature:
+      'int32 FormulaUtility.GetFunctionParams(int32 index, IElement* element, List<int>* functionParams)',
+  },
+  {
+    chains: ['hpDamage'],
+    className: 'FormulaUtility',
+    method: 'GetOutputDamage',
+    qualifiedName:
+      'Lens.Gameplay.Modules.BigWorld.FormulaUtility$$GetOutputDamage',
+    address: 25686880,
+    rva: '0x187F360',
+    signature:
+      'OutputDamageData FormulaUtility.GetOutputDamage(IElement* element, EntityHandle* attacker, EntityHandle* executor, EntityHandle* source, int32 skillGroupId, int32 criticalRandom)',
+  },
+  {
+    chains: ['toughnessDamage'],
+    className: 'FormulaUtility',
+    method: 'GetOutputWeaknessDamage',
+    qualifiedName:
+      'Lens.Gameplay.Modules.BigWorld.FormulaUtility$$GetOutputWeaknessDamage',
+    address: 25714672,
+    rva: '0x1885FF0',
+    signature:
+      'OutputDamageData FormulaUtility.GetOutputWeaknessDamage(IElement* element, EntityHandle* attacker, EntityHandle* executor, EntityHandle* source, int32 skillGroupId)',
+  },
+  {
+    chains: ['hpDamage'],
+    className: 'FormulaUtility',
+    method: 'GetOutput',
+    qualifiedName: 'Lens.Gameplay.Modules.BigWorld.FormulaUtility$$GetOutput',
+    address: 25718032,
+    rva: '0x1886D10',
+    signature:
+      'OutputDamageData FormulaUtility.GetOutput(IElement* elementConfig, EntityHandle* attacker, EntityHandle* executor, EntityHandle* source, int32 skillGroupId, int32 criticalRandom)',
+  },
+  {
+    chains: ['hpDamage'],
+    className: 'FormulaUtility',
+    method: 'SkillDmgUp',
+    qualifiedName: 'Lens.Gameplay.Modules.BigWorld.FormulaUtility$$SkillDmgUp',
+    address: 25730464,
+    rva: '0x1889DA0',
+    signature:
+      'MyFloat FormulaUtility.SkillDmgUp(AliveData* executorData, AliveData* attackerData, int32 skillGroupId, IElement* element, MyFloat* weaknessSkillDmgUp)',
+  },
+  {
+    chains: ['hpDamage', 'toughnessDamage'],
+    className: 'FormulaUtility',
+    method: 'WeaknessPointChange',
+    qualifiedName:
+      'Lens.Gameplay.Modules.BigWorld.FormulaUtility$$WeaknessPointChange',
+    address: 25732784,
+    rva: '0x188A6B0',
+    signature:
+      'bool FormulaUtility.WeaknessPointChange(DamageElement* damageElement, EntityHandle* executor, EntityHandle* attacker, int32 outputType1, int32 outputType2, MyFloat weaknessSkillDmgUp, MyFloat* outputDamage, MyFloat* wk)',
+  },
+  {
+    chains: ['hpDamage'],
+    className: 'FormulaUtility',
+    method: 'innerCalculate',
+    qualifiedName:
+      'Lens.Gameplay.Modules.BigWorld.FormulaUtility$$innerCalculate',
+    address: 25735808,
+    rva: '0x188B280',
+    signature:
+      'MyFloat FormulaUtility.innerCalculate(FormulaItem[]* items, IElement* element, List<int>* functionParams, AliveData* self, AliveData* target, AliveData* source)',
+  },
+];
+const RUNTIME_NATIVE_STRING_LITERALS = [
+  { value: 'SPSystem', address: '0xC30B400' },
+  { value: 'GetOutputDamage', address: '0xC3E68F8' },
+  { value: 'GetOutputWeaknessDamage', address: '0xC3E7F18' },
+  { value: 'RecoverSP', address: '0xC444938' },
+  { value: 'WeakBreak', address: '0xC489B48' },
+  { value: 'WeaknessPointChange', address: '0xC48AA08' },
+  { value: 'SkillDmgUp', address: '0xC4ACC48' },
+];
+const RUNTIME_FIELD_LAYOUT_EVIDENCE = [
+  {
+    className: 'RecoverSPArgs',
+    fields: [
+      'id',
+      'baseDelta',
+      'delta',
+      'interval',
+      'tagType',
+      'skillId',
+      'sharePercent',
+      'petSharePercent',
+      'petDelta',
+      'isAddition',
+      'additionId',
+      'mainPetSharePercent',
+    ],
+    source: AZPR_IL2CPP_HEADER_PATH,
+    sourceLineRange: 'il2cpp.h:235723-235760',
+  },
+  {
+    className: 'FormulaUtility.OutputDamageData',
+    fields: ['outputDamage', 'realDamage', 'isCritical', 'isShield'],
+    source: AZPR_IL2CPP_HEADER_PATH,
+    sourceLineRange: 'il2cpp.h:248082-248105',
+  },
+  {
+    className: 'DamageElement',
+    fields: [
+      'm_recoverSP',
+      'm_petRecoverSP',
+      'm_recoverInterval',
+      'criticalRandom',
+      '_outputDamageData_k__BackingField',
+    ],
+    source: AZPR_IL2CPP_HEADER_PATH,
+    sourceLineRange: 'il2cpp.h:248107-248145',
+  },
+  {
+    className: 'SPSystem',
+    fields: ['m_entityHandle', 'm_updateTimer', 'm_recoverTimerMap'],
+    source: AZPR_IL2CPP_HEADER_PATH,
+    sourceLineRange: 'il2cpp.h:265444-265485',
+  },
+  {
+    className: 'WeakBreakSystem',
+    fields: [
+      'm_entityHandle',
+      'm_attackerHandle',
+      'm_lastDamageTime',
+      'm_weakTime',
+      'm_curWeakTime',
+      'm_hasWeakPoint',
+      'm_weakState',
+      'm_weakElement',
+    ],
+    source: AZPR_IL2CPP_HEADER_PATH,
+    sourceLineRange: 'il2cpp.h:265821-265877',
+  },
+];
 
 export function projectSimulationResult({
   scenario,
@@ -1652,6 +2006,18 @@ function createHitBindingGapExternalElementBinding({
       : [],
     runtimeApplicationTraceChainCount:
       runtimeApplicationTraceEvidence?.trackedValueChainCount ?? 0,
+    runtimeMethodBodyStatuses: runtimeApplicationTraceEvidence
+      ? [runtimeApplicationTraceEvidence.methodBodyStatus]
+      : [],
+    runtimeNativeMethodSymbolStatuses:
+      runtimeApplicationTraceEvidence?.nativeMethodSymbolEvidence?.status !=
+      null
+        ? [runtimeApplicationTraceEvidence.nativeMethodSymbolEvidence.status]
+        : [],
+    runtimeNativeMethodSymbolKeys:
+      runtimeApplicationTraceEvidence?.runtimeNativeMethodSymbolKeys ?? [],
+    runtimeNativeMethodSymbolCount:
+      runtimeApplicationTraceEvidence?.runtimeNativeMethodSymbolCount ?? 0,
     candidates,
     unresolved,
     applied: false,
@@ -1837,6 +2203,9 @@ function createHitBindingGapRuntimeApplicationTraceEvidence({
       petRecoverSPValues.length > 0 ||
       recoverIntervals.length > 0,
   ].filter(Boolean).length;
+  const nativeMethodSymbolEvidence = hasDamageElement
+    ? createRuntimeNativeMethodSymbolEvidence()
+    : null;
 
   return {
     status: hasDamageElement
@@ -1849,7 +2218,16 @@ function createHitBindingGapRuntimeApplicationTraceEvidence({
       refs.map(ref => ref.pathId).filter(value => value != null)
     ),
     trackedValueChainCount,
-    methodBodyStatus: 'il2cpp-dump-signatures-only',
+    methodBodyStatus:
+      nativeMethodSymbolEvidence?.methodBodyStatus ??
+      'il2cpp-dump-signatures-only',
+    methodBodyAvailabilityStatus:
+      nativeMethodSymbolEvidence?.status ??
+      'native-method-symbols-not-evaluated',
+    runtimeNativeMethodSymbolCount:
+      nativeMethodSymbolEvidence?.methodCount ?? 0,
+    runtimeNativeMethodSymbolKeys: nativeMethodSymbolEvidence?.methodKeys ?? [],
+    nativeMethodSymbolEvidence,
     parameterOverrideStatus:
       (runtimeParameterSourceEvidence?.candidateCount ?? 0) > 0
         ? 'related-skill-level-candidate-found-execution-override-order-unconfirmed'
@@ -1898,6 +2276,7 @@ function createHitBindingGapRuntimeApplicationTraceEvidence({
           sourceLineRange: 'dump.cs:336798-336814',
         },
       ],
+      nativeMethodSymbols: getRuntimeNativeMethodSymbolsByChain('hpDamage'),
       unresolved: [
         'function-combination-order-unconfirmed',
         'formula-param-override-order-unconfirmed',
@@ -1936,6 +2315,8 @@ function createHitBindingGapRuntimeApplicationTraceEvidence({
           sourceLineRange: 'dump.cs:289239-289419',
         },
       ],
+      nativeMethodSymbols:
+        getRuntimeNativeMethodSymbolsByChain('toughnessDamage'),
       unresolved: [
         'weak-break-unit-scale-unconfirmed',
         'weak-break-state-gating-unconfirmed',
@@ -1989,6 +2370,8 @@ function createHitBindingGapRuntimeApplicationTraceEvidence({
           sourceLineRange: 'dump.cs:288763-288851',
         },
       ],
+      nativeMethodSymbols:
+        getRuntimeNativeMethodSymbolsByChain('selfEnergyChange'),
       unresolved: [
         'self-energy-owner-unconfirmed',
         'sp-share-percent-rule-unconfirmed',
@@ -1997,13 +2380,88 @@ function createHitBindingGapRuntimeApplicationTraceEvidence({
       applied: false,
     },
     unresolved: [
-      'il2cpp-method-body-missing',
+      'native-method-body-decompilation-pending',
       'runtime-parameter-override-order-unconfirmed',
       'hp-toughness-energy-application-points-unconfirmed',
     ],
     applied: false,
     note: 'This records runtime entry points and data carriers for HP, toughness and self energy. The dump currently exposes signatures and fields only, so formulas remain evidence-only.',
   };
+}
+
+function createRuntimeNativeMethodSymbolEvidence() {
+  const methodKeys = uniqueStrings(
+    RUNTIME_NATIVE_METHOD_SYMBOLS.map(createRuntimeMethodSymbolKey)
+  );
+  const chainMethodCounts = ['hpDamage', 'toughnessDamage', 'selfEnergyChange']
+    .map(chain => ({
+      chain,
+      methodCount: getRuntimeNativeMethodSymbolsByChain(chain).length,
+    }))
+    .filter(item => item.methodCount > 0);
+
+  return {
+    status: 'native-addresses-and-signatures-found-method-bodies-not-extracted',
+    sourceKind: 'azpr-il2cpp-native-method-symbol-evidence',
+    methodBodyStatus:
+      'native-addresses-and-signatures-found-method-bodies-not-extracted',
+    sourceFiles: [
+      {
+        kind: 'il2cpp-signature-stubs',
+        path: AZPR_IL2CPP_DUMP_CS_PATH,
+        status: 'available-signatures-only',
+      },
+      {
+        kind: 'il2cpp-script-method-addresses',
+        path: AZPR_IL2CPP_SCRIPT_JSON_PATH,
+        status: 'available-native-addresses-and-signatures',
+      },
+      {
+        kind: 'il2cpp-field-layout-header',
+        path: AZPR_IL2CPP_HEADER_PATH,
+        status: 'available-field-layouts',
+      },
+      {
+        kind: 'il2cpp-string-literals',
+        path: AZPR_IL2CPP_STRING_LITERAL_PATH,
+        status: 'available-target-entrypoint-literals',
+      },
+      {
+        kind: 'dummy-assembly',
+        path: AZPR_IL2CPP_DUMMY_DLL_PATH,
+        status: 'available-metadata-stubs-no-managed-bodies',
+      },
+    ],
+    availableEvidence: [
+      'dump.cs exposes C# signatures and fields',
+      'script.json exposes native method addresses and signatures',
+      'il2cpp.h exposes field layouts for DamageElement, RecoverSPArgs, SPSystem and WeakBreakSystem',
+      'stringliteral.json contains target runtime names',
+    ],
+    missingEvidence: [
+      'managed C# method bodies',
+      'IDA/Ghidra/C++ pseudocode for target RVAs',
+      'runtime hook trace confirming call order and units',
+    ],
+    methodCount: methodKeys.length,
+    methodKeys,
+    chainMethodCounts,
+    targetMethods: RUNTIME_NATIVE_METHOD_SYMBOLS,
+    fieldLayoutEvidence: RUNTIME_FIELD_LAYOUT_EVIDENCE,
+    stringLiteralEvidence: RUNTIME_NATIVE_STRING_LITERALS,
+    applied: false,
+    note: 'Native addresses make the runtime application entrypoints locatable, but method bodies are still not extracted; application order, scaling units and trigger conditions remain unconfirmed.',
+  };
+}
+
+function getRuntimeNativeMethodSymbolsByChain(chain) {
+  return RUNTIME_NATIVE_METHOD_SYMBOLS.filter(symbol =>
+    (symbol.chains ?? []).includes(chain)
+  );
+}
+
+function createRuntimeMethodSymbolKey(symbol) {
+  return `${symbol.qualifiedName}@${symbol.rva}`;
 }
 
 function selectPrimaryHitBindingBehaviorCandidates(behaviorBindingEvidence) {
@@ -2204,6 +2662,9 @@ function createHitBindingGapExternalElementBindingSummary(gaps) {
       )
     )
   );
+  const runtimeNativeMethodSymbolKeys = uniqueStrings(
+    bindings.flatMap(binding => binding.runtimeNativeMethodSymbolKeys ?? [])
+  );
 
   return {
     status:
@@ -2303,6 +2764,18 @@ function createHitBindingGapExternalElementBindingSummary(gaps) {
     gapsWithRuntimeApplicationTraceEvidence: bindings.filter(
       binding =>
         (numberOrNull(binding.runtimeApplicationTraceChainCount) ?? 0) > 0
+    ).length,
+    runtimeMethodBodyStatuses: uniqueStrings(
+      bindings.flatMap(binding => binding.runtimeMethodBodyStatuses ?? [])
+    ),
+    runtimeNativeMethodSymbolStatuses: uniqueStrings(
+      bindings.flatMap(
+        binding => binding.runtimeNativeMethodSymbolStatuses ?? []
+      )
+    ),
+    runtimeNativeMethodSymbolCount: runtimeNativeMethodSymbolKeys.length,
+    gapsWithRuntimeNativeMethodSymbols: bindings.filter(
+      binding => (binding.runtimeNativeMethodSymbolKeys ?? []).length > 0
     ).length,
     unresolved: uniqueStrings(
       bindings.flatMap(binding => binding.unresolved ?? [])

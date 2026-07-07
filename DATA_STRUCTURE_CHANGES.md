@@ -5425,3 +5425,108 @@ hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1
 - `methodBodyStatus = il2cpp-dump-signatures-only` 必须保留；当前没有方法体，不能确认覆盖顺序、单位和触发条件。
 - `runtimeApplicationTraceEvidence.applied = false`，HP、削韧、自身能量最终公式仍不能应用。
 - 下一阶段需要寻找方法体、native 符号/字符串交叉引用、反编译产物或运行时采样证据。
+
+## 73. 阶段 5-8AT：nativeMethodSymbolEvidence 原生方法符号与方法体缺口证据
+
+阶段 5-8AT 在 `runtimeApplicationTraceEvidence` 下新增方法体可用性和原生方法符号证据。该字段用于明确区分：
+
+- 已找到：目标运行时入口的原生地址、签名、字段布局和字符串字面量。
+- 未找到：可直接确认执行顺序的 C# 方法体、IDA/Ghidra 伪代码或运行时 hook 日志。
+
+### 73.1 runtimeApplicationTraceEvidence 顶层新增字段
+
+重击样例：
+
+```json
+{
+  "methodBodyStatus": "native-addresses-and-signatures-found-method-bodies-not-extracted",
+  "methodBodyAvailabilityStatus": "native-addresses-and-signatures-found-method-bodies-not-extracted",
+  "runtimeNativeMethodSymbolCount": 27,
+  "runtimeNativeMethodSymbolKeys": [
+    "Lens.Gameplay.Modules.BigWorld.FormulaUtility$$GetOutputDamage@0x187F360",
+    "Lens.Gameplay.Modules.BigWorld.WeakBreakSystem$$OnTransmit@0x14C05A0",
+    "Lens.Gameplay.Modules.BigWorld.SPSystem$$RecoverSP@0x1483F40"
+  ],
+  "applied": false
+}
+```
+
+### 73.2 runtimeApplicationTraceEvidence.nativeMethodSymbolEvidence
+
+新增对象字段：
+
+- `status`：当前为 `native-addresses-and-signatures-found-method-bodies-not-extracted`。
+- `sourceKind`：`azpr-il2cpp-native-method-symbol-evidence`。
+- `sourceFiles[]`：记录 `dump.cs`、`script.json`、`il2cpp.h`、`stringliteral.json` 和 `DummyDll/Assembly-CSharp.dll` 的可用状态。
+- `availableEvidence[]`：记录当前已有签名、原生地址、字段布局和字符串证据。
+- `missingEvidence[]`：记录仍缺 C# 方法体、IDA/Ghidra/C++ 伪代码和运行时 hook 调用顺序。
+- `methodCount`：当前为 `27`，按 `qualifiedName@rva` 去重。
+- `chainMethodCounts[]`：当前 HP `13`、削韧 `11`、充能 `4`。`FormulaUtility.WeaknessPointChange` 同时属于 HP 和削韧链，因此链路计数可大于去重总数。
+- `targetMethods[]`：每个目标入口记录 `chains`、`className`、`method`、`qualifiedName`、`address`、`rva`、`signature`。
+- `fieldLayoutEvidence[]`：记录 `RecoverSPArgs`、`FormulaUtility.OutputDamageData`、`DamageElement`、`SPSystem`、`WeakBreakSystem` 的关键字段布局。
+- `stringLiteralEvidence[]`：记录 `SPSystem`、`GetOutputDamage`、`GetOutputWeaknessDamage`、`RecoverSP`、`WeakBreak`、`WeaknessPointChange`、`SkillDmgUp` 等字符串地址。
+- `applied`：固定为 `false`。
+
+### 73.3 三条曲线新增 nativeMethodSymbols
+
+`runtimeApplicationTraceEvidence.hpDamage.nativeMethodSymbols[]` 当前覆盖：
+
+- `AliveElementSystem.ExecuteDamageElement / OnExecuteDamageElement`
+- `DamageElement.BaseExecute / ExecuteEffect / Execute / Parse`
+- `FormulaUtility.Calculate / innerCalculate / GetFunctionParams / GetOutput / GetOutputDamage / SkillDmgUp / WeaknessPointChange`
+
+`runtimeApplicationTraceEvidence.toughnessDamage.nativeMethodSymbols[]` 当前覆盖：
+
+- `FormulaUtility.GetOutputWeaknessDamage / WeaknessPointChange`
+- `WeakBreakSystem.OnSelfTakenDamage / OnTransmit / OnWeakPointChange / UpdateWeakState / WeakBreaking / WeakBreakEnding / WeakBreakEnd / WeaknessPointUpdate`
+
+`runtimeApplicationTraceEvidence.selfEnergyChange.nativeMethodSymbols[]` 当前覆盖：
+
+- `RecoverSPArgs..ctor`
+- `DamageElement.RecoverSP`
+- `SPSystem.OnTransmit / RecoverSP`
+
+### 73.4 externalElementBindingSummary
+
+`hitBindingGapSummary.externalElementBindingSummary` 新增：
+
+- `runtimeMethodBodyStatuses`
+- `runtimeNativeMethodSymbolStatuses`
+- `runtimeNativeMethodSymbolCount`
+- `gapsWithRuntimeNativeMethodSymbols`
+
+四动作样例当前为：
+
+```json
+{
+  "runtimeMethodBodyStatuses": [
+    "native-addresses-and-signatures-found-method-bodies-not-extracted"
+  ],
+  "runtimeNativeMethodSymbolStatuses": [
+    "native-addresses-and-signatures-found-method-bodies-not-extracted"
+  ],
+  "runtimeNativeMethodSymbolCount": 27,
+  "gapsWithRuntimeNativeMethodSymbols": 3
+}
+```
+
+### 73.5 Workbench 摘要
+
+Workbench 执行矩阵摘要新增：
+
+```text
+原生入口 3/3
+```
+
+单个重击动作切换时显示：
+
+```text
+hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1/1 · 参数来源候选 1/1 · 应用入口候选 1/1 · 原生入口 1/1 · 来源差异 1/1
+```
+
+### 73.6 当前边界
+
+- `nativeMethodSymbolEvidence` 只证明目标入口可定位到原生地址，不证明方法体和执行顺序已经确认。
+- `methodBodyStatus` 从阶段 5-8AS 的 `il2cpp-dump-signatures-only` 细化为 `native-addresses-and-signatures-found-method-bodies-not-extracted`。
+- `runtimeApplicationTraceEvidence.applied = false`，HP、削韧、自身能量最终公式仍不能应用。
+- 下一阶段需要围绕目标 RVA 生成方法体级证据或运行时采样证据。

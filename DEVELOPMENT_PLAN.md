@@ -272,7 +272,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8AQ，在 `skillLevelBridge` 下新增 `relatedElementLevelBridge` 关联等级链候选；当前确认 `109001251` 的直连等级桥接仍缺失，但全量 `skillsub_ele_value` 中存在 `skillId = 10900125` 的 12 行 A/G 参数，`10900125` 可由 `elementId / 10` 推导并出现在末音 `ground slot 207`，Workbench 显示 `关联等级链 x/y`，继承/应用仍保持未确认。
 - 已完成：阶段 5-8AR，在 `hitBindingGap.externalElementBinding` 下新增 `runtimeParameterSourceEvidence` 运行时参数来源候选；当前确认 `Skill0_6 / subSkill 109001011 / hitEffects 11_109001_133, 11_109001_005 -> element 109001251 -> derivedSkillId 10900125 -> 末音 ground slot 207` 可以组成候选链，并记录 `DamageElement.Parse(skillId, ...)` 与 `SkillElementInjector.ExecuteDamageElement` 签名锚点；Workbench 显示 `参数来源候选 x/y`，但 runtime 应用仍未确认。
 - 已完成：阶段 5-8AS，在 `hitBindingGap.externalElementBinding` 下新增 `runtimeApplicationTraceEvidence` 三值运行时应用入口候选；当前 HP 链路命中 `DamageElement + FormulaUtility + OutputDamageData`，削韧链路命中 `FormulaUtility.GetOutputWeaknessDamage / WeakBreakSystem`，充能链路命中 `DamageElement.RecoverSP / RecoverSPArgs / SPSystem`，Workbench 显示 `应用入口候选 x/y`，但方法体、覆盖顺序、单位和触发条件仍未确认。
-- 下一步：阶段 5-8AT，寻找 `DamageElement`、`FormulaUtility`、`SPSystem`、`WeakBreakSystem` 的方法体或等价运行时证据，确认 `formulaParamValues`、`skillsub_ele_value.valueParam`、`weakBreakDamageRate`、`recoverSP/petRecoverSP/recoverInterval` 的实际应用顺序和单位。
+- 已完成：阶段 5-8AT，在 `runtimeApplicationTraceEvidence` 下新增 `nativeMethodSymbolEvidence` 与三链 `nativeMethodSymbols`；当前确认 27 个目标 IL2CPP 原生入口可从 `script.json` 定位到地址/签名，并由 `il2cpp.h` 字段布局和 `stringliteral.json` 字符串交叉支撑，Workbench 显示 `原生入口 x/y`；但 C# 方法体、IDA/Ghidra 伪代码、运行时调用顺序、单位和触发条件仍未确认。
+- 下一步：阶段 5-8AU，围绕 `FormulaUtility.GetOutputDamage/GetOutputWeaknessDamage/WeaknessPointChange`、`DamageElement.RecoverSP`、`SPSystem.OnTransmit/RecoverSP` 等目标 RVA 生成或导入方法体级证据，确认 `formulaParamValues`、`skillsub_ele_value.valueParam`、`weakBreakDamageRate`、`recoverSP/petRecoverSP/recoverInterval` 的实际应用顺序和单位。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

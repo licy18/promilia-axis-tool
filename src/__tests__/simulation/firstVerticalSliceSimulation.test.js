@@ -1664,6 +1664,14 @@ describe('first vertical slice simulation', () => {
           ],
           runtimeApplicationTraceChainCount: 9,
           gapsWithRuntimeApplicationTraceEvidence: 3,
+          runtimeMethodBodyStatuses: [
+            'native-addresses-and-signatures-found-method-bodies-not-extracted',
+          ],
+          runtimeNativeMethodSymbolStatuses: [
+            'native-addresses-and-signatures-found-method-bodies-not-extracted',
+          ],
+          runtimeNativeMethodSymbolCount: 27,
+          gapsWithRuntimeNativeMethodSymbols: 3,
           applied: false,
         }),
         elementSourceAlignmentSummary: expect.objectContaining({
@@ -1793,7 +1801,77 @@ describe('first vertical slice simulation', () => {
               runtimeApplicationTraceEvidence: expect.objectContaining({
                 status:
                   'runtime-application-entrypoints-found-method-bodies-missing',
-                methodBodyStatus: 'il2cpp-dump-signatures-only',
+                methodBodyStatus:
+                  'native-addresses-and-signatures-found-method-bodies-not-extracted',
+                methodBodyAvailabilityStatus:
+                  'native-addresses-and-signatures-found-method-bodies-not-extracted',
+                runtimeNativeMethodSymbolCount: 27,
+                runtimeNativeMethodSymbolKeys: expect.arrayContaining([
+                  'Lens.Gameplay.Modules.BigWorld.FormulaUtility$$GetOutputDamage@0x187F360',
+                  'Lens.Gameplay.Modules.BigWorld.WeakBreakSystem$$OnTransmit@0x14C05A0',
+                  'Lens.Gameplay.Modules.BigWorld.SPSystem$$RecoverSP@0x1483F40',
+                ]),
+                nativeMethodSymbolEvidence: expect.objectContaining({
+                  status:
+                    'native-addresses-and-signatures-found-method-bodies-not-extracted',
+                  sourceKind: 'azpr-il2cpp-native-method-symbol-evidence',
+                  methodCount: 27,
+                  sourceFiles: expect.arrayContaining([
+                    expect.objectContaining({
+                      kind: 'il2cpp-script-method-addresses',
+                      status: 'available-native-addresses-and-signatures',
+                    }),
+                    expect.objectContaining({
+                      kind: 'dummy-assembly',
+                      status: 'available-metadata-stubs-no-managed-bodies',
+                    }),
+                  ]),
+                  missingEvidence: expect.arrayContaining([
+                    'managed C# method bodies',
+                    'IDA/Ghidra/C++ pseudocode for target RVAs',
+                    'runtime hook trace confirming call order and units',
+                  ]),
+                  chainMethodCounts: expect.arrayContaining([
+                    { chain: 'hpDamage', methodCount: 13 },
+                    { chain: 'toughnessDamage', methodCount: 11 },
+                    { chain: 'selfEnergyChange', methodCount: 4 },
+                  ]),
+                  targetMethods: expect.arrayContaining([
+                    expect.objectContaining({
+                      qualifiedName:
+                        'Lens.Gameplay.Modules.BigWorld.FormulaUtility$$GetOutputDamage',
+                      rva: '0x187F360',
+                    }),
+                    expect.objectContaining({
+                      qualifiedName:
+                        'Lens.Gameplay.Modules.BigWorld.WeakBreakSystem$$WeaknessPointUpdate',
+                      rva: '0x14C39D0',
+                    }),
+                    expect.objectContaining({
+                      qualifiedName:
+                        'Lens.Gameplay.Modules.BigWorld.SPSystem$$RecoverSP',
+                      rva: '0x1483F40',
+                    }),
+                  ]),
+                  fieldLayoutEvidence: expect.arrayContaining([
+                    expect.objectContaining({
+                      className: 'DamageElement',
+                      fields: expect.arrayContaining([
+                        'm_recoverSP',
+                        'm_petRecoverSP',
+                        '_outputDamageData_k__BackingField',
+                      ]),
+                    }),
+                    expect.objectContaining({
+                      className: 'WeakBreakSystem',
+                      fields: expect.arrayContaining([
+                        'm_weakState',
+                        'm_weakElement',
+                      ]),
+                    }),
+                  ]),
+                  applied: false,
+                }),
                 parameterOverrideStatus:
                   'related-skill-level-candidate-found-execution-override-order-unconfirmed',
                 trackedValueChainCount: 3,
@@ -1812,6 +1890,13 @@ describe('first vertical slice simulation', () => {
                       ]),
                     }),
                   ]),
+                  nativeMethodSymbols: expect.arrayContaining([
+                    expect.objectContaining({
+                      qualifiedName:
+                        'Lens.Gameplay.Modules.BigWorld.FormulaUtility$$GetOutputDamage',
+                      rva: '0x187F360',
+                    }),
+                  ]),
                   applied: false,
                 }),
                 toughnessDamage: expect.objectContaining({
@@ -1825,6 +1910,13 @@ describe('first vertical slice simulation', () => {
                         'WeaknessPointUpdate',
                         'WeakBreaking',
                       ]),
+                    }),
+                  ]),
+                  nativeMethodSymbols: expect.arrayContaining([
+                    expect.objectContaining({
+                      qualifiedName:
+                        'Lens.Gameplay.Modules.BigWorld.WeakBreakSystem$$OnTransmit',
+                      rva: '0x14C05A0',
                     }),
                   ]),
                   applied: false,
@@ -1852,10 +1944,17 @@ describe('first vertical slice simulation', () => {
                       ]),
                     }),
                   ]),
+                  nativeMethodSymbols: expect.arrayContaining([
+                    expect.objectContaining({
+                      qualifiedName:
+                        'Lens.Gameplay.Modules.BigWorld.SPSystem$$RecoverSP',
+                      rva: '0x1483F40',
+                    }),
+                  ]),
                   applied: false,
                 }),
                 unresolved: expect.arrayContaining([
-                  'il2cpp-method-body-missing',
+                  'native-method-body-decompilation-pending',
                   'runtime-parameter-override-order-unconfirmed',
                   'hp-toughness-energy-application-points-unconfirmed',
                 ]),

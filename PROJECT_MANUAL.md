@@ -3641,6 +3641,43 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8AT 目标：优先寻找 `DamageElement`、`FormulaUtility`、`SPSystem`、`WeakBreakSystem` 的方法体或等价运行时证据，确认 `formulaParamValues`、`skillsub_ele_value.valueParam`、`weakBreakDamageRate`、`recoverSP/petRecoverSP/recoverInterval` 的实际应用顺序和单位。
 - 若 IL2CPP dump 无法提供方法体，改走 AzPr Extractor 里的 native 符号/字符串交叉引用、反编译产物或可插桩运行时日志。
 
+### 2026-07-08：阶段 5-8AT 原生方法符号与方法体缺口固化
+
+本轮完成：
+
+- 已盘点 `C:/Codex/AzPr Extractor/outputs/il2cpp-dump`：当前可用证据包括 `dump.cs` 签名/字段、`script.json` 原生方法地址与签名、`il2cpp.h` 字段布局、`stringliteral.json` 入口字符串，以及 `DummyDll/Assembly-CSharp.dll` 元数据 stub。
+- 未发现可直接读取的 C# 方法体、IDA/Ghidra 伪代码或目标函数运行时 hook 日志；因此这一阶段只确认“入口可定位”，不确认公式顺序。
+- `runtimeApplicationTraceEvidence.methodBodyStatus` 更新为 `native-addresses-and-signatures-found-method-bodies-not-extracted`。
+- `runtimeApplicationTraceEvidence` 新增 `nativeMethodSymbolEvidence`，记录 27 个目标原生方法键、字段布局证据、字符串字面量证据、可用/缺失证据清单。
+- HP 链新增 `nativeMethodSymbols`，覆盖 `AliveElementSystem.ExecuteDamageElement`、`DamageElement.Execute/Parse`、`FormulaUtility.GetOutputDamage/Calculate/GetFunctionParams/SkillDmgUp/WeaknessPointChange` 等 13 个入口。
+- 削韧链新增 `nativeMethodSymbols`，覆盖 `FormulaUtility.GetOutputWeaknessDamage/WeaknessPointChange`、`WeakBreakSystem.OnTransmit/WeaknessPointUpdate/WeakBreaking/WeakBreakEnd` 等 11 个入口。
+- 充能链新增 `nativeMethodSymbols`，覆盖 `DamageElement.RecoverSP`、`RecoverSPArgs..ctor`、`SPSystem.OnTransmit/RecoverSP` 4 个入口。
+- `externalElementBindingSummary` 新增 `runtimeMethodBodyStatuses`、`runtimeNativeMethodSymbolStatuses`、`runtimeNativeMethodSymbolCount`、`gapsWithRuntimeNativeMethodSymbols`。
+- Workbench 执行矩阵摘要新增 `原生入口 x/y`，切换到重击动作时可以看到 `原生入口 1/1`。
+
+当前四动作原生入口候选结果：
+
+- `externalElementBindingSummary.gapsWithRuntimeNativeMethodSymbols = 3/3`。
+- `runtimeNativeMethodSymbolCount = 27`，按 `qualifiedName@rva` 去重。
+- 单动作 `runtimeApplicationTraceEvidence.runtimeNativeMethodSymbolCount = 27`。
+- 代表性 RVA：`FormulaUtility.GetOutputDamage = 0x187F360`，`FormulaUtility.GetOutputWeaknessDamage = 0x1885FF0`，`WeakBreakSystem.OnTransmit = 0x14C05A0`，`SPSystem.RecoverSP = 0x1483F40`，`DamageElement.RecoverSP = 0x138EEE0`。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+
+当前边界：
+
+- 阶段 5-8AT 证明的是三值运行时入口已经可以从 IL2CPP 导出定位到原生地址和字段布局。
+- 仍没有方法体/伪代码/运行时调用顺序，不能确认 `formulaParamValues` 与 `skillsub_ele_value.valueParam` 的覆盖点。
+- `weakBreakDamageRate = 7000`、`recoverSP = 5899`、`petRecoverSP = 22999`、`recoverInterval = 9999` 仍是字段候选，削韧单位、充能归属、共享比例和冷却/间隔触发都未确认。
+- `runtimeApplicationTraceEvidence.applied = false`，不能直接改写 HP、削韧或自身能量最终公式。
+
+下一步：
+
+- 阶段 5-8AU 目标：为 5-8AT 固化的目标 RVA 生成或导入方法体级证据，优先走 Ghidra/IDA 反汇编、Il2CppDumper 脚本交叉引用或运行时 hook 采样。
+- 重点验证 `FormulaUtility.GetOutputDamage/GetOutputWeaknessDamage/WeaknessPointChange`、`DamageElement.RecoverSP`、`SPSystem.OnTransmit/RecoverSP` 的调用顺序、单位缩放、参数覆盖点和触发条件。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
