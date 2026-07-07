@@ -34,6 +34,25 @@
       </div>
     </div>
 
+    <div class="action-result-list" data-testid="workbench-action-result-sources">
+      <div class="diagnostic-heading source-heading">
+        <span>三值来源</span>
+        <strong>{{ actionResultTimeline.length }}</strong>
+      </div>
+      <div
+        v-for="entry in actionResultTimeline"
+        :key="entry.actionId"
+        class="action-result-row"
+        data-testid="workbench-action-result-source-row"
+      >
+        <div class="damage-row-main">
+          <span>{{ entry.actionName }}</span>
+          <small>{{ formatActionResultSource(entry) }}</small>
+        </div>
+        <strong>{{ formatActionResultValues(entry) }}</strong>
+      </div>
+    </div>
+
     <div class="timeline-diagnostics">
       <div class="diagnostic-heading">
         <span>时间轴诊断</span>
@@ -91,6 +110,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  actionResultTimeline: {
+    type: Array,
+    default: () => [],
+  },
   insertionDiagnostics: {
     type: Object,
     default: () => ({
@@ -138,6 +161,44 @@ function formatMultiplier(value) {
     return '-';
   }
   return `${number.toFixed(2)}x`;
+}
+
+function formatActionResultValues(entry) {
+  return [
+    `伤害 ${formatNumber(entry.hpDamage?.value)}`,
+    `韧性 ${formatNumber(entry.toughnessDamage?.value)}`,
+    `能量 ${formatSignedNumber(entry.selfEnergyChange?.value)}`,
+  ].join(' · ');
+}
+
+function formatActionResultSource(entry) {
+  const hp = formatChainSource(entry.hpDamage?.sourceEvidence);
+  const toughness = formatChainSource(entry.toughnessDamage?.sourceEvidence);
+  const energy = formatChainSource(entry.selfEnergyChange?.sourceEvidence);
+  return `HP ${hp} / 削韧 ${toughness} / 充能 ${energy}`;
+}
+
+function formatChainSource(sourceEvidence) {
+  if (!sourceEvidence) {
+    return '无候选';
+  }
+  if (sourceEvidence.candidateCount > 0) {
+    return `${sourceEvidence.candidateCount} 个候选 ${formatElementIds(sourceEvidence.matchedElementConfigIds)}`;
+  }
+  if (sourceEvidence.logicElementIds?.length > 0) {
+    return `未桥接 ${formatElementIds(sourceEvidence.logicElementIds)}`;
+  }
+  return '未映射';
+}
+
+function formatElementIds(ids = []) {
+  const values = ids.filter((id) => Number.isFinite(Number(id)));
+  return values.length > 0 ? `(${values.join(', ')})` : '';
+}
+
+function formatSignedNumber(value) {
+  const number = Math.round(Number(value) || 0);
+  return number > 0 ? `+${number.toLocaleString('zh-CN')}` : number.toLocaleString('zh-CN');
 }
 
 function formatOverlapRange(item) {
@@ -211,6 +272,12 @@ h2 {
   padding: 0 14px 14px;
 }
 
+.action-result-list {
+  display: grid;
+  gap: 8px;
+  padding: 0 14px 14px;
+}
+
 .damage-row {
   display: flex;
   align-items: center;
@@ -219,6 +286,31 @@ h2 {
   padding: 9px 10px;
   border-radius: 4px;
   background: rgba(230, 162, 60, 0.1);
+}
+
+.action-result-row {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding: 9px 10px;
+  border-left: 3px solid #79c7b9;
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.1);
+}
+
+.action-result-row strong {
+  overflow-wrap: anywhere;
+  color: #dff9f3;
+  font-size: 12px;
+}
+
+.action-result-row span {
+  color: #9ce0d2;
+}
+
+.action-result-row small {
+  color: #b8c0c7;
+  font-size: 11px;
 }
 
 .damage-row-main {
@@ -272,6 +364,14 @@ h2 {
 
 .diagnostic-heading.neutral {
   background: rgba(230, 162, 60, 0.08);
+}
+
+.diagnostic-heading.source-heading {
+  background: rgba(121, 199, 185, 0.08);
+}
+
+.diagnostic-heading.source-heading strong {
+  color: #9ce0d2;
 }
 
 .diagnostic-heading.neutral strong {

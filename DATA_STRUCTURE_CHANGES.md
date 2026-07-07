@@ -2436,3 +2436,105 @@ Unity `m_PathID` 是 64 位整数，JavaScript `JSON.parse` 会把它读成普�
 - `damageElementFieldMappingEvidence` 是字段候选映射，不是最终公式。
 - `skillsub_ele_value.valueParam` 已能桥接部分 elementId 的等级值，但 `valueParam` 与 `formulaParamValues` 的覆盖关系、缩放关系和公式输入顺序仍未确认。
 - 下一阶段应把这些候选字段接入 `actionResultTimeline[]` source 层和 Workbench 展示层，保持未确认公式 `applied: false`，再继续验证 HP、削韧、充能三条最终计算链。
+
+## 39. 2026-07-08 actionResultTimeline 三值 sourceEvidence 摘要
+
+阶段 5-8N 把 `damageElementFieldMappingEvidence` 接入 `simulationResult.actionResultTimeline[]`。每个动作的 HP 伤害、敌人韧性削减、自身能量变化三槽都可以携带 `sourceEvidence`，用于说明当前动作能追溯到哪些 `TDamageElementParams` 候选字段。
+
+### 39.1 hpDamage.sourceEvidence
+
+```javascript
+{
+  "hpDamage": {
+    "value": 12461,
+    "applied": true,
+    "status": "raw-hp-projection",
+    "sourceEvidence": {
+      "kind": "azpr-damage-element-field-mapping-evidence",
+      "file": "src/data/generated/skill-asset-evidence.json",
+      "status": "candidate-fields-found",
+      "skillId": 10900101,
+      "actionVariantIndex": 0,
+      "actionVariantLabel": "普攻",
+      "logicElementIds": [109001081, 109001306],
+      "matchedElementConfigIds": [109001081, 109001306],
+      "unbridgedElementConfigIds": [109001251],
+      "candidateCount": 2,
+      "bridgeMatchedLevelRows": 24
+    }
+  }
+}
+```
+
+HP 槽仍使用当前 raw 投影值；`sourceEvidence` 只是候选字段来源。`hpDamage.formulaBreakdown.layers.damageElementFields` 会把这些候选字段作为未应用层记录。
+
+### 39.2 toughnessDamage.sourceEvidence
+
+```javascript
+{
+  "toughnessDamage": {
+    "value": 0,
+    "applied": false,
+    "status": "candidate-fields-found-formula-unmapped",
+    "sourceEvidence": {
+      "status": "candidate-fields-found",
+      "candidateCount": 2,
+      "candidates": [
+        {
+          "elementConfigId": 109001081,
+          "fieldCandidate": {
+            "weakBreakDamageRate": 7000,
+            "hitType": 1,
+            "knockBackId": 1,
+            "knockBackForce": 1
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+削韧槽找到候选字段后会从纯 `formula-unmapped` 升级为 `candidate-fields-found-formula-unmapped`，但仍保持 `applied: false` 和 `value: 0`。
+
+### 39.3 selfEnergyChange.sourceEvidence
+
+```javascript
+{
+  "selfEnergyChange": {
+    "value": 0,
+    "applied": false,
+    "status": "candidate-fields-found-charge-formula-unmapped",
+    "sourceEvidence": {
+      "status": "candidate-fields-found",
+      "candidateCount": 2,
+      "candidates": [
+        {
+          "elementConfigId": 109001081,
+          "fieldCandidate": {
+            "recoverSP": 2700,
+            "petRecoverSP": 10399,
+            "recoverInterval": 9999
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+若动作同时有显式 SP 消耗，`selfEnergyChange.value` 仍只应用显式资源 delta，`sourceEvidence` 只说明后续充能公式候选字段。
+
+### 39.4 Workbench 展示
+
+Workbench 分析面板新增“三值来源”列表，当前展示：
+
+- 每个动作的 HP / 削韧 / 充能候选数量。
+- 已桥接的 elementId，例如 `109001081, 109001306`。
+- 当前动作三值结果摘要，例如 `伤害 12,461 · 韧性 0 · 能量 0`。
+
+### 39.5 当前边界
+
+- `sourceEvidence` 不是最终公式结果，只证明动作级结果可以追溯到候选字段。
+- 当前动作形态和 element 的匹配仍是 `skillId + logicModel.elementValues[].elementId` 级别，尚未精确到命中帧或动作段。
+- 下一阶段需要验证 `valueParam` 和 `formulaParamValues` 的真实覆盖/缩放关系，再决定是否把候选字段推进到 applied 公式层。

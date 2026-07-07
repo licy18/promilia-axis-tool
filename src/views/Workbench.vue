@@ -99,6 +99,7 @@
           :summary="simulationResult.summary"
           :diagnostics="simulationResult.diagnostics"
           :damage-timeline="simulationResult.damageTimeline"
+          :action-result-timeline="simulationResult.actionResultTimeline"
           :insertion-diagnostics="insertionDiagnostics"
           :timeline-diagnostics="timelineDiagnostics"
         />

@@ -31,6 +31,11 @@ describe('Workbench view', () => {
     expect(text).toContain('DAMAGE_PROJECTED');
     expect(text).toContain('stage5-damage-layer-breakdown-v1');
     expect(text).toContain('攻击 1,920 × 倍率 649%');
+    expect(text).toContain('三值来源');
+    expect(text).toContain(
+      'HP 2 个候选 (109001081, 109001306) / 削韧 2 个候选 (109001081, 109001306) / 充能 2 个候选 (109001081, 109001306)'
+    );
+    expect(text).toContain('伤害 12,461 · 韧性 0 · 能量 0');
     expect(text).toContain('low');
   });
 

@@ -2324,6 +2324,36 @@ Endaxis 参考边界：
 - 每个动作的 `actionResultTimeline[]` 应能显示候选 HP、削韧、充能来源字段，但仍保持未确认公式为 `applied: false`。
 - 优先用末音 `10900101` 的 `109001081` / `109001306` 桥接样本，建立 `skill level valueParam -> element field mapping -> action result source` 的可追溯链路，再继续验证公式缩放。
 
+### 2026-07-08：阶段 5-8N 动作三值 source 层和 Workbench 展示落地
+
+本轮完成：
+
+- `actionResultTimeline[]` 的 `hpDamage`、`toughnessDamage`、`selfEnergyChange` 三槽新增 `sourceEvidence`，统一引用 `skill-asset-evidence.json.damageElementFieldMappingEvidence`。
+- projection 层按 `skillId + action.logicModel.elementValues[].elementId` 匹配 damage element 候选；当前末音 `10900101` 的动作能桥接到 `109001081`、`109001306` 两个候选，`109001251` 保持 unbridged 记录。
+- HP 槽保留当前 raw 投影已应用状态，同时在 `formulaBreakdown.layers.damageElementFields` 中挂上未应用的 `TDamageElementParams` 候选字段来源。
+- 削韧槽在找到候选字段时从纯 `formula-unmapped` 升级为 `candidate-fields-found-formula-unmapped`，但数值仍为 0、`applied: false`。
+- 充能槽在找到 `recoverSP/petRecoverSP/recoverInterval` 候选字段时记录 source；若动作有显式 SP 消耗，仍只应用显式 delta，充能获取公式保持未应用。
+- Workbench 分析面板新增“三值来源”列表，按动作显示 HP / 削韧 / 充能候选 elementId 和当前动作三值结果。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、11 条测试通过。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、33 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1380 KB。
+
+当前边界：
+
+- 5-8N 只把候选字段接入动作结果 source 层和 UI 展示层，不改变 HP、削韧、充能的最终数值公式。
+- 当前动作形态与 damage element 仍只通过同技能等级的 elementId 集合粗桥接，尚未确认“普通攻击/重击/闪击/跃击”等动作形态具体对应哪个 element 或命中帧。
+- `skillsub_ele_value.valueParam` 与 `formulaParamValues` 的覆盖、缩放、替换顺序仍未确认。
+
+下一步：
+
+- 阶段 5-8O 目标：验证 `skillsub_ele_value.valueParam` 与 `TDamageElementParams.formulaParamValues` 的缩放/覆盖关系。
+- 优先比较末音 `109001081` / `109001306` 的 1-12 级 `valueParam` 与 `formulaParamValues` 槽位，确认参数 1、7 是否覆盖 A/G 槽或另有公式入口。
+- 若缩放关系仍不能确认，继续从 `element_formula`、IL2CPP `DamageElement` 运行时字段和 Extractor 侧 typetree 中寻找实际公式执行链。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

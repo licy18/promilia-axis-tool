@@ -251,29 +251,113 @@ describe('first vertical slice simulation', () => {
         value: 12461,
         applied: true,
         status: 'raw-hp-projection',
+        sourceEvidence: {
+          status: 'candidate-fields-found',
+          skillId: 10900101,
+          actionVariantIndex: 0,
+          actionVariantLabel: '普攻',
+          logicElementIds: [109001081, 109001306],
+          matchedElementConfigIds: [109001081, 109001306],
+          unbridgedElementConfigIds: [109001251],
+          candidateCount: 2,
+          bridgeMatchedLevelRows: 24,
+          candidates: expect.arrayContaining([
+            expect.objectContaining({
+              elementConfigId: 109001081,
+              fieldCandidate: expect.objectContaining({
+                formulaSlotCandidates: expect.arrayContaining([
+                  expect.objectContaining({
+                    slot: 2,
+                    rawValue: 1900,
+                  }),
+                ]),
+              }),
+              skillLevelBridge: expect.objectContaining({
+                status: 'skillsub-element-level-bridge-found',
+                levelRows: 12,
+              }),
+            }),
+          ]),
+        },
+        formulaBreakdown: {
+          unappliedLayerKeys: expect.arrayContaining([
+            'damageElementFields',
+          ]),
+          layers: {
+            damageElementFields: expect.objectContaining({
+              applied: false,
+              status: 'candidate-fields-found-formula-unmapped',
+            }),
+          },
+        },
       },
       toughnessDamage: {
         value: 0,
         applied: false,
-        status: 'formula-unmapped',
+        status: 'candidate-fields-found-formula-unmapped',
+        sourceEvidence: {
+          status: 'candidate-fields-found',
+          candidateCount: 2,
+          matchedElementConfigIds: [109001081, 109001306],
+          candidates: expect.arrayContaining([
+            expect.objectContaining({
+              elementConfigId: 109001081,
+              fieldCandidate: expect.objectContaining({
+                weakBreakDamageRate: 7000,
+                hitType: 1,
+                knockBackId: 1,
+                knockBackForce: 1,
+              }),
+            }),
+          ]),
+        },
         formulaBreakdown: {
+          status: 'candidate-fields-found-formula-unmapped',
           unappliedLayerKeys: [
             'actionToughnessValue',
             'enemyToughnessState',
             'weaknessOrBreakModifier',
           ],
+          layers: {
+            actionToughnessValue: expect.objectContaining({
+              applied: false,
+              status: 'candidate-fields-found-formula-unmapped',
+            }),
+          },
         },
       },
       selfEnergyChange: {
         value: 0,
         applied: false,
-        status: 'charge-formula-unmapped',
+        status: 'candidate-fields-found-charge-formula-unmapped',
+        sourceEvidence: {
+          status: 'candidate-fields-found',
+          candidateCount: 2,
+          matchedElementConfigIds: [109001081, 109001306],
+          candidates: expect.arrayContaining([
+            expect.objectContaining({
+              elementConfigId: 109001081,
+              fieldCandidate: expect.objectContaining({
+                recoverSP: 2700,
+                petRecoverSP: 10399,
+                recoverInterval: 9999,
+              }),
+            }),
+          ]),
+        },
         formulaBreakdown: {
+          status: 'candidate-fields-found-charge-formula-unmapped',
           unappliedLayerKeys: [
             'actionChargeGain',
             'hitEnergyGain',
             'passiveEnergyModifiers',
           ],
+          layers: {
+            actionChargeGain: expect.objectContaining({
+              applied: false,
+              status: 'candidate-fields-found-formula-unmapped',
+            }),
+          },
         },
       },
     });
@@ -582,6 +666,14 @@ describe('first vertical slice simulation', () => {
       value: -Number(spSkill.spCost),
       applied: true,
       status: 'explicit-cost-applied-charge-formula-unmapped',
+      sourceEvidence: {
+        status: 'no-damage-element-field-mapping-for-skill',
+        skillId: spSkill.id,
+        logicElementIds: [101003118, 101003122],
+        candidateCount: 0,
+        matchedElementConfigIds: [],
+        candidates: [],
+      },
       formulaBreakdown: {
         appliedLayerKeys: ['explicitResourceDelta'],
         unappliedLayerKeys: [
@@ -589,6 +681,11 @@ describe('first vertical slice simulation', () => {
           'hitEnergyGain',
           'passiveEnergyModifiers',
         ],
+        layers: {
+          actionChargeGain: expect.objectContaining({
+            status: 'formula-unmapped',
+          }),
+        },
       },
     });
     expect(result.eventLog.map(event => event.type)).toContain(

@@ -1,3 +1,18 @@
+import skillAssetEvidence from '../../data/generated/skill-asset-evidence.json';
+
+const SKILL_ASSET_EVIDENCE_PATH =
+  'src/data/generated/skill-asset-evidence.json';
+const DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE =
+  skillAssetEvidence.damageElementFieldMappingEvidence ?? {};
+const DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE_KIND =
+  DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE.sourceKind ??
+  'azpr-damage-element-field-mapping-evidence';
+const DAMAGE_ELEMENT_FIELD_MAPPING_BY_SKILL_ID = new Map(
+  (DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE.skills ?? [])
+    .map(skill => [Number(skill.skillId), skill])
+    .filter(([skillId]) => Number.isFinite(skillId))
+);
+
 export function projectSimulationResult({
   scenario,
   eventLog,
@@ -142,6 +157,7 @@ function buildActionResultTimeline({ scenario, damageEvents, resourceEvents }) {
     const actionDamageEvents = damageByActionId.get(action.id) ?? [];
     const actionResourceEvents = resourcesByActionId.get(action.id) ?? [];
     const primaryDamageEvent = actionDamageEvents[0] ?? null;
+    const damageElementSource = createActionDamageElementSource(action);
 
     return {
       actionId: action.id,
@@ -154,9 +170,21 @@ function buildActionResultTimeline({ scenario, damageEvents, resourceEvents }) {
       targetId: action.targetId ?? null,
       targetName: action.target?.name ?? null,
       skillId: action.skillId ?? null,
-      hpDamage: createHpDamageResult(action, primaryDamageEvent),
-      toughnessDamage: createToughnessDamageResult(action, primaryDamageEvent),
-      selfEnergyChange: createSelfEnergyChangeResult(action, actionResourceEvents),
+      hpDamage: createHpDamageResult(
+        action,
+        primaryDamageEvent,
+        damageElementSource
+      ),
+      toughnessDamage: createToughnessDamageResult(
+        action,
+        primaryDamageEvent,
+        damageElementSource
+      ),
+      selfEnergyChange: createSelfEnergyChangeResult(
+        action,
+        actionResourceEvents,
+        damageElementSource
+      ),
       sourceEventTypes: [
         ...actionDamageEvents.map(event => event.type),
         ...actionResourceEvents.map(event => event.type),
@@ -165,7 +193,7 @@ function buildActionResultTimeline({ scenario, damageEvents, resourceEvents }) {
   });
 }
 
-function createHpDamageResult(action, damageEvent) {
+function createHpDamageResult(action, damageEvent, damageElementSource) {
   if (!damageEvent) {
     return {
       value: 0,
@@ -180,6 +208,10 @@ function createHpDamageResult(action, damageEvent) {
           ? 'Skill action has no parseable damage multiplier.'
           : 'Non-skill action does not project HP damage.',
       }),
+      sourceEvidence: createDamageElementChainSource(
+        damageElementSource,
+        'hpDamage'
+      ),
     };
   }
 
@@ -189,22 +221,43 @@ function createHpDamageResult(action, damageEvent) {
     status: 'raw-hp-projection',
     precision: damageEvent.payload.precision,
     confidence: damageEvent.payload.confidence,
-    formulaBreakdown: damageEvent.payload.formulaBreakdown,
+    formulaBreakdown: attachDamageElementSourceToHpBreakdown(
+      damageEvent.payload.formulaBreakdown,
+      damageElementSource
+    ),
+    sourceEvidence: createDamageElementChainSource(
+      damageElementSource,
+      'hpDamage'
+    ),
   };
 }
 
-function createToughnessDamageResult(action, damageEvent) {
+function createToughnessDamageResult(action, damageEvent, damageElementSource) {
   const hasSkillDamage = isSkillAction(action) && Boolean(damageEvent);
+  const sourceEvidence = createDamageElementChainSource(
+    damageElementSource,
+    'toughnessDamage'
+  );
+  const hasCandidateFields = sourceEvidence?.status === 'candidate-fields-found';
 
   return {
     value: 0,
     applied: false,
-    status: hasSkillDamage ? 'formula-unmapped' : 'not-applicable',
+    status: hasSkillDamage
+      ? hasCandidateFields
+        ? 'candidate-fields-found-formula-unmapped'
+        : 'formula-unmapped'
+      : 'not-applicable',
     precision: 'unmapped',
-    confidence: 'unknown',
+    confidence: hasCandidateFields ? 'source-evidence' : 'unknown',
+    sourceEvidence,
     formulaBreakdown: {
       version: 'stage5-toughness-breakdown-placeholder-v1',
-      status: hasSkillDamage ? 'formula-unmapped' : 'not-applicable',
+      status: hasSkillDamage
+        ? hasCandidateFields
+          ? 'candidate-fields-found-formula-unmapped'
+          : 'formula-unmapped'
+        : 'not-applicable',
       expression: null,
       result: 0,
       appliedLayerKeys: [],
@@ -220,10 +273,14 @@ function createToughnessDamageResult(action, damageEvent) {
           label: '动作削韧值',
           applied: false,
           status: hasSkillDamage
-            ? 'skill-effect-node-unmapped'
+            ? hasCandidateFields
+              ? 'candidate-fields-found-formula-unmapped'
+              : 'skill-effect-node-unmapped'
             : 'not-applicable',
-          source:
-            'pending skill_control/effect node mapping for toughness damage',
+          source: sourceEvidence ?? {
+            status: 'pending-skill-control-effect-node-mapping',
+            note: 'pending skill_control/effect node mapping for toughness damage',
+          },
         },
         enemyToughnessState: {
           label: '敌人韧性状态',
@@ -237,14 +294,20 @@ function createToughnessDamageResult(action, damageEvent) {
       limitations: hasSkillDamage
         ? [
             'Toughness damage must be mapped independently from HP damage.',
-            'Current skill_control evidence is not yet resolved to toughness effect nodes.',
+            hasCandidateFields
+              ? 'TDamageElementParams toughness candidate fields are linked, but unit scale and target state rules are still unmapped.'
+              : 'Current skill_control evidence is not yet resolved to toughness effect nodes.',
           ]
         : [],
     },
   };
 }
 
-function createSelfEnergyChangeResult(action, resourceEvents) {
+function createSelfEnergyChangeResult(
+  action,
+  resourceEvents,
+  damageElementSource
+) {
   const energyEvents = resourceEvents.filter(event =>
     ['sp', 'energy'].includes(String(event.payload.resource))
   );
@@ -254,6 +317,11 @@ function createSelfEnergyChangeResult(action, resourceEvents) {
   );
   const hasExplicitDelta = energyEvents.length > 0;
   const skillAction = isSkillAction(action);
+  const sourceEvidence = createDamageElementChainSource(
+    damageElementSource,
+    'selfEnergyChange'
+  );
+  const hasCandidateFields = sourceEvidence?.status === 'candidate-fields-found';
 
   return {
     value: explicitDelta,
@@ -263,11 +331,18 @@ function createSelfEnergyChangeResult(action, resourceEvents) {
         ? 'explicit-cost-applied-charge-formula-unmapped'
         : 'explicit-resource-delta-applied'
       : skillAction
-        ? 'charge-formula-unmapped'
+        ? hasCandidateFields
+          ? 'candidate-fields-found-charge-formula-unmapped'
+          : 'charge-formula-unmapped'
         : 'not-applicable',
     resource: energyEvents[0]?.payload.resource ?? 'sp',
     precision: hasExplicitDelta ? 'explicit-delta' : 'unmapped',
-    confidence: hasExplicitDelta ? energyEvents[0].payload.confidence : 'unknown',
+    confidence: hasExplicitDelta
+      ? energyEvents[0].payload.confidence
+      : hasCandidateFields
+        ? 'source-evidence'
+        : 'unknown',
+    sourceEvidence,
     formulaBreakdown: {
       version: 'stage5-self-energy-breakdown-placeholder-v1',
       status: hasExplicitDelta
@@ -275,7 +350,9 @@ function createSelfEnergyChangeResult(action, resourceEvents) {
           ? 'explicit-cost-applied-charge-formula-unmapped'
           : 'explicit-resource-delta-applied'
         : skillAction
-          ? 'charge-formula-unmapped'
+          ? hasCandidateFields
+            ? 'candidate-fields-found-charge-formula-unmapped'
+            : 'charge-formula-unmapped'
           : 'not-applicable',
       expression: hasExplicitDelta
         ? 'sum(explicit self resource deltas)'
@@ -300,18 +377,232 @@ function createSelfEnergyChangeResult(action, resourceEvents) {
         actionChargeGain: {
           label: '动作充能',
           applied: false,
-          status: skillAction ? 'formula-unmapped' : 'not-applicable',
-          source:
-            'pending skill_control/effect node and skillsub_logic energy mapping',
+          status: skillAction
+            ? hasCandidateFields
+              ? 'candidate-fields-found-formula-unmapped'
+              : 'formula-unmapped'
+            : 'not-applicable',
+          source: sourceEvidence ?? {
+            status: 'pending-skill-control-effect-node-and-skillsub-logic-mapping',
+            note: 'pending skill_control/effect node and skillsub_logic energy mapping',
+          },
         },
       },
       limitations: skillAction
         ? [
             'Current result applies explicit skill cost when present.',
-            'Energy gain/charge formula is still unmapped and must be tracked separately from HP damage.',
+            hasCandidateFields
+              ? 'TDamageElementParams recoverSP candidate fields are linked, but owner, sharing and interval trigger rules are still unmapped.'
+              : 'Energy gain/charge formula is still unmapped and must be tracked separately from HP damage.',
           ]
         : [],
     },
+  };
+}
+
+function createActionDamageElementSource(action) {
+  if (!isSkillAction(action)) {
+    return null;
+  }
+
+  const skillId = Number(action.skillId);
+  const skillMapping = DAMAGE_ELEMENT_FIELD_MAPPING_BY_SKILL_ID.get(skillId);
+  const logicElementRows = action.logicModel?.elementValues ?? [];
+  const logicElementIds = uniqueNumbers(
+    logicElementRows.map(row => row.elementId)
+  );
+
+  if (!skillMapping) {
+    return {
+      kind: DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE_KIND,
+      file: SKILL_ASSET_EVIDENCE_PATH,
+      status: 'no-damage-element-field-mapping-for-skill',
+      skillId,
+      actionVariantIndex: Number(
+        action.actionVariantIndex ?? action.damageSegmentIndex ?? 0
+      ),
+      actionVariantLabel:
+        action.selectedActionVariant?.label ??
+        action.selectedDamageSegment?.label ??
+        null,
+      logicElementIds,
+      matchedElementConfigIds: [],
+      unbridgedElementConfigIds: [],
+      candidates: [],
+    };
+  }
+
+  const fieldMappings = skillMapping.fieldMappings ?? [];
+  const matchedMappings = fieldMappings
+    .filter(mapping => logicElementIds.includes(Number(mapping.elementConfigId)))
+    .sort(
+      (left, right) =>
+        Number(left.elementConfigId) - Number(right.elementConfigId)
+    );
+  const unbridgedElementConfigIds = fieldMappings
+    .filter(
+      mapping =>
+        mapping.skillLevelBridge?.status ===
+        'skillsub-element-level-bridge-missing'
+    )
+    .map(mapping => Number(mapping.elementConfigId))
+    .filter(Number.isFinite);
+
+  return {
+    kind: DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE_KIND,
+    file: SKILL_ASSET_EVIDENCE_PATH,
+    status:
+      matchedMappings.length > 0
+        ? 'candidate-fields-bridged-to-action-element-values'
+        : 'candidate-fields-found-no-action-element-bridge',
+    skillId,
+    actionVariantIndex: Number(
+      action.actionVariantIndex ?? action.damageSegmentIndex ?? 0
+    ),
+    actionVariantLabel:
+      action.selectedActionVariant?.label ??
+      action.selectedDamageSegment?.label ??
+      null,
+    logicElementIds,
+    matchedElementConfigIds: matchedMappings.map(mapping =>
+      Number(mapping.elementConfigId)
+    ),
+    unbridgedElementConfigIds,
+    totalDamageElementCandidates: fieldMappings.length,
+    bridgeMatchedLevelRows: matchedMappings.reduce(
+      (sum, mapping) => sum + (mapping.skillLevelBridge?.levelRows ?? 0),
+      0
+    ),
+    candidates: matchedMappings.map(compactDamageElementMapping),
+    note:
+      'TDamageElementParams fields are linked as candidate source evidence only; final HP/toughness/energy formulas remain unmapped.',
+  };
+}
+
+function compactDamageElementMapping(mapping) {
+  return {
+    elementConfigId: Number(mapping.elementConfigId),
+    pathId: mapping.pathId,
+    containerPath: mapping.containerPath,
+    mediaPackNames: mapping.mediaPackNames ?? [],
+    hpDamage: mapping.hpDamage
+      ? {
+          status: mapping.hpDamage.status,
+          formulaFunctionIds: mapping.hpDamage.formulaFunctionIds,
+          formulaSlotCandidates: mapping.hpDamage.formulaSlotCandidates,
+          damageFields: mapping.hpDamage.damageFields,
+        }
+      : null,
+    toughnessDamage: mapping.toughnessDamage
+      ? {
+          status: mapping.toughnessDamage.status,
+          weakBreakDamageRate: mapping.toughnessDamage.weakBreakDamageRate,
+          hitType: mapping.toughnessDamage.hitType,
+          knockBackId: mapping.toughnessDamage.knockBackId,
+          knockBackForce: mapping.toughnessDamage.knockBackForce,
+          interruptPriority: mapping.toughnessDamage.interruptPriority,
+          useOneBreak: mapping.toughnessDamage.useOneBreak,
+        }
+      : null,
+    selfEnergyChange: mapping.selfEnergyChange
+      ? {
+          status: mapping.selfEnergyChange.status,
+          recoverSP: mapping.selfEnergyChange.recoverSP,
+          petRecoverSP: mapping.selfEnergyChange.petRecoverSP,
+          recoverInterval: mapping.selfEnergyChange.recoverInterval,
+          ownerScope: mapping.selfEnergyChange.ownerScope,
+        }
+      : null,
+    skillLevelBridge: {
+      status: mapping.skillLevelBridge?.status ?? 'unknown',
+      levelRows: mapping.skillLevelBridge?.levelRows ?? 0,
+      parameterIds: mapping.skillLevelBridge?.parameterIds ?? [],
+      varyingParameterIds: mapping.skillLevelBridge?.varyingParameterIds ?? [],
+      firstLevel: mapping.skillLevelBridge?.firstLevel
+        ? {
+            level: mapping.skillLevelBridge.firstLevel.level,
+            valueParam: mapping.skillLevelBridge.firstLevel.valueParam,
+          }
+        : null,
+      lastLevel: mapping.skillLevelBridge?.lastLevel
+        ? {
+            level: mapping.skillLevelBridge.lastLevel.level,
+            valueParam: mapping.skillLevelBridge.lastLevel.valueParam,
+          }
+        : null,
+    },
+  };
+}
+
+function createDamageElementChainSource(damageElementSource, chainKey) {
+  if (!damageElementSource) {
+    return null;
+  }
+
+  const candidates = damageElementSource.candidates
+    .map(candidate => ({
+      elementConfigId: candidate.elementConfigId,
+      pathId: candidate.pathId,
+      mediaPackNames: candidate.mediaPackNames,
+      fieldCandidate: candidate[chainKey],
+      skillLevelBridge: candidate.skillLevelBridge,
+    }))
+    .filter(candidate => candidate.fieldCandidate);
+
+  return {
+    kind: damageElementSource.kind,
+    file: damageElementSource.file,
+    status:
+      candidates.length > 0
+        ? 'candidate-fields-found'
+        : damageElementSource.status,
+    skillId: damageElementSource.skillId,
+    actionVariantIndex: damageElementSource.actionVariantIndex,
+    actionVariantLabel: damageElementSource.actionVariantLabel,
+    logicElementIds: damageElementSource.logicElementIds,
+    matchedElementConfigIds: damageElementSource.matchedElementConfigIds,
+    unbridgedElementConfigIds: damageElementSource.unbridgedElementConfigIds,
+    candidateCount: candidates.length,
+    bridgeMatchedLevelRows: damageElementSource.bridgeMatchedLevelRows ?? 0,
+    candidates,
+    note: damageElementSource.note,
+  };
+}
+
+function attachDamageElementSourceToHpBreakdown(
+  formulaBreakdown,
+  damageElementSource
+) {
+  const sourceEvidence = createDamageElementChainSource(
+    damageElementSource,
+    'hpDamage'
+  );
+  if (!formulaBreakdown || !sourceEvidence) {
+    return formulaBreakdown;
+  }
+
+  return {
+    ...formulaBreakdown,
+    unappliedLayerKeys: uniqueStrings([
+      ...(formulaBreakdown.unappliedLayerKeys ?? []),
+      'damageElementFields',
+    ]),
+    layers: {
+      ...(formulaBreakdown.layers ?? {}),
+      damageElementFields: {
+        label: '伤害元素字段',
+        applied: false,
+        status:
+          sourceEvidence.status === 'candidate-fields-found'
+            ? 'candidate-fields-found-formula-unmapped'
+            : sourceEvidence.status,
+        source: sourceEvidence,
+      },
+    },
+    limitations: uniqueStrings([
+      ...(formulaBreakdown.limitations ?? []),
+      'TDamageElementParams HP candidate fields are linked, but formula scaling and hit-to-action mapping are still unmapped.',
+    ]),
   };
 }
 
@@ -340,4 +631,14 @@ function groupEventsByActionId(events) {
 
 function isSkillAction(action) {
   return action.type === 'skill';
+}
+
+function uniqueNumbers(values) {
+  return [
+    ...new Set(values.map(value => Number(value)).filter(Number.isFinite)),
+  ].sort((left, right) => left - right);
+}
+
+function uniqueStrings(values) {
+  return [...new Set(values.map(value => String(value)).filter(Boolean))];
 }
