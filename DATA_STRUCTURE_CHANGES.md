@@ -40,6 +40,7 @@
 - 技能：哈库茵剑舞，`skillId = 10900101`
 - 敌人：迅狼，`enemyId = 300032`
 - 用途：阶段 3 `src/simulation/` 的 compiler / engine / projection 输入样本。
+- 当前快照文件：`src/data/generated/first-vertical-slice.json`。该文件由 `npm run data:generate` 输出，供工作台和测试读取，避免首屏加载全量生成数据。
 
 ## 2026-07-07：最小模拟运行时输出
 

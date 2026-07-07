@@ -1,11 +1,4 @@
-import {
-  getAzprCharacterById,
-  getAzprCharacters,
-  getAzprEnemies,
-  getAzprEnemyById,
-  getAzprSkills,
-  getAzprSkillsByCharacterId,
-} from '../../data/azprGenerated';
+import firstVerticalSlice from '../../data/generated/first-vertical-slice.json';
 import {
   createActorFromCharacter,
   createEnemyFromData,
@@ -18,10 +11,7 @@ export const FIRST_SLICE_SKILL_ID = 10900101;
 export const FIRST_SLICE_ENEMY_ID = 300032;
 
 export function createFirstVerticalSliceProject() {
-  const character = getAzprCharacterById(FIRST_SLICE_CHARACTER_ID) ?? getAzprCharacters()[0];
-  const skills = getAzprSkillsByCharacterId(character.id);
-  const skill = skills.find((item) => item.id === FIRST_SLICE_SKILL_ID) ?? skills[0];
-  const enemy = getAzprEnemyById(FIRST_SLICE_ENEMY_ID) ?? getFirstEnemyWithBattleProperty();
+  const { character, skill, enemy } = getFirstVerticalSliceSources();
 
   const actor = createActorFromCharacter(character, {
     actorId: `actor-${character.id}`,
@@ -63,17 +53,23 @@ export function createFirstVerticalSliceProject() {
 }
 
 export function getFirstVerticalSliceGameData() {
-  return {
-    characters: getAzprCharacters(),
-    skills: getAzprSkills(),
-    enemies: getAzprEnemies(),
-  };
+  return firstVerticalSlice.gameData;
 }
 
-function getFirstEnemyWithBattleProperty() {
-  const enemy = getAzprEnemies().find((item) => item.property?.exists);
-  if (!enemy) {
-    throw new Error('No generated enemy has battle property data');
+function getFirstVerticalSliceSources() {
+  const character =
+    firstVerticalSlice.gameData.characters.find((item) => item.id === FIRST_SLICE_CHARACTER_ID) ??
+    firstVerticalSlice.gameData.characters[0];
+  const skill =
+    firstVerticalSlice.gameData.skills.find((item) => item.id === FIRST_SLICE_SKILL_ID) ??
+    firstVerticalSlice.gameData.skills[0];
+  const enemy =
+    firstVerticalSlice.gameData.enemies.find((item) => item.id === FIRST_SLICE_ENEMY_ID) ??
+    firstVerticalSlice.gameData.enemies[0];
+
+  if (!character || !skill || !enemy) {
+    throw new Error('First vertical slice generated data is incomplete');
   }
-  return enemy;
+
+  return { character, skill, enemy };
 }

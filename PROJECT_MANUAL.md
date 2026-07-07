@@ -379,6 +379,7 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 | 装备 | 137 | `src/data/generated/equipment.json` |
 | 灵子 | 62 | `src/data/generated/soulessences.json` |
 | 图片索引 | 3059 | `src/data/generated/media-index.json` |
+| 首条垂直切片快照 | 1 | `src/data/generated/first-vertical-slice.json` |
 
 当前校验结果：
 
@@ -480,6 +481,49 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 阶段 4 目标：建立新版编辑器骨架的第一屏，不再加厚旧 `Editor.vue`。
 - 先新增一个轻量工作台入口，能读取第一条垂直切片并展示角色、敌人、动作、事件日志和 `damageTimeline`。
 - 再把 ActionLibrary / TimelineGrid / PropertiesPanel / AnalysisPanel 拆成可替换组件，为后续真实交互打底。
+
+### 2026-07-07：阶段 4 新版工作台第一屏落地
+
+本轮完成：
+
+- 新增路由 `/workbench` 和页面 `src/views/Workbench.vue`。
+- 首页新增“新版工作台”入口。
+- 新增 `src/features/workbench/` 分区组件：
+  - `ScenarioHeader.vue`
+  - `ActionLibraryPanel.vue`
+  - `TimelineGridPreview.vue`
+  - `AnalysisPanel.vue`
+  - `EventLogPanel.vue`
+- 工作台直接读取第一条真实数据垂直切片，运行 `compileProject()` / `simulateScenario()`，展示：
+  - 场景概览。
+  - 角色与动作。
+  - 时间轴动作块。
+  - 伤害投影 marker。
+  - 原始伤害 summary。
+  - 事件日志。
+  - 当前计算限制。
+- 数据生成器新增 `src/data/generated/first-vertical-slice.json`，避免工作台路由把全量敌人/角色/装备数据打进页面 chunk。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、1 条测试通过。
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/domain/projectSchema.test.js`：通过，3 个测试文件、8 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、48 条测试通过。
+- `npm run build`：通过；`Workbench` JS chunk 约 42.22 kB / gzip 11.84 kB。仍有旧 `Editor` 和全局包 chunk 体积提示，以及 Sass `@import` 弃用提示。
+- 浏览器检查 `http://127.0.0.1:5175/#/workbench`：页面非空，包含工作台、时间轴、伤害 marker、末音、迅狼、`DAMAGE_PROJECTED`，控制台无 error。
+
+当前结论：
+
+- 新版数据、领域模型、模拟运行时已经有可见工作台入口。
+- 第一屏仍是只读垂直切片，不支持用户选择角色、拖拽动作或编辑属性。
+- 旧 `Editor.vue` 仍未替换；阶段 4 后续应继续在新工作台内拆交互组件。
+
+下一步：
+
+- 阶段 4-2 目标：把只读工作台推进到最小可编辑。
+- 新增可替换的 `PropertiesPanel`，支持编辑动作 `startMs`、`level`、`targetId` 并重新运行 simulation。
+- 新增角色/技能/敌人选择入口，先从生成数据中选择真实条目，不回退到旧 `gamedata.json`。
+- 时间轴预览增加动作选择状态，为后续拖拽和多动作轴做准备。
 
 ## 10. 文档维护规则
 

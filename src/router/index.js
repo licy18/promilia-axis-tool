@@ -14,6 +14,11 @@ const router = createRouter({
       component: () => import('../views/Editor.vue'),
     },
     {
+      path: '/workbench',
+      name: 'Workbench',
+      component: () => import('../views/Workbench.vue'),
+    },
+    {
       path: '/preset',
       name: 'Preset',
       component: () => import('../views/Preset.vue'),

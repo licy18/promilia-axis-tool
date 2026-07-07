@@ -11,6 +11,9 @@
             @click="openNewProjectDialog"
             >{{ $t('home.startEditing') }}</el-button
           >
+          <el-button size="large" @click="navigateTo('/workbench')"
+            >新版工作台</el-button
+          >
           <el-button size="large" @click="navigateTo('/preset')">{{
             $t('home.browsePresets')
           }}</el-button>

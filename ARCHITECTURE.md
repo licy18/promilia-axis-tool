@@ -48,6 +48,8 @@ src/
 ├── domain/             # 新版项目领域模型
 │   ├── fixtures/        # 真实数据垂直切片 fixture
 │   └── projectSchema.js # Project / Actor / Enemy / Action schema
+├── features/           # 新版功能模块组件
+│   └── workbench/       # 阶段 4 新版工作台分区组件
 ├── simulation/         # 新版无 UI 模拟运行时
 │   ├── compiler/        # Project -> Scenario
 │   ├── engine/          # Scenario -> EventLog
@@ -76,6 +78,7 @@ src/
 │   ├── Handbook.vue     # 游戏图鉴页面
 │   ├── Home.vue         # 首页
 │   ├── Preset.vue       # 预设轴库页面
+│   ├── Workbench.vue    # 新版工作台入口
 │   └── Setting.vue      # 设置页面
 ├── App.vue             # 根组件
 └── main.js             # 入口文件
@@ -107,10 +110,11 @@ C:\PC2\Codex\AzPr
 - 阶段 1：真实 AzPr 数据管线。
 - 阶段 2：最小项目领域模型和第一条真实数据 fixture。
 - 阶段 3：无 UI 最小模拟运行时。
+- 阶段 4-1：新版工作台只读第一屏。
 
 下一阶段：
 
-- 阶段 4：建立新版编辑器工作台骨架，让 UI 读取领域模型和 simulation 投影，而不是直接拼旧 `gamedata.json` 或旧 `skillBlocks`。
+- 阶段 4-2：让新版工作台具备最小可编辑能力，优先实现 PropertiesPanel、动作选择状态、真实角色/技能/敌人选择。
 
 ## 3. 核心模块设计
 

@@ -82,6 +82,7 @@ const kibos = mapKibos(kiboForms);
 const equipment = mapEquipment(equipmentForms);
 const soulessences = mapSoulessences(soulessenceForms);
 const mediaIndex = await mapMediaIndex(sourceFiles.mediaImages);
+const firstVerticalSlice = buildFirstVerticalSliceData({ characters, skills, enemies });
 const validationReport = buildValidationReport({
   characters,
   skills,
@@ -104,6 +105,7 @@ await Promise.all([
   writeJson('equipment.json', wrapItems(equipment, sourceFiles.equipment)),
   writeJson('soulessences.json', wrapItems(soulessences, sourceFiles.soulessences)),
   writeJson('media-index.json', mediaIndex),
+  writeJson('first-vertical-slice.json', firstVerticalSlice),
   writeJson('validation-report.json', validationReport),
 ]);
 
@@ -159,9 +161,39 @@ function buildManifest(validationReport) {
       equipment: 'equipment.json',
       soulessences: 'soulessences.json',
       mediaIndex: 'media-index.json',
+      firstVerticalSlice: 'first-vertical-slice.json',
       validationReport: 'validation-report.json',
     },
     counts: validationReport.counts,
+  };
+}
+
+function buildFirstVerticalSliceData({ characters, skills, enemies }) {
+  const characterId = 109001;
+  const skillId = 10900101;
+  const enemyId = 300032;
+  const character = characters.find((item) => item.id === characterId) ?? characters[0];
+  const skill =
+    skills.find((item) => item.id === skillId) ??
+    skills.find((item) => item.characterId === character.id) ??
+    skills[0];
+  const enemy = enemies.find((item) => item.id === enemyId) ?? enemies.find((item) => item.property?.exists) ?? enemies[0];
+
+  return {
+    schemaVersion: 1,
+    generatedAt,
+    source: 'generated-from-local-azpr-data',
+    purpose: 'stage-2-domain-schema-and-stage-3-simulation-seed',
+    ids: {
+      characterId: character.id,
+      skillId: skill.id,
+      enemyId: enemy.id,
+    },
+    gameData: {
+      characters: [character],
+      skills: [skill],
+      enemies: [enemy],
+    },
   };
 }
 
