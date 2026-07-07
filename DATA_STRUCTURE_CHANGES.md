@@ -494,3 +494,42 @@ Workbench 草稿新增可选 `segmentSplitOptions` 配置块，用于保存动�
 - 该输入只表达编辑器对齐命令，不代表真实技能首帧、命中帧或取消窗口。
 - 如果目标起点超出场景边界，最终保存的 `startMs` 以夹紧后的动作时间为准。
 - 对齐后如果造成同轨重叠，仍由时间轴诊断提示，不自动避让。
+
+## 17. 2026-07-07 Workbench 批次摘要/集中管理面板补充
+
+阶段 4-29 没有新增持久化字段，而是在 UI 层从现有动作草稿派生批次摘要。
+
+### 17.1 派生结构
+
+批次摘要由 `actionDrafts[]` 中带 `generationBatch.batchId` 的动作即时聚合：
+
+```javascript
+{
+  "batchId": "segment-batch-0001",
+  "skillName": "哈库茵剑舞",
+  "sourceLabel": "拆段生成",
+  "count": 4,
+  "minStartMs": 3500,
+  "maxStartMs": 9500,
+  "selected": true
+}
+```
+
+- `batchId`：来自动作自身的 `generationBatch.batchId`。
+- `skillName`：优先用 `generationBatch.skillId` 在当前技能列表中反查；找不到时回退到动作名称。
+- `sourceLabel`：当前把 `skill-segment-split` 显示为“拆段生成”。
+- `count`：同批次动作数量。
+- `minStartMs` / `maxStartMs`：同批次动作当前起点范围。
+- `selected`：当前选中的动作是否属于该批次。
+
+### 17.2 行为说明
+
+- 批次摘要不写入 `workbench-draft`；刷新后会从已保存的 `actionDrafts[]` 重新计算。
+- 批次删除、固定偏移、任意偏移和目标起点对齐集中到摘要面板执行。
+- 单动作卡不再重复显示批次级删除/移动/对齐控件，只保留动作自身复制/删除与批次来源说明。
+- 摘要面板继续复用阶段 4-26 至 4-28 的批次移动与对齐逻辑，保存后仍只以各动作 `startMs` 作为权威时间。
+
+### 17.3 当前边界
+
+- 当前摘要项只反映选中态，还不能点击摘要直接定位或选择整组动作。
+- 批次摘要仍是编辑器辅助视图，不代表真实连段、动作帧、命中帧或取消窗口。

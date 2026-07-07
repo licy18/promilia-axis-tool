@@ -126,7 +126,9 @@ describe('Workbench view', () => {
     expect(wrapper.find('.action-item[data-action-id="action-0004"]').text()).toContain('重击 / 190%');
     expect(wrapper.find('.action-item[data-action-id="action-0004"]').text()).toContain('segment-batch-0001');
     expect(wrapper.findAll('[data-testid="workbench-action-batch-note"]')).toHaveLength(4);
-    expect(wrapper.findAll('[data-testid="workbench-delete-action-batch"]')).toHaveLength(4);
+    expect(wrapper.findAll('[data-testid="workbench-delete-action-batch"]')).toHaveLength(0);
+    expect(wrapper.findAll('[data-testid="workbench-summary-delete-action-batch"]')).toHaveLength(1);
+    expect(wrapper.find('[data-testid="workbench-action-batch-summary"]').text()).toContain('4 动作');
 
     const damageLabels = wrapper.findAll('.damage-row').map((row) => row.find('span').text());
     expect(damageLabels).toEqual(expect.arrayContaining(['普攻', '重击', '闪击', '跃击']));
@@ -215,7 +217,7 @@ describe('Workbench view', () => {
     expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe('5 action');
     expect(restored.findAll('[data-testid="workbench-action-batch-note"]')).toHaveLength(4);
 
-    await restored.find('[data-testid="workbench-delete-action-batch"]').trigger('click');
+    await restored.find('[data-testid="workbench-summary-delete-action-batch"]').trigger('click');
 
     expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe('1 action');
     expect(restored.find('[data-testid="scenario-hit-count"]').text()).toBe('1');
@@ -245,16 +247,16 @@ describe('Workbench view', () => {
 
     expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe('0');
 
-    await wrapper.find('[data-testid="workbench-shift-action-batch-earlier"]').trigger('click');
-    await wrapper.find('[data-testid="workbench-shift-action-batch-earlier"]').trigger('click');
-    await wrapper.find('[data-testid="workbench-shift-action-batch-earlier"]').trigger('click');
+    await wrapper.find('[data-testid="workbench-summary-shift-action-batch-earlier"]').trigger('click');
+    await wrapper.find('[data-testid="workbench-summary-shift-action-batch-earlier"]').trigger('click');
+    await wrapper.find('[data-testid="workbench-summary-shift-action-batch-earlier"]').trigger('click');
 
     expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe('1');
     expect(wrapper.find('[data-testid="workbench-overlap-item"]').text()).toContain('500-1000ms');
     expect(wrapper.find('.action-item[data-action-id="action-0002"]').text()).toContain('500ms');
     expect(wrapper.findAll('[data-testid="workbench-action-overlap-warning"]')).toHaveLength(2);
 
-    await wrapper.find('[data-testid="workbench-shift-action-batch-later"]').trigger('click');
+    await wrapper.find('[data-testid="workbench-summary-shift-action-batch-later"]').trigger('click');
 
     expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe('0');
     expect(wrapper.find('.action-item[data-action-id="action-0002"]').text()).toContain('1000ms');
@@ -302,16 +304,16 @@ describe('Workbench view', () => {
     await findActionLibrarySkillSplitButton(wrapper, workbenchSeed.defaults.skillId).trigger('click');
     await wrapper.find('[data-testid="workbench-segment-preview-confirm"]').trigger('click');
 
-    await wrapper.find('[data-testid="workbench-batch-shift-offset-input"]').setValue('-5000');
-    await wrapper.find('[data-testid="workbench-apply-action-batch-shift"]').trigger('click');
+    await wrapper.find('[data-testid="workbench-summary-batch-shift-offset-input"]').setValue('-5000');
+    await wrapper.find('[data-testid="workbench-summary-apply-action-batch-shift"]').trigger('click');
 
-    expect(wrapper.find('[data-testid="workbench-batch-shift-offset-input"]').element.value).toBe('0');
+    expect(wrapper.find('[data-testid="workbench-summary-batch-shift-offset-input"]').element.value).toBe('0');
     expect(wrapper.find('.action-item[data-action-id="action-0002"]').text()).toContain('0ms');
     expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe('1');
     expect(wrapper.find('[data-testid="workbench-overlap-item"]').text()).toContain('0-1000ms');
 
-    await wrapper.find('[data-testid="workbench-batch-shift-offset-input"]').setValue('40000');
-    await wrapper.find('[data-testid="workbench-apply-action-batch-shift"]').trigger('click');
+    await wrapper.find('[data-testid="workbench-summary-batch-shift-offset-input"]').setValue('40000');
+    await wrapper.find('[data-testid="workbench-summary-apply-action-batch-shift"]').trigger('click');
 
     expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe('0');
     expect(wrapper.find('.action-item[data-action-id="action-0005"]').text()).toContain('30000ms');
@@ -342,15 +344,15 @@ describe('Workbench view', () => {
     await findActionLibrarySkillSplitButton(wrapper, workbenchSeed.defaults.skillId).trigger('click');
     await wrapper.find('[data-testid="workbench-segment-preview-confirm"]').trigger('click');
 
-    await wrapper.find('[data-testid="workbench-batch-align-start-input"]').setValue('-5000');
-    await wrapper.find('[data-testid="workbench-apply-action-batch-align"]').trigger('click');
+    await wrapper.find('[data-testid="workbench-summary-batch-align-start-input"]').setValue('-5000');
+    await wrapper.find('[data-testid="workbench-summary-apply-action-batch-align"]').trigger('click');
 
     expect(wrapper.find('.action-item[data-action-id="action-0002"]').text()).toContain('0ms');
     expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe('1');
     expect(wrapper.find('[data-testid="workbench-overlap-item"]').text()).toContain('0-1000ms');
 
-    await wrapper.find('[data-testid="workbench-batch-align-start-input"]').setValue('3500');
-    await wrapper.find('[data-testid="workbench-apply-action-batch-align"]').trigger('click');
+    await wrapper.find('[data-testid="workbench-summary-batch-align-start-input"]').setValue('3500');
+    await wrapper.find('[data-testid="workbench-summary-apply-action-batch-align"]').trigger('click');
 
     expect(wrapper.find('.action-item[data-action-id="action-0002"]').text()).toContain('3500ms');
     expect(wrapper.find('.action-item[data-action-id="action-0005"]').text()).toContain('9500ms');
@@ -378,12 +380,81 @@ describe('Workbench view', () => {
     expect(restored.find('.action-item[data-action-id="action-0002"]').text()).toContain('3500ms');
     expect(restored.findAll('[data-testid="workbench-action-batch-note"]')).toHaveLength(4);
 
-    await restored.find('[data-testid="workbench-batch-align-start-input"]').setValue('40000');
-    await restored.find('[data-testid="workbench-apply-action-batch-align"]').trigger('click');
+    await restored.find('[data-testid="workbench-summary-batch-align-start-input"]').setValue('40000');
+    await restored.find('[data-testid="workbench-summary-apply-action-batch-align"]').trigger('click');
     await restored.find('[data-testid="workbench-save-draft"]').trigger('click');
     const clampedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
     expect(clampedDraft.actionDrafts.map((action) => action.startMs)).toEqual([0, 24000, 26000, 28000, 30000]);
     expect(restored.find('[data-testid="workbench-overlap-count"]').text()).toBe('0');
+  });
+
+  it('summarizes generated skill segment batches and controls them centrally', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    expect(wrapper.find('[data-testid="workbench-action-batch-summary-count"]').text()).toBe('0');
+    expect(wrapper.find('[data-testid="workbench-action-batch-summary-empty"]').text()).toBe('暂无生成批次');
+
+    await findActionLibrarySkillSplitButton(wrapper, workbenchSeed.defaults.skillId).trigger('click');
+    await wrapper.find('[data-testid="workbench-segment-preview-confirm"]').trigger('click');
+
+    expect(wrapper.find('[data-testid="workbench-action-batch-summary-count"]').text()).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-action-batch-summary-empty"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="workbench-action-batch-summary"]').text()).toContain('哈库茵剑舞');
+    expect(wrapper.find('[data-testid="workbench-action-batch-summary"]').text()).toContain('4 动作');
+    expect(wrapper.find('[data-testid="workbench-action-batch-summary"]').text()).toContain('2000-8000ms');
+
+    await wrapper.find('.action-item[data-action-id="action-0003"]').trigger('click');
+
+    expect(wrapper.find('[data-testid="workbench-action-batch-summary"]').attributes('data-selected')).toBe('true');
+    expect(wrapper.find('[data-testid="workbench-action-batch-selected"]').text()).toBe('选中');
+
+    await wrapper.find('[data-testid="workbench-summary-shift-action-batch-earlier"]').trigger('click');
+
+    expect(wrapper.find('.action-item[data-action-id="action-0002"]').text()).toContain('1500ms');
+    expect(wrapper.find('[data-testid="workbench-action-batch-summary"]').text()).toContain('1500-7500ms');
+
+    await wrapper.find('[data-testid="workbench-summary-batch-shift-offset-input"]').setValue('500');
+    await wrapper.find('[data-testid="workbench-summary-apply-action-batch-shift"]').trigger('click');
+
+    expect(wrapper.find('[data-testid="workbench-summary-batch-shift-offset-input"]').element.value).toBe('0');
+    expect(wrapper.find('.action-item[data-action-id="action-0002"]').text()).toContain('2000ms');
+
+    await wrapper.find('[data-testid="workbench-summary-batch-align-start-input"]').setValue('3500');
+    await wrapper.find('[data-testid="workbench-summary-apply-action-batch-align"]').trigger('click');
+
+    expect(wrapper.find('.action-item[data-action-id="action-0002"]').text()).toContain('3500ms');
+    expect(wrapper.find('[data-testid="workbench-action-batch-summary"]').text()).toContain('3500-9500ms');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    wrapper.unmount();
+
+    const restored = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await nextTick();
+
+    expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe('已恢复草稿');
+    expect(restored.find('[data-testid="workbench-action-batch-summary"]').text()).toContain('3500-9500ms');
+
+    await restored.find('[data-testid="workbench-summary-delete-action-batch"]').trigger('click');
+
+    expect(restored.find('[data-testid="workbench-action-batch-summary-count"]').text()).toBe('0');
+    expect(restored.find('[data-testid="workbench-action-batch-summary-empty"]').exists()).toBe(true);
+    expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe('1 action');
   });
 
   it('cancels a skill segment split preview without writing actions', async () => {

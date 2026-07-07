@@ -189,6 +189,105 @@
       </div>
     </div>
 
+    <section class="batch-summary-panel" data-testid="workbench-action-batch-summary-panel">
+      <div class="batch-summary-heading">
+        <span>批次管理</span>
+        <strong data-testid="workbench-action-batch-summary-count">{{ actionBatches.length }}</strong>
+      </div>
+      <p
+        v-if="actionBatches.length === 0"
+        class="batch-summary-empty"
+        data-testid="workbench-action-batch-summary-empty"
+      >
+        暂无生成批次
+      </p>
+      <article
+        v-for="batch in actionBatches"
+        :key="batch.batchId"
+        class="batch-summary-item"
+        :class="{ selected: batch.selected }"
+        data-testid="workbench-action-batch-summary"
+        :data-batch-id="batch.batchId"
+        :data-selected="batch.selected ? 'true' : 'false'"
+      >
+        <div class="batch-summary-main">
+          <div>
+            <span>{{ batch.skillName }}</span>
+            <strong>{{ batch.count }} 动作</strong>
+          </div>
+          <small>{{ batch.sourceLabel }} / {{ batch.minStartMs }}-{{ batch.maxStartMs }}ms</small>
+          <small>{{ batch.batchId }}</small>
+        </div>
+        <strong v-if="batch.selected" class="batch-selected-badge" data-testid="workbench-action-batch-selected">
+          选中
+        </strong>
+        <div class="batch-summary-actions">
+          <button
+            class="tool-button danger"
+            data-testid="workbench-summary-delete-action-batch"
+            type="button"
+            @click="$emit('delete-action-batch', batch.batchId)"
+          >
+            删批次
+          </button>
+          <button
+            class="tool-button"
+            data-testid="workbench-summary-shift-action-batch-earlier"
+            type="button"
+            @click="emitBatchShift(batch.batchId, -500)"
+          >
+            -500ms
+          </button>
+          <button
+            class="tool-button"
+            data-testid="workbench-summary-shift-action-batch-later"
+            type="button"
+            @click="emitBatchShift(batch.batchId, 500)"
+          >
+            +500ms
+          </button>
+          <label class="batch-shift-control">
+            <span>批次偏移 ms</span>
+            <input
+              type="number"
+              step="100"
+              data-testid="workbench-summary-batch-shift-offset-input"
+              :data-batch-id="batch.batchId"
+              :value="getBatchShiftOffset(batch.batchId)"
+              @input="setBatchShiftOffset(batch.batchId, $event.target.value)"
+            />
+          </label>
+          <button
+            class="tool-button"
+            data-testid="workbench-summary-apply-action-batch-shift"
+            type="button"
+            @click="applyBatchShift(batch.batchId)"
+          >
+            应用偏移
+          </button>
+          <label class="batch-shift-control">
+            <span>批次起点 ms</span>
+            <input
+              type="number"
+              step="100"
+              data-testid="workbench-summary-batch-align-start-input"
+              :data-batch-id="batch.batchId"
+              :value="getBatchAlignStart(batch.batchId)"
+              @input="setBatchAlignStart(batch.batchId, $event.target.value)"
+            />
+          </label>
+          <button
+            class="tool-button"
+            data-testid="workbench-summary-apply-action-batch-align"
+            type="button"
+            @click="applyBatchAlign(batch.batchId)"
+          >
+            对齐起点
+          </button>
+        </div>
+      </article>
+    </section>
+
     <div class="action-list">
       <article
         v-for="action in actions"
@@ -222,75 +321,6 @@
             @click.stop="$emit('delete-action', action.id)"
           >
             删除
-          </button>
-          <button
-            v-if="action.generationBatch?.batchId"
-            class="tool-button danger"
-            data-testid="workbench-delete-action-batch"
-            type="button"
-            @click.stop="$emit('delete-action-batch', action.generationBatch.batchId)"
-          >
-            删批次
-          </button>
-          <button
-            v-if="action.generationBatch?.batchId"
-            class="tool-button"
-            data-testid="workbench-shift-action-batch-earlier"
-            type="button"
-            @click.stop="emitBatchShift(action.generationBatch.batchId, -500)"
-          >
-            -500ms
-          </button>
-          <button
-            v-if="action.generationBatch?.batchId"
-            class="tool-button"
-            data-testid="workbench-shift-action-batch-later"
-            type="button"
-            @click.stop="emitBatchShift(action.generationBatch.batchId, 500)"
-          >
-            +500ms
-          </button>
-          <label v-if="action.generationBatch?.batchId" class="batch-shift-control">
-            <span>批次偏移 ms</span>
-            <input
-              type="number"
-              step="100"
-              data-testid="workbench-batch-shift-offset-input"
-              :data-batch-id="action.generationBatch.batchId"
-              :value="getBatchShiftOffset(action.generationBatch.batchId)"
-              @click.stop
-              @input.stop="setBatchShiftOffset(action.generationBatch.batchId, $event.target.value)"
-            />
-          </label>
-          <button
-            v-if="action.generationBatch?.batchId"
-            class="tool-button"
-            data-testid="workbench-apply-action-batch-shift"
-            type="button"
-            @click.stop="applyBatchShift(action.generationBatch.batchId)"
-          >
-            应用偏移
-          </button>
-          <label v-if="action.generationBatch?.batchId" class="batch-shift-control">
-            <span>批次起点 ms</span>
-            <input
-              type="number"
-              step="100"
-              data-testid="workbench-batch-align-start-input"
-              :data-batch-id="action.generationBatch.batchId"
-              :value="getBatchAlignStart(action.generationBatch.batchId)"
-              @click.stop
-              @input.stop="setBatchAlignStart(action.generationBatch.batchId, $event.target.value)"
-            />
-          </label>
-          <button
-            v-if="action.generationBatch?.batchId"
-            class="tool-button"
-            data-testid="workbench-apply-action-batch-align"
-            type="button"
-            @click.stop="applyBatchAlign(action.generationBatch.batchId)"
-          >
-            对齐起点
           </button>
         </div>
         <dl>
@@ -337,11 +367,11 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import { Collection } from '@element-plus/icons-vue';
 import { getSkillDamageSegments } from '../../domain/workbenchProjectFactory';
 
-defineProps({
+const props = defineProps({
   actor: {
     type: Object,
     required: true,
@@ -403,6 +433,45 @@ const emit = defineEmits([
 
 const batchAlignStarts = reactive({});
 const batchShiftOffsets = reactive({});
+
+const actionBatches = computed(() => {
+  const batches = new Map();
+
+  props.actions.forEach((action) => {
+    const batch = action.generationBatch;
+    if (!batch?.batchId) {
+      return;
+    }
+
+    const startMs = Math.max(0, Number(action.startMs) || 0);
+    const batchId = batch.batchId;
+    const existing = batches.get(batchId);
+    if (existing) {
+      existing.count += 1;
+      existing.minStartMs = Math.min(existing.minStartMs, startMs);
+      existing.maxStartMs = Math.max(existing.maxStartMs, startMs);
+      existing.selected = existing.selected || action.id === props.selectedActionId;
+      return;
+    }
+
+    batches.set(batchId, {
+      batchId,
+      count: 1,
+      minStartMs: startMs,
+      maxStartMs: startMs,
+      selected: action.id === props.selectedActionId,
+      skillName: resolveBatchSkillName(batch, action),
+      sourceLabel: formatBatchSource(batch.source),
+    });
+  });
+
+  return [...batches.values()].sort((left, right) => {
+    if (left.minStartMs !== right.minStartMs) {
+      return left.minStartMs - right.minStartMs;
+    }
+    return left.batchId.localeCompare(right.batchId);
+  });
+});
 
 function actionTypeLabel(type) {
   if (type === 'wait') {
@@ -472,6 +541,19 @@ function formatSkillMeta(skill) {
 
 function formatSkillName(skill) {
   return skill.name || `技能 ${skill.id}`;
+}
+
+function resolveBatchSkillName(batch, action) {
+  const skillId = Number(batch.skillId ?? action.skillId);
+  const skill = props.skills.find((item) => Number(item.id) === skillId);
+  return skill?.name || action.name || `技能 ${skillId}`;
+}
+
+function formatBatchSource(source) {
+  if (source === 'skill-segment-split') {
+    return '拆段生成';
+  }
+  return source || '批次生成';
 }
 
 function getSkillSegmentCount(skill) {
@@ -748,6 +830,110 @@ h2 {
   background: rgba(255, 255, 255, 0.04);
   color: #6f7880;
   cursor: not-allowed;
+}
+
+.batch-summary-panel {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.batch-summary-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: #d9dee3;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.batch-summary-heading strong {
+  min-width: 24px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(121, 199, 185, 0.14);
+  color: #9fe1d7;
+  font-size: 11px;
+  text-align: center;
+}
+
+.batch-summary-empty {
+  margin: 0;
+  color: #8f9aa3;
+  font-size: 11px;
+}
+
+.batch-summary-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px;
+  border-left: 3px solid rgba(121, 199, 185, 0.38);
+  border-radius: 4px;
+  background: rgba(17, 22, 27, 0.64);
+}
+
+.batch-summary-item.selected {
+  border-left-color: #79c7b9;
+  background: rgba(121, 199, 185, 0.1);
+}
+
+.batch-summary-main {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.batch-summary-main div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.batch-summary-main span,
+.batch-summary-main strong,
+.batch-summary-main small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.batch-summary-main span {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.batch-summary-main strong {
+  flex: none;
+  color: #9fe1d7;
+  font-size: 11px;
+}
+
+.batch-summary-main small {
+  color: #8f9aa3;
+  font-size: 11px;
+}
+
+.batch-selected-badge {
+  align-self: start;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(121, 199, 185, 0.18);
+  color: #9fe1d7;
+  font-size: 10px;
+}
+
+.batch-summary-actions {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
 }
 
 .actor-tabs {
