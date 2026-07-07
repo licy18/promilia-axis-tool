@@ -3326,6 +3326,44 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8AL 目标：基于 per-element 对比模型整理 `DamageElement` 公式执行证据矩阵，按 element / hit / action 标注 function 组合顺序候选、A 槽覆盖点候选和每 hit 倍率缺口。
 - 若仍无法确认执行顺序，则把未确认原因固化为结构化 diagnostics，并继续保持最终 HP、削韧、充能公式 `applied: false`。
 
+### 2026-07-08：阶段 5-8AL DamageElement 公式执行证据矩阵
+
+本轮完成：
+
+- `actionResultTimeline[].hpDamage.sourceEvidence` 新增 `formulaExecutionEvidenceMatrix`，把动作级公式候选、逐 hit element 绑定和 per-element 槽位关系整理成同一张证据矩阵。
+- 矩阵按 element 行记录 `functionOrderCandidates`、`preferredFunctionOrderCandidate`、`slotOverrideCandidates`、`directSlotMatches`、`hitIndexes` 和 `perHitScaleGap`。
+- `diagnostics` 固化三个仍未确认的问题：function 组合顺序、等级值覆盖应用点、每 hit 倍率/运行时缩放分配。
+- `AnalysisPanel` 的三值来源新增 `执行矩阵` 摘要，能直接看到 element 行数、A 覆盖候选数、缩放缺口和大差异行数。
+- 仿真测试覆盖矩阵结构；Workbench 测试覆盖页面摘要文本。
+
+当前末音 `10900101` 默认普攻矩阵：
+
+- `rowCount = 2`，覆盖 `109001081` 与 `109001306`。
+- 两个 element 当前都绑定到 `hitIndexes = [1]`，说明动作级 `skillsub_ele_value` 证据只桥接到首 hit 的两个 action-level element。
+- 首选候选仍为 `function_2-current-level-value-param`，当前等级值预览 `307`，对比 raw HP `12,461`，差距状态为 `large-difference`。
+- 需要约 `×40.6` 才接近 raw；若按 5 hit 均分，需要约 `每 hit ×8.1`，因此仍不能应用为最终公式。
+- A 槽记录为等级覆盖候选 `1,600-3,360`；G 槽记录为常量直连 `10,000`。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+- `npm exec prettier -- --check AGENTS.md PROJECT_MANUAL.md DEVELOPMENT_PLAN.md ARCHITECTURE.md DATA_STRUCTURE_CHANGES.md src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npm exec eslint -- --no-warn-ignored src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npm test -- --run`：通过，13 个测试文件、105 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
+- `git diff --check`：通过。
+
+当前边界：
+
+- `formulaExecutionEvidenceMatrix` 仍是 evidence-only，所有行保持 `applied: false`。
+- raw HP 仍来自当前描述倍率投影；削韧和充能仍只追踪候选字段，不应用最终公式。
+- `hitIndexes = [1]` 暴露了动作级 element 值与后续 hit element 的桥接缺口；需要更多动作/skill_control 样本和运行时证据确认是否存在共享倍率、额外缩放或子技能自身等级值。
+
+下一步：
+
+- 阶段 5-8AM 目标：把 `formulaExecutionEvidenceMatrix` 扩展到更多动作形态/技能样本，生成跨动作矩阵摘要，并继续沿 IL2CPP / Extractor 证据追 `DamageElement` 的 function 组合顺序、等级覆盖应用点和每 hit 缩放来源。
+- 若本地 AzPr 数据仍不足，按项目规则使用 AzPr Extractor 提取原始资源补齐证据链。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -41,6 +41,9 @@ describe('Workbench view', () => {
     expect(text).toContain('公式函数候选 f1 G/10000 / f2 self.ATK[0]*A/10000');
     expect(text).toContain('候选预览 f2 等级值 307 vs raw 12,461，约 2.5%');
     expect(text).toContain('组合诊断 f2 需 ×40.6 才接近 raw / 每 hit ×8.1');
+    expect(text).toContain('执行矩阵 2 element');
+    expect(text).toContain('function未确认 · A覆盖候选 2');
+    expect(text).toContain('缩放 ×40.6 / 每 hit ×8.1 · 差异 2/2');
     expect(text).toContain(
       '逐hit候选 5/5段 · 三值字段 12 · 帧 12f/6f/12f/7f/4f · 绝对帧 0s12f/0s22f/1s3f/2s3f/3s4f · 连段桥 4/4'
     );

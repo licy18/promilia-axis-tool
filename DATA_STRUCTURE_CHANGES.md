@@ -4546,3 +4546,132 @@ data-element-config-id="109001306" data-status="未应用 · function组合待�
 - 这是前端派生比较模型，不是导出数据结构。
 - 当前 tooltip 是原生 `title`，还不是完整交互详情面板。
 - `statusText` 是诊断状态，不代表已经确认 `DamageElement` 的最终公式执行顺序。
+
+## 65. 阶段 5-8AL：DamageElement 公式执行证据矩阵
+
+阶段 5-8AL 在 `actionResultTimeline[].hpDamage.sourceEvidence` 下新增 `formulaExecutionEvidenceMatrix`。该字段由仿真投影层从动作级 `formulaCandidatePreview`、`sourceEvidence.candidates[]` 和逐 hit `hitCandidates[]` 派生，用于把公式执行顺序候选、等级槽位覆盖候选和每 hit 倍率缺口放到同一张 evidence-only 矩阵。
+
+### 65.1 字段位置
+
+```json
+{
+  "actionResultTimeline": [
+    {
+      "hpDamage": {
+        "sourceEvidence": {
+          "formulaExecutionEvidenceMatrix": {
+            "status": "evidence-matrix-built-execution-unconfirmed",
+            "applied": false
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+### 65.2 矩阵结构
+
+```json
+{
+  "status": "evidence-matrix-built-execution-unconfirmed",
+  "actionId": "action-0001",
+  "actionName": "普通攻击",
+  "skillId": 10900101,
+  "actionVariantIndex": 0,
+  "actionVariantLabel": "普攻",
+  "hitCount": 5,
+  "elementCount": 2,
+  "rowCount": 2,
+  "preferredStrategy": "function_2-current-level-value-param",
+  "rows": [
+    {
+      "elementConfigId": 109001081,
+      "hitIndexes": [1],
+      "hitBindingStatus": "per-hit-candidate-bound",
+      "preferredFunctionOrderCandidate": {
+        "strategy": "function_2-current-level-value-param",
+        "expression": "function_2",
+        "inputSource": "skill_logic.currentLevel.valueParam",
+        "roundedValue": 307,
+        "comparisonStatus": "compared-to-raw-projection",
+        "rawProjectionValue": 12461,
+        "previewRoundedValue": 307,
+        "differenceStatus": "large-difference",
+        "applied": false
+      },
+      "slotOverrideCandidates": [
+        {
+          "id": 1,
+          "variable": "A",
+          "relationStatus": "level-scaling-override-candidate",
+          "formulaParamValue": 1000,
+          "firstLevelValue": 1600,
+          "lastLevelValue": 3360,
+          "applied": false
+        }
+      ],
+      "directSlotMatches": [
+        {
+          "id": 7,
+          "variable": "G",
+          "relationStatus": "constant-direct-slot-match",
+          "formulaParamValue": 10000,
+          "firstLevelValue": 10000,
+          "lastLevelValue": 10000,
+          "applied": false
+        }
+      ],
+      "perHitScaleGap": {
+        "status": "requires-runtime-scale-or-hit-allocation",
+        "requiredScaleToRaw": 40.58957654723127,
+        "requiredPerHitScaleToRaw": 8.117915309446254,
+        "hitCount": 5,
+        "boundHitCount": 1,
+        "differenceStatus": "large-difference",
+        "applied": false
+      },
+      "unresolved": [
+        "function-combination-order-unconfirmed",
+        "level-override-application-point-unconfirmed",
+        "per-hit-multiplier-allocation-unconfirmed"
+      ],
+      "applied": false
+    }
+  ],
+  "diagnostics": {
+    "functionCombinationOrderStatus": "unconfirmed",
+    "levelOverrideApplicationStatus": "unconfirmed",
+    "perHitMultiplierAllocationStatus": "unconfirmed",
+    "rowsWithLargeDifference": 2,
+    "rowsWithSlotOverrideCandidates": 2,
+    "rowsWithHitBindings": 2
+  },
+  "applied": false
+}
+```
+
+字段说明：
+
+- `functionOrderCandidates[]` 是从 `formulaCandidatePreview.combinationPreviews[]` 按 element 分组后的组合候选，当前包括 f2、f1\*f2、f1+f2 等简单诊断组合。
+- `preferredFunctionOrderCandidate` 优先选择 `function_2-current-level-value-param`；若不存在，则选择首个可与 raw 投影比较的组合。
+- `slotOverrideCandidates[]` 记录等级值可能覆盖的变量槽，当前默认样本为 A 槽。
+- `directSlotMatches[]` 记录常量直连槽，当前默认样本为 G 槽。
+- `perHitScaleGap` 记录候选值与 raw HP 投影之间需要的缩放；该字段用于诊断运行时缺口，不参与计算。
+- `hitIndexes[]` 来自逐 hit 候选中包含该 element 的 hit 编号。默认样本中两个动作级 element 均只绑定到 hit1，后续 hit 的 element 仍需要继续追等级值或运行时映射。
+
+### 65.3 Workbench 摘要
+
+`AnalysisPanel` 在三值来源中新增一行摘要：
+
+```text
+执行矩阵 2 element · function未确认 · A覆盖候选 2 · 缩放 ×40.6 / 每 hit ×8.1 · 差异 2/2
+```
+
+该摘要只用于提示当前证据矩阵和主要缺口，不替代后续完整详情面板。
+
+### 65.4 当前边界
+
+- `formulaExecutionEvidenceMatrix.applied` 必须保持 `false`，直到 `DamageElement` runtime 执行顺序确认。
+- 该矩阵只接在 HP 伤害的 sourceEvidence 下；削韧和充能仍分别由各自 sourceEvidence 追踪候选字段。
+- 下一阶段需要扩展到更多动作/技能样本，验证 `hitIndexes`、A 槽覆盖点和缩放缺口是否跨动作稳定。

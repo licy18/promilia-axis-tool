@@ -94,6 +94,11 @@
               formatFormulaCombinationPreview(entry.hpDamage?.sourceEvidence)
             }}
           </small>
+          <small
+            v-if="formatFormulaExecutionMatrix(entry.hpDamage?.sourceEvidence)"
+          >
+            {{ formatFormulaExecutionMatrix(entry.hpDamage?.sourceEvidence) }}
+          </small>
           <small v-if="formatHitCandidateSummary(entry)">
             {{ formatHitCandidateSummary(entry) }}
           </small>
@@ -557,6 +562,35 @@ function formatFormulaCombinationPreview(sourceEvidence) {
     ? ` / 每 hit ×${formatFixed(perHitScale)}`
     : '';
   return `组合诊断 ${formatCombinationLabel(preferred)} 需 ×${formatFixed(scale)} 才接近 raw${perHitText}`;
+}
+
+function formatFormulaExecutionMatrix(sourceEvidence) {
+  const matrix = sourceEvidence?.formulaExecutionEvidenceMatrix;
+  if (!matrix || matrix.rowCount <= 0) {
+    return '';
+  }
+
+  const rows = matrix.rows ?? [];
+  const slotOverrideCount = rows.reduce(
+    (sum, row) => sum + (row.slotOverrideCandidates?.length ?? 0),
+    0
+  );
+  const preferredRow = rows.find(row => row.preferredFunctionOrderCandidate);
+  const scale = preferredRow?.perHitScaleGap?.requiredScaleToRaw;
+  const perHitScale = preferredRow?.perHitScaleGap?.requiredPerHitScaleToRaw;
+  const scaleText = Number.isFinite(Number(scale))
+    ? ` · 缩放 ×${formatFixed(scale)}`
+    : '';
+  const perHitText = Number.isFinite(Number(perHitScale))
+    ? ` / 每 hit ×${formatFixed(perHitScale)}`
+    : '';
+  const largeDifferenceCount = matrix.diagnostics?.rowsWithLargeDifference ?? 0;
+  const differenceText =
+    largeDifferenceCount > 0
+      ? ` · 差异 ${largeDifferenceCount}/${matrix.rowCount}`
+      : '';
+
+  return `执行矩阵 ${matrix.rowCount} element · function未确认 · A覆盖候选 ${slotOverrideCount}${scaleText}${perHitText}${differenceText}`;
 }
 
 function formatHitCandidateSummary(entry) {

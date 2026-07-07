@@ -751,6 +751,280 @@ function selectComparableFormulaCombinationPreview(previews) {
   );
 }
 
+function attachFormulaExecutionEvidenceMatrix(hpDamage, action, hitCandidates) {
+  const sourceEvidence = hpDamage?.sourceEvidence;
+  const formulaCandidatePreview = sourceEvidence?.formulaCandidatePreview;
+  if (!sourceEvidence || !formulaCandidatePreview) {
+    return hpDamage;
+  }
+
+  return {
+    ...hpDamage,
+    sourceEvidence: {
+      ...sourceEvidence,
+      formulaExecutionEvidenceMatrix: createFormulaExecutionEvidenceMatrix({
+        action,
+        sourceEvidence,
+        formulaCandidatePreview,
+        hitCandidates,
+      }),
+    },
+  };
+}
+
+function createFormulaExecutionEvidenceMatrix({
+  action,
+  sourceEvidence,
+  formulaCandidatePreview,
+  hitCandidates,
+}) {
+  const rows = (sourceEvidence?.candidates ?? [])
+    .map(candidate =>
+      createFormulaExecutionEvidenceMatrixRow({
+        action,
+        candidate,
+        formulaCandidatePreview,
+        hitCandidates,
+      })
+    )
+    .filter(Boolean);
+  const unresolved = uniqueStrings(rows.flatMap(row => row.unresolved ?? []));
+  const rowsWithLargeDifference = rows.filter(
+    row => row.perHitScaleGap?.differenceStatus === 'large-difference'
+  ).length;
+  const rowsWithSlotOverrideCandidates = rows.filter(
+    row => row.slotOverrideCandidates.length > 0
+  ).length;
+  const rowsWithHitBindings = rows.filter(
+    row => row.hitIndexes.length > 0
+  ).length;
+
+  return {
+    status:
+      rows.length > 0
+        ? 'evidence-matrix-built-execution-unconfirmed'
+        : 'no-formula-execution-evidence',
+    actionId: action?.id ?? null,
+    actionName: action?.name ?? null,
+    actionType: action?.type ?? null,
+    actorId: action?.actorId ?? null,
+    actorName: action?.actor?.name ?? null,
+    skillId: numberOrNull(action?.skillId),
+    actionVariantIndex: numberOrNull(sourceEvidence?.actionVariantIndex),
+    actionVariantLabel: sourceEvidence?.actionVariantLabel ?? null,
+    hitCount:
+      numberOrNull(formulaCandidatePreview?.rawProjection?.hitCount) ??
+      hitCandidates.length,
+    elementCount: uniqueNumbers(rows.map(row => row.elementConfigId)).length,
+    rowCount: rows.length,
+    preferredStrategy: PREFERRED_FORMULA_CANDIDATE_STRATEGY,
+    rows,
+    diagnostics: {
+      functionCombinationOrderStatus: 'unconfirmed',
+      levelOverrideApplicationStatus: 'unconfirmed',
+      perHitMultiplierAllocationStatus: 'unconfirmed',
+      rowsWithLargeDifference,
+      rowsWithSlotOverrideCandidates,
+      rowsWithHitBindings,
+      unresolved,
+      note: 'Function order, level-value override point and per-hit multiplier allocation remain unconfirmed.',
+    },
+    unresolved,
+    applied: false,
+    note: 'DamageElement execution matrix is evidence-only and must not be used as the final HP/toughness/energy formula until runtime execution is confirmed.',
+  };
+}
+
+function createFormulaExecutionEvidenceMatrixRow({
+  action,
+  candidate,
+  formulaCandidatePreview,
+  hitCandidates,
+}) {
+  const elementConfigId = numberOrNull(candidate.elementConfigId);
+  if (!Number.isFinite(elementConfigId)) {
+    return null;
+  }
+
+  const functionOrderCandidates = prioritizeFormulaExecutionCandidates(
+    (formulaCandidatePreview.combinationPreviews ?? [])
+      .filter(preview => Number(preview.elementConfigId) === elementConfigId)
+      .map(compactFormulaExecutionCombinationCandidate)
+  );
+  const preferredFunctionOrderCandidate =
+    selectComparableFormulaExecutionCandidate(functionOrderCandidates);
+  const slotSummaries =
+    candidate.skillLevelBridge?.formulaSlotAlignment?.parameterSummaries ?? [];
+  const slotOverrideCandidates = slotSummaries
+    .filter(
+      summary => summary.relationStatus === 'level-scaling-override-candidate'
+    )
+    .map(compactFormulaExecutionSlotSummary);
+  const directSlotMatches = slotSummaries
+    .filter(summary => summary.relationStatus === 'constant-direct-slot-match')
+    .map(compactFormulaExecutionSlotSummary);
+  const hitIndexes = collectFormulaExecutionHitIndexes(
+    hitCandidates,
+    elementConfigId
+  );
+
+  return {
+    actionId: action?.id ?? null,
+    actionName: action?.name ?? null,
+    actionVariantLabel:
+      action?.selectedActionVariant?.label ??
+      action?.selectedDamageSegment?.label ??
+      null,
+    skillId: numberOrNull(action?.skillId),
+    elementConfigId,
+    pathId: candidate.pathId ?? null,
+    hitIndexes,
+    hitBindingStatus:
+      hitIndexes.length > 0
+        ? 'per-hit-candidate-bound'
+        : 'per-hit-candidate-not-found',
+    functionOrderCandidates,
+    preferredFunctionOrderCandidate,
+    slotOverrideCandidates,
+    directSlotMatches,
+    perHitScaleGap: createFormulaExecutionPerHitScaleGap({
+      preferredFunctionOrderCandidate,
+      hitIndexes,
+    }),
+    unresolved: [
+      'function-combination-order-unconfirmed',
+      'level-override-application-point-unconfirmed',
+      'per-hit-multiplier-allocation-unconfirmed',
+    ],
+    applied: false,
+  };
+}
+
+function prioritizeFormulaExecutionCandidates(candidates) {
+  return [...candidates].sort((left, right) => {
+    const preferredDelta =
+      Number(right.strategy === PREFERRED_FORMULA_CANDIDATE_STRATEGY) -
+      Number(left.strategy === PREFERRED_FORMULA_CANDIDATE_STRATEGY);
+    if (preferredDelta !== 0) {
+      return preferredDelta;
+    }
+
+    const comparableDelta =
+      Number(right.comparisonStatus === 'compared-to-raw-projection') -
+      Number(left.comparisonStatus === 'compared-to-raw-projection');
+    if (comparableDelta !== 0) {
+      return comparableDelta;
+    }
+
+    return String(left.strategy).localeCompare(String(right.strategy));
+  });
+}
+
+function compactFormulaExecutionCombinationCandidate(preview) {
+  const comparison = preview.comparison ?? {};
+  return {
+    strategy: preview.strategy ?? null,
+    expression: preview.expression ?? null,
+    inputSource: preview.inputSource ?? null,
+    functionValues: Object.fromEntries(
+      Object.entries(preview.functionValues ?? {}).map(([key, value]) => [
+        key,
+        numberOrNull(value),
+      ])
+    ),
+    value: numberOrNull(preview.value),
+    roundedValue: numberOrNull(preview.roundedValue),
+    hitCount: numberOrNull(preview.hitCount),
+    comparisonStatus: comparison.status ?? null,
+    rawProjectionValue: numberOrNull(comparison.rawProjectionValue),
+    previewRoundedValue: numberOrNull(comparison.previewRoundedValue),
+    ratioToRawProjection: numberOrNull(comparison.ratioToRawProjection),
+    requiredScaleToRaw: numberOrNull(comparison.requiredScaleToRaw),
+    requiredPerHitScaleToRaw: numberOrNull(comparison.requiredPerHitScaleToRaw),
+    differenceStatus: comparison.differenceStatus ?? null,
+    status: preview.status ?? null,
+    applied: preview.applied === true,
+  };
+}
+
+function selectComparableFormulaExecutionCandidate(candidates) {
+  return (
+    candidates.find(
+      candidate =>
+        candidate.strategy === PREFERRED_FORMULA_CANDIDATE_STRATEGY &&
+        candidate.comparisonStatus === 'compared-to-raw-projection'
+    ) ??
+    candidates.find(
+      candidate => candidate.comparisonStatus === 'compared-to-raw-projection'
+    ) ??
+    null
+  );
+}
+
+function compactFormulaExecutionSlotSummary(summary) {
+  return {
+    id: numberOrNull(summary.id),
+    variable: summary.variable ?? null,
+    relationStatus: summary.relationStatus ?? null,
+    formulaParamValue: numberOrNull(summary.formulaParamValue),
+    firstLevelValue: numberOrNull(summary.firstLevelValue),
+    lastLevelValue: numberOrNull(summary.lastLevelValue),
+    minValue: numberOrNull(summary.minValue),
+    maxValue: numberOrNull(summary.maxValue),
+    levelRows: numberOrNull(summary.levelRows) ?? 0,
+    progression: summary.progression
+      ? {
+          status: summary.progression.status ?? null,
+          step: numberOrNull(summary.progression.step),
+          isArithmetic: summary.progression.isArithmetic === true,
+        }
+      : null,
+    applied: false,
+  };
+}
+
+function collectFormulaExecutionHitIndexes(hitCandidates, elementConfigId) {
+  return uniqueNumbers(
+    (hitCandidates ?? [])
+      .filter(hitCandidate =>
+        (hitCandidate.candidates ?? []).some(
+          candidate => Number(candidate.elementConfigId) === elementConfigId
+        )
+      )
+      .map(hitCandidate => hitCandidate.hitIndex)
+  );
+}
+
+function createFormulaExecutionPerHitScaleGap({
+  preferredFunctionOrderCandidate,
+  hitIndexes,
+}) {
+  if (!preferredFunctionOrderCandidate) {
+    return {
+      status: 'no-comparable-function-order-candidate',
+      hitCount: hitIndexes.length,
+      boundHitCount: hitIndexes.length,
+      applied: false,
+    };
+  }
+
+  return {
+    status: Number.isFinite(preferredFunctionOrderCandidate.requiredScaleToRaw)
+      ? 'requires-runtime-scale-or-hit-allocation'
+      : 'missing-comparable-scale',
+    rawProjectionValue: preferredFunctionOrderCandidate.rawProjectionValue,
+    previewRoundedValue: preferredFunctionOrderCandidate.previewRoundedValue,
+    ratioToRawProjection: preferredFunctionOrderCandidate.ratioToRawProjection,
+    requiredScaleToRaw: preferredFunctionOrderCandidate.requiredScaleToRaw,
+    requiredPerHitScaleToRaw:
+      preferredFunctionOrderCandidate.requiredPerHitScaleToRaw,
+    hitCount: preferredFunctionOrderCandidate.hitCount ?? hitIndexes.length,
+    boundHitCount: hitIndexes.length,
+    differenceStatus: preferredFunctionOrderCandidate.differenceStatus,
+    applied: false,
+  };
+}
+
 function compactDamageFieldPatternValues(damageFields = {}) {
   return {
     amp: numberOrNull(damageFields.amp),
@@ -1613,6 +1887,11 @@ function buildActionResultTimeline({ scenario, damageEvents, resourceEvents }) {
       damageElementSource,
     });
     const hitCandidates = hitCandidateResult.hitCandidates;
+    const hpDamage = attachFormulaExecutionEvidenceMatrix(
+      createHpDamageResult(action, primaryDamageEvent, damageElementSource),
+      action,
+      hitCandidates
+    );
 
     return {
       actionId: action.id,
@@ -1625,11 +1904,7 @@ function buildActionResultTimeline({ scenario, damageEvents, resourceEvents }) {
       targetId: action.targetId ?? null,
       targetName: action.target?.name ?? null,
       skillId: action.skillId ?? null,
-      hpDamage: createHpDamageResult(
-        action,
-        primaryDamageEvent,
-        damageElementSource
-      ),
+      hpDamage,
       toughnessDamage: createToughnessDamageResult(
         action,
         primaryDamageEvent,
