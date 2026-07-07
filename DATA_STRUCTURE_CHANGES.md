@@ -5530,3 +5530,120 @@ hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1
 - `methodBodyStatus` 从阶段 5-8AS 的 `il2cpp-dump-signatures-only` 细化为 `native-addresses-and-signatures-found-method-bodies-not-extracted`。
 - `runtimeApplicationTraceEvidence.applied = false`，HP、削韧、自身能量最终公式仍不能应用。
 - 下一阶段需要围绕目标 RVA 生成方法体级证据或运行时采样证据。
+
+## 74. 阶段 5-8AU：nativeDisassemblyEvidence 原生反汇编片段证据
+
+阶段 5-8AU 在 `runtimeApplicationTraceEvidence` 下新增 `nativeDisassemblyEvidence`，并把方法体状态从“只有原生地址”推进到“已有目标反汇编片段但公式语义未确认”。
+
+### 74.1 runtimeApplicationTraceEvidence 顶层字段变化
+
+`runtimeApplicationTraceEvidence` 更新：
+
+```json
+{
+  "status": "runtime-application-entrypoints-found-native-disassembly-snippets",
+  "methodBodyStatus": "native-disassembly-snippets-extracted-formula-semantics-unconfirmed",
+  "methodBodyAvailabilityStatus": "native-disassembly-snippets-extracted-formula-semantics-unconfirmed",
+  "runtimeNativeDisassemblyFunctionCount": 7,
+  "runtimeNativeDisassemblyFunctionKeys": [
+    "FormulaUtility.GetOutputDamage@0x187F360",
+    "DamageElement.Parse@0x138E5E0",
+    "SPSystem.RecoverSP@0x1483F40"
+  ],
+  "nativeDisassemblyEvidence": {},
+  "applied": false
+}
+```
+
+`unresolved[]` 从 `native-method-body-decompilation-pending` 调整为：
+
+- `native-disassembly-semantics-unconfirmed`
+- `runtime-call-target-mapping-unconfirmed`
+- `runtime-parameter-override-order-unconfirmed`
+- `hp-toughness-energy-application-points-unconfirmed`
+
+### 74.2 runtimeApplicationTraceEvidence.nativeDisassemblyEvidence
+
+新增对象字段：
+
+- `status`：当前为 `native-disassembly-snippets-extracted-formula-semantics-unconfirmed`。
+- `sourceKind`：`azpr-il2cpp-native-disassembly-evidence`。
+- `tool` / `toolPath`：当前使用 `dumpbin /disasm:nobytes /range`。
+- `primaryBinary`：记录 TC `GameAssembly.dll` 路径、长度、metadata 长度、image base 和与 Extractor metadata 的匹配状态。
+- `alternateBinaries[]`：记录 JP `GameAssembly.dll` 可用但非当前 TC dump 主来源。
+- `managedDecompilerAudit`：记录 `DummyDll/Assembly-CSharp.dll` 只能反编译出 `[Address]` 与空方法 stub。
+- `functionCount`：当前为 `7`。
+- `targetFunctions[]`：每个目标函数记录 `chains`、`className`、`method`、`rva`、`va`、`disassemblyRange`、`observations[]`、`confirmed[]`、`unresolved[]`。
+- `applied`：固定为 `false`。
+
+当前 `targetFunctions[]` 覆盖：
+
+- `FormulaUtility.GetOutputDamage`
+- `FormulaUtility.GetOutputWeaknessDamage`
+- `FormulaUtility.WeaknessPointChange`
+- `DamageElement.Parse`
+- `DamageElement.RecoverSP`
+- `SPSystem.RecoverSP`
+- `WeakBreakSystem.OnTransmit`
+
+### 74.3 externalElementBinding 与 summary 新增字段
+
+`hitBindingGap.externalElementBinding` 新增：
+
+- `runtimeNativeDisassemblyStatuses`
+- `runtimeNativeDisassemblyFunctionCount`
+- `runtimeNativeDisassemblyFunctionKeys`
+
+`hitBindingGapSummary.externalElementBindingSummary` 新增：
+
+- `runtimeNativeDisassemblyStatuses`
+- `runtimeNativeDisassemblyFunctionCount`
+- `gapsWithRuntimeNativeDisassembly`
+
+四动作样例当前为：
+
+```json
+{
+  "runtimeNativeDisassemblyStatuses": [
+    "native-disassembly-snippets-extracted-formula-semantics-unconfirmed"
+  ],
+  "runtimeNativeDisassemblyFunctionCount": 7,
+  "gapsWithRuntimeNativeDisassembly": 3
+}
+```
+
+### 74.4 已确认与仍未确认
+
+已确认：
+
+- `DamageElement.Parse` 会把 `TDamageElementParams+0x12C/0x130/0x134` 复制到 `DamageElement+0x240/0x244/0x248`，对应 `recoverSP/petRecoverSP/recoverInterval` 的运行时字段物化。
+- `DamageElement.RecoverSP` 会用 `DamageElement+0x240` 的 `m_recoverSP` 做进入充能路径的门控。
+- `SPSystem.RecoverSP` 中 `delta` 参与资源值累加路径。
+- `WeakBreakSystem.OnTransmit` 存在 transmit type 分支，但具体削韧分支仍未命名。
+
+仍未确认：
+
+- `FormulaUtility` 下游间接调用目标、function 组合顺序和敌方属性应用顺序。
+- `weakBreakDamageRate` 单位和对应 transmit type。
+- `recoverSP/petRecoverSP/recoverInterval` 的共享比例、角色/宠物归属、冷却或间隔触发规则。
+- `skillsub_ele_value.valueParam` 与 `TDamageElementParams.formulaParamValues` 的最终覆盖点。
+
+### 74.5 Workbench 摘要
+
+Workbench 执行矩阵摘要新增：
+
+```text
+反汇编片段 3/3
+```
+
+单个重击动作切换时显示：
+
+```text
+hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1/1 · 参数来源候选 1/1 · 应用入口候选 1/1 · 原生入口 1/1 · 反汇编片段 1/1 · 来源差异 1/1
+```
+
+### 74.6 当前边界
+
+- `nativeDisassemblyEvidence` 只证明已有目标原生片段和部分字段复制/门控事实，不等于完整公式反编译。
+- `runtimeApplicationTraceEvidence.applied = false`，HP、削韧、自身能量最终公式仍不能应用。
+- 下一阶段需要命名间接调用、字段偏移和 transmit type，再把充能链路推进到可测试公式探针。

@@ -37,6 +37,14 @@ const AZPR_IL2CPP_STRING_LITERAL_PATH =
   'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/stringliteral.json';
 const AZPR_IL2CPP_DUMMY_DLL_PATH =
   'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/DummyDll/Assembly-CSharp.dll';
+const AZPR_TC_GAME_ASSEMBLY_PATH =
+  'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll';
+const AZPR_TC_GLOBAL_METADATA_PATH =
+  'C:/AP/AzurPromilia_TC/AzurPromilia_game/AzurPromilia_Data/il2cpp_data/Metadata/global-metadata.dat';
+const AZPR_JP_GAME_ASSEMBLY_PATH =
+  'C:/AP/YostarGames/AZUPRO_JP/GameAssembly.dll';
+const AZPR_NATIVE_DISASSEMBLY_TOOL =
+  'C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/dumpbin.exe';
 const RUNTIME_NATIVE_METHOD_SYMBOLS = [
   {
     chains: ['selfEnergyChange'],
@@ -381,6 +389,189 @@ const RUNTIME_FIELD_LAYOUT_EVIDENCE = [
     sourceLineRange: 'il2cpp.h:265821-265877',
   },
 ];
+const RUNTIME_NATIVE_DISASSEMBLY_EVIDENCE = {
+  status: 'native-disassembly-snippets-extracted-formula-semantics-unconfirmed',
+  sourceKind: 'azpr-il2cpp-native-disassembly-evidence',
+  tool: 'dumpbin /disasm:nobytes /range',
+  toolPath: AZPR_NATIVE_DISASSEMBLY_TOOL,
+  primaryBinary: {
+    path: AZPR_TC_GAME_ASSEMBLY_PATH,
+    status: 'matched-to-current-extractor-metadata',
+    length: 222485544,
+    lastWriteTime: '2026-06-10T07:30:25+08:00',
+    imageBase: '0x180000000',
+    metadataPath: AZPR_TC_GLOBAL_METADATA_PATH,
+    metadataLength: 39907788,
+    extractorMetadataPath:
+      'C:/Codex/AzPr Extractor/AzurPromilia_Data/il2cpp_data/Metadata/global-metadata.dat',
+    extractorMetadataLength: 39907788,
+  },
+  alternateBinaries: [
+    {
+      path: AZPR_JP_GAME_ASSEMBLY_PATH,
+      status: 'available-but-not-primary-for-current-tc-dump',
+      length: 224586752,
+      metadataLength: 40532016,
+    },
+  ],
+  managedDecompilerAudit: {
+    tool: 'ilspycmd 10.1.0.8386',
+    target: AZPR_IL2CPP_DUMMY_DLL_PATH,
+    status: 'dummy-assembly-decompiles-to-address-attributes-and-empty-stubs',
+    finding:
+      'DummyDll exposes [Address] attributes and default-return method stubs, not executable C# bodies.',
+  },
+  functionCount: 7,
+  targetFunctions: [
+    {
+      chains: ['hpDamage'],
+      className: 'FormulaUtility',
+      method: 'GetOutputDamage',
+      rva: '0x187F360',
+      va: '0x18187F360',
+      disassemblyRange: '0x18187F360-0x18187F820',
+      observations: [
+        'Native body exists in TC GameAssembly and starts with a full non-empty prologue.',
+        'References GetOutputDamage string literal through VA 0x181C3E68F8.',
+        'Resolves executor/source/element handles before the main formula path; downstream call targets are still unmapped.',
+      ],
+      confirmed: [
+        'native-method-body-present',
+        'string-literal-cross-reference-present',
+      ],
+      unresolved: [
+        'function-param-evaluation-order-unconfirmed',
+        'enemy-defense-resistance-critical-order-unconfirmed',
+      ],
+    },
+    {
+      chains: ['toughnessDamage'],
+      className: 'FormulaUtility',
+      method: 'GetOutputWeaknessDamage',
+      rva: '0x1885FF0',
+      va: '0x181885FF0',
+      disassemblyRange: '0x181885FF0-0x181886150',
+      observations: [
+        'Native body exists and references GetOutputWeaknessDamage string literal through VA 0x181C3E7F18.',
+        'Copies returned OutputDamageData-sized data back to the caller buffer after an indirect method path.',
+      ],
+      confirmed: [
+        'native-method-body-present',
+        'weakness-output-entrypoint-present',
+      ],
+      unresolved: [
+        'weak-break-damage-rate-unit-scale-unconfirmed',
+        'weakness-output-to-target-state-link-unconfirmed',
+      ],
+    },
+    {
+      chains: ['hpDamage', 'toughnessDamage'],
+      className: 'FormulaUtility',
+      method: 'WeaknessPointChange',
+      rva: '0x188A6B0',
+      va: '0x18188A6B0',
+      disassemblyRange: '0x18188A6B0-0x18188A850',
+      observations: [
+        'Native body exists and references WeaknessPointChange string literal through VA 0x181C48AA08.',
+        'Initializes an output MyFloat-like stack value before resolving executor and attacker handles.',
+      ],
+      confirmed: [
+        'native-method-body-present',
+        'hp-and-toughness-shared-helper-present',
+      ],
+      unresolved: [
+        'outputDamage-and-wk-mutation-semantics-unconfirmed',
+        'weakness-skill-dmg-up-scale-unconfirmed',
+      ],
+    },
+    {
+      chains: ['selfEnergyChange'],
+      className: 'DamageElement',
+      method: 'Parse',
+      rva: '0x138E5E0',
+      va: '0x18138E5E0',
+      disassemblyRange: '0x18138E5E0-0x18138EEE0',
+      observations: [
+        'Copies TDamageElementParams+0x12C into DamageElement+0x240, matching m_recoverSP.',
+        'Copies TDamageElementParams+0x130 into DamageElement+0x244, matching m_petRecoverSP.',
+        'Copies TDamageElementParams+0x134 into DamageElement+0x248, matching m_recoverInterval.',
+        'Copies additional TDamageElementParams fields into DamageElement runtime fields before execution.',
+      ],
+      confirmed: [
+        'recover-sp-fields-copied-during-damage-element-parse',
+        'damage-element-runtime-field-materialization-confirmed',
+      ],
+      unresolved: [
+        'related-skill-level-override-application-point-unconfirmed',
+        'hit-index-binding-still-unconfirmed',
+      ],
+    },
+    {
+      chains: ['selfEnergyChange'],
+      className: 'DamageElement',
+      method: 'RecoverSP',
+      rva: '0x138EEE0',
+      va: '0x18138EEE0',
+      disassemblyRange: '0x18138EEE0-0x18138F080',
+      observations: [
+        'Native body checks DamageElement+0x240 and returns early when m_recoverSP <= 0.',
+        'References RecoverSP string literal through VA 0x181C444938.',
+        'Continues into entity/SP-system access after the m_recoverSP gate.',
+      ],
+      confirmed: [
+        'recover-sp-field-gates-energy-recovery-path',
+        'native-method-body-present',
+      ],
+      unresolved: [
+        'pet-recover-sp-share-rule-unconfirmed',
+        'recover-interval-runtime-throttle-unconfirmed',
+      ],
+    },
+    {
+      chains: ['selfEnergyChange'],
+      className: 'SPSystem',
+      method: 'RecoverSP',
+      rva: '0x1483F40',
+      va: '0x181483F40',
+      disassemblyRange: '0x181483F40-0x181484120',
+      observations: [
+        'Preserves recoverTagType from edx and baseDelta/delta from xmm2/xmm3.',
+        'Reads current entity resource state, adds delta to an existing float-like value, and compares against a cap-like value.',
+      ],
+      confirmed: [
+        'sp-system-recover-sp-native-body-present',
+        'delta-parameter-participates-in-resource-update-path',
+      ],
+      unresolved: [
+        'baseDelta-vs-delta-final-role-unconfirmed',
+        'resource-cap-and-rounding-rule-unconfirmed',
+      ],
+    },
+    {
+      chains: ['toughnessDamage'],
+      className: 'WeakBreakSystem',
+      method: 'OnTransmit',
+      rva: '0x14C05A0',
+      va: '0x1814C05A0',
+      disassemblyRange: '0x1814C05A0-0x1814C0780',
+      observations: [
+        'Native body gates on enabled byte at WeakBreakSystem+0x38.',
+        'Branches on transmit type values 0x64, 0x6F, 0x12B and 0x10C before resolving args.',
+        'References WeakBreak string literal through VA 0x181C489B48.',
+      ],
+      confirmed: [
+        'weak-break-system-ontransmit-native-body-present',
+        'weak-break-system-transmit-type-branching-present',
+      ],
+      unresolved: [
+        'which-transmit-type-corresponds-to-weakness-damage-unconfirmed',
+        'weak-break-state-transition-scale-unconfirmed',
+      ],
+    },
+  ],
+  applied: false,
+  note: 'Native disassembly proves selected target method bodies are present in the TC client binary and confirms several field-copy/gating facts, but it is not yet a full formula reconstruction.',
+};
 
 export function projectSimulationResult({
   scenario,
@@ -1861,6 +2052,8 @@ function createHitBindingGapExternalElementBinding({
       damageElementRefs: uniqueDamageElementRefs,
       runtimeParameterSourceEvidence,
     });
+  const runtimeNativeDisassemblyFunctionKeys =
+    runtimeApplicationTraceEvidence?.runtimeNativeDisassemblyFunctionKeys ?? [];
   const unresolved = uniqueStrings([
     'hit-index-binding-unconfirmed',
     'damage-element-execution-order-unconfirmed',
@@ -1877,7 +2070,7 @@ function createHitBindingGapExternalElementBinding({
       ? ['runtime-parameter-source-application-unconfirmed']
       : []),
     ...(runtimeApplicationTraceEvidence?.trackedValueChainCount > 0
-      ? ['runtime-application-method-body-missing']
+      ? ['runtime-application-native-disassembly-semantics-unconfirmed']
       : []),
     'toughness-unit-scale',
     'self-energy-owner-and-share-rule',
@@ -2018,6 +2211,14 @@ function createHitBindingGapExternalElementBinding({
       runtimeApplicationTraceEvidence?.runtimeNativeMethodSymbolKeys ?? [],
     runtimeNativeMethodSymbolCount:
       runtimeApplicationTraceEvidence?.runtimeNativeMethodSymbolCount ?? 0,
+    runtimeNativeDisassemblyStatuses:
+      runtimeApplicationTraceEvidence?.nativeDisassemblyEvidence?.status != null
+        ? [runtimeApplicationTraceEvidence.nativeDisassemblyEvidence.status]
+        : [],
+    runtimeNativeDisassemblyFunctionCount:
+      runtimeApplicationTraceEvidence?.nativeDisassemblyEvidence
+        ?.functionCount ?? 0,
+    runtimeNativeDisassemblyFunctionKeys,
     candidates,
     unresolved,
     applied: false,
@@ -2206,10 +2407,14 @@ function createHitBindingGapRuntimeApplicationTraceEvidence({
   const nativeMethodSymbolEvidence = hasDamageElement
     ? createRuntimeNativeMethodSymbolEvidence()
     : null;
+  const nativeDisassemblyEvidence =
+    nativeMethodSymbolEvidence?.nativeDisassemblyEvidence ?? null;
+  const runtimeNativeDisassemblyFunctionKeys =
+    getRuntimeNativeDisassemblyFunctionKeys(nativeDisassemblyEvidence);
 
   return {
     status: hasDamageElement
-      ? 'runtime-application-entrypoints-found-method-bodies-missing'
+      ? 'runtime-application-entrypoints-found-native-disassembly-snippets'
       : 'runtime-application-entrypoints-missing',
     sourceKind: 'azpr-runtime-application-trace-evidence',
     file: SKILL_ASSET_EVIDENCE_PATH,
@@ -2219,15 +2424,21 @@ function createHitBindingGapRuntimeApplicationTraceEvidence({
     ),
     trackedValueChainCount,
     methodBodyStatus:
+      nativeDisassemblyEvidence?.status ??
       nativeMethodSymbolEvidence?.methodBodyStatus ??
       'il2cpp-dump-signatures-only',
     methodBodyAvailabilityStatus:
+      nativeDisassemblyEvidence?.status ??
       nativeMethodSymbolEvidence?.status ??
       'native-method-symbols-not-evaluated',
     runtimeNativeMethodSymbolCount:
       nativeMethodSymbolEvidence?.methodCount ?? 0,
     runtimeNativeMethodSymbolKeys: nativeMethodSymbolEvidence?.methodKeys ?? [],
+    runtimeNativeDisassemblyFunctionCount:
+      nativeDisassemblyEvidence?.functionCount ?? 0,
+    runtimeNativeDisassemblyFunctionKeys,
     nativeMethodSymbolEvidence,
+    nativeDisassemblyEvidence,
     parameterOverrideStatus:
       (runtimeParameterSourceEvidence?.candidateCount ?? 0) > 0
         ? 'related-skill-level-candidate-found-execution-override-order-unconfirmed'
@@ -2380,12 +2591,13 @@ function createHitBindingGapRuntimeApplicationTraceEvidence({
       applied: false,
     },
     unresolved: [
-      'native-method-body-decompilation-pending',
+      'native-disassembly-semantics-unconfirmed',
+      'runtime-call-target-mapping-unconfirmed',
       'runtime-parameter-override-order-unconfirmed',
       'hp-toughness-energy-application-points-unconfirmed',
     ],
     applied: false,
-    note: 'This records runtime entry points and data carriers for HP, toughness and self energy. The dump currently exposes signatures and fields only, so formulas remain evidence-only.',
+    note: 'This records runtime entry points, data carriers and selected native disassembly snippets for HP, toughness and self energy. Formula semantics remain evidence-only until call targets, order and units are confirmed.',
   };
 }
 
@@ -2440,7 +2652,7 @@ function createRuntimeNativeMethodSymbolEvidence() {
     ],
     missingEvidence: [
       'managed C# method bodies',
-      'IDA/Ghidra/C++ pseudocode for target RVAs',
+      'full IDA/Ghidra/C++ pseudocode and call target map for target RVAs',
       'runtime hook trace confirming call order and units',
     ],
     methodCount: methodKeys.length,
@@ -2449,8 +2661,9 @@ function createRuntimeNativeMethodSymbolEvidence() {
     targetMethods: RUNTIME_NATIVE_METHOD_SYMBOLS,
     fieldLayoutEvidence: RUNTIME_FIELD_LAYOUT_EVIDENCE,
     stringLiteralEvidence: RUNTIME_NATIVE_STRING_LITERALS,
+    nativeDisassemblyEvidence: RUNTIME_NATIVE_DISASSEMBLY_EVIDENCE,
     applied: false,
-    note: 'Native addresses make the runtime application entrypoints locatable, but method bodies are still not extracted; application order, scaling units and trigger conditions remain unconfirmed.',
+    note: 'Native addresses make the runtime application entrypoints locatable; selected disassembly snippets are attached separately, while application order, scaling units and trigger conditions remain unconfirmed.',
   };
 }
 
@@ -2462,6 +2675,18 @@ function getRuntimeNativeMethodSymbolsByChain(chain) {
 
 function createRuntimeMethodSymbolKey(symbol) {
   return `${symbol.qualifiedName}@${symbol.rva}`;
+}
+
+function getRuntimeNativeDisassemblyFunctionKeys(evidence) {
+  return uniqueStrings(
+    (evidence?.targetFunctions ?? []).map(
+      createRuntimeNativeDisassemblyFunctionKey
+    )
+  );
+}
+
+function createRuntimeNativeDisassemblyFunctionKey(target) {
+  return `${target.className}.${target.method}@${target.rva}`;
 }
 
 function selectPrimaryHitBindingBehaviorCandidates(behaviorBindingEvidence) {
@@ -2665,6 +2890,11 @@ function createHitBindingGapExternalElementBindingSummary(gaps) {
   const runtimeNativeMethodSymbolKeys = uniqueStrings(
     bindings.flatMap(binding => binding.runtimeNativeMethodSymbolKeys ?? [])
   );
+  const runtimeNativeDisassemblyFunctionKeys = uniqueStrings(
+    bindings.flatMap(
+      binding => binding.runtimeNativeDisassemblyFunctionKeys ?? []
+    )
+  );
 
   return {
     status:
@@ -2776,6 +3006,16 @@ function createHitBindingGapExternalElementBindingSummary(gaps) {
     runtimeNativeMethodSymbolCount: runtimeNativeMethodSymbolKeys.length,
     gapsWithRuntimeNativeMethodSymbols: bindings.filter(
       binding => (binding.runtimeNativeMethodSymbolKeys ?? []).length > 0
+    ).length,
+    runtimeNativeDisassemblyStatuses: uniqueStrings(
+      bindings.flatMap(
+        binding => binding.runtimeNativeDisassemblyStatuses ?? []
+      )
+    ),
+    runtimeNativeDisassemblyFunctionCount:
+      runtimeNativeDisassemblyFunctionKeys.length,
+    gapsWithRuntimeNativeDisassembly: bindings.filter(
+      binding => (binding.runtimeNativeDisassemblyFunctionKeys ?? []).length > 0
     ).length,
     unresolved: uniqueStrings(
       bindings.flatMap(binding => binding.unresolved ?? [])

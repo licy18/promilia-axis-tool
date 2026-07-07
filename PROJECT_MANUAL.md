@@ -55,7 +55,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；12 个测试文件、104 条测试通过。
+- `npm run test -- --run`：通过；13 个测试文件、105 条测试通过。
 
 ## 3. 目录速览
 
@@ -2575,6 +2575,9 @@ Endaxis 参考边界：
 验收结果：
 
 - `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+- `npm run lint`：通过，0 error，16 个既有 warning。
+- `npm test -- --run`：通过，13 个测试文件、105 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
 - `npm test -- --run`：通过，12 个测试文件、104 条测试通过。
 - `npx eslint src/simulation/projection/projectSimulationResult.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
 - `npx prettier --check src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
@@ -3677,6 +3680,48 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 阶段 5-8AU 目标：为 5-8AT 固化的目标 RVA 生成或导入方法体级证据，优先走 Ghidra/IDA 反汇编、Il2CppDumper 脚本交叉引用或运行时 hook 采样。
 - 重点验证 `FormulaUtility.GetOutputDamage/GetOutputWeaknessDamage/WeaknessPointChange`、`DamageElement.RecoverSP`、`SPSystem.OnTransmit/RecoverSP` 的调用顺序、单位缩放、参数覆盖点和触发条件。
+
+### 2026-07-08：阶段 5-8AU 原生反汇编片段与充能字段门控证据
+
+本轮完成：
+
+- 已在本机定位客户端二进制：TC `C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll` 与当前 Extractor metadata 长度一致，JP `C:/AP/YostarGames/AZUPRO_JP/GameAssembly.dll` 暂作为非主用参考。
+- 已确认 `DummyDll/Assembly-CSharp.dll` 只能通过 `ilspycmd` 得到 `[Address]` 和空方法 stub，不能作为 C# 方法体来源。
+- 已用 `dumpbin /disasm:nobytes /range` 为 7 个目标函数建立 `nativeDisassemblyEvidence`：`FormulaUtility.GetOutputDamage`、`GetOutputWeaknessDamage`、`WeaknessPointChange`、`DamageElement.Parse`、`DamageElement.RecoverSP`、`SPSystem.RecoverSP`、`WeakBreakSystem.OnTransmit`。
+- `runtimeApplicationTraceEvidence.status` 更新为 `runtime-application-entrypoints-found-native-disassembly-snippets`。
+- `runtimeApplicationTraceEvidence.methodBodyStatus` 更新为 `native-disassembly-snippets-extracted-formula-semantics-unconfirmed`，并新增顶层 `nativeDisassemblyEvidence`、`runtimeNativeDisassemblyFunctionCount`、`runtimeNativeDisassemblyFunctionKeys`。
+- `externalElementBindingSummary` 新增 `runtimeNativeDisassemblyStatuses`、`runtimeNativeDisassemblyFunctionCount`、`gapsWithRuntimeNativeDisassembly`。
+- Workbench 执行矩阵摘要新增 `反汇编片段 x/y`，切换到重击动作时可以看到 `反汇编片段 1/1`。
+
+当前已确认事实：
+
+- `DamageElement.Parse` 中可见 `TDamageElementParams+0x12C/0x130/0x134 -> DamageElement+0x240/0x244/0x248` 的字段复制，对应 `recoverSP/petRecoverSP/recoverInterval` 进入运行时 `DamageElement`。
+- `DamageElement.RecoverSP` 会检查 `DamageElement+0x240`，当 `m_recoverSP <= 0` 时提前返回，说明 `recoverSP` 字段确实门控自身能量恢复路径。
+- `SPSystem.RecoverSP` 保留 `recoverTagType` 与 `baseDelta/delta` 参数，并能看到 `delta` 参与当前资源值累加与上限比较路径；但 `baseDelta`、共享比例、上限和取整规则仍未确认。
+- `WeakBreakSystem.OnTransmit` 已看到对 `0x64 / 0x6F / 0x12B / 0x10C` 等 transmit type 的分支，但哪个分支对应削韧/失衡伤害仍未确认。
+- `FormulaUtility.GetOutputDamage/GetOutputWeaknessDamage/WeaknessPointChange` 均确认存在非空原生方法体和字符串交叉引用，但下游间接调用目标、参数覆盖顺序、敌方属性顺序和单位缩放仍未确认。
+
+当前四动作反汇编片段结果：
+
+- `externalElementBindingSummary.gapsWithRuntimeNativeDisassembly = 3/3`。
+- `runtimeNativeDisassemblyFunctionCount = 7`，按 `class.method@rva` 去重。
+- 单动作 `runtimeApplicationTraceEvidence.runtimeNativeDisassemblyFunctionCount = 7`。
+- 代表性 RVA：`FormulaUtility.GetOutputDamage = 0x187F360`，`FormulaUtility.GetOutputWeaknessDamage = 0x1885FF0`，`DamageElement.Parse = 0x138E5E0`，`DamageElement.RecoverSP = 0x138EEE0`，`SPSystem.RecoverSP = 0x1483F40`，`WeakBreakSystem.OnTransmit = 0x14C05A0`。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+
+当前边界：
+
+- 阶段 5-8AU 只证明目标原生方法体片段存在，并确认了部分充能字段复制/门控事实。
+- `nativeDisassemblyEvidence.applied = false`，不能直接改写 HP、削韧或自身能量最终公式。
+- HP 的 `FormulaUtility` 完整公式顺序、削韧 transmit type 映射、`weakBreakDamageRate` 单位、`recoverSP/petRecoverSP/recoverInterval` 的最终共享/冷却规则仍需继续验证。
+
+下一步：
+
+- 阶段 5-8AV 目标：把目标 RVA 的间接调用、关键字段偏移和 transmit enum/type 值继续命名，优先把 `DamageElement.Parse -> RecoverSP -> SPSystem.RecoverSP` 的充能链路拆成可测试的运行时公式探针。
+- 若静态反汇编继续卡在间接调用，改走 Ghidra/IDA 伪代码、Capstone 脚本交叉引用或运行时 hook 采样，确认 `formulaParamValues`、`skillsub_ele_value.valueParam`、`weakBreakDamageRate` 和充能字段的实际单位。
 
 ## 10. 文档维护规则
 

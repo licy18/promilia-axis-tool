@@ -1660,18 +1660,23 @@ describe('first vertical slice simulation', () => {
           runtimeParameterSourceSkillIds: [10900125],
           gapsWithRuntimeParameterSourceCandidates: 3,
           runtimeApplicationTraceStatuses: [
-            'runtime-application-entrypoints-found-method-bodies-missing',
+            'runtime-application-entrypoints-found-native-disassembly-snippets',
           ],
           runtimeApplicationTraceChainCount: 9,
           gapsWithRuntimeApplicationTraceEvidence: 3,
           runtimeMethodBodyStatuses: [
-            'native-addresses-and-signatures-found-method-bodies-not-extracted',
+            'native-disassembly-snippets-extracted-formula-semantics-unconfirmed',
           ],
           runtimeNativeMethodSymbolStatuses: [
             'native-addresses-and-signatures-found-method-bodies-not-extracted',
           ],
           runtimeNativeMethodSymbolCount: 27,
           gapsWithRuntimeNativeMethodSymbols: 3,
+          runtimeNativeDisassemblyStatuses: [
+            'native-disassembly-snippets-extracted-formula-semantics-unconfirmed',
+          ],
+          runtimeNativeDisassemblyFunctionCount: 7,
+          gapsWithRuntimeNativeDisassembly: 3,
           applied: false,
         }),
         elementSourceAlignmentSummary: expect.objectContaining({
@@ -1795,21 +1800,37 @@ describe('first vertical slice simulation', () => {
                 applied: false,
               }),
               runtimeApplicationTraceStatuses: [
-                'runtime-application-entrypoints-found-method-bodies-missing',
+                'runtime-application-entrypoints-found-native-disassembly-snippets',
               ],
               runtimeApplicationTraceChainCount: 3,
+              runtimeNativeDisassemblyStatuses: [
+                'native-disassembly-snippets-extracted-formula-semantics-unconfirmed',
+              ],
+              runtimeNativeDisassemblyFunctionCount: 7,
+              runtimeNativeDisassemblyFunctionKeys: expect.arrayContaining([
+                'FormulaUtility.GetOutputDamage@0x187F360',
+                'DamageElement.Parse@0x138E5E0',
+                'SPSystem.RecoverSP@0x1483F40',
+                'WeakBreakSystem.OnTransmit@0x14C05A0',
+              ]),
               runtimeApplicationTraceEvidence: expect.objectContaining({
                 status:
-                  'runtime-application-entrypoints-found-method-bodies-missing',
+                  'runtime-application-entrypoints-found-native-disassembly-snippets',
                 methodBodyStatus:
-                  'native-addresses-and-signatures-found-method-bodies-not-extracted',
+                  'native-disassembly-snippets-extracted-formula-semantics-unconfirmed',
                 methodBodyAvailabilityStatus:
-                  'native-addresses-and-signatures-found-method-bodies-not-extracted',
+                  'native-disassembly-snippets-extracted-formula-semantics-unconfirmed',
                 runtimeNativeMethodSymbolCount: 27,
                 runtimeNativeMethodSymbolKeys: expect.arrayContaining([
                   'Lens.Gameplay.Modules.BigWorld.FormulaUtility$$GetOutputDamage@0x187F360',
                   'Lens.Gameplay.Modules.BigWorld.WeakBreakSystem$$OnTransmit@0x14C05A0',
                   'Lens.Gameplay.Modules.BigWorld.SPSystem$$RecoverSP@0x1483F40',
+                ]),
+                runtimeNativeDisassemblyFunctionCount: 7,
+                runtimeNativeDisassemblyFunctionKeys: expect.arrayContaining([
+                  'FormulaUtility.GetOutputDamage@0x187F360',
+                  'DamageElement.RecoverSP@0x138EEE0',
+                  'WeakBreakSystem.OnTransmit@0x14C05A0',
                 ]),
                 nativeMethodSymbolEvidence: expect.objectContaining({
                   status:
@@ -1828,7 +1849,7 @@ describe('first vertical slice simulation', () => {
                   ]),
                   missingEvidence: expect.arrayContaining([
                     'managed C# method bodies',
-                    'IDA/Ghidra/C++ pseudocode for target RVAs',
+                    'full IDA/Ghidra/C++ pseudocode and call target map for target RVAs',
                     'runtime hook trace confirming call order and units',
                   ]),
                   chainMethodCounts: expect.arrayContaining([
@@ -1870,7 +1891,57 @@ describe('first vertical slice simulation', () => {
                       ]),
                     }),
                   ]),
+                  nativeDisassemblyEvidence: expect.objectContaining({
+                    status:
+                      'native-disassembly-snippets-extracted-formula-semantics-unconfirmed',
+                    functionCount: 7,
+                  }),
                   applied: false,
+                }),
+                nativeDisassemblyEvidence: expect.objectContaining({
+                  status:
+                    'native-disassembly-snippets-extracted-formula-semantics-unconfirmed',
+                  primaryBinary: expect.objectContaining({
+                    path: 'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll',
+                    status: 'matched-to-current-extractor-metadata',
+                    metadataLength: 39907788,
+                    extractorMetadataLength: 39907788,
+                  }),
+                  managedDecompilerAudit: expect.objectContaining({
+                    status:
+                      'dummy-assembly-decompiles-to-address-attributes-and-empty-stubs',
+                  }),
+                  targetFunctions: expect.arrayContaining([
+                    expect.objectContaining({
+                      className: 'DamageElement',
+                      method: 'Parse',
+                      confirmed: expect.arrayContaining([
+                        'recover-sp-fields-copied-during-damage-element-parse',
+                        'damage-element-runtime-field-materialization-confirmed',
+                      ]),
+                    }),
+                    expect.objectContaining({
+                      className: 'DamageElement',
+                      method: 'RecoverSP',
+                      confirmed: expect.arrayContaining([
+                        'recover-sp-field-gates-energy-recovery-path',
+                      ]),
+                    }),
+                    expect.objectContaining({
+                      className: 'SPSystem',
+                      method: 'RecoverSP',
+                      confirmed: expect.arrayContaining([
+                        'delta-parameter-participates-in-resource-update-path',
+                      ]),
+                    }),
+                    expect.objectContaining({
+                      className: 'WeakBreakSystem',
+                      method: 'OnTransmit',
+                      confirmed: expect.arrayContaining([
+                        'weak-break-system-transmit-type-branching-present',
+                      ]),
+                    }),
+                  ]),
                 }),
                 parameterOverrideStatus:
                   'related-skill-level-candidate-found-execution-override-order-unconfirmed',
@@ -1954,7 +2025,8 @@ describe('first vertical slice simulation', () => {
                   applied: false,
                 }),
                 unresolved: expect.arrayContaining([
-                  'native-method-body-decompilation-pending',
+                  'native-disassembly-semantics-unconfirmed',
+                  'runtime-call-target-mapping-unconfirmed',
                   'runtime-parameter-override-order-unconfirmed',
                   'hp-toughness-energy-application-points-unconfirmed',
                 ]),
