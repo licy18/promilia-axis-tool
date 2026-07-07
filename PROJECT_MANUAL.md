@@ -2293,6 +2293,37 @@ Endaxis 参考边界：
 - 优先建立 `TDamageElementParams` 的字段语义表：HP 倍率候选、削韧候选、角色自身能量回复候选分别对应哪些字段、缩放和触发条件。
 - 将末音 `10900101` 的 `ast_109001251` 作为第一条公式样本，和 `skill_level` 描述倍率、`skillsub_ele_value`、`element_formula`、角色面板攻击进行交叉校验。
 
+### 2026-07-07：阶段 5-8M TDamageElementParams 三值字段映射落地
+
+本轮完成：
+
+- `skill-asset-evidence.json` 新增顶层 `damageElementFieldMappingEvidence`，把已解析出的 `TDamageElementParams` 对象按三条计算链拆开记录。
+- HP 伤害候选链记录 `formulaParams.function_1/function_2`、`formulaParamValues`、`damageElementalType`、`physicalRatio`、`magicRatio`、`elementCalFactor`、`amp` 等字段。
+- 敌人韧性削减候选链记录 `weakBreakDamageRate`、`hitType`、`knockBackId`、`knockBackForce`、`interruptPriority`、`useOneBreak` 等字段。
+- 自身能量变化候选链记录 `recoverSP`、`petRecoverSP`、`recoverInterval`，并标注归属和共享规则仍待确认。
+- `damageElementFieldMappingEvidence` 会尝试把 external element 的 `elementConfigId` 桥接到 `skill-logic-index.json` 的 `skillsub_ele_value.valueParam` 等级值。
+- 末音 `10900101` 当前有 3 个 `TDamageElementParams`：`109001081` 与 `109001306` 各命中 12 行等级桥接，`109001251` 暂未在当前技能等级值中找到同 elementId 桥接。
+- `109001081` / `109001306` 的桥接显示 `valueParam = 1#1600|7#10000` 到 `1#3360|7#10000`，其中参数 1 随等级变化，参数 7 恒为 10000；与对象内 `formulaParamValues` 的槽位对齐仍标记为未确认。
+
+验收结果：
+
+- `npm run data:generate`：通过，重新生成 `skill-asset-evidence.json` 和相关 generated 数据。
+- `npm run test -- --run src/__tests__/data/azprGenerated.test.js`：通过，1 个测试文件、9 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1359 KB。
+
+当前边界：
+
+- 5-8M 已完成字段语义候选映射，不等于最终公式已应用。
+- `skillsub_ele_value.valueParam` 已能对部分 elementId 提供等级值桥接，但还不能证明这些值和 `formulaParamValues` 的覆盖、缩放或替换关系。
+- HP 伤害仍需接角色面板、敌方防御/抗性/弱点、命中次数和目标状态；削韧仍需确认蓝原的韧性单位和目标规则；充能仍需确认能量归属、共享和 interval 触发。
+
+下一步：
+
+- 阶段 5-8N 目标：把 `damageElementFieldMappingEvidence` 接入动作结果 source 层和 Workbench 展示层。
+- 每个动作的 `actionResultTimeline[]` 应能显示候选 HP、削韧、充能来源字段，但仍保持未确认公式为 `applied: false`。
+- 优先用末音 `10900101` 的 `109001081` / `109001306` 桥接样本，建立 `skill level valueParam -> element field mapping -> action result source` 的可追溯链路，再继续验证公式缩放。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

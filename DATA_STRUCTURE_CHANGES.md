@@ -2311,3 +2311,128 @@ Unity `m_PathID` 是 64 位整数，JavaScript `JSON.parse` 会把它读成普�
 - 已解析对象本体，不等于已确认最终公式。
 - `TDamageElementParams` 中的 `formulaParams`、`weakBreakDamageRate`、`recoverSP`、`petRecoverSP` 是 HP、削韧、充能三条计算链的候选字段。
 - 下一阶段必须确认这些字段的缩放、触发次数、目标归属和与 `skillsub_ele_value` / `element_formula` 的关系。
+
+## 38. 2026-07-07 TDamageElementParams 三值字段映射摘要
+
+阶段 5-8M 在 `skill-asset-evidence.json` 中新增 `damageElementFieldMappingEvidence`，用于把已解析出的 `TDamageElementParams` 对象拆成 HP 伤害、敌人韧性削减、自身能量变化三条候选链。
+
+### 38.1 summary 新增字段
+
+`skill-asset-evidence.json.summary` 新增：
+
+```javascript
+{
+  "damageElementFieldMappedSkills": 1,
+  "damageElementFieldMappedObjects": 3,
+  "hpDamageFieldCandidateRefs": 3,
+  "toughnessDamageFieldCandidateRefs": 3,
+  "selfEnergyFieldCandidateRefs": 3,
+  "damageElementSkillLogicBridgeMatches": 2
+}
+```
+
+含义：
+
+- `damageElementFieldMappedSkills`：存在 `TDamageElementParams` 字段映射的当前技能数。
+- `damageElementFieldMappedObjects`：已映射的 `TDamageElementParams` 对象数。
+- `hpDamageFieldCandidateRefs`：HP 伤害候选字段引用数。
+- `toughnessDamageFieldCandidateRefs`：敌人韧性削减候选字段引用数。
+- `selfEnergyFieldCandidateRefs`：自身能量变化候选字段引用数。
+- `damageElementSkillLogicBridgeMatches`：同 elementId 能桥接到 `skill-logic-index.json.levels.elementValues` 的对象数。
+
+### 38.2 顶层新增 damageElementFieldMappingEvidence
+
+```javascript
+{
+  "damageElementFieldMappingEvidence": {
+    "status": "damage-element-field-candidates-found",
+    "summary": {
+      "skillCount": 1,
+      "mappedSkills": 1,
+      "damageElementObjects": 3,
+      "hpDamageCandidateRefs": 3,
+      "toughnessDamageCandidateRefs": 3,
+      "selfEnergyCandidateRefs": 3,
+      "skillsubElementBridgeMatchedObjects": 2,
+      "skillsubElementBridgeMissingObjects": 1,
+      "skillsubElementBridgeLevelRows": 24
+    }
+  }
+}
+```
+
+### 38.3 fieldMappings 对象摘要
+
+`damageElementFieldMappingEvidence.skills[].fieldMappings[]` 的关键字段：
+
+```javascript
+{
+  "elementConfigId": 109001081,
+  "hpDamage": {
+    "status": "candidate-from-TDamageElementParams-formulaParams",
+    "formulaFunctionIds": {
+      "function_1": 1,
+      "function_2": 2
+    },
+    "formulaSlotCandidates": [
+      { "slot": 1, "variable": "A", "rawValue": 1000 },
+      { "slot": 2, "variable": "B", "rawValue": 1900 },
+      { "slot": 6, "variable": "F", "rawValue": 2500 },
+      { "slot": 7, "variable": "G", "rawValue": 10000 }
+    ]
+  },
+  "toughnessDamage": {
+    "status": "candidate-from-TDamageElementParams-weak-break-fields",
+    "weakBreakDamageRate": 7000,
+    "hitType": 1,
+    "knockBackId": 1,
+    "knockBackForce": 1
+  },
+  "selfEnergyChange": {
+    "status": "candidate-from-TDamageElementParams-recover-sp-fields",
+    "recoverSP": 2700,
+    "petRecoverSP": 10399,
+    "recoverInterval": 9999
+  }
+}
+```
+
+### 38.4 skillLevelBridge 摘要
+
+当 `elementConfigId` 能在当前技能等级值中找到同 elementId 时，`skillLevelBridge` 会记录等级桥接：
+
+```javascript
+{
+  "status": "skillsub-element-level-bridge-found",
+  "elementConfigId": 109001081,
+  "levelRows": 12,
+  "parameterIds": [1, 7],
+  "varyingParameterIds": [1],
+  "firstLevel": {
+    "level": 1,
+    "valueParam": "1#1600|7#10000"
+  },
+  "lastLevel": {
+    "level": 12,
+    "valueParam": "1#3360|7#10000"
+  },
+  "formulaParamAlignment": {
+    "status": "same-element-id-found-slot-alignment-unverified",
+    "firstLevelDirectSlotMatches": [7],
+    "firstLevelMismatches": [
+      {
+        "id": 1,
+        "variable": "A",
+        "skillsubValue": 1600,
+        "formulaParamValue": 1000
+      }
+    ]
+  }
+}
+```
+
+### 38.5 当前边界
+
+- `damageElementFieldMappingEvidence` 是字段候选映射，不是最终公式。
+- `skillsub_ele_value.valueParam` 已能桥接部分 elementId 的等级值，但 `valueParam` 与 `formulaParamValues` 的覆盖关系、缩放关系和公式输入顺序仍未确认。
+- 下一阶段应把这些候选字段接入 `actionResultTimeline[]` source 层和 Workbench 展示层，保持未确认公式 `applied: false`，再继续验证 HP、削韧、充能三条最终计算链。

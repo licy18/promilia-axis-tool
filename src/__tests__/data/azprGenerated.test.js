@@ -384,6 +384,12 @@ describe('generated AzPr data', () => {
       externalElementObjectResolvedSkills: 1,
       externalElementObjectResolvedRefs: 8,
       externalElementObjectUnresolvedRefs: 0,
+      damageElementFieldMappedSkills: 1,
+      damageElementFieldMappedObjects: 3,
+      hpDamageFieldCandidateRefs: 3,
+      toughnessDamageFieldCandidateRefs: 3,
+      selfEnergyFieldCandidateRefs: 3,
+      damageElementSkillLogicBridgeMatches: 2,
       relationStatus: 'skill-control-assets-found-in-azpr-extractor',
     });
     expect(evidence.elementTypeCatalogEvidence).toMatchObject({
@@ -458,6 +464,104 @@ describe('generated AzPr data', () => {
                 recoverInterval: 9999,
               }),
               mediaPackNames: ['11_109001_133'],
+            }),
+          ]),
+        }),
+      ],
+    });
+    expect(evidence.damageElementFieldMappingEvidence).toMatchObject({
+      status: 'damage-element-field-candidates-found',
+      summary: {
+        skillCount: 1,
+        mappedSkills: 1,
+        damageElementObjects: 3,
+        hpDamageCandidateRefs: 3,
+        toughnessDamageCandidateRefs: 3,
+        selfEnergyCandidateRefs: 3,
+        skillsubElementBridgeMatchedObjects: 2,
+        skillsubElementBridgeMissingObjects: 1,
+        skillsubElementBridgeLevelRows: 24,
+      },
+      skills: [
+        expect.objectContaining({
+          skillId: 10900101,
+          status: 'damage-element-field-candidates-found',
+          damageElementCount: 3,
+          fieldMappings: expect.arrayContaining([
+            expect.objectContaining({
+              elementConfigId: 109001251,
+              hpDamage: expect.objectContaining({
+                status: 'candidate-from-TDamageElementParams-formulaParams',
+                formulaFunctionIds: {
+                  function_1: 1,
+                  function_2: 2,
+                },
+                formulaSlotCandidates: expect.arrayContaining([
+                  {
+                    slot: 2,
+                    variable: 'B',
+                    rawValue: 3000,
+                    roleStatus: 'unconfirmed-formula-input',
+                  },
+                  {
+                    slot: 6,
+                    variable: 'F',
+                    rawValue: 8500,
+                    roleStatus: 'unconfirmed-formula-input',
+                  },
+                ]),
+              }),
+              toughnessDamage: expect.objectContaining({
+                weakBreakDamageRate: 7000,
+                hitType: 0,
+                knockBackId: 4,
+                knockBackForce: 3,
+              }),
+              selfEnergyChange: expect.objectContaining({
+                recoverSP: 5899,
+                petRecoverSP: 22999,
+                recoverInterval: 9999,
+              }),
+              skillLevelBridge: expect.objectContaining({
+                status: 'skillsub-element-level-bridge-missing',
+                elementConfigId: 109001251,
+                levelRows: 0,
+              }),
+            }),
+            expect.objectContaining({
+              elementConfigId: 109001081,
+              hpDamage: expect.objectContaining({
+                formulaSlotCandidates: expect.arrayContaining([
+                  expect.objectContaining({
+                    slot: 2,
+                    rawValue: 1900,
+                  }),
+                ]),
+              }),
+              skillLevelBridge: expect.objectContaining({
+                status: 'skillsub-element-level-bridge-found',
+                levelRows: 12,
+                parameterIds: [1, 7],
+                varyingParameterIds: [1],
+                firstLevel: expect.objectContaining({
+                  valueParam: '1#1600|7#10000',
+                }),
+                lastLevel: expect.objectContaining({
+                  valueParam: '1#3360|7#10000',
+                }),
+                formulaParamAlignment: expect.objectContaining({
+                  status: 'same-element-id-found-slot-alignment-unverified',
+                  firstLevelDirectSlotMatches: [7],
+                  firstLevelMismatches: [
+                    {
+                      id: 1,
+                      variable: 'A',
+                      skillsubValue: 1600,
+                      formulaParamValue: 1000,
+                    },
+                  ],
+                }),
+              }),
             }),
           ]),
         }),

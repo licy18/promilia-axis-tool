@@ -649,6 +649,7 @@ const combatFormulaEvidence = buildCombatFormulaEvidenceIndex({
 const skillAssetEvidence = await buildSkillAssetEvidenceIndex({
   characters,
   skills,
+  skillLogicIndex,
   tables: {
     skillTable,
     heroTable,
@@ -2025,7 +2026,12 @@ function buildCombatFormulaEvidenceIndex({
   };
 }
 
-async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
+async function buildSkillAssetEvidenceIndex({
+  characters,
+  skills,
+  skillLogicIndex,
+  tables,
+}) {
   const currentSkillIds = new Set(skills.map(skill => Number(skill.id)));
   const currentCharacterIds = new Set(
     characters.map(character => Number(character.id))
@@ -2120,6 +2126,11 @@ async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
   const elementTypeCatalogEvidence = buildSkillElementTypeCatalogEvidence();
   const externalElementObjectEvidence =
     await buildExternalElementObjectEvidence(currentSkillControlEvidence);
+  const damageElementFieldMappingEvidence =
+    buildDamageElementFieldMappingEvidence({
+      externalElementObjectEvidence,
+      skillLogicIndex,
+    });
 
   return {
     schemaVersion: 1,
@@ -2143,6 +2154,7 @@ async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
     probes,
     elementTypeCatalogEvidence,
     externalElementObjectEvidence,
+    damageElementFieldMappingEvidence,
     summary: {
       skillTableRows: skillTableRows.length,
       currentSkillCount: skills.length,
@@ -2190,6 +2202,20 @@ async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
         externalElementObjectEvidence.summary?.resolvedPathIds ?? 0,
       externalElementObjectUnresolvedRefs:
         externalElementObjectEvidence.summary?.unresolvedPathIds ?? 0,
+      damageElementFieldMappedSkills:
+        damageElementFieldMappingEvidence.summary?.mappedSkills ?? 0,
+      damageElementFieldMappedObjects:
+        damageElementFieldMappingEvidence.summary?.damageElementObjects ?? 0,
+      hpDamageFieldCandidateRefs:
+        damageElementFieldMappingEvidence.summary?.hpDamageCandidateRefs ?? 0,
+      toughnessDamageFieldCandidateRefs:
+        damageElementFieldMappingEvidence.summary?.toughnessDamageCandidateRefs ??
+        0,
+      selfEnergyFieldCandidateRefs:
+        damageElementFieldMappingEvidence.summary?.selfEnergyCandidateRefs ?? 0,
+      damageElementSkillLogicBridgeMatches:
+        damageElementFieldMappingEvidence.summary
+          ?.skillsubElementBridgeMatchedObjects ?? 0,
       relationStatus:
         foundCurrentSkillControls.length > 0
           ? 'skill-control-assets-found-in-azpr-extractor'
@@ -2302,6 +2328,318 @@ async function buildExternalElementObjectEvidence(currentSkillControlEvidence) {
       skills: [],
     };
   }
+}
+
+function buildDamageElementFieldMappingEvidence({
+  externalElementObjectEvidence,
+  skillLogicIndex,
+}) {
+  const skillLogicById = new Map(
+    (skillLogicIndex?.items ?? [])
+      .map(item => [Number(item.skillId), item])
+      .filter(([skillId]) => Number.isFinite(skillId))
+  );
+  const skills = [];
+
+  for (const skill of externalElementObjectEvidence?.skills ?? []) {
+    const damageElementObjects = (skill.objects ?? []).filter(
+      isResolvedDamageElementParamsObject
+    );
+    if (damageElementObjects.length === 0) {
+      continue;
+    }
+
+    const skillLogicItem = skillLogicById.get(Number(skill.skillId));
+    const fieldMappings = damageElementObjects.map(object =>
+      buildDamageElementFieldMappingItem(object, skillLogicItem)
+    );
+
+    skills.push({
+      skillId: Number(skill.skillId),
+      status: 'damage-element-field-candidates-found',
+      damageElementCount: fieldMappings.length,
+      scriptClassCounts: skill.scriptClassCounts ?? {},
+      fieldMappings,
+    });
+  }
+
+  const fieldMappings = skills.flatMap(skill => skill.fieldMappings);
+  const bridgeMatchedObjects = fieldMappings.filter(
+    item => item.skillLevelBridge.status === 'skillsub-element-level-bridge-found'
+  );
+  const bridgeMissingObjects = fieldMappings.filter(
+    item =>
+      item.skillLevelBridge.status === 'skillsub-element-level-bridge-missing'
+  );
+
+  return {
+    schemaVersion: 1,
+    generatedAt,
+    sourceKind: 'azpr-damage-element-field-mapping-evidence',
+    status:
+      fieldMappings.length > 0
+        ? 'damage-element-field-candidates-found'
+        : 'no-damage-element-field-candidates',
+    source: {
+      externalElementObjectEvidence:
+        'skill-asset-evidence.json.externalElementObjectEvidence',
+      skillLogicIndex: 'skill-logic-index.json',
+      skillsubEleValueTable: normalizePath(sourceFiles.skillsubEleValue),
+      note:
+        'Field mappings are source evidence for the HP, toughness and self-energy chains; they are not final combat formulas yet.',
+    },
+    summary: {
+      skillCount: externalElementObjectEvidence?.skills?.length ?? 0,
+      mappedSkills: skills.length,
+      damageElementObjects: fieldMappings.length,
+      hpDamageCandidateRefs: fieldMappings.length,
+      toughnessDamageCandidateRefs: fieldMappings.length,
+      selfEnergyCandidateRefs: fieldMappings.length,
+      skillsubElementBridgeMatchedObjects: bridgeMatchedObjects.length,
+      skillsubElementBridgeMissingObjects: bridgeMissingObjects.length,
+      skillsubElementBridgeLevelRows: bridgeMatchedObjects.reduce(
+        (sum, item) => sum + item.skillLevelBridge.levelRows,
+        0
+      ),
+    },
+    skills,
+  };
+}
+
+function isResolvedDamageElementParamsObject(object) {
+  return (
+    object?.status === 'resolved-in-element-assets-bundle' &&
+    object?.scriptTypeCandidate?.className === 'TDamageElementParams'
+  );
+}
+
+function buildDamageElementFieldMappingItem(object, skillLogicItem) {
+  const formulaParamValues = normalizeNumberArray(
+    object.formulaParams?.formulaParamValues ?? object.functionParams
+  );
+  const damageFields = object.damageFields ?? {};
+  const skillLevelBridge = buildDamageElementSkillLevelBridge(
+    Number(object.elementConfigId),
+    skillLogicItem,
+    formulaParamValues
+  );
+
+  return {
+    elementConfigId: Number(object.elementConfigId),
+    pathId: String(object.pathId),
+    containerPath: object.containerPath ?? null,
+    elementName: object.elementName ?? null,
+    describe: object.describe ?? null,
+    mediaPackNames: object.mediaPackNames ?? [],
+    scriptTypeCandidate: object.scriptTypeCandidate ?? null,
+    hpDamage: buildHpDamageFieldCandidate(
+      object.formulaParams,
+      formulaParamValues,
+      damageFields
+    ),
+    toughnessDamage: buildToughnessDamageFieldCandidate(damageFields),
+    selfEnergyChange: buildSelfEnergyFieldCandidate(damageFields),
+    skillLevelBridge,
+    unresolved: [
+      'formula-param-scale',
+      'target-defense-and-resistance-chain',
+      'hit-count-and-trigger-frame',
+      'toughness-unit-scale',
+      'self-energy-owner-and-share-rule',
+    ],
+  };
+}
+
+function buildHpDamageFieldCandidate(
+  formulaParams,
+  formulaParamValues,
+  damageFields
+) {
+  return {
+    status: 'candidate-from-TDamageElementParams-formulaParams',
+    fieldSources: [
+      'formulaParams.function_1',
+      'formulaParams.function_2',
+      'formulaParams.formulaParamValues',
+      'damageFields.damageElementalType',
+      'damageFields.physicalRatio',
+      'damageFields.magicRatio',
+      'damageFields.elementCalFactor',
+      'damageFields.amp',
+    ],
+    formulaFunctionIds: {
+      function_1: numberOrNull(formulaParams?.function_1),
+      function_2: numberOrNull(formulaParams?.function_2),
+    },
+    formulaSlotCandidates: buildFormulaSlotCandidates(formulaParamValues),
+    rawFormulaParamValues: formulaParamValues,
+    damageFields: {
+      damageType: numberOrNull(damageFields.damageType),
+      damageElementalType: numberOrNull(damageFields.damageElementalType),
+      elementCalFactor: numberOrNull(damageFields.elementCalFactor),
+      physicalRatio: numberOrNull(damageFields.physicalRatio),
+      magicRatio: numberOrNull(damageFields.magicRatio),
+      amp: numberOrNull(damageFields.amp),
+      burstId: numberOrNull(damageFields.burstId),
+      armerPenetration: numberOrNull(damageFields.armerPenetration),
+      magicPenetration: numberOrNull(damageFields.magicPenetration),
+    },
+    calculationBoundary:
+      'This identifies raw HP damage inputs only; final damage still needs character panel, enemy defense/resistance, target state and hit frame validation.',
+  };
+}
+
+function buildToughnessDamageFieldCandidate(damageFields) {
+  return {
+    status: 'candidate-from-TDamageElementParams-weak-break-fields',
+    fieldSources: [
+      'damageFields.weakBreakDamageRate',
+      'damageFields.hitType',
+      'damageFields.knockBackId',
+      'damageFields.knockBackForce',
+      'damageFields.interruptPriority',
+      'damageFields.useOneBreak',
+    ],
+    weakBreakDamageRate: numberOrNull(damageFields.weakBreakDamageRate),
+    hitType: numberOrNull(damageFields.hitType),
+    knockBackId: numberOrNull(damageFields.knockBackId),
+    knockBackForce: numberOrNull(damageFields.knockBackForce),
+    interruptPriority: numberOrNull(damageFields.interruptPriority),
+    useOneBreak: numberOrNull(damageFields.useOneBreak),
+    calculationBoundary:
+      'This identifies enemy toughness/break inputs only; final toughness loss still needs the AzPr break unit scale and target state rules.',
+  };
+}
+
+function buildSelfEnergyFieldCandidate(damageFields) {
+  return {
+    status: 'candidate-from-TDamageElementParams-recover-sp-fields',
+    fieldSources: [
+      'damageFields.recoverSP',
+      'damageFields.petRecoverSP',
+      'damageFields.recoverInterval',
+    ],
+    recoverSP: numberOrNull(damageFields.recoverSP),
+    petRecoverSP: numberOrNull(damageFields.petRecoverSP),
+    recoverInterval: numberOrNull(damageFields.recoverInterval),
+    ownerScope: 'self-and-pet-candidate-unconfirmed',
+    calculationBoundary:
+      'This identifies self energy/SP inputs only; final per-character energy still needs owner, sharing and interval trigger rules.',
+  };
+}
+
+function buildFormulaSlotCandidates(formulaParamValues) {
+  const preferredSlots = [1, 2, 6, 7, 8];
+  return preferredSlots
+    .filter(slot => Number.isFinite(formulaParamValues[slot - 1]))
+    .map(slot => ({
+      slot,
+      variable: paramIdToFormulaVariable(slot),
+      rawValue: formulaParamValues[slot - 1],
+      roleStatus: 'unconfirmed-formula-input',
+    }));
+}
+
+function buildDamageElementSkillLevelBridge(
+  elementConfigId,
+  skillLogicItem,
+  formulaParamValues
+) {
+  if (!skillLogicItem) {
+    return {
+      status: 'skill-logic-item-missing',
+      elementConfigId,
+      levelRows: 0,
+      levels: [],
+      formulaParamAlignment: {
+        status: 'not-checked',
+        note: 'No skill-logic-index item was available for this skill.',
+      },
+    };
+  }
+
+  const levels = [];
+  for (const level of skillLogicItem.levels ?? []) {
+    const matchingElementValues = (level.elementValues ?? []).filter(
+      elementValue => Number(elementValue.elementId) === elementConfigId
+    );
+    for (const elementValue of matchingElementValues) {
+      levels.push({
+        level: Number(level.level),
+        levelIndex: Number(level.levelIndex),
+        skillLevelRowId: Number(level.skillLevelRowId),
+        subSkillId: Number(level.subSkillId),
+        rowId: Number(elementValue.rowId),
+        valueParam: elementValue.valueParam ?? '',
+        paramPairs: parseParamPairs(elementValue.valueParam).map(pair => {
+          const formulaParamValue = formulaParamValues[pair.id - 1];
+          return {
+            id: pair.id,
+            variable: paramIdToFormulaVariable(pair.id),
+            value: pair.value,
+            formulaParamValue: Number.isFinite(formulaParamValue)
+              ? formulaParamValue
+              : null,
+            directSlotMatch: formulaParamValue === pair.value,
+          };
+        }),
+      });
+    }
+  }
+
+  const parameterIds = uniqueNumbers(
+    levels.flatMap(level => level.paramPairs.map(pair => pair.id))
+  );
+  const varyingParameterIds = parameterIds.filter(id => {
+    const values = uniqueNumbers(
+      levels.flatMap(level =>
+        level.paramPairs.filter(pair => pair.id === id).map(pair => pair.value)
+      )
+    );
+    return values.length > 1;
+  });
+  const firstLevel = levels[0] ?? null;
+  const firstLevelMismatches = (firstLevel?.paramPairs ?? [])
+    .filter(pair => pair.formulaParamValue !== null && !pair.directSlotMatch)
+    .map(pair => ({
+      id: pair.id,
+      variable: pair.variable,
+      skillsubValue: pair.value,
+      formulaParamValue: pair.formulaParamValue,
+    }));
+  const firstLevelDirectSlotMatches = (firstLevel?.paramPairs ?? [])
+    .filter(pair => pair.directSlotMatch)
+    .map(pair => pair.id);
+
+  return {
+    status:
+      levels.length > 0
+        ? 'skillsub-element-level-bridge-found'
+        : 'skillsub-element-level-bridge-missing',
+    elementConfigId,
+    source: 'skill-logic-index.json.levels.elementValues',
+    levelRows: levels.length,
+    parameterIds,
+    varyingParameterIds,
+    firstLevel,
+    lastLevel: levels.length > 0 ? levels[levels.length - 1] : null,
+    formulaParamAlignment: {
+      status:
+        levels.length > 0
+          ? 'same-element-id-found-slot-alignment-unverified'
+          : 'same-element-id-not-found-in-current-skill-level-values',
+      firstLevelDirectSlotMatches,
+      firstLevelMismatches,
+      note:
+        'skillsub_ele_value.valueParam can bridge element IDs to level-scaling rows, but slot overrides/scaling must be validated before final damage math.',
+    },
+  };
+}
+
+function normalizeNumberArray(value) {
+  return normalizeArray(value)
+    .map(item => Number(item))
+    .filter(Number.isFinite);
 }
 
 function buildSkillAssetTableEvidence(spec, table, currentSkillIds) {

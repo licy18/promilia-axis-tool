@@ -237,7 +237,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8J，新增 `skillResourceMapEvidence`，把行为对象里的外部 `elementBaseDatas` 引用匹配到根 `skillResourceMaps[].elements`；末音 `10900101` 的 13 条外部 element 引用全部匹配到对应 `subSkillId`、`stateName` 和 hitEffects。
 - 已完成：阶段 5-8K，新增行为脚本类型候选和 IL2CPP element 类型目录；末音 `10900101` 的 HP 候选行为已匹配 `InjectToTargetKeyFrameBehaviorData` 字段签名，当前全局有 1 个技能命中脚本类型候选、2 个 element 类型候选。
 - 已完成：阶段 5-8L，新增 `externalElementObjectEvidence` 与 `resolve-azpr-element-objects.py`，把末音 `10900101` 的 8 个 `m_FileID = 2` external element PathID 全部解析到 `battle_element_assets` 对象本体；当前确认 3 个 `TDamageElementParams`、2 个 `TFxElementParams`、2 个 `TFreezeFrameElementParams`、1 个 `TBuffElementParams`。
-- 下一步：阶段 5-8M，把 `TDamageElementParams` 的 `formulaParams`、`weakBreakDamageRate`、`recoverSP/petRecoverSP` 等字段映射到每动作 HP 伤害、敌人韧性削减、自身能量变化三条计算链，并和 `skillsub_ele_value` / `element_formula` / 角色面板进行交叉校验。
+- 已完成：阶段 5-8M，新增 `damageElementFieldMappingEvidence`，把 `TDamageElementParams` 的 `formulaParams`、`weakBreakDamageRate`、`recoverSP/petRecoverSP` 分别映射到 HP 伤害、敌人韧性削减、自身能量变化三条候选链；末音 `10900101` 的 3 个 damage element 均完成字段映射，其中 `109001081` / `109001306` 已桥接到 12 行 `skillsub_ele_value.valueParam` 等级值。
+- 下一步：阶段 5-8N，把 `damageElementFieldMappingEvidence` 接入 `actionResultTimeline[]` 的 source 层和 Workbench 展示层，让每个动作先能展示 HP、削韧、充能候选字段来源；公式缩放、命中次数、敌方防御/抗性和能量归属仍保持待确认。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 
