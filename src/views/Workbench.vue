@@ -33,10 +33,12 @@
 
     <div class="workbench-grid">
       <ActionLibraryPanel
-        :actor="scenario.actors[0]"
+        :actor="actionLibraryActor"
+        :actors="scenario.actors"
+        :active-actor-character-id="actionLibraryCharacterId"
         :actions="scenario.actions"
         :selected-action-id="selectedActionId"
-        @select-action="selectedActionId = $event"
+        @select-action="selectAction"
         @add-action="addAction"
         @add-annotation-action="addAnnotationAction"
         @add-enemy-event-action="addEnemyEventAction"
@@ -45,6 +47,7 @@
         @add-wait-action="addWaitAction"
         @copy-action="copyAction"
         @delete-action="deleteAction"
+        @update-active-actor="setActionLibraryCharacterId"
       />
 
       <TimelineGridPreview
@@ -55,7 +58,7 @@
         :duration-ms="scenario.time.durationMs"
         :selected-action-id="selectedActionId"
         :timeline-diagnostics="timelineDiagnostics"
-        @select-action="selectedActionId = $event"
+        @select-action="selectAction"
         @delete-action="deleteAction"
         @update-action-duration="updateActionDuration"
         @update-action-lane="updateActionLane"
@@ -143,6 +146,7 @@ const selection = ref({ ...initialDraft.selection });
 const enemyConfig = ref({ ...initialDraft.enemyConfig });
 const actionDrafts = ref([...initialDraft.actionDrafts]);
 const selectedActionId = ref(initialDraft.selectedActionId);
+const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const draftStatus = ref('未保存草稿');
 
 const project = computed(() =>
@@ -159,6 +163,12 @@ const timelineDiagnostics = computed(() =>
     actions: scenario.value.actions,
   }),
 );
+const actionLibraryActor = computed(() => {
+  return (
+    scenario.value.actors.find((actor) => Number(actor.characterId) === Number(actionLibraryCharacterId.value)) ??
+    scenario.value.actors[0]
+  );
+});
 const selectedAction = computed(() => {
   return scenario.value.actions.find((action) => action.id === selectedActionId.value) ?? scenario.value.actions[0];
 });
@@ -188,6 +198,11 @@ function updateSelection(patch) {
     ...patch,
   });
   selection.value = nextSelection;
+
+  normalizeActionLibraryCharacterId(previousSelection, nextSelection, {
+    characterChanged,
+    secondaryCharacterChanged,
+  });
 
   if (characterChanged || secondaryCharacterChanged) {
     const nextActionDrafts = actionDrafts.value.map((action) => {
@@ -248,6 +263,9 @@ function updateAction(patch) {
       level: clampNumber(nextLevel, 1, skill.level.values.length),
     });
   });
+  if (patch.actorCharacterId != null) {
+    setActionLibraryCharacterId(patch.actorCharacterId);
+  }
   markDraftDirty();
 }
 
@@ -327,6 +345,7 @@ function updateActionLane({ actionId, laneId }) {
     }
 
     didUpdate = true;
+    actionLibraryCharacterId.value = targetCharacterId;
     return createWorkbenchActionDraft({
       ...action,
       ...patch,
@@ -340,12 +359,14 @@ function updateActionLane({ actionId, laneId }) {
 
 function addAction() {
   const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
+  const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
+  const skill = resolveContextSkill(actorCharacterId, selectedDraft.value.skillId);
   const nextAction = createWorkbenchActionDraft({
     id: createNextActionId(),
-    skillId: selectedDraft.value.skillId,
-    actorCharacterId: selection.value.characterId,
+    skillId: skill.id,
+    actorCharacterId,
     startMs: clampNumber((lastAction?.startMs ?? 0) + 2000, 0, project.value.time.durationMs),
-    level: selectedDraft.value.level,
+    level: selectedDraft.value.actorCharacterId === actorCharacterId ? selectedDraft.value.level : 1,
   });
 
   actionDrafts.value = [...actionDrafts.value, nextAction];
@@ -359,7 +380,7 @@ function addWaitAction() {
     id: createNextActionId(),
     type: ACTION_TYPES.WAIT,
     skillId: selectedDraft.value.skillId,
-    actorCharacterId: selection.value.characterId,
+    actorCharacterId: actionLibraryCharacterId.value,
     startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
     durationMs: 1000,
     level: selectedDraft.value.level,
@@ -373,15 +394,16 @@ function addWaitAction() {
 
 function addSwitchAction() {
   const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
+  const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
   const nextAction = createWorkbenchActionDraft({
     id: createNextActionId(),
     type: ACTION_TYPES.SWITCH,
     skillId: selectedDraft.value.skillId,
-    actorCharacterId: selection.value.characterId,
+    actorCharacterId,
     startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
     durationMs: 600,
     level: selectedDraft.value.level,
-    targetCharacterId: selection.value.secondaryCharacterId,
+    targetCharacterId: resolveAlternateActorCharacterId(actorCharacterId),
     note: '切换至副角色',
   });
 
@@ -396,7 +418,7 @@ function addAnnotationAction() {
     id: createNextActionId(),
     type: ACTION_TYPES.ANNOTATION,
     skillId: selectedDraft.value.skillId,
-    actorCharacterId: selection.value.characterId,
+    actorCharacterId: actionLibraryCharacterId.value,
     startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
     durationMs: 600,
     level: selectedDraft.value.level,
@@ -410,11 +432,12 @@ function addAnnotationAction() {
 
 function addResourceAction() {
   const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
+  const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
   const nextAction = createWorkbenchActionDraft({
     id: createNextActionId(),
     type: ACTION_TYPES.RESOURCE,
     skillId: selectedDraft.value.skillId,
-    actorCharacterId: selection.value.characterId,
+    actorCharacterId,
     startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
     durationMs: 600,
     level: selectedDraft.value.level,
@@ -435,7 +458,7 @@ function addEnemyEventAction() {
     id: createNextActionId(),
     type: ACTION_TYPES.ENEMY_EVENT,
     skillId: selectedDraft.value.skillId,
-    actorCharacterId: selection.value.characterId,
+    actorCharacterId: actionLibraryCharacterId.value,
     startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
     durationMs: 600,
     level: selectedDraft.value.level,
@@ -466,6 +489,7 @@ function copyAction(actionId) {
     ...actionDrafts.value.slice(sourceIndex + 1),
   ];
   selectedActionId.value = nextAction.id;
+  syncActionLibraryCharacterIdFromDraft(nextAction);
   markDraftDirty();
 }
 
@@ -484,6 +508,7 @@ function deleteAction(actionId) {
   if (selectedActionId.value === actionId) {
     const nextIndex = Math.min(index, actionDrafts.value.length - 1);
     selectedActionId.value = actionDrafts.value[nextIndex].id;
+    syncActionLibraryCharacterIdFromDraft(actionDrafts.value[nextIndex]);
   }
   markDraftDirty();
 }
@@ -509,10 +534,17 @@ function applyDraftState(draft) {
   enemyConfig.value = normalizeWorkbenchEnemyConfig(draft.enemyConfig);
   actionDrafts.value = normalizeWorkbenchActionDrafts(draft.actionDrafts, selection.value);
   selectedActionId.value = draft.selectedActionId;
+  syncActionLibraryCharacterIdFromDraft(actionDrafts.value.find((action) => action.id === draft.selectedActionId));
 }
 
 function markDraftDirty() {
   draftStatus.value = '有未保存改动';
+}
+
+function selectAction(actionId) {
+  selectedActionId.value = actionId;
+  const draft = actionDrafts.value.find((action) => action.id === actionId);
+  syncActionLibraryCharacterIdFromDraft(draft);
 }
 
 function findSkillById(skillId) {
@@ -529,6 +561,48 @@ function createNextActionId() {
 
 function canAssignActionLane(action) {
   return [ACTION_TYPES.SKILL, ACTION_TYPES.SWITCH, ACTION_TYPES.RESOURCE].includes(action.type);
+}
+
+function setActionLibraryCharacterId(characterId) {
+  const actor = scenario.value.actors.find((item) => Number(item.characterId) === Number(characterId));
+  if (!actor) {
+    return;
+  }
+  actionLibraryCharacterId.value = Number(actor.characterId);
+}
+
+function normalizeActionLibraryCharacterId(previousSelection, nextSelection, changes) {
+  if (changes.characterChanged && Number(actionLibraryCharacterId.value) === Number(previousSelection.characterId)) {
+    actionLibraryCharacterId.value = nextSelection.characterId;
+  }
+  if (
+    changes.secondaryCharacterChanged &&
+    Number(actionLibraryCharacterId.value) === Number(previousSelection.secondaryCharacterId)
+  ) {
+    actionLibraryCharacterId.value = nextSelection.secondaryCharacterId;
+  }
+
+  if (
+    Number(actionLibraryCharacterId.value) !== Number(nextSelection.characterId) &&
+    Number(actionLibraryCharacterId.value) !== Number(nextSelection.secondaryCharacterId)
+  ) {
+    actionLibraryCharacterId.value = nextSelection.characterId;
+  }
+}
+
+function syncActionLibraryCharacterIdFromDraft(draft) {
+  if (!draft || !canAssignActionLane(draft)) {
+    return;
+  }
+  setActionLibraryCharacterId(draft.actorCharacterId);
+}
+
+function resolveContextSkill(actorCharacterId, preferredSkillId) {
+  const preferredSkill = findSkillById(preferredSkillId);
+  if (Number(preferredSkill?.characterId) === Number(actorCharacterId)) {
+    return preferredSkill;
+  }
+  return findFirstSkillForCharacter(actorCharacterId) ?? preferredSkill ?? workbenchSeed.gameData.skills[0];
 }
 
 function normalizeActionPatch(action, patch) {

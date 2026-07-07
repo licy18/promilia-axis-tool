@@ -477,6 +477,60 @@ describe('Workbench view', () => {
     expect(wrapper.find('[data-testid="workbench-action-actor-readonly"]').element.value).toBe('系统 / 事件轨');
   });
 
+  it('uses the action library actor context for new and copied actions', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    const secondaryCharacterId = 101003;
+    const secondarySkills = workbenchSeed.gameData.skills.filter(
+      (skill) => Number(skill.characterId) === secondaryCharacterId,
+    );
+
+    expect(findActionLibraryActorButton(wrapper, 109001).attributes('data-active')).toBe('true');
+
+    await findActionLibraryActorButton(wrapper, secondaryCharacterId).trigger('click');
+    expect(findActionLibraryActorButton(wrapper, secondaryCharacterId).attributes('data-active')).toBe('true');
+
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-action"][data-action-id="action-0002"]')
+        .attributes('data-lane-id'),
+    ).toBe('actor-101003');
+    expect(wrapper.find('[data-testid="workbench-skill-select"]').element.value).toBe(String(secondarySkills[0].id));
+
+    await wrapper.findAll('[data-testid="workbench-copy-action"]')[1].trigger('click');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-action"][data-action-id="action-0003"]')
+        .attributes('data-lane-id'),
+    ).toBe('actor-101003');
+    expect(findActionLibraryActorButton(wrapper, secondaryCharacterId).attributes('data-active')).toBe('true');
+
+    await wrapper.find('.action-item[data-action-id="action-0001"]').trigger('click');
+    expect(findActionLibraryActorButton(wrapper, 109001).attributes('data-active')).toBe('true');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(savedDraft.actionDrafts[1]).toMatchObject({
+      id: 'action-0002',
+      actorCharacterId: secondaryCharacterId,
+      skillId: secondarySkills[0].id,
+    });
+    expect(savedDraft.actionDrafts[2]).toMatchObject({
+      id: 'action-0003',
+      actorCharacterId: secondaryCharacterId,
+      skillId: secondarySkills[0].id,
+    });
+  });
+
   it('keeps generated action ids unique after deleting the first action', async () => {
     const wrapper = mount(Workbench, {
       global: {
@@ -703,4 +757,10 @@ async function dragTimelineAction(wrapper, actionId, { fromY, toY }) {
   await nextTick();
   window.dispatchEvent(new MouseEvent('pointerup', { clientX: 100, clientY: toY }));
   await nextTick();
+}
+
+function findActionLibraryActorButton(wrapper, characterId) {
+  return wrapper.find(
+    `[data-testid="workbench-action-library-actor"][data-character-id="${Number(characterId)}"]`,
+  );
 }

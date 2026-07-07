@@ -5,6 +5,23 @@
       <h2>动作库</h2>
     </div>
 
+    <div class="actor-tabs" role="tablist" aria-label="动作库角色">
+      <button
+        v-for="teamActor in actors"
+        :key="teamActor.id"
+        class="actor-tab"
+        :class="{ active: Number(teamActor.characterId) === Number(activeActorCharacterId) }"
+        type="button"
+        data-testid="workbench-action-library-actor"
+        :data-character-id="teamActor.characterId"
+        :data-active="Number(teamActor.characterId) === Number(activeActorCharacterId) ? 'true' : 'false'"
+        @click="$emit('update-active-actor', teamActor.characterId)"
+      >
+        <span>{{ teamActor.name }}</span>
+        <small>{{ teamActor.role || '角色' }}</small>
+      </button>
+    </div>
+
     <div class="toolbox">
       <button class="icon-button" data-testid="workbench-add-action" type="button" @click="$emit('add-action')">
         + 技能
@@ -43,7 +60,7 @@
 
     <div class="actor-block">
       <span class="actor-name">{{ actor.name }}</span>
-      <span class="actor-role">{{ actor.role }}</span>
+      <span class="actor-role">{{ actor.role || '角色轨' }}</span>
     </div>
 
     <div class="action-list">
@@ -118,6 +135,14 @@ defineProps({
     type: Object,
     required: true,
   },
+  actors: {
+    type: Array,
+    required: true,
+  },
+  activeActorCharacterId: {
+    type: Number,
+    required: true,
+  },
   actions: {
     type: Array,
     required: true,
@@ -138,6 +163,7 @@ defineEmits([
   'add-enemy-event-action',
   'copy-action',
   'delete-action',
+  'update-active-actor',
 ]);
 
 function actionTypeLabel(type) {
@@ -245,6 +271,51 @@ h2 {
   gap: 8px;
   padding: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.actor-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 12px 12px 0;
+}
+
+.actor-tab {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: 7px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #d9dee3;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.actor-tab:hover,
+.actor-tab.active {
+  border-color: rgba(121, 199, 185, 0.58);
+  background: rgba(121, 199, 185, 0.12);
+  color: #ffffff;
+}
+
+.actor-tab span,
+.actor-tab small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actor-tab span {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.actor-tab small {
+  color: #8f9aa3;
+  font-size: 10px;
 }
 
 .action-tools {
