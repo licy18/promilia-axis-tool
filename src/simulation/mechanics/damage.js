@@ -1,17 +1,9 @@
+import { parseSkillDamageMultiplier } from '../../domain/skillDamageSegments';
+
 export const DAMAGE_FORMULA_VERSION = 'stage3-raw-attack-multiplier-v1';
 
 export function parsePercentMultiplier(value) {
-  if (value == null || value === '') {
-    return null;
-  }
-
-  const text = String(value).trim();
-  const number = Number(text.replace('%', ''));
-  if (!Number.isFinite(number)) {
-    return null;
-  }
-
-  return text.includes('%') ? number / 100 : number;
+  return parseSkillDamageMultiplier(value);
 }
 
 export function parseDamageSegments(action) {
@@ -30,9 +22,24 @@ export function parseDamageSegments(action) {
         label: labels[index] ?? `segment-${index + 1}`,
         rawValue: value,
         multiplier,
+        source: createDamageSegmentSource(action.damageModel, index),
       };
     })
     .filter(Boolean);
+}
+
+function createDamageSegmentSource(damageModel = {}, index) {
+  const fieldPaths = damageModel.fieldPaths ?? {};
+  return {
+    kind: damageModel.sourceKind ?? damageModel.source ?? 'unknown',
+    path: damageModel.sourcePath ?? null,
+    skillId: damageModel.skillId ?? null,
+    characterId: damageModel.characterId ?? null,
+    level: damageModel.level ?? null,
+    levelIndex: damageModel.levelIndex ?? null,
+    labelField: fieldPaths.labels ? `${fieldPaths.labels}[${index}]` : null,
+    valueField: fieldPaths.values ? `${fieldPaths.values}[${index}]` : null,
+  };
 }
 
 export function getAttributeValue(baseAttributes, key, fallback = 0) {

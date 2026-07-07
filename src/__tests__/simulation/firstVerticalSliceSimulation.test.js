@@ -18,6 +18,23 @@ describe('first vertical slice simulation', () => {
     expect(scenario.actions[0].actor.name).toBe('末音');
     expect(scenario.actions[0].selectedDamageSegment.label).toBe('普攻');
     expect(scenario.actions[0].selectedDamageSegment.multiplier).toBeCloseTo(6.49);
+    expect(scenario.actions[0].damageModel).toMatchObject({
+      source: 'azpr-local-hero-module-skill-level',
+      sourceKind: 'azpr-local-hero-module-skill-level',
+      skillId: 10900101,
+      characterId: 109001,
+      fieldPaths: {
+        labels: 'skillSystem.10900101.skillLevel.name',
+        values: 'skillSystem.10900101.skillLevel.values[0]',
+      },
+    });
+    expect(scenario.actions[0].damageModel.sourcePath).toContain('109001.hero-module.local.json');
+    expect(scenario.actions[0].selectedDamageSegment.source).toMatchObject({
+      kind: 'azpr-local-hero-module-skill-level',
+      skillId: 10900101,
+      characterId: 109001,
+      valueField: 'skillSystem.10900101.skillLevel.values[0][0]',
+    });
     expect(scenario.diagnostics.missingTimingActionIds).toEqual(['action-0001']);
   });
 
@@ -40,6 +57,12 @@ describe('first vertical slice simulation', () => {
       confidence: 'low',
       precision: 'raw-pre-mitigation',
       timingAccuracy: 'placeholder',
+      segment: {
+        source: {
+          kind: 'azpr-local-hero-module-skill-level',
+          valueField: 'skillSystem.10900101.skillLevel.values[0][0]',
+        },
+      },
     });
     expect(result.damageTimeline[0].rawDamage).toBeGreaterThan(0);
     expect(result.summary).toMatchObject({

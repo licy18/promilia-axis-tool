@@ -557,3 +557,84 @@ Workbench 草稿新增可选 `segmentSplitOptions` 配置块，用于保存动�
 - 当前仍不保存独立的“选中批次”状态；批次高亮由当前选中动作反推。
 - 点击摘要只定位到批次第一条动作，还没有滚动到对应动作卡或时间轴位置。
 - 这仍是编辑器辅助联动，不代表真实连段、动作帧、命中帧或取消窗口。
+
+## 19. 2026-07-07 技能倍率段数据源适配补充
+
+阶段 5-1 建立了 `skillDamageSegments` 适配层，用来把当前技能倍率段从普通 `labels/values` 解析结果升级为带来源和诊断的结构。
+
+### 19.1 来源字段
+
+当前工作台使用的技能倍率段来自本地 AzPr 聚合数据：
+
+- 根目录：`C:\PC2\Codex\AzPr`
+- 聚合文件：`BWiki/data/hero-modules/local-all/<characterId>.hero-module.local.json`
+- 技能对象：`data.skillSystem.<skillId>`
+- 标签字段：`skillSystem.<skillId>.skillLevel.name`
+- 等级倍率字段：`skillSystem.<skillId>.skillLevel.values[<levelIndex>]`
+- 描述字段：`skillSystem.<skillId>.skillDescribe`
+
+`scripts/generate-azpr-data.mjs` 的 `compactSkill()` 现在会保留 `source.heroModule`，所以 `workbench-seed.json` 里的技能也能追溯到本地 hero-module 文件。
+
+### 19.2 `damageModel` 结构
+
+`createSkillAction()` 现在通过 `createSkillDamageModel(skill, level)` 生成 `damageModel`：
+
+```javascript
+{
+  "source": "azpr-local-hero-module-skill-level",
+  "sourceKind": "azpr-local-hero-module-skill-level",
+  "sourcePath": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json",
+  "skillId": 10900101,
+  "characterId": 109001,
+  "fieldPaths": {
+    "labels": "skillSystem.10900101.skillLevel.name",
+    "values": "skillSystem.10900101.skillLevel.values[0]",
+    "description": "skillSystem.10900101.skillDescribe",
+    "sourceTable": "BWiki/data/hero-modules/local-all/<characterId>.hero-module.local.json"
+  },
+  "level": 1,
+  "levelIndex": 0,
+  "labels": ["普攻", "重击", "闪击", "跃击"],
+  "values": ["649%", "190%", "40%", "136%"],
+  "diagnostics": []
+}
+```
+
+### 19.3 Segment 来源
+
+`getSkillDamageSegments()` 和模拟编译后的 `selectedDamageSegment` 会保留单段来源：
+
+```javascript
+{
+  "index": 0,
+  "label": "普攻",
+  "rawValue": "649%",
+  "multiplier": 6.49,
+  "source": {
+    "kind": "azpr-local-hero-module-skill-level",
+    "path": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json",
+    "skillId": 10900101,
+    "characterId": 109001,
+    "level": 1,
+    "levelIndex": 0,
+    "labelField": "skillSystem.10900101.skillLevel.name[0]",
+    "valueField": "skillSystem.10900101.skillLevel.values[0][0]"
+  }
+}
+```
+
+`projectSimulationResult.damageTimeline[]` 现在保留完整 `segment`，因此投影结果也能追溯倍率来源。
+
+### 19.4 诊断码
+
+- `skill-missing`：技能对象不存在。
+- `skill-source-missing`：技能缺少本地来源路径。
+- `skill-level-values-missing`：技能缺少等级倍率表。
+- `skill-level-row-missing`：当前等级缺少倍率行。
+- `skill-level-label-value-mismatch`：标签数量与倍率值数量不一致。
+- `skill-damage-multiplier-unparseable`：某个倍率值无法解析为数字倍率。
+
+### 19.5 当前边界
+
+- 当前来源是 BWiki hero-module 聚合数据，虽然来自本地 AzPr 数据树，但还未与 `Assets/ResourcesAssets/Config/NewTable/skill_level.json` 做字段级交叉校验。
+- 当前只解决倍率段来源和解析诊断，不解决真实命中帧、动画帧、取消窗口或完整伤害公式。

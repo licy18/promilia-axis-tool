@@ -1642,6 +1642,39 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 将当前手写/解析倍率段包装成带来源标记的适配层，为后续替换为真实游戏数据和战斗计算逻辑做准备。
 - 补充真实数据字段映射、缺失诊断、回退策略和首个技能段来源测试。
 
+### 2026-07-07：阶段 5-1 AzPr 实际技能倍率段数据源适配雏形落地
+
+本轮完成：
+
+- 新增 `src/domain/skillDamageSegments.js` 适配层，将技能倍率段从普通 `labels/values` 升级为带来源、字段路径、等级索引和诊断信息的结构。
+- `scripts/generate-azpr-data.mjs` 的 `compactSkill()` 现在保留 `source.heroModule`，`workbench-seed.json` 中的技能可追溯到本地 hero-module 聚合文件。
+- `createSkillAction()` 改为通过 `createSkillDamageModel(skill, level)` 生成 `damageModel`，动作草稿从创建时就携带倍率来源。
+- 模拟编译的 `selectedDamageSegment` 和投影结果 `damageTimeline[].segment` 保留单段来源，便于从时间轴伤害事件反查倍率字段。
+- 新增技能倍率段领域测试，覆盖首个真实技能段来源、等级夹紧、字段路径、解析倍率和异常倍率诊断。
+- 扩展首个竖切模拟测试，确认动作创建、模拟编译和投影结果都能保留倍率段来源。
+- 新增数据结构说明，记录 `damageModel`、单段 `source`、诊断码和当前边界。
+
+验收结果：
+
+- `npx vitest run src/__tests__/domain/skillDamageSegments.test.js src/__tests__/data/azprGenerated.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，3 个测试文件、17 条测试通过。
+- `npm run test -- --run`：通过，11 个测试文件、94 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- `git diff --check`：通过；仅有仓库既有 LF/CRLF 工作区提示。
+- `http://127.0.0.1:5175/#/workbench` 本地页面服务返回 200。
+
+当前结论：
+
+- 工作台技能倍率段不再是匿名数组，已经能追溯到 `C:\PC2\Codex\AzPr\BWiki\data\hero-modules\local-all\<characterId>.hero-module.local.json`。
+- 当前来源仍是 BWiki hero-module 聚合层，尚未与 `Assets/ResourcesAssets/Config/NewTable/skill_level.json` 做字段级交叉校验。
+- 本阶段只解决倍率段来源和解析诊断，不代表已经接入真实命中帧、动画帧、取消窗口或完整伤害公式。
+
+下一步：
+
+- 阶段 5-2 目标：建立 `Assets/ResourcesAssets/Config/NewTable/skill_level.json` 字段级交叉校验雏形。
+- 对比 hero-module 聚合倍率与 NewTable 原始技能等级表，确认技能 ID、等级行、倍率字段和标签字段之间的映射关系。
+- 输出 mismatch/missing 诊断，明确哪些倍率段可直接信任，哪些需要回退到聚合层或人工补齐。
+- 补充交叉校验脚本或领域测试，为后续真实战斗计算逻辑接入提供数据可信度基线。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

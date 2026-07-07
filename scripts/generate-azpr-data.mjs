@@ -264,6 +264,7 @@ function compactSkill(skill) {
     spCost: skill.spCost,
     needsTimingData: skill.needsTimingData,
     timingSource: skill.timingSource,
+    source: skill.source,
   };
 }
 

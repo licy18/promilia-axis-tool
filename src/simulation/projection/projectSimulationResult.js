@@ -7,6 +7,7 @@ export function projectSimulationResult({ scenario, eventLog, damageEvents, reso
     rawDamage: event.payload.rawDamage,
     segmentLabel: event.payload.segment.label,
     multiplier: event.payload.segment.multiplier,
+    segment: event.payload.segment,
     confidence: event.payload.confidence,
     precision: event.payload.precision,
     timingAccuracy: event.payload.timingAccuracy,
