@@ -1655,3 +1655,92 @@ enemy.propertyId -> unit_property.baseAttributeId -> template_value.baseAttribut
 - 最终伤害仍是 `round(baseAttack.value * actionMultiplier.value)`。
 - `appliedLayerKeys` 仍只有 `baseAttack` 和 `actionMultiplier`；`enemyDefense` / `enemyResistance` 仍在 `unappliedLayerKeys`。
 - 下一步应生成 skill asset / effect node 候选索引，继续追踪 `skillsub_ele_value.elementId` 到真实公式节点的链路。
+
+## 31. 2026-07-07 技能资源证据索引
+
+阶段 5-8F 新增 `src/data/generated/skill-asset-evidence.json`，用于把表格层技能引用、AzPr Assets 缺口和 AzPr Extractor Unity 技能控制资源连接起来。
+
+### 31.1 新增生成文件
+
+`manifest.json.files` 新增：
+
+```javascript
+{
+  "skillAssetEvidence": "skill-asset-evidence.json"
+}
+```
+
+`validation-report.json.counts` 新增：
+
+```javascript
+{
+  "skillAssetEvidence": 116
+}
+```
+
+### 31.2 `skill-asset-evidence.json` 摘要
+
+```javascript
+{
+  "sourceKind": "azpr-skill-asset-evidence-index",
+  "summary": {
+    "skillTableRows": 3200,
+    "currentSkillCount": 120,
+    "currentSkillsWithSkillTableRow": 120,
+    "currentSkillsWithExtractedSkillControl": 116,
+    "currentSkillsMissingExtractedSkillControl": 4,
+    "skillBytesPathOwnerRows": 646,
+    "uniqueSkillBytesPaths": 682,
+    "existingSkillBytesPathsInAzPrAssets": 0,
+    "extractedSkillControlDirectories": 4134,
+    "relationStatus": "skill-control-assets-found-in-azpr-extractor"
+  }
+}
+```
+
+### 31.3 路径探测规则
+
+当前探测结果：
+
+```javascript
+{
+  "azprSkillRoot": {
+    "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/Battle/Skill",
+    "exists": false
+  },
+  "azprSkillPreloadRoot": {
+    "path": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/Battle/SkillPreload",
+    "exists": false
+  },
+  "extractorSkillListRoot": {
+    "path": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList",
+    "exists": true
+  }
+}
+```
+
+因此后续规则为：
+
+- 表格和 Lua 缺失时，使用 AzPr Extractor 的 `raw_nostreaming_package` 导出流程补 `C:/PC2/Codex/AzPr/Assets`。
+- Unity 技能、动作、效果资源缺失时，使用 AzPr Extractor 的 Unity/default_package 导出结果，当前入口是 `SkillList/skill_control_*.asset`。
+- 不把 `skillBytesPath` 字符串当作已存在文件；必须检查实际路径或 Extractor 输出。
+
+### 31.4 当前缺口
+
+当前 4 个技能没有匹配到 `skill_control_*.asset`：
+
+```javascript
+[10101062, 10700262, 10800562, 11200262]
+```
+
+`skill_control` MonoBehaviour 样本已记录 `startFrame`、`endFrame`、`frameCount`、`eventType`、`eventID`、`elementList` 等候选字段，但尚未解析引用关系，也尚未确认这些节点与 `skillsub_ele_value.elementId` 或 `element_formula.id` 的最终映射。
+
+### 31.5 数据入口
+
+`src/data/azprGenerated.js` 新增：
+
+```javascript
+getAzprSkillAssetEvidence()
+```
+
+读取方应把它作为证据索引使用；在阶段 5-8G 之前，不应把其中的帧范围直接当成最终动作时长或命中帧。

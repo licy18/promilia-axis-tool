@@ -2060,6 +2060,51 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 阶段 5-8F 目标：专门追踪 `skill.skillBytesPath`、`Config/Battle/Skill/*.asset`、效果节点或相邻 battle 表，建立 skill asset / effect node 候选索引。
 - 若找到 `skillsub_ele_value.elementId` 到公式节点的链路，生成可验证的关系索引；若仍找不到，记录缺口和候选表字段，避免重复大范围盲搜。
 
+### 2026-07-07：阶段 5-8F 技能资源证据索引落地
+
+本轮完成：
+
+- `scripts/generate-azpr-data.mjs` 新增 `skill-asset-evidence.json` 生成。
+- 读取 `skill.json`、`hero.json`、`enemy.json`、`hero_test.json`、`pet.json`、`kibo_duel.json`、`world_item.json`、`world_resource.json`、`battlefield_item.json`，统计 `skillList`、`attackSkill`、`skillSystem` 和 `skillBytesPath`。
+- 探测 `C:\PC2\Codex\AzPr\Assets\ResourcesAssets\Config\Battle\Skill`、`SkillPreload`、`SkillList`，当前均不存在实体资源。
+- 按项目规则使用 `C:\Codex\AzPr Extractor` 作为 fallback，已索引 `ExtractedAssets\Unity\default_package\ResourcesAssets\Config\Battle\SkillList`。
+- Extractor 当前有 4134 个 `skill_control_*.asset` 目录；120 个当前技能中 116 个匹配，4 个缺失：`10101062`、`10700262`、`10800562`、`11200262`。
+- `skill-asset-evidence.json` 对 `skill_control` 的 MonoBehaviour JSON 做了候选抽样，记录 `startFrame/endFrame/frameCount/eventType/eventID/elementList` 等字段；末音 `10900101` 的候选帧范围样本为 `0-300` 帧。
+- `src/data/azprGenerated.js` 新增 `getAzprSkillAssetEvidence()`。
+- `validation-report.json` 新增 `skill-asset-effect-node-unmapped` info 级诊断，明确当前只是候选索引，还没有解析成最终命中帧、效果节点或公式映射。
+
+关键数据：
+
+- `skillTableRows`: 3200
+- `currentSkillCount`: 120
+- `currentSkillsWithSkillTableRow`: 120
+- `currentSkillsWithExtractedSkillControl`: 116
+- `currentSkillsMissingExtractedSkillControl`: 4
+- `skillBytesPathOwnerRows`: 646
+- `uniqueSkillBytesPaths`: 682
+- `existingSkillBytesPathsInAzPrAssets`: 0
+- `extractedSkillControlDirectories`: 4134
+- `relationStatus`: `skill-control-assets-found-in-azpr-extractor`
+
+验收结果：
+
+- `npm run data:generate`：通过，生成 `skill-asset-evidence.json`。
+- `npm run test -- --run src/__tests__/data/azprGenerated.test.js`：通过，1 个测试文件、9 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1354 KB。
+
+当前边界：
+
+- `skill_control` 候选帧范围不是最终动作时长。
+- MonoBehaviour 节点样本还没有解引用到具体行为对象链。
+- 还没有建立 `skillsub_ele_value.elementId -> effect node -> element_formula.id` 的可信映射。
+- 不应把 `skill-asset-evidence.json` 直接用于伤害计算，只能用于下一阶段追踪。
+
+下一步：
+
+- 阶段 5-8G 目标：解析 `skill_control` MonoBehaviour 候选节点，把 `startFrame/endFrame/frameCount/eventType/eventID/elementList` 组织成动作时长、命中帧、效果节点和公式映射候选。
+- 优先从 `10900101` 末音普通攻击入手，追踪 MonoBehaviour 引用对象、行为组、节点类型和 `skillsub_ele_value.elementId` 的关系；若链路不完整，记录缺口和需要追加导出的资源包。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

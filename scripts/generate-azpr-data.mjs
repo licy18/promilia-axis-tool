@@ -7,13 +7,34 @@ const repoRoot = path.resolve(
   '..'
 );
 const defaultSourceRoot = 'C:\\PC2\\Codex\\AzPr';
+const defaultExtractorRoot = 'C:\\Codex\\AzPr Extractor';
 const defaultOutputRoot = path.join(repoRoot, 'src', 'data', 'generated');
 
 const sourceRoot = path.resolve(
   getArg('--source') ?? process.env.AZPR_DATA_ROOT ?? defaultSourceRoot
 );
+const extractorRoot = path.resolve(
+  getArg('--extractor') ??
+    process.env.AZPR_EXTRACTOR_ROOT ??
+    defaultExtractorRoot
+);
 const outputRoot = path.resolve(getArg('--out') ?? defaultOutputRoot);
 const generatedAt = new Date().toISOString();
+const extractorSkillListRoot = path.join(
+  extractorRoot,
+  'ExtractedAssets',
+  'Unity',
+  'default_package',
+  'ResourcesAssets',
+  'Config',
+  'Battle',
+  'SkillList'
+);
+const extractorYooIndexRoot = path.join(
+  extractorRoot,
+  'outputs',
+  'axis-skill-yoo-index'
+);
 
 const sourceFiles = {
   heroModules: path.join(
@@ -82,6 +103,70 @@ const sourceFiles = {
     'chs',
     'Table',
     'lang_skill_level.json'
+  ),
+  skillTable: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'skill.json'
+  ),
+  heroTable: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'hero.json'
+  ),
+  heroTestTable: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'hero_test.json'
+  ),
+  petTable: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'pet.json'
+  ),
+  kiboDuelTable: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'kibo_duel.json'
+  ),
+  worldItemTable: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'world_item.json'
+  ),
+  worldResourceTable: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'world_resource.json'
+  ),
+  battlefieldItemTable: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'battlefield_item.json'
   ),
   skillsubLogic: path.join(
     sourceRoot,
@@ -262,6 +347,65 @@ const WEAK_POINT_DAMAGE_ATTRIBUTE_KEYS = Object.freeze([
   'WDM_MIN',
   'WDM_MAX',
 ]);
+const SKILL_CONTROL_SAMPLE_FILE_LIMIT = 80;
+const SKILL_CONTROL_SAMPLE_NODE_LIMIT = 8;
+const SKILL_ASSET_EVIDENCE_TABLES = Object.freeze([
+  {
+    key: 'heroTable',
+    name: 'hero.json',
+    ownerKind: 'hero',
+    skillFields: [
+      'attackSkill',
+      'skillList',
+      'aerialSkillList',
+      'passiveSkillList',
+      'backupSkillList',
+      'skillSystem',
+    ],
+  },
+  {
+    key: 'enemyTable',
+    name: 'enemy.json',
+    ownerKind: 'enemy',
+    skillFields: ['skillList'],
+  },
+  {
+    key: 'heroTestTable',
+    name: 'hero_test.json',
+    ownerKind: 'hero-test',
+    skillFields: ['skillList'],
+  },
+  {
+    key: 'petTable',
+    name: 'pet.json',
+    ownerKind: 'pet',
+    skillFields: ['skillList'],
+  },
+  {
+    key: 'kiboDuelTable',
+    name: 'kibo_duel.json',
+    ownerKind: 'kibo-duel',
+    skillFields: ['skillList'],
+  },
+  {
+    key: 'worldItemTable',
+    name: 'world_item.json',
+    ownerKind: 'world-item',
+    skillFields: ['skillList'],
+  },
+  {
+    key: 'worldResourceTable',
+    name: 'world_resource.json',
+    ownerKind: 'world-resource',
+    skillFields: ['skillList'],
+  },
+  {
+    key: 'battlefieldItemTable',
+    name: 'battlefield_item.json',
+    ownerKind: 'battlefield-item',
+    skillFields: ['skillList'],
+  },
+]);
 
 const requiredPaths = Object.values(sourceFiles);
 await assertReadablePaths(requiredPaths);
@@ -276,6 +420,14 @@ const [
   enemyLangTable,
   skillLevelTable,
   skillLevelLangTable,
+  skillTable,
+  heroTable,
+  heroTestTable,
+  petTable,
+  kiboDuelTable,
+  worldItemTable,
+  worldResourceTable,
+  battlefieldItemTable,
   skillsubLogicTable,
   skillsubEleValueTable,
   elementFormulaTable,
@@ -295,6 +447,14 @@ const [
   readJson(sourceFiles.enemyLang),
   readJson(sourceFiles.skillLevel),
   readJson(sourceFiles.skillLevelLang),
+  readJson(sourceFiles.skillTable),
+  readJson(sourceFiles.heroTable),
+  readJson(sourceFiles.heroTestTable),
+  readJson(sourceFiles.petTable),
+  readJson(sourceFiles.kiboDuelTable),
+  readJson(sourceFiles.worldItemTable),
+  readJson(sourceFiles.worldResourceTable),
+  readJson(sourceFiles.battlefieldItemTable),
   readJson(sourceFiles.skillsubLogic),
   readJson(sourceFiles.skillsubEleValue),
   readJson(sourceFiles.elementFormula),
@@ -374,6 +534,21 @@ const combatFormulaEvidence = buildCombatFormulaEvidenceIndex({
   elementFormulaTable,
   attributeInfoById,
 });
+const skillAssetEvidence = await buildSkillAssetEvidenceIndex({
+  characters,
+  skills,
+  tables: {
+    skillTable,
+    heroTable,
+    enemyTable,
+    heroTestTable,
+    petTable,
+    kiboDuelTable,
+    worldItemTable,
+    worldResourceTable,
+    battlefieldItemTable,
+  },
+});
 const characterAttributePanels = buildCharacterAttributePanels({
   characters,
   attributeInfoById,
@@ -415,6 +590,7 @@ const validationReport = buildValidationReport({
   skillLogicIndex,
   valueParamIndex,
   combatFormulaEvidence,
+  skillAssetEvidence,
   characterAttributePanels,
 });
 
@@ -442,6 +618,7 @@ await Promise.all([
   writeJson('skill-logic-index.json', skillLogicIndex),
   writeJson('value-param-index.json', valueParamIndex),
   writeJson('combat-formula-evidence.json', combatFormulaEvidence),
+  writeJson('skill-asset-evidence.json', skillAssetEvidence),
   writeJson('character-attribute-panels.json', characterAttributePanels),
   writeJson('first-vertical-slice.json', firstVerticalSlice),
   writeJson('workbench-seed.json', workbenchSeed),
@@ -510,6 +687,7 @@ function buildManifest(validationReport) {
       skillLogicIndex: 'skill-logic-index.json',
       valueParamIndex: 'value-param-index.json',
       combatFormulaEvidence: 'combat-formula-evidence.json',
+      skillAssetEvidence: 'skill-asset-evidence.json',
       characterAttributePanels: 'character-attribute-panels.json',
       firstVerticalSlice: 'first-vertical-slice.json',
       workbenchSeed: 'workbench-seed.json',
@@ -1735,6 +1913,623 @@ function buildCombatFormulaEvidenceIndex({
   };
 }
 
+async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
+  const currentSkillIds = new Set(skills.map(skill => Number(skill.id)));
+  const currentCharacterIds = new Set(
+    characters.map(character => Number(character.id))
+  );
+  const skillTableRows = tables.skillTable?.rows ?? [];
+  const skillTableById = new Map(
+    skillTableRows.map(row => [Number(row.id), row]).filter(([id]) =>
+      Number.isFinite(id)
+    )
+  );
+  const probes = {
+    azprSkillRoot: await createPathStatus(
+      path.join(
+        sourceRoot,
+        'Assets',
+        'ResourcesAssets',
+        'Config',
+        'Battle',
+        'Skill'
+      )
+    ),
+    azprSkillPreloadRoot: await createPathStatus(
+      path.join(
+        sourceRoot,
+        'Assets',
+        'ResourcesAssets',
+        'Config',
+        'Battle',
+        'SkillPreload'
+      )
+    ),
+    azprSkillListRoot: await createPathStatus(
+      path.join(
+        sourceRoot,
+        'Assets',
+        'ResourcesAssets',
+        'Config',
+        'Battle',
+        'SkillList'
+      )
+    ),
+    extractorSkillListRoot: await createPathStatus(extractorSkillListRoot),
+    extractorYooIndexRoot: await createPathStatus(extractorYooIndexRoot),
+  };
+  const tableEvidence = SKILL_ASSET_EVIDENCE_TABLES.map(spec =>
+    buildSkillAssetTableEvidence(spec, tables[spec.key], currentSkillIds)
+  );
+  const uniqueSkillBytesPaths = uniqueStrings(
+    tableEvidence.flatMap(item => item.uniqueSkillBytesPaths)
+  );
+  const skillBytesPathStatuses =
+    await buildSkillBytesPathStatuses(uniqueSkillBytesPaths);
+  const skillControlDirs = await listSkillControlDirs(extractorSkillListRoot);
+  const skillControlBySkillId = new Map(
+    skillControlDirs.map(item => [Number(item.skillId), item])
+  );
+  const currentSkillControlEvidence = [];
+
+  for (const skill of skills) {
+    currentSkillControlEvidence.push(
+      await buildSkillControlEvidenceItem(skill, skillControlBySkillId)
+    );
+  }
+
+  const currentHeroRows = buildCurrentHeroSkillRows(
+    tables.heroTable,
+    currentCharacterIds,
+    currentSkillIds
+  );
+  const foundCurrentSkillControls = currentSkillControlEvidence.filter(
+    item => item.status === 'found'
+  );
+  const missingCurrentSkillControls = currentSkillControlEvidence.filter(
+    item => item.status === 'missing'
+  );
+  const currentSkillsWithSkillTableRow = skills.filter(skill =>
+    skillTableById.has(Number(skill.id))
+  );
+  const skillBytesPathOwnerRows = tableEvidence.reduce(
+    (sum, item) => sum + item.rowsWithSkillBytesPath,
+    0
+  );
+  const existingSkillBytesPathCount = skillBytesPathStatuses.filter(
+    item => item.existsInAzPrAssets
+  ).length;
+
+  return {
+    schemaVersion: 1,
+    generatedAt,
+    sourceKind: 'azpr-skill-asset-evidence-index',
+    source: {
+      sourceRoot: normalizePath(sourceRoot),
+      extractorRoot: normalizePath(extractorRoot),
+      skillTable: normalizePath(sourceFiles.skillTable),
+      extractorSkillListRoot: normalizePath(extractorSkillListRoot),
+      extractorYooIndexRoot: normalizePath(extractorYooIndexRoot),
+      tables: Object.fromEntries(
+        SKILL_ASSET_EVIDENCE_TABLES.map(spec => [
+          spec.name,
+          normalizePath(skillAssetSourceFile(spec)),
+        ])
+      ),
+      fallbackPolicy:
+        'If C:/PC2/Codex/AzPr lacks Config/Battle/Skill assets, use AzPr Extractor Unity exports under default_package/ResourcesAssets/Config/Battle/SkillList.',
+    },
+    probes,
+    summary: {
+      skillTableRows: skillTableRows.length,
+      currentSkillCount: skills.length,
+      currentHeroCount: characters.length,
+      currentSkillsWithSkillTableRow: currentSkillsWithSkillTableRow.length,
+      currentSkillsWithExtractedSkillControl: foundCurrentSkillControls.length,
+      currentSkillsMissingExtractedSkillControl: missingCurrentSkillControls.length,
+      skillBytesPathOwnerRows,
+      uniqueSkillBytesPaths: uniqueSkillBytesPaths.length,
+      existingSkillBytesPathsInAzPrAssets: existingSkillBytesPathCount,
+      extractedSkillControlDirectories: skillControlDirs.length,
+      parsedCurrentSkillControlSampleFiles: currentSkillControlEvidence.reduce(
+        (sum, item) => sum + (item.parsedJsonSampleFiles ?? 0),
+        0
+      ),
+      timelineControlSampleCount: currentSkillControlEvidence.reduce(
+        (sum, item) => sum + (item.timelineControlSampleCount ?? 0),
+        0
+      ),
+      behaviorNodeSampleCount: currentSkillControlEvidence.reduce(
+        (sum, item) => sum + (item.behaviorNodeSampleCount ?? 0),
+        0
+      ),
+      relationStatus:
+        foundCurrentSkillControls.length > 0
+          ? 'skill-control-assets-found-in-azpr-extractor'
+          : probes.extractorSkillListRoot.exists
+            ? 'no-current-skill-control-assets-found'
+            : 'azpr-extractor-skill-list-missing',
+    },
+    tableEvidence,
+    currentHeroRows,
+    skillBytesPathStatuses: skillBytesPathStatuses.slice(0, 80),
+    currentSkillControlEvidence,
+    sampleSkillControls: foundCurrentSkillControls.slice(0, 20),
+    nextTraceTargets: buildSkillControlTraceTargets(foundCurrentSkillControls),
+  };
+}
+
+function buildSkillAssetTableEvidence(spec, table, currentSkillIds) {
+  const rows = table?.rows ?? [];
+  const skillIds = new Set();
+  const currentSkillRefs = new Set();
+  const uniqueSkillBytesPaths = new Set();
+  const sampleRows = [];
+  let rowsWithSkillReferences = 0;
+  let rowsWithSkillBytesPath = 0;
+
+  for (const row of rows) {
+    const skillRefsByField = {};
+    for (const field of spec.skillFields) {
+      const refs = parseSkillReferenceIds(row[field]);
+      if (refs.length > 0) {
+        skillRefsByField[field] = refs;
+      }
+    }
+
+    const rowSkillIds = uniqueNumbers(Object.values(skillRefsByField).flat());
+    const skillBytesPaths = parseAssetPathList(row.skillBytesPath);
+    if (rowSkillIds.length > 0) {
+      rowsWithSkillReferences += 1;
+    }
+    if (skillBytesPaths.length > 0) {
+      rowsWithSkillBytesPath += 1;
+      for (const assetPath of skillBytesPaths) {
+        uniqueSkillBytesPaths.add(assetPath);
+      }
+    }
+    for (const skillId of rowSkillIds) {
+      skillIds.add(skillId);
+      if (currentSkillIds.has(Number(skillId))) {
+        currentSkillRefs.add(skillId);
+      }
+    }
+
+    if (
+      sampleRows.length < 12 &&
+      (rowSkillIds.length > 0 || skillBytesPaths.length > 0)
+    ) {
+      sampleRows.push({
+        ownerId: numberOrNull(row.id),
+        ownerKind: spec.ownerKind,
+        skillRefsByField,
+        currentSkillRefs: rowSkillIds.filter(skillId =>
+          currentSkillIds.has(Number(skillId))
+        ),
+        skillBytesPaths,
+      });
+    }
+  }
+
+  return {
+    table: spec.name,
+    ownerKind: spec.ownerKind,
+    source: normalizePath(skillAssetSourceFile(spec)),
+    rows: rows.length,
+    rowsWithSkillReferences,
+    rowsWithSkillBytesPath,
+    uniqueSkillIds: skillIds.size,
+    currentSkillRefs: currentSkillRefs.size,
+    uniqueSkillBytesPaths: [...uniqueSkillBytesPaths].sort(),
+    sampleRows,
+  };
+}
+
+function buildCurrentHeroSkillRows(heroTable, currentCharacterIds, currentSkillIds) {
+  return (heroTable?.rows ?? [])
+    .filter(row => currentCharacterIds.has(Number(row.id)))
+    .map(row => {
+      const fields = [
+        'attackSkill',
+        'skillList',
+        'aerialSkillList',
+        'passiveSkillList',
+        'backupSkillList',
+        'skillSystem',
+      ];
+      const skillRefsByField = {};
+      for (const field of fields) {
+        const refs = parseSkillReferenceIds(row[field]);
+        if (refs.length > 0) {
+          skillRefsByField[field] = refs;
+        }
+      }
+      const skillIds = uniqueNumbers(Object.values(skillRefsByField).flat());
+
+      return {
+        heroId: Number(row.id),
+        source: normalizePath(sourceFiles.heroTable),
+        skillRefsByField,
+        currentSkillRefs: skillIds.filter(skillId =>
+          currentSkillIds.has(Number(skillId))
+        ),
+        skillBytesPaths: parseAssetPathList(row.skillBytesPath),
+      };
+    })
+    .sort((left, right) => left.heroId - right.heroId);
+}
+
+async function buildSkillBytesPathStatuses(assetPaths) {
+  const statuses = [];
+  for (const assetPath of assetPaths) {
+    const resolvedPath = resolveAzPrResourcesAssetPath(assetPath);
+    statuses.push({
+      assetPath,
+      resolvedPath: normalizePath(resolvedPath),
+      existsInAzPrAssets: await pathExists(resolvedPath),
+    });
+  }
+  return statuses.sort((left, right) =>
+    left.assetPath.localeCompare(right.assetPath)
+  );
+}
+
+async function buildSkillControlEvidenceItem(skill, skillControlBySkillId) {
+  const expectedDirectory = path.join(
+    extractorSkillListRoot,
+    `skill_control_${skill.id}.asset`
+  );
+  const controlDir = skillControlBySkillId.get(Number(skill.id));
+  if (!controlDir) {
+    return {
+      skillId: Number(skill.id),
+      characterId: Number(skill.characterId),
+      characterName: skill.characterName,
+      skillName: skill.name ?? skill.displayName ?? null,
+      status: 'missing',
+      expectedDirectory: normalizePath(expectedDirectory),
+    };
+  }
+
+  const monoBehaviourRoot = path.join(controlDir.fullPath, 'MonoBehaviour');
+  const jsonFiles = await listJsonFileNames(monoBehaviourRoot);
+  const aggregate = createEmptySkillControlNodeEvidence();
+  let parsedJsonSampleFiles = 0;
+  let unreadableJsonSampleFiles = 0;
+
+  for (const fileName of jsonFiles.slice(0, SKILL_CONTROL_SAMPLE_FILE_LIMIT)) {
+    try {
+      const json = await readJson(path.join(monoBehaviourRoot, fileName));
+      parsedJsonSampleFiles += 1;
+      mergeSkillControlNodeEvidence(
+        aggregate,
+        extractSkillControlNodeEvidence(json, fileName)
+      );
+    } catch {
+      unreadableJsonSampleFiles += 1;
+    }
+  }
+
+  return {
+    skillId: Number(skill.id),
+    characterId: Number(skill.characterId),
+    characterName: skill.characterName,
+    skillName: skill.name ?? skill.displayName ?? null,
+    status: 'found',
+    directory: normalizePath(controlDir.fullPath),
+    monoBehaviourRoot: normalizePath(monoBehaviourRoot),
+    jsonFileCount: jsonFiles.length,
+    parsedJsonSampleFiles,
+    unreadableJsonSampleFiles,
+    sampleFiles: jsonFiles.slice(0, 5),
+    timelineControlSampleCount: aggregate.timelineControlCount,
+    behaviorNodeSampleCount: aggregate.behaviorNodeCount,
+    frameCandidateSampleCount: aggregate.frameCandidateCount,
+    elementListCandidateSampleCount: aggregate.elementListCandidateCount,
+    frameRange: buildFrameRange(aggregate.startFrames, aggregate.endFrames),
+    sampleNodeCandidates: aggregate.candidates.slice(
+      0,
+      SKILL_CONTROL_SAMPLE_NODE_LIMIT
+    ),
+  };
+}
+
+function extractSkillControlNodeEvidence(json, fileName) {
+  const evidence = createEmptySkillControlNodeEvidence();
+  const stack = [json];
+
+  while (stack.length > 0) {
+    const value = stack.pop();
+    if (!value || typeof value !== 'object') {
+      continue;
+    }
+
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        stack.push(item);
+      }
+      continue;
+    }
+
+    if (Array.isArray(value.behaviorlineControl)) {
+      for (const control of value.behaviorlineControl) {
+        if (!control || typeof control !== 'object') {
+          continue;
+        }
+        evidence.timelineControlCount += 1;
+        collectFrameEvidence(evidence, control);
+        pushSkillControlCandidate(
+          evidence,
+          compactSkillControlCandidate(control, fileName, 'timeline-control')
+        );
+      }
+    }
+
+    if (isBehaviorNodeCandidate(value)) {
+      evidence.behaviorNodeCount += 1;
+      collectFrameEvidence(evidence, value);
+      if (Array.isArray(value.elementList) && value.elementList.length > 0) {
+        evidence.elementListCandidateCount += 1;
+      }
+      if (
+        value.startFrame != null ||
+        value.endFrame != null ||
+        value.frameCount != null
+      ) {
+        evidence.frameCandidateCount += 1;
+      }
+      pushSkillControlCandidate(
+        evidence,
+        compactSkillControlCandidate(value, fileName, 'behavior-node')
+      );
+    }
+
+    for (const nestedValue of Object.values(value)) {
+      if (nestedValue && typeof nestedValue === 'object') {
+        stack.push(nestedValue);
+      }
+    }
+  }
+
+  return evidence;
+}
+
+function createEmptySkillControlNodeEvidence() {
+  return {
+    timelineControlCount: 0,
+    behaviorNodeCount: 0,
+    frameCandidateCount: 0,
+    elementListCandidateCount: 0,
+    startFrames: [],
+    endFrames: [],
+    candidates: [],
+  };
+}
+
+function mergeSkillControlNodeEvidence(target, source) {
+  target.timelineControlCount += source.timelineControlCount;
+  target.behaviorNodeCount += source.behaviorNodeCount;
+  target.frameCandidateCount += source.frameCandidateCount;
+  target.elementListCandidateCount += source.elementListCandidateCount;
+  target.startFrames.push(...source.startFrames);
+  target.endFrames.push(...source.endFrames);
+  for (const candidate of source.candidates) {
+    pushSkillControlCandidate(target, candidate);
+  }
+}
+
+function collectFrameEvidence(evidence, value) {
+  const startFrame = numberOrNull(value.startFrame);
+  const endFrame = numberOrNull(value.endFrame);
+  const frameCount = numberOrNull(value.frameCount);
+
+  if (startFrame != null) {
+    evidence.startFrames.push(startFrame);
+  }
+  if (endFrame != null) {
+    evidence.endFrames.push(endFrame);
+  } else if (startFrame != null && frameCount != null) {
+    evidence.endFrames.push(startFrame + frameCount);
+  }
+}
+
+function pushSkillControlCandidate(evidence, candidate) {
+  if (candidate && evidence.candidates.length < SKILL_CONTROL_SAMPLE_NODE_LIMIT) {
+    evidence.candidates.push(candidate);
+  }
+}
+
+function compactSkillControlCandidate(value, fileName, type) {
+  return compactObject({
+    type,
+    file: fileName,
+    name: value.name ?? null,
+    trackName: value.trackName ?? null,
+    trackIndex: numberOrNull(value.trackIndex),
+    trackGroupIndex: numberOrNull(value.trackGroupIndex),
+    timelineGroupIndex: numberOrNull(value.timelineGroupIndex),
+    behaviorGroupId: numberOrNull(value.behaviorGroupId),
+    behaviorIndex: numberOrNull(value.behaviorIndex),
+    startFrame: numberOrNull(value.startFrame),
+    endFrame: numberOrNull(value.endFrame),
+    frameCount: numberOrNull(value.frameCount),
+    eventType: numberOrNull(value.eventType),
+    eventId: numberOrNull(value.eventID),
+    value: value.value ?? null,
+    stringValue: value.stringValue ?? null,
+    intParam: numberOrNull(value.intParam),
+    floatParam: numberOrNull(value.floatParam),
+    specialState: numberOrNull(value.specialState),
+    battlePropertyType: numberOrNull(value.battlePropertyType),
+    elementList: summarizeElementList(value.elementList),
+    eventFrameCount: Array.isArray(value.eventFrame)
+      ? value.eventFrame.length
+      : null,
+    behaviorListCount: Array.isArray(value.behaviorList)
+      ? value.behaviorList.length
+      : null,
+  });
+}
+
+function summarizeElementList(elementList) {
+  if (!Array.isArray(elementList) || elementList.length === 0) {
+    return [];
+  }
+
+  return elementList.slice(0, 5).map(item => {
+    if (item && typeof item === 'object') {
+      return compactObject({
+        elementId: numberOrNull(item.elementId ?? item.elementID ?? item.id),
+        value: item.value ?? null,
+        fileId: numberOrNull(item.m_FileID),
+        pathId: numberOrNull(item.m_PathID),
+      });
+    }
+    return item;
+  });
+}
+
+function isBehaviorNodeCandidate(value) {
+  return [
+    'eventType',
+    'eventID',
+    'startFrame',
+    'endFrame',
+    'frameCount',
+    'elementList',
+    'specialState',
+    'battlePropertyType',
+    'behaviorGroupId',
+    'timelineGroupIndex',
+    'behaviorIndex',
+  ].some(key => Object.prototype.hasOwnProperty.call(value, key));
+}
+
+function buildFrameRange(startFrames, endFrames) {
+  if (startFrames.length === 0 && endFrames.length === 0) {
+    return null;
+  }
+
+  return {
+    minStartFrame: startFrames.length > 0 ? Math.min(...startFrames) : null,
+    maxEndFrame: endFrames.length > 0 ? Math.max(...endFrames) : null,
+  };
+}
+
+function buildSkillControlTraceTargets(foundSkillControls) {
+  return [...foundSkillControls]
+    .sort((left, right) => {
+      if (left.skillId === 10900101) {
+        return -1;
+      }
+      if (right.skillId === 10900101) {
+        return 1;
+      }
+      return (
+        (right.behaviorNodeSampleCount ?? 0) -
+          (left.behaviorNodeSampleCount ?? 0) ||
+        Number(left.skillId) - Number(right.skillId)
+      );
+    })
+    .slice(0, 16)
+    .map(item => ({
+      skillId: item.skillId,
+      characterId: item.characterId,
+      characterName: item.characterName,
+      skillName: item.skillName,
+      directory: item.directory,
+      jsonFileCount: item.jsonFileCount,
+      frameRange: item.frameRange,
+      timelineControlSampleCount: item.timelineControlSampleCount,
+      behaviorNodeSampleCount: item.behaviorNodeSampleCount,
+      sampleNodeCandidates: item.sampleNodeCandidates.slice(0, 3),
+      nextStep:
+        'Parse MonoBehaviour references into action segments, hit frames, effect nodes, and formula candidates.',
+    }));
+}
+
+async function listSkillControlDirs(root) {
+  if (!(await pathExists(root))) {
+    return [];
+  }
+
+  const entries = await fs.readdir(root, { withFileTypes: true });
+  return entries
+    .filter(entry => entry.isDirectory())
+    .map(entry => {
+      const match = /^skill_control_(\d+)\.asset$/i.exec(entry.name);
+      if (!match) {
+        return null;
+      }
+      return {
+        skillId: Number(match[1]),
+        name: entry.name,
+        fullPath: path.join(root, entry.name),
+      };
+    })
+    .filter(Boolean)
+    .sort((left, right) => left.skillId - right.skillId);
+}
+
+async function listJsonFileNames(root) {
+  if (!(await pathExists(root))) {
+    return [];
+  }
+
+  const entries = await fs.readdir(root, { withFileTypes: true });
+  return entries
+    .filter(entry => entry.isFile() && entry.name.endsWith('.json'))
+    .map(entry => entry.name)
+    .sort();
+}
+
+async function createPathStatus(filePath) {
+  return {
+    path: normalizePath(filePath),
+    exists: await pathExists(filePath),
+  };
+}
+
+async function pathExists(filePath) {
+  try {
+    await fs.access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function parseSkillReferenceIds(rawValue) {
+  return uniqueNumbers(parseNumberList(rawValue).filter(value => value >= 100000));
+}
+
+function skillAssetSourceFile(spec) {
+  return spec.key === 'enemyTable' ? sourceFiles.enemies : sourceFiles[spec.key];
+}
+
+function resolveAzPrResourcesAssetPath(assetPath) {
+  return path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    ...String(assetPath).split(/[\\/]/).filter(Boolean)
+  );
+}
+
+function compactObject(value) {
+  return Object.fromEntries(
+    Object.entries(value).filter(([, item]) => {
+      if (item == null) {
+        return false;
+      }
+      if (Array.isArray(item) && item.length === 0) {
+        return false;
+      }
+      return item !== '';
+    })
+  );
+}
+
 function collectSkillLogicElementValueRows(skillLogicIndex) {
   return (skillLogicIndex.items ?? []).flatMap(item =>
     (item.levels ?? []).flatMap(level =>
@@ -2505,6 +3300,7 @@ function buildValidationReport(data) {
   const valueParamSummary = data.valueParamIndex?.summary ?? {};
   const combatFormulaEvidenceSummary =
     data.combatFormulaEvidence?.summary ?? {};
+  const skillAssetEvidenceSummary = data.skillAssetEvidence?.summary ?? {};
   const characterAttributePanelSummary =
     data.characterAttributePanels?.summary ?? {};
   const missingCharacterAttributePanelCount = Math.max(
@@ -2626,6 +3422,18 @@ function buildValidationReport(data) {
         '已建立敌人属性与公式证据索引，但当前 skillsub_ele_value.elementId 未直接匹配 element_formula.id，仍需 asset/效果节点追踪。',
     },
     {
+      code: 'skill-asset-effect-node-unmapped',
+      severity:
+        (skillAssetEvidenceSummary.currentSkillsWithExtractedSkillControl ?? 0) > 0
+          ? 'info'
+          : 'warning',
+      count:
+        skillAssetEvidenceSummary.currentSkillsMissingExtractedSkillControl ?? 0,
+      summary: skillAssetEvidenceSummary,
+      message:
+        'C:/PC2/Codex/AzPr 当前缺少 Config/Battle/Skill 实体资源；已按规则从 AzPr Extractor SkillList 建立 skill_control 候选索引，但还未解析为命中帧/效果节点/公式映射。',
+    },
+    {
       code: 'character-attribute-panel-missing',
       severity: missingCharacterAttributePanelCount > 0 ? 'warning' : 'ok',
       count: missingCharacterAttributePanelCount,
@@ -2667,6 +3475,9 @@ function buildValidationReport(data) {
       valueParamIndex: data.valueParamIndex?.summary?.parameterIds ?? 0,
       combatFormulaEvidence:
         data.combatFormulaEvidence?.summary?.elementFormulaRows ?? 0,
+      skillAssetEvidence:
+        data.skillAssetEvidence?.summary?.currentSkillsWithExtractedSkillControl ??
+        0,
       characterAttributePanels:
         data.characterAttributePanels?.summary?.characters ?? 0,
     },

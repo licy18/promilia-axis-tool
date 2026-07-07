@@ -9,6 +9,7 @@ import {
   getAzprEquipment,
   getAzprGeneratedManifest,
   getAzprKibos,
+  getAzprSkillAssetEvidence,
   getAzprSkillLogicIndex,
   getAzprSkillLevelCrossCheck,
   getAzprSkills,
@@ -63,6 +64,9 @@ describe('generated AzPr data', () => {
     const combatFormulaInfo = report.warnings.find(
       warning => warning.code === 'combat-formula-evidence-direct-link-missing'
     );
+    const skillAssetInfo = report.warnings.find(
+      warning => warning.code === 'skill-asset-effect-node-unmapped'
+    );
     const placeholderWarning = report.warnings.find(
       warning => warning.code === 'non-azpr-placeholder-character'
     );
@@ -72,6 +76,7 @@ describe('generated AzPr data', () => {
     expect(report.counts.skillLogicIndex).toBe(120);
     expect(report.counts.valueParamIndex).toBe(2);
     expect(report.counts.combatFormulaEvidence).toBe(152);
+    expect(report.counts.skillAssetEvidence).toBe(116);
     expect(report.counts.characterAttributePanels).toBe(20);
     expect(timingWarning.count).toBe(report.counts.skills);
     expect(crossCheckWarning).toMatchObject({
@@ -128,6 +133,21 @@ describe('generated AzPr data', () => {
         directAllElementFormulaIdMatches: 0,
         directCurrentElementFormulaIdMatches: 0,
         relationStatus: 'no-direct-elementId-to-element_formula-id-match',
+      },
+    });
+    expect(skillAssetInfo).toMatchObject({
+      severity: 'info',
+      count: 4,
+      summary: {
+        skillTableRows: 3200,
+        currentSkillCount: 120,
+        currentSkillsWithSkillTableRow: 120,
+        currentSkillsWithExtractedSkillControl: 116,
+        currentSkillsMissingExtractedSkillControl: 4,
+        uniqueSkillBytesPaths: 682,
+        existingSkillBytesPathsInAzPrAssets: 0,
+        extractedSkillControlDirectories: 4134,
+        relationStatus: 'skill-control-assets-found-in-azpr-extractor',
       },
     });
     expect(
@@ -300,6 +320,54 @@ describe('generated AzPr data', () => {
     expect(evidence.elementValueEvidence).toMatchObject({
       status: 'element-values-have-params-but-no-direct-formula-id-link',
       directElementFormulaIdMatches: [],
+    });
+  });
+
+  it('indexes AzPr Extractor skill control assets as effect-node candidates', () => {
+    const manifest = getAzprGeneratedManifest();
+    const evidence = getAzprSkillAssetEvidence();
+    const mayoiAttack = evidence.currentSkillControlEvidence.find(
+      item => item.skillId === 10900101
+    );
+
+    expect(manifest.files.skillAssetEvidence).toBe('skill-asset-evidence.json');
+    expect(evidence.probes).toMatchObject({
+      azprSkillRoot: {
+        exists: false,
+      },
+      azprSkillPreloadRoot: {
+        exists: false,
+      },
+      extractorSkillListRoot: {
+        exists: true,
+      },
+    });
+    expect(evidence.summary).toMatchObject({
+      currentSkillCount: 120,
+      currentSkillsWithExtractedSkillControl: 116,
+      currentSkillsMissingExtractedSkillControl: 4,
+      existingSkillBytesPathsInAzPrAssets: 0,
+      relationStatus: 'skill-control-assets-found-in-azpr-extractor',
+    });
+    expect(
+      evidence.currentSkillControlEvidence
+        .filter(item => item.status === 'missing')
+        .map(item => item.skillId)
+    ).toEqual([10101062, 10700262, 10800562, 11200262]);
+    expect(mayoiAttack).toMatchObject({
+      status: 'found',
+      jsonFileCount: 193,
+      frameRange: {
+        minStartFrame: 0,
+        maxEndFrame: 300,
+      },
+    });
+    expect(evidence.nextTraceTargets[0]).toMatchObject({
+      skillId: 10900101,
+      frameRange: {
+        minStartFrame: 0,
+        maxEndFrame: 300,
+      },
     });
   });
 

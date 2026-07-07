@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-07T14:04:44.973Z",
+  "generatedAt": "2026-07-07T14:29:40.922Z",
   "sourceRoot": "C:/PC2/Codex/AzPr",
   "counts": {
     "attributes": 184,
@@ -16,6 +16,7 @@
     "skillLogicIndex": 120,
     "valueParamIndex": 2,
     "combatFormulaEvidence": 152,
+    "skillAssetEvidence": 116,
     "characterAttributePanels": 20
   },
   "warnings": [
@@ -394,6 +395,28 @@
         "relationStatus": "no-direct-elementId-to-element_formula-id-match"
       },
       "message": "已建立敌人属性与公式证据索引，但当前 skillsub_ele_value.elementId 未直接匹配 element_formula.id，仍需 asset/效果节点追踪。"
+    },
+    {
+      "code": "skill-asset-effect-node-unmapped",
+      "severity": "info",
+      "count": 4,
+      "summary": {
+        "skillTableRows": 3200,
+        "currentSkillCount": 120,
+        "currentHeroCount": 20,
+        "currentSkillsWithSkillTableRow": 120,
+        "currentSkillsWithExtractedSkillControl": 116,
+        "currentSkillsMissingExtractedSkillControl": 4,
+        "skillBytesPathOwnerRows": 646,
+        "uniqueSkillBytesPaths": 682,
+        "existingSkillBytesPathsInAzPrAssets": 0,
+        "extractedSkillControlDirectories": 4134,
+        "parsedCurrentSkillControlSampleFiles": 5016,
+        "timelineControlSampleCount": 157,
+        "behaviorNodeSampleCount": 319,
+        "relationStatus": "skill-control-assets-found-in-azpr-extractor"
+      },
+      "message": "C:/PC2/Codex/AzPr 当前缺少 Config/Battle/Skill 实体资源；已按规则从 AzPr Extractor SkillList 建立 skill_control 候选索引，但还未解析为命中帧/效果节点/公式映射。"
     },
     {
       "code": "character-attribute-panel-missing",

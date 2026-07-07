@@ -55,6 +55,8 @@ npm run dev
 - 工作台动作库已切换为 Endaxis 风格直接动作目录：只列 `普通攻击`、`重击`、`闪击`、`跃击`、`星鸣技`、`星结合击`、`星决技`、`星携技`、`极限反击`、`完美招架`，被动技能不列入动作库。
 - 工作台伤害投影已建立公式分层雏形：`formulaBreakdown` 中当前攻击和动作形态倍率是已应用层，敌人防御/抗性/暴击/增伤仍是 `applied: false` 的未应用层；其中敌人防御/抗性 source 已接入 `combat-formula-evidence.json`。
 - 数据生成器已建立 `combat-formula-evidence.json`：敌人属性链和元素减免字段来源可追溯，但 `skillsub_ele_value.elementId -> element_formula.id` 当前无直接匹配，仍需 asset/效果节点追踪。
+- 数据生成器已建立 `skill-asset-evidence.json`：`C:\PC2\Codex\AzPr` 当前没有 `Config/Battle/Skill`、`SkillPreload`、`SkillList` 实体资源时，应按项目规则使用 `C:\Codex\AzPr Extractor` 的 Unity 导出资源；当前 `SkillList` 中 4134 个 `skill_control_*.asset` 目录可用，120 个当前技能中 116 个已匹配，4 个 `*62` 技能缺失。
+- 若后续 AzPr 数据库中缺少游戏原始资源文件，优先在 `C:\Codex\AzPr Extractor` 继续导出或索引；表格/Lua 走 `raw_nostreaming_package` 导出流程，Unity 技能/动作/效果资源走 Extractor 的 Unity/default_package 导出结果。
 - 项目状态核心在 `src/store/project.js`。
 - 主编辑器在 `src/views/Editor.vue`，当前承担了大量 UI、交互和业务协调职责。
 - 时间轴组件位于 `src/components/timeline/`。
@@ -92,7 +94,7 @@ Endaxis 只作为架构和交互成熟度参考，不是蓝色星原数据来源
 
 ## 已知开发阶段
 
-当前已完成阶段 1-3 的最小闭环、阶段 4 工作台主链路、阶段 5-1 至 5-8E 的真实数据/数值/动作形态、直接动作库、60fps 帧时间轴、公式分层雏形、战斗公式证据索引和公式 source 接入。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 5-8F，专门追踪 skill asset / effect node 候选索引或缺口报告。
+当前已完成阶段 1-3 的最小闭环、阶段 4 工作台主链路、阶段 5-1 至 5-8F 的真实数据/数值/动作形态、直接动作库、60fps 帧时间轴、公式分层雏形、战斗公式证据索引、公式 source 接入和 skill asset/effect node 候选索引。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 5-8G，把 `skill_control` MonoBehaviour 候选节点解析成动作时长、命中帧和公式映射候选。
 
 完整对标 Endaxis 的后续路线见 `DEVELOPMENT_PLAN.md`。
 

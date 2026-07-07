@@ -8,6 +8,7 @@ import equipment from './generated/equipment.json';
 import kibos from './generated/kibos.json';
 import manifest from './generated/manifest.json';
 import mediaIndex from './generated/media-index.json';
+import skillAssetEvidence from './generated/skill-asset-evidence.json';
 import skillLogicIndex from './generated/skill-logic-index.json';
 import skillLevelCrossCheck from './generated/skill-level-crosscheck.json';
 import skills from './generated/skills.json';
@@ -32,6 +33,7 @@ export const azprGeneratedData = Object.freeze({
   validationReport,
   mediaIndex,
   combatFormulaEvidence,
+  skillAssetEvidence,
   skillLogicIndex,
   skillLevelCrossCheck,
   valueParamIndex,
@@ -60,6 +62,10 @@ export function getAzprValueParamIndex() {
 
 export function getAzprCombatFormulaEvidence() {
   return combatFormulaEvidence;
+}
+
+export function getAzprSkillAssetEvidence() {
+  return skillAssetEvidence;
 }
 
 export function getAzprCharacterAttributePanels() {
