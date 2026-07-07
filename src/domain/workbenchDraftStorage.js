@@ -89,9 +89,11 @@ function ensureActionDrafts(actionDrafts, selection) {
     return normalizedActions;
   }
 
+  const normalizedSelection = normalizeWorkbenchSelection(selection);
   return [
     createWorkbenchActionDraft({
-      skillId: normalizeWorkbenchSelection(selection).skillId,
+      skillId: normalizedSelection.skillId,
+      actorCharacterId: normalizedSelection.characterId,
     }),
   ];
 }

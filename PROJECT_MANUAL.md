@@ -55,7 +55,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；10 个测试文件、68 条测试通过。
+- `npm run test -- --run`：通过；10 个测试文件、69 条测试通过。
 
 ## 3. 目录速览
 
@@ -988,6 +988,38 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 先允许有 `actorId` 的动作在角色轨之间拖拽，并由 `Workbench.vue` 回写动作归属或对应角色选择。
 - 对系统轨动作保持只读归属，避免注释/敌人事件被误拖成角色技能。
 - 为跨轨拖拽补充测试，并继续保持运行时和战斗公式不因 UI 拖拽而隐式篡改。
+
+### 2026-07-07：阶段 4-13 跨轨拖拽改变动作归属雏形落地
+
+本轮完成：
+
+- `actionDrafts[]` 新增轻量 `actorCharacterId` 字段，用于记录动作归属角色，并进入 workbench 草稿保存/恢复。
+- `createWorkbenchProject()` 生成项目动作时会按 `actorCharacterId` 解析来源 actor；技能、切人和资源动作可投射到对应角色轨。
+- 切人动作如果被拖到原目标角色轨，会自动选择另一个 actor 作为切人目标，避免来源和目标角色相同。
+- `TimelineGridPreview` 支持在拖拽结束时识别落点角色轨，并通过 `update-action-lane` 回传目标轨道。
+- 角色轨在拖拽经过时有最小落点高亮；系统轨事件不会被作为可变更归属动作处理。
+- `Workbench.vue` 接收跨轨拖拽后只回写技能、切人、资源动作的 `actorCharacterId`；注释、等待、敌人事件仍保持系统/非 actor 归属。
+- 新增工作台测试，覆盖资源动作从末音轨拖到寒悠悠轨后保存 `actorCharacterId: 101003`，以及注释动作拖向角色轨后仍留在系统轨。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、25 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、69 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- `http://127.0.0.1:5175/#/workbench` 本地页面服务返回 200。
+
+当前结论：
+
+- 新版工作台时间轴已经具备最小跨角色轨拖拽归属能力。
+- 动作归属现在可以持久化到草稿，不再只由主角色或技能来源隐式决定。
+- 当前仍没有在属性面板显式展示/编辑动作归属；技能下拉也仍主要跟随主角色选择，跨轨后的技能来源关系还不够透明。
+
+下一步：
+
+- 阶段 4-14 目标：建立多角色动作归属和技能选择的属性面板雏形。
+- 在属性面板显示当前动作归属角色，并允许对可归属动作直接选择归属角色。
+- 技能动作的技能选择需要和动作归属角色关系更清晰：先按归属角色过滤或标记跨角色技能状态，避免跨轨拖拽后用户看不出技能/角色来源。
+- 继续保持归属变化通过 `actionDrafts -> Project -> Scenario -> simulation` 生效，不在 UI 层硬改战斗公式。
 
 ## 10. 文档维护规则
 

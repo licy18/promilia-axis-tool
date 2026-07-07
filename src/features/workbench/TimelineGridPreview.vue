@@ -72,8 +72,10 @@
             v-for="lane in timelineLanes"
             :key="lane.id"
             class="lane-row"
+            :class="{ 'drop-target': lane.id === dragTargetLaneId && lane.id !== dragInitialLaneId }"
             :data-lane-id="lane.id"
             data-testid="workbench-timeline-row"
+            :ref="(element) => setLaneRowRef(element, lane.id)"
           >
             <div
               v-for="action in lane.actions"
@@ -198,8 +200,15 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['select-action', 'delete-action', 'update-action-time', 'update-action-duration']);
+const emit = defineEmits([
+  'select-action',
+  'delete-action',
+  'update-action-time',
+  'update-action-duration',
+  'update-action-lane',
+]);
 const laneRef = ref(null);
+const laneRowRefs = new Map();
 const dragState = ref(null);
 const resizeState = ref(null);
 const timelineZoom = ref(1);
@@ -216,6 +225,8 @@ const ticks = computed(() => {
 });
 
 const draggingActionId = computed(() => dragState.value?.actionId ?? null);
+const dragInitialLaneId = computed(() => dragState.value?.initialLaneId ?? null);
+const dragTargetLaneId = computed(() => dragState.value?.targetLaneId ?? null);
 const resizingActionId = computed(() => resizeState.value?.actionId ?? null);
 const timelineTrackStyle = computed(() => ({
   width: `${timelineZoom.value * 100}%`,
@@ -338,6 +349,9 @@ function beginDrag(event, action) {
   emit('select-action', action.id);
   dragState.value = {
     actionId: action.id,
+    canChangeLane: canChangeActionLane(action),
+    initialLaneId: resolveActionLaneId(action),
+    targetLaneId: null,
     laneWidth: rect.width,
     initialClientX: event.clientX,
     initialStartMs: action.startMs,
@@ -404,6 +418,13 @@ function handleDragMove(event) {
     return;
   }
 
+  if (dragState.value.canChangeLane) {
+    dragState.value = {
+      ...dragState.value,
+      targetLaneId: resolveActorLaneAtPoint(event.clientY),
+    };
+  }
+
   const deltaMs = ((event.clientX - dragState.value.initialClientX) / dragState.value.laneWidth) * props.durationMs;
   const nextStartMs = snapTimeMs(dragState.value.initialStartMs + deltaMs);
   emit('update-action-time', {
@@ -412,7 +433,17 @@ function handleDragMove(event) {
   });
 }
 
-function endDrag() {
+function endDrag(event) {
+  if (dragState.value?.canChangeLane && event?.type === 'pointerup') {
+    const targetLaneId = resolveActorLaneAtPoint(event.clientY);
+    if (targetLaneId && targetLaneId !== dragState.value.initialLaneId) {
+      emit('update-action-lane', {
+        actionId: dragState.value.actionId,
+        laneId: targetLaneId,
+      });
+    }
+  }
+
   dragState.value = null;
   window.removeEventListener('pointermove', handleDragMove);
   window.removeEventListener('pointerup', endDrag);
@@ -428,6 +459,40 @@ function endResize() {
 
 function setTimelineZoom(value) {
   timelineZoom.value = clampNumber(Number(value), MIN_ZOOM, MAX_ZOOM);
+}
+
+function setLaneRowRef(element, laneId) {
+  if (element) {
+    laneRowRefs.set(laneId, element);
+  } else {
+    laneRowRefs.delete(laneId);
+  }
+}
+
+function canChangeActionLane(action) {
+  return resolveActionLaneId(action) !== 'system';
+}
+
+function resolveActorLaneAtPoint(clientY) {
+  if (!Number.isFinite(clientY)) {
+    return null;
+  }
+
+  for (const lane of timelineLanes.value) {
+    if (lane.type !== 'actor') {
+      continue;
+    }
+    const element = laneRowRefs.get(lane.id);
+    const rect = element?.getBoundingClientRect?.();
+    if (!rect || rect.height <= 0) {
+      continue;
+    }
+    if (clientY >= rect.top && clientY <= rect.bottom) {
+      return lane.id;
+    }
+  }
+
+  return null;
 }
 
 function formatZoom(value) {
@@ -611,6 +676,11 @@ h2 {
     ),
     #14191e;
   overflow: hidden;
+}
+
+.lane-row.drop-target {
+  border-color: rgba(121, 199, 185, 0.78);
+  box-shadow: inset 0 0 0 1px rgba(121, 199, 185, 0.28);
 }
 
 .action-block {

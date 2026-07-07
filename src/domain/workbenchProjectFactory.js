@@ -47,6 +47,7 @@ export function createWorkbenchActionDraft({
   id = DEFAULT_WORKBENCH_ACTION_ID,
   type = ACTION_TYPES.SKILL,
   skillId = DEFAULT_WORKBENCH_SELECTION.skillId,
+  actorCharacterId = DEFAULT_WORKBENCH_SELECTION.characterId,
   startMs = 0,
   durationMs = 1000,
   level = 1,
@@ -61,6 +62,7 @@ export function createWorkbenchActionDraft({
     id,
     type,
     skillId: Number(skillId),
+    actorCharacterId: Number(actorCharacterId) || DEFAULT_WORKBENCH_SELECTION.characterId,
     startMs: Number(startMs) || 0,
     durationMs: Math.max(1, Number(durationMs) || 1000),
     level: Math.max(1, Number(level) || 1),
@@ -189,6 +191,7 @@ export function normalizeWorkbenchActionDrafts(
           id: draft.id ?? `action-${String(index + 1).padStart(4, '0')}`,
           type: draft.type,
           skillId: draft.skillId ?? fallbackSkill.id,
+          actorCharacterId: normalizeActorCharacterId(draft.actorCharacterId, selection),
           startMs: draft.startMs,
           durationMs: draft.durationMs,
           level: draft.level,
@@ -207,6 +210,7 @@ export function normalizeWorkbenchActionDrafts(
         id: draft.id ?? `action-${String(index + 1).padStart(4, '0')}`,
         type: ACTION_TYPES.SKILL,
         skillId: skill.id,
+        actorCharacterId: normalizeActorCharacterId(draft.actorCharacterId, selection),
         startMs: draft.startMs,
         durationMs: draft.durationMs,
         level: clampLevel(draft.level, skill),
@@ -223,12 +227,13 @@ export function normalizeWorkbenchActionDrafts(
 
 function createProjectActionFromDraft(draft, actorsByCharacterId, primaryCharacterId, targetId) {
   const primaryActor = actorsByCharacterId.get(Number(primaryCharacterId)) ?? [...actorsByCharacterId.values()][0];
+  const sourceActor = resolveActorFromDraft(draft, actorsByCharacterId, primaryActor);
 
   if (draft.type === ACTION_TYPES.SWITCH) {
-    const targetActor = actorsByCharacterId.get(Number(draft.targetCharacterId)) ?? primaryActor;
+    const targetActor = resolveSwitchTargetActor(draft, actorsByCharacterId, sourceActor);
     return createSwitchAction({
       id: draft.id,
-      actorId: primaryActor.id,
+      actorId: sourceActor.id,
       targetActorId: targetActor.id,
       targetCharacterId: targetActor.characterId,
       startMs: draft.startMs,
@@ -257,7 +262,7 @@ function createProjectActionFromDraft(draft, actorsByCharacterId, primaryCharact
   if (draft.type === ACTION_TYPES.RESOURCE) {
     return createResourceAction({
       id: draft.id,
-      actorId: primaryActor.id,
+      actorId: sourceActor.id,
       startMs: draft.startMs,
       resource: draft.resource || 'sp',
       change: draft.change,
@@ -277,7 +282,7 @@ function createProjectActionFromDraft(draft, actorsByCharacterId, primaryCharact
   }
 
   const skill = findById(workbenchSeed.gameData.skills, draft.skillId);
-  const actor = actorsByCharacterId.get(Number(skill.characterId)) ?? primaryActor;
+  const actor = sourceActor ?? actorsByCharacterId.get(Number(skill.characterId)) ?? primaryActor;
   return createSkillAction({
     id: draft.id,
     actorId: actor.id,
@@ -317,6 +322,27 @@ function isNonSkillDraftType(type) {
     ACTION_TYPES.RESOURCE,
     ACTION_TYPES.ENEMY_EVENT,
   ].includes(type);
+}
+
+function normalizeActorCharacterId(actorCharacterId, selection) {
+  const id = Number(actorCharacterId);
+  if (id === Number(selection.characterId) || id === Number(selection.secondaryCharacterId)) {
+    return id;
+  }
+  return selection.characterId;
+}
+
+function resolveActorFromDraft(draft, actorsByCharacterId, fallbackActor) {
+  return actorsByCharacterId.get(Number(draft.actorCharacterId)) ?? fallbackActor;
+}
+
+function resolveSwitchTargetActor(draft, actorsByCharacterId, sourceActor) {
+  const requestedTarget = actorsByCharacterId.get(Number(draft.targetCharacterId));
+  if (requestedTarget && requestedTarget.id !== sourceActor.id) {
+    return requestedTarget;
+  }
+
+  return [...actorsByCharacterId.values()].find((actor) => actor.id !== sourceActor.id) ?? sourceActor;
 }
 
 function clampLevel(level, skill) {

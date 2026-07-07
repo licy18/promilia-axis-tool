@@ -369,6 +369,64 @@ describe('Workbench view', () => {
     expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe('有未保存改动');
   });
 
+  it('drags actor-bound actions between actor lanes without moving system events', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    stubTimelineGeometry(wrapper);
+
+    await wrapper.find('[data-testid="workbench-add-resource-action"]').trigger('click');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-action"][data-action-id="action-0002"]')
+        .attributes('data-lane-id'),
+    ).toBe('actor-109001');
+
+    await dragTimelineAction(wrapper, 'action-0002', {
+      fromY: 20,
+      toY: 110,
+    });
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-action"][data-action-id="action-0002"]')
+        .attributes('data-lane-id'),
+    ).toBe('actor-101003');
+    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe('有未保存改动');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(savedDraft.actionDrafts[1]).toMatchObject({
+      id: 'action-0002',
+      actorCharacterId: 101003,
+    });
+
+    await wrapper.find('[data-testid="workbench-add-annotation-action"]').trigger('click');
+    stubTimelineGeometry(wrapper);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-action"][data-action-id="action-0003"]')
+        .attributes('data-lane-id'),
+    ).toBe('system');
+
+    await dragTimelineAction(wrapper, 'action-0003', {
+      fromY: 200,
+      toY: 110,
+    });
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-action"][data-action-id="action-0003"]')
+        .attributes('data-lane-id'),
+    ).toBe('system');
+  });
+
   it('keeps generated action ids unique after deleting the first action', async () => {
     const wrapper = mount(Workbench, {
       global: {
@@ -541,3 +599,58 @@ describe('Workbench view', () => {
     expect(restored.find('[data-testid="workbench-enemy-level"]').text()).toBe('Lv.80');
   });
 });
+
+function stubTimelineGeometry(wrapper) {
+  const lane = wrapper.find('[data-testid="workbench-timeline-lane"]').element;
+  lane.getBoundingClientRect = () => ({
+    width: 600,
+    height: 240,
+    left: 0,
+    right: 600,
+    top: 0,
+    bottom: 240,
+    x: 0,
+    y: 0,
+    toJSON: () => {},
+  });
+
+  stubLaneRow(wrapper, 'actor-109001', 0, 72);
+  stubLaneRow(wrapper, 'actor-101003', 84, 156);
+  stubLaneRow(wrapper, 'system', 168, 240);
+}
+
+function stubLaneRow(wrapper, laneId, top, bottom) {
+  const row = wrapper.find(`[data-testid="workbench-timeline-row"][data-lane-id="${laneId}"]`);
+  if (!row.exists()) {
+    return;
+  }
+
+  row.element.getBoundingClientRect = () => ({
+    width: 600,
+    height: bottom - top,
+    left: 0,
+    right: 600,
+    top,
+    bottom,
+    x: 0,
+    y: top,
+    toJSON: () => {},
+  });
+}
+
+async function dragTimelineAction(wrapper, actionId, { fromY, toY }) {
+  const action = wrapper.find(`[data-testid="workbench-timeline-action"][data-action-id="${actionId}"]`).element;
+  const pointerDown = new MouseEvent('pointerdown', {
+    bubbles: true,
+    button: 0,
+    clientX: 100,
+    clientY: fromY,
+  });
+  Object.defineProperty(pointerDown, 'pointerId', { value: Number(actionId.replace(/\D/g, '')) || 1 });
+  action.dispatchEvent(pointerDown);
+  await nextTick();
+  window.dispatchEvent(new MouseEvent('pointermove', { clientX: 100, clientY: toY }));
+  await nextTick();
+  window.dispatchEvent(new MouseEvent('pointerup', { clientX: 100, clientY: toY }));
+  await nextTick();
+}

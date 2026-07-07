@@ -58,6 +58,7 @@
         @select-action="selectedActionId = $event"
         @delete-action="deleteAction"
         @update-action-duration="updateActionDuration"
+        @update-action-lane="updateActionLane"
         @update-action-time="updateActionTime"
       />
 
@@ -176,6 +177,7 @@ onMounted(() => {
 });
 
 function updateSelection(patch) {
+  const previousSelection = selection.value;
   const characterChanged =
     patch.characterId != null && Number(patch.characterId) !== Number(selection.value.characterId);
   const secondaryCharacterChanged =
@@ -189,13 +191,20 @@ function updateSelection(patch) {
 
   if (characterChanged || secondaryCharacterChanged) {
     const nextActionDrafts = actionDrafts.value.map((action) => {
-      if (secondaryCharacterChanged && action.type === ACTION_TYPES.SWITCH) {
-        return {
-          ...action,
-          targetCharacterId: nextSelection.secondaryCharacterId,
-        };
+      const nextAction = { ...action };
+      if (characterChanged && Number(nextAction.actorCharacterId) === Number(previousSelection.characterId)) {
+        nextAction.actorCharacterId = nextSelection.characterId;
       }
-      return action;
+      if (
+        secondaryCharacterChanged &&
+        Number(nextAction.actorCharacterId) === Number(previousSelection.secondaryCharacterId)
+      ) {
+        nextAction.actorCharacterId = nextSelection.secondaryCharacterId;
+      }
+      if (secondaryCharacterChanged && nextAction.type === ACTION_TYPES.SWITCH) {
+        nextAction.targetCharacterId = nextSelection.secondaryCharacterId;
+      }
+      return nextAction;
     });
     actionDrafts.value = normalizeWorkbenchActionDrafts(nextActionDrafts, nextSelection);
   }
@@ -275,11 +284,50 @@ function updateActionDuration({ actionId, durationMs }) {
   markDraftDirty();
 }
 
+function updateActionLane({ actionId, laneId }) {
+  const targetActor = scenario.value.actors.find((actor) => actor.id === laneId);
+  if (!targetActor) {
+    return;
+  }
+
+  let didUpdate = false;
+  selectedActionId.value = actionId;
+  actionDrafts.value = actionDrafts.value.map((action) => {
+    if (action.id !== actionId || !canAssignActionLane(action)) {
+      return action;
+    }
+
+    const targetCharacterId = Number(targetActor.characterId);
+    if (Number(action.actorCharacterId) === targetCharacterId) {
+      return action;
+    }
+
+    const patch = {
+      actorCharacterId: targetCharacterId,
+    };
+
+    if (action.type === ACTION_TYPES.SWITCH && Number(action.targetCharacterId) === targetCharacterId) {
+      patch.targetCharacterId = resolveAlternateActorCharacterId(targetCharacterId);
+    }
+
+    didUpdate = true;
+    return createWorkbenchActionDraft({
+      ...action,
+      ...patch,
+    });
+  });
+
+  if (didUpdate) {
+    markDraftDirty();
+  }
+}
+
 function addAction() {
   const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
   const nextAction = createWorkbenchActionDraft({
     id: createNextActionId(),
     skillId: selectedDraft.value.skillId,
+    actorCharacterId: selection.value.characterId,
     startMs: clampNumber((lastAction?.startMs ?? 0) + 2000, 0, project.value.time.durationMs),
     level: selectedDraft.value.level,
   });
@@ -295,6 +343,7 @@ function addWaitAction() {
     id: createNextActionId(),
     type: ACTION_TYPES.WAIT,
     skillId: selectedDraft.value.skillId,
+    actorCharacterId: selection.value.characterId,
     startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
     durationMs: 1000,
     level: selectedDraft.value.level,
@@ -312,6 +361,7 @@ function addSwitchAction() {
     id: createNextActionId(),
     type: ACTION_TYPES.SWITCH,
     skillId: selectedDraft.value.skillId,
+    actorCharacterId: selection.value.characterId,
     startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
     durationMs: 600,
     level: selectedDraft.value.level,
@@ -330,6 +380,7 @@ function addAnnotationAction() {
     id: createNextActionId(),
     type: ACTION_TYPES.ANNOTATION,
     skillId: selectedDraft.value.skillId,
+    actorCharacterId: selection.value.characterId,
     startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
     durationMs: 600,
     level: selectedDraft.value.level,
@@ -347,6 +398,7 @@ function addResourceAction() {
     id: createNextActionId(),
     type: ACTION_TYPES.RESOURCE,
     skillId: selectedDraft.value.skillId,
+    actorCharacterId: selection.value.characterId,
     startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
     durationMs: 600,
     level: selectedDraft.value.level,
@@ -367,6 +419,7 @@ function addEnemyEventAction() {
     id: createNextActionId(),
     type: ACTION_TYPES.ENEMY_EVENT,
     skillId: selectedDraft.value.skillId,
+    actorCharacterId: selection.value.characterId,
     startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
     durationMs: 600,
     level: selectedDraft.value.level,
@@ -438,7 +491,7 @@ function resetDraft() {
 function applyDraftState(draft) {
   selection.value = { ...draft.selection };
   enemyConfig.value = normalizeWorkbenchEnemyConfig(draft.enemyConfig);
-  actionDrafts.value = draft.actionDrafts.map((action) => createWorkbenchActionDraft(action));
+  actionDrafts.value = normalizeWorkbenchActionDrafts(draft.actionDrafts, selection.value);
   selectedActionId.value = draft.selectedActionId;
 }
 
@@ -456,6 +509,17 @@ function createNextActionId() {
     return match ? Math.max(max, Number(match[1])) : max;
   }, 0);
   return `action-${String(maxIndex + 1).padStart(4, '0')}`;
+}
+
+function canAssignActionLane(action) {
+  return [ACTION_TYPES.SKILL, ACTION_TYPES.SWITCH, ACTION_TYPES.RESOURCE].includes(action.type);
+}
+
+function resolveAlternateActorCharacterId(sourceCharacterId) {
+  return (
+    scenario.value.actors.find((actor) => Number(actor.characterId) !== Number(sourceCharacterId))?.characterId ??
+    selection.value.characterId
+  );
 }
 
 function clampNumber(value, min, max) {
