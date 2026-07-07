@@ -3838,6 +3838,46 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8AY 目标：继续追 `DamageElement.RecoverSP` 中两个 runtime modifier 调用、`recoverInterval` native divisor、`sharePercent/petSharePercent` 来源配置和最终 owner 选择。
 - 如果静态证据仍不足，设计 runtime hook 采样点，按角色记录 `RecoverSPArgs` 字段快照、share rebroadcast 目标、interval 节流命中结果和最终 SP 曲线。
 
+### 2026-07-08：阶段 5-8AY RecoverSP 修正倍率与分享配置探针
+
+本轮完成：
+
+- 已确认 `DamageElement.RecoverSP@0x138EEE0` 的两个 runtime modifier 来源：
+  - `propertyId = 105 / 0x69` 对应 `EBattlePropertyType.SPGETUP`，dump 描述为能量回复增幅。
+  - `propertyId = 228 / 0xE4` 对应 `EBattlePropertyType.SPGETUP_ATK`，dump 描述为能量攻击回复增幅。
+- 已确认两个 modifier 的静态取值链：
+  - 常规路径调用 `AliveProperty.GetBattlePropertyCurrentValue@0x12A7EE0`，参数 `isRatio = true`、`tags = null`。
+  - snapshot/attacker 路径调用 `SnapshotPropertyManager.GetBattlePropertyCurrentValue@0x181D240`。
+  - `MyFloat.op_Implicit(float)@0x11B2AE0` 把 `MyFloat` 转为 float 参与公式。
+- 已确认 `BattleConfigData.shareEnergyPercent@0x108` 写入 `RecoverSPArgs.sharePercent@0x30`，`BattleConfigData.petShareEnergyPercent@0x10C` 写入 `RecoverSPArgs.petSharePercent@0x34`；`RecoverSPArgs.mainPetSharePercent@0x44` 仍为常量 `1.0`。
+- 新增 `runtimeModifierProbe`，挂在 `selfEnergyRuntimeFormulaProbe.runtimeModifierProbe` 下；它记录 `delta/petDelta` 的公式形态、modifier 属性来源、`nativeConstant@0x189956B08`、`recoverInterval` divisor 地址 `0x189956D8C` 和分享配置来源。
+- `externalElementBindingSummary` 新增 `runtimeSelfEnergyModifierProbeStatuses`、`runtimeSelfEnergyModifierProbeCandidateCount`、`runtimeSelfEnergyModifierProbeGateOpenCount`、`gapsWithRuntimeSelfEnergyModifierProbe`。
+- Workbench 执行矩阵摘要新增 `修正探针 x/y`，切换到重击动作时可以看到 `修正探针 1/1`。
+
+当前样例结果：
+
+- 默认普通攻击 action-level：`runtimeModifierProbe.candidateCount = 2`、`gateOpenCount = 2`，modifier 属性为 `[105, 228]`。
+- 非普攻外部 DamageElement：`109001251` 的 `deltaFormulaPreview.baseDeltaCandidate = 0.5899`，`petBaseDeltaCandidate = 2.2999`，公式形态为 `base * (nativeConstant@0x189956B08 + SPGETUP + SPGETUP_ATK)`。
+- 四动作缺口摘要：`gapsWithRuntimeSelfEnergyModifierProbe = 3/3`，`runtimeSelfEnergyModifierProbeCandidateCount = 3`，`runtimeSelfEnergyModifierProbeGateOpenCount = 3`。
+
+验收结果：
+
+- `npx prettier --write src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+
+当前边界：
+
+- 阶段 5-8AY 证明的是 modifier 来源和分享配置字段来源，仍不等于最终充能公式可应用。
+- `nativeConstant@0x189956B08` 的实际值未读取；它很可能是公式基准常量，但当前只确认地址和参与位置。
+- `recoverInterval` divisor `0x189956D8C` 的实际值和时间单位仍未确认。
+- `SPGETUP/SPGETUP_ATK` 的实时属性值、owner/share 目标筛选、interval 节流命中和最终每角色 SP 曲线仍未确认。
+- `runtimeModifierProbe.applied = false`，`selfEnergyChange.value` 仍只应用显式资源事件，不应用候选充能。
+
+下一步：
+
+- 阶段 5-8AZ 目标：读取或 runtime hook 采样 `nativeConstant@0x189956B08` 与 `recoverInterval` divisor `0x189956D8C` 的实际值，确认 `SPGETUP/SPGETUP_ATK` 的单位和默认值。
+- 同步设计按角色采样点：记录 `RecoverSPArgs.id/baseDelta/delta/interval/sharePercent/petSharePercent/petDelta/mainPetSharePercent` 字段快照、share rebroadcast 目标、interval 节流结果和最终自身能量曲线。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

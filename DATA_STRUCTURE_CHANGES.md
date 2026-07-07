@@ -6024,3 +6024,111 @@ hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1
 - `sourceToArgsProbe.applied = false`。
 - 已确认 source-to-args 的主要字段写入路径，但 `delta` / `petDelta` 的 runtime modifier 来源仍未确认。
 - `recoverInterval` native divisor、share config 来源对象、owner 选择和最终 SP 曲线仍未确认。
+
+## 78. 阶段 5-8AY：runtimeModifierProbe 修正倍率与分享配置子探针
+
+阶段 5-8AY 在 `selfEnergyRuntimeFormulaProbe` 下新增 `runtimeModifierProbe`，用于记录 `DamageElement.RecoverSP` 中 `delta/petDelta` 的修正倍率来源、interval divisor 地址和分享配置来源。该结构仍为证据层，不参与最终自身能量值计算。
+
+### 78.1 selfEnergyRuntimeFormulaProbe
+
+新增字段：
+
+- `runtimeModifierProbe.status`：有候选时为 `runtime-modifier-subprobe-built-unapplied`。
+- `runtimeModifierProbe.sourceKind`：固定为 `azpr-self-energy-runtime-modifier-subprobe`。
+- `runtimeModifierProbe.sourceFunction`：固定为 `DamageElement.RecoverSP@0x138EEE0`。
+- `runtimeModifierProbe.candidateCount` / `gateOpenCount`：沿用 `selfEnergyRuntimeFormulaProbe` 的候选数量和 `m_recoverSP > 0` 门控数量。
+- `runtimeModifierProbe.confirmedRuntimeRules`：静态确认规则集合。
+- `runtimeModifierProbe.modifierPropertyIds`：当前为 `[105, 228]`。
+- `runtimeModifierProbe.samples[]`：每个 DamageElement 候选的修正公式预览。
+- `runtimeModifierProbe.unresolved`：仍未确认的常量值、divisor 值、实时属性值和目标筛选。
+- `runtimeModifierProbe.applied`：固定为 `false`。
+
+### 78.2 confirmedRuntimeRules
+
+`confirmedRuntimeRules` 当前包含：
+
+- `deltaFormulaShape`：记录 `RecoverSPArgs.baseDelta@0x1C`、`delta@0x20`、`petDelta@0x38` 和公式形态 `scaledSource * (nativeConstant@0x189956B08 + SPGETUP + SPGETUP_ATK)`。
+- `modifierSources[]`：
+  - `SPGETUP`：`propertyId = 105 / 0x69`，来源枚举 `EBattlePropertyType.SPGETUP`。
+  - `SPGETUP_ATK`：`propertyId = 228 / 0xE4`，来源枚举 `EBattlePropertyType.SPGETUP_ATK`。
+  - 两者常规路径均使用 `AliveProperty.GetBattlePropertyCurrentValue@0x12A7EE0`，snapshot 路径使用 `SnapshotPropertyManager.GetBattlePropertyCurrentValue@0x181D240`，并经 `MyFloat.op_Implicit(float)@0x11B2AE0` 转 float。
+- `intervalScale`：记录 `DamageElement.m_recoverInterval@0x248 -> RecoverSPArgs.interval@0x24`，divisor 地址为 `0x189956D8C`。
+- `shareConfigSources[]`：
+  - `RecoverSPArgs.sharePercent@0x30 <- BattleConfigData.shareEnergyPercent@0x108`
+  - `RecoverSPArgs.petSharePercent@0x34 <- BattleConfigData.petShareEnergyPercent@0x10C`
+  - `RecoverSPArgs.mainPetSharePercent@0x44 <- constant-1.0`
+
+### 78.3 samples
+
+样例结构：
+
+```json
+{
+  "elementConfigId": 109001251,
+  "pathId": "-5633710717881758712",
+  "gateOpen": true,
+  "deltaFormulaPreview": {
+    "baseDeltaCandidate": 0.5899,
+    "petBaseDeltaCandidate": 2.2999,
+    "modifierPropertyIds": [105, 228],
+    "formulaShape": "base * (nativeConstant@0x189956B08 + SPGETUP + SPGETUP_ATK)",
+    "nativeConstantAddress": "0x189956B08",
+    "status": "modifier-values-runtime-unapplied"
+  },
+  "intervalScaleCandidate": {
+    "sourceField": 9999,
+    "nativeDivisorAddress": "0x189956D8C",
+    "status": "divisor-address-confirmed-value-unread"
+  },
+  "applied": false
+}
+```
+
+### 78.4 externalElementBinding
+
+非普攻缺口 `hitBindingGap.externalElementBinding` 新增：
+
+- `runtimeSelfEnergyModifierProbeStatuses`
+- `runtimeSelfEnergyModifierProbeCandidateCount`
+- `runtimeSelfEnergyModifierProbeGateOpenCount`
+
+`hitBindingGapSummary.externalElementBindingSummary` 新增：
+
+- `runtimeSelfEnergyModifierProbeStatuses`
+- `runtimeSelfEnergyModifierProbeCandidateCount`
+- `runtimeSelfEnergyModifierProbeGateOpenCount`
+- `gapsWithRuntimeSelfEnergyModifierProbe`
+
+四动作样例当前为：
+
+```json
+{
+  "runtimeSelfEnergyModifierProbeStatuses": [
+    "runtime-modifier-subprobe-built-unapplied"
+  ],
+  "runtimeSelfEnergyModifierProbeCandidateCount": 3,
+  "runtimeSelfEnergyModifierProbeGateOpenCount": 3,
+  "gapsWithRuntimeSelfEnergyModifierProbe": 3
+}
+```
+
+### 78.5 Workbench 摘要
+
+Workbench 执行矩阵摘要新增：
+
+```text
+修正探针 3/3
+```
+
+单动作切换到重击时可见：
+
+```text
+hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1/1 · 参数来源候选 1/1 · 应用入口候选 1/1 · 原生入口 1/1 · 反汇编片段 1/1 · 充能探针 1/1 · 构造探针 1/1 · 修正探针 1/1 · 归属探针 1/1 · 来源差异 1/1
+```
+
+### 78.6 当前边界
+
+- `runtimeModifierProbe.applied = false`。
+- 已确认两个 modifier 的属性来源与分享配置字段来源，但未读取 `nativeConstant@0x189956B08` 的实际值。
+- `recoverInterval` divisor `0x189956D8C` 只确认地址，尚未确认实际值和时间单位。
+- `SPGETUP/SPGETUP_ATK` 实时属性值、owner/share 目标筛选和最终 SP 曲线仍未确认。

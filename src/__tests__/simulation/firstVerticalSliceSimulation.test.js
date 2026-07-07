@@ -708,6 +708,47 @@ describe('first vertical slice simulation', () => {
                 }),
               }),
             }),
+            runtimeModifierProbe: expect.objectContaining({
+              status: 'runtime-modifier-subprobe-built-unapplied',
+              sourceFunction: 'DamageElement.RecoverSP@0x138EEE0',
+              candidateCount: 2,
+              gateOpenCount: 2,
+              modifierPropertyIds: [105, 228],
+              confirmedRuntimeRules: expect.objectContaining({
+                status:
+                  'damage-element-recover-sp-runtime-modifiers-partially-confirmed',
+                deltaFormulaShape: expect.objectContaining({
+                  nativeConstantAddress: '0x189956B08',
+                  status: 'modifier-sources-confirmed-values-runtime-unapplied',
+                }),
+                modifierSources: expect.arrayContaining([
+                  expect.objectContaining({
+                    propertyId: 105,
+                    propertyName: 'SPGETUP',
+                    alivePropertyFunction:
+                      'AliveProperty.GetBattlePropertyCurrentValue@0x12A7EE0',
+                    conversionFunction: 'MyFloat.op_Implicit(float)@0x11B2AE0',
+                  }),
+                  expect.objectContaining({
+                    propertyId: 228,
+                    propertyName: 'SPGETUP_ATK',
+                    snapshotPropertyFunction:
+                      'SnapshotPropertyManager.GetBattlePropertyCurrentValue@0x181D240',
+                  }),
+                ]),
+                intervalScale: expect.objectContaining({
+                  nativeDivisorAddress: '0x189956D8C',
+                }),
+                shareConfigSources: expect.arrayContaining([
+                  expect.objectContaining({
+                    sourceField: 'BattleConfigData.shareEnergyPercent@0x108',
+                  }),
+                  expect.objectContaining({
+                    sourceField: 'BattleConfigData.petShareEnergyPercent@0x10C',
+                  }),
+                ]),
+              }),
+            }),
             ownerShareIntervalProbe: expect.objectContaining({
               status: 'owner-share-interval-subprobe-built-unapplied',
               sourceFunction: 'SPSystem.OnTransmit@0x14837F0',
@@ -1889,6 +1930,12 @@ describe('first vertical slice simulation', () => {
           runtimeSelfEnergySourceToArgsProbeCandidateCount: 3,
           runtimeSelfEnergySourceToArgsProbeGateOpenCount: 3,
           gapsWithRuntimeSelfEnergySourceToArgsProbe: 3,
+          runtimeSelfEnergyModifierProbeStatuses: [
+            'runtime-modifier-subprobe-built-unapplied',
+          ],
+          runtimeSelfEnergyModifierProbeCandidateCount: 3,
+          runtimeSelfEnergyModifierProbeGateOpenCount: 3,
+          gapsWithRuntimeSelfEnergyModifierProbe: 3,
           runtimeSelfEnergyOwnerShareIntervalProbeStatuses: [
             'owner-share-interval-subprobe-built-unapplied',
           ],
@@ -2043,6 +2090,11 @@ describe('first vertical slice simulation', () => {
               ],
               runtimeSelfEnergySourceToArgsProbeCandidateCount: 1,
               runtimeSelfEnergySourceToArgsProbeGateOpenCount: 1,
+              runtimeSelfEnergyModifierProbeStatuses: [
+                'runtime-modifier-subprobe-built-unapplied',
+              ],
+              runtimeSelfEnergyModifierProbeCandidateCount: 1,
+              runtimeSelfEnergyModifierProbeGateOpenCount: 1,
               runtimeSelfEnergyOwnerShareIntervalProbeStatuses: [
                 'owner-share-interval-subprobe-built-unapplied',
               ],
@@ -2075,6 +2127,27 @@ describe('first vertical slice simulation', () => {
                           sourceField: 22999,
                           basePetDeltaCandidate: 2.2999,
                         }),
+                      }),
+                    }),
+                  ]),
+                }),
+                runtimeModifierProbe: expect.objectContaining({
+                  status: 'runtime-modifier-subprobe-built-unapplied',
+                  candidateCount: 1,
+                  gateOpenCount: 1,
+                  modifierPropertyIds: [105, 228],
+                  samples: expect.arrayContaining([
+                    expect.objectContaining({
+                      elementConfigId: 109001251,
+                      deltaFormulaPreview: expect.objectContaining({
+                        baseDeltaCandidate: 0.5899,
+                        petBaseDeltaCandidate: 2.2999,
+                        modifierPropertyIds: [105, 228],
+                        nativeConstantAddress: '0x189956B08',
+                      }),
+                      intervalScaleCandidate: expect.objectContaining({
+                        sourceField: 9999,
+                        nativeDivisorAddress: '0x189956D8C',
                       }),
                     }),
                   ]),

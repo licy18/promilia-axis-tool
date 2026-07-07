@@ -890,13 +890,13 @@ const SELF_ENERGY_SOURCE_TO_ARGS_RULES = {
   shareFieldFacts: [
     {
       argsField: 'RecoverSPArgs.sharePercent@0x30',
-      source: 'runtime-config-field@0x108',
-      status: 'share-percent-source-field-confirmed-target-unconfirmed',
+      source: 'BattleConfigData.shareEnergyPercent@0x108',
+      status: 'share-energy-percent-source-field-confirmed',
     },
     {
       argsField: 'RecoverSPArgs.petSharePercent@0x34',
-      source: 'runtime-config-field@0x10C',
-      status: 'pet-share-percent-source-field-confirmed-target-unconfirmed',
+      source: 'BattleConfigData.petShareEnergyPercent@0x10C',
+      status: 'pet-share-energy-percent-source-field-confirmed',
     },
     {
       argsField: 'RecoverSPArgs.mainPetSharePercent@0x44',
@@ -906,11 +906,90 @@ const SELF_ENERGY_SOURCE_TO_ARGS_RULES = {
   ],
   enumEvidence: RECOVER_SP_ENUM_EVIDENCE,
   unresolved: [
-    'delta-runtime-modifier-a-source-unconfirmed',
-    'delta-runtime-modifier-b-source-unconfirmed',
-    'recover-interval-native-divisor-unconfirmed',
-    'share-percent-runtime-config-owner-unconfirmed',
+    'delta-runtime-modifier-values-unapplied',
+    'recover-interval-native-divisor-value-unconfirmed',
+    'share-target-filter-unconfirmed',
     'damage-element-target-owner-selection-unconfirmed',
+  ],
+};
+const SELF_ENERGY_RUNTIME_MODIFIER_RULES = {
+  status: 'damage-element-recover-sp-runtime-modifiers-partially-confirmed',
+  sourceFunction: 'DamageElement.RecoverSP@0x138EEE0',
+  deltaFormulaShape: {
+    baseDeltaField: 'RecoverSPArgs.baseDelta@0x1C',
+    deltaField: 'RecoverSPArgs.delta@0x20',
+    petDeltaField: 'RecoverSPArgs.petDelta@0x38',
+    expression:
+      'scaledSource * (nativeConstant@0x189956B08 + SPGETUP + SPGETUP_ATK)',
+    nativeConstantAddress: '0x189956B08',
+    nativeConstantStatus: 'address-confirmed-value-unread',
+    status: 'modifier-sources-confirmed-values-runtime-unapplied',
+  },
+  modifierSources: [
+    {
+      key: 'spgetup',
+      propertyId: 105,
+      propertyHex: '0x69',
+      propertyName: 'SPGETUP',
+      enumSource: 'EBattlePropertyType.SPGETUP',
+      description: 'energy-recovery-amplification',
+      alivePropertyFunction:
+        'AliveProperty.GetBattlePropertyCurrentValue@0x12A7EE0',
+      snapshotPropertyFunction:
+        'SnapshotPropertyManager.GetBattlePropertyCurrentValue@0x181D240',
+      conversionFunction: 'MyFloat.op_Implicit(float)@0x11B2AE0',
+      isRatio: true,
+      tags: null,
+      status: 'property-source-confirmed-value-runtime-unapplied',
+    },
+    {
+      key: 'spgetup-atk',
+      propertyId: 228,
+      propertyHex: '0xE4',
+      propertyName: 'SPGETUP_ATK',
+      enumSource: 'EBattlePropertyType.SPGETUP_ATK',
+      description: 'attack-energy-recovery-amplification',
+      alivePropertyFunction:
+        'AliveProperty.GetBattlePropertyCurrentValue@0x12A7EE0',
+      snapshotPropertyFunction:
+        'SnapshotPropertyManager.GetBattlePropertyCurrentValue@0x181D240',
+      conversionFunction: 'MyFloat.op_Implicit(float)@0x11B2AE0',
+      isRatio: true,
+      tags: null,
+      status: 'property-source-confirmed-value-runtime-unapplied',
+    },
+  ],
+  intervalScale: {
+    sourceField: 'DamageElement.m_recoverInterval@0x248',
+    argsField: 'RecoverSPArgs.interval@0x24',
+    operation: 'int-to-float-divide-native-constant',
+    nativeDivisorAddress: '0x189956D8C',
+    status: 'divisor-address-confirmed-value-unread',
+  },
+  shareConfigSources: [
+    {
+      argsField: 'RecoverSPArgs.sharePercent@0x30',
+      sourceFunction: 'BattleConfigManager.get_Data@0x16E5BA0',
+      sourceField: 'BattleConfigData.shareEnergyPercent@0x108',
+      status: 'source-field-confirmed',
+    },
+    {
+      argsField: 'RecoverSPArgs.petSharePercent@0x34',
+      sourceFunction: 'BattleConfigManager.get_Data@0x16E5BA0',
+      sourceField: 'BattleConfigData.petShareEnergyPercent@0x10C',
+      status: 'source-field-confirmed',
+    },
+    {
+      argsField: 'RecoverSPArgs.mainPetSharePercent@0x44',
+      source: 'constant-1.0',
+      status: 'constant-default-confirmed',
+    },
+  ],
+  unresolved: [
+    'native-constant-value-unread',
+    'recover-interval-native-divisor-value-unconfirmed',
+    'runtime-property-values-unapplied',
+    'owner-and-share-target-filter-unconfirmed',
   ],
 };
 
@@ -2589,6 +2668,15 @@ function createHitBindingGapExternalElementBinding({
       runtimeSelfEnergyFormulaProbe.sourceToArgsProbe?.candidateCount ?? 0,
     runtimeSelfEnergySourceToArgsProbeGateOpenCount:
       runtimeSelfEnergyFormulaProbe.sourceToArgsProbe?.gateOpenCount ?? 0,
+    runtimeSelfEnergyModifierProbeStatuses:
+      runtimeSelfEnergyFormulaProbe.runtimeModifierProbe?.status !==
+      'runtime-modifier-subprobe-missing'
+        ? [runtimeSelfEnergyFormulaProbe.runtimeModifierProbe.status]
+        : [],
+    runtimeSelfEnergyModifierProbeCandidateCount:
+      runtimeSelfEnergyFormulaProbe.runtimeModifierProbe?.candidateCount ?? 0,
+    runtimeSelfEnergyModifierProbeGateOpenCount:
+      runtimeSelfEnergyFormulaProbe.runtimeModifierProbe?.gateOpenCount ?? 0,
     runtimeSelfEnergyOwnerShareIntervalProbeStatuses:
       runtimeSelfEnergyFormulaProbe.ownerShareIntervalProbe?.status !==
       'owner-share-interval-subprobe-missing'
@@ -3446,6 +3534,30 @@ function createHitBindingGapExternalElementBindingSummary(gaps) {
         (numberOrNull(
           binding.runtimeSelfEnergySourceToArgsProbeCandidateCount
         ) ?? 0) > 0
+    ).length,
+    runtimeSelfEnergyModifierProbeStatuses: uniqueStrings(
+      bindings.flatMap(
+        binding => binding.runtimeSelfEnergyModifierProbeStatuses ?? []
+      )
+    ),
+    runtimeSelfEnergyModifierProbeCandidateCount: bindings.reduce(
+      (sum, binding) =>
+        sum +
+        (numberOrNull(binding.runtimeSelfEnergyModifierProbeCandidateCount) ??
+          0),
+      0
+    ),
+    runtimeSelfEnergyModifierProbeGateOpenCount: bindings.reduce(
+      (sum, binding) =>
+        sum +
+        (numberOrNull(binding.runtimeSelfEnergyModifierProbeGateOpenCount) ??
+          0),
+      0
+    ),
+    gapsWithRuntimeSelfEnergyModifierProbe: bindings.filter(
+      binding =>
+        (numberOrNull(binding.runtimeSelfEnergyModifierProbeCandidateCount) ??
+          0) > 0
     ).length,
     runtimeSelfEnergyOwnerShareIntervalProbeStatuses: uniqueStrings(
       bindings.flatMap(
@@ -5508,6 +5620,7 @@ function createSelfEnergyRuntimeFormulaProbe(candidates, options = {}) {
     samples.map(sample => sample.recoverInterval).filter(value => value != null)
   );
   const sourceToArgsProbe = createSelfEnergySourceToArgsProbe(samples);
+  const runtimeModifierProbe = createSelfEnergyRuntimeModifierProbe(samples);
   const ownerShareIntervalProbe =
     createSelfEnergyOwnerShareIntervalProbe(samples);
 
@@ -5526,6 +5639,7 @@ function createSelfEnergyRuntimeFormulaProbe(candidates, options = {}) {
     unitHypotheses: SELF_ENERGY_RUNTIME_UNIT_HYPOTHESES,
     recoverSpArgsFieldMap: RECOVER_SP_ARGS_FIELD_MAP,
     sourceToArgsProbe,
+    runtimeModifierProbe,
     ownerShareIntervalProbe,
     recoverSPValues,
     petRecoverSPValues,
@@ -5548,8 +5662,8 @@ function createSelfEnergyRuntimeFormulaProbe(candidates, options = {}) {
     samples,
     unresolved: [
       'recover-sp-final-unit-unconfirmed',
-      'delta-runtime-modifier-sources-unconfirmed',
-      'recover-interval-native-divisor-unconfirmed',
+      'delta-runtime-modifier-values-unapplied',
+      'recover-interval-native-divisor-value-unconfirmed',
       'share-target-filter-unconfirmed',
       'baseDelta-vs-delta-role-unconfirmed',
     ],
@@ -5617,18 +5731,18 @@ function createSelfEnergySourceToArgsProbe(samples) {
         delta: {
           sourceField: sample.recoverSP,
           baseDeltaCandidate: scalePerTenThousand(sample.recoverSP),
-          modifierStatus: 'runtime-modifier-sources-unconfirmed',
+          modifierStatus: 'runtime-modifier-sources-confirmed-values-unapplied',
           status: 'derived-from-baseDelta-with-runtime-modifiers-unapplied',
         },
         petDelta: {
           sourceField: sample.petRecoverSP,
           basePetDeltaCandidate: scalePerTenThousand(sample.petRecoverSP),
-          modifierStatus: 'runtime-modifier-sources-unconfirmed',
+          modifierStatus: 'runtime-modifier-sources-confirmed-values-unapplied',
           status: 'derived-from-petRecoverSP-with-runtime-modifiers-unapplied',
         },
         interval: {
           sourceField: sample.recoverInterval,
-          divisorStatus: 'native-divisor-unconfirmed',
+          divisorStatus: 'native-divisor-address-confirmed-value-unread',
           status: 'source-to-interval-confirmed-timebase-unconfirmed',
         },
         tagType: {
@@ -5640,6 +5754,55 @@ function createSelfEnergySourceToArgsProbe(samples) {
       applied: false,
     })),
     unresolved: SELF_ENERGY_SOURCE_TO_ARGS_RULES.unresolved,
+    applied: false,
+  };
+}
+
+function createSelfEnergyRuntimeModifierProbe(samples) {
+  const candidateCount = samples.length;
+  const gateOpenCount = samples.filter(sample => sample.gateOpen).length;
+  const modifierPropertyIds =
+    SELF_ENERGY_RUNTIME_MODIFIER_RULES.modifierSources.map(
+      source => source.propertyId
+    );
+
+  return {
+    status:
+      candidateCount > 0
+        ? 'runtime-modifier-subprobe-built-unapplied'
+        : 'runtime-modifier-subprobe-missing',
+    sourceKind: 'azpr-self-energy-runtime-modifier-subprobe',
+    sourceFunction: 'DamageElement.RecoverSP@0x138EEE0',
+    candidateCount,
+    gateOpenCount,
+    confirmedRuntimeRules: SELF_ENERGY_RUNTIME_MODIFIER_RULES,
+    modifierPropertyIds,
+    samples: samples.map(sample => ({
+      elementConfigId: sample.elementConfigId,
+      pathId: sample.pathId,
+      gateOpen: sample.gateOpen,
+      deltaFormulaPreview: {
+        baseDeltaCandidate: scalePerTenThousand(sample.recoverSP),
+        petBaseDeltaCandidate: scalePerTenThousand(sample.petRecoverSP),
+        modifierPropertyIds,
+        formulaShape:
+          'base * (nativeConstant@0x189956B08 + SPGETUP + SPGETUP_ATK)',
+        nativeConstantAddress:
+          SELF_ENERGY_RUNTIME_MODIFIER_RULES.deltaFormulaShape
+            .nativeConstantAddress,
+        status: 'modifier-values-runtime-unapplied',
+      },
+      intervalScaleCandidate: {
+        sourceField: sample.recoverInterval,
+        nativeDivisorAddress:
+          SELF_ENERGY_RUNTIME_MODIFIER_RULES.intervalScale.nativeDivisorAddress,
+        status: 'divisor-address-confirmed-value-unread',
+      },
+      shareConfigCandidates:
+        SELF_ENERGY_RUNTIME_MODIFIER_RULES.shareConfigSources,
+      applied: false,
+    })),
+    unresolved: SELF_ENERGY_RUNTIME_MODIFIER_RULES.unresolved,
     applied: false,
   };
 }
