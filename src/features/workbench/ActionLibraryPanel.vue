@@ -63,6 +63,21 @@
       <span class="actor-role">{{ actor.role || '角色轨' }}</span>
     </div>
 
+    <div v-if="skills.length" class="skill-entry-list">
+      <button
+        v-for="skill in skills"
+        :key="skill.id"
+        class="skill-entry"
+        type="button"
+        data-testid="workbench-skill-entry"
+        :data-skill-id="skill.id"
+        @click="$emit('add-skill-action', skill.id)"
+      >
+        <span class="skill-entry-name">{{ formatSkillName(skill) }}</span>
+        <span class="skill-entry-meta">{{ formatSkillMeta(skill) }}</span>
+      </button>
+    </div>
+
     <div class="action-list">
       <article
         v-for="action in actions"
@@ -147,6 +162,10 @@ defineProps({
     type: Array,
     required: true,
   },
+  skills: {
+    type: Array,
+    required: true,
+  },
   selectedActionId: {
     type: String,
     required: true,
@@ -156,6 +175,7 @@ defineProps({
 defineEmits([
   'select-action',
   'add-action',
+  'add-skill-action',
   'add-wait-action',
   'add-switch-action',
   'add-annotation-action',
@@ -220,6 +240,17 @@ function actionDetailValue(action) {
 function formatSigned(value) {
   const number = Number(value) || 0;
   return `${number > 0 ? '+' : ''}${number}`;
+}
+
+function formatSkillMeta(skill) {
+  const cooldownMs = Number(skill.cooldownMs);
+  const cooldown = cooldownMs > 0 ? `${cooldownMs / 1000}s` : 'CD -';
+  const spCost = Number(skill.spCost) || 0;
+  return `${cooldown} / SP ${spCost}`;
+}
+
+function formatSkillName(skill) {
+  return skill.name || `技能 ${skill.id}`;
 }
 </script>
 
@@ -356,6 +387,48 @@ h2 {
 .actor-role {
   color: #8f9aa3;
   font-size: 12px;
+}
+
+.skill-entry-list {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.skill-entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(121, 199, 185, 0.26);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.08);
+  color: #dff6f1;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.skill-entry:hover {
+  border-color: rgba(121, 199, 185, 0.56);
+  background: rgba(121, 199, 185, 0.14);
+}
+
+.skill-entry-name {
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.skill-entry-meta {
+  color: #8f9aa3;
+  font-size: 11px;
+  white-space: nowrap;
 }
 
 .action-list {

@@ -1087,6 +1087,38 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 新增技能动作应保留所选技能、归属角色、默认等级和合理开始时间，并继续进入 `actionDrafts -> Project -> Scenario -> simulation`。
 - 为技能入口补充测试，覆盖不同角色动作库上下文下的技能新增和时间轴归属。
 
+### 2026-07-07：阶段 4-16 动作库技能入口雏形落地
+
+本轮完成：
+
+- `ActionLibraryPanel` 在当前动作库角色下展示真实技能列表，技能入口来自 `workbench-seed.json` 的角色技能数据。
+- 每个技能入口显示技能名、冷却和 SP 信息；缺少技能名的真实数据会回退显示 `技能 {id}`，避免空白按钮。
+- 新增 `add-skill-action` 事件，允许直接从某个技能生成动作，而不是先点通用“+ 技能”再到属性面板改技能。
+- `Workbench.vue` 新增 `actionLibrarySkills` 和 `addSkillAction()`，按当前动作库角色生成指定技能动作，保留 `actorCharacterId`、`skillId`、默认等级和合理开始时间。
+- 通用“+ 技能”继续可用，并复用同一套技能新增逻辑。
+- 新增工作台测试，覆盖主/副角色技能入口列表、点击副角色指定技能后进入副角色轨、属性面板技能值同步、草稿保存 `actorCharacterId` / `skillId` / `level`。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、28 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、72 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- `git diff --check`：通过；仅有仓库既有 LF/CRLF 工作区提示。
+- `http://127.0.0.1:5175/#/workbench` 本地页面服务返回 200。
+
+当前结论：
+
+- 动作库已经从“按角色新增默认技能”推进到“按角色直接选择具体技能新增动作”。
+- 当前技能入口可以把真实技能、动作归属、时间轴轨道、属性面板和草稿保存串成闭环。
+- 新增动作的开始时间仍沿用最后一个动作之后固定偏移，尚未根据当前选中动作、轨道冲突或局部插入位置做更细策略。
+
+下一步：
+
+- 阶段 4-17 目标：统一新增动作插入位置策略雏形。
+- 基于当前选中动作和动作库角色计算插入时间，优先插入当前动作之后，而不是所有新增动作都依赖全局最后动作。
+- 让技能、等待、切人、资源、注释和敌人事件复用同一套插入时间 helper，继续保留边界 clamp 和最小间隔。
+- 为插入策略补充测试，覆盖多角色/系统动作混排下新增动作的时间、顺序和轨道归属。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

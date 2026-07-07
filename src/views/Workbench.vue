@@ -37,9 +37,11 @@
         :actors="scenario.actors"
         :active-actor-character-id="actionLibraryCharacterId"
         :actions="scenario.actions"
+        :skills="actionLibrarySkills"
         :selected-action-id="selectedActionId"
         @select-action="selectAction"
         @add-action="addAction"
+        @add-skill-action="addSkillAction"
         @add-annotation-action="addAnnotationAction"
         @add-enemy-event-action="addEnemyEventAction"
         @add-resource-action="addResourceAction"
@@ -169,6 +171,7 @@ const actionLibraryActor = computed(() => {
     scenario.value.actors[0]
   );
 });
+const actionLibrarySkills = computed(() => getSkillsForCharacter(actionLibraryActor.value?.characterId));
 const selectedAction = computed(() => {
   return scenario.value.actions.find((action) => action.id === selectedActionId.value) ?? scenario.value.actions[0];
 });
@@ -358,15 +361,23 @@ function updateActionLane({ actionId, laneId }) {
 }
 
 function addAction() {
+  const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
+  addSkillAction(resolveContextSkill(actorCharacterId, selectedDraft.value.skillId).id);
+}
+
+function addSkillAction(skillId) {
   const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
   const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
-  const skill = resolveContextSkill(actorCharacterId, selectedDraft.value.skillId);
+  const skill = resolveContextSkill(actorCharacterId, skillId);
+  const shouldInheritLevel =
+    Number(selectedDraft.value.actorCharacterId) === actorCharacterId &&
+    Number(selectedDraft.value.skillId) === Number(skill.id);
   const nextAction = createWorkbenchActionDraft({
     id: createNextActionId(),
     skillId: skill.id,
     actorCharacterId,
     startMs: clampNumber((lastAction?.startMs ?? 0) + 2000, 0, project.value.time.durationMs),
-    level: selectedDraft.value.actorCharacterId === actorCharacterId ? selectedDraft.value.level : 1,
+    level: shouldInheritLevel ? selectedDraft.value.level : 1,
   });
 
   actionDrafts.value = [...actionDrafts.value, nextAction];

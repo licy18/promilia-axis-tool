@@ -531,6 +531,64 @@ describe('Workbench view', () => {
     });
   });
 
+  it('adds a selected skill from the action library for the active actor', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    const primarySkills = workbenchSeed.gameData.skills.filter(
+      (skill) => Number(skill.characterId) === workbenchSeed.defaults.characterId,
+    );
+    const secondaryCharacterId = 101003;
+    const secondarySkills = workbenchSeed.gameData.skills.filter(
+      (skill) => Number(skill.characterId) === secondaryCharacterId,
+    );
+    const selectedSecondarySkill =
+      secondarySkills.find((skill) => Number(skill.spCost) > 0) ?? secondarySkills[secondarySkills.length - 1];
+
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-skill-entry"]')
+        .map((entry) => Number(entry.attributes('data-skill-id'))),
+    ).toEqual(primarySkills.map((skill) => skill.id));
+
+    await findActionLibraryActorButton(wrapper, secondaryCharacterId).trigger('click');
+
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-skill-entry"]')
+        .map((entry) => Number(entry.attributes('data-skill-id'))),
+    ).toEqual(secondarySkills.map((skill) => skill.id));
+    expect(findActionLibrarySkillEntry(wrapper, selectedSecondarySkill.id).exists()).toBe(true);
+
+    await findActionLibrarySkillEntry(wrapper, selectedSecondarySkill.id).trigger('click');
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-action"][data-action-id="action-0002"]')
+        .attributes('data-lane-id'),
+    ).toBe('actor-101003');
+    expect(wrapper.find('[data-testid="workbench-skill-select"]').element.value).toBe(
+      String(selectedSecondarySkill.id),
+    );
+    expect(wrapper.find('[data-testid="workbench-level-input"]').element.value).toBe('1');
+    expect(wrapper.text()).toContain(selectedSecondarySkill.name);
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(savedDraft.actionDrafts[1]).toMatchObject({
+      id: 'action-0002',
+      actorCharacterId: secondaryCharacterId,
+      skillId: selectedSecondarySkill.id,
+      level: 1,
+    });
+  });
+
   it('keeps generated action ids unique after deleting the first action', async () => {
     const wrapper = mount(Workbench, {
       global: {
@@ -763,4 +821,8 @@ function findActionLibraryActorButton(wrapper, characterId) {
   return wrapper.find(
     `[data-testid="workbench-action-library-actor"][data-character-id="${Number(characterId)}"]`,
   );
+}
+
+function findActionLibrarySkillEntry(wrapper, skillId) {
+  return wrapper.find(`[data-testid="workbench-skill-entry"][data-skill-id="${Number(skillId)}"]`);
 }
