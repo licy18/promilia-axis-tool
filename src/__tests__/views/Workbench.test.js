@@ -623,6 +623,7 @@ describe('Workbench view', () => {
     ).toContain('190%');
     expect(wrapper.text()).toContain('hit绑定 0/2 · 缺口候选 1/1');
     expect(wrapper.text()).toContain('伤害元素候选 1/1');
+    expect(wrapper.text()).toContain('关联等级链 1/1');
     expect(wrapper.text()).toContain('来源差异 1/1');
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');

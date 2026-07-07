@@ -3522,6 +3522,48 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8AQ 目标：继续追 `109001251` 的运行时参数来源，确认它是固定 `formulaParamValues`、继承 action-level `valueParam`、由运行时覆盖，还是存在另一条等级配置链。
 - 优先从 AzPr Extractor / IL2CPP 侧追 `DamageElement`、`SkillElementInjector`、`FormulaParams`、`skillsub_ele_value` 交叉引用，以及 `subSkillId = 109001011` 与动作形态的真实选择规则。
 
+### 2026-07-08：阶段 5-8AQ 关联技能等级链候选固化
+
+本轮完成：
+
+- `generate-azpr-data.mjs` 在 `damageElementFieldMappingEvidence` 中新增 `skillLevelBridge.relatedElementLevelBridge`，当当前技能直连 `skill_logic.currentLevel.elementValues` 找不到同 elementId 时，会继续从全量 `skillsub_ele_value` 按 `elementId` 查关联等级链。
+- `109001251` 现在保留双层结论：直连 `skillLevelBridge.status = skillsub-element-level-bridge-missing` 仍成立，但 `relatedElementLevelBridge.status = related-slot-skill-element-level-bridge-found` 已找到关联等级链候选。
+- `relatedElementLevelBridge` 记录 `derivedSkillId = 10900125`、`primarySkillId = 10900125`，并确认该技能在末音角色技能槽中为 `ground / slot 207`，`skill.json.parentSkill = 10900121`、`skillModuleTag = 2`。
+- `10900125` 的 `skillsub_ele_value` 有 12 行：`valueParam` 从 `1#4500|7#10000` 到 `1#9450|7#10000`，参数 `1 / A` 每级 +450，参数 `7 / G` 恒为 10000。
+- 同时记录 `10900125` 的 `skill_level` 只有 level 1 行，但 `skillsub_ele_value` 有 12 行，因此这条链更像动作/派生 skill 的等级参数候选，运行时继承或应用规则仍未确认。
+- 投影层把 `relatedElementLevelBridge` 压缩进 DamageElement source、hit 缺口外部 element binding 和 summary；Workbench 的执行矩阵摘要新增 `关联等级链 x/y`。
+- 仿真测试新增 `relatedElementLevelBridge` 明细断言，Workbench 测试新增 `关联等级链 1/1` 展示断言。
+
+当前四动作关联等级链结果：
+
+- `externalElementBindingSummary.gapsWithRelatedSkillLevelBridges = 3/3`。
+- `relatedSkillLevelBridgeStatuses = ["related-slot-skill-element-level-bridge-found"]`。
+- `relatedSkillLevelBridgePrimarySkillIds = [10900125]`。
+- 每个非普攻缺口的关联等级链为 12 行；四动作摘要中 3 个缺口合计 `relatedSkillLevelBridgeLevelRows = 36`。
+- `relatedSkillLevelBridgeInheritanceStatuses = ["related-skill-level-inheritance-unconfirmed"]`。
+- `109001251` 的关联槽位对齐结论为 `slot-override-candidate-unconfirmed`：`A` 是等级覆盖候选，`G` 是常量直连匹配。
+
+验收结果：
+
+- `npm run data:generate`：通过，生成数据 counts 仍为 `skills = 120`，未把 slot 技能误加入工作台主技能列表。
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+- `npm exec eslint -- --no-warn-ignored scripts/generate-azpr-data.mjs src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过；仅保留生成脚本既有 `console.log` warning。
+- `npm exec prettier -- --check AGENTS.md PROJECT_MANUAL.md DEVELOPMENT_PLAN.md ARCHITECTURE.md DATA_STRUCTURE_CHANGES.md scripts/generate-azpr-data.mjs src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npm test -- --run`：通过，13 个测试文件、105 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
+- `git diff --check`：通过；仅有本机 CRLF 转换提示。
+
+当前边界：
+
+- 阶段 5-8AQ 证明 `109001251` 不是完全无等级数据，而是存在 `skillsub_ele_value.skillId = 10900125` 的关联等级链候选。
+- 仍不能确认 runtime 一定把 `10900125` 的 A/G 覆盖到 `Skill0_6 / subSkill 109001011` 的 `TDamageElementParams` 上；`related-skill-level-inheritance-unconfirmed` 必须保留。
+- 不能把 `A = 4500-9450` 直接用于最终 HP、削韧或充能公式；这只是参数来源候选。
+
+下一步：
+
+- 阶段 5-8AR 目标：继续追 `Skill0_6 / subSkill 109001011 / element 109001251` 与 `10900125 / slot 207` 的运行时选择关系，确认 `DamageElement` 或 `SkillElementInjector` 如何取用关联技能等级参数。
+- 重点检查 `skill_control` 事件桥、`skill.json.parentSkill`、`skillModuleTag`、输入槽位、IL2CPP `DamageElement.Parse/Execute` 和 `SkillElementInjector.ExecuteDamageElement` 是否存在把 `elementConfigId -> floor(elementId / 10)` 或 parent/slot skill 作为参数来源的逻辑。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

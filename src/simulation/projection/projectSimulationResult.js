@@ -593,6 +593,84 @@ function compactCandidateSkillLevelBridge(bridge) {
           valueParam: bridge.lastLevel.valueParam ?? null,
         }
       : null,
+    relatedElementLevelBridge: compactRelatedElementLevelBridge(
+      bridge.relatedElementLevelBridge
+    ),
+  };
+}
+
+function compactRelatedElementLevelBridge(bridge) {
+  if (!bridge) {
+    return null;
+  }
+
+  return {
+    status: bridge.status ?? null,
+    source: bridge.source ?? null,
+    elementConfigId: numberOrNull(bridge.elementConfigId),
+    sourceSkillId: numberOrNull(bridge.sourceSkillId),
+    derivedSkillId: numberOrNull(bridge.derivedSkillId),
+    primarySkillId: numberOrNull(bridge.primarySkillId),
+    primaryRelationStatus: bridge.primaryRelationStatus ?? null,
+    candidateSkillIds: bridge.candidateSkillIds ?? [],
+    candidateCount: numberOrNull(bridge.candidateCount) ?? 0,
+    levelRows: numberOrNull(bridge.levelRows) ?? 0,
+    parameterIds: bridge.parameterIds ?? [],
+    varyingParameterIds: bridge.varyingParameterIds ?? [],
+    inheritanceStatus: bridge.inheritanceStatus ?? null,
+    formulaSlotAlignment: compactFormulaSlotAlignment(
+      bridge.formulaParamAlignment
+    ),
+    firstLevel: bridge.firstLevel
+      ? {
+          level: numberOrNull(bridge.firstLevel.level),
+          valueParam: bridge.firstLevel.valueParam ?? null,
+        }
+      : null,
+    lastLevel: bridge.lastLevel
+      ? {
+          level: numberOrNull(bridge.lastLevel.level),
+          valueParam: bridge.lastLevel.valueParam ?? null,
+        }
+      : null,
+    candidates: (bridge.candidates ?? []).slice(0, 3).map(candidate => ({
+      skillId: numberOrNull(candidate.skillId),
+      relationStatus: candidate.relationStatus ?? null,
+      derivedFromElementId: candidate.derivedFromElementId === true,
+      parentSkillId: numberOrNull(candidate.parentSkillId),
+      skillModuleTag: numberOrNull(candidate.skillModuleTag),
+      characterSlotRefs: (candidate.characterSlotRefs ?? [])
+        .slice(0, 4)
+        .map(ref => ({
+          characterId: numberOrNull(ref.characterId),
+          characterName: ref.characterName ?? null,
+          group: ref.group ?? null,
+          slot: numberOrNull(ref.slot),
+        })),
+      skillLevelRowCount: numberOrNull(candidate.skillLevelRowCount) ?? 0,
+      skillLevelLevels: candidate.skillLevelLevels ?? [],
+      levelRows: numberOrNull(candidate.levelRows) ?? 0,
+      parameterIds: candidate.parameterIds ?? [],
+      varyingParameterIds: candidate.varyingParameterIds ?? [],
+      formulaSlotAlignment: compactFormulaSlotAlignment(
+        candidate.formulaParamAlignment
+      ),
+      firstLevel: candidate.firstLevel
+        ? {
+            level: numberOrNull(candidate.firstLevel.level),
+            valueParam: candidate.firstLevel.valueParam ?? null,
+          }
+        : null,
+      lastLevel: candidate.lastLevel
+        ? {
+            level: numberOrNull(candidate.lastLevel.level),
+            valueParam: candidate.lastLevel.valueParam ?? null,
+          }
+        : null,
+      applied: false,
+    })),
+    note: bridge.note ?? null,
+    applied: false,
   };
 }
 
@@ -1398,6 +1476,26 @@ function createHitBindingGapExternalElementBinding({
       .map(ref => ref.damageElementFieldMapping?.skillLevelBridge?.status)
       .filter(value => value != null)
   );
+  const relatedElementLevelBridges = uniqueDamageElementRefs
+    .map(
+      ref =>
+        ref.damageElementFieldMapping?.skillLevelBridge
+          ?.relatedElementLevelBridge
+    )
+    .filter(Boolean);
+  const relatedSkillLevelBridgeStatuses = uniqueStrings(
+    relatedElementLevelBridges.map(bridge => bridge.status)
+  );
+  const relatedSkillLevelBridgePrimarySkillIds = uniqueNumbers(
+    relatedElementLevelBridges.map(bridge => bridge.primarySkillId)
+  );
+  const relatedSkillLevelBridgeLevelRows = relatedElementLevelBridges.reduce(
+    (sum, bridge) => sum + (numberOrNull(bridge.levelRows) ?? 0),
+    0
+  );
+  const relatedSkillLevelBridgeInheritanceStatuses = uniqueStrings(
+    relatedElementLevelBridges.map(bridge => bridge.inheritanceStatus)
+  );
   const unresolved = uniqueStrings([
     'hit-index-binding-unconfirmed',
     'damage-element-execution-order-unconfirmed',
@@ -1406,6 +1504,9 @@ function createHitBindingGapExternalElementBinding({
       'skillsub-element-level-bridge-missing'
     )
       ? ['damage-element-level-bridge-missing']
+      : []),
+    ...(relatedSkillLevelBridgeStatuses.length > 0
+      ? ['related-skill-level-inheritance-unconfirmed']
       : []),
     'toughness-unit-scale',
     'self-energy-owner-and-share-rule',
@@ -1516,6 +1617,10 @@ function createHitBindingGapExternalElementBinding({
       )
     ),
     skillLevelBridgeStatuses,
+    relatedSkillLevelBridgeStatuses,
+    relatedSkillLevelBridgePrimarySkillIds,
+    relatedSkillLevelBridgeLevelRows,
+    relatedSkillLevelBridgeInheritanceStatuses,
     candidates,
     unresolved,
     applied: false,
@@ -1680,6 +1785,9 @@ function compactHitBindingDamageElementFieldMapping(mapping) {
             valueParam: mapping.skillLevelBridge.lastLevel.valueParam ?? null,
           }
         : null,
+      relatedElementLevelBridge: compactRelatedElementLevelBridge(
+        mapping.skillLevelBridge?.relatedElementLevelBridge
+      ),
     },
     unresolved: mapping.unresolved ?? [],
     applied: false,
@@ -1770,6 +1878,27 @@ function createHitBindingGapExternalElementBindingSummary(gaps) {
     skillLevelBridgeStatuses: uniqueStrings(
       bindings.flatMap(binding => binding.skillLevelBridgeStatuses ?? [])
     ),
+    relatedSkillLevelBridgeStatuses: uniqueStrings(
+      bindings.flatMap(binding => binding.relatedSkillLevelBridgeStatuses ?? [])
+    ),
+    relatedSkillLevelBridgePrimarySkillIds: uniqueNumbers(
+      bindings.flatMap(
+        binding => binding.relatedSkillLevelBridgePrimarySkillIds ?? []
+      )
+    ),
+    relatedSkillLevelBridgeLevelRows: bindings.reduce(
+      (sum, binding) =>
+        sum + (numberOrNull(binding.relatedSkillLevelBridgeLevelRows) ?? 0),
+      0
+    ),
+    relatedSkillLevelBridgeInheritanceStatuses: uniqueStrings(
+      bindings.flatMap(
+        binding => binding.relatedSkillLevelBridgeInheritanceStatuses ?? []
+      )
+    ),
+    gapsWithRelatedSkillLevelBridges: bindings.filter(
+      binding => (binding.relatedSkillLevelBridgeStatuses ?? []).length > 0
+    ).length,
     unresolved: uniqueStrings(
       bindings.flatMap(binding => binding.unresolved ?? [])
     ),
@@ -2946,6 +3075,9 @@ function compactNormalAttackHitDamageElementFieldMapping(mapping) {
             valueParam: mapping.skillLevelBridge.lastLevel.valueParam ?? null,
           }
         : null,
+      relatedElementLevelBridge: compactRelatedElementLevelBridge(
+        mapping.skillLevelBridge?.relatedElementLevelBridge
+      ),
     },
     applied: false,
   };
@@ -3672,6 +3804,10 @@ function mergeHitCandidateMappingEvidence(mapping, actionLevelCandidate) {
         mapping.skillLevelBridge?.lastLevel ??
         actionLevelCandidate.skillLevelBridge?.lastLevel ??
         null,
+      relatedElementLevelBridge:
+        mapping.skillLevelBridge?.relatedElementLevelBridge ??
+        actionLevelCandidate.skillLevelBridge?.relatedElementLevelBridge ??
+        null,
     },
   };
 }
@@ -3823,6 +3959,9 @@ function compactHitCandidateDamageElementMapping(mapping) {
             valueParam: mapping.skillLevelBridge.lastLevel.valueParam ?? null,
           }
         : null,
+      relatedElementLevelBridge: compactRelatedElementLevelBridge(
+        mapping.skillLevelBridge?.relatedElementLevelBridge
+      ),
     },
     applied: false,
   };
@@ -4315,6 +4454,9 @@ function compactDamageElementMapping(mapping, currentLogicElementValue = null) {
             valueParam: mapping.skillLevelBridge.lastLevel.valueParam,
           }
         : null,
+      relatedElementLevelBridge: compactRelatedElementLevelBridge(
+        mapping.skillLevelBridge?.relatedElementLevelBridge
+      ),
     },
   };
 }

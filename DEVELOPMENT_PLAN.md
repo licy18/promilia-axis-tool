@@ -269,7 +269,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8AN，在 `formulaExecutionMatrixSummary` 新增 `hitBindingGapSummary`，把重击/闪击/跃击的 6 行 hit 绑定缺口与 skill_control 最高置信度候选对齐；当前三个缺口动作都命中 `攻击碰撞 / Skill0_6 / subSkill 109001011` 候选，但仍保持 `shared-action-family-candidate-unconfirmed` 和 `applied: false`。
 - 已完成：阶段 5-8AO，在 `hitBindingGap` 新增 `externalElementBinding`，把重击/闪击/跃击的 `攻击碰撞 / Skill0_6 / subSkill 109001011` 候选 PathID 桥接到外部对象；当前三个缺口动作都能追到 `109001251 / ast_109001251 / TDamageElementParams`，并暴露 HP `function_1/function_2`、削韧 `weakBreakDamageRate = 7000`、充能 `recoverSP = 5899` 候选，但 `skillsub-element-level-bridge-missing` 和 hit 归属仍未确认。
 - 已完成：阶段 5-8AP，在 `hitBindingGap` 新增 `elementSourceAlignment`，并在 `hitBindingGapSummary` 新增 `elementSourceAlignmentSummary`；当前确认 action-level / matrix element 为 `109001081 / 109001306`，来源 `skill_logic.currentLevel.elementValues`，而非普攻外部 DamageElement 为 `109001251`，来源 `skill_control.elementBaseDatas / Skill0_6 / subSkill 109001011`，二者没有 element 重叠，Workbench 显示 `来源差异 x/y`。
-- 下一步：阶段 5-8AQ，继续追 `109001251` 的运行时参数来源，确认它使用固定 `formulaParamValues`、继承 action-level `valueParam`、由运行时覆盖，还是存在另一条等级配置链；必要时用 AzPr Extractor / IL2CPP 证据追 `DamageElement`、`SkillElementInjector`、`FormulaParams` 和 `skillsub_ele_value` 交叉引用。
+- 已完成：阶段 5-8AQ，在 `skillLevelBridge` 下新增 `relatedElementLevelBridge` 关联等级链候选；当前确认 `109001251` 的直连等级桥接仍缺失，但全量 `skillsub_ele_value` 中存在 `skillId = 10900125` 的 12 行 A/G 参数，`10900125` 可由 `elementId / 10` 推导并出现在末音 `ground slot 207`，Workbench 显示 `关联等级链 x/y`，继承/应用仍保持未确认。
+- 下一步：阶段 5-8AR，继续追 `Skill0_6 / subSkill 109001011 / element 109001251` 与 `10900125 / slot 207` 的运行时选择关系，确认 `DamageElement` 或 `SkillElementInjector` 如何取用关联技能等级参数；必要时继续查 skill_control 事件桥、`skill.json.parentSkill`、`skillModuleTag`、输入槽位和 IL2CPP 执行链。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

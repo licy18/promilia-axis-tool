@@ -785,6 +785,9 @@ const skillAssetEvidence = await buildSkillAssetEvidenceIndex({
     worldItemTable,
     worldResourceTable,
     battlefieldItemTable,
+    skillLevelTable,
+    skillsubLogicTable,
+    skillsubEleValueTable,
   },
 });
 const characterAttributePanels = buildCharacterAttributePanels({
@@ -2280,6 +2283,11 @@ async function buildSkillAssetEvidenceIndex({
       externalElementObjectEvidence,
       skillLogicIndex,
       elementFormulaTable,
+      skillsubEleValueTable: tables.skillsubEleValueTable,
+      characters,
+      skillTable: tables.skillTable,
+      skillLevelTable: tables.skillLevelTable,
+      skillsubLogicTable: tables.skillsubLogicTable,
     });
   attachNormalAttackHitDamageElementEvidence(
     currentSkillControlEvidence,
@@ -2528,6 +2536,11 @@ function buildDamageElementFieldMappingEvidence({
   externalElementObjectEvidence,
   skillLogicIndex,
   elementFormulaTable,
+  skillsubEleValueTable,
+  characters,
+  skillTable,
+  skillLevelTable,
+  skillsubLogicTable,
 }) {
   const skillLogicById = new Map(
     (skillLogicIndex?.items ?? [])
@@ -2539,6 +2552,13 @@ function buildDamageElementFieldMappingEvidence({
       .map(row => [Number(row.id), row])
       .filter(([id]) => Number.isFinite(id))
   );
+  const relatedSkillLevelBridgeContext = buildRelatedSkillLevelBridgeContext({
+    skillsubEleValueTable,
+    characters,
+    skillTable,
+    skillLevelTable,
+    skillsubLogicTable,
+  });
   const skills = [];
 
   for (const skill of externalElementObjectEvidence?.skills ?? []) {
@@ -2554,7 +2574,9 @@ function buildDamageElementFieldMappingEvidence({
       buildDamageElementFieldMappingItem(
         object,
         skillLogicItem,
-        elementFormulaRowsById
+        elementFormulaRowsById,
+        relatedSkillLevelBridgeContext,
+        Number(skill.skillId)
       )
     );
 
@@ -2575,6 +2597,11 @@ function buildDamageElementFieldMappingEvidence({
   const bridgeMissingObjects = fieldMappings.filter(
     item =>
       item.skillLevelBridge.status === 'skillsub-element-level-bridge-missing'
+  );
+  const relatedBridgeFoundObjects = fieldMappings.filter(item =>
+    String(
+      item.skillLevelBridge.relatedElementLevelBridge?.status ?? ''
+    ).endsWith('found')
   );
   const alignmentSummaries = fieldMappings.map(
     item => item.skillLevelBridge.formulaParamAlignment
@@ -2615,8 +2642,16 @@ function buildDamageElementFieldMappingEvidence({
       selfEnergyCandidateRefs: fieldMappings.length,
       skillsubElementBridgeMatchedObjects: bridgeMatchedObjects.length,
       skillsubElementBridgeMissingObjects: bridgeMissingObjects.length,
+      relatedSkillsubElementBridgeFoundObjects:
+        relatedBridgeFoundObjects.length,
       skillsubElementBridgeLevelRows: bridgeMatchedObjects.reduce(
         (sum, item) => sum + item.skillLevelBridge.levelRows,
+        0
+      ),
+      relatedSkillsubElementBridgeLevelRows: relatedBridgeFoundObjects.reduce(
+        (sum, item) =>
+          sum +
+          (item.skillLevelBridge.relatedElementLevelBridge?.levelRows ?? 0),
         0
       ),
       valueParamFormulaSlotDirectMatchObjects: alignmentSummaries.filter(
@@ -2790,7 +2825,9 @@ function isResolvedDamageElementParamsObject(object) {
 function buildDamageElementFieldMappingItem(
   object,
   skillLogicItem,
-  elementFormulaRowsById
+  elementFormulaRowsById,
+  relatedSkillLevelBridgeContext,
+  sourceSkillId
 ) {
   const formulaParamValues = normalizeNumberArray(
     object.formulaParams?.formulaParamValues ?? object.functionParams
@@ -2799,7 +2836,9 @@ function buildDamageElementFieldMappingItem(
   const skillLevelBridge = buildDamageElementSkillLevelBridge(
     Number(object.elementConfigId),
     skillLogicItem,
-    formulaParamValues
+    formulaParamValues,
+    relatedSkillLevelBridgeContext,
+    sourceSkillId
   );
 
   return {
@@ -3054,14 +3093,24 @@ function buildFormulaSlotCandidates(formulaParamValues) {
 function buildDamageElementSkillLevelBridge(
   elementConfigId,
   skillLogicItem,
-  formulaParamValues
+  formulaParamValues,
+  relatedSkillLevelBridgeContext,
+  sourceSkillId
 ) {
+  const relatedElementLevelBridge = buildRelatedDamageElementSkillLevelBridge({
+    elementConfigId,
+    formulaParamValues,
+    relatedSkillLevelBridgeContext,
+    sourceSkillId,
+  });
+
   if (!skillLogicItem) {
     return {
       status: 'skill-logic-item-missing',
       elementConfigId,
       levelRows: 0,
       levels: [],
+      relatedElementLevelBridge,
       formulaParamAlignment: {
         status: 'not-checked',
         note: 'No skill-logic-index item was available for this skill.',
@@ -3139,12 +3188,240 @@ function buildDamageElementSkillLevelBridge(
     varyingParameterIds,
     firstLevel,
     lastLevel: levels.length > 0 ? levels[levels.length - 1] : null,
+    relatedElementLevelBridge:
+      levels.length === 0 ? relatedElementLevelBridge : null,
     formulaParamAlignment: {
       ...formulaParamAlignment,
       firstLevelDirectSlotMatches,
       firstLevelMismatches,
       note: 'skillsub_ele_value.valueParam can bridge element IDs to level-scaling rows, but slot overrides/scaling must be validated before final damage math.',
     },
+  };
+}
+
+function buildRelatedSkillLevelBridgeContext({
+  skillsubEleValueTable,
+  characters,
+  skillTable,
+  skillLevelTable,
+  skillsubLogicTable,
+}) {
+  const slotRefsBySkillId = new Map();
+  for (const character of characters ?? []) {
+    for (const slot of character.skillSlots ?? []) {
+      const skillId = Number(slot.skillId);
+      if (!Number.isFinite(skillId)) {
+        continue;
+      }
+      const refs = slotRefsBySkillId.get(skillId) ?? [];
+      refs.push({
+        characterId: Number(character.id),
+        characterName: character.name ?? null,
+        group: slot.group ?? null,
+        slot: numberOrNull(slot.slot),
+      });
+      slotRefsBySkillId.set(skillId, refs);
+    }
+  }
+
+  return {
+    elementRowsByElementId: groupRowsByNumberKey(
+      skillsubEleValueTable?.rows ?? [],
+      'elementId'
+    ),
+    slotRefsBySkillId,
+    skillRowsById: new Map(
+      (skillTable?.rows ?? [])
+        .map(row => [Number(row.id), row])
+        .filter(([skillId]) => Number.isFinite(skillId))
+    ),
+    skillLevelRowsBySkillId: groupRowsByNumberKey(
+      skillLevelTable?.rows ?? [],
+      'skillId'
+    ),
+    skillsubLogicRowsBySkillId: new Map(
+      (skillsubLogicTable?.rows ?? [])
+        .map(row => [Number(row.skillId), row])
+        .filter(([skillId]) => Number.isFinite(skillId))
+    ),
+  };
+}
+
+function buildRelatedDamageElementSkillLevelBridge({
+  elementConfigId,
+  formulaParamValues,
+  relatedSkillLevelBridgeContext,
+  sourceSkillId,
+}) {
+  if (!relatedSkillLevelBridgeContext) {
+    return null;
+  }
+
+  const elementRows = (
+    relatedSkillLevelBridgeContext.elementRowsByElementId.get(
+      Number(elementConfigId)
+    ) ?? []
+  )
+    .slice()
+    .sort(
+      (left, right) =>
+        Number(left.skillId) - Number(right.skillId) ||
+        Number(left.level) - Number(right.level) ||
+        Number(left.id) - Number(right.id)
+    );
+
+  if (elementRows.length === 0) {
+    return {
+      status: 'related-element-level-bridge-missing',
+      source: 'skillsub_ele_value.json.allRowsByElementId',
+      elementConfigId,
+      levelRows: 0,
+      candidateSkillIds: [],
+      candidates: [],
+      applied: false,
+    };
+  }
+
+  const derivedSkillId = Math.trunc(Number(elementConfigId) / 10);
+  const candidateSkillIds = uniqueNumbers(
+    elementRows.map(row => Number(row.skillId))
+  );
+  const candidates = candidateSkillIds.map(skillId =>
+    buildRelatedDamageElementSkillCandidate({
+      skillId,
+      elementRows: elementRows.filter(row => Number(row.skillId) === skillId),
+      derivedSkillId,
+      formulaParamValues,
+      relatedSkillLevelBridgeContext,
+    })
+  );
+  const primaryCandidate =
+    candidates.find(
+      candidate =>
+        candidate.derivedFromElementId && candidate.characterSlotRefs.length > 0
+    ) ??
+    candidates.find(candidate => candidate.derivedFromElementId) ??
+    candidates.find(candidate => candidate.characterSlotRefs.length > 0) ??
+    candidates[0] ??
+    null;
+
+  return {
+    status:
+      primaryCandidate?.characterSlotRefs?.length > 0
+        ? 'related-slot-skill-element-level-bridge-found'
+        : 'related-skill-element-level-bridge-found',
+    source: 'skillsub_ele_value.json.allRowsByElementId',
+    elementConfigId,
+    sourceSkillId: numberOrNull(sourceSkillId),
+    derivedSkillId,
+    primarySkillId: primaryCandidate?.skillId ?? null,
+    primaryRelationStatus: primaryCandidate?.relationStatus ?? null,
+    candidateSkillIds,
+    candidateCount: candidates.length,
+    levelRows: primaryCandidate?.levelRows ?? elementRows.length,
+    parameterIds: primaryCandidate?.parameterIds ?? [],
+    varyingParameterIds: primaryCandidate?.varyingParameterIds ?? [],
+    firstLevel: primaryCandidate?.firstLevel ?? null,
+    lastLevel: primaryCandidate?.lastLevel ?? null,
+    formulaParamAlignment: primaryCandidate?.formulaParamAlignment ?? {
+      status: 'not-checked',
+      note: 'No related skill element rows were available for formula slot alignment.',
+    },
+    inheritanceStatus: 'related-skill-level-inheritance-unconfirmed',
+    candidates,
+    note: 'Same elementId exists in skillsub_ele_value under a related skill/subSkill. This is evidence for a parameter-source candidate, not proof that runtime inherits or applies these values.',
+    applied: false,
+  };
+}
+
+function buildRelatedDamageElementSkillCandidate({
+  skillId,
+  elementRows,
+  derivedSkillId,
+  formulaParamValues,
+  relatedSkillLevelBridgeContext,
+}) {
+  const skillRow = relatedSkillLevelBridgeContext.skillRowsById.get(skillId);
+  const skillLevelRows =
+    relatedSkillLevelBridgeContext.skillLevelRowsBySkillId.get(skillId) ?? [];
+  const skillLevelRowByLevel = new Map(
+    skillLevelRows
+      .map(row => [Number(row.level), row])
+      .filter(([level]) => Number.isFinite(level))
+  );
+  const logicRow =
+    relatedSkillLevelBridgeContext.skillsubLogicRowsBySkillId.get(skillId);
+  const characterSlotRefs =
+    relatedSkillLevelBridgeContext.slotRefsBySkillId.get(skillId) ?? [];
+  const levels = elementRows.map((row, index) => {
+    const level = Number(row.level);
+    const skillLevelRow = skillLevelRowByLevel.get(level);
+    return {
+      level,
+      levelIndex: index,
+      skillLevelRowId: Number.isFinite(Number(skillLevelRow?.id))
+        ? Number(skillLevelRow.id)
+        : null,
+      subSkillId: Number(row.skillId),
+      rowId: Number(row.id),
+      valueParam: row.valueParam ?? '',
+      paramPairs: parseParamPairs(row.valueParam).map(pair => {
+        const formulaParamValue = formulaParamValues[pair.id - 1];
+        return {
+          id: pair.id,
+          variable: paramIdToFormulaVariable(pair.id),
+          value: pair.value,
+          formulaParamValue: Number.isFinite(formulaParamValue)
+            ? formulaParamValue
+            : null,
+          directSlotMatch: formulaParamValue === pair.value,
+        };
+      }),
+    };
+  });
+  const parameterIds = uniqueNumbers(
+    levels.flatMap(level => level.paramPairs.map(pair => pair.id))
+  );
+  const varyingParameterIds = parameterIds.filter(id => {
+    const values = uniqueNumbers(
+      levels.flatMap(level =>
+        level.paramPairs.filter(pair => pair.id === id).map(pair => pair.value)
+      )
+    );
+    return values.length > 1;
+  });
+  const formulaParamAlignment = buildFormulaParamAlignmentSummary({
+    levels,
+    formulaParamValues,
+    parameterIds,
+  });
+  const derivedFromElementId = Number(skillId) === Number(derivedSkillId);
+
+  return {
+    skillId,
+    relationStatus: derivedFromElementId
+      ? 'element-id-derived-skill-id'
+      : 'same-element-id-different-skill',
+    derivedFromElementId,
+    parentSkillId: numberOrNull(skillRow?.parentSkill),
+    skillType: numberOrNull(skillRow?.skillType),
+    skillDisplayType: numberOrNull(skillRow?.skillDisplayType),
+    skillModuleTag: numberOrNull(skillRow?.skillModuleTag),
+    characterSlotRefs,
+    skillLevelRowCount: skillLevelRows.length,
+    skillLevelLevels: uniqueNumbers(skillLevelRows.map(row => row.level)),
+    logic: logicRow ? compactSkillLogicRow(logicRow) : null,
+    levelRows: levels.length,
+    parameterIds,
+    varyingParameterIds,
+    firstLevel: levels[0] ?? null,
+    lastLevel: levels.at(-1) ?? null,
+    formulaParamAlignment: {
+      ...formulaParamAlignment,
+      note: 'Related skillsub_ele_value rows share the DamageElement elementId. Runtime inheritance/application remains unconfirmed.',
+    },
+    levels,
+    applied: false,
   };
 }
 

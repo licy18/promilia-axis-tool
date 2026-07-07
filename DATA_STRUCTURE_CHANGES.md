@@ -5114,3 +5114,115 @@ hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 来源差异 1/1
 - `elementSourceAlignment` 只解释两条证据链的来源差异，不决定最终 runtime 采用哪一组 element。
 - 不能把 `109001251` 直接合并到 action-level 矩阵，也不能用 `109001081 / 109001306` 的 `valueParam` 直接覆盖 `109001251`。
 - 下一阶段应追 `109001251` 的运行时参数来源：固定 `formulaParamValues`、继承 action-level `valueParam`、运行时覆盖或另一条等级配置链。
+
+## 70. 阶段 5-8AQ：relatedElementLevelBridge 关联等级链候选
+
+阶段 5-8AQ 在 `damageElementFieldMappingEvidence.fieldMappings[].skillLevelBridge` 下新增 `relatedElementLevelBridge`。该字段用于表达“当前 skill 直连等级桥接缺失，但同一个 `elementConfigId` 在全量 `skillsub_ele_value` 中存在关联 skill/subSkill 等级行”的证据。
+
+### 70.1 skillLevelBridge.relatedElementLevelBridge
+
+`109001251` 当前样例：
+
+```json
+{
+  "status": "skillsub-element-level-bridge-missing",
+  "elementConfigId": 109001251,
+  "levelRows": 0,
+  "relatedElementLevelBridge": {
+    "status": "related-slot-skill-element-level-bridge-found",
+    "source": "skillsub_ele_value.json.allRowsByElementId",
+    "sourceSkillId": 10900101,
+    "derivedSkillId": 10900125,
+    "primarySkillId": 10900125,
+    "primaryRelationStatus": "element-id-derived-skill-id",
+    "candidateSkillIds": [10900125],
+    "candidateCount": 1,
+    "levelRows": 12,
+    "parameterIds": [1, 7],
+    "varyingParameterIds": [1],
+    "firstLevel": {
+      "level": 1,
+      "skillLevelRowId": 1728,
+      "subSkillId": 10900125,
+      "rowId": 1261,
+      "valueParam": "1#4500|7#10000"
+    },
+    "lastLevel": {
+      "level": 12,
+      "skillLevelRowId": null,
+      "subSkillId": 10900125,
+      "rowId": 1272,
+      "valueParam": "1#9450|7#10000"
+    },
+    "inheritanceStatus": "related-skill-level-inheritance-unconfirmed",
+    "applied": false
+  }
+}
+```
+
+### 70.2 relatedElementLevelBridge.candidates[]
+
+每个 candidate 表示一个同 elementId 的 `skillsub_ele_value.skillId`：
+
+```json
+{
+  "skillId": 10900125,
+  "relationStatus": "element-id-derived-skill-id",
+  "derivedFromElementId": true,
+  "parentSkillId": 10900121,
+  "skillType": 1,
+  "skillDisplayType": 0,
+  "skillModuleTag": 2,
+  "characterSlotRefs": [
+    {
+      "characterId": 109001,
+      "characterName": "末音",
+      "group": "ground",
+      "slot": 207
+    }
+  ],
+  "skillLevelRowCount": 1,
+  "skillLevelLevels": [1],
+  "levelRows": 12,
+  "parameterIds": [1, 7],
+  "varyingParameterIds": [1],
+  "applied": false
+}
+```
+
+`skillLevelRowCount = 1` 但 `levelRows = 12` 是重要证据：当前只能确认 `skillsub_ele_value` 侧存在 12 级参数，不能确认这些参数如何跟随可升级技能等级。
+
+### 70.3 formulaParamAlignment
+
+`relatedElementLevelBridge.formulaParamAlignment` 复用既有槽位摘要：
+
+- `A / 参数 1`：`4500 -> 9450`，12 级每级 +450，`relationStatus = level-scaling-override-candidate`。
+- `G / 参数 7`：恒为 `10000`，与 `formulaParamValues[7]` 直连匹配。
+- `conclusion = slot-override-candidate-unconfirmed`。
+
+### 70.4 projection 与 Workbench 摘要
+
+投影层会把该字段压缩到：
+
+- `actionResultTimeline[].*.sourceEvidence.candidates[].skillLevelBridge.relatedElementLevelBridge`
+- `hitBindingGap.externalElementBinding.candidates[].elementRefs[].damageElementFieldMapping.skillLevelBridge.relatedElementLevelBridge`
+- `hitBindingGap.externalElementBinding.relatedSkillLevelBridgeStatuses`
+- `hitBindingGapSummary.externalElementBindingSummary.relatedSkillLevelBridgeStatuses`
+
+Workbench 摘要新增：
+
+```text
+关联等级链 3/3
+```
+
+单个重击动作切换时显示：
+
+```text
+hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1/1 · 来源差异 1/1
+```
+
+### 70.5 当前边界
+
+- `relatedElementLevelBridge` 不是最终公式输入，只是参数来源候选。
+- `skillLevelBridge.status` 仍保持直连缺失；只有 `relatedElementLevelBridge.status` 表示找到了关联链。
+- 下一阶段需要验证 runtime 是否通过 `elementConfigId / 10`、`parentSkill`、角色 slot、`skillModuleTag` 或 `SkillElementInjector` 执行上下文选择 `10900125` 的等级参数。

@@ -1644,6 +1644,15 @@ describe('first vertical slice simulation', () => {
           weakBreakDamageRates: [7000],
           recoverSPValues: [5899],
           skillLevelBridgeStatuses: ['skillsub-element-level-bridge-missing'],
+          relatedSkillLevelBridgeStatuses: [
+            'related-slot-skill-element-level-bridge-found',
+          ],
+          relatedSkillLevelBridgePrimarySkillIds: [10900125],
+          relatedSkillLevelBridgeLevelRows: 36,
+          relatedSkillLevelBridgeInheritanceStatuses: [
+            'related-skill-level-inheritance-unconfirmed',
+          ],
+          gapsWithRelatedSkillLevelBridges: 3,
           applied: false,
         }),
         elementSourceAlignmentSummary: expect.objectContaining({
@@ -1708,6 +1717,14 @@ describe('first vertical slice simulation', () => {
               skillLevelBridgeStatuses: [
                 'skillsub-element-level-bridge-missing',
               ],
+              relatedSkillLevelBridgeStatuses: [
+                'related-slot-skill-element-level-bridge-found',
+              ],
+              relatedSkillLevelBridgePrimarySkillIds: [10900125],
+              relatedSkillLevelBridgeLevelRows: 12,
+              relatedSkillLevelBridgeInheritanceStatuses: [
+                'related-skill-level-inheritance-unconfirmed',
+              ],
               candidates: expect.arrayContaining([
                 expect.objectContaining({
                   sourceName: '攻击碰撞',
@@ -1736,6 +1753,54 @@ describe('first vertical slice simulation', () => {
                         }),
                         skillLevelBridge: expect.objectContaining({
                           status: 'skillsub-element-level-bridge-missing',
+                          relatedElementLevelBridge: expect.objectContaining({
+                            status:
+                              'related-slot-skill-element-level-bridge-found',
+                            source:
+                              'skillsub_ele_value.json.allRowsByElementId',
+                            sourceSkillId: 10900101,
+                            derivedSkillId: 10900125,
+                            primarySkillId: 10900125,
+                            primaryRelationStatus:
+                              'element-id-derived-skill-id',
+                            levelRows: 12,
+                            parameterIds: [1, 7],
+                            varyingParameterIds: [1],
+                            inheritanceStatus:
+                              'related-skill-level-inheritance-unconfirmed',
+                            firstLevel: expect.objectContaining({
+                              level: 1,
+                              valueParam: '1#4500|7#10000',
+                            }),
+                            lastLevel: expect.objectContaining({
+                              level: 12,
+                              valueParam: '1#9450|7#10000',
+                            }),
+                            formulaSlotAlignment: expect.objectContaining({
+                              conclusion: 'slot-override-candidate-unconfirmed',
+                              overrideCandidateParamIds: [1],
+                              directSlotMatchParamIds: [7],
+                            }),
+                            candidates: expect.arrayContaining([
+                              expect.objectContaining({
+                                skillId: 10900125,
+                                relationStatus: 'element-id-derived-skill-id',
+                                derivedFromElementId: true,
+                                parentSkillId: 10900121,
+                                characterSlotRefs: [
+                                  {
+                                    characterId: 109001,
+                                    characterName: '末音',
+                                    group: 'ground',
+                                    slot: 207,
+                                  },
+                                ],
+                                skillLevelRowCount: 1,
+                                skillLevelLevels: [1],
+                                levelRows: 12,
+                              }),
+                            ]),
+                          }),
                         }),
                       }),
                     }),
