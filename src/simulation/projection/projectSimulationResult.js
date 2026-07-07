@@ -395,6 +395,7 @@ function createCandidateChartPoint({
     valueSamples: point.valueSamples ?? [],
     candidateCount: point.candidateCount,
     elementConfigIds: point.elementConfigIds ?? [],
+    elementDetails: point.elementDetails ?? [],
     sourceStatus: point.sourceStatus,
     applied: false,
   };
@@ -466,6 +467,7 @@ function createCandidateSeriesPoint(hitCandidate, sequenceIndex, rawValues) {
     valueSamples,
     candidateCount: valueSamples.length,
     elementConfigIds: hitCandidate.damageElementElementConfigIds ?? [],
+    elementDetails: createCandidateElementDetails(hitCandidate),
     sourceStatus: hitCandidate.status,
     applied: false,
   };
@@ -478,6 +480,55 @@ function createHpCandidateSeriesValues(hitCandidate) {
   return rawFormulaParamValues
     .map(numberOrNull)
     .filter(value => Number.isFinite(value) && value > 0 && value !== 10000);
+}
+
+function createCandidateElementDetails(hitCandidate) {
+  return (hitCandidate.candidates ?? []).map(candidate => ({
+    elementConfigId: numberOrNull(candidate.elementConfigId),
+    elementName: candidate.elementName ?? null,
+    pathId: candidate.pathId ?? null,
+    hpDamage: candidate.hpDamage
+      ? {
+          status: candidate.hpDamage.status ?? null,
+          rawFormulaParamValues: createHpCandidateSeriesValues({
+            candidates: [candidate],
+          }),
+          formulaFunctionIds: uniqueNumbers(
+            Object.values(candidate.hpDamage.formulaFunctionIds ?? {})
+              .map(numberOrNull)
+              .filter(Number.isFinite)
+          ),
+          formulaFunctionMatchedIds: uniqueNumbers(
+            candidate.hpDamage.formulaFunctionMatchedIds ?? []
+          ),
+        }
+      : null,
+    toughnessDamage: candidate.toughnessDamage
+      ? {
+          status: candidate.toughnessDamage.status ?? null,
+          weakBreakDamageRate: numberOrNull(
+            candidate.toughnessDamage.weakBreakDamageRate
+          ),
+          hitType: numberOrNull(candidate.toughnessDamage.hitType),
+          interruptPriority: numberOrNull(
+            candidate.toughnessDamage.interruptPriority
+          ),
+          useOneBreak: numberOrNull(candidate.toughnessDamage.useOneBreak),
+        }
+      : null,
+    selfEnergyChange: candidate.selfEnergyChange
+      ? {
+          status: candidate.selfEnergyChange.status ?? null,
+          recoverSP: numberOrNull(candidate.selfEnergyChange.recoverSP),
+          petRecoverSP: numberOrNull(candidate.selfEnergyChange.petRecoverSP),
+          recoverInterval: numberOrNull(
+            candidate.selfEnergyChange.recoverInterval
+          ),
+          ownerScope: candidate.selfEnergyChange.ownerScope ?? null,
+        }
+      : null,
+    applied: false,
+  }));
 }
 
 const PREFERRED_FORMULA_CANDIDATE_STRATEGY =

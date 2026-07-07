@@ -793,6 +793,38 @@ describe('first vertical slice simulation', () => {
     expect(hpChartSeries.points.map(point => point.xPercent)).toEqual([
       0.6667, 1.2222, 3.5, 6.8333, 10.2222,
     ]);
+    expect(hpChartSeries.points[0].elementDetails).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          elementConfigId: 109001306,
+          hpDamage: expect.objectContaining({
+            rawFormulaParamValues: [1000, 1800, 2500],
+            formulaFunctionIds: [1, 2],
+          }),
+          toughnessDamage: expect.objectContaining({
+            weakBreakDamageRate: 7000,
+          }),
+          selfEnergyChange: expect.objectContaining({
+            recoverSP: 2700,
+            petRecoverSP: 10399,
+            recoverInterval: 9999,
+          }),
+          applied: false,
+        }),
+        expect.objectContaining({
+          elementConfigId: 109001081,
+          hpDamage: expect.objectContaining({
+            rawFormulaParamValues: [1000, 1900, 2500],
+          }),
+          toughnessDamage: expect.objectContaining({
+            weakBreakDamageRate: 7000,
+          }),
+          selfEnergyChange: expect.objectContaining({
+            recoverSP: 2700,
+          }),
+        }),
+      ])
+    );
     expect(
       hpCandidateSeries.points.map(point => [
         point.hitIndex,

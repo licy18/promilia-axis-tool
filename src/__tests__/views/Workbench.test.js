@@ -119,6 +119,31 @@ describe('Workbench view', () => {
         )
         .attributes('disabled')
     ).toBeDefined();
+    const actorFilter = wrapper.find(
+      '[data-testid="workbench-candidate-value-actor-filter"]'
+    );
+    expect(actorFilter.element.value).toBe('all');
+    expect(actorFilter.text()).toContain('末音');
+    expect(actorFilter.text()).not.toContain('寒悠悠');
+    await actorFilter.setValue('actor-109001');
+    await nextTick();
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-candidate-value-marker"]'
+      )
+    ).toHaveLength(15);
+    const actionFilter = wrapper.find(
+      '[data-testid="workbench-candidate-value-action-filter"]'
+    );
+    expect(actionFilter.element.value).toBe('all');
+    expect(actionFilter.text()).toContain('普通攻击');
+    await actionFilter.setValue('action-0001');
+    await nextTick();
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-candidate-value-marker"]'
+      )
+    ).toHaveLength(15);
     expect(
       wrapper
         .find(
@@ -199,7 +224,13 @@ describe('Workbench view', () => {
     expect(hpFrameDetail.text()).toContain(
       '帧 src12 / disp12 / local12 / chain0 / abs12'
     );
-    expect(hpFrameDetail.text()).toContain('element 109001081/109001306');
+    expect(hpFrameDetail.attributes('data-element-detail-count')).toBe('2');
+    expect(hpFrameDetail.text()).toContain(
+      '109001306 HP1,000/1,800/2,500 韧性7,000 能量2,700/宠物10,399/间隔9,999'
+    );
+    expect(hpFrameDetail.text()).toContain(
+      '109001081 HP1,000/1,900/2,500 韧性7,000 能量2,700/宠物10,399/间隔9,999'
+    );
     expect(
       wrapper
         .find(

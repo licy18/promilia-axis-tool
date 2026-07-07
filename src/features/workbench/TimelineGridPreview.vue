@@ -82,6 +82,46 @@
           {{ scope.label }}
         </button>
       </div>
+      <div
+        v-if="candidateSeriesToggles.length"
+        class="candidate-filter-group"
+        data-testid="workbench-candidate-value-filter-group"
+      >
+        <label class="candidate-filter">
+          <span>角色</span>
+          <select
+            :value="candidateActorFilter"
+            data-testid="workbench-candidate-value-actor-filter"
+            @change="setCandidateActorFilter($event.target.value)"
+          >
+            <option value="all">全部</option>
+            <option
+              v-for="actor in candidateActorOptions"
+              :key="actor.id"
+              :value="actor.id"
+            >
+              {{ actor.label }}
+            </option>
+          </select>
+        </label>
+        <label class="candidate-filter">
+          <span>动作</span>
+          <select
+            :value="candidateActionFilter"
+            data-testid="workbench-candidate-value-action-filter"
+            @change="setCandidateActionFilter($event.target.value)"
+          >
+            <option value="all">全部</option>
+            <option
+              v-for="action in candidateActionOptions"
+              :key="action.id"
+              :value="action.id"
+            >
+              {{ action.label }}
+            </option>
+          </select>
+        </label>
+      </div>
     </div>
 
     <div class="timeline-scale">
@@ -313,6 +353,7 @@
           :data-series-key="value.seriesKey"
           :data-candidate-count="value.candidateCount"
           :data-source-frame-index="value.sourceFrameIndex"
+          :data-element-detail-count="value.elementDetails?.length ?? 0"
           data-testid="workbench-candidate-value-frame-detail-row"
         >
           <b>{{ value.seriesLabel }}</b>
@@ -446,6 +487,8 @@ const timelineZoom = ref(1);
 const candidateSeriesVisibility = ref({});
 const selectedCandidateFrameGroupId = ref(null);
 const candidateDisplayScope = ref('all');
+const candidateActorFilter = ref('all');
+const candidateActionFilter = ref('all');
 
 const ticks = computed(() => {
   const durationSeconds = props.durationMs / 1000;
@@ -491,6 +534,40 @@ const actionsById = computed(
 );
 const actorLaneIds = computed(
   () => new Set(props.actors.map(actor => actor.id))
+);
+const candidateActionIds = computed(
+  () =>
+    new Set(
+      (props.candidateValueChart?.series ?? [])
+        .flatMap(series => (series.points ?? []).map(point => point.actionId))
+        .filter(Boolean)
+    )
+);
+const candidateActorOptions = computed(() => {
+  const actorIds = new Set(
+    [...candidateActionIds.value]
+      .map(actionId => actionsById.value.get(actionId))
+      .filter(Boolean)
+      .map(action => resolveActionLaneId(action))
+      .filter(actorId => actorLaneIds.value.has(actorId))
+  );
+  return props.actors
+    .filter(actor => actorIds.has(actor.id))
+    .map(actor => ({
+      id: actor.id,
+      label: actor.name,
+    }));
+});
+const candidateActionOptions = computed(() =>
+  [...candidateActionIds.value]
+    .filter(actionId => actionsById.value.has(actionId))
+    .map(actionId => {
+      const action = actionsById.value.get(actionId);
+      return {
+        id: actionId,
+        label: action?.name ?? actionId,
+      };
+    })
 );
 const overlapActionIds = computed(
   () => new Set(props.timelineDiagnostics?.overlapActionIds ?? [])
@@ -704,12 +781,18 @@ function createCandidateValueTimelineMarkers() {
             sourceTimeMs: point.sourceTimeMs,
             displayTimeMs: point.displayTimeMs,
             elementConfigIds: point.elementConfigIds ?? [],
+            elementDetails: point.elementDetails ?? [],
             sourceStatus: point.sourceStatus,
             timeAdjustmentStatus: point.timeAdjustmentStatus,
             seriesOrder: meta.order,
           };
         })
-        .filter(marker => isCandidateMarkerInDisplayScope(marker));
+        .filter(
+          marker =>
+            isCandidateMarkerInActorFilter(marker) &&
+            isCandidateMarkerInActionFilter(marker) &&
+            isCandidateMarkerInDisplayScope(marker)
+        );
     });
 }
 
@@ -826,10 +909,32 @@ function setCandidateSeriesVisible(seriesKey, visible) {
 }
 
 function setCandidateDisplayScope(scope) {
-  if (scope === 'selected-frame' && !selectedCandidateFrameGroupId.value) {
+  if (scope === 'selected-frame' && !selectedCandidateFrameGroup.value) {
     return;
   }
   candidateDisplayScope.value = scope;
+}
+
+function setCandidateActorFilter(actorId) {
+  candidateActorFilter.value = actorId || 'all';
+}
+
+function setCandidateActionFilter(actionId) {
+  candidateActionFilter.value = actionId || 'all';
+}
+
+function isCandidateMarkerInActorFilter(marker) {
+  return (
+    candidateActorFilter.value === 'all' ||
+    resolveCandidateValueLaneId(marker) === candidateActorFilter.value
+  );
+}
+
+function isCandidateMarkerInActionFilter(marker) {
+  return (
+    candidateActionFilter.value === 'all' ||
+    marker.actionId === candidateActionFilter.value
+  );
 }
 
 function isCandidateMarkerInDisplayScope(marker) {
@@ -904,11 +1009,63 @@ function formatCandidateFrameDetailFrames(value) {
 }
 
 function formatCandidateFrameDetailElements(value) {
-  const elementText = formatCompactList(
-    value.elementConfigIds ?? [],
-    'element 未展开'
-  );
+  const elementDetails = (value.elementDetails ?? [])
+    .map(formatCandidateElementDetail)
+    .filter(Boolean);
+  const elementText = elementDetails.length
+    ? elementDetails.join(' ; ')
+    : formatCompactList(value.elementConfigIds ?? [], 'element 未展开');
   return `element ${elementText}`;
+}
+
+function formatCandidateElementDetail(element) {
+  const elementId = element.elementConfigId ?? '未知';
+  const parts = [
+    formatCandidateElementHpDetail(element.hpDamage),
+    formatCandidateElementToughnessDetail(element.toughnessDamage),
+    formatCandidateElementEnergyDetail(element.selfEnergyChange),
+  ].filter(Boolean);
+  return parts.length ? `${elementId} ${parts.join(' ')}` : `${elementId}`;
+}
+
+function formatCandidateElementHpDetail(hpDamage) {
+  if (!hpDamage) {
+    return null;
+  }
+  const values = formatCompactList(
+    hpDamage.rawFormulaParamValues?.map(value => formatTimelineNumber(value)) ??
+      [],
+    null
+  );
+  return values ? `HP${values}` : null;
+}
+
+function formatCandidateElementToughnessDetail(toughnessDamage) {
+  if (!toughnessDamage) {
+    return null;
+  }
+  const value = toughnessDamage.weakBreakDamageRate;
+  return Number.isFinite(Number(value))
+    ? `韧性${formatTimelineNumber(value)}`
+    : null;
+}
+
+function formatCandidateElementEnergyDetail(selfEnergyChange) {
+  if (!selfEnergyChange) {
+    return null;
+  }
+  const parts = [
+    createElementNumberPart('能量', selfEnergyChange.recoverSP),
+    createElementNumberPart('宠物', selfEnergyChange.petRecoverSP),
+    createElementNumberPart('间隔', selfEnergyChange.recoverInterval),
+  ].filter(Boolean);
+  return parts.length ? parts.join('/') : null;
+}
+
+function createElementNumberPart(label, value) {
+  return Number.isFinite(Number(value))
+    ? `${label}${formatTimelineNumber(value)}`
+    : null;
 }
 
 function createFramePart(label, value) {
@@ -1260,6 +1417,35 @@ h2 {
 .candidate-scope:disabled {
   cursor: not-allowed;
   opacity: 0.42;
+}
+
+.candidate-filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.candidate-filter {
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+  gap: 6px;
+  padding: 0 6px 0 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  background: #151b20;
+  color: #8f9aa3;
+  font-size: 11px;
+}
+
+.candidate-filter select {
+  min-width: 78px;
+  border: 0;
+  background: transparent;
+  color: #dff6f1;
+  font-size: 11px;
+  outline: none;
 }
 
 .icon-control {
@@ -1826,6 +2012,19 @@ h2 {
 
   .candidate-scope {
     flex: 1;
+  }
+
+  .candidate-filter-group {
+    width: 100%;
+  }
+
+  .candidate-filter {
+    flex: 1;
+  }
+
+  .candidate-filter select {
+    flex: 1;
+    min-width: 0;
   }
 
   .candidate-frame-detail-row {

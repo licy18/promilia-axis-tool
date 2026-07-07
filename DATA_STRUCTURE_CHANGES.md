@@ -4317,3 +4317,76 @@ data-scope-key="selected-frame"
 
 - 详情行仍是 chart point 级别，不是每个 `elementConfigId` 的原始字段拆解。
 - `selected-frame` 是长轴密度控制的最小入口，尚未覆盖按 actor/action/series 组合过滤。
+
+## 62. 阶段 5-8AI：candidateValueSeries per-element 详情与组合过滤
+
+阶段 5-8AI 在 `candidateValueSeries.series[].points[]` 和 `candidateValueSeries.chart.series[].points[]` 上新增 `elementDetails[]`。该字段来自 `actionResultTimeline[].hitCandidates[].candidates[]`，用于 Workbench 选中帧详情，不参与最终公式计算。
+
+### 62.1 elementDetails[]
+
+每个候选曲线点新增：
+
+```json
+{
+  "elementDetails": [
+    {
+      "elementConfigId": 109001306,
+      "pathId": 123,
+      "elementName": "TDamageElementParams",
+      "hpDamage": {
+        "rawFormulaParamValues": [1000, 1800, 2500],
+        "formulaFunctionIds": [1, 2],
+        "formulaFunctionMatchedIds": [1, 2]
+      },
+      "toughnessDamage": {
+        "weakBreakDamageRate": 7000,
+        "hitType": 1,
+        "interruptPriority": 1,
+        "useOneBreak": 0
+      },
+      "selfEnergyChange": {
+        "recoverSP": 2700,
+        "petRecoverSP": 10399,
+        "recoverInterval": 9999,
+        "ownerScope": "self"
+      },
+      "applied": false
+    }
+  ]
+}
+```
+
+字段说明：
+
+- `hpDamage.rawFormulaParamValues`：过滤掉 `10000` 常量槽后的 HP 参数候选。
+- `toughnessDamage.weakBreakDamageRate`：削韧字段候选。
+- `selfEnergyChange.recoverSP/petRecoverSP/recoverInterval`：自身能量相关字段候选。
+- `applied` 必须保持 `false`，表示仍未应用为最终伤害、削韧或充能公式。
+
+### 62.2 TimelineGrid filters
+
+`TimelineGridPreview` 新增组合过滤入口：
+
+```html
+data-testid="workbench-candidate-value-actor-filter"
+data-testid="workbench-candidate-value-action-filter"
+```
+
+当前可组合的过滤维度：
+
+- 角色：按 actor lane 过滤。
+- 动作：按 `actionId` 过滤。
+- 曲线：沿用 HP / 韧性 / 能量 series 显隐。
+- 范围：沿用 `all` / `selected-frame`。
+
+### 62.3 当前样本
+
+默认末音普攻首帧：
+
+- `109001306`：HP `1,000 / 1,800 / 2,500`，韧性 `7,000`，能量 `2,700`，宠物能量 `10,399`，间隔 `9,999`。
+- `109001081`：HP `1,000 / 1,900 / 2,500`，韧性 `7,000`，能量 `2,700`，宠物能量 `10,399`，间隔 `9,999`。
+
+### 62.4 当前边界
+
+- `elementDetails[]` 是候选字段明细，不代表执行顺序、同 hit 多候选组合方式或最终公式。
+- 组合过滤已接入 UI，但当前默认 fixture 只有一个 actor 和一个 action；多动作验证需要后续样本。

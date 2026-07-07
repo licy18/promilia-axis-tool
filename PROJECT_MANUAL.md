@@ -3218,6 +3218,43 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8AI 目标：把候选详情继续下钻到 per-element 原始字段，至少能在选中帧里区分每个 `elementConfigId` 对 HP 参数、削韧和能量字段的贡献。
 - 同时补更适合多动作长轴的范围过滤，例如按 action、actor 或可见 series 组合筛选。
 
+### 2026-07-08：阶段 5-8AI per-element 原始字段下钻与组合过滤
+
+本轮完成：
+
+- `candidateValueSeries.series[].points[]` 与 `candidateValueSeries.chart.series[].points[]` 新增 `elementDetails[]`，从 `actionResultTimeline[].hitCandidates[].candidates[]` 保留每个 `elementConfigId` 的候选字段。
+- `elementDetails[]` 当前按 element 记录 HP 参数候选、公式函数 ID、削韧字段、自身能量字段、PathID 和 element 名称；仍全部标记 `applied: false`。
+- `TimelineGridPreview` 的选中帧详情行改为展示 per-element 贡献，而不只显示 element ID 列表。
+- 时间轴候选过滤新增角色和动作下拉；与已有 series 显隐、`全部 / 选中帧` 范围一起构成基础组合过滤。
+- 仿真测试覆盖首帧 `elementDetails[]`，Workbench 测试覆盖角色/动作过滤和 per-element 字段文本。
+
+当前末音 `10900101` 默认普攻首帧 per-element 详情：
+
+- `109001306`：HP 参数 `1,000 / 1,800 / 2,500`，削韧 `7,000`，自身能量 `2,700`，petRecoverSP `10,399`，recoverInterval `9,999`。
+- `109001081`：HP 参数 `1,000 / 1,900 / 2,500`，削韧 `7,000`，自身能量 `2,700`，petRecoverSP `10,399`，recoverInterval `9,999`。
+- 角色过滤：当前样本可选择 `末音 / actor-109001`。
+- 动作过滤：当前样本可选择 `普通攻击 / action-0001`。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+- `npm exec prettier -- --check AGENTS.md PROJECT_MANUAL.md DEVELOPMENT_PLAN.md ARCHITECTURE.md DATA_STRUCTURE_CHANGES.md src/simulation/projection/projectSimulationResult.js src/features/workbench/TimelineGridPreview.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npm exec eslint -- --no-warn-ignored src/simulation/projection/projectSimulationResult.js src/features/workbench/TimelineGridPreview.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npm test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
+- `git diff --check`：通过。
+
+当前边界：
+
+- 本阶段只是把 per-element 原始候选字段带到 chart/UI，不应用最终公式。
+- 公式函数、槽位关系、等级覆盖和 per-element 字段已经能在不同证据层看到，但选中帧详情尚未把这些关系折叠成同一张 element 详情表。
+- 角色/动作过滤已接入 UI，但默认样本只有一个 actor 和一个 action；多角色多动作的实际收缩效果需要后续样本验证。
+
+下一步：
+
+- 阶段 5-8AJ 目标：把 per-element 详情与 `formulaFunctionIds`、`formulaFunctionMatchedIds`、`formulaParamAlignment` 和 `skillsub_ele_value` 等级槽位关系联动展示。
+- 同时准备多动作样本或构造测试 fixture，验证 actor/action/series 组合过滤在非单动作时间轴上的行为。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

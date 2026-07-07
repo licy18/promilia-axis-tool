@@ -261,7 +261,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8AF，把主时间轴候选 marker 升级为多曲线轨；当前默认普攻在 `actor-109001` 轨显示 3 条候选曲线、15 个候选 marker 和 5 个按帧 hotspot，首帧提示可同时查看 HP、削韧、能量三个候选值。
 - 已完成：阶段 5-8AG，给候选多曲线轨增加基础交互控制；当前时间轴可按 HP / 韧性 / 能量切换候选曲线显隐，点击按帧 hotspot 可查看该帧可见三值候选、`hitSkill`、element 候选和时序来源摘要，关闭 HP 后默认样本剩余 2 条曲线、10 个 marker。
 - 已完成：阶段 5-8AH，把选中帧摘要升级为候选来源详情下钻，并新增 `全部 / 选中帧` 候选范围切换；当前首帧 HP 详情显示样本 `1,000/1,800/1,900/2,500`、`candidateCount = 4`、帧来源 `src12/disp12/local12/chain0/abs12` 和 element `109001081/109001306`，选中帧范围会收缩到 3 个 marker、3 条 curve、1 个 hotspot。
-- 下一步：阶段 5-8AI，把候选详情继续下钻到 per-element 原始字段，区分每个 `elementConfigId` 对 HP 参数、削韧和能量字段的贡献，并补 action/actor/series 组合过滤。
+- 已完成：阶段 5-8AI，把候选详情继续下钻到 per-element 原始字段；`candidateValueSeries` / `chart` 点新增 `elementDetails[]`，首帧可区分 `109001306` 与 `109001081` 的 HP 参数、削韧、能量、petRecoverSP 和 recoverInterval 字段，并补角色/动作过滤下拉。
+- 下一步：阶段 5-8AJ，把 per-element 详情与公式函数、公式槽位、等级覆盖关系联动展示，并准备多动作样本验证组合过滤。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 
