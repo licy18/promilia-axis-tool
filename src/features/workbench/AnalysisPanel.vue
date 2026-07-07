@@ -489,7 +489,11 @@ function formatStateTimingSummary(evidence) {
     .filter(item => item.stateName)
     .slice(0, 2)
     .map(item => `${item.stateName} ${formatStateTimingFindingStatus(item)}`);
-  return findings.length > 0 ? ` · 状态证据 ${findings.join(' / ')}` : '';
+  const findingText =
+    findings.length > 0 ? ` · 状态证据 ${findings.join(' / ')}` : '';
+  return `${findingText}${formatEventBridgeTargetSummary(
+    evidence?.eventBridgeTargetSkillControlEvidence
+  )}`;
 }
 
 function formatStateTimingFindingStatus(finding) {
@@ -497,6 +501,21 @@ function formatStateTimingFindingStatus(finding) {
     return '动画+命中';
   }
   return '仅资源命中';
+}
+
+function formatEventBridgeTargetSummary(evidence) {
+  const targets = (evidence?.targetSkillControls ?? [])
+    .slice(0, 2)
+    .map(target => {
+      if (target.status !== 'found') {
+        return `${target.skillId}缺失`;
+      }
+      const states = (target.animationStateNames ?? []).slice(0, 2).join('/');
+      return states
+        ? `${target.skillId}->${states}`
+        : `${target.skillId}无动画`;
+    });
+  return targets.length > 0 ? ` · 目标技能 ${targets.join(' / ')}` : '';
 }
 
 function uniqueDisplayValues(values) {

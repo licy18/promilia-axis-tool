@@ -2236,7 +2236,11 @@ async function buildSkillAssetEvidenceIndex({
 
   for (const skill of skills) {
     currentSkillControlEvidence.push(
-      await buildSkillControlEvidenceItem(skill, skillControlBySkillId)
+      await buildSkillControlEvidenceItem(
+        skill,
+        skillControlBySkillId,
+        skillTableById
+      )
     );
   }
 
@@ -3266,7 +3270,11 @@ async function buildSkillBytesPathStatuses(assetPaths) {
   );
 }
 
-async function buildSkillControlEvidenceItem(skill, skillControlBySkillId) {
+async function buildSkillControlEvidenceItem(
+  skill,
+  skillControlBySkillId,
+  skillTableById
+) {
   const expectedDirectory = path.join(
     extractorSkillListRoot,
     `skill_control_${skill.id}.asset`
@@ -3320,6 +3328,15 @@ async function buildSkillControlEvidenceItem(skill, skillControlBySkillId) {
     }
   }
 
+  const stateTimingEvidence = await buildSkillStateTimingEvidence(
+    aggregate.behaviorChainsByLane,
+    {
+      sourceSkillId: Number(skill.id),
+      skillControlBySkillId,
+      skillTableById,
+    }
+  );
+
   return {
     skillId: Number(skill.id),
     characterId: Number(skill.characterId),
@@ -3343,9 +3360,7 @@ async function buildSkillControlEvidenceItem(skill, skillControlBySkillId) {
     behaviorReferenceSummary: aggregate.behaviorReferenceSummary,
     effectLaneBehaviorChains: aggregate.behaviorChains,
     effectLaneBehaviorChainsByLane: aggregate.behaviorChainsByLane,
-    stateTimingEvidence: buildSkillStateTimingEvidence(
-      aggregate.behaviorChainsByLane
-    ),
+    stateTimingEvidence,
     frameRange: buildFrameRange(aggregate.startFrames, aggregate.endFrames),
     sampleNodeCandidates: aggregate.candidates.slice(
       0,
@@ -3568,7 +3583,7 @@ function pushSkillEffectLaneCandidateSampleForLane(evidence, lane, candidate) {
   samples.push(candidate);
 }
 
-function buildSkillStateTimingEvidence(behaviorChainsByLane) {
+async function buildSkillStateTimingEvidence(behaviorChainsByLane, context) {
   const hpChains = behaviorChainsByLane?.hpDamage ?? [];
   const timingChains = behaviorChainsByLane?.timingControl ?? [];
   const hpStateWindows = summarizeHpStateWindows(hpChains);
@@ -3583,6 +3598,11 @@ function buildSkillStateTimingEvidence(behaviorChainsByLane) {
     animationStateControls,
     eventBridgeControls,
   });
+  const eventBridgeTargetSkillControlEvidence =
+    await buildEventBridgeTargetSkillControlEvidence(
+      eventBridgeControls,
+      context
+    );
 
   return compactObject({
     status:
@@ -3613,10 +3633,345 @@ function buildSkillStateTimingEvidence(behaviorChainsByLane) {
     hpStateWindows: hpStateWindows.slice(0, 8),
     animationStateControls: animationStateControls.slice(0, 8),
     eventBridgeControls: eventBridgeControls.slice(0, 8),
+    eventBridgeTargetSkillControlEvidence,
     stateFindings,
     bindingStatus: 'state-timing-evidence-candidates-unconfirmed',
     applied: false,
   });
+}
+
+async function buildEventBridgeTargetSkillControlEvidence(
+  eventBridgeControls,
+  context
+) {
+  const targetSkillIds = uniqueNumbers(
+    eventBridgeControls
+      .map(item => item.skillId)
+      .filter(skillId => Number(skillId) > 0)
+  );
+
+  if (targetSkillIds.length === 0) {
+    return {
+      status: 'event-bridge-target-skill-controls-missing',
+      targetSkillIds: [],
+      targetSkillControlCount: 0,
+      foundTargetSkillControlCount: 0,
+      missingTargetSkillControlCount: 0,
+      targetSkillControls: [],
+      applied: false,
+    };
+  }
+
+  const targetSkillControls = [];
+  for (const skillId of targetSkillIds) {
+    targetSkillControls.push(
+      await buildEventBridgeTargetSkillControlSummary(skillId, context)
+    );
+  }
+  targetSkillControls.sort(compareEventBridgeTargetSkillControlSummaries);
+
+  const foundTargetSkillControls = targetSkillControls.filter(
+    item => item.status === 'found'
+  );
+  const childSkillTargetIds = targetSkillControls
+    .filter(item => item.relationToSourceSkill === 'child-skill-of-source')
+    .map(item => item.skillId);
+
+  return {
+    status:
+      foundTargetSkillControls.length > 0
+        ? 'event-bridge-target-skill-controls-indexed'
+        : 'event-bridge-target-skill-controls-not-found',
+    targetSkillIds,
+    targetSkillControlCount: targetSkillControls.length,
+    foundTargetSkillControlCount: foundTargetSkillControls.length,
+    missingTargetSkillControlCount:
+      targetSkillControls.length - foundTargetSkillControls.length,
+    childSkillTargetIds,
+    targetAnimationStateNames: uniqueStrings(
+      targetSkillControls.flatMap(item => item.animationStateNames ?? [])
+    ),
+    targetHpTrackNames: uniqueStrings(
+      targetSkillControls.flatMap(item =>
+        (item.hpTimelineCandidates ?? []).map(candidate => candidate.trackName)
+      )
+    ),
+    targetSkillControls,
+    applied: false,
+  };
+}
+
+async function buildEventBridgeTargetSkillControlSummary(skillId, context) {
+  const skillTableRow = context?.skillTableById?.get(Number(skillId)) ?? null;
+  const controlDir = context?.skillControlBySkillId?.get(Number(skillId));
+  const relationToSourceSkill = createTargetSkillRelation(
+    Number(skillId),
+    skillTableRow,
+    context?.sourceSkillId
+  );
+
+  if (!controlDir) {
+    return compactObject({
+      skillId: Number(skillId),
+      status: 'missing-skill-control-directory',
+      skillTableStatus: skillTableRow ? 'found' : 'missing-skill-table-row',
+      skillType: numberOrNull(skillTableRow?.skillType),
+      skillDisplayType: numberOrNull(skillTableRow?.skillDisplayType),
+      parentSkill: numberOrNull(skillTableRow?.parentSkill),
+      relationToSourceSkill,
+      expectedDirectory: normalizePath(
+        path.join(extractorSkillListRoot, `skill_control_${skillId}.asset`)
+      ),
+      applied: false,
+    });
+  }
+
+  const monoBehaviourRoot = path.join(controlDir.fullPath, 'MonoBehaviour');
+  const jsonFiles = await listJsonFileNames(monoBehaviourRoot);
+  const targetEvidence = createEmptyEventBridgeTargetEvidence();
+
+  for (const fileName of jsonFiles.slice(0, SKILL_CONTROL_SAMPLE_FILE_LIMIT)) {
+    try {
+      const text = await fs.readFile(
+        path.join(monoBehaviourRoot, fileName),
+        'utf8'
+      );
+      const json = JSON.parse(text);
+      const pathId = extractPathIdFromMonoBehaviourFileName(fileName);
+      const behavior = compactMonoBehaviourBehaviorTarget(
+        json,
+        text,
+        fileName,
+        pathId,
+        null
+      );
+      collectEventBridgeTargetTopLevelBehavior(targetEvidence, behavior);
+      collectEventBridgeTargetTimelineCandidates(
+        targetEvidence,
+        json,
+        fileName
+      );
+      targetEvidence.parsedJsonSampleFiles += 1;
+    } catch {
+      targetEvidence.unreadableJsonSampleFiles += 1;
+    }
+  }
+
+  return compactObject({
+    skillId: Number(skillId),
+    status: 'found',
+    skillTableStatus: skillTableRow ? 'found' : 'missing-skill-table-row',
+    skillType: numberOrNull(skillTableRow?.skillType),
+    skillDisplayType: numberOrNull(skillTableRow?.skillDisplayType),
+    parentSkill: numberOrNull(skillTableRow?.parentSkill),
+    relationToSourceSkill,
+    directory: normalizePath(controlDir.fullPath),
+    monoBehaviourRoot: normalizePath(monoBehaviourRoot),
+    jsonFileCount: jsonFiles.length,
+    parsedJsonSampleFiles: targetEvidence.parsedJsonSampleFiles,
+    unreadableJsonSampleFiles: targetEvidence.unreadableJsonSampleFiles,
+    animationStateControlCount: targetEvidence.animationStateControls.length,
+    animationStateNames: uniqueStrings(
+      targetEvidence.animationStateControls.map(item => item.selectedStateName)
+    ),
+    animationStateControls: targetEvidence.animationStateControls.slice(0, 8),
+    eventBridgeControlCount: targetEvidence.eventBridgeControls.length,
+    eventBridgeSkillIds: uniqueNumbers(
+      targetEvidence.eventBridgeControls.map(item => item.skillId)
+    ),
+    eventBridgeControls: targetEvidence.eventBridgeControls.slice(0, 8),
+    hpTimelineCandidateCount: targetEvidence.hpTimelineCandidates.length,
+    hpTimelineCandidates: targetEvidence.hpTimelineCandidates.slice(0, 8),
+    timingTimelineCandidateCount:
+      targetEvidence.timingTimelineCandidates.length,
+    timingTimelineCandidates: targetEvidence.timingTimelineCandidates.slice(
+      0,
+      8
+    ),
+    applied: false,
+  });
+}
+
+function createEmptyEventBridgeTargetEvidence() {
+  return {
+    parsedJsonSampleFiles: 0,
+    unreadableJsonSampleFiles: 0,
+    animationStateControls: [],
+    eventBridgeControls: [],
+    hpTimelineCandidates: [],
+    timingTimelineCandidates: [],
+  };
+}
+
+function collectEventBridgeTargetTopLevelBehavior(evidence, behavior) {
+  if (!behavior) {
+    return;
+  }
+
+  if (
+    (behavior.selectedStateName ||
+      behavior.scriptTypeCandidate?.className === 'AnimationBehaviorData') &&
+    evidence.animationStateControls.length <
+      SKILL_EFFECT_LANE_SPECIFIC_SAMPLE_LIMIT
+  ) {
+    evidence.animationStateControls.push(
+      compactTargetAnimationStateControl(behavior)
+    );
+  }
+
+  if (
+    (behavior.scriptTypeCandidate?.className === 'EventBridgeBehaviorData' ||
+      behavior.bridge != null ||
+      behavior.type != null) &&
+    evidence.eventBridgeControls.length <
+      SKILL_EFFECT_LANE_SPECIFIC_SAMPLE_LIMIT
+  ) {
+    evidence.eventBridgeControls.push(
+      compactTargetEventBridgeControl(behavior)
+    );
+  }
+}
+
+function collectEventBridgeTargetTimelineCandidates(evidence, json, fileName) {
+  const stack = [json];
+
+  while (stack.length > 0) {
+    const value = stack.pop();
+    if (!value || typeof value !== 'object') {
+      continue;
+    }
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        stack.push(item);
+      }
+      continue;
+    }
+
+    if (Array.isArray(value.behaviorlineControl)) {
+      for (const control of value.behaviorlineControl) {
+        if (!control || typeof control !== 'object') {
+          continue;
+        }
+        const candidate = compactSkillControlCandidate(
+          control,
+          fileName,
+          'timeline-control'
+        );
+        if (
+          (candidate.laneHints ?? []).includes('hpDamage') &&
+          evidence.hpTimelineCandidates.length <
+            SKILL_EFFECT_LANE_SPECIFIC_SAMPLE_LIMIT
+        ) {
+          evidence.hpTimelineCandidates.push(candidate);
+        }
+        if (
+          (candidate.laneHints ?? []).includes('timingControl') &&
+          evidence.timingTimelineCandidates.length <
+            SKILL_EFFECT_LANE_SPECIFIC_SAMPLE_LIMIT
+        ) {
+          evidence.timingTimelineCandidates.push(candidate);
+        }
+      }
+    }
+
+    for (const nestedValue of Object.values(value)) {
+      if (nestedValue && typeof nestedValue === 'object') {
+        stack.push(nestedValue);
+      }
+    }
+  }
+}
+
+function compactTargetAnimationStateControl(behavior) {
+  return compactObject({
+    file: behavior.file ?? null,
+    pathId: behavior.pathId ?? null,
+    scriptTypeCandidate: compactScriptTypeCandidate(
+      behavior.scriptTypeCandidate
+    ),
+    selectedStateName: behavior.selectedStateName ?? null,
+    selectedClipName: behavior.selectedClipName ?? null,
+    behaviorStartFrame: numberOrNull(behavior.startFrame),
+    behaviorFrameCount: numberOrNull(behavior.frameCount),
+    timelineGroupIndex: numberOrNull(behavior.timelineGroupIndex),
+    behaviorGroupId: numberOrNull(behavior.behaviorGroupId),
+    behaviorIndex: numberOrNull(behavior.behaviorIndex),
+    rootmotion: numberOrNull(behavior.rootmotion),
+    aniLength: numberOrNull(behavior.aniLength),
+    defaultAniLength: numberOrNull(behavior.defaultAniLength),
+    aniStartFrame: numberOrNull(behavior.aniStartFrame),
+    aniEndFrame: numberOrNull(behavior.aniEndFrame),
+    aniPlaySpeed: numberOrNull(behavior.aniPlaySpeed),
+  });
+}
+
+function compactTargetEventBridgeControl(behavior) {
+  return compactObject({
+    file: behavior.file ?? null,
+    pathId: behavior.pathId ?? null,
+    scriptTypeCandidate: compactScriptTypeCandidate(
+      behavior.scriptTypeCandidate
+    ),
+    behaviorStartFrame: numberOrNull(behavior.startFrame),
+    behaviorFrameCount: numberOrNull(behavior.frameCount),
+    timelineGroupIndex: numberOrNull(behavior.timelineGroupIndex),
+    behaviorGroupId: numberOrNull(behavior.behaviorGroupId),
+    behaviorIndex: numberOrNull(behavior.behaviorIndex),
+    allowAttack: numberOrNull(behavior.allowAttack),
+    allowSkill1: numberOrNull(behavior.allowSkill1),
+    allowSkill2: numberOrNull(behavior.allowSkill2),
+    allowSkill3: numberOrNull(behavior.allowSkill3),
+    allowMove: numberOrNull(behavior.allowMove),
+    allowJump: numberOrNull(behavior.allowJump),
+    allowDodge: numberOrNull(behavior.allowDodge),
+    allowCountermeasuresSkill: numberOrNull(behavior.allowCountermeasuresSkill),
+    bridge: numberOrNull(behavior.bridge),
+    type: numberOrNull(behavior.type),
+    skillId: numberOrNull(behavior.skillId),
+    skillIndex: numberOrNull(behavior.skillIndex),
+    frameIndex: numberOrNull(behavior.frameIndex),
+    allowedInputs: summarizeAllowedEventBridgeInputs(behavior),
+  });
+}
+
+function createTargetSkillRelation(skillId, skillTableRow, sourceSkillId) {
+  if (!skillTableRow) {
+    return 'unknown-target-not-in-skill-table';
+  }
+  const parentSkill = numberOrNull(skillTableRow.parentSkill);
+  const sourceId = numberOrNull(sourceSkillId);
+  if (sourceId != null && parentSkill === sourceId) {
+    return 'child-skill-of-source';
+  }
+  if (sourceId != null && Number(skillId) === sourceId) {
+    return 'self-skill';
+  }
+  if (parentSkill && parentSkill !== 0) {
+    return 'child-skill-of-other-source';
+  }
+  return 'standalone-skill';
+}
+
+function compareEventBridgeTargetSkillControlSummaries(left, right) {
+  if (left.status === 'found' && right.status !== 'found') {
+    return -1;
+  }
+  if (left.status !== 'found' && right.status === 'found') {
+    return 1;
+  }
+  if (
+    left.relationToSourceSkill === 'child-skill-of-source' &&
+    right.relationToSourceSkill !== 'child-skill-of-source'
+  ) {
+    return -1;
+  }
+  if (
+    left.relationToSourceSkill !== 'child-skill-of-source' &&
+    right.relationToSourceSkill === 'child-skill-of-source'
+  ) {
+    return 1;
+  }
+  return Number(left.skillId) - Number(right.skillId);
 }
 
 function summarizeHpStateWindows(hpChains) {

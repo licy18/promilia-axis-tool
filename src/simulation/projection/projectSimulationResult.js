@@ -684,6 +684,10 @@ function compactSkillStateTimingEvidence(evidence) {
     eventBridgeSkillIds: evidence.eventBridgeSkillIds ?? [],
     eventBridgeTypes: evidence.eventBridgeTypes ?? [],
     eventBridgeValues: evidence.eventBridgeValues ?? [],
+    eventBridgeTargetSkillControlEvidence:
+      compactEventBridgeTargetSkillControlEvidence(
+        evidence.eventBridgeTargetSkillControlEvidence
+      ),
     stateFindings: (evidence.stateFindings ?? []).slice(0, 6).map(item => ({
       stateName: item.stateName ?? null,
       status: item.status ?? null,
@@ -736,6 +740,49 @@ function compactSkillStateTimingEvidence(evidence) {
         allowJump: numberOrNull(item.allowJump),
         allowDodge: numberOrNull(item.allowDodge),
         allowedInputs: item.allowedInputs ?? [],
+      })),
+    applied: false,
+  };
+}
+
+function compactEventBridgeTargetSkillControlEvidence(evidence) {
+  if (!evidence) {
+    return null;
+  }
+  return {
+    status: evidence.status ?? 'event-bridge-target-skill-controls-missing',
+    targetSkillIds: evidence.targetSkillIds ?? [],
+    targetSkillControlCount:
+      numberOrNull(evidence.targetSkillControlCount) ?? 0,
+    foundTargetSkillControlCount:
+      numberOrNull(evidence.foundTargetSkillControlCount) ?? 0,
+    missingTargetSkillControlCount:
+      numberOrNull(evidence.missingTargetSkillControlCount) ?? 0,
+    childSkillTargetIds: evidence.childSkillTargetIds ?? [],
+    targetAnimationStateNames: evidence.targetAnimationStateNames ?? [],
+    targetHpTrackNames: evidence.targetHpTrackNames ?? [],
+    targetSkillControls: (evidence.targetSkillControls ?? [])
+      .slice(0, 4)
+      .map(item => ({
+        skillId: numberOrNull(item.skillId),
+        status: item.status ?? null,
+        skillTableStatus: item.skillTableStatus ?? null,
+        parentSkill: numberOrNull(item.parentSkill),
+        relationToSourceSkill: item.relationToSourceSkill ?? null,
+        animationStateControlCount:
+          numberOrNull(item.animationStateControlCount) ?? 0,
+        animationStateNames: item.animationStateNames ?? [],
+        hpTimelineCandidateCount:
+          numberOrNull(item.hpTimelineCandidateCount) ?? 0,
+        hpTimelineCandidates: (item.hpTimelineCandidates ?? [])
+          .slice(0, 4)
+          .map(candidate => ({
+            name: candidate.name ?? null,
+            trackName: candidate.trackName ?? null,
+            startFrame: numberOrNull(candidate.startFrame),
+            endFrame: numberOrNull(candidate.endFrame),
+          })),
+        eventBridgeSkillIds: item.eventBridgeSkillIds ?? [],
       })),
     applied: false,
   };

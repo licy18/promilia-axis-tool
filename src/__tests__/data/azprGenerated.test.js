@@ -805,6 +805,49 @@ describe('generated AzPr data', () => {
       bindingStatus: 'state-timing-evidence-candidates-unconfirmed',
       applied: false,
     });
+    expect(
+      mayoiAttack.stateTimingEvidence.eventBridgeTargetSkillControlEvidence
+    ).toMatchObject({
+      status: 'event-bridge-target-skill-controls-indexed',
+      targetSkillIds: [80102, 10900102],
+      targetSkillControlCount: 2,
+      foundTargetSkillControlCount: 1,
+      missingTargetSkillControlCount: 1,
+      childSkillTargetIds: [10900102],
+      targetAnimationStateNames: ['Skill0_2'],
+      targetHpTrackNames: ['普攻-攻击碰撞'],
+      applied: false,
+    });
+    expect(
+      mayoiAttack.stateTimingEvidence.eventBridgeTargetSkillControlEvidence
+        .targetSkillControls
+    ).toEqual([
+      expect.objectContaining({
+        skillId: 10900102,
+        status: 'found',
+        skillTableStatus: 'found',
+        parentSkill: 10900101,
+        relationToSourceSkill: 'child-skill-of-source',
+        animationStateControlCount: 3,
+        animationStateNames: ['Skill0_2'],
+        hpTimelineCandidateCount: 4,
+        eventBridgeSkillIds: [0, 10900103],
+        hpTimelineCandidates: expect.arrayContaining([
+          expect.objectContaining({
+            name: '攻击第1段',
+            trackName: '普攻-攻击碰撞',
+            startFrame: 6,
+            endFrame: 7,
+          }),
+        ]),
+      }),
+      expect.objectContaining({
+        skillId: 80102,
+        status: 'missing-skill-control-directory',
+        skillTableStatus: 'missing-skill-table-row',
+        relationToSourceSkill: 'unknown-target-not-in-skill-table',
+      }),
+    ]);
     expect(mayoiAttack.stateTimingEvidence.animationStateControls).toEqual([
       expect.objectContaining({
         sourceName: '动作',

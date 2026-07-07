@@ -649,6 +649,28 @@ describe('first vertical slice simulation', () => {
             hpStateNames: ['Skill0_1', 'Skill0_6'],
             animationStateNames: ['Skill0_6'],
             eventBridgeSkillIds: [0, 80102, 10900102],
+            eventBridgeTargetSkillControlEvidence: expect.objectContaining({
+              status: 'event-bridge-target-skill-controls-indexed',
+              targetSkillIds: [80102, 10900102],
+              foundTargetSkillControlCount: 1,
+              missingTargetSkillControlCount: 1,
+              childSkillTargetIds: [10900102],
+              targetAnimationStateNames: ['Skill0_2'],
+              targetHpTrackNames: ['普攻-攻击碰撞'],
+              targetSkillControls: [
+                expect.objectContaining({
+                  skillId: 10900102,
+                  status: 'found',
+                  relationToSourceSkill: 'child-skill-of-source',
+                  animationStateNames: ['Skill0_2'],
+                  hpTimelineCandidateCount: 4,
+                }),
+                expect.objectContaining({
+                  skillId: 80102,
+                  status: 'missing-skill-control-directory',
+                }),
+              ],
+            }),
             stateFindings: [
               expect.objectContaining({
                 stateName: 'Skill0_1',
@@ -919,6 +941,21 @@ describe('first vertical slice simulation', () => {
           stateTimingEvidence: expect.objectContaining({
             animationStateNames: ['Skill0_6'],
             eventBridgeSkillIds: [0, 80102, 10900102],
+            eventBridgeTargetSkillControlEvidence: expect.objectContaining({
+              targetAnimationStateNames: ['Skill0_2'],
+              targetHpTrackNames: ['普攻-攻击碰撞'],
+              targetSkillControls: [
+                expect.objectContaining({
+                  skillId: 10900102,
+                  status: 'found',
+                  animationStateNames: ['Skill0_2'],
+                }),
+                expect.objectContaining({
+                  skillId: 80102,
+                  status: 'missing-skill-control-directory',
+                }),
+              ],
+            }),
             stateFindings: [
               expect.objectContaining({
                 stateName: 'Skill0_1',

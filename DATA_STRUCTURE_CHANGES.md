@@ -3383,3 +3383,59 @@ Workbench 候选模式摘要会追加动作绑定提示：
 - 这些字段仍为证据索引，所有 `applied` 必须保持 `false`。
 - `Skill0_6` 有动画状态控制和 HP 命中窗口，但仍不能拆分重击、闪击、跃击。
 - `Skill0_1` 只有 HP 资源映射命中，尚未在同一 `skill_control_10900101` 中找到动画状态控制；下一步需要追相关 `skill_control_10900102.asset`、`skill_control_80102.asset`、Yoo index 和 EventBridge runtime。
+
+## 50. 阶段 5-8X-B：eventBridgeTargetSkillControlEvidence
+
+阶段 5-8X-B 在 `stateTimingEvidence` 下新增 EventBridge 目标技能 skill_control 摘要，用于确认跳转/桥接目标是否仍属于同一普攻链。
+
+### 50.1 stateTimingEvidence.eventBridgeTargetSkillControlEvidence
+
+字段示例：
+
+```javascript
+{
+  "eventBridgeTargetSkillControlEvidence": {
+    "status": "event-bridge-target-skill-controls-indexed",
+    "targetSkillIds": [80102, 10900102],
+    "foundTargetSkillControlCount": 1,
+    "missingTargetSkillControlCount": 1,
+    "childSkillTargetIds": [10900102],
+    "targetAnimationStateNames": ["Skill0_2"],
+    "targetHpTrackNames": ["普攻-攻击碰撞"],
+    "targetSkillControls": [
+      {
+        "skillId": 10900102,
+        "status": "found",
+        "skillTableStatus": "found",
+        "parentSkill": 10900101,
+        "relationToSourceSkill": "child-skill-of-source",
+        "animationStateNames": ["Skill0_2"],
+        "hpTimelineCandidateCount": 4,
+        "eventBridgeSkillIds": [0, 10900103]
+      },
+      {
+        "skillId": 80102,
+        "status": "missing-skill-control-directory",
+        "skillTableStatus": "missing-skill-table-row",
+        "relationToSourceSkill": "unknown-target-not-in-skill-table"
+      }
+    ],
+    "applied": false
+  }
+}
+```
+
+### 50.2 projection / Workbench
+
+- `formulaCandidatePatternSummary.skillControlBehaviorCorrelations[].stateTimingEvidence.eventBridgeTargetSkillControlEvidence` 保留压缩摘要。
+- Workbench 状态证据后追加目标技能摘要：
+
+```text
+目标技能 10900102->Skill0_2 / 80102缺失
+```
+
+### 50.3 当前边界
+
+- 目标技能摘要只证明 EventBridge 目标 skill_control 的存在、状态名和候选 HP 轨道，不直接证明最终动作绑定。
+- `10900102` 已确认是 `10900101` 的子技能，并继续桥接到 `10900103`；下一阶段应递归追完整普攻连段链。
+- `80102` 暂不在 `SkillList` 和当前 `skill.json`，必须先确认它是否是非技能表 ID、枚举值或其他资源 ID，不能直接按技能控制处理。

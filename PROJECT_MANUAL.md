@@ -2733,6 +2733,43 @@ Workbench 当前默认样本显示：
 - 阶段 5-8X-B 目标：追 `Skill0_1` 的动画状态来源、`10900102 / 80102` 等 EventBridge 目标技能含义，以及这些跳转/桥接节点与【普通攻击 / 重击 / 闪击 / 跃击】的真实对应关系。
 - 优先扫描相关 `skill_control_10900102.asset`、`skill_control_80102.asset`、Yoo index 和 IL2CPP `EventBridgeBehaviorData` / 技能状态切换调用。
 
+### 2026-07-08：阶段 5-8X-B EventBridge 目标技能追踪
+
+本轮完成：
+
+- `stateTimingEvidence` 新增 `eventBridgeTargetSkillControlEvidence`，用于索引 EventBridge 指向的目标技能。
+- 目标技能摘要接入 `formulaCandidatePatternSummary.skillControlBehaviorCorrelations[].stateTimingEvidence`。
+- Workbench 候选模式摘要新增目标技能提示。
+
+当前末音 `10900101` EventBridge 目标结论：
+
+- `10900102`：存在 `skill_control_10900102.asset`，`skill.json.parentSkill = 10900101`，关系为 `child-skill-of-source`。
+- `10900102` 的动画状态为 `Skill0_2`，分 3 段 `AnimationBehaviorData`：`0-17f`、`17-23f`、`23-318f`。
+- `10900102` 有 4 个 `普攻-攻击碰撞` HP timeline 候选，帧为 `6-7f`、`10-11f`、`14-15f`、`26-27f`。
+- `10900102` 的 EventBridge 继续指向 `10900103`，说明普攻链很可能通过多个子 skill_control 串联。
+- `80102`：在 `SkillList/skill_control_80102.asset` 和当前 `skill.json` 中均缺失，暂记为 `missing-skill-control-directory / missing-skill-table-row`，不能当作可用技能控制证据。
+
+Workbench 当前默认样本显示：
+
+```text
+候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 12f/13f/16f/19f · Skill0_6/Skill0_1 · 绑定候选 普攻->Skill0_1 12f/13f · 状态证据 Skill0_1 仅资源命中 / Skill0_6 动画+命中 · 目标技能 10900102->Skill0_2 / 80102缺失
+```
+
+验收结果：
+
+- `npm test -- --run src/__tests__/data/azprGenerated.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、53 条测试通过。
+
+当前边界：
+
+- `eventBridgeTargetSkillControlEvidence.applied` 必须保持 `false`。
+- `10900102 -> Skill0_2` 证明 EventBridge 目标链能追到普攻相关子 skill_control，但还不能反推 `Skill0_1` 的动画状态来源。
+- `80102` 缺失可能代表非技能表 ID、运行时桥接枚举或其他资源 ID，不能直接按技能处理。
+
+下一步：
+
+- 阶段 5-8X-C 目标：沿 `10900102 -> 10900103` 普攻连段链递归索引目标 skill_control，确认 `Skill0_1 / Skill0_2 / ...` 与普通攻击段数、连击桥接和动作形态的对应关系。
+- 若递归链能覆盖普攻多段，再把普通攻击候选绑定从单技能级证据升级为“普攻连段链候选”。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
