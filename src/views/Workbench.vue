@@ -143,6 +143,7 @@ import { simulateScenario } from '../simulation/engine/simulateScenario';
 
 const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
+const NEW_ACTION_INSERT_GAP_MS = 1000;
 const initialDraft = createDefaultWorkbenchDraftState();
 const selection = ref({ ...initialDraft.selection });
 const enemyConfig = ref({ ...initialDraft.enemyConfig });
@@ -366,90 +367,64 @@ function addAction() {
 }
 
 function addSkillAction(skillId) {
-  const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
   const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
   const skill = resolveContextSkill(actorCharacterId, skillId);
   const shouldInheritLevel =
     Number(selectedDraft.value.actorCharacterId) === actorCharacterId &&
     Number(selectedDraft.value.skillId) === Number(skill.id);
-  const nextAction = createWorkbenchActionDraft({
+  addInsertedAction({
     id: createNextActionId(),
     skillId: skill.id,
     actorCharacterId,
-    startMs: clampNumber((lastAction?.startMs ?? 0) + 2000, 0, project.value.time.durationMs),
     level: shouldInheritLevel ? selectedDraft.value.level : 1,
   });
-
-  actionDrafts.value = [...actionDrafts.value, nextAction];
-  selectedActionId.value = nextAction.id;
-  markDraftDirty();
 }
 
 function addWaitAction() {
-  const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
-  const nextAction = createWorkbenchActionDraft({
+  addInsertedAction({
     id: createNextActionId(),
     type: ACTION_TYPES.WAIT,
     skillId: selectedDraft.value.skillId,
     actorCharacterId: actionLibraryCharacterId.value,
-    startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
     durationMs: 1000,
     level: selectedDraft.value.level,
     note: '等待窗口',
   });
-
-  actionDrafts.value = [...actionDrafts.value, nextAction];
-  selectedActionId.value = nextAction.id;
-  markDraftDirty();
 }
 
 function addSwitchAction() {
-  const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
   const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
-  const nextAction = createWorkbenchActionDraft({
+  addInsertedAction({
     id: createNextActionId(),
     type: ACTION_TYPES.SWITCH,
     skillId: selectedDraft.value.skillId,
     actorCharacterId,
-    startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
     durationMs: 600,
     level: selectedDraft.value.level,
     targetCharacterId: resolveAlternateActorCharacterId(actorCharacterId),
     note: '切换至副角色',
   });
-
-  actionDrafts.value = [...actionDrafts.value, nextAction];
-  selectedActionId.value = nextAction.id;
-  markDraftDirty();
 }
 
 function addAnnotationAction() {
-  const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
-  const nextAction = createWorkbenchActionDraft({
+  addInsertedAction({
     id: createNextActionId(),
     type: ACTION_TYPES.ANNOTATION,
     skillId: selectedDraft.value.skillId,
     actorCharacterId: actionLibraryCharacterId.value,
-    startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
     durationMs: 600,
     level: selectedDraft.value.level,
     note: '备注',
   });
-
-  actionDrafts.value = [...actionDrafts.value, nextAction];
-  selectedActionId.value = nextAction.id;
-  markDraftDirty();
 }
 
 function addResourceAction() {
-  const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
   const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
-  const nextAction = createWorkbenchActionDraft({
+  addInsertedAction({
     id: createNextActionId(),
     type: ACTION_TYPES.RESOURCE,
     skillId: selectedDraft.value.skillId,
     actorCharacterId,
-    startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
     durationMs: 600,
     level: selectedDraft.value.level,
     resource: 'sp',
@@ -457,29 +432,19 @@ function addResourceAction() {
     reason: 'manual-axis-resource',
     note: '手动资源变化',
   });
-
-  actionDrafts.value = [...actionDrafts.value, nextAction];
-  selectedActionId.value = nextAction.id;
-  markDraftDirty();
 }
 
 function addEnemyEventAction() {
-  const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
-  const nextAction = createWorkbenchActionDraft({
+  addInsertedAction({
     id: createNextActionId(),
     type: ACTION_TYPES.ENEMY_EVENT,
     skillId: selectedDraft.value.skillId,
     actorCharacterId: actionLibraryCharacterId.value,
-    startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
     durationMs: 600,
     level: selectedDraft.value.level,
     eventType: 'phase',
     note: '敌人阶段标记',
   });
-
-  actionDrafts.value = [...actionDrafts.value, nextAction];
-  selectedActionId.value = nextAction.id;
-  markDraftDirty();
 }
 
 function copyAction(actionId) {
@@ -568,6 +533,37 @@ function createNextActionId() {
     return match ? Math.max(max, Number(match[1])) : max;
   }, 0);
   return `action-${String(maxIndex + 1).padStart(4, '0')}`;
+}
+
+function addInsertedAction(actionPatch) {
+  const insertIndex = resolveInsertIndex();
+  const nextAction = createWorkbenchActionDraft({
+    ...actionPatch,
+    startMs: resolveInsertStartMs(insertIndex),
+  });
+  actionDrafts.value = [
+    ...actionDrafts.value.slice(0, insertIndex),
+    nextAction,
+    ...actionDrafts.value.slice(insertIndex),
+  ];
+  selectedActionId.value = nextAction.id;
+  markDraftDirty();
+}
+
+function resolveInsertStartMs(insertIndex) {
+  const anchor =
+    actionDrafts.value[Math.max(0, insertIndex - 1)] ?? actionDrafts.value[actionDrafts.value.length - 1];
+  if (!anchor) {
+    return 0;
+  }
+  const anchorStartMs = Number(anchor.startMs) || 0;
+  const anchorDurationMs = Math.max(0, Number(anchor.durationMs) || 0);
+  return clampNumber(anchorStartMs + anchorDurationMs + NEW_ACTION_INSERT_GAP_MS, 0, project.value.time.durationMs);
+}
+
+function resolveInsertIndex() {
+  const selectedIndex = actionDrafts.value.findIndex((action) => action.id === selectedActionId.value);
+  return selectedIndex >= 0 ? selectedIndex + 1 : actionDrafts.value.length;
 }
 
 function canAssignActionLane(action) {

@@ -1119,6 +1119,38 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 让技能、等待、切人、资源、注释和敌人事件复用同一套插入时间 helper，继续保留边界 clamp 和最小间隔。
 - 为插入策略补充测试，覆盖多角色/系统动作混排下新增动作的时间、顺序和轨道归属。
 
+### 2026-07-07：阶段 4-17 统一新增动作插入位置策略雏形落地
+
+本轮完成：
+
+- `Workbench.vue` 新增 `NEW_ACTION_INSERT_GAP_MS`、`addInsertedAction()`、`resolveInsertStartMs()` 和 `resolveInsertIndex()`。
+- 新增技能、等待、切人、资源、注释和敌人事件动作统一通过 `addInsertedAction()` 写入 `actionDrafts[]`。
+- 新增动作现在插入到当前选中动作之后，不再全部追加到全局最后动作之后。
+- 新增动作开始时间改为“插入锚点 `startMs + durationMs + 1000ms`”，并继续按项目总时长做边界 clamp。
+- 动作库角色仍决定技能、切人和资源动作的 `actorCharacterId`；插入顺序则跟随当前选中动作，方便在已有排轴中间补动作。
+- 新增工作台测试，覆盖副角色技能动作作为全局尾部时，回选第一个动作新增系统注释会插入到第一个动作之后，草稿顺序为 `action-0001 -> action-0003 -> action-0002`，且系统轨和副角色轨归属保持正确。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、29 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、73 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- `git diff --check`：通过；仅有仓库既有 LF/CRLF 工作区提示。
+- `http://127.0.0.1:5175/#/workbench` 本地页面服务返回 200。
+
+当前结论：
+
+- 新增动作已经从“永远追加到最后”推进到“围绕当前选中动作局部插入”。
+- 六类新增动作共用同一套插入时间和插入顺序逻辑，后续优化不用逐个按钮重复改。
+- 当前插入策略仍只做最小间隔和边界 clamp，不会主动查找同轨空位，也不会自动避开已存在的同轨重叠。
+
+下一步：
+
+- 阶段 4-18 目标：建立插入位置冲突感知和同轨空位推荐雏形。
+- 基于当前新增动作的目标轨道，检查候选开始时间是否与同轨动作重叠。
+- 在不 hard fail 的前提下，优先把新增动作推到同轨下一个可用空位；如果仍有冲突，则复用时间轴诊断显示告警。
+- 为同轨冲突、跨轨同时间允许、系统轨事件插入三类场景补充测试。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
