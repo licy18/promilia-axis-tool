@@ -21,6 +21,10 @@
         tabindex="0"
         @click="$emit('select-action', action.id)"
         @keydown.enter="$emit('select-action', action.id)"
+        @keydown.left.prevent="nudgeAction($event, action, -1)"
+        @keydown.right.prevent="nudgeAction($event, action, 1)"
+        @keydown.delete.prevent="$emit('delete-action', action.id)"
+        @keydown.backspace.prevent="$emit('delete-action', action.id)"
         @pointerdown="beginDrag($event, action)"
       >
         <span>{{ action.name }}</span>
@@ -72,7 +76,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['select-action', 'update-action-time']);
+const emit = defineEmits(['select-action', 'delete-action', 'update-action-time']);
 const laneRef = ref(null);
 const dragState = ref(null);
 
@@ -134,6 +138,16 @@ function beginDrag(event, action) {
   window.addEventListener('pointermove', handleDragMove);
   window.addEventListener('pointerup', endDrag);
   window.addEventListener('pointercancel', endDrag);
+}
+
+function nudgeAction(event, action, direction) {
+  const stepMs = event.shiftKey ? props.snapMs * 4 : props.snapMs;
+  const maxStartMs = Math.max(0, props.durationMs - (action.durationMs ?? DEFAULT_ACTION_DURATION_MS));
+  emit('select-action', action.id);
+  emit('update-action-time', {
+    actionId: action.id,
+    startMs: clampNumber(action.startMs + direction * stepMs, 0, maxStartMs),
+  });
 }
 
 function handleDragMove(event) {

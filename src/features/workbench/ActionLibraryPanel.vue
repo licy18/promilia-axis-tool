@@ -23,19 +23,31 @@
         tabindex="0"
         @click="$emit('select-action', action.id)"
         @keydown.enter="$emit('select-action', action.id)"
+        @keydown.delete.prevent="$emit('delete-action', action.id)"
+        @keydown.backspace.prevent="$emit('delete-action', action.id)"
       >
         <div class="action-main">
           <span class="action-name">{{ action.name }}</span>
           <span class="action-time">{{ action.startMs }}ms</span>
         </div>
-        <button
-          class="delete-button"
-          data-testid="workbench-delete-action"
-          type="button"
-          @click.stop="$emit('delete-action', action.id)"
-        >
-          删除
-        </button>
+        <div class="action-tools">
+          <button
+            class="tool-button"
+            data-testid="workbench-copy-action"
+            type="button"
+            @click.stop="$emit('copy-action', action.id)"
+          >
+            复制
+          </button>
+          <button
+            class="tool-button danger"
+            data-testid="workbench-delete-action"
+            type="button"
+            @click.stop="$emit('delete-action', action.id)"
+          >
+            删除
+          </button>
+        </div>
         <dl>
           <div>
             <dt>技能</dt>
@@ -80,7 +92,7 @@ defineProps({
   },
 });
 
-defineEmits(['select-action', 'add-action', 'delete-action']);
+defineEmits(['select-action', 'add-action', 'copy-action', 'delete-action']);
 </script>
 
 <style scoped>
@@ -111,7 +123,7 @@ h2 {
 }
 
 .icon-button,
-.delete-button {
+.tool-button {
   border: 1px solid rgba(121, 199, 185, 0.32);
   border-radius: 4px;
   background: rgba(121, 199, 185, 0.1);
@@ -126,17 +138,25 @@ h2 {
   font-size: 12px;
 }
 
-.delete-button {
-  width: 100%;
+.action-tools {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
   margin-bottom: 10px;
+}
+
+.tool-button {
   padding: 5px 8px;
+}
+
+.tool-button.danger {
   border-color: rgba(245, 108, 108, 0.34);
   background: rgba(245, 108, 108, 0.1);
   color: #f8b6b6;
 }
 
 .icon-button:hover,
-.delete-button:hover {
+.tool-button:hover {
   filter: brightness(1.18);
 }
 

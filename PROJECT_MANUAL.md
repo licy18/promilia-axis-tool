@@ -55,7 +55,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；10 个测试文件、55 条测试通过。
+- `npm run test -- --run`：通过；10 个测试文件、57 条测试通过。
 
 ## 3. 目录速览
 
@@ -686,6 +686,45 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 支持动作复制、快捷删除和键盘微调开始时间。
 - 为保存按钮增加脏状态提示，区分“已保存”和“当前草稿有未保存改动”。
 - 继续保持新版工作台只通过 `actionDrafts -> Project -> simulation` 输出结果。
+
+### 2026-07-07：阶段 4-5 时间轴编辑效率落地
+
+本轮完成：
+
+- `ActionLibraryPanel` 增加动作复制按钮。
+- 动作库卡片支持 `Delete` / `Backspace` 快捷删除。
+- `TimelineGridPreview` 支持方向键微调动作开始时间：
+  - 左右方向键按 `500ms` 移动。
+  - `Shift + 左/右` 按 `2000ms` 移动。
+  - 时间仍按动作边界 clamp，不越出当前时间轴。
+- 时间轴动作块支持 `Delete` / `Backspace` 快捷删除。
+- `Workbench.vue` 增加草稿脏状态：新增、复制、删除、拖动、键盘微调、属性修改、角色/敌人/技能修改都会显示“有未保存改动”；保存后显示“已保存草稿”。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、13 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、57 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- 浏览器检查 `http://127.0.0.1:5175/#/workbench`：
+  - 复制默认动作后得到 `action-0002`，动作数和命中数变为 2，复制动作开始时间为 `1000ms`。
+  - 保存后状态为“已保存草稿”。
+  - 方向键右移后开始时间变为 `1500ms`，状态变为“有未保存改动”。
+  - `Shift + 左` 可大步回退到 `0ms`。
+  - `Delete` 删除复制动作后回到 1 个动作、1 次命中。
+  - 页面保留 `DAMAGE_PROJECTED`，应用控制台无 error。
+
+当前结论：
+
+- 新版工作台已经具备添加、复制、删除、拖动、键盘微调、属性编辑、保存和恢复的基础编辑闭环。
+- 当前仍只有技能动作一种动作类型，尚未支持等待、注释、切人、敌人事件或多轨。
+- 草稿脏状态是轻量提示，尚未做未保存离开拦截或自动保存。
+
+下一步：
+
+- 阶段 4-6 目标：扩展工作台动作类型和工具栏雏形。
+- 先支持等待动作和注释动作，进入同一 `actionDrafts -> Project -> simulation` 链路。
+- 让 ActionLibrary 从“技能动作列表”扩展为“动作工具箱”，为后续切人、敌人事件、资源事件留接口。
+- 继续保持非技能动作在 simulation 中有明确事件日志和不伪造伤害。
 
 ## 10. 文档维护规则
 

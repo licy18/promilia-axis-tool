@@ -12,10 +12,14 @@
 - `500ms` 网格吸附更新 `startMs`。
 - 拖动后通过 `Workbench.vue` 更新动作草稿，并重新运行 `compileProject()` / `simulateScenario()`。
 - workbench 草稿保存/刷新恢复/重置，草稿只记录新版 `selection`、`actionDrafts` 和 `selectedActionId`。
+- 动作复制。
+- `Delete` / `Backspace` 快捷删除。
+- 左右方向键按 `500ms` 微调，`Shift + 左/右` 按 `2000ms` 微调。
+- 草稿脏状态提示。
 
 下一步：
 
-- 动作复制、快捷删除、键盘微调。
+- 等待动作、注释动作和动作工具箱雏形。
 - 多轨道、缩放和持续时间调整。
 
 ## 1. 技能拖放系统

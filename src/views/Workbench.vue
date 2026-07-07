@@ -38,6 +38,7 @@
         :selected-action-id="selectedActionId"
         @select-action="selectedActionId = $event"
         @add-action="addAction"
+        @copy-action="copyAction"
         @delete-action="deleteAction"
       />
 
@@ -48,6 +49,7 @@
         :duration-ms="scenario.time.durationMs"
         :selected-action-id="selectedActionId"
         @select-action="selectedActionId = $event"
+        @delete-action="deleteAction"
         @update-action-time="updateActionTime"
       />
 
@@ -151,6 +153,8 @@ function updateSelection(patch) {
     actionDrafts.value = normalizeWorkbenchActionDrafts(actionDrafts.value, nextSelection.characterId);
     selectedActionId.value = actionDrafts.value[0].id;
   }
+
+  markDraftDirty();
 }
 
 function updateAction(patch) {
@@ -171,6 +175,7 @@ function updateAction(patch) {
       level: clampNumber(nextLevel, 1, skill.level.values.length),
     });
   });
+  markDraftDirty();
 }
 
 function updateActionTime({ actionId, startMs }) {
@@ -185,6 +190,7 @@ function updateActionTime({ actionId, startMs }) {
       startMs: clampNumber(startMs, 0, project.value.time.durationMs),
     });
   });
+  markDraftDirty();
 }
 
 function addAction() {
@@ -198,6 +204,28 @@ function addAction() {
 
   actionDrafts.value = [...actionDrafts.value, nextAction];
   selectedActionId.value = nextAction.id;
+  markDraftDirty();
+}
+
+function copyAction(actionId) {
+  const sourceIndex = actionDrafts.value.findIndex((action) => action.id === actionId);
+  const sourceAction = actionDrafts.value[sourceIndex];
+  if (!sourceAction) {
+    return;
+  }
+
+  const nextAction = createWorkbenchActionDraft({
+    ...sourceAction,
+    id: createNextActionId(),
+    startMs: clampNumber(sourceAction.startMs + 1000, 0, project.value.time.durationMs),
+  });
+  actionDrafts.value = [
+    ...actionDrafts.value.slice(0, sourceIndex + 1),
+    nextAction,
+    ...actionDrafts.value.slice(sourceIndex + 1),
+  ];
+  selectedActionId.value = nextAction.id;
+  markDraftDirty();
 }
 
 function deleteAction(actionId) {
@@ -206,12 +234,17 @@ function deleteAction(actionId) {
   }
 
   const index = actionDrafts.value.findIndex((action) => action.id === actionId);
+  if (index < 0) {
+    return;
+  }
+
   actionDrafts.value = actionDrafts.value.filter((action) => action.id !== actionId);
 
   if (selectedActionId.value === actionId) {
     const nextIndex = Math.min(index, actionDrafts.value.length - 1);
     selectedActionId.value = actionDrafts.value[nextIndex].id;
   }
+  markDraftDirty();
 }
 
 function saveDraft() {
@@ -233,6 +266,10 @@ function applyDraftState(draft) {
   selection.value = { ...draft.selection };
   actionDrafts.value = draft.actionDrafts.map((action) => createWorkbenchActionDraft(action));
   selectedActionId.value = draft.selectedActionId;
+}
+
+function markDraftDirty() {
+  draftStatus.value = '有未保存改动';
 }
 
 function findSkillById(skillId) {

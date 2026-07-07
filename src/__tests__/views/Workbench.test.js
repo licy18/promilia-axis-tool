@@ -100,6 +100,60 @@ describe('Workbench view', () => {
     expect(wrapper.find('[data-testid="scenario-hit-count"]').text()).toBe('1');
   });
 
+  it('copies the selected action and tracks unsaved draft changes', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe('未保存草稿');
+
+    await wrapper.find('[data-testid="workbench-copy-action"]').trigger('click');
+
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('2 action');
+    expect(wrapper.find('[data-testid="workbench-start-input"]').element.value).toBe('1000');
+    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe('有未保存改动');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe('已保存草稿');
+
+    await wrapper.find('[data-testid="workbench-level-input"]').setValue('2');
+    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe('有未保存改动');
+  });
+
+  it('nudges and deletes timeline actions with keyboard shortcuts', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper.find('[data-testid="workbench-copy-action"]').trigger('click');
+    let timelineActions = wrapper.findAll('[data-testid="workbench-timeline-action"]');
+
+    await timelineActions[1].trigger('keydown', { key: 'ArrowRight' });
+    expect(wrapper.find('[data-testid="workbench-start-input"]').element.value).toBe('1500');
+
+    timelineActions = wrapper.findAll('[data-testid="workbench-timeline-action"]');
+    await timelineActions[1].trigger('keydown', { key: 'ArrowLeft', shiftKey: true });
+    expect(wrapper.find('[data-testid="workbench-start-input"]').element.value).toBe('0');
+
+    timelineActions = wrapper.findAll('[data-testid="workbench-timeline-action"]');
+    await timelineActions[1].trigger('keydown', { key: 'Delete' });
+
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('1 action');
+    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe('有未保存改动');
+  });
+
   it('keeps generated action ids unique after deleting the first action', async () => {
     const wrapper = mount(Workbench, {
       global: {
