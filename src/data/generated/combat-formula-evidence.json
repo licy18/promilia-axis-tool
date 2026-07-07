@@ -1,0 +1,645 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-07T14:04:44.973Z",
+  "sourceKind": "azpr-combat-formula-evidence-index",
+  "source": {
+    "enemies": "enemies.json",
+    "skillLogicIndex": "skill-logic-index.json",
+    "enemyTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/enemy.json",
+    "unitPropertyTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/unit_property.json",
+    "templateValueTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/template_value.json",
+    "battleInfoTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/battle_info.json",
+    "skillsubEleValueTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/skillsub_ele_value.json",
+    "elementFormulaTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json"
+  },
+  "summary": {
+    "enemyCount": 208,
+    "enemiesWithProperty": 199,
+    "enemiesWithBaseDefense": 198,
+    "enemiesWithElementDefense": 198,
+    "enemiesWithWeakPointDamage": 198,
+    "missingPropertyEnemyIds": [
+      310007,
+      310081,
+      320001,
+      320002,
+      320003,
+      400063,
+      400075,
+      400081,
+      400082
+    ],
+    "allElementValueRows": 13118,
+    "currentSkillElementValueRows": 2808,
+    "allUniqueElementIds": 1800,
+    "currentSkillUniqueElementIds": 234,
+    "elementFormulaRows": 152,
+    "directAllElementFormulaIdMatches": 0,
+    "directCurrentElementFormulaIdMatches": 0,
+    "relationStatus": "no-direct-elementId-to-element_formula-id-match"
+  },
+  "enemyAttributeEvidence": {
+    "status": "enemy-property-attributes-found",
+    "sourceChain": "enemy.propertyId -> unit_property.baseAttributeId -> template_value.baseAttribute -> battle_info.attrVal",
+    "baseDefenseAttributes": [
+      {
+        "key": "DEF",
+        "id": 3,
+        "name": "物理防御",
+        "isRatio": false
+      },
+      {
+        "key": "MDEF",
+        "id": 4,
+        "name": "魔法防御",
+        "isRatio": false
+      }
+    ],
+    "elementDefenseAttributes": [
+      {
+        "key": "NORMAL_DEFENSE",
+        "id": 61,
+        "name": "无属性伤害减免",
+        "isRatio": true
+      },
+      {
+        "key": "FIRE_DEFENSE",
+        "id": 62,
+        "name": "火属性伤害减免",
+        "isRatio": true
+      },
+      {
+        "key": "WIND_DEFENSE",
+        "id": 63,
+        "name": "风属性伤害减免",
+        "isRatio": true
+      },
+      {
+        "key": "EARTH_DEFENSE",
+        "id": 64,
+        "name": "地属性伤害减免",
+        "isRatio": true
+      },
+      {
+        "key": "WOOD_DEFENSE",
+        "id": 65,
+        "name": "木属性伤害减免",
+        "isRatio": true
+      },
+      {
+        "key": "ICE_DEFENSE",
+        "id": 66,
+        "name": "冰属性伤害减免",
+        "isRatio": true
+      },
+      {
+        "key": "WATER_DEFENSE",
+        "id": 67,
+        "name": "水属性伤害减免",
+        "isRatio": true
+      },
+      {
+        "key": "ELEC_DEFENSE",
+        "id": 68,
+        "name": "雷属性伤害减免",
+        "isRatio": true
+      },
+      {
+        "key": "LIGHT_DEFENSE",
+        "id": 69,
+        "name": "光属性伤害减免",
+        "isRatio": true
+      },
+      {
+        "key": "DARK_DEFENSE",
+        "id": 70,
+        "name": "暗属性伤害减免",
+        "isRatio": true
+      }
+    ],
+    "weakPointDamageAttributes": [
+      {
+        "key": "WDM_PHYSICAL",
+        "id": 202,
+        "name": "弱点伤害倍率_物理",
+        "isRatio": true
+      },
+      {
+        "key": "WDM_MAGIC",
+        "id": 203,
+        "name": "弱点伤害倍率_魔法",
+        "isRatio": true
+      },
+      {
+        "key": "WDM_HEAL",
+        "id": 204,
+        "name": "弱点伤害倍率_治疗",
+        "isRatio": true
+      },
+      {
+        "key": "WDM_NORMAL",
+        "id": 205,
+        "name": "弱点伤害倍率_无属性",
+        "isRatio": true
+      },
+      {
+        "key": "WDM_FIRE",
+        "id": 206,
+        "name": "弱点伤害倍率_火",
+        "isRatio": true
+      },
+      {
+        "key": "WDM_WIND",
+        "id": 207,
+        "name": "弱点伤害倍率_风",
+        "isRatio": true
+      },
+      {
+        "key": "WDM_EARTH",
+        "id": 208,
+        "name": "弱点伤害倍率_地",
+        "isRatio": true
+      },
+      {
+        "key": "WDM_WOOD",
+        "id": 209,
+        "name": "弱点伤害倍率_木",
+        "isRatio": true
+      },
+      {
+        "key": "WDM_ICE",
+        "id": 210,
+        "name": "弱点伤害倍率_冰",
+        "isRatio": true
+      },
+      {
+        "key": "WDM_WATER",
+        "id": 211,
+        "name": "弱点伤害倍率_水",
+        "isRatio": true
+      },
+      {
+        "key": "WDM_ELEC",
+        "id": 212,
+        "name": "弱点伤害倍率_雷",
+        "isRatio": true
+      },
+      {
+        "key": "WDM_LIGHT",
+        "id": 213,
+        "name": "弱点伤害倍率_光",
+        "isRatio": true
+      },
+      {
+        "key": "WDM_DARK",
+        "id": 214,
+        "name": "弱点伤害倍率_暗",
+        "isRatio": true
+      },
+      {
+        "key": "WDM_MIN",
+        "id": 215,
+        "name": "弱点伤害_最小值",
+        "isRatio": true
+      },
+      {
+        "key": "WDM_MAX",
+        "id": 216,
+        "name": "弱点伤害_最大值",
+        "isRatio": true
+      }
+    ],
+    "sampleEnemy": {
+      "id": 300032,
+      "name": "迅狼",
+      "propertyId": 300032,
+      "baseAttributeId": 300032,
+      "sourceChain": {
+        "enemyTableField": "propertyId",
+        "unitPropertyField": "baseAttributeId",
+        "templateValueField": "baseAttribute"
+      },
+      "baseDefenseValues": {
+        "DEF": 9000,
+        "MDEF": 9000
+      },
+      "elementDefenseValues": {
+        "NORMAL_DEFENSE": 0,
+        "FIRE_DEFENSE": 0,
+        "WIND_DEFENSE": 0,
+        "EARTH_DEFENSE": 0,
+        "WOOD_DEFENSE": 0,
+        "ICE_DEFENSE": 0,
+        "WATER_DEFENSE": 0,
+        "ELEC_DEFENSE": 0,
+        "LIGHT_DEFENSE": 0,
+        "DARK_DEFENSE": 0
+      },
+      "weakPointDamageValues": {
+        "WDM_PHYSICAL": 10000,
+        "WDM_MAGIC": 10000,
+        "WDM_HEAL": 10000,
+        "WDM_NORMAL": 10000,
+        "WDM_FIRE": 10000,
+        "WDM_WIND": 10000,
+        "WDM_EARTH": 10000,
+        "WDM_WOOD": 10000,
+        "WDM_ICE": 10000,
+        "WDM_WATER": 10000,
+        "WDM_ELEC": 10000,
+        "WDM_LIGHT": 10000,
+        "WDM_DARK": 10000,
+        "WDM_MIN": -1,
+        "WDM_MAX": -1
+      }
+    }
+  },
+  "formulaEvidence": {
+    "status": "formula-rows-found-without-elementId-direct-link",
+    "attackFormulaRows": [
+      {
+        "id": 2,
+        "functionOutput": "(self.ATK[0]*A)/10000",
+        "variables": [
+          "A"
+        ]
+      },
+      {
+        "id": 9,
+        "functionOutput": "IF(target.SPEED[0]>A,target.SPEED[0]*self.ATK[0]*B/10000,0)",
+        "variables": [
+          "A",
+          "B"
+        ]
+      },
+      {
+        "id": 101,
+        "functionOutput": "(self.ATK[0]*A)/10000",
+        "variables": [
+          "A"
+        ]
+      },
+      {
+        "id": 114,
+        "functionOutput": "(target.ELEMENT_LAYERS[B]*C/10000+1)*self.ATK[0]*A/10000",
+        "variables": [
+          "B",
+          "C",
+          "A"
+        ]
+      },
+      {
+        "id": 231,
+        "functionOutput": "(self.ATK[0]*B)/10000+H",
+        "variables": [
+          "B",
+          "H"
+        ]
+      },
+      {
+        "id": 2001,
+        "functionOutput": "(self.ATK[4]*A)/10000",
+        "variables": [
+          "A"
+        ]
+      },
+      {
+        "id": 100701061,
+        "functionOutput": "(10000+A*self.ELEMENT_LAYERS[B])*self.ATK[0]*C/10000",
+        "variables": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "id": 10100301,
+        "functionOutput": "(self.ELEMENT_LAYERS[B]*C/10000+1)*self.ATK[0]*A/10000",
+        "variables": [
+          "B",
+          "C",
+          "A"
+        ]
+      },
+      {
+        "id": 107204,
+        "functionOutput": "self.CONSUME_PACK_ELEMENT_COUNT [M]*self.ATK[0]*A/10000",
+        "variables": [
+          "M",
+          "A"
+        ]
+      },
+      {
+        "id": 107210,
+        "functionOutput": "F_MIN(self.ATK[0]*B/10000,target.WEAKNESS_POINT_MAX[0]*A/10000)",
+        "variables": [
+          "B",
+          "A"
+        ]
+      }
+    ],
+    "magicAttackFormulaRows": [
+      {
+        "id": 102,
+        "functionOutput": "(self.MATK[0]*A)/10000",
+        "variables": [
+          "A"
+        ]
+      }
+    ],
+    "selfDefenseFormulaRows": [
+      {
+        "id": 22,
+        "functionOutput": "(self.DEF[4]*A)/10000",
+        "variables": [
+          "A"
+        ]
+      },
+      {
+        "id": 23,
+        "functionOutput": "(self.DEF[0]*A)/10000",
+        "variables": [
+          "A"
+        ]
+      }
+    ],
+    "targetReferenceFormulaRows": [
+      {
+        "id": 8,
+        "functionOutput": "IF(target.SPEED[0]>A,(target.SPEED[0]-A)*B,0)",
+        "variables": [
+          "A",
+          "A",
+          "B"
+        ]
+      },
+      {
+        "id": 9,
+        "functionOutput": "IF(target.SPEED[0]>A,target.SPEED[0]*self.ATK[0]*B/10000,0)",
+        "variables": [
+          "A",
+          "B"
+        ]
+      },
+      {
+        "id": 10,
+        "functionOutput": "(G-target.BLOCKTHROWS[0])/10000",
+        "variables": [
+          "G"
+        ]
+      },
+      {
+        "id": 107,
+        "functionOutput": "(target.CURRENT_HEALTH*A)/10000",
+        "variables": [
+          "A"
+        ]
+      },
+      {
+        "id": 108,
+        "functionOutput": "(target.MAXHP[0]*A)/10000",
+        "variables": [
+          "A"
+        ]
+      },
+      {
+        "id": 113,
+        "functionOutput": "(target.ELEMENT_LAYERS[H])*I/10000",
+        "variables": [
+          "H",
+          "I"
+        ]
+      },
+      {
+        "id": 114,
+        "functionOutput": "(target.ELEMENT_LAYERS[B]*C/10000+1)*self.ATK[0]*A/10000",
+        "variables": [
+          "B",
+          "C",
+          "A"
+        ]
+      },
+      {
+        "id": 115,
+        "functionOutput": "target.ELEMENT_LAYERS[H]*I",
+        "variables": [
+          "H",
+          "I"
+        ]
+      },
+      {
+        "id": 116,
+        "functionOutput": "target.ELEMENT_LAYERS[H]*source.ATK[0]*I/10000",
+        "variables": [
+          "H",
+          "I"
+        ]
+      },
+      {
+        "id": 118,
+        "functionOutput": "target.ELEMENT_LAYERS[H]*source.MAXHP[0]*I/10000",
+        "variables": [
+          "H",
+          "I"
+        ]
+      },
+      {
+        "id": 122,
+        "functionOutput": "target.ELEMENT_LAYERS[H]*target.MAXHP[0]*I/10000",
+        "variables": [
+          "H",
+          "I"
+        ]
+      },
+      {
+        "id": 202,
+        "functionOutput": "F/10000*(1-target.SOLDIER_SUFFERAOEDMGDOWN[0]/10000)",
+        "variables": [
+          "F"
+        ]
+      },
+      {
+        "id": 208,
+        "functionOutput": "IF(target.CURRENT_HEALTH/target.MAXHP[0]>Z/10000,1,0)",
+        "variables": [
+          "Z"
+        ]
+      },
+      {
+        "id": 209,
+        "functionOutput": "IF(target.CURRENT_HEALTH/target.MAXHP[0]<Z/10000,1,0)",
+        "variables": [
+          "Z"
+        ]
+      },
+      {
+        "id": 223,
+        "functionOutput": "target.WEAKNESS_POINT_MAX[0]*target.WP_BREAK_TOUGH[0]/10000*self.WP_BREAK_PERCENT[0]/10000",
+        "variables": []
+      },
+      {
+        "id": 224,
+        "functionOutput": "IF(target.CURRENT_HEALTH/target.MAXHP[0]=Z/10000,1,0)",
+        "variables": [
+          "Z"
+        ]
+      },
+      {
+        "id": 234,
+        "functionOutput": "(target.SHIELD[0]*B)/10000",
+        "variables": [
+          "B"
+        ]
+      },
+      {
+        "id": 235,
+        "functionOutput": "IF(target.SHIELD[0]>Z,1,0)",
+        "variables": [
+          "Z"
+        ]
+      },
+      {
+        "id": 1001,
+        "functionOutput": "IF(target.ELEMENT_LAYERS[F]>E,G,0)",
+        "variables": [
+          "F",
+          "E",
+          "G"
+        ]
+      },
+      {
+        "id": 1003,
+        "functionOutput": "(target.ATK[0]*A)/10000",
+        "variables": [
+          "A"
+        ]
+      },
+      {
+        "id": 1004,
+        "functionOutput": "target.ELEMENT_LAYERS[A]*B/10000",
+        "variables": [
+          "A",
+          "B"
+        ]
+      },
+      {
+        "id": 1005,
+        "functionOutput": "IF(target.IMPACT_RESISTANCE&F>0,G,0)",
+        "variables": [
+          "F",
+          "G"
+        ]
+      },
+      {
+        "id": 1006,
+        "functionOutput": "IF(target.ELEMENT_LAYERS[F]>I,G,0)",
+        "variables": [
+          "F",
+          "I",
+          "G"
+        ]
+      },
+      {
+        "id": 1011,
+        "functionOutput": "IF(target.CONFIG_ID=E,1,0)",
+        "variables": [
+          "E"
+        ]
+      }
+    ],
+    "directElementFormulaIdMatches": []
+  },
+  "elementValueEvidence": {
+    "status": "element-values-have-params-but-no-direct-formula-id-link",
+    "currentSkillElementValueRows": 2808,
+    "currentSkillUniqueElementIds": 234,
+    "sampleRows": [
+      {
+        "skillId": 10100301,
+        "level": 1,
+        "rowId": 6433,
+        "elementId": 101003087,
+        "valueParam": "1#1800|7#10000"
+      },
+      {
+        "skillId": 10100301,
+        "level": 2,
+        "rowId": 6434,
+        "elementId": 101003087,
+        "valueParam": "1#1980|7#10000"
+      },
+      {
+        "skillId": 10100301,
+        "level": 3,
+        "rowId": 6435,
+        "elementId": 101003087,
+        "valueParam": "1#2160|7#10000"
+      },
+      {
+        "skillId": 10100301,
+        "level": 4,
+        "rowId": 6436,
+        "elementId": 101003087,
+        "valueParam": "1#2340|7#10000"
+      },
+      {
+        "skillId": 10100301,
+        "level": 5,
+        "rowId": 6437,
+        "elementId": 101003087,
+        "valueParam": "1#2520|7#10000"
+      },
+      {
+        "skillId": 10100301,
+        "level": 6,
+        "rowId": 6438,
+        "elementId": 101003087,
+        "valueParam": "1#2700|7#10000"
+      },
+      {
+        "skillId": 10100301,
+        "level": 7,
+        "rowId": 6439,
+        "elementId": 101003087,
+        "valueParam": "1#2880|7#10000"
+      },
+      {
+        "skillId": 10100301,
+        "level": 8,
+        "rowId": 6440,
+        "elementId": 101003087,
+        "valueParam": "1#3060|7#10000"
+      },
+      {
+        "skillId": 10100301,
+        "level": 9,
+        "rowId": 6441,
+        "elementId": 101003087,
+        "valueParam": "1#3240|7#10000"
+      },
+      {
+        "skillId": 10100301,
+        "level": 10,
+        "rowId": 6442,
+        "elementId": 101003087,
+        "valueParam": "1#3420|7#10000"
+      },
+      {
+        "skillId": 10100301,
+        "level": 11,
+        "rowId": 6443,
+        "elementId": 101003087,
+        "valueParam": "1#3600|7#10000"
+      },
+      {
+        "skillId": 10100301,
+        "level": 12,
+        "rowId": 6444,
+        "elementId": 101003087,
+        "valueParam": "1#3780|7#10000"
+      }
+    ],
+    "directElementFormulaIdMatches": [],
+    "note": "skillsub_ele_value.elementId does not equal element_formula.id in the current local tables; asset/effect-node tracing is still required before applying formula rows."
+  }
+}

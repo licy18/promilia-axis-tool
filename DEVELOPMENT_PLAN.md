@@ -228,7 +228,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8A，修正技能动作形态模型，`普攻/重击/闪击/跃击` 不再误作同一技能多段；普攻段数从描述解析，当前只记录总倍率与段数。
 - 已完成：阶段 5-8B，动作库切换为 Endaxis 风格直接动作目录，只列 `普通攻击/重击/闪击/跃击/星鸣技/星结合击/星决技/星携技/极限反击/完美招架`，被动技能不列入动作库；时间轴颗粒度统一为 60fps 的 1 帧网格。
 - 已完成：阶段 5-8C，建立 `formulaBreakdown` 真实伤害公式分层雏形，当前攻击和动作形态倍率为已应用层，敌人防御/抗性/暴击/增伤为占位未应用层。
-- 下一步：阶段 5-8D，追踪敌人防御/抗性与 `elementId -> asset/公式/效果节点` 证据；找到可验证来源后再把对应占位层升级为真实应用层。
+- 已完成：阶段 5-8D，新增 `combat-formula-evidence.json`，确认敌人属性链和元素减免字段来源，同时记录 `skillsub_ele_value.elementId` 与 `element_formula.id` 当前无直接匹配。
+- 下一步：阶段 5-8E，继续追踪 skill asset / effect node，将 `skillsub_ele_value.elementId` 连接到具体公式或效果节点；或先把证据索引接入公式分层 source 说明。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

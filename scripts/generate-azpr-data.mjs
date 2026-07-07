@@ -232,6 +232,36 @@ const ROLE_PANEL_DESIRED_ATTR_NAMES = [
 ];
 
 const NORMALIZED_BASE_ATTRIBUTE_IDS = new Set([1, 3, 4, 5, 35, 229]);
+const ENEMY_BASE_DEFENSE_ATTRIBUTE_KEYS = Object.freeze(['DEF', 'MDEF']);
+const ELEMENT_DEFENSE_ATTRIBUTE_KEYS = Object.freeze([
+  'NORMAL_DEFENSE',
+  'FIRE_DEFENSE',
+  'WIND_DEFENSE',
+  'EARTH_DEFENSE',
+  'WOOD_DEFENSE',
+  'ICE_DEFENSE',
+  'WATER_DEFENSE',
+  'ELEC_DEFENSE',
+  'LIGHT_DEFENSE',
+  'DARK_DEFENSE',
+]);
+const WEAK_POINT_DAMAGE_ATTRIBUTE_KEYS = Object.freeze([
+  'WDM_PHYSICAL',
+  'WDM_MAGIC',
+  'WDM_HEAL',
+  'WDM_NORMAL',
+  'WDM_FIRE',
+  'WDM_WIND',
+  'WDM_EARTH',
+  'WDM_WOOD',
+  'WDM_ICE',
+  'WDM_WATER',
+  'WDM_ELEC',
+  'WDM_LIGHT',
+  'WDM_DARK',
+  'WDM_MIN',
+  'WDM_MAX',
+]);
 
 const requiredPaths = Object.values(sourceFiles);
 await assertReadablePaths(requiredPaths);
@@ -337,6 +367,13 @@ const valueParamIndex = buildValueParamIndex({
   skillLogicIndex,
   elementFormulaTable,
 });
+const combatFormulaEvidence = buildCombatFormulaEvidenceIndex({
+  enemies,
+  skillLogicIndex,
+  skillsubEleValueTable,
+  elementFormulaTable,
+  attributeInfoById,
+});
 const characterAttributePanels = buildCharacterAttributePanels({
   characters,
   attributeInfoById,
@@ -377,6 +414,7 @@ const validationReport = buildValidationReport({
   skillLevelCrossCheck,
   skillLogicIndex,
   valueParamIndex,
+  combatFormulaEvidence,
   characterAttributePanels,
 });
 
@@ -403,6 +441,7 @@ await Promise.all([
   writeJson('skill-level-crosscheck.json', skillLevelCrossCheck),
   writeJson('skill-logic-index.json', skillLogicIndex),
   writeJson('value-param-index.json', valueParamIndex),
+  writeJson('combat-formula-evidence.json', combatFormulaEvidence),
   writeJson('character-attribute-panels.json', characterAttributePanels),
   writeJson('first-vertical-slice.json', firstVerticalSlice),
   writeJson('workbench-seed.json', workbenchSeed),
@@ -470,6 +509,7 @@ function buildManifest(validationReport) {
       skillLevelCrossCheck: 'skill-level-crosscheck.json',
       skillLogicIndex: 'skill-logic-index.json',
       valueParamIndex: 'value-param-index.json',
+      combatFormulaEvidence: 'combat-formula-evidence.json',
       characterAttributePanels: 'character-attribute-panels.json',
       firstVerticalSlice: 'first-vertical-slice.json',
       workbenchSeed: 'workbench-seed.json',
@@ -1573,6 +1613,203 @@ function createValueParamDescriptor(stat, formulaVariables) {
   };
 }
 
+function buildCombatFormulaEvidenceIndex({
+  enemies,
+  skillLogicIndex,
+  skillsubEleValueTable,
+  elementFormulaTable,
+  attributeInfoById,
+}) {
+  const formulas = elementFormulaTable.rows ?? [];
+  const formulaIds = new Set(formulas.map(row => Number(row.id)));
+  const allElementValueRows = skillsubEleValueTable.rows ?? [];
+  const currentElementValueRows = collectSkillLogicElementValueRows(skillLogicIndex);
+  const allElementIds = uniqueNumbers(
+    allElementValueRows.map(row => Number(row.elementId))
+  );
+  const currentElementIds = uniqueNumbers(
+    currentElementValueRows.map(row => Number(row.elementId))
+  );
+  const directAllElementFormulaMatches = allElementIds.filter(id => formulaIds.has(id));
+  const directCurrentElementFormulaMatches = currentElementIds.filter(id => formulaIds.has(id));
+  const enemiesWithProperty = enemies.filter(enemy => enemy.property?.exists);
+  const enemiesWithBaseDefense = enemiesWithProperty.filter(enemy =>
+    ENEMY_BASE_DEFENSE_ATTRIBUTE_KEYS.every(key => hasAttributeKey(enemy.property, key))
+  );
+  const enemiesWithElementDefense = enemiesWithProperty.filter(enemy =>
+    ELEMENT_DEFENSE_ATTRIBUTE_KEYS.every(key => hasAttributeKey(enemy.property, key))
+  );
+  const enemiesWithWeakPointDamage = enemiesWithProperty.filter(enemy =>
+    WEAK_POINT_DAMAGE_ATTRIBUTE_KEYS.every(key => hasAttributeKey(enemy.property, key))
+  );
+  const sampleEnemy =
+    enemies.find(enemy => Number(enemy.id) === 300032) ??
+    enemiesWithBaseDefense[0] ??
+    enemies[0] ??
+    null;
+
+  return {
+    schemaVersion: 1,
+    generatedAt,
+    sourceKind: 'azpr-combat-formula-evidence-index',
+    source: {
+      enemies: 'enemies.json',
+      skillLogicIndex: 'skill-logic-index.json',
+      enemyTable: normalizePath(sourceFiles.enemies),
+      unitPropertyTable: normalizePath(sourceFiles.unitProperty),
+      templateValueTable: normalizePath(sourceFiles.templateValue),
+      battleInfoTable: normalizePath(sourceFiles.battleInfo),
+      skillsubEleValueTable: normalizePath(sourceFiles.skillsubEleValue),
+      elementFormulaTable: normalizePath(sourceFiles.elementFormula),
+    },
+    summary: {
+      enemyCount: enemies.length,
+      enemiesWithProperty: enemiesWithProperty.length,
+      enemiesWithBaseDefense: enemiesWithBaseDefense.length,
+      enemiesWithElementDefense: enemiesWithElementDefense.length,
+      enemiesWithWeakPointDamage: enemiesWithWeakPointDamage.length,
+      missingPropertyEnemyIds: enemies
+        .filter(enemy => !enemy.property?.exists)
+        .map(enemy => enemy.id),
+      allElementValueRows: allElementValueRows.length,
+      currentSkillElementValueRows: currentElementValueRows.length,
+      allUniqueElementIds: allElementIds.length,
+      currentSkillUniqueElementIds: currentElementIds.length,
+      elementFormulaRows: formulas.length,
+      directAllElementFormulaIdMatches: directAllElementFormulaMatches.length,
+      directCurrentElementFormulaIdMatches: directCurrentElementFormulaMatches.length,
+      relationStatus:
+        directAllElementFormulaMatches.length > 0
+          ? 'direct-elementId-formulaId-match-found'
+          : 'no-direct-elementId-to-element_formula-id-match',
+    },
+    enemyAttributeEvidence: {
+      status:
+        enemiesWithBaseDefense.length > 0 && enemiesWithElementDefense.length > 0
+          ? 'enemy-property-attributes-found'
+          : 'enemy-property-attributes-incomplete',
+      sourceChain:
+        'enemy.propertyId -> unit_property.baseAttributeId -> template_value.baseAttribute -> battle_info.attrVal',
+      baseDefenseAttributes: mapAttributeEvidence(
+        ENEMY_BASE_DEFENSE_ATTRIBUTE_KEYS,
+        attributeInfoById
+      ),
+      elementDefenseAttributes: mapAttributeEvidence(
+        ELEMENT_DEFENSE_ATTRIBUTE_KEYS,
+        attributeInfoById
+      ),
+      weakPointDamageAttributes: mapAttributeEvidence(
+        WEAK_POINT_DAMAGE_ATTRIBUTE_KEYS,
+        attributeInfoById
+      ),
+      sampleEnemy: sampleEnemy ? createCombatFormulaSampleEnemy(sampleEnemy) : null,
+    },
+    formulaEvidence: {
+      status: 'formula-rows-found-without-elementId-direct-link',
+      attackFormulaRows: mapFormulaRows(
+        formulas.filter(row => /\bself\.ATK\b/.test(String(row.functionOutput)))
+      ),
+      magicAttackFormulaRows: mapFormulaRows(
+        formulas.filter(row => /\bself\.MATK\b/.test(String(row.functionOutput)))
+      ),
+      selfDefenseFormulaRows: mapFormulaRows(
+        formulas.filter(row => /\bself\.DEF\b/.test(String(row.functionOutput)))
+      ),
+      targetReferenceFormulaRows: mapFormulaRows(
+        formulas.filter(row => /\btarget\./.test(String(row.functionOutput))).slice(0, 24)
+      ),
+      directElementFormulaIdMatches: directCurrentElementFormulaMatches,
+    },
+    elementValueEvidence: {
+      status:
+        directCurrentElementFormulaMatches.length > 0
+          ? 'direct-element-formula-match-found'
+          : 'element-values-have-params-but-no-direct-formula-id-link',
+      currentSkillElementValueRows: currentElementValueRows.length,
+      currentSkillUniqueElementIds: currentElementIds.length,
+      sampleRows: currentElementValueRows.slice(0, 12),
+      directElementFormulaIdMatches: directCurrentElementFormulaMatches,
+      note:
+        'skillsub_ele_value.elementId does not equal element_formula.id in the current local tables; asset/effect-node tracing is still required before applying formula rows.',
+    },
+  };
+}
+
+function collectSkillLogicElementValueRows(skillLogicIndex) {
+  return (skillLogicIndex.items ?? []).flatMap(item =>
+    (item.levels ?? []).flatMap(level =>
+      (level.elementValues ?? []).map(elementValue => ({
+        skillId: Number(item.skillId),
+        level: Number(level.level),
+        rowId: Number(elementValue.rowId),
+        elementId: Number(elementValue.elementId),
+        valueParam: elementValue.valueParam,
+      }))
+    )
+  );
+}
+
+function hasAttributeKey(property, key) {
+  return Boolean((property?.baseAttributes ?? []).some(attribute => attribute.key === key));
+}
+
+function getAttributeByKey(property, key) {
+  return (property?.baseAttributes ?? []).find(attribute => attribute.key === key) ?? null;
+}
+
+function mapAttributeEvidence(keys, attributeInfoById) {
+  const infoByKey = new Map([...attributeInfoById.values()].map(info => [info.key, info]));
+  return keys.map(key => {
+    const info = infoByKey.get(key);
+    return {
+      key,
+      id: info?.id ?? null,
+      name: info?.name ?? key,
+      isRatio: Boolean(info?.isRatio),
+    };
+  });
+}
+
+function createCombatFormulaSampleEnemy(enemy) {
+  return {
+    id: enemy.id,
+    name: enemy.name,
+    propertyId: enemy.property?.id ?? null,
+    baseAttributeId: enemy.property?.baseAttributeId ?? null,
+    sourceChain: {
+      enemyTableField: 'propertyId',
+      unitPropertyField: 'baseAttributeId',
+      templateValueField: 'baseAttribute',
+    },
+    baseDefenseValues: Object.fromEntries(
+      ENEMY_BASE_DEFENSE_ATTRIBUTE_KEYS.map(key => [
+        key,
+        getAttributeByKey(enemy.property, key)?.value ?? null,
+      ])
+    ),
+    elementDefenseValues: Object.fromEntries(
+      ELEMENT_DEFENSE_ATTRIBUTE_KEYS.map(key => [
+        key,
+        getAttributeByKey(enemy.property, key)?.value ?? null,
+      ])
+    ),
+    weakPointDamageValues: Object.fromEntries(
+      WEAK_POINT_DAMAGE_ATTRIBUTE_KEYS.map(key => [
+        key,
+        getAttributeByKey(enemy.property, key)?.value ?? null,
+      ])
+    ),
+  };
+}
+
+function mapFormulaRows(rows) {
+  return rows.map(row => ({
+    id: Number(row.id),
+    functionOutput: row.functionOutput,
+    variables: extractFormulaVariables(row.functionOutput),
+  }));
+}
+
 function extractFormulaVariables(functionOutput) {
   if (!functionOutput) {
     return [];
@@ -2266,6 +2503,8 @@ function buildValidationReport(data) {
     (skillLevelCrossCheckSummary.mismatchedLevels ?? 0);
   const skillLogicSummary = data.skillLogicIndex?.summary ?? {};
   const valueParamSummary = data.valueParamIndex?.summary ?? {};
+  const combatFormulaEvidenceSummary =
+    data.combatFormulaEvidence?.summary ?? {};
   const characterAttributePanelSummary =
     data.characterAttributePanels?.summary ?? {};
   const missingCharacterAttributePanelCount = Math.max(
@@ -2376,6 +2615,17 @@ function buildValidationReport(data) {
         'valueParam 参数 ID 已建立公式槽位统计，但战斗语义仍未确认，不能直接写入伤害公式。',
     },
     {
+      code: 'combat-formula-evidence-direct-link-missing',
+      severity:
+        (combatFormulaEvidenceSummary.directCurrentElementFormulaIdMatches ?? 0) > 0
+          ? 'ok'
+          : 'info',
+      count: combatFormulaEvidenceSummary.directCurrentElementFormulaIdMatches ?? 0,
+      summary: combatFormulaEvidenceSummary,
+      message:
+        '已建立敌人属性与公式证据索引，但当前 skillsub_ele_value.elementId 未直接匹配 element_formula.id，仍需 asset/效果节点追踪。',
+    },
+    {
       code: 'character-attribute-panel-missing',
       severity: missingCharacterAttributePanelCount > 0 ? 'warning' : 'ok',
       count: missingCharacterAttributePanelCount,
@@ -2415,6 +2665,8 @@ function buildValidationReport(data) {
       skillLevelCrossCheck: data.skillLevelCrossCheck?.count ?? 0,
       skillLogicIndex: data.skillLogicIndex?.count ?? 0,
       valueParamIndex: data.valueParamIndex?.summary?.parameterIds ?? 0,
+      combatFormulaEvidence:
+        data.combatFormulaEvidence?.summary?.elementFormulaRows ?? 0,
       characterAttributePanels:
         data.characterAttributePanels?.summary?.characters ?? 0,
     },

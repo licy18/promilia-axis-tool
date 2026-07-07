@@ -1,6 +1,7 @@
 import attributes from './generated/attributes.json';
 import characterAttributePanels from './generated/character-attribute-panels.json';
 import characters from './generated/characters.json';
+import combatFormulaEvidence from './generated/combat-formula-evidence.json';
 import elements from './generated/elements.json';
 import enemies from './generated/enemies.json';
 import equipment from './generated/equipment.json';
@@ -30,6 +31,7 @@ export const azprGeneratedData = Object.freeze({
   manifest,
   validationReport,
   mediaIndex,
+  combatFormulaEvidence,
   skillLogicIndex,
   skillLevelCrossCheck,
   valueParamIndex,
@@ -54,6 +56,10 @@ export function getAzprSkillLogicIndex() {
 
 export function getAzprValueParamIndex() {
   return valueParamIndex;
+}
+
+export function getAzprCombatFormulaEvidence() {
+  return combatFormulaEvidence;
 }
 
 export function getAzprCharacterAttributePanels() {

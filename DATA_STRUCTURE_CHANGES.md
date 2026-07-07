@@ -1480,3 +1480,113 @@ Workbench 的新增动作、拖动吸附、持续时间编辑和批次快捷偏�
 - `enemyDefense.defenseMultiplier` 会保留 Workbench 敌人配置，但目前仍 `applied: false`。
 - `enemyResistance`、`critical`、`damageBonus` 均是明确占位层，不得把它们解释为真实公式已完成。
 - 下一步需要用本地数据证据确认敌人防御/抗性和 `elementId` 公式节点后，才能升级对应层的 `applied` 状态。
+
+## 29. 2026-07-07 战斗公式证据索引
+
+阶段 5-8D 新增 `src/data/generated/combat-formula-evidence.json`，用于把可确认的数据来源和仍缺失的公式链路分开记录。
+
+### 29.1 新增生成文件
+
+`manifest.json.files` 新增：
+
+```javascript
+{
+  "combatFormulaEvidence": "combat-formula-evidence.json"
+}
+```
+
+`validation-report.json.counts` 新增：
+
+```javascript
+{
+  "combatFormulaEvidence": 152
+}
+```
+
+`azprGenerated.js` 新增访问入口：
+
+```javascript
+getAzprCombatFormulaEvidence()
+```
+
+### 29.2 evidence summary
+
+当前摘要：
+
+```javascript
+{
+  "enemyCount": 208,
+  "enemiesWithProperty": 199,
+  "enemiesWithBaseDefense": 198,
+  "enemiesWithElementDefense": 198,
+  "enemiesWithWeakPointDamage": 198,
+  "allElementValueRows": 13118,
+  "currentSkillElementValueRows": 2808,
+  "allUniqueElementIds": 1800,
+  "currentSkillUniqueElementIds": 234,
+  "elementFormulaRows": 152,
+  "directAllElementFormulaIdMatches": 0,
+  "directCurrentElementFormulaIdMatches": 0,
+  "relationStatus": "no-direct-elementId-to-element_formula-id-match"
+}
+```
+
+### 29.3 敌人属性证据链
+
+敌人属性来源链：
+
+```text
+enemy.propertyId -> unit_property.baseAttributeId -> template_value.baseAttribute -> battle_info.attrVal
+```
+
+样例 `300032 迅狼`：
+
+```javascript
+{
+  "baseDefenseValues": {
+    "DEF": 9000,
+    "MDEF": 9000
+  },
+  "elementDefenseValues": {
+    "FIRE_DEFENSE": 0,
+    "WIND_DEFENSE": 0,
+    "WATER_DEFENSE": 0
+  },
+  "weakPointDamageValues": {
+    "WDM_FIRE": 10000,
+    "WDM_WATER": 10000,
+    "WDM_DARK": 10000
+  }
+}
+```
+
+这证明敌人防御、元素减免和弱点倍率字段有本地表来源，但不证明最终伤害公式。
+
+### 29.4 公式证据边界
+
+`element_formula.json` 中已发现攻击/防御相关公式行，例如：
+
+```javascript
+[
+  { "id": 2, "functionOutput": "(self.ATK[0]*A)/10000" },
+  { "id": 23, "functionOutput": "(self.DEF[0]*A)/10000" },
+  { "id": 101, "functionOutput": "(self.ATK[0]*A)/10000" }
+]
+```
+
+但当前全量 `skillsub_ele_value.elementId` 与 `element_formula.id` 直接等值匹配数为 `0`，因此不能直接把这些公式行应用到技能伤害。
+
+`validation-report.json` 新增 info 级诊断：
+
+```javascript
+{
+  "code": "combat-formula-evidence-direct-link-missing",
+  "severity": "info"
+}
+```
+
+### 29.5 当前边界
+
+- `combat-formula-evidence.json` 是证据索引，不是公式执行层。
+- 当前 `formulaBreakdown.layers.enemyDefense` 和 `enemyResistance` 仍必须保持 `applied: false`。
+- 下一步需要继续追踪 skill asset / effect node，把 `skillsub_ele_value.elementId` 连接到具体公式或效果节点。

@@ -1999,6 +1999,37 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 优先从 `C:\PC2\Codex\AzPr` 的 NewTable、battle/skill asset、Lua 或导出索引中寻找敌人防御、抗性、元素伤害公式和 `elementId` 关联。
 - 若找到可验证公式来源，将 `enemyDefense` 或 `enemyResistance` 从占位层升级为可应用层；若找不到，则产出诊断索引和缺口清单。
 
+### 2026-07-07：阶段 5-8D 战斗公式证据索引落地
+
+本轮完成：
+
+- `scripts/generate-azpr-data.mjs` 新增 `combat-formula-evidence.json` 生成。
+- `combat-formula-evidence.json` 追踪敌人属性链：`enemy.propertyId -> unit_property.baseAttributeId -> template_value.baseAttribute -> battle_info.attrVal`。
+- 当前 208 个可用敌人中，199 个有 `property`，198 个有 `DEF/MDEF`、元素减免属性和弱点伤害倍率属性。
+- 样例敌人 `300032 迅狼` 的 `DEF = 9000`、`MDEF = 9000`、各元素减免为 `0`、各元素弱点伤害倍率多为 `10000`。
+- 证据索引同时记录 `element_formula.json` 中的攻击/魔法攻击/防御/target 引用公式行，例如 `2: (self.ATK[0]*A)/10000`、`23: (self.DEF[0]*A)/10000`。
+- 证据索引确认当前本地表中 `skillsub_ele_value.elementId` 与 `element_formula.id` 没有直接等值匹配：全量 13118 行、1800 个 elementId、152 条 formula 行，直接匹配数为 0。
+- `validation-report.json` 新增 `combat-formula-evidence-direct-link-missing` info 级诊断，明确还需要 asset/效果节点追踪。
+- `src/data/azprGenerated.js` 新增 `getAzprCombatFormulaEvidence()`，数据测试覆盖 manifest、validation、敌人属性链和公式 direct-link 缺口。
+
+验收结果：
+
+- `npm run data:generate`：通过，生成 `combatFormulaEvidence = 152`。
+- `npm run test -- --run src/__tests__/data/azprGenerated.test.js`：通过，1 个测试文件、8 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、103 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1351 KB。
+
+当前边界：
+
+- 已确认敌人属性和元素减免字段来源，但尚未确认最终防御/抗性伤害公式。
+- 已确认 `element_formula` 有可疑公式行，但尚未确认 `elementId -> formulaId` 或 `elementId -> effect node -> formulaId` 的真实关联。
+- 本阶段仍不把 `enemyDefense` / `enemyResistance` 从 `applied: false` 升级为已应用层。
+
+下一步：
+
+- 阶段 5-8E 目标：继续追踪 skill asset / effect node，将 `skillsub_ele_value.elementId` 连接到具体公式或效果节点。
+- 若仍找不到直接链路，先把 `combat-formula-evidence` 接入 `formulaBreakdown.layers.enemyDefense.source` / `enemyResistance.source`，让 UI 能显示“有属性来源、公式未确认”的更细状态。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

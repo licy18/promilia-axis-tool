@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-07T12:42:08.428Z",
+  "generatedAt": "2026-07-07T14:04:44.973Z",
   "sourceRoot": "C:/PC2/Codex/AzPr",
   "counts": {
     "attributes": 184,
@@ -15,6 +15,7 @@
     "skillLevelCrossCheck": 120,
     "skillLogicIndex": 120,
     "valueParamIndex": 2,
+    "combatFormulaEvidence": 152,
     "characterAttributePanels": 20
   },
   "warnings": [
@@ -361,6 +362,38 @@
         ]
       },
       "message": "valueParam 参数 ID 已建立公式槽位统计，但战斗语义仍未确认，不能直接写入伤害公式。"
+    },
+    {
+      "code": "combat-formula-evidence-direct-link-missing",
+      "severity": "info",
+      "count": 0,
+      "summary": {
+        "enemyCount": 208,
+        "enemiesWithProperty": 199,
+        "enemiesWithBaseDefense": 198,
+        "enemiesWithElementDefense": 198,
+        "enemiesWithWeakPointDamage": 198,
+        "missingPropertyEnemyIds": [
+          310007,
+          310081,
+          320001,
+          320002,
+          320003,
+          400063,
+          400075,
+          400081,
+          400082
+        ],
+        "allElementValueRows": 13118,
+        "currentSkillElementValueRows": 2808,
+        "allUniqueElementIds": 1800,
+        "currentSkillUniqueElementIds": 234,
+        "elementFormulaRows": 152,
+        "directAllElementFormulaIdMatches": 0,
+        "directCurrentElementFormulaIdMatches": 0,
+        "relationStatus": "no-direct-elementId-to-element_formula-id-match"
+      },
+      "message": "已建立敌人属性与公式证据索引，但当前 skillsub_ele_value.elementId 未直接匹配 element_formula.id，仍需 asset/效果节点追踪。"
     },
     {
       "code": "character-attribute-panel-missing",

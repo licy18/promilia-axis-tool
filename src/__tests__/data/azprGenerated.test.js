@@ -3,6 +3,7 @@ import {
   getAzprCharacterAttributePanelByCharacterId,
   getAzprCharacterAttributePanels,
   getAzprCharacters,
+  getAzprCombatFormulaEvidence,
   getAzprElements,
   getAzprEnemies,
   getAzprEquipment,
@@ -59,6 +60,9 @@ describe('generated AzPr data', () => {
     const valueParamInfo = report.warnings.find(
       warning => warning.code === 'skill-value-param-semantic-unresolved'
     );
+    const combatFormulaInfo = report.warnings.find(
+      warning => warning.code === 'combat-formula-evidence-direct-link-missing'
+    );
     const placeholderWarning = report.warnings.find(
       warning => warning.code === 'non-azpr-placeholder-character'
     );
@@ -67,6 +71,7 @@ describe('generated AzPr data', () => {
     expect(report.counts.skillLevelCrossCheck).toBe(120);
     expect(report.counts.skillLogicIndex).toBe(120);
     expect(report.counts.valueParamIndex).toBe(2);
+    expect(report.counts.combatFormulaEvidence).toBe(152);
     expect(report.counts.characterAttributePanels).toBe(20);
     expect(timingWarning.count).toBe(report.counts.skills);
     expect(crossCheckWarning).toMatchObject({
@@ -108,6 +113,21 @@ describe('generated AzPr data', () => {
         observedSkills: 75,
         unresolvedParameterIds: [1, 7],
         constantParameterIds: [7],
+      },
+    });
+    expect(combatFormulaInfo).toMatchObject({
+      severity: 'info',
+      count: 0,
+      summary: {
+        enemyCount: 208,
+        enemiesWithProperty: 199,
+        enemiesWithBaseDefense: 198,
+        enemiesWithElementDefense: 198,
+        enemiesWithWeakPointDamage: 198,
+        elementFormulaRows: 152,
+        directAllElementFormulaIdMatches: 0,
+        directCurrentElementFormulaIdMatches: 0,
+        relationStatus: 'no-direct-elementId-to-element_formula-id-match',
       },
     });
     expect(
@@ -209,6 +229,77 @@ describe('generated AzPr data', () => {
       minValue: 10000,
       maxValue: 10000,
       sampleValues: [10000],
+    });
+  });
+
+  it('indexes combat formula evidence without applying unconfirmed layers', () => {
+    const manifest = getAzprGeneratedManifest();
+    const evidence = getAzprCombatFormulaEvidence();
+
+    expect(manifest.files.combatFormulaEvidence).toBe(
+      'combat-formula-evidence.json'
+    );
+    expect(evidence.summary).toMatchObject({
+      enemyCount: 208,
+      enemiesWithProperty: 199,
+      enemiesWithBaseDefense: 198,
+      enemiesWithElementDefense: 198,
+      enemiesWithWeakPointDamage: 198,
+      allElementValueRows: 13118,
+      currentSkillElementValueRows: 2808,
+      allUniqueElementIds: 1800,
+      currentSkillUniqueElementIds: 234,
+      elementFormulaRows: 152,
+      directAllElementFormulaIdMatches: 0,
+      directCurrentElementFormulaIdMatches: 0,
+      relationStatus: 'no-direct-elementId-to-element_formula-id-match',
+    });
+    expect(evidence.enemyAttributeEvidence).toMatchObject({
+      status: 'enemy-property-attributes-found',
+      sampleEnemy: {
+        id: 300032,
+        name: '迅狼',
+        propertyId: 300032,
+        baseAttributeId: 300032,
+        baseDefenseValues: {
+          DEF: 9000,
+          MDEF: 9000,
+        },
+        elementDefenseValues: {
+          FIRE_DEFENSE: 0,
+          WIND_DEFENSE: 0,
+          WATER_DEFENSE: 0,
+        },
+        weakPointDamageValues: {
+          WDM_FIRE: 10000,
+          WDM_WATER: 10000,
+          WDM_DARK: 10000,
+        },
+      },
+    });
+    expect(evidence.formulaEvidence.attackFormulaRows).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 2,
+          functionOutput: '(self.ATK[0]*A)/10000',
+        }),
+        expect.objectContaining({
+          id: 101,
+          functionOutput: '(self.ATK[0]*A)/10000',
+        }),
+      ])
+    );
+    expect(evidence.formulaEvidence.selfDefenseFormulaRows).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 23,
+          functionOutput: '(self.DEF[0]*A)/10000',
+        }),
+      ])
+    );
+    expect(evidence.elementValueEvidence).toMatchObject({
+      status: 'element-values-have-params-but-no-direct-formula-id-link',
+      directElementFormulaIdMatches: [],
     });
   });
 
