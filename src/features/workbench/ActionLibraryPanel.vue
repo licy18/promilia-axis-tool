@@ -12,6 +12,9 @@
       <button class="icon-button" data-testid="workbench-add-wait-action" type="button" @click="$emit('add-wait-action')">
         + 等待
       </button>
+      <button class="icon-button" data-testid="workbench-add-switch-action" type="button" @click="$emit('add-switch-action')">
+        + 切人
+      </button>
       <button
         class="icon-button"
         data-testid="workbench-add-annotation-action"
@@ -129,6 +132,7 @@ defineEmits([
   'select-action',
   'add-action',
   'add-wait-action',
+  'add-switch-action',
   'add-annotation-action',
   'add-resource-action',
   'add-enemy-event-action',
@@ -149,6 +153,9 @@ function actionTypeLabel(type) {
   if (type === 'enemyEvent') {
     return '敌人';
   }
+  if (type === 'switch') {
+    return '切人';
+  }
   return '技能';
 }
 
@@ -162,6 +169,9 @@ function actionDetailLabel(action) {
   if (action.type === 'enemyEvent') {
     return '事件';
   }
+  if (action.type === 'switch') {
+    return '目标';
+  }
   return '时长';
 }
 
@@ -174,6 +184,9 @@ function actionDetailValue(action) {
   }
   if (action.type === 'enemyEvent') {
     return action.eventType ?? 'phase';
+  }
+  if (action.type === 'switch') {
+    return action.targetActor?.name ?? action.targetCharacterId ?? '-';
   }
   return `${action.durationMs ?? 0}ms`;
 }

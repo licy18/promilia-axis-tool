@@ -41,6 +41,9 @@ function formatPayload(event) {
   if (event.type === 'WAIT') {
     return `${event.payload.durationMs}ms / ${event.payload.note}`;
   }
+  if (event.type === 'SWITCH') {
+    return `${event.payload.fromActorName ?? '前台'} -> ${event.payload.targetActorName ?? event.payload.targetActorId}`;
+  }
   if (event.type === 'ANNOTATION') {
     return event.payload.note;
   }
@@ -144,6 +147,11 @@ li {
 .type.enemy_event {
   background: rgba(245, 108, 108, 0.12);
   color: #f8b6b6;
+}
+
+.type.switch {
+  background: rgba(103, 194, 58, 0.12);
+  color: #9bd982;
 }
 
 .type.wait,

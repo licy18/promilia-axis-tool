@@ -41,6 +41,7 @@
         @add-annotation-action="addAnnotationAction"
         @add-enemy-event-action="addEnemyEventAction"
         @add-resource-action="addResourceAction"
+        @add-switch-action="addSwitchAction"
         @add-wait-action="addWaitAction"
         @copy-action="copyAction"
         @delete-action="deleteAction"
@@ -164,15 +165,31 @@ onMounted(() => {
 });
 
 function updateSelection(patch) {
-  const characterChanged = patch.characterId != null && Number(patch.characterId) !== selection.value.characterId;
+  const characterChanged =
+    patch.characterId != null && Number(patch.characterId) !== Number(selection.value.characterId);
+  const secondaryCharacterChanged =
+    patch.secondaryCharacterId != null &&
+    Number(patch.secondaryCharacterId) !== Number(selection.value.secondaryCharacterId);
   const nextSelection = normalizeWorkbenchSelection({
     ...selection.value,
     ...patch,
   });
   selection.value = nextSelection;
 
+  if (characterChanged || secondaryCharacterChanged) {
+    const nextActionDrafts = actionDrafts.value.map((action) => {
+      if (secondaryCharacterChanged && action.type === ACTION_TYPES.SWITCH) {
+        return {
+          ...action,
+          targetCharacterId: nextSelection.secondaryCharacterId,
+        };
+      }
+      return action;
+    });
+    actionDrafts.value = normalizeWorkbenchActionDrafts(nextActionDrafts, nextSelection);
+  }
+
   if (characterChanged) {
-    actionDrafts.value = normalizeWorkbenchActionDrafts(actionDrafts.value, nextSelection.characterId);
     selectedActionId.value = actionDrafts.value[0].id;
   }
 
@@ -256,6 +273,24 @@ function addWaitAction() {
     durationMs: 1000,
     level: selectedDraft.value.level,
     note: '等待窗口',
+  });
+
+  actionDrafts.value = [...actionDrafts.value, nextAction];
+  selectedActionId.value = nextAction.id;
+  markDraftDirty();
+}
+
+function addSwitchAction() {
+  const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
+  const nextAction = createWorkbenchActionDraft({
+    id: createNextActionId(),
+    type: ACTION_TYPES.SWITCH,
+    skillId: selectedDraft.value.skillId,
+    startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
+    durationMs: 600,
+    level: selectedDraft.value.level,
+    targetCharacterId: selection.value.secondaryCharacterId,
+    note: '切换至副角色',
   });
 
   actionDrafts.value = [...actionDrafts.value, nextAction];

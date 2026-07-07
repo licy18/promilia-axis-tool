@@ -55,7 +55,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；10 个测试文件、63 条测试通过。
+- `npm run test -- --run`：通过；10 个测试文件、65 条测试通过。
 
 ## 3. 目录速览
 
@@ -846,6 +846,44 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 先让 workbench 选择第二个真实角色，并在 `createWorkbenchProject()` 中生成多个 actors。
 - 接入 `switch` 动作草稿、项目 action、运行时 `SWITCH` 事件和属性面板编辑。
 - 切人动作先作为非伤害事件，不直接改变伤害公式；后续再接入当前前台角色、队伍资源和多轨显示。
+
+### 2026-07-07：阶段 4-9 切人动作和多角色 actor 雏形落地
+
+本轮完成：
+
+- `src/domain/projectSchema.js` 增加 `createSwitchAction()`，`switch` 动作字段包含 `actorId`、`targetActorId`、`targetCharacterId`、`durationMs`、`note`，schema 校验会确认来源 actor 和目标 actor 都存在。
+- `src/domain/workbenchProjectFactory.js` 支持 `selection.secondaryCharacterId`，默认以末音为主角色、寒悠悠为副角色生成两个真实 actor，并把技能等级按角色归集。
+- `actionDrafts[]` 保留 `targetCharacterId`，切人动作会在生成新版 `Project.actions[]` 时解析为 `targetActorId`。
+- `compileProject()` 为 `switch` 动作补齐来源 actor 和目标 actor；`simulateScenario()` 输出 `SWITCH` 事件，不投射伤害、不制造 `DAMAGE_SKIPPED`。
+- `ActionLibraryPanel` 工具箱新增“+ 切人”。
+- `PropertiesPanel` 新增副角色选择和切人目标选择；副角色变化后，当前切人动作目标会同步更新。
+- `EventLogPanel` 支持显示 `SWITCH`，格式为 `来源角色 -> 目标角色`。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、21 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、65 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- 浏览器检查 `http://127.0.0.1:5175/#/workbench`：
+  - 初始工作台显示 `2 actor`，默认副角色为寒悠悠。
+  - 新增切人动作后动作数为 2，命中数仍为 1。
+  - 事件日志显示 `SWITCH` 和 `末音 -> 寒悠悠`，没有产生 `DAMAGE_SKIPPED`。
+  - 将副角色改为芃芃后，切人目标同步变为芃芃，事件日志显示 `末音 -> 芃芃`。
+  - 验证结束后已重置 workbench 草稿，应用控制台无 error。
+
+当前结论：
+
+- 新版工作台已经从单 actor 垂直切片推进到主/副角色双 actor 雏形。
+- 切人动作已进入统一 `actionDrafts -> Project -> Scenario -> EventLog` 链路。
+- 当前切人仍是日志型非伤害动作，还没有改变当前前台角色、队伍共享资源、Buff 归属或后续技能 actor 归属。
+- 时间轴仍是单轨显示，多角色动作只靠动作文本和事件日志区分。
+
+下一步：
+
+- 阶段 4-10 目标：建立多轨道/角色轨道显示雏形。
+- 先让 `TimelineGridPreview` 按 actor 或动作归属显示角色轨道，让技能动作、切人动作和事件动作在时间轴上更容易区分。
+- 为轨道渲染补充测试，确保多 actor 项目不会退化成不可读的单行堆叠。
+- 继续保持切人不直接改变伤害公式；前台角色状态、队伍资源和 Buff 归属放到后续机制阶段处理。
 
 ## 10. 文档维护规则
 

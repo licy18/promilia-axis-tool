@@ -7,13 +7,30 @@
 
     <div class="control-grid">
       <label>
-        <span>角色</span>
+        <span>主角色</span>
         <select
           data-testid="workbench-character-select"
           :value="selection.characterId"
           @change="emitSelection('characterId', $event.target.value)"
         >
           <option v-for="character in characters" :key="character.id" :value="character.id">
+            {{ character.name }}
+          </option>
+        </select>
+      </label>
+
+      <label>
+        <span>副角色</span>
+        <select
+          data-testid="workbench-secondary-character-select"
+          :value="selection.secondaryCharacterId"
+          @change="emitSelection('secondaryCharacterId', $event.target.value)"
+        >
+          <option
+            v-for="character in secondaryCharacterOptions"
+            :key="character.id"
+            :value="character.id"
+          >
             {{ character.name }}
           </option>
         </select>
@@ -96,6 +113,20 @@
           :value="selectedAction.eventType"
           @input="emitTextPatch('eventType', $event.target.value)"
         />
+        <select
+          v-else-if="isSwitchAction"
+          data-testid="workbench-switch-target-select"
+          :value="selectedAction.targetCharacterId"
+          @change="emitActionPatch('targetCharacterId', $event.target.value)"
+        >
+          <option
+            v-for="character in switchTargetOptions"
+            :key="character.id"
+            :value="character.id"
+          >
+            {{ character.name }}
+          </option>
+        </select>
       </label>
     </div>
 
@@ -177,6 +208,13 @@ const isWaitAction = computed(() => props.selectedAction.type === 'wait');
 const isAnnotationAction = computed(() => props.selectedAction.type === 'annotation');
 const isResourceAction = computed(() => props.selectedAction.type === 'resource');
 const isEnemyEventAction = computed(() => props.selectedAction.type === 'enemyEvent');
+const isSwitchAction = computed(() => props.selectedAction.type === 'switch');
+const secondaryCharacterOptions = computed(() =>
+  props.characters.filter((character) => Number(character.id) !== Number(props.selection.characterId)),
+);
+const switchTargetOptions = computed(() => {
+  return props.characters.filter((character) => Number(character.id) === Number(props.selection.secondaryCharacterId));
+});
 const actionTypeLabel = computed(() => {
   if (props.selectedAction.type === 'wait') {
     return '等待动作';
@@ -190,6 +228,9 @@ const actionTypeLabel = computed(() => {
   if (props.selectedAction.type === 'enemyEvent') {
     return '敌人事件';
   }
+  if (props.selectedAction.type === 'switch') {
+    return '切人动作';
+  }
   return '技能动作';
 });
 const secondaryControlLabel = computed(() => {
@@ -201,6 +242,9 @@ const secondaryControlLabel = computed(() => {
   }
   if (isEnemyEventAction.value) {
     return '事件类型';
+  }
+  if (isSwitchAction.value) {
+    return '目标角色';
   }
   return '持续时间 ms';
 });
@@ -216,6 +260,9 @@ const selectedActionSummary = computed(() => {
   }
   if (isEnemyEventAction.value) {
     return props.selectedAction.eventType || 'phase';
+  }
+  if (isSwitchAction.value) {
+    return props.selectedAction.targetActor?.name ?? resolveCharacterName(props.selectedAction.targetCharacterId);
   }
   return props.selectedAction.note || '备注';
 });
@@ -247,6 +294,10 @@ function emitTextPatch(key, value) {
 function formatSigned(value) {
   const number = Number(value) || 0;
   return `${number > 0 ? '+' : ''}${number}`;
+}
+
+function resolveCharacterName(characterId) {
+  return props.characters.find((character) => Number(character.id) === Number(characterId))?.name ?? '目标待选';
 }
 </script>
 

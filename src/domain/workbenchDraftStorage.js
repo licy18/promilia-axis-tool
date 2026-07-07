@@ -27,7 +27,7 @@ export function createWorkbenchDraftSnapshot(
 ) {
   const normalizedSelection = normalizeWorkbenchSelection(selection);
   const normalizedEnemyConfig = normalizeWorkbenchEnemyConfig(enemyConfig);
-  const normalizedActions = ensureActionDrafts(actionDrafts, normalizedSelection.characterId);
+  const normalizedActions = ensureActionDrafts(actionDrafts, normalizedSelection);
   const normalizedSelectedActionId = normalizedActions.some((action) => action.id === selectedActionId)
     ? selectedActionId
     : normalizedActions[0].id;
@@ -83,15 +83,15 @@ export function clearWorkbenchDraft(storage) {
   storage?.removeItem(WORKBENCH_DRAFT_STORAGE_KEY);
 }
 
-function ensureActionDrafts(actionDrafts, characterId) {
-  const normalizedActions = normalizeWorkbenchActionDrafts(actionDrafts, characterId);
+function ensureActionDrafts(actionDrafts, selection) {
+  const normalizedActions = normalizeWorkbenchActionDrafts(actionDrafts, selection);
   if (normalizedActions.length > 0) {
     return normalizedActions;
   }
 
   return [
     createWorkbenchActionDraft({
-      skillId: normalizeWorkbenchSelection({ characterId }).skillId,
+      skillId: normalizeWorkbenchSelection(selection).skillId,
     }),
   ];
 }

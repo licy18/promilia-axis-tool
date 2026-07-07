@@ -261,6 +261,39 @@ describe('Workbench view', () => {
     expect(wrapper.text()).not.toContain('DAMAGE_SKIPPED');
   });
 
+  it('adds a switch action targeting a secondary actor', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    expect(wrapper.text()).toContain('2 actor');
+    expect(wrapper.find('[data-testid="workbench-secondary-character-select"]').element.value).toBe('101003');
+
+    await wrapper.find('[data-testid="workbench-add-switch-action"]').trigger('click');
+
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('2 action');
+    expect(wrapper.find('[data-testid="scenario-hit-count"]').text()).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-action-type"]').element.value).toBe('切人动作');
+    expect(wrapper.find('[data-testid="workbench-switch-target-select"]').element.value).toBe('101003');
+    expect(wrapper.text()).toContain('SWITCH');
+    expect(wrapper.text()).toContain('末音 -> 寒悠悠');
+    expect(wrapper.text()).not.toContain('DAMAGE_SKIPPED');
+
+    const nextSecondary = workbenchSeed.gameData.characters.find(
+      (character) => character.id !== workbenchSeed.defaults.characterId && character.id !== 101003,
+    );
+    await wrapper.find('[data-testid="workbench-secondary-character-select"]').setValue(String(nextSecondary.id));
+
+    expect(wrapper.find('[data-testid="workbench-switch-target-select"]').element.value).toBe(String(nextSecondary.id));
+    expect(wrapper.text()).toContain(`末音 -> ${nextSecondary.name}`);
+  });
+
   it('keeps generated action ids unique after deleting the first action', async () => {
     const wrapper = mount(Workbench, {
       global: {

@@ -48,6 +48,7 @@ npm run dev
 - 工作台动作工具箱雏形已建立：支持技能、等待、注释三类动作；等待/注释进入同一 `actionDrafts -> Project -> simulation` 链路，但不伪造伤害。
 - 工作台敌人与资源面板雏形已建立：敌人等级/生命倍率/防御倍率进入新版项目模型；资源面板只读取 `simulationResult.resourceTimeline`。
 - 工作台事件动作已建立：支持资源事件和敌人事件动作；资源事件进入 `RESOURCE_CHANGE` 与 `resourceTimeline`，敌人事件进入 `ENEMY_EVENT` 日志。
+- 工作台切人动作和多角色 actor 雏形已建立：默认生成主/副两个真实角色 actor，`switch` 动作进入 `SWITCH` 事件日志，暂不改变伤害公式。
 - 项目状态核心在 `src/store/project.js`。
 - 主编辑器在 `src/views/Editor.vue`，当前承担了大量 UI、交互和业务协调职责。
 - 时间轴组件位于 `src/components/timeline/`。
@@ -82,7 +83,7 @@ Endaxis 只作为架构和交互成熟度参考，不是蓝色星原数据来源
 
 ## 已知开发阶段
 
-当前已完成阶段 1-3 的最小闭环，并完成阶段 4-8 的资源事件和敌人事件动作。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 4-9，建立切人动作和多角色 actor 雏形。
+当前已完成阶段 1-3 的最小闭环，并完成阶段 4-9 的切人动作和多角色 actor 雏形。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 4-10，建立多轨道/角色轨道显示雏形。
 
 完整对标 Endaxis 的后续路线见 `DEVELOPMENT_PLAN.md`。
 
@@ -115,7 +116,7 @@ npm run test -- --run
 截至 2026-07-07 的基线：
 
 - `npm run build` 可以通过。
-- `npm run test -- --run` 可以通过；当前为 10 个测试文件、63 条测试。
+- `npm run test -- --run` 可以通过；当前为 10 个测试文件、65 条测试。
 - `npm run data:generate` 可以从 `C:\PC2\Codex\AzPr` 重新生成真实 AzPr 数据拆表。
 
 ## 开发规则

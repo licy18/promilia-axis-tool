@@ -123,6 +123,23 @@ function createNonCombatEvent(action) {
     };
   }
 
+  if (action.type === ACTION_TYPES.SWITCH) {
+    return {
+      type: 'SWITCH',
+      timeMs: action.startMs,
+      actionId: action.id,
+      actorId: action.actorId,
+      payload: {
+        actionName: action.name,
+        fromActorName: action.actor?.name,
+        targetActorId: action.targetActorId,
+        targetActorName: action.targetActor?.name,
+        durationMs: action.durationMs,
+        note: action.note,
+      },
+    };
+  }
+
   if (action.type === ACTION_TYPES.ANNOTATION) {
     return {
       type: 'ANNOTATION',
@@ -184,6 +201,7 @@ function createActionStartEvent(action) {
       actionType: action.type,
       skillId: action.skillId,
       actorName: action.actor?.name,
+      targetActorName: action.targetActor?.name,
       targetId: action.target?.id,
       targetName: action.target?.name,
     },
@@ -225,9 +243,10 @@ function eventPriority(type) {
     COOLDOWN_START: 4,
     DAMAGE_PROJECTED: 5,
     WAIT: 6,
-    ENEMY_EVENT: 7,
-    ANNOTATION: 8,
-    DAMAGE_SKIPPED: 9,
+    SWITCH: 7,
+    ENEMY_EVENT: 8,
+    ANNOTATION: 9,
+    DAMAGE_SKIPPED: 10,
     SCENARIO_END: 99,
   };
 

@@ -83,6 +83,40 @@ function compileEnemy(enemy, enemiesById) {
 }
 
 function compileAction(action, actorsById, enemy, skillsById) {
+  if (action.type === ACTION_TYPES.SWITCH) {
+    return {
+      ...action,
+      actor: actorsById.get(action.actorId) ?? null,
+      targetActor: actorsById.get(action.targetActorId) ?? null,
+      target: null,
+      source: {},
+      damageSegments: [],
+      selectedDamageSegment: null,
+    };
+  }
+
+  if (action.type === ACTION_TYPES.RESOURCE) {
+    return {
+      ...action,
+      actor: action.actorId ? actorsById.get(action.actorId) ?? null : null,
+      target: null,
+      source: {},
+      damageSegments: [],
+      selectedDamageSegment: null,
+    };
+  }
+
+  if (action.type === ACTION_TYPES.ENEMY_EVENT) {
+    return {
+      ...action,
+      actor: null,
+      target: action.targetId === enemy.id ? enemy : null,
+      source: {},
+      damageSegments: [],
+      selectedDamageSegment: null,
+    };
+  }
+
   if (action.type !== ACTION_TYPES.SKILL) {
     return {
       ...action,

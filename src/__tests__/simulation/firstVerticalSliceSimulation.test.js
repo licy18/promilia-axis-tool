@@ -231,4 +231,49 @@ describe('first vertical slice simulation', () => {
     });
     expect(result.eventLog.map((event) => event.type)).not.toContain('DAMAGE_SKIPPED');
   });
+
+  it('compiles a secondary actor and keeps switch actions as non-damage events', () => {
+    const project = createWorkbenchProject(
+      {
+        secondaryCharacterId: 101003,
+      },
+      {
+        actions: [
+          { id: 'action-skill', type: 'skill', skillId: 10900101, startMs: 0, level: 1 },
+          {
+            id: 'action-switch',
+            type: 'switch',
+            startMs: 1600,
+            targetCharacterId: 101003,
+            note: '切换至寒悠悠',
+          },
+        ],
+      },
+    );
+    const scenario = compileProject(project, getWorkbenchGameData());
+    const result = runSimulation(project, getWorkbenchGameData());
+    const switchEvent = result.eventLog.find((event) => event.type === 'SWITCH');
+
+    expect(project.actors.map((actor) => actor.characterId)).toEqual([109001, 101003]);
+    expect(scenario.actors).toHaveLength(2);
+    expect(scenario.actions.find((action) => action.id === 'action-switch')).toMatchObject({
+      actor: {
+        name: '末音',
+      },
+      targetActor: {
+        name: '寒悠悠',
+      },
+    });
+    expect(result.summary.actionCount).toBe(2);
+    expect(result.summary.projectedHitCount).toBe(1);
+    expect(switchEvent).toMatchObject({
+      actionId: 'action-switch',
+      payload: {
+        fromActorName: '末音',
+        targetActorName: '寒悠悠',
+        note: '切换至寒悠悠',
+      },
+    });
+    expect(result.eventLog.map((event) => event.type)).not.toContain('DAMAGE_SKIPPED');
+  });
 });

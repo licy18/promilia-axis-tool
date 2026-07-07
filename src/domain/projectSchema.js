@@ -158,6 +158,28 @@ export function createSkillAction({
   };
 }
 
+export function createSwitchAction({
+  id,
+  actorId,
+  targetActorId,
+  targetCharacterId = null,
+  startMs = 0,
+  durationMs = 600,
+  note = '',
+} = {}) {
+  return {
+    id: id ?? createStableId('action'),
+    type: ACTION_TYPES.SWITCH,
+    actorId,
+    targetActorId,
+    targetCharacterId,
+    name: '切人',
+    startMs,
+    durationMs,
+    note,
+  };
+}
+
 export function createWaitAction({
   id,
   startMs = 0,
@@ -382,6 +404,20 @@ function validateActions(actions, project, gameData, errors, warnings) {
           issue('action.timing.missing', 'Skill action still needs authoritative timing data', `${path}.timing`),
         );
       }
+    } else if (action.type === ACTION_TYPES.SWITCH) {
+      if (!actorIds.has(action.actorId)) {
+        errors.push(issue('action.actorId.unknown', `Unknown actorId ${action.actorId}`, `${path}.actorId`));
+      }
+      if (!actorIds.has(action.targetActorId)) {
+        errors.push(
+          issue('action.targetActorId.unknown', `Unknown targetActorId ${action.targetActorId}`, `${path}.targetActorId`),
+        );
+      }
+      if (!Number.isFinite(action.durationMs) || action.durationMs <= 0) {
+        errors.push(
+          issue('action.durationMs.invalid', 'Switch action durationMs must be positive', `${path}.durationMs`),
+        );
+      }
     } else if (action.type === ACTION_TYPES.WAIT) {
       if (!Number.isFinite(action.durationMs) || action.durationMs <= 0) {
         errors.push(issue('action.durationMs.invalid', 'Wait action durationMs must be positive', `${path}.durationMs`));
@@ -389,6 +425,9 @@ function validateActions(actions, project, gameData, errors, warnings) {
     } else if (action.type === ACTION_TYPES.ANNOTATION && typeof action.note !== 'string') {
       errors.push(issue('action.note.invalid', 'Annotation action note must be a string', `${path}.note`));
     } else if (action.type === ACTION_TYPES.RESOURCE) {
+      if (action.actorId && !actorIds.has(action.actorId)) {
+        errors.push(issue('action.actorId.unknown', `Unknown actorId ${action.actorId}`, `${path}.actorId`));
+      }
       if (typeof action.resource !== 'string' || action.resource.trim() === '') {
         errors.push(issue('action.resource.invalid', 'Resource action resource must be a non-empty string', `${path}.resource`));
       }
