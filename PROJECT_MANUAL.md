@@ -380,6 +380,7 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 | 灵子 | 62 | `src/data/generated/soulessences.json` |
 | 图片索引 | 3059 | `src/data/generated/media-index.json` |
 | 首条垂直切片快照 | 1 | `src/data/generated/first-vertical-slice.json` |
+| 工作台轻量数据 | 20 角色 / 120 技能 / 199 敌人 | `src/data/generated/workbench-seed.json` |
 
 当前校验结果：
 
@@ -524,6 +525,55 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 新增可替换的 `PropertiesPanel`，支持编辑动作 `startMs`、`level`、`targetId` 并重新运行 simulation。
 - 新增角色/技能/敌人选择入口，先从生成数据中选择真实条目，不回退到旧 `gamedata.json`。
 - 时间轴预览增加动作选择状态，为后续拖拽和多动作轴做准备。
+
+### 2026-07-07：阶段 4-2 工作台最小可编辑落地
+
+本轮完成：
+
+- 生成器新增 `src/data/generated/workbench-seed.json`：
+  - 20 个真实角色。
+  - 120 个真实技能。
+  - 199 个带战斗属性的敌人。
+  - 只保留工作台/运行时需要的轻量字段，避免首屏加载完整生成数据。
+- 新增 `src/domain/workbenchProjectFactory.js`：
+  - `createWorkbenchProject()`
+  - `getWorkbenchGameData()`
+  - `getSkillsForCharacter()`
+  - `normalizeWorkbenchSelection()`
+- 新增 `src/features/workbench/PropertiesPanel.vue`：
+  - 角色选择。
+  - 技能选择。
+  - 敌人选择。
+  - 动作开始时间编辑。
+  - 技能等级编辑。
+- `ActionLibraryPanel` 和 `TimelineGridPreview` 增加动作选择状态。
+- `Workbench.vue` 改为根据当前选择和动作参数实时重建新版 `Project`，并重新运行 `compileProject()` / `simulateScenario()`。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、3 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、50 条测试通过。
+- `npm run build`：通过；`Workbench` JS chunk 约 271.99 kB / gzip 30.29 kB。仍有旧 `Editor` 和全局包 chunk 体积提示，以及 Sass `@import` 弃用提示。
+- 浏览器检查 `http://127.0.0.1:5175/#/workbench`：
+  - 等级改为 2 后倍率从 `649%` 更新到 `714%`。
+  - 开始时间改为 `1200ms` / `1500ms` 后动作库和事件投影同步更新。
+  - 敌人可切换到真实敌人“菜鸡”。
+  - 角色可切换到真实角色“寒悠悠”，技能自动切到“鸢回影”。
+  - 页面保留 `DAMAGE_PROJECTED` 和伤害 marker，控制台无 error。
+
+当前结论：
+
+- 新版工作台已经具备最小可编辑能力。
+- 当前仍是单角色、单动作、单敌人的垂直切片。
+- 属性面板修改会重建项目和模拟结果，但尚未支持在时间轴上拖拽、添加/删除动作、多角色队伍或导入导出新版项目。
+
+下一步：
+
+- 阶段 4-3 目标：让时间轴进入最小交互状态。
+- 支持从 ActionLibrary 追加第二个动作。
+- 支持删除动作和选择不同动作编辑。
+- 支持在 TimelineGridPreview 中通过拖动或输入调整动作时间。
+- 为多动作运行时结果增加基础排序和总伤害汇总测试。
 
 ## 10. 文档维护规则
 

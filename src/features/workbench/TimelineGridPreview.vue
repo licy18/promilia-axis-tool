@@ -14,7 +14,11 @@
         v-for="action in actions"
         :key="action.id"
         class="action-block"
+        :class="{ selected: action.id === selectedActionId }"
         :style="actionStyle(action)"
+        tabindex="0"
+        @click="$emit('select-action', action.id)"
+        @keydown.enter="$emit('select-action', action.id)"
       >
         <span>{{ action.name }}</span>
       </div>
@@ -53,7 +57,13 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  selectedActionId: {
+    type: String,
+    required: true,
+  },
 });
+
+defineEmits(['select-action']);
 
 const ticks = computed(() => {
   const durationSeconds = props.durationMs / 1000;
@@ -160,6 +170,17 @@ h2 {
   color: #ffffff;
   font-weight: 700;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+}
+
+.action-block:hover,
+.action-block:focus {
+  border-color: rgba(255, 255, 255, 0.8);
+  outline: none;
+}
+
+.action-block.selected {
+  box-shadow: 0 0 0 2px rgba(121, 199, 185, 0.3), 0 12px 30px rgba(0, 0, 0, 0.28);
 }
 
 .action-block span {

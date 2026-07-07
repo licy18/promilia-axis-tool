@@ -11,7 +11,15 @@
     </div>
 
     <div class="action-list">
-      <article v-for="action in actions" :key="action.id" class="action-item">
+      <article
+        v-for="action in actions"
+        :key="action.id"
+        class="action-item"
+        :class="{ selected: action.id === selectedActionId }"
+        tabindex="0"
+        @click="$emit('select-action', action.id)"
+        @keydown.enter="$emit('select-action', action.id)"
+      >
         <div class="action-main">
           <span class="action-name">{{ action.name }}</span>
           <span class="action-time">{{ action.startMs }}ms</span>
@@ -54,7 +62,13 @@ defineProps({
     type: Array,
     required: true,
   },
+  selectedActionId: {
+    type: String,
+    required: true,
+  },
 });
+
+defineEmits(['select-action']);
 </script>
 
 <style scoped>
@@ -113,6 +127,18 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 6px;
   background: #232a31;
+  cursor: pointer;
+}
+
+.action-item:hover,
+.action-item:focus {
+  border-color: rgba(121, 199, 185, 0.38);
+  outline: none;
+}
+
+.action-item.selected {
+  border-color: rgba(121, 199, 185, 0.75);
+  box-shadow: 0 0 0 2px rgba(121, 199, 185, 0.12);
 }
 
 .action-main {

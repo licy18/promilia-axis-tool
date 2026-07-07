@@ -200,7 +200,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：第一条真实数据垂直切片 fixture，文件为 `src/domain/fixtures/firstVerticalSlice.js`。
 - 已完成：建立 `src/simulation/`，先完成 `compileProject()`、`simulateScenario()` 和 projection 测试。
 - 已完成：进入阶段 4，新建 `/workbench` 编辑器工作台第一屏，展示第一条垂直切片的 actor / enemy / action / eventLog / damageTimeline。
-- 下一步：阶段 4-2，把只读工作台推进到最小可编辑，先做 `PropertiesPanel`、动作选择状态和真实角色/技能/敌人选择入口。
+- 已完成：阶段 4-2，把只读工作台推进到最小可编辑，完成 `PropertiesPanel`、动作选择状态和真实角色/技能/敌人选择入口。
+- 下一步：阶段 4-3，让时间轴进入最小交互状态，支持追加第二个动作、删除动作、选择动作编辑和多动作模拟汇总。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

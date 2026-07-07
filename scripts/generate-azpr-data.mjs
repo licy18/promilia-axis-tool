@@ -83,6 +83,7 @@ const equipment = mapEquipment(equipmentForms);
 const soulessences = mapSoulessences(soulessenceForms);
 const mediaIndex = await mapMediaIndex(sourceFiles.mediaImages);
 const firstVerticalSlice = buildFirstVerticalSliceData({ characters, skills, enemies });
+const workbenchSeed = buildWorkbenchSeedData({ characters, skills, enemies });
 const validationReport = buildValidationReport({
   characters,
   skills,
@@ -106,6 +107,7 @@ await Promise.all([
   writeJson('soulessences.json', wrapItems(soulessences, sourceFiles.soulessences)),
   writeJson('media-index.json', mediaIndex),
   writeJson('first-vertical-slice.json', firstVerticalSlice),
+  writeJson('workbench-seed.json', workbenchSeed),
   writeJson('validation-report.json', validationReport),
 ]);
 
@@ -162,6 +164,7 @@ function buildManifest(validationReport) {
       soulessences: 'soulessences.json',
       mediaIndex: 'media-index.json',
       firstVerticalSlice: 'first-vertical-slice.json',
+      workbenchSeed: 'workbench-seed.json',
       validationReport: 'validation-report.json',
     },
     counts: validationReport.counts,
@@ -195,6 +198,94 @@ function buildFirstVerticalSliceData({ characters, skills, enemies }) {
       enemies: [enemy],
     },
   };
+}
+
+function buildWorkbenchSeedData({ characters, skills, enemies }) {
+  const compactCharacters = characters.map(compactCharacter);
+  const compactSkills = skills.map(compactSkill);
+  const compactEnemies = enemies.filter((enemy) => enemy.property?.exists).map(compactEnemy);
+
+  return {
+    schemaVersion: 1,
+    generatedAt,
+    source: 'generated-from-local-azpr-data',
+    purpose: 'stage-4-workbench-editing-seed',
+    defaults: {
+      characterId: 109001,
+      skillId: 10900101,
+      enemyId: 300032,
+    },
+    counts: {
+      characters: compactCharacters.length,
+      skills: compactSkills.length,
+      enemies: compactEnemies.length,
+    },
+    gameData: {
+      characters: compactCharacters,
+      skills: compactSkills,
+      enemies: compactEnemies,
+    },
+  };
+}
+
+function compactCharacter(character) {
+  return {
+    id: character.id,
+    name: character.name,
+    englishName: character.englishName,
+    rarity: character.rarity,
+    position: character.position,
+    element: character.element,
+    weaponType: character.weaponType,
+    property: {
+      id: character.property.id,
+      exists: character.property.exists,
+      baseAttributeId: character.property.baseAttributeId,
+      baseAttributes: compactBaseAttributes(character.property.baseAttributes),
+    },
+    icons: {
+      avatar: character.icons.avatar,
+    },
+  };
+}
+
+function compactSkill(skill) {
+  return {
+    id: skill.id,
+    characterId: skill.characterId,
+    characterName: skill.characterName,
+    name: skill.name,
+    displayName: skill.displayName,
+    displayType: skill.displayType,
+    elementId: skill.elementId,
+    icon: skill.icon,
+    level: skill.level,
+    cooldownMs: skill.cooldownMs,
+    spCost: skill.spCost,
+    needsTimingData: skill.needsTimingData,
+    timingSource: skill.timingSource,
+  };
+}
+
+function compactEnemy(enemy) {
+  return {
+    id: enemy.id,
+    name: enemy.name,
+    elementIds: enemy.elementIds,
+    enemyType: enemy.enemyType,
+    property: {
+      id: enemy.property.id,
+      exists: enemy.property.exists,
+      baseAttributeId: enemy.property.baseAttributeId,
+      baseAttributes: compactBaseAttributes(enemy.property.baseAttributes),
+    },
+    icon: enemy.icon,
+  };
+}
+
+function compactBaseAttributes(baseAttributes = []) {
+  const keys = new Set(['ATK', 'MAXHP', 'DEF', 'MDEF', 'CRI', 'CRI_DMG', 'MAXSP', 'SPR_SEC']);
+  return baseAttributes.filter((attribute) => keys.has(attribute.key));
 }
 
 function wrapItems(items, sourcePath) {
