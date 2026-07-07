@@ -55,7 +55,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；10 个测试文件、65 条测试通过。
+- `npm run test -- --run`：通过；10 个测试文件、66 条测试通过。
 
 ## 3. 目录速览
 
@@ -884,6 +884,45 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 先让 `TimelineGridPreview` 按 actor 或动作归属显示角色轨道，让技能动作、切人动作和事件动作在时间轴上更容易区分。
 - 为轨道渲染补充测试，确保多 actor 项目不会退化成不可读的单行堆叠。
 - 继续保持切人不直接改变伤害公式；前台角色状态、队伍资源和 Buff 归属放到后续机制阶段处理。
+
+### 2026-07-07：阶段 4-10 多轨道/角色轨道显示雏形落地
+
+本轮完成：
+
+- `TimelineGridPreview` 新增 `actors` 输入，按 `scenario.actors[]` 渲染角色轨道。
+- 时间轴动作会按 `action.actor` / `action.actorId` 归入对应 actor 轨道；无 actor 的注释、敌人事件等动作进入 `system` 系统轨。
+- 伤害投影 marker 会根据 `damage.actorId` 或对应 action 归入同一角色轨道，不再漂在单独固定行。
+- 切人动作在主角色轨显示为 `切人 -> 目标角色`，但仍保持非伤害事件，不改变后续技能归属。
+- 时间轴新增稳定测试标记：
+  - `workbench-timeline-row`
+  - `workbench-timeline-lane-label`
+  - `workbench-timeline-action[data-lane-id]`
+  - `workbench-timeline-damage-marker[data-lane-id]`
+- 轨道视觉样式区分角色轨、系统轨、切人/资源/事件类动作，为后续缩放、持续时间调整和多轨拖拽打底。
+
+验收结果：
+
+- `npm run test -- --run`：通过，10 个测试文件、66 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- 浏览器检查 `http://127.0.0.1:5175/#/workbench`：
+  - 初始时间轴显示 `actor-109001` 末音轨和 `actor-101003` 寒悠悠轨。
+  - 默认技能动作和伤害 marker 都位于 `actor-109001`。
+  - 新增切人动作后，切人块位于 `actor-109001`，文本显示 `切人 -> 寒悠悠`，命中数仍为 1。
+  - 新增注释动作后出现 `system` 系统轨，注释动作位于系统轨。
+  - 重置后系统轨消失，回到两条角色轨，应用控制台无 error。
+
+当前结论：
+
+- 新版工作台时间轴已经从单行动作堆叠推进到角色轨道雏形。
+- 多 actor 项目现在能在时间轴上表达角色归属；无角色事件不会污染角色轨。
+- 当前轨道只是显示分层，尚未支持轨道内碰撞规避、跨轨拖拽改变 actor、缩放视口或拖拽调整动作持续时间。
+
+下一步：
+
+- 阶段 4-11 目标：建立时间轴缩放和动作持续时间调整雏形。
+- 先增加时间轴缩放/视窗比例状态，让 30s 轴可以从固定全览走向可横向细看。
+- 再为可持续动作增加拖拽调整 `durationMs` 的最小手柄，并保持边界 clamp 和测试覆盖。
+- 继续只通过 `actionDrafts -> Project -> simulation` 更新结果，不在时间轴组件内直接改业务事实。
 
 ## 10. 文档维护规则
 

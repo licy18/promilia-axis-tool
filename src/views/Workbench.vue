@@ -49,6 +49,7 @@
 
       <TimelineGridPreview
         class="timeline-area"
+        :actors="scenario.actors"
         :actions="scenario.actions"
         :damage-timeline="simulationResult.damageTimeline"
         :duration-ms="scenario.time.durationMs"

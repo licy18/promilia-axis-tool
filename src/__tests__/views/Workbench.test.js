@@ -294,6 +294,54 @@ describe('Workbench view', () => {
     expect(wrapper.text()).toContain(`末音 -> ${nextSecondary.name}`);
   });
 
+  it('renders actor lanes and keeps system events on a system lane', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    expect(wrapper.findAll('[data-testid="workbench-timeline-lane-label"]').map((lane) => lane.text())).toEqual([
+      '末音猛攻',
+      '寒悠悠增幅',
+    ]);
+    expect(wrapper.find('[data-testid="workbench-timeline-row"][data-lane-id="actor-109001"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]').exists()).toBe(true);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-action"][data-action-id="action-0001"]')
+        .attributes('data-lane-id'),
+    ).toBe('actor-109001');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-damage-marker"][data-action-id="action-0001"]')
+        .attributes('data-lane-id'),
+    ).toBe('actor-109001');
+
+    await wrapper.find('[data-testid="workbench-add-switch-action"]').trigger('click');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-action"][data-action-id="action-0002"]')
+        .attributes('data-lane-id'),
+    ).toBe('actor-109001');
+    expect(wrapper.text()).toContain('切人 -> 寒悠悠');
+
+    await wrapper.find('[data-testid="workbench-add-annotation-action"]').trigger('click');
+    expect(wrapper.find('[data-testid="workbench-timeline-row"][data-lane-id="system"]').exists()).toBe(true);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-action"][data-action-id="action-0003"]')
+        .attributes('data-lane-id'),
+    ).toBe('system');
+    expect(wrapper.findAll('[data-testid="workbench-timeline-lane-label"]').map((lane) => lane.text())).toContain(
+      '系统事件轨',
+    );
+  });
+
   it('keeps generated action ids unique after deleting the first action', async () => {
     const wrapper = mount(Workbench, {
       global: {
