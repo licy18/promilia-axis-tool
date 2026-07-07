@@ -83,6 +83,7 @@
                 {
                   selected: action.id === selectedActionId,
                   dragging: action.id === draggingActionId,
+                  overlap: overlapActionIds.has(action.id),
                   resizing: action.id === resizingActionId,
                 },
                 `type-${action.type}`,
@@ -102,6 +103,13 @@
             >
               <span>{{ actionLabel(action) }}</span>
               <small v-if="actionDetail(action)">{{ actionDetail(action) }}</small>
+              <span
+                v-if="overlapActionIds.has(action.id)"
+                class="overlap-badge"
+                data-testid="workbench-action-overlap-warning"
+              >
+                重叠
+              </span>
               <button
                 class="duration-handle"
                 type="button"
@@ -136,6 +144,7 @@
       <span><i class="legend-action" /> 动作</span>
       <span><i class="legend-damage" /> 伤害投影</span>
       <span><i class="legend-system" /> 系统轨</span>
+      <span><i class="legend-overlap" /> 重叠</span>
       <span class="warning">时序为占位数据</span>
     </div>
   </section>
@@ -144,8 +153,11 @@
 <script setup>
 import { computed, onBeforeUnmount, ref } from 'vue';
 import { Clock, Minus, Plus } from '@element-plus/icons-vue';
+import {
+  DEFAULT_TIMELINE_ACTION_DURATION_MS,
+  resolveTimelineActionLaneId,
+} from './timelineDiagnostics';
 
-const DEFAULT_ACTION_DURATION_MS = 1800;
 const MIN_ACTION_DURATION_MS = 100;
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
@@ -171,6 +183,14 @@ const props = defineProps({
   selectedActionId: {
     type: String,
     required: true,
+  },
+  timelineDiagnostics: {
+    type: Object,
+    default: () => ({
+      overlapActionIds: [],
+      overlaps: [],
+      overlapCount: 0,
+    }),
   },
   snapMs: {
     type: Number,
@@ -202,6 +222,7 @@ const timelineTrackStyle = computed(() => ({
 }));
 const actionsById = computed(() => new Map(props.actions.map((action) => [action.id, action])));
 const actorLaneIds = computed(() => new Set(props.actors.map((actor) => actor.id)));
+const overlapActionIds = computed(() => new Set(props.timelineDiagnostics?.overlapActionIds ?? []));
 const timelineLanes = computed(() => {
   const actorLanes = props.actors.map((actor) => ({
     id: actor.id,
@@ -238,7 +259,11 @@ const timelineLanes = computed(() => {
 
 function actionStyle(action) {
   const left = clampPercent((action.startMs / props.durationMs) * 100);
-  const width = clampPercent(((action.durationMs ?? DEFAULT_ACTION_DURATION_MS) / props.durationMs) * 100, 8, 100);
+  const width = clampPercent(
+    ((action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS) / props.durationMs) * 100,
+    8,
+    100,
+  );
   return {
     left: `${left}%`,
     width: `${width}%`,
@@ -276,13 +301,7 @@ function actionDetail(action) {
 }
 
 function resolveActionLaneId(action) {
-  if (action.actor?.id && actorLaneIds.value.has(action.actor.id)) {
-    return action.actor.id;
-  }
-  if (action.actorId && actorLaneIds.value.has(action.actorId)) {
-    return action.actorId;
-  }
-  return 'system';
+  return resolveTimelineActionLaneId(action, actorLaneIds.value);
 }
 
 function resolveDamageLaneId(damage) {
@@ -322,7 +341,7 @@ function beginDrag(event, action) {
     laneWidth: rect.width,
     initialClientX: event.clientX,
     initialStartMs: action.startMs,
-    maxStartMs: Math.max(0, props.durationMs - (action.durationMs ?? DEFAULT_ACTION_DURATION_MS)),
+    maxStartMs: Math.max(0, props.durationMs - (action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS)),
   };
 
   window.addEventListener('pointermove', handleDragMove);
@@ -348,7 +367,7 @@ function beginResize(event, action) {
     actionId: action.id,
     laneWidth: rect.width,
     initialClientX: event.clientX,
-    initialDurationMs: action.durationMs ?? DEFAULT_ACTION_DURATION_MS,
+    initialDurationMs: action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS,
     maxDurationMs: Math.max(MIN_ACTION_DURATION_MS, props.durationMs - action.startMs),
   };
 
@@ -359,7 +378,7 @@ function beginResize(event, action) {
 
 function nudgeAction(event, action, direction) {
   const stepMs = event.shiftKey ? props.snapMs * 4 : props.snapMs;
-  const maxStartMs = Math.max(0, props.durationMs - (action.durationMs ?? DEFAULT_ACTION_DURATION_MS));
+  const maxStartMs = Math.max(0, props.durationMs - (action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS));
   emit('select-action', action.id);
   emit('update-action-time', {
     actionId: action.id,
@@ -599,7 +618,7 @@ h2 {
   top: 10px;
   height: 42px;
   min-width: 96px;
-  padding: 7px 22px 7px 10px;
+  padding: 7px 54px 7px 10px;
   border: 1px solid rgba(121, 199, 185, 0.5);
   border-radius: 6px;
   background: linear-gradient(180deg, #274840 0%, #20352f 100%);
@@ -642,6 +661,26 @@ h2 {
   font-weight: 500;
 }
 
+.action-block .overlap-badge {
+  position: absolute;
+  top: 4px;
+  right: 22px;
+  display: inline-flex;
+  width: auto;
+  max-width: 30px;
+  height: 16px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  border: 1px solid rgba(255, 214, 214, 0.5);
+  border-radius: 3px;
+  background: rgba(245, 108, 108, 0.28);
+  color: #ffdede;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+
 .action-block.type-switch {
   border-color: rgba(126, 176, 255, 0.5);
   background: linear-gradient(180deg, #29436b 0%, #223455 100%);
@@ -657,6 +696,12 @@ h2 {
 .action-block.type-wait {
   border-color: rgba(185, 164, 121, 0.45);
   background: linear-gradient(180deg, #4a4029 0%, #352f21 100%);
+}
+
+.action-block.overlap {
+  border-color: rgba(245, 108, 108, 0.82);
+  background: linear-gradient(180deg, #5a3334 0%, #3b272b 100%);
+  box-shadow: 0 0 0 2px rgba(245, 108, 108, 0.18), 0 12px 30px rgba(0, 0, 0, 0.28);
 }
 
 .duration-handle {
@@ -729,6 +774,10 @@ h2 {
 
 .legend-system {
   background: #b9a479;
+}
+
+.legend-overlap {
+  background: #f56c6c;
 }
 
 .warning {

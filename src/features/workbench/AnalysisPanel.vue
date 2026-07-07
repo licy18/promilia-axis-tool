@@ -31,6 +31,23 @@
       </div>
     </div>
 
+    <div class="timeline-diagnostics">
+      <div class="diagnostic-heading">
+        <span>时间轴诊断</span>
+        <strong data-testid="workbench-overlap-count">{{ overlapCount }}</strong>
+      </div>
+      <p v-if="overlapItems.length === 0" class="diagnostic-empty" data-testid="workbench-overlap-empty">
+        暂无轨道重叠
+      </p>
+      <ul v-else class="overlap-list">
+        <li v-for="item in overlapItems" :key="item.id" data-testid="workbench-overlap-item">
+          <span>{{ item.laneName }}</span>
+          <strong>{{ item.actionNames.join(' / ') }}</strong>
+          <small>{{ formatOverlapRange(item) }}</small>
+        </li>
+      </ul>
+    </div>
+
     <ul class="limitations">
       <li v-for="item in diagnostics.limitations" :key="item">{{ item }}</li>
     </ul>
@@ -38,9 +55,10 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { TrendCharts } from '@element-plus/icons-vue';
 
-defineProps({
+const props = defineProps({
   summary: {
     type: Object,
     required: true,
@@ -53,10 +71,24 @@ defineProps({
     type: Array,
     required: true,
   },
+  timelineDiagnostics: {
+    type: Object,
+    default: () => ({
+      overlapCount: 0,
+      overlaps: [],
+    }),
+  },
 });
+
+const overlapItems = computed(() => props.timelineDiagnostics?.overlaps ?? []);
+const overlapCount = computed(() => props.timelineDiagnostics?.overlapCount ?? overlapItems.value.length);
 
 function formatNumber(value) {
   return Math.round(Number(value) || 0).toLocaleString('zh-CN');
+}
+
+function formatOverlapRange(item) {
+  return `${Math.round(item.overlapStartMs)}-${Math.round(item.overlapEndMs)}ms`;
 }
 </script>
 
@@ -134,6 +166,73 @@ h2 {
 
 .damage-row span {
   color: #efc574;
+}
+
+.timeline-diagnostics {
+  display: grid;
+  gap: 8px;
+  padding: 0 14px 14px;
+}
+
+.diagnostic-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  background: rgba(245, 108, 108, 0.08);
+}
+
+.diagnostic-heading span {
+  color: #d9dee3;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.diagnostic-heading strong {
+  color: #ffb9b9;
+  font-size: 15px;
+}
+
+.diagnostic-empty {
+  margin: 0;
+  padding: 9px 10px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #8f9aa3;
+  font-size: 12px;
+}
+
+.overlap-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.overlap-list li {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 9px 10px;
+  border-left: 3px solid #f56c6c;
+  border-radius: 4px;
+  background: rgba(245, 108, 108, 0.1);
+}
+
+.overlap-list span,
+.overlap-list small {
+  color: #b8c0c7;
+  font-size: 11px;
+}
+
+.overlap-list strong {
+  overflow-wrap: anywhere;
+  color: #ffdede;
+  font-size: 12px;
 }
 
 .limitations {

@@ -54,6 +54,7 @@
         :damage-timeline="simulationResult.damageTimeline"
         :duration-ms="scenario.time.durationMs"
         :selected-action-id="selectedActionId"
+        :timeline-diagnostics="timelineDiagnostics"
         @select-action="selectedActionId = $event"
         @delete-action="deleteAction"
         @update-action-duration="updateActionDuration"
@@ -88,6 +89,7 @@
           :summary="simulationResult.summary"
           :diagnostics="simulationResult.diagnostics"
           :damage-timeline="simulationResult.damageTimeline"
+          :timeline-diagnostics="timelineDiagnostics"
         />
       </div>
 
@@ -110,6 +112,7 @@ import PropertiesPanel from '../features/workbench/PropertiesPanel.vue';
 import ResourceMonitorPanel from '../features/workbench/ResourceMonitorPanel.vue';
 import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
+import { createTimelineDiagnostics } from '../features/workbench/timelineDiagnostics';
 import {
   DEFAULT_WORKBENCH_SELECTION,
   createWorkbenchActionDraft,
@@ -149,6 +152,12 @@ const project = computed(() =>
 );
 const scenario = computed(() => compileProject(project.value, gameData));
 const simulationResult = computed(() => simulateScenario(scenario.value));
+const timelineDiagnostics = computed(() =>
+  createTimelineDiagnostics({
+    actors: scenario.value.actors,
+    actions: scenario.value.actions,
+  }),
+);
 const selectedAction = computed(() => {
   return scenario.value.actions.find((action) => action.id === selectedActionId.value) ?? scenario.value.actions[0];
 });

@@ -55,7 +55,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；10 个测试文件、67 条测试通过。
+- `npm run test -- --run`：通过；10 个测试文件、68 条测试通过。
 
 ## 3. 目录速览
 
@@ -956,6 +956,38 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 在 `scenario.actions[]` 投影层或工作台层计算同一轨道内动作时间范围重叠。
 - 在时间轴动作块和分析/诊断区域显示基础重叠告警，避免缩放和持续时间调整后用户看不到冲突。
 - 保持诊断是 UI/投影层提示，不先改战斗公式或动作合法性 hard fail。
+
+### 2026-07-07：阶段 4-12 轨道内重叠检测和时间轴诊断雏形落地
+
+本轮完成：
+
+- 新增 `src/features/workbench/timelineDiagnostics.js`，从 `scenario.actors[]` 和 `scenario.actions[]` 生成时间轴诊断投影。
+- 诊断投影会按当前角色轨/系统轨解析动作归属，并计算同一轨道内动作时间范围重叠。
+- `TimelineGridPreview` 接入 `timelineDiagnostics`，重叠动作块会显示红色重叠态和“重叠”标记。
+- `AnalysisPanel` 新增“时间轴诊断”区域，展示轨道重叠数量、轨道名、冲突动作名和重叠区间。
+- `Workbench.vue` 继续只负责串联 `Project -> Scenario -> simulation -> timelineDiagnostics`，没有把重叠判定写成战斗合法性 hard fail。
+- 新增工作台测试，覆盖同一角色轨两个技能动作从 `500ms` 到 `1000ms` 的重叠告警。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、24 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、68 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- `http://127.0.0.1:5175/#/workbench` 本地页面服务返回 200。
+- 本阶段未使用应用内浏览器交互验证作为通过证据；上一阶段记录的浏览器控制层超时问题仍按工具侧限制看待。
+
+当前结论：
+
+- 新版工作台已经能在用户调整动作开始时间或持续时间后提示同轨道时间冲突。
+- 重叠诊断目前是 UI/投影层提示，不阻止保存、模拟或草稿编辑。
+- 当前重叠检测只按动作起止区间判断，没有做动作优先级、取消窗口、跨轨拖拽改 actor 或真实技能帧语义。
+
+下一步：
+
+- 阶段 4-13 目标：建立跨轨拖拽改变动作归属的最小闭环。
+- 先允许有 `actorId` 的动作在角色轨之间拖拽，并由 `Workbench.vue` 回写动作归属或对应角色选择。
+- 对系统轨动作保持只读归属，避免注释/敌人事件被误拖成角色技能。
+- 为跨轨拖拽补充测试，并继续保持运行时和战斗公式不因 UI 拖拽而隐式篡改。
 
 ## 10. 文档维护规则
 

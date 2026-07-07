@@ -342,6 +342,33 @@ describe('Workbench view', () => {
     );
   });
 
+  it('flags overlapping actions on the same timeline lane', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe('0');
+    expect(wrapper.find('[data-testid="workbench-overlap-empty"]').text()).toBe('暂无轨道重叠');
+
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    expect(wrapper.findAll('[data-testid="workbench-action-overlap-warning"]')).toHaveLength(0);
+
+    await wrapper.find('[data-testid="workbench-start-input"]').setValue('500');
+
+    expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe('1');
+    expect(wrapper.findAll('[data-testid="workbench-action-overlap-warning"]')).toHaveLength(2);
+    expect(wrapper.find('[data-testid="workbench-overlap-item"]').text()).toContain('末音');
+    expect(wrapper.find('[data-testid="workbench-overlap-item"]').text()).toContain('哈库茵剑舞 / 哈库茵剑舞');
+    expect(wrapper.find('[data-testid="workbench-overlap-item"]').text()).toContain('500-1000ms');
+    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe('有未保存改动');
+  });
+
   it('keeps generated action ids unique after deleting the first action', async () => {
     const wrapper = mount(Workbench, {
       global: {
