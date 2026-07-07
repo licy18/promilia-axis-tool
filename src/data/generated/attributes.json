@@ -1,0 +1,1848 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-07T07:08:23.886Z",
+  "source": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/battle_info.json",
+  "count": 184,
+  "items": [
+    {
+      "id": 1,
+      "key": "ATK",
+      "name": "攻击",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 1,
+      "sort": 2,
+      "icon": "tex_icon_status_atk.png"
+    },
+    {
+      "id": 2,
+      "key": "MATK",
+      "name": "-",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_atk.png"
+    },
+    {
+      "id": 3,
+      "key": "DEF",
+      "name": "物理防御",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 1,
+      "sort": 3,
+      "icon": "tex_icon_status_def.png"
+    },
+    {
+      "id": 4,
+      "key": "MDEF",
+      "name": "魔法防御",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 1,
+      "sort": 4,
+      "icon": "tex_icon_status_res.png"
+    },
+    {
+      "id": 5,
+      "key": "MAXHP",
+      "name": "生命",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 1,
+      "sort": 1,
+      "icon": "tex_icon_status_hp.png"
+    },
+    {
+      "id": 6,
+      "key": "MAXSP",
+      "name": "能量上限",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 7,
+      "key": "CRI",
+      "name": "暴击率",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 1,
+      "sort": 5,
+      "icon": "tex_icon_status_bjl.png"
+    },
+    {
+      "id": 8,
+      "key": "CRI_DMG",
+      "name": "暴击伤害",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 1,
+      "sort": 6,
+      "icon": "tex_icon_status_bjsh.png"
+    },
+    {
+      "id": 21,
+      "key": "SHOOT_DMGUP",
+      "name": "伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 1,
+      "sort": 11,
+      "icon": "tex_icon_status_zf.png"
+    },
+    {
+      "id": 22,
+      "key": "SUFFER_DMGDOWN",
+      "name": "伤害减免",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 1,
+      "sort": 12,
+      "icon": "tex_icon_status_sj.png"
+    },
+    {
+      "id": 23,
+      "key": "SHOOT_HEALUP",
+      "name": "治疗加成",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 1,
+      "sort": 7,
+      "icon": "tex_icon_status_zhljc.png"
+    },
+    {
+      "id": 24,
+      "key": "SUFFER_HEALUP",
+      "name": "受到治疗加成",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 1,
+      "sort": 8,
+      "icon": "tex_icon_status_zhljc2.png"
+    },
+    {
+      "id": 25,
+      "key": "PHYSICAL_SHOOTDMGUP",
+      "name": "物理伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_zf.png"
+    },
+    {
+      "id": 26,
+      "key": "PHYSICAL_SUFFERDMGDOWN",
+      "name": "物理伤害减免",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_sj.png"
+    },
+    {
+      "id": 27,
+      "key": "MAGIC_SHOOTDMGDUP",
+      "name": "魔法伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_zf.png"
+    },
+    {
+      "id": 28,
+      "key": "MAGIC_SUFFERDMGDOWN",
+      "name": "魔法伤害减免",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_sj.png"
+    },
+    {
+      "id": 29,
+      "key": "PERPIERCING",
+      "name": "物理防御百分比穿透",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 1,
+      "sort": 9,
+      "icon": "tex_icon_status_wswf.png"
+    },
+    {
+      "id": 30,
+      "key": "PERMPIERCING",
+      "name": "魔法防御百分比穿透",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 1,
+      "sort": 10,
+      "icon": "tex_icon_status_wsmf.png"
+    },
+    {
+      "id": 31,
+      "key": "LEECH",
+      "name": "吸血系数",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 32,
+      "key": "REBOUND",
+      "name": "反弹系数",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 33,
+      "key": "COLDDOWN",
+      "name": "冷却减少",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 34,
+      "key": "MASS",
+      "name": "重量",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 35,
+      "key": "SPEED",
+      "name": "移动速度",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 36,
+      "key": "FASTRUN_SPEED_RATIO",
+      "name": "疾跑速度系数修正",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 37,
+      "key": "WALK_SPEED",
+      "name": "走路速度",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 38,
+      "key": "ENGAGE_SPEED",
+      "name": "engage速度",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 39,
+      "key": "JUMP_HEIGHT",
+      "name": "坐骑跳跃高度",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 40,
+      "key": "JUMP_DISTANCE",
+      "name": "坐骑跳跃距离",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 43,
+      "key": "CAN_JUMP",
+      "name": "坐骑能否跳跃",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 44,
+      "key": "CAN_SPRINT",
+      "name": "坐骑能否冲刺",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 45,
+      "key": "SPEED_RATIO",
+      "name": "移动速度修正属性",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 51,
+      "key": "NORMAL_SHOOTDMGUP",
+      "name": "无属性伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 2,
+      "sort": 1,
+      "icon": "tex_icon_status_wuzf.png"
+    },
+    {
+      "id": 52,
+      "key": "FIRE_SHOOTDMGUP",
+      "name": "火属性伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 2,
+      "sort": 2,
+      "icon": "tex_icon_status_huozf.png"
+    },
+    {
+      "id": 53,
+      "key": "WIND_SHOOTDMGUP",
+      "name": "风属性伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 2,
+      "sort": 3,
+      "icon": "tex_icon_status_fengzf.png"
+    },
+    {
+      "id": 54,
+      "key": "EARTH_SHOOTDMGUP",
+      "name": "地属性伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 2,
+      "sort": 4,
+      "icon": "tex_icon_status_dizf.png"
+    },
+    {
+      "id": 55,
+      "key": "WOOD_SHOOTDMGUP",
+      "name": "木属性伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 2,
+      "sort": 5,
+      "icon": "tex_icon_status_muzf.png"
+    },
+    {
+      "id": 56,
+      "key": "ICE_SHOOTDMGUP",
+      "name": "冰属性伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 2,
+      "sort": 6,
+      "icon": "tex_icon_status_bingzf.png"
+    },
+    {
+      "id": 57,
+      "key": "WATER_SHOOTDMGUP",
+      "name": "水属性伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 2,
+      "sort": 7,
+      "icon": "tex_icon_status_shuizf.png"
+    },
+    {
+      "id": 58,
+      "key": "ELEC_SHOOTDMGUP",
+      "name": "雷属性伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 2,
+      "sort": 8,
+      "icon": "tex_icon_status_leizf.png"
+    },
+    {
+      "id": 59,
+      "key": "LIGHT_SHOOTDMGUP",
+      "name": "光属性伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 2,
+      "sort": 9,
+      "icon": "tex_icon_status_guangzf.png"
+    },
+    {
+      "id": 60,
+      "key": "DARK_SHOOTDMGUP",
+      "name": "暗属性伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 2,
+      "sort": 10,
+      "icon": "tex_icon_status_anzf.png"
+    },
+    {
+      "id": 61,
+      "key": "NORMAL_DEFENSE",
+      "name": "无属性伤害减免",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_sj.png"
+    },
+    {
+      "id": 62,
+      "key": "FIRE_DEFENSE",
+      "name": "火属性伤害减免",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_sj.png"
+    },
+    {
+      "id": 63,
+      "key": "WIND_DEFENSE",
+      "name": "风属性伤害减免",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_sj.png"
+    },
+    {
+      "id": 64,
+      "key": "EARTH_DEFENSE",
+      "name": "地属性伤害减免",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_sj.png"
+    },
+    {
+      "id": 65,
+      "key": "WOOD_DEFENSE",
+      "name": "木属性伤害减免",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_sj.png"
+    },
+    {
+      "id": 66,
+      "key": "ICE_DEFENSE",
+      "name": "冰属性伤害减免",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_sj.png"
+    },
+    {
+      "id": 67,
+      "key": "WATER_DEFENSE",
+      "name": "水属性伤害减免",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_sj.png"
+    },
+    {
+      "id": 68,
+      "key": "ELEC_DEFENSE",
+      "name": "雷属性伤害减免",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_sj.png"
+    },
+    {
+      "id": 69,
+      "key": "LIGHT_DEFENSE",
+      "name": "光属性伤害减免",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_sj.png"
+    },
+    {
+      "id": 70,
+      "key": "DARK_DEFENSE",
+      "name": "暗属性伤害减免",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_sj.png"
+    },
+    {
+      "id": 101,
+      "key": "CRI_SUFFERDMGDOWN",
+      "name": "暴击伤害减免",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 102,
+      "key": "CRI_DEFENSE",
+      "name": "减暴率",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 103,
+      "key": "STEERINGSPEED",
+      "name": "转向速度",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 104,
+      "key": "BLOCKTHROWS",
+      "name": "-",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 105,
+      "key": "SPGETUP",
+      "name": "能量回复增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 1,
+      "sort": 14,
+      "icon": "tex_icon_status_nlhfzf.png"
+    },
+    {
+      "id": 106,
+      "key": "SOLDIER_SUFFERAOEDMGDOWN",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 107,
+      "key": "PIERCING",
+      "name": "物理防御固定穿透",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_wlct.png"
+    },
+    {
+      "id": 108,
+      "key": "MPIERCING",
+      "name": "魔法防御固定穿透",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_mfct.png"
+    },
+    {
+      "id": 109,
+      "key": "HPR_SEC",
+      "name": "每秒生命回复",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 110,
+      "key": "SPR_SEC",
+      "name": "每秒能量回复",
+      "isRatio": false,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 111,
+      "key": "SHIELD",
+      "name": "护盾值",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 112,
+      "key": "THREAT",
+      "name": "威胁值",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 113,
+      "key": "SKILLPRIORITY",
+      "name": "基础打断优先级",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 114,
+      "key": "ATTACK_TOKEN",
+      "name": "进攻token",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 115,
+      "key": "CD_SKILL",
+      "name": "冷却缩减",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 12,
+      "icon": "tex_icon_status_js.png"
+    },
+    {
+      "id": 116,
+      "key": "CD_SKILL_1",
+      "name": "冷却缩减_槽位1",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_js.png"
+    },
+    {
+      "id": 117,
+      "key": "CD_SKILL_2",
+      "name": "冷却缩减_槽位2",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_js.png"
+    },
+    {
+      "id": 118,
+      "key": "CD_SKILL_3",
+      "name": "星鸣技冷却缩减",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_js.png"
+    },
+    {
+      "id": 119,
+      "key": "CD_SKILL_4",
+      "name": "冷却缩减_槽位4",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_js.png"
+    },
+    {
+      "id": 120,
+      "key": "CD_SKILL_5",
+      "name": "冷却缩减_槽位5",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_js.png"
+    },
+    {
+      "id": 121,
+      "key": "COUNTER_THRESHOLD",
+      "name": "反击阈值",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 122,
+      "key": "SHOOT_SHIELDUP",
+      "name": "施加护盾增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 123,
+      "key": "SUFFER_SHIELDUP",
+      "name": "受护盾增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 124,
+      "key": "SHIELD_DEFENSE",
+      "name": "护盾强效",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 125,
+      "key": "ATTACK_SHOOTDMGUP",
+      "name": "普通攻击伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 126,
+      "key": "ATTACK_SUFFERDMGDOWN",
+      "name": "受普通攻击伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 127,
+      "key": "CHARGEDATTACK_SHOOTDMGUP",
+      "name": "重击伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 128,
+      "key": "CHARGEDATTACK_SUFFERDMGDOWN",
+      "name": "受重击伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 129,
+      "key": "SKILL_SHOOTDMGUP",
+      "name": "星鸣技伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 130,
+      "key": "SKILL_SUFFERDMGDOWN",
+      "name": "受技能伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 131,
+      "key": "AERIALATTACK_SHOOTDMGUP",
+      "name": "下落攻击伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 132,
+      "key": "AERIALATTACK_SUFFERDMGDOWN",
+      "name": "受下落攻击伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 133,
+      "key": "ULTRAATTACK_SHOOTDMGUP",
+      "name": "星决技伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 134,
+      "key": "ULTRAATTACK_SUFFERDMGDOWN",
+      "name": "受大招伤害增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 135,
+      "key": "SWITCHENERGY",
+      "name": "急速能量",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 136,
+      "key": "SWITCHENERGY_LIMIT",
+      "name": "急速能量上限",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 137,
+      "key": "SWITCHENERGY_RECOVERYRATE",
+      "name": "急速能量回复速率",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 138,
+      "key": "FIRE_REVERBERATIONDEFENSE",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 139,
+      "key": "WIND_REVERBERATIONDEFENSE",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 140,
+      "key": "EARTH_REVERBERATIONDEFENSE",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 141,
+      "key": "WOOD_REVERBERATIONDEFENSE",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 142,
+      "key": "ICE_REVERBERATIONDEFENSE",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 143,
+      "key": "WATER_REVERBERATIONDEFENSE",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 144,
+      "key": "ELEC_REVERBERATIONDEFENSE",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 145,
+      "key": "LIGHT_REVERBERATIONDEFENSE",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 146,
+      "key": "DARK_REVERBERATIONDEFENSE",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 147,
+      "key": "ALL_REVERBERATIONDEFENSE",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 148,
+      "key": "FIRE_REVERBERATIONPIERCING",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 149,
+      "key": "WIND_REVERBERATIONPIERCING",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 150,
+      "key": "EARTH_REVERBERATIONPIERCING",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 151,
+      "key": "WOOD_REVERBERATIONPIERCING",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 152,
+      "key": "ICE_REVERBERATIONPIERCING",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 153,
+      "key": "WATER_REVERBERATIONPIERCING",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 154,
+      "key": "ELEC_REVERBERATIONPIERCING",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 155,
+      "key": "LIGHT_REVERBERATIONPIERCING",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 156,
+      "key": "DARK_REVERBERATIONPIERCING",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 157,
+      "key": "ALL_REVERBERATIONPIERCING",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 158,
+      "key": "CD_SKILL_206",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_js.png"
+    },
+    {
+      "id": 201,
+      "key": "WEAKNESS_POINT_MAX",
+      "name": "弱点值上限",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 202,
+      "key": "WDM_PHYSICAL",
+      "name": "弱点伤害倍率_物理",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 203,
+      "key": "WDM_MAGIC",
+      "name": "弱点伤害倍率_魔法",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 204,
+      "key": "WDM_HEAL",
+      "name": "弱点伤害倍率_治疗",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 205,
+      "key": "WDM_NORMAL",
+      "name": "弱点伤害倍率_无属性",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 206,
+      "key": "WDM_FIRE",
+      "name": "弱点伤害倍率_火",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 207,
+      "key": "WDM_WIND",
+      "name": "弱点伤害倍率_风",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 208,
+      "key": "WDM_EARTH",
+      "name": "弱点伤害倍率_地",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 209,
+      "key": "WDM_WOOD",
+      "name": "弱点伤害倍率_木",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 210,
+      "key": "WDM_ICE",
+      "name": "弱点伤害倍率_冰",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 211,
+      "key": "WDM_WATER",
+      "name": "弱点伤害倍率_水",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 212,
+      "key": "WDM_ELEC",
+      "name": "弱点伤害倍率_雷",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 213,
+      "key": "WDM_LIGHT",
+      "name": "弱点伤害倍率_光",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 214,
+      "key": "WDM_DARK",
+      "name": "弱点伤害倍率_暗",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 215,
+      "key": "WDM_MIN",
+      "name": "弱点伤害_最小值",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 216,
+      "key": "WDM_MAX",
+      "name": "弱点伤害_最大值",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 217,
+      "key": "WP_RECOVERY_DELAY",
+      "name": "弱点复原延迟",
+      "isRatio": false,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 218,
+      "key": "WP_RECOVERY_RATE",
+      "name": "复原弱点的速率",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 219,
+      "key": "WP_BREAK_TIME",
+      "name": "Break持续时间",
+      "isRatio": false,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 220,
+      "key": "WP_BREAK_END_TIME",
+      "name": "Braek_End持续时间",
+      "isRatio": false,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 221,
+      "key": "WP_BREAK_DMGUP",
+      "name": "Break受伤增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 222,
+      "key": "WDM_TAG_HEAVYATTACK",
+      "name": "架势条破坏效率",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 223,
+      "key": "WP_BREAK_PERCENT",
+      "name": "Break击破万分比",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 224,
+      "key": "WP_BREAK_TOUGH",
+      "name": "Break韧性",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 225,
+      "key": "DODGE",
+      "name": "全闪避",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 226,
+      "key": "SPR_SEC_BACK",
+      "name": "能量自动回复值（后台）",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 227,
+      "key": "SPGETUP_AUTO",
+      "name": "能量自动回复增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 228,
+      "key": "SPGETUP_ATK",
+      "name": "能量攻击回复增幅",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 229,
+      "key": "MASTERY",
+      "name": "调谐强度",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 1,
+      "sort": 13,
+      "icon": "tex_icon_status_jstk.png"
+    },
+    {
+      "id": 301,
+      "key": "SKILL1_CD",
+      "name": "普攻间隔",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 302,
+      "key": "PET_REBORN",
+      "name": "奇波重整时间",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 303,
+      "key": "PET_PUZZLETYPE",
+      "name": "奇波解谜属性",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 304,
+      "key": "COST",
+      "name": "cost值",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": null
+    },
+    {
+      "id": 305,
+      "key": "COST_MAX",
+      "name": "cost最大值",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": null
+    },
+    {
+      "id": 306,
+      "key": "COST_UP_TIME",
+      "name": "cost增长时间（MS）",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": null
+    },
+    {
+      "id": 307,
+      "key": "COST_START",
+      "name": "关卡初始COST值",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": null
+    },
+    {
+      "id": 501,
+      "key": "ROGUE_IMPLEMENTATION",
+      "name": "执行",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 502,
+      "key": "ROGUE_PERCEPTION",
+      "name": "洞察",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 503,
+      "key": "ROGUE_APPERCEIVE",
+      "name": "感知",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 504,
+      "key": "ROGUE_TURBULENCEGET",
+      "name": "扰动率获取调整值",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 505,
+      "key": "ROGUE_VOIDGOLDGET",
+      "name": "虚金获取率",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 506,
+      "key": "ROGUE_DISCOUNT",
+      "name": "购买道具折扣",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 507,
+      "key": "ROGUE_CHOICENUM",
+      "name": "选择数量",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 508,
+      "key": "ROGUE_REROLLNUM",
+      "name": "重投次数",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 509,
+      "key": "ROGUE_INFOFLOWGET",
+      "name": "信息流获取调整值",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 510,
+      "key": "ROGUE_VOIDGOLD",
+      "name": "虚金数量",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": null
+    },
+    {
+      "id": 511,
+      "key": "ROGUE_INFOFLOW",
+      "name": "信息流数量",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": null
+    },
+    {
+      "id": 512,
+      "key": "ROGUE_TURBULENCE",
+      "name": "扰动率数量",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": null
+    },
+    {
+      "id": 513,
+      "key": "ROGUE_DODGEATTACK",
+      "name": "极限反击伤害",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_atk.png"
+    },
+    {
+      "id": 514,
+      "key": "ROGUE_KIBO_SKILLCD",
+      "name": "奇波特技冷却缩减",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_js.png"
+    },
+    {
+      "id": 515,
+      "key": "ROGUE_KIBO_ATK",
+      "name": "奇波攻击",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_atk.png"
+    },
+    {
+      "id": 516,
+      "key": "ROGUE_KIBO_MAXHP",
+      "name": "奇波生命上限",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_hp.png"
+    },
+    {
+      "id": 517,
+      "key": "ROGUE_KIBO_CRI",
+      "name": "奇波暴击率",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_bjl.png"
+    },
+    {
+      "id": 518,
+      "key": "ROGUE_KIBO_CRI_DMG",
+      "name": "奇波暴击伤害",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_bjsh.png"
+    },
+    {
+      "id": 997,
+      "key": "PET_SPECIAL",
+      "name": "异色闪光",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 998,
+      "key": "FLY_LEVEL",
+      "name": "击飞等级",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 999,
+      "key": "IMPACT_RESISTANCE",
+      "name": "抗冲击力",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 1001,
+      "key": "PER_ATK",
+      "name": "攻击",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_atk.png"
+    },
+    {
+      "id": 1002,
+      "key": "PER_MATK",
+      "name": "-",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_atk.png"
+    },
+    {
+      "id": 1003,
+      "key": "PER_DEF",
+      "name": "物理防御",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_def.png"
+    },
+    {
+      "id": 1004,
+      "key": "PER_MDEF",
+      "name": "魔法防御",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_res.png"
+    },
+    {
+      "id": 1005,
+      "key": "PER_MAXHP",
+      "name": "生命",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_hp.png"
+    },
+    {
+      "id": 1006,
+      "key": "PER_MASS",
+      "name": "重量",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 1007,
+      "key": "PER_SPEED",
+      "name": "移动速度",
+      "isRatio": true,
+      "isCalculatedRatio": true,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 1039,
+      "key": "EXTRA_SPEED_RUN",
+      "name": "坐骑地面移动速度百分比",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 1040,
+      "key": "EXTRA_SPEED_FLY",
+      "name": "坐骑飞行移动速度百分比",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 1041,
+      "key": "EXTRA_SPEED_SWIM",
+      "name": "坐骑游泳移动速度百分比",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 1042,
+      "key": "EXTRA_SPEED_DIVE",
+      "name": "坐骑潜水移动速度百分比",
+      "isRatio": true,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 2001,
+      "key": "EXTRA_ATK",
+      "name": "攻击",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_atk.png"
+    },
+    {
+      "id": 2002,
+      "key": "EXTRA_MATK",
+      "name": "-",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_atk.png"
+    },
+    {
+      "id": 2003,
+      "key": "EXTRA_DEF",
+      "name": "物理防御",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_def.png"
+    },
+    {
+      "id": 2004,
+      "key": "EXTRA_MDEF",
+      "name": "魔法防御",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_res.png"
+    },
+    {
+      "id": 2005,
+      "key": "EXTRA_MAXHP",
+      "name": "生命",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_hp.png"
+    },
+    {
+      "id": 2006,
+      "key": "EXTRA_MASS",
+      "name": "重量",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    },
+    {
+      "id": 2007,
+      "key": "EXTRA_SPEED",
+      "name": "移动速度",
+      "isRatio": false,
+      "isCalculatedRatio": false,
+      "showType": 0,
+      "sort": 0,
+      "icon": "tex_icon_status_star2.png"
+    }
+  ]
+}

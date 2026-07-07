@@ -1,8 +1,9 @@
 import { mount } from '@vue/test-utils';
+import { vi } from 'vitest';
 import SkillBlock from '@/components/timeline/SkillBlock.vue';
 
 // Mock Vue Use Core
-jest.mock('@vueuse/core', () => ({
+vi.mock('@vueuse/core', () => ({
   useThrottleFn: (fn) => fn
 }));
 
