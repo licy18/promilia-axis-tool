@@ -30,6 +30,7 @@ export function projectSimulationResult({
     damageEvents,
     resourceEvents,
   });
+  const candidateValueSeries = buildCandidateValueSeries(actionResultTimeline);
   const damageTimeline = damageEvents.map(event => ({
     timeMs: event.timeMs,
     actionId: event.actionId,
@@ -94,6 +95,7 @@ export function projectSimulationResult({
     },
     eventLog,
     actionResultTimeline,
+    candidateValueSeries,
     damageTimeline,
     resourceTimeline,
     summary: {
@@ -105,6 +107,7 @@ export function projectSimulationResult({
       resourceEventCount: resourceTimeline.length,
       actionResultCount: actionResultTimeline.length,
       actionCount: scenario.actions.length,
+      candidateValueSeriesSummary: candidateValueSeries.summary,
       formulaVersion: damageEvents[0]?.payload.formulaVersion ?? null,
       formulaCandidatePatternSummary,
       confidence: damageTimeline.some(entry => entry.confidence === 'low')
@@ -156,6 +159,141 @@ function summarizeSelfEnergyByActor(scenario, actionResultTimeline) {
   }
 
   return [...summaries.values()];
+}
+
+function buildCandidateValueSeries(actionResultTimeline) {
+  const hitCandidates = actionResultTimeline.flatMap(entry =>
+    (entry.hitCandidates ?? []).map((hitCandidate, index) => ({
+      ...hitCandidate,
+      sequenceIndex: index,
+    }))
+  );
+  const series = [
+    createCandidateSeries({
+      key: 'hpDamageFormulaParamCandidate',
+      label: 'HP参数候选',
+      valueKind: 'TDamageElementParams.formulaParamValues',
+      unit: 'raw-param',
+      hitCandidates,
+      getValues: createHpCandidateSeriesValues,
+    }),
+    createCandidateSeries({
+      key: 'toughnessDamageCandidate',
+      label: '削韧候选',
+      valueKind: 'TDamageElementParams.weakBreakDamageRate',
+      unit: 'raw-field',
+      hitCandidates,
+      getValues: hitCandidate =>
+        hitCandidate.toughnessDamage?.weakBreakDamageRates ?? [],
+    }),
+    createCandidateSeries({
+      key: 'selfEnergyCandidate',
+      label: '能量候选',
+      valueKind: 'TDamageElementParams.recoverSP',
+      unit: 'raw-field',
+      hitCandidates,
+      getValues: hitCandidate =>
+        hitCandidate.selfEnergyChange?.recoverSPValues ?? [],
+    }),
+  ];
+  const activeSeries = series.filter(item => item.pointCount > 0);
+  const pointCount = activeSeries.reduce(
+    (sum, item) => sum + item.pointCount,
+    0
+  );
+
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-action-result-candidate-value-series',
+    status:
+      pointCount > 0
+        ? 'candidate-value-series-found-unapplied'
+        : 'candidate-value-series-missing',
+    frameRate: AZPR_TIMELINE_FRAME_RATE,
+    summary: {
+      seriesCount: activeSeries.length,
+      pointCount,
+      hitCandidateCount: hitCandidates.length,
+      actionCount: new Set(hitCandidates.map(item => item.actionId)).size,
+      applied: false,
+    },
+    series,
+    applied: false,
+  };
+}
+
+function createCandidateSeries({
+  key,
+  label,
+  valueKind,
+  unit,
+  hitCandidates,
+  getValues,
+}) {
+  const points = hitCandidates
+    .map((hitCandidate, index) =>
+      createCandidateSeriesPoint(hitCandidate, index, getValues(hitCandidate))
+    )
+    .filter(Boolean);
+  const values = points.map(point => point.value).filter(Number.isFinite);
+  const valueMin = minNumber(values);
+  const valueMax = maxNumber(values);
+
+  return {
+    key,
+    label,
+    valueKind,
+    unit,
+    status:
+      points.length > 0
+        ? 'candidate-points-found-unapplied'
+        : 'candidate-points-missing',
+    pointCount: points.length,
+    valueMin,
+    valueMax,
+    valueRange: numberRange(valueMin, valueMax),
+    points,
+    applied: false,
+  };
+}
+
+function createCandidateSeriesPoint(hitCandidate, sequenceIndex, rawValues) {
+  const valueSamples = uniqueNumbers(rawValues);
+  if (valueSamples.length === 0) {
+    return null;
+  }
+  const valueMin = minNumber(valueSamples);
+  const valueMax = maxNumber(valueSamples);
+
+  return {
+    actionId: hitCandidate.actionId,
+    actionName: hitCandidate.actionName,
+    actionVariantLabel: hitCandidate.actionVariantLabel,
+    skillId: numberOrNull(hitCandidate.skillId),
+    hitSkillId: numberOrNull(hitCandidate.hitSkillId),
+    hitIndex: numberOrNull(hitCandidate.hitIndex),
+    sequenceIndex,
+    frameRate: hitCandidate.frameRate ?? AZPR_TIMELINE_FRAME_RATE,
+    primaryFrame: numberOrNull(hitCandidate.primaryFrame),
+    timeMs: numberOrNull(hitCandidate.candidateTimeMs),
+    value: valueMax,
+    valueMin,
+    valueMax,
+    valueSamples,
+    candidateCount: valueSamples.length,
+    elementConfigIds: hitCandidate.damageElementElementConfigIds ?? [],
+    sourceStatus: hitCandidate.status,
+    applied: false,
+  };
+}
+
+function createHpCandidateSeriesValues(hitCandidate) {
+  const rawFormulaParamValues = (hitCandidate.candidates ?? []).flatMap(
+    candidate => candidate.hpDamage?.rawFormulaParamValues ?? []
+  );
+  return rawFormulaParamValues
+    .map(numberOrNull)
+    .filter(value => Number.isFinite(value) && value > 0 && value !== 10000);
 }
 
 const PREFERRED_FORMULA_CANDIDATE_STRATEGY =
@@ -1427,6 +1565,7 @@ function compactHitCandidateDamageElementMapping(mapping) {
           formulaFunctionStatus: mapping.hpDamage.formulaFunctionStatus ?? null,
           formulaFunctionMatchedIds:
             mapping.hpDamage.formulaFunctionMatchedIds ?? [],
+          rawFormulaParamValues: mapping.hpDamage.rawFormulaParamValues ?? [],
           damageFields: compactDamageFieldPatternValues(
             mapping.hpDamage.damageFields
           ),

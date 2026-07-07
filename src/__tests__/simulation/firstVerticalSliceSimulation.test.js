@@ -671,6 +671,80 @@ describe('first vertical slice simulation', () => {
         weakBreakDamageRates: [7000],
       }),
     });
+    expect(result.candidateValueSeries).toMatchObject({
+      status: 'candidate-value-series-found-unapplied',
+      frameRate: 60,
+      summary: {
+        seriesCount: 3,
+        pointCount: 15,
+        hitCandidateCount: 5,
+        actionCount: 1,
+        applied: false,
+      },
+      applied: false,
+    });
+    const hpCandidateSeries = result.candidateValueSeries.series.find(
+      series => series.key === 'hpDamageFormulaParamCandidate'
+    );
+    expect(hpCandidateSeries).toMatchObject({
+      label: 'HP参数候选',
+      valueKind: 'TDamageElementParams.formulaParamValues',
+      unit: 'raw-param',
+      pointCount: 5,
+      valueMin: 2500,
+      valueMax: 13000,
+      applied: false,
+    });
+    expect(
+      hpCandidateSeries.points.map(point => [
+        point.hitIndex,
+        point.value,
+        point.valueMin,
+        point.valueMax,
+      ])
+    ).toEqual([
+      [1, 2500, 1000, 2500],
+      [2, 4800, 1000, 4800],
+      [3, 3000, 1000, 3000],
+      [4, 5400, 1000, 5400],
+      [5, 13000, 1000, 13000],
+    ]);
+    const toughnessCandidateSeries = result.candidateValueSeries.series.find(
+      series => series.key === 'toughnessDamageCandidate'
+    );
+    expect(toughnessCandidateSeries).toMatchObject({
+      label: '削韧候选',
+      valueKind: 'TDamageElementParams.weakBreakDamageRate',
+      unit: 'raw-field',
+      pointCount: 5,
+      valueMin: 7000,
+      valueMax: 7000,
+      applied: false,
+    });
+    expect(toughnessCandidateSeries.points.map(point => point.value)).toEqual([
+      7000, 7000, 7000, 7000, 7000,
+    ]);
+    const selfEnergyCandidateSeries = result.candidateValueSeries.series.find(
+      series => series.key === 'selfEnergyCandidate'
+    );
+    expect(selfEnergyCandidateSeries).toMatchObject({
+      label: '能量候选',
+      valueKind: 'TDamageElementParams.recoverSP',
+      unit: 'raw-field',
+      pointCount: 5,
+      valueMin: 2399,
+      valueMax: 3000,
+      applied: false,
+    });
+    expect(selfEnergyCandidateSeries.points.map(point => point.value)).toEqual([
+      2700, 2599, 2399, 3000, 2599,
+    ]);
+    expect(result.summary.candidateValueSeriesSummary).toMatchObject({
+      seriesCount: 3,
+      pointCount: 15,
+      hitCandidateCount: 5,
+      applied: false,
+    });
     const combinationPreview =
       result.actionResultTimeline[0].hpDamage.sourceEvidence.formulaCandidatePreview.combinationPreviews.find(
         item =>

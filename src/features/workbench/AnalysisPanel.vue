@@ -102,6 +102,47 @@
       </div>
     </div>
 
+    <div
+      v-if="candidateSeriesItems.length"
+      class="candidate-series-list"
+      data-testid="workbench-candidate-value-series"
+    >
+      <div class="diagnostic-heading source-heading">
+        <span>候选曲线</span>
+        <strong>{{ candidateValuePointCount }}</strong>
+      </div>
+      <div
+        v-for="series in candidateSeriesItems"
+        :key="series.key"
+        class="candidate-series-row"
+        data-testid="workbench-candidate-value-series-row"
+        :data-series-key="series.key"
+      >
+        <div class="candidate-series-main">
+          <span>{{ series.label }}</span>
+          <small>{{ formatCandidateSeries(series) }}</small>
+        </div>
+        <svg viewBox="0 0 112 32" class="candidate-series-sparkline">
+          <polyline
+            :points="formatCandidateSeriesPolyline(series)"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <circle
+            v-for="point in getCandidateSeriesSvgPoints(series)"
+            :key="point.key"
+            :cx="point.x"
+            :cy="point.y"
+            r="2.4"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
+    </div>
+
     <div class="timeline-diagnostics">
       <div class="diagnostic-heading">
         <span>时间轴诊断</span>
@@ -183,6 +224,15 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  candidateValueSeries: {
+    type: Object,
+    default: () => ({
+      summary: {
+        pointCount: 0,
+      },
+      series: [],
+    }),
+  },
   insertionDiagnostics: {
     type: Object,
     default: () => ({
@@ -210,6 +260,19 @@ const autoDelayedCount = computed(
   () =>
     props.insertionDiagnostics?.autoDelayedCount ??
     autoDelayedItems.value.length
+);
+const candidateSeriesItems = computed(() =>
+  (props.candidateValueSeries?.series ?? []).filter(
+    series => series.pointCount > 0
+  )
+);
+const candidateValuePointCount = computed(
+  () =>
+    props.candidateValueSeries?.summary?.pointCount ??
+    candidateSeriesItems.value.reduce(
+      (sum, series) => sum + (series.pointCount ?? 0),
+      0
+    )
 );
 
 function formatNumber(value) {
@@ -408,6 +471,55 @@ function formatHitCandidateSummary(entry) {
     .join('/');
   const frameText = frames ? ` · 帧 ${frames}` : '';
   return `逐hit候选 ${summary.mappedHitCandidateCount}/${summary.hitCandidateCount}段 · 三值字段 ${summary.damageElementFieldMappingCount}${frameText}`;
+}
+
+function formatCandidateSeries(series) {
+  const range = formatValueRange(series.valueMin, series.valueMax);
+  return `${series.pointCount}点 · ${range} · ${series.unit}`;
+}
+
+function formatValueRange(min, max) {
+  if (!Number.isFinite(Number(min)) || !Number.isFinite(Number(max))) {
+    return '-';
+  }
+  if (Number(min) === Number(max)) {
+    return formatNumber(min);
+  }
+  return `${formatNumber(min)}-${formatNumber(max)}`;
+}
+
+function formatCandidateSeriesPolyline(series) {
+  return getCandidateSeriesSvgPoints(series)
+    .map(point => `${point.x},${point.y}`)
+    .join(' ');
+}
+
+function getCandidateSeriesSvgPoints(series) {
+  const points = series.points ?? [];
+  if (points.length === 0) {
+    return [];
+  }
+
+  const min = Number.isFinite(Number(series.valueMin))
+    ? Number(series.valueMin)
+    : 0;
+  const max = Number.isFinite(Number(series.valueMax))
+    ? Number(series.valueMax)
+    : min;
+  const range = Math.max(1, max - min);
+  const count = Math.max(1, points.length - 1);
+
+  return points.map((point, index) => {
+    const x = 8 + (index / count) * 96;
+    const value = Number(point.value);
+    const y =
+      24 - (((Number.isFinite(value) ? value : min) - min) / range) * 18;
+    return {
+      key: `${point.actionId}-${point.hitIndex}-${index}`,
+      x: Number(x.toFixed(2)),
+      y: Number(y.toFixed(2)),
+    };
+  });
 }
 
 function formatFormulaCandidatePatternSummary(summary) {
@@ -707,6 +819,12 @@ h2 {
   padding: 0 14px 14px;
 }
 
+.candidate-series-list {
+  display: grid;
+  gap: 8px;
+  padding: 0 14px 14px;
+}
+
 .damage-row {
   display: flex;
   align-items: center;
@@ -725,6 +843,42 @@ h2 {
   border-left: 3px solid #79c7b9;
   border-radius: 4px;
   background: rgba(121, 199, 185, 0.1);
+}
+
+.candidate-series-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 112px;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 9px 10px;
+  border-left: 3px solid #79c7b9;
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.08);
+  color: #9ce0d2;
+}
+
+.candidate-series-main {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.candidate-series-main span {
+  color: #9ce0d2;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.candidate-series-main small {
+  color: #b8c0c7;
+  font-size: 11px;
+}
+
+.candidate-series-sparkline {
+  width: 112px;
+  height: 32px;
+  color: #79c7b9;
 }
 
 .action-result-row strong {

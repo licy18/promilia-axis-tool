@@ -2937,6 +2937,47 @@ Workbench 当前默认样本显示：
 - 阶段 5-8AB 目标：把 `hitCandidates[]` 聚合成可绘制的 HP / 韧性 / 自身能量候选曲线数据，例如 `candidateValueSeries` 或等价结构。
 - Workbench 应在分析/曲线区域展示三条未应用候选曲线或帧点标记，继续明确区分“当前实际投影值”和“候选公式字段预览”。
 
+### 2026-07-08：阶段 5-8AB hitCandidates 候选三曲线聚合
+
+本轮完成：
+
+- `projectSimulationResult()` 新增顶层 `candidateValueSeries`，从 `actionResultTimeline[].hitCandidates[]` 聚合 HP、削韧、自身能量三条候选曲线。
+- `summary.candidateValueSeriesSummary` 记录曲线数、点数、hit 候选数和动作数，仍统一标记 `applied: false`。
+- Workbench 分析面板新增“候选曲线”区域，显示每条候选曲线的点数、数值范围和未应用小折线。
+- 回归测试覆盖模拟输出和 Workbench 展示。
+
+当前末音 `10900101` 默认普攻动作候选曲线：
+
+- `candidateValueSeries.status = candidate-value-series-found-unapplied`。
+- `seriesCount = 3`，`pointCount = 15`，`hitCandidateCount = 5`，`actionCount = 1`。
+- HP 参数候选：`2500 / 4800 / 3000 / 5400 / 13000`，来源为 `TDamageElementParams.formulaParamValues`，已过滤常量槽 `10000`。
+- 削韧候选：`7000 / 7000 / 7000 / 7000 / 7000`，来源为 `TDamageElementParams.weakBreakDamageRate`。
+- 能量候选：`2700 / 2599 / 2399 / 3000 / 2599`，来源为 `TDamageElementParams.recoverSP`。
+
+Workbench 当前默认样本显示：
+
+```text
+候选曲线 15
+HP参数候选 5点 · 2,500-13,000 · raw-param
+削韧候选 5点 · 7,000 · raw-field
+能量候选 5点 · 2,399-3,000 · raw-field
+```
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+
+当前边界：
+
+- `candidateValueSeries` 是未应用候选曲线，不是最终伤害、削韧或充能计算结果。
+- HP 曲线当前取每个 hit 的候选参数最大值作为点值，仅用于对比和可视化；真实公式组合顺序、同段多候选处理、敌人防御/抗性和能量间隔规则仍未确认。
+- 曲线帧点仍沿用 `hitCandidates[].candidateTimeMs` 的动作相对帧点，尚未把连段子 skill_control 的真实切换时长、取消窗口或输入时机展开成绝对时间轴。
+
+下一步：
+
+- 阶段 5-8AC 目标：把 `candidateValueSeries` 转成时间轴绝对帧点/曲线图数据，让 HP、韧性、能量三条曲线能按 Endaxis 式多曲线轨道显示。
+- 同时补 `candidateValueSeries` 到实际曲线图或 marker 层的展示，仍保持候选与当前实际投影分离。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

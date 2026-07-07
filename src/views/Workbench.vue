@@ -12,12 +12,24 @@
           <span>{{ simulationResult.summary.formulaVersion }}</span>
         </div>
         <div class="nav-actions">
-          <span class="draft-status" data-testid="workbench-draft-status">{{ draftStatus }}</span>
-          <button class="nav-button" data-testid="workbench-save-draft" type="button" @click="saveDraft">
+          <span class="draft-status" data-testid="workbench-draft-status">{{
+            draftStatus
+          }}</span>
+          <button
+            class="nav-button"
+            data-testid="workbench-save-draft"
+            type="button"
+            @click="saveDraft"
+          >
             <Document class="button-icon" />
             <span>保存草稿</span>
           </button>
-          <button class="nav-button secondary" data-testid="workbench-reset-draft" type="button" @click="resetDraft">
+          <button
+            class="nav-button secondary"
+            data-testid="workbench-reset-draft"
+            type="button"
+            @click="resetDraft"
+          >
             <Refresh class="button-icon" />
             <span>重置</span>
           </button>
@@ -100,6 +112,7 @@
           :diagnostics="simulationResult.diagnostics"
           :damage-timeline="simulationResult.damageTimeline"
           :action-result-timeline="simulationResult.actionResultTimeline"
+          :candidate-value-series="simulationResult.candidateValueSeries"
           :insertion-diagnostics="insertionDiagnostics"
           :timeline-diagnostics="timelineDiagnostics"
         />
@@ -124,7 +137,10 @@ import PropertiesPanel from '../features/workbench/PropertiesPanel.vue';
 import ResourceMonitorPanel from '../features/workbench/ResourceMonitorPanel.vue';
 import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
-import { SYSTEM_TIMELINE_LANE_ID, createTimelineDiagnostics } from '../features/workbench/timelineDiagnostics';
+import {
+  SYSTEM_TIMELINE_LANE_ID,
+  createTimelineDiagnostics,
+} from '../features/workbench/timelineDiagnostics';
 import {
   DEFAULT_WORKBENCH_SELECTION,
   createWorkbenchActionDraft,
@@ -153,7 +169,8 @@ import { simulateScenario } from '../simulation/engine/simulateScenario';
 const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
 const NEW_ACTION_INSERT_GAP_MS = frameToMs(60);
-const AUTO_DELAY_NOTE_PATTERN = /^自动推迟：同轨已有动作占用，已从 \d+(?:\.\d+)?ms 调整到 \d+(?:\.\d+)?ms。$/;
+const AUTO_DELAY_NOTE_PATTERN =
+  /^自动推迟：同轨已有动作占用，已从 \d+(?:\.\d+)?ms 调整到 \d+(?:\.\d+)?ms。$/;
 const initialDraft = createDefaultWorkbenchDraftState();
 const selection = ref({ ...initialDraft.selection });
 const enemyConfig = ref({ ...initialDraft.enemyConfig });
@@ -168,7 +185,7 @@ const project = computed(() =>
   createWorkbenchProject(selection.value, {
     enemyConfig: enemyConfig.value,
     actions: actionDrafts.value,
-  }),
+  })
 );
 const scenario = computed(() => compileProject(project.value, gameData));
 const simulationResult = computed(() => simulateScenario(scenario.value));
@@ -176,21 +193,34 @@ const timelineDiagnostics = computed(() =>
   createTimelineDiagnostics({
     actors: scenario.value.actors,
     actions: scenario.value.actions,
-  }),
+  })
 );
-const insertionDiagnostics = computed(() => createInsertionDiagnostics(scenario.value.actions));
+const insertionDiagnostics = computed(() =>
+  createInsertionDiagnostics(scenario.value.actions)
+);
 const actionLibraryActor = computed(() => {
   return (
-    scenario.value.actors.find((actor) => Number(actor.characterId) === Number(actionLibraryCharacterId.value)) ??
-    scenario.value.actors[0]
+    scenario.value.actors.find(
+      actor =>
+        Number(actor.characterId) === Number(actionLibraryCharacterId.value)
+    ) ?? scenario.value.actors[0]
   );
 });
-const actionLibrarySkills = computed(() => getSkillsForCharacter(actionLibraryActor.value?.characterId));
+const actionLibrarySkills = computed(() =>
+  getSkillsForCharacter(actionLibraryActor.value?.characterId)
+);
 const selectedAction = computed(() => {
-  return scenario.value.actions.find((action) => action.id === selectedActionId.value) ?? scenario.value.actions[0];
+  return (
+    scenario.value.actions.find(
+      action => action.id === selectedActionId.value
+    ) ?? scenario.value.actions[0]
+  );
 });
 const selectedDraft = computed(() => {
-  return actionDrafts.value.find((action) => action.id === selectedActionId.value) ?? actionDrafts.value[0];
+  return (
+    actionDrafts.value.find(action => action.id === selectedActionId.value) ??
+    actionDrafts.value[0]
+  );
 });
 
 onMounted(() => {
@@ -207,10 +237,12 @@ function updateSelection(patch) {
   clearSegmentSplitPreview();
   const previousSelection = selection.value;
   const characterChanged =
-    patch.characterId != null && Number(patch.characterId) !== Number(selection.value.characterId);
+    patch.characterId != null &&
+    Number(patch.characterId) !== Number(selection.value.characterId);
   const secondaryCharacterChanged =
     patch.secondaryCharacterId != null &&
-    Number(patch.secondaryCharacterId) !== Number(selection.value.secondaryCharacterId);
+    Number(patch.secondaryCharacterId) !==
+      Number(selection.value.secondaryCharacterId);
   const nextSelection = normalizeWorkbenchSelection({
     ...selection.value,
     ...patch,
@@ -223,23 +255,34 @@ function updateSelection(patch) {
   });
 
   if (characterChanged || secondaryCharacterChanged) {
-    const nextActionDrafts = actionDrafts.value.map((action) => {
+    const nextActionDrafts = actionDrafts.value.map(action => {
       const nextAction = { ...action };
-      if (characterChanged && Number(nextAction.actorCharacterId) === Number(previousSelection.characterId)) {
+      if (
+        characterChanged &&
+        Number(nextAction.actorCharacterId) ===
+          Number(previousSelection.characterId)
+      ) {
         nextAction.actorCharacterId = nextSelection.characterId;
       }
       if (
         secondaryCharacterChanged &&
-        Number(nextAction.actorCharacterId) === Number(previousSelection.secondaryCharacterId)
+        Number(nextAction.actorCharacterId) ===
+          Number(previousSelection.secondaryCharacterId)
       ) {
         nextAction.actorCharacterId = nextSelection.secondaryCharacterId;
       }
-      if (secondaryCharacterChanged && nextAction.type === ACTION_TYPES.SWITCH) {
+      if (
+        secondaryCharacterChanged &&
+        nextAction.type === ACTION_TYPES.SWITCH
+      ) {
         nextAction.targetCharacterId = nextSelection.secondaryCharacterId;
       }
       return nextAction;
     });
-    actionDrafts.value = normalizeWorkbenchActionDrafts(nextActionDrafts, nextSelection);
+    actionDrafts.value = normalizeWorkbenchActionDrafts(
+      nextActionDrafts,
+      nextSelection
+    );
   }
 
   if (characterChanged) {
@@ -251,40 +294,63 @@ function updateSelection(patch) {
 
 function updateAction(patch) {
   clearSegmentSplitPreview();
-  actionDrafts.value = actionDrafts.value.map((action) => {
+  actionDrafts.value = actionDrafts.value.map(action => {
     if (action.id !== selectedActionId.value) {
       return action;
     }
 
-    const normalizedPatch = applyInsertionLifecyclePatch(action, normalizeActionPatch(action, patch));
+    const normalizedPatch = applyInsertionLifecyclePatch(
+      action,
+      normalizeActionPatch(action, patch)
+    );
     if (action.type !== ACTION_TYPES.SKILL) {
       return createWorkbenchActionDraft({
         ...action,
         ...normalizedPatch,
-        startMs: clampNumber(normalizedPatch.startMs ?? action.startMs, 0, project.value.time.durationMs),
-        durationMs: clampNumber(normalizedPatch.durationMs ?? action.durationMs, 1, project.value.time.durationMs),
+        startMs: clampNumber(
+          normalizedPatch.startMs ?? action.startMs,
+          0,
+          project.value.time.durationMs
+        ),
+        durationMs: clampNumber(
+          normalizedPatch.durationMs ?? action.durationMs,
+          1,
+          project.value.time.durationMs
+        ),
       });
     }
 
     const nextActorCharacterId = Number(
-      normalizedPatch.actorCharacterId ?? action.actorCharacterId ?? selection.value.characterId,
+      normalizedPatch.actorCharacterId ??
+        action.actorCharacterId ??
+        selection.value.characterId
     );
-    const skill = resolveSkillForActionPatch(action, normalizedPatch, nextActorCharacterId);
+    const skill = resolveSkillForActionPatch(
+      action,
+      normalizedPatch,
+      nextActorCharacterId
+    );
     const skillChanged = Number(skill.id) !== Number(action.skillId);
-    const nextLevel = skillChanged ? 1 : normalizedPatch.level ?? action.level;
+    const nextLevel = skillChanged
+      ? 1
+      : (normalizedPatch.level ?? action.level);
     const nextActionVariantIndex = skillChanged
       ? 0
-      : normalizedPatch.actionVariantIndex ??
+      : (normalizedPatch.actionVariantIndex ??
         normalizedPatch.damageSegmentIndex ??
         action.actionVariantIndex ??
-        action.damageSegmentIndex;
+        action.damageSegmentIndex);
 
     return createWorkbenchActionDraft({
       ...action,
       ...normalizedPatch,
       skillId: skill.id,
       actorCharacterId: nextActorCharacterId,
-      startMs: clampNumber(normalizedPatch.startMs ?? action.startMs, 0, project.value.time.durationMs),
+      startMs: clampNumber(
+        normalizedPatch.startMs ?? action.startMs,
+        0,
+        project.value.time.durationMs
+      ),
       level: clampNumber(nextLevel, 1, skill.level.values.length),
       actionVariantIndex: nextActionVariantIndex,
       damageSegmentIndex: nextActionVariantIndex,
@@ -317,7 +383,7 @@ function updateSegmentSplitOptions(patch) {
 function updateActionTime({ actionId, startMs }) {
   clearSegmentSplitPreview();
   selectedActionId.value = actionId;
-  actionDrafts.value = actionDrafts.value.map((action) => {
+  actionDrafts.value = actionDrafts.value.map(action => {
     if (action.id !== actionId) {
       return action;
     }
@@ -334,7 +400,7 @@ function updateActionTime({ actionId, startMs }) {
 function updateActionDuration({ actionId, durationMs }) {
   clearSegmentSplitPreview();
   selectedActionId.value = actionId;
-  actionDrafts.value = actionDrafts.value.map((action) => {
+  actionDrafts.value = actionDrafts.value.map(action => {
     if (action.id !== actionId) {
       return action;
     }
@@ -342,7 +408,11 @@ function updateActionDuration({ actionId, durationMs }) {
     return createWorkbenchActionDraft({
       ...action,
       ...clearInsertionForManualEdit(action),
-      durationMs: clampNumber(durationMs, 1, Math.max(1, project.value.time.durationMs - action.startMs)),
+      durationMs: clampNumber(
+        durationMs,
+        1,
+        Math.max(1, project.value.time.durationMs - action.startMs)
+      ),
     });
   });
   markDraftDirty();
@@ -350,14 +420,14 @@ function updateActionDuration({ actionId, durationMs }) {
 
 function updateActionLane({ actionId, laneId }) {
   clearSegmentSplitPreview();
-  const targetActor = scenario.value.actors.find((actor) => actor.id === laneId);
+  const targetActor = scenario.value.actors.find(actor => actor.id === laneId);
   if (!targetActor) {
     return;
   }
 
   let didUpdate = false;
   selectedActionId.value = actionId;
-  actionDrafts.value = actionDrafts.value.map((action) => {
+  actionDrafts.value = actionDrafts.value.map(action => {
     if (action.id !== actionId || !canAssignActionLane(action)) {
       return action;
     }
@@ -384,8 +454,12 @@ function updateActionLane({ actionId, laneId }) {
       }
     }
 
-    if (action.type === ACTION_TYPES.SWITCH && Number(action.targetCharacterId) === targetCharacterId) {
-      patch.targetCharacterId = resolveAlternateActorCharacterId(targetCharacterId);
+    if (
+      action.type === ACTION_TYPES.SWITCH &&
+      Number(action.targetCharacterId) === targetCharacterId
+    ) {
+      patch.targetCharacterId =
+        resolveAlternateActorCharacterId(targetCharacterId);
     }
 
     didUpdate = true;
@@ -410,14 +484,26 @@ function addAction() {
     return;
   }
 
-  const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
-  addSkillAction({ skillId: resolveContextSkill(actorCharacterId, selectedDraft.value.skillId).id });
+  const actorCharacterId = Number(
+    actionLibraryActor.value?.characterId ??
+      selectedDraft.value.actorCharacterId
+  );
+  addSkillAction({
+    skillId: resolveContextSkill(actorCharacterId, selectedDraft.value.skillId)
+      .id,
+  });
 }
 
 function addSkillAction(actionEntryOrSkillId) {
   clearSegmentSplitPreview();
-  const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
-  const actionEntry = normalizeActionEntryInput(actionEntryOrSkillId, actorCharacterId);
+  const actorCharacterId = Number(
+    actionLibraryActor.value?.characterId ??
+      selectedDraft.value.actorCharacterId
+  );
+  const actionEntry = normalizeActionEntryInput(
+    actionEntryOrSkillId,
+    actorCharacterId
+  );
   const skill = resolveContextSkill(actorCharacterId, actionEntry.skillId);
   const level = resolveSkillInsertLevel(actorCharacterId, skill);
   addInsertedAction({
@@ -445,7 +531,7 @@ function confirmSkillSegmentActions() {
   }
 
   const generationBatch = createSegmentGenerationBatch(preview);
-  preview.actions.forEach((item) => {
+  preview.actions.forEach(item => {
     addInsertedAction(
       {
         id: createNextActionId(),
@@ -459,7 +545,7 @@ function confirmSkillSegmentActions() {
       },
       {
         requestedStartMs: item.requestedStartMs,
-      },
+      }
     );
   });
   clearSegmentSplitPreview();
@@ -484,7 +570,10 @@ function addWaitAction() {
 
 function addSwitchAction() {
   clearSegmentSplitPreview();
-  const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
+  const actorCharacterId = Number(
+    actionLibraryActor.value?.characterId ??
+      selectedDraft.value.actorCharacterId
+  );
   addInsertedAction({
     id: createNextActionId(),
     type: ACTION_TYPES.SWITCH,
@@ -512,7 +601,10 @@ function addAnnotationAction() {
 
 function addResourceAction() {
   clearSegmentSplitPreview();
-  const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
+  const actorCharacterId = Number(
+    actionLibraryActor.value?.characterId ??
+      selectedDraft.value.actorCharacterId
+  );
   addInsertedAction({
     id: createNextActionId(),
     type: ACTION_TYPES.RESOURCE,
@@ -543,7 +635,9 @@ function addEnemyEventAction() {
 
 function copyAction(actionId) {
   clearSegmentSplitPreview();
-  const sourceIndex = actionDrafts.value.findIndex((action) => action.id === actionId);
+  const sourceIndex = actionDrafts.value.findIndex(
+    action => action.id === actionId
+  );
   const sourceAction = actionDrafts.value[sourceIndex];
   if (!sourceAction) {
     return;
@@ -552,7 +646,11 @@ function copyAction(actionId) {
   const nextAction = createWorkbenchActionDraft({
     ...sourceAction,
     id: createNextActionId(),
-    startMs: clampNumber(sourceAction.startMs + 1000, 0, project.value.time.durationMs),
+    startMs: clampNumber(
+      sourceAction.startMs + 1000,
+      0,
+      project.value.time.durationMs
+    ),
     note: stripAutoDelayNote(sourceAction.note),
     insertion: null,
     generationBatch: null,
@@ -573,12 +671,14 @@ function deleteAction(actionId) {
     return;
   }
 
-  const index = actionDrafts.value.findIndex((action) => action.id === actionId);
+  const index = actionDrafts.value.findIndex(action => action.id === actionId);
   if (index < 0) {
     return;
   }
 
-  actionDrafts.value = actionDrafts.value.filter((action) => action.id !== actionId);
+  actionDrafts.value = actionDrafts.value.filter(
+    action => action.id !== actionId
+  );
 
   if (selectedActionId.value === actionId) {
     const nextIndex = Math.min(index, actionDrafts.value.length - 1);
@@ -596,19 +696,29 @@ function deleteActionBatch(batchId) {
 
   const batchActionIds = new Set(
     actionDrafts.value
-      .filter((action) => action.generationBatch?.batchId === batchId)
-      .map((action) => action.id),
+      .filter(action => action.generationBatch?.batchId === batchId)
+      .map(action => action.id)
   );
-  if (batchActionIds.size === 0 || batchActionIds.size >= actionDrafts.value.length) {
+  if (
+    batchActionIds.size === 0 ||
+    batchActionIds.size >= actionDrafts.value.length
+  ) {
     return;
   }
 
-  const firstRemovedIndex = actionDrafts.value.findIndex((action) => batchActionIds.has(action.id));
+  const firstRemovedIndex = actionDrafts.value.findIndex(action =>
+    batchActionIds.has(action.id)
+  );
   const selectedWasRemoved = batchActionIds.has(selectedActionId.value);
-  actionDrafts.value = actionDrafts.value.filter((action) => !batchActionIds.has(action.id));
+  actionDrafts.value = actionDrafts.value.filter(
+    action => !batchActionIds.has(action.id)
+  );
 
   if (selectedWasRemoved) {
-    const nextIndex = Math.min(Math.max(0, firstRemovedIndex), actionDrafts.value.length - 1);
+    const nextIndex = Math.min(
+      Math.max(0, firstRemovedIndex),
+      actionDrafts.value.length - 1
+    );
     selectedActionId.value = actionDrafts.value[nextIndex].id;
     syncActionLibraryCharacterIdFromDraft(actionDrafts.value[nextIndex]);
   }
@@ -621,12 +731,16 @@ function alignActionBatch({ batchId, startMs }) {
     return;
   }
 
-  const batchActions = actionDrafts.value.filter((action) => action.generationBatch?.batchId === batchId);
+  const batchActions = actionDrafts.value.filter(
+    action => action.generationBatch?.batchId === batchId
+  );
   if (batchActions.length === 0) {
     return;
   }
 
-  const minStartMs = Math.min(...batchActions.map((action) => Math.max(0, Number(action.startMs) || 0)));
+  const minStartMs = Math.min(
+    ...batchActions.map(action => Math.max(0, Number(action.startMs) || 0))
+  );
   shiftActionBatch({
     batchId,
     offsetMs: targetStartMs - minStartMs,
@@ -640,19 +754,29 @@ function shiftActionBatch({ batchId, offsetMs }) {
     return;
   }
 
-  const batchActions = actionDrafts.value.filter((action) => action.generationBatch?.batchId === batchId);
+  const batchActions = actionDrafts.value.filter(
+    action => action.generationBatch?.batchId === batchId
+  );
   if (batchActions.length === 0) {
     return;
   }
 
-  const minStartMs = Math.min(...batchActions.map((action) => Math.max(0, Number(action.startMs) || 0)));
-  const maxStartMs = Math.max(...batchActions.map((action) => Math.max(0, Number(action.startMs) || 0)));
-  const appliedOffsetMs = clampNumber(offset, -minStartMs, project.value.time.durationMs - maxStartMs);
+  const minStartMs = Math.min(
+    ...batchActions.map(action => Math.max(0, Number(action.startMs) || 0))
+  );
+  const maxStartMs = Math.max(
+    ...batchActions.map(action => Math.max(0, Number(action.startMs) || 0))
+  );
+  const appliedOffsetMs = clampNumber(
+    offset,
+    -minStartMs,
+    project.value.time.durationMs - maxStartMs
+  );
   if (appliedOffsetMs === 0) {
     return;
   }
 
-  actionDrafts.value = actionDrafts.value.map((action) => {
+  actionDrafts.value = actionDrafts.value.map(action => {
     if (action.generationBatch?.batchId !== batchId) {
       return action;
     }
@@ -660,7 +784,7 @@ function shiftActionBatch({ batchId, offsetMs }) {
     const nextStartMs = clampNumber(
       (Number(action.startMs) || 0) + appliedOffsetMs,
       0,
-      project.value.time.durationMs,
+      project.value.time.durationMs
     );
     return createWorkbenchActionDraft({
       ...action,
@@ -692,10 +816,17 @@ function resetDraft() {
 function applyDraftState(draft) {
   selection.value = { ...draft.selection };
   enemyConfig.value = normalizeWorkbenchEnemyConfig(draft.enemyConfig);
-  segmentSplitOptions.value = normalizeWorkbenchSegmentSplitOptions(draft.segmentSplitOptions);
-  actionDrafts.value = normalizeWorkbenchActionDrafts(draft.actionDrafts, selection.value);
+  segmentSplitOptions.value = normalizeWorkbenchSegmentSplitOptions(
+    draft.segmentSplitOptions
+  );
+  actionDrafts.value = normalizeWorkbenchActionDrafts(
+    draft.actionDrafts,
+    selection.value
+  );
   selectedActionId.value = draft.selectedActionId;
-  syncActionLibraryCharacterIdFromDraft(actionDrafts.value.find((action) => action.id === draft.selectedActionId));
+  syncActionLibraryCharacterIdFromDraft(
+    actionDrafts.value.find(action => action.id === draft.selectedActionId)
+  );
 }
 
 function markDraftDirty() {
@@ -705,12 +836,15 @@ function markDraftDirty() {
 function selectAction(actionId) {
   clearSegmentSplitPreview();
   selectedActionId.value = actionId;
-  const draft = actionDrafts.value.find((action) => action.id === actionId);
+  const draft = actionDrafts.value.find(action => action.id === actionId);
   syncActionLibraryCharacterIdFromDraft(draft);
 }
 
 function findSkillById(skillId) {
-  return workbenchSeed.gameData.skills.find((skill) => skill.id === Number(skillId)) ?? null;
+  return (
+    workbenchSeed.gameData.skills.find(skill => skill.id === Number(skillId)) ??
+    null
+  );
 }
 
 function createSegmentGenerationBatch(preview) {
@@ -728,7 +862,9 @@ function createSegmentGenerationBatch(preview) {
 
 function createNextSegmentBatchId() {
   const maxIndex = actionDrafts.value.reduce((max, action) => {
-    const match = String(action.generationBatch?.batchId ?? '').match(/^segment-batch-(\d+)$/);
+    const match = String(action.generationBatch?.batchId ?? '').match(
+      /^segment-batch-(\d+)$/
+    );
     return match ? Math.max(max, Number(match[1])) : max;
   }, 0);
   return `segment-batch-${String(maxIndex + 1).padStart(4, '0')}`;
@@ -769,13 +905,21 @@ function addInsertedAction(actionPatch, options = {}) {
 }
 
 function createSkillSegmentSplitPreview(skillId) {
-  const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
-  const actor = scenario.value.actors.find((item) => Number(item.characterId) === actorCharacterId) ?? null;
+  const actorCharacterId = Number(
+    actionLibraryActor.value?.characterId ??
+      selectedDraft.value.actorCharacterId
+  );
+  const actor =
+    scenario.value.actors.find(
+      item => Number(item.characterId) === actorCharacterId
+    ) ?? null;
   const skill = resolveContextSkill(actorCharacterId, skillId);
   const level = resolveSkillInsertLevel(actorCharacterId, skill);
-  const options = normalizeWorkbenchSegmentSplitOptions(segmentSplitOptions.value);
+  const options = normalizeWorkbenchSegmentSplitOptions(
+    segmentSplitOptions.value
+  );
   const allSegments = getSkillActionVariants(skill, level);
-  const includedSegments = allSegments.filter((segment) => {
+  const includedSegments = allSegments.filter(segment => {
     if (!options.skipExistingSegments) {
       return true;
     }
@@ -808,13 +952,21 @@ function createSkillSegmentSplitPreview(skillId) {
     totalSegmentCount: allSegments.length,
     skippedCount,
     generatedCount: simulation.actions.length,
-    autoDelayedCount: simulation.actions.filter((item) => item.autoDelayed).length,
+    autoDelayedCount: simulation.actions.filter(item => item.autoDelayed)
+      .length,
     baseStartMs,
     actions: simulation.actions,
   };
 }
 
-function simulateSegmentSplitPlacements({ actorCharacterId, skill, level, segments, options, baseStartMs }) {
+function simulateSegmentSplitPlacements({
+  actorCharacterId,
+  skill,
+  level,
+  segments,
+  options,
+  baseStartMs,
+}) {
   let simulatedDrafts = [...actionDrafts.value];
   let insertIndex = resolveInsertIndex();
   let previousResolvedStartMs = null;
@@ -824,7 +976,10 @@ function simulateSegmentSplitPlacements({ actorCharacterId, skill, level, segmen
     const requestedStartMs =
       previousResolvedStartMs == null
         ? baseStartMs
-        : Math.max(baseStartMs + index * options.intervalMs, previousResolvedStartMs + options.intervalMs);
+        : Math.max(
+            baseStartMs + index * options.intervalMs,
+            previousResolvedStartMs + options.intervalMs
+          );
     const candidateAction = createWorkbenchActionDraft({
       id: `preview-segment-${segment.index}`,
       skillId: skill.id,
@@ -835,7 +990,11 @@ function simulateSegmentSplitPlacements({ actorCharacterId, skill, level, segmen
       startMs: requestedStartMs,
       note: `动作形态拆分：${formatActionVariantPreview(segment)}；非真实命中帧。`,
     });
-    const placement = resolveInsertPlacement(candidateAction, insertIndex, simulatedDrafts);
+    const placement = resolveInsertPlacement(
+      candidateAction,
+      insertIndex,
+      simulatedDrafts
+    );
     const simulatedAction = createWorkbenchActionDraft({
       ...candidateAction,
       startMs: placement.startMs,
@@ -871,7 +1030,8 @@ function simulateSegmentSplitPlacements({ actorCharacterId, skill, level, segmen
 
 function formatActionVariantPreview(variant) {
   const hitCount = Number(variant.hitModel?.hitCount) || 1;
-  const hitSuffix = hitCount > 1 ? `；普攻 ${hitCount} 段总倍率，单段倍率待补` : '';
+  const hitSuffix =
+    hitCount > 1 ? `；普攻 ${hitCount} 段总倍率，单段倍率待补` : '';
   return `${variant.displayLabel ?? variant.label} / ${variant.rawValue}${hitSuffix}`;
 }
 
@@ -886,19 +1046,30 @@ function resolveSegmentSplitBaseStartMs(options) {
   return clampNumber(startMs + durationMs, 0, project.value.time.durationMs);
 }
 
-function hasExistingSkillSegmentAction({ actorCharacterId, skillId, level, actionVariantIndex, damageSegmentIndex }) {
+function hasExistingSkillSegmentAction({
+  actorCharacterId,
+  skillId,
+  level,
+  actionVariantIndex,
+  damageSegmentIndex,
+}) {
   const selectedIndex = actionVariantIndex ?? damageSegmentIndex;
   return actionDrafts.value.some(
-    (action) =>
+    action =>
       action.type === ACTION_TYPES.SKILL &&
       Number(action.actorCharacterId) === Number(actorCharacterId) &&
       Number(action.skillId) === Number(skillId) &&
       Number(action.level) === Number(level) &&
-      Number(action.actionVariantIndex ?? action.damageSegmentIndex) === Number(selectedIndex),
+      Number(action.actionVariantIndex ?? action.damageSegmentIndex) ===
+        Number(selectedIndex)
   );
 }
 
-function resolveInsertPlacement(candidateAction, baseInsertIndex, draftSource = actionDrafts.value) {
+function resolveInsertPlacement(
+  candidateAction,
+  baseInsertIndex,
+  draftSource = actionDrafts.value
+) {
   const laneId = resolveDraftLaneId(candidateAction);
   const durationMs = resolveDraftDurationMs(candidateAction);
   const maxStartMs = project.value.time.durationMs;
@@ -908,7 +1079,7 @@ function resolveInsertPlacement(candidateAction, baseInsertIndex, draftSource = 
   const conflictActionIds = new Set();
   const ranges = draftSource
     .map((action, index) => createDraftTimelineRange(action, index))
-    .filter((range) => range.laneId === laneId)
+    .filter(range => range.laneId === laneId)
     .sort(compareDraftTimelineRanges);
 
   for (let scanIndex = 0; scanIndex < ranges.length; scanIndex += 1) {
@@ -919,7 +1090,11 @@ function resolveInsertPlacement(candidateAction, baseInsertIndex, draftSource = 
       continue;
     }
 
-    const nextStartMs = clampNumber(range.endMs + NEW_ACTION_INSERT_GAP_MS, 0, maxStartMs);
+    const nextStartMs = clampNumber(
+      range.endMs + NEW_ACTION_INSERT_GAP_MS,
+      0,
+      maxStartMs
+    );
     insertIndex = Math.max(insertIndex, range.index + 1);
     conflictActionIds.add(range.actionId);
     if (nextStartMs <= startMs) {
@@ -943,17 +1118,24 @@ function resolveInsertPlacement(candidateAction, baseInsertIndex, draftSource = 
 
 function resolveInsertStartMs(insertIndex) {
   const anchor =
-    actionDrafts.value[Math.max(0, insertIndex - 1)] ?? actionDrafts.value[actionDrafts.value.length - 1];
+    actionDrafts.value[Math.max(0, insertIndex - 1)] ??
+    actionDrafts.value[actionDrafts.value.length - 1];
   if (!anchor) {
     return 0;
   }
   const anchorStartMs = Number(anchor.startMs) || 0;
   const anchorDurationMs = Math.max(0, Number(anchor.durationMs) || 0);
-  return clampNumber(anchorStartMs + anchorDurationMs + NEW_ACTION_INSERT_GAP_MS, 0, project.value.time.durationMs);
+  return clampNumber(
+    anchorStartMs + anchorDurationMs + NEW_ACTION_INSERT_GAP_MS,
+    0,
+    project.value.time.durationMs
+  );
 }
 
 function resolveInsertIndex() {
-  const selectedIndex = actionDrafts.value.findIndex((action) => action.id === selectedActionId.value);
+  const selectedIndex = actionDrafts.value.findIndex(
+    action => action.id === selectedActionId.value
+  );
   return selectedIndex >= 0 ? selectedIndex + 1 : actionDrafts.value.length;
 }
 
@@ -972,7 +1154,7 @@ function createDraftTimelineRange(action, index) {
 function resolveDraftLaneId(action) {
   if (canAssignActionLane(action)) {
     const actor = scenario.value.actors.find(
-      (item) => Number(item.characterId) === Number(action.actorCharacterId),
+      item => Number(item.characterId) === Number(action.actorCharacterId)
     );
     return actor?.id ?? SYSTEM_TIMELINE_LANE_ID;
   }
@@ -984,7 +1166,11 @@ function resolveDraftDurationMs(action) {
 }
 
 function compareDraftTimelineRanges(left, right) {
-  return left.startMs - right.startMs || left.endMs - right.endMs || left.index - right.index;
+  return (
+    left.startMs - right.startMs ||
+    left.endMs - right.endMs ||
+    left.index - right.index
+  );
 }
 
 function createInsertionMetadata(placement) {
@@ -1033,7 +1219,11 @@ function shouldClearInsertionForPatch(action, patch) {
   if (!action.insertion?.autoDelayed) {
     return false;
   }
-  return patch.startMs != null || patch.durationMs != null || patch.actorCharacterId != null;
+  return (
+    patch.startMs != null ||
+    patch.durationMs != null ||
+    patch.actorCharacterId != null
+  );
 }
 
 function clearInsertionForManualEdit(action) {
@@ -1053,19 +1243,20 @@ function stripAutoDelayNote(note) {
 
   return String(note)
     .split(/\r?\n/)
-    .filter((line) => !AUTO_DELAY_NOTE_PATTERN.test(line.trim()))
+    .filter(line => !AUTO_DELAY_NOTE_PATTERN.test(line.trim()))
     .join('\n')
     .trimEnd();
 }
 
 function createInsertionDiagnostics(actions) {
   const autoDelayedItems = actions
-    .filter((action) => action.insertion?.autoDelayed)
-    .map((action) => ({
+    .filter(action => action.insertion?.autoDelayed)
+    .map(action => ({
       id: action.id,
       actionId: action.id,
       actionName: action.name,
-      laneName: action.actor?.name ?? (action.actorId ? action.actorId : '系统'),
+      laneName:
+        action.actor?.name ?? (action.actorId ? action.actorId : '系统'),
       requestedStartMs: action.insertion.requestedStartMs,
       resolvedStartMs: action.insertion.resolvedStartMs,
       delayedByMs: action.insertion.delayedByMs,
@@ -1079,32 +1270,49 @@ function createInsertionDiagnostics(actions) {
 }
 
 function canAssignActionLane(action) {
-  return [ACTION_TYPES.SKILL, ACTION_TYPES.SWITCH, ACTION_TYPES.RESOURCE].includes(action.type);
+  return [
+    ACTION_TYPES.SKILL,
+    ACTION_TYPES.SWITCH,
+    ACTION_TYPES.RESOURCE,
+  ].includes(action.type);
 }
 
 function setActionLibraryCharacterId(characterId) {
   clearSegmentSplitPreview();
-  const actor = scenario.value.actors.find((item) => Number(item.characterId) === Number(characterId));
+  const actor = scenario.value.actors.find(
+    item => Number(item.characterId) === Number(characterId)
+  );
   if (!actor) {
     return;
   }
   actionLibraryCharacterId.value = Number(actor.characterId);
 }
 
-function normalizeActionLibraryCharacterId(previousSelection, nextSelection, changes) {
-  if (changes.characterChanged && Number(actionLibraryCharacterId.value) === Number(previousSelection.characterId)) {
+function normalizeActionLibraryCharacterId(
+  previousSelection,
+  nextSelection,
+  changes
+) {
+  if (
+    changes.characterChanged &&
+    Number(actionLibraryCharacterId.value) ===
+      Number(previousSelection.characterId)
+  ) {
     actionLibraryCharacterId.value = nextSelection.characterId;
   }
   if (
     changes.secondaryCharacterChanged &&
-    Number(actionLibraryCharacterId.value) === Number(previousSelection.secondaryCharacterId)
+    Number(actionLibraryCharacterId.value) ===
+      Number(previousSelection.secondaryCharacterId)
   ) {
     actionLibraryCharacterId.value = nextSelection.secondaryCharacterId;
   }
 
   if (
-    Number(actionLibraryCharacterId.value) !== Number(nextSelection.characterId) &&
-    Number(actionLibraryCharacterId.value) !== Number(nextSelection.secondaryCharacterId)
+    Number(actionLibraryCharacterId.value) !==
+      Number(nextSelection.characterId) &&
+    Number(actionLibraryCharacterId.value) !==
+      Number(nextSelection.secondaryCharacterId)
   ) {
     actionLibraryCharacterId.value = nextSelection.characterId;
   }
@@ -1122,7 +1330,11 @@ function resolveContextSkill(actorCharacterId, preferredSkillId) {
   if (Number(preferredSkill?.characterId) === Number(actorCharacterId)) {
     return preferredSkill;
   }
-  return findFirstSkillForCharacter(actorCharacterId) ?? preferredSkill ?? workbenchSeed.gameData.skills[0];
+  return (
+    findFirstSkillForCharacter(actorCharacterId) ??
+    preferredSkill ??
+    workbenchSeed.gameData.skills[0]
+  );
 }
 
 function normalizeActionEntryInput(input, actorCharacterId) {
@@ -1130,15 +1342,17 @@ function normalizeActionEntryInput(input, actorCharacterId) {
     return {
       ...input,
       skillId: input.skillId,
-      actionVariantIndex: input.actionVariantIndex ?? input.damageSegmentIndex ?? 0,
+      actionVariantIndex:
+        input.actionVariantIndex ?? input.damageSegmentIndex ?? 0,
       durationMs: input.durationMs ?? frameToMs(60),
     };
   }
 
   const skillId = Number(input);
-  const actionEntry = getSkillActionCatalog(getSkillsForCharacter(actorCharacterId), 1).find(
-    entry => Number(entry.skillId) === skillId,
-  );
+  const actionEntry = getSkillActionCatalog(
+    getSkillsForCharacter(actorCharacterId),
+    1
+  ).find(entry => Number(entry.skillId) === skillId);
 
   return (
     actionEntry ?? {
@@ -1160,24 +1374,39 @@ function resolveSkillInsertLevel(actorCharacterId, skill) {
 
 function normalizeActionPatch(action, patch) {
   const normalizedPatch = { ...patch };
-  if (normalizedPatch.actionVariantIndex != null || normalizedPatch.damageSegmentIndex != null) {
-    const actionVariantIndex = Number(normalizedPatch.actionVariantIndex ?? normalizedPatch.damageSegmentIndex);
+  if (
+    normalizedPatch.actionVariantIndex != null ||
+    normalizedPatch.damageSegmentIndex != null
+  ) {
+    const actionVariantIndex = Number(
+      normalizedPatch.actionVariantIndex ?? normalizedPatch.damageSegmentIndex
+    );
     normalizedPatch.actionVariantIndex = actionVariantIndex;
     normalizedPatch.damageSegmentIndex = actionVariantIndex;
   }
   if (normalizedPatch.actorCharacterId != null) {
     normalizedPatch.actorCharacterId = Number(normalizedPatch.actorCharacterId);
 
-    if (action.type === ACTION_TYPES.SWITCH && Number(action.targetCharacterId) === normalizedPatch.actorCharacterId) {
-      normalizedPatch.targetCharacterId = resolveAlternateActorCharacterId(normalizedPatch.actorCharacterId);
+    if (
+      action.type === ACTION_TYPES.SWITCH &&
+      Number(action.targetCharacterId) === normalizedPatch.actorCharacterId
+    ) {
+      normalizedPatch.targetCharacterId = resolveAlternateActorCharacterId(
+        normalizedPatch.actorCharacterId
+      );
     }
   }
   return normalizedPatch;
 }
 
 function resolveSkillForActionPatch(action, patch, actorCharacterId) {
-  const requestedSkill = findSkillById(patch.skillId ?? action.skillId) ?? findSkillById(action.skillId);
-  if (patch.actorCharacterId != null && Number(requestedSkill?.characterId) !== Number(actorCharacterId)) {
+  const requestedSkill =
+    findSkillById(patch.skillId ?? action.skillId) ??
+    findSkillById(action.skillId);
+  if (
+    patch.actorCharacterId != null &&
+    Number(requestedSkill?.characterId) !== Number(actorCharacterId)
+  ) {
     return findFirstSkillForCharacter(actorCharacterId) ?? requestedSkill;
   }
   return requestedSkill ?? findFirstSkillForCharacter(actorCharacterId);
@@ -1189,8 +1418,9 @@ function findFirstSkillForCharacter(characterId) {
 
 function resolveAlternateActorCharacterId(sourceCharacterId) {
   return (
-    scenario.value.actors.find((actor) => Number(actor.characterId) !== Number(sourceCharacterId))?.characterId ??
-    selection.value.characterId
+    scenario.value.actors.find(
+      actor => Number(actor.characterId) !== Number(sourceCharacterId)
+    )?.characterId ?? selection.value.characterId
   );
 }
 
@@ -1307,10 +1537,13 @@ function getLocalStorage() {
 
 .workbench-grid {
   display: grid;
-  grid-template-columns: minmax(230px, 280px) minmax(0, 1fr) minmax(260px, 340px);
+  grid-template-columns: minmax(230px, 280px) minmax(0, 1fr) minmax(
+      260px,
+      340px
+    );
   grid-template-areas:
-    "actions timeline analysis"
-    "actions events analysis";
+    'actions timeline analysis'
+    'actions events analysis';
   gap: 14px;
   padding: 14px;
 }
@@ -1338,8 +1571,8 @@ function getLocalStorage() {
   .workbench-grid {
     grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
     grid-template-areas:
-      "actions timeline"
-      "analysis events";
+      'actions timeline'
+      'analysis events';
   }
 }
 
@@ -1365,10 +1598,10 @@ function getLocalStorage() {
   .workbench-grid {
     grid-template-columns: 1fr;
     grid-template-areas:
-      "actions"
-      "timeline"
-      "analysis"
-      "events";
+      'actions'
+      'timeline'
+      'analysis'
+      'events';
     padding: 10px;
   }
 }

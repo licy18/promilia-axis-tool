@@ -3778,3 +3778,88 @@ Workbench 候选模式摘要会追加动作绑定提示：
 - `hitCandidates[]` 可以作为曲线候选输入，但不是最终三值曲线。
 - 当前 `candidateTimeMs` 仅使用动作开始时间加 hitGroup 相对帧点，尚未解析子 skill_control 串联时长、取消窗口或输入节奏。
 - 第 2-5 段的 `actionLevelElementMatchCount` 目前可能为 0，因为它们的 damage element 不一定在源动作的 `skillsub_ele_value` 等级行中直接出现。
+
+## 55. 阶段 5-8AB：candidateValueSeries 候选三曲线
+
+阶段 5-8AB 在仿真投影顶层新增 `candidateValueSeries`。该结构把 `actionResultTimeline[].hitCandidates[]` 聚合成可绘制的 HP、削韧、自身能量候选曲线，服务于后续 Endaxis 式多曲线展示；当前仍不参与最终计算。
+
+### 55.1 顶层结构
+
+字段示例：
+
+```javascript
+{
+  "candidateValueSeries": {
+    "schemaVersion": 1,
+    "sourceKind": "azpr-action-result-candidate-value-series",
+    "status": "candidate-value-series-found-unapplied",
+    "frameRate": 60,
+    "summary": {
+      "seriesCount": 3,
+      "pointCount": 15,
+      "hitCandidateCount": 5,
+      "actionCount": 1,
+      "applied": false
+    },
+    "series": [],
+    "applied": false
+  }
+}
+```
+
+`summary.candidateValueSeriesSummary` 同步引用该摘要，便于统计面板读取。
+
+### 55.2 series[]
+
+当前固定输出三类候选曲线：
+
+- `hpDamageFormulaParamCandidate`：HP 参数候选，`valueKind = TDamageElementParams.formulaParamValues`，`unit = raw-param`。
+- `toughnessDamageCandidate`：削韧候选，`valueKind = TDamageElementParams.weakBreakDamageRate`，`unit = raw-field`。
+- `selfEnergyCandidate`：自身能量候选，`valueKind = TDamageElementParams.recoverSP`，`unit = raw-field`。
+
+单条曲线字段：
+
+- `key` / `label` / `valueKind` / `unit`
+- `status`
+- `pointCount`
+- `valueMin` / `valueMax` / `valueRange`
+- `points[]`
+- `applied = false`
+
+### 55.3 points[]
+
+单点字段：
+
+- `actionId` / `actionName` / `actionVariantLabel`
+- `skillId` / `hitSkillId` / `hitIndex`
+- `sequenceIndex`
+- `frameRate` / `primaryFrame` / `timeMs`
+- `value` / `valueMin` / `valueMax` / `valueSamples`
+- `candidateCount`
+- `elementConfigIds`
+- `sourceStatus`
+- `applied = false`
+
+当前末音 `10900101` 默认普攻样本：
+
+- HP：`2500 / 4800 / 3000 / 5400 / 13000`。
+- 削韧：`7000 / 7000 / 7000 / 7000 / 7000`。
+- 能量：`2700 / 2599 / 2399 / 3000 / 2599`。
+
+### 55.4 Workbench
+
+Workbench 分析面板新增候选曲线列表：
+
+```text
+候选曲线 15
+HP参数候选 5点 · 2,500-13,000 · raw-param
+削韧候选 5点 · 7,000 · raw-field
+能量候选 5点 · 2,399-3,000 · raw-field
+```
+
+### 55.5 当前边界
+
+- `candidateValueSeries.applied` 必须保持 `false`。
+- HP 曲线当前取每个 hit 候选参数的最大非零、非 `10000` 值作为预览点，不代表最终 HP 伤害公式。
+- 削韧和能量曲线当前直接暴露字段候选值，尚未确认缩放、命中次数、间隔、目标归属或角色资源归属规则。
+- 下一阶段应把这些点转换为时间轴绝对帧点或图表 marker，并继续追最终公式执行链。

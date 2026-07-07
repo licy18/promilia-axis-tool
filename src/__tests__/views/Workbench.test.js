@@ -44,6 +44,19 @@ describe('Workbench view', () => {
     expect(text).toContain(
       '逐hit候选 5/5段 · 三值字段 12 · 帧 12f/6f/12f/7f/4f'
     );
+    expect(text).toContain('候选曲线');
+    expect(text).toContain('HP参数候选');
+    expect(text).toContain('5点 · 2,500-13,000 · raw-param');
+    expect(text).toContain('削韧候选');
+    expect(text).toContain('5点 · 7,000 · raw-field');
+    expect(text).toContain('能量候选');
+    expect(text).toContain('5点 · 2,399-3,000 · raw-field');
+    expect(
+      wrapper.find('[data-testid="workbench-candidate-value-series"]').exists()
+    ).toBe(true);
+    expect(
+      wrapper.findAll('[data-testid="workbench-candidate-value-series-row"]')
+    ).toHaveLength(3);
     expect(text).toContain(
       '候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 12f/13f/16f/19f · Skill0_6/Skill0_1 · 绑定候选 普攻->Skill0_1 12f/13f · 状态证据 Skill0_1 动画+命中 / Skill0_6 动画+命中 · 普攻链 10900102->Skill0_2 / 10900103->Skill0_3 / +2 · 命中候选 5/5段 · 三值候选 5/5段 · 目标缺失 80102'
     );
