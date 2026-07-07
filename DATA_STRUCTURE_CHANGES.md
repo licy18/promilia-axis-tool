@@ -5885,3 +5885,142 @@ hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1
 - `ownerShareIntervalProbe.applied = false`。
 - 已确认 `SPSystem.OnTransmit` 使用 `RecoverSPArgs` 字段的方式，但尚未确认 `DamageElement.RecoverSP` 如何构造这些 args。
 - 下一阶段应追 `recoverSP -> baseDelta/delta`、`petRecoverSP -> petDelta`、`recoverInterval -> interval` 的 source-to-args 映射，并确认 `recoverTagType` 枚举与共享目标筛选。
+
+## 77. 阶段 5-8AX：sourceToArgsProbe RecoverSPArgs 构造子探针
+
+阶段 5-8AX 在 `selfEnergyRuntimeFormulaProbe` 下新增 `sourceToArgsProbe`，用于记录 `DamageElement.RecoverSP` 如何把 `DamageElement` 运行时字段写入 `RecoverSPArgs`。该结构仍为证据层，不参与最终自身能量值计算。
+
+### 77.1 selfEnergyRuntimeFormulaProbe
+
+新增字段：
+
+```json
+{
+  "sourceToArgsProbe": {
+    "status": "source-to-args-subprobe-built-unapplied",
+    "sourceKind": "azpr-self-energy-source-to-args-subprobe",
+    "sourceFunction": "DamageElement.RecoverSP@0x138EEE0",
+    "argsResetFunction": "RecoverSPArgs.OnReset@0x1254070",
+    "candidateCount": 2,
+    "gateOpenCount": 2,
+    "confirmedRuntimeRules": {},
+    "candidateMappings": {},
+    "samples": [],
+    "applied": false
+  }
+}
+```
+
+### 77.2 confirmedRuntimeRules
+
+`sourceToArgsProbe.confirmedRuntimeRules` 当前固定记录：
+
+- `DamageElement.m_recoverSP@0x240 -> RecoverSPArgs.baseDelta@0x1C`：转 float 并除以 native 常量，当前作为 per-10000 候选。
+- `DamageElement.m_recoverSP@0x240 -> RecoverSPArgs.delta@0x20`：由 `baseDelta * (nativeConstant + runtimeModifierA + runtimeModifierB)` 推导。
+- `DamageElement.m_petRecoverSP@0x244 -> RecoverSPArgs.petDelta@0x38`：由 `petRecoverSP` 基础值走同一 modifier 路径推导。
+- `DamageElement.m_recoverInterval@0x248 -> RecoverSPArgs.interval@0x24`：转 float 并除以 native 常量，divisor 仍未确认。
+- `DamageElement.RecoverSP -> RecoverSPArgs.tagType@0x28 = 0`：当前路径对应 `AttackRecoverySp`。
+- `RecoverSPArgs.OnReset@0x1254070`：清空 `id` 到 `mainPetSharePercent` 的 args 字段。
+
+枚举证据：
+
+```json
+{
+  "recoverTagType": [
+    { "name": "AttackRecoverySp", "value": 0 },
+    { "name": "AutoRecoverySp", "value": 1 },
+    { "name": "Other", "value": 2 }
+  ],
+  "shareType": [
+    { "name": "NoShare", "value": 0 },
+    { "name": "ShareHalf", "value": 1 },
+    { "name": "ShareAll", "value": 2 }
+  ]
+}
+```
+
+### 77.3 samples
+
+样本结构：
+
+```json
+{
+  "elementConfigId": 109001081,
+  "pathId": "-5794772393213319773",
+  "gateOpen": true,
+  "argsConstructionCandidates": {
+    "baseDelta": {
+      "sourceField": 2700,
+      "perTenThousandCandidate": 0.27,
+      "status": "source-to-baseDelta-confirmed-unit-candidate"
+    },
+    "delta": {
+      "sourceField": 2700,
+      "baseDeltaCandidate": 0.27,
+      "modifierStatus": "runtime-modifier-sources-unconfirmed"
+    },
+    "petDelta": {
+      "sourceField": 10399,
+      "basePetDeltaCandidate": 1.0399,
+      "modifierStatus": "runtime-modifier-sources-unconfirmed"
+    },
+    "interval": {
+      "sourceField": 9999,
+      "divisorStatus": "native-divisor-unconfirmed"
+    },
+    "tagType": {
+      "value": 0,
+      "name": "AttackRecoverySp"
+    }
+  },
+  "applied": false
+}
+```
+
+### 77.4 externalElementBinding
+
+非普攻缺口 `hitBindingGap.externalElementBinding` 新增：
+
+- `runtimeSelfEnergySourceToArgsProbeStatuses`
+- `runtimeSelfEnergySourceToArgsProbeCandidateCount`
+- `runtimeSelfEnergySourceToArgsProbeGateOpenCount`
+
+`hitBindingGapSummary.externalElementBindingSummary` 新增：
+
+- `runtimeSelfEnergySourceToArgsProbeStatuses`
+- `runtimeSelfEnergySourceToArgsProbeCandidateCount`
+- `runtimeSelfEnergySourceToArgsProbeGateOpenCount`
+- `gapsWithRuntimeSelfEnergySourceToArgsProbe`
+
+四动作样例当前为：
+
+```json
+{
+  "runtimeSelfEnergySourceToArgsProbeStatuses": [
+    "source-to-args-subprobe-built-unapplied"
+  ],
+  "runtimeSelfEnergySourceToArgsProbeCandidateCount": 3,
+  "runtimeSelfEnergySourceToArgsProbeGateOpenCount": 3,
+  "gapsWithRuntimeSelfEnergySourceToArgsProbe": 3
+}
+```
+
+### 77.5 Workbench 摘要
+
+Workbench 执行矩阵摘要新增：
+
+```text
+构造探针 3/3
+```
+
+单动作切换到重击时可见：
+
+```text
+hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1/1 · 参数来源候选 1/1 · 应用入口候选 1/1 · 原生入口 1/1 · 反汇编片段 1/1 · 充能探针 1/1 · 构造探针 1/1 · 归属探针 1/1 · 来源差异 1/1
+```
+
+### 77.6 当前边界
+
+- `sourceToArgsProbe.applied = false`。
+- 已确认 source-to-args 的主要字段写入路径，但 `delta` / `petDelta` 的 runtime modifier 来源仍未确认。
+- `recoverInterval` native divisor、share config 来源对象、owner 选择和最终 SP 曲线仍未确认。

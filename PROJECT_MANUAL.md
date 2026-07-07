@@ -2626,6 +2626,9 @@ Endaxis 参考边界：
 验收结果：
 
 - `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+- `npm run lint`：通过，0 error，16 个既有 warning。
+- `npm test -- --run`：通过，13 个测试文件、105 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
 
 当前边界：
 
@@ -3795,6 +3798,45 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 阶段 5-8AX 目标：继续沿 `DamageElement.RecoverSP`、`RecoverSPArgs..ctor` / `OnReset` 和 `SPSystem.OnTransmit` 追 source-to-args 映射，优先确认 `recoverSP -> baseDelta/delta`、`petRecoverSP -> petDelta`、`recoverInterval -> interval` 的构造点。
 - 如果静态反汇编仍无法确定构造来源，设计 runtime hook 采样点，按角色分别记录 `RecoverSPArgs` 字段快照、最终 SP 曲线、share rebroadcast 目标和间隔节流命中结果。
+
+### 2026-07-08：阶段 5-8AX RecoverSPArgs 构造子探针
+
+本轮完成：
+
+- 已把 `DamageElement.RecoverSP@0x138EEE0` 的反汇编范围扩展到 `0x18138EEE0-0x18138F609`，覆盖 `RecoverSPArgs` 对象获取、字段写入和 type `0x12F` 发送路径。
+- 已把 `RecoverSPArgs.OnReset@0x1254070` 加入 `nativeDisassemblyEvidence`，目标函数总数从 8 个推进到 9 个；`OnReset` 会把 `id` 到 `mainPetSharePercent` 的字段清零，说明 args 复用前会回到默认状态。
+- 已确认 `DamageElement.m_recoverSP@0x240` 会转 float 并除以 native 常量后写入 `RecoverSPArgs.baseDelta@0x1C`。
+- 已确认 `RecoverSPArgs.delta@0x20` 由 `baseDelta * (nativeConstant + runtimeModifierA + runtimeModifierB)` 推导；两个 runtime modifier 的来源仍未确认。
+- 已确认 `DamageElement.m_petRecoverSP@0x244` 走同一 modifier 路径后写入 `RecoverSPArgs.petDelta@0x38`。
+- 已确认 `DamageElement.m_recoverInterval@0x248` 会转 float 并除以 native 常量后写入 `RecoverSPArgs.interval@0x24`；该 divisor 的精确单位仍未确认。
+- 已确认 `DamageElement.RecoverSP` 路径写入 `RecoverSPArgs.tagType@0x28 = 0`，对应 `TSpElementParams.ERecoverTagType.AttackRecoverySp`；枚举还包括 `AutoRecoverySp = 1`、`Other = 2`。
+- 新增 `sourceToArgsProbe`，挂在 `selfEnergyRuntimeFormulaProbe.sourceToArgsProbe` 下；action-level、每 hit 候选和非普攻缺口都能复用同一结构。
+- `externalElementBindingSummary` 新增 `runtimeSelfEnergySourceToArgsProbeStatuses`、`runtimeSelfEnergySourceToArgsProbeCandidateCount`、`runtimeSelfEnergySourceToArgsProbeGateOpenCount`、`gapsWithRuntimeSelfEnergySourceToArgsProbe`。
+- Workbench 执行矩阵摘要新增 `构造探针 x/y`，切换到重击动作时可以看到 `构造探针 1/1`。
+
+当前样例结果：
+
+- 默认普通攻击 action-level：`sourceToArgsProbe.candidateCount = 2`、`gateOpenCount = 2`，`recoverSP = 2700` 的 `baseDelta` 候选为 `0.27`。
+- 默认普通攻击每 hit：第 1 段 `sourceToArgsProbe.candidateCount = 2`、`gateOpenCount = 2`。
+- 非普攻外部 DamageElement：`109001251` 的 `recoverSP = 5899` 对应 `baseDelta` 候选 `0.5899`，`petRecoverSP = 22999` 对应 `petDelta` 基础候选 `2.2999`。
+- 四动作缺口摘要：`gapsWithRuntimeSelfEnergySourceToArgsProbe = 3/3`，`runtimeSelfEnergySourceToArgsProbeCandidateCount = 3`，`runtimeSelfEnergySourceToArgsProbeGateOpenCount = 3`。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+
+当前边界：
+
+- 阶段 5-8AX 证明的是 `DamageElement.RecoverSP` 如何构造并发送 `RecoverSPArgs`，仍不等于最终充能公式可应用。
+- `delta` 和 `petDelta` 依赖的两个 runtime modifier 来源仍未确认。
+- `recoverInterval` 的 native divisor 和最终时间基准仍未确认。
+- `sharePercent/petSharePercent` 的配置来源对象、共享目标筛选、最终 owner 选择和实际 SP 曲线仍未确认。
+- `sourceToArgsProbe.applied = false`，`selfEnergyChange.value` 仍只应用显式资源事件，不应用候选充能。
+
+下一步：
+
+- 阶段 5-8AY 目标：继续追 `DamageElement.RecoverSP` 中两个 runtime modifier 调用、`recoverInterval` native divisor、`sharePercent/petSharePercent` 来源配置和最终 owner 选择。
+- 如果静态证据仍不足，设计 runtime hook 采样点，按角色记录 `RecoverSPArgs` 字段快照、share rebroadcast 目标、interval 节流命中结果和最终 SP 曲线。
 
 ## 10. 文档维护规则
 

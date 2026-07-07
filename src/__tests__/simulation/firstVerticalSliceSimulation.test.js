@@ -670,6 +670,44 @@ describe('first vertical slice simulation', () => {
             gateOpenCount: 2,
             recoverSPValues: [2700],
             perTenThousandRecoverSPValues: [0.27],
+            sourceToArgsProbe: expect.objectContaining({
+              status: 'source-to-args-subprobe-built-unapplied',
+              sourceFunction: 'DamageElement.RecoverSP@0x138EEE0',
+              argsResetFunction: 'RecoverSPArgs.OnReset@0x1254070',
+              candidateCount: 2,
+              gateOpenCount: 2,
+              confirmedRuntimeRules: expect.objectContaining({
+                status:
+                  'damage-element-recover-sp-source-to-args-partially-confirmed',
+                transmitType: '0x12F',
+                nativeScaleFacts: expect.arrayContaining([
+                  expect.objectContaining({
+                    sourceField: 'DamageElement.m_recoverSP@0x240',
+                    argsField: 'RecoverSPArgs.baseDelta@0x1C',
+                    status: 'source-to-base-delta-confirmed',
+                  }),
+                  expect.objectContaining({
+                    sourceField: 'DamageElement.m_recoverSP@0x240',
+                    argsField: 'RecoverSPArgs.delta@0x20',
+                    status:
+                      'source-to-delta-derived-with-runtime-modifiers-confirmed',
+                  }),
+                  expect.objectContaining({
+                    sourceField: 'DamageElement.m_recoverInterval@0x248',
+                    argsField: 'RecoverSPArgs.interval@0x24',
+                    status: 'source-to-interval-confirmed-divisor-unconfirmed',
+                  }),
+                ]),
+                enumEvidence: expect.objectContaining({
+                  recoverTagType: expect.arrayContaining([
+                    expect.objectContaining({
+                      name: 'AttackRecoverySp',
+                      value: 0,
+                    }),
+                  ]),
+                }),
+              }),
+            }),
             ownerShareIntervalProbe: expect.objectContaining({
               status: 'owner-share-interval-subprobe-built-unapplied',
               sourceFunction: 'SPSystem.OnTransmit@0x14837F0',
@@ -758,6 +796,39 @@ describe('first vertical slice simulation', () => {
                   interval: expect.objectContaining({
                     rawField: 9999,
                     perTenThousand: 0.9999,
+                  }),
+                }),
+              }),
+            ]),
+          }),
+          sourceToArgsProbe: expect.objectContaining({
+            status: 'source-to-args-subprobe-built-unapplied',
+            sourceFunction: 'DamageElement.RecoverSP@0x138EEE0',
+            argsResetFunction: 'RecoverSPArgs.OnReset@0x1254070',
+            candidateMappings: expect.objectContaining({
+              recoverSP: expect.objectContaining({
+                recoverSpArgsFields: expect.arrayContaining([
+                  'baseDelta@0x1C',
+                  'delta@0x20-derived-with-runtime-modifiers',
+                ]),
+                status: 'source-to-baseDelta-confirmed-delta-derived-unapplied',
+              }),
+              recoverInterval: expect.objectContaining({
+                recoverSpArgsFields: ['interval@0x24'],
+                status: 'source-to-interval-confirmed-divisor-unconfirmed',
+              }),
+            }),
+            samples: expect.arrayContaining([
+              expect.objectContaining({
+                elementConfigId: 109001081,
+                argsConstructionCandidates: expect.objectContaining({
+                  baseDelta: expect.objectContaining({
+                    sourceField: 2700,
+                    perTenThousandCandidate: 0.27,
+                  }),
+                  tagType: expect.objectContaining({
+                    value: 0,
+                    name: 'AttackRecoverySp',
                   }),
                 }),
               }),
@@ -901,6 +972,11 @@ describe('first vertical slice simulation', () => {
           candidateCount: 2,
           gateOpenCount: 2,
           perTenThousandRecoverSPValues: [0.27],
+          sourceToArgsProbe: expect.objectContaining({
+            status: 'source-to-args-subprobe-built-unapplied',
+            candidateCount: 2,
+            gateOpenCount: 2,
+          }),
           ownerShareIntervalProbe: expect.objectContaining({
             status: 'owner-share-interval-subprobe-built-unapplied',
             candidateCount: 2,
@@ -1799,7 +1875,7 @@ describe('first vertical slice simulation', () => {
           runtimeNativeDisassemblyStatuses: [
             'native-disassembly-snippets-extracted-formula-semantics-unconfirmed',
           ],
-          runtimeNativeDisassemblyFunctionCount: 8,
+          runtimeNativeDisassemblyFunctionCount: 9,
           gapsWithRuntimeNativeDisassembly: 3,
           runtimeSelfEnergyFormulaProbeStatuses: [
             'recover-sp-runtime-probe-built-unapplied',
@@ -1807,6 +1883,12 @@ describe('first vertical slice simulation', () => {
           runtimeSelfEnergyFormulaProbeCandidateCount: 3,
           runtimeSelfEnergyFormulaProbeGateOpenCount: 3,
           gapsWithRuntimeSelfEnergyFormulaProbe: 3,
+          runtimeSelfEnergySourceToArgsProbeStatuses: [
+            'source-to-args-subprobe-built-unapplied',
+          ],
+          runtimeSelfEnergySourceToArgsProbeCandidateCount: 3,
+          runtimeSelfEnergySourceToArgsProbeGateOpenCount: 3,
+          gapsWithRuntimeSelfEnergySourceToArgsProbe: 3,
           runtimeSelfEnergyOwnerShareIntervalProbeStatuses: [
             'owner-share-interval-subprobe-built-unapplied',
           ],
@@ -1942,10 +2024,11 @@ describe('first vertical slice simulation', () => {
               runtimeNativeDisassemblyStatuses: [
                 'native-disassembly-snippets-extracted-formula-semantics-unconfirmed',
               ],
-              runtimeNativeDisassemblyFunctionCount: 8,
+              runtimeNativeDisassemblyFunctionCount: 9,
               runtimeNativeDisassemblyFunctionKeys: expect.arrayContaining([
                 'FormulaUtility.GetOutputDamage@0x187F360',
                 'DamageElement.Parse@0x138E5E0',
+                'RecoverSPArgs.OnReset@0x1254070',
                 'SPSystem.OnTransmit@0x14837F0',
                 'SPSystem.RecoverSP@0x1483F40',
                 'WeakBreakSystem.OnTransmit@0x14C05A0',
@@ -1955,6 +2038,11 @@ describe('first vertical slice simulation', () => {
               ],
               runtimeSelfEnergyFormulaProbeCandidateCount: 1,
               runtimeSelfEnergyFormulaProbeGateOpenCount: 1,
+              runtimeSelfEnergySourceToArgsProbeStatuses: [
+                'source-to-args-subprobe-built-unapplied',
+              ],
+              runtimeSelfEnergySourceToArgsProbeCandidateCount: 1,
+              runtimeSelfEnergySourceToArgsProbeGateOpenCount: 1,
               runtimeSelfEnergyOwnerShareIntervalProbeStatuses: [
                 'owner-share-interval-subprobe-built-unapplied',
               ],
@@ -1971,6 +2059,26 @@ describe('first vertical slice simulation', () => {
                 perTenThousandRecoverSPValues: [0.5899],
                 perTenThousandPetRecoverSPValues: [2.2999],
                 perTenThousandRecoverIntervals: [0.9999],
+                sourceToArgsProbe: expect.objectContaining({
+                  status: 'source-to-args-subprobe-built-unapplied',
+                  candidateCount: 1,
+                  gateOpenCount: 1,
+                  samples: expect.arrayContaining([
+                    expect.objectContaining({
+                      elementConfigId: 109001251,
+                      argsConstructionCandidates: expect.objectContaining({
+                        baseDelta: expect.objectContaining({
+                          sourceField: 5899,
+                          perTenThousandCandidate: 0.5899,
+                        }),
+                        petDelta: expect.objectContaining({
+                          sourceField: 22999,
+                          basePetDeltaCandidate: 2.2999,
+                        }),
+                      }),
+                    }),
+                  ]),
+                }),
                 ownerShareIntervalProbe: expect.objectContaining({
                   status: 'owner-share-interval-subprobe-built-unapplied',
                   candidateCount: 1,
@@ -2009,10 +2117,11 @@ describe('first vertical slice simulation', () => {
                   'Lens.Gameplay.Modules.BigWorld.WeakBreakSystem$$OnTransmit@0x14C05A0',
                   'Lens.Gameplay.Modules.BigWorld.SPSystem$$RecoverSP@0x1483F40',
                 ]),
-                runtimeNativeDisassemblyFunctionCount: 8,
+                runtimeNativeDisassemblyFunctionCount: 9,
                 runtimeNativeDisassemblyFunctionKeys: expect.arrayContaining([
                   'FormulaUtility.GetOutputDamage@0x187F360',
                   'DamageElement.RecoverSP@0x138EEE0',
+                  'RecoverSPArgs.OnReset@0x1254070',
                   'SPSystem.OnTransmit@0x14837F0',
                   'WeakBreakSystem.OnTransmit@0x14C05A0',
                 ]),
@@ -2078,7 +2187,7 @@ describe('first vertical slice simulation', () => {
                   nativeDisassemblyEvidence: expect.objectContaining({
                     status:
                       'native-disassembly-snippets-extracted-formula-semantics-unconfirmed',
-                    functionCount: 8,
+                    functionCount: 9,
                   }),
                   applied: false,
                 }),
@@ -2117,6 +2226,16 @@ describe('first vertical slice simulation', () => {
                       method: 'RecoverSP',
                       confirmed: expect.arrayContaining([
                         'recover-sp-field-gates-energy-recovery-path',
+                        'recover-sp-source-to-base-delta-confirmed',
+                        'pet-recover-sp-source-to-pet-delta-confirmed',
+                        'recover-interval-source-to-args-interval-confirmed',
+                      ]),
+                    }),
+                    expect.objectContaining({
+                      className: 'RecoverSPArgs',
+                      method: 'OnReset',
+                      confirmed: expect.arrayContaining([
+                        'recover-sp-args-reset-fields-confirmed',
                       ]),
                     }),
                     expect.objectContaining({
