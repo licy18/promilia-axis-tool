@@ -53,14 +53,14 @@
 
 `Project.actions[]` 当前已支持以下动作类型：
 
-| 类型 | 用途 | 当前运行时行为 |
-| --- | --- | --- |
-| `skill` | 真实角色技能动作 | 进入伤害投影、冷却、资源消耗和时序缺口日志 |
-| `wait` | 排轴中的等待窗口 | 输出 `WAIT` 事件，记录 `durationMs` 和 `note`，不投射伤害 |
-| `annotation` | 排轴备注/阶段标记 | 输出 `ANNOTATION` 事件，记录 `note`，不投射伤害 |
-| `resource` | 手动资源变化 | 输出 `RESOURCE_CHANGE` 事件，记录 `resource`、`change`、`reason`、`note`，并进入 `resourceTimeline` |
-| `enemyEvent` | 敌人/Boss 事件标记 | 输出 `ENEMY_EVENT` 事件，记录 `eventType` 和 `note`，不投射伤害 |
-| `switch` | 切换到另一个角色 actor | 输出 `SWITCH` 事件，记录来源 actor、目标 actor、`durationMs` 和 `note`，不投射伤害 |
+| 类型         | 用途                   | 当前运行时行为                                                                                      |
+| ------------ | ---------------------- | --------------------------------------------------------------------------------------------------- |
+| `skill`      | 真实角色技能动作       | 进入伤害投影、冷却、资源消耗和时序缺口日志                                                          |
+| `wait`       | 排轴中的等待窗口       | 输出 `WAIT` 事件，记录 `durationMs` 和 `note`，不投射伤害                                           |
+| `annotation` | 排轴备注/阶段标记      | 输出 `ANNOTATION` 事件，记录 `note`，不投射伤害                                                     |
+| `resource`   | 手动资源变化           | 输出 `RESOURCE_CHANGE` 事件，记录 `resource`、`change`、`reason`、`note`，并进入 `resourceTimeline` |
+| `enemyEvent` | 敌人/Boss 事件标记     | 输出 `ENEMY_EVENT` 事件，记录 `eventType` 和 `note`，不投射伤害                                     |
+| `switch`     | 切换到另一个角色 actor | 输出 `SWITCH` 事件，记录来源 actor、目标 actor、`durationMs` 和 `note`，不投射伤害                  |
 
 `switch` 当前只作为日志型非伤害动作，不改变后续技能的 actor 归属、Buff 归属或队伍资源；这些属于后续机制阶段。
 
@@ -118,19 +118,19 @@
 
 #### 2.1.1 新增字段
 
-| 字段名 | 类型 | 描述 | 示例 |
-|-------|------|------|------|
-| `damageTicks` | Array | 伤害判定帧数组，记录技能的伤害判定时间点 | `[{"offset": 45, "multiplier": 2.5, "element": "fire", "hitType": "skill"}]` |
-| `buffs` | Array | 技能触发的buff效果数组 | `[{"name": "水之守护", "type": "defense", "value": 0.2, "duration": 10, "trigger": "onHit", "target": "self"}]` |
-| `debuffs` | Array | 技能触发的debuff效果数组 | `[{"name": "岩元素减抗", "type": "resistanceReduction", "value": 0.2, "duration": 10, "trigger": "onHit", "target": "enemy"}]` |
+| 字段名        | 类型  | 描述                                     | 示例                                                                                                                           |
+| ------------- | ----- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `damageTicks` | Array | 伤害判定帧数组，记录技能的伤害判定时间点 | `[{"offset": 45, "multiplier": 2.5, "element": "fire", "hitType": "skill"}]`                                                   |
+| `buffs`       | Array | 技能触发的buff效果数组                   | `[{"name": "水之守护", "type": "defense", "value": 0.2, "duration": 10, "trigger": "onHit", "target": "self"}]`                |
+| `debuffs`     | Array | 技能触发的debuff效果数组                 | `[{"name": "岩元素减抗", "type": "resistanceReduction", "value": 0.2, "duration": 10, "trigger": "onHit", "target": "enemy"}]` |
 
 #### 2.1.2 字段变更
 
-| 旧字段 | 新字段 | 说明 |
-|-------|-------|------|
-| `judgmentPoints` | `damageTicks` | 重命名并调整结构，将`time`字段改为`offset` |
-| `buff` | `buffs` | 从单个对象改为数组，增加`trigger`和`target`字段 |
-| `debuff` | `debuffs` | 从单个对象改为数组，增加`trigger`和`target`字段 |
+| 旧字段           | 新字段        | 说明                                            |
+| ---------------- | ------------- | ----------------------------------------------- |
+| `judgmentPoints` | `damageTicks` | 重命名并调整结构，将`time`字段改为`offset`      |
+| `buff`           | `buffs`       | 从单个对象改为数组，增加`trigger`和`target`字段 |
+| `debuff`         | `debuffs`     | 从单个对象改为数组，增加`trigger`和`target`字段 |
 
 ### 2.2 伤害判定帧结构
 
@@ -306,20 +306,20 @@
 ```javascript
 [
   {
-    "id": "action-0003",
-    "type": "skill",
-    "skillId": 10900101,
-    "level": 1,
-    "damageSegmentIndex": 0
+    id: 'action-0003',
+    type: 'skill',
+    skillId: 10900101,
+    level: 1,
+    damageSegmentIndex: 0,
   },
   {
-    "id": "action-0004",
-    "type": "skill",
-    "skillId": 10900101,
-    "level": 1,
-    "damageSegmentIndex": 1
-  }
-]
+    id: 'action-0004',
+    type: 'skill',
+    skillId: 10900101,
+    level: 1,
+    damageSegmentIndex: 1,
+  },
+];
 ```
 
 - 批量生成不会创建新的 `multiHitAction` 或嵌套子动作结构，避免在真实命中帧确认前提前固化错误模型。
@@ -1229,7 +1229,7 @@ Workbench 技能逻辑来源区现在会展示当前参数语义状态：
 当前 raw 投影公式版本改为：
 
 ```javascript
-"stage5-current-panel-attack-multiplier-v1"
+'stage5-current-panel-attack-multiplier-v1';
 ```
 
 ### 25.4 Workbench 展示
@@ -1351,17 +1351,17 @@ Workbench 的新增动作、拖动吸附、持续时间编辑和批次快捷偏�
 
 ```javascript
 [
-  "普通攻击",
-  "重击",
-  "闪击",
-  "跃击",
-  "星鸣技",
-  "星结合击",
-  "星决技",
-  "星携技",
-  "极限反击",
-  "完美招架"
-]
+  '普通攻击',
+  '重击',
+  '闪击',
+  '跃击',
+  '星鸣技',
+  '星结合击',
+  '星决技',
+  '星携技',
+  '极限反击',
+  '完美招架',
+];
 ```
 
 目录条目包含：
@@ -1399,7 +1399,7 @@ Workbench 的新增动作、拖动吸附、持续时间编辑和批次快捷偏�
 当前模拟公式版本：
 
 ```javascript
-"stage5-damage-layer-breakdown-v1"
+'stage5-damage-layer-breakdown-v1';
 ```
 
 ### 28.2 damageTimeline 字段
@@ -1506,7 +1506,7 @@ Workbench 的新增动作、拖动吸附、持续时间编辑和批次快捷偏�
 `azprGenerated.js` 新增访问入口：
 
 ```javascript
-getAzprCombatFormulaEvidence()
+getAzprCombatFormulaEvidence();
 ```
 
 ### 29.2 evidence summary
@@ -1568,10 +1568,10 @@ enemy.propertyId -> unit_property.baseAttributeId -> template_value.baseAttribut
 
 ```javascript
 [
-  { "id": 2, "functionOutput": "(self.ATK[0]*A)/10000" },
-  { "id": 23, "functionOutput": "(self.DEF[0]*A)/10000" },
-  { "id": 101, "functionOutput": "(self.ATK[0]*A)/10000" }
-]
+  { id: 2, functionOutput: '(self.ATK[0]*A)/10000' },
+  { id: 23, functionOutput: '(self.DEF[0]*A)/10000' },
+  { id: 101, functionOutput: '(self.ATK[0]*A)/10000' },
+];
 ```
 
 但当前全量 `skillsub_ele_value.elementId` 与 `element_formula.id` 直接等值匹配数为 `0`，因此不能直接把这些公式行应用到技能伤害。
@@ -1600,7 +1600,7 @@ enemy.propertyId -> unit_property.baseAttributeId -> template_value.baseAttribut
 `enemyDefense.status` 从纯占位升级为：
 
 ```javascript
-"evidence-found-formula-unmapped"
+'evidence-found-formula-unmapped';
 ```
 
 `enemyDefense.source` 由字符串升级为对象：
@@ -1629,7 +1629,7 @@ enemy.propertyId -> unit_property.baseAttributeId -> template_value.baseAttribut
 `enemyResistance.status` 同样为：
 
 ```javascript
-"evidence-found-formula-unmapped"
+'evidence-found-formula-unmapped';
 ```
 
 `enemyResistance.source` 记录动作元素和敌人元素防御字段：
@@ -1722,7 +1722,7 @@ enemy.propertyId -> unit_property.baseAttributeId -> template_value.baseAttribut
 因此后续规则为：
 
 - 表格和 Lua 缺失时，使用 AzPr Extractor 的 `raw_nostreaming_package` 导出流程补 `C:/PC2/Codex/AzPr/Assets`。
-- Unity 技能、动作、效果资源缺失时，使用 AzPr Extractor 的 Unity/default_package 导出结果，当前入口是 `SkillList/skill_control_*.asset`。
+- Unity 技能、动作、效果资源缺失时，使用 AzPr Extractor 的 Unity/default*package 导出结果，当前入口是 `SkillList/skill_control*\*.asset`。
 - 不把 `skillBytesPath` 字符串当作已存在文件；必须检查实际路径或 Extractor 输出。
 
 ### 31.4 当前缺口
@@ -1730,7 +1730,7 @@ enemy.propertyId -> unit_property.baseAttributeId -> template_value.baseAttribut
 当前 4 个技能没有匹配到 `skill_control_*.asset`：
 
 ```javascript
-[10101062, 10700262, 10800562, 11200262]
+[10101062, 10700262, 10800562, 11200262];
 ```
 
 `skill_control` MonoBehaviour 样本已记录 `startFrame`、`endFrame`、`frameCount`、`eventType`、`eventID`、`elementList` 等候选字段，但尚未解析引用关系，也尚未确认这些节点与 `skillsub_ele_value.elementId` 或 `element_formula.id` 的最终映射。
@@ -1740,7 +1740,7 @@ enemy.propertyId -> unit_property.baseAttributeId -> template_value.baseAttribut
 `src/data/azprGenerated.js` 新增：
 
 ```javascript
-getAzprSkillAssetEvidence()
+getAzprSkillAssetEvidence();
 ```
 
 读取方应把它作为证据索引使用；在阶段 5-8G 之前，不应把其中的帧范围直接当成最终动作时长或命中帧。
@@ -1935,14 +1935,14 @@ getAzprSkillAssetEvidence()
 
 当前固定六类候选：
 
-| key | 含义 |
-| --- | --- |
-| `hpDamage` | 敌人 HP 伤害候选，例如 `攻击碰撞`、`damage`、`hit` |
-| `toughnessDamage` | 敌人韧性/失衡削减候选 |
-| `selfEnergyChange` | 自身能量/充能变化候选 |
-| `elementEffect` | 元素或属性效果候选 |
-| `timingControl` | 动作、跳转、打断、连击、位移等时序控制候选 |
-| `presentation` | SFX、特效、镜头、VO、武器等表现资源候选 |
+| key                | 含义                                               |
+| ------------------ | -------------------------------------------------- |
+| `hpDamage`         | 敌人 HP 伤害候选，例如 `攻击碰撞`、`damage`、`hit` |
+| `toughnessDamage`  | 敌人韧性/失衡削减候选                              |
+| `selfEnergyChange` | 自身能量/充能变化候选                              |
+| `elementEffect`    | 元素或属性效果候选                                 |
+| `timingControl`    | 动作、跳转、打断、连击、位移等时序控制候选         |
+| `presentation`     | SFX、特效、镜头、VO、武器等表现资源候选            |
 
 分类依据是 JSON 解析后的 `name`、`trackName` 和字符串字段模式匹配。直接文本搜索可能漏掉 Unity JSON 中转义的中文字段，因此不能作为唯一依据。
 
@@ -3188,4 +3188,132 @@ Workbench 候选模式摘要会追加行为节点提示：
 
 - `skillControlBehaviorCorrelations.applied` 必须保持 `false`。
 - 当前字段只证明技能级行为候选和资源归属存在，不证明动作形态级绑定。
-- 若后续需要完整覆盖 5 个 HP 行为节点，需要扩展 generated evidence 的采样策略，不能只依赖当前保留的 3 条 HP 行为链样本。
+- 阶段 5-8W 已扩展 generated evidence 的采样策略，完整 HP 行为链样本见第 48 节。
+
+## 48. 阶段 5-8W：动作形态级行为绑定候选
+
+阶段 5-8W 把技能级 HP 行为节点继续推进到动作形态级候选绑定，但仍保持证据态，不参与实际伤害计算。
+
+### 48.1 skillAssetEvidence.currentSkillControlEvidence[]
+
+`src/data/generated/skill-asset-evidence.json` 在每个 current skill control item 中新增按 lane 保留的样本：
+
+```javascript
+{
+  "effectLaneCandidatesByLane": {
+    "hpDamage": [
+      { "name": "攻击碰撞", "startFrame": 19, "endFrame": 20 },
+      { "name": "普通-攻击碰撞", "startFrame": 13, "endFrame": 14 }
+    ]
+  },
+  "effectLaneBehaviorChainsByLane": {
+    "hpDamage": [
+      {
+        "sourceName": "普通-攻击碰撞",
+        "sourceStartFrame": 12,
+        "sourceEndFrame": 13,
+        "resolvedBehaviors": [
+          {
+            "scriptTypeCandidate": {
+              "className": "InjectToTargetKeyFrameBehaviorData"
+            },
+            "startFrame": 12,
+            "frameCount": 1,
+            "elementBaseDataRefs": [
+              {
+                "resourceMapMatches": [
+                  {
+                    "subSkillIds": [10900101],
+                    "stateNames": ["Skill0_1"],
+                    "hitEffects": ["11_109001_116"]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+含义：
+
+- `effectLaneCandidatesByLane`：按 HP / toughness / energy 等 lane 分类保留的 effect node 候选样本。
+- `effectLaneBehaviorChainsByLane`：按 lane 保留的已解引用行为链样本，包含原始行为节点帧、`resolvedBehaviors[]`、`elementBaseDataRefs[]`、`resourceMapMatches[]` 等证据。
+- `stateName`、`subSkillId` 和 hitEffect 在 generated evidence 里来自 `resourceMapMatches[]`；仿真投影会再折叠为 `stateNames`、`subSkillIds` 和 `hitEffects` 便于界面展示。
+- 当前阶段只对 HP lane 生成动作绑定候选；韧性和能量 lane 仍等待蓝色星原真实字段确认。
+
+### 48.2 formulaCandidatePatternSummary.skillControlBehaviorCorrelations[]
+
+仿真投影在技能级关联摘要中新增动作形态绑定候选：
+
+```javascript
+{
+  "actionVariantBindingStatus": "action-variant-binding-candidates-generated-unconfirmed",
+  "actionVariantBindingSummary": {
+    "actionVariantCount": 4,
+    "boundCandidateCount": 4,
+    "confidenceLevels": ["medium", "low"],
+    "statuses": ["action-variant-binding-candidates-found"]
+  },
+  "actionVariantBindingCandidates": [
+    {
+      "actionId": "action-0001",
+      "actionLabel": "普攻",
+      "confidence": "medium",
+      "bindingStatus": "normal-action-name-state-candidate-unconfirmed",
+      "candidateCount": 5,
+      "topCandidates": [
+        {
+          "sourceName": "普通-攻击碰撞",
+          "sourceStartFrame": 12,
+          "sourceEndFrame": 13,
+          "stateNames": ["Skill0_1"],
+          "subSkillIds": [10900101],
+          "hitEffects": ["11_109001_116"]
+        }
+      ],
+      "applied": false
+    }
+  ]
+}
+```
+
+### 48.3 actionSummaries[].skillControlBehaviorCorrelation
+
+每个动作摘要会带上该动作自己的候选绑定精简视图：
+
+```javascript
+{
+  "skillControlBehaviorCorrelation": {
+    "actionVariantBindingStatus": "action-variant-binding-candidates-generated-unconfirmed",
+    "actionVariantBindingCandidate": {
+      "confidence": "medium",
+      "bindingStatus": "normal-action-name-state-candidate-unconfirmed",
+      "topCandidates": [
+        {
+          "sourceName": "普通-攻击碰撞",
+          "sourceStartFrame": 12,
+          "stateNames": ["Skill0_1"]
+        }
+      ],
+      "applied": false
+    }
+  }
+}
+```
+
+Workbench 候选模式摘要会追加动作绑定提示：
+
+```text
+候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 12f/13f/16f/19f · Skill0_6/Skill0_1 · 绑定候选 普攻->Skill0_1 12f/13f
+```
+
+### 48.4 当前边界
+
+- 所有 `actionVariantBindingCandidates[].applied` 和 `actionVariantBindingCandidate.applied` 必须保持 `false`。
+- 【普通攻击】当前只有中置信候选：`普通-攻击碰撞 / Skill0_1 / 12-13f, 13-14f`。
+- 【重击 / 闪击 / 跃击】当前只是低置信共享候选：`攻击碰撞 / Skill0_6`。
+- 下一阶段必须验证 `Skill0_1` / `Skill0_6` 与动作形态的真实对应关系，不能把候选直接写入最终伤害公式。

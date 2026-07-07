@@ -45,19 +45,19 @@ C:\Codex\AzPr Axis\promilia-axis-tool
 
 Endaxis 当前值得对标的模块如下：
 
-| 能力 | Endaxis 位置 | promilia 对标方向 |
-| --- | --- | --- |
-| 数据访问层 | `src/data/`、`src/data/timeline.ts`、`src/data/index.ts` | 从单一 `gamedata.json` 逐步过渡到数据访问层 |
-| 编辑器主界面 | `src/views/TimelineEditor.vue` | 拆薄 `src/views/Editor.vue` |
-| 动作库 | `src/components/ActionLibrary.vue`、`ActionItem.vue` | 重构技能库/动作库，支持技能、切人、敌方事件 |
-| 时间轴网格 | `src/components/TimelineGrid.vue` | 强化拖拽、吸附、选择、缩放和多轨交互 |
-| 属性面板 | `src/components/PropertiesPanel.vue` | 收敛当前编辑面板能力 |
-| 资源监控 | `src/components/ResourceMonitor.vue` | 修复现有资源监控并接入运行时投影 |
-| 敌人设置 | `src/components/EnemySettingsPanel.vue` | 蓝色星原敌人/Boss 机制面板 |
-| 运行时编译 | `src/simulation/compiler/` | 项目模型 -> 模拟场景 |
-| 模拟引擎 | `src/simulation/engine/`、`simulator.ts` | 事件队列、角色/敌人状态、命中、Buff、资源 |
-| 结果投影 | `src/simulation/projection/` | 输出图表、时间线状态条和统计面板数据 |
-| 测试体系 | `src/simulation/*.test.ts`、`runtimeCoverage.test.ts` | 建立蓝色星原机制 golden tests |
+| 能力         | Endaxis 位置                                             | promilia 对标方向                           |
+| ------------ | -------------------------------------------------------- | ------------------------------------------- |
+| 数据访问层   | `src/data/`、`src/data/timeline.ts`、`src/data/index.ts` | 从单一 `gamedata.json` 逐步过渡到数据访问层 |
+| 编辑器主界面 | `src/views/TimelineEditor.vue`                           | 拆薄 `src/views/Editor.vue`                 |
+| 动作库       | `src/components/ActionLibrary.vue`、`ActionItem.vue`     | 重构技能库/动作库，支持技能、切人、敌方事件 |
+| 时间轴网格   | `src/components/TimelineGrid.vue`                        | 强化拖拽、吸附、选择、缩放和多轨交互        |
+| 属性面板     | `src/components/PropertiesPanel.vue`                     | 收敛当前编辑面板能力                        |
+| 资源监控     | `src/components/ResourceMonitor.vue`                     | 修复现有资源监控并接入运行时投影            |
+| 敌人设置     | `src/components/EnemySettingsPanel.vue`                  | 蓝色星原敌人/Boss 机制面板                  |
+| 运行时编译   | `src/simulation/compiler/`                               | 项目模型 -> 模拟场景                        |
+| 模拟引擎     | `src/simulation/engine/`、`simulator.ts`                 | 事件队列、角色/敌人状态、命中、Buff、资源   |
+| 结果投影     | `src/simulation/projection/`                             | 输出图表、时间线状态条和统计面板数据        |
+| 测试体系     | `src/simulation/*.test.ts`、`runtimeCoverage.test.ts`    | 建立蓝色星原机制 golden tests               |
 
 ## 4. 当前差距
 
@@ -174,14 +174,14 @@ Endaxis 当前值得对标的模块如下：
 
 ## 6. 推荐里程碑
 
-| 里程碑 | 目标 | 主要产出 |
-| --- | --- | --- |
-| M1 数据真实 | 新版脱离占位数据 | AzPr 数据生成器、拆表数据、校验报告 |
-| M2 模型稳定 | 项目结构可长期维护 | 版本化项目模型、schema、迁移层 |
-| M3 运行时闭环 | 可无 UI 模拟一条轴 | compiler、engine、projection、golden tests |
-| M4 编辑器成型 | 操作体验接近 Endaxis | 工作台组件、真实数据拖拽、运行时投影 |
-| M5 机制可信 | 能复盘代表队伍 | 机制规则、TimingProfile、覆盖测试 |
-| M6 分享发布 | 可稳定交付用户 | 导入导出、预设、性能、发布文档 |
+| 里程碑        | 目标                 | 主要产出                                   |
+| ------------- | -------------------- | ------------------------------------------ |
+| M1 数据真实   | 新版脱离占位数据     | AzPr 数据生成器、拆表数据、校验报告        |
+| M2 模型稳定   | 项目结构可长期维护   | 版本化项目模型、schema、迁移层             |
+| M3 运行时闭环 | 可无 UI 模拟一条轴   | compiler、engine、projection、golden tests |
+| M4 编辑器成型 | 操作体验接近 Endaxis | 工作台组件、真实数据拖拽、运行时投影       |
+| M5 机制可信   | 能复盘代表队伍       | 机制规则、TimingProfile、覆盖测试          |
+| M6 分享发布   | 可稳定交付用户       | 导入导出、预设、性能、发布文档             |
 
 ## 7. 立即执行清单
 
@@ -247,7 +247,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8T，新增 `formulaCandidatePreview.combinationPreviews`，验证 `function_2`、`function_1*function_2`、`function_1+function_2` 等简单组合仍远低于 raw HP；当前 f2 等级值需约 `×40.6` 才接近 raw，按 5 hit 平均仍需每 hit `×8.1`，Workbench 显示组合诊断。
 - 已完成：阶段 5-8U，新增 `summary.formulaCandidatePatternSummary`，把四动作样本【普通攻击 / 重击 / 闪击 / 跃击】的 f2 候选值与 raw HP 投影做跨动作差异摘要；当前 f2 候选值在四动作中均为 `307`，`requiredScaleToRaw` 随描述倍率变化，范围约 `×2.5` 到 `×40.6`，Workbench 显示候选模式摘要，仍保持 `applied: false`。
 - 已完成：阶段 5-8V，新增 `formulaCandidatePatternSummary.skillControlBehaviorCorrelations`，把 f2 差异模式与当前技能级 `skill_control` HP 行为节点证据放在同一摘要里；末音 `10900101` 当前确认 HP 行为候选 5 个、采样命中帧 `13/16/19f`、资源归属 `Skill0_6 / Skill0_1` 和 hitEffects，但动作形态级绑定仍标为未确认。
-- 下一步：阶段 5-8W，把技能级 HP 行为节点继续推进到动作形态级候选绑定，优先用 `stateName`、`subSkillId`、hitEffects、行为节点名称、帧窗口和 `skill_level` 动作标签建立候选映射。
+- 已完成：阶段 5-8W，新增按 lane 保留的 `effectLaneCandidatesByLane` / `effectLaneBehaviorChainsByLane`，完整保留末音 `10900101` 的 5 条 HP 行为链，并在仿真中生成动作形态级候选绑定；当前【普通攻击】中置信候选为 `普通-攻击碰撞 / Skill0_1 / 12-13f, 13-14f`，【重击 / 闪击 / 跃击】低置信共享候选为 `攻击碰撞 / Skill0_6`。
+- 下一步：阶段 5-8X，验证 `Skill0_1` / `Skill0_6` 与【普通攻击 / 重击 / 闪击 / 跃击】的真实对应关系，继续追动画状态、trackIndex、timelineGroupIndex、combo/timingControl 和 DamageElement 执行入口。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

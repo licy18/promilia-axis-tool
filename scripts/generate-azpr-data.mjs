@@ -354,6 +354,7 @@ const SKILL_CONTROL_SAMPLE_FILE_LIMIT = 80;
 const SKILL_CONTROL_SAMPLE_NODE_LIMIT = 8;
 const SKILL_EFFECT_LANE_SAMPLE_LIMIT = 12;
 const SKILL_EFFECT_BEHAVIOR_CHAIN_SAMPLE_LIMIT = 12;
+const SKILL_EFFECT_LANE_SPECIFIC_SAMPLE_LIMIT = 24;
 const SKILL_EFFECT_LANES = Object.freeze([
   {
     key: 'hpDamage',
@@ -368,7 +369,15 @@ const SKILL_EFFECT_LANES = Object.freeze([
   {
     key: 'selfEnergyChange',
     label: '自身能量变化',
-    patterns: [/能量/, /充能/, /蓄能/, /回能/, /\bsp\b/i, /\benergy\b/i, /\bcharge\b/i],
+    patterns: [
+      /能量/,
+      /充能/,
+      /蓄能/,
+      /回能/,
+      /\bsp\b/i,
+      /\benergy\b/i,
+      /\bcharge\b/i,
+    ],
   },
   {
     key: 'elementEffect',
@@ -378,7 +387,17 @@ const SKILL_EFFECT_LANES = Object.freeze([
   {
     key: 'timingControl',
     label: '动作/时序控制',
-    patterns: [/动作/, /跳转/, /打断/, /连击/, /桥接/, /移动/, /位移/, /前摇/, /全程/],
+    patterns: [
+      /动作/,
+      /跳转/,
+      /打断/,
+      /连击/,
+      /桥接/,
+      /移动/,
+      /位移/,
+      /前摇/,
+      /全程/,
+    ],
   },
   {
     key: 'presentation',
@@ -1969,24 +1988,35 @@ function buildCombatFormulaEvidenceIndex({
   const formulas = elementFormulaTable.rows ?? [];
   const formulaIds = new Set(formulas.map(row => Number(row.id)));
   const allElementValueRows = skillsubEleValueTable.rows ?? [];
-  const currentElementValueRows = collectSkillLogicElementValueRows(skillLogicIndex);
+  const currentElementValueRows =
+    collectSkillLogicElementValueRows(skillLogicIndex);
   const allElementIds = uniqueNumbers(
     allElementValueRows.map(row => Number(row.elementId))
   );
   const currentElementIds = uniqueNumbers(
     currentElementValueRows.map(row => Number(row.elementId))
   );
-  const directAllElementFormulaMatches = allElementIds.filter(id => formulaIds.has(id));
-  const directCurrentElementFormulaMatches = currentElementIds.filter(id => formulaIds.has(id));
+  const directAllElementFormulaMatches = allElementIds.filter(id =>
+    formulaIds.has(id)
+  );
+  const directCurrentElementFormulaMatches = currentElementIds.filter(id =>
+    formulaIds.has(id)
+  );
   const enemiesWithProperty = enemies.filter(enemy => enemy.property?.exists);
   const enemiesWithBaseDefense = enemiesWithProperty.filter(enemy =>
-    ENEMY_BASE_DEFENSE_ATTRIBUTE_KEYS.every(key => hasAttributeKey(enemy.property, key))
+    ENEMY_BASE_DEFENSE_ATTRIBUTE_KEYS.every(key =>
+      hasAttributeKey(enemy.property, key)
+    )
   );
   const enemiesWithElementDefense = enemiesWithProperty.filter(enemy =>
-    ELEMENT_DEFENSE_ATTRIBUTE_KEYS.every(key => hasAttributeKey(enemy.property, key))
+    ELEMENT_DEFENSE_ATTRIBUTE_KEYS.every(key =>
+      hasAttributeKey(enemy.property, key)
+    )
   );
   const enemiesWithWeakPointDamage = enemiesWithProperty.filter(enemy =>
-    WEAK_POINT_DAMAGE_ATTRIBUTE_KEYS.every(key => hasAttributeKey(enemy.property, key))
+    WEAK_POINT_DAMAGE_ATTRIBUTE_KEYS.every(key =>
+      hasAttributeKey(enemy.property, key)
+    )
   );
   const sampleEnemy =
     enemies.find(enemy => Number(enemy.id) === 300032) ??
@@ -2023,7 +2053,8 @@ function buildCombatFormulaEvidenceIndex({
       currentSkillUniqueElementIds: currentElementIds.length,
       elementFormulaRows: formulas.length,
       directAllElementFormulaIdMatches: directAllElementFormulaMatches.length,
-      directCurrentElementFormulaIdMatches: directCurrentElementFormulaMatches.length,
+      directCurrentElementFormulaIdMatches:
+        directCurrentElementFormulaMatches.length,
       relationStatus:
         directAllElementFormulaMatches.length > 0
           ? 'direct-elementId-formulaId-match-found'
@@ -2031,7 +2062,8 @@ function buildCombatFormulaEvidenceIndex({
     },
     enemyAttributeEvidence: {
       status:
-        enemiesWithBaseDefense.length > 0 && enemiesWithElementDefense.length > 0
+        enemiesWithBaseDefense.length > 0 &&
+        enemiesWithElementDefense.length > 0
           ? 'enemy-property-attributes-found'
           : 'enemy-property-attributes-incomplete',
       sourceChain:
@@ -2048,7 +2080,9 @@ function buildCombatFormulaEvidenceIndex({
         WEAK_POINT_DAMAGE_ATTRIBUTE_KEYS,
         attributeInfoById
       ),
-      sampleEnemy: sampleEnemy ? createCombatFormulaSampleEnemy(sampleEnemy) : null,
+      sampleEnemy: sampleEnemy
+        ? createCombatFormulaSampleEnemy(sampleEnemy)
+        : null,
     },
     formulaEvidence: {
       status: 'formula-rows-found-without-elementId-direct-link',
@@ -2056,13 +2090,17 @@ function buildCombatFormulaEvidenceIndex({
         formulas.filter(row => /\bself\.ATK\b/.test(String(row.functionOutput)))
       ),
       magicAttackFormulaRows: mapFormulaRows(
-        formulas.filter(row => /\bself\.MATK\b/.test(String(row.functionOutput)))
+        formulas.filter(row =>
+          /\bself\.MATK\b/.test(String(row.functionOutput))
+        )
       ),
       selfDefenseFormulaRows: mapFormulaRows(
         formulas.filter(row => /\bself\.DEF\b/.test(String(row.functionOutput)))
       ),
       targetReferenceFormulaRows: mapFormulaRows(
-        formulas.filter(row => /\btarget\./.test(String(row.functionOutput))).slice(0, 24)
+        formulas
+          .filter(row => /\btarget\./.test(String(row.functionOutput)))
+          .slice(0, 24)
       ),
       directElementFormulaIdMatches: directCurrentElementFormulaMatches,
     },
@@ -2075,8 +2113,7 @@ function buildCombatFormulaEvidenceIndex({
       currentSkillUniqueElementIds: currentElementIds.length,
       sampleRows: currentElementValueRows.slice(0, 12),
       directElementFormulaIdMatches: directCurrentElementFormulaMatches,
-      note:
-        'skillsub_ele_value.elementId does not equal element_formula.id in the current local tables; asset/effect-node tracing is still required before applying formula rows.',
+      note: 'skillsub_ele_value.elementId does not equal element_formula.id in the current local tables; asset/effect-node tracing is still required before applying formula rows.',
     },
   };
 }
@@ -2094,9 +2131,9 @@ async function buildSkillAssetEvidenceIndex({
   );
   const skillTableRows = tables.skillTable?.rows ?? [];
   const skillTableById = new Map(
-    skillTableRows.map(row => [Number(row.id), row]).filter(([id]) =>
-      Number.isFinite(id)
-    )
+    skillTableRows
+      .map(row => [Number(row.id), row])
+      .filter(([id]) => Number.isFinite(id))
   );
   const probes = {
     azprSkillRoot: await createPathStatus(
@@ -2138,8 +2175,9 @@ async function buildSkillAssetEvidenceIndex({
   const uniqueSkillBytesPaths = uniqueStrings(
     tableEvidence.flatMap(item => item.uniqueSkillBytesPaths)
   );
-  const skillBytesPathStatuses =
-    await buildSkillBytesPathStatuses(uniqueSkillBytesPaths);
+  const skillBytesPathStatuses = await buildSkillBytesPathStatuses(
+    uniqueSkillBytesPaths
+  );
   const skillControlDirs = await listSkillControlDirs(extractorSkillListRoot);
   const skillControlBySkillId = new Map(
     skillControlDirs.map(item => [Number(item.skillId), item])
@@ -2218,7 +2256,8 @@ async function buildSkillAssetEvidenceIndex({
       currentHeroCount: characters.length,
       currentSkillsWithSkillTableRow: currentSkillsWithSkillTableRow.length,
       currentSkillsWithExtractedSkillControl: foundCurrentSkillControls.length,
-      currentSkillsMissingExtractedSkillControl: missingCurrentSkillControls.length,
+      currentSkillsMissingExtractedSkillControl:
+        missingCurrentSkillControls.length,
       skillBytesPathOwnerRows,
       uniqueSkillBytesPaths: uniqueSkillBytesPaths.length,
       existingSkillBytesPathsInAzPrAssets: existingSkillBytesPathCount,
@@ -2266,16 +2305,16 @@ async function buildSkillAssetEvidenceIndex({
       hpDamageFieldCandidateRefs:
         damageElementFieldMappingEvidence.summary?.hpDamageCandidateRefs ?? 0,
       toughnessDamageFieldCandidateRefs:
-        damageElementFieldMappingEvidence.summary?.toughnessDamageCandidateRefs ??
-        0,
+        damageElementFieldMappingEvidence.summary
+          ?.toughnessDamageCandidateRefs ?? 0,
       selfEnergyFieldCandidateRefs:
         damageElementFieldMappingEvidence.summary?.selfEnergyCandidateRefs ?? 0,
       damageElementSkillLogicBridgeMatches:
         damageElementFieldMappingEvidence.summary
           ?.skillsubElementBridgeMatchedObjects ?? 0,
       damageElementFormulaFunctionMatchedRefs:
-        damageElementFieldMappingEvidence.summary
-          ?.formulaFunctionMatchedRefs ?? 0,
+        damageElementFieldMappingEvidence.summary?.formulaFunctionMatchedRefs ??
+        0,
       damageElementFormulaFunctionUnmatchedRefs:
         damageElementFieldMappingEvidence.summary
           ?.formulaFunctionUnmatchedRefs ?? 0,
@@ -2299,8 +2338,7 @@ function buildSkillElementTypeCatalogEvidence() {
   return {
     status: 'il2cpp-element-type-candidates-found',
     source: normalizePath(IL2CPP_DUMP_SOURCE),
-    note:
-      'These IL2CPP type candidates are evidence for later element object tracing only; they do not prove the unresolved m_FileID=2 objects are already parsed.',
+    note: 'These IL2CPP type candidates are evidence for later element object tracing only; they do not prove the unresolved m_FileID=2 objects are already parsed.',
     elementTypes: SKILL_ELEMENT_TYPE_CATALOG.map(item => ({
       ...item,
       source: normalizePath(IL2CPP_DUMP_SOURCE),
@@ -2313,8 +2351,8 @@ async function buildExternalElementObjectEvidence(currentSkillControlEvidence) {
     .filter(
       item =>
         item.status === 'found' &&
-        (item.behaviorReferenceSummary?.resourceMapMatchedElementBaseRefs ?? 0) >
-          0
+        (item.behaviorReferenceSummary?.resourceMapMatchedElementBaseRefs ??
+          0) > 0
     )
     .map(item => Number(item.skillId))
     .filter(Number.isFinite);
@@ -2335,7 +2373,11 @@ async function buildExternalElementObjectEvidence(currentSkillControlEvidence) {
     };
   }
 
-  const resolverPath = path.join(repoRoot, 'scripts', 'resolve-azpr-element-objects.py');
+  const resolverPath = path.join(
+    repoRoot,
+    'scripts',
+    'resolve-azpr-element-objects.py'
+  );
   if (!(await pathExists(resolverPath))) {
     return {
       schemaVersion: 1,
@@ -2438,7 +2480,8 @@ function buildDamageElementFieldMappingEvidence({
 
   const fieldMappings = skills.flatMap(skill => skill.fieldMappings);
   const bridgeMatchedObjects = fieldMappings.filter(
-    item => item.skillLevelBridge.status === 'skillsub-element-level-bridge-found'
+    item =>
+      item.skillLevelBridge.status === 'skillsub-element-level-bridge-found'
   );
   const bridgeMissingObjects = fieldMappings.filter(
     item =>
@@ -2472,8 +2515,7 @@ function buildDamageElementFieldMappingEvidence({
       skillsubEleValueTable: normalizePath(sourceFiles.skillsubEleValue),
       elementFormulaTable: normalizePath(sourceFiles.elementFormula),
       il2cppDump: normalizePath(IL2CPP_DUMP_SOURCE),
-      note:
-        'Field mappings are source evidence for the HP, toughness and self-energy chains; they are not final combat formulas yet.',
+      note: 'Field mappings are source evidence for the HP, toughness and self-energy chains; they are not final combat formulas yet.',
     },
     summary: {
       skillCount: externalElementObjectEvidence?.skills?.length ?? 0,
@@ -2491,18 +2533,16 @@ function buildDamageElementFieldMappingEvidence({
       valueParamFormulaSlotDirectMatchObjects: alignmentSummaries.filter(
         item => (item?.directSlotMatchParamIds ?? []).length > 0
       ).length,
-      valueParamFormulaSlotOverrideCandidateObjects:
-        alignmentSummaries.filter(
-          item => (item?.overrideCandidateParamIds ?? []).length > 0
-        ).length,
+      valueParamFormulaSlotOverrideCandidateObjects: alignmentSummaries.filter(
+        item => (item?.overrideCandidateParamIds ?? []).length > 0
+      ).length,
       valueParamFormulaSlotUnresolvedObjects: alignmentSummaries.filter(
         item =>
-          item?.status ===
-          'same-element-id-found-slot-alignment-unverified'
+          item?.status === 'same-element-id-found-slot-alignment-unverified'
       ).length,
       formulaFunctionCheckedObjects: fieldMappings.filter(
-        item => (item.hpDamage.formulaFunctionEvidence?.functionRefs ?? [])
-          .length > 0
+        item =>
+          (item.hpDamage.formulaFunctionEvidence?.functionRefs ?? []).length > 0
       ).length,
       formulaFunctionDirectElementFormulaObjects: fieldMappings.filter(
         item =>
@@ -2646,15 +2686,15 @@ function buildFormulaFunctionEvidence({
             ? 'partial-direct-element-formula-id-candidates-found'
             : 'no-direct-element-formula-id-candidates-found',
     relationStatus:
-      functionRefs.length > 0 && matchedFunctionIds.length === functionRefs.length
+      functionRefs.length > 0 &&
+      matchedFunctionIds.length === functionRefs.length
         ? 'function-id-matches-element_formula-id-candidate'
         : 'function-id-to-element_formula-id-unresolved',
     applied: false,
     source: {
       elementFormulaTable: normalizePath(sourceFiles.elementFormula),
       il2cppDump: normalizePath(IL2CPP_DUMP_SOURCE),
-      note:
-        'formulaParams.function_1/function_2 are matched to element_formula.id as evidence candidates only; DamageElement execution order and final formula application are still unconfirmed.',
+      note: 'formulaParams.function_1/function_2 are matched to element_formula.id as evidence candidates only; DamageElement execution order and final formula application are still unconfirmed.',
     },
     functionRefs,
     matchedFunctionIds: uniqueNumbers(matchedFunctionIds),
@@ -2883,8 +2923,7 @@ function buildDamageElementSkillLevelBridge(
       ...formulaParamAlignment,
       firstLevelDirectSlotMatches,
       firstLevelMismatches,
-      note:
-        'skillsub_ele_value.valueParam can bridge element IDs to level-scaling rows, but slot overrides/scaling must be validated before final damage math.',
+      note: 'skillsub_ele_value.valueParam can bridge element IDs to level-scaling rows, but slot overrides/scaling must be validated before final damage math.',
     },
   };
 }
@@ -3124,7 +3163,11 @@ function summarizeLaneCandidateSkillCounts(currentSkillControlEvidence) {
   );
 }
 
-function buildCurrentHeroSkillRows(heroTable, currentCharacterIds, currentSkillIds) {
+function buildCurrentHeroSkillRows(
+  heroTable,
+  currentCharacterIds,
+  currentSkillIds
+) {
   return (heroTable?.rows ?? [])
     .filter(row => currentCharacterIds.has(Number(row.id)))
     .map(row => {
@@ -3218,7 +3261,8 @@ async function buildSkillControlEvidenceItem(skill, skillControlBySkillId) {
           monoBehaviourRoot,
           monoBehaviourFileIndex,
           monoBehaviourPayloadCache,
-          skillResourceMapIndex: skillResourceMapEvidence.elementRefsByRoundedPathId,
+          skillResourceMapIndex:
+            skillResourceMapEvidence.elementRefsByRoundedPathId,
         })
       );
     } catch {
@@ -3245,8 +3289,10 @@ async function buildSkillControlEvidenceItem(skill, skillControlBySkillId) {
     skillResourceMapEvidence: skillResourceMapEvidence.evidence,
     effectLaneCandidateSummary: aggregate.laneCandidateSummary,
     effectLaneCandidates: aggregate.laneCandidates,
+    effectLaneCandidatesByLane: aggregate.laneCandidateSamplesByLane,
     behaviorReferenceSummary: aggregate.behaviorReferenceSummary,
     effectLaneBehaviorChains: aggregate.behaviorChains,
+    effectLaneBehaviorChainsByLane: aggregate.behaviorChainsByLane,
     frameRange: buildFrameRange(aggregate.startFrames, aggregate.endFrames),
     sampleNodeCandidates: aggregate.candidates.slice(
       0,
@@ -3340,6 +3386,9 @@ function createEmptySkillControlNodeEvidence() {
       ])
     ),
     laneCandidates: [],
+    laneCandidateSamplesByLane: Object.fromEntries(
+      SKILL_EFFECT_LANES.map(lane => [lane.key, []])
+    ),
     behaviorReferenceSummary: {
       behaviorListRefs: 0,
       resolvedBehaviorListRefs: 0,
@@ -3353,6 +3402,9 @@ function createEmptySkillControlNodeEvidence() {
       ),
     },
     behaviorChains: [],
+    behaviorChainsByLane: Object.fromEntries(
+      SKILL_EFFECT_LANES.map(lane => [lane.key, []])
+    ),
   };
 }
 
@@ -3372,12 +3424,26 @@ function mergeSkillControlNodeEvidence(target, source) {
   for (const candidate of source.laneCandidates) {
     pushSkillEffectLaneCandidateSample(target, candidate);
   }
+  for (const [lane, candidates] of Object.entries(
+    source.laneCandidateSamplesByLane ?? {}
+  )) {
+    for (const candidate of candidates) {
+      pushSkillEffectLaneCandidateSampleForLane(target, lane, candidate);
+    }
+  }
   mergeBehaviorReferenceSummary(
     target.behaviorReferenceSummary,
     source.behaviorReferenceSummary
   );
   for (const chain of source.behaviorChains) {
     pushSkillBehaviorChainSample(target, chain);
+  }
+  for (const [lane, chains] of Object.entries(
+    source.behaviorChainsByLane ?? {}
+  )) {
+    for (const chain of chains) {
+      pushSkillBehaviorChainSampleForLane(target, lane, chain);
+    }
   }
 }
 
@@ -3402,7 +3468,10 @@ function pushSkillControlCandidate(evidence, candidate) {
 }
 
 function pushSkillControlCandidateSample(evidence, candidate) {
-  if (candidate && evidence.candidates.length < SKILL_CONTROL_SAMPLE_NODE_LIMIT) {
+  if (
+    candidate &&
+    evidence.candidates.length < SKILL_CONTROL_SAMPLE_NODE_LIMIT
+  ) {
     evidence.candidates.push(candidate);
   }
 }
@@ -3423,6 +3492,7 @@ function pushSkillEffectLaneCandidate(evidence, candidate) {
   for (const lane of candidate.laneHints) {
     if (evidence.laneCandidateSummary[lane]) {
       evidence.laneCandidateSummary[lane].count += 1;
+      pushSkillEffectLaneCandidateSampleForLane(evidence, lane, candidate);
     }
   }
 
@@ -3435,6 +3505,14 @@ function pushSkillEffectLaneCandidateSample(evidence, candidate) {
   if (evidence.laneCandidates.length < SKILL_EFFECT_LANE_SAMPLE_LIMIT) {
     evidence.laneCandidates.push(candidate);
   }
+}
+
+function pushSkillEffectLaneCandidateSampleForLane(evidence, lane, candidate) {
+  const samples = evidence.laneCandidateSamplesByLane?.[lane];
+  if (!samples || samples.length >= SKILL_EFFECT_LANE_SPECIFIC_SAMPLE_LIMIT) {
+    return;
+  }
+  samples.push(candidate);
 }
 
 async function buildSkillBehaviorChain(control, fileName, candidate, context) {
@@ -3591,9 +3669,10 @@ function buildBehaviorScriptTypeCandidate(value, text, scriptPathId) {
     return null;
   }
 
-  const matchedFields = candidate.signatureFields.filter(field =>
-    Object.prototype.hasOwnProperty.call(value, field) ||
-    text.includes(`"${field}"`)
+  const matchedFields = candidate.signatureFields.filter(
+    field =>
+      Object.prototype.hasOwnProperty.call(value, field) ||
+      text.includes(`"${field}"`)
   );
   if (matchedFields.length < 6) {
     return null;
@@ -3612,8 +3691,7 @@ function buildBehaviorScriptTypeCandidate(value, text, scriptPathId) {
     interfaces: candidate.interfaces,
     matchedFields,
     methods: candidate.methods,
-    note:
-      'Matched by script PathID plus exported MonoBehaviour field signature; this is not yet a direct MonoScript asset-name resolution.',
+    note: 'Matched by script PathID plus exported MonoBehaviour field signature; this is not yet a direct MonoScript asset-name resolution.',
   };
 }
 
@@ -3640,9 +3718,9 @@ function pushSkillBehaviorChain(evidence, chain) {
       sum + (behavior.resourceMapMatchedElementBaseRefCount ?? 0),
     0
   );
-  const scriptTypeCandidateBehaviorRefs = (chain.resolvedBehaviors ?? []).filter(
-    behavior => behavior.scriptTypeCandidate
-  ).length;
+  const scriptTypeCandidateBehaviorRefs = (
+    chain.resolvedBehaviors ?? []
+  ).filter(behavior => behavior.scriptTypeCandidate).length;
 
   evidence.behaviorReferenceSummary.behaviorListRefs += refs.length;
   evidence.behaviorReferenceSummary.resolvedBehaviorListRefs +=
@@ -3671,12 +3749,25 @@ function pushSkillBehaviorChain(evidence, chain) {
   }
 
   pushSkillBehaviorChainSample(evidence, chain);
+  for (const lane of chain.laneHints ?? []) {
+    pushSkillBehaviorChainSampleForLane(evidence, lane, chain);
+  }
 }
 
 function pushSkillBehaviorChainSample(evidence, chain) {
-  if (evidence.behaviorChains.length < SKILL_EFFECT_BEHAVIOR_CHAIN_SAMPLE_LIMIT) {
+  if (
+    evidence.behaviorChains.length < SKILL_EFFECT_BEHAVIOR_CHAIN_SAMPLE_LIMIT
+  ) {
     evidence.behaviorChains.push(chain);
   }
+}
+
+function pushSkillBehaviorChainSampleForLane(evidence, lane, chain) {
+  const samples = evidence.behaviorChainsByLane?.[lane];
+  if (!samples || samples.length >= SKILL_EFFECT_LANE_SPECIFIC_SAMPLE_LIMIT) {
+    return;
+  }
+  samples.push(chain);
 }
 
 function mergeBehaviorReferenceSummary(target, source) {
@@ -3690,7 +3781,9 @@ function mergeBehaviorReferenceSummary(target, source) {
     source.resourceMapUnmatchedElementBaseRefs;
   target.scriptTypeCandidateBehaviorRefs +=
     source.scriptTypeCandidateBehaviorRefs;
-  for (const [lane, count] of Object.entries(source.resolvedBehaviorRefsByLane)) {
+  for (const [lane, count] of Object.entries(
+    source.resolvedBehaviorRefsByLane
+  )) {
     target.resolvedBehaviorRefsByLane[lane] =
       (target.resolvedBehaviorRefsByLane[lane] ?? 0) + count;
   }
@@ -3709,8 +3802,8 @@ function summarizeBehaviorReferenceSkillCounts(currentSkillControlEvidence) {
     ).length,
     resourceMapMatchedElementBaseRefs: foundItems.filter(
       item =>
-        (item.behaviorReferenceSummary?.resourceMapMatchedElementBaseRefs ?? 0) >
-        0
+        (item.behaviorReferenceSummary?.resourceMapMatchedElementBaseRefs ??
+          0) > 0
     ).length,
     resourceMapUnmatchedElementBaseRefs: foundItems.filter(
       item =>
@@ -3743,8 +3836,14 @@ async function buildSkillResourceMapEvidence(
   cache
 ) {
   const rootFilePrefix = `skill_control_${skill.id}__`;
-  for (const fileName of jsonFiles.filter(file => file.startsWith(rootFilePrefix))) {
-    const payload = await readMonoBehaviourPayload(monoBehaviourRoot, fileName, cache);
+  for (const fileName of jsonFiles.filter(file =>
+    file.startsWith(rootFilePrefix)
+  )) {
+    const payload = await readMonoBehaviourPayload(
+      monoBehaviourRoot,
+      fileName,
+      cache
+    );
     if (!payload.text.includes('"skillResourceMaps"')) {
       continue;
     }
@@ -3754,9 +3853,8 @@ async function buildSkillResourceMapEvidence(
           compactSkillResourceMap(resourceMap, index)
         )
       : [];
-    const elementRefsByRoundedPathId = buildSkillResourceMapElementIndex(
-      resourceMaps
-    );
+    const elementRefsByRoundedPathId =
+      buildSkillResourceMapElementIndex(resourceMaps);
 
     return {
       elementRefsByRoundedPathId,
@@ -3906,8 +4004,7 @@ function extractObjectRefsFromArraySection(text, key, skillResourceMapIndex) {
   for (const match of section.matchAll(regex)) {
     const pathId = match[2];
     const roundedPathId = String(Number(pathId));
-    const resourceMapMatches =
-      skillResourceMapIndex?.get(roundedPathId) ?? [];
+    const resourceMapMatches = skillResourceMapIndex?.get(roundedPathId) ?? [];
     refs.push({
       fileId: Number(match[1]),
       pathId,
@@ -3925,7 +4022,8 @@ function compactSkillControlCandidate(value, fileName, type) {
   return compactObject({
     type,
     laneHints,
-    laneHintSource: laneHints.length > 0 ? 'name-trackName-string-pattern' : null,
+    laneHintSource:
+      laneHints.length > 0 ? 'name-trackName-string-pattern' : null,
     file: fileName,
     name: value.name ?? null,
     trackName: value.trackName ?? null,
@@ -4103,11 +4201,15 @@ async function pathExists(filePath) {
 }
 
 function parseSkillReferenceIds(rawValue) {
-  return uniqueNumbers(parseNumberList(rawValue).filter(value => value >= 100000));
+  return uniqueNumbers(
+    parseNumberList(rawValue).filter(value => value >= 100000)
+  );
 }
 
 function skillAssetSourceFile(spec) {
-  return spec.key === 'enemyTable' ? sourceFiles.enemies : sourceFiles[spec.key];
+  return spec.key === 'enemyTable'
+    ? sourceFiles.enemies
+    : sourceFiles[spec.key];
 }
 
 function resolveAzPrResourcesAssetPath(assetPath) {
@@ -4148,15 +4250,22 @@ function collectSkillLogicElementValueRows(skillLogicIndex) {
 }
 
 function hasAttributeKey(property, key) {
-  return Boolean((property?.baseAttributes ?? []).some(attribute => attribute.key === key));
+  return Boolean(
+    (property?.baseAttributes ?? []).some(attribute => attribute.key === key)
+  );
 }
 
 function getAttributeByKey(property, key) {
-  return (property?.baseAttributes ?? []).find(attribute => attribute.key === key) ?? null;
+  return (
+    (property?.baseAttributes ?? []).find(attribute => attribute.key === key) ??
+    null
+  );
 }
 
 function mapAttributeEvidence(keys, attributeInfoById) {
-  const infoByKey = new Map([...attributeInfoById.values()].map(info => [info.key, info]));
+  const infoByKey = new Map(
+    [...attributeInfoById.values()].map(info => [info.key, info])
+  );
   return keys.map(key => {
     const info = infoByKey.get(key);
     return {
@@ -5016,10 +5125,12 @@ function buildValidationReport(data) {
     {
       code: 'combat-formula-evidence-direct-link-missing',
       severity:
-        (combatFormulaEvidenceSummary.directCurrentElementFormulaIdMatches ?? 0) > 0
+        (combatFormulaEvidenceSummary.directCurrentElementFormulaIdMatches ??
+          0) > 0
           ? 'ok'
           : 'info',
-      count: combatFormulaEvidenceSummary.directCurrentElementFormulaIdMatches ?? 0,
+      count:
+        combatFormulaEvidenceSummary.directCurrentElementFormulaIdMatches ?? 0,
       summary: combatFormulaEvidenceSummary,
       message:
         '已建立敌人属性与公式证据索引，但当前 skillsub_ele_value.elementId 未直接匹配 element_formula.id，仍需 asset/效果节点追踪。',
@@ -5027,11 +5138,13 @@ function buildValidationReport(data) {
     {
       code: 'skill-asset-effect-node-unmapped',
       severity:
-        (skillAssetEvidenceSummary.currentSkillsWithExtractedSkillControl ?? 0) > 0
+        (skillAssetEvidenceSummary.currentSkillsWithExtractedSkillControl ??
+          0) > 0
           ? 'info'
           : 'warning',
       count:
-        skillAssetEvidenceSummary.currentSkillsMissingExtractedSkillControl ?? 0,
+        skillAssetEvidenceSummary.currentSkillsMissingExtractedSkillControl ??
+        0,
       summary: skillAssetEvidenceSummary,
       message:
         'C:/PC2/Codex/AzPr 当前缺少 Config/Battle/Skill 实体资源；已按规则从 AzPr Extractor SkillList 建立 skill_control 候选索引，但还未解析为命中帧/效果节点/公式映射。',
@@ -5079,8 +5192,8 @@ function buildValidationReport(data) {
       combatFormulaEvidence:
         data.combatFormulaEvidence?.summary?.elementFormulaRows ?? 0,
       skillAssetEvidence:
-        data.skillAssetEvidence?.summary?.currentSkillsWithExtractedSkillControl ??
-        0,
+        data.skillAssetEvidence?.summary
+          ?.currentSkillsWithExtractedSkillControl ?? 0,
       characterAttributePanels:
         data.characterAttributePanels?.summary?.characters ?? 0,
     },

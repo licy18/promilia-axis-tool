@@ -634,9 +634,38 @@ describe('first vertical slice simulation', () => {
           resolvedHpBehaviorRefCount: 5,
           externalElementBaseRefCount: 13,
           resourceMapMatchedElementBaseRefCount: 13,
-          sampledHpBehaviorChainCount: 3,
-          sampledResolvedHpBehaviorCount: 3,
-          hitFrameStartFrames: [13, 16, 19],
+          sampledHpBehaviorChainCount: 5,
+          sampledHpLaneCandidateCount: 5,
+          sampledResolvedHpBehaviorCount: 5,
+          hitFrameStartFrames: [12, 13, 16, 19],
+          actionVariantBindingStatus:
+            'action-variant-binding-candidates-generated-unconfirmed',
+          actionVariantBindingSummary: {
+            actionVariantCount: 1,
+            boundCandidateCount: 1,
+            confidenceLevels: ['medium'],
+            statuses: ['action-variant-binding-candidates-found'],
+          },
+          actionVariantBindingCandidates: [
+            expect.objectContaining({
+              actionId: 'action-0001',
+              actionVariantLabel: '普攻',
+              confidence: 'medium',
+              candidateCount: 5,
+              candidates: expect.arrayContaining([
+                expect.objectContaining({
+                  sourceName: '普通-攻击碰撞',
+                  sourceStartFrame: 12,
+                  stateNames: ['Skill0_1'],
+                  subSkillIds: [10900101],
+                  hitEffects: ['11_109001_116'],
+                  bindingStatus:
+                    'normal-action-name-state-candidate-unconfirmed',
+                  confidence: 'medium',
+                }),
+              ]),
+            }),
+          ],
           resourceBindings: expect.objectContaining({
             subSkillIds: [10900101, 109001011],
             stateNames: ['Skill0_6', 'Skill0_1'],
@@ -660,11 +689,26 @@ describe('first vertical slice simulation', () => {
           }),
           skillControlBehaviorCorrelation: expect.objectContaining({
             hpLaneCandidateCount: 5,
-            sampledHpBehaviorChainCount: 3,
-            hitFrameStartFrames: [13, 16, 19],
+            sampledHpBehaviorChainCount: 5,
+            hitFrameStartFrames: [12, 13, 16, 19],
             stateNames: ['Skill0_6', 'Skill0_1'],
             correlationStatus:
               'skill-level-only-action-variant-binding-unresolved',
+            actionVariantBindingStatus:
+              'action-variant-binding-candidates-generated-unconfirmed',
+            actionVariantBindingCandidate: expect.objectContaining({
+              confidence: 'medium',
+              candidateCount: 5,
+              candidates: expect.arrayContaining([
+                expect.objectContaining({
+                  sourceName: '普通-攻击碰撞',
+                  sourceStartFrame: 12,
+                  stateNames: ['Skill0_1'],
+                  bindingStatus:
+                    'normal-action-name-state-candidate-unconfirmed',
+                }),
+              ]),
+            }),
           }),
         }),
       ],
@@ -829,8 +873,17 @@ describe('first vertical slice simulation', () => {
           status: 'skill-level-hp-behavior-candidates-found',
           hpLaneCandidateCount: 5,
           resolvedHpBehaviorRefCount: 5,
-          sampledHpBehaviorChainCount: 3,
-          hitFrameStartFrames: [13, 16, 19],
+          sampledHpBehaviorChainCount: 5,
+          sampledHpLaneCandidateCount: 5,
+          hitFrameStartFrames: [12, 13, 16, 19],
+          actionVariantBindingStatus:
+            'action-variant-binding-candidates-generated-unconfirmed',
+          actionVariantBindingSummary: {
+            actionVariantCount: 4,
+            boundCandidateCount: 4,
+            confidenceLevels: ['medium', 'low'],
+            statuses: ['action-variant-binding-candidates-found'],
+          },
           correlationStatus:
             'skill-level-only-action-variant-binding-unresolved',
         }),
@@ -863,6 +916,34 @@ describe('first vertical slice simulation', () => {
         item => item.actionVariantLabel === '重击'
       ).requiredScaleToRaw
     ).toBeCloseTo(11.88, 2);
+    expect(
+      result.summary.formulaCandidatePatternSummary.actionSummaries.find(
+        item => item.actionVariantLabel === '普攻'
+      ).skillControlBehaviorCorrelation.actionVariantBindingCandidate
+    ).toMatchObject({
+      confidence: 'medium',
+      candidates: expect.arrayContaining([
+        expect.objectContaining({
+          sourceName: '普通-攻击碰撞',
+          stateNames: ['Skill0_1'],
+          bindingStatus: 'normal-action-name-state-candidate-unconfirmed',
+        }),
+      ]),
+    });
+    expect(
+      result.summary.formulaCandidatePatternSummary.actionSummaries.find(
+        item => item.actionVariantLabel === '重击'
+      ).skillControlBehaviorCorrelation.actionVariantBindingCandidate
+    ).toMatchObject({
+      confidence: 'low',
+      candidates: expect.arrayContaining([
+        expect.objectContaining({
+          sourceName: '攻击碰撞',
+          stateNames: ['Skill0_6'],
+          bindingStatus: 'shared-action-family-candidate-unconfirmed',
+        }),
+      ]),
+    });
   });
 
   it('preserves generated skill segment batch metadata through compilation', () => {

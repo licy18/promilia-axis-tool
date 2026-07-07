@@ -295,19 +295,19 @@ C:\PC2\Codex\AzPr
 
 ### 本地 AzPr 可用数据
 
-| 数据域 | 可用情况 | 主要来源 |
-| --- | --- | --- |
-| 角色基础资料 | 有；`hero.json` 有 23 行，其中 20 个可用角色，含女/男星临者和诺诺，另有 3 个不可用测试承载 | `Assets/ResourcesAssets/Config/NewTable/hero.json`、`Assets/ResourcesLang/chs/Table/lang_hero.json` |
-| 角色整理模块 | 有；`local-all` 中有 20 个角色模块 JSON，含基础资料、图标、职业/元素解析、`skillSystem`、语音等 | `BWiki/data/hero-modules/local-all` |
-| BWiki 角色表单 | 有；19 个表单，星临者合并为一个表单 | `BWiki/data/local-role-forms` |
-| 技能文本与倍率 | 有；技能名、图标、描述模板、等级倍率、显示 CD/SP 可取 | `skill.json`、`skill_level.json`、`lang_skill.json`、`lang_skill_level.json`、角色模块 `skillSystem` |
-| 元素系统 | 有；10 个元素，含颜色、图标、克制关系 | `BWiki/data/local-element-system/element-system.local.json` |
-| 奇波 | 有；122 个主体，含元素、特性、技能描述和技能图标 | `BWiki/data/local-kibo-forms/all.local-kibo-forms.json` |
-| 装备 | 有；137 个开放装备，43 个未开放条目；覆盖武器、上装、下装、耳环、戒指 | `BWiki/data/local-accessory-forms/all.local-accessory-forms.json` |
-| 灵子 | 有；62 个整理表，含基础属性、技能描述、满星描述、相关角色 | `BWiki/data/local-soulessence-forms/all.local-soulessence-forms.json` |
-| 敌人 | 部分有；`enemy.json` 有 208 个可用敌人，含名称、元素、技能列表、单位/属性 ID | `enemy.json`、`lang_enemy.json`、`unit_property.json`、`template_value.json` |
-| 属性枚举与基础属性 | 有，但需要写映射器；属性 ID 可通过 `battle_info.json` 解释，具体值在 `template_value.json` 等表中 | `battle_info.json`、`template_value.json`、`template_hero.json`、`template_herolevel.json` |
-| 图片资源 | 有相当一部分；BWiki 知识库媒体目录已发现技能、元素、奇波、装备图标样例，共约 3060 个图片文件 | `BWiki/knowledge/media/images` |
+| 数据域             | 可用情况                                                                                          | 主要来源                                                                                             |
+| ------------------ | ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| 角色基础资料       | 有；`hero.json` 有 23 行，其中 20 个可用角色，含女/男星临者和诺诺，另有 3 个不可用测试承载        | `Assets/ResourcesAssets/Config/NewTable/hero.json`、`Assets/ResourcesLang/chs/Table/lang_hero.json`  |
+| 角色整理模块       | 有；`local-all` 中有 20 个角色模块 JSON，含基础资料、图标、职业/元素解析、`skillSystem`、语音等   | `BWiki/data/hero-modules/local-all`                                                                  |
+| BWiki 角色表单     | 有；19 个表单，星临者合并为一个表单                                                               | `BWiki/data/local-role-forms`                                                                        |
+| 技能文本与倍率     | 有；技能名、图标、描述模板、等级倍率、显示 CD/SP 可取                                             | `skill.json`、`skill_level.json`、`lang_skill.json`、`lang_skill_level.json`、角色模块 `skillSystem` |
+| 元素系统           | 有；10 个元素，含颜色、图标、克制关系                                                             | `BWiki/data/local-element-system/element-system.local.json`                                          |
+| 奇波               | 有；122 个主体，含元素、特性、技能描述和技能图标                                                  | `BWiki/data/local-kibo-forms/all.local-kibo-forms.json`                                              |
+| 装备               | 有；137 个开放装备，43 个未开放条目；覆盖武器、上装、下装、耳环、戒指                             | `BWiki/data/local-accessory-forms/all.local-accessory-forms.json`                                    |
+| 灵子               | 有；62 个整理表，含基础属性、技能描述、满星描述、相关角色                                         | `BWiki/data/local-soulessence-forms/all.local-soulessence-forms.json`                                |
+| 敌人               | 部分有；`enemy.json` 有 208 个可用敌人，含名称、元素、技能列表、单位/属性 ID                      | `enemy.json`、`lang_enemy.json`、`unit_property.json`、`template_value.json`                         |
+| 属性枚举与基础属性 | 有，但需要写映射器；属性 ID 可通过 `battle_info.json` 解释，具体值在 `template_value.json` 等表中 | `battle_info.json`、`template_value.json`、`template_hero.json`、`template_herolevel.json`           |
+| 图片资源           | 有相当一部分；BWiki 知识库媒体目录已发现技能、元素、奇波、装备图标样例，共约 3060 个图片文件      | `BWiki/knowledge/media/images`                                                                       |
 
 ### 仍缺或需要二次处理的数据
 
@@ -342,17 +342,17 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 
 ## 8. 当前已知问题清单
 
-| 优先级 | 问题 | 影响 | 建议处理 |
-| --- | --- | --- | --- |
-| P0 | `actions` 与 `skillBlocks` 并存 | 统计、验证、显示可能不一致 | 建立统一 adapter 或迁移到 `actions` |
-| P0 | 当前 `gamedata.json` 仍是原型/占位数据 | 角色、敌人、奇波、装备无法支撑真实排轴 | 建立本地 AzPr 数据生成器 |
-| P0 | 旧实现质量不足以作为最终架构地基 | 继续修补会放大模型分叉和 UI/逻辑耦合 | 新架构优先，旧实现仅作功能迁移参考 |
-| P0 | 精确技能帧数据缺失 | 无法直接实现真实命中帧、动作时长、取消窗口 | 另找技能 asset、运行捕获或建立人工标注层 |
-| P1 | Boss 事件 store action 缺失 | 相关 UI 操作会报错 | 补齐 store 方法 |
-| P1 | `ResourceMonitor.vue` 错把角色 ID 数组当对象数组 | 资源图显示不可靠 | 从 gamedata 按 ID 解析 |
-| P1 | 数据层仍集中在单个 JSON | 维护复杂、难以测试 | 引入数据访问层 |
-| P2 | 图片/Markdown 导出未完成 | 分享体验不足 | 阶段 6 补全 |
-| P2 | 组件和工具函数存在重复计算逻辑 | 后续机制扩展风险高 | 拆 runtime 后收敛 |
+| 优先级 | 问题                                             | 影响                                       | 建议处理                                 |
+| ------ | ------------------------------------------------ | ------------------------------------------ | ---------------------------------------- |
+| P0     | `actions` 与 `skillBlocks` 并存                  | 统计、验证、显示可能不一致                 | 建立统一 adapter 或迁移到 `actions`      |
+| P0     | 当前 `gamedata.json` 仍是原型/占位数据           | 角色、敌人、奇波、装备无法支撑真实排轴     | 建立本地 AzPr 数据生成器                 |
+| P0     | 旧实现质量不足以作为最终架构地基                 | 继续修补会放大模型分叉和 UI/逻辑耦合       | 新架构优先，旧实现仅作功能迁移参考       |
+| P0     | 精确技能帧数据缺失                               | 无法直接实现真实命中帧、动作时长、取消窗口 | 另找技能 asset、运行捕获或建立人工标注层 |
+| P1     | Boss 事件 store action 缺失                      | 相关 UI 操作会报错                         | 补齐 store 方法                          |
+| P1     | `ResourceMonitor.vue` 错把角色 ID 数组当对象数组 | 资源图显示不可靠                           | 从 gamedata 按 ID 解析                   |
+| P1     | 数据层仍集中在单个 JSON                          | 维护复杂、难以测试                         | 引入数据访问层                           |
+| P2     | 图片/Markdown 导出未完成                         | 分享体验不足                               | 阶段 6 补全                              |
+| P2     | 组件和工具函数存在重复计算逻辑                   | 后续机制扩展风险高                         | 拆 runtime 后收敛                        |
 
 ## 9. 阶段进度记录
 
@@ -368,19 +368,19 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 
 已生成数据：
 
-| 数据域 | 数量 | 输出文件 |
-| --- | ---: | --- |
-| 属性枚举 | 184 | `src/data/generated/attributes.json` |
-| 元素 | 10 | `src/data/generated/elements.json` |
-| 角色 | 20 | `src/data/generated/characters.json` |
-| 技能 | 120 | `src/data/generated/skills.json` |
-| 敌人 | 208 | `src/data/generated/enemies.json` |
-| 奇波 | 122 | `src/data/generated/kibos.json` |
-| 装备 | 137 | `src/data/generated/equipment.json` |
-| 灵子 | 62 | `src/data/generated/soulessences.json` |
-| 图片索引 | 3059 | `src/data/generated/media-index.json` |
-| 首条垂直切片快照 | 1 | `src/data/generated/first-vertical-slice.json` |
-| 工作台轻量数据 | 20 角色 / 120 技能 / 199 敌人 | `src/data/generated/workbench-seed.json` |
+| 数据域           |                          数量 | 输出文件                                       |
+| ---------------- | ----------------------------: | ---------------------------------------------- |
+| 属性枚举         |                           184 | `src/data/generated/attributes.json`           |
+| 元素             |                            10 | `src/data/generated/elements.json`             |
+| 角色             |                            20 | `src/data/generated/characters.json`           |
+| 技能             |                           120 | `src/data/generated/skills.json`               |
+| 敌人             |                           208 | `src/data/generated/enemies.json`              |
+| 奇波             |                           122 | `src/data/generated/kibos.json`                |
+| 装备             |                           137 | `src/data/generated/equipment.json`            |
+| 灵子             |                            62 | `src/data/generated/soulessences.json`         |
+| 图片索引         |                          3059 | `src/data/generated/media-index.json`          |
+| 首条垂直切片快照 |                             1 | `src/data/generated/first-vertical-slice.json` |
+| 工作台轻量数据   | 20 角色 / 120 技能 / 199 敌人 | `src/data/generated/workbench-seed.json`       |
 
 当前校验结果：
 
@@ -474,7 +474,7 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 当前结论：
 
 - 项目已经具备无 UI 的最小模拟链路。
-- 当前伤害为“原始攻击 * 技能倍率”的低置信度投影，只用于打通运行时结构，不代表最终 AzPr 精确公式。
+- 当前伤害为“原始攻击 \* 技能倍率”的低置信度投影，只用于打通运行时结构，不代表最终 AzPr 精确公式。
 - 技能命中帧、动作时长、取消窗口、最终防御/抗性/暴击/Buff/奇波/装备/灵子计算仍未完成，已通过 `diagnostics.limitations` 和 `TIMING_DATA_MISSING` 暴露。
 
 下一步：
@@ -2638,6 +2638,56 @@ Endaxis 参考边界：
 - 阶段 5-8W 目标：把技能级 HP 行为节点继续推进到动作形态级候选绑定。
 - 优先尝试用 `stateName`、`subSkillId`、hitEffects、行为节点名称、帧窗口和 `skill_level` 动作标签建立候选映射。
 - 若现有 `effectLaneBehaviorChains` 采样不足，则调整 `scripts/generate-azpr-data.mjs` 的行为链摘要或新增专门的动作绑定 evidence，而不是在前端临时猜测。
+
+### 2026-07-08：阶段 5-8W 动作形态级行为绑定候选
+
+本轮完成：
+
+- `scripts/generate-azpr-data.mjs` 新增按 lane 分组保留字段：
+  - `effectLaneCandidatesByLane`
+  - `effectLaneBehaviorChainsByLane`
+- 重新生成 `skill-asset-evidence.json`，末音 `10900101` 当前 HP lane 专用样本完整保留 5 条候选/行为链，不再被表现、时序 lane 的全局采样截断。
+- `formulaCandidatePatternSummary.skillControlBehaviorCorrelations[]` 新增：
+  - `sampledHpLaneCandidateCount`
+  - `actionVariantBindingSummary`
+  - `actionVariantBindingCandidates`
+  - `actionVariantBindingStatus`
+- `actionSummaries[].skillControlBehaviorCorrelation` 新增精简版 `actionVariantBindingCandidate`，让每个动作结果可看到自己的候选绑定。
+- Workbench 候选模式摘要新增单动作绑定提示，当前默认样本显示：
+
+```text
+候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 12f/13f/16f/19f · Skill0_6/Skill0_1 · 绑定候选 普攻->Skill0_1 12f/13f
+```
+
+当前末音 `10900101` HP 行为链完整样本：
+
+- `普通-攻击碰撞 / 12-13f / Skill0_1 / hitEffect 11_109001_116`
+- `普通-攻击碰撞 / 13-14f / Skill0_1 / hitEffect 11_109001_116`
+- `攻击碰撞 / 13-14f / Skill0_6 / hitEffects 11_109001_133, 11_109001_005`
+- `攻击碰撞 / 16-17f / Skill0_6 / hitEffects 11_109001_133, 11_109001_005`
+- `攻击碰撞 / 19-20f / Skill0_6 / hitEffects 11_109001_133, 11_109001_005`
+
+动作形态候选绑定：
+
+- 【普通攻击 / 普攻】中置信候选：`普通-攻击碰撞` + `Skill0_1` + `subSkillId = 10900101`。
+- 【重击 / 闪击 / 跃击】低置信共享候选：`攻击碰撞` + `Skill0_6` + `subSkillId = 109001011`。
+- 这些候选仍只说明“可能对应”，不能当作已确认 runtime 绑定；`bindingStatus` 保持 `*-candidate-unconfirmed`。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/data/azprGenerated.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、53 条测试通过。
+
+当前边界：
+
+- `actionVariantBindingCandidates[].applied` 必须保持 `false`。
+- 当前只建立候选绑定，不确认普通攻击 5 段内部每 hit 对应关系。
+- `Skill0_6` 同时覆盖重击、闪击、跃击候选，仍需更多证据拆分具体动作形态。
+
+下一步：
+
+- 阶段 5-8X 目标：验证 `Skill0_1` / `Skill0_6` 与【普通攻击 / 重击 / 闪击 / 跃击】的真实对应关系。
+- 优先追 `skill_control` 中 `stateName`、动画状态、trackIndex、timelineGroupIndex、combo/timingControl 节点与动作标签之间的关系。
+- 若本地 JSON 仍不足，继续沿 Extractor 的 Unity 资源、Yoo index 或 IL2CPP runtime 方法追动作状态切换和 DamageElement 执行入口。
 
 ## 10. 文档维护规则
 

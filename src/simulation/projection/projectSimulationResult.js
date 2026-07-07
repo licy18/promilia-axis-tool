@@ -191,7 +191,8 @@ function summarizeFormulaCandidatePatterns(actionResultTimeline) {
     ...summary,
     skillControlBehaviorCorrelation:
       compactSkillControlBehaviorCorrelationForAction(
-        skillControlBehaviorCorrelationBySkillId.get(Number(summary.skillId))
+        skillControlBehaviorCorrelationBySkillId.get(Number(summary.skillId)),
+        summary
       ),
   }));
 
@@ -337,10 +338,15 @@ function compactDamageFieldPatternValues(damageFields = {}) {
 
 function createSkillControlBehaviorCorrelations(actionSummaries) {
   const skillIds = uniqueNumbers(actionSummaries.map(item => item.skillId));
-  return skillIds.map(createSkillControlBehaviorCorrelation);
+  return skillIds.map(skillId =>
+    createSkillControlBehaviorCorrelation(
+      skillId,
+      actionSummaries.filter(item => Number(item.skillId) === Number(skillId))
+    )
+  );
 }
 
-function createSkillControlBehaviorCorrelation(skillId) {
+function createSkillControlBehaviorCorrelation(skillId, actionSummaries = []) {
   const evidence = CURRENT_SKILL_CONTROL_EVIDENCE_BY_SKILL_ID.get(
     Number(skillId)
   );
@@ -367,8 +373,23 @@ function createSkillControlBehaviorCorrelation(skillId) {
     };
   }
 
-  const hpBehaviorChains = (evidence.effectLaneBehaviorChains ?? []).filter(
-    chain => (chain.laneHints ?? []).includes('hpDamage')
+  const hpLaneCandidates =
+    evidence.effectLaneCandidatesByLane?.hpDamage ??
+    (evidence.effectLaneCandidates ?? []).filter(chain =>
+      (chain.laneHints ?? []).includes('hpDamage')
+    );
+  const hpBehaviorChains = (
+    evidence.effectLaneBehaviorChainsByLane?.hpDamage ??
+    evidence.effectLaneBehaviorChains ??
+    []
+  ).filter(chain => (chain.laneHints ?? []).includes('hpDamage'));
+  const actionVariantBindingCandidates = createActionVariantBindingCandidates(
+    actionSummaries,
+    hpBehaviorChains,
+    Number(skillId)
+  );
+  const actionVariantBindingSummary = summarizeActionVariantBindings(
+    actionVariantBindingCandidates
   );
   const sampledResolvedHpBehaviors = hpBehaviorChains.flatMap(chain =>
     (chain.resolvedBehaviors ?? []).map(behavior => ({
@@ -422,7 +443,10 @@ function createSkillControlBehaviorCorrelation(skillId) {
         evidence.behaviorReferenceSummary?.resourceMapUnmatchedElementBaseRefs
       ) ?? 0,
     sampledHpBehaviorChainCount: hpBehaviorChains.length,
+    sampledHpLaneCandidateCount: hpLaneCandidates.length,
     sampledResolvedHpBehaviorCount: sampledResolvedHpBehaviors.length,
+    actionVariantBindingSummary,
+    actionVariantBindingCandidates,
     hitFrameStartFrames: uniqueNumbers(
       sampledResolvedHpBehaviors.map(behavior => behavior.startFrame)
     ),
@@ -432,9 +456,185 @@ function createSkillControlBehaviorCorrelation(skillId) {
       .slice(0, 5)
       .map(compactSkillControlBehaviorChain),
     correlationStatus: 'skill-level-only-action-variant-binding-unresolved',
+    actionVariantBindingStatus:
+      actionVariantBindingSummary.boundCandidateCount > 0
+        ? 'action-variant-binding-candidates-generated-unconfirmed'
+        : 'action-variant-binding-candidates-missing',
     applied: false,
     note: 'Skill control behavior evidence is linked at skill level only; action-variant and per-hit runtime binding remain unconfirmed.',
   };
+}
+
+function createActionVariantBindingCandidates(
+  actionSummaries,
+  hpBehaviorChains,
+  skillId
+) {
+  const compactChains = hpBehaviorChains.map(compactBehaviorChainForBinding);
+  return actionSummaries.map(actionSummary => {
+    const candidates = compactChains
+      .map(chain =>
+        scoreBehaviorChainForActionVariant(actionSummary, chain, skillId)
+      )
+      .filter(candidate => candidate.score > 0)
+      .sort(compareActionVariantBindingCandidates)
+      .slice(0, 5);
+
+    return {
+      actionId: actionSummary.actionId,
+      actionVariantIndex: actionSummary.actionVariantIndex,
+      actionVariantLabel: actionSummary.actionVariantLabel,
+      rawMultiplier: actionSummary.rawMultiplier,
+      status:
+        candidates.length > 0
+          ? 'action-variant-binding-candidates-found'
+          : 'action-variant-binding-candidates-missing',
+      confidence: candidates[0]?.confidence ?? 'none',
+      candidateCount: candidates.length,
+      candidates,
+      applied: false,
+    };
+  });
+}
+
+function summarizeActionVariantBindings(bindings) {
+  const bound = bindings.filter(item => item.candidateCount > 0);
+  return {
+    actionVariantCount: bindings.length,
+    boundCandidateCount: bound.length,
+    confidenceLevels: uniqueStrings(bound.map(item => item.confidence)),
+    statuses: uniqueStrings(bindings.map(item => item.status)),
+  };
+}
+
+function compactBehaviorChainForBinding(chain) {
+  const resolvedBehaviors = chain.resolvedBehaviors ?? [];
+  const refs = resolvedBehaviors.flatMap(
+    behavior => behavior.elementBaseDataRefs ?? []
+  );
+  const matches = refs.flatMap(ref => ref.resourceMapMatches ?? []);
+
+  return {
+    sourceName: chain.sourceName ?? null,
+    sourceTrackName: chain.sourceTrackName ?? null,
+    sourceStartFrame: numberOrNull(chain.sourceStartFrame),
+    sourceEndFrame: numberOrNull(chain.sourceEndFrame),
+    behaviorStartFrames: uniqueNumbers(
+      resolvedBehaviors.map(behavior => behavior.startFrame)
+    ),
+    behaviorFrameCounts: uniqueNumbers(
+      resolvedBehaviors.map(behavior => behavior.frameCount)
+    ),
+    resolvedBehaviorPathIds: uniqueStrings(
+      resolvedBehaviors.map(behavior => behavior.pathId)
+    ),
+    scriptClassNames: uniqueStrings(
+      resolvedBehaviors.map(behavior => behavior.scriptTypeCandidate?.className)
+    ),
+    elementBaseRefCount: refs.length,
+    subSkillIds: uniqueNumbers(matches.flatMap(match => match.subSkillIds)),
+    stateNames: uniqueStrings(matches.flatMap(match => match.stateNames)),
+    hitEffects: uniqueStrings(matches.flatMap(match => match.hitEffects)),
+    elementRoundedPathIds: uniqueStrings(refs.map(ref => ref.roundedPathId)),
+    elementPathIds: uniqueStrings(refs.map(ref => ref.pathId)),
+  };
+}
+
+function scoreBehaviorChainForActionVariant(actionSummary, chain, skillId) {
+  const label = normalizeBindingText(actionSummary.actionVariantLabel);
+  const sourceName = normalizeBindingText(chain.sourceName);
+  const isNormalAction = label === '普攻' || label === '普通攻击';
+  const isExplicitNormalChain = sourceName.includes('普通');
+  const expectedDerivedSubSkillId = Number.isFinite(skillId)
+    ? skillId * 10 + 1
+    : null;
+  let score = 0;
+  const reasons = [];
+
+  if (isNormalAction && isExplicitNormalChain) {
+    score += 60;
+    reasons.push('normal-action-name-match');
+  }
+  if (
+    isNormalAction &&
+    (chain.stateNames.includes('Skill0_1') ||
+      chain.subSkillIds.includes(Number(skillId)))
+  ) {
+    score += 35;
+    reasons.push('normal-action-state-or-subskill-match');
+  }
+  if (!isNormalAction && !isExplicitNormalChain) {
+    score += 20;
+    reasons.push('non-normal-shared-chain-name-candidate');
+  }
+  if (
+    !isNormalAction &&
+    (chain.stateNames.includes('Skill0_6') ||
+      chain.subSkillIds.includes(expectedDerivedSubSkillId))
+  ) {
+    score += 35;
+    reasons.push('non-normal-shared-state-or-derived-subskill-candidate');
+  }
+  if (chain.scriptClassNames.includes('InjectToTargetKeyFrameBehaviorData')) {
+    score += 10;
+    reasons.push('inject-to-target-keyframe-behavior');
+  }
+  if (chain.elementBaseRefCount > 0) {
+    score += 5;
+    reasons.push('element-base-data-linked');
+  }
+
+  return {
+    ...chain,
+    score,
+    confidence: createActionVariantBindingConfidence(score),
+    bindingStatus: createActionVariantBindingStatus({
+      isNormalAction,
+      isExplicitNormalChain,
+      score,
+    }),
+    reasons,
+    applied: false,
+  };
+}
+
+function createActionVariantBindingConfidence(score) {
+  if (score >= 90) {
+    return 'medium';
+  }
+  if (score >= 60) {
+    return 'low';
+  }
+  if (score > 0) {
+    return 'weak';
+  }
+  return 'none';
+}
+
+function createActionVariantBindingStatus({
+  isNormalAction,
+  isExplicitNormalChain,
+  score,
+}) {
+  if (score <= 0) {
+    return 'not-a-candidate';
+  }
+  if (isNormalAction && isExplicitNormalChain) {
+    return 'normal-action-name-state-candidate-unconfirmed';
+  }
+  return 'shared-action-family-candidate-unconfirmed';
+}
+
+function compareActionVariantBindingCandidates(left, right) {
+  return (
+    right.score - left.score ||
+    (left.sourceStartFrame ?? 0) - (right.sourceStartFrame ?? 0) ||
+    String(left.sourceName).localeCompare(String(right.sourceName))
+  );
+}
+
+function normalizeBindingText(value) {
+  return String(value ?? '').trim();
 }
 
 function summarizeSkillControlResourceBindings(behaviors) {
@@ -527,10 +727,16 @@ function compactSkillControlResolvedBehavior(behavior) {
   };
 }
 
-function compactSkillControlBehaviorCorrelationForAction(correlation) {
+function compactSkillControlBehaviorCorrelationForAction(
+  correlation,
+  actionSummary
+) {
   if (!correlation) {
     return null;
   }
+  const bindingCandidate = correlation.actionVariantBindingCandidates?.find(
+    item => item.actionId === actionSummary.actionId
+  );
   return {
     status: correlation.status,
     scope: correlation.scope,
@@ -541,6 +747,28 @@ function compactSkillControlBehaviorCorrelationForAction(correlation) {
     stateNames: correlation.resourceBindings?.stateNames ?? [],
     hitEffects: correlation.resourceBindings?.hitEffects ?? [],
     correlationStatus: correlation.correlationStatus,
+    actionVariantBindingStatus: correlation.actionVariantBindingStatus,
+    actionVariantBindingCandidate: bindingCandidate
+      ? {
+          status: bindingCandidate.status,
+          confidence: bindingCandidate.confidence,
+          candidateCount: bindingCandidate.candidateCount,
+          candidates: (bindingCandidate.candidates ?? [])
+            .slice(0, 3)
+            .map(item => ({
+              sourceName: item.sourceName,
+              sourceStartFrame: item.sourceStartFrame,
+              sourceEndFrame: item.sourceEndFrame,
+              stateNames: item.stateNames,
+              subSkillIds: item.subSkillIds,
+              hitEffects: item.hitEffects,
+              score: item.score,
+              confidence: item.confidence,
+              bindingStatus: item.bindingStatus,
+              reasons: item.reasons,
+            })),
+        }
+      : null,
     applied: false,
   };
 }

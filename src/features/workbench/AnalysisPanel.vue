@@ -446,7 +446,47 @@ function formatBehaviorCorrelationSummary(correlations = []) {
     .join('/');
   const frameText = frames ? ` · 帧 ${frames}` : '';
   const stateText = states ? ` · ${states}` : '';
-  return ` / 行为节点 ${formatNumber(correlation.hpLaneCandidateCount)} 候选${frameText}${stateText}`;
+  const bindingText = formatActionVariantBindingSummary(
+    correlation.actionVariantBindingCandidates
+  );
+  return ` / 行为节点 ${formatNumber(correlation.hpLaneCandidateCount)} 候选${frameText}${stateText}${bindingText}`;
+}
+
+function formatActionVariantBindingSummary(bindings = []) {
+  const bound = bindings.filter(binding => binding.candidateCount > 0);
+  if (bound.length === 0) {
+    return '';
+  }
+  if (bindings.length > 1) {
+    return ` · 绑定候选 ${bound.length}/${bindings.length}`;
+  }
+
+  const binding = bound[0];
+  const candidates = (binding.candidates ?? []).filter(
+    candidate => candidate.confidence === binding.confidence
+  );
+  const frames = uniqueDisplayValues(
+    candidates.map(candidate => candidate.sourceStartFrame)
+  )
+    .slice(0, 3)
+    .map(frame => `${Math.round(frame)}f`)
+    .join('/');
+  const states = uniqueDisplayValues(
+    candidates.flatMap(candidate => candidate.stateNames ?? [])
+  )
+    .slice(0, 2)
+    .join('/');
+  const stateText = states ? `->${states}` : '';
+  const frameText = frames ? ` ${frames}` : '';
+  return ` · 绑定候选 ${binding.actionVariantLabel}${stateText}${frameText}`;
+}
+
+function uniqueDisplayValues(values) {
+  return [
+    ...new Set(
+      values.filter(value => value != null && String(value).trim() !== '')
+    ),
+  ];
 }
 
 function formatCombinationLabel(preview) {

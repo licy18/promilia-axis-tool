@@ -433,7 +433,8 @@ describe('generated AzPr data', () => {
           }),
           elementAssetsBundle: expect.objectContaining({
             bundleIndex: 74227,
-            logicalName: 'd_assets_resourcesassets_config_battle_element_assets',
+            logicalName:
+              'd_assets_resourcesassets_config_battle_element_assets',
           }),
           scriptClassCounts: {
             TDamageElementParams: 3,
@@ -557,7 +558,11 @@ describe('generated AzPr data', () => {
                   runtimeEvidence: expect.arrayContaining([
                     expect.objectContaining({
                       className: 'FormulaParams',
-                      fields: ['function_1', 'function_2', 'formulaParamValues'],
+                      fields: [
+                        'function_1',
+                        'function_2',
+                        'formulaParamValues',
+                      ],
                     }),
                     expect.objectContaining({
                       className: 'DamageElement',
@@ -659,18 +664,7 @@ describe('generated AzPr data', () => {
                       maxValue: 10000,
                       isConstantAcrossLevels: true,
                       directSlotMatchLevels: [
-                        1,
-                        2,
-                        3,
-                        4,
-                        5,
-                        6,
-                        7,
-                        8,
-                        9,
-                        10,
-                        11,
-                        12,
+                        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
                       ],
                       mismatchLevels: [],
                       directSlotMatchCount: 12,
@@ -768,6 +762,36 @@ describe('generated AzPr data', () => {
         }),
       ])
     );
+    expect(mayoiAttack.effectLaneCandidatesByLane.hpDamage).toHaveLength(5);
+    expect(
+      mayoiAttack.effectLaneCandidatesByLane.hpDamage.map(item => [
+        item.name,
+        item.startFrame,
+        item.endFrame,
+      ])
+    ).toEqual([
+      ['攻击碰撞', 19, 20],
+      ['普通-攻击碰撞', 13, 14],
+      ['攻击碰撞', 16, 17],
+      ['攻击碰撞', 13, 14],
+      ['普通-攻击碰撞', 12, 13],
+    ]);
+    expect(mayoiAttack.effectLaneBehaviorChainsByLane.hpDamage).toHaveLength(5);
+    expect(
+      mayoiAttack.effectLaneBehaviorChainsByLane.hpDamage.map(item => [
+        item.sourceName,
+        item.sourceStartFrame,
+        item.resolvedBehaviors[0].resourceBindings?.stateNames?.[0] ??
+          item.resolvedBehaviors[0].elementBaseDataRefs?.[0]
+            ?.resourceMapMatches?.[0]?.stateNames?.[0],
+      ])
+    ).toEqual([
+      ['攻击碰撞', 19, 'Skill0_6'],
+      ['普通-攻击碰撞', 13, 'Skill0_1'],
+      ['攻击碰撞', 16, 'Skill0_6'],
+      ['攻击碰撞', 13, 'Skill0_6'],
+      ['普通-攻击碰撞', 12, 'Skill0_1'],
+    ]);
     expect(mayoiAttack.effectLaneBehaviorChains).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
