@@ -4497,3 +4497,52 @@ data-testid="workbench-candidate-value-action-filter"
 - 叠加 `action-a` 后为 0。
 - 恢复全部 actor 且保留 `action-a` 后为 3。
 - 再关闭 HP series 后为 2。
+
+## 64. 阶段 5-8AK：候选帧 per-element 横向比较 UI 模型
+
+阶段 5-8AK 不新增持久化 schema，也不改变 `candidateValueSeries.chart` 原始数据。`TimelineGridPreview` 在选中候选帧时，从当前 frame group 的可见 `values[].elementDetails[]` 派生 `selectedCandidateElementComparisonRows`，用于 UI 对比和原生 tooltip。
+
+### 64.1 selectedCandidateElementComparisonRows
+
+派生行按 `elementConfigId + pathId` 聚合：
+
+```json
+{
+  "elementConfigId": 109001306,
+  "pathId": "-4052262175632216603",
+  "hpText": "1,000/1,800/2,500",
+  "functionText": "f1:G/10000/f2:self.ATK[0]*A/10000",
+  "slotText": "A覆盖1,600-3,360/G直连10,000",
+  "toughnessText": "7,000",
+  "energyText": "能量2,700/宠物10,399/间隔9,999",
+  "statusText": "未应用 · function组合待验证 · 等级覆盖待验证:1 · 每hit倍率待分配"
+}
+```
+
+字段说明：
+
+- `hpText` 来自 `hpDamage.rawFormulaParamValues`。
+- `functionText` 来自 `hpDamage.formulaFunctionRefs[]`。
+- `slotText` 来自 `skillLevelBridge.formulaSlotAlignment.parameterSummaries[]`。
+- `toughnessText` 来自 `toughnessDamage.weakBreakDamageRate`。
+- `energyText` 来自 `selfEnergyChange.recoverSP/petRecoverSP/recoverInterval`。
+- `statusText` 明确记录仍未应用公式、function 组合待验证、等级覆盖待验证和每 hit 倍率待分配。
+
+### 64.2 DOM hooks
+
+新增：
+
+```html
+data-testid="workbench-candidate-element-comparison"
+data-testid="workbench-candidate-element-comparison-row"
+data-element-config-id="109001306" data-status="未应用 · function组合待验证 ·
+等级覆盖待验证:1 · 每hit倍率待分配"
+```
+
+每行 `title` 属性作为最小 tooltip，串联 element、HP、函数、槽位、削韧、能量和状态。
+
+### 64.3 当前边界
+
+- 这是前端派生比较模型，不是导出数据结构。
+- 当前 tooltip 是原生 `title`，还不是完整交互详情面板。
+- `statusText` 是诊断状态，不代表已经确认 `DamageElement` 的最终公式执行顺序。

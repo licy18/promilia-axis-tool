@@ -3291,6 +3291,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8AK 目标：把 per-element 详情整理成更适合比较的候选详情模型/tooltip，支持按 action、hit、element 横向对比 HP 参数、公式函数、A/G 槽位、削韧和能量字段。
 - 开始用该详情模型追踪 `DamageElement` 的 function 组合顺序、等级覆盖应用点和每 hit 倍率分配，仍保持最终公式 `applied: false`。
 
+### 2026-07-08：阶段 5-8AK per-element 横向比较详情与 tooltip
+
+本轮完成：
+
+- `TimelineGridPreview` 在选中候选帧下新增 `candidate-element-comparison` 结构化对比区。
+- 对比区按 `elementConfigId + pathId` 聚合当前帧可见 series 的 `elementDetails[]`，每行展示 HP 参数、公式函数、A/G 槽位、削韧、能量和验证状态。
+- 每行带 `title` tooltip 文本，串联 element、HP、函数、槽位、削韧、能量和未应用状态，作为后续完整 tooltip/详情面板的最小模型。
+- 验证状态明确记录 `未应用`、`function组合待验证`、`等级覆盖待验证` 和 `每hit倍率待分配`，避免把候选关系误读为最终公式。
+- Workbench 测试覆盖默认首帧两个 element 的对比行、公式函数、槽位关系、削韧、能量和 tooltip 文本。
+
+当前末音 `10900101` 默认普攻首帧对比区：
+
+- `109001306`：HP `1,000/1,800/2,500`；函数 `f1:G/10000 / f2:self.ATK[0]*A/10000`；槽 `A覆盖1,600-3,360 / G直连10,000`；削韧 `7,000`；能量 `2,700 / 宠物10,399 / 间隔9,999`；状态 `未应用 · function组合待验证 · 等级覆盖待验证:1 · 每hit倍率待分配`。
+- `109001081`：HP `1,000/1,900/2,500`；函数、槽位、削韧和能量同首帧候选；状态同样保持未应用。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/views/Workbench.test.js src/__tests__/features/TimelineGridPreview.test.js`：通过，2 个测试文件、34 条测试通过。
+- `npm exec prettier -- --check AGENTS.md PROJECT_MANUAL.md DEVELOPMENT_PLAN.md ARCHITECTURE.md DATA_STRUCTURE_CHANGES.md src/features/workbench/TimelineGridPreview.vue src/__tests__/views/Workbench.test.js`：通过。
+- `npm exec eslint -- --no-warn-ignored src/features/workbench/TimelineGridPreview.vue src/__tests__/views/Workbench.test.js`：通过。
+- `npm test -- --run`：通过，13 个测试文件、105 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
+- `git diff --check`：通过。
+
+当前边界：
+
+- 对比区仍是前端结构化展示模型，不改变 `candidateValueSeries.chart` 原始候选数据，也不应用最终公式。
+- 当前 tooltip 使用原生 `title`，还不是可交互的完整详情面板。
+- `function_1/function_2` 的组合顺序、A 槽等级覆盖实际应用点和每 hit 倍率分配仍未确认。
+
+下一步：
+
+- 阶段 5-8AL 目标：基于 per-element 对比模型整理 `DamageElement` 公式执行证据矩阵，按 element / hit / action 标注 function 组合顺序候选、A 槽覆盖点候选和每 hit 倍率缺口。
+- 若仍无法确认执行顺序，则把未确认原因固化为结构化 diagnostics，并继续保持最终 HP、削韧、充能公式 `applied: false`。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

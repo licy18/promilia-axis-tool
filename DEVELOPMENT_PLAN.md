@@ -263,7 +263,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8AH，把选中帧摘要升级为候选来源详情下钻，并新增 `全部 / 选中帧` 候选范围切换；当前首帧 HP 详情显示样本 `1,000/1,800/1,900/2,500`、`candidateCount = 4`、帧来源 `src12/disp12/local12/chain0/abs12` 和 element `109001081/109001306`，选中帧范围会收缩到 3 个 marker、3 条 curve、1 个 hotspot。
 - 已完成：阶段 5-8AI，把候选详情继续下钻到 per-element 原始字段；`candidateValueSeries` / `chart` 点新增 `elementDetails[]`，首帧可区分 `109001306` 与 `109001081` 的 HP 参数、削韧、能量、petRecoverSP 和 recoverInterval 字段，并补角色/动作过滤下拉。
 - 已完成：阶段 5-8AJ，把 per-element 详情与公式函数、公式槽位、等级覆盖关系联动展示；首帧 element 详情现在可显示 `f1:G/10000`、`f2:self.ATK[0]*A/10000`、`A覆盖1,600-3,360`、`G直连10,000`，并新增双 actor / 双 action / 三 series 的组件级过滤 fixture。
-- 下一步：阶段 5-8AK，把 per-element 详情整理成可横向比较的候选详情模型/tooltip，继续追 `DamageElement` function 组合顺序、等级覆盖应用点和每 hit 倍率分配。
+- 已完成：阶段 5-8AK，把 per-element 详情整理成结构化横向比较区和原生 tooltip；当前选中帧可按 element 行对比 HP 参数、公式函数、A/G 槽位、削韧、能量和 `未应用/function组合待验证/等级覆盖待验证/每hit倍率待分配` 状态。
+- 下一步：阶段 5-8AL，基于 per-element 对比模型整理 `DamageElement` 公式执行证据矩阵，按 element / hit / action 标注 function 组合顺序候选、A 槽覆盖点候选和每 hit 倍率缺口。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

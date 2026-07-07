@@ -231,6 +231,36 @@ describe('Workbench view', () => {
     expect(hpFrameDetail.text()).toContain(
       '109001081 HP1,000/1,900/2,500 函数f1:G/10000/f2:self.ATK[0]*A/10000 槽A覆盖1,600-3,360/G直连10,000 韧性7,000 能量2,700/宠物10,399/间隔9,999'
     );
+    const elementComparison = wrapper.find(
+      '[data-testid="workbench-candidate-element-comparison"]'
+    );
+    expect(elementComparison.exists()).toBe(true);
+    const elementComparisonRows = wrapper.findAll(
+      '[data-testid="workbench-candidate-element-comparison-row"]'
+    );
+    expect(elementComparisonRows).toHaveLength(2);
+    const element109001306Row = elementComparisonRows.find(
+      row => row.attributes('data-element-config-id') === '109001306'
+    );
+    expect(element109001306Row).toBeTruthy();
+    expect(element109001306Row.text()).toContain('109001306');
+    expect(element109001306Row.text()).toContain('1,000/1,800/2,500');
+    expect(element109001306Row.text()).toContain(
+      'f1:G/10000/f2:self.ATK[0]*A/10000'
+    );
+    expect(element109001306Row.text()).toContain(
+      'A覆盖1,600-3,360/G直连10,000'
+    );
+    expect(element109001306Row.text()).toContain('7,000');
+    expect(element109001306Row.text()).toContain(
+      '能量2,700/宠物10,399/间隔9,999'
+    );
+    expect(element109001306Row.text()).toContain('function组合待验证');
+    expect(element109001306Row.text()).toContain('等级覆盖待验证:1');
+    expect(element109001306Row.text()).toContain('每hit倍率待分配');
+    expect(element109001306Row.attributes('title')).toContain(
+      '函数 f1:G/10000/f2:self.ATK[0]*A/10000'
+    );
     expect(
       wrapper
         .find(

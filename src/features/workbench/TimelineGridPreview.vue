@@ -363,6 +363,39 @@
           <small>{{ formatCandidateFrameDetailElements(value) }}</small>
         </div>
       </div>
+      <div
+        v-if="selectedCandidateElementComparisonRows.length"
+        class="candidate-element-comparison"
+        data-testid="workbench-candidate-element-comparison"
+      >
+        <div class="candidate-element-comparison-head">
+          <span>element</span>
+          <span>HP参数</span>
+          <span>函数</span>
+          <span>槽位</span>
+          <span>削韧</span>
+          <span>能量</span>
+          <span>状态</span>
+        </div>
+        <div
+          v-for="row in selectedCandidateElementComparisonRows"
+          :key="row.id"
+          class="candidate-element-comparison-row"
+          :data-element-config-id="row.elementConfigId"
+          :data-path-id="row.pathId"
+          :data-status="row.statusText"
+          :title="row.tooltip"
+          data-testid="workbench-candidate-element-comparison-row"
+        >
+          <b>{{ row.elementConfigId }}</b>
+          <span>{{ row.hpText }}</span>
+          <span>{{ row.functionText }}</span>
+          <span>{{ row.slotText }}</span>
+          <span>{{ row.toughnessText }}</span>
+          <span>{{ row.energyText }}</span>
+          <small>{{ row.statusText }}</small>
+        </div>
+      </div>
     </div>
 
     <div v-if="timelineLanes.length === 0" class="empty-lane">
@@ -645,6 +678,11 @@ const selectedCandidateFrameGroup = computed(
     allCandidateFrameGroups.value.find(
       group => group.id === selectedCandidateFrameGroupId.value
     ) ?? null
+);
+const selectedCandidateElementComparisonRows = computed(() =>
+  selectedCandidateFrameGroup.value
+    ? createCandidateElementComparisonRows(selectedCandidateFrameGroup.value)
+    : []
 );
 
 function isActionInSelectedBatch(action) {
@@ -1033,23 +1071,31 @@ function formatCandidateElementDetail(element) {
 }
 
 function formatCandidateElementHpDetail(hpDamage) {
+  const values = formatCandidateElementHpValues(hpDamage);
+  return values ? `HP${values}` : null;
+}
+
+function formatCandidateElementHpValues(hpDamage) {
   if (!hpDamage) {
     return null;
   }
-  const values = formatCompactList(
+  return formatCompactList(
     hpDamage.rawFormulaParamValues?.map(value => formatTimelineNumber(value)) ??
       [],
     null
   );
-  return values ? `HP${values}` : null;
 }
 
 function formatCandidateElementFormulaFunctionDetail(hpDamage) {
+  const refs = formatCandidateFormulaFunctionRefs(hpDamage);
+  return refs ? `函数${refs}` : null;
+}
+
+function formatCandidateFormulaFunctionRefs(hpDamage) {
   const refs = hpDamage?.formulaFunctionRefs ?? [];
-  if (refs.length === 0) {
-    return null;
-  }
-  return `函数${refs.map(formatCandidateFormulaFunctionRef).join('/')}`;
+  return refs.length
+    ? refs.map(formatCandidateFormulaFunctionRef).join('/')
+    : null;
 }
 
 function formatCandidateFormulaFunctionRef(ref) {
@@ -1065,11 +1111,15 @@ function formatCandidateFormulaFunctionRef(ref) {
 }
 
 function formatCandidateElementSlotAlignmentDetail(alignment) {
+  const summaries = formatCandidateElementSlotSummaries(alignment);
+  return summaries ? `槽${summaries}` : null;
+}
+
+function formatCandidateElementSlotSummaries(alignment) {
   const summaries = alignment?.parameterSummaries ?? [];
-  if (summaries.length === 0) {
-    return null;
-  }
-  return `槽${summaries.map(formatCandidateElementSlotSummary).join('/')}`;
+  return summaries.length
+    ? summaries.map(formatCandidateElementSlotSummary).join('/')
+    : null;
 }
 
 function formatCandidateElementSlotSummary(summary) {
@@ -1098,16 +1148,20 @@ function trimFormulaParentheses(value) {
 }
 
 function formatCandidateElementToughnessDetail(toughnessDamage) {
-  if (!toughnessDamage) {
-    return null;
-  }
-  const value = toughnessDamage.weakBreakDamageRate;
-  return Number.isFinite(Number(value))
-    ? `韧性${formatTimelineNumber(value)}`
-    : null;
+  const value = formatCandidateElementToughnessValue(toughnessDamage);
+  return value ? `韧性${value}` : null;
+}
+
+function formatCandidateElementToughnessValue(toughnessDamage) {
+  const value = toughnessDamage?.weakBreakDamageRate;
+  return Number.isFinite(Number(value)) ? formatTimelineNumber(value) : null;
 }
 
 function formatCandidateElementEnergyDetail(selfEnergyChange) {
+  return formatCandidateElementEnergyParts(selfEnergyChange);
+}
+
+function formatCandidateElementEnergyParts(selfEnergyChange) {
   if (!selfEnergyChange) {
     return null;
   }
@@ -1117,6 +1171,114 @@ function formatCandidateElementEnergyDetail(selfEnergyChange) {
     createElementNumberPart('间隔', selfEnergyChange.recoverInterval),
   ].filter(Boolean);
   return parts.length ? parts.join('/') : null;
+}
+
+function createCandidateElementComparisonRows(group) {
+  const rowsByElement = new Map();
+  for (const value of group.values ?? []) {
+    for (const element of value.elementDetails ?? []) {
+      const elementId = element.elementConfigId ?? '未知';
+      const key = `${elementId}:${element.pathId ?? ''}`;
+      if (!rowsByElement.has(key)) {
+        rowsByElement.set(key, {
+          id: key,
+          elementConfigId: elementId,
+          pathId: element.pathId ?? null,
+          elementName: element.elementName ?? null,
+          hpDamage: null,
+          toughnessDamage: null,
+          selfEnergyChange: null,
+          skillLevelBridge: null,
+        });
+      }
+
+      const row = rowsByElement.get(key);
+      row.hpDamage = mergeElementCandidateObject(
+        row.hpDamage,
+        element.hpDamage
+      );
+      row.toughnessDamage = mergeElementCandidateObject(
+        row.toughnessDamage,
+        element.toughnessDamage
+      );
+      row.selfEnergyChange = mergeElementCandidateObject(
+        row.selfEnergyChange,
+        element.selfEnergyChange
+      );
+      row.skillLevelBridge = mergeElementCandidateObject(
+        row.skillLevelBridge,
+        element.skillLevelBridge
+      );
+    }
+  }
+
+  return [...rowsByElement.values()]
+    .map(row => {
+      const displayRow = {
+        ...row,
+        hpText: formatCandidateElementHpValues(row.hpDamage) ?? '未展开',
+        functionText:
+          formatCandidateFormulaFunctionRefs(row.hpDamage) ?? '未确认',
+        slotText:
+          formatCandidateElementSlotSummaries(
+            row.skillLevelBridge?.formulaSlotAlignment
+          ) ?? '未桥接',
+        toughnessText:
+          formatCandidateElementToughnessValue(row.toughnessDamage) ?? '未展开',
+        energyText:
+          formatCandidateElementEnergyParts(row.selfEnergyChange) ?? '未展开',
+      };
+      displayRow.statusText =
+        formatCandidateElementComparisonStatus(displayRow);
+      displayRow.tooltip = formatCandidateElementComparisonTooltip(displayRow);
+      return displayRow;
+    })
+    .sort(
+      (left, right) =>
+        Number(left.elementConfigId) - Number(right.elementConfigId) ||
+        String(left.pathId ?? '').localeCompare(String(right.pathId ?? ''))
+    );
+}
+
+function mergeElementCandidateObject(current, incoming) {
+  if (!incoming) {
+    return current;
+  }
+  if (!current) {
+    return incoming;
+  }
+  return {
+    ...current,
+    ...incoming,
+  };
+}
+
+function formatCandidateElementComparisonStatus(row) {
+  const parts = ['未应用'];
+  if (row.functionText !== '未确认') {
+    parts.push('function组合待验证');
+  }
+  const overrideIds =
+    row.skillLevelBridge?.formulaSlotAlignment?.overrideCandidateParamIds ?? [];
+  if (overrideIds.length > 0) {
+    parts.push(`等级覆盖待验证:${overrideIds.join('/')}`);
+  }
+  if (row.hpText !== '未展开') {
+    parts.push('每hit倍率待分配');
+  }
+  return parts.join(' · ');
+}
+
+function formatCandidateElementComparisonTooltip(row) {
+  return [
+    `element ${row.elementConfigId}`,
+    `HP ${row.hpText}`,
+    `函数 ${row.functionText}`,
+    `槽位 ${row.slotText}`,
+    `削韧 ${row.toughnessText}`,
+    `能量 ${row.energyText}`,
+    row.statusText,
+  ].join(' / ');
 }
 
 function createElementNumberPart(label, value) {
@@ -1652,6 +1814,55 @@ h2 {
   overflow-wrap: anywhere;
 }
 
+.candidate-element-comparison {
+  display: grid;
+  gap: 4px;
+  grid-column: 1 / -1;
+  margin-top: 4px;
+}
+
+.candidate-element-comparison-head,
+.candidate-element-comparison-row {
+  display: grid;
+  grid-template-columns:
+    minmax(82px, 0.8fr) minmax(110px, 1fr) minmax(148px, 1.25fr)
+    minmax(128px, 1.1fr) minmax(70px, 0.7fr) minmax(112px, 1fr)
+    minmax(168px, 1.4fr);
+  gap: 6px;
+  align-items: center;
+}
+
+.candidate-element-comparison-head {
+  color: #6f7b84;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.candidate-element-comparison-row {
+  min-height: 30px;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #cfd8df;
+  font-size: 11px;
+}
+
+.candidate-element-comparison-row b {
+  color: #e5f4f1;
+  font-weight: 700;
+}
+
+.candidate-element-comparison-row span,
+.candidate-element-comparison-row small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.candidate-element-comparison-row small {
+  color: #8f9aa3;
+}
+
 .lane-labels,
 .timeline-lane {
   display: grid;
@@ -2085,6 +2296,14 @@ h2 {
   }
 
   .candidate-frame-detail-row {
+    grid-template-columns: 1fr;
+  }
+
+  .candidate-element-comparison-head {
+    display: none;
+  }
+
+  .candidate-element-comparison-row {
     grid-template-columns: 1fr;
   }
 
