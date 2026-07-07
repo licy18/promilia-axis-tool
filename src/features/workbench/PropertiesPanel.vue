@@ -163,6 +163,59 @@
       </label>
     </div>
 
+    <div
+      v-if="isSkillAction && skillLogicModel"
+      class="logic-source"
+      data-testid="workbench-skill-logic-source"
+      :data-logic-status="skillLogicModel.status"
+    >
+      <div class="logic-source-title">
+        <span>技能逻辑来源</span>
+        <strong data-testid="workbench-skill-logic-status">{{ logicStatusLabel }}</strong>
+      </div>
+
+      <div class="logic-source-grid">
+        <div class="logic-source-item" data-testid="workbench-skill-display-timing">
+          <span>skill_level 显示</span>
+          <strong>CD {{ formatMs(displayTiming.cooldownMs) }} / SP {{ displayTiming.spCost }}</strong>
+          <small>#{{ skillLogicModel.skillLevelRowId }}</small>
+        </div>
+        <div class="logic-source-item" data-testid="workbench-skill-logic-timing">
+          <span>skillsub_logic 逻辑</span>
+          <strong>
+            CD {{ formatMs(logicTiming.cooldownMs) }} / SP {{ logicTiming.spCost }}
+          </strong>
+          <small>
+            selfCD {{ formatMs(logicTiming.selfCooldownMs) }} / GCD {{ formatMs(logicTiming.gcdMs) }}
+          </small>
+        </div>
+      </div>
+
+      <p
+        v-if="hasDisplayLogicMismatch"
+        class="logic-warning"
+        data-testid="workbench-skill-logic-mismatch"
+      >
+        显示层与逻辑层不同：显示 CD {{ formatMs(displayTiming.cooldownMs) }} / SP {{ displayTiming.spCost }}，逻辑 CD
+        {{ formatMs(logicTiming.cooldownMs) }} / SP {{ logicTiming.spCost }}
+      </p>
+
+      <div
+        v-if="skillLogicModel.elementValues?.length"
+        class="logic-param-list"
+        data-testid="workbench-skill-element-values"
+      >
+        <span>skillsub_ele_value</span>
+        <code
+          v-for="row in displayedElementValues"
+          :key="row.rowId"
+          data-testid="workbench-skill-element-value-row"
+        >
+          #{{ row.rowId }} · {{ row.elementId }} · {{ row.valueParam }}
+        </code>
+      </div>
+    </div>
+
     <div v-if="isResourceAction" class="action-controls contextual-controls">
       <label>
         <span>资源</span>
@@ -281,6 +334,32 @@ const damageSegmentOptions = computed(() =>
 const selectedDamageSegmentIndex = computed(() => {
   return props.selectedAction.selectedDamageSegment?.index ?? props.selectedAction.damageSegmentIndex ?? 0;
 });
+const skillLogicModel = computed(() => props.selectedAction.logicModel ?? null);
+const displayTiming = computed(() => skillLogicModel.value?.display ?? { cooldownMs: 0, spCost: 0 });
+const logicTiming = computed(
+  () =>
+    skillLogicModel.value?.logic ?? {
+      cooldownMs: 0,
+      spCost: 0,
+      selfCooldownMs: 0,
+      gcdMs: 0,
+    },
+);
+const hasDisplayLogicMismatch = computed(() =>
+  (skillLogicModel.value?.diagnostics ?? []).some(
+    (diagnostic) => diagnostic.code === 'skill-display-logic-timing-mismatch',
+  ),
+);
+const logicStatusLabel = computed(() => {
+  if (skillLogicModel.value?.status === 'mismatch') {
+    return '来源差异';
+  }
+  if (skillLogicModel.value?.status === 'missing') {
+    return '来源缺失';
+  }
+  return '已映射';
+});
+const displayedElementValues = computed(() => (skillLogicModel.value?.elementValues ?? []).slice(0, 3));
 const actionTypeLabel = computed(() => {
   if (props.selectedAction.type === 'wait') {
     return '等待动作';
@@ -361,6 +440,10 @@ function emitTextPatch(key, value) {
 function formatSigned(value) {
   const number = Number(value) || 0;
   return `${number > 0 ? '+' : ''}${number}`;
+}
+
+function formatMs(value) {
+  return `${Number(value) || 0}ms`;
 }
 
 function resolveCharacterName(characterId) {
@@ -459,8 +542,96 @@ textarea {
   font-size: 12px;
 }
 
+.logic-source {
+  display: grid;
+  gap: 10px;
+  margin: 0 14px 14px;
+  padding: 12px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.logic-source-title,
+.logic-param-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.logic-source-title span,
+.logic-param-list > span {
+  color: #8f9aa3;
+  font-size: 12px;
+}
+
+.logic-source-title strong {
+  color: #79c7b9;
+  font-size: 12px;
+}
+
+.logic-source[data-logic-status='mismatch'] .logic-source-title strong {
+  color: #f0c36a;
+}
+
+.logic-source-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.logic-source-item {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background: rgba(17, 22, 27, 0.62);
+}
+
+.logic-source-item span,
+.logic-source-item small {
+  color: #8f9aa3;
+  font-size: 11px;
+}
+
+.logic-source-item strong {
+  overflow-wrap: anywhere;
+  color: #eef5f2;
+  font-size: 12px;
+}
+
+.logic-warning {
+  margin: 0;
+  padding: 8px 9px;
+  border-left: 3px solid #f0c36a;
+  background: rgba(240, 195, 106, 0.1);
+  color: #ead7a5;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.logic-param-list {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.logic-param-list code {
+  min-width: 0;
+  padding: 4px 6px;
+  border-radius: 3px;
+  background: #11161b;
+  color: #b8c0c7;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
 @media (max-width: 760px) {
   .action-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .logic-source-grid {
     grid-template-columns: 1fr;
   }
 }

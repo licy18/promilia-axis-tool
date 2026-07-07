@@ -54,6 +54,63 @@ describe('Workbench view', () => {
     expect(wrapper.text()).toContain(secondEnemy.name);
   });
 
+  it('shows skill logic sources and display-versus-logic timing differences', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    expect(wrapper.find('[data-testid="workbench-skill-logic-source"]').attributes('data-logic-status')).toBe('mapped');
+    expect(wrapper.find('[data-testid="workbench-skill-logic-status"]').text()).toBe('已映射');
+    expect(wrapper.find('[data-testid="workbench-skill-display-timing"]').text()).toContain('CD 0ms / SP 0');
+    expect(wrapper.find('[data-testid="workbench-skill-display-timing"]').text()).toContain('#1657');
+    expect(wrapper.find('[data-testid="workbench-skill-logic-timing"]').text()).toContain('selfCD 0ms / GCD 0ms');
+    expect(wrapper.findAll('[data-testid="workbench-skill-element-value-row"]').map((row) => row.text())).toEqual([
+      '#973 · 109001081 · 1#1600|7#10000',
+      '#985 · 109001306 · 1#1600|7#10000',
+    ]);
+
+    await wrapper.find('[data-testid="workbench-character-select"]').setValue('101007');
+    await nextTick();
+    await wrapper.find('[data-testid="workbench-skill-select"]').setValue('10100712');
+    await nextTick();
+
+    expect(wrapper.find('[data-testid="workbench-skill-logic-source"]').attributes('data-logic-status')).toBe(
+      'mismatch',
+    );
+    expect(wrapper.find('[data-testid="workbench-skill-logic-status"]').text()).toBe('来源差异');
+    expect(wrapper.find('[data-testid="workbench-skill-display-timing"]').text()).toContain('CD 13000ms / SP 0');
+    expect(wrapper.find('[data-testid="workbench-skill-logic-timing"]').text()).toContain('CD 20000ms / SP 0');
+    expect(wrapper.find('[data-testid="workbench-skill-logic-mismatch"]').text()).toContain(
+      '显示 CD 13000ms / SP 0，逻辑 CD 20000ms / SP 0',
+    );
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    wrapper.unmount();
+
+    const restored = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await nextTick();
+
+    expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe('已恢复草稿');
+    expect(restored.find('[data-testid="workbench-skill-logic-source"]').attributes('data-logic-status')).toBe(
+      'mismatch',
+    );
+    expect(restored.find('[data-testid="workbench-skill-logic-mismatch"]').text()).toContain('逻辑 CD 20000ms');
+  });
+
   it('selects a skill damage segment and saves the projection choice', async () => {
     const wrapper = mount(Workbench, {
       global: {

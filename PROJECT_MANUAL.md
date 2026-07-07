@@ -1754,6 +1754,38 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 对 `skill-display-logic-timing-mismatch` 给出清晰的来源提示，避免把显示字段误当作真实排轴字段。
 - 补充 UI 测试和模拟投影断言，确保保存/恢复后逻辑来源仍可追溯。
 
+### 2026-07-07：阶段 5-4 Workbench 技能逻辑来源展示落地
+
+本轮完成：
+
+- `PropertiesPanel` 在技能动作详情中新增“技能逻辑来源”区。
+- 展示 `skill_level` 显示层 `coolDown/spCost`、`skillsub_logic` 逻辑层 `coolDown/spCost/selfCD/GCD`，以及当前等级 `skillsub_ele_value` 参数行。
+- 当动作命中 `skill-display-logic-timing-mismatch` 诊断时，UI 显示“来源差异”，并同时列出显示层与逻辑层的冷却/能量值。
+- 该展示完全由 `selectedAction.logicModel` 派生，不写入 `workbench-draft`。
+- 新增 Workbench UI 测试，覆盖默认技能逻辑来源展示、差异技能 `10100712` 的显示/逻辑冷却差异，以及保存/恢复后来源差异仍可追溯。
+- 新增数据结构说明，确认本阶段不新增持久化字段，只展示派生来源。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、48 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、101 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1201 KB，后续可拆包或懒加载优化。
+- `git diff --check`：通过；仅有仓库既有 LF/CRLF 工作区提示。
+- `http://127.0.0.1:5175/#/workbench` 本地页面服务返回 200。
+
+当前边界：
+
+- UI 现在能看到显示层/逻辑层差异，但仍没有解释 `skillsub_ele_value.valueParam` 参数 ID 的具体战斗语义。
+- `logicModel` 仍不代表真实命中帧、动画帧、取消窗口或完整伤害公式。
+- Workbench chunk 仍偏大，后续需要结合索引拆包或懒加载处理。
+
+下一步：
+
+- 阶段 5-5 目标：建立 `skillsub_ele_value.valueParam` 参数解析与倍率段关联雏形。
+- 解析 `valueParam` 中的参数 ID/value 对，梳理它们与技能描述占位、倍率段、元素值参数的对应关系。
+- 尝试把当前伤害段的 `rawValue` 与 `skillsub_ele_value` 当前等级参数行建立可诊断关联，为真实战斗计算公式接入做准备。
+- 补充首个技能和一个显示/逻辑差异技能的参数映射测试，并继续记录无法解释的参数 ID。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -889,3 +889,27 @@ Workbench 草稿新增可选 `segmentSplitOptions` 配置块，用于保存动�
 
 - 当前只建立字段来源和显示/逻辑区分，还没有把 `valueParam` 的参数 ID 解释为具体命中段、伤害类型、附着或资源效果。
 - 真实命中帧、动画帧、取消窗口仍需继续从技能 asset、`skillsub_logic` 关联表或运行时捕获补齐。
+
+## 22. 2026-07-07 Workbench 技能逻辑来源展示补充
+
+阶段 5-4 没有新增草稿持久化字段，而是在 Workbench 动作详情中展示 `logicModel` 的派生信息。
+
+### 22.1 展示字段
+
+技能动作详情现在展示：
+
+- `skill_level` 显示层：`display.cooldownMs`、`display.spCost`、`skillLevelRowId`。
+- `skillsub_logic` 逻辑层：`logic.cooldownMs`、`logic.spCost`、`logic.selfCooldownMs`、`logic.gcdMs`。
+- `skillsub_ele_value` 当前等级参数行：`rowId`、`elementId`、`valueParam`。
+- `skill-display-logic-timing-mismatch`：当显示层与逻辑层冷却/能量不一致时，显示来源差异提示。
+
+### 22.2 派生规则
+
+- Workbench 草稿仍只保存 `actionDrafts[]` 中的技能 ID、等级、时间、伤害段等编辑字段。
+- `logicModel` 会在 `createWorkbenchProject()` / `createSkillAction()` 时由当前技能和等级重新派生。
+- 保存并恢复草稿后，逻辑来源展示会从重新编译的场景动作恢复，不写入 `workbench-draft`。
+
+### 22.3 当前边界
+
+- 本阶段只展示来源和差异，不解释 `valueParam` 参数 ID 的战斗语义。
+- UI 中展示的逻辑层字段仍不代表真实命中帧、动画帧、取消窗口或完整伤害公式。
