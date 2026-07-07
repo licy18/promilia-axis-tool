@@ -65,7 +65,7 @@ npm run dev
 - `skill-asset-evidence.json` 已新增 `damageElementFieldMappingEvidence`：把 `TDamageElementParams` 字段拆成 HP 伤害、敌人韧性削减、自身能量变化三条候选链；当前末音 `10900101` 的 3 个 damage element 均已映射，`109001081` / `109001306` 已桥接到 12 行 `skillsub_ele_value.valueParam` 等级值，`109001251` 暂无同 elementId 等级桥接。该证据仍不能直接当作最终公式。
 - `damageElementFieldMappingEvidence.skillLevelBridge.formulaParamAlignment.parameterSummaries` 已记录 `valueParam` 与 `formulaParamValues` 同编号槽位关系：当前 `109001081 / 109001306` 的 `1 / A` 是等级覆盖候选，1-12 级 `1600 -> 3360`、每级 +160；`7 / G` 是常量直连匹配，1-12 级恒为 `10000`。这些仍是候选关系，不能直接当作最终公式。
 - `hpDamage.formulaFunctionEvidence` 已记录 `TDamageElementParams.formulaParams.function_1/function_2` 到 `element_formula.id` 的候选公式行：当前末音 `10900101` 的 3 个 damage element 合计 6 条引用全部命中，`function_1 = 1 -> G/10000`，`function_2 = 2 -> (self.ATK[0]*A)/10000`，并记录 `FormulaParams`、`DamageElement`、`BattleConfigManager.elementFormulaConfig` 等 IL2CPP 锚点。该证据仍为 `applied: false`，不能直接改写最终伤害。
-- `actionResultTimeline[]` 已接入 `sourceEvidence`：HP、削韧、充能三槽都会引用 `damageElementFieldMappingEvidence` 的候选字段来源。当前末音 `10900101` 动作可显示 `109001081 / 109001306` 两个候选 element，并在 Workbench 三值来源显示 `A 覆盖候选 1,600-3,360 / G 常量匹配 10,000` 和 `公式函数候选 f1 G/10000 / f2 self.ATK[0]*A/10000`。`applied` 仍只代表当前 raw HP 或显式资源 delta，不代表削韧/充能/最终伤害公式已应用。
+- `actionResultTimeline[]` 已接入 `sourceEvidence`：HP、削韧、充能三槽都会引用 `damageElementFieldMappingEvidence` 的候选字段来源。当前末音 `10900101` 动作可显示 `109001081 / 109001306` 两个候选 element，并在 Workbench 三值来源显示 `A 覆盖候选 1,600-3,360 / G 常量匹配 10,000`、`公式函数候选 f1 G/10000 / f2 self.ATK[0]*A/10000` 和 `候选预览 f2 等级值 307 vs raw 12,461，约 2.5%`。`applied` 仍只代表当前 raw HP 或显式资源 delta，不代表削韧/充能/最终伤害公式已应用。
 - 若后续 AzPr 数据库中缺少游戏原始资源文件，优先在 `C:\Codex\AzPr Extractor` 继续导出或索引；表格/Lua 走 `raw_nostreaming_package` 导出流程，Unity 技能/动作/效果资源走 Extractor 的 Unity/default_package 导出结果。
 - 项目状态核心在 `src/store/project.js`。
 - 主编辑器在 `src/views/Editor.vue`，当前承担了大量 UI、交互和业务协调职责。
@@ -106,7 +106,7 @@ Endaxis 只作为架构和交互成熟度参考，不是蓝色星原数据来源
 
 ## 已知开发阶段
 
-当前已完成阶段 1-3 的最小闭环、阶段 4 工作台主链路、阶段 5-1 至 5-8R 的真实数据/数值/动作形态、直接动作库、60fps 帧时间轴、公式分层雏形、战斗公式证据索引、公式 source 接入、skill asset/effect node 候选索引、每动作三值结果契约、`skill_control` 效果轨道候选分类、本地行为链解引用、elementBaseDatas 资源映射归属、行为脚本类型候选、IL2CPP element 类型目录、外部 element 对象本体解析、`TDamageElementParams` 三值字段候选映射、Workbench 三值来源展示、`valueParam` / `formulaParamValues` 槽位关系诊断、未应用公式槽位候选展示、`function_1/function_2 -> element_formula` 候选索引和动作级 `formulaFunctionSummary` 展示。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 5-8S，建立未应用公式候选数值预览与差异诊断。
+当前已完成阶段 1-3 的最小闭环、阶段 4 工作台主链路、阶段 5-1 至 5-8S 的真实数据/数值/动作形态、直接动作库、60fps 帧时间轴、公式分层雏形、战斗公式证据索引、公式 source 接入、skill asset/effect node 候选索引、每动作三值结果契约、`skill_control` 效果轨道候选分类、本地行为链解引用、elementBaseDatas 资源映射归属、行为脚本类型候选、IL2CPP element 类型目录、外部 element 对象本体解析、`TDamageElementParams` 三值字段候选映射、Workbench 三值来源展示、`valueParam` / `formulaParamValues` 槽位关系诊断、未应用公式槽位候选展示、`function_1/function_2 -> element_formula` 候选索引、动作级 `formulaFunctionSummary` 展示和 `formulaCandidatePreview` 未应用预览。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 5-8T，追踪 `DamageElement` 的真实 function 组合顺序、命中段绑定和等级覆盖规则。
 
 完整对标 Endaxis 的后续路线见 `DEVELOPMENT_PLAN.md`。
 

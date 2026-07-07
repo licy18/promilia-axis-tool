@@ -2473,6 +2473,40 @@ Endaxis 参考边界：
 - 以 `self.ATK[0]`、A/G 槽候选和当前技能等级 `valueParam` 为输入，生成不参与最终数值的 `formulaCandidatePreview`，对比现有 `skill_level` 描述倍率 raw HP 投影。
 - 若候选预览与描述倍率差距明显，继续追 IL2CPP `DamageElement` 对 `function_1/function_2` 的组合顺序、等级覆盖规则和命中段拆分。
 
+### 2026-07-08：阶段 5-8S 未应用公式候选预览与差异诊断
+
+本轮完成：
+
+- `actionResultTimeline[].hpDamage.sourceEvidence` 新增 `formulaCandidatePreview`。
+- `formulaCandidatePreview` 会读取当前动作桥接到的 damage element、当前等级 `logicModel.elementValues.valueParam`、`TDamageElementParams.formulaParamValues` 和当前 raw 投影的 `self.ATK[0]`。
+- 当前末音 `10900101` 普攻样本：
+  - `function_1 = G/10000` 用 `G = 10000` 得到 `1`，标记为标量候选，不与 raw HP 直接比较。
+  - `function_2 = (self.ATK[0]*A)/10000` 用 `formulaParamValues.A = 1000` 得到 `192`。
+  - 同一公式用当前等级 `valueParam.A = 1600` 得到 `307.2`，四舍五入为 `307`。
+  - 当前 `skill_level` 描述倍率 raw HP 投影为 `12461`，因此 f2 等级值预览约为 raw 的 `2.5%`，诊断为 `large-difference`。
+- Workbench 三值来源新增候选预览行：`候选预览 f2 等级值 307 vs raw 12,461，约 2.5%`。
+- 该 preview 不参与 `hpDamage.value`，也不改变削韧或充能结果。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `node --check src/simulation/projection/projectSimulationResult.js`：通过。
+- `npx eslint src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过；当前 ESLint 配置会忽略 Vue 文件并给出提示。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1404 KB。
+
+当前边界：
+
+- `formulaCandidatePreview` 只证明候选公式能被代入求值，并暴露它与描述倍率 raw 投影的差异。
+- 当前巨大差异说明 `element_formula` 候选不能直接替换 `skill_level` 描述倍率；仍需确认 function 组合顺序、命中段绑定、每段倍率、是否存在动作总倍率/单段倍率差异，以及 A 槽覆盖规则。
+- 还没有将任何 formula candidate 迁入 `appliedLayerKeys`。
+
+下一步：
+
+- 阶段 5-8T 目标：追踪 `DamageElement` 的真实 function 组合顺序、命中段绑定和等级覆盖规则。
+- 优先从 IL2CPP `ExecuteDamageElement` / `FormulaUtility.OutputDamageData`、`DamageElement.Parse/BaseExecute`、`skill_control` 行为节点命中帧与 element 绑定入手。
+- 若仍无法闭环，则扩大样本到其他角色/动作，比较 `formulaCandidatePreview` 与 `skill_level` 描述倍率的差异模式，判断公式候选是单 hit、子段、额外倍率还是中间量。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

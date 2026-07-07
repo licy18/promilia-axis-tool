@@ -39,6 +39,9 @@ describe('Workbench view', () => {
     expect(text).toContain(
       '公式函数候选 f1 G/10000 / f2 self.ATK[0]*A/10000'
     );
+    expect(text).toContain(
+      '候选预览 f2 等级值 307 vs raw 12,461，约 2.5%'
+    );
     expect(text).toContain('伤害 12,461 · 韧性 0 · 能量 0');
     expect(text).toContain('low');
   });

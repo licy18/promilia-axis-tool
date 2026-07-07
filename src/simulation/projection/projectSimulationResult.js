@@ -195,6 +195,10 @@ function buildActionResultTimeline({ scenario, damageEvents, resourceEvents }) {
 
 function createHpDamageResult(action, damageEvent, damageElementSource) {
   if (!damageEvent) {
+    const sourceEvidence = createDamageElementChainSource(
+      damageElementSource,
+      'hpDamage'
+    );
     return {
       value: 0,
       applied: false,
@@ -208,12 +212,14 @@ function createHpDamageResult(action, damageEvent, damageElementSource) {
           ? 'Skill action has no parseable damage multiplier.'
           : 'Non-skill action does not project HP damage.',
       }),
-      sourceEvidence: createDamageElementChainSource(
-        damageElementSource,
-        'hpDamage'
-      ),
+      sourceEvidence,
     };
   }
+
+  const sourceEvidence = attachFormulaCandidatePreview(
+    createDamageElementChainSource(damageElementSource, 'hpDamage'),
+    damageEvent.payload
+  );
 
   return {
     value: damageEvent.payload.rawDamage,
@@ -223,12 +229,10 @@ function createHpDamageResult(action, damageEvent, damageElementSource) {
     confidence: damageEvent.payload.confidence,
     formulaBreakdown: attachDamageElementSourceToHpBreakdown(
       damageEvent.payload.formulaBreakdown,
-      damageElementSource
-    ),
-    sourceEvidence: createDamageElementChainSource(
       damageElementSource,
-      'hpDamage'
+      damageEvent.payload
     ),
+    sourceEvidence,
   };
 }
 
@@ -411,6 +415,11 @@ function createActionDamageElementSource(action) {
   const logicElementIds = uniqueNumbers(
     logicElementRows.map(row => row.elementId)
   );
+  const logicElementRowByElementId = new Map(
+    logicElementRows
+      .map(row => [Number(row.elementId), row])
+      .filter(([elementId]) => Number.isFinite(elementId))
+  );
 
   if (!skillMapping) {
     return {
@@ -473,18 +482,26 @@ function createActionDamageElementSource(action) {
       (sum, mapping) => sum + (mapping.skillLevelBridge?.levelRows ?? 0),
       0
     ),
-    candidates: matchedMappings.map(compactDamageElementMapping),
+    candidates: matchedMappings.map(mapping =>
+      compactDamageElementMapping(
+        mapping,
+        logicElementRowByElementId.get(Number(mapping.elementConfigId))
+      )
+    ),
     note:
       'TDamageElementParams fields are linked as candidate source evidence only; final HP/toughness/energy formulas remain unmapped.',
   };
 }
 
-function compactDamageElementMapping(mapping) {
+function compactDamageElementMapping(mapping, currentLogicElementValue = null) {
   return {
     elementConfigId: Number(mapping.elementConfigId),
     pathId: mapping.pathId,
     containerPath: mapping.containerPath,
     mediaPackNames: mapping.mediaPackNames ?? [],
+    currentLogicElementValue: compactCurrentLogicElementValue(
+      currentLogicElementValue
+    ),
     hpDamage: mapping.hpDamage
       ? {
           status: mapping.hpDamage.status,
@@ -550,6 +567,7 @@ function createDamageElementChainSource(damageElementSource, chainKey) {
       elementConfigId: candidate.elementConfigId,
       pathId: candidate.pathId,
       mediaPackNames: candidate.mediaPackNames,
+      currentLogicElementValue: candidate.currentLogicElementValue,
       fieldCandidate: candidate[chainKey],
       skillLevelBridge: candidate.skillLevelBridge,
     }))
@@ -574,8 +592,22 @@ function createDamageElementChainSource(damageElementSource, chainKey) {
       createFormulaSlotAlignmentSummary(candidates),
     formulaFunctionSummary:
       chainKey === 'hpDamage' ? createFormulaFunctionSummary(candidates) : [],
+    formulaCandidatePreview: null,
     candidates,
     note: damageElementSource.note,
+  };
+}
+
+function compactCurrentLogicElementValue(row) {
+  if (!row) {
+    return null;
+  }
+
+  return {
+    rowId: row.rowId ?? null,
+    elementId: Number(row.elementId),
+    valueParam: row.valueParam ?? '',
+    paramPairs: parseValueParamPairs(row.valueParam),
   };
 }
 
@@ -753,13 +785,393 @@ function mergeFormulaFunctionVariableInputs(existingInputs, nextInputs) {
   return [...byVariable.values()];
 }
 
+function attachFormulaCandidatePreview(sourceEvidence, damagePayload) {
+  if (!sourceEvidence || !damagePayload) {
+    return sourceEvidence;
+  }
+
+  const formulaCandidatePreview = createFormulaCandidatePreview(
+    sourceEvidence,
+    damagePayload
+  );
+  return {
+    ...sourceEvidence,
+    formulaCandidatePreview,
+  };
+}
+
+function createFormulaCandidatePreview(sourceEvidence, damagePayload) {
+  const candidates = sourceEvidence.candidates ?? [];
+  const functionPreviews = candidates.flatMap(candidate =>
+    createCandidateFormulaFunctionPreviews(candidate, damagePayload)
+  );
+  const comparablePreviews = functionPreviews.filter(
+    item => item.comparison?.status === 'compared-to-raw-projection'
+  );
+  const largeDifferencePreviews = comparablePreviews.filter(
+    item => item.comparison?.differenceStatus === 'large-difference'
+  );
+
+  return {
+    status:
+      functionPreviews.length > 0
+        ? 'candidate-preview-computed-combination-unconfirmed'
+        : 'no-formula-function-preview',
+    applied: false,
+    baseAttack: {
+      key: 'self.ATK[0]',
+      value: numberOrNull(damagePayload.attack),
+      source: damagePayload.attackSource ?? null,
+    },
+    rawProjection: {
+      value: numberOrNull(damagePayload.rawDamage),
+      expression:
+        damagePayload.formulaBreakdown?.expression ??
+        'round(baseAttack.value * actionMultiplier.value)',
+      actionMultiplier: numberOrNull(damagePayload.segment?.multiplier),
+      rawMultiplier: damagePayload.segment?.rawValue ?? null,
+      source: 'current-skill-level-description-raw-projection',
+    },
+    functionPreviews,
+    diagnostics: {
+      comparablePreviewCount: comparablePreviews.length,
+      largeDifferenceCount: largeDifferencePreviews.length,
+      statuses: uniqueStrings(
+        functionPreviews
+          .map(
+            item =>
+              item.comparison?.differenceStatus ??
+              item.comparison?.status ??
+              item.status
+          )
+          .filter(Boolean)
+      ),
+      note:
+        'Preview values are evidence diagnostics only. They do not define DamageElement function combination order or final damage.',
+    },
+  };
+}
+
+function createCandidateFormulaFunctionPreviews(candidate, damagePayload) {
+  const refs =
+    candidate.fieldCandidate?.formulaFunctionEvidence?.functionRefs ?? [];
+  return refs.map(ref =>
+    createFormulaFunctionPreview({
+      ref,
+      candidate,
+      damagePayload,
+    })
+  );
+}
+
+function createFormulaFunctionPreview({ ref, candidate, damagePayload }) {
+  const functionOutput = ref.elementFormulaRow?.functionOutput ?? null;
+  const formulaParamInputs = buildFormulaPreviewInputs({
+    ref,
+    candidate,
+    damagePayload,
+    mode: 'formula-param-values',
+  });
+  const currentLevelInputs = buildFormulaPreviewInputs({
+    ref,
+    candidate,
+    damagePayload,
+    mode: 'current-level-value-param',
+  });
+  const formulaParamEvaluation = evaluateFormulaOutput(
+    functionOutput,
+    formulaParamInputs.values
+  );
+  const currentLevelEvaluation = evaluateFormulaOutput(
+    functionOutput,
+    currentLevelInputs.values
+  );
+  const preferredEvaluation =
+    currentLevelEvaluation.status === 'computed'
+      ? currentLevelEvaluation
+      : formulaParamEvaluation;
+  const comparison = createFormulaPreviewComparison({
+    functionOutput,
+    rawProjectionValue: damagePayload.rawDamage,
+    evaluation: preferredEvaluation,
+  });
+
+  return {
+    elementConfigId: candidate.elementConfigId,
+    field: ref.field,
+    functionId: ref.functionId,
+    functionOutput,
+    status:
+      formulaParamEvaluation.status === 'computed' ||
+      currentLevelEvaluation.status === 'computed'
+        ? 'preview-computed'
+        : 'preview-unsupported',
+    applied: false,
+    formulaParamPreview: {
+      inputSource: 'TDamageElementParams.formulaParamValues',
+      inputs: formulaParamInputs.publicInputs,
+      value: formulaParamEvaluation.value,
+      roundedValue: formulaParamEvaluation.roundedValue,
+      status: formulaParamEvaluation.status,
+      reason: formulaParamEvaluation.reason ?? null,
+    },
+    currentLevelPreview: {
+      inputSource: 'skill_logic.currentLevel.valueParam',
+      valueParam: candidate.currentLogicElementValue?.valueParam ?? null,
+      rowId: candidate.currentLogicElementValue?.rowId ?? null,
+      inputs: currentLevelInputs.publicInputs,
+      value: currentLevelEvaluation.value,
+      roundedValue: currentLevelEvaluation.roundedValue,
+      status: currentLevelEvaluation.status,
+      reason: currentLevelEvaluation.reason ?? null,
+    },
+    comparison,
+    unresolved: [
+      'function-combination-order',
+      'value-param-override-rule',
+      'hit-count-and-segment-binding',
+      'enemy-defense-and-resistance-application',
+    ],
+  };
+}
+
+function buildFormulaPreviewInputs({ ref, candidate, damagePayload, mode }) {
+  const values = {
+    SELF_ATK_0: numberOrNull(damagePayload.attack),
+  };
+  const publicInputs = [
+    {
+      key: 'self.ATK[0]',
+      value: values.SELF_ATK_0,
+      source: damagePayload.attackSource ?? null,
+    },
+  ];
+  const currentParamPairs = new Map(
+    (candidate.currentLogicElementValue?.paramPairs ?? []).map(pair => [
+      Number(pair.id),
+      pair,
+    ])
+  );
+
+  for (const input of ref.variableInputs ?? []) {
+    const paramId = Number(input.paramId);
+    const currentPair = currentParamPairs.get(paramId);
+    const selectedValue =
+      mode === 'current-level-value-param' && Number.isFinite(currentPair?.value)
+        ? currentPair.value
+        : input.formulaParamValue;
+
+    values[input.variable] = numberOrNull(selectedValue);
+    publicInputs.push({
+      key: input.variable,
+      paramId,
+      value: numberOrNull(selectedValue),
+      source:
+        mode === 'current-level-value-param' && Number.isFinite(currentPair?.value)
+          ? 'skill_logic.currentLevel.valueParam'
+          : 'TDamageElementParams.formulaParamValues',
+      fallbackUsed:
+        mode === 'current-level-value-param' &&
+        !Number.isFinite(currentPair?.value),
+      formulaParamValue: numberOrNull(input.formulaParamValue),
+      currentLevelValue: Number.isFinite(currentPair?.value)
+        ? currentPair.value
+        : null,
+    });
+  }
+
+  return {
+    values,
+    publicInputs,
+  };
+}
+
+function evaluateFormulaOutput(functionOutput, inputValues) {
+  if (!functionOutput) {
+    return {
+      status: 'unsupported',
+      value: null,
+      roundedValue: null,
+      reason: 'missing-function-output',
+    };
+  }
+
+  const expression = normalizeFormulaExpression(functionOutput);
+  if (!expression) {
+    return {
+      status: 'unsupported',
+      value: null,
+      roundedValue: null,
+      reason: 'unsupported-formula-expression',
+    };
+  }
+
+  const missingInput = [...expression.matchAll(/\b[A-Z][A-Z0-9_]*\b/g)]
+    .map(match => match[0])
+    .find(name => !Number.isFinite(inputValues[name]));
+  if (missingInput) {
+    return {
+      status: 'unsupported',
+      value: null,
+      roundedValue: null,
+      reason: `missing-input-${missingInput}`,
+    };
+  }
+
+  const substituted = expression.replace(/\b[A-Z][A-Z0-9_]*\b/g, name =>
+    String(inputValues[name])
+  );
+  const value = evaluateArithmeticExpression(substituted);
+  if (!Number.isFinite(value)) {
+    return {
+      status: 'unsupported',
+      value: null,
+      roundedValue: null,
+      reason: 'evaluation-failed',
+    };
+  }
+
+  return {
+    status: 'computed',
+    value,
+    roundedValue: Math.round(value),
+    reason: null,
+  };
+}
+
+function normalizeFormulaExpression(functionOutput) {
+  const expression = String(functionOutput)
+    .replaceAll('self.ATK[0]', 'SELF_ATK_0')
+    .replace(/\s+/g, '');
+  return /^[0-9A-Z_+\-*/().]+$/.test(expression) ? expression : '';
+}
+
+function evaluateArithmeticExpression(expression) {
+  let index = 0;
+
+  function parseExpression() {
+    let value = parseTerm();
+    while (index < expression.length) {
+      const operator = expression[index];
+      if (operator !== '+' && operator !== '-') {
+        break;
+      }
+      index += 1;
+      const next = parseTerm();
+      value = operator === '+' ? value + next : value - next;
+    }
+    return value;
+  }
+
+  function parseTerm() {
+    let value = parseFactor();
+    while (index < expression.length) {
+      const operator = expression[index];
+      if (operator !== '*' && operator !== '/') {
+        break;
+      }
+      index += 1;
+      const next = parseFactor();
+      value = operator === '*' ? value * next : value / next;
+    }
+    return value;
+  }
+
+  function parseFactor() {
+    if (expression[index] === '(') {
+      index += 1;
+      const value = parseExpression();
+      if (expression[index] !== ')') {
+        return NaN;
+      }
+      index += 1;
+      return value;
+    }
+
+    const start = index;
+    if (expression[index] === '-') {
+      index += 1;
+    }
+    while (/[0-9.]/.test(expression[index] ?? '')) {
+      index += 1;
+    }
+    if (start === index) {
+      return NaN;
+    }
+    return Number(expression.slice(start, index));
+  }
+
+  const value = parseExpression();
+  return index === expression.length ? value : NaN;
+}
+
+function createFormulaPreviewComparison({
+  functionOutput,
+  rawProjectionValue,
+  evaluation,
+}) {
+  const rawValue = numberOrNull(rawProjectionValue);
+  const usesAttack = String(functionOutput ?? '').includes('self.ATK[0]');
+  if (!usesAttack) {
+    return {
+      status: 'not-compared-scalar-candidate',
+      reason: 'formula-output-does-not-reference-self-attack',
+    };
+  }
+  if (evaluation.status !== 'computed' || !Number.isFinite(rawValue)) {
+    return {
+      status: 'not-compared',
+      reason: evaluation.reason ?? 'missing-raw-projection',
+    };
+  }
+
+  const roundedValue = evaluation.roundedValue;
+  const delta = roundedValue - rawValue;
+  const ratioToRawProjection = rawValue === 0 ? null : roundedValue / rawValue;
+  const absoluteRatio = ratioToRawProjection == null ? null : Math.abs(1 - ratioToRawProjection);
+
+  return {
+    status: 'compared-to-raw-projection',
+    rawProjectionValue: rawValue,
+    previewRoundedValue: roundedValue,
+    delta,
+    ratioToRawProjection,
+    differenceStatus:
+      absoluteRatio != null && absoluteRatio > 0.1
+        ? 'large-difference'
+        : 'close-to-raw-projection',
+  };
+}
+
+function parseValueParamPairs(rawValue) {
+  if (!rawValue) {
+    return [];
+  }
+  return String(rawValue)
+    .split('|')
+    .map(part => {
+      const [idText, valueText] = part.split('#');
+      return {
+        id: Number(idText),
+        value: Number(valueText),
+      };
+    })
+    .filter(item => Number.isFinite(item.id) && Number.isFinite(item.value));
+}
+
+function numberOrNull(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
 function attachDamageElementSourceToHpBreakdown(
   formulaBreakdown,
-  damageElementSource
+  damageElementSource,
+  damagePayload = null
 ) {
-  const sourceEvidence = createDamageElementChainSource(
-    damageElementSource,
-    'hpDamage'
+  const sourceEvidence = attachFormulaCandidatePreview(
+    createDamageElementChainSource(damageElementSource, 'hpDamage'),
+    damagePayload
   );
   if (!formulaBreakdown || !sourceEvidence) {
     return formulaBreakdown;

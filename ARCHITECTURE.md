@@ -122,11 +122,11 @@ C:\PC2\Codex\AzPr
 - 阶段 4-9：新版工作台切人动作和多角色 actor 雏形，默认主/副角色 actor、`SWITCH` 事件和切人属性编辑已进入统一链路。
 - 阶段 4-10：新版工作台时间轴角色轨道雏形，动作和伤害 marker 按 actor 或系统轨显示。
 - 阶段 4-11：新版工作台时间轴缩放和动作持续时间调整雏形，`durationMs` 通过工作台草稿链路回写。
-- 阶段 4-12 至 5-8R：已继续补齐轨道诊断、动作形态、60fps 帧时间轴、公式分层、战斗公式证据、skill asset 候选索引、每动作 HP/韧性/能量三值结果契约、`skill_control` 效果轨道候选分类、本地行为链解引用、elementBaseDatas 资源映射归属、行为脚本类型候选、IL2CPP element 类型目录、外部 element 对象本体解析、`TDamageElementParams` 三值字段候选映射、Workbench 三值来源展示、`valueParam` / `formulaParamValues` 槽位关系诊断、未应用公式槽位候选展示、`function_1/function_2 -> element_formula` 候选证据索引，以及动作级 `formulaFunctionSummary` 展示。
+- 阶段 4-12 至 5-8S：已继续补齐轨道诊断、动作形态、60fps 帧时间轴、公式分层、战斗公式证据、skill asset 候选索引、每动作 HP/韧性/能量三值结果契约、`skill_control` 效果轨道候选分类、本地行为链解引用、elementBaseDatas 资源映射归属、行为脚本类型候选、IL2CPP element 类型目录、外部 element 对象本体解析、`TDamageElementParams` 三值字段候选映射、Workbench 三值来源展示、`valueParam` / `formulaParamValues` 槽位关系诊断、未应用公式槽位候选展示、`function_1/function_2 -> element_formula` 候选证据索引、动作级 `formulaFunctionSummary` 展示，以及 `formulaCandidatePreview` 未应用数值预览。
 
 下一阶段：
 
-- 阶段 5-8S：建立未应用公式候选数值预览与差异诊断，继续验证 `DamageElement` 的 function 组合顺序。
+- 阶段 5-8T：追踪 `DamageElement` 的真实 function 组合顺序、命中段绑定和等级覆盖规则。
 
 ## 3. 核心模块设计
 
@@ -259,11 +259,11 @@ App.vue
 - **时间基准**: Workbench 使用 `src/domain/timebase.js` 统一到 60fps 的 1 帧网格，新增动作、拖动吸附、持续时间和批次快捷偏移都按帧对齐。
 - **普攻段数**: 从技能描述 `【普通攻击】` 中解析，例如 `进行至多五段的普通攻击`；当前只记录总倍率和段数，不编造每段倍率。
 - **公式分层**: `damageTimeline[].formulaBreakdown` 将当前攻击和动作形态倍率标记为已应用层，将敌人防御、抗性、暴击、增伤标记为未应用层。
-- **动作三值结果**: `actionResultTimeline[]` 是新版模拟结果主入口，每个动作都必须同时输出 `hpDamage`、`toughnessDamage`、`selfEnergyChange`。三槽均可携带 `sourceEvidence`，用于追踪 `damageElementFieldMappingEvidence` 候选字段来源；HP 伤害 source 还会携带 `formulaSlotAlignmentSummary` 和 `formulaFunctionSummary` 两类未应用公式候选。HP 伤害、削韧和自身能量变化是三条独立公式链，不能只用伤害公式推导另外两项。
+- **动作三值结果**: `actionResultTimeline[]` 是新版模拟结果主入口，每个动作都必须同时输出 `hpDamage`、`toughnessDamage`、`selfEnergyChange`。三槽均可携带 `sourceEvidence`，用于追踪 `damageElementFieldMappingEvidence` 候选字段来源；HP 伤害 source 还会携带 `formulaSlotAlignmentSummary`、`formulaFunctionSummary` 和 `formulaCandidatePreview` 等未应用公式候选/预览。HP 伤害、削韧和自身能量变化是三条独立公式链，不能只用伤害公式推导另外两项。
 - **公式证据**: `src/data/generated/combat-formula-evidence.json` 记录敌人属性链、元素减免字段、弱点倍率字段和 `element_formula` 公式行；当前没有 `elementId -> element_formula.id` 直接匹配。敌人防御/抗性层的 `source` 已引用该证据索引，但仍保持 `applied: false`。
 - **技能资源证据**: `src/data/generated/skill-asset-evidence.json` 记录 `skillBytesPath` 表格引用、`C:/PC2/Codex/AzPr` 技能资源缺口、`C:/Codex/AzPr Extractor` 的 `SkillList/skill_control_*.asset` 匹配结果、MonoBehaviour 节点样本、`effectLaneCandidateSummary` / `effectLaneCandidates` 效果轨道候选分类、`behaviorReferenceSummary` / `effectLaneBehaviorChains` 本地行为链解引用、`skillResourceMapEvidence` / `resourceMapMatches` 资源映射归属、`scriptTypeCandidate` 行为脚本类型候选、`elementTypeCatalogEvidence` IL2CPP element 类型候选目录、`externalElementObjectEvidence` 外部 element 对象本体摘要、`damageElementFieldMappingEvidence` 三值字段候选映射、`formulaParamAlignment.parameterSummaries` 槽位关系诊断，以及 `hpDamage.formulaFunctionEvidence` 的 `function_1/function_2 -> element_formula` 候选公式行；当前仍是公式映射证据层，不能直接视为已应用最终公式。
 - **兼容字段**: `damageSegmentIndex`、`damageSegments`、`selectedDamageSegment` 暂时作为旧命名兼容层；新逻辑优先使用 `actionVariantIndex`、`actionVariants`、`selectedActionVariant`。
-- **当前边界**: 动作形态倍率可用于 raw HP 投影；`skill_control` 已能给出候选帧范围、节点样本、HP/韧性/能量等轨道候选分类、本地行为对象链、外部 element 引用的资源映射归属、脚本类型候选、外部 element 对象字段、`TDamageElementParams` 三值候选字段、动作结果 sourceEvidence，以及 Workbench 可见的 `function_1=1 -> G/10000`、`function_2=2 -> (self.ATK[0]*A)/10000` 未应用公式函数候选。真实命中帧、每段倍率、削韧单位、充能归属、取消窗口、function 组合顺序和完整公式仍需继续验证 `skillsub_ele_value` / `element_formula` / 角色面板 / 敌方属性链。
+- **当前边界**: 动作形态倍率可用于 raw HP 投影；`skill_control` 已能给出候选帧范围、节点样本、HP/韧性/能量等轨道候选分类、本地行为对象链、外部 element 引用的资源映射归属、脚本类型候选、外部 element 对象字段、`TDamageElementParams` 三值候选字段、动作结果 sourceEvidence，以及 Workbench 可见的公式函数候选和候选预览。当前 f2 等级值预览为 307，约为 raw HP 12461 的 2.5%，说明候选公式不能直接替换描述倍率投影。真实命中帧、每段倍率、削韧单位、充能归属、取消窗口、function 组合顺序和完整公式仍需继续验证 `skillsub_ele_value` / `element_formula` / 角色面板 / 敌方属性链。
 
 ## 7. 扩展指南
 

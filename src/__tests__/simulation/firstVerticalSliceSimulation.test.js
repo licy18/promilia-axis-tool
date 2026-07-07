@@ -332,6 +332,99 @@ describe('first vertical slice simulation', () => {
               ],
             }),
           ],
+          formulaCandidatePreview: {
+            status: 'candidate-preview-computed-combination-unconfirmed',
+            applied: false,
+            baseAttack: {
+              key: 'self.ATK[0]',
+              value: 1920,
+              source: 'character-attribute-panel-current-rank',
+            },
+            rawProjection: {
+              value: 12461,
+              expression: 'round(baseAttack.value * actionMultiplier.value)',
+              actionMultiplier: 6.49,
+              rawMultiplier: '649%',
+              source: 'current-skill-level-description-raw-projection',
+            },
+            functionPreviews: expect.arrayContaining([
+              expect.objectContaining({
+                elementConfigId: 109001081,
+                field: 'function_1',
+                functionId: 1,
+                functionOutput: 'G/10000',
+                status: 'preview-computed',
+                applied: false,
+                formulaParamPreview: expect.objectContaining({
+                  inputSource: 'TDamageElementParams.formulaParamValues',
+                  value: 1,
+                  roundedValue: 1,
+                  status: 'computed',
+                }),
+                currentLevelPreview: expect.objectContaining({
+                  inputSource: 'skill_logic.currentLevel.valueParam',
+                  valueParam: '1#1600|7#10000',
+                  rowId: 973,
+                  value: 1,
+                  roundedValue: 1,
+                  status: 'computed',
+                }),
+                comparison: {
+                  status: 'not-compared-scalar-candidate',
+                  reason: 'formula-output-does-not-reference-self-attack',
+                },
+              }),
+              expect.objectContaining({
+                elementConfigId: 109001081,
+                field: 'function_2',
+                functionId: 2,
+                functionOutput: '(self.ATK[0]*A)/10000',
+                status: 'preview-computed',
+                applied: false,
+                formulaParamPreview: expect.objectContaining({
+                  inputSource: 'TDamageElementParams.formulaParamValues',
+                  value: 192,
+                  roundedValue: 192,
+                  status: 'computed',
+                }),
+                currentLevelPreview: expect.objectContaining({
+                  inputSource: 'skill_logic.currentLevel.valueParam',
+                  valueParam: '1#1600|7#10000',
+                  rowId: 973,
+                  value: 307.2,
+                  roundedValue: 307,
+                  status: 'computed',
+                  inputs: expect.arrayContaining([
+                    expect.objectContaining({
+                      key: 'A',
+                      paramId: 1,
+                      value: 1600,
+                      source: 'skill_logic.currentLevel.valueParam',
+                      formulaParamValue: 1000,
+                      currentLevelValue: 1600,
+                    }),
+                  ]),
+                }),
+                comparison: expect.objectContaining({
+                  status: 'compared-to-raw-projection',
+                  rawProjectionValue: 12461,
+                  previewRoundedValue: 307,
+                  delta: -12154,
+                  differenceStatus: 'large-difference',
+                }),
+              }),
+            ]),
+            diagnostics: {
+              comparablePreviewCount: 2,
+              largeDifferenceCount: 2,
+              statuses: [
+                'not-compared-scalar-candidate',
+                'large-difference',
+              ],
+              note:
+                'Preview values are evidence diagnostics only. They do not define DamageElement function combination order or final damage.',
+            },
+          },
           candidates: expect.arrayContaining([
             expect.objectContaining({
               elementConfigId: 109001081,

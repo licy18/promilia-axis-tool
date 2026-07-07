@@ -243,7 +243,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8P，把 `formulaParamAlignment.parameterSummaries` 接入 `actionResultTimeline[].sourceEvidence`，并在 Workbench 三值来源中展示未应用公式候选；当前显示 `A 覆盖候选 1,600-3,360 / G 常量匹配 10,000`，但不改变 raw HP、削韧或充能数值。
 - 已完成：阶段 5-8Q，新增 `hpDamage.formulaFunctionEvidence`，确认末音 `10900101` 的 3 个 `TDamageElementParams` 合计 6 条 `function_1/function_2` 引用全部候选命中 `element_formula.id`：`1 -> G/10000`、`2 -> (self.ATK[0]*A)/10000`；同时记录 `FormulaParams`、`DamageElement`、`BattleConfigManager.elementFormulaConfig` 等 IL2CPP 锚点，但仍不应用最终公式。
 - 已完成：阶段 5-8R，把 `formulaFunctionEvidence` 接入 `actionResultTimeline[].hpDamage.sourceEvidence.formulaFunctionSummary` 和 Workbench 三值来源展示；当前显示 `公式函数候选 f1 G/10000 / f2 self.ATK[0]*A/10000`，仍不改变 raw HP、削韧或充能数值。
-- 下一步：阶段 5-8S，建立未应用公式候选数值预览与差异诊断，对比 `element_formula` 候选、A/G 槽位、角色攻击和现有 `skill_level` 描述倍率 raw HP 投影，再继续追 `DamageElement` 的真实 function 组合顺序。
+- 已完成：阶段 5-8S，新增 `formulaCandidatePreview` 未应用预览，当前末音 `10900101` 的 f2 公式用等级 A=1600 得到 307，约为现有 raw HP 12461 的 2.5%，诊断为 `large-difference`；Workbench 显示 `候选预览 f2 等级值 307 vs raw 12,461，约 2.5%`，仍不改变最终数值。
+- 下一步：阶段 5-8T，追踪 `DamageElement` 的真实 function 组合顺序、命中段绑定和等级覆盖规则；若不能闭环，扩大样本比较 `formulaCandidatePreview` 与 `skill_level` 描述倍率差异模式。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

@@ -54,6 +54,9 @@
           <small v-if="formatFormulaFunctionSummary(entry.hpDamage?.sourceEvidence)">
             {{ formatFormulaFunctionSummary(entry.hpDamage?.sourceEvidence) }}
           </small>
+          <small v-if="formatFormulaCandidatePreview(entry.hpDamage?.sourceEvidence)">
+            {{ formatFormulaCandidatePreview(entry.hpDamage?.sourceEvidence) }}
+          </small>
         </div>
         <strong>{{ formatActionResultValues(entry) }}</strong>
       </div>
@@ -251,6 +254,53 @@ function trimFormulaParentheses(value) {
   return text;
 }
 
+function formatFormulaCandidatePreview(sourceEvidence) {
+  const previews = sourceEvidence?.formulaCandidatePreview?.functionPreviews ?? [];
+  const comparable = uniqueFormulaCandidatePreviews(
+    previews.filter((preview) => preview.comparison?.status === 'compared-to-raw-projection')
+  );
+  if (comparable.length === 0) {
+    return '';
+  }
+
+  return `候选预览 ${comparable.map(formatFormulaCandidatePreviewItem).join(' / ')}`;
+}
+
+function uniqueFormulaCandidatePreviews(previews) {
+  const byKey = new Map();
+  for (const preview of previews) {
+    const key = [
+      preview.field,
+      preview.functionId,
+      preview.currentLevelPreview?.roundedValue,
+      preview.comparison?.rawProjectionValue,
+    ].join(':');
+    if (!byKey.has(key)) {
+      byKey.set(key, preview);
+    }
+  }
+  return [...byKey.values()];
+}
+
+function formatFormulaCandidatePreviewItem(preview) {
+  const label =
+    preview.field === 'function_1'
+      ? 'f1'
+      : preview.field === 'function_2'
+        ? 'f2'
+        : preview.field;
+  const candidateValue =
+    preview.currentLevelPreview?.roundedValue ??
+    preview.formulaParamPreview?.roundedValue ??
+    0;
+  const rawValue = preview.comparison?.rawProjectionValue ?? 0;
+  const ratio = preview.comparison?.ratioToRawProjection;
+  const ratioText = Number.isFinite(ratio)
+    ? `，约 ${formatPercent(ratio)}`
+    : '';
+  return `${label} 等级值 ${formatNumber(candidateValue)} vs raw ${formatNumber(rawValue)}${ratioText}`;
+}
+
 function formatElementIds(ids = []) {
   const values = ids.filter((id) => Number.isFinite(Number(id)));
   return values.length > 0 ? `(${values.join(', ')})` : '';
@@ -259,6 +309,14 @@ function formatElementIds(ids = []) {
 function formatSignedNumber(value) {
   const number = Math.round(Number(value) || 0);
   return number > 0 ? `+${number.toLocaleString('zh-CN')}` : number.toLocaleString('zh-CN');
+}
+
+function formatPercent(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return '-';
+  }
+  return `${(number * 100).toFixed(1)}%`;
 }
 
 function formatOverlapRange(item) {

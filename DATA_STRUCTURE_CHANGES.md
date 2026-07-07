@@ -2849,3 +2849,88 @@ Workbench 分析面板三值来源当前会显示：
 
 - 该摘要只是动作级证据视图，不改变 `hpDamage.value`。
 - 下一阶段需要把候选公式做成未应用数值预览，并与 `skill_level` 描述倍率 raw HP 投影做差异诊断。
+
+## 44. 2026-07-08 actionResultTimeline 公式候选 preview
+
+阶段 5-8S 在 `actionResultTimeline[].hpDamage.sourceEvidence` 中新增 `formulaCandidatePreview`，用于把 `element_formula` 候选公式代入当前动作上下文，和现有 raw HP 投影做差异诊断。
+
+### 44.1 sourceEvidence.formulaCandidatePreview
+
+示例：
+
+```javascript
+{
+  "formulaCandidatePreview": {
+    "status": "candidate-preview-computed-combination-unconfirmed",
+    "applied": false,
+    "baseAttack": {
+      "key": "self.ATK[0]",
+      "value": 1920,
+      "source": "character-attribute-panel-current-rank"
+    },
+    "rawProjection": {
+      "value": 12461,
+      "expression": "round(baseAttack.value * actionMultiplier.value)",
+      "actionMultiplier": 6.49,
+      "rawMultiplier": "649%",
+      "source": "current-skill-level-description-raw-projection"
+    },
+    "functionPreviews": [
+      {
+        "elementConfigId": 109001081,
+        "field": "function_2",
+        "functionId": 2,
+        "functionOutput": "(self.ATK[0]*A)/10000",
+        "formulaParamPreview": {
+          "inputSource": "TDamageElementParams.formulaParamValues",
+          "value": 192,
+          "roundedValue": 192,
+          "status": "computed"
+        },
+        "currentLevelPreview": {
+          "inputSource": "skill_logic.currentLevel.valueParam",
+          "valueParam": "1#1600|7#10000",
+          "value": 307.2,
+          "roundedValue": 307,
+          "status": "computed"
+        },
+        "comparison": {
+          "status": "compared-to-raw-projection",
+          "rawProjectionValue": 12461,
+          "previewRoundedValue": 307,
+          "delta": -12154,
+          "ratioToRawProjection": 0.0246,
+          "differenceStatus": "large-difference"
+        },
+        "applied": false
+      }
+    ],
+    "diagnostics": {
+      "comparablePreviewCount": 2,
+      "largeDifferenceCount": 2,
+      "statuses": ["not-compared-scalar-candidate", "large-difference"]
+    }
+  }
+}
+```
+
+### 44.2 输入来源
+
+- `baseAttack`：当前模拟已应用的角色攻击，来自角色数值面板。
+- `formulaParamPreview`：直接使用 `TDamageElementParams.formulaParamValues` 槽位。
+- `currentLevelPreview`：优先使用当前动作 `logicModel.elementValues.valueParam` 的同编号槽位，用于验证技能等级覆盖候选。
+- `rawProjection`：现有 `skill_level` 描述倍率 raw HP 投影，仍是当前 `hpDamage.value` 的来源。
+
+### 44.3 Workbench 展示
+
+Workbench 分析面板三值来源当前会显示：
+
+```text
+候选预览 f2 等级值 307 vs raw 12,461，约 2.5%
+```
+
+### 44.4 当前边界
+
+- `formulaCandidatePreview.applied` 必须保持 `false`。
+- 当前 f2 预览与 raw 投影差距巨大，不能把 `element_formula` 候选直接迁入最终公式。
+- 下一阶段必须继续追 `DamageElement` function 组合顺序、命中段绑定、等级覆盖规则和动作描述倍率之间的关系。
