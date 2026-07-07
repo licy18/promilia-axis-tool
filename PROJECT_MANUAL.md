@@ -2893,6 +2893,50 @@ Workbench 当前默认样本显示：
 - 阶段 5-8AA 目标：把普通攻击每段 `damageElementFieldMappings[]` 接入每动作三值曲线的“未应用 per-hit 增量预览”，让 HP、韧性、能量三条曲线能按 60fps 帧点显示候选变化。
 - 优先输出 `actionResultTimeline[].hitCandidates[]` 或等价字段，按 hitGroup 保留帧点、elementId、HP 公式函数、削韧字段、充能字段和未确认原因；最终数值仍保持 raw/占位，直到公式组合顺序确认。
 
+### 2026-07-08：阶段 5-8AA 普攻 per-hit 三值增量预览
+
+本轮完成：
+
+- `actionResultTimeline[]` 新增 `hitCandidateSummary` 和 `hitCandidates[]`。
+- 普通攻击动作会从 `normalAttackHitChainCandidate.hitGroups[]` 派生每 hit 候选预览；非普攻动作暂返回 `no-per-hit-candidates`。
+- 每条 `hitCandidates[]` 保留：
+  - 动作 ID、动作形态、原 skillId、hit skillId、hitIndex。
+  - 60fps 帧点：`frameStartFrames`、`primaryFrame`、`timeMsCandidates`、`candidateTimeMs`。
+  - 该 hit 的 `damageElementElementConfigIds` 和 `damageElementFieldMappingCount`。
+  - HP 候选公式函数 ID、削韧 `weakBreakDamageRate` 等字段、自身能量 `recoverSP/petRecoverSP/recoverInterval` 等字段。
+  - `unresolved` 列表，显式标记执行顺序、多候选组合、每 hit 权重、防御抗性、能量归属/间隔规则未确认。
+- Workbench 三值来源行新增逐 hit 候选摘要。
+
+当前末音 `10900101` 默认普攻动作结果：
+
+- `hitCandidateSummary.status = all-hit-candidates-have-damage-element-fields`。
+- `hitCandidateCount = 5`，`mappedHitCandidateCount = 5`。
+- `damageElementFieldMappingCount = 12`。
+- `primaryFrames = 12f / 6f / 12f / 7f / 4f`，按普通攻击第 1-5 段的本段相对帧记录。
+- 第 1 段保留动作级 element 桥接：`actionLevelElementMatchCount = 2`，elementId 为 `109001081 / 109001306`。
+- 第 2-5 段暂是 hitGroup 级候选，尚未桥接到当前动作形态的 `skillsub_ele_value` 等级行。
+
+Workbench 当前默认样本显示：
+
+```text
+逐hit候选 5/5段 · 三值字段 12 · 帧 12f/6f/12f/7f/4f
+```
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+
+当前边界：
+
+- `hitCandidates[]` 是曲线预览来源，不是最终公式输出；所有候选仍为 `applied: false`。
+- 当前总伤害仍来自描述倍率 raw 投影，韧性和能量仍不应用候选字段。
+- `candidateTimeMs` 当前按动作开始时间加 hitGroup 相对帧点计算，尚未纳入连段子 skill_control 的真实切换时长、取消窗口或输入时机。
+
+下一步：
+
+- 阶段 5-8AB 目标：把 `hitCandidates[]` 聚合成可绘制的 HP / 韧性 / 自身能量候选曲线数据，例如 `candidateValueSeries` 或等价结构。
+- Workbench 应在分析/曲线区域展示三条未应用候选曲线或帧点标记，继续明确区分“当前实际投影值”和“候选公式字段预览”。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

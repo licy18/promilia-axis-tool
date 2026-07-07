@@ -17,6 +17,7 @@ const CURRENT_SKILL_CONTROL_EVIDENCE_BY_SKILL_ID = new Map(
     .map(skill => [Number(skill.skillId), skill])
     .filter(([skillId]) => Number.isFinite(skillId))
 );
+const AZPR_TIMELINE_FRAME_RATE = 60;
 
 export function projectSimulationResult({
   scenario,
@@ -1162,6 +1163,10 @@ function buildActionResultTimeline({ scenario, damageEvents, resourceEvents }) {
     const actionResourceEvents = resourcesByActionId.get(action.id) ?? [];
     const primaryDamageEvent = actionDamageEvents[0] ?? null;
     const damageElementSource = createActionDamageElementSource(action);
+    const hitCandidates = createActionHitCandidates({
+      action,
+      damageElementSource,
+    });
 
     return {
       actionId: action.id,
@@ -1189,12 +1194,339 @@ function buildActionResultTimeline({ scenario, damageEvents, resourceEvents }) {
         actionResourceEvents,
         damageElementSource
       ),
+      hitCandidateSummary: summarizeActionHitCandidates(hitCandidates),
+      hitCandidates,
       sourceEventTypes: [
         ...actionDamageEvents.map(event => event.type),
         ...actionResourceEvents.map(event => event.type),
       ],
     };
   });
+}
+
+function createActionHitCandidates({ action, damageElementSource }) {
+  if (!isNormalAttackAction(action)) {
+    return [];
+  }
+
+  const hitChain = getActionNormalAttackHitChainCandidate(action);
+  if (!hitChain?.hitGroups?.length) {
+    return [];
+  }
+
+  return hitChain.hitGroups.map(hitGroup =>
+    createHitCandidatePreview({
+      action,
+      hitGroup,
+      damageElementSource,
+      hitChain,
+    })
+  );
+}
+
+function isNormalAttackAction(action) {
+  if (!isSkillAction(action)) {
+    return false;
+  }
+
+  const hitModel = action.selectedActionVariant?.hitModel;
+  const label =
+    action.selectedActionVariant?.label ??
+    action.selectedDamageSegment?.label ??
+    action.name;
+  return (
+    hitModel?.kind === 'normal-attack' ||
+    normalizeBindingText(label) === '普攻' ||
+    normalizeBindingText(label) === '普通攻击'
+  );
+}
+
+function getActionNormalAttackHitChainCandidate(action) {
+  const evidence = CURRENT_SKILL_CONTROL_EVIDENCE_BY_SKILL_ID.get(
+    Number(action.skillId)
+  );
+  return (
+    evidence?.stateTimingEvidence?.eventBridgeTargetSkillControlEvidence
+      ?.normalAttackHitChainCandidate ?? null
+  );
+}
+
+function createHitCandidatePreview({
+  action,
+  hitGroup,
+  damageElementSource,
+  hitChain,
+}) {
+  const mappings = hitGroup.damageElementFieldMappings ?? [];
+  const frameStartFrames = uniqueNumbers(hitGroup.hpFrameStartFrames ?? []);
+  const primaryFrame = frameStartFrames[0] ?? null;
+  const candidateTimeMs =
+    primaryFrame == null
+      ? null
+      : roundTimelineMs(action.startMs + frameToTimelineMs(primaryFrame));
+  const actionLevelMatchedElementIds =
+    damageElementSource?.matchedElementConfigIds ?? [];
+  const actionLevelElementMatchCount = mappings.filter(mapping =>
+    actionLevelMatchedElementIds.includes(Number(mapping.elementConfigId))
+  ).length;
+
+  return {
+    sourceKind: 'azpr-normal-attack-per-hit-damage-element-candidate',
+    file: SKILL_ASSET_EVIDENCE_PATH,
+    actionId: action.id,
+    actionName: action.name,
+    actionVariantIndex: numberOrNull(
+      action.actionVariantIndex ?? action.damageSegmentIndex
+    ),
+    actionVariantLabel:
+      action.selectedActionVariant?.label ??
+      action.selectedDamageSegment?.label ??
+      null,
+    skillId: numberOrNull(action.skillId),
+    expectedHitCount: numberOrNull(hitChain.expectedHitCount),
+    hitIndex: numberOrNull(hitGroup.hitIndex),
+    label: hitGroup.label ?? null,
+    candidateSource: hitGroup.candidateSource ?? null,
+    hitSkillId: numberOrNull(hitGroup.skillId),
+    animationStateNames: hitGroup.animationStateNames ?? [],
+    frameRate: AZPR_TIMELINE_FRAME_RATE,
+    frameStartFrames,
+    primaryFrame,
+    timeMsCandidates: frameStartFrames.map(frame =>
+      roundTimelineMs(action.startMs + frameToTimelineMs(frame))
+    ),
+    candidateTimeMs,
+    hpTimelineCandidateCount:
+      numberOrNull(hitGroup.hpTimelineCandidateCount) ?? 0,
+    behaviorChainCandidateCount:
+      numberOrNull(hitGroup.behaviorChainCandidateCount) ?? 0,
+    resolvedBehaviorCount: numberOrNull(hitGroup.resolvedBehaviorCount) ?? 0,
+    externalElementBaseRefCount:
+      numberOrNull(hitGroup.externalElementBaseRefCount) ?? 0,
+    resourceMapMatchedElementBaseRefCount:
+      numberOrNull(hitGroup.resourceMapMatchedElementBaseRefCount) ?? 0,
+    damageElementFieldMappingStatus:
+      hitGroup.damageElementFieldMappingStatus ?? null,
+    damageElementFieldMappingCount: mappings.length,
+    actionLevelElementMatchCount,
+    actionLevelElementMatchStatus:
+      actionLevelElementMatchCount > 0
+        ? 'some-hit-elements-bridge-to-action-element-values'
+        : 'hit-elements-not-bridged-to-action-element-values',
+    damageElementElementConfigIds: uniqueNumbers(
+      mappings.map(mapping => mapping.elementConfigId)
+    ),
+    hpDamage: summarizeHitCandidateHpDamage(mappings),
+    toughnessDamage: summarizeHitCandidateToughnessDamage(mappings),
+    selfEnergyChange: summarizeHitCandidateSelfEnergyChange(mappings),
+    candidates: mappings.map(compactHitCandidateDamageElementMapping),
+    status:
+      mappings.length > 0
+        ? 'per-hit-candidate-fields-found-formula-unapplied'
+        : 'per-hit-candidate-fields-missing',
+    unresolved: [
+      'damage-element-execution-order',
+      'multi-candidate-combination-rule',
+      'per-hit-scale-or-hit-count-weight',
+      'enemy-defense-and-resistance-application',
+      'self-energy-owner-and-interval-rule',
+    ],
+    applied: false,
+  };
+}
+
+function summarizeHitCandidateHpDamage(mappings) {
+  const hpMappings = mappings.filter(mapping => mapping.hpDamage);
+  return {
+    status:
+      hpMappings.length > 0
+        ? 'candidate-fields-found-formula-unmapped'
+        : 'candidate-fields-missing',
+    candidateCount: hpMappings.length,
+    formulaFunctionIds: uniqueNumbers(
+      hpMappings.flatMap(mapping =>
+        Object.values(mapping.hpDamage?.formulaFunctionIds ?? {})
+      )
+    ),
+    formulaFunctionStatuses: uniqueStrings(
+      hpMappings.map(mapping => mapping.hpDamage?.formulaFunctionStatus)
+    ),
+    formulaFunctionMatchedIds: uniqueNumbers(
+      hpMappings.flatMap(
+        mapping => mapping.hpDamage?.formulaFunctionMatchedIds ?? []
+      )
+    ),
+    rawFormulaParamValueSamples: uniqueNumbers(
+      hpMappings.flatMap(mapping => mapping.hpDamage?.rawFormulaParamValues)
+    ).slice(0, 12),
+    applied: false,
+  };
+}
+
+function summarizeHitCandidateToughnessDamage(mappings) {
+  const toughnessMappings = mappings.filter(mapping => mapping.toughnessDamage);
+  return {
+    status:
+      toughnessMappings.length > 0
+        ? 'candidate-fields-found-formula-unmapped'
+        : 'candidate-fields-missing',
+    candidateCount: toughnessMappings.length,
+    weakBreakDamageRates: uniqueNumbers(
+      toughnessMappings.map(
+        mapping => mapping.toughnessDamage?.weakBreakDamageRate
+      )
+    ),
+    hitTypes: uniqueNumbers(
+      toughnessMappings.map(mapping => mapping.toughnessDamage?.hitType)
+    ),
+    interruptPriorities: uniqueNumbers(
+      toughnessMappings.map(
+        mapping => mapping.toughnessDamage?.interruptPriority
+      )
+    ),
+    useOneBreakValues: uniqueNumbers(
+      toughnessMappings.map(mapping => mapping.toughnessDamage?.useOneBreak)
+    ),
+    applied: false,
+  };
+}
+
+function summarizeHitCandidateSelfEnergyChange(mappings) {
+  const energyMappings = mappings.filter(mapping => mapping.selfEnergyChange);
+  return {
+    status:
+      energyMappings.length > 0
+        ? 'candidate-fields-found-formula-unmapped'
+        : 'candidate-fields-missing',
+    candidateCount: energyMappings.length,
+    recoverSPValues: uniqueNumbers(
+      energyMappings.map(mapping => mapping.selfEnergyChange?.recoverSP)
+    ),
+    petRecoverSPValues: uniqueNumbers(
+      energyMappings.map(mapping => mapping.selfEnergyChange?.petRecoverSP)
+    ),
+    recoverIntervals: uniqueNumbers(
+      energyMappings.map(mapping => mapping.selfEnergyChange?.recoverInterval)
+    ),
+    ownerScopes: uniqueStrings(
+      energyMappings.map(mapping => mapping.selfEnergyChange?.ownerScope)
+    ),
+    applied: false,
+  };
+}
+
+function compactHitCandidateDamageElementMapping(mapping) {
+  return {
+    elementConfigId: numberOrNull(mapping.elementConfigId),
+    pathId: mapping.pathId ?? null,
+    elementName: mapping.elementName ?? null,
+    hpDamage: mapping.hpDamage
+      ? {
+          status: mapping.hpDamage.status ?? null,
+          formulaFunctionIds: mapping.hpDamage.formulaFunctionIds ?? {},
+          formulaFunctionStatus: mapping.hpDamage.formulaFunctionStatus ?? null,
+          formulaFunctionMatchedIds:
+            mapping.hpDamage.formulaFunctionMatchedIds ?? [],
+          damageFields: compactDamageFieldPatternValues(
+            mapping.hpDamage.damageFields
+          ),
+        }
+      : null,
+    toughnessDamage: mapping.toughnessDamage
+      ? {
+          status: mapping.toughnessDamage.status ?? null,
+          weakBreakDamageRate: numberOrNull(
+            mapping.toughnessDamage.weakBreakDamageRate
+          ),
+          hitType: numberOrNull(mapping.toughnessDamage.hitType),
+          interruptPriority: numberOrNull(
+            mapping.toughnessDamage.interruptPriority
+          ),
+          useOneBreak: numberOrNull(mapping.toughnessDamage.useOneBreak),
+        }
+      : null,
+    selfEnergyChange: mapping.selfEnergyChange
+      ? {
+          status: mapping.selfEnergyChange.status ?? null,
+          recoverSP: numberOrNull(mapping.selfEnergyChange.recoverSP),
+          petRecoverSP: numberOrNull(mapping.selfEnergyChange.petRecoverSP),
+          recoverInterval: numberOrNull(
+            mapping.selfEnergyChange.recoverInterval
+          ),
+          ownerScope: mapping.selfEnergyChange.ownerScope ?? null,
+        }
+      : null,
+    skillLevelBridge: {
+      status: mapping.skillLevelBridge?.status ?? null,
+      levelRows: numberOrNull(mapping.skillLevelBridge?.levelRows) ?? 0,
+      parameterIds: mapping.skillLevelBridge?.parameterIds ?? [],
+      varyingParameterIds: mapping.skillLevelBridge?.varyingParameterIds ?? [],
+    },
+    applied: false,
+  };
+}
+
+function summarizeActionHitCandidates(hitCandidates) {
+  if (hitCandidates.length === 0) {
+    return {
+      status: 'no-per-hit-candidates',
+      hitCandidateCount: 0,
+      damageElementFieldMappingCount: 0,
+      mappedHitCandidateCount: 0,
+      applied: false,
+    };
+  }
+
+  const mappedHitCandidates = hitCandidates.filter(
+    candidate => candidate.damageElementFieldMappingCount > 0
+  );
+
+  return {
+    status:
+      mappedHitCandidates.length === hitCandidates.length
+        ? 'all-hit-candidates-have-damage-element-fields'
+        : mappedHitCandidates.length > 0
+          ? 'partial-hit-candidates-have-damage-element-fields'
+          : 'hit-candidates-missing-damage-element-fields',
+    hitCandidateCount: hitCandidates.length,
+    mappedHitCandidateCount: mappedHitCandidates.length,
+    damageElementFieldMappingCount: hitCandidates.reduce(
+      (sum, candidate) => sum + candidate.damageElementFieldMappingCount,
+      0
+    ),
+    frameRate: AZPR_TIMELINE_FRAME_RATE,
+    primaryFrames: hitCandidates
+      .map(candidate => numberOrNull(candidate.primaryFrame))
+      .filter(Number.isFinite),
+    candidateElementConfigIds: uniqueNumbers(
+      hitCandidates.flatMap(
+        candidate => candidate.damageElementElementConfigIds
+      )
+    ),
+    hpFormulaFunctionIds: uniqueNumbers(
+      hitCandidates.flatMap(candidate => candidate.hpDamage.formulaFunctionIds)
+    ),
+    toughnessWeakBreakDamageRates: uniqueNumbers(
+      hitCandidates.flatMap(
+        candidate => candidate.toughnessDamage.weakBreakDamageRates
+      )
+    ),
+    selfEnergyRecoverSPValues: uniqueNumbers(
+      hitCandidates.flatMap(
+        candidate => candidate.selfEnergyChange.recoverSPValues
+      )
+    ),
+    applied: false,
+  };
+}
+
+function frameToTimelineMs(frame) {
+  return (Number(frame) * 1000) / AZPR_TIMELINE_FRAME_RATE;
+}
+
+function roundTimelineMs(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? Number(number.toFixed(6)) : null;
 }
 
 function createHpDamageResult(action, damageEvent, damageElementSource) {

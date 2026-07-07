@@ -3704,3 +3704,77 @@ Workbench 候选模式摘要会追加动作绑定提示：
 - `damageElementFieldMappings[].applied` 必须保持 `false`。
 - 这些字段只说明每段 hit 可以追到哪些 HP、削韧、自身能量候选字段；不能直接推导最终伤害、削韧或充能数值。
 - 下一阶段应把这些候选接入 per-hit 三曲线预览，并继续显式记录未确认的公式组合顺序和执行条件。
+
+## 54. 阶段 5-8AA：actionResultTimeline per-hit 三值候选预览
+
+阶段 5-8AA 在仿真投影层新增每动作逐 hit 候选预览。该结构服务于后续曲线绘制和公式诊断，不改变当前实际投影值。
+
+### 54.1 actionResultTimeline[].hitCandidateSummary
+
+字段示例：
+
+```javascript
+{
+  "hitCandidateSummary": {
+    "status": "all-hit-candidates-have-damage-element-fields",
+    "hitCandidateCount": 5,
+    "mappedHitCandidateCount": 5,
+    "damageElementFieldMappingCount": 12,
+    "frameRate": 60,
+    "primaryFrames": [12, 6, 12, 7, 4],
+    "candidateElementConfigIds": [
+      109001018,
+      109001021,
+      109001081,
+      109001117,
+      109001134,
+      109001135,
+      109001137,
+      109001280,
+      109001285,
+      109001306,
+      109001313,
+      109001328
+    ],
+    "applied": false
+  }
+}
+```
+
+非普攻动作或缺少 hitChain 证据的动作返回：
+
+```javascript
+{
+  "status": "no-per-hit-candidates",
+  "hitCandidateCount": 0,
+  "damageElementFieldMappingCount": 0,
+  "mappedHitCandidateCount": 0,
+  "applied": false
+}
+```
+
+### 54.2 actionResultTimeline[].hitCandidates[]
+
+单条 hit 候选字段：
+
+- `sourceKind = azpr-normal-attack-per-hit-damage-element-candidate`
+- `actionId` / `actionName` / `actionVariantIndex` / `actionVariantLabel`
+- `skillId` / `hitSkillId` / `hitIndex`
+- `frameRate` / `frameStartFrames` / `primaryFrame` / `timeMsCandidates` / `candidateTimeMs`
+- `hpTimelineCandidateCount`
+- `behaviorChainCandidateCount`
+- `damageElementFieldMappingCount`
+- `actionLevelElementMatchCount`
+- `damageElementElementConfigIds`
+- `hpDamage`
+- `toughnessDamage`
+- `selfEnergyChange`
+- `candidates[]`
+- `unresolved[]`
+- `applied = false`
+
+### 54.3 当前边界
+
+- `hitCandidates[]` 可以作为曲线候选输入，但不是最终三值曲线。
+- 当前 `candidateTimeMs` 仅使用动作开始时间加 hitGroup 相对帧点，尚未解析子 skill_control 串联时长、取消窗口或输入节奏。
+- 第 2-5 段的 `actionLevelElementMatchCount` 目前可能为 0，因为它们的 damage element 不一定在源动作的 `skillsub_ele_value` 等级行中直接出现。

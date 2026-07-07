@@ -600,6 +600,77 @@ describe('first vertical slice simulation', () => {
         },
       },
     });
+    const actionResult = result.actionResultTimeline[0];
+    expect(actionResult.hitCandidateSummary).toMatchObject({
+      status: 'all-hit-candidates-have-damage-element-fields',
+      hitCandidateCount: 5,
+      mappedHitCandidateCount: 5,
+      damageElementFieldMappingCount: 12,
+      frameRate: 60,
+      primaryFrames: [12, 6, 12, 7, 4],
+      applied: false,
+    });
+    expect(actionResult.hitCandidateSummary.candidateElementConfigIds).toEqual([
+      109001018, 109001021, 109001081, 109001117, 109001134, 109001135,
+      109001137, 109001280, 109001285, 109001306, 109001313, 109001328,
+    ]);
+    expect(actionResult.hitCandidates).toHaveLength(5);
+    expect(actionResult.hitCandidates[0]).toMatchObject({
+      sourceKind: 'azpr-normal-attack-per-hit-damage-element-candidate',
+      actionId: 'action-0001',
+      actionVariantLabel: '普攻',
+      expectedHitCount: 5,
+      hitIndex: 1,
+      hitSkillId: 10900101,
+      animationStateNames: ['Skill0_1'],
+      frameRate: 60,
+      frameStartFrames: [12, 13],
+      primaryFrame: 12,
+      candidateTimeMs: 200,
+      damageElementFieldMappingCount: 2,
+      actionLevelElementMatchCount: 2,
+      actionLevelElementMatchStatus:
+        'some-hit-elements-bridge-to-action-element-values',
+      damageElementElementConfigIds: [109001081, 109001306],
+      hpDamage: expect.objectContaining({
+        status: 'candidate-fields-found-formula-unmapped',
+        candidateCount: 2,
+        formulaFunctionIds: [1, 2],
+        formulaFunctionMatchedIds: [1, 2],
+        applied: false,
+      }),
+      toughnessDamage: expect.objectContaining({
+        status: 'candidate-fields-found-formula-unmapped',
+        candidateCount: 2,
+        weakBreakDamageRates: [7000],
+        applied: false,
+      }),
+      selfEnergyChange: expect.objectContaining({
+        status: 'candidate-fields-found-formula-unmapped',
+        candidateCount: 2,
+        recoverSPValues: [2700],
+        applied: false,
+      }),
+      status: 'per-hit-candidate-fields-found-formula-unapplied',
+      applied: false,
+    });
+    expect(actionResult.hitCandidates[1]).toMatchObject({
+      hitIndex: 2,
+      hitSkillId: 10900102,
+      animationStateNames: ['Skill0_2'],
+      frameStartFrames: [6, 10, 14, 26],
+      primaryFrame: 6,
+      candidateTimeMs: 100,
+      damageElementFieldMappingCount: 2,
+      actionLevelElementMatchCount: 0,
+      damageElementElementConfigIds: [109001018, 109001137],
+      hpDamage: expect.objectContaining({
+        formulaFunctionIds: [1, 2],
+      }),
+      toughnessDamage: expect.objectContaining({
+        weakBreakDamageRates: [7000],
+      }),
+    });
     const combinationPreview =
       result.actionResultTimeline[0].hpDamage.sourceEvidence.formulaCandidatePreview.combinationPreviews.find(
         item =>

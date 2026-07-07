@@ -253,7 +253,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8X-C，把 EventBridge 目标从单跳索引升级为递归普攻连段链索引；当前 `10900102 -> 10900103 -> 10900104 -> 10900105` 均确认为 `10900101` 的子 skill_control，链路动画状态为 `Skill0_2 / Skill0_3 / Skill0_4 / Skill0_5`，HP timeline 候选合计 30 个；同时修正 `Skill0_1` 的直接动画状态证据，使主 skill_control 的 `Skill0_1 / Skill0_6` 均为动画+命中候选。
 - 已完成：阶段 5-8Y，把普攻链候选升级为普通攻击多段/每 hit 候选；当前从【普通攻击】描述解析 `expectedHitCount = 5`，并建立 `normalAttackHitChainCandidate`，覆盖 `10900101 / Skill0_1` 与 `10900102-10900105 / Skill0_2-5` 五段候选，HP timeline 候选数为 `2 / 4 / 9 / 7 / 10`，总计 32 个，仍保持 `applied: false`。
 - 已完成：阶段 5-8Z，把 `normalAttackHitChainCandidate.hitGroups[]` 继续向下解析到每 hit 的 `behaviorList -> elementBaseDatas -> TDamageElementParams`；当前普通攻击 5 段均有三值字段候选，覆盖 `damageElementMappedHitGroupCount = 5/5`，合计 12 个 `TDamageElementParams` 映射，Workbench 显示 `三值候选 5/5段`，仍保持 `applied: false`。
-- 下一步：阶段 5-8AA，把普通攻击每段 `damageElementFieldMappings[]` 接入每动作三值曲线的未应用 per-hit 增量预览，让 HP、韧性、能量三条曲线能按 60fps 帧点追踪候选变化。
+- 已完成：阶段 5-8AA，把普通攻击每段 `damageElementFieldMappings[]` 接入 `actionResultTimeline[].hitCandidates[]` 和 `hitCandidateSummary`，当前默认普攻动作输出 5 条 per-hit 候选、12 个三值字段映射、60fps 相对帧点 `12/6/12/7/4f`，Workbench 显示 `逐hit候选 5/5段 · 三值字段 12`；这些仍是未应用预览。
+- 下一步：阶段 5-8AB，把 `hitCandidates[]` 聚合成可绘制的 HP / 韧性 / 自身能量候选曲线数据，并在 Workbench 分析/曲线区域展示候选曲线或帧点标记。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

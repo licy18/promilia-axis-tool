@@ -94,6 +94,9 @@
               formatFormulaCombinationPreview(entry.hpDamage?.sourceEvidence)
             }}
           </small>
+          <small v-if="formatHitCandidateSummary(entry)">
+            {{ formatHitCandidateSummary(entry) }}
+          </small>
         </div>
         <strong>{{ formatActionResultValues(entry) }}</strong>
       </div>
@@ -391,6 +394,20 @@ function formatFormulaCombinationPreview(sourceEvidence) {
     ? ` / 每 hit ×${formatFixed(perHitScale)}`
     : '';
   return `组合诊断 ${formatCombinationLabel(preferred)} 需 ×${formatFixed(scale)} 才接近 raw${perHitText}`;
+}
+
+function formatHitCandidateSummary(entry) {
+  const summary = entry.hitCandidateSummary;
+  if (!summary || summary.hitCandidateCount <= 0) {
+    return '';
+  }
+
+  const frames = (summary.primaryFrames ?? [])
+    .slice(0, 5)
+    .map(frame => `${Math.round(frame)}f`)
+    .join('/');
+  const frameText = frames ? ` · 帧 ${frames}` : '';
+  return `逐hit候选 ${summary.mappedHitCandidateCount}/${summary.hitCandidateCount}段 · 三值字段 ${summary.damageElementFieldMappingCount}${frameText}`;
 }
 
 function formatFormulaCandidatePatternSummary(summary) {
