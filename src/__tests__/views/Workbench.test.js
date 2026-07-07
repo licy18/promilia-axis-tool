@@ -410,6 +410,16 @@ describe('Workbench view', () => {
     expect(wrapper.find('[data-testid="workbench-action-batch-summary"]').text()).toContain('哈库茵剑舞');
     expect(wrapper.find('[data-testid="workbench-action-batch-summary"]').text()).toContain('4 动作');
     expect(wrapper.find('[data-testid="workbench-action-batch-summary"]').text()).toContain('2000-8000ms');
+    expect(wrapper.find('[data-testid="workbench-action-batch-summary"]').attributes('data-first-action-id')).toBe(
+      'action-0002',
+    );
+
+    await wrapper.find('[data-testid="workbench-action-batch-summary"]').trigger('click');
+
+    expect(wrapper.find('.action-item.selected').attributes('data-action-id')).toBe('action-0002');
+    expect(wrapper.findAll('.action-item[data-batch-highlight="true"]')).toHaveLength(4);
+    expect(wrapper.findAll('[data-testid="workbench-timeline-action"][data-batch-highlight="true"]')).toHaveLength(4);
+    expect(wrapper.findAll('[data-testid="workbench-timeline-damage-marker"][data-batch-highlight="true"]')).toHaveLength(4);
 
     await wrapper.find('.action-item[data-action-id="action-0003"]').trigger('click');
 
@@ -418,6 +428,7 @@ describe('Workbench view', () => {
 
     await wrapper.find('[data-testid="workbench-summary-shift-action-batch-earlier"]').trigger('click');
 
+    expect(wrapper.find('.action-item.selected').attributes('data-action-id')).toBe('action-0003');
     expect(wrapper.find('.action-item[data-action-id="action-0002"]').text()).toContain('1500ms');
     expect(wrapper.find('[data-testid="workbench-action-batch-summary"]').text()).toContain('1500-7500ms');
 
@@ -449,6 +460,7 @@ describe('Workbench view', () => {
 
     expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe('已恢复草稿');
     expect(restored.find('[data-testid="workbench-action-batch-summary"]').text()).toContain('3500-9500ms');
+    expect(restored.findAll('.action-item[data-batch-highlight="true"]')).toHaveLength(4);
 
     await restored.find('[data-testid="workbench-summary-delete-action-batch"]').trigger('click');
 

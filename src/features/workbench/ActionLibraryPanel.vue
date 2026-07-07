@@ -209,6 +209,10 @@
         data-testid="workbench-action-batch-summary"
         :data-batch-id="batch.batchId"
         :data-selected="batch.selected ? 'true' : 'false'"
+        :data-first-action-id="batch.firstActionId"
+        tabindex="0"
+        @click="selectBatchFirstAction(batch)"
+        @keydown.enter="selectBatchFirstAction(batch)"
       >
         <div class="batch-summary-main">
           <div>
@@ -226,7 +230,7 @@
             class="tool-button danger"
             data-testid="workbench-summary-delete-action-batch"
             type="button"
-            @click="$emit('delete-action-batch', batch.batchId)"
+            @click.stop="$emit('delete-action-batch', batch.batchId)"
           >
             删批次
           </button>
@@ -234,7 +238,7 @@
             class="tool-button"
             data-testid="workbench-summary-shift-action-batch-earlier"
             type="button"
-            @click="emitBatchShift(batch.batchId, -500)"
+            @click.stop="emitBatchShift(batch.batchId, -500)"
           >
             -500ms
           </button>
@@ -242,7 +246,7 @@
             class="tool-button"
             data-testid="workbench-summary-shift-action-batch-later"
             type="button"
-            @click="emitBatchShift(batch.batchId, 500)"
+            @click.stop="emitBatchShift(batch.batchId, 500)"
           >
             +500ms
           </button>
@@ -254,14 +258,15 @@
               data-testid="workbench-summary-batch-shift-offset-input"
               :data-batch-id="batch.batchId"
               :value="getBatchShiftOffset(batch.batchId)"
-              @input="setBatchShiftOffset(batch.batchId, $event.target.value)"
+              @click.stop
+              @input.stop="setBatchShiftOffset(batch.batchId, $event.target.value)"
             />
           </label>
           <button
             class="tool-button"
             data-testid="workbench-summary-apply-action-batch-shift"
             type="button"
-            @click="applyBatchShift(batch.batchId)"
+            @click.stop="applyBatchShift(batch.batchId)"
           >
             应用偏移
           </button>
@@ -273,14 +278,15 @@
               data-testid="workbench-summary-batch-align-start-input"
               :data-batch-id="batch.batchId"
               :value="getBatchAlignStart(batch.batchId)"
-              @input="setBatchAlignStart(batch.batchId, $event.target.value)"
+              @click.stop
+              @input.stop="setBatchAlignStart(batch.batchId, $event.target.value)"
             />
           </label>
           <button
             class="tool-button"
             data-testid="workbench-summary-apply-action-batch-align"
             type="button"
-            @click="applyBatchAlign(batch.batchId)"
+            @click.stop="applyBatchAlign(batch.batchId)"
           >
             对齐起点
           </button>
@@ -293,8 +299,13 @@
         v-for="action in actions"
         :key="action.id"
         class="action-item"
-        :class="{ selected: action.id === selectedActionId }"
+        :class="{
+          selected: action.id === selectedActionId,
+          'batch-selected': isActionInSelectedBatch(action),
+        }"
         :data-action-id="action.id"
+        :data-batch-id="action.generationBatch?.batchId || ''"
+        :data-batch-highlight="isActionInSelectedBatch(action) ? 'true' : 'false'"
         tabindex="0"
         @click="$emit('select-action', action.id)"
         @keydown.enter="$emit('select-action', action.id)"
@@ -434,6 +445,11 @@ const emit = defineEmits([
 const batchAlignStarts = reactive({});
 const batchShiftOffsets = reactive({});
 
+const selectedBatchId = computed(() => {
+  const selectedAction = props.actions.find((action) => action.id === props.selectedActionId);
+  return selectedAction?.generationBatch?.batchId ?? null;
+});
+
 const actionBatches = computed(() => {
   const batches = new Map();
 
@@ -448,6 +464,9 @@ const actionBatches = computed(() => {
     const existing = batches.get(batchId);
     if (existing) {
       existing.count += 1;
+      if (startMs < existing.minStartMs) {
+        existing.firstActionId = action.id;
+      }
       existing.minStartMs = Math.min(existing.minStartMs, startMs);
       existing.maxStartMs = Math.max(existing.maxStartMs, startMs);
       existing.selected = existing.selected || action.id === props.selectedActionId;
@@ -457,6 +476,7 @@ const actionBatches = computed(() => {
     batches.set(batchId, {
       batchId,
       count: 1,
+      firstActionId: action.id,
       minStartMs: startMs,
       maxStartMs: startMs,
       selected: action.id === props.selectedActionId,
@@ -472,6 +492,16 @@ const actionBatches = computed(() => {
     return left.batchId.localeCompare(right.batchId);
   });
 });
+
+function selectBatchFirstAction(batch) {
+  if (batch?.firstActionId) {
+    emit('select-action', batch.firstActionId);
+  }
+}
+
+function isActionInSelectedBatch(action) {
+  return Boolean(selectedBatchId.value && action.generationBatch?.batchId === selectedBatchId.value);
+}
 
 function actionTypeLabel(type) {
   if (type === 'wait') {
@@ -875,6 +905,13 @@ h2 {
   border-left: 3px solid rgba(121, 199, 185, 0.38);
   border-radius: 4px;
   background: rgba(17, 22, 27, 0.64);
+  cursor: pointer;
+}
+
+.batch-summary-item:hover,
+.batch-summary-item:focus {
+  border-left-color: rgba(121, 199, 185, 0.72);
+  outline: none;
 }
 
 .batch-summary-item.selected {
@@ -1133,6 +1170,11 @@ h2 {
 .action-item.selected {
   border-color: rgba(121, 199, 185, 0.75);
   box-shadow: 0 0 0 2px rgba(121, 199, 185, 0.12);
+}
+
+.action-item.batch-selected {
+  border-left: 3px solid rgba(121, 199, 185, 0.76);
+  background: #25343a;
 }
 
 .action-main {

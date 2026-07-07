@@ -88,12 +88,15 @@
                   overlap: overlapActionIds.has(action.id),
                   resizing: action.id === resizingActionId,
                   'auto-delayed': action.insertion?.autoDelayed,
+                  'batch-selected': isActionInSelectedBatch(action),
                 },
                 `type-${action.type}`,
               ]"
               :style="actionStyle(action)"
               :data-action-id="action.id"
               :data-lane-id="lane.id"
+              :data-batch-id="action.generationBatch?.batchId || ''"
+              :data-batch-highlight="isActionInSelectedBatch(action) ? 'true' : 'false'"
               data-testid="workbench-timeline-action"
               tabindex="0"
               @click="$emit('select-action', action.id)"
@@ -135,10 +138,12 @@
               v-for="damage in lane.damageMarkers"
               :key="`${damage.actionId}-${damage.timeMs}`"
               class="damage-marker"
+              :class="{ 'batch-selected': isDamageInSelectedBatch(damage) }"
               :style="markerStyle(damage)"
               :title="`${damage.segmentLabel}: ${damage.rawDamage}`"
               :data-action-id="damage.actionId"
               :data-lane-id="lane.id"
+              :data-batch-highlight="isDamageInSelectedBatch(damage) ? 'true' : 'false'"
               data-testid="workbench-timeline-damage-marker"
             />
           </div>
@@ -243,6 +248,10 @@ const timelineTrackStyle = computed(() => ({
 const actionsById = computed(() => new Map(props.actions.map((action) => [action.id, action])));
 const actorLaneIds = computed(() => new Set(props.actors.map((actor) => actor.id)));
 const overlapActionIds = computed(() => new Set(props.timelineDiagnostics?.overlapActionIds ?? []));
+const selectedBatchId = computed(() => {
+  const selectedAction = actionsById.value.get(props.selectedActionId);
+  return selectedAction?.generationBatch?.batchId ?? null;
+});
 const timelineLanes = computed(() => {
   const actorLanes = props.actors.map((actor) => ({
     id: actor.id,
@@ -276,6 +285,15 @@ const timelineLanes = computed(() => {
     ? [...actorLanes, systemLane]
     : actorLanes;
 });
+
+function isActionInSelectedBatch(action) {
+  return Boolean(selectedBatchId.value && action.generationBatch?.batchId === selectedBatchId.value);
+}
+
+function isDamageInSelectedBatch(damage) {
+  const action = actionsById.value.get(damage.actionId);
+  return Boolean(action && isActionInSelectedBatch(action));
+}
 
 function actionStyle(action) {
   const left = clampPercent((action.startMs / props.durationMs) * 100);
@@ -717,6 +735,11 @@ h2 {
   box-shadow: 0 0 0 2px rgba(121, 199, 185, 0.3), 0 12px 30px rgba(0, 0, 0, 0.28);
 }
 
+.action-block.batch-selected {
+  border-color: rgba(121, 199, 185, 0.92);
+  box-shadow: 0 0 0 2px rgba(121, 199, 185, 0.2), 0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
 .action-block.dragging {
   cursor: grabbing;
 }
@@ -835,6 +858,11 @@ h2 {
   background: #e6a23c;
   box-shadow: 0 0 18px rgba(230, 162, 60, 0.42);
   transform: translateX(-50%);
+}
+
+.damage-marker.batch-selected {
+  background: #79c7b9;
+  box-shadow: 0 0 18px rgba(121, 199, 185, 0.62);
 }
 
 .empty-lane {
