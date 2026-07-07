@@ -2281,6 +2281,10 @@ async function buildSkillAssetEvidenceIndex({
       skillLogicIndex,
       elementFormulaTable,
     });
+  attachNormalAttackHitDamageElementEvidence(
+    currentSkillControlEvidence,
+    damageElementFieldMappingEvidence
+  );
 
   return {
     schemaVersion: 1,
@@ -2412,13 +2416,34 @@ async function buildExternalElementObjectEvidence(currentSkillControlEvidence) {
     .map(item => Number(item.skillId))
     .filter(Number.isFinite);
   const uniqueSkillIds = uniqueNumbers(skillIds);
-  if (uniqueSkillIds.length === 0) {
+  const targetSkillIds = currentSkillControlEvidence.flatMap(item =>
+    (
+      item.stateTimingEvidence?.eventBridgeTargetSkillControlEvidence
+        ?.targetSkillControls ?? []
+    )
+      .filter(
+        target =>
+          target.status === 'found' &&
+          (target.behaviorReferenceSummary?.resourceMapMatchedElementBaseRefs ??
+            0) > 0
+      )
+      .map(target => Number(target.skillId))
+      .filter(Number.isFinite)
+  );
+  const uniqueTargetSkillIds = uniqueNumbers(targetSkillIds);
+  const uniqueTraceSkillIds = uniqueNumbers([
+    ...uniqueSkillIds,
+    ...uniqueTargetSkillIds,
+  ]);
+  if (uniqueTraceSkillIds.length === 0) {
     return {
       schemaVersion: 1,
       sourceKind: 'azpr-skill-external-element-object-evidence',
       status: 'no-external-element-object-trace-targets',
       summary: {
         skillCount: 0,
+        sourceSkillCount: 0,
+        targetSkillCount: 0,
         resolvedSkills: 0,
         requestedPathIds: 0,
         resolvedPathIds: 0,
@@ -2440,7 +2465,9 @@ async function buildExternalElementObjectEvidence(currentSkillControlEvidence) {
       status: 'resolver-script-missing',
       resolverPath: normalizePath(resolverPath),
       summary: {
-        skillCount: uniqueSkillIds.length,
+        skillCount: uniqueTraceSkillIds.length,
+        sourceSkillCount: uniqueSkillIds.length,
+        targetSkillCount: uniqueTargetSkillIds.length,
         resolvedSkills: 0,
         requestedPathIds: 0,
         resolvedPathIds: 0,
@@ -2458,7 +2485,7 @@ async function buildExternalElementObjectEvidence(currentSkillControlEvidence) {
         '--extractor',
         extractorRoot,
         '--skill-ids',
-        uniqueSkillIds.join(','),
+        uniqueTraceSkillIds.join(','),
       ],
       {
         maxBuffer: 50 * 1024 * 1024,
@@ -2466,6 +2493,11 @@ async function buildExternalElementObjectEvidence(currentSkillControlEvidence) {
       }
     );
     const parsed = JSON.parse(stdout);
+    parsed.summary = {
+      ...(parsed.summary ?? {}),
+      sourceSkillCount: uniqueSkillIds.length,
+      targetSkillCount: uniqueTargetSkillIds.length,
+    };
     if (stderr?.trim()) {
       parsed.stderr = stderr.trim().slice(0, 2000);
     }
@@ -2479,7 +2511,9 @@ async function buildExternalElementObjectEvidence(currentSkillControlEvidence) {
       error: `${error?.name ?? 'Error'}: ${error?.message ?? String(error)}`,
       stderr: String(error?.stderr ?? '').slice(0, 2000),
       summary: {
-        skillCount: uniqueSkillIds.length,
+        skillCount: uniqueTraceSkillIds.length,
+        sourceSkillCount: uniqueSkillIds.length,
+        targetSkillCount: uniqueTargetSkillIds.length,
         resolvedSkills: 0,
         requestedPathIds: 0,
         resolvedPathIds: 0,
@@ -2612,6 +2646,137 @@ function buildDamageElementFieldMappingEvidence({
       ),
     },
     skills,
+  };
+}
+
+function attachNormalAttackHitDamageElementEvidence(
+  currentSkillControlEvidence,
+  damageElementFieldMappingEvidence
+) {
+  const mappingBySkillId = new Map();
+  for (const skill of damageElementFieldMappingEvidence?.skills ?? []) {
+    const byPathId = new Map();
+    for (const mapping of skill.fieldMappings ?? []) {
+      byPathId.set(String(mapping.pathId), mapping);
+    }
+    mappingBySkillId.set(Number(skill.skillId), byPathId);
+  }
+
+  for (const item of currentSkillControlEvidence ?? []) {
+    const candidate =
+      item.stateTimingEvidence?.eventBridgeTargetSkillControlEvidence
+        ?.normalAttackHitChainCandidate;
+    if (!candidate?.hitGroups?.length) {
+      continue;
+    }
+
+    let mappedHitGroupCount = 0;
+    const mappedElementConfigIds = [];
+    const mappedPathIds = [];
+
+    for (const hitGroup of candidate.hitGroups) {
+      const mappings = matchHitGroupDamageElementMappings(
+        hitGroup,
+        mappingBySkillId
+      );
+      if (mappings.length > 0) {
+        mappedHitGroupCount += 1;
+      }
+      mappedElementConfigIds.push(
+        ...mappings.map(mapping => mapping.elementConfigId)
+      );
+      mappedPathIds.push(...mappings.map(mapping => mapping.pathId));
+
+      hitGroup.damageElementFieldMappingStatus =
+        mappings.length > 0
+          ? 'damage-element-field-mappings-found'
+          : 'damage-element-field-mappings-missing';
+      hitGroup.damageElementFieldMappingCount = mappings.length;
+      hitGroup.damageElementElementConfigIds = uniqueNumbers(
+        mappings.map(mapping => mapping.elementConfigId)
+      );
+      hitGroup.damageElementPathIds = uniqueStrings(
+        mappings.map(mapping => mapping.pathId)
+      );
+      hitGroup.damageElementFieldMappings = mappings.map(
+        compactHitDamageElementFieldMapping
+      );
+    }
+
+    candidate.damageElementFieldMappingStatus =
+      mappedHitGroupCount === candidate.hitGroups.length
+        ? 'all-hit-groups-have-damage-element-field-mappings'
+        : mappedHitGroupCount > 0
+          ? 'partial-hit-groups-have-damage-element-field-mappings'
+          : 'hit-groups-missing-damage-element-field-mappings';
+    candidate.damageElementMappedHitGroupCount = mappedHitGroupCount;
+    candidate.damageElementFieldMappingCount = candidate.hitGroups.reduce(
+      (sum, hitGroup) =>
+        sum + (numberOrNull(hitGroup.damageElementFieldMappingCount) ?? 0),
+      0
+    );
+    candidate.damageElementElementConfigIds = uniqueNumbers(
+      mappedElementConfigIds
+    );
+    candidate.damageElementPathIds = uniqueStrings(mappedPathIds);
+  }
+}
+
+function matchHitGroupDamageElementMappings(hitGroup, mappingBySkillId) {
+  const byPathId = mappingBySkillId.get(Number(hitGroup.skillId));
+  if (!byPathId) {
+    return [];
+  }
+  return uniqueStrings(
+    (hitGroup.elementBaseDataRefs ?? []).map(ref => ref.pathId).filter(Boolean)
+  )
+    .map(pathId => byPathId.get(String(pathId)))
+    .filter(Boolean);
+}
+
+function compactHitDamageElementFieldMapping(mapping) {
+  return {
+    elementConfigId: numberOrNull(mapping.elementConfigId),
+    pathId: mapping.pathId ?? null,
+    elementName: mapping.elementName ?? null,
+    scriptTypeCandidate: compactScriptTypeCandidate(
+      mapping.scriptTypeCandidate
+    ),
+    hpDamage: {
+      status: mapping.hpDamage?.status ?? null,
+      formulaFunctionIds: mapping.hpDamage?.formulaFunctionIds ?? {},
+      formulaFunctionStatus:
+        mapping.hpDamage?.formulaFunctionEvidence?.status ?? null,
+      formulaFunctionMatchedIds:
+        mapping.hpDamage?.formulaFunctionEvidence?.matchedFunctionIds ?? [],
+      rawFormulaParamValues: mapping.hpDamage?.rawFormulaParamValues ?? [],
+      damageFields: mapping.hpDamage?.damageFields ?? {},
+    },
+    toughnessDamage: {
+      status: mapping.toughnessDamage?.status ?? null,
+      weakBreakDamageRate: numberOrNull(
+        mapping.toughnessDamage?.weakBreakDamageRate
+      ),
+      hitType: numberOrNull(mapping.toughnessDamage?.hitType),
+      interruptPriority: numberOrNull(
+        mapping.toughnessDamage?.interruptPriority
+      ),
+      useOneBreak: numberOrNull(mapping.toughnessDamage?.useOneBreak),
+    },
+    selfEnergyChange: {
+      status: mapping.selfEnergyChange?.status ?? null,
+      recoverSP: numberOrNull(mapping.selfEnergyChange?.recoverSP),
+      petRecoverSP: numberOrNull(mapping.selfEnergyChange?.petRecoverSP),
+      recoverInterval: numberOrNull(mapping.selfEnergyChange?.recoverInterval),
+      ownerScope: mapping.selfEnergyChange?.ownerScope ?? null,
+    },
+    skillLevelBridge: {
+      status: mapping.skillLevelBridge?.status ?? null,
+      levelRows: numberOrNull(mapping.skillLevelBridge?.levelRows) ?? 0,
+      parameterIds: mapping.skillLevelBridge?.parameterIds ?? [],
+      varyingParameterIds: mapping.skillLevelBridge?.varyingParameterIds ?? [],
+    },
+    applied: false,
   };
 }
 
@@ -3669,6 +3834,7 @@ async function buildSkillStateTimingEvidence(behaviorChainsByLane, context) {
     await buildEventBridgeTargetSkillControlEvidence(eventBridgeControls, {
       ...context,
       hpStateWindows,
+      sourceHpBehaviorChains: hpChains,
       normalAttackDescriptionEvidence,
     });
 
@@ -3793,6 +3959,7 @@ async function buildEventBridgeTargetSkillControlEvidence(
   const normalAttackHitChainCandidate = buildNormalAttackHitChainCandidate({
     sourceSkillId: context?.sourceSkillId,
     hpStateWindows: context?.hpStateWindows ?? [],
+    sourceHpBehaviorChains: context?.sourceHpBehaviorChains ?? [],
     normalAttackDescriptionEvidence: context?.normalAttackDescriptionEvidence,
     normalAttackChainCandidate,
     targetSkillControls,
@@ -3859,19 +4026,28 @@ async function buildEventBridgeTargetSkillControlSummary(skillId, context) {
 
   const monoBehaviourRoot = path.join(controlDir.fullPath, 'MonoBehaviour');
   const jsonFiles = await listJsonFileNames(monoBehaviourRoot);
+  const monoBehaviourFileIndex = buildMonoBehaviourFileIndex(jsonFiles);
+  const monoBehaviourPayloadCache = new Map();
+  const skillResourceMapEvidence = await buildSkillResourceMapEvidence(
+    { id: Number(skillId) },
+    monoBehaviourRoot,
+    jsonFiles,
+    monoBehaviourPayloadCache
+  );
   const targetEvidence = createEmptyEventBridgeTargetEvidence();
+  const targetBehaviorEvidence = createEmptySkillControlNodeEvidence();
 
   for (const fileName of jsonFiles) {
     try {
-      const text = await fs.readFile(
-        path.join(monoBehaviourRoot, fileName),
-        'utf8'
+      const payload = await readMonoBehaviourPayload(
+        monoBehaviourRoot,
+        fileName,
+        monoBehaviourPayloadCache
       );
-      const json = JSON.parse(text);
       const pathId = extractPathIdFromMonoBehaviourFileName(fileName);
       const behavior = compactMonoBehaviourBehaviorTarget(
-        json,
-        text,
+        payload.json,
+        payload.text,
         fileName,
         pathId,
         null
@@ -3879,8 +4055,18 @@ async function buildEventBridgeTargetSkillControlSummary(skillId, context) {
       collectEventBridgeTargetTopLevelBehavior(targetEvidence, behavior);
       collectEventBridgeTargetTimelineCandidates(
         targetEvidence,
-        json,
+        payload.json,
         fileName
+      );
+      mergeSkillControlNodeEvidence(
+        targetBehaviorEvidence,
+        await extractSkillControlNodeEvidence(payload.json, fileName, {
+          monoBehaviourRoot,
+          monoBehaviourFileIndex,
+          monoBehaviourPayloadCache,
+          skillResourceMapIndex:
+            skillResourceMapEvidence.elementRefsByRoundedPathId,
+        })
       );
       targetEvidence.parsedJsonSampleFiles += 1;
     } catch {
@@ -3903,6 +4089,8 @@ async function buildEventBridgeTargetSkillControlSummary(skillId, context) {
     jsonFileCount: jsonFiles.length,
     parsedJsonSampleFiles: targetEvidence.parsedJsonSampleFiles,
     unreadableJsonSampleFiles: targetEvidence.unreadableJsonSampleFiles,
+    skillResourceMapEvidence: skillResourceMapEvidence.evidence,
+    behaviorReferenceSummary: targetBehaviorEvidence.behaviorReferenceSummary,
     animationStateControlCount: targetEvidence.animationStateControls.length,
     animationStateNames: uniqueStrings(
       targetEvidence.animationStateControls.map(item => item.selectedStateName)
@@ -3918,6 +4106,13 @@ async function buildEventBridgeTargetSkillControlSummary(skillId, context) {
       0,
       SKILL_EFFECT_LANE_SPECIFIC_SAMPLE_LIMIT
     ),
+    hpBehaviorChainCount:
+      targetBehaviorEvidence.behaviorChainsByLane.hpDamage.length,
+    hpBehaviorChains:
+      targetBehaviorEvidence.behaviorChainsByLane.hpDamage.slice(
+        0,
+        SKILL_EFFECT_LANE_SPECIFIC_SAMPLE_LIMIT
+      ),
     timingTimelineCandidateCount:
       targetEvidence.timingTimelineCandidates.length,
     timingTimelineCandidates: targetEvidence.timingTimelineCandidates.slice(
@@ -4163,6 +4358,7 @@ function buildNormalAttackChainCandidate(targetSkillControls) {
 function buildNormalAttackHitChainCandidate({
   sourceSkillId,
   hpStateWindows,
+  sourceHpBehaviorChains,
   normalAttackDescriptionEvidence,
   normalAttackChainCandidate,
   targetSkillControls,
@@ -4181,6 +4377,7 @@ function buildNormalAttackHitChainCandidate({
   const sourceHitGroup = buildSourceNormalAttackHitGroup({
     sourceSkillId,
     hpStateWindows,
+    hpBehaviorChains: sourceHpBehaviorChains ?? [],
   });
 
   if (sourceHitGroup) {
@@ -4245,7 +4442,11 @@ function compareNormalAttackChainControls(left, right) {
   return Number(left.skillId) - Number(right.skillId);
 }
 
-function buildSourceNormalAttackHitGroup({ sourceSkillId, hpStateWindows }) {
+function buildSourceNormalAttackHitGroup({
+  sourceSkillId,
+  hpStateWindows,
+  hpBehaviorChains,
+}) {
   const directWindows = hpStateWindows
     .filter(item => (item.stateNames ?? []).includes('Skill0_1'))
     .sort(compareTimelineCandidates);
@@ -4260,6 +4461,11 @@ function buildSourceNormalAttackHitGroup({ sourceSkillId, hpStateWindows }) {
   if (windows.length === 0) {
     return null;
   }
+  const behaviorChains = selectHitBehaviorChainsForWindows(
+    hpBehaviorChains,
+    windows
+  );
+  const behaviorSummary = summarizeHitBehaviorChains(behaviorChains);
 
   return compactObject({
     hitIndex: 1,
@@ -4281,6 +4487,8 @@ function buildSourceNormalAttackHitGroup({ sourceSkillId, hpStateWindows }) {
     subSkillIds: uniqueNumbers(windows.flatMap(item => item.subSkillIds ?? [])),
     hitEffects: uniqueStrings(windows.flatMap(item => item.hitEffects ?? [])),
     hpTimelineCandidates: windows.map(compactHpStateWindowCandidate),
+    ...behaviorSummary,
+    behaviorChains: behaviorChains.map(compactHitBehaviorChain),
     confidence: 'medium',
     bindingStatus: 'normal-attack-hit-candidate-unconfirmed',
     applied: false,
@@ -4291,7 +4499,11 @@ function buildChildNormalAttackHitGroup({ control, hitIndex }) {
   const hpTimelineCandidates = (control.hpTimelineCandidates ?? [])
     .slice()
     .sort(compareTimelineCandidates);
+  const behaviorChains = (control.hpBehaviorChains ?? [])
+    .slice()
+    .sort(compareTimelineCandidates);
   const candidateCount = numberOrNull(control.hpTimelineCandidateCount) ?? 0;
+  const behaviorSummary = summarizeHitBehaviorChains(behaviorChains);
 
   return compactObject({
     hitIndex,
@@ -4313,9 +4525,102 @@ function buildChildNormalAttackHitGroup({ control, hitIndex }) {
       hpTimelineCandidates.map(item => item.trackName ?? item.name)
     ),
     hpTimelineCandidates: hpTimelineCandidates.map(compactHpTimelineCandidate),
+    ...behaviorSummary,
+    behaviorChains: behaviorChains.map(compactHitBehaviorChain),
     confidence: 'medium',
     bindingStatus: 'normal-attack-hit-candidate-unconfirmed',
     applied: false,
+  });
+}
+
+function selectHitBehaviorChainsForWindows(behaviorChains, windows) {
+  const windowKeys = new Set(
+    windows.map(
+      item =>
+        `${item.sourceName ?? ''}|${item.sourceTrackName ?? ''}|${numberOrNull(item.sourceStartFrame)}`
+    )
+  );
+  return (behaviorChains ?? [])
+    .filter(chain => {
+      const key = `${chain.sourceName ?? ''}|${chain.sourceTrackName ?? ''}|${numberOrNull(chain.sourceStartFrame)}`;
+      if (windowKeys.has(key)) {
+        return true;
+      }
+      const resourceMatches = (chain.resolvedBehaviors ?? []).flatMap(
+        behavior =>
+          (behavior.elementBaseDataRefs ?? []).flatMap(
+            ref => ref.resourceMapMatches ?? []
+          )
+      );
+      return resourceMatches.some(match =>
+        (match.stateNames ?? []).includes('Skill0_1')
+      );
+    })
+    .sort(compareTimelineCandidates);
+}
+
+function summarizeHitBehaviorChains(behaviorChains) {
+  const resolvedBehaviors = (behaviorChains ?? []).flatMap(
+    chain => chain.resolvedBehaviors ?? []
+  );
+  const elementBaseDataRefs = resolvedBehaviors.flatMap(
+    behavior => behavior.elementBaseDataRefs ?? []
+  );
+  const externalElementBaseDataRefs = elementBaseDataRefs.filter(
+    ref => numberOrNull(ref.fileId) !== 0
+  );
+
+  return compactObject({
+    behaviorChainCandidateCount: behaviorChains.length,
+    resolvedBehaviorCount: resolvedBehaviors.length,
+    externalElementBaseRefCount: externalElementBaseDataRefs.length,
+    resourceMapMatchedElementBaseRefCount: externalElementBaseDataRefs.filter(
+      ref => (ref.resourceMapMatchCount ?? 0) > 0
+    ).length,
+    resourceMapUnmatchedElementBaseRefCount: externalElementBaseDataRefs.filter(
+      ref => (ref.resourceMapMatchCount ?? 0) === 0
+    ).length,
+    elementBaseDataRefs: uniqueByKey(
+      externalElementBaseDataRefs.map(compactHitElementBaseDataRef),
+      ref => `${ref.fileId}|${ref.pathId}`
+    ),
+  });
+}
+
+function compactHitElementBaseDataRef(ref) {
+  return compactObject({
+    fileId: numberOrNull(ref.fileId),
+    pathId: ref.pathId ?? null,
+    roundedPathId: ref.roundedPathId ?? null,
+    status: ref.status ?? null,
+    resourceMapMatchCount: numberOrNull(ref.resourceMapMatchCount) ?? 0,
+    resourceMapMatches: ref.resourceMapMatches ?? [],
+  });
+}
+
+function compactHitBehaviorChain(chain) {
+  return compactObject({
+    sourceName: chain.sourceName ?? null,
+    sourceTrackName: chain.sourceTrackName ?? null,
+    sourceStartFrame: numberOrNull(chain.sourceStartFrame),
+    sourceEndFrame: numberOrNull(chain.sourceEndFrame),
+    resolvedBehaviorCount: (chain.resolvedBehaviors ?? []).length,
+    behaviorRefs: (chain.behaviorRefs ?? []).slice(0, 3),
+    resolvedBehaviors: (chain.resolvedBehaviors ?? [])
+      .slice(0, 3)
+      .map(behavior =>
+        compactObject({
+          pathId: behavior.pathId ?? null,
+          scriptTypeCandidate: compactScriptTypeCandidate(
+            behavior.scriptTypeCandidate
+          ),
+          startFrame: numberOrNull(behavior.startFrame),
+          frameCount: numberOrNull(behavior.frameCount),
+          elementBaseDataRefs: (behavior.elementBaseDataRefs ?? [])
+            .slice(0, 6)
+            .map(compactHitElementBaseDataRef),
+        })
+      ),
   });
 }
 

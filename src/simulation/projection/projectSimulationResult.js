@@ -830,6 +830,15 @@ function compactNormalAttackHitChainCandidate(candidate) {
     hpTimelineCandidateCount:
       numberOrNull(candidate.hpTimelineCandidateCount) ?? 0,
     hpTrackNames: candidate.hpTrackNames ?? [],
+    damageElementFieldMappingStatus:
+      candidate.damageElementFieldMappingStatus ?? null,
+    damageElementMappedHitGroupCount:
+      numberOrNull(candidate.damageElementMappedHitGroupCount) ?? 0,
+    damageElementFieldMappingCount:
+      numberOrNull(candidate.damageElementFieldMappingCount) ?? 0,
+    damageElementElementConfigIds:
+      candidate.damageElementElementConfigIds ?? [],
+    damageElementPathIds: candidate.damageElementPathIds ?? [],
     hitGroups: (candidate.hitGroups ?? []).slice(0, 6).map(group => ({
       hitIndex: numberOrNull(group.hitIndex),
       label: group.label ?? null,
@@ -845,6 +854,27 @@ function compactNormalAttackHitChainCandidate(candidate) {
       hpTrackNames: group.hpTrackNames ?? [],
       subSkillIds: group.subSkillIds ?? [],
       hitEffects: group.hitEffects ?? [],
+      behaviorChainCandidateCount:
+        numberOrNull(group.behaviorChainCandidateCount) ?? 0,
+      resolvedBehaviorCount: numberOrNull(group.resolvedBehaviorCount) ?? 0,
+      externalElementBaseRefCount:
+        numberOrNull(group.externalElementBaseRefCount) ?? 0,
+      resourceMapMatchedElementBaseRefCount:
+        numberOrNull(group.resourceMapMatchedElementBaseRefCount) ?? 0,
+      resourceMapUnmatchedElementBaseRefCount:
+        numberOrNull(group.resourceMapUnmatchedElementBaseRefCount) ?? 0,
+      elementBaseDataRefs: (group.elementBaseDataRefs ?? [])
+        .slice(0, 12)
+        .map(compactNormalAttackHitElementBaseDataRef),
+      damageElementFieldMappingStatus:
+        group.damageElementFieldMappingStatus ?? null,
+      damageElementFieldMappingCount:
+        numberOrNull(group.damageElementFieldMappingCount) ?? 0,
+      damageElementElementConfigIds: group.damageElementElementConfigIds ?? [],
+      damageElementPathIds: group.damageElementPathIds ?? [],
+      damageElementFieldMappings: (group.damageElementFieldMappings ?? [])
+        .slice(0, 6)
+        .map(compactNormalAttackHitDamageElementFieldMapping),
       confidence: group.confidence ?? null,
       bindingStatus: group.bindingStatus ?? null,
       hpTimelineCandidates: (group.hpTimelineCandidates ?? [])
@@ -860,6 +890,74 @@ function compactNormalAttackHitChainCandidate(candidate) {
         })),
       applied: false,
     })),
+    applied: false,
+  };
+}
+
+function compactNormalAttackHitElementBaseDataRef(ref) {
+  return {
+    fileId: numberOrNull(ref.fileId),
+    pathId: ref.pathId ?? null,
+    roundedPathId: ref.roundedPathId ?? null,
+    status: ref.status ?? null,
+    resourceMapMatchCount: numberOrNull(ref.resourceMapMatchCount) ?? 0,
+    resourceMapMatches: (ref.resourceMapMatches ?? [])
+      .slice(0, 3)
+      .map(match => ({
+        stateNames: match.stateNames ?? [],
+        subSkillIds: match.subSkillIds ?? [],
+        hitEffects: match.hitEffects ?? [],
+      })),
+  };
+}
+
+function compactNormalAttackHitDamageElementFieldMapping(mapping) {
+  return {
+    elementConfigId: numberOrNull(mapping.elementConfigId),
+    pathId: mapping.pathId ?? null,
+    elementName: mapping.elementName ?? null,
+    scriptTypeCandidate: mapping.scriptTypeCandidate
+      ? {
+          status: mapping.scriptTypeCandidate.status,
+          confidence: mapping.scriptTypeCandidate.confidence,
+          className: mapping.scriptTypeCandidate.className,
+        }
+      : null,
+    hpDamage: {
+      status: mapping.hpDamage?.status ?? null,
+      formulaFunctionIds: mapping.hpDamage?.formulaFunctionIds ?? {},
+      formulaFunctionStatus: mapping.hpDamage?.formulaFunctionStatus ?? null,
+      formulaFunctionMatchedIds:
+        mapping.hpDamage?.formulaFunctionMatchedIds ?? [],
+      rawFormulaParamValues: mapping.hpDamage?.rawFormulaParamValues ?? [],
+      damageFields: compactDamageFieldPatternValues(
+        mapping.hpDamage?.damageFields
+      ),
+    },
+    toughnessDamage: {
+      status: mapping.toughnessDamage?.status ?? null,
+      weakBreakDamageRate: numberOrNull(
+        mapping.toughnessDamage?.weakBreakDamageRate
+      ),
+      hitType: numberOrNull(mapping.toughnessDamage?.hitType),
+      interruptPriority: numberOrNull(
+        mapping.toughnessDamage?.interruptPriority
+      ),
+      useOneBreak: numberOrNull(mapping.toughnessDamage?.useOneBreak),
+    },
+    selfEnergyChange: {
+      status: mapping.selfEnergyChange?.status ?? null,
+      recoverSP: numberOrNull(mapping.selfEnergyChange?.recoverSP),
+      petRecoverSP: numberOrNull(mapping.selfEnergyChange?.petRecoverSP),
+      recoverInterval: numberOrNull(mapping.selfEnergyChange?.recoverInterval),
+      ownerScope: mapping.selfEnergyChange?.ownerScope ?? null,
+    },
+    skillLevelBridge: {
+      status: mapping.skillLevelBridge?.status ?? null,
+      levelRows: numberOrNull(mapping.skillLevelBridge?.levelRows) ?? 0,
+      parameterIds: mapping.skillLevelBridge?.parameterIds ?? [],
+      varyingParameterIds: mapping.skillLevelBridge?.varyingParameterIds ?? [],
+    },
     applied: false,
   };
 }

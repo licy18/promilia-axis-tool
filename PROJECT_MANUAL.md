@@ -2852,6 +2852,47 @@ Workbench 当前默认样本显示：
 - 阶段 5-8Z 目标：把 `normalAttackHitChainCandidate.hitGroups[]` 继续向下解析到每 hit 的 `behaviorList -> elementBaseDatas -> TDamageElementParams`，为普通攻击每 hit 的 HP、削韧、充能三值公式候选建立可追踪来源。
 - 优先从 `10900102-10900105` 的 HP timeline candidate 追本地 behavior 引用和外部 element 对象，而不是直接沿用主 skill_control 的 raw HP 投影。
 
+### 2026-07-08：阶段 5-8Z 普攻每 hit 三值字段候选
+
+本轮完成：
+
+- `eventBridgeTargetSkillControlEvidence.targetSkillControls[]` 的目标 skill_control 摘要新增 `skillResourceMapEvidence`、`behaviorReferenceSummary` 和 `hpBehaviorChains`，第 2-5 段不再只停留在 HP timeline 名称/帧窗。
+- `normalAttackHitChainCandidate.hitGroups[]` 新增每段行为链摘要、外部 `elementBaseDataRefs`、`TDamageElementParams` 字段映射摘要。
+- `externalElementObjectEvidence` / `damageElementFieldMappingEvidence` 的解析范围从源技能扩展到 EventBridge 普攻子 skill_control。
+- `compactEventBridgeTargetSkillControlEvidence()` 保留每段 hit 的行为链/三值字段压缩摘要，Workbench 普攻链提示新增三值候选覆盖数。
+
+当前末音 `10900101` 普通攻击 5 段三值字段候选：
+
+- 覆盖状态：`damageElementFieldMappingStatus = all-hit-groups-have-damage-element-field-mappings`。
+- 覆盖段数：`damageElementMappedHitGroupCount = 5 / candidateHitGroupCount = 5`。
+- 三值字段映射总数：12 个 `TDamageElementParams`。
+- 第 1 段：2 条行为链、4 个外部 element 引用、2 个 damage element：`109001081 / 109001306`。
+- 第 2 段：4 条行为链、9 个外部 element 引用、2 个 damage element：`109001018 / 109001137`。
+- 第 3 段：9 条行为链、19 个外部 element 引用、2 个 damage element：`109001134 / 109001280`。
+- 第 4 段：7 条行为链、16 个外部 element 引用、3 个 damage element：`109001021 / 109001135 / 109001328`。
+- 第 5 段：10 条行为链、18 个外部 element 引用、3 个 damage element：`109001117 / 109001285 / 109001313`。
+
+Workbench 当前默认样本显示：
+
+```text
+候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 12f/13f/16f/19f · Skill0_6/Skill0_1 · 绑定候选 普攻->Skill0_1 12f/13f · 状态证据 Skill0_1 动画+命中 / Skill0_6 动画+命中 · 普攻链 10900102->Skill0_2 / 10900103->Skill0_3 / +2 · 命中候选 5/5段 · 三值候选 5/5段 · 目标缺失 80102
+```
+
+验收结果：
+
+- `npm test -- --run src/__tests__/data/azprGenerated.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、53 条测试通过。
+
+当前边界：
+
+- `normalAttackHitChainCandidate`、`hitGroups[]` 和 `damageElementFieldMappings[]` 仍全部是 `applied: false` 的候选证据。
+- 当前只确认“每段 hit 可追到哪些三值字段候选”，尚未确认 DamageElement 执行顺序、同段多候选的组合方式、每 hit 倍率分配、最终伤害/削韧/充能公式和敌人防御/抗性应用顺序。
+- `externalElementObjectEvidence` 当前解析到 6 个技能、43 个 external element PathID；这是候选范围扩展，不代表所有技能都已完成公式应用。
+
+下一步：
+
+- 阶段 5-8AA 目标：把普通攻击每段 `damageElementFieldMappings[]` 接入每动作三值曲线的“未应用 per-hit 增量预览”，让 HP、韧性、能量三条曲线能按 60fps 帧点显示候选变化。
+- 优先输出 `actionResultTimeline[].hitCandidates[]` 或等价字段，按 hitGroup 保留帧点、elementId、HP 公式函数、削韧字段、充能字段和未确认原因；最终数值仍保持 raw/占位，直到公式组合顺序确认。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

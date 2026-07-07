@@ -3634,3 +3634,73 @@ Workbench 候选模式摘要会追加动作绑定提示：
 - 所有 `normalAttackHitChainCandidate` 与 `hitGroups[]` 仍为 `applied: false`。
 - 第 1 段来自主 skill_control 的 HP state window，已带 `subSkillId` 和 hitEffect；第 2-5 段目前来自目标 skill_control HP timeline，尚未解析到 `behaviorList`、`elementBaseDatas` 或 `TDamageElementParams`。
 - 下一阶段应把第 2-5 段也解析到外部 element 对象和 HP/削韧/充能三值字段。
+
+## 53. 阶段 5-8Z：normalAttackHitChainCandidate 每 hit 三值字段候选
+
+阶段 5-8Z 把普通攻击 5 段 hitGroup 继续向下解析到行为链、外部 element 引用和 `TDamageElementParams` 字段映射。该字段仍是 evidence，不是最终公式输入。
+
+### 53.1 targetSkillControls[] 扩展
+
+`eventBridgeTargetSkillControlEvidence.targetSkillControls[]` 新增：
+
+- `skillResourceMapEvidence`：目标 skill_control 的 `skillResourceMaps[].elements` 归属证据。
+- `behaviorReferenceSummary`：目标 skill_control 的 `behaviorList` 解引用摘要。
+- `hpBehaviorChainCount` / `hpBehaviorChains`：目标 skill_control 的 HP 行为链样本。
+
+### 53.2 hitGroups[] 扩展
+
+`normalAttackHitChainCandidate.hitGroups[]` 新增：
+
+- `behaviorChainCandidateCount`
+- `resolvedBehaviorCount`
+- `externalElementBaseRefCount`
+- `resourceMapMatchedElementBaseRefCount`
+- `resourceMapUnmatchedElementBaseRefCount`
+- `elementBaseDataRefs[]`
+- `damageElementFieldMappingStatus`
+- `damageElementFieldMappingCount`
+- `damageElementElementConfigIds[]`
+- `damageElementPathIds[]`
+- `damageElementFieldMappings[]`
+
+### 53.3 候选级汇总
+
+`normalAttackHitChainCandidate` 新增：
+
+```javascript
+{
+  "damageElementFieldMappingStatus": "all-hit-groups-have-damage-element-field-mappings",
+  "damageElementMappedHitGroupCount": 5,
+  "damageElementFieldMappingCount": 12,
+  "damageElementElementConfigIds": [
+    109001018,
+    109001021,
+    109001081,
+    109001117,
+    109001134,
+    109001135,
+    109001137,
+    109001280,
+    109001285,
+    109001306,
+    109001313,
+    109001328
+  ],
+  "applied": false
+}
+```
+
+### 53.4 projection / Workbench
+
+- `compactNormalAttackHitChainCandidate()` 保留候选级和 hitGroup 级三值字段摘要。
+- Workbench 普攻链摘要新增：
+
+```text
+三值候选 5/5段
+```
+
+### 53.5 当前边界
+
+- `damageElementFieldMappings[].applied` 必须保持 `false`。
+- 这些字段只说明每段 hit 可以追到哪些 HP、削韧、自身能量候选字段；不能直接推导最终伤害、削韧或充能数值。
+- 下一阶段应把这些候选接入 per-hit 三曲线预览，并继续显式记录未确认的公式组合顺序和执行条件。

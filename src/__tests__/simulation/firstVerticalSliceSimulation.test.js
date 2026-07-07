@@ -673,6 +673,10 @@ describe('first vertical slice simulation', () => {
                 candidateHitGroupCount: 5,
                 coverageStatus: 'matches-description-hit-count',
                 hpTimelineCandidateCount: 32,
+                damageElementFieldMappingStatus:
+                  'all-hit-groups-have-damage-element-field-mappings',
+                damageElementMappedHitGroupCount: 5,
+                damageElementFieldMappingCount: 12,
                 hitGroups: [
                   expect.objectContaining({
                     hitIndex: 1,
@@ -680,30 +684,43 @@ describe('first vertical slice simulation', () => {
                     animationStateNames: ['Skill0_1'],
                     hpTimelineCandidateCount: 2,
                     hpFrameStartFrames: [12, 13],
+                    behaviorChainCandidateCount: 2,
+                    resolvedBehaviorCount: 2,
+                    resourceMapMatchedElementBaseRefCount: 4,
+                    damageElementFieldMappingCount: 2,
+                    damageElementElementConfigIds: [109001081, 109001306],
                   }),
                   expect.objectContaining({
                     hitIndex: 2,
                     skillId: 10900102,
                     animationStateNames: ['Skill0_2'],
                     hpTimelineCandidateCount: 4,
+                    behaviorChainCandidateCount: 4,
+                    damageElementFieldMappingCount: 2,
                   }),
                   expect.objectContaining({
                     hitIndex: 3,
                     skillId: 10900103,
                     animationStateNames: ['Skill0_3'],
                     hpTimelineCandidateCount: 9,
+                    behaviorChainCandidateCount: 9,
+                    damageElementFieldMappingCount: 2,
                   }),
                   expect.objectContaining({
                     hitIndex: 4,
                     skillId: 10900104,
                     animationStateNames: ['Skill0_4'],
                     hpTimelineCandidateCount: 7,
+                    behaviorChainCandidateCount: 7,
+                    damageElementFieldMappingCount: 3,
                   }),
                   expect.objectContaining({
                     hitIndex: 5,
                     skillId: 10900105,
                     animationStateNames: ['Skill0_5'],
                     hpTimelineCandidateCount: 10,
+                    behaviorChainCandidateCount: 10,
+                    damageElementFieldMappingCount: 3,
                   }),
                 ],
               }),
@@ -1032,6 +1049,10 @@ describe('first vertical slice simulation', () => {
                 candidateHitGroupCount: 5,
                 coverageStatus: 'matches-description-hit-count',
                 hpTimelineCandidateCount: 32,
+                damageElementFieldMappingStatus:
+                  'all-hit-groups-have-damage-element-field-mappings',
+                damageElementMappedHitGroupCount: 5,
+                damageElementFieldMappingCount: 12,
               }),
               targetSkillControls: [
                 expect.objectContaining({

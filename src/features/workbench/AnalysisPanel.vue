@@ -529,7 +529,12 @@ function formatEventBridgeTargetSummary(evidence) {
     const hitText = hitChain
       ? ` · 命中候选 ${hitChain.candidateHitGroupCount}/${hitChain.expectedHitCount ?? '?'}段`
       : '';
-    return ` · 普攻链 ${chainText.join(' / ')}${hitText}${missingText}`;
+    const damageElementText =
+      hitChain &&
+      Number.isFinite(Number(hitChain.damageElementMappedHitGroupCount))
+        ? ` · 三值候选 ${hitChain.damageElementMappedHitGroupCount}/${hitChain.candidateHitGroupCount}段`
+        : '';
+    return ` · 普攻链 ${chainText.join(' / ')}${hitText}${damageElementText}${missingText}`;
   }
 
   const targets = (evidence?.targetSkillControls ?? [])
