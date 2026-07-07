@@ -2441,6 +2441,38 @@ Endaxis 参考边界：
 - UI 只显示未应用公式候选，例如 `f1 G/10000 / f2 self.ATK*A/10000`，并继续保持 raw HP、削韧和充能数值不变。
 - 随后再进入公式执行层验证：确认 `DamageElement` 如何组合 `function_1/function_2`、如何使用 `valueParam` 覆盖 A 槽，以及如何叠加敌方防御/抗性。
 
+### 2026-07-08：阶段 5-8R 公式函数候选接入动作结果与 Workbench
+
+本轮完成：
+
+- `src/simulation/projection/projectSimulationResult.js` 在 compact HP 候选中保留 `formulaFunctionEvidence`。
+- `actionResultTimeline[].hpDamage.sourceEvidence` 新增 `formulaFunctionSummary`，按当前动作桥接到的 damage element 汇总 `function_1/function_2`。
+- 当前末音 `10900101` 的动作 source 可显示：
+  - `function_1 = 1`、`G/10000`、变量 `G`、槽位 7、候选值 `10000`、候选 element `109001081 / 109001306`。
+  - `function_2 = 2`、`(self.ATK[0]*A)/10000`、变量 `A`、槽位 1、候选值 `1000`、候选 element `109001081 / 109001306`。
+- Workbench 分析面板“三值来源”新增公式函数候选行，当前显示 `公式函数候选 f1 G/10000 / f2 self.ATK[0]*A/10000`。
+- 该 UI 仍是未应用证据展示；`hpDamage.value` 继续使用现有 raw HP 投影，削韧和充能仍保持独立未映射占位。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `node --check src/simulation/projection/projectSimulationResult.js`：通过。
+- `npx eslint src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过；当前 ESLint 配置会忽略 Vue 文件并给出提示。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1397 KB。
+
+当前边界：
+
+- `formulaFunctionSummary` 是动作级轻量摘要，不证明 `DamageElement` 已按该公式计算最终伤害。
+- 当前还未确认 `function_1/function_2` 是相乘、相加、主/兜底函数，还是运行时前后处理步骤。
+- 当前也未确认 A 槽应使用 `formulaParamValues[0] = 1000`、技能等级 `valueParam` 的 `1600 -> 3360`，还是二者存在覆盖/回退规则。
+
+下一步：
+
+- 阶段 5-8S 目标：建立未应用公式候选数值预览与差异诊断。
+- 以 `self.ATK[0]`、A/G 槽候选和当前技能等级 `valueParam` 为输入，生成不参与最终数值的 `formulaCandidatePreview`，对比现有 `skill_level` 描述倍率 raw HP 投影。
+- 若候选预览与描述倍率差距明显，继续追 IL2CPP `DamageElement` 对 `function_1/function_2` 的组合顺序、等级覆盖规则和命中段拆分。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

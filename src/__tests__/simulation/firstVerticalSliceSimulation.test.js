@@ -286,10 +286,82 @@ describe('first vertical slice simulation', () => {
               candidateCount: 2,
             }),
           ],
+          formulaFunctionSummary: [
+            expect.objectContaining({
+              field: 'function_1',
+              functionId: 1,
+              status: 'element_formula-row-found',
+              relationStatus:
+                'function-id-matches-element_formula-id-candidate',
+              functionOutput: 'G/10000',
+              variables: ['G'],
+              candidateElementConfigIds: [109001081, 109001306],
+              candidateCount: 2,
+              applied: false,
+              variableInputs: [
+                {
+                  variable: 'G',
+                  paramId: 7,
+                  formulaParamSlot: 7,
+                  formulaParamValue: 10000,
+                  slotStatus: 'formula-param-slot-found',
+                  candidateCount: 2,
+                },
+              ],
+            }),
+            expect.objectContaining({
+              field: 'function_2',
+              functionId: 2,
+              status: 'element_formula-row-found',
+              relationStatus:
+                'function-id-matches-element_formula-id-candidate',
+              functionOutput: '(self.ATK[0]*A)/10000',
+              variables: ['A'],
+              candidateElementConfigIds: [109001081, 109001306],
+              candidateCount: 2,
+              applied: false,
+              variableInputs: [
+                {
+                  variable: 'A',
+                  paramId: 1,
+                  formulaParamSlot: 1,
+                  formulaParamValue: 1000,
+                  slotStatus: 'formula-param-slot-found',
+                  candidateCount: 2,
+                },
+              ],
+            }),
+          ],
           candidates: expect.arrayContaining([
             expect.objectContaining({
               elementConfigId: 109001081,
               fieldCandidate: expect.objectContaining({
+                formulaFunctionEvidence: expect.objectContaining({
+                  status: 'direct-element-formula-id-candidates-found',
+                  relationStatus:
+                    'function-id-matches-element_formula-id-candidate',
+                  applied: false,
+                  functionRefs: expect.arrayContaining([
+                    expect.objectContaining({
+                      field: 'function_1',
+                      functionId: 1,
+                      elementFormulaRow: {
+                        id: 1,
+                        functionOutput: 'G/10000',
+                        variables: ['G'],
+                      },
+                    }),
+                    expect.objectContaining({
+                      field: 'function_2',
+                      functionId: 2,
+                      elementFormulaRow: {
+                        id: 2,
+                        functionOutput: '(self.ATK[0]*A)/10000',
+                        variables: ['A'],
+                      },
+                    }),
+                  ]),
+                }),
                 formulaSlotCandidates: expect.arrayContaining([
                   expect.objectContaining({
                     slot: 2,

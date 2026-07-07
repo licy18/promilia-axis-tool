@@ -51,6 +51,9 @@
           <small v-if="formatFormulaSlotAlignment(entry.hpDamage?.sourceEvidence)">
             {{ formatFormulaSlotAlignment(entry.hpDamage?.sourceEvidence) }}
           </small>
+          <small v-if="formatFormulaFunctionSummary(entry.hpDamage?.sourceEvidence)">
+            {{ formatFormulaFunctionSummary(entry.hpDamage?.sourceEvidence) }}
+          </small>
         </div>
         <strong>{{ formatActionResultValues(entry) }}</strong>
       </div>
@@ -212,6 +215,40 @@ function formatFormulaSlotSummary(summary) {
     return `${variable} 常量匹配 ${formatNumber(summary.formulaParamValue)}`;
   }
   return `${variable} ${summary.relationStatus}`;
+}
+
+function formatFormulaFunctionSummary(sourceEvidence) {
+  const summaries = sourceEvidence?.formulaFunctionSummary ?? [];
+  if (summaries.length === 0) {
+    return '';
+  }
+
+  return `公式函数候选 ${summaries.map(formatFormulaFunctionRef).join(' / ')}`;
+}
+
+function formatFormulaFunctionRef(summary) {
+  const label =
+    summary.field === 'function_1'
+      ? 'f1'
+      : summary.field === 'function_2'
+        ? 'f2'
+        : summary.field;
+  const output = trimFormulaParentheses(
+    summary.functionOutput ?? `#${summary.functionId}`
+  );
+  return `${label} ${output}`;
+}
+
+function trimFormulaParentheses(value) {
+  const text = String(value ?? '').trim();
+  const parenthesizedNumerator = text.match(/^\(([^()]+)\)(\/.+)$/);
+  if (parenthesizedNumerator) {
+    return `${parenthesizedNumerator[1]}${parenthesizedNumerator[2]}`;
+  }
+  if (text.startsWith('(') && text.endsWith(')')) {
+    return text.slice(1, -1);
+  }
+  return text;
 }
 
 function formatElementIds(ids = []) {

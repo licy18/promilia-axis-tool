@@ -242,7 +242,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8O，新增 `formulaParamAlignment.parameterSummaries`，确认末音 `109001081 / 109001306` 的参数 `1 / A` 是 1-12 级线性增长的等级覆盖候选，参数 `7 / G` 是 1-12 级恒定的同槽直连匹配；这些仍是公式槽位关系证据，不是最终公式应用。
 - 已完成：阶段 5-8P，把 `formulaParamAlignment.parameterSummaries` 接入 `actionResultTimeline[].sourceEvidence`，并在 Workbench 三值来源中展示未应用公式候选；当前显示 `A 覆盖候选 1,600-3,360 / G 常量匹配 10,000`，但不改变 raw HP、削韧或充能数值。
 - 已完成：阶段 5-8Q，新增 `hpDamage.formulaFunctionEvidence`，确认末音 `10900101` 的 3 个 `TDamageElementParams` 合计 6 条 `function_1/function_2` 引用全部候选命中 `element_formula.id`：`1 -> G/10000`、`2 -> (self.ATK[0]*A)/10000`；同时记录 `FormulaParams`、`DamageElement`、`BattleConfigManager.elementFormulaConfig` 等 IL2CPP 锚点，但仍不应用最终公式。
-- 下一步：阶段 5-8R，把 `formulaFunctionEvidence` 接入 `actionResultTimeline[].hpDamage.sourceEvidence` 和 Workbench 三值来源展示，只显示未应用公式函数候选，不改变 raw HP、削韧或充能数值。
+- 已完成：阶段 5-8R，把 `formulaFunctionEvidence` 接入 `actionResultTimeline[].hpDamage.sourceEvidence.formulaFunctionSummary` 和 Workbench 三值来源展示；当前显示 `公式函数候选 f1 G/10000 / f2 self.ATK[0]*A/10000`，仍不改变 raw HP、削韧或充能数值。
+- 下一步：阶段 5-8S，建立未应用公式候选数值预览与差异诊断，对比 `element_formula` 候选、A/G 槽位、角色攻击和现有 `skill_level` 描述倍率 raw HP 投影，再继续追 `DamageElement` 的真实 function 组合顺序。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

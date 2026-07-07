@@ -2769,3 +2769,83 @@ Workbench 分析面板三值来源当前会显示：
 - 当前只确认 `function_1 = 1 -> G/10000`、`function_2 = 2 -> (self.ATK[0]*A)/10000` 的候选直连。
 - 还未确认 `function_1/function_2` 是加法、乘法、兜底/主公式、前后处理，还是其他运行时分支。
 - 下一阶段应把该证据接入动作级 `sourceEvidence` 和 Workbench 展示层，继续保持不参与数值计算。
+
+## 43. 2026-07-08 actionResultTimeline 公式函数 sourceEvidence 摘要
+
+阶段 5-8R 把 `hpDamage.formulaFunctionEvidence` 接入动作级 `sourceEvidence`，并在 Workbench 三值来源里显示未应用公式函数候选。
+
+### 43.1 sourceEvidence.formulaFunctionSummary
+
+`actionResultTimeline[].hpDamage.sourceEvidence` 新增：
+
+```javascript
+{
+  "formulaFunctionSummary": [
+    {
+      "field": "function_1",
+      "functionId": 1,
+      "status": "element_formula-row-found",
+      "relationStatus": "function-id-matches-element_formula-id-candidate",
+      "functionOutput": "G/10000",
+      "variables": ["G"],
+      "variableInputs": [
+        {
+          "variable": "G",
+          "paramId": 7,
+          "formulaParamSlot": 7,
+          "formulaParamValue": 10000,
+          "slotStatus": "formula-param-slot-found",
+          "candidateCount": 2
+        }
+      ],
+      "candidateElementConfigIds": [109001081, 109001306],
+      "candidateCount": 2,
+      "applied": false
+    },
+    {
+      "field": "function_2",
+      "functionId": 2,
+      "functionOutput": "(self.ATK[0]*A)/10000",
+      "variables": ["A"],
+      "variableInputs": [
+        {
+          "variable": "A",
+          "paramId": 1,
+          "formulaParamSlot": 1,
+          "formulaParamValue": 1000,
+          "slotStatus": "formula-param-slot-found",
+          "candidateCount": 2
+        }
+      ],
+      "candidateElementConfigIds": [109001081, 109001306],
+      "candidateCount": 2,
+      "applied": false
+    }
+  ]
+}
+```
+
+含义：
+
+- `field`：来自 `TDamageElementParams.formulaParams.function_1/function_2`。
+- `functionOutput`：对应 `element_formula.id = functionId` 的公式输出文本。
+- `variableInputs`：将公式变量按 A=1、G=7 等约定映射回 `formulaParamValues` 槽位。
+- `candidateElementConfigIds` / `candidateCount`：当前动作桥接到多少个候选 damage element 支持同一条公式函数关系。
+- `applied`：必须为 `false`，表示只展示证据，不参与数值。
+
+### 43.2 candidates[].fieldCandidate.formulaFunctionEvidence
+
+`sourceEvidence.candidates[].fieldCandidate` 会保留 compact `formulaFunctionEvidence`，用于从动作结果反查单个候选 element 的 functionId、公式行和变量槽位。
+
+### 43.3 Workbench 展示
+
+Workbench 分析面板三值来源当前会显示：
+
+```text
+公式函数候选 f1 G/10000 / f2 self.ATK[0]*A/10000
+```
+
+### 43.4 当前边界
+
+- 该摘要只是动作级证据视图，不改变 `hpDamage.value`。
+- 下一阶段需要把候选公式做成未应用数值预览，并与 `skill_level` 描述倍率 raw HP 投影做差异诊断。

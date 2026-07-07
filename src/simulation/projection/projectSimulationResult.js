@@ -489,6 +489,9 @@ function compactDamageElementMapping(mapping) {
       ? {
           status: mapping.hpDamage.status,
           formulaFunctionIds: mapping.hpDamage.formulaFunctionIds,
+          formulaFunctionEvidence: compactFormulaFunctionEvidence(
+            mapping.hpDamage.formulaFunctionEvidence
+          ),
           formulaSlotCandidates: mapping.hpDamage.formulaSlotCandidates,
           damageFields: mapping.hpDamage.damageFields,
         }
@@ -569,8 +572,45 @@ function createDamageElementChainSource(damageElementSource, chainKey) {
     bridgeMatchedLevelRows: damageElementSource.bridgeMatchedLevelRows ?? 0,
     formulaSlotAlignmentSummary:
       createFormulaSlotAlignmentSummary(candidates),
+    formulaFunctionSummary:
+      chainKey === 'hpDamage' ? createFormulaFunctionSummary(candidates) : [],
     candidates,
     note: damageElementSource.note,
+  };
+}
+
+function compactFormulaFunctionEvidence(evidence) {
+  if (!evidence) {
+    return null;
+  }
+
+  return {
+    status: evidence.status ?? 'unknown',
+    relationStatus: evidence.relationStatus ?? 'unknown',
+    applied: evidence.applied === true,
+    matchedFunctionIds: evidence.matchedFunctionIds ?? [],
+    unmatchedFunctionIds: evidence.unmatchedFunctionIds ?? [],
+    functionRefs: (evidence.functionRefs ?? []).map(ref => ({
+      field: ref.field,
+      functionId: ref.functionId,
+      status: ref.status,
+      relationStatus: ref.relationStatus,
+      elementFormulaRow: ref.elementFormulaRow
+        ? {
+            id: ref.elementFormulaRow.id,
+            functionOutput: ref.elementFormulaRow.functionOutput,
+            variables: ref.elementFormulaRow.variables ?? [],
+          }
+        : null,
+      variableInputs: (ref.variableInputs ?? []).map(input => ({
+        variable: input.variable,
+        paramId: input.paramId,
+        formulaParamSlot: input.formulaParamSlot,
+        formulaParamValue: input.formulaParamValue,
+        slotStatus: input.slotStatus,
+      })),
+      applied: ref.applied === true,
+    })),
   };
 }
 
@@ -627,6 +667,90 @@ function createFormulaSlotAlignmentSummary(candidates) {
   return [...byParam.values()].sort(
     (left, right) => Number(left.id) - Number(right.id)
   );
+}
+
+function createFormulaFunctionSummary(candidates) {
+  const refs = candidates.flatMap(candidate =>
+    (candidate.fieldCandidate?.formulaFunctionEvidence?.functionRefs ?? []).map(
+      ref => ({
+        ...ref,
+        elementConfigId: candidate.elementConfigId,
+      })
+    )
+  );
+  const byRef = new Map();
+
+  for (const ref of refs) {
+    const key = [
+      ref.field,
+      ref.functionId,
+      ref.elementFormulaRow?.functionOutput ?? '',
+    ].join(':');
+    if (!byRef.has(key)) {
+      byRef.set(key, {
+        field: ref.field,
+        functionId: ref.functionId,
+        status: ref.status,
+        relationStatus: ref.relationStatus,
+        functionOutput: ref.elementFormulaRow?.functionOutput ?? null,
+        variables: ref.elementFormulaRow?.variables ?? [],
+        variableInputs: [],
+        candidateElementConfigIds: [],
+        candidateCount: 0,
+        applied: false,
+      });
+    }
+
+    const summary = byRef.get(key);
+    summary.candidateCount += 1;
+    summary.candidateElementConfigIds.push(ref.elementConfigId);
+    summary.variableInputs = mergeFormulaFunctionVariableInputs(
+      summary.variableInputs,
+      ref.variableInputs ?? []
+    );
+  }
+
+  return [...byRef.values()]
+    .map(summary => ({
+      ...summary,
+      candidateElementConfigIds: uniqueNumbers(
+        summary.candidateElementConfigIds
+      ),
+      variableInputs: summary.variableInputs.sort(
+        (left, right) => Number(left.paramId) - Number(right.paramId)
+      ),
+    }))
+    .sort(
+      (left, right) =>
+        Number(left.functionId) - Number(right.functionId) ||
+        String(left.field).localeCompare(String(right.field))
+    );
+}
+
+function mergeFormulaFunctionVariableInputs(existingInputs, nextInputs) {
+  const byVariable = new Map(
+    existingInputs.map(input => [
+      `${input.variable}:${input.paramId}:${input.formulaParamValue}`,
+      { ...input },
+    ])
+  );
+
+  for (const input of nextInputs) {
+    const key = `${input.variable}:${input.paramId}:${input.formulaParamValue}`;
+    if (!byVariable.has(key)) {
+      byVariable.set(key, {
+        variable: input.variable,
+        paramId: input.paramId,
+        formulaParamSlot: input.formulaParamSlot,
+        formulaParamValue: input.formulaParamValue,
+        slotStatus: input.slotStatus,
+        candidateCount: 0,
+      });
+    }
+    byVariable.get(key).candidateCount += 1;
+  }
+
+  return [...byVariable.values()];
 }
 
 function attachDamageElementSourceToHpBreakdown(
