@@ -115,9 +115,76 @@
           :data-skill-id="skill.id"
           :disabled="getSkillSegmentCount(skill) <= 1"
           :title="formatSkillSplitTitle(skill)"
-          @click="$emit('add-skill-segment-actions', skill.id)"
+          @click="$emit('preview-skill-segment-actions', skill.id)"
         >
           拆段 {{ getSkillSegmentCount(skill) }}
+        </button>
+      </div>
+    </div>
+
+    <div
+      v-if="segmentSplitPreview"
+      class="segment-preview"
+      data-testid="workbench-segment-split-preview"
+    >
+      <div class="segment-preview-heading">
+        <span>{{ segmentSplitPreview.skillName }}</span>
+        <strong>{{ segmentSplitPreview.actorName }} Lv.{{ segmentSplitPreview.level }}</strong>
+      </div>
+      <dl class="segment-preview-metrics">
+        <div>
+          <dt>生成</dt>
+          <dd data-testid="workbench-segment-preview-generated-count">
+            {{ segmentSplitPreview.generatedCount }}
+          </dd>
+        </div>
+        <div>
+          <dt>跳过</dt>
+          <dd data-testid="workbench-segment-preview-skipped-count">
+            {{ segmentSplitPreview.skippedCount }}
+          </dd>
+        </div>
+        <div>
+          <dt>推迟</dt>
+          <dd data-testid="workbench-segment-preview-delay-count">
+            {{ segmentSplitPreview.autoDelayedCount }}
+          </dd>
+        </div>
+      </dl>
+      <p class="segment-preview-base" data-testid="workbench-segment-preview-base">
+        起点 {{ segmentSplitPreview.baseStartMs }}ms / 间隔 {{ segmentSplitPreview.options.intervalMs }}ms
+      </p>
+      <ul v-if="segmentSplitPreview.actions.length" class="segment-preview-list">
+        <li
+          v-for="action in segmentSplitPreview.actions"
+          :key="action.damageSegmentIndex"
+          data-testid="workbench-segment-preview-item"
+          :data-segment-index="action.damageSegmentIndex"
+        >
+          <span>{{ action.label }} / {{ action.rawValue }}</span>
+          <small>{{ formatPreviewRange(action) }}</small>
+        </li>
+      </ul>
+      <p v-else class="segment-preview-empty" data-testid="workbench-segment-preview-empty">
+        没有可生成段
+      </p>
+      <div class="segment-preview-actions">
+        <button
+          class="tool-button"
+          type="button"
+          data-testid="workbench-segment-preview-confirm"
+          :disabled="segmentSplitPreview.generatedCount === 0"
+          @click="$emit('confirm-skill-segment-actions')"
+        >
+          确认
+        </button>
+        <button
+          class="tool-button"
+          type="button"
+          data-testid="workbench-segment-preview-cancel"
+          @click="$emit('cancel-skill-segment-actions')"
+        >
+          取消
         </button>
       </div>
     </div>
@@ -230,13 +297,19 @@ defineProps({
       skipExistingSegments: false,
     }),
   },
+  segmentSplitPreview: {
+    type: Object,
+    default: null,
+  },
 });
 
 const emit = defineEmits([
   'select-action',
   'add-action',
   'add-skill-action',
-  'add-skill-segment-actions',
+  'preview-skill-segment-actions',
+  'confirm-skill-segment-actions',
+  'cancel-skill-segment-actions',
   'add-wait-action',
   'add-switch-action',
   'add-annotation-action',
@@ -331,6 +404,13 @@ function emitSegmentSplitOption(key, value) {
   emit('update-segment-split-options', {
     [key]: key === 'intervalMs' ? Number(value) : Boolean(value),
   });
+}
+
+function formatPreviewRange(action) {
+  if (action.autoDelayed) {
+    return `${action.requestedStartMs}ms -> ${action.resolvedStartMs}ms`;
+  }
+  return `${action.resolvedStartMs}ms`;
 }
 
 function formatInsertionNote(insertion) {
@@ -430,6 +510,108 @@ h2 {
   width: 14px;
   height: 14px;
   accent-color: #79c7b9;
+}
+
+.segment-preview {
+  display: grid;
+  gap: 9px;
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(230, 162, 60, 0.07);
+}
+
+.segment-preview-heading {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.segment-preview-heading span,
+.segment-preview-heading strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.segment-preview-heading span {
+  color: #efc574;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.segment-preview-heading strong {
+  color: #d9dee3;
+  font-size: 11px;
+}
+
+.segment-preview-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+}
+
+.segment-preview-metrics div {
+  min-width: 0;
+  padding: 6px 7px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.segment-preview-base,
+.segment-preview-empty {
+  margin: 0;
+  color: #b8c0c7;
+  font-size: 11px;
+}
+
+.segment-preview-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.segment-preview-list li {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: 6px 7px;
+  border-left: 3px solid #e6a23c;
+  border-radius: 4px;
+  background: rgba(17, 22, 27, 0.72);
+}
+
+.segment-preview-list span,
+.segment-preview-list small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.segment-preview-list span {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.segment-preview-list small {
+  color: #efc574;
+  font-size: 11px;
+}
+
+.segment-preview-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.segment-preview-actions .tool-button:disabled {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #6f7880;
+  cursor: not-allowed;
 }
 
 .actor-tabs {

@@ -106,8 +106,21 @@ describe('Workbench view', () => {
 
     await splitButton.trigger('click');
 
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('2 action');
+    expect(wrapper.find('[data-testid="workbench-segment-split-preview"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="workbench-segment-preview-generated-count"]').text()).toBe('4');
+    expect(wrapper.find('[data-testid="workbench-segment-preview-skipped-count"]').text()).toBe('0');
+    expect(wrapper.find('[data-testid="workbench-segment-preview-delay-count"]').text()).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-segment-preview-base"]').text()).toContain('起点 2000ms');
+    expect(wrapper.find('[data-testid="workbench-segment-preview-item"][data-segment-index="0"]').text()).toContain(
+      '2000ms -> 4000ms',
+    );
+
+    await wrapper.find('[data-testid="workbench-segment-preview-confirm"]').trigger('click');
+
     expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('6 action');
     expect(wrapper.find('[data-testid="scenario-hit-count"]').text()).toBe('6');
+    expect(wrapper.find('[data-testid="workbench-segment-split-preview"]').exists()).toBe(false);
     expect(wrapper.find('[data-testid="workbench-insert-delay-count"]').text()).toBe('1');
     expect(wrapper.find('[data-testid="workbench-insert-delay-item"]').text()).toContain('2000ms -> 4000ms');
     expect(wrapper.find('.action-item[data-action-id="action-0004"]').text()).toContain('重击 / 190%');
@@ -143,6 +156,30 @@ describe('Workbench view', () => {
     expect(generatedActions[1].note).toContain('非真实命中帧');
   });
 
+  it('cancels a skill segment split preview without writing actions', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await findActionLibrarySkillSplitButton(wrapper, workbenchSeed.defaults.skillId).trigger('click');
+
+    expect(wrapper.find('[data-testid="workbench-segment-split-preview"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="workbench-segment-preview-generated-count"]').text()).toBe('4');
+
+    await wrapper.find('[data-testid="workbench-segment-preview-cancel"]').trigger('click');
+
+    expect(wrapper.find('[data-testid="workbench-segment-split-preview"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('1 action');
+    expect(wrapper.find('[data-testid="scenario-hit-count"]').text()).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe('未保存草稿');
+  });
+
   it('applies and restores segment split placement options', async () => {
     const wrapper = mount(Workbench, {
       global: {
@@ -163,9 +200,21 @@ describe('Workbench view', () => {
     await wrapper.find('[data-testid="workbench-segment-split-skip-existing-checkbox"]').setValue(true);
     await findActionLibrarySkillSplitButton(wrapper, workbenchSeed.defaults.skillId).trigger('click');
 
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('1 action');
+    expect(wrapper.find('[data-testid="workbench-segment-preview-generated-count"]').text()).toBe('3');
+    expect(wrapper.find('[data-testid="workbench-segment-preview-skipped-count"]').text()).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-segment-preview-delay-count"]').text()).toBe('0');
+    expect(wrapper.find('[data-testid="workbench-segment-preview-base"]').text()).toContain('起点 1000ms');
+    expect(wrapper.find('[data-testid="workbench-segment-preview-item"][data-segment-index="1"]').text()).toContain(
+      '1000ms',
+    );
+
+    await wrapper.find('[data-testid="workbench-segment-preview-confirm"]').trigger('click');
+
     expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('4 action');
     expect(wrapper.find('[data-testid="scenario-hit-count"]').text()).toBe('4');
     expect(wrapper.find('[data-testid="workbench-insert-delay-count"]').text()).toBe('0');
+    expect(wrapper.find('[data-testid="workbench-segment-split-preview"]').exists()).toBe(false);
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));

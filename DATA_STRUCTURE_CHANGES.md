@@ -363,3 +363,36 @@ Workbench 草稿新增可选 `segmentSplitOptions` 配置块，用于保存动�
 - `segmentSplitOptions` 只影响新生成动作，不会回写或重排已经存在的动作。
 - `intervalMs` 是编辑辅助间隔，不代表真实命中帧间隔。
 - `skipExistingSegments` 只按当前草稿动作字段匹配，不做语义去重或真实连段判定。
+
+## 12. 2026-07-07 Workbench 拆段预览状态说明
+
+阶段 4-24 新增拆段生成预览，但没有新增持久化字段。
+
+### 12.1 临时状态
+
+`segmentSplitPreview` 仅存在于 `Workbench.vue` 运行时状态中，用于在确认前展示预计生成结果：
+
+```javascript
+{
+  "skillId": 10900101,
+  "generatedCount": 3,
+  "skippedCount": 1,
+  "autoDelayedCount": 0,
+  "actions": [
+    {
+      "damageSegmentIndex": 1,
+      "requestedStartMs": 1000,
+      "resolvedStartMs": 1000
+    }
+  ]
+}
+```
+
+- 该结构不会保存到 `workbench-draft`，刷新或重开后不会恢复。
+- 取消预览不会改变 `actionDrafts`。
+- 确认预览后才会生成普通 `skill` 动作，并继续使用 `damageSegmentIndex`、`startMs` 和可选 `insertion` 元信息保存真实写入结果。
+
+### 12.2 当前边界
+
+- 预览只模拟当前草稿状态下的预计插入结果；如果动作、角色、拆段配置或时间轴发生变化，旧预览会被清理。
+- 预览中的 `resolvedStartMs` 是编辑器插入策略的预计落点，不代表真实游戏帧。
