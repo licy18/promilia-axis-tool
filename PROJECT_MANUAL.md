@@ -2579,6 +2579,10 @@ Endaxis 参考边界：
 - `npx eslint src/simulation/projection/projectSimulationResult.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
 - `npx prettier --check src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
+- `npm test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `npx eslint src/simulation/projection/projectSimulationResult.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npx prettier --check src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
 - `npx eslint . --ext .vue,.js,.jsx,.cjs,.mjs`：未通过，阻塞点是既有 `scripts/generate-azpr-data.mjs` 顶层 `await` 被当前 ESLint 配置解析为 `Cannot use keyword 'await' outside an async function`；本阶段未修改该脚本。
 
 当前边界：
@@ -2592,6 +2596,48 @@ Endaxis 参考边界：
 - 阶段 5-8V 目标：把 `requiredScaleToRaw` 差异模式与 `skill_control` 行为节点命中数量、命中帧和 element 绑定关系关联起来。
 - 优先统计末音 `10900101` 的 `InjectToTargetKeyFrameBehaviorData`、`elementBaseDatas`、hitEffects、stateName 与动作形态之间的绑定数量。
 - 对四动作样本补充“行为节点候选数 / element 引用数 / 帧窗口”字段，判断 `f2` 候选值是否是单 hit、行为节点中间值、动作总倍率的一部分或额外公式入口。
+
+### 2026-07-08：阶段 5-8V skill_control 行为节点关联摘要
+
+本轮完成：
+
+- `formulaCandidatePatternSummary` 新增 `skillControlBehaviorCorrelations`，从 `skill-asset-evidence.json.currentSkillControlEvidence` 读取当前技能的行为链证据。
+- 每个动作的 `actionSummaries[]` 新增精简版 `skillControlBehaviorCorrelation`，用于把 f2 候选差异与当前技能级 HP 行为节点证据放在同一结果里。
+- Workbench 候选模式摘要新增行为节点提示，当前默认样本显示：
+
+```text
+候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 13f/16f/19f · Skill0_6/Skill0_1
+```
+
+当前末音 `10900101` 证据：
+
+- `hpLaneCandidateCount = 5`：`skill_control` 中 HP 伤害候选行为节点数。
+- `resolvedHpBehaviorRefCount = 5`：HP lane 的行为引用都已解到本地 MonoBehaviour。
+- `externalElementBaseRefCount = 13`，`resourceMapMatchedElementBaseRefCount = 13`：外部 element 引用均能匹配到根 `skillResourceMaps`。
+- 当前采样到的 HP 行为链帧为 `13f / 16f / 19f`。
+- 资源归属包含 `Skill0_6`、`Skill0_1`，hitEffects 包含 `11_109001_133`、`11_109001_005`、`11_109001_116`。
+
+初步判断：
+
+- 现在可以把“f2 候选值固定为 307，但 raw HP 缩放随动作倍率变化”的现象，与“同一技能存在 5 个 HP 行为候选节点、多个命中帧和多个 stateName/hitEffects”放在同一证据层观察。
+- 仍不能确认【普通攻击 / 重击 / 闪击 / 跃击】各自动作形态对应哪一条行为节点；因此 `correlationStatus` 明确记录为 `skill-level-only-action-variant-binding-unresolved`。
+- 该阶段仍没有把行为节点、f2 候选或 `requiredScaleToRaw` 推入最终 HP、削韧或充能公式。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+
+当前边界：
+
+- `skillControlBehaviorCorrelations.applied` 必须保持 `false`。
+- `skillControlBehaviorCorrelations` 是技能级证据，不是动作形态级绑定。
+- 当前只消费 `skill-asset-evidence.json` 中已有采样行为链；若要覆盖全部 5 个 HP 行为节点的完整帧/资源绑定，后续需要扩大或调整生成脚本的行为链采样限制。
+
+下一步：
+
+- 阶段 5-8W 目标：把技能级 HP 行为节点继续推进到动作形态级候选绑定。
+- 优先尝试用 `stateName`、`subSkillId`、hitEffects、行为节点名称、帧窗口和 `skill_level` 动作标签建立候选映射。
+- 若现有 `effectLaneBehaviorChains` 采样不足，则调整 `scripts/generate-azpr-data.mjs` 的行为链摘要或新增专门的动作绑定 evidence，而不是在前端临时猜测。
 
 ## 10. 文档维护规则
 

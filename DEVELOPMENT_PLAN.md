@@ -246,7 +246,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8S，新增 `formulaCandidatePreview` 未应用预览，当前末音 `10900101` 的 f2 公式用等级 A=1600 得到 307，约为现有 raw HP 12461 的 2.5%，诊断为 `large-difference`；Workbench 显示 `候选预览 f2 等级值 307 vs raw 12,461，约 2.5%`，仍不改变最终数值。
 - 已完成：阶段 5-8T，新增 `formulaCandidatePreview.combinationPreviews`，验证 `function_2`、`function_1*function_2`、`function_1+function_2` 等简单组合仍远低于 raw HP；当前 f2 等级值需约 `×40.6` 才接近 raw，按 5 hit 平均仍需每 hit `×8.1`，Workbench 显示组合诊断。
 - 已完成：阶段 5-8U，新增 `summary.formulaCandidatePatternSummary`，把四动作样本【普通攻击 / 重击 / 闪击 / 跃击】的 f2 候选值与 raw HP 投影做跨动作差异摘要；当前 f2 候选值在四动作中均为 `307`，`requiredScaleToRaw` 随描述倍率变化，范围约 `×2.5` 到 `×40.6`，Workbench 显示候选模式摘要，仍保持 `applied: false`。
-- 下一步：阶段 5-8V，把 `requiredScaleToRaw` 差异模式与 `skill_control` 行为节点命中数量、命中帧和 element 绑定关系关联起来，判断 f2 候选值是单 hit、中间值、动作总倍率的一部分还是额外公式入口。
+- 已完成：阶段 5-8V，新增 `formulaCandidatePatternSummary.skillControlBehaviorCorrelations`，把 f2 差异模式与当前技能级 `skill_control` HP 行为节点证据放在同一摘要里；末音 `10900101` 当前确认 HP 行为候选 5 个、采样命中帧 `13/16/19f`、资源归属 `Skill0_6 / Skill0_1` 和 hitEffects，但动作形态级绑定仍标为未确认。
+- 下一步：阶段 5-8W，把技能级 HP 行为节点继续推进到动作形态级候选绑定，优先用 `stateName`、`subSkillId`、hitEffects、行为节点名称、帧窗口和 `skill_level` 动作标签建立候选映射。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

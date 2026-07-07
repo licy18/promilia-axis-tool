@@ -412,8 +412,11 @@ function formatFormulaCandidatePatternSummary(summary) {
     'tracks-description-multiplier-before-runtime-hit-mapping'
       ? '，随描述倍率变化'
       : '';
+  const behaviorText = formatBehaviorCorrelationSummary(
+    summary.skillControlBehaviorCorrelations
+  );
 
-  return `候选模式 ${summary.comparableActionCount} 动作 · ${formatStrategyLabel(summary.preferredStrategy)} 缩放 ${scaleRange}${perHitText}${hint}`;
+  return `候选模式 ${summary.comparableActionCount} 动作 · ${formatStrategyLabel(summary.preferredStrategy)} 缩放 ${scaleRange}${perHitText}${hint}${behaviorText}`;
 }
 
 function formatScaleRange(min, max) {
@@ -424,6 +427,26 @@ function formatScaleRange(min, max) {
     return `×${formatFixed(min)}`;
   }
   return `×${formatFixed(min)}-×${formatFixed(max)}`;
+}
+
+function formatBehaviorCorrelationSummary(correlations = []) {
+  const correlation = correlations.find(
+    item => item.status === 'skill-level-hp-behavior-candidates-found'
+  );
+  if (!correlation) {
+    return '';
+  }
+
+  const frames = (correlation.hitFrameStartFrames ?? [])
+    .slice(0, 4)
+    .map(frame => `${Math.round(frame)}f`)
+    .join('/');
+  const states = (correlation.resourceBindings?.stateNames ?? [])
+    .slice(0, 2)
+    .join('/');
+  const frameText = frames ? ` · 帧 ${frames}` : '';
+  const stateText = states ? ` · ${states}` : '';
+  return ` / 行为节点 ${formatNumber(correlation.hpLaneCandidateCount)} 候选${frameText}${stateText}`;
 }
 
 function formatCombinationLabel(preview) {

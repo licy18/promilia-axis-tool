@@ -621,8 +621,32 @@ describe('first vertical slice simulation', () => {
       preferredStrategy: 'function_2-current-level-value-param',
       scaleSpreadStatus: 'single-sample',
       previewValueStatus: 'same-preview-across-actions',
+      behaviorCorrelationStatus:
+        'skill-level-behavior-candidates-found-action-binding-unresolved',
       missingRuntimeScaleStatus: 'needs-more-action-samples',
       applied: false,
+      skillControlBehaviorCorrelations: [
+        expect.objectContaining({
+          status: 'skill-level-hp-behavior-candidates-found',
+          scope: 'skill-level-not-action-variant-bound',
+          skillId: 10900101,
+          hpLaneCandidateCount: 5,
+          resolvedHpBehaviorRefCount: 5,
+          externalElementBaseRefCount: 13,
+          resourceMapMatchedElementBaseRefCount: 13,
+          sampledHpBehaviorChainCount: 3,
+          sampledResolvedHpBehaviorCount: 3,
+          hitFrameStartFrames: [13, 16, 19],
+          resourceBindings: expect.objectContaining({
+            subSkillIds: [10900101, 109001011],
+            stateNames: ['Skill0_6', 'Skill0_1'],
+            hitEffects: ['11_109001_133', '11_109001_005', '11_109001_116'],
+          }),
+          correlationStatus:
+            'skill-level-only-action-variant-binding-unresolved',
+          applied: false,
+        }),
+      ],
       actionSummaries: [
         expect.objectContaining({
           actionId: 'action-0001',
@@ -633,6 +657,14 @@ describe('first vertical slice simulation', () => {
             amp: 6553,
             physicalRatio: 10000,
             elementCalFactor: 10000,
+          }),
+          skillControlBehaviorCorrelation: expect.objectContaining({
+            hpLaneCandidateCount: 5,
+            sampledHpBehaviorChainCount: 3,
+            hitFrameStartFrames: [13, 16, 19],
+            stateNames: ['Skill0_6', 'Skill0_1'],
+            correlationStatus:
+              'skill-level-only-action-variant-binding-unresolved',
           }),
         }),
       ],
@@ -788,8 +820,21 @@ describe('first vertical slice simulation', () => {
       preferredStrategy: 'function_2-current-level-value-param',
       scaleSpreadStatus: 'varies-by-action-variant',
       previewValueStatus: 'same-preview-across-actions',
+      behaviorCorrelationStatus:
+        'skill-level-behavior-candidates-found-action-binding-unresolved',
       missingRuntimeScaleStatus:
         'tracks-description-multiplier-before-runtime-hit-mapping',
+      skillControlBehaviorCorrelations: [
+        expect.objectContaining({
+          status: 'skill-level-hp-behavior-candidates-found',
+          hpLaneCandidateCount: 5,
+          resolvedHpBehaviorRefCount: 5,
+          sampledHpBehaviorChainCount: 3,
+          hitFrameStartFrames: [13, 16, 19],
+          correlationStatus:
+            'skill-level-only-action-variant-binding-unresolved',
+        }),
+      ],
       previewRoundedValues: [307],
       applied: false,
     });

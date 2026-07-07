@@ -41,7 +41,9 @@ describe('Workbench view', () => {
     expect(text).toContain('公式函数候选 f1 G/10000 / f2 self.ATK[0]*A/10000');
     expect(text).toContain('候选预览 f2 等级值 307 vs raw 12,461，约 2.5%');
     expect(text).toContain('组合诊断 f2 需 ×40.6 才接近 raw / 每 hit ×8.1');
-    expect(text).toContain('候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1');
+    expect(text).toContain(
+      '候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 13f/16f/19f · Skill0_6/Skill0_1'
+    );
     expect(text).toContain('伤害 12,461 · 韧性 0 · 能量 0');
     expect(text).toContain('low');
   });

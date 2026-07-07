@@ -3097,3 +3097,95 @@ Workbench 分析面板三值来源下会显示：
 - `formulaCandidatePatternSummary` 不参与 HP、削韧、充能计算。
 - 不能把 `requiredScaleToRaw` 当作真实公式常量；它只是“候选预览值与当前 raw 投影之间缺多少”的诊断值。
 - 下一阶段需要把这些差异与 `skill_control` 行为节点命中数量、命中帧、element 绑定和 hitEffects 关联。
+
+## 47. 2026-07-08 skillControlBehaviorCorrelations 技能级行为节点关联
+
+阶段 5-8V 在 `formulaCandidatePatternSummary` 中新增 `skillControlBehaviorCorrelations`，用于把 formula candidate 差异模式与当前技能级 `skill_control` 行为链证据关联。
+
+### 47.1 summary.formulaCandidatePatternSummary.skillControlBehaviorCorrelations
+
+示例：
+
+```javascript
+{
+  "skillControlBehaviorCorrelations": [
+    {
+      "status": "skill-level-hp-behavior-candidates-found",
+      "sourceKind": "azpr-skill-control-behavior-chain-evidence",
+      "file": "src/data/generated/skill-asset-evidence.json",
+      "scope": "skill-level-not-action-variant-bound",
+      "skillId": 10900101,
+      "skillName": "哈库茵剑舞",
+      "hpLaneCandidateCount": 5,
+      "resolvedHpBehaviorRefCount": 5,
+      "externalElementBaseRefCount": 13,
+      "resourceMapMatchedElementBaseRefCount": 13,
+      "sampledHpBehaviorChainCount": 3,
+      "sampledResolvedHpBehaviorCount": 3,
+      "hitFrameStartFrames": [13, 16, 19],
+      "resourceBindings": {
+        "subSkillIds": [10900101, 109001011],
+        "stateNames": ["Skill0_6", "Skill0_1"],
+        "hitEffects": [
+          "11_109001_133",
+          "11_109001_005",
+          "11_109001_116"
+        ]
+      },
+      "correlationStatus": "skill-level-only-action-variant-binding-unresolved",
+      "applied": false
+    }
+  ]
+}
+```
+
+含义：
+
+- `hpLaneCandidateCount`：当前技能 `skill_control` 中按 HP 伤害 lane 分类的行为候选数。
+- `resolvedHpBehaviorRefCount`：HP lane 行为引用解到本地 MonoBehaviour 的数量。
+- `externalElementBaseRefCount` / `resourceMapMatchedElementBaseRefCount`：外部 element 引用与根 `skillResourceMaps` 的匹配情况。
+- `sampledHpBehaviorChainCount` / `sampledResolvedHpBehaviorCount`：当前 generated evidence 中实际保留的 HP 行为链样本数。
+- `hitFrameStartFrames`：当前样本里已看到的行为开始帧，仍是采样值。
+- `resourceBindings`：从行为节点的 `elementBaseDatas` 反查到的 `subSkillIds`、`stateNames`、`hitEffects`。
+- `correlationStatus`：明确当前只是技能级关联，动作形态绑定尚未确认。
+
+### 47.2 actionSummaries[].skillControlBehaviorCorrelation
+
+每个动作摘要会保留精简版字段：
+
+```javascript
+{
+  "skillControlBehaviorCorrelation": {
+    "status": "skill-level-hp-behavior-candidates-found",
+    "scope": "skill-level-not-action-variant-bound",
+    "hpLaneCandidateCount": 5,
+    "resolvedHpBehaviorRefCount": 5,
+    "sampledHpBehaviorChainCount": 3,
+    "hitFrameStartFrames": [13, 16, 19],
+    "stateNames": ["Skill0_6", "Skill0_1"],
+    "hitEffects": [
+      "11_109001_133",
+      "11_109001_005",
+      "11_109001_116"
+    ],
+    "correlationStatus": "skill-level-only-action-variant-binding-unresolved",
+    "applied": false
+  }
+}
+```
+
+该字段用于把每个动作的 f2 候选差异与同技能行为证据放在同一观察面板中，但不代表该动作已经绑定到这些行为节点。
+
+### 47.3 Workbench 展示
+
+Workbench 候选模式摘要会追加行为节点提示：
+
+```text
+候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 13f/16f/19f · Skill0_6/Skill0_1
+```
+
+### 47.4 当前边界
+
+- `skillControlBehaviorCorrelations.applied` 必须保持 `false`。
+- 当前字段只证明技能级行为候选和资源归属存在，不证明动作形态级绑定。
+- 若后续需要完整覆盖 5 个 HP 行为节点，需要扩展 generated evidence 的采样策略，不能只依赖当前保留的 3 条 HP 行为链样本。

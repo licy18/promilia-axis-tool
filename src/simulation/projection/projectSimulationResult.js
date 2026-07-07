@@ -12,6 +12,11 @@ const DAMAGE_ELEMENT_FIELD_MAPPING_BY_SKILL_ID = new Map(
     .map(skill => [Number(skill.skillId), skill])
     .filter(([skillId]) => Number.isFinite(skillId))
 );
+const CURRENT_SKILL_CONTROL_EVIDENCE_BY_SKILL_ID = new Map(
+  (skillAssetEvidence.currentSkillControlEvidence ?? [])
+    .map(skill => [Number(skill.skillId), skill])
+    .filter(([skillId]) => Number.isFinite(skillId))
+);
 
 export function projectSimulationResult({
   scenario,
@@ -156,22 +161,39 @@ const PREFERRED_FORMULA_CANDIDATE_STRATEGY =
   'function_2-current-level-value-param';
 
 function summarizeFormulaCandidatePatterns(actionResultTimeline) {
-  const actionSummaries = actionResultTimeline
+  const baseActionSummaries = actionResultTimeline
     .map(createFormulaCandidatePatternActionSummary)
     .filter(Boolean);
 
-  if (actionSummaries.length === 0) {
+  if (baseActionSummaries.length === 0) {
     return {
       status: 'no-comparable-formula-candidate-patterns',
       actionCount: actionResultTimeline.length,
       comparableActionCount: 0,
       preferredStrategy: PREFERRED_FORMULA_CANDIDATE_STRATEGY,
       strategies: [],
+      skillControlBehaviorCorrelations: [],
       actionSummaries: [],
       applied: false,
       note: 'Formula candidate pattern summary is evidence-only until the runtime DamageElement execution chain is confirmed.',
     };
   }
+
+  const skillControlBehaviorCorrelations =
+    createSkillControlBehaviorCorrelations(baseActionSummaries);
+  const skillControlBehaviorCorrelationBySkillId = new Map(
+    skillControlBehaviorCorrelations.map(correlation => [
+      Number(correlation.skillId),
+      correlation,
+    ])
+  );
+  const actionSummaries = baseActionSummaries.map(summary => ({
+    ...summary,
+    skillControlBehaviorCorrelation:
+      compactSkillControlBehaviorCorrelationForAction(
+        skillControlBehaviorCorrelationBySkillId.get(Number(summary.skillId))
+      ),
+  }));
 
   const requiredScales = finiteValues(
     actionSummaries.map(item => item.requiredScaleToRaw)
@@ -223,12 +245,16 @@ function summarizeFormulaCandidatePatterns(actionResultTimeline) {
       uniquePreviewRoundedValues.length <= 1
         ? 'same-preview-across-actions'
         : 'preview-varies-by-action',
+    behaviorCorrelationStatus: inferBehaviorCorrelationStatus(
+      skillControlBehaviorCorrelations
+    ),
     missingRuntimeScaleStatus: inferMissingRuntimeScaleStatus({
       actionSummaries,
       actionMultiplierMin,
       actionMultiplierMax,
       uniquePreviewRoundedValues,
     }),
+    skillControlBehaviorCorrelations,
     actionSummaries,
     applied: false,
     note: 'Formula candidate patterns compare unconfirmed DamageElement previews against current raw HP projection; they are diagnostics only.',
@@ -307,6 +333,231 @@ function compactDamageFieldPatternValues(damageFields = {}) {
       ? damageFields.formulaParams.length
       : 0,
   };
+}
+
+function createSkillControlBehaviorCorrelations(actionSummaries) {
+  const skillIds = uniqueNumbers(actionSummaries.map(item => item.skillId));
+  return skillIds.map(createSkillControlBehaviorCorrelation);
+}
+
+function createSkillControlBehaviorCorrelation(skillId) {
+  const evidence = CURRENT_SKILL_CONTROL_EVIDENCE_BY_SKILL_ID.get(
+    Number(skillId)
+  );
+  if (!evidence) {
+    return {
+      status: 'no-skill-control-evidence',
+      scope: 'skill-level',
+      skillId: numberOrNull(skillId),
+      correlationStatus: 'skill-control-evidence-missing',
+      applied: false,
+    };
+  }
+
+  if (evidence.status !== 'found') {
+    return {
+      status: evidence.status ?? 'skill-control-evidence-unavailable',
+      scope: 'skill-level',
+      skillId: numberOrNull(skillId),
+      characterId: numberOrNull(evidence.characterId),
+      skillName: evidence.skillName ?? null,
+      expectedDirectory: evidence.expectedDirectory ?? null,
+      correlationStatus: 'skill-control-evidence-missing',
+      applied: false,
+    };
+  }
+
+  const hpBehaviorChains = (evidence.effectLaneBehaviorChains ?? []).filter(
+    chain => (chain.laneHints ?? []).includes('hpDamage')
+  );
+  const sampledResolvedHpBehaviors = hpBehaviorChains.flatMap(chain =>
+    (chain.resolvedBehaviors ?? []).map(behavior => ({
+      ...behavior,
+      sourceName: chain.sourceName ?? null,
+      sourceStartFrame: numberOrNull(chain.sourceStartFrame),
+      sourceEndFrame: numberOrNull(chain.sourceEndFrame),
+    }))
+  );
+  const resourceBindings = summarizeSkillControlResourceBindings(
+    sampledResolvedHpBehaviors
+  );
+
+  return {
+    status:
+      (evidence.effectLaneCandidateSummary?.hpDamage?.count ?? 0) > 0
+        ? 'skill-level-hp-behavior-candidates-found'
+        : 'skill-level-hp-behavior-candidates-missing',
+    sourceKind: 'azpr-skill-control-behavior-chain-evidence',
+    file: SKILL_ASSET_EVIDENCE_PATH,
+    scope: 'skill-level-not-action-variant-bound',
+    skillId: numberOrNull(skillId),
+    characterId: numberOrNull(evidence.characterId),
+    skillName: evidence.skillName ?? null,
+    hpLaneCandidateCount:
+      numberOrNull(evidence.effectLaneCandidateSummary?.hpDamage?.count) ?? 0,
+    behaviorListRefCount:
+      numberOrNull(evidence.behaviorReferenceSummary?.behaviorListRefs) ?? 0,
+    resolvedBehaviorListRefCount:
+      numberOrNull(
+        evidence.behaviorReferenceSummary?.resolvedBehaviorListRefs
+      ) ?? 0,
+    resolvedHpBehaviorRefCount:
+      numberOrNull(
+        evidence.behaviorReferenceSummary?.resolvedBehaviorRefsByLane?.hpDamage
+      ) ?? 0,
+    scriptTypeCandidateBehaviorRefCount:
+      numberOrNull(
+        evidence.behaviorReferenceSummary?.scriptTypeCandidateBehaviorRefs
+      ) ?? 0,
+    externalElementBaseRefCount:
+      numberOrNull(
+        evidence.behaviorReferenceSummary?.externalElementBaseRefs
+      ) ?? 0,
+    resourceMapMatchedElementBaseRefCount:
+      numberOrNull(
+        evidence.behaviorReferenceSummary?.resourceMapMatchedElementBaseRefs
+      ) ?? 0,
+    resourceMapUnmatchedElementBaseRefCount:
+      numberOrNull(
+        evidence.behaviorReferenceSummary?.resourceMapUnmatchedElementBaseRefs
+      ) ?? 0,
+    sampledHpBehaviorChainCount: hpBehaviorChains.length,
+    sampledResolvedHpBehaviorCount: sampledResolvedHpBehaviors.length,
+    hitFrameStartFrames: uniqueNumbers(
+      sampledResolvedHpBehaviors.map(behavior => behavior.startFrame)
+    ),
+    hitFrameWindows: createSkillControlHitFrameWindows(hpBehaviorChains),
+    resourceBindings,
+    sampledBehaviorChains: hpBehaviorChains
+      .slice(0, 5)
+      .map(compactSkillControlBehaviorChain),
+    correlationStatus: 'skill-level-only-action-variant-binding-unresolved',
+    applied: false,
+    note: 'Skill control behavior evidence is linked at skill level only; action-variant and per-hit runtime binding remain unconfirmed.',
+  };
+}
+
+function summarizeSkillControlResourceBindings(behaviors) {
+  const refs = behaviors.flatMap(
+    behavior => behavior.elementBaseDataRefs ?? []
+  );
+  const matches = refs.flatMap(ref => ref.resourceMapMatches ?? []);
+
+  return {
+    sampledElementBaseRefCount: refs.length,
+    sampledMatchedElementBaseRefCount: refs.filter(
+      ref => (ref.resourceMapMatchCount ?? 0) > 0
+    ).length,
+    subSkillIds: uniqueNumbers(matches.flatMap(match => match.subSkillIds)),
+    stateNames: uniqueStrings(matches.flatMap(match => match.stateNames)),
+    effects: uniqueStrings(matches.flatMap(match => match.effects)),
+    hitEffects: uniqueStrings(matches.flatMap(match => match.hitEffects)),
+    elementRoundedPathIds: uniqueStrings(refs.map(ref => ref.roundedPathId)),
+    elementPathIds: uniqueStrings(refs.map(ref => ref.pathId)),
+  };
+}
+
+function createSkillControlHitFrameWindows(hpBehaviorChains) {
+  return hpBehaviorChains
+    .map(chain => ({
+      sourceName: chain.sourceName ?? null,
+      sourceStartFrame: numberOrNull(chain.sourceStartFrame),
+      sourceEndFrame: numberOrNull(chain.sourceEndFrame),
+      resolvedBehaviorCount: (chain.resolvedBehaviors ?? []).length,
+      behaviorStartFrames: uniqueNumbers(
+        (chain.resolvedBehaviors ?? []).map(behavior => behavior.startFrame)
+      ),
+      behaviorFrameCounts: uniqueNumbers(
+        (chain.resolvedBehaviors ?? []).map(behavior => behavior.frameCount)
+      ),
+      elementBaseRefCount: (chain.resolvedBehaviors ?? []).reduce(
+        (sum, behavior) => sum + (behavior.externalElementBaseRefCount ?? 0),
+        0
+      ),
+    }))
+    .sort(
+      (left, right) =>
+        (left.sourceStartFrame ?? 0) - (right.sourceStartFrame ?? 0) ||
+        String(left.sourceName).localeCompare(String(right.sourceName))
+    );
+}
+
+function compactSkillControlBehaviorChain(chain) {
+  return {
+    laneHints: chain.laneHints ?? [],
+    sourceName: chain.sourceName ?? null,
+    sourceStartFrame: numberOrNull(chain.sourceStartFrame),
+    sourceEndFrame: numberOrNull(chain.sourceEndFrame),
+    behaviorRefCount: (chain.behaviorRefs ?? []).length,
+    resolvedBehaviorCount: (chain.resolvedBehaviors ?? []).length,
+    resolvedBehaviors: (chain.resolvedBehaviors ?? [])
+      .slice(0, 3)
+      .map(compactSkillControlResolvedBehavior),
+  };
+}
+
+function compactSkillControlResolvedBehavior(behavior) {
+  const refs = behavior.elementBaseDataRefs ?? [];
+  const matches = refs.flatMap(ref => ref.resourceMapMatches ?? []);
+  return {
+    pathId: behavior.pathId ?? null,
+    scriptTypeCandidate: behavior.scriptTypeCandidate
+      ? {
+          status: behavior.scriptTypeCandidate.status,
+          confidence: behavior.scriptTypeCandidate.confidence,
+          className: behavior.scriptTypeCandidate.className,
+        }
+      : null,
+    startFrame: numberOrNull(behavior.startFrame),
+    frameCount: numberOrNull(behavior.frameCount),
+    externalElementBaseRefCount:
+      numberOrNull(behavior.externalElementBaseRefCount) ?? 0,
+    resourceMapMatchedElementBaseRefCount:
+      numberOrNull(behavior.resourceMapMatchedElementBaseRefCount) ?? 0,
+    elementBaseDataRefs: refs.slice(0, 5).map(ref => ({
+      pathId: ref.pathId ?? null,
+      roundedPathId: ref.roundedPathId ?? null,
+      resourceMapMatchCount: numberOrNull(ref.resourceMapMatchCount) ?? 0,
+    })),
+    resourceBindings: {
+      subSkillIds: uniqueNumbers(matches.flatMap(match => match.subSkillIds)),
+      stateNames: uniqueStrings(matches.flatMap(match => match.stateNames)),
+      hitEffects: uniqueStrings(matches.flatMap(match => match.hitEffects)),
+    },
+  };
+}
+
+function compactSkillControlBehaviorCorrelationForAction(correlation) {
+  if (!correlation) {
+    return null;
+  }
+  return {
+    status: correlation.status,
+    scope: correlation.scope,
+    hpLaneCandidateCount: correlation.hpLaneCandidateCount ?? 0,
+    resolvedHpBehaviorRefCount: correlation.resolvedHpBehaviorRefCount ?? 0,
+    sampledHpBehaviorChainCount: correlation.sampledHpBehaviorChainCount ?? 0,
+    hitFrameStartFrames: correlation.hitFrameStartFrames ?? [],
+    stateNames: correlation.resourceBindings?.stateNames ?? [],
+    hitEffects: correlation.resourceBindings?.hitEffects ?? [],
+    correlationStatus: correlation.correlationStatus,
+    applied: false,
+  };
+}
+
+function inferBehaviorCorrelationStatus(correlations) {
+  if (correlations.length === 0) {
+    return 'no-skill-control-correlation';
+  }
+  if (
+    correlations.some(
+      correlation =>
+        correlation.status === 'skill-level-hp-behavior-candidates-found'
+    )
+  ) {
+    return 'skill-level-behavior-candidates-found-action-binding-unresolved';
+  }
+  return 'skill-level-behavior-candidates-missing';
 }
 
 function inferMissingRuntimeScaleStatus({
