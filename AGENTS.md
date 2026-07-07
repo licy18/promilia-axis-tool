@@ -46,6 +46,7 @@ npm run dev
 - 工作台草稿保存/恢复已建立：`src/domain/workbenchDraftStorage.js` 只保存新版 `selection`、`actionDrafts`、`selectedActionId`，不接旧 `skillBlocks`。
 - 工作台基础编辑效率已提升：支持复制动作、`Delete` / `Backspace` 快捷删除、方向键微调时间和草稿脏状态提示。
 - 工作台动作工具箱雏形已建立：支持技能、等待、注释三类动作；等待/注释进入同一 `actionDrafts -> Project -> simulation` 链路，但不伪造伤害。
+- 工作台敌人与资源面板雏形已建立：敌人等级/生命倍率/防御倍率进入新版项目模型；资源面板只读取 `simulationResult.resourceTimeline`。
 - 项目状态核心在 `src/store/project.js`。
 - 主编辑器在 `src/views/Editor.vue`，当前承担了大量 UI、交互和业务协调职责。
 - 时间轴组件位于 `src/components/timeline/`。
@@ -80,7 +81,7 @@ Endaxis 只作为架构和交互成熟度参考，不是蓝色星原数据来源
 
 ## 已知开发阶段
 
-当前已完成阶段 1-3 的最小闭环，并完成阶段 4-6 的工作台动作类型和工具箱雏形。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 4-7，补齐敌人与资源面板雏形。
+当前已完成阶段 1-3 的最小闭环，并完成阶段 4-7 的敌人与资源面板雏形。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 4-8，接入资源事件和敌人事件动作。
 
 完整对标 Endaxis 的后续路线见 `DEVELOPMENT_PLAN.md`。
 
@@ -113,7 +114,7 @@ npm run test -- --run
 截至 2026-07-07 的基线：
 
 - `npm run build` 可以通过。
-- `npm run test -- --run` 可以通过；当前为 10 个测试文件、59 条测试。
+- `npm run test -- --run` 可以通过；当前为 10 个测试文件、61 条测试。
 - `npm run data:generate` 可以从 `C:\PC2\Codex\AzPr` 重新生成真实 AzPr 数据拆表。
 
 ## 开发规则

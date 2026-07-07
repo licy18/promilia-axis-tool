@@ -119,4 +119,55 @@ describe('first vertical slice simulation', () => {
       },
     });
   });
+
+  it('projects workbench enemy config and resource events from the simulation result', () => {
+    const gameData = getWorkbenchGameData();
+    const spSkill = gameData.skills.find((skill) => Number(skill.spCost) > 0);
+    const project = createWorkbenchProject(
+      {
+        characterId: spSkill.characterId,
+        skillId: spSkill.id,
+      },
+      {
+        enemyConfig: {
+          level: 95,
+          hpMultiplier: 2,
+          defenseMultiplier: 1.5,
+        },
+        actions: [
+          {
+            id: 'action-sp',
+            type: 'skill',
+            skillId: spSkill.id,
+            startMs: 700,
+            level: 1,
+          },
+        ],
+      },
+    );
+    const scenario = compileProject(project, gameData);
+    const result = runSimulation(project, gameData);
+
+    expect(scenario.enemy).toMatchObject({
+      level: 95,
+      hpMultiplier: 2,
+      defenseMultiplier: 1.5,
+    });
+    expect(result.scenario).toMatchObject({
+      enemyLevel: 95,
+      enemyHpMultiplier: 2,
+      enemyDefenseMultiplier: 1.5,
+    });
+    expect(result.summary.resourceEventCount).toBe(1);
+    expect(result.resourceTimeline).toEqual([
+      expect.objectContaining({
+        timeMs: 700,
+        actionId: 'action-sp',
+        resource: 'sp',
+        change: -Number(spSkill.spCost),
+        reason: 'skill-cost',
+      }),
+    ]);
+    expect(result.eventLog.map((event) => event.type)).toContain('RESOURCE_CHANGE');
+  });
 });

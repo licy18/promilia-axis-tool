@@ -55,7 +55,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；10 个测试文件、59 条测试通过。
+- `npm run test -- --run`：通过；10 个测试文件、61 条测试通过。
 
 ## 3. 目录速览
 
@@ -763,6 +763,47 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 新增 `EnemyPanel`，先展示/编辑敌人等级、生命/防御倍率等最小场景参数，并继续通过 `Project -> simulation` 生效。
 - 新增 `ResourceMonitor` 雏形，先读取 `simulationResult.resourceTimeline` 和诊断信息，不在 UI 中自行编造资源计算。
 - 为后续资源事件、敌人事件和 Boss 机制动作预留 action 类型入口与测试。
+
+### 2026-07-07：阶段 4-7 敌人与资源面板雏形落地
+
+本轮完成：
+
+- 新增 `src/features/workbench/EnemyPanel.vue`：
+  - 展示当前模拟场景中的敌人名称、等级、生命/防御基础值和倍率。
+  - 支持编辑敌人等级、生命倍率、防御倍率。
+  - 改动通过 `enemyConfig -> createWorkbenchProject() -> compileProject() -> simulateScenario()` 生效。
+- 新增 `src/features/workbench/ResourceMonitorPanel.vue`：
+  - 只读取 `simulationResult.resourceTimeline`、`summary` 和 `diagnostics`。
+  - 展示资源事件数、SP 净变化、命中数和运行限制数量。
+  - 无资源事件时显示空状态，不从 UI 侧自行推算资源。
+- `src/domain/workbenchProjectFactory.js` 增加 `DEFAULT_WORKBENCH_ENEMY_CONFIG` 和 `normalizeWorkbenchEnemyConfig()`。
+- `src/domain/workbenchDraftStorage.js` 将 `enemyConfig` 纳入 workbench 草稿保存/恢复/重置。
+- `projectSimulationResult()` 在 `scenario` 中输出敌人等级与倍率，并在 `summary` 中输出 `resourceEventCount`。
+- `EventLogPanel` 补齐 `RESOURCE_CHANGE` 日志格式，显示资源、变化量和原因。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、17 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、61 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- 浏览器检查 `http://127.0.0.1:5175/#/workbench`：
+  - 敌人等级可改为 `Lv.95`，生命倍率可改为 `2`，防御倍率可改为 `1.5`。
+  - 切换到真实 SP 消耗技能“沐星雨”后，资源面板显示 1 个资源事件和 `SP -100`。
+  - 事件日志显示 `RESOURCE_CHANGE SP -100 / skill-cost`。
+  - 验证结束后已重置 workbench 草稿，应用控制台无 error。
+
+当前结论：
+
+- 新版工作台已经有敌人参数面板和资源投影面板。
+- 敌人参数已经进入新版项目模型和模拟场景，不再只是 UI 状态。
+- 资源面板当前只展示技能 SP 消耗带来的运行时事件；尚未支持用户手动插入资源事件动作。
+
+下一步：
+
+- 阶段 4-8 目标：接入资源事件和敌人事件动作。
+- 先实现 `resource` 动作草稿、项目 action、运行时 `RESOURCE_CHANGE` 事件和属性面板编辑。
+- 再实现 `enemyEvent` 动作的最小日志事件，为 Boss 机制/阶段转换/可攻击窗口预留结构。
+- 保持事件动作不投射伤害，所有资源变化必须从 simulation 事件进入 `resourceTimeline`。
 
 ## 10. 文档维护规则
 

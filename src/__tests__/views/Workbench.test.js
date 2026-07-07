@@ -187,6 +187,39 @@ describe('Workbench view', () => {
     expect(wrapper.text()).not.toContain('DAMAGE_SKIPPED');
   });
 
+  it('edits enemy parameters and reads resource events from simulation', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    const spSkill = workbenchSeed.gameData.skills.find((skill) => Number(skill.spCost) > 0);
+
+    expect(wrapper.find('[data-testid="workbench-enemy-level"]').text()).toBe('Lv.80');
+    expect(wrapper.find('[data-testid="workbench-resource-event-count"]').text()).toBe('0');
+    expect(wrapper.find('[data-testid="workbench-resource-empty"]').text()).toBe('暂无资源事件');
+
+    await wrapper.find('[data-testid="workbench-enemy-level-input"]').setValue('95');
+    await wrapper.find('[data-testid="workbench-enemy-hp-multiplier-input"]').setValue('2');
+    await wrapper.find('[data-testid="workbench-enemy-defense-multiplier-input"]').setValue('1.5');
+
+    expect(wrapper.find('[data-testid="workbench-enemy-level"]').text()).toBe('Lv.95');
+    expect(wrapper.text()).toContain('2x / 1.5x');
+    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe('有未保存改动');
+
+    await wrapper.find('[data-testid="workbench-character-select"]').setValue(String(spSkill.characterId));
+    await nextTick();
+    await wrapper.find('[data-testid="workbench-skill-select"]').setValue(String(spSkill.id));
+
+    expect(wrapper.find('[data-testid="workbench-resource-event-count"]').text()).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-resource-sp-total"]').text()).toBe(`-${spSkill.spCost}`);
+    expect(wrapper.text()).toContain('RESOURCE_CHANGE');
+  });
+
   it('keeps generated action ids unique after deleting the first action', async () => {
     const wrapper = mount(Workbench, {
       global: {
@@ -261,6 +294,7 @@ describe('Workbench view', () => {
 
     await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
     await wrapper.find('[data-testid="workbench-start-input"]').setValue('2400');
+    await wrapper.find('[data-testid="workbench-enemy-level-input"]').setValue('95');
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
 
     const rawDraft = window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY);
@@ -270,6 +304,9 @@ describe('Workbench view', () => {
       schemaVersion: 1,
       game: 'azur-promilia',
       type: 'workbench-draft',
+      enemyConfig: {
+        level: 95,
+      },
       selectedActionId: 'action-0002',
     });
     expect(draft.actionDrafts).toHaveLength(2);
@@ -294,6 +331,7 @@ describe('Workbench view', () => {
     expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe('已恢复草稿');
     expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe('2 action');
     expect(restored.find('[data-testid="workbench-start-input"]').element.value).toBe('2400');
+    expect(restored.find('[data-testid="workbench-enemy-level"]').text()).toBe('Lv.95');
 
     await restored.find('[data-testid="workbench-reset-draft"]').trigger('click');
 
@@ -301,5 +339,6 @@ describe('Workbench view', () => {
     expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe('已重置草稿');
     expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe('1 action');
     expect(restored.find('[data-testid="workbench-start-input"]').element.value).toBe('0');
+    expect(restored.find('[data-testid="workbench-enemy-level"]').text()).toBe('Lv.80');
   });
 });

@@ -15,6 +15,12 @@ export const DEFAULT_WORKBENCH_SELECTION = Object.freeze({
   enemyId: workbenchSeed.defaults.enemyId,
 });
 
+export const DEFAULT_WORKBENCH_ENEMY_CONFIG = Object.freeze({
+  level: 80,
+  hpMultiplier: 1,
+  defenseMultiplier: 1,
+});
+
 export const DEFAULT_WORKBENCH_ACTION_ID = 'action-0001';
 
 export function getWorkbenchSeed() {
@@ -69,6 +75,7 @@ export function normalizeWorkbenchSelection(selection = {}) {
 
 export function createWorkbenchProject(selection = {}, actionPatch = {}) {
   const normalized = normalizeWorkbenchSelection(selection);
+  const enemyConfig = normalizeWorkbenchEnemyConfig(actionPatch.enemyConfig ?? actionPatch);
   const character = findById(workbenchSeed.gameData.characters, normalized.characterId);
   const enemy = findById(workbenchSeed.gameData.enemies, normalized.enemyId);
   const actionDrafts = normalizeWorkbenchActionDrafts(actionPatch.actions ?? [actionPatch], normalized.characterId);
@@ -86,7 +93,9 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
   });
   const enemyInstance = createEnemyFromData(enemy, {
     enemyInstanceId: `enemy-${enemy.id}`,
-    level: actionPatch.enemyLevel ?? 80,
+    level: enemyConfig.level,
+    hpMultiplier: enemyConfig.hpMultiplier,
+    defenseMultiplier: enemyConfig.defenseMultiplier,
   });
   const titleAction = actionDrafts[0];
   const firstSkill = findById(workbenchSeed.gameData.skills, titleAction.skillId);
@@ -105,8 +114,28 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
       sourceCharacterId: character.id,
       sourceSkillIds: skillDrafts.map((draft) => draft.skillId),
       sourceEnemyId: enemy.id,
+      enemyConfig,
     },
   });
+}
+
+export function normalizeWorkbenchEnemyConfig(config = {}) {
+  const source = config ?? {};
+  return {
+    level: clampNumber(source.level ?? source.enemyLevel, 1, 200, DEFAULT_WORKBENCH_ENEMY_CONFIG.level),
+    hpMultiplier: clampNumber(
+      source.hpMultiplier ?? DEFAULT_WORKBENCH_ENEMY_CONFIG.hpMultiplier,
+      0.1,
+      100,
+      DEFAULT_WORKBENCH_ENEMY_CONFIG.hpMultiplier,
+    ),
+    defenseMultiplier: clampNumber(
+      source.defenseMultiplier ?? DEFAULT_WORKBENCH_ENEMY_CONFIG.defenseMultiplier,
+      0.1,
+      100,
+      DEFAULT_WORKBENCH_ENEMY_CONFIG.defenseMultiplier,
+    ),
+  };
 }
 
 export function normalizeWorkbenchActionDrafts(actionDrafts = [], characterId = DEFAULT_WORKBENCH_SELECTION.characterId) {
@@ -186,6 +215,14 @@ function actionTypeLabel(type) {
 function clampLevel(level, skill) {
   const maxLevel = Math.max(1, skill?.level?.values?.length ?? 1);
   return Math.min(maxLevel, Math.max(1, Number(level) || 1));
+}
+
+function clampNumber(value, min, max, fallback) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return fallback;
+  }
+  return Math.min(max, Math.max(min, number));
 }
 
 function findById(items, id) {

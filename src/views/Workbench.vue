@@ -67,6 +67,18 @@
           @update-action="updateAction"
         />
 
+        <EnemyPanel
+          :enemy="scenario.enemy"
+          :enemy-config="enemyConfig"
+          @update-enemy-config="updateEnemyConfig"
+        />
+
+        <ResourceMonitorPanel
+          :resource-timeline="simulationResult.resourceTimeline"
+          :summary="simulationResult.summary"
+          :diagnostics="simulationResult.diagnostics"
+        />
+
         <AnalysisPanel
           :summary="simulationResult.summary"
           :diagnostics="simulationResult.diagnostics"
@@ -87,8 +99,10 @@ import { computed, onMounted, ref } from 'vue';
 import { ArrowLeft, Document, Refresh } from '@element-plus/icons-vue';
 import ActionLibraryPanel from '../features/workbench/ActionLibraryPanel.vue';
 import AnalysisPanel from '../features/workbench/AnalysisPanel.vue';
+import EnemyPanel from '../features/workbench/EnemyPanel.vue';
 import EventLogPanel from '../features/workbench/EventLogPanel.vue';
 import PropertiesPanel from '../features/workbench/PropertiesPanel.vue';
+import ResourceMonitorPanel from '../features/workbench/ResourceMonitorPanel.vue';
 import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import {
@@ -99,6 +113,7 @@ import {
   getWorkbenchGameData,
   getWorkbenchSeed,
   normalizeWorkbenchActionDrafts,
+  normalizeWorkbenchEnemyConfig,
   normalizeWorkbenchSelection,
 } from '../domain/workbenchProjectFactory';
 import { ACTION_TYPES } from '../domain/projectSchema';
@@ -115,6 +130,7 @@ const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
 const initialDraft = createDefaultWorkbenchDraftState();
 const selection = ref({ ...initialDraft.selection });
+const enemyConfig = ref({ ...initialDraft.enemyConfig });
 const actionDrafts = ref([...initialDraft.actionDrafts]);
 const selectedActionId = ref(initialDraft.selectedActionId);
 const draftStatus = ref('未保存草稿');
@@ -122,6 +138,7 @@ const draftStatus = ref('未保存草稿');
 const availableSkills = computed(() => getSkillsForCharacter(selection.value.characterId));
 const project = computed(() =>
   createWorkbenchProject(selection.value, {
+    enemyConfig: enemyConfig.value,
     actions: actionDrafts.value,
   }),
 );
@@ -186,6 +203,14 @@ function updateAction(patch) {
       startMs: clampNumber(patch.startMs ?? action.startMs, 0, project.value.time.durationMs),
       level: clampNumber(nextLevel, 1, skill.level.values.length),
     });
+  });
+  markDraftDirty();
+}
+
+function updateEnemyConfig(patch) {
+  enemyConfig.value = normalizeWorkbenchEnemyConfig({
+    ...enemyConfig.value,
+    ...patch,
   });
   markDraftDirty();
 }
@@ -296,6 +321,7 @@ function deleteAction(actionId) {
 function saveDraft() {
   const snapshot = saveWorkbenchDraft(getLocalStorage(), {
     selection: selection.value,
+    enemyConfig: enemyConfig.value,
     actionDrafts: actionDrafts.value,
     selectedActionId: selectedActionId.value,
   });
@@ -310,6 +336,7 @@ function resetDraft() {
 
 function applyDraftState(draft) {
   selection.value = { ...draft.selection };
+  enemyConfig.value = normalizeWorkbenchEnemyConfig(draft.enemyConfig);
   actionDrafts.value = draft.actionDrafts.map((action) => createWorkbenchActionDraft(action));
   selectedActionId.value = draft.selectedActionId;
 }

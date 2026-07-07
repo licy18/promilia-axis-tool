@@ -1,7 +1,9 @@
 import {
   DEFAULT_WORKBENCH_ACTION_ID,
+  DEFAULT_WORKBENCH_ENEMY_CONFIG,
   DEFAULT_WORKBENCH_SELECTION,
   createWorkbenchActionDraft,
+  normalizeWorkbenchEnemyConfig,
   normalizeWorkbenchActionDrafts,
   normalizeWorkbenchSelection,
 } from './workbenchProjectFactory';
@@ -12,6 +14,7 @@ export const WORKBENCH_DRAFT_STORAGE_KEY = 'promilia-axis-tool:workbench-draft:v
 export function createDefaultWorkbenchDraftState() {
   return {
     selection: { ...DEFAULT_WORKBENCH_SELECTION },
+    enemyConfig: { ...DEFAULT_WORKBENCH_ENEMY_CONFIG },
     actionDrafts: [createWorkbenchActionDraft()],
     selectedActionId: DEFAULT_WORKBENCH_ACTION_ID,
     savedAt: null,
@@ -19,10 +22,11 @@ export function createDefaultWorkbenchDraftState() {
 }
 
 export function createWorkbenchDraftSnapshot(
-  { selection, actionDrafts, selectedActionId },
+  { selection, enemyConfig, actionDrafts, selectedActionId },
   savedAt = new Date().toISOString(),
 ) {
   const normalizedSelection = normalizeWorkbenchSelection(selection);
+  const normalizedEnemyConfig = normalizeWorkbenchEnemyConfig(enemyConfig);
   const normalizedActions = ensureActionDrafts(actionDrafts, normalizedSelection.characterId);
   const normalizedSelectedActionId = normalizedActions.some((action) => action.id === selectedActionId)
     ? selectedActionId
@@ -34,6 +38,7 @@ export function createWorkbenchDraftSnapshot(
     type: 'workbench-draft',
     savedAt,
     selection: normalizedSelection,
+    enemyConfig: normalizedEnemyConfig,
     actionDrafts: normalizedActions,
     selectedActionId: normalizedSelectedActionId,
   };

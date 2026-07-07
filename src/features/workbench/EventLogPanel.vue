@@ -35,6 +35,9 @@ function formatPayload(event) {
   if (event.type === 'TIMING_DATA_MISSING') {
     return event.payload.timingSource;
   }
+  if (event.type === 'RESOURCE_CHANGE') {
+    return `${event.payload.resource.toUpperCase()} ${formatSigned(event.payload.change)} / ${event.payload.reason}`;
+  }
   if (event.type === 'WAIT') {
     return `${event.payload.durationMs}ms / ${event.payload.note}`;
   }
@@ -48,6 +51,11 @@ function formatPayload(event) {
     return event.payload.projectId;
   }
   return event.actionId ?? '';
+}
+
+function formatSigned(value) {
+  const number = Number(value) || 0;
+  return `${number > 0 ? '+' : ''}${number}`;
 }
 </script>
 
@@ -123,6 +131,11 @@ li {
 .type.damage_projected {
   background: rgba(103, 194, 58, 0.12);
   color: #9bd982;
+}
+
+.type.resource_change {
+  background: rgba(121, 199, 185, 0.12);
+  color: #79c7b9;
 }
 
 .type.wait,

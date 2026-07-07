@@ -35,6 +35,9 @@ export function projectSimulationResult({ scenario, eventLog, damageEvents, reso
       actionCount: scenario.actions.length,
       enemyId: scenario.enemy.id,
       enemyName: scenario.enemy.name,
+      enemyLevel: scenario.enemy.level,
+      enemyHpMultiplier: scenario.enemy.hpMultiplier,
+      enemyDefenseMultiplier: scenario.enemy.defenseMultiplier,
     },
     eventLog,
     damageTimeline,
@@ -42,6 +45,7 @@ export function projectSimulationResult({ scenario, eventLog, damageEvents, reso
     summary: {
       totalRawDamage,
       projectedHitCount: damageTimeline.length,
+      resourceEventCount: resourceTimeline.length,
       actionCount: scenario.actions.length,
       formulaVersion: damageEvents[0]?.payload.formulaVersion ?? null,
       confidence: damageTimeline.some((entry) => entry.confidence === 'low') ? 'low' : 'medium',
