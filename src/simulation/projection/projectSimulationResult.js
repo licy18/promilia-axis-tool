@@ -391,6 +391,9 @@ function createSkillControlBehaviorCorrelation(skillId, actionSummaries = []) {
   const actionVariantBindingSummary = summarizeActionVariantBindings(
     actionVariantBindingCandidates
   );
+  const stateTimingEvidence = compactSkillStateTimingEvidence(
+    evidence.stateTimingEvidence
+  );
   const sampledResolvedHpBehaviors = hpBehaviorChains.flatMap(chain =>
     (chain.resolvedBehaviors ?? []).map(behavior => ({
       ...behavior,
@@ -445,6 +448,7 @@ function createSkillControlBehaviorCorrelation(skillId, actionSummaries = []) {
     sampledHpBehaviorChainCount: hpBehaviorChains.length,
     sampledHpLaneCandidateCount: hpLaneCandidates.length,
     sampledResolvedHpBehaviorCount: sampledResolvedHpBehaviors.length,
+    stateTimingEvidence,
     actionVariantBindingSummary,
     actionVariantBindingCandidates,
     hitFrameStartFrames: uniqueNumbers(
@@ -460,6 +464,8 @@ function createSkillControlBehaviorCorrelation(skillId, actionSummaries = []) {
       actionVariantBindingSummary.boundCandidateCount > 0
         ? 'action-variant-binding-candidates-generated-unconfirmed'
         : 'action-variant-binding-candidates-missing',
+    stateTimingEvidenceStatus:
+      stateTimingEvidence?.status ?? 'state-timing-evidence-missing',
     applied: false,
     note: 'Skill control behavior evidence is linked at skill level only; action-variant and per-hit runtime binding remain unconfirmed.',
   };
@@ -657,6 +663,84 @@ function summarizeSkillControlResourceBindings(behaviors) {
   };
 }
 
+function compactSkillStateTimingEvidence(evidence) {
+  if (!evidence) {
+    return null;
+  }
+  return {
+    status: evidence.status ?? 'state-timing-evidence-missing',
+    scope: evidence.scope ?? 'skill-level-action-state-candidates',
+    bindingStatus:
+      evidence.bindingStatus ?? 'state-timing-evidence-candidates-unconfirmed',
+    hpStateWindowCount: numberOrNull(evidence.hpStateWindowCount) ?? 0,
+    timingControlChainCount:
+      numberOrNull(evidence.timingControlChainCount) ?? 0,
+    animationStateControlCount:
+      numberOrNull(evidence.animationStateControlCount) ?? 0,
+    eventBridgeControlCount:
+      numberOrNull(evidence.eventBridgeControlCount) ?? 0,
+    hpStateNames: evidence.hpStateNames ?? [],
+    animationStateNames: evidence.animationStateNames ?? [],
+    eventBridgeSkillIds: evidence.eventBridgeSkillIds ?? [],
+    eventBridgeTypes: evidence.eventBridgeTypes ?? [],
+    eventBridgeValues: evidence.eventBridgeValues ?? [],
+    stateFindings: (evidence.stateFindings ?? []).slice(0, 6).map(item => ({
+      stateName: item.stateName ?? null,
+      status: item.status ?? null,
+      hpWindowCount: numberOrNull(item.hpWindowCount) ?? 0,
+      hpStartFrames: item.hpStartFrames ?? [],
+      subSkillIds: item.subSkillIds ?? [],
+      hitEffects: item.hitEffects ?? [],
+      animationControlCount: numberOrNull(item.animationControlCount) ?? 0,
+      animationFrameWindows: (item.animationFrameWindows ?? [])
+        .slice(0, 3)
+        .map(window => ({
+          sourceName: window.sourceName ?? null,
+          sourceStartFrame: numberOrNull(window.sourceStartFrame),
+          sourceEndFrame: numberOrNull(window.sourceEndFrame),
+          aniStartFrame: numberOrNull(window.aniStartFrame),
+          aniEndFrame: numberOrNull(window.aniEndFrame),
+          aniLength: numberOrNull(window.aniLength),
+        })),
+      overlappingEventBridgeCount:
+        numberOrNull(item.overlappingEventBridgeCount) ?? 0,
+      overlappingEventBridgeNames: item.overlappingEventBridgeNames ?? [],
+      applied: false,
+    })),
+    animationStateControls: (evidence.animationStateControls ?? [])
+      .slice(0, 4)
+      .map(item => ({
+        sourceName: item.sourceName ?? null,
+        sourceStartFrame: numberOrNull(item.sourceStartFrame),
+        sourceEndFrame: numberOrNull(item.sourceEndFrame),
+        selectedStateName: item.selectedStateName ?? null,
+        behaviorStartFrame: numberOrNull(item.behaviorStartFrame),
+        behaviorFrameCount: numberOrNull(item.behaviorFrameCount),
+        timelineGroupIndex: numberOrNull(item.timelineGroupIndex),
+        aniLength: numberOrNull(item.aniLength),
+        aniStartFrame: numberOrNull(item.aniStartFrame),
+        aniEndFrame: numberOrNull(item.aniEndFrame),
+      })),
+    eventBridgeControls: (evidence.eventBridgeControls ?? [])
+      .slice(0, 5)
+      .map(item => ({
+        sourceName: item.sourceName ?? null,
+        sourceStartFrame: numberOrNull(item.sourceStartFrame),
+        sourceEndFrame: numberOrNull(item.sourceEndFrame),
+        skillId: numberOrNull(item.skillId),
+        bridge: numberOrNull(item.bridge),
+        type: numberOrNull(item.type),
+        frameIndex: numberOrNull(item.frameIndex),
+        allowAttack: numberOrNull(item.allowAttack),
+        allowMove: numberOrNull(item.allowMove),
+        allowJump: numberOrNull(item.allowJump),
+        allowDodge: numberOrNull(item.allowDodge),
+        allowedInputs: item.allowedInputs ?? [],
+      })),
+    applied: false,
+  };
+}
+
 function createSkillControlHitFrameWindows(hpBehaviorChains) {
   return hpBehaviorChains
     .map(chain => ({
@@ -737,6 +821,15 @@ function compactSkillControlBehaviorCorrelationForAction(
   const bindingCandidate = correlation.actionVariantBindingCandidates?.find(
     item => item.actionId === actionSummary.actionId
   );
+  const primaryBindingCandidates = (bindingCandidate?.candidates ?? []).filter(
+    item => item.confidence === bindingCandidate.confidence
+  );
+  const bindingStateNames = uniqueStrings(
+    primaryBindingCandidates.flatMap(item => item.stateNames ?? [])
+  );
+  const stateTimingFindings = (
+    correlation.stateTimingEvidence?.stateFindings ?? []
+  ).filter(item => bindingStateNames.includes(item.stateName));
   return {
     status: correlation.status,
     scope: correlation.scope,
@@ -748,6 +841,8 @@ function compactSkillControlBehaviorCorrelationForAction(
     hitEffects: correlation.resourceBindings?.hitEffects ?? [],
     correlationStatus: correlation.correlationStatus,
     actionVariantBindingStatus: correlation.actionVariantBindingStatus,
+    stateTimingEvidenceStatus: correlation.stateTimingEvidenceStatus,
+    stateTimingFindings,
     actionVariantBindingCandidate: bindingCandidate
       ? {
           status: bindingCandidate.status,

@@ -449,7 +449,10 @@ function formatBehaviorCorrelationSummary(correlations = []) {
   const bindingText = formatActionVariantBindingSummary(
     correlation.actionVariantBindingCandidates
   );
-  return ` / 行为节点 ${formatNumber(correlation.hpLaneCandidateCount)} 候选${frameText}${stateText}${bindingText}`;
+  const stateTimingText = formatStateTimingSummary(
+    correlation.stateTimingEvidence
+  );
+  return ` / 行为节点 ${formatNumber(correlation.hpLaneCandidateCount)} 候选${frameText}${stateText}${bindingText}${stateTimingText}`;
 }
 
 function formatActionVariantBindingSummary(bindings = []) {
@@ -479,6 +482,21 @@ function formatActionVariantBindingSummary(bindings = []) {
   const stateText = states ? `->${states}` : '';
   const frameText = frames ? ` ${frames}` : '';
   return ` · 绑定候选 ${binding.actionVariantLabel}${stateText}${frameText}`;
+}
+
+function formatStateTimingSummary(evidence) {
+  const findings = (evidence?.stateFindings ?? [])
+    .filter(item => item.stateName)
+    .slice(0, 2)
+    .map(item => `${item.stateName} ${formatStateTimingFindingStatus(item)}`);
+  return findings.length > 0 ? ` · 状态证据 ${findings.join(' / ')}` : '';
+}
+
+function formatStateTimingFindingStatus(finding) {
+  if (finding.animationControlCount > 0) {
+    return '动画+命中';
+  }
+  return '仅资源命中';
 }
 
 function uniqueDisplayValues(values) {

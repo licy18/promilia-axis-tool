@@ -416,6 +416,56 @@ const SKILL_BEHAVIOR_SCRIPT_TYPE_CANDIDATES = Object.freeze([
     status: 'field-signature-matched',
     confidence: 'medium',
     source: IL2CPP_DUMP_SOURCE,
+    sourceLineRange: 'dump.cs:284907-284946',
+    scriptPathId: '-2619638872350711656',
+    namespace: 'Lens.Gameplay.Modules.BigWorld',
+    className: 'AnimationBehaviorData',
+    typeDefIndex: 7192,
+    baseType: 'SkillBehaviorData',
+    signatureFields: [
+      'loop',
+      'fadeTime',
+      'selectedStateName',
+      'rootmotion',
+      'aniLength',
+      'layerIndex',
+      'defaultAniLength',
+      'aniStartFrame',
+      'aniEndFrame',
+      'aniPlaySpeed',
+    ],
+  },
+  {
+    status: 'field-signature-matched',
+    confidence: 'medium',
+    source: IL2CPP_DUMP_SOURCE,
+    sourceLineRange: 'dump.cs:285740-285783',
+    scriptPathId: '-2061467371774231447',
+    namespace: 'Lens.Gameplay.Modules.BigWorld',
+    className: 'EventBridgeBehaviorData',
+    typeDefIndex: 7223,
+    baseType: 'SkillBehaviorData',
+    signatureFields: [
+      'allowAttack',
+      'allowSkill1',
+      'allowSkill2',
+      'allowSkill3',
+      'allowMove',
+      'allowJump',
+      'allowDodge',
+      'allowCountermeasuresSkill',
+      'bridge',
+      'type',
+      'skillId',
+      'skillIndex',
+      'frameIndex',
+      'interruptBehavior',
+    ],
+  },
+  {
+    status: 'field-signature-matched',
+    confidence: 'medium',
+    source: IL2CPP_DUMP_SOURCE,
     sourceLineRange: 'dump.cs:286170-286206',
     scriptPathId: '8289252000250858251',
     namespace: 'Lens.Gameplay.Modules.BigWorld',
@@ -3293,6 +3343,9 @@ async function buildSkillControlEvidenceItem(skill, skillControlBySkillId) {
     behaviorReferenceSummary: aggregate.behaviorReferenceSummary,
     effectLaneBehaviorChains: aggregate.behaviorChains,
     effectLaneBehaviorChainsByLane: aggregate.behaviorChainsByLane,
+    stateTimingEvidence: buildSkillStateTimingEvidence(
+      aggregate.behaviorChainsByLane
+    ),
     frameRange: buildFrameRange(aggregate.startFrames, aggregate.endFrames),
     sampleNodeCandidates: aggregate.candidates.slice(
       0,
@@ -3515,6 +3568,266 @@ function pushSkillEffectLaneCandidateSampleForLane(evidence, lane, candidate) {
   samples.push(candidate);
 }
 
+function buildSkillStateTimingEvidence(behaviorChainsByLane) {
+  const hpChains = behaviorChainsByLane?.hpDamage ?? [];
+  const timingChains = behaviorChainsByLane?.timingControl ?? [];
+  const hpStateWindows = summarizeHpStateWindows(hpChains);
+  const animationStateControls = timingChains
+    .flatMap(compactAnimationStateControls)
+    .filter(Boolean);
+  const eventBridgeControls = timingChains
+    .flatMap(compactEventBridgeControls)
+    .filter(Boolean);
+  const stateFindings = summarizeStateTimingFindings({
+    hpStateWindows,
+    animationStateControls,
+    eventBridgeControls,
+  });
+
+  return compactObject({
+    status:
+      hpStateWindows.length > 0 ||
+      animationStateControls.length > 0 ||
+      eventBridgeControls.length > 0
+        ? 'state-timing-evidence-found-action-binding-unconfirmed'
+        : 'state-timing-evidence-missing',
+    sourceKind: 'azpr-skill-control-state-timing-evidence',
+    scope: 'skill-level-action-state-candidates',
+    hpStateWindowCount: hpStateWindows.length,
+    timingControlChainCount: timingChains.length,
+    animationStateControlCount: animationStateControls.length,
+    eventBridgeControlCount: eventBridgeControls.length,
+    hpStateNames: uniqueStrings(
+      hpStateWindows.flatMap(item => item.stateNames)
+    ),
+    animationStateNames: uniqueStrings(
+      animationStateControls.map(item => item.selectedStateName)
+    ),
+    eventBridgeSkillIds: uniqueNumbers(
+      eventBridgeControls.map(item => item.skillId)
+    ),
+    eventBridgeTypes: uniqueNumbers(eventBridgeControls.map(item => item.type)),
+    eventBridgeValues: uniqueNumbers(
+      eventBridgeControls.map(item => item.bridge)
+    ),
+    hpStateWindows: hpStateWindows.slice(0, 8),
+    animationStateControls: animationStateControls.slice(0, 8),
+    eventBridgeControls: eventBridgeControls.slice(0, 8),
+    stateFindings,
+    bindingStatus: 'state-timing-evidence-candidates-unconfirmed',
+    applied: false,
+  });
+}
+
+function summarizeHpStateWindows(hpChains) {
+  return hpChains
+    .map(chain => {
+      const behaviors = chain.resolvedBehaviors ?? [];
+      const refs = behaviors.flatMap(
+        behavior => behavior.elementBaseDataRefs ?? []
+      );
+      const matches = refs.flatMap(ref => ref.resourceMapMatches ?? []);
+      return compactObject({
+        sourceName: chain.sourceName ?? null,
+        sourceTrackName: chain.sourceTrackName ?? null,
+        sourceStartFrame: numberOrNull(chain.sourceStartFrame),
+        sourceEndFrame: numberOrNull(chain.sourceEndFrame),
+        behaviorStartFrames: uniqueNumbers(
+          behaviors.map(behavior => behavior.startFrame)
+        ),
+        behaviorFrameCounts: uniqueNumbers(
+          behaviors.map(behavior => behavior.frameCount)
+        ),
+        scriptClassNames: uniqueStrings(
+          behaviors.map(behavior => behavior.scriptTypeCandidate?.className)
+        ),
+        subSkillIds: uniqueNumbers(matches.flatMap(match => match.subSkillIds)),
+        stateNames: uniqueStrings(matches.flatMap(match => match.stateNames)),
+        hitEffects: uniqueStrings(matches.flatMap(match => match.hitEffects)),
+      });
+    })
+    .filter(item => item.stateNames?.length > 0);
+}
+
+function compactAnimationStateControls(chain) {
+  return (chain.resolvedBehaviors ?? [])
+    .filter(
+      behavior =>
+        behavior.selectedStateName ||
+        behavior.scriptTypeCandidate?.className === 'AnimationBehaviorData'
+    )
+    .map(behavior =>
+      compactObject({
+        sourceName: chain.sourceName ?? null,
+        sourceTrackName: chain.sourceTrackName ?? null,
+        sourceStartFrame: numberOrNull(chain.sourceStartFrame),
+        sourceEndFrame: numberOrNull(chain.sourceEndFrame),
+        file: behavior.file ?? null,
+        pathId: behavior.pathId ?? null,
+        scriptTypeCandidate: compactScriptTypeCandidate(
+          behavior.scriptTypeCandidate
+        ),
+        selectedStateName: behavior.selectedStateName ?? null,
+        selectedClipName: behavior.selectedClipName ?? null,
+        behaviorStartFrame: numberOrNull(behavior.startFrame),
+        behaviorFrameCount: numberOrNull(behavior.frameCount),
+        timelineGroupIndex: numberOrNull(behavior.timelineGroupIndex),
+        behaviorGroupId: numberOrNull(behavior.behaviorGroupId),
+        behaviorIndex: numberOrNull(behavior.behaviorIndex),
+        rootmotion: numberOrNull(behavior.rootmotion),
+        aniLength: numberOrNull(behavior.aniLength),
+        defaultAniLength: numberOrNull(behavior.defaultAniLength),
+        aniStartFrame: numberOrNull(behavior.aniStartFrame),
+        aniEndFrame: numberOrNull(behavior.aniEndFrame),
+        aniPlaySpeed: numberOrNull(behavior.aniPlaySpeed),
+      })
+    );
+}
+
+function compactEventBridgeControls(chain) {
+  return (chain.resolvedBehaviors ?? [])
+    .filter(
+      behavior =>
+        behavior.scriptTypeCandidate?.className === 'EventBridgeBehaviorData' ||
+        behavior.bridge != null ||
+        behavior.type != null ||
+        behavior.skillId != null
+    )
+    .map(behavior =>
+      compactObject({
+        sourceName: chain.sourceName ?? null,
+        sourceTrackName: chain.sourceTrackName ?? null,
+        sourceStartFrame: numberOrNull(chain.sourceStartFrame),
+        sourceEndFrame: numberOrNull(chain.sourceEndFrame),
+        file: behavior.file ?? null,
+        pathId: behavior.pathId ?? null,
+        scriptTypeCandidate: compactScriptTypeCandidate(
+          behavior.scriptTypeCandidate
+        ),
+        behaviorStartFrame: numberOrNull(behavior.startFrame),
+        behaviorFrameCount: numberOrNull(behavior.frameCount),
+        timelineGroupIndex: numberOrNull(behavior.timelineGroupIndex),
+        behaviorGroupId: numberOrNull(behavior.behaviorGroupId),
+        behaviorIndex: numberOrNull(behavior.behaviorIndex),
+        allowAttack: numberOrNull(behavior.allowAttack),
+        allowSkill1: numberOrNull(behavior.allowSkill1),
+        allowSkill2: numberOrNull(behavior.allowSkill2),
+        allowSkill3: numberOrNull(behavior.allowSkill3),
+        allowMove: numberOrNull(behavior.allowMove),
+        allowJump: numberOrNull(behavior.allowJump),
+        allowDodge: numberOrNull(behavior.allowDodge),
+        allowHomeSkill: numberOrNull(behavior.allowHomeSkill),
+        allowJointStrikeSkill: numberOrNull(behavior.allowJointStrikeSkill),
+        allowCountermeasuresSkill: numberOrNull(
+          behavior.allowCountermeasuresSkill
+        ),
+        bridge: numberOrNull(behavior.bridge),
+        type: numberOrNull(behavior.type),
+        skillId: numberOrNull(behavior.skillId),
+        skillIndex: numberOrNull(behavior.skillIndex),
+        frameIndex: numberOrNull(behavior.frameIndex),
+        runFactor: numberOrNull(behavior.runFactor),
+        baseOnInput: numberOrNull(behavior.baseOnInput),
+        inputToIndex: numberOrNull(behavior.inputToIndex),
+        interruptBehavior: numberOrNull(behavior.interruptBehavior),
+        allowedInputs: summarizeAllowedEventBridgeInputs(behavior),
+      })
+    );
+}
+
+function compactScriptTypeCandidate(candidate) {
+  if (!candidate) {
+    return null;
+  }
+  return {
+    status: candidate.status,
+    confidence: candidate.confidence,
+    className: candidate.className,
+    sourceLineRange: candidate.sourceLineRange,
+  };
+}
+
+function summarizeAllowedEventBridgeInputs(behavior) {
+  return [
+    ['attack', behavior.allowAttack],
+    ['skill1', behavior.allowSkill1],
+    ['skill2', behavior.allowSkill2],
+    ['skill3', behavior.allowSkill3],
+    ['move', behavior.allowMove],
+    ['jump', behavior.allowJump],
+    ['dodge', behavior.allowDodge],
+    ['homeSkill', behavior.allowHomeSkill],
+    ['jointStrikeSkill', behavior.allowJointStrikeSkill],
+    ['countermeasuresSkill', behavior.allowCountermeasuresSkill],
+  ]
+    .filter(([, value]) => numberOrNull(value) === 1)
+    .map(([key]) => key);
+}
+
+function summarizeStateTimingFindings({
+  hpStateWindows,
+  animationStateControls,
+  eventBridgeControls,
+}) {
+  return uniqueStrings(hpStateWindows.flatMap(item => item.stateNames)).map(
+    stateName => {
+      const hpWindows = hpStateWindows.filter(item =>
+        (item.stateNames ?? []).includes(stateName)
+      );
+      const animationControls = animationStateControls.filter(
+        item => item.selectedStateName === stateName
+      );
+      const overlappingBridgeControls = eventBridgeControls.filter(bridge =>
+        hpWindows.some(window => frameWindowsOverlap(window, bridge))
+      );
+
+      return compactObject({
+        stateName,
+        status:
+          animationControls.length > 0
+            ? 'hp-state-has-animation-control-candidate'
+            : 'hp-state-resource-map-only-no-local-animation-control',
+        hpWindowCount: hpWindows.length,
+        hpStartFrames: uniqueNumbers(
+          hpWindows.map(item => item.sourceStartFrame)
+        ),
+        subSkillIds: uniqueNumbers(hpWindows.flatMap(item => item.subSkillIds)),
+        hitEffects: uniqueStrings(hpWindows.flatMap(item => item.hitEffects)),
+        animationControlCount: animationControls.length,
+        animationFrameWindows: animationControls.map(item => ({
+          sourceName: item.sourceName,
+          sourceStartFrame: item.sourceStartFrame,
+          sourceEndFrame: item.sourceEndFrame,
+          aniStartFrame: item.aniStartFrame,
+          aniEndFrame: item.aniEndFrame,
+          aniLength: item.aniLength,
+        })),
+        overlappingEventBridgeCount: overlappingBridgeControls.length,
+        overlappingEventBridgeNames: uniqueStrings(
+          overlappingBridgeControls.map(item => item.sourceName)
+        ),
+        applied: false,
+      });
+    }
+  );
+}
+
+function frameWindowsOverlap(left, right) {
+  const leftStart = numberOrNull(left.sourceStartFrame);
+  const leftEnd = numberOrNull(left.sourceEndFrame) ?? leftStart;
+  const rightStart = numberOrNull(right.sourceStartFrame);
+  const rightEnd = numberOrNull(right.sourceEndFrame) ?? rightStart;
+  if (
+    leftStart == null ||
+    leftEnd == null ||
+    rightStart == null ||
+    rightEnd == null
+  ) {
+    return false;
+  }
+  return leftStart <= rightEnd && rightStart <= leftEnd;
+}
+
 async function buildSkillBehaviorChain(control, fileName, candidate, context) {
   if (!candidate?.laneHints?.length || !Array.isArray(control.behaviorList)) {
     return null;
@@ -3639,6 +3952,46 @@ function compactMonoBehaviourBehaviorTarget(
     behaviorIndex: numberOrNull(value.behaviorIndex),
     startFrame: numberOrNull(value.startFrame),
     frameCount: numberOrNull(value.frameCount),
+    selectedStateName: value.selectedStateName ?? null,
+    selectedClipName: value.selectedClipName ?? null,
+    loop: numberOrNull(value.loop),
+    fadeTime: numberOrNull(value.fadeTime),
+    rootmotion: numberOrNull(value.rootmotion),
+    cantBeBlock: numberOrNull(value.cantBeBlock),
+    ignoreBlock: numberOrNull(value.ignoreBlock),
+    lastLayerIndex: numberOrNull(value.lastLayerIndex),
+    isPartsAnimation: numberOrNull(value.isPartsAnimation),
+    aniLength: numberOrNull(value.aniLength),
+    layerIndex: numberOrNull(value.layerIndex),
+    defaultAniLength: numberOrNull(value.defaultAniLength),
+    aniStartFrame: numberOrNull(value.aniStartFrame),
+    aniEndFrame: numberOrNull(value.aniEndFrame),
+    aniPlaySpeed: numberOrNull(value.aniPlaySpeed),
+    segmentedAnimation: numberOrNull(value.segmentedAnimation),
+    useBlendTree: numberOrNull(value.useBlendTree),
+    moveAttack: numberOrNull(value.moveAttack),
+    independentUse: numberOrNull(value.independentUse),
+    independentSkillGroup: numberOrNull(value.independentSkillGroup),
+    allowAttack: numberOrNull(value.allowAttack),
+    allowSkill1: numberOrNull(value.allowSkill1),
+    allowSkill2: numberOrNull(value.allowSkill2),
+    allowSkill3: numberOrNull(value.allowSkill3),
+    allowMove: numberOrNull(value.allowMove),
+    allowJump: numberOrNull(value.allowJump),
+    allowDodge: numberOrNull(value.allowDodge),
+    allowHomeSkill: numberOrNull(value.allowHomeSkill),
+    allowJointStrikeSkill: numberOrNull(value.allowJointStrikeSkill),
+    allowCountermeasuresSkill: numberOrNull(value.allowCountermeasuresSkill),
+    bridge: numberOrNull(value.bridge),
+    type: numberOrNull(value.type),
+    skillId: numberOrNull(value.skillId),
+    skillIndex: numberOrNull(value.skillIndex),
+    frameIndex: numberOrNull(value.frameIndex),
+    runFactor: numberOrNull(value.runFactor),
+    baseOnInput: numberOrNull(value.baseOnInput),
+    inputToIndex: numberOrNull(value.inputToIndex),
+    interruptBehavior: numberOrNull(value.interruptBehavior),
+    emojiName: value.emojiName ?? null,
     collisionLayer: numberOrNull(value.collisionLayer),
     elementalType: numberOrNull(value.elementalType),
     targetType: numberOrNull(value.targetType),

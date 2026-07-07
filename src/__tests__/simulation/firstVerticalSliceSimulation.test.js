@@ -638,6 +638,34 @@ describe('first vertical slice simulation', () => {
           sampledHpLaneCandidateCount: 5,
           sampledResolvedHpBehaviorCount: 5,
           hitFrameStartFrames: [12, 13, 16, 19],
+          stateTimingEvidenceStatus:
+            'state-timing-evidence-found-action-binding-unconfirmed',
+          stateTimingEvidence: expect.objectContaining({
+            status: 'state-timing-evidence-found-action-binding-unconfirmed',
+            hpStateWindowCount: 5,
+            timingControlChainCount: 5,
+            animationStateControlCount: 1,
+            eventBridgeControlCount: 4,
+            hpStateNames: ['Skill0_1', 'Skill0_6'],
+            animationStateNames: ['Skill0_6'],
+            eventBridgeSkillIds: [0, 80102, 10900102],
+            stateFindings: [
+              expect.objectContaining({
+                stateName: 'Skill0_1',
+                status: 'hp-state-resource-map-only-no-local-animation-control',
+                hpWindowCount: 2,
+                hpStartFrames: [12, 13],
+                animationControlCount: 0,
+              }),
+              expect.objectContaining({
+                stateName: 'Skill0_6',
+                status: 'hp-state-has-animation-control-candidate',
+                hpWindowCount: 3,
+                hpStartFrames: [13, 16, 19],
+                animationControlCount: 1,
+              }),
+            ],
+          }),
           actionVariantBindingStatus:
             'action-variant-binding-candidates-generated-unconfirmed',
           actionVariantBindingSummary: {
@@ -696,6 +724,16 @@ describe('first vertical slice simulation', () => {
               'skill-level-only-action-variant-binding-unresolved',
             actionVariantBindingStatus:
               'action-variant-binding-candidates-generated-unconfirmed',
+            stateTimingEvidenceStatus:
+              'state-timing-evidence-found-action-binding-unconfirmed',
+            stateTimingFindings: [
+              expect.objectContaining({
+                stateName: 'Skill0_1',
+                status: 'hp-state-resource-map-only-no-local-animation-control',
+                hpWindowCount: 2,
+                animationControlCount: 0,
+              }),
+            ],
             actionVariantBindingCandidate: expect.objectContaining({
               confidence: 'medium',
               candidateCount: 5,
@@ -876,6 +914,22 @@ describe('first vertical slice simulation', () => {
           sampledHpBehaviorChainCount: 5,
           sampledHpLaneCandidateCount: 5,
           hitFrameStartFrames: [12, 13, 16, 19],
+          stateTimingEvidenceStatus:
+            'state-timing-evidence-found-action-binding-unconfirmed',
+          stateTimingEvidence: expect.objectContaining({
+            animationStateNames: ['Skill0_6'],
+            eventBridgeSkillIds: [0, 80102, 10900102],
+            stateFindings: [
+              expect.objectContaining({
+                stateName: 'Skill0_1',
+                status: 'hp-state-resource-map-only-no-local-animation-control',
+              }),
+              expect.objectContaining({
+                stateName: 'Skill0_6',
+                status: 'hp-state-has-animation-control-candidate',
+              }),
+            ],
+          }),
           actionVariantBindingStatus:
             'action-variant-binding-candidates-generated-unconfirmed',
           actionVariantBindingSummary: {
@@ -944,6 +998,27 @@ describe('first vertical slice simulation', () => {
         }),
       ]),
     });
+    expect(
+      result.summary.formulaCandidatePatternSummary.actionSummaries.find(
+        item => item.actionVariantLabel === '普攻'
+      ).skillControlBehaviorCorrelation.stateTimingFindings
+    ).toEqual([
+      expect.objectContaining({
+        stateName: 'Skill0_1',
+        status: 'hp-state-resource-map-only-no-local-animation-control',
+      }),
+    ]);
+    expect(
+      result.summary.formulaCandidatePatternSummary.actionSummaries.find(
+        item => item.actionVariantLabel === '重击'
+      ).skillControlBehaviorCorrelation.stateTimingFindings
+    ).toEqual([
+      expect.objectContaining({
+        stateName: 'Skill0_6',
+        status: 'hp-state-has-animation-control-candidate',
+        animationControlCount: 1,
+      }),
+    ]);
   });
 
   it('preserves generated skill segment batch metadata through compilation', () => {

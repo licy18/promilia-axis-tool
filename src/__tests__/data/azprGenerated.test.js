@@ -379,7 +379,7 @@ describe('generated AzPr data', () => {
       externalElementBaseReferenceSkills: 1,
       resourceMapMatchedElementBaseReferenceSkills: 1,
       resourceMapUnmatchedElementBaseReferenceSkills: 0,
-      scriptTypeCandidateSkills: 1,
+      scriptTypeCandidateSkills: 4,
       elementTypeCatalogCandidates: 2,
       externalElementObjectResolvedSkills: 1,
       externalElementObjectResolvedRefs: 8,
@@ -742,7 +742,7 @@ describe('generated AzPr data', () => {
       externalElementBaseRefs: 13,
       resourceMapMatchedElementBaseRefs: 13,
       resourceMapUnmatchedElementBaseRefs: 0,
-      scriptTypeCandidateBehaviorRefs: 5,
+      scriptTypeCandidateBehaviorRefs: 10,
       resolvedBehaviorRefsByLane: {
         hpDamage: 5,
         toughnessDamage: 0,
@@ -791,6 +791,75 @@ describe('generated AzPr data', () => {
       ['攻击碰撞', 16, 'Skill0_6'],
       ['攻击碰撞', 13, 'Skill0_6'],
       ['普通-攻击碰撞', 12, 'Skill0_1'],
+    ]);
+    expect(mayoiAttack.stateTimingEvidence).toMatchObject({
+      status: 'state-timing-evidence-found-action-binding-unconfirmed',
+      scope: 'skill-level-action-state-candidates',
+      hpStateWindowCount: 5,
+      timingControlChainCount: 5,
+      animationStateControlCount: 1,
+      eventBridgeControlCount: 4,
+      hpStateNames: ['Skill0_1', 'Skill0_6'],
+      animationStateNames: ['Skill0_6'],
+      eventBridgeSkillIds: [0, 80102, 10900102],
+      bindingStatus: 'state-timing-evidence-candidates-unconfirmed',
+      applied: false,
+    });
+    expect(mayoiAttack.stateTimingEvidence.animationStateControls).toEqual([
+      expect.objectContaining({
+        sourceName: '动作',
+        sourceStartFrame: 0,
+        sourceEndFrame: 230,
+        selectedStateName: 'Skill0_6',
+        aniLength: 230,
+        aniStartFrame: 0,
+        aniEndFrame: 21,
+        scriptTypeCandidate: expect.objectContaining({
+          className: 'AnimationBehaviorData',
+        }),
+      }),
+    ]);
+    expect(mayoiAttack.stateTimingEvidence.eventBridgeControls).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          sourceName: '连击桥接',
+          sourceStartFrame: 0,
+          sourceEndFrame: 29,
+          skillId: 80102,
+          frameIndex: 8,
+          allowedInputs: expect.arrayContaining(['jump', 'dodge']),
+          scriptTypeCandidate: expect.objectContaining({
+            className: 'EventBridgeBehaviorData',
+          }),
+        }),
+        expect.objectContaining({
+          sourceName: '立即跳转',
+          sourceStartFrame: 16,
+          sourceEndFrame: 43,
+          skillId: 10900102,
+          type: 1,
+        }),
+      ])
+    );
+    expect(mayoiAttack.stateTimingEvidence.stateFindings).toEqual([
+      expect.objectContaining({
+        stateName: 'Skill0_1',
+        status: 'hp-state-resource-map-only-no-local-animation-control',
+        hpWindowCount: 2,
+        hpStartFrames: [12, 13],
+        subSkillIds: [10900101],
+        animationControlCount: 0,
+        overlappingEventBridgeNames: ['连击桥接'],
+      }),
+      expect.objectContaining({
+        stateName: 'Skill0_6',
+        status: 'hp-state-has-animation-control-candidate',
+        hpWindowCount: 3,
+        hpStartFrames: [13, 16, 19],
+        subSkillIds: [109001011],
+        animationControlCount: 1,
+        overlappingEventBridgeNames: ['立即跳转', '连击桥接'],
+      }),
     ]);
     expect(mayoiAttack.effectLaneBehaviorChains).toEqual(
       expect.arrayContaining([

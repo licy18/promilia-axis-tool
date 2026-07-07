@@ -3317,3 +3317,69 @@ Workbench 候选模式摘要会追加动作绑定提示：
 - 【普通攻击】当前只有中置信候选：`普通-攻击碰撞 / Skill0_1 / 12-13f, 13-14f`。
 - 【重击 / 闪击 / 跃击】当前只是低置信共享候选：`攻击碰撞 / Skill0_6`。
 - 下一阶段必须验证 `Skill0_1` / `Skill0_6` 与动作形态的真实对应关系，不能把候选直接写入最终伤害公式。
+
+## 49. 阶段 5-8X-A：stateTimingEvidence
+
+阶段 5-8X-A 新增状态/时序控制证据索引，用于继续验证 `Skill0_1` / `Skill0_6` 与动作形态的真实对应关系。
+
+### 49.1 behavior script candidates
+
+`skill-asset-evidence.json` 现在可识别三类行为脚本候选：
+
+- `AnimationBehaviorData`：字段签名来自 `dump.cs:284907-284946`，关键字段包括 `selectedStateName`、`aniLength`、`aniStartFrame`、`aniEndFrame`。
+- `EventBridgeBehaviorData`：字段签名来自 `dump.cs:285740-285783`，关键字段包括 `allowAttack`、`allowMove`、`allowJump`、`allowDodge`、`bridge`、`type`、`skillId`、`frameIndex`。
+- `InjectToTargetKeyFrameBehaviorData`：阶段 5-8K 已接入的 HP 命中注入行为。
+
+### 49.2 currentSkillControlEvidence[].stateTimingEvidence
+
+新增字段示例：
+
+```javascript
+{
+  "stateTimingEvidence": {
+    "status": "state-timing-evidence-found-action-binding-unconfirmed",
+    "sourceKind": "azpr-skill-control-state-timing-evidence",
+    "scope": "skill-level-action-state-candidates",
+    "hpStateWindowCount": 5,
+    "timingControlChainCount": 5,
+    "animationStateControlCount": 1,
+    "eventBridgeControlCount": 4,
+    "hpStateNames": ["Skill0_1", "Skill0_6"],
+    "animationStateNames": ["Skill0_6"],
+    "eventBridgeSkillIds": [0, 80102, 10900102],
+    "stateFindings": [
+      {
+        "stateName": "Skill0_1",
+        "status": "hp-state-resource-map-only-no-local-animation-control",
+        "hpStartFrames": [12, 13],
+        "animationControlCount": 0
+      },
+      {
+        "stateName": "Skill0_6",
+        "status": "hp-state-has-animation-control-candidate",
+        "hpStartFrames": [13, 16, 19],
+        "animationControlCount": 1
+      }
+    ],
+    "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
+    "applied": false
+  }
+}
+```
+
+### 49.3 projection / Workbench
+
+- `formulaCandidatePatternSummary.skillControlBehaviorCorrelations[].stateTimingEvidence`：保留技能级状态/时序证据摘要。
+- `formulaCandidatePatternSummary.skillControlBehaviorCorrelations[].stateTimingEvidenceStatus`：快速状态字段。
+- `actionSummaries[].skillControlBehaviorCorrelation.stateTimingFindings`：按动作主置信候选过滤的 state finding。
+- Workbench 候选模式摘要会追加：
+
+```text
+状态证据 Skill0_1 仅资源命中 / Skill0_6 动画+命中
+```
+
+### 49.4 当前边界
+
+- 这些字段仍为证据索引，所有 `applied` 必须保持 `false`。
+- `Skill0_6` 有动画状态控制和 HP 命中窗口，但仍不能拆分重击、闪击、跃击。
+- `Skill0_1` 只有 HP 资源映射命中，尚未在同一 `skill_control_10900101` 中找到动画状态控制；下一步需要追相关 `skill_control_10900102.asset`、`skill_control_80102.asset`、Yoo index 和 EventBridge runtime。

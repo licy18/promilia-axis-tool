@@ -2689,6 +2689,50 @@ Endaxis 参考边界：
 - 优先追 `skill_control` 中 `stateName`、动画状态、trackIndex、timelineGroupIndex、combo/timingControl 节点与动作标签之间的关系。
 - 若本地 JSON 仍不足，继续沿 Extractor 的 Unity 资源、Yoo index 或 IL2CPP runtime 方法追动作状态切换和 DamageElement 执行入口。
 
+### 2026-07-08：阶段 5-8X-A 状态/时序控制证据索引
+
+本轮完成：
+
+- `scripts/generate-azpr-data.mjs` 新增 `AnimationBehaviorData` 与 `EventBridgeBehaviorData` 脚本类型候选。
+- `skill-asset-evidence.json.currentSkillControlEvidence[].stateTimingEvidence` 新增状态/时序证据摘要：
+  - HP 状态窗口：5 个。
+  - timingControl 行为链：5 个。
+  - 动画状态控制：1 个。
+  - EventBridge 控制：4 个。
+- 仿真投影 `formulaCandidatePatternSummary.skillControlBehaviorCorrelations[]` 接入 `stateTimingEvidence`。
+- `actionSummaries[].skillControlBehaviorCorrelation.stateTimingFindings` 会按动作主置信候选过滤对应 state finding。
+- Workbench 候选模式摘要新增状态证据提示。
+
+当前末音 `10900101` 状态/时序发现：
+
+- `Skill0_6`：有 `动作 / AnimationBehaviorData`，窗口 `0-230f`，`selectedStateName = Skill0_6`，并有 3 个 HP 命中窗口 `13f / 16f / 19f`。
+- `Skill0_1`：有 2 个 HP 命中窗口 `12f / 13f`，但同一 `skill_control_10900101` 中尚未找到动画状态控制；当前状态为 `hp-state-resource-map-only-no-local-animation-control`。
+- EventBridge 行为包含：
+  - `连击桥接 0-29f`，目标 `skillId = 80102`，`frameIndex = 8`。
+  - `立即跳转 16-43f`，目标 `skillId = 10900102`。
+  - `移动打断 / 全程打断` 在 `29f` 后开放 attack/move/jump/dodge 等输入。
+
+Workbench 当前默认样本显示：
+
+```text
+候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 12f/13f/16f/19f · Skill0_6/Skill0_1 · 绑定候选 普攻->Skill0_1 12f/13f · 状态证据 Skill0_1 仅资源命中 / Skill0_6 动画+命中
+```
+
+验收结果：
+
+- `npm test -- --run src/__tests__/data/azprGenerated.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、53 条测试通过。
+
+当前边界：
+
+- `stateTimingEvidence.applied` 必须保持 `false`。
+- `Skill0_6` 的动画+命中证据强于 `Skill0_1`，但仍不能证明重击/闪击/跃击分别对应哪条命中。
+- `Skill0_1` 可能由别的 skill_control、动作状态切换、连击桥接或 runtime 状态机引入；当前不能把它直接视为“普通攻击完整动画”。
+
+下一步：
+
+- 阶段 5-8X-B 目标：追 `Skill0_1` 的动画状态来源、`10900102 / 80102` 等 EventBridge 目标技能含义，以及这些跳转/桥接节点与【普通攻击 / 重击 / 闪击 / 跃击】的真实对应关系。
+- 优先扫描相关 `skill_control_10900102.asset`、`skill_control_80102.asset`、Yoo index 和 IL2CPP `EventBridgeBehaviorData` / 技能状态切换调用。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
