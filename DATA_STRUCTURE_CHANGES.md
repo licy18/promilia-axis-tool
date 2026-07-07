@@ -3863,3 +3863,92 @@ HP参数候选 5点 · 2,500-13,000 · raw-param
 - HP 曲线当前取每个 hit 候选参数的最大非零、非 `10000` 值作为预览点，不代表最终 HP 伤害公式。
 - 削韧和能量曲线当前直接暴露字段候选值，尚未确认缩放、命中次数、间隔、目标归属或角色资源归属规则。
 - 下一阶段应把这些点转换为时间轴绝对帧点或图表 marker，并继续追最终公式执行链。
+
+## 56. 阶段 5-8AC：candidateValueSeries.chart 时间轴图表层
+
+阶段 5-8AC 在 `candidateValueSeries` 内新增 `chart`，把候选曲线转换成 Workbench 可直接绘制的 60fps 图表点。该层仍属于未应用候选可视化。
+
+### 56.1 candidateValueSeries.chart
+
+字段示例：
+
+```javascript
+{
+  "chart": {
+    "schemaVersion": 1,
+    "sourceKind": "azpr-candidate-value-series-chart",
+    "status": "candidate-chart-found-unapplied",
+    "durationMs": 30000,
+    "frameRate": 60,
+    "frameMs": 16.666667,
+    "frameCount": 1800,
+    "summary": {
+      "seriesCount": 3,
+      "pointCount": 15,
+      "displayFrameAdjustmentCount": 12,
+      "timeOrderStatus": "source-times-non-monotonic-display-adjusted",
+      "applied": false
+    },
+    "series": [],
+    "applied": false
+  }
+}
+```
+
+`candidateValueSeries.summary` 同步新增：
+
+- `chartPointCount`
+- `displayFrameAdjustmentCount`
+- `timeOrderStatus`
+
+### 56.2 chart.series[]
+
+单条图表曲线字段：
+
+- `key` / `label` / `valueKind` / `unit`
+- `status`
+- `pointCount`
+- `valueMin` / `valueMax` / `valueRange`
+- `frameMin` / `frameMax`
+- `displayFrameAdjustmentCount`
+- `timeOrderStatus`
+- `polylinePoints`
+- `points[]`
+- `applied = false`
+
+### 56.3 chart.points[]
+
+单点字段：
+
+- `actionId` / `actionName` / `actionVariantLabel`
+- `skillId` / `hitSkillId` / `hitIndex` / `sequenceIndex`
+- `sourceFrameIndex` / `sourceTimeMs`
+- `displayFrameIndex` / `displayFrameLabel` / `displayTimeMs`
+- `timeAdjustmentStatus`
+- `xPercent` / `yPercent`
+- `value` / `valueMin` / `valueMax` / `valueSamples`
+- `candidateCount`
+- `elementConfigIds`
+- `sourceStatus`
+- `applied = false`
+
+### 56.4 当前样本
+
+末音 `10900101` 默认普攻 HP 曲线：
+
+- 源帧：`12 / 6 / 12 / 7 / 4f`。
+- 显示帧：`0s12f / 0s13f / 0s14f / 0s15f / 0s16f`。
+- 第 2-5 点 `timeAdjustmentStatus = sequence-display-frame-adjusted`。
+
+Workbench 显示：
+
+```text
+候选时间曲线 15
+60fps · 30s0f · 显示帧调整 12
+```
+
+### 56.5 当前边界
+
+- `displayFrameIndex` 只是可视化帧，不应被当成已确认的运行时命中绝对帧。
+- `timeOrderStatus = source-times-non-monotonic-display-adjusted` 表示存在子 `skill_control` 局部帧回退，必须继续追 EventBridge 和动画状态切换证据。
+- 下一阶段应优先消除默认普攻样本中的 12 个显示帧调整，或把主时间轴 marker 明确标注为候选显示帧。

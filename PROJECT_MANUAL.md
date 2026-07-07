@@ -2978,6 +2978,49 @@ HP参数候选 5点 · 2,500-13,000 · raw-param
 - 阶段 5-8AC 目标：把 `candidateValueSeries` 转成时间轴绝对帧点/曲线图数据，让 HP、韧性、能量三条曲线能按 Endaxis 式多曲线轨道显示。
 - 同时补 `candidateValueSeries` 到实际曲线图或 marker 层的展示，仍保持候选与当前实际投影分离。
 
+### 2026-07-08：阶段 5-8AC 候选三曲线时间轴图表层
+
+本轮完成：
+
+- `candidateValueSeries` 新增 `chart` 子结构，把三条候选曲线转换成可直接绘图的时间轴点。
+- 每个 chart point 保留源帧 `sourceFrameIndex/sourceTimeMs`，并新增用于绘图的 `displayFrameIndex/displayFrameLabel/displayTimeMs/xPercent/yPercent`。
+- 对当前普攻第 2-5 段的子 `skill_control` 相对帧回退问题，新增 `timeAdjustmentStatus = sequence-display-frame-adjusted`，按 hit 顺序最小 1 帧递增生成显示帧；这只是可视化 fallback，不覆盖源证据。
+- Workbench 分析面板新增“候选时间曲线”区域，用 60fps 多曲线图展示 HP、削韧、能量三条候选线，并显示帧调整数量。
+
+当前末音 `10900101` 默认普攻 chart 结果：
+
+- `candidateValueSeries.chart.status = candidate-chart-found-unapplied`。
+- `durationMs = 30000`，`frameRate = 60`，`frameCount = 1800`。
+- `summary.pointCount = 15`，`summary.displayFrameAdjustmentCount = 12`。
+- `summary.timeOrderStatus = source-times-non-monotonic-display-adjusted`。
+- HP 曲线源帧：`12 / 6 / 12 / 7 / 4f`。
+- HP 曲线显示帧：`0s12f / 0s13f / 0s14f / 0s15f / 0s16f`。
+
+Workbench 当前默认样本显示：
+
+```text
+候选时间曲线 15
+60fps · 30s0f · 显示帧调整 12
+HP参数候选 0s12f-0s16f · 2,500-13,000 · raw-param
+削韧候选 0s12f-0s16f · 7,000 · raw-field
+能量候选 0s12f-0s16f · 2,399-3,000 · raw-field
+```
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+
+当前边界：
+
+- `candidateValueSeries.chart.applied` 仍为 `false`。
+- `displayFrameIndex` 是为可视化生成的显示帧，不是已确认的游戏真实命中绝对帧。
+- 当前帧调整来自普攻第 2-5 段子 `skill_control` 的局部帧回退；真实连段切换时长、输入节奏、取消窗口和命中触发时机仍需继续追证。
+
+下一步：
+
+- 阶段 5-8AD 目标：继续追 `10900101 -> 10900102-10900105` 普攻子 `skill_control` 的连段切换时间、EventBridge 触发帧和动画状态长度，尽量把候选曲线的 `displayFrameIndex` 替换为证据更强的真实绝对帧。
+- 若真实绝对帧仍不能一次确认，应把候选时间曲线同步到主时间轴 marker 层，保留 `sourceFrameIndex` 与 `displayFrameIndex` 双轨提示。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

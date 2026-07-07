@@ -18,6 +18,7 @@ const CURRENT_SKILL_CONTROL_EVIDENCE_BY_SKILL_ID = new Map(
     .filter(([skillId]) => Number.isFinite(skillId))
 );
 const AZPR_TIMELINE_FRAME_RATE = 60;
+const AZPR_TIMELINE_FRAME_MS = 1000 / AZPR_TIMELINE_FRAME_RATE;
 
 export function projectSimulationResult({
   scenario,
@@ -30,7 +31,10 @@ export function projectSimulationResult({
     damageEvents,
     resourceEvents,
   });
-  const candidateValueSeries = buildCandidateValueSeries(actionResultTimeline);
+  const candidateValueSeries = buildCandidateValueSeries(
+    actionResultTimeline,
+    scenario.time.durationMs
+  );
   const damageTimeline = damageEvents.map(event => ({
     timeMs: event.timeMs,
     actionId: event.actionId,
@@ -161,7 +165,7 @@ function summarizeSelfEnergyByActor(scenario, actionResultTimeline) {
   return [...summaries.values()];
 }
 
-function buildCandidateValueSeries(actionResultTimeline) {
+function buildCandidateValueSeries(actionResultTimeline, durationMs) {
   const hitCandidates = actionResultTimeline.flatMap(entry =>
     (entry.hitCandidates ?? []).map((hitCandidate, index) => ({
       ...hitCandidate,
@@ -201,6 +205,7 @@ function buildCandidateValueSeries(actionResultTimeline) {
     (sum, item) => sum + item.pointCount,
     0
   );
+  const chart = buildCandidateValueChart(activeSeries, durationMs);
 
   return {
     schemaVersion: 1,
@@ -215,9 +220,175 @@ function buildCandidateValueSeries(actionResultTimeline) {
       pointCount,
       hitCandidateCount: hitCandidates.length,
       actionCount: new Set(hitCandidates.map(item => item.actionId)).size,
+      chartPointCount: chart.summary.pointCount,
+      displayFrameAdjustmentCount: chart.summary.displayFrameAdjustmentCount,
+      timeOrderStatus: chart.summary.timeOrderStatus,
       applied: false,
     },
     series,
+    chart,
+    applied: false,
+  };
+}
+
+function buildCandidateValueChart(series, durationMs) {
+  const normalizedDurationMs = Math.max(0, numberOrNull(durationMs) ?? 0);
+  const chartSeries = series
+    .map(item => createCandidateChartSeries(item, normalizedDurationMs))
+    .filter(item => item.pointCount > 0);
+  const pointCount = chartSeries.reduce(
+    (sum, item) => sum + item.pointCount,
+    0
+  );
+  const displayFrameAdjustmentCount = chartSeries.reduce(
+    (sum, item) => sum + item.displayFrameAdjustmentCount,
+    0
+  );
+
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-candidate-value-series-chart',
+    status:
+      pointCount > 0
+        ? 'candidate-chart-found-unapplied'
+        : 'candidate-chart-missing',
+    durationMs: normalizedDurationMs,
+    frameRate: AZPR_TIMELINE_FRAME_RATE,
+    frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
+    frameCount: Math.max(
+      1,
+      Math.round(normalizedDurationMs / AZPR_TIMELINE_FRAME_MS)
+    ),
+    summary: {
+      seriesCount: chartSeries.length,
+      pointCount,
+      displayFrameAdjustmentCount,
+      timeOrderStatus:
+        displayFrameAdjustmentCount > 0
+          ? 'source-times-non-monotonic-display-adjusted'
+          : pointCount > 0
+            ? 'source-times-monotonic'
+            : 'no-candidate-points',
+      applied: false,
+    },
+    series: chartSeries,
+    applied: false,
+  };
+}
+
+function createCandidateChartSeries(series, durationMs) {
+  let previousDisplayFrameIndex = -1;
+  let displayFrameAdjustmentCount = 0;
+  const points = (series.points ?? [])
+    .map((point, index) => {
+      const chartPoint = createCandidateChartPoint({
+        point,
+        index,
+        series,
+        durationMs,
+        previousDisplayFrameIndex,
+      });
+      if (!chartPoint) {
+        return null;
+      }
+      previousDisplayFrameIndex = chartPoint.displayFrameIndex;
+      if (chartPoint.displayFrameIndex !== chartPoint.sourceFrameIndex) {
+        displayFrameAdjustmentCount += 1;
+      }
+      return chartPoint;
+    })
+    .filter(Boolean);
+
+  return {
+    key: series.key,
+    label: series.label,
+    valueKind: series.valueKind,
+    unit: series.unit,
+    status:
+      points.length > 0
+        ? 'candidate-chart-points-found-unapplied'
+        : 'candidate-chart-points-missing',
+    pointCount: points.length,
+    valueMin: series.valueMin,
+    valueMax: series.valueMax,
+    valueRange: series.valueRange,
+    frameMin: minNumber(points.map(point => point.displayFrameIndex)),
+    frameMax: maxNumber(points.map(point => point.displayFrameIndex)),
+    displayFrameAdjustmentCount,
+    timeOrderStatus:
+      displayFrameAdjustmentCount > 0
+        ? 'source-times-non-monotonic-display-adjusted'
+        : points.length > 0
+          ? 'source-times-monotonic'
+          : 'no-candidate-points',
+    polylinePoints: points
+      .map(point => `${point.xPercent},${point.yPercent}`)
+      .join(' '),
+    points,
+    applied: false,
+  };
+}
+
+function createCandidateChartPoint({
+  point,
+  index,
+  series,
+  durationMs,
+  previousDisplayFrameIndex,
+}) {
+  const sourceTimeMs = numberOrNull(point.timeMs);
+  if (!Number.isFinite(sourceTimeMs)) {
+    return null;
+  }
+
+  const sourceFrameIndex = Math.max(
+    0,
+    Math.round(sourceTimeMs / AZPR_TIMELINE_FRAME_MS)
+  );
+  const displayFrameIndex = Math.max(
+    sourceFrameIndex,
+    previousDisplayFrameIndex + 1
+  );
+  const displayTimeMs = roundTimelineMs(
+    displayFrameIndex * AZPR_TIMELINE_FRAME_MS
+  );
+  const value = Number(point.value);
+  const valueMin = numberOrNull(series.valueMin) ?? value;
+  const valueMax = numberOrNull(series.valueMax) ?? valueMin;
+  const valueRange = Math.max(1, valueMax - valueMin);
+  const yPercent =
+    valueMax === valueMin
+      ? 50
+      : roundChartPercent(100 - ((value - valueMin) / valueRange) * 100);
+
+  return {
+    actionId: point.actionId,
+    actionName: point.actionName,
+    actionVariantLabel: point.actionVariantLabel,
+    skillId: point.skillId,
+    hitSkillId: point.hitSkillId,
+    hitIndex: point.hitIndex,
+    sequenceIndex: point.sequenceIndex ?? index,
+    sourceFrameIndex,
+    sourceTimeMs: roundTimelineMs(sourceTimeMs),
+    displayFrameIndex,
+    displayFrameLabel: formatTimelineFrame(displayFrameIndex),
+    displayTimeMs,
+    timeAdjustmentStatus:
+      displayFrameIndex === sourceFrameIndex
+        ? 'source-time-kept'
+        : 'sequence-display-frame-adjusted',
+    xPercent: roundChartPercent(
+      durationMs > 0 ? (displayTimeMs / durationMs) * 100 : 0
+    ),
+    yPercent,
+    value: point.value,
+    valueMin: point.valueMin,
+    valueMax: point.valueMax,
+    valueSamples: point.valueSamples ?? [],
+    candidateCount: point.candidateCount,
+    elementConfigIds: point.elementConfigIds ?? [],
+    sourceStatus: point.sourceStatus,
     applied: false,
   };
 }
@@ -1666,6 +1837,21 @@ function frameToTimelineMs(frame) {
 function roundTimelineMs(value) {
   const number = Number(value);
   return Number.isFinite(number) ? Number(number.toFixed(6)) : null;
+}
+
+function roundChartPercent(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return 0;
+  }
+  return Number(Math.min(100, Math.max(0, number)).toFixed(4));
+}
+
+function formatTimelineFrame(frameIndex) {
+  const frame = Math.max(0, Math.round(Number(frameIndex) || 0));
+  const seconds = Math.floor(frame / AZPR_TIMELINE_FRAME_RATE);
+  const remainFrames = frame % AZPR_TIMELINE_FRAME_RATE;
+  return `${seconds}s${remainFrames}f`;
 }
 
 function createHpDamageResult(action, damageEvent, damageElementSource) {

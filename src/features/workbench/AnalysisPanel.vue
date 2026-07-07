@@ -143,6 +143,77 @@
       </div>
     </div>
 
+    <div
+      v-if="candidateChartSeriesItems.length"
+      class="candidate-chart"
+      data-testid="workbench-candidate-value-chart"
+    >
+      <div class="diagnostic-heading source-heading">
+        <span>候选时间曲线</span>
+        <strong>{{ candidateChartPointCount }}</strong>
+      </div>
+      <small class="candidate-chart-meta">
+        {{ formatCandidateChartMeta(candidateChart) }}
+      </small>
+      <div class="candidate-chart-canvas">
+        <svg
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <line
+            v-for="line in candidateChartGridLines"
+            :key="line"
+            x1="0"
+            x2="100"
+            :y1="line"
+            :y2="line"
+            class="candidate-chart-gridline"
+          />
+          <polyline
+            v-for="series in candidateChartSeriesItems"
+            :key="series.key"
+            :points="series.polylinePoints"
+            fill="none"
+            :stroke="series.color"
+            stroke-width="2.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            vector-effect="non-scaling-stroke"
+          />
+          <g
+            v-for="series in candidateChartSeriesItems"
+            :key="`${series.key}-points`"
+          >
+            <circle
+              v-for="(point, pointIndex) in series.points"
+              :key="createCandidateChartPointKey(series, point, pointIndex)"
+              :cx="point.xPercent"
+              :cy="point.yPercent"
+              r="2.4"
+              :fill="series.color"
+              vector-effect="non-scaling-stroke"
+            >
+              <title>{{ formatCandidateChartPointTitle(series, point) }}</title>
+            </circle>
+          </g>
+        </svg>
+      </div>
+      <div class="candidate-chart-legend">
+        <div
+          v-for="series in candidateChartSeriesItems"
+          :key="`${series.key}-legend`"
+          class="candidate-chart-legend-row"
+          data-testid="workbench-candidate-value-chart-row"
+          :data-series-key="series.key"
+        >
+          <i :style="{ background: series.color }" />
+          <span>{{ series.label }}</span>
+          <small>{{ formatCandidateChartSeries(series) }}</small>
+        </div>
+      </div>
+    </div>
+
     <div class="timeline-diagnostics">
       <div class="diagnostic-heading">
         <span>时间轴诊断</span>
@@ -207,6 +278,9 @@
 import { computed } from 'vue';
 import { TrendCharts } from '@element-plus/icons-vue';
 
+const CANDIDATE_CHART_COLORS = ['#f2b366', '#79c7b9', '#a6b7ff'];
+const candidateChartGridLines = [25, 50, 75];
+
 const props = defineProps({
   summary: {
     type: Object,
@@ -270,6 +344,32 @@ const candidateValuePointCount = computed(
   () =>
     props.candidateValueSeries?.summary?.pointCount ??
     candidateSeriesItems.value.reduce(
+      (sum, series) => sum + (series.pointCount ?? 0),
+      0
+    )
+);
+const candidateChart = computed(
+  () =>
+    props.candidateValueSeries?.chart ?? {
+      summary: {
+        pointCount: 0,
+        displayFrameAdjustmentCount: 0,
+      },
+      series: [],
+    }
+);
+const candidateChartSeriesItems = computed(() =>
+  (candidateChart.value?.series ?? [])
+    .filter(series => series.pointCount > 0)
+    .map((series, index) => ({
+      ...series,
+      color: CANDIDATE_CHART_COLORS[index % CANDIDATE_CHART_COLORS.length],
+    }))
+);
+const candidateChartPointCount = computed(
+  () =>
+    candidateChart.value?.summary?.pointCount ??
+    candidateChartSeriesItems.value.reduce(
       (sum, series) => sum + (series.pointCount ?? 0),
       0
     )
@@ -520,6 +620,52 @@ function getCandidateSeriesSvgPoints(series) {
       y: Number(y.toFixed(2)),
     };
   });
+}
+
+function formatCandidateChartMeta(chart) {
+  if (!chart) {
+    return '';
+  }
+  const frameText = formatFrameIndex(chart.frameCount);
+  const adjustmentCount = chart.summary?.displayFrameAdjustmentCount ?? 0;
+  const adjustmentText =
+    adjustmentCount > 0 ? ` · 显示帧调整 ${adjustmentCount}` : '';
+  return `${chart.frameRate}fps · ${frameText}${adjustmentText}`;
+}
+
+function formatCandidateChartSeries(series) {
+  const frameRange = formatFrameRange(series.frameMin, series.frameMax);
+  const valueRange = formatValueRange(series.valueMin, series.valueMax);
+  return `${frameRange} · ${valueRange} · ${series.unit}`;
+}
+
+function formatFrameRange(min, max) {
+  if (!Number.isFinite(Number(min)) || !Number.isFinite(Number(max))) {
+    return '-';
+  }
+  if (Number(min) === Number(max)) {
+    return formatFrameIndex(min);
+  }
+  return `${formatFrameIndex(min)}-${formatFrameIndex(max)}`;
+}
+
+function formatFrameIndex(frameIndex) {
+  const frame = Math.max(0, Math.round(Number(frameIndex) || 0));
+  const seconds = Math.floor(frame / 60);
+  const remainFrames = frame % 60;
+  return `${seconds}s${remainFrames}f`;
+}
+
+function createCandidateChartPointKey(series, point, index) {
+  return `${series.key}-${point.actionId}-${point.hitIndex}-${index}`;
+}
+
+function formatCandidateChartPointTitle(series, point) {
+  const sourceFrame =
+    point.timeAdjustmentStatus === 'sequence-display-frame-adjusted'
+      ? ` / 源 ${formatFrameIndex(point.sourceFrameIndex)}`
+      : '';
+  return `${series.label} ${point.displayFrameLabel}${sourceFrame}: ${formatNumber(point.value)}`;
 }
 
 function formatFormulaCandidatePatternSummary(summary) {
@@ -879,6 +1025,77 @@ h2 {
   width: 112px;
   height: 32px;
   color: #79c7b9;
+}
+
+.candidate-chart {
+  display: grid;
+  gap: 8px;
+  padding: 0 14px 14px;
+}
+
+.candidate-chart-meta {
+  display: block;
+  color: #8f9aa3;
+  font-size: 11px;
+}
+
+.candidate-chart-canvas {
+  height: 104px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid rgba(121, 199, 185, 0.18);
+  border-radius: 4px;
+  background: #171d22;
+}
+
+.candidate-chart-canvas svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.candidate-chart-gridline {
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.candidate-chart-legend {
+  display: grid;
+  gap: 6px;
+}
+
+.candidate-chart-legend-row {
+  display: grid;
+  grid-template-columns: 8px minmax(64px, 0.7fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 7px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.candidate-chart-legend-row i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.candidate-chart-legend-row span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #d9dee3;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.candidate-chart-legend-row small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #8f9aa3;
+  font-size: 11px;
 }
 
 .action-result-row strong {

@@ -124,11 +124,11 @@ C:\PC2\Codex\AzPr
 - 阶段 4-9：新版工作台切人动作和多角色 actor 雏形，默认主/副角色 actor、`SWITCH` 事件和切人属性编辑已进入统一链路。
 - 阶段 4-10：新版工作台时间轴角色轨道雏形，动作和伤害 marker 按 actor 或系统轨显示。
 - 阶段 4-11：新版工作台时间轴缩放和动作持续时间调整雏形，`durationMs` 通过工作台草稿链路回写。
-- 阶段 4-12 至 5-8AB：已继续补齐轨道诊断、动作形态、60fps 帧时间轴、公式分层、战斗公式证据、skill asset 候选索引、每动作 HP/韧性/能量三值结果契约、`skill_control` 效果轨道候选分类、本地行为链解引用、elementBaseDatas 资源映射归属、行为脚本类型候选、IL2CPP element 类型目录、外部 element 对象本体解析、`TDamageElementParams` 三值字段候选映射、Workbench 三值来源展示、`valueParam` / `formulaParamValues` 槽位关系诊断、未应用公式槽位候选展示、`function_1/function_2 -> element_formula` 候选证据索引、动作级 `formulaFunctionSummary` 展示、`formulaCandidatePreview` 未应用数值预览、`combinationPreviews` 简单组合诊断矩阵、`formulaCandidatePatternSummary` 跨动作差异模式摘要、`skillControlBehaviorCorrelations` 技能级行为节点关联摘要、按 lane 保留的 HP 行为链样本、动作形态级行为绑定候选、`stateTimingEvidence` 状态/时序控制证据、EventBridge 目标技能 skill_control 摘要、普攻连段链递归索引、普通攻击多段 / 每 hit 候选、`actionResultTimeline[].hitCandidates[]` per-hit 三值候选预览，以及顶层 `candidateValueSeries` 三曲线候选聚合。
+- 阶段 4-12 至 5-8AC：已继续补齐轨道诊断、动作形态、60fps 帧时间轴、公式分层、战斗公式证据、skill asset 候选索引、每动作 HP/韧性/能量三值结果契约、`skill_control` 效果轨道候选分类、本地行为链解引用、elementBaseDatas 资源映射归属、行为脚本类型候选、IL2CPP element 类型目录、外部 element 对象本体解析、`TDamageElementParams` 三值字段候选映射、Workbench 三值来源展示、`valueParam` / `formulaParamValues` 槽位关系诊断、未应用公式槽位候选展示、`function_1/function_2 -> element_formula` 候选证据索引、动作级 `formulaFunctionSummary` 展示、`formulaCandidatePreview` 未应用数值预览、`combinationPreviews` 简单组合诊断矩阵、`formulaCandidatePatternSummary` 跨动作差异模式摘要、`skillControlBehaviorCorrelations` 技能级行为节点关联摘要、按 lane 保留的 HP 行为链样本、动作形态级行为绑定候选、`stateTimingEvidence` 状态/时序控制证据、EventBridge 目标技能 skill_control 摘要、普攻连段链递归索引、普通攻击多段 / 每 hit 候选、`actionResultTimeline[].hitCandidates[]` per-hit 三值候选预览、顶层 `candidateValueSeries` 三曲线候选聚合，以及 `candidateValueSeries.chart` 60fps 多曲线图表层。
 
 下一阶段：
 
-- 阶段 5-8AC：把 `candidateValueSeries` 转成时间轴绝对帧点/曲线图数据，并接入 Endaxis 式多曲线展示或 marker 层；候选结果继续保持未应用。
+- 阶段 5-8AD：追普攻子 `skill_control` 连段切换时间、EventBridge 触发帧和动画状态长度，减少 `candidateValueSeries.chart` 的显示帧 fallback；必要时把候选时间曲线同步到主时间轴 marker 层。
 
 ## 3. 核心模块设计
 

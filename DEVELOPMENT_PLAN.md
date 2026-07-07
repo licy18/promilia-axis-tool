@@ -255,7 +255,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8Z，把 `normalAttackHitChainCandidate.hitGroups[]` 继续向下解析到每 hit 的 `behaviorList -> elementBaseDatas -> TDamageElementParams`；当前普通攻击 5 段均有三值字段候选，覆盖 `damageElementMappedHitGroupCount = 5/5`，合计 12 个 `TDamageElementParams` 映射，Workbench 显示 `三值候选 5/5段`，仍保持 `applied: false`。
 - 已完成：阶段 5-8AA，把普通攻击每段 `damageElementFieldMappings[]` 接入 `actionResultTimeline[].hitCandidates[]` 和 `hitCandidateSummary`，当前默认普攻动作输出 5 条 per-hit 候选、12 个三值字段映射、60fps 相对帧点 `12/6/12/7/4f`，Workbench 显示 `逐hit候选 5/5段 · 三值字段 12`；这些仍是未应用预览。
 - 已完成：阶段 5-8AB，把 `hitCandidates[]` 聚合为顶层 `candidateValueSeries` 三条候选曲线；当前默认普攻输出 HP 参数候选 `2500/4800/3000/5400/13000`、削韧候选 `7000x5`、能量候选 `2700/2599/2399/3000/2599`，Workbench 显示 `候选曲线 15` 及三条未应用小折线。
-- 下一步：阶段 5-8AC，把 `candidateValueSeries` 转成时间轴绝对帧点/曲线图数据，并接入 Endaxis 式多曲线展示或 marker 层；候选曲线继续与当前实际投影分离。
+- 已完成：阶段 5-8AC，把 `candidateValueSeries` 扩展为 `chart` 图表层，输出 `sourceFrameIndex` 与 `displayFrameIndex` 双轨帧点；当前默认普攻因子 `skill_control` 局部帧回退产生 12 个显示帧调整，Workbench 显示 `候选时间曲线 15` 和三条 60fps 多曲线。
+- 下一步：阶段 5-8AD，追 `10900101 -> 10900102-10900105` 普攻子 `skill_control` 的连段切换时间、EventBridge 触发帧和动画状态长度，减少或替换候选曲线的显示帧 fallback。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

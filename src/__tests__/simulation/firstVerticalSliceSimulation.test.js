@@ -683,6 +683,21 @@ describe('first vertical slice simulation', () => {
       },
       applied: false,
     });
+    expect(result.candidateValueSeries.chart).toMatchObject({
+      status: 'candidate-chart-found-unapplied',
+      durationMs: 30000,
+      frameRate: 60,
+      frameMs: 16.666667,
+      frameCount: 1800,
+      summary: {
+        seriesCount: 3,
+        pointCount: 15,
+        displayFrameAdjustmentCount: 12,
+        timeOrderStatus: 'source-times-non-monotonic-display-adjusted',
+        applied: false,
+      },
+      applied: false,
+    });
     const hpCandidateSeries = result.candidateValueSeries.series.find(
       series => series.key === 'hpDamageFormulaParamCandidate'
     );
@@ -695,6 +710,36 @@ describe('first vertical slice simulation', () => {
       valueMax: 13000,
       applied: false,
     });
+    const hpChartSeries = result.candidateValueSeries.chart.series.find(
+      series => series.key === 'hpDamageFormulaParamCandidate'
+    );
+    expect(hpChartSeries).toMatchObject({
+      label: 'HP参数候选',
+      pointCount: 5,
+      frameMin: 12,
+      frameMax: 16,
+      displayFrameAdjustmentCount: 4,
+      timeOrderStatus: 'source-times-non-monotonic-display-adjusted',
+      applied: false,
+    });
+    expect(
+      hpChartSeries.points.map(point => [
+        point.hitIndex,
+        point.sourceFrameIndex,
+        point.displayFrameIndex,
+        point.displayFrameLabel,
+        point.timeAdjustmentStatus,
+      ])
+    ).toEqual([
+      [1, 12, 12, '0s12f', 'source-time-kept'],
+      [2, 6, 13, '0s13f', 'sequence-display-frame-adjusted'],
+      [3, 12, 14, '0s14f', 'sequence-display-frame-adjusted'],
+      [4, 7, 15, '0s15f', 'sequence-display-frame-adjusted'],
+      [5, 4, 16, '0s16f', 'sequence-display-frame-adjusted'],
+    ]);
+    expect(hpChartSeries.points.map(point => point.xPercent)).toEqual([
+      0.6667, 0.7222, 0.7778, 0.8333, 0.8889,
+    ]);
     expect(
       hpCandidateSeries.points.map(point => [
         point.hitIndex,
@@ -724,6 +769,12 @@ describe('first vertical slice simulation', () => {
     expect(toughnessCandidateSeries.points.map(point => point.value)).toEqual([
       7000, 7000, 7000, 7000, 7000,
     ]);
+    const toughnessChartSeries = result.candidateValueSeries.chart.series.find(
+      series => series.key === 'toughnessDamageCandidate'
+    );
+    expect(toughnessChartSeries.points.map(point => point.yPercent)).toEqual([
+      50, 50, 50, 50, 50,
+    ]);
     const selfEnergyCandidateSeries = result.candidateValueSeries.series.find(
       series => series.key === 'selfEnergyCandidate'
     );
@@ -743,6 +794,9 @@ describe('first vertical slice simulation', () => {
       seriesCount: 3,
       pointCount: 15,
       hitCandidateCount: 5,
+      chartPointCount: 15,
+      displayFrameAdjustmentCount: 12,
+      timeOrderStatus: 'source-times-non-monotonic-display-adjusted',
       applied: false,
     });
     const combinationPreview =
