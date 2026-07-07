@@ -27,6 +27,13 @@ describe('first vertical slice simulation', () => {
         labels: 'skillSystem.10900101.skillLevel.name',
         values: 'skillSystem.10900101.skillLevel.values[0]',
       },
+      crossCheck: {
+        sourceKind: 'azpr-newtable-skill-level-crosscheck',
+        status: 'matched',
+        rowId: 1657,
+        labels: ['普攻', '重击', '闪击', '跃击'],
+        values: ['649%', '190%', '40%', '136%'],
+      },
     });
     expect(scenario.actions[0].damageModel.sourcePath).toContain('109001.hero-module.local.json');
     expect(scenario.actions[0].selectedDamageSegment.source).toMatchObject({
@@ -34,6 +41,12 @@ describe('first vertical slice simulation', () => {
       skillId: 10900101,
       characterId: 109001,
       valueField: 'skillSystem.10900101.skillLevel.values[0][0]',
+      crossCheck: {
+        kind: 'azpr-newtable-skill-level-crosscheck',
+        status: 'matched',
+        rowId: 1657,
+        valueId: '7116760813824',
+      },
     });
     expect(scenario.diagnostics.missingTimingActionIds).toEqual(['action-0001']);
   });
@@ -61,6 +74,11 @@ describe('first vertical slice simulation', () => {
         source: {
           kind: 'azpr-local-hero-module-skill-level',
           valueField: 'skillSystem.10900101.skillLevel.values[0][0]',
+          crossCheck: {
+            kind: 'azpr-newtable-skill-level-crosscheck',
+            rowId: 1657,
+            valueId: '7116760813824',
+          },
         },
       },
     });

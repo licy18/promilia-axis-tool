@@ -18,6 +18,8 @@ const sourceFiles = {
   soulessences: path.join(sourceRoot, 'BWiki', 'data', 'local-soulessence-forms', 'all.local-soulessence-forms.json'),
   enemies: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'enemy.json'),
   enemyLang: path.join(sourceRoot, 'Assets', 'ResourcesLang', 'chs', 'Table', 'lang_enemy.json'),
+  skillLevel: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'skill_level.json'),
+  skillLevelLang: path.join(sourceRoot, 'Assets', 'ResourcesLang', 'chs', 'Table', 'lang_skill_level.json'),
   unitProperty: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'unit_property.json'),
   templateValue: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'template_value.json'),
   battleInfo: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'battle_info.json'),
@@ -36,6 +38,8 @@ const [
   soulessenceForms,
   enemyTable,
   enemyLangTable,
+  skillLevelTable,
+  skillLevelLangTable,
   unitPropertyTable,
   templateValueTable,
   battleInfoTable,
@@ -47,6 +51,8 @@ const [
   readJson(sourceFiles.soulessences),
   readJson(sourceFiles.enemies),
   readJson(sourceFiles.enemyLang),
+  readJson(sourceFiles.skillLevel),
+  readJson(sourceFiles.skillLevelLang),
   readJson(sourceFiles.unitProperty),
   readJson(sourceFiles.templateValue),
   readJson(sourceFiles.battleInfo),
@@ -54,6 +60,7 @@ const [
 ]);
 
 const battleInfoLang = mapRowsById(battleInfoLangTable.rows);
+const skillLevelLang = mapRowsById(skillLevelLangTable.rows);
 const attributeInfoById = new Map(
   battleInfoTable.rows.map((row) => [
     Number(row.attrVal),
@@ -82,6 +89,7 @@ const kibos = mapKibos(kiboForms);
 const equipment = mapEquipment(equipmentForms);
 const soulessences = mapSoulessences(soulessenceForms);
 const mediaIndex = await mapMediaIndex(sourceFiles.mediaImages);
+const skillLevelCrossCheck = buildSkillLevelCrossCheck({ skills, skillLevelTable, skillLevelLang });
 const firstVerticalSlice = buildFirstVerticalSliceData({ characters, skills, enemies });
 const workbenchSeed = buildWorkbenchSeedData({ characters, skills, enemies });
 const validationReport = buildValidationReport({
@@ -93,6 +101,7 @@ const validationReport = buildValidationReport({
   equipment,
   soulessences,
   mediaIndex,
+  skillLevelCrossCheck,
 });
 
 await Promise.all([
@@ -106,6 +115,7 @@ await Promise.all([
   writeJson('equipment.json', wrapItems(equipment, sourceFiles.equipment)),
   writeJson('soulessences.json', wrapItems(soulessences, sourceFiles.soulessences)),
   writeJson('media-index.json', mediaIndex),
+  writeJson('skill-level-crosscheck.json', skillLevelCrossCheck),
   writeJson('first-vertical-slice.json', firstVerticalSlice),
   writeJson('workbench-seed.json', workbenchSeed),
   writeJson('validation-report.json', validationReport),
@@ -163,6 +173,7 @@ function buildManifest(validationReport) {
       equipment: 'equipment.json',
       soulessences: 'soulessences.json',
       mediaIndex: 'media-index.json',
+      skillLevelCrossCheck: 'skill-level-crosscheck.json',
       firstVerticalSlice: 'first-vertical-slice.json',
       workbenchSeed: 'workbench-seed.json',
       validationReport: 'validation-report.json',
@@ -301,6 +312,192 @@ function wrapItems(items, sourcePath) {
 
 function mapRowsById(rows = []) {
   return new Map(rows.map((row) => [String(row.id), row]));
+}
+
+function buildSkillLevelCrossCheck({ skills, skillLevelTable, skillLevelLang }) {
+  const rowsBySkillId = new Map();
+  for (const row of skillLevelTable.rows ?? []) {
+    const skillId = Number(row.skillId);
+    if (!Number.isFinite(skillId)) {
+      continue;
+    }
+    const rows = rowsBySkillId.get(skillId) ?? [];
+    rows.push(row);
+    rowsBySkillId.set(skillId, rows);
+  }
+
+  const items = skills.map((skill) => buildSkillLevelCrossCheckItem(skill, rowsBySkillId, skillLevelLang));
+  const summary = summarizeSkillLevelCrossCheck(items);
+
+  return {
+    schemaVersion: 1,
+    generatedAt,
+    sourceKind: 'azpr-newtable-skill-level-crosscheck',
+    source: {
+      table: normalizePath(sourceFiles.skillLevel),
+      langTable: normalizePath(sourceFiles.skillLevelLang),
+    },
+    count: items.length,
+    summary,
+    items,
+  };
+}
+
+function buildSkillLevelCrossCheckItem(skill, rowsBySkillId, skillLevelLang) {
+  const rows = rowsBySkillId.get(Number(skill.id)) ?? [];
+  const diagnostics = [];
+  const rowsByLevel = new Map(rows.map((row) => [Number(row.level), row]));
+  const levelCount = Math.max(skill.level?.values?.length ?? 0, rows.length);
+
+  if (rows.length === 0) {
+    diagnostics.push({
+      code: 'skill-level-crosscheck-row-missing',
+      severity: 'warning',
+      skillId: skill.id,
+      message: 'NewTable/skill_level.json 中缺少该技能的等级行。',
+    });
+  }
+
+  const levels = Array.from({ length: levelCount }, (_, index) => {
+    const level = index + 1;
+    return buildSkillLevelCrossCheckLevel(skill, rowsByLevel.get(level), level, index, skillLevelLang);
+  });
+
+  for (const level of levels) {
+    diagnostics.push(...level.diagnostics);
+  }
+
+  return {
+    skillId: skill.id,
+    characterId: skill.characterId,
+    characterName: skill.characterName,
+    skillName: skill.name ?? skill.displayName ?? null,
+    status: statusFromDiagnostics(diagnostics),
+    levelCount,
+    matchedLevelCount: levels.filter((level) => level.status === 'matched').length,
+    diagnostics,
+    levels,
+  };
+}
+
+function buildSkillLevelCrossCheckLevel(skill, row, level, levelIndex, skillLevelLang) {
+  const diagnostics = [];
+  const expectedLabels = skill.level?.labels ?? [];
+  const expectedValues = skill.level?.values?.[levelIndex] ?? [];
+
+  if (!row) {
+    return {
+      level,
+      levelIndex,
+      rowId: null,
+      status: 'missing',
+      labels: [],
+      values: [],
+      labelIds: [],
+      valueIds: [],
+      matches: {
+        labels: false,
+        values: false,
+      },
+      diagnostics: [
+        {
+          code: 'skill-level-crosscheck-level-row-missing',
+          severity: 'warning',
+          skillId: skill.id,
+          level,
+          message: 'NewTable/skill_level.json 中缺少该等级行。',
+        },
+      ],
+    };
+  }
+
+  const labelIds = splitPipe(row.name);
+  const valueIds = splitPipe(row.value);
+  const labels = resolveSkillLevelLangValues(labelIds, skillLevelLang, diagnostics, skill.id, level, 'name');
+  const values = resolveSkillLevelLangValues(valueIds, skillLevelLang, diagnostics, skill.id, level, 'value');
+  const labelMatches = equalStringArrays(labels, expectedLabels);
+  const valueMatches = equalStringArrays(values, expectedValues);
+
+  if (!labelMatches) {
+    diagnostics.push({
+      code: 'skill-level-crosscheck-label-mismatch',
+      severity: 'warning',
+      skillId: skill.id,
+      level,
+      expected: expectedLabels,
+      actual: labels,
+      message: 'hero-module 聚合标签与 NewTable/skill_level.json 还原标签不一致。',
+    });
+  }
+
+  if (!valueMatches) {
+    diagnostics.push({
+      code: 'skill-level-crosscheck-value-mismatch',
+      severity: 'warning',
+      skillId: skill.id,
+      level,
+      expected: expectedValues,
+      actual: values,
+      message: 'hero-module 聚合倍率与 NewTable/skill_level.json 还原倍率不一致。',
+    });
+  }
+
+  return {
+    level,
+    levelIndex,
+    rowId: Number(row.id),
+    status: statusFromDiagnostics(diagnostics),
+    labels,
+    values,
+    labelIds,
+    valueIds,
+    matches: {
+      labels: labelMatches,
+      values: valueMatches,
+    },
+    diagnostics,
+  };
+}
+
+function resolveSkillLevelLangValues(ids, langRows, diagnostics, skillId, level, fieldName) {
+  return ids.map((id) => {
+    const row = langRows.get(String(id));
+    if (!row) {
+      diagnostics.push({
+        code: 'skill-level-crosscheck-lang-missing',
+        severity: 'warning',
+        skillId,
+        level,
+        fieldName,
+        langId: id,
+        message: 'lang_skill_level.json 中缺少 NewTable 引用的语言 ID。',
+      });
+      return null;
+    }
+    return row.value;
+  });
+}
+
+function summarizeSkillLevelCrossCheck(items) {
+  const levels = items.flatMap((item) => item.levels);
+  return {
+    matchedSkills: items.filter((item) => item.status === 'matched').length,
+    missingSkills: items.filter((item) => item.status === 'missing').length,
+    mismatchedSkills: items.filter((item) => item.status === 'mismatch').length,
+    matchedLevels: levels.filter((level) => level.status === 'matched').length,
+    missingLevels: levels.filter((level) => level.status === 'missing').length,
+    mismatchedLevels: levels.filter((level) => level.status === 'mismatch').length,
+  };
+}
+
+function statusFromDiagnostics(diagnostics) {
+  if (diagnostics.some((diagnostic) => diagnostic.code.includes('missing') && diagnostic.code.includes('row'))) {
+    return 'missing';
+  }
+  if (diagnostics.length > 0) {
+    return 'mismatch';
+  }
+  return 'matched';
 }
 
 async function loadHeroModules(heroModulesDir) {
@@ -616,6 +813,11 @@ function buildValidationReport(data) {
     .map((character) => character.id);
   const skillTimingMissingCount = data.skills.filter((skill) => skill.needsTimingData).length;
   const skillNoLevelValues = data.skills.filter((skill) => skill.level.values.length === 0).map((skill) => skill.id);
+  const skillLevelCrossCheckSummary = data.skillLevelCrossCheck?.summary ?? {};
+  const skillLevelCrossCheckMissingCount =
+    (skillLevelCrossCheckSummary.missingSkills ?? 0) + (skillLevelCrossCheckSummary.missingLevels ?? 0);
+  const skillLevelCrossCheckMismatchCount =
+    (skillLevelCrossCheckSummary.mismatchedSkills ?? 0) + (skillLevelCrossCheckSummary.mismatchedLevels ?? 0);
   const nonAzPrPlaceholderNames = ['云堇', '钟离', '甘雨', '雷电将军', '温迪', '可莉'];
   const placeholderCharacters = data.characters
     .filter((character) => nonAzPrPlaceholderNames.includes(character.name))
@@ -657,6 +859,20 @@ function buildValidationReport(data) {
       message: '技能缺少等级倍率表。',
     },
     {
+      code: 'skill-level-crosscheck-missing',
+      severity: skillLevelCrossCheckMissingCount > 0 ? 'warning' : 'ok',
+      count: skillLevelCrossCheckMissingCount,
+      summary: skillLevelCrossCheckSummary,
+      message: '技能倍率在 NewTable/skill_level.json 字段级校验中存在缺失行。',
+    },
+    {
+      code: 'skill-level-crosscheck-mismatch',
+      severity: skillLevelCrossCheckMismatchCount > 0 ? 'warning' : 'ok',
+      count: skillLevelCrossCheckMismatchCount,
+      summary: skillLevelCrossCheckSummary,
+      message: 'hero-module 聚合倍率与 NewTable/skill_level.json 还原结果存在差异。',
+    },
+    {
       code: 'non-azpr-placeholder-character',
       severity: placeholderCharacters.length > 0 ? 'error' : 'ok',
       count: placeholderCharacters.length,
@@ -686,6 +902,7 @@ function buildValidationReport(data) {
       equipment: data.equipment.length,
       soulessences: data.soulessences.length,
       mediaFiles: data.mediaIndex.count,
+      skillLevelCrossCheck: data.skillLevelCrossCheck?.count ?? 0,
     },
     warnings,
   };
@@ -796,6 +1013,23 @@ function mapNamedStats(fields, prefix) {
 
 function fieldsToMap(fields = []) {
   return new Map(fields.map((field) => [field.name, field.value]));
+}
+
+function splitPipe(raw) {
+  if (raw == null || raw === '') {
+    return [];
+  }
+  return String(raw)
+    .split('|')
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function equalStringArrays(left = [], right = []) {
+  if (left.length !== right.length) {
+    return false;
+  }
+  return left.every((item, index) => item === right[index]);
 }
 
 function parseSkillSlotList(raw, group) {

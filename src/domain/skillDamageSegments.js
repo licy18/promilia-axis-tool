@@ -1,3 +1,9 @@
+import {
+  SKILL_LEVEL_CROSSCHECK_SOURCE_KIND,
+  createSkillLevelCrossCheckSegmentSource,
+  resolveSkillLevelCrossCheck,
+} from './skillLevelCrossCheck';
+
 export const SKILL_DAMAGE_SEGMENT_SOURCE_KIND = 'azpr-local-hero-module-skill-level';
 
 export function getSkillDamageSegments(skill, level = 1) {
@@ -17,6 +23,7 @@ export function createSkillDamageModel(skill, level = 1) {
     levelIndex: resolved.levelIndex,
     labels: resolved.labels,
     values: resolved.values,
+    crossCheck: resolved.crossCheck,
     diagnostics: resolved.diagnostics,
   };
 }
@@ -43,6 +50,8 @@ export function resolveSkillDamageSegments(skill, level = 1) {
   const values = Array.isArray(levelValues[levelIndex]) ? levelValues[levelIndex] : [];
   const sourcePath = skill.source?.heroModule ?? null;
   const fieldPaths = createSkillDamageFieldPaths(skill.id, levelIndex);
+  const crossCheck = resolveSkillLevelCrossCheck(skill, clampedLevel);
+  diagnostics.push(...crossCheck.diagnostics.map(createCrossCheckDiagnostic));
 
   if (!sourcePath) {
     diagnostics.push({
@@ -114,6 +123,7 @@ export function resolveSkillDamageSegments(skill, level = 1) {
           levelIndex,
           labelField: `${fieldPaths.labels}[${index}]`,
           valueField: `${fieldPaths.values}[${index}]`,
+          crossCheck: createSkillLevelCrossCheckSegmentSource(crossCheck, index),
         },
       };
     })
@@ -129,6 +139,7 @@ export function resolveSkillDamageSegments(skill, level = 1) {
     levelIndex,
     labels,
     values,
+    crossCheck,
     segments,
     diagnostics,
   };
@@ -159,6 +170,7 @@ function createEmptyResolution({ level, diagnostics }) {
     levelIndex: 0,
     labels: [],
     values: [],
+    crossCheck: null,
     segments: [],
     diagnostics,
   };
@@ -177,4 +189,11 @@ function createSkillDamageFieldPaths(skillId, levelIndex) {
 function clampLevel(level, levelCount) {
   const maxLevel = Math.max(1, Number(levelCount) || 1);
   return Math.min(maxLevel, Math.max(1, Number(level) || 1));
+}
+
+function createCrossCheckDiagnostic(diagnostic) {
+  return {
+    ...diagnostic,
+    sourceKind: SKILL_LEVEL_CROSSCHECK_SOURCE_KIND,
+  };
 }

@@ -1675,6 +1675,45 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 输出 mismatch/missing 诊断，明确哪些倍率段可直接信任，哪些需要回退到聚合层或人工补齐。
 - 补充交叉校验脚本或领域测试，为后续真实战斗计算逻辑接入提供数据可信度基线。
 
+### 2026-07-07：阶段 5-2 NewTable 技能等级交叉校验雏形落地
+
+本轮完成：
+
+- `scripts/generate-azpr-data.mjs` 接入 `Assets/ResourcesAssets/Config/NewTable/skill_level.json` 和 `Assets/ResourcesLang/chs/Table/lang_skill_level.json`。
+- 新增 `src/data/generated/skill-level-crosscheck.json`，按 `skillId + level` 记录 NewTable 行号、语言 ID、还原标签、还原倍率、匹配状态和诊断。
+- `manifest.json` 和 `validation-report.json` 记录交叉校验文件与汇总统计。
+- 新增 `src/domain/skillLevelCrossCheck.js`，提供运行时按技能/等级读取交叉校验结果的领域接口。
+- `skillDamageSegments` 的 `damageModel.crossCheck`、`selectedDamageSegment.source.crossCheck` 和 `damageTimeline[].segment.source.crossCheck` 现在会保留 NewTable 来源。
+- 新增/扩展数据层、领域层和模拟层测试，覆盖首个匹配技能、真实不一致技能和投影结果来源保留。
+
+数据结论：
+
+- 当前 120 个角色技能全部能在 `skill_level.json` 找到等级行。
+- 118 个技能完全匹配；2 个技能存在语言 ID 缺失导致的不一致：`10800562`（卡塔露）和 `19900361`（诺诺）。
+- 等级维度上 998 个等级完全匹配，0 个等级缺失，2 个等级不一致。
+- 这说明当前工作台主要倍率段可以信任 hero-module 聚合层，同时已有机制标记少量需要回退或人工修复的异常项。
+
+验收结果：
+
+- `npx vitest run src/__tests__/domain/skillDamageSegments.test.js src/__tests__/data/azprGenerated.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，3 个测试文件、19 条测试通过。
+- `npm run test -- --run`：通过，11 个测试文件、96 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- `skill-level-crosscheck.json` 瘦身后约 755 KB，避免把重复字段路径和 expected 数组写入生成文件。
+- `git diff --check`：通过；仅有仓库既有 LF/CRLF 工作区提示。
+- `http://127.0.0.1:5175/#/workbench` 本地页面服务返回 200。
+
+当前边界：
+
+- 本阶段只校验技能等级显示倍率字段，不代表真实命中帧、动画帧、取消窗口或完整伤害公式已经接入。
+- `skill_level.coolDown` / `spCost` 仍视为显示层数据；真实时序和资源消耗需要继续追 `skillsub_logic`、技能 asset 或运行时捕获。
+
+下一步：
+
+- 阶段 5-3 目标：建立 `skillsub_logic` 技能逻辑字段索引与首批技能资源/冷却来源诊断。
+- 梳理 `skill_level.subSkillId`、`skillsub_logic.json`、`skillsub_ele_value.json` 与当前技能动作之间的映射关系。
+- 把显示层 `coolDown` / `spCost` 与逻辑层 `coolDown` / `spCost` / `selfCD` / `GCD` 区分记录，避免后续排轴误用显示字段。
+- 补充首个技能的逻辑字段来源测试，并在手册中标记仍缺少真实命中帧/取消窗口的部分。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

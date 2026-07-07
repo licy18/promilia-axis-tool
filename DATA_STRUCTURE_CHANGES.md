@@ -638,3 +638,105 @@ Workbench 草稿新增可选 `segmentSplitOptions` 配置块，用于保存动�
 
 - 当前来源是 BWiki hero-module 聚合数据，虽然来自本地 AzPr 数据树，但还未与 `Assets/ResourcesAssets/Config/NewTable/skill_level.json` 做字段级交叉校验。
 - 当前只解决倍率段来源和解析诊断，不解决真实命中帧、动画帧、取消窗口或完整伤害公式。
+
+## 20. 2026-07-07 NewTable 技能等级交叉校验补充
+
+阶段 5-2 新增 `skill-level-crosscheck.json`，用于把 hero-module 聚合技能倍率与本地 `NewTable/skill_level.json` 逐等级交叉校验。
+
+### 20.1 来源字段
+
+交叉校验使用两张本地表：
+
+- 原始等级表：`C:\PC2\Codex\AzPr\Assets\ResourcesAssets\Config\NewTable\skill_level.json`
+- 简体中文语言表：`C:\PC2\Codex\AzPr\Assets\ResourcesLang\chs\Table\lang_skill_level.json`
+
+`skill_level.json` 的 `name` 和 `value` 字段是 `|` 分隔的语言 ID；生成器会通过 `lang_skill_level.json` 还原为标签和倍率文本，再与 hero-module 聚合层的 `skillLevel.name` / `skillLevel.values` 比较。
+
+### 20.2 生成文件
+
+`src/data/generated/skill-level-crosscheck.json` 的单个技能结构：
+
+```javascript
+{
+  "skillId": 10900101,
+  "characterId": 109001,
+  "status": "matched",
+  "matchedLevelCount": 12,
+  "levels": [
+    {
+      "level": 1,
+      "levelIndex": 0,
+      "rowId": 1657,
+      "status": "matched",
+      "fieldPaths": {
+        "row": "skill_level.rows[id=1657]",
+        "labels": "skill_level.rows[id=1657].name -> lang_skill_level",
+        "values": "skill_level.rows[id=1657].value -> lang_skill_level",
+        "description": "skill_level.rows[id=1657].skillDescribe -> lang_skill_level"
+      },
+      "labels": ["普攻", "重击", "闪击", "跃击"],
+      "values": ["649%", "190%", "40%", "136%"],
+      "labelIds": ["7116760813568", "7116760813569", "7116760813570", "7116760813571"],
+      "valueIds": ["7116760813824", "7116760813825", "7116760813826", "7116760813827"],
+      "matches": {
+        "labels": true,
+        "values": true
+      },
+      "diagnostics": []
+    }
+  ]
+}
+```
+
+当前统计：
+
+- `matchedSkills`: 118
+- `missingSkills`: 0
+- `mismatchedSkills`: 2
+- `matchedLevels`: 998
+- `missingLevels`: 0
+- `mismatchedLevels`: 2
+
+两个真实差异项是 `10800562`（卡塔露）和 `19900361`（诺诺），表现为 `lang_skill_level.json` 缺少对应语言 ID，导致 hero-module 聚合层仍保留语言 ID 文本。
+
+### 20.3 `damageModel.crossCheck`
+
+`createSkillDamageModel()` 现在会附带当前等级的 `crossCheck`：
+
+```javascript
+{
+  "sourceKind": "azpr-newtable-skill-level-crosscheck",
+  "status": "matched",
+  "tablePath": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/skill_level.json",
+  "langTablePath": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_skill_level.json",
+  "skillId": 10900101,
+  "characterId": 109001,
+  "level": 1,
+  "levelIndex": 0,
+  "rowId": 1657,
+  "labels": ["普攻", "重击", "闪击", "跃击"],
+  "values": ["649%", "190%", "40%", "136%"],
+  "matches": {
+    "labels": true,
+    "values": true
+  }
+}
+```
+
+`selectedDamageSegment.source.crossCheck` 和 `damageTimeline[].segment.source.crossCheck` 会保留单段的 `rowId`、`labelId`、`valueId`、字段路径和匹配状态。
+
+### 20.4 新增诊断码
+
+- `skill-level-crosscheck-skill-missing`：缺少技能 ID，无法查交叉校验。
+- `skill-level-crosscheck-entry-missing`：生成索引中缺少该技能。
+- `skill-level-crosscheck-level-missing`：生成索引中缺少该等级。
+- `skill-level-crosscheck-row-missing`：原始 `skill_level.json` 缺少该技能行。
+- `skill-level-crosscheck-level-row-missing`：原始 `skill_level.json` 缺少该等级行。
+- `skill-level-crosscheck-lang-missing`：`lang_skill_level.json` 缺少 `name` 或 `value` 引用的语言 ID。
+- `skill-level-crosscheck-label-mismatch`：还原标签与 hero-module 聚合标签不一致。
+- `skill-level-crosscheck-value-mismatch`：还原倍率与 hero-module 聚合倍率不一致。
+
+### 20.5 当前边界
+
+- 本阶段确认的是技能等级显示倍率字段可信度，不代表真实命中帧、动作帧、取消窗口或完整伤害公式已经接入。
+- `skill_level.coolDown` / `spCost` 仍按显示层处理，真实技能时序和资源逻辑需要继续向 `skillsub_logic`、技能 asset 或运行时捕获推进。

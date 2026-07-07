@@ -1,3 +1,4 @@
+import { createSkillLevelCrossCheckSegmentSource } from '../../domain/skillLevelCrossCheck';
 import { parseSkillDamageMultiplier } from '../../domain/skillDamageSegments';
 
 export const DAMAGE_FORMULA_VERSION = 'stage3-raw-attack-multiplier-v1';
@@ -39,6 +40,7 @@ function createDamageSegmentSource(damageModel = {}, index) {
     levelIndex: damageModel.levelIndex ?? null,
     labelField: fieldPaths.labels ? `${fieldPaths.labels}[${index}]` : null,
     valueField: fieldPaths.values ? `${fieldPaths.values}[${index}]` : null,
+    crossCheck: createSkillLevelCrossCheckSegmentSource(damageModel.crossCheck, index),
   };
 }
 
