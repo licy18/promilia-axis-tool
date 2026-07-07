@@ -1496,6 +1496,12 @@ function createHitBindingGapExternalElementBinding({
   const relatedSkillLevelBridgeInheritanceStatuses = uniqueStrings(
     relatedElementLevelBridges.map(bridge => bridge.inheritanceStatus)
   );
+  const runtimeParameterSourceEvidence =
+    createHitBindingGapRuntimeParameterSourceEvidence({
+      skillId: numericSkillId,
+      sourceCandidates,
+      damageElementRefs: uniqueDamageElementRefs,
+    });
   const unresolved = uniqueStrings([
     'hit-index-binding-unconfirmed',
     'damage-element-execution-order-unconfirmed',
@@ -1507,6 +1513,9 @@ function createHitBindingGapExternalElementBinding({
       : []),
     ...(relatedSkillLevelBridgeStatuses.length > 0
       ? ['related-skill-level-inheritance-unconfirmed']
+      : []),
+    ...(runtimeParameterSourceEvidence?.candidateCount > 0
+      ? ['runtime-parameter-source-application-unconfirmed']
       : []),
     'toughness-unit-scale',
     'self-energy-owner-and-share-rule',
@@ -1621,10 +1630,155 @@ function createHitBindingGapExternalElementBinding({
     relatedSkillLevelBridgePrimarySkillIds,
     relatedSkillLevelBridgeLevelRows,
     relatedSkillLevelBridgeInheritanceStatuses,
+    runtimeParameterSourceEvidence,
+    runtimeParameterSourceStatuses: runtimeParameterSourceEvidence
+      ? [runtimeParameterSourceEvidence.status]
+      : [],
+    runtimeParameterSourceCandidateCount:
+      runtimeParameterSourceEvidence?.candidateCount ?? 0,
+    runtimeParameterSourceSkillIds:
+      runtimeParameterSourceEvidence?.relatedSkillIds ?? [],
     candidates,
     unresolved,
     applied: false,
     note: 'External element refs are resolved as hit-binding candidates only; final hit index, DamageElement execution and HP/toughness/energy formulas remain unconfirmed.',
+  };
+}
+
+function createHitBindingGapRuntimeParameterSourceEvidence({
+  skillId,
+  sourceCandidates,
+  damageElementRefs,
+}) {
+  const relatedRows = uniqueElementRefsByPath(damageElementRefs)
+    .map(ref => ({
+      ref,
+      bridge:
+        ref.damageElementFieldMapping?.skillLevelBridge
+          ?.relatedElementLevelBridge,
+    }))
+    .filter(row => row.bridge);
+
+  const sourceStateNames = uniqueStrings(
+    sourceCandidates.flatMap(candidate => candidate.stateNames ?? [])
+  );
+  const sourceSubSkillIds = uniqueNumbers(
+    sourceCandidates.flatMap(candidate => candidate.subSkillIds ?? [])
+  );
+  const sourceHitEffects = uniqueStrings(
+    sourceCandidates.flatMap(candidate => candidate.hitEffects ?? [])
+  );
+  const sourceStartFrames = uniqueNumbers(
+    sourceCandidates.map(candidate => candidate.sourceStartFrame)
+  );
+  const sourceEndFrames = uniqueNumbers(
+    sourceCandidates.map(candidate => candidate.sourceEndFrame)
+  );
+  const damageElementConfigIds = uniqueNumbers(
+    relatedRows.map(row => row.ref.elementConfigId)
+  );
+  const relatedSkillIds = uniqueNumbers(
+    relatedRows.flatMap(row => [
+      row.bridge.primarySkillId,
+      ...(row.bridge.candidateSkillIds ?? []),
+    ])
+  );
+  const derivedSkillIds = uniqueNumbers(
+    relatedRows.map(row => row.bridge.derivedSkillId)
+  );
+  const characterSlotRefs = uniqueCharacterSlotRefs(
+    relatedRows.flatMap(row =>
+      (row.bridge.candidates ?? []).flatMap(
+        candidate => candidate.characterSlotRefs ?? []
+      )
+    )
+  );
+  const relationFindings = uniqueStrings([
+    ...(sourceSubSkillIds.length > 0
+      ? ['skill-control-source-subskill-uses-external-damage-element']
+      : []),
+    ...(sourceHitEffects.length > 0
+      ? ['skill-control-hit-effect-links-external-damage-element']
+      : []),
+    ...(damageElementConfigIds.some(elementConfigId =>
+      relatedSkillIds.includes(Math.trunc(Number(elementConfigId) / 10))
+    )
+      ? ['element-config-id-derived-related-skill-id']
+      : []),
+    ...(derivedSkillIds.some(skillIdValue =>
+      relatedSkillIds.includes(skillIdValue)
+    )
+      ? ['related-bridge-primary-skill-matches-derived-skill-id']
+      : []),
+    ...(characterSlotRefs.length > 0
+      ? ['related-skill-present-in-character-slot']
+      : []),
+    'il2cpp-damage-element-parse-receives-skill-id',
+    'il2cpp-skill-element-injector-executes-damage-element',
+  ]);
+
+  return {
+    status:
+      relatedRows.length > 0
+        ? 'runtime-parameter-source-candidates-found-application-unconfirmed'
+        : 'runtime-parameter-source-candidates-missing',
+    sourceKind: 'azpr-runtime-parameter-source-candidate',
+    file: SKILL_ASSET_EVIDENCE_PATH,
+    sourceSkillId: numberOrNull(skillId),
+    sourceStateNames,
+    sourceSubSkillIds,
+    sourceHitEffects,
+    sourceStartFrames,
+    sourceEndFrames,
+    damageElementConfigIds,
+    damageElementPathIds: uniqueStrings(
+      relatedRows.map(row => row.ref.pathId).filter(value => value != null)
+    ),
+    relatedSkillIds,
+    derivedSkillIds,
+    characterSlotRefs,
+    candidateCount: relatedRows.length,
+    relationFindings,
+    runtimeMethodEvidence: [
+      {
+        className: 'DamageElement',
+        method:
+          'Parse(TElementParams param, int skillId, CustomBattleVerifyInfo verifyInfo)',
+        finding: 'damage-element-parse-receives-skill-id',
+        source: 'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs',
+        sourceLineRange: 'dump.cs:274573-274708',
+      },
+      {
+        className: 'SkillElementInjector',
+        method: 'ExecuteDamageElement(DamageElement element)',
+        finding: 'skill-element-injector-executes-damage-element',
+        source: 'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs',
+        sourceLineRange: 'dump.cs:272567-272576',
+      },
+    ],
+    evidenceRows: relatedRows.map(row => ({
+      elementConfigId: numberOrNull(row.ref.elementConfigId),
+      pathId: row.ref.pathId ?? null,
+      elementName: row.ref.elementName ?? null,
+      bridgeStatus: row.bridge.status ?? null,
+      primarySkillId: numberOrNull(row.bridge.primarySkillId),
+      primaryRelationStatus: row.bridge.primaryRelationStatus ?? null,
+      candidateSkillIds: row.bridge.candidateSkillIds ?? [],
+      levelRows: numberOrNull(row.bridge.levelRows) ?? 0,
+      parameterIds: row.bridge.parameterIds ?? [],
+      varyingParameterIds: row.bridge.varyingParameterIds ?? [],
+      formulaSlotConclusion:
+        row.bridge.formulaSlotAlignment?.conclusion ?? null,
+      inheritanceStatus: row.bridge.inheritanceStatus ?? null,
+    })),
+    unresolved: uniqueStrings([
+      'damage-element-hit-index-binding-unconfirmed',
+      'runtime-related-skill-level-selection-unconfirmed',
+      'runtime-parameter-source-application-unconfirmed',
+      'function-combination-order-unconfirmed',
+    ]),
+    applied: false,
+    note: 'This groups source subSkill, external DamageElement and related skill-level rows as a runtime parameter-source candidate only; it is not applied to final HP/toughness/energy formulas.',
   };
 }
 
@@ -1899,6 +2053,21 @@ function createHitBindingGapExternalElementBindingSummary(gaps) {
     gapsWithRelatedSkillLevelBridges: bindings.filter(
       binding => (binding.relatedSkillLevelBridgeStatuses ?? []).length > 0
     ).length,
+    runtimeParameterSourceStatuses: uniqueStrings(
+      bindings.flatMap(binding => binding.runtimeParameterSourceStatuses ?? [])
+    ),
+    runtimeParameterSourceCandidateCount: bindings.reduce(
+      (sum, binding) =>
+        sum + (numberOrNull(binding.runtimeParameterSourceCandidateCount) ?? 0),
+      0
+    ),
+    runtimeParameterSourceSkillIds: uniqueNumbers(
+      bindings.flatMap(binding => binding.runtimeParameterSourceSkillIds ?? [])
+    ),
+    gapsWithRuntimeParameterSourceCandidates: bindings.filter(
+      binding =>
+        (numberOrNull(binding.runtimeParameterSourceCandidateCount) ?? 0) > 0
+    ).length,
     unresolved: uniqueStrings(
       bindings.flatMap(binding => binding.unresolved ?? [])
     ),
@@ -2131,6 +2300,28 @@ function uniqueElementRefsByPath(refs) {
     byPath.set(key, ref);
   }
   return [...byPath.values()];
+}
+
+function uniqueCharacterSlotRefs(refs) {
+  const byKey = new Map();
+  for (const ref of refs ?? []) {
+    const key = [
+      ref?.characterId,
+      ref?.characterName,
+      ref?.group,
+      ref?.slot,
+    ].join('|');
+    if (byKey.has(key)) {
+      continue;
+    }
+    byKey.set(key, {
+      characterId: numberOrNull(ref?.characterId),
+      characterName: ref?.characterName ?? null,
+      group: ref?.group ?? null,
+      slot: numberOrNull(ref?.slot),
+    });
+  }
+  return [...byKey.values()];
 }
 
 function collectFormulaFunctionOutputs(evidence) {

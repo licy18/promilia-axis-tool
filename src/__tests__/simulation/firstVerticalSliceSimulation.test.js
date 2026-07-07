@@ -1653,6 +1653,12 @@ describe('first vertical slice simulation', () => {
             'related-skill-level-inheritance-unconfirmed',
           ],
           gapsWithRelatedSkillLevelBridges: 3,
+          runtimeParameterSourceStatuses: [
+            'runtime-parameter-source-candidates-found-application-unconfirmed',
+          ],
+          runtimeParameterSourceCandidateCount: 3,
+          runtimeParameterSourceSkillIds: [10900125],
+          gapsWithRuntimeParameterSourceCandidates: 3,
           applied: false,
         }),
         elementSourceAlignmentSummary: expect.objectContaining({
@@ -1725,6 +1731,56 @@ describe('first vertical slice simulation', () => {
               relatedSkillLevelBridgeInheritanceStatuses: [
                 'related-skill-level-inheritance-unconfirmed',
               ],
+              runtimeParameterSourceStatuses: [
+                'runtime-parameter-source-candidates-found-application-unconfirmed',
+              ],
+              runtimeParameterSourceCandidateCount: 1,
+              runtimeParameterSourceSkillIds: [10900125],
+              runtimeParameterSourceEvidence: expect.objectContaining({
+                status:
+                  'runtime-parameter-source-candidates-found-application-unconfirmed',
+                sourceSkillId: 10900101,
+                sourceStateNames: ['Skill0_6'],
+                sourceSubSkillIds: [109001011],
+                sourceHitEffects: ['11_109001_133', '11_109001_005'],
+                damageElementConfigIds: [109001251],
+                relatedSkillIds: [10900125],
+                derivedSkillIds: [10900125],
+                characterSlotRefs: [
+                  {
+                    characterId: 109001,
+                    characterName: '末音',
+                    group: 'ground',
+                    slot: 207,
+                  },
+                ],
+                candidateCount: 1,
+                relationFindings: expect.arrayContaining([
+                  'skill-control-source-subskill-uses-external-damage-element',
+                  'skill-control-hit-effect-links-external-damage-element',
+                  'element-config-id-derived-related-skill-id',
+                  'related-bridge-primary-skill-matches-derived-skill-id',
+                  'related-skill-present-in-character-slot',
+                  'il2cpp-damage-element-parse-receives-skill-id',
+                  'il2cpp-skill-element-injector-executes-damage-element',
+                ]),
+                evidenceRows: expect.arrayContaining([
+                  expect.objectContaining({
+                    elementConfigId: 109001251,
+                    pathId: '-5633710717881758712',
+                    primarySkillId: 10900125,
+                    primaryRelationStatus: 'element-id-derived-skill-id',
+                    levelRows: 12,
+                    parameterIds: [1, 7],
+                    varyingParameterIds: [1],
+                    formulaSlotConclusion:
+                      'slot-override-candidate-unconfirmed',
+                    inheritanceStatus:
+                      'related-skill-level-inheritance-unconfirmed',
+                  }),
+                ]),
+                applied: false,
+              }),
               candidates: expect.arrayContaining([
                 expect.objectContaining({
                   sourceName: '攻击碰撞',

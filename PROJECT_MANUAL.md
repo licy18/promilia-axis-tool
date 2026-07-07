@@ -3564,6 +3564,48 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8AR 目标：继续追 `Skill0_6 / subSkill 109001011 / element 109001251` 与 `10900125 / slot 207` 的运行时选择关系，确认 `DamageElement` 或 `SkillElementInjector` 如何取用关联技能等级参数。
 - 重点检查 `skill_control` 事件桥、`skill.json.parentSkill`、`skillModuleTag`、输入槽位、IL2CPP `DamageElement.Parse/Execute` 和 `SkillElementInjector.ExecuteDamageElement` 是否存在把 `elementConfigId -> floor(elementId / 10)` 或 parent/slot skill 作为参数来源的逻辑。
 
+### 2026-07-08：阶段 5-8AR 运行时参数来源候选固化
+
+本轮完成：
+
+- 投影层在 `hitBindingGap.externalElementBinding` 下新增 `runtimeParameterSourceEvidence`，把缺口行为候选、外部 DamageElement 和关联等级链放到同一条证据里。
+- 当前重击/闪击/跃击的缺口链路均能合并为：`Skill0_6 / subSkill 109001011 / hitEffects 11_109001_133, 11_109001_005 -> element 109001251 -> derivedSkillId 10900125 -> 末音 ground slot 207`。
+- 证据字段记录 `DamageElement.Parse(TElementParams param, int skillId, ...)` 和 `SkillElementInjector.ExecuteDamageElement(DamageElement element)` 两个 IL2CPP 签名锚点，说明运行时执行链具备 skillId / DamageElement 上下文，但 dump 只有签名，尚不能确认方法体如何覆盖参数。
+- `externalElementBindingSummary` 新增 `runtimeParameterSourceStatuses`、`runtimeParameterSourceCandidateCount`、`runtimeParameterSourceSkillIds` 和 `gapsWithRuntimeParameterSourceCandidates`。
+- Workbench 执行矩阵摘要新增 `参数来源候选 x/y`，切换到重击动作时可以看到 `参数来源候选 1/1`。
+- 仿真测试新增 `runtimeParameterSourceEvidence` 明细断言，Workbench 测试新增 `参数来源候选 1/1` 展示断言。
+
+当前四动作参数来源候选结果：
+
+- `externalElementBindingSummary.gapsWithRuntimeParameterSourceCandidates = 3/3`。
+- `runtimeParameterSourceStatuses = ["runtime-parameter-source-candidates-found-application-unconfirmed"]`。
+- `runtimeParameterSourceCandidateCount = 3`，每个缺口动作各命中 1 个唯一 DamageElement 参数来源候选。
+- `runtimeParameterSourceSkillIds = [10900125]`。
+- 单动作候选关系包含：
+  - `skill-control-source-subskill-uses-external-damage-element`
+  - `skill-control-hit-effect-links-external-damage-element`
+  - `element-config-id-derived-related-skill-id`
+  - `related-bridge-primary-skill-matches-derived-skill-id`
+  - `related-skill-present-in-character-slot`
+  - `il2cpp-damage-element-parse-receives-skill-id`
+  - `il2cpp-skill-element-injector-executes-damage-element`
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+
+当前边界：
+
+- 阶段 5-8AR 证明的是 `Skill0_6/subSkill 109001011` 的外部 DamageElement、`10900125` 关联等级链和 IL2CPP 执行上下文三者可组成同一条运行时参数来源候选。
+- 仍不能确认 runtime 一定使用 `10900125` 的 `A = 4500-9450` 覆盖 `TDamageElementParams.formulaParamValues[1] = 1000`。
+- `runtimeParameterSourceEvidence.applied = false`，不能直接改写 HP、削韧或自身能量公式。
+- IL2CPP dump 目前只能提供方法签名，下一步必须继续找方法体、运行时日志、反编译产物或可验证的公式执行证据。
+
+下一步：
+
+- 阶段 5-8AS 目标：继续追 `DamageElement.Parse/Execute`、`SkillElementInjector.ExecuteDamageElement`、`FormulaUtility`、`RecoverSP` 和弱点击破相关执行点，确认 `TDamageElementParams.formulaParamValues` 与 `skillsub_ele_value.valueParam` 的覆盖顺序，以及 HP、削韧、自身能量三条曲线各自的真实应用点。
+- 如果当前 IL2CPP dump 仍只有签名，优先在 AzPr Extractor 产物中查找反编译方法体、native 符号/字符串交叉引用或可运行时采样的日志证据。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -5226,3 +5226,102 @@ hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1
 - `relatedElementLevelBridge` 不是最终公式输入，只是参数来源候选。
 - `skillLevelBridge.status` 仍保持直连缺失；只有 `relatedElementLevelBridge.status` 表示找到了关联链。
 - 下一阶段需要验证 runtime 是否通过 `elementConfigId / 10`、`parentSkill`、角色 slot、`skillModuleTag` 或 `SkillElementInjector` 执行上下文选择 `10900125` 的等级参数。
+
+## 71. 阶段 5-8AR：runtimeParameterSourceEvidence 运行时参数来源候选
+
+阶段 5-8AR 在 `hitBindingGap.externalElementBinding` 下新增 `runtimeParameterSourceEvidence`。该字段用于把三条原本分散的证据合并到同一候选链：
+
+- `skill_control` 行为候选：`Skill0_6 / subSkill 109001011 / hitEffects 11_109001_133, 11_109001_005`。
+- 外部 DamageElement：`elementConfigId = 109001251`、`pathId = -5633710717881758712`、`TDamageElementParams`。
+- 关联等级链：`derivedSkillId = 10900125`、末音 `ground slot 207`、12 行 `A/G` 参数。
+
+### 71.1 hitBindingGap.externalElementBinding.runtimeParameterSourceEvidence
+
+重击样例：
+
+```json
+{
+  "status": "runtime-parameter-source-candidates-found-application-unconfirmed",
+  "sourceKind": "azpr-runtime-parameter-source-candidate",
+  "sourceSkillId": 10900101,
+  "sourceStateNames": ["Skill0_6"],
+  "sourceSubSkillIds": [109001011],
+  "sourceHitEffects": ["11_109001_133", "11_109001_005"],
+  "sourceStartFrames": [13, 16, 19],
+  "damageElementConfigIds": [109001251],
+  "damageElementPathIds": ["-5633710717881758712"],
+  "relatedSkillIds": [10900125],
+  "derivedSkillIds": [10900125],
+  "characterSlotRefs": [
+    {
+      "characterId": 109001,
+      "characterName": "末音",
+      "group": "ground",
+      "slot": 207
+    }
+  ],
+  "candidateCount": 1,
+  "relationFindings": [
+    "skill-control-source-subskill-uses-external-damage-element",
+    "skill-control-hit-effect-links-external-damage-element",
+    "element-config-id-derived-related-skill-id",
+    "related-bridge-primary-skill-matches-derived-skill-id",
+    "related-skill-present-in-character-slot",
+    "il2cpp-damage-element-parse-receives-skill-id",
+    "il2cpp-skill-element-injector-executes-damage-element"
+  ],
+  "applied": false
+}
+```
+
+### 71.2 runtimeMethodEvidence
+
+`runtimeParameterSourceEvidence.runtimeMethodEvidence[]` 记录 IL2CPP 签名锚点：
+
+- `DamageElement.Parse(TElementParams param, int skillId, CustomBattleVerifyInfo verifyInfo)`，说明 DamageElement 解析阶段具备 `skillId` 参数。
+- `SkillElementInjector.ExecuteDamageElement(DamageElement element)`，说明 SkillElementInjector 确实执行 DamageElement。
+
+当前 dump 只有签名，没有方法体；因此这些锚点只能证明运行时上下文可能携带 skillId / DamageElement，不能证明 `10900125` 的 A/G 参数已经被应用。
+
+### 71.3 externalElementBindingSummary
+
+`hitBindingGapSummary.externalElementBindingSummary` 新增：
+
+- `runtimeParameterSourceStatuses`
+- `runtimeParameterSourceCandidateCount`
+- `runtimeParameterSourceSkillIds`
+- `gapsWithRuntimeParameterSourceCandidates`
+
+四动作样例当前为：
+
+```json
+{
+  "runtimeParameterSourceStatuses": [
+    "runtime-parameter-source-candidates-found-application-unconfirmed"
+  ],
+  "runtimeParameterSourceCandidateCount": 3,
+  "runtimeParameterSourceSkillIds": [10900125],
+  "gapsWithRuntimeParameterSourceCandidates": 3
+}
+```
+
+### 71.4 Workbench 摘要
+
+Workbench 执行矩阵摘要新增：
+
+```text
+参数来源候选 3/3
+```
+
+单个重击动作切换时显示：
+
+```text
+hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1/1 · 参数来源候选 1/1 · 来源差异 1/1
+```
+
+### 71.5 当前边界
+
+- `runtimeParameterSourceEvidence` 只是运行时参数来源候选，不是最终公式输入。
+- `10900125` 的 `A = 4500-9450` 仍不能直接覆盖 `TDamageElementParams.formulaParamValues[1] = 1000`。
+- HP、削韧、自身能量三条公式链仍保持 `applied: false`。
+- 下一阶段应继续追 `DamageElement.Parse/Execute`、`FormulaUtility`、`RecoverSP` 和弱点击破相关执行点，确认参数覆盖顺序和三值应用点。

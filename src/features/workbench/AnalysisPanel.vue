@@ -788,12 +788,16 @@ function formatFormulaExecutionMatrixSummary(summary) {
     external?.gapsWithRelatedSkillLevelBridges > 0
       ? ` · 关联等级链 ${external.gapsWithRelatedSkillLevelBridges}/${external.gapCount}`
       : '';
+  const runtimeParameterText =
+    external?.gapsWithRuntimeParameterSourceCandidates > 0
+      ? ` · 参数来源候选 ${external.gapsWithRuntimeParameterSourceCandidates}/${external.gapCount}`
+      : '';
   const alignment = gap?.elementSourceAlignmentSummary;
   const alignmentText =
     alignment?.gapCount > 0
       ? ` · 来源差异 ${alignment.divergentGapCount}/${alignment.gapCount}`
       : '';
-  return `执行矩阵摘要 ${summary.matrixActionCount} 动作 · ${summary.rowCount} 行 · ${summary.elementCount} element · 缩放 ${scaleRange}${perHitText}${spreadText}${hitBindingText}${gapText}${externalText}${relatedLevelText}${alignmentText}`;
+  return `执行矩阵摘要 ${summary.matrixActionCount} 动作 · ${summary.rowCount} 行 · ${summary.elementCount} element · 缩放 ${scaleRange}${perHitText}${spreadText}${hitBindingText}${gapText}${externalText}${relatedLevelText}${runtimeParameterText}${alignmentText}`;
 }
 
 function formatScaleRange(min, max) {
