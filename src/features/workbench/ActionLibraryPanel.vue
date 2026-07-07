@@ -232,6 +232,24 @@
           >
             删批次
           </button>
+          <button
+            v-if="action.generationBatch?.batchId"
+            class="tool-button"
+            data-testid="workbench-shift-action-batch-earlier"
+            type="button"
+            @click.stop="emitBatchShift(action.generationBatch.batchId, -500)"
+          >
+            -500ms
+          </button>
+          <button
+            v-if="action.generationBatch?.batchId"
+            class="tool-button"
+            data-testid="workbench-shift-action-batch-later"
+            type="button"
+            @click.stop="emitBatchShift(action.generationBatch.batchId, 500)"
+          >
+            +500ms
+          </button>
         </div>
         <dl>
           <div>
@@ -334,6 +352,7 @@ const emit = defineEmits([
   'copy-action',
   'delete-action',
   'delete-action-batch',
+  'shift-action-batch',
   'update-active-actor',
   'update-segment-split-options',
 ]);
@@ -420,6 +439,13 @@ function formatSkillSplitTitle(skill) {
 function emitSegmentSplitOption(key, value) {
   emit('update-segment-split-options', {
     [key]: key === 'intervalMs' ? Number(value) : Boolean(value),
+  });
+}
+
+function emitBatchShift(batchId, offsetMs) {
+  emit('shift-action-batch', {
+    batchId,
+    offsetMs,
   });
 }
 

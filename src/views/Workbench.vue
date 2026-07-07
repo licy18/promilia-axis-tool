@@ -55,6 +55,7 @@
         @copy-action="copyAction"
         @delete-action="deleteAction"
         @delete-action-batch="deleteActionBatch"
+        @shift-action-batch="shiftActionBatch"
         @update-active-actor="setActionLibraryCharacterId"
         @update-segment-split-options="updateSegmentSplitOptions"
       />
@@ -592,6 +593,44 @@ function deleteActionBatch(batchId) {
     selectedActionId.value = actionDrafts.value[nextIndex].id;
     syncActionLibraryCharacterIdFromDraft(actionDrafts.value[nextIndex]);
   }
+  markDraftDirty();
+}
+
+function shiftActionBatch({ batchId, offsetMs }) {
+  clearSegmentSplitPreview();
+  const offset = Number(offsetMs);
+  if (!batchId || !Number.isFinite(offset) || offset === 0) {
+    return;
+  }
+
+  const batchActions = actionDrafts.value.filter((action) => action.generationBatch?.batchId === batchId);
+  if (batchActions.length === 0) {
+    return;
+  }
+
+  const minStartMs = Math.min(...batchActions.map((action) => Math.max(0, Number(action.startMs) || 0)));
+  const maxStartMs = Math.max(...batchActions.map((action) => Math.max(0, Number(action.startMs) || 0)));
+  const appliedOffsetMs = clampNumber(offset, -minStartMs, project.value.time.durationMs - maxStartMs);
+  if (appliedOffsetMs === 0) {
+    return;
+  }
+
+  actionDrafts.value = actionDrafts.value.map((action) => {
+    if (action.generationBatch?.batchId !== batchId) {
+      return action;
+    }
+
+    const nextStartMs = clampNumber(
+      (Number(action.startMs) || 0) + appliedOffsetMs,
+      0,
+      project.value.time.durationMs,
+    );
+    return createWorkbenchActionDraft({
+      ...action,
+      ...clearInsertionForManualEdit(action),
+      startMs: nextStartMs,
+    });
+  });
   markDraftDirty();
 }
 
