@@ -161,6 +161,8 @@ describe('generated AzPr data', () => {
         behaviorReferenceResolvedSkills: 5,
         hpDamageBehaviorReferenceResolvedSkills: 1,
         externalElementBaseReferenceSkills: 1,
+        resourceMapMatchedElementBaseReferenceSkills: 1,
+        resourceMapUnmatchedElementBaseReferenceSkills: 0,
         relationStatus: 'skill-control-assets-found-in-azpr-extractor',
       },
     });
@@ -375,6 +377,8 @@ describe('generated AzPr data', () => {
       behaviorReferenceResolvedSkills: 5,
       hpDamageBehaviorReferenceResolvedSkills: 1,
       externalElementBaseReferenceSkills: 1,
+      resourceMapMatchedElementBaseReferenceSkills: 1,
+      resourceMapUnmatchedElementBaseReferenceSkills: 0,
       relationStatus: 'skill-control-assets-found-in-azpr-extractor',
     });
     expect(
@@ -401,11 +405,30 @@ describe('generated AzPr data', () => {
         },
       },
     });
+    expect(mayoiAttack.skillResourceMapEvidence).toMatchObject({
+      status: 'root-skillResourceMaps-found',
+      resourceMapCount: 2,
+      elementRefCount: 8,
+      resourceMaps: [
+        expect.objectContaining({
+          subSkillIds: [10900101],
+          stateNames: ['Skill0_1'],
+          hitEffects: ['11_109001_116'],
+        }),
+        expect.objectContaining({
+          subSkillIds: [109001011],
+          stateNames: ['Skill0_6'],
+          hitEffects: ['11_109001_133', '11_109001_005'],
+        }),
+      ],
+    });
     expect(mayoiAttack.behaviorReferenceSummary).toMatchObject({
       behaviorListRefs: 36,
       resolvedBehaviorListRefs: 36,
       unresolvedBehaviorListRefs: 0,
       externalElementBaseRefs: 13,
+      resourceMapMatchedElementBaseRefs: 13,
+      resourceMapUnmatchedElementBaseRefs: 0,
       resolvedBehaviorRefsByLane: {
         hpDamage: 5,
         toughnessDamage: 0,
@@ -450,6 +473,28 @@ describe('generated AzPr data', () => {
               elementalType: 1023,
               targetType: 1,
               externalElementBaseRefCount: 3,
+              resourceMapMatchedElementBaseRefCount: 3,
+              elementBaseDataRefs: [
+                expect.objectContaining({
+                  pathId: '-5633710717881758712',
+                  resourceMapMatchCount: 1,
+                  resourceMapMatches: [
+                    expect.objectContaining({
+                      subSkillIds: [109001011],
+                      stateNames: ['Skill0_6'],
+                      hitEffects: ['11_109001_133', '11_109001_005'],
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  pathId: '7848597992417622553',
+                  resourceMapMatchCount: 1,
+                }),
+                expect.objectContaining({
+                  pathId: '2740651767650299388',
+                  resourceMapMatchCount: 1,
+                }),
+              ],
             }),
           ],
         }),

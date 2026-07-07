@@ -2042,3 +2042,89 @@ Unity `m_PathID` 是 64 位整数，JavaScript `JSON.parse` 会把它读成普�
 - `scriptPathId = 8289252000250858251` 是识别行为类型的强线索，但仍需脚本类型名、更多样本或 typetree 证据确认。
 - `elementBaseDatas[].fileId = 2` 表示外部文件引用，当前不在同目录 JSON 中；下一阶段必须追 bundle 外部对象或 Extractor 索引。
 - 削韧和自身能量仍未在本地行为链中确认，不得从 HP 碰撞行为推导。
+
+## 35. 2026-07-07 elementBaseDatas 资源映射归属
+
+阶段 5-8J 在 `skill-asset-evidence.json` 中新增 `skillResourceMapEvidence`，并把行为对象里的外部 `elementBaseDatas` 引用匹配回根 `skillResourceMaps[].elements`。
+
+### 35.1 summary 新增字段
+
+`skill-asset-evidence.json.summary` 新增：
+
+```javascript
+{
+  "resourceMapMatchedElementBaseReferenceSkills": 1,
+  "resourceMapUnmatchedElementBaseReferenceSkills": 0
+}
+```
+
+含义：
+
+- `resourceMapMatchedElementBaseReferenceSkills`：至少一个外部 `elementBaseDatas` 引用能匹配到根 `skillResourceMaps[].elements` 的当前技能数。
+- `resourceMapUnmatchedElementBaseReferenceSkills`：至少一个外部 `elementBaseDatas` 引用仍无法匹配根资源映射的当前技能数。
+
+### 35.2 技能证据项新增字段
+
+`currentSkillControlEvidence[]` 的 `found` 项新增：
+
+```javascript
+{
+  "skillResourceMapEvidence": {
+    "status": "root-skillResourceMaps-found",
+    "file": "skill_control_10900101__-2033047303768548289.json",
+    "resourceMapCount": 2,
+    "elementRefCount": 8,
+    "resourceMaps": [
+      {
+        "index": 0,
+        "skillIds": [10900101],
+        "subSkillIds": [10900101],
+        "stateNames": ["Skill0_1"],
+        "hitEffects": ["11_109001_116"]
+      },
+      {
+        "index": 1,
+        "skillIds": [10900101],
+        "subSkillIds": [109001011],
+        "stateNames": ["Skill0_6"],
+        "hitEffects": ["11_109001_133", "11_109001_005"]
+      }
+    ]
+  }
+}
+```
+
+`behaviorReferenceSummary` 新增：
+
+```javascript
+{
+  "resourceMapMatchedElementBaseRefs": 13,
+  "resourceMapUnmatchedElementBaseRefs": 0
+}
+```
+
+`elementBaseDataRefs[]` 新增：
+
+```javascript
+{
+  "fileId": 2,
+  "pathId": "-5633710717881758712",
+  "roundedPathId": "-5633710717881759000",
+  "resourceMapMatchCount": 1,
+  "resourceMapMatches": [
+    {
+      "resourceMapIndex": 1,
+      "subSkillIds": [109001011],
+      "stateNames": ["Skill0_6"],
+      "hitEffects": ["11_109001_133", "11_109001_005"]
+    }
+  ]
+}
+```
+
+### 35.3 当前边界
+
+- `resourceMapMatches` 只证明外部 element 引用属于哪组 `skillResourceMaps`，不证明已经解析了 element 对象本体。
+- `effects` / `hitEffects` 是资源名线索，不等同于伤害公式、削韧公式或充能公式。
+- 这些资源映射帮助缩小追踪范围：下一步应沿 `subSkillId`、`stateName`、`hitEffects` 和 element PathID 继续找对象结构。
+- 当前仍不能把 `elementBaseDatas` 直接映射到 `skillsub_ele_value.elementId` 或 `valueParam`。

@@ -2208,6 +2208,38 @@ Endaxis 参考边界：
 - 优先从 `skill_control_10900101` 所属 bundle、Extractor 的 Yoo index、stub 元信息和 Unity typetree 输出中查找 `-5633710717881758712`、`7848597992417622553`、`2740651767650299388`、`-4052262175632216603` 等外部对象。
 - 若能解析外部对象，继续确认它们是否连接到 `skillsub_ele_value.elementId`、`valueParam`、削韧字段或充能字段；若仍不能解析，则把缺口固化为诊断索引。
 
+### 2026-07-07：阶段 5-8J elementBaseDatas 资源映射证据落地
+
+本轮完成：
+
+- `scripts/generate-azpr-data.mjs` 新增 `skillResourceMapEvidence`，从 `skill_control_*.asset` 根 MonoBehaviour 的 `skillResourceMaps` 提取资源映射。
+- `effectLaneBehaviorChains[].resolvedBehaviors[].elementBaseDataRefs` 现在会尝试匹配根 `skillResourceMaps[].elements`，并记录 `resourceMapMatches`。
+- 全局当前样本统计显示：1 个当前技能存在外部 `elementBaseDatas` 引用，且这些引用已能匹配到根 `skillResourceMaps`；未匹配技能数为 0。
+- 末音 `10900101` 根对象 `skillResourceMaps` 有 2 组资源映射、8 个 element 引用。
+- `subSkillId = 10900101 / Skill0_1` 对应 hitEffect `11_109001_116`，包含 `-4052262175632216603` 等 element 引用。
+- `subSkillId = 109001011 / Skill0_6` 对应 hitEffects `11_109001_133`、`11_109001_005`，包含 `-5633710717881758712`、`7848597992417622553`、`2740651767650299388` 等 element 引用。
+- 末音 `10900101` 的 13 条外部 `elementBaseDatas` 引用全部匹配到根 `skillResourceMaps`，其中 `攻击碰撞 19-20f` 的 3 条 element 引用都归到 `subSkillId = 109001011 / Skill0_6`。
+
+验收结果：
+
+- `npm run data:generate`：通过，重新生成 `skill-asset-evidence.json`。
+- `npm run test -- --run src/__tests__/data/azprGenerated.test.js`：通过，1 个测试文件、9 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1359 KB。
+
+当前边界：
+
+- 当前已确认“外部 element 引用属于哪组 `skillResourceMaps` / `subSkillId` / `hitEffects`”，但仍没有解析 `m_FileID = 2` 外部对象本体。
+- `skillResourceMaps.effects` / `hitEffects` 是资源名线索，不等同于伤害、削韧或充能公式。
+- Yoo index 当前只定位到 `skill_control_10900101` 所在 bundle `ypm6fu6ccxdszvz7zhuinq`，没有直接列出这些 PathID 的对象落点；当前 Unity 导出目录中也没有对应独立 JSON。
+- 下一步仍需要从 bundle typetree、Extractor 脚本或 IL2CPP 类型信息中找外部 element 对象结构。
+
+下一步：
+
+- 阶段 5-8K 目标：追踪 `m_FileID = 2` element 对象本体和行为脚本类型。
+- 优先确认 `scriptPathId = 8289252000250858251` 的脚本类型名，并查找 `skill_control_10900101` bundle 内 `m_FileID = 2` 的对象表。
+- 若能解析 element 对象，继续验证它是否包含 `elementId`、`valueParam`、削韧、充能或公式 ID；若不能解析，产出 Extractor 侧最小复现和缺失 typetree 清单。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

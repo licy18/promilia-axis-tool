@@ -234,7 +234,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8G，新增每动作三值结果契约，`actionResultTimeline[]` 对每个动作固定追踪敌人 HP 伤害、敌人韧性削减、自身能量变化；当前 HP 走 raw 投影，削韧和充能公式保持独立占位。
 - 已完成：阶段 5-8H，对 `skill_control` MonoBehaviour 样本建立效果轨道候选分类，输出 `effectLaneCandidateSummary` / `effectLaneCandidates`；当前确认末音 `10900101` 有 `攻击碰撞` HP 候选，但削韧、充能仍未在该技能样本中确认。
 - 已完成：阶段 5-8I，解引用 `behaviorList` / PathID / MonoBehaviour 关联链，末音 `10900101` 的 36 条 behaviorList 引用全部解到本地行为对象，HP 候选行为链已追到 `collisionLayer/elementalType/targetType/elementBaseDatas` 等字段。
-- 下一步：阶段 5-8J，追踪 `elementBaseDatas` 的 `m_FileID = 2` 外部引用，确认其是否连接 `skillsub_ele_value.elementId`、`valueParam`、削韧字段或充能字段。
+- 已完成：阶段 5-8J，新增 `skillResourceMapEvidence`，把行为对象里的外部 `elementBaseDatas` 引用匹配到根 `skillResourceMaps[].elements`；末音 `10900101` 的 13 条外部 element 引用全部匹配到对应 `subSkillId`、`stateName` 和 hitEffects。
+- 下一步：阶段 5-8K，追踪 `m_FileID = 2` element 对象本体和 `scriptPathId = 8289252000250858251` 的脚本类型名，确认是否能找到 `elementId`、`valueParam`、削韧、充能或公式 ID。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

@@ -2093,6 +2093,10 @@ async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
         behaviorReferenceSkillCounts.hpDamage,
       externalElementBaseReferenceSkills:
         behaviorReferenceSkillCounts.externalElementBaseRefs,
+      resourceMapMatchedElementBaseReferenceSkills:
+        behaviorReferenceSkillCounts.resourceMapMatchedElementBaseRefs,
+      resourceMapUnmatchedElementBaseReferenceSkills:
+        behaviorReferenceSkillCounts.resourceMapUnmatchedElementBaseRefs,
       relationStatus:
         foundCurrentSkillControls.length > 0
           ? 'skill-control-assets-found-in-azpr-extractor'
@@ -2256,6 +2260,12 @@ async function buildSkillControlEvidenceItem(skill, skillControlBySkillId) {
   const jsonFiles = await listJsonFileNames(monoBehaviourRoot);
   const monoBehaviourFileIndex = buildMonoBehaviourFileIndex(jsonFiles);
   const monoBehaviourPayloadCache = new Map();
+  const skillResourceMapEvidence = await buildSkillResourceMapEvidence(
+    skill,
+    monoBehaviourRoot,
+    jsonFiles,
+    monoBehaviourPayloadCache
+  );
   const aggregate = createEmptySkillControlNodeEvidence();
   let parsedJsonSampleFiles = 0;
   let unreadableJsonSampleFiles = 0;
@@ -2274,6 +2284,7 @@ async function buildSkillControlEvidenceItem(skill, skillControlBySkillId) {
           monoBehaviourRoot,
           monoBehaviourFileIndex,
           monoBehaviourPayloadCache,
+          skillResourceMapIndex: skillResourceMapEvidence.elementRefsByRoundedPathId,
         })
       );
     } catch {
@@ -2297,6 +2308,7 @@ async function buildSkillControlEvidenceItem(skill, skillControlBySkillId) {
     behaviorNodeSampleCount: aggregate.behaviorNodeCount,
     frameCandidateSampleCount: aggregate.frameCandidateCount,
     elementListCandidateSampleCount: aggregate.elementListCandidateCount,
+    skillResourceMapEvidence: skillResourceMapEvidence.evidence,
     effectLaneCandidateSummary: aggregate.laneCandidateSummary,
     effectLaneCandidates: aggregate.laneCandidates,
     behaviorReferenceSummary: aggregate.behaviorReferenceSummary,
@@ -2399,6 +2411,8 @@ function createEmptySkillControlNodeEvidence() {
       resolvedBehaviorListRefs: 0,
       unresolvedBehaviorListRefs: 0,
       externalElementBaseRefs: 0,
+      resourceMapMatchedElementBaseRefs: 0,
+      resourceMapUnmatchedElementBaseRefs: 0,
       resolvedBehaviorRefsByLane: Object.fromEntries(
         SKILL_EFFECT_LANES.map(lane => [lane.key, 0])
       ),
@@ -2558,7 +2572,8 @@ async function resolveMonoBehaviourReference(ref, context) {
       payload.json,
       payload.text,
       target.fileName,
-      target.pathId
+      target.pathId,
+      context.skillResourceMapIndex
     ),
   };
 }
@@ -2578,14 +2593,22 @@ async function readMonoBehaviourPayload(root, fileName, cache) {
   return payload;
 }
 
-function compactMonoBehaviourBehaviorTarget(value, text, fileName, pathId) {
+function compactMonoBehaviourBehaviorTarget(
+  value,
+  text,
+  fileName,
+  pathId,
+  skillResourceMapIndex
+) {
   const elementBaseDataRefs = extractObjectRefsFromArraySection(
     text,
-    'elementBaseDatas'
+    'elementBaseDatas',
+    skillResourceMapIndex
   );
   const toOwnElementBaseDataRefs = extractObjectRefsFromArraySection(
     text,
-    'toOwnElementBaseDatas'
+    'toOwnElementBaseDatas',
+    skillResourceMapIndex
   );
 
   return compactObject({
@@ -2613,6 +2636,9 @@ function compactMonoBehaviourBehaviorTarget(value, text, fileName, pathId) {
     externalElementBaseRefCount: elementBaseDataRefs.filter(
       item => item.fileId !== 0
     ).length,
+    resourceMapMatchedElementBaseRefCount: elementBaseDataRefs.filter(
+      item => item.resourceMapMatchCount > 0
+    ).length,
   });
 }
 
@@ -2632,6 +2658,13 @@ function pushSkillBehaviorChain(evidence, chain) {
     (sum, behavior) => sum + (behavior.externalElementBaseRefCount ?? 0),
     0
   );
+  const resourceMapMatchedElementBaseRefs = (
+    chain.resolvedBehaviors ?? []
+  ).reduce(
+    (sum, behavior) =>
+      sum + (behavior.resourceMapMatchedElementBaseRefCount ?? 0),
+    0
+  );
 
   evidence.behaviorReferenceSummary.behaviorListRefs += refs.length;
   evidence.behaviorReferenceSummary.resolvedBehaviorListRefs +=
@@ -2640,6 +2673,10 @@ function pushSkillBehaviorChain(evidence, chain) {
     unresolvedRefs.length;
   evidence.behaviorReferenceSummary.externalElementBaseRefs +=
     externalElementBaseRefs;
+  evidence.behaviorReferenceSummary.resourceMapMatchedElementBaseRefs +=
+    resourceMapMatchedElementBaseRefs;
+  evidence.behaviorReferenceSummary.resourceMapUnmatchedElementBaseRefs +=
+    externalElementBaseRefs - resourceMapMatchedElementBaseRefs;
 
   for (const lane of chain.laneHints ?? []) {
     if (
@@ -2667,6 +2704,10 @@ function mergeBehaviorReferenceSummary(target, source) {
   target.resolvedBehaviorListRefs += source.resolvedBehaviorListRefs;
   target.unresolvedBehaviorListRefs += source.unresolvedBehaviorListRefs;
   target.externalElementBaseRefs += source.externalElementBaseRefs;
+  target.resourceMapMatchedElementBaseRefs +=
+    source.resourceMapMatchedElementBaseRefs;
+  target.resourceMapUnmatchedElementBaseRefs +=
+    source.resourceMapUnmatchedElementBaseRefs;
   for (const [lane, count] of Object.entries(source.resolvedBehaviorRefsByLane)) {
     target.resolvedBehaviorRefsByLane[lane] =
       (target.resolvedBehaviorRefsByLane[lane] ?? 0) + count;
@@ -2684,6 +2725,16 @@ function summarizeBehaviorReferenceSkillCounts(currentSkillControlEvidence) {
     externalElementBaseRefs: foundItems.filter(
       item => (item.behaviorReferenceSummary?.externalElementBaseRefs ?? 0) > 0
     ).length,
+    resourceMapMatchedElementBaseRefs: foundItems.filter(
+      item =>
+        (item.behaviorReferenceSummary?.resourceMapMatchedElementBaseRefs ?? 0) >
+        0
+    ).length,
+    resourceMapUnmatchedElementBaseRefs: foundItems.filter(
+      item =>
+        (item.behaviorReferenceSummary?.resourceMapUnmatchedElementBaseRefs ??
+          0) > 0
+    ).length,
     ...Object.fromEntries(
       SKILL_EFFECT_LANES.map(lane => [
         lane.key,
@@ -2696,6 +2747,115 @@ function summarizeBehaviorReferenceSkillCounts(currentSkillControlEvidence) {
       ])
     ),
   };
+}
+
+async function buildSkillResourceMapEvidence(
+  skill,
+  monoBehaviourRoot,
+  jsonFiles,
+  cache
+) {
+  const rootFilePrefix = `skill_control_${skill.id}__`;
+  for (const fileName of jsonFiles.filter(file => file.startsWith(rootFilePrefix))) {
+    const payload = await readMonoBehaviourPayload(monoBehaviourRoot, fileName, cache);
+    if (!payload.text.includes('"skillResourceMaps"')) {
+      continue;
+    }
+
+    const resourceMaps = Array.isArray(payload.json.skillResourceMaps)
+      ? payload.json.skillResourceMaps.map((resourceMap, index) =>
+          compactSkillResourceMap(resourceMap, index)
+        )
+      : [];
+    const elementRefsByRoundedPathId = buildSkillResourceMapElementIndex(
+      resourceMaps
+    );
+
+    return {
+      elementRefsByRoundedPathId,
+      evidence: compactObject({
+        status:
+          resourceMaps.length > 0
+            ? 'root-skillResourceMaps-found'
+            : 'root-skillResourceMaps-empty',
+        file: fileName,
+        resourceMapCount: resourceMaps.length,
+        elementRefCount: resourceMaps.reduce(
+          (sum, item) => sum + (item.elements?.length ?? 0),
+          0
+        ),
+        resourceMaps,
+      }),
+    };
+  }
+
+  return {
+    elementRefsByRoundedPathId: new Map(),
+    evidence: {
+      status: 'root-skillResourceMaps-missing',
+    },
+  };
+}
+
+function compactSkillResourceMap(resourceMap, index) {
+  const animations = Array.isArray(resourceMap.allSkillAnimations)
+    ? resourceMap.allSkillAnimations
+    : [];
+  return compactObject({
+    index,
+    skillIds: uniqueNumbers(animations.map(item => numberOrNull(item.skillId))),
+    subSkillIds: uniqueNumbers(
+      animations.map(item => numberOrNull(item.subSkillId))
+    ),
+    stateNames: uniqueStrings(animations.map(item => item.stateName)),
+    effects: normalizeArray(resourceMap.effects),
+    hitEffects: normalizeArray(resourceMap.hitEffects),
+    bulletEffects: normalizeArray(resourceMap.bulletEffects),
+    elements: summarizeRoundedObjectRefs(resourceMap.elements),
+  });
+}
+
+function buildSkillResourceMapElementIndex(resourceMaps) {
+  const index = new Map();
+  for (const resourceMap of resourceMaps) {
+    for (const element of resourceMap.elements ?? []) {
+      const roundedPathId = element.roundedPathId;
+      if (!roundedPathId) {
+        continue;
+      }
+      if (!index.has(roundedPathId)) {
+        index.set(roundedPathId, []);
+      }
+      index.get(roundedPathId).push(
+        compactObject({
+          resourceMapIndex: resourceMap.index,
+          skillIds: resourceMap.skillIds,
+          subSkillIds: resourceMap.subSkillIds,
+          stateNames: resourceMap.stateNames,
+          effects: resourceMap.effects,
+          hitEffects: resourceMap.hitEffects,
+        })
+      );
+    }
+  }
+  return index;
+}
+
+function summarizeRoundedObjectRefs(refs) {
+  if (!Array.isArray(refs)) {
+    return [];
+  }
+  return refs.map(ref =>
+    compactObject({
+      fileId: numberOrNull(ref?.m_FileID),
+      roundedPathId:
+        ref?.m_PathID == null ? null : String(numberOrNull(ref.m_PathID)),
+      status:
+        numberOrNull(ref?.m_FileID) === 0
+          ? 'local-or-unresolved'
+          : 'external-file',
+    })
+  );
 }
 
 function buildMonoBehaviourFileIndex(fileNames) {
@@ -2746,7 +2906,7 @@ function extractScriptPathId(text) {
   );
 }
 
-function extractObjectRefsFromArraySection(text, key) {
+function extractObjectRefsFromArraySection(text, key, skillResourceMapIndex) {
   const section = text.match(
     new RegExp(`"${key}"\\s*:\\s*\\[([\\s\\S]*?)\\]`)
   )?.[1];
@@ -2757,10 +2917,17 @@ function extractObjectRefsFromArraySection(text, key) {
   const refs = [];
   const regex = /"m_FileID"\s*:\s*(-?\d+)\s*,\s*"m_PathID"\s*:\s*(-?\d+)/g;
   for (const match of section.matchAll(regex)) {
+    const pathId = match[2];
+    const roundedPathId = String(Number(pathId));
+    const resourceMapMatches =
+      skillResourceMapIndex?.get(roundedPathId) ?? [];
     refs.push({
       fileId: Number(match[1]),
-      pathId: match[2],
+      pathId,
+      roundedPathId,
       status: Number(match[1]) === 0 ? 'local-or-unresolved' : 'external-file',
+      resourceMapMatchCount: resourceMapMatches.length,
+      resourceMapMatches: resourceMapMatches.slice(0, 3),
     });
   }
   return refs;
