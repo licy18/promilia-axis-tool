@@ -119,6 +119,38 @@ describe('first vertical slice simulation', () => {
     });
   });
 
+  it('projects generated skill segment actions as separate damage entries', () => {
+    const project = createWorkbenchProject(
+      {},
+      {
+        actions: [0, 1, 2, 3].map((damageSegmentIndex) => ({
+          id: `action-segment-${damageSegmentIndex}`,
+          type: 'skill',
+          skillId: 10900101,
+          startMs: damageSegmentIndex * 1000,
+          level: 1,
+          damageSegmentIndex,
+        })),
+      },
+    );
+    const scenario = compileProject(project, getWorkbenchGameData());
+    const result = runSimulation(project, getWorkbenchGameData());
+
+    expect(scenario.actions.map((action) => action.selectedDamageSegment.label)).toEqual([
+      '普攻',
+      '重击',
+      '闪击',
+      '跃击',
+    ]);
+    expect(result.damageTimeline.map((entry) => [entry.actionId, entry.segmentLabel, entry.multiplier])).toEqual([
+      ['action-segment-0', '普攻', 6.49],
+      ['action-segment-1', '重击', 1.9],
+      ['action-segment-2', '闪击', 0.4],
+      ['action-segment-3', '跃击', 1.36],
+    ]);
+    expect(result.summary.projectedHitCount).toBe(4);
+  });
+
   it('keeps wait and annotation actions in the event log without projecting damage', () => {
     const project = createWorkbenchProject(
       {},

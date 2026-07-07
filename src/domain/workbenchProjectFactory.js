@@ -43,6 +43,32 @@ export function getSkillsForCharacter(characterId) {
   return workbenchSeed.gameData.skills.filter((skill) => skill.characterId === Number(characterId));
 }
 
+export function getSkillDamageSegments(skill, level = 1) {
+  if (!skill) {
+    return [];
+  }
+
+  const levelIndex = clampLevel(level, skill) - 1;
+  const labels = skill.level?.labels ?? [];
+  const values = skill.level?.values?.[levelIndex] ?? [];
+
+  return values
+    .map((value, index) => {
+      const multiplier = parseDamageMultiplier(value);
+      if (multiplier == null) {
+        return null;
+      }
+
+      return {
+        index,
+        label: labels[index] ?? `segment-${index + 1}`,
+        rawValue: value,
+        multiplier,
+      };
+    })
+    .filter(Boolean);
+}
+
 export function createWorkbenchActionDraft({
   id = DEFAULT_WORKBENCH_ACTION_ID,
   type = ACTION_TYPES.SKILL,
@@ -370,9 +396,22 @@ function clampLevel(level, skill) {
 }
 
 function clampDamageSegmentIndex(damageSegmentIndex, skill, level) {
-  const levelIndex = clampLevel(level, skill) - 1;
-  const segmentCount = Math.max(1, skill?.level?.values?.[levelIndex]?.length ?? 1);
+  const segmentCount = Math.max(1, getSkillDamageSegments(skill, level).length);
   return Math.min(segmentCount - 1, Math.max(0, Number(damageSegmentIndex) || 0));
+}
+
+function parseDamageMultiplier(value) {
+  if (value == null || value === '') {
+    return null;
+  }
+
+  const text = String(value).trim();
+  const number = Number(text.replace('%', ''));
+  if (!Number.isFinite(number)) {
+    return null;
+  }
+
+  return text.includes('%') ? number / 100 : number;
 }
 
 function normalizeWorkbenchInsertion(insertion) {

@@ -42,6 +42,7 @@
         @select-action="selectAction"
         @add-action="addAction"
         @add-skill-action="addSkillAction"
+        @add-skill-segment-actions="addSkillSegmentActions"
         @add-annotation-action="addAnnotationAction"
         @add-enemy-event-action="addEnemyEventAction"
         @add-resource-action="addResourceAction"
@@ -125,6 +126,7 @@ import {
   DEFAULT_WORKBENCH_SELECTION,
   createWorkbenchActionDraft,
   createWorkbenchProject,
+  getSkillDamageSegments,
   getSkillsForCharacter,
   getWorkbenchGameData,
   getWorkbenchSeed,
@@ -378,14 +380,35 @@ function addAction() {
 function addSkillAction(skillId) {
   const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
   const skill = resolveContextSkill(actorCharacterId, skillId);
-  const shouldInheritLevel =
-    Number(selectedDraft.value.actorCharacterId) === actorCharacterId &&
-    Number(selectedDraft.value.skillId) === Number(skill.id);
+  const level = resolveSkillInsertLevel(actorCharacterId, skill);
   addInsertedAction({
     id: createNextActionId(),
     skillId: skill.id,
     actorCharacterId,
-    level: shouldInheritLevel ? selectedDraft.value.level : 1,
+    level,
+  });
+}
+
+function addSkillSegmentActions(skillId) {
+  const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
+  const skill = resolveContextSkill(actorCharacterId, skillId);
+  const level = resolveSkillInsertLevel(actorCharacterId, skill);
+  const segments = getSkillDamageSegments(skill, level);
+
+  if (segments.length <= 1) {
+    addSkillAction(skill.id);
+    return;
+  }
+
+  segments.forEach((segment) => {
+    addInsertedAction({
+      id: createNextActionId(),
+      skillId: skill.id,
+      actorCharacterId,
+      level,
+      damageSegmentIndex: segment.index,
+      note: `倍率段拆分：${segment.label} / ${segment.rawValue}；非真实命中帧。`,
+    });
   });
 }
 
@@ -792,6 +815,13 @@ function resolveContextSkill(actorCharacterId, preferredSkillId) {
     return preferredSkill;
   }
   return findFirstSkillForCharacter(actorCharacterId) ?? preferredSkill ?? workbenchSeed.gameData.skills[0];
+}
+
+function resolveSkillInsertLevel(actorCharacterId, skill) {
+  const shouldInheritLevel =
+    Number(selectedDraft.value.actorCharacterId) === actorCharacterId &&
+    Number(selectedDraft.value.skillId) === Number(skill.id);
+  return shouldInheritLevel ? selectedDraft.value.level : 1;
 }
 
 function normalizeActionPatch(action, patch) {

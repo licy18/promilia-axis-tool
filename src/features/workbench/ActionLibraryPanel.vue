@@ -64,18 +64,29 @@
     </div>
 
     <div v-if="skills.length" class="skill-entry-list">
-      <button
-        v-for="skill in skills"
-        :key="skill.id"
-        class="skill-entry"
-        type="button"
-        data-testid="workbench-skill-entry"
-        :data-skill-id="skill.id"
-        @click="$emit('add-skill-action', skill.id)"
-      >
-        <span class="skill-entry-name">{{ formatSkillName(skill) }}</span>
-        <span class="skill-entry-meta">{{ formatSkillMeta(skill) }}</span>
-      </button>
+      <div v-for="skill in skills" :key="skill.id" class="skill-entry-row">
+        <button
+          class="skill-entry"
+          type="button"
+          data-testid="workbench-skill-entry"
+          :data-skill-id="skill.id"
+          @click="$emit('add-skill-action', skill.id)"
+        >
+          <span class="skill-entry-name">{{ formatSkillName(skill) }}</span>
+          <span class="skill-entry-meta">{{ formatSkillMeta(skill) }}</span>
+        </button>
+        <button
+          class="segment-button"
+          type="button"
+          data-testid="workbench-skill-segment-split"
+          :data-skill-id="skill.id"
+          :disabled="getSkillSegmentCount(skill) <= 1"
+          :title="formatSkillSplitTitle(skill)"
+          @click="$emit('add-skill-segment-actions', skill.id)"
+        >
+          拆段 {{ getSkillSegmentCount(skill) }}
+        </button>
+      </div>
     </div>
 
     <div class="action-list">
@@ -151,6 +162,7 @@
 
 <script setup>
 import { Collection } from '@element-plus/icons-vue';
+import { getSkillDamageSegments } from '../../domain/workbenchProjectFactory';
 
 defineProps({
   actor: {
@@ -183,6 +195,7 @@ defineEmits([
   'select-action',
   'add-action',
   'add-skill-action',
+  'add-skill-segment-actions',
   'add-wait-action',
   'add-switch-action',
   'add-annotation-action',
@@ -230,7 +243,10 @@ function actionDetailLabel(action) {
 
 function actionDetailValue(action) {
   if (action.type === 'skill') {
-    return action.selectedDamageSegment?.rawValue ?? '待补';
+    if (!action.selectedDamageSegment) {
+      return '待补';
+    }
+    return `${action.selectedDamageSegment.label} / ${action.selectedDamageSegment.rawValue}`;
   }
   if (action.type === 'resource') {
     return `${String(action.resource ?? 'sp').toUpperCase()} ${formatSigned(action.change)}`;
@@ -258,6 +274,15 @@ function formatSkillMeta(skill) {
 
 function formatSkillName(skill) {
   return skill.name || `技能 ${skill.id}`;
+}
+
+function getSkillSegmentCount(skill) {
+  return getSkillDamageSegments(skill, 1).length;
+}
+
+function formatSkillSplitTitle(skill) {
+  const count = getSkillSegmentCount(skill);
+  return count > 1 ? `按 ${count} 个倍率段生成动作` : '该技能只有一个可解析倍率段';
 }
 
 function formatInsertionNote(insertion) {
@@ -293,7 +318,8 @@ h2 {
 }
 
 .icon-button,
-.tool-button {
+.tool-button,
+.segment-button {
   border: 1px solid rgba(121, 199, 185, 0.32);
   border-radius: 4px;
   background: rgba(121, 199, 185, 0.1);
@@ -378,8 +404,17 @@ h2 {
 }
 
 .icon-button:hover,
-.tool-button:hover {
+.tool-button:hover,
+.segment-button:hover {
   filter: brightness(1.18);
+}
+
+.segment-button:disabled {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #6f7880;
+  cursor: not-allowed;
+  filter: none;
 }
 
 .actor-block {
@@ -407,6 +442,12 @@ h2 {
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
+.skill-entry-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
 .skill-entry {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -423,9 +464,17 @@ h2 {
   text-align: left;
 }
 
-.skill-entry:hover {
+.skill-entry:hover,
+.segment-button:hover:not(:disabled) {
   border-color: rgba(121, 199, 185, 0.56);
   background: rgba(121, 199, 185, 0.14);
+}
+
+.segment-button {
+  min-width: 62px;
+  padding: 8px 9px;
+  font-size: 12px;
+  white-space: nowrap;
 }
 
 .skill-entry-name {

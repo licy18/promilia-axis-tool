@@ -86,6 +86,63 @@ describe('Workbench view', () => {
     });
   });
 
+  it('splits a skill into per-segment draft actions from the action library', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await wrapper.find('.action-item[data-action-id="action-0001"]').trigger('click');
+
+    const splitButton = findActionLibrarySkillSplitButton(wrapper, workbenchSeed.defaults.skillId);
+    expect(splitButton.text()).toBe('拆段 4');
+    expect(splitButton.attributes('disabled')).toBeUndefined();
+
+    await splitButton.trigger('click');
+
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('6 action');
+    expect(wrapper.find('[data-testid="scenario-hit-count"]').text()).toBe('6');
+    expect(wrapper.find('[data-testid="workbench-insert-delay-count"]').text()).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-insert-delay-item"]').text()).toContain('2000ms -> 4000ms');
+    expect(wrapper.find('.action-item[data-action-id="action-0004"]').text()).toContain('重击 / 190%');
+
+    const damageLabels = wrapper.findAll('.damage-row').map((row) => row.find('span').text());
+    expect(damageLabels).toEqual(expect.arrayContaining(['普攻', '重击', '闪击', '跃击']));
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    const generatedActions = savedDraft.actionDrafts.slice(2);
+
+    expect(savedDraft.actionDrafts.map((action) => action.id)).toEqual([
+      'action-0001',
+      'action-0002',
+      'action-0003',
+      'action-0004',
+      'action-0005',
+      'action-0006',
+    ]);
+    expect(generatedActions.map((action) => action.damageSegmentIndex)).toEqual([0, 1, 2, 3]);
+    expect(generatedActions.map((action) => action.startMs)).toEqual([4000, 6000, 8000, 10000]);
+    expect(generatedActions[0]).toMatchObject({
+      skillId: workbenchSeed.defaults.skillId,
+      insertion: {
+        autoDelayed: true,
+        requestedStartMs: 2000,
+        resolvedStartMs: 4000,
+        conflictActionIds: ['action-0002'],
+      },
+    });
+    expect(generatedActions.slice(1).map((action) => action.insertion)).toEqual([null, null, null]);
+    expect(generatedActions[1].note).toContain('倍率段拆分：重击 / 190%');
+    expect(generatedActions[1].note).toContain('非真实命中帧');
+  });
+
   it('rebuilds the workbench project when the selected character changes', async () => {
     const wrapper = mount(Workbench, {
       global: {
@@ -1186,4 +1243,8 @@ function findActionLibraryActorButton(wrapper, characterId) {
 
 function findActionLibrarySkillEntry(wrapper, skillId) {
   return wrapper.find(`[data-testid="workbench-skill-entry"][data-skill-id="${Number(skillId)}"]`);
+}
+
+function findActionLibrarySkillSplitButton(wrapper, skillId) {
+  return wrapper.find(`[data-testid="workbench-skill-segment-split"][data-skill-id="${Number(skillId)}"]`);
 }
