@@ -608,6 +608,41 @@ describe('first vertical slice simulation', () => {
       damageElementFieldMappingCount: 12,
       frameRate: 60,
       primaryFrames: [12, 6, 12, 7, 4],
+      absolutePrimaryFrames: [12, 22, 63, 123, 184],
+      sequenceChainStartFrames: [0, 16, 51, 116, 180],
+      sequenceTimingStatus:
+        'normal-attack-sequence-absolute-frame-candidates-found',
+      sequenceTimingSourceKind: 'azpr-normal-attack-sequence-timing-candidate',
+      sequenceTimingTransitionCount: 4,
+      sequenceTimingResolvedTransitionCount: 4,
+      sequenceTimingAbsoluteFrameStatus:
+        'absolute-hit-frames-strictly-increasing',
+      sequenceTimingTransitions: [
+        expect.objectContaining({
+          fromSkillId: 10900101,
+          toSkillId: 10900102,
+          bridgeStartFrame: 16,
+          chainStartFrame: 16,
+        }),
+        expect.objectContaining({
+          fromSkillId: 10900102,
+          toSkillId: 10900103,
+          bridgeStartFrame: 35,
+          chainStartFrame: 51,
+        }),
+        expect.objectContaining({
+          fromSkillId: 10900103,
+          toSkillId: 10900104,
+          bridgeStartFrame: 65,
+          chainStartFrame: 116,
+        }),
+        expect.objectContaining({
+          fromSkillId: 10900104,
+          toSkillId: 10900105,
+          bridgeStartFrame: 64,
+          chainStartFrame: 180,
+        }),
+      ],
       applied: false,
     });
     expect(actionResult.hitCandidateSummary.candidateElementConfigIds).toEqual([
@@ -626,6 +661,14 @@ describe('first vertical slice simulation', () => {
       frameRate: 60,
       frameStartFrames: [12, 13],
       primaryFrame: 12,
+      localCandidateTimeMs: 200,
+      chainStartFrame: 0,
+      absolutePrimaryFrame: 12,
+      absoluteFrameStartFrames: [12, 13],
+      absoluteCandidateTimeMs: 200,
+      sequenceTimingStatus: 'absolute-hit-frame-candidate-found',
+      sequenceTimingSourceStatus:
+        'normal-attack-sequence-absolute-frame-candidates-found',
       candidateTimeMs: 200,
       damageElementFieldMappingCount: 2,
       actionLevelElementMatchCount: 2,
@@ -660,7 +703,15 @@ describe('first vertical slice simulation', () => {
       animationStateNames: ['Skill0_2'],
       frameStartFrames: [6, 10, 14, 26],
       primaryFrame: 6,
-      candidateTimeMs: 100,
+      localCandidateTimeMs: 100,
+      chainStartFrame: 16,
+      absolutePrimaryFrame: 22,
+      absoluteFrameStartFrames: [22, 26, 30, 42],
+      absoluteCandidateTimeMs: 366.666667,
+      sequenceTimingStatus: 'absolute-hit-frame-candidate-found',
+      sequenceTimingSourceStatus:
+        'normal-attack-sequence-absolute-frame-candidates-found',
+      candidateTimeMs: 366.666667,
       damageElementFieldMappingCount: 2,
       actionLevelElementMatchCount: 0,
       damageElementElementConfigIds: [109001018, 109001137],
@@ -692,8 +743,8 @@ describe('first vertical slice simulation', () => {
       summary: {
         seriesCount: 3,
         pointCount: 15,
-        displayFrameAdjustmentCount: 12,
-        timeOrderStatus: 'source-times-non-monotonic-display-adjusted',
+        displayFrameAdjustmentCount: 0,
+        timeOrderStatus: 'source-times-monotonic',
         applied: false,
       },
       applied: false,
@@ -717,9 +768,9 @@ describe('first vertical slice simulation', () => {
       label: 'HP参数候选',
       pointCount: 5,
       frameMin: 12,
-      frameMax: 16,
-      displayFrameAdjustmentCount: 4,
-      timeOrderStatus: 'source-times-non-monotonic-display-adjusted',
+      frameMax: 184,
+      displayFrameAdjustmentCount: 0,
+      timeOrderStatus: 'source-times-monotonic',
       applied: false,
     });
     expect(
@@ -729,16 +780,18 @@ describe('first vertical slice simulation', () => {
         point.displayFrameIndex,
         point.displayFrameLabel,
         point.timeAdjustmentStatus,
+        point.localFrameIndex,
+        point.chainStartFrame,
       ])
     ).toEqual([
-      [1, 12, 12, '0s12f', 'source-time-kept'],
-      [2, 6, 13, '0s13f', 'sequence-display-frame-adjusted'],
-      [3, 12, 14, '0s14f', 'sequence-display-frame-adjusted'],
-      [4, 7, 15, '0s15f', 'sequence-display-frame-adjusted'],
-      [5, 4, 16, '0s16f', 'sequence-display-frame-adjusted'],
+      [1, 12, 12, '0s12f', 'event-bridge-absolute-time-kept', 12, 0],
+      [2, 22, 22, '0s22f', 'event-bridge-absolute-time-kept', 6, 16],
+      [3, 63, 63, '1s3f', 'event-bridge-absolute-time-kept', 12, 51],
+      [4, 123, 123, '2s3f', 'event-bridge-absolute-time-kept', 7, 116],
+      [5, 184, 184, '3s4f', 'event-bridge-absolute-time-kept', 4, 180],
     ]);
     expect(hpChartSeries.points.map(point => point.xPercent)).toEqual([
-      0.6667, 0.7222, 0.7778, 0.8333, 0.8889,
+      0.6667, 1.2222, 3.5, 6.8333, 10.2222,
     ]);
     expect(
       hpCandidateSeries.points.map(point => [
@@ -795,8 +848,8 @@ describe('first vertical slice simulation', () => {
       pointCount: 15,
       hitCandidateCount: 5,
       chartPointCount: 15,
-      displayFrameAdjustmentCount: 12,
-      timeOrderStatus: 'source-times-non-monotonic-display-adjusted',
+      displayFrameAdjustmentCount: 0,
+      timeOrderStatus: 'source-times-monotonic',
       applied: false,
     });
     const combinationPreview =

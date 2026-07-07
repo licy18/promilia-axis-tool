@@ -570,7 +570,16 @@ function formatHitCandidateSummary(entry) {
     .map(frame => `${Math.round(frame)}f`)
     .join('/');
   const frameText = frames ? ` · 帧 ${frames}` : '';
-  return `逐hit候选 ${summary.mappedHitCandidateCount}/${summary.hitCandidateCount}段 · 三值字段 ${summary.damageElementFieldMappingCount}${frameText}`;
+  const absoluteFrames = (summary.absolutePrimaryFrames ?? [])
+    .slice(0, 5)
+    .map(formatFrameIndex)
+    .join('/');
+  const absoluteFrameText = absoluteFrames ? ` · 绝对帧 ${absoluteFrames}` : '';
+  const transitionText =
+    summary.sequenceTimingTransitionCount > 0
+      ? ` · 连段桥 ${summary.sequenceTimingResolvedTransitionCount}/${summary.sequenceTimingTransitionCount}`
+      : '';
+  return `逐hit候选 ${summary.mappedHitCandidateCount}/${summary.hitCandidateCount}段 · 三值字段 ${summary.damageElementFieldMappingCount}${frameText}${absoluteFrameText}${transitionText}`;
 }
 
 function formatCandidateSeries(series) {

@@ -3952,3 +3952,89 @@ Workbench 显示：
 - `displayFrameIndex` 只是可视化帧，不应被当成已确认的运行时命中绝对帧。
 - `timeOrderStatus = source-times-non-monotonic-display-adjusted` 表示存在子 `skill_control` 局部帧回退，必须继续追 EventBridge 和动画状态切换证据。
 - 下一阶段应优先消除默认普攻样本中的 12 个显示帧调整，或把主时间轴 marker 明确标注为候选显示帧。
+
+## 57. 阶段 5-8AD：normalAttackSequenceTimingEvidence 连段绝对帧候选
+
+阶段 5-8AD 在仿真投影层新增普攻连段时序候选。该层使用上一段 `skill_control` 的 `EventBridgeBehaviorData` 指向下一段 skillId 的 `behaviorStartFrame` 累加连段起点，再叠加每段 HP timeline 本地命中帧，得到候选绝对帧。
+
+### 57.1 actionResultTimeline[].hitCandidateSummary 扩展
+
+新增字段：
+
+- `absolutePrimaryFrames`
+- `sequenceChainStartFrames`
+- `sequenceTimingStatus`
+- `sequenceTimingSourceKind`
+- `sequenceTimingTransitionCount`
+- `sequenceTimingResolvedTransitionCount`
+- `sequenceTimingAbsoluteFrameStatus`
+- `sequenceTimingTransitions[]`
+
+当前默认样本：
+
+```javascript
+{
+  "absolutePrimaryFrames": [12, 22, 63, 123, 184],
+  "sequenceChainStartFrames": [0, 16, 51, 116, 180],
+  "sequenceTimingStatus": "normal-attack-sequence-absolute-frame-candidates-found",
+  "sequenceTimingTransitionCount": 4,
+  "sequenceTimingResolvedTransitionCount": 4,
+  "sequenceTimingAbsoluteFrameStatus": "absolute-hit-frames-strictly-increasing"
+}
+```
+
+`sequenceTimingTransitions[]` 示例：
+
+```javascript
+[
+  { "fromSkillId": 10900101, "toSkillId": 10900102, "bridgeStartFrame": 16, "chainStartFrame": 16 },
+  { "fromSkillId": 10900102, "toSkillId": 10900103, "bridgeStartFrame": 35, "chainStartFrame": 51 },
+  { "fromSkillId": 10900103, "toSkillId": 10900104, "bridgeStartFrame": 65, "chainStartFrame": 116 },
+  { "fromSkillId": 10900104, "toSkillId": 10900105, "bridgeStartFrame": 64, "chainStartFrame": 180 }
+]
+```
+
+### 57.2 actionResultTimeline[].hitCandidates[] 扩展
+
+每条 hit 候选新增：
+
+- `localCandidateTimeMs`
+- `absolutePrimaryFrame`
+- `absoluteFrameStartFrames`
+- `absoluteCandidateTimeMs`
+- `chainStartFrame`
+- `sequenceTimingStatus`
+- `sequenceTimingSourceStatus`
+- `sequenceTiming`
+
+第 2 段示例：
+
+```javascript
+{
+  "hitIndex": 2,
+  "hitSkillId": 10900102,
+  "primaryFrame": 6,
+  "localCandidateTimeMs": 100,
+  "chainStartFrame": 16,
+  "absolutePrimaryFrame": 22,
+  "absoluteCandidateTimeMs": 366.666667,
+  "candidateTimeMs": 366.666667
+}
+```
+
+### 57.3 candidateValueSeries.chart 行为变化
+
+`candidateValueSeries.chart` 现在优先使用 `absoluteCandidateTimeMs` 作为图表源时间。
+
+当前默认样本：
+
+- `displayFrameAdjustmentCount = 0`。
+- `timeOrderStatus = source-times-monotonic`。
+- HP / 削韧 / 能量三条曲线的 `frameMin = 12`，`frameMax = 184`。
+- 图表帧范围显示为 `0s12f-3s4f`。
+
+### 57.4 当前边界
+
+- 绝对帧是 EventBridge 与 HP timeline 的中置信候选，不是最终 timing profile。
+- `candidateTimeMs` 已从本地帧时间升级为绝对候选时间；本地时间保留在 `localCandidateTimeMs`。
+- 仍需继续验证输入条件、取消窗口、桥接 `type/bridge/frameIndex` 语义和运行时实际命中触发。

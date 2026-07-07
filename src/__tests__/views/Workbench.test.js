@@ -42,7 +42,7 @@ describe('Workbench view', () => {
     expect(text).toContain('候选预览 f2 等级值 307 vs raw 12,461，约 2.5%');
     expect(text).toContain('组合诊断 f2 需 ×40.6 才接近 raw / 每 hit ×8.1');
     expect(text).toContain(
-      '逐hit候选 5/5段 · 三值字段 12 · 帧 12f/6f/12f/7f/4f'
+      '逐hit候选 5/5段 · 三值字段 12 · 帧 12f/6f/12f/7f/4f · 绝对帧 0s12f/0s22f/1s3f/2s3f/3s4f · 连段桥 4/4'
     );
     expect(text).toContain('候选曲线');
     expect(text).toContain('HP参数候选');
@@ -52,10 +52,10 @@ describe('Workbench view', () => {
     expect(text).toContain('能量候选');
     expect(text).toContain('5点 · 2,399-3,000 · raw-field');
     expect(text).toContain('候选时间曲线');
-    expect(text).toContain('60fps · 30s0f · 显示帧调整 12');
-    expect(text).toContain('0s12f-0s16f · 2,500-13,000 · raw-param');
-    expect(text).toContain('0s12f-0s16f · 7,000 · raw-field');
-    expect(text).toContain('0s12f-0s16f · 2,399-3,000 · raw-field');
+    expect(text).toContain('60fps · 30s0f');
+    expect(text).toContain('0s12f-3s4f · 2,500-13,000 · raw-param');
+    expect(text).toContain('0s12f-3s4f · 7,000 · raw-field');
+    expect(text).toContain('0s12f-3s4f · 2,399-3,000 · raw-field');
     expect(
       wrapper.find('[data-testid="workbench-candidate-value-series"]').exists()
     ).toBe(true);

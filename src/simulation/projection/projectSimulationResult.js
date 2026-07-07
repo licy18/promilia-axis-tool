@@ -369,15 +369,22 @@ function createCandidateChartPoint({
     hitSkillId: point.hitSkillId,
     hitIndex: point.hitIndex,
     sequenceIndex: point.sequenceIndex ?? index,
+    localFrameIndex: numberOrNull(point.primaryFrame),
+    chainStartFrame: numberOrNull(point.chainStartFrame),
+    absoluteFrameIndex: numberOrNull(point.absolutePrimaryFrame),
+    sequenceTimingStatus: point.sequenceTimingStatus ?? null,
+    sequenceTimingSourceStatus: point.sequenceTimingSourceStatus ?? null,
     sourceFrameIndex,
     sourceTimeMs: roundTimelineMs(sourceTimeMs),
     displayFrameIndex,
     displayFrameLabel: formatTimelineFrame(displayFrameIndex),
     displayTimeMs,
     timeAdjustmentStatus:
-      displayFrameIndex === sourceFrameIndex
-        ? 'source-time-kept'
-        : 'sequence-display-frame-adjusted',
+      displayFrameIndex !== sourceFrameIndex
+        ? 'sequence-display-frame-adjusted'
+        : point.sequenceTimingStatus === 'absolute-hit-frame-candidate-found'
+          ? 'event-bridge-absolute-time-kept'
+          : 'source-time-kept',
     xPercent: roundChartPercent(
       durationMs > 0 ? (displayTimeMs / durationMs) * 100 : 0
     ),
@@ -446,6 +453,12 @@ function createCandidateSeriesPoint(hitCandidate, sequenceIndex, rawValues) {
     sequenceIndex,
     frameRate: hitCandidate.frameRate ?? AZPR_TIMELINE_FRAME_RATE,
     primaryFrame: numberOrNull(hitCandidate.primaryFrame),
+    localCandidateTimeMs: numberOrNull(hitCandidate.localCandidateTimeMs),
+    absolutePrimaryFrame: numberOrNull(hitCandidate.absolutePrimaryFrame),
+    absoluteCandidateTimeMs: numberOrNull(hitCandidate.absoluteCandidateTimeMs),
+    chainStartFrame: numberOrNull(hitCandidate.chainStartFrame),
+    sequenceTimingStatus: hitCandidate.sequenceTimingStatus ?? null,
+    sequenceTimingSourceStatus: hitCandidate.sequenceTimingSourceStatus ?? null,
     timeMs: numberOrNull(hitCandidate.candidateTimeMs),
     value: valueMax,
     valueMin,
@@ -1472,10 +1485,11 @@ function buildActionResultTimeline({ scenario, damageEvents, resourceEvents }) {
     const actionResourceEvents = resourcesByActionId.get(action.id) ?? [];
     const primaryDamageEvent = actionDamageEvents[0] ?? null;
     const damageElementSource = createActionDamageElementSource(action);
-    const hitCandidates = createActionHitCandidates({
+    const hitCandidateResult = createActionHitCandidateResult({
       action,
       damageElementSource,
     });
+    const hitCandidates = hitCandidateResult.hitCandidates;
 
     return {
       actionId: action.id,
@@ -1503,7 +1517,10 @@ function buildActionResultTimeline({ scenario, damageEvents, resourceEvents }) {
         actionResourceEvents,
         damageElementSource
       ),
-      hitCandidateSummary: summarizeActionHitCandidates(hitCandidates),
+      hitCandidateSummary: summarizeActionHitCandidates(
+        hitCandidates,
+        hitCandidateResult.sequenceTimingEvidence
+      ),
       hitCandidates,
       sourceEventTypes: [
         ...actionDamageEvents.map(event => event.type),
@@ -1513,24 +1530,38 @@ function buildActionResultTimeline({ scenario, damageEvents, resourceEvents }) {
   });
 }
 
-function createActionHitCandidates({ action, damageElementSource }) {
+function createActionHitCandidateResult({ action, damageElementSource }) {
   if (!isNormalAttackAction(action)) {
-    return [];
+    return {
+      hitCandidates: [],
+      sequenceTimingEvidence: null,
+    };
   }
 
   const hitChain = getActionNormalAttackHitChainCandidate(action);
   if (!hitChain?.hitGroups?.length) {
-    return [];
+    return {
+      hitCandidates: [],
+      sequenceTimingEvidence: null,
+    };
   }
-
-  return hitChain.hitGroups.map(hitGroup =>
-    createHitCandidatePreview({
-      action,
-      hitGroup,
-      damageElementSource,
-      hitChain,
-    })
+  const sequenceTimingEvidence = createNormalAttackSequenceTimingEvidence(
+    action,
+    hitChain
   );
+
+  return {
+    sequenceTimingEvidence,
+    hitCandidates: hitChain.hitGroups.map(hitGroup =>
+      createHitCandidatePreview({
+        action,
+        hitGroup,
+        damageElementSource,
+        hitChain,
+        sequenceTimingEvidence,
+      })
+    ),
+  };
 }
 
 function isNormalAttackAction(action) {
@@ -1560,19 +1591,275 @@ function getActionNormalAttackHitChainCandidate(action) {
   );
 }
 
+function createNormalAttackSequenceTimingEvidence(action, hitChain) {
+  const sourceSkillId = numberOrNull(action.skillId);
+  const evidence = CURRENT_SKILL_CONTROL_EVIDENCE_BY_SKILL_ID.get(
+    Number(sourceSkillId)
+  );
+  const stateTimingEvidence = evidence?.stateTimingEvidence ?? null;
+  const targetEvidence =
+    stateTimingEvidence?.eventBridgeTargetSkillControlEvidence ?? null;
+  const hitGroups = [...(hitChain.hitGroups ?? [])].sort(
+    (left, right) => Number(left.hitIndex) - Number(right.hitIndex)
+  );
+  if (!sourceSkillId || hitGroups.length === 0 || !stateTimingEvidence) {
+    return {
+      status: 'normal-attack-sequence-timing-missing',
+      sourceKind: 'azpr-normal-attack-sequence-timing-candidate',
+      frameRate: AZPR_TIMELINE_FRAME_RATE,
+      transitionCount: Math.max(0, hitGroups.length - 1),
+      resolvedTransitionCount: 0,
+      hitTimingCount: 0,
+      hitTimings: [],
+      transitions: [],
+      applied: false,
+    };
+  }
+
+  const controlsBySkillId = createSkillTimingControlsBySkillId({
+    sourceSkillId,
+    stateTimingEvidence,
+    targetSkillControls: targetEvidence?.targetSkillControls ?? [],
+  });
+  const chainStartFrames = new Map([[sourceSkillId, 0]]);
+  const transitions = [];
+
+  for (let index = 1; index < hitGroups.length; index += 1) {
+    const previousSkillId = numberOrNull(hitGroups[index - 1].skillId);
+    const skillId = numberOrNull(hitGroups[index].skillId);
+    const previousStartFrame = chainStartFrames.get(previousSkillId);
+    const transition = findNormalAttackSequenceTransition({
+      fromSkillId: previousSkillId,
+      toSkillId: skillId,
+      controlsBySkillId,
+    });
+    const chainStartFrame =
+      Number.isFinite(previousStartFrame) && transition
+        ? previousStartFrame + transition.bridgeStartFrame
+        : null;
+
+    if (Number.isFinite(chainStartFrame)) {
+      chainStartFrames.set(skillId, chainStartFrame);
+    }
+
+    transitions.push({
+      fromSkillId: previousSkillId,
+      toSkillId: skillId,
+      status: transition
+        ? 'event-bridge-target-transition-found'
+        : 'event-bridge-target-transition-missing',
+      bridgeStartFrame: transition?.bridgeStartFrame ?? null,
+      bridgeFrameIndex: transition?.bridgeFrameIndex ?? null,
+      bridgeEndFrame: transition?.bridgeEndFrame ?? null,
+      sourceBehaviorFrameCount: transition?.sourceBehaviorFrameCount ?? null,
+      allowedInputs: transition?.allowedInputs ?? [],
+      chainStartFrame,
+      applied: false,
+    });
+  }
+
+  const hitTimings = hitGroups.map(hitGroup => {
+    const skillId = numberOrNull(hitGroup.skillId);
+    const localFrameStartFrames = uniqueNumbers(
+      hitGroup.hpFrameStartFrames ?? []
+    );
+    const localPrimaryFrame = localFrameStartFrames[0] ?? null;
+    const chainStartFrame = chainStartFrames.get(skillId);
+    const absoluteFrameStartFrames = Number.isFinite(chainStartFrame)
+      ? localFrameStartFrames.map(frame => chainStartFrame + frame)
+      : [];
+    const absolutePrimaryFrame =
+      Number.isFinite(chainStartFrame) && Number.isFinite(localPrimaryFrame)
+        ? chainStartFrame + localPrimaryFrame
+        : null;
+    const animationSummary = summarizeSequenceAnimationControls(
+      controlsBySkillId.get(skillId)?.animationStateControls ?? []
+    );
+
+    return {
+      hitIndex: numberOrNull(hitGroup.hitIndex),
+      skillId,
+      status: Number.isFinite(absolutePrimaryFrame)
+        ? 'absolute-hit-frame-candidate-found'
+        : 'absolute-hit-frame-candidate-missing',
+      chainStartFrame: Number.isFinite(chainStartFrame)
+        ? chainStartFrame
+        : null,
+      localPrimaryFrame,
+      localFrameStartFrames,
+      absolutePrimaryFrame,
+      absoluteFrameStartFrames,
+      absoluteCandidateTimeMs: Number.isFinite(absolutePrimaryFrame)
+        ? roundTimelineMs(
+            action.startMs + frameToTimelineMs(absolutePrimaryFrame)
+          )
+        : null,
+      animationStateNames: hitGroup.animationStateNames ?? [],
+      animationControlCount: animationSummary.animationControlCount,
+      animationFrameStartMin: animationSummary.animationFrameStartMin,
+      animationFrameEndMax: animationSummary.animationFrameEndMax,
+      applied: false,
+    };
+  });
+  const resolvedTransitionCount = transitions.filter(
+    transition => transition.status === 'event-bridge-target-transition-found'
+  ).length;
+  const absoluteFrames = hitTimings
+    .map(hitTiming => hitTiming.absolutePrimaryFrame)
+    .filter(Number.isFinite);
+
+  return {
+    status:
+      resolvedTransitionCount === Math.max(0, hitGroups.length - 1) &&
+      absoluteFrames.length === hitGroups.length
+        ? 'normal-attack-sequence-absolute-frame-candidates-found'
+        : resolvedTransitionCount > 0
+          ? 'normal-attack-sequence-absolute-frame-candidates-partial'
+          : 'normal-attack-sequence-absolute-frame-candidates-missing',
+    sourceKind: 'azpr-normal-attack-sequence-timing-candidate',
+    frameRate: AZPR_TIMELINE_FRAME_RATE,
+    sourceSkillId,
+    transitionCount: Math.max(0, hitGroups.length - 1),
+    resolvedTransitionCount,
+    hitTimingCount: hitTimings.length,
+    absoluteFrameStatus: isStrictlyIncreasing(absoluteFrames)
+      ? 'absolute-hit-frames-strictly-increasing'
+      : 'absolute-hit-frames-not-strictly-increasing',
+    absolutePrimaryFrames: absoluteFrames,
+    transitions,
+    hitTimings,
+    applied: false,
+  };
+}
+
+function createSkillTimingControlsBySkillId({
+  sourceSkillId,
+  stateTimingEvidence,
+  targetSkillControls,
+}) {
+  const controlsBySkillId = new Map();
+  controlsBySkillId.set(sourceSkillId, {
+    skillId: sourceSkillId,
+    animationStateControls: stateTimingEvidence.animationStateControls ?? [],
+    eventBridgeControls: stateTimingEvidence.eventBridgeControls ?? [],
+  });
+  for (const target of targetSkillControls ?? []) {
+    const skillId = numberOrNull(target.skillId);
+    if (!Number.isFinite(skillId)) {
+      continue;
+    }
+    controlsBySkillId.set(skillId, {
+      skillId,
+      animationStateControls: target.animationStateControls ?? [],
+      eventBridgeControls: target.eventBridgeControls ?? [],
+    });
+  }
+  return controlsBySkillId;
+}
+
+function findNormalAttackSequenceTransition({
+  fromSkillId,
+  toSkillId,
+  controlsBySkillId,
+}) {
+  if (!Number.isFinite(fromSkillId) || !Number.isFinite(toSkillId)) {
+    return null;
+  }
+  const controls =
+    controlsBySkillId.get(fromSkillId)?.eventBridgeControls ?? [];
+  const candidates = controls
+    .filter(control => numberOrNull(control.skillId) === toSkillId)
+    .map(control => ({
+      bridgeStartFrame: numberOrNull(
+        control.behaviorStartFrame ?? control.sourceStartFrame
+      ),
+      bridgeFrameIndex: numberOrNull(control.frameIndex) ?? 0,
+      sourceBehaviorFrameCount: numberOrNull(control.behaviorFrameCount),
+      allowedInputs: control.allowedInputs ?? [],
+      bridgeEndFrame:
+        numberOrNull(control.behaviorStartFrame ?? control.sourceStartFrame) !=
+          null && numberOrNull(control.behaviorFrameCount) != null
+          ? numberOrNull(
+              control.behaviorStartFrame ?? control.sourceStartFrame
+            ) + numberOrNull(control.behaviorFrameCount)
+          : null,
+    }))
+    .filter(candidate => Number.isFinite(candidate.bridgeStartFrame))
+    .sort((left, right) => left.bridgeStartFrame - right.bridgeStartFrame);
+
+  return candidates[0] ?? null;
+}
+
+function summarizeSequenceAnimationControls(animationStateControls) {
+  const starts = (animationStateControls ?? [])
+    .map(control =>
+      numberOrNull(
+        control.behaviorStartFrame ??
+          control.sourceStartFrame ??
+          control.aniStartFrame
+      )
+    )
+    .filter(Number.isFinite);
+  const ends = (animationStateControls ?? [])
+    .map(control => {
+      const start = numberOrNull(
+        control.behaviorStartFrame ??
+          control.sourceStartFrame ??
+          control.aniStartFrame
+      );
+      const frameCount = numberOrNull(
+        control.behaviorFrameCount ?? control.aniLength
+      );
+      const explicitEnd = numberOrNull(
+        control.sourceEndFrame ?? control.aniEndFrame
+      );
+      if (Number.isFinite(start) && Number.isFinite(frameCount)) {
+        return start + frameCount;
+      }
+      return explicitEnd;
+    })
+    .filter(Number.isFinite);
+
+  return {
+    animationControlCount: animationStateControls?.length ?? 0,
+    animationFrameStartMin: minNumber(starts),
+    animationFrameEndMax: maxNumber(ends),
+  };
+}
+
+function isStrictlyIncreasing(values) {
+  if (values.length <= 1) {
+    return values.length === 1;
+  }
+  return values.every(
+    (value, index) => index === 0 || value > values[index - 1]
+  );
+}
+
 function createHitCandidatePreview({
   action,
   hitGroup,
   damageElementSource,
   hitChain,
+  sequenceTimingEvidence,
 }) {
   const mappings = hitGroup.damageElementFieldMappings ?? [];
   const frameStartFrames = uniqueNumbers(hitGroup.hpFrameStartFrames ?? []);
   const primaryFrame = frameStartFrames[0] ?? null;
-  const candidateTimeMs =
+  const localCandidateTimeMs =
     primaryFrame == null
       ? null
       : roundTimelineMs(action.startMs + frameToTimelineMs(primaryFrame));
+  const hitTiming = (sequenceTimingEvidence?.hitTimings ?? []).find(
+    timing => Number(timing.hitIndex) === Number(hitGroup.hitIndex)
+  );
+  const absolutePrimaryFrame = numberOrNull(hitTiming?.absolutePrimaryFrame);
+  const absoluteCandidateTimeMs = numberOrNull(
+    hitTiming?.absoluteCandidateTimeMs
+  );
+  const candidateTimeMs = Number.isFinite(absoluteCandidateTimeMs)
+    ? absoluteCandidateTimeMs
+    : localCandidateTimeMs;
   const actionLevelMatchedElementIds =
     damageElementSource?.matchedElementConfigIds ?? [];
   const actionLevelElementMatchCount = mappings.filter(mapping =>
@@ -1601,6 +1888,13 @@ function createHitCandidatePreview({
     frameRate: AZPR_TIMELINE_FRAME_RATE,
     frameStartFrames,
     primaryFrame,
+    localCandidateTimeMs,
+    absolutePrimaryFrame,
+    absoluteFrameStartFrames: hitTiming?.absoluteFrameStartFrames ?? [],
+    absoluteCandidateTimeMs,
+    chainStartFrame: numberOrNull(hitTiming?.chainStartFrame),
+    sequenceTimingStatus: hitTiming?.status ?? null,
+    sequenceTimingSourceStatus: sequenceTimingEvidence?.status ?? null,
     timeMsCandidates: frameStartFrames.map(frame =>
       roundTimelineMs(action.startMs + frameToTimelineMs(frame))
     ),
@@ -1629,6 +1923,21 @@ function createHitCandidatePreview({
     toughnessDamage: summarizeHitCandidateToughnessDamage(mappings),
     selfEnergyChange: summarizeHitCandidateSelfEnergyChange(mappings),
     candidates: mappings.map(compactHitCandidateDamageElementMapping),
+    sequenceTiming: hitTiming
+      ? {
+          status: hitTiming.status,
+          chainStartFrame: hitTiming.chainStartFrame,
+          localPrimaryFrame: hitTiming.localPrimaryFrame,
+          absolutePrimaryFrame: hitTiming.absolutePrimaryFrame,
+          localFrameStartFrames: hitTiming.localFrameStartFrames,
+          absoluteFrameStartFrames: hitTiming.absoluteFrameStartFrames,
+          absoluteCandidateTimeMs: hitTiming.absoluteCandidateTimeMs,
+          animationControlCount: hitTiming.animationControlCount,
+          animationFrameStartMin: hitTiming.animationFrameStartMin,
+          animationFrameEndMax: hitTiming.animationFrameEndMax,
+          applied: false,
+        }
+      : null,
     status:
       mappings.length > 0
         ? 'per-hit-candidate-fields-found-formula-unapplied'
@@ -1776,13 +2085,16 @@ function compactHitCandidateDamageElementMapping(mapping) {
   };
 }
 
-function summarizeActionHitCandidates(hitCandidates) {
+function summarizeActionHitCandidates(hitCandidates, sequenceTimingEvidence) {
   if (hitCandidates.length === 0) {
     return {
       status: 'no-per-hit-candidates',
       hitCandidateCount: 0,
       damageElementFieldMappingCount: 0,
       mappedHitCandidateCount: 0,
+      sequenceTimingStatus:
+        sequenceTimingEvidence?.status ??
+        'normal-attack-sequence-timing-not-applicable',
       applied: false,
     };
   }
@@ -1808,6 +2120,38 @@ function summarizeActionHitCandidates(hitCandidates) {
     primaryFrames: hitCandidates
       .map(candidate => numberOrNull(candidate.primaryFrame))
       .filter(Number.isFinite),
+    absolutePrimaryFrames: uniqueNumbers(
+      hitCandidates
+        .map(candidate => numberOrNull(candidate.absolutePrimaryFrame))
+        .filter(Number.isFinite)
+    ),
+    sequenceChainStartFrames: uniqueNumbers(
+      hitCandidates
+        .map(candidate => numberOrNull(candidate.chainStartFrame))
+        .filter(Number.isFinite)
+    ),
+    sequenceTimingStatus:
+      sequenceTimingEvidence?.status ?? 'normal-attack-sequence-timing-missing',
+    sequenceTimingSourceKind: sequenceTimingEvidence?.sourceKind ?? null,
+    sequenceTimingTransitionCount:
+      numberOrNull(sequenceTimingEvidence?.transitionCount) ?? 0,
+    sequenceTimingResolvedTransitionCount:
+      numberOrNull(sequenceTimingEvidence?.resolvedTransitionCount) ?? 0,
+    sequenceTimingAbsoluteFrameStatus:
+      sequenceTimingEvidence?.absoluteFrameStatus ?? null,
+    sequenceTimingTransitions: (sequenceTimingEvidence?.transitions ?? []).map(
+      transition => ({
+        fromSkillId: numberOrNull(transition.fromSkillId),
+        toSkillId: numberOrNull(transition.toSkillId),
+        status: transition.status ?? null,
+        bridgeStartFrame: numberOrNull(transition.bridgeStartFrame),
+        bridgeFrameIndex: numberOrNull(transition.bridgeFrameIndex),
+        bridgeEndFrame: numberOrNull(transition.bridgeEndFrame),
+        chainStartFrame: numberOrNull(transition.chainStartFrame),
+        allowedInputs: transition.allowedInputs ?? [],
+        applied: false,
+      })
+    ),
     candidateElementConfigIds: uniqueNumbers(
       hitCandidates.flatMap(
         candidate => candidate.damageElementElementConfigIds

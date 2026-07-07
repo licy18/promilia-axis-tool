@@ -3021,6 +3021,54 @@ HP参数候选 0s12f-0s16f · 2,500-13,000 · raw-param
 - 阶段 5-8AD 目标：继续追 `10900101 -> 10900102-10900105` 普攻子 `skill_control` 的连段切换时间、EventBridge 触发帧和动画状态长度，尽量把候选曲线的 `displayFrameIndex` 替换为证据更强的真实绝对帧。
 - 若真实绝对帧仍不能一次确认，应把候选时间曲线同步到主时间轴 marker 层，保留 `sourceFrameIndex` 与 `displayFrameIndex` 双轨提示。
 
+### 2026-07-08：阶段 5-8AD 普攻连段 EventBridge 绝对帧候选
+
+本轮完成：
+
+- 新增 `normalAttackSequenceTimingEvidence` 投影逻辑：按普攻 hitGroup 顺序，读取上一段 `skill_control` 中指向下一段技能的 `EventBridgeBehaviorData.behaviorStartFrame`，累计为连段起始帧。
+- `actionResultTimeline[].hitCandidateSummary` 新增连段时序摘要：`absolutePrimaryFrames`、`sequenceChainStartFrames`、`sequenceTimingTransitions[]`、`sequenceTimingResolvedTransitionCount` 和 `sequenceTimingAbsoluteFrameStatus`。
+- `actionResultTimeline[].hitCandidates[]` 新增每 hit 的 `localCandidateTimeMs`、`chainStartFrame`、`absolutePrimaryFrame`、`absoluteCandidateTimeMs`、`absoluteFrameStartFrames` 和 `sequenceTiming`。
+- `candidateValueSeries.chart` 改用 EventBridge 绝对帧候选作为图表源帧；默认普攻样本不再需要 5-8AC 的显示帧递增 fallback。
+- Workbench `逐hit候选` 摘要新增绝对帧和连段桥接数。
+
+当前末音 `10900101` 默认普攻连段时序候选：
+
+- 连段桥接：`4/4`。
+- `10900101 -> 10900102`：桥接帧 `16f`，第 2 段链起点 `16f`。
+- `10900102 -> 10900103`：桥接帧 `35f`，第 3 段链起点 `51f`。
+- `10900103 -> 10900104`：桥接帧 `65f`，第 4 段链起点 `116f`。
+- `10900104 -> 10900105`：桥接帧 `64f`，第 5 段链起点 `180f`。
+- 本地命中帧仍为：`12 / 6 / 12 / 7 / 4f`。
+- EventBridge 累计绝对帧候选为：`0s12f / 0s22f / 1s3f / 2s3f / 3s4f`。
+- `candidateValueSeries.chart.summary.displayFrameAdjustmentCount = 0`。
+- `candidateValueSeries.chart.summary.timeOrderStatus = source-times-monotonic`。
+
+Workbench 当前默认样本显示：
+
+```text
+逐hit候选 5/5段 · 三值字段 12 · 帧 12f/6f/12f/7f/4f · 绝对帧 0s12f/0s22f/1s3f/2s3f/3s4f · 连段桥 4/4
+候选时间曲线 15
+60fps · 30s0f
+HP参数候选 0s12f-3s4f · 2,500-13,000 · raw-param
+削韧候选 0s12f-3s4f · 7,000 · raw-field
+能量候选 0s12f-3s4f · 2,399-3,000 · raw-field
+```
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+
+当前边界：
+
+- 绝对帧仍是 `EventBridgeBehaviorData` 和 HP timeline 候选推导出的中置信候选，`applied` 继续保持 `false`。
+- 这些帧还没有验证输入节奏、取消窗口、运行时实际触发条件和命中盒真实生效帧；不能直接作为最终动作 timing profile。
+- `candidateValueSeries.chart` 已消除默认样本的显示帧 fallback，但仍未同步到主时间轴 marker 层。
+
+下一步：
+
+- 阶段 5-8AE 目标：把 `candidateValueSeries.chart` 的 HP、削韧、能量候选点同步到主时间轴 marker/曲线轨，让时间轴区域也能看到三值候选变化，而不只在分析面板显示。
+- 继续明确区分：真实伤害投影 marker、候选三值 marker、未应用公式字段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
