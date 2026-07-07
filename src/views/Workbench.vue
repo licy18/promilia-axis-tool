@@ -66,7 +66,8 @@
         <PropertiesPanel
           :selection="selection"
           :characters="workbenchSeed.gameData.characters"
-          :skills="availableSkills"
+          :actors="scenario.actors"
+          :skills="workbenchSeed.gameData.skills"
           :enemies="workbenchSeed.gameData.enemies"
           :selected-action="selectedAction"
           :duration-ms="scenario.time.durationMs"
@@ -144,7 +145,6 @@ const actionDrafts = ref([...initialDraft.actionDrafts]);
 const selectedActionId = ref(initialDraft.selectedActionId);
 const draftStatus = ref('未保存草稿');
 
-const availableSkills = computed(() => getSkillsForCharacter(selection.value.characterId));
 const project = computed(() =>
   createWorkbenchProject(selection.value, {
     enemyConfig: enemyConfig.value,
@@ -222,24 +222,29 @@ function updateAction(patch) {
       return action;
     }
 
+    const normalizedPatch = normalizeActionPatch(action, patch);
     if (action.type !== ACTION_TYPES.SKILL) {
       return createWorkbenchActionDraft({
         ...action,
-        ...patch,
-        startMs: clampNumber(patch.startMs ?? action.startMs, 0, project.value.time.durationMs),
-        durationMs: clampNumber(patch.durationMs ?? action.durationMs, 1, project.value.time.durationMs),
+        ...normalizedPatch,
+        startMs: clampNumber(normalizedPatch.startMs ?? action.startMs, 0, project.value.time.durationMs),
+        durationMs: clampNumber(normalizedPatch.durationMs ?? action.durationMs, 1, project.value.time.durationMs),
       });
     }
 
-    const nextSkillId = patch.skillId ?? action.skillId;
-    const skill = findSkillById(nextSkillId) ?? findSkillById(action.skillId);
-    const nextLevel = patch.skillId != null ? 1 : patch.level ?? action.level;
+    const nextActorCharacterId = Number(
+      normalizedPatch.actorCharacterId ?? action.actorCharacterId ?? selection.value.characterId,
+    );
+    const skill = resolveSkillForActionPatch(action, normalizedPatch, nextActorCharacterId);
+    const skillChanged = Number(skill.id) !== Number(action.skillId);
+    const nextLevel = skillChanged ? 1 : normalizedPatch.level ?? action.level;
 
     return createWorkbenchActionDraft({
       ...action,
-      ...patch,
+      ...normalizedPatch,
       skillId: skill.id,
-      startMs: clampNumber(patch.startMs ?? action.startMs, 0, project.value.time.durationMs),
+      actorCharacterId: nextActorCharacterId,
+      startMs: clampNumber(normalizedPatch.startMs ?? action.startMs, 0, project.value.time.durationMs),
       level: clampNumber(nextLevel, 1, skill.level.values.length),
     });
   });
@@ -305,6 +310,17 @@ function updateActionLane({ actionId, laneId }) {
     const patch = {
       actorCharacterId: targetCharacterId,
     };
+
+    if (action.type === ACTION_TYPES.SKILL) {
+      const currentSkill = findSkillById(action.skillId);
+      if (Number(currentSkill?.characterId) !== targetCharacterId) {
+        const nextSkill = findFirstSkillForCharacter(targetCharacterId);
+        if (nextSkill) {
+          patch.skillId = nextSkill.id;
+          patch.level = 1;
+        }
+      }
+    }
 
     if (action.type === ACTION_TYPES.SWITCH && Number(action.targetCharacterId) === targetCharacterId) {
       patch.targetCharacterId = resolveAlternateActorCharacterId(targetCharacterId);
@@ -500,7 +516,7 @@ function markDraftDirty() {
 }
 
 function findSkillById(skillId) {
-  return availableSkills.value.find((skill) => skill.id === Number(skillId)) ?? null;
+  return workbenchSeed.gameData.skills.find((skill) => skill.id === Number(skillId)) ?? null;
 }
 
 function createNextActionId() {
@@ -513,6 +529,30 @@ function createNextActionId() {
 
 function canAssignActionLane(action) {
   return [ACTION_TYPES.SKILL, ACTION_TYPES.SWITCH, ACTION_TYPES.RESOURCE].includes(action.type);
+}
+
+function normalizeActionPatch(action, patch) {
+  const normalizedPatch = { ...patch };
+  if (normalizedPatch.actorCharacterId != null) {
+    normalizedPatch.actorCharacterId = Number(normalizedPatch.actorCharacterId);
+
+    if (action.type === ACTION_TYPES.SWITCH && Number(action.targetCharacterId) === normalizedPatch.actorCharacterId) {
+      normalizedPatch.targetCharacterId = resolveAlternateActorCharacterId(normalizedPatch.actorCharacterId);
+    }
+  }
+  return normalizedPatch;
+}
+
+function resolveSkillForActionPatch(action, patch, actorCharacterId) {
+  const requestedSkill = findSkillById(patch.skillId ?? action.skillId) ?? findSkillById(action.skillId);
+  if (patch.actorCharacterId != null && Number(requestedSkill?.characterId) !== Number(actorCharacterId)) {
+    return findFirstSkillForCharacter(actorCharacterId) ?? requestedSkill;
+  }
+  return requestedSkill ?? findFirstSkillForCharacter(actorCharacterId);
+}
+
+function findFirstSkillForCharacter(characterId) {
+  return getSkillsForCharacter(characterId)[0] ?? null;
 }
 
 function resolveAlternateActorCharacterId(sourceCharacterId) {

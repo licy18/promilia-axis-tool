@@ -427,6 +427,56 @@ describe('Workbench view', () => {
     ).toBe('system');
   });
 
+  it('edits action ownership from the properties panel and filters skill choices by actor', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    const secondaryCharacterId = 101003;
+    const secondarySkills = workbenchSeed.gameData.skills.filter(
+      (skill) => Number(skill.characterId) === secondaryCharacterId,
+    );
+
+    expect(wrapper.find('[data-testid="workbench-action-actor-select"]').element.value).toBe('109001');
+
+    await wrapper.find('[data-testid="workbench-action-actor-select"]').setValue(String(secondaryCharacterId));
+
+    expect(wrapper.find('[data-testid="workbench-action-actor-select"]').element.value).toBe(
+      String(secondaryCharacterId),
+    );
+    expect(wrapper.find('[data-testid="workbench-skill-select"]').element.value).toBe(String(secondarySkills[0].id));
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-action"][data-action-id="action-0001"]')
+        .attributes('data-lane-id'),
+    ).toBe('actor-101003');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-damage-marker"][data-action-id="action-0001"]')
+        .attributes('data-lane-id'),
+    ).toBe('actor-101003');
+
+    const optionValues = Array.from(wrapper.find('[data-testid="workbench-skill-select"]').element.options).map(
+      (option) => Number(option.value),
+    );
+    expect(optionValues).toEqual(secondarySkills.map((skill) => skill.id));
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(savedDraft.actionDrafts[0]).toMatchObject({
+      actorCharacterId: secondaryCharacterId,
+      skillId: secondarySkills[0].id,
+    });
+
+    await wrapper.find('[data-testid="workbench-add-annotation-action"]').trigger('click');
+    expect(wrapper.find('[data-testid="workbench-action-actor-readonly"]').element.value).toBe('系统 / 事件轨');
+  });
+
   it('keeps generated action ids unique after deleting the first action', async () => {
     const wrapper = mount(Workbench, {
       global: {

@@ -44,7 +44,7 @@
           :value="selectedAction.skillId"
           @change="emitActionPatch('skillId', $event.target.value)"
         >
-          <option v-for="skill in skills" :key="skill.id" :value="skill.id">
+          <option v-for="skill in skillOptions" :key="skill.id" :value="skill.id">
             {{ skill.name }}
           </option>
         </select>
@@ -128,6 +128,26 @@
           </option>
         </select>
       </label>
+
+      <label>
+        <span>动作归属</span>
+        <select
+          v-if="canAssignActor"
+          data-testid="workbench-action-actor-select"
+          :value="currentActorCharacterId"
+          @change="emitActionPatch('actorCharacterId', $event.target.value)"
+        >
+          <option v-for="actor in actors" :key="actor.id" :value="actor.characterId">
+            {{ actor.name }}
+          </option>
+        </select>
+        <input
+          v-else
+          data-testid="workbench-action-actor-readonly"
+          :value="currentActorName"
+          disabled
+        />
+      </label>
     </div>
 
     <div v-if="isResourceAction" class="action-controls contextual-controls">
@@ -180,6 +200,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  actors: {
+    type: Array,
+    required: true,
+  },
   skills: {
     type: Array,
     required: true,
@@ -209,11 +233,30 @@ const isAnnotationAction = computed(() => props.selectedAction.type === 'annotat
 const isResourceAction = computed(() => props.selectedAction.type === 'resource');
 const isEnemyEventAction = computed(() => props.selectedAction.type === 'enemyEvent');
 const isSwitchAction = computed(() => props.selectedAction.type === 'switch');
+const canAssignActor = computed(() => ['skill', 'switch', 'resource'].includes(props.selectedAction.type));
 const secondaryCharacterOptions = computed(() =>
   props.characters.filter((character) => Number(character.id) !== Number(props.selection.characterId)),
 );
+const currentActorCharacterId = computed(() => {
+  return props.selectedAction.actor?.characterId ?? props.selectedAction.actorCharacterId ?? props.selection.characterId;
+});
+const currentActorName = computed(() => {
+  if (!canAssignActor.value) {
+    return '系统 / 事件轨';
+  }
+  return props.actors.find((actor) => Number(actor.characterId) === Number(currentActorCharacterId.value))?.name ??
+    resolveCharacterName(currentActorCharacterId.value);
+});
+const skillOptions = computed(() => {
+  const actorSkills = props.skills.filter((skill) => Number(skill.characterId) === Number(currentActorCharacterId.value));
+  return actorSkills.length > 0 ? actorSkills : props.skills;
+});
 const switchTargetOptions = computed(() => {
-  return props.characters.filter((character) => Number(character.id) === Number(props.selection.secondaryCharacterId));
+  const actorCharacterIds = new Set(props.actors.map((actor) => Number(actor.characterId)));
+  return props.characters.filter(
+    (character) =>
+      actorCharacterIds.has(Number(character.id)) && Number(character.id) !== Number(currentActorCharacterId.value),
+  );
 });
 const actionTypeLabel = computed(() => {
   if (props.selectedAction.type === 'wait') {

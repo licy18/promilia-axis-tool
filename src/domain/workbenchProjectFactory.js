@@ -181,17 +181,21 @@ export function normalizeWorkbenchActionDrafts(
     typeof selectionOrCharacterId === 'object'
       ? normalizeWorkbenchSelection(selectionOrCharacterId)
       : normalizeWorkbenchSelection({ characterId: selectionOrCharacterId });
-  const skills = getSkillsForCharacter(selection.characterId);
-  const fallbackSkill = skills[0] ?? workbenchSeed.gameData.skills[0];
+  const primarySkills = getSkillsForCharacter(selection.characterId);
+  const primaryFallbackSkill = primarySkills[0] ?? workbenchSeed.gameData.skills[0];
 
   return actionDrafts
     .map((draft, index) => {
+      const actorCharacterId = normalizeActorCharacterId(draft.actorCharacterId, selection);
+      const actorSkills = getSkillsForCharacter(actorCharacterId);
+      const fallbackSkill = actorSkills[0] ?? primaryFallbackSkill;
+
       if (isNonSkillDraftType(draft.type)) {
         return createWorkbenchActionDraft({
           id: draft.id ?? `action-${String(index + 1).padStart(4, '0')}`,
           type: draft.type,
           skillId: draft.skillId ?? fallbackSkill.id,
-          actorCharacterId: normalizeActorCharacterId(draft.actorCharacterId, selection),
+          actorCharacterId,
           startMs: draft.startMs,
           durationMs: draft.durationMs,
           level: draft.level,
@@ -204,13 +208,13 @@ export function normalizeWorkbenchActionDrafts(
         });
       }
 
-      const requestedSkill = findById(skills, draft.skillId);
+      const requestedSkill = findById(actorSkills, draft.skillId);
       const skill = requestedSkill ?? fallbackSkill;
       return createWorkbenchActionDraft({
         id: draft.id ?? `action-${String(index + 1).padStart(4, '0')}`,
         type: ACTION_TYPES.SKILL,
         skillId: skill.id,
-        actorCharacterId: normalizeActorCharacterId(draft.actorCharacterId, selection),
+        actorCharacterId,
         startMs: draft.startMs,
         durationMs: draft.durationMs,
         level: clampLevel(draft.level, skill),
