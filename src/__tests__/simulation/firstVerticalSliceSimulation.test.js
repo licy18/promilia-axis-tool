@@ -66,6 +66,18 @@ describe('first vertical slice simulation', () => {
           valueParam: '1#1600|7#10000',
         },
       ],
+      valueParamSummary: {
+        uniqueParamIds: [1, 7],
+        directMatchCount: 0,
+        unmatchedSegmentCount: 4,
+      },
+    });
+    expect(scenario.actions[0].logicModel.damageParameterLinks[0]).toMatchObject({
+      segmentIndex: 0,
+      label: '普攻',
+      rawValue: '649%',
+      status: 'unmatched',
+      unmatchedParamIds: [1, 7],
     });
     expect(scenario.actions[0].selectedDamageSegment.source).toMatchObject({
       kind: 'azpr-local-hero-module-skill-level',
@@ -77,6 +89,12 @@ describe('first vertical slice simulation', () => {
         status: 'matched',
         rowId: 1657,
         valueId: '7116760813824',
+      },
+      valueParamLink: {
+        segmentIndex: 0,
+        rawValue: '649%',
+        status: 'unmatched',
+        unmatchedParamIds: [1, 7],
       },
     });
     expect(scenario.diagnostics.missingTimingActionIds).toEqual(['action-0001']);
@@ -109,6 +127,12 @@ describe('first vertical slice simulation', () => {
             kind: 'azpr-newtable-skill-level-crosscheck',
             rowId: 1657,
             valueId: '7116760813824',
+          },
+          valueParamLink: {
+            segmentIndex: 0,
+            rawValue: '649%',
+            status: 'unmatched',
+            unmatchedParamIds: [1, 7],
           },
         },
       },

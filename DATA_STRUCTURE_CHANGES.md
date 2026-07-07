@@ -913,3 +913,97 @@ Workbench 草稿新增可选 `segmentSplitOptions` 配置块，用于保存动�
 
 - 本阶段只展示来源和差异，不解释 `valueParam` 参数 ID 的战斗语义。
 - UI 中展示的逻辑层字段仍不代表真实命中帧、动画帧、取消窗口或完整伤害公式。
+
+## 23. 2026-07-07 `valueParam` 与倍率段关联诊断补充
+
+阶段 5-5 没有新增草稿持久化字段，而是在 `logicModel` 和倍率段来源中增加派生诊断信息。
+
+### 23.1 `logicModel.valueParamSummary`
+
+`createSkillLogicModel(skill, level, { damageModel })` 现在会解析当前等级 `skillsub_ele_value.valueParam`，并生成摘要：
+
+```javascript
+{
+  "rowCount": 2,
+  "paramCount": 4,
+  "uniqueParamIds": [1, 7],
+  "directMatchCount": 0,
+  "linkedSegmentCount": 0,
+  "unmatchedSegmentCount": 4,
+  "unexplainedParamIds": [1, 7]
+}
+```
+
+含义：
+
+- `rowCount`：当前技能等级命中的 `skillsub_ele_value` 行数。
+- `paramCount`：解析出的 `id#value` 参数对数量。
+- `uniqueParamIds`：当前等级出现过的参数 ID。
+- `directMatchCount`：与倍率段候选值直接匹配的参数数量。
+- `linkedSegmentCount`：至少有一个直接参数匹配的倍率段数量。
+- `unmatchedSegmentCount`：能解析倍率但没有直接参数匹配的倍率段数量。
+- `unexplainedParamIds`：尚未被直接匹配解释的参数 ID。
+
+### 23.2 `logicModel.damageParameterLinks[]`
+
+每个倍率段会生成一条关联诊断：
+
+```javascript
+{
+  "segmentIndex": 0,
+  "label": "普攻",
+  "rawValue": "649%",
+  "multiplier": 6.49,
+  "status": "unmatched",
+  "candidates": [
+    { "kind": "raw-number", "value": 649 },
+    { "kind": "multiplier", "value": 6.49 },
+    { "kind": "basis-points", "value": 64900 }
+  ],
+  "matches": [],
+  "unmatchedParamIds": [1, 7]
+}
+```
+
+当前候选值只做保守枚举：
+
+- `raw-number`：去掉 `%` 后的原始数字，例如 `649`。
+- `multiplier`：解析后的倍率，例如 `6.49`。
+- `basis-points`：百分数字乘 100，例如 `64900`。
+- `ten-thousand-ratio`：倍率乘 10000；与 `basis-points` 数值相同时会被去重。
+
+只有 `valueParam` 参数值与上述候选值直接相等或近似相等时，`status` 才会变为 `matched`。当前首个技能 `10900101` 与差异技能 `10100712` 都是 `unmatched`，因此不能把 `valueParam` 直接作为倍率公式来源。
+
+### 23.3 模拟与 UI 派生字段
+
+模拟编译和投影会把当前伤害段的关联诊断挂到段来源上：
+
+```javascript
+{
+  "valueParamLink": {
+    "segmentIndex": 0,
+    "rawValue": "649%",
+    "status": "unmatched",
+    "unmatchedParamIds": [1, 7]
+  }
+}
+```
+
+出现位置：
+
+- `scenario.actions[].selectedDamageSegment.source.valueParamLink`
+- `damageTimeline[].segment.source.valueParamLink`
+- Workbench 技能逻辑来源区的当前倍率段关联提示
+
+这些字段都由当前技能、等级、倍率段和 `logicModel` 派生，不写入 `workbench-draft`。
+
+### 23.4 新增诊断码
+
+- `skill-value-param-damage-segment-unmatched`：倍率段可解析，但没有与当前等级 `valueParam` 参数值建立直接数值匹配。
+- `skill-value-param-damage-segment-unparseable`：倍率段无法解析为数值，无法参与直接匹配。
+
+### 23.5 当前边界
+
+- 本阶段只处理直接数值匹配，不解释参数 ID 的真实战斗语义。
+- `unmatched` 是预期诊断，不代表数据错误；它提醒后续开发不能把未解释的 `valueParam` 写入伤害公式。
+- 下一阶段需要建立参数 ID 词典，继续调查 `1`、`7` 等参数在本地表、技能描述和战斗逻辑中的来源含义。

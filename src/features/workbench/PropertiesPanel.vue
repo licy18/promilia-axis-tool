@@ -214,6 +214,16 @@
           #{{ row.rowId }} · {{ row.elementId }} · {{ row.valueParam }}
         </code>
       </div>
+
+      <p
+        v-if="selectedDamageParameterLink"
+        class="logic-param-link"
+        data-testid="workbench-skill-value-param-link"
+        :data-link-status="selectedDamageParameterLink.status"
+      >
+        倍率段 {{ selectedDamageParameterLink.label }} / {{ selectedDamageParameterLink.rawValue }}：
+        {{ valueParamLinkLabel }}
+      </p>
     </div>
 
     <div v-if="isResourceAction" class="action-controls contextual-controls">
@@ -360,6 +370,24 @@ const logicStatusLabel = computed(() => {
   return '已映射';
 });
 const displayedElementValues = computed(() => (skillLogicModel.value?.elementValues ?? []).slice(0, 3));
+const selectedDamageParameterLink = computed(() =>
+  (skillLogicModel.value?.damageParameterLinks ?? []).find(
+    (link) => Number(link.segmentIndex) === Number(selectedDamageSegmentIndex.value),
+  ),
+);
+const valueParamLinkLabel = computed(() => {
+  if (!selectedDamageParameterLink.value) {
+    return '未检查';
+  }
+  if (selectedDamageParameterLink.value.status === 'matched') {
+    return `直接匹配 ${selectedDamageParameterLink.value.matches.length} 个 valueParam`;
+  }
+  if (selectedDamageParameterLink.value.status === 'unparseable') {
+    return '倍率无法解析，未建立 valueParam 关联';
+  }
+  const ids = selectedDamageParameterLink.value.unmatchedParamIds?.join(', ') || '无';
+  return `未发现直接 valueParam 匹配；未解释参数 ${ids}`;
+});
 const actionTypeLabel = computed(() => {
   if (props.selectedAction.type === 'wait') {
     return '等待动作';
@@ -609,6 +637,22 @@ textarea {
   color: #ead7a5;
   font-size: 12px;
   line-height: 1.45;
+}
+
+.logic-param-link {
+  margin: 0;
+  padding: 8px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background: rgba(17, 22, 27, 0.62);
+  color: #b8c0c7;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.logic-param-link[data-link-status='unmatched'] {
+  border-color: rgba(240, 195, 106, 0.32);
+  color: #ead7a5;
 }
 
 .logic-param-list {

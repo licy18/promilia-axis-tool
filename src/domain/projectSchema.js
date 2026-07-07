@@ -134,6 +134,7 @@ export function createSkillAction({
   if (!skill) {
     throw new Error('createSkillAction requires a skill');
   }
+  const damageModel = createSkillDamageModel(skill, level);
 
   return {
     id: id ?? createStableId('action'),
@@ -149,8 +150,8 @@ export function createSkillAction({
     cooldownMs: skill.cooldownMs,
     spCost: skill.spCost,
     elementId: skill.elementId,
-    damageModel: createSkillDamageModel(skill, level),
-    logicModel: createSkillLogicModel(skill, level),
+    damageModel,
+    logicModel: createSkillLogicModel(skill, level, { damageModel }),
     timing: {
       needsTimingData: Boolean(skill.needsTimingData),
       source: skill.timingSource ?? 'unknown',

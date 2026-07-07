@@ -1786,6 +1786,41 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 尝试把当前伤害段的 `rawValue` 与 `skillsub_ele_value` 当前等级参数行建立可诊断关联，为真实战斗计算公式接入做准备。
 - 补充首个技能和一个显示/逻辑差异技能的参数映射测试，并继续记录无法解释的参数 ID。
 
+### 2026-07-07：阶段 5-5 `valueParam` 参数解析与倍率段关联诊断雏形落地
+
+本轮完成：
+
+- `createSkillLogicModel()` 支持接收 `damageModel`，并基于当前等级的 `skillsub_ele_value.valueParam` 生成参数摘要。
+- 新增 `logicModel.valueParamSummary`，记录参数行数、参数数量、参数 ID、直接匹配数量、未解释参数 ID 和未匹配倍率段数量。
+- 新增 `logicModel.damageParameterLinks[]`，按倍率段尝试建立 `rawValue` 与 `valueParam` 参数值的直接数值关联。
+- 倍率段候选值目前只做保守枚举：原始数字、倍率、小数转万分比、百分数字转基点；去重后再与 `valueParam` 数值精确/近似匹配。
+- 当倍率段无法与 `valueParam` 直接匹配时，输出 info 级诊断 `skill-value-param-damage-segment-unmatched`；无法解析倍率时输出 `skill-value-param-damage-segment-unparseable`。
+- 模拟编译后的 `selectedDamageSegment.source.valueParamLink` 与投影结果 `damageTimeline[].segment.source.valueParamLink` 会保留当前段的参数关联诊断。
+- Workbench 技能逻辑来源区新增当前倍率段的 `valueParam` 关联状态，保存/恢复后可由动作重新派生。
+- 覆盖首个技能 `10900101` 与显示/逻辑差异技能 `10100712`：两者当前都没有发现 `valueParam` 与倍率段的直接数值匹配，因此继续标记为“未解释参数”。
+
+验收结果：
+
+- `npx vitest run src/__tests__/domain/skillLogicModel.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、53 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、103 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1205 KB，后续可拆包或懒加载优化。
+- `git diff --check`：通过；仅有仓库既有 LF/CRLF 工作区提示。
+- `http://127.0.0.1:5175/#/workbench` 本地页面服务返回 200。
+
+当前边界：
+
+- 本阶段只建立 `valueParam` 与倍率段之间的“直接数值匹配诊断”，并未解释参数 ID 的真实战斗语义。
+- 对 `10900101` 和 `10100712` 的结果表明，`valueParam` 当前不能直接当作倍率公式来源使用。
+- `logicModel` 仍不代表真实命中帧、动画帧、取消窗口或完整伤害公式。
+- Workbench chunk 继续偏大，数据索引拆包仍是后续技术债。
+
+下一步：
+
+- 阶段 5-6 目标：建立 `valueParam` 参数 ID 词典/语义来源调查雏形。
+- 从本地 NewTable、脚本和描述占位中追踪 `valueParam` 参数 ID，例如当前反复出现的 `1`、`7`，区分倍率、资源、效果、附着或条件参数。
+- 把参数 ID 语义以可诊断词典形式接入 `logicModel`，让 UI 能显示“未知参数/疑似非伤害参数/已解释参数”。
+- 补充跨技能统计、首批参数 ID 语义测试，并继续避免把未确认参数写入真实伤害公式。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

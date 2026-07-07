@@ -23,13 +23,13 @@ export function parseDamageSegments(action) {
         label: labels[index] ?? `segment-${index + 1}`,
         rawValue: value,
         multiplier,
-        source: createDamageSegmentSource(action.damageModel, index),
+        source: createDamageSegmentSource(action.damageModel, index, action.logicModel),
       };
     })
     .filter(Boolean);
 }
 
-function createDamageSegmentSource(damageModel = {}, index) {
+function createDamageSegmentSource(damageModel = {}, index, logicModel = null) {
   const fieldPaths = damageModel.fieldPaths ?? {};
   return {
     kind: damageModel.sourceKind ?? damageModel.source ?? 'unknown',
@@ -41,6 +41,7 @@ function createDamageSegmentSource(damageModel = {}, index) {
     labelField: fieldPaths.labels ? `${fieldPaths.labels}[${index}]` : null,
     valueField: fieldPaths.values ? `${fieldPaths.values}[${index}]` : null,
     crossCheck: createSkillLevelCrossCheckSegmentSource(damageModel.crossCheck, index),
+    valueParamLink: logicModel?.damageParameterLinks?.find((link) => Number(link.segmentIndex) === Number(index)) ?? null,
   };
 }
 
