@@ -2538,3 +2538,63 @@ Workbench 分析面板新增“三值来源”列表，当前展示：
 - `sourceEvidence` 不是最终公式结果，只证明动作级结果可以追溯到候选字段。
 - 当前动作形态和 element 的匹配仍是 `skillId + logicModel.elementValues[].elementId` 级别，尚未精确到命中帧或动作段。
 - 下一阶段需要验证 `valueParam` 和 `formulaParamValues` 的真实覆盖/缩放关系，再决定是否把候选字段推进到 applied 公式层。
+
+## 40. 2026-07-08 valueParam / formulaParamValues 槽位关系诊断摘要
+
+阶段 5-8O 在 `skill-asset-evidence.json.damageElementFieldMappingEvidence` 中增强 `skillLevelBridge.formulaParamAlignment`，用于记录 `skillsub_ele_value.valueParam` 与 `TDamageElementParams.formulaParamValues` 同编号槽位的候选关系。
+
+### 40.1 summary 新增字段
+
+```javascript
+{
+  "valueParamFormulaSlotDirectMatchObjects": 2,
+  "valueParamFormulaSlotOverrideCandidateObjects": 2,
+  "valueParamFormulaSlotUnresolvedObjects": 2
+}
+```
+
+含义：
+
+- `valueParamFormulaSlotDirectMatchObjects`：至少有一个参数在所有检查等级中与同编号 `formulaParamValues` 槽位直接匹配的对象数。
+- `valueParamFormulaSlotOverrideCandidateObjects`：至少有一个参数显示出同编号槽位覆盖候选的对象数。
+- `valueParamFormulaSlotUnresolvedObjects`：已桥接到技能等级值但仍未确认最终公式关系的对象数。
+
+### 40.2 parameterSummaries
+
+`skillLevelBridge.formulaParamAlignment.parameterSummaries[]` 新增参数级诊断：
+
+```javascript
+{
+  "id": 1,
+  "variable": "A",
+  "formulaParamValue": 1000,
+  "levelRows": 12,
+  "minValue": 1600,
+  "maxValue": 3360,
+  "firstLevelValue": 1600,
+  "lastLevelValue": 3360,
+  "uniqueValues": [1600, 1760, 1920, 2080, 2240, 2400, 2560, 2720, 2880, 3040, 3200, 3360],
+  "isConstantAcrossLevels": false,
+  "directSlotMatchLevels": [],
+  "mismatchLevels": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+  "progression": {
+    "status": "arithmetic-progression",
+    "step": 160
+  },
+  "relationStatus": "level-scaling-override-candidate"
+}
+```
+
+### 40.3 当前样本结论
+
+末音 `10900101`：
+
+- `109001081` / `109001306` 的参数 `1 / A`：`valueParam` 从 1 级 `1600` 到 12 级 `3360`，每级 +160；同编号 `formulaParamValues[0]` 固定为 `1000`，因此记录为 `level-scaling-override-candidate`。
+- `109001081` / `109001306` 的参数 `7 / G`：`valueParam` 在 1-12 级恒为 `10000`，与 `formulaParamValues[6] = 10000` 全等级直连匹配，因此记录为 `constant-direct-slot-match`。
+- `109001251`：仍无同 elementId 的技能等级桥接，不能检查槽位关系。
+
+### 40.4 当前边界
+
+- `level-scaling-override-candidate` 不是最终公式确认，只说明 `valueParam` 和同编号 `formulaParamValues` 槽存在强候选覆盖关系。
+- `constant-direct-slot-match` 不是最终公式确认，只说明同编号槽位值一致。
+- 下一阶段应把这些参数级关系接入动作级 `sourceEvidence` 和 Workbench 展示层，再继续追 `formulaParams.function_1/function_2` 的实际执行公式。

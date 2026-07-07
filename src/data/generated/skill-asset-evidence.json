@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-07T16:04:51.608Z",
+  "generatedAt": "2026-07-07T16:20:51.586Z",
   "sourceKind": "azpr-skill-asset-evidence-index",
   "source": {
     "sourceRoot": "C:/PC2/Codex/AzPr",
@@ -1180,7 +1180,7 @@
   },
   "damageElementFieldMappingEvidence": {
     "schemaVersion": 1,
-    "generatedAt": "2026-07-07T16:04:51.608Z",
+    "generatedAt": "2026-07-07T16:20:51.586Z",
     "sourceKind": "azpr-damage-element-field-mapping-evidence",
     "status": "damage-element-field-candidates-found",
     "source": {
@@ -1198,7 +1198,10 @@
       "selfEnergyCandidateRefs": 3,
       "skillsubElementBridgeMatchedObjects": 2,
       "skillsubElementBridgeMissingObjects": 1,
-      "skillsubElementBridgeLevelRows": 24
+      "skillsubElementBridgeLevelRows": 24,
+      "valueParamFormulaSlotDirectMatchObjects": 2,
+      "valueParamFormulaSlotOverrideCandidateObjects": 2,
+      "valueParamFormulaSlotUnresolvedObjects": 2
     },
     "skills": [
       {
@@ -1372,6 +1375,11 @@
               "lastLevel": null,
               "formulaParamAlignment": {
                 "status": "same-element-id-not-found-in-current-skill-level-values",
+                "parameterSummaries": [],
+                "directSlotMatchParamIds": [],
+                "overrideCandidateParamIds": [],
+                "missingFormulaSlotParamIds": [],
+                "conclusion": "no-skill-level-bridge-for-formula-param-check",
                 "firstLevelDirectSlotMatches": [],
                 "firstLevelMismatches": [],
                 "note": "skillsub_ele_value.valueParam can bridge element IDs to level-scaling rows, but slot overrides/scaling must be validated before final damage math."
@@ -1594,6 +1602,109 @@
               },
               "formulaParamAlignment": {
                 "status": "same-element-id-found-slot-alignment-unverified",
+                "parameterSummaries": [
+                  {
+                    "id": 1,
+                    "variable": "A",
+                    "formulaParamValue": 1000,
+                    "levelRows": 12,
+                    "minValue": 1600,
+                    "maxValue": 3360,
+                    "firstLevelValue": 1600,
+                    "lastLevelValue": 3360,
+                    "uniqueValues": [
+                      1600,
+                      1760,
+                      1920,
+                      2080,
+                      2240,
+                      2400,
+                      2560,
+                      2720,
+                      2880,
+                      3040,
+                      3200,
+                      3360
+                    ],
+                    "isConstantAcrossLevels": false,
+                    "directSlotMatchLevels": [],
+                    "mismatchLevels": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12
+                    ],
+                    "directSlotMatchCount": 0,
+                    "mismatchCount": 12,
+                    "progression": {
+                      "status": "arithmetic-progression",
+                      "step": 160,
+                      "uniqueDeltas": [
+                        160
+                      ],
+                      "isArithmetic": true
+                    },
+                    "relationStatus": "level-scaling-override-candidate",
+                    "interpretation": "skillsub_ele_value value varies by level while the same formulaParamValues slot is fixed; this is a likely level-scaling override candidate."
+                  },
+                  {
+                    "id": 7,
+                    "variable": "G",
+                    "formulaParamValue": 10000,
+                    "levelRows": 12,
+                    "minValue": 10000,
+                    "maxValue": 10000,
+                    "firstLevelValue": 10000,
+                    "lastLevelValue": 10000,
+                    "uniqueValues": [
+                      10000
+                    ],
+                    "isConstantAcrossLevels": true,
+                    "directSlotMatchLevels": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12
+                    ],
+                    "mismatchLevels": [],
+                    "directSlotMatchCount": 12,
+                    "mismatchCount": 0,
+                    "progression": {
+                      "status": "arithmetic-progression",
+                      "step": 0,
+                      "uniqueDeltas": [
+                        0
+                      ],
+                      "isArithmetic": true
+                    },
+                    "relationStatus": "constant-direct-slot-match",
+                    "interpretation": "skillsub_ele_value value matches the same formulaParamValues slot at every checked level; this is a constant slot match, not proof of final formula application."
+                  }
+                ],
+                "directSlotMatchParamIds": [
+                  7
+                ],
+                "overrideCandidateParamIds": [
+                  1
+                ],
+                "missingFormulaSlotParamIds": [],
+                "conclusion": "slot-override-candidate-unconfirmed",
                 "firstLevelDirectSlotMatches": [
                   7
                 ],
@@ -1827,6 +1938,109 @@
               },
               "formulaParamAlignment": {
                 "status": "same-element-id-found-slot-alignment-unverified",
+                "parameterSummaries": [
+                  {
+                    "id": 1,
+                    "variable": "A",
+                    "formulaParamValue": 1000,
+                    "levelRows": 12,
+                    "minValue": 1600,
+                    "maxValue": 3360,
+                    "firstLevelValue": 1600,
+                    "lastLevelValue": 3360,
+                    "uniqueValues": [
+                      1600,
+                      1760,
+                      1920,
+                      2080,
+                      2240,
+                      2400,
+                      2560,
+                      2720,
+                      2880,
+                      3040,
+                      3200,
+                      3360
+                    ],
+                    "isConstantAcrossLevels": false,
+                    "directSlotMatchLevels": [],
+                    "mismatchLevels": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12
+                    ],
+                    "directSlotMatchCount": 0,
+                    "mismatchCount": 12,
+                    "progression": {
+                      "status": "arithmetic-progression",
+                      "step": 160,
+                      "uniqueDeltas": [
+                        160
+                      ],
+                      "isArithmetic": true
+                    },
+                    "relationStatus": "level-scaling-override-candidate",
+                    "interpretation": "skillsub_ele_value value varies by level while the same formulaParamValues slot is fixed; this is a likely level-scaling override candidate."
+                  },
+                  {
+                    "id": 7,
+                    "variable": "G",
+                    "formulaParamValue": 10000,
+                    "levelRows": 12,
+                    "minValue": 10000,
+                    "maxValue": 10000,
+                    "firstLevelValue": 10000,
+                    "lastLevelValue": 10000,
+                    "uniqueValues": [
+                      10000
+                    ],
+                    "isConstantAcrossLevels": true,
+                    "directSlotMatchLevels": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12
+                    ],
+                    "mismatchLevels": [],
+                    "directSlotMatchCount": 12,
+                    "mismatchCount": 0,
+                    "progression": {
+                      "status": "arithmetic-progression",
+                      "step": 0,
+                      "uniqueDeltas": [
+                        0
+                      ],
+                      "isArithmetic": true
+                    },
+                    "relationStatus": "constant-direct-slot-match",
+                    "interpretation": "skillsub_ele_value value matches the same formulaParamValues slot at every checked level; this is a constant slot match, not proof of final formula application."
+                  }
+                ],
+                "directSlotMatchParamIds": [
+                  7
+                ],
+                "overrideCandidateParamIds": [
+                  1
+                ],
+                "missingFormulaSlotParamIds": [],
+                "conclusion": "slot-override-candidate-unconfirmed",
                 "firstLevelDirectSlotMatches": [
                   7
                 ],

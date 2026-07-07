@@ -461,6 +461,18 @@ const SKILL_ELEMENT_TYPE_CATALOG = Object.freeze([
     ],
   },
 ]);
+const FORMULA_PARAM_RELATION_INTERPRETATIONS = Object.freeze({
+  'constant-direct-slot-match':
+    'skillsub_ele_value value matches the same formulaParamValues slot at every checked level; this is a constant slot match, not proof of final formula application.',
+  'level-scaling-override-candidate':
+    'skillsub_ele_value value varies by level while the same formulaParamValues slot is fixed; this is a likely level-scaling override candidate.',
+  'constant-override-candidate':
+    'skillsub_ele_value value differs from a fixed formulaParamValues slot but does not vary by checked level; override semantics are unconfirmed.',
+  'missing-formula-slot':
+    'skillsub_ele_value parameter ID has no same-numbered formulaParamValues slot in the parsed object.',
+  'slot-alignment-unresolved':
+    'No clear direct match or override pattern was found for this parameter.',
+});
 const SKILL_ASSET_EVIDENCE_TABLES = Object.freeze([
   {
     key: 'heroTable',
@@ -2371,6 +2383,9 @@ function buildDamageElementFieldMappingEvidence({
     item =>
       item.skillLevelBridge.status === 'skillsub-element-level-bridge-missing'
   );
+  const alignmentSummaries = fieldMappings.map(
+    item => item.skillLevelBridge.formulaParamAlignment
+  );
 
   return {
     schemaVersion: 1,
@@ -2401,6 +2416,18 @@ function buildDamageElementFieldMappingEvidence({
         (sum, item) => sum + item.skillLevelBridge.levelRows,
         0
       ),
+      valueParamFormulaSlotDirectMatchObjects: alignmentSummaries.filter(
+        item => (item?.directSlotMatchParamIds ?? []).length > 0
+      ).length,
+      valueParamFormulaSlotOverrideCandidateObjects:
+        alignmentSummaries.filter(
+          item => (item?.overrideCandidateParamIds ?? []).length > 0
+        ).length,
+      valueParamFormulaSlotUnresolvedObjects: alignmentSummaries.filter(
+        item =>
+          item?.status ===
+          'same-element-id-found-slot-alignment-unverified'
+      ).length,
     },
     skills,
   };
@@ -2610,6 +2637,11 @@ function buildDamageElementSkillLevelBridge(
   const firstLevelDirectSlotMatches = (firstLevel?.paramPairs ?? [])
     .filter(pair => pair.directSlotMatch)
     .map(pair => pair.id);
+  const formulaParamAlignment = buildFormulaParamAlignmentSummary({
+    levels,
+    formulaParamValues,
+    parameterIds,
+  });
 
   return {
     status:
@@ -2624,15 +2656,164 @@ function buildDamageElementSkillLevelBridge(
     firstLevel,
     lastLevel: levels.length > 0 ? levels[levels.length - 1] : null,
     formulaParamAlignment: {
-      status:
-        levels.length > 0
-          ? 'same-element-id-found-slot-alignment-unverified'
-          : 'same-element-id-not-found-in-current-skill-level-values',
+      ...formulaParamAlignment,
       firstLevelDirectSlotMatches,
       firstLevelMismatches,
       note:
         'skillsub_ele_value.valueParam can bridge element IDs to level-scaling rows, but slot overrides/scaling must be validated before final damage math.',
     },
+  };
+}
+
+function buildFormulaParamAlignmentSummary({
+  levels,
+  formulaParamValues,
+  parameterIds,
+}) {
+  if (levels.length === 0) {
+    return {
+      status: 'same-element-id-not-found-in-current-skill-level-values',
+      parameterSummaries: [],
+      directSlotMatchParamIds: [],
+      overrideCandidateParamIds: [],
+      missingFormulaSlotParamIds: [],
+      conclusion: 'no-skill-level-bridge-for-formula-param-check',
+    };
+  }
+
+  const parameterSummaries = parameterIds.map(paramId =>
+    buildFormulaParamAlignmentParameterSummary({
+      paramId,
+      levels,
+      formulaParamValues,
+    })
+  );
+  const directSlotMatchParamIds = parameterSummaries
+    .filter(item => item.relationStatus === 'constant-direct-slot-match')
+    .map(item => item.id);
+  const overrideCandidateParamIds = parameterSummaries
+    .filter(item =>
+      [
+        'level-scaling-override-candidate',
+        'constant-override-candidate',
+      ].includes(item.relationStatus)
+    )
+    .map(item => item.id);
+  const missingFormulaSlotParamIds = parameterSummaries
+    .filter(item => item.relationStatus === 'missing-formula-slot')
+    .map(item => item.id);
+
+  return {
+    status: 'same-element-id-found-slot-alignment-unverified',
+    parameterSummaries,
+    directSlotMatchParamIds,
+    overrideCandidateParamIds,
+    missingFormulaSlotParamIds,
+    conclusion:
+      overrideCandidateParamIds.length > 0
+        ? 'slot-override-candidate-unconfirmed'
+        : directSlotMatchParamIds.length > 0
+          ? 'direct-slot-match-only-unconfirmed'
+          : 'slot-alignment-unresolved',
+  };
+}
+
+function buildFormulaParamAlignmentParameterSummary({
+  paramId,
+  levels,
+  formulaParamValues,
+}) {
+  const formulaParamValue = formulaParamValues[paramId - 1];
+  const rows = levels.flatMap(level =>
+    level.paramPairs
+      .filter(pair => Number(pair.id) === Number(paramId))
+      .map(pair => ({
+        level: level.level,
+        rowId: level.rowId,
+        value: pair.value,
+        directSlotMatch: pair.directSlotMatch,
+      }))
+  );
+  const values = rows.map(row => row.value).filter(Number.isFinite);
+  const uniqueValues = uniqueNumbers(values);
+  const directSlotMatchLevels = rows
+    .filter(row => row.directSlotMatch)
+    .map(row => row.level);
+  const mismatchLevels = rows
+    .filter(row => !row.directSlotMatch)
+    .map(row => row.level);
+  const isConstantAcrossLevels = uniqueValues.length <= 1;
+  const hasFormulaSlot = Number.isFinite(formulaParamValue);
+  const relationStatus = determineFormulaParamRelationStatus({
+    hasFormulaSlot,
+    isConstantAcrossLevels,
+    directSlotMatchLevels,
+    mismatchLevels,
+  });
+
+  return {
+    id: Number(paramId),
+    variable: paramIdToFormulaVariable(paramId),
+    formulaParamValue: hasFormulaSlot ? formulaParamValue : null,
+    levelRows: rows.length,
+    minValue: values.length > 0 ? Math.min(...values) : null,
+    maxValue: values.length > 0 ? Math.max(...values) : null,
+    firstLevelValue: rows[0]?.value ?? null,
+    lastLevelValue: rows.at(-1)?.value ?? null,
+    uniqueValues,
+    isConstantAcrossLevels,
+    directSlotMatchLevels,
+    mismatchLevels,
+    directSlotMatchCount: directSlotMatchLevels.length,
+    mismatchCount: mismatchLevels.length,
+    progression: summarizeNumericProgression(rows),
+    relationStatus,
+    interpretation:
+      FORMULA_PARAM_RELATION_INTERPRETATIONS[relationStatus] ??
+      'Formula slot relation is unresolved.',
+  };
+}
+
+function determineFormulaParamRelationStatus({
+  hasFormulaSlot,
+  isConstantAcrossLevels,
+  directSlotMatchLevels,
+  mismatchLevels,
+}) {
+  if (!hasFormulaSlot) {
+    return 'missing-formula-slot';
+  }
+  if (directSlotMatchLevels.length > 0 && mismatchLevels.length === 0) {
+    return 'constant-direct-slot-match';
+  }
+  if (mismatchLevels.length > 0 && !isConstantAcrossLevels) {
+    return 'level-scaling-override-candidate';
+  }
+  if (mismatchLevels.length > 0) {
+    return 'constant-override-candidate';
+  }
+  return 'slot-alignment-unresolved';
+}
+
+function summarizeNumericProgression(rows) {
+  if (rows.length < 2) {
+    return {
+      status: 'insufficient-level-rows',
+      step: null,
+      isArithmetic: false,
+    };
+  }
+
+  const deltas = rows
+    .slice(1)
+    .map((row, index) => row.value - rows[index].value)
+    .filter(Number.isFinite);
+  const uniqueDeltas = uniqueNumbers(deltas);
+  return {
+    status: uniqueDeltas.length === 1 ? 'arithmetic-progression' : 'mixed',
+    step: uniqueDeltas.length === 1 ? uniqueDeltas[0] : null,
+    uniqueDeltas,
+    isArithmetic: uniqueDeltas.length === 1,
   };
 }
 

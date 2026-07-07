@@ -2354,6 +2354,35 @@ Endaxis 参考边界：
 - 优先比较末音 `109001081` / `109001306` 的 1-12 级 `valueParam` 与 `formulaParamValues` 槽位，确认参数 1、7 是否覆盖 A/G 槽或另有公式入口。
 - 若缩放关系仍不能确认，继续从 `element_formula`、IL2CPP `DamageElement` 运行时字段和 Extractor 侧 typetree 中寻找实际公式执行链。
 
+### 2026-07-08：阶段 5-8O valueParam 与 formulaParamValues 槽位关系诊断落地
+
+本轮完成：
+
+- `damageElementFieldMappingEvidence.summary` 新增 `valueParamFormulaSlotDirectMatchObjects`、`valueParamFormulaSlotOverrideCandidateObjects`、`valueParamFormulaSlotUnresolvedObjects`。
+- `skillLevelBridge.formulaParamAlignment` 新增参数级 `parameterSummaries`，记录每个 `valueParam` 参数与同编号 `formulaParamValues` 槽位的关系、等级范围、是否常量、直连等级、错配等级和数值递增规律。
+- 末音 `10900101` 的 `109001081` / `109001306` 都得到同样结论：参数 `1 / A` 在 1-12 级从 `1600` 到 `3360`，每级 +160，而对象内 `formulaParamValues[0]` 固定为 `1000`，因此标记为 `level-scaling-override-candidate`。
+- 参数 `7 / G` 在 1-12 级恒为 `10000`，与对象内 `formulaParamValues[6] = 10000` 每级直连匹配，因此标记为 `constant-direct-slot-match`。
+- `109001251` 仍没有同 elementId 的技能等级桥接，因此 `formulaParamAlignment.conclusion = no-skill-level-bridge-for-formula-param-check`。
+
+验收结果：
+
+- `npm run data:generate`：通过，重新生成 `skill-asset-evidence.json` 和相关 generated 数据。
+- `npm run test -- --run src/__tests__/data/azprGenerated.test.js`：通过，1 个测试文件、9 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1383 KB。
+
+当前边界：
+
+- `level-scaling-override-candidate` 说明 `valueParam` 很可能覆盖同编号公式槽位，但尚未证明公式执行顺序或最终倍率单位。
+- `constant-direct-slot-match` 只证明同编号槽位的数值一致，不代表该槽一定参与最终公式。
+- 当前仍未把参数 1/7 的关系接入运行时 `sourceEvidence` 展示，也未生成可读的未应用公式候选表达式。
+
+下一步：
+
+- 阶段 5-8P 目标：把 `formulaParamAlignment.parameterSummaries` 接入 `actionResultTimeline[].sourceEvidence` 和 Workbench 展示层。
+- 为 HP 候选增加未应用公式候选视图，例如“槽 A 使用当前等级 valueParam 覆盖候选，槽 G 为常量匹配”，但仍保持 `applied: false`。
+- 随后继续追 `formulaParams.function_1/function_2` 与 `element_formula` / IL2CPP `DamageElement` 的实际公式执行链。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

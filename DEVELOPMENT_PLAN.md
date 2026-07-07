@@ -239,7 +239,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8L，新增 `externalElementObjectEvidence` 与 `resolve-azpr-element-objects.py`，把末音 `10900101` 的 8 个 `m_FileID = 2` external element PathID 全部解析到 `battle_element_assets` 对象本体；当前确认 3 个 `TDamageElementParams`、2 个 `TFxElementParams`、2 个 `TFreezeFrameElementParams`、1 个 `TBuffElementParams`。
 - 已完成：阶段 5-8M，新增 `damageElementFieldMappingEvidence`，把 `TDamageElementParams` 的 `formulaParams`、`weakBreakDamageRate`、`recoverSP/petRecoverSP` 分别映射到 HP 伤害、敌人韧性削减、自身能量变化三条候选链；末音 `10900101` 的 3 个 damage element 均完成字段映射，其中 `109001081` / `109001306` 已桥接到 12 行 `skillsub_ele_value.valueParam` 等级值。
 - 已完成：阶段 5-8N，把 `damageElementFieldMappingEvidence` 接入 `actionResultTimeline[]` 的 `sourceEvidence` 层和 Workbench 分析面板“三值来源”展示；末音 `10900101` 当前动作可显示 HP、削韧、充能候选 elementId `109001081 / 109001306`，并保留 `109001251` 未桥接记录。
-- 下一步：阶段 5-8O，验证 `skillsub_ele_value.valueParam` 与 `TDamageElementParams.formulaParamValues` 的缩放/覆盖关系，优先确认参数 1、7 与公式槽 A/G 的真实关系，再决定是否能把候选字段推进到可应用公式层。
+- 已完成：阶段 5-8O，新增 `formulaParamAlignment.parameterSummaries`，确认末音 `109001081 / 109001306` 的参数 `1 / A` 是 1-12 级线性增长的等级覆盖候选，参数 `7 / G` 是 1-12 级恒定的同槽直连匹配；这些仍是公式槽位关系证据，不是最终公式应用。
+- 下一步：阶段 5-8P，把 `formulaParamAlignment.parameterSummaries` 接入 `actionResultTimeline[].sourceEvidence` 和 Workbench 展示层，形成未应用 HP 公式候选视图，再继续追 `formulaParams.function_1/function_2` 与 `element_formula` / IL2CPP `DamageElement` 的实际执行链。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 
