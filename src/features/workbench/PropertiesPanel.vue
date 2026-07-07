@@ -22,6 +22,7 @@
       <label>
         <span>技能</span>
         <select
+          v-if="isSkillAction"
           data-testid="workbench-skill-select"
           :value="selectedAction.skillId"
           @change="emitActionPatch('skillId', $event.target.value)"
@@ -30,6 +31,7 @@
             {{ skill.name }}
           </option>
         </select>
+        <input v-else data-testid="workbench-action-type" :value="actionTypeLabel" disabled />
       </label>
 
       <label>
@@ -63,6 +65,7 @@
       <label>
         <span>技能等级</span>
         <input
+          v-if="isSkillAction"
           type="number"
           data-testid="workbench-level-input"
           min="1"
@@ -71,11 +74,28 @@
           :value="selectedAction.level"
           @input="emitActionPatch('level', $event.target.value)"
         />
+        <input
+          v-else
+          type="number"
+          data-testid="workbench-duration-input"
+          min="1"
+          :value="selectedAction.durationMs"
+          @input="emitActionPatch('durationMs', $event.target.value)"
+        />
       </label>
     </div>
 
+    <label class="note-control">
+      <span>备注</span>
+      <textarea
+        data-testid="workbench-note-input"
+        :value="selectedAction.note"
+        @input="emitTextPatch('note', $event.target.value)"
+      />
+    </label>
+
     <p class="selection-note">
-      当前动作：{{ selectedAction.name }} / {{ selectedAction.damageModel.values[0] ?? '倍率待补' }}
+      当前动作：{{ selectedAction.name }} / {{ selectedActionSummary }}
     </p>
   </section>
 </template>
@@ -116,6 +136,25 @@ const emit = defineEmits(['update-selection', 'update-action']);
 const maxSkillLevel = computed(() =>
   Math.max(1, props.selectedAction.source?.skill?.level?.values?.length ?? props.selectedAction.level ?? 1),
 );
+const isSkillAction = computed(() => props.selectedAction.type === 'skill');
+const actionTypeLabel = computed(() => {
+  if (props.selectedAction.type === 'wait') {
+    return '等待动作';
+  }
+  if (props.selectedAction.type === 'annotation') {
+    return '注释动作';
+  }
+  return '技能动作';
+});
+const selectedActionSummary = computed(() => {
+  if (isSkillAction.value) {
+    return props.selectedAction.damageModel?.values?.[0] ?? '倍率待补';
+  }
+  if (props.selectedAction.type === 'wait') {
+    return `${props.selectedAction.durationMs ?? 0}ms`;
+  }
+  return props.selectedAction.note || '备注';
+});
 
 function emitSelection(key, value) {
   emit('update-selection', {
@@ -133,6 +172,12 @@ function emitActionPatch(key, value) {
     patch.level = 1;
   }
   emit('update-action', patch);
+}
+
+function emitTextPatch(key, value) {
+  emit('update-action', {
+    [key]: value,
+  });
 }
 </script>
 
@@ -175,6 +220,10 @@ h2 {
   padding-top: 0;
 }
 
+.note-control {
+  padding: 0 14px 14px;
+}
+
 label {
   display: grid;
   gap: 6px;
@@ -187,7 +236,8 @@ label span {
 }
 
 select,
-input {
+input,
+textarea {
   width: 100%;
   min-width: 0;
   padding: 8px 9px;
@@ -199,10 +249,16 @@ input {
 }
 
 select:focus,
-input:focus {
+input:focus,
+textarea:focus {
   outline: none;
   border-color: #79c7b9;
   box-shadow: 0 0 0 2px rgba(121, 199, 185, 0.14);
+}
+
+textarea {
+  min-height: 72px;
+  resize: vertical;
 }
 
 .selection-note {

@@ -85,4 +85,38 @@ describe('first vertical slice simulation', () => {
       result.damageTimeline.reduce((sum, entry) => sum + entry.rawDamage, 0),
     );
   });
+
+  it('keeps wait and annotation actions in the event log without projecting damage', () => {
+    const project = createWorkbenchProject(
+      {},
+      {
+        actions: [
+          { id: 'action-skill', type: 'skill', skillId: 10900101, startMs: 0, level: 1 },
+          { id: 'action-wait', type: 'wait', startMs: 1000, durationMs: 1500, note: '等技能冷却' },
+          { id: 'action-note', type: 'annotation', startMs: 3000, note: '准备爆发' },
+        ],
+      },
+    );
+    const result = runSimulation(project, getWorkbenchGameData());
+    const waitEvent = result.eventLog.find((event) => event.type === 'WAIT');
+    const annotationEvent = result.eventLog.find((event) => event.type === 'ANNOTATION');
+
+    expect(result.summary.actionCount).toBe(3);
+    expect(result.summary.projectedHitCount).toBe(1);
+    expect(result.damageTimeline).toHaveLength(1);
+    expect(result.eventLog.map((event) => event.type)).not.toContain('DAMAGE_SKIPPED');
+    expect(waitEvent).toMatchObject({
+      actionId: 'action-wait',
+      payload: {
+        durationMs: 1500,
+        note: '等技能冷却',
+      },
+    });
+    expect(annotationEvent).toMatchObject({
+      actionId: 'action-note',
+      payload: {
+        note: '准备爆发',
+      },
+    });
+  });
 });

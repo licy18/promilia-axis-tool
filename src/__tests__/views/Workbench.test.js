@@ -154,6 +154,39 @@ describe('Workbench view', () => {
     expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe('有未保存改动');
   });
 
+  it('adds wait and annotation actions without projecting extra damage', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper.find('[data-testid="workbench-add-wait-action"]').trigger('click');
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('2 action');
+    expect(wrapper.find('[data-testid="scenario-hit-count"]').text()).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-action-type"]').element.value).toBe('等待动作');
+    expect(wrapper.find('[data-testid="workbench-duration-input"]').element.value).toBe('1000');
+
+    await wrapper.find('[data-testid="workbench-duration-input"]').setValue('1500');
+    await wrapper.find('[data-testid="workbench-note-input"]').setValue('等技能冷却');
+    expect(wrapper.text()).toContain('WAIT');
+    expect(wrapper.text()).toContain('1500ms / 等技能冷却');
+
+    await wrapper.find('[data-testid="workbench-add-annotation-action"]').trigger('click');
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('3 action');
+    expect(wrapper.find('[data-testid="scenario-hit-count"]').text()).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-action-type"]').element.value).toBe('注释动作');
+
+    await wrapper.find('[data-testid="workbench-note-input"]').setValue('准备爆发');
+    expect(wrapper.text()).toContain('ANNOTATION');
+    expect(wrapper.text()).toContain('准备爆发');
+    expect(wrapper.text()).not.toContain('DAMAGE_SKIPPED');
+  });
+
   it('keeps generated action ids unique after deleting the first action', async () => {
     const wrapper = mount(Workbench, {
       global: {

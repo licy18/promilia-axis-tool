@@ -55,7 +55,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；10 个测试文件、57 条测试通过。
+- `npm run test -- --run`：通过；10 个测试文件、59 条测试通过。
 
 ## 3. 目录速览
 
@@ -725,6 +725,44 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 先支持等待动作和注释动作，进入同一 `actionDrafts -> Project -> simulation` 链路。
 - 让 ActionLibrary 从“技能动作列表”扩展为“动作工具箱”，为后续切人、敌人事件、资源事件留接口。
 - 继续保持非技能动作在 simulation 中有明确事件日志和不伪造伤害。
+
+### 2026-07-07：阶段 4-6 工作台动作类型和工具箱雏形落地
+
+本轮完成：
+
+- `src/domain/projectSchema.js` 增加 `createWaitAction()` 和 `createAnnotationAction()`，等待动作校验 `durationMs`，注释动作校验 `note`。
+- `src/domain/workbenchProjectFactory.js` 扩展 `actionDrafts[]`，草稿现在保留 `type`、`durationMs` 和 `note`，并可生成技能、等待、注释三类新版 `Project.actions[]`。
+- `ActionLibraryPanel` 从单一“+ 动作”扩展为动作工具箱，提供“+ 技能”“+ 等待”“+ 注释”三个入口。
+- `PropertiesPanel` 支持非技能动作的类型展示、持续时间和备注编辑。
+- `simulateScenario()` 对等待和注释动作输出 `WAIT` / `ANNOTATION` 事件，并跳过伤害、冷却、资源消耗和 `DAMAGE_SKIPPED`。
+- `EventLogPanel` 增加等待和注释事件展示。
+- 新增运行时和工作台测试，覆盖等待/注释不产生额外伤害投射。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、15 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、59 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- 浏览器检查 `http://127.0.0.1:5175/#/workbench`：
+  - 新增等待动作后动作数为 2，命中数仍为 1。
+  - 将等待持续时间改为 `1500ms`、备注改为“等技能冷却”后，事件日志出现 `WAIT 1500ms / 等技能冷却`。
+  - 新增注释动作后动作数为 3，命中数仍为 1。
+  - 注释备注改为“准备爆发”后，事件日志出现 `ANNOTATION 准备爆发`。
+  - 非技能动作没有产生 `DAMAGE_SKIPPED`，应用控制台无 error。
+  - 验证结束后已重置 workbench 草稿。
+
+当前结论：
+
+- 新版工作台已具备最小动作工具箱，不再只有技能动作。
+- 等待和注释已经进入统一项目模型与模拟事件日志，但不会被误算为伤害动作。
+- 仍未支持切人、敌人事件、资源事件、多轨道或资源曲线。
+
+下一步：
+
+- 阶段 4-7 目标：补齐敌人与资源面板雏形。
+- 新增 `EnemyPanel`，先展示/编辑敌人等级、生命/防御倍率等最小场景参数，并继续通过 `Project -> simulation` 生效。
+- 新增 `ResourceMonitor` 雏形，先读取 `simulationResult.resourceTimeline` 和诊断信息，不在 UI 中自行编造资源计算。
+- 为后续资源事件、敌人事件和 Boss 机制动作预留 action 类型入口与测试。
 
 ## 10. 文档维护规则
 

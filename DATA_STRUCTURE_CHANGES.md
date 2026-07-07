@@ -42,8 +42,20 @@
 - 用途：阶段 3 `src/simulation/` 的 compiler / engine / projection 输入样本。
 - 当前快照文件：`src/data/generated/first-vertical-slice.json`。该文件由 `npm run data:generate` 输出，供工作台和测试读取，避免首屏加载全量生成数据。
 - 当前工作台 seed：`src/data/generated/workbench-seed.json`。该文件由 `npm run data:generate` 输出，包含 20 个角色、120 个技能和 199 个带战斗属性的敌人，字段已裁剪到工作台与运行时当前需要的范围。
-- 当前工作台动作草稿：`src/domain/workbenchProjectFactory.js` 使用 `actionDrafts[]` 生成新版 `Project.actions[]`。每个草稿包含 `id`、`skillId`、`startMs`、`level`，并在生成项目时汇总为 actor 的 `skillLevels` 和 `metadata.sourceSkillIds`。
+- 当前工作台动作草稿：`src/domain/workbenchProjectFactory.js` 使用 `actionDrafts[]` 生成新版 `Project.actions[]`。每个草稿包含 `id`、`type`、`skillId`、`startMs`、`durationMs`、`level`、`note`；技能草稿在生成项目时汇总为 actor 的 `skillLevels` 和 `metadata.sourceSkillIds`。
 - 当前工作台草稿存储：`src/domain/workbenchDraftStorage.js` 使用 `schemaVersion: 1` 的 `workbench-draft` 保存 `selection`、`actionDrafts`、`selectedActionId` 和 `savedAt`。该草稿是新版 workbench 专用状态，不包含旧 `skillBlocks`。
+
+### 当前动作类型
+
+`Project.actions[]` 当前已支持以下动作类型：
+
+| 类型 | 用途 | 当前运行时行为 |
+| --- | --- | --- |
+| `skill` | 真实角色技能动作 | 进入伤害投影、冷却、资源消耗和时序缺口日志 |
+| `wait` | 排轴中的等待窗口 | 输出 `WAIT` 事件，记录 `durationMs` 和 `note`，不投射伤害 |
+| `annotation` | 排轴备注/阶段标记 | 输出 `ANNOTATION` 事件，记录 `note`，不投射伤害 |
+
+`switch`、`enemyEvent` 和 `resource` 已在 `ACTION_TYPES` 中预留，但尚未接入工作台和运行时。
 
 ## 2026-07-07：最小模拟运行时输出
 

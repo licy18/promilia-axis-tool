@@ -1,9 +1,12 @@
 import workbenchSeed from '../data/generated/workbench-seed.json';
 import {
+  ACTION_TYPES,
   createActorFromCharacter,
+  createAnnotationAction,
   createEnemyFromData,
   createProject,
   createSkillAction,
+  createWaitAction,
 } from './projectSchema';
 
 export const DEFAULT_WORKBENCH_SELECTION = Object.freeze({
@@ -28,15 +31,21 @@ export function getSkillsForCharacter(characterId) {
 
 export function createWorkbenchActionDraft({
   id = DEFAULT_WORKBENCH_ACTION_ID,
+  type = ACTION_TYPES.SKILL,
   skillId = DEFAULT_WORKBENCH_SELECTION.skillId,
   startMs = 0,
+  durationMs = 1000,
   level = 1,
+  note = '',
 } = {}) {
   return {
     id,
+    type,
     skillId: Number(skillId),
     startMs: Number(startMs) || 0,
+    durationMs: Math.max(1, Number(durationMs) || 1000),
     level: Math.max(1, Number(level) || 1),
+    note,
   };
 }
 
@@ -68,7 +77,8 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     throw new Error('Workbench seed cannot resolve selected character, skill, or enemy');
   }
 
-  const skillLevels = Object.fromEntries(actionDrafts.map((draft) => [draft.skillId, draft.level]));
+  const skillDrafts = actionDrafts.filter((draft) => draft.type === ACTION_TYPES.SKILL);
+  const skillLevels = Object.fromEntries(skillDrafts.map((draft) => [draft.skillId, draft.level]));
   const actor = createActorFromCharacter(character, {
     actorId: `actor-${character.id}`,
     level: actionPatch.actorLevel ?? 80,
@@ -78,31 +88,22 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     enemyInstanceId: `enemy-${enemy.id}`,
     level: actionPatch.enemyLevel ?? 80,
   });
-  const firstSkill = findById(workbenchSeed.gameData.skills, actionDrafts[0].skillId);
+  const titleAction = actionDrafts[0];
+  const firstSkill = findById(workbenchSeed.gameData.skills, titleAction.skillId);
+  const titleActionName = titleAction.type === ACTION_TYPES.SKILL ? firstSkill.name : actionTypeLabel(titleAction.type);
 
   return createProject({
     id: 'workbench-editable-slice',
-    name: `工作台：${character.name} / ${firstSkill.name} / ${enemy.name}`,
+    name: `工作台：${character.name} / ${titleActionName} / ${enemy.name}`,
     durationMs: actionPatch.durationMs ?? 30000,
     actors: [actor],
     enemy: enemyInstance,
-    actions: actionDrafts.map((draft) => {
-      const skill = findById(workbenchSeed.gameData.skills, draft.skillId);
-      return createSkillAction({
-        id: draft.id,
-        actorId: actor.id,
-        skill,
-        targetId: enemyInstance.id,
-        startMs: draft.startMs,
-        level: draft.level,
-        note: '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
-      });
-    }),
+    actions: actionDrafts.map((draft) => createProjectActionFromDraft(draft, actor.id, enemyInstance.id)),
     metadata: {
       fixture: false,
       fixturePurpose: 'stage-4-editable-workbench',
       sourceCharacterId: character.id,
-      sourceSkillIds: actionDrafts.map((draft) => draft.skillId),
+      sourceSkillIds: skillDrafts.map((draft) => draft.skillId),
       sourceEnemyId: enemy.id,
     },
   });
@@ -114,16 +115,72 @@ export function normalizeWorkbenchActionDrafts(actionDrafts = [], characterId = 
 
   return actionDrafts
     .map((draft, index) => {
+      if (draft.type === ACTION_TYPES.WAIT || draft.type === ACTION_TYPES.ANNOTATION) {
+        return createWorkbenchActionDraft({
+          id: draft.id ?? `action-${String(index + 1).padStart(4, '0')}`,
+          type: draft.type,
+          skillId: draft.skillId ?? fallbackSkill.id,
+          startMs: draft.startMs,
+          durationMs: draft.durationMs,
+          level: draft.level,
+          note: draft.note,
+        });
+      }
+
       const requestedSkill = findById(skills, draft.skillId);
       const skill = requestedSkill ?? fallbackSkill;
       return createWorkbenchActionDraft({
         id: draft.id ?? `action-${String(index + 1).padStart(4, '0')}`,
+        type: ACTION_TYPES.SKILL,
         skillId: skill.id,
         startMs: draft.startMs,
+        durationMs: draft.durationMs,
         level: clampLevel(draft.level, skill),
+        note: draft.note,
       });
     })
-    .filter((draft) => findById(workbenchSeed.gameData.skills, draft.skillId));
+    .filter((draft) => draft.type !== ACTION_TYPES.SKILL || findById(workbenchSeed.gameData.skills, draft.skillId));
+}
+
+function createProjectActionFromDraft(draft, actorId, targetId) {
+  if (draft.type === ACTION_TYPES.WAIT) {
+    return createWaitAction({
+      id: draft.id,
+      startMs: draft.startMs,
+      durationMs: draft.durationMs,
+      note: draft.note || '等待窗口',
+    });
+  }
+
+  if (draft.type === ACTION_TYPES.ANNOTATION) {
+    return createAnnotationAction({
+      id: draft.id,
+      startMs: draft.startMs,
+      note: draft.note || '备注',
+    });
+  }
+
+  const skill = findById(workbenchSeed.gameData.skills, draft.skillId);
+  return createSkillAction({
+    id: draft.id,
+    actorId,
+    skill,
+    targetId,
+    startMs: draft.startMs,
+    durationMs: draft.durationMs,
+    level: draft.level,
+    note: draft.note || '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
+  });
+}
+
+function actionTypeLabel(type) {
+  if (type === ACTION_TYPES.WAIT) {
+    return '等待';
+  }
+  if (type === ACTION_TYPES.ANNOTATION) {
+    return '注释';
+  }
+  return '动作';
 }
 
 function clampLevel(level, skill) {

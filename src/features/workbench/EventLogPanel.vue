@@ -30,10 +30,16 @@ function formatPayload(event) {
     return `${event.payload.skillName} / ${event.payload.segment.label} / ${event.payload.rawDamage}`;
   }
   if (event.type === 'ACTION_START') {
-    return `${event.payload.actorName} -> ${event.payload.actionName}`;
+    return event.payload.actorName ? `${event.payload.actorName} -> ${event.payload.actionName}` : event.payload.actionName;
   }
   if (event.type === 'TIMING_DATA_MISSING') {
     return event.payload.timingSource;
+  }
+  if (event.type === 'WAIT') {
+    return `${event.payload.durationMs}ms / ${event.payload.note}`;
+  }
+  if (event.type === 'ANNOTATION') {
+    return event.payload.note;
   }
   if (event.type === 'SCENARIO_START') {
     return event.payload.projectName;
@@ -117,6 +123,12 @@ li {
 .type.damage_projected {
   background: rgba(103, 194, 58, 0.12);
   color: #9bd982;
+}
+
+.type.wait,
+.type.annotation {
+  background: rgba(144, 147, 153, 0.14);
+  color: #c8cdd3;
 }
 
 .payload {

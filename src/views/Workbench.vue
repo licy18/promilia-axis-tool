@@ -38,6 +38,8 @@
         :selected-action-id="selectedActionId"
         @select-action="selectedActionId = $event"
         @add-action="addAction"
+        @add-annotation-action="addAnnotationAction"
+        @add-wait-action="addWaitAction"
         @copy-action="copyAction"
         @delete-action="deleteAction"
       />
@@ -99,6 +101,7 @@ import {
   normalizeWorkbenchActionDrafts,
   normalizeWorkbenchSelection,
 } from '../domain/workbenchProjectFactory';
+import { ACTION_TYPES } from '../domain/projectSchema';
 import {
   clearWorkbenchDraft,
   createDefaultWorkbenchDraftState,
@@ -163,6 +166,15 @@ function updateAction(patch) {
       return action;
     }
 
+    if (action.type !== ACTION_TYPES.SKILL) {
+      return createWorkbenchActionDraft({
+        ...action,
+        ...patch,
+        startMs: clampNumber(patch.startMs ?? action.startMs, 0, project.value.time.durationMs),
+        durationMs: clampNumber(patch.durationMs ?? action.durationMs, 1, project.value.time.durationMs),
+      });
+    }
+
     const nextSkillId = patch.skillId ?? action.skillId;
     const skill = findSkillById(nextSkillId) ?? findSkillById(action.skillId);
     const nextLevel = patch.skillId != null ? 1 : patch.level ?? action.level;
@@ -200,6 +212,40 @@ function addAction() {
     skillId: selectedDraft.value.skillId,
     startMs: clampNumber((lastAction?.startMs ?? 0) + 2000, 0, project.value.time.durationMs),
     level: selectedDraft.value.level,
+  });
+
+  actionDrafts.value = [...actionDrafts.value, nextAction];
+  selectedActionId.value = nextAction.id;
+  markDraftDirty();
+}
+
+function addWaitAction() {
+  const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
+  const nextAction = createWorkbenchActionDraft({
+    id: createNextActionId(),
+    type: ACTION_TYPES.WAIT,
+    skillId: selectedDraft.value.skillId,
+    startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
+    durationMs: 1000,
+    level: selectedDraft.value.level,
+    note: '等待窗口',
+  });
+
+  actionDrafts.value = [...actionDrafts.value, nextAction];
+  selectedActionId.value = nextAction.id;
+  markDraftDirty();
+}
+
+function addAnnotationAction() {
+  const lastAction = actionDrafts.value[actionDrafts.value.length - 1];
+  const nextAction = createWorkbenchActionDraft({
+    id: createNextActionId(),
+    type: ACTION_TYPES.ANNOTATION,
+    skillId: selectedDraft.value.skillId,
+    startMs: clampNumber((lastAction?.startMs ?? 0) + 1000, 0, project.value.time.durationMs),
+    durationMs: 600,
+    level: selectedDraft.value.level,
+    note: '备注',
   });
 
   actionDrafts.value = [...actionDrafts.value, nextAction];

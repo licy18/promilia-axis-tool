@@ -1,5 +1,6 @@
 import { createRawDamageProjection } from '../mechanics/damage';
 import { projectSimulationResult } from '../projection/projectSimulationResult';
+import { ACTION_TYPES } from '../../domain/projectSchema';
 
 export function simulateScenario(scenario) {
   const eventLog = [
@@ -18,6 +19,12 @@ export function simulateScenario(scenario) {
 
   for (const action of scenario.actions) {
     eventLog.push(createActionStartEvent(action));
+
+    const nonCombatEvent = createNonCombatEvent(action);
+    if (nonCombatEvent) {
+      eventLog.push(nonCombatEvent);
+      continue;
+    }
 
     if (action.timing?.needsTimingData) {
       eventLog.push({
@@ -95,6 +102,35 @@ export function simulateScenario(scenario) {
   });
 }
 
+function createNonCombatEvent(action) {
+  if (action.type === ACTION_TYPES.WAIT) {
+    return {
+      type: 'WAIT',
+      timeMs: action.startMs,
+      actionId: action.id,
+      payload: {
+        actionName: action.name,
+        durationMs: action.durationMs,
+        note: action.note,
+      },
+    };
+  }
+
+  if (action.type === ACTION_TYPES.ANNOTATION) {
+    return {
+      type: 'ANNOTATION',
+      timeMs: action.startMs,
+      actionId: action.id,
+      payload: {
+        actionName: action.name,
+        note: action.note,
+      },
+    };
+  }
+
+  return null;
+}
+
 function createActionStartEvent(action) {
   return {
     type: 'ACTION_START',
@@ -103,6 +139,7 @@ function createActionStartEvent(action) {
     actorId: action.actorId,
     payload: {
       actionName: action.name,
+      actionType: action.type,
       skillId: action.skillId,
       actorName: action.actor?.name,
       targetId: action.target?.id,
@@ -145,7 +182,9 @@ function eventPriority(type) {
     RESOURCE_CHANGE: 3,
     COOLDOWN_START: 4,
     DAMAGE_PROJECTED: 5,
-    DAMAGE_SKIPPED: 6,
+    WAIT: 6,
+    ANNOTATION: 7,
+    DAMAGE_SKIPPED: 8,
     SCENARIO_END: 99,
   };
 

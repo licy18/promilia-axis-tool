@@ -41,7 +41,7 @@ export function compileProject(project, gameData) {
     diagnostics: {
       validationWarnings: validation.warnings,
       missingTimingActionIds: actions
-        .filter((action) => action.timing.needsTimingData)
+        .filter((action) => action.timing?.needsTimingData)
         .map((action) => action.id),
     },
   };

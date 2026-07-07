@@ -158,6 +158,37 @@ export function createSkillAction({
   };
 }
 
+export function createWaitAction({
+  id,
+  startMs = 0,
+  durationMs = 1000,
+  note = '等待',
+} = {}) {
+  return {
+    id: id ?? createStableId('action'),
+    type: ACTION_TYPES.WAIT,
+    name: '等待',
+    startMs,
+    durationMs,
+    note,
+  };
+}
+
+export function createAnnotationAction({
+  id,
+  startMs = 0,
+  note = '备注',
+} = {}) {
+  return {
+    id: id ?? createStableId('action'),
+    type: ACTION_TYPES.ANNOTATION,
+    name: '注释',
+    startMs,
+    durationMs: 600,
+    note,
+  };
+}
+
 export function validateProject(project, gameData = {}) {
   const errors = [];
   const warnings = [];
@@ -309,6 +340,12 @@ function validateActions(actions, project, gameData, errors, warnings) {
           issue('action.timing.missing', 'Skill action still needs authoritative timing data', `${path}.timing`),
         );
       }
+    } else if (action.type === ACTION_TYPES.WAIT) {
+      if (!Number.isFinite(action.durationMs) || action.durationMs <= 0) {
+        errors.push(issue('action.durationMs.invalid', 'Wait action durationMs must be positive', `${path}.durationMs`));
+      }
+    } else if (action.type === ACTION_TYPES.ANNOTATION && typeof action.note !== 'string') {
+      errors.push(issue('action.note.invalid', 'Annotation action note must be a string', `${path}.note`));
     }
   });
 }

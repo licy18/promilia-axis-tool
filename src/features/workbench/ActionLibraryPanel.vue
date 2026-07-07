@@ -3,8 +3,22 @@
     <div class="panel-title">
       <Collection class="panel-icon" />
       <h2>动作库</h2>
-      <button class="icon-button add-button" data-testid="workbench-add-action" type="button" @click="$emit('add-action')">
-        + 动作
+    </div>
+
+    <div class="toolbox">
+      <button class="icon-button" data-testid="workbench-add-action" type="button" @click="$emit('add-action')">
+        + 技能
+      </button>
+      <button class="icon-button" data-testid="workbench-add-wait-action" type="button" @click="$emit('add-wait-action')">
+        + 等待
+      </button>
+      <button
+        class="icon-button"
+        data-testid="workbench-add-annotation-action"
+        type="button"
+        @click="$emit('add-annotation-action')"
+      >
+        + 注释
       </button>
     </div>
 
@@ -50,12 +64,12 @@
         </div>
         <dl>
           <div>
-            <dt>技能</dt>
-            <dd>{{ action.skillId }}</dd>
+            <dt>类型</dt>
+            <dd>{{ actionTypeLabel(action.type) }}</dd>
           </div>
           <div>
-            <dt>倍率</dt>
-            <dd>{{ action.selectedDamageSegment?.rawValue ?? '待补' }}</dd>
+            <dt>{{ action.type === 'skill' ? '倍率' : '时长' }}</dt>
+            <dd>{{ action.type === 'skill' ? action.selectedDamageSegment?.rawValue ?? '待补' : `${action.durationMs ?? 0}ms` }}</dd>
           </div>
           <div>
             <dt>冷却</dt>
@@ -66,8 +80,11 @@
             <dd>{{ action.spCost ?? '-' }}</dd>
           </div>
         </dl>
-        <p v-if="action.timing.needsTimingData" class="timing-note">
+        <p v-if="action.timing?.needsTimingData" class="timing-note">
           {{ action.timing.source }}
+        </p>
+        <p v-else-if="action.note" class="timing-note neutral">
+          {{ action.note }}
         </p>
       </article>
     </div>
@@ -92,7 +109,17 @@ defineProps({
   },
 });
 
-defineEmits(['select-action', 'add-action', 'copy-action', 'delete-action']);
+defineEmits(['select-action', 'add-action', 'add-wait-action', 'add-annotation-action', 'copy-action', 'delete-action']);
+
+function actionTypeLabel(type) {
+  if (type === 'wait') {
+    return '等待';
+  }
+  if (type === 'annotation') {
+    return '注释';
+  }
+  return '技能';
+}
 </script>
 
 <style scoped>
@@ -133,9 +160,16 @@ h2 {
 }
 
 .icon-button {
-  margin-left: auto;
   padding: 4px 8px;
   font-size: 12px;
+}
+
+.toolbox {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .action-tools {
@@ -249,5 +283,10 @@ dd {
   color: #efc574;
   font-size: 12px;
   overflow-wrap: anywhere;
+}
+
+.timing-note.neutral {
+  background: rgba(255, 255, 255, 0.06);
+  color: #b8c0c7;
 }
 </style>
