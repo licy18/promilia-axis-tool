@@ -57,6 +57,7 @@ npm run dev
 - 模拟结果必须按动作追踪三类数值变化：敌人 HP 伤害、敌人韧性削减、自身能量变化。当前 `actionResultTimeline[]` 已固定三槽结构；HP 使用现有 raw 投影，韧性和充能公式仍是待解析占位，不能混入 HP 伤害公式。
 - 数据生成器已建立 `combat-formula-evidence.json`：敌人属性链和元素减免字段来源可追溯，但 `skillsub_ele_value.elementId -> element_formula.id` 当前无直接匹配，仍需 asset/效果节点追踪。
 - 数据生成器已建立 `skill-asset-evidence.json`：`C:\PC2\Codex\AzPr` 当前没有 `Config/Battle/Skill`、`SkillPreload`、`SkillList` 实体资源时，应按项目规则使用 `C:\Codex\AzPr Extractor` 的 Unity 导出资源；当前 `SkillList` 中 4134 个 `skill_control_*.asset` 目录可用，120 个当前技能中 116 个已匹配，4 个 `*62` 技能缺失。
+- `skill-asset-evidence.json` 已新增 `effectLaneCandidateSummary` / `effectLaneCandidates`：用于按 HP 伤害、韧性削减、自身能量变化、元素效果、动作时序、表现资源分类 `skill_control` 候选轨道；这只是 JSON 解析后的名称/字符串模式候选，尚未解引用 `behaviorList` 或确认公式。
 - 若后续 AzPr 数据库中缺少游戏原始资源文件，优先在 `C:\Codex\AzPr Extractor` 继续导出或索引；表格/Lua 走 `raw_nostreaming_package` 导出流程，Unity 技能/动作/效果资源走 Extractor 的 Unity/default_package 导出结果。
 - 项目状态核心在 `src/store/project.js`。
 - 主编辑器在 `src/views/Editor.vue`，当前承担了大量 UI、交互和业务协调职责。
@@ -97,7 +98,7 @@ Endaxis 只作为架构和交互成熟度参考，不是蓝色星原数据来源
 
 ## 已知开发阶段
 
-当前已完成阶段 1-3 的最小闭环、阶段 4 工作台主链路、阶段 5-1 至 5-8G 的真实数据/数值/动作形态、直接动作库、60fps 帧时间轴、公式分层雏形、战斗公式证据索引、公式 source 接入、skill asset/effect node 候选索引和每动作三值结果契约。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 5-8H，把 `skill_control` MonoBehaviour 候选节点解析成 HP 伤害、削韧、充能三类公式映射候选。
+当前已完成阶段 1-3 的最小闭环、阶段 4 工作台主链路、阶段 5-1 至 5-8H 的真实数据/数值/动作形态、直接动作库、60fps 帧时间轴、公式分层雏形、战斗公式证据索引、公式 source 接入、skill asset/effect node 候选索引、每动作三值结果契约和 `skill_control` 效果轨道候选分类。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 5-8I，解引用 `behaviorList` / PathID / MonoBehaviour 关联链，把 HP 伤害、削韧、充能继续追到实际行为对象和公式/效果节点。
 
 完整对标 Endaxis 的后续路线见 `DEVELOPMENT_PLAN.md`。
 
@@ -130,7 +131,7 @@ npm run test -- --run
 截至 2026-07-07 的基线：
 
 - `npm run build` 可以通过。
-- `npm run test -- --run` 可以通过；当前为 12 个测试文件、102 条测试。
+- `npm run test -- --run` 可以通过；当前为 12 个测试文件、104 条测试。
 - `npm run data:generate` 可以从 `C:\PC2\Codex\AzPr` 重新生成真实 AzPr 数据拆表。
 
 ## 开发规则

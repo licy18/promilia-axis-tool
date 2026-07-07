@@ -55,7 +55,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；12 个测试文件、102 条测试通过。
+- `npm run test -- --run`：通过；12 个测试文件、104 条测试通过。
 
 ## 3. 目录速览
 
@@ -2143,6 +2143,38 @@ Endaxis 参考边界：
 
 - 阶段 5-8H 目标：解析 `skill_control` MonoBehaviour 候选节点，区分 HP 伤害节点、削韧节点、充能节点。
 - 优先从 `10900101` 末音普通攻击入手，追踪 MonoBehaviour 引用对象、行为组、节点类型和 `skillsub_ele_value.elementId` 的关系；同时记录是否存在韧性/充能专用字段。
+
+### 2026-07-07：阶段 5-8H skill_control 效果轨道候选分类落地
+
+本轮完成：
+
+- `scripts/generate-azpr-data.mjs` 对 `skill_control_*.asset` 的 MonoBehaviour JSON 样本新增效果轨道候选分类。
+- `skill-asset-evidence.json` 的每个当前技能证据项新增 `effectLaneCandidateSummary` 和 `effectLaneCandidates`。
+- 分类维度先固定为六类：敌人 HP 伤害、敌人韧性削减、自身能量变化、元素/属性效果、动作/时序控制、表现/音画资源。
+- 分类依据来自 JSON 解析后的 `name`、`trackName` 和字符串字段模式匹配；不能用纯文本 `rg` 直接搜中文，因为 Unity JSON 中大量中文字段会转义。
+- 全局当前技能样本统计显示：`hpDamage = 1`、`toughnessDamage = 0`、`selfEnergyChange = 1`、`elementEffect = 3`、`timingControl = 4`、`presentation = 4`。
+- 末音 `10900101` 已识别到 `攻击碰撞` / `普通-攻击碰撞` 等 HP 伤害候选；其中 `攻击碰撞` 样本帧为 `19-20`，但仍只是候选命中轨道。
+- 末音 `10900101` 还识别到 `元素`、`移动打断`、`立即跳转`、`SFX`、`特效` 等候选轨道；本轮样本中没有发现削韧或自身能量候选。
+- `validation-report.json` 的 `skill-asset-effect-node-unmapped` 诊断同步输出效果轨道候选摘要，方便后续追踪。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/data/azprGenerated.test.js`：通过，1 个测试文件、9 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1359 KB。
+
+当前边界：
+
+- 本阶段只做候选分类，不代表 HP 伤害、削韧、充能公式已经确认。
+- 还没有解引用 `behaviorList`、PathID 或 MonoBehaviour 之间的真实行为对象链。
+- 全局统计来自当前每技能抽样文件，不能当作完整技能资源解析覆盖率。
+- `effectLaneCandidates[].startFrame/endFrame` 只能作为追踪入口，不能直接当成最终动作时长、真实命中帧或取消窗口。
+
+下一步：
+
+- 阶段 5-8I 目标：从末音 `10900101` 入手解引用 `behaviorList` / PathID / MonoBehaviour 引用链。
+- 将 `攻击碰撞`、`普通-攻击碰撞`、`元素` 等轨道连接到实际行为对象、`skillsub_ele_value.elementId` 和可能的公式/效果节点。
+- 重点确认削韧字段、自身能量变化字段和 HP 伤害节点是否在行为对象或相邻资源中，而不是只看 timeline control 名称。
 
 ## 10. 文档维护规则
 

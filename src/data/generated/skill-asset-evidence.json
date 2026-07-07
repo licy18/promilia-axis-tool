@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-07T14:29:40.922Z",
+  "generatedAt": "2026-07-07T14:58:22.215Z",
   "sourceKind": "azpr-skill-asset-evidence-index",
   "source": {
     "sourceRoot": "C:/PC2/Codex/AzPr",
@@ -56,6 +56,17 @@
     "parsedCurrentSkillControlSampleFiles": 5016,
     "timelineControlSampleCount": 157,
     "behaviorNodeSampleCount": 319,
+    "effectLaneCandidateSkills": {
+      "hpDamage": 1,
+      "toughnessDamage": 0,
+      "selfEnergyChange": 1,
+      "elementEffect": 3,
+      "timingControl": 4,
+      "presentation": 4
+    },
+    "hpDamageCandidateSkills": 1,
+    "toughnessCandidateSkills": 0,
+    "selfEnergyCandidateSkills": 1,
     "relationStatus": "skill-control-assets-found-in-azpr-extractor"
   },
   "tableEvidence": [
@@ -4905,6 +4916,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -4930,6 +4968,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -4955,6 +5020,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -4980,6 +5072,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5003,6 +5122,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5026,6 +5172,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5051,6 +5224,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5076,6 +5276,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5101,6 +5328,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5126,6 +5380,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5149,6 +5430,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5170,6 +5478,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5195,6 +5530,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5220,6 +5582,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5245,6 +5634,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5270,6 +5686,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5291,6 +5734,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5324,6 +5794,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5349,6 +5846,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5374,6 +5898,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5399,6 +5950,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5422,6 +6000,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5443,6 +6048,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5468,6 +6100,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5493,6 +6152,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5518,6 +6204,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5543,6 +6256,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5564,6 +6304,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5585,6 +6352,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5610,6 +6404,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5635,6 +6456,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5660,6 +6508,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5685,6 +6560,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5710,6 +6612,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5735,6 +6664,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5760,6 +6716,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5785,6 +6768,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5810,6 +6820,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5835,6 +6872,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5856,6 +6920,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5889,6 +6980,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5914,6 +7032,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5939,6 +7084,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5964,6 +7136,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -5987,6 +7186,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6008,6 +7234,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6033,6 +7286,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6058,6 +7338,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6083,6 +7390,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6108,6 +7442,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6131,6 +7492,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6156,6 +7544,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6181,6 +7596,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6206,6 +7648,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6231,6 +7700,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6256,6 +7752,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6279,6 +7802,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6300,6 +7850,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6325,6 +7902,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6350,6 +7954,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6375,6 +8006,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6400,6 +8058,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6423,6 +8108,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6444,6 +8156,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6469,6 +8208,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6494,6 +8260,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6519,6 +8312,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6544,6 +8364,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6567,6 +8414,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -6600,6 +8474,226 @@
       "behaviorNodeSampleCount": 80,
       "frameCandidateSampleCount": 80,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 5
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 6
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 5
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 20
+        }
+      },
+      "effectLaneCandidates": [
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-1470319565813827264__-1470319565813827264.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 63,
+          "trackGroupIndex": 0,
+          "startFrame": 26,
+          "endFrame": 68,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-19311014994001508__-19311014994001508.json",
+          "name": "特效",
+          "trackName": "特效",
+          "trackIndex": 29,
+          "trackGroupIndex": 0,
+          "startFrame": 9,
+          "endFrame": 54,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "hpDamage"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-2219364397070875723__-2219364397070875723.json",
+          "name": "攻击碰撞",
+          "trackName": "攻击碰撞",
+          "trackIndex": 52,
+          "trackGroupIndex": 0,
+          "startFrame": 19,
+          "endFrame": 20,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "elementEffect"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-2281777935708912715__-2281777935708912715.json",
+          "name": "元素",
+          "trackName": "元素",
+          "trackIndex": 42,
+          "trackGroupIndex": 0,
+          "startFrame": 119,
+          "endFrame": 120,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "timingControl"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-3132428803813621348__-3132428803813621348.json",
+          "name": "移动打断",
+          "trackName": "连击桥接",
+          "trackIndex": 12,
+          "trackGroupIndex": 0,
+          "startFrame": 29,
+          "endFrame": 300,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "timingControl"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-3232795933488201316__-3232795933488201316.json",
+          "name": "立即跳转",
+          "trackName": "立即跳转",
+          "trackIndex": 2,
+          "trackGroupIndex": 0,
+          "startFrame": 16,
+          "endFrame": 43,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-3618395529106278080__-3618395529106278080.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 60,
+          "trackGroupIndex": 0,
+          "startFrame": 19,
+          "endFrame": 38,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-4278554404456447588__-4278554404456447588.json",
+          "name": "特效",
+          "trackName": "特效",
+          "trackIndex": 37,
+          "trackGroupIndex": 0,
+          "startFrame": 0,
+          "endFrame": 200,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "elementEffect"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-4970282345535372363__-4970282345535372363.json",
+          "name": "元素",
+          "trackName": "元素",
+          "trackIndex": 43,
+          "trackGroupIndex": 0,
+          "startFrame": 0,
+          "endFrame": 197,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "hpDamage"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-5538357736860761700__-5538357736860761700.json",
+          "name": "普通-攻击碰撞",
+          "trackName": "普通-攻击碰撞",
+          "trackIndex": 35,
+          "trackGroupIndex": 0,
+          "startFrame": 13,
+          "endFrame": 14,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "hpDamage"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-5636599307898911819__-5636599307898911819.json",
+          "name": "攻击碰撞",
+          "trackName": "攻击碰撞",
+          "trackIndex": 51,
+          "trackGroupIndex": 0,
+          "startFrame": 16,
+          "endFrame": 17,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-6033860874848931804__-6033860874848931804.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 38,
+          "trackGroupIndex": 0,
+          "startFrame": 10,
+          "endFrame": 60,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        }
+      ],
       "frameRange": {
         "minStartFrame": 0,
         "maxEndFrame": 300
@@ -6607,6 +8701,10 @@
       "sampleNodeCandidates": [
         {
           "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1470319565813827264__-1470319565813827264.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -6619,6 +8717,10 @@
         },
         {
           "type": "behavior-node",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1470319565813827264__-1470319565813827264.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -6656,6 +8758,10 @@
         },
         {
           "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-19311014994001508__-19311014994001508.json",
           "name": "特效",
           "trackName": "特效",
@@ -6668,6 +8774,10 @@
         },
         {
           "type": "behavior-node",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-19311014994001508__-19311014994001508.json",
           "name": "特效",
           "trackName": "特效",
@@ -6680,6 +8790,10 @@
         },
         {
           "type": "timeline-control",
+          "laneHints": [
+            "hpDamage"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-2219364397070875723__-2219364397070875723.json",
           "name": "攻击碰撞",
           "trackName": "攻击碰撞",
@@ -6692,6 +8806,10 @@
         },
         {
           "type": "behavior-node",
+          "laneHints": [
+            "hpDamage"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-2219364397070875723__-2219364397070875723.json",
           "name": "攻击碰撞",
           "trackName": "攻击碰撞",
@@ -6726,6 +8844,226 @@
       "behaviorNodeSampleCount": 74,
       "frameCandidateSampleCount": 74,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 3
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 4
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 24
+        }
+      },
+      "effectLaneCandidates": [
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-1041937790840212889__-1041937790840212889.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 67,
+          "trackGroupIndex": 0,
+          "startFrame": 8,
+          "endFrame": 31,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-2775251788641930649__-2775251788641930649.json",
+          "name": "VO",
+          "trackName": "VO",
+          "trackIndex": 62,
+          "trackGroupIndex": 0,
+          "startFrame": 6,
+          "endFrame": 57,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-2880507283564023651__-2880507283564023651.json",
+          "name": "特效",
+          "trackName": "特效",
+          "trackIndex": 50,
+          "trackGroupIndex": 0,
+          "startFrame": 26,
+          "endFrame": 71,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "elementEffect"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-3868088731946340195__-3868088731946340195.json",
+          "name": "元素",
+          "trackName": "元素",
+          "trackIndex": 44,
+          "trackGroupIndex": 0,
+          "startFrame": 3,
+          "endFrame": 30,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "timingControl"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-4074710510952009571__-4074710510952009571.json",
+          "name": "连击桥接",
+          "trackName": "连击桥接",
+          "trackIndex": 28,
+          "trackGroupIndex": 0,
+          "startFrame": 0,
+          "endFrame": 175,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-4501946945564249497__-4501946945564249497.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 71,
+          "trackGroupIndex": 0,
+          "startFrame": 29,
+          "endFrame": 45,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-4757544542256041369__-4757544542256041369.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 66,
+          "trackGroupIndex": 0,
+          "startFrame": 45,
+          "endFrame": 99,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-480301727865834905__-480301727865834905.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 68,
+          "trackGroupIndex": 0,
+          "startFrame": 8,
+          "endFrame": 67,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-5418404418644430691__-5418404418644430691.json",
+          "name": "特效",
+          "trackName": "特效",
+          "trackIndex": 63,
+          "trackGroupIndex": 0,
+          "startFrame": 0,
+          "endFrame": 200,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "timingControl"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-5431380337124724579__-5431380337124724579.json",
+          "name": "动作",
+          "trackName": "技能2动画",
+          "trackIndex": 1,
+          "trackGroupIndex": 0,
+          "startFrame": 0,
+          "endFrame": 254,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-7396633604588851043__-7396633604588851043.json",
+          "name": "特效",
+          "trackName": "特效",
+          "trackIndex": 32,
+          "trackGroupIndex": 0,
+          "startFrame": 2,
+          "endFrame": 17,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-7446437683809439587__-7446437683809439587.json",
+          "name": "特效",
+          "trackName": "特效",
+          "trackIndex": 40,
+          "trackGroupIndex": 0,
+          "startFrame": 12,
+          "endFrame": 35,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        }
+      ],
       "frameRange": {
         "minStartFrame": 0,
         "maxEndFrame": 259
@@ -6733,6 +9071,10 @@
       "sampleNodeCandidates": [
         {
           "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1041937790840212889__-1041937790840212889.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -6745,6 +9087,10 @@
         },
         {
           "type": "behavior-node",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1041937790840212889__-1041937790840212889.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -6793,6 +9139,10 @@
         },
         {
           "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-2775251788641930649__-2775251788641930649.json",
           "name": "VO",
           "trackName": "VO",
@@ -6805,6 +9155,10 @@
         },
         {
           "type": "behavior-node",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-2775251788641930649__-2775251788641930649.json",
           "name": "VO",
           "trackName": "VO",
@@ -6839,6 +9193,226 @@
       "behaviorNodeSampleCount": 80,
       "frameCandidateSampleCount": 80,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 4
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 3
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 12
+        }
+      },
+      "effectLaneCandidates": [
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-1430744253779101951__-1430744253779101951.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 113,
+          "trackGroupIndex": 0,
+          "startFrame": 160,
+          "endFrame": 235,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-2402528415843305727__-2402528415843305727.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 114,
+          "trackGroupIndex": 0,
+          "startFrame": 128,
+          "endFrame": 177,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-2818074497067206911__-2818074497067206911.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 109,
+          "trackGroupIndex": 0,
+          "startFrame": 211,
+          "endFrame": 309,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "timingControl"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-3197825378341931003__-3197825378341931003.json",
+          "name": "动作",
+          "trackName": "必杀技动画",
+          "trackIndex": 1,
+          "trackGroupIndex": 0,
+          "startFrame": 0,
+          "endFrame": 340,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-4060558448504915963__-4060558448504915963.json",
+          "name": "广播-触发帧事件",
+          "trackName": "广播-触发帧事件",
+          "trackIndex": 127,
+          "trackGroupIndex": 0,
+          "startFrame": 155,
+          "endFrame": 156,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-490198699867686907__-490198699867686907.json",
+          "name": "隐藏武器",
+          "trackName": "隐藏武器",
+          "trackIndex": 91,
+          "trackGroupIndex": 0,
+          "startFrame": 283,
+          "endFrame": 284,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "elementEffect"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-5968812441235736571__-5968812441235736571.json",
+          "name": "元素",
+          "trackName": "元素",
+          "trackIndex": 96,
+          "trackGroupIndex": 0,
+          "startFrame": 129,
+          "endFrame": 416,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "elementEffect"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-7074143453459171323__-7074143453459171323.json",
+          "name": "元素",
+          "trackName": "元素",
+          "trackIndex": 78,
+          "trackGroupIndex": 0,
+          "startFrame": 0,
+          "endFrame": 125,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-7101754049037945087__-7101754049037945087.json",
+          "name": "VO",
+          "trackName": "VO",
+          "trackIndex": 102,
+          "trackGroupIndex": 0,
+          "startFrame": 1,
+          "endFrame": 336,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "timingControl"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-7411268397570181115__-7411268397570181115.json",
+          "name": "连击桥接",
+          "trackName": "连击桥接",
+          "trackIndex": 74,
+          "trackGroupIndex": 0,
+          "startFrame": 235,
+          "endFrame": 421,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "elementEffect"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-8586678420351928315__-8586678420351928315.json",
+          "name": "元素(自己",
+          "trackName": "元素(自己",
+          "trackIndex": 80,
+          "trackGroupIndex": 0,
+          "startFrame": 0,
+          "endFrame": 1,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-9158309300281297151__-9158309300281297151.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 112,
+          "trackGroupIndex": 0,
+          "startFrame": 119,
+          "endFrame": 163,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        }
+      ],
       "frameRange": {
         "minStartFrame": 0,
         "maxEndFrame": 999
@@ -6846,6 +9420,10 @@
       "sampleNodeCandidates": [
         {
           "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1430744253779101951__-1430744253779101951.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -6858,6 +9436,10 @@
         },
         {
           "type": "behavior-node",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1430744253779101951__-1430744253779101951.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -6912,6 +9494,10 @@
         },
         {
           "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-2402528415843305727__-2402528415843305727.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -6924,6 +9510,10 @@
         },
         {
           "type": "behavior-node",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-2402528415843305727__-2402528415843305727.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -6958,6 +9548,226 @@
       "behaviorNodeSampleCount": 81,
       "frameCandidateSampleCount": 81,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 8
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 22
+        }
+      },
+      "effectLaneCandidates": [
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-196065238310878629__-196065238310878629.json",
+          "name": "广播-触发帧事件",
+          "trackName": "广播-触发帧事件",
+          "trackIndex": 97,
+          "trackGroupIndex": 0,
+          "startFrame": 103,
+          "endFrame": 104,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-1994388550921564738__-1994388550921564738.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 71,
+          "trackGroupIndex": 0,
+          "startFrame": 92,
+          "endFrame": 108,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-2047795946377851458__-2047795946377851458.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 67,
+          "trackGroupIndex": 0,
+          "startFrame": 71,
+          "endFrame": 94,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-262389996265504165__-262389996265504165.json",
+          "name": "压暗特效",
+          "trackName": "主体刀光特效",
+          "trackIndex": 81,
+          "trackGroupIndex": 0,
+          "startFrame": 0,
+          "endFrame": 65,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-3283155647948862018__-3283155647948862018.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 90,
+          "trackGroupIndex": 0,
+          "startFrame": 40,
+          "endFrame": 204,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-3298722944703803970__-3298722944703803970.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 89,
+          "trackGroupIndex": 0,
+          "startFrame": 15,
+          "endFrame": 69,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-3375822121504767397__-3375822121504767397.json",
+          "name": "特效",
+          "trackName": "特效",
+          "trackIndex": 49,
+          "trackGroupIndex": 0,
+          "startFrame": 81,
+          "endFrame": 96,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-3748198252940112450__-3748198252940112450.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 87,
+          "trackGroupIndex": 0,
+          "startFrame": 15,
+          "endFrame": 64,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "timingControl"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-4781142067172507045__-4781142067172507045.json",
+          "name": "连击桥接",
+          "trackName": "连击桥接",
+          "trackIndex": 85,
+          "trackGroupIndex": 0,
+          "startFrame": 0,
+          "endFrame": 106,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "timingControl"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-5748296574917901733__-5748296574917901733.json",
+          "name": "连击桥接",
+          "trackName": "连击桥接",
+          "trackIndex": 28,
+          "trackGroupIndex": 0,
+          "startFrame": 104,
+          "endFrame": 279,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-6437822999940772418__-6437822999940772418.json",
+          "name": "SFX",
+          "trackName": "SFX",
+          "trackIndex": 66,
+          "trackGroupIndex": 0,
+          "startFrame": 108,
+          "endFrame": 162,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "timingControl"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-6657709127500004773__-6657709127500004773.json",
+          "name": "动作",
+          "trackName": "技能2动画",
+          "trackIndex": 1,
+          "trackGroupIndex": 0,
+          "startFrame": 65,
+          "endFrame": 317,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        }
+      ],
       "frameRange": {
         "minStartFrame": 0,
         "maxEndFrame": 999
@@ -6974,6 +9784,10 @@
         },
         {
           "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-196065238310878629__-196065238310878629.json",
           "name": "广播-触发帧事件",
           "trackName": "广播-触发帧事件",
@@ -6986,6 +9800,10 @@
         },
         {
           "type": "behavior-node",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-196065238310878629__-196065238310878629.json",
           "name": "广播-触发帧事件",
           "trackName": "广播-触发帧事件",
@@ -6998,6 +9816,10 @@
         },
         {
           "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1994388550921564738__-1994388550921564738.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -7010,6 +9832,10 @@
         },
         {
           "type": "behavior-node",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1994388550921564738__-1994388550921564738.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -7022,6 +9848,10 @@
         },
         {
           "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-2047795946377851458__-2047795946377851458.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -7034,6 +9864,10 @@
         },
         {
           "type": "behavior-node",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-2047795946377851458__-2047795946377851458.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -7077,6 +9911,50 @@
       "behaviorNodeSampleCount": 3,
       "frameCandidateSampleCount": 3,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 1
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "selfEnergyChange"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-1453394638663096777__-1453394638663096777.json",
+          "name": "被动回能量",
+          "trackName": "被动1标记",
+          "trackIndex": 1,
+          "trackGroupIndex": 0,
+          "startFrame": 0,
+          "endFrame": 1,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        }
+      ],
       "frameRange": {
         "minStartFrame": 0,
         "maxEndFrame": 1
@@ -7084,6 +9962,10 @@
       "sampleNodeCandidates": [
         {
           "type": "timeline-control",
+          "laneHints": [
+            "selfEnergyChange"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1453394638663096777__-1453394638663096777.json",
           "name": "被动回能量",
           "trackName": "被动1标记",
@@ -7096,6 +9978,10 @@
         },
         {
           "type": "behavior-node",
+          "laneHints": [
+            "selfEnergyChange"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1453394638663096777__-1453394638663096777.json",
           "name": "被动回能量",
           "trackName": "被动1标记",
@@ -7140,6 +10026,33 @@
       "behaviorNodeSampleCount": 1,
       "frameCandidateSampleCount": 1,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": [
         {
@@ -7171,6 +10084,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7196,6 +10136,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7221,6 +10188,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7246,6 +10240,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7269,6 +10290,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7290,6 +10338,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7315,6 +10390,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7340,6 +10442,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7365,6 +10494,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7390,6 +10546,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7413,6 +10596,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7436,6 +10646,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7461,6 +10698,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7486,6 +10750,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7511,6 +10802,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7536,6 +10854,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7559,6 +10904,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7582,6 +10954,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7607,6 +11006,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7632,6 +11058,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7657,6 +11110,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7682,6 +11162,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7705,6 +11212,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7738,6 +11272,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7763,6 +11324,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7788,6 +11376,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7813,6 +11428,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7836,6 +11478,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7857,6 +11526,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7882,6 +11578,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7907,6 +11630,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7932,6 +11682,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7957,6 +11734,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -7980,6 +11784,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8001,6 +11832,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8026,6 +11884,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8051,6 +11936,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8076,6 +11988,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8101,6 +12040,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8124,6 +12090,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8147,6 +12140,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     }
@@ -8174,6 +12194,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8199,6 +12246,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8224,6 +12298,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8249,6 +12350,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8272,6 +12400,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8295,6 +12450,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8320,6 +12502,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8345,6 +12554,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8370,6 +12606,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8395,6 +12658,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8418,6 +12708,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8439,6 +12756,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8464,6 +12808,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8489,6 +12860,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8514,6 +12912,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8539,6 +12964,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8560,6 +13012,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8585,6 +13064,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8610,6 +13116,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     },
@@ -8635,6 +13168,33 @@
       "behaviorNodeSampleCount": 0,
       "frameCandidateSampleCount": 0,
       "elementListCandidateSampleCount": 0,
+      "effectLaneCandidateSummary": {
+        "hpDamage": {
+          "label": "敌人 HP 伤害",
+          "count": 0
+        },
+        "toughnessDamage": {
+          "label": "敌人韧性削减",
+          "count": 0
+        },
+        "selfEnergyChange": {
+          "label": "自身能量变化",
+          "count": 0
+        },
+        "elementEffect": {
+          "label": "元素/属性效果",
+          "count": 0
+        },
+        "timingControl": {
+          "label": "动作/时序控制",
+          "count": 0
+        },
+        "presentation": {
+          "label": "表现/音画资源",
+          "count": 0
+        }
+      },
+      "effectLaneCandidates": [],
       "frameRange": null,
       "sampleNodeCandidates": []
     }
@@ -8656,6 +13216,10 @@
       "sampleNodeCandidates": [
         {
           "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1470319565813827264__-1470319565813827264.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -8668,6 +13232,10 @@
         },
         {
           "type": "behavior-node",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1470319565813827264__-1470319565813827264.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -8718,6 +13286,10 @@
         },
         {
           "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-196065238310878629__-196065238310878629.json",
           "name": "广播-触发帧事件",
           "trackName": "广播-触发帧事件",
@@ -8730,6 +13302,10 @@
         },
         {
           "type": "behavior-node",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-196065238310878629__-196065238310878629.json",
           "name": "广播-触发帧事件",
           "trackName": "广播-触发帧事件",
@@ -8759,6 +13335,10 @@
       "sampleNodeCandidates": [
         {
           "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1430744253779101951__-1430744253779101951.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -8771,6 +13351,10 @@
         },
         {
           "type": "behavior-node",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1430744253779101951__-1430744253779101951.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -8809,6 +13393,10 @@
       "sampleNodeCandidates": [
         {
           "type": "timeline-control",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1041937790840212889__-1041937790840212889.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -8821,6 +13409,10 @@
         },
         {
           "type": "behavior-node",
+          "laneHints": [
+            "presentation"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1041937790840212889__-1041937790840212889.json",
           "name": "SFX",
           "trackName": "SFX",
@@ -8859,6 +13451,10 @@
       "sampleNodeCandidates": [
         {
           "type": "timeline-control",
+          "laneHints": [
+            "selfEnergyChange"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1453394638663096777__-1453394638663096777.json",
           "name": "被动回能量",
           "trackName": "被动1标记",
@@ -8871,6 +13467,10 @@
         },
         {
           "type": "behavior-node",
+          "laneHints": [
+            "selfEnergyChange"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
           "file": "MonoBehaviour_-1453394638663096777__-1453394638663096777.json",
           "name": "被动回能量",
           "trackName": "被动1标记",

@@ -147,6 +147,17 @@ describe('generated AzPr data', () => {
         uniqueSkillBytesPaths: 682,
         existingSkillBytesPathsInAzPrAssets: 0,
         extractedSkillControlDirectories: 4134,
+        effectLaneCandidateSkills: {
+          hpDamage: 1,
+          toughnessDamage: 0,
+          selfEnergyChange: 1,
+          elementEffect: 3,
+          timingControl: 4,
+          presentation: 4,
+        },
+        hpDamageCandidateSkills: 1,
+        toughnessCandidateSkills: 0,
+        selfEnergyCandidateSkills: 1,
         relationStatus: 'skill-control-assets-found-in-azpr-extractor',
       },
     });
@@ -347,6 +358,17 @@ describe('generated AzPr data', () => {
       currentSkillsWithExtractedSkillControl: 116,
       currentSkillsMissingExtractedSkillControl: 4,
       existingSkillBytesPathsInAzPrAssets: 0,
+      effectLaneCandidateSkills: {
+        hpDamage: 1,
+        toughnessDamage: 0,
+        selfEnergyChange: 1,
+        elementEffect: 3,
+        timingControl: 4,
+        presentation: 4,
+      },
+      hpDamageCandidateSkills: 1,
+      toughnessCandidateSkills: 0,
+      selfEnergyCandidateSkills: 1,
       relationStatus: 'skill-control-assets-found-in-azpr-extractor',
     });
     expect(
@@ -361,7 +383,28 @@ describe('generated AzPr data', () => {
         minStartFrame: 0,
         maxEndFrame: 300,
       },
+      effectLaneCandidateSummary: {
+        hpDamage: {
+          count: 5,
+        },
+        toughnessDamage: {
+          count: 0,
+        },
+        selfEnergyChange: {
+          count: 0,
+        },
+      },
     });
+    expect(mayoiAttack.effectLaneCandidates).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          laneHints: ['hpDamage'],
+          name: '攻击碰撞',
+          startFrame: 19,
+          endFrame: 20,
+        }),
+      ])
+    );
     expect(evidence.nextTraceTargets[0]).toMatchObject({
       skillId: 10900101,
       frameRange: {

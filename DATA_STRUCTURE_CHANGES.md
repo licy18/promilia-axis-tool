@@ -1868,3 +1868,87 @@ getAzprSkillAssetEvidence()
 - 蓝色星原韧性值只可类比终末地失衡值，不可直接复用终末地公式。
 - 自身能量类似 SP，但必须按角色 actor 独立记录。
 - 削韧、充能和 HP 伤害需要分别从蓝原表、`skill_control`、效果节点或运行时证据确认。
+
+## 33. 2026-07-07 skill_control 效果轨道候选分类
+
+阶段 5-8H 在 `skill-asset-evidence.json` 中新增效果轨道候选字段，用于把 `skill_control` MonoBehaviour 样本先按用途分组，供下一阶段解引用行为链。
+
+### 33.1 summary 新增字段
+
+`skill-asset-evidence.json.summary` 新增：
+
+```javascript
+{
+  "effectLaneCandidateSkills": {
+    "hpDamage": 1,
+    "toughnessDamage": 0,
+    "selfEnergyChange": 1,
+    "elementEffect": 3,
+    "timingControl": 4,
+    "presentation": 4
+  },
+  "hpDamageCandidateSkills": 1,
+  "toughnessCandidateSkills": 0,
+  "selfEnergyCandidateSkills": 1
+}
+```
+
+这些计数表示“当前抽样中至少出现过该类候选轨道的当前技能数量”，不是完整技能覆盖率，也不是公式确认数。
+
+### 33.2 技能证据项新增字段
+
+`currentSkillControlEvidence[]` 的 `found` 项新增：
+
+```javascript
+{
+  "effectLaneCandidateSummary": {
+    "hpDamage": {
+      "label": "敌人 HP 伤害",
+      "count": 5
+    },
+    "toughnessDamage": {
+      "label": "敌人韧性削减",
+      "count": 0
+    },
+    "selfEnergyChange": {
+      "label": "自身能量变化",
+      "count": 0
+    }
+  },
+  "effectLaneCandidates": [
+    {
+      "type": "timeline-control",
+      "laneHints": ["hpDamage"],
+      "laneHintSource": "name-trackName-string-pattern",
+      "file": "MonoBehaviour_-2219364397070875723__-2219364397070875723.json",
+      "name": "攻击碰撞",
+      "trackName": "攻击碰撞",
+      "startFrame": 19,
+      "endFrame": 20,
+      "behaviorListCount": 1
+    }
+  ]
+}
+```
+
+### 33.3 分类维度
+
+当前固定六类候选：
+
+| key | 含义 |
+| --- | --- |
+| `hpDamage` | 敌人 HP 伤害候选，例如 `攻击碰撞`、`damage`、`hit` |
+| `toughnessDamage` | 敌人韧性/失衡削减候选 |
+| `selfEnergyChange` | 自身能量/充能变化候选 |
+| `elementEffect` | 元素或属性效果候选 |
+| `timingControl` | 动作、跳转、打断、连击、位移等时序控制候选 |
+| `presentation` | SFX、特效、镜头、VO、武器等表现资源候选 |
+
+分类依据是 JSON 解析后的 `name`、`trackName` 和字符串字段模式匹配。直接文本搜索可能漏掉 Unity JSON 中转义的中文字段，因此不能作为唯一依据。
+
+### 33.4 当前边界
+
+- `effectLaneCandidates` 是追踪入口，不是最终命中帧、削韧帧、充能帧或公式节点。
+- `laneHints` 可以多值，表示同一个 MonoBehaviour 候选可能同时命中多个分类模式。
+- 下一阶段必须解引用 `behaviorList`、PathID、MonoBehaviour 引用和相邻资源，才能确认真实行为对象。
+- 未出现 `toughnessDamage` 或 `selfEnergyChange` 候选不代表游戏没有削韧/充能机制，只表示当前抽样和当前模式尚未定位到明确字段。

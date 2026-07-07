@@ -349,6 +349,39 @@ const WEAK_POINT_DAMAGE_ATTRIBUTE_KEYS = Object.freeze([
 ]);
 const SKILL_CONTROL_SAMPLE_FILE_LIMIT = 80;
 const SKILL_CONTROL_SAMPLE_NODE_LIMIT = 8;
+const SKILL_EFFECT_LANE_SAMPLE_LIMIT = 12;
+const SKILL_EFFECT_LANES = Object.freeze([
+  {
+    key: 'hpDamage',
+    label: '敌人 HP 伤害',
+    patterns: [/攻击碰撞/, /伤害/, /\bdamage\b/i, /\bhit\b/i],
+  },
+  {
+    key: 'toughnessDamage',
+    label: '敌人韧性削减',
+    patterns: [/韧/, /失衡/, /削韧/, /破衡/, /\bstagger\b/i, /\btough/i],
+  },
+  {
+    key: 'selfEnergyChange',
+    label: '自身能量变化',
+    patterns: [/能量/, /充能/, /蓄能/, /回能/, /\bsp\b/i, /\benergy\b/i, /\bcharge\b/i],
+  },
+  {
+    key: 'elementEffect',
+    label: '元素/属性效果',
+    patterns: [/元素/, /\belement\b/i],
+  },
+  {
+    key: 'timingControl',
+    label: '动作/时序控制',
+    patterns: [/动作/, /跳转/, /打断/, /连击/, /桥接/, /移动/, /位移/, /前摇/, /全程/],
+  },
+  {
+    key: 'presentation',
+    label: '表现/音画资源',
+    patterns: [/SFX/i, /特效/, /镜头/, /\bVO\b/i, /武器/, /广播/, /宠物响应/],
+  },
+]);
 const SKILL_ASSET_EVIDENCE_TABLES = Object.freeze([
   {
     key: 'heroTable',
@@ -1989,6 +2022,9 @@ async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
   const missingCurrentSkillControls = currentSkillControlEvidence.filter(
     item => item.status === 'missing'
   );
+  const laneCandidateSkillCounts = summarizeLaneCandidateSkillCounts(
+    currentSkillControlEvidence
+  );
   const currentSkillsWithSkillTableRow = skills.filter(skill =>
     skillTableById.has(Number(skill.id))
   );
@@ -2043,6 +2079,10 @@ async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
         (sum, item) => sum + (item.behaviorNodeSampleCount ?? 0),
         0
       ),
+      effectLaneCandidateSkills: laneCandidateSkillCounts,
+      hpDamageCandidateSkills: laneCandidateSkillCounts.hpDamage ?? 0,
+      toughnessCandidateSkills: laneCandidateSkillCounts.toughnessDamage ?? 0,
+      selfEnergyCandidateSkills: laneCandidateSkillCounts.selfEnergyChange ?? 0,
       relationStatus:
         foundCurrentSkillControls.length > 0
           ? 'skill-control-assets-found-in-azpr-extractor'
@@ -2123,6 +2163,17 @@ function buildSkillAssetTableEvidence(spec, table, currentSkillIds) {
     uniqueSkillBytesPaths: [...uniqueSkillBytesPaths].sort(),
     sampleRows,
   };
+}
+
+function summarizeLaneCandidateSkillCounts(currentSkillControlEvidence) {
+  return Object.fromEntries(
+    SKILL_EFFECT_LANES.map(lane => [
+      lane.key,
+      currentSkillControlEvidence.filter(
+        item => (item.effectLaneCandidateSummary?.[lane.key]?.count ?? 0) > 0
+      ).length,
+    ])
+  );
 }
 
 function buildCurrentHeroSkillRows(heroTable, currentCharacterIds, currentSkillIds) {
@@ -2226,6 +2277,8 @@ async function buildSkillControlEvidenceItem(skill, skillControlBySkillId) {
     behaviorNodeSampleCount: aggregate.behaviorNodeCount,
     frameCandidateSampleCount: aggregate.frameCandidateCount,
     elementListCandidateSampleCount: aggregate.elementListCandidateCount,
+    effectLaneCandidateSummary: aggregate.laneCandidateSummary,
+    effectLaneCandidates: aggregate.laneCandidates,
     frameRange: buildFrameRange(aggregate.startFrames, aggregate.endFrames),
     sampleNodeCandidates: aggregate.candidates.slice(
       0,
@@ -2303,6 +2356,16 @@ function createEmptySkillControlNodeEvidence() {
     startFrames: [],
     endFrames: [],
     candidates: [],
+    laneCandidateSummary: Object.fromEntries(
+      SKILL_EFFECT_LANES.map(lane => [
+        lane.key,
+        {
+          label: lane.label,
+          count: 0,
+        },
+      ])
+    ),
+    laneCandidates: [],
   };
 }
 
@@ -2314,7 +2377,13 @@ function mergeSkillControlNodeEvidence(target, source) {
   target.startFrames.push(...source.startFrames);
   target.endFrames.push(...source.endFrames);
   for (const candidate of source.candidates) {
-    pushSkillControlCandidate(target, candidate);
+    pushSkillControlCandidateSample(target, candidate);
+  }
+  for (const [key, summary] of Object.entries(source.laneCandidateSummary)) {
+    target.laneCandidateSummary[key].count += summary.count;
+  }
+  for (const candidate of source.laneCandidates) {
+    pushSkillEffectLaneCandidateSample(target, candidate);
   }
 }
 
@@ -2334,14 +2403,52 @@ function collectFrameEvidence(evidence, value) {
 }
 
 function pushSkillControlCandidate(evidence, candidate) {
+  pushSkillControlCandidateSample(evidence, candidate);
+  pushSkillEffectLaneCandidate(evidence, candidate);
+}
+
+function pushSkillControlCandidateSample(evidence, candidate) {
   if (candidate && evidence.candidates.length < SKILL_CONTROL_SAMPLE_NODE_LIMIT) {
     evidence.candidates.push(candidate);
   }
 }
 
+function pushSkillEffectLaneCandidate(evidence, candidate) {
+  if (!candidate?.laneHints?.length) {
+    return;
+  }
+
+  if (
+    candidate.type === 'behavior-node' &&
+    candidate.trackName &&
+    candidate.behaviorListCount != null
+  ) {
+    return;
+  }
+
+  for (const lane of candidate.laneHints) {
+    if (evidence.laneCandidateSummary[lane]) {
+      evidence.laneCandidateSummary[lane].count += 1;
+    }
+  }
+
+  if (evidence.laneCandidates.length < SKILL_EFFECT_LANE_SAMPLE_LIMIT) {
+    pushSkillEffectLaneCandidateSample(evidence, candidate);
+  }
+}
+
+function pushSkillEffectLaneCandidateSample(evidence, candidate) {
+  if (evidence.laneCandidates.length < SKILL_EFFECT_LANE_SAMPLE_LIMIT) {
+    evidence.laneCandidates.push(candidate);
+  }
+}
+
 function compactSkillControlCandidate(value, fileName, type) {
+  const laneHints = classifySkillEffectLanes(value);
   return compactObject({
     type,
+    laneHints,
+    laneHintSource: laneHints.length > 0 ? 'name-trackName-string-pattern' : null,
     file: fileName,
     name: value.name ?? null,
     trackName: value.trackName ?? null,
@@ -2369,6 +2476,25 @@ function compactSkillControlCandidate(value, fileName, type) {
       ? value.behaviorList.length
       : null,
   });
+}
+
+function classifySkillEffectLanes(value) {
+  const text = [
+    value.name,
+    value.trackName,
+    value.stringValue,
+    value.eventName,
+    value.behaviorName,
+  ]
+    .filter(Boolean)
+    .join(' ');
+  if (!text) {
+    return [];
+  }
+
+  return SKILL_EFFECT_LANES.filter(lane =>
+    lane.patterns.some(pattern => pattern.test(text))
+  ).map(lane => lane.key);
 }
 
 function summarizeElementList(elementList) {
