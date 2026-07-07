@@ -86,7 +86,7 @@
           data-testid="workbench-start-input"
           min="0"
           :max="durationMs"
-          step="100"
+          :step="frameStepMs"
           :value="selectedAction.startMs"
           @input="emitActionPatch('startMs', $event.target.value)"
         />
@@ -109,6 +109,7 @@
           type="number"
           data-testid="workbench-duration-input"
           min="1"
+          :step="frameStepMs"
           :value="selectedAction.durationMs"
           @input="emitActionPatch('durationMs', $event.target.value)"
         />
@@ -344,6 +345,7 @@
 <script setup>
 import { computed } from 'vue';
 import { Operation } from '@element-plus/icons-vue';
+import { WORKBENCH_FRAME_MS, formatFrameTime } from '../../domain/timebase';
 
 const props = defineProps({
   selection: {
@@ -377,6 +379,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update-selection', 'update-action']);
+
+const frameStepMs = WORKBENCH_FRAME_MS;
 
 const maxSkillLevel = computed(() =>
   Math.max(
@@ -630,7 +634,7 @@ const selectedActionSummary = computed(() => {
     return formatActionVariantOption(props.selectedAction.selectedDamageSegment) || '倍率待补';
   }
   if (isWaitAction.value) {
-    return `${props.selectedAction.durationMs ?? 0}ms`;
+    return formatFrameTime(props.selectedAction.durationMs ?? 0);
   }
   if (isResourceAction.value) {
     return `${String(props.selectedAction.resource ?? 'sp').toUpperCase()} ${formatSigned(props.selectedAction.change)}`;

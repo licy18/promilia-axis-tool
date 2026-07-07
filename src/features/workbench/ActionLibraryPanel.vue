@@ -24,7 +24,7 @@
 
     <div class="toolbox">
       <button class="icon-button" data-testid="workbench-add-action" type="button" @click="$emit('add-action')">
-        + 技能
+        + 动作
       </button>
       <button class="icon-button" data-testid="workbench-add-wait-action" type="button" @click="$emit('add-wait-action')">
         + 等待
@@ -58,133 +58,24 @@
       </button>
     </div>
 
-    <div class="segment-options">
-      <label>
-        <span>动作间隔 ms</span>
-        <input
-          type="number"
-          min="100"
-          max="10000"
-          step="100"
-          data-testid="workbench-segment-split-interval-input"
-          :value="segmentSplitOptions.intervalMs"
-          @input="emitSegmentSplitOption('intervalMs', $event.target.value)"
-        />
-      </label>
-      <label class="checkbox-control">
-        <input
-          type="checkbox"
-          data-testid="workbench-segment-split-start-after-checkbox"
-          :checked="segmentSplitOptions.startAfterSelectedAction"
-          @change="emitSegmentSplitOption('startAfterSelectedAction', $event.target.checked)"
-        />
-        <span>从选中结束</span>
-      </label>
-      <label class="checkbox-control">
-        <input
-          type="checkbox"
-          data-testid="workbench-segment-split-skip-existing-checkbox"
-          :checked="segmentSplitOptions.skipExistingSegments"
-          @change="emitSegmentSplitOption('skipExistingSegments', $event.target.checked)"
-        />
-        <span>跳过已有动作</span>
-      </label>
-    </div>
-
     <div class="actor-block">
       <span class="actor-name">{{ actor.name }}</span>
       <span class="actor-role">{{ actor.role || '角色轨' }}</span>
     </div>
 
-    <div v-if="skills.length" class="skill-entry-list">
-      <div v-for="skill in skills" :key="skill.id" class="skill-entry-row">
+    <div v-if="actionEntries.length" class="skill-entry-list">
+      <div v-for="entry in actionEntries" :key="entry.id" class="skill-entry-row">
         <button
           class="skill-entry"
           type="button"
           data-testid="workbench-skill-entry"
-          :data-skill-id="skill.id"
-          @click="$emit('add-skill-action', skill.id)"
+          :data-skill-id="entry.skillId"
+          :data-action-kind="entry.kind"
+          :data-action-variant-index="entry.actionVariantIndex"
+          @click="$emit('add-skill-action', entry)"
         >
-          <span class="skill-entry-name">{{ formatSkillName(skill) }}</span>
-          <span class="skill-entry-meta">{{ formatSkillMeta(skill) }}</span>
-        </button>
-        <button
-          class="segment-button"
-          type="button"
-          data-testid="workbench-skill-segment-split"
-          :data-skill-id="skill.id"
-          :disabled="getSkillSegmentCount(skill) <= 1"
-          :title="formatSkillSplitTitle(skill)"
-          @click="$emit('preview-skill-segment-actions', skill.id)"
-        >
-          形态 {{ getSkillSegmentCount(skill) }}
-        </button>
-      </div>
-    </div>
-
-    <div
-      v-if="segmentSplitPreview"
-      class="segment-preview"
-      data-testid="workbench-segment-split-preview"
-    >
-      <div class="segment-preview-heading">
-        <span>{{ segmentSplitPreview.skillName }}</span>
-        <strong>{{ segmentSplitPreview.actorName }} Lv.{{ segmentSplitPreview.level }}</strong>
-      </div>
-      <dl class="segment-preview-metrics">
-        <div>
-          <dt>生成</dt>
-          <dd data-testid="workbench-segment-preview-generated-count">
-            {{ segmentSplitPreview.generatedCount }}
-          </dd>
-        </div>
-        <div>
-          <dt>跳过</dt>
-          <dd data-testid="workbench-segment-preview-skipped-count">
-            {{ segmentSplitPreview.skippedCount }}
-          </dd>
-        </div>
-        <div>
-          <dt>推迟</dt>
-          <dd data-testid="workbench-segment-preview-delay-count">
-            {{ segmentSplitPreview.autoDelayedCount }}
-          </dd>
-        </div>
-      </dl>
-      <p class="segment-preview-base" data-testid="workbench-segment-preview-base">
-        起点 {{ segmentSplitPreview.baseStartMs }}ms / 间隔 {{ segmentSplitPreview.options.intervalMs }}ms
-      </p>
-      <ul v-if="segmentSplitPreview.actions.length" class="segment-preview-list">
-        <li
-          v-for="action in segmentSplitPreview.actions"
-          :key="action.damageSegmentIndex"
-          data-testid="workbench-segment-preview-item"
-          :data-segment-index="action.damageSegmentIndex"
-        >
-          <span>{{ formatActionVariantPreview(action) }}</span>
-          <small>{{ formatPreviewRange(action) }}</small>
-        </li>
-      </ul>
-      <p v-else class="segment-preview-empty" data-testid="workbench-segment-preview-empty">
-        没有可生成动作
-      </p>
-      <div class="segment-preview-actions">
-        <button
-          class="tool-button"
-          type="button"
-          data-testid="workbench-segment-preview-confirm"
-          :disabled="segmentSplitPreview.generatedCount === 0"
-          @click="$emit('confirm-skill-segment-actions')"
-        >
-          确认
-        </button>
-        <button
-          class="tool-button"
-          type="button"
-          data-testid="workbench-segment-preview-cancel"
-          @click="$emit('cancel-skill-segment-actions')"
-        >
-          取消
+          <span class="skill-entry-name">{{ entry.label }}</span>
+          <span class="skill-entry-meta">{{ formatActionEntryMeta(entry) }}</span>
         </button>
       </div>
     </div>
@@ -238,17 +129,17 @@
             class="tool-button"
             data-testid="workbench-summary-shift-action-batch-earlier"
             type="button"
-            @click.stop="emitBatchShift(batch.batchId, -500)"
+            @click.stop="emitBatchShift(batch.batchId, -batchShiftStepMs)"
           >
-            -500ms
+            -30f
           </button>
           <button
             class="tool-button"
             data-testid="workbench-summary-shift-action-batch-later"
             type="button"
-            @click.stop="emitBatchShift(batch.batchId, 500)"
+            @click.stop="emitBatchShift(batch.batchId, batchShiftStepMs)"
           >
-            +500ms
+            +30f
           </button>
           <label class="batch-shift-control">
             <span>批次偏移 ms</span>
@@ -380,8 +271,8 @@
 <script setup>
 import { computed, reactive } from 'vue';
 import { Collection } from '@element-plus/icons-vue';
-import { getSkillActionVariants } from '../../domain/workbenchProjectFactory';
-
+import { getSkillActionCatalog } from '../../domain/workbenchProjectFactory';
+import { formatFrameTime, frameToMs, msToFrame } from '../../domain/timebase';
 const props = defineProps({
   actor: {
     type: Object,
@@ -407,27 +298,12 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  segmentSplitOptions: {
-    type: Object,
-    default: () => ({
-      intervalMs: 2000,
-      startAfterSelectedAction: false,
-      skipExistingSegments: false,
-    }),
-  },
-  segmentSplitPreview: {
-    type: Object,
-    default: null,
-  },
 });
 
 const emit = defineEmits([
   'select-action',
   'add-action',
   'add-skill-action',
-  'preview-skill-segment-actions',
-  'confirm-skill-segment-actions',
-  'cancel-skill-segment-actions',
   'add-wait-action',
   'add-switch-action',
   'add-annotation-action',
@@ -439,11 +315,13 @@ const emit = defineEmits([
   'align-action-batch',
   'shift-action-batch',
   'update-active-actor',
-  'update-segment-split-options',
 ]);
 
 const batchAlignStarts = reactive({});
 const batchShiftOffsets = reactive({});
+const batchShiftStepMs = frameToMs(30);
+
+const actionEntries = computed(() => getSkillActionCatalog(props.skills, 1));
 
 const selectedBatchId = computed(() => {
   const selectedAction = props.actions.find((action) => action.id === props.selectedActionId);
@@ -543,7 +421,7 @@ function actionDetailValue(action) {
     if (!action.selectedDamageSegment) {
       return '待补';
     }
-    return formatActionVariantPreview(action.selectedDamageSegment);
+    return `${formatActionVariantPreview(action.selectedDamageSegment)} / ${formatFrameTime(action.durationMs ?? 0)}`;
   }
   if (action.type === 'resource') {
     return `${String(action.resource ?? 'sp').toUpperCase()} ${formatSigned(action.change)}`;
@@ -562,15 +440,12 @@ function formatSigned(value) {
   return `${number > 0 ? '+' : ''}${number}`;
 }
 
-function formatSkillMeta(skill) {
-  const cooldownMs = Number(skill.cooldownMs);
-  const cooldown = cooldownMs > 0 ? `${cooldownMs / 1000}s` : 'CD -';
-  const spCost = Number(skill.spCost) || 0;
-  return `${cooldown} / SP ${spCost}`;
-}
-
-function formatSkillName(skill) {
-  return skill.name || `技能 ${skill.id}`;
+function formatActionEntryMeta(entry) {
+  const source =
+    entry.sourceLabel && entry.sourceLabel !== entry.label
+      ? `${entry.sourceLabel} / `
+      : '';
+  return `${source}${entry.rawValue ?? '倍率待补'} / ${msToFrame(entry.durationMs)}f ${formatFrameTime(entry.durationMs)}`;
 }
 
 function resolveBatchSkillName(batch, action) {
@@ -589,25 +464,10 @@ function formatBatchSource(source) {
   return source || '批次生成';
 }
 
-function getSkillSegmentCount(skill) {
-  return getSkillActionVariants(skill, 1).length;
-}
-
-function formatSkillSplitTitle(skill) {
-  const count = getSkillSegmentCount(skill);
-  return count > 1 ? `按 ${count} 个动作形态生成动作` : '该技能只有一个可解析动作形态';
-}
-
 function formatActionVariantPreview(action) {
   const hitCount = Number(action.hitModel?.hitCount) || 1;
   const hitSuffix = hitCount > 1 ? `；${hitCount} 段总倍率` : '';
   return `${action.displayLabel ?? action.label} / ${action.rawValue}${hitSuffix}`;
-}
-
-function emitSegmentSplitOption(key, value) {
-  emit('update-segment-split-options', {
-    [key]: key === 'intervalMs' ? Number(value) : Boolean(value),
-  });
 }
 
 function emitBatchShift(batchId, offsetMs) {
@@ -657,13 +517,6 @@ function applyBatchAlign(batchId) {
     batchId,
     startMs,
   });
-}
-
-function formatPreviewRange(action) {
-  if (action.autoDelayed) {
-    return `${action.requestedStartMs}ms -> ${action.resolvedStartMs}ms`;
-  }
-  return `${action.resolvedStartMs}ms`;
 }
 
 function formatGenerationBatch(batch) {
@@ -724,151 +577,6 @@ h2 {
   gap: 8px;
   padding: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-}
-
-.segment-options {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 8px;
-  padding: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-}
-
-.segment-options label {
-  display: grid;
-  gap: 5px;
-  min-width: 0;
-}
-
-.segment-options label span {
-  color: #8f9aa3;
-  font-size: 11px;
-}
-
-.segment-options input[type="number"] {
-  width: 100%;
-  min-width: 0;
-  padding: 7px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 4px;
-  background: #11161b;
-  color: #ffffff;
-  font: inherit;
-  font-size: 12px;
-}
-
-.segment-options .checkbox-control {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.segment-options input[type="checkbox"] {
-  width: 14px;
-  height: 14px;
-  accent-color: #79c7b9;
-}
-
-.segment-preview {
-  display: grid;
-  gap: 9px;
-  padding: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  background: rgba(230, 162, 60, 0.07);
-}
-
-.segment-preview-heading {
-  display: grid;
-  gap: 3px;
-  min-width: 0;
-}
-
-.segment-preview-heading span,
-.segment-preview-heading strong {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.segment-preview-heading span {
-  color: #efc574;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.segment-preview-heading strong {
-  color: #d9dee3;
-  font-size: 11px;
-}
-
-.segment-preview-metrics {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
-  margin: 0;
-}
-
-.segment-preview-metrics div {
-  min-width: 0;
-  padding: 6px 7px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.segment-preview-base,
-.segment-preview-empty {
-  margin: 0;
-  color: #b8c0c7;
-  font-size: 11px;
-}
-
-.segment-preview-list {
-  display: grid;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.segment-preview-list li {
-  display: grid;
-  gap: 2px;
-  min-width: 0;
-  padding: 6px 7px;
-  border-left: 3px solid #e6a23c;
-  border-radius: 4px;
-  background: rgba(17, 22, 27, 0.72);
-}
-
-.segment-preview-list span,
-.segment-preview-list small {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.segment-preview-list span {
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.segment-preview-list small {
-  color: #efc574;
-  font-size: 11px;
-}
-
-.segment-preview-actions {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.segment-preview-actions .tool-button:disabled {
-  border-color: rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  color: #6f7880;
-  cursor: not-allowed;
 }
 
 .batch-summary-panel {

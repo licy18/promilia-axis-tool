@@ -3,6 +3,7 @@ import { nextTick } from 'vue';
 import { beforeEach, describe, expect, it } from 'vitest';
 import workbenchSeed from '../../data/generated/workbench-seed.json';
 import { WORKBENCH_DRAFT_STORAGE_KEY } from '../../domain/workbenchDraftStorage';
+import { getSkillActionCatalog } from '../../domain/workbenchProjectFactory';
 import Workbench from '../../views/Workbench.vue';
 
 describe('Workbench view', () => {
@@ -306,7 +307,7 @@ describe('Workbench view', () => {
     });
   });
 
-  it('splits a skill into per-action-variant draft actions from the action library', async () => {
+  it('lists Endaxis-style combat actions instead of fancy skill names', async () => {
     const wrapper = mount(Workbench, {
       global: {
         stubs: {
@@ -317,156 +318,76 @@ describe('Workbench view', () => {
       },
     });
 
-    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
-    await wrapper
-      .find('.action-item[data-action-id="action-0001"]')
-      .trigger('click');
+    const entries = wrapper.findAll('[data-testid="workbench-skill-entry"]');
+    expect(entries.map(entry => entry.find('.skill-entry-name').text())).toEqual([
+      '普通攻击',
+      '重击',
+      '闪击',
+      '跃击',
+      '星鸣技',
+      '星结合击',
+      '星决技',
+      '星携技',
+      '极限反击',
+      '完美招架',
+    ]);
+    expect(entries.map(entry => entry.attributes('data-action-kind'))).toEqual([
+      'normal-attack',
+      'charged-attack',
+      'dodge-attack',
+      'plunging-attack',
+      'star-skill',
+      'star-combo',
+      'ultimate',
+      'star-carry',
+      'limit-counter',
+      'perfect-parry',
+    ]);
+    expect(entries.map(entry => entry.text()).join(' ')).not.toContain('哈库茵剑舞');
+    expect(entries.map(entry => entry.text()).join(' ')).not.toContain('暴击率');
+    expect(
+      entries.find(entry => entry.attributes('data-action-kind') === 'star-skill')?.attributes('data-skill-id')
+    ).toBe('10900112');
+  });
 
-    const splitButton = findActionLibrarySkillSplitButton(
-      wrapper,
-      workbenchSeed.defaults.skillId
-    );
-    expect(splitButton.text()).toBe('形态 4');
-    expect(splitButton.attributes('disabled')).toBeUndefined();
+  it('adds a selected combat action directly from the action library', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
 
-    await splitButton.trigger('click');
+    const starSkillEntry = findActionLibraryEntry(wrapper, 'star-skill');
+    await starSkillEntry.trigger('click');
 
     expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe(
       '2 action'
     );
-    expect(
-      wrapper.find('[data-testid="workbench-segment-split-preview"]').exists()
-    ).toBe(true);
-    expect(
-      wrapper
-        .find('[data-testid="workbench-segment-preview-generated-count"]')
-        .text()
-    ).toBe('4');
-    expect(
-      wrapper
-        .find('[data-testid="workbench-segment-preview-skipped-count"]')
-        .text()
-    ).toBe('0');
-    expect(
-      wrapper
-        .find('[data-testid="workbench-segment-preview-delay-count"]')
-        .text()
-    ).toBe('1');
-    expect(
-      wrapper.find('[data-testid="workbench-segment-preview-base"]').text()
-    ).toContain('起点 2000ms');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-segment-preview-item"][data-segment-index="0"]'
-        )
-        .text()
-    ).toContain('2000ms -> 4000ms');
-
-    await wrapper
-      .find('[data-testid="workbench-segment-preview-confirm"]')
-      .trigger('click');
-
-    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe(
-      '6 action'
-    );
-    expect(wrapper.find('[data-testid="scenario-hit-count"]').text()).toBe('6');
-    expect(
-      wrapper.find('[data-testid="workbench-segment-split-preview"]').exists()
-    ).toBe(false);
-    expect(
-      wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
-    ).toBe('1');
-    expect(
-      wrapper.find('[data-testid="workbench-insert-delay-item"]').text()
-    ).toContain('2000ms -> 4000ms');
-    expect(
-      wrapper.find('.action-item[data-action-id="action-0004"]').text()
-    ).toContain('重击 / 190%');
-    expect(
-      wrapper.find('.action-item[data-action-id="action-0004"]').text()
-    ).toContain('segment-batch-0001');
-    expect(
-      wrapper.findAll('[data-testid="workbench-action-batch-note"]')
-    ).toHaveLength(4);
-    expect(
-      wrapper.findAll('[data-testid="workbench-delete-action-batch"]')
-    ).toHaveLength(0);
-    expect(
-      wrapper.findAll('[data-testid="workbench-summary-delete-action-batch"]')
-    ).toHaveLength(1);
-    expect(
-      wrapper.find('[data-testid="workbench-action-batch-summary"]').text()
-    ).toContain('4 动作');
-
-    const damageLabels = wrapper
-      .findAll('.damage-row')
-      .map(row => row.find('span').text());
-    expect(damageLabels).toEqual(
-      expect.arrayContaining(['普攻', '重击', '闪击', '跃击'])
-    );
+    expect(wrapper.find('.action-item[data-action-id="action-0002"]').text()).toContain('星鸣技');
+    expect(wrapper.find('.action-item[data-action-id="action-0002"]').text()).toContain('1s30f');
+    expect(wrapper.findAll('.damage-row').some(row => row.text().includes('星鸣技'))).toBe(true);
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     const savedDraft = JSON.parse(
       window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
     );
-    const generatedActions = savedDraft.actionDrafts.slice(2);
-
-    expect(savedDraft.actionDrafts.map(action => action.id)).toEqual([
-      'action-0001',
-      'action-0002',
-      'action-0003',
-      'action-0004',
-      'action-0005',
-      'action-0006',
-    ]);
-    expect(generatedActions.map(action => action.damageSegmentIndex)).toEqual([
-      0, 1, 2, 3,
-    ]);
-    expect(generatedActions.map(action => action.actionVariantIndex)).toEqual([
-      0, 1, 2, 3,
-    ]);
-    expect(generatedActions.map(action => action.startMs)).toEqual([
-      4000, 6000, 8000, 10000,
-    ]);
-    expect(
-      generatedActions.map(action => action.generationBatch?.batchId)
-    ).toEqual([
-      'segment-batch-0001',
-      'segment-batch-0001',
-      'segment-batch-0001',
-      'segment-batch-0001',
-    ]);
-    expect(generatedActions[0].generationBatch).toMatchObject({
-      source: 'skill-action-variant-split',
-      skillId: workbenchSeed.defaults.skillId,
+    expect(savedDraft.actionDrafts[1]).toMatchObject({
+      id: 'action-0002',
+      skillId: 10900112,
       actorCharacterId: workbenchSeed.defaults.characterId,
       level: 1,
-      variantCount: 4,
-      segmentCount: 4,
+      actionVariantIndex: 0,
+      damageSegmentIndex: 0,
+      durationMs: 1500,
     });
-    expect(generatedActions[0].generationBatch.createdAt).toEqual(
-      expect.any(String)
-    );
-    expect(generatedActions[0]).toMatchObject({
-      skillId: workbenchSeed.defaults.skillId,
-      insertion: {
-        autoDelayed: true,
-        requestedStartMs: 2000,
-        resolvedStartMs: 4000,
-        conflictActionIds: ['action-0002'],
-      },
-    });
-    expect(generatedActions.slice(1).map(action => action.insertion)).toEqual([
-      null,
-      null,
-      null,
-    ]);
-    expect(generatedActions[1].note).toContain('动作形态拆分：重击 / 190%');
-    expect(generatedActions[1].note).toContain('非真实命中帧');
+    expect(savedDraft.actionDrafts[1].note).toContain('星鸣技：160%');
   });
 
-  it('saves, restores, and deletes a generated skill segment batch', async () => {
+  it('uses distinct frame-based default durations for direct combat actions', async () => {
     const wrapper = mount(Workbench, {
       global: {
         stubs: {
@@ -477,726 +398,21 @@ describe('Workbench view', () => {
       },
     });
 
-    await findActionLibrarySkillSplitButton(
-      wrapper,
-      workbenchSeed.defaults.skillId
-    ).trigger('click');
-    await wrapper
-      .find('[data-testid="workbench-segment-preview-confirm"]')
-      .trigger('click');
+    await findActionLibraryEntry(wrapper, 'charged-attack').trigger('click');
+    await findActionLibraryEntry(wrapper, 'dodge-attack').trigger('click');
 
     expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe(
-      '5 action'
+      '3 action'
     );
     expect(
-      wrapper.findAll('[data-testid="workbench-action-batch-note"]')
-    ).toHaveLength(4);
-
-    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
-    const savedDraft = JSON.parse(
-      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
-    );
-    expect(
-      savedDraft.actionDrafts
-        .slice(1)
-        .map(action => action.generationBatch?.batchId)
-    ).toEqual([
-      'segment-batch-0001',
-      'segment-batch-0001',
-      'segment-batch-0001',
-      'segment-batch-0001',
-    ]);
-
-    wrapper.unmount();
-    const restored = mount(Workbench, {
-      global: {
-        stubs: {
-          RouterLink: {
-            template: '<a><slot /></a>',
-          },
-        },
-      },
-    });
-    await nextTick();
-
-    expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe(
-      '已恢复草稿'
-    );
-    expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe(
-      '5 action'
-    );
-    expect(
-      restored.findAll('[data-testid="workbench-action-batch-note"]')
-    ).toHaveLength(4);
-
-    await restored
-      .find('[data-testid="workbench-summary-delete-action-batch"]')
-      .trigger('click');
-
-    expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe(
-      '1 action'
-    );
-    expect(restored.find('[data-testid="scenario-hit-count"]').text()).toBe(
-      '1'
-    );
-    expect(
-      restored.findAll('[data-testid="workbench-action-batch-note"]')
-    ).toHaveLength(0);
-    expect(
-      restored.find('[data-testid="workbench-start-input"]').element.value
-    ).toBe('0');
-    expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe(
-      '有未保存改动'
-    );
-
-    await restored
-      .find('[data-testid="workbench-save-draft"]')
-      .trigger('click');
-    const savedAfterDelete = JSON.parse(
-      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
-    );
-    expect(savedAfterDelete.actionDrafts).toHaveLength(1);
-    expect(savedAfterDelete.actionDrafts[0].generationBatch).toBeNull();
-  });
-
-  it('shifts a generated skill segment batch while preserving relative spacing', async () => {
-    const wrapper = mount(Workbench, {
-      global: {
-        stubs: {
-          RouterLink: {
-            template: '<a><slot /></a>',
-          },
-        },
-      },
-    });
-
-    await findActionLibrarySkillSplitButton(
-      wrapper,
-      workbenchSeed.defaults.skillId
-    ).trigger('click');
-    await wrapper
-      .find('[data-testid="workbench-segment-preview-confirm"]')
-      .trigger('click');
-
-    expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe(
-      '0'
-    );
-
-    await wrapper
-      .find('[data-testid="workbench-summary-shift-action-batch-earlier"]')
-      .trigger('click');
-    await wrapper
-      .find('[data-testid="workbench-summary-shift-action-batch-earlier"]')
-      .trigger('click');
-    await wrapper
-      .find('[data-testid="workbench-summary-shift-action-batch-earlier"]')
-      .trigger('click');
-
-    expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe(
-      '1'
-    );
-    expect(
-      wrapper.find('[data-testid="workbench-overlap-item"]').text()
-    ).toContain('500-1000ms');
+      wrapper.findAll('.action-item').map(action => action.find('.action-name').text())
+    ).toEqual(['普通攻击', '重击', '闪击']);
     expect(
       wrapper.find('.action-item[data-action-id="action-0002"]').text()
-    ).toContain('500ms');
+    ).toContain('1s12f');
     expect(
-      wrapper.findAll('[data-testid="workbench-action-overlap-warning"]')
-    ).toHaveLength(2);
-
-    await wrapper
-      .find('[data-testid="workbench-summary-shift-action-batch-later"]')
-      .trigger('click');
-
-    expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe(
-      '0'
-    );
-    expect(
-      wrapper.find('.action-item[data-action-id="action-0002"]').text()
-    ).toContain('1000ms');
-    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe(
-      '有未保存改动'
-    );
-
-    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
-    const savedDraft = JSON.parse(
-      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
-    );
-    expect(savedDraft.actionDrafts.map(action => action.startMs)).toEqual([
-      0, 1000, 3000, 5000, 7000,
-    ]);
-    expect(
-      savedDraft.actionDrafts
-        .slice(1)
-        .map(action => action.generationBatch?.batchId)
-    ).toEqual([
-      'segment-batch-0001',
-      'segment-batch-0001',
-      'segment-batch-0001',
-      'segment-batch-0001',
-    ]);
-
-    wrapper.unmount();
-    const restored = mount(Workbench, {
-      global: {
-        stubs: {
-          RouterLink: {
-            template: '<a><slot /></a>',
-          },
-        },
-      },
-    });
-    await nextTick();
-
-    expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe(
-      '已恢复草稿'
-    );
-    expect(
-      restored.find('[data-testid="workbench-overlap-count"]').text()
-    ).toBe('0');
-    expect(
-      restored.find('.action-item[data-action-id="action-0002"]').text()
-    ).toContain('1000ms');
-    expect(
-      restored.findAll('[data-testid="workbench-action-batch-note"]')
-    ).toHaveLength(4);
-  });
-
-  it('applies arbitrary batch shift input and clamps to timeline bounds', async () => {
-    const wrapper = mount(Workbench, {
-      global: {
-        stubs: {
-          RouterLink: {
-            template: '<a><slot /></a>',
-          },
-        },
-      },
-    });
-
-    await findActionLibrarySkillSplitButton(
-      wrapper,
-      workbenchSeed.defaults.skillId
-    ).trigger('click');
-    await wrapper
-      .find('[data-testid="workbench-segment-preview-confirm"]')
-      .trigger('click');
-
-    await wrapper
-      .find('[data-testid="workbench-summary-batch-shift-offset-input"]')
-      .setValue('-5000');
-    await wrapper
-      .find('[data-testid="workbench-summary-apply-action-batch-shift"]')
-      .trigger('click');
-
-    expect(
-      wrapper.find('[data-testid="workbench-summary-batch-shift-offset-input"]')
-        .element.value
-    ).toBe('0');
-    expect(
-      wrapper.find('.action-item[data-action-id="action-0002"]').text()
-    ).toContain('0ms');
-    expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe(
-      '1'
-    );
-    expect(
-      wrapper.find('[data-testid="workbench-overlap-item"]').text()
-    ).toContain('0-1000ms');
-
-    await wrapper
-      .find('[data-testid="workbench-summary-batch-shift-offset-input"]')
-      .setValue('40000');
-    await wrapper
-      .find('[data-testid="workbench-summary-apply-action-batch-shift"]')
-      .trigger('click');
-
-    expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe(
-      '0'
-    );
-    expect(
-      wrapper.find('.action-item[data-action-id="action-0005"]').text()
-    ).toContain('30000ms');
-    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe(
-      '有未保存改动'
-    );
-
-    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
-    const savedDraft = JSON.parse(
-      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
-    );
-    expect(savedDraft.actionDrafts.map(action => action.startMs)).toEqual([
-      0, 24000, 26000, 28000, 30000,
-    ]);
-    expect(
-      savedDraft.actionDrafts
-        .slice(1)
-        .map(action => action.generationBatch?.batchId)
-    ).toEqual([
-      'segment-batch-0001',
-      'segment-batch-0001',
-      'segment-batch-0001',
-      'segment-batch-0001',
-    ]);
-  });
-
-  it('aligns a generated skill segment batch to a target start and restores it', async () => {
-    const wrapper = mount(Workbench, {
-      global: {
-        stubs: {
-          RouterLink: {
-            template: '<a><slot /></a>',
-          },
-        },
-      },
-    });
-
-    await findActionLibrarySkillSplitButton(
-      wrapper,
-      workbenchSeed.defaults.skillId
-    ).trigger('click');
-    await wrapper
-      .find('[data-testid="workbench-segment-preview-confirm"]')
-      .trigger('click');
-
-    await wrapper
-      .find('[data-testid="workbench-summary-batch-align-start-input"]')
-      .setValue('-5000');
-    await wrapper
-      .find('[data-testid="workbench-summary-apply-action-batch-align"]')
-      .trigger('click');
-
-    expect(
-      wrapper.find('.action-item[data-action-id="action-0002"]').text()
-    ).toContain('0ms');
-    expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe(
-      '1'
-    );
-    expect(
-      wrapper.find('[data-testid="workbench-overlap-item"]').text()
-    ).toContain('0-1000ms');
-
-    await wrapper
-      .find('[data-testid="workbench-summary-batch-align-start-input"]')
-      .setValue('3500');
-    await wrapper
-      .find('[data-testid="workbench-summary-apply-action-batch-align"]')
-      .trigger('click');
-
-    expect(
-      wrapper.find('.action-item[data-action-id="action-0002"]').text()
-    ).toContain('3500ms');
-    expect(
-      wrapper.find('.action-item[data-action-id="action-0005"]').text()
-    ).toContain('9500ms');
-    expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe(
-      '0'
-    );
-    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe(
-      '有未保存改动'
-    );
-
-    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
-    const savedDraft = JSON.parse(
-      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
-    );
-    expect(savedDraft.actionDrafts.map(action => action.startMs)).toEqual([
-      0, 3500, 5500, 7500, 9500,
-    ]);
-
-    wrapper.unmount();
-
-    const restored = mount(Workbench, {
-      global: {
-        stubs: {
-          RouterLink: {
-            template: '<a><slot /></a>',
-          },
-        },
-      },
-    });
-    await nextTick();
-
-    expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe(
-      '已恢复草稿'
-    );
-    expect(
-      restored.find('.action-item[data-action-id="action-0002"]').text()
-    ).toContain('3500ms');
-    expect(
-      restored.findAll('[data-testid="workbench-action-batch-note"]')
-    ).toHaveLength(4);
-
-    await restored
-      .find('[data-testid="workbench-summary-batch-align-start-input"]')
-      .setValue('40000');
-    await restored
-      .find('[data-testid="workbench-summary-apply-action-batch-align"]')
-      .trigger('click');
-    await restored
-      .find('[data-testid="workbench-save-draft"]')
-      .trigger('click');
-    const clampedDraft = JSON.parse(
-      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
-    );
-    expect(clampedDraft.actionDrafts.map(action => action.startMs)).toEqual([
-      0, 24000, 26000, 28000, 30000,
-    ]);
-    expect(
-      restored.find('[data-testid="workbench-overlap-count"]').text()
-    ).toBe('0');
-  });
-
-  it('summarizes generated skill segment batches and controls them centrally', async () => {
-    const wrapper = mount(Workbench, {
-      global: {
-        stubs: {
-          RouterLink: {
-            template: '<a><slot /></a>',
-          },
-        },
-      },
-    });
-
-    expect(
-      wrapper
-        .find('[data-testid="workbench-action-batch-summary-count"]')
-        .text()
-    ).toBe('0');
-    expect(
-      wrapper
-        .find('[data-testid="workbench-action-batch-summary-empty"]')
-        .text()
-    ).toBe('暂无生成批次');
-
-    await findActionLibrarySkillSplitButton(
-      wrapper,
-      workbenchSeed.defaults.skillId
-    ).trigger('click');
-    await wrapper
-      .find('[data-testid="workbench-segment-preview-confirm"]')
-      .trigger('click');
-
-    expect(
-      wrapper
-        .find('[data-testid="workbench-action-batch-summary-count"]')
-        .text()
-    ).toBe('1');
-    expect(
-      wrapper
-        .find('[data-testid="workbench-action-batch-summary-empty"]')
-        .exists()
-    ).toBe(false);
-    expect(
-      wrapper.find('[data-testid="workbench-action-batch-summary"]').text()
-    ).toContain('哈库茵剑舞');
-    expect(
-      wrapper.find('[data-testid="workbench-action-batch-summary"]').text()
-    ).toContain('4 动作');
-    expect(
-      wrapper.find('[data-testid="workbench-action-batch-summary"]').text()
-    ).toContain('2000-8000ms');
-    expect(
-      wrapper
-        .find('[data-testid="workbench-action-batch-summary"]')
-        .attributes('data-first-action-id')
-    ).toBe('action-0002');
-
-    await wrapper
-      .find('[data-testid="workbench-action-batch-summary"]')
-      .trigger('click');
-
-    expect(
-      wrapper.find('.action-item.selected').attributes('data-action-id')
-    ).toBe('action-0002');
-    expect(
-      wrapper.findAll('.action-item[data-batch-highlight="true"]')
-    ).toHaveLength(4);
-    expect(
-      wrapper.findAll(
-        '[data-testid="workbench-timeline-action"][data-batch-highlight="true"]'
-      )
-    ).toHaveLength(4);
-    expect(
-      wrapper.findAll(
-        '[data-testid="workbench-timeline-damage-marker"][data-batch-highlight="true"]'
-      )
-    ).toHaveLength(4);
-
-    await wrapper
-      .find('.action-item[data-action-id="action-0003"]')
-      .trigger('click');
-
-    expect(
-      wrapper
-        .find('[data-testid="workbench-action-batch-summary"]')
-        .attributes('data-selected')
-    ).toBe('true');
-    expect(
-      wrapper.find('[data-testid="workbench-action-batch-selected"]').text()
-    ).toBe('选中');
-
-    await wrapper
-      .find('[data-testid="workbench-summary-shift-action-batch-earlier"]')
-      .trigger('click');
-
-    expect(
-      wrapper.find('.action-item.selected').attributes('data-action-id')
-    ).toBe('action-0003');
-    expect(
-      wrapper.find('.action-item[data-action-id="action-0002"]').text()
-    ).toContain('1500ms');
-    expect(
-      wrapper.find('[data-testid="workbench-action-batch-summary"]').text()
-    ).toContain('1500-7500ms');
-
-    await wrapper
-      .find('[data-testid="workbench-summary-batch-shift-offset-input"]')
-      .setValue('500');
-    await wrapper
-      .find('[data-testid="workbench-summary-apply-action-batch-shift"]')
-      .trigger('click');
-
-    expect(
-      wrapper.find('[data-testid="workbench-summary-batch-shift-offset-input"]')
-        .element.value
-    ).toBe('0');
-    expect(
-      wrapper.find('.action-item[data-action-id="action-0002"]').text()
-    ).toContain('2000ms');
-
-    await wrapper
-      .find('[data-testid="workbench-summary-batch-align-start-input"]')
-      .setValue('3500');
-    await wrapper
-      .find('[data-testid="workbench-summary-apply-action-batch-align"]')
-      .trigger('click');
-
-    expect(
-      wrapper.find('.action-item[data-action-id="action-0002"]').text()
-    ).toContain('3500ms');
-    expect(
-      wrapper.find('[data-testid="workbench-action-batch-summary"]').text()
-    ).toContain('3500-9500ms');
-
-    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
-    wrapper.unmount();
-
-    const restored = mount(Workbench, {
-      global: {
-        stubs: {
-          RouterLink: {
-            template: '<a><slot /></a>',
-          },
-        },
-      },
-    });
-    await nextTick();
-
-    expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe(
-      '已恢复草稿'
-    );
-    expect(
-      restored.find('[data-testid="workbench-action-batch-summary"]').text()
-    ).toContain('3500-9500ms');
-    expect(
-      restored.findAll('.action-item[data-batch-highlight="true"]')
-    ).toHaveLength(4);
-
-    await restored
-      .find('[data-testid="workbench-summary-delete-action-batch"]')
-      .trigger('click');
-
-    expect(
-      restored
-        .find('[data-testid="workbench-action-batch-summary-count"]')
-        .text()
-    ).toBe('0');
-    expect(
-      restored
-        .find('[data-testid="workbench-action-batch-summary-empty"]')
-        .exists()
-    ).toBe(true);
-    expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe(
-      '1 action'
-    );
-  });
-
-  it('cancels a skill segment split preview without writing actions', async () => {
-    const wrapper = mount(Workbench, {
-      global: {
-        stubs: {
-          RouterLink: {
-            template: '<a><slot /></a>',
-          },
-        },
-      },
-    });
-
-    await findActionLibrarySkillSplitButton(
-      wrapper,
-      workbenchSeed.defaults.skillId
-    ).trigger('click');
-
-    expect(
-      wrapper.find('[data-testid="workbench-segment-split-preview"]').exists()
-    ).toBe(true);
-    expect(
-      wrapper
-        .find('[data-testid="workbench-segment-preview-generated-count"]')
-        .text()
-    ).toBe('4');
-
-    await wrapper
-      .find('[data-testid="workbench-segment-preview-cancel"]')
-      .trigger('click');
-
-    expect(
-      wrapper.find('[data-testid="workbench-segment-split-preview"]').exists()
-    ).toBe(false);
-    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe(
-      '1 action'
-    );
-    expect(wrapper.find('[data-testid="scenario-hit-count"]').text()).toBe('1');
-    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe(
-      '未保存草稿'
-    );
-  });
-
-  it('applies and restores segment split placement options', async () => {
-    const wrapper = mount(Workbench, {
-      global: {
-        stubs: {
-          RouterLink: {
-            template: '<a><slot /></a>',
-          },
-        },
-      },
-    });
-
-    expect(
-      wrapper.find('[data-testid="workbench-segment-split-interval-input"]')
-        .element.value
-    ).toBe('2000');
-    expect(
-      wrapper.find(
-        '[data-testid="workbench-segment-split-start-after-checkbox"]'
-      ).element.checked
-    ).toBe(false);
-    expect(
-      wrapper.find(
-        '[data-testid="workbench-segment-split-skip-existing-checkbox"]'
-      ).element.checked
-    ).toBe(false);
-
-    await wrapper
-      .find('[data-testid="workbench-segment-split-interval-input"]')
-      .setValue('1500');
-    await wrapper
-      .find('[data-testid="workbench-segment-split-start-after-checkbox"]')
-      .setValue(true);
-    await wrapper
-      .find('[data-testid="workbench-segment-split-skip-existing-checkbox"]')
-      .setValue(true);
-    await findActionLibrarySkillSplitButton(
-      wrapper,
-      workbenchSeed.defaults.skillId
-    ).trigger('click');
-
-    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe(
-      '1 action'
-    );
-    expect(
-      wrapper
-        .find('[data-testid="workbench-segment-preview-generated-count"]')
-        .text()
-    ).toBe('3');
-    expect(
-      wrapper
-        .find('[data-testid="workbench-segment-preview-skipped-count"]')
-        .text()
-    ).toBe('1');
-    expect(
-      wrapper
-        .find('[data-testid="workbench-segment-preview-delay-count"]')
-        .text()
-    ).toBe('0');
-    expect(
-      wrapper.find('[data-testid="workbench-segment-preview-base"]').text()
-    ).toContain('起点 1000ms');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-segment-preview-item"][data-segment-index="1"]'
-        )
-        .text()
-    ).toContain('1000ms');
-
-    await wrapper
-      .find('[data-testid="workbench-segment-preview-confirm"]')
-      .trigger('click');
-
-    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe(
-      '4 action'
-    );
-    expect(wrapper.find('[data-testid="scenario-hit-count"]').text()).toBe('4');
-    expect(
-      wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
-    ).toBe('0');
-    expect(
-      wrapper.find('[data-testid="workbench-segment-split-preview"]').exists()
-    ).toBe(false);
-
-    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
-    const savedDraft = JSON.parse(
-      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
-    );
-    expect(savedDraft.segmentSplitOptions).toEqual({
-      intervalMs: 1500,
-      startAfterSelectedAction: true,
-      skipExistingSegments: true,
-    });
-    expect(
-      savedDraft.actionDrafts.map(action => action.damageSegmentIndex)
-    ).toEqual([0, 1, 2, 3]);
-    expect(savedDraft.actionDrafts.map(action => action.startMs)).toEqual([
-      0, 1000, 2500, 4000,
-    ]);
-
-    wrapper.unmount();
-    const restored = mount(Workbench, {
-      global: {
-        stubs: {
-          RouterLink: {
-            template: '<a><slot /></a>',
-          },
-        },
-      },
-    });
-    await nextTick();
-
-    expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe(
-      '已恢复草稿'
-    );
-    expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe(
-      '4 action'
-    );
-    expect(
-      restored.find('[data-testid="workbench-segment-split-interval-input"]')
-        .element.value
-    ).toBe('1500');
-    expect(
-      restored.find(
-        '[data-testid="workbench-segment-split-start-after-checkbox"]'
-      ).element.checked
-    ).toBe(true);
-    expect(
-      restored.find(
-        '[data-testid="workbench-segment-split-skip-existing-checkbox"]'
-      ).element.checked
-    ).toBe(true);
-    expect(
-      restored.find('[data-testid="workbench-start-input"]').element.value
-    ).toBe('4000');
+      wrapper.find('.action-item[data-action-id="action-0003"]').text()
+    ).toContain('0s36f');
   });
 
   it('rebuilds the workbench project when the selected character changes', async () => {
@@ -1322,7 +538,7 @@ describe('Workbench view', () => {
     await timelineActions[1].trigger('keydown', { key: 'ArrowRight' });
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
-    ).toBe('1500');
+    ).toBe('1016.666667');
 
     timelineActions = wrapper.findAll(
       '[data-testid="workbench-timeline-action"]'
@@ -1333,7 +549,7 @@ describe('Workbench view', () => {
     });
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
-    ).toBe('0');
+    ).toBe('950');
 
     timelineActions = wrapper.findAll(
       '[data-testid="workbench-timeline-action"]'
@@ -1697,7 +913,7 @@ describe('Workbench view', () => {
     ).toContain('末音');
     expect(
       wrapper.find('[data-testid="workbench-overlap-item"]').text()
-    ).toContain('哈库茵剑舞 / 哈库茵剑舞');
+    ).toContain('普通攻击 / 普通攻击');
     expect(
       wrapper.find('[data-testid="workbench-overlap-item"]').text()
     ).toContain('500-1000ms');
@@ -1929,7 +1145,7 @@ describe('Workbench view', () => {
     });
   });
 
-  it('adds a selected skill from the action library for the active actor', async () => {
+  it('adds a selected combat action from the action library for the active actor', async () => {
     const wrapper = mount(Workbench, {
       global: {
         stubs: {
@@ -1942,19 +1158,21 @@ describe('Workbench view', () => {
     const primarySkills = workbenchSeed.gameData.skills.filter(
       skill => Number(skill.characterId) === workbenchSeed.defaults.characterId
     );
+    const primaryEntries = getSkillActionCatalog(primarySkills, 1);
     const secondaryCharacterId = 101003;
     const secondarySkills = workbenchSeed.gameData.skills.filter(
       skill => Number(skill.characterId) === secondaryCharacterId
     );
-    const selectedSecondarySkill =
-      secondarySkills.find(skill => Number(skill.spCost) > 0) ??
-      secondarySkills[secondarySkills.length - 1];
+    const secondaryEntries = getSkillActionCatalog(secondarySkills, 1);
+    const selectedSecondaryEntry =
+      secondaryEntries.find(entry => entry.kind === 'star-skill') ??
+      secondaryEntries[0];
 
     expect(
       wrapper
         .findAll('[data-testid="workbench-skill-entry"]')
-        .map(entry => Number(entry.attributes('data-skill-id')))
-    ).toEqual(primarySkills.map(skill => skill.id));
+        .map(entry => entry.attributes('data-action-kind'))
+    ).toEqual(primaryEntries.map(entry => entry.kind));
 
     await findActionLibraryActorButton(wrapper, secondaryCharacterId).trigger(
       'click'
@@ -1963,15 +1181,15 @@ describe('Workbench view', () => {
     expect(
       wrapper
         .findAll('[data-testid="workbench-skill-entry"]')
-        .map(entry => Number(entry.attributes('data-skill-id')))
-    ).toEqual(secondarySkills.map(skill => skill.id));
+        .map(entry => entry.attributes('data-action-kind'))
+    ).toEqual(secondaryEntries.map(entry => entry.kind));
     expect(
-      findActionLibrarySkillEntry(wrapper, selectedSecondarySkill.id).exists()
+      findActionLibraryEntry(wrapper, selectedSecondaryEntry.kind).exists()
     ).toBe(true);
 
-    await findActionLibrarySkillEntry(
+    await findActionLibraryEntry(
       wrapper,
-      selectedSecondarySkill.id
+      selectedSecondaryEntry.kind
     ).trigger('click');
 
     expect(
@@ -1983,11 +1201,11 @@ describe('Workbench view', () => {
     ).toBe('actor-101003');
     expect(
       wrapper.find('[data-testid="workbench-skill-select"]').element.value
-    ).toBe(String(selectedSecondarySkill.id));
+    ).toBe(String(selectedSecondaryEntry.skillId));
     expect(
       wrapper.find('[data-testid="workbench-level-input"]').element.value
     ).toBe('1');
-    expect(wrapper.text()).toContain(selectedSecondarySkill.name);
+    expect(wrapper.text()).toContain(selectedSecondaryEntry.label);
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     const savedDraft = JSON.parse(
@@ -1996,7 +1214,7 @@ describe('Workbench view', () => {
     expect(savedDraft.actionDrafts[1]).toMatchObject({
       id: 'action-0002',
       actorCharacterId: secondaryCharacterId,
-      skillId: selectedSecondarySkill.id,
+      skillId: selectedSecondaryEntry.skillId,
       level: 1,
     });
   });
@@ -2150,7 +1368,7 @@ describe('Workbench view', () => {
     ).toContain('末音');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-item"]').text()
-    ).toContain('哈库茵剑舞');
+    ).toContain('普通攻击');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-item"]').text()
     ).toContain('2000ms -> 4000ms');
@@ -2361,7 +1579,7 @@ describe('Workbench view', () => {
       savedDraft.actionDrafts.find(action => action.id === 'action-0003')
     ).toMatchObject({
       startMs: 4500,
-      note: '',
+      note: expect.stringContaining('普通攻击：'),
       insertion: null,
     });
   });
@@ -2466,7 +1684,7 @@ describe('Workbench view', () => {
       savedDraft.actionDrafts.find(action => action.id === 'action-0003')
     ).toMatchObject({
       actorCharacterId: 101003,
-      note: '',
+      note: expect.stringContaining('普通攻击：'),
       insertion: null,
     });
   });
@@ -2537,8 +1755,8 @@ describe('Workbench view', () => {
 
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
-    ).toBe('3500');
-    expect(wrapper.text()).toContain('3500ms');
+    ).toBe('3450');
+    expect(wrapper.text()).toContain('3450ms');
     expect(wrapper.text()).toContain('DAMAGE_PROJECTED');
   });
 
@@ -2785,8 +2003,8 @@ function findActionLibrarySkillEntry(wrapper, skillId) {
   );
 }
 
-function findActionLibrarySkillSplitButton(wrapper, skillId) {
+function findActionLibraryEntry(wrapper, actionKind) {
   return wrapper.find(
-    `[data-testid="workbench-skill-segment-split"][data-skill-id="${Number(skillId)}"]`
+    `[data-testid="workbench-skill-entry"][data-action-kind="${actionKind}"]`
   );
 }

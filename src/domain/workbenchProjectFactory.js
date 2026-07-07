@@ -1,4 +1,5 @@
 import workbenchSeed from '../data/generated/workbench-seed.json';
+import { WORKBENCH_FRAME_MS, snapMsToFrame } from './timebase';
 import {
   ACTION_TYPES,
   createActorFromCharacter,
@@ -11,8 +12,10 @@ import {
   createSwitchAction,
   createWaitAction,
 } from './projectSchema';
+import { getSkillActionCatalog } from './skillActionCatalog';
 import { getSkillActionVariants, getSkillDamageSegments } from './skillDamageSegments';
 
+export { getSkillActionCatalog } from './skillActionCatalog';
 export { getSkillActionVariants, getSkillDamageSegments } from './skillDamageSegments';
 
 const DEFAULT_SECONDARY_CHARACTER_ID =
@@ -71,8 +74,8 @@ export function createWorkbenchActionDraft({
     type,
     skillId: Number(skillId),
     actorCharacterId: Number(actorCharacterId) || DEFAULT_WORKBENCH_SELECTION.characterId,
-    startMs: Number(startMs) || 0,
-    durationMs: Math.max(1, Number(durationMs) || 1000),
+    startMs: Math.max(0, snapMsToFrame(Number(startMs) || 0)),
+    durationMs: Math.max(WORKBENCH_FRAME_MS, snapMsToFrame(Number(durationMs) || 1000)),
     level: Math.max(1, Number(level) || 1),
     actionVariantIndex: normalizedActionVariantIndex,
     damageSegmentIndex: normalizedActionVariantIndex,

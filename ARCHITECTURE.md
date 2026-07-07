@@ -254,6 +254,8 @@ App.vue
 ### 6.7 新版工作台动作模型
 - **主链路**: `actionDrafts` → `Project.actions` → `compileProject()` → `runSimulation()`。
 - **技能动作形态**: `skillLevel.name/value` 解析为 `actionVariants`，用于表达 `普攻`、`重击`、`闪击`、`跃击` 等独立动作形态。
+- **动作库目录**: Workbench 主动作库按 Endaxis 风格展示固定动作：`普通攻击`、`重击`、`闪击`、`跃击`、`星鸣技`、`星结合击`、`星决技`、`星携技`、`极限反击`、`完美招架`；被动技能不作为动作库条目。
+- **时间基准**: Workbench 使用 `src/domain/timebase.js` 统一到 60fps 的 1 帧网格，新增动作、拖动吸附、持续时间和批次快捷偏移都按帧对齐。
 - **普攻段数**: 从技能描述 `【普通攻击】` 中解析，例如 `进行至多五段的普通攻击`；当前只记录总倍率和段数，不编造每段倍率。
 - **兼容字段**: `damageSegmentIndex`、`damageSegments`、`selectedDamageSegment` 暂时作为旧命名兼容层；新逻辑优先使用 `actionVariantIndex`、`actionVariants`、`selectedActionVariant`。
 - **当前边界**: 动作形态倍率可用于 raw 投影，但真实命中帧、每段倍率、取消窗口和完整伤害公式仍需后续数据接入。

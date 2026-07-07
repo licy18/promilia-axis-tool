@@ -137,13 +137,27 @@ export function createSkillAction({
     throw new Error('createSkillAction requires a skill');
   }
   const damageModel = createSkillDamageModel(skill, level);
+  const selectedActionVariant =
+    damageModel.variants?.find(
+      variant => Number(variant.index) === Math.max(0, Number(actionVariantIndex) || 0)
+    ) ??
+    damageModel.variants?.find(
+      variant => Number(variant.index) === Math.max(0, Number(damageSegmentIndex) || 0)
+    ) ??
+    damageModel.variants?.[0] ??
+    null;
 
   return {
     id: id ?? createStableId('action'),
     type: ACTION_TYPES.SKILL,
     actorId,
     skillId: skill.id,
-    name: skill.name ?? skill.displayName ?? `Skill ${skill.id}`,
+    name:
+      selectedActionVariant?.displayLabel ??
+      selectedActionVariant?.label ??
+      skill.displayName ??
+      skill.name ??
+      `Skill ${skill.id}`,
     startMs,
     durationMs,
     targetId,

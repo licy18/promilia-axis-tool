@@ -1320,3 +1320,72 @@ Workbench 技能逻辑来源区现在会展示当前参数语义状态：
 - 本阶段修正动作建模，不等于拿到了普攻每一段的真实倍率、命中帧或取消窗口。
 - 当前 raw 投影仍使用所选动作形态的总倍率。
 - 下一步真实伤害公式分层必须以 `actionVariantIndex + hitModel` 为输入，不能再把普攻、重击、闪击、跃击当成同一动作的多段命中。
+
+## 27. 2026-07-07 Endaxis 风格动作目录与 60fps 时间基准
+
+阶段 5-8B 新增 Workbench 交互适配层，目标是让动作库和时间轴颗粒度先对齐 Endaxis 的排轴体验。
+
+### 27.1 时间基准
+
+新增 `src/domain/timebase.js`：
+
+```javascript
+{
+  "WORKBENCH_FPS": 60,
+  "WORKBENCH_FRAME_MS": 16.666666666667
+}
+```
+
+提供：
+
+- `msToFrame(value)`：毫秒转最近帧数。
+- `frameToMs(value)`：帧数转毫秒，并做浮点尾数规整。
+- `snapMsToFrame(value)`：毫秒吸附到最近 1 帧。
+- `formatFrameTime(value)`：显示为 `秒s帧f`，例如 `1s30f`。
+
+Workbench 的新增动作、拖动吸附、持续时间编辑和批次快捷偏移都按该时间基准处理。
+
+### 27.2 动作目录
+
+新增 `src/domain/skillActionCatalog.js`，从 `getSkillActionVariants()` 派生可直接放入时间轴的动作目录：
+
+```javascript
+[
+  "普通攻击",
+  "重击",
+  "闪击",
+  "跃击",
+  "星鸣技",
+  "星结合击",
+  "星决技",
+  "星携技",
+  "极限反击",
+  "完美招架"
+]
+```
+
+目录条目包含：
+
+- `kind`：稳定动作类型，例如 `normal-attack`、`star-skill`。
+- `label`：动作库显示名。
+- `skillId`：底层真实技能 ID。
+- `actionVariantIndex` / `damageSegmentIndex`：动作形态索引和兼容索引。
+- `rawValue` / `multiplier` / `hitModel`：当前可用倍率与段数信息。
+- `durationFrames` / `durationMs`：暂定默认动作长度。
+
+### 27.3 过滤规则
+
+动作目录只收录可进入时间轴的主动战斗动作。
+
+不会列入动作库的项包括：
+
+- 被动技能。
+- 属性提升项，例如 `暴击率`、`攻击力`。
+- 资源或蓄能提示项，例如 `星决蓄能`。
+- 泛化效果项，例如 `伤害提升`。
+
+### 27.4 当前边界
+
+- `durationFrames` 只是交互占位默认值，不是正式动作帧、命中帧或取消窗口。
+- 技能名仍作为底层数据来源保留，但动作库主显示以直接动作名为准。
+- `damageSegmentIndex` 继续作为兼容字段保留，后续 schema 升级时再迁移到更干净的 action variant 命名。

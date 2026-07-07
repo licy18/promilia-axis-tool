@@ -173,8 +173,9 @@ import {
   DEFAULT_TIMELINE_ACTION_DURATION_MS,
   resolveTimelineActionLaneId,
 } from './timelineDiagnostics';
+import { WORKBENCH_FRAME_MS, formatFrameTime, snapMsToFrame } from '../../domain/timebase';
 
-const MIN_ACTION_DURATION_MS = 100;
+const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
 const ZOOM_STEP = 0.25;
@@ -210,7 +211,7 @@ const props = defineProps({
   },
   snapMs: {
     type: Number,
-    default: 500,
+    default: WORKBENCH_FRAME_MS,
   },
 });
 
@@ -324,7 +325,7 @@ function actionLabel(action) {
 
 function actionDetail(action) {
   if (action.type === 'skill') {
-    return action.actor?.name ?? '';
+    return `${action.actor?.name ?? ''} / ${formatFrameTime(action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS)}`;
   }
   if (action.type === 'resource') {
     return `${String(action.resource ?? 'sp').toUpperCase()} ${formatSigned(action.change)}`;
@@ -333,7 +334,7 @@ function actionDetail(action) {
     return action.eventType ?? '';
   }
   if (action.type === 'switch') {
-    return `${action.durationMs ?? 0}ms`;
+    return formatFrameTime(action.durationMs ?? 0);
   }
   return action.note ?? '';
 }
@@ -527,8 +528,8 @@ function formatZoom(value) {
 }
 
 function snapTimeMs(value) {
-  const snap = Math.max(1, Number(props.snapMs) || 1);
-  return Math.round(value / snap) * snap;
+  const snap = Math.max(WORKBENCH_FRAME_MS, Number(props.snapMs) || WORKBENCH_FRAME_MS);
+  return snap === WORKBENCH_FRAME_MS ? snapMsToFrame(value) : Math.round(value / snap) * snap;
 }
 
 function clampNumber(value, min, max) {

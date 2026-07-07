@@ -42,7 +42,7 @@ npm run dev
 - 新版工作台第一屏已建立：`src/views/Workbench.vue`，路由为 `/workbench`，组件位于 `src/features/workbench/`。
 - 工作台最小可编辑能力已建立：`src/features/workbench/PropertiesPanel.vue` 可选择真实角色/技能/敌人并编辑动作开始时间和等级。
 - 工作台时间轴最小交互已建立：可追加动作、选择动作、删除动作，并让多动作进入同一模拟汇总。
-- 工作台时间轴拖动已建立：`TimelineGridPreview` 可水平拖动动作块，并按 `500ms` 网格吸附更新 `startMs`。
+- 工作台时间轴拖动已建立：`TimelineGridPreview` 可水平拖动动作块，并按 `60fps` 的 1 帧网格吸附更新 `startMs`。
 - 工作台草稿保存/恢复已建立：`src/domain/workbenchDraftStorage.js` 只保存新版 `selection`、`actionDrafts`、`selectedActionId`，不接旧 `skillBlocks`。
 - 工作台基础编辑效率已提升：支持复制动作、`Delete` / `Backspace` 快捷删除、方向键微调时间和草稿脏状态提示。
 - 工作台动作工具箱雏形已建立：支持技能、等待、注释三类动作；等待/注释进入同一 `actionDrafts -> Project -> simulation` 链路，但不伪造伤害。
@@ -52,6 +52,7 @@ npm run dev
 - 工作台时间轴角色轨道雏形已建立：`TimelineGridPreview` 按 actor 显示角色轨道，非角色事件进入系统轨，动作块和伤害 marker 都带稳定轨道标记。
 - 工作台时间轴缩放和持续时间调整雏形已建立：支持 1x-4x 视图缩放，动作块右侧手柄可拖拽调整 `durationMs`。
 - 工作台技能动作形态模型已修正：`普攻`、`重击`、`闪击`、`跃击` 等按独立动作形态处理；普攻段数从技能描述解析，当前不编造单段倍率。
+- 工作台动作库已切换为 Endaxis 风格直接动作目录：只列 `普通攻击`、`重击`、`闪击`、`跃击`、`星鸣技`、`星结合击`、`星决技`、`星携技`、`极限反击`、`完美招架`，被动技能不列入动作库。
 - 项目状态核心在 `src/store/project.js`。
 - 主编辑器在 `src/views/Editor.vue`，当前承担了大量 UI、交互和业务协调职责。
 - 时间轴组件位于 `src/components/timeline/`。
@@ -86,7 +87,7 @@ Endaxis 只作为架构和交互成熟度参考，不是蓝色星原数据来源
 
 ## 已知开发阶段
 
-当前已完成阶段 1-3 的最小闭环、阶段 4 工作台主链路、阶段 5-1 至 5-8A 的真实数据/数值/动作形态修正。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 5-8B，建立真实伤害公式分层雏形。
+当前已完成阶段 1-3 的最小闭环、阶段 4 工作台主链路、阶段 5-1 至 5-8B 的真实数据/数值/动作形态、直接动作库和 60fps 帧时间轴修正。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 5-8C，建立真实伤害公式分层雏形。
 
 完整对标 Endaxis 的后续路线见 `DEVELOPMENT_PLAN.md`。
 
@@ -119,7 +120,7 @@ npm run test -- --run
 截至 2026-07-07 的基线：
 
 - `npm run build` 可以通过。
-- `npm run test -- --run` 可以通过；当前为 12 个测试文件、107 条测试。
+- `npm run test -- --run` 可以通过；当前为 12 个测试文件、102 条测试。
 - `npm run data:generate` 可以从 `C:\PC2\Codex\AzPr` 重新生成真实 AzPr 数据拆表。
 
 ## 开发规则

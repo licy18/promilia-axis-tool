@@ -39,14 +39,9 @@
         :actions="scenario.actions"
         :skills="actionLibrarySkills"
         :selected-action-id="selectedActionId"
-        :segment-split-options="segmentSplitOptions"
-        :segment-split-preview="segmentSplitPreview"
         @select-action="selectAction"
         @add-action="addAction"
         @add-skill-action="addSkillAction"
-        @preview-skill-segment-actions="previewSkillSegmentActions"
-        @confirm-skill-segment-actions="confirmSkillSegmentActions"
-        @cancel-skill-segment-actions="clearSegmentSplitPreview"
         @add-annotation-action="addAnnotationAction"
         @add-enemy-event-action="addEnemyEventAction"
         @add-resource-action="addResourceAction"
@@ -58,7 +53,6 @@
         @align-action-batch="alignActionBatch"
         @shift-action-batch="shiftActionBatch"
         @update-active-actor="setActionLibraryCharacterId"
-        @update-segment-split-options="updateSegmentSplitOptions"
       />
 
       <TimelineGridPreview
@@ -134,6 +128,7 @@ import {
   DEFAULT_WORKBENCH_SELECTION,
   createWorkbenchActionDraft,
   createWorkbenchProject,
+  getSkillActionCatalog,
   getSkillActionVariants,
   getSkillsForCharacter,
   getWorkbenchGameData,
@@ -150,13 +145,14 @@ import {
   normalizeWorkbenchSegmentSplitOptions,
   saveWorkbenchDraft,
 } from '../domain/workbenchDraftStorage';
+import { frameToMs } from '../domain/timebase';
 import { compileProject } from '../simulation/compiler/compileProject';
 import { simulateScenario } from '../simulation/engine/simulateScenario';
 
 const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
-const NEW_ACTION_INSERT_GAP_MS = 1000;
-const AUTO_DELAY_NOTE_PATTERN = /^自动推迟：同轨已有动作占用，已从 \d+ms 调整到 \d+ms。$/;
+const NEW_ACTION_INSERT_GAP_MS = frameToMs(60);
+const AUTO_DELAY_NOTE_PATTERN = /^自动推迟：同轨已有动作占用，已从 \d+(?:\.\d+)?ms 调整到 \d+(?:\.\d+)?ms。$/;
 const initialDraft = createDefaultWorkbenchDraftState();
 const selection = ref({ ...initialDraft.selection });
 const enemyConfig = ref({ ...initialDraft.enemyConfig });
@@ -407,20 +403,33 @@ function updateActionLane({ actionId, laneId }) {
 
 function addAction() {
   clearSegmentSplitPreview();
+  const fallbackEntry = getSkillActionCatalog(actionLibrarySkills.value, 1)[0];
+  if (fallbackEntry) {
+    addSkillAction(fallbackEntry);
+    return;
+  }
+
   const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
-  addSkillAction(resolveContextSkill(actorCharacterId, selectedDraft.value.skillId).id);
+  addSkillAction({ skillId: resolveContextSkill(actorCharacterId, selectedDraft.value.skillId).id });
 }
 
-function addSkillAction(skillId) {
+function addSkillAction(actionEntryOrSkillId) {
   clearSegmentSplitPreview();
   const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
-  const skill = resolveContextSkill(actorCharacterId, skillId);
+  const actionEntry = normalizeActionEntryInput(actionEntryOrSkillId, actorCharacterId);
+  const skill = resolveContextSkill(actorCharacterId, actionEntry.skillId);
   const level = resolveSkillInsertLevel(actorCharacterId, skill);
   addInsertedAction({
     id: createNextActionId(),
     skillId: skill.id,
     actorCharacterId,
     level,
+    actionVariantIndex: actionEntry.actionVariantIndex ?? 0,
+    damageSegmentIndex: actionEntry.actionVariantIndex ?? 0,
+    durationMs: actionEntry.durationMs,
+    note:
+      actionEntry.note ??
+      `${actionEntry.label ?? '动作'}：${actionEntry.rawValue ?? '倍率待补'}；真实动作帧等待 asset 或运行时捕获补充。`,
   });
 }
 
@@ -1113,6 +1122,32 @@ function resolveContextSkill(actorCharacterId, preferredSkillId) {
     return preferredSkill;
   }
   return findFirstSkillForCharacter(actorCharacterId) ?? preferredSkill ?? workbenchSeed.gameData.skills[0];
+}
+
+function normalizeActionEntryInput(input, actorCharacterId) {
+  if (input && typeof input === 'object') {
+    return {
+      ...input,
+      skillId: input.skillId,
+      actionVariantIndex: input.actionVariantIndex ?? input.damageSegmentIndex ?? 0,
+      durationMs: input.durationMs ?? frameToMs(60),
+    };
+  }
+
+  const skillId = Number(input);
+  const actionEntry = getSkillActionCatalog(getSkillsForCharacter(actorCharacterId), 1).find(
+    entry => Number(entry.skillId) === skillId,
+  );
+
+  return (
+    actionEntry ?? {
+      skillId,
+      actionVariantIndex: 0,
+      durationMs: frameToMs(60),
+      label: '动作',
+      rawValue: null,
+    }
+  );
 }
 
 function resolveSkillInsertLevel(actorCharacterId, skill) {
