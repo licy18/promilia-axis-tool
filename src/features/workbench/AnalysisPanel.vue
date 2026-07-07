@@ -48,6 +48,23 @@
       </ul>
     </div>
 
+    <div class="insertion-diagnostics">
+      <div class="diagnostic-heading neutral">
+        <span>插入提示</span>
+        <strong data-testid="workbench-insert-delay-count">{{ autoDelayedCount }}</strong>
+      </div>
+      <p v-if="autoDelayedItems.length === 0" class="diagnostic-empty" data-testid="workbench-insert-delay-empty">
+        暂无自动推迟
+      </p>
+      <ul v-else class="insertion-list">
+        <li v-for="item in autoDelayedItems" :key="item.id" data-testid="workbench-insert-delay-item">
+          <span>{{ item.laneName }}</span>
+          <strong>{{ item.actionName }}</strong>
+          <small>{{ formatDelayRange(item) }}</small>
+        </li>
+      </ul>
+    </div>
+
     <ul class="limitations">
       <li v-for="item in diagnostics.limitations" :key="item">{{ item }}</li>
     </ul>
@@ -71,6 +88,13 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  insertionDiagnostics: {
+    type: Object,
+    default: () => ({
+      autoDelayedCount: 0,
+      autoDelayedItems: [],
+    }),
+  },
   timelineDiagnostics: {
     type: Object,
     default: () => ({
@@ -82,6 +106,10 @@ const props = defineProps({
 
 const overlapItems = computed(() => props.timelineDiagnostics?.overlaps ?? []);
 const overlapCount = computed(() => props.timelineDiagnostics?.overlapCount ?? overlapItems.value.length);
+const autoDelayedItems = computed(() => props.insertionDiagnostics?.autoDelayedItems ?? []);
+const autoDelayedCount = computed(
+  () => props.insertionDiagnostics?.autoDelayedCount ?? autoDelayedItems.value.length,
+);
 
 function formatNumber(value) {
   return Math.round(Number(value) || 0).toLocaleString('zh-CN');
@@ -89,6 +117,10 @@ function formatNumber(value) {
 
 function formatOverlapRange(item) {
   return `${Math.round(item.overlapStartMs)}-${Math.round(item.overlapEndMs)}ms`;
+}
+
+function formatDelayRange(item) {
+  return `${Math.round(item.requestedStartMs)}ms -> ${Math.round(item.resolvedStartMs)}ms`;
 }
 </script>
 
@@ -174,6 +206,12 @@ h2 {
   padding: 0 14px 14px;
 }
 
+.insertion-diagnostics {
+  display: grid;
+  gap: 8px;
+  padding: 0 14px 14px;
+}
+
 .diagnostic-heading {
   display: flex;
   align-items: center;
@@ -196,6 +234,14 @@ h2 {
   font-size: 15px;
 }
 
+.diagnostic-heading.neutral {
+  background: rgba(230, 162, 60, 0.08);
+}
+
+.diagnostic-heading.neutral strong {
+  color: #efc574;
+}
+
 .diagnostic-empty {
   margin: 0;
   padding: 9px 10px;
@@ -213,7 +259,8 @@ h2 {
   list-style: none;
 }
 
-.overlap-list li {
+.overlap-list li,
+.insertion-list li {
   display: grid;
   gap: 3px;
   min-width: 0;
@@ -223,16 +270,36 @@ h2 {
   background: rgba(245, 108, 108, 0.1);
 }
 
+.insertion-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.insertion-list li {
+  border-left-color: #e6a23c;
+  background: rgba(230, 162, 60, 0.1);
+}
+
 .overlap-list span,
-.overlap-list small {
+.overlap-list small,
+.insertion-list span,
+.insertion-list small {
   color: #b8c0c7;
   font-size: 11px;
 }
 
-.overlap-list strong {
+.overlap-list strong,
+.insertion-list strong {
   overflow-wrap: anywhere;
   color: #ffdede;
   font-size: 12px;
+}
+
+.insertion-list strong {
+  color: #efc574;
 }
 
 .limitations {

@@ -96,6 +96,7 @@
           :summary="simulationResult.summary"
           :diagnostics="simulationResult.diagnostics"
           :damage-timeline="simulationResult.damageTimeline"
+          :insertion-diagnostics="insertionDiagnostics"
           :timeline-diagnostics="timelineDiagnostics"
         />
       </div>
@@ -166,6 +167,7 @@ const timelineDiagnostics = computed(() =>
     actions: scenario.value.actions,
   }),
 );
+const insertionDiagnostics = computed(() => createInsertionDiagnostics(scenario.value.actions));
 const actionLibraryActor = computed(() => {
   return (
     scenario.value.actors.find((actor) => Number(actor.characterId) === Number(actionLibraryCharacterId.value)) ??
@@ -545,6 +547,8 @@ function addInsertedAction(actionPatch) {
   const nextAction = createWorkbenchActionDraft({
     ...candidateAction,
     startMs: placement.startMs,
+    note: createInsertionNote(candidateAction.note, placement),
+    insertion: createInsertionMetadata(placement),
   });
   actionDrafts.value = [
     ...actionDrafts.value.slice(0, placement.insertIndex),
@@ -559,8 +563,10 @@ function resolveInsertPlacement(candidateAction, baseInsertIndex) {
   const laneId = resolveDraftLaneId(candidateAction);
   const durationMs = resolveDraftDurationMs(candidateAction);
   const maxStartMs = project.value.time.durationMs;
-  let startMs = clampNumber(candidateAction.startMs, 0, maxStartMs);
+  const requestedStartMs = clampNumber(candidateAction.startMs, 0, maxStartMs);
+  let startMs = requestedStartMs;
   let insertIndex = baseInsertIndex;
+  const conflictActionIds = new Set();
   const ranges = actionDrafts.value
     .map((action, index) => createDraftTimelineRange(action, index))
     .filter((range) => range.laneId === laneId)
@@ -576,6 +582,7 @@ function resolveInsertPlacement(candidateAction, baseInsertIndex) {
 
     const nextStartMs = clampNumber(range.endMs + NEW_ACTION_INSERT_GAP_MS, 0, maxStartMs);
     insertIndex = Math.max(insertIndex, range.index + 1);
+    conflictActionIds.add(range.actionId);
     if (nextStartMs <= startMs) {
       startMs = nextStartMs;
       break;
@@ -586,7 +593,11 @@ function resolveInsertPlacement(candidateAction, baseInsertIndex) {
   }
 
   return {
+    autoDelayed: startMs > requestedStartMs,
+    conflictActionIds: [...conflictActionIds],
     insertIndex,
+    laneId,
+    requestedStartMs,
     startMs,
   };
 }
@@ -611,6 +622,7 @@ function createDraftTimelineRange(action, index) {
   const startMs = Math.max(0, Number(action.startMs) || 0);
   const durationMs = resolveDraftDurationMs(action);
   return {
+    actionId: action.id,
     index,
     laneId: resolveDraftLaneId(action),
     startMs,
@@ -634,6 +646,51 @@ function resolveDraftDurationMs(action) {
 
 function compareDraftTimelineRanges(left, right) {
   return left.startMs - right.startMs || left.endMs - right.endMs || left.index - right.index;
+}
+
+function createInsertionMetadata(placement) {
+  if (!placement.autoDelayed) {
+    return null;
+  }
+
+  return {
+    autoDelayed: true,
+    requestedStartMs: placement.requestedStartMs,
+    resolvedStartMs: placement.startMs,
+    delayedByMs: placement.startMs - placement.requestedStartMs,
+    laneId: placement.laneId,
+    reason: 'same-lane-conflict',
+    conflictActionIds: placement.conflictActionIds,
+  };
+}
+
+function createInsertionNote(note, placement) {
+  if (!placement.autoDelayed) {
+    return note;
+  }
+
+  const message = `自动推迟：同轨已有动作占用，已从 ${placement.requestedStartMs}ms 调整到 ${placement.startMs}ms。`;
+  return note ? `${note}\n${message}` : message;
+}
+
+function createInsertionDiagnostics(actions) {
+  const autoDelayedItems = actions
+    .filter((action) => action.insertion?.autoDelayed)
+    .map((action) => ({
+      id: action.id,
+      actionId: action.id,
+      actionName: action.name,
+      laneName: action.actor?.name ?? (action.actorId ? action.actorId : '系统'),
+      requestedStartMs: action.insertion.requestedStartMs,
+      resolvedStartMs: action.insertion.resolvedStartMs,
+      delayedByMs: action.insertion.delayedByMs,
+      conflictActionIds: action.insertion.conflictActionIds ?? [],
+    }));
+
+  return {
+    autoDelayedCount: autoDelayedItems.length,
+    autoDelayedItems,
+  };
 }
 
 function canAssignActionLane(action) {

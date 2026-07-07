@@ -131,6 +131,13 @@
             <dd>{{ action.spCost ?? '-' }}</dd>
           </div>
         </dl>
+        <p
+          v-if="action.insertion?.autoDelayed"
+          class="timing-note placement-note"
+          data-testid="workbench-action-insert-delay-note"
+        >
+          {{ formatInsertionNote(action.insertion) }}
+        </p>
         <p v-if="action.timing?.needsTimingData" class="timing-note">
           {{ action.timing.source }}
         </p>
@@ -251,6 +258,10 @@ function formatSkillMeta(skill) {
 
 function formatSkillName(skill) {
   return skill.name || `技能 ${skill.id}`;
+}
+
+function formatInsertionNote(insertion) {
+  return `自动推迟 ${insertion.requestedStartMs}ms -> ${insertion.resolvedStartMs}ms`;
 }
 </script>
 
@@ -507,5 +518,10 @@ dd {
 .timing-note.neutral {
   background: rgba(255, 255, 255, 0.06);
   color: #b8c0c7;
+}
+
+.timing-note.placement-note {
+  background: rgba(230, 162, 60, 0.12);
+  color: #efc574;
 }
 </style>

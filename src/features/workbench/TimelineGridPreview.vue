@@ -87,6 +87,7 @@
                   dragging: action.id === draggingActionId,
                   overlap: overlapActionIds.has(action.id),
                   resizing: action.id === resizingActionId,
+                  'auto-delayed': action.insertion?.autoDelayed,
                 },
                 `type-${action.type}`,
               ]"
@@ -111,6 +112,13 @@
                 data-testid="workbench-action-overlap-warning"
               >
                 重叠
+              </span>
+              <span
+                v-if="action.insertion?.autoDelayed"
+                class="auto-delay-badge"
+                data-testid="workbench-action-insert-delay-badge"
+              >
+                推迟
               </span>
               <button
                 class="duration-handle"
@@ -147,6 +155,7 @@
       <span><i class="legend-damage" /> 伤害投影</span>
       <span><i class="legend-system" /> 系统轨</span>
       <span><i class="legend-overlap" /> 重叠</span>
+      <span><i class="legend-delay" /> 自动推迟</span>
       <span class="warning">时序为占位数据</span>
     </div>
   </section>
@@ -751,6 +760,26 @@ h2 {
   line-height: 1;
 }
 
+.action-block .auto-delay-badge {
+  position: absolute;
+  right: 22px;
+  bottom: 4px;
+  display: inline-flex;
+  width: auto;
+  max-width: 30px;
+  height: 16px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  border: 1px solid rgba(255, 230, 190, 0.52);
+  border-radius: 3px;
+  background: rgba(230, 162, 60, 0.3);
+  color: #ffe0ad;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+
 .action-block.type-switch {
   border-color: rgba(126, 176, 255, 0.5);
   background: linear-gradient(180deg, #29436b 0%, #223455 100%);
@@ -772,6 +801,10 @@ h2 {
   border-color: rgba(245, 108, 108, 0.82);
   background: linear-gradient(180deg, #5a3334 0%, #3b272b 100%);
   box-shadow: 0 0 0 2px rgba(245, 108, 108, 0.18), 0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+.action-block.auto-delayed {
+  border-color: rgba(230, 162, 60, 0.78);
 }
 
 .duration-handle {
@@ -848,6 +881,10 @@ h2 {
 
 .legend-overlap {
   background: #f56c6c;
+}
+
+.legend-delay {
+  background: #e6a23c;
 }
 
 .warning {

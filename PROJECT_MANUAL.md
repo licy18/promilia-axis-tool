@@ -1186,6 +1186,49 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 区分“跨轨同时间允许”和“同轨自动推迟”，避免用户误以为按钮失灵或时间随机变化。
 - 为自动推迟提示补充测试，并继续保持提示不成为保存或模拟的 hard fail。
 
+### 2026-07-07：阶段 4-19 插入策略反馈和自动推迟提示雏形落地
+
+本轮完成：
+
+- `actionDrafts[]` 新增结构化 `insertion` 元信息，用于记录自动推迟结果：
+  - `autoDelayed`
+  - `requestedStartMs`
+  - `resolvedStartMs`
+  - `delayedByMs`
+  - `laneId`
+  - `reason`
+  - `conflictActionIds`
+- `workbenchProjectFactory` 和 `projectSchema` 透传 `insertion`，让草稿、项目动作、编译后的 scenario action 和 UI 使用同一份插入事实。
+- 当新增动作因同轨冲突被自动推迟时，会在动作 `note` 中追加中文提示，例如 `自动推迟：同轨已有动作占用，已从 2000ms 调整到 4000ms。`
+- `TimelineGridPreview` 为自动推迟动作显示“推迟”徽标，并在图例中新增“自动推迟”说明。
+- `ActionLibraryPanel` 在动作卡片中显示自动推迟时间提示，例如 `自动推迟 2000ms -> 4000ms`。
+- `AnalysisPanel` 新增“插入提示”诊断区，显示自动推迟数量、动作名、轨道名和时间调整范围。
+- 工作台测试补充断言：
+  - 跨轨同时间新增保持 `workbench-insert-delay-count = 0`，不会误标为推迟。
+  - 同轨技能自动推迟后，备注、时间轴徽标、动作库提示、分析面板和保存草稿中的 `insertion` 元信息一致。
+  - 系统轨敌人事件自动推迟后，也会显示系统轨插入提示并保存结构化元信息。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、31 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、75 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- `git diff --check`：通过；仅有仓库既有 LF/CRLF 工作区提示。
+- `http://127.0.0.1:5175/#/workbench` 本地页面服务返回 200。
+
+当前结论：
+
+- 用户现在能明确看到动作是否因同轨冲突被自动推迟，以及从哪个候选时间调整到哪个落点。
+- 自动推迟信息已经不只是普通文案，而是可保存、可编译、可被多个 UI 面板读取的结构化元信息。
+- 当前自动推迟标记还没有生命周期管理：如果用户之后手动修改开始时间、持续时间或轨道，旧的 `insertion` 提示可能变成过期信息。
+
+下一步：
+
+- 阶段 4-20 目标：建立自动推迟标记生命周期和手动编辑清理雏形。
+- 当用户手动改开始时间、持续时间、动作归属或跨轨拖拽时，清理或重算旧的 `insertion` 元信息，避免过期提示误导。
+- 保留用户手写备注，尽量只移除系统自动追加的推迟提示行。
+- 为手动改时间、改轨道、改备注后的保存结果补充测试。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

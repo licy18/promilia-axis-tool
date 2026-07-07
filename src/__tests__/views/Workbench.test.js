@@ -665,6 +665,7 @@ describe('Workbench view', () => {
     await findActionLibrarySkillEntry(wrapper, secondarySkill.id).trigger('click');
 
     expect(wrapper.find('[data-testid="workbench-start-input"]').element.value).toBe('2000');
+    expect(wrapper.find('[data-testid="workbench-insert-delay-count"]').text()).toBe('0');
     expect(
       wrapper
         .find('[data-testid="workbench-timeline-action"][data-action-id="action-0003"]')
@@ -676,11 +677,22 @@ describe('Workbench view', () => {
     await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
 
     expect(wrapper.find('[data-testid="workbench-start-input"]').element.value).toBe('4000');
+    expect(wrapper.find('[data-testid="workbench-note-input"]').element.value).toContain(
+      '自动推迟：同轨已有动作占用，已从 2000ms 调整到 4000ms。',
+    );
     expect(
       wrapper
         .find('[data-testid="workbench-timeline-action"][data-action-id="action-0004"]')
         .attributes('data-lane-id'),
     ).toBe('actor-109001');
+    expect(wrapper.findAll('[data-testid="workbench-action-insert-delay-badge"]')).toHaveLength(1);
+    expect(wrapper.find('[data-testid="workbench-action-insert-delay-note"]').text()).toContain(
+      '自动推迟 2000ms -> 4000ms',
+    );
+    expect(wrapper.find('[data-testid="workbench-insert-delay-count"]').text()).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-insert-delay-item"]').text()).toContain('末音');
+    expect(wrapper.find('[data-testid="workbench-insert-delay-item"]').text()).toContain('哈库茵剑舞');
+    expect(wrapper.find('[data-testid="workbench-insert-delay-item"]').text()).toContain('2000ms -> 4000ms');
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
@@ -693,10 +705,20 @@ describe('Workbench view', () => {
     expect(savedDraft.actionDrafts.find((action) => action.id === 'action-0003')).toMatchObject({
       actorCharacterId: secondaryCharacterId,
       startMs: 2000,
+      insertion: null,
     });
     expect(savedDraft.actionDrafts.find((action) => action.id === 'action-0004')).toMatchObject({
       actorCharacterId: workbenchSeed.defaults.characterId,
       startMs: 4000,
+      insertion: {
+        autoDelayed: true,
+        requestedStartMs: 2000,
+        resolvedStartMs: 4000,
+        delayedByMs: 2000,
+        laneId: 'actor-109001',
+        reason: 'same-lane-conflict',
+        conflictActionIds: ['action-0002'],
+      },
     });
   });
 
@@ -718,11 +740,18 @@ describe('Workbench view', () => {
     await wrapper.find('[data-testid="workbench-add-enemy-event-action"]').trigger('click');
 
     expect(wrapper.find('[data-testid="workbench-start-input"]').element.value).toBe('3600');
+    expect(wrapper.find('[data-testid="workbench-note-input"]').element.value).toContain(
+      '自动推迟：同轨已有动作占用，已从 2000ms 调整到 3600ms。',
+    );
     expect(
       wrapper
         .find('[data-testid="workbench-timeline-action"][data-action-id="action-0003"]')
         .attributes('data-lane-id'),
     ).toBe('system');
+    expect(wrapper.find('[data-testid="workbench-insert-delay-count"]').text()).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-insert-delay-item"]').text()).toContain('系统');
+    expect(wrapper.find('[data-testid="workbench-insert-delay-item"]').text()).toContain('敌人事件');
+    expect(wrapper.find('[data-testid="workbench-insert-delay-item"]').text()).toContain('2000ms -> 3600ms');
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
@@ -736,6 +765,15 @@ describe('Workbench view', () => {
       id: 'action-0003',
       type: 'enemyEvent',
       startMs: 3600,
+      insertion: {
+        autoDelayed: true,
+        requestedStartMs: 2000,
+        resolvedStartMs: 3600,
+        delayedByMs: 1600,
+        laneId: 'system',
+        reason: 'same-lane-conflict',
+        conflictActionIds: ['action-0002'],
+      },
     });
   });
 

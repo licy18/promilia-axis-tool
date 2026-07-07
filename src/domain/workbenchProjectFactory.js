@@ -57,6 +57,7 @@ export function createWorkbenchActionDraft({
   reason = 'manual-axis-resource',
   eventType = 'phase',
   note = '',
+  insertion = null,
 } = {}) {
   return {
     id,
@@ -72,6 +73,7 @@ export function createWorkbenchActionDraft({
     reason,
     eventType,
     note,
+    insertion: normalizeWorkbenchInsertion(insertion),
   };
 }
 
@@ -205,6 +207,7 @@ export function normalizeWorkbenchActionDrafts(
           reason: draft.reason,
           eventType: draft.eventType,
           note: draft.note,
+          insertion: draft.insertion,
         });
       }
 
@@ -224,6 +227,7 @@ export function normalizeWorkbenchActionDrafts(
         reason: draft.reason,
         eventType: draft.eventType,
         note: draft.note,
+        insertion: draft.insertion,
       });
     })
     .filter((draft) => draft.type !== ACTION_TYPES.SKILL || findById(workbenchSeed.gameData.skills, draft.skillId));
@@ -243,6 +247,7 @@ function createProjectActionFromDraft(draft, actorsByCharacterId, primaryCharact
       startMs: draft.startMs,
       durationMs: draft.durationMs,
       note: draft.note || `切换至 ${targetActor.name}`,
+      insertion: draft.insertion,
     });
   }
 
@@ -252,6 +257,7 @@ function createProjectActionFromDraft(draft, actorsByCharacterId, primaryCharact
       startMs: draft.startMs,
       durationMs: draft.durationMs,
       note: draft.note || '等待窗口',
+      insertion: draft.insertion,
     });
   }
 
@@ -260,6 +266,7 @@ function createProjectActionFromDraft(draft, actorsByCharacterId, primaryCharact
       id: draft.id,
       startMs: draft.startMs,
       note: draft.note || '备注',
+      insertion: draft.insertion,
     });
   }
 
@@ -272,6 +279,7 @@ function createProjectActionFromDraft(draft, actorsByCharacterId, primaryCharact
       change: draft.change,
       reason: draft.reason || 'manual-axis-resource',
       note: draft.note,
+      insertion: draft.insertion,
     });
   }
 
@@ -282,6 +290,7 @@ function createProjectActionFromDraft(draft, actorsByCharacterId, primaryCharact
       startMs: draft.startMs,
       eventType: draft.eventType || 'phase',
       note: draft.note || '敌人阶段标记',
+      insertion: draft.insertion,
     });
   }
 
@@ -296,6 +305,7 @@ function createProjectActionFromDraft(draft, actorsByCharacterId, primaryCharact
     durationMs: draft.durationMs,
     level: draft.level,
     note: draft.note || '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
+    insertion: draft.insertion,
   });
 }
 
@@ -352,6 +362,24 @@ function resolveSwitchTargetActor(draft, actorsByCharacterId, sourceActor) {
 function clampLevel(level, skill) {
   const maxLevel = Math.max(1, skill?.level?.values?.length ?? 1);
   return Math.min(maxLevel, Math.max(1, Number(level) || 1));
+}
+
+function normalizeWorkbenchInsertion(insertion) {
+  if (!insertion || typeof insertion !== 'object') {
+    return null;
+  }
+
+  return {
+    autoDelayed: Boolean(insertion.autoDelayed),
+    requestedStartMs: Math.max(0, Number(insertion.requestedStartMs) || 0),
+    resolvedStartMs: Math.max(0, Number(insertion.resolvedStartMs) || 0),
+    delayedByMs: Math.max(0, Number(insertion.delayedByMs) || 0),
+    laneId: insertion.laneId ? String(insertion.laneId) : '',
+    reason: insertion.reason ? String(insertion.reason) : '',
+    conflictActionIds: Array.isArray(insertion.conflictActionIds)
+      ? insertion.conflictActionIds.map((id) => String(id))
+      : [],
+  };
 }
 
 function createSkillLevelsForCharacter(skillDrafts, characterId) {

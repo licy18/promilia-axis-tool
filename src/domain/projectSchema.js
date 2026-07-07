@@ -124,6 +124,7 @@ export function createSkillAction({
   level = 1,
   durationMs = null,
   note = '',
+  insertion = null,
 }) {
   if (!skill) {
     throw new Error('createSkillAction requires a skill');
@@ -155,6 +156,7 @@ export function createSkillAction({
       cancelWindows: [],
     },
     note,
+    insertion,
   };
 }
 
@@ -166,6 +168,7 @@ export function createSwitchAction({
   startMs = 0,
   durationMs = 600,
   note = '',
+  insertion = null,
 } = {}) {
   return {
     id: id ?? createStableId('action'),
@@ -177,6 +180,7 @@ export function createSwitchAction({
     startMs,
     durationMs,
     note,
+    insertion,
   };
 }
 
@@ -185,6 +189,7 @@ export function createWaitAction({
   startMs = 0,
   durationMs = 1000,
   note = '等待',
+  insertion = null,
 } = {}) {
   return {
     id: id ?? createStableId('action'),
@@ -193,6 +198,7 @@ export function createWaitAction({
     startMs,
     durationMs,
     note,
+    insertion,
   };
 }
 
@@ -200,6 +206,7 @@ export function createAnnotationAction({
   id,
   startMs = 0,
   note = '备注',
+  insertion = null,
 } = {}) {
   return {
     id: id ?? createStableId('action'),
@@ -208,6 +215,7 @@ export function createAnnotationAction({
     startMs,
     durationMs: 600,
     note,
+    insertion,
   };
 }
 
@@ -219,6 +227,7 @@ export function createResourceAction({
   change = 50,
   reason = 'manual-axis-resource',
   note = '',
+  insertion = null,
 } = {}) {
   return {
     id: id ?? createStableId('action'),
@@ -231,6 +240,7 @@ export function createResourceAction({
     change: Number(change) || 0,
     reason,
     note,
+    insertion,
   };
 }
 
@@ -240,6 +250,7 @@ export function createEnemyEventAction({
   startMs = 0,
   eventType = 'phase',
   note = '敌人阶段标记',
+  insertion = null,
 } = {}) {
   return {
     id: id ?? createStableId('action'),
@@ -250,6 +261,7 @@ export function createEnemyEventAction({
     durationMs: 600,
     eventType,
     note,
+    insertion,
   };
 }
 
