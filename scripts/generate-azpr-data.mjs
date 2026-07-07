@@ -355,6 +355,7 @@ const SKILL_CONTROL_SAMPLE_NODE_LIMIT = 8;
 const SKILL_EFFECT_LANE_SAMPLE_LIMIT = 12;
 const SKILL_EFFECT_BEHAVIOR_CHAIN_SAMPLE_LIMIT = 12;
 const SKILL_EFFECT_LANE_SPECIFIC_SAMPLE_LIMIT = 24;
+const SKILL_EVENT_BRIDGE_TARGET_CHAIN_DEPTH_LIMIT = 6;
 const SKILL_EFFECT_LANES = Object.freeze([
   {
     key: 'hpDamage',
@@ -3302,6 +3303,11 @@ async function buildSkillControlEvidenceItem(
     monoBehaviourPayloadCache
   );
   const aggregate = createEmptySkillControlNodeEvidence();
+  const directStateTimingControls = await buildDirectSkillStateTimingControls(
+    monoBehaviourRoot,
+    jsonFiles,
+    monoBehaviourPayloadCache
+  );
   let parsedJsonSampleFiles = 0;
   let unreadableJsonSampleFiles = 0;
 
@@ -3334,6 +3340,7 @@ async function buildSkillControlEvidenceItem(
       sourceSkillId: Number(skill.id),
       skillControlBySkillId,
       skillTableById,
+      directStateTimingControls,
     }
   );
 
@@ -3583,16 +3590,72 @@ function pushSkillEffectLaneCandidateSampleForLane(evidence, lane, candidate) {
   samples.push(candidate);
 }
 
+async function buildDirectSkillStateTimingControls(
+  monoBehaviourRoot,
+  jsonFiles,
+  monoBehaviourPayloadCache
+) {
+  const animationStateControls = [];
+  const eventBridgeControls = [];
+
+  for (const fileName of jsonFiles.slice(0, SKILL_CONTROL_SAMPLE_FILE_LIMIT)) {
+    try {
+      const payload = await readMonoBehaviourPayload(
+        monoBehaviourRoot,
+        fileName,
+        monoBehaviourPayloadCache
+      );
+      const pathId = extractPathIdFromMonoBehaviourFileName(fileName);
+      const behavior = compactMonoBehaviourBehaviorTarget(
+        payload.json,
+        payload.text,
+        fileName,
+        pathId,
+        null
+      );
+      if (
+        behavior.scriptTypeCandidate?.className === 'AnimationBehaviorData' &&
+        animationStateControls.length < SKILL_EFFECT_LANE_SPECIFIC_SAMPLE_LIMIT
+      ) {
+        animationStateControls.push(
+          compactTargetAnimationStateControl(behavior)
+        );
+      }
+      if (
+        behavior.scriptTypeCandidate?.className === 'EventBridgeBehaviorData' &&
+        eventBridgeControls.length < SKILL_EFFECT_LANE_SPECIFIC_SAMPLE_LIMIT
+      ) {
+        eventBridgeControls.push(compactTargetEventBridgeControl(behavior));
+      }
+    } catch {
+      // Keep this optional index from affecting the main skill-control pass.
+    }
+  }
+
+  return {
+    animationStateControls,
+    eventBridgeControls,
+  };
+}
+
 async function buildSkillStateTimingEvidence(behaviorChainsByLane, context) {
   const hpChains = behaviorChainsByLane?.hpDamage ?? [];
   const timingChains = behaviorChainsByLane?.timingControl ?? [];
   const hpStateWindows = summarizeHpStateWindows(hpChains);
-  const animationStateControls = timingChains
-    .flatMap(compactAnimationStateControls)
-    .filter(Boolean);
-  const eventBridgeControls = timingChains
-    .flatMap(compactEventBridgeControls)
-    .filter(Boolean);
+  const animationStateControls = uniqueByKey(
+    [
+      ...timingChains.flatMap(compactAnimationStateControls).filter(Boolean),
+      ...(context?.directStateTimingControls?.animationStateControls ?? []),
+    ],
+    createStateTimingControlKey
+  );
+  const eventBridgeControls = uniqueByKey(
+    [
+      ...timingChains.flatMap(compactEventBridgeControls).filter(Boolean),
+      ...(context?.directStateTimingControls?.eventBridgeControls ?? []),
+    ],
+    createStateTimingControlKey
+  );
   const stateFindings = summarizeStateTimingFindings({
     hpStateWindows,
     animationStateControls,
@@ -3644,29 +3707,71 @@ async function buildEventBridgeTargetSkillControlEvidence(
   eventBridgeControls,
   context
 ) {
-  const targetSkillIds = uniqueNumbers(
+  const directTargetSkillIds = uniqueNumbers(
     eventBridgeControls
       .map(item => item.skillId)
       .filter(skillId => Number(skillId) > 0)
   );
 
-  if (targetSkillIds.length === 0) {
+  if (directTargetSkillIds.length === 0) {
     return {
       status: 'event-bridge-target-skill-controls-missing',
+      directTargetSkillIds: [],
       targetSkillIds: [],
       targetSkillControlCount: 0,
       foundTargetSkillControlCount: 0,
       missingTargetSkillControlCount: 0,
+      normalAttackChainCandidate: null,
       targetSkillControls: [],
       applied: false,
     };
   }
 
   const targetSkillControls = [];
-  for (const skillId of targetSkillIds) {
-    targetSkillControls.push(
-      await buildEventBridgeTargetSkillControlSummary(skillId, context)
+  const queuedSkillIds = directTargetSkillIds.map(skillId => ({
+    skillId,
+    discoveryDepth: 1,
+    discoveredFromSkillId: context?.sourceSkillId ?? null,
+  }));
+  const seenSkillIds = new Set();
+
+  while (queuedSkillIds.length > 0) {
+    const next = queuedSkillIds.shift();
+    if (
+      seenSkillIds.has(next.skillId) ||
+      next.discoveryDepth > SKILL_EVENT_BRIDGE_TARGET_CHAIN_DEPTH_LIMIT
+    ) {
+      continue;
+    }
+    seenSkillIds.add(next.skillId);
+
+    const summary = await buildEventBridgeTargetSkillControlSummary(
+      next.skillId,
+      {
+        ...context,
+        discoveryDepth: next.discoveryDepth,
+        discoveredFromSkillId: next.discoveredFromSkillId,
+      }
     );
+    targetSkillControls.push(summary);
+
+    if (
+      summary.status !== 'found' ||
+      summary.relationToSourceSkill !== 'child-skill-of-source'
+    ) {
+      continue;
+    }
+
+    for (const skillId of summary.eventBridgeSkillIds ?? []) {
+      if (Number(skillId) <= 0 || seenSkillIds.has(Number(skillId))) {
+        continue;
+      }
+      queuedSkillIds.push({
+        skillId: Number(skillId),
+        discoveryDepth: next.discoveryDepth + 1,
+        discoveredFromSkillId: summary.skillId,
+      });
+    }
   }
   targetSkillControls.sort(compareEventBridgeTargetSkillControlSummaries);
 
@@ -3676,18 +3781,26 @@ async function buildEventBridgeTargetSkillControlEvidence(
   const childSkillTargetIds = targetSkillControls
     .filter(item => item.relationToSourceSkill === 'child-skill-of-source')
     .map(item => item.skillId);
+  const normalAttackChainCandidate =
+    buildNormalAttackChainCandidate(targetSkillControls);
 
   return {
     status:
       foundTargetSkillControls.length > 0
         ? 'event-bridge-target-skill-controls-indexed'
         : 'event-bridge-target-skill-controls-not-found',
-    targetSkillIds,
+    directTargetSkillIds,
+    targetSkillIds: uniqueNumbers(
+      targetSkillControls.map(item => item.skillId)
+    ),
     targetSkillControlCount: targetSkillControls.length,
     foundTargetSkillControlCount: foundTargetSkillControls.length,
     missingTargetSkillControlCount:
       targetSkillControls.length - foundTargetSkillControls.length,
     childSkillTargetIds,
+    chainDepthMax: maxNumber(
+      targetSkillControls.map(item => item.discoveryDepth)
+    ),
     targetAnimationStateNames: uniqueStrings(
       targetSkillControls.flatMap(item => item.animationStateNames ?? [])
     ),
@@ -3696,6 +3809,7 @@ async function buildEventBridgeTargetSkillControlEvidence(
         (item.hpTimelineCandidates ?? []).map(candidate => candidate.trackName)
       )
     ),
+    normalAttackChainCandidate,
     targetSkillControls,
     applied: false,
   };
@@ -3719,6 +3833,8 @@ async function buildEventBridgeTargetSkillControlSummary(skillId, context) {
       skillDisplayType: numberOrNull(skillTableRow?.skillDisplayType),
       parentSkill: numberOrNull(skillTableRow?.parentSkill),
       relationToSourceSkill,
+      discoveryDepth: numberOrNull(context?.discoveryDepth),
+      discoveredFromSkillId: numberOrNull(context?.discoveredFromSkillId),
       expectedDirectory: normalizePath(
         path.join(extractorSkillListRoot, `skill_control_${skillId}.asset`)
       ),
@@ -3730,7 +3846,7 @@ async function buildEventBridgeTargetSkillControlSummary(skillId, context) {
   const jsonFiles = await listJsonFileNames(monoBehaviourRoot);
   const targetEvidence = createEmptyEventBridgeTargetEvidence();
 
-  for (const fileName of jsonFiles.slice(0, SKILL_CONTROL_SAMPLE_FILE_LIMIT)) {
+  for (const fileName of jsonFiles) {
     try {
       const text = await fs.readFile(
         path.join(monoBehaviourRoot, fileName),
@@ -3765,6 +3881,8 @@ async function buildEventBridgeTargetSkillControlSummary(skillId, context) {
     skillDisplayType: numberOrNull(skillTableRow?.skillDisplayType),
     parentSkill: numberOrNull(skillTableRow?.parentSkill),
     relationToSourceSkill,
+    discoveryDepth: numberOrNull(context?.discoveryDepth),
+    discoveredFromSkillId: numberOrNull(context?.discoveredFromSkillId),
     directory: normalizePath(controlDir.fullPath),
     monoBehaviourRoot: normalizePath(monoBehaviourRoot),
     jsonFileCount: jsonFiles.length,
@@ -3971,7 +4089,69 @@ function compareEventBridgeTargetSkillControlSummaries(left, right) {
   ) {
     return 1;
   }
+  const depthDiff =
+    (numberOrNull(left.discoveryDepth) ?? Number.MAX_SAFE_INTEGER) -
+    (numberOrNull(right.discoveryDepth) ?? Number.MAX_SAFE_INTEGER);
+  if (depthDiff !== 0) {
+    return depthDiff;
+  }
   return Number(left.skillId) - Number(right.skillId);
+}
+
+function buildNormalAttackChainCandidate(targetSkillControls) {
+  const chainControls = targetSkillControls
+    .filter(
+      item =>
+        item.status === 'found' &&
+        item.relationToSourceSkill === 'child-skill-of-source'
+    )
+    .sort((left, right) => {
+      const depthDiff =
+        (numberOrNull(left.discoveryDepth) ?? Number.MAX_SAFE_INTEGER) -
+        (numberOrNull(right.discoveryDepth) ?? Number.MAX_SAFE_INTEGER);
+      if (depthDiff !== 0) {
+        return depthDiff;
+      }
+      return Number(left.skillId) - Number(right.skillId);
+    });
+
+  if (chainControls.length === 0) {
+    return null;
+  }
+
+  return {
+    status: 'normal-attack-child-skill-chain-candidate-unconfirmed',
+    chainSkillIds: chainControls.map(item => item.skillId),
+    chainLength: chainControls.length,
+    animationStateNames: uniqueStrings(
+      chainControls.flatMap(item => item.animationStateNames ?? [])
+    ),
+    hpTimelineCandidateCount: chainControls.reduce(
+      (sum, item) => sum + (numberOrNull(item.hpTimelineCandidateCount) ?? 0),
+      0
+    ),
+    hpTrackNames: uniqueStrings(
+      chainControls.flatMap(item =>
+        (item.hpTimelineCandidates ?? []).map(candidate => candidate.trackName)
+      )
+    ),
+    bridgeTargetSkillIds: uniqueNumbers(
+      chainControls.flatMap(item => item.eventBridgeSkillIds ?? [])
+    ),
+    applied: false,
+  };
+}
+
+function createStateTimingControlKey(item) {
+  return [
+    item.file ?? '',
+    item.pathId ?? '',
+    item.behaviorStartFrame ?? '',
+    item.selectedStateName ?? '',
+    item.skillId ?? '',
+    item.bridge ?? '',
+    item.type ?? '',
+  ].join('|');
 }
 
 function summarizeHpStateWindows(hpChains) {
@@ -5326,6 +5506,11 @@ function uniqueNumbers(values) {
   return [
     ...new Set(values.map(value => Number(value)).filter(Number.isFinite)),
   ].sort((left, right) => left - right);
+}
+
+function maxNumber(values) {
+  const finite = values.map(numberOrNull).filter(Number.isFinite);
+  return finite.length > 0 ? Math.max(...finite) : null;
 }
 
 function uniqueStrings(values) {

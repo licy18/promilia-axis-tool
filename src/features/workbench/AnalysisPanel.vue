@@ -504,6 +504,30 @@ function formatStateTimingFindingStatus(finding) {
 }
 
 function formatEventBridgeTargetSummary(evidence) {
+  const chain = evidence?.normalAttackChainCandidate;
+  if (chain?.chainSkillIds?.length > 0) {
+    const chainText = chain.chainSkillIds.slice(0, 2).map(skillId => {
+      const target = (evidence.targetSkillControls ?? []).find(
+        item => Number(item.skillId) === Number(skillId)
+      );
+      const states = (target?.animationStateNames ?? []).slice(0, 2).join('/');
+      return states ? `${skillId}->${states}` : `${skillId}`;
+    });
+    const remaining = chain.chainSkillIds.length - chainText.length;
+    if (remaining > 0) {
+      chainText.push(`+${remaining}`);
+    }
+    const missingTargets = (evidence.targetSkillControls ?? [])
+      .filter(target => target.status !== 'found')
+      .map(target => `${target.skillId}缺失`)
+      .slice(0, 2);
+    const missingText =
+      missingTargets.length > 0
+        ? ` · 目标缺失 ${missingTargets.join(' / ')}`
+        : '';
+    return ` · 普攻链 ${chainText.join(' / ')}${missingText}`;
+  }
+
   const targets = (evidence?.targetSkillControls ?? [])
     .slice(0, 2)
     .map(target => {

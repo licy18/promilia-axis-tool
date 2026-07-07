@@ -106,7 +106,7 @@ Endaxis 只作为架构和交互成熟度参考，不是蓝色星原数据来源
 
 ## 已知开发阶段
 
-当前已完成阶段 1-3 的最小闭环、阶段 4 工作台主链路、阶段 5-1 至 5-8X-B 的真实数据/数值/动作形态、直接动作库、60fps 帧时间轴、公式分层雏形、战斗公式证据索引、公式 source 接入、skill asset/effect node 候选索引、每动作三值结果契约、`skill_control` 效果轨道候选分类、本地行为链解引用、elementBaseDatas 资源映射归属、行为脚本类型候选、IL2CPP element 类型目录、外部 element 对象本体解析、`TDamageElementParams` 三值字段候选映射、Workbench 三值来源展示、`valueParam` / `formulaParamValues` 槽位关系诊断、未应用公式槽位候选展示、`function_1/function_2 -> element_formula` 候选索引、动作级 `formulaFunctionSummary` 展示、`formulaCandidatePreview` 未应用预览、`combinationPreviews` 简单组合诊断矩阵、`formulaCandidatePatternSummary` 跨动作差异模式摘要、`skillControlBehaviorCorrelations` 技能级行为节点关联摘要、按 lane 保留的 HP 行为链样本、动作形态级行为绑定候选、`stateTimingEvidence` 状态/时序控制证据，以及 EventBridge 目标技能 skill_control 摘要。旧 Vue 原型可运行，但不再作为最终架构地基；下一步推进阶段 5-8X-C，沿 `10900102 -> 10900103` 普攻连段链递归验证动作状态。
+当前已完成阶段 1-3 的最小闭环、阶段 4 工作台主链路、阶段 5-1 至 5-8X-C 的真实数据/数值/动作形态、直接动作库、60fps 帧时间轴、公式分层雏形、战斗公式证据索引、公式 source 接入、skill asset/effect node 候选索引、每动作三值结果契约、`skill_control` 效果轨道候选分类、本地行为链解引用、elementBaseDatas 资源映射归属、行为脚本类型候选、IL2CPP element 类型目录、外部 element 对象本体解析、`TDamageElementParams` 三值字段候选映射、Workbench 三值来源展示、`valueParam` / `formulaParamValues` 槽位关系诊断、未应用公式槽位候选展示、`function_1/function_2 -> element_formula` 候选索引、动作级 `formulaFunctionSummary` 展示、`formulaCandidatePreview` 未应用预览、`combinationPreviews` 简单组合诊断矩阵、`formulaCandidatePatternSummary` 跨动作差异模式摘要、`skillControlBehaviorCorrelations` 技能级行为节点关联摘要、按 lane 保留的 HP 行为链样本、动作形态级行为绑定候选、`stateTimingEvidence` 状态/时序控制证据、EventBridge 目标技能 skill_control 摘要，以及普攻连段链递归索引。当前 `10900102 -> 10900103 -> 10900104 -> 10900105` 已作为 `10900101` 的子 skill_control 普攻链候选，链路动画状态为 `Skill0_2 / Skill0_3 / Skill0_4 / Skill0_5`，但还未绑定到普通攻击每 hit；下一步推进阶段 5-8Y，把普攻链候选升级为普通攻击多段/每 hit 绑定候选。
 
 完整对标 Endaxis 的后续路线见 `DEVELOPMENT_PLAN.md`。
 

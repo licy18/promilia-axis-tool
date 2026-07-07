@@ -2770,6 +2770,47 @@ Workbench 当前默认样本显示：
 - 阶段 5-8X-C 目标：沿 `10900102 -> 10900103` 普攻连段链递归索引目标 skill_control，确认 `Skill0_1 / Skill0_2 / ...` 与普通攻击段数、连击桥接和动作形态的对应关系。
 - 若递归链能覆盖普攻多段，再把普通攻击候选绑定从单技能级证据升级为“普攻连段链候选”。
 
+### 2026-07-08：阶段 5-8X-C 普攻连段链递归索引
+
+本轮完成：
+
+- `stateTimingEvidence` 合并同一 `skill_control` 内直接挂载的 `AnimationBehaviorData` / `EventBridgeBehaviorData`，时间轴链证据优先保留轨道名和帧窗，直接扫描只补缺口。
+- `eventBridgeTargetSkillControlEvidence` 从单跳目标扩展为递归链索引，当前深度上限为 6，记录 `directTargetSkillIds`、`targetSkillIds`、`chainDepthMax`、`discoveryDepth`、`discoveredFromSkillId`。
+- 新增 `normalAttackChainCandidate`，把 `child-skill-of-source` 的目标 skill_control 汇总为普攻连段候选。
+- 目标 skill_control 摘要改为全量扫描目标目录，避免高文件数目录里后段动画状态被样本上限截断。
+- 仿真投影和 Workbench 摘要接入普攻链候选；Workbench 当前默认样本显示：
+
+```text
+候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 12f/13f/16f/19f · Skill0_6/Skill0_1 · 绑定候选 普攻->Skill0_1 12f/13f · 状态证据 Skill0_1 动画+命中 / Skill0_6 动画+命中 · 普攻链 10900102->Skill0_2 / 10900103->Skill0_3 / +2 · 目标缺失 80102
+```
+
+当前末音 `10900101` 普攻链证据：
+
+- 主 skill_control：`Skill0_1` 与 `Skill0_6` 均已有动画+命中候选。
+- 直接 EventBridge 目标：`80102`、`10900102`。
+- 递归普攻链：`10900102 -> 10900103 -> 10900104 -> 10900105`，均为 `parentSkill = 10900101` 的子 skill_control。
+- 链路动画状态：`Skill0_2 / Skill0_3 / Skill0_4 / Skill0_5`。
+- 链路 HP timeline 候选总数：30。
+- 链路 HP 轨道名包含：`普攻-攻击碰撞`、`攻击碰撞1`、`无属性-攻击碰撞2`、`最后1hit-攻击碰撞`、`最后大hit-攻击框`、`左转圈hit -攻击框`、`上挑hit-攻击框`。
+- `80102` 仍缺少 `skill_control_80102.asset` 和 `skill.json` 行，继续标记为缺失目标，不能当作已解析技能。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/data/azprGenerated.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、53 条测试通过。
+
+当前边界：
+
+- `normalAttackChainCandidate.applied` 仍为 `false`。
+- 当前只证明普攻连段 skill_control 链和状态/HP 候选存在，尚未把 30 个 HP timeline 候选映射到“普通攻击第 1/2/3/4/5 段”的最终每 hit 序列。
+- `Skill0_6` 仍是重击/闪击/跃击共享低置信候选，需要继续拆分动作形态。
+- `80102` 的含义仍未确认，可能是非技能表 ID、枚举或其他资源 ID。
+
+下一步：
+
+- 阶段 5-8Y 目标：把普攻链候选升级为普通攻击多段/每 hit 绑定候选。
+- 优先按 `discoveryDepth`、动画状态名、HP 轨道名、候选帧、`subSkillId`、hitEffect 和技能描述的普攻段数建立 `normalAttackHitChainCandidate`。
+- 仍保持所有候选 `applied: false`，直到能用 runtime 行为或更强资源证据确认每 hit 的最终伤害/削韧/充能节点。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

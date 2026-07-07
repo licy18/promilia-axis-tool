@@ -250,7 +250,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8W，新增按 lane 保留的 `effectLaneCandidatesByLane` / `effectLaneBehaviorChainsByLane`，完整保留末音 `10900101` 的 5 条 HP 行为链，并在仿真中生成动作形态级候选绑定；当前【普通攻击】中置信候选为 `普通-攻击碰撞 / Skill0_1 / 12-13f, 13-14f`，【重击 / 闪击 / 跃击】低置信共享候选为 `攻击碰撞 / Skill0_6`。
 - 已完成：阶段 5-8X-A，新增 `stateTimingEvidence`，把 `AnimationBehaviorData` 和 `EventBridgeBehaviorData` 时序行为纳入 evidence/投影/Workbench；当前 `Skill0_6` 有 `动作` 动画状态控制与 3 个 HP 命中窗口，`Skill0_1` 只有 2 个 HP 资源映射窗口，尚未在同一 skill_control 中找到动画状态控制。
 - 已完成：阶段 5-8X-B，新增 `eventBridgeTargetSkillControlEvidence`，把 `10900102 / 80102` 等 EventBridge 目标技能接入状态证据；当前确认 `10900102` 是 `10900101` 的子技能，目标 skill_control 动画状态为 `Skill0_2`，有 4 个 `普攻-攻击碰撞` HP 候选；`80102` 在 SkillList 和 `skill.json` 中缺失。
-- 下一步：阶段 5-8X-C，沿 `10900102 -> 10900103` 普攻连段链递归索引目标 skill_control，确认 `Skill0_1 / Skill0_2 / ...` 与普通攻击段数、连击桥接和动作形态的对应关系。
+- 已完成：阶段 5-8X-C，把 EventBridge 目标从单跳索引升级为递归普攻连段链索引；当前 `10900102 -> 10900103 -> 10900104 -> 10900105` 均确认为 `10900101` 的子 skill_control，链路动画状态为 `Skill0_2 / Skill0_3 / Skill0_4 / Skill0_5`，HP timeline 候选合计 30 个；同时修正 `Skill0_1` 的直接动画状态证据，使主 skill_control 的 `Skill0_1 / Skill0_6` 均为动画+命中候选。
+- 下一步：阶段 5-8Y，把普攻链候选升级为普通攻击多段/每 hit 绑定候选，按链路深度、动画状态、HP 轨道名、帧窗口、`subSkillId` 和 hitEffect 建立 `normalAttackHitChainCandidate`，但在 runtime 或更强资源证据确认前继续保持 `applied: false`。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

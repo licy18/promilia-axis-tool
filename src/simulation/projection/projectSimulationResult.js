@@ -751,6 +751,7 @@ function compactEventBridgeTargetSkillControlEvidence(evidence) {
   }
   return {
     status: evidence.status ?? 'event-bridge-target-skill-controls-missing',
+    directTargetSkillIds: evidence.directTargetSkillIds ?? [],
     targetSkillIds: evidence.targetSkillIds ?? [],
     targetSkillControlCount:
       numberOrNull(evidence.targetSkillControlCount) ?? 0,
@@ -759,16 +760,38 @@ function compactEventBridgeTargetSkillControlEvidence(evidence) {
     missingTargetSkillControlCount:
       numberOrNull(evidence.missingTargetSkillControlCount) ?? 0,
     childSkillTargetIds: evidence.childSkillTargetIds ?? [],
+    chainDepthMax: numberOrNull(evidence.chainDepthMax),
     targetAnimationStateNames: evidence.targetAnimationStateNames ?? [],
     targetHpTrackNames: evidence.targetHpTrackNames ?? [],
+    normalAttackChainCandidate: evidence.normalAttackChainCandidate
+      ? {
+          status: evidence.normalAttackChainCandidate.status ?? null,
+          chainSkillIds:
+            evidence.normalAttackChainCandidate.chainSkillIds ?? [],
+          chainLength:
+            numberOrNull(evidence.normalAttackChainCandidate.chainLength) ?? 0,
+          animationStateNames:
+            evidence.normalAttackChainCandidate.animationStateNames ?? [],
+          hpTimelineCandidateCount:
+            numberOrNull(
+              evidence.normalAttackChainCandidate.hpTimelineCandidateCount
+            ) ?? 0,
+          hpTrackNames: evidence.normalAttackChainCandidate.hpTrackNames ?? [],
+          bridgeTargetSkillIds:
+            evidence.normalAttackChainCandidate.bridgeTargetSkillIds ?? [],
+          applied: false,
+        }
+      : null,
     targetSkillControls: (evidence.targetSkillControls ?? [])
-      .slice(0, 4)
+      .slice(0, 6)
       .map(item => ({
         skillId: numberOrNull(item.skillId),
         status: item.status ?? null,
         skillTableStatus: item.skillTableStatus ?? null,
         parentSkill: numberOrNull(item.parentSkill),
         relationToSourceSkill: item.relationToSourceSkill ?? null,
+        discoveryDepth: numberOrNull(item.discoveryDepth),
+        discoveredFromSkillId: numberOrNull(item.discoveredFromSkillId),
         animationStateControlCount:
           numberOrNull(item.animationStateControlCount) ?? 0,
         animationStateNames: item.animationStateNames ?? [],

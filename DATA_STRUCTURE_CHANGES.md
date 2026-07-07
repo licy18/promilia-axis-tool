@@ -3439,3 +3439,104 @@ Workbench 候选模式摘要会追加动作绑定提示：
 - 目标技能摘要只证明 EventBridge 目标 skill_control 的存在、状态名和候选 HP 轨道，不直接证明最终动作绑定。
 - `10900102` 已确认是 `10900101` 的子技能，并继续桥接到 `10900103`；下一阶段应递归追完整普攻连段链。
 - `80102` 暂不在 `SkillList` 和当前 `skill.json`，必须先确认它是否是非技能表 ID、枚举值或其他资源 ID，不能直接按技能控制处理。
+
+## 51. 阶段 5-8X-C：递归普攻连段链候选
+
+阶段 5-8X-C 将 `eventBridgeTargetSkillControlEvidence` 从单跳目标摘要扩展为递归目标链索引，并新增 `normalAttackChainCandidate`。本节覆盖并更新第 49 / 50 节中对末音 `10900101` 的旧样例：当前 `Skill0_1` 已通过直接 `AnimationBehaviorData` 补证为动画+命中候选，`EventBridge` 目标不再只停留在 `10900102` 单跳。
+
+### 51.1 stateTimingEvidence 更新
+
+`stateTimingEvidence` 现在同时合并：
+
+- timingControl 行为链中解析出的 `AnimationBehaviorData` / `EventBridgeBehaviorData`。
+- skill_control 目录顶层直接挂载的 `AnimationBehaviorData` / `EventBridgeBehaviorData`。
+
+合并时优先保留 timingControl 链上的轨道名和帧窗，直接扫描只用于补缺口。当前末音 `10900101` 的摘要：
+
+```javascript
+{
+  "animationStateControlCount": 2,
+  "eventBridgeControlCount": 5,
+  "animationStateNames": ["Skill0_1", "Skill0_6"],
+  "stateFindings": [
+    {
+      "stateName": "Skill0_1",
+      "status": "hp-state-has-animation-control-candidate",
+      "hpStartFrames": [12, 13],
+      "animationControlCount": 1
+    },
+    {
+      "stateName": "Skill0_6",
+      "status": "hp-state-has-animation-control-candidate",
+      "hpStartFrames": [13, 16, 19],
+      "animationControlCount": 1
+    }
+  ],
+  "applied": false
+}
+```
+
+### 51.2 eventBridgeTargetSkillControlEvidence 更新
+
+新增或扩展字段：
+
+- `directTargetSkillIds`：源 skill_control 直接 EventBridge 目标。
+- `targetSkillIds`：递归追踪后见到的所有目标 ID。
+- `chainDepthMax`：当前追踪到的最大跳数。
+- `targetSkillControls[].discoveryDepth`：目标 skill_control 位于第几跳。
+- `targetSkillControls[].discoveredFromSkillId`：由哪个 skill_control 桥接发现。
+- `normalAttackChainCandidate`：同源 `parentSkill` 子 skill_control 组成的普攻连段候选。
+
+末音 `10900101` 当前摘要：
+
+```javascript
+{
+  "eventBridgeTargetSkillControlEvidence": {
+    "status": "event-bridge-target-skill-controls-indexed",
+    "directTargetSkillIds": [80102, 10900102],
+    "targetSkillIds": [80102, 10900102, 10900103, 10900104, 10900105],
+    "targetSkillControlCount": 5,
+    "foundTargetSkillControlCount": 4,
+    "missingTargetSkillControlCount": 1,
+    "childSkillTargetIds": [10900102, 10900103, 10900104, 10900105],
+    "chainDepthMax": 4,
+    "targetAnimationStateNames": [
+      "Skill0_2",
+      "Skill0_3",
+      "Skill0_4",
+      "Skill0_5"
+    ],
+    "normalAttackChainCandidate": {
+      "status": "normal-attack-child-skill-chain-candidate-unconfirmed",
+      "chainSkillIds": [10900102, 10900103, 10900104, 10900105],
+      "chainLength": 4,
+      "animationStateNames": [
+        "Skill0_2",
+        "Skill0_3",
+        "Skill0_4",
+        "Skill0_5"
+      ],
+      "hpTimelineCandidateCount": 30,
+      "bridgeTargetSkillIds": [0, 10900103, 10900104, 10900105],
+      "applied": false
+    },
+    "applied": false
+  }
+}
+```
+
+### 51.3 projection / Workbench
+
+- `compactEventBridgeTargetSkillControlEvidence()` 保留 `directTargetSkillIds`、`chainDepthMax`、`normalAttackChainCandidate`、`discoveryDepth`、`discoveredFromSkillId`。
+- Workbench 状态证据后优先显示普攻链摘要：
+
+```text
+普攻链 10900102->Skill0_2 / 10900103->Skill0_3 / +2 · 目标缺失 80102
+```
+
+### 51.4 当前边界
+
+- `normalAttackChainCandidate.applied` 必须保持 `false`。
+- 当前只确认普攻连段 skill_control 链和 HP timeline 候选存在，还没有建立普通攻击第 1/2/3/4/5 段与每 hit 伤害/削韧/充能节点的最终绑定。
+- `80102` 仍是缺失目标，不可直接按技能表行处理。
+- 下一阶段应新增普通攻击多段/每 hit 候选字段，建议暂命名为 `normalAttackHitChainCandidate`。

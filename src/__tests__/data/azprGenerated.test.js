@@ -797,10 +797,10 @@ describe('generated AzPr data', () => {
       scope: 'skill-level-action-state-candidates',
       hpStateWindowCount: 5,
       timingControlChainCount: 5,
-      animationStateControlCount: 1,
-      eventBridgeControlCount: 4,
+      animationStateControlCount: 2,
+      eventBridgeControlCount: 5,
       hpStateNames: ['Skill0_1', 'Skill0_6'],
-      animationStateNames: ['Skill0_6'],
+      animationStateNames: ['Skill0_1', 'Skill0_6'],
       eventBridgeSkillIds: [0, 80102, 10900102],
       bindingStatus: 'state-timing-evidence-candidates-unconfirmed',
       applied: false,
@@ -809,13 +809,37 @@ describe('generated AzPr data', () => {
       mayoiAttack.stateTimingEvidence.eventBridgeTargetSkillControlEvidence
     ).toMatchObject({
       status: 'event-bridge-target-skill-controls-indexed',
-      targetSkillIds: [80102, 10900102],
-      targetSkillControlCount: 2,
-      foundTargetSkillControlCount: 1,
+      directTargetSkillIds: [80102, 10900102],
+      targetSkillIds: [80102, 10900102, 10900103, 10900104, 10900105],
+      targetSkillControlCount: 5,
+      foundTargetSkillControlCount: 4,
       missingTargetSkillControlCount: 1,
-      childSkillTargetIds: [10900102],
-      targetAnimationStateNames: ['Skill0_2'],
-      targetHpTrackNames: ['普攻-攻击碰撞'],
+      childSkillTargetIds: [10900102, 10900103, 10900104, 10900105],
+      chainDepthMax: 4,
+      targetAnimationStateNames: [
+        'Skill0_2',
+        'Skill0_3',
+        'Skill0_4',
+        'Skill0_5',
+      ],
+      targetHpTrackNames: [
+        '上挑hit-攻击框',
+        '左转圈hit -攻击框',
+        '攻击碰撞1',
+        '无属性-攻击碰撞2',
+        '普攻-攻击碰撞',
+        '最后1hit-攻击碰撞',
+        '最后大hit-攻击框',
+      ],
+      normalAttackChainCandidate: {
+        status: 'normal-attack-child-skill-chain-candidate-unconfirmed',
+        chainSkillIds: [10900102, 10900103, 10900104, 10900105],
+        chainLength: 4,
+        animationStateNames: ['Skill0_2', 'Skill0_3', 'Skill0_4', 'Skill0_5'],
+        hpTimelineCandidateCount: 30,
+        bridgeTargetSkillIds: [0, 10900103, 10900104, 10900105],
+        applied: false,
+      },
       applied: false,
     });
     expect(
@@ -828,6 +852,8 @@ describe('generated AzPr data', () => {
         skillTableStatus: 'found',
         parentSkill: 10900101,
         relationToSourceSkill: 'child-skill-of-source',
+        discoveryDepth: 1,
+        discoveredFromSkillId: 10900101,
         animationStateControlCount: 3,
         animationStateNames: ['Skill0_2'],
         hpTimelineCandidateCount: 4,
@@ -842,26 +868,69 @@ describe('generated AzPr data', () => {
         ]),
       }),
       expect.objectContaining({
+        skillId: 10900103,
+        status: 'found',
+        relationToSourceSkill: 'child-skill-of-source',
+        discoveryDepth: 2,
+        discoveredFromSkillId: 10900102,
+        animationStateControlCount: 1,
+        animationStateNames: ['Skill0_3'],
+        hpTimelineCandidateCount: 9,
+        eventBridgeSkillIds: [0, 10900104],
+      }),
+      expect.objectContaining({
+        skillId: 10900104,
+        status: 'found',
+        relationToSourceSkill: 'child-skill-of-source',
+        discoveryDepth: 3,
+        discoveredFromSkillId: 10900103,
+        animationStateControlCount: 3,
+        animationStateNames: ['Skill0_4'],
+        hpTimelineCandidateCount: 7,
+        eventBridgeSkillIds: [0, 10900105],
+      }),
+      expect.objectContaining({
+        skillId: 10900105,
+        status: 'found',
+        relationToSourceSkill: 'child-skill-of-source',
+        discoveryDepth: 4,
+        discoveredFromSkillId: 10900104,
+        animationStateControlCount: 1,
+        animationStateNames: ['Skill0_5'],
+        hpTimelineCandidateCount: 10,
+        eventBridgeSkillIds: [0],
+      }),
+      expect.objectContaining({
         skillId: 80102,
         status: 'missing-skill-control-directory',
         skillTableStatus: 'missing-skill-table-row',
         relationToSourceSkill: 'unknown-target-not-in-skill-table',
+        discoveryDepth: 1,
+        discoveredFromSkillId: 10900101,
       }),
     ]);
-    expect(mayoiAttack.stateTimingEvidence.animationStateControls).toEqual([
-      expect.objectContaining({
-        sourceName: '动作',
-        sourceStartFrame: 0,
-        sourceEndFrame: 230,
-        selectedStateName: 'Skill0_6',
-        aniLength: 230,
-        aniStartFrame: 0,
-        aniEndFrame: 21,
-        scriptTypeCandidate: expect.objectContaining({
-          className: 'AnimationBehaviorData',
+    expect(mayoiAttack.stateTimingEvidence.animationStateControls).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          selectedStateName: 'Skill0_1',
+          aniLength: 300,
+          aniStartFrame: 0,
+          aniEndFrame: 300,
+          scriptTypeCandidate: expect.objectContaining({
+            className: 'AnimationBehaviorData',
+          }),
         }),
-      }),
-    ]);
+        expect.objectContaining({
+          selectedStateName: 'Skill0_6',
+          aniLength: 230,
+          aniStartFrame: 0,
+          aniEndFrame: 21,
+          scriptTypeCandidate: expect.objectContaining({
+            className: 'AnimationBehaviorData',
+          }),
+        }),
+      ])
+    );
     expect(mayoiAttack.stateTimingEvidence.eventBridgeControls).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -887,11 +956,11 @@ describe('generated AzPr data', () => {
     expect(mayoiAttack.stateTimingEvidence.stateFindings).toEqual([
       expect.objectContaining({
         stateName: 'Skill0_1',
-        status: 'hp-state-resource-map-only-no-local-animation-control',
+        status: 'hp-state-has-animation-control-candidate',
         hpWindowCount: 2,
         hpStartFrames: [12, 13],
         subSkillIds: [10900101],
-        animationControlCount: 0,
+        animationControlCount: 1,
         overlappingEventBridgeNames: ['连击桥接'],
       }),
       expect.objectContaining({

@@ -644,26 +644,62 @@ describe('first vertical slice simulation', () => {
             status: 'state-timing-evidence-found-action-binding-unconfirmed',
             hpStateWindowCount: 5,
             timingControlChainCount: 5,
-            animationStateControlCount: 1,
-            eventBridgeControlCount: 4,
+            animationStateControlCount: 2,
+            eventBridgeControlCount: 5,
             hpStateNames: ['Skill0_1', 'Skill0_6'],
-            animationStateNames: ['Skill0_6'],
+            animationStateNames: ['Skill0_1', 'Skill0_6'],
             eventBridgeSkillIds: [0, 80102, 10900102],
             eventBridgeTargetSkillControlEvidence: expect.objectContaining({
               status: 'event-bridge-target-skill-controls-indexed',
-              targetSkillIds: [80102, 10900102],
-              foundTargetSkillControlCount: 1,
+              directTargetSkillIds: [80102, 10900102],
+              targetSkillIds: [80102, 10900102, 10900103, 10900104, 10900105],
+              foundTargetSkillControlCount: 4,
               missingTargetSkillControlCount: 1,
-              childSkillTargetIds: [10900102],
-              targetAnimationStateNames: ['Skill0_2'],
-              targetHpTrackNames: ['普攻-攻击碰撞'],
+              childSkillTargetIds: [10900102, 10900103, 10900104, 10900105],
+              chainDepthMax: 4,
+              targetAnimationStateNames: [
+                'Skill0_2',
+                'Skill0_3',
+                'Skill0_4',
+                'Skill0_5',
+              ],
+              normalAttackChainCandidate: expect.objectContaining({
+                chainSkillIds: [10900102, 10900103, 10900104, 10900105],
+                chainLength: 4,
+                hpTimelineCandidateCount: 30,
+              }),
               targetSkillControls: [
                 expect.objectContaining({
                   skillId: 10900102,
                   status: 'found',
                   relationToSourceSkill: 'child-skill-of-source',
+                  discoveryDepth: 1,
                   animationStateNames: ['Skill0_2'],
                   hpTimelineCandidateCount: 4,
+                }),
+                expect.objectContaining({
+                  skillId: 10900103,
+                  status: 'found',
+                  relationToSourceSkill: 'child-skill-of-source',
+                  discoveryDepth: 2,
+                  animationStateNames: ['Skill0_3'],
+                  hpTimelineCandidateCount: 9,
+                }),
+                expect.objectContaining({
+                  skillId: 10900104,
+                  status: 'found',
+                  relationToSourceSkill: 'child-skill-of-source',
+                  discoveryDepth: 3,
+                  animationStateNames: ['Skill0_4'],
+                  hpTimelineCandidateCount: 7,
+                }),
+                expect.objectContaining({
+                  skillId: 10900105,
+                  status: 'found',
+                  relationToSourceSkill: 'child-skill-of-source',
+                  discoveryDepth: 4,
+                  animationStateNames: ['Skill0_5'],
+                  hpTimelineCandidateCount: 10,
                 }),
                 expect.objectContaining({
                   skillId: 80102,
@@ -674,10 +710,10 @@ describe('first vertical slice simulation', () => {
             stateFindings: [
               expect.objectContaining({
                 stateName: 'Skill0_1',
-                status: 'hp-state-resource-map-only-no-local-animation-control',
+                status: 'hp-state-has-animation-control-candidate',
                 hpWindowCount: 2,
                 hpStartFrames: [12, 13],
-                animationControlCount: 0,
+                animationControlCount: 1,
               }),
               expect.objectContaining({
                 stateName: 'Skill0_6',
@@ -751,9 +787,9 @@ describe('first vertical slice simulation', () => {
             stateTimingFindings: [
               expect.objectContaining({
                 stateName: 'Skill0_1',
-                status: 'hp-state-resource-map-only-no-local-animation-control',
+                status: 'hp-state-has-animation-control-candidate',
                 hpWindowCount: 2,
-                animationControlCount: 0,
+                animationControlCount: 1,
               }),
             ],
             actionVariantBindingCandidate: expect.objectContaining({
@@ -939,16 +975,39 @@ describe('first vertical slice simulation', () => {
           stateTimingEvidenceStatus:
             'state-timing-evidence-found-action-binding-unconfirmed',
           stateTimingEvidence: expect.objectContaining({
-            animationStateNames: ['Skill0_6'],
+            animationStateNames: ['Skill0_1', 'Skill0_6'],
             eventBridgeSkillIds: [0, 80102, 10900102],
             eventBridgeTargetSkillControlEvidence: expect.objectContaining({
-              targetAnimationStateNames: ['Skill0_2'],
-              targetHpTrackNames: ['普攻-攻击碰撞'],
+              targetAnimationStateNames: [
+                'Skill0_2',
+                'Skill0_3',
+                'Skill0_4',
+                'Skill0_5',
+              ],
+              normalAttackChainCandidate: expect.objectContaining({
+                chainSkillIds: [10900102, 10900103, 10900104, 10900105],
+                chainLength: 4,
+              }),
               targetSkillControls: [
                 expect.objectContaining({
                   skillId: 10900102,
                   status: 'found',
                   animationStateNames: ['Skill0_2'],
+                }),
+                expect.objectContaining({
+                  skillId: 10900103,
+                  status: 'found',
+                  animationStateNames: ['Skill0_3'],
+                }),
+                expect.objectContaining({
+                  skillId: 10900104,
+                  status: 'found',
+                  animationStateNames: ['Skill0_4'],
+                }),
+                expect.objectContaining({
+                  skillId: 10900105,
+                  status: 'found',
+                  animationStateNames: ['Skill0_5'],
                 }),
                 expect.objectContaining({
                   skillId: 80102,
@@ -959,7 +1018,7 @@ describe('first vertical slice simulation', () => {
             stateFindings: [
               expect.objectContaining({
                 stateName: 'Skill0_1',
-                status: 'hp-state-resource-map-only-no-local-animation-control',
+                status: 'hp-state-has-animation-control-candidate',
               }),
               expect.objectContaining({
                 stateName: 'Skill0_6',
@@ -1042,7 +1101,7 @@ describe('first vertical slice simulation', () => {
     ).toEqual([
       expect.objectContaining({
         stateName: 'Skill0_1',
-        status: 'hp-state-resource-map-only-no-local-animation-control',
+        status: 'hp-state-has-animation-control-candidate',
       }),
     ]);
     expect(
