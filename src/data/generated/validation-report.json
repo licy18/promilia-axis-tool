@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-07T12:13:58.236Z",
+  "generatedAt": "2026-07-07T12:42:08.428Z",
   "sourceRoot": "C:/PC2/Codex/AzPr",
   "counts": {
     "attributes": 184,
@@ -14,7 +14,8 @@
     "mediaFiles": 3059,
     "skillLevelCrossCheck": 120,
     "skillLogicIndex": 120,
-    "valueParamIndex": 2
+    "valueParamIndex": 2,
+    "characterAttributePanels": 20
   },
   "warnings": [
     {
@@ -360,6 +361,20 @@
         ]
       },
       "message": "valueParam 参数 ID 已建立公式槽位统计，但战斗语义仍未确认，不能直接写入伤害公式。"
+    },
+    {
+      "code": "character-attribute-panel-missing",
+      "severity": "ok",
+      "count": 0,
+      "summary": {
+        "characters": 20,
+        "attributesPerCharacter": 29,
+        "panelRows": 580,
+        "starAttributeRows": 2656,
+        "level": 80,
+        "currentRank": 7
+      },
+      "message": "角色当前数值面板快照缺失，后续倍率转伤害前必须补齐。"
     },
     {
       "code": "non-azpr-placeholder-character",

@@ -18,11 +18,13 @@ export function compileProject(project, gameData) {
   const charactersById = indexById(gameData.characters);
   const skillsById = indexById(gameData.skills);
   const enemiesById = indexById(gameData.enemies);
-  const actorsById = new Map(project.actors.map((actor) => [actor.id, compileActor(actor, charactersById)]));
+  const actorsById = new Map(
+    project.actors.map(actor => [actor.id, compileActor(actor, charactersById)])
+  );
   const enemy = compileEnemy(project.enemy, enemiesById);
 
   const actions = project.actions
-    .map((action) => compileAction(action, actorsById, enemy, skillsById))
+    .map(action => compileAction(action, actorsById, enemy, skillsById))
     .sort((a, b) => a.startMs - b.startMs || a.id.localeCompare(b.id));
 
   return {
@@ -41,8 +43,8 @@ export function compileProject(project, gameData) {
     diagnostics: {
       validationWarnings: validation.warnings,
       missingTimingActionIds: actions
-        .filter((action) => action.timing?.needsTimingData)
-        .map((action) => action.id),
+        .filter(action => action.timing?.needsTimingData)
+        .map(action => action.id),
     },
   };
 }
@@ -56,11 +58,45 @@ function compileActor(actor, charactersById) {
       character,
     },
     stats: {
-      attack: getAttributeValue(actor.baseAttributes, 'ATK'),
-      maxHp: getAttributeValue(actor.baseAttributes, 'MAXHP'),
-      critRate: getAttributeValue(actor.baseAttributes, 'CRI'),
-      critDamage: getAttributeValue(actor.baseAttributes, 'CRI_DMG'),
+      attack: getPanelCoreValue(
+        actor.attributePanel,
+        'attack',
+        getAttributeValue(actor.baseAttributes, 'ATK')
+      ),
+      maxHp: getPanelCoreValue(
+        actor.attributePanel,
+        'maxHp',
+        getAttributeValue(actor.baseAttributes, 'MAXHP')
+      ),
+      physicalDefense: getPanelCoreValue(
+        actor.attributePanel,
+        'physicalDefense',
+        getAttributeValue(actor.baseAttributes, 'DEF')
+      ),
+      magicalDefense: getPanelCoreValue(
+        actor.attributePanel,
+        'magicalDefense',
+        getAttributeValue(actor.baseAttributes, 'MDEF')
+      ),
+      tuningStrength: getPanelCoreValue(
+        actor.attributePanel,
+        'tuningStrength',
+        0
+      ),
+      critRate: getPanelCoreValue(
+        actor.attributePanel,
+        'critRate',
+        getAttributeValue(actor.baseAttributes, 'CRI')
+      ),
+      critDamage: getPanelCoreValue(
+        actor.attributePanel,
+        'critDamage',
+        getAttributeValue(actor.baseAttributes, 'CRI_DMG')
+      ),
       maxSp: getAttributeValue(actor.baseAttributes, 'MAXSP'),
+      source: actor.attributePanel
+        ? 'character-attribute-panel-current-rank'
+        : 'baseAttributes',
     },
   };
 }
@@ -98,7 +134,7 @@ function compileAction(action, actorsById, enemy, skillsById) {
   if (action.type === ACTION_TYPES.RESOURCE) {
     return {
       ...action,
-      actor: action.actorId ? actorsById.get(action.actorId) ?? null : null,
+      actor: action.actorId ? (actorsById.get(action.actorId) ?? null) : null,
       target: null,
       source: {},
       damageSegments: [],
@@ -132,7 +168,9 @@ function compileAction(action, actorsById, enemy, skillsById) {
   const skill = skillsById.get(Number(action.skillId));
   const damageSegments = parseDamageSegments(action);
   const selectedDamageSegment =
-    damageSegments.find((segment) => Number(segment.index) === Number(action.damageSegmentIndex)) ??
+    damageSegments.find(
+      segment => Number(segment.index) === Number(action.damageSegmentIndex)
+    ) ??
     damageSegments[0] ??
     null;
 
@@ -149,10 +187,15 @@ function compileAction(action, actorsById, enemy, skillsById) {
 }
 
 function indexById(items = []) {
-  return new Map(items.map((item) => [Number(item.id), item]));
+  return new Map(items.map(item => [Number(item.id), item]));
 }
 
 function getAttributeValue(baseAttributes, key) {
-  const attribute = (baseAttributes ?? []).find((item) => item.key === key);
+  const attribute = (baseAttributes ?? []).find(item => item.key === key);
   return Number.isFinite(attribute?.value) ? attribute.value : 0;
+}
+
+function getPanelCoreValue(attributePanel, key, fallback = 0) {
+  const value = attributePanel?.core?.[key]?.effectiveValue;
+  return Number.isFinite(value) ? value : fallback;
 }

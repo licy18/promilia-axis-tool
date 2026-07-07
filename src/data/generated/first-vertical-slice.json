@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-07T11:45:59.901Z",
+  "generatedAt": "2026-07-07T12:42:08.428Z",
   "source": "generated-from-local-azpr-data",
   "purpose": "stage-2-domain-schema-and-stage-3-simulation-seed",
   "ids": {
@@ -826,6 +826,89 @@
         ],
         "source": {
           "heroModule": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/109001.hero-module.local.json"
+        },
+        "attributePanel": {
+          "characterId": 109001,
+          "characterName": "末音",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1920,
+              "displayText": "1920",
+              "isRatio": false,
+              "fixedPanelValue": 1920,
+              "percentBonusValue": null
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 320,
+              "displayText": "320",
+              "isRatio": false,
+              "fixedPanelValue": 320,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 292,
+              "displayText": "292",
+              "isRatio": false,
+              "fixedPanelValue": 292,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 10748,
+              "displayText": "10748",
+              "isRatio": false,
+              "fixedPanelValue": 10748,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 212,
+              "displayText": "212",
+              "isRatio": false,
+              "fixedPanelValue": 212,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.061,
+              "displayText": "6.1%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.559,
+              "displayText": "155.9%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.08,
+              "displayText": "8%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.013,
+              "displayText": "1.3%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       }
     ],

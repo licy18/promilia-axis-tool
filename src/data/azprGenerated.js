@@ -1,4 +1,5 @@
 import attributes from './generated/attributes.json';
+import characterAttributePanels from './generated/character-attribute-panels.json';
 import characters from './generated/characters.json';
 import elements from './generated/elements.json';
 import enemies from './generated/enemies.json';
@@ -15,6 +16,7 @@ import valueParamIndex from './generated/value-param-index.json';
 
 const generatedTables = {
   attributes,
+  characterAttributePanels,
   characters,
   elements,
   enemies,
@@ -54,6 +56,18 @@ export function getAzprValueParamIndex() {
   return valueParamIndex;
 }
 
+export function getAzprCharacterAttributePanels() {
+  return characterAttributePanels;
+}
+
+export function getAzprCharacterAttributePanelByCharacterId(characterId) {
+  return (
+    characterAttributePanels.items.find(
+      panel => panel.characterId === Number(characterId)
+    ) ?? null
+  );
+}
+
 export function getAzprElements() {
   return elements.items;
 }
@@ -63,7 +77,9 @@ export function getAzprCharacters() {
 }
 
 export function getAzprCharacterById(id) {
-  return characters.items.find((character) => character.id === Number(id)) ?? null;
+  return (
+    characters.items.find(character => character.id === Number(id)) ?? null
+  );
 }
 
 export function getAzprSkills() {
@@ -71,11 +87,13 @@ export function getAzprSkills() {
 }
 
 export function getAzprSkillById(id) {
-  return skills.items.find((skill) => skill.id === Number(id)) ?? null;
+  return skills.items.find(skill => skill.id === Number(id)) ?? null;
 }
 
 export function getAzprSkillsByCharacterId(characterId) {
-  return skills.items.filter((skill) => skill.characterId === Number(characterId));
+  return skills.items.filter(
+    skill => skill.characterId === Number(characterId)
+  );
 }
 
 export function getAzprEnemies() {
@@ -83,7 +101,7 @@ export function getAzprEnemies() {
 }
 
 export function getAzprEnemyById(id) {
-  return enemies.items.find((enemy) => enemy.id === Number(id)) ?? null;
+  return enemies.items.find(enemy => enemy.id === Number(id)) ?? null;
 }
 
 export function getAzprKibos() {
@@ -103,5 +121,5 @@ export function getAzprAttributes() {
 }
 
 export function findAzprMediaByFileName(fileName) {
-  return mediaIndex.items.filter((item) => item.fileName === fileName);
+  return mediaIndex.items.filter(item => item.fileName === fileName);
 }

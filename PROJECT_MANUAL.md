@@ -1860,10 +1860,49 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 
 下一步：
 
-- 阶段 5-7 目标：建立 `elementId -> 技能 asset/公式/效果节点` 来源追踪雏形。
-- 优先追 `109001081`、`109001306`、`10100712` 相关 elementId，在本地 Lua config、BWiki `knowledge/json/entities` 和可读 asset 导出中寻找它们对应的公式 ID、效果类型或命中节点。
-- 把 `elementId` 的来源状态接入 `logicModel`，区分“只在 `skillsub_ele_value` 出现”“已找到 asset 引用”“已找到公式引用”。
-- 补充首个技能的 elementId 来源测试，为后续真实伤害公式和命中段映射打底。
+- 阶段 5-7 目标调整：优先建立角色当前数值面板，先把技能倍率要乘的角色攻击、生命、防御、暴击等面板来源固定下来。
+- 数据参考来自 `C:\PC2\Codex\AzPr\BWiki\generated\spreadsheets\role-attribute-dynamic-current-rank.xlsx`，生成口径沿用 BWiki 动态角色属性表。
+- `elementId -> 技能 asset/公式/效果节点` 来源追踪顺延到数值面板之后。
+
+### 2026-07-07：阶段 5-7 角色当前数值面板落地
+
+本轮完成：
+
+- `scripts/generate-azpr-data.mjs` 接入 `template_hero.json`、`talent_rank.json`、`talent_rune.json`，按 BWiki `role-attribute-dynamic-current-rank.xlsx` 同源口径生成角色当前面板快照。
+- 新增 `src/data/generated/character-attribute-panels.json`，覆盖 20 个角色、每角色 29 个展示属性，共 580 条面板属性行。
+- 面板默认口径固定为 80 级、当前临阶 7、当前阶星赐全选、突破加成计入至 6 阶。
+- `workbench-seed.json` 内嵌压缩后的核心面板字段，保留完整 29 属性在独立 JSON，避免 Workbench chunk 过度膨胀。
+- `Actor.attributePanel` 进入新版项目模型，`compileActor().stats` 优先读取面板核心值；当前 raw 投影公式版本升级为 `stage5-current-panel-attack-multiplier-v1`。
+- Workbench 右侧 `PropertiesPanel` 新增“角色数值面板”，跟随当前动作归属显示攻击、生命、物防、魔防、调谐、暴击率、暴击伤害、伤害增幅等核心属性。
+- 已用 xlsx inspect 产物核对末音面板：攻击 `1920`、生命 `10748`、暴击率 `6.1%`，与 `全角色面板拆分` 工作表一致。
+
+数据结论：
+
+- `character-attribute-panels.json.summary.characters = 20`。
+- `attributesPerCharacter = 29`，`panelRows = 580`。
+- `starAttributeRows = 2656`。
+- 末音当前面板攻击为 `1920`，首条垂直切片的普攻 raw 投影现在使用 `1920 * 649% = 12461`。
+
+验收结果：
+
+- `npx vitest run src/__tests__/data/azprGenerated.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、56 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、107 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1243 KB，后续仍需做数据拆包/懒加载。
+- `git diff --check`：通过；仅有仓库既有 LF/CRLF 工作区提示。
+- `http://127.0.0.1:5176/#/workbench` 本地页面服务返回 200。
+
+当前边界：
+
+- 当前仍是“角色面板攻击 × 技能倍率”的 raw 投影，不包含防御、抗性、暴击、增伤、减伤、buff、装备、奇波或灵子公式。
+- 面板快照固定为当前排行口径，不等同于可编辑配装/练度系统。
+- `valueParam` 与 `elementId` 仍未确认真实战斗语义，不能直接写入最终伤害公式。
+
+下一步：
+
+- 阶段 5-8 目标：建立真实伤害公式分层雏形。
+- 先在 `src/simulation/mechanics/` 中拆出攻击区、倍率区、防御/抗性占位、暴击/增伤占位和数据来源标签。
+- 用当前面板攻击、技能倍率段、敌人防御面板建立第一版可诊断公式链；未确认字段必须输出 limitation，不伪装成最终伤害。
+- 随后再回到 `elementId -> asset/公式/效果节点` 追踪，把命中段和公式节点补到技能逻辑模型中。
 
 ## 10. 文档维护规则
 

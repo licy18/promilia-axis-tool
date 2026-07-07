@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  getAzprCharacterAttributePanelByCharacterId,
+  getAzprCharacterAttributePanels,
   getAzprCharacters,
   getAzprElements,
   getAzprEnemies,
@@ -28,7 +30,7 @@ describe('generated AzPr data', () => {
     expect(getAzprEquipment()).toHaveLength(137);
     expect(getAzprSoulessences()).toHaveLength(62);
 
-    const names = characters.map((character) => character.name);
+    const names = characters.map(character => character.name);
     expect(names).toContain('末音');
     expect(names).not.toContain('钟离');
     expect(names).not.toContain('甘雨');
@@ -37,30 +39,35 @@ describe('generated AzPr data', () => {
   it('marks skill timing as missing until authoritative runtime data exists', () => {
     const skills = getAzprSkills();
 
-    expect(skills.every((skill) => skill.needsTimingData)).toBe(true);
-    expect(new Set(skills.map((skill) => skill.timingSource))).toEqual(
-      new Set(['missing-skill-asset-or-runtime-capture']),
+    expect(skills.every(skill => skill.needsTimingData)).toBe(true);
+    expect(new Set(skills.map(skill => skill.timingSource))).toEqual(
+      new Set(['missing-skill-asset-or-runtime-capture'])
     );
   });
 
   it('keeps validation findings explicit for the next reconstruction stage', () => {
     const report = getAzprValidationReport();
-    const timingWarning = report.warnings.find((warning) => warning.code === 'skill-timing-missing');
-    const crossCheckWarning = report.warnings.find((warning) => warning.code === 'skill-level-crosscheck-mismatch');
+    const timingWarning = report.warnings.find(
+      warning => warning.code === 'skill-timing-missing'
+    );
+    const crossCheckWarning = report.warnings.find(
+      warning => warning.code === 'skill-level-crosscheck-mismatch'
+    );
     const logicMismatchInfo = report.warnings.find(
-      (warning) => warning.code === 'skill-display-logic-timing-mismatch',
+      warning => warning.code === 'skill-display-logic-timing-mismatch'
     );
     const valueParamInfo = report.warnings.find(
-      (warning) => warning.code === 'skill-value-param-semantic-unresolved',
+      warning => warning.code === 'skill-value-param-semantic-unresolved'
     );
     const placeholderWarning = report.warnings.find(
-      (warning) => warning.code === 'non-azpr-placeholder-character',
+      warning => warning.code === 'non-azpr-placeholder-character'
     );
 
     expect(report.counts.characters).toBe(20);
     expect(report.counts.skillLevelCrossCheck).toBe(120);
     expect(report.counts.skillLogicIndex).toBe(120);
     expect(report.counts.valueParamIndex).toBe(2);
+    expect(report.counts.characterAttributePanels).toBe(20);
     expect(timingWarning.count).toBe(report.counts.skills);
     expect(crossCheckWarning).toMatchObject({
       severity: 'warning',
@@ -103,7 +110,64 @@ describe('generated AzPr data', () => {
         constantParameterIds: [7],
       },
     });
+    expect(
+      report.warnings.find(
+        warning => warning.code === 'character-attribute-panel-missing'
+      )
+    ).toMatchObject({
+      severity: 'ok',
+      count: 0,
+      summary: {
+        characters: 20,
+        attributesPerCharacter: 29,
+        panelRows: 580,
+        level: 80,
+        currentRank: 7,
+      },
+    });
     expect(placeholderWarning.severity).toBe('ok');
+  });
+
+  it('loads current-rank character attribute panels from the BWiki spreadsheet formula lineage', () => {
+    const manifest = getAzprGeneratedManifest();
+    const panels = getAzprCharacterAttributePanels();
+    const mayoi = getAzprCharacterAttributePanelByCharacterId(109001);
+
+    expect(manifest.files.characterAttributePanels).toBe(
+      'character-attribute-panels.json'
+    );
+    expect(panels.summary).toMatchObject({
+      characters: 20,
+      attributesPerCharacter: 29,
+      panelRows: 580,
+      level: 80,
+      currentRank: 7,
+    });
+    expect(panels.policy).toMatchObject({
+      level: 80,
+      currentRank: 7,
+      currentRankRunes: 'all-selected',
+      rankBonusIncludedThrough: 6,
+    });
+    expect(panels.source.referenceWorkbook).toContain(
+      'role-attribute-dynamic-current-rank.xlsx'
+    );
+    expect(mayoi.core.attack).toMatchObject({
+      name: '攻击',
+      effectiveValue: 1920,
+      displayText: '1920',
+      formulaRaw: 1920.2092,
+    });
+    expect(mayoi.core.maxHp).toMatchObject({
+      name: '生命',
+      effectiveValue: 10748,
+      displayText: '10748',
+    });
+    expect(mayoi.core.critRate).toMatchObject({
+      name: '暴击率',
+      effectiveValue: 0.061,
+      displayText: '6.1%',
+    });
   });
 
   it('indexes valueParam parameter slots without claiming combat semantics', () => {
@@ -120,12 +184,17 @@ describe('generated AzPr data', () => {
       unresolvedParameterIds: [1, 7],
       constantParameterIds: [7],
     });
-    expect(valueParams.params.map((param) => [param.id, param.variable, param.semanticStatus, param.category])).toEqual(
-      [
-        [1, 'A', 'unresolved', 'varying-formula-slot'],
-        [7, 'G', 'unresolved', 'constant-formula-slot'],
-      ],
-    );
+    expect(
+      valueParams.params.map(param => [
+        param.id,
+        param.variable,
+        param.semanticStatus,
+        param.category,
+      ])
+    ).toEqual([
+      [1, 'A', 'unresolved', 'varying-formula-slot'],
+      [7, 'G', 'unresolved', 'constant-formula-slot'],
+    ]);
     expect(valueParams.params[0]).toMatchObject({
       label: '参数 1 / A',
       isConstant: false,
@@ -146,10 +215,16 @@ describe('generated AzPr data', () => {
   it('cross-checks generated skill multipliers against NewTable skill_level rows', () => {
     const manifest = getAzprGeneratedManifest();
     const crossCheck = getAzprSkillLevelCrossCheck();
-    const mayoiAttack = crossCheck.items.find((item) => item.skillId === 10900101);
-    const mismatches = crossCheck.items.filter((item) => item.status !== 'matched');
+    const mayoiAttack = crossCheck.items.find(
+      item => item.skillId === 10900101
+    );
+    const mismatches = crossCheck.items.filter(
+      item => item.status !== 'matched'
+    );
 
-    expect(manifest.files.skillLevelCrossCheck).toBe('skill-level-crosscheck.json');
+    expect(manifest.files.skillLevelCrossCheck).toBe(
+      'skill-level-crosscheck.json'
+    );
     expect(crossCheck.count).toBe(120);
     expect(crossCheck.summary).toMatchObject({
       matchedSkills: 118,
@@ -164,21 +239,35 @@ describe('generated AzPr data', () => {
       status: 'matched',
       labels: ['普攻', '重击', '闪击', '跃击'],
       values: ['649%', '190%', '40%', '136%'],
-      labelIds: ['7116760813568', '7116760813569', '7116760813570', '7116760813571'],
-      valueIds: ['7116760813824', '7116760813825', '7116760813826', '7116760813827'],
+      labelIds: [
+        '7116760813568',
+        '7116760813569',
+        '7116760813570',
+        '7116760813571',
+      ],
+      valueIds: [
+        '7116760813824',
+        '7116760813825',
+        '7116760813826',
+        '7116760813827',
+      ],
       matches: {
         labels: true,
         values: true,
       },
     });
-    expect(mismatches.map((item) => item.skillId)).toEqual([10800562, 19900361]);
+    expect(mismatches.map(item => item.skillId)).toEqual([10800562, 19900361]);
   });
 
   it('maps skill_level subSkillId rows to skillsub_logic and skillsub_ele_value', () => {
     const manifest = getAzprGeneratedManifest();
     const logicIndex = getAzprSkillLogicIndex();
-    const mayoiAttack = logicIndex.items.find((item) => item.skillId === 10900101);
-    const timingMismatch = logicIndex.items.find((item) => item.skillId === 10100712);
+    const mayoiAttack = logicIndex.items.find(
+      item => item.skillId === 10900101
+    );
+    const timingMismatch = logicIndex.items.find(
+      item => item.skillId === 10100712
+    );
 
     expect(manifest.files.skillLogicIndex).toBe('skill-logic-index.json');
     expect(logicIndex.count).toBe(120);

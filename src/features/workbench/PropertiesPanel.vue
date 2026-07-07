@@ -13,7 +13,11 @@
           :value="selection.characterId"
           @change="emitSelection('characterId', $event.target.value)"
         >
-          <option v-for="character in characters" :key="character.id" :value="character.id">
+          <option
+            v-for="character in characters"
+            :key="character.id"
+            :value="character.id"
+          >
             {{ character.name }}
           </option>
         </select>
@@ -44,11 +48,20 @@
           :value="selectedAction.skillId"
           @change="emitActionPatch('skillId', $event.target.value)"
         >
-          <option v-for="skill in skillOptions" :key="skill.id" :value="skill.id">
+          <option
+            v-for="skill in skillOptions"
+            :key="skill.id"
+            :value="skill.id"
+          >
             {{ skill.name }}
           </option>
         </select>
-        <input v-else data-testid="workbench-action-type" :value="actionTypeLabel" disabled />
+        <input
+          v-else
+          data-testid="workbench-action-type"
+          :value="actionTypeLabel"
+          disabled
+        />
       </label>
 
       <label>
@@ -137,7 +150,11 @@
           :value="currentActorCharacterId"
           @change="emitActionPatch('actorCharacterId', $event.target.value)"
         >
-          <option v-for="actor in actors" :key="actor.id" :value="actor.characterId">
+          <option
+            v-for="actor in actors"
+            :key="actor.id"
+            :value="actor.characterId"
+          >
             {{ actor.name }}
           </option>
         </select>
@@ -156,11 +173,50 @@
           :value="selectedDamageSegmentIndex"
           @change="emitActionPatch('damageSegmentIndex', $event.target.value)"
         >
-          <option v-for="segment in damageSegmentOptions" :key="segment.index" :value="segment.index">
+          <option
+            v-for="segment in damageSegmentOptions"
+            :key="segment.index"
+            :value="segment.index"
+          >
             {{ segment.label }} / {{ segment.rawValue }}
           </option>
         </select>
       </label>
+    </div>
+
+    <div
+      v-if="currentActorAttributePanel"
+      class="attribute-panel"
+      data-testid="workbench-character-attribute-panel"
+      :data-character-id="currentActorAttributePanel.characterId"
+    >
+      <div class="attribute-panel-title">
+        <span>角色数值面板</span>
+        <strong data-testid="workbench-character-attribute-policy">{{
+          attributePanelPolicyLabel
+        }}</strong>
+      </div>
+
+      <div class="attribute-core-grid">
+        <div
+          v-for="row in attributePanelRows"
+          :key="row.key"
+          class="attribute-core-item"
+          data-testid="workbench-character-attribute-row"
+          :data-attribute-key="row.key"
+        >
+          <span>{{ row.label }}</span>
+          <strong>{{ row.value }}</strong>
+          <small v-if="row.detail">{{ row.detail }}</small>
+        </div>
+      </div>
+
+      <p
+        class="attribute-source"
+        data-testid="workbench-character-attribute-source"
+      >
+        来源：{{ attributePanelSourceLabel }}
+      </p>
     </div>
 
     <div
@@ -171,22 +227,35 @@
     >
       <div class="logic-source-title">
         <span>技能逻辑来源</span>
-        <strong data-testid="workbench-skill-logic-status">{{ logicStatusLabel }}</strong>
+        <strong data-testid="workbench-skill-logic-status">{{
+          logicStatusLabel
+        }}</strong>
       </div>
 
       <div class="logic-source-grid">
-        <div class="logic-source-item" data-testid="workbench-skill-display-timing">
+        <div
+          class="logic-source-item"
+          data-testid="workbench-skill-display-timing"
+        >
           <span>skill_level 显示</span>
-          <strong>CD {{ formatMs(displayTiming.cooldownMs) }} / SP {{ displayTiming.spCost }}</strong>
+          <strong
+            >CD {{ formatMs(displayTiming.cooldownMs) }} / SP
+            {{ displayTiming.spCost }}</strong
+          >
           <small>#{{ skillLogicModel.skillLevelRowId }}</small>
         </div>
-        <div class="logic-source-item" data-testid="workbench-skill-logic-timing">
+        <div
+          class="logic-source-item"
+          data-testid="workbench-skill-logic-timing"
+        >
           <span>skillsub_logic 逻辑</span>
           <strong>
-            CD {{ formatMs(logicTiming.cooldownMs) }} / SP {{ logicTiming.spCost }}
+            CD {{ formatMs(logicTiming.cooldownMs) }} / SP
+            {{ logicTiming.spCost }}
           </strong>
           <small>
-            selfCD {{ formatMs(logicTiming.selfCooldownMs) }} / GCD {{ formatMs(logicTiming.gcdMs) }}
+            selfCD {{ formatMs(logicTiming.selfCooldownMs) }} / GCD
+            {{ formatMs(logicTiming.gcdMs) }}
           </small>
         </div>
       </div>
@@ -196,7 +265,8 @@
         class="logic-warning"
         data-testid="workbench-skill-logic-mismatch"
       >
-        显示层与逻辑层不同：显示 CD {{ formatMs(displayTiming.cooldownMs) }} / SP {{ displayTiming.spCost }}，逻辑 CD
+        显示层与逻辑层不同：显示 CD {{ formatMs(displayTiming.cooldownMs) }} /
+        SP {{ displayTiming.spCost }}，逻辑 CD
         {{ formatMs(logicTiming.cooldownMs) }} / SP {{ logicTiming.spCost }}
       </p>
 
@@ -228,7 +298,8 @@
         data-testid="workbench-skill-value-param-link"
         :data-link-status="selectedDamageParameterLink.status"
       >
-        倍率段 {{ selectedDamageParameterLink.label }} / {{ selectedDamageParameterLink.rawValue }}：
+        倍率段 {{ selectedDamageParameterLink.label }} /
+        {{ selectedDamageParameterLink.rawValue }}：
         {{ valueParamLinkLabel }}
       </p>
     </div>
@@ -308,37 +379,76 @@ const props = defineProps({
 const emit = defineEmits(['update-selection', 'update-action']);
 
 const maxSkillLevel = computed(() =>
-  Math.max(1, props.selectedAction.source?.skill?.level?.values?.length ?? props.selectedAction.level ?? 1),
+  Math.max(
+    1,
+    props.selectedAction.source?.skill?.level?.values?.length ??
+      props.selectedAction.level ??
+      1
+  )
 );
 const isSkillAction = computed(() => props.selectedAction.type === 'skill');
 const isWaitAction = computed(() => props.selectedAction.type === 'wait');
-const isAnnotationAction = computed(() => props.selectedAction.type === 'annotation');
-const isResourceAction = computed(() => props.selectedAction.type === 'resource');
-const isEnemyEventAction = computed(() => props.selectedAction.type === 'enemyEvent');
+const isAnnotationAction = computed(
+  () => props.selectedAction.type === 'annotation'
+);
+const isResourceAction = computed(
+  () => props.selectedAction.type === 'resource'
+);
+const isEnemyEventAction = computed(
+  () => props.selectedAction.type === 'enemyEvent'
+);
 const isSwitchAction = computed(() => props.selectedAction.type === 'switch');
-const canAssignActor = computed(() => ['skill', 'switch', 'resource'].includes(props.selectedAction.type));
+const canAssignActor = computed(() =>
+  ['skill', 'switch', 'resource'].includes(props.selectedAction.type)
+);
+const currentActor = computed(() => {
+  if (props.selectedAction.actor) {
+    return props.selectedAction.actor;
+  }
+  return (
+    props.actors.find(
+      actor =>
+        Number(actor.characterId) === Number(currentActorCharacterId.value)
+    ) ?? null
+  );
+});
 const secondaryCharacterOptions = computed(() =>
-  props.characters.filter((character) => Number(character.id) !== Number(props.selection.characterId)),
+  props.characters.filter(
+    character => Number(character.id) !== Number(props.selection.characterId)
+  )
 );
 const currentActorCharacterId = computed(() => {
-  return props.selectedAction.actor?.characterId ?? props.selectedAction.actorCharacterId ?? props.selection.characterId;
+  return (
+    props.selectedAction.actor?.characterId ??
+    props.selectedAction.actorCharacterId ??
+    props.selection.characterId
+  );
 });
 const currentActorName = computed(() => {
   if (!canAssignActor.value) {
     return '系统 / 事件轨';
   }
-  return props.actors.find((actor) => Number(actor.characterId) === Number(currentActorCharacterId.value))?.name ??
-    resolveCharacterName(currentActorCharacterId.value);
+  return (
+    props.actors.find(
+      actor =>
+        Number(actor.characterId) === Number(currentActorCharacterId.value)
+    )?.name ?? resolveCharacterName(currentActorCharacterId.value)
+  );
 });
 const skillOptions = computed(() => {
-  const actorSkills = props.skills.filter((skill) => Number(skill.characterId) === Number(currentActorCharacterId.value));
+  const actorSkills = props.skills.filter(
+    skill => Number(skill.characterId) === Number(currentActorCharacterId.value)
+  );
   return actorSkills.length > 0 ? actorSkills : props.skills;
 });
 const switchTargetOptions = computed(() => {
-  const actorCharacterIds = new Set(props.actors.map((actor) => Number(actor.characterId)));
+  const actorCharacterIds = new Set(
+    props.actors.map(actor => Number(actor.characterId))
+  );
   return props.characters.filter(
-    (character) =>
-      actorCharacterIds.has(Number(character.id)) && Number(character.id) !== Number(currentActorCharacterId.value),
+    character =>
+      actorCharacterIds.has(Number(character.id)) &&
+      Number(character.id) !== Number(currentActorCharacterId.value)
   );
 });
 const damageSegmentOptions = computed(() =>
@@ -346,13 +456,19 @@ const damageSegmentOptions = computed(() =>
     ? props.selectedAction.damageSegments
     : props.selectedAction.selectedDamageSegment
       ? [props.selectedAction.selectedDamageSegment]
-      : [],
+      : []
 );
 const selectedDamageSegmentIndex = computed(() => {
-  return props.selectedAction.selectedDamageSegment?.index ?? props.selectedAction.damageSegmentIndex ?? 0;
+  return (
+    props.selectedAction.selectedDamageSegment?.index ??
+    props.selectedAction.damageSegmentIndex ??
+    0
+  );
 });
 const skillLogicModel = computed(() => props.selectedAction.logicModel ?? null);
-const displayTiming = computed(() => skillLogicModel.value?.display ?? { cooldownMs: 0, spCost: 0 });
+const displayTiming = computed(
+  () => skillLogicModel.value?.display ?? { cooldownMs: 0, spCost: 0 }
+);
 const logicTiming = computed(
   () =>
     skillLogicModel.value?.logic ?? {
@@ -360,12 +476,12 @@ const logicTiming = computed(
       spCost: 0,
       selfCooldownMs: 0,
       gcdMs: 0,
-    },
+    }
 );
 const hasDisplayLogicMismatch = computed(() =>
   (skillLogicModel.value?.diagnostics ?? []).some(
-    (diagnostic) => diagnostic.code === 'skill-display-logic-timing-mismatch',
-  ),
+    diagnostic => diagnostic.code === 'skill-display-logic-timing-mismatch'
+  )
 );
 const logicStatusLabel = computed(() => {
   if (skillLogicModel.value?.status === 'mismatch') {
@@ -376,9 +492,60 @@ const logicStatusLabel = computed(() => {
   }
   return '已映射';
 });
-const displayedElementValues = computed(() => (skillLogicModel.value?.elementValues ?? []).slice(0, 3));
+const displayedElementValues = computed(() =>
+  (skillLogicModel.value?.elementValues ?? []).slice(0, 3)
+);
+const currentActorAttributePanel = computed(
+  () => currentActor.value?.attributePanel ?? null
+);
+const attributePanelPolicyLabel = computed(() => {
+  const panel = currentActorAttributePanel.value;
+  if (!panel) {
+    return '';
+  }
+  return `${panel.level}级 / 临阶 ${panel.currentRank}`;
+});
+const attributePanelSourceLabel = computed(() => {
+  const panel = currentActorAttributePanel.value;
+  if (!panel) {
+    return '';
+  }
+  const runeLabel =
+    panel.currentRankRunes === 'all-selected'
+      ? '当前阶星赐全选'
+      : panel.currentRankRunes;
+  return `${panel.sourceKind}；${runeLabel}；突破计入至 ${panel.rankBonusIncludedThrough} 阶`;
+});
+const attributePanelRows = computed(() => {
+  const core = currentActorAttributePanel.value?.core ?? {};
+  return [
+    ['attack', '攻击'],
+    ['maxHp', '生命'],
+    ['physicalDefense', '物防'],
+    ['magicalDefense', '魔防'],
+    ['tuningStrength', '调谐'],
+    ['critRate', '暴击率'],
+    ['critDamage', '暴击伤害'],
+    ['damageAmplification', '伤害增幅'],
+  ]
+    .map(([key, label]) => {
+      const attribute = core[key];
+      if (!attribute) {
+        return null;
+      }
+      return {
+        key,
+        label,
+        value:
+          attribute.displayText ??
+          formatAttributeValue(attribute.effectiveValue, attribute.isRatio),
+        detail: formatAttributeDetail(attribute),
+      };
+    })
+    .filter(Boolean);
+});
 const valueParamSemanticLabel = computed(() => {
-  const params = displayedElementValues.value.flatMap((row) => row.params ?? []);
+  const params = displayedElementValues.value.flatMap(row => row.params ?? []);
   const uniqueParams = [];
   const seen = new Set();
   for (const param of params) {
@@ -392,8 +559,9 @@ const valueParamSemanticLabel = computed(() => {
 });
 const selectedDamageParameterLink = computed(() =>
   (skillLogicModel.value?.damageParameterLinks ?? []).find(
-    (link) => Number(link.segmentIndex) === Number(selectedDamageSegmentIndex.value),
-  ),
+    link =>
+      Number(link.segmentIndex) === Number(selectedDamageSegmentIndex.value)
+  )
 );
 const valueParamLinkLabel = computed(() => {
   if (!selectedDamageParameterLink.value) {
@@ -405,7 +573,8 @@ const valueParamLinkLabel = computed(() => {
   if (selectedDamageParameterLink.value.status === 'unparseable') {
     return '倍率无法解析，未建立 valueParam 关联';
   }
-  const ids = selectedDamageParameterLink.value.unmatchedParamIds?.join(', ') || '无';
+  const ids =
+    selectedDamageParameterLink.value.unmatchedParamIds?.join(', ') || '无';
   return `未发现直接 valueParam 匹配；未解释参数 ${ids}`;
 });
 function formatValueParamSemantic(param) {
@@ -469,7 +638,10 @@ const selectedActionSummary = computed(() => {
     return props.selectedAction.eventType || 'phase';
   }
   if (isSwitchAction.value) {
-    return props.selectedAction.targetActor?.name ?? resolveCharacterName(props.selectedAction.targetCharacterId);
+    return (
+      props.selectedAction.targetActor?.name ??
+      resolveCharacterName(props.selectedAction.targetCharacterId)
+    );
   }
   return props.selectedAction.note || '备注';
 });
@@ -508,8 +680,35 @@ function formatMs(value) {
   return `${Number(value) || 0}ms`;
 }
 
+function formatAttributeValue(value, isRatio = false) {
+  if (!Number.isFinite(value)) {
+    return '0';
+  }
+  if (isRatio) {
+    return `${(value * 100).toFixed(2).replace(/\.?0+$/, '')}%`;
+  }
+  return String(Math.round(value));
+}
+
+function formatAttributeDetail(attribute) {
+  if (!attribute || attribute.isRatio) {
+    return '';
+  }
+  if (
+    attribute.percentBonusValue == null ||
+    attribute.percentBonusValue === 0
+  ) {
+    return '';
+  }
+  return `黑字 ${attribute.fixedPanelValue} / 绿字 +${attribute.percentBonusValue}`;
+}
+
 function resolveCharacterName(characterId) {
-  return props.characters.find((character) => Number(character.id) === Number(characterId))?.name ?? '目标待选';
+  return (
+    props.characters.find(
+      character => Number(character.id) === Number(characterId)
+    )?.name ?? '目标待选'
+  );
 }
 </script>
 
@@ -610,6 +809,65 @@ textarea {
   margin: 0 14px 14px;
   padding: 12px 0 0;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.attribute-panel {
+  display: grid;
+  gap: 10px;
+  margin: 0 14px 14px;
+  padding: 12px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.attribute-panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.attribute-panel-title span,
+.attribute-source {
+  color: #8f9aa3;
+  font-size: 12px;
+}
+
+.attribute-panel-title strong {
+  color: #79c7b9;
+  font-size: 12px;
+}
+
+.attribute-core-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.attribute-core-item {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background: rgba(17, 22, 27, 0.62);
+}
+
+.attribute-core-item span,
+.attribute-core-item small {
+  color: #8f9aa3;
+  font-size: 11px;
+}
+
+.attribute-core-item strong {
+  overflow-wrap: anywhere;
+  color: #eef5f2;
+  font-size: 13px;
+}
+
+.attribute-source {
+  margin: 0;
+  line-height: 1.45;
 }
 
 .logic-source-title,
@@ -716,6 +974,10 @@ textarea {
   }
 
   .logic-source-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .attribute-core-grid {
     grid-template-columns: 1fr;
   }
 }

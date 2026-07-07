@@ -1,7 +1,8 @@
 import { createSkillLevelCrossCheckSegmentSource } from '../../domain/skillLevelCrossCheck';
 import { parseSkillDamageMultiplier } from '../../domain/skillDamageSegments';
 
-export const DAMAGE_FORMULA_VERSION = 'stage3-raw-attack-multiplier-v1';
+export const DAMAGE_FORMULA_VERSION =
+  'stage5-current-panel-attack-multiplier-v1';
 
 export function parsePercentMultiplier(value) {
   return parseSkillDamageMultiplier(value);
@@ -23,7 +24,11 @@ export function parseDamageSegments(action) {
         label: labels[index] ?? `segment-${index + 1}`,
         rawValue: value,
         multiplier,
-        source: createDamageSegmentSource(action.damageModel, index, action.logicModel),
+        source: createDamageSegmentSource(
+          action.damageModel,
+          index,
+          action.logicModel
+        ),
       };
     })
     .filter(Boolean);
@@ -40,18 +45,26 @@ function createDamageSegmentSource(damageModel = {}, index, logicModel = null) {
     levelIndex: damageModel.levelIndex ?? null,
     labelField: fieldPaths.labels ? `${fieldPaths.labels}[${index}]` : null,
     valueField: fieldPaths.values ? `${fieldPaths.values}[${index}]` : null,
-    crossCheck: createSkillLevelCrossCheckSegmentSource(damageModel.crossCheck, index),
-    valueParamLink: logicModel?.damageParameterLinks?.find((link) => Number(link.segmentIndex) === Number(index)) ?? null,
+    crossCheck: createSkillLevelCrossCheckSegmentSource(
+      damageModel.crossCheck,
+      index
+    ),
+    valueParamLink:
+      logicModel?.damageParameterLinks?.find(
+        link => Number(link.segmentIndex) === Number(index)
+      ) ?? null,
   };
 }
 
 export function getAttributeValue(baseAttributes, key, fallback = 0) {
-  const attribute = (baseAttributes ?? []).find((item) => item.key === key);
+  const attribute = (baseAttributes ?? []).find(item => item.key === key);
   return Number.isFinite(attribute?.value) ? attribute.value : fallback;
 }
 
 export function createRawDamageProjection({ actor, enemy, action, segment }) {
-  const attack = getAttributeValue(actor.baseAttributes, 'ATK');
+  const attack = Number.isFinite(actor.stats?.attack)
+    ? actor.stats.attack
+    : getAttributeValue(actor.baseAttributes, 'ATK');
   const rawDamage = Math.max(0, Math.round(attack * segment.multiplier));
 
   return {
@@ -67,9 +80,10 @@ export function createRawDamageProjection({ actor, enemy, action, segment }) {
     skillName: action.name,
     segment,
     attack,
+    attackSource: actor.stats?.source ?? 'baseAttributes',
     rawDamage,
     notes: [
-      'Uses actor ATK and selected skill multiplier only.',
+      'Uses compiled actor ATK and selected skill multiplier only.',
       'Does not apply final AzPr defense, resistance, crit, buff, equipment, kibo, or soulessence formulas yet.',
     ],
   };

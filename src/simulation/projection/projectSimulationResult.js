@@ -1,9 +1,16 @@
-export function projectSimulationResult({ scenario, eventLog, damageEvents, resourceEvents }) {
-  const damageTimeline = damageEvents.map((event) => ({
+export function projectSimulationResult({
+  scenario,
+  eventLog,
+  damageEvents,
+  resourceEvents,
+}) {
+  const damageTimeline = damageEvents.map(event => ({
     timeMs: event.timeMs,
     actionId: event.actionId,
     actorId: event.actorId,
     targetId: event.targetId,
+    attack: event.payload.attack,
+    attackSource: event.payload.attackSource,
     rawDamage: event.payload.rawDamage,
     segmentLabel: event.payload.segment.label,
     multiplier: event.payload.segment.multiplier,
@@ -13,7 +20,7 @@ export function projectSimulationResult({ scenario, eventLog, damageEvents, reso
     timingAccuracy: event.payload.timingAccuracy,
   }));
 
-  const resourceTimeline = resourceEvents.map((event) => ({
+  const resourceTimeline = resourceEvents.map(event => ({
     timeMs: event.timeMs,
     actionId: event.actionId,
     actorId: event.actorId,
@@ -23,7 +30,10 @@ export function projectSimulationResult({ scenario, eventLog, damageEvents, reso
     confidence: event.payload.confidence,
   }));
 
-  const totalRawDamage = damageTimeline.reduce((sum, entry) => sum + entry.rawDamage, 0);
+  const totalRawDamage = damageTimeline.reduce(
+    (sum, entry) => sum + entry.rawDamage,
+    0
+  );
   const timingMissingActionIds = scenario.diagnostics.missingTimingActionIds;
 
   return {
@@ -49,7 +59,9 @@ export function projectSimulationResult({ scenario, eventLog, damageEvents, reso
       resourceEventCount: resourceTimeline.length,
       actionCount: scenario.actions.length,
       formulaVersion: damageEvents[0]?.payload.formulaVersion ?? null,
-      confidence: damageTimeline.some((entry) => entry.confidence === 'low') ? 'low' : 'medium',
+      confidence: damageTimeline.some(entry => entry.confidence === 'low')
+        ? 'low'
+        : 'medium',
       timingMissingActionCount: timingMissingActionIds.length,
       timingMissingActionIds,
     },

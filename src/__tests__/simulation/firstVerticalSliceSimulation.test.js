@@ -3,8 +3,15 @@ import {
   createFirstVerticalSliceProject,
   getFirstVerticalSliceGameData,
 } from '../../domain/fixtures/firstVerticalSlice';
-import { createWorkbenchProject, getWorkbenchGameData } from '../../domain/workbenchProjectFactory';
-import { compileProject, CompileProjectError, runSimulation } from '../../simulation';
+import {
+  createWorkbenchProject,
+  getWorkbenchGameData,
+} from '../../domain/workbenchProjectFactory';
+import {
+  compileProject,
+  CompileProjectError,
+  runSimulation,
+} from '../../simulation';
 
 describe('first vertical slice simulation', () => {
   it('compiles the real-data fixture into a scenario', () => {
@@ -15,9 +22,20 @@ describe('first vertical slice simulation', () => {
     expect(scenario.actors).toHaveLength(1);
     expect(scenario.actions).toHaveLength(1);
     expect(scenario.enemy.name).toBe('迅狼');
+    expect(scenario.actors[0].attributePanel.core.attack).toMatchObject({
+      displayText: '1920',
+      effectiveValue: 1920,
+    });
+    expect(scenario.actors[0].stats).toMatchObject({
+      attack: 1920,
+      maxHp: 10748,
+      source: 'character-attribute-panel-current-rank',
+    });
     expect(scenario.actions[0].actor.name).toBe('末音');
     expect(scenario.actions[0].selectedDamageSegment.label).toBe('普攻');
-    expect(scenario.actions[0].selectedDamageSegment.multiplier).toBeCloseTo(6.49);
+    expect(scenario.actions[0].selectedDamageSegment.multiplier).toBeCloseTo(
+      6.49
+    );
     expect(scenario.actions[0].damageModel).toMatchObject({
       source: 'azpr-local-hero-module-skill-level',
       sourceKind: 'azpr-local-hero-module-skill-level',
@@ -35,7 +53,9 @@ describe('first vertical slice simulation', () => {
         values: ['649%', '190%', '40%', '136%'],
       },
     });
-    expect(scenario.actions[0].damageModel.sourcePath).toContain('109001.hero-module.local.json');
+    expect(scenario.actions[0].damageModel.sourcePath).toContain(
+      '109001.hero-module.local.json'
+    );
     expect(scenario.actions[0].logicModel).toMatchObject({
       sourceKind: 'azpr-newtable-skill-logic-index',
       status: 'mapped',
@@ -72,7 +92,9 @@ describe('first vertical slice simulation', () => {
         unmatchedSegmentCount: 4,
       },
     });
-    expect(scenario.actions[0].logicModel.damageParameterLinks[0]).toMatchObject({
+    expect(
+      scenario.actions[0].logicModel.damageParameterLinks[0]
+    ).toMatchObject({
       segmentIndex: 0,
       label: '普攻',
       rawValue: '649%',
@@ -97,14 +119,16 @@ describe('first vertical slice simulation', () => {
         unmatchedParamIds: [1, 7],
       },
     });
-    expect(scenario.diagnostics.missingTimingActionIds).toEqual(['action-0001']);
+    expect(scenario.diagnostics.missingTimingActionIds).toEqual([
+      'action-0001',
+    ]);
   });
 
   it('runs the minimal engine and projects raw damage with limitations marked', () => {
     const project = createFirstVerticalSliceProject();
     const gameData = getFirstVerticalSliceGameData();
     const result = runSimulation(project, gameData);
-    const eventTypes = result.eventLog.map((event) => event.type);
+    const eventTypes = result.eventLog.map(event => event.type);
 
     expect(eventTypes).toContain('SCENARIO_START');
     expect(eventTypes).toContain('ACTION_START');
@@ -115,6 +139,9 @@ describe('first vertical slice simulation', () => {
     expect(result.damageTimeline).toHaveLength(1);
     expect(result.damageTimeline[0]).toMatchObject({
       actionId: 'action-0001',
+      attack: 1920,
+      attackSource: 'character-attribute-panel-current-rank',
+      rawDamage: 12461,
       segmentLabel: '普攻',
       confidence: 'low',
       precision: 'raw-pre-mitigation',
@@ -141,11 +168,14 @@ describe('first vertical slice simulation', () => {
     expect(result.summary).toMatchObject({
       projectedHitCount: 1,
       actionCount: 1,
+      formulaVersion: 'stage5-current-panel-attack-multiplier-v1',
       confidence: 'low',
       timingMissingActionCount: 1,
       timingMissingActionIds: ['action-0001'],
     });
-    expect(result.diagnostics.limitations.join('\n')).toContain('Raw damage projection only');
+    expect(result.diagnostics.limitations.join('\n')).toContain(
+      'Raw damage projection only'
+    );
   });
 
   it('rejects invalid projects before simulation', () => {
@@ -155,7 +185,9 @@ describe('first vertical slice simulation', () => {
       skillId: 999999999,
     };
 
-    expect(() => compileProject(project, getFirstVerticalSliceGameData())).toThrow(CompileProjectError);
+    expect(() =>
+      compileProject(project, getFirstVerticalSliceGameData())
+    ).toThrow(CompileProjectError);
   });
 
   it('sorts multiple actions and summarizes projected damage', () => {
@@ -166,19 +198,25 @@ describe('first vertical slice simulation', () => {
           { id: 'action-late', skillId: 10900101, startMs: 2000, level: 1 },
           { id: 'action-early', skillId: 10900101, startMs: 500, level: 2 },
         ],
-      },
+      }
     );
     const gameData = getWorkbenchGameData();
     const scenario = compileProject(project, gameData);
     const result = runSimulation(project, gameData);
 
-    expect(scenario.actions.map((action) => action.id)).toEqual(['action-early', 'action-late']);
+    expect(scenario.actions.map(action => action.id)).toEqual([
+      'action-early',
+      'action-late',
+    ]);
     expect(result.damageTimeline).toHaveLength(2);
-    expect(result.damageTimeline.map((entry) => entry.actionId)).toEqual(['action-early', 'action-late']);
+    expect(result.damageTimeline.map(entry => entry.actionId)).toEqual([
+      'action-early',
+      'action-late',
+    ]);
     expect(result.summary.projectedHitCount).toBe(2);
     expect(result.summary.actionCount).toBe(2);
     expect(result.summary.totalRawDamage).toBe(
-      result.damageTimeline.reduce((sum, entry) => sum + entry.rawDamage, 0),
+      result.damageTimeline.reduce((sum, entry) => sum + entry.rawDamage, 0)
     );
   });
 
@@ -196,7 +234,7 @@ describe('first vertical slice simulation', () => {
             damageSegmentIndex: 1,
           },
         ],
-      },
+      }
     );
     const scenario = compileProject(project, getWorkbenchGameData());
     const result = runSimulation(project, getWorkbenchGameData());
@@ -219,7 +257,7 @@ describe('first vertical slice simulation', () => {
     const project = createWorkbenchProject(
       {},
       {
-        actions: [0, 1, 2, 3].map((damageSegmentIndex) => ({
+        actions: [0, 1, 2, 3].map(damageSegmentIndex => ({
           id: `action-segment-${damageSegmentIndex}`,
           type: 'skill',
           skillId: 10900101,
@@ -227,18 +265,21 @@ describe('first vertical slice simulation', () => {
           level: 1,
           damageSegmentIndex,
         })),
-      },
+      }
     );
     const scenario = compileProject(project, getWorkbenchGameData());
     const result = runSimulation(project, getWorkbenchGameData());
 
-    expect(scenario.actions.map((action) => action.selectedDamageSegment.label)).toEqual([
-      '普攻',
-      '重击',
-      '闪击',
-      '跃击',
-    ]);
-    expect(result.damageTimeline.map((entry) => [entry.actionId, entry.segmentLabel, entry.multiplier])).toEqual([
+    expect(
+      scenario.actions.map(action => action.selectedDamageSegment.label)
+    ).toEqual(['普攻', '重击', '闪击', '跃击']);
+    expect(
+      result.damageTimeline.map(entry => [
+        entry.actionId,
+        entry.segmentLabel,
+        entry.multiplier,
+      ])
+    ).toEqual([
       ['action-segment-0', '普攻', 6.49],
       ['action-segment-1', '重击', 1.9],
       ['action-segment-2', '闪击', 0.4],
@@ -271,7 +312,7 @@ describe('first vertical slice simulation', () => {
             generationBatch,
           },
         ],
-      },
+      }
     );
     const scenario = compileProject(project, getWorkbenchGameData());
 
@@ -285,20 +326,41 @@ describe('first vertical slice simulation', () => {
       {},
       {
         actions: [
-          { id: 'action-skill', type: 'skill', skillId: 10900101, startMs: 0, level: 1 },
-          { id: 'action-wait', type: 'wait', startMs: 1000, durationMs: 1500, note: '等技能冷却' },
-          { id: 'action-note', type: 'annotation', startMs: 3000, note: '准备爆发' },
+          {
+            id: 'action-skill',
+            type: 'skill',
+            skillId: 10900101,
+            startMs: 0,
+            level: 1,
+          },
+          {
+            id: 'action-wait',
+            type: 'wait',
+            startMs: 1000,
+            durationMs: 1500,
+            note: '等技能冷却',
+          },
+          {
+            id: 'action-note',
+            type: 'annotation',
+            startMs: 3000,
+            note: '准备爆发',
+          },
         ],
-      },
+      }
     );
     const result = runSimulation(project, getWorkbenchGameData());
-    const waitEvent = result.eventLog.find((event) => event.type === 'WAIT');
-    const annotationEvent = result.eventLog.find((event) => event.type === 'ANNOTATION');
+    const waitEvent = result.eventLog.find(event => event.type === 'WAIT');
+    const annotationEvent = result.eventLog.find(
+      event => event.type === 'ANNOTATION'
+    );
 
     expect(result.summary.actionCount).toBe(3);
     expect(result.summary.projectedHitCount).toBe(1);
     expect(result.damageTimeline).toHaveLength(1);
-    expect(result.eventLog.map((event) => event.type)).not.toContain('DAMAGE_SKIPPED');
+    expect(result.eventLog.map(event => event.type)).not.toContain(
+      'DAMAGE_SKIPPED'
+    );
     expect(waitEvent).toMatchObject({
       actionId: 'action-wait',
       payload: {
@@ -316,7 +378,7 @@ describe('first vertical slice simulation', () => {
 
   it('projects workbench enemy config and resource events from the simulation result', () => {
     const gameData = getWorkbenchGameData();
-    const spSkill = gameData.skills.find((skill) => Number(skill.spCost) > 0);
+    const spSkill = gameData.skills.find(skill => Number(skill.spCost) > 0);
     const project = createWorkbenchProject(
       {
         characterId: spSkill.characterId,
@@ -337,7 +399,7 @@ describe('first vertical slice simulation', () => {
             level: 1,
           },
         ],
-      },
+      }
     );
     const scenario = compileProject(project, gameData);
     const result = runSimulation(project, gameData);
@@ -362,7 +424,9 @@ describe('first vertical slice simulation', () => {
         reason: 'skill-cost',
       }),
     ]);
-    expect(result.eventLog.map((event) => event.type)).toContain('RESOURCE_CHANGE');
+    expect(result.eventLog.map(event => event.type)).toContain(
+      'RESOURCE_CHANGE'
+    );
   });
 
   it('keeps manual resource and enemy event actions as non-damage timeline events', () => {
@@ -370,7 +434,13 @@ describe('first vertical slice simulation', () => {
       {},
       {
         actions: [
-          { id: 'action-skill', type: 'skill', skillId: 10900101, startMs: 0, level: 1 },
+          {
+            id: 'action-skill',
+            type: 'skill',
+            skillId: 10900101,
+            startMs: 0,
+            level: 1,
+          },
           {
             id: 'action-resource',
             type: 'resource',
@@ -388,14 +458,15 @@ describe('first vertical slice simulation', () => {
             note: '进入二阶段',
           },
         ],
-      },
+      }
     );
     const result = runSimulation(project, getWorkbenchGameData());
     const resourceEvent = result.eventLog.find(
-      (event) => event.actionId === 'action-resource' && event.type === 'RESOURCE_CHANGE',
+      event =>
+        event.actionId === 'action-resource' && event.type === 'RESOURCE_CHANGE'
     );
     const enemyEvent = result.eventLog.find(
-      (event) => event.actionId === 'action-enemy' && event.type === 'ENEMY_EVENT',
+      event => event.actionId === 'action-enemy' && event.type === 'ENEMY_EVENT'
     );
 
     expect(result.summary.actionCount).toBe(3);
@@ -423,7 +494,9 @@ describe('first vertical slice simulation', () => {
         note: '进入二阶段',
       },
     });
-    expect(result.eventLog.map((event) => event.type)).not.toContain('DAMAGE_SKIPPED');
+    expect(result.eventLog.map(event => event.type)).not.toContain(
+      'DAMAGE_SKIPPED'
+    );
   });
 
   it('compiles a secondary actor and keeps switch actions as non-damage events', () => {
@@ -433,7 +506,13 @@ describe('first vertical slice simulation', () => {
       },
       {
         actions: [
-          { id: 'action-skill', type: 'skill', skillId: 10900101, startMs: 0, level: 1 },
+          {
+            id: 'action-skill',
+            type: 'skill',
+            skillId: 10900101,
+            startMs: 0,
+            level: 1,
+          },
           {
             id: 'action-switch',
             type: 'switch',
@@ -442,15 +521,19 @@ describe('first vertical slice simulation', () => {
             note: '切换至寒悠悠',
           },
         ],
-      },
+      }
     );
     const scenario = compileProject(project, getWorkbenchGameData());
     const result = runSimulation(project, getWorkbenchGameData());
-    const switchEvent = result.eventLog.find((event) => event.type === 'SWITCH');
+    const switchEvent = result.eventLog.find(event => event.type === 'SWITCH');
 
-    expect(project.actors.map((actor) => actor.characterId)).toEqual([109001, 101003]);
+    expect(project.actors.map(actor => actor.characterId)).toEqual([
+      109001, 101003,
+    ]);
     expect(scenario.actors).toHaveLength(2);
-    expect(scenario.actions.find((action) => action.id === 'action-switch')).toMatchObject({
+    expect(
+      scenario.actions.find(action => action.id === 'action-switch')
+    ).toMatchObject({
       actor: {
         name: '末音',
       },
@@ -468,6 +551,8 @@ describe('first vertical slice simulation', () => {
         note: '切换至寒悠悠',
       },
     });
-    expect(result.eventLog.map((event) => event.type)).not.toContain('DAMAGE_SKIPPED');
+    expect(result.eventLog.map(event => event.type)).not.toContain(
+      'DAMAGE_SKIPPED'
+    );
   });
 });

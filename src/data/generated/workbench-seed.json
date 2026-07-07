@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-07T11:45:59.901Z",
+  "generatedAt": "2026-07-07T12:42:08.428Z",
   "source": "generated-from-local-azpr-data",
   "purpose": "stage-4-workbench-editing-seed",
   "defaults": {
@@ -104,6 +104,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_101003.png"
+        },
+        "attributePanel": {
+          "characterId": 101003,
+          "characterName": "寒悠悠",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1684,
+              "displayText": "1604+80",
+              "isRatio": false,
+              "fixedPanelValue": 1604,
+              "percentBonusValue": 80
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 289,
+              "displayText": "289",
+              "isRatio": false,
+              "fixedPanelValue": 289,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 324,
+              "displayText": "324",
+              "isRatio": false,
+              "fixedPanelValue": 324,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 8782,
+              "displayText": "8782",
+              "isRatio": false,
+              "fixedPanelValue": 8782,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 168,
+              "displayText": "168",
+              "isRatio": false,
+              "fixedPanelValue": 168,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.075,
+              "displayText": "7.5%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.564,
+              "displayText": "156.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.07,
+              "displayText": "7%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.022,
+              "displayText": "2.2%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -195,6 +278,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_101007.png"
+        },
+        "attributePanel": {
+          "characterId": 101007,
+          "characterName": "芃芃",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1795,
+              "displayText": "1710+85",
+              "isRatio": false,
+              "fixedPanelValue": 1710,
+              "percentBonusValue": 85
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 365,
+              "displayText": "365",
+              "isRatio": false,
+              "fixedPanelValue": 365,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 335,
+              "displayText": "335",
+              "isRatio": false,
+              "fixedPanelValue": 335,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 9979,
+              "displayText": "9979",
+              "isRatio": false,
+              "fixedPanelValue": 9979,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 53,
+              "displayText": "53",
+              "isRatio": false,
+              "fixedPanelValue": 53,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.093,
+              "displayText": "9.3%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.637,
+              "displayText": "163.7%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.043,
+              "displayText": "4.3%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.038,
+              "displayText": "3.8%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -286,6 +452,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_101010.png"
+        },
+        "attributePanel": {
+          "characterId": 101010,
+          "characterName": "涂山小玉",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1872,
+              "displayText": "1872",
+              "isRatio": false,
+              "fixedPanelValue": 1872,
+              "percentBonusValue": null
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 303,
+              "displayText": "303",
+              "isRatio": false,
+              "fixedPanelValue": 303,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 313,
+              "displayText": "313",
+              "isRatio": false,
+              "fixedPanelValue": 313,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 10905,
+              "displayText": "10905",
+              "isRatio": false,
+              "fixedPanelValue": 10905,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 205,
+              "displayText": "205",
+              "isRatio": false,
+              "fixedPanelValue": 205,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.075,
+              "displayText": "7.5%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.557,
+              "displayText": "155.7%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.067,
+              "displayText": "6.7%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.019,
+              "displayText": "1.9%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -377,6 +626,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_102001.png"
+        },
+        "attributePanel": {
+          "characterId": 102001,
+          "characterName": "莉莉",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1693,
+              "displayText": "1693",
+              "isRatio": false,
+              "fixedPanelValue": 1693,
+              "percentBonusValue": null
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 365,
+              "displayText": "342+23",
+              "isRatio": false,
+              "fixedPanelValue": 342,
+              "percentBonusValue": 23
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 348,
+              "displayText": "348",
+              "isRatio": false,
+              "fixedPanelValue": 348,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 9497,
+              "displayText": "9497",
+              "isRatio": false,
+              "fixedPanelValue": 9497,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 156,
+              "displayText": "156",
+              "isRatio": false,
+              "fixedPanelValue": 156,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.066,
+              "displayText": "6.6%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.611,
+              "displayText": "161.1%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.083,
+              "displayText": "8.3%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.013,
+              "displayText": "1.3%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -468,6 +800,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_103002.png"
+        },
+        "attributePanel": {
+          "characterId": 103002,
+          "characterName": "红宝石",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 2078,
+              "displayText": "1959+119",
+              "isRatio": false,
+              "fixedPanelValue": 1959,
+              "percentBonusValue": 119
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 266,
+              "displayText": "266",
+              "isRatio": false,
+              "fixedPanelValue": 266,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 279,
+              "displayText": "279",
+              "isRatio": false,
+              "fixedPanelValue": 279,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 8979,
+              "displayText": "8979",
+              "isRatio": false,
+              "fixedPanelValue": 8979,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 197,
+              "displayText": "197",
+              "isRatio": false,
+              "fixedPanelValue": 197,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.068,
+              "displayText": "6.8%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.567,
+              "displayText": "156.7%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.076,
+              "displayText": "7.6%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.019,
+              "displayText": "1.9%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -559,6 +974,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_107001.png"
+        },
+        "attributePanel": {
+          "characterId": 107001,
+          "characterName": "西芙莉雅",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1707,
+              "displayText": "1707",
+              "isRatio": false,
+              "fixedPanelValue": 1707,
+              "percentBonusValue": null
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 341,
+              "displayText": "341",
+              "isRatio": false,
+              "fixedPanelValue": 341,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 332,
+              "displayText": "332",
+              "isRatio": false,
+              "fixedPanelValue": 332,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 10166,
+              "displayText": "10166",
+              "isRatio": false,
+              "fixedPanelValue": 10166,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 53,
+              "displayText": "53",
+              "isRatio": false,
+              "fixedPanelValue": 53,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.115,
+              "displayText": "11.5%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.679,
+              "displayText": "167.9%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.051,
+              "displayText": "5.1%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.03,
+              "displayText": "3%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -650,6 +1148,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_107002.png"
+        },
+        "attributePanel": {
+          "characterId": 107002,
+          "characterName": "米砂",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1605,
+              "displayText": "1605",
+              "isRatio": false,
+              "fixedPanelValue": 1605,
+              "percentBonusValue": null
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 367,
+              "displayText": "367",
+              "isRatio": false,
+              "fixedPanelValue": 367,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 369,
+              "displayText": "369",
+              "isRatio": false,
+              "fixedPanelValue": 369,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 10340,
+              "displayText": "9746+594",
+              "isRatio": false,
+              "fixedPanelValue": 9746,
+              "percentBonusValue": 594
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 155,
+              "displayText": "155",
+              "isRatio": false,
+              "fixedPanelValue": 155,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.072,
+              "displayText": "7.2%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.612,
+              "displayText": "161.2%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.027,
+              "displayText": "2.7%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.027,
+              "displayText": "2.7%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -741,6 +1322,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_107003.png"
+        },
+        "attributePanel": {
+          "characterId": 107003,
+          "characterName": "阿比",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1890,
+              "displayText": "1890",
+              "isRatio": false,
+              "fixedPanelValue": 1890,
+              "percentBonusValue": null
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 341,
+              "displayText": "341",
+              "isRatio": false,
+              "fixedPanelValue": 341,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 314,
+              "displayText": "314",
+              "isRatio": false,
+              "fixedPanelValue": 314,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 10530,
+              "displayText": "10530",
+              "isRatio": false,
+              "fixedPanelValue": 10530,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 140,
+              "displayText": "140",
+              "isRatio": false,
+              "fixedPanelValue": 140,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.059,
+              "displayText": "5.9%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.712,
+              "displayText": "171.2%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.021,
+              "displayText": "2.1%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.019,
+              "displayText": "1.9%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -832,6 +1496,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_108001.png"
+        },
+        "attributePanel": {
+          "characterId": 108001,
+          "characterName": "忒拉拉",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1832,
+              "displayText": "1745+87",
+              "isRatio": false,
+              "fixedPanelValue": 1745,
+              "percentBonusValue": 87
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 286,
+              "displayText": "286",
+              "isRatio": false,
+              "fixedPanelValue": 286,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 329,
+              "displayText": "329",
+              "isRatio": false,
+              "fixedPanelValue": 329,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 9770,
+              "displayText": "9770",
+              "isRatio": false,
+              "fixedPanelValue": 9770,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 163,
+              "displayText": "163",
+              "isRatio": false,
+              "fixedPanelValue": 163,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.093,
+              "displayText": "9.3%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.546,
+              "displayText": "154.6%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.068,
+              "displayText": "6.8%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.02,
+              "displayText": "2%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -923,6 +1670,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_108002.png"
+        },
+        "attributePanel": {
+          "characterId": 108002,
+          "characterName": "璐璐卡",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1614,
+              "displayText": "1614",
+              "isRatio": false,
+              "fixedPanelValue": 1614,
+              "percentBonusValue": null
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 403,
+              "displayText": "403",
+              "isRatio": false,
+              "fixedPanelValue": 403,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 377,
+              "displayText": "377",
+              "isRatio": false,
+              "fixedPanelValue": 377,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 9330,
+              "displayText": "9330",
+              "isRatio": false,
+              "fixedPanelValue": 9330,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 167,
+              "displayText": "167",
+              "isRatio": false,
+              "fixedPanelValue": 167,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.075,
+              "displayText": "7.5%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.563,
+              "displayText": "156.3%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.023,
+              "displayText": "2.3%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.022,
+              "displayText": "2.2%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -1014,6 +1844,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_108003.png"
+        },
+        "attributePanel": {
+          "characterId": 108003,
+          "characterName": "米蒂",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1572,
+              "displayText": "1572",
+              "isRatio": false,
+              "fixedPanelValue": 1572,
+              "percentBonusValue": null
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 325,
+              "displayText": "325",
+              "isRatio": false,
+              "fixedPanelValue": 325,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 360,
+              "displayText": "360",
+              "isRatio": false,
+              "fixedPanelValue": 360,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 8402,
+              "displayText": "8402",
+              "isRatio": false,
+              "fixedPanelValue": 8402,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 164,
+              "displayText": "164",
+              "isRatio": false,
+              "fixedPanelValue": 164,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.118,
+              "displayText": "11.8%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.599,
+              "displayText": "159.9%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.058,
+              "displayText": "5.8%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.024,
+              "displayText": "2.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -1105,6 +2018,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_108005.png"
+        },
+        "attributePanel": {
+          "characterId": 108005,
+          "characterName": "卡塔露",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1564,
+              "displayText": "1564",
+              "isRatio": false,
+              "fixedPanelValue": 1564,
+              "percentBonusValue": null
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 472,
+              "displayText": "442+30",
+              "isRatio": false,
+              "fixedPanelValue": 442,
+              "percentBonusValue": 30
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 354,
+              "displayText": "354",
+              "isRatio": false,
+              "fixedPanelValue": 354,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 9352,
+              "displayText": "9352",
+              "isRatio": false,
+              "fixedPanelValue": 9352,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 187,
+              "displayText": "187",
+              "isRatio": false,
+              "fixedPanelValue": 187,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.055,
+              "displayText": "5.5%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.621,
+              "displayText": "162.1%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.036,
+              "displayText": "3.6%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.024,
+              "displayText": "2.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -1196,6 +2192,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_109001.png"
+        },
+        "attributePanel": {
+          "characterId": 109001,
+          "characterName": "末音",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1920,
+              "displayText": "1920",
+              "isRatio": false,
+              "fixedPanelValue": 1920,
+              "percentBonusValue": null
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 320,
+              "displayText": "320",
+              "isRatio": false,
+              "fixedPanelValue": 320,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 292,
+              "displayText": "292",
+              "isRatio": false,
+              "fixedPanelValue": 292,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 10748,
+              "displayText": "10748",
+              "isRatio": false,
+              "fixedPanelValue": 10748,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 212,
+              "displayText": "212",
+              "isRatio": false,
+              "fixedPanelValue": 212,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.061,
+              "displayText": "6.1%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.559,
+              "displayText": "155.9%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.08,
+              "displayText": "8%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.013,
+              "displayText": "1.3%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -1287,6 +2366,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_109002.png"
+        },
+        "attributePanel": {
+          "characterId": 109002,
+          "characterName": "夏儿",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1973,
+              "displayText": "1973",
+              "isRatio": false,
+              "fixedPanelValue": 1973,
+              "percentBonusValue": null
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 383,
+              "displayText": "383",
+              "isRatio": false,
+              "fixedPanelValue": 383,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 330,
+              "displayText": "330",
+              "isRatio": false,
+              "fixedPanelValue": 330,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 10322,
+              "displayText": "10322",
+              "isRatio": false,
+              "fixedPanelValue": 10322,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 65,
+              "displayText": "65",
+              "isRatio": false,
+              "fixedPanelValue": 65,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.125,
+              "displayText": "12.5%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.714,
+              "displayText": "171.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.034,
+              "displayText": "3.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.024,
+              "displayText": "2.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -1378,6 +2540,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_111001.png"
+        },
+        "attributePanel": {
+          "characterId": 111001,
+          "characterName": "法兰塔",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1874,
+              "displayText": "1874",
+              "isRatio": false,
+              "fixedPanelValue": 1874,
+              "percentBonusValue": null
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 363,
+              "displayText": "363",
+              "isRatio": false,
+              "fixedPanelValue": 363,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 352,
+              "displayText": "352",
+              "isRatio": false,
+              "fixedPanelValue": 352,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 10057,
+              "displayText": "10057",
+              "isRatio": false,
+              "fixedPanelValue": 10057,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 156,
+              "displayText": "156",
+              "isRatio": false,
+              "fixedPanelValue": 156,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.064,
+              "displayText": "6.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.585,
+              "displayText": "158.5%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.054,
+              "displayText": "5.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.004,
+              "displayText": "0.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -1469,6 +2714,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_112001.png"
+        },
+        "attributePanel": {
+          "characterId": 112001,
+          "characterName": "姬瑟贝露",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1682,
+              "displayText": "1682",
+              "isRatio": false,
+              "fixedPanelValue": 1682,
+              "percentBonusValue": null
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 314,
+              "displayText": "314",
+              "isRatio": false,
+              "fixedPanelValue": 314,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 308,
+              "displayText": "308",
+              "isRatio": false,
+              "fixedPanelValue": 308,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 10104,
+              "displayText": "10104",
+              "isRatio": false,
+              "fixedPanelValue": 10104,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 128,
+              "displayText": "128",
+              "isRatio": false,
+              "fixedPanelValue": 128,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.077,
+              "displayText": "7.7%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.639,
+              "displayText": "163.9%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.016,
+              "displayText": "1.6%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.024,
+              "displayText": "2.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -1560,6 +2888,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_112002.png"
+        },
+        "attributePanel": {
+          "characterId": 112002,
+          "characterName": "艾妮丝",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1416,
+              "displayText": "1416",
+              "isRatio": false,
+              "fixedPanelValue": 1416,
+              "percentBonusValue": null
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 334,
+              "displayText": "334",
+              "isRatio": false,
+              "fixedPanelValue": 334,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 368,
+              "displayText": "368",
+              "isRatio": false,
+              "fixedPanelValue": 368,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 9409,
+              "displayText": "9409",
+              "isRatio": false,
+              "fixedPanelValue": 9409,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 161,
+              "displayText": "161",
+              "isRatio": false,
+              "fixedPanelValue": 161,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.077,
+              "displayText": "7.7%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.569,
+              "displayText": "156.9%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.031,
+              "displayText": "3.1%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.027,
+              "displayText": "2.7%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -1651,6 +3062,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_199001.png"
+        },
+        "attributePanel": {
+          "characterId": 199001,
+          "characterName": "女主角",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1711,
+              "displayText": "1630+81",
+              "isRatio": false,
+              "fixedPanelValue": 1630,
+              "percentBonusValue": 81
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 336,
+              "displayText": "336",
+              "isRatio": false,
+              "fixedPanelValue": 336,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 292,
+              "displayText": "292",
+              "isRatio": false,
+              "fixedPanelValue": 292,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 10292,
+              "displayText": "10292",
+              "isRatio": false,
+              "fixedPanelValue": 10292,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 132,
+              "displayText": "132",
+              "isRatio": false,
+              "fixedPanelValue": 132,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.084,
+              "displayText": "8.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.564,
+              "displayText": "156.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.074,
+              "displayText": "7.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.034,
+              "displayText": "3.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -1742,6 +3236,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_199002.png"
+        },
+        "attributePanel": {
+          "characterId": 199002,
+          "characterName": "男主角",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1711,
+              "displayText": "1630+81",
+              "isRatio": false,
+              "fixedPanelValue": 1630,
+              "percentBonusValue": 81
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 336,
+              "displayText": "336",
+              "isRatio": false,
+              "fixedPanelValue": 336,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 292,
+              "displayText": "292",
+              "isRatio": false,
+              "fixedPanelValue": 292,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 10292,
+              "displayText": "10292",
+              "isRatio": false,
+              "fixedPanelValue": 10292,
+              "percentBonusValue": null
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 132,
+              "displayText": "132",
+              "isRatio": false,
+              "fixedPanelValue": 132,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.084,
+              "displayText": "8.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.564,
+              "displayText": "156.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.074,
+              "displayText": "7.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.034,
+              "displayText": "3.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       },
       {
@@ -1833,6 +3410,89 @@
         },
         "icons": {
           "avatar": "tex_icon_hero_l_199003.png"
+        },
+        "attributePanel": {
+          "characterId": 199003,
+          "characterName": "诺诺",
+          "level": 80,
+          "currentRank": 7,
+          "rankBonusIncludedThrough": 6,
+          "currentRankRunes": "all-selected",
+          "sourceKind": "role-attribute-dynamic-current-rank",
+          "core": {
+            "attack": {
+              "name": "攻击",
+              "effectiveValue": 1594,
+              "displayText": "1594",
+              "isRatio": false,
+              "fixedPanelValue": 1594,
+              "percentBonusValue": null
+            },
+            "physicalDefense": {
+              "name": "物理防御",
+              "effectiveValue": 323,
+              "displayText": "323",
+              "isRatio": false,
+              "fixedPanelValue": 323,
+              "percentBonusValue": null
+            },
+            "magicalDefense": {
+              "name": "魔法防御",
+              "effectiveValue": 331,
+              "displayText": "331",
+              "isRatio": false,
+              "fixedPanelValue": 331,
+              "percentBonusValue": null
+            },
+            "maxHp": {
+              "name": "生命",
+              "effectiveValue": 10993,
+              "displayText": "10470+523",
+              "isRatio": false,
+              "fixedPanelValue": 10470,
+              "percentBonusValue": 523
+            },
+            "tuningStrength": {
+              "name": "调谐强度",
+              "effectiveValue": 94,
+              "displayText": "94",
+              "isRatio": false,
+              "fixedPanelValue": 94,
+              "percentBonusValue": null
+            },
+            "critRate": {
+              "name": "暴击率",
+              "effectiveValue": 0.082,
+              "displayText": "8.2%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "critDamage": {
+              "name": "暴击伤害",
+              "effectiveValue": 1.58,
+              "displayText": "158%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageAmplification": {
+              "name": "伤害增幅",
+              "effectiveValue": 0.044,
+              "displayText": "4.4%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            },
+            "damageReduction": {
+              "name": "伤害减免",
+              "effectiveValue": 0.022,
+              "displayText": "2.2%",
+              "isRatio": true,
+              "fixedPanelValue": null,
+              "percentBonusValue": null
+            }
+          }
         }
       }
     ],

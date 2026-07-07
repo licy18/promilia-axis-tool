@@ -2,33 +2,236 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const repoRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '..'
+);
 const defaultSourceRoot = 'C:\\PC2\\Codex\\AzPr';
 const defaultOutputRoot = path.join(repoRoot, 'src', 'data', 'generated');
 
-const sourceRoot = path.resolve(getArg('--source') ?? process.env.AZPR_DATA_ROOT ?? defaultSourceRoot);
+const sourceRoot = path.resolve(
+  getArg('--source') ?? process.env.AZPR_DATA_ROOT ?? defaultSourceRoot
+);
 const outputRoot = path.resolve(getArg('--out') ?? defaultOutputRoot);
 const generatedAt = new Date().toISOString();
 
 const sourceFiles = {
-  heroModules: path.join(sourceRoot, 'BWiki', 'data', 'hero-modules', 'local-all'),
-  elementSystem: path.join(sourceRoot, 'BWiki', 'data', 'local-element-system', 'element-system.local.json'),
-  kibos: path.join(sourceRoot, 'BWiki', 'data', 'local-kibo-forms', 'all.local-kibo-forms.json'),
-  equipment: path.join(sourceRoot, 'BWiki', 'data', 'local-accessory-forms', 'all.local-accessory-forms.json'),
-  soulessences: path.join(sourceRoot, 'BWiki', 'data', 'local-soulessence-forms', 'all.local-soulessence-forms.json'),
-  enemies: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'enemy.json'),
-  enemyLang: path.join(sourceRoot, 'Assets', 'ResourcesLang', 'chs', 'Table', 'lang_enemy.json'),
-  skillLevel: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'skill_level.json'),
-  skillLevelLang: path.join(sourceRoot, 'Assets', 'ResourcesLang', 'chs', 'Table', 'lang_skill_level.json'),
-  skillsubLogic: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'skillsub_logic.json'),
-  skillsubEleValue: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'skillsub_ele_value.json'),
-  elementFormula: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'element_formula.json'),
-  unitProperty: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'unit_property.json'),
-  templateValue: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'template_value.json'),
-  battleInfo: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'battle_info.json'),
-  battleInfoLang: path.join(sourceRoot, 'Assets', 'ResourcesLang', 'chs', 'Table', 'lang_battle_info.json'),
+  heroModules: path.join(
+    sourceRoot,
+    'BWiki',
+    'data',
+    'hero-modules',
+    'local-all'
+  ),
+  elementSystem: path.join(
+    sourceRoot,
+    'BWiki',
+    'data',
+    'local-element-system',
+    'element-system.local.json'
+  ),
+  kibos: path.join(
+    sourceRoot,
+    'BWiki',
+    'data',
+    'local-kibo-forms',
+    'all.local-kibo-forms.json'
+  ),
+  equipment: path.join(
+    sourceRoot,
+    'BWiki',
+    'data',
+    'local-accessory-forms',
+    'all.local-accessory-forms.json'
+  ),
+  soulessences: path.join(
+    sourceRoot,
+    'BWiki',
+    'data',
+    'local-soulessence-forms',
+    'all.local-soulessence-forms.json'
+  ),
+  enemies: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'enemy.json'
+  ),
+  enemyLang: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesLang',
+    'chs',
+    'Table',
+    'lang_enemy.json'
+  ),
+  skillLevel: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'skill_level.json'
+  ),
+  skillLevelLang: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesLang',
+    'chs',
+    'Table',
+    'lang_skill_level.json'
+  ),
+  skillsubLogic: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'skillsub_logic.json'
+  ),
+  skillsubEleValue: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'skillsub_ele_value.json'
+  ),
+  elementFormula: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'element_formula.json'
+  ),
+  unitProperty: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'unit_property.json'
+  ),
+  templateValue: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'template_value.json'
+  ),
+  templateHero: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'template_hero.json'
+  ),
+  talentRank: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'talent_rank.json'
+  ),
+  talentRune: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'talent_rune.json'
+  ),
+  battleInfo: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'battle_info.json'
+  ),
+  battleInfoLang: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesLang',
+    'chs',
+    'Table',
+    'lang_battle_info.json'
+  ),
+  roleAttributeWorkbook: path.join(
+    sourceRoot,
+    'BWiki',
+    'generated',
+    'spreadsheets',
+    'role-attribute-dynamic-current-rank.xlsx'
+  ),
   mediaImages: path.join(sourceRoot, 'BWiki', 'knowledge', 'media', 'images'),
 };
+
+const ROLE_PANEL_CORE_ATTRIBUTE_KEYS = Object.freeze({
+  攻击: 'attack',
+  生命: 'maxHp',
+  物理防御: 'physicalDefense',
+  魔法防御: 'magicalDefense',
+  调谐强度: 'tuningStrength',
+  暴击率: 'critRate',
+  暴击伤害: 'critDamage',
+  伤害增幅: 'damageAmplification',
+  伤害减免: 'damageReduction',
+});
+
+const ROLE_PANEL_DISPLAY_ATTRIBUTE_NAMES = new Set([
+  '攻击',
+  '生命',
+  '物理防御',
+  '魔法防御',
+  '调谐强度',
+  '暴击率',
+  '暴击伤害',
+  '伤害增幅',
+  '伤害减免',
+  '治疗加成',
+  '能量回复增幅',
+]);
+
+const ROLE_PANEL_DESIRED_ATTR_NAMES = [
+  '攻击',
+  '物理防御',
+  '魔法防御',
+  '生命',
+  '调谐强度',
+  '暴击率',
+  '暴击伤害',
+  '伤害增幅',
+  '伤害减免',
+  '物理伤害增幅',
+  '魔法伤害增幅',
+  '物理伤害减免',
+  '魔法伤害减免',
+  '攻击加成',
+  '物理防御加成',
+  '魔法防御加成',
+  '生命加成',
+  '风属性伤害增幅',
+  '雷属性伤害增幅',
+  '火属性伤害增幅',
+  '水属性伤害增幅',
+  '木属性伤害增幅',
+  '冰属性伤害增幅',
+  '地属性伤害增幅',
+  '光属性伤害增幅',
+  '暗属性伤害增幅',
+  '治疗加成',
+  '架势条破坏效率',
+  '能量回复增幅',
+];
+
+const NORMALIZED_BASE_ATTRIBUTE_IDS = new Set([1, 3, 4, 5, 35, 229]);
 
 const requiredPaths = Object.values(sourceFiles);
 await assertReadablePaths(requiredPaths);
@@ -48,6 +251,9 @@ const [
   elementFormulaTable,
   unitPropertyTable,
   templateValueTable,
+  templateHeroTable,
+  talentRankTable,
+  talentRuneTable,
   battleInfoTable,
   battleInfoLangTable,
 ] = await Promise.all([
@@ -64,6 +270,9 @@ const [
   readJson(sourceFiles.elementFormula),
   readJson(sourceFiles.unitProperty),
   readJson(sourceFiles.templateValue),
+  readJson(sourceFiles.templateHero),
+  readJson(sourceFiles.talentRank),
+  readJson(sourceFiles.talentRune),
   readJson(sourceFiles.battleInfo),
   readJson(sourceFiles.battleInfoLang),
 ]);
@@ -71,7 +280,7 @@ const [
 const battleInfoLang = mapRowsById(battleInfoLangTable.rows);
 const skillLevelLang = mapRowsById(skillLevelLangTable.rows);
 const attributeInfoById = new Map(
-  battleInfoTable.rows.map((row) => [
+  battleInfoTable.rows.map(row => [
     Number(row.attrVal),
     {
       id: Number(row.attrVal),
@@ -83,26 +292,79 @@ const attributeInfoById = new Map(
       sort: row.sort,
       icon: assetFileName(row.icon),
     },
-  ]),
+  ])
 );
 
-const unitProperties = new Map(unitPropertyTable.rows.map((row) => [Number(row.id), row]));
-const templateValues = new Map(templateValueTable.rows.map((row) => [Number(row.id), row]));
+const unitProperties = new Map(
+  unitPropertyTable.rows.map(row => [Number(row.id), row])
+);
+const templateValues = new Map(
+  templateValueTable.rows.map(row => [Number(row.id), row])
+);
 const enemyLang = mapRowsById(enemyLangTable.rows);
 
 const heroes = await loadHeroModules(sourceFiles.heroModules);
 const elements = mapElements(elementSystem);
-const { characters, skills } = mapCharactersAndSkills(heroes, attributeInfoById, unitProperties, templateValues);
-const enemies = mapEnemies(enemyTable, enemyLang, attributeInfoById, unitProperties, templateValues);
+const { characters, skills } = mapCharactersAndSkills(
+  heroes,
+  attributeInfoById,
+  unitProperties,
+  templateValues
+);
+const enemies = mapEnemies(
+  enemyTable,
+  enemyLang,
+  attributeInfoById,
+  unitProperties,
+  templateValues
+);
 const kibos = mapKibos(kiboForms);
 const equipment = mapEquipment(equipmentForms);
 const soulessences = mapSoulessences(soulessenceForms);
 const mediaIndex = await mapMediaIndex(sourceFiles.mediaImages);
-const skillLevelCrossCheck = buildSkillLevelCrossCheck({ skills, skillLevelTable, skillLevelLang });
-const skillLogicIndex = buildSkillLogicIndex({ skills, skillLevelTable, skillsubLogicTable, skillsubEleValueTable });
-const valueParamIndex = buildValueParamIndex({ skillLogicIndex, elementFormulaTable });
-const firstVerticalSlice = buildFirstVerticalSliceData({ characters, skills, enemies });
-const workbenchSeed = buildWorkbenchSeedData({ characters, skills, enemies });
+const skillLevelCrossCheck = buildSkillLevelCrossCheck({
+  skills,
+  skillLevelTable,
+  skillLevelLang,
+});
+const skillLogicIndex = buildSkillLogicIndex({
+  skills,
+  skillLevelTable,
+  skillsubLogicTable,
+  skillsubEleValueTable,
+});
+const valueParamIndex = buildValueParamIndex({
+  skillLogicIndex,
+  elementFormulaTable,
+});
+const characterAttributePanels = buildCharacterAttributePanels({
+  characters,
+  attributeInfoById,
+  unitProperties,
+  templateValues,
+  templateHeroTable,
+  talentRankTable,
+  talentRuneTable,
+  battleInfoTable,
+});
+const characterAttributePanelByCharacterId = new Map(
+  characterAttributePanels.items.map(panel => [
+    Number(panel.characterId),
+    panel,
+  ])
+);
+const firstVerticalSlice = buildFirstVerticalSliceData({
+  characters,
+  skills,
+  enemies,
+  characterAttributePanelByCharacterId,
+});
+const workbenchSeed = buildWorkbenchSeedData({
+  characters,
+  skills,
+  enemies,
+  characterAttributePanelByCharacterId,
+});
 const validationReport = buildValidationReport({
   characters,
   skills,
@@ -115,22 +377,33 @@ const validationReport = buildValidationReport({
   skillLevelCrossCheck,
   skillLogicIndex,
   valueParamIndex,
+  characterAttributePanels,
 });
 
 await Promise.all([
   writeJson('manifest.json', buildManifest(validationReport)),
-  writeJson('attributes.json', wrapItems([...attributeInfoById.values()].sort(compareById), sourceFiles.battleInfo)),
+  writeJson(
+    'attributes.json',
+    wrapItems(
+      [...attributeInfoById.values()].sort(compareById),
+      sourceFiles.battleInfo
+    )
+  ),
   writeJson('elements.json', wrapItems(elements, sourceFiles.elementSystem)),
   writeJson('characters.json', wrapItems(characters, sourceFiles.heroModules)),
   writeJson('skills.json', wrapItems(skills, sourceFiles.heroModules)),
   writeJson('enemies.json', wrapItems(enemies, sourceFiles.enemies)),
   writeJson('kibos.json', wrapItems(kibos, sourceFiles.kibos)),
   writeJson('equipment.json', wrapItems(equipment, sourceFiles.equipment)),
-  writeJson('soulessences.json', wrapItems(soulessences, sourceFiles.soulessences)),
+  writeJson(
+    'soulessences.json',
+    wrapItems(soulessences, sourceFiles.soulessences)
+  ),
   writeJson('media-index.json', mediaIndex),
   writeJson('skill-level-crosscheck.json', skillLevelCrossCheck),
   writeJson('skill-logic-index.json', skillLogicIndex),
   writeJson('value-param-index.json', valueParamIndex),
+  writeJson('character-attribute-panels.json', characterAttributePanels),
   writeJson('first-vertical-slice.json', firstVerticalSlice),
   writeJson('workbench-seed.json', workbenchSeed),
   writeJson('validation-report.json', validationReport),
@@ -155,7 +428,9 @@ async function assertReadablePaths(paths) {
   }
 
   if (missing.length > 0) {
-    throw new Error(`Missing AzPr source paths:\n${missing.map((item) => `- ${item}`).join('\n')}`);
+    throw new Error(
+      `Missing AzPr source paths:\n${missing.map(item => `- ${item}`).join('\n')}`
+    );
   }
 }
 
@@ -164,7 +439,11 @@ async function readJson(filePath) {
 }
 
 async function writeJson(fileName, data) {
-  await fs.writeFile(path.join(outputRoot, fileName), `${JSON.stringify(data, null, 2)}\n`, 'utf8');
+  await fs.writeFile(
+    path.join(outputRoot, fileName),
+    `${JSON.stringify(data, null, 2)}\n`,
+    'utf8'
+  );
 }
 
 function buildManifest(validationReport) {
@@ -191,6 +470,7 @@ function buildManifest(validationReport) {
       skillLevelCrossCheck: 'skill-level-crosscheck.json',
       skillLogicIndex: 'skill-logic-index.json',
       valueParamIndex: 'value-param-index.json',
+      characterAttributePanels: 'character-attribute-panels.json',
       firstVerticalSlice: 'first-vertical-slice.json',
       workbenchSeed: 'workbench-seed.json',
       validationReport: 'validation-report.json',
@@ -199,16 +479,25 @@ function buildManifest(validationReport) {
   };
 }
 
-function buildFirstVerticalSliceData({ characters, skills, enemies }) {
+function buildFirstVerticalSliceData({
+  characters,
+  skills,
+  enemies,
+  characterAttributePanelByCharacterId,
+}) {
   const characterId = 109001;
   const skillId = 10900101;
   const enemyId = 300032;
-  const character = characters.find((item) => item.id === characterId) ?? characters[0];
+  const character =
+    characters.find(item => item.id === characterId) ?? characters[0];
   const skill =
-    skills.find((item) => item.id === skillId) ??
-    skills.find((item) => item.characterId === character.id) ??
+    skills.find(item => item.id === skillId) ??
+    skills.find(item => item.characterId === character.id) ??
     skills[0];
-  const enemy = enemies.find((item) => item.id === enemyId) ?? enemies.find((item) => item.property?.exists) ?? enemies[0];
+  const enemy =
+    enemies.find(item => item.id === enemyId) ??
+    enemies.find(item => item.property?.exists) ??
+    enemies[0];
 
   return {
     schemaVersion: 1,
@@ -221,17 +510,31 @@ function buildFirstVerticalSliceData({ characters, skills, enemies }) {
       enemyId: enemy.id,
     },
     gameData: {
-      characters: [character],
+      characters: [
+        attachCharacterAttributePanel(
+          character,
+          characterAttributePanelByCharacterId
+        ),
+      ],
       skills: [skill],
       enemies: [enemy],
     },
   };
 }
 
-function buildWorkbenchSeedData({ characters, skills, enemies }) {
-  const compactCharacters = characters.map(compactCharacter);
+function buildWorkbenchSeedData({
+  characters,
+  skills,
+  enemies,
+  characterAttributePanelByCharacterId,
+}) {
+  const compactCharacters = characters.map(character =>
+    compactCharacter(character, characterAttributePanelByCharacterId)
+  );
   const compactSkills = skills.map(compactSkill);
-  const compactEnemies = enemies.filter((enemy) => enemy.property?.exists).map(compactEnemy);
+  const compactEnemies = enemies
+    .filter(enemy => enemy.property?.exists)
+    .map(compactEnemy);
 
   return {
     schemaVersion: 1,
@@ -256,7 +559,10 @@ function buildWorkbenchSeedData({ characters, skills, enemies }) {
   };
 }
 
-function compactCharacter(character) {
+function compactCharacter(
+  character,
+  characterAttributePanelByCharacterId = new Map()
+) {
   return {
     id: character.id,
     name: character.name,
@@ -274,6 +580,9 @@ function compactCharacter(character) {
     icons: {
       avatar: character.icons.avatar,
     },
+    attributePanel: compactCharacterAttributePanel(
+      characterAttributePanelByCharacterId.get(Number(character.id))
+    ),
   };
 }
 
@@ -313,8 +622,519 @@ function compactEnemy(enemy) {
 }
 
 function compactBaseAttributes(baseAttributes = []) {
-  const keys = new Set(['ATK', 'MAXHP', 'DEF', 'MDEF', 'CRI', 'CRI_DMG', 'MAXSP', 'SPR_SEC']);
-  return baseAttributes.filter((attribute) => keys.has(attribute.key));
+  const keys = new Set([
+    'ATK',
+    'MAXHP',
+    'DEF',
+    'MDEF',
+    'CRI',
+    'CRI_DMG',
+    'MAXSP',
+    'SPR_SEC',
+  ]);
+  return baseAttributes.filter(attribute => keys.has(attribute.key));
+}
+
+function attachCharacterAttributePanel(
+  character,
+  characterAttributePanelByCharacterId = new Map()
+) {
+  return {
+    ...character,
+    attributePanel: compactCharacterAttributePanel(
+      characterAttributePanelByCharacterId.get(Number(character.id))
+    ),
+  };
+}
+
+function compactCharacterAttributePanel(panel) {
+  if (!panel) {
+    return null;
+  }
+
+  return {
+    characterId: panel.characterId,
+    characterName: panel.characterName,
+    level: panel.level,
+    currentRank: panel.currentRank,
+    rankBonusIncludedThrough: panel.rankBonusIncludedThrough,
+    currentRankRunes: panel.currentRankRunes,
+    sourceKind: panel.sourceKind,
+    core: compactCharacterAttributePanelCore(panel.core),
+  };
+}
+
+function compactCharacterAttributePanelCore(core = {}) {
+  return Object.fromEntries(
+    Object.entries(core).map(([key, attribute]) => [
+      key,
+      {
+        name: attribute.name,
+        effectiveValue: attribute.effectiveValue,
+        displayText: attribute.displayText,
+        isRatio: attribute.isRatio,
+        fixedPanelValue: attribute.fixedPanelValue,
+        percentBonusValue: attribute.percentBonusValue,
+      },
+    ])
+  );
+}
+
+function buildCharacterAttributePanels({
+  characters,
+  attributeInfoById,
+  unitProperties,
+  templateValues,
+  templateHeroTable,
+  talentRankTable,
+  talentRuneTable,
+  battleInfoTable,
+}) {
+  const defaultLevel = 80;
+  const defaultCurrentRank = 7;
+  const displayAttrs = buildRoleDisplayAttributes({
+    attributeInfoById,
+    talentRankTable,
+    talentRuneTable,
+    battleInfoTable,
+  });
+  const levelCoeffByKey = buildLevelAttributeCoeffMap({
+    templateHeroTable,
+    templateValues,
+    relevantAttrIds: displayAttrs.relevantAttrIds,
+  });
+  const factorByKey = buildCharacterAttributeFactorMap({
+    characters,
+    unitProperties,
+    templateValues,
+    relevantAttrIds: displayAttrs.relevantAttrIds,
+  });
+  const starRows = buildCharacterStarAttributeRows({
+    characters,
+    talentRankTable,
+    talentRuneTable,
+  });
+  const starCache = new Map();
+  const staticBaseConfig = (characterId, level, attrId) => {
+    if (!attrId) {
+      return 0;
+    }
+    const attrNumber = Number(attrId);
+    const levelCoeff = Number(
+      levelCoeffByKey.get(`${level}|${attrNumber}`) || 0
+    );
+    const factor = Number(factorByKey.get(`${characterId}|${attrNumber}`) || 0);
+    return (
+      (levelCoeff * factor) /
+      (NORMALIZED_BASE_ATTRIBUTE_IDS.has(attrNumber) ? 10000 : 1)
+    );
+  };
+  const staticStarVal = (characterId, rankLimit, attrId, sourceType) => {
+    if (!attrId) {
+      return 0;
+    }
+    const effectiveRankLimit =
+      sourceType === '临阶' ? Math.max(0, rankLimit - 1) : rankLimit;
+    const key = `${characterId}|${effectiveRankLimit}|${attrId}|${sourceType}`;
+    if (starCache.has(key)) {
+      return starCache.get(key);
+    }
+
+    let total = 0;
+    for (const row of starRows) {
+      if (
+        row.characterId !== Number(characterId) ||
+        row.attributeId !== Number(attrId) ||
+        row.rank > effectiveRankLimit ||
+        row.sourceType !== sourceType
+      ) {
+        continue;
+      }
+      total += Number(row.value || 0);
+    }
+    starCache.set(key, total);
+    return total;
+  };
+
+  const items = characters
+    .map(character =>
+      buildCharacterAttributePanelItem({
+        character,
+        defaultLevel,
+        defaultCurrentRank,
+        displayAttrs: displayAttrs.items,
+        staticBaseConfig,
+        staticStarVal,
+      })
+    )
+    .sort(compareById);
+
+  return {
+    schemaVersion: 1,
+    generatedAt,
+    sourceKind: 'azpr-role-attribute-current-rank-panel',
+    source: {
+      referenceWorkbook: normalizePath(sourceFiles.roleAttributeWorkbook),
+      sourceBuilder: normalizePath(
+        path.join(
+          sourceRoot,
+          'BWiki',
+          'work',
+          'hero-xlsx-audit',
+          'build_dynamic_role_attribute_workbook.mjs'
+        )
+      ),
+      tables: {
+        templateHero: normalizePath(sourceFiles.templateHero),
+        talentRank: normalizePath(sourceFiles.talentRank),
+        talentRune: normalizePath(sourceFiles.talentRune),
+        unitProperty: normalizePath(sourceFiles.unitProperty),
+        templateValue: normalizePath(sourceFiles.templateValue),
+        battleInfo: normalizePath(sourceFiles.battleInfo),
+        battleInfoLang: normalizePath(sourceFiles.battleInfoLang),
+      },
+    },
+    policy: {
+      level: defaultLevel,
+      currentRank: defaultCurrentRank,
+      currentRankRunes: 'all-selected',
+      rankBonusIncludedThrough: defaultCurrentRank - 1,
+      formula:
+        'final = (levelBase + starBase) * (1 + percentAddRaw / 10000) + fixedAdd; HP floors, other grouped values round.',
+    },
+    summary: {
+      characters: items.length,
+      attributesPerCharacter: displayAttrs.items.length,
+      panelRows: items.reduce((sum, item) => sum + item.attributes.length, 0),
+      starAttributeRows: starRows.length,
+      level: defaultLevel,
+      currentRank: defaultCurrentRank,
+    },
+    items,
+  };
+}
+
+function buildCharacterAttributePanelItem({
+  character,
+  defaultLevel,
+  defaultCurrentRank,
+  displayAttrs,
+  staticBaseConfig,
+  staticStarVal,
+}) {
+  const attributes = displayAttrs.map(attr =>
+    buildCharacterAttributePanelRow({
+      character,
+      level: defaultLevel,
+      currentRank: defaultCurrentRank,
+      attr,
+      staticBaseConfig,
+      staticStarVal,
+    })
+  );
+  const core = {};
+  for (const attribute of attributes) {
+    const key = ROLE_PANEL_CORE_ATTRIBUTE_KEYS[attribute.name];
+    if (key) {
+      core[key] = attribute;
+    }
+  }
+
+  return {
+    id: character.id,
+    characterId: character.id,
+    characterName: character.name,
+    level: defaultLevel,
+    currentRank: defaultCurrentRank,
+    currentRankRunes: 'all-selected',
+    rankBonusIncludedThrough: defaultCurrentRank - 1,
+    sourceKind: 'role-attribute-dynamic-current-rank',
+    core,
+    attributes,
+  };
+}
+
+function buildCharacterAttributePanelRow({
+  character,
+  level,
+  currentRank,
+  attr,
+  staticBaseConfig,
+  staticStarVal,
+}) {
+  const levelBase = staticBaseConfig(character.id, level, attr.baseAttrId);
+  const starBase =
+    staticStarVal(character.id, currentRank, attr.baseAttrId, '星赐') +
+    staticStarVal(character.id, currentRank, attr.baseAttrId, '临阶');
+  const fixedAdd =
+    staticBaseConfig(character.id, level, attr.fixedAttrId) +
+    staticStarVal(character.id, currentRank, attr.fixedAttrId, '星赐') +
+    staticStarVal(character.id, currentRank, attr.fixedAttrId, '临阶');
+  const percentAddRaw =
+    staticBaseConfig(character.id, level, attr.percentAttrId) +
+    staticStarVal(character.id, currentRank, attr.percentAttrId, '星赐') +
+    staticStarVal(character.id, currentRank, attr.percentAttrId, '临阶');
+  const formulaRaw = attr.percentAttrId
+    ? (levelBase + starBase) * (1 + percentAddRaw / 10000) + fixedAdd
+    : levelBase + starBase + fixedAdd;
+  const fixedPanelValue = attr.isRatio
+    ? null
+    : panelNumber(levelBase + starBase + fixedAdd, attr.baseAttrId);
+  const percentBonusValue =
+    attr.isRatio || !attr.percentAttrId || percentAddRaw === 0
+      ? null
+      : Math.floor((fixedPanelValue * percentAddRaw) / 10000);
+  const panelTotalValue = attr.isRatio
+    ? null
+    : fixedPanelValue + (percentBonusValue ?? 0);
+  const effectiveValue = attr.isRatio ? formulaRaw / 10000 : panelTotalValue;
+
+  return {
+    name: attr.name,
+    key: attr.key,
+    displayAttrId: attr.displayAttrId,
+    baseAttrId: attr.baseAttrId,
+    percentAttrId: attr.percentAttrId,
+    fixedAttrId: attr.fixedAttrId,
+    kind: attr.kind,
+    isRatio: attr.isRatio,
+    levelBase: roundMetric(levelBase),
+    starBase: roundMetric(starBase),
+    fixedAdd: roundMetric(fixedAdd),
+    percentAddRaw: roundMetric(percentAddRaw),
+    formulaRaw: roundMetric(formulaRaw),
+    fixedPanelValue,
+    percentBonusValue,
+    panelTotalValue,
+    effectiveValue: roundMetric(effectiveValue),
+    displayText: attr.isRatio
+      ? percentText(effectiveValue)
+      : displaySplitText(fixedPanelValue, percentBonusValue),
+    displayInPanel: ROLE_PANEL_DISPLAY_ATTRIBUTE_NAMES.has(attr.name),
+  };
+}
+
+function buildRoleDisplayAttributes({
+  attributeInfoById,
+  talentRankTable,
+  talentRuneTable,
+  battleInfoTable,
+}) {
+  const relevantAttrIds = new Set([
+    1, 3, 4, 5, 7, 8, 21, 22, 25, 27, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
+    105, 222, 229, 1001, 1003, 1004, 1005,
+  ]);
+
+  for (const row of talentRankTable.rows ?? []) {
+    for (const attrId of parseAttributePairs(row.attribute).keys()) {
+      relevantAttrIds.add(attrId);
+    }
+  }
+  for (const row of talentRuneTable.rows ?? []) {
+    for (const attrId of parseAttributePairs(row.runeAttribute).keys()) {
+      relevantAttrIds.add(attrId);
+    }
+  }
+
+  const groupMap = new Map();
+  for (const row of battleInfoTable.rows ?? []) {
+    if (!row.attrGroup) {
+      continue;
+    }
+    const [groupId, groupType] = String(row.attrGroup).split('|').map(Number);
+    if (!groupMap.has(groupId)) {
+      groupMap.set(groupId, {});
+    }
+    groupMap.get(groupId)[groupType] = Number(row.attrVal);
+  }
+
+  const attrIdByDisplayName = new Map();
+  for (const attrId of relevantAttrIds) {
+    const name = roleAttributeName(attrId, attributeInfoById, battleInfoTable);
+    if (!attrIdByDisplayName.has(name)) {
+      attrIdByDisplayName.set(name, attrId);
+    }
+  }
+
+  const items = [];
+  for (const name of ROLE_PANEL_DESIRED_ATTR_NAMES) {
+    if (!attrIdByDisplayName.has(name)) {
+      continue;
+    }
+    const attrId = attrIdByDisplayName.get(name);
+    const group = groupMap.get(attrId);
+    const info = attributeInfoById.get(Number(attrId));
+    if (group && group[1] === attrId) {
+      items.push({
+        name,
+        key: info?.key ?? String(attrId),
+        displayAttrId: attrId,
+        baseAttrId: group[1] || attrId,
+        percentAttrId: group[2] || null,
+        fixedAttrId: group[3] || null,
+        isRatio: false,
+        kind: '分组最终属性',
+      });
+    } else {
+      items.push({
+        name,
+        key: info?.key ?? String(attrId),
+        displayAttrId: attrId,
+        baseAttrId: attrId,
+        percentAttrId: null,
+        fixedAttrId: null,
+        isRatio: Boolean(info?.isRatio),
+        kind: '独立属性',
+      });
+    }
+  }
+
+  return { items, relevantAttrIds };
+}
+
+function roleAttributeName(attrId, attributeInfoById, battleInfoTable) {
+  const row = (battleInfoTable.rows ?? []).find(
+    item => Number(item.attrVal) === Number(attrId)
+  );
+  const base = attributeInfoById.get(Number(attrId))?.name ?? String(attrId);
+  const group = String(row?.attrGroup || '');
+  if (group.endsWith('|2')) {
+    return `${base}加成`;
+  }
+  if (group.endsWith('|3')) {
+    return `${base}固定加成`;
+  }
+  return base;
+}
+
+function buildLevelAttributeCoeffMap({
+  templateHeroTable,
+  templateValues,
+  relevantAttrIds,
+}) {
+  const map = new Map();
+  for (const templateHero of templateHeroTable.rows ?? []) {
+    const templateValue = templateValues.get(
+      Number(templateHero.baseAttribute)
+    );
+    const attrs = parseAttributePairs(templateValue?.baseAttribute);
+    for (const attrId of relevantAttrIds) {
+      if (attrs.has(attrId)) {
+        map.set(`${Number(templateHero.level)}|${attrId}`, attrs.get(attrId));
+      }
+    }
+  }
+  return map;
+}
+
+function buildCharacterAttributeFactorMap({
+  characters,
+  unitProperties,
+  templateValues,
+  relevantAttrIds,
+}) {
+  const map = new Map();
+  for (const character of characters) {
+    const property = unitProperties.get(Number(character.property?.id));
+    const templateValue = templateValues.get(Number(property?.baseAttributeId));
+    const attrs = parseAttributePairs(templateValue?.baseAttribute);
+    for (const attrId of relevantAttrIds) {
+      if (attrs.has(attrId)) {
+        map.set(`${Number(character.id)}|${attrId}`, attrs.get(attrId));
+      }
+    }
+  }
+  return map;
+}
+
+function buildCharacterStarAttributeRows({
+  characters,
+  talentRankTable,
+  talentRuneTable,
+}) {
+  const characterIds = new Set(
+    characters.map(character => Number(character.id))
+  );
+  const talentRuneById = new Map(
+    (talentRuneTable.rows ?? []).map(row => [Number(row.id), row])
+  );
+  const rows = [];
+
+  for (const rank of talentRankTable.rows ?? []) {
+    const characterId = Number(rank.heroId);
+    if (!characterIds.has(characterId)) {
+      continue;
+    }
+    for (const runeId of parseNumberList(rank.rankBreakthroughItem)) {
+      const rune = talentRuneById.get(Number(runeId));
+      if (!rune) {
+        continue;
+      }
+      for (const [attributeId, value] of parseAttributePairs(
+        rune.runeAttribute
+      )) {
+        rows.push({
+          characterId,
+          rank: Number(rank.rank),
+          sourceType: '星赐',
+          sourceId: Number(rune.id),
+          attributeId,
+          value,
+        });
+      }
+    }
+    for (const [attributeId, value] of parseAttributePairs(rank.attribute)) {
+      rows.push({
+        characterId,
+        rank: Number(rank.rank),
+        sourceType: '临阶',
+        sourceId: Number(rank.id),
+        attributeId,
+        value,
+      });
+    }
+  }
+
+  return rows;
+}
+
+function parseAttributePairs(rawValue) {
+  const pairs = new Map();
+  if (!rawValue) {
+    return pairs;
+  }
+  for (const part of String(rawValue).split('|')) {
+    if (!part) {
+      continue;
+    }
+    const [left, right] = part.split('#');
+    const id = Number(left);
+    const value = Number(right);
+    if (Number.isFinite(id) && Number.isFinite(value)) {
+      pairs.set(id, value);
+    }
+  }
+  return pairs;
+}
+
+function panelNumber(value, baseAttrId) {
+  return Number(baseAttrId) === 5 ? Math.floor(value) : Math.round(value);
+}
+
+function roundMetric(value) {
+  return Number.isFinite(value) ? Number(value.toFixed(4)) : 0;
+}
+
+function percentText(value) {
+  const percent = Number(value) * 100;
+  return `${percent.toFixed(2).replace(/\.?0+$/, '')}%`;
+}
+
+function displaySplitText(fixedPanelValue, percentBonusValue) {
+  if (percentBonusValue == null || percentBonusValue === 0) {
+    return String(fixedPanelValue ?? 0);
+  }
+  return `${fixedPanelValue}+${percentBonusValue}`;
 }
 
 function wrapItems(items, sourcePath) {
@@ -328,10 +1148,14 @@ function wrapItems(items, sourcePath) {
 }
 
 function mapRowsById(rows = []) {
-  return new Map(rows.map((row) => [String(row.id), row]));
+  return new Map(rows.map(row => [String(row.id), row]));
 }
 
-function buildSkillLevelCrossCheck({ skills, skillLevelTable, skillLevelLang }) {
+function buildSkillLevelCrossCheck({
+  skills,
+  skillLevelTable,
+  skillLevelLang,
+}) {
   const rowsBySkillId = new Map();
   for (const row of skillLevelTable.rows ?? []) {
     const skillId = Number(row.skillId);
@@ -343,7 +1167,9 @@ function buildSkillLevelCrossCheck({ skills, skillLevelTable, skillLevelLang }) 
     rowsBySkillId.set(skillId, rows);
   }
 
-  const items = skills.map((skill) => buildSkillLevelCrossCheckItem(skill, rowsBySkillId, skillLevelLang));
+  const items = skills.map(skill =>
+    buildSkillLevelCrossCheckItem(skill, rowsBySkillId, skillLevelLang)
+  );
   const summary = summarizeSkillLevelCrossCheck(items);
 
   return {
@@ -363,7 +1189,7 @@ function buildSkillLevelCrossCheck({ skills, skillLevelTable, skillLevelLang }) 
 function buildSkillLevelCrossCheckItem(skill, rowsBySkillId, skillLevelLang) {
   const rows = rowsBySkillId.get(Number(skill.id)) ?? [];
   const diagnostics = [];
-  const rowsByLevel = new Map(rows.map((row) => [Number(row.level), row]));
+  const rowsByLevel = new Map(rows.map(row => [Number(row.level), row]));
   const levelCount = Math.max(skill.level?.values?.length ?? 0, rows.length);
 
   if (rows.length === 0) {
@@ -377,7 +1203,13 @@ function buildSkillLevelCrossCheckItem(skill, rowsBySkillId, skillLevelLang) {
 
   const levels = Array.from({ length: levelCount }, (_, index) => {
     const level = index + 1;
-    return buildSkillLevelCrossCheckLevel(skill, rowsByLevel.get(level), level, index, skillLevelLang);
+    return buildSkillLevelCrossCheckLevel(
+      skill,
+      rowsByLevel.get(level),
+      level,
+      index,
+      skillLevelLang
+    );
   });
 
   for (const level of levels) {
@@ -391,13 +1223,20 @@ function buildSkillLevelCrossCheckItem(skill, rowsBySkillId, skillLevelLang) {
     skillName: skill.name ?? skill.displayName ?? null,
     status: statusFromDiagnostics(diagnostics),
     levelCount,
-    matchedLevelCount: levels.filter((level) => level.status === 'matched').length,
+    matchedLevelCount: levels.filter(level => level.status === 'matched')
+      .length,
     diagnostics,
     levels,
   };
 }
 
-function buildSkillLevelCrossCheckLevel(skill, row, level, levelIndex, skillLevelLang) {
+function buildSkillLevelCrossCheckLevel(
+  skill,
+  row,
+  level,
+  levelIndex,
+  skillLevelLang
+) {
   const diagnostics = [];
   const expectedLabels = skill.level?.labels ?? [];
   const expectedValues = skill.level?.values?.[levelIndex] ?? [];
@@ -430,8 +1269,22 @@ function buildSkillLevelCrossCheckLevel(skill, row, level, levelIndex, skillLeve
 
   const labelIds = splitPipe(row.name);
   const valueIds = splitPipe(row.value);
-  const labels = resolveSkillLevelLangValues(labelIds, skillLevelLang, diagnostics, skill.id, level, 'name');
-  const values = resolveSkillLevelLangValues(valueIds, skillLevelLang, diagnostics, skill.id, level, 'value');
+  const labels = resolveSkillLevelLangValues(
+    labelIds,
+    skillLevelLang,
+    diagnostics,
+    skill.id,
+    level,
+    'name'
+  );
+  const values = resolveSkillLevelLangValues(
+    valueIds,
+    skillLevelLang,
+    diagnostics,
+    skill.id,
+    level,
+    'value'
+  );
   const labelMatches = equalStringArrays(labels, expectedLabels);
   const valueMatches = equalStringArrays(values, expectedValues);
 
@@ -443,7 +1296,8 @@ function buildSkillLevelCrossCheckLevel(skill, row, level, levelIndex, skillLeve
       level,
       expected: expectedLabels,
       actual: labels,
-      message: 'hero-module 聚合标签与 NewTable/skill_level.json 还原标签不一致。',
+      message:
+        'hero-module 聚合标签与 NewTable/skill_level.json 还原标签不一致。',
     });
   }
 
@@ -455,7 +1309,8 @@ function buildSkillLevelCrossCheckLevel(skill, row, level, levelIndex, skillLeve
       level,
       expected: expectedValues,
       actual: values,
-      message: 'hero-module 聚合倍率与 NewTable/skill_level.json 还原倍率不一致。',
+      message:
+        'hero-module 聚合倍率与 NewTable/skill_level.json 还原倍率不一致。',
     });
   }
 
@@ -476,8 +1331,15 @@ function buildSkillLevelCrossCheckLevel(skill, row, level, levelIndex, skillLeve
   };
 }
 
-function resolveSkillLevelLangValues(ids, langRows, diagnostics, skillId, level, fieldName) {
-  return ids.map((id) => {
+function resolveSkillLevelLangValues(
+  ids,
+  langRows,
+  diagnostics,
+  skillId,
+  level,
+  fieldName
+) {
+  return ids.map(id => {
     const row = langRows.get(String(id));
     if (!row) {
       diagnostics.push({
@@ -496,19 +1358,25 @@ function resolveSkillLevelLangValues(ids, langRows, diagnostics, skillId, level,
 }
 
 function summarizeSkillLevelCrossCheck(items) {
-  const levels = items.flatMap((item) => item.levels);
+  const levels = items.flatMap(item => item.levels);
   return {
-    matchedSkills: items.filter((item) => item.status === 'matched').length,
-    missingSkills: items.filter((item) => item.status === 'missing').length,
-    mismatchedSkills: items.filter((item) => item.status === 'mismatch').length,
-    matchedLevels: levels.filter((level) => level.status === 'matched').length,
-    missingLevels: levels.filter((level) => level.status === 'missing').length,
-    mismatchedLevels: levels.filter((level) => level.status === 'mismatch').length,
+    matchedSkills: items.filter(item => item.status === 'matched').length,
+    missingSkills: items.filter(item => item.status === 'missing').length,
+    mismatchedSkills: items.filter(item => item.status === 'mismatch').length,
+    matchedLevels: levels.filter(level => level.status === 'matched').length,
+    missingLevels: levels.filter(level => level.status === 'missing').length,
+    mismatchedLevels: levels.filter(level => level.status === 'mismatch')
+      .length,
   };
 }
 
 function statusFromDiagnostics(diagnostics) {
-  if (diagnostics.some((diagnostic) => diagnostic.code.includes('missing') && diagnostic.code.includes('row'))) {
+  if (
+    diagnostics.some(
+      diagnostic =>
+        diagnostic.code.includes('missing') && diagnostic.code.includes('row')
+    )
+  ) {
     return 'missing';
   }
   if (diagnostics.length > 0) {
@@ -517,16 +1385,23 @@ function statusFromDiagnostics(diagnostics) {
   return 'matched';
 }
 
-function buildSkillLogicIndex({ skills, skillLevelTable, skillsubLogicTable, skillsubEleValueTable }) {
-  const skillIds = new Set(skills.map((skill) => Number(skill.id)));
+function buildSkillLogicIndex({
+  skills,
+  skillLevelTable,
+  skillsubLogicTable,
+  skillsubEleValueTable,
+}) {
+  const skillIds = new Set(skills.map(skill => Number(skill.id)));
   const skillLevelRowsBySkillId = groupRowsByNumberKey(
-    (skillLevelTable.rows ?? []).filter((row) => skillIds.has(Number(row.skillId))),
-    'skillId',
+    (skillLevelTable.rows ?? []).filter(row =>
+      skillIds.has(Number(row.skillId))
+    ),
+    'skillId'
   );
   const logicRowsBySubSkillId = new Map(
     (skillsubLogicTable.rows ?? [])
-      .map((row) => [Number(row.skillId), row])
-      .filter(([skillId]) => Number.isFinite(skillId)),
+      .map(row => [Number(row.skillId), row])
+      .filter(([skillId]) => Number.isFinite(skillId))
   );
   const elementRowsBySubSkillAndLevel = new Map();
   for (const row of skillsubEleValueTable.rows ?? []) {
@@ -536,8 +1411,13 @@ function buildSkillLogicIndex({ skills, skillLevelTable, skillsubLogicTable, ski
     elementRowsBySubSkillAndLevel.set(key, rows);
   }
 
-  const items = skills.map((skill) =>
-    buildSkillLogicIndexItem(skill, skillLevelRowsBySkillId, logicRowsBySubSkillId, elementRowsBySubSkillAndLevel),
+  const items = skills.map(skill =>
+    buildSkillLogicIndexItem(
+      skill,
+      skillLevelRowsBySkillId,
+      logicRowsBySubSkillId,
+      elementRowsBySubSkillAndLevel
+    )
   );
   const summary = summarizeSkillLogicIndex(items);
 
@@ -560,7 +1440,9 @@ function buildValueParamIndex({ skillLogicIndex, elementFormulaTable }) {
   const statsByParamId = new Map();
   const formulas = elementFormulaTable.rows ?? [];
   const formulaVariables = uniqueStrings(
-    formulas.flatMap((row) => extractFormulaVariables(row.functionOutput)).filter((variable) => variable.length === 1),
+    formulas
+      .flatMap(row => extractFormulaVariables(row.functionOutput))
+      .filter(variable => variable.length === 1)
   );
 
   for (const item of skillLogicIndex.items ?? []) {
@@ -593,11 +1475,15 @@ function buildValueParamIndex({ skillLogicIndex, elementFormulaTable }) {
 
   const params = [...statsByParamId.values()]
     .sort((left, right) => left.id - right.id)
-    .map((stat) => createValueParamDescriptor(stat, formulaVariables));
-  const unknownParams = params.filter((param) => param.semanticStatus !== 'confirmed');
-  const observedSkillIds = uniqueNumbers([...statsByParamId.values()].flatMap((stat) => [...stat.skillIds]));
+    .map(stat => createValueParamDescriptor(stat, formulaVariables));
+  const unknownParams = params.filter(
+    param => param.semanticStatus !== 'confirmed'
+  );
+  const observedSkillIds = uniqueNumbers(
+    [...statsByParamId.values()].flatMap(stat => [...stat.skillIds])
+  );
   const observedElementValueRows = uniqueNumbers(
-    params.flatMap((param) => param.examples.map((example) => example.rowId)),
+    params.flatMap(param => param.examples.map(example => example.rowId))
   ).length;
 
   return {
@@ -611,13 +1497,19 @@ function buildValueParamIndex({ skillLogicIndex, elementFormulaTable }) {
     },
     summary: {
       parameterIds: params.length,
-      observedParameterPairs: params.reduce((sum, param) => sum + param.rowCount, 0),
-      observedElementValueRows: skillLogicIndex.summary?.elementValueRows ?? observedElementValueRows,
+      observedParameterPairs: params.reduce(
+        (sum, param) => sum + param.rowCount,
+        0
+      ),
+      observedElementValueRows:
+        skillLogicIndex.summary?.elementValueRows ?? observedElementValueRows,
       observedSkills: observedSkillIds.length,
       formulaRows: formulas.length,
       formulaVariables,
-      unresolvedParameterIds: unknownParams.map((param) => param.id),
-      constantParameterIds: params.filter((param) => param.isConstant).map((param) => param.id),
+      unresolvedParameterIds: unknownParams.map(param => param.id),
+      constantParameterIds: params
+        .filter(param => param.isConstant)
+        .map(param => param.id),
     },
     params,
   };
@@ -642,7 +1534,10 @@ function getOrCreateValueParamStat(statsByParamId, paramId) {
 
 function createValueParamDescriptor(stat, formulaVariables) {
   const variable = paramIdToFormulaVariable(stat.id);
-  const sampleValues = [...stat.values].filter(Number.isFinite).sort((left, right) => left - right).slice(0, 12);
+  const sampleValues = [...stat.values]
+    .filter(Number.isFinite)
+    .sort((left, right) => left - right)
+    .slice(0, 12);
   const isConstant = stat.values.size === 1;
   const roleHint = isConstant
     ? `当前技能范围内恒为 ${sampleValues[0]} 的公式槽位，可能是比例/默认因子；战斗语义未确认。`
@@ -662,8 +1557,12 @@ function createValueParamDescriptor(stat, formulaVariables) {
     rowCount: stat.rowCount,
     skillCount: stat.skillIds.size,
     elementCount: stat.elementIds.size,
-    skillIds: [...stat.skillIds].sort((left, right) => left - right).slice(0, 20),
-    sampleElementIds: [...stat.elementIds].sort((left, right) => left - right).slice(0, 20),
+    skillIds: [...stat.skillIds]
+      .sort((left, right) => left - right)
+      .slice(0, 20),
+    sampleElementIds: [...stat.elementIds]
+      .sort((left, right) => left - right)
+      .slice(0, 20),
     minValue: Number.isFinite(stat.minValue) ? stat.minValue : null,
     maxValue: Number.isFinite(stat.maxValue) ? stat.maxValue : null,
     zeroCount: stat.zeroCount,
@@ -676,10 +1575,19 @@ function extractFormulaVariables(functionOutput) {
   if (!functionOutput) {
     return [];
   }
-  const reserved = new Set(['IF', 'OR', 'FLOOR', 'ROUND', 'CEILING', 'RANDOM', 'F_MIN', 'F_MAX']);
+  const reserved = new Set([
+    'IF',
+    'OR',
+    'FLOOR',
+    'ROUND',
+    'CEILING',
+    'RANDOM',
+    'F_MIN',
+    'F_MAX',
+  ]);
   return [...String(functionOutput).matchAll(/\b[A-Z][A-Z_]*\b/g)]
-    .map((match) => match[0])
-    .filter((name) => !reserved.has(name) && name.length === 1);
+    .map(match => match[0])
+    .filter(name => !reserved.has(name) && name.length === 1);
 }
 
 function paramIdToFormulaVariable(paramId) {
@@ -696,20 +1604,25 @@ function parseParamPairs(rawValue) {
   }
   return String(rawValue)
     .split('|')
-    .map((part) => {
+    .map(part => {
       const [idText, valueText] = part.split('#');
       return {
         id: Number(idText),
         value: Number(valueText),
       };
     })
-    .filter((item) => Number.isFinite(item.id) && Number.isFinite(item.value));
+    .filter(item => Number.isFinite(item.id) && Number.isFinite(item.value));
 }
 
-function buildSkillLogicIndexItem(skill, skillLevelRowsBySkillId, logicRowsBySubSkillId, elementRowsBySubSkillAndLevel) {
-  const skillLevelRows = (skillLevelRowsBySkillId.get(Number(skill.id)) ?? []).sort(
-    (left, right) => Number(left.level) - Number(right.level),
-  );
+function buildSkillLogicIndexItem(
+  skill,
+  skillLevelRowsBySkillId,
+  logicRowsBySubSkillId,
+  elementRowsBySubSkillAndLevel
+) {
+  const skillLevelRows = (
+    skillLevelRowsBySkillId.get(Number(skill.id)) ?? []
+  ).sort((left, right) => Number(left.level) - Number(right.level));
   const diagnostics = [];
 
   if (skillLevelRows.length === 0) {
@@ -721,11 +1634,18 @@ function buildSkillLogicIndexItem(skill, skillLevelRowsBySkillId, logicRowsBySub
     });
   }
 
-  const subSkills = uniqueNumbers(skillLevelRows.map((row) => row.subSkillId)).map((subSkillId) =>
-    buildSubSkillLogicIndex(subSkillId, skill, skillLevelRows, logicRowsBySubSkillId),
+  const subSkills = uniqueNumbers(
+    skillLevelRows.map(row => row.subSkillId)
+  ).map(subSkillId =>
+    buildSubSkillLogicIndex(
+      subSkillId,
+      skill,
+      skillLevelRows,
+      logicRowsBySubSkillId
+    )
   );
   const levels = skillLevelRows.map((row, index) =>
-    buildSkillLogicLevelIndex(row, index, elementRowsBySubSkillAndLevel),
+    buildSkillLogicLevelIndex(row, index, elementRowsBySubSkillAndLevel)
   );
 
   for (const subSkill of subSkills) {
@@ -742,18 +1662,23 @@ function buildSkillLogicIndexItem(skill, skillLevelRowsBySkillId, logicRowsBySub
     skillName: skill.name ?? skill.displayName ?? null,
     status: statusFromSkillLogicDiagnostics(diagnostics),
     levelCount: levels.length,
-    subSkillIds: subSkills.map((subSkill) => subSkill.subSkillId),
+    subSkillIds: subSkills.map(subSkill => subSkill.subSkillId),
     subSkills,
     levels,
     diagnostics,
   };
 }
 
-function buildSubSkillLogicIndex(subSkillId, skill, skillLevelRows, logicRowsBySubSkillId) {
+function buildSubSkillLogicIndex(
+  subSkillId,
+  skill,
+  skillLevelRows,
+  logicRowsBySubSkillId
+) {
   const diagnostics = [];
   const logicRow = logicRowsBySubSkillId.get(subSkillId);
   const displayPairs = uniqueDisplayTimingPairs(
-    skillLevelRows.filter((row) => Number(row.subSkillId) === Number(subSkillId)),
+    skillLevelRows.filter(row => Number(row.subSkillId) === Number(subSkillId))
   );
 
   if (!logicRow) {
@@ -777,7 +1702,7 @@ function buildSubSkillLogicIndex(subSkillId, skill, skillLevelRows, logicRowsByS
 
   const logic = compactSkillLogicRow(logicRow);
   const displayMatchesLogic = displayPairs.some(
-    (pair) => pair.cooldownMs === logic.cooldownMs && pair.spCost === logic.spCost,
+    pair => pair.cooldownMs === logic.cooldownMs && pair.spCost === logic.spCost
   );
 
   if (!displayMatchesLogic) {
@@ -791,7 +1716,8 @@ function buildSubSkillLogicIndex(subSkillId, skill, skillLevelRows, logicRowsByS
         cooldownMs: logic.cooldownMs,
         spCost: logic.spCost,
       },
-      message: 'skill_level 显示层冷却/能量与 skillsub_logic 逻辑层冷却/能量不一致。',
+      message:
+        'skill_level 显示层冷却/能量与 skillsub_logic 逻辑层冷却/能量不一致。',
     });
   }
 
@@ -805,10 +1731,15 @@ function buildSubSkillLogicIndex(subSkillId, skill, skillLevelRows, logicRowsByS
   };
 }
 
-function buildSkillLogicLevelIndex(row, levelIndex, elementRowsBySubSkillAndLevel) {
+function buildSkillLogicLevelIndex(
+  row,
+  levelIndex,
+  elementRowsBySubSkillAndLevel
+) {
   const subSkillId = Number(row.subSkillId);
   const level = Number(row.level);
-  const elementRows = elementRowsBySubSkillAndLevel.get(`${subSkillId}:${level}`) ?? [];
+  const elementRows =
+    elementRowsBySubSkillAndLevel.get(`${subSkillId}:${level}`) ?? [];
   const diagnostics = [];
 
   if (elementRows.length === 0) {
@@ -818,7 +1749,8 @@ function buildSkillLogicLevelIndex(row, levelIndex, elementRowsBySubSkillAndLeve
       skillId: Number(row.skillId),
       subSkillId,
       level,
-      message: 'skillsub_ele_value.json 中没有该 subSkillId/level 的数值参数行。',
+      message:
+        'skillsub_ele_value.json 中没有该 subSkillId/level 的数值参数行。',
     });
   }
 
@@ -831,7 +1763,7 @@ function buildSkillLogicLevelIndex(row, levelIndex, elementRowsBySubSkillAndLeve
       cooldownMs: numberOrNull(row.coolDown) ?? 0,
       spCost: numberOrNull(row.spCost) ?? 0,
     },
-    elementValues: elementRows.map((elementRow) => ({
+    elementValues: elementRows.map(elementRow => ({
       rowId: Number(elementRow.id),
       elementId: Number(elementRow.elementId),
       valueParam: elementRow.valueParam ?? '',
@@ -865,28 +1797,47 @@ function compactSkillLogicRow(row) {
 }
 
 function summarizeSkillLogicIndex(items) {
-  const subSkills = items.flatMap((item) => item.subSkills);
-  const levels = items.flatMap((item) => item.levels);
-  const elementValueRows = levels.reduce((sum, level) => sum + level.elementValues.length, 0);
+  const subSkills = items.flatMap(item => item.subSkills);
+  const levels = items.flatMap(item => item.levels);
+  const elementValueRows = levels.reduce(
+    (sum, level) => sum + level.elementValues.length,
+    0
+  );
   return {
-    mappedSkills: items.filter((item) => item.status === 'mapped').length,
-    missingSkills: items.filter((item) => item.status === 'missing').length,
-    mismatchedSkills: items.filter((item) => item.status === 'mismatch').length,
+    mappedSkills: items.filter(item => item.status === 'mapped').length,
+    missingSkills: items.filter(item => item.status === 'missing').length,
+    mismatchedSkills: items.filter(item => item.status === 'mismatch').length,
     subSkillIds: subSkills.length,
-    missingLogicRows: subSkills.filter((subSkill) => subSkill.status === 'missing').length,
-    displayLogicMismatchSubSkills: subSkills.filter((subSkill) => !subSkill.displayMatchesLogic).length,
+    missingLogicRows: subSkills.filter(
+      subSkill => subSkill.status === 'missing'
+    ).length,
+    displayLogicMismatchSubSkills: subSkills.filter(
+      subSkill => !subSkill.displayMatchesLogic
+    ).length,
     levelRows: levels.length,
     elementValueRows,
-    levelsMissingElementValues: levels.filter((level) => level.elementValues.length === 0).length,
-    logicRowsWithNonZeroTiming: subSkills.filter((subSkill) => hasNonZeroLogicTiming(subSkill.logic)).length,
+    levelsMissingElementValues: levels.filter(
+      level => level.elementValues.length === 0
+    ).length,
+    logicRowsWithNonZeroTiming: subSkills.filter(subSkill =>
+      hasNonZeroLogicTiming(subSkill.logic)
+    ).length,
   };
 }
 
 function statusFromSkillLogicDiagnostics(diagnostics) {
-  if (diagnostics.some((diagnostic) => diagnostic.code === 'skill-logic-row-missing')) {
+  if (
+    diagnostics.some(
+      diagnostic => diagnostic.code === 'skill-logic-row-missing'
+    )
+  ) {
     return 'missing';
   }
-  if (diagnostics.some((diagnostic) => diagnostic.code === 'skill-display-logic-timing-mismatch')) {
+  if (
+    diagnostics.some(
+      diagnostic => diagnostic.code === 'skill-display-logic-timing-mismatch'
+    )
+  ) {
     return 'mismatch';
   }
   return 'mapped';
@@ -906,28 +1857,32 @@ function hasNonZeroLogicTiming(logic) {
     logic.selfCooldownMs,
     logic.publicCooldownMs,
     logic.gcdMs,
-  ].some((value) => Number(value) !== 0);
+  ].some(value => Number(value) !== 0);
 }
 
 function uniqueDisplayTimingPairs(rows) {
-  const pairs = rows.map((row) => ({
+  const pairs = rows.map(row => ({
     cooldownMs: numberOrNull(row.coolDown) ?? 0,
     spCost: numberOrNull(row.spCost) ?? 0,
   }));
-  return uniqueByKey(pairs, (pair) => `${pair.cooldownMs}:${pair.spCost}`);
+  return uniqueByKey(pairs, pair => `${pair.cooldownMs}:${pair.spCost}`);
 }
 
 function uniqueNumbers(values) {
-  return [...new Set(values.map((value) => Number(value)).filter(Number.isFinite))].sort((left, right) => left - right);
+  return [
+    ...new Set(values.map(value => Number(value)).filter(Number.isFinite)),
+  ].sort((left, right) => left - right);
 }
 
 function uniqueStrings(values) {
-  return [...new Set(values.map((value) => String(value)).filter(Boolean))].sort();
+  return [
+    ...new Set(values.map(value => String(value)).filter(Boolean)),
+  ].sort();
 }
 
 function uniqueByKey(items, createKey) {
   const seen = new Set();
-  return items.filter((item) => {
+  return items.filter(item => {
     const key = createKey(item);
     if (seen.has(key)) {
       return false;
@@ -953,7 +1908,9 @@ function groupRowsByNumberKey(rows, key) {
 
 async function loadHeroModules(heroModulesDir) {
   const names = await fs.readdir(heroModulesDir);
-  const jsonNames = names.filter((name) => /^\d+\.hero-module\.local\.json$/.test(name)).sort();
+  const jsonNames = names
+    .filter(name => /^\d+\.hero-module\.local\.json$/.test(name))
+    .sort();
   const modules = [];
 
   for (const name of jsonNames) {
@@ -974,7 +1931,7 @@ async function loadHeroModules(heroModulesDir) {
 
 function mapElements(elementSystem) {
   return elementSystem.elements
-    .map((element) => ({
+    .map(element => ({
       id: Number(element.id),
       name: element.name,
       abbrName: element.abbrName,
@@ -991,7 +1948,12 @@ function mapElements(elementSystem) {
     .sort(compareById);
 }
 
-function mapCharactersAndSkills(heroModules, attributeInfoById, unitProperties, templateValues) {
+function mapCharactersAndSkills(
+  heroModules,
+  attributeInfoById,
+  unitProperties,
+  templateValues
+) {
   const characters = [];
   const skills = [];
 
@@ -1028,7 +1990,7 @@ function mapCharactersAndSkills(heroModules, attributeInfoById, unitProperties, 
         id: numberOrNull(hero.weaponType?.id),
         name: hero.weaponType?.typeName ?? null,
       },
-      battleTags: (hero.battleTag ?? []).map((tag) => ({
+      battleTags: (hero.battleTag ?? []).map(tag => ({
         id: Number(tag.id),
         title: tag.title,
         description: cleanMarkup(tag.desc),
@@ -1036,14 +1998,19 @@ function mapCharactersAndSkills(heroModules, attributeInfoById, unitProperties, 
       })),
       cost: numberOrNull(hero.cost),
       unitId: numberOrNull(hero.unitId),
-      property: mapProperty(hero.propertyId, attributeInfoById, unitProperties, templateValues),
+      property: mapProperty(
+        hero.propertyId,
+        attributeInfoById,
+        unitProperties,
+        templateValues
+      ),
       icons: {
         avatar: firstString(hero.avatarTexture),
         all: normalizeStringArray(hero.avatarTexture),
       },
       description: cleanMarkup(hero.dec),
       skillIds: Object.values(hero.skillSystem ?? {})
-        .map((skill) => Number(skill.id))
+        .map(skill => Number(skill.id))
         .filter(Boolean),
       skillSlots,
       skillAssetPaths: parseAssetPathList(hero.skillBytesPath),
@@ -1097,10 +2064,16 @@ function mapCharactersAndSkills(heroModules, attributeInfoById, unitProperties, 
   };
 }
 
-function mapEnemies(enemyTable, enemyLang, attributeInfoById, unitProperties, templateValues) {
+function mapEnemies(
+  enemyTable,
+  enemyLang,
+  attributeInfoById,
+  unitProperties,
+  templateValues
+) {
   return enemyTable.rows
-    .filter((enemy) => enemy.isUsable === 1)
-    .map((enemy) => ({
+    .filter(enemy => enemy.isUsable === 1)
+    .map(enemy => ({
       id: Number(enemy.id),
       name: enemyLang.get(String(enemy.name))?.value ?? String(enemy.name),
       description: cleanMarkup(enemyLang.get(String(enemy.desc))?.value ?? ''),
@@ -1109,9 +2082,21 @@ function mapEnemies(enemyTable, enemyLang, attributeInfoById, unitProperties, te
       elementIds: parseNumberList(enemy.element),
       hpBarType: numberOrNull(enemy.hpBarType),
       hpBarWeakness: Boolean(enemy.hpBarWeakness),
-      property: mapProperty(enemy.propertyId, attributeInfoById, unitProperties, templateValues),
-      worldProperty: mapProperty(enemy.worldPropertyId, attributeInfoById, unitProperties, templateValues),
-      skillIds: parseSkillSlotList(enemy.skillList, 'enemy').map((item) => item.skillId),
+      property: mapProperty(
+        enemy.propertyId,
+        attributeInfoById,
+        unitProperties,
+        templateValues
+      ),
+      worldProperty: mapProperty(
+        enemy.worldPropertyId,
+        attributeInfoById,
+        unitProperties,
+        templateValues
+      ),
+      skillIds: parseSkillSlotList(enemy.skillList, 'enemy').map(
+        item => item.skillId
+      ),
       passiveSkillIds: parseNumberList(enemy.passiveSkillList),
       skillAssetPaths: parseAssetPathList(enemy.skillBytesPath),
       icon: assetFileName(enemy.avatarTexture),
@@ -1126,7 +2111,7 @@ function mapEnemies(enemyTable, enemyLang, attributeInfoById, unitProperties, te
 
 function mapKibos(kiboForms) {
   return kiboForms.forms
-    .map((form) => {
+    .map(form => {
       const fields = fieldsToMap(form.main?.fields);
       return {
         id: numberOrNull(fields.get('id') ?? form.main?.localId),
@@ -1140,11 +2125,11 @@ function mapKibos(kiboForms) {
         drops: splitTextList(fields.get('掉落素材')),
         description: cleanMarkup(fields.get('描述')),
         traits: [1, 2, 3]
-          .map((index) => ({
+          .map(index => ({
             name: fields.get(`特性${index}`) ?? '',
             description: cleanMarkup(fields.get(`特性${index}描述`)),
           }))
-          .filter((trait) => trait.name || trait.description),
+          .filter(trait => trait.name || trait.description),
         skills: [
           mapFormSkill(fields, '固定技能'),
           mapFormSkill(fields, '技能1'),
@@ -1163,7 +2148,7 @@ function mapKibos(kiboForms) {
 
 function mapEquipment(equipmentForms) {
   return equipmentForms.forms
-    .map((form) => {
+    .map(form => {
       const fields = fieldsToMap(form.main?.fields);
       return {
         id: numberOrNull(fields.get('id') ?? form.main?.localId),
@@ -1184,7 +2169,7 @@ function mapEquipment(equipmentForms) {
 
 function mapSoulessences(soulessenceForms) {
   return soulessenceForms.forms
-    .map((form) => {
+    .map(form => {
       const fields = fieldsToMap(form.main?.fields);
       return {
         id: numberOrNull(fields.get('id') ?? form.main?.localId),
@@ -1213,8 +2198,8 @@ function mapSoulessences(soulessenceForms) {
 async function mapMediaIndex(mediaRoot) {
   const files = await listFiles(mediaRoot);
   const imageFiles = files
-    .filter((filePath) => /\.(png|jpe?g|webp|gif)$/i.test(filePath))
-    .map((filePath) => {
+    .filter(filePath => /\.(png|jpe?g|webp|gif)$/i.test(filePath))
+    .map(filePath => {
       const relativePath = normalizePath(path.relative(mediaRoot, filePath));
       return {
         fileName: path.basename(filePath),
@@ -1223,7 +2208,9 @@ async function mapMediaIndex(mediaRoot) {
     })
     .sort((a, b) => a.relativePath.localeCompare(b.relativePath, 'zh-CN'));
 
-  const duplicateFileNames = findDuplicateNames(imageFiles.map((item) => item.fileName));
+  const duplicateFileNames = findDuplicateNames(
+    imageFiles.map(item => item.fileName)
+  );
 
   return {
     schemaVersion: 1,
@@ -1254,34 +2241,54 @@ async function listFiles(root) {
 
 function buildValidationReport(data) {
   const missingEnemyPropertyIds = data.enemies
-    .filter((enemy) => !enemy.property.exists)
-    .map((enemy) => enemy.id);
+    .filter(enemy => !enemy.property.exists)
+    .map(enemy => enemy.id);
   const missingWorldEnemyPropertyIds = data.enemies
-    .filter((enemy) => enemy.worldProperty.id && !enemy.worldProperty.exists)
-    .map((enemy) => enemy.id);
+    .filter(enemy => enemy.worldProperty.id && !enemy.worldProperty.exists)
+    .map(enemy => enemy.id);
   const missingCharacterPropertyIds = data.characters
-    .filter((character) => !character.property.exists)
-    .map((character) => character.id);
-  const skillTimingMissingCount = data.skills.filter((skill) => skill.needsTimingData).length;
-  const skillNoLevelValues = data.skills.filter((skill) => skill.level.values.length === 0).map((skill) => skill.id);
+    .filter(character => !character.property.exists)
+    .map(character => character.id);
+  const skillTimingMissingCount = data.skills.filter(
+    skill => skill.needsTimingData
+  ).length;
+  const skillNoLevelValues = data.skills
+    .filter(skill => skill.level.values.length === 0)
+    .map(skill => skill.id);
   const skillLevelCrossCheckSummary = data.skillLevelCrossCheck?.summary ?? {};
   const skillLevelCrossCheckMissingCount =
-    (skillLevelCrossCheckSummary.missingSkills ?? 0) + (skillLevelCrossCheckSummary.missingLevels ?? 0);
+    (skillLevelCrossCheckSummary.missingSkills ?? 0) +
+    (skillLevelCrossCheckSummary.missingLevels ?? 0);
   const skillLevelCrossCheckMismatchCount =
-    (skillLevelCrossCheckSummary.mismatchedSkills ?? 0) + (skillLevelCrossCheckSummary.mismatchedLevels ?? 0);
+    (skillLevelCrossCheckSummary.mismatchedSkills ?? 0) +
+    (skillLevelCrossCheckSummary.mismatchedLevels ?? 0);
   const skillLogicSummary = data.skillLogicIndex?.summary ?? {};
   const valueParamSummary = data.valueParamIndex?.summary ?? {};
-  const nonAzPrPlaceholderNames = ['云堇', '钟离', '甘雨', '雷电将军', '温迪', '可莉'];
+  const characterAttributePanelSummary =
+    data.characterAttributePanels?.summary ?? {};
+  const missingCharacterAttributePanelCount = Math.max(
+    0,
+    data.characters.length - (characterAttributePanelSummary.characters ?? 0)
+  );
+  const nonAzPrPlaceholderNames = [
+    '云堇',
+    '钟离',
+    '甘雨',
+    '雷电将军',
+    '温迪',
+    '可莉',
+  ];
   const placeholderCharacters = data.characters
-    .filter((character) => nonAzPrPlaceholderNames.includes(character.name))
-    .map((character) => character.name);
+    .filter(character => nonAzPrPlaceholderNames.includes(character.name))
+    .map(character => character.name);
 
   const warnings = [
     {
       code: 'skill-timing-missing',
       severity: 'info',
       count: skillTimingMissingCount,
-      message: '技能命中帧、动作时长和取消窗口尚未从 asset 或运行时捕获获得，已统一标记 needsTimingData。',
+      message:
+        '技能命中帧、动作时长和取消窗口尚未从 asset 或运行时捕获获得，已统一标记 needsTimingData。',
     },
     {
       code: 'enemy-property-missing',
@@ -1323,36 +2330,55 @@ function buildValidationReport(data) {
       severity: skillLevelCrossCheckMismatchCount > 0 ? 'warning' : 'ok',
       count: skillLevelCrossCheckMismatchCount,
       summary: skillLevelCrossCheckSummary,
-      message: 'hero-module 聚合倍率与 NewTable/skill_level.json 还原结果存在差异。',
+      message:
+        'hero-module 聚合倍率与 NewTable/skill_level.json 还原结果存在差异。',
     },
     {
       code: 'skill-logic-row-missing',
-      severity: (skillLogicSummary.missingLogicRows ?? 0) > 0 ? 'warning' : 'ok',
+      severity:
+        (skillLogicSummary.missingLogicRows ?? 0) > 0 ? 'warning' : 'ok',
       count: skillLogicSummary.missingLogicRows ?? 0,
       summary: skillLogicSummary,
       message: 'skillsub_logic.json 中缺少当前角色技能引用的 subSkillId。',
     },
     {
       code: 'skill-display-logic-timing-mismatch',
-      severity: (skillLogicSummary.displayLogicMismatchSubSkills ?? 0) > 0 ? 'info' : 'ok',
+      severity:
+        (skillLogicSummary.displayLogicMismatchSubSkills ?? 0) > 0
+          ? 'info'
+          : 'ok',
       count: skillLogicSummary.displayLogicMismatchSubSkills ?? 0,
       summary: skillLogicSummary,
-      message: 'skill_level 显示层 coolDown/spCost 与 skillsub_logic 逻辑层 coolDown/spCost 不一致，排轴应优先区分字段来源。',
+      message:
+        'skill_level 显示层 coolDown/spCost 与 skillsub_logic 逻辑层 coolDown/spCost 不一致，排轴应优先区分字段来源。',
     },
     {
       code: 'skill-element-value-row-missing',
-      severity: (skillLogicSummary.levelsMissingElementValues ?? 0) > 0 ? 'info' : 'ok',
+      severity:
+        (skillLogicSummary.levelsMissingElementValues ?? 0) > 0 ? 'info' : 'ok',
       count: skillLogicSummary.levelsMissingElementValues ?? 0,
       summary: skillLogicSummary,
-      message: '部分技能等级没有 skillsub_ele_value 数值参数行，可能是被动、纯逻辑或无需倍率参数的技能。',
+      message:
+        '部分技能等级没有 skillsub_ele_value 数值参数行，可能是被动、纯逻辑或无需倍率参数的技能。',
     },
     {
       code: 'skill-value-param-semantic-unresolved',
-      severity: (valueParamSummary.unresolvedParameterIds?.length ?? 0) > 0 ? 'info' : 'ok',
+      severity:
+        (valueParamSummary.unresolvedParameterIds?.length ?? 0) > 0
+          ? 'info'
+          : 'ok',
       count: valueParamSummary.unresolvedParameterIds?.length ?? 0,
       ids: valueParamSummary.unresolvedParameterIds ?? [],
       summary: valueParamSummary,
-      message: 'valueParam 参数 ID 已建立公式槽位统计，但战斗语义仍未确认，不能直接写入伤害公式。',
+      message:
+        'valueParam 参数 ID 已建立公式槽位统计，但战斗语义仍未确认，不能直接写入伤害公式。',
+    },
+    {
+      code: 'character-attribute-panel-missing',
+      severity: missingCharacterAttributePanelCount > 0 ? 'warning' : 'ok',
+      count: missingCharacterAttributePanelCount,
+      summary: characterAttributePanelSummary,
+      message: '角色当前数值面板快照缺失，后续倍率转伤害前必须补齐。',
     },
     {
       code: 'non-azpr-placeholder-character',
@@ -1387,22 +2413,35 @@ function buildValidationReport(data) {
       skillLevelCrossCheck: data.skillLevelCrossCheck?.count ?? 0,
       skillLogicIndex: data.skillLogicIndex?.count ?? 0,
       valueParamIndex: data.valueParamIndex?.summary?.parameterIds ?? 0,
+      characterAttributePanels:
+        data.characterAttributePanels?.summary?.characters ?? 0,
     },
     warnings,
   };
 }
 
-function mapProperty(propertyId, attributeInfoById, unitProperties, templateValues) {
+function mapProperty(
+  propertyId,
+  attributeInfoById,
+  unitProperties,
+  templateValues
+) {
   const id = numberOrNull(propertyId);
   const unitProperty = id == null ? null : unitProperties.get(id);
   const baseAttributeId = unitProperty?.baseAttributeId ?? null;
-  const templateValue = baseAttributeId == null ? null : templateValues.get(Number(baseAttributeId));
+  const templateValue =
+    baseAttributeId == null
+      ? null
+      : templateValues.get(Number(baseAttributeId));
 
   return {
     id,
     exists: Boolean(unitProperty),
     baseAttributeId: numberOrNull(baseAttributeId),
-    baseAttributes: parseBaseAttributes(templateValue?.baseAttribute, attributeInfoById),
+    baseAttributes: parseBaseAttributes(
+      templateValue?.baseAttribute,
+      attributeInfoById
+    ),
   };
 }
 
@@ -1413,7 +2452,7 @@ function parseBaseAttributes(raw, attributeInfoById) {
 
   return String(raw)
     .split('|')
-    .map((pair) => {
+    .map(pair => {
       const [idText, valueText] = pair.split('#');
       const id = Number(idText);
       const info = attributeInfoById.get(id);
@@ -1425,7 +2464,7 @@ function parseBaseAttributes(raw, attributeInfoById) {
         isRatio: Boolean(info?.isRatio),
       };
     })
-    .filter((item) => Number.isFinite(item.id) && Number.isFinite(item.value));
+    .filter(item => Number.isFinite(item.id) && Number.isFinite(item.value));
 }
 
 function mapInlineElement(element) {
@@ -1443,7 +2482,7 @@ function mapInlineElement(element) {
 }
 
 function mapRestraint(restraint = []) {
-  return restraint.map((item) => ({
+  return restraint.map(item => ({
     targetId: Number(item.targetId),
     value: Number(item.value),
     percent: Number(item.percent),
@@ -1461,11 +2500,11 @@ function mapFormSkill(fields, prefix) {
     icon: fields.get(`${prefix}图`) ?? '',
     element: fields.get(`${prefix}元素`) ?? '',
     descriptionsByLevel: [1, 2, 3, 4, 5]
-      .map((level) => ({
+      .map(level => ({
         level,
         description: cleanMarkup(fields.get(`${prefix}描述${level}`)),
       }))
-      .filter((item) => item.description),
+      .filter(item => item.description),
     needsTimingData: true,
     timingSource: 'missing-skill-asset-or-runtime-capture',
   };
@@ -1484,7 +2523,15 @@ function mapIndexedAttributes(fields, prefix) {
 }
 
 function mapNamedStats(fields, prefix) {
-  const names = ['基础生命', '基础攻击', '基础物理防御', '基础魔法防御', '治疗加成', '攻击', '生命'];
+  const names = [
+    '基础生命',
+    '基础攻击',
+    '基础物理防御',
+    '基础魔法防御',
+    '治疗加成',
+    '攻击',
+    '生命',
+  ];
   const stats = {};
   for (const name of names) {
     const value = fields.get(`${prefix}${name}`);
@@ -1496,7 +2543,7 @@ function mapNamedStats(fields, prefix) {
 }
 
 function fieldsToMap(fields = []) {
-  return new Map(fields.map((field) => [field.name, field.value]));
+  return new Map(fields.map(field => [field.name, field.value]));
 }
 
 function splitPipe(raw) {
@@ -1505,7 +2552,7 @@ function splitPipe(raw) {
   }
   return String(raw)
     .split('|')
-    .map((item) => item.trim())
+    .map(item => item.trim())
     .filter(Boolean);
 }
 
@@ -1523,15 +2570,17 @@ function parseSkillSlotList(raw, group) {
 
   return String(raw)
     .split('|')
-    .map((item) => {
-      const [slotText, skillText] = item.includes('#') ? item.split('#') : [null, item];
+    .map(item => {
+      const [slotText, skillText] = item.includes('#')
+        ? item.split('#')
+        : [null, item];
       return {
         group,
         slot: slotText == null ? null : numberOrNull(slotText),
         skillId: numberOrNull(skillText),
       };
     })
-    .filter((item) => item.skillId != null);
+    .filter(item => item.skillId != null);
 }
 
 function parseNumberList(raw) {
@@ -1541,9 +2590,11 @@ function parseNumberList(raw) {
 
   return String(raw)
     .split('|')
-    .flatMap((part) => part.split(','))
-    .map((value) => numberOrNull(value.includes('#') ? value.split('#').at(-1) : value))
-    .filter((value) => value != null);
+    .flatMap(part => part.split(','))
+    .map(value =>
+      numberOrNull(value.includes('#') ? value.split('#').at(-1) : value)
+    )
+    .filter(value => value != null);
 }
 
 function parseAssetPathList(raw) {
@@ -1553,8 +2604,8 @@ function parseAssetPathList(raw) {
 
   return String(raw)
     .split('|')
-    .flatMap((group) => group.split(','))
-    .map((item) => item.trim())
+    .flatMap(group => group.split(','))
+    .map(item => item.trim())
     .filter(Boolean);
 }
 
@@ -1565,7 +2616,7 @@ function splitTextList(raw) {
 
   return String(raw)
     .split(/[、,，|]/)
-    .map((item) => item.trim())
+    .map(item => item.trim())
     .filter(Boolean);
 }
 
@@ -1575,7 +2626,7 @@ function normalizeArray(value) {
 
 function normalizeStringArray(value) {
   if (Array.isArray(value)) {
-    return value.map((item) => String(item)).filter(Boolean);
+    return value.map(item => String(item)).filter(Boolean);
   }
   return value ? [String(value)] : [];
 }
@@ -1650,5 +2701,7 @@ function compareById(a, b) {
 }
 
 function compareByCharacterThenId(a, b) {
-  return Number(a.characterId) - Number(b.characterId) || Number(a.id) - Number(b.id);
+  return (
+    Number(a.characterId) - Number(b.characterId) || Number(a.id) - Number(b.id)
+  );
 }

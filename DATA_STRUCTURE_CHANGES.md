@@ -1124,3 +1124,124 @@ Workbench 技能逻辑来源区现在会展示当前参数语义状态：
 - `variable` 是基于 `element_formula.functionOutput` 中 A/G 等变量命名约定的槽位推断，不等同于已确认的战斗语义。
 - `semanticStatus: "unresolved"` 是本阶段的安全默认值；后续只有找到 `elementId -> 公式/效果节点` 的证据后才能升级。
 - 当前仍不能把参数 `1` 或 `7` 直接写入真实伤害公式。
+
+## 25. 2026-07-07 角色当前数值面板补充
+
+阶段 5-7 新增角色当前面板快照，先固定“技能倍率要乘哪个角色面板值”。
+
+### 25.1 新增生成文件
+
+`src/data/generated/character-attribute-panels.json`：
+
+```javascript
+{
+  "sourceKind": "azpr-role-attribute-current-rank-panel",
+  "source": {
+    "referenceWorkbook": "C:/PC2/Codex/AzPr/BWiki/generated/spreadsheets/role-attribute-dynamic-current-rank.xlsx"
+  },
+  "policy": {
+    "level": 80,
+    "currentRank": 7,
+    "currentRankRunes": "all-selected",
+    "rankBonusIncludedThrough": 6
+  },
+  "summary": {
+    "characters": 20,
+    "attributesPerCharacter": 29,
+    "panelRows": 580
+  }
+}
+```
+
+单角色条目包含：
+
+- `core.attack`、`core.maxHp`、`core.physicalDefense`、`core.magicalDefense`、`core.tuningStrength`、`core.critRate`、`core.critDamage`、`core.damageAmplification`、`core.damageReduction`。
+- `attributes[]`：完整 29 项展示属性，保留 `levelBase`、`starBase`、`fixedAdd`、`percentAddRaw`、`formulaRaw`、`fixedPanelValue`、`percentBonusValue`、`panelTotalValue`、`effectiveValue`、`displayText`。
+
+`manifest.json` 新增：
+
+```javascript
+{
+  "files": {
+    "characterAttributePanels": "character-attribute-panels.json"
+  },
+  "counts": {
+    "characterAttributePanels": 20
+  }
+}
+```
+
+`validation-report.json` 新增：
+
+- `character-attribute-panel-missing`：正常时 `severity: "ok"`、`count: 0`。
+
+### 25.2 Workbench seed 压缩面板
+
+`workbench-seed.json.gameData.characters[].attributePanel` 只保留 UI 和当前 raw 投影需要的核心字段：
+
+```javascript
+{
+  "level": 80,
+  "currentRank": 7,
+  "currentRankRunes": "all-selected",
+  "rankBonusIncludedThrough": 6,
+  "core": {
+    "attack": {
+      "name": "攻击",
+      "effectiveValue": 1920,
+      "displayText": "1920"
+    }
+  }
+}
+```
+
+完整字段以 `character-attribute-panels.json` 为准，不在 seed 中重复展开。
+
+### 25.3 Project / Actor / Simulation 字段
+
+`createActorFromCharacter()` 新增：
+
+```javascript
+{
+  "attributePanel": character.attributePanel ?? null
+}
+```
+
+`compileActor().stats` 现在优先读取 `actor.attributePanel.core`：
+
+```javascript
+{
+  "attack": 1920,
+  "maxHp": 10748,
+  "source": "character-attribute-panel-current-rank"
+}
+```
+
+`damageTimeline[]` 新增：
+
+```javascript
+{
+  "attack": 1920,
+  "attackSource": "character-attribute-panel-current-rank"
+}
+```
+
+当前 raw 投影公式版本改为：
+
+```javascript
+"stage5-current-panel-attack-multiplier-v1"
+```
+
+### 25.4 Workbench 展示
+
+`PropertiesPanel` 新增“角色数值面板”派生展示：
+
+- 来源：当前动作归属 actor 的 `attributePanel`。
+- 展示：攻击、生命、物防、魔防、调谐、暴击率、暴击伤害、伤害增幅等核心属性。
+- 不写入 `workbench-draft`。
+
+### 25.5 当前边界
+
+- 本阶段只解决角色面板值来源，不代表最终伤害公式完成。
+- 当前排行口径固定为 80 级、临阶 7、当前阶星赐全选；后续配装/练度编辑需要新 schema。
+- 防御、抗性、暴击、增伤、减伤、buff、装备、奇波、灵子仍需后续分层接入。

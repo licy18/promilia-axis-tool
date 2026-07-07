@@ -43,7 +43,7 @@ export function createProject({
     actions,
     resources: [],
     buffs: [],
-    loadouts: actors.map((actor) => actor.loadout).filter(Boolean),
+    loadouts: actors.map(actor => actor.loadout).filter(Boolean),
     metadata: {
       createdAt: now,
       updatedAt: now,
@@ -69,6 +69,7 @@ export function createActorFromCharacter(character, options = {}) {
     role: character.position?.name ?? null,
     propertyId: character.property?.id ?? null,
     baseAttributes: character.property?.baseAttributes ?? [],
+    attributePanel: character.attributePanel ?? null,
     skillLevels: options.skillLevels ?? {},
     loadout: createLoadout({
       actorId,
@@ -287,13 +288,19 @@ export function validateProject(project, gameData = {}) {
       issue(
         'project.schemaVersion.unsupported',
         `Project schemaVersion must be ${PROJECT_SCHEMA_VERSION}`,
-        '$.schemaVersion',
-      ),
+        '$.schemaVersion'
+      )
     );
   }
 
   if (project.game !== 'azur-promilia') {
-    errors.push(issue('project.game.invalid', 'Project game must be azur-promilia', '$.game'));
+    errors.push(
+      issue(
+        'project.game.invalid',
+        'Project game must be azur-promilia',
+        '$.game'
+      )
+    );
   }
 
   validateTime(project.time, errors);
@@ -311,48 +318,98 @@ export function validateProject(project, gameData = {}) {
 
 function validateTime(time, errors) {
   if (!isObject(time)) {
-    errors.push(issue('project.time.missing', 'Project time block is required', '$.time'));
+    errors.push(
+      issue('project.time.missing', 'Project time block is required', '$.time')
+    );
     return;
   }
 
   if (time.unit !== PROJECT_TIME_UNIT) {
-    errors.push(issue('project.time.unit.invalid', 'Project time.unit must be ms', '$.time.unit'));
+    errors.push(
+      issue(
+        'project.time.unit.invalid',
+        'Project time.unit must be ms',
+        '$.time.unit'
+      )
+    );
   }
 
   if (!isPositiveNumber(time.durationMs)) {
     errors.push(
-      issue('project.time.duration.invalid', 'Project durationMs must be a positive number', '$.time.durationMs'),
+      issue(
+        'project.time.duration.invalid',
+        'Project durationMs must be a positive number',
+        '$.time.durationMs'
+      )
     );
   }
 
   if (!isPositiveNumber(time.fps)) {
-    errors.push(issue('project.time.fps.invalid', 'Project fps must be a positive number', '$.time.fps'));
+    errors.push(
+      issue(
+        'project.time.fps.invalid',
+        'Project fps must be a positive number',
+        '$.time.fps'
+      )
+    );
   }
 }
 
 function validateActors(actors, gameData, errors, warnings) {
   if (!Array.isArray(actors) || actors.length === 0) {
-    errors.push(issue('actors.missing', 'Project must include at least one actor', '$.actors'));
+    errors.push(
+      issue(
+        'actors.missing',
+        'Project must include at least one actor',
+        '$.actors'
+      )
+    );
     return;
   }
 
   const characters = gameData.characters ?? [];
-  const characterIds = new Set(characters.map((character) => Number(character.id)));
+  const characterIds = new Set(
+    characters.map(character => Number(character.id))
+  );
 
   actors.forEach((actor, index) => {
     const path = `$.actors[${index}]`;
     if (!actor.id) {
-      errors.push(issue('actor.id.missing', 'Actor id is required', `${path}.id`));
-    }
-    if (!actor.characterId) {
-      errors.push(issue('actor.characterId.missing', 'Actor characterId is required', `${path}.characterId`));
-    } else if (characters.length > 0 && !characterIds.has(Number(actor.characterId))) {
       errors.push(
-        issue('actor.characterId.unknown', `Unknown characterId ${actor.characterId}`, `${path}.characterId`),
+        issue('actor.id.missing', 'Actor id is required', `${path}.id`)
       );
     }
-    if (!Array.isArray(actor.baseAttributes) || actor.baseAttributes.length === 0) {
-      warnings.push(issue('actor.attributes.empty', 'Actor has no base attributes', `${path}.baseAttributes`));
+    if (!actor.characterId) {
+      errors.push(
+        issue(
+          'actor.characterId.missing',
+          'Actor characterId is required',
+          `${path}.characterId`
+        )
+      );
+    } else if (
+      characters.length > 0 &&
+      !characterIds.has(Number(actor.characterId))
+    ) {
+      errors.push(
+        issue(
+          'actor.characterId.unknown',
+          `Unknown characterId ${actor.characterId}`,
+          `${path}.characterId`
+        )
+      );
+    }
+    if (
+      !Array.isArray(actor.baseAttributes) ||
+      actor.baseAttributes.length === 0
+    ) {
+      warnings.push(
+        issue(
+          'actor.attributes.empty',
+          'Actor has no base attributes',
+          `${path}.baseAttributes`
+        )
+      );
     }
   });
 }
@@ -364,104 +421,247 @@ function validateEnemy(enemy, gameData, errors, warnings) {
   }
 
   const enemies = gameData.enemies ?? [];
-  const enemyIds = new Set(enemies.map((item) => Number(item.id)));
+  const enemyIds = new Set(enemies.map(item => Number(item.id)));
 
   if (!enemy.id) {
-    errors.push(issue('enemy.id.missing', 'Enemy instance id is required', '$.enemy.id'));
+    errors.push(
+      issue('enemy.id.missing', 'Enemy instance id is required', '$.enemy.id')
+    );
   }
   if (!enemy.enemyId) {
-    errors.push(issue('enemy.enemyId.missing', 'Enemy enemyId is required', '$.enemy.enemyId'));
+    errors.push(
+      issue(
+        'enemy.enemyId.missing',
+        'Enemy enemyId is required',
+        '$.enemy.enemyId'
+      )
+    );
   } else if (enemies.length > 0 && !enemyIds.has(Number(enemy.enemyId))) {
-    errors.push(issue('enemy.enemyId.unknown', `Unknown enemyId ${enemy.enemyId}`, '$.enemy.enemyId'));
+    errors.push(
+      issue(
+        'enemy.enemyId.unknown',
+        `Unknown enemyId ${enemy.enemyId}`,
+        '$.enemy.enemyId'
+      )
+    );
   }
-  if (!Array.isArray(enemy.baseAttributes) || enemy.baseAttributes.length === 0) {
-    warnings.push(issue('enemy.attributes.empty', 'Enemy has no base attributes', '$.enemy.baseAttributes'));
+  if (
+    !Array.isArray(enemy.baseAttributes) ||
+    enemy.baseAttributes.length === 0
+  ) {
+    warnings.push(
+      issue(
+        'enemy.attributes.empty',
+        'Enemy has no base attributes',
+        '$.enemy.baseAttributes'
+      )
+    );
   }
 }
 
 function validateActions(actions, project, gameData, errors, warnings) {
   if (!Array.isArray(actions)) {
-    errors.push(issue('actions.invalid', 'Project actions must be an array', '$.actions'));
+    errors.push(
+      issue('actions.invalid', 'Project actions must be an array', '$.actions')
+    );
     return;
   }
 
   validateUniqueIds(actions, '$.actions', errors);
 
-  const actorIds = new Set((project.actors ?? []).map((actor) => actor.id));
+  const actorIds = new Set((project.actors ?? []).map(actor => actor.id));
   const enemyIds = new Set(project.enemy?.id ? [project.enemy.id] : []);
   const skills = gameData.skills ?? [];
-  const skillIds = new Set(skills.map((skill) => Number(skill.id)));
+  const skillIds = new Set(skills.map(skill => Number(skill.id)));
 
   actions.forEach((action, index) => {
     const path = `$.actions[${index}]`;
     if (!Object.values(ACTION_TYPES).includes(action.type)) {
-      errors.push(issue('action.type.invalid', `Unsupported action type ${action.type}`, `${path}.type`));
+      errors.push(
+        issue(
+          'action.type.invalid',
+          `Unsupported action type ${action.type}`,
+          `${path}.type`
+        )
+      );
     }
     if (!Number.isFinite(action.startMs) || action.startMs < 0) {
-      errors.push(issue('action.startMs.invalid', 'Action startMs must be a non-negative number', `${path}.startMs`));
+      errors.push(
+        issue(
+          'action.startMs.invalid',
+          'Action startMs must be a non-negative number',
+          `${path}.startMs`
+        )
+      );
     }
-    if (project.time?.durationMs != null && action.startMs > project.time.durationMs) {
-      errors.push(issue('action.startMs.outOfRange', 'Action starts after project duration', `${path}.startMs`));
+    if (
+      project.time?.durationMs != null &&
+      action.startMs > project.time.durationMs
+    ) {
+      errors.push(
+        issue(
+          'action.startMs.outOfRange',
+          'Action starts after project duration',
+          `${path}.startMs`
+        )
+      );
     }
 
     if (action.type === ACTION_TYPES.SKILL) {
       if (!actorIds.has(action.actorId)) {
-        errors.push(issue('action.actorId.unknown', `Unknown actorId ${action.actorId}`, `${path}.actorId`));
+        errors.push(
+          issue(
+            'action.actorId.unknown',
+            `Unknown actorId ${action.actorId}`,
+            `${path}.actorId`
+          )
+        );
       }
       if (action.targetId && !enemyIds.has(action.targetId)) {
-        errors.push(issue('action.targetId.unknown', `Unknown targetId ${action.targetId}`, `${path}.targetId`));
+        errors.push(
+          issue(
+            'action.targetId.unknown',
+            `Unknown targetId ${action.targetId}`,
+            `${path}.targetId`
+          )
+        );
       }
       if (!action.skillId) {
-        errors.push(issue('action.skillId.missing', 'Skill action requires skillId', `${path}.skillId`));
+        errors.push(
+          issue(
+            'action.skillId.missing',
+            'Skill action requires skillId',
+            `${path}.skillId`
+          )
+        );
       } else if (skills.length > 0 && !skillIds.has(Number(action.skillId))) {
-        errors.push(issue('action.skillId.unknown', `Unknown skillId ${action.skillId}`, `${path}.skillId`));
+        errors.push(
+          issue(
+            'action.skillId.unknown',
+            `Unknown skillId ${action.skillId}`,
+            `${path}.skillId`
+          )
+        );
       }
       if (action.timing?.needsTimingData) {
         warnings.push(
-          issue('action.timing.missing', 'Skill action still needs authoritative timing data', `${path}.timing`),
+          issue(
+            'action.timing.missing',
+            'Skill action still needs authoritative timing data',
+            `${path}.timing`
+          )
         );
       }
     } else if (action.type === ACTION_TYPES.SWITCH) {
       if (!actorIds.has(action.actorId)) {
-        errors.push(issue('action.actorId.unknown', `Unknown actorId ${action.actorId}`, `${path}.actorId`));
+        errors.push(
+          issue(
+            'action.actorId.unknown',
+            `Unknown actorId ${action.actorId}`,
+            `${path}.actorId`
+          )
+        );
       }
       if (!actorIds.has(action.targetActorId)) {
         errors.push(
-          issue('action.targetActorId.unknown', `Unknown targetActorId ${action.targetActorId}`, `${path}.targetActorId`),
+          issue(
+            'action.targetActorId.unknown',
+            `Unknown targetActorId ${action.targetActorId}`,
+            `${path}.targetActorId`
+          )
         );
       }
       if (!Number.isFinite(action.durationMs) || action.durationMs <= 0) {
         errors.push(
-          issue('action.durationMs.invalid', 'Switch action durationMs must be positive', `${path}.durationMs`),
+          issue(
+            'action.durationMs.invalid',
+            'Switch action durationMs must be positive',
+            `${path}.durationMs`
+          )
         );
       }
     } else if (action.type === ACTION_TYPES.WAIT) {
       if (!Number.isFinite(action.durationMs) || action.durationMs <= 0) {
-        errors.push(issue('action.durationMs.invalid', 'Wait action durationMs must be positive', `${path}.durationMs`));
+        errors.push(
+          issue(
+            'action.durationMs.invalid',
+            'Wait action durationMs must be positive',
+            `${path}.durationMs`
+          )
+        );
       }
-    } else if (action.type === ACTION_TYPES.ANNOTATION && typeof action.note !== 'string') {
-      errors.push(issue('action.note.invalid', 'Annotation action note must be a string', `${path}.note`));
+    } else if (
+      action.type === ACTION_TYPES.ANNOTATION &&
+      typeof action.note !== 'string'
+    ) {
+      errors.push(
+        issue(
+          'action.note.invalid',
+          'Annotation action note must be a string',
+          `${path}.note`
+        )
+      );
     } else if (action.type === ACTION_TYPES.RESOURCE) {
       if (action.actorId && !actorIds.has(action.actorId)) {
-        errors.push(issue('action.actorId.unknown', `Unknown actorId ${action.actorId}`, `${path}.actorId`));
+        errors.push(
+          issue(
+            'action.actorId.unknown',
+            `Unknown actorId ${action.actorId}`,
+            `${path}.actorId`
+          )
+        );
       }
-      if (typeof action.resource !== 'string' || action.resource.trim() === '') {
-        errors.push(issue('action.resource.invalid', 'Resource action resource must be a non-empty string', `${path}.resource`));
+      if (
+        typeof action.resource !== 'string' ||
+        action.resource.trim() === ''
+      ) {
+        errors.push(
+          issue(
+            'action.resource.invalid',
+            'Resource action resource must be a non-empty string',
+            `${path}.resource`
+          )
+        );
       }
       if (!Number.isFinite(action.change)) {
-        errors.push(issue('action.change.invalid', 'Resource action change must be a finite number', `${path}.change`));
+        errors.push(
+          issue(
+            'action.change.invalid',
+            'Resource action change must be a finite number',
+            `${path}.change`
+          )
+        );
       }
       if (typeof action.reason !== 'string') {
-        errors.push(issue('action.reason.invalid', 'Resource action reason must be a string', `${path}.reason`));
+        errors.push(
+          issue(
+            'action.reason.invalid',
+            'Resource action reason must be a string',
+            `${path}.reason`
+          )
+        );
       }
     } else if (action.type === ACTION_TYPES.ENEMY_EVENT) {
-      if (typeof action.eventType !== 'string' || action.eventType.trim() === '') {
+      if (
+        typeof action.eventType !== 'string' ||
+        action.eventType.trim() === ''
+      ) {
         errors.push(
-          issue('action.eventType.invalid', 'Enemy event action eventType must be a non-empty string', `${path}.eventType`),
+          issue(
+            'action.eventType.invalid',
+            'Enemy event action eventType must be a non-empty string',
+            `${path}.eventType`
+          )
         );
       }
       if (typeof action.note !== 'string') {
-        errors.push(issue('action.note.invalid', 'Enemy event action note must be a string', `${path}.note`));
+        errors.push(
+          issue(
+            'action.note.invalid',
+            'Enemy event action note must be a string',
+            `${path}.note`
+          )
+        );
       }
     }
   });
@@ -478,7 +678,9 @@ function validateUniqueIds(items, path, errors) {
       return;
     }
     if (seen.has(item.id)) {
-      errors.push(issue('id.duplicate', `Duplicate id ${item.id}`, `${path}[${index}].id`));
+      errors.push(
+        issue('id.duplicate', `Duplicate id ${item.id}`, `${path}[${index}].id`)
+      );
     }
     seen.add(item.id);
   });

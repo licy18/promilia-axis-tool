@@ -222,7 +222,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-4，在 Workbench 展示技能逻辑来源和显示/逻辑差异。
 - 已完成：阶段 5-5，建立 `valueParam` 与倍率段的直接数值匹配诊断，确认当前不能把 `valueParam` 直接当作倍率公式来源。
 - 已完成：阶段 5-6，新增 `value-param-index.json` 参数 ID 词典雏形，当前参数 `1 -> A`、`7 -> G` 均为 `unresolved` 公式槽位。
-- 下一步：阶段 5-7，追踪 `skillsub_ele_value.elementId -> 技能 asset/公式/效果节点` 的来源映射，为真实伤害公式和命中段关联做准备。
+- 已完成：阶段 5-7，接入 `role-attribute-dynamic-current-rank.xlsx` 同源口径的角色当前数值面板，生成 `character-attribute-panels.json`，Workbench 展示当前 actor 面板，raw 投影改用当前面板攻击。
+- 下一步：阶段 5-8，建立真实伤害公式分层雏形，先接当前面板攻击、倍率段、敌人防御/抗性占位和诊断链；`elementId -> 技能 asset/公式/效果节点` 追踪顺延为后续补强。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 
