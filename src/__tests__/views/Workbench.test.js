@@ -143,6 +143,60 @@ describe('Workbench view', () => {
     expect(generatedActions[1].note).toContain('非真实命中帧');
   });
 
+  it('applies and restores segment split placement options', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    expect(wrapper.find('[data-testid="workbench-segment-split-interval-input"]').element.value).toBe('2000');
+    expect(wrapper.find('[data-testid="workbench-segment-split-start-after-checkbox"]').element.checked).toBe(false);
+    expect(wrapper.find('[data-testid="workbench-segment-split-skip-existing-checkbox"]').element.checked).toBe(false);
+
+    await wrapper.find('[data-testid="workbench-segment-split-interval-input"]').setValue('1500');
+    await wrapper.find('[data-testid="workbench-segment-split-start-after-checkbox"]').setValue(true);
+    await wrapper.find('[data-testid="workbench-segment-split-skip-existing-checkbox"]').setValue(true);
+    await findActionLibrarySkillSplitButton(wrapper, workbenchSeed.defaults.skillId).trigger('click');
+
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('4 action');
+    expect(wrapper.find('[data-testid="scenario-hit-count"]').text()).toBe('4');
+    expect(wrapper.find('[data-testid="workbench-insert-delay-count"]').text()).toBe('0');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(savedDraft.segmentSplitOptions).toEqual({
+      intervalMs: 1500,
+      startAfterSelectedAction: true,
+      skipExistingSegments: true,
+    });
+    expect(savedDraft.actionDrafts.map((action) => action.damageSegmentIndex)).toEqual([0, 1, 2, 3]);
+    expect(savedDraft.actionDrafts.map((action) => action.startMs)).toEqual([0, 1000, 2500, 4000]);
+
+    wrapper.unmount();
+    const restored = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await nextTick();
+
+    expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe('已恢复草稿');
+    expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe('4 action');
+    expect(restored.find('[data-testid="workbench-segment-split-interval-input"]').element.value).toBe('1500');
+    expect(restored.find('[data-testid="workbench-segment-split-start-after-checkbox"]').element.checked).toBe(true);
+    expect(restored.find('[data-testid="workbench-segment-split-skip-existing-checkbox"]').element.checked).toBe(true);
+    expect(restored.find('[data-testid="workbench-start-input"]').element.value).toBe('4000');
+  });
+
   it('rebuilds the workbench project when the selected character changes', async () => {
     const wrapper = mount(Workbench, {
       global: {

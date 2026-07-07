@@ -39,6 +39,7 @@
         :actions="scenario.actions"
         :skills="actionLibrarySkills"
         :selected-action-id="selectedActionId"
+        :segment-split-options="segmentSplitOptions"
         @select-action="selectAction"
         @add-action="addAction"
         @add-skill-action="addSkillAction"
@@ -51,6 +52,7 @@
         @copy-action="copyAction"
         @delete-action="deleteAction"
         @update-active-actor="setActionLibraryCharacterId"
+        @update-segment-split-options="updateSegmentSplitOptions"
       />
 
       <TimelineGridPreview
@@ -139,6 +141,7 @@ import {
   clearWorkbenchDraft,
   createDefaultWorkbenchDraftState,
   loadWorkbenchDraft,
+  normalizeWorkbenchSegmentSplitOptions,
   saveWorkbenchDraft,
 } from '../domain/workbenchDraftStorage';
 import { compileProject } from '../simulation/compiler/compileProject';
@@ -151,6 +154,7 @@ const AUTO_DELAY_NOTE_PATTERN = /^自动推迟：同轨已有动作占用，已�
 const initialDraft = createDefaultWorkbenchDraftState();
 const selection = ref({ ...initialDraft.selection });
 const enemyConfig = ref({ ...initialDraft.enemyConfig });
+const segmentSplitOptions = ref({ ...initialDraft.segmentSplitOptions });
 const actionDrafts = ref([...initialDraft.actionDrafts]);
 const selectedActionId = ref(initialDraft.selectedActionId);
 const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
@@ -288,6 +292,14 @@ function updateEnemyConfig(patch) {
   markDraftDirty();
 }
 
+function updateSegmentSplitOptions(patch) {
+  segmentSplitOptions.value = normalizeWorkbenchSegmentSplitOptions({
+    ...segmentSplitOptions.value,
+    ...patch,
+  });
+  markDraftDirty();
+}
+
 function updateActionTime({ actionId, startMs }) {
   selectedActionId.value = actionId;
   actionDrafts.value = actionDrafts.value.map((action) => {
@@ -393,22 +405,44 @@ function addSkillSegmentActions(skillId) {
   const actorCharacterId = Number(actionLibraryActor.value?.characterId ?? selectedDraft.value.actorCharacterId);
   const skill = resolveContextSkill(actorCharacterId, skillId);
   const level = resolveSkillInsertLevel(actorCharacterId, skill);
-  const segments = getSkillDamageSegments(skill, level);
+  const options = normalizeWorkbenchSegmentSplitOptions(segmentSplitOptions.value);
+  const segments = getSkillDamageSegments(skill, level).filter((segment) => {
+    if (!options.skipExistingSegments) {
+      return true;
+    }
+    return !hasExistingSkillSegmentAction({
+      actorCharacterId,
+      skillId: skill.id,
+      level,
+      damageSegmentIndex: segment.index,
+    });
+  });
 
-  if (segments.length <= 1) {
-    addSkillAction(skill.id);
+  if (segments.length === 0) {
     return;
   }
 
-  segments.forEach((segment) => {
-    addInsertedAction({
-      id: createNextActionId(),
-      skillId: skill.id,
-      actorCharacterId,
-      level,
-      damageSegmentIndex: segment.index,
-      note: `倍率段拆分：${segment.label} / ${segment.rawValue}；非真实命中帧。`,
-    });
+  const baseStartMs = resolveSegmentSplitBaseStartMs(options);
+  let previousResolvedStartMs = null;
+  segments.forEach((segment, index) => {
+    const requestedStartMs =
+      previousResolvedStartMs == null
+        ? baseStartMs
+        : Math.max(baseStartMs + index * options.intervalMs, previousResolvedStartMs + options.intervalMs);
+    const result = addInsertedAction(
+      {
+        id: createNextActionId(),
+        skillId: skill.id,
+        actorCharacterId,
+        level,
+        damageSegmentIndex: segment.index,
+        note: `倍率段拆分：${segment.label} / ${segment.rawValue}；非真实命中帧。`,
+      },
+      {
+        requestedStartMs,
+      },
+    );
+    previousResolvedStartMs = result?.placement?.startMs ?? requestedStartMs;
   });
 }
 
@@ -527,6 +561,7 @@ function saveDraft() {
   const snapshot = saveWorkbenchDraft(getLocalStorage(), {
     selection: selection.value,
     enemyConfig: enemyConfig.value,
+    segmentSplitOptions: segmentSplitOptions.value,
     actionDrafts: actionDrafts.value,
     selectedActionId: selectedActionId.value,
   });
@@ -542,6 +577,7 @@ function resetDraft() {
 function applyDraftState(draft) {
   selection.value = { ...draft.selection };
   enemyConfig.value = normalizeWorkbenchEnemyConfig(draft.enemyConfig);
+  segmentSplitOptions.value = normalizeWorkbenchSegmentSplitOptions(draft.segmentSplitOptions);
   actionDrafts.value = normalizeWorkbenchActionDrafts(draft.actionDrafts, selection.value);
   selectedActionId.value = draft.selectedActionId;
   syncActionLibraryCharacterIdFromDraft(actionDrafts.value.find((action) => action.id === draft.selectedActionId));
@@ -569,11 +605,11 @@ function createNextActionId() {
   return `action-${String(maxIndex + 1).padStart(4, '0')}`;
 }
 
-function addInsertedAction(actionPatch) {
+function addInsertedAction(actionPatch, options = {}) {
   const baseInsertIndex = resolveInsertIndex();
   const candidateAction = createWorkbenchActionDraft({
     ...actionPatch,
-    startMs: resolveInsertStartMs(baseInsertIndex),
+    startMs: options.requestedStartMs ?? resolveInsertStartMs(baseInsertIndex),
   });
   const placement = resolveInsertPlacement(candidateAction, baseInsertIndex);
   const nextAction = createWorkbenchActionDraft({
@@ -589,6 +625,32 @@ function addInsertedAction(actionPatch) {
   ];
   selectedActionId.value = nextAction.id;
   markDraftDirty();
+  return {
+    action: nextAction,
+    placement,
+  };
+}
+
+function resolveSegmentSplitBaseStartMs(options) {
+  if (!options.startAfterSelectedAction) {
+    return resolveInsertStartMs(resolveInsertIndex());
+  }
+
+  const action = selectedDraft.value;
+  const startMs = Math.max(0, Number(action?.startMs) || 0);
+  const durationMs = resolveDraftDurationMs(action ?? {});
+  return clampNumber(startMs + durationMs, 0, project.value.time.durationMs);
+}
+
+function hasExistingSkillSegmentAction({ actorCharacterId, skillId, level, damageSegmentIndex }) {
+  return actionDrafts.value.some(
+    (action) =>
+      action.type === ACTION_TYPES.SKILL &&
+      Number(action.actorCharacterId) === Number(actorCharacterId) &&
+      Number(action.skillId) === Number(skillId) &&
+      Number(action.level) === Number(level) &&
+      Number(action.damageSegmentIndex) === Number(damageSegmentIndex),
+  );
 }
 
 function resolveInsertPlacement(candidateAction, baseInsertIndex) {

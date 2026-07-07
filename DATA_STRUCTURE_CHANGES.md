@@ -331,3 +331,35 @@
 - 生成顺序来自当前等级表可解析倍率段顺序，不代表真实动画命中顺序一定可靠。
 - 生成时间仍来自现有插入策略和默认动作时长，不代表真实帧数据。
 - 后续若接入 `TimingProfile` 或运行时捕获，应优先在动作 timing 层补真实 hit frame，而不是把 `damageSegmentIndex` 升级成时序字段。
+
+## 11. 2026-07-07 Workbench 拆段生成配置补充
+
+Workbench 草稿新增可选 `segmentSplitOptions` 配置块，用于保存动作库“拆段”生成策略。
+
+### 11.1 字段说明
+
+```javascript
+{
+  "segmentSplitOptions": {
+    "intervalMs": 1500,
+    "startAfterSelectedAction": true,
+    "skipExistingSegments": true
+  }
+}
+```
+
+- `intervalMs`：批量生成多个倍率段动作时，相邻段请求起始时间的间隔。默认 `2000`，归一化范围为 `100-10000`。
+- `startAfterSelectedAction`：为 `true` 时，从当前选中动作的结束时间开始生成；为 `false` 时，继续从现有推荐插入点开始生成。
+- `skipExistingSegments`：为 `true` 时，跳过当前轴中已有的同角色、同技能、同等级、同 `damageSegmentIndex` 技能动作。
+
+### 11.2 兼容性
+
+- 该字段只存在于 `workbench-draft` 草稿层，不进入通用 `Project` action 数据模型。
+- 旧草稿缺少 `segmentSplitOptions` 时会自动使用默认配置，不需要迁移脚本。
+- 若某一段因同轨冲突被自动推迟，后续段会按上一段实际落点继续计算间隔；真实落点仍以动作自身 `startMs` 和可选 `insertion` 元信息为准。
+
+### 11.3 当前边界
+
+- `segmentSplitOptions` 只影响新生成动作，不会回写或重排已经存在的动作。
+- `intervalMs` 是编辑辅助间隔，不代表真实命中帧间隔。
+- `skipExistingSegments` 只按当前草稿动作字段匹配，不做语义去重或真实连段判定。

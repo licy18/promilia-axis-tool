@@ -58,6 +58,39 @@
       </button>
     </div>
 
+    <div class="segment-options">
+      <label>
+        <span>拆段间隔 ms</span>
+        <input
+          type="number"
+          min="100"
+          max="10000"
+          step="100"
+          data-testid="workbench-segment-split-interval-input"
+          :value="segmentSplitOptions.intervalMs"
+          @input="emitSegmentSplitOption('intervalMs', $event.target.value)"
+        />
+      </label>
+      <label class="checkbox-control">
+        <input
+          type="checkbox"
+          data-testid="workbench-segment-split-start-after-checkbox"
+          :checked="segmentSplitOptions.startAfterSelectedAction"
+          @change="emitSegmentSplitOption('startAfterSelectedAction', $event.target.checked)"
+        />
+        <span>从选中结束</span>
+      </label>
+      <label class="checkbox-control">
+        <input
+          type="checkbox"
+          data-testid="workbench-segment-split-skip-existing-checkbox"
+          :checked="segmentSplitOptions.skipExistingSegments"
+          @change="emitSegmentSplitOption('skipExistingSegments', $event.target.checked)"
+        />
+        <span>跳过已有段</span>
+      </label>
+    </div>
+
     <div class="actor-block">
       <span class="actor-name">{{ actor.name }}</span>
       <span class="actor-role">{{ actor.role || '角色轨' }}</span>
@@ -189,9 +222,17 @@ defineProps({
     type: String,
     required: true,
   },
+  segmentSplitOptions: {
+    type: Object,
+    default: () => ({
+      intervalMs: 2000,
+      startAfterSelectedAction: false,
+      skipExistingSegments: false,
+    }),
+  },
 });
 
-defineEmits([
+const emit = defineEmits([
   'select-action',
   'add-action',
   'add-skill-action',
@@ -204,6 +245,7 @@ defineEmits([
   'copy-action',
   'delete-action',
   'update-active-actor',
+  'update-segment-split-options',
 ]);
 
 function actionTypeLabel(type) {
@@ -285,6 +327,12 @@ function formatSkillSplitTitle(skill) {
   return count > 1 ? `按 ${count} 个倍率段生成动作` : '该技能只有一个可解析倍率段';
 }
 
+function emitSegmentSplitOption(key, value) {
+  emit('update-segment-split-options', {
+    [key]: key === 'intervalMs' ? Number(value) : Boolean(value),
+  });
+}
+
 function formatInsertionNote(insertion) {
   return `自动推迟 ${insertion.requestedStartMs}ms -> ${insertion.resolvedStartMs}ms`;
 }
@@ -339,6 +387,49 @@ h2 {
   gap: 8px;
   padding: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.segment-options {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.segment-options label {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.segment-options label span {
+  color: #8f9aa3;
+  font-size: 11px;
+}
+
+.segment-options input[type="number"] {
+  width: 100%;
+  min-width: 0;
+  padding: 7px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  background: #11161b;
+  color: #ffffff;
+  font: inherit;
+  font-size: 12px;
+}
+
+.segment-options .checkbox-control {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.segment-options input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: #79c7b9;
 }
 
 .actor-tabs {

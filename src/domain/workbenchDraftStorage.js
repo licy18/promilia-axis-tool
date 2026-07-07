@@ -10,11 +10,17 @@ import {
 
 export const WORKBENCH_DRAFT_SCHEMA_VERSION = 1;
 export const WORKBENCH_DRAFT_STORAGE_KEY = 'promilia-axis-tool:workbench-draft:v1';
+export const DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS = Object.freeze({
+  intervalMs: 2000,
+  startAfterSelectedAction: false,
+  skipExistingSegments: false,
+});
 
 export function createDefaultWorkbenchDraftState() {
   return {
     selection: { ...DEFAULT_WORKBENCH_SELECTION },
     enemyConfig: { ...DEFAULT_WORKBENCH_ENEMY_CONFIG },
+    segmentSplitOptions: { ...DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS },
     actionDrafts: [createWorkbenchActionDraft()],
     selectedActionId: DEFAULT_WORKBENCH_ACTION_ID,
     savedAt: null,
@@ -22,11 +28,12 @@ export function createDefaultWorkbenchDraftState() {
 }
 
 export function createWorkbenchDraftSnapshot(
-  { selection, enemyConfig, actionDrafts, selectedActionId },
+  { selection, enemyConfig, segmentSplitOptions, actionDrafts, selectedActionId },
   savedAt = new Date().toISOString(),
 ) {
   const normalizedSelection = normalizeWorkbenchSelection(selection);
   const normalizedEnemyConfig = normalizeWorkbenchEnemyConfig(enemyConfig);
+  const normalizedSegmentSplitOptions = normalizeWorkbenchSegmentSplitOptions(segmentSplitOptions);
   const normalizedActions = ensureActionDrafts(actionDrafts, normalizedSelection);
   const normalizedSelectedActionId = normalizedActions.some((action) => action.id === selectedActionId)
     ? selectedActionId
@@ -39,8 +46,25 @@ export function createWorkbenchDraftSnapshot(
     savedAt,
     selection: normalizedSelection,
     enemyConfig: normalizedEnemyConfig,
+    segmentSplitOptions: normalizedSegmentSplitOptions,
     actionDrafts: normalizedActions,
     selectedActionId: normalizedSelectedActionId,
+  };
+}
+
+export function normalizeWorkbenchSegmentSplitOptions(options = {}) {
+  const source = options ?? {};
+
+  return {
+    intervalMs: clampNumber(source.intervalMs, 100, 10000, DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS.intervalMs),
+    startAfterSelectedAction:
+      source.startAfterSelectedAction == null
+        ? DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS.startAfterSelectedAction
+        : Boolean(source.startAfterSelectedAction),
+    skipExistingSegments:
+      source.skipExistingSegments == null
+        ? DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS.skipExistingSegments
+        : Boolean(source.skipExistingSegments),
   };
 }
 
@@ -96,4 +120,12 @@ function ensureActionDrafts(actionDrafts, selection) {
       actorCharacterId: normalizedSelection.characterId,
     }),
   ];
+}
+
+function clampNumber(value, min, max, fallback) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return fallback;
+  }
+  return Math.min(max, Math.max(min, number));
 }
