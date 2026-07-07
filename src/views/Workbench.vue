@@ -145,6 +145,7 @@ import { simulateScenario } from '../simulation/engine/simulateScenario';
 const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
 const NEW_ACTION_INSERT_GAP_MS = 1000;
+const AUTO_DELAY_NOTE_PATTERN = /^自动推迟：同轨已有动作占用，已从 \d+ms 调整到 \d+ms。$/;
 const initialDraft = createDefaultWorkbenchDraftState();
 const selection = ref({ ...initialDraft.selection });
 const enemyConfig = ref({ ...initialDraft.enemyConfig });
@@ -243,7 +244,7 @@ function updateAction(patch) {
       return action;
     }
 
-    const normalizedPatch = normalizeActionPatch(action, patch);
+    const normalizedPatch = applyInsertionLifecyclePatch(action, normalizeActionPatch(action, patch));
     if (action.type !== ACTION_TYPES.SKILL) {
       return createWorkbenchActionDraft({
         ...action,
@@ -292,6 +293,7 @@ function updateActionTime({ actionId, startMs }) {
 
     return createWorkbenchActionDraft({
       ...action,
+      ...clearInsertionForManualEdit(action),
       startMs: clampNumber(startMs, 0, project.value.time.durationMs),
     });
   });
@@ -307,6 +309,7 @@ function updateActionDuration({ actionId, durationMs }) {
 
     return createWorkbenchActionDraft({
       ...action,
+      ...clearInsertionForManualEdit(action),
       durationMs: clampNumber(durationMs, 1, Math.max(1, project.value.time.durationMs - action.startMs)),
     });
   });
@@ -355,6 +358,7 @@ function updateActionLane({ actionId, laneId }) {
     return createWorkbenchActionDraft({
       ...action,
       ...patch,
+      ...clearInsertionForManualEdit(action),
     });
   });
 
@@ -460,6 +464,8 @@ function copyAction(actionId) {
     ...sourceAction,
     id: createNextActionId(),
     startMs: clampNumber(sourceAction.startMs + 1000, 0, project.value.time.durationMs),
+    note: stripAutoDelayNote(sourceAction.note),
+    insertion: null,
   });
   actionDrafts.value = [
     ...actionDrafts.value.slice(0, sourceIndex + 1),
@@ -671,6 +677,52 @@ function createInsertionNote(note, placement) {
 
   const message = `自动推迟：同轨已有动作占用，已从 ${placement.requestedStartMs}ms 调整到 ${placement.startMs}ms。`;
   return note ? `${note}\n${message}` : message;
+}
+
+function applyInsertionLifecyclePatch(action, patch) {
+  const nextPatch = { ...patch };
+  if (typeof nextPatch.note === 'string') {
+    nextPatch.note = stripAutoDelayNote(nextPatch.note);
+  }
+
+  if (!shouldClearInsertionForPatch(action, nextPatch)) {
+    return nextPatch;
+  }
+
+  nextPatch.insertion = null;
+  if (nextPatch.note == null) {
+    nextPatch.note = stripAutoDelayNote(action.note);
+  }
+  return nextPatch;
+}
+
+function shouldClearInsertionForPatch(action, patch) {
+  if (!action.insertion?.autoDelayed) {
+    return false;
+  }
+  return patch.startMs != null || patch.durationMs != null || patch.actorCharacterId != null;
+}
+
+function clearInsertionForManualEdit(action) {
+  if (!action.insertion?.autoDelayed) {
+    return {};
+  }
+  return {
+    insertion: null,
+    note: stripAutoDelayNote(action.note),
+  };
+}
+
+function stripAutoDelayNote(note) {
+  if (!note) {
+    return '';
+  }
+
+  return String(note)
+    .split(/\r?\n/)
+    .filter((line) => !AUTO_DELAY_NOTE_PATTERN.test(line.trim()))
+    .join('\n')
+    .trimEnd();
 }
 
 function createInsertionDiagnostics(actions) {

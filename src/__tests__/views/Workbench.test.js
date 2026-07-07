@@ -777,6 +777,141 @@ describe('Workbench view', () => {
     });
   });
 
+  it('cleans the auto-delay note line when the note is edited manually', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await createAutoDelayedPrimarySkillAction(wrapper);
+    expect(wrapper.find('[data-testid="workbench-insert-delay-count"]').text()).toBe('1');
+
+    await wrapper
+      .find('[data-testid="workbench-note-input"]')
+      .setValue('手写备注\n自动推迟：同轨已有动作占用，已从 2000ms 调整到 4000ms。');
+
+    expect(wrapper.find('[data-testid="workbench-note-input"]').element.value).toBe('手写备注');
+    expect(wrapper.find('[data-testid="workbench-insert-delay-count"]').text()).toBe('1');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(savedDraft.actionDrafts.find((action) => action.id === 'action-0003')).toMatchObject({
+      note: '手写备注',
+      insertion: {
+        autoDelayed: true,
+        requestedStartMs: 2000,
+        resolvedStartMs: 4000,
+      },
+    });
+  });
+
+  it('clears stale auto-delay metadata when the delayed start time is edited manually', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await createAutoDelayedPrimarySkillAction(wrapper);
+    expect(wrapper.find('[data-testid="workbench-insert-delay-count"]').text()).toBe('1');
+
+    await wrapper.find('[data-testid="workbench-start-input"]').setValue('4500');
+
+    expect(wrapper.find('[data-testid="workbench-start-input"]').element.value).toBe('4500');
+    expect(wrapper.find('[data-testid="workbench-note-input"]').element.value).not.toContain('自动推迟');
+    expect(wrapper.find('[data-testid="workbench-insert-delay-count"]').text()).toBe('0');
+    expect(wrapper.findAll('[data-testid="workbench-action-insert-delay-badge"]')).toHaveLength(0);
+    expect(wrapper.find('[data-testid="workbench-action-insert-delay-note"]').exists()).toBe(false);
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(savedDraft.actionDrafts.find((action) => action.id === 'action-0003')).toMatchObject({
+      startMs: 4500,
+      note: '',
+      insertion: null,
+    });
+  });
+
+  it('clears stale auto-delay metadata when the delayed duration is edited manually', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper.find('[data-testid="workbench-add-annotation-action"]').trigger('click');
+    await wrapper.find('.action-item[data-action-id="action-0001"]').trigger('click');
+    await wrapper.find('[data-testid="workbench-add-wait-action"]').trigger('click');
+
+    expect(wrapper.find('[data-testid="workbench-start-input"]').element.value).toBe('3600');
+    expect(wrapper.find('[data-testid="workbench-insert-delay-count"]').text()).toBe('1');
+
+    await wrapper.find('[data-testid="workbench-duration-input"]').setValue('1200');
+
+    expect(wrapper.find('[data-testid="workbench-duration-input"]').element.value).toBe('1200');
+    expect(wrapper.find('[data-testid="workbench-note-input"]').element.value).not.toContain('自动推迟');
+    expect(wrapper.find('[data-testid="workbench-insert-delay-count"]').text()).toBe('0');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(savedDraft.actionDrafts.find((action) => action.id === 'action-0003')).toMatchObject({
+      type: 'wait',
+      durationMs: 1200,
+      note: '等待窗口',
+      insertion: null,
+    });
+  });
+
+  it('clears stale auto-delay metadata when the delayed action is dragged to another lane', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await createAutoDelayedPrimarySkillAction(wrapper);
+    stubTimelineGeometry(wrapper);
+    expect(wrapper.find('[data-testid="workbench-insert-delay-count"]').text()).toBe('1');
+
+    await dragTimelineAction(wrapper, 'action-0003', {
+      fromY: 20,
+      toY: 110,
+    });
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-action"][data-action-id="action-0003"]')
+        .attributes('data-lane-id'),
+    ).toBe('actor-101003');
+    expect(wrapper.find('[data-testid="workbench-note-input"]').element.value).not.toContain('自动推迟');
+    expect(wrapper.find('[data-testid="workbench-insert-delay-count"]').text()).toBe('0');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(savedDraft.actionDrafts.find((action) => action.id === 'action-0003')).toMatchObject({
+      actorCharacterId: 101003,
+      note: '',
+      insertion: null,
+    });
+  });
+
   it('keeps generated action ids unique after deleting the first action', async () => {
     const wrapper = mount(Workbench, {
       global: {
@@ -1003,6 +1138,12 @@ async function dragTimelineAction(wrapper, actionId, { fromY, toY }) {
   await nextTick();
   window.dispatchEvent(new MouseEvent('pointerup', { clientX: 100, clientY: toY }));
   await nextTick();
+}
+
+async function createAutoDelayedPrimarySkillAction(wrapper) {
+  await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+  await wrapper.find('.action-item[data-action-id="action-0001"]').trigger('click');
+  await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
 }
 
 function findActionLibraryActorButton(wrapper, characterId) {

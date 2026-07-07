@@ -1229,6 +1229,42 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 保留用户手写备注，尽量只移除系统自动追加的推迟提示行。
 - 为手动改时间、改轨道、改备注后的保存结果补充测试。
 
+### 2026-07-07：阶段 4-20 自动推迟标记生命周期和手动编辑清理雏形落地
+
+本轮完成：
+
+- `Workbench.vue` 新增 `applyInsertionLifecyclePatch()`、`clearInsertionForManualEdit()` 和 `stripAutoDelayNote()`。
+- 当用户手动修改动作开始时间、持续时间或动作归属时，会清理旧 `insertion` 元信息，避免旧自动推迟提示继续显示。
+- 当用户通过时间轴拖动改变开始时间、拖拽持续时间或跨轨拖拽改变归属时，也会清理旧自动推迟标记。
+- 手动编辑备注时会移除系统自动追加的 `自动推迟：...` 行，但保留用户手写备注；如果只是改备注，结构化 `insertion` 仍保留，因为动作落点事实未改变。
+- 复制带自动推迟标记的动作时，会移除旧自动推迟备注行和 `insertion`，避免复制出的动作继承过期解释。
+- 新增工作台测试覆盖：
+  - 手动改备注只移除系统自动推迟行，保留用户备注和结构化插入事实。
+  - 手动改开始时间后，自动推迟计数、时间轴徽标、动作库提示和保存草稿中的 `insertion` 均清空。
+  - 手动改持续时间后，系统轨自动推迟提示被清空，并保留原本的用户/默认备注。
+  - 跨轨拖拽被自动推迟的技能动作后，旧 `insertion` 被清空，动作保存到新的 actor 轨道。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、35 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、79 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- `git diff --check`：通过；命令通道仍偶发 `Import-Clixml` / `InvalidOperation` 噪声，但主命令无 diff check 错误。
+- `http://127.0.0.1:5175/#/workbench` 本地页面服务返回 200。
+
+当前结论：
+
+- 自动推迟提示已经有最小生命周期，不会在用户手动改时间、改时长或改轨道后继续误导。
+- 自动推迟系统行和用户备注已经能区分处理，用户手写备注不会被粗暴清空。
+- 当前技能动作仍默认使用第一个伤害段，属性面板还不能选择具体倍率段；这会限制真实排轴对技能多段/派生段的表达。
+
+下一步：
+
+- 阶段 4-21 目标：建立技能伤害段/倍率段选择雏形。
+- 在技能动作属性面板展示当前技能解析出的 `damageSegments`，允许选择某一段作为本动作的伤害投影来源。
+- 将所选伤害段保存到 `actionDrafts`，并继续通过 `Project -> Scenario -> simulation` 影响 `selectedDamageSegment` 和伤害投影。
+- 明确该阶段只处理“倍率段选择”，不把描述解析出的段落当成真实命中帧或取消窗口。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
