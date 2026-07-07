@@ -3338,6 +3338,7 @@ async function buildSkillControlEvidenceItem(
     aggregate.behaviorChainsByLane,
     {
       sourceSkillId: Number(skill.id),
+      sourceSkill: skill,
       skillControlBySkillId,
       skillTableById,
       directStateTimingControls,
@@ -3642,6 +3643,9 @@ async function buildSkillStateTimingEvidence(behaviorChainsByLane, context) {
   const hpChains = behaviorChainsByLane?.hpDamage ?? [];
   const timingChains = behaviorChainsByLane?.timingControl ?? [];
   const hpStateWindows = summarizeHpStateWindows(hpChains);
+  const normalAttackDescriptionEvidence = buildNormalAttackDescriptionEvidence(
+    context?.sourceSkill
+  );
   const animationStateControls = uniqueByKey(
     [
       ...timingChains.flatMap(compactAnimationStateControls).filter(Boolean),
@@ -3662,10 +3666,11 @@ async function buildSkillStateTimingEvidence(behaviorChainsByLane, context) {
     eventBridgeControls,
   });
   const eventBridgeTargetSkillControlEvidence =
-    await buildEventBridgeTargetSkillControlEvidence(
-      eventBridgeControls,
-      context
-    );
+    await buildEventBridgeTargetSkillControlEvidence(eventBridgeControls, {
+      ...context,
+      hpStateWindows,
+      normalAttackDescriptionEvidence,
+    });
 
   return compactObject({
     status:
@@ -3697,6 +3702,7 @@ async function buildSkillStateTimingEvidence(behaviorChainsByLane, context) {
     animationStateControls: animationStateControls.slice(0, 8),
     eventBridgeControls: eventBridgeControls.slice(0, 8),
     eventBridgeTargetSkillControlEvidence,
+    normalAttackDescriptionEvidence,
     stateFindings,
     bindingStatus: 'state-timing-evidence-candidates-unconfirmed',
     applied: false,
@@ -3722,6 +3728,7 @@ async function buildEventBridgeTargetSkillControlEvidence(
       foundTargetSkillControlCount: 0,
       missingTargetSkillControlCount: 0,
       normalAttackChainCandidate: null,
+      normalAttackHitChainCandidate: null,
       targetSkillControls: [],
       applied: false,
     };
@@ -3783,6 +3790,13 @@ async function buildEventBridgeTargetSkillControlEvidence(
     .map(item => item.skillId);
   const normalAttackChainCandidate =
     buildNormalAttackChainCandidate(targetSkillControls);
+  const normalAttackHitChainCandidate = buildNormalAttackHitChainCandidate({
+    sourceSkillId: context?.sourceSkillId,
+    hpStateWindows: context?.hpStateWindows ?? [],
+    normalAttackDescriptionEvidence: context?.normalAttackDescriptionEvidence,
+    normalAttackChainCandidate,
+    targetSkillControls,
+  });
 
   return {
     status:
@@ -3810,6 +3824,7 @@ async function buildEventBridgeTargetSkillControlEvidence(
       )
     ),
     normalAttackChainCandidate,
+    normalAttackHitChainCandidate,
     targetSkillControls,
     applied: false,
   };
@@ -3899,7 +3914,10 @@ async function buildEventBridgeTargetSkillControlSummary(skillId, context) {
     ),
     eventBridgeControls: targetEvidence.eventBridgeControls.slice(0, 8),
     hpTimelineCandidateCount: targetEvidence.hpTimelineCandidates.length,
-    hpTimelineCandidates: targetEvidence.hpTimelineCandidates.slice(0, 8),
+    hpTimelineCandidates: targetEvidence.hpTimelineCandidates.slice(
+      0,
+      SKILL_EFFECT_LANE_SPECIFIC_SAMPLE_LIMIT
+    ),
     timingTimelineCandidateCount:
       targetEvidence.timingTimelineCandidates.length,
     timingTimelineCandidates: targetEvidence.timingTimelineCandidates.slice(
@@ -4140,6 +4158,298 @@ function buildNormalAttackChainCandidate(targetSkillControls) {
     ),
     applied: false,
   };
+}
+
+function buildNormalAttackHitChainCandidate({
+  sourceSkillId,
+  hpStateWindows,
+  normalAttackDescriptionEvidence,
+  normalAttackChainCandidate,
+  targetSkillControls,
+}) {
+  const expectedHitCount = numberOrNull(
+    normalAttackDescriptionEvidence?.expectedHitCount
+  );
+  const chainControls = targetSkillControls
+    .filter(
+      item =>
+        item.status === 'found' &&
+        item.relationToSourceSkill === 'child-skill-of-source'
+    )
+    .sort(compareNormalAttackChainControls);
+  const candidateHitGroups = [];
+  const sourceHitGroup = buildSourceNormalAttackHitGroup({
+    sourceSkillId,
+    hpStateWindows,
+  });
+
+  if (sourceHitGroup) {
+    candidateHitGroups.push(sourceHitGroup);
+  }
+
+  for (const [index, control] of chainControls.entries()) {
+    candidateHitGroups.push(
+      buildChildNormalAttackHitGroup({
+        control,
+        hitIndex: index + 2,
+      })
+    );
+  }
+
+  if (candidateHitGroups.length === 0) {
+    return null;
+  }
+
+  const coverageStatus =
+    expectedHitCount == null
+      ? 'description-hit-count-missing'
+      : candidateHitGroups.length === expectedHitCount
+        ? 'matches-description-hit-count'
+        : candidateHitGroups.length < expectedHitCount
+          ? 'partial-before-description-hit-count'
+          : 'exceeds-description-hit-count';
+
+  return {
+    status: 'normal-attack-hit-chain-candidates-found-unconfirmed',
+    sourceKind: 'azpr-normal-attack-hit-chain-candidate',
+    bindingStatus: 'normal-attack-hit-chain-candidates-unconfirmed',
+    expectedHitCount,
+    expectedHitCountSource: normalAttackDescriptionEvidence?.sourceKind ?? null,
+    descriptionSectionTitle:
+      normalAttackDescriptionEvidence?.sectionTitle ?? null,
+    candidateHitGroupCount: candidateHitGroups.length,
+    coverageStatus,
+    chainSkillIds: normalAttackChainCandidate?.chainSkillIds ?? [],
+    animationStateNames: uniqueStrings(
+      candidateHitGroups.flatMap(item => item.animationStateNames ?? [])
+    ),
+    hpTimelineCandidateCount: candidateHitGroups.reduce(
+      (sum, item) => sum + (numberOrNull(item.hpTimelineCandidateCount) ?? 0),
+      0
+    ),
+    hpTrackNames: uniqueStrings(
+      candidateHitGroups.flatMap(item => item.hpTrackNames ?? [])
+    ),
+    hitGroups: candidateHitGroups,
+    applied: false,
+  };
+}
+
+function compareNormalAttackChainControls(left, right) {
+  const depthDiff =
+    (numberOrNull(left.discoveryDepth) ?? Number.MAX_SAFE_INTEGER) -
+    (numberOrNull(right.discoveryDepth) ?? Number.MAX_SAFE_INTEGER);
+  if (depthDiff !== 0) {
+    return depthDiff;
+  }
+  return Number(left.skillId) - Number(right.skillId);
+}
+
+function buildSourceNormalAttackHitGroup({ sourceSkillId, hpStateWindows }) {
+  const directWindows = hpStateWindows
+    .filter(item => (item.stateNames ?? []).includes('Skill0_1'))
+    .sort(compareTimelineCandidates);
+  const fallbackWindows = hpStateWindows
+    .filter(item => {
+      const text = `${item.sourceName ?? ''} ${item.sourceTrackName ?? ''}`;
+      return /普通|普攻/.test(text);
+    })
+    .sort(compareTimelineCandidates);
+  const windows = directWindows.length > 0 ? directWindows : fallbackWindows;
+
+  if (windows.length === 0) {
+    return null;
+  }
+
+  return compactObject({
+    hitIndex: 1,
+    label: '普通攻击 1段',
+    candidateSource: 'source-skill-control-hp-state-window',
+    skillId: numberOrNull(sourceSkillId),
+    discoveryDepth: 0,
+    animationStateNames: uniqueStrings(
+      windows.flatMap(item => item.stateNames ?? [])
+    ),
+    hpTimelineCandidateCount: windows.length,
+    candidateCountStatus: 'complete-sample',
+    hpFrameStartFrames: uniqueNumbers(
+      windows.map(item => item.sourceStartFrame)
+    ),
+    hpTrackNames: uniqueStrings(
+      windows.map(item => item.sourceTrackName ?? item.sourceName)
+    ),
+    subSkillIds: uniqueNumbers(windows.flatMap(item => item.subSkillIds ?? [])),
+    hitEffects: uniqueStrings(windows.flatMap(item => item.hitEffects ?? [])),
+    hpTimelineCandidates: windows.map(compactHpStateWindowCandidate),
+    confidence: 'medium',
+    bindingStatus: 'normal-attack-hit-candidate-unconfirmed',
+    applied: false,
+  });
+}
+
+function buildChildNormalAttackHitGroup({ control, hitIndex }) {
+  const hpTimelineCandidates = (control.hpTimelineCandidates ?? [])
+    .slice()
+    .sort(compareTimelineCandidates);
+  const candidateCount = numberOrNull(control.hpTimelineCandidateCount) ?? 0;
+
+  return compactObject({
+    hitIndex,
+    label: `普通攻击 ${hitIndex}段`,
+    candidateSource: 'event-bridge-child-skill-control-hp-timeline',
+    skillId: numberOrNull(control.skillId),
+    discoveryDepth: numberOrNull(control.discoveryDepth),
+    discoveredFromSkillId: numberOrNull(control.discoveredFromSkillId),
+    animationStateNames: control.animationStateNames ?? [],
+    hpTimelineCandidateCount: candidateCount,
+    candidateCountStatus:
+      candidateCount === hpTimelineCandidates.length
+        ? 'complete-sample'
+        : 'sampled-candidates',
+    hpFrameStartFrames: uniqueNumbers(
+      hpTimelineCandidates.map(item => item.startFrame)
+    ),
+    hpTrackNames: uniqueStrings(
+      hpTimelineCandidates.map(item => item.trackName ?? item.name)
+    ),
+    hpTimelineCandidates: hpTimelineCandidates.map(compactHpTimelineCandidate),
+    confidence: 'medium',
+    bindingStatus: 'normal-attack-hit-candidate-unconfirmed',
+    applied: false,
+  });
+}
+
+function compactHpStateWindowCandidate(item) {
+  return compactObject({
+    name: item.sourceName ?? null,
+    trackName: item.sourceTrackName ?? item.sourceName ?? null,
+    startFrame: numberOrNull(item.sourceStartFrame),
+    endFrame: numberOrNull(item.sourceEndFrame),
+    stateNames: item.stateNames ?? [],
+    subSkillIds: item.subSkillIds ?? [],
+    hitEffects: item.hitEffects ?? [],
+  });
+}
+
+function compactHpTimelineCandidate(item) {
+  return compactObject({
+    name: item.name ?? null,
+    trackName: item.trackName ?? null,
+    startFrame: numberOrNull(item.startFrame),
+    endFrame: numberOrNull(item.endFrame),
+  });
+}
+
+function compareTimelineCandidates(left, right) {
+  const startDiff =
+    (numberOrNull(left.sourceStartFrame ?? left.startFrame) ??
+      Number.MAX_SAFE_INTEGER) -
+    (numberOrNull(right.sourceStartFrame ?? right.startFrame) ??
+      Number.MAX_SAFE_INTEGER);
+  if (startDiff !== 0) {
+    return startDiff;
+  }
+  return String(
+    left.sourceName ?? left.name ?? left.trackName ?? ''
+  ).localeCompare(
+    String(right.sourceName ?? right.name ?? right.trackName ?? '')
+  );
+}
+
+function buildNormalAttackDescriptionEvidence(skill) {
+  const description = String(
+    skill?.description?.plain ?? skill?.description?.raw ?? ''
+  );
+  const section = findDescriptionSection(description, /普通攻击|普攻/);
+  const expectedHitCount = parseNormalAttackHitCount(section?.text ?? '');
+
+  if (!section && expectedHitCount == null) {
+    return null;
+  }
+
+  return compactObject({
+    status: expectedHitCount
+      ? 'normal-attack-hit-count-found'
+      : 'normal-attack-hit-count-missing',
+    sourceKind: 'azpr-skill-description-normal-attack-hit-count',
+    sectionTitle: section?.title ?? null,
+    expectedHitCount,
+    sourceField: 'skill.description.plain',
+    applied: false,
+  });
+}
+
+function findDescriptionSection(description, titlePattern) {
+  const pattern = /【([^】]+)】([\s\S]*?)(?=【[^】]+】|$)/g;
+  let match = pattern.exec(description);
+
+  while (match) {
+    if (titlePattern.test(match[1])) {
+      return {
+        title: match[1].trim(),
+        text: match[2].trim(),
+      };
+    }
+    match = pattern.exec(description);
+  }
+
+  return null;
+}
+
+function parseNormalAttackHitCount(text = '') {
+  const source = String(text);
+  const patterns = [
+    /至多([一二两三四五六七八九十\d]+)段的?普通攻击/,
+    /进行([一二两三四五六七八九十\d]+)段的?普通攻击/,
+    /普通攻击[^。；;]*?([一二两三四五六七八九十\d]+)段/,
+  ];
+
+  for (const pattern of patterns) {
+    const match = source.match(pattern);
+    const number = parseChinesePositiveInteger(match?.[1]);
+    if (number) {
+      return number;
+    }
+  }
+
+  return null;
+}
+
+function parseChinesePositiveInteger(value) {
+  if (value == null || value === '') {
+    return null;
+  }
+  const text = String(value).trim();
+  if (/^\d+$/.test(text)) {
+    const number = Number(text);
+    return Number.isFinite(number) && number > 0 ? number : null;
+  }
+
+  const digits = {
+    一: 1,
+    二: 2,
+    两: 2,
+    三: 3,
+    四: 4,
+    五: 5,
+    六: 6,
+    七: 7,
+    八: 8,
+    九: 9,
+  };
+
+  if (text === '十') {
+    return 10;
+  }
+  if (text.includes('十')) {
+    const [tensText, onesText] = text.split('十');
+    const tens = tensText ? digits[tensText] : 1;
+    const ones = onesText ? digits[onesText] : 0;
+    const number = tens * 10 + ones;
+    return Number.isFinite(number) && number > 0 ? number : null;
+  }
+
+  return digits[text] ?? null;
 }
 
 function createStateTimingControlKey(item) {

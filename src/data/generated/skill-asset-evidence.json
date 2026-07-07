@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-07T18:06:46.609Z",
+  "generatedAt": "2026-07-07T18:16:39.879Z",
   "sourceKind": "azpr-skill-asset-evidence-index",
   "source": {
     "sourceRoot": "C:/PC2/Codex/AzPr",
@@ -1180,7 +1180,7 @@
   },
   "damageElementFieldMappingEvidence": {
     "schemaVersion": 1,
-    "generatedAt": "2026-07-07T18:06:46.609Z",
+    "generatedAt": "2026-07-07T18:16:39.879Z",
     "sourceKind": "azpr-damage-element-field-mapping-evidence",
     "status": "damage-element-field-candidates-found",
     "source": {
@@ -7416,7 +7416,15 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-missing",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -7527,6 +7535,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -7638,6 +7647,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -7749,6 +7759,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -7858,6 +7869,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -7967,6 +7979,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -8078,7 +8091,16 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-found",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "expectedHitCount": 4,
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -8189,6 +8211,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -8300,6 +8323,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -8411,6 +8435,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -8520,6 +8545,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -8627,6 +8653,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -8738,7 +8765,15 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-missing",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -8849,6 +8884,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -8960,6 +8996,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -9071,6 +9108,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -9178,6 +9216,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -9297,7 +9336,16 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-found",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "expectedHitCount": 5,
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -9408,6 +9456,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -9519,6 +9568,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -9630,6 +9680,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -9739,6 +9790,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -9846,6 +9898,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -9957,7 +10010,16 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-found",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "expectedHitCount": 3,
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -10068,6 +10130,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -10179,6 +10242,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -10290,6 +10354,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -10397,6 +10462,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -10504,6 +10570,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -10615,7 +10682,16 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-found",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "expectedHitCount": 3,
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -10726,6 +10802,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -10837,6 +10914,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -10948,6 +11026,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -11059,6 +11138,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -11170,6 +11250,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -11281,7 +11362,15 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-missing",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -11392,6 +11481,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -11503,6 +11593,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -11614,6 +11705,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -11721,6 +11813,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -11840,7 +11933,16 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-found",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "expectedHitCount": 4,
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -11951,6 +12053,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -12062,6 +12165,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -12173,6 +12277,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -12282,6 +12387,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -12389,6 +12495,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -12500,7 +12607,16 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-found",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "expectedHitCount": 5,
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -12611,6 +12727,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -12722,6 +12839,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -12833,6 +12951,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -12942,6 +13061,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -13053,6 +13173,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -13164,7 +13285,16 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-found",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "expectedHitCount": 3,
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -13275,6 +13405,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -13386,6 +13517,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -13497,6 +13629,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -13606,6 +13739,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -13713,6 +13847,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -13824,7 +13959,16 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-found",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "expectedHitCount": 3,
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -13935,6 +14079,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -14046,6 +14191,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -14157,6 +14303,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -14266,6 +14413,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -14373,6 +14521,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -14484,7 +14633,16 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-found",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "expectedHitCount": 3,
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -14595,6 +14753,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -14706,6 +14865,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -14817,6 +14977,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -14926,6 +15087,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -19394,6 +19556,408 @@
             ],
             "applied": false
           },
+          "normalAttackHitChainCandidate": {
+            "status": "normal-attack-hit-chain-candidates-found-unconfirmed",
+            "sourceKind": "azpr-normal-attack-hit-chain-candidate",
+            "bindingStatus": "normal-attack-hit-chain-candidates-unconfirmed",
+            "expectedHitCount": 5,
+            "expectedHitCountSource": "azpr-skill-description-normal-attack-hit-count",
+            "descriptionSectionTitle": "普通攻击",
+            "candidateHitGroupCount": 5,
+            "coverageStatus": "matches-description-hit-count",
+            "chainSkillIds": [
+              10900102,
+              10900103,
+              10900104,
+              10900105
+            ],
+            "animationStateNames": [
+              "Skill0_1",
+              "Skill0_2",
+              "Skill0_3",
+              "Skill0_4",
+              "Skill0_5"
+            ],
+            "hpTimelineCandidateCount": 32,
+            "hpTrackNames": [
+              "上挑hit-攻击框",
+              "左转圈hit -攻击框",
+              "攻击碰撞1",
+              "无属性-攻击碰撞2",
+              "普攻-攻击碰撞",
+              "普通-攻击碰撞",
+              "最后1hit-攻击碰撞",
+              "最后大hit-攻击框"
+            ],
+            "hitGroups": [
+              {
+                "hitIndex": 1,
+                "label": "普通攻击 1段",
+                "candidateSource": "source-skill-control-hp-state-window",
+                "skillId": 10900101,
+                "discoveryDepth": 0,
+                "animationStateNames": [
+                  "Skill0_1"
+                ],
+                "hpTimelineCandidateCount": 2,
+                "candidateCountStatus": "complete-sample",
+                "hpFrameStartFrames": [
+                  12,
+                  13
+                ],
+                "hpTrackNames": [
+                  "普通-攻击碰撞"
+                ],
+                "subSkillIds": [
+                  10900101
+                ],
+                "hitEffects": [
+                  "11_109001_116"
+                ],
+                "hpTimelineCandidates": [
+                  {
+                    "name": "普通-攻击碰撞",
+                    "trackName": "普通-攻击碰撞",
+                    "startFrame": 12,
+                    "endFrame": 13,
+                    "stateNames": [
+                      "Skill0_1"
+                    ],
+                    "subSkillIds": [
+                      10900101
+                    ],
+                    "hitEffects": [
+                      "11_109001_116"
+                    ]
+                  },
+                  {
+                    "name": "普通-攻击碰撞",
+                    "trackName": "普通-攻击碰撞",
+                    "startFrame": 13,
+                    "endFrame": 14,
+                    "stateNames": [
+                      "Skill0_1"
+                    ],
+                    "subSkillIds": [
+                      10900101
+                    ],
+                    "hitEffects": [
+                      "11_109001_116"
+                    ]
+                  }
+                ],
+                "confidence": "medium",
+                "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
+                "applied": false
+              },
+              {
+                "hitIndex": 2,
+                "label": "普通攻击 2段",
+                "candidateSource": "event-bridge-child-skill-control-hp-timeline",
+                "skillId": 10900102,
+                "discoveryDepth": 1,
+                "discoveredFromSkillId": 10900101,
+                "animationStateNames": [
+                  "Skill0_2"
+                ],
+                "hpTimelineCandidateCount": 4,
+                "candidateCountStatus": "complete-sample",
+                "hpFrameStartFrames": [
+                  6,
+                  10,
+                  14,
+                  26
+                ],
+                "hpTrackNames": [
+                  "普攻-攻击碰撞"
+                ],
+                "hpTimelineCandidates": [
+                  {
+                    "name": "攻击第1段",
+                    "trackName": "普攻-攻击碰撞",
+                    "startFrame": 6,
+                    "endFrame": 7
+                  },
+                  {
+                    "name": "攻击第1段",
+                    "trackName": "普攻-攻击碰撞",
+                    "startFrame": 10,
+                    "endFrame": 11
+                  },
+                  {
+                    "name": "攻击第1段",
+                    "trackName": "普攻-攻击碰撞",
+                    "startFrame": 14,
+                    "endFrame": 15
+                  },
+                  {
+                    "name": "攻击第1段",
+                    "trackName": "普攻-攻击碰撞",
+                    "startFrame": 26,
+                    "endFrame": 27
+                  }
+                ],
+                "confidence": "medium",
+                "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
+                "applied": false
+              },
+              {
+                "hitIndex": 3,
+                "label": "普通攻击 3段",
+                "candidateSource": "event-bridge-child-skill-control-hp-timeline",
+                "skillId": 10900103,
+                "discoveryDepth": 2,
+                "discoveredFromSkillId": 10900102,
+                "animationStateNames": [
+                  "Skill0_3"
+                ],
+                "hpTimelineCandidateCount": 9,
+                "candidateCountStatus": "complete-sample",
+                "hpFrameStartFrames": [
+                  12,
+                  18,
+                  24,
+                  30,
+                  36,
+                  42,
+                  48,
+                  54,
+                  60
+                ],
+                "hpTrackNames": [
+                  "攻击碰撞1"
+                ],
+                "hpTimelineCandidates": [
+                  {
+                    "name": "攻击碰撞1",
+                    "trackName": "攻击碰撞1",
+                    "startFrame": 12,
+                    "endFrame": 13
+                  },
+                  {
+                    "name": "攻击碰撞1",
+                    "trackName": "攻击碰撞1",
+                    "startFrame": 18,
+                    "endFrame": 19
+                  },
+                  {
+                    "name": "攻击碰撞1",
+                    "trackName": "攻击碰撞1",
+                    "startFrame": 24,
+                    "endFrame": 25
+                  },
+                  {
+                    "name": "攻击碰撞1",
+                    "trackName": "攻击碰撞1",
+                    "startFrame": 30,
+                    "endFrame": 31
+                  },
+                  {
+                    "name": "攻击碰撞1",
+                    "trackName": "攻击碰撞1",
+                    "startFrame": 36,
+                    "endFrame": 37
+                  },
+                  {
+                    "name": "攻击碰撞1",
+                    "trackName": "攻击碰撞1",
+                    "startFrame": 42,
+                    "endFrame": 43
+                  },
+                  {
+                    "name": "攻击碰撞1",
+                    "trackName": "攻击碰撞1",
+                    "startFrame": 48,
+                    "endFrame": 49
+                  },
+                  {
+                    "name": "攻击碰撞1",
+                    "trackName": "攻击碰撞1",
+                    "startFrame": 54,
+                    "endFrame": 55
+                  },
+                  {
+                    "name": "攻击碰撞1",
+                    "trackName": "攻击碰撞1",
+                    "startFrame": 60,
+                    "endFrame": 61
+                  }
+                ],
+                "confidence": "medium",
+                "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
+                "applied": false
+              },
+              {
+                "hitIndex": 4,
+                "label": "普通攻击 4段",
+                "candidateSource": "event-bridge-child-skill-control-hp-timeline",
+                "skillId": 10900104,
+                "discoveryDepth": 3,
+                "discoveredFromSkillId": 10900103,
+                "animationStateNames": [
+                  "Skill0_4"
+                ],
+                "hpTimelineCandidateCount": 7,
+                "candidateCountStatus": "complete-sample",
+                "hpFrameStartFrames": [
+                  7,
+                  11,
+                  15,
+                  29,
+                  45,
+                  49,
+                  53
+                ],
+                "hpTrackNames": [
+                  "上挑hit-攻击框",
+                  "左转圈hit -攻击框",
+                  "最后大hit-攻击框"
+                ],
+                "hpTimelineCandidates": [
+                  {
+                    "name": "左转圈hit -攻击框",
+                    "trackName": "左转圈hit -攻击框",
+                    "startFrame": 7,
+                    "endFrame": 8
+                  },
+                  {
+                    "name": "左转圈hit -攻击框",
+                    "trackName": "左转圈hit -攻击框",
+                    "startFrame": 11,
+                    "endFrame": 12
+                  },
+                  {
+                    "name": "左转圈hit -攻击框",
+                    "trackName": "左转圈hit -攻击框",
+                    "startFrame": 15,
+                    "endFrame": 16
+                  },
+                  {
+                    "name": "上挑hit-攻击框",
+                    "trackName": "上挑hit-攻击框",
+                    "startFrame": 29,
+                    "endFrame": 30
+                  },
+                  {
+                    "name": "无属性-第1段",
+                    "trackName": "最后大hit-攻击框",
+                    "startFrame": 45,
+                    "endFrame": 46
+                  },
+                  {
+                    "name": "无属性-第1段",
+                    "trackName": "最后大hit-攻击框",
+                    "startFrame": 49,
+                    "endFrame": 50
+                  },
+                  {
+                    "name": "无属性-第1段",
+                    "trackName": "最后大hit-攻击框",
+                    "startFrame": 53,
+                    "endFrame": 54
+                  }
+                ],
+                "confidence": "medium",
+                "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
+                "applied": false
+              },
+              {
+                "hitIndex": 5,
+                "label": "普通攻击 5段",
+                "candidateSource": "event-bridge-child-skill-control-hp-timeline",
+                "skillId": 10900105,
+                "discoveryDepth": 4,
+                "discoveredFromSkillId": 10900104,
+                "animationStateNames": [
+                  "Skill0_5"
+                ],
+                "hpTimelineCandidateCount": 10,
+                "candidateCountStatus": "complete-sample",
+                "hpFrameStartFrames": [
+                  4,
+                  8,
+                  12,
+                  16,
+                  20,
+                  47,
+                  56,
+                  61,
+                  66,
+                  71
+                ],
+                "hpTrackNames": [
+                  "无属性-攻击碰撞2",
+                  "最后1hit-攻击碰撞"
+                ],
+                "hpTimelineCandidates": [
+                  {
+                    "name": "无属性-攻击碰撞1",
+                    "trackName": "无属性-攻击碰撞2",
+                    "startFrame": 4,
+                    "endFrame": 5
+                  },
+                  {
+                    "name": "无属性-攻击碰撞1",
+                    "trackName": "无属性-攻击碰撞2",
+                    "startFrame": 8,
+                    "endFrame": 9
+                  },
+                  {
+                    "name": "无属性-攻击碰撞1",
+                    "trackName": "无属性-攻击碰撞2",
+                    "startFrame": 12,
+                    "endFrame": 13
+                  },
+                  {
+                    "name": "无属性-攻击碰撞1",
+                    "trackName": "无属性-攻击碰撞2",
+                    "startFrame": 16,
+                    "endFrame": 17
+                  },
+                  {
+                    "name": "无属性-攻击碰撞1",
+                    "trackName": "无属性-攻击碰撞2",
+                    "startFrame": 20,
+                    "endFrame": 21
+                  },
+                  {
+                    "name": "无属性-攻击碰撞1",
+                    "trackName": "最后1hit-攻击碰撞",
+                    "startFrame": 47,
+                    "endFrame": 48
+                  },
+                  {
+                    "name": "无属性-攻击碰撞1",
+                    "trackName": "最后1hit-攻击碰撞",
+                    "startFrame": 56,
+                    "endFrame": 57
+                  },
+                  {
+                    "name": "无属性-攻击碰撞1",
+                    "trackName": "最后1hit-攻击碰撞",
+                    "startFrame": 61,
+                    "endFrame": 62
+                  },
+                  {
+                    "name": "无属性-攻击碰撞1",
+                    "trackName": "最后1hit-攻击碰撞",
+                    "startFrame": 66,
+                    "endFrame": 67
+                  },
+                  {
+                    "name": "无属性-攻击碰撞1",
+                    "trackName": "最后1hit-攻击碰撞",
+                    "startFrame": 71,
+                    "endFrame": 72
+                  }
+                ],
+                "confidence": "medium",
+                "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
+                "applied": false
+              }
+            ],
+            "applied": false
+          },
           "targetSkillControls": [
             {
               "skillId": 10900102,
@@ -20044,6 +20608,22 @@
                   "trackGroupIndex": 1,
                   "startFrame": 12,
                   "endFrame": 13,
+                  "eventFrameCount": 0,
+                  "behaviorListCount": 1
+                },
+                {
+                  "type": "timeline-control",
+                  "laneHints": [
+                    "hpDamage"
+                  ],
+                  "laneHintSource": "name-trackName-string-pattern",
+                  "file": "MonoBehaviour_8182091111161279118__8182091111161279118.json",
+                  "name": "攻击碰撞1",
+                  "trackName": "攻击碰撞1",
+                  "trackIndex": 70,
+                  "trackGroupIndex": 1,
+                  "startFrame": 24,
+                  "endFrame": 25,
                   "eventFrameCount": 0,
                   "behaviorListCount": 1
                 }
@@ -20876,6 +21456,38 @@
                   "endFrame": 67,
                   "eventFrameCount": 0,
                   "behaviorListCount": 1
+                },
+                {
+                  "type": "timeline-control",
+                  "laneHints": [
+                    "hpDamage"
+                  ],
+                  "laneHintSource": "name-trackName-string-pattern",
+                  "file": "MonoBehaviour_6895904047689883997__6895904047689883997.json",
+                  "name": "无属性-攻击碰撞1",
+                  "trackName": "最后1hit-攻击碰撞",
+                  "trackIndex": 91,
+                  "trackGroupIndex": 1,
+                  "startFrame": 71,
+                  "endFrame": 72,
+                  "eventFrameCount": 0,
+                  "behaviorListCount": 1
+                },
+                {
+                  "type": "timeline-control",
+                  "laneHints": [
+                    "hpDamage"
+                  ],
+                  "laneHintSource": "name-trackName-string-pattern",
+                  "file": "MonoBehaviour_9089768072148017501__9089768072148017501.json",
+                  "name": "无属性-攻击碰撞1",
+                  "trackName": "无属性-攻击碰撞2",
+                  "trackIndex": 42,
+                  "trackGroupIndex": 1,
+                  "startFrame": 4,
+                  "endFrame": 5,
+                  "eventFrameCount": 0,
+                  "behaviorListCount": 1
                 }
               ],
               "timingTimelineCandidateCount": 4,
@@ -20958,6 +21570,14 @@
               "applied": false
             }
           ],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-found",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普通攻击",
+          "expectedHitCount": 5,
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "stateFindings": [
@@ -24087,6 +24707,73 @@
             ],
             "applied": false
           },
+          "normalAttackHitChainCandidate": {
+            "status": "normal-attack-hit-chain-candidates-found-unconfirmed",
+            "sourceKind": "azpr-normal-attack-hit-chain-candidate",
+            "bindingStatus": "normal-attack-hit-chain-candidates-unconfirmed",
+            "expectedHitCount": null,
+            "expectedHitCountSource": null,
+            "descriptionSectionTitle": null,
+            "candidateHitGroupCount": 1,
+            "coverageStatus": "description-hit-count-missing",
+            "chainSkillIds": [
+              10900143
+            ],
+            "animationStateNames": [
+              "Skill0_6"
+            ],
+            "hpTimelineCandidateCount": 3,
+            "hpTrackNames": [
+              "攻击碰撞"
+            ],
+            "hitGroups": [
+              {
+                "hitIndex": 2,
+                "label": "普通攻击 2段",
+                "candidateSource": "event-bridge-child-skill-control-hp-timeline",
+                "skillId": 10900143,
+                "discoveryDepth": 1,
+                "discoveredFromSkillId": 10900112,
+                "animationStateNames": [
+                  "Skill0_6"
+                ],
+                "hpTimelineCandidateCount": 3,
+                "candidateCountStatus": "complete-sample",
+                "hpFrameStartFrames": [
+                  13,
+                  18,
+                  23
+                ],
+                "hpTrackNames": [
+                  "攻击碰撞"
+                ],
+                "hpTimelineCandidates": [
+                  {
+                    "name": "攻击碰撞",
+                    "trackName": "攻击碰撞",
+                    "startFrame": 13,
+                    "endFrame": 14
+                  },
+                  {
+                    "name": "攻击碰撞",
+                    "trackName": "攻击碰撞",
+                    "startFrame": 18,
+                    "endFrame": 19
+                  },
+                  {
+                    "name": "攻击碰撞",
+                    "trackName": "攻击碰撞",
+                    "startFrame": 23,
+                    "endFrame": 24
+                  }
+                ],
+                "confidence": "medium",
+                "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
+                "applied": false
+              }
+            ],
+            "applied": false
+          },
           "targetSkillControls": [
             {
               "skillId": 10900143,
@@ -27187,6 +27874,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -30406,6 +31094,7 @@
             "攻击碰撞"
           ],
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [
             {
               "skillId": 10900143,
@@ -31113,6 +31802,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -31278,6 +31968,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -31395,7 +32086,15 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-missing",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -31506,6 +32205,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -31617,6 +32317,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -31728,6 +32429,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -31837,6 +32539,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -31944,6 +32647,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -32055,7 +32759,16 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-found",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "expectedHitCount": 4,
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -32166,6 +32879,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -32277,6 +32991,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -32388,6 +33103,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -32497,6 +33213,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -32606,6 +33323,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -32717,7 +33435,16 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-found",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普通攻击",
+          "expectedHitCount": 5,
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -32828,6 +33555,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -32939,6 +33667,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -33050,6 +33779,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -33159,6 +33889,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -33268,6 +33999,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -33379,7 +34111,16 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-found",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "expectedHitCount": 3,
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -33490,6 +34231,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -33601,6 +34343,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -33712,6 +34455,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -33821,6 +34565,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -33940,7 +34685,15 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-missing",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -34051,6 +34804,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -34162,6 +34916,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -34273,6 +35028,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -34382,6 +35138,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -34489,6 +35246,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -34600,7 +35358,15 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-missing",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -34711,6 +35477,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -34822,6 +35589,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -34933,6 +35701,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -35042,6 +35811,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -35149,6 +35919,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -35260,7 +36031,16 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-found",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "expectedHitCount": 5,
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -35371,6 +36151,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -35482,6 +36263,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -35593,6 +36375,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -35702,6 +36485,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -35811,6 +36595,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -35924,7 +36709,15 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-missing",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -36035,6 +36828,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -36146,6 +36940,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -36257,6 +37052,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -36366,6 +37162,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -36475,6 +37272,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -36586,7 +37384,16 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-found",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "expectedHitCount": 4,
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -36697,6 +37504,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -36808,6 +37616,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -36919,6 +37728,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -37028,6 +37838,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -37135,6 +37946,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -37246,7 +38058,15 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-missing",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -37357,6 +38177,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -37468,6 +38289,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -37579,6 +38401,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -37686,6 +38509,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -37797,7 +38621,16 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
+          "applied": false
+        },
+        "normalAttackDescriptionEvidence": {
+          "status": "normal-attack-hit-count-found",
+          "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+          "sectionTitle": "普攻",
+          "expectedHitCount": 5,
+          "sourceField": "skill.description.plain",
           "applied": false
         },
         "bindingStatus": "state-timing-evidence-candidates-unconfirmed",
@@ -37908,6 +38741,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },
@@ -38019,6 +38853,7 @@
           "foundTargetSkillControlCount": 0,
           "missingTargetSkillControlCount": 0,
           "normalAttackChainCandidate": null,
+          "normalAttackHitChainCandidate": null,
           "targetSkillControls": [],
           "applied": false
         },

@@ -3540,3 +3540,97 @@ Workbench 候选模式摘要会追加动作绑定提示：
 - 当前只确认普攻连段 skill_control 链和 HP timeline 候选存在，还没有建立普通攻击第 1/2/3/4/5 段与每 hit 伤害/削韧/充能节点的最终绑定。
 - `80102` 仍是缺失目标，不可直接按技能表行处理。
 - 下一阶段应新增普通攻击多段/每 hit 候选字段，建议暂命名为 `normalAttackHitChainCandidate`。
+
+## 52. 阶段 5-8Y：normalAttackHitChainCandidate
+
+阶段 5-8Y 新增普通攻击多段 / 每 hit 候选字段。该字段仍是 evidence，不是最终公式输入。
+
+### 52.1 stateTimingEvidence.normalAttackDescriptionEvidence
+
+从技能描述【普通攻击】段落解析普通攻击段数：
+
+```javascript
+{
+  "normalAttackDescriptionEvidence": {
+    "status": "normal-attack-hit-count-found",
+    "sourceKind": "azpr-skill-description-normal-attack-hit-count",
+    "sectionTitle": "普通攻击",
+    "expectedHitCount": 5,
+    "sourceField": "skill.description.plain",
+    "applied": false
+  }
+}
+```
+
+### 52.2 eventBridgeTargetSkillControlEvidence.normalAttackHitChainCandidate
+
+字段示例：
+
+```javascript
+{
+  "normalAttackHitChainCandidate": {
+    "status": "normal-attack-hit-chain-candidates-found-unconfirmed",
+    "sourceKind": "azpr-normal-attack-hit-chain-candidate",
+    "bindingStatus": "normal-attack-hit-chain-candidates-unconfirmed",
+    "expectedHitCount": 5,
+    "expectedHitCountSource": "azpr-skill-description-normal-attack-hit-count",
+    "descriptionSectionTitle": "普通攻击",
+    "candidateHitGroupCount": 5,
+    "coverageStatus": "matches-description-hit-count",
+    "chainSkillIds": [10900102, 10900103, 10900104, 10900105],
+    "animationStateNames": [
+      "Skill0_1",
+      "Skill0_2",
+      "Skill0_3",
+      "Skill0_4",
+      "Skill0_5"
+    ],
+    "hpTimelineCandidateCount": 32,
+    "hitGroups": [
+      {
+        "hitIndex": 1,
+        "label": "普通攻击 1段",
+        "candidateSource": "source-skill-control-hp-state-window",
+        "skillId": 10900101,
+        "discoveryDepth": 0,
+        "animationStateNames": ["Skill0_1"],
+        "hpTimelineCandidateCount": 2,
+        "hpFrameStartFrames": [12, 13],
+        "subSkillIds": [10900101],
+        "hitEffects": ["11_109001_116"],
+        "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
+        "applied": false
+      },
+      {
+        "hitIndex": 2,
+        "candidateSource": "event-bridge-child-skill-control-hp-timeline",
+        "skillId": 10900102,
+        "discoveryDepth": 1,
+        "animationStateNames": ["Skill0_2"],
+        "hpTimelineCandidateCount": 4,
+        "hpFrameStartFrames": [6, 10, 14, 26],
+        "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
+        "applied": false
+      }
+    ],
+    "applied": false
+  }
+}
+```
+
+当前末音 `10900101` 五段候选的 HP timeline 数量为 `2 / 4 / 9 / 7 / 10`，总计 32。
+
+### 52.3 projection / Workbench
+
+- `compactEventBridgeTargetSkillControlEvidence()` 保留 `normalAttackHitChainCandidate` 压缩摘要。
+- Workbench 普攻链摘要新增：
+
+```text
+命中候选 5/5段
+```
+
+### 52.4 当前边界
+
+- 所有 `normalAttackHitChainCandidate` 与 `hitGroups[]` 仍为 `applied: false`。
+- 第 1 段来自主 skill_control 的 HP state window，已带 `subSkillId` 和 hitEffect；第 2-5 段目前来自目标 skill_control HP timeline，尚未解析到 `behaviorList`、`elementBaseDatas` 或 `TDamageElementParams`。
+- 下一阶段应把第 2-5 段也解析到外部 element 对象和 HP/削韧/充能三值字段。

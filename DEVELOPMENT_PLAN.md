@@ -251,7 +251,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8X-A，新增 `stateTimingEvidence`，把 `AnimationBehaviorData` 和 `EventBridgeBehaviorData` 时序行为纳入 evidence/投影/Workbench；当前 `Skill0_6` 有 `动作` 动画状态控制与 3 个 HP 命中窗口，`Skill0_1` 只有 2 个 HP 资源映射窗口，尚未在同一 skill_control 中找到动画状态控制。
 - 已完成：阶段 5-8X-B，新增 `eventBridgeTargetSkillControlEvidence`，把 `10900102 / 80102` 等 EventBridge 目标技能接入状态证据；当前确认 `10900102` 是 `10900101` 的子技能，目标 skill_control 动画状态为 `Skill0_2`，有 4 个 `普攻-攻击碰撞` HP 候选；`80102` 在 SkillList 和 `skill.json` 中缺失。
 - 已完成：阶段 5-8X-C，把 EventBridge 目标从单跳索引升级为递归普攻连段链索引；当前 `10900102 -> 10900103 -> 10900104 -> 10900105` 均确认为 `10900101` 的子 skill_control，链路动画状态为 `Skill0_2 / Skill0_3 / Skill0_4 / Skill0_5`，HP timeline 候选合计 30 个；同时修正 `Skill0_1` 的直接动画状态证据，使主 skill_control 的 `Skill0_1 / Skill0_6` 均为动画+命中候选。
-- 下一步：阶段 5-8Y，把普攻链候选升级为普通攻击多段/每 hit 绑定候选，按链路深度、动画状态、HP 轨道名、帧窗口、`subSkillId` 和 hitEffect 建立 `normalAttackHitChainCandidate`，但在 runtime 或更强资源证据确认前继续保持 `applied: false`。
+- 已完成：阶段 5-8Y，把普攻链候选升级为普通攻击多段/每 hit 候选；当前从【普通攻击】描述解析 `expectedHitCount = 5`，并建立 `normalAttackHitChainCandidate`，覆盖 `10900101 / Skill0_1` 与 `10900102-10900105 / Skill0_2-5` 五段候选，HP timeline 候选数为 `2 / 4 / 9 / 7 / 10`，总计 32 个，仍保持 `applied: false`。
+- 下一步：阶段 5-8Z，把 `normalAttackHitChainCandidate.hitGroups[]` 继续向下解析到每 hit 的 `behaviorList -> elementBaseDatas -> TDamageElementParams`，为普通攻击每 hit 的 HP、削韧、充能三值公式候选建立可追踪来源。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

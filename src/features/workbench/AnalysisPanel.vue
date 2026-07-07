@@ -525,7 +525,11 @@ function formatEventBridgeTargetSummary(evidence) {
       missingTargets.length > 0
         ? ` · 目标缺失 ${missingTargets.join(' / ')}`
         : '';
-    return ` · 普攻链 ${chainText.join(' / ')}${missingText}`;
+    const hitChain = evidence.normalAttackHitChainCandidate;
+    const hitText = hitChain
+      ? ` · 命中候选 ${hitChain.candidateHitGroupCount}/${hitChain.expectedHitCount ?? '?'}段`
+      : '';
+    return ` · 普攻链 ${chainText.join(' / ')}${hitText}${missingText}`;
   }
 
   const targets = (evidence?.targetSkillControls ?? [])

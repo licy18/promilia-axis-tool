@@ -2811,6 +2811,47 @@ Workbench 当前默认样本显示：
 - 优先按 `discoveryDepth`、动画状态名、HP 轨道名、候选帧、`subSkillId`、hitEffect 和技能描述的普攻段数建立 `normalAttackHitChainCandidate`。
 - 仍保持所有候选 `applied: false`，直到能用 runtime 行为或更强资源证据确认每 hit 的最终伤害/削韧/充能节点。
 
+### 2026-07-08：阶段 5-8Y 普通攻击多段 / 每 hit 候选
+
+本轮完成：
+
+- `stateTimingEvidence` 新增 `normalAttackDescriptionEvidence`，从技能描述【普通攻击】段落解析普通攻击段数。
+- `eventBridgeTargetSkillControlEvidence` 新增 `normalAttackHitChainCandidate`，把主 skill_control 的 `Skill0_1` 与递归子 skill_control 的 `Skill0_2-5` 组织成普通攻击 1-5 段候选。
+- 目标 skill_control 的 `hpTimelineCandidates` 样本上限从 8 提高到 `SKILL_EFFECT_LANE_SPECIFIC_SAMPLE_LIMIT`，确保当前 9/10 hit 的子技能不会被摘要截断。
+- 仿真投影保留 `normalAttackHitChainCandidate` 的压缩摘要，Workbench 普攻链提示新增命中候选覆盖数。
+
+当前末音 `10900101` 普通攻击命中链候选：
+
+- 描述段数：`expectedHitCount = 5`，来源为 `skill.description.plain` 的【普通攻击】段落。
+- 覆盖状态：`candidateHitGroupCount = 5`，`coverageStatus = matches-description-hit-count`。
+- 第 1 段：`10900101 / Skill0_1 / 2` 个 HP 候选，帧 `12f / 13f`，`subSkillId = 10900101`，hitEffect `11_109001_116`。
+- 第 2 段：`10900102 / Skill0_2 / 4` 个 HP 候选，帧 `6f / 10f / 14f / 26f`。
+- 第 3 段：`10900103 / Skill0_3 / 9` 个 HP 候选，帧 `12f / 18f / 24f / 30f / 36f / 42f / 48f / 54f / 60f`。
+- 第 4 段：`10900104 / Skill0_4 / 7` 个 HP 候选，帧 `7f / 11f / 15f / 29f / 45f / 49f / 53f`。
+- 第 5 段：`10900105 / Skill0_5 / 10` 个 HP 候选，帧 `4f / 8f / 12f / 16f / 20f / 47f / 56f / 61f / 66f / 71f`。
+- 总 HP timeline 候选：32 个。
+
+Workbench 当前默认样本显示：
+
+```text
+候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 12f/13f/16f/19f · Skill0_6/Skill0_1 · 绑定候选 普攻->Skill0_1 12f/13f · 状态证据 Skill0_1 动画+命中 / Skill0_6 动画+命中 · 普攻链 10900102->Skill0_2 / 10900103->Skill0_3 / +2 · 命中候选 5/5段 · 目标缺失 80102
+```
+
+验收结果：
+
+- `npm test -- --run src/__tests__/data/azprGenerated.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、53 条测试通过。
+
+当前边界：
+
+- `normalAttackHitChainCandidate.applied` 仍为 `false`。
+- 当前只把“普通攻击第几段”与 skill_control / 动画状态 / HP timeline 候选组对齐，还没有把每个 HP 候选绑定到最终 `TDamageElementParams`、削韧字段或充能字段。
+- 第 2-5 段的 HP timeline 候选目前只有 timeline 名称、轨道名和帧窗，尚未像主 skill_control 的 5 个 HP 行为链一样解析到 `elementBaseDatas` / `TDamageElementParams`。
+
+下一步：
+
+- 阶段 5-8Z 目标：把 `normalAttackHitChainCandidate.hitGroups[]` 继续向下解析到每 hit 的 `behaviorList -> elementBaseDatas -> TDamageElementParams`，为普通攻击每 hit 的 HP、削韧、充能三值公式候选建立可追踪来源。
+- 优先从 `10900102-10900105` 的 HP timeline candidate 追本地 behavior 引用和外部 element 对象，而不是直接沿用主 skill_control 的 raw HP 投影。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -668,6 +668,45 @@ describe('first vertical slice simulation', () => {
                 chainLength: 4,
                 hpTimelineCandidateCount: 30,
               }),
+              normalAttackHitChainCandidate: expect.objectContaining({
+                expectedHitCount: 5,
+                candidateHitGroupCount: 5,
+                coverageStatus: 'matches-description-hit-count',
+                hpTimelineCandidateCount: 32,
+                hitGroups: [
+                  expect.objectContaining({
+                    hitIndex: 1,
+                    skillId: 10900101,
+                    animationStateNames: ['Skill0_1'],
+                    hpTimelineCandidateCount: 2,
+                    hpFrameStartFrames: [12, 13],
+                  }),
+                  expect.objectContaining({
+                    hitIndex: 2,
+                    skillId: 10900102,
+                    animationStateNames: ['Skill0_2'],
+                    hpTimelineCandidateCount: 4,
+                  }),
+                  expect.objectContaining({
+                    hitIndex: 3,
+                    skillId: 10900103,
+                    animationStateNames: ['Skill0_3'],
+                    hpTimelineCandidateCount: 9,
+                  }),
+                  expect.objectContaining({
+                    hitIndex: 4,
+                    skillId: 10900104,
+                    animationStateNames: ['Skill0_4'],
+                    hpTimelineCandidateCount: 7,
+                  }),
+                  expect.objectContaining({
+                    hitIndex: 5,
+                    skillId: 10900105,
+                    animationStateNames: ['Skill0_5'],
+                    hpTimelineCandidateCount: 10,
+                  }),
+                ],
+              }),
               targetSkillControls: [
                 expect.objectContaining({
                   skillId: 10900102,
@@ -987,6 +1026,12 @@ describe('first vertical slice simulation', () => {
               normalAttackChainCandidate: expect.objectContaining({
                 chainSkillIds: [10900102, 10900103, 10900104, 10900105],
                 chainLength: 4,
+              }),
+              normalAttackHitChainCandidate: expect.objectContaining({
+                expectedHitCount: 5,
+                candidateHitGroupCount: 5,
+                coverageStatus: 'matches-description-hit-count',
+                hpTimelineCandidateCount: 32,
               }),
               targetSkillControls: [
                 expect.objectContaining({

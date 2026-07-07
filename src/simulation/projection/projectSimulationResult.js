@@ -782,6 +782,11 @@ function compactEventBridgeTargetSkillControlEvidence(evidence) {
           applied: false,
         }
       : null,
+    normalAttackHitChainCandidate: evidence.normalAttackHitChainCandidate
+      ? compactNormalAttackHitChainCandidate(
+          evidence.normalAttackHitChainCandidate
+        )
+      : null,
     targetSkillControls: (evidence.targetSkillControls ?? [])
       .slice(0, 6)
       .map(item => ({
@@ -807,6 +812,54 @@ function compactEventBridgeTargetSkillControlEvidence(evidence) {
           })),
         eventBridgeSkillIds: item.eventBridgeSkillIds ?? [],
       })),
+    applied: false,
+  };
+}
+
+function compactNormalAttackHitChainCandidate(candidate) {
+  return {
+    status: candidate.status ?? null,
+    bindingStatus: candidate.bindingStatus ?? null,
+    expectedHitCount: numberOrNull(candidate.expectedHitCount),
+    expectedHitCountSource: candidate.expectedHitCountSource ?? null,
+    descriptionSectionTitle: candidate.descriptionSectionTitle ?? null,
+    candidateHitGroupCount: numberOrNull(candidate.candidateHitGroupCount) ?? 0,
+    coverageStatus: candidate.coverageStatus ?? null,
+    chainSkillIds: candidate.chainSkillIds ?? [],
+    animationStateNames: candidate.animationStateNames ?? [],
+    hpTimelineCandidateCount:
+      numberOrNull(candidate.hpTimelineCandidateCount) ?? 0,
+    hpTrackNames: candidate.hpTrackNames ?? [],
+    hitGroups: (candidate.hitGroups ?? []).slice(0, 6).map(group => ({
+      hitIndex: numberOrNull(group.hitIndex),
+      label: group.label ?? null,
+      candidateSource: group.candidateSource ?? null,
+      skillId: numberOrNull(group.skillId),
+      discoveryDepth: numberOrNull(group.discoveryDepth),
+      discoveredFromSkillId: numberOrNull(group.discoveredFromSkillId),
+      animationStateNames: group.animationStateNames ?? [],
+      hpTimelineCandidateCount:
+        numberOrNull(group.hpTimelineCandidateCount) ?? 0,
+      candidateCountStatus: group.candidateCountStatus ?? null,
+      hpFrameStartFrames: group.hpFrameStartFrames ?? [],
+      hpTrackNames: group.hpTrackNames ?? [],
+      subSkillIds: group.subSkillIds ?? [],
+      hitEffects: group.hitEffects ?? [],
+      confidence: group.confidence ?? null,
+      bindingStatus: group.bindingStatus ?? null,
+      hpTimelineCandidates: (group.hpTimelineCandidates ?? [])
+        .slice(0, 12)
+        .map(item => ({
+          name: item.name ?? null,
+          trackName: item.trackName ?? null,
+          startFrame: numberOrNull(item.startFrame),
+          endFrame: numberOrNull(item.endFrame),
+          stateNames: item.stateNames ?? [],
+          subSkillIds: item.subSkillIds ?? [],
+          hitEffects: item.hitEffects ?? [],
+        })),
+      applied: false,
+    })),
     applied: false,
   };
 }

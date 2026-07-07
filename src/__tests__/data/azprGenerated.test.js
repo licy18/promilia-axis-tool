@@ -806,6 +806,15 @@ describe('generated AzPr data', () => {
       applied: false,
     });
     expect(
+      mayoiAttack.stateTimingEvidence.normalAttackDescriptionEvidence
+    ).toMatchObject({
+      status: 'normal-attack-hit-count-found',
+      sourceKind: 'azpr-skill-description-normal-attack-hit-count',
+      sectionTitle: '普通攻击',
+      expectedHitCount: 5,
+      applied: false,
+    });
+    expect(
       mayoiAttack.stateTimingEvidence.eventBridgeTargetSkillControlEvidence
     ).toMatchObject({
       status: 'event-bridge-target-skill-controls-indexed',
@@ -840,8 +849,77 @@ describe('generated AzPr data', () => {
         bridgeTargetSkillIds: [0, 10900103, 10900104, 10900105],
         applied: false,
       },
+      normalAttackHitChainCandidate: expect.objectContaining({
+        status: 'normal-attack-hit-chain-candidates-found-unconfirmed',
+        bindingStatus: 'normal-attack-hit-chain-candidates-unconfirmed',
+        expectedHitCount: 5,
+        expectedHitCountSource:
+          'azpr-skill-description-normal-attack-hit-count',
+        descriptionSectionTitle: '普通攻击',
+        candidateHitGroupCount: 5,
+        coverageStatus: 'matches-description-hit-count',
+        chainSkillIds: [10900102, 10900103, 10900104, 10900105],
+        animationStateNames: [
+          'Skill0_1',
+          'Skill0_2',
+          'Skill0_3',
+          'Skill0_4',
+          'Skill0_5',
+        ],
+        hpTimelineCandidateCount: 32,
+        applied: false,
+      }),
       applied: false,
     });
+    expect(
+      mayoiAttack.stateTimingEvidence.eventBridgeTargetSkillControlEvidence
+        .normalAttackHitChainCandidate.hitGroups
+    ).toEqual([
+      expect.objectContaining({
+        hitIndex: 1,
+        skillId: 10900101,
+        discoveryDepth: 0,
+        animationStateNames: ['Skill0_1'],
+        hpTimelineCandidateCount: 2,
+        hpFrameStartFrames: [12, 13],
+        subSkillIds: [10900101],
+        hitEffects: ['11_109001_116'],
+        bindingStatus: 'normal-attack-hit-candidate-unconfirmed',
+        applied: false,
+      }),
+      expect.objectContaining({
+        hitIndex: 2,
+        skillId: 10900102,
+        discoveryDepth: 1,
+        animationStateNames: ['Skill0_2'],
+        hpTimelineCandidateCount: 4,
+        hpFrameStartFrames: [6, 10, 14, 26],
+      }),
+      expect.objectContaining({
+        hitIndex: 3,
+        skillId: 10900103,
+        discoveryDepth: 2,
+        animationStateNames: ['Skill0_3'],
+        hpTimelineCandidateCount: 9,
+        hpFrameStartFrames: [12, 18, 24, 30, 36, 42, 48, 54, 60],
+      }),
+      expect.objectContaining({
+        hitIndex: 4,
+        skillId: 10900104,
+        discoveryDepth: 3,
+        animationStateNames: ['Skill0_4'],
+        hpTimelineCandidateCount: 7,
+        hpFrameStartFrames: [7, 11, 15, 29, 45, 49, 53],
+      }),
+      expect.objectContaining({
+        hitIndex: 5,
+        skillId: 10900105,
+        discoveryDepth: 4,
+        animationStateNames: ['Skill0_5'],
+        hpTimelineCandidateCount: 10,
+        hpFrameStartFrames: [4, 8, 12, 16, 20, 47, 56, 61, 66, 71],
+      }),
+    ]);
     expect(
       mayoiAttack.stateTimingEvidence.eventBridgeTargetSkillControlEvidence
         .targetSkillControls
