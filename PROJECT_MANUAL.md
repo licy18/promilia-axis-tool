@@ -55,7 +55,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；10 个测试文件、54 条测试通过。
+- `npm run test -- --run`：通过；10 个测试文件、55 条测试通过。
 
 ## 3. 目录速览
 
@@ -645,6 +645,47 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 保存字段应使用 `selection`、`actionDrafts`、`selectedActionId` 和版本号，不接旧 `skillBlocks`。
 - 增加 localStorage 读写的容错、重置草稿入口和恢复测试。
 - 草稿恢复后仍必须通过 `createWorkbenchProject()`、`compileProject()`、`simulateScenario()` 验证。
+
+### 2026-07-07：阶段 4-4B workbench 草稿保存/恢复落地
+
+本轮完成：
+
+- 新增 `src/domain/workbenchDraftStorage.js`，定义新版 workbench 草稿 schema：
+  - `schemaVersion: 1`
+  - `game: azur-promilia`
+  - `type: workbench-draft`
+  - `selection`
+  - `actionDrafts`
+  - `selectedActionId`
+  - `savedAt`
+- `Workbench.vue` 顶部新增“保存草稿”和“重置”入口。
+- 页面挂载时会从 `localStorage` 恢复新版草稿；草稿无效或版本不匹配时保持默认垂直切片。
+- 保存内容只包含新版工作台状态，不写入旧 `skillBlocks`。
+- 重置会清除草稿并恢复默认 `selection`、单动作草稿和默认选中动作。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、11 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、55 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- 浏览器检查 `http://127.0.0.1:5175/#/workbench`：
+  - 新增第二个动作并把开始时间改为 `2400ms` 后可保存草稿。
+  - 刷新页面后自动恢复为 2 个动作，当前动作开始时间仍为 `2400`，状态为“已恢复草稿”。
+  - 重置后回到 1 个动作、开始时间 `0`，状态为“已重置草稿”。
+  - 页面保留 `DAMAGE_PROJECTED`，控制台无 error。
+
+当前结论：
+
+- 新版工作台已经具备“编辑 -> 保存 -> 刷新恢复 -> 重置”的最小项目草稿闭环。
+- 草稿仍是 workbench 专用状态，还不是完整项目 JSON 导入导出格式。
+- 旧 `Editor.vue` 的 localStorage 项目系统没有接入本阶段，避免把旧模型债务带入新版工作台。
+
+下一步：
+
+- 阶段 4-5 目标：提高时间轴基础编辑效率。
+- 支持动作复制、快捷删除和键盘微调开始时间。
+- 为保存按钮增加脏状态提示，区分“已保存”和“当前草稿有未保存改动”。
+- 继续保持新版工作台只通过 `actionDrafts -> Project -> simulation` 输出结果。
 
 ## 10. 文档维护规则
 

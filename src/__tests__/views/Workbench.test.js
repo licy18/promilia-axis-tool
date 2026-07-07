@@ -1,10 +1,15 @@
 import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import workbenchSeed from '../../data/generated/workbench-seed.json';
+import { WORKBENCH_DRAFT_STORAGE_KEY } from '../../domain/workbenchDraftStorage';
 import Workbench from '../../views/Workbench.vue';
 
 describe('Workbench view', () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
   it('renders the first real-data simulation slice', () => {
     const wrapper = mount(Workbench, {
       global: {
@@ -154,5 +159,60 @@ describe('Workbench view', () => {
     expect(wrapper.find('[data-testid="workbench-start-input"]').element.value).toBe('3500');
     expect(wrapper.text()).toContain('3500ms');
     expect(wrapper.text()).toContain('DAMAGE_PROJECTED');
+  });
+
+  it('saves, restores, and resets a versioned workbench draft', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await wrapper.find('[data-testid="workbench-start-input"]').setValue('2400');
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+
+    const rawDraft = window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY);
+    const draft = JSON.parse(rawDraft);
+    expect(rawDraft).not.toContain('skillBlocks');
+    expect(draft).toMatchObject({
+      schemaVersion: 1,
+      game: 'azur-promilia',
+      type: 'workbench-draft',
+      selectedActionId: 'action-0002',
+    });
+    expect(draft.actionDrafts).toHaveLength(2);
+    expect(draft.actionDrafts[1]).toMatchObject({
+      id: 'action-0002',
+      startMs: 2400,
+    });
+    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe('已保存草稿');
+    wrapper.unmount();
+
+    const restored = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await nextTick();
+
+    expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe('已恢复草稿');
+    expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe('2 action');
+    expect(restored.find('[data-testid="workbench-start-input"]').element.value).toBe('2400');
+
+    await restored.find('[data-testid="workbench-reset-draft"]').trigger('click');
+
+    expect(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)).toBeNull();
+    expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe('已重置草稿');
+    expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe('1 action');
+    expect(restored.find('[data-testid="workbench-start-input"]').element.value).toBe('0');
   });
 });

@@ -11,10 +11,10 @@
 - 动作块水平拖动。
 - `500ms` 网格吸附更新 `startMs`。
 - 拖动后通过 `Workbench.vue` 更新动作草稿，并重新运行 `compileProject()` / `simulateScenario()`。
+- workbench 草稿保存/刷新恢复/重置，草稿只记录新版 `selection`、`actionDrafts` 和 `selectedActionId`。
 
 下一步：
 
-- 新版 workbench 草稿保存/恢复。
 - 动作复制、快捷删除、键盘微调。
 - 多轨道、缩放和持续时间调整。
 

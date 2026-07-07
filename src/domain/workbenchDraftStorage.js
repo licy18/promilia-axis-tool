@@ -1,0 +1,92 @@
+import {
+  DEFAULT_WORKBENCH_ACTION_ID,
+  DEFAULT_WORKBENCH_SELECTION,
+  createWorkbenchActionDraft,
+  normalizeWorkbenchActionDrafts,
+  normalizeWorkbenchSelection,
+} from './workbenchProjectFactory';
+
+export const WORKBENCH_DRAFT_SCHEMA_VERSION = 1;
+export const WORKBENCH_DRAFT_STORAGE_KEY = 'promilia-axis-tool:workbench-draft:v1';
+
+export function createDefaultWorkbenchDraftState() {
+  return {
+    selection: { ...DEFAULT_WORKBENCH_SELECTION },
+    actionDrafts: [createWorkbenchActionDraft()],
+    selectedActionId: DEFAULT_WORKBENCH_ACTION_ID,
+    savedAt: null,
+  };
+}
+
+export function createWorkbenchDraftSnapshot(
+  { selection, actionDrafts, selectedActionId },
+  savedAt = new Date().toISOString(),
+) {
+  const normalizedSelection = normalizeWorkbenchSelection(selection);
+  const normalizedActions = ensureActionDrafts(actionDrafts, normalizedSelection.characterId);
+  const normalizedSelectedActionId = normalizedActions.some((action) => action.id === selectedActionId)
+    ? selectedActionId
+    : normalizedActions[0].id;
+
+  return {
+    schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
+    game: 'azur-promilia',
+    type: 'workbench-draft',
+    savedAt,
+    selection: normalizedSelection,
+    actionDrafts: normalizedActions,
+    selectedActionId: normalizedSelectedActionId,
+  };
+}
+
+export function parseWorkbenchDraft(rawDraft) {
+  if (!rawDraft) {
+    return null;
+  }
+
+  try {
+    const draft = typeof rawDraft === 'string' ? JSON.parse(rawDraft) : rawDraft;
+    if (draft.schemaVersion !== WORKBENCH_DRAFT_SCHEMA_VERSION || draft.type !== 'workbench-draft') {
+      return null;
+    }
+
+    return createWorkbenchDraftSnapshot(draft, draft.savedAt ?? null);
+  } catch {
+    return null;
+  }
+}
+
+export function saveWorkbenchDraft(storage, state) {
+  if (!storage) {
+    return null;
+  }
+
+  const snapshot = createWorkbenchDraftSnapshot(state);
+  storage.setItem(WORKBENCH_DRAFT_STORAGE_KEY, JSON.stringify(snapshot));
+  return snapshot;
+}
+
+export function loadWorkbenchDraft(storage) {
+  if (!storage) {
+    return null;
+  }
+
+  return parseWorkbenchDraft(storage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+}
+
+export function clearWorkbenchDraft(storage) {
+  storage?.removeItem(WORKBENCH_DRAFT_STORAGE_KEY);
+}
+
+function ensureActionDrafts(actionDrafts, characterId) {
+  const normalizedActions = normalizeWorkbenchActionDrafts(actionDrafts, characterId);
+  if (normalizedActions.length > 0) {
+    return normalizedActions;
+  }
+
+  return [
+    createWorkbenchActionDraft({
+      skillId: normalizeWorkbenchSelection({ characterId }).skillId,
+    }),
+  ];
+}

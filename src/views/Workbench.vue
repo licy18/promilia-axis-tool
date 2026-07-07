@@ -5,10 +5,23 @@
         <ArrowLeft class="nav-icon" />
         <span>首页</span>
       </RouterLink>
-      <div class="nav-status">
-        <span>真实数据</span>
-        <span>Schema v{{ project.schemaVersion }}</span>
-        <span>{{ simulationResult.summary.formulaVersion }}</span>
+      <div class="nav-side">
+        <div class="nav-status">
+          <span>真实数据</span>
+          <span>Schema v{{ project.schemaVersion }}</span>
+          <span>{{ simulationResult.summary.formulaVersion }}</span>
+        </div>
+        <div class="nav-actions">
+          <span class="draft-status" data-testid="workbench-draft-status">{{ draftStatus }}</span>
+          <button class="nav-button" data-testid="workbench-save-draft" type="button" @click="saveDraft">
+            <Document class="button-icon" />
+            <span>保存草稿</span>
+          </button>
+          <button class="nav-button secondary" data-testid="workbench-reset-draft" type="button" @click="resetDraft">
+            <Refresh class="button-icon" />
+            <span>重置</span>
+          </button>
+        </div>
       </div>
     </nav>
 
@@ -66,8 +79,8 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
-import { ArrowLeft } from '@element-plus/icons-vue';
+import { computed, onMounted, ref } from 'vue';
+import { ArrowLeft, Document, Refresh } from '@element-plus/icons-vue';
 import ActionLibraryPanel from '../features/workbench/ActionLibraryPanel.vue';
 import AnalysisPanel from '../features/workbench/AnalysisPanel.vue';
 import EventLogPanel from '../features/workbench/EventLogPanel.vue';
@@ -84,14 +97,22 @@ import {
   normalizeWorkbenchActionDrafts,
   normalizeWorkbenchSelection,
 } from '../domain/workbenchProjectFactory';
+import {
+  clearWorkbenchDraft,
+  createDefaultWorkbenchDraftState,
+  loadWorkbenchDraft,
+  saveWorkbenchDraft,
+} from '../domain/workbenchDraftStorage';
 import { compileProject } from '../simulation/compiler/compileProject';
 import { simulateScenario } from '../simulation/engine/simulateScenario';
 
 const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
-const selection = ref({ ...DEFAULT_WORKBENCH_SELECTION });
-const actionDrafts = ref([createWorkbenchActionDraft()]);
-const selectedActionId = ref('action-0001');
+const initialDraft = createDefaultWorkbenchDraftState();
+const selection = ref({ ...initialDraft.selection });
+const actionDrafts = ref([...initialDraft.actionDrafts]);
+const selectedActionId = ref(initialDraft.selectedActionId);
+const draftStatus = ref('未保存草稿');
 
 const availableSkills = computed(() => getSkillsForCharacter(selection.value.characterId));
 const project = computed(() =>
@@ -106,6 +127,16 @@ const selectedAction = computed(() => {
 });
 const selectedDraft = computed(() => {
   return actionDrafts.value.find((action) => action.id === selectedActionId.value) ?? actionDrafts.value[0];
+});
+
+onMounted(() => {
+  const draft = loadWorkbenchDraft(getLocalStorage());
+  if (!draft) {
+    return;
+  }
+
+  applyDraftState(draft);
+  draftStatus.value = '已恢复草稿';
 });
 
 function updateSelection(patch) {
@@ -183,6 +214,27 @@ function deleteAction(actionId) {
   }
 }
 
+function saveDraft() {
+  const snapshot = saveWorkbenchDraft(getLocalStorage(), {
+    selection: selection.value,
+    actionDrafts: actionDrafts.value,
+    selectedActionId: selectedActionId.value,
+  });
+  draftStatus.value = snapshot ? '已保存草稿' : '草稿不可用';
+}
+
+function resetDraft() {
+  clearWorkbenchDraft(getLocalStorage());
+  applyDraftState(createDefaultWorkbenchDraftState());
+  draftStatus.value = '已重置草稿';
+}
+
+function applyDraftState(draft) {
+  selection.value = { ...draft.selection };
+  actionDrafts.value = draft.actionDrafts.map((action) => createWorkbenchActionDraft(action));
+  selectedActionId.value = draft.selectedActionId;
+}
+
 function findSkillById(skillId) {
   return availableSkills.value.find((skill) => skill.id === Number(skillId)) ?? null;
 }
@@ -201,6 +253,10 @@ function clampNumber(value, min, max) {
     return min;
   }
   return Math.min(max, Math.max(min, number));
+}
+
+function getLocalStorage() {
+  return typeof window === 'undefined' ? null : window.localStorage;
 }
 </script>
 
@@ -254,6 +310,54 @@ function clampNumber(value, min, max) {
   font-size: 12px;
 }
 
+.nav-side {
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.draft-status {
+  color: #8f9aa3;
+  font-size: 12px;
+}
+
+.nav-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 9px;
+  border: 1px solid rgba(121, 199, 185, 0.38);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.12);
+  color: #dff6f1;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+}
+
+.nav-button.secondary {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: #d9dee3;
+}
+
+.nav-button:hover {
+  filter: brightness(1.16);
+}
+
+.button-icon {
+  width: 14px;
+  height: 14px;
+}
+
 .workbench-grid {
   display: grid;
   grid-template-columns: minmax(230px, 280px) minmax(0, 1fr) minmax(260px, 340px);
@@ -300,6 +404,14 @@ function clampNumber(value, min, max) {
   }
 
   .nav-status {
+    justify-content: flex-start;
+  }
+
+  .nav-side {
+    justify-items: start;
+  }
+
+  .nav-actions {
     justify-content: flex-start;
   }
 
