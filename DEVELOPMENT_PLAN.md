@@ -259,7 +259,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8AD，追 `10900101 -> 10900102-10900105` 普攻子 `skill_control` 的 EventBridge 连段触发帧，建立 `normalAttackSequenceTimingEvidence`；当前连段桥接 `4/4`，链起点 `0/16/51/116/180f`，绝对帧候选 `0s12f/0s22f/1s3f/2s3f/3s4f`，`candidateValueSeries.chart` 显示帧调整降为 0。
 - 已完成：阶段 5-8AE，把 `candidateValueSeries.chart` 的 HP、削韧、能量候选点同步到主时间轴 marker；当前默认普攻显示 15 个候选三值 marker，全部归属 `actor-109001`，并与真实伤害投影 marker 使用独立图例和 `data-testid`。
 - 已完成：阶段 5-8AF，把主时间轴候选 marker 升级为多曲线轨；当前默认普攻在 `actor-109001` 轨显示 3 条候选曲线、15 个候选 marker 和 5 个按帧 hotspot，首帧提示可同时查看 HP、削韧、能量三个候选值。
-- 下一步：阶段 5-8AG，给候选多曲线轨增加基础交互控制，例如 HP/削韧/能量曲线显隐、选中帧来源摘要，以及候选/真实投影视觉分层说明。
+- 已完成：阶段 5-8AG，给候选多曲线轨增加基础交互控制；当前时间轴可按 HP / 韧性 / 能量切换候选曲线显隐，点击按帧 hotspot 可查看该帧可见三值候选、`hitSkill`、element 候选和时序来源摘要，关闭 HP 后默认样本剩余 2 条曲线、10 个 marker。
+- 下一步：阶段 5-8AH，把选中帧摘要升级为候选来源详情下钻，展示 `valueSamples`、`candidateCount`、source/local/chain 帧，以及多动作长时间轴的曲线密度控制。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

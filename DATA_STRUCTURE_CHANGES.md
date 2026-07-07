@@ -3987,11 +3987,31 @@ Workbench 显示：
 
 ```javascript
 [
-  { "fromSkillId": 10900101, "toSkillId": 10900102, "bridgeStartFrame": 16, "chainStartFrame": 16 },
-  { "fromSkillId": 10900102, "toSkillId": 10900103, "bridgeStartFrame": 35, "chainStartFrame": 51 },
-  { "fromSkillId": 10900103, "toSkillId": 10900104, "bridgeStartFrame": 65, "chainStartFrame": 116 },
-  { "fromSkillId": 10900104, "toSkillId": 10900105, "bridgeStartFrame": 64, "chainStartFrame": 180 }
-]
+  {
+    fromSkillId: 10900101,
+    toSkillId: 10900102,
+    bridgeStartFrame: 16,
+    chainStartFrame: 16,
+  },
+  {
+    fromSkillId: 10900102,
+    toSkillId: 10900103,
+    bridgeStartFrame: 35,
+    chainStartFrame: 51,
+  },
+  {
+    fromSkillId: 10900103,
+    toSkillId: 10900104,
+    bridgeStartFrame: 65,
+    chainStartFrame: 116,
+  },
+  {
+    fromSkillId: 10900104,
+    toSkillId: 10900105,
+    bridgeStartFrame: 64,
+    chainStartFrame: 180,
+  },
+];
 ```
 
 ### 57.2 actionResultTimeline[].hitCandidates[] 扩展
@@ -4077,8 +4097,7 @@ Workbench 显示：
 
 ```html
 data-testid="workbench-timeline-candidate-value-marker"
-data-series-key="hpDamageFormulaParamCandidate"
-data-hit-index="1"
+data-series-key="hpDamageFormulaParamCandidate" data-hit-index="1"
 data-frame-label="0s12f"
 ```
 
@@ -4125,8 +4144,7 @@ data-testid="workbench-timeline-candidate-value-curve-track"
 
 ```html
 data-testid="workbench-timeline-candidate-value-curve"
-data-series-key="hpDamageFormulaParamCandidate"
-data-point-count="5"
+data-series-key="hpDamageFormulaParamCandidate" data-point-count="5"
 ```
 
 当前默认样本：
@@ -4143,10 +4161,9 @@ marker 继续保留：
 
 ```html
 data-testid="workbench-timeline-candidate-value-marker"
-data-series-key="hpDamageFormulaParamCandidate"
-data-hit-index="1"
-data-frame-label="0s12f"
-data-marker-title="HP参数候选 0s12f hit1: 2,500 raw-param"
+data-series-key="hpDamageFormulaParamCandidate" data-hit-index="1"
+data-frame-label="0s12f" data-marker-title="HP参数候选 0s12f hit1: 2,500
+raw-param"
 ```
 
 ### 59.4 frame hotspot
@@ -4155,8 +4172,7 @@ data-marker-title="HP参数候选 0s12f hit1: 2,500 raw-param"
 
 ```html
 data-testid="workbench-timeline-candidate-value-frame-hotspot"
-data-hit-index="1"
-data-frame-label="0s12f"
+data-hit-index="1" data-frame-label="0s12f"
 ```
 
 首帧提示：
@@ -4170,3 +4186,59 @@ data-frame-label="0s12f"
 - hotspot 目前使用原生 `title` / `aria-label`，不是自定义浮层。
 - 曲线显隐和来源详情暂未交互化。
 - 后续多动作、多角色样本需要验证曲线密度和 hover 命中区域。
+
+## 60. 阶段 5-8AG：TimelineGrid 候选曲线显隐与选中帧摘要
+
+阶段 5-8AG 仍是 UI 投影层增强，不新增或迁移底层仿真 schema。输入继续来自 `candidateValueSeries.chart.series[].points[]`。
+
+### 60.1 series visibility
+
+时间轴标题区新增三枚曲线显隐开关：
+
+```html
+data-testid="workbench-candidate-value-toggle"
+data-series-key="hpDamageFormulaParamCandidate"
+```
+
+开关只影响当前 `TimelineGridPreview` 内部可见性：
+
+- curve line 渲染数量。
+- candidate marker 渲染数量。
+- frame hotspot 聚合值。
+- selected frame summary 当前可见值。
+
+不会改写 `candidateValueSeries.chart`，也不会改变 `applied = false` 的候选语义。
+
+### 60.2 selected frame summary
+
+选中按帧 hotspot 或候选 marker 后，时间轴下方显示：
+
+```html
+data-testid="workbench-candidate-value-frame-summary"
+data-testid="workbench-candidate-value-frame-summary-values"
+data-testid="workbench-candidate-value-frame-summary-source"
+```
+
+当前摘要读取并展示：
+
+- `frameLabel`
+- `hitIndex`
+- 当前可见 series 的 `value` / `unit`
+- `hitSkillId`
+- `elementConfigIds`
+- `sourceStatus`
+- `timeAdjustmentStatus`
+
+### 60.3 当前样本
+
+默认末音普攻样本：
+
+- 默认可见：3 条曲线、15 个 marker、5 个按帧 hotspot。
+- 首帧值摘要：`HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field`。
+- 关闭 HP 后：2 条曲线、10 个 marker，首帧摘要不再显示 HP。
+
+### 60.4 当前边界
+
+- 这不是新的数据契约，只是把既有 chart point 字段投影到交互 UI。
+- 选中帧来源摘要仍不是 per-element 全量详情；下一阶段应补 `valueSamples`、`candidateCount`、source/local/chain 帧等下钻信息。
+- 多动作长轴的曲线密度控制仍未完成。

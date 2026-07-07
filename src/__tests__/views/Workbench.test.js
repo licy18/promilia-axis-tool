@@ -11,7 +11,7 @@ describe('Workbench view', () => {
     window.localStorage.clear();
   });
 
-  it('renders the first real-data simulation slice', () => {
+  it('renders the first real-data simulation slice', async () => {
     const wrapper = mount(Workbench, {
       global: {
         stubs: {
@@ -87,6 +87,17 @@ describe('Workbench view', () => {
         '[data-testid="workbench-timeline-candidate-value-frame-hotspot"]'
       )
     ).toHaveLength(5);
+    const candidateToggles = wrapper.findAll(
+      '[data-testid="workbench-candidate-value-toggle"]'
+    );
+    expect(candidateToggles).toHaveLength(3);
+    expect(
+      candidateToggles.map(toggle => toggle.attributes('data-series-key'))
+    ).toEqual([
+      'hpDamageFormulaParamCandidate',
+      'toughnessDamageCandidate',
+      'selfEnergyCandidate',
+    ]);
     expect(
       wrapper
         .find(
@@ -122,6 +133,27 @@ describe('Workbench view', () => {
     ).toBe(
       '0s12f hit1: HP参数候选 2,500 raw-param / 削韧候选 7,000 raw-field / 能量候选 2,700 raw-field'
     );
+    await wrapper
+      .find(
+        '[data-testid="workbench-timeline-candidate-value-frame-hotspot"][data-hit-index="1"]'
+      )
+      .trigger('click');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-candidate-value-frame-summary"]')
+        .attributes('data-hit-index')
+    ).toBe('1');
+    const selectedFrameValues = wrapper
+      .find('[data-testid="workbench-candidate-value-frame-summary-values"]')
+      .text();
+    expect(selectedFrameValues).toContain('HP 2,500 raw-param');
+    expect(selectedFrameValues).toContain('韧性 7,000 raw-field');
+    expect(selectedFrameValues).toContain('能量 2,700 raw-field');
+    const selectedFrameSource = wrapper
+      .find('[data-testid="workbench-candidate-value-frame-summary-source"]')
+      .text();
+    expect(selectedFrameSource).toContain('hitSkill 10900101');
+    expect(selectedFrameSource).toContain('109001081');
     expect(
       wrapper
         .find(
@@ -129,6 +161,34 @@ describe('Workbench view', () => {
         )
         .attributes('data-frame-label')
     ).toBe('3s4f');
+    await wrapper
+      .find(
+        '[data-testid="workbench-candidate-value-toggle"][data-series-key="hpDamageFormulaParamCandidate"]'
+      )
+      .setValue(false);
+    await nextTick();
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-candidate-value-marker"]'
+      )
+    ).toHaveLength(10);
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-candidate-value-curve"]'
+      )
+    ).toHaveLength(2);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-candidate-value-curve"][data-series-key="hpDamageFormulaParamCandidate"]'
+        )
+        .exists()
+    ).toBe(false);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-candidate-value-frame-summary-values"]')
+        .text()
+    ).not.toContain('HP');
     expect(text).toContain('候选三值');
     expect(text).toContain(
       '候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 12f/13f/16f/19f · Skill0_6/Skill0_1 · 绑定候选 普攻->Skill0_1 12f/13f · 状态证据 Skill0_1 动画+命中 / Skill0_6 动画+命中 · 普攻链 10900102->Skill0_2 / 10900103->Skill0_3 / +2 · 命中候选 5/5段 · 三值候选 5/5段 · 目标缺失 80102'

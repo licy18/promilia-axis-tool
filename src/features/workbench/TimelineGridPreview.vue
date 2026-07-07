@@ -37,6 +37,30 @@
           formatZoom(timelineZoom)
         }}</span>
       </div>
+      <div
+        v-if="candidateSeriesToggles.length"
+        class="candidate-toggle-group"
+        data-testid="workbench-candidate-value-toggle-group"
+      >
+        <label
+          v-for="toggle in candidateSeriesToggles"
+          :key="toggle.key"
+          class="candidate-toggle"
+          :data-series-key="toggle.key"
+        >
+          <input
+            type="checkbox"
+            :checked="isCandidateSeriesVisible(toggle.key)"
+            :data-series-key="toggle.key"
+            data-testid="workbench-candidate-value-toggle"
+            @change="
+              setCandidateSeriesVisible(toggle.key, $event.target.checked)
+            "
+          />
+          <i :style="{ background: toggle.color }" />
+          <span>{{ toggle.shortLabel }}</span>
+        </label>
+      </div>
     </div>
 
     <div class="timeline-scale">
@@ -187,6 +211,9 @@
               v-for="group in lane.candidateValueFrameGroups"
               :key="group.id"
               class="candidate-value-frame-hotspot"
+              :class="{
+                selected: group.id === selectedCandidateFrameGroup?.id,
+              }"
               :style="candidateValueFrameHotspotStyle(group)"
               :title="group.title"
               :aria-label="group.title"
@@ -196,13 +223,24 @@
               :data-frame-label="group.frameLabel"
               :data-marker-title="group.title"
               data-testid="workbench-timeline-candidate-value-frame-hotspot"
+              role="button"
+              tabindex="0"
+              @click="selectCandidateFrameGroup(group)"
+              @keydown.enter.prevent="selectCandidateFrameGroup(group)"
+              @keydown.space.prevent="selectCandidateFrameGroup(group)"
             />
 
             <div
               v-for="marker in lane.candidateValueMarkers"
               :key="marker.id"
               class="candidate-value-marker"
-              :class="`candidate-${marker.seriesKey}`"
+              :class="[
+                `candidate-${marker.seriesKey}`,
+                {
+                  selected:
+                    marker.frameGroupId === selectedCandidateFrameGroup?.id,
+                },
+              ]"
               :style="candidateValueMarkerStyle(marker)"
               :title="formatCandidateValueMarkerTitle(marker)"
               :aria-label="formatCandidateValueMarkerTitle(marker)"
@@ -214,10 +252,35 @@
               :data-value="marker.value"
               :data-marker-title="formatCandidateValueMarkerTitle(marker)"
               data-testid="workbench-timeline-candidate-value-marker"
+              role="button"
+              tabindex="0"
+              @click="selectCandidateFrameGroupByMarker(marker)"
+              @keydown.enter.prevent="selectCandidateFrameGroupByMarker(marker)"
+              @keydown.space.prevent="selectCandidateFrameGroupByMarker(marker)"
             />
           </div>
         </div>
       </div>
+    </div>
+
+    <div
+      v-if="selectedCandidateFrameGroup"
+      class="candidate-frame-summary"
+      data-testid="workbench-candidate-value-frame-summary"
+      :data-hit-index="selectedCandidateFrameGroup.hitIndex"
+      :data-frame-label="selectedCandidateFrameGroup.frameLabel"
+    >
+      <span>
+        {{ selectedCandidateFrameGroup.frameLabel }} · hit{{
+          selectedCandidateFrameGroup.hitIndex
+        }}
+      </span>
+      <strong data-testid="workbench-candidate-value-frame-summary-values">
+        {{ formatCandidateFrameGroupValues(selectedCandidateFrameGroup) }}
+      </strong>
+      <small data-testid="workbench-candidate-value-frame-summary-source">
+        {{ formatCandidateFrameGroupSource(selectedCandidateFrameGroup) }}
+      </small>
     </div>
 
     <div v-if="timelineLanes.length === 0" class="empty-lane">
@@ -255,10 +318,22 @@ const MAX_ZOOM = 4;
 const ZOOM_STEP = 0.25;
 const CANDIDATE_VALUE_CURVE_TOP = 68;
 const CANDIDATE_VALUE_CURVE_HEIGHT = 34;
-const CANDIDATE_VALUE_SERIES_ORDER = {
-  hpDamageFormulaParamCandidate: 0,
-  toughnessDamageCandidate: 1,
-  selfEnergyCandidate: 2,
+const CANDIDATE_VALUE_SERIES_META = {
+  hpDamageFormulaParamCandidate: {
+    order: 0,
+    shortLabel: 'HP',
+    color: '#f2b366',
+  },
+  toughnessDamageCandidate: {
+    order: 1,
+    shortLabel: '韧性',
+    color: '#79c7b9',
+  },
+  selfEnergyCandidate: {
+    order: 2,
+    shortLabel: '能量',
+    color: '#a6b7ff',
+  },
 };
 
 const props = defineProps({
@@ -317,6 +392,8 @@ const laneRowRefs = new Map();
 const dragState = ref(null);
 const resizeState = ref(null);
 const timelineZoom = ref(1);
+const candidateSeriesVisibility = ref({});
+const selectedCandidateFrameGroupId = ref(null);
 
 const ticks = computed(() => {
   const durationSeconds = props.durationMs / 1000;
@@ -338,6 +415,25 @@ const resizingActionId = computed(() => resizeState.value?.actionId ?? null);
 const timelineTrackStyle = computed(() => ({
   width: `${timelineZoom.value * 100}%`,
 }));
+const candidateSeriesToggles = computed(() =>
+  (props.candidateValueChart?.series ?? [])
+    .filter(series => series.pointCount > 0)
+    .map(series => {
+      const meta = getCandidateSeriesMeta(series.key);
+      return {
+        key: series.key,
+        label: series.label,
+        order: meta.order,
+        shortLabel: meta.shortLabel,
+        color: meta.color,
+      };
+    })
+    .sort(
+      (left, right) =>
+        left.order - right.order ||
+        String(left.label).localeCompare(String(right.label))
+    )
+);
 const actionsById = computed(
   () => new Map(props.actions.map(action => [action.id, action]))
 );
@@ -407,6 +503,20 @@ const timelineLanes = computed(() => {
     ? [...actorLanes, systemLane]
     : actorLanes;
 });
+const allCandidateFrameGroups = computed(() =>
+  timelineLanes.value.flatMap(lane =>
+    lane.candidateValueFrameGroups.map(group => ({
+      ...group,
+      laneId: lane.id,
+    }))
+  )
+);
+const selectedCandidateFrameGroup = computed(
+  () =>
+    allCandidateFrameGroups.value.find(
+      group => group.id === selectedCandidateFrameGroupId.value
+    ) ?? null
+);
 
 function isActionInSelectedBatch(action) {
   return Boolean(
@@ -502,26 +612,40 @@ function resolveCandidateValueLaneId(marker) {
 }
 
 function createCandidateValueTimelineMarkers() {
-  return (props.candidateValueChart?.series ?? []).flatMap(series =>
-    (series.points ?? []).map((point, index) => ({
-      id: `${series.key}-${point.actionId}-${point.hitIndex}-${index}`,
-      seriesKey: series.key,
-      seriesLabel: series.label,
-      valueKind: series.valueKind,
-      unit: series.unit,
-      actionId: point.actionId,
-      hitIndex: point.hitIndex,
-      timeMs: point.displayTimeMs ?? point.sourceTimeMs ?? 0,
-      frameLabel:
-        point.displayFrameLabel ?? formatFrameTime(point.displayTimeMs ?? 0),
-      value: point.value,
-      xPercent: point.xPercent,
-      yPercent: point.yPercent,
-      seriesOrder:
-        CANDIDATE_VALUE_SERIES_ORDER[series.key] ??
-        CANDIDATE_VALUE_SERIES_ORDER.hpDamageFormulaParamCandidate,
-    }))
-  );
+  return (props.candidateValueChart?.series ?? [])
+    .filter(series => isCandidateSeriesVisible(series.key))
+    .flatMap(series => {
+      const meta = getCandidateSeriesMeta(series.key);
+      return (series.points ?? []).map((point, index) => {
+        const timeMs = point.displayTimeMs ?? point.sourceTimeMs ?? 0;
+        const frameLabel = point.displayFrameLabel ?? formatFrameTime(timeMs);
+        const frameGroupId = `${point.actionId}-${point.hitIndex}-${frameLabel}`;
+        return {
+          id: `${series.key}-${point.actionId}-${point.hitIndex}-${index}`,
+          frameGroupId,
+          seriesKey: series.key,
+          seriesLabel: series.label,
+          shortLabel: meta.shortLabel,
+          color: meta.color,
+          valueKind: series.valueKind,
+          unit: series.unit,
+          actionId: point.actionId,
+          actionName: point.actionName,
+          skillId: point.skillId,
+          hitSkillId: point.hitSkillId,
+          hitIndex: point.hitIndex,
+          timeMs,
+          frameLabel,
+          value: point.value,
+          xPercent: point.xPercent,
+          yPercent: point.yPercent,
+          elementConfigIds: point.elementConfigIds ?? [],
+          sourceStatus: point.sourceStatus,
+          timeAdjustmentStatus: point.timeAdjustmentStatus,
+          seriesOrder: meta.order,
+        };
+      });
+    });
 }
 
 function createCandidateValueTimelineCurves(markers) {
@@ -570,7 +694,7 @@ function createCandidateValueTimelineCurves(markers) {
 function createCandidateValueFrameGroups(markers) {
   const byFrame = new Map();
   for (const marker of markers) {
-    const key = `${marker.actionId}-${marker.hitIndex}-${marker.frameLabel}`;
+    const key = marker.frameGroupId;
     if (!byFrame.has(key)) {
       byFrame.set(key, {
         id: key,
@@ -613,6 +737,75 @@ function createCandidateValueFrameGroups(markers) {
 
 function formatCandidateValueMarkerTitle(marker) {
   return `${marker.seriesLabel} ${marker.frameLabel} hit${marker.hitIndex}: ${formatTimelineNumber(marker.value)} ${marker.unit}`;
+}
+
+function getCandidateSeriesMeta(seriesKey) {
+  return (
+    CANDIDATE_VALUE_SERIES_META[seriesKey] ?? {
+      order: 99,
+      shortLabel: '候选',
+      color: '#b8c0c7',
+    }
+  );
+}
+
+function isCandidateSeriesVisible(seriesKey) {
+  return candidateSeriesVisibility.value[seriesKey] !== false;
+}
+
+function setCandidateSeriesVisible(seriesKey, visible) {
+  candidateSeriesVisibility.value = {
+    ...candidateSeriesVisibility.value,
+    [seriesKey]: Boolean(visible),
+  };
+}
+
+function selectCandidateFrameGroup(group) {
+  selectedCandidateFrameGroupId.value = group.id;
+}
+
+function selectCandidateFrameGroupByMarker(marker) {
+  selectedCandidateFrameGroupId.value = marker.frameGroupId;
+}
+
+function formatCandidateFrameGroupValues(group) {
+  return group.values
+    .map(
+      value =>
+        `${value.shortLabel} ${formatTimelineNumber(value.value)} ${value.unit}`
+    )
+    .join(' / ');
+}
+
+function formatCandidateFrameGroupSource(group) {
+  const firstValue = group.values[0] ?? {};
+  const hitSkillText = firstValue.hitSkillId
+    ? `hitSkill ${firstValue.hitSkillId}`
+    : 'hitSkill 未知';
+  const elementText = formatCompactList(
+    group.values.flatMap(value => value.elementConfigIds ?? []),
+    'element 未展开'
+  );
+  const sourceText = formatCompactList(
+    group.values.map(value => value.sourceStatus),
+    '来源候选字段'
+  );
+  const timingText = formatCompactList(
+    group.values.map(value => value.timeAdjustmentStatus),
+    '时序候选'
+  );
+  return `${group.actionId} · ${hitSkillText} · ${elementText} · ${sourceText} · ${timingText} · 未应用候选`;
+}
+
+function formatCompactList(values, fallback) {
+  const uniqueValues = [
+    ...new Set(
+      values
+        .map(value => String(value ?? '').trim())
+        .filter(value => value.length > 0)
+    ),
+  ];
+  return uniqueValues.length ? uniqueValues.join('/') : fallback;
 }
 
 function formatTimelineNumber(value) {
@@ -849,6 +1042,7 @@ onBeforeUnmount(() => {
 
 .panel-title {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
   padding: 14px 16px;
@@ -871,6 +1065,45 @@ h2 {
   align-items: center;
   gap: 8px;
   margin-left: auto;
+}
+
+.candidate-toggle-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.candidate-toggle {
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+  gap: 5px;
+  padding: 0 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  background: #151b20;
+  color: #b8c0c7;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.candidate-toggle input {
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  accent-color: #79c7b9;
+}
+
+.candidate-toggle i {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+}
+
+.candidate-toggle span {
+  white-space: nowrap;
 }
 
 .icon-control {
@@ -949,6 +1182,38 @@ h2 {
   grid-template-columns: 112px minmax(0, 1fr);
   gap: 10px;
   margin: 12px 18px;
+}
+
+.candidate-frame-summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 6px 12px;
+  margin: 0 18px 12px 140px;
+  padding: 8px 10px;
+  border: 1px solid rgba(121, 199, 185, 0.2);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.07);
+}
+
+.candidate-frame-summary span {
+  color: #9ce0d2;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.candidate-frame-summary strong {
+  min-width: 0;
+  color: #ffffff;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.candidate-frame-summary small {
+  grid-column: 1 / -1;
+  color: #8f9aa3;
+  font-size: 11px;
+  overflow-wrap: anywhere;
 }
 
 .lane-labels,
@@ -1219,7 +1484,7 @@ h2 {
 
 .candidate-value-frame-hotspot {
   position: absolute;
-  z-index: 3;
+  z-index: 1;
   top: 68px;
   width: 18px;
   height: 34px;
@@ -1227,6 +1492,12 @@ h2 {
   background: transparent;
   cursor: help;
   transform: translateX(-50%);
+}
+
+.candidate-value-frame-hotspot:focus,
+.candidate-value-frame-hotspot.selected {
+  outline: 1px solid rgba(121, 199, 185, 0.72);
+  outline-offset: -1px;
 }
 
 .candidate-value-marker {
@@ -1241,6 +1512,12 @@ h2 {
   transform: translateX(-50%);
 }
 
+.candidate-value-marker:focus,
+.candidate-value-marker.selected {
+  outline: 2px solid rgba(255, 255, 255, 0.86);
+  outline-offset: 2px;
+}
+
 .candidate-value-marker.candidate-toughnessDamageCandidate {
   border-radius: 2px;
   background: #79c7b9;
@@ -1251,6 +1528,11 @@ h2 {
   background: #a6b7ff;
   box-shadow: 0 0 14px rgba(166, 183, 255, 0.48);
   transform: translateX(-50%) rotate(45deg);
+}
+
+.candidate-value-marker.candidate-selfEnergyCandidate:focus,
+.candidate-value-marker.candidate-selfEnergyCandidate.selected {
+  outline-offset: 3px;
 }
 
 .empty-lane {
@@ -1338,6 +1620,11 @@ h2 {
 
   .timeline-shell {
     grid-template-columns: 84px minmax(0, 1fr);
+  }
+
+  .candidate-frame-summary {
+    grid-template-columns: 1fr;
+    margin: 0 18px 12px;
   }
 
   .lane-label {

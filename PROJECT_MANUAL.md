@@ -3140,6 +3140,48 @@ HP参数候选 0s12f-3s4f · 2,500-13,000 · raw-param
 - 阶段 5-8AG 目标：给候选多曲线轨增加基础交互控制，例如 HP/削韧/能量曲线显隐、选中帧来源摘要，以及候选/真实投影视觉分层说明。
 - 同时开始考虑多动作、多角色和长时间轴时的候选曲线密度控制。
 
+### 2026-07-08：阶段 5-8AG 候选多曲线基础交互控制
+
+本轮完成：
+
+- `TimelineGridPreview` 在时间轴标题区新增 HP / 韧性 / 能量三枚候选曲线显隐开关。
+- 曲线显隐会同步影响对应的 curve line、candidate marker 和按帧 hotspot 聚合，不改变 `candidateValueSeries.chart` 原始数据。
+- 候选 hotspot 和 marker 可点击或键盘选中，选中后在时间轴下方显示 `candidate-frame-summary`，汇总该帧当前可见的候选值。
+- 选中帧来源摘要会显示 `hitSkill`、`elementConfigIds`、候选字段来源状态和时序状态，并继续标记为“未应用候选”。
+- Workbench 测试覆盖默认三枚开关、首帧选中摘要，以及关闭 HP 曲线后的 marker / curve 数量变化。
+
+当前末音 `10900101` 默认普攻主时间轴显示：
+
+- 默认可见曲线：HP、韧性、能量 3 条。
+- 默认候选 marker：15 个。
+- 默认按帧 hotspot：5 个。
+- 首帧选中摘要值：
+
+```text
+HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
+```
+
+- 关闭 HP 开关后：剩余 2 条曲线、10 个 marker；首帧摘要只保留韧性和能量候选。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、33 条测试通过。
+- `npm exec eslint -- --no-warn-ignored src/features/workbench/TimelineGridPreview.vue src/__tests__/views/Workbench.test.js`：通过。
+- `npm test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `npm run build`：通过，仍有既有 Sass `@import` deprecation 和 chunk size 警告。
+- `npm exec prettier -- --check ...` 与 `git diff --check`：通过。
+
+当前边界：
+
+- 本阶段只增强候选曲线交互，不改变仿真 schema，也不应用 HP、削韧或充能最终公式。
+- 选中帧来源摘要仍来自 `candidateValueSeries.chart.points[]` 已暴露字段，不是完整的 per-element 详情面板。
+- 长轴、多动作、多角色同时出现候选曲线时，仍需要后续密度控制和来源详情下钻。
+
+下一步：
+
+- 阶段 5-8AH 目标：把选中帧摘要升级为更细的候选来源详情，展示每条可见曲线的 `valueSamples`、`candidateCount`、`sourceFrameIndex/localFrameIndex/chainStartFrame` 和 element 候选来源。
+- 同时开始为多动作长时间轴设计候选曲线密度控制，例如按 action、actor、series 或选中帧范围过滤。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
