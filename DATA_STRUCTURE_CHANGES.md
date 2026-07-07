@@ -1952,3 +1952,93 @@ getAzprSkillAssetEvidence()
 - `laneHints` 可以多值，表示同一个 MonoBehaviour 候选可能同时命中多个分类模式。
 - 下一阶段必须解引用 `behaviorList`、PathID、MonoBehaviour 引用和相邻资源，才能确认真实行为对象。
 - 未出现 `toughnessDamage` 或 `selfEnergyChange` 候选不代表游戏没有削韧/充能机制，只表示当前抽样和当前模式尚未定位到明确字段。
+
+## 34. 2026-07-07 skill_control 本地行为链解引用
+
+阶段 5-8I 在 `skill-asset-evidence.json` 中新增本地行为链证据，用于记录 `timeline control -> behaviorList -> target MonoBehaviour` 的可解析链路。
+
+### 34.1 summary 新增字段
+
+`skill-asset-evidence.json.summary` 新增：
+
+```javascript
+{
+  "behaviorReferenceResolvedSkills": 5,
+  "hpDamageBehaviorReferenceResolvedSkills": 1,
+  "externalElementBaseReferenceSkills": 1
+}
+```
+
+这些计数表示当前抽样中：
+
+- 至少有一个 `behaviorList` 引用能解到本地 MonoBehaviour 的当前技能数。
+- 至少有一个 HP 伤害候选行为链能解到本地 MonoBehaviour 的当前技能数。
+- 至少有一个行为对象包含外部 `elementBaseDatas` 引用的当前技能数。
+
+### 34.2 技能证据项新增字段
+
+`currentSkillControlEvidence[]` 的 `found` 项新增：
+
+```javascript
+{
+  "behaviorReferenceSummary": {
+    "behaviorListRefs": 36,
+    "resolvedBehaviorListRefs": 36,
+    "unresolvedBehaviorListRefs": 0,
+    "externalElementBaseRefs": 13,
+    "resolvedBehaviorRefsByLane": {
+      "hpDamage": 5,
+      "toughnessDamage": 0,
+      "selfEnergyChange": 0,
+      "elementEffect": 6,
+      "timingControl": 5,
+      "presentation": 20
+    }
+  },
+  "effectLaneBehaviorChains": [
+    {
+      "laneHints": ["hpDamage"],
+      "sourceFile": "MonoBehaviour_-2219364397070875723__-2219364397070875723.json",
+      "sourceName": "攻击碰撞",
+      "sourceStartFrame": 19,
+      "sourceEndFrame": 20,
+      "behaviorRefs": [
+        {
+          "fileId": 0,
+          "pathId": "1081335820946113461",
+          "roundedPathId": "1081335820946113400",
+          "targetFile": "MonoBehaviour_1081335820946113461__1081335820946113461.json",
+          "status": "resolved-local-monoBehaviour"
+        }
+      ],
+      "resolvedBehaviors": [
+        {
+          "pathId": "1081335820946113461",
+          "scriptPathId": "8289252000250858251",
+          "startFrame": 19,
+          "frameCount": 1,
+          "collisionLayer": 5,
+          "elementalType": 1023,
+          "targetType": 1,
+          "externalElementBaseRefCount": 3
+        }
+      ]
+    }
+  ]
+}
+```
+
+### 34.3 PathID 精度规则
+
+Unity `m_PathID` 是 64 位整数，JavaScript `JSON.parse` 会把它读成普通 `Number` 并丢失低位精度。因此新增字段遵循：
+
+- `pathId`：从文件名或原始 JSON 文本中抽取的精确字符串，作为证据记录使用。
+- `roundedPathId`：由 `JSON.parse` 后的 Number 转成字符串，仅用于说明本次匹配经历了 JS 精度折损。
+- 生成器用 `roundedPathId` 反查同目录文件索引，但输出必须保留精确 `pathId`。
+
+### 34.4 当前边界
+
+- `resolved-local-monoBehaviour` 只说明 `behaviorList` 能解到同目录目标 MonoBehaviour，不说明目标行为已经等于伤害公式。
+- `scriptPathId = 8289252000250858251` 是识别行为类型的强线索，但仍需脚本类型名、更多样本或 typetree 证据确认。
+- `elementBaseDatas[].fileId = 2` 表示外部文件引用，当前不在同目录 JSON 中；下一阶段必须追 bundle 外部对象或 Extractor 索引。
+- 削韧和自身能量仍未在本地行为链中确认，不得从 HP 碰撞行为推导。

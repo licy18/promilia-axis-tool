@@ -158,6 +158,9 @@ describe('generated AzPr data', () => {
         hpDamageCandidateSkills: 1,
         toughnessCandidateSkills: 0,
         selfEnergyCandidateSkills: 1,
+        behaviorReferenceResolvedSkills: 5,
+        hpDamageBehaviorReferenceResolvedSkills: 1,
+        externalElementBaseReferenceSkills: 1,
         relationStatus: 'skill-control-assets-found-in-azpr-extractor',
       },
     });
@@ -369,6 +372,9 @@ describe('generated AzPr data', () => {
       hpDamageCandidateSkills: 1,
       toughnessCandidateSkills: 0,
       selfEnergyCandidateSkills: 1,
+      behaviorReferenceResolvedSkills: 5,
+      hpDamageBehaviorReferenceResolvedSkills: 1,
+      externalElementBaseReferenceSkills: 1,
       relationStatus: 'skill-control-assets-found-in-azpr-extractor',
     });
     expect(
@@ -395,6 +401,20 @@ describe('generated AzPr data', () => {
         },
       },
     });
+    expect(mayoiAttack.behaviorReferenceSummary).toMatchObject({
+      behaviorListRefs: 36,
+      resolvedBehaviorListRefs: 36,
+      unresolvedBehaviorListRefs: 0,
+      externalElementBaseRefs: 13,
+      resolvedBehaviorRefsByLane: {
+        hpDamage: 5,
+        toughnessDamage: 0,
+        selfEnergyChange: 0,
+        elementEffect: 6,
+        timingControl: 5,
+        presentation: 20,
+      },
+    });
     expect(mayoiAttack.effectLaneCandidates).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -402,6 +422,36 @@ describe('generated AzPr data', () => {
           name: '攻击碰撞',
           startFrame: 19,
           endFrame: 20,
+        }),
+      ])
+    );
+    expect(mayoiAttack.effectLaneBehaviorChains).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          laneHints: ['hpDamage'],
+          sourceName: '攻击碰撞',
+          sourceStartFrame: 19,
+          sourceEndFrame: 20,
+          behaviorRefs: [
+            expect.objectContaining({
+              pathId: '1081335820946113461',
+              targetFile:
+                'MonoBehaviour_1081335820946113461__1081335820946113461.json',
+              status: 'resolved-local-monoBehaviour',
+            }),
+          ],
+          resolvedBehaviors: [
+            expect.objectContaining({
+              pathId: '1081335820946113461',
+              scriptPathId: '8289252000250858251',
+              startFrame: 19,
+              frameCount: 1,
+              collisionLayer: 5,
+              elementalType: 1023,
+              targetType: 1,
+              externalElementBaseRefCount: 3,
+            }),
+          ],
         }),
       ])
     );

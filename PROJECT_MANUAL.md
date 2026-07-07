@@ -2176,6 +2176,38 @@ Endaxis 参考边界：
 - 将 `攻击碰撞`、`普通-攻击碰撞`、`元素` 等轨道连接到实际行为对象、`skillsub_ele_value.elementId` 和可能的公式/效果节点。
 - 重点确认削韧字段、自身能量变化字段和 HP 伤害节点是否在行为对象或相邻资源中，而不是只看 timeline control 名称。
 
+### 2026-07-07：阶段 5-8I skill_control 本地行为链解引用落地
+
+本轮完成：
+
+- `scripts/generate-azpr-data.mjs` 为 `skill_control` MonoBehaviour 样本新增 PathID 文件索引，能从 `behaviorList[].m_PathID` 反查同目录目标 MonoBehaviour。
+- 因 Unity `m_PathID` 是 64 位整数，JS `JSON.parse` 会丢精度；本轮通过文件名保留精确 PathID 字符串，同时用 rounded PathID 做索引匹配，输出中同时记录 `pathId` 和 `roundedPathId`。
+- `skill-asset-evidence.json` 新增 `behaviorReferenceSummary` 和 `effectLaneBehaviorChains`，记录 `timeline control -> behaviorList ref -> target MonoBehaviour` 的链路。
+- 全局当前样本统计显示：5 个当前技能已解出本地 behavior 引用，1 个当前技能有 HP 行为链，1 个当前技能出现外部 `elementBaseDatas` 引用。
+- 末音 `10900101` 的 36 条 `behaviorList` 引用全部解到本地 MonoBehaviour，未解引用数为 0。
+- 末音 `10900101` 的 HP 候选行为链解出 5 条；第一条 `攻击碰撞 19-20f` 指向 `MonoBehaviour_1081335820946113461__1081335820946113461.json`。
+- 该目标行为对象字段显示：`scriptPathId = 8289252000250858251`、`startFrame = 19`、`frameCount = 1`、`collisionLayer = 5`、`elementalType = 1023`、`targetType = 1`、`maxTargetCount = 99`，并有 3 条 `m_FileID = 2` 的 `elementBaseDatas` 外部引用。
+
+验收结果：
+
+- `npm run data:generate`：通过，重新生成 `skill-asset-evidence.json`。
+- `npm run test -- --run src/__tests__/data/azprGenerated.test.js`：通过，1 个测试文件、9 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1359 KB。
+
+当前边界：
+
+- 已确认的是本地行为对象链路，不是最终伤害公式、削韧公式或充能公式。
+- `scriptPathId = 8289252000250858251` 可作为后续识别碰撞/命中行为类型的强线索，但还需要脚本类型名或更多同类样本验证。
+- `elementBaseDatas` 指向 `m_FileID = 2` 外部对象，当前 `skill_control_10900101.asset/MonoBehaviour` 目录内没有对应 JSON；下一阶段需要追 bundle 外部对象、Yoo index、typetree 或 Extractor 原始资源。
+- 末音样本中削韧和自身能量仍未在 HP 碰撞行为对象里直接出现，不能从 HP 行为链推导它们。
+
+下一步：
+
+- 阶段 5-8J 目标：追踪 `elementBaseDatas` 的 `m_FileID = 2` 外部引用来源。
+- 优先从 `skill_control_10900101` 所属 bundle、Extractor 的 Yoo index、stub 元信息和 Unity typetree 输出中查找 `-5633710717881758712`、`7848597992417622553`、`2740651767650299388`、`-4052262175632216603` 等外部对象。
+- 若能解析外部对象，继续确认它们是否连接到 `skillsub_ele_value.elementId`、`valueParam`、削韧字段或充能字段；若仍不能解析，则把缺口固化为诊断索引。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

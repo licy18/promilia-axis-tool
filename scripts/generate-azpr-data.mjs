@@ -350,6 +350,7 @@ const WEAK_POINT_DAMAGE_ATTRIBUTE_KEYS = Object.freeze([
 const SKILL_CONTROL_SAMPLE_FILE_LIMIT = 80;
 const SKILL_CONTROL_SAMPLE_NODE_LIMIT = 8;
 const SKILL_EFFECT_LANE_SAMPLE_LIMIT = 12;
+const SKILL_EFFECT_BEHAVIOR_CHAIN_SAMPLE_LIMIT = 12;
 const SKILL_EFFECT_LANES = Object.freeze([
   {
     key: 'hpDamage',
@@ -2025,6 +2026,9 @@ async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
   const laneCandidateSkillCounts = summarizeLaneCandidateSkillCounts(
     currentSkillControlEvidence
   );
+  const behaviorReferenceSkillCounts = summarizeBehaviorReferenceSkillCounts(
+    currentSkillControlEvidence
+  );
   const currentSkillsWithSkillTableRow = skills.filter(skill =>
     skillTableById.has(Number(skill.id))
   );
@@ -2083,6 +2087,12 @@ async function buildSkillAssetEvidenceIndex({ characters, skills, tables }) {
       hpDamageCandidateSkills: laneCandidateSkillCounts.hpDamage ?? 0,
       toughnessCandidateSkills: laneCandidateSkillCounts.toughnessDamage ?? 0,
       selfEnergyCandidateSkills: laneCandidateSkillCounts.selfEnergyChange ?? 0,
+      behaviorReferenceResolvedSkills:
+        behaviorReferenceSkillCounts.resolvedBehaviorListRefs,
+      hpDamageBehaviorReferenceResolvedSkills:
+        behaviorReferenceSkillCounts.hpDamage,
+      externalElementBaseReferenceSkills:
+        behaviorReferenceSkillCounts.externalElementBaseRefs,
       relationStatus:
         foundCurrentSkillControls.length > 0
           ? 'skill-control-assets-found-in-azpr-extractor'
@@ -2244,17 +2254,27 @@ async function buildSkillControlEvidenceItem(skill, skillControlBySkillId) {
 
   const monoBehaviourRoot = path.join(controlDir.fullPath, 'MonoBehaviour');
   const jsonFiles = await listJsonFileNames(monoBehaviourRoot);
+  const monoBehaviourFileIndex = buildMonoBehaviourFileIndex(jsonFiles);
+  const monoBehaviourPayloadCache = new Map();
   const aggregate = createEmptySkillControlNodeEvidence();
   let parsedJsonSampleFiles = 0;
   let unreadableJsonSampleFiles = 0;
 
   for (const fileName of jsonFiles.slice(0, SKILL_CONTROL_SAMPLE_FILE_LIMIT)) {
     try {
-      const json = await readJson(path.join(monoBehaviourRoot, fileName));
+      const payload = await readMonoBehaviourPayload(
+        monoBehaviourRoot,
+        fileName,
+        monoBehaviourPayloadCache
+      );
       parsedJsonSampleFiles += 1;
       mergeSkillControlNodeEvidence(
         aggregate,
-        extractSkillControlNodeEvidence(json, fileName)
+        await extractSkillControlNodeEvidence(payload.json, fileName, {
+          monoBehaviourRoot,
+          monoBehaviourFileIndex,
+          monoBehaviourPayloadCache,
+        })
       );
     } catch {
       unreadableJsonSampleFiles += 1;
@@ -2279,6 +2299,8 @@ async function buildSkillControlEvidenceItem(skill, skillControlBySkillId) {
     elementListCandidateSampleCount: aggregate.elementListCandidateCount,
     effectLaneCandidateSummary: aggregate.laneCandidateSummary,
     effectLaneCandidates: aggregate.laneCandidates,
+    behaviorReferenceSummary: aggregate.behaviorReferenceSummary,
+    effectLaneBehaviorChains: aggregate.behaviorChains,
     frameRange: buildFrameRange(aggregate.startFrames, aggregate.endFrames),
     sampleNodeCandidates: aggregate.candidates.slice(
       0,
@@ -2287,7 +2309,7 @@ async function buildSkillControlEvidenceItem(skill, skillControlBySkillId) {
   };
 }
 
-function extractSkillControlNodeEvidence(json, fileName) {
+async function extractSkillControlNodeEvidence(json, fileName, context) {
   const evidence = createEmptySkillControlNodeEvidence();
   const stack = [json];
 
@@ -2311,9 +2333,15 @@ function extractSkillControlNodeEvidence(json, fileName) {
         }
         evidence.timelineControlCount += 1;
         collectFrameEvidence(evidence, control);
-        pushSkillControlCandidate(
+        const candidate = compactSkillControlCandidate(
+          control,
+          fileName,
+          'timeline-control'
+        );
+        pushSkillControlCandidate(evidence, candidate);
+        pushSkillBehaviorChain(
           evidence,
-          compactSkillControlCandidate(control, fileName, 'timeline-control')
+          await buildSkillBehaviorChain(control, fileName, candidate, context)
         );
       }
     }
@@ -2366,6 +2394,16 @@ function createEmptySkillControlNodeEvidence() {
       ])
     ),
     laneCandidates: [],
+    behaviorReferenceSummary: {
+      behaviorListRefs: 0,
+      resolvedBehaviorListRefs: 0,
+      unresolvedBehaviorListRefs: 0,
+      externalElementBaseRefs: 0,
+      resolvedBehaviorRefsByLane: Object.fromEntries(
+        SKILL_EFFECT_LANES.map(lane => [lane.key, 0])
+      ),
+    },
+    behaviorChains: [],
   };
 }
 
@@ -2384,6 +2422,13 @@ function mergeSkillControlNodeEvidence(target, source) {
   }
   for (const candidate of source.laneCandidates) {
     pushSkillEffectLaneCandidateSample(target, candidate);
+  }
+  mergeBehaviorReferenceSummary(
+    target.behaviorReferenceSummary,
+    source.behaviorReferenceSummary
+  );
+  for (const chain of source.behaviorChains) {
+    pushSkillBehaviorChainSample(target, chain);
   }
 }
 
@@ -2441,6 +2486,284 @@ function pushSkillEffectLaneCandidateSample(evidence, candidate) {
   if (evidence.laneCandidates.length < SKILL_EFFECT_LANE_SAMPLE_LIMIT) {
     evidence.laneCandidates.push(candidate);
   }
+}
+
+async function buildSkillBehaviorChain(control, fileName, candidate, context) {
+  if (!candidate?.laneHints?.length || !Array.isArray(control.behaviorList)) {
+    return null;
+  }
+
+  const behaviorRefs = [];
+  const resolvedBehaviors = [];
+  for (const ref of control.behaviorList.slice(0, 5)) {
+    const resolvedRef = await resolveMonoBehaviourReference(ref, context);
+    behaviorRefs.push(resolvedRef.reference);
+    if (resolvedRef.behavior) {
+      resolvedBehaviors.push(resolvedRef.behavior);
+    }
+  }
+
+  return compactObject({
+    laneHints: candidate.laneHints,
+    sourceFile: fileName,
+    sourceName: candidate.name,
+    sourceTrackName: candidate.trackName,
+    sourceStartFrame: candidate.startFrame,
+    sourceEndFrame: candidate.endFrame,
+    behaviorRefs,
+    resolvedBehaviors,
+  });
+}
+
+async function resolveMonoBehaviourReference(ref, context) {
+  const fileId = numberOrNull(ref?.m_FileID);
+  const roundedPathId = numberOrNull(ref?.m_PathID);
+  const reference = compactObject({
+    fileId,
+    roundedPathId: roundedPathId == null ? null : String(roundedPathId),
+    status: 'unresolved',
+  });
+
+  if (fileId !== 0 || roundedPathId == null) {
+    return {
+      reference,
+      behavior: null,
+    };
+  }
+
+  const target = context.monoBehaviourFileIndex.byRoundedPathId.get(
+    String(roundedPathId)
+  );
+  if (!target) {
+    return {
+      reference,
+      behavior: null,
+    };
+  }
+
+  const payload = await readMonoBehaviourPayload(
+    context.monoBehaviourRoot,
+    target.fileName,
+    context.monoBehaviourPayloadCache
+  );
+  return {
+    reference: compactObject({
+      fileId,
+      pathId: target.pathId,
+      roundedPathId: String(roundedPathId),
+      targetFile: target.fileName,
+      status: 'resolved-local-monoBehaviour',
+    }),
+    behavior: compactMonoBehaviourBehaviorTarget(
+      payload.json,
+      payload.text,
+      target.fileName,
+      target.pathId
+    ),
+  };
+}
+
+async function readMonoBehaviourPayload(root, fileName, cache) {
+  const cached = cache.get(fileName);
+  if (cached) {
+    return cached;
+  }
+
+  const text = await fs.readFile(path.join(root, fileName), 'utf8');
+  const payload = {
+    text,
+    json: JSON.parse(text),
+  };
+  cache.set(fileName, payload);
+  return payload;
+}
+
+function compactMonoBehaviourBehaviorTarget(value, text, fileName, pathId) {
+  const elementBaseDataRefs = extractObjectRefsFromArraySection(
+    text,
+    'elementBaseDatas'
+  );
+  const toOwnElementBaseDataRefs = extractObjectRefsFromArraySection(
+    text,
+    'toOwnElementBaseDatas'
+  );
+
+  return compactObject({
+    file: fileName,
+    pathId,
+    scriptPathId: extractScriptPathId(text),
+    behaviorGroupId: numberOrNull(value.behaviorGroupId),
+    timelineGroupIndex: numberOrNull(value.timelineGroupIndex),
+    behaviorIndex: numberOrNull(value.behaviorIndex),
+    startFrame: numberOrNull(value.startFrame),
+    frameCount: numberOrNull(value.frameCount),
+    collisionLayer: numberOrNull(value.collisionLayer),
+    elementalType: numberOrNull(value.elementalType),
+    targetType: numberOrNull(value.targetType),
+    lockType: numberOrNull(value.lockType),
+    interval: numberOrNull(value.interval),
+    maxTargetCount: numberOrNull(value.maxTargetCount),
+    maxTotalCount: numberOrNull(value.maxTotalCount),
+    damageEffectId: numberOrNull(value.damageEffectId),
+    keyFrameCount: Array.isArray(value.keyFrameDatas)
+      ? value.keyFrameDatas.length
+      : null,
+    elementBaseDataRefs,
+    toOwnElementBaseDataRefCount: toOwnElementBaseDataRefs.length,
+    externalElementBaseRefCount: elementBaseDataRefs.filter(
+      item => item.fileId !== 0
+    ).length,
+  });
+}
+
+function pushSkillBehaviorChain(evidence, chain) {
+  if (!chain) {
+    return;
+  }
+
+  const refs = chain.behaviorRefs ?? [];
+  const resolvedRefs = refs.filter(
+    ref => ref.status === 'resolved-local-monoBehaviour'
+  );
+  const unresolvedRefs = refs.filter(
+    ref => ref.status !== 'resolved-local-monoBehaviour'
+  );
+  const externalElementBaseRefs = (chain.resolvedBehaviors ?? []).reduce(
+    (sum, behavior) => sum + (behavior.externalElementBaseRefCount ?? 0),
+    0
+  );
+
+  evidence.behaviorReferenceSummary.behaviorListRefs += refs.length;
+  evidence.behaviorReferenceSummary.resolvedBehaviorListRefs +=
+    resolvedRefs.length;
+  evidence.behaviorReferenceSummary.unresolvedBehaviorListRefs +=
+    unresolvedRefs.length;
+  evidence.behaviorReferenceSummary.externalElementBaseRefs +=
+    externalElementBaseRefs;
+
+  for (const lane of chain.laneHints ?? []) {
+    if (
+      Object.prototype.hasOwnProperty.call(
+        evidence.behaviorReferenceSummary.resolvedBehaviorRefsByLane,
+        lane
+      )
+    ) {
+      evidence.behaviorReferenceSummary.resolvedBehaviorRefsByLane[lane] +=
+        resolvedRefs.length;
+    }
+  }
+
+  pushSkillBehaviorChainSample(evidence, chain);
+}
+
+function pushSkillBehaviorChainSample(evidence, chain) {
+  if (evidence.behaviorChains.length < SKILL_EFFECT_BEHAVIOR_CHAIN_SAMPLE_LIMIT) {
+    evidence.behaviorChains.push(chain);
+  }
+}
+
+function mergeBehaviorReferenceSummary(target, source) {
+  target.behaviorListRefs += source.behaviorListRefs;
+  target.resolvedBehaviorListRefs += source.resolvedBehaviorListRefs;
+  target.unresolvedBehaviorListRefs += source.unresolvedBehaviorListRefs;
+  target.externalElementBaseRefs += source.externalElementBaseRefs;
+  for (const [lane, count] of Object.entries(source.resolvedBehaviorRefsByLane)) {
+    target.resolvedBehaviorRefsByLane[lane] =
+      (target.resolvedBehaviorRefsByLane[lane] ?? 0) + count;
+  }
+}
+
+function summarizeBehaviorReferenceSkillCounts(currentSkillControlEvidence) {
+  const foundItems = currentSkillControlEvidence.filter(
+    item => item.status === 'found'
+  );
+  return {
+    resolvedBehaviorListRefs: foundItems.filter(
+      item => (item.behaviorReferenceSummary?.resolvedBehaviorListRefs ?? 0) > 0
+    ).length,
+    externalElementBaseRefs: foundItems.filter(
+      item => (item.behaviorReferenceSummary?.externalElementBaseRefs ?? 0) > 0
+    ).length,
+    ...Object.fromEntries(
+      SKILL_EFFECT_LANES.map(lane => [
+        lane.key,
+        foundItems.filter(
+          item =>
+            (item.behaviorReferenceSummary?.resolvedBehaviorRefsByLane?.[
+              lane.key
+            ] ?? 0) > 0
+        ).length,
+      ])
+    ),
+  };
+}
+
+function buildMonoBehaviourFileIndex(fileNames) {
+  const byPathId = new Map();
+  for (const fileName of fileNames) {
+    const pathId = extractPathIdFromMonoBehaviourFileName(fileName);
+    if (!pathId) {
+      continue;
+    }
+    const item = {
+      pathId,
+      roundedPathId: String(Number(pathId)),
+      fileName,
+      preferred: fileName.startsWith('MonoBehaviour_') ? 1 : 0,
+    };
+    const existing = byPathId.get(pathId);
+    if (!existing || item.preferred > existing.preferred) {
+      byPathId.set(pathId, item);
+    }
+  }
+
+  const byRoundedPathId = new Map();
+  for (const item of byPathId.values()) {
+    const existing = byRoundedPathId.get(item.roundedPathId);
+    if (!existing || item.preferred > existing.preferred) {
+      byRoundedPathId.set(item.roundedPathId, item);
+    }
+  }
+
+  return {
+    byPathId,
+    byRoundedPathId,
+  };
+}
+
+function extractPathIdFromMonoBehaviourFileName(fileName) {
+  return (
+    fileName.match(/__(-?\d+)\.json$/)?.[1] ??
+    fileName.match(/^MonoBehaviour_(-?\d+)/)?.[1] ??
+    null
+  );
+}
+
+function extractScriptPathId(text) {
+  return (
+    text.match(/"m_Script"\s*:\s*{[\s\S]*?"m_PathID"\s*:\s*(-?\d+)/)?.[1] ??
+    null
+  );
+}
+
+function extractObjectRefsFromArraySection(text, key) {
+  const section = text.match(
+    new RegExp(`"${key}"\\s*:\\s*\\[([\\s\\S]*?)\\]`)
+  )?.[1];
+  if (!section) {
+    return [];
+  }
+
+  const refs = [];
+  const regex = /"m_FileID"\s*:\s*(-?\d+)\s*,\s*"m_PathID"\s*:\s*(-?\d+)/g;
+  for (const match of section.matchAll(regex)) {
+    refs.push({
+      fileId: Number(match[1]),
+      pathId: match[2],
+      status: Number(match[1]) === 0 ? 'local-or-unresolved' : 'external-file',
+    });
+  }
+  return refs;
 }
 
 function compactSkillControlCandidate(value, fileName, type) {
