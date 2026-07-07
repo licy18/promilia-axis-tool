@@ -288,6 +288,46 @@ describe('Workbench view', () => {
     expect(restored.findAll('[data-testid="workbench-action-batch-note"]')).toHaveLength(4);
   });
 
+  it('applies arbitrary batch shift input and clamps to timeline bounds', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await findActionLibrarySkillSplitButton(wrapper, workbenchSeed.defaults.skillId).trigger('click');
+    await wrapper.find('[data-testid="workbench-segment-preview-confirm"]').trigger('click');
+
+    await wrapper.find('[data-testid="workbench-batch-shift-offset-input"]').setValue('-5000');
+    await wrapper.find('[data-testid="workbench-apply-action-batch-shift"]').trigger('click');
+
+    expect(wrapper.find('[data-testid="workbench-batch-shift-offset-input"]').element.value).toBe('0');
+    expect(wrapper.find('.action-item[data-action-id="action-0002"]').text()).toContain('0ms');
+    expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-overlap-item"]').text()).toContain('0-1000ms');
+
+    await wrapper.find('[data-testid="workbench-batch-shift-offset-input"]').setValue('40000');
+    await wrapper.find('[data-testid="workbench-apply-action-batch-shift"]').trigger('click');
+
+    expect(wrapper.find('[data-testid="workbench-overlap-count"]').text()).toBe('0');
+    expect(wrapper.find('.action-item[data-action-id="action-0005"]').text()).toContain('30000ms');
+    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe('有未保存改动');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(savedDraft.actionDrafts.map((action) => action.startMs)).toEqual([0, 24000, 26000, 28000, 30000]);
+    expect(savedDraft.actionDrafts.slice(1).map((action) => action.generationBatch?.batchId)).toEqual([
+      'segment-batch-0001',
+      'segment-batch-0001',
+      'segment-batch-0001',
+      'segment-batch-0001',
+    ]);
+  });
+
   it('cancels a skill segment split preview without writing actions', async () => {
     const wrapper = mount(Workbench, {
       global: {

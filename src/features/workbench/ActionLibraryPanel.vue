@@ -250,6 +250,27 @@
           >
             +500ms
           </button>
+          <label v-if="action.generationBatch?.batchId" class="batch-shift-control">
+            <span>批次偏移 ms</span>
+            <input
+              type="number"
+              step="100"
+              data-testid="workbench-batch-shift-offset-input"
+              :data-batch-id="action.generationBatch.batchId"
+              :value="getBatchShiftOffset(action.generationBatch.batchId)"
+              @click.stop
+              @input.stop="setBatchShiftOffset(action.generationBatch.batchId, $event.target.value)"
+            />
+          </label>
+          <button
+            v-if="action.generationBatch?.batchId"
+            class="tool-button"
+            data-testid="workbench-apply-action-batch-shift"
+            type="button"
+            @click.stop="applyBatchShift(action.generationBatch.batchId)"
+          >
+            应用偏移
+          </button>
         </div>
         <dl>
           <div>
@@ -295,6 +316,7 @@
 </template>
 
 <script setup>
+import { reactive } from 'vue';
 import { Collection } from '@element-plus/icons-vue';
 import { getSkillDamageSegments } from '../../domain/workbenchProjectFactory';
 
@@ -356,6 +378,8 @@ const emit = defineEmits([
   'update-active-actor',
   'update-segment-split-options',
 ]);
+
+const batchShiftOffsets = reactive({});
 
 function actionTypeLabel(type) {
   if (type === 'wait') {
@@ -447,6 +471,24 @@ function emitBatchShift(batchId, offsetMs) {
     batchId,
     offsetMs,
   });
+}
+
+function getBatchShiftOffset(batchId) {
+  return batchShiftOffsets[batchId] ?? 0;
+}
+
+function setBatchShiftOffset(batchId, value) {
+  batchShiftOffsets[batchId] = value;
+}
+
+function applyBatchShift(batchId) {
+  const offsetMs = Number(batchShiftOffsets[batchId]);
+  if (!Number.isFinite(offsetMs) || offsetMs === 0) {
+    return;
+  }
+
+  emitBatchShift(batchId, offsetMs);
+  batchShiftOffsets[batchId] = 0;
 }
 
 function formatPreviewRange(action) {
@@ -711,6 +753,30 @@ h2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   margin-bottom: 10px;
+}
+
+.batch-shift-control {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 5px;
+  min-width: 0;
+}
+
+.batch-shift-control span {
+  color: #8f9aa3;
+  font-size: 11px;
+}
+
+.batch-shift-control input {
+  width: 100%;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  background: #11161b;
+  color: #ffffff;
+  font: inherit;
+  font-size: 12px;
 }
 
 .tool-button {
