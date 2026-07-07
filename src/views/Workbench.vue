@@ -119,7 +119,7 @@ import PropertiesPanel from '../features/workbench/PropertiesPanel.vue';
 import ResourceMonitorPanel from '../features/workbench/ResourceMonitorPanel.vue';
 import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
-import { createTimelineDiagnostics } from '../features/workbench/timelineDiagnostics';
+import { SYSTEM_TIMELINE_LANE_ID, createTimelineDiagnostics } from '../features/workbench/timelineDiagnostics';
 import {
   DEFAULT_WORKBENCH_SELECTION,
   createWorkbenchActionDraft,
@@ -536,18 +536,59 @@ function createNextActionId() {
 }
 
 function addInsertedAction(actionPatch) {
-  const insertIndex = resolveInsertIndex();
-  const nextAction = createWorkbenchActionDraft({
+  const baseInsertIndex = resolveInsertIndex();
+  const candidateAction = createWorkbenchActionDraft({
     ...actionPatch,
-    startMs: resolveInsertStartMs(insertIndex),
+    startMs: resolveInsertStartMs(baseInsertIndex),
+  });
+  const placement = resolveInsertPlacement(candidateAction, baseInsertIndex);
+  const nextAction = createWorkbenchActionDraft({
+    ...candidateAction,
+    startMs: placement.startMs,
   });
   actionDrafts.value = [
-    ...actionDrafts.value.slice(0, insertIndex),
+    ...actionDrafts.value.slice(0, placement.insertIndex),
     nextAction,
-    ...actionDrafts.value.slice(insertIndex),
+    ...actionDrafts.value.slice(placement.insertIndex),
   ];
   selectedActionId.value = nextAction.id;
   markDraftDirty();
+}
+
+function resolveInsertPlacement(candidateAction, baseInsertIndex) {
+  const laneId = resolveDraftLaneId(candidateAction);
+  const durationMs = resolveDraftDurationMs(candidateAction);
+  const maxStartMs = project.value.time.durationMs;
+  let startMs = clampNumber(candidateAction.startMs, 0, maxStartMs);
+  let insertIndex = baseInsertIndex;
+  const ranges = actionDrafts.value
+    .map((action, index) => createDraftTimelineRange(action, index))
+    .filter((range) => range.laneId === laneId)
+    .sort(compareDraftTimelineRanges);
+
+  for (let scanIndex = 0; scanIndex < ranges.length; scanIndex += 1) {
+    const range = ranges[scanIndex];
+    const endMs = startMs + durationMs;
+
+    if (endMs <= range.startMs || startMs >= range.endMs) {
+      continue;
+    }
+
+    const nextStartMs = clampNumber(range.endMs + NEW_ACTION_INSERT_GAP_MS, 0, maxStartMs);
+    insertIndex = Math.max(insertIndex, range.index + 1);
+    if (nextStartMs <= startMs) {
+      startMs = nextStartMs;
+      break;
+    }
+
+    startMs = nextStartMs;
+    scanIndex = -1;
+  }
+
+  return {
+    insertIndex,
+    startMs,
+  };
 }
 
 function resolveInsertStartMs(insertIndex) {
@@ -564,6 +605,35 @@ function resolveInsertStartMs(insertIndex) {
 function resolveInsertIndex() {
   const selectedIndex = actionDrafts.value.findIndex((action) => action.id === selectedActionId.value);
   return selectedIndex >= 0 ? selectedIndex + 1 : actionDrafts.value.length;
+}
+
+function createDraftTimelineRange(action, index) {
+  const startMs = Math.max(0, Number(action.startMs) || 0);
+  const durationMs = resolveDraftDurationMs(action);
+  return {
+    index,
+    laneId: resolveDraftLaneId(action),
+    startMs,
+    endMs: startMs + durationMs,
+  };
+}
+
+function resolveDraftLaneId(action) {
+  if (canAssignActionLane(action)) {
+    const actor = scenario.value.actors.find(
+      (item) => Number(item.characterId) === Number(action.actorCharacterId),
+    );
+    return actor?.id ?? SYSTEM_TIMELINE_LANE_ID;
+  }
+  return SYSTEM_TIMELINE_LANE_ID;
+}
+
+function resolveDraftDurationMs(action) {
+  return Math.max(1, Number(action.durationMs) || 1000);
+}
+
+function compareDraftTimelineRanges(left, right) {
+  return left.startMs - right.startMs || left.endMs - right.endMs || left.index - right.index;
 }
 
 function canAssignActionLane(action) {

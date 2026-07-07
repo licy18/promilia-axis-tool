@@ -642,6 +642,103 @@ describe('Workbench view', () => {
     });
   });
 
+  it('pushes actor actions to the next same-lane slot while allowing cross-lane time sharing', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    const secondaryCharacterId = 101003;
+    const secondarySkill = workbenchSeed.gameData.skills.find(
+      (skill) => Number(skill.characterId) === secondaryCharacterId,
+    );
+
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    expect(wrapper.find('[data-testid="workbench-start-input"]').element.value).toBe('2000');
+
+    await wrapper.find('.action-item[data-action-id="action-0001"]').trigger('click');
+    await findActionLibraryActorButton(wrapper, secondaryCharacterId).trigger('click');
+    await findActionLibrarySkillEntry(wrapper, secondarySkill.id).trigger('click');
+
+    expect(wrapper.find('[data-testid="workbench-start-input"]').element.value).toBe('2000');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-action"][data-action-id="action-0003"]')
+        .attributes('data-lane-id'),
+    ).toBe('actor-101003');
+
+    await wrapper.find('.action-item[data-action-id="action-0001"]').trigger('click');
+    await findActionLibraryActorButton(wrapper, workbenchSeed.defaults.characterId).trigger('click');
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+
+    expect(wrapper.find('[data-testid="workbench-start-input"]').element.value).toBe('4000');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-action"][data-action-id="action-0004"]')
+        .attributes('data-lane-id'),
+    ).toBe('actor-109001');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(savedDraft.actionDrafts.map((action) => action.id)).toEqual([
+      'action-0001',
+      'action-0003',
+      'action-0002',
+      'action-0004',
+    ]);
+    expect(savedDraft.actionDrafts.find((action) => action.id === 'action-0003')).toMatchObject({
+      actorCharacterId: secondaryCharacterId,
+      startMs: 2000,
+    });
+    expect(savedDraft.actionDrafts.find((action) => action.id === 'action-0004')).toMatchObject({
+      actorCharacterId: workbenchSeed.defaults.characterId,
+      startMs: 4000,
+    });
+  });
+
+  it('pushes system events to the next system-lane slot', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper.find('[data-testid="workbench-add-annotation-action"]').trigger('click');
+    expect(wrapper.find('[data-testid="workbench-start-input"]').element.value).toBe('2000');
+
+    await wrapper.find('.action-item[data-action-id="action-0001"]').trigger('click');
+    await wrapper.find('[data-testid="workbench-add-enemy-event-action"]').trigger('click');
+
+    expect(wrapper.find('[data-testid="workbench-start-input"]').element.value).toBe('3600');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-action"][data-action-id="action-0003"]')
+        .attributes('data-lane-id'),
+    ).toBe('system');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(savedDraft.actionDrafts.map((action) => action.id)).toEqual(['action-0001', 'action-0002', 'action-0003']);
+    expect(savedDraft.actionDrafts[1]).toMatchObject({
+      id: 'action-0002',
+      type: 'annotation',
+      startMs: 2000,
+    });
+    expect(savedDraft.actionDrafts[2]).toMatchObject({
+      id: 'action-0003',
+      type: 'enemyEvent',
+      startMs: 3600,
+    });
+  });
+
   it('keeps generated action ids unique after deleting the first action', async () => {
     const wrapper = mount(Workbench, {
       global: {
