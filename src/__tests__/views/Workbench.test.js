@@ -98,6 +98,27 @@ describe('Workbench view', () => {
       'toughnessDamageCandidate',
       'selfEnergyCandidate',
     ]);
+    const candidateScopeOptions = wrapper.findAll(
+      '[data-testid="workbench-candidate-value-scope-option"]'
+    );
+    expect(candidateScopeOptions).toHaveLength(2);
+    expect(
+      candidateScopeOptions.map(option => option.attributes('data-scope-key'))
+    ).toEqual(['all', 'selected-frame']);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="all"]'
+        )
+        .classes()
+    ).toContain('active');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="selected-frame"]'
+        )
+        .attributes('disabled')
+    ).toBeDefined();
     expect(
       wrapper
         .find(
@@ -157,10 +178,74 @@ describe('Workbench view', () => {
     expect(
       wrapper
         .find(
+          '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="selected-frame"]'
+        )
+        .attributes('disabled')
+    ).toBeUndefined();
+    const selectedFrameDetailRows = wrapper.findAll(
+      '[data-testid="workbench-candidate-value-frame-detail-row"]'
+    );
+    expect(selectedFrameDetailRows).toHaveLength(3);
+    const hpFrameDetail = wrapper.find(
+      '[data-testid="workbench-candidate-value-frame-detail-row"][data-series-key="hpDamageFormulaParamCandidate"]'
+    );
+    expect(hpFrameDetail.attributes('data-candidate-count')).toBe('4');
+    expect(hpFrameDetail.attributes('data-source-frame-index')).toBe('12');
+    expect(hpFrameDetail.text()).toContain('HP参数候选');
+    expect(hpFrameDetail.text()).toContain('2,500 raw-param');
+    expect(hpFrameDetail.text()).toContain(
+      '样本 1,000/1,800/1,900/2,500 · 候选 4'
+    );
+    expect(hpFrameDetail.text()).toContain(
+      '帧 src12 / disp12 / local12 / chain0 / abs12'
+    );
+    expect(hpFrameDetail.text()).toContain('element 109001081/109001306');
+    expect(
+      wrapper
+        .find(
           '[data-testid="workbench-timeline-candidate-value-marker"][data-series-key="hpDamageFormulaParamCandidate"][data-hit-index="5"]'
         )
         .attributes('data-frame-label')
     ).toBe('3s4f');
+    await wrapper
+      .find(
+        '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="selected-frame"]'
+      )
+      .trigger('click');
+    await nextTick();
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="selected-frame"]'
+        )
+        .classes()
+    ).toContain('active');
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-candidate-value-marker"]'
+      )
+    ).toHaveLength(3);
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-candidate-value-curve"]'
+      )
+    ).toHaveLength(3);
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-candidate-value-frame-hotspot"]'
+      )
+    ).toHaveLength(1);
+    await wrapper
+      .find(
+        '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="all"]'
+      )
+      .trigger('click');
+    await nextTick();
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-candidate-value-marker"]'
+      )
+    ).toHaveLength(15);
     await wrapper
       .find(
         '[data-testid="workbench-candidate-value-toggle"][data-series-key="hpDamageFormulaParamCandidate"]'
@@ -189,6 +274,18 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-candidate-value-frame-summary-values"]')
         .text()
     ).not.toContain('HP');
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-candidate-value-frame-detail-row"]'
+      )
+    ).toHaveLength(2);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-candidate-value-frame-detail-row"][data-series-key="hpDamageFormulaParamCandidate"]'
+        )
+        .exists()
+    ).toBe(false);
     expect(text).toContain('候选三值');
     expect(text).toContain(
       '候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 12f/13f/16f/19f · Skill0_6/Skill0_1 · 绑定候选 普攻->Skill0_1 12f/13f · 状态证据 Skill0_1 动画+命中 / Skill0_6 动画+命中 · 普攻链 10900102->Skill0_2 / 10900103->Skill0_3 / +2 · 命中候选 5/5段 · 三值候选 5/5段 · 目标缺失 80102'

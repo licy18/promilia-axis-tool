@@ -4242,3 +4242,78 @@ data-testid="workbench-candidate-value-frame-summary-source"
 - 这不是新的数据契约，只是把既有 chart point 字段投影到交互 UI。
 - 选中帧来源摘要仍不是 per-element 全量详情；下一阶段应补 `valueSamples`、`candidateCount`、source/local/chain 帧等下钻信息。
 - 多动作长轴的曲线密度控制仍未完成。
+
+## 61. 阶段 5-8AH：TimelineGrid 候选来源详情与选中帧范围
+
+阶段 5-8AH 继续使用既有 `candidateValueSeries.chart.series[].points[]`，没有新增底层仿真字段，也没有迁移 schema。
+
+### 61.1 marker passthrough
+
+`TimelineGridPreview` 的候选 marker 现在会透传 chart point 的更多来源字段：
+
+- `valueMin`
+- `valueMax`
+- `valueSamples`
+- `candidateCount`
+- `sourceFrameIndex`
+- `displayFrameIndex`
+- `localFrameIndex`
+- `chainStartFrame`
+- `absoluteFrameIndex`
+- `sourceTimeMs`
+- `displayTimeMs`
+
+这些字段只用于 UI 展示和测试断言，不改变 `candidateValueSeries.chart` 原始结构。
+
+### 61.2 detail rows
+
+选中帧摘要新增详情行：
+
+```html
+data-testid="workbench-candidate-value-frame-detail-row"
+data-series-key="hpDamageFormulaParamCandidate" data-candidate-count="4"
+data-source-frame-index="12"
+```
+
+当前每行展示：
+
+- series label
+- 当前值与单位
+- `valueSamples` 和 `candidateCount`
+- `sourceFrameIndex/displayFrameIndex/localFrameIndex/chainStartFrame/absoluteFrameIndex`
+- `elementConfigIds`
+
+### 61.3 display scope
+
+候选曲线范围新增：
+
+```html
+data-testid="workbench-candidate-value-scope-option"
+data-scope-key="selected-frame"
+```
+
+当前支持：
+
+- `all`：显示当前可见 series 的全部候选点。
+- `selected-frame`：仅显示已选中 hit 帧的候选点；未选中候选帧前禁用。
+
+### 61.4 当前样本
+
+默认末音普攻首帧：
+
+- HP detail：`2,500 raw-param`
+- HP samples：`1,000 / 1,800 / 1,900 / 2,500`
+- HP candidateCount：`4`
+- frame detail：`src12 / disp12 / local12 / chain0 / abs12`
+- element：`109001081 / 109001306`
+
+切换到 `selected-frame` 后：
+
+- candidate marker：3
+- candidate curve：3
+- frame hotspot：1
+
+### 61.5 当前边界
+
+- 详情行仍是 chart point 级别，不是每个 `elementConfigId` 的原始字段拆解。
+- `selected-frame` 是长轴密度控制的最小入口，尚未覆盖按 actor/action/series 组合过滤。

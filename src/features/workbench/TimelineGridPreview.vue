@@ -61,6 +61,27 @@
           <span>{{ toggle.shortLabel }}</span>
         </label>
       </div>
+      <div
+        v-if="candidateSeriesToggles.length"
+        class="candidate-scope-group"
+        data-testid="workbench-candidate-value-scope-group"
+      >
+        <button
+          v-for="scope in CANDIDATE_DISPLAY_SCOPE_OPTIONS"
+          :key="scope.key"
+          class="candidate-scope"
+          :class="{ active: candidateDisplayScope === scope.key }"
+          type="button"
+          :disabled="
+            scope.key === 'selected-frame' && !selectedCandidateFrameGroupId
+          "
+          :data-scope-key="scope.key"
+          data-testid="workbench-candidate-value-scope-option"
+          @click="setCandidateDisplayScope(scope.key)"
+        >
+          {{ scope.label }}
+        </button>
+      </div>
     </div>
 
     <div class="timeline-scale">
@@ -281,6 +302,26 @@
       <small data-testid="workbench-candidate-value-frame-summary-source">
         {{ formatCandidateFrameGroupSource(selectedCandidateFrameGroup) }}
       </small>
+      <div
+        class="candidate-frame-details"
+        data-testid="workbench-candidate-value-frame-details"
+      >
+        <div
+          v-for="value in selectedCandidateFrameGroup.values"
+          :key="`${value.seriesKey}-${value.hitIndex}`"
+          class="candidate-frame-detail-row"
+          :data-series-key="value.seriesKey"
+          :data-candidate-count="value.candidateCount"
+          :data-source-frame-index="value.sourceFrameIndex"
+          data-testid="workbench-candidate-value-frame-detail-row"
+        >
+          <b>{{ value.seriesLabel }}</b>
+          <span>{{ formatCandidateFrameDetailValue(value) }}</span>
+          <small>{{ formatCandidateFrameDetailSamples(value) }}</small>
+          <small>{{ formatCandidateFrameDetailFrames(value) }}</small>
+          <small>{{ formatCandidateFrameDetailElements(value) }}</small>
+        </div>
+      </div>
     </div>
 
     <div v-if="timelineLanes.length === 0" class="empty-lane">
@@ -335,6 +376,16 @@ const CANDIDATE_VALUE_SERIES_META = {
     color: '#a6b7ff',
   },
 };
+const CANDIDATE_DISPLAY_SCOPE_OPTIONS = [
+  {
+    key: 'all',
+    label: '全部',
+  },
+  {
+    key: 'selected-frame',
+    label: '选中帧',
+  },
+];
 
 const props = defineProps({
   actors: {
@@ -394,6 +445,7 @@ const resizeState = ref(null);
 const timelineZoom = ref(1);
 const candidateSeriesVisibility = ref({});
 const selectedCandidateFrameGroupId = ref(null);
+const candidateDisplayScope = ref('all');
 
 const ticks = computed(() => {
   const durationSeconds = props.durationMs / 1000;
@@ -616,35 +668,48 @@ function createCandidateValueTimelineMarkers() {
     .filter(series => isCandidateSeriesVisible(series.key))
     .flatMap(series => {
       const meta = getCandidateSeriesMeta(series.key);
-      return (series.points ?? []).map((point, index) => {
-        const timeMs = point.displayTimeMs ?? point.sourceTimeMs ?? 0;
-        const frameLabel = point.displayFrameLabel ?? formatFrameTime(timeMs);
-        const frameGroupId = `${point.actionId}-${point.hitIndex}-${frameLabel}`;
-        return {
-          id: `${series.key}-${point.actionId}-${point.hitIndex}-${index}`,
-          frameGroupId,
-          seriesKey: series.key,
-          seriesLabel: series.label,
-          shortLabel: meta.shortLabel,
-          color: meta.color,
-          valueKind: series.valueKind,
-          unit: series.unit,
-          actionId: point.actionId,
-          actionName: point.actionName,
-          skillId: point.skillId,
-          hitSkillId: point.hitSkillId,
-          hitIndex: point.hitIndex,
-          timeMs,
-          frameLabel,
-          value: point.value,
-          xPercent: point.xPercent,
-          yPercent: point.yPercent,
-          elementConfigIds: point.elementConfigIds ?? [],
-          sourceStatus: point.sourceStatus,
-          timeAdjustmentStatus: point.timeAdjustmentStatus,
-          seriesOrder: meta.order,
-        };
-      });
+      return (series.points ?? [])
+        .map((point, index) => {
+          const timeMs = point.displayTimeMs ?? point.sourceTimeMs ?? 0;
+          const frameLabel = point.displayFrameLabel ?? formatFrameTime(timeMs);
+          const frameGroupId = `${point.actionId}-${point.hitIndex}-${frameLabel}`;
+          return {
+            id: `${series.key}-${point.actionId}-${point.hitIndex}-${index}`,
+            frameGroupId,
+            seriesKey: series.key,
+            seriesLabel: series.label,
+            shortLabel: meta.shortLabel,
+            color: meta.color,
+            valueKind: series.valueKind,
+            unit: series.unit,
+            actionId: point.actionId,
+            actionName: point.actionName,
+            skillId: point.skillId,
+            hitSkillId: point.hitSkillId,
+            hitIndex: point.hitIndex,
+            timeMs,
+            frameLabel,
+            value: point.value,
+            valueMin: point.valueMin,
+            valueMax: point.valueMax,
+            valueSamples: point.valueSamples ?? [],
+            candidateCount: point.candidateCount,
+            xPercent: point.xPercent,
+            yPercent: point.yPercent,
+            sourceFrameIndex: point.sourceFrameIndex,
+            displayFrameIndex: point.displayFrameIndex,
+            localFrameIndex: point.localFrameIndex,
+            chainStartFrame: point.chainStartFrame,
+            absoluteFrameIndex: point.absoluteFrameIndex,
+            sourceTimeMs: point.sourceTimeMs,
+            displayTimeMs: point.displayTimeMs,
+            elementConfigIds: point.elementConfigIds ?? [],
+            sourceStatus: point.sourceStatus,
+            timeAdjustmentStatus: point.timeAdjustmentStatus,
+            seriesOrder: meta.order,
+          };
+        })
+        .filter(marker => isCandidateMarkerInDisplayScope(marker));
     });
 }
 
@@ -760,6 +825,23 @@ function setCandidateSeriesVisible(seriesKey, visible) {
   };
 }
 
+function setCandidateDisplayScope(scope) {
+  if (scope === 'selected-frame' && !selectedCandidateFrameGroupId.value) {
+    return;
+  }
+  candidateDisplayScope.value = scope;
+}
+
+function isCandidateMarkerInDisplayScope(marker) {
+  if (candidateDisplayScope.value === 'selected-frame') {
+    return (
+      !selectedCandidateFrameGroupId.value ||
+      marker.frameGroupId === selectedCandidateFrameGroupId.value
+    );
+  }
+  return true;
+}
+
 function selectCandidateFrameGroup(group) {
   selectedCandidateFrameGroupId.value = group.id;
 }
@@ -795,6 +877,46 @@ function formatCandidateFrameGroupSource(group) {
     '时序候选'
   );
   return `${group.actionId} · ${hitSkillText} · ${elementText} · ${sourceText} · ${timingText} · 未应用候选`;
+}
+
+function formatCandidateFrameDetailValue(value) {
+  return `${formatTimelineNumber(value.value)} ${value.unit}`;
+}
+
+function formatCandidateFrameDetailSamples(value) {
+  const sampleText = formatCompactList(
+    value.valueSamples?.map(sample => formatTimelineNumber(sample)) ?? [],
+    formatTimelineNumber(value.value)
+  );
+  const candidateCount = Number(value.candidateCount) || 0;
+  return `样本 ${sampleText} · 候选 ${candidateCount}`;
+}
+
+function formatCandidateFrameDetailFrames(value) {
+  const frameParts = [
+    createFramePart('src', value.sourceFrameIndex),
+    createFramePart('disp', value.displayFrameIndex),
+    createFramePart('local', value.localFrameIndex),
+    createFramePart('chain', value.chainStartFrame),
+    createFramePart('abs', value.absoluteFrameIndex),
+  ].filter(Boolean);
+  return `帧 ${frameParts.join(' / ')}`;
+}
+
+function formatCandidateFrameDetailElements(value) {
+  const elementText = formatCompactList(
+    value.elementConfigIds ?? [],
+    'element 未展开'
+  );
+  return `element ${elementText}`;
+}
+
+function createFramePart(label, value) {
+  if (value === null || value === undefined || value === '') {
+    return null;
+  }
+  const number = Number(value);
+  return Number.isFinite(number) ? `${label}${number}` : null;
 }
 
 function formatCompactList(values, fallback) {
@@ -1106,6 +1228,40 @@ h2 {
   white-space: nowrap;
 }
 
+.candidate-scope-group {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  background: #151b20;
+}
+
+.candidate-scope {
+  display: inline-flex;
+  min-width: 52px;
+  min-height: 22px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: #8f9aa3;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.candidate-scope.active {
+  background: rgba(121, 199, 185, 0.18);
+  color: #dff6f1;
+}
+
+.candidate-scope:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
 .icon-control {
   display: inline-grid;
   width: 26px;
@@ -1213,6 +1369,43 @@ h2 {
   grid-column: 1 / -1;
   color: #8f9aa3;
   font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.candidate-frame-details {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 6px;
+}
+
+.candidate-frame-detail-row {
+  display: grid;
+  grid-template-columns: 92px minmax(86px, 0.7fr) repeat(3, minmax(0, 1fr));
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  background: rgba(10, 13, 16, 0.22);
+}
+
+.candidate-frame-detail-row b {
+  color: #dff6f1;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.candidate-frame-detail-row span {
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.candidate-frame-detail-row small {
+  grid-column: auto;
+  color: #8f9aa3;
+  font-size: 10px;
   overflow-wrap: anywhere;
 }
 
@@ -1625,6 +1818,18 @@ h2 {
   .candidate-frame-summary {
     grid-template-columns: 1fr;
     margin: 0 18px 12px;
+  }
+
+  .candidate-scope-group {
+    width: 100%;
+  }
+
+  .candidate-scope {
+    flex: 1;
+  }
+
+  .candidate-frame-detail-row {
+    grid-template-columns: 1fr;
   }
 
   .lane-label {

@@ -3182,6 +3182,42 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8AH 目标：把选中帧摘要升级为更细的候选来源详情，展示每条可见曲线的 `valueSamples`、`candidateCount`、`sourceFrameIndex/localFrameIndex/chainStartFrame` 和 element 候选来源。
 - 同时开始为多动作长时间轴设计候选曲线密度控制，例如按 action、actor、series 或选中帧范围过滤。
 
+### 2026-07-08：阶段 5-8AH 候选来源详情下钻与选中帧密度控制
+
+本轮完成：
+
+- `TimelineGridPreview` 把 `candidateValueSeries.chart.points[]` 的 `valueSamples`、`candidateCount`、`sourceFrameIndex`、`displayFrameIndex`、`localFrameIndex`、`chainStartFrame`、`absoluteFrameIndex` 透传到时间轴候选 marker。
+- 选中帧摘要新增逐曲线详情行，按当前可见曲线展示候选值、样本值、候选数、源/显示/局部/连段/绝对帧，以及 element 候选来源。
+- 时间轴标题区新增候选范围切换：`全部` / `选中帧`。未选中候选帧时 `选中帧` 不可用；选中后可把主时间轴收缩到当前 hit 帧的候选 marker、curve 和 hotspot。
+- Workbench 测试覆盖详情行、首帧 HP 样本值、候选数、帧来源、element 来源，以及 `选中帧` 范围下的 3 marker / 3 curve / 1 hotspot 密度收缩。
+
+当前末音 `10900101` 默认普攻首帧详情：
+
+- HP 参数候选：`2,500 raw-param`。
+- HP 样本值：`1,000 / 1,800 / 1,900 / 2,500`，`candidateCount = 4`。
+- 帧来源：`src12 / disp12 / local12 / chain0 / abs12`。
+- element 来源：`109001081 / 109001306`。
+- 切换到 `选中帧` 范围后：主时间轴只保留该帧的 3 个候选 marker、3 条候选 curve 和 1 个 hotspot。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、33 条测试通过。
+- `npm exec eslint -- --no-warn-ignored src/features/workbench/TimelineGridPreview.vue src/__tests__/views/Workbench.test.js`：通过。
+- `npm test -- --run`：通过，12 个测试文件、104 条测试通过。
+- `npm run build`：通过，仍有既有 Sass `@import` deprecation 和 chunk size 警告。
+- `git diff --check`：通过。
+
+当前边界：
+
+- 本阶段仍只展示候选字段来源，不改变 `candidateValueSeries.chart`、不应用最终 HP / 削韧 / 充能公式。
+- `选中帧` 是密度控制的第一步，尚未提供按 actor、action、series 组合过滤，也没有虚拟化长时间轴点位。
+- 详情行展示 element ID 和 chart point 字段，尚未下钻到每个 element 的完整 `TDamageElementParams` 原始字段。
+
+下一步：
+
+- 阶段 5-8AI 目标：把候选详情继续下钻到 per-element 原始字段，至少能在选中帧里区分每个 `elementConfigId` 对 HP 参数、削韧和能量字段的贡献。
+- 同时补更适合多动作长轴的范围过滤，例如按 action、actor 或可见 series 组合筛选。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
