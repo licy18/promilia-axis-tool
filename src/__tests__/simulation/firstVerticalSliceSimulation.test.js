@@ -86,6 +86,39 @@ describe('first vertical slice simulation', () => {
     );
   });
 
+  it('uses the selected skill damage segment for projection', () => {
+    const project = createWorkbenchProject(
+      {},
+      {
+        actions: [
+          {
+            id: 'action-heavy',
+            type: 'skill',
+            skillId: 10900101,
+            startMs: 0,
+            level: 1,
+            damageSegmentIndex: 1,
+          },
+        ],
+      },
+    );
+    const scenario = compileProject(project, getWorkbenchGameData());
+    const result = runSimulation(project, getWorkbenchGameData());
+
+    expect(scenario.actions[0].damageSegmentIndex).toBe(1);
+    expect(scenario.actions[0].selectedDamageSegment).toMatchObject({
+      index: 1,
+      label: '重击',
+      rawValue: '190%',
+      multiplier: 1.9,
+    });
+    expect(result.damageTimeline[0]).toMatchObject({
+      actionId: 'action-heavy',
+      segmentLabel: '重击',
+      multiplier: 1.9,
+    });
+  });
+
   it('keeps wait and annotation actions in the event log without projecting damage', () => {
     const project = createWorkbenchProject(
       {},

@@ -54,6 +54,38 @@ describe('Workbench view', () => {
     expect(wrapper.text()).toContain(secondEnemy.name);
   });
 
+  it('selects a skill damage segment and saves the projection choice', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    const segmentSelect = wrapper.find('[data-testid="workbench-damage-segment-select"]');
+    const segmentOptions = Array.from(segmentSelect.element.options).map((option) => option.textContent);
+
+    expect(segmentSelect.element.value).toBe('0');
+    expect(segmentOptions).toEqual(expect.arrayContaining(['普攻 / 649%', '重击 / 190%']));
+
+    await segmentSelect.setValue('1');
+
+    expect(wrapper.find('[data-testid="workbench-damage-segment-select"]').element.value).toBe('1');
+    expect(wrapper.find('.selection-note').text()).toContain('190%');
+    expect(wrapper.find('.damage-row').text()).toContain('重击');
+    expect(wrapper.find('.action-item[data-action-id="action-0001"]').text()).toContain('190%');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(savedDraft.actionDrafts[0]).toMatchObject({
+      id: 'action-0001',
+      skillId: workbenchSeed.defaults.skillId,
+      damageSegmentIndex: 1,
+    });
+  });
+
   it('rebuilds the workbench project when the selected character changes', async () => {
     const wrapper = mount(Workbench, {
       global: {

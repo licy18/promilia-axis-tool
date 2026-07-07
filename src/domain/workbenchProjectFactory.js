@@ -51,6 +51,7 @@ export function createWorkbenchActionDraft({
   startMs = 0,
   durationMs = 1000,
   level = 1,
+  damageSegmentIndex = 0,
   targetCharacterId = DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId,
   resource = 'sp',
   change = 50,
@@ -67,6 +68,7 @@ export function createWorkbenchActionDraft({
     startMs: Number(startMs) || 0,
     durationMs: Math.max(1, Number(durationMs) || 1000),
     level: Math.max(1, Number(level) || 1),
+    damageSegmentIndex: Math.max(0, Number(damageSegmentIndex) || 0),
     targetCharacterId: Number(targetCharacterId) || DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId,
     resource,
     change: Number(change) || 0,
@@ -201,6 +203,7 @@ export function normalizeWorkbenchActionDrafts(
           startMs: draft.startMs,
           durationMs: draft.durationMs,
           level: draft.level,
+          damageSegmentIndex: draft.damageSegmentIndex,
           targetCharacterId: draft.targetCharacterId ?? selection.secondaryCharacterId,
           resource: draft.resource,
           change: draft.change,
@@ -221,6 +224,7 @@ export function normalizeWorkbenchActionDrafts(
         startMs: draft.startMs,
         durationMs: draft.durationMs,
         level: clampLevel(draft.level, skill),
+        damageSegmentIndex: clampDamageSegmentIndex(draft.damageSegmentIndex, skill, draft.level),
         targetCharacterId: draft.targetCharacterId ?? selection.secondaryCharacterId,
         resource: draft.resource,
         change: draft.change,
@@ -304,6 +308,7 @@ function createProjectActionFromDraft(draft, actorsByCharacterId, primaryCharact
     startMs: draft.startMs,
     durationMs: draft.durationMs,
     level: draft.level,
+    damageSegmentIndex: draft.damageSegmentIndex,
     note: draft.note || '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
     insertion: draft.insertion,
   });
@@ -362,6 +367,12 @@ function resolveSwitchTargetActor(draft, actorsByCharacterId, sourceActor) {
 function clampLevel(level, skill) {
   const maxLevel = Math.max(1, skill?.level?.values?.length ?? 1);
   return Math.min(maxLevel, Math.max(1, Number(level) || 1));
+}
+
+function clampDamageSegmentIndex(damageSegmentIndex, skill, level) {
+  const levelIndex = clampLevel(level, skill) - 1;
+  const segmentCount = Math.max(1, skill?.level?.values?.[levelIndex]?.length ?? 1);
+  return Math.min(segmentCount - 1, Math.max(0, Number(damageSegmentIndex) || 0));
 }
 
 function normalizeWorkbenchInsertion(insertion) {

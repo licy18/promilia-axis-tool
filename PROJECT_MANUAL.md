@@ -1265,6 +1265,39 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 将所选伤害段保存到 `actionDrafts`，并继续通过 `Project -> Scenario -> simulation` 影响 `selectedDamageSegment` 和伤害投影。
 - 明确该阶段只处理“倍率段选择”，不把描述解析出的段落当成真实命中帧或取消窗口。
 
+### 2026-07-07：阶段 4-21 技能伤害段/倍率段选择雏形落地
+
+本轮完成：
+
+- `Project` 技能动作和 `workbench` 动作草稿新增 `damageSegmentIndex` 字段，默认 `0`。
+- `workbenchProjectFactory` 会保存、归一化并透传 `damageSegmentIndex`；索引超出当前技能等级可用段数时会 clamp 到有效范围。
+- `compileProject()` 会根据 `damageSegmentIndex` 从 `damageSegments[]` 中选择 `selectedDamageSegment`，模拟投影不再固定使用第一个倍率段。
+- `PropertiesPanel` 在技能动作下新增“伤害段”下拉，选项来自当前技能解析出的 `damageSegments`，显示为 `段名 / 倍率`。
+- 切换技能或跨轨导致技能来源变化时，`damageSegmentIndex` 会重置为 `0`，避免继承旧技能的无效段索引。
+- `selectedActionSummary`、动作库倍率显示和分析面板伤害段会跟随所选倍率段更新。
+- `DATA_STRUCTURE_CHANGES.md` 新增 `damageSegmentIndex` 字段说明，明确它只代表倍率段选择，不代表真实命中帧或取消窗口。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、37 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、81 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- `git diff --check`：通过；命令通道仍偶发 `Import-Clixml` 噪声，但主命令无 diff check 错误。
+- `http://127.0.0.1:5175/#/workbench` 本地页面服务返回 200。
+
+当前结论：
+
+- 技能动作已经可以表达“同一个技能取哪个倍率段”这一层需求，末音 `哈库茵剑舞` 可从默认 `普攻 / 649%` 切到 `重击 / 190%` 并影响模拟结果。
+- 该能力仍是低置信度倍率投影，不等价于真实多段命中帧、动作时长、前后摇或取消窗口。
+- 多段技能目前仍需要用户手动新增多个动作并逐个选择倍率段，尚未提供“从技能段批量生成动作”的效率入口。
+
+下一步：
+
+- 阶段 4-22 目标：建立技能段动作拆分/多段动作生成雏形。
+- 在动作库或属性面板提供从当前技能 `damageSegments[]` 批量生成多个技能动作的入口，每个动作保存对应 `damageSegmentIndex`。
+- 生成结果继续使用同轨空位推荐和自动推迟提示，不把描述解析段当作真实命中帧。
+- 为多段生成补充测试，覆盖动作数量、段索引、时间排序、草稿保存和模拟投影。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

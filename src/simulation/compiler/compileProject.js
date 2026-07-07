@@ -131,6 +131,10 @@ function compileAction(action, actorsById, enemy, skillsById) {
   const actor = actorsById.get(action.actorId);
   const skill = skillsById.get(Number(action.skillId));
   const damageSegments = parseDamageSegments(action);
+  const selectedDamageSegment =
+    damageSegments.find((segment) => Number(segment.index) === Number(action.damageSegmentIndex)) ??
+    damageSegments[0] ??
+    null;
 
   return {
     ...action,
@@ -140,7 +144,7 @@ function compileAction(action, actorsById, enemy, skillsById) {
       skill,
     },
     damageSegments,
-    selectedDamageSegment: damageSegments[0] ?? null,
+    selectedDamageSegment,
   };
 }
 

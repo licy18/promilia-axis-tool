@@ -148,6 +148,19 @@
           disabled
         />
       </label>
+
+      <label v-if="isSkillAction">
+        <span>伤害段</span>
+        <select
+          data-testid="workbench-damage-segment-select"
+          :value="selectedDamageSegmentIndex"
+          @change="emitActionPatch('damageSegmentIndex', $event.target.value)"
+        >
+          <option v-for="segment in damageSegmentOptions" :key="segment.index" :value="segment.index">
+            {{ segment.label }} / {{ segment.rawValue }}
+          </option>
+        </select>
+      </label>
     </div>
 
     <div v-if="isResourceAction" class="action-controls contextual-controls">
@@ -258,6 +271,16 @@ const switchTargetOptions = computed(() => {
       actorCharacterIds.has(Number(character.id)) && Number(character.id) !== Number(currentActorCharacterId.value),
   );
 });
+const damageSegmentOptions = computed(() =>
+  props.selectedAction.damageSegments?.length
+    ? props.selectedAction.damageSegments
+    : props.selectedAction.selectedDamageSegment
+      ? [props.selectedAction.selectedDamageSegment]
+      : [],
+);
+const selectedDamageSegmentIndex = computed(() => {
+  return props.selectedAction.selectedDamageSegment?.index ?? props.selectedAction.damageSegmentIndex ?? 0;
+});
 const actionTypeLabel = computed(() => {
   if (props.selectedAction.type === 'wait') {
     return '等待动作';
@@ -293,7 +316,7 @@ const secondaryControlLabel = computed(() => {
 });
 const selectedActionSummary = computed(() => {
   if (isSkillAction.value) {
-    return props.selectedAction.damageModel?.values?.[0] ?? '倍率待补';
+    return props.selectedAction.selectedDamageSegment?.rawValue ?? '倍率待补';
   }
   if (isWaitAction.value) {
     return `${props.selectedAction.durationMs ?? 0}ms`;
@@ -324,6 +347,7 @@ function emitActionPatch(key, value) {
   const patch = { [key]: number };
   if (key === 'skillId') {
     patch.level = 1;
+    patch.damageSegmentIndex = 0;
   }
   emit('update-action', patch);
 }

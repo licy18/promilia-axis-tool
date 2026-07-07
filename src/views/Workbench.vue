@@ -260,6 +260,7 @@ function updateAction(patch) {
     const skill = resolveSkillForActionPatch(action, normalizedPatch, nextActorCharacterId);
     const skillChanged = Number(skill.id) !== Number(action.skillId);
     const nextLevel = skillChanged ? 1 : normalizedPatch.level ?? action.level;
+    const nextDamageSegmentIndex = skillChanged ? 0 : normalizedPatch.damageSegmentIndex ?? action.damageSegmentIndex;
 
     return createWorkbenchActionDraft({
       ...action,
@@ -268,6 +269,7 @@ function updateAction(patch) {
       actorCharacterId: nextActorCharacterId,
       startMs: clampNumber(normalizedPatch.startMs ?? action.startMs, 0, project.value.time.durationMs),
       level: clampNumber(nextLevel, 1, skill.level.values.length),
+      damageSegmentIndex: nextDamageSegmentIndex,
     });
   });
   if (patch.actorCharacterId != null) {
@@ -345,6 +347,7 @@ function updateActionLane({ actionId, laneId }) {
         if (nextSkill) {
           patch.skillId = nextSkill.id;
           patch.level = 1;
+          patch.damageSegmentIndex = 0;
         }
       }
     }
