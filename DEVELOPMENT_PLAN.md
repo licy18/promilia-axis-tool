@@ -278,7 +278,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8AW，把 `SPSystem.OnTransmit@0x14837F0` 纳入 `nativeDisassemblyEvidence`，确认 RecoverSPArgs transmit type `0x12F`、`RecoverSPArgs.id/baseDelta/delta/interval/tagType/sharePercent/petSharePercent/petDelta/mainPetSharePercent` 字段、`id + interval` 节流和共享回传路径；新增 `ownerShareIntervalProbe`，让 action-level、每 hit 候选和非普攻外部 DamageElement 缺口都能显示 `归属探针 x/y`。
 - 已完成：阶段 5-8AX，把 `DamageElement.RecoverSP@0x138EEE0` 的完整构造段和 `RecoverSPArgs.OnReset@0x1254070` 纳入证据，新增 `sourceToArgsProbe`；当前确认 `recoverSP -> baseDelta`、`recoverSP -> delta(经 runtime modifier)`、`petRecoverSP -> petDelta(经同 modifier)`、`recoverInterval -> interval`、`tagType = AttackRecoverySp(0)` 和 type `0x12F` 发送，Workbench 显示 `构造探针 x/y`。
 - 已完成：阶段 5-8AY，把 `DamageElement.RecoverSP` 中两个 runtime modifier 固化为 `EBattlePropertyType.SPGETUP(105)` 与 `SPGETUP_ATK(228)`，确认 `AliveProperty.GetBattlePropertyCurrentValue` / `SnapshotPropertyManager.GetBattlePropertyCurrentValue` + `MyFloat.op_Implicit(float)` 的取值链，确认 `BattleConfigData.shareEnergyPercent@0x108` 与 `petShareEnergyPercent@0x10C`，并新增 `runtimeModifierProbe`；Workbench 显示 `修正探针 x/y`。
-- 下一步：阶段 5-8AZ，读取或运行时采样 `nativeConstant@0x189956B08` 与 `recoverInterval` divisor `0x189956D8C` 的实际值，确认 `SPGETUP/SPGETUP_ATK` 的运行时数值单位、owner/share 目标筛选和最终每角色 SP 曲线。
+- 已完成：阶段 5-8AZ，从 `C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll` 的 `.rdata` 读取 float32 常量并新增 `nativeConstantReadEvidence`：`0x189956B08 = 1.0`、`0x189956D8C = 1000.0`、`0x189956FB0 = 10000.0`；`sourceToArgsProbe` 和 `runtimeModifierProbe` 已显示 divisor/value 证据。
+- 下一步：阶段 5-8BA，设计或接入 runtime hook 采样点，确认 `SPGETUP/SPGETUP_ATK` 的实时属性值、owner/share 目标筛选、interval 节流命中和最终每角色 SP 曲线。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

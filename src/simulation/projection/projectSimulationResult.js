@@ -517,22 +517,26 @@ const RUNTIME_NATIVE_DISASSEMBLY_EVIDENCE = {
         'Native body checks DamageElement+0x240 and returns early when m_recoverSP <= 0.',
         'References RecoverSP string literal through VA 0x181C444938.',
         'Creates or reuses a RecoverSPArgs object before writing source fields into RecoverSPArgs offsets.',
-        'Writes DamageElement.m_recoverSP / 10000 into RecoverSPArgs.baseDelta, then derives RecoverSPArgs.delta from baseDelta and two runtime scalar modifiers.',
-        'Writes DamageElement.m_petRecoverSP through the same modifier path into RecoverSPArgs.petDelta.',
-        'Writes DamageElement.m_recoverInterval through a native divisor into RecoverSPArgs.interval and writes tagType = 0 before transmitting type 0x12F.',
+        'Writes DamageElement.m_recoverSP / 10000 into RecoverSPArgs.baseDelta, then derives RecoverSPArgs.delta from baseDelta * (1 + SPGETUP + SPGETUP_ATK).',
+        'Writes DamageElement.m_petRecoverSP / 10000 through the same modifier path into RecoverSPArgs.petDelta.',
+        'Writes DamageElement.m_recoverInterval / 1000 into RecoverSPArgs.interval and writes tagType = 0 before transmitting type 0x12F.',
       ],
       confirmed: [
         'recover-sp-field-gates-energy-recovery-path',
         'recover-sp-source-to-base-delta-confirmed',
+        'recover-sp-base-delta-divisor-10000-confirmed',
         'recover-sp-source-to-delta-modifier-path-confirmed',
+        'recover-sp-delta-modifier-base-1-confirmed',
+        'recover-sp-delta-modifier-properties-spgetup-spgetup-atk-confirmed',
         'pet-recover-sp-source-to-pet-delta-confirmed',
         'recover-interval-source-to-args-interval-confirmed',
+        'recover-interval-divisor-1000-confirmed',
         'recover-sp-args-transmit-type-0x12f-confirmed',
         'native-method-body-present',
       ],
       unresolved: [
-        'delta-runtime-modifier-sources-unconfirmed',
-        'recover-interval-native-divisor-unconfirmed',
+        'delta-runtime-modifier-property-values-unapplied',
+        'recover-interval-runtime-throttle-semantics-unconfirmed',
         'damage-element-target-owner-selection-unconfirmed',
       ],
     },
@@ -845,39 +849,89 @@ const RECOVER_SP_ENUM_EVIDENCE = {
     },
   ],
 };
+const SELF_ENERGY_NATIVE_CONSTANT_READ_EVIDENCE = {
+  status: 'gameassembly-rdata-float32-values-read',
+  sourceFile: 'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll',
+  fileSize: 222485544,
+  imageBase: '0x180000000',
+  constants: [
+    {
+      key: 'recover-sp-modifier-base',
+      va: '0x189956B08',
+      rva: '0x9956B08',
+      section: '.rdata',
+      fileOffset: '0x9954708',
+      float32: 1,
+      uint32Hex: '0x3F800000',
+      usage: 'RecoverSPArgs.delta/petDelta modifier base constant',
+      status: 'value-confirmed',
+    },
+    {
+      key: 'recover-interval-divisor',
+      va: '0x189956D8C',
+      rva: '0x9956D8C',
+      section: '.rdata',
+      fileOffset: '0x995498C',
+      float32: 1000,
+      uint32Hex: '0x447A0000',
+      usage: 'DamageElement.m_recoverInterval to RecoverSPArgs.interval',
+      status: 'value-confirmed',
+    },
+    {
+      key: 'recover-sp-per-ten-thousand-divisor',
+      va: '0x189956FB0',
+      rva: '0x9956FB0',
+      section: '.rdata',
+      fileOffset: '0x9954BB0',
+      float32: 10000,
+      uint32Hex: '0x461C4000',
+      usage: 'DamageElement.m_recoverSP/petRecoverSP raw field scale',
+      status: 'value-confirmed',
+    },
+  ],
+};
 const SELF_ENERGY_SOURCE_TO_ARGS_RULES = {
   status: 'damage-element-recover-sp-source-to-args-partially-confirmed',
   sourceFunction: 'DamageElement.RecoverSP@0x138EEE0',
   argsResetFunction: 'RecoverSPArgs.OnReset@0x1254070',
   transmitType: '0x12F',
+  nativeConstantReadEvidence: SELF_ENERGY_NATIVE_CONSTANT_READ_EVIDENCE,
   nativeScaleFacts: [
     {
       sourceField: 'DamageElement.m_recoverSP@0x240',
       argsField: 'RecoverSPArgs.baseDelta@0x1C',
       operation: 'int-to-float-divide-native-constant',
-      observedConstantRole: 'per-ten-thousand-scale-candidate',
-      status: 'source-to-base-delta-confirmed',
+      nativeDivisorAddress: '0x189956FB0',
+      nativeDivisorValue: 10000,
+      observedConstantRole: 'per-ten-thousand-scale-confirmed',
+      status: 'source-to-base-delta-divisor-confirmed',
     },
     {
       sourceField: 'DamageElement.m_recoverSP@0x240',
       argsField: 'RecoverSPArgs.delta@0x20',
-      operation:
-        'baseDelta * (nativeConstant + runtimeModifierA + runtimeModifierB)',
+      operation: 'baseDelta * (1 + SPGETUP + SPGETUP_ATK)',
+      nativeConstantAddress: '0x189956B08',
+      nativeConstantValue: 1,
       status: 'source-to-delta-derived-with-runtime-modifiers-confirmed',
     },
     {
       sourceField: 'DamageElement.m_petRecoverSP@0x244',
       argsField: 'RecoverSPArgs.petDelta@0x38',
-      operation:
-        'petRecoverSPScaled * (nativeConstant + runtimeModifierA + runtimeModifierB)',
+      operation: 'petRecoverSPScaled * (1 + SPGETUP + SPGETUP_ATK)',
+      nativeDivisorAddress: '0x189956FB0',
+      nativeDivisorValue: 10000,
+      nativeConstantAddress: '0x189956B08',
+      nativeConstantValue: 1,
       status: 'source-to-pet-delta-derived-with-runtime-modifiers-confirmed',
     },
     {
       sourceField: 'DamageElement.m_recoverInterval@0x248',
       argsField: 'RecoverSPArgs.interval@0x24',
       operation: 'int-to-float-divide-native-constant',
-      observedConstantRole: 'interval-timebase-divisor-unconfirmed',
-      status: 'source-to-interval-confirmed-divisor-unconfirmed',
+      nativeDivisorAddress: '0x189956D8C',
+      nativeDivisorValue: 1000,
+      observedConstantRole: 'interval-timebase-divisor-confirmed',
+      status: 'source-to-interval-confirmed-divisor-confirmed',
     },
     {
       sourceField: 'DamageElement.RecoverSP path',
@@ -907,7 +961,7 @@ const SELF_ENERGY_SOURCE_TO_ARGS_RULES = {
   enumEvidence: RECOVER_SP_ENUM_EVIDENCE,
   unresolved: [
     'delta-runtime-modifier-values-unapplied',
-    'recover-interval-native-divisor-value-unconfirmed',
+    'recover-interval-runtime-throttle-semantics-unconfirmed',
     'share-target-filter-unconfirmed',
     'damage-element-target-owner-selection-unconfirmed',
   ],
@@ -919,11 +973,11 @@ const SELF_ENERGY_RUNTIME_MODIFIER_RULES = {
     baseDeltaField: 'RecoverSPArgs.baseDelta@0x1C',
     deltaField: 'RecoverSPArgs.delta@0x20',
     petDeltaField: 'RecoverSPArgs.petDelta@0x38',
-    expression:
-      'scaledSource * (nativeConstant@0x189956B08 + SPGETUP + SPGETUP_ATK)',
+    expression: 'scaledSource * (1 + SPGETUP + SPGETUP_ATK)',
     nativeConstantAddress: '0x189956B08',
-    nativeConstantStatus: 'address-confirmed-value-unread',
-    status: 'modifier-sources-confirmed-values-runtime-unapplied',
+    nativeConstantValue: 1,
+    nativeConstantStatus: 'value-confirmed-from-gameassembly-rdata',
+    status: 'modifier-base-constant-confirmed-values-runtime-unapplied',
   },
   modifierSources: [
     {
@@ -964,7 +1018,8 @@ const SELF_ENERGY_RUNTIME_MODIFIER_RULES = {
     argsField: 'RecoverSPArgs.interval@0x24',
     operation: 'int-to-float-divide-native-constant',
     nativeDivisorAddress: '0x189956D8C',
-    status: 'divisor-address-confirmed-value-unread',
+    nativeDivisorValue: 1000,
+    status: 'divisor-value-confirmed-time-unit-unapplied',
   },
   shareConfigSources: [
     {
@@ -985,11 +1040,11 @@ const SELF_ENERGY_RUNTIME_MODIFIER_RULES = {
       status: 'constant-default-confirmed',
     },
   ],
+  nativeConstantReadEvidence: SELF_ENERGY_NATIVE_CONSTANT_READ_EVIDENCE,
   unresolved: [
-    'native-constant-value-unread',
-    'recover-interval-native-divisor-value-unconfirmed',
     'runtime-property-values-unapplied',
     'owner-and-share-target-filter-unconfirmed',
+    'final-sp-curve-unconfirmed',
   ],
 };
 
@@ -5663,7 +5718,7 @@ function createSelfEnergyRuntimeFormulaProbe(candidates, options = {}) {
     unresolved: [
       'recover-sp-final-unit-unconfirmed',
       'delta-runtime-modifier-values-unapplied',
-      'recover-interval-native-divisor-value-unconfirmed',
+      'recover-interval-runtime-throttle-semantics-unconfirmed',
       'share-target-filter-unconfirmed',
       'baseDelta-vs-delta-role-unconfirmed',
     ],
@@ -5706,7 +5761,7 @@ function createSelfEnergySourceToArgsProbe(samples) {
         candidateSourceField: 'TDamageElementParams.recoverInterval',
         runtimeField: 'DamageElement.m_recoverInterval@0x248',
         recoverSpArgsFields: ['interval@0x24'],
-        status: 'source-to-interval-confirmed-divisor-unconfirmed',
+        status: 'source-to-interval-confirmed-divisor-confirmed',
       },
       recoverTagType: {
         candidateSourceField: 'DamageElement.RecoverSP path',
@@ -5725,24 +5780,46 @@ function createSelfEnergySourceToArgsProbe(samples) {
       argsConstructionCandidates: {
         baseDelta: {
           sourceField: sample.recoverSP,
+          nativeDivisorAddress: '0x189956FB0',
+          nativeDivisorValue: 10000,
           perTenThousandCandidate: scalePerTenThousand(sample.recoverSP),
-          status: 'source-to-baseDelta-confirmed-unit-candidate',
+          status: 'source-to-baseDelta-confirmed-unit-confirmed',
         },
         delta: {
           sourceField: sample.recoverSP,
           baseDeltaCandidate: scalePerTenThousand(sample.recoverSP),
+          modifierBaseConstantAddress: '0x189956B08',
+          modifierBaseConstantValue: 1,
+          modifierPropertyIds:
+            SELF_ENERGY_RUNTIME_MODIFIER_RULES.modifierSources.map(
+              source => source.propertyId
+            ),
           modifierStatus: 'runtime-modifier-sources-confirmed-values-unapplied',
           status: 'derived-from-baseDelta-with-runtime-modifiers-unapplied',
         },
         petDelta: {
           sourceField: sample.petRecoverSP,
           basePetDeltaCandidate: scalePerTenThousand(sample.petRecoverSP),
+          nativeDivisorAddress: '0x189956FB0',
+          nativeDivisorValue: 10000,
+          modifierBaseConstantAddress: '0x189956B08',
+          modifierBaseConstantValue: 1,
+          modifierPropertyIds:
+            SELF_ENERGY_RUNTIME_MODIFIER_RULES.modifierSources.map(
+              source => source.propertyId
+            ),
           modifierStatus: 'runtime-modifier-sources-confirmed-values-unapplied',
           status: 'derived-from-petRecoverSP-with-runtime-modifiers-unapplied',
         },
         interval: {
           sourceField: sample.recoverInterval,
-          divisorStatus: 'native-divisor-address-confirmed-value-unread',
+          nativeDivisorAddress: '0x189956D8C',
+          nativeDivisorValue: 1000,
+          intervalSecondsCandidate:
+            sample.recoverInterval == null
+              ? null
+              : sample.recoverInterval / 1000,
+          divisorStatus: 'native-divisor-value-confirmed-time-unit-unapplied',
           status: 'source-to-interval-confirmed-timebase-unconfirmed',
         },
         tagType: {
@@ -5785,18 +5862,24 @@ function createSelfEnergyRuntimeModifierProbe(samples) {
         baseDeltaCandidate: scalePerTenThousand(sample.recoverSP),
         petBaseDeltaCandidate: scalePerTenThousand(sample.petRecoverSP),
         modifierPropertyIds,
-        formulaShape:
-          'base * (nativeConstant@0x189956B08 + SPGETUP + SPGETUP_ATK)',
+        formulaShape: 'base * (1 + SPGETUP + SPGETUP_ATK)',
         nativeConstantAddress:
           SELF_ENERGY_RUNTIME_MODIFIER_RULES.deltaFormulaShape
             .nativeConstantAddress,
-        status: 'modifier-values-runtime-unapplied',
+        nativeConstantValue:
+          SELF_ENERGY_RUNTIME_MODIFIER_RULES.deltaFormulaShape
+            .nativeConstantValue,
+        status: 'modifier-base-constant-confirmed-values-runtime-unapplied',
       },
       intervalScaleCandidate: {
         sourceField: sample.recoverInterval,
         nativeDivisorAddress:
           SELF_ENERGY_RUNTIME_MODIFIER_RULES.intervalScale.nativeDivisorAddress,
-        status: 'divisor-address-confirmed-value-unread',
+        nativeDivisorValue:
+          SELF_ENERGY_RUNTIME_MODIFIER_RULES.intervalScale.nativeDivisorValue,
+        intervalSecondsCandidate:
+          sample.recoverInterval == null ? null : sample.recoverInterval / 1000,
+        status: 'divisor-value-confirmed-time-unit-unapplied',
       },
       shareConfigCandidates:
         SELF_ENERGY_RUNTIME_MODIFIER_RULES.shareConfigSources,
@@ -5836,7 +5919,7 @@ function createSelfEnergyOwnerShareIntervalProbe(samples) {
       recoverInterval: {
         candidateSourceField: 'TDamageElementParams.recoverInterval',
         recoverSpArgsCandidates: ['interval@0x24'],
-        status: 'source-to-interval-confirmed-divisor-unconfirmed',
+        status: 'source-to-interval-confirmed-divisor-confirmed',
       },
     },
     samples: samples.map(sample => ({
@@ -5852,17 +5935,22 @@ function createSelfEnergyOwnerShareIntervalProbe(samples) {
         },
         interval: {
           rawField: sample.recoverInterval,
-          perTenThousand: scalePerTenThousand(sample.recoverInterval),
+          nativeDivisorAddress: '0x189956D8C',
+          nativeDivisorValue: 1000,
+          intervalSecondsCandidate:
+            sample.recoverInterval == null
+              ? null
+              : sample.recoverInterval / 1000,
         },
       },
       applied: false,
     })),
     unresolved: [
-      'delta-runtime-modifier-sources-unconfirmed',
+      'delta-runtime-modifier-values-unapplied',
       'owner-entity-selection-unconfirmed',
       'background-share-target-filter-unconfirmed',
       'pet-share-target-filter-unconfirmed',
-      'recover-interval-native-divisor-unconfirmed',
+      'recover-interval-runtime-throttle-semantics-unconfirmed',
       'recover-tag-type-non-damage-element-paths-unconfirmed',
     ],
     applied: false,

@@ -6132,3 +6132,104 @@ hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1
 - 已确认两个 modifier 的属性来源与分享配置字段来源，但未读取 `nativeConstant@0x189956B08` 的实际值。
 - `recoverInterval` divisor `0x189956D8C` 只确认地址，尚未确认实际值和时间单位。
 - `SPGETUP/SPGETUP_ATK` 实时属性值、owner/share 目标筛选和最终 SP 曲线仍未确认。
+
+## 79. 阶段 5-8AZ：nativeConstantReadEvidence 原生常量读取证据
+
+阶段 5-8AZ 在充能证据层新增 `nativeConstantReadEvidence`，用于把 `DamageElement.RecoverSP` 中已定位的原生常量地址升级为可验证的 PE `.rdata` float32 读数。该结构仍为 evidence-only，不参与最终自身能量值计算。
+
+### 79.1 nativeConstantReadEvidence
+
+字段：
+
+- `status`：当前为 `gameassembly-rdata-float32-values-read`。
+- `sourceFile`：`C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll`。
+- `fileSize`：`222485544`。
+- `imageBase`：`0x180000000`。
+- `constants[]`：每个常量的 key、VA、RVA、section、fileOffset、float32、uint32Hex、usage 和 status。
+
+当前读数：
+
+```json
+{
+  "status": "gameassembly-rdata-float32-values-read",
+  "sourceFile": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+  "imageBase": "0x180000000",
+  "constants": [
+    {
+      "key": "recover-sp-modifier-base",
+      "va": "0x189956B08",
+      "rva": "0x9956B08",
+      "section": ".rdata",
+      "fileOffset": "0x9954708",
+      "float32": 1,
+      "uint32Hex": "0x3F800000"
+    },
+    {
+      "key": "recover-interval-divisor",
+      "va": "0x189956D8C",
+      "rva": "0x9956D8C",
+      "section": ".rdata",
+      "fileOffset": "0x995498C",
+      "float32": 1000,
+      "uint32Hex": "0x447A0000"
+    },
+    {
+      "key": "recover-sp-per-ten-thousand-divisor",
+      "va": "0x189956FB0",
+      "rva": "0x9956FB0",
+      "section": ".rdata",
+      "fileOffset": "0x9954BB0",
+      "float32": 10000,
+      "uint32Hex": "0x461C4000"
+    }
+  ]
+}
+```
+
+### 79.2 sourceToArgsProbe 更新
+
+`SELF_ENERGY_SOURCE_TO_ARGS_RULES.nativeScaleFacts[]` 更新：
+
+- `RecoverSPArgs.baseDelta@0x1C`：新增 `nativeDivisorAddress = 0x189956FB0`、`nativeDivisorValue = 10000`，状态升级为 `source-to-base-delta-divisor-confirmed`。
+- `RecoverSPArgs.delta@0x20`：公式从 `nativeConstant + runtimeModifierA + runtimeModifierB` 细化为 `1 + SPGETUP + SPGETUP_ATK`。
+- `RecoverSPArgs.petDelta@0x38`：新增 `nativeDivisorAddress = 0x189956FB0`、`nativeDivisorValue = 10000`、`nativeConstantValue = 1`。
+- `RecoverSPArgs.interval@0x24`：新增 `nativeDivisorAddress = 0x189956D8C`、`nativeDivisorValue = 1000`，状态升级为 `source-to-interval-confirmed-divisor-confirmed`。
+
+`sourceToArgsProbe.samples[].argsConstructionCandidates` 更新：
+
+- `baseDelta.nativeDivisorValue = 10000`。
+- `delta.modifierBaseConstantValue = 1`。
+- `petDelta.nativeDivisorValue = 10000`。
+- `interval.nativeDivisorValue = 1000`。
+- `interval.intervalSecondsCandidate = recoverInterval / 1000`。
+
+### 79.3 runtimeModifierProbe 更新
+
+`runtimeModifierProbe.confirmedRuntimeRules.deltaFormulaShape` 更新：
+
+```json
+{
+  "expression": "scaledSource * (1 + SPGETUP + SPGETUP_ATK)",
+  "nativeConstantAddress": "0x189956B08",
+  "nativeConstantValue": 1,
+  "nativeConstantStatus": "value-confirmed-from-gameassembly-rdata"
+}
+```
+
+`runtimeModifierProbe.samples[].deltaFormulaPreview` 更新：
+
+- `formulaShape = base * (1 + SPGETUP + SPGETUP_ATK)`。
+- `nativeConstantValue = 1`。
+- `status = modifier-base-constant-confirmed-values-runtime-unapplied`。
+
+`runtimeModifierProbe.samples[].intervalScaleCandidate` 更新：
+
+- `nativeDivisorValue = 1000`。
+- `intervalSecondsCandidate = recoverInterval / 1000`。
+- `status = divisor-value-confirmed-time-unit-unapplied`。
+
+### 79.4 当前边界
+
+- `nativeConstantReadEvidence` 只证明二进制中的常量读数。
+- `SPGETUP/SPGETUP_ATK` 实时属性值仍未确认。
+- `intervalSecondsCandidate` 是基于 divisor 的候选单位；真实节流命中、share rebroadcast 顺序和最终每角色 SP 曲线仍需 runtime 样本验证。

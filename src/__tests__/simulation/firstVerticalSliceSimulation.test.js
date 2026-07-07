@@ -684,7 +684,9 @@ describe('first vertical slice simulation', () => {
                   expect.objectContaining({
                     sourceField: 'DamageElement.m_recoverSP@0x240',
                     argsField: 'RecoverSPArgs.baseDelta@0x1C',
-                    status: 'source-to-base-delta-confirmed',
+                    nativeDivisorAddress: '0x189956FB0',
+                    nativeDivisorValue: 10000,
+                    status: 'source-to-base-delta-divisor-confirmed',
                   }),
                   expect.objectContaining({
                     sourceField: 'DamageElement.m_recoverSP@0x240',
@@ -695,9 +697,31 @@ describe('first vertical slice simulation', () => {
                   expect.objectContaining({
                     sourceField: 'DamageElement.m_recoverInterval@0x248',
                     argsField: 'RecoverSPArgs.interval@0x24',
-                    status: 'source-to-interval-confirmed-divisor-unconfirmed',
+                    nativeDivisorAddress: '0x189956D8C',
+                    nativeDivisorValue: 1000,
+                    status: 'source-to-interval-confirmed-divisor-confirmed',
                   }),
                 ]),
+                nativeConstantReadEvidence: expect.objectContaining({
+                  status: 'gameassembly-rdata-float32-values-read',
+                  constants: expect.arrayContaining([
+                    expect.objectContaining({
+                      key: 'recover-sp-modifier-base',
+                      float32: 1,
+                      fileOffset: '0x9954708',
+                    }),
+                    expect.objectContaining({
+                      key: 'recover-interval-divisor',
+                      float32: 1000,
+                      fileOffset: '0x995498C',
+                    }),
+                    expect.objectContaining({
+                      key: 'recover-sp-per-ten-thousand-divisor',
+                      float32: 10000,
+                      fileOffset: '0x9954BB0',
+                    }),
+                  ]),
+                }),
                 enumEvidence: expect.objectContaining({
                   recoverTagType: expect.arrayContaining([
                     expect.objectContaining({
@@ -719,7 +743,9 @@ describe('first vertical slice simulation', () => {
                   'damage-element-recover-sp-runtime-modifiers-partially-confirmed',
                 deltaFormulaShape: expect.objectContaining({
                   nativeConstantAddress: '0x189956B08',
-                  status: 'modifier-sources-confirmed-values-runtime-unapplied',
+                  nativeConstantValue: 1,
+                  status:
+                    'modifier-base-constant-confirmed-values-runtime-unapplied',
                 }),
                 modifierSources: expect.arrayContaining([
                   expect.objectContaining({
@@ -738,6 +764,7 @@ describe('first vertical slice simulation', () => {
                 ]),
                 intervalScale: expect.objectContaining({
                   nativeDivisorAddress: '0x189956D8C',
+                  nativeDivisorValue: 1000,
                 }),
                 shareConfigSources: expect.arrayContaining([
                   expect.objectContaining({
@@ -836,7 +863,9 @@ describe('first vertical slice simulation', () => {
                 recoverSpArgsCandidates: expect.objectContaining({
                   interval: expect.objectContaining({
                     rawField: 9999,
-                    perTenThousand: 0.9999,
+                    nativeDivisorAddress: '0x189956D8C',
+                    nativeDivisorValue: 1000,
+                    intervalSecondsCandidate: 9.999,
                   }),
                 }),
               }),
@@ -856,7 +885,7 @@ describe('first vertical slice simulation', () => {
               }),
               recoverInterval: expect.objectContaining({
                 recoverSpArgsFields: ['interval@0x24'],
-                status: 'source-to-interval-confirmed-divisor-unconfirmed',
+                status: 'source-to-interval-confirmed-divisor-confirmed',
               }),
             }),
             samples: expect.arrayContaining([
@@ -865,6 +894,7 @@ describe('first vertical slice simulation', () => {
                 argsConstructionCandidates: expect.objectContaining({
                   baseDelta: expect.objectContaining({
                     sourceField: 2700,
+                    nativeDivisorValue: 10000,
                     perTenThousandCandidate: 0.27,
                   }),
                   tagType: expect.objectContaining({
@@ -2144,10 +2174,13 @@ describe('first vertical slice simulation', () => {
                         petBaseDeltaCandidate: 2.2999,
                         modifierPropertyIds: [105, 228],
                         nativeConstantAddress: '0x189956B08',
+                        nativeConstantValue: 1,
                       }),
                       intervalScaleCandidate: expect.objectContaining({
                         sourceField: 9999,
                         nativeDivisorAddress: '0x189956D8C',
+                        nativeDivisorValue: 1000,
+                        intervalSecondsCandidate: 9.999,
                       }),
                     }),
                   ]),
@@ -2300,8 +2333,12 @@ describe('first vertical slice simulation', () => {
                       confirmed: expect.arrayContaining([
                         'recover-sp-field-gates-energy-recovery-path',
                         'recover-sp-source-to-base-delta-confirmed',
+                        'recover-sp-base-delta-divisor-10000-confirmed',
+                        'recover-sp-delta-modifier-base-1-confirmed',
+                        'recover-sp-delta-modifier-properties-spgetup-spgetup-atk-confirmed',
                         'pet-recover-sp-source-to-pet-delta-confirmed',
                         'recover-interval-source-to-args-interval-confirmed',
+                        'recover-interval-divisor-1000-confirmed',
                       ]),
                     }),
                     expect.objectContaining({

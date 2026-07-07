@@ -3878,6 +3878,46 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8AZ 目标：读取或 runtime hook 采样 `nativeConstant@0x189956B08` 与 `recoverInterval` divisor `0x189956D8C` 的实际值，确认 `SPGETUP/SPGETUP_ATK` 的单位和默认值。
 - 同步设计按角色采样点：记录 `RecoverSPArgs.id/baseDelta/delta/interval/sharePercent/petSharePercent/petDelta/mainPetSharePercent` 字段快照、share rebroadcast 目标、interval 节流结果和最终自身能量曲线。
 
+### 2026-07-08：阶段 5-8AZ RecoverSP 原生常量读取
+
+本轮完成：
+
+- 已确认原始客户端 `GameAssembly.dll` 路径：`C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll`，文件大小 `222,485,544` 字节，PE imageBase 为 `0x180000000`。
+- 已直接解析 PE 节表并从 `.rdata` 读取三处 float32 常量：
+  - `0x189956B08 / RVA 0x9956B08 / fileOffset 0x9954708 = 1.0`，用于 `RecoverSPArgs.delta/petDelta` 的 modifier 基准常量。
+  - `0x189956D8C / RVA 0x9956D8C / fileOffset 0x995498C = 1000.0`，用于 `DamageElement.m_recoverInterval -> RecoverSPArgs.interval`。
+  - `0x189956FB0 / RVA 0x9956FB0 / fileOffset 0x9954BB0 = 10000.0`，用于 `recoverSP/petRecoverSP` 原始字段缩放。
+- 新增 `nativeConstantReadEvidence`，挂入 `SELF_ENERGY_SOURCE_TO_ARGS_RULES` 和 `SELF_ENERGY_RUNTIME_MODIFIER_RULES`，记录 source file、imageBase、section、RVA、fileOffset、float32 和 uint32 hex。
+- `sourceToArgsProbe` 已升级：
+  - `recoverSP -> baseDelta` 记录 `nativeDivisorValue = 10000`。
+  - `recoverInterval -> interval` 记录 `nativeDivisorValue = 1000` 和 `intervalSecondsCandidate`。
+- `runtimeModifierProbe` 已升级：
+  - `deltaFormulaShape.expression = scaledSource * (1 + SPGETUP + SPGETUP_ATK)`。
+  - `deltaFormulaPreview.nativeConstantValue = 1`。
+  - `intervalScaleCandidate.nativeDivisorValue = 1000`。
+
+当前样例结果：
+
+- 默认普通攻击 action-level：`recoverSP = 2700 -> baseDeltaCandidate = 0.27`，`recoverInterval = 9999 -> intervalSecondsCandidate = 9.999`。
+- 非普攻外部 DamageElement：`109001251` 的 `recoverSP = 5899 -> 0.5899`，`petRecoverSP = 22999 -> 2.2999`，`recoverInterval = 9999 -> 9.999`。
+- 当前公式形态已经能写为 `base * (1 + SPGETUP + SPGETUP_ATK)`，但 `SPGETUP/SPGETUP_ATK` 实时属性值仍未采样。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+
+当前边界：
+
+- 阶段 5-8AZ 证明的是原生常量值和静态缩放关系，仍不等于最终充能公式可应用。
+- `SPGETUP/SPGETUP_ATK` 的实时属性值、默认值、buff/装备影响和快照路径差异仍未确认。
+- `recoverInterval / 1000` 已确认，但 `SPSystem.OnTransmit` 的节流命中时机、timer map key 和 share rebroadcast 顺序仍未通过运行时样本闭环。
+- `selfEnergyChange.value` 仍只应用显式资源事件，不应用候选充能。
+
+下一步：
+
+- 阶段 5-8BA 目标：设计或接入 runtime hook 采样点，按角色记录 `RecoverSPArgs` 字段快照、`SPGETUP/SPGETUP_ATK` 实时属性值、owner/share 目标筛选、interval 节流结果和最终自身能量曲线。
+- 若暂时无法直接 hook 客户端，先在项目中建立 runtime sample schema 和离线导入入口，确保后续采样能直接驱动 HP/削韧/能量三曲线验证。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
