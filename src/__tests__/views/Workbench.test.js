@@ -73,6 +73,28 @@ describe('Workbench view', () => {
     );
     expect(candidateMarkers).toHaveLength(15);
     expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-candidate-value-curve-track"]'
+      )
+    ).toHaveLength(1);
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-candidate-value-curve"]'
+      )
+    ).toHaveLength(3);
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-candidate-value-frame-hotspot"]'
+      )
+    ).toHaveLength(5);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-candidate-value-curve"][data-series-key="hpDamageFormulaParamCandidate"]'
+        )
+        .attributes('data-point-count')
+    ).toBe('5');
+    expect(
       candidateMarkers.every(
         marker => marker.attributes('data-lane-id') === 'actor-109001'
       )
@@ -84,6 +106,22 @@ describe('Workbench view', () => {
         )
         .attributes('data-frame-label')
     ).toBe('0s12f');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-candidate-value-marker"][data-series-key="hpDamageFormulaParamCandidate"][data-hit-index="1"]'
+        )
+        .attributes('data-marker-title')
+    ).toBe('HP参数候选 0s12f hit1: 2,500 raw-param');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-candidate-value-frame-hotspot"][data-hit-index="1"]'
+        )
+        .attributes('data-marker-title')
+    ).toBe(
+      '0s12f hit1: HP参数候选 2,500 raw-param / 削韧候选 7,000 raw-field / 能量候选 2,700 raw-field'
+    );
     expect(
       wrapper
         .find(

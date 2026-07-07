@@ -4104,3 +4104,69 @@ data-testid="workbench-timeline-damage-marker"
 - 时间轴当前是 marker 点，不是连续曲线轨。
 - marker 值仍是未应用候选字段值。
 - 下一阶段应补多曲线轨或悬浮提示，避免用户只能靠 marker 形状判断来源。
+
+## 59. 阶段 5-8AF：TimelineGrid 候选多曲线轨与按帧提示
+
+阶段 5-8AF 继续扩展主时间轴 UI 投影，不改变底层仿真 schema。输入仍来自 `candidateValueSeries.chart`。
+
+### 59.1 curve track
+
+每个含候选点的 lane 新增曲线轨：
+
+```html
+data-testid="workbench-timeline-candidate-value-curve-track"
+```
+
+当前默认样本只有 `actor-109001` 一条候选曲线轨。
+
+### 59.2 curve line
+
+每条候选曲线使用独立 polyline：
+
+```html
+data-testid="workbench-timeline-candidate-value-curve"
+data-series-key="hpDamageFormulaParamCandidate"
+data-point-count="5"
+```
+
+当前默认样本：
+
+- `hpDamageFormulaParamCandidate`
+- `toughnessDamageCandidate`
+- `selfEnergyCandidate`
+
+### 59.3 marker 与 yPercent
+
+候选 marker 不再按固定三行摆放，而是按 `candidateValueSeries.chart.points[].yPercent` 计算纵坐标，使 marker 与曲线线段对齐。
+
+marker 继续保留：
+
+```html
+data-testid="workbench-timeline-candidate-value-marker"
+data-series-key="hpDamageFormulaParamCandidate"
+data-hit-index="1"
+data-frame-label="0s12f"
+data-marker-title="HP参数候选 0s12f hit1: 2,500 raw-param"
+```
+
+### 59.4 frame hotspot
+
+同一 hit 帧的三条候选值合并为一个 hover hotspot：
+
+```html
+data-testid="workbench-timeline-candidate-value-frame-hotspot"
+data-hit-index="1"
+data-frame-label="0s12f"
+```
+
+首帧提示：
+
+```text
+0s12f hit1: HP参数候选 2,500 raw-param / 削韧候选 7,000 raw-field / 能量候选 2,700 raw-field
+```
+
+### 59.5 当前边界
+
+- hotspot 目前使用原生 `title` / `aria-label`，不是自定义浮层。
+- 曲线显隐和来源详情暂未交互化。
+- 后续多动作、多角色样本需要验证曲线密度和 hover 命中区域。

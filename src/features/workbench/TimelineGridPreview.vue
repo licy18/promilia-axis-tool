@@ -163,17 +163,56 @@
             />
 
             <div
+              v-if="lane.candidateValueCurves.length"
+              class="candidate-value-curve-track"
+              data-testid="workbench-timeline-candidate-value-curve-track"
+              :data-lane-id="lane.id"
+            >
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                <polyline
+                  v-for="curve in lane.candidateValueCurves"
+                  :key="curve.seriesKey"
+                  class="candidate-value-curve-line"
+                  :class="`candidate-${curve.seriesKey}`"
+                  :points="curve.polylinePoints"
+                  vector-effect="non-scaling-stroke"
+                  data-testid="workbench-timeline-candidate-value-curve"
+                  :data-series-key="curve.seriesKey"
+                  :data-point-count="curve.pointCount"
+                />
+              </svg>
+            </div>
+
+            <div
+              v-for="group in lane.candidateValueFrameGroups"
+              :key="group.id"
+              class="candidate-value-frame-hotspot"
+              :style="candidateValueFrameHotspotStyle(group)"
+              :title="group.title"
+              :aria-label="group.title"
+              :data-action-id="group.actionId"
+              :data-lane-id="lane.id"
+              :data-hit-index="group.hitIndex"
+              :data-frame-label="group.frameLabel"
+              :data-marker-title="group.title"
+              data-testid="workbench-timeline-candidate-value-frame-hotspot"
+            />
+
+            <div
               v-for="marker in lane.candidateValueMarkers"
               :key="marker.id"
               class="candidate-value-marker"
               :class="`candidate-${marker.seriesKey}`"
               :style="candidateValueMarkerStyle(marker)"
               :title="formatCandidateValueMarkerTitle(marker)"
+              :aria-label="formatCandidateValueMarkerTitle(marker)"
               :data-action-id="marker.actionId"
               :data-lane-id="lane.id"
               :data-series-key="marker.seriesKey"
               :data-hit-index="marker.hitIndex"
               :data-frame-label="marker.frameLabel"
+              :data-value="marker.value"
+              :data-marker-title="formatCandidateValueMarkerTitle(marker)"
               data-testid="workbench-timeline-candidate-value-marker"
             />
           </div>
@@ -214,10 +253,12 @@ const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
 const ZOOM_STEP = 0.25;
-const CANDIDATE_VALUE_SERIES_OFFSETS = {
-  hpDamageFormulaParamCandidate: 70,
-  toughnessDamageCandidate: 82,
-  selfEnergyCandidate: 94,
+const CANDIDATE_VALUE_CURVE_TOP = 68;
+const CANDIDATE_VALUE_CURVE_HEIGHT = 34;
+const CANDIDATE_VALUE_SERIES_ORDER = {
+  hpDamageFormulaParamCandidate: 0,
+  toughnessDamageCandidate: 1,
+  selfEnergyCandidate: 2,
 };
 
 const props = defineProps({
@@ -319,6 +360,8 @@ const timelineLanes = computed(() => {
     actions: [],
     damageMarkers: [],
     candidateValueMarkers: [],
+    candidateValueCurves: [],
+    candidateValueFrameGroups: [],
   }));
   const lanesById = new Map(actorLanes.map(lane => [lane.id, lane]));
   const systemLane = {
@@ -329,6 +372,8 @@ const timelineLanes = computed(() => {
     actions: [],
     damageMarkers: [],
     candidateValueMarkers: [],
+    candidateValueCurves: [],
+    candidateValueFrameGroups: [],
   };
 
   props.actions.forEach(action => {
@@ -345,6 +390,15 @@ const timelineLanes = computed(() => {
     const lane =
       lanesById.get(resolveCandidateValueLaneId(marker)) ?? systemLane;
     lane.candidateValueMarkers.push(marker);
+  });
+
+  [...actorLanes, systemLane].forEach(lane => {
+    lane.candidateValueCurves = createCandidateValueTimelineCurves(
+      lane.candidateValueMarkers
+    );
+    lane.candidateValueFrameGroups = createCandidateValueFrameGroups(
+      lane.candidateValueMarkers
+    );
   });
 
   return systemLane.actions.length > 0 ||
@@ -390,9 +444,19 @@ function markerStyle(damage) {
 
 function candidateValueMarkerStyle(marker) {
   const left = clampPercent((marker.timeMs / props.durationMs) * 100);
+  const top =
+    CANDIDATE_VALUE_CURVE_TOP +
+    (clampPercent(marker.yPercent) / 100) * CANDIDATE_VALUE_CURVE_HEIGHT;
   return {
     left: `${left}%`,
-    top: `${marker.offsetTop}px`,
+    top: `${top}px`,
+  };
+}
+
+function candidateValueFrameHotspotStyle(group) {
+  const left = clampPercent((group.timeMs / props.durationMs) * 100);
+  return {
+    left: `${left}%`,
   };
 }
 
@@ -451,11 +515,100 @@ function createCandidateValueTimelineMarkers() {
       frameLabel:
         point.displayFrameLabel ?? formatFrameTime(point.displayTimeMs ?? 0),
       value: point.value,
-      offsetTop:
-        CANDIDATE_VALUE_SERIES_OFFSETS[series.key] ??
-        CANDIDATE_VALUE_SERIES_OFFSETS.hpDamageFormulaParamCandidate,
+      xPercent: point.xPercent,
+      yPercent: point.yPercent,
+      seriesOrder:
+        CANDIDATE_VALUE_SERIES_ORDER[series.key] ??
+        CANDIDATE_VALUE_SERIES_ORDER.hpDamageFormulaParamCandidate,
     }))
   );
+}
+
+function createCandidateValueTimelineCurves(markers) {
+  const bySeries = new Map();
+  for (const marker of markers) {
+    if (!bySeries.has(marker.seriesKey)) {
+      bySeries.set(marker.seriesKey, {
+        seriesKey: marker.seriesKey,
+        seriesLabel: marker.seriesLabel,
+        seriesOrder: marker.seriesOrder,
+        points: [],
+      });
+    }
+    bySeries.get(marker.seriesKey).points.push(marker);
+  }
+
+  return [...bySeries.values()]
+    .map(curve => {
+      const points = curve.points
+        .slice()
+        .sort(
+          (left, right) =>
+            left.timeMs - right.timeMs ||
+            left.hitIndex - right.hitIndex ||
+            left.seriesOrder - right.seriesOrder
+        );
+      return {
+        ...curve,
+        pointCount: points.length,
+        polylinePoints: points
+          .map(
+            point =>
+              `${clampPercent(point.xPercent)},${clampPercent(point.yPercent)}`
+          )
+          .join(' '),
+        points,
+      };
+    })
+    .sort(
+      (left, right) =>
+        left.seriesOrder - right.seriesOrder ||
+        String(left.seriesLabel).localeCompare(String(right.seriesLabel))
+    );
+}
+
+function createCandidateValueFrameGroups(markers) {
+  const byFrame = new Map();
+  for (const marker of markers) {
+    const key = `${marker.actionId}-${marker.hitIndex}-${marker.frameLabel}`;
+    if (!byFrame.has(key)) {
+      byFrame.set(key, {
+        id: key,
+        actionId: marker.actionId,
+        hitIndex: marker.hitIndex,
+        frameLabel: marker.frameLabel,
+        timeMs: marker.timeMs,
+        values: [],
+      });
+    }
+    byFrame.get(key).values.push(marker);
+  }
+
+  return [...byFrame.values()]
+    .map(group => {
+      const values = group.values
+        .slice()
+        .sort(
+          (left, right) =>
+            left.seriesOrder - right.seriesOrder ||
+            String(left.seriesLabel).localeCompare(String(right.seriesLabel))
+        );
+      return {
+        ...group,
+        values,
+        title: `${group.frameLabel} hit${group.hitIndex}: ${values
+          .map(
+            value =>
+              `${value.seriesLabel} ${formatTimelineNumber(value.value)} ${value.unit}`
+          )
+          .join(' / ')}`,
+      };
+    })
+    .sort(
+      (left, right) =>
+        left.timeMs - right.timeMs ||
+        Number(left.hitIndex) - Number(right.hitIndex)
+    );
 }
 
 function formatCandidateValueMarkerTitle(marker) {
@@ -1020,8 +1173,65 @@ h2 {
   box-shadow: 0 0 18px rgba(121, 199, 185, 0.62);
 }
 
+.candidate-value-curve-track {
+  position: absolute;
+  top: 68px;
+  right: 0;
+  left: 0;
+  height: 34px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 15px,
+      rgba(255, 255, 255, 0.05) 15px,
+      rgba(255, 255, 255, 0.05) 16px
+    );
+  pointer-events: none;
+}
+
+.candidate-value-curve-track svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.candidate-value-curve-line {
+  fill: none;
+  stroke: #f2b366;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.82;
+}
+
+.candidate-value-curve-line.candidate-toughnessDamageCandidate {
+  stroke: #79c7b9;
+}
+
+.candidate-value-curve-line.candidate-selfEnergyCandidate {
+  stroke: #a6b7ff;
+}
+
+.candidate-value-frame-hotspot {
+  position: absolute;
+  z-index: 3;
+  top: 68px;
+  width: 18px;
+  height: 34px;
+  border: 0;
+  background: transparent;
+  cursor: help;
+  transform: translateX(-50%);
+}
+
 .candidate-value-marker {
   position: absolute;
+  z-index: 2;
   width: 9px;
   height: 9px;
   border: 1px solid rgba(255, 255, 255, 0.72);
