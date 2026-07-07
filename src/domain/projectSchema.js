@@ -126,6 +126,7 @@ export function createSkillAction({
   durationMs = null,
   note = '',
   insertion = null,
+  generationBatch = null,
 }) {
   if (!skill) {
     throw new Error('createSkillAction requires a skill');
@@ -159,6 +160,7 @@ export function createSkillAction({
     },
     note,
     insertion,
+    generationBatch,
   };
 }
 

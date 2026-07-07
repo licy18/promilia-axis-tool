@@ -1414,6 +1414,52 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 不引入真实时序假设；批次标记只表达“这些动作由同一次拆段生成”。
 - 为批次保存、草稿恢复、批量删除或撤销入口补充测试。
 
+### 2026-07-07：阶段 4-25 拆段生成批次标记/批量管理雏形落地
+
+本轮完成：
+
+- `workbench` 动作草稿新增可选 `generationBatch` 字段，用于标记同一次确认拆段生成的一组动作。
+- `generationBatch` 归一化内容包括：
+  - `batchId`
+  - `source`
+  - `skillId`
+  - `actorCharacterId`
+  - `level`
+  - `segmentCount`
+  - `createdAt`
+- 确认拆段预览时，`Workbench.vue` 会创建 `segment-batch-0001` 形式的批次 ID，并把同一批次写入所有生成动作。
+- `generationBatch` 会随 `actionDrafts` 保存、恢复，并透传到 Project skill action 和编译后的 scenario action。
+- 复制单个生成动作时会清除 `generationBatch`，避免复制件误入原批次。
+- `ActionLibraryPanel` 会在生成动作卡片中显示 `拆段批次 batchId / N 段`。
+- 生成动作卡片新增“删批次”入口，可一次性删除同批次生成的所有动作；保留原有非批次动作。
+- 新增测试覆盖：
+  - 确认拆段后 4 条生成动作共享同一个 `generationBatch.batchId`。
+  - 批次元信息会保存到草稿并在重新挂载工作台后恢复。
+  - 点击“删批次”只删除同批次动作，不删除原始动作。
+  - 删除批次后保存草稿，剩余动作不带 `generationBatch`。
+  - Project action 和 scenario action 会保留 `generationBatch`。
+
+验收结果：
+
+- `npx vitest run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、43 条测试通过。
+- `npm run test -- --run`：通过，10 个测试文件、87 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和旧 chunk 体积提示，暂不阻塞本阶段。
+- `git diff --check`：通过；仅有仓库既有 LF/CRLF 工作区提示和命令通道偶发 `Import-Clixml` 噪声。
+- `http://127.0.0.1:5175/#/workbench` 本地页面服务返回 200。
+
+当前结论：
+
+- 拆段生成结果已经具备最小可追踪性，同一批动作可以被识别和整体删除。
+- 批次标记仍是编辑器来源信息，不引入真实连段、真实命中帧或动画时序含义。
+- 当前批量管理只覆盖删除，尚未提供批量选择、批量移动、批量重排或撤销栈。
+
+下一步：
+
+- 阶段 4-26 目标：建立拆段批次时间偏移/批量移动雏形。
+- 允许对同一 `generationBatch` 的动作整体调整起始时间偏移，保持段间相对间隔。
+- 继续复用时间轴同轨重叠诊断，不把批量移动结果当作真实时序。
+- 为批量偏移、草稿保存恢复、重叠提示和取消/清理批次状态补充测试。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

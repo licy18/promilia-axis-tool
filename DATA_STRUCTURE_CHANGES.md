@@ -396,3 +396,44 @@ Workbench 草稿新增可选 `segmentSplitOptions` 配置块，用于保存动�
 
 - 预览只模拟当前草稿状态下的预计插入结果；如果动作、角色、拆段配置或时间轴发生变化，旧预览会被清理。
 - 预览中的 `resolvedStartMs` 是编辑器插入策略的预计落点，不代表真实游戏帧。
+
+## 13. 2026-07-07 Workbench 拆段生成批次标记补充
+
+确认拆段预览后生成的技能动作新增可选 `generationBatch` 元信息，用于表达“这些动作来自同一次拆段生成”。
+
+### 13.1 字段说明
+
+```javascript
+{
+  "id": "action-0003",
+  "type": "skill",
+  "skillId": 10900101,
+  "damageSegmentIndex": 1,
+  "generationBatch": {
+    "batchId": "segment-batch-0001",
+    "source": "skill-segment-split",
+    "skillId": 10900101,
+    "actorCharacterId": 109001,
+    "level": 1,
+    "segmentCount": 4,
+    "createdAt": "2026-07-07T00:00:00.000Z"
+  }
+}
+```
+
+- `batchId`：同一次确认拆段生成的动作共享同一个批次 ID。
+- `source`：当前固定为 `skill-segment-split`。
+- `skillId`、`actorCharacterId`、`level`：记录批次来源上下文。
+- `segmentCount`：记录本次确认实际生成的动作数量。
+- `createdAt`：记录确认生成时间。
+
+### 13.2 兼容性
+
+- `generationBatch` 是可选字段，旧动作缺少该字段时按普通动作处理。
+- 该字段会保存在 `workbench-draft.actionDrafts[]`，并透传到 Project skill action 和编译后的 scenario action。
+- 复制单个生成动作时会清除 `generationBatch`，避免复制件误入原批次。
+
+### 13.3 当前边界
+
+- 批次标记只表达编辑器生成来源，不代表真实连段、命中帧、动画段或取消窗口。
+- 当前批量管理只提供“删除同批次动作”入口；后续可在该字段基础上继续扩展批量选择、批量重排或撤销栈。

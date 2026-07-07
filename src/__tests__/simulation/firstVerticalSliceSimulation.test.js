@@ -151,6 +151,39 @@ describe('first vertical slice simulation', () => {
     expect(result.summary.projectedHitCount).toBe(4);
   });
 
+  it('preserves generated skill segment batch metadata through compilation', () => {
+    const generationBatch = {
+      batchId: 'segment-batch-test',
+      source: 'skill-segment-split',
+      skillId: 10900101,
+      actorCharacterId: 109001,
+      level: 1,
+      segmentCount: 2,
+      createdAt: '2026-07-07T00:00:00.000Z',
+    };
+    const project = createWorkbenchProject(
+      {},
+      {
+        actions: [
+          {
+            id: 'action-segment-batch',
+            type: 'skill',
+            skillId: 10900101,
+            startMs: 1000,
+            level: 1,
+            damageSegmentIndex: 1,
+            generationBatch,
+          },
+        ],
+      },
+    );
+    const scenario = compileProject(project, getWorkbenchGameData());
+
+    expect(project.actions[0].generationBatch).toEqual(generationBatch);
+    expect(scenario.actions[0].generationBatch).toEqual(generationBatch);
+    expect(scenario.actions[0].selectedDamageSegment.label).toBe('重击');
+  });
+
   it('keeps wait and annotation actions in the event log without projecting damage', () => {
     const project = createWorkbenchProject(
       {},

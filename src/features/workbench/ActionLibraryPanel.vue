@@ -223,6 +223,15 @@
           >
             删除
           </button>
+          <button
+            v-if="action.generationBatch?.batchId"
+            class="tool-button danger"
+            data-testid="workbench-delete-action-batch"
+            type="button"
+            @click.stop="$emit('delete-action-batch', action.generationBatch.batchId)"
+          >
+            删批次
+          </button>
         </div>
         <dl>
           <div>
@@ -248,6 +257,13 @@
           data-testid="workbench-action-insert-delay-note"
         >
           {{ formatInsertionNote(action.insertion) }}
+        </p>
+        <p
+          v-if="action.generationBatch?.batchId"
+          class="timing-note batch-note"
+          data-testid="workbench-action-batch-note"
+        >
+          {{ formatGenerationBatch(action.generationBatch) }}
         </p>
         <p v-if="action.timing?.needsTimingData" class="timing-note">
           {{ action.timing.source }}
@@ -317,6 +333,7 @@ const emit = defineEmits([
   'add-enemy-event-action',
   'copy-action',
   'delete-action',
+  'delete-action-batch',
   'update-active-actor',
   'update-segment-split-options',
 ]);
@@ -411,6 +428,10 @@ function formatPreviewRange(action) {
     return `${action.requestedStartMs}ms -> ${action.resolvedStartMs}ms`;
   }
   return `${action.resolvedStartMs}ms`;
+}
+
+function formatGenerationBatch(batch) {
+  return `拆段批次 ${batch.batchId} / ${batch.segmentCount} 段`;
 }
 
 function formatInsertionNote(insertion) {
@@ -845,5 +866,10 @@ dd {
 .timing-note.placement-note {
   background: rgba(230, 162, 60, 0.12);
   color: #efc574;
+}
+
+.timing-note.batch-note {
+  background: rgba(121, 199, 185, 0.1);
+  color: #9ad9ce;
 }
 </style>

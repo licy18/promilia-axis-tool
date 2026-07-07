@@ -85,6 +85,7 @@ export function createWorkbenchActionDraft({
   eventType = 'phase',
   note = '',
   insertion = null,
+  generationBatch = null,
 } = {}) {
   return {
     id,
@@ -102,6 +103,7 @@ export function createWorkbenchActionDraft({
     eventType,
     note,
     insertion: normalizeWorkbenchInsertion(insertion),
+    generationBatch: normalizeWorkbenchGenerationBatch(generationBatch),
   };
 }
 
@@ -237,6 +239,7 @@ export function normalizeWorkbenchActionDrafts(
           eventType: draft.eventType,
           note: draft.note,
           insertion: draft.insertion,
+          generationBatch: draft.generationBatch,
         });
       }
 
@@ -258,6 +261,7 @@ export function normalizeWorkbenchActionDrafts(
         eventType: draft.eventType,
         note: draft.note,
         insertion: draft.insertion,
+        generationBatch: draft.generationBatch,
       });
     })
     .filter((draft) => draft.type !== ACTION_TYPES.SKILL || findById(workbenchSeed.gameData.skills, draft.skillId));
@@ -337,6 +341,7 @@ function createProjectActionFromDraft(draft, actorsByCharacterId, primaryCharact
     damageSegmentIndex: draft.damageSegmentIndex,
     note: draft.note || '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
     insertion: draft.insertion,
+    generationBatch: draft.generationBatch,
   });
 }
 
@@ -429,6 +434,27 @@ function normalizeWorkbenchInsertion(insertion) {
     conflictActionIds: Array.isArray(insertion.conflictActionIds)
       ? insertion.conflictActionIds.map((id) => String(id))
       : [],
+  };
+}
+
+function normalizeWorkbenchGenerationBatch(generationBatch) {
+  if (!generationBatch || typeof generationBatch !== 'object') {
+    return null;
+  }
+
+  const batchId = generationBatch.batchId ? String(generationBatch.batchId) : '';
+  if (!batchId) {
+    return null;
+  }
+
+  return {
+    batchId,
+    source: generationBatch.source ? String(generationBatch.source) : 'skill-segment-split',
+    skillId: Number(generationBatch.skillId) || null,
+    actorCharacterId: Number(generationBatch.actorCharacterId) || null,
+    level: Math.max(1, Number(generationBatch.level) || 1),
+    segmentCount: Math.max(1, Number(generationBatch.segmentCount) || 1),
+    createdAt: generationBatch.createdAt ? String(generationBatch.createdAt) : null,
   };
 }
 

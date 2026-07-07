@@ -124,6 +124,9 @@ describe('Workbench view', () => {
     expect(wrapper.find('[data-testid="workbench-insert-delay-count"]').text()).toBe('1');
     expect(wrapper.find('[data-testid="workbench-insert-delay-item"]').text()).toContain('2000ms -> 4000ms');
     expect(wrapper.find('.action-item[data-action-id="action-0004"]').text()).toContain('重击 / 190%');
+    expect(wrapper.find('.action-item[data-action-id="action-0004"]').text()).toContain('segment-batch-0001');
+    expect(wrapper.findAll('[data-testid="workbench-action-batch-note"]')).toHaveLength(4);
+    expect(wrapper.findAll('[data-testid="workbench-delete-action-batch"]')).toHaveLength(4);
 
     const damageLabels = wrapper.findAll('.damage-row').map((row) => row.find('span').text());
     expect(damageLabels).toEqual(expect.arrayContaining(['普攻', '重击', '闪击', '跃击']));
@@ -142,6 +145,20 @@ describe('Workbench view', () => {
     ]);
     expect(generatedActions.map((action) => action.damageSegmentIndex)).toEqual([0, 1, 2, 3]);
     expect(generatedActions.map((action) => action.startMs)).toEqual([4000, 6000, 8000, 10000]);
+    expect(generatedActions.map((action) => action.generationBatch?.batchId)).toEqual([
+      'segment-batch-0001',
+      'segment-batch-0001',
+      'segment-batch-0001',
+      'segment-batch-0001',
+    ]);
+    expect(generatedActions[0].generationBatch).toMatchObject({
+      source: 'skill-segment-split',
+      skillId: workbenchSeed.defaults.skillId,
+      actorCharacterId: workbenchSeed.defaults.characterId,
+      level: 1,
+      segmentCount: 4,
+    });
+    expect(generatedActions[0].generationBatch.createdAt).toEqual(expect.any(String));
     expect(generatedActions[0]).toMatchObject({
       skillId: workbenchSeed.defaults.skillId,
       insertion: {
@@ -154,6 +171,62 @@ describe('Workbench view', () => {
     expect(generatedActions.slice(1).map((action) => action.insertion)).toEqual([null, null, null]);
     expect(generatedActions[1].note).toContain('倍率段拆分：重击 / 190%');
     expect(generatedActions[1].note).toContain('非真实命中帧');
+  });
+
+  it('saves, restores, and deletes a generated skill segment batch', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await findActionLibrarySkillSplitButton(wrapper, workbenchSeed.defaults.skillId).trigger('click');
+    await wrapper.find('[data-testid="workbench-segment-preview-confirm"]').trigger('click');
+
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe('5 action');
+    expect(wrapper.findAll('[data-testid="workbench-action-batch-note"]')).toHaveLength(4);
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(savedDraft.actionDrafts.slice(1).map((action) => action.generationBatch?.batchId)).toEqual([
+      'segment-batch-0001',
+      'segment-batch-0001',
+      'segment-batch-0001',
+      'segment-batch-0001',
+    ]);
+
+    wrapper.unmount();
+    const restored = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await nextTick();
+
+    expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe('已恢复草稿');
+    expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe('5 action');
+    expect(restored.findAll('[data-testid="workbench-action-batch-note"]')).toHaveLength(4);
+
+    await restored.find('[data-testid="workbench-delete-action-batch"]').trigger('click');
+
+    expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe('1 action');
+    expect(restored.find('[data-testid="scenario-hit-count"]').text()).toBe('1');
+    expect(restored.findAll('[data-testid="workbench-action-batch-note"]')).toHaveLength(0);
+    expect(restored.find('[data-testid="workbench-start-input"]').element.value).toBe('0');
+    expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe('有未保存改动');
+
+    await restored.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedAfterDelete = JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+    expect(savedAfterDelete.actionDrafts).toHaveLength(1);
+    expect(savedAfterDelete.actionDrafts[0].generationBatch).toBeNull();
   });
 
   it('cancels a skill segment split preview without writing actions', async () => {

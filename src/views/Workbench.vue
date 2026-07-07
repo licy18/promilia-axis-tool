@@ -54,6 +54,7 @@
         @add-wait-action="addWaitAction"
         @copy-action="copyAction"
         @delete-action="deleteAction"
+        @delete-action-batch="deleteActionBatch"
         @update-active-actor="setActionLibraryCharacterId"
         @update-segment-split-options="updateSegmentSplitOptions"
       />
@@ -424,6 +425,7 @@ function confirmSkillSegmentActions() {
     return;
   }
 
+  const generationBatch = createSegmentGenerationBatch(preview);
   preview.actions.forEach((item) => {
     addInsertedAction(
       {
@@ -433,6 +435,7 @@ function confirmSkillSegmentActions() {
         level: preview.level,
         damageSegmentIndex: item.damageSegmentIndex,
         note: `倍率段拆分：${item.label} / ${item.rawValue}；非真实命中帧。`,
+        generationBatch,
       },
       {
         requestedStartMs: item.requestedStartMs,
@@ -532,6 +535,7 @@ function copyAction(actionId) {
     startMs: clampNumber(sourceAction.startMs + 1000, 0, project.value.time.durationMs),
     note: stripAutoDelayNote(sourceAction.note),
     insertion: null,
+    generationBatch: null,
   });
   actionDrafts.value = [
     ...actionDrafts.value.slice(0, sourceIndex + 1),
@@ -558,6 +562,33 @@ function deleteAction(actionId) {
 
   if (selectedActionId.value === actionId) {
     const nextIndex = Math.min(index, actionDrafts.value.length - 1);
+    selectedActionId.value = actionDrafts.value[nextIndex].id;
+    syncActionLibraryCharacterIdFromDraft(actionDrafts.value[nextIndex]);
+  }
+  markDraftDirty();
+}
+
+function deleteActionBatch(batchId) {
+  clearSegmentSplitPreview();
+  if (!batchId) {
+    return;
+  }
+
+  const batchActionIds = new Set(
+    actionDrafts.value
+      .filter((action) => action.generationBatch?.batchId === batchId)
+      .map((action) => action.id),
+  );
+  if (batchActionIds.size === 0 || batchActionIds.size >= actionDrafts.value.length) {
+    return;
+  }
+
+  const firstRemovedIndex = actionDrafts.value.findIndex((action) => batchActionIds.has(action.id));
+  const selectedWasRemoved = batchActionIds.has(selectedActionId.value);
+  actionDrafts.value = actionDrafts.value.filter((action) => !batchActionIds.has(action.id));
+
+  if (selectedWasRemoved) {
+    const nextIndex = Math.min(Math.max(0, firstRemovedIndex), actionDrafts.value.length - 1);
     selectedActionId.value = actionDrafts.value[nextIndex].id;
     syncActionLibraryCharacterIdFromDraft(actionDrafts.value[nextIndex]);
   }
@@ -604,6 +635,26 @@ function selectAction(actionId) {
 
 function findSkillById(skillId) {
   return workbenchSeed.gameData.skills.find((skill) => skill.id === Number(skillId)) ?? null;
+}
+
+function createSegmentGenerationBatch(preview) {
+  return {
+    batchId: createNextSegmentBatchId(),
+    source: 'skill-segment-split',
+    skillId: preview.skillId,
+    actorCharacterId: preview.actorCharacterId,
+    level: preview.level,
+    segmentCount: preview.generatedCount,
+    createdAt: new Date().toISOString(),
+  };
+}
+
+function createNextSegmentBatchId() {
+  const maxIndex = actionDrafts.value.reduce((max, action) => {
+    const match = String(action.generationBatch?.batchId ?? '').match(/^segment-batch-(\d+)$/);
+    return match ? Math.max(max, Number(match[1])) : max;
+  }, 0);
+  return `segment-batch-${String(maxIndex + 1).padStart(4, '0')}`;
 }
 
 function createNextActionId() {
