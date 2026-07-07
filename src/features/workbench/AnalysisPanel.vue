@@ -774,7 +774,12 @@ function formatFormulaExecutionMatrixSummary(summary) {
     summary.rowCount > 0
       ? ` · hit绑定 ${summary.rowsWithHitBindings}/${summary.rowCount}`
       : '';
-  return `执行矩阵摘要 ${summary.matrixActionCount} 动作 · ${summary.rowCount} 行 · ${summary.elementCount} element · 缩放 ${scaleRange}${perHitText}${spreadText}${hitBindingText}`;
+  const gap = summary.hitBindingGapSummary;
+  const gapText =
+    gap?.missingActionCount > 0
+      ? ` · 缺口候选 ${gap.actionsWithBindingCandidates}/${gap.missingActionCount}`
+      : '';
+  return `执行矩阵摘要 ${summary.matrixActionCount} 动作 · ${summary.rowCount} 行 · ${summary.elementCount} element · 缩放 ${scaleRange}${perHitText}${spreadText}${hitBindingText}${gapText}`;
 }
 
 function formatScaleRange(min, max) {

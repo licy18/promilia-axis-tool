@@ -3403,6 +3403,45 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8AN 目标：围绕 `formulaExecutionMatrixSummary` 的 hit 绑定缺口，继续追重击/闪击/跃击的 skill_control 行为链和外部 element 对象，优先确认非普攻动作的 hit 级 DamageElement 绑定来源。
 - 若本地 AzPr 表和已生成证据不足，则使用 AzPr Extractor 提取原始资源，补齐对应 `skill_control`、`elementBaseDatas`、外部 element 对象和 IL2CPP 执行链锚点。
 
+### 2026-07-08：阶段 5-8AN hit 绑定缺口与 skill_control 候选联动
+
+本轮完成：
+
+- `formulaExecutionMatrixSummary` 新增 `hitBindingGapSummary`，专门汇总矩阵行缺 hit 绑定的动作形态。
+- 每个 `actionSummaries[]` 新增 `hitBindingGap`，把该动作的缺口行数与 `formulaCandidatePatternSummary.skillControlBehaviorCorrelations[].actionVariantBindingCandidates[]` 对齐。
+- 对缺口动作只聚合最高置信度候选，避免弱置信度的普通攻击窗口污染重击/闪击/跃击摘要；完整候选仍保留在 `behaviorBindingEvidence.candidates[]`。
+- `AnalysisPanel` 的 `执行矩阵摘要` 增加 `缺口候选 x/y`，用于提示缺 hit 绑定的动作中有多少已找到 skill_control 行为候选。
+- 仿真测试覆盖单动作无缺口、四动作 3 个非普攻缺口，以及重击缺口绑定到 `攻击碰撞 / Skill0_6` 的候选证据。
+
+当前四动作 hit 绑定缺口：
+
+- `hitBindingGapSummary.status = all-missing-hit-actions-have-skill-control-candidates`。
+- `missingActionCount = 3`，缺口动作是【重击】【闪击】【跃击】。
+- `missingRowCount = 6`，即 3 个动作各缺 2 个 element 行的 hit 级绑定。
+- `actionsWithBindingCandidates = 3`，三个缺口动作都已有 skill_control 行为候选。
+- 最高置信度候选聚合为 `sourceNames = ["攻击碰撞"]`、`stateNames = ["Skill0_6"]`、`subSkillIds = [109001011]`、`bindingStatus = shared-action-family-candidate-unconfirmed`。
+- 重击样例：`action-segment-1` 的 `hitBindingGap` 为 `skill-control-binding-candidate-found-hit-elements-unresolved`，候选数 `5`，最高置信度 `low`，仍未确认外部 element 对象如何绑定到具体 hit。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+- `npm exec prettier -- --check AGENTS.md PROJECT_MANUAL.md DEVELOPMENT_PLAN.md ARCHITECTURE.md DATA_STRUCTURE_CHANGES.md src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npm exec eslint -- --no-warn-ignored src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npm test -- --run`：通过，13 个测试文件、105 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
+- `git diff --check`：通过。
+
+当前边界：
+
+- `hitBindingGapSummary` 仍是 evidence-only，不证明 `攻击碰撞 / Skill0_6` 就是重击/闪击/跃击的真实 hit 绑定。
+- 当前只能确认“缺口动作有 skill_control 行为候选”，还没确认候选行为链里的外部 element 对象与动作矩阵 element 的逐 hit 对应关系。
+- 三值最终公式仍全部保持未应用：HP raw 投影、削韧候选和充能候选不能由该缺口摘要直接计算。
+
+下一步：
+
+- 阶段 5-8AO 目标：沿 `hitBindingGap.behaviorBindingEvidence.candidates[]` 的 `elementPathIds` / `elementRoundedPathIds` / `subSkillIds` 继续追非普攻动作的外部 element 对象，把 `攻击碰撞 / Skill0_6` 候选进一步桥接到具体 `TDamageElementParams` 和 hit 级三值字段。
+- 若当前生成证据没有足够对象体，使用 AzPr Extractor 从原始资源补齐对应外部 element 对象、typetree 和 IL2CPP `DamageElement` 执行链锚点。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

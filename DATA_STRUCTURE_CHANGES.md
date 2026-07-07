@@ -4801,3 +4801,81 @@ data-element-config-id="109001306" data-status="未应用 · function组合待�
 - `formulaExecutionMatrixSummary.applied` 必须保持 `false`。
 - 该摘要不能证明 f2、f1\*f2 或 f1+f2 就是真实 `DamageElement` 执行顺序。
 - 下一阶段应优先补非普攻动作的 hit 绑定来源，再判断缩放缺口是否来自 hit 分配、等级覆盖点、运行时常量或其他 `DamageElement` 逻辑。
+
+## 67. 阶段 5-8AN：hit 绑定缺口与 skill_control 候选摘要
+
+阶段 5-8AN 在 `summary.formulaExecutionMatrixSummary` 下新增 `hitBindingGapSummary`，并在 `actionSummaries[]` 下新增 `hitBindingGap`。该字段用于把缺 hit 级 `DamageElement` 绑定的动作形态，与已有 `formulaCandidatePatternSummary.skillControlBehaviorCorrelations[].actionVariantBindingCandidates[]` 对齐。
+
+### 67.1 hitBindingGapSummary
+
+四动作样本当前输出：
+
+```json
+{
+  "status": "all-missing-hit-actions-have-skill-control-candidates",
+  "actionCount": 4,
+  "missingActionCount": 3,
+  "missingRowCount": 6,
+  "actionsWithBindingCandidates": 3,
+  "actionVariantLabels": ["重击", "闪击", "跃击"],
+  "candidateSourceNames": ["攻击碰撞"],
+  "candidateStateNames": ["Skill0_6"],
+  "candidateSubSkillIds": [109001011],
+  "bindingStatuses": ["shared-action-family-candidate-unconfirmed"],
+  "applied": false
+}
+```
+
+字段说明：
+
+- `missingActionCount`：存在矩阵行但缺 hit 绑定的动作数。
+- `missingRowCount`：缺 hit 绑定的矩阵行数。
+- `actionsWithBindingCandidates`：缺口动作中，已找到 skill_control 行为候选的动作数。
+- `candidateSourceNames/stateNames/subSkillIds`：只聚合最高置信度候选，用于避免弱候选污染摘要。
+
+### 67.2 actionSummaries[].hitBindingGap
+
+重击样例：
+
+```json
+{
+  "actionId": "action-segment-1",
+  "actionVariantLabel": "重击",
+  "status": "skill-control-binding-candidate-found-hit-elements-unresolved",
+  "matrixRowCount": 2,
+  "rowsWithHitBindings": 0,
+  "missingRowCount": 2,
+  "behaviorBindingStatus": "action-variant-binding-candidates-found",
+  "behaviorBindingConfidence": "low",
+  "behaviorBindingCandidateCount": 5,
+  "sourceNames": ["攻击碰撞"],
+  "sourceStartFrames": [13, 16, 19],
+  "stateNames": ["Skill0_6"],
+  "hitEffects": ["11_109001_133", "11_109001_005"],
+  "subSkillIds": [109001011],
+  "bindingStatuses": ["shared-action-family-candidate-unconfirmed"],
+  "unresolved": [
+    "hit-damage-element-binding-unresolved",
+    "external-element-object-binding-unconfirmed"
+  ],
+  "applied": false
+}
+```
+
+`behaviorBindingEvidence.candidates[]` 仍保留最多 5 条候选，其中包括较弱的普通攻击窗口；但摘要字段只使用最高置信度候选。
+
+### 67.3 Workbench 摘要
+
+当存在缺口时，`AnalysisPanel` 的跨动作矩阵摘要会追加：
+
+```text
+缺口候选 3/3
+```
+
+默认单动作普攻样本没有缺口，因此不显示该片段。
+
+### 67.4 当前边界
+
+- `hitBindingGapSummary` 证明“缺口动作有 skill_control 候选”，不证明该候选已绑定到最终 hit 或最终 `TDamageElementParams`。
+- `shared-action-family-candidate-unconfirmed` 仍需继续追外部 element 对象、hitEffect、subSkill 与 IL2CPP runtime 执行顺序。
+- 下一阶段应沿 `elementPathIds` / `elementRoundedPathIds` / `subSkillIds` 把非普攻动作候选推进到 hit 级三值字段映射。

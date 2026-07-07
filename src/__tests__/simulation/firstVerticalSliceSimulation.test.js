@@ -1295,11 +1295,21 @@ describe('first vertical slice simulation', () => {
       rowsWithSlotOverrideCandidates: 2,
       rowsWithDirectSlotMatches: 2,
       rowsWithHitBindings: 2,
+      hitBindingGapSummary: {
+        status: 'all-actions-have-hit-bindings',
+        actionCount: 1,
+        missingActionCount: 0,
+        missingRowCount: 0,
+        actionsWithBindingCandidates: 0,
+        gaps: [],
+        applied: false,
+      },
       diagnostics: expect.objectContaining({
         functionCombinationOrderStatus: 'unconfirmed',
         levelOverrideApplicationStatus: 'unconfirmed',
         perHitMultiplierAllocationStatus: 'unconfirmed',
         crossActionMatrixStatus: 'needs-more-action-samples',
+        hitBindingGapStatus: 'all-actions-have-hit-bindings',
       }),
       actionSummaries: [
         expect.objectContaining({
@@ -1308,6 +1318,10 @@ describe('first vertical slice simulation', () => {
           rowCount: 2,
           rowsWithHitBindings: 2,
           hitBindingCoverageStatus: 'all-rows-have-hit-bindings',
+          hitBindingGap: expect.objectContaining({
+            status: 'hit-bindings-complete',
+            missingRowCount: 0,
+          }),
         }),
       ],
       elementSummaries: expect.arrayContaining([
@@ -1582,6 +1596,37 @@ describe('first vertical slice simulation', () => {
       rowsWithSlotOverrideCandidates: 8,
       rowsWithDirectSlotMatches: 8,
       rowsWithHitBindings: 2,
+      hitBindingGapSummary: expect.objectContaining({
+        status: 'all-missing-hit-actions-have-skill-control-candidates',
+        actionCount: 4,
+        missingActionCount: 3,
+        missingRowCount: 6,
+        actionsWithBindingCandidates: 3,
+        actionVariantLabels: ['重击', '闪击', '跃击'],
+        candidateSourceNames: ['攻击碰撞'],
+        candidateStateNames: ['Skill0_6'],
+        bindingStatuses: ['shared-action-family-candidate-unconfirmed'],
+        gaps: expect.arrayContaining([
+          expect.objectContaining({
+            actionId: 'action-segment-1',
+            actionVariantLabel: '重击',
+            status:
+              'skill-control-binding-candidate-found-hit-elements-unresolved',
+            missingRowCount: 2,
+            behaviorBindingCandidateCount: 5,
+            behaviorBindingConfidence: 'low',
+            sourceNames: ['攻击碰撞'],
+            stateNames: ['Skill0_6'],
+            bindingStatuses: ['shared-action-family-candidate-unconfirmed'],
+            unresolved: expect.arrayContaining([
+              'hit-damage-element-binding-unresolved',
+              'external-element-object-binding-unconfirmed',
+            ]),
+            applied: false,
+          }),
+        ]),
+        applied: false,
+      }),
       diagnostics: expect.objectContaining({
         functionCombinationOrderStatus: 'unconfirmed',
         levelOverrideApplicationStatus: 'unconfirmed',
@@ -1589,6 +1634,8 @@ describe('first vertical slice simulation', () => {
         crossActionMatrixStatus: 'cross-action-matrix-summary-built',
         scaleSpreadStatus: 'varies-by-action-variant',
         hitBindingCoverageStatus: 'some-rows-missing-hit-bindings',
+        hitBindingGapStatus:
+          'all-missing-hit-actions-have-skill-control-candidates',
       }),
       actionSummaries: expect.arrayContaining([
         expect.objectContaining({
@@ -1606,6 +1653,14 @@ describe('first vertical slice simulation', () => {
           rowCount: 2,
           rowsWithHitBindings: 0,
           hitBindingCoverageStatus: 'no-rows-have-hit-bindings',
+          hitBindingGap: expect.objectContaining({
+            status:
+              'skill-control-binding-candidate-found-hit-elements-unresolved',
+            missingRowCount: 2,
+            behaviorBindingCandidateCount: 5,
+            sourceNames: ['攻击碰撞'],
+            stateNames: ['Skill0_6'],
+          }),
         }),
       ]),
       elementSummaries: expect.arrayContaining([

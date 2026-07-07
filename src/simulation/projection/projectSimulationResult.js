@@ -81,8 +81,10 @@ export function projectSimulationResult({
   );
   const formulaCandidatePatternSummary =
     summarizeFormulaCandidatePatterns(actionResultTimeline);
-  const formulaExecutionMatrixSummary =
-    summarizeFormulaExecutionMatrices(actionResultTimeline);
+  const formulaExecutionMatrixSummary = summarizeFormulaExecutionMatrices(
+    actionResultTimeline,
+    formulaCandidatePatternSummary
+  );
   const timingMissingActionIds = scenario.diagnostics.missingTimingActionIds;
 
   return {
@@ -754,9 +756,21 @@ function selectComparableFormulaCombinationPreview(previews) {
   );
 }
 
-function summarizeFormulaExecutionMatrices(actionResultTimeline) {
+function summarizeFormulaExecutionMatrices(
+  actionResultTimeline,
+  formulaCandidatePatternSummary = null
+) {
+  const behaviorBindingEvidenceByActionId =
+    createFormulaPatternBindingEvidenceByActionId(
+      formulaCandidatePatternSummary
+    );
   const actionSummaries = actionResultTimeline
-    .map(createFormulaExecutionMatrixActionSummary)
+    .map(entry =>
+      createFormulaExecutionMatrixActionSummary(
+        entry,
+        behaviorBindingEvidenceByActionId.get(entry.actionId)
+      )
+    )
     .filter(Boolean);
   const rows = actionSummaries.flatMap(summary => summary.rows ?? []);
 
@@ -800,6 +814,8 @@ function summarizeFormulaExecutionMatrices(actionResultTimeline) {
   const requiredScaleMax = maxNumber(requiredScales);
   const requiredPerHitScaleMin = minNumber(requiredPerHitScales);
   const requiredPerHitScaleMax = maxNumber(requiredPerHitScales);
+  const hitBindingGapSummary =
+    createFormulaExecutionHitBindingGapSummary(actionSummaries);
 
   return {
     status:
@@ -850,6 +866,7 @@ function summarizeFormulaExecutionMatrices(actionResultTimeline) {
     rowsWithSlotOverrideCandidates,
     rowsWithDirectSlotMatches,
     rowsWithHitBindings,
+    hitBindingGapSummary,
     unresolved: uniqueStrings(rows.flatMap(row => row.unresolved ?? [])),
     diagnostics: {
       functionCombinationOrderStatus: 'unconfirmed',
@@ -867,6 +884,7 @@ function summarizeFormulaExecutionMatrices(actionResultTimeline) {
         partialStatus: 'some-rows-missing-hit-bindings',
         noneStatus: 'no-rows-have-hit-bindings',
       }),
+      hitBindingGapStatus: hitBindingGapSummary.status,
     },
     actionSummaries,
     elementSummaries,
@@ -875,7 +893,10 @@ function summarizeFormulaExecutionMatrices(actionResultTimeline) {
   };
 }
 
-function createFormulaExecutionMatrixActionSummary(entry) {
+function createFormulaExecutionMatrixActionSummary(
+  entry,
+  behaviorBindingEvidence = null
+) {
   const matrix = entry.hpDamage?.sourceEvidence?.formulaExecutionEvidenceMatrix;
   if (!matrix || matrix.rowCount <= 0) {
     return null;
@@ -902,6 +923,14 @@ function createFormulaExecutionMatrixActionSummary(entry) {
     row => row.differenceStatus === 'large-difference'
   ).length;
   const rowsWithHitBindings = rows.filter(row => row.boundHitCount > 0).length;
+  const hitBindingGap = createFormulaExecutionHitBindingGap({
+    actionId: entry.actionId,
+    actionName: entry.actionName,
+    actionVariantLabel: matrix.actionVariantLabel,
+    rowCount: rows.length,
+    rowsWithHitBindings,
+    behaviorBindingEvidence,
+  });
 
   return {
     actionId: entry.actionId,
@@ -937,6 +966,7 @@ function createFormulaExecutionMatrixActionSummary(entry) {
       partialStatus: 'some-rows-missing-hit-bindings',
       noneStatus: 'no-rows-have-hit-bindings',
     }),
+    hitBindingGap,
     unresolved: uniqueStrings(rows.flatMap(row => row.unresolved ?? [])),
     rows,
     status: 'formula-execution-matrix-action-summary',
@@ -1081,6 +1111,205 @@ function createFormulaMatrixCoverageStatus({
     return noneStatus;
   }
   return matchedCount >= totalCount ? allStatus : partialStatus;
+}
+
+function createFormulaPatternBindingEvidenceByActionId(
+  formulaCandidatePatternSummary
+) {
+  const byActionId = new Map();
+  for (const correlation of formulaCandidatePatternSummary?.skillControlBehaviorCorrelations ??
+    []) {
+    for (const binding of correlation.actionVariantBindingCandidates ?? []) {
+      if (!binding?.actionId) {
+        continue;
+      }
+      byActionId.set(
+        binding.actionId,
+        compactFormulaPatternBindingEvidence(binding, correlation)
+      );
+    }
+  }
+  return byActionId;
+}
+
+function compactFormulaPatternBindingEvidence(binding, correlation) {
+  const candidates = (binding.candidates ?? [])
+    .slice(0, 5)
+    .map(compactFormulaPatternBindingCandidate);
+  const primaryCandidates = candidates.filter(
+    candidate => candidate.confidence === binding.confidence
+  );
+  const summaryCandidates =
+    primaryCandidates.length > 0 ? primaryCandidates : candidates;
+
+  return {
+    status: binding.status ?? 'action-variant-binding-candidate-missing',
+    actionId: binding.actionId ?? null,
+    actionVariantIndex: numberOrNull(binding.actionVariantIndex),
+    actionVariantLabel: binding.actionVariantLabel ?? null,
+    rawMultiplier: binding.rawMultiplier ?? null,
+    confidence: binding.confidence ?? 'none',
+    candidateCount: numberOrNull(binding.candidateCount) ?? candidates.length,
+    primaryCandidateCount: summaryCandidates.length,
+    sourceNames: uniqueStrings(
+      summaryCandidates
+        .map(candidate => candidate.sourceName)
+        .filter(value => value != null)
+    ),
+    sourceTrackNames: uniqueStrings(
+      summaryCandidates
+        .map(candidate => candidate.sourceTrackName)
+        .filter(value => value != null)
+    ),
+    sourceStartFrames: uniqueNumbers(
+      summaryCandidates.map(candidate => candidate.sourceStartFrame)
+    ),
+    stateNames: uniqueStrings(
+      summaryCandidates.flatMap(candidate => candidate.stateNames)
+    ),
+    hitEffects: uniqueStrings(
+      summaryCandidates.flatMap(candidate => candidate.hitEffects)
+    ),
+    subSkillIds: uniqueNumbers(
+      summaryCandidates.flatMap(candidate => candidate.subSkillIds)
+    ),
+    bindingStatuses: uniqueStrings(
+      summaryCandidates
+        .map(candidate => candidate.bindingStatus)
+        .filter(value => value != null)
+    ),
+    stateTimingEvidenceStatus: correlation.stateTimingEvidenceStatus ?? null,
+    correlationStatus: correlation.correlationStatus ?? null,
+    candidates,
+    applied: false,
+  };
+}
+
+function compactFormulaPatternBindingCandidate(candidate) {
+  return {
+    sourceName: candidate.sourceName ?? null,
+    sourceTrackName: candidate.sourceTrackName ?? null,
+    sourceStartFrame: numberOrNull(candidate.sourceStartFrame),
+    sourceEndFrame: numberOrNull(candidate.sourceEndFrame),
+    stateNames: candidate.stateNames ?? [],
+    hitEffects: candidate.hitEffects ?? [],
+    subSkillIds: candidate.subSkillIds ?? [],
+    elementBaseRefCount: numberOrNull(candidate.elementBaseRefCount) ?? 0,
+    elementPathIds: candidate.elementPathIds ?? [],
+    elementRoundedPathIds: candidate.elementRoundedPathIds ?? [],
+    scriptClassNames: candidate.scriptClassNames ?? [],
+    score: numberOrNull(candidate.score),
+    confidence: candidate.confidence ?? 'none',
+    bindingStatus: candidate.bindingStatus ?? null,
+    reasons: candidate.reasons ?? [],
+    applied: false,
+  };
+}
+
+function createFormulaExecutionHitBindingGap({
+  actionId,
+  actionName,
+  actionVariantLabel,
+  rowCount,
+  rowsWithHitBindings,
+  behaviorBindingEvidence,
+}) {
+  const missingRowCount = Math.max(0, rowCount - rowsWithHitBindings);
+  if (missingRowCount === 0) {
+    return {
+      status: 'hit-bindings-complete',
+      actionId,
+      actionName,
+      actionVariantLabel,
+      matrixRowCount: rowCount,
+      rowsWithHitBindings,
+      missingRowCount: 0,
+      behaviorBindingCandidateCount:
+        numberOrNull(behaviorBindingEvidence?.candidateCount) ?? 0,
+      applied: false,
+    };
+  }
+
+  const behaviorBindingCandidateCount =
+    numberOrNull(behaviorBindingEvidence?.candidateCount) ?? 0;
+  return {
+    status:
+      behaviorBindingCandidateCount > 0
+        ? 'skill-control-binding-candidate-found-hit-elements-unresolved'
+        : 'skill-control-binding-candidate-missing',
+    actionId,
+    actionName,
+    actionVariantLabel,
+    matrixRowCount: rowCount,
+    rowsWithHitBindings,
+    missingRowCount,
+    behaviorBindingStatus: behaviorBindingEvidence?.status ?? null,
+    behaviorBindingConfidence: behaviorBindingEvidence?.confidence ?? 'none',
+    behaviorBindingCandidateCount,
+    sourceNames: behaviorBindingEvidence?.sourceNames ?? [],
+    sourceTrackNames: behaviorBindingEvidence?.sourceTrackNames ?? [],
+    sourceStartFrames: behaviorBindingEvidence?.sourceStartFrames ?? [],
+    stateNames: behaviorBindingEvidence?.stateNames ?? [],
+    hitEffects: behaviorBindingEvidence?.hitEffects ?? [],
+    subSkillIds: behaviorBindingEvidence?.subSkillIds ?? [],
+    bindingStatuses: behaviorBindingEvidence?.bindingStatuses ?? [],
+    stateTimingEvidenceStatus:
+      behaviorBindingEvidence?.stateTimingEvidenceStatus ?? null,
+    behaviorBindingEvidence: behaviorBindingEvidence ?? null,
+    unresolved: [
+      'hit-damage-element-binding-unresolved',
+      'external-element-object-binding-unconfirmed',
+    ],
+    applied: false,
+  };
+}
+
+function createFormulaExecutionHitBindingGapSummary(actionSummaries) {
+  const gaps = actionSummaries
+    .map(summary => summary.hitBindingGap)
+    .filter(gap => (gap?.missingRowCount ?? 0) > 0);
+  const gapsWithBindingCandidates = gaps.filter(
+    gap => (gap.behaviorBindingCandidateCount ?? 0) > 0
+  );
+  const missingRowCount = gaps.reduce(
+    (sum, gap) => sum + (gap.missingRowCount ?? 0),
+    0
+  );
+
+  return {
+    status:
+      gaps.length === 0
+        ? 'all-actions-have-hit-bindings'
+        : gapsWithBindingCandidates.length === gaps.length
+          ? 'all-missing-hit-actions-have-skill-control-candidates'
+          : gapsWithBindingCandidates.length > 0
+            ? 'some-missing-hit-actions-have-skill-control-candidates'
+            : 'missing-hit-actions-lack-skill-control-candidates',
+    actionCount: actionSummaries.length,
+    missingActionCount: gaps.length,
+    missingRowCount,
+    actionsWithBindingCandidates: gapsWithBindingCandidates.length,
+    actionVariantLabels: uniqueStrings(
+      gaps.map(gap => gap.actionVariantLabel).filter(value => value != null)
+    ),
+    candidateSourceNames: uniqueStrings(
+      gaps.flatMap(gap => gap.sourceNames ?? [])
+    ),
+    candidateStateNames: uniqueStrings(
+      gaps.flatMap(gap => gap.stateNames ?? [])
+    ),
+    candidateHitEffects: uniqueStrings(
+      gaps.flatMap(gap => gap.hitEffects ?? [])
+    ),
+    candidateSubSkillIds: uniqueNumbers(
+      gaps.flatMap(gap => gap.subSkillIds ?? [])
+    ),
+    bindingStatuses: uniqueStrings(
+      gaps.flatMap(gap => gap.bindingStatuses ?? [])
+    ),
+    gaps,
+    applied: false,
+  };
 }
 
 function attachFormulaExecutionEvidenceMatrix(hpDamage, action, hitCandidates) {
