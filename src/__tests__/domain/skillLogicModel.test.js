@@ -4,8 +4,10 @@ import { createSkillDamageModel } from '../../domain/skillDamageSegments';
 import {
   SKILL_LEVEL_DISPLAY_SOURCE_KIND,
   SKILL_LOGIC_SOURCE_KIND,
+  VALUE_PARAM_SOURCE_KIND,
   createSkillLogicModel,
   getSkillLogicIndexSummary,
+  getValueParamIndexSummary,
   resolveSkillLogic,
 } from '../../domain/skillLogicModel';
 
@@ -55,14 +57,44 @@ describe('skill logic model adapter', () => {
       elementId: 109001081,
       valueParam: '1#1600|7#10000',
       params: [
-        { id: 1, value: 1600 },
-        { id: 7, value: 10000 },
+        {
+          id: 1,
+          value: 1600,
+          descriptor: {
+            sourceKind: VALUE_PARAM_SOURCE_KIND,
+            variable: 'A',
+            semanticStatus: 'unresolved',
+            category: 'varying-formula-slot',
+          },
+        },
+        {
+          id: 7,
+          value: 10000,
+          descriptor: {
+            sourceKind: VALUE_PARAM_SOURCE_KIND,
+            variable: 'G',
+            semanticStatus: 'unresolved',
+            category: 'constant-formula-slot',
+            isConstant: true,
+          },
+        },
       ],
       fieldPaths: {
         valueParam: 'skillsub_ele_value.rows[id=973].valueParam',
       },
     });
     expect(model.diagnostics).toEqual([]);
+  });
+
+  it('loads the generated valueParam parameter dictionary as unresolved formula slots', () => {
+    expect(getValueParamIndexSummary()).toMatchObject({
+      parameterIds: 2,
+      observedParameterPairs: 5616,
+      observedElementValueRows: 2808,
+      observedSkills: 75,
+      unresolvedParameterIds: [1, 7],
+      constantParameterIds: [7],
+    });
   });
 
   it('keeps display cooldown separate from logic cooldown when source tables disagree', () => {
@@ -118,6 +150,9 @@ describe('skill logic model adapter', () => {
       rowCount: 2,
       paramCount: 4,
       uniqueParamIds: [1, 7],
+      semanticStatusCounts: { unresolved: 4 },
+      unresolvedParamIds: [1, 7],
+      constantParamIds: [7],
       directMatchCount: 0,
       linkedSegmentCount: 0,
       unmatchedSegmentCount: 4,
@@ -154,6 +189,9 @@ describe('skill logic model adapter', () => {
         rowCount: 7,
         paramCount: 14,
         uniqueParamIds: [1, 7],
+        semanticStatusCounts: { unresolved: 14 },
+        unresolvedParamIds: [1, 7],
+        constantParamIds: [7],
         directMatchCount: 0,
         linkedSegmentCount: 0,
         unmatchedSegmentCount: 3,

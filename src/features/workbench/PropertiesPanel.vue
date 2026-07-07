@@ -213,6 +213,13 @@
         >
           #{{ row.rowId }} · {{ row.elementId }} · {{ row.valueParam }}
         </code>
+        <span
+          v-if="valueParamSemanticLabel"
+          class="logic-param-semantics"
+          data-testid="workbench-skill-value-param-semantics"
+        >
+          {{ valueParamSemanticLabel }}
+        </span>
       </div>
 
       <p
@@ -370,6 +377,19 @@ const logicStatusLabel = computed(() => {
   return '已映射';
 });
 const displayedElementValues = computed(() => (skillLogicModel.value?.elementValues ?? []).slice(0, 3));
+const valueParamSemanticLabel = computed(() => {
+  const params = displayedElementValues.value.flatMap((row) => row.params ?? []);
+  const uniqueParams = [];
+  const seen = new Set();
+  for (const param of params) {
+    if (seen.has(param.id)) {
+      continue;
+    }
+    seen.add(param.id);
+    uniqueParams.push(param);
+  }
+  return uniqueParams.map(formatValueParamSemantic).join('；');
+});
 const selectedDamageParameterLink = computed(() =>
   (skillLogicModel.value?.damageParameterLinks ?? []).find(
     (link) => Number(link.segmentIndex) === Number(selectedDamageSegmentIndex.value),
@@ -388,6 +408,20 @@ const valueParamLinkLabel = computed(() => {
   const ids = selectedDamageParameterLink.value.unmatchedParamIds?.join(', ') || '无';
   return `未发现直接 valueParam 匹配；未解释参数 ${ids}`;
 });
+function formatValueParamSemantic(param) {
+  const descriptor = param.descriptor ?? {};
+  const label = descriptor.label ?? `参数 ${param.id}`;
+  if (descriptor.semanticStatus === 'confirmed') {
+    return `${label}：已解释`;
+  }
+  if (descriptor.category === 'constant-formula-slot') {
+    return `${label}：恒定公式槽位，语义未确认`;
+  }
+  if (descriptor.semanticStatus === 'unknown') {
+    return `${label}：未知参数`;
+  }
+  return `${label}：公式槽位，语义未确认`;
+}
 const actionTypeLabel = computed(() => {
   if (props.selectedAction.type === 'wait') {
     return '等待动作';
@@ -668,6 +702,12 @@ textarea {
   color: #b8c0c7;
   font-size: 11px;
   overflow-wrap: anywhere;
+}
+
+.logic-param-semantics {
+  width: 100%;
+  color: #9fb8b3;
+  line-height: 1.45;
 }
 
 @media (max-width: 760px) {

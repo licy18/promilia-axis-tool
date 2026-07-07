@@ -1007,3 +1007,120 @@ Workbench 草稿新增可选 `segmentSplitOptions` 配置块，用于保存动�
 - 本阶段只处理直接数值匹配，不解释参数 ID 的真实战斗语义。
 - `unmatched` 是预期诊断，不代表数据错误；它提醒后续开发不能把未解释的 `valueParam` 写入伤害公式。
 - 下一阶段需要建立参数 ID 词典，继续调查 `1`、`7` 等参数在本地表、技能描述和战斗逻辑中的来源含义。
+
+## 24. 2026-07-07 `valueParam` 参数 ID 词典补充
+
+阶段 5-6 新增一个小型生成索引，用于记录 `skillsub_ele_value.valueParam` 参数 ID 的公式槽位统计和当前语义状态。
+
+### 24.1 新增生成文件
+
+`src/data/generated/value-param-index.json`：
+
+```javascript
+{
+  "sourceKind": "azpr-newtable-value-param-index",
+  "source": {
+    "skillLogicIndex": "skill-logic-index.json",
+    "skillsubEleValueTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/skillsub_ele_value.json",
+    "elementFormulaTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json"
+  },
+  "summary": {
+    "parameterIds": 2,
+    "observedParameterPairs": 5616,
+    "observedElementValueRows": 2808,
+    "observedSkills": 75,
+    "formulaRows": 152,
+    "unresolvedParameterIds": [1, 7],
+    "constantParameterIds": [7]
+  },
+  "params": [
+    {
+      "id": 1,
+      "variable": "A",
+      "semanticStatus": "unresolved",
+      "category": "varying-formula-slot"
+    },
+    {
+      "id": 7,
+      "variable": "G",
+      "semanticStatus": "unresolved",
+      "category": "constant-formula-slot",
+      "isConstant": true
+    }
+  ]
+}
+```
+
+`manifest.json` 新增：
+
+```javascript
+{
+  "files": {
+    "valueParamIndex": "value-param-index.json"
+  },
+  "counts": {
+    "valueParamIndex": 2
+  }
+}
+```
+
+`validation-report.json` 新增 info 级提示：
+
+- `skill-value-param-semantic-unresolved`：参数 ID 已建立公式槽位统计，但战斗语义仍未确认，不能直接写入伤害公式。
+
+### 24.2 `logicModel.elementValues[].params[]`
+
+参数解析结果现在会附带精简词典描述：
+
+```javascript
+{
+  "id": 1,
+  "value": 1600,
+  "descriptor": {
+    "sourceKind": "azpr-newtable-value-param-index",
+    "id": 1,
+    "variable": "A",
+    "label": "参数 1 / A",
+    "semanticStatus": "unresolved",
+    "category": "varying-formula-slot",
+    "roleHint": "当前技能范围内随技能和等级变化的公式槽位；战斗语义未确认。",
+    "isConstant": false,
+    "rowCount": 2808,
+    "skillCount": 75,
+    "elementCount": 234,
+    "minValue": 200,
+    "maxValue": 408450
+  }
+}
+```
+
+参数 `7` 的 `descriptor.category` 为 `constant-formula-slot`，`isConstant` 为 `true`，当前观测值恒为 `10000`。
+
+### 24.3 `logicModel.valueParamSummary`
+
+摘要新增：
+
+```javascript
+{
+  "semanticStatusCounts": {
+    "unresolved": 4
+  },
+  "unresolvedParamIds": [1, 7],
+  "constantParamIds": [7]
+}
+```
+
+这些字段由当前 `valueParam` 派生，不写入 `workbench-draft`。
+
+### 24.4 Workbench 派生展示
+
+Workbench 技能逻辑来源区现在会展示当前参数语义状态：
+
+- `参数 1 / A：公式槽位，语义未确认`
+- `参数 7 / G：恒定公式槽位，语义未确认`
+
+### 24.5 当前边界
+
+- `variable` 是基于 `element_formula.functionOutput` 中 A/G 等变量命名约定的槽位推断，不等同于已确认的战斗语义。
+- `semanticStatus: "unresolved"` 是本阶段的安全默认值；后续只有找到 `elementId -> 公式/效果节点` 的证据后才能升级。
+- 当前仍不能把参数 `1` 或 `7` 直接写入真实伤害公式。

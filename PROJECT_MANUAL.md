@@ -1821,6 +1821,50 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 把参数 ID 语义以可诊断词典形式接入 `logicModel`，让 UI 能显示“未知参数/疑似非伤害参数/已解释参数”。
 - 补充跨技能统计、首批参数 ID 语义测试，并继续避免把未确认参数写入真实伤害公式。
 
+### 2026-07-07：阶段 5-6 `valueParam` 参数 ID 词典/语义来源调查雏形落地
+
+本轮完成：
+
+- `scripts/generate-azpr-data.mjs` 接入 `element_formula.json`，并新增 `src/data/generated/value-param-index.json`。
+- `value-param-index.json` 记录当前技能范围内出现的 `valueParam` 参数 ID、推断公式变量槽位、样例、统计范围和语义状态。
+- 当前只观察到参数 ID `1` 与 `7`：
+  - `1 -> A`：随技能/等级变化的公式槽位，当前最小 200、最大 408450。
+  - `7 -> G`：当前恒为 10000 的公式槽位，疑似比例/默认因子，但战斗语义仍未确认。
+- 验证报告新增 `skill-value-param-semantic-unresolved` info 级提示，明确参数词典已建立，但不能直接写入真实伤害公式。
+- `logicModel.elementValues[].params[]` 现在带有精简 `descriptor`，包含参数标签、公式变量、语义状态、常量/变量分类和统计范围。
+- `logicModel.valueParamSummary` 新增 `semanticStatusCounts`、`unresolvedParamIds`、`constantParamIds`。
+- Workbench 技能逻辑来源区新增参数语义提示，例如 `参数 1 / A：公式槽位，语义未确认` 和 `参数 7 / G：恒定公式槽位，语义未确认`。
+- 新增/扩展生成数据、领域层和 Workbench 测试，固定首批参数 ID 词典和 UI 展示。
+
+数据结论：
+
+- 当前角色技能索引覆盖 2808 条 `skillsub_ele_value` 元素数值行。
+- 共解析 5616 个 `valueParam` 参数对。
+- 出现 `valueParam` 的技能数为 75 个。
+- `element_formula.json` 共 152 条公式，当前可从公式变量约定推断 `1 -> A`、`7 -> G`，但还缺少 `elementId -> 公式/效果` 的直接映射证据。
+
+验收结果：
+
+- `npx vitest run src/__tests__/data/azprGenerated.test.js src/__tests__/domain/skillLogicModel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、49 条测试通过。
+- `npm run test -- --run`：通过，12 个测试文件、105 条测试通过。
+- `npm run build`：通过；仍有 Sass `@import` 弃用提示和大 chunk 提示，Workbench chunk 约 1210 KB，后续可拆包或懒加载优化。
+- `git diff --check`：通过；仅有仓库既有 LF/CRLF 工作区提示。
+- `http://127.0.0.1:5175/#/workbench` 本地页面服务返回 200。
+
+当前边界：
+
+- `value-param-index.json` 是公式槽位词典，不是伤害公式词典。
+- `semanticStatus` 仍是 `unresolved`，因此参数 `1`、`7` 只能用于诊断和展示，不能参与真实伤害计算。
+- 当前仍缺少 `skillsub_ele_value.elementId` 到具体技能 asset、效果节点、公式 ID 或命中段的直接映射。
+- 本阶段仍不代表真实命中帧、动画帧、取消窗口或完整伤害公式已经接入。
+
+下一步：
+
+- 阶段 5-7 目标：建立 `elementId -> 技能 asset/公式/效果节点` 来源追踪雏形。
+- 优先追 `109001081`、`109001306`、`10100712` 相关 elementId，在本地 Lua config、BWiki `knowledge/json/entities` 和可读 asset 导出中寻找它们对应的公式 ID、效果类型或命中节点。
+- 把 `elementId` 的来源状态接入 `logicModel`，区分“只在 `skillsub_ele_value` 出现”“已找到 asset 引用”“已找到公式引用”。
+- 补充首个技能的 elementId 来源测试，为后续真实伤害公式和命中段映射打底。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

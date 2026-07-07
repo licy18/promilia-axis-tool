@@ -11,6 +11,7 @@ import {
   getAzprSkills,
   getAzprSoulessences,
   getAzprValidationReport,
+  getAzprValueParamIndex,
 } from '../../data/azprGenerated';
 
 describe('generated AzPr data', () => {
@@ -49,6 +50,9 @@ describe('generated AzPr data', () => {
     const logicMismatchInfo = report.warnings.find(
       (warning) => warning.code === 'skill-display-logic-timing-mismatch',
     );
+    const valueParamInfo = report.warnings.find(
+      (warning) => warning.code === 'skill-value-param-semantic-unresolved',
+    );
     const placeholderWarning = report.warnings.find(
       (warning) => warning.code === 'non-azpr-placeholder-character',
     );
@@ -56,6 +60,7 @@ describe('generated AzPr data', () => {
     expect(report.counts.characters).toBe(20);
     expect(report.counts.skillLevelCrossCheck).toBe(120);
     expect(report.counts.skillLogicIndex).toBe(120);
+    expect(report.counts.valueParamIndex).toBe(2);
     expect(timingWarning.count).toBe(report.counts.skills);
     expect(crossCheckWarning).toMatchObject({
       severity: 'warning',
@@ -85,7 +90,57 @@ describe('generated AzPr data', () => {
         logicRowsWithNonZeroTiming: 60,
       },
     });
+    expect(valueParamInfo).toMatchObject({
+      severity: 'info',
+      count: 2,
+      ids: [1, 7],
+      summary: {
+        parameterIds: 2,
+        observedParameterPairs: 5616,
+        observedElementValueRows: 2808,
+        observedSkills: 75,
+        unresolvedParameterIds: [1, 7],
+        constantParameterIds: [7],
+      },
+    });
     expect(placeholderWarning.severity).toBe('ok');
+  });
+
+  it('indexes valueParam parameter slots without claiming combat semantics', () => {
+    const manifest = getAzprGeneratedManifest();
+    const valueParams = getAzprValueParamIndex();
+
+    expect(manifest.files.valueParamIndex).toBe('value-param-index.json');
+    expect(valueParams.summary).toMatchObject({
+      parameterIds: 2,
+      observedParameterPairs: 5616,
+      observedElementValueRows: 2808,
+      observedSkills: 75,
+      formulaRows: 152,
+      unresolvedParameterIds: [1, 7],
+      constantParameterIds: [7],
+    });
+    expect(valueParams.params.map((param) => [param.id, param.variable, param.semanticStatus, param.category])).toEqual(
+      [
+        [1, 'A', 'unresolved', 'varying-formula-slot'],
+        [7, 'G', 'unresolved', 'constant-formula-slot'],
+      ],
+    );
+    expect(valueParams.params[0]).toMatchObject({
+      label: '参数 1 / A',
+      isConstant: false,
+      minValue: 200,
+      maxValue: 408450,
+      rowCount: 2808,
+      skillCount: 75,
+    });
+    expect(valueParams.params[1]).toMatchObject({
+      label: '参数 7 / G',
+      isConstant: true,
+      minValue: 10000,
+      maxValue: 10000,
+      sampleValues: [10000],
+    });
   });
 
   it('cross-checks generated skill multipliers against NewTable skill_level rows', () => {

@@ -1,13 +1,20 @@
 import skillLogicIndex from '../data/generated/skill-logic-index.json';
+import valueParamIndex from '../data/generated/value-param-index.json';
 import { parseSkillDamageMultiplier } from './skillDamageSegments';
 
 export const SKILL_LOGIC_SOURCE_KIND = skillLogicIndex.sourceKind ?? 'azpr-newtable-skill-logic-index';
 export const SKILL_LEVEL_DISPLAY_SOURCE_KIND = 'azpr-newtable-skill-level-display';
+export const VALUE_PARAM_SOURCE_KIND = valueParamIndex.sourceKind ?? 'azpr-newtable-value-param-index';
 
 const logicBySkillId = new Map((skillLogicIndex.items ?? []).map((item) => [Number(item.skillId), item]));
+const valueParamDescriptorsById = new Map((valueParamIndex.params ?? []).map((item) => [Number(item.id), item]));
 
 export function getSkillLogicIndexSummary() {
   return skillLogicIndex.summary;
+}
+
+export function getValueParamIndexSummary() {
+  return valueParamIndex.summary;
 }
 
 export function createSkillLogicModel(skill, level = 1, options = {}) {
@@ -84,6 +91,8 @@ function createSkillLogicSource() {
     skillLevelTablePath: skillLogicIndex.source?.skillLevelTable ?? null,
     skillsubLogicTablePath: skillLogicIndex.source?.skillsubLogicTable ?? null,
     skillsubEleValueTablePath: skillLogicIndex.source?.skillsubEleValueTable ?? null,
+    valueParamIndexSourceKind: VALUE_PARAM_SOURCE_KIND,
+    elementFormulaTablePath: valueParamIndex.source?.elementFormulaTable ?? null,
   };
 }
 
@@ -237,10 +246,20 @@ function findValueParamMatches(params, candidates) {
 function createValueParamSummary(elementValues, damageParameterLinks) {
   const params = flattenValueParams(elementValues);
   const matches = damageParameterLinks.flatMap((link) => link.matches);
+  const semanticStatusCounts = countBy(params, (param) => param.descriptor.semanticStatus);
   return {
     rowCount: elementValues.length,
     paramCount: params.length,
     uniqueParamIds: uniqueNumbers(params.map((param) => param.paramId)),
+    semanticStatusCounts,
+    unresolvedParamIds: uniqueNumbers(
+      params
+        .filter((param) => param.descriptor.semanticStatus !== 'confirmed')
+        .map((param) => param.paramId),
+    ),
+    constantParamIds: uniqueNumbers(
+      params.filter((param) => param.descriptor.isConstant).map((param) => param.paramId),
+    ),
     directMatchCount: matches.length,
     linkedSegmentCount: damageParameterLinks.filter((link) => link.status === 'matched').length,
     unmatchedSegmentCount: damageParameterLinks.filter((link) => link.status === 'unmatched').length,
@@ -259,6 +278,7 @@ function flattenValueParams(elementValues) {
       elementId: row.elementId,
       paramId: param.id,
       value: param.value,
+      descriptor: param.descriptor,
       fieldPath: `${row.fieldPaths.valueParam}[${param.id}]`,
     })),
   );
@@ -276,9 +296,51 @@ function parseValueParam(valueParam) {
       return {
         id: Number(idText),
         value: Number(valueText),
+        descriptor: createValueParamDescriptor(idText),
       };
     })
     .filter((item) => Number.isFinite(item.id) && Number.isFinite(item.value));
+}
+
+function createValueParamDescriptor(paramId) {
+  const id = Number(paramId);
+  const descriptor = valueParamDescriptorsById.get(id);
+  if (!descriptor) {
+    return {
+      sourceKind: VALUE_PARAM_SOURCE_KIND,
+      id,
+      variable: '',
+      label: `参数 ${Number.isFinite(id) ? id : '?'}`,
+      semanticStatus: 'unknown',
+      category: 'unknown-formula-slot',
+      roleHint: '当前 value-param-index.json 未记录该参数 ID；战斗语义未确认。',
+      isConstant: false,
+      rowCount: 0,
+      skillCount: 0,
+      elementCount: 0,
+      minValue: null,
+      maxValue: null,
+      sampleValues: [],
+    };
+  }
+
+  return {
+    sourceKind: VALUE_PARAM_SOURCE_KIND,
+    id: descriptor.id,
+    variable: descriptor.variable,
+    variableSource: descriptor.variableSource,
+    label: descriptor.label,
+    semanticStatus: descriptor.semanticStatus,
+    category: descriptor.category,
+    roleHint: descriptor.roleHint,
+    isConstant: Boolean(descriptor.isConstant),
+    rowCount: descriptor.rowCount,
+    skillCount: descriptor.skillCount,
+    elementCount: descriptor.elementCount,
+    minValue: descriptor.minValue,
+    maxValue: descriptor.maxValue,
+    sampleValues: descriptor.sampleValues ?? [],
+  };
 }
 
 function parseRawNumber(rawValue) {
@@ -306,6 +368,9 @@ function createMissingLogicModel(source, diagnostic) {
       rowCount: 0,
       paramCount: 0,
       uniqueParamIds: [],
+      semanticStatusCounts: {},
+      unresolvedParamIds: [],
+      constantParamIds: [],
       directMatchCount: 0,
       linkedSegmentCount: 0,
       unmatchedSegmentCount: 0,
@@ -351,6 +416,14 @@ function uniqueByKey(items, createKey) {
     seen.add(key);
     return true;
   });
+}
+
+function countBy(items, createKey) {
+  return items.reduce((counts, item) => {
+    const key = createKey(item);
+    counts[key] = (counts[key] ?? 0) + 1;
+    return counts;
+  }, {});
 }
 
 function nearlyEqual(left, right) {

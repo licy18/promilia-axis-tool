@@ -1,0 +1,258 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-07T12:13:58.236Z",
+  "sourceKind": "azpr-newtable-value-param-index",
+  "source": {
+    "skillLogicIndex": "skill-logic-index.json",
+    "skillsubEleValueTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/skillsub_ele_value.json",
+    "elementFormulaTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json"
+  },
+  "summary": {
+    "parameterIds": 2,
+    "observedParameterPairs": 5616,
+    "observedElementValueRows": 2808,
+    "observedSkills": 75,
+    "formulaRows": 152,
+    "formulaVariables": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "T",
+      "X",
+      "Y",
+      "Z"
+    ],
+    "unresolvedParameterIds": [
+      1,
+      7
+    ],
+    "constantParameterIds": [
+      7
+    ]
+  },
+  "params": [
+    {
+      "id": 1,
+      "variable": "A",
+      "variableSource": "inferred-from-element_formula-variable-convention",
+      "label": "参数 1 / A",
+      "semanticStatus": "unresolved",
+      "category": "varying-formula-slot",
+      "roleHint": "当前技能范围内随技能和等级变化的公式槽位；战斗语义未确认。",
+      "isConstant": false,
+      "rowCount": 2808,
+      "skillCount": 75,
+      "elementCount": 234,
+      "skillIds": [
+        10100301,
+        10100312,
+        10100313,
+        10100322,
+        10100701,
+        10100712,
+        10100713,
+        10100721,
+        10101001,
+        10101012,
+        10101013,
+        10101021,
+        10200101,
+        10200112,
+        10200113,
+        10300201,
+        10300212,
+        10300213,
+        10300221,
+        10700101
+      ],
+      "sampleElementIds": [
+        101003033,
+        101003071,
+        101003074,
+        101003087,
+        101003108,
+        101003118,
+        101003122,
+        101007086,
+        101007087,
+        101007088,
+        101007120,
+        101007121,
+        101007122,
+        101007127,
+        101007139,
+        101007141,
+        101007144,
+        101007150,
+        101007206,
+        101007211
+      ],
+      "minValue": 200,
+      "maxValue": 408450,
+      "zeroCount": 0,
+      "sampleValues": [
+        200,
+        220,
+        240,
+        260,
+        280,
+        300,
+        320,
+        340,
+        360,
+        380,
+        400,
+        420
+      ],
+      "examples": [
+        {
+          "skillId": 10100301,
+          "level": 1,
+          "rowId": 6433,
+          "elementId": 101003087,
+          "valueParam": "1#1800|7#10000"
+        },
+        {
+          "skillId": 10100301,
+          "level": 2,
+          "rowId": 6434,
+          "elementId": 101003087,
+          "valueParam": "1#1980|7#10000"
+        },
+        {
+          "skillId": 10100301,
+          "level": 3,
+          "rowId": 6435,
+          "elementId": 101003087,
+          "valueParam": "1#2160|7#10000"
+        },
+        {
+          "skillId": 10100301,
+          "level": 4,
+          "rowId": 6436,
+          "elementId": 101003087,
+          "valueParam": "1#2340|7#10000"
+        },
+        {
+          "skillId": 10100301,
+          "level": 5,
+          "rowId": 6437,
+          "elementId": 101003087,
+          "valueParam": "1#2520|7#10000"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "variable": "G",
+      "variableSource": "inferred-from-element_formula-variable-convention",
+      "label": "参数 7 / G",
+      "semanticStatus": "unresolved",
+      "category": "constant-formula-slot",
+      "roleHint": "当前技能范围内恒为 10000 的公式槽位，可能是比例/默认因子；战斗语义未确认。",
+      "isConstant": true,
+      "rowCount": 2808,
+      "skillCount": 75,
+      "elementCount": 234,
+      "skillIds": [
+        10100301,
+        10100312,
+        10100313,
+        10100322,
+        10100701,
+        10100712,
+        10100713,
+        10100721,
+        10101001,
+        10101012,
+        10101013,
+        10101021,
+        10200101,
+        10200112,
+        10200113,
+        10300201,
+        10300212,
+        10300213,
+        10300221,
+        10700101
+      ],
+      "sampleElementIds": [
+        101003033,
+        101003071,
+        101003074,
+        101003087,
+        101003108,
+        101003118,
+        101003122,
+        101007086,
+        101007087,
+        101007088,
+        101007120,
+        101007121,
+        101007122,
+        101007127,
+        101007139,
+        101007141,
+        101007144,
+        101007150,
+        101007206,
+        101007211
+      ],
+      "minValue": 10000,
+      "maxValue": 10000,
+      "zeroCount": 0,
+      "sampleValues": [
+        10000
+      ],
+      "examples": [
+        {
+          "skillId": 10100301,
+          "level": 1,
+          "rowId": 6433,
+          "elementId": 101003087,
+          "valueParam": "1#1800|7#10000"
+        },
+        {
+          "skillId": 10100301,
+          "level": 2,
+          "rowId": 6434,
+          "elementId": 101003087,
+          "valueParam": "1#1980|7#10000"
+        },
+        {
+          "skillId": 10100301,
+          "level": 3,
+          "rowId": 6435,
+          "elementId": 101003087,
+          "valueParam": "1#2160|7#10000"
+        },
+        {
+          "skillId": 10100301,
+          "level": 4,
+          "rowId": 6436,
+          "elementId": 101003087,
+          "valueParam": "1#2340|7#10000"
+        },
+        {
+          "skillId": 10100301,
+          "level": 5,
+          "rowId": 6437,
+          "elementId": 101003087,
+          "valueParam": "1#2520|7#10000"
+        }
+      ]
+    }
+  ]
+}

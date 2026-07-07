@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-07T11:45:59.901Z",
+  "generatedAt": "2026-07-07T12:13:58.236Z",
   "sourceRoot": "C:/PC2/Codex/AzPr",
   "counts": {
     "attributes": 184,
@@ -13,7 +13,8 @@
     "soulessences": 62,
     "mediaFiles": 3059,
     "skillLevelCrossCheck": 120,
-    "skillLogicIndex": 120
+    "skillLogicIndex": 120,
+    "valueParamIndex": 2
   },
   "warnings": [
     {
@@ -314,6 +315,51 @@
         "logicRowsWithNonZeroTiming": 60
       },
       "message": "部分技能等级没有 skillsub_ele_value 数值参数行，可能是被动、纯逻辑或无需倍率参数的技能。"
+    },
+    {
+      "code": "skill-value-param-semantic-unresolved",
+      "severity": "info",
+      "count": 2,
+      "ids": [
+        1,
+        7
+      ],
+      "summary": {
+        "parameterIds": 2,
+        "observedParameterPairs": 5616,
+        "observedElementValueRows": 2808,
+        "observedSkills": 75,
+        "formulaRows": 152,
+        "formulaVariables": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "J",
+          "K",
+          "L",
+          "M",
+          "N",
+          "O",
+          "T",
+          "X",
+          "Y",
+          "Z"
+        ],
+        "unresolvedParameterIds": [
+          1,
+          7
+        ],
+        "constantParameterIds": [
+          7
+        ]
+      },
+      "message": "valueParam 参数 ID 已建立公式槽位统计，但战斗语义仍未确认，不能直接写入伤害公式。"
     },
     {
       "code": "non-azpr-placeholder-character",

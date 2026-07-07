@@ -74,6 +74,12 @@ describe('Workbench view', () => {
       '#973 · 109001081 · 1#1600|7#10000',
       '#985 · 109001306 · 1#1600|7#10000',
     ]);
+    expect(wrapper.find('[data-testid="workbench-skill-value-param-semantics"]').text()).toContain(
+      '参数 1 / A：公式槽位，语义未确认',
+    );
+    expect(wrapper.find('[data-testid="workbench-skill-value-param-semantics"]').text()).toContain(
+      '参数 7 / G：恒定公式槽位，语义未确认',
+    );
     expect(wrapper.find('[data-testid="workbench-skill-value-param-link"]').attributes('data-link-status')).toBe(
       'unmatched',
     );
@@ -100,6 +106,8 @@ describe('Workbench view', () => {
       '倍率段 星鸣技 / 180%',
     );
     expect(wrapper.find('[data-testid="workbench-skill-value-param-link"]').text()).toContain('未解释参数 1, 7');
+    expect(wrapper.find('[data-testid="workbench-skill-value-param-semantics"]').text()).toContain('参数 1 / A');
+    expect(wrapper.find('[data-testid="workbench-skill-value-param-semantics"]').text()).toContain('参数 7 / G');
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     wrapper.unmount();
@@ -121,6 +129,7 @@ describe('Workbench view', () => {
     );
     expect(restored.find('[data-testid="workbench-skill-logic-mismatch"]').text()).toContain('逻辑 CD 20000ms');
     expect(restored.find('[data-testid="workbench-skill-value-param-link"]').text()).toContain('未解释参数 1, 7');
+    expect(restored.find('[data-testid="workbench-skill-value-param-semantics"]').text()).toContain('语义未确认');
   });
 
   it('selects a skill damage segment and saves the projection choice', async () => {

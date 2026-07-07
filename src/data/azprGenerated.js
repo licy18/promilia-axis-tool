@@ -11,6 +11,7 @@ import skillLevelCrossCheck from './generated/skill-level-crosscheck.json';
 import skills from './generated/skills.json';
 import soulessences from './generated/soulessences.json';
 import validationReport from './generated/validation-report.json';
+import valueParamIndex from './generated/value-param-index.json';
 
 const generatedTables = {
   attributes,
@@ -29,6 +30,7 @@ export const azprGeneratedData = Object.freeze({
   mediaIndex,
   skillLogicIndex,
   skillLevelCrossCheck,
+  valueParamIndex,
   tables: generatedTables,
 });
 
@@ -46,6 +48,10 @@ export function getAzprSkillLevelCrossCheck() {
 
 export function getAzprSkillLogicIndex() {
   return skillLogicIndex;
+}
+
+export function getAzprValueParamIndex() {
+  return valueParamIndex;
 }
 
 export function getAzprElements() {

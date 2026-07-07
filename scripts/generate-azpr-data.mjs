@@ -22,6 +22,7 @@ const sourceFiles = {
   skillLevelLang: path.join(sourceRoot, 'Assets', 'ResourcesLang', 'chs', 'Table', 'lang_skill_level.json'),
   skillsubLogic: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'skillsub_logic.json'),
   skillsubEleValue: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'skillsub_ele_value.json'),
+  elementFormula: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'element_formula.json'),
   unitProperty: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'unit_property.json'),
   templateValue: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'template_value.json'),
   battleInfo: path.join(sourceRoot, 'Assets', 'ResourcesAssets', 'Config', 'NewTable', 'battle_info.json'),
@@ -44,6 +45,7 @@ const [
   skillLevelLangTable,
   skillsubLogicTable,
   skillsubEleValueTable,
+  elementFormulaTable,
   unitPropertyTable,
   templateValueTable,
   battleInfoTable,
@@ -59,6 +61,7 @@ const [
   readJson(sourceFiles.skillLevelLang),
   readJson(sourceFiles.skillsubLogic),
   readJson(sourceFiles.skillsubEleValue),
+  readJson(sourceFiles.elementFormula),
   readJson(sourceFiles.unitProperty),
   readJson(sourceFiles.templateValue),
   readJson(sourceFiles.battleInfo),
@@ -97,6 +100,7 @@ const soulessences = mapSoulessences(soulessenceForms);
 const mediaIndex = await mapMediaIndex(sourceFiles.mediaImages);
 const skillLevelCrossCheck = buildSkillLevelCrossCheck({ skills, skillLevelTable, skillLevelLang });
 const skillLogicIndex = buildSkillLogicIndex({ skills, skillLevelTable, skillsubLogicTable, skillsubEleValueTable });
+const valueParamIndex = buildValueParamIndex({ skillLogicIndex, elementFormulaTable });
 const firstVerticalSlice = buildFirstVerticalSliceData({ characters, skills, enemies });
 const workbenchSeed = buildWorkbenchSeedData({ characters, skills, enemies });
 const validationReport = buildValidationReport({
@@ -110,6 +114,7 @@ const validationReport = buildValidationReport({
   mediaIndex,
   skillLevelCrossCheck,
   skillLogicIndex,
+  valueParamIndex,
 });
 
 await Promise.all([
@@ -125,6 +130,7 @@ await Promise.all([
   writeJson('media-index.json', mediaIndex),
   writeJson('skill-level-crosscheck.json', skillLevelCrossCheck),
   writeJson('skill-logic-index.json', skillLogicIndex),
+  writeJson('value-param-index.json', valueParamIndex),
   writeJson('first-vertical-slice.json', firstVerticalSlice),
   writeJson('workbench-seed.json', workbenchSeed),
   writeJson('validation-report.json', validationReport),
@@ -184,6 +190,7 @@ function buildManifest(validationReport) {
       mediaIndex: 'media-index.json',
       skillLevelCrossCheck: 'skill-level-crosscheck.json',
       skillLogicIndex: 'skill-logic-index.json',
+      valueParamIndex: 'value-param-index.json',
       firstVerticalSlice: 'first-vertical-slice.json',
       workbenchSeed: 'workbench-seed.json',
       validationReport: 'validation-report.json',
@@ -549,6 +556,156 @@ function buildSkillLogicIndex({ skills, skillLevelTable, skillsubLogicTable, ski
   };
 }
 
+function buildValueParamIndex({ skillLogicIndex, elementFormulaTable }) {
+  const statsByParamId = new Map();
+  const formulas = elementFormulaTable.rows ?? [];
+  const formulaVariables = uniqueStrings(
+    formulas.flatMap((row) => extractFormulaVariables(row.functionOutput)).filter((variable) => variable.length === 1),
+  );
+
+  for (const item of skillLogicIndex.items ?? []) {
+    for (const level of item.levels ?? []) {
+      for (const elementValue of level.elementValues ?? []) {
+        for (const param of parseParamPairs(elementValue.valueParam)) {
+          const stat = getOrCreateValueParamStat(statsByParamId, param.id);
+          stat.rowCount += 1;
+          stat.skillIds.add(Number(item.skillId));
+          stat.elementIds.add(Number(elementValue.elementId));
+          stat.values.add(param.value);
+          stat.minValue = Math.min(stat.minValue, param.value);
+          stat.maxValue = Math.max(stat.maxValue, param.value);
+          if (param.value === 0) {
+            stat.zeroCount += 1;
+          }
+          if (stat.examples.length < 5) {
+            stat.examples.push({
+              skillId: Number(item.skillId),
+              level: Number(level.level),
+              rowId: Number(elementValue.rowId),
+              elementId: Number(elementValue.elementId),
+              valueParam: elementValue.valueParam,
+            });
+          }
+        }
+      }
+    }
+  }
+
+  const params = [...statsByParamId.values()]
+    .sort((left, right) => left.id - right.id)
+    .map((stat) => createValueParamDescriptor(stat, formulaVariables));
+  const unknownParams = params.filter((param) => param.semanticStatus !== 'confirmed');
+  const observedSkillIds = uniqueNumbers([...statsByParamId.values()].flatMap((stat) => [...stat.skillIds]));
+  const observedElementValueRows = uniqueNumbers(
+    params.flatMap((param) => param.examples.map((example) => example.rowId)),
+  ).length;
+
+  return {
+    schemaVersion: 1,
+    generatedAt,
+    sourceKind: 'azpr-newtable-value-param-index',
+    source: {
+      skillLogicIndex: 'skill-logic-index.json',
+      skillsubEleValueTable: normalizePath(sourceFiles.skillsubEleValue),
+      elementFormulaTable: normalizePath(sourceFiles.elementFormula),
+    },
+    summary: {
+      parameterIds: params.length,
+      observedParameterPairs: params.reduce((sum, param) => sum + param.rowCount, 0),
+      observedElementValueRows: skillLogicIndex.summary?.elementValueRows ?? observedElementValueRows,
+      observedSkills: observedSkillIds.length,
+      formulaRows: formulas.length,
+      formulaVariables,
+      unresolvedParameterIds: unknownParams.map((param) => param.id),
+      constantParameterIds: params.filter((param) => param.isConstant).map((param) => param.id),
+    },
+    params,
+  };
+}
+
+function getOrCreateValueParamStat(statsByParamId, paramId) {
+  if (!statsByParamId.has(paramId)) {
+    statsByParamId.set(paramId, {
+      id: paramId,
+      rowCount: 0,
+      skillIds: new Set(),
+      elementIds: new Set(),
+      values: new Set(),
+      minValue: Infinity,
+      maxValue: -Infinity,
+      zeroCount: 0,
+      examples: [],
+    });
+  }
+  return statsByParamId.get(paramId);
+}
+
+function createValueParamDescriptor(stat, formulaVariables) {
+  const variable = paramIdToFormulaVariable(stat.id);
+  const sampleValues = [...stat.values].filter(Number.isFinite).sort((left, right) => left - right).slice(0, 12);
+  const isConstant = stat.values.size === 1;
+  const roleHint = isConstant
+    ? `当前技能范围内恒为 ${sampleValues[0]} 的公式槽位，可能是比例/默认因子；战斗语义未确认。`
+    : '当前技能范围内随技能和等级变化的公式槽位；战斗语义未确认。';
+
+  return {
+    id: stat.id,
+    variable,
+    variableSource: formulaVariables.includes(variable)
+      ? 'inferred-from-element_formula-variable-convention'
+      : 'inferred-slot-name-unseen-in-element_formula',
+    label: `参数 ${stat.id}${variable ? ` / ${variable}` : ''}`,
+    semanticStatus: 'unresolved',
+    category: isConstant ? 'constant-formula-slot' : 'varying-formula-slot',
+    roleHint,
+    isConstant,
+    rowCount: stat.rowCount,
+    skillCount: stat.skillIds.size,
+    elementCount: stat.elementIds.size,
+    skillIds: [...stat.skillIds].sort((left, right) => left - right).slice(0, 20),
+    sampleElementIds: [...stat.elementIds].sort((left, right) => left - right).slice(0, 20),
+    minValue: Number.isFinite(stat.minValue) ? stat.minValue : null,
+    maxValue: Number.isFinite(stat.maxValue) ? stat.maxValue : null,
+    zeroCount: stat.zeroCount,
+    sampleValues,
+    examples: stat.examples,
+  };
+}
+
+function extractFormulaVariables(functionOutput) {
+  if (!functionOutput) {
+    return [];
+  }
+  const reserved = new Set(['IF', 'OR', 'FLOOR', 'ROUND', 'CEILING', 'RANDOM', 'F_MIN', 'F_MAX']);
+  return [...String(functionOutput).matchAll(/\b[A-Z][A-Z_]*\b/g)]
+    .map((match) => match[0])
+    .filter((name) => !reserved.has(name) && name.length === 1);
+}
+
+function paramIdToFormulaVariable(paramId) {
+  const id = Number(paramId);
+  if (!Number.isInteger(id) || id < 1 || id > 26) {
+    return '';
+  }
+  return String.fromCharCode(64 + id);
+}
+
+function parseParamPairs(rawValue) {
+  if (!rawValue) {
+    return [];
+  }
+  return String(rawValue)
+    .split('|')
+    .map((part) => {
+      const [idText, valueText] = part.split('#');
+      return {
+        id: Number(idText),
+        value: Number(valueText),
+      };
+    })
+    .filter((item) => Number.isFinite(item.id) && Number.isFinite(item.value));
+}
+
 function buildSkillLogicIndexItem(skill, skillLevelRowsBySkillId, logicRowsBySubSkillId, elementRowsBySubSkillAndLevel) {
   const skillLevelRows = (skillLevelRowsBySkillId.get(Number(skill.id)) ?? []).sort(
     (left, right) => Number(left.level) - Number(right.level),
@@ -762,6 +919,10 @@ function uniqueDisplayTimingPairs(rows) {
 
 function uniqueNumbers(values) {
   return [...new Set(values.map((value) => Number(value)).filter(Number.isFinite))].sort((left, right) => left - right);
+}
+
+function uniqueStrings(values) {
+  return [...new Set(values.map((value) => String(value)).filter(Boolean))].sort();
 }
 
 function uniqueByKey(items, createKey) {
@@ -1109,6 +1270,7 @@ function buildValidationReport(data) {
   const skillLevelCrossCheckMismatchCount =
     (skillLevelCrossCheckSummary.mismatchedSkills ?? 0) + (skillLevelCrossCheckSummary.mismatchedLevels ?? 0);
   const skillLogicSummary = data.skillLogicIndex?.summary ?? {};
+  const valueParamSummary = data.valueParamIndex?.summary ?? {};
   const nonAzPrPlaceholderNames = ['云堇', '钟离', '甘雨', '雷电将军', '温迪', '可莉'];
   const placeholderCharacters = data.characters
     .filter((character) => nonAzPrPlaceholderNames.includes(character.name))
@@ -1185,6 +1347,14 @@ function buildValidationReport(data) {
       message: '部分技能等级没有 skillsub_ele_value 数值参数行，可能是被动、纯逻辑或无需倍率参数的技能。',
     },
     {
+      code: 'skill-value-param-semantic-unresolved',
+      severity: (valueParamSummary.unresolvedParameterIds?.length ?? 0) > 0 ? 'info' : 'ok',
+      count: valueParamSummary.unresolvedParameterIds?.length ?? 0,
+      ids: valueParamSummary.unresolvedParameterIds ?? [],
+      summary: valueParamSummary,
+      message: 'valueParam 参数 ID 已建立公式槽位统计，但战斗语义仍未确认，不能直接写入伤害公式。',
+    },
+    {
       code: 'non-azpr-placeholder-character',
       severity: placeholderCharacters.length > 0 ? 'error' : 'ok',
       count: placeholderCharacters.length,
@@ -1216,6 +1386,7 @@ function buildValidationReport(data) {
       mediaFiles: data.mediaIndex.count,
       skillLevelCrossCheck: data.skillLevelCrossCheck?.count ?? 0,
       skillLogicIndex: data.skillLogicIndex?.count ?? 0,
+      valueParamIndex: data.valueParamIndex?.summary?.parameterIds ?? 0,
     },
     warnings,
   };
