@@ -628,6 +628,7 @@ describe('Workbench view', () => {
     expect(wrapper.text()).toContain('应用入口候选 1/1');
     expect(wrapper.text()).toContain('原生入口 1/1');
     expect(wrapper.text()).toContain('反汇编片段 1/1');
+    expect(wrapper.text()).toContain('充能探针 1/1');
     expect(wrapper.text()).toContain('来源差异 1/1');
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');

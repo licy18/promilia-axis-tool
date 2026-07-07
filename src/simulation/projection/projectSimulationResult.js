@@ -572,6 +572,74 @@ const RUNTIME_NATIVE_DISASSEMBLY_EVIDENCE = {
   applied: false,
   note: 'Native disassembly proves selected target method bodies are present in the TC client binary and confirms several field-copy/gating facts, but it is not yet a full formula reconstruction.',
 };
+const SELF_ENERGY_RUNTIME_FIELD_MAP = [
+  {
+    field: 'recoverSP',
+    paramField: 'TDamageElementParams.recoverSP',
+    paramOffset: '0x12C',
+    runtimeField: 'DamageElement.m_recoverSP',
+    runtimeOffset: '0x240',
+    confirmedBy: 'DamageElement.Parse@0x138E5E0',
+    runtimeUse: 'gate-and-delta-source-candidate',
+  },
+  {
+    field: 'petRecoverSP',
+    paramField: 'TDamageElementParams.petRecoverSP',
+    paramOffset: '0x130',
+    runtimeField: 'DamageElement.m_petRecoverSP',
+    runtimeOffset: '0x244',
+    confirmedBy: 'DamageElement.Parse@0x138E5E0',
+    runtimeUse: 'pet-share-source-candidate',
+  },
+  {
+    field: 'recoverInterval',
+    paramField: 'TDamageElementParams.recoverInterval',
+    paramOffset: '0x134',
+    runtimeField: 'DamageElement.m_recoverInterval',
+    runtimeOffset: '0x248',
+    confirmedBy: 'DamageElement.Parse@0x138E5E0',
+    runtimeUse: 'throttle-interval-candidate',
+  },
+];
+const SELF_ENERGY_RUNTIME_CHAIN_STEPS = [
+  {
+    step: 'parse-fields',
+    method: 'DamageElement.Parse',
+    functionKey: 'DamageElement.Parse@0x138E5E0',
+    status: 'field-copy-confirmed',
+    confirmedFacts: [
+      'TDamageElementParams.recoverSP -> DamageElement.m_recoverSP',
+      'TDamageElementParams.petRecoverSP -> DamageElement.m_petRecoverSP',
+      'TDamageElementParams.recoverInterval -> DamageElement.m_recoverInterval',
+    ],
+  },
+  {
+    step: 'recover-gate',
+    method: 'DamageElement.RecoverSP',
+    functionKey: 'DamageElement.RecoverSP@0x138EEE0',
+    status: 'recover-sp-positive-gate-confirmed',
+    gateCondition: 'DamageElement.m_recoverSP > 0',
+  },
+  {
+    step: 'resource-update',
+    method: 'SPSystem.RecoverSP',
+    functionKey: 'SPSystem.RecoverSP@0x1483F40',
+    status: 'delta-update-path-confirmed-scale-unconfirmed',
+    parameters: ['recoverTagType', 'baseDelta', 'delta'],
+  },
+];
+const SELF_ENERGY_RUNTIME_UNIT_HYPOTHESES = [
+  {
+    key: 'raw-field',
+    divisor: 1,
+    status: 'observed-field-value-not-confirmed-final-unit',
+  },
+  {
+    key: 'per-ten-thousand',
+    divisor: 10000,
+    status: 'common-config-scale-candidate-unconfirmed',
+  },
+];
 
 export function projectSimulationResult({
   scenario,
@@ -2054,6 +2122,16 @@ function createHitBindingGapExternalElementBinding({
     });
   const runtimeNativeDisassemblyFunctionKeys =
     runtimeApplicationTraceEvidence?.runtimeNativeDisassemblyFunctionKeys ?? [];
+  const runtimeSelfEnergyFormulaProbe = createSelfEnergyRuntimeFormulaProbe(
+    uniqueDamageElementRefs.map(ref => ({
+      elementConfigId: ref.elementConfigId,
+      pathId: ref.pathId,
+      fieldCandidate: ref.damageElementFieldMapping?.selfEnergyChange,
+    })),
+    {
+      sourceStatus: 'external-damage-element-candidates',
+    }
+  );
   const unresolved = uniqueStrings([
     'hit-index-binding-unconfirmed',
     'damage-element-execution-order-unconfirmed',
@@ -2219,6 +2297,16 @@ function createHitBindingGapExternalElementBinding({
       runtimeApplicationTraceEvidence?.nativeDisassemblyEvidence
         ?.functionCount ?? 0,
     runtimeNativeDisassemblyFunctionKeys,
+    runtimeSelfEnergyFormulaProbe,
+    runtimeSelfEnergyFormulaProbeStatuses:
+      runtimeSelfEnergyFormulaProbe.status !==
+      'recover-sp-runtime-probe-missing'
+        ? [runtimeSelfEnergyFormulaProbe.status]
+        : [],
+    runtimeSelfEnergyFormulaProbeCandidateCount:
+      runtimeSelfEnergyFormulaProbe.candidateCount,
+    runtimeSelfEnergyFormulaProbeGateOpenCount:
+      runtimeSelfEnergyFormulaProbe.gateOpenCount,
     candidates,
     unresolved,
     applied: false,
@@ -3016,6 +3104,29 @@ function createHitBindingGapExternalElementBindingSummary(gaps) {
       runtimeNativeDisassemblyFunctionKeys.length,
     gapsWithRuntimeNativeDisassembly: bindings.filter(
       binding => (binding.runtimeNativeDisassemblyFunctionKeys ?? []).length > 0
+    ).length,
+    runtimeSelfEnergyFormulaProbeStatuses: uniqueStrings(
+      bindings.flatMap(
+        binding => binding.runtimeSelfEnergyFormulaProbeStatuses ?? []
+      )
+    ),
+    runtimeSelfEnergyFormulaProbeCandidateCount: bindings.reduce(
+      (sum, binding) =>
+        sum +
+        (numberOrNull(binding.runtimeSelfEnergyFormulaProbeCandidateCount) ??
+          0),
+      0
+    ),
+    runtimeSelfEnergyFormulaProbeGateOpenCount: bindings.reduce(
+      (sum, binding) =>
+        sum +
+        (numberOrNull(binding.runtimeSelfEnergyFormulaProbeGateOpenCount) ?? 0),
+      0
+    ),
+    gapsWithRuntimeSelfEnergyFormulaProbe: bindings.filter(
+      binding =>
+        (numberOrNull(binding.runtimeSelfEnergyFormulaProbeCandidateCount) ??
+          0) > 0
     ).length,
     unresolved: uniqueStrings(
       bindings.flatMap(binding => binding.unresolved ?? [])
@@ -5010,6 +5121,8 @@ function summarizeHitCandidateToughnessDamage(mappings) {
 
 function summarizeHitCandidateSelfEnergyChange(mappings) {
   const energyMappings = mappings.filter(mapping => mapping.selfEnergyChange);
+  const runtimeFormulaProbe =
+    createSelfEnergyRuntimeFormulaProbe(energyMappings);
   return {
     status:
       energyMappings.length > 0
@@ -5028,8 +5141,111 @@ function summarizeHitCandidateSelfEnergyChange(mappings) {
     ownerScopes: uniqueStrings(
       energyMappings.map(mapping => mapping.selfEnergyChange?.ownerScope)
     ),
+    runtimeFormulaProbe,
     applied: false,
   };
+}
+
+function createSelfEnergyRuntimeFormulaProbe(candidates, options = {}) {
+  const samples = (candidates ?? [])
+    .map(normalizeSelfEnergyRuntimeProbeSample)
+    .filter(Boolean);
+  const gateOpenCount = samples.filter(sample => sample.gateOpen).length;
+  const recoverSPValues = uniqueNumbers(
+    samples.map(sample => sample.recoverSP).filter(value => value != null)
+  );
+  const petRecoverSPValues = uniqueNumbers(
+    samples.map(sample => sample.petRecoverSP).filter(value => value != null)
+  );
+  const recoverIntervals = uniqueNumbers(
+    samples.map(sample => sample.recoverInterval).filter(value => value != null)
+  );
+
+  return {
+    status:
+      samples.length > 0
+        ? 'recover-sp-runtime-probe-built-unapplied'
+        : 'recover-sp-runtime-probe-missing',
+    sourceKind: 'azpr-self-energy-runtime-formula-probe',
+    sourceStatus: options.sourceStatus ?? null,
+    candidateCount: samples.length,
+    gateOpenCount,
+    gateCondition: 'DamageElement.m_recoverSP > 0',
+    runtimeFieldMap: SELF_ENERGY_RUNTIME_FIELD_MAP,
+    runtimeChainSteps: SELF_ENERGY_RUNTIME_CHAIN_STEPS,
+    unitHypotheses: SELF_ENERGY_RUNTIME_UNIT_HYPOTHESES,
+    recoverSPValues,
+    petRecoverSPValues,
+    recoverIntervals,
+    perTenThousandRecoverSPValues: uniqueNumbers(
+      recoverSPValues
+        .map(value => scalePerTenThousand(value))
+        .filter(value => value != null)
+    ),
+    perTenThousandPetRecoverSPValues: uniqueNumbers(
+      petRecoverSPValues
+        .map(value => scalePerTenThousand(value))
+        .filter(value => value != null)
+    ),
+    perTenThousandRecoverIntervals: uniqueNumbers(
+      recoverIntervals
+        .map(value => scalePerTenThousand(value))
+        .filter(value => value != null)
+    ),
+    samples,
+    unresolved: [
+      'recover-sp-final-unit-unconfirmed',
+      'pet-recover-sp-share-rule-unconfirmed',
+      'recover-interval-timebase-unconfirmed',
+      'recover-tag-type-unconfirmed',
+      'baseDelta-vs-delta-role-unconfirmed',
+    ],
+    applied: false,
+  };
+}
+
+function normalizeSelfEnergyRuntimeProbeSample(candidate) {
+  const fieldCandidate =
+    candidate?.fieldCandidate ?? candidate?.selfEnergyChange ?? candidate;
+  if (!fieldCandidate) {
+    return null;
+  }
+
+  const recoverSP = numberOrNull(fieldCandidate.recoverSP);
+  const petRecoverSP = numberOrNull(fieldCandidate.petRecoverSP);
+  const recoverInterval = numberOrNull(fieldCandidate.recoverInterval);
+  if (recoverSP == null && petRecoverSP == null && recoverInterval == null) {
+    return null;
+  }
+
+  return {
+    elementConfigId: numberOrNull(candidate?.elementConfigId),
+    pathId: candidate?.pathId ?? null,
+    status: fieldCandidate.status ?? null,
+    ownerScope: fieldCandidate.ownerScope ?? null,
+    recoverSP,
+    petRecoverSP,
+    recoverInterval,
+    gateOpen: Number(recoverSP) > 0,
+    scaledCandidates: {
+      rawField: {
+        recoverSP,
+        petRecoverSP,
+        recoverInterval,
+      },
+      perTenThousand: {
+        recoverSP: scalePerTenThousand(recoverSP),
+        petRecoverSP: scalePerTenThousand(petRecoverSP),
+        recoverInterval: scalePerTenThousand(recoverInterval),
+      },
+    },
+    applied: false,
+  };
+}
+
+function scalePerTenThousand(value) {
+  const number = numberOrNull(value);
+  return number == null ? null : Number((number / 10000).toFixed(6));
 }
 
 function compactHitCandidateDamageElementMapping(mapping) {
@@ -5378,6 +5594,7 @@ function createSelfEnergyChangeResult(
         ? 'source-evidence'
         : 'unknown',
     sourceEvidence,
+    runtimeFormulaProbe: sourceEvidence?.selfEnergyRuntimeFormulaProbe ?? null,
     formulaBreakdown: {
       version: 'stage5-self-energy-breakdown-placeholder-v1',
       status: hasExplicitDelta
@@ -5646,6 +5863,15 @@ function createDamageElementChainSource(damageElementSource, chainKey) {
       skillLevelBridge: candidate.skillLevelBridge,
     }))
     .filter(candidate => candidate.fieldCandidate);
+  const selfEnergyRuntimeFormulaProbe = createSelfEnergyRuntimeFormulaProbe(
+    candidates,
+    {
+      sourceStatus:
+        candidates.length > 0
+          ? 'action-level-damage-element-candidates'
+          : damageElementSource.status,
+    }
+  );
 
   return {
     kind: damageElementSource.kind,
@@ -5666,6 +5892,11 @@ function createDamageElementChainSource(damageElementSource, chainKey) {
     formulaSlotAlignmentSummary: createFormulaSlotAlignmentSummary(candidates),
     formulaFunctionSummary:
       chainKey === 'hpDamage' ? createFormulaFunctionSummary(candidates) : [],
+    selfEnergyRuntimeFormulaProbe:
+      selfEnergyRuntimeFormulaProbe.status !==
+      'recover-sp-runtime-probe-missing'
+        ? selfEnergyRuntimeFormulaProbe
+        : null,
     formulaCandidatePreview: null,
     candidates,
     note: damageElementSource.note,

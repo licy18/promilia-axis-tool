@@ -5647,3 +5647,135 @@ hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1
 - `nativeDisassemblyEvidence` 只证明已有目标原生片段和部分字段复制/门控事实，不等于完整公式反编译。
 - `runtimeApplicationTraceEvidence.applied = false`，HP、削韧、自身能量最终公式仍不能应用。
 - 下一阶段需要命名间接调用、字段偏移和 transmit type，再把充能链路推进到可测试公式探针。
+
+## 75. 阶段 5-8AV：selfEnergyRuntimeFormulaProbe 充能运行时公式探针
+
+阶段 5-8AV 新增充能公式探针，用于把 `recoverSP/petRecoverSP/recoverInterval` 的运行时字段复制、门控和资源更新路径结构化记录。该探针仍为证据层，不能参与最终能量计算。
+
+### 75.1 action-level sourceEvidence
+
+`selfEnergyChange.sourceEvidence` 新增：
+
+```json
+{
+  "selfEnergyRuntimeFormulaProbe": {
+    "status": "recover-sp-runtime-probe-built-unapplied",
+    "sourceKind": "azpr-self-energy-runtime-formula-probe",
+    "sourceStatus": "action-level-damage-element-candidates",
+    "candidateCount": 2,
+    "gateOpenCount": 2,
+    "gateCondition": "DamageElement.m_recoverSP > 0",
+    "recoverSPValues": [2700],
+    "petRecoverSPValues": [10399],
+    "recoverIntervals": [9999],
+    "perTenThousandRecoverSPValues": [0.27],
+    "perTenThousandPetRecoverSPValues": [1.0399],
+    "perTenThousandRecoverIntervals": [0.9999],
+    "applied": false
+  }
+}
+```
+
+`selfEnergyChange` 顶层同步新增快捷字段：
+
+```json
+{
+  "runtimeFormulaProbe": {
+    "status": "recover-sp-runtime-probe-built-unapplied",
+    "applied": false
+  }
+}
+```
+
+### 75.2 hitCandidates[].selfEnergyChange
+
+每 hit 候选摘要新增：
+
+```json
+{
+  "selfEnergyChange": {
+    "runtimeFormulaProbe": {
+      "status": "recover-sp-runtime-probe-built-unapplied",
+      "candidateCount": 2,
+      "gateOpenCount": 2,
+      "samples": [
+        {
+          "elementConfigId": 109001081,
+          "recoverSP": 2700,
+          "petRecoverSP": 10399,
+          "recoverInterval": 9999,
+          "gateOpen": true,
+          "scaledCandidates": {
+            "rawField": {
+              "recoverSP": 2700,
+              "petRecoverSP": 10399,
+              "recoverInterval": 9999
+            },
+            "perTenThousand": {
+              "recoverSP": 0.27,
+              "petRecoverSP": 1.0399,
+              "recoverInterval": 0.9999
+            }
+          },
+          "applied": false
+        }
+      ],
+      "applied": false
+    }
+  }
+}
+```
+
+### 75.3 externalElementBinding
+
+非普攻缺口 `hitBindingGap.externalElementBinding` 新增：
+
+- `runtimeSelfEnergyFormulaProbe`
+- `runtimeSelfEnergyFormulaProbeStatuses`
+- `runtimeSelfEnergyFormulaProbeCandidateCount`
+- `runtimeSelfEnergyFormulaProbeGateOpenCount`
+
+`hitBindingGapSummary.externalElementBindingSummary` 新增：
+
+- `runtimeSelfEnergyFormulaProbeStatuses`
+- `runtimeSelfEnergyFormulaProbeCandidateCount`
+- `runtimeSelfEnergyFormulaProbeGateOpenCount`
+- `gapsWithRuntimeSelfEnergyFormulaProbe`
+
+四动作样例当前为：
+
+```json
+{
+  "runtimeSelfEnergyFormulaProbeStatuses": [
+    "recover-sp-runtime-probe-built-unapplied"
+  ],
+  "runtimeSelfEnergyFormulaProbeCandidateCount": 3,
+  "runtimeSelfEnergyFormulaProbeGateOpenCount": 3,
+  "gapsWithRuntimeSelfEnergyFormulaProbe": 3
+}
+```
+
+### 75.4 探针固定结构
+
+`runtimeFieldMap[]` 固定记录：
+
+- `recoverSP`: `TDamageElementParams+0x12C -> DamageElement+0x240`
+- `petRecoverSP`: `TDamageElementParams+0x130 -> DamageElement+0x244`
+- `recoverInterval`: `TDamageElementParams+0x134 -> DamageElement+0x248`
+
+`runtimeChainSteps[]` 固定记录：
+
+- `DamageElement.Parse@0x138E5E0`: 字段复制已确认。
+- `DamageElement.RecoverSP@0x138EEE0`: `DamageElement.m_recoverSP > 0` 门控已确认。
+- `SPSystem.RecoverSP@0x1483F40`: `delta` 进入资源更新路径已确认，单位仍未确认。
+
+`unitHypotheses[]` 固定记录：
+
+- `raw-field`: 原始字段值候选。
+- `per-ten-thousand`: 万分比缩放候选。
+
+### 75.5 当前边界
+
+- `selfEnergyRuntimeFormulaProbe.applied = false`，最终自身能量值仍不能从候选字段直接计算。
+- `baseDelta-vs-delta-role-unconfirmed`、`recover-tag-type-unconfirmed`、`pet-recover-sp-share-rule-unconfirmed`、`recover-interval-timebase-unconfirmed` 必须继续保留。
+- 下一阶段应追 `RecoverSPArgs` 构造来源、`SPSystem.OnTransmit` 类型映射和 runtime hook 采样点。

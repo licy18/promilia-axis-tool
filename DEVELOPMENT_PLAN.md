@@ -274,7 +274,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8AS，在 `hitBindingGap.externalElementBinding` 下新增 `runtimeApplicationTraceEvidence` 三值运行时应用入口候选；当前 HP 链路命中 `DamageElement + FormulaUtility + OutputDamageData`，削韧链路命中 `FormulaUtility.GetOutputWeaknessDamage / WeakBreakSystem`，充能链路命中 `DamageElement.RecoverSP / RecoverSPArgs / SPSystem`，Workbench 显示 `应用入口候选 x/y`，但方法体、覆盖顺序、单位和触发条件仍未确认。
 - 已完成：阶段 5-8AT，在 `runtimeApplicationTraceEvidence` 下新增 `nativeMethodSymbolEvidence` 与三链 `nativeMethodSymbols`；当前确认 27 个目标 IL2CPP 原生入口可从 `script.json` 定位到地址/签名，并由 `il2cpp.h` 字段布局和 `stringliteral.json` 字符串交叉支撑，Workbench 显示 `原生入口 x/y`；但 C# 方法体、IDA/Ghidra 伪代码、运行时调用顺序、单位和触发条件仍未确认。
 - 已完成：阶段 5-8AU，在 `runtimeApplicationTraceEvidence` 下新增 `nativeDisassemblyEvidence`，从 TC `GameAssembly.dll` 提取 7 个目标函数反汇编片段；当前已确认 `DamageElement.Parse` 会把 `recoverSP/petRecoverSP/recoverInterval` 复制进运行时字段，`DamageElement.RecoverSP` 会用 `m_recoverSP` 门控充能路径，`SPSystem.RecoverSP` 中 `delta` 参与资源更新，Workbench 显示 `反汇编片段 x/y`；但 `FormulaUtility` 间接调用、削韧 transmit type、单位和共享规则仍未确认。
-- 下一步：阶段 5-8AV，围绕目标 RVA 建立间接调用目标、关键字段偏移和 transmit enum/type 映射，优先把充能链路拆成可测试公式探针，再继续确认 `formulaParamValues`、`skillsub_ele_value.valueParam`、`weakBreakDamageRate`、`recoverSP/petRecoverSP/recoverInterval` 的实际应用顺序和单位。
+- 已完成：阶段 5-8AV，新增 `selfEnergyRuntimeFormulaProbe` / `runtimeSelfEnergyFormulaProbe`，把 `DamageElement.Parse -> DamageElement.RecoverSP -> SPSystem.RecoverSP` 的字段复制、`m_recoverSP > 0` 门控、`delta` 更新路径和 raw/per-10000 单位假设做成未应用探针；当前 action-level、每 hit 候选和非普攻外部 DamageElement 缺口都能显示 `充能探针 x/y`，但 `baseDelta`、`delta` 最终角色、宠物共享、recoverInterval 时间基准和 recoverTagType 仍未确认。
+- 下一步：阶段 5-8AW，继续沿 `SPSystem.RecoverSP` / `SPSystem.OnTransmit` / `RecoverSPArgs` 追 `baseDelta` 与 `delta` 的构造来源、宠物分享字段、recoverInterval 节流和 recoverTagType 枚举，先把充能探针推进到可校验的 owner/share/interval 子探针。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

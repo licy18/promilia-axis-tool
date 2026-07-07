@@ -442,8 +442,13 @@ function formatChainSource(sourceEvidence) {
   if (!sourceEvidence) {
     return '无候选';
   }
+  const runtimeProbe = sourceEvidence.selfEnergyRuntimeFormulaProbe;
+  const probeText =
+    runtimeProbe?.candidateCount > 0
+      ? ` · 充能探针 ${runtimeProbe.gateOpenCount}/${runtimeProbe.candidateCount}`
+      : '';
   if (sourceEvidence.candidateCount > 0) {
-    return `${sourceEvidence.candidateCount} 个候选 ${formatElementIds(sourceEvidence.matchedElementConfigIds)}`;
+    return `${sourceEvidence.candidateCount} 个候选 ${formatElementIds(sourceEvidence.matchedElementConfigIds)}${probeText}`;
   }
   if (sourceEvidence.logicElementIds?.length > 0) {
     return `未桥接 ${formatElementIds(sourceEvidence.logicElementIds)}`;
@@ -804,12 +809,16 @@ function formatFormulaExecutionMatrixSummary(summary) {
     external?.gapsWithRuntimeNativeDisassembly > 0
       ? ` · 反汇编片段 ${external.gapsWithRuntimeNativeDisassembly}/${external.gapCount}`
       : '';
+  const selfEnergyProbeText =
+    external?.gapsWithRuntimeSelfEnergyFormulaProbe > 0
+      ? ` · 充能探针 ${external.gapsWithRuntimeSelfEnergyFormulaProbe}/${external.gapCount}`
+      : '';
   const alignment = gap?.elementSourceAlignmentSummary;
   const alignmentText =
     alignment?.gapCount > 0
       ? ` · 来源差异 ${alignment.divergentGapCount}/${alignment.gapCount}`
       : '';
-  return `执行矩阵摘要 ${summary.matrixActionCount} 动作 · ${summary.rowCount} 行 · ${summary.elementCount} element · 缩放 ${scaleRange}${perHitText}${spreadText}${hitBindingText}${gapText}${externalText}${relatedLevelText}${runtimeParameterText}${runtimeApplicationText}${nativeMethodText}${nativeDisassemblyText}${alignmentText}`;
+  return `执行矩阵摘要 ${summary.matrixActionCount} 动作 · ${summary.rowCount} 行 · ${summary.elementCount} element · 缩放 ${scaleRange}${perHitText}${spreadText}${hitBindingText}${gapText}${externalText}${relatedLevelText}${runtimeParameterText}${runtimeApplicationText}${nativeMethodText}${nativeDisassemblyText}${selfEnergyProbeText}${alignmentText}`;
 }
 
 function formatScaleRange(min, max) {

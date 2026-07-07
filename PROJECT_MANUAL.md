@@ -2575,9 +2575,6 @@ Endaxis 参考边界：
 验收结果：
 
 - `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
-- `npm run lint`：通过，0 error，16 个既有 warning。
-- `npm test -- --run`：通过，13 个测试文件、105 条测试通过。
-- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
 - `npm test -- --run`：通过，12 个测试文件、104 条测试通过。
 - `npx eslint src/simulation/projection/projectSimulationResult.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
 - `npx prettier --check src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
@@ -3722,6 +3719,43 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 阶段 5-8AV 目标：把目标 RVA 的间接调用、关键字段偏移和 transmit enum/type 值继续命名，优先把 `DamageElement.Parse -> RecoverSP -> SPSystem.RecoverSP` 的充能链路拆成可测试的运行时公式探针。
 - 若静态反汇编继续卡在间接调用，改走 Ghidra/IDA 伪代码、Capstone 脚本交叉引用或运行时 hook 采样，确认 `formulaParamValues`、`skillsub_ele_value.valueParam`、`weakBreakDamageRate` 和充能字段的实际单位。
+
+### 2026-07-08：阶段 5-8AV 充能运行时公式探针
+
+本轮完成：
+
+- 新增 `selfEnergyRuntimeFormulaProbe` / `runtimeSelfEnergyFormulaProbe`，把阶段 5-8AU 已确认的充能链路转为可测试、未应用的公式探针。
+- 探针记录 `TDamageElementParams.recoverSP/petRecoverSP/recoverInterval` 到 `DamageElement.m_recoverSP/m_petRecoverSP/m_recoverInterval` 的偏移映射：`0x12C/0x130/0x134 -> 0x240/0x244/0x248`。
+- 探针记录三段运行时链路：`DamageElement.Parse` 字段复制、`DamageElement.RecoverSP` 的 `m_recoverSP > 0` 门控、`SPSystem.RecoverSP` 的 `delta` 资源更新路径。
+- 探针为当前 raw 字段值同时给出 `raw-field` 和 `per-ten-thousand` 两种单位假设；这只是对比候选，不参与最终充能值。
+- action-level `selfEnergyChange.sourceEvidence`、每 hit `hitCandidates[].selfEnergyChange.runtimeFormulaProbe`、非普攻缺口 `externalElementBinding.runtimeSelfEnergyFormulaProbe` 都已接入同一套探针结构。
+- `externalElementBindingSummary` 新增 `runtimeSelfEnergyFormulaProbeStatuses`、`runtimeSelfEnergyFormulaProbeCandidateCount`、`runtimeSelfEnergyFormulaProbeGateOpenCount`、`gapsWithRuntimeSelfEnergyFormulaProbe`。
+- Workbench 执行矩阵摘要新增 `充能探针 x/y`，切换到重击动作时可以看到 `充能探针 1/1`。
+
+当前样例结果：
+
+- 默认普通攻击 action-level 探针：`candidateCount = 2`、`gateOpenCount = 2`、`recoverSPValues = [2700]`、`perTenThousandRecoverSPValues = [0.27]`。
+- 默认普通攻击每 hit 探针：第 1 段 `candidateCount = 2`、`gateOpenCount = 2`，仍保持 `applied = false`。
+- 非普攻外部 DamageElement 探针：`109001251` 的 `recoverSP = 5899`、`petRecoverSP = 22999`、`recoverInterval = 9999`，per-10000 候选为 `0.5899 / 2.2999 / 0.9999`。
+- 四动作缺口摘要：`gapsWithRuntimeSelfEnergyFormulaProbe = 3/3`，`runtimeSelfEnergyFormulaProbeCandidateCount = 3`，`runtimeSelfEnergyFormulaProbeGateOpenCount = 3`。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+- `npm run lint`：通过，0 error，16 个既有 warning。
+- `npm test -- --run`：通过，13 个测试文件、105 条测试通过。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
+
+当前边界：
+
+- 阶段 5-8AV 只把已确认的字段复制、门控和 `delta` 更新路径结构化为探针，不确认最终充能数值。
+- `selfEnergyRuntimeFormulaProbe.applied = false`，`selfEnergyChange.value` 仍只应用显式资源事件，不应用候选充能。
+- `baseDelta` 与 `delta` 的构造来源、`petRecoverSP` 分享规则、`recoverInterval` 的时间基准/节流逻辑、`recoverTagType` 枚举和角色/宠物归属仍未确认。
+
+下一步：
+
+- 阶段 5-8AW 目标：继续沿 `SPSystem.RecoverSP`、`SPSystem.OnTransmit`、`RecoverSPArgs` 和 `DamageElement.RecoverSP` 的反汇编追 `baseDelta/delta` 构造、共享比例、recoverInterval 节流和 recoverTagType 枚举。
+- 如果静态反汇编继续只给出片段事实，就优先做 runtime hook 采样点设计，把 `RecoverSPArgs` 字段和最终 SP 曲线按角色分别记录。
 
 ## 10. 文档维护规则
 

@@ -664,6 +664,13 @@ describe('first vertical slice simulation', () => {
           status: 'candidate-fields-found',
           candidateCount: 2,
           matchedElementConfigIds: [109001081, 109001306],
+          selfEnergyRuntimeFormulaProbe: expect.objectContaining({
+            status: 'recover-sp-runtime-probe-built-unapplied',
+            candidateCount: 2,
+            gateOpenCount: 2,
+            recoverSPValues: [2700],
+            perTenThousandRecoverSPValues: [0.27],
+          }),
           candidates: expect.arrayContaining([
             expect.objectContaining({
               elementConfigId: 109001081,
@@ -675,6 +682,42 @@ describe('first vertical slice simulation', () => {
             }),
           ]),
         },
+        runtimeFormulaProbe: expect.objectContaining({
+          status: 'recover-sp-runtime-probe-built-unapplied',
+          candidateCount: 2,
+          gateOpenCount: 2,
+          runtimeFieldMap: expect.arrayContaining([
+            expect.objectContaining({
+              field: 'recoverSP',
+              paramOffset: '0x12C',
+              runtimeOffset: '0x240',
+            }),
+          ]),
+          runtimeChainSteps: expect.arrayContaining([
+            expect.objectContaining({
+              method: 'DamageElement.Parse',
+              status: 'field-copy-confirmed',
+            }),
+            expect.objectContaining({
+              method: 'SPSystem.RecoverSP',
+              status: 'delta-update-path-confirmed-scale-unconfirmed',
+            }),
+          ]),
+          samples: expect.arrayContaining([
+            expect.objectContaining({
+              elementConfigId: 109001081,
+              recoverSP: 2700,
+              gateOpen: true,
+              scaledCandidates: expect.objectContaining({
+                perTenThousand: expect.objectContaining({
+                  recoverSP: 0.27,
+                  recoverInterval: 0.9999,
+                }),
+              }),
+            }),
+          ]),
+          applied: false,
+        }),
         formulaBreakdown: {
           status: 'candidate-fields-found-charge-formula-unmapped',
           unappliedLayerKeys: [
@@ -783,6 +826,12 @@ describe('first vertical slice simulation', () => {
         status: 'candidate-fields-found-formula-unmapped',
         candidateCount: 2,
         recoverSPValues: [2700],
+        runtimeFormulaProbe: expect.objectContaining({
+          status: 'recover-sp-runtime-probe-built-unapplied',
+          candidateCount: 2,
+          gateOpenCount: 2,
+          perTenThousandRecoverSPValues: [0.27],
+        }),
         applied: false,
       }),
       status: 'per-hit-candidate-fields-found-formula-unapplied',
@@ -1677,6 +1726,12 @@ describe('first vertical slice simulation', () => {
           ],
           runtimeNativeDisassemblyFunctionCount: 7,
           gapsWithRuntimeNativeDisassembly: 3,
+          runtimeSelfEnergyFormulaProbeStatuses: [
+            'recover-sp-runtime-probe-built-unapplied',
+          ],
+          runtimeSelfEnergyFormulaProbeCandidateCount: 3,
+          runtimeSelfEnergyFormulaProbeGateOpenCount: 3,
+          gapsWithRuntimeSelfEnergyFormulaProbe: 3,
           applied: false,
         }),
         elementSourceAlignmentSummary: expect.objectContaining({
@@ -1813,6 +1868,31 @@ describe('first vertical slice simulation', () => {
                 'SPSystem.RecoverSP@0x1483F40',
                 'WeakBreakSystem.OnTransmit@0x14C05A0',
               ]),
+              runtimeSelfEnergyFormulaProbeStatuses: [
+                'recover-sp-runtime-probe-built-unapplied',
+              ],
+              runtimeSelfEnergyFormulaProbeCandidateCount: 1,
+              runtimeSelfEnergyFormulaProbeGateOpenCount: 1,
+              runtimeSelfEnergyFormulaProbe: expect.objectContaining({
+                status: 'recover-sp-runtime-probe-built-unapplied',
+                sourceStatus: 'external-damage-element-candidates',
+                candidateCount: 1,
+                gateOpenCount: 1,
+                recoverSPValues: [5899],
+                petRecoverSPValues: [22999],
+                recoverIntervals: [9999],
+                perTenThousandRecoverSPValues: [0.5899],
+                perTenThousandPetRecoverSPValues: [2.2999],
+                perTenThousandRecoverIntervals: [0.9999],
+                samples: expect.arrayContaining([
+                  expect.objectContaining({
+                    elementConfigId: 109001251,
+                    recoverSP: 5899,
+                    gateOpen: true,
+                  }),
+                ]),
+                applied: false,
+              }),
               runtimeApplicationTraceEvidence: expect.objectContaining({
                 status:
                   'runtime-application-entrypoints-found-native-disassembly-snippets',
