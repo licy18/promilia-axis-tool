@@ -8505,6 +8505,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把“排轴动作编辑 -> 运行模拟 -> 资源曲线/日志/详情查看 -> 回到动作修改”的主操作闭环继续压实成完整可用流程，重点处理入口和跳转，不再扩展局部状态文案。
 
+### 2026-07-09：UI 主流程能力块 - State Curve Flow Entrypoints
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 时间轴里的已应用 runtime 状态点点击入口接入 Workbench 主流程 action，不再绕过 `workbenchFlowController` 直接改本地选择状态。
+- 分析面板的状态曲线列表、相邻点导航和同帧分组切换，在目标为 runtime 状态点时接入同一套主流程 action；候选、采样、占位点仍保留原本的本地曲线选择行为。
+- `select-runtime-state-point` action 可以携带 `preserveStateCurveFilters`，让从状态曲线进入运行点时保留当前曲线浏览范围，只改变运行焦点。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- flow controller 单元测试覆盖 runtime 状态点 action 的 `preserveStateCurveFilters` 透传到 runtime flow plan。
+- Workbench 页面测试确认时间轴 runtime 状态点点击会发出 `select-runtime-state-point` 主流程 action，并继续保持原有状态曲线导航范围。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowController.test.js src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、65 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、183 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把主流程 action 的结果和失败状态收敛到 Workbench 层，便于后续做完整的运行回看/回改闭环，而不是继续扩展局部提示文案。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

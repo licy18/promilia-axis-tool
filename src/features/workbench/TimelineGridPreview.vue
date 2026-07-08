@@ -554,6 +554,9 @@ import {
   createStateCurveFrameGroupKey,
   createStateCurvePointId,
 } from './stateCurvePointIdentity';
+import {
+  createWorkbenchRuntimeStatePointFlowAction,
+} from './workbenchMainFlowActions';
 
 const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
@@ -721,6 +724,7 @@ const emit = defineEmits([
   'update-action-duration',
   'update-action-lane',
   'select-state-curve-point',
+  'dispatch-flow-action',
   'update-state-curve-layer-filter',
   'update-state-curve-track-filter',
   'update-state-curve-focus-mode',
@@ -1545,7 +1549,25 @@ function selectCandidateFrameGroupByMarker(marker) {
 }
 
 function selectStateCurveMarker(marker) {
+  if (isRuntimeStateCurveMarker(marker)) {
+    emit(
+      'dispatch-flow-action',
+      createWorkbenchRuntimeStatePointFlowAction({
+        source: 'state-curve-point',
+        actionId: marker.actionId,
+        statePointId: marker.statePointId,
+        payload: {
+          preserveStateCurveFilters: true,
+        },
+      })
+    );
+    return;
+  }
   emit('select-state-curve-point', marker.statePointId);
+}
+
+function isRuntimeStateCurveMarker(marker) {
+  return marker?.layerKey === 'applied';
 }
 
 function selectStateCurvePointForCandidateFrame(frame) {

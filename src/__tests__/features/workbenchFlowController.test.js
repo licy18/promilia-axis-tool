@@ -254,6 +254,9 @@ describe('workbench flow controller', () => {
     controller.dispatch({
       kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_STATE_POINT,
       statePointId: 'point-direct',
+      payload: {
+        preserveStateCurveFilters: true,
+      },
     });
     controller.dispatch({
       kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT,
@@ -305,6 +308,7 @@ describe('workbench flow controller', () => {
         payload: {
           statePointId: 'point-direct',
           source: 'runtime-state-point',
+          preserveStateCurveFilters: true,
         },
       },
       {

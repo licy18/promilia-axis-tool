@@ -63,11 +63,7 @@ export function createWorkbenchFlowController(handlers = {}) {
           handlerKey:
             WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_STATE_POINT,
           flowAction,
-          payload: {
-            actionId: flowAction.actionId,
-            statePointId: flowAction.statePointId,
-            source: flowAction.source,
-          },
+          payload: createRuntimeStatePointFocusPayload(flowAction),
         });
       }
 
@@ -168,6 +164,7 @@ export function createWorkbenchFlowPlanHandlers({
     [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_STATE_POINT]: ({
       statePointId,
       source,
+      preserveStateCurveFilters = false,
     } = {}) =>
       applyRuntimeFlowPlan(
         createPlan(
@@ -176,6 +173,7 @@ export function createWorkbenchFlowPlanHandlers({
           {
             statePointId,
             source: source || 'runtime-state-point',
+            preserveStateCurveFilters,
           }
         )
       ),
@@ -248,6 +246,19 @@ function createRuntimeActionFocusPayload(flowAction) {
     actionId: payload.actionId || flowAction?.actionId || '',
     statePointId: payload.statePointId || flowAction?.statePointId || '',
     source: payload.source || flowAction?.source || '',
+  };
+}
+
+function createRuntimeStatePointFocusPayload(flowAction) {
+  const payload =
+    flowAction?.payload && typeof flowAction.payload === 'object'
+      ? { ...flowAction.payload }
+      : {};
+  return {
+    ...payload,
+    actionId: flowAction?.actionId || payload.actionId || '',
+    statePointId: flowAction?.statePointId || payload.statePointId || '',
+    source: flowAction?.source || payload.source || '',
   };
 }
 

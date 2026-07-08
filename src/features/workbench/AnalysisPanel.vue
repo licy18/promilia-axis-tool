@@ -942,7 +942,10 @@ import {
   WORKBENCH_FLOW_ACTION_KINDS,
   createWorkbenchFlowAction,
 } from './workbenchFlowModel';
-import { createWorkbenchRuntimeResultFlowAction } from './workbenchMainFlowActions';
+import {
+  createWorkbenchRuntimeResultFlowAction,
+  createWorkbenchRuntimeStatePointFlowAction,
+} from './workbenchMainFlowActions';
 
 const CANDIDATE_CHART_COLORS = ['#f2b366', '#79c7b9', '#a6b7ff'];
 const candidateChartGridLines = [25, 50, 75];
@@ -1254,6 +1257,12 @@ const threeValueCalculatorDiagnosticRows = computed(() =>
 );
 const runtimeStatePointContexts = computed(() =>
   createRuntimeStatePointContexts(props.runtimeProjection)
+);
+const runtimeStatePointIds = computed(
+  () =>
+    new Set(
+      runtimeStatePointContexts.value.map(context => context.statePointId)
+    )
 );
 const runtimeTraceByActionId = computed(() => {
   const groups = new Map();
@@ -1938,7 +1947,7 @@ function createStateCurveVisiblePointRows(track, visibleLayers, trackIndex) {
 }
 
 function selectStateCurvePoint(point) {
-  emit('select-state-curve-point', point.statePointId);
+  selectStateCurvePointFromMainFlow(point, 'analysis-state-curve');
 }
 
 function getActionResultRuntimeTrace(entry) {
@@ -2654,7 +2663,7 @@ function selectAdjacentStateCurvePoint(direction) {
       selectedStateCurveNavigationIndex.value + offset
     ];
   if (nextPoint) {
-    emit('select-state-curve-point', nextPoint.statePointId);
+    selectStateCurvePointFromMainFlow(nextPoint, 'analysis-state-curve-nav');
   }
 }
 
@@ -2664,7 +2673,31 @@ function formatStateCurveNavigationPosition() {
 }
 
 function selectStateCurveFrameGroupPoint(point) {
+  selectStateCurvePointFromMainFlow(point, 'analysis-state-curve-frame-group');
+}
+
+function selectStateCurvePointFromMainFlow(point, source) {
+  if (!point?.statePointId) {
+    return;
+  }
+  if (isRuntimeStateCurvePoint(point)) {
+    dispatchAnalysisFlowAction(
+      createWorkbenchRuntimeStatePointFlowAction({
+        source,
+        actionId: point.actionId,
+        statePointId: point.statePointId,
+        payload: {
+          preserveStateCurveFilters: true,
+        },
+      })
+    );
+    return;
+  }
   emit('select-state-curve-point', point.statePointId);
+}
+
+function isRuntimeStateCurvePoint(point) {
+  return runtimeStatePointIds.value.has(point?.statePointId);
 }
 
 function formatStateCurveFrameGroupOption(point) {

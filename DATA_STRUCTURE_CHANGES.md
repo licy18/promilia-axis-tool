@@ -18188,3 +18188,48 @@ data-flow-runtime-focus-source
 - `npm run test -- --run src/__tests__/features/TimelineGridPreview.test.js src/__tests__/views/Workbench.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，3 个测试文件、60 条测试。
 - `npm run test -- --run`：通过，33 个测试文件、183 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 231. UI 主流程能力块：State Curve Flow Entrypoints
+
+### 231.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果，只扩展 Workbench UI flow action 的路由合同。
+
+`select-runtime-state-point` action 的 `payload` 可以携带：
+
+```js
+{
+  preserveStateCurveFilters: true
+}
+```
+
+`workbenchFlowController` 在处理 `SELECT_RUNTIME_STATE_POINT` 时会把该字段透传给 `createRuntimePointFocusPlan`，使状态曲线入口可以聚焦运行点但保留当前曲线层/轨筛选。
+
+`TimelineGridPreview` 新增 `dispatch-flow-action` 输出。点击已应用 runtime 状态点时，组件发出：
+
+```js
+{
+  kind: 'select-runtime-state-point',
+  source: 'state-curve-point',
+  statePointId,
+  payload: {
+    preserveStateCurveFilters: true
+  }
+}
+```
+
+`AnalysisPanel` 的状态曲线列表、相邻点导航和同帧分组切换增加 runtime 点识别：当目标 `statePointId` 属于 runtime projection 时走 `select-runtime-state-point` 主流程 action；非 runtime 候选/采样/占位点继续使用原有 `select-state-curve-point` 本地选择事件。
+
+### 231.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、localStorage 草稿结构或任何游戏数据表结构。
+
+该变化只影响 Workbench UI 主流程 action 的入口路由；`simLog`、`stateCurves`、资源曲线、summary 和三值数值结果不变。
+
+### 231.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowController.test.js`，确认 `SELECT_RUNTIME_STATE_POINT` 可以把 `preserveStateCurveFilters` 送入 runtime point focus plan。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认时间轴 runtime 状态点点击发出主流程 action，并保持原有状态曲线导航范围。
+- `npm run test -- --run src/__tests__/features/workbenchFlowController.test.js src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、65 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、183 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

@@ -142,6 +142,7 @@
           :timeline-diagnostics="timelineDiagnostics"
           @select-action="selectAction"
           @select-state-curve-point="selectStateCurvePoint"
+          @dispatch-flow-action="dispatchWorkbenchFlowAction"
           @update-state-curve-layer-filter="updateStateCurveLayerFilter"
           @update-state-curve-track-filter="updateStateCurveTrackFilter"
           @update-state-curve-focus-mode="updateStateCurveFocusMode"
@@ -294,6 +295,9 @@ import { createWorkbenchFlowRuntimeScopeState } from '../features/workbench/work
 import {
   createWorkbenchFlowModel,
 } from '../features/workbench/workbenchFlowModel';
+import {
+  createWorkbenchRuntimeStatePointFlowAction,
+} from '../features/workbench/workbenchMainFlowActions';
 import {
   createRuntimeStatePointContexts,
   findFirstRuntimeStatePointForAction,
@@ -1462,11 +1466,13 @@ function isRuntimeStatePointId(pointId) {
 }
 
 function focusRuntimeStateCurvePoint(pointId) {
-  workbenchFlowRuntime.applyRuntimeFlowPlan(
-    workbenchFlowPlanController.createRuntimePointFocusPlan({
-      statePointId: pointId,
+  dispatchWorkbenchFlowAction(
+    createWorkbenchRuntimeStatePointFlowAction({
       source: 'state-curve-point',
-      preserveStateCurveFilters: true,
+      statePointId: pointId,
+      payload: {
+        preserveStateCurveFilters: true,
+      },
     })
   );
 }

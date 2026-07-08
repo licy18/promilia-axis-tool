@@ -15,6 +15,7 @@ import EventLogPanel from '../../features/workbench/EventLogPanel.vue';
 import ResourceMonitorPanel from '../../features/workbench/ResourceMonitorPanel.vue';
 import RuntimeSelectedDetailPanel from '../../features/workbench/RuntimeSelectedDetailPanel.vue';
 import PropertiesPanel from '../../features/workbench/PropertiesPanel.vue';
+import TimelineGridPreview from '../../features/workbench/TimelineGridPreview.vue';
 import WorkbenchFlowPanel from '../../features/workbench/WorkbenchFlowPanel.vue';
 import Workbench from '../../views/Workbench.vue';
 
@@ -680,6 +681,16 @@ describe('Workbench view', () => {
     ).not.toContain('selected');
     await stateTimelineMarkers[0].trigger('click');
     await nextTick();
+    expect(
+      getLastDispatchedFlowAction(wrapper, TimelineGridPreview)
+    ).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'state-curve-point',
+      statePointId: appliedStatePointId,
+      payload: {
+        preserveStateCurveFilters: true,
+      },
+    });
     expect(
       wrapper
         .find(
