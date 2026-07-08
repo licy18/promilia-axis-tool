@@ -9449,6 +9449,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：基于统一 command surface 检查剩余直接创建 flow action 的 UI 入口，优先收束真正影响“编辑 -> 运行 -> 选择结果 -> 回改”的主路径。
 
+### 2026-07-09：UI 主流程能力块 - Edit Source Actions Consume Command Surface
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `createWorkbenchMainFlowCommandSurface()` 新增 `createFocusEditSourceFlowAction()`，用于统一生成回到动作编辑来源的 flow action。
+- `AnalysisPanel` 的动作结果来源定位和最近编辑来源定位改为优先通过页面级 `mainFlowCommandSurface` 创建 `focus-edit-source` action。
+- 分析面板内“运行结果 -> 编辑来源 -> 回到动作修改”的主路径 action 来源与 runtime selection/focus/return 继续汇合到同一 command surface。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- main flow action 单测覆盖 command surface 的 edit source action 工厂。
+- Workbench 页面测试确认 AnalysisPanel 的编辑来源定位仍能分发并回到动作编辑焦点。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、79 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、214 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查剩余 UI 主路径是否仍绕过 `mainFlowCommandSurface`，优先处理会影响编辑、运行结果选择和回改闭环的入口，而不是扩展局部提示。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

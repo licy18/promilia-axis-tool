@@ -648,6 +648,28 @@ describe('workbench main flow actions', () => {
       statePointId: 'result-state',
       canRun: true,
     });
+    expect(
+      surface.createFocusEditSourceFlowAction({
+        source: 'analysis-edit-source',
+        actionId: 'edit-action',
+        fieldKey: 'level',
+        payload: {
+          actionId: 'edit-action',
+          fieldKey: 'level',
+        },
+        enabled: true,
+      })
+    ).toMatchObject({
+      kind: 'focus-edit-source',
+      source: 'analysis-edit-source',
+      actionId: 'edit-action',
+      fieldKey: 'level',
+      payload: {
+        actionId: 'edit-action',
+        fieldKey: 'level',
+      },
+      canRun: true,
+    });
   });
 
   it('creates runtime point and result focus actions with the same main flow factory', () => {

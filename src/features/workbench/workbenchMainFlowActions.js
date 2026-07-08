@@ -268,6 +268,16 @@ export function createWorkbenchMainFlowCommandSurface({
     createWorkbenchRuntimeStatePointFlowAction(options);
   const createRuntimeResultFlowAction = (options = {}) =>
     createWorkbenchRuntimeResultFlowAction(options);
+  const createFocusEditSourceFlowAction = (options = {}) =>
+    createWorkbenchFlowAction({
+      kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_EDIT_SOURCE,
+      source: options.source ?? '',
+      actionId: options.actionId ?? '',
+      fieldKey: options.fieldKey ?? '',
+      payload: options.payload ?? null,
+      enabled: options.enabled,
+      disabledReason: options.disabledReason ?? 'missing-edit-source',
+    });
 
   return {
     source,
@@ -292,6 +302,7 @@ export function createWorkbenchMainFlowCommandSurface({
     createRuntimeReviewFlowAction,
     createRuntimeStatePointFlowAction,
     createRuntimeResultFlowAction,
+    createFocusEditSourceFlowAction,
   };
 }
 
