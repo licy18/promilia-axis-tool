@@ -1734,6 +1734,71 @@ describe('Workbench view', () => {
         .text()
     ).toBe('结果已定位');
 
+    await wrapper
+      .find('[data-testid="workbench-add-resource-action"]')
+      .trigger('click');
+    await nextTick();
+
+    const alternateRuntimePoint = wrapper
+      .findAll('[data-testid="workbench-runtime-resource-chart-point"]')
+      .find(
+        point =>
+          point.attributes('data-state-point-id') &&
+          point.attributes('data-state-point-id') !== feedbackStatePointId
+      );
+    expect(alternateRuntimePoint).toBeTruthy();
+    const alternateStatePointId = alternateRuntimePoint.attributes(
+      'data-state-point-id'
+    );
+
+    await alternateRuntimePoint.trigger('click');
+    await nextTick();
+
+    const unfocusedActionEditFeedback = wrapper.find(
+      '[data-testid="workbench-action-edit-feedback"]'
+    );
+    expect(unfocusedActionEditFeedback.attributes('data-result-focused')).toBe(
+      'false'
+    );
+    expect(
+      unfocusedActionEditFeedback.attributes('data-result-focus-status')
+    ).toBe('available');
+    expect(
+      unfocusedActionEditFeedback
+        .find('[data-testid="workbench-action-edit-feedback-result-status"]')
+        .text()
+    ).toBe('结果未定位');
+    const jumpBackButton = unfocusedActionEditFeedback.find(
+      '[data-testid="workbench-action-edit-feedback-result-focus"]'
+    );
+    expect(jumpBackButton.attributes('disabled')).toBeUndefined();
+    expect(jumpBackButton.text()).toBe('定位结果');
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-runtime-resource-chart-point"][data-state-point-id="${alternateStatePointId}"]`
+        )
+        .attributes('data-selected')
+    ).toBe('true');
+
+    await jumpBackButton.trigger('click');
+    await nextTick();
+
+    const jumpedBackActionEditFeedback = wrapper.find(
+      '[data-testid="workbench-action-edit-feedback"]'
+    );
+    expect(jumpedBackActionEditFeedback.attributes('data-result-focused')).toBe(
+      'true'
+    );
+    expect(
+      jumpedBackActionEditFeedback.attributes('data-result-focus-status')
+    ).toBe('focused');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(feedbackStatePointId);
+
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     await nextTick();
 

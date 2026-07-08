@@ -12165,3 +12165,43 @@ data-testid="workbench-action-edit-feedback-result-status"
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DK 应继续完善结果定位体验，优先让反馈条在用户选中其他结果点后清楚标记为未定位，并保留一键回到最近编辑结果点的路径。
+
+## 144. 阶段 5-8DK：最近编辑结果回跳路径
+
+阶段目标：
+
+- 验证并固定最近编辑反馈条在用户切换到其他三值结果点后的未定位状态和回跳能力。
+
+### 144.1 数据结构变化
+
+本阶段不新增字段。
+
+继续复用阶段 5-8DJ 的派生状态：
+
+```js
+resultFocused
+resultFocusStatus
+resultFocusLabel
+runtimeStatePointId
+runtimeDeltaCount
+```
+
+这些字段仍只存在于 `AnalysisPanel` 运行时派生中，不写入 localStorage，不属于项目保存 schema。
+
+### 144.2 验证路径
+
+当前测试覆盖：
+
+- 最近编辑反馈条处于 `focused / 结果已定位`。
+- 新增资源动作制造另一个 runtime state point。
+- 选择资源曲线的其他 state point 后，最近编辑反馈条变为 `available / 结果未定位`。
+- `workbench-action-edit-feedback-result-focus` 恢复可用并显示 `定位结果`。
+- 点击该按钮后，运行详情回到最近编辑反馈条携带的 runtime state point。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DL 应继续完善 Workbench 主流程体验，优先减少最近编辑反馈、动作结果行、贡献拆分之间的重复信息。
