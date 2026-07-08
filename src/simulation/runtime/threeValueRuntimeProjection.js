@@ -1,0 +1,539 @@
+import { compareThreeValueGenerationDeltas as compareStandardThreeValueGenerationDeltas } from '../generation/threeValueGenerationLayer';
+import { summarizeThreeValueCalculators } from '../threeValueCalculatorAdapters';
+
+export function createThreeValueRuntimeProjection({
+  scenario,
+  threeValueGenerationLayer,
+}) {
+  const appliedDeltas = createThreeValueRuntimeAppliedDeltas(
+    threeValueGenerationLayer
+  );
+  const enemyStateCurve = createThreeValueRuntimeEnemyStateCurve({
+    scenario,
+    appliedDeltas,
+  });
+  const selfEnergyCurveByActor = createThreeValueRuntimeSelfEnergyCurveByActor({
+    scenario,
+    appliedDeltas,
+  });
+  const simLog = createThreeValueRuntimeSimLog(appliedDeltas);
+  const summary = summarizeThreeValueRuntimeProjection({
+    threeValueGenerationLayer,
+    appliedDeltas,
+    enemyStateCurve,
+    selfEnergyCurveByActor,
+    simLog,
+  });
+
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-runtime-projection-from-three-value-generation-layer',
+    status:
+      appliedDeltas.length > 0
+        ? 'runtime-projection-ready-from-generation-layer'
+        : 'runtime-projection-ready-no-applied-deltas',
+    inputContractName:
+      threeValueGenerationLayer?.contract?.name ??
+      'Action -> Hit -> ThreeValueDelta',
+    appliedOnly: true,
+    enemyStateCurve,
+    selfEnergyCurveByActor,
+    simLog,
+    summary,
+    applied: true,
+  };
+}
+
+function createThreeValueRuntimeAppliedDeltas(threeValueGenerationLayer) {
+  return [...(threeValueGenerationLayer?.deltas ?? [])]
+    .filter(delta => delta.applied)
+    .sort(compareStandardThreeValueGenerationDeltas);
+}
+
+function createThreeValueRuntimeEnemyStateCurve({ scenario, appliedDeltas }) {
+  const points = appliedDeltas
+    .filter(delta =>
+      ['enemyHpDamage', 'enemyToughnessDamage'].includes(delta.trackKey)
+    )
+    .map((delta, index) => createThreeValueRuntimePoint(delta, index));
+  const hpDelta = sumThreeValueRuntimeDeltas(points, 'hpDelta');
+  const toughnessDelta = sumThreeValueRuntimeDeltas(points, 'toughnessDelta');
+  const baseline = createThreeValueRuntimeEnemyBaseline(scenario);
+  const stateMetrics = {
+    hp: createThreeValueRuntimeStateMetric({
+      key: 'hp',
+      label: '敌人 HP',
+      valueUnit: 'hp',
+      baseline: baseline.hp,
+      delta: hpDelta,
+      deltaDirection: 'decrease',
+      stateLabel: '剩余',
+    }),
+    toughness: createThreeValueRuntimeStateMetric({
+      key: 'toughness',
+      label: '敌人韧性',
+      valueUnit: 'toughness',
+      baseline: baseline.toughness,
+      delta: toughnessDelta,
+      deltaDirection: 'decrease',
+      stateLabel: '剩余',
+    }),
+  };
+
+  return {
+    sourceKind: 'three-value-generation-layer-applied-enemy-deltas',
+    status:
+      points.length > 0
+        ? 'enemy-state-curve-ready-from-applied-deltas'
+        : 'enemy-state-curve-ready-no-applied-deltas',
+    pointCount: points.length,
+    frameMin: minNumber(points.map(point => point.frameIndex)),
+    frameMax: maxNumber(points.map(point => point.frameIndex)),
+    hpDelta,
+    toughnessDelta,
+    baseline,
+    stateMetrics,
+    hpInitial: stateMetrics.hp.initialValue,
+    hpRemaining: stateMetrics.hp.currentValue,
+    hpBaselineStatus: stateMetrics.hp.baselineStatus,
+    toughnessInitial: stateMetrics.toughness.initialValue,
+    toughnessRemaining: stateMetrics.toughness.currentValue,
+    toughnessBaselineStatus: stateMetrics.toughness.baselineStatus,
+    points,
+    applied: true,
+  };
+}
+
+function createThreeValueRuntimeSelfEnergyCurveByActor({
+  scenario,
+  appliedDeltas,
+}) {
+  const actorGroups = new Map(
+    scenario.actors.map((actor, index) => [
+      actor.id,
+      {
+        actorId: actor.id,
+        actorName: actor.name,
+        resource: 'sp',
+        baseline: createThreeValueRuntimeSelfEnergyBaseline(actor),
+        order: index,
+        delta: 0,
+        pointCount: 0,
+        points: [],
+      },
+    ])
+  );
+  const selfEnergyDeltas = appliedDeltas.filter(
+    delta => delta.trackKey === 'selfEnergyChange'
+  );
+
+  for (const [index, delta] of selfEnergyDeltas.entries()) {
+    const actorId = delta.actorId ?? 'unknown';
+    if (!actorGroups.has(actorId)) {
+      actorGroups.set(actorId, {
+        actorId,
+        actorName: delta.actorName ?? '未知角色',
+        resource: delta.valueUnit ?? 'sp',
+        baseline: createThreeValueRuntimeSelfEnergyBaseline(null),
+        order: actorGroups.size,
+        delta: 0,
+        pointCount: 0,
+        points: [],
+      });
+    }
+    const group = actorGroups.get(actorId);
+    const point = createThreeValueRuntimePoint(delta, index);
+    group.points.push(point);
+    group.pointCount += 1;
+    group.delta = roundCurveValue(
+      group.delta + (numberOrNull(point.energyDelta) ?? 0)
+    );
+    group.resource = point.valueUnit ?? group.resource;
+  }
+
+  return [...actorGroups.values()]
+    .map(group => ({
+      actorId: group.actorId,
+      actorName: group.actorName,
+      resource: group.resource,
+      delta: roundCurveValue(group.delta),
+      baseline: group.baseline,
+      stateMetric: createThreeValueRuntimeStateMetric({
+        key: 'selfEnergy',
+        label: '自身能量',
+        valueUnit: group.resource,
+        baseline: group.baseline,
+        delta: roundCurveValue(group.delta),
+        deltaDirection: 'increase',
+        stateLabel: '当前',
+      }),
+      pointCount: group.pointCount,
+      points: group.points.sort(compareThreeValueRuntimePoints),
+      applied: true,
+      order: group.order,
+    }))
+    .sort((left, right) => left.order - right.order)
+    .map(({ order, ...group }) => group);
+}
+
+function createThreeValueRuntimeSimLog(appliedDeltas) {
+  return appliedDeltas.map((delta, index) => ({
+    eventType: 'THREE_VALUE_DELTA_APPLIED',
+    sequenceIndex: index,
+    sourceDeltaId: delta.id,
+    timeMs: delta.timeMs,
+    frameIndex: delta.frameIndex,
+    frameLabel: delta.frameLabel,
+    actionId: delta.actionId,
+    actionName: delta.actionName,
+    actorId: delta.actorId,
+    actorName: delta.actorName,
+    hitKey: delta.hitKey,
+    hitIndex: delta.hitIndex,
+    trackKey: delta.trackKey,
+    layerKey: delta.layerKey,
+    delta: normalizeThreeValueRuntimeNumber(delta.delta),
+    hpDelta: normalizeThreeValueRuntimeNumber(delta.hpDelta),
+    toughnessDelta: normalizeThreeValueRuntimeNumber(delta.toughnessDelta),
+    energyDelta: normalizeThreeValueRuntimeNumber(delta.energyDelta),
+    calculator: delta.calculator ?? null,
+    calculatorKey: delta.calculatorKey ?? delta.calculator?.key ?? null,
+    calculatorVersion:
+      numberOrNull(delta.calculatorVersion ?? delta.calculator?.version) ??
+      null,
+    calculationKind: delta.calculationKind ?? delta.calculator?.kind ?? null,
+    calculationStatus:
+      delta.calculationStatus ?? delta.calculator?.status ?? null,
+    calculationReplaceable:
+      typeof delta.calculationReplaceable === 'boolean'
+        ? delta.calculationReplaceable
+        : (delta.calculator?.replaceable ?? null),
+    confidence: delta.confidence,
+    stateCurveSequenceIndex: delta.stateCurveSequenceIndex,
+    applied: true,
+  }));
+}
+
+function createThreeValueRuntimePoint(delta, sequenceIndex) {
+  return {
+    sourceKind: 'three-value-generation-layer-applied-delta',
+    sourceDeltaId: delta.id,
+    sequenceIndex,
+    stateCurveSequenceIndex: delta.stateCurveSequenceIndex,
+    actionId: delta.actionId,
+    actionName: delta.actionName,
+    actionType: delta.actionType,
+    actorId: delta.actorId,
+    actorName: delta.actorName,
+    hitKey: delta.hitKey,
+    hitIndex: delta.hitIndex,
+    hitSkillId: delta.hitSkillId,
+    frameIndex: delta.frameIndex,
+    frameLabel: delta.frameLabel,
+    timeMs: delta.timeMs,
+    trackKey: delta.trackKey,
+    trackLabel: delta.trackLabel,
+    layerKey: delta.layerKey,
+    valueUnit: delta.valueUnit,
+    delta: normalizeThreeValueRuntimeNumber(delta.delta),
+    hpDelta: normalizeThreeValueRuntimeNumber(delta.hpDelta),
+    toughnessDelta: normalizeThreeValueRuntimeNumber(delta.toughnessDelta),
+    energyDelta: normalizeThreeValueRuntimeNumber(delta.energyDelta),
+    calculator: delta.calculator ?? null,
+    calculatorKey: delta.calculatorKey ?? delta.calculator?.key ?? null,
+    calculatorVersion:
+      numberOrNull(delta.calculatorVersion ?? delta.calculator?.version) ??
+      null,
+    calculationKind: delta.calculationKind ?? delta.calculator?.kind ?? null,
+    calculationStatus:
+      delta.calculationStatus ?? delta.calculator?.status ?? null,
+    calculationReplaceable:
+      typeof delta.calculationReplaceable === 'boolean'
+        ? delta.calculationReplaceable
+        : (delta.calculator?.replaceable ?? null),
+    confidence: delta.confidence,
+    sourceStatus: delta.sourceStatus,
+    resultStatus: delta.resultStatus,
+    sourceIds: delta.sourceIds,
+    applied: true,
+  };
+}
+
+function summarizeThreeValueRuntimeProjection({
+  threeValueGenerationLayer,
+  appliedDeltas,
+  enemyStateCurve,
+  selfEnergyCurveByActor,
+  simLog,
+}) {
+  const selfEnergyPointCount = selfEnergyCurveByActor.reduce(
+    (sum, actor) => sum + actor.pointCount,
+    0
+  );
+  const calculatorSummary = summarizeThreeValueCalculators(appliedDeltas);
+
+  return {
+    inputContractName:
+      threeValueGenerationLayer?.contract?.name ??
+      'Action -> Hit -> ThreeValueDelta',
+    inputDeltaCount: threeValueGenerationLayer?.deltas?.length ?? 0,
+    appliedDeltaCount: appliedDeltas.length,
+    enemyHpDelta: sumThreeValueRuntimeDeltas(appliedDeltas, 'hpDelta'),
+    enemyToughnessDelta: sumThreeValueRuntimeDeltas(
+      appliedDeltas,
+      'toughnessDelta'
+    ),
+    selfEnergyDelta: sumThreeValueRuntimeDeltas(appliedDeltas, 'energyDelta'),
+    selfEnergyActorCount: selfEnergyCurveByActor.length,
+    enemyStatePointCount: enemyStateCurve.pointCount,
+    selfEnergyPointCount,
+    enemyHpInitial: enemyStateCurve.stateMetrics?.hp?.initialValue ?? null,
+    enemyHpRemaining: enemyStateCurve.stateMetrics?.hp?.currentValue ?? null,
+    enemyHpBaselineStatus:
+      enemyStateCurve.stateMetrics?.hp?.baselineStatus ?? null,
+    enemyToughnessInitial:
+      enemyStateCurve.stateMetrics?.toughness?.initialValue ?? null,
+    enemyToughnessRemaining:
+      enemyStateCurve.stateMetrics?.toughness?.currentValue ?? null,
+    enemyToughnessBaselineStatus:
+      enemyStateCurve.stateMetrics?.toughness?.baselineStatus ?? null,
+    selfEnergyBaselineReadyActorCount: selfEnergyCurveByActor.filter(
+      actor => actor.stateMetric?.baselineConfirmed
+    ).length,
+    simLogCount: simLog.length,
+    calculatorCount: calculatorSummary.calculatorCount,
+    calculatorKeys: calculatorSummary.calculatorKeys,
+    calculatorReplaceableDeltaCount:
+      calculatorSummary.calculatorReplaceableDeltaCount,
+    calculatorStatuses: calculatorSummary.statuses,
+    calculatorSummary,
+    source: 'threeValueGenerationLayer.applied-deltas',
+    appliedOnly: true,
+    applied: true,
+  };
+}
+
+export function createSelfEnergyDeltaSummaryByActor(selfEnergyCurveByActor) {
+  return selfEnergyCurveByActor.map(actor => ({
+    actorId: actor.actorId,
+    actorName: actor.actorName,
+    resource: actor.resource,
+    delta: actor.delta,
+    currentValue: actor.stateMetric?.currentValue ?? null,
+    baselineStatus: actor.stateMetric?.baselineStatus ?? null,
+  }));
+}
+
+function createThreeValueRuntimeEnemyBaseline(scenario) {
+  const enemy = scenario?.enemy ?? {};
+  const baseHp = firstRuntimeNumber(
+    enemy.stats?.maxHp,
+    enemy.maxHp,
+    enemy.baseHp,
+    enemy.source?.enemy?.stats?.maxHp,
+    enemy.source?.enemy?.maxHp
+  );
+  const hpMultiplier = firstRuntimeNumber(enemy.hpMultiplier, 1) ?? 1;
+  const hpInitial = Number.isFinite(baseHp)
+    ? roundCurveValue(baseHp * hpMultiplier)
+    : null;
+
+  return {
+    hp: {
+      sourceKind: 'scenario-enemy-hp-baseline',
+      sourceStatus:
+        hpInitial == null
+          ? 'baseline-pending-missing-scenario-enemy-max-hp'
+          : 'baseline-derived-from-scenario-enemy-max-hp',
+      sourcePath: 'scenario.enemy.stats.maxHp * scenario.enemy.hpMultiplier',
+      initialValue: hpInitial,
+      baseValue: Number.isFinite(baseHp) ? baseHp : null,
+      multiplier: Number.isFinite(hpMultiplier) ? hpMultiplier : null,
+      valueUnit: 'hp',
+      applied: hpInitial != null,
+    },
+    toughness: {
+      sourceKind: 'scenario-enemy-toughness-baseline',
+      sourceStatus: 'baseline-pending-azpr-enemy-toughness-state',
+      sourcePath: 'pending enemy weak-break/toughness state evidence',
+      initialValue: null,
+      baseValue: null,
+      multiplier: null,
+      valueUnit: 'toughness',
+      applied: false,
+    },
+  };
+}
+
+function createThreeValueRuntimeSelfEnergyBaseline(actor) {
+  const initialValue = firstRuntimeNumber(
+    actor?.initialSp,
+    actor?.initialEnergy,
+    actor?.resourceState?.sp,
+    actor?.resources?.sp,
+    actor?.stats?.sp
+  );
+  const maxValue = firstRuntimeNumber(
+    actor?.stats?.maxSp,
+    actor?.maxSp,
+    actor?.baseAttributes?.find(item => item.key === 'MAXSP')?.value
+  );
+
+  return {
+    sourceKind: 'scenario-actor-self-energy-baseline',
+    sourceStatus:
+      initialValue == null
+        ? 'baseline-pending-azpr-initial-self-energy'
+        : 'baseline-derived-from-scenario-actor-self-energy',
+    sourcePath:
+      initialValue == null
+        ? 'pending battle start/current SP evidence'
+        : 'scenario.actor.initialSp|initialEnergy|resourceState.sp',
+    initialValue: initialValue == null ? null : roundCurveValue(initialValue),
+    maxValue: maxValue == null ? null : roundCurveValue(maxValue),
+    maxValueSourceStatus:
+      maxValue == null ? 'max-sp-missing' : 'max-sp-derived-from-actor-stats',
+    valueUnit: 'sp',
+    applied: initialValue != null,
+  };
+}
+
+function createThreeValueRuntimeStateMetric({
+  key,
+  label,
+  valueUnit,
+  baseline,
+  delta,
+  deltaDirection,
+  stateLabel,
+}) {
+  const initialValue = strictRuntimeNumberOrNull(baseline?.initialValue);
+  const normalizedDelta = normalizeThreeValueRuntimeNumber(delta) ?? 0;
+  const baselineConfirmed = Number.isFinite(initialValue);
+  const rawCurrentValue = baselineConfirmed
+    ? roundCurveValue(
+        deltaDirection === 'decrease'
+          ? initialValue - normalizedDelta
+          : initialValue + normalizedDelta
+      )
+    : null;
+  const currentValue =
+    rawCurrentValue != null && deltaDirection === 'decrease'
+      ? Math.max(0, rawCurrentValue)
+      : rawCurrentValue;
+
+  return {
+    key,
+    label,
+    stateLabel,
+    valueUnit: baseline?.valueUnit ?? valueUnit,
+    initialValue: baselineConfirmed ? initialValue : null,
+    maxValue: baseline?.maxValue ?? null,
+    delta: normalizedDelta,
+    rawCurrentValue,
+    currentValue,
+    overrunValue:
+      rawCurrentValue != null && deltaDirection === 'decrease'
+        ? Math.max(0, roundCurveValue(-rawCurrentValue))
+        : 0,
+    remainingValue: deltaDirection === 'decrease' ? currentValue : null,
+    deltaDirection,
+    baselineConfirmed,
+    baselineStatus:
+      baseline?.sourceStatus ??
+      (baselineConfirmed ? 'baseline-confirmed' : 'baseline-pending'),
+    stateStatus: baselineConfirmed
+      ? 'state-derived-from-baseline-and-applied-delta'
+      : 'state-baseline-pending',
+    sourceKind: baseline?.sourceKind ?? null,
+    sourcePath: baseline?.sourcePath ?? null,
+    baseValue: baseline?.baseValue ?? null,
+    multiplier: baseline?.multiplier ?? null,
+    applied: baselineConfirmed,
+  };
+}
+
+function firstRuntimeNumber(...values) {
+  for (const value of values) {
+    const number = strictRuntimeNumberOrNull(value);
+    if (Number.isFinite(number)) {
+      return number;
+    }
+  }
+  return null;
+}
+
+function strictRuntimeNumberOrNull(value) {
+  if (value == null || value === '') {
+    return null;
+  }
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+function sumThreeValueRuntimeDeltas(items, field) {
+  return roundCurveValue(
+    items.reduce((sum, item) => {
+      const value = numberOrNull(item[field]);
+      return sum + (Number.isFinite(value) ? value : 0);
+    }, 0)
+  );
+}
+
+function normalizeThreeValueRuntimeNumber(value) {
+  if (value == null || value === '') {
+    return null;
+  }
+  const numericValue = numberOrNull(value);
+  return Number.isFinite(numericValue) ? roundCurveValue(numericValue) : null;
+}
+
+function compareThreeValueRuntimePoints(left, right) {
+  return (
+    compareNullableTimelineNumber(left.frameIndex, right.frameIndex) ||
+    compareNullableTimelineNumber(left.timeMs, right.timeMs) ||
+    compareNullableTimelineNumber(left.sequenceIndex, right.sequenceIndex) ||
+    String(left.sourceDeltaId ?? '').localeCompare(
+      String(right.sourceDeltaId ?? '')
+    )
+  );
+}
+
+function compareNullableTimelineNumber(left, right) {
+  const leftNumber = numberOrNull(left);
+  const rightNumber = numberOrNull(right);
+  if (Number.isFinite(leftNumber) && Number.isFinite(rightNumber)) {
+    return leftNumber - rightNumber;
+  }
+  if (Number.isFinite(leftNumber)) {
+    return -1;
+  }
+  if (Number.isFinite(rightNumber)) {
+    return 1;
+  }
+  return 0;
+}
+
+function numberOrNull(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+function finiteValues(values) {
+  return values.map(numberOrNull).filter(Number.isFinite);
+}
+
+function minNumber(values) {
+  const finite = finiteValues(values);
+  return finite.length > 0 ? Math.min(...finite) : null;
+}
+
+function maxNumber(values) {
+  const finite = finiteValues(values);
+  return finite.length > 0 ? Math.max(...finite) : null;
+}
+
+function roundCurveValue(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? Number(number.toFixed(6)) : 0;
+}

@@ -6652,6 +6652,36 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 运行时层能力块：把 runtime projection 的 enemy curve、self energy curve、simLog 和 summary 进一步收束为只消费 generation layer applied deltas 的稳定模块，减少 projection 文件里的混合职责。
 - UI 主流程暂不继续细抠状态标签，等运行时层边界更稳后再做 Endaxis 式完整流程体验。
 
+### 2026-07-08：运行时层能力块 - Runtime Projection 入口模块化
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- 新增 `src/simulation/runtime/threeValueRuntimeProjection.js` 作为 runtime projection 稳定入口。
+- `projectSimulationResult()` 不再内联 runtime projection 的 enemy curve、self energy curve、simLog 和 summary 构建逻辑，而是调用 `createThreeValueRuntimeProjection()`。
+- runtime 模块只消费 `threeValueGenerationLayer.deltas[]` 中 `applied = true` 的标准 delta。
+- `createSelfEnergyDeltaSummaryByActor()` 从 projection 大文件移入 runtime 模块，让顶层 summary 继续从 runtime 输出派生。
+- projection 层现在主要负责组装 scenario、actionResultTimeline、generation layer、runtime projection 和最终 summary，减少混合职责。
+
+当前验证事实：
+
+- 独立 runtime 测试直接输入包含 applied 与 candidate 的 generation layer，确认 runtime 只把 applied delta 写入曲线和 simLog。
+- runtime 测试确认 enemy HP 剩余值、self energy actor 曲线、simLog、runtime summary 和 `selfEnergyDeltaByActor` 摘要都由标准 delta 派生。
+- 既有 simulation 回归继续证明完整结果、generation layer 和 runtime projection 行为保持不变。
+- 本阶段不新增保存字段，不追最终公式，不扩写 UI 状态提示。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/threeValueGenerationLayer.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，3 个测试文件、15 条测试。
+- `npm run test -- --run`：通过，15 个测试文件、116 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- UI 主流程能力块：在现有 runtime/generation 边界稳定后，围绕“排轴动作编辑 -> 运行模拟 -> 资源曲线监控 -> 日志/详情查看 -> 回到动作修改”推进完整可用体验。
+- 如果继续做运行时层，优先把 runtime module 的输入/输出边界文档化到架构说明，而不是补新的状态文案。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

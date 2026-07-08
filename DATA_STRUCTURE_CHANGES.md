@@ -13527,3 +13527,88 @@ src/__tests__/simulation/threeValueGenerationLayer.test.js
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一步应进入运行时层能力块，把 runtime projection 的曲线、日志和 summary 继续模块化为只消费 generation layer applied deltas 的稳定入口。
+
+## 162. 运行时层能力块：Runtime Projection 入口模块化
+
+本阶段属于运行时层。
+
+### 162.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 162.2 新增模块
+
+新增运行时入口：
+
+```text
+src/simulation/runtime/threeValueRuntimeProjection.js
+```
+
+该模块导出：
+
+```js
+createThreeValueRuntimeProjection({
+  scenario,
+  threeValueGenerationLayer
+})
+
+createSelfEnergyDeltaSummaryByActor(selfEnergyCurveByActor)
+```
+
+### 162.3 接线变化
+
+`projectSimulationResult()` 的运行时层接线从 projection 内部函数改为：
+
+```js
+createThreeValueRuntimeProjection({
+  scenario,
+  threeValueGenerationLayer
+})
+```
+
+顶层 summary 的自身能量角色摘要继续由 runtime 输出派生：
+
+```js
+createSelfEnergyDeltaSummaryByActor(
+  threeValueRuntimeProjection.selfEnergyCurveByActor
+)
+```
+
+### 162.4 Runtime 消费边界
+
+runtime projection 当前只消费 generation layer 中的 applied delta：
+
+```text
+threeValueGenerationLayer.deltas[].applied === true
+```
+
+runtime 输出仍保持：
+
+```text
+threeValueRuntimeProjection.enemyStateCurve
+threeValueRuntimeProjection.selfEnergyCurveByActor
+threeValueRuntimeProjection.simLog
+threeValueRuntimeProjection.summary
+```
+
+其中 `candidate / sampled / placeholder` delta 仍停留在 generation layer，用于来源追溯和诊断，不进入 runtime 的曲线、日志和最终 summary。
+
+### 162.5 验证
+
+新增测试：
+
+```text
+src/__tests__/simulation/threeValueRuntimeProjection.test.js
+```
+
+当前验证：
+
+- 独立 runtime 测试直接输入包含 applied 与 candidate 的 generation layer。
+- 测试确认 runtime 只把 applied delta 写入 `enemyStateCurve`、`selfEnergyCurveByActor` 和 `simLog`。
+- 测试确认 `summary.inputDeltaCount` 统计全部 generation delta，但 `summary.appliedDeltaCount`、曲线点和 simLog 只统计 applied delta。
+- 测试确认 `createSelfEnergyDeltaSummaryByActor()` 继续从 runtime actor curve 派生顶层自身能量摘要。
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/threeValueGenerationLayer.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，3 个测试文件、15 条测试。
+- `npm run test -- --run`：通过，15 个测试文件、116 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步应进入 UI 主流程能力块，围绕 Endaxis 式完整流程推进：排轴动作编辑 -> 运行模拟 -> 资源曲线监控 -> 日志/详情查看 -> 回到动作修改。
