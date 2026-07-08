@@ -8557,6 +8557,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：基于 Workbench 层 dispatch result，把运行回看、回到动作修改、刷新结果回看这条主流程的成功路径和失败回退继续收敛到一个可控闭环。
 
+### 2026-07-09：UI 主流程能力块 - Dispatch Result Flow Model Contract
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `WorkbenchFlowModel` 新增 `mainFlowDispatchResult`，把主流程 action 的 idle/handled/failed 状态、来源、handler、失败原因和目标点纳入统一模型合同。
+- Workbench 主流程工作区和 `WorkbenchFlowPanel` 改为从同一份 flow model 读取 dispatch result，不再分别依赖页面本地状态。
+- dispatch result 仍保持非可见结构状态，作为后续运行回看、回到动作修改、刷新结果回看和失败回退闭环的共同输入。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- flow model 单元测试覆盖 dispatch result 的 idle、handled、failed 三种规范化状态。
+- Workbench 页面测试确认主流程工作区和主流程面板都能消费同一份 dispatch result。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、185 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：基于 `mainFlowDispatchResult` 对运行回看/回改/刷新回看链路做统一闭环控制，优先处理真实主路径的状态转换，而不是扩展局部提示文案。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

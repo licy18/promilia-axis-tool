@@ -72,6 +72,7 @@ export function createWorkbenchFlowModel({
   runtimeOverviewActive = false,
   actionEditFocus = null,
   actionEditResultContext = null,
+  flowDispatchState = null,
 } = {}) {
   const runtimeNavigationPoints =
     createRuntimeStatePointContexts(runtimeProjection);
@@ -132,6 +133,8 @@ export function createWorkbenchFlowModel({
     editResult,
     mainFlowState,
   });
+  const mainFlowDispatchResult =
+    createWorkbenchMainFlowDispatchResult(flowDispatchState);
 
   return {
     phase,
@@ -151,6 +154,7 @@ export function createWorkbenchFlowModel({
     primaryAction,
     mainFlowState,
     mainFlowSelection,
+    mainFlowDispatchResult,
     runtimeNavigation: {
       points: runtimeNavigationPoints,
       count: runtimeNavigationPoints.length,
@@ -171,6 +175,24 @@ export function createWorkbenchFlowModel({
       }),
     },
     controls,
+  };
+}
+
+export function createWorkbenchMainFlowDispatchResult(dispatchState = null) {
+  const sequence = Number(dispatchState?.sequence ?? 0);
+  const hasResult = Number.isFinite(sequence) && sequence > 0;
+  const handled = Boolean(dispatchState?.handled);
+  return {
+    sequence: hasResult ? sequence : 0,
+    status: hasResult ? (handled ? 'handled' : 'failed') : 'idle',
+    handled,
+    hasResult,
+    kind: dispatchState?.kind ?? '',
+    source: dispatchState?.source ?? '',
+    handlerKey: dispatchState?.handlerKey ?? '',
+    reason: dispatchState?.reason ?? '',
+    actionId: dispatchState?.actionId ?? '',
+    statePointId: dispatchState?.statePointId ?? '',
   };
 }
 

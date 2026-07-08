@@ -115,11 +115,19 @@ describe('Workbench view', () => {
     ).toBe('');
     expect(mainFlowWorkspace.attributes()).toMatchObject({
       'data-main-flow-dispatch-sequence': '0',
+      'data-main-flow-dispatch-status': 'idle',
       'data-main-flow-dispatch-handled': 'false',
+      'data-main-flow-dispatch-has-result': 'false',
       'data-main-flow-dispatch-kind': '',
       'data-main-flow-dispatch-source': '',
       'data-main-flow-dispatch-handler-key': '',
       'data-main-flow-dispatch-reason': '',
+    });
+    expect(flowPanel.attributes()).toMatchObject({
+      'data-main-flow-dispatch-sequence': '0',
+      'data-main-flow-dispatch-status': 'idle',
+      'data-main-flow-dispatch-handled': 'false',
+      'data-main-flow-dispatch-kind': '',
     });
     const primaryFlow = wrapper.find('[data-testid="workbench-primary-flow"]');
     expect(primaryFlow.exists()).toBe(true);
@@ -1778,13 +1786,24 @@ describe('Workbench view', () => {
       wrapper.find('[data-testid="workbench-main-flow-workspace"]').attributes()
     ).toMatchObject({
       'data-main-flow-dispatch-sequence': '1',
+      'data-main-flow-dispatch-status': 'handled',
       'data-main-flow-dispatch-handled': 'true',
+      'data-main-flow-dispatch-has-result': 'true',
       'data-main-flow-dispatch-kind': 'open-runtime-results',
       'data-main-flow-dispatch-source': 'workbench-flow-panel',
       'data-main-flow-dispatch-handler-key': 'openRuntimeResults',
       'data-main-flow-dispatch-reason': '',
       'data-main-flow-dispatch-action-id': 'action-0001',
       'data-main-flow-dispatch-state-point-id': '',
+    });
+    expect(focusedFlowPanel.attributes()).toMatchObject({
+      'data-main-flow-dispatch-sequence': '1',
+      'data-main-flow-dispatch-status': 'handled',
+      'data-main-flow-dispatch-handled': 'true',
+      'data-main-flow-dispatch-kind': 'open-runtime-results',
+      'data-main-flow-dispatch-source': 'workbench-flow-panel',
+      'data-main-flow-dispatch-handler-key': 'openRuntimeResults',
+      'data-main-flow-dispatch-reason': '',
     });
     expect(
       wrapper
@@ -2142,7 +2161,9 @@ describe('Workbench view', () => {
       wrapper.find('[data-testid="workbench-main-flow-workspace"]').attributes()
     ).toMatchObject({
       'data-main-flow-dispatch-sequence': '1',
+      'data-main-flow-dispatch-status': 'failed',
       'data-main-flow-dispatch-handled': 'false',
+      'data-main-flow-dispatch-has-result': 'true',
       'data-main-flow-dispatch-kind': 'unsupported-flow-action',
       'data-main-flow-dispatch-source': 'test-flow-source',
       'data-main-flow-dispatch-handler-key': '',

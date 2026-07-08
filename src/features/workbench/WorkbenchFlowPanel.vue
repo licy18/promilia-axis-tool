@@ -44,6 +44,25 @@
     :data-runtime-output-status="
       workbenchFlow.contractContext.runtimeOutput.status
     "
+    :data-main-flow-dispatch-sequence="
+      workbenchFlow.mainFlowDispatchResult.sequence
+    "
+    :data-main-flow-dispatch-status="
+      workbenchFlow.mainFlowDispatchResult.status
+    "
+    :data-main-flow-dispatch-handled="
+      workbenchFlow.mainFlowDispatchResult.handled ? 'true' : 'false'
+    "
+    :data-main-flow-dispatch-kind="workbenchFlow.mainFlowDispatchResult.kind"
+    :data-main-flow-dispatch-source="
+      workbenchFlow.mainFlowDispatchResult.source
+    "
+    :data-main-flow-dispatch-handler-key="
+      workbenchFlow.mainFlowDispatchResult.handlerKey
+    "
+    :data-main-flow-dispatch-reason="
+      workbenchFlow.mainFlowDispatchResult.reason
+    "
     data-testid="workbench-flow-panel"
   >
     <div class="flow-main">

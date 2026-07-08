@@ -76,19 +76,35 @@
       :data-main-flow-selected-runtime-state-point-id="
         workbenchFlowModel.mainFlowSelection.selectedRuntimeStatePointId
       "
-      :data-main-flow-dispatch-sequence="workbenchFlowDispatchState.sequence"
+      :data-main-flow-dispatch-sequence="
+        workbenchFlowModel.mainFlowDispatchResult.sequence
+      "
+      :data-main-flow-dispatch-status="
+        workbenchFlowModel.mainFlowDispatchResult.status
+      "
       :data-main-flow-dispatch-handled="
-        workbenchFlowDispatchState.handled ? 'true' : 'false'
+        workbenchFlowModel.mainFlowDispatchResult.handled ? 'true' : 'false'
       "
-      :data-main-flow-dispatch-kind="workbenchFlowDispatchState.kind"
-      :data-main-flow-dispatch-source="workbenchFlowDispatchState.source"
+      :data-main-flow-dispatch-has-result="
+        workbenchFlowModel.mainFlowDispatchResult.hasResult ? 'true' : 'false'
+      "
+      :data-main-flow-dispatch-kind="
+        workbenchFlowModel.mainFlowDispatchResult.kind
+      "
+      :data-main-flow-dispatch-source="
+        workbenchFlowModel.mainFlowDispatchResult.source
+      "
       :data-main-flow-dispatch-handler-key="
-        workbenchFlowDispatchState.handlerKey
+        workbenchFlowModel.mainFlowDispatchResult.handlerKey
       "
-      :data-main-flow-dispatch-reason="workbenchFlowDispatchState.reason"
-      :data-main-flow-dispatch-action-id="workbenchFlowDispatchState.actionId"
+      :data-main-flow-dispatch-reason="
+        workbenchFlowModel.mainFlowDispatchResult.reason
+      "
+      :data-main-flow-dispatch-action-id="
+        workbenchFlowModel.mainFlowDispatchResult.actionId
+      "
       :data-main-flow-dispatch-state-point-id="
-        workbenchFlowDispatchState.statePointId
+        workbenchFlowModel.mainFlowDispatchResult.statePointId
       "
       data-testid="workbench-main-flow-workspace"
     >
@@ -496,6 +512,7 @@ const workbenchFlowModel = computed(() =>
     runtimeOverviewActive: runtimeOverviewActive.value,
     actionEditFocus: actionEditFocus.value,
     actionEditResultContext: actionEditResultContext.value,
+    flowDispatchState: workbenchFlowDispatchState.value,
   })
 );
 const timelineDiagnostics = computed(() =>

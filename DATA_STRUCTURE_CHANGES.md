@@ -18288,3 +18288,64 @@ data-main-flow-dispatch-state-point-id
 - `npm run test -- --run src/__tests__/views/Workbench.test.js src/__tests__/features/workbenchFlowController.test.js`：通过，2 个测试文件、58 条测试。
 - `npm run test -- --run`：通过，33 个测试文件、184 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 233. UI 主流程能力块：Dispatch Result Flow Model Contract
+
+### 233.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果，只把 Workbench UI 主流程 action 执行结果纳入 `WorkbenchFlowModel`。
+
+`createWorkbenchFlowModel` 新增可选输入：
+
+```js
+flowDispatchState
+```
+
+模型新增输出：
+
+```js
+mainFlowDispatchResult
+```
+
+当前字段：
+
+```js
+{
+  sequence,
+  status,
+  handled,
+  hasResult,
+  kind,
+  source,
+  handlerKey,
+  reason,
+  actionId,
+  statePointId
+}
+```
+
+`status` 当前取值：
+
+```text
+idle
+handled
+failed
+```
+
+`Workbench.vue` 将本地 `workbenchFlowDispatchState` 作为 `flowDispatchState` 输入传给 `createWorkbenchFlowModel`，主流程工作区改为读取 `workbenchFlowModel.mainFlowDispatchResult`。
+
+`WorkbenchFlowPanel` 新增消费 `workbenchFlow.mainFlowDispatchResult`，用于让主流程面板和主流程工作区基于同一模型合同观察 action 执行状态。
+
+### 233.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、localStorage 草稿结构或任何游戏数据表结构。
+
+该变化只影响 Workbench UI 主流程模型的运行时状态；`simLog`、`stateCurves`、资源曲线、summary 和三值数值结果不变。
+
+### 233.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖 `mainFlowDispatchResult` 的 idle、handled、failed 规范化输出。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认 Workbench 主流程工作区和 `WorkbenchFlowPanel` 消费同一份 dispatch result。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、185 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

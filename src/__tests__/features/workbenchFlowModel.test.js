@@ -335,6 +335,63 @@ describe('workbench flow model', () => {
     ).toBeNull();
   });
 
+  it('normalizes main flow dispatch result state', () => {
+    const idleModel = createWorkbenchFlowModel();
+    expect(idleModel.mainFlowDispatchResult).toMatchObject({
+      sequence: 0,
+      status: 'idle',
+      handled: false,
+      hasResult: false,
+      kind: '',
+      source: '',
+      handlerKey: '',
+      reason: '',
+    });
+
+    const handledModel = createWorkbenchFlowModel({
+      flowDispatchState: {
+        sequence: 2,
+        handled: true,
+        kind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+        source: 'workbench-flow-panel',
+        handlerKey: 'openRuntimeResults',
+        actionId: 'action-0001',
+      },
+    });
+    expect(handledModel.mainFlowDispatchResult).toMatchObject({
+      sequence: 2,
+      status: 'handled',
+      handled: true,
+      hasResult: true,
+      kind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+      source: 'workbench-flow-panel',
+      handlerKey: 'openRuntimeResults',
+      reason: '',
+      actionId: 'action-0001',
+    });
+
+    const failedModel = createWorkbenchFlowModel({
+      flowDispatchState: {
+        sequence: 3,
+        handled: false,
+        kind: 'unsupported-flow-action',
+        source: 'test-flow-source',
+        reason: 'unsupported-flow-action-kind',
+        statePointId: 'runtime-point-for-failure',
+      },
+    });
+    expect(failedModel.mainFlowDispatchResult).toMatchObject({
+      sequence: 3,
+      status: 'failed',
+      handled: false,
+      hasResult: true,
+      kind: 'unsupported-flow-action',
+      source: 'test-flow-source',
+      reason: 'unsupported-flow-action-kind',
+      statePointId: 'runtime-point-for-failure',
+    });
+  });
+
   it('describes enabled and disabled workbench flow actions', () => {
     expect(WORKBENCH_FLOW_ACTION_KINDS).toMatchObject({
       OPEN_RUNTIME_RESULTS: 'open-runtime-results',
