@@ -1,5 +1,6 @@
 import {
   WORKBENCH_FLOW_ACTION_KINDS,
+  WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS,
   createWorkbenchFlowAction,
 } from './workbenchFlowModel';
 import { createRuntimeActionFocusFlowAction } from './runtimeActionFocusFlowAction';
@@ -190,6 +191,81 @@ export function createWorkbenchRuntimeReviewFlowAction({
   });
 }
 
+export function createWorkbenchRuntimeReviewOperationFlowAction({
+  operationKind = '',
+  flowModel = null,
+  source = '',
+  target = null,
+  context = null,
+  enabled,
+} = {}) {
+  const operations = flowModel?.runtimeReviewOperations ?? null;
+  const resolvedOperationKind =
+    operationKind || operations?.primaryOperationKind || '';
+  const modelOperation = getRuntimeReviewOperationTarget({
+    operations,
+    operationKind: resolvedOperationKind,
+  });
+  const operationTarget = modelOperation ?? target ?? context;
+  const operationEnabled = enabled ?? modelOperation?.enabled;
+
+  if (
+    resolvedOperationKind ===
+    WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION
+  ) {
+    return createWorkbenchRuntimeReviewFlowAction({
+      kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+      source,
+      target: operationTarget,
+      enabled: operationEnabled,
+      disabledReason: operationTarget?.disabledReason,
+    });
+  }
+
+  if (
+    resolvedOperationKind ===
+    WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT
+  ) {
+    return createWorkbenchRuntimeReviewFlowAction({
+      kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+      source,
+      context: operationTarget,
+      enabled: operationEnabled,
+      disabledReason: operationTarget?.disabledReason,
+    });
+  }
+
+  return createWorkbenchFlowAction({
+    kind: resolvedOperationKind,
+    source,
+    actionId: operationTarget?.actionId ?? '',
+    statePointId:
+      operationTarget?.statePointId ??
+      operations?.selectedStatePointId ??
+      operations?.pendingStatePointId ??
+      '',
+    payload: operationTarget ?? operations ?? null,
+    enabled: false,
+    disabledReason:
+      operationTarget?.disabledReason ||
+      'missing-runtime-review-operation',
+  });
+}
+
+export function createWorkbenchRuntimeReviewPrimaryOperationFlowAction({
+  flowModel = null,
+  source = '',
+  enabled,
+} = {}) {
+  const operations = flowModel?.runtimeReviewOperations ?? null;
+  return createWorkbenchRuntimeReviewOperationFlowAction({
+    operationKind: operations?.primaryOperationKind ?? '',
+    flowModel,
+    source,
+    enabled: enabled ?? operations?.primaryOperationEnabled,
+  });
+}
+
 export function createWorkbenchRuntimeActionEditFlowAction({
   source = '',
   target = null,
@@ -227,4 +303,23 @@ function createMainFlowLoopTarget({ loopState = {}, target = null } = {}) {
     actionId: target?.actionId || loopState.targetActionId || '',
     statePointId: target?.statePointId || loopState.targetStatePointId || '',
   };
+}
+
+function getRuntimeReviewOperationTarget({
+  operations = null,
+  operationKind = '',
+} = {}) {
+  if (
+    operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION
+  ) {
+    return operations?.focusAction ?? null;
+  }
+
+  if (
+    operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT
+  ) {
+    return operations?.returnResult ?? null;
+  }
+
+  return null;
 }

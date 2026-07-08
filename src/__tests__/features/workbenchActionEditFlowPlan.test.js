@@ -33,8 +33,29 @@ describe('workbench action edit flow plan', () => {
         focusSource: 'runtime-detail',
         originStatePointId: 'enemyHpDamage|applied|action-0001|12|0',
         originTrackKey: 'enemyHpDamage',
+        originTrackLabel: '',
         originFrameLabel: '12f',
         sequence: 8,
+      },
+    });
+  });
+
+  it('keeps runtime result focus readable when only a track label is available', () => {
+    const plan = createRuntimeActionEditFocusPlan({
+      actionId: 'action-0002',
+      frameLabel: '30f',
+      statePointId: 'selfEnergyChange|applied|action-0002|30|1',
+      trackLabel: '自身能量',
+      source: 'runtime-detail',
+    });
+
+    expect(plan).toMatchObject({
+      canApply: true,
+      actionEditFocus: {
+        actionId: 'action-0002',
+        changeSummary: '三值点 30f · 自身能量',
+        originTrackKey: '',
+        originTrackLabel: '自身能量',
       },
     });
   });

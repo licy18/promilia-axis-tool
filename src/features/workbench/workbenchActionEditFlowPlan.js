@@ -9,6 +9,7 @@ export function createRuntimeActionEditFocusPlan({
   frameLabel = '',
   statePointId = '',
   trackKey = '',
+  trackLabel = '',
   source = '',
   sequence = 0,
 } = {}) {
@@ -27,11 +28,13 @@ export function createRuntimeActionEditFocusPlan({
       changeSummary: formatRuntimeActionFocusSummary({
         frameLabel,
         trackKey,
+        trackLabel,
       }),
       editOrigin: 'runtime-focus',
       focusSource: source ?? '',
       originStatePointId: statePointId ?? '',
       originTrackKey: trackKey ?? '',
+      originTrackLabel: trackLabel ?? '',
       originFrameLabel: frameLabel ?? '',
       sequence: Number(sequence) + 1,
     },
@@ -78,15 +81,19 @@ function createActionEditFlowPlan({
   };
 }
 
-function formatRuntimeActionFocusSummary({ frameLabel = '', trackKey = '' }) {
+function formatRuntimeActionFocusSummary({
+  frameLabel = '',
+  trackKey = '',
+  trackLabel = '',
+}) {
   const parts = [
     frameLabel ? `三值点 ${frameLabel}` : '三值点',
-    formatRuntimeActionFocusTrack(trackKey),
+    formatRuntimeActionFocusTrack(trackKey, trackLabel),
   ].filter(Boolean);
   return parts.join(' · ');
 }
 
-function formatRuntimeActionFocusTrack(trackKey) {
+function formatRuntimeActionFocusTrack(trackKey, trackLabel = '') {
   if (trackKey === 'enemyHpDamage') {
     return '敌人 HP';
   }
@@ -96,5 +103,5 @@ function formatRuntimeActionFocusTrack(trackKey) {
   if (trackKey === 'selfEnergyChange') {
     return '自身能量';
   }
-  return '';
+  return trackLabel || '';
 }

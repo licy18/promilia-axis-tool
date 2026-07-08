@@ -235,6 +235,8 @@ describe('workbench flow model', () => {
         statePointId: firstPoint.statePointId,
         fieldKey: 'startMs',
         frameLabel: '12f',
+        trackKey: 'enemyHpDamage',
+        trackLabel: '敌人 HP',
         sourceKind: 'action-result',
       },
       returnResult: {
@@ -463,6 +465,7 @@ describe('workbench flow model', () => {
         actionId: 'action-0002',
         statePointId: secondPoint.statePointId,
         frameLabel: '30f',
+        trackLabel: '自身能量',
       },
       returnResult: {
         enabled: true,

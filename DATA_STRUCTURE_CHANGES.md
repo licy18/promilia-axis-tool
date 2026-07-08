@@ -18717,6 +18717,95 @@ Workbench 主工作区和运行结果栈新增 `data-runtime-review-*` 诊断属
 - `npm run test -- --run`：通过，33 个测试文件、191 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 
+## 241. UI 主流程能力块：Runtime Review Operation Flow Action
+
+### 241.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`workbenchMainFlowActions` 新增运行结果 review operation 到 flow action 的统一入口：
+
+```js
+createWorkbenchRuntimeReviewOperationFlowAction()
+createWorkbenchRuntimeReviewPrimaryOperationFlowAction()
+```
+
+`createWorkbenchRuntimeReviewOperationFlowAction()` 当前输入核心字段：
+
+```js
+{
+  operationKind,
+  flowModel,
+  source,
+  target,
+  context,
+  enabled
+}
+```
+
+当 `flowModel.runtimeReviewOperations` 存在时，会优先消费模型里的操作目标：
+
+```text
+runtimeReviewOperations.focusAction
+runtimeReviewOperations.returnResult
+```
+
+当前映射关系：
+
+```text
+focus-runtime-action -> createWorkbenchRuntimeActionEditFlowAction()
+return-runtime-result -> createWorkbenchRuntimeResultReturnFlowAction()
+```
+
+`createWorkbenchRuntimeReviewPrimaryOperationFlowAction()` 读取：
+
+```text
+runtimeReviewOperations.primaryOperationKind
+runtimeReviewOperations.primaryOperationEnabled
+```
+
+并生成当前主操作对应的 flow action。
+
+`runtimeReviewOperations.focusAction` 新增运行点上下文字段：
+
+```js
+{
+  timeMs,
+  trackKey,
+  trackLabel
+}
+```
+
+`runtimeActionFocusFlowAction` 的 payload 新增：
+
+```js
+trackLabel
+```
+
+`createRuntimeActionEditFocusPlan()` 新增输入与输出上下文：
+
+```js
+trackLabel
+originTrackLabel
+```
+
+当 `trackKey` 缺失但 `trackLabel` 存在时，运行结果定位的编辑焦点摘要会使用 `trackLabel` 保持可读。
+
+`RuntimeSelectedDetailPanel` 现在通过 `createWorkbenchRuntimeReviewOperationFlowAction()` 生成“定位动作”和“回到结果点”的 flow action。
+
+### 241.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程运行时合同和 action 生成入口，不新增持久字段，不需要数据迁移。
+
+### 241.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 operation state 生成 focus、return、pending primary return action。
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，确认 `runtimeReviewOperations.focusAction` 保留运行点轨道上下文。
+- 更新 `src/__tests__/features/workbenchActionEditFlowPlan.test.js`，覆盖仅有 `trackLabel` 时的编辑焦点摘要。
+- `npm run test -- --run src/__tests__/features/workbenchActionEditFlowPlan.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、76 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、194 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
 ## 239. UI 主流程能力块：Runtime Review Selection Consumers
 
 ### 239.1 结构变化

@@ -8765,6 +8765,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：基于 `runtimeReviewOperations` 继续压缩运行结果详情区的操作路径，把“定位动作 -> 修改 -> 返回刷新结果”的往返链路收敛到更直接的主流程入口。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Operation Flow Action
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchMainFlowActions` 新增从 `runtimeReviewOperations` 生成运行结果 review flow action 的统一入口。
+- `RuntimeSelectedDetailPanel` 的“定位动作”和“回到结果点”改为消费统一 operation action 入口，不再本地拼接 focus/return action。
+- `runtimeReviewOperations.focusAction` 补齐运行点轨道上下文，保证“结果定位 -> 动作编辑”时编辑焦点摘要不丢失三值语义。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- action helper 单测覆盖 focus、return 和 pending result primary operation 三条路径。
+- Workbench 页面测试确认运行日志详情、结果回改、刷新结果返回路径保持可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchActionEditFlowPlan.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、76 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、194 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把运行结果详情、曲线点和日志行的 review operation 入口继续收敛到同一 operation action helper，减少不同面板各自拼接 flow action 的路径。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

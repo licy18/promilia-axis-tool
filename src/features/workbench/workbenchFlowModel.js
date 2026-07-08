@@ -699,6 +699,15 @@ function createRuntimeReviewFocusActionOperation({
       runtimeActionEditTarget?.frameLabel ??
       runtimeReviewSelection?.frameLabel ??
       '',
+    timeMs: runtimeReviewSelection?.timeMs ?? null,
+    trackKey:
+      runtimeActionEditTarget?.trackKey ??
+      runtimeReviewSelection?.trackKey ??
+      '',
+    trackLabel:
+      runtimeActionEditTarget?.trackLabel ??
+      runtimeReviewSelection?.trackLabel ??
+      '',
     sourceKind: runtimeReviewSelection?.sourceKind ?? '',
   };
 }

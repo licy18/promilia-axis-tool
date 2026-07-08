@@ -5,6 +5,8 @@ import {
   createWorkbenchMainFlowRecoveryAction,
   createWorkbenchOpenRuntimeResultsFlowAction,
   createWorkbenchRuntimeActionEditFlowAction,
+  createWorkbenchRuntimeReviewOperationFlowAction,
+  createWorkbenchRuntimeReviewPrimaryOperationFlowAction,
   createWorkbenchRuntimeResultFlowAction,
   createWorkbenchRuntimeResultReturnFlowAction,
   createWorkbenchRuntimeReviewFlowAction,
@@ -374,6 +376,127 @@ describe('workbench main flow actions', () => {
       canRun: true,
       payload: {
         originStatePointId: 'selfEnergyChange|applied|action-0002|12|0',
+      },
+    });
+  });
+
+  it('creates runtime review actions from the shared operation state', () => {
+    const flowModel = {
+      runtimeReviewOperations: {
+        primaryOperationKind:
+          WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+        primaryOperationEnabled: true,
+        selectedStatePointId: 'enemyHpDamage|applied|action-0002|30|0',
+        pendingStatePointId: '',
+        focusAction: {
+          kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+          enabled: true,
+          actionId: 'action-0002',
+          statePointId: 'enemyHpDamage|applied|action-0002|30|0',
+          fieldKey: 'startMs',
+          frameLabel: '30f',
+          trackLabel: '敌人 HP',
+        },
+        returnResult: {
+          kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+          enabled: true,
+          actionId: 'action-0002',
+          originStatePointId: 'enemyHpDamage|applied|action-0002|12|0',
+          statePointId: 'enemyHpDamage|applied|action-0002|30|0',
+          status: 'refreshed-edit-result',
+        },
+      },
+    };
+
+    expect(
+      createWorkbenchRuntimeReviewOperationFlowAction({
+        operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+        source: 'runtime-detail',
+        flowModel,
+      })
+    ).toMatchObject({
+      kind: 'focus-runtime-action',
+      source: 'runtime-detail',
+      actionId: 'action-0002',
+      statePointId: 'enemyHpDamage|applied|action-0002|30|0',
+      canRun: true,
+      payload: {
+        fieldKey: 'startMs',
+        frameLabel: '30f',
+        trackLabel: '敌人 HP',
+      },
+    });
+
+    expect(
+      createWorkbenchRuntimeReviewOperationFlowAction({
+        operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+        source: 'runtime-detail',
+        flowModel,
+      })
+    ).toMatchObject({
+      kind: 'return-runtime-result',
+      source: 'runtime-detail',
+      actionId: 'action-0002',
+      statePointId: 'enemyHpDamage|applied|action-0002|30|0',
+      canRun: true,
+      payload: {
+        originStatePointId: 'enemyHpDamage|applied|action-0002|12|0',
+        status: 'refreshed-edit-result',
+      },
+    });
+
+    expect(
+      createWorkbenchRuntimeReviewPrimaryOperationFlowAction({
+        source: 'runtime-detail-primary',
+        flowModel,
+      })
+    ).toMatchObject({
+      kind: 'focus-runtime-action',
+      source: 'runtime-detail-primary',
+      actionId: 'action-0002',
+      statePointId: 'enemyHpDamage|applied|action-0002|30|0',
+      canRun: true,
+    });
+  });
+
+  it('creates the pending result primary runtime review action', () => {
+    const flowModel = {
+      runtimeReviewOperations: {
+        primaryOperationKind:
+          WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+        primaryOperationEnabled: true,
+        selectedStatePointId: '',
+        pendingStatePointId: 'selfEnergyChange|applied|action-0002|30|1',
+        focusAction: {
+          kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+          enabled: false,
+          disabledReason: 'missing-runtime-action',
+        },
+        returnResult: {
+          kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+          enabled: true,
+          actionId: 'action-0002',
+          originStatePointId: 'selfEnergyChange|applied|action-0002|12|0',
+          statePointId: 'selfEnergyChange|applied|action-0002|30|1',
+          status: 'refreshed-edit-result',
+        },
+      },
+    };
+
+    expect(
+      createWorkbenchRuntimeReviewPrimaryOperationFlowAction({
+        source: 'runtime-detail-primary',
+        flowModel,
+      })
+    ).toMatchObject({
+      kind: 'return-runtime-result',
+      source: 'runtime-detail-primary',
+      actionId: 'action-0002',
+      statePointId: 'selfEnergyChange|applied|action-0002|30|1',
+      canRun: true,
+      payload: {
+        originStatePointId: 'selfEnergyChange|applied|action-0002|12|0',
+        status: 'refreshed-edit-result',
       },
     });
   });

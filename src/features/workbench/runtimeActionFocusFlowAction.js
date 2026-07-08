@@ -17,6 +17,7 @@ export function createRuntimeActionFocusFlowAction({
     frameLabel: detail?.frameLabel ?? formatRuntimeFocusFrameLabel(detail),
     statePointId,
     trackKey: detail?.trackKey ?? '',
+    trackLabel: detail?.trackLabel ?? '',
   };
 
   return createWorkbenchFlowAction({

@@ -236,7 +236,7 @@ import {
 } from './workbenchFlowModel';
 import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
-  createWorkbenchRuntimeReviewFlowAction,
+  createWorkbenchRuntimeReviewOperationFlowAction,
 } from './workbenchMainFlowActions';
 
 const props = defineProps({
@@ -336,20 +336,22 @@ function dispatchRuntimeDetailFlowAction(action) {
 }
 
 function getRuntimeDetailActionFocusFlowAction(detail) {
-  return createWorkbenchRuntimeReviewFlowAction({
-    kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+  return createWorkbenchRuntimeReviewOperationFlowAction({
+    operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
     source: 'runtime-detail',
+    flowModel: props.flowModel,
     target: detail,
-    enabled: Boolean(detail?.canFocusAction ?? detail?.actionId),
+    enabled: runtimeReviewFocusActionEnabled.value,
   });
 }
 
 function getRuntimeDetailReturnFlowAction(context) {
-  return createWorkbenchRuntimeReviewFlowAction({
-    kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+  return createWorkbenchRuntimeReviewOperationFlowAction({
+    operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
     source: 'runtime-detail',
-    target: context,
-    enabled: Boolean(context?.statePointId),
+    flowModel: props.flowModel,
+    context,
+    enabled: runtimeReviewReturnResultEnabled.value,
   });
 }
 
