@@ -13848,3 +13848,64 @@ Workbench 测试新增覆盖：
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
 - `npm run test -- --run`：通过，15 个测试文件、118 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 166. UI 主流程能力块：时间轴下方资源监控区
+
+本阶段属于 UI 主流程。
+
+### 166.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 166.2 Workbench DOM 布局变化
+
+`Workbench.vue` 新增资源监控区域：
+
+```html
+data-testid="workbench-resource-area"
+```
+
+`ResourceMonitorPanel` 从右侧 `side-stack` 移到该区域中，仍消费原有输入：
+
+```text
+resourceTimeline
+threeValueRuntimeProjection
+selectedStateCurvePointId
+runtimeFocusSource
+actionEditResultContext
+summary
+diagnostics
+```
+
+事件接线保持不变：
+
+```text
+select-runtime-state-point -> selectRuntimeStatePoint()
+focus-runtime-action -> focusRuntimeAction()
+```
+
+### 166.3 网格区域变化
+
+`workbench-grid` 新增 `resources` grid area：
+
+```text
+actions timeline  analysis
+actions resources analysis
+actions events    analysis
+```
+
+窄屏布局也保留 `resources` 区域，移动端顺序为：
+
+```text
+actions -> timeline -> resources -> analysis -> events
+```
+
+### 166.4 验证
+
+Workbench 测试新增覆盖：
+
+- `workbench-resource-area` 存在。
+- `workbench-resource-area` 内包含 `workbench-runtime-resource-monitor`。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
+- `npm run test -- --run`：通过，15 个测试文件、118 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

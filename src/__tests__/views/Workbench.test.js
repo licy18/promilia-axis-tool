@@ -130,6 +130,15 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-resource-monitor"]')
         .exists()
     ).toBe(true);
+    const resourceArea = wrapper.find(
+      '[data-testid="workbench-resource-area"]'
+    );
+    expect(resourceArea.exists()).toBe(true);
+    expect(
+      resourceArea
+        .find('[data-testid="workbench-runtime-resource-monitor"]')
+        .exists()
+    ).toBe(true);
     expect(
       wrapper.find('[data-testid="workbench-runtime-enemy-hp-delta"]').text()
     ).toBe('12,461');

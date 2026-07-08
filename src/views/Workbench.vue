@@ -106,6 +106,20 @@
         @update-action-time="updateActionTime"
       />
 
+      <div class="resource-area" data-testid="workbench-resource-area">
+        <ResourceMonitorPanel
+          :resource-timeline="simulationResult.resourceTimeline"
+          :runtime-projection="simulationResult.threeValueRuntimeProjection"
+          :selected-state-curve-point-id="selectedStateCurvePointId"
+          :runtime-focus-source="runtimeFocusSource"
+          :action-edit-result-context="actionEditResultContext"
+          :summary="simulationResult.summary"
+          :diagnostics="simulationResult.diagnostics"
+          @select-runtime-state-point="selectRuntimeStatePoint"
+          @focus-runtime-action="focusRuntimeAction"
+        />
+      </div>
+
       <div class="side-stack">
         <PropertiesPanel
           :selection="selection"
@@ -126,18 +140,6 @@
           :enemy="scenario.enemy"
           :enemy-config="enemyConfig"
           @update-enemy-config="updateEnemyConfig"
-        />
-
-        <ResourceMonitorPanel
-          :resource-timeline="simulationResult.resourceTimeline"
-          :runtime-projection="simulationResult.threeValueRuntimeProjection"
-          :selected-state-curve-point-id="selectedStateCurvePointId"
-          :runtime-focus-source="runtimeFocusSource"
-          :action-edit-result-context="actionEditResultContext"
-          :summary="simulationResult.summary"
-          :diagnostics="simulationResult.diagnostics"
-          @select-runtime-state-point="selectRuntimeStatePoint"
-          @focus-runtime-action="focusRuntimeAction"
         />
 
         <RuntimeSelectedDetailPanel
@@ -2245,6 +2247,7 @@ function getLocalStorage() {
     );
   grid-template-areas:
     'actions timeline analysis'
+    'actions resources analysis'
     'actions events analysis';
   gap: 14px;
   padding: 14px;
@@ -2256,6 +2259,11 @@ function getLocalStorage() {
 
 .timeline-area {
   grid-area: timeline;
+}
+
+.resource-area {
+  grid-area: resources;
+  min-width: 0;
 }
 
 .side-stack {
@@ -2274,6 +2282,7 @@ function getLocalStorage() {
     grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
     grid-template-areas:
       'actions timeline'
+      'actions resources'
       'analysis events';
   }
 }
@@ -2302,6 +2311,7 @@ function getLocalStorage() {
     grid-template-areas:
       'actions'
       'timeline'
+      'resources'
       'analysis'
       'events';
     padding: 10px;
