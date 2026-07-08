@@ -327,6 +327,7 @@
               :class="[
                 `state-layer-${marker.layerKey}`,
                 `state-track-${marker.trackKey}`,
+                { selected: marker.statePointId === selectedStateCurvePointId },
               ]"
               :style="stateCurveMarkerStyle(marker)"
               :title="formatStateCurveMarkerTitle(marker)"
@@ -338,10 +339,14 @@
               :data-frame-label="marker.frameLabel"
               :data-delta="marker.delta"
               :data-cumulative="marker.cumulative"
+              :data-state-point-id="marker.statePointId"
               :data-marker-title="formatStateCurveMarkerTitle(marker)"
               data-testid="workbench-timeline-state-curve-marker"
-              role="img"
+              role="button"
               tabindex="0"
+              @click="selectStateCurveMarker(marker)"
+              @keydown.enter.prevent="selectStateCurveMarker(marker)"
+              @keydown.space.prevent="selectStateCurveMarker(marker)"
             />
           </div>
         </div>
@@ -451,6 +456,7 @@ import {
   formatFrameTime,
   snapMsToFrame,
 } from '../../domain/timebase';
+import { createStateCurvePointId } from './stateCurvePointIdentity';
 
 const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
@@ -534,6 +540,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  selectedStateCurvePointId: {
+    type: String,
+    default: '',
+  },
   timelineDiagnostics: {
     type: Object,
     default: () => ({
@@ -554,6 +564,7 @@ const emit = defineEmits([
   'update-action-time',
   'update-action-duration',
   'update-action-lane',
+  'select-state-curve-point',
 ]);
 const laneRef = ref(null);
 const laneRowRefs = new Map();
@@ -950,13 +961,18 @@ function createStateCurveTimelineMarker({
       : formatFrameTime(timeMs));
 
   return {
-    id: [
-      track.trackKey,
-      layer.key,
-      point.actionId ?? point.eventType ?? 'point',
-      point.frameIndex ?? point.timeMs ?? pointIndex,
-      point.sequenceIndex ?? point.eventIndex ?? point.hitIndex ?? layerIndex,
-    ].join('-'),
+    id: createStateCurvePointId({
+      trackKey: track.trackKey,
+      layerKey: layer.key,
+      point,
+      pointIndex,
+    }),
+    statePointId: createStateCurvePointId({
+      trackKey: track.trackKey,
+      layerKey: layer.key,
+      point,
+      pointIndex,
+    }),
     trackKey: track.trackKey,
     trackLabel: track.label,
     layerKey: layer.key,
@@ -1208,6 +1224,10 @@ function selectCandidateFrameGroup(group) {
 
 function selectCandidateFrameGroupByMarker(marker) {
   selectedCandidateFrameGroupId.value = marker.frameGroupId;
+}
+
+function selectStateCurveMarker(marker) {
+  emit('select-state-curve-point', marker.statePointId);
 }
 
 function formatCandidateFrameGroupValues(group) {
@@ -2527,9 +2547,16 @@ h2 {
   transform: translateX(-50%) rotate(45deg);
 }
 
-.state-curve-marker:focus {
+.state-curve-marker:focus,
+.state-curve-marker.selected {
   outline: 2px solid rgba(255, 255, 255, 0.86);
   outline-offset: 3px;
+}
+
+.state-curve-marker.selected {
+  box-shadow:
+    0 0 0 3px rgba(121, 199, 185, 0.22),
+    0 0 16px rgba(223, 249, 243, 0.52);
 }
 
 .state-curve-marker.state-layer-sampled {

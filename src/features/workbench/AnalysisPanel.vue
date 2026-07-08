@@ -308,10 +308,19 @@
             v-for="point in track.visiblePointRows"
             :key="point.rowKey"
             class="state-curve-point-row"
+            :class="{
+              selected: point.statePointId === selectedStateCurvePointId,
+            }"
             :data-layer-key="point.layerKey"
             :data-action-id="point.actionId"
             :data-frame-label="formatStateCurvePointFrame(point)"
+            :data-state-point-id="point.statePointId"
             data-testid="workbench-state-curve-point"
+            role="button"
+            tabindex="0"
+            @click="selectStateCurvePoint(point)"
+            @keydown.enter.prevent="selectStateCurvePoint(point)"
+            @keydown.space.prevent="selectStateCurvePoint(point)"
           >
             <span class="state-curve-point-time">
               {{ formatStateCurvePointFrame(point) }}
@@ -386,6 +395,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { TrendCharts } from '@element-plus/icons-vue';
+import { createStateCurvePointId } from './stateCurvePointIdentity';
 
 const CANDIDATE_CHART_COLORS = ['#f2b366', '#79c7b9', '#a6b7ff'];
 const candidateChartGridLines = [25, 50, 75];
@@ -445,6 +455,10 @@ const props = defineProps({
       },
     }),
   },
+  selectedStateCurvePointId: {
+    type: String,
+    default: '',
+  },
   insertionDiagnostics: {
     type: Object,
     default: () => ({
@@ -460,6 +474,8 @@ const props = defineProps({
     }),
   },
 });
+
+const emit = defineEmits(['select-state-curve-point']);
 
 const stateCurveLayerFilters = ref({
   applied: true,
@@ -975,16 +991,18 @@ function createStateCurveVisiblePointRows(track, visibleLayers) {
     .flatMap((layer, layerIndex) =>
       (layer.points ?? []).map((point, pointIndex) => ({
         ...point,
-        rowKey: [
-          track.trackKey,
-          layer.key,
-          point.actionId ?? point.eventType ?? 'point',
-          point.frameIndex ?? point.timeMs ?? pointIndex,
-          point.sequenceIndex ??
-            point.eventIndex ??
-            point.hitIndex ??
-            pointIndex,
-        ].join(':'),
+        statePointId: createStateCurvePointId({
+          trackKey: track.trackKey,
+          layerKey: layer.key,
+          point,
+          pointIndex,
+        }),
+        rowKey: createStateCurvePointId({
+          trackKey: track.trackKey,
+          layerKey: layer.key,
+          point,
+          pointIndex,
+        }),
         trackKey: track.trackKey,
         layerKey: layer.key,
         layerLabel: formatStateCurveLayerLabel(layer.key),
@@ -994,6 +1012,10 @@ function createStateCurveVisiblePointRows(track, visibleLayers) {
       }))
     )
     .sort(compareStateCurvePointRows);
+}
+
+function selectStateCurvePoint(point) {
+  emit('select-state-curve-point', point.statePointId);
 }
 
 function compareStateCurvePointRows(left, right) {
@@ -1761,6 +1783,17 @@ h2 {
   min-width: 0;
   padding-top: 5px;
   border-top: 1px solid rgba(166, 183, 255, 0.1);
+  cursor: pointer;
+}
+
+.state-curve-point-row:focus,
+.state-curve-point-row.selected {
+  outline: 1px solid rgba(121, 199, 185, 0.52);
+  outline-offset: 2px;
+}
+
+.state-curve-point-row.selected {
+  background: rgba(121, 199, 185, 0.08);
 }
 
 .state-curve-point-time {

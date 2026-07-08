@@ -4527,6 +4527,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 优先让时间轴 marker 与分析面板中的点级明细能互相定位，或提供按 state layer / track 的显示控制。
 - 保持三值曲线框架优先，具体数值机制仍按采样和公式证据逐步替换。
 
+### 2026-07-08：阶段 5-8BS 状态点 marker / 明细选中联动
+
+本轮完成：
+
+- 新增 `stateCurvePointIdentity.js`，用 `trackKey / layerKey / actionId或eventType / frameIndex或timeMs / sequenceIndex或eventIndex或hitIndex` 生成共享 `stateCurvePointId`。
+- `TimelineGridPreview` 的状态点 marker 现在带 `data-state-point-id`，可点击或键盘选中，并把选中 ID 回传给 `Workbench`。
+- `AnalysisPanel` 的状态曲线点明细同样带 `data-state-point-id`，可点击或键盘选中。
+- `Workbench` 新增 `selectedStateCurvePointId` 状态，统一传给时间轴和分析面板。
+- 选中时间轴 applied 状态点后，对应分析面板明细同步高亮；从分析面板选中候选点后，时间轴 marker 会取消 applied 高亮，说明联动 ID 已切换。
+
+当前边界：
+
+- 本阶段只做选中联动，不新增 layer / track 筛选控件。
+- 候选层 state point 仍不渲染为时间轴状态 marker；候选点可在分析面板中选中，但不会对应到状态 marker。
+- 没有改变 `threeValueCurveFramework.stateCurves` 模拟结果结构。
+
+验收结果：
+
+- `npm test -- --run src\__tests__\views\Workbench.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、48 条测试。
+
+下一步：
+
+- 阶段 5-8BT 目标：补状态点 layer / track 筛选，或提供只看 selected state point 的焦点模式。
+- 优先让用户在时间轴上快速切换“只看采样 / 只看占位 / 只看已用”，避免状态点增多后视觉过载。
+- 继续保持框架优先，具体技能逐帧与最终公式仍后补。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

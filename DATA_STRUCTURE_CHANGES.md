@@ -7941,3 +7941,105 @@ action-result-placeholder
 - `npm test -- --run src\__tests__\views\Workbench.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过。
 
 下一阶段 5-8BS 应补状态点 marker 筛选、选中或与分析面板点级明细联动。
+
+## 98. 阶段 5-8BS：stateCurvePointId selected-link
+
+阶段 5-8BS 不修改 `threeValueCurveFramework.stateCurves` 的模拟结果结构，只新增前端共享 ID 与选中状态。
+
+### 98.1 共享 ID
+
+新增文件：
+
+```text
+src/features/workbench/stateCurvePointIdentity.js
+```
+
+导出：
+
+```js
+createStateCurvePointId({
+  trackKey,
+  layerKey,
+  point,
+  pointIndex
+})
+```
+
+ID 由以下字段组成：
+
+```js
+[
+  trackKey,
+  layerKey,
+  point.actionId ?? point.eventType ?? 'point',
+  point.frameIndex ?? point.timeMs ?? pointIndex,
+  point.sequenceIndex ?? point.eventIndex ?? point.hitIndex ?? pointIndex
+].join('|')
+```
+
+该 ID 只用于 Workbench 前端联动，不写回导出的模拟数据。
+
+### 98.2 Workbench 选中状态
+
+`Workbench.vue` 新增：
+
+```js
+const selectedStateCurvePointId = ref('');
+
+function selectStateCurvePoint(pointId) {
+  selectedStateCurvePointId.value = pointId || '';
+}
+```
+
+并传给：
+
+- `TimelineGridPreview`
+- `AnalysisPanel`
+
+两者都通过 `select-state-curve-point` 事件回传选中 ID。
+
+### 98.3 时间轴 marker
+
+`TimelineGridPreview` 的 state marker 新增：
+
+```html
+data-state-point-id
+role="button"
+selected class
+```
+
+点击、Enter、Space 都会触发：
+
+```js
+emit('select-state-curve-point', marker.statePointId)
+```
+
+### 98.4 分析面板点明细
+
+`AnalysisPanel` 的 state point row 新增：
+
+```html
+data-state-point-id
+role="button"
+selected class
+```
+
+点击、Enter、Space 都会触发：
+
+```js
+emit('select-state-curve-point', point.statePointId)
+```
+
+### 98.5 验证
+
+扩展 Workbench 测试覆盖：
+
+- 时间轴 applied marker 和分析面板 applied point 共享同一个 `data-state-point-id`。
+- 点击候选 state point 后，候选明细高亮，applied 时间轴 marker 不高亮。
+- 再点击 applied 时间轴 marker 后，marker 与对应分析面板点同步高亮。
+
+阶段验收：
+
+- `npm test -- --run src\__tests__\views\Workbench.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过。
+
+下一阶段 5-8BT 应补状态点 layer / track 筛选或 selected-only 焦点模式。

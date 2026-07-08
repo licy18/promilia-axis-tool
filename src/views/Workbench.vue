@@ -76,8 +76,10 @@
         :three-value-curve-framework="simulationResult.threeValueCurveFramework"
         :duration-ms="scenario.time.durationMs"
         :selected-action-id="selectedActionId"
+        :selected-state-curve-point-id="selectedStateCurvePointId"
         :timeline-diagnostics="timelineDiagnostics"
         @select-action="selectAction"
+        @select-state-curve-point="selectStateCurvePoint"
         @delete-action="deleteAction"
         @update-action-duration="updateActionDuration"
         @update-action-lane="updateActionLane"
@@ -118,8 +120,10 @@
           :three-value-curve-framework="
             simulationResult.threeValueCurveFramework
           "
+          :selected-state-curve-point-id="selectedStateCurvePointId"
           :insertion-diagnostics="insertionDiagnostics"
           :timeline-diagnostics="timelineDiagnostics"
+          @select-state-curve-point="selectStateCurvePoint"
         />
       </div>
 
@@ -183,6 +187,7 @@ const segmentSplitOptions = ref({ ...initialDraft.segmentSplitOptions });
 const segmentSplitPreview = ref(null);
 const actionDrafts = ref([...initialDraft.actionDrafts]);
 const selectedActionId = ref(initialDraft.selectedActionId);
+const selectedStateCurvePointId = ref('');
 const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const draftStatus = ref('未保存草稿');
 
@@ -843,6 +848,10 @@ function selectAction(actionId) {
   selectedActionId.value = actionId;
   const draft = actionDrafts.value.find(action => action.id === actionId);
   syncActionLibraryCharacterIdFromDraft(draft);
+}
+
+function selectStateCurvePoint(pointId) {
+  selectedStateCurvePointId.value = pointId || '';
 }
 
 function findSkillById(skillId) {

@@ -160,6 +160,39 @@ describe('Workbench view', () => {
     expect(stateTimelineMarkers[0].attributes('data-marker-title')).toContain(
       '普通攻击'
     );
+    const appliedStatePointId = stateTimelineMarkers[0].attributes(
+      'data-state-point-id'
+    );
+    expect(appliedStatePointId).toBeTruthy();
+    expect(hpStateCurvePoints[0].attributes('data-state-point-id')).toBe(
+      appliedStatePointId
+    );
+    await firstCandidatePoint.trigger('click');
+    await nextTick();
+    expect(firstCandidatePoint.classes()).toContain('selected');
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-timeline-state-curve-marker"][data-state-point-id="${appliedStatePointId}"]`
+        )
+        .classes()
+    ).not.toContain('selected');
+    await stateTimelineMarkers[0].trigger('click');
+    await nextTick();
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-timeline-state-curve-marker"][data-state-point-id="${appliedStatePointId}"]`
+        )
+        .classes()
+    ).toContain('selected');
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-state-curve-point"][data-state-point-id="${appliedStatePointId}"]`
+        )
+        .classes()
+    ).toContain('selected');
     await wrapper
       .find(
         '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="candidate"]'
