@@ -15948,3 +15948,74 @@ controller 的 `dispatch()` 会返回诊断结果：
 - `npm run test -- --run`：通过，20 个测试文件、144 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 203. UI 主流程能力块：Runtime Entry Flow Action
+
+本阶段属于 UI 主流程。
+
+### 203.1 结构变化
+
+`WORKBENCH_FLOW_ACTION_KINDS` 新增：
+
+```js
+OPEN_RUNTIME_RESULTS: 'open-runtime-results'
+```
+
+`WORKBENCH_FLOW_CONTROLLER_HANDLERS` 新增：
+
+```js
+OPEN_RUNTIME_RESULTS: 'openRuntimeResults'
+```
+
+`WorkbenchFlowPanel` 的“查看运行结果”入口不再发出专用父事件：
+
+```js
+open-runtime-results
+```
+
+改为发出标准 flow action：
+
+```js
+{
+  kind: 'open-runtime-results',
+  source: 'workbench-flow-panel',
+  actionId,
+  payload: {
+    runtimeSimLogCount
+  }
+}
+```
+
+`Workbench.vue` 不再监听：
+
+```js
+@open-runtime-results="openRuntimeResultsFlow"
+```
+
+而是通过既有统一入口消费：
+
+```js
+@dispatch-flow-action="dispatchWorkbenchFlowAction"
+```
+
+controller 将 `open-runtime-results` 路由到：
+
+```js
+openRuntimeResultsFlow({ actionId })
+```
+
+### 203.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 的主流程入口事件合同；模拟结果、三值计算、项目文件、runtime projection 结构不变。
+
+### 203.3 验证
+
+- flow model 测试覆盖新增 `open-runtime-results` action kind。
+- controller 测试覆盖 `open-runtime-results` 路由到 `openRuntimeResults` handler。
+- Workbench 视图测试覆盖：主流程条“查看运行结果”会发出标准 flow action，并保持原有运行结果打开、编辑动作、返回刷新结果闭环。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、59 条测试。
+- `npm run test -- --run`：通过，20 个测试文件、144 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。

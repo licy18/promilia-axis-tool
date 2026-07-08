@@ -4,6 +4,7 @@ import {
 } from './workbenchFlowModel';
 
 export const WORKBENCH_FLOW_CONTROLLER_HANDLERS = Object.freeze({
+  OPEN_RUNTIME_RESULTS: 'openRuntimeResults',
   SELECT_RUNTIME_RESULT: 'selectRuntimeResult',
   SELECT_RUNTIME_STATE_POINT: 'selectRuntimeStatePoint',
   SELECT_CONTRIBUTION_POINT: 'selectContributionPoint',
@@ -20,6 +21,19 @@ export function createWorkbenchFlowController(handlers = {}) {
         return createWorkbenchFlowControllerResult({
           flowAction,
           reason: flowAction.disabledReason || 'disabled-flow-action',
+        });
+      }
+
+      if (
+        flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS
+      ) {
+        return callWorkbenchFlowHandler({
+          handlers,
+          handlerKey: WORKBENCH_FLOW_CONTROLLER_HANDLERS.OPEN_RUNTIME_RESULTS,
+          flowAction,
+          payload: {
+            actionId: flowAction.actionId,
+          },
         });
       }
 

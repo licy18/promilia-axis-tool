@@ -99,7 +99,7 @@
         class="flow-button"
         data-testid="workbench-flow-open-runtime"
         :disabled="!workbenchFlow.controls.canOpenRuntimeResults"
-        @click="$emit('open-runtime-results')"
+        @click="openRuntimeResults"
       >
         <TrendCharts class="flow-button-icon" />
         <span>查看运行结果</span>
@@ -177,7 +177,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['open-runtime-results', 'dispatch-flow-action']);
+const emit = defineEmits(['dispatch-flow-action']);
 
 const workbenchFlow = computed(
   () =>
@@ -202,6 +202,10 @@ function returnRuntimeResult() {
   dispatchFlowAction(getRuntimeReturnFlowAction(context));
 }
 
+function openRuntimeResults() {
+  dispatchFlowAction(getOpenRuntimeResultsFlowAction(workbenchFlow.value));
+}
+
 function selectRuntimeNavigationPoint(point) {
   dispatchFlowAction(getRuntimeNavigationFlowAction(point));
 }
@@ -211,6 +215,19 @@ function dispatchFlowAction(action) {
     return;
   }
   emit('dispatch-flow-action', action);
+}
+
+function getOpenRuntimeResultsFlowAction(flow) {
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+    source: 'workbench-flow-panel',
+    actionId: flow?.selectedActionId ?? '',
+    payload: {
+      runtimeSimLogCount: flow?.runtimeSimLogCount ?? 0,
+    },
+    enabled: Boolean(flow?.controls?.canOpenRuntimeResults),
+    disabledReason: 'missing-runtime-results',
+  });
 }
 
 function getRuntimeNavigationFlowAction(point) {

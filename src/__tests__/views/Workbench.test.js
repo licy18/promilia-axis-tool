@@ -1576,6 +1576,12 @@ describe('Workbench view', () => {
     await openRuntimeButton.trigger('click');
     await nextTick();
 
+    expect(getLastDispatchedFlowAction(wrapper, WorkbenchFlowPanel)).toMatchObject({
+      kind: 'open-runtime-results',
+      source: 'workbench-flow-panel',
+      actionId: 'action-0001',
+      canRun: true,
+    });
     const selectedRuntimePointId = wrapper
       .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
       .text();

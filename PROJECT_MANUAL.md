@@ -7755,6 +7755,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把“排轴动作编辑 -> 运行模拟 -> 资源曲线监控 -> 日志/详情查看 -> 回到动作修改”整理成更明确的完整主流程闭环，暂不继续扩写微型状态提示或公式证据。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Entry Flow Action
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `WorkbenchFlowPanel` 的“查看运行结果”入口改为发出标准 `open-runtime-results` flow action。
+- `workbenchFlowController` 新增 `openRuntimeResults` 路由，Workbench 通过同一个 controller 执行“打开运行结果/运行总览”和后续的结果定位、编辑聚焦、返回结果。
+- 主流程入口从“按钮触发专用父事件”推进到“按钮描述标准动作、controller 执行主流程”，为完整闭环继续收束。
+- 现有运行结果选择、无匹配结果时进入运行总览、返回刷新结果、三值数值和模拟输出保持不变。
+
+当前验证事实：
+
+- 点击主流程条“查看运行结果”会发出 `open-runtime-results` flow action。
+- controller 能把 `open-runtime-results` 路由到 Workbench 的运行结果打开逻辑。
+- 原有“排轴动作编辑 -> 查看运行结果 -> 编辑结果动作 -> 回到刷新结果”集成测试继续通过。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、59 条测试。
+- `npm run test -- --run`：通过，20 个测试文件、144 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 Workbench 中运行入口、运行结果定位、详情查看和返回动作修改的流程状态整理成更清晰的闭环接口；暂不继续扩展公式证据或微型状态文案。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

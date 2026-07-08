@@ -12,6 +12,8 @@ describe('workbench flow controller', () => {
   it('routes runtime and edit flow actions to explicit workbench handlers', () => {
     const calls = [];
     const controller = createWorkbenchFlowController({
+      openRuntimeResults: payload =>
+        calls.push(['openRuntimeResults', payload]),
       selectRuntimeResult: payload =>
         calls.push(['selectRuntimeResult', payload]),
       selectRuntimeStatePoint: payload =>
@@ -24,6 +26,16 @@ describe('workbench flow controller', () => {
         calls.push(['returnRuntimeResult', payload]),
     });
 
+    expect(
+      controller.dispatch({
+        kind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+        source: 'workbench-flow-panel',
+        actionId: 'action-0000',
+      })
+    ).toMatchObject({
+      handled: true,
+      handlerKey: WORKBENCH_FLOW_CONTROLLER_HANDLERS.OPEN_RUNTIME_RESULTS,
+    });
     expect(
       controller.dispatch({
         kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
@@ -105,6 +117,7 @@ describe('workbench flow controller', () => {
     });
 
     expect(calls).toEqual([
+      ['openRuntimeResults', { actionId: 'action-0000' }],
       [
         'selectRuntimeResult',
         { actionId: 'action-0001', statePointId: 'runtime-point-001' },

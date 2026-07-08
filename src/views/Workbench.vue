@@ -51,7 +51,6 @@
       :runtime-overview-active="runtimeOverviewActive"
       :action-edit-result-context="actionEditResultContext"
       :flow-model="workbenchFlowModel"
-      @open-runtime-results="openRuntimeResultsFlow"
       @dispatch-flow-action="dispatchWorkbenchFlowAction"
     />
 
@@ -312,6 +311,8 @@ const draftStatus = ref('未保存草稿');
 const actionEditSource = ref(createEmptyActionEditSource());
 const actionEditFocus = ref(createEmptyActionEditFocus());
 const workbenchFlowController = createWorkbenchFlowController({
+  openRuntimeResults: ({ actionId }) =>
+    openRuntimeResultsFlow({ actionId }),
   selectRuntimeResult: ({ actionId, statePointId }) =>
     selectActionResult({ actionId, statePointId }),
   selectRuntimeStatePoint: statePointId => selectRuntimeStatePoint(statePointId),
@@ -1365,10 +1366,11 @@ function returnRuntimeResultFromProperties({ actionId, statePointId } = {}) {
   selectActionResultRuntimePoint(statePointId);
 }
 
-function openRuntimeResultsFlow() {
+function openRuntimeResultsFlow({ actionId } = {}) {
+  const targetActionId = actionId || selectedActionId.value;
   const actionRuntimePoint = findFirstRuntimeStatePointForAction(
     simulationResult.value.threeValueRuntimeProjection,
-    selectedActionId.value
+    targetActionId
   );
   if (actionRuntimePoint?.statePointId) {
     focusThreeValueCalculatorScope('runtime');

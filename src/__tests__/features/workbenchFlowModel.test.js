@@ -107,6 +107,7 @@ describe('workbench flow model', () => {
 
   it('describes enabled and disabled workbench flow actions', () => {
     expect(WORKBENCH_FLOW_ACTION_KINDS).toMatchObject({
+      OPEN_RUNTIME_RESULTS: 'open-runtime-results',
       SELECT_RUNTIME_RESULT: 'select-runtime-result',
       SELECT_RUNTIME_STATE_POINT: 'select-runtime-state-point',
       SELECT_CONTRIBUTION_POINT: 'select-contribution-point',
