@@ -2139,6 +2139,26 @@ describe('Workbench view', () => {
       refreshedRuntimeStatePointId
     );
     expect(syncedRuntimeLogNavigation.text()).toContain('日志已同步');
+    const feedbackLocationChain = wrapper.find(
+      '[data-testid="workbench-action-edit-feedback-location-chain"]'
+    );
+    expect(feedbackLocationChain.exists()).toBe(true);
+    expect(feedbackLocationChain.attributes('data-chain-status')).toBe(
+      'synced'
+    );
+    expect(feedbackLocationChain.attributes('data-chain-synced-count')).toBe(
+      '3'
+    );
+    expect(feedbackLocationChain.attributes('data-chain-total-count')).toBe(
+      '3'
+    );
+    expect(feedbackLocationChain.attributes('data-action-synced')).toBe('true');
+    expect(feedbackLocationChain.attributes('data-result-synced')).toBe('true');
+    expect(feedbackLocationChain.attributes('data-detail-synced')).toBe('true');
+    expect(feedbackLocationChain.text()).toContain('3/3已同步');
+    expect(feedbackLocationChain.text()).toContain('动作已选中');
+    expect(feedbackLocationChain.text()).toContain('结果已定位');
+    expect(feedbackLocationChain.text()).toContain('详情已同步');
   });
 
   it('links runtime sim log detail to the action edit focus', async () => {

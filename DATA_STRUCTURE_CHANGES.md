@@ -13338,3 +13338,82 @@ data-source-count
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8EA 应整理结果定位链路的主路径提示，减少重复状态标签，让当前动作、当前结果点和当前日志位置的关系更清楚。
+
+## 160. 阶段 5-8EA：最近编辑定位链路摘要
+
+阶段目标：
+
+- 把最近编辑后的动作、结果点和详情同步状态压缩为一条主路径摘要。
+
+### 160.1 数据结构变化
+
+本阶段不新增保存字段，不变更 `Project` schema、simulation 输出或 localStorage 数据。
+
+`AnalysisPanel` 的 `actionEditFeedback` 新增前端派生字段：
+
+```js
+locationChain: {
+  status: 'synced' | 'pending' | 'unavailable',
+  actionSynced: boolean,
+  resultSynced: boolean,
+  detailSynced: boolean,
+  syncedCount: number,
+  totalCount: number,
+  label: string,
+  detail: string
+}
+```
+
+派生依据：
+
+```text
+selectedActionId
+selectedStateCurvePointId
+runtimeSelectedDetail.statePointId
+actionEditFeedback.runtimeStatePointId
+```
+
+当前固定检查三项：
+
+```text
+动作是否已选中
+刷新后结果点是否已定位
+结果详情是否已同步
+```
+
+### 160.2 DOM 状态
+
+最近编辑反馈条新增：
+
+```html
+data-testid="workbench-action-edit-feedback-location-chain"
+data-chain-status="synced|pending|unavailable"
+data-chain-synced-count
+data-chain-total-count
+data-action-synced="true|false"
+data-result-synced="true|false"
+data-detail-synced="true|false"
+```
+
+含义：
+
+- `synced`：动作、结果点、结果详情三项全部同步。
+- `pending`：存在刷新后结果点，但仍有至少一项未同步。
+- `unavailable`：当前动作没有可用刷新后结果点。
+
+### 160.3 验证
+
+当前测试覆盖：
+
+- 属性面板回看刷新后结果点后，定位链路显示 `synced`。
+- 同步数为 `3/3`。
+- 动作、结果、详情三个布尔状态都为 `true`。
+- 摘要文字包含 `动作已选中`、`结果已定位`、`详情已同步`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、40 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、114 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8EB 应继续减少最近编辑反馈、动作结果行和详情面板中的重复状态标签，让主路径摘要承担更多确认职责。

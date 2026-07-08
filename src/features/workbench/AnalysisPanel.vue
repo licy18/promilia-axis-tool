@@ -103,6 +103,30 @@
               <strong>{{ actionEditFeedback.runtimePointDisplay }}</strong>
             </span>
           </div>
+          <div
+            class="action-edit-feedback-location-chain"
+            :data-action-synced="
+              actionEditFeedback.locationChain.actionSynced ? 'true' : 'false'
+            "
+            :data-chain-status="actionEditFeedback.locationChain.status"
+            :data-chain-synced-count="
+              actionEditFeedback.locationChain.syncedCount
+            "
+            :data-chain-total-count="
+              actionEditFeedback.locationChain.totalCount
+            "
+            :data-detail-synced="
+              actionEditFeedback.locationChain.detailSynced ? 'true' : 'false'
+            "
+            :data-result-synced="
+              actionEditFeedback.locationChain.resultSynced ? 'true' : 'false'
+            "
+            data-testid="workbench-action-edit-feedback-location-chain"
+          >
+            <span>定位链路</span>
+            <strong>{{ actionEditFeedback.locationChain.label }}</strong>
+            <small>{{ actionEditFeedback.locationChain.detail }}</small>
+          </div>
         </div>
         <div class="action-edit-feedback-actions">
           <button
@@ -1967,6 +1991,11 @@ function createActionEditFeedback(source) {
       ? 'focused'
       : 'available'
     : 'unavailable';
+  const locationChain = createActionEditFeedbackLocationChain({
+    actionId: source.actionId,
+    resultFocusStatus,
+    runtimeStatePointId,
+  });
   return {
     actionId: source.actionId,
     actionName: action?.actionName ?? source.actionId,
@@ -1994,6 +2023,53 @@ function createActionEditFeedback(source) {
     resultFocusStatus,
     resultFocusLabel:
       formatActionEditFeedbackResultFocusLabel(resultFocusStatus),
+    locationChain,
+  };
+}
+
+function createActionEditFeedbackLocationChain({
+  actionId = '',
+  resultFocusStatus = 'unavailable',
+  runtimeStatePointId = '',
+} = {}) {
+  const actionSynced = Boolean(actionId && props.selectedActionId === actionId);
+  const resultSynced = resultFocusStatus === 'focused';
+  const detailSynced = Boolean(
+    runtimeStatePointId &&
+    props.runtimeSelectedDetail?.statePointId === runtimeStatePointId
+  );
+  const items = [
+    actionSynced ? '动作已选中' : '动作待选中',
+    resultSynced
+      ? '结果已定位'
+      : resultFocusStatus === 'available'
+        ? '结果待定位'
+        : '无结果点',
+    detailSynced
+      ? '详情已同步'
+      : runtimeStatePointId
+        ? '详情待同步'
+        : '详情无结果',
+  ];
+  const syncedCount = [actionSynced, resultSynced, detailSynced].filter(
+    Boolean
+  ).length;
+  const totalCount = 3;
+  const status =
+    resultFocusStatus === 'unavailable'
+      ? 'unavailable'
+      : syncedCount === totalCount
+        ? 'synced'
+        : 'pending';
+  return {
+    status,
+    actionSynced,
+    resultSynced,
+    detailSynced,
+    syncedCount,
+    totalCount,
+    label: `${syncedCount}/${totalCount}已同步`,
+    detail: items.join(' · '),
   };
 }
 
@@ -3179,6 +3255,63 @@ h2 {
   color: #dff9f3;
   font-size: 11px;
   font-weight: 700;
+}
+
+.action-edit-feedback-location-chain {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 5px 7px;
+  border: 1px solid rgba(121, 199, 185, 0.18);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.08);
+}
+
+.action-edit-feedback-location-chain[data-chain-status='pending'] {
+  border-color: rgba(230, 162, 60, 0.22);
+  background: rgba(230, 162, 60, 0.08);
+}
+
+.action-edit-feedback-location-chain[data-chain-status='unavailable'] {
+  border-color: rgba(245, 108, 108, 0.2);
+  background: rgba(245, 108, 108, 0.08);
+}
+
+.action-edit-feedback-location-chain span,
+.action-edit-feedback-location-chain strong,
+.action-edit-feedback-location-chain small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action-edit-feedback-location-chain span {
+  color: #9ce0d2;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.action-edit-feedback-location-chain[data-chain-status='pending'] span,
+.action-edit-feedback-location-chain[data-chain-status='pending'] strong {
+  color: #efc574;
+}
+
+.action-edit-feedback-location-chain[data-chain-status='unavailable'] span,
+.action-edit-feedback-location-chain[data-chain-status='unavailable'] strong {
+  color: #ffb3b3;
+}
+
+.action-edit-feedback-location-chain strong {
+  color: #dff9f3;
+  font-size: 11px;
+}
+
+.action-edit-feedback-location-chain small {
+  color: #aeb8c1;
+  font-size: 11px;
 }
 
 .action-edit-feedback-actions {
