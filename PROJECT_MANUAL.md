@@ -6004,6 +6004,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DJ 目标：继续完善结果定位体验，优先在最近编辑反馈条中标明当前结果定位状态，避免用户重复点击或不清楚是否已经选中对应三值结果点。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DJ 最近编辑结果定位状态
+
+本轮完成：
+
+- 最近编辑反馈条新增结果定位状态标签。
+- `AnalysisPanel` 根据反馈条的 runtime state point 和当前 `selectedStateCurvePointId` 派生 `focused / available / unavailable` 三种状态。
+- 反馈条新增 `data-result-focused`、`data-result-focus-status` DOM 状态。
+- 当最近编辑对应的三值结果点已经被选中时，反馈条显示 `结果已定位`，`定位结果` 按钮变为 `结果已定位` 并禁用。
+- Workbench 测试覆盖反馈条已定位状态、按钮禁用状态、贡献拆分和运行详情一致性。
+
+当前验证事实：
+
+- 在已通过动作结果行选中 `action-0001` runtime point 后，修改等级会让反馈条立即显示 `data-result-focused="true"`、`data-result-focus-status="focused"`。
+- 状态标签显示 `结果已定位`。
+- `定位结果` 按钮显示 `结果已定位`，且处于禁用状态。
+- 动作贡献拆分仍定位到 `action-0001`，运行详情 state point 与反馈条 runtime state point 一致。
+- 本阶段只新增前端定位状态，不新增公式、simulation 输出或保存 schema。
+
+当前边界：
+
+- `focused` 只表示当前选中的 state point 与反馈条 runtime state point 一致。
+- 本阶段不计算字段编辑导致的三值差异，也不追踪多步编辑历史。
+- 缺少 runtime trace 的动作仍显示 `无结果点`，结果定位按钮不可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8DK 目标：继续完善结果定位体验，优先让反馈条在用户选中其他结果点后清楚标记为未定位，并保留一键回到最近编辑结果点的路径。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

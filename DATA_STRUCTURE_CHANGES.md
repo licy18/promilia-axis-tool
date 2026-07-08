@@ -12101,3 +12101,67 @@ select-action-result
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DJ 应继续完善结果定位体验，优先在最近编辑反馈条中标明当前结果定位状态。
+
+## 143. 阶段 5-8DJ：最近编辑结果定位状态
+
+阶段目标：
+
+- 在最近编辑反馈条中标明该编辑对应的三值结果点是否已经是当前选中结果点。
+
+### 143.1 actionEditFeedback 新增派生字段
+
+新增内部派生：
+
+```js
+resultFocused: boolean
+resultFocusStatus: 'focused' | 'available' | 'unavailable'
+resultFocusLabel: string
+```
+
+派生规则：
+
+```text
+runtimeStatePointId 为空 -> unavailable / 无结果点
+runtimeStatePointId 等于 selectedStateCurvePointId -> focused / 结果已定位
+其他情况 -> available / 结果未定位
+```
+
+这些字段只存在于 `AnalysisPanel` 运行时派生中，不写入 localStorage，不属于项目保存 schema。
+
+### 143.2 DOM 状态
+
+`workbench-action-edit-feedback` 新增：
+
+```html
+data-result-focused
+data-result-focus-status
+```
+
+新增状态标签：
+
+```html
+data-testid="workbench-action-edit-feedback-result-status"
+```
+
+当 `resultFocused=true` 时：
+
+- `workbench-action-edit-feedback-result-focus` 显示 `结果已定位`。
+- `workbench-action-edit-feedback-result-focus` 置为 disabled。
+
+### 143.3 验证
+
+当前测试覆盖：
+
+- 最近编辑反馈条在 runtime point 已选中时写入 `data-result-focused="true"`。
+- 最近编辑反馈条写入 `data-result-focus-status="focused"`。
+- 状态标签显示 `结果已定位`。
+- 结果定位按钮禁用且文本为 `结果已定位`。
+- 贡献拆分和运行详情仍与反馈条 runtime state point 一致。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DK 应继续完善结果定位体验，优先让反馈条在用户选中其他结果点后清楚标记为未定位，并保留一键回到最近编辑结果点的路径。

@@ -1613,11 +1613,20 @@ describe('Workbench view', () => {
     expect(actionEditFeedback.attributes('data-runtime-delta-count')).toBe(
       '1'
     );
+    expect(actionEditFeedback.attributes('data-result-focused')).toBe('true');
+    expect(actionEditFeedback.attributes('data-result-focus-status')).toBe(
+      'focused'
+    );
     expect(feedbackStatePointId).toBe(
       actionResultRow.attributes('data-runtime-state-point-id')
     );
     expect(actionEditFeedback.text()).toContain('最近编辑');
     expect(actionEditFeedback.text()).toContain('等级变更 1 -> 2');
+    expect(
+      actionEditFeedback
+        .find('[data-testid="workbench-action-edit-feedback-result-status"]')
+        .text()
+    ).toBe('结果已定位');
 
     const levelEditControl = wrapper.find(
       '[data-testid="workbench-action-edit-control"][data-edit-field="level"]'
@@ -1682,10 +1691,8 @@ describe('Workbench view', () => {
     expect(resultFocusButton.attributes('data-runtime-state-point-id')).toBe(
       feedbackStatePointId
     );
-    expect(resultFocusButton.attributes('disabled')).toBeUndefined();
-
-    await resultFocusButton.trigger('click');
-    await nextTick();
+    expect(resultFocusButton.attributes('disabled')).toBeDefined();
+    expect(resultFocusButton.text()).toBe('结果已定位');
 
     expect(
       wrapper
@@ -1702,6 +1709,30 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(feedbackStatePointId);
+    const focusedActionEditFeedback = wrapper.find(
+      '[data-testid="workbench-action-edit-feedback"]'
+    );
+    expect(focusedActionEditFeedback.attributes('data-result-focused')).toBe(
+      'true'
+    );
+    expect(
+      focusedActionEditFeedback.attributes('data-result-focus-status')
+    ).toBe('focused');
+    expect(
+      focusedActionEditFeedback
+        .find('[data-testid="workbench-action-edit-feedback-result-status"]')
+        .text()
+    ).toBe('结果已定位');
+    expect(
+      focusedActionEditFeedback
+        .find('[data-testid="workbench-action-edit-feedback-result-focus"]')
+        .attributes('disabled')
+    ).toBeDefined();
+    expect(
+      focusedActionEditFeedback
+        .find('[data-testid="workbench-action-edit-feedback-result-focus"]')
+        .text()
+    ).toBe('结果已定位');
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     await nextTick();

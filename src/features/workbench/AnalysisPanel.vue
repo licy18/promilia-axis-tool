@@ -55,8 +55,16 @@
         :data-edit-source-summary="actionEditFeedback.changeSummary"
         :data-runtime-delta-count="actionEditFeedback.runtimeDeltaCount"
         :data-runtime-state-point-id="actionEditFeedback.runtimeStatePointId"
+        :data-result-focused="actionEditFeedback.resultFocused"
+        :data-result-focus-status="actionEditFeedback.resultFocusStatus"
         data-testid="workbench-action-edit-feedback"
       >
+        <span
+          class="action-edit-feedback-status"
+          data-testid="workbench-action-edit-feedback-result-status"
+        >
+          {{ actionEditFeedback.resultFocusLabel }}
+        </span>
         <div class="action-edit-feedback-main">
           <span>最近编辑</span>
           <strong>{{ actionEditFeedback.actionName }}</strong>
@@ -77,11 +85,14 @@
             :data-runtime-state-point-id="
               actionEditFeedback.runtimeStatePointId
             "
-            :disabled="!actionEditFeedback.runtimeStatePointId"
+            :disabled="
+              !actionEditFeedback.runtimeStatePointId ||
+              actionEditFeedback.resultFocused
+            "
             data-testid="workbench-action-edit-feedback-result-focus"
             @click="selectActionEditFeedbackResult"
           >
-            定位结果
+            {{ actionEditFeedback.resultFocused ? '结果已定位' : '定位结果' }}
           </button>
         </div>
       </div>
@@ -1904,6 +1915,17 @@ function createActionEditFeedback(source) {
     entry => entry.actionId === source.actionId
   );
   const trace = runtimeTraceByActionId.value.get(source.actionId);
+  const runtimeStatePointId = trace?.firstStatePointId ?? '';
+  const resultFocused = Boolean(
+    runtimeStatePointId &&
+      props.selectedStateCurvePointId &&
+      props.selectedStateCurvePointId === runtimeStatePointId
+  );
+  const resultFocusStatus = runtimeStatePointId
+    ? resultFocused
+      ? 'focused'
+      : 'available'
+    : 'unavailable';
   return {
     actionId: source.actionId,
     actionName: action?.actionName ?? source.actionId,
@@ -1911,13 +1933,28 @@ function createActionEditFeedback(source) {
     label: source.label,
     changeSummary: source.changeSummary ?? '',
     display: formatActionEditSourceDisplay(source),
-    runtimeStatePointId: trace?.firstStatePointId ?? '',
+    runtimeStatePointId,
     runtimeDeltaCount: trace?.count ?? 0,
+    resultFocused,
+    resultFocusStatus,
+    resultFocusLabel: formatActionEditFeedbackResultFocusLabel(
+      resultFocusStatus
+    ),
   };
 }
 
 function isValidActionEditSource(source) {
   return Boolean(source?.actionId && source?.fieldKey && source?.label);
+}
+
+function formatActionEditFeedbackResultFocusLabel(status) {
+  if (status === 'focused') {
+    return '结果已定位';
+  }
+  if (status === 'available') {
+    return '结果未定位';
+  }
+  return '无结果点';
 }
 
 function createActionResultRuntimeTrace(actionId, rows) {
@@ -2923,13 +2960,23 @@ h2 {
 
 .action-edit-feedback {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
   padding: 9px 10px;
   border: 1px solid rgba(242, 179, 102, 0.22);
   border-radius: 4px;
   background: rgba(242, 179, 102, 0.08);
+}
+
+.action-edit-feedback-status {
+  width: max-content;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(242, 179, 102, 0.12);
+  color: #ffd8a6;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .action-edit-feedback-main {
