@@ -8895,6 +8895,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：基于 `primaryOperation` 合同继续整理 Workbench 主工作面，优先减少 review 区、顶部 flow panel、侧边详情之间的重复入口。
 
+### 2026-07-09：UI 主流程能力块 - Workbench Flow Panel Primary Operation Consumer
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `WorkbenchFlowPanel` 顶部 focus / return 主流程按钮在当前按钮就是主操作且 `runtimeReviewOperations.primaryOperation` 匹配时，改为消费同一 `primaryOperation` 合同显示 actionId、statePointId 和启用状态。
+- 顶部主流程按钮、review 区主操作、主流程 action dispatch 现在围绕同一 review primary operation 目标，减少 fallback target 与真实 dispatch target 的分叉。
+- 保留无匹配 primary operation 时的旧 fallback，非 review 路径和兼容测试仍可独立工作。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- 新增 `WorkbenchFlowPanel` 组件测试，构造 fallback target 与 primaryOperation target 不一致的场景，确认按钮展示和 dispatch 均使用 primaryOperation。
+- Workbench 页面测试和 main flow action 单测确认真实主流程路径保持可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、72 条测试。
+- `npm run test -- --run`：通过，34 个测试文件、199 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：基于同一 `primaryOperation` 合同进一步削减侧边详情面板与 review 主操作之间的重复 focus / return 入口。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

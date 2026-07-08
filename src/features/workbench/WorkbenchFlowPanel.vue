@@ -182,19 +182,15 @@
             ),
           },
         ]"
-        :data-action-id="
-          workbenchFlow.mainFlowState.runtimeActionEditTarget.actionId
-        "
+        :data-action-id="runtimeActionEditButtonTarget.actionId"
         :data-primary-action="
           isPrimaryFlowAction(WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION)
             ? 'true'
             : 'false'
         "
-        :data-state-point-id="
-          workbenchFlow.mainFlowState.runtimeActionEditTarget.statePointId
-        "
+        :data-state-point-id="runtimeActionEditButtonTarget.statePointId"
         data-testid="workbench-flow-edit-runtime-action"
-        :disabled="!workbenchFlow.mainFlowState.canFocusRuntimeAction"
+        :disabled="!runtimeActionEditButtonEnabled"
         @click="focusRuntimeAction"
       >
         <EditPen class="flow-button-icon" />
@@ -213,19 +209,15 @@
             ),
           },
         ]"
-        :data-action-id="
-          workbenchFlow.mainFlowState.resultReturnTarget.actionId
-        "
+        :data-action-id="runtimeResultReturnButtonTarget.actionId"
         :data-primary-action="
           isPrimaryFlowAction(WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT)
             ? 'true'
             : 'false'
         "
-        :data-state-point-id="
-          workbenchFlow.mainFlowState.resultReturnTarget.statePointId
-        "
+        :data-state-point-id="runtimeResultReturnButtonTarget.statePointId"
         data-testid="workbench-flow-return-edit-result"
-        :disabled="!workbenchFlow.mainFlowState.canReturnRuntimeResult"
+        :disabled="!runtimeResultReturnButtonEnabled"
         @click="returnRuntimeResult"
       >
         <ArrowRight class="flow-button-icon" />
@@ -309,20 +301,41 @@ const workbenchFlow = computed(
       actionEditResultContext: props.actionEditResultContext,
     })
 );
+const runtimeReviewPrimaryOperation = computed(
+  () => workbenchFlow.value.runtimeReviewOperations?.primaryOperation ?? null
+);
+const runtimeActionEditButtonTarget = computed(() =>
+  resolveMainFlowButtonOperation({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+    fallbackTarget: workbenchFlow.value.mainFlowState.runtimeActionEditTarget,
+  })
+);
+const runtimeResultReturnButtonTarget = computed(() =>
+  resolveMainFlowButtonOperation({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+    fallbackTarget: workbenchFlow.value.mainFlowState.resultReturnTarget,
+  })
+);
+const runtimeActionEditButtonEnabled = computed(
+  () =>
+    runtimeActionEditButtonTarget.value.enabled ??
+    workbenchFlow.value.mainFlowState.canFocusRuntimeAction
+);
+const runtimeResultReturnButtonEnabled = computed(
+  () =>
+    runtimeResultReturnButtonTarget.value.enabled ??
+    workbenchFlow.value.mainFlowState.canReturnRuntimeResult
+);
 
 function focusRuntimeAction() {
   dispatchMainFlowAction(WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION, () =>
-    getRuntimeActionFocusFlowAction(
-      workbenchFlow.value.mainFlowState.runtimeActionEditTarget
-    )
+    getRuntimeActionFocusFlowAction(runtimeActionEditButtonTarget.value)
   );
 }
 
 function returnRuntimeResult() {
   dispatchMainFlowAction(WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT, () =>
-    getRuntimeReturnFlowAction(
-      workbenchFlow.value.mainFlowState.resultReturnTarget
-    )
+    getRuntimeReturnFlowAction(runtimeResultReturnButtonTarget.value)
   );
 }
 
@@ -363,6 +376,14 @@ function dispatchMainFlowAction(kind, createFallbackAction) {
 
 function isPrimaryFlowAction(kind) {
   return workbenchFlow.value.mainFlowState.primaryAction.kind === kind;
+}
+
+function resolveMainFlowButtonOperation({ kind = '', fallbackTarget = null }) {
+  const primaryOperation = runtimeReviewPrimaryOperation.value;
+  if (isPrimaryFlowAction(kind) && primaryOperation?.kind === kind) {
+    return primaryOperation;
+  }
+  return fallbackTarget ?? {};
 }
 
 function getOpenRuntimeResultsFlowAction(flow) {
