@@ -7699,6 +7699,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 WorkbenchFlowPanel 和 PropertiesPanel 的返回/定位动作也接入统一 dispatcher，然后开始把“排轴动作编辑 -> 运行模拟 -> 曲线/日志/详情定位 -> 回到动作修改”整理成更明确的主流程控制模型。
 
+### 2026-07-09：UI 主流程能力块 - Flow/Properties 接入 Dispatcher
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `WorkbenchFlowPanel` 的运行结果导航、编辑结果动作、回到刷新结果都改为发出标准 `dispatch-flow-action`。
+- `PropertiesPanel` 的结果回看按钮改为发出标准 `dispatch-flow-action`。
+- `Workbench.vue` 现在通过同一个 dispatcher 执行分析面板、资源曲线、日志详情、三值详情、主流程条和属性面板的核心运行结果定位/返回/编辑聚焦动作。
+- 现有运行点选中、动作字段聚焦、返回刷新结果、资源曲线/日志/详情同步行为保持不变。
+
+当前验证事实：
+
+- 主流程条的前后导航会发出 `select-runtime-state-point` flow action。
+- 主流程条的“编辑结果动作”会发出 `focus-runtime-action` flow action。
+- 主流程条和属性面板的返回按钮会发出 `return-runtime-result` flow action。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、57 条测试。
+- `npm run test -- --run`：通过，19 个测试文件、142 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：在 Workbench 层整理更明确的主流程控制模型，把“排轴动作编辑 -> 运行模拟 -> 曲线/日志/详情定位 -> 回到动作修改”的状态和动作入口从分散函数进一步归纳为可维护的流程控制层。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

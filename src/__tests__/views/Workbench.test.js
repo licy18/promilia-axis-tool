@@ -14,6 +14,8 @@ import AnalysisPanel from '../../features/workbench/AnalysisPanel.vue';
 import EventLogPanel from '../../features/workbench/EventLogPanel.vue';
 import ResourceMonitorPanel from '../../features/workbench/ResourceMonitorPanel.vue';
 import RuntimeSelectedDetailPanel from '../../features/workbench/RuntimeSelectedDetailPanel.vue';
+import PropertiesPanel from '../../features/workbench/PropertiesPanel.vue';
+import WorkbenchFlowPanel from '../../features/workbench/WorkbenchFlowPanel.vue';
 import Workbench from '../../views/Workbench.vue';
 
 describe('Workbench view', () => {
@@ -1628,6 +1630,13 @@ describe('Workbench view', () => {
     await editRuntimeActionButton.trigger('click');
     await nextTick();
 
+    expect(getLastDispatchedFlowAction(wrapper, WorkbenchFlowPanel)).toMatchObject({
+      kind: 'focus-runtime-action',
+      source: 'workbench-flow-panel',
+      actionId: 'action-0001',
+      statePointId: selectedRuntimePointId,
+      canRun: true,
+    });
     const focusedTimelineAction = wrapper.find(
       '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
     );
@@ -1689,6 +1698,13 @@ describe('Workbench view', () => {
     await returnEditResultButton.trigger('click');
     await nextTick();
 
+    expect(getLastDispatchedFlowAction(wrapper, WorkbenchFlowPanel)).toMatchObject({
+      kind: 'return-runtime-result',
+      source: 'workbench-flow-panel',
+      actionId: 'action-0001',
+      statePointId: refreshedStatePointId,
+      canRun: true,
+    });
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
@@ -1919,6 +1935,12 @@ describe('Workbench view', () => {
     await previousRuntimePointButton.trigger('click');
     await nextTick();
 
+    expect(getLastDispatchedFlowAction(wrapper, WorkbenchFlowPanel)).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'workbench-flow-navigation',
+      statePointId: firstActionRuntimePointId,
+      canRun: true,
+    });
     flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
     expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
       'action-0001'
@@ -2067,6 +2089,12 @@ describe('Workbench view', () => {
     await nextRuntimePointButton.trigger('click');
     await nextTick();
 
+    expect(getLastDispatchedFlowAction(wrapper, WorkbenchFlowPanel)).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'workbench-flow-navigation',
+      statePointId: nextRuntimePointId,
+      canRun: true,
+    });
     flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
     expect(
       wrapper
@@ -3231,9 +3259,16 @@ describe('Workbench view', () => {
       refreshedRuntimeStatePointId
     );
 
-    await runtimeDetailReturnButton.trigger('click');
+    await refreshedResultReturnButton.trigger('click');
     await nextTick();
 
+    expect(getLastDispatchedFlowAction(wrapper, PropertiesPanel)).toMatchObject({
+      kind: 'return-runtime-result',
+      source: 'properties-panel',
+      actionId: 'action-0001',
+      statePointId: refreshedRuntimeStatePointId,
+      canRun: true,
+    });
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')

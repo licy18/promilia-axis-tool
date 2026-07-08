@@ -140,7 +140,11 @@ import {
   EditPen,
   TrendCharts,
 } from '@element-plus/icons-vue';
-import { createWorkbenchFlowModel } from './workbenchFlowModel';
+import {
+  WORKBENCH_FLOW_ACTION_KINDS,
+  createWorkbenchFlowAction,
+  createWorkbenchFlowModel,
+} from './workbenchFlowModel';
 
 const props = defineProps({
   selectedAction: {
@@ -173,12 +177,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits([
-  'open-runtime-results',
-  'focus-runtime-action',
-  'return-runtime-result',
-  'select-runtime-state-point',
-]);
+const emit = defineEmits(['open-runtime-results', 'dispatch-flow-action']);
 
 const workbenchFlow = computed(
   () =>
@@ -195,36 +194,66 @@ const workbenchFlow = computed(
 
 function focusRuntimeAction() {
   const detail = workbenchFlow.value.runtimeDetail;
-  if (!detail?.canFocusAction) {
-    return;
-  }
-  emit('focus-runtime-action', {
-    actionId: detail.actionId,
-    fieldKey: 'startMs',
-    frameLabel: detail.frameLabel ?? `${detail.timeMs ?? 0}ms`,
-    statePointId: detail.statePointId ?? '',
-    trackKey: detail.trackKey ?? '',
-  });
+  dispatchFlowAction(getRuntimeActionFocusFlowAction(detail));
 }
 
 function returnRuntimeResult() {
   const context = workbenchFlow.value.editResult;
-  if (!context?.canReturn) {
-    return;
-  }
-  emit('return-runtime-result', {
-    actionId: context.actionId,
-    statePointId: context.statePointId,
-  });
+  dispatchFlowAction(getRuntimeReturnFlowAction(context));
 }
 
 function selectRuntimeNavigationPoint(point) {
-  if (!point?.statePointId) {
-    return;
-  }
-  emit('select-runtime-state-point', point.statePointId);
+  dispatchFlowAction(getRuntimeNavigationFlowAction(point));
 }
 
+function dispatchFlowAction(action) {
+  if (!action?.canRun) {
+    return;
+  }
+  emit('dispatch-flow-action', action);
+}
+
+function getRuntimeNavigationFlowAction(point) {
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_STATE_POINT,
+    source: 'workbench-flow-navigation',
+    actionId: point?.row?.actionId ?? '',
+    statePointId: point?.statePointId ?? '',
+    payload: point ?? null,
+    enabled: Boolean(point?.statePointId),
+    disabledReason: 'missing-runtime-state-point',
+  });
+}
+
+function getRuntimeActionFocusFlowAction(detail) {
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+    source: 'workbench-flow-panel',
+    actionId: detail?.actionId ?? '',
+    statePointId: detail?.statePointId ?? '',
+    payload: {
+      actionId: detail?.actionId ?? '',
+      fieldKey: 'startMs',
+      frameLabel: detail?.frameLabel ?? `${detail?.timeMs ?? 0}ms`,
+      statePointId: detail?.statePointId ?? '',
+      trackKey: detail?.trackKey ?? '',
+    },
+    enabled: Boolean(detail?.canFocusAction),
+    disabledReason: 'missing-runtime-action',
+  });
+}
+
+function getRuntimeReturnFlowAction(context) {
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+    source: 'workbench-flow-panel',
+    actionId: context?.actionId ?? '',
+    statePointId: context?.statePointId ?? '',
+    payload: context ?? null,
+    enabled: Boolean(context?.canReturn),
+    disabledReason: 'missing-runtime-result',
+  });
+}
 </script>
 
 <style scoped>

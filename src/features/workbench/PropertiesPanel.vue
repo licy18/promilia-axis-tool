@@ -440,6 +440,10 @@ import { computed } from 'vue';
 import { Aim, Operation } from '@element-plus/icons-vue';
 import { WORKBENCH_FRAME_MS, formatFrameTime } from '../../domain/timebase';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
+import {
+  WORKBENCH_FLOW_ACTION_KINDS,
+  createWorkbenchFlowAction,
+} from './workbenchFlowModel';
 
 const props = defineProps({
   selection: {
@@ -483,7 +487,7 @@ const props = defineProps({
 const emit = defineEmits([
   'update-selection',
   'update-action',
-  'return-runtime-result',
+  'dispatch-flow-action',
 ]);
 
 const frameStepMs = WORKBENCH_FRAME_MS;
@@ -813,14 +817,19 @@ function emitTextPatch(key, value) {
 }
 
 function returnRuntimeResult() {
-  if (!runtimeResultReturnContext.value?.statePointId) {
+  const action = createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+    source: 'properties-panel',
+    actionId: runtimeResultReturnContext.value?.actionId ?? '',
+    statePointId: runtimeResultReturnContext.value?.statePointId ?? '',
+    payload: runtimeResultReturnContext.value ?? null,
+    enabled: Boolean(runtimeResultReturnContext.value?.statePointId),
+    disabledReason: 'missing-runtime-result',
+  });
+  if (!action.canRun) {
     return;
   }
-  emit('return-runtime-result', {
-    actionId: runtimeResultReturnContext.value.actionId,
-    statePointId: runtimeResultReturnContext.value.statePointId,
-    status: runtimeResultReturnContext.value.status,
-  });
+  emit('dispatch-flow-action', action);
 }
 
 function isEditFocusField(fieldKey) {

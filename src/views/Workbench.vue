@@ -52,9 +52,7 @@
       :action-edit-result-context="actionEditResultContext"
       :flow-model="workbenchFlowModel"
       @open-runtime-results="openRuntimeResultsFlow"
-      @focus-runtime-action="focusRuntimeAction"
-      @return-runtime-result="returnRuntimeResultFromProperties"
-      @select-runtime-state-point="selectRuntimeFlowStatePoint"
+      @dispatch-flow-action="dispatchWorkbenchFlowAction"
     />
 
     <div class="workbench-grid">
@@ -135,7 +133,7 @@
           :action-edit-result-context="actionEditResultContext"
           @update-selection="updateSelection"
           @update-action="updateAction"
-          @return-runtime-result="returnRuntimeResultFromProperties"
+          @dispatch-flow-action="dispatchWorkbenchFlowAction"
         />
 
         <EnemyPanel

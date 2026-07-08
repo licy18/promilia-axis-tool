@@ -15766,6 +15766,61 @@ Workbench 负责把 action kind 落到现有的状态更新函数，因此选中
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
 
+## 201. UI 主流程能力块：Flow/Properties 接入 Flow Action Dispatcher
+
+本阶段属于 UI 主流程。
+
+### 201.1 结构变化
+
+以下面板的主流程事件出口改为统一 `dispatch-flow-action`：
+
+```js
+WorkbenchFlowPanel
+PropertiesPanel
+```
+
+`WorkbenchFlowPanel` 内部动作映射：
+
+```js
+runtime navigation    -> select-runtime-state-point
+edit runtime action   -> focus-runtime-action
+return edit result    -> return-runtime-result
+```
+
+`PropertiesPanel` 内部动作映射：
+
+```js
+action edit result return -> return-runtime-result
+```
+
+`Workbench.vue` 对上述两个面板改为监听：
+
+```js
+@dispatch-flow-action="dispatchWorkbenchFlowAction"
+```
+
+不再直接监听上述两个面板的以下旧主流程事件：
+
+```js
+focus-runtime-action
+return-runtime-result
+select-runtime-state-point
+```
+
+### 201.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 的父子事件合同和派生主流程动作调度；模拟结果、三值计算、项目文件、runtime projection 结构不变。
+
+### 201.3 验证
+
+- Workbench 视图测试覆盖：主流程条运行结果导航、主流程条编辑结果动作、主流程条回到刷新结果、属性面板回到结果点都会发出标准 flow action，并保持现有状态同步。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、57 条测试。
+- `npm run test -- --run`：通过，19 个测试文件、142 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
 ## 200. UI 主流程能力块：Runtime Panels 接入 Flow Action Dispatcher
 
 本阶段属于 UI 主流程。
