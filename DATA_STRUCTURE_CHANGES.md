@@ -20391,3 +20391,39 @@ applyRuntimePointSelection({ statePointId })
 - `npm run test -- --run`：通过，35 个测试文件、215 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `git diff --check`：通过。
+
+## 271. UI 主流程能力块：Calculator Scope State In Flow Runtime
+
+### 271.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`createWorkbenchFlowRuntime()` 新增可选回调：
+
+```js
+getFirstRuntimeStatePointId()
+applyCalculatorScopeState(scopeState)
+```
+
+并新增运行时方法：
+
+```js
+applyCalculatorScope({
+  scope,
+  selectFirstRuntimePoint,
+})
+```
+
+`workbenchFlowRuntime` 现在负责调用 `createWorkbenchFlowRuntimeScopeState()` 创建 calculator scope / runtime overview 状态；Workbench 页面层只接收并应用该状态。
+
+### 271.2 保存与迁移
+
+本阶段只调整 Workbench 主流程 runtime 的内部状态应用入口，不新增持久字段，不需要数据迁移。
+
+### 271.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowRuntime.test.js`，覆盖直接 calculator scope 切换输出共享 scope state，以及 runtime overview plan 的 pulsed scope state 入口。
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、63 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、216 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过。

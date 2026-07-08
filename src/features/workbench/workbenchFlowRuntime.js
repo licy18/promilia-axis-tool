@@ -1,11 +1,13 @@
 import { createWorkbenchFlowRuntimePointSelectionState } from './workbenchFlowRuntimePointSelection';
+import { createWorkbenchFlowRuntimeScopeState } from './workbenchFlowRuntimeScope';
 
 export function createWorkbenchFlowRuntime({
   actionExists = () => false,
   selectAction = () => {},
   setActionEditFocus = () => {},
-  focusCalculatorScope = () => {},
   setCalculatorScope = () => {},
+  getFirstRuntimeStatePointId = () => '',
+  applyCalculatorScopeState = null,
   applyRuntimePointSelectionState = null,
   selectRuntimeStatePoint = () => {},
   clearRuntimeSelection = () => {},
@@ -25,7 +27,37 @@ export function createWorkbenchFlowRuntime({
     return selectionState;
   }
 
+  function applyCalculatorScopeStateForScope(
+    scope = '',
+    { selectFirstRuntimePoint = true } = {}
+  ) {
+    const firstRuntimeStatePointId = selectFirstRuntimePoint
+      ? getFirstRuntimeStatePointId()
+      : '';
+    const scopeState = createWorkbenchFlowRuntimeScopeState({
+      scope,
+      firstRuntimeStatePointId,
+    });
+    if (typeof applyCalculatorScopeState === 'function') {
+      applyCalculatorScopeState(scopeState);
+    } else {
+      setCalculatorScope(scopeState.calculatorScope);
+    }
+    return scopeState;
+  }
+
   return {
+    applyCalculatorScope({
+      scope = '',
+      selectFirstRuntimePoint = true,
+    } = {}) {
+      applyCalculatorScopeStateForScope(scope, { selectFirstRuntimePoint });
+      return createFlowRuntimeResult({
+        applied: true,
+        kind: 'calculator-scope-selection',
+      });
+    },
+
     applyRuntimePointSelection({ statePointId = '' } = {}) {
       applyRuntimePointSelectionStateForPoint(statePointId);
       return createFlowRuntimeResult({
@@ -68,7 +100,7 @@ export function createWorkbenchFlowRuntime({
 
       if (flowPlan.calculatorScope) {
         if (flowPlan.pulseCalculatorFocus) {
-          focusCalculatorScope(flowPlan.calculatorScope, {
+          applyCalculatorScopeStateForScope(flowPlan.calculatorScope, {
             selectFirstRuntimePoint: flowPlan.selectFirstRuntimePoint,
           });
         } else {

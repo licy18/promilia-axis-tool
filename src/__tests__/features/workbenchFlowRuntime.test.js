@@ -79,8 +79,6 @@ describe('workbench flow runtime', () => {
       actionExists: actionId => actionId === 'action-0001',
       selectAction: (actionId, options) =>
         calls.push(['selectAction', actionId, options]),
-      focusCalculatorScope: (scope, options) =>
-        calls.push(['focusCalculatorScope', scope, options]),
       setCalculatorScope: scope => calls.push(['setCalculatorScope', scope]),
       applyRuntimePointSelectionState: selectionState =>
         calls.push(['applyRuntimePointSelectionState', selectionState]),
@@ -180,11 +178,54 @@ describe('workbench flow runtime', () => {
     ]);
   });
 
+  it('applies calculator scope selection through the shared scope state', () => {
+    const calls = [];
+    const runtime = createWorkbenchFlowRuntime({
+      getFirstRuntimeStatePointId: () => 'point-first',
+      applyCalculatorScopeState: scopeState =>
+        calls.push(['applyCalculatorScopeState', scopeState]),
+    });
+
+    expect(
+      runtime.applyCalculatorScope({
+        scope: 'runtime',
+      })
+    ).toMatchObject({
+      applied: true,
+      kind: 'calculator-scope-selection',
+    });
+
+    expect(calls).toEqual([
+      [
+        'applyCalculatorScopeState',
+        {
+          calculatorScope: 'runtime',
+          statePointId: 'point-first',
+          selectRuntimeStatePoint: true,
+          clearRuntimeSelection: false,
+          stateCurveFocusMode: 'selected',
+          stateCurveLayerFilters: {
+            applied: true,
+            candidate: false,
+            sampled: false,
+            placeholder: false,
+          },
+          stateCurveTrackFilters: {},
+          runtimeLogFocus: {
+            source: '',
+            statePointId: '',
+          },
+        },
+      ],
+    ]);
+  });
+
   it('applies runtime overview clearing and pulsed calculator focus', () => {
     const calls = [];
     const runtime = createWorkbenchFlowRuntime({
-      focusCalculatorScope: (scope, options) =>
-        calls.push(['focusCalculatorScope', scope, options]),
+      getFirstRuntimeStatePointId: () => 'point-unused',
+      applyCalculatorScopeState: scopeState =>
+        calls.push(['applyCalculatorScopeState', scopeState]),
       clearRuntimeSelection: payload =>
         calls.push(['clearRuntimeSelection', payload]),
     });
@@ -201,10 +242,24 @@ describe('workbench flow runtime', () => {
 
     expect(calls).toEqual([
       [
-        'focusCalculatorScope',
-        'runtime',
+        'applyCalculatorScopeState',
         {
-          selectFirstRuntimePoint: false,
+          calculatorScope: 'runtime',
+          statePointId: '',
+          selectRuntimeStatePoint: false,
+          clearRuntimeSelection: true,
+          stateCurveFocusMode: 'all',
+          stateCurveLayerFilters: {
+            applied: true,
+            candidate: false,
+            sampled: false,
+            placeholder: false,
+          },
+          stateCurveTrackFilters: {},
+          runtimeLogFocus: {
+            source: '',
+            statePointId: '',
+          },
         },
       ],
       [

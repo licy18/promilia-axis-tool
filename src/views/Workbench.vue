@@ -430,7 +430,6 @@ import {
   createWorkbenchFlowPlanController,
 } from '../features/workbench/workbenchFlowPlanController';
 import { createWorkbenchFlowRuntime } from '../features/workbench/workbenchFlowRuntime';
-import { createWorkbenchFlowRuntimeScopeState } from '../features/workbench/workbenchFlowRuntimeScope';
 import {
   createWorkbenchMainFlowStatusView,
   createWorkbenchRuntimeReviewFlowView,
@@ -546,11 +545,15 @@ const workbenchFlowRuntime = createWorkbenchFlowRuntime({
   setActionEditFocus: focus => {
     actionEditFocus.value = { ...focus };
   },
-  focusCalculatorScope: (scope, options) =>
-    focusThreeValueCalculatorScope(scope, options),
   setCalculatorScope: scope => {
     calculatorDiagnosticScope.value = scope;
   },
+  getFirstRuntimeStatePointId: () =>
+    getFirstRuntimeStatePointId(
+      simulationResult.value.threeValueRuntimeProjection
+    ),
+  applyCalculatorScopeState: scopeState =>
+    applyCalculatorScopeFlowState(scopeState),
   applyRuntimePointSelectionState: selectionState =>
     applyRuntimePointSelectionState(selectionState),
   clearRuntimeSelection: ({ stateCurveFocusMode: mode = 'all' } = {}) => {
@@ -1734,17 +1737,10 @@ function focusThreeValueCalculatorScope(
   scope,
   { selectFirstRuntimePoint = true } = {}
 ) {
-  const firstRuntimeStatePointId = selectFirstRuntimePoint
-    ? getFirstRuntimeStatePointId(
-        simulationResult.value.threeValueRuntimeProjection
-      )
-    : '';
-  applyCalculatorScopeFlowState(
-    createWorkbenchFlowRuntimeScopeState({
-      scope,
-      firstRuntimeStatePointId,
-    })
-  );
+  workbenchFlowRuntime.applyCalculatorScope({
+    scope,
+    selectFirstRuntimePoint,
+  });
 }
 
 function applyCalculatorScopeFlowState(scopeState = {}) {
