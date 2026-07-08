@@ -5253,6 +5253,38 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 展示时保留非技术但可追溯的标签，例如“HP预览 / 可替换 / 公式未确认”、“削韧候选 / 基线待确认”、“能量采样 / owner-share待确认”。
 - 不在 5-8CN 修改最终公式，只把来源透明度和调试入口补齐。
 
+### 2026-07-08：阶段 5-8CN calculator 来源接入详情
+
+本轮完成：
+
+- `createRuntimeSelectedDetail()` 新增 `calculatorRows`，把 runtime point / sim log 中的 calculator 元数据整理成 UI 可直接展示的行。
+- 右侧 `RuntimeSelectedDetailPanel` 新增“公式适配器”区，展示适配器、来源、是否可替换、公式状态、缺口。
+- `EventLogPanel` 的 runtime sim log 内嵌详情也新增“公式适配器”区；当统一详情已匹配时复用统一详情的 `calculatorRows`，初始 fallback 状态也能从 runtime point / sim log 生成同样的行。
+- 当前 HP applied 点展示为：`HP适配器 / HP预览 / 可替换 / 公式未确认 / 最终公式、防御抗性顺序、命中绑定`。
+- calculator 文案保持面向使用者的中文标签，同时保留 `title` 与 `rawValue` 追溯原始 key/status。
+
+当前验证事实：
+
+- 默认 runtime sim log 初始 fallback 详情显示 5 行 calculator 来源：适配器、来源、替换、公式、缺口。
+- 点击默认 runtime sim log 行后，右侧三值详情显示同一套 calculator 来源。
+- HP applied 点仍保持原有 Delta、累计、状态值、基线与来源 element 显示；本阶段只增加来源透明度。
+
+当前边界：
+
+- calculator 来源已显示在详情里，但还没有独立的全局 calculator 诊断摘要或筛选入口。
+- calculator 定义仍位于 `projectSimulationResult.js` 中，后续应拆到更清晰的运行时 adapter 模块。
+- UI 文案目前覆盖当前三条轨道的主要来源类型；后续若新增最终公式或新采样类型，需要补映射文案。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+
+下一步：
+
+- 阶段 5-8CO 目标：把三值 calculator 定义、状态映射和未确认项整理到独立运行时 adapter 模块，减少 `projectSimulationResult.js` 的继续膨胀。
+- 同步补 generation/runtime summary 的 calculator 诊断入口，让用户后续能看到每条轨道仍有多少 preview/candidate/sample 输出、哪些缺口最常见。
+- 仍不修改最终公式数值；这一阶段先把 adapter 模块边界和诊断摘要铺好。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

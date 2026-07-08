@@ -80,6 +80,20 @@
       </div>
     </div>
 
+    <div class="runtime-detail-calculators">
+      <div
+        v-for="row in detail.calculatorRows"
+        :key="row.key"
+        class="runtime-detail-calculator-row"
+        :data-calculator-key="row.key"
+        :title="String(row.rawValue ?? row.value ?? '')"
+        data-testid="workbench-runtime-selected-detail-calculator-row"
+      >
+        <span>{{ row.label }}</span>
+        <strong>{{ row.value }}</strong>
+      </div>
+    </div>
+
     <div class="runtime-detail-meta">
       <div>
         <span>来源</span>
@@ -251,6 +265,7 @@ h2 {
 .runtime-detail-values div,
 .runtime-detail-meta div,
 .runtime-detail-contribution-row,
+.runtime-detail-calculator-row,
 .runtime-detail-source-row {
   min-width: 0;
   padding: 8px 9px;
@@ -262,6 +277,7 @@ h2 {
 .runtime-detail-values span,
 .runtime-detail-meta span,
 .runtime-detail-contribution-row span,
+.runtime-detail-calculator-row span,
 .runtime-detail-source-row span {
   display: block;
   margin-bottom: 4px;
@@ -273,6 +289,7 @@ h2 {
 .runtime-detail-values strong,
 .runtime-detail-meta strong,
 .runtime-detail-contribution-row strong,
+.runtime-detail-calculator-row strong,
 .runtime-detail-source-row strong {
   display: block;
   overflow: hidden;
@@ -288,6 +305,7 @@ h2 {
 }
 
 .runtime-detail-contributions,
+.runtime-detail-calculators,
 .runtime-detail-sources {
   display: grid;
   gap: 6px;
@@ -295,6 +313,7 @@ h2 {
 }
 
 .runtime-detail-contribution-row,
+.runtime-detail-calculator-row,
 .runtime-detail-source-row {
   display: flex;
   align-items: center;
@@ -308,12 +327,14 @@ h2 {
 }
 
 .runtime-detail-contribution-row span,
+.runtime-detail-calculator-row span,
 .runtime-detail-source-row span {
   margin-bottom: 0;
   white-space: nowrap;
 }
 
 .runtime-detail-contribution-row strong,
+.runtime-detail-calculator-row strong,
 .runtime-detail-source-row strong {
   text-align: right;
 }

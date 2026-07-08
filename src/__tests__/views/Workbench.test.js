@@ -236,6 +236,20 @@ describe('Workbench view', () => {
         expect.stringContaining('Element109001081'),
       ])
     );
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-runtime-sim-log-calculator-row"]')
+        .map(row => [
+          row.attributes('data-calculator-key'),
+          row.text(),
+        ])
+    ).toEqual([
+      ['calculator', '适配器HP适配器'],
+      ['kind', '来源HP预览'],
+      ['replaceable', '替换可替换'],
+      ['status', '公式公式未确认'],
+      ['unresolved', '缺口最终公式、防御抗性顺序、命中绑定'],
+    ]);
     expect(text).toContain(
       'HP 2 个候选 (109001081, 109001306) / 削韧 2 个候选 (109001081, 109001306) / 充能 2 个候选 (109001081, 109001306)'
     );
@@ -1179,6 +1193,20 @@ describe('Workbench view', () => {
         )
         .text()
     ).toBe('敌人面板');
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-runtime-selected-detail-calculator-row"]')
+        .map(row => [
+          row.attributes('data-calculator-key'),
+          row.text(),
+        ])
+    ).toEqual([
+      ['calculator', '适配器HP适配器'],
+      ['kind', '来源HP预览'],
+      ['replaceable', '替换可替换'],
+      ['status', '公式公式未确认'],
+      ['unresolved', '缺口最终公式、防御抗性顺序、命中绑定'],
+    ]);
     expect(
       wrapper
         .findAll(

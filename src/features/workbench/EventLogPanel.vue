@@ -202,6 +202,25 @@
           <strong>{{ item.value }}</strong>
         </div>
       </div>
+
+      <div
+        v-if="selectedRuntimeCalculatorRows.length"
+        class="runtime-calculator-detail"
+        data-testid="workbench-runtime-sim-log-calculator"
+      >
+        <div class="runtime-detail-heading">公式适配器</div>
+        <div
+          v-for="item in selectedRuntimeCalculatorRows"
+          :key="item.key"
+          class="runtime-calculator-row"
+          :data-calculator-key="item.key"
+          :title="String(item.rawValue ?? item.value ?? '')"
+          data-testid="workbench-runtime-sim-log-calculator-row"
+        >
+          <span>{{ item.label }}</span>
+          <strong>{{ item.value }}</strong>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -210,6 +229,7 @@
 import { computed, ref, watch } from 'vue';
 import { Tickets } from '@element-plus/icons-vue';
 import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
+import { createRuntimeDetailCalculatorRows } from './runtimeSelectedDetail';
 
 const props = defineProps({
   eventLog: {
@@ -415,6 +435,14 @@ const selectedRuntimeSourceRows = computed(() =>
   matchedRuntimeSelectedDetail.value
     ? createRuntimeSourceRowsFromDetail(matchedRuntimeSelectedDetail.value)
     : createRuntimeSourceRows(selectedRuntimeLogPoint.value)
+);
+const selectedRuntimeCalculatorRows = computed(() =>
+  matchedRuntimeSelectedDetail.value
+    ? (matchedRuntimeSelectedDetail.value.calculatorRows ?? [])
+    : createRuntimeDetailCalculatorRows(
+        selectedRuntimeLogPoint.value,
+        selectedRuntimeLog.value
+      )
 );
 
 watch(filteredRuntimeSimLogRows, rows => {
@@ -951,6 +979,7 @@ h2 {
 
 .runtime-log-detail div,
 .runtime-contribution-row,
+.runtime-calculator-row,
 .runtime-source-row {
   min-width: 0;
   padding: 8px 9px;
@@ -960,6 +989,7 @@ h2 {
 
 .runtime-log-detail span,
 .runtime-contribution-row span,
+.runtime-calculator-row span,
 .runtime-source-row span {
   display: block;
   margin-bottom: 4px;
@@ -969,6 +999,7 @@ h2 {
 
 .runtime-log-detail strong,
 .runtime-contribution-row strong,
+.runtime-calculator-row strong,
 .runtime-source-row strong {
   display: block;
   overflow: hidden;
@@ -979,6 +1010,7 @@ h2 {
 }
 
 .runtime-contribution-detail,
+.runtime-calculator-detail,
 .runtime-source-detail {
   display: grid;
   gap: 6px;
@@ -991,6 +1023,7 @@ h2 {
 }
 
 .runtime-contribution-row,
+.runtime-calculator-row,
 .runtime-source-row {
   display: flex;
   align-items: center;
@@ -999,12 +1032,14 @@ h2 {
 }
 
 .runtime-contribution-row span,
+.runtime-calculator-row span,
 .runtime-source-row span {
   margin-bottom: 0;
   white-space: nowrap;
 }
 
 .runtime-contribution-row strong,
+.runtime-calculator-row strong,
 .runtime-source-row strong {
   text-align: right;
 }

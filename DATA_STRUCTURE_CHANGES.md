@@ -10320,3 +10320,101 @@ appliedToRuntimeCount
 - `git diff --check`：通过；仅有既有 Windows 换行提示。
 
 下一阶段 5-8CN 应把 calculator 来源接入 Workbench 统一三值详情和 runtime sim log 详情。
+
+## 121. 阶段 5-8CN：calculator source detail rows
+
+阶段 5-8CN 不修改项目保存 schema。本阶段只扩展 Workbench 的运行时详情派生字段和 DOM 测试入口。
+
+### 121.1 统一详情新增 calculatorRows
+
+`createRuntimeSelectedDetail()` 新增：
+
+```js
+calculatorRows: [
+  {
+    key: 'calculator',
+    label: '适配器',
+    value,
+    rawValue,
+  },
+  {
+    key: 'kind',
+    label: '来源',
+    value,
+    rawValue,
+  },
+  {
+    key: 'replaceable',
+    label: '替换',
+    value,
+    rawValue,
+  },
+  {
+    key: 'status',
+    label: '公式',
+    value,
+    rawValue,
+  },
+  {
+    key: 'unresolved',
+    label: '缺口',
+    value,
+    rawValue,
+  },
+]
+```
+
+`calculatorRows` 从 runtime point 的 `calculator` / `calculatorKey` / `calculationKind` / `calculationStatus` / `calculationReplaceable` 派生；缺失时可从 `simLogRow` 回退。
+
+### 121.2 新增导出 helper
+
+`runtimeSelectedDetail.js` 新增导出：
+
+```js
+createRuntimeDetailCalculatorRows(point, simLogRow)
+```
+
+用于 `RuntimeSelectedDetailPanel` 和 `EventLogPanel` 共享同一套 calculator 文案。
+
+### 121.3 新增 DOM 测试入口
+
+右侧三值详情新增：
+
+```html
+data-testid="workbench-runtime-selected-detail-calculator-row"
+data-calculator-key="calculator | kind | replaceable | status | unresolved"
+```
+
+runtime sim log 内嵌详情新增：
+
+```html
+data-testid="workbench-runtime-sim-log-calculator"
+data-testid="workbench-runtime-sim-log-calculator-row"
+data-calculator-key="calculator | kind | replaceable | status | unresolved"
+```
+
+### 121.4 当前展示文案
+
+默认 HP applied 点当前展示为：
+
+```text
+适配器 HP适配器
+来源 HP预览
+替换 可替换
+公式 公式未确认
+缺口 最终公式、防御抗性顺序、命中绑定
+```
+
+### 121.5 验证
+
+当前测试覆盖：
+
+- 默认 runtime sim log fallback 详情显示 calculator rows。
+- 点击 runtime sim log 行后，统一三值详情显示同一套 calculator rows。
+- 既有贡献、来源、状态值、基线与 HP 溢出断言继续通过。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+
+下一阶段 5-8CO 应把 calculator 定义、状态映射和未确认项整理到独立运行时 adapter 模块，并补 calculator 诊断摘要入口。
