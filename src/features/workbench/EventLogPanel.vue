@@ -330,6 +330,7 @@ import {
 import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
   createWorkbenchRuntimeReviewFlowAction,
+  createWorkbenchRuntimeReviewOperationFlowAction,
 } from './workbenchMainFlowActions';
 import {
   isRuntimeResultFocusSource,
@@ -815,19 +816,21 @@ function getRuntimeLogRowFlowAction(row) {
 }
 
 function getRuntimeLogActionFocusFlowAction(focus) {
-  return createWorkbenchRuntimeReviewFlowAction({
-    kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+  return createWorkbenchRuntimeReviewOperationFlowAction({
+    operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
     source: 'event-log-runtime-detail',
+    flowModel: props.flowModel,
     target: focus,
     enabled: Boolean(focus?.canFocusAction ?? focus?.actionId),
   });
 }
 
 function getRuntimeLogReturnFlowAction(context) {
-  return createWorkbenchRuntimeReviewFlowAction({
-    kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+  return createWorkbenchRuntimeReviewOperationFlowAction({
+    operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
     source: 'event-log-runtime-detail',
-    target: context,
+    flowModel: props.flowModel,
+    context,
     enabled: Boolean(context?.statePointId),
   });
 }

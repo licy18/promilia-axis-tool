@@ -371,6 +371,7 @@ import {
 import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
   createWorkbenchRuntimeReviewFlowAction,
+  createWorkbenchRuntimeReviewOperationFlowAction,
 } from './workbenchMainFlowActions';
 import { isRuntimeResultFocusSource } from './runtimeFocusSource';
 
@@ -1097,9 +1098,10 @@ function getRuntimeCurvePointFlowAction(point) {
 }
 
 function getRuntimeCurveActionFocusFlowAction(point) {
-  return createWorkbenchRuntimeReviewFlowAction({
-    kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+  return createWorkbenchRuntimeReviewOperationFlowAction({
+    operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
     source: 'resource-runtime-curve',
+    flowModel: props.flowModel,
     target: point,
     enabled: Boolean(point?.canFocusAction ?? point?.actionId),
   });

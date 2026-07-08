@@ -18806,6 +18806,50 @@ originTrackLabel
 - `npm run test -- --run`：通过，33 个测试文件、194 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 
+## 242. UI 主流程能力块：Runtime Review Operation Consumers
+
+### 242.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+运行结果 review operation 的消费组件扩展为：
+
+```text
+RuntimeSelectedDetailPanel
+ResourceMonitorPanel
+EventLogPanel
+```
+
+以下操作现在统一通过 `createWorkbenchRuntimeReviewOperationFlowAction()` 生成 flow action：
+
+```text
+RuntimeSelectedDetailPanel: focus-runtime-action
+RuntimeSelectedDetailPanel: return-runtime-result
+ResourceMonitorPanel: focus-runtime-action
+EventLogPanel: focus-runtime-action
+EventLogPanel: return-runtime-result
+```
+
+以下选择动作继续通过 `createWorkbenchRuntimeReviewFlowAction()` 生成，因为它们不是 review operation，而是运行点选择：
+
+```text
+ResourceMonitorPanel: select-runtime-state-point
+EventLogPanel: select-runtime-state-point
+```
+
+`createWorkbenchRuntimeReviewOperationFlowAction()` 的消费语义不变：优先读取 `flowModel.runtimeReviewOperations` 中对应 operation 的标准目标，在没有 flow model 目标时回退到调用方传入的 `target` 或 `context`。
+
+### 242.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程 action 生成入口，不新增持久字段，不需要数据迁移。
+
+### 242.3 验证
+
+- 更新 `src/__tests__/views/Workbench.test.js`，确认日志详情 focus action 保留 `trackKey/trackLabel`，日志详情 return action 保留 `originStatePointId/status`，曲线 focus action 保留 `trackKey/trackLabel`。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、67 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、194 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
 ## 239. UI 主流程能力块：Runtime Review Selection Consumers
 
 ### 239.1 结构变化
