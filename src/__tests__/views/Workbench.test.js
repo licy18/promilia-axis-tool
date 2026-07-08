@@ -2252,6 +2252,11 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-action-edit-result-return"]')
         .exists()
     ).toBe(false);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-return-result"]')
+        .exists()
+    ).toBe(false);
 
     await runtimeDetailActionFocus.trigger('click');
     await nextTick();
@@ -2360,8 +2365,24 @@ describe('Workbench view', () => {
     expect(refreshedResultReturnButton.attributes('data-state-point-id')).toBe(
       refreshedRuntimeStatePointId
     );
+    const runtimeDetailReturnButton = wrapper.find(
+      '[data-testid="workbench-runtime-selected-detail-return-result"]'
+    );
+    expect(runtimeDetailReturnButton.exists()).toBe(true);
+    expect(runtimeDetailReturnButton.attributes('data-action-id')).toBe(
+      'action-0001'
+    );
+    expect(
+      runtimeDetailReturnButton.attributes('data-origin-state-point-id')
+    ).toBe(appliedStatePointId);
+    expect(runtimeDetailReturnButton.attributes('data-return-status')).toBe(
+      'refreshed-edit-result'
+    );
+    expect(runtimeDetailReturnButton.attributes('data-state-point-id')).toBe(
+      refreshedRuntimeStatePointId
+    );
 
-    await refreshedResultReturnButton.trigger('click');
+    await runtimeDetailReturnButton.trigger('click');
     await nextTick();
 
     expect(

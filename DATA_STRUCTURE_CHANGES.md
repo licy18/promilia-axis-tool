@@ -13968,3 +13968,69 @@ Workbench 测试新增覆盖：
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
 - `npm run test -- --run`：通过，15 个测试文件、118 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 168. UI 主流程能力块：三值详情回看刷新结果
+
+本阶段属于 UI 主流程。
+
+### 168.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 168.2 RuntimeSelectedDetailPanel 输入变化
+
+`RuntimeSelectedDetailPanel` 新增输入：
+
+```text
+actionEditResultContext
+```
+
+该输入来自 `Workbench.vue` 的既有派生上下文，用于判断三值详情当前对应的 runtime-focus 编辑是否已经产生刷新后的 runtime state point。
+
+### 168.3 RuntimeSelectedDetailPanel 事件变化
+
+`RuntimeSelectedDetailPanel` 新增事件：
+
+```text
+return-runtime-result
+```
+
+`Workbench.vue` 接线为：
+
+```text
+return-runtime-result -> returnRuntimeResultFromProperties()
+```
+
+该事件复用既有回看逻辑，不新增平行状态。
+
+### 168.4 DOM 变化
+
+三值详情面板新增回看按钮：
+
+```html
+data-testid="workbench-runtime-selected-detail-return-result"
+data-action-id
+data-origin-state-point-id
+data-return-status
+data-state-point-id
+```
+
+当旧 runtime state point 已随动作编辑失效但刷新结果可用时，三值详情面板仍保留轻量回看上下文：
+
+```html
+data-testid="workbench-runtime-selected-detail-return-context"
+data-action-id
+data-origin-state-point-id
+data-state-point-id
+```
+
+### 168.5 验证
+
+Workbench 测试新增覆盖：
+
+- 三值详情定位动作前不显示回看入口。
+- 修改开始时间后，三值详情回看按钮携带来源 state point 与刷新后 state point。
+- 点击三值详情回看按钮后，运行详情、动作结果行和模拟日志导航同步到刷新后的 state point。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
+- `npm run test -- --run`：通过，15 个测试文件、118 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

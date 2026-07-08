@@ -1,6 +1,6 @@
 <template>
   <section
-    v-if="detail"
+    v-if="panelVisible"
     class="panel runtime-selected-detail-panel"
     data-testid="workbench-runtime-selected-detail"
   >
@@ -8,6 +8,7 @@
       <DataAnalysis class="panel-icon" />
       <h2>三值详情</h2>
       <button
+        v-if="detail"
         type="button"
         class="runtime-detail-action-focus"
         :data-action-id="detail.actionId || ''"
@@ -20,9 +21,40 @@
         <EditPen class="runtime-detail-action-focus-icon" />
         <span>定位动作</span>
       </button>
+      <button
+        v-if="runtimeDetailResultReturnContext"
+        type="button"
+        class="runtime-detail-result-return"
+        :data-action-id="runtimeDetailResultReturnContext.actionId"
+        :data-origin-state-point-id="
+          runtimeDetailResultReturnContext.originStatePointId
+        "
+        :data-return-status="runtimeDetailResultReturnContext.status"
+        :data-state-point-id="runtimeDetailResultReturnContext.statePointId"
+        data-testid="workbench-runtime-selected-detail-return-result"
+        @click="returnRuntimeResult"
+      >
+        <Aim class="runtime-detail-result-return-icon" />
+        <span>回到结果点</span>
+      </button>
     </div>
 
-    <div class="runtime-detail-summary">
+    <div
+      v-if="!detail && runtimeDetailResultReturnContext"
+      class="runtime-detail-return-context"
+      :data-action-id="runtimeDetailResultReturnContext.actionId"
+      :data-origin-state-point-id="
+        runtimeDetailResultReturnContext.originStatePointId
+      "
+      :data-state-point-id="runtimeDetailResultReturnContext.statePointId"
+      data-testid="workbench-runtime-selected-detail-return-context"
+    >
+      <span>刷新结果</span>
+      <strong>{{ runtimeDetailResultReturnContext.label }}</strong>
+      <small>{{ runtimeDetailResultReturnContext.summary }}</small>
+    </div>
+
+    <div v-if="detail" class="runtime-detail-summary">
       <div>
         <span>动作</span>
         <strong data-testid="workbench-runtime-selected-detail-action">
@@ -50,7 +82,7 @@
     </div>
 
     <div
-      v-if="runtimeDetailEditContext"
+      v-if="detail && runtimeDetailEditContext"
       class="runtime-detail-edit-context"
       :data-action-id="runtimeDetailEditContext.actionId"
       :data-edit-context-status="runtimeDetailEditContext.status"
@@ -64,7 +96,7 @@
       <small>{{ runtimeDetailEditContext.summary }}</small>
     </div>
 
-    <div class="runtime-detail-values">
+    <div v-if="detail" class="runtime-detail-values">
       <div>
         <span>Delta</span>
         <strong data-testid="workbench-runtime-selected-detail-delta">
@@ -94,7 +126,7 @@
       </div>
     </div>
 
-    <div class="runtime-detail-contributions">
+    <div v-if="detail" class="runtime-detail-contributions">
       <div
         v-for="row in detail.contributionRows"
         :key="row.key"
@@ -108,7 +140,7 @@
       </div>
     </div>
 
-    <div class="runtime-detail-calculators">
+    <div v-if="detail" class="runtime-detail-calculators">
       <div
         v-for="row in detail.calculatorRows"
         :key="row.key"
@@ -122,7 +154,7 @@
       </div>
     </div>
 
-    <div class="runtime-detail-meta">
+    <div v-if="detail" class="runtime-detail-meta">
       <div>
         <span>来源</span>
         <strong data-testid="workbench-runtime-selected-detail-source-delta">
@@ -146,7 +178,7 @@
       </div>
     </div>
 
-    <div class="runtime-detail-sources">
+    <div v-if="detail" class="runtime-detail-sources">
       <div
         v-for="row in detail.sourceRows"
         :key="row.key"
@@ -163,7 +195,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { DataAnalysis, EditPen } from '@element-plus/icons-vue';
+import { Aim, DataAnalysis, EditPen } from '@element-plus/icons-vue';
 
 const props = defineProps({
   detail: {
@@ -174,12 +206,26 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  actionEditResultContext: {
+    type: Object,
+    default: null,
+  },
 });
 
-const emit = defineEmits(['focus-runtime-action']);
+const emit = defineEmits(['focus-runtime-action', 'return-runtime-result']);
 
 const runtimeDetailEditContext = computed(() =>
   createRuntimeDetailEditContext(props.detail, props.actionEditFocus)
+);
+const runtimeDetailResultReturnContext = computed(() =>
+  createRuntimeDetailResultReturnContext({
+    detail: props.detail,
+    focus: props.actionEditFocus,
+    resultContext: props.actionEditResultContext,
+  })
+);
+const panelVisible = computed(() =>
+  Boolean(props.detail || runtimeDetailResultReturnContext.value)
 );
 
 function focusRuntimeAction() {
@@ -193,6 +239,18 @@ function focusRuntimeAction() {
     frameLabel: detail.frameLabel ?? `${detail.timeMs ?? 0}ms`,
     statePointId: detail.statePointId ?? '',
     trackKey: detail.trackKey ?? '',
+  });
+}
+
+function returnRuntimeResult() {
+  const context = runtimeDetailResultReturnContext.value;
+  if (!context?.statePointId) {
+    return;
+  }
+  emit('return-runtime-result', {
+    actionId: context.actionId,
+    statePointId: context.statePointId,
+    status: context.status,
   });
 }
 
@@ -281,6 +339,38 @@ function createRuntimeDetailEditContext(detail, focus) {
     summary: focus.changeSummary ?? '',
   };
 }
+
+function createRuntimeDetailResultReturnContext({
+  detail = null,
+  focus = null,
+  resultContext = null,
+} = {}) {
+  const actionId = detail?.actionId ?? resultContext?.actionId ?? '';
+  if (
+    !actionId ||
+    !focus?.actionId ||
+    focus.editOrigin !== 'runtime-focus' ||
+    focus.actionId !== actionId ||
+    resultContext?.actionId !== actionId ||
+    !resultContext?.runtimeStatePointId
+  ) {
+    return null;
+  }
+  if (
+    detail?.statePointId &&
+    focus.originStatePointId !== detail.statePointId
+  ) {
+    return null;
+  }
+  return {
+    status: 'refreshed-edit-result',
+    actionId,
+    originStatePointId: focus.originStatePointId ?? '',
+    statePointId: resultContext.runtimeStatePointId,
+    label: '回到刷新后结果',
+    summary: resultContext.changeSummary || focus.changeSummary || '',
+  };
+}
 </script>
 
 <style scoped>
@@ -330,13 +420,44 @@ h2 {
   white-space: nowrap;
 }
 
+.runtime-detail-result-return {
+  display: inline-grid;
+  grid-template-columns: 13px auto;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  min-height: 28px;
+  padding: 0 9px;
+  border: 1px solid rgba(166, 183, 255, 0.28);
+  border-radius: 4px;
+  background: rgba(166, 183, 255, 0.12);
+  color: #e4e9ff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 .runtime-detail-action-focus:disabled {
   color: #6d7780;
   cursor: not-allowed;
   opacity: 0.5;
 }
 
+.runtime-detail-result-return:hover,
+.runtime-detail-result-return:focus,
+.runtime-detail-action-focus:not(:disabled):hover,
+.runtime-detail-action-focus:not(:disabled):focus {
+  filter: brightness(1.14);
+}
+
 .runtime-detail-action-focus-icon {
+  width: 13px;
+  height: 13px;
+}
+
+.runtime-detail-result-return-icon {
   width: 13px;
   height: 13px;
 }
@@ -381,6 +502,21 @@ h2 {
   font-size: 11px;
 }
 
+.runtime-detail-return-context {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  margin: 14px 14px 0;
+  padding: 7px 9px;
+  border: 1px solid rgba(166, 183, 255, 0.28);
+  border-radius: 4px;
+  background: rgba(166, 183, 255, 0.1);
+  color: #e4e9ff;
+  font-size: 11px;
+}
+
 .runtime-detail-edit-context span {
   color: #9ce0d2;
   font-weight: 700;
@@ -393,6 +529,25 @@ h2 {
 }
 
 .runtime-detail-edit-context small {
+  min-width: 0;
+  overflow: hidden;
+  color: #aeb8c1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.runtime-detail-return-context span {
+  color: #c7d2ff;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.runtime-detail-return-context strong {
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.runtime-detail-return-context small {
   min-width: 0;
   overflow: hidden;
   color: #aeb8c1;

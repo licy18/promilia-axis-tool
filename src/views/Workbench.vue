@@ -145,7 +145,9 @@
         <RuntimeSelectedDetailPanel
           :detail="runtimeSelectedDetail"
           :action-edit-focus="actionEditFocus"
+          :action-edit-result-context="actionEditResultContext"
           @focus-runtime-action="focusRuntimeAction"
+          @return-runtime-result="returnRuntimeResultFromProperties"
         />
 
         <AnalysisPanel
