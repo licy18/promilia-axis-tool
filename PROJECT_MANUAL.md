@@ -4709,6 +4709,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 优先让用户从候选帧热点进入“只看该帧/该组”的联动查看，减少在全部点与候选帧摘要之间来回切换。
 - 继续保持框架优先，真实采样和最终公式细化后续再接。
 
+### 2026-07-08：阶段 5-8BZ 候选选中帧与状态点焦点联动
+
+本轮完成：
+
+- `TimelineGridPreview` 新增候选范围与状态点焦点同步：当 `stateCurveFocusMode = selected` 且当前状态点属于 `candidate` 层时，候选三值曲线自动切到 `selected-frame`，只保留同帧 HP / 韧性 / 能量三条候选点。
+- 状态点焦点切回 `all` 或选中非 candidate 状态点时，候选三值曲线自动回到 `全部`，避免沿用旧候选帧造成误读。
+- 候选三值曲线的 `选中帧` 按钮现在会先定位同帧 candidate state point，再回传 `update-state-curve-focus-mode = selected`，让右侧分析面板同步进入只看选中。
+- 候选三值曲线的 `全部` 按钮会同步把状态点焦点切回 `all`。
+- Workbench 已接通 `TimelineGridPreview -> update-state-curve-focus-mode -> Workbench -> AnalysisPanel` 的事件链。
+- 测试覆盖从状态点邻近导航进入 candidate 点时，候选 marker 从 15 个收束到同帧 3 个；也覆盖从候选 `选中帧/全部` 切换时，分析面板状态点数量在 `1 / 16` 之间同步变化。
+
+当前边界：
+
+- 联动只基于当前可见 series / actor / action / state layer / state track 过滤结果，不强行显示用户主动隐藏的候选或状态点。
+- 仍不把 candidate state point 渲染为时间轴 state marker；候选层继续由候选曲线、marker、frame hotspot 和详情摘要承担。
+- 没有改变 `threeValueCurveFramework.stateCurves`、`candidateValueSeries.chart` 或项目保存 schema。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js src/__tests__/features/TimelineGridPreview.test.js`：通过，2 个测试文件、36 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、109 条测试。
+
+下一步：
+
+- 阶段 5-8CA 目标：补候选帧详情行与当前三值轨道的高亮联动。
+- 优先让用户在同帧 HP / 韧性 / 能量状态点间切换时，候选帧详情表、候选 marker 或曲线行能明确显示当前关注的是哪一条三值轨道。
+- 继续保持框架优先，真实采样和最终公式细化后续再接。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

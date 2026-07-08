@@ -85,6 +85,7 @@
         @select-state-curve-point="selectStateCurvePoint"
         @update-state-curve-layer-filter="updateStateCurveLayerFilter"
         @update-state-curve-track-filter="updateStateCurveTrackFilter"
+        @update-state-curve-focus-mode="updateStateCurveFocusMode"
         @delete-action="deleteAction"
         @update-action-duration="updateActionDuration"
         @update-action-lane="updateActionLane"

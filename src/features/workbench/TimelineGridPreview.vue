@@ -495,7 +495,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, ref } from 'vue';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { Clock, Minus, Plus } from '@element-plus/icons-vue';
 import {
   DEFAULT_TIMELINE_ACTION_DURATION_MS,
@@ -657,6 +657,7 @@ const emit = defineEmits([
   'select-state-curve-point',
   'update-state-curve-layer-filter',
   'update-state-curve-track-filter',
+  'update-state-curve-focus-mode',
 ]);
 const laneRef = ref(null);
 const laneRowRefs = new Map();
@@ -874,6 +875,21 @@ const selectedCandidateElementComparisonRows = computed(() =>
   selectedCandidateFrameGroup.value
     ? createCandidateElementComparisonRows(selectedCandidateFrameGroup.value)
     : []
+);
+
+watch(
+  [
+    () => props.stateCurveFocusMode,
+    () => props.selectedStateCurvePointId,
+    () => props.threeValueCurveFramework,
+    () => props.stateCurveLayerFilters,
+    () => props.stateCurveTrackFilters,
+    () => candidateSeriesVisibility.value,
+    () => candidateActorFilter.value,
+    () => candidateActionFilter.value,
+  ],
+  syncCandidateDisplayScopeFromStateFocus,
+  { deep: true }
 );
 
 function isActionInSelectedBatch(action) {
@@ -1319,6 +1335,16 @@ function setCandidateDisplayScope(scope) {
     return;
   }
   candidateDisplayScope.value = scope;
+  if (scope === 'selected-frame') {
+    const selected = selectStateCurvePointForCandidateFrame(
+      selectedCandidateFrameGroup.value
+    );
+    if (selected) {
+      emit('update-state-curve-focus-mode', 'selected');
+    }
+    return;
+  }
+  emit('update-state-curve-focus-mode', 'all');
 }
 
 function setCandidateActorFilter(actorId) {
@@ -1355,11 +1381,17 @@ function isCandidateMarkerInDisplayScope(marker) {
 
 function selectCandidateFrameGroup(group) {
   selectedCandidateFrameGroupId.value = group.id;
+  if (isStateCurveSelectedFocusActive.value) {
+    candidateDisplayScope.value = 'selected-frame';
+  }
   selectStateCurvePointForCandidateFrame(group);
 }
 
 function selectCandidateFrameGroupByMarker(marker) {
   selectedCandidateFrameGroupId.value = marker.frameGroupId;
+  if (isStateCurveSelectedFocusActive.value) {
+    candidateDisplayScope.value = 'selected-frame';
+  }
   selectStateCurvePointForCandidateFrame(marker);
 }
 
@@ -1371,7 +1403,9 @@ function selectStateCurvePointForCandidateFrame(frame) {
   const point = findCandidateStateCurvePointForFrame(frame);
   if (point) {
     emit('select-state-curve-point', point.statePointId);
+    return true;
   }
+  return false;
 }
 
 function findCandidateStateCurvePointForFrame(frame) {
@@ -1409,6 +1443,112 @@ function findCandidateStateCurvePointForFrame(frame) {
           pointIndex,
         }),
       };
+    }
+  }
+
+  return null;
+}
+
+function syncCandidateDisplayScopeFromStateFocus() {
+  if (!isStateCurveSelectedFocusActive.value) {
+    if (candidateDisplayScope.value === 'selected-frame') {
+      candidateDisplayScope.value = 'all';
+    }
+    return;
+  }
+
+  const selectedPoint = findStateCurvePointById(
+    props.selectedStateCurvePointId
+  );
+  if (!selectedPoint || selectedPoint.layerKey !== 'candidate') {
+    if (candidateDisplayScope.value === 'selected-frame') {
+      candidateDisplayScope.value = 'all';
+    }
+    return;
+  }
+
+  const frameGroupId =
+    findCandidateFrameGroupIdForStateCurvePoint(selectedPoint);
+  if (!frameGroupId) {
+    if (candidateDisplayScope.value === 'selected-frame') {
+      candidateDisplayScope.value = 'all';
+    }
+    return;
+  }
+
+  selectedCandidateFrameGroupId.value = frameGroupId;
+  candidateDisplayScope.value = 'selected-frame';
+}
+
+function findStateCurvePointById(pointId) {
+  if (!pointId) {
+    return null;
+  }
+
+  for (const track of props.threeValueCurveFramework?.stateCurves?.tracks ??
+    []) {
+    if (!isStateCurveTrackVisible(track.trackKey)) {
+      continue;
+    }
+    for (const layer of track.layers ?? []) {
+      const points = layer.points ?? [];
+      if (!isStateCurveTimelineLayerVisible(layer.key) || points.length <= 0) {
+        continue;
+      }
+      for (let pointIndex = 0; pointIndex < points.length; pointIndex += 1) {
+        const point = points[pointIndex];
+        const statePointId = createStateCurvePointId({
+          trackKey: track.trackKey,
+          layerKey: layer.key,
+          point,
+          pointIndex,
+        });
+        if (statePointId !== pointId) {
+          continue;
+        }
+        return {
+          ...point,
+          trackKey: track.trackKey,
+          layerKey: layer.key,
+          pointIndex,
+        };
+      }
+    }
+  }
+
+  return null;
+}
+
+function findCandidateFrameGroupIdForStateCurvePoint(point) {
+  const targetFrameGroupKey = createStateCurveFrameGroupKey(point);
+
+  for (const series of props.candidateValueChart?.series ?? []) {
+    if (!isCandidateSeriesVisible(series.key)) {
+      continue;
+    }
+    for (const candidatePoint of series.points ?? []) {
+      if (
+        !isCandidateMarkerInActorFilter(candidatePoint) ||
+        !isCandidateMarkerInActionFilter(candidatePoint)
+      ) {
+        continue;
+      }
+
+      const timeMs =
+        candidatePoint.displayTimeMs ?? candidatePoint.sourceTimeMs ?? 0;
+      const frameLabel =
+        candidatePoint.displayFrameLabel ?? formatFrameTime(timeMs);
+      const frameGroupKey = createStateCurveFrameGroupKey({
+        actionId: candidatePoint.actionId,
+        frameIndex:
+          candidatePoint.displayFrameIndex ?? candidatePoint.sourceFrameIndex,
+        timeMs,
+        frameLabel,
+        hitIndex: candidatePoint.hitIndex,
+      });
+      if (frameGroupKey === targetFrameGroupKey) {
+        return `${candidatePoint.actionId}-${candidatePoint.hitIndex}-${frameLabel}`;
+      }
     }
   }
 

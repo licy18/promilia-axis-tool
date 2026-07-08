@@ -8631,3 +8631,139 @@ emit('select-state-curve-point', point.statePointId)
 - `npm run test -- --run`：通过。
 
 下一阶段 5-8BZ 应补候选三值曲线 selected-frame scope 与状态点焦点模式联动。
+
+## 105. 阶段 5-8BZ：candidate selected-frame scope 与 state focus 联动
+
+阶段 5-8BZ 不修改模拟输出结构，只调整 Workbench 前端的派生状态和事件链，让候选三值曲线的 `selected-frame` 范围与状态点的 selected-only 焦点保持一致。
+
+### 105.1 新增事件链
+
+`TimelineGridPreview` 新增 emit：
+
+```js
+update-state-curve-focus-mode
+```
+
+`src/views/Workbench.vue` 接入：
+
+```vue
+@update-state-curve-focus-mode="updateStateCurveFocusMode"
+```
+
+因此候选三值曲线内部的范围按钮可以复用 Workbench 已有的状态点焦点状态：
+
+```js
+stateCurveFocusMode
+selectedStateCurvePointId
+```
+
+### 105.2 Candidate scope -> state focus
+
+`setCandidateDisplayScope(scope)` 现在有联动语义：
+
+```js
+setCandidateDisplayScope('selected-frame')
+```
+
+会先通过现有流程选中同帧 candidate state point：
+
+```js
+selectStateCurvePointForCandidateFrame(selectedCandidateFrameGroup.value)
+```
+
+匹配成功后再 emit：
+
+```js
+emit('update-state-curve-focus-mode', 'selected')
+```
+
+切回：
+
+```js
+setCandidateDisplayScope('all')
+```
+
+会 emit：
+
+```js
+emit('update-state-curve-focus-mode', 'all')
+```
+
+### 105.3 State focus -> candidate scope
+
+`TimelineGridPreview` 新增 `watch()`，监听：
+
+```js
+props.stateCurveFocusMode
+props.selectedStateCurvePointId
+props.threeValueCurveFramework
+props.stateCurveLayerFilters
+props.stateCurveTrackFilters
+candidateSeriesVisibility
+candidateActorFilter
+candidateActionFilter
+```
+
+当 `stateCurveFocusMode = selected` 且选中点属于 `candidate` layer 时：
+
+1. 通过 `findStateCurvePointById(pointId)` 在当前可见 state track / layer 中找到选中 state point。
+2. 用 `createStateCurveFrameGroupKey(point)` 与当前可见候选 series 点匹配。
+3. 匹配到同动作 / 同帧 / 同 hit 后，设置：
+
+```js
+selectedCandidateFrameGroupId = frameGroupId
+candidateDisplayScope = 'selected-frame'
+```
+
+当状态点焦点切回 `all`，或 selected-only 选中点不是 `candidate` layer 时：
+
+```js
+candidateDisplayScope = 'all'
+```
+
+### 105.4 可见性边界
+
+联动尊重当前过滤：
+
+- candidate series visibility。
+- candidate actor filter。
+- candidate action filter。
+- state layer filter。
+- state track filter。
+
+若用户主动隐藏对应 candidate series、action、actor、state layer 或 state track，联动不会强行显示隐藏内容。
+
+### 105.5 与数据结构的关系
+
+本阶段没有新增或修改以下数据：
+
+```js
+candidateValueSeries.chart
+threeValueCurveFramework.stateCurves
+actionResultTimeline
+```
+
+它只新增 Workbench 前端派生关系：
+
+```txt
+candidate selected-frame scope <-> stateCurveFocusMode(selected/all)
+```
+
+candidate state point 仍不作为时间轴 state marker 渲染，仍由候选曲线 / marker / frame hotspot 负责显示。
+
+### 105.6 验证
+
+扩展 Workbench 测试覆盖：
+
+- 状态点导航从 applied 点移动到第一个 candidate HP 点时，候选 scope 自动变为 `selected-frame`。
+- 同帧候选 marker 从 15 个收束为 3 个，frame hotspot 从 5 个收束为 1 个。
+- 状态点焦点回到 applied 或 `all` 时，候选 scope 自动回到 `全部`。
+- 点击候选 scope 的 `选中帧` 后，分析面板状态点焦点同步进入 selected-only，显示 1 个状态点。
+- 点击候选 scope 的 `全部` 后，分析面板状态点焦点同步回到 all，显示 16 个状态点。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js src/__tests__/features/TimelineGridPreview.test.js`：通过。
+- `npm run test -- --run`：通过。
+
+下一阶段 5-8CA 应补候选帧详情行与当前三值轨道的高亮联动。

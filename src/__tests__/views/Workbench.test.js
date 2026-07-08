@@ -282,6 +282,23 @@ describe('Workbench view', () => {
     expect(
       wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
     ).toHaveLength(0);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="selected-frame"]'
+        )
+        .classes()
+    ).toContain('active');
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-candidate-value-marker"]'
+      )
+    ).toHaveLength(3);
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-candidate-value-frame-hotspot"]'
+      )
+    ).toHaveLength(1);
     const frameGroupOptions = wrapper.findAll(
       '[data-testid="workbench-state-curve-frame-group-option"]'
     );
@@ -336,6 +353,13 @@ describe('Workbench view', () => {
     expect(
       wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
     ).toHaveLength(1);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="all"]'
+        )
+        .classes()
+    ).toContain('active');
     await focusAllButton.trigger('click');
     await nextTick();
     expect(
@@ -519,7 +543,7 @@ describe('Workbench view', () => {
           '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="selected-frame"]'
         )
         .attributes('disabled')
-    ).toBeDefined();
+    ).toBeUndefined();
     const actorFilter = wrapper.find(
       '[data-testid="workbench-candidate-value-actor-filter"]'
     );
@@ -701,6 +725,16 @@ describe('Workbench view', () => {
         .classes()
     ).toContain('active');
     expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-focus-selected"]')
+        .classes()
+    ).toContain('active');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curves"] .source-heading strong')
+        .text()
+    ).toBe('1');
+    expect(
       wrapper.findAll(
         '[data-testid="workbench-timeline-candidate-value-marker"]'
       )
@@ -726,6 +760,14 @@ describe('Workbench view', () => {
         '[data-testid="workbench-timeline-candidate-value-marker"]'
       )
     ).toHaveLength(15);
+    expect(
+      wrapper.find('[data-testid="workbench-state-curve-focus-all"]').classes()
+    ).toContain('active');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curves"] .source-heading strong')
+        .text()
+    ).toBe('16');
     await wrapper
       .find(
         '[data-testid="workbench-candidate-value-toggle"][data-series-key="hpDamageFormulaParamCandidate"]'
