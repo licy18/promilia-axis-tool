@@ -11317,3 +11317,64 @@ data-detail-key="frame|track|delta|cumulative|state|status"
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8CZ 应继续贴近 Endaxis 主流程，优先改善结果定位后的动作编辑闭环。
+
+## 133. 阶段 5-8CZ：action result focus selects source action
+
+阶段 5-8CZ 不修改项目保存 schema，也不修改 simulation 输出结构。本阶段只新增 Workbench 前端事件，让动作结果定位同时同步源动作选择。
+
+### 133.1 AnalysisPanel 新增事件
+
+新增 emit：
+
+```js
+select-action-result
+```
+
+点击 `workbench-action-result-source-row` 时，`selectActionResultRuntimePoint(entry)` 不再只发出 state point，而是发出：
+
+```js
+{
+  actionId: trace.actionId,
+  statePointId: trace.firstStatePointId,
+}
+```
+
+`select-runtime-state-point` 事件仍保留在声明中，避免影响组件未来复用；本阶段动作结果行走新事件。
+
+### 133.2 Workbench 新增处理函数
+
+新增：
+
+```js
+selectActionResult({ actionId, statePointId })
+```
+
+处理顺序：
+
+1. 若 `actionId` 存在于 `actionDrafts`，先调用既有 `selectAction(actionId)`。
+2. 再调用 `selectActionResultRuntimePoint(statePointId)`，沿用 `action-result` runtime 聚焦链路。
+
+因此结果定位会同步：
+
+- `selectedActionId`
+- 时间轴动作块 selected class
+- `PropertiesPanel.selectedAction`
+- runtime selected state point
+- runtime sim log `action-result` 焦点来源
+
+### 133.3 验证
+
+当前测试覆盖：
+
+- 新建等待动作后，时间轴 `action-0002` 为选中，属性面板显示等待动作。
+- 点击 `action-0001` 动作结果后，时间轴选中回到 `action-0001`。
+- `action-0002` 不再选中。
+- 属性面板回到技能动作编辑态，`workbench-level-input` 出现，`workbench-start-input` 回到 `0`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DA 应继续完善 Endaxis 式编辑闭环，优先让动作编辑后的结果区反馈更清楚。

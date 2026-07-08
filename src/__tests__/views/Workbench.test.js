@@ -1459,6 +1459,62 @@ describe('Workbench view', () => {
     expect(text).toContain('low');
   });
 
+  it('selects the source action when an action result is focused', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-add-wait-action"]')
+      .trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+        )
+        .classes()
+    ).toContain('selected');
+    expect(
+      wrapper.find('[data-testid="workbench-action-type"]').element.value
+    ).toBe('等待动作');
+
+    await wrapper
+      .find(
+        '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+      )
+      .trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+        )
+        .classes()
+    ).toContain('selected');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+        )
+        .classes()
+    ).not.toContain('selected');
+    expect(wrapper.find('[data-testid="workbench-level-input"]').exists()).toBe(
+      true
+    );
+    expect(
+      wrapper.find('[data-testid="workbench-start-input"]').element.value
+    ).toBe('0');
+  });
+
   it('links runtime sim log selection to the focused state curve point', async () => {
     const wrapper = mount(Workbench, {
       global: {

@@ -883,6 +883,7 @@ const emit = defineEmits([
   'update-state-curve-focus-mode',
   'focus-three-value-calculator-scope',
   'select-runtime-state-point',
+  'select-action-result',
   'select-action-contribution-point',
 ]);
 
@@ -1720,7 +1721,10 @@ function selectActionResultRuntimePoint(entry) {
   if (!trace?.firstStatePointId) {
     return;
   }
-  emit('select-runtime-state-point', trace.firstStatePointId);
+  emit('select-action-result', {
+    actionId: trace.actionId,
+    statePointId: trace.firstStatePointId,
+  });
 }
 
 function isActionResultRuntimeSelected(entry) {

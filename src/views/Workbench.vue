@@ -149,7 +149,7 @@
           @focus-three-value-calculator-scope="
             focusThreeValueCalculatorScope
           "
-          @select-runtime-state-point="selectActionResultRuntimePoint"
+          @select-action-result="selectActionResult"
           @select-action-contribution-point="
             selectActionContributionRuntimePoint
           "
@@ -933,6 +933,16 @@ function selectRuntimeStatePoint(pointId) {
 
 function selectActionResultRuntimePoint(pointId) {
   focusRuntimePointFromAnalysis(pointId, 'action-result');
+}
+
+function selectActionResult({ actionId, statePointId } = {}) {
+  if (
+    actionId &&
+    actionDrafts.value.some(action => action.id === actionId)
+  ) {
+    selectAction(actionId);
+  }
+  selectActionResultRuntimePoint(statePointId);
 }
 
 function selectActionContributionRuntimePoint(pointId) {
