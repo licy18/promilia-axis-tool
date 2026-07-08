@@ -283,6 +283,81 @@ export function createWorkbenchMainFlowStatusView({
   };
 }
 
+export function createWorkbenchRuntimeReviewFlowView({
+  flowModel = null,
+  mainFlowSelection = null,
+  mainFlowState = null,
+  runtimeReviewSelection = null,
+  runtimeReviewOperations = null,
+} = {}) {
+  const selectionModel =
+    mainFlowSelection ?? flowModel?.mainFlowSelection ?? {};
+  const stateModel = mainFlowState ?? flowModel?.mainFlowState ?? {};
+  const reviewSelection =
+    runtimeReviewSelection ?? flowModel?.runtimeReviewSelection ?? {};
+  const operations =
+    runtimeReviewOperations ?? flowModel?.runtimeReviewOperations ?? {};
+  const primaryOperation = operations.primaryOperation ?? {};
+  const focusAction = operations.focusAction ?? {};
+  const returnResult = operations.returnResult ?? {};
+
+  return {
+    region: {
+      currentRegion: selectionModel.currentRegion ?? '',
+      nextRegion: selectionModel.nextRegion ?? '',
+      nextTargetKind: stateModel.nextTargetKind ?? '',
+      inspectorMode: selectionModel.inspectorMode ?? '',
+      selectedActionId: selectionModel.selectedActionId ?? '',
+      selectedRuntimeStatePointId:
+        selectionModel.selectedRuntimeStatePointId ?? '',
+      pendingRuntimeStatePointId:
+        selectionModel.pendingRuntimeStatePointId ?? '',
+      refreshedRuntimeStatePointId:
+        selectionModel.refreshedRuntimeStatePointId ?? '',
+    },
+    selection: {
+      status:
+        reviewSelection.status ??
+        WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.EMPTY,
+      selectedActionId: reviewSelection.selectedActionId ?? '',
+      selectedStatePointId: reviewSelection.selectedStatePointId ?? '',
+      pendingActionId: reviewSelection.pendingActionId ?? '',
+      pendingStatePointId: reviewSelection.pendingStatePointId ?? '',
+      refreshedStatePointId: reviewSelection.refreshedStatePointId ?? '',
+      source: reviewSelection.source ?? '',
+      sourceKind: reviewSelection.sourceKind ?? 'none',
+      lastActionKind: reviewSelection.lastActionKind ?? '',
+      lastActionSource: reviewSelection.lastActionSource ?? '',
+      hasSelection: Boolean(reviewSelection.hasSelection),
+      hasSelectionState: reviewSelection.hasSelection ? 'true' : 'false',
+      hasPendingResult: Boolean(reviewSelection.hasPendingResult),
+      hasPendingResultState: reviewSelection.hasPendingResult
+        ? 'true'
+        : 'false',
+      overviewActive: Boolean(reviewSelection.overviewActive),
+      overviewActiveState: reviewSelection.overviewActive ? 'true' : 'false',
+    },
+    operations: {
+      primaryOperationKind: operations.primaryOperationKind ?? '',
+      primaryOperationEnabled: Boolean(operations.primaryOperationEnabled),
+      primaryOperationEnabledState: operations.primaryOperationEnabled
+        ? 'true'
+        : 'false',
+      canRunAnyOperation: Boolean(operations.canRunAnyOperation),
+      canRunAnyOperationState: operations.canRunAnyOperation
+        ? 'true'
+        : 'false',
+      primaryActionId: primaryOperation.actionId ?? '',
+      primaryStatePointId: primaryOperation.statePointId ?? '',
+      primaryLabel: primaryOperation.label ?? '',
+      focusActionEnabled: Boolean(focusAction.enabled),
+      focusActionEnabledState: focusAction.enabled ? 'true' : 'false',
+      returnResultEnabled: Boolean(returnResult.enabled),
+      returnResultEnabledState: returnResult.enabled ? 'true' : 'false',
+    },
+  };
+}
+
 export function createWorkbenchMainFlowLoopState({
   phase = '',
   mainFlowState = null,

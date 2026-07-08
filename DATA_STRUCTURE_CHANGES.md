@@ -19873,3 +19873,83 @@ EventLogPanel：读取 view.focus / view.returnResult；保留 focus seed comman
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、80 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、210 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 259. UI 主流程能力块：Runtime Review Flow View
+
+### 259.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增共享函数：
+
+```js
+createWorkbenchRuntimeReviewFlowView({
+  flowModel,
+  mainFlowSelection,
+  mainFlowState,
+  runtimeReviewSelection,
+  runtimeReviewOperations,
+})
+```
+
+输出结构：
+
+```js
+{
+  region: {
+    currentRegion,
+    nextRegion,
+    nextTargetKind,
+    inspectorMode,
+    selectedActionId,
+    selectedRuntimeStatePointId,
+    pendingRuntimeStatePointId,
+    refreshedRuntimeStatePointId,
+  },
+  selection: {
+    status,
+    selectedActionId,
+    selectedStatePointId,
+    pendingActionId,
+    pendingStatePointId,
+    refreshedStatePointId,
+    source,
+    sourceKind,
+    lastActionKind,
+    lastActionSource,
+    hasSelection,
+    hasSelectionState,
+    hasPendingResult,
+    hasPendingResultState,
+    overviewActive,
+    overviewActiveState,
+  },
+  operations: {
+    primaryOperationKind,
+    primaryOperationEnabled,
+    primaryOperationEnabledState,
+    canRunAnyOperation,
+    canRunAnyOperationState,
+    primaryActionId,
+    primaryStatePointId,
+    primaryLabel,
+    focusActionEnabled,
+    focusActionEnabledState,
+    returnResultEnabled,
+    returnResultEnabledState,
+  },
+}
+```
+
+`Workbench` 主工作区、primary flow、runtime review stack、side inspector 的运行结果选择和区域 data 属性现在从 `runtimeReviewFlowView` 读取，不再直接散读 `mainFlowSelection` / `runtimeReviewSelection`。
+
+### 259.2 保存与迁移
+
+本阶段只调整 Workbench 页面层的运行结果主流程 view model，不新增持久字段，不需要数据迁移。
+
+### 259.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖 selected runtime result 与 pending refreshed result 两种 `createWorkbenchRuntimeReviewFlowView()` 输出。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、64 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、211 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

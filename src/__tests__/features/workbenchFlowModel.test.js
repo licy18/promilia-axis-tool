@@ -9,6 +9,7 @@ import {
   createWorkbenchFlowAction,
   createWorkbenchFlowModel,
   createWorkbenchMainFlowStatusView,
+  createWorkbenchRuntimeReviewFlowView,
   resolveWorkbenchMainFlowActionEditTarget,
   resolveWorkbenchMainFlowResultReturnTarget,
 } from '../../features/workbench/workbenchFlowModel';
@@ -718,6 +719,117 @@ describe('workbench flow model', () => {
         recoveryNeededState: 'true',
         currentRegion: 'action-edit',
         nextRegion: 'runtime-review',
+      },
+    });
+  });
+
+  it('creates a runtime review flow view for selected and pending result states', () => {
+    const runtimeProjection = createRuntimeProjectionFixture();
+    const baseModel = createWorkbenchFlowModel({ runtimeProjection });
+    const firstPoint = baseModel.runtimeNavigation.points[0];
+    const secondPoint = baseModel.runtimeNavigation.points[1];
+
+    const selectedView = createWorkbenchRuntimeReviewFlowView({
+      flowModel: createWorkbenchFlowModel({
+        selectedAction: { id: 'action-0001', name: '普通攻击' },
+        runtimeProjection,
+        selectedStateCurvePointId: firstPoint.statePointId,
+        runtimeFocusSource: 'action-result',
+        runtimeSelectedDetail: {
+          actionId: 'action-0001',
+          statePointId: firstPoint.statePointId,
+          frameLabel: '12f',
+          trackLabel: '敌人 HP',
+          trackKey: 'enemyHpDamage',
+        },
+      }),
+    });
+    expect(selectedView).toMatchObject({
+      region: {
+        currentRegion: WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW,
+        nextRegion: WORKBENCH_MAIN_FLOW_REGIONS.ACTION_EDIT,
+        nextTargetKind: 'runtime-action-edit',
+        inspectorMode: 'runtime-detail',
+        selectedActionId: 'action-0001',
+        selectedRuntimeStatePointId: firstPoint.statePointId,
+        pendingRuntimeStatePointId: '',
+      },
+      selection: {
+        status: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.SELECTED,
+        selectedActionId: 'action-0001',
+        selectedStatePointId: firstPoint.statePointId,
+        pendingStatePointId: '',
+        source: 'action-result',
+        sourceKind: 'action-result',
+        hasSelection: true,
+        hasSelectionState: 'true',
+        hasPendingResult: false,
+        hasPendingResultState: 'false',
+      },
+      operations: {
+        primaryOperationKind:
+          WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+        primaryOperationEnabled: true,
+        primaryOperationEnabledState: 'true',
+        canRunAnyOperation: true,
+        canRunAnyOperationState: 'true',
+        primaryActionId: 'action-0001',
+        primaryStatePointId: firstPoint.statePointId,
+        primaryLabel: '定位动作',
+        focusActionEnabledState: 'true',
+        returnResultEnabledState: 'false',
+      },
+    });
+
+    const pendingView = createWorkbenchRuntimeReviewFlowView({
+      flowModel: createWorkbenchFlowModel({
+        selectedAction: { id: 'action-0002', name: '资源动作' },
+        runtimeProjection,
+        actionEditFocus: {
+          actionId: 'action-0002',
+          fieldKey: 'startMs',
+          editOrigin: 'runtime-focus',
+          originStatePointId: firstPoint.statePointId,
+        },
+        actionEditResultContext: {
+          status: 'refreshed-edit-result',
+          actionId: 'action-0002',
+          runtimeStatePointId: secondPoint.statePointId,
+          originStatePointId: firstPoint.statePointId,
+          label: '开始时间',
+          changeSummary: '0ms -> 1000ms',
+        },
+      }),
+    });
+    expect(pendingView).toMatchObject({
+      region: {
+        currentRegion: WORKBENCH_MAIN_FLOW_REGIONS.ACTION_EDIT,
+        nextRegion: WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW,
+        nextTargetKind: 'runtime-result-return',
+        selectedActionId: 'action-0002',
+        selectedRuntimeStatePointId: '',
+        pendingRuntimeStatePointId: secondPoint.statePointId,
+        refreshedRuntimeStatePointId: secondPoint.statePointId,
+      },
+      selection: {
+        status: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.PENDING_RESULT,
+        selectedActionId: '',
+        selectedStatePointId: '',
+        pendingActionId: 'action-0002',
+        pendingStatePointId: secondPoint.statePointId,
+        refreshedStatePointId: secondPoint.statePointId,
+        hasSelectionState: 'false',
+        hasPendingResultState: 'true',
+      },
+      operations: {
+        primaryOperationKind:
+          WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
+        primaryOperationEnabledState: 'true',
+        primaryActionId: 'action-0002',
+        primaryStatePointId: secondPoint.statePointId,
+        primaryLabel: '回到结果点',
+        focusActionEnabledState: 'false',
+        returnResultEnabledState: 'true',
       },
     });
   });

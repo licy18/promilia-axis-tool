@@ -59,22 +59,22 @@
       class="workbench-grid"
       :data-flow-phase="workbenchFlowModel.phase"
       :data-main-flow-current-region="
-        workbenchFlowModel.mainFlowSelection.currentRegion
+        runtimeReviewFlowView.region.currentRegion
       "
       :data-main-flow-next-target-kind="
-        workbenchFlowModel.mainFlowState.nextTargetKind
+        runtimeReviewFlowView.region.nextTargetKind
       "
       :data-main-flow-next-region="
-        workbenchFlowModel.mainFlowSelection.nextRegion
+        runtimeReviewFlowView.region.nextRegion
       "
       :data-main-flow-pending-runtime-state-point-id="
-        workbenchFlowModel.mainFlowSelection.pendingRuntimeStatePointId
+        runtimeReviewFlowView.region.pendingRuntimeStatePointId
       "
       :data-main-flow-selected-action-id="
-        workbenchFlowModel.mainFlowSelection.selectedActionId
+        runtimeReviewFlowView.region.selectedActionId
       "
       :data-main-flow-selected-runtime-state-point-id="
-        workbenchFlowModel.mainFlowSelection.selectedRuntimeStatePointId
+        runtimeReviewFlowView.region.selectedRuntimeStatePointId
       "
       :data-main-flow-dispatch-sequence="
         mainFlowStatusView.dispatch.sequence
@@ -122,28 +122,28 @@
         mainFlowStatusView.loop.nextRegion
       "
       :data-runtime-review-selection-status="
-        workbenchFlowModel.runtimeReviewSelection.status
+        runtimeReviewFlowView.selection.status
       "
       :data-runtime-review-selected-action-id="
-        workbenchFlowModel.runtimeReviewSelection.selectedActionId
+        runtimeReviewFlowView.selection.selectedActionId
       "
       :data-runtime-review-selected-state-point-id="
-        workbenchFlowModel.runtimeReviewSelection.selectedStatePointId
+        runtimeReviewFlowView.selection.selectedStatePointId
       "
       :data-runtime-review-pending-state-point-id="
-        workbenchFlowModel.runtimeReviewSelection.pendingStatePointId
+        runtimeReviewFlowView.selection.pendingStatePointId
       "
       :data-runtime-review-source="
-        workbenchFlowModel.runtimeReviewSelection.source
+        runtimeReviewFlowView.selection.source
       "
       :data-runtime-review-source-kind="
-        workbenchFlowModel.runtimeReviewSelection.sourceKind
+        runtimeReviewFlowView.selection.sourceKind
       "
       :data-runtime-review-last-action-kind="
-        workbenchFlowModel.runtimeReviewSelection.lastActionKind
+        runtimeReviewFlowView.selection.lastActionKind
       "
       :data-runtime-review-last-action-source="
-        workbenchFlowModel.runtimeReviewSelection.lastActionSource
+        runtimeReviewFlowView.selection.lastActionSource
       "
       data-testid="workbench-main-flow-workspace"
     >
@@ -174,19 +174,19 @@
         class="primary-flow"
         :data-flow-phase="workbenchFlowModel.phase"
         :data-main-flow-current-region="
-          workbenchFlowModel.mainFlowSelection.currentRegion
+          runtimeReviewFlowView.region.currentRegion
         "
         :data-main-flow-next-target-kind="
-          workbenchFlowModel.mainFlowState.nextTargetKind
+          runtimeReviewFlowView.region.nextTargetKind
         "
         :data-main-flow-next-region="
-          workbenchFlowModel.mainFlowSelection.nextRegion
+          runtimeReviewFlowView.region.nextRegion
         "
         :data-main-flow-pending-runtime-state-point-id="
-          workbenchFlowModel.mainFlowSelection.pendingRuntimeStatePointId
+          runtimeReviewFlowView.region.pendingRuntimeStatePointId
         "
         :data-main-flow-selected-runtime-state-point-id="
-          workbenchFlowModel.mainFlowSelection.selectedRuntimeStatePointId
+          runtimeReviewFlowView.region.selectedRuntimeStatePointId
         "
         data-testid="workbench-primary-flow"
       >
@@ -224,34 +224,34 @@
         <div
           class="runtime-review-stack"
           :data-main-flow-current-region="
-            workbenchFlowModel.mainFlowSelection.currentRegion
+            runtimeReviewFlowView.region.currentRegion
           "
           :data-main-flow-pending-runtime-state-point-id="
-            workbenchFlowModel.mainFlowSelection.pendingRuntimeStatePointId
+            runtimeReviewFlowView.region.pendingRuntimeStatePointId
           "
           :data-main-flow-selected-runtime-state-point-id="
-            workbenchFlowModel.mainFlowSelection.selectedRuntimeStatePointId
+            runtimeReviewFlowView.region.selectedRuntimeStatePointId
           "
           :data-runtime-review-selection-status="
-            workbenchFlowModel.runtimeReviewSelection.status
+            runtimeReviewFlowView.selection.status
           "
           :data-runtime-review-selected-action-id="
-            workbenchFlowModel.runtimeReviewSelection.selectedActionId
+            runtimeReviewFlowView.selection.selectedActionId
           "
           :data-runtime-review-selected-state-point-id="
-            workbenchFlowModel.runtimeReviewSelection.selectedStatePointId
+            runtimeReviewFlowView.selection.selectedStatePointId
           "
           :data-runtime-review-source="
-            workbenchFlowModel.runtimeReviewSelection.source
+            runtimeReviewFlowView.selection.source
           "
           :data-runtime-review-source-kind="
-            workbenchFlowModel.runtimeReviewSelection.sourceKind
+            runtimeReviewFlowView.selection.sourceKind
           "
           :data-runtime-review-primary-operation-kind="
-            runtimeReviewPrimaryOperationView.operationKind
+            runtimeReviewFlowView.operations.primaryOperationKind
           "
           :data-runtime-review-primary-operation-enabled="
-            runtimeReviewPrimaryOperationView.enabled ? 'true' : 'false'
+            runtimeReviewFlowView.operations.primaryOperationEnabledState
           "
           data-testid="workbench-runtime-review-stack"
         >
@@ -326,7 +326,7 @@
         class="side-stack"
         :data-flow-phase="workbenchFlowModel.phase"
         :data-main-flow-inspector-mode="
-          workbenchFlowModel.mainFlowSelection.inspectorMode
+          runtimeReviewFlowView.region.inspectorMode
         "
         data-testid="workbench-side-inspector"
       >
@@ -427,6 +427,7 @@ import { createWorkbenchFlowRuntimePointSelectionState } from '../features/workb
 import { createWorkbenchFlowRuntimeScopeState } from '../features/workbench/workbenchFlowRuntimeScope';
 import {
   createWorkbenchMainFlowStatusView,
+  createWorkbenchRuntimeReviewFlowView,
   createWorkbenchFlowModel,
 } from '../features/workbench/workbenchFlowModel';
 import {
@@ -622,6 +623,11 @@ const workbenchFlowModel = computed(() =>
 );
 const mainFlowStatusView = computed(() =>
   createWorkbenchMainFlowStatusView({
+    flowModel: workbenchFlowModel.value,
+  })
+);
+const runtimeReviewFlowView = computed(() =>
+  createWorkbenchRuntimeReviewFlowView({
     flowModel: workbenchFlowModel.value,
   })
 );
