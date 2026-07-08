@@ -4878,12 +4878,48 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、35 条测试。
 - `npm run test -- --run`：通过，13 个测试文件、109 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `npm run test -- --run`：通过，13 个测试文件、109 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一步：
 
 - 阶段 5-8CD 目标：把模拟日志详情升级为 Endaxis 式三值详情弹层或右侧详情面板，支持按 HP / 韧性 / 能量、actor、action 过滤日志。
 - 详情面板优先消费 `threeValueRuntimeProjection.simLog` 和 runtime point 的 `sourceDeltaId / sourceIds`，不要直接回退读取 evidence 矩阵。
 - 若本阶段继续 UI，优先补日志筛选和贡献拆分骨架；若回运行时，优先补 applied delta 的 source 字段完整性。
+
+### 2026-07-08：阶段 5-8CD 模拟日志筛选与三值详情面板
+
+本轮完成：
+
+- `EventLogPanel` 的 runtime sim log 新增 HP / 韧性 / 能量 segmented 筛选，显示当前筛选数量和总日志数量。
+- `EventLogPanel` 新增 actor 与 action 下拉筛选，筛选项来自 `threeValueRuntimeProjection.simLog` 的当前数据，不写入项目保存 schema。
+- 模拟日志详情从选中 `simLog.sourceDeltaId` 回查 `enemyStateCurve.points[]` 与 `selfEnergyCurveByActor[].points[]`，显示动作、命中、轨道、角色、状态和来源 delta。
+- 详情区新增 `三值贡献` 骨架，分别展示敌人 HP、敌人韧性、自身能量三个槽位，当前只把 selected applied delta 写入对应槽位。
+- 详情区新增 `来源标注` 骨架，展示 `skillIds / elementConfigIds / captureSessionIds / pathIds`，来源来自 runtime point 的 `sourceIds`。
+- `createAppliedStateCurveLayer()` 为 applied point 补充 `actionType / targetId / targetName / skillId / elementConfigIds / sourceStatus`，让 runtime point 的 `sourceIds` 至少能追到技能和 element 候选。
+
+当前验证事实：
+
+- 默认末音样例：runtime sim log 过滤计数为 `1/1`，筛选按钮为 `全部1 / HP1 / 韧性0 / 能量0`，默认详情贡献为 `敌人 HP 12,461 / 敌人韧性 0 / 自身能量 0`。
+- 默认末音样例：来源标注能显示 `Skill 10900101` 和 `Element 109001081` 等 element 候选。
+- 切换到有 SP 消耗的技能后：runtime sim log 总数为 `2/2`，点击能量筛选后变为 `1/2`，唯一日志显示 `SP -{spCost}`，贡献槽位显示 `自身能量 -{spCost}`，来源标注包含该技能 ID。
+
+当前边界：
+
+- 详情面板仍是内嵌面板，不是独立弹层；但筛选、选中、详情回查的数据路径已经建立。
+- 贡献拆分仍是三值槽位骨架，尚未拆到公式层、buff 层、反应层或来源候选层。
+- 筛选状态还没有和时间轴 state marker / 状态点焦点联动。
+- 资源监控仍是列表摘要，还没有 Endaxis 式多曲线图。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、35 条测试。
+
+下一步：
+
+- 阶段 5-8CE 目标：把 runtime sim log 选中项与时间轴 / 状态点焦点联动，点击日志后能定位对应帧和三值点。
+- 若先补资源监控，则优先用 `enemyStateCurve.points[]` 与 `selfEnergyCurveByActor[].points[]` 绘制 HP / 韧性 / 能量多曲线，而不是继续扩展 evidence 诊断。
+- 继续保持 `candidate / sampled / placeholder` 在诊断层，只有 applied delta 进入主运行时 UI。
 
 ## 10. 文档维护规则
 

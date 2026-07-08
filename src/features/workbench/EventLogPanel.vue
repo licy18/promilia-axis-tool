@@ -25,11 +25,68 @@
     >
       <div class="runtime-log-heading">
         <span>模拟日志</span>
-        <strong>{{ runtimeSimLogRows.length }}</strong>
+        <strong data-testid="workbench-runtime-sim-log-filter-count">
+          {{ filteredRuntimeSimLogRows.length }}/{{ runtimeSimLogRows.length }}
+        </strong>
       </div>
+
+      <div
+        class="runtime-log-filters"
+        data-testid="workbench-runtime-sim-log-filters"
+      >
+        <div class="runtime-track-filters" aria-label="三值筛选">
+          <button
+            v-for="option in runtimeTrackFilterOptions"
+            :key="option.key"
+            type="button"
+            class="runtime-filter-button"
+            :data-active="runtimeTrackFilter === option.key"
+            :data-track-filter="option.key"
+            data-testid="workbench-runtime-sim-log-track-filter"
+            @click="runtimeTrackFilter = option.key"
+          >
+            <span>{{ option.label }}</span>
+            <strong>{{ option.count }}</strong>
+          </button>
+        </div>
+
+        <div class="runtime-select-filters">
+          <label>
+            <span>角色</span>
+            <select
+              v-model="runtimeActorFilter"
+              data-testid="workbench-runtime-sim-log-actor-filter"
+            >
+              <option
+                v-for="option in runtimeActorFilterOptions"
+                :key="option.key"
+                :value="option.key"
+              >
+                {{ option.label }}
+              </option>
+            </select>
+          </label>
+          <label>
+            <span>动作</span>
+            <select
+              v-model="runtimeActionFilter"
+              data-testid="workbench-runtime-sim-log-action-filter"
+            >
+              <option
+                v-for="option in runtimeActionFilterOptions"
+                :key="option.key"
+                :value="option.key"
+              >
+                {{ option.label }}
+              </option>
+            </select>
+          </label>
+        </div>
+      </div>
+
       <ol class="runtime-log-list">
         <li
-          v-for="(row, index) in runtimeSimLogRows"
+          v-for="(row, index) in filteredRuntimeSimLogRows"
           :key="row.sourceDeltaId ?? `${row.eventType}-${index}`"
           class="runtime-log-row"
           :data-selected="selectedRuntimeLogIndex === index"
@@ -45,6 +102,14 @@
           <span class="payload">{{ formatRuntimePayload(row) }}</span>
         </li>
       </ol>
+
+      <p
+        v-if="filteredRuntimeSimLogRows.length === 0"
+        class="runtime-log-empty"
+        data-testid="workbench-runtime-sim-log-empty"
+      >
+        当前筛选无模拟日志
+      </p>
 
       <div
         v-if="selectedRuntimeLog"
@@ -66,8 +131,56 @@
           <strong>{{ formatRuntimeDelta(selectedRuntimeLog) }}</strong>
         </div>
         <div>
+          <span>轨道</span>
+          <strong>{{ formatRuntimeTrack(selectedRuntimeLog) }}</strong>
+        </div>
+        <div>
+          <span>角色</span>
+          <strong>{{
+            selectedRuntimeLog.actorName ?? selectedRuntimeLog.actorId ?? '系统'
+          }}</strong>
+        </div>
+        <div>
+          <span>状态</span>
+          <strong>{{ formatRuntimeStatus(selectedRuntimeLog) }}</strong>
+        </div>
+        <div>
           <span>来源</span>
           <strong>{{ selectedRuntimeLog.sourceDeltaId }}</strong>
+        </div>
+      </div>
+
+      <div
+        v-if="selectedRuntimeLog"
+        class="runtime-contribution-detail"
+        data-testid="workbench-runtime-sim-log-contribution"
+      >
+        <div class="runtime-detail-heading">三值贡献</div>
+        <div
+          v-for="item in selectedRuntimeContributionRows"
+          :key="item.key"
+          class="runtime-contribution-row"
+          data-testid="workbench-runtime-sim-log-contribution-row"
+        >
+          <span>{{ item.label }}</span>
+          <strong>{{ item.value }}</strong>
+        </div>
+      </div>
+
+      <div
+        v-if="selectedRuntimeLogPoint"
+        class="runtime-source-detail"
+        data-testid="workbench-runtime-sim-log-source"
+      >
+        <div class="runtime-detail-heading">来源标注</div>
+        <div
+          v-for="item in selectedRuntimeSourceRows"
+          :key="item.key"
+          class="runtime-source-row"
+          data-testid="workbench-runtime-sim-log-source-row"
+        >
+          <span>{{ item.label }}</span>
+          <strong>{{ item.value }}</strong>
         </div>
       </div>
     </div>
@@ -90,15 +203,112 @@ const props = defineProps({
 });
 
 const selectedRuntimeLogIndex = ref(0);
+const runtimeTrackFilter = ref('all');
+const runtimeActorFilter = ref('all');
+const runtimeActionFilter = ref('all');
 const runtimeSimLogRows = computed(() => props.runtimeProjection?.simLog ?? []);
+const runtimePointByDeltaId = computed(() => {
+  const byId = new Map();
+  for (const point of props.runtimeProjection?.enemyStateCurve?.points ?? []) {
+    if (point?.sourceDeltaId) {
+      byId.set(point.sourceDeltaId, point);
+    }
+  }
+  for (const actor of props.runtimeProjection?.selfEnergyCurveByActor ?? []) {
+    for (const point of actor.points ?? []) {
+      if (point?.sourceDeltaId) {
+        byId.set(point.sourceDeltaId, point);
+      }
+    }
+  }
+  return byId;
+});
+const runtimeTrackFilterOptions = computed(() => {
+  const counts = countRuntimeOptions(runtimeSimLogRows.value, 'trackKey');
+  return [
+    { key: 'all', label: '全部', count: runtimeSimLogRows.value.length },
+    {
+      key: 'enemyHpDamage',
+      label: 'HP',
+      count: counts.get('enemyHpDamage') ?? 0,
+    },
+    {
+      key: 'enemyToughnessDamage',
+      label: '韧性',
+      count: counts.get('enemyToughnessDamage') ?? 0,
+    },
+    {
+      key: 'selfEnergyChange',
+      label: '能量',
+      count: counts.get('selfEnergyChange') ?? 0,
+    },
+  ];
+});
+const runtimeActorFilterOptions = computed(() =>
+  createRuntimeSelectOptions({
+    rows: runtimeSimLogRows.value,
+    keyField: 'actorId',
+    labelField: 'actorName',
+    allLabel: '全部角色',
+    fallbackLabel: '系统',
+  })
+);
+const runtimeActionFilterOptions = computed(() =>
+  createRuntimeSelectOptions({
+    rows: runtimeSimLogRows.value,
+    keyField: 'actionId',
+    labelField: 'actionName',
+    allLabel: '全部动作',
+    fallbackLabel: '系统',
+  })
+);
+const filteredRuntimeSimLogRows = computed(() =>
+  runtimeSimLogRows.value.filter(row => {
+    if (
+      runtimeTrackFilter.value !== 'all' &&
+      row.trackKey !== runtimeTrackFilter.value
+    ) {
+      return false;
+    }
+    if (
+      runtimeActorFilter.value !== 'all' &&
+      String(row.actorId ?? 'system') !== runtimeActorFilter.value
+    ) {
+      return false;
+    }
+    if (
+      runtimeActionFilter.value !== 'all' &&
+      String(row.actionId ?? 'system') !== runtimeActionFilter.value
+    ) {
+      return false;
+    }
+    return true;
+  })
+);
 const selectedRuntimeLog = computed(
-  () => runtimeSimLogRows.value[selectedRuntimeLogIndex.value] ?? null
+  () => filteredRuntimeSimLogRows.value[selectedRuntimeLogIndex.value] ?? null
+);
+const selectedRuntimeLogPoint = computed(() =>
+  selectedRuntimeLog.value?.sourceDeltaId
+    ? runtimePointByDeltaId.value.get(selectedRuntimeLog.value.sourceDeltaId)
+    : null
+);
+const selectedRuntimeContributionRows = computed(() =>
+  createRuntimeContributionRows(selectedRuntimeLog.value)
+);
+const selectedRuntimeSourceRows = computed(() =>
+  createRuntimeSourceRows(selectedRuntimeLogPoint.value)
 );
 
-watch(runtimeSimLogRows, rows => {
+watch(filteredRuntimeSimLogRows, rows => {
   if (selectedRuntimeLogIndex.value >= rows.length) {
     selectedRuntimeLogIndex.value = 0;
   }
+});
+
+watch(runtimeSimLogRows, () => {
+  syncRuntimeFilterValue(runtimeActorFilter, runtimeActorFilterOptions.value);
+  syncRuntimeFilterValue(runtimeActionFilter, runtimeActionFilterOptions.value);
 });
 
 function formatPayload(event) {
@@ -179,6 +389,119 @@ function formatRuntimeDelta(row) {
 
 function formatNumber(value) {
   return Math.round(Number(value) || 0).toLocaleString('zh-CN');
+}
+
+function formatRuntimeStatus(row) {
+  const point = row?.sourceDeltaId
+    ? runtimePointByDeltaId.value.get(row.sourceDeltaId)
+    : null;
+  return (
+    point?.resultStatus ?? point?.sourceStatus ?? row?.confidence ?? 'applied'
+  );
+}
+
+function countRuntimeOptions(rows, field) {
+  const counts = new Map();
+  for (const row of rows ?? []) {
+    const key = row?.[field];
+    if (!key) {
+      continue;
+    }
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+  return counts;
+}
+
+function createRuntimeSelectOptions({
+  rows,
+  keyField,
+  labelField,
+  allLabel,
+  fallbackLabel,
+}) {
+  const options = new Map();
+  for (const row of rows ?? []) {
+    const key = String(row?.[keyField] ?? 'system');
+    if (options.has(key)) {
+      continue;
+    }
+    options.set(key, {
+      key,
+      label: row?.[labelField] ?? fallbackLabel,
+    });
+  }
+  return [{ key: 'all', label: allLabel }, ...options.values()];
+}
+
+function syncRuntimeFilterValue(filterRef, options) {
+  if (!options.some(option => option.key === filterRef.value)) {
+    filterRef.value = 'all';
+  }
+}
+
+function createRuntimeContributionRows(row) {
+  if (!row) {
+    return [];
+  }
+  return [
+    {
+      key: 'hp',
+      label: '敌人 HP',
+      value:
+        row.hpDelta == null || row.trackKey !== 'enemyHpDamage'
+          ? '0'
+          : formatNumber(row.hpDelta),
+    },
+    {
+      key: 'toughness',
+      label: '敌人韧性',
+      value:
+        row.toughnessDelta == null || row.trackKey !== 'enemyToughnessDamage'
+          ? '0'
+          : formatNumber(row.toughnessDelta),
+    },
+    {
+      key: 'energy',
+      label: '自身能量',
+      value:
+        row.energyDelta == null || row.trackKey !== 'selfEnergyChange'
+          ? '0'
+          : formatSigned(row.energyDelta),
+    },
+  ];
+}
+
+function createRuntimeSourceRows(point) {
+  const sourceIds = point?.sourceIds ?? {};
+  return [
+    {
+      key: 'skillIds',
+      label: 'Skill',
+      value: formatRuntimeSourceList(sourceIds.skillIds),
+    },
+    {
+      key: 'elementConfigIds',
+      label: 'Element',
+      value: formatRuntimeSourceList(sourceIds.elementConfigIds),
+    },
+    {
+      key: 'captureSessionIds',
+      label: '采样',
+      value: formatRuntimeSourceList(sourceIds.captureSessionIds),
+    },
+    {
+      key: 'pathIds',
+      label: 'Path',
+      value: formatRuntimeSourceList(sourceIds.pathIds),
+    },
+  ];
+}
+
+function formatRuntimeSourceList(values) {
+  const list = Array.isArray(values)
+    ? values.filter(value => value != null)
+    : [];
+  return list.length > 0 ? list.join(', ') : '无';
 }
 </script>
 
@@ -268,6 +591,79 @@ h2 {
   padding: 0;
 }
 
+.runtime-log-filters {
+  display: grid;
+  gap: 8px;
+}
+
+.runtime-track-filters {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.runtime-filter-button {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  padding: 7px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #c8cdd3;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.runtime-filter-button[data-active='true'] {
+  border-color: rgba(121, 199, 185, 0.46);
+  background: rgba(121, 199, 185, 0.16);
+  color: #ffffff;
+}
+
+.runtime-filter-button span,
+.runtime-filter-button strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.runtime-filter-button strong {
+  color: #79c7b9;
+  font-size: 11px;
+}
+
+.runtime-select-filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.runtime-select-filters label {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.runtime-select-filters label span {
+  color: #8f9aa3;
+  font-size: 11px;
+}
+
+.runtime-select-filters select {
+  width: 100%;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background: #20262c;
+  color: #ffffff;
+  font-size: 12px;
+}
+
 .runtime-log-row {
   width: 100%;
   border: 1px solid transparent;
@@ -289,33 +685,76 @@ h2 {
   white-space: nowrap;
 }
 
+.runtime-log-empty {
+  margin: 0;
+  color: #8f9aa3;
+  font-size: 12px;
+}
+
 .runtime-log-detail {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
 
-.runtime-log-detail div {
+.runtime-log-detail div,
+.runtime-contribution-row,
+.runtime-source-row {
   min-width: 0;
   padding: 8px 9px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.05);
 }
 
-.runtime-log-detail span {
+.runtime-log-detail span,
+.runtime-contribution-row span,
+.runtime-source-row span {
   display: block;
   margin-bottom: 4px;
   color: #8f9aa3;
   font-size: 11px;
 }
 
-.runtime-log-detail strong {
+.runtime-log-detail strong,
+.runtime-contribution-row strong,
+.runtime-source-row strong {
   display: block;
   overflow: hidden;
   color: #ffffff;
   font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.runtime-contribution-detail,
+.runtime-source-detail {
+  display: grid;
+  gap: 6px;
+}
+
+.runtime-detail-heading {
+  color: #d9dee3;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.runtime-contribution-row,
+.runtime-source-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.runtime-contribution-row span,
+.runtime-source-row span {
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.runtime-contribution-row strong,
+.runtime-source-row strong {
+  text-align: right;
 }
 
 .time {
@@ -375,7 +814,8 @@ h2 {
 @media (max-width: 760px) {
   .event-list > li,
   .runtime-log-row,
-  .runtime-log-detail {
+  .runtime-log-detail,
+  .runtime-select-filters {
     grid-template-columns: 1fr;
     gap: 4px;
   }

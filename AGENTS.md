@@ -51,7 +51,7 @@ npm run dev
   - UI 层：优先补 Endaxis 式资源监控、模拟日志、伤害/三值详情弹层、贡献拆分和编辑器体验。
 - Evidence 层保留为来源追溯和诊断信息，不再作为用户主路径，也不阻塞工具体验。
 - `actionResultTimeline[]` 必须持续按动作追踪三类数值变化：敌人 HP 伤害、敌人韧性削减、自身能量变化。不要把韧性或充能混进 HP 伤害公式。
-- 当前 `5-8CC` 已把 `threeValueRuntimeProjection` 接入 Workbench 资源监控和模拟日志；下一步优先补三值详情弹层、日志筛选和贡献拆分，不要回头把 evidence 矩阵当用户主入口。
+- 当前 `5-8CD` 已给 Workbench runtime sim log 补 HP / 韧性 / 能量、actor、action 筛选，以及三值贡献和来源标注详情；下一步优先做日志选择与时间轴/状态点联动，或补资源监控多曲线图。
 
 ## Endaxis 参考原则
 

@@ -9305,3 +9305,94 @@ sourceDeltaId
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8CD 应把 runtime sim log 详情升级为可筛选的三值详情弹层或右侧详情面板，并开始接贡献拆分骨架。
+
+## 111. 阶段 5-8CD：runtime sim log 筛选与详情派生
+
+阶段 5-8CD 不修改项目保存 schema。本阶段包含一个 simulation projection 字段增强和一组 Workbench UI 派生字段。
+
+### 111.1 Applied state point 来源增强
+
+`createAppliedStateCurveLayer()` 生成的 applied point 新增字段：
+
+```js
+{
+  actionType,
+  targetId,
+  targetName,
+  skillId,
+  elementConfigIds,
+  sourceStatus
+}
+```
+
+其中 `elementConfigIds` 从 `result.sourceEvidence` 中的 `matchedElementConfigIds / logicElementIds / candidates[].elementConfigId` 归并。该字段会被 `threeValueGenerationLayer.deltas[].sourceIds.elementConfigIds` 继承，再被 runtime point 的 `sourceIds` 暴露给 UI。
+
+### 111.2 EventLogPanel 筛选状态
+
+`EventLogPanel` 新增前端状态：
+
+```js
+runtimeTrackFilter // all | enemyHpDamage | enemyToughnessDamage | selfEnergyChange
+runtimeActorFilter // all | actorId | system
+runtimeActionFilter // all | actionId | system
+selectedRuntimeLogIndex
+```
+
+新增派生：
+
+```js
+runtimePointByDeltaId
+runtimeTrackFilterOptions
+runtimeActorFilterOptions
+runtimeActionFilterOptions
+filteredRuntimeSimLogRows
+selectedRuntimeLog
+selectedRuntimeLogPoint
+selectedRuntimeContributionRows
+selectedRuntimeSourceRows
+```
+
+这些派生只消费：
+
+```js
+runtimeProjection.simLog
+runtimeProjection.enemyStateCurve.points
+runtimeProjection.selfEnergyCurveByActor[].points
+```
+
+不会回退读取 evidence 矩阵。
+
+### 111.3 UI 测试入口
+
+新增测试入口：
+
+```html
+data-testid="workbench-runtime-sim-log-filter-count"
+data-testid="workbench-runtime-sim-log-filters"
+data-testid="workbench-runtime-sim-log-track-filter"
+data-testid="workbench-runtime-sim-log-actor-filter"
+data-testid="workbench-runtime-sim-log-action-filter"
+data-testid="workbench-runtime-sim-log-empty"
+data-testid="workbench-runtime-sim-log-contribution"
+data-testid="workbench-runtime-sim-log-contribution-row"
+data-testid="workbench-runtime-sim-log-source"
+data-testid="workbench-runtime-sim-log-source-row"
+```
+
+### 111.4 验证
+
+当前测试覆盖：
+
+- 默认末音样例的 runtime sim log 过滤计数为 `1/1`。
+- 默认末音样例的 track filter 文案为 `全部1 / HP1 / 韧性0 / 能量0`。
+- 默认末音样例的贡献详情为 `敌人 HP 12,461 / 敌人韧性 0 / 自身能量 0`。
+- 默认末音样例的来源详情包含 `Skill 10900101` 与 `Element 109001081`。
+- 切换到有 SP 消耗的技能后，点击 `selfEnergyChange` track filter，日志从 `2/2` 过滤为 `1/2`，详情贡献显示 `自身能量 -{spCost}`，来源详情包含该技能 ID。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、35 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、109 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8CE 应把 runtime sim log 选中项与时间轴 / 状态点焦点联动，或优先补运行时资源监控的 HP / 韧性 / 能量多曲线图。

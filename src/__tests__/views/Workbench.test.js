@@ -70,6 +70,25 @@ describe('Workbench view', () => {
     ).toBe('1 日志');
     expect(
       wrapper
+        .find('[data-testid="workbench-runtime-sim-log-filter-count"]')
+        .text()
+    ).toBe('1/1');
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-runtime-sim-log-track-filter"]')
+        .map(button => [
+          button.attributes('data-track-filter'),
+          button.text(),
+          button.attributes('data-active'),
+        ])
+    ).toEqual([
+      ['all', '全部1', 'true'],
+      ['enemyHpDamage', 'HP1', 'false'],
+      ['enemyToughnessDamage', '韧性0', 'false'],
+      ['selfEnergyChange', '能量0', 'false'],
+    ]);
+    expect(
+      wrapper
         .findAll('[data-testid="workbench-runtime-energy-actor-row"]')
         .map(row => row.text())
     ).toEqual(expect.arrayContaining([expect.stringContaining('末音')]));
@@ -85,6 +104,21 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-detail"]').text()
     ).toContain('action-0001|applied-frame-0-point-0');
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-runtime-sim-log-contribution-row"]')
+        .map(row => row.text())
+    ).toEqual(['敌人 HP12,461', '敌人韧性0', '自身能量0']);
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-runtime-sim-log-source-row"]')
+        .map(row => row.text())
+    ).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('Skill10900101'),
+        expect.stringContaining('Element109001081'),
+      ])
+    );
     expect(text).toContain(
       'HP 2 个候选 (109001081, 109001306) / 削韧 2 个候选 (109001081, 109001306) / 充能 2 个候选 (109001081, 109001306)'
     );
@@ -1780,6 +1814,37 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log"]').text()
     ).toContain(`SP -${spSkill.spCost}`);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-filter-count"]')
+        .text()
+    ).toBe('2/2');
+
+    await wrapper
+      .find(
+        '[data-testid="workbench-runtime-sim-log-track-filter"][data-track-filter="selfEnergyChange"]'
+      )
+      .trigger('click');
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-filter-count"]')
+        .text()
+    ).toBe('1/2');
+    expect(
+      wrapper.findAll('[data-testid="workbench-runtime-sim-log-row"]')
+    ).toHaveLength(1);
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-sim-log-row"]').text()
+    ).toContain(`SP -${spSkill.spCost}`);
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-runtime-sim-log-contribution-row"]')
+        .map(row => row.text())
+    ).toEqual(['敌人 HP0', '敌人韧性0', `自身能量-${spSkill.spCost}`]);
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-sim-log-source"]').text()
+    ).toContain(String(spSkill.id));
     expect(wrapper.text()).toContain('RESOURCE_CHANGE');
   });
 

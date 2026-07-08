@@ -2409,14 +2409,20 @@ function createAppliedStateCurveLayer(track, actionResultTimeline) {
         sourceKind: 'action-result-applied-value',
         actionId: entry.actionId,
         actionName: entry.actionName,
+        actionType: entry.actionType,
         actorId: entry.actorId,
         actorName: entry.actorName,
+        targetId: entry.targetId,
+        targetName: entry.targetName,
+        skillId: numberOrNull(entry.skillId),
         sequenceIndex: index,
         timeMs: roundTimelineMs(timeMs),
         frameIndex,
         frameLabel: formatTimelineFrame(frameIndex),
         delta,
+        elementConfigIds: createAppliedStateCurveElementConfigIds(result),
         resultStatus: result.status ?? null,
+        sourceStatus: result.sourceEvidence?.status ?? null,
         confidence: result.confidence ?? null,
         precision: result.precision ?? null,
         applied: true,
@@ -2433,6 +2439,17 @@ function createAppliedStateCurveLayer(track, actionResultTimeline) {
     points,
     applied: true,
   });
+}
+
+function createAppliedStateCurveElementConfigIds(result) {
+  const sourceEvidence = result?.sourceEvidence;
+  return uniqueNumbers([
+    ...(sourceEvidence?.matchedElementConfigIds ?? []),
+    ...(sourceEvidence?.logicElementIds ?? []),
+    ...(sourceEvidence?.candidates ?? []).map(candidate =>
+      numberOrNull(candidate.elementConfigId)
+    ),
+  ]);
 }
 
 function createCandidateStateCurveLayer(track, chartSeries) {
