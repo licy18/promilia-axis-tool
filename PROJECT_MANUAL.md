@@ -8817,6 +8817,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 Workbench 主界面中运行结果 review 的主操作显示和实际 dispatch 进一步合并，让“选中结果 -> 执行主操作 -> 修改 -> 返回结果”的路径更少分叉。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Primary Dispatch
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- Workbench 的运行结果 review 区新增统一主操作入口，直接消费 `runtimeReviewOperations.primaryOperationKind` 和 `primaryOperationEnabled`。
+- 主操作入口通过 `createWorkbenchRuntimeReviewPrimaryOperationFlowAction()` dispatch，不再要求用户先进入某个局部面板按钮才能继续“定位动作”或“回到结果点”。
+- 已覆盖两条主路径：选中运行结果后从 review 区主操作定位动作；动作编辑产生刷新结果后从 review 区主操作回到结果点。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- Workbench 页面测试确认 `runtime-review-primary` source 的 focus / return dispatch 会被主流程控制器正常处理。
+- 选中日志结果后，主操作能把时间轴动作切到编辑焦点；pending 刷新结果后，主操作能回到刷新后的 runtime state point。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、57 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、196 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 review 主操作和 WorkbenchFlowPanel 的主流程按钮进一步对齐，减少顶部主流程条与运行结果区之间的重复入口和状态分叉。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

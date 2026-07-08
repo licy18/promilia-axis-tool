@@ -249,8 +249,60 @@
           :data-runtime-review-source-kind="
             workbenchFlowModel.runtimeReviewSelection.sourceKind
           "
+          :data-runtime-review-primary-operation-kind="
+            workbenchFlowModel.runtimeReviewOperations.primaryOperationKind
+          "
+          :data-runtime-review-primary-operation-enabled="
+            workbenchFlowModel.runtimeReviewOperations.primaryOperationEnabled
+              ? 'true'
+              : 'false'
+          "
           data-testid="workbench-runtime-review-stack"
         >
+          <div
+            v-if="workbenchFlowModel.runtimeReviewOperations.canRunAnyOperation"
+            class="runtime-review-primary-bar"
+            :data-primary-operation-action-id="
+              runtimeReviewPrimaryOperationTarget.actionId
+            "
+            :data-primary-operation-kind="
+              workbenchFlowModel.runtimeReviewOperations.primaryOperationKind
+            "
+            :data-primary-operation-state-point-id="
+              runtimeReviewPrimaryOperationTarget.statePointId
+            "
+            data-testid="workbench-runtime-review-primary-bar"
+          >
+            <button
+              type="button"
+              class="runtime-review-primary-action"
+              :data-action-id="runtimeReviewPrimaryOperationTarget.actionId"
+              :data-operation-kind="
+                workbenchFlowModel.runtimeReviewOperations.primaryOperationKind
+              "
+              :data-state-point-id="
+                runtimeReviewPrimaryOperationTarget.statePointId
+              "
+              data-testid="workbench-runtime-review-primary-operation"
+              :disabled="
+                !workbenchFlowModel.runtimeReviewOperations
+                  .primaryOperationEnabled
+              "
+              @click="dispatchRuntimeReviewPrimaryOperation"
+            >
+              <EditPen
+                v-if="
+                  workbenchFlowModel.runtimeReviewOperations
+                    .primaryOperationKind ===
+                  WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION
+                "
+                class="runtime-review-primary-action-icon"
+              />
+              <Aim v-else class="runtime-review-primary-action-icon" />
+              <span>{{ runtimeReviewPrimaryOperationLabel }}</span>
+            </button>
+          </div>
+
           <div class="resource-area" data-testid="workbench-resource-area">
             <ResourceMonitorPanel
               :resource-timeline="simulationResult.resourceTimeline"
@@ -356,7 +408,13 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import { ArrowLeft, Document, Refresh } from '@element-plus/icons-vue';
+import {
+  Aim,
+  ArrowLeft,
+  Document,
+  EditPen,
+  Refresh,
+} from '@element-plus/icons-vue';
 import ActionLibraryPanel from '../features/workbench/ActionLibraryPanel.vue';
 import AnalysisPanel from '../features/workbench/AnalysisPanel.vue';
 import EnemyPanel from '../features/workbench/EnemyPanel.vue';
@@ -380,8 +438,10 @@ import { createWorkbenchFlowRuntimePointSelectionState } from '../features/workb
 import { createWorkbenchFlowRuntimeScopeState } from '../features/workbench/workbenchFlowRuntimeScope';
 import {
   createWorkbenchFlowModel,
+  WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS,
 } from '../features/workbench/workbenchFlowModel';
 import {
+  createWorkbenchRuntimeReviewPrimaryOperationFlowAction,
   createWorkbenchRuntimeStatePointFlowAction,
 } from '../features/workbench/workbenchMainFlowActions';
 import {
@@ -571,6 +631,22 @@ const workbenchFlowModel = computed(() =>
     flowDispatchState: workbenchFlowDispatchState.value,
   })
 );
+const runtimeReviewPrimaryOperationTarget = computed(() =>
+  getRuntimeReviewPrimaryOperationTarget(
+    workbenchFlowModel.value.runtimeReviewOperations
+  )
+);
+const runtimeReviewPrimaryOperationLabel = computed(() => {
+  const kind = workbenchFlowModel.value.runtimeReviewOperations
+    .primaryOperationKind;
+  if (kind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION) {
+    return '定位动作';
+  }
+  if (kind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT) {
+    return '回到结果点';
+  }
+  return '主操作';
+});
 const timelineDiagnostics = computed(() =>
   createTimelineDiagnostics({
     actors: scenario.value.actors,
@@ -1626,6 +1702,26 @@ function dispatchWorkbenchFlowAction(action = {}) {
   return result;
 }
 
+function dispatchRuntimeReviewPrimaryOperation() {
+  dispatchWorkbenchFlowAction(
+    createWorkbenchRuntimeReviewPrimaryOperationFlowAction({
+      flowModel: workbenchFlowModel.value,
+      source: 'runtime-review-primary',
+    })
+  );
+}
+
+function getRuntimeReviewPrimaryOperationTarget(operations = null) {
+  const kind = operations?.primaryOperationKind ?? '';
+  if (kind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION) {
+    return operations?.focusAction ?? {};
+  }
+  if (kind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT) {
+    return operations?.returnResult ?? {};
+  }
+  return {};
+}
+
 function updateStateCurveFocusMode(mode) {
   if (mode === 'selected' && !selectedStateCurvePointId.value) {
     return;
@@ -2480,6 +2576,39 @@ function getLocalStorage() {
   align-items: start;
   gap: 14px;
   min-width: 0;
+}
+
+.runtime-review-primary-bar {
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.runtime-review-primary-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid rgba(121, 199, 185, 0.42);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.14);
+  color: #d7fff8;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.runtime-review-primary-action:disabled {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #7f8991;
+  cursor: not-allowed;
+}
+
+.runtime-review-primary-action-icon {
+  width: 15px;
+  height: 15px;
 }
 
 .timeline-area,

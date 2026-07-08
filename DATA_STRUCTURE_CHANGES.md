@@ -18850,6 +18850,61 @@ EventLogPanel: select-runtime-state-point
 - `npm run test -- --run`：通过，33 个测试文件、194 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 
+## 243. UI 主流程能力块：Runtime Review Primary Dispatch
+
+### 243.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`Workbench.vue` 运行结果 review 区新增主操作执行入口，直接读取：
+
+```text
+workbenchFlowModel.runtimeReviewOperations.primaryOperationKind
+workbenchFlowModel.runtimeReviewOperations.primaryOperationEnabled
+workbenchFlowModel.runtimeReviewOperations.focusAction
+workbenchFlowModel.runtimeReviewOperations.returnResult
+```
+
+新增 dispatch source：
+
+```text
+runtime-review-primary
+```
+
+该入口通过以下 helper 生成 flow action：
+
+```js
+createWorkbenchRuntimeReviewPrimaryOperationFlowAction()
+```
+
+运行结果 review stack 新增诊断属性：
+
+```text
+data-runtime-review-primary-operation-kind
+data-runtime-review-primary-operation-enabled
+```
+
+新增测试锚点：
+
+```text
+workbench-runtime-review-primary-bar
+workbench-runtime-review-primary-operation
+```
+
+这些字段只描述 Workbench UI 主流程运行时状态，不进入草稿保存结构。
+
+### 243.2 保存与迁移
+
+本阶段只新增 Workbench runtime review 主操作 dispatch 入口，不新增持久字段，不需要数据迁移。
+
+### 243.3 验证
+
+- 更新 `src/__tests__/views/Workbench.test.js`，覆盖选中运行结果后从 review 主操作执行 `focus-runtime-action`。
+- 更新 `src/__tests__/views/Workbench.test.js`，覆盖 pending 刷新结果后从 review 主操作执行 `return-runtime-result`。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、57 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、196 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
 ## 239. UI 主流程能力块：Runtime Review Selection Consumers
 
 ### 239.1 结构变化

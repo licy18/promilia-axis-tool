@@ -2359,6 +2359,126 @@ describe('Workbench view', () => {
     ).toBe(refreshedStatePointId);
   });
 
+  it('runs the selected runtime review primary operation from the workbench stack', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    const firstLogRow = wrapper.find(
+      '[data-testid="workbench-runtime-sim-log-row"]'
+    );
+    const statePointId = firstLogRow.attributes('data-state-point-id');
+    expect(statePointId).toBeTruthy();
+
+    await firstLogRow.trigger('click');
+    await nextTick();
+
+    const runtimeReviewStack = wrapper.find(
+      '[data-testid="workbench-runtime-review-stack"]'
+    );
+    expect(runtimeReviewStack.attributes()).toMatchObject({
+      'data-runtime-review-selection-status': 'selected',
+      'data-runtime-review-primary-operation-kind': 'focus-runtime-action',
+      'data-runtime-review-primary-operation-enabled': 'true',
+    });
+    const primaryOperation = runtimeReviewStack.find(
+      '[data-testid="workbench-runtime-review-primary-operation"]'
+    );
+    expect(primaryOperation.exists()).toBe(true);
+    expect(primaryOperation.attributes()).toMatchObject({
+      'data-action-id': 'action-0001',
+      'data-operation-kind': 'focus-runtime-action',
+      'data-state-point-id': statePointId,
+    });
+    expect(primaryOperation.attributes('disabled')).toBeUndefined();
+
+    await primaryOperation.trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper.find('[data-testid="workbench-main-flow-workspace"]').attributes()
+    ).toMatchObject({
+      'data-main-flow-dispatch-status': 'handled',
+      'data-main-flow-dispatch-kind': 'focus-runtime-action',
+      'data-main-flow-dispatch-source': 'runtime-review-primary',
+      'data-main-flow-dispatch-action-id': 'action-0001',
+      'data-main-flow-dispatch-state-point-id': statePointId,
+    });
+    const focusedTimelineAction = wrapper.find(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+    );
+    expect(focusedTimelineAction.classes()).toContain('selected');
+    expect(focusedTimelineAction.attributes('data-edit-focused')).toBe('true');
+    expect(focusedTimelineAction.attributes('data-edit-focus-source')).toBe(
+      'runtime-review-primary'
+    );
+  });
+
+  it('returns to the refreshed runtime result from the workbench review primary operation', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper.find('[data-testid="workbench-level-input"]').setValue('2');
+    await nextTick();
+
+    const flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    const refreshedStatePointId = flowPanel.attributes(
+      'data-edit-result-state-point-id'
+    );
+    expect(refreshedStatePointId).toBeTruthy();
+
+    const runtimeReviewStack = wrapper.find(
+      '[data-testid="workbench-runtime-review-stack"]'
+    );
+    expect(runtimeReviewStack.attributes()).toMatchObject({
+      'data-runtime-review-selection-status': 'pending-result',
+      'data-runtime-review-primary-operation-kind': 'return-runtime-result',
+      'data-runtime-review-primary-operation-enabled': 'true',
+    });
+    const primaryOperation = runtimeReviewStack.find(
+      '[data-testid="workbench-runtime-review-primary-operation"]'
+    );
+    expect(primaryOperation.exists()).toBe(true);
+    expect(primaryOperation.attributes()).toMatchObject({
+      'data-action-id': 'action-0001',
+      'data-operation-kind': 'return-runtime-result',
+      'data-state-point-id': refreshedStatePointId,
+    });
+
+    await primaryOperation.trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper.find('[data-testid="workbench-main-flow-workspace"]').attributes()
+    ).toMatchObject({
+      'data-flow-phase': 'edit-result-review',
+      'data-main-flow-dispatch-status': 'handled',
+      'data-main-flow-dispatch-kind': 'return-runtime-result',
+      'data-main-flow-dispatch-source': 'runtime-review-primary',
+      'data-main-flow-dispatch-action-id': 'action-0001',
+      'data-main-flow-dispatch-state-point-id': refreshedStatePointId,
+      'data-runtime-review-selection-status': 'selected',
+    });
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(refreshedStatePointId);
+  });
+
   it('returns to the refreshed resource result from the main flow panel', async () => {
     const wrapper = mount(Workbench, {
       global: {
