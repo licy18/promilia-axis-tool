@@ -2953,6 +2953,46 @@ describe('Workbench view', () => {
     expect(curveSelection.attributes('data-runtime-focus-source')).toBe(
       'action-result'
     );
+
+    const actionResultRow = wrapper.find(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    );
+    expect(actionResultRow.attributes('data-runtime-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+    expect(actionResultRow.attributes('data-selected-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+    expect(actionResultRow.attributes('data-result-location-status')).toBe(
+      'selected-result'
+    );
+
+    const actionEditFeedback = wrapper.find(
+      '[data-testid="workbench-action-edit-feedback"]'
+    );
+    expect(actionEditFeedback.attributes('data-runtime-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+    expect(actionEditFeedback.attributes('data-result-focused')).toBe('true');
+
+    const actionContributionPanel = wrapper.find(
+      '[data-testid="workbench-action-contribution-panel"]'
+    );
+    expect(actionContributionPanel.attributes('data-action-id')).toBe(
+      'action-0001'
+    );
+    const hpContributionRow = wrapper.find(
+      '[data-testid="workbench-action-contribution-row"][data-track-key="enemyHpDamage"]'
+    );
+    expect(hpContributionRow.attributes('data-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+    expect(hpContributionRow.attributes('data-active')).toBe('true');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-action-contribution-detail"]')
+        .attributes('data-state-point-id')
+    ).toBe(refreshedStatePointId);
   });
 
   it('links runtime resource curve points to the focused state curve point', async () => {

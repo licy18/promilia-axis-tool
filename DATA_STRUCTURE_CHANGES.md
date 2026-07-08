@@ -14758,3 +14758,32 @@ createRuntimeStatePointContexts(runtimeProjection)
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、46 条测试。
 - `npm run test -- --run`：通过，16 个测试文件、126 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 180. UI 主流程能力块：Action Result trace 统一
+
+本阶段属于 UI 主流程。
+
+### 180.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 180.2 AnalysisPanel runtime trace 来源
+
+`AnalysisPanel` 的 Action Result runtime trace 改为从：
+
+```js
+createRuntimeStatePointContexts(runtimeProjection)
+```
+
+取得 `row`、`point`、`statePointId`，再按 `actionId` 分组生成 Action Result trace 和贡献拆分。`AnalysisPanel` 不再本地使用 `createRuntimePointByDeltaId()` 与 `createRuntimeStateCurvePointId()` 重建 runtime state point。
+
+### 180.3 最近编辑反馈结果点
+
+`AnalysisPanel` 新增消费 `actionEditResultContext`，最近编辑反馈的刷新后结果点优先使用 Workbench 已解析的 `runtimeStatePointId`，再回退到该动作 trace 的第一条结果。
+
+### 180.4 验证
+
+- Workbench 测试覆盖：从模拟日志进入编辑并触发再次模拟后，Action Result 行、贡献拆分行、贡献详情、日志导航、资源曲线和最近编辑反馈都指向同一个刷新后结果点。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、46 条测试。
+- `npm run test -- --run`：通过，16 个测试文件、126 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

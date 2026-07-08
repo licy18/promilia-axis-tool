@@ -7157,6 +7157,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - UI 主流程能力块继续推进时，优先把 Action Result / 贡献拆分里的 runtime trace 也收敛到统一 runtime state point context。
 - 不回到公式追证、候选数值平衡或单帧动作细节阶段。
 
+### 2026-07-08：UI 主流程能力块 - Action Result trace 统一
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- Action Result 行和贡献拆分改为消费统一 runtime state point context，不再在 `AnalysisPanel` 内重复拼接 runtime state point id。
+- 最近编辑反馈优先使用 Workbench 的刷新后结果上下文，和主流程、日志、资源曲线指向同一个刷新后结果点。
+- 本阶段不修改三值数据、runtime 计算、保存结构或 UI 信息量。
+
+当前验证事实：
+
+- 从模拟日志进入编辑并触发再次模拟后，Action Result 行、贡献拆分行、贡献详情、日志导航、资源曲线和最近编辑反馈都会指向同一个刷新后结果点。
+- 既有 Action Result / 贡献拆分定位链路继续通过。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、46 条测试。
+- `npm run test -- --run`：通过，16 个测试文件、126 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- UI 主流程能力块继续推进时，优先做主流程编辑体验的完整性检查，确认动作编辑、运行巡检、日志/曲线/贡献详情之间没有剩余本地结果点拼接。
+- 不回到公式追证、候选数值平衡或单帧动作细节阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

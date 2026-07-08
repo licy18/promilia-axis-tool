@@ -899,9 +899,8 @@ import {
 import {
   createStateCurveFrameGroupKey,
   createStateCurvePointId,
-  createRuntimeStateCurvePointId,
 } from './stateCurvePointIdentity';
-import { createRuntimePointByDeltaId } from './runtimeProjectionPoints';
+import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
 
 const CANDIDATE_CHART_COLORS = ['#f2b366', '#79c7b9', '#a6b7ff'];
 const candidateChartGridLines = [25, 50, 75];
@@ -986,6 +985,10 @@ const props = defineProps({
     default: '',
   },
   actionEditSource: {
+    type: Object,
+    default: null,
+  },
+  actionEditResultContext: {
     type: Object,
     default: null,
   },
@@ -1205,24 +1208,18 @@ const threeValueCalculatorDiagnosticRows = computed(() =>
     }),
   ].filter(Boolean)
 );
-const runtimePointByDeltaId = computed(() =>
-  createRuntimePointByDeltaId(props.runtimeProjection)
+const runtimeStatePointContexts = computed(() =>
+  createRuntimeStatePointContexts(props.runtimeProjection)
 );
 const runtimeTraceByActionId = computed(() => {
   const groups = new Map();
-  for (const row of props.runtimeProjection?.simLog ?? []) {
+  for (const context of runtimeStatePointContexts.value) {
+    const row = context.row;
     if (!row?.actionId) {
       continue;
     }
     const group = groups.get(row.actionId) ?? [];
-    const point = row.sourceDeltaId
-      ? runtimePointByDeltaId.value.get(row.sourceDeltaId)
-      : null;
-    group.push({
-      row,
-      point,
-      statePointId: createRuntimeStateCurvePointId(row, point),
-    });
+    group.push(context);
     groups.set(row.actionId, group);
   }
   return new Map(
@@ -1968,7 +1965,10 @@ function createActionEditFeedback(source) {
     entry => entry.actionId === source.actionId
   );
   const trace = runtimeTraceByActionId.value.get(source.actionId);
-  const runtimeStatePointId = trace?.firstStatePointId ?? '';
+  const runtimeStatePointId = getActionEditFeedbackRuntimeStatePointId(
+    source,
+    trace
+  );
   const resultFocused = Boolean(
     runtimeStatePointId &&
     props.selectedStateCurvePointId &&
@@ -2013,6 +2013,16 @@ function createActionEditFeedback(source) {
       formatActionEditFeedbackResultFocusLabel(resultFocusStatus),
     locationChain,
   };
+}
+
+function getActionEditFeedbackRuntimeStatePointId(source, trace) {
+  if (
+    props.actionEditResultContext?.actionId === source.actionId &&
+    props.actionEditResultContext?.runtimeStatePointId
+  ) {
+    return props.actionEditResultContext.runtimeStatePointId;
+  }
+  return trace?.firstStatePointId ?? '';
 }
 
 function createActionEditFeedbackLocationChain({
@@ -2118,7 +2128,7 @@ function formatActionEditFeedbackResultFocusLabel(status) {
 }
 
 function createActionResultRuntimeTrace(actionId, rows) {
-  const sortedRows = [...rows].sort(compareRuntimeTraceRows);
+  const sortedRows = [...rows];
   const sourceDeltaIds = uniqueDisplayValues(
     sortedRows.map(item => item.row.sourceDeltaId)
   );
@@ -2433,16 +2443,6 @@ function selectActionContributionRow(row) {
     return;
   }
   emit('select-action-contribution-point', row.firstStatePointId);
-}
-
-function compareRuntimeTraceRows(left, right) {
-  return (
-    compareNullableNumber(left.row?.frameIndex, right.row?.frameIndex) ||
-    compareNullableNumber(left.row?.sequenceIndex, right.row?.sequenceIndex) ||
-    String(left.row?.sourceDeltaId ?? '').localeCompare(
-      String(right.row?.sourceDeltaId ?? '')
-    )
-  );
 }
 
 function formatActionResultRuntimeTrace(trace) {
