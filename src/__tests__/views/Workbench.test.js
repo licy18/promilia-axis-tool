@@ -2395,6 +2395,15 @@ describe('Workbench view', () => {
       'data-runtime-review-primary-operation-kind': 'focus-runtime-action',
       'data-runtime-review-primary-operation-enabled': 'true',
     });
+    expect(
+      runtimeReviewStack
+        .find('[data-testid="workbench-runtime-review-primary-bar"]')
+        .attributes()
+    ).toMatchObject({
+      'data-primary-operation-action-id': 'action-0001',
+      'data-primary-operation-kind': 'focus-runtime-action',
+      'data-primary-operation-state-point-id': statePointId,
+    });
     const primaryOperation = runtimeReviewStack.find(
       '[data-testid="workbench-runtime-review-primary-operation"]'
     );
@@ -2455,6 +2464,15 @@ describe('Workbench view', () => {
       'data-runtime-review-selection-status': 'pending-result',
       'data-runtime-review-primary-operation-kind': 'return-runtime-result',
       'data-runtime-review-primary-operation-enabled': 'true',
+    });
+    expect(
+      runtimeReviewStack
+        .find('[data-testid="workbench-runtime-review-primary-bar"]')
+        .attributes()
+    ).toMatchObject({
+      'data-primary-operation-action-id': 'action-0001',
+      'data-primary-operation-kind': 'return-runtime-result',
+      'data-primary-operation-state-point-id': refreshedStatePointId,
     });
     const primaryOperation = runtimeReviewStack.find(
       '[data-testid="workbench-runtime-review-primary-operation"]'

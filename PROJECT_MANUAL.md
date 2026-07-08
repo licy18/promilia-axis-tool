@@ -8974,6 +8974,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：基于统一 operation consumer 继续整理 Workbench 页面层的 review 主操作分发与各面板事件入口，让“资源曲线/日志/详情 -> 定位动作 -> 修改 -> 回看结果”的主路径更少分叉。
 
+### 2026-07-09：UI 主流程能力块 - Workbench Review Primary Consumer
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- Workbench 页面层新增 `runtimeReviewPrimaryOperationConsumer`，review 主操作按钮的 actionId、statePointId、operationKind 和 disabled 状态改为读取同一份 consumer 结果。
+- `dispatchRuntimeReviewPrimaryOperation()` 改为直接分发 `runtimeReviewPrimaryOperationConsumer.action`，不再在页面层额外创建另一份 primary operation action。
+- review 主操作按钮、资源曲线、日志行和详情面板现在都围绕 `createWorkbenchRuntimeReviewOperationConsumer()` 消费运行结果操作合同。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- Workbench 页面测试补充 review primary bar 的 actionId、operationKind、statePointId 断言，确认按钮展示目标和点击分发目标保持一致。
+- main flow action 单测和 Workbench 页面测试确认 focus / return 两条主路径仍可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、72 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、203 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 Workbench 主流程 dispatch 后的状态消费也继续收束到共享模型，减少页面模板直接读取深层 runtimeReviewOperations 的位置。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

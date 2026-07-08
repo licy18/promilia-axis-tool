@@ -19313,3 +19313,49 @@ RuntimeSelectedDetailPanel
 - `npm run test -- --run src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、76 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、203 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 249. UI 主流程能力块：Workbench Review Primary Consumer
+
+### 249.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+Workbench 页面层新增运行时主操作 consumer：
+
+```js
+runtimeReviewPrimaryOperationConsumer
+runtimeReviewPrimaryOperationTarget
+runtimeReviewPrimaryOperationKind
+```
+
+来源：
+
+```js
+createWorkbenchRuntimeReviewOperationConsumer({
+  flowModel: workbenchFlowModel.value,
+  source: 'runtime-review-primary',
+})
+```
+
+影响范围：
+
+```text
+workbench-runtime-review-primary-bar
+workbench-runtime-review-primary-operation
+dispatchRuntimeReviewPrimaryOperation()
+```
+
+review 主操作按钮的 actionId、statePointId、operationKind、disabled 状态和点击分发 action 现在来自同一份 `runtimeReviewPrimaryOperationConsumer`。
+
+`createWorkbenchRuntimeReviewPrimaryOperationFlowAction()` 仍保留给 helper 和兼容路径使用，但 Workbench 页面主操作分发不再直接调用它。
+
+### 249.2 保存与迁移
+
+本阶段只调整 Workbench 页面层的 UI 主流程消费关系，不新增持久字段，不需要数据迁移。
+
+### 249.3 验证
+
+- 更新 `src/__tests__/views/Workbench.test.js`，补充 review primary bar 的 actionId、operationKind、statePointId 断言。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、72 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、203 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

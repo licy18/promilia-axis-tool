@@ -263,43 +263,29 @@
             v-if="workbenchFlowModel.runtimeReviewOperations.canRunAnyOperation"
             class="runtime-review-primary-bar"
             :data-primary-operation-action-id="
-              workbenchFlowModel.runtimeReviewOperations.primaryOperation
-                .actionId
+              runtimeReviewPrimaryOperationTarget.actionId
             "
-            :data-primary-operation-kind="
-              workbenchFlowModel.runtimeReviewOperations.primaryOperation.kind
-            "
+            :data-primary-operation-kind="runtimeReviewPrimaryOperationKind"
             :data-primary-operation-state-point-id="
-              workbenchFlowModel.runtimeReviewOperations.primaryOperation
-                .statePointId
+              runtimeReviewPrimaryOperationTarget.statePointId
             "
             data-testid="workbench-runtime-review-primary-bar"
           >
             <button
               type="button"
               class="runtime-review-primary-action"
-              :data-action-id="
-                workbenchFlowModel.runtimeReviewOperations.primaryOperation
-                  .actionId
-              "
-              :data-operation-kind="
-                workbenchFlowModel.runtimeReviewOperations.primaryOperation.kind
-              "
+              :data-action-id="runtimeReviewPrimaryOperationTarget.actionId"
+              :data-operation-kind="runtimeReviewPrimaryOperationKind"
               :data-state-point-id="
-                workbenchFlowModel.runtimeReviewOperations.primaryOperation
-                  .statePointId
+                runtimeReviewPrimaryOperationTarget.statePointId
               "
               data-testid="workbench-runtime-review-primary-operation"
-              :disabled="
-                !workbenchFlowModel.runtimeReviewOperations
-                  .primaryOperationEnabled
-              "
+              :disabled="!runtimeReviewPrimaryOperationConsumer.enabled"
               @click="dispatchRuntimeReviewPrimaryOperation"
             >
               <EditPen
                 v-if="
-                  workbenchFlowModel.runtimeReviewOperations
-                    .primaryOperationKind ===
+                  runtimeReviewPrimaryOperationKind ===
                   WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION
                 "
                 class="runtime-review-primary-action-icon"
@@ -450,7 +436,7 @@ import {
   WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS,
 } from '../features/workbench/workbenchFlowModel';
 import {
-  createWorkbenchRuntimeReviewPrimaryOperationFlowAction,
+  createWorkbenchRuntimeReviewOperationConsumer,
   createWorkbenchRuntimeStatePointFlowAction,
 } from '../features/workbench/workbenchMainFlowActions';
 import {
@@ -639,6 +625,18 @@ const workbenchFlowModel = computed(() =>
     actionEditResultContext: actionEditResultContext.value,
     flowDispatchState: workbenchFlowDispatchState.value,
   })
+);
+const runtimeReviewPrimaryOperationConsumer = computed(() =>
+  createWorkbenchRuntimeReviewOperationConsumer({
+    flowModel: workbenchFlowModel.value,
+    source: 'runtime-review-primary',
+  })
+);
+const runtimeReviewPrimaryOperationTarget = computed(
+  () => runtimeReviewPrimaryOperationConsumer.value.target
+);
+const runtimeReviewPrimaryOperationKind = computed(
+  () => runtimeReviewPrimaryOperationConsumer.value.operationKind
 );
 const timelineDiagnostics = computed(() =>
   createTimelineDiagnostics({
@@ -1696,12 +1694,7 @@ function dispatchWorkbenchFlowAction(action = {}) {
 }
 
 function dispatchRuntimeReviewPrimaryOperation() {
-  dispatchWorkbenchFlowAction(
-    createWorkbenchRuntimeReviewPrimaryOperationFlowAction({
-      flowModel: workbenchFlowModel.value,
-      source: 'runtime-review-primary',
-    })
-  );
+  dispatchWorkbenchFlowAction(runtimeReviewPrimaryOperationConsumer.value.action);
 }
 
 function updateStateCurveFocusMode(mode) {
