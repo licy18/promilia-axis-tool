@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
   createWorkbenchMainFlowButtonView,
+  createWorkbenchMainFlowCommandSurface,
   createWorkbenchMainFlowLoopAction,
   createWorkbenchMainFlowNextAction,
   createWorkbenchMainFlowRecoveryAction,
@@ -459,6 +460,110 @@ describe('workbench main flow actions', () => {
       },
     });
     expect(returnView.action).toBeNull();
+  });
+
+  it('creates a main flow command surface for top buttons and runtime review primary', () => {
+    const surface = createWorkbenchMainFlowCommandSurface({
+      source: 'workbench-flow-panel',
+      recoverySource: 'workbench-flow-recovery',
+      runtimeReviewPrimarySource: 'runtime-review-primary',
+      flowModel: {
+        mainFlowState: {
+          primaryAction: {
+            kind: 'focus-runtime-action',
+          },
+          runtimeActionEditTarget: {
+            actionId: 'fallback-action',
+            statePointId: 'fallback-state-point',
+            canFocusAction: true,
+          },
+          resultReturnTarget: {
+            actionId: 'return-action',
+            statePointId: 'return-state-point',
+          },
+          canFocusRuntimeAction: true,
+          canReturnRuntimeResult: true,
+        },
+        mainFlowLoopState: {
+          nextActionKind: 'focus-runtime-action',
+          canRunNextAction: true,
+        },
+        runtimeReviewOperations: {
+          primaryOperationKind: 'focus-runtime-action',
+          primaryOperationEnabled: true,
+          canRunAnyOperation: true,
+          primaryOperation: {
+            kind: 'focus-runtime-action',
+            enabled: true,
+            label: '定位动作',
+            target: {
+              actionId: 'review-action',
+              statePointId: 'review-state-point',
+              fieldKey: 'startMs',
+              frameLabel: '18f',
+            },
+          },
+          focusAction: {
+            kind: 'focus-runtime-action',
+            enabled: true,
+            actionId: 'model-action',
+            statePointId: 'model-state-point',
+          },
+        },
+        controls: {
+          canOpenRuntimeResults: true,
+        },
+      },
+    });
+
+    expect(surface.runtimeActionEdit).toMatchObject({
+      kind: 'focus-runtime-action',
+      isPrimary: true,
+      enabled: true,
+      actionId: 'review-action',
+      statePointId: 'review-state-point',
+      action: {
+        kind: 'focus-runtime-action',
+        source: 'workbench-flow-panel',
+        actionId: 'review-action',
+        statePointId: 'review-state-point',
+        canRun: true,
+      },
+    });
+    expect(surface.runtimeReviewPrimary).toMatchObject({
+      source: 'runtime-review-primary',
+      visible: true,
+      operationKind: 'focus-runtime-action',
+      actionId: 'review-action',
+      statePointId: 'review-state-point',
+      action: {
+        kind: 'focus-runtime-action',
+        source: 'runtime-review-primary',
+        actionId: 'review-action',
+        statePointId: 'review-state-point',
+        canRun: true,
+      },
+    });
+    expect(surface.runtimeResultReturn).toMatchObject({
+      kind: 'return-runtime-result',
+      isPrimary: false,
+      enabled: true,
+      actionId: 'return-action',
+      statePointId: 'return-state-point',
+      action: {
+        kind: 'return-runtime-result',
+        source: 'workbench-flow-panel',
+        actionId: 'return-action',
+        statePointId: 'return-state-point',
+        canRun: true,
+      },
+    });
+    expect(surface.actions.runtimeActionEdit).toBe(
+      surface.runtimeActionEdit.action
+    );
+    expect(surface.actions.runtimeReviewPrimary).toBe(
+      surface.runtimeReviewPrimary.action
+    );
   });
 
   it('creates runtime point and result focus actions with the same main flow factory', () => {

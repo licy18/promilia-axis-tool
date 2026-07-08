@@ -220,16 +220,11 @@ import {
   TrendCharts,
 } from '@element-plus/icons-vue';
 import {
-  WORKBENCH_FLOW_ACTION_KINDS,
   createWorkbenchMainFlowStatusView,
   createWorkbenchFlowModel,
 } from './workbenchFlowModel';
 import {
-  createWorkbenchMainFlowButtonView,
-  createWorkbenchMainFlowLoopAction,
-  createWorkbenchOpenRuntimeResultsFlowAction,
-  createWorkbenchRuntimeActionEditFlowAction,
-  createWorkbenchRuntimeResultReturnFlowAction,
+  createWorkbenchMainFlowCommandSurface,
   createWorkbenchRuntimeStatePointFlowAction,
 } from './workbenchMainFlowActions';
 
@@ -291,50 +286,33 @@ const mainFlowStatusView = computed(() =>
     flowModel: workbenchFlow.value,
   })
 );
-const openRuntimeButtonView = computed(() =>
-  createWorkbenchMainFlowButtonView({
-    kind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+const mainFlowCommandSurface = computed(() =>
+  createWorkbenchMainFlowCommandSurface({
     flowModel: workbenchFlow.value,
-    fallbackTarget: workbenchFlow.value.mainFlowState.primaryAction,
-    fallbackEnabled: workbenchFlow.value.controls.canOpenRuntimeResults,
     source: MAIN_FLOW_PANEL_SOURCE,
+    recoverySource: MAIN_FLOW_RECOVERY_SOURCE,
   })
+);
+const openRuntimeButtonView = computed(() =>
+  mainFlowCommandSurface.value.openRuntimeResults
 );
 const runtimeActionEditButtonView = computed(() =>
-  createWorkbenchMainFlowButtonView({
-    kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
-    flowModel: workbenchFlow.value,
-    fallbackTarget: workbenchFlow.value.mainFlowState.runtimeActionEditTarget,
-    fallbackEnabled: workbenchFlow.value.mainFlowState.canFocusRuntimeAction,
-    source: MAIN_FLOW_PANEL_SOURCE,
-  })
+  mainFlowCommandSurface.value.runtimeActionEdit
 );
 const runtimeResultReturnButtonView = computed(() =>
-  createWorkbenchMainFlowButtonView({
-    kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
-    flowModel: workbenchFlow.value,
-    fallbackTarget: workbenchFlow.value.mainFlowState.resultReturnTarget,
-    fallbackEnabled: workbenchFlow.value.mainFlowState.canReturnRuntimeResult,
-    source: MAIN_FLOW_PANEL_SOURCE,
-  })
+  mainFlowCommandSurface.value.runtimeResultReturn
 );
 
 function focusRuntimeAction() {
-  dispatchMainFlowAction(WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION, () =>
-    getRuntimeActionFocusFlowAction(runtimeActionEditButtonView.value.target)
-  );
+  dispatchFlowAction(mainFlowCommandSurface.value.actions.runtimeActionEdit);
 }
 
 function returnRuntimeResult() {
-  dispatchMainFlowAction(WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT, () =>
-    getRuntimeReturnFlowAction(runtimeResultReturnButtonView.value.target)
-  );
+  dispatchFlowAction(mainFlowCommandSurface.value.actions.runtimeResultReturn);
 }
 
 function openRuntimeResults() {
-  dispatchMainFlowAction(WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS, () =>
-    getOpenRuntimeResultsFlowAction(workbenchFlow.value)
-  );
+  dispatchFlowAction(mainFlowCommandSurface.value.actions.openRuntimeResults);
 }
 
 function selectRuntimeNavigationPoint(point) {
@@ -348,51 +326,11 @@ function dispatchFlowAction(action) {
   emit('dispatch-flow-action', action);
 }
 
-function dispatchMainFlowAction(kind, createFallbackAction) {
-  const isPrimaryAction = isPrimaryFlowAction(kind);
-  if (!isPrimaryAction) {
-    dispatchFlowAction(createFallbackAction());
-    return;
-  }
-  const action = createWorkbenchMainFlowLoopAction({
-    flowModel: workbenchFlow.value,
-    source: MAIN_FLOW_PANEL_SOURCE,
-    recoverySource: MAIN_FLOW_RECOVERY_SOURCE,
-  });
-  dispatchFlowAction(action);
-}
-
-function isPrimaryFlowAction(kind) {
-  return workbenchFlow.value.mainFlowState.primaryAction.kind === kind;
-}
-
-function getOpenRuntimeResultsFlowAction(flow) {
-  return createWorkbenchOpenRuntimeResultsFlowAction({
-    flowModel: flow,
-    source: MAIN_FLOW_PANEL_SOURCE,
-  });
-}
-
 function getRuntimeNavigationFlowAction(point) {
   return createWorkbenchRuntimeStatePointFlowAction({
     source: 'workbench-flow-navigation',
     detail: point,
     enabled: Boolean(point?.statePointId),
-  });
-}
-
-function getRuntimeActionFocusFlowAction(detail) {
-  return createWorkbenchRuntimeActionEditFlowAction({
-    source: MAIN_FLOW_PANEL_SOURCE,
-    target: detail,
-    enabled: Boolean(detail?.canFocusAction),
-  });
-}
-
-function getRuntimeReturnFlowAction(context) {
-  return createWorkbenchRuntimeResultReturnFlowAction({
-    source: MAIN_FLOW_PANEL_SOURCE,
-    target: context,
   });
 }
 </script>

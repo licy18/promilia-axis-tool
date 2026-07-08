@@ -20034,3 +20034,69 @@ createWorkbenchRuntimeReviewPanelCommandView({
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、78 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、211 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 262. UI 主流程能力块：Main Flow Command Surface
+
+### 262.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增共享函数：
+
+```js
+createWorkbenchMainFlowCommandSurface({
+  flowModel,
+  source,
+  recoverySource,
+  runtimeReviewPrimarySource,
+})
+```
+
+输出结构：
+
+```js
+{
+  source,
+  recoverySource,
+  openRuntimeResults,
+  runtimeActionEdit,
+  runtimeResultReturn,
+  runtimeReviewPrimary,
+  buttons: {
+    openRuntimeResults,
+    runtimeActionEdit,
+    runtimeResultReturn,
+  },
+  actions: {
+    openRuntimeResults,
+    runtimeActionEdit,
+    runtimeResultReturn,
+    runtimeReviewPrimary,
+  },
+}
+```
+
+其中 `openRuntimeResults`、`runtimeActionEdit`、`runtimeResultReturn` 是 main flow button command：
+
+```js
+{
+  ...buttonView,
+  view,
+  action,
+}
+```
+
+primary 场景下 `action` 来自 `createWorkbenchMainFlowLoopAction()`；非 primary 场景下 `action` 来自对应 fallback action。`runtimeReviewPrimary` 继续复用 `createWorkbenchRuntimeReviewPrimaryOperationCommand()`，但由同一 command surface 暴露给 Workbench 页面层消费。
+
+`WorkbenchFlowPanel` 与 `Workbench` 页面层现在改为消费 `createWorkbenchMainFlowCommandSurface()`，减少顶部主流程按钮和运行结果区 primary 操作之间的分散 action 创建。
+
+### 262.2 保存与迁移
+
+本阶段只调整主流程 command/view 消费关系，不新增持久字段，不需要数据迁移。
+
+### 262.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 command surface 同时输出顶部按钮 action 与 runtime review primary action，并确认两类入口保持各自 source。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、81 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、212 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

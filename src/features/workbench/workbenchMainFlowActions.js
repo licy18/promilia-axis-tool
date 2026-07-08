@@ -199,6 +199,81 @@ export function createWorkbenchMainFlowButtonView({
   });
 }
 
+export function createWorkbenchMainFlowCommandSurface({
+  flowModel = null,
+  source = '',
+  recoverySource = '',
+  runtimeReviewPrimarySource = '',
+} = {}) {
+  const mainFlowState = flowModel?.mainFlowState ?? {};
+  const openRuntimeResults = createWorkbenchMainFlowButtonCommand({
+    flowModel,
+    kind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+    source,
+    recoverySource,
+    fallbackTarget: mainFlowState.primaryAction,
+    fallbackEnabled: flowModel?.controls?.canOpenRuntimeResults,
+    createFallbackAction: () =>
+      createWorkbenchOpenRuntimeResultsFlowAction({
+        flowModel,
+        source,
+      }),
+  });
+  const runtimeActionEdit = createWorkbenchMainFlowButtonCommand({
+    flowModel,
+    kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+    source,
+    recoverySource,
+    fallbackTarget: mainFlowState.runtimeActionEditTarget,
+    fallbackEnabled: mainFlowState.canFocusRuntimeAction,
+    createFallbackAction: ({ target }) =>
+      createWorkbenchRuntimeActionEditFlowAction({
+        source,
+        target,
+        enabled: Boolean(target?.canFocusAction),
+      }),
+  });
+  const runtimeResultReturn = createWorkbenchMainFlowButtonCommand({
+    flowModel,
+    kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+    source,
+    recoverySource,
+    fallbackTarget: mainFlowState.resultReturnTarget,
+    fallbackEnabled: mainFlowState.canReturnRuntimeResult,
+    createFallbackAction: ({ target }) =>
+      createWorkbenchRuntimeResultReturnFlowAction({
+        source,
+        target,
+      }),
+  });
+  const runtimeReviewPrimary = createWorkbenchRuntimeReviewPrimaryOperationCommand(
+    {
+      flowModel,
+      source: runtimeReviewPrimarySource || source,
+    }
+  );
+
+  return {
+    source,
+    recoverySource,
+    openRuntimeResults,
+    runtimeActionEdit,
+    runtimeResultReturn,
+    runtimeReviewPrimary,
+    buttons: {
+      openRuntimeResults,
+      runtimeActionEdit,
+      runtimeResultReturn,
+    },
+    actions: {
+      openRuntimeResults: openRuntimeResults.action,
+      runtimeActionEdit: runtimeActionEdit.action,
+      runtimeResultReturn: runtimeResultReturn.action,
+      runtimeReviewPrimary: runtimeReviewPrimary.action,
+    },
+  };
+}
+
 export function createWorkbenchRuntimeStatePointFlowAction(options = {}) {
   return createRuntimeStatePointFocusFlowAction(options);
 }
@@ -572,6 +647,38 @@ function createMainFlowLoopTarget({ loopState = {}, target = null } = {}) {
     ...(target ?? {}),
     actionId: target?.actionId || loopState.targetActionId || '',
     statePointId: target?.statePointId || loopState.targetStatePointId || '',
+  };
+}
+
+function createWorkbenchMainFlowButtonCommand({
+  flowModel = null,
+  kind = '',
+  source = '',
+  recoverySource = '',
+  fallbackTarget = null,
+  fallbackEnabled,
+  createFallbackAction,
+} = {}) {
+  const view = createWorkbenchMainFlowButtonView({
+    flowModel,
+    kind,
+    fallbackTarget,
+    fallbackEnabled,
+    source,
+  });
+  const action = view.isPrimary
+    ? createWorkbenchMainFlowLoopAction({
+        flowModel,
+        source,
+        recoverySource,
+      })
+    : (view.action ??
+      createFallbackAction?.({ flowModel, target: view.target, view }) ??
+      null);
+  return {
+    ...view,
+    view,
+    action,
   };
 }
 

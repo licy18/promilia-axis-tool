@@ -431,7 +431,7 @@ import {
   createWorkbenchFlowModel,
 } from '../features/workbench/workbenchFlowModel';
 import {
-  createWorkbenchRuntimeReviewPrimaryOperationCommand,
+  createWorkbenchMainFlowCommandSurface,
   createWorkbenchRuntimeStatePointFlowAction,
 } from '../features/workbench/workbenchMainFlowActions';
 import {
@@ -631,11 +631,16 @@ const runtimeReviewFlowView = computed(() =>
     flowModel: workbenchFlowModel.value,
   })
 );
-const runtimeReviewPrimaryOperationCommand = computed(() =>
-  createWorkbenchRuntimeReviewPrimaryOperationCommand({
+const mainFlowCommandSurface = computed(() =>
+  createWorkbenchMainFlowCommandSurface({
     flowModel: workbenchFlowModel.value,
-    source: 'runtime-review-primary',
+    source: 'workbench-flow-panel',
+    recoverySource: 'workbench-flow-recovery',
+    runtimeReviewPrimarySource: 'runtime-review-primary',
   })
+);
+const runtimeReviewPrimaryOperationCommand = computed(
+  () => mainFlowCommandSurface.value.runtimeReviewPrimary
 );
 const runtimeReviewPrimaryOperationView = computed(() =>
   runtimeReviewPrimaryOperationCommand.value.view
