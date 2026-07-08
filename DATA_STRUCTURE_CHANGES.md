@@ -17199,3 +17199,85 @@ empty point -> 清空选择并回到 all 视角
 - `npm run test -- --run src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、64 条测试。
 - `npm run test -- --run`：通过，29 个测试文件、171 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 218. UI 主流程能力块：Runtime Result Source Route
+
+本阶段属于 UI 主流程。
+
+### 218.1 结构变化
+
+`createWorkbenchFlowController()` 对以下 action 的 handler payload 新增 `source`：
+
+```js
+SELECT_RUNTIME_RESULT
+RETURN_RUNTIME_RESULT
+```
+
+payload 从：
+
+```js
+{
+  actionId,
+  statePointId
+}
+```
+
+扩展为：
+
+```js
+{
+  actionId,
+  statePointId,
+  source
+}
+```
+
+`createWorkbenchFlowPlanHandlers()` 创建 `RUNTIME_RESULT_RETURN` plan 时不再强制写死：
+
+```js
+source: 'action-result'
+```
+
+而是使用：
+
+```js
+source: source || 'action-result'
+```
+
+新增 `src/features/workbench/runtimeFocusSource.js`，集中维护 runtime result focus source 分类：
+
+```js
+isRuntimeResultFocusSource(source)
+normalizeRuntimeLogFocusScope(source)
+```
+
+当前归为 result focus 的来源包括：
+
+```text
+action-result
+analysis-action-result
+analysis-edit-result
+properties-panel
+event-log-runtime-detail
+runtime-detail
+workbench-flow-panel
+```
+
+`EventLogPanel` 使用 `normalizeRuntimeLogFocusScope()` 继续把这些来源映射为既有 `action-result` 日志 scope。
+
+`ResourceMonitorPanel` 使用 `isRuntimeResultFocusSource()` 继续把这些来源显示为既有“动作结果定位”语义；`refreshed-edit-result` 仍优先显示为“刷新后结果”。
+
+### 218.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench 主流程路由来源；三值计算、runtime projection 数值结果和草稿保存结构不变。
+
+### 218.3 验证
+
+- 新增 `src/__tests__/features/runtimeFocusSource.test.js`，覆盖结果入口 source 分类与日志 scope 归一。
+- 更新 `src/__tests__/features/workbenchFlowController.test.js`，确认 `SELECT_RUNTIME_RESULT` / `RETURN_RUNTIME_RESULT` 的 source 进入 runtime result return plan。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认普通结果定位、日志回看和编辑反馈回看分别保留真实 `data-runtime-focus-source`。
+- `npm run test -- --run src/__tests__/features/runtimeFocusSource.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、59 条测试。
+- `npm run test -- --run`：通过，30 个测试文件、173 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

@@ -49,6 +49,7 @@ export function createWorkbenchFlowController(handlers = {}) {
           payload: {
             actionId: flowAction.actionId,
             statePointId: flowAction.statePointId,
+            source: flowAction.source,
           },
         });
       }
@@ -113,6 +114,7 @@ export function createWorkbenchFlowController(handlers = {}) {
           payload: {
             actionId: flowAction.actionId,
             statePointId: flowAction.statePointId,
+            source: flowAction.source,
           },
         });
       }
@@ -149,6 +151,7 @@ export function createWorkbenchFlowPlanHandlers({
     [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_RESULT]: ({
       actionId,
       statePointId,
+      source,
     } = {}) =>
       applyRuntimeFlowPlan(
         createPlan(
@@ -157,7 +160,7 @@ export function createWorkbenchFlowPlanHandlers({
           {
             actionId,
             statePointId,
-            source: 'action-result',
+            source: source || 'action-result',
           }
         )
       ),
@@ -211,6 +214,7 @@ export function createWorkbenchFlowPlanHandlers({
     [WORKBENCH_FLOW_CONTROLLER_HANDLERS.RETURN_RUNTIME_RESULT]: ({
       actionId,
       statePointId,
+      source,
     } = {}) =>
       applyRuntimeFlowPlan(
         createPlan(
@@ -219,7 +223,7 @@ export function createWorkbenchFlowPlanHandlers({
           {
             actionId,
             statePointId,
-            source: 'action-result',
+            source: source || 'action-result',
           }
         )
       ),

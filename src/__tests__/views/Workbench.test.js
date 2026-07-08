@@ -1341,7 +1341,7 @@ describe('Workbench view', () => {
     );
     expect(
       actionResultCurveSelection.attributes('data-runtime-focus-source')
-    ).toBe('action-result');
+    ).toBe('analysis-action-result');
     expect(actionResultCurveSelection.text()).toContain('动作结果定位');
     const actionResultDetailPanel = wrapper.find(
       '[data-testid="workbench-action-result-detail-panel"]'
@@ -3735,7 +3735,7 @@ describe('Workbench view', () => {
     expect(curveSelection.attributes('data-navigation-count')).toBe('2');
     expect(curveSelection.attributes('data-navigation-index')).toBe('1');
     expect(curveSelection.attributes('data-runtime-focus-source')).toBe(
-      'action-result'
+      'event-log-runtime-detail'
     );
 
     const actionResultRow = wrapper.find(
@@ -4119,7 +4119,7 @@ describe('Workbench view', () => {
     );
     expect(
       refreshedCurveSelection.attributes('data-runtime-focus-source')
-    ).toBe('action-result');
+    ).toBe('analysis-edit-result');
     expect(
       refreshedCurveSelection.attributes('data-result-context-status')
     ).toBe('refreshed-edit-result');

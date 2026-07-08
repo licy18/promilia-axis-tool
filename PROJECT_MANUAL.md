@@ -8167,6 +8167,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把动作编辑后的回看路径继续收束到同一套 runtime/state point 路由上，让“改动作 -> 看刷新结果 -> 再回编辑”更稳定。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Result Source Route
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `select-runtime-result` 与 `return-runtime-result` 现在会把真实入口来源透传到 runtime result plan，不再统一覆盖为 `action-result`。
+- 新增 runtime focus source 分类 helper，把普通动作结果、编辑反馈结果、属性面板回看、日志/详情回看和主流程面板回看归入同一类“结果定位”语义。
+- 资源曲线和模拟日志继续显示原有结果定位语义，同时保留真实 route source，后续可以区分用户是从分析结果、编辑反馈、属性面板还是日志/详情回到结果点。
+- 本阶段不新增公式推断、不调整三值结果、不扩展微型状态标签。
+
+当前验证事实：
+
+- controller 单元测试确认 `SELECT_RUNTIME_RESULT` / `RETURN_RUNTIME_RESULT` 的 source 会进入 runtime result return plan。
+- runtime focus source 单元测试确认多个结果入口 source 归一到日志的 `action-result` scope。
+- Workbench 页面测试确认普通结果定位、日志回看和编辑反馈回看都保留各自真实 `data-runtime-focus-source`，同时维持原有曲线和日志联动。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/runtimeFocusSource.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、59 条测试。
+- `npm run test -- --run`：通过，30 个测试文件、173 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 继续 UI 主流程能力块：把“回到结果点后继续编辑同一动作”的入口再收束一层，让动作属性面板、运行详情和时间轴编辑焦点更一致。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

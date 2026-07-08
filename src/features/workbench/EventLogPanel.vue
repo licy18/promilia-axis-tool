@@ -317,6 +317,10 @@ import {
   WORKBENCH_FLOW_ACTION_KINDS,
   createWorkbenchFlowAction,
 } from './workbenchFlowModel';
+import {
+  isRuntimeResultFocusSource,
+  normalizeRuntimeLogFocusScope,
+} from './runtimeFocusSource';
 
 const props = defineProps({
   eventLog: {
@@ -451,7 +455,7 @@ const runtimeLogFilterSummary = computed(() => {
   const focusSource = flowRuntimeFocusSource.value;
   const actionResultFocusActive = isRuntimeLogFocusSource(focusSource);
   const scope = actionResultFocusActive
-    ? focusSource
+    ? normalizeRuntimeLogFocusScope(focusSource)
     : props.calculatorDiagnosticFocus?.scope === 'runtime'
       ? 'runtime'
       : 'manual';
@@ -840,7 +844,9 @@ function focusRuntimeLogByStatePoint(statePointId) {
 }
 
 function isRuntimeLogFocusSource(source) {
-  return source === 'action-result' || source === 'action-contribution';
+  return (
+    isRuntimeResultFocusSource(source) || source === 'action-contribution'
+  );
 }
 
 function createRuntimeLogNavigationStatus({

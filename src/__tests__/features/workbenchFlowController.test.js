@@ -122,7 +122,11 @@ describe('workbench flow controller', () => {
       ['openRuntimeResults', { actionId: 'action-0000' }],
       [
         'selectRuntimeResult',
-        { actionId: 'action-0001', statePointId: 'runtime-point-001' },
+        {
+          actionId: 'action-0001',
+          statePointId: 'runtime-point-001',
+          source: 'analysis-action-result',
+        },
       ],
       [
         'selectRuntimeStatePoint',
@@ -137,7 +141,11 @@ describe('workbench flow controller', () => {
       ['focusEditSource', editSourcePayload],
       [
         'returnRuntimeResult',
-        { actionId: 'action-0004', statePointId: 'runtime-point-005' },
+        {
+          actionId: 'action-0004',
+          statePointId: 'runtime-point-005',
+          source: 'properties-panel',
+        },
       ],
     ]);
   });
@@ -233,6 +241,7 @@ describe('workbench flow controller', () => {
     });
     controller.dispatch({
       kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+      source: 'analysis-edit-result',
       actionId: 'action-result',
       statePointId: 'point-result',
     });
@@ -263,6 +272,7 @@ describe('workbench flow controller', () => {
     });
     controller.dispatch({
       kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+      source: 'properties-panel',
       actionId: 'action-return',
       statePointId: 'point-return',
     });
@@ -280,7 +290,7 @@ describe('workbench flow controller', () => {
         payload: {
           actionId: 'action-result',
           statePointId: 'point-result',
-          source: 'action-result',
+          source: 'analysis-edit-result',
         },
       },
       {
@@ -302,7 +312,7 @@ describe('workbench flow controller', () => {
         payload: {
           actionId: 'action-return',
           statePointId: 'point-return',
-          source: 'action-result',
+          source: 'properties-panel',
         },
       },
     ]);
