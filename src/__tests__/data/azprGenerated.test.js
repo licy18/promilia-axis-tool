@@ -706,7 +706,7 @@ describe('generated AzPr data', () => {
     ).toEqual([10101062, 10700262, 10800562, 11200262]);
     expect(mayoiAttack).toMatchObject({
       status: 'found',
-      jsonFileCount: 193,
+      jsonFileCount: 97,
       frameRange: {
         minStartFrame: 0,
         maxEndFrame: 300,

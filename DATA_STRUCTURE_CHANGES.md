@@ -6589,3 +6589,56 @@ runtime-sampling-offline-samples-partially-validated
 - `10100301` 的普攻子技能链已经发现，但每段 hit 到 DamageElement 的绑定仍未闭合。
 - 外部 Element 名称存在原始编码乱码，UI 和报告应优先显示 `elementConfigId`、PathID 和脚本类型。
 - 本阶段不改变最终公式、运行时采样 schema 或 `selfEnergyChange.value` 的应用边界。
+
+## 83. 阶段 5-8BD：末音 skill_control 清理重导后的报表语义
+
+阶段 5-8BD 清理并重导 `skill_control_109001*`，属于源数据清洁和 evidence 报表更新，不改变项目保存 schema。
+
+### 83.1 清理结果
+
+旧目录中末音 MonoBehaviour JSON 曾混有真实对象与 `stubOnly` 壳对象。清理 27 个 `skill_control_109001*.asset` 目录并重新 manifest-sliced 导出后：
+
+```json
+{
+  "candidateBundles": 27,
+  "writtenFiles": 1437,
+  "typeCounts": {
+    "MonoBehaviour": 1437
+  },
+  "errorCount": 0,
+  "stubOnly": 0
+}
+```
+
+因此 `jsonFileCount` 现在表示干净导出的真实 MonoBehaviour 文件数，不再包含旧 stub。末音普攻 `10900101` 的 `jsonFileCount` 从旧混合目录的 `193` 变为 `97`。
+
+### 83.2 末音外部引用闭环
+
+重生成后的末音主技能外部 Element 引用没有未匹配项：
+
+```json
+[
+  { "skillId": 10900101, "external": 14, "matched": 14, "unmatched": 0 },
+  { "skillId": 10900112, "external": 9, "matched": 9, "unmatched": 0 },
+  { "skillId": 10900113, "external": 25, "matched": 25, "unmatched": 0 },
+  { "skillId": 10900121, "external": 1, "matched": 1, "unmatched": 0 },
+  { "skillId": 10900161, "external": 1, "matched": 1, "unmatched": 0 }
+]
+```
+
+这说明末音当前没有资源映射层面的外部 DamageElement 缺口。剩余问题不是找不到外部对象，而是抽样上限、动作 hit 绑定和运行时公式验证。
+
+### 83.3 仍需保留的缺口标记
+
+当前 `SKILL_CONTROL_SAMPLE_FILE_LIMIT = 80` 仍会限制报表覆盖：
+
+- `10900101`：97 个 JSON，解析 80 个，剩余 17 个未纳入当前报表。
+- `10900113`：95 个 JSON，解析 80 个，剩余 15 个未纳入当前报表。
+- `10900121`：104 个 JSON，解析 80 个，剩余 24 个未纳入当前报表。
+
+消费者展示末音报表时应区分：
+
+- `resourceMapUnmatchedElementBaseRefs = 0`：外部资源映射已闭环。
+- `jsonFileCount > parsedJsonSampleFiles`：当前 evidence 仍是抽样解析，不是全量解析。
+- `formulaFunctionEvidence.applied = false`：字段和公式 ID 已匹配，但最终 HP / 韧性 / 能量公式仍未应用。
+- `selfEnergyChange` 主动作缺真实 runtime capture：仍需 hook 样本确认最终每角色能量曲线。

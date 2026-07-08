@@ -4037,6 +4037,38 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8BD 目标：把寒悠悠 `10100302/03/04/05` 普攻子技能链拆成每段 hit 组，并把 hit 组绑定到 `TDamageElementParams`。
 - 之后再接入真实 hook JSON / runtime capture，验证默认普攻、寒悠悠样本、非普攻 `109001251` 的 HP / 韧性 / 能量三曲线。
 
+### 2026-07-08：阶段 5-8BD 末音 skill_control 清理重导与缺口复核
+
+本轮完成：
+
+- 清理 `C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_109001*.asset` 旧目录 27 个，去掉旧导出残留的 `stubOnly` JSON。
+- 使用 AzPr Extractor 对 `skill_control_109001*` 重新做 manifest-sliced MonoBehaviour 导出：27 个 bundle、1437 个 MonoBehaviour JSON，错误数 0。
+- 重导后确认末音目录为 1437 个真实 JSON、`stubOnly = 0`、不可读 JSON = 0。
+- 重新运行 `npm run data:generate`，生成报表基于干净导出目录。
+
+末音当前已解析部分：
+
+- `10900101 哈库茵剑舞`：97 个 JSON，当前解析 80 个；40 条 timeline、80 个行为节点，帧范围 `0-300`；外部 Element 引用 `14/14` 已匹配，DamageElement 包含 `109001251 / 109001306 / 109001081`。
+- `10900112 涌雷动之跃`：75 个 JSON，当前解析 75 个；37 条 timeline、75 个行为节点，帧范围 `0-259`；外部 Element 引用 `9/9` 已匹配，DamageElement 包含 `109001033 / 109001121`。
+- `10900113 绽华章之舞`：95 个 JSON，当前解析 80 个；40 条 timeline、80 个行为节点，帧范围 `0-999`；外部 Element 引用 `25/25` 已匹配，DamageElement 包含 `796 / 296 / 109001173 / 109001133`。
+- `10900121 凝飓风之旋`：104 个 JSON，当前解析 80 个；39 条 timeline、81 个行为节点，帧范围 `0-999`；外部 Element 引用 `1/1` 已匹配，DamageElement 包含 `109001349 / 109001350`。
+- `10900161 哈库茵之耀`：3 个 JSON，当前解析 3 个；1 条 timeline、3 个行为节点，帧范围 `0-1`；外部 Element 引用 `1/1` 已匹配，当前只命中自身能量 lane。
+- `10900162`：1 个 JSON，当前解析 1 个；没有有效 timeline，外部 Element 引用 0。
+
+实际缺口：
+
+- 末音没有外部 DamageElement 映射缺口：主技能外部引用均为 `resourceMapUnmatchedElementBaseRefs = 0`。
+- 仍有生成器抽样上限缺口：`10900101` 余 17 个 JSON 未纳入当前报表、`10900113` 余 15 个、`10900121` 余 24 个。
+- `10900101` 当前样本未命中韧性 lane；`10900161` 更像 1 帧能量壳；`10900162` 没有有效时序。
+- DamageElement 字段已能看到 HP、削韧、recoverSP / petRecoverSP / recoverInterval 候选，但 `formulaFunctionEvidence.applied = false`，仍未应用为最终 HP / 韧性 / 能量曲线。
+- `selfEnergyChange` 对主动作仍缺真实 runtime capture；需要真实 hook 样本确认 SPGETUP、SPGETUP_ATK、interval 节流、share target 和最终每角色能量变化。
+- 全局仍缺 4 个当前技能的 `skill_control` 目录：`10101062`、`10700262`、`10800562`、`11200262`；与末音无关。
+
+下一步：
+
+- 阶段 5-8BE 目标：为目标角色开放全量 skill_control 解析，消除 `SKILL_CONTROL_SAMPLE_FILE_LIMIT = 80` 对 `10900101/13/21` 的剩余抽样缺口。
+- 同步推进寒悠悠 `10100302/03/04/05` 普攻子技能 hit 绑定，并把末音/寒悠悠的真实 hook capture 接入 HP / 韧性 / 能量三曲线验证。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
