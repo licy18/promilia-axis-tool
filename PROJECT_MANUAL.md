@@ -5361,6 +5361,40 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 优先支持从“生成适配器 / 运行适配器”诊断行切换到对应层级视角：generation 侧聚焦候选/采样来源，runtime 侧聚焦已应用曲线和 sim log。
 - 仍保持框架优先，不追逐每个动作的逐帧精细数值；下一阶段重点是让用户能从诊断摘要快速定位三值曲线和日志。
 
+### 2026-07-08：阶段 5-8CQ calculator 诊断联动三值曲线/日志
+
+本轮完成：
+
+- `AnalysisPanel` 的 generation/runtime calculator 诊断行从只读摘要升级为可点击入口，并保留 `data-calculator-scope` / `data-active` 测试入口。
+- Workbench 新增 `calculatorDiagnosticScope` 和 `calculatorDiagnosticFocus` 状态，统一承接诊断入口的 scope。
+- 点击“生成适配器”会切换到 generation 视角：隐藏 applied 层，显示 candidate / sampled / placeholder 层，清空选中点并回到全部视角。
+- 点击“运行适配器”会切换到 runtime 视角：只显示 applied 层，选中第一条 runtime sim log 对应的状态点，并切到选中视角。
+- `EventLogPanel` 新增 `calculatorDiagnosticFocus` prop；runtime 诊断触发时会把日志筛选重置到全部轨道、全部角色、全部动作，并回到第一条日志。
+- Workbench 端到端测试覆盖了从 generation 诊断聚焦候选层，再从 runtime 诊断恢复 applied 曲线和 sim log 可见的流程。
+
+当前验证事实：
+
+- 默认样本点击“生成适配器”后，状态曲线可见点从 16 切换为 15，`applied` 关闭、`candidate` 保持开启。
+- 默认样本把 runtime sim log 手动筛到能量后会显示 `0/1`；随后点击“运行适配器”会恢复为 `1/1`，且日志轨道筛选回到“全部”。
+- 点击“运行适配器”后状态曲线切到 selected focus，并选中默认 HP applied 点。
+
+当前边界：
+
+- 联动粒度仍是 generation/runtime 两个 scope，不支持按单个 calculator key、status 或 unresolved item 精准过滤。
+- generation 视角目前使用 state curve 层筛选表达，不会自动滚动到候选曲线或 action result 行。
+- runtime 视角默认选中第一条 sim log；多条 runtime delta 下尚未按诊断行内的 track/status 分配具体目标点。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8CR 目标：把三值曲线和模拟日志的“当前视角”做成更清晰的用户反馈，让 generation/runtime 诊断联动后的层级、选中状态和日志筛选状态一眼可见。
+- 优先补 UI 状态标签和空状态解释，不继续扩展公式细节；让框架调试路径更像 Endaxis 的资源/日志联动体验。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -96,17 +96,21 @@
         class="calculator-diagnostic-list"
         data-testid="workbench-three-value-calculator-diagnostics"
       >
-        <div
+        <button
           v-for="row in threeValueCalculatorDiagnosticRows"
           :key="row.scope"
+          type="button"
           class="calculator-diagnostic-row"
+          :class="{ active: row.scope === calculatorDiagnosticScope }"
+          :data-active="row.scope === calculatorDiagnosticScope"
           :data-calculator-scope="row.scope"
           data-testid="workbench-three-value-calculator-diagnostic-row"
+          @click="focusThreeValueCalculatorScope(row.scope)"
         >
           <span>{{ row.label }}</span>
           <strong>{{ row.summary }}</strong>
           <small>{{ row.detail }}</small>
-        </div>
+        </button>
       </div>
       <p
         v-if="
@@ -635,6 +639,10 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
+  calculatorDiagnosticScope: {
+    type: String,
+    default: '',
+  },
   insertionDiagnostics: {
     type: Object,
     default: () => ({
@@ -656,6 +664,7 @@ const emit = defineEmits([
   'update-state-curve-layer-filter',
   'update-state-curve-track-filter',
   'update-state-curve-focus-mode',
+  'focus-three-value-calculator-scope',
 ]);
 
 const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
@@ -1305,6 +1314,10 @@ function createThreeValueCalculatorDiagnosticRow({ scope, label, summary }) {
     summary: `${calculatorSummary.calculatorCount}类/${outputCount}条 · 可替换 ${calculatorSummary.calculatorReplaceableDeltaCount}`,
     detail: detailParts.join(' · '),
   };
+}
+
+function focusThreeValueCalculatorScope(scope) {
+  emit('focus-three-value-calculator-scope', scope);
 }
 
 function formatCalculatorCountList(items, formatter, limit = 3) {
@@ -2025,10 +2038,23 @@ h2 {
   align-items: center;
   gap: 8px;
   min-width: 0;
+  width: 100%;
   padding: 8px 10px;
+  border: 0;
   border-left: 3px solid #a6b7ff;
   border-radius: 4px;
   background: rgba(166, 183, 255, 0.08);
+  text-align: left;
+  cursor: pointer;
+}
+
+.calculator-diagnostic-row:hover,
+.calculator-diagnostic-row:focus {
+  background: rgba(166, 183, 255, 0.13);
+}
+
+.calculator-diagnostic-row.active {
+  background: rgba(166, 183, 255, 0.18);
 }
 
 .calculator-diagnostic-row span {

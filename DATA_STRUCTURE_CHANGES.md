@@ -10619,3 +10619,117 @@ data-calculator-scope="generation | runtime"
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8CQ 应把全局 calculator 诊断入口与现有三值曲线/日志筛选轻量联动。
+
+## 124. 阶段 5-8CQ：calculator diagnostics focus bridge
+
+阶段 5-8CQ 不修改项目保存 schema。本阶段新增 Workbench 内部 UI 状态与组件事件，用于把 calculator 诊断摘要联动到已有三值曲线和 runtime sim log 筛选。
+
+### 124.1 AnalysisPanel 新增交互事件
+
+`AnalysisPanel` 新增 prop：
+
+```js
+calculatorDiagnosticScope: String
+```
+
+calculator 诊断行新增：
+
+```html
+data-active="true | false"
+```
+
+并在点击时发出：
+
+```js
+focus-three-value-calculator-scope(scope)
+```
+
+其中 `scope` 当前为：
+
+```text
+generation
+runtime
+```
+
+### 124.2 Workbench 新增内部状态
+
+`Workbench.vue` 新增内部状态：
+
+```js
+calculatorDiagnosticScope
+calculatorDiagnosticFocus
+```
+
+`calculatorDiagnosticFocus` 当前结构：
+
+```js
+{
+  scope,
+  sequence,
+}
+```
+
+`sequence` 用于让子组件识别重复点击同一 scope 的外部 focus 请求。
+
+### 124.3 scope 联动规则
+
+点击 `generation`：
+
+```js
+stateCurveLayerFilters = {
+  applied: false,
+  candidate: true,
+  sampled: true,
+  placeholder: true,
+}
+stateCurveTrackFilters = {}
+selectedStateCurvePointId = ''
+stateCurveFocusMode = 'all'
+```
+
+点击 `runtime`：
+
+```js
+stateCurveLayerFilters = {
+  applied: true,
+  candidate: false,
+  sampled: false,
+  placeholder: false,
+}
+stateCurveTrackFilters = {}
+selectedStateCurvePointId = first runtime sim log state point id
+stateCurveFocusMode = selectedStateCurvePointId ? 'selected' : 'all'
+```
+
+### 124.4 EventLogPanel 外部 focus
+
+`EventLogPanel` 新增 prop：
+
+```js
+calculatorDiagnosticFocus: Object | null
+```
+
+当 `calculatorDiagnosticFocus.scope === 'runtime'` 且 `sequence` 变化时：
+
+```js
+runtimeTrackFilter = 'all'
+runtimeActorFilter = 'all'
+runtimeActionFilter = 'all'
+selectedRuntimeLogIndex = 0
+```
+
+### 124.5 验证
+
+当前测试覆盖：
+
+- 点击 generation calculator 诊断行后，`applied` 层关闭、`candidate` 层开启，默认样本状态曲线可见点为 15。
+- 先把 runtime sim log 手动筛到能量导致 `0/1`，再点击 runtime calculator 诊断行，会恢复为 `1/1` 且轨道筛选为全部。
+- 点击 runtime calculator 诊断行后，状态曲线进入 selected focus。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8CR 应把三值曲线和模拟日志的当前视角反馈做得更清楚，补状态标签和空状态解释。

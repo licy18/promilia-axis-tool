@@ -248,6 +248,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  calculatorDiagnosticFocus: {
+    type: Object,
+    default: null,
+  },
 });
 const emit = defineEmits(['select-runtime-state-point']);
 
@@ -463,6 +467,19 @@ watch(runtimeSimLogRows, () => {
   syncRuntimeFilterValue(runtimeActorFilter, runtimeActorFilterOptions.value);
   syncRuntimeFilterValue(runtimeActionFilter, runtimeActionFilterOptions.value);
 });
+
+watch(
+  () => props.calculatorDiagnosticFocus?.sequence,
+  () => {
+    if (props.calculatorDiagnosticFocus?.scope !== 'runtime') {
+      return;
+    }
+    runtimeTrackFilter.value = 'all';
+    runtimeActorFilter.value = 'all';
+    runtimeActionFilter.value = 'all';
+    selectedRuntimeLogIndex.value = 0;
+  }
+);
 
 function formatPayload(event) {
   if (event.type === 'DAMAGE_PROJECTED') {

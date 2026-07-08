@@ -135,12 +135,16 @@
           :state-curve-focus-mode="stateCurveFocusMode"
           :state-curve-layer-filters="stateCurveLayerFilters"
           :state-curve-track-filters="stateCurveTrackFilters"
+          :calculator-diagnostic-scope="calculatorDiagnosticScope"
           :insertion-diagnostics="insertionDiagnostics"
           :timeline-diagnostics="timelineDiagnostics"
           @select-state-curve-point="selectStateCurvePoint"
           @update-state-curve-focus-mode="updateStateCurveFocusMode"
           @update-state-curve-layer-filter="updateStateCurveLayerFilter"
           @update-state-curve-track-filter="updateStateCurveTrackFilter"
+          @focus-three-value-calculator-scope="
+            focusThreeValueCalculatorScope
+          "
         />
       </div>
 
@@ -150,6 +154,7 @@
         :runtime-projection="simulationResult.threeValueRuntimeProjection"
         :runtime-selected-detail="runtimeSelectedDetail"
         :selected-state-curve-point-id="selectedStateCurvePointId"
+        :calculator-diagnostic-focus="calculatorDiagnosticFocus"
         @select-runtime-state-point="selectRuntimeStatePoint"
       />
     </div>
@@ -169,6 +174,7 @@ import RuntimeSelectedDetailPanel from '../features/workbench/RuntimeSelectedDet
 import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
+import { createRuntimeStateCurvePointId } from '../features/workbench/stateCurvePointIdentity';
 import {
   SYSTEM_TIMELINE_LANE_ID,
   createTimelineDiagnostics,
@@ -220,6 +226,8 @@ const selectedStateCurvePointId = ref('');
 const stateCurveFocusMode = ref('all');
 const stateCurveLayerFilters = ref({ ...DEFAULT_STATE_CURVE_LAYER_FILTERS });
 const stateCurveTrackFilters = ref({});
+const calculatorDiagnosticScope = ref('');
+const calculatorDiagnosticFocus = ref({ scope: '', sequence: 0 });
 const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const draftStatus = ref('未保存草稿');
 
@@ -927,6 +935,69 @@ function updateStateCurveTrackFilter({ trackKey, visible }) {
     ...stateCurveTrackFilters.value,
     [trackKey]: Boolean(visible),
   };
+}
+
+function focusThreeValueCalculatorScope(scope) {
+  const normalizedScope = scope === 'runtime' ? 'runtime' : 'generation';
+  calculatorDiagnosticScope.value = normalizedScope;
+  calculatorDiagnosticFocus.value = {
+    scope: normalizedScope,
+    sequence: calculatorDiagnosticFocus.value.sequence + 1,
+  };
+
+  if (normalizedScope === 'runtime') {
+    stateCurveLayerFilters.value = {
+      applied: true,
+      candidate: false,
+      sampled: false,
+      placeholder: false,
+    };
+    stateCurveTrackFilters.value = {};
+    const firstRuntimePointId = getFirstRuntimeStatePointId(
+      simulationResult.value.threeValueRuntimeProjection
+    );
+    selectedStateCurvePointId.value = firstRuntimePointId;
+    stateCurveFocusMode.value = firstRuntimePointId ? 'selected' : 'all';
+    return;
+  }
+
+  stateCurveLayerFilters.value = {
+    applied: false,
+    candidate: true,
+    sampled: true,
+    placeholder: true,
+  };
+  stateCurveTrackFilters.value = {};
+  selectedStateCurvePointId.value = '';
+  stateCurveFocusMode.value = 'all';
+}
+
+function getFirstRuntimeStatePointId(runtimeProjection) {
+  const row = runtimeProjection?.simLog?.[0];
+  if (!row) {
+    return '';
+  }
+  const point = findRuntimePointByDeltaId(runtimeProjection, row.sourceDeltaId);
+  return createRuntimeStateCurvePointId(row, point);
+}
+
+function findRuntimePointByDeltaId(runtimeProjection, sourceDeltaId) {
+  if (!sourceDeltaId) {
+    return null;
+  }
+  for (const point of runtimeProjection?.enemyStateCurve?.points ?? []) {
+    if (point.sourceDeltaId === sourceDeltaId) {
+      return point;
+    }
+  }
+  for (const actor of runtimeProjection?.selfEnergyCurveByActor ?? []) {
+    for (const point of actor.points ?? []) {
+      if (point.sourceDeltaId === sourceDeltaId) {
+        return point;
+      }
+    }
+  }
+  return null;
 }
 
 function findSkillById(skillId) {

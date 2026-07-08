@@ -1108,6 +1108,93 @@ describe('Workbench view', () => {
         )
         .exists()
     ).toBe(false);
+    await wrapper
+      .find(
+        '[data-testid="workbench-three-value-calculator-diagnostic-row"][data-calculator-scope="generation"]'
+      )
+      .trigger('click');
+    await nextTick();
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-three-value-calculator-diagnostic-row"][data-calculator-scope="generation"]'
+        )
+        .attributes('data-active')
+    ).toBe('true');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="applied"]'
+        )
+        .element.checked
+    ).toBe(false);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="candidate"]'
+        )
+        .element.checked
+    ).toBe(true);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curves"] .source-heading strong')
+        .text()
+    ).toBe('15');
+    await wrapper
+      .find(
+        '[data-testid="workbench-runtime-sim-log-track-filter"][data-track-filter="selfEnergyChange"]'
+      )
+      .trigger('click');
+    await nextTick();
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-filter-count"]')
+        .text()
+    ).toBe('0/1');
+    await wrapper
+      .find(
+        '[data-testid="workbench-three-value-calculator-diagnostic-row"][data-calculator-scope="runtime"]'
+      )
+      .trigger('click');
+    await nextTick();
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-three-value-calculator-diagnostic-row"][data-calculator-scope="runtime"]'
+        )
+        .attributes('data-active')
+    ).toBe('true');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="applied"]'
+        )
+        .element.checked
+    ).toBe(true);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="candidate"]'
+        )
+        .element.checked
+    ).toBe(false);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-focus-selected"]')
+        .classes()
+    ).toContain('active');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-filter-count"]')
+        .text()
+    ).toBe('1/1');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-runtime-sim-log-track-filter"][data-track-filter="all"]'
+        )
+        .attributes('data-active')
+    ).toBe('true');
     expect(text).toContain('候选三值');
     expect(text).toContain(
       '候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 12f/13f/16f/19f · Skill0_6/Skill0_1 · 绑定候选 普攻->Skill0_1 12f/13f · 状态证据 Skill0_1 动画+命中 / Skill0_6 动画+命中 · 普攻链 10900102->Skill0_2 / 10900103->Skill0_3 / +2 · 命中候选 5/5段 · 三值候选 5/5段 · 目标缺失 80102'
