@@ -8766,4 +8766,130 @@ candidate state point 仍不作为时间轴 state marker 渲染，仍由候选�
 - `npm run test -- --run src/__tests__/views/Workbench.test.js src/__tests__/features/TimelineGridPreview.test.js`：通过。
 - `npm run test -- --run`：通过。
 
-下一阶段 5-8CA 应补候选帧详情行与当前三值轨道的高亮联动。
+下一阶段 5-8CA 方向调整为生成层 / 运行时层 / UI 层收束。
+
+## 106. 阶段 5-8CA 路线收束：标准生成层合同
+
+蓝色星原仍在测试阶段，平衡数值、最终倍率和公式细节可能继续调整；后续不再把最终数值考据作为当前主线阻塞项。现有 evidence / candidate / runtime sample 继续保留，但应折叠成运行时可消费的标准生成层输入。
+
+### 106.1 目标合同
+
+下一阶段优先定义最小稳定合同，形态围绕：
+
+```txt
+Action -> Hit -> ThreeValueDelta
+```
+
+每个三值 delta 至少需要能表达：
+
+```js
+{
+  actionId,
+  hitIndex,
+  frame,
+  timeMs,
+  trackKey,
+  layerKey,
+  hpDelta,
+  toughnessDelta,
+  energyDelta,
+  sourceKind,
+  sourceIds,
+  confidence
+}
+```
+
+字段名可随实现微调，但语义应保持稳定：生成层负责归一化和来源标注，运行时层负责消费，UI 层负责展示。
+
+### 106.2 分层边界
+
+- 生成层读取 `candidateValueSeries.chart`、`threeValueCurveFramework.stateCurves`、`actionResultTimeline[].sourceEvidence`、`metadata.runtimeSampleCaptures` 等现有来源。
+- 运行时层不继续追公式证据，只消费标准合同并输出 `simLog`、`stateCurves`、资源曲线和统计摘要。
+- UI 层不再把 evidence 矩阵作为主路径，优先补资源监控、模拟日志、详情弹层和贡献拆分。
+- evidence 层继续保留，用于解释 source / confidence 和后续替换真实公式。
+
+### 106.3 当前阶段约束
+
+5-8CA 允许新增生成层派生字段或内部 projection 字段，但暂不要求修改项目保存 schema。若后续标准合同需要落入项目文件，必须另开迁移记录并补导入导出兼容测试。
+
+## 107. 阶段 5-8BZ2：candidate frame track focus UI state
+
+阶段 5-8BZ2 是 5-8BZ selected-frame / state focus 联动后的 UI 收口，不改变模拟输出结构，也不改变项目保存 schema。
+
+### 107.1 Track 与 candidate series 映射
+
+`TimelineGridPreview` 新增两组前端常量：
+
+```js
+STATE_TRACK_TO_CANDIDATE_SERIES_KEY
+CANDIDATE_SERIES_TO_STATE_TRACK_KEY
+```
+
+当前映射为：
+
+```js
+enemyHpDamage -> hpDamageFormulaParamCandidate
+enemyToughnessDamage -> toughnessDamageCandidate
+selfEnergyChange -> selfEnergyCandidate
+```
+
+该映射只用于 Workbench 候选层高亮，不作为公式或运行时合同。
+
+### 107.2 选中 state point 派生候选焦点
+
+新增派生状态：
+
+```js
+selectedStateCurvePoint
+selectedCandidateFocusSeriesKey
+```
+
+当选中点属于 `candidate` layer 时，按 `trackKey` 找到对应候选 series；否则焦点为空。
+
+### 107.3 DOM 测试属性
+
+以下元素新增测试/调试属性：
+
+```html
+data-state-track-key
+data-track-focused
+```
+
+覆盖位置：
+
+- `workbench-candidate-value-frame-detail-row`
+- `workbench-timeline-candidate-value-marker`
+- `workbench-timeline-candidate-value-curve`
+
+当同帧状态点从 HP 切到韧性或能量时，候选详情行、marker 和曲线的 `data-track-focused` 会同步转移到对应 series。
+
+### 107.4 样式
+
+新增 `track-focused` class：
+
+- 候选帧详情行：边框、背景和左侧 inset 线高亮。
+- 候选 marker：尺寸、边框和外发光增强。
+- 候选曲线：线宽和不透明度增强。
+
+### 107.5 边界
+
+- 不新增 candidate state marker。
+- 不改变 `candidateValueSeries.chart`。
+- 不改变 `threeValueCurveFramework.stateCurves`。
+- 不改变 `actionResultTimeline`。
+- candidate element 对比区尚未做列级焦点。
+
+### 107.6 验证
+
+扩展 Workbench 测试覆盖：
+
+- 状态点导航到 hit1 candidate HP 时，HP 详情行、HP marker、HP 曲线 `data-track-focused = true`。
+- 切换同帧韧性状态点后，焦点转移到 `toughnessDamageCandidate`，HP 曲线 `data-track-focused = false`。
+- 回到 applied 点后，不再存在 focused 候选详情行。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js src/__tests__/features/TimelineGridPreview.test.js`：通过。
+- `npm run test -- --run`：通过。
+
+下一阶段仍为 5-8CA：落地标准生成层合同最小版本。

@@ -308,12 +308,24 @@
                   v-for="curve in lane.candidateValueCurves"
                   :key="curve.seriesKey"
                   class="candidate-value-curve-line"
-                  :class="`candidate-${curve.seriesKey}`"
+                  :class="[
+                    `candidate-${curve.seriesKey}`,
+                    {
+                      'track-focused': isCandidateSeriesInStateTrackFocus(
+                        curve.seriesKey
+                      ),
+                    },
+                  ]"
                   :points="curve.polylinePoints"
                   vector-effect="non-scaling-stroke"
                   data-testid="workbench-timeline-candidate-value-curve"
                   :data-series-key="curve.seriesKey"
                   :data-point-count="curve.pointCount"
+                  :data-track-focused="
+                    isCandidateSeriesInStateTrackFocus(curve.seriesKey)
+                      ? 'true'
+                      : 'false'
+                  "
                 />
               </svg>
             </div>
@@ -350,6 +362,7 @@
                 {
                   selected:
                     marker.frameGroupId === selectedCandidateFrameGroup?.id,
+                  'track-focused': isCandidateMarkerInStateTrackFocus(marker),
                 },
               ]"
               :style="candidateValueMarkerStyle(marker)"
@@ -361,6 +374,10 @@
               :data-hit-index="marker.hitIndex"
               :data-frame-label="marker.frameLabel"
               :data-value="marker.value"
+              :data-state-track-key="getCandidateSeriesStateTrackKey(marker)"
+              :data-track-focused="
+                isCandidateMarkerInStateTrackFocus(marker) ? 'true' : 'false'
+              "
               :data-marker-title="formatCandidateValueMarkerTitle(marker)"
               data-testid="workbench-timeline-candidate-value-marker"
               role="button"
@@ -429,7 +446,14 @@
           v-for="value in selectedCandidateFrameGroup.values"
           :key="`${value.seriesKey}-${value.hitIndex}`"
           class="candidate-frame-detail-row"
+          :class="{
+            'track-focused': isCandidateFrameValueInStateTrackFocus(value),
+          }"
           :data-series-key="value.seriesKey"
+          :data-state-track-key="getCandidateSeriesStateTrackKey(value)"
+          :data-track-focused="
+            isCandidateFrameValueInStateTrackFocus(value) ? 'true' : 'false'
+          "
           :data-candidate-count="value.candidateCount"
           :data-source-frame-index="value.sourceFrameIndex"
           :data-element-detail-count="value.elementDetails?.length ?? 0"
@@ -546,6 +570,16 @@ const STATE_CURVE_TRACK_MARKER_TOP = {
   enemyHpDamage: 92,
   enemyToughnessDamage: 99,
   selfEnergyChange: 106,
+};
+const STATE_TRACK_TO_CANDIDATE_SERIES_KEY = {
+  enemyHpDamage: 'hpDamageFormulaParamCandidate',
+  enemyToughnessDamage: 'toughnessDamageCandidate',
+  selfEnergyChange: 'selfEnergyCandidate',
+};
+const CANDIDATE_SERIES_TO_STATE_TRACK_KEY = {
+  hpDamageFormulaParamCandidate: 'enemyHpDamage',
+  toughnessDamageCandidate: 'enemyToughnessDamage',
+  selfEnergyCandidate: 'selfEnergyChange',
 };
 const CANDIDATE_VALUE_SERIES_META = {
   hpDamageFormulaParamCandidate: {
@@ -875,6 +909,16 @@ const selectedCandidateElementComparisonRows = computed(() =>
   selectedCandidateFrameGroup.value
     ? createCandidateElementComparisonRows(selectedCandidateFrameGroup.value)
     : []
+);
+const selectedStateCurvePoint = computed(() =>
+  findStateCurvePointById(props.selectedStateCurvePointId)
+);
+const selectedCandidateFocusSeriesKey = computed(() =>
+  selectedStateCurvePoint.value?.layerKey === 'candidate'
+    ? (STATE_TRACK_TO_CANDIDATE_SERIES_KEY[
+        selectedStateCurvePoint.value.trackKey
+      ] ?? '')
+    : ''
 );
 
 watch(
@@ -1319,6 +1363,10 @@ function getCandidateSeriesMeta(seriesKey) {
   );
 }
 
+function getCandidateSeriesStateTrackKey(item) {
+  return CANDIDATE_SERIES_TO_STATE_TRACK_KEY[item?.seriesKey] ?? '';
+}
+
 function isCandidateSeriesVisible(seriesKey) {
   return candidateSeriesVisibility.value[seriesKey] !== false;
 }
@@ -1377,6 +1425,24 @@ function isCandidateMarkerInDisplayScope(marker) {
     );
   }
   return true;
+}
+
+function isCandidateSeriesInStateTrackFocus(seriesKey) {
+  return (
+    Boolean(selectedCandidateFocusSeriesKey.value) &&
+    seriesKey === selectedCandidateFocusSeriesKey.value
+  );
+}
+
+function isCandidateMarkerInStateTrackFocus(marker) {
+  return (
+    marker.frameGroupId === selectedCandidateFrameGroup.value?.id &&
+    isCandidateSeriesInStateTrackFocus(marker.seriesKey)
+  );
+}
+
+function isCandidateFrameValueInStateTrackFocus(value) {
+  return isCandidateSeriesInStateTrackFocus(value.seriesKey);
 }
 
 function selectCandidateFrameGroup(group) {
@@ -2548,6 +2614,12 @@ h2 {
   background: rgba(10, 13, 16, 0.22);
 }
 
+.candidate-frame-detail-row.track-focused {
+  border-color: rgba(121, 199, 185, 0.62);
+  background: rgba(121, 199, 185, 0.12);
+  box-shadow: inset 3px 0 0 rgba(121, 199, 185, 0.82);
+}
+
 .candidate-frame-detail-row b {
   color: #dff6f1;
   font-size: 11px;
@@ -2875,6 +2947,11 @@ h2 {
   opacity: 0.82;
 }
 
+.candidate-value-curve-line.track-focused {
+  stroke-width: 3.4;
+  opacity: 1;
+}
+
 .candidate-value-curve-line.candidate-toughnessDamageCandidate {
   stroke: #79c7b9;
 }
@@ -2934,6 +3011,15 @@ h2 {
 .candidate-value-marker.candidate-selfEnergyCandidate:focus,
 .candidate-value-marker.candidate-selfEnergyCandidate.selected {
   outline-offset: 3px;
+}
+
+.candidate-value-marker.track-focused {
+  width: 12px;
+  height: 12px;
+  border-color: rgba(255, 255, 255, 0.94);
+  box-shadow:
+    0 0 0 3px rgba(121, 199, 185, 0.2),
+    0 0 18px rgba(121, 199, 185, 0.64);
 }
 
 .state-curve-marker {

@@ -4733,9 +4733,56 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 下一步：
 
-- 阶段 5-8CA 目标：补候选帧详情行与当前三值轨道的高亮联动。
-- 优先让用户在同帧 HP / 韧性 / 能量状态点间切换时，候选帧详情表、候选 marker 或曲线行能明确显示当前关注的是哪一条三值轨道。
-- 继续保持框架优先，真实采样和最终公式细化后续再接。
+- 阶段 5-8CA 目标调整为生成层 / 运行时层 / UI 层收束，不再继续沿候选帧详情微交互深挖。
+- 优先把现有 evidence、candidateValueSeries、stateCurves 和 runtime sample 折叠成标准生成层输入合同，例如 `Action -> Hit -> ThreeValueDelta`，包含 frame、track、layer、source、confidence 和可替换数值。
+- 运行时层应尽量像 Endaxis 一样只消费标准输入并产出 `simLog`、`stateCurves`、资源曲线和统计摘要；UI 层只负责资源监控、模拟日志、详情弹层和编辑器操作，不继续承担证据考古主线。
+- 真实采样、最终公式、平衡倍率和复杂 runtime 条件保留为后续 evidence 填充任务，不阻塞当前工具体验。
+
+### 2026-07-08：阶段 5-8BZ2 候选帧三值轨道焦点高亮
+
+本轮完成：
+
+- `TimelineGridPreview` 新增 `enemyHpDamage / enemyToughnessDamage / selfEnergyChange` 与候选 series 的双向映射，让当前选中的 candidate state point 能反查到候选 HP / 韧性 / 能量 series。
+- 候选帧详情行新增 `data-state-track-key` 与 `data-track-focused`，当前状态点属于同帧 HP / 韧性 / 能量中的哪条轨道，对应详情行会同步高亮。
+- 同一焦点也同步到候选 marker 和候选曲线 polyline，切换同帧分组中的 HP / 韧性 / 能量按钮时，时间轴上的候选点和曲线线段会跟着切换高亮。
+- 当状态点焦点回到非 candidate 点或 `all` 模式时，候选详情行不保留旧焦点，避免误以为仍在查看某条候选轨道。
+- 测试覆盖默认末音样例中 HP candidate -> 韧性 candidate -> applied 点的焦点切换，确认详情行、marker 和曲线的 `data-track-focused` 状态同步变化。
+
+当前边界：
+
+- 本阶段只补候选帧详情和时间轴候选层的视觉/测试状态，不改变 `candidateValueSeries.chart`、`threeValueCurveFramework.stateCurves` 或保存 schema。
+- candidate element 对比区仍只横向列出 HP 参数、函数、槽位、削韧、能量和状态；列级焦点可在后续 UI 阶段继续补。
+- `5-8CA` 标准生成层合同路线保持不变，本阶段只是进入该路线前的 BZ 焦点联动收口。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js src/__tests__/features/TimelineGridPreview.test.js`：通过，2 个测试文件、36 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、109 条测试。
+
+下一步：
+
+- 阶段 5-8CA 目标：定义并落地标准生成层合同的最小版本，覆盖默认末音样例和寒悠悠样例。
+- 优先把现有 evidence、candidateValueSeries、stateCurves 和 runtime sample 折叠成 `Action -> Hit -> ThreeValueDelta` 输入。
+
+### 2026-07-08：阶段 5-8CA 路线收束为生成层 / 运行时层 / UI 层
+
+方向调整：
+
+- 蓝色星原仍在测试阶段，技能数值、平衡倍率和公式细节仍可能调整；当前不再把最终数值考据作为主线阻塞项。
+- 已有 evidence / candidate / runtime sample 继续保留，但定位从“用户主线展示”降级为“生成层来源与诊断依据”。
+- 下一阶段优先交付稳定的生成层标准合同，让运行时和 UI 可以像 Endaxis 一样消费清晰的命中与三值变化输入。
+
+当前三层目标：
+
+- 生成层：从现有 `candidateValueSeries.chart`、`threeValueCurveFramework.stateCurves`、`actionResultTimeline[].sourceEvidence` 和 `metadata.runtimeSampleCaptures` 生成统一的 action / hit / three-value delta 输入。
+- 运行时层：围绕标准输入输出 `simLog`、`stateCurves`、资源曲线、敌人状态曲线和统计摘要，不在运行时里继续追公式证据。
+- UI 层：优先补 Endaxis 式资源监控、模拟日志、伤害/三值详情弹层、贡献拆分和编辑器工作流。
+
+下一步：
+
+- 阶段 5-8CA 先定义并落地生成层合同的最小版本，覆盖默认末音样例和寒悠悠样例。
+- 阶段 5-8CB 再让运行时投影改为消费该合同，并保持现有 Workbench 可视化不倒退。
+- 阶段 5-8CC 起优先补资源监控 / 模拟日志 / 详情弹层，而不是继续扩展证据矩阵。
 
 ## 10. 文档维护规则
 

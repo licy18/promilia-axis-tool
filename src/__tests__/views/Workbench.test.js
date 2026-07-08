@@ -299,6 +299,34 @@ describe('Workbench view', () => {
         '[data-testid="workbench-timeline-candidate-value-frame-hotspot"]'
       )
     ).toHaveLength(1);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-candidate-value-frame-detail-row"][data-track-focused="true"]'
+        )
+        .attributes('data-series-key')
+    ).toBe('hpDamageFormulaParamCandidate');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-candidate-value-frame-detail-row"][data-track-focused="true"]'
+        )
+        .attributes('data-state-track-key')
+    ).toBe('enemyHpDamage');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-candidate-value-marker"][data-track-focused="true"]'
+        )
+        .attributes('data-series-key')
+    ).toBe('hpDamageFormulaParamCandidate');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-candidate-value-curve"][data-series-key="hpDamageFormulaParamCandidate"]'
+        )
+        .attributes('data-track-focused')
+    ).toBe('true');
     const frameGroupOptions = wrapper.findAll(
       '[data-testid="workbench-state-curve-frame-group-option"]'
     );
@@ -323,6 +351,34 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-state-curve-point"]')
         .attributes('data-track-key')
     ).toBe('enemyToughnessDamage');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-candidate-value-frame-detail-row"][data-track-focused="true"]'
+        )
+        .attributes('data-series-key')
+    ).toBe('toughnessDamageCandidate');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-candidate-value-marker"][data-track-focused="true"]'
+        )
+        .attributes('data-series-key')
+    ).toBe('toughnessDamageCandidate');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-candidate-value-curve"][data-series-key="toughnessDamageCandidate"]'
+        )
+        .attributes('data-track-focused')
+    ).toBe('true');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-candidate-value-curve"][data-series-key="hpDamageFormulaParamCandidate"]'
+        )
+        .attributes('data-track-focused')
+    ).toBe('false');
     expect(toughnessFrameGroupOption.text()).toContain('韧性');
     const hpFrameGroupOption = wrapper
       .findAll('[data-testid="workbench-state-curve-frame-group-option"]')
@@ -360,6 +416,13 @@ describe('Workbench view', () => {
         )
         .classes()
     ).toContain('active');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-candidate-value-frame-detail-row"][data-track-focused="true"]'
+        )
+        .exists()
+    ).toBe(false);
     await focusAllButton.trigger('click');
     await nextTick();
     expect(
