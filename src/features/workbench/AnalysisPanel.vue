@@ -46,6 +46,29 @@
         <span>三值来源</span>
         <strong>{{ actionResultTimeline.length }}</strong>
       </div>
+      <div
+        v-if="actionEditFeedback"
+        class="action-edit-feedback"
+        :data-action-id="actionEditFeedback.actionId"
+        :data-edit-source-field="actionEditFeedback.fieldKey"
+        :data-edit-source-label="actionEditFeedback.label"
+        :data-edit-source-summary="actionEditFeedback.changeSummary"
+        data-testid="workbench-action-edit-feedback"
+      >
+        <div class="action-edit-feedback-main">
+          <span>最近编辑</span>
+          <strong>{{ actionEditFeedback.actionName }}</strong>
+          <small>{{ actionEditFeedback.display }}</small>
+        </div>
+        <button
+          type="button"
+          class="action-edit-feedback-focus"
+          data-testid="workbench-action-edit-feedback-focus"
+          @click="focusActionEditFeedback"
+        >
+          定位来源
+        </button>
+      </div>
       <p
         v-if="
           formatThreeValueCurveFrameworkSummary(
@@ -1161,6 +1184,9 @@ const selectedRuntimeResultDetail = computed(
 const draftResultStatus = computed(() =>
   createDraftResultStatus(props.draftStatus)
 );
+const actionEditFeedback = computed(() =>
+  createActionEditFeedback(props.actionEditSource)
+);
 const activeStateCurveLayerKeys = computed(() =>
   STATE_CURVE_LAYER_OPTIONS.filter(
     layer => effectiveStateCurveLayerFilters.value[layer.key]
@@ -1836,6 +1862,34 @@ function focusActionEditSource(entry) {
   emit('focus-action-edit-source', source);
 }
 
+function focusActionEditFeedback() {
+  if (!isValidActionEditSource(props.actionEditSource)) {
+    return;
+  }
+  emit('focus-action-edit-source', props.actionEditSource);
+}
+
+function createActionEditFeedback(source) {
+  if (!isValidActionEditSource(source)) {
+    return null;
+  }
+  const action = props.actionResultTimeline.find(
+    entry => entry.actionId === source.actionId
+  );
+  return {
+    actionId: source.actionId,
+    actionName: action?.actionName ?? source.actionId,
+    fieldKey: source.fieldKey,
+    label: source.label,
+    changeSummary: source.changeSummary ?? '',
+    display: formatActionEditSourceDisplay(source),
+  };
+}
+
+function isValidActionEditSource(source) {
+  return Boolean(source?.actionId && source?.fieldKey && source?.label);
+}
+
 function createActionResultRuntimeTrace(actionId, rows) {
   const sortedRows = [...rows].sort(compareRuntimeTraceRows);
   const sourceDeltaIds = uniqueDisplayValues(
@@ -1999,7 +2053,7 @@ function getEditSourceForAction(actionId) {
   if (!source?.actionId || !actionId || source.actionId !== actionId) {
     return null;
   }
-  return source.fieldKey && source.label ? source : null;
+  return isValidActionEditSource(source) ? source : null;
 }
 
 function createDraftResultStatus(status) {
@@ -2835,6 +2889,61 @@ h2 {
 .action-result-row:disabled {
   cursor: default;
   opacity: 0.82;
+}
+
+.action-edit-feedback {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border: 1px solid rgba(242, 179, 102, 0.22);
+  border-radius: 4px;
+  background: rgba(242, 179, 102, 0.08);
+}
+
+.action-edit-feedback-main {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.action-edit-feedback-main span,
+.action-edit-feedback-main small {
+  color: #b8c0c7;
+  font-size: 11px;
+}
+
+.action-edit-feedback-main strong {
+  min-width: 0;
+  color: #ffffff;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.action-edit-feedback-main small {
+  color: #f2b366;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.action-edit-feedback-focus {
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid rgba(242, 179, 102, 0.34);
+  border-radius: 4px;
+  background: rgba(242, 179, 102, 0.12);
+  color: #ffd8a6;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.action-edit-feedback-focus:hover,
+.action-edit-feedback-focus:focus {
+  outline: none;
+  background: rgba(242, 179, 102, 0.18);
+  box-shadow: 0 0 0 2px rgba(242, 179, 102, 0.16);
 }
 
 .calculator-diagnostic-list {

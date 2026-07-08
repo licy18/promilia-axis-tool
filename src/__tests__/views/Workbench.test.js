@@ -1593,6 +1593,21 @@ describe('Workbench view', () => {
       editedActionResultDetailPanel.attributes('data-edit-source-summary')
     ).toBe('1 -> 2');
     expect(editedActionResultDetailPanel.text()).toContain('等级变更 1 -> 2');
+    const actionEditFeedback = wrapper.find(
+      '[data-testid="workbench-action-edit-feedback"]'
+    );
+    expect(actionEditFeedback.exists()).toBe(true);
+    expect(actionEditFeedback.attributes('data-action-id')).toBe(
+      'action-0001'
+    );
+    expect(actionEditFeedback.attributes('data-edit-source-field')).toBe(
+      'level'
+    );
+    expect(actionEditFeedback.attributes('data-edit-source-summary')).toBe(
+      '1 -> 2'
+    );
+    expect(actionEditFeedback.text()).toContain('最近编辑');
+    expect(actionEditFeedback.text()).toContain('等级变更 1 -> 2');
 
     const levelEditControl = wrapper.find(
       '[data-testid="workbench-action-edit-control"][data-edit-field="level"]'
@@ -1607,8 +1622,8 @@ describe('Workbench view', () => {
     expect(sourceTimelineAction.attributes('data-edit-focus-field')).toBe('');
     expect(sourceTimelineAction.attributes('data-edit-focus-summary')).toBe('');
 
-    await actionResultRow
-      .find('[data-testid="workbench-action-result-edit-source"]')
+    await actionEditFeedback
+      .find('[data-testid="workbench-action-edit-feedback-focus"]')
       .trigger('click');
     await nextTick();
 

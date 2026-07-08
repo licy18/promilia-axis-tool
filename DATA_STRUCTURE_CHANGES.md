@@ -11967,3 +11967,74 @@ data-edit-focus-summary
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DH 应继续完善 Workbench 主流程编辑体验，优先把最近编辑摘要接入结果定位/对比的小面板或操作反馈区域。
+
+## 141. 阶段 5-8DH：最近编辑集中反馈条
+
+阶段目标：
+
+- 在分析面板中集中展示最近动作字段编辑来源和前后值摘要，并提供统一定位入口。
+
+### 141.1 AnalysisPanel 新增派生反馈
+
+新增内部派生：
+
+```js
+actionEditFeedback
+```
+
+输入仍为既有 `actionEditSource` prop，不新增 Workbench 保存字段。
+
+反馈内容：
+
+```js
+{
+  actionId: string,
+  actionName: string,
+  fieldKey: string,
+  label: string,
+  changeSummary: string,
+  display: string,
+}
+```
+
+### 141.2 DOM 状态
+
+新增反馈条：
+
+```html
+data-testid="workbench-action-edit-feedback"
+data-action-id
+data-edit-source-field
+data-edit-source-label
+data-edit-source-summary
+```
+
+新增定位按钮：
+
+```html
+data-testid="workbench-action-edit-feedback-focus"
+```
+
+点击按钮会发出既有事件：
+
+```js
+focus-action-edit-source
+```
+
+### 141.3 验证
+
+当前测试覆盖：
+
+- 修改 `action-0001` 等级后，反馈条 `data-action-id="action-0001"`。
+- 反馈条 `data-edit-source-field="level"`。
+- 反馈条 `data-edit-source-summary="1 -> 2"`。
+- 反馈条文本包含 `等级变更 1 -> 2`。
+- 点击 `workbench-action-edit-feedback-focus` 后，属性面板和时间轴来源聚焦状态同步更新。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DI 应继续完善结果定位体验，优先把最近编辑反馈与贡献拆分或曲线选中状态联动。
