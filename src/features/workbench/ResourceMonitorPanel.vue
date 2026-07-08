@@ -354,7 +354,11 @@ import {
   getRuntimeOutputSummary,
   getRuntimeResourceCurveRows,
 } from './runtimeProjectionPoints';
-import { createWorkbenchFlowRuntimeActionEditTarget } from './workbenchFlowModel';
+import {
+  createWorkbenchFlowRuntimeActionEditTarget,
+  resolveWorkbenchMainFlowActionEditTarget,
+  resolveWorkbenchMainFlowResultReturnTarget,
+} from './workbenchFlowModel';
 import { createRuntimeActionFocusFlowAction } from './runtimeActionFocusFlowAction';
 import { createRuntimeStatePointFocusFlowAction } from './runtimeResultFocusFlowAction';
 import { isRuntimeResultFocusSource } from './runtimeFocusSource';
@@ -982,11 +986,11 @@ function createSelectedRuntimeCurveResultContext(context, point) {
 }
 
 function getSelectedRuntimeCurveResultContext(flowModel, context, point) {
-  const target = flowModel?.runtimeResultReturnTarget;
-  if (target?.statePointId && target.statePointId === point?.statePointId) {
-    return target;
-  }
-  return createSelectedRuntimeCurveResultContext(context, point);
+  return resolveWorkbenchMainFlowResultReturnTarget({
+    flowModel,
+    fallbackTarget: createSelectedRuntimeCurveResultContext(context, point),
+    statePointId: point?.statePointId ?? '',
+  });
 }
 
 function formatRuntimeCurveSelectionSource(source, resultContext = null) {
@@ -1011,11 +1015,11 @@ function formatRuntimeCurveSelectionIndex() {
 }
 
 function getRuntimeCurveActionEditTarget(flowModel, point) {
-  const target = flowModel?.runtimeActionEditTarget;
-  if (target?.statePointId && target.statePointId === point?.statePointId) {
-    return target;
-  }
-  return createWorkbenchFlowRuntimeActionEditTarget(point);
+  return resolveWorkbenchMainFlowActionEditTarget({
+    flowModel,
+    fallbackTarget: createWorkbenchFlowRuntimeActionEditTarget(point),
+    statePointId: point?.statePointId ?? '',
+  });
 }
 
 function formatRuntimeTrackLabel(trackKey) {

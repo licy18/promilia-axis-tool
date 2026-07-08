@@ -317,6 +317,8 @@ import {
   WORKBENCH_FLOW_ACTION_KINDS,
   createWorkbenchFlowRuntimeActionEditTarget,
   createWorkbenchFlowAction,
+  resolveWorkbenchMainFlowActionEditTarget,
+  resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
 import { createRuntimeActionFocusFlowAction } from './runtimeActionFocusFlowAction';
 import { createRuntimeStatePointFocusFlowAction } from './runtimeResultFocusFlowAction';
@@ -623,11 +625,13 @@ const runtimeLogResultReturnActionId = computed(
     ''
 );
 const runtimeLogResultReturnContext = computed(() =>
-  props.flowModel?.runtimeResultReturnTarget ??
-  createRuntimeResultReturnContext({
-    actionId: runtimeLogResultReturnActionId.value,
-    focus: props.actionEditFocus,
-    resultContext: flowEditResult.value,
+  resolveWorkbenchMainFlowResultReturnTarget({
+    flowModel: props.flowModel,
+    fallbackTarget: createRuntimeResultReturnContext({
+      actionId: runtimeLogResultReturnActionId.value,
+      focus: props.actionEditFocus,
+      resultContext: flowEditResult.value,
+    }),
   })
 );
 const selectedRuntimeContributionRows = computed(() =>
@@ -838,17 +842,17 @@ function getRuntimeLogActionEditTarget({
   row = null,
   statePointId = '',
 } = {}) {
-  const target = flowModel?.runtimeActionEditTarget;
-  if (target?.statePointId && target.statePointId === statePointId) {
-    return target;
-  }
-  return createWorkbenchFlowRuntimeActionEditTarget({
-    actionId: detail?.actionId ?? row?.actionId ?? '',
-    frameLabel:
-      detail?.frameLabel ?? row?.frameLabel ?? `${row?.timeMs ?? 0}ms`,
-    statePointId: statePointId ?? '',
-    trackKey: detail?.trackKey ?? row?.trackKey ?? '',
-    trackLabel: detail?.trackLabel ?? '',
+  return resolveWorkbenchMainFlowActionEditTarget({
+    flowModel,
+    fallbackTarget: createWorkbenchFlowRuntimeActionEditTarget({
+      actionId: detail?.actionId ?? row?.actionId ?? '',
+      frameLabel:
+        detail?.frameLabel ?? row?.frameLabel ?? `${row?.timeMs ?? 0}ms`,
+      statePointId: statePointId ?? '',
+      trackKey: detail?.trackKey ?? row?.trackKey ?? '',
+      trackLabel: detail?.trackLabel ?? '',
+    }),
+    statePointId,
   });
 }
 

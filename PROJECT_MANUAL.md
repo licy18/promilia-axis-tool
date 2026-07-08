@@ -8381,6 +8381,31 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：让更多面板逐步消费 `mainFlowState`，并把“排轴动作编辑 -> 运行模拟 -> 曲线/日志/详情查看 -> 回到动作修改”的路径整理成更少本地推断、更接近 Endaxis 工作流的主流程。
 
+### 2026-07-09：UI 主流程能力块 - Shared Main Flow Targets
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `WorkbenchFlowModel` 新增主流程目标解析入口，让面板可以统一从 `mainFlowState` 读取“回到动作编辑”和“返回运行结果”目标。
+- 属性面板、三值详情、资源曲线选中点和事件日志详情现在优先消费同一份主流程目标；没有主流程目标时才保留各自原本 fallback。
+- `PropertiesPanel` 接入 `flowModel`，刷新结果回看优先跟随主流程状态，未产生刷新结果时仍保留来源结果 fallback。
+- 页面闭环测试现在确认主流程面板、属性面板、三值详情、资源曲线和日志详情共享同一个刷新结果返回点。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- flow model 单元测试覆盖主流程目标解析、状态点匹配和 fallback。
+- Workbench 页面测试覆盖“运行结果 -> 回到动作编辑 -> 产生刷新结果 -> 多面板回到结果点 -> 继续修改动作”的共享目标闭环。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、58 条测试。
+
+下一步：
+
+- 继续 UI 主流程能力块：把主流程动作分发也从各面板本地 helper 逐步收束为共享入口，让查看、回改、回看三类动作更接近 Endaxis 的单一工作流。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

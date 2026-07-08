@@ -246,6 +246,45 @@ export function createWorkbenchMainFlowState({
   };
 }
 
+export function resolveWorkbenchMainFlowActionEditTarget({
+  flowModel = null,
+  fallbackTarget = null,
+  statePointId = '',
+} = {}) {
+  const target =
+    flowModel?.mainFlowState?.runtimeActionEditTarget ??
+    flowModel?.runtimeActionEditTarget ??
+    null;
+  if (isWorkbenchMainFlowTargetUsable(target, { statePointId })) {
+    return target;
+  }
+  return fallbackTarget ?? null;
+}
+
+export function resolveWorkbenchMainFlowResultReturnTarget({
+  flowModel = null,
+  fallbackTarget = null,
+  statePointId = '',
+} = {}) {
+  const target =
+    flowModel?.mainFlowState?.resultReturnTarget ??
+    flowModel?.runtimeResultReturnTarget ??
+    null;
+  if (isWorkbenchMainFlowTargetUsable(target, { statePointId })) {
+    return target;
+  }
+  return isWorkbenchMainFlowTargetUsable(fallbackTarget, { statePointId })
+    ? fallbackTarget
+    : null;
+}
+
+function isWorkbenchMainFlowTargetUsable(target, { statePointId = '' } = {}) {
+  if (!target?.statePointId) {
+    return false;
+  }
+  return !statePointId || target.statePointId === statePointId;
+}
+
 function resolveMainFlowNextTargetKind(kind = '') {
   if (kind === WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS) {
     return 'runtime-results';

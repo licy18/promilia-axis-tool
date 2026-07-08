@@ -131,6 +131,7 @@
           :duration-ms="scenario.time.durationMs"
           :action-edit-focus="actionEditFocus"
           :action-edit-result-context="actionEditResultContext"
+          :flow-model="workbenchFlowModel"
           @update-selection="updateSelection"
           @update-action="updateAction"
           @dispatch-flow-action="dispatchWorkbenchFlowAction"

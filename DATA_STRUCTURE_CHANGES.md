@@ -17830,3 +17830,61 @@ data-main-flow-return-state-point-id
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、58 条测试。
 - `npm run test -- --run`：通过，32 个测试文件、178 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 226. UI 主流程能力块：Shared Main Flow Targets
+
+本阶段属于 UI 主流程。
+
+### 226.1 结构变化
+
+`src/features/workbench/workbenchFlowModel.js` 新增并导出：
+
+```js
+resolveWorkbenchMainFlowActionEditTarget({
+  flowModel,
+  fallbackTarget,
+  statePointId
+})
+
+resolveWorkbenchMainFlowResultReturnTarget({
+  flowModel,
+  fallbackTarget,
+  statePointId
+})
+```
+
+两个解析函数优先读取：
+
+```js
+flowModel.mainFlowState.runtimeActionEditTarget
+flowModel.mainFlowState.resultReturnTarget
+```
+
+当主流程目标不存在、缺少 `statePointId`，或与传入的 `statePointId` 不匹配时，才回退到调用方传入的 fallback。
+
+已接入位置：
+
+```text
+PropertiesPanel -> flowModel.mainFlowState.resultReturnTarget
+RuntimeSelectedDetailPanel -> main flow action edit / result return target
+ResourceMonitorPanel -> selected curve point action edit / result context
+EventLogPanel -> selected log action edit / result return target
+```
+
+`Workbench.vue` 传给 `PropertiesPanel` 的 props 新增：
+
+```vue
+:flow-model="workbenchFlowModel"
+```
+
+### 226.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 主流程目标解析；三值计算、runtime projection 数值结果和草稿保存结构不变。
+
+### 226.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖主流程目标解析、状态点匹配和 fallback。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认主流程面板、属性面板、三值详情、资源曲线和日志详情共享同一个刷新结果返回点。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、58 条测试。

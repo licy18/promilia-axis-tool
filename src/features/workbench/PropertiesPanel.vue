@@ -451,6 +451,7 @@ import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import {
   WORKBENCH_FLOW_ACTION_KINDS,
   createWorkbenchFlowAction,
+  resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
 
 const props = defineProps({
@@ -487,6 +488,10 @@ const props = defineProps({
     default: null,
   },
   actionEditResultContext: {
+    type: Object,
+    default: null,
+  },
+  flowModel: {
     type: Object,
     default: null,
   },
@@ -667,12 +672,18 @@ const attributePanelRows = computed(() => {
     })
     .filter(Boolean);
 });
-const runtimeResultReturnContext = computed(() =>
+const fallbackRuntimeResultReturnContext = computed(() =>
   createRuntimeResultReturnContext({
     actionId: props.selectedAction?.id,
     focus: props.actionEditFocus,
     resultContext: props.actionEditResultContext,
     allowOriginResult: true,
+  })
+);
+const runtimeResultReturnContext = computed(() =>
+  resolveWorkbenchMainFlowResultReturnTarget({
+    flowModel: props.flowModel,
+    fallbackTarget: fallbackRuntimeResultReturnContext.value,
   })
 );
 const valueParamSemanticLabel = computed(() => {

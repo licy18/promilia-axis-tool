@@ -203,6 +203,8 @@ import {
   WORKBENCH_FLOW_ACTION_KINDS,
   createWorkbenchFlowRuntimeActionEditTarget,
   createWorkbenchFlowAction,
+  resolveWorkbenchMainFlowActionEditTarget,
+  resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
 import { createRuntimeActionFocusFlowAction } from './runtimeActionFocusFlowAction';
 
@@ -242,12 +244,14 @@ const runtimeDetailActionEditTarget = computed(() =>
   getRuntimeDetailActionEditTarget(props.flowModel, props.detail)
 );
 const runtimeDetailResultReturnContext = computed(() =>
-  props.flowModel?.runtimeResultReturnTarget ??
-  createRuntimeResultReturnContext({
-    actionId: props.detail?.actionId ?? flowEditResult.value?.actionId,
-    focus: props.actionEditFocus,
-    resultContext: flowEditResult.value,
-    originStatePointId: runtimeDetailOriginStatePointId.value,
+  resolveWorkbenchMainFlowResultReturnTarget({
+    flowModel: props.flowModel,
+    fallbackTarget: createRuntimeResultReturnContext({
+      actionId: props.detail?.actionId ?? flowEditResult.value?.actionId,
+      focus: props.actionEditFocus,
+      resultContext: flowEditResult.value,
+      originStatePointId: runtimeDetailOriginStatePointId.value,
+    }),
   })
 );
 const panelVisible = computed(() =>
@@ -378,11 +382,11 @@ function createRuntimeDetailEditContext(detail, focus) {
 }
 
 function getRuntimeDetailActionEditTarget(flowModel, detail) {
-  const target = flowModel?.runtimeActionEditTarget;
-  if (target?.statePointId && target.statePointId === detail?.statePointId) {
-    return target;
-  }
-  return createWorkbenchFlowRuntimeActionEditTarget(detail);
+  return resolveWorkbenchMainFlowActionEditTarget({
+    flowModel,
+    fallbackTarget: createWorkbenchFlowRuntimeActionEditTarget(detail),
+    statePointId: detail?.statePointId ?? '',
+  });
 }
 </script>
 

@@ -5,6 +5,8 @@ import {
   WORKBENCH_FLOW_PRIMARY_ACTION_KEYS,
   createWorkbenchFlowAction,
   createWorkbenchFlowModel,
+  resolveWorkbenchMainFlowActionEditTarget,
+  resolveWorkbenchMainFlowResultReturnTarget,
 } from '../../features/workbench/workbenchFlowModel';
 
 describe('workbench flow model', () => {
@@ -233,6 +235,55 @@ describe('workbench flow model', () => {
       canFocusRuntimeAction: true,
       canReturnRuntimeResult: true,
     });
+    expect(
+      resolveWorkbenchMainFlowActionEditTarget({
+        flowModel: reviewModel,
+        statePointId: secondPoint.statePointId,
+      })
+    ).toMatchObject({
+      actionId: 'action-0002',
+      statePointId: secondPoint.statePointId,
+    });
+    expect(
+      resolveWorkbenchMainFlowActionEditTarget({
+        flowModel: reviewModel,
+        fallbackTarget: {
+          actionId: 'action-0001',
+          statePointId: firstPoint.statePointId,
+        },
+        statePointId: firstPoint.statePointId,
+      })
+    ).toMatchObject({
+      actionId: 'action-0001',
+      statePointId: firstPoint.statePointId,
+    });
+    expect(
+      resolveWorkbenchMainFlowResultReturnTarget({
+        flowModel: readyModel,
+      })
+    ).toMatchObject({
+      actionId: 'action-0002',
+      statePointId: secondPoint.statePointId,
+      originStatePointId: firstPoint.statePointId,
+    });
+    expect(
+      resolveWorkbenchMainFlowResultReturnTarget({
+        flowModel: readyModel,
+        fallbackTarget: {
+          actionId: 'action-0002',
+          statePointId: firstPoint.statePointId,
+        },
+        statePointId: firstPoint.statePointId,
+      })
+    ).toMatchObject({
+      actionId: 'action-0002',
+      statePointId: firstPoint.statePointId,
+    });
+    expect(
+      resolveWorkbenchMainFlowResultReturnTarget({
+        flowModel: createWorkbenchFlowModel({ runtimeProjection }),
+      })
+    ).toBeNull();
   });
 
   it('describes enabled and disabled workbench flow actions', () => {

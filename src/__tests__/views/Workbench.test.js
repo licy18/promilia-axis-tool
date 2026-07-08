@@ -1807,6 +1807,29 @@ describe('Workbench view', () => {
     expect(returnEditResultButton.attributes('data-primary-action')).toBe(
       'true'
     );
+    const propertiesResultReturn = wrapper.find(
+      '[data-testid="workbench-action-edit-result-return"]'
+    );
+    expect(propertiesResultReturn.exists()).toBe(true);
+    expect(propertiesResultReturn.attributes('data-return-status')).toBe(
+      'refreshed-edit-result'
+    );
+    expect(propertiesResultReturn.attributes('data-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+    expect(
+      propertiesResultReturn.attributes('data-origin-state-point-id')
+    ).toBe(selectedRuntimePointId);
+    const detailResultReturn = wrapper.find(
+      '[data-testid="workbench-runtime-selected-detail-return-result"]'
+    );
+    expect(detailResultReturn.exists()).toBe(true);
+    expect(detailResultReturn.attributes('data-return-status')).toBe(
+      'refreshed-edit-result'
+    );
+    expect(detailResultReturn.attributes('data-state-point-id')).toBe(
+      refreshedStatePointId
+    );
 
     await returnEditResultButton.trigger('click');
     await nextTick();
@@ -1876,6 +1899,21 @@ describe('Workbench view', () => {
           '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
         )
         .attributes('data-selected-state-point-id')
+    ).toBe(refreshedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-resource-chart-selection"]')
+        .attributes('data-result-context-status')
+    ).toBe('refreshed-edit-result');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-resource-chart-selection"]')
+        .attributes('data-result-context-origin-state-point-id')
+    ).toBe(selectedRuntimePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-return-result"]')
+        .attributes('data-state-point-id')
     ).toBe(refreshedStatePointId);
   });
 
