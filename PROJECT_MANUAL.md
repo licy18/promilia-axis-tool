@@ -9104,6 +9104,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 FlowPanel 中 recovery 分发判断也逐步收敛到共享主流程 action/view helper，让顶部面板的状态读取和动作创建继续减少本地判断。
 
+### 2026-07-09：UI 主流程能力块 - Main Flow Loop Action Helper
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增共享 `createWorkbenchMainFlowLoopAction()`，统一根据 `mainFlowLoopState.recoveryNeeded` 选择正常 next action 或 recovery action。
+- `WorkbenchFlowPanel` 的 primary action dispatch 改为调用共享 loop action helper，不再在组件内本地判断 recovery 分支。
+- 顶部主流程面板现在通过共享 status view 读取 dispatch/loop 状态，并通过共享 loop action helper 创建主流程 action，减少状态读取和动作创建的组件局部判断。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- main flow action 单测覆盖 normal source 与 recovery source 两条 loop action 路径。
+- WorkbenchFlowPanel 组件测试和 Workbench 页面测试确认 primary dispatch 与失败恢复路径仍可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、76 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、206 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 FlowPanel 中 button target / enabled 的 primary operation 解析也逐步沉到共享 helper，进一步减少顶部面板对 review operation 的本地判断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

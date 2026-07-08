@@ -239,8 +239,7 @@ import {
   createWorkbenchFlowModel,
 } from './workbenchFlowModel';
 import {
-  createWorkbenchMainFlowNextAction,
-  createWorkbenchMainFlowRecoveryAction,
+  createWorkbenchMainFlowLoopAction,
   createWorkbenchOpenRuntimeResultsFlowAction,
   createWorkbenchRuntimeActionEditFlowAction,
   createWorkbenchRuntimeResultReturnFlowAction,
@@ -366,15 +365,11 @@ function dispatchMainFlowAction(kind, createFallbackAction) {
     dispatchFlowAction(createFallbackAction());
     return;
   }
-  const action = workbenchFlow.value.mainFlowLoopState.recoveryNeeded
-    ? createWorkbenchMainFlowRecoveryAction({
-        flowModel: workbenchFlow.value,
-        source: MAIN_FLOW_RECOVERY_SOURCE,
-      })
-    : createWorkbenchMainFlowNextAction({
-        flowModel: workbenchFlow.value,
-        source: MAIN_FLOW_PANEL_SOURCE,
-      });
+  const action = createWorkbenchMainFlowLoopAction({
+    flowModel: workbenchFlow.value,
+    source: MAIN_FLOW_PANEL_SOURCE,
+    recoverySource: MAIN_FLOW_RECOVERY_SOURCE,
+  });
   dispatchFlowAction(action);
 }
 

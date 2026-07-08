@@ -19594,3 +19594,40 @@ data-main-flow-loop-*
 - `npm run test -- --run src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、65 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、205 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 254. UI 主流程能力块：Main Flow Loop Action Helper
+
+### 254.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增共享函数：
+
+```js
+createWorkbenchMainFlowLoopAction({
+  flowModel,
+  source,
+  recoverySource,
+  enabled,
+})
+```
+
+行为：
+
+```text
+mainFlowLoopState.recoveryNeeded === true -> createWorkbenchMainFlowRecoveryAction({ source: recoverySource || source })
+否则 -> createWorkbenchMainFlowNextAction({ source })
+```
+
+`WorkbenchFlowPanel` 的 primary action dispatch 现在调用 `createWorkbenchMainFlowLoopAction()`，不再本地判断 recovery 分支。
+
+### 254.2 保存与迁移
+
+本阶段只调整 Workbench 顶部主流程面板的 action 创建 helper，不新增持久字段，不需要数据迁移。
+
+### 254.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 normal source 与 recovery source 两条 loop action 路径。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、76 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、206 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

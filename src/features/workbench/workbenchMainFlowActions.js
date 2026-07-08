@@ -130,6 +130,27 @@ export function createWorkbenchMainFlowRecoveryAction({
   });
 }
 
+export function createWorkbenchMainFlowLoopAction({
+  flowModel = null,
+  source = '',
+  recoverySource = '',
+  enabled,
+} = {}) {
+  const loopState = flowModel?.mainFlowLoopState ?? {};
+  if (loopState.recoveryNeeded) {
+    return createWorkbenchMainFlowRecoveryAction({
+      flowModel,
+      source: recoverySource || source,
+      enabled,
+    });
+  }
+  return createWorkbenchMainFlowNextAction({
+    flowModel,
+    source,
+    enabled,
+  });
+}
+
 export function createWorkbenchRuntimeStatePointFlowAction(options = {}) {
   return createRuntimeStatePointFocusFlowAction(options);
 }
