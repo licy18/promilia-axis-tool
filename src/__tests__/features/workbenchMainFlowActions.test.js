@@ -5,6 +5,7 @@ import {
   createWorkbenchMainFlowRecoveryAction,
   createWorkbenchOpenRuntimeResultsFlowAction,
   createWorkbenchRuntimeActionEditFlowAction,
+  createWorkbenchRuntimeReviewOperationConsumer,
   createWorkbenchRuntimeReviewOperationFlowAction,
   createWorkbenchRuntimeReviewPrimaryOperationFlowAction,
   createWorkbenchRuntimeResultFlowAction,
@@ -545,6 +546,110 @@ describe('workbench main flow actions', () => {
       actionId: 'action-0002',
       statePointId: 'enemyHpDamage|applied|action-0002|30|0',
       canRun: true,
+    });
+  });
+
+  it('exposes a shared runtime review operation consumer', () => {
+    const fallbackTarget = {
+      actionId: 'fallback-action',
+      statePointId: 'fallback-state-point',
+      fieldKey: 'startMs',
+      frameLabel: '12f',
+      canFocusAction: true,
+    };
+    const primaryTarget = {
+      kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+      enabled: true,
+      actionId: 'primary-action',
+      statePointId: 'primary-state-point',
+      fieldKey: 'startMs',
+      frameLabel: '18f',
+      trackKey: 'enemyHpDamage',
+      trackLabel: '敌人 HP',
+    };
+    const consumer = createWorkbenchRuntimeReviewOperationConsumer({
+      operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+      source: 'event-log-runtime-detail',
+      flowModel: {
+        runtimeReviewOperations: {
+          primaryOperationKind:
+            WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+          primaryOperationEnabled: true,
+          primaryOperation: {
+            kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+            enabled: true,
+            target: primaryTarget,
+          },
+          focusAction: {
+            kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+            enabled: true,
+            actionId: 'model-action',
+            statePointId: 'model-state-point',
+          },
+        },
+      },
+      target: fallbackTarget,
+    });
+
+    expect(consumer).toMatchObject({
+      operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+      source: 'event-log-runtime-detail',
+      enabled: true,
+      target: {
+        actionId: 'primary-action',
+        statePointId: 'primary-state-point',
+      },
+      action: {
+        kind: 'focus-runtime-action',
+        source: 'event-log-runtime-detail',
+        actionId: 'primary-action',
+        statePointId: 'primary-state-point',
+        canRun: true,
+      },
+    });
+  });
+
+  it('lets fallback targets survive empty runtime review operations', () => {
+    const fallbackContext = {
+      actionId: 'fallback-action',
+      originStatePointId: 'origin-state-point',
+      statePointId: 'fallback-return-state-point',
+      status: 'refreshed-edit-result',
+    };
+    const consumer = createWorkbenchRuntimeReviewOperationConsumer({
+      operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+      source: 'runtime-detail',
+      flowModel: {
+        runtimeReviewOperations: {
+          primaryOperationKind:
+            WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+          primaryOperationEnabled: false,
+          primaryOperation: {
+            kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+            enabled: false,
+            target: {},
+          },
+          returnResult: {},
+        },
+      },
+      context: fallbackContext,
+    });
+
+    expect(consumer).toMatchObject({
+      operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+      source: 'runtime-detail',
+      enabled: true,
+      context: {
+        actionId: 'fallback-action',
+        statePointId: 'fallback-return-state-point',
+      },
+      action: {
+        kind: 'return-runtime-result',
+        source: 'runtime-detail',
+        actionId: 'fallback-action',
+        statePointId: 'fallback-return-state-point',
+        canRun: true,
+      },
     });
   });
 

@@ -19250,3 +19250,66 @@ src/__tests__/features/RuntimeSelectedDetailPanel.test.js
 - `npm run test -- --run src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、74 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、201 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 248. UI 主流程能力块：Runtime Review Operation Consumer
+
+### 248.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增共享 UI 消费入口：
+
+```js
+createWorkbenchRuntimeReviewOperationConsumer({
+  operationKind,
+  flowModel,
+  source,
+  target,
+  context,
+  enabled,
+})
+```
+
+输出结构：
+
+```js
+{
+  operationKind,
+  source,
+  target,
+  context,
+  enabled,
+  disabledReason,
+  action
+}
+```
+
+解析顺序：
+
+```text
+runtimeReviewOperations.primaryOperation.target
+runtimeReviewOperations.focusAction / returnResult
+调用方 fallback target / context
+disabled operation shape
+```
+
+接入面板：
+
+```text
+ResourceMonitorPanel
+EventLogPanel
+RuntimeSelectedDetailPanel
+```
+
+`createWorkbenchRuntimeReviewOperationFlowAction()` 继续保留，并改为内部复用 `createWorkbenchRuntimeReviewOperationConsumer().action`。
+
+### 248.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程的 operation 消费层，不新增持久字段，不需要数据迁移。
+
+### 248.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 consumer 优先使用 `primaryOperation.target`，以及空 operation 不遮住 fallback target。
+- `npm run test -- --run src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、76 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、203 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

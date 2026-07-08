@@ -213,57 +213,89 @@ export function createWorkbenchRuntimeReviewOperationFlowAction({
   context = null,
   enabled,
 } = {}) {
+  return createWorkbenchRuntimeReviewOperationConsumer({
+    operationKind,
+    flowModel,
+    source,
+    target,
+    context,
+    enabled,
+  }).action;
+}
+
+export function createWorkbenchRuntimeReviewOperationConsumer({
+  operationKind = '',
+  flowModel = null,
+  source = '',
+  target = null,
+  context = null,
+  enabled,
+} = {}) {
   const operations = flowModel?.runtimeReviewOperations ?? null;
   const resolvedOperationKind =
     operationKind || operations?.primaryOperationKind || '';
-  const modelOperation = getRuntimeReviewOperationTarget({
+  const operationTarget = resolveRuntimeReviewOperationTarget({
     operations,
     operationKind: resolvedOperationKind,
+    fallbackTarget: target ?? context,
   });
-  const operationTarget = modelOperation ?? target ?? context;
-  const operationEnabled = enabled ?? modelOperation?.enabled;
+  const operationEnabled = resolveRuntimeReviewOperationEnabled({
+    operationKind: resolvedOperationKind,
+    operationTarget,
+    enabled,
+  });
+  const disabledReason =
+    operationTarget?.disabledReason || 'missing-runtime-review-operation';
+
+  let action;
 
   if (
     resolvedOperationKind ===
     WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION
   ) {
-    return createWorkbenchRuntimeReviewFlowAction({
+    action = createWorkbenchRuntimeReviewFlowAction({
       kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
       source,
       target: operationTarget,
       enabled: operationEnabled,
-      disabledReason: operationTarget?.disabledReason,
+      disabledReason,
     });
-  }
-
-  if (
+  } else if (
     resolvedOperationKind ===
     WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT
   ) {
-    return createWorkbenchRuntimeReviewFlowAction({
+    action = createWorkbenchRuntimeReviewFlowAction({
       kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
       source,
       context: operationTarget,
       enabled: operationEnabled,
-      disabledReason: operationTarget?.disabledReason,
+      disabledReason,
+    });
+  } else {
+    action = createWorkbenchFlowAction({
+      kind: resolvedOperationKind,
+      source,
+      actionId: operationTarget?.actionId ?? '',
+      statePointId:
+        operationTarget?.statePointId ??
+        operations?.selectedStatePointId ??
+        operations?.pendingStatePointId ??
+        '',
+      payload: operationTarget ?? operations ?? null,
+      enabled: false,
+      disabledReason,
     });
   }
 
-  return createWorkbenchFlowAction({
-    kind: resolvedOperationKind,
+  return {
+    operationKind: resolvedOperationKind,
     source,
-    actionId: operationTarget?.actionId ?? '',
-    statePointId:
-      operationTarget?.statePointId ??
-      operations?.selectedStatePointId ??
-      operations?.pendingStatePointId ??
-      '',
-    payload: operationTarget ?? operations ?? null,
-    enabled: false,
-    disabledReason:
-      operationTarget?.disabledReason ||
-      'missing-runtime-review-operation',
-  });
+    target: operationTarget ?? {},
+    context: operationTarget ?? {},
+    enabled: operationEnabled,
+    disabledReason,
+    action,
+  };
 }
 
 export function createWorkbenchRuntimeReviewPrimaryOperationFlowAction({
@@ -336,6 +368,83 @@ function getRuntimeReviewOperationTarget({
   }
 
   return null;
+}
+
+function resolveRuntimeReviewOperationTarget({
+  operations = null,
+  operationKind = '',
+  fallbackTarget = null,
+} = {}) {
+  const primaryOperation = operations?.primaryOperation ?? null;
+  const primaryOperationTarget = primaryOperation?.target ?? primaryOperation;
+  const modelOperation = getRuntimeReviewOperationTarget({
+    operations,
+    operationKind,
+  });
+  if (
+    primaryOperation?.kind === operationKind &&
+    hasRuntimeReviewOperationPayload(primaryOperationTarget)
+  ) {
+    return primaryOperationTarget;
+  }
+  if (hasRuntimeReviewOperationPayload(modelOperation)) {
+    return modelOperation;
+  }
+  if (hasRuntimeReviewOperationPayload(fallbackTarget)) {
+    return fallbackTarget;
+  }
+  if (
+    primaryOperation?.kind === operationKind &&
+    hasRuntimeReviewOperationShape(primaryOperationTarget)
+  ) {
+    return primaryOperationTarget;
+  }
+  if (hasRuntimeReviewOperationShape(modelOperation)) {
+    return modelOperation;
+  }
+  if (hasRuntimeReviewOperationShape(fallbackTarget)) {
+    return fallbackTarget;
+  }
+  return null;
+}
+
+function resolveRuntimeReviewOperationEnabled({
+  operationKind = '',
+  operationTarget = null,
+  enabled,
+} = {}) {
+  if (enabled != null) {
+    return Boolean(enabled);
+  }
+  if (operationTarget?.enabled != null) {
+    return Boolean(operationTarget.enabled);
+  }
+  if (
+    operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION
+  ) {
+    return Boolean(operationTarget?.canFocusAction ?? operationTarget?.actionId);
+  }
+  if (
+    operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT
+  ) {
+    return Boolean(operationTarget?.canReturn ?? operationTarget?.statePointId);
+  }
+  return false;
+}
+
+function hasRuntimeReviewOperationPayload(target = null) {
+  return Boolean(
+    target &&
+      (target.actionId ||
+        target.statePointId ||
+        target.originStatePointId ||
+        target.canFocusAction ||
+        target.canReturn)
+  );
+}
+
+function hasRuntimeReviewOperationShape(target = null) {
+  return Boolean(target && Object.keys(target).length);
 }
 
 function isRuntimeReviewPrimaryOperationKind(flowModel = null, actionKind = '') {

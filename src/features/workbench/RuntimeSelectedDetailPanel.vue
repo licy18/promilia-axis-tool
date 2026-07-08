@@ -236,7 +236,7 @@ import {
 } from './workbenchFlowModel';
 import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
-  createWorkbenchRuntimeReviewOperationFlowAction,
+  createWorkbenchRuntimeReviewOperationConsumer,
 } from './workbenchMainFlowActions';
 
 const props = defineProps({
@@ -292,28 +292,32 @@ const runtimeReviewDetailSynced = computed(
       runtimeReviewSelection.value.selectedStatePointId
 );
 const runtimeDetailActionEditButtonTarget = computed(() =>
-  resolveRuntimeDetailReviewOperationTarget({
+  runtimeDetailActionEditOperation.value.target
+);
+const runtimeDetailActionEditOperation = computed(() =>
+  createWorkbenchRuntimeReviewOperationConsumer({
     operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
-    operationTarget: runtimeReviewOperations.value?.focusAction,
-    fallbackTarget: runtimeDetailActionEditTarget.value,
+    source: 'runtime-detail',
+    flowModel: props.flowModel,
+    target: runtimeDetailActionEditTarget.value,
   })
 );
 const runtimeDetailResultReturnButtonTarget = computed(() =>
-  resolveRuntimeDetailReviewOperationTarget({
+  runtimeDetailResultReturnOperation.value.context
+);
+const runtimeDetailResultReturnOperation = computed(() =>
+  createWorkbenchRuntimeReviewOperationConsumer({
     operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
-    operationTarget: runtimeReviewOperations.value?.returnResult,
-    fallbackTarget: runtimeDetailResultReturnContext.value,
+    source: 'runtime-detail',
+    flowModel: props.flowModel,
+    context: runtimeDetailResultReturnContext.value,
   })
 );
 const runtimeReviewFocusActionEnabled = computed(
-  () =>
-    runtimeDetailActionEditButtonTarget.value?.enabled ??
-    Boolean(runtimeDetailActionEditTarget.value?.canFocusAction)
+  () => runtimeDetailActionEditOperation.value.enabled
 );
 const runtimeReviewReturnResultEnabled = computed(
-  () =>
-    runtimeDetailResultReturnButtonTarget.value?.enabled ??
-    Boolean(runtimeDetailResultReturnContext.value?.statePointId)
+  () => runtimeDetailResultReturnOperation.value.enabled
 );
 const runtimeDetailActionEditTarget = computed(() =>
   getRuntimeDetailActionEditTarget(props.flowModel, props.detail)
@@ -344,13 +348,11 @@ const panelVisible = computed(() =>
 );
 
 function focusRuntimeAction() {
-  const detail = runtimeDetailActionEditButtonTarget.value;
-  dispatchRuntimeDetailFlowAction(getRuntimeDetailActionFocusFlowAction(detail));
+  dispatchRuntimeDetailFlowAction(runtimeDetailActionEditOperation.value.action);
 }
 
 function returnRuntimeResult() {
-  const context = runtimeDetailResultReturnButtonTarget.value;
-  dispatchRuntimeDetailFlowAction(getRuntimeDetailReturnFlowAction(context));
+  dispatchRuntimeDetailFlowAction(runtimeDetailResultReturnOperation.value.action);
 }
 
 function dispatchRuntimeDetailFlowAction(action) {
@@ -358,26 +360,6 @@ function dispatchRuntimeDetailFlowAction(action) {
     return;
   }
   emit('dispatch-flow-action', action);
-}
-
-function getRuntimeDetailActionFocusFlowAction(detail) {
-  return createWorkbenchRuntimeReviewOperationFlowAction({
-    operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
-    source: 'runtime-detail',
-    flowModel: props.flowModel,
-    target: detail,
-    enabled: runtimeReviewFocusActionEnabled.value,
-  });
-}
-
-function getRuntimeDetailReturnFlowAction(context) {
-  return createWorkbenchRuntimeReviewOperationFlowAction({
-    operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
-    source: 'runtime-detail',
-    flowModel: props.flowModel,
-    context,
-    enabled: runtimeReviewReturnResultEnabled.value,
-  });
 }
 
 function formatDetailDelta(detail) {
@@ -474,28 +456,6 @@ function getRuntimeDetailActionEditTarget(flowModel, detail) {
   });
 }
 
-function resolveRuntimeDetailReviewOperationTarget({
-  operationKind = '',
-  operationTarget = null,
-  fallbackTarget = null,
-} = {}) {
-  const primaryOperation = runtimeReviewOperations.value?.primaryOperation;
-  const primaryOperationTarget = primaryOperation?.target ?? primaryOperation;
-  if (
-    primaryOperation?.kind === operationKind &&
-    hasRuntimeDetailReviewOperationTarget(primaryOperationTarget)
-  ) {
-    return primaryOperationTarget;
-  }
-  if (hasRuntimeDetailReviewOperationTarget(operationTarget)) {
-    return operationTarget;
-  }
-  return fallbackTarget ?? {};
-}
-
-function hasRuntimeDetailReviewOperationTarget(target = null) {
-  return Boolean(target && Object.keys(target).length);
-}
 </script>
 
 <style scoped>

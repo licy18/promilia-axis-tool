@@ -250,10 +250,8 @@
                 selectedRuntimeCurveActionEditTarget.statePointId
               "
               data-testid="workbench-runtime-resource-chart-selection-action-focus"
-              :disabled="!selectedRuntimeCurveActionEditTarget.canFocusAction"
-              @click="
-                focusRuntimeCurveAction(selectedRuntimeCurveActionEditTarget)
-              "
+              :disabled="!selectedRuntimeCurveActionEditOperation.enabled"
+              @click="focusRuntimeCurveAction"
             >
               <EditPen class="runtime-curve-action-focus-icon" />
               <span>定位动作</span>
@@ -371,7 +369,7 @@ import {
 import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
   createWorkbenchRuntimeReviewFlowAction,
-  createWorkbenchRuntimeReviewOperationFlowAction,
+  createWorkbenchRuntimeReviewOperationConsumer,
 } from './workbenchMainFlowActions';
 import { isRuntimeResultFocusSource } from './runtimeFocusSource';
 
@@ -576,10 +574,18 @@ const selectedRuntimeCurveResultContext = computed(() =>
   )
 );
 const selectedRuntimeCurveActionEditTarget = computed(() =>
-  getRuntimeCurveActionEditTarget(
-    props.flowModel,
-    selectedRuntimeCurvePoint.value
-  )
+  selectedRuntimeCurveActionEditOperation.value.target
+);
+const selectedRuntimeCurveActionEditOperation = computed(() =>
+  createWorkbenchRuntimeReviewOperationConsumer({
+    operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+    source: 'resource-runtime-curve',
+    flowModel: props.flowModel,
+    target: getRuntimeCurveActionEditTarget(
+      props.flowModel,
+      selectedRuntimeCurvePoint.value
+    ),
+  })
 );
 
 const selectedRuntimeCurvePointRows = computed(() =>
@@ -1077,8 +1083,10 @@ function selectRuntimeCurveAdjacentPoint(point) {
   dispatchRuntimeCurveFlowAction(getRuntimeCurvePointFlowAction(point));
 }
 
-function focusRuntimeCurveAction(point) {
-  dispatchRuntimeCurveFlowAction(getRuntimeCurveActionFocusFlowAction(point));
+function focusRuntimeCurveAction() {
+  dispatchRuntimeCurveFlowAction(
+    selectedRuntimeCurveActionEditOperation.value.action
+  );
 }
 
 function dispatchRuntimeCurveFlowAction(action) {
@@ -1094,16 +1102,6 @@ function getRuntimeCurvePointFlowAction(point) {
     source: 'resource-runtime-curve',
     detail: point,
     enabled: Boolean(point?.statePointId),
-  });
-}
-
-function getRuntimeCurveActionFocusFlowAction(point) {
-  return createWorkbenchRuntimeReviewOperationFlowAction({
-    operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
-    source: 'resource-runtime-curve',
-    flowModel: props.flowModel,
-    target: point,
-    enabled: Boolean(point?.canFocusAction ?? point?.actionId),
   });
 }
 
