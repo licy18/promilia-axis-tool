@@ -123,6 +123,30 @@
       :data-main-flow-loop-next-region="
         workbenchFlowModel.mainFlowLoopState.nextRegion
       "
+      :data-runtime-review-selection-status="
+        workbenchFlowModel.runtimeReviewSelection.status
+      "
+      :data-runtime-review-selected-action-id="
+        workbenchFlowModel.runtimeReviewSelection.selectedActionId
+      "
+      :data-runtime-review-selected-state-point-id="
+        workbenchFlowModel.runtimeReviewSelection.selectedStatePointId
+      "
+      :data-runtime-review-pending-state-point-id="
+        workbenchFlowModel.runtimeReviewSelection.pendingStatePointId
+      "
+      :data-runtime-review-source="
+        workbenchFlowModel.runtimeReviewSelection.source
+      "
+      :data-runtime-review-source-kind="
+        workbenchFlowModel.runtimeReviewSelection.sourceKind
+      "
+      :data-runtime-review-last-action-kind="
+        workbenchFlowModel.runtimeReviewSelection.lastActionKind
+      "
+      :data-runtime-review-last-action-source="
+        workbenchFlowModel.runtimeReviewSelection.lastActionSource
+      "
       data-testid="workbench-main-flow-workspace"
     >
       <ActionLibraryPanel
@@ -209,6 +233,21 @@
           "
           :data-main-flow-selected-runtime-state-point-id="
             workbenchFlowModel.mainFlowSelection.selectedRuntimeStatePointId
+          "
+          :data-runtime-review-selection-status="
+            workbenchFlowModel.runtimeReviewSelection.status
+          "
+          :data-runtime-review-selected-action-id="
+            workbenchFlowModel.runtimeReviewSelection.selectedActionId
+          "
+          :data-runtime-review-selected-state-point-id="
+            workbenchFlowModel.runtimeReviewSelection.selectedStatePointId
+          "
+          :data-runtime-review-source="
+            workbenchFlowModel.runtimeReviewSelection.source
+          "
+          :data-runtime-review-source-kind="
+            workbenchFlowModel.runtimeReviewSelection.sourceKind
           "
           data-testid="workbench-runtime-review-stack"
         >

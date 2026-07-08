@@ -4,6 +4,7 @@ import {
   WORKBENCH_FLOW_PHASES,
   WORKBENCH_MAIN_FLOW_REGIONS,
   WORKBENCH_FLOW_PRIMARY_ACTION_KEYS,
+  WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES,
   createWorkbenchFlowAction,
   createWorkbenchFlowModel,
   resolveWorkbenchMainFlowActionEditTarget,
@@ -86,6 +87,20 @@ describe('workbench flow model', () => {
       targetActionId: 'action-0002',
       targetStatePointId: '',
     });
+    expect(model.runtimeReviewSelection).toMatchObject({
+      status: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.EMPTY,
+      selectedActionId: '',
+      selectedStatePointId: '',
+      pendingActionId: '',
+      pendingStatePointId: '',
+      source: '',
+      sourceKind: 'none',
+      hasSelection: false,
+      hasPendingResult: false,
+      overviewActive: false,
+      canFocusAction: false,
+      canReturnResult: false,
+    });
     expect(model.runtimeNavigation.count).toBe(2);
     expect(model.runtimeNavigation.index).toBe(-1);
     expect(model.runtimeNavigation.label).toBe('-/2');
@@ -108,6 +123,14 @@ describe('workbench flow model', () => {
         frameLabel: '12f',
         trackLabel: '敌人 HP',
         trackKey: 'enemyHpDamage',
+      },
+      flowDispatchState: {
+        sequence: 1,
+        handled: true,
+        kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+        source: 'analysis-action-result',
+        actionId: 'action-0001',
+        statePointId: firstPoint.statePointId,
       },
     });
 
@@ -157,6 +180,29 @@ describe('workbench flow model', () => {
       runtimeFocusSource: 'action-result',
       hasRuntimeSelection: true,
       hasPendingRuntimeResult: false,
+    });
+    expect(model.runtimeReviewSelection).toMatchObject({
+      status: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.SELECTED,
+      selectedActionId: 'action-0001',
+      selectedStatePointId: firstPoint.statePointId,
+      pendingStatePointId: '',
+      source: 'action-result',
+      sourceKind: 'action-result',
+      frameLabel: '12f',
+      trackKey: 'enemyHpDamage',
+      trackLabel: '敌人 HP',
+      hasSelection: true,
+      hasPendingResult: false,
+      overviewActive: false,
+      canFocusAction: true,
+      canReturnResult: false,
+      actionEditTargetActionId: 'action-0001',
+      actionEditTargetStatePointId: firstPoint.statePointId,
+      resultReturnStatePointId: '',
+      lastActionKind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+      lastActionSource: 'analysis-action-result',
+      lastActionHandled: true,
+      lastActionStatePointId: firstPoint.statePointId,
     });
     expect(model.runtimeNavigation.index).toBe(0);
     expect(model.runtimeNavigation.label).toBe('1/2');
@@ -250,6 +296,20 @@ describe('workbench flow model', () => {
       targetActionId: 'action-0002',
       targetStatePointId: secondPoint.statePointId,
     });
+    expect(readyModel.runtimeReviewSelection).toMatchObject({
+      status: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.PENDING_RESULT,
+      selectedActionId: '',
+      selectedStatePointId: '',
+      pendingActionId: 'action-0002',
+      pendingStatePointId: secondPoint.statePointId,
+      refreshedStatePointId: secondPoint.statePointId,
+      hasSelection: false,
+      hasPendingResult: true,
+      canFocusAction: false,
+      canReturnResult: true,
+      resultReturnActionId: 'action-0002',
+      resultReturnStatePointId: secondPoint.statePointId,
+    });
 
     const reviewModel = createWorkbenchFlowModel({
       runtimeProjection,
@@ -317,6 +377,21 @@ describe('workbench flow model', () => {
       canRunNextAction: true,
       targetActionId: 'action-0002',
       targetStatePointId: secondPoint.statePointId,
+    });
+    expect(reviewModel.runtimeReviewSelection).toMatchObject({
+      status: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.SELECTED,
+      selectedActionId: 'action-0002',
+      selectedStatePointId: secondPoint.statePointId,
+      pendingStatePointId: '',
+      refreshedStatePointId: secondPoint.statePointId,
+      frameLabel: '30f',
+      trackLabel: '自身能量',
+      hasSelection: true,
+      hasPendingResult: false,
+      canFocusAction: true,
+      canReturnResult: true,
+      actionEditTargetStatePointId: secondPoint.statePointId,
+      resultReturnStatePointId: secondPoint.statePointId,
     });
     expect(
       resolveWorkbenchMainFlowActionEditTarget({

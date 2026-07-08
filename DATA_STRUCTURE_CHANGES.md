@@ -18621,3 +18621,98 @@ RuntimeSelectedDetailPanel
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、65 条测试。
 - `npm run test -- --run`：通过，33 个测试文件、191 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 238. UI 主流程能力块：Runtime Review Selection Model
+
+### 238.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增 `workbenchFlowModel` 枚举：
+
+```js
+WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES
+```
+
+当前取值：
+
+```text
+empty
+overview
+selected
+pending-result
+```
+
+`createWorkbenchFlowModel` 新增输出：
+
+```js
+runtimeReviewSelection
+```
+
+当前字段：
+
+```js
+{
+  phase,
+  status,
+  selectedActionId,
+  selectedStatePointId,
+  pendingActionId,
+  pendingStatePointId,
+  refreshedStatePointId,
+  source,
+  sourceKind,
+  frameLabel,
+  timeMs,
+  trackKey,
+  trackLabel,
+  hasSelection,
+  hasPendingResult,
+  overviewActive,
+  canFocusAction,
+  canReturnResult,
+  actionEditTargetActionId,
+  actionEditTargetStatePointId,
+  resultReturnActionId,
+  resultReturnStatePointId,
+  lastActionKind,
+  lastActionSource,
+  lastActionHandled,
+  lastActionStatePointId
+}
+```
+
+`runtimeReviewSelection` 由以下运行时输入派生：
+
+```text
+runtimeDetail
+editResult
+selectedStateCurvePointId
+runtimeFocusSource
+runtimeOverviewActive
+runtimeActionEditTarget
+runtimeResultReturnTarget
+mainFlowDispatchResult
+```
+
+接入变化：
+
+```text
+Workbench.vue
+ResourceMonitorPanel.vue
+EventLogPanel.vue
+```
+
+Workbench 主工作区和运行结果栈新增 `data-runtime-review-*` 诊断属性；曲线与日志面板从 flow model 读取选择状态时优先消费 `runtimeReviewSelection`。
+
+### 238.2 保存与迁移
+
+本阶段只新增 Workbench UI 主流程模型的运行时选择状态，不新增持久字段，不需要数据迁移。
+
+### 238.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖 empty、selected、pending-result 三类 review selection 状态。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认初始、打开运行结果、失败恢复等主流程下的 review selection 属性随模型同步变化。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、191 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

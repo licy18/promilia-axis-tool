@@ -49,6 +49,13 @@ export const WORKBENCH_MAIN_FLOW_LOOP_STEPS = Object.freeze({
   EDIT_RESULT_REVIEW: 'edit-result-review',
 });
 
+export const WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES = Object.freeze({
+  EMPTY: 'empty',
+  OVERVIEW: 'overview',
+  SELECTED: 'selected',
+  PENDING_RESULT: 'pending-result',
+});
+
 export function createWorkbenchFlowAction({
   kind = '',
   source = '',
@@ -149,6 +156,17 @@ export function createWorkbenchFlowModel({
   });
   const mainFlowDispatchResult =
     createWorkbenchMainFlowDispatchResult(flowDispatchState);
+  const runtimeReviewSelection = createWorkbenchRuntimeReviewSelection({
+    phase,
+    runtimeDetail,
+    editResult,
+    selectedStateCurvePointId,
+    runtimeFocusSource,
+    runtimeOverviewActive,
+    runtimeActionEditTarget,
+    runtimeResultReturnTarget,
+    mainFlowDispatchResult,
+  });
   const mainFlowLoopState = createWorkbenchMainFlowLoopState({
     phase,
     mainFlowState,
@@ -176,6 +194,7 @@ export function createWorkbenchFlowModel({
     mainFlowSelection,
     mainFlowDispatchResult,
     mainFlowLoopState,
+    runtimeReviewSelection,
     runtimeNavigation: {
       points: runtimeNavigationPoints,
       count: runtimeNavigationPoints.length,
@@ -243,6 +262,60 @@ export function createWorkbenchMainFlowLoopState({
     lastDispatchReason: recoveryNeeded
       ? (mainFlowDispatchResult?.reason ?? '')
       : '',
+  };
+}
+
+export function createWorkbenchRuntimeReviewSelection({
+  phase = '',
+  runtimeDetail = null,
+  editResult = null,
+  selectedStateCurvePointId = '',
+  runtimeFocusSource = '',
+  runtimeOverviewActive = false,
+  runtimeActionEditTarget = null,
+  runtimeResultReturnTarget = null,
+  mainFlowDispatchResult = null,
+} = {}) {
+  const selectedStatePointId =
+    runtimeDetail?.statePointId ?? selectedStateCurvePointId ?? '';
+  const pendingStatePointId =
+    editResult?.statePointId && editResult.statePointId !== selectedStatePointId
+      ? editResult.statePointId
+      : '';
+  const lastReviewAction = createRuntimeReviewLastAction(
+    mainFlowDispatchResult
+  );
+  return {
+    phase,
+    status: resolveRuntimeReviewSelectionStatus({
+      selectedStatePointId,
+      pendingStatePointId,
+      runtimeOverviewActive,
+    }),
+    selectedActionId: runtimeDetail?.actionId ?? '',
+    selectedStatePointId,
+    pendingActionId: pendingStatePointId ? (editResult?.actionId ?? '') : '',
+    pendingStatePointId,
+    refreshedStatePointId: editResult?.statePointId ?? '',
+    source: runtimeFocusSource ?? '',
+    sourceKind: resolveRuntimeReviewSelectionSourceKind(runtimeFocusSource),
+    frameLabel: runtimeDetail?.frameLabel ?? '',
+    timeMs: runtimeDetail?.timeMs ?? null,
+    trackKey: runtimeDetail?.trackKey ?? '',
+    trackLabel: runtimeDetail?.trackLabel ?? '',
+    hasSelection: Boolean(selectedStatePointId),
+    hasPendingResult: Boolean(pendingStatePointId),
+    overviewActive: Boolean(runtimeOverviewActive && !selectedStatePointId),
+    canFocusAction: Boolean(runtimeActionEditTarget?.canFocusAction),
+    canReturnResult: Boolean(runtimeResultReturnTarget?.statePointId),
+    actionEditTargetActionId: runtimeActionEditTarget?.actionId ?? '',
+    actionEditTargetStatePointId: runtimeActionEditTarget?.statePointId ?? '',
+    resultReturnActionId: runtimeResultReturnTarget?.actionId ?? '',
+    resultReturnStatePointId: runtimeResultReturnTarget?.statePointId ?? '',
+    lastActionKind: lastReviewAction.kind,
+    lastActionSource: lastReviewAction.source,
+    lastActionHandled: lastReviewAction.handled,
+    lastActionStatePointId: lastReviewAction.statePointId,
   };
 }
 
@@ -482,6 +555,74 @@ function resolveMainFlowLoopStatus(dispatchResult = null) {
     return WORKBENCH_MAIN_FLOW_LOOP_STATUSES.ADVANCED;
   }
   return WORKBENCH_MAIN_FLOW_LOOP_STATUSES.READY;
+}
+
+function resolveRuntimeReviewSelectionStatus({
+  selectedStatePointId = '',
+  pendingStatePointId = '',
+  runtimeOverviewActive = false,
+} = {}) {
+  if (selectedStatePointId) {
+    return WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.SELECTED;
+  }
+  if (pendingStatePointId) {
+    return WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.PENDING_RESULT;
+  }
+  if (runtimeOverviewActive) {
+    return WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.OVERVIEW;
+  }
+  return WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.EMPTY;
+}
+
+function resolveRuntimeReviewSelectionSourceKind(source = '') {
+  if (!source) {
+    return 'none';
+  }
+  if (source.includes('state-curve')) {
+    return 'state-curve';
+  }
+  if (source.includes('resource') || source.includes('curve')) {
+    return 'curve';
+  }
+  if (source.includes('event-log')) {
+    return 'log';
+  }
+  if (source.includes('runtime-detail')) {
+    return 'detail';
+  }
+  if (source.includes('action-result')) {
+    return 'action-result';
+  }
+  return 'other';
+}
+
+function createRuntimeReviewLastAction(dispatchResult = null) {
+  if (!isRuntimeReviewDispatch(dispatchResult)) {
+    return {
+      kind: '',
+      source: '',
+      handled: false,
+      statePointId: '',
+    };
+  }
+  return {
+    kind: dispatchResult.kind ?? '',
+    source: dispatchResult.source ?? '',
+    handled: Boolean(dispatchResult.handled),
+    statePointId: dispatchResult.statePointId ?? '',
+  };
+}
+
+function isRuntimeReviewDispatch(dispatchResult = null) {
+  if (!dispatchResult?.hasResult) {
+    return false;
+  }
+  return [
+    WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+    WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_STATE_POINT,
+    WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+    WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+  ].includes(dispatchResult.kind);
 }
 
 function createWorkbenchFlowEditResult(context) {

@@ -383,14 +383,16 @@ const runtimeContextByRow = computed(
 const runtimeSimLogRows = computed(() =>
   runtimeStatePointContexts.value.map(context => context.row)
 );
-const flowSelection = computed(() => props.flowModel?.mainFlowSelection ?? null);
+const flowSelection = computed(
+  () => props.flowModel?.runtimeReviewSelection ?? null
+);
 const flowSelectedStatePointId = computed(
   () =>
-    flowSelection.value?.selectedStateCurvePointId ??
+    flowSelection.value?.selectedStatePointId ??
     props.selectedStateCurvePointId
 );
 const flowRuntimeFocusSource = computed(
-  () => flowSelection.value?.runtimeFocusSource ?? ''
+  () => flowSelection.value?.source ?? ''
 );
 const flowEditResult = computed(
   () => props.flowModel?.editResult ?? props.actionEditResultContext

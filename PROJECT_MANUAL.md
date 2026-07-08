@@ -8687,6 +8687,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把运行结果 review action 的选择结果进一步沉淀到 Workbench flow model 中，形成统一的 review selection 状态，为后续曲线/日志/详情联动和结果定位体验对齐 Endaxis 做准备。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Selection Model
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `WorkbenchFlowModel` 新增 `runtimeReviewSelection`，统一描述运行结果 review 区当前选择状态、来源、选中 action/state point、pending 刷新结果、可回改/可返回能力和最后一次 review action。
+- Workbench 主工作区与运行结果栈开始从同一份 `runtimeReviewSelection` 暴露 review selection 状态。
+- `ResourceMonitorPanel` 与 `EventLogPanel` 读取 flow model 时改为优先消费 `runtimeReviewSelection`，曲线与日志面板不再从 `mainFlowSelection` 拼运行结果选择上下文。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- flow model 单元测试覆盖 empty、selected、pending-result 三类 review selection 状态。
+- Workbench 页面测试确认初始、打开运行结果、失败恢复等主流程下的 review selection 属性随模型同步变化。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、191 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：基于 `runtimeReviewSelection` 做曲线、日志、详情三处的选择同步与定位一致性收敛，推进 Endaxis 式结果定位体验。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

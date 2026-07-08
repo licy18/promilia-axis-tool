@@ -129,6 +129,14 @@ describe('Workbench view', () => {
       'data-main-flow-loop-next-target-kind': 'runtime-results',
       'data-main-flow-loop-current-region': 'action-edit',
       'data-main-flow-loop-next-region': 'runtime-review',
+      'data-runtime-review-selection-status': 'empty',
+      'data-runtime-review-selected-action-id': '',
+      'data-runtime-review-selected-state-point-id': '',
+      'data-runtime-review-pending-state-point-id': '',
+      'data-runtime-review-source': '',
+      'data-runtime-review-source-kind': 'none',
+      'data-runtime-review-last-action-kind': '',
+      'data-runtime-review-last-action-source': '',
     });
     expect(flowPanel.attributes()).toMatchObject({
       'data-main-flow-dispatch-sequence': '0',
@@ -174,6 +182,13 @@ describe('Workbench view', () => {
         'data-main-flow-selected-runtime-state-point-id'
       )
     ).toBe('');
+    expect(runtimeReviewStack.attributes()).toMatchObject({
+      'data-runtime-review-selection-status': 'empty',
+      'data-runtime-review-selected-action-id': '',
+      'data-runtime-review-selected-state-point-id': '',
+      'data-runtime-review-source': '',
+      'data-runtime-review-source-kind': 'none',
+    });
     expect(runtimeReviewStack.findComponent(ResourceMonitorPanel).exists()).toBe(
       true
     );
@@ -1814,6 +1829,14 @@ describe('Workbench view', () => {
       'data-main-flow-loop-next-target-kind': 'runtime-action-edit',
       'data-main-flow-loop-current-region': 'runtime-review',
       'data-main-flow-loop-next-region': 'action-edit',
+      'data-runtime-review-selection-status': 'selected',
+      'data-runtime-review-selected-action-id': 'action-0001',
+      'data-runtime-review-selected-state-point-id': selectedRuntimePointId,
+      'data-runtime-review-pending-state-point-id': '',
+      'data-runtime-review-source': '',
+      'data-runtime-review-source-kind': 'none',
+      'data-runtime-review-last-action-kind': '',
+      'data-runtime-review-last-action-source': '',
     });
     expect(focusedFlowPanel.attributes()).toMatchObject({
       'data-main-flow-dispatch-sequence': '1',
@@ -2199,6 +2222,10 @@ describe('Workbench view', () => {
       'data-main-flow-loop-recovery-needed': 'true',
       'data-main-flow-loop-next-action-kind': 'open-runtime-results',
       'data-main-flow-loop-next-target-kind': 'runtime-results',
+      'data-runtime-review-selection-status': 'empty',
+      'data-runtime-review-selected-action-id': '',
+      'data-runtime-review-selected-state-point-id': '',
+      'data-runtime-review-source-kind': 'none',
     });
 
     const recoveryButton = wrapper.find(
@@ -2235,6 +2262,9 @@ describe('Workbench view', () => {
       'data-main-flow-loop-recovery-needed': 'false',
       'data-main-flow-loop-next-action-kind': 'focus-runtime-action',
       'data-main-flow-loop-next-target-kind': 'runtime-action-edit',
+      'data-runtime-review-selection-status': 'selected',
+      'data-runtime-review-selected-action-id': 'action-0001',
+      'data-runtime-review-source-kind': 'none',
     });
     expect(
       wrapper.find('[data-testid="workbench-runtime-selected-detail"]').exists()
