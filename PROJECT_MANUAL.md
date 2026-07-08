@@ -5869,6 +5869,39 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DF 目标：继续完善编辑闭环，优先把来源反向定位扩展到时间轴入口高亮，或增加字段级前后值摘要，让结果定位更接近 Endaxis 的完整编辑体验。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DF 字段来源反向定位时间轴入口
+
+本轮完成：
+
+- `TimelineGridPreview` 接入 `actionEditFocus`，动作块现在可响应结果来源定位。
+- 点击动作结果的最近编辑来源标签后，来源动作块会写入 `data-edit-focused`、`data-edit-focus-field`、`data-edit-focus-label`。
+- 时间轴来源动作块新增 `edit-focused` 视觉状态，与属性面板来源高亮形成同一条定位链。
+- Workbench 测试覆盖编辑等级后点击 `等级变更`，时间轴 `action-0001` 动作块同步标记为来源聚焦。
+
+当前验证事实：
+
+- 点击来源标签前，时间轴 `action-0001` 的 `data-edit-focused="false"`。
+- 点击 `等级变更` 后，时间轴 `action-0001` 的 `data-edit-focused="true"`、`data-edit-focus-field="level"`、`data-edit-focus-label="等级变更"`。
+- 来源动作块仍保持选中状态，同时新增 `edit-focused` 样式。
+- 本阶段只新增前端聚焦状态，不新增公式、simulation 输出或保存 schema。
+
+当前边界：
+
+- 本阶段高亮到时间轴动作块，不细分到动作块内的拖拽手柄、持续时间手柄或具体帧点。
+- 仍不展示字段编辑前后值，也不做多步编辑历史。
+- 非动作字段仍暂不纳入动作结果来源定位。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8DG 目标：继续完善编辑闭环，优先为最近编辑来源补字段级前后值摘要，让用户能判断结果刷新来自哪个字段以及改动幅度。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

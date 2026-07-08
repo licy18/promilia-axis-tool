@@ -1588,6 +1588,11 @@ describe('Workbench view', () => {
     );
     expect(levelEditControl.exists()).toBe(true);
     expect(levelEditControl.attributes('data-edit-focused')).toBe('false');
+    let sourceTimelineAction = wrapper.find(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+    );
+    expect(sourceTimelineAction.attributes('data-edit-focused')).toBe('false');
+    expect(sourceTimelineAction.attributes('data-edit-focus-field')).toBe('');
 
     await actionResultRow
       .find('[data-testid="workbench-action-result-edit-source"]')
@@ -1615,6 +1620,17 @@ describe('Workbench view', () => {
         )
         .classes()
     ).toContain('selected');
+    sourceTimelineAction = wrapper.find(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+    );
+    expect(sourceTimelineAction.attributes('data-edit-focused')).toBe('true');
+    expect(sourceTimelineAction.attributes('data-edit-focus-field')).toBe(
+      'level'
+    );
+    expect(sourceTimelineAction.attributes('data-edit-focus-label')).toBe(
+      '等级变更'
+    );
+    expect(sourceTimelineAction.classes()).toContain('edit-focused');
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     await nextTick();

@@ -76,6 +76,7 @@
         :three-value-curve-framework="simulationResult.threeValueCurveFramework"
         :duration-ms="scenario.time.durationMs"
         :selected-action-id="selectedActionId"
+        :action-edit-focus="actionEditFocus"
         :selected-state-curve-point-id="selectedStateCurvePointId"
         :state-curve-focus-mode="stateCurveFocusMode"
         :state-curve-layer-filters="stateCurveLayerFilters"

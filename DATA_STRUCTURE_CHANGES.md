@@ -11820,3 +11820,59 @@ focus-action-edit-source
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DF 应继续完善编辑闭环，优先把来源反向定位扩展到时间轴入口高亮，或补字段级前后值摘要。
+
+## 139. 阶段 5-8DF：字段来源反向定位时间轴入口
+
+阶段目标：
+
+- 复用 `actionEditFocus` 前端派生状态，让动作结果来源标签点击后同时定位属性面板控件和时间轴动作块。
+
+### 139.1 TimelineGridPreview 新增 prop
+
+新增：
+
+```js
+actionEditFocus: Object | null
+```
+
+由 `Workbench` 传入：
+
+```vue
+:action-edit-focus="actionEditFocus"
+```
+
+该 prop 只用于前端高亮，不写入 localStorage，不属于项目保存 schema。
+
+### 139.2 时间轴动作块新增 DOM 状态
+
+`workbench-timeline-action` 新增：
+
+```html
+data-edit-focused
+data-edit-focus-field
+data-edit-focus-label
+```
+
+字段归一保持与属性面板一致：
+
+```text
+laneId -> actorCharacterId
+damageSegmentIndex -> actionVariantIndex
+```
+
+### 139.3 验证
+
+当前测试覆盖：
+
+- 点击 `等级变更` 前，时间轴来源动作 `data-edit-focused="false"`。
+- 点击 `等级变更` 后，时间轴来源动作 `data-edit-focused="true"`。
+- 时间轴来源动作同步写入 `data-edit-focus-field="level"` 和 `data-edit-focus-label="等级变更"`。
+- 来源动作块带 `edit-focused` 样式并保持选中。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DG 应继续完善编辑闭环，优先为最近编辑来源补字段级前后值摘要。

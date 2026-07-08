@@ -233,6 +233,7 @@
                   resizing: action.id === resizingActionId,
                   'auto-delayed': action.insertion?.autoDelayed,
                   'batch-selected': isActionInSelectedBatch(action),
+                  'edit-focused': isActionEditFocused(action),
                 },
                 `type-${action.type}`,
               ]"
@@ -243,6 +244,9 @@
               :data-batch-highlight="
                 isActionInSelectedBatch(action) ? 'true' : 'false'
               "
+              :data-edit-focused="isActionEditFocused(action)"
+              :data-edit-focus-field="getActionEditFocusField(action)"
+              :data-edit-focus-label="getActionEditFocusLabel(action)"
               data-testid="workbench-timeline-action"
               tabindex="0"
               @click="$emit('select-action', action.id)"
@@ -652,6 +656,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  actionEditFocus: {
+    type: Object,
+    default: null,
+  },
   selectedStateCurvePointId: {
     type: String,
     default: '',
@@ -955,6 +963,32 @@ function isActionInSelectedBatch(action) {
 function isDamageInSelectedBatch(damage) {
   const action = actionsById.value.get(damage.actionId);
   return Boolean(action && isActionInSelectedBatch(action));
+}
+
+function isActionEditFocused(action) {
+  return Boolean(getActionEditFocusField(action));
+}
+
+function getActionEditFocusField(action) {
+  const focus = props.actionEditFocus;
+  if (!action?.id || !focus?.actionId || action.id !== focus.actionId) {
+    return '';
+  }
+  return normalizeActionEditFocusField(focus.fieldKey);
+}
+
+function getActionEditFocusLabel(action) {
+  return isActionEditFocused(action) ? props.actionEditFocus?.label ?? '' : '';
+}
+
+function normalizeActionEditFocusField(fieldKey) {
+  if (fieldKey === 'damageSegmentIndex') {
+    return 'actionVariantIndex';
+  }
+  if (fieldKey === 'laneId') {
+    return 'actorCharacterId';
+  }
+  return fieldKey || '';
 }
 
 function actionStyle(action) {
@@ -2786,6 +2820,13 @@ h2 {
   border-color: rgba(121, 199, 185, 0.92);
   box-shadow:
     0 0 0 2px rgba(121, 199, 185, 0.2),
+    0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+.action-block.edit-focused {
+  border-color: rgba(242, 179, 102, 0.9);
+  box-shadow:
+    0 0 0 3px rgba(242, 179, 102, 0.22),
     0 12px 30px rgba(0, 0, 0, 0.28);
 }
 
