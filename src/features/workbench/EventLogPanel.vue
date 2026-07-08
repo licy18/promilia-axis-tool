@@ -204,6 +204,22 @@
           <EditPen class="runtime-log-action-focus-icon" />
           <span>定位动作</span>
         </button>
+        <button
+          v-if="runtimeLogResultReturnContext"
+          type="button"
+          class="runtime-log-result-return"
+          :data-action-id="runtimeLogResultReturnContext.actionId"
+          :data-origin-state-point-id="
+            runtimeLogResultReturnContext.originStatePointId
+          "
+          :data-return-status="runtimeLogResultReturnContext.status"
+          :data-state-point-id="runtimeLogResultReturnContext.statePointId"
+          data-testid="workbench-runtime-sim-log-return-result"
+          @click="returnRuntimeLogResult"
+        >
+          <Aim class="runtime-log-result-return-icon" />
+          <span>回到结果点</span>
+        </button>
         <div
           v-if="runtimeLogEditContext"
           class="runtime-log-edit-context"
@@ -278,7 +294,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue';
-import { EditPen, Tickets } from '@element-plus/icons-vue';
+import { Aim, EditPen, Tickets } from '@element-plus/icons-vue';
 import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
 import { createRuntimeDetailCalculatorRows } from './runtimeSelectedDetail';
 
@@ -311,10 +327,15 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  actionEditResultContext: {
+    type: Object,
+    default: null,
+  },
 });
 const emit = defineEmits([
   'select-runtime-state-point',
   'focus-runtime-action',
+  'return-runtime-result',
 ]);
 
 const selectedRuntimeLogIndex = ref(0);
@@ -555,6 +576,13 @@ const runtimeLogEditContext = computed(() =>
     focus: props.actionEditFocus,
   })
 );
+const runtimeLogResultReturnContext = computed(() =>
+  createRuntimeLogResultReturnContext({
+    actionId: runtimeLogActionFocus.value.actionId,
+    focus: props.actionEditFocus,
+    resultContext: props.actionEditResultContext,
+  })
+);
 const selectedRuntimeContributionRows = computed(() =>
   matchedRuntimeSelectedDetail.value
     ? createRuntimeContributionRowsFromDetail(
@@ -704,6 +732,18 @@ function focusRuntimeLogAction() {
   emit('focus-runtime-action', runtimeLogActionFocus.value);
 }
 
+function returnRuntimeLogResult() {
+  const context = runtimeLogResultReturnContext.value;
+  if (!context?.statePointId) {
+    return;
+  }
+  emit('return-runtime-result', {
+    actionId: context.actionId,
+    statePointId: context.statePointId,
+    status: context.status,
+  });
+}
+
 function focusRuntimeLogByStatePoint(statePointId) {
   if (!statePointId) {
     return;
@@ -812,6 +852,30 @@ function createRuntimeLogEditContext({
     label: focus.label ?? '结果定位',
     statePointId,
     summary: focus.changeSummary ?? '',
+  };
+}
+
+function createRuntimeLogResultReturnContext({
+  actionId = '',
+  focus = null,
+  resultContext = null,
+} = {}) {
+  if (
+    !actionId ||
+    !focus?.actionId ||
+    focus.editOrigin !== 'runtime-focus' ||
+    focus.actionId !== actionId ||
+    resultContext?.actionId !== actionId ||
+    !resultContext?.runtimeStatePointId
+  ) {
+    return null;
+  }
+  return {
+    status: 'refreshed-edit-result',
+    actionId,
+    originStatePointId: focus.originStatePointId ?? '',
+    statePointId: resultContext.runtimeStatePointId,
+    summary: resultContext.changeSummary || focus.changeSummary || '',
   };
 }
 
@@ -1432,13 +1496,43 @@ h2 {
   font-weight: 700;
 }
 
+.runtime-log-result-return {
+  display: inline-grid;
+  grid-template-columns: 13px auto;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  min-height: 36px;
+  border: 1px solid rgba(166, 183, 255, 0.28);
+  border-radius: 4px;
+  background: rgba(166, 183, 255, 0.12);
+  color: #e4e9ff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .runtime-log-action-focus:disabled {
   color: #6d7780;
   cursor: not-allowed;
   opacity: 0.5;
 }
 
+.runtime-log-result-return:hover,
+.runtime-log-result-return:focus,
+.runtime-log-action-focus:not(:disabled):hover,
+.runtime-log-action-focus:not(:disabled):focus {
+  filter: brightness(1.14);
+}
+
 .runtime-log-action-focus-icon {
+  width: 13px;
+  height: 13px;
+}
+
+.runtime-log-result-return-icon {
   width: 13px;
   height: 13px;
 }

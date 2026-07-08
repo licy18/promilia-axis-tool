@@ -191,8 +191,10 @@
         :calculator-diagnostic-focus="calculatorDiagnosticFocus"
         :runtime-log-focus="runtimeLogFocus"
         :action-edit-focus="actionEditFocus"
+        :action-edit-result-context="actionEditResultContext"
         @select-runtime-state-point="selectRuntimeStatePoint"
         @focus-runtime-action="focusRuntimeAction"
+        @return-runtime-result="returnRuntimeResultFromProperties"
       />
     </div>
   </main>

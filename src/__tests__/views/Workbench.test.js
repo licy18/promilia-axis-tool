@@ -2519,11 +2519,48 @@ describe('Workbench view', () => {
     expect(logEditFeedback.attributes('data-origin-track-key')).toBe(
       'enemyHpDamage'
     );
+    const refreshedStatePointId = logEditFeedback.attributes(
+      'data-runtime-state-point-id'
+    );
+    expect(refreshedStatePointId).toBeTruthy();
+    expect(refreshedStatePointId).not.toBe(statePointId);
     expect(
       logEditFeedback
         .find('[data-testid="workbench-action-edit-feedback-origin"]')
         .text()
     ).toBe('来自结果定位');
+
+    const logResultReturnButton = wrapper.find(
+      '[data-testid="workbench-runtime-sim-log-return-result"]'
+    );
+    expect(logResultReturnButton.exists()).toBe(true);
+    expect(logResultReturnButton.attributes('data-action-id')).toBe(
+      'action-0001'
+    );
+    expect(logResultReturnButton.attributes('data-origin-state-point-id')).toBe(
+      statePointId
+    );
+    expect(logResultReturnButton.attributes('data-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+
+    await logResultReturnButton.trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(refreshedStatePointId);
+    const returnedLogNavigation = wrapper.find(
+      '[data-testid="workbench-runtime-sim-log-navigation"]'
+    );
+    expect(returnedLogNavigation.attributes('data-navigation-status')).toBe(
+      'synced'
+    );
+    expect(returnedLogNavigation.attributes('data-state-point-id')).toBe(
+      refreshedStatePointId
+    );
   });
 
   it('links runtime resource curve points to the focused state curve point', async () => {

@@ -13909,3 +13909,62 @@ Workbench 测试新增覆盖：
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
 - `npm run test -- --run`：通过，15 个测试文件、118 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 167. UI 主流程能力块：日志详情回看刷新结果
+
+本阶段属于 UI 主流程。
+
+### 167.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 167.2 EventLogPanel 输入变化
+
+`EventLogPanel` 新增输入：
+
+```text
+actionEditResultContext
+```
+
+该输入来自 `Workbench.vue` 的既有派生上下文，用于判断当前 runtime-focus 编辑是否已经产生刷新后的 runtime state point。
+
+### 167.3 EventLogPanel 事件变化
+
+`EventLogPanel` 新增事件：
+
+```text
+return-runtime-result
+```
+
+`Workbench.vue` 接线为：
+
+```text
+return-runtime-result -> returnRuntimeResultFromProperties()
+```
+
+该事件复用既有回看逻辑，不新增平行状态。
+
+### 167.4 DOM 变化
+
+事件日志详情新增回看按钮：
+
+```html
+data-testid="workbench-runtime-sim-log-return-result"
+data-action-id
+data-origin-state-point-id
+data-return-status
+data-state-point-id
+```
+
+当日志详情对应的动作处于 `runtime-focus` 编辑来源，并且 `actionEditResultContext.runtimeStatePointId` 可用时显示。
+
+### 167.5 验证
+
+Workbench 测试新增覆盖：
+
+- 从模拟日志详情点击 `定位动作` 后，编辑焦点进入 `runtime-focus`。
+- 修改开始时间后，日志详情回看按钮携带来源 state point 与刷新后 state point。
+- 点击日志详情回看按钮后，`RuntimeSelectedDetailPanel` 和模拟日志导航同步到刷新后的 state point。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
+- `npm run test -- --run`：通过，15 个测试文件、118 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
