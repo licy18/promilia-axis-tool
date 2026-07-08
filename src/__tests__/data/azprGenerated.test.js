@@ -345,6 +345,9 @@ describe('generated AzPr data', () => {
     const mayoiAttack = evidence.currentSkillControlEvidence.find(
       item => item.skillId === 10900101
     );
+    const hanyouyouAttack = evidence.currentSkillControlEvidence.find(
+      item => item.skillId === 10100301
+    );
     const hanyouyouUltimate = evidence.currentSkillControlEvidence.find(
       item => item.skillId === 10100313
     );
@@ -384,14 +387,14 @@ describe('generated AzPr data', () => {
       resourceMapUnmatchedElementBaseReferenceSkills: 0,
       scriptTypeCandidateSkills: 8,
       elementTypeCatalogCandidates: 2,
-      externalElementObjectResolvedSkills: 14,
-      externalElementObjectResolvedRefs: 89,
+      externalElementObjectResolvedSkills: 18,
+      externalElementObjectResolvedRefs: 97,
       externalElementObjectUnresolvedRefs: 0,
-      damageElementFieldMappedSkills: 13,
-      damageElementFieldMappedObjects: 31,
-      hpDamageFieldCandidateRefs: 31,
-      toughnessDamageFieldCandidateRefs: 31,
-      selfEnergyFieldCandidateRefs: 31,
+      damageElementFieldMappedSkills: 15,
+      damageElementFieldMappedObjects: 33,
+      hpDamageFieldCandidateRefs: 33,
+      toughnessDamageFieldCandidateRefs: 33,
+      selfEnergyFieldCandidateRefs: 33,
       damageElementSkillLogicBridgeMatches: 15,
       relationStatus: 'skill-control-assets-found-in-azpr-extractor',
     });
@@ -418,13 +421,13 @@ describe('generated AzPr data', () => {
     expect(evidence.externalElementObjectEvidence).toMatchObject({
       status: 'element-objects-resolved',
       summary: {
-        skillCount: 14,
-        resolvedSkills: 14,
-        requestedPathIds: 89,
-        resolvedPathIds: 89,
+        skillCount: 18,
+        resolvedSkills: 18,
+        requestedPathIds: 97,
+        resolvedPathIds: 97,
         unresolvedPathIds: 0,
         sourceSkillCount: 9,
-        targetSkillCount: 5,
+        targetSkillCount: 9,
       },
       skills: expect.arrayContaining([
         expect.objectContaining({
@@ -478,22 +481,22 @@ describe('generated AzPr data', () => {
     expect(evidence.damageElementFieldMappingEvidence).toMatchObject({
       status: 'damage-element-field-candidates-found',
       summary: {
-        skillCount: 14,
-        mappedSkills: 13,
-        damageElementObjects: 31,
-        hpDamageCandidateRefs: 31,
-        toughnessDamageCandidateRefs: 31,
-        selfEnergyCandidateRefs: 31,
+        skillCount: 18,
+        mappedSkills: 15,
+        damageElementObjects: 33,
+        hpDamageCandidateRefs: 33,
+        toughnessDamageCandidateRefs: 33,
+        selfEnergyCandidateRefs: 33,
         skillsubElementBridgeMatchedObjects: 15,
         skillsubElementBridgeMissingObjects: 3,
         skillsubElementBridgeLevelRows: 180,
         valueParamFormulaSlotDirectMatchObjects: 15,
         valueParamFormulaSlotOverrideCandidateObjects: 15,
         valueParamFormulaSlotUnresolvedObjects: 15,
-        formulaFunctionCheckedObjects: 31,
-        formulaFunctionDirectElementFormulaObjects: 31,
-        formulaFunctionRefs: 62,
-        formulaFunctionMatchedRefs: 62,
+        formulaFunctionCheckedObjects: 33,
+        formulaFunctionDirectElementFormulaObjects: 33,
+        formulaFunctionRefs: 66,
+        formulaFunctionMatchedRefs: 66,
         formulaFunctionUnmatchedRefs: 0,
         formulaFunctionUniqueIds: [1, 2, 101, 107205],
       },
@@ -786,6 +789,61 @@ describe('generated AzPr data', () => {
         animationStateControlCount: 2,
       },
     });
+    const hanyouyouHitChain =
+      hanyouyouAttack.stateTimingEvidence.eventBridgeTargetSkillControlEvidence
+        .normalAttackHitChainCandidate;
+    expect(hanyouyouHitChain).toMatchObject({
+      status: 'normal-attack-hit-chain-candidates-found-unconfirmed',
+      candidateHitGroupCount: 4,
+      coverageStatus: 'description-hit-count-missing',
+      damageElementFieldMappingStatus:
+        'partial-hit-groups-have-damage-element-field-mappings',
+      damageElementMappedHitGroupCount: 2,
+      damageElementFieldMappingCount: 2,
+      damageElementElementConfigIds: [101003037, 101003046],
+    });
+    expect(hanyouyouHitChain.hitGroups).toEqual([
+      expect.objectContaining({
+        hitIndex: 2,
+        skillId: 10100302,
+        candidateSource: 'event-bridge-child-skill-control-resource-map',
+        hpTimelineCandidateCount: 0,
+        resourceMapElementRefCount: 2,
+        damageElementFieldMappingStatus: 'damage-element-field-mappings-found',
+        damageElementFieldMappingCount: 1,
+        damageElementElementConfigIds: [101003046],
+      }),
+      expect.objectContaining({
+        hitIndex: 3,
+        skillId: 10100303,
+        candidateSource: 'event-bridge-child-skill-control-resource-map',
+        hpTimelineCandidateCount: 0,
+        resourceMapElementRefCount: 1,
+        damageElementFieldMappingStatus: 'damage-element-field-mappings-found',
+        damageElementFieldMappingCount: 1,
+        damageElementElementConfigIds: [101003037],
+      }),
+      expect.objectContaining({
+        hitIndex: 4,
+        skillId: 10100304,
+        candidateSource: 'event-bridge-child-skill-control-resource-map',
+        hpTimelineCandidateCount: 0,
+        resourceMapElementRefCount: 2,
+        damageElementFieldMappingStatus:
+          'resource-map-element-refs-found-damage-element-fields-missing',
+        damageElementFieldMappingCount: 0,
+      }),
+      expect.objectContaining({
+        hitIndex: 5,
+        skillId: 10100305,
+        candidateSource: 'event-bridge-child-skill-control-resource-map',
+        hpTimelineCandidateCount: 0,
+        resourceMapElementRefCount: 3,
+        damageElementFieldMappingStatus:
+          'resource-map-element-refs-found-damage-element-fields-missing',
+        damageElementFieldMappingCount: 0,
+      }),
+    ]);
     expect(evidence.damageElementFieldMappingEvidence.skills).toEqual(
       expect.arrayContaining([
         expect.objectContaining({

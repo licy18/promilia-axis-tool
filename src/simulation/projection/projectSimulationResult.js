@@ -5790,6 +5790,11 @@ function createHitCandidatePreview({
   const actionLevelElementMatchCount = mappings.filter(mapping =>
     actionLevelMatchedElementIds.includes(Number(mapping.elementConfigId))
   ).length;
+  const resourceMapElementRefCount =
+    numberOrNull(hitGroup.resourceMapElementRefCount) ?? 0;
+  const hasResourceMapElementRefs =
+    resourceMapElementRefCount > 0 ||
+    (numberOrNull(hitGroup.resourceMapMatchedElementBaseRefCount) ?? 0) > 0;
 
   return {
     sourceKind: 'azpr-normal-attack-per-hit-damage-element-candidate',
@@ -5831,8 +5836,11 @@ function createHitCandidatePreview({
     resolvedBehaviorCount: numberOrNull(hitGroup.resolvedBehaviorCount) ?? 0,
     externalElementBaseRefCount:
       numberOrNull(hitGroup.externalElementBaseRefCount) ?? 0,
+    resourceMapElementRefCount,
     resourceMapMatchedElementBaseRefCount:
       numberOrNull(hitGroup.resourceMapMatchedElementBaseRefCount) ?? 0,
+    resourceMapUnmatchedElementBaseRefCount:
+      numberOrNull(hitGroup.resourceMapUnmatchedElementBaseRefCount) ?? 0,
     damageElementFieldMappingStatus:
       hitGroup.damageElementFieldMappingStatus ?? null,
     damageElementFieldMappingCount: mappings.length,
@@ -5866,7 +5874,9 @@ function createHitCandidatePreview({
     status:
       mappings.length > 0
         ? 'per-hit-candidate-fields-found-formula-unapplied'
-        : 'per-hit-candidate-fields-missing',
+        : hasResourceMapElementRefs
+          ? 'per-hit-resource-map-elements-found-fields-missing'
+          : 'per-hit-candidate-fields-missing',
     unresolved: [
       'damage-element-execution-order',
       'multi-candidate-combination-rule',

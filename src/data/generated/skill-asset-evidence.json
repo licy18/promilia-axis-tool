@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-08T01:21:21.128Z",
+  "generatedAt": "2026-07-08T01:55:04.318Z",
   "sourceKind": "azpr-skill-asset-evidence-index",
   "source": {
     "sourceRoot": "C:/PC2/Codex/AzPr",
@@ -101,13 +101,13 @@
       "compactManifest": "C:/Codex/AzPr Extractor/AzurPromilia_Data/StreamingAssets/.res/default_package"
     },
     "summary": {
-      "skillCount": 14,
-      "resolvedSkills": 14,
-      "requestedPathIds": 89,
-      "resolvedPathIds": 89,
+      "skillCount": 18,
+      "resolvedSkills": 18,
+      "requestedPathIds": 97,
+      "resolvedPathIds": 97,
       "unresolvedPathIds": 0,
       "sourceSkillCount": 9,
-      "targetSkillCount": 5
+      "targetSkillCount": 9
     },
     "skills": [
       {
@@ -422,6 +422,1140 @@
               "recoverInterval": 9999
             },
             "timingFields": null
+          }
+        ]
+      },
+      {
+        "skillId": 10100302,
+        "status": "element-objects-resolved",
+        "skillControlLogicalName": "d_assets_resourcesassets_config_battle_skilllist_skill_control_10100302",
+        "skillControlBundle": {
+          "bundleIndex": 75064,
+          "logicalName": "d_assets_resourcesassets_config_battle_skilllist_skill_control_10100302",
+          "fileName": "obtlq5jqayrucysv3keog",
+          "packName": "ypm6fu6ccxdszvz7zhuinq",
+          "packResId": 5306,
+          "fileOffset": 786768,
+          "fileSize": 14129
+        },
+        "elementAssetsBundle": {
+          "bundleIndex": 74227,
+          "logicalName": "d_assets_resourcesassets_config_battle_element_assets",
+          "fileName": "zuytda0aqqi7doe9jcbqoa",
+          "packName": "fwtvymrpqatpf4ytyfvwqg",
+          "packResId": 1903,
+          "fileOffset": 0,
+          "fileSize": 2614465
+        },
+        "fileId": 2,
+        "requestedPathIds": [
+          "-4373351994372761995",
+          "7736637370449973165"
+        ],
+        "resolvedPathIds": [
+          "-4373351994372761995",
+          "7736637370449973165"
+        ],
+        "unresolvedPathIds": [],
+        "scriptClassCounts": {
+          "TFxElementParams": 1,
+          "TDamageElementParams": 1
+        },
+        "objects": [
+          {
+            "pathId": "-4373351994372761995",
+            "status": "resolved-in-element-assets-bundle",
+            "objectType": "MonoBehaviour",
+            "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003025.asset",
+            "scriptPathId": "8877289764366981625",
+            "scriptTypeCandidate": {
+              "status": "field-signature-matched",
+              "confidence": "medium",
+              "scriptPathId": "8877289764366981625",
+              "namespace": "Lens.Gameplay.Modules.BigWorld.Config",
+              "className": "TFxElementParams",
+              "typeDefIndex": 9729,
+              "label": "fx",
+              "role": "fx-camera-shake",
+              "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+              "sourceLineRange": "dump.cs:395503-395627",
+              "matchedFields": [
+                "fxElementType",
+                "shakeType",
+                "floatParam1",
+                "intParam1"
+              ]
+            },
+            "mName": "ast_101003025",
+            "elementConfigId": 101003025,
+            "elementName": "�չ� ��������",
+            "describe": "Y��",
+            "types": [
+              0
+            ],
+            "combineType": 3,
+            "baseIntParams": [
+              1,
+              5,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              2500,
+              120000,
+              0,
+              0,
+              0,
+              0,
+              2,
+              50,
+              0,
+              0,
+              0,
+              65536,
+              65536,
+              65536,
+              0,
+              19660,
+              0,
+              0,
+              42598,
+              65536,
+              0,
+              0
+            ],
+            "functionParams": [
+              80,
+              0,
+              0,
+              0,
+              0,
+              0,
+              10000,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "formulaParams": {
+              "function_1": 1,
+              "function_2": 5,
+              "formulaParamValues": [
+                80,
+                0,
+                0,
+                0,
+                0,
+                0,
+                10000,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "mediaPackNames": [],
+            "damageFields": null,
+            "timingFields": {
+              "fxElementType": 0,
+              "shakeType": 2,
+              "floatParam1": 16384,
+              "floatParam2": 786432,
+              "floatParam3": 65536,
+              "floatParam4": 65536,
+              "intParam1": 50,
+              "intParam2": 0
+            }
+          },
+          {
+            "pathId": "7736637370449973165",
+            "status": "resolved-in-element-assets-bundle",
+            "objectType": "MonoBehaviour",
+            "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003046.asset",
+            "scriptPathId": "3156599909451817364",
+            "scriptTypeCandidate": {
+              "status": "field-signature-matched",
+              "confidence": "medium",
+              "scriptPathId": "3156599909451817364",
+              "namespace": "Lens.Gameplay.Modules.BigWorld.Config",
+              "className": "TDamageElementParams",
+              "typeDefIndex": 9720,
+              "label": "damage",
+              "role": "hp-damage-and-break-sp",
+              "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+              "sourceLineRange": "dump.cs:395210-395289",
+              "matchedFields": [
+                "damageType",
+                "damageElementalType",
+                "weakBreakDamageRate",
+                "recoverSP",
+                "petRecoverSP",
+                "recoverInterval"
+              ]
+            },
+            "mName": "ast_101003046",
+            "elementConfigId": 101003046,
+            "elementName": "�չ�2 �ӵ�hit1~2",
+            "describe": "�ӵ��˺�",
+            "types": [
+              22,
+              31,
+              300
+            ],
+            "combineType": 1,
+            "baseIntParams": [
+              1,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "functionParams": [
+              1000,
+              1800,
+              0,
+              0,
+              0,
+              6400,
+              10000,
+              10000,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "formulaParams": {
+              "function_1": 1,
+              "function_2": 2,
+              "formulaParamValues": [
+                1000,
+                1800,
+                0,
+                0,
+                0,
+                6400,
+                10000,
+                10000,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "mediaPackNames": [
+              "11_101003_016"
+            ],
+            "damageFields": {
+              "damageSourceType": 0,
+              "damageType": 2,
+              "damageElementalType": 1,
+              "weakBreakDamageRate": 7000,
+              "damageMinimunValueType": 0,
+              "minimunHpValue": 0,
+              "burstId": 1,
+              "armerPenetration": -1,
+              "magicPenetration": 10000,
+              "elementCalFactor": 10000,
+              "physicalRatio": 10000,
+              "magicRatio": 0,
+              "hitType": 0,
+              "knockBackId": 1,
+              "knockBackForce": 2,
+              "amp": 0,
+              "interruptPriority": 15,
+              "useOneBreak": 0,
+              "recoverSP": 6299,
+              "petRecoverSP": 24700,
+              "recoverInterval": 9999
+            },
+            "timingFields": null
+          }
+        ]
+      },
+      {
+        "skillId": 10100303,
+        "status": "element-objects-resolved",
+        "skillControlLogicalName": "d_assets_resourcesassets_config_battle_skilllist_skill_control_10100303",
+        "skillControlBundle": {
+          "bundleIndex": 75065,
+          "logicalName": "d_assets_resourcesassets_config_battle_skilllist_skill_control_10100303",
+          "fileName": "qlziyx6jiu3rpteuynkgzg",
+          "packName": "ypm6fu6ccxdszvz7zhuinq",
+          "packResId": 5306,
+          "fileOffset": 800897,
+          "fileSize": 13082
+        },
+        "elementAssetsBundle": {
+          "bundleIndex": 74227,
+          "logicalName": "d_assets_resourcesassets_config_battle_element_assets",
+          "fileName": "zuytda0aqqi7doe9jcbqoa",
+          "packName": "fwtvymrpqatpf4ytyfvwqg",
+          "packResId": 1903,
+          "fileOffset": 0,
+          "fileSize": 2614465
+        },
+        "fileId": 2,
+        "requestedPathIds": [
+          "-668735999631003170"
+        ],
+        "resolvedPathIds": [
+          "-668735999631003170"
+        ],
+        "unresolvedPathIds": [],
+        "scriptClassCounts": {
+          "TDamageElementParams": 1
+        },
+        "objects": [
+          {
+            "pathId": "-668735999631003170",
+            "status": "resolved-in-element-assets-bundle",
+            "objectType": "MonoBehaviour",
+            "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003037.asset",
+            "scriptPathId": "3156599909451817364",
+            "scriptTypeCandidate": {
+              "status": "field-signature-matched",
+              "confidence": "medium",
+              "scriptPathId": "3156599909451817364",
+              "namespace": "Lens.Gameplay.Modules.BigWorld.Config",
+              "className": "TDamageElementParams",
+              "typeDefIndex": 9720,
+              "label": "damage",
+              "role": "hp-damage-and-break-sp",
+              "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+              "sourceLineRange": "dump.cs:395210-395289",
+              "matchedFields": [
+                "damageType",
+                "damageElementalType",
+                "weakBreakDamageRate",
+                "recoverSP",
+                "petRecoverSP",
+                "recoverInterval"
+              ]
+            },
+            "mName": "ast_101003037",
+            "elementConfigId": 101003037,
+            "elementName": "�չ�3 �ӵ�hit1~3",
+            "describe": "�ӵ��˺�",
+            "types": [
+              22,
+              31,
+              300
+            ],
+            "combineType": 1,
+            "baseIntParams": [
+              1,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "functionParams": [
+              5000,
+              1800,
+              0,
+              0,
+              0,
+              9600,
+              10000,
+              10000,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "formulaParams": {
+              "function_1": 1,
+              "function_2": 2,
+              "formulaParamValues": [
+                5000,
+                1800,
+                0,
+                0,
+                0,
+                9600,
+                10000,
+                10000,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "mediaPackNames": [
+              "11_101003_016"
+            ],
+            "damageFields": {
+              "damageSourceType": 0,
+              "damageType": 2,
+              "damageElementalType": 1,
+              "weakBreakDamageRate": 7000,
+              "damageMinimunValueType": 0,
+              "minimunHpValue": 0,
+              "burstId": 1,
+              "armerPenetration": -1,
+              "magicPenetration": 10000,
+              "elementCalFactor": 10000,
+              "physicalRatio": 10000,
+              "magicRatio": 0,
+              "hitType": 0,
+              "knockBackId": 1,
+              "knockBackForce": 2,
+              "amp": 0,
+              "interruptPriority": 15,
+              "useOneBreak": 0,
+              "recoverSP": 3600,
+              "petRecoverSP": 13899,
+              "recoverInterval": 9999
+            },
+            "timingFields": null
+          }
+        ]
+      },
+      {
+        "skillId": 10100304,
+        "status": "element-objects-resolved",
+        "skillControlLogicalName": "d_assets_resourcesassets_config_battle_skilllist_skill_control_10100304",
+        "skillControlBundle": {
+          "bundleIndex": 75066,
+          "logicalName": "d_assets_resourcesassets_config_battle_skilllist_skill_control_10100304",
+          "fileName": "fkdir1jgllezrdebnv5w",
+          "packName": "ypm6fu6ccxdszvz7zhuinq",
+          "packResId": 5306,
+          "fileOffset": 813979,
+          "fileSize": 12898
+        },
+        "elementAssetsBundle": {
+          "bundleIndex": 74227,
+          "logicalName": "d_assets_resourcesassets_config_battle_element_assets",
+          "fileName": "zuytda0aqqi7doe9jcbqoa",
+          "packName": "fwtvymrpqatpf4ytyfvwqg",
+          "packResId": 1903,
+          "fileOffset": 0,
+          "fileSize": 2614465
+        },
+        "fileId": 2,
+        "requestedPathIds": [
+          "-4280404759535193379",
+          "1572718271109451571"
+        ],
+        "resolvedPathIds": [
+          "-4280404759535193379",
+          "1572718271109451571"
+        ],
+        "unresolvedPathIds": [],
+        "scriptClassCounts": {
+          "TFxElementParams": 1,
+          "unknown": 1
+        },
+        "objects": [
+          {
+            "pathId": "-4280404759535193379",
+            "status": "resolved-in-element-assets-bundle",
+            "objectType": "MonoBehaviour",
+            "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003076.asset",
+            "scriptPathId": "8877289764366981625",
+            "scriptTypeCandidate": {
+              "status": "field-signature-matched",
+              "confidence": "medium",
+              "scriptPathId": "8877289764366981625",
+              "namespace": "Lens.Gameplay.Modules.BigWorld.Config",
+              "className": "TFxElementParams",
+              "typeDefIndex": 9729,
+              "label": "fx",
+              "role": "fx-camera-shake",
+              "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+              "sourceLineRange": "dump.cs:395503-395627",
+              "matchedFields": [
+                "fxElementType",
+                "shakeType",
+                "floatParam1",
+                "intParam1"
+              ]
+            },
+            "mName": "ast_101003076",
+            "elementConfigId": 101003076,
+            "elementName": "�ػ�1 ��������",
+            "describe": "��������",
+            "types": [
+              0
+            ],
+            "combineType": 1,
+            "baseIntParams": [
+              1,
+              5,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              5000,
+              5000,
+              0,
+              0,
+              0,
+              0,
+              1,
+              8,
+              196608,
+              0,
+              0,
+              983040,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "functionParams": [
+              200,
+              0,
+              0,
+              0,
+              0,
+              0,
+              10000,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "formulaParams": {
+              "function_1": 1,
+              "function_2": 5,
+              "formulaParamValues": [
+                200,
+                0,
+                0,
+                0,
+                0,
+                0,
+                10000,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "mediaPackNames": [],
+            "damageFields": null,
+            "timingFields": {
+              "fxElementType": 0,
+              "shakeType": 2,
+              "floatParam1": 32768,
+              "floatParam2": 786432,
+              "floatParam3": 65536,
+              "floatParam4": 65536,
+              "intParam1": 100,
+              "intParam2": 0
+            }
+          },
+          {
+            "pathId": "1572718271109451571",
+            "status": "resolved-in-element-assets-bundle",
+            "objectType": "MonoBehaviour",
+            "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003180.asset",
+            "scriptPathId": "5576338162890961044",
+            "scriptTypeCandidate": null,
+            "mName": "ast_101003180",
+            "elementConfigId": 101003180,
+            "elementName": "�չ�4 ը�����汬ը",
+            "describe": "�չ�4 3hit��ը",
+            "types": [
+              0
+            ],
+            "combineType": 1,
+            "baseIntParams": [
+              1,
+              3
+            ],
+            "functionParams": [
+              10000,
+              0,
+              0,
+              0,
+              0,
+              0,
+              10000,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "formulaParams": {
+              "function_1": 1,
+              "function_2": 3,
+              "formulaParamValues": [
+                10000,
+                0,
+                0,
+                0,
+                0,
+                0,
+                10000,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "mediaPackNames": [],
+            "damageFields": null,
+            "timingFields": null
+          }
+        ]
+      },
+      {
+        "skillId": 10100305,
+        "status": "element-objects-resolved",
+        "skillControlLogicalName": "d_assets_resourcesassets_config_battle_skilllist_skill_control_10100305",
+        "skillControlBundle": {
+          "bundleIndex": 75067,
+          "logicalName": "d_assets_resourcesassets_config_battle_skilllist_skill_control_10100305",
+          "fileName": "rwfrychy6lyatzk369lzva",
+          "packName": "ypm6fu6ccxdszvz7zhuinq",
+          "packResId": 5306,
+          "fileOffset": 826877,
+          "fileSize": 13675
+        },
+        "elementAssetsBundle": {
+          "bundleIndex": 74227,
+          "logicalName": "d_assets_resourcesassets_config_battle_element_assets",
+          "fileName": "zuytda0aqqi7doe9jcbqoa",
+          "packName": "fwtvymrpqatpf4ytyfvwqg",
+          "packResId": 1903,
+          "fileOffset": 0,
+          "fileSize": 2614465
+        },
+        "fileId": 2,
+        "requestedPathIds": [
+          "-3406483301161857991",
+          "-1285658850712902661",
+          "5614799294546611630"
+        ],
+        "resolvedPathIds": [
+          "-3406483301161857991",
+          "-1285658850712902661",
+          "5614799294546611630"
+        ],
+        "unresolvedPathIds": [],
+        "scriptClassCounts": {
+          "TFreezeFrameElementParams": 1,
+          "unknown": 1,
+          "TFxElementParams": 1
+        },
+        "objects": [
+          {
+            "pathId": "-3406483301161857991",
+            "status": "resolved-in-element-assets-bundle",
+            "objectType": "MonoBehaviour",
+            "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003101.asset",
+            "scriptPathId": "7293914887559091286",
+            "scriptTypeCandidate": {
+              "status": "field-signature-matched",
+              "confidence": "medium",
+              "scriptPathId": "7293914887559091286",
+              "namespace": "Lens.Gameplay.Modules.BigWorld.Config",
+              "className": "TFreezeFrameElementParams",
+              "typeDefIndex": 9728,
+              "label": "freeze-frame",
+              "role": "hit-stop",
+              "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+              "sourceLineRange": "dump.cs:395456-395501",
+              "matchedFields": [
+                "timeScaleCurve",
+                "freezeFrameCount",
+                "freezeSource",
+                "freezeTarget"
+              ]
+            },
+            "mName": "ast_101003101",
+            "elementConfigId": 101003101,
+            "elementName": "�ػ���2�ζ���֡",
+            "describe": "����֡",
+            "types": [
+              0
+            ],
+            "combineType": 1,
+            "baseIntParams": [
+              1,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "functionParams": [
+              10000,
+              0,
+              0,
+              0,
+              0,
+              0,
+              10000,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "formulaParams": {
+              "function_1": 1,
+              "function_2": 3,
+              "formulaParamValues": [
+                10000,
+                0,
+                0,
+                0,
+                0,
+                0,
+                10000,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "mediaPackNames": [],
+            "damageFields": null,
+            "timingFields": {
+              "freezeFrameCount": 6,
+              "freezeSource": 1,
+              "freezeTarget": 0,
+              "freezeEffect": 0,
+              "freezeBullet": 0,
+              "freezeHitEffect": 0
+            }
+          },
+          {
+            "pathId": "-1285658850712902661",
+            "status": "resolved-in-element-assets-bundle",
+            "objectType": "MonoBehaviour",
+            "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003181.asset",
+            "scriptPathId": "5576338162890961044",
+            "scriptTypeCandidate": null,
+            "mName": "ast_101003181",
+            "elementConfigId": 101003181,
+            "elementName": "�չ�5 ը�����汬ը",
+            "describe": "��Ŀ��ʱ�������item",
+            "types": [
+              0
+            ],
+            "combineType": 1,
+            "baseIntParams": [
+              1,
+              3
+            ],
+            "functionParams": [
+              10000,
+              101003079,
+              2000,
+              0,
+              0,
+              0,
+              10000,
+              0,
+              0,
+              0,
+              0,
+              0,
+              101003079,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "formulaParams": {
+              "function_1": 1,
+              "function_2": 3,
+              "formulaParamValues": [
+                10000,
+                101003079,
+                2000,
+                0,
+                0,
+                0,
+                10000,
+                0,
+                0,
+                0,
+                0,
+                0,
+                101003079,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "mediaPackNames": [],
+            "damageFields": null,
+            "timingFields": null
+          },
+          {
+            "pathId": "5614799294546611630",
+            "status": "resolved-in-element-assets-bundle",
+            "objectType": "MonoBehaviour",
+            "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003038.asset",
+            "scriptPathId": "8877289764366981625",
+            "scriptTypeCandidate": {
+              "status": "field-signature-matched",
+              "confidence": "medium",
+              "scriptPathId": "8877289764366981625",
+              "namespace": "Lens.Gameplay.Modules.BigWorld.Config",
+              "className": "TFxElementParams",
+              "typeDefIndex": 9729,
+              "label": "fx",
+              "role": "fx-camera-shake",
+              "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+              "sourceLineRange": "dump.cs:395503-395627",
+              "matchedFields": [
+                "fxElementType",
+                "shakeType",
+                "floatParam1",
+                "intParam1"
+              ]
+            },
+            "mName": "ast_101003038",
+            "elementConfigId": 101003038,
+            "elementName": "�ػ�2������",
+            "describe": "Y",
+            "types": [
+              0
+            ],
+            "combineType": 3,
+            "baseIntParams": [
+              1,
+              5,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              5999,
+              120000,
+              0,
+              0,
+              0,
+              0,
+              2,
+              150,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              -52428,
+              0,
+              0,
+              65536,
+              0,
+              0,
+              0
+            ],
+            "functionParams": [
+              200,
+              0,
+              0,
+              0,
+              0,
+              0,
+              10000,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "formulaParams": {
+              "function_1": 1,
+              "function_2": 5,
+              "formulaParamValues": [
+                200,
+                0,
+                0,
+                0,
+                0,
+                0,
+                10000,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "mediaPackNames": [],
+            "damageFields": null,
+            "timingFields": {
+              "fxElementType": 0,
+              "shakeType": 2,
+              "floatParam1": 39288,
+              "floatParam2": 786432,
+              "floatParam3": 65536,
+              "floatParam4": 65536,
+              "intParam1": 150,
+              "intParam2": 0
+            }
           }
         ]
       },
@@ -11451,7 +12585,7 @@
   },
   "damageElementFieldMappingEvidence": {
     "schemaVersion": 1,
-    "generatedAt": "2026-07-08T01:21:21.128Z",
+    "generatedAt": "2026-07-08T01:55:04.318Z",
     "sourceKind": "azpr-damage-element-field-mapping-evidence",
     "status": "damage-element-field-candidates-found",
     "source": {
@@ -11463,24 +12597,24 @@
       "note": "Field mappings are source evidence for the HP, toughness and self-energy chains; they are not final combat formulas yet."
     },
     "summary": {
-      "skillCount": 14,
-      "mappedSkills": 13,
-      "damageElementObjects": 31,
-      "hpDamageCandidateRefs": 31,
-      "toughnessDamageCandidateRefs": 31,
-      "selfEnergyCandidateRefs": 31,
+      "skillCount": 18,
+      "mappedSkills": 15,
+      "damageElementObjects": 33,
+      "hpDamageCandidateRefs": 33,
+      "toughnessDamageCandidateRefs": 33,
+      "selfEnergyCandidateRefs": 33,
       "skillsubElementBridgeMatchedObjects": 15,
       "skillsubElementBridgeMissingObjects": 3,
-      "relatedSkillsubElementBridgeFoundObjects": 12,
+      "relatedSkillsubElementBridgeFoundObjects": 14,
       "skillsubElementBridgeLevelRows": 180,
-      "relatedSkillsubElementBridgeLevelRows": 144,
+      "relatedSkillsubElementBridgeLevelRows": 168,
       "valueParamFormulaSlotDirectMatchObjects": 15,
       "valueParamFormulaSlotOverrideCandidateObjects": 15,
       "valueParamFormulaSlotUnresolvedObjects": 15,
-      "formulaFunctionCheckedObjects": 31,
-      "formulaFunctionDirectElementFormulaObjects": 31,
-      "formulaFunctionRefs": 62,
-      "formulaFunctionMatchedRefs": 62,
+      "formulaFunctionCheckedObjects": 33,
+      "formulaFunctionDirectElementFormulaObjects": 33,
+      "formulaFunctionRefs": 66,
+      "formulaFunctionMatchedRefs": 66,
       "formulaFunctionUnmatchedRefs": 0,
       "formulaFunctionUniqueIds": [
         1,
@@ -11948,6 +13082,1959 @@
                   }
                 ],
                 "note": "skillsub_ele_value.valueParam can bridge element IDs to level-scaling rows, but slot overrides/scaling must be validated before final damage math."
+              }
+            },
+            "unresolved": [
+              "formula-param-scale",
+              "target-defense-and-resistance-chain",
+              "hit-count-and-trigger-frame",
+              "toughness-unit-scale",
+              "self-energy-owner-and-share-rule"
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 10100302,
+        "status": "damage-element-field-candidates-found",
+        "damageElementCount": 1,
+        "scriptClassCounts": {
+          "TFxElementParams": 1,
+          "TDamageElementParams": 1
+        },
+        "fieldMappings": [
+          {
+            "elementConfigId": 101003046,
+            "pathId": "7736637370449973165",
+            "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003046.asset",
+            "elementName": "�չ�2 �ӵ�hit1~2",
+            "describe": "�ӵ��˺�",
+            "mediaPackNames": [
+              "11_101003_016"
+            ],
+            "scriptTypeCandidate": {
+              "status": "field-signature-matched",
+              "confidence": "medium",
+              "scriptPathId": "3156599909451817364",
+              "namespace": "Lens.Gameplay.Modules.BigWorld.Config",
+              "className": "TDamageElementParams",
+              "typeDefIndex": 9720,
+              "label": "damage",
+              "role": "hp-damage-and-break-sp",
+              "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+              "sourceLineRange": "dump.cs:395210-395289",
+              "matchedFields": [
+                "damageType",
+                "damageElementalType",
+                "weakBreakDamageRate",
+                "recoverSP",
+                "petRecoverSP",
+                "recoverInterval"
+              ]
+            },
+            "hpDamage": {
+              "status": "candidate-from-TDamageElementParams-formulaParams",
+              "fieldSources": [
+                "formulaParams.function_1",
+                "formulaParams.function_2",
+                "formulaParams.formulaParamValues",
+                "damageFields.damageElementalType",
+                "damageFields.physicalRatio",
+                "damageFields.magicRatio",
+                "damageFields.elementCalFactor",
+                "damageFields.amp"
+              ],
+              "formulaFunctionIds": {
+                "function_1": 1,
+                "function_2": 2
+              },
+              "formulaFunctionEvidence": {
+                "status": "direct-element-formula-id-candidates-found",
+                "relationStatus": "function-id-matches-element_formula-id-candidate",
+                "applied": false,
+                "source": {
+                  "elementFormulaTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json",
+                  "il2cppDump": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                  "note": "formulaParams.function_1/function_2 are matched to element_formula.id as evidence candidates only; DamageElement execution order and final formula application are still unconfirmed."
+                },
+                "functionRefs": [
+                  {
+                    "field": "function_1",
+                    "functionId": 1,
+                    "status": "element_formula-row-found",
+                    "relationStatus": "function-id-matches-element_formula-id-candidate",
+                    "elementFormulaRow": {
+                      "id": 1,
+                      "functionOutput": "G/10000",
+                      "variables": [
+                        "G"
+                      ],
+                      "source": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json"
+                    },
+                    "variableInputs": [
+                      {
+                        "variable": "G",
+                        "paramId": 7,
+                        "formulaParamSlot": 7,
+                        "formulaParamValue": 10000,
+                        "slotStatus": "formula-param-slot-found"
+                      }
+                    ],
+                    "applied": false
+                  },
+                  {
+                    "field": "function_2",
+                    "functionId": 2,
+                    "status": "element_formula-row-found",
+                    "relationStatus": "function-id-matches-element_formula-id-candidate",
+                    "elementFormulaRow": {
+                      "id": 2,
+                      "functionOutput": "(self.ATK[0]*A)/10000",
+                      "variables": [
+                        "A"
+                      ],
+                      "source": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json"
+                    },
+                    "variableInputs": [
+                      {
+                        "variable": "A",
+                        "paramId": 1,
+                        "formulaParamSlot": 1,
+                        "formulaParamValue": 1000,
+                        "slotStatus": "formula-param-slot-found"
+                      }
+                    ],
+                    "applied": false
+                  }
+                ],
+                "matchedFunctionIds": [
+                  1,
+                  2
+                ],
+                "unmatchedFunctionIds": [],
+                "runtimeEvidence": [
+                  {
+                    "kind": "il2cpp-config-field",
+                    "className": "FormulaParams",
+                    "sourceLineRange": "dump.cs:394316,394437-394439",
+                    "fields": [
+                      "function_1",
+                      "function_2",
+                      "formulaParamValues"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-runtime-method",
+                    "className": "DamageElement",
+                    "sourceLineRange": "dump.cs:274573-274708",
+                    "methods": [
+                      "ExecuteEffect",
+                      "Execute",
+                      "BaseExecute",
+                      "Parse"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-runtime-method",
+                    "className": "SkillElementInjector",
+                    "sourceLineRange": "dump.cs:272567-272576",
+                    "methods": [
+                      "OnExecuteDamageElement",
+                      "ExecuteDamageElement"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-config-entry",
+                    "className": "BattleConfigManager",
+                    "sourceLineRange": "dump.cs:314761-314807",
+                    "properties": [
+                      "elementFormulaConfig"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-config-table",
+                    "className": "ElementFormulaData",
+                    "sourceLineRange": "dump.cs:396498",
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-config-row",
+                    "className": "TDElementFormula",
+                    "sourceLineRange": "dump.cs:634105",
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  }
+                ],
+                "calculationBoundary": "These formula rows are not applied to damage yet; HP damage still needs execution order, character panel binding, enemy defense/resistance, target state and hit frame validation."
+              },
+              "formulaSlotCandidates": [
+                {
+                  "slot": 1,
+                  "variable": "A",
+                  "rawValue": 1000,
+                  "roleStatus": "unconfirmed-formula-input"
+                },
+                {
+                  "slot": 2,
+                  "variable": "B",
+                  "rawValue": 1800,
+                  "roleStatus": "unconfirmed-formula-input"
+                },
+                {
+                  "slot": 6,
+                  "variable": "F",
+                  "rawValue": 6400,
+                  "roleStatus": "unconfirmed-formula-input"
+                },
+                {
+                  "slot": 7,
+                  "variable": "G",
+                  "rawValue": 10000,
+                  "roleStatus": "unconfirmed-formula-input"
+                },
+                {
+                  "slot": 8,
+                  "variable": "H",
+                  "rawValue": 10000,
+                  "roleStatus": "unconfirmed-formula-input"
+                }
+              ],
+              "rawFormulaParamValues": [
+                1000,
+                1800,
+                0,
+                0,
+                0,
+                6400,
+                10000,
+                10000,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "damageFields": {
+                "damageType": 2,
+                "damageElementalType": 1,
+                "elementCalFactor": 10000,
+                "physicalRatio": 10000,
+                "magicRatio": 0,
+                "amp": 0,
+                "burstId": 1,
+                "armerPenetration": -1,
+                "magicPenetration": 10000
+              },
+              "calculationBoundary": "This identifies raw HP damage inputs only; final damage still needs character panel, enemy defense/resistance, target state and hit frame validation."
+            },
+            "toughnessDamage": {
+              "status": "candidate-from-TDamageElementParams-weak-break-fields",
+              "fieldSources": [
+                "damageFields.weakBreakDamageRate",
+                "damageFields.hitType",
+                "damageFields.knockBackId",
+                "damageFields.knockBackForce",
+                "damageFields.interruptPriority",
+                "damageFields.useOneBreak"
+              ],
+              "weakBreakDamageRate": 7000,
+              "hitType": 0,
+              "knockBackId": 1,
+              "knockBackForce": 2,
+              "interruptPriority": 15,
+              "useOneBreak": 0,
+              "calculationBoundary": "This identifies enemy toughness/break inputs only; final toughness loss still needs the AzPr break unit scale and target state rules."
+            },
+            "selfEnergyChange": {
+              "status": "candidate-from-TDamageElementParams-recover-sp-fields",
+              "fieldSources": [
+                "damageFields.recoverSP",
+                "damageFields.petRecoverSP",
+                "damageFields.recoverInterval"
+              ],
+              "recoverSP": 6299,
+              "petRecoverSP": 24700,
+              "recoverInterval": 9999,
+              "ownerScope": "self-and-pet-candidate-unconfirmed",
+              "calculationBoundary": "This identifies self energy/SP inputs only; final per-character energy still needs owner, sharing and interval trigger rules."
+            },
+            "skillLevelBridge": {
+              "status": "skill-logic-item-missing",
+              "elementConfigId": 101003046,
+              "levelRows": 0,
+              "levels": [],
+              "relatedElementLevelBridge": {
+                "status": "related-slot-skill-element-level-bridge-found",
+                "source": "skillsub_ele_value.json.allRowsByElementId",
+                "elementConfigId": 101003046,
+                "sourceSkillId": 10100302,
+                "derivedSkillId": 10100304,
+                "primarySkillId": 10100302,
+                "primaryRelationStatus": "same-element-id-different-skill",
+                "candidateSkillIds": [
+                  10100302
+                ],
+                "candidateCount": 1,
+                "levelRows": 12,
+                "parameterIds": [
+                  1,
+                  7
+                ],
+                "varyingParameterIds": [
+                  1
+                ],
+                "firstLevel": {
+                  "level": 1,
+                  "levelIndex": 0,
+                  "skillLevelRowId": 58,
+                  "subSkillId": 10100302,
+                  "rowId": 6445,
+                  "valueParam": "1#2000|7#10000",
+                  "paramPairs": [
+                    {
+                      "id": 1,
+                      "variable": "A",
+                      "value": 2000,
+                      "formulaParamValue": 1000,
+                      "directSlotMatch": false
+                    },
+                    {
+                      "id": 7,
+                      "variable": "G",
+                      "value": 10000,
+                      "formulaParamValue": 10000,
+                      "directSlotMatch": true
+                    }
+                  ]
+                },
+                "lastLevel": {
+                  "level": 12,
+                  "levelIndex": 11,
+                  "skillLevelRowId": null,
+                  "subSkillId": 10100302,
+                  "rowId": 6456,
+                  "valueParam": "1#4200|7#10000",
+                  "paramPairs": [
+                    {
+                      "id": 1,
+                      "variable": "A",
+                      "value": 4200,
+                      "formulaParamValue": 1000,
+                      "directSlotMatch": false
+                    },
+                    {
+                      "id": 7,
+                      "variable": "G",
+                      "value": 10000,
+                      "formulaParamValue": 10000,
+                      "directSlotMatch": true
+                    }
+                  ]
+                },
+                "formulaParamAlignment": {
+                  "status": "same-element-id-found-slot-alignment-unverified",
+                  "parameterSummaries": [
+                    {
+                      "id": 1,
+                      "variable": "A",
+                      "formulaParamValue": 1000,
+                      "levelRows": 12,
+                      "minValue": 2000,
+                      "maxValue": 4200,
+                      "firstLevelValue": 2000,
+                      "lastLevelValue": 4200,
+                      "uniqueValues": [
+                        2000,
+                        2200,
+                        2400,
+                        2600,
+                        2800,
+                        3000,
+                        3200,
+                        3400,
+                        3600,
+                        3800,
+                        4000,
+                        4200
+                      ],
+                      "isConstantAcrossLevels": false,
+                      "directSlotMatchLevels": [],
+                      "mismatchLevels": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11,
+                        12
+                      ],
+                      "directSlotMatchCount": 0,
+                      "mismatchCount": 12,
+                      "progression": {
+                        "status": "arithmetic-progression",
+                        "step": 200,
+                        "uniqueDeltas": [
+                          200
+                        ],
+                        "isArithmetic": true
+                      },
+                      "relationStatus": "level-scaling-override-candidate",
+                      "interpretation": "skillsub_ele_value value varies by level while the same formulaParamValues slot is fixed; this is a likely level-scaling override candidate."
+                    },
+                    {
+                      "id": 7,
+                      "variable": "G",
+                      "formulaParamValue": 10000,
+                      "levelRows": 12,
+                      "minValue": 10000,
+                      "maxValue": 10000,
+                      "firstLevelValue": 10000,
+                      "lastLevelValue": 10000,
+                      "uniqueValues": [
+                        10000
+                      ],
+                      "isConstantAcrossLevels": true,
+                      "directSlotMatchLevels": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11,
+                        12
+                      ],
+                      "mismatchLevels": [],
+                      "directSlotMatchCount": 12,
+                      "mismatchCount": 0,
+                      "progression": {
+                        "status": "arithmetic-progression",
+                        "step": 0,
+                        "uniqueDeltas": [
+                          0
+                        ],
+                        "isArithmetic": true
+                      },
+                      "relationStatus": "constant-direct-slot-match",
+                      "interpretation": "skillsub_ele_value value matches the same formulaParamValues slot at every checked level; this is a constant slot match, not proof of final formula application."
+                    }
+                  ],
+                  "directSlotMatchParamIds": [
+                    7
+                  ],
+                  "overrideCandidateParamIds": [
+                    1
+                  ],
+                  "missingFormulaSlotParamIds": [],
+                  "conclusion": "slot-override-candidate-unconfirmed",
+                  "note": "Related skillsub_ele_value rows share the DamageElement elementId. Runtime inheritance/application remains unconfirmed."
+                },
+                "inheritanceStatus": "related-skill-level-inheritance-unconfirmed",
+                "candidates": [
+                  {
+                    "skillId": 10100302,
+                    "relationStatus": "same-element-id-different-skill",
+                    "derivedFromElementId": false,
+                    "parentSkillId": 10100301,
+                    "skillType": 1,
+                    "skillDisplayType": 0,
+                    "skillModuleTag": 1,
+                    "characterSlotRefs": [
+                      {
+                        "characterId": 101003,
+                        "characterName": "寒悠悠",
+                        "group": "backup",
+                        "slot": null
+                      }
+                    ],
+                    "skillLevelRowCount": 1,
+                    "skillLevelLevels": [
+                      1
+                    ],
+                    "logic": {
+                      "skillLogicType": 0,
+                      "skillTag": "1",
+                      "petSkillLogicTag": "-1",
+                      "cooldownMs": 0,
+                      "mountCooldownMs": 0,
+                      "kiboCooldownDefaultMs": 0,
+                      "kiboVersusCooldownMs": 0,
+                      "cooldownDefaultMs": 0,
+                      "cooldownCount": 0,
+                      "cooldownCountDefault": 0,
+                      "spCost": 0,
+                      "selfCooldownGroup": 0,
+                      "selfCooldownMs": 0,
+                      "publicCooldownGroup": 0,
+                      "publicCooldownMs": 0,
+                      "gcdMs": 0,
+                      "priority": 5,
+                      "castPriority": 0,
+                      "targetType": 1
+                    },
+                    "levelRows": 12,
+                    "parameterIds": [
+                      1,
+                      7
+                    ],
+                    "varyingParameterIds": [
+                      1
+                    ],
+                    "firstLevel": {
+                      "level": 1,
+                      "levelIndex": 0,
+                      "skillLevelRowId": 58,
+                      "subSkillId": 10100302,
+                      "rowId": 6445,
+                      "valueParam": "1#2000|7#10000",
+                      "paramPairs": [
+                        {
+                          "id": 1,
+                          "variable": "A",
+                          "value": 2000,
+                          "formulaParamValue": 1000,
+                          "directSlotMatch": false
+                        },
+                        {
+                          "id": 7,
+                          "variable": "G",
+                          "value": 10000,
+                          "formulaParamValue": 10000,
+                          "directSlotMatch": true
+                        }
+                      ]
+                    },
+                    "lastLevel": {
+                      "level": 12,
+                      "levelIndex": 11,
+                      "skillLevelRowId": null,
+                      "subSkillId": 10100302,
+                      "rowId": 6456,
+                      "valueParam": "1#4200|7#10000",
+                      "paramPairs": [
+                        {
+                          "id": 1,
+                          "variable": "A",
+                          "value": 4200,
+                          "formulaParamValue": 1000,
+                          "directSlotMatch": false
+                        },
+                        {
+                          "id": 7,
+                          "variable": "G",
+                          "value": 10000,
+                          "formulaParamValue": 10000,
+                          "directSlotMatch": true
+                        }
+                      ]
+                    },
+                    "formulaParamAlignment": {
+                      "status": "same-element-id-found-slot-alignment-unverified",
+                      "parameterSummaries": [
+                        {
+                          "id": 1,
+                          "variable": "A",
+                          "formulaParamValue": 1000,
+                          "levelRows": 12,
+                          "minValue": 2000,
+                          "maxValue": 4200,
+                          "firstLevelValue": 2000,
+                          "lastLevelValue": 4200,
+                          "uniqueValues": [
+                            2000,
+                            2200,
+                            2400,
+                            2600,
+                            2800,
+                            3000,
+                            3200,
+                            3400,
+                            3600,
+                            3800,
+                            4000,
+                            4200
+                          ],
+                          "isConstantAcrossLevels": false,
+                          "directSlotMatchLevels": [],
+                          "mismatchLevels": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12
+                          ],
+                          "directSlotMatchCount": 0,
+                          "mismatchCount": 12,
+                          "progression": {
+                            "status": "arithmetic-progression",
+                            "step": 200,
+                            "uniqueDeltas": [
+                              200
+                            ],
+                            "isArithmetic": true
+                          },
+                          "relationStatus": "level-scaling-override-candidate",
+                          "interpretation": "skillsub_ele_value value varies by level while the same formulaParamValues slot is fixed; this is a likely level-scaling override candidate."
+                        },
+                        {
+                          "id": 7,
+                          "variable": "G",
+                          "formulaParamValue": 10000,
+                          "levelRows": 12,
+                          "minValue": 10000,
+                          "maxValue": 10000,
+                          "firstLevelValue": 10000,
+                          "lastLevelValue": 10000,
+                          "uniqueValues": [
+                            10000
+                          ],
+                          "isConstantAcrossLevels": true,
+                          "directSlotMatchLevels": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12
+                          ],
+                          "mismatchLevels": [],
+                          "directSlotMatchCount": 12,
+                          "mismatchCount": 0,
+                          "progression": {
+                            "status": "arithmetic-progression",
+                            "step": 0,
+                            "uniqueDeltas": [
+                              0
+                            ],
+                            "isArithmetic": true
+                          },
+                          "relationStatus": "constant-direct-slot-match",
+                          "interpretation": "skillsub_ele_value value matches the same formulaParamValues slot at every checked level; this is a constant slot match, not proof of final formula application."
+                        }
+                      ],
+                      "directSlotMatchParamIds": [
+                        7
+                      ],
+                      "overrideCandidateParamIds": [
+                        1
+                      ],
+                      "missingFormulaSlotParamIds": [],
+                      "conclusion": "slot-override-candidate-unconfirmed",
+                      "note": "Related skillsub_ele_value rows share the DamageElement elementId. Runtime inheritance/application remains unconfirmed."
+                    },
+                    "levels": [
+                      {
+                        "level": 1,
+                        "levelIndex": 0,
+                        "skillLevelRowId": 58,
+                        "subSkillId": 10100302,
+                        "rowId": 6445,
+                        "valueParam": "1#2000|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 2000,
+                            "formulaParamValue": 1000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 2,
+                        "levelIndex": 1,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100302,
+                        "rowId": 6446,
+                        "valueParam": "1#2200|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 2200,
+                            "formulaParamValue": 1000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 3,
+                        "levelIndex": 2,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100302,
+                        "rowId": 6447,
+                        "valueParam": "1#2400|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 2400,
+                            "formulaParamValue": 1000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 4,
+                        "levelIndex": 3,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100302,
+                        "rowId": 6448,
+                        "valueParam": "1#2600|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 2600,
+                            "formulaParamValue": 1000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 5,
+                        "levelIndex": 4,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100302,
+                        "rowId": 6449,
+                        "valueParam": "1#2800|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 2800,
+                            "formulaParamValue": 1000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 6,
+                        "levelIndex": 5,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100302,
+                        "rowId": 6450,
+                        "valueParam": "1#3000|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 3000,
+                            "formulaParamValue": 1000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 7,
+                        "levelIndex": 6,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100302,
+                        "rowId": 6451,
+                        "valueParam": "1#3200|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 3200,
+                            "formulaParamValue": 1000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 8,
+                        "levelIndex": 7,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100302,
+                        "rowId": 6452,
+                        "valueParam": "1#3400|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 3400,
+                            "formulaParamValue": 1000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 9,
+                        "levelIndex": 8,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100302,
+                        "rowId": 6453,
+                        "valueParam": "1#3600|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 3600,
+                            "formulaParamValue": 1000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 10,
+                        "levelIndex": 9,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100302,
+                        "rowId": 6454,
+                        "valueParam": "1#3800|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 3800,
+                            "formulaParamValue": 1000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 11,
+                        "levelIndex": 10,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100302,
+                        "rowId": 6455,
+                        "valueParam": "1#4000|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 4000,
+                            "formulaParamValue": 1000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 12,
+                        "levelIndex": 11,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100302,
+                        "rowId": 6456,
+                        "valueParam": "1#4200|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 4200,
+                            "formulaParamValue": 1000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      }
+                    ],
+                    "applied": false
+                  }
+                ],
+                "note": "Same elementId exists in skillsub_ele_value under a related skill/subSkill. This is evidence for a parameter-source candidate, not proof that runtime inherits or applies these values.",
+                "applied": false
+              },
+              "formulaParamAlignment": {
+                "status": "not-checked",
+                "note": "No skill-logic-index item was available for this skill."
+              }
+            },
+            "unresolved": [
+              "formula-param-scale",
+              "target-defense-and-resistance-chain",
+              "hit-count-and-trigger-frame",
+              "toughness-unit-scale",
+              "self-energy-owner-and-share-rule"
+            ]
+          }
+        ]
+      },
+      {
+        "skillId": 10100303,
+        "status": "damage-element-field-candidates-found",
+        "damageElementCount": 1,
+        "scriptClassCounts": {
+          "TDamageElementParams": 1
+        },
+        "fieldMappings": [
+          {
+            "elementConfigId": 101003037,
+            "pathId": "-668735999631003170",
+            "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003037.asset",
+            "elementName": "�չ�3 �ӵ�hit1~3",
+            "describe": "�ӵ��˺�",
+            "mediaPackNames": [
+              "11_101003_016"
+            ],
+            "scriptTypeCandidate": {
+              "status": "field-signature-matched",
+              "confidence": "medium",
+              "scriptPathId": "3156599909451817364",
+              "namespace": "Lens.Gameplay.Modules.BigWorld.Config",
+              "className": "TDamageElementParams",
+              "typeDefIndex": 9720,
+              "label": "damage",
+              "role": "hp-damage-and-break-sp",
+              "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+              "sourceLineRange": "dump.cs:395210-395289",
+              "matchedFields": [
+                "damageType",
+                "damageElementalType",
+                "weakBreakDamageRate",
+                "recoverSP",
+                "petRecoverSP",
+                "recoverInterval"
+              ]
+            },
+            "hpDamage": {
+              "status": "candidate-from-TDamageElementParams-formulaParams",
+              "fieldSources": [
+                "formulaParams.function_1",
+                "formulaParams.function_2",
+                "formulaParams.formulaParamValues",
+                "damageFields.damageElementalType",
+                "damageFields.physicalRatio",
+                "damageFields.magicRatio",
+                "damageFields.elementCalFactor",
+                "damageFields.amp"
+              ],
+              "formulaFunctionIds": {
+                "function_1": 1,
+                "function_2": 2
+              },
+              "formulaFunctionEvidence": {
+                "status": "direct-element-formula-id-candidates-found",
+                "relationStatus": "function-id-matches-element_formula-id-candidate",
+                "applied": false,
+                "source": {
+                  "elementFormulaTable": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json",
+                  "il2cppDump": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                  "note": "formulaParams.function_1/function_2 are matched to element_formula.id as evidence candidates only; DamageElement execution order and final formula application are still unconfirmed."
+                },
+                "functionRefs": [
+                  {
+                    "field": "function_1",
+                    "functionId": 1,
+                    "status": "element_formula-row-found",
+                    "relationStatus": "function-id-matches-element_formula-id-candidate",
+                    "elementFormulaRow": {
+                      "id": 1,
+                      "functionOutput": "G/10000",
+                      "variables": [
+                        "G"
+                      ],
+                      "source": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json"
+                    },
+                    "variableInputs": [
+                      {
+                        "variable": "G",
+                        "paramId": 7,
+                        "formulaParamSlot": 7,
+                        "formulaParamValue": 10000,
+                        "slotStatus": "formula-param-slot-found"
+                      }
+                    ],
+                    "applied": false
+                  },
+                  {
+                    "field": "function_2",
+                    "functionId": 2,
+                    "status": "element_formula-row-found",
+                    "relationStatus": "function-id-matches-element_formula-id-candidate",
+                    "elementFormulaRow": {
+                      "id": 2,
+                      "functionOutput": "(self.ATK[0]*A)/10000",
+                      "variables": [
+                        "A"
+                      ],
+                      "source": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/element_formula.json"
+                    },
+                    "variableInputs": [
+                      {
+                        "variable": "A",
+                        "paramId": 1,
+                        "formulaParamSlot": 1,
+                        "formulaParamValue": 5000,
+                        "slotStatus": "formula-param-slot-found"
+                      }
+                    ],
+                    "applied": false
+                  }
+                ],
+                "matchedFunctionIds": [
+                  1,
+                  2
+                ],
+                "unmatchedFunctionIds": [],
+                "runtimeEvidence": [
+                  {
+                    "kind": "il2cpp-config-field",
+                    "className": "FormulaParams",
+                    "sourceLineRange": "dump.cs:394316,394437-394439",
+                    "fields": [
+                      "function_1",
+                      "function_2",
+                      "formulaParamValues"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-runtime-method",
+                    "className": "DamageElement",
+                    "sourceLineRange": "dump.cs:274573-274708",
+                    "methods": [
+                      "ExecuteEffect",
+                      "Execute",
+                      "BaseExecute",
+                      "Parse"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-runtime-method",
+                    "className": "SkillElementInjector",
+                    "sourceLineRange": "dump.cs:272567-272576",
+                    "methods": [
+                      "OnExecuteDamageElement",
+                      "ExecuteDamageElement"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-config-entry",
+                    "className": "BattleConfigManager",
+                    "sourceLineRange": "dump.cs:314761-314807",
+                    "properties": [
+                      "elementFormulaConfig"
+                    ],
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-config-table",
+                    "className": "ElementFormulaData",
+                    "sourceLineRange": "dump.cs:396498",
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  },
+                  {
+                    "kind": "il2cpp-config-row",
+                    "className": "TDElementFormula",
+                    "sourceLineRange": "dump.cs:634105",
+                    "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+                  }
+                ],
+                "calculationBoundary": "These formula rows are not applied to damage yet; HP damage still needs execution order, character panel binding, enemy defense/resistance, target state and hit frame validation."
+              },
+              "formulaSlotCandidates": [
+                {
+                  "slot": 1,
+                  "variable": "A",
+                  "rawValue": 5000,
+                  "roleStatus": "unconfirmed-formula-input"
+                },
+                {
+                  "slot": 2,
+                  "variable": "B",
+                  "rawValue": 1800,
+                  "roleStatus": "unconfirmed-formula-input"
+                },
+                {
+                  "slot": 6,
+                  "variable": "F",
+                  "rawValue": 9600,
+                  "roleStatus": "unconfirmed-formula-input"
+                },
+                {
+                  "slot": 7,
+                  "variable": "G",
+                  "rawValue": 10000,
+                  "roleStatus": "unconfirmed-formula-input"
+                },
+                {
+                  "slot": 8,
+                  "variable": "H",
+                  "rawValue": 10000,
+                  "roleStatus": "unconfirmed-formula-input"
+                }
+              ],
+              "rawFormulaParamValues": [
+                5000,
+                1800,
+                0,
+                0,
+                0,
+                9600,
+                10000,
+                10000,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "damageFields": {
+                "damageType": 2,
+                "damageElementalType": 1,
+                "elementCalFactor": 10000,
+                "physicalRatio": 10000,
+                "magicRatio": 0,
+                "amp": 0,
+                "burstId": 1,
+                "armerPenetration": -1,
+                "magicPenetration": 10000
+              },
+              "calculationBoundary": "This identifies raw HP damage inputs only; final damage still needs character panel, enemy defense/resistance, target state and hit frame validation."
+            },
+            "toughnessDamage": {
+              "status": "candidate-from-TDamageElementParams-weak-break-fields",
+              "fieldSources": [
+                "damageFields.weakBreakDamageRate",
+                "damageFields.hitType",
+                "damageFields.knockBackId",
+                "damageFields.knockBackForce",
+                "damageFields.interruptPriority",
+                "damageFields.useOneBreak"
+              ],
+              "weakBreakDamageRate": 7000,
+              "hitType": 0,
+              "knockBackId": 1,
+              "knockBackForce": 2,
+              "interruptPriority": 15,
+              "useOneBreak": 0,
+              "calculationBoundary": "This identifies enemy toughness/break inputs only; final toughness loss still needs the AzPr break unit scale and target state rules."
+            },
+            "selfEnergyChange": {
+              "status": "candidate-from-TDamageElementParams-recover-sp-fields",
+              "fieldSources": [
+                "damageFields.recoverSP",
+                "damageFields.petRecoverSP",
+                "damageFields.recoverInterval"
+              ],
+              "recoverSP": 3600,
+              "petRecoverSP": 13899,
+              "recoverInterval": 9999,
+              "ownerScope": "self-and-pet-candidate-unconfirmed",
+              "calculationBoundary": "This identifies self energy/SP inputs only; final per-character energy still needs owner, sharing and interval trigger rules."
+            },
+            "skillLevelBridge": {
+              "status": "skill-logic-item-missing",
+              "elementConfigId": 101003037,
+              "levelRows": 0,
+              "levels": [],
+              "relatedElementLevelBridge": {
+                "status": "related-slot-skill-element-level-bridge-found",
+                "source": "skillsub_ele_value.json.allRowsByElementId",
+                "elementConfigId": 101003037,
+                "sourceSkillId": 10100303,
+                "derivedSkillId": 10100303,
+                "primarySkillId": 10100303,
+                "primaryRelationStatus": "element-id-derived-skill-id",
+                "candidateSkillIds": [
+                  10100303
+                ],
+                "candidateCount": 1,
+                "levelRows": 12,
+                "parameterIds": [
+                  1,
+                  7
+                ],
+                "varyingParameterIds": [
+                  1
+                ],
+                "firstLevel": {
+                  "level": 1,
+                  "levelIndex": 0,
+                  "skillLevelRowId": 59,
+                  "subSkillId": 10100303,
+                  "rowId": 6457,
+                  "valueParam": "1#1400|7#10000",
+                  "paramPairs": [
+                    {
+                      "id": 1,
+                      "variable": "A",
+                      "value": 1400,
+                      "formulaParamValue": 5000,
+                      "directSlotMatch": false
+                    },
+                    {
+                      "id": 7,
+                      "variable": "G",
+                      "value": 10000,
+                      "formulaParamValue": 10000,
+                      "directSlotMatch": true
+                    }
+                  ]
+                },
+                "lastLevel": {
+                  "level": 12,
+                  "levelIndex": 11,
+                  "skillLevelRowId": null,
+                  "subSkillId": 10100303,
+                  "rowId": 6468,
+                  "valueParam": "1#2940|7#10000",
+                  "paramPairs": [
+                    {
+                      "id": 1,
+                      "variable": "A",
+                      "value": 2940,
+                      "formulaParamValue": 5000,
+                      "directSlotMatch": false
+                    },
+                    {
+                      "id": 7,
+                      "variable": "G",
+                      "value": 10000,
+                      "formulaParamValue": 10000,
+                      "directSlotMatch": true
+                    }
+                  ]
+                },
+                "formulaParamAlignment": {
+                  "status": "same-element-id-found-slot-alignment-unverified",
+                  "parameterSummaries": [
+                    {
+                      "id": 1,
+                      "variable": "A",
+                      "formulaParamValue": 5000,
+                      "levelRows": 12,
+                      "minValue": 1400,
+                      "maxValue": 2940,
+                      "firstLevelValue": 1400,
+                      "lastLevelValue": 2940,
+                      "uniqueValues": [
+                        1400,
+                        1540,
+                        1680,
+                        1820,
+                        1960,
+                        2100,
+                        2240,
+                        2380,
+                        2520,
+                        2660,
+                        2800,
+                        2940
+                      ],
+                      "isConstantAcrossLevels": false,
+                      "directSlotMatchLevels": [],
+                      "mismatchLevels": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11,
+                        12
+                      ],
+                      "directSlotMatchCount": 0,
+                      "mismatchCount": 12,
+                      "progression": {
+                        "status": "arithmetic-progression",
+                        "step": 140,
+                        "uniqueDeltas": [
+                          140
+                        ],
+                        "isArithmetic": true
+                      },
+                      "relationStatus": "level-scaling-override-candidate",
+                      "interpretation": "skillsub_ele_value value varies by level while the same formulaParamValues slot is fixed; this is a likely level-scaling override candidate."
+                    },
+                    {
+                      "id": 7,
+                      "variable": "G",
+                      "formulaParamValue": 10000,
+                      "levelRows": 12,
+                      "minValue": 10000,
+                      "maxValue": 10000,
+                      "firstLevelValue": 10000,
+                      "lastLevelValue": 10000,
+                      "uniqueValues": [
+                        10000
+                      ],
+                      "isConstantAcrossLevels": true,
+                      "directSlotMatchLevels": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11,
+                        12
+                      ],
+                      "mismatchLevels": [],
+                      "directSlotMatchCount": 12,
+                      "mismatchCount": 0,
+                      "progression": {
+                        "status": "arithmetic-progression",
+                        "step": 0,
+                        "uniqueDeltas": [
+                          0
+                        ],
+                        "isArithmetic": true
+                      },
+                      "relationStatus": "constant-direct-slot-match",
+                      "interpretation": "skillsub_ele_value value matches the same formulaParamValues slot at every checked level; this is a constant slot match, not proof of final formula application."
+                    }
+                  ],
+                  "directSlotMatchParamIds": [
+                    7
+                  ],
+                  "overrideCandidateParamIds": [
+                    1
+                  ],
+                  "missingFormulaSlotParamIds": [],
+                  "conclusion": "slot-override-candidate-unconfirmed",
+                  "note": "Related skillsub_ele_value rows share the DamageElement elementId. Runtime inheritance/application remains unconfirmed."
+                },
+                "inheritanceStatus": "related-skill-level-inheritance-unconfirmed",
+                "candidates": [
+                  {
+                    "skillId": 10100303,
+                    "relationStatus": "element-id-derived-skill-id",
+                    "derivedFromElementId": true,
+                    "parentSkillId": 10100301,
+                    "skillType": 1,
+                    "skillDisplayType": 0,
+                    "skillModuleTag": 1,
+                    "characterSlotRefs": [
+                      {
+                        "characterId": 101003,
+                        "characterName": "寒悠悠",
+                        "group": "backup",
+                        "slot": null
+                      }
+                    ],
+                    "skillLevelRowCount": 1,
+                    "skillLevelLevels": [
+                      1
+                    ],
+                    "logic": {
+                      "skillLogicType": 0,
+                      "skillTag": "1",
+                      "petSkillLogicTag": "-1",
+                      "cooldownMs": 0,
+                      "mountCooldownMs": 0,
+                      "kiboCooldownDefaultMs": 0,
+                      "kiboVersusCooldownMs": 0,
+                      "cooldownDefaultMs": 0,
+                      "cooldownCount": 0,
+                      "cooldownCountDefault": 0,
+                      "spCost": 0,
+                      "selfCooldownGroup": 0,
+                      "selfCooldownMs": 0,
+                      "publicCooldownGroup": 0,
+                      "publicCooldownMs": 0,
+                      "gcdMs": 0,
+                      "priority": 5,
+                      "castPriority": 0,
+                      "targetType": 1
+                    },
+                    "levelRows": 12,
+                    "parameterIds": [
+                      1,
+                      7
+                    ],
+                    "varyingParameterIds": [
+                      1
+                    ],
+                    "firstLevel": {
+                      "level": 1,
+                      "levelIndex": 0,
+                      "skillLevelRowId": 59,
+                      "subSkillId": 10100303,
+                      "rowId": 6457,
+                      "valueParam": "1#1400|7#10000",
+                      "paramPairs": [
+                        {
+                          "id": 1,
+                          "variable": "A",
+                          "value": 1400,
+                          "formulaParamValue": 5000,
+                          "directSlotMatch": false
+                        },
+                        {
+                          "id": 7,
+                          "variable": "G",
+                          "value": 10000,
+                          "formulaParamValue": 10000,
+                          "directSlotMatch": true
+                        }
+                      ]
+                    },
+                    "lastLevel": {
+                      "level": 12,
+                      "levelIndex": 11,
+                      "skillLevelRowId": null,
+                      "subSkillId": 10100303,
+                      "rowId": 6468,
+                      "valueParam": "1#2940|7#10000",
+                      "paramPairs": [
+                        {
+                          "id": 1,
+                          "variable": "A",
+                          "value": 2940,
+                          "formulaParamValue": 5000,
+                          "directSlotMatch": false
+                        },
+                        {
+                          "id": 7,
+                          "variable": "G",
+                          "value": 10000,
+                          "formulaParamValue": 10000,
+                          "directSlotMatch": true
+                        }
+                      ]
+                    },
+                    "formulaParamAlignment": {
+                      "status": "same-element-id-found-slot-alignment-unverified",
+                      "parameterSummaries": [
+                        {
+                          "id": 1,
+                          "variable": "A",
+                          "formulaParamValue": 5000,
+                          "levelRows": 12,
+                          "minValue": 1400,
+                          "maxValue": 2940,
+                          "firstLevelValue": 1400,
+                          "lastLevelValue": 2940,
+                          "uniqueValues": [
+                            1400,
+                            1540,
+                            1680,
+                            1820,
+                            1960,
+                            2100,
+                            2240,
+                            2380,
+                            2520,
+                            2660,
+                            2800,
+                            2940
+                          ],
+                          "isConstantAcrossLevels": false,
+                          "directSlotMatchLevels": [],
+                          "mismatchLevels": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12
+                          ],
+                          "directSlotMatchCount": 0,
+                          "mismatchCount": 12,
+                          "progression": {
+                            "status": "arithmetic-progression",
+                            "step": 140,
+                            "uniqueDeltas": [
+                              140
+                            ],
+                            "isArithmetic": true
+                          },
+                          "relationStatus": "level-scaling-override-candidate",
+                          "interpretation": "skillsub_ele_value value varies by level while the same formulaParamValues slot is fixed; this is a likely level-scaling override candidate."
+                        },
+                        {
+                          "id": 7,
+                          "variable": "G",
+                          "formulaParamValue": 10000,
+                          "levelRows": 12,
+                          "minValue": 10000,
+                          "maxValue": 10000,
+                          "firstLevelValue": 10000,
+                          "lastLevelValue": 10000,
+                          "uniqueValues": [
+                            10000
+                          ],
+                          "isConstantAcrossLevels": true,
+                          "directSlotMatchLevels": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12
+                          ],
+                          "mismatchLevels": [],
+                          "directSlotMatchCount": 12,
+                          "mismatchCount": 0,
+                          "progression": {
+                            "status": "arithmetic-progression",
+                            "step": 0,
+                            "uniqueDeltas": [
+                              0
+                            ],
+                            "isArithmetic": true
+                          },
+                          "relationStatus": "constant-direct-slot-match",
+                          "interpretation": "skillsub_ele_value value matches the same formulaParamValues slot at every checked level; this is a constant slot match, not proof of final formula application."
+                        }
+                      ],
+                      "directSlotMatchParamIds": [
+                        7
+                      ],
+                      "overrideCandidateParamIds": [
+                        1
+                      ],
+                      "missingFormulaSlotParamIds": [],
+                      "conclusion": "slot-override-candidate-unconfirmed",
+                      "note": "Related skillsub_ele_value rows share the DamageElement elementId. Runtime inheritance/application remains unconfirmed."
+                    },
+                    "levels": [
+                      {
+                        "level": 1,
+                        "levelIndex": 0,
+                        "skillLevelRowId": 59,
+                        "subSkillId": 10100303,
+                        "rowId": 6457,
+                        "valueParam": "1#1400|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 1400,
+                            "formulaParamValue": 5000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 2,
+                        "levelIndex": 1,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100303,
+                        "rowId": 6458,
+                        "valueParam": "1#1540|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 1540,
+                            "formulaParamValue": 5000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 3,
+                        "levelIndex": 2,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100303,
+                        "rowId": 6459,
+                        "valueParam": "1#1680|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 1680,
+                            "formulaParamValue": 5000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 4,
+                        "levelIndex": 3,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100303,
+                        "rowId": 6460,
+                        "valueParam": "1#1820|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 1820,
+                            "formulaParamValue": 5000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 5,
+                        "levelIndex": 4,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100303,
+                        "rowId": 6461,
+                        "valueParam": "1#1960|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 1960,
+                            "formulaParamValue": 5000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 6,
+                        "levelIndex": 5,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100303,
+                        "rowId": 6462,
+                        "valueParam": "1#2100|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 2100,
+                            "formulaParamValue": 5000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 7,
+                        "levelIndex": 6,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100303,
+                        "rowId": 6463,
+                        "valueParam": "1#2240|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 2240,
+                            "formulaParamValue": 5000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 8,
+                        "levelIndex": 7,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100303,
+                        "rowId": 6464,
+                        "valueParam": "1#2380|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 2380,
+                            "formulaParamValue": 5000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 9,
+                        "levelIndex": 8,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100303,
+                        "rowId": 6465,
+                        "valueParam": "1#2520|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 2520,
+                            "formulaParamValue": 5000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 10,
+                        "levelIndex": 9,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100303,
+                        "rowId": 6466,
+                        "valueParam": "1#2660|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 2660,
+                            "formulaParamValue": 5000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 11,
+                        "levelIndex": 10,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100303,
+                        "rowId": 6467,
+                        "valueParam": "1#2800|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 2800,
+                            "formulaParamValue": 5000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      },
+                      {
+                        "level": 12,
+                        "levelIndex": 11,
+                        "skillLevelRowId": null,
+                        "subSkillId": 10100303,
+                        "rowId": 6468,
+                        "valueParam": "1#2940|7#10000",
+                        "paramPairs": [
+                          {
+                            "id": 1,
+                            "variable": "A",
+                            "value": 2940,
+                            "formulaParamValue": 5000,
+                            "directSlotMatch": false
+                          },
+                          {
+                            "id": 7,
+                            "variable": "G",
+                            "value": 10000,
+                            "formulaParamValue": 10000,
+                            "directSlotMatch": true
+                          }
+                        ]
+                      }
+                    ],
+                    "applied": false
+                  }
+                ],
+                "note": "Same elementId exists in skillsub_ele_value under a related skill/subSkill. This is evidence for a parameter-source candidate, not proof that runtime inherits or applies these values.",
+                "applied": false
+              },
+              "formulaParamAlignment": {
+                "status": "not-checked",
+                "note": "No skill-logic-index item was available for this skill."
               }
             },
             "unresolved": [
@@ -31410,16 +34497,16 @@
     "resourceMapUnmatchedElementBaseReferenceSkills": 0,
     "scriptTypeCandidateSkills": 8,
     "elementTypeCatalogCandidates": 2,
-    "externalElementObjectResolvedSkills": 14,
-    "externalElementObjectResolvedRefs": 89,
+    "externalElementObjectResolvedSkills": 18,
+    "externalElementObjectResolvedRefs": 97,
     "externalElementObjectUnresolvedRefs": 0,
-    "damageElementFieldMappedSkills": 13,
-    "damageElementFieldMappedObjects": 31,
-    "hpDamageFieldCandidateRefs": 31,
-    "toughnessDamageFieldCandidateRefs": 31,
-    "selfEnergyFieldCandidateRefs": 31,
+    "damageElementFieldMappedSkills": 15,
+    "damageElementFieldMappedObjects": 33,
+    "hpDamageFieldCandidateRefs": 33,
+    "toughnessDamageFieldCandidateRefs": 33,
+    "selfEnergyFieldCandidateRefs": 33,
     "damageElementSkillLogicBridgeMatches": 15,
-    "damageElementFormulaFunctionMatchedRefs": 62,
+    "damageElementFormulaFunctionMatchedRefs": 66,
     "damageElementFormulaFunctionUnmatchedRefs": 0,
     "relationStatus": "skill-control-assets-found-in-azpr-extractor"
   },
@@ -38477,7 +41564,7 @@
               {
                 "hitIndex": 2,
                 "label": "普通攻击 2段",
-                "candidateSource": "event-bridge-child-skill-control-hp-timeline",
+                "candidateSource": "event-bridge-child-skill-control-resource-map",
                 "skillId": 10100302,
                 "discoveryDepth": 1,
                 "discoveredFromSkillId": 10100301,
@@ -38488,22 +41575,175 @@
                 "candidateCountStatus": "complete-sample",
                 "behaviorChainCandidateCount": 0,
                 "resolvedBehaviorCount": 0,
-                "externalElementBaseRefCount": 0,
-                "resourceMapMatchedElementBaseRefCount": 0,
+                "externalElementBaseRefCount": 2,
+                "resourceMapMatchedElementBaseRefCount": 2,
                 "resourceMapUnmatchedElementBaseRefCount": 0,
+                "elementBaseDataRefs": [
+                  {
+                    "fileId": 2,
+                    "roundedPathId": "-4373351994372762000",
+                    "status": "external-file",
+                    "sourceKey": "skillResourceMap",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100302
+                        ],
+                        "subSkillIds": [
+                          10100302
+                        ],
+                        "stateNames": [
+                          "Skill0_2"
+                        ],
+                        "effects": [
+                          "11_101003_013",
+                          "11_101003_125"
+                        ],
+                        "hitEffects": [
+                          "11_101003_016"
+                        ],
+                        "bulletEffects": [
+                          "11_101003_015"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "fileId": 2,
+                    "roundedPathId": "7736637370449973000",
+                    "status": "external-file",
+                    "sourceKey": "skillResourceMap",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100302
+                        ],
+                        "subSkillIds": [
+                          10100302
+                        ],
+                        "stateNames": [
+                          "Skill0_2"
+                        ],
+                        "effects": [
+                          "11_101003_013",
+                          "11_101003_125"
+                        ],
+                        "hitEffects": [
+                          "11_101003_016"
+                        ],
+                        "bulletEffects": [
+                          "11_101003_015"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "resourceMapElementRefCount": 2,
                 "confidence": "medium",
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
-                "damageElementFieldMappingStatus": "damage-element-field-mappings-missing",
-                "damageElementFieldMappingCount": 0,
-                "damageElementElementConfigIds": [],
-                "damageElementPathIds": [],
-                "damageElementFieldMappings": []
+                "damageElementFieldMappingStatus": "damage-element-field-mappings-found",
+                "damageElementFieldMappingCount": 1,
+                "damageElementElementConfigIds": [
+                  101003046
+                ],
+                "damageElementPathIds": [
+                  "7736637370449973165"
+                ],
+                "damageElementFieldMappings": [
+                  {
+                    "elementConfigId": 101003046,
+                    "pathId": "7736637370449973165",
+                    "elementName": "�չ�2 �ӵ�hit1~2",
+                    "scriptTypeCandidate": {
+                      "status": "field-signature-matched",
+                      "confidence": "medium",
+                      "className": "TDamageElementParams",
+                      "sourceLineRange": "dump.cs:395210-395289"
+                    },
+                    "hpDamage": {
+                      "status": "candidate-from-TDamageElementParams-formulaParams",
+                      "formulaFunctionIds": {
+                        "function_1": 1,
+                        "function_2": 2
+                      },
+                      "formulaFunctionStatus": "direct-element-formula-id-candidates-found",
+                      "formulaFunctionMatchedIds": [
+                        1,
+                        2
+                      ],
+                      "rawFormulaParamValues": [
+                        1000,
+                        1800,
+                        0,
+                        0,
+                        0,
+                        6400,
+                        10000,
+                        10000,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                      ],
+                      "damageFields": {
+                        "damageType": 2,
+                        "damageElementalType": 1,
+                        "elementCalFactor": 10000,
+                        "physicalRatio": 10000,
+                        "magicRatio": 0,
+                        "amp": 0,
+                        "burstId": 1,
+                        "armerPenetration": -1,
+                        "magicPenetration": 10000
+                      }
+                    },
+                    "toughnessDamage": {
+                      "status": "candidate-from-TDamageElementParams-weak-break-fields",
+                      "weakBreakDamageRate": 7000,
+                      "hitType": 0,
+                      "interruptPriority": 15,
+                      "useOneBreak": 0
+                    },
+                    "selfEnergyChange": {
+                      "status": "candidate-from-TDamageElementParams-recover-sp-fields",
+                      "recoverSP": 6299,
+                      "petRecoverSP": 24700,
+                      "recoverInterval": 9999,
+                      "ownerScope": "self-and-pet-candidate-unconfirmed"
+                    },
+                    "skillLevelBridge": {
+                      "status": "skill-logic-item-missing",
+                      "levelRows": 0,
+                      "parameterIds": [],
+                      "varyingParameterIds": []
+                    },
+                    "applied": false
+                  }
+                ]
               },
               {
                 "hitIndex": 3,
                 "label": "普通攻击 3段",
-                "candidateSource": "event-bridge-child-skill-control-hp-timeline",
+                "candidateSource": "event-bridge-child-skill-control-resource-map",
                 "skillId": 10100303,
                 "discoveryDepth": 2,
                 "discoveredFromSkillId": 10100302,
@@ -38514,22 +41754,144 @@
                 "candidateCountStatus": "complete-sample",
                 "behaviorChainCandidateCount": 0,
                 "resolvedBehaviorCount": 0,
-                "externalElementBaseRefCount": 0,
-                "resourceMapMatchedElementBaseRefCount": 0,
+                "externalElementBaseRefCount": 1,
+                "resourceMapMatchedElementBaseRefCount": 1,
                 "resourceMapUnmatchedElementBaseRefCount": 0,
+                "elementBaseDataRefs": [
+                  {
+                    "fileId": 2,
+                    "roundedPathId": "-668735999631003100",
+                    "status": "external-file",
+                    "sourceKey": "skillResourceMap",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100303
+                        ],
+                        "subSkillIds": [
+                          1
+                        ],
+                        "stateNames": [
+                          "Skill0_3"
+                        ],
+                        "effects": [
+                          "11_101003_013",
+                          "11_101003_125"
+                        ],
+                        "hitEffects": [
+                          "11_101003_016"
+                        ],
+                        "bulletEffects": [
+                          "11_101003_015"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "resourceMapElementRefCount": 1,
                 "confidence": "medium",
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
-                "damageElementFieldMappingStatus": "damage-element-field-mappings-missing",
-                "damageElementFieldMappingCount": 0,
-                "damageElementElementConfigIds": [],
-                "damageElementPathIds": [],
-                "damageElementFieldMappings": []
+                "damageElementFieldMappingStatus": "damage-element-field-mappings-found",
+                "damageElementFieldMappingCount": 1,
+                "damageElementElementConfigIds": [
+                  101003037
+                ],
+                "damageElementPathIds": [
+                  "-668735999631003170"
+                ],
+                "damageElementFieldMappings": [
+                  {
+                    "elementConfigId": 101003037,
+                    "pathId": "-668735999631003170",
+                    "elementName": "�չ�3 �ӵ�hit1~3",
+                    "scriptTypeCandidate": {
+                      "status": "field-signature-matched",
+                      "confidence": "medium",
+                      "className": "TDamageElementParams",
+                      "sourceLineRange": "dump.cs:395210-395289"
+                    },
+                    "hpDamage": {
+                      "status": "candidate-from-TDamageElementParams-formulaParams",
+                      "formulaFunctionIds": {
+                        "function_1": 1,
+                        "function_2": 2
+                      },
+                      "formulaFunctionStatus": "direct-element-formula-id-candidates-found",
+                      "formulaFunctionMatchedIds": [
+                        1,
+                        2
+                      ],
+                      "rawFormulaParamValues": [
+                        5000,
+                        1800,
+                        0,
+                        0,
+                        0,
+                        9600,
+                        10000,
+                        10000,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                      ],
+                      "damageFields": {
+                        "damageType": 2,
+                        "damageElementalType": 1,
+                        "elementCalFactor": 10000,
+                        "physicalRatio": 10000,
+                        "magicRatio": 0,
+                        "amp": 0,
+                        "burstId": 1,
+                        "armerPenetration": -1,
+                        "magicPenetration": 10000
+                      }
+                    },
+                    "toughnessDamage": {
+                      "status": "candidate-from-TDamageElementParams-weak-break-fields",
+                      "weakBreakDamageRate": 7000,
+                      "hitType": 0,
+                      "interruptPriority": 15,
+                      "useOneBreak": 0
+                    },
+                    "selfEnergyChange": {
+                      "status": "candidate-from-TDamageElementParams-recover-sp-fields",
+                      "recoverSP": 3600,
+                      "petRecoverSP": 13899,
+                      "recoverInterval": 9999,
+                      "ownerScope": "self-and-pet-candidate-unconfirmed"
+                    },
+                    "skillLevelBridge": {
+                      "status": "skill-logic-item-missing",
+                      "levelRows": 0,
+                      "parameterIds": [],
+                      "varyingParameterIds": []
+                    },
+                    "applied": false
+                  }
+                ]
               },
               {
                 "hitIndex": 4,
                 "label": "普通攻击 4段",
-                "candidateSource": "event-bridge-child-skill-control-hp-timeline",
+                "candidateSource": "event-bridge-child-skill-control-resource-map",
                 "skillId": 10100304,
                 "discoveryDepth": 3,
                 "discoveredFromSkillId": 10100303,
@@ -38540,13 +41902,76 @@
                 "candidateCountStatus": "complete-sample",
                 "behaviorChainCandidateCount": 0,
                 "resolvedBehaviorCount": 0,
-                "externalElementBaseRefCount": 0,
-                "resourceMapMatchedElementBaseRefCount": 0,
+                "externalElementBaseRefCount": 2,
+                "resourceMapMatchedElementBaseRefCount": 2,
                 "resourceMapUnmatchedElementBaseRefCount": 0,
+                "elementBaseDataRefs": [
+                  {
+                    "fileId": 2,
+                    "roundedPathId": "-4280404759535193600",
+                    "status": "external-file",
+                    "sourceKey": "skillResourceMap",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100304
+                        ],
+                        "subSkillIds": [
+                          0
+                        ],
+                        "stateNames": [
+                          "Skill0_4"
+                        ],
+                        "effects": [
+                          "11_101003_125",
+                          "11_101003_030",
+                          "11_101003_031",
+                          "11_101003_032"
+                        ],
+                        "bulletEffects": [
+                          "pre_effect_empty"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "fileId": 2,
+                    "roundedPathId": "1572718271109451500",
+                    "status": "external-file",
+                    "sourceKey": "skillResourceMap",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100304
+                        ],
+                        "subSkillIds": [
+                          0
+                        ],
+                        "stateNames": [
+                          "Skill0_4"
+                        ],
+                        "effects": [
+                          "11_101003_125",
+                          "11_101003_030",
+                          "11_101003_031",
+                          "11_101003_032"
+                        ],
+                        "bulletEffects": [
+                          "pre_effect_empty"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "resourceMapElementRefCount": 2,
                 "confidence": "medium",
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
-                "damageElementFieldMappingStatus": "damage-element-field-mappings-missing",
+                "damageElementFieldMappingStatus": "resource-map-element-refs-found-damage-element-fields-missing",
                 "damageElementFieldMappingCount": 0,
                 "damageElementElementConfigIds": [],
                 "damageElementPathIds": [],
@@ -38555,7 +41980,7 @@
               {
                 "hitIndex": 5,
                 "label": "普通攻击 5段",
-                "candidateSource": "event-bridge-child-skill-control-hp-timeline",
+                "candidateSource": "event-bridge-child-skill-control-resource-map",
                 "skillId": 10100305,
                 "discoveryDepth": 4,
                 "discoveredFromSkillId": 10100304,
@@ -38566,13 +41991,106 @@
                 "candidateCountStatus": "complete-sample",
                 "behaviorChainCandidateCount": 0,
                 "resolvedBehaviorCount": 0,
-                "externalElementBaseRefCount": 0,
-                "resourceMapMatchedElementBaseRefCount": 0,
+                "externalElementBaseRefCount": 3,
+                "resourceMapMatchedElementBaseRefCount": 3,
                 "resourceMapUnmatchedElementBaseRefCount": 0,
+                "elementBaseDataRefs": [
+                  {
+                    "fileId": 2,
+                    "roundedPathId": "-3406483301161858000",
+                    "status": "external-file",
+                    "sourceKey": "skillResourceMap",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100305
+                        ],
+                        "subSkillIds": [
+                          0
+                        ],
+                        "stateNames": [
+                          "Skill0_5"
+                        ],
+                        "effects": [
+                          "11_101003_125",
+                          "11_101003_035",
+                          "11_101003_036",
+                          "11_101003_037"
+                        ],
+                        "bulletEffects": [
+                          "pre_effect_empty"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "fileId": 2,
+                    "roundedPathId": "5614799294546611000",
+                    "status": "external-file",
+                    "sourceKey": "skillResourceMap",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100305
+                        ],
+                        "subSkillIds": [
+                          0
+                        ],
+                        "stateNames": [
+                          "Skill0_5"
+                        ],
+                        "effects": [
+                          "11_101003_125",
+                          "11_101003_035",
+                          "11_101003_036",
+                          "11_101003_037"
+                        ],
+                        "bulletEffects": [
+                          "pre_effect_empty"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "fileId": 2,
+                    "roundedPathId": "-1285658850712902700",
+                    "status": "external-file",
+                    "sourceKey": "skillResourceMap",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100305
+                        ],
+                        "subSkillIds": [
+                          0
+                        ],
+                        "stateNames": [
+                          "Skill0_5"
+                        ],
+                        "effects": [
+                          "11_101003_125",
+                          "11_101003_035",
+                          "11_101003_036",
+                          "11_101003_037"
+                        ],
+                        "bulletEffects": [
+                          "pre_effect_empty"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "resourceMapElementRefCount": 3,
                 "confidence": "medium",
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
-                "damageElementFieldMappingStatus": "damage-element-field-mappings-missing",
+                "damageElementFieldMappingStatus": "resource-map-element-refs-found-damage-element-fields-missing",
                 "damageElementFieldMappingCount": 0,
                 "damageElementElementConfigIds": [],
                 "damageElementPathIds": [],
@@ -38580,11 +42098,17 @@
               }
             ],
             "applied": false,
-            "damageElementFieldMappingStatus": "hit-groups-missing-damage-element-field-mappings",
-            "damageElementMappedHitGroupCount": 0,
-            "damageElementFieldMappingCount": 0,
-            "damageElementElementConfigIds": [],
-            "damageElementPathIds": []
+            "damageElementFieldMappingStatus": "partial-hit-groups-have-damage-element-field-mappings",
+            "damageElementMappedHitGroupCount": 2,
+            "damageElementFieldMappingCount": 2,
+            "damageElementElementConfigIds": [
+              101003037,
+              101003046
+            ],
+            "damageElementPathIds": [
+              "-668735999631003170",
+              "7736637370449973165"
+            ]
           },
           "targetSkillControls": [
             {
@@ -63139,94 +66663,6 @@
                 ],
                 "damageElementFieldMappings": [
                   {
-                    "elementConfigId": 109001306,
-                    "pathId": "-4052262175632216603",
-                    "elementName": "�չ�1|��|��",
-                    "scriptTypeCandidate": {
-                      "status": "field-signature-matched",
-                      "confidence": "medium",
-                      "className": "TDamageElementParams",
-                      "sourceLineRange": "dump.cs:395210-395289"
-                    },
-                    "hpDamage": {
-                      "status": "candidate-from-TDamageElementParams-formulaParams",
-                      "formulaFunctionIds": {
-                        "function_1": 1,
-                        "function_2": 2
-                      },
-                      "formulaFunctionStatus": "direct-element-formula-id-candidates-found",
-                      "formulaFunctionMatchedIds": [
-                        1,
-                        2
-                      ],
-                      "rawFormulaParamValues": [
-                        1000,
-                        1800,
-                        0,
-                        0,
-                        0,
-                        2500,
-                        10000,
-                        10000,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0
-                      ],
-                      "damageFields": {
-                        "damageType": 1,
-                        "damageElementalType": 2,
-                        "elementCalFactor": 10000,
-                        "physicalRatio": 10000,
-                        "magicRatio": 0,
-                        "amp": 6553,
-                        "burstId": 1,
-                        "armerPenetration": -1,
-                        "magicPenetration": 10000
-                      }
-                    },
-                    "toughnessDamage": {
-                      "status": "candidate-from-TDamageElementParams-weak-break-fields",
-                      "weakBreakDamageRate": 7000,
-                      "hitType": 2,
-                      "interruptPriority": 15,
-                      "useOneBreak": 0
-                    },
-                    "selfEnergyChange": {
-                      "status": "candidate-from-TDamageElementParams-recover-sp-fields",
-                      "recoverSP": 2700,
-                      "petRecoverSP": 10399,
-                      "recoverInterval": 9999,
-                      "ownerScope": "self-and-pet-candidate-unconfirmed"
-                    },
-                    "skillLevelBridge": {
-                      "status": "skillsub-element-level-bridge-found",
-                      "levelRows": 12,
-                      "parameterIds": [
-                        1,
-                        7
-                      ],
-                      "varyingParameterIds": [
-                        1
-                      ]
-                    },
-                    "applied": false
-                  },
-                  {
                     "elementConfigId": 109001081,
                     "pathId": "3476557355496561381",
                     "elementName": "�չ�1|��|��",
@@ -63291,6 +66727,94 @@
                       "status": "candidate-from-TDamageElementParams-weak-break-fields",
                       "weakBreakDamageRate": 7000,
                       "hitType": 1,
+                      "interruptPriority": 15,
+                      "useOneBreak": 0
+                    },
+                    "selfEnergyChange": {
+                      "status": "candidate-from-TDamageElementParams-recover-sp-fields",
+                      "recoverSP": 2700,
+                      "petRecoverSP": 10399,
+                      "recoverInterval": 9999,
+                      "ownerScope": "self-and-pet-candidate-unconfirmed"
+                    },
+                    "skillLevelBridge": {
+                      "status": "skillsub-element-level-bridge-found",
+                      "levelRows": 12,
+                      "parameterIds": [
+                        1,
+                        7
+                      ],
+                      "varyingParameterIds": [
+                        1
+                      ]
+                    },
+                    "applied": false
+                  },
+                  {
+                    "elementConfigId": 109001306,
+                    "pathId": "-4052262175632216603",
+                    "elementName": "�չ�1|��|��",
+                    "scriptTypeCandidate": {
+                      "status": "field-signature-matched",
+                      "confidence": "medium",
+                      "className": "TDamageElementParams",
+                      "sourceLineRange": "dump.cs:395210-395289"
+                    },
+                    "hpDamage": {
+                      "status": "candidate-from-TDamageElementParams-formulaParams",
+                      "formulaFunctionIds": {
+                        "function_1": 1,
+                        "function_2": 2
+                      },
+                      "formulaFunctionStatus": "direct-element-formula-id-candidates-found",
+                      "formulaFunctionMatchedIds": [
+                        1,
+                        2
+                      ],
+                      "rawFormulaParamValues": [
+                        1000,
+                        1800,
+                        0,
+                        0,
+                        0,
+                        2500,
+                        10000,
+                        10000,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                      ],
+                      "damageFields": {
+                        "damageType": 1,
+                        "damageElementalType": 2,
+                        "elementCalFactor": 10000,
+                        "physicalRatio": 10000,
+                        "magicRatio": 0,
+                        "amp": 6553,
+                        "burstId": 1,
+                        "armerPenetration": -1,
+                        "magicPenetration": 10000
+                      }
+                    },
+                    "toughnessDamage": {
+                      "status": "candidate-from-TDamageElementParams-weak-break-fields",
+                      "weakBreakDamageRate": 7000,
+                      "hitType": 2,
                       "interruptPriority": 15,
                       "useOneBreak": 0
                     },
@@ -63515,6 +67039,7 @@
                     ]
                   }
                 ],
+                "resourceMapElementRefCount": 0,
                 "behaviorChains": [
                   {
                     "sourceName": "攻击第1段",
@@ -64285,6 +67810,7 @@
                     ]
                   }
                 ],
+                "resourceMapElementRefCount": 0,
                 "behaviorChains": [
                   {
                     "sourceName": "攻击碰撞1",
@@ -65621,6 +69147,7 @@
                     ]
                   }
                 ],
+                "resourceMapElementRefCount": 0,
                 "behaviorChains": [
                   {
                     "sourceName": "左转圈hit -攻击框",
@@ -66385,9 +69912,9 @@
                 ],
                 "damageElementFieldMappings": [
                   {
-                    "elementConfigId": 109001328,
-                    "pathId": "-1163125552202303495",
-                    "elementName": "�չ�4 ��תȦ hit",
+                    "elementConfigId": 109001021,
+                    "pathId": "610497198600338323",
+                    "elementName": "�չ�4-hit1~2",
                     "scriptTypeCandidate": {
                       "status": "field-signature-matched",
                       "confidence": "medium",
@@ -66407,7 +69934,7 @@
                       ],
                       "rawFormulaParamValues": [
                         1000,
-                        5400,
+                        1700,
                         0,
                         0,
                         0,
@@ -66435,7 +69962,7 @@
                       ],
                       "damageFields": {
                         "damageType": 1,
-                        "damageElementalType": 7,
+                        "damageElementalType": 2,
                         "elementCalFactor": 10000,
                         "physicalRatio": 10000,
                         "magicRatio": 0,
@@ -66448,7 +69975,7 @@
                     "toughnessDamage": {
                       "status": "candidate-from-TDamageElementParams-weak-break-fields",
                       "weakBreakDamageRate": 7000,
-                      "hitType": 0,
+                      "hitType": 2,
                       "interruptPriority": 15,
                       "useOneBreak": 0
                     },
@@ -66551,9 +70078,9 @@
                     "applied": false
                   },
                   {
-                    "elementConfigId": 109001021,
-                    "pathId": "610497198600338323",
-                    "elementName": "�չ�4-hit1~2",
+                    "elementConfigId": 109001328,
+                    "pathId": "-1163125552202303495",
+                    "elementName": "�չ�4 ��תȦ hit",
                     "scriptTypeCandidate": {
                       "status": "field-signature-matched",
                       "confidence": "medium",
@@ -66573,7 +70100,7 @@
                       ],
                       "rawFormulaParamValues": [
                         1000,
-                        1700,
+                        5400,
                         0,
                         0,
                         0,
@@ -66601,7 +70128,7 @@
                       ],
                       "damageFields": {
                         "damageType": 1,
-                        "damageElementalType": 2,
+                        "damageElementalType": 7,
                         "elementCalFactor": 10000,
                         "physicalRatio": 10000,
                         "magicRatio": 0,
@@ -66614,7 +70141,7 @@
                     "toughnessDamage": {
                       "status": "candidate-from-TDamageElementParams-weak-break-fields",
                       "weakBreakDamageRate": 7000,
-                      "hitType": 2,
+                      "hitType": 0,
                       "interruptPriority": 15,
                       "useOneBreak": 0
                     },
@@ -66970,6 +70497,7 @@
                     ]
                   }
                 ],
+                "resourceMapElementRefCount": 0,
                 "behaviorChains": [
                   {
                     "sourceName": "无属性-攻击碰撞1",
@@ -67994,89 +71522,6 @@
                     "applied": false
                   },
                   {
-                    "elementConfigId": 109001117,
-                    "pathId": "2602386345610884148",
-                    "elementName": "�չ�5|hit6~10",
-                    "scriptTypeCandidate": {
-                      "status": "field-signature-matched",
-                      "confidence": "medium",
-                      "className": "TDamageElementParams",
-                      "sourceLineRange": "dump.cs:395210-395289"
-                    },
-                    "hpDamage": {
-                      "status": "candidate-from-TDamageElementParams-formulaParams",
-                      "formulaFunctionIds": {
-                        "function_1": 1,
-                        "function_2": 101
-                      },
-                      "formulaFunctionStatus": "direct-element-formula-id-candidates-found",
-                      "formulaFunctionMatchedIds": [
-                        1,
-                        101
-                      ],
-                      "rawFormulaParamValues": [
-                        1000,
-                        3000,
-                        0,
-                        0,
-                        0,
-                        13000,
-                        10000,
-                        10000,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0
-                      ],
-                      "damageFields": {
-                        "damageType": 1,
-                        "damageElementalType": 7,
-                        "elementCalFactor": 10000,
-                        "physicalRatio": 10000,
-                        "magicRatio": 0,
-                        "amp": 0,
-                        "burstId": 1,
-                        "armerPenetration": -1,
-                        "magicPenetration": 10000
-                      }
-                    },
-                    "toughnessDamage": {
-                      "status": "candidate-from-TDamageElementParams-weak-break-fields",
-                      "weakBreakDamageRate": 7000,
-                      "hitType": 0,
-                      "interruptPriority": 15,
-                      "useOneBreak": 0
-                    },
-                    "selfEnergyChange": {
-                      "status": "candidate-from-TDamageElementParams-recover-sp-fields",
-                      "recoverSP": 2599,
-                      "petRecoverSP": 10099,
-                      "recoverInterval": 9999,
-                      "ownerScope": "self-and-pet-candidate-unconfirmed"
-                    },
-                    "skillLevelBridge": {
-                      "status": "skill-logic-item-missing",
-                      "levelRows": 0,
-                      "parameterIds": [],
-                      "varyingParameterIds": []
-                    },
-                    "applied": false
-                  },
-                  {
                     "elementConfigId": 109001285,
                     "pathId": "5068827089459744812",
                     "elementName": "�չ�5 hit2/4",
@@ -68128,6 +71573,89 @@
                       "damageFields": {
                         "damageType": 1,
                         "damageElementalType": 2,
+                        "elementCalFactor": 10000,
+                        "physicalRatio": 10000,
+                        "magicRatio": 0,
+                        "amp": 0,
+                        "burstId": 1,
+                        "armerPenetration": -1,
+                        "magicPenetration": 10000
+                      }
+                    },
+                    "toughnessDamage": {
+                      "status": "candidate-from-TDamageElementParams-weak-break-fields",
+                      "weakBreakDamageRate": 7000,
+                      "hitType": 0,
+                      "interruptPriority": 15,
+                      "useOneBreak": 0
+                    },
+                    "selfEnergyChange": {
+                      "status": "candidate-from-TDamageElementParams-recover-sp-fields",
+                      "recoverSP": 2599,
+                      "petRecoverSP": 10099,
+                      "recoverInterval": 9999,
+                      "ownerScope": "self-and-pet-candidate-unconfirmed"
+                    },
+                    "skillLevelBridge": {
+                      "status": "skill-logic-item-missing",
+                      "levelRows": 0,
+                      "parameterIds": [],
+                      "varyingParameterIds": []
+                    },
+                    "applied": false
+                  },
+                  {
+                    "elementConfigId": 109001117,
+                    "pathId": "2602386345610884148",
+                    "elementName": "�չ�5|hit6~10",
+                    "scriptTypeCandidate": {
+                      "status": "field-signature-matched",
+                      "confidence": "medium",
+                      "className": "TDamageElementParams",
+                      "sourceLineRange": "dump.cs:395210-395289"
+                    },
+                    "hpDamage": {
+                      "status": "candidate-from-TDamageElementParams-formulaParams",
+                      "formulaFunctionIds": {
+                        "function_1": 1,
+                        "function_2": 101
+                      },
+                      "formulaFunctionStatus": "direct-element-formula-id-candidates-found",
+                      "formulaFunctionMatchedIds": [
+                        1,
+                        101
+                      ],
+                      "rawFormulaParamValues": [
+                        1000,
+                        3000,
+                        0,
+                        0,
+                        0,
+                        13000,
+                        10000,
+                        10000,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                      ],
+                      "damageFields": {
+                        "damageType": 1,
+                        "damageElementalType": 7,
                         "elementCalFactor": 10000,
                         "physicalRatio": 10000,
                         "magicRatio": 0,
@@ -78837,6 +82365,7 @@
                     ]
                   }
                 ],
+                "resourceMapElementRefCount": 0,
                 "behaviorChains": [
                   {
                     "sourceName": "攻击碰撞",
@@ -91399,9 +94928,9 @@
                 ],
                 "damageElementFieldMappings": [
                   {
-                    "elementConfigId": 109001350,
-                    "pathId": "-3956021691739248290",
-                    "elementName": "�볡 hit 4",
+                    "elementConfigId": 109001349,
+                    "pathId": "-7737634469737456931",
+                    "elementName": "�볡 1~3 hit",
                     "scriptTypeCandidate": {
                       "status": "field-signature-matched",
                       "confidence": "medium",
@@ -91421,7 +94950,7 @@
                       ],
                       "rawFormulaParamValues": [
                         1000,
-                        6800,
+                        3400,
                         0,
                         0,
                         0,
@@ -91487,9 +95016,9 @@
                     "applied": false
                   },
                   {
-                    "elementConfigId": 109001349,
-                    "pathId": "-7737634469737456931",
-                    "elementName": "�볡 1~3 hit",
+                    "elementConfigId": 109001350,
+                    "pathId": "-3956021691739248290",
+                    "elementName": "�볡 hit 4",
                     "scriptTypeCandidate": {
                       "status": "field-signature-matched",
                       "confidence": "medium",
@@ -91509,7 +95038,7 @@
                       ],
                       "rawFormulaParamValues": [
                         1000,
-                        3400,
+                        6800,
                         0,
                         0,
                         0,
@@ -99955,7 +103484,7 @@
               {
                 "hitIndex": 2,
                 "label": "普通攻击 2段",
-                "candidateSource": "event-bridge-child-skill-control-hp-timeline",
+                "candidateSource": "event-bridge-child-skill-control-resource-map",
                 "skillId": 10100302,
                 "discoveryDepth": 1,
                 "discoveredFromSkillId": 10100301,
@@ -99966,22 +103495,175 @@
                 "candidateCountStatus": "complete-sample",
                 "behaviorChainCandidateCount": 0,
                 "resolvedBehaviorCount": 0,
-                "externalElementBaseRefCount": 0,
-                "resourceMapMatchedElementBaseRefCount": 0,
+                "externalElementBaseRefCount": 2,
+                "resourceMapMatchedElementBaseRefCount": 2,
                 "resourceMapUnmatchedElementBaseRefCount": 0,
+                "elementBaseDataRefs": [
+                  {
+                    "fileId": 2,
+                    "roundedPathId": "-4373351994372762000",
+                    "status": "external-file",
+                    "sourceKey": "skillResourceMap",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100302
+                        ],
+                        "subSkillIds": [
+                          10100302
+                        ],
+                        "stateNames": [
+                          "Skill0_2"
+                        ],
+                        "effects": [
+                          "11_101003_013",
+                          "11_101003_125"
+                        ],
+                        "hitEffects": [
+                          "11_101003_016"
+                        ],
+                        "bulletEffects": [
+                          "11_101003_015"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "fileId": 2,
+                    "roundedPathId": "7736637370449973000",
+                    "status": "external-file",
+                    "sourceKey": "skillResourceMap",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100302
+                        ],
+                        "subSkillIds": [
+                          10100302
+                        ],
+                        "stateNames": [
+                          "Skill0_2"
+                        ],
+                        "effects": [
+                          "11_101003_013",
+                          "11_101003_125"
+                        ],
+                        "hitEffects": [
+                          "11_101003_016"
+                        ],
+                        "bulletEffects": [
+                          "11_101003_015"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "resourceMapElementRefCount": 2,
                 "confidence": "medium",
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
-                "damageElementFieldMappingStatus": "damage-element-field-mappings-missing",
-                "damageElementFieldMappingCount": 0,
-                "damageElementElementConfigIds": [],
-                "damageElementPathIds": [],
-                "damageElementFieldMappings": []
+                "damageElementFieldMappingStatus": "damage-element-field-mappings-found",
+                "damageElementFieldMappingCount": 1,
+                "damageElementElementConfigIds": [
+                  101003046
+                ],
+                "damageElementPathIds": [
+                  "7736637370449973165"
+                ],
+                "damageElementFieldMappings": [
+                  {
+                    "elementConfigId": 101003046,
+                    "pathId": "7736637370449973165",
+                    "elementName": "�չ�2 �ӵ�hit1~2",
+                    "scriptTypeCandidate": {
+                      "status": "field-signature-matched",
+                      "confidence": "medium",
+                      "className": "TDamageElementParams",
+                      "sourceLineRange": "dump.cs:395210-395289"
+                    },
+                    "hpDamage": {
+                      "status": "candidate-from-TDamageElementParams-formulaParams",
+                      "formulaFunctionIds": {
+                        "function_1": 1,
+                        "function_2": 2
+                      },
+                      "formulaFunctionStatus": "direct-element-formula-id-candidates-found",
+                      "formulaFunctionMatchedIds": [
+                        1,
+                        2
+                      ],
+                      "rawFormulaParamValues": [
+                        1000,
+                        1800,
+                        0,
+                        0,
+                        0,
+                        6400,
+                        10000,
+                        10000,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                      ],
+                      "damageFields": {
+                        "damageType": 2,
+                        "damageElementalType": 1,
+                        "elementCalFactor": 10000,
+                        "physicalRatio": 10000,
+                        "magicRatio": 0,
+                        "amp": 0,
+                        "burstId": 1,
+                        "armerPenetration": -1,
+                        "magicPenetration": 10000
+                      }
+                    },
+                    "toughnessDamage": {
+                      "status": "candidate-from-TDamageElementParams-weak-break-fields",
+                      "weakBreakDamageRate": 7000,
+                      "hitType": 0,
+                      "interruptPriority": 15,
+                      "useOneBreak": 0
+                    },
+                    "selfEnergyChange": {
+                      "status": "candidate-from-TDamageElementParams-recover-sp-fields",
+                      "recoverSP": 6299,
+                      "petRecoverSP": 24700,
+                      "recoverInterval": 9999,
+                      "ownerScope": "self-and-pet-candidate-unconfirmed"
+                    },
+                    "skillLevelBridge": {
+                      "status": "skill-logic-item-missing",
+                      "levelRows": 0,
+                      "parameterIds": [],
+                      "varyingParameterIds": []
+                    },
+                    "applied": false
+                  }
+                ]
               },
               {
                 "hitIndex": 3,
                 "label": "普通攻击 3段",
-                "candidateSource": "event-bridge-child-skill-control-hp-timeline",
+                "candidateSource": "event-bridge-child-skill-control-resource-map",
                 "skillId": 10100303,
                 "discoveryDepth": 2,
                 "discoveredFromSkillId": 10100302,
@@ -99992,22 +103674,144 @@
                 "candidateCountStatus": "complete-sample",
                 "behaviorChainCandidateCount": 0,
                 "resolvedBehaviorCount": 0,
-                "externalElementBaseRefCount": 0,
-                "resourceMapMatchedElementBaseRefCount": 0,
+                "externalElementBaseRefCount": 1,
+                "resourceMapMatchedElementBaseRefCount": 1,
                 "resourceMapUnmatchedElementBaseRefCount": 0,
+                "elementBaseDataRefs": [
+                  {
+                    "fileId": 2,
+                    "roundedPathId": "-668735999631003100",
+                    "status": "external-file",
+                    "sourceKey": "skillResourceMap",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100303
+                        ],
+                        "subSkillIds": [
+                          1
+                        ],
+                        "stateNames": [
+                          "Skill0_3"
+                        ],
+                        "effects": [
+                          "11_101003_013",
+                          "11_101003_125"
+                        ],
+                        "hitEffects": [
+                          "11_101003_016"
+                        ],
+                        "bulletEffects": [
+                          "11_101003_015"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "resourceMapElementRefCount": 1,
                 "confidence": "medium",
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
-                "damageElementFieldMappingStatus": "damage-element-field-mappings-missing",
-                "damageElementFieldMappingCount": 0,
-                "damageElementElementConfigIds": [],
-                "damageElementPathIds": [],
-                "damageElementFieldMappings": []
+                "damageElementFieldMappingStatus": "damage-element-field-mappings-found",
+                "damageElementFieldMappingCount": 1,
+                "damageElementElementConfigIds": [
+                  101003037
+                ],
+                "damageElementPathIds": [
+                  "-668735999631003170"
+                ],
+                "damageElementFieldMappings": [
+                  {
+                    "elementConfigId": 101003037,
+                    "pathId": "-668735999631003170",
+                    "elementName": "�չ�3 �ӵ�hit1~3",
+                    "scriptTypeCandidate": {
+                      "status": "field-signature-matched",
+                      "confidence": "medium",
+                      "className": "TDamageElementParams",
+                      "sourceLineRange": "dump.cs:395210-395289"
+                    },
+                    "hpDamage": {
+                      "status": "candidate-from-TDamageElementParams-formulaParams",
+                      "formulaFunctionIds": {
+                        "function_1": 1,
+                        "function_2": 2
+                      },
+                      "formulaFunctionStatus": "direct-element-formula-id-candidates-found",
+                      "formulaFunctionMatchedIds": [
+                        1,
+                        2
+                      ],
+                      "rawFormulaParamValues": [
+                        5000,
+                        1800,
+                        0,
+                        0,
+                        0,
+                        9600,
+                        10000,
+                        10000,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                      ],
+                      "damageFields": {
+                        "damageType": 2,
+                        "damageElementalType": 1,
+                        "elementCalFactor": 10000,
+                        "physicalRatio": 10000,
+                        "magicRatio": 0,
+                        "amp": 0,
+                        "burstId": 1,
+                        "armerPenetration": -1,
+                        "magicPenetration": 10000
+                      }
+                    },
+                    "toughnessDamage": {
+                      "status": "candidate-from-TDamageElementParams-weak-break-fields",
+                      "weakBreakDamageRate": 7000,
+                      "hitType": 0,
+                      "interruptPriority": 15,
+                      "useOneBreak": 0
+                    },
+                    "selfEnergyChange": {
+                      "status": "candidate-from-TDamageElementParams-recover-sp-fields",
+                      "recoverSP": 3600,
+                      "petRecoverSP": 13899,
+                      "recoverInterval": 9999,
+                      "ownerScope": "self-and-pet-candidate-unconfirmed"
+                    },
+                    "skillLevelBridge": {
+                      "status": "skill-logic-item-missing",
+                      "levelRows": 0,
+                      "parameterIds": [],
+                      "varyingParameterIds": []
+                    },
+                    "applied": false
+                  }
+                ]
               },
               {
                 "hitIndex": 4,
                 "label": "普通攻击 4段",
-                "candidateSource": "event-bridge-child-skill-control-hp-timeline",
+                "candidateSource": "event-bridge-child-skill-control-resource-map",
                 "skillId": 10100304,
                 "discoveryDepth": 3,
                 "discoveredFromSkillId": 10100303,
@@ -100018,13 +103822,76 @@
                 "candidateCountStatus": "complete-sample",
                 "behaviorChainCandidateCount": 0,
                 "resolvedBehaviorCount": 0,
-                "externalElementBaseRefCount": 0,
-                "resourceMapMatchedElementBaseRefCount": 0,
+                "externalElementBaseRefCount": 2,
+                "resourceMapMatchedElementBaseRefCount": 2,
                 "resourceMapUnmatchedElementBaseRefCount": 0,
+                "elementBaseDataRefs": [
+                  {
+                    "fileId": 2,
+                    "roundedPathId": "-4280404759535193600",
+                    "status": "external-file",
+                    "sourceKey": "skillResourceMap",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100304
+                        ],
+                        "subSkillIds": [
+                          0
+                        ],
+                        "stateNames": [
+                          "Skill0_4"
+                        ],
+                        "effects": [
+                          "11_101003_125",
+                          "11_101003_030",
+                          "11_101003_031",
+                          "11_101003_032"
+                        ],
+                        "bulletEffects": [
+                          "pre_effect_empty"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "fileId": 2,
+                    "roundedPathId": "1572718271109451500",
+                    "status": "external-file",
+                    "sourceKey": "skillResourceMap",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100304
+                        ],
+                        "subSkillIds": [
+                          0
+                        ],
+                        "stateNames": [
+                          "Skill0_4"
+                        ],
+                        "effects": [
+                          "11_101003_125",
+                          "11_101003_030",
+                          "11_101003_031",
+                          "11_101003_032"
+                        ],
+                        "bulletEffects": [
+                          "pre_effect_empty"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "resourceMapElementRefCount": 2,
                 "confidence": "medium",
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
-                "damageElementFieldMappingStatus": "damage-element-field-mappings-missing",
+                "damageElementFieldMappingStatus": "resource-map-element-refs-found-damage-element-fields-missing",
                 "damageElementFieldMappingCount": 0,
                 "damageElementElementConfigIds": [],
                 "damageElementPathIds": [],
@@ -100033,7 +103900,7 @@
               {
                 "hitIndex": 5,
                 "label": "普通攻击 5段",
-                "candidateSource": "event-bridge-child-skill-control-hp-timeline",
+                "candidateSource": "event-bridge-child-skill-control-resource-map",
                 "skillId": 10100305,
                 "discoveryDepth": 4,
                 "discoveredFromSkillId": 10100304,
@@ -100044,13 +103911,106 @@
                 "candidateCountStatus": "complete-sample",
                 "behaviorChainCandidateCount": 0,
                 "resolvedBehaviorCount": 0,
-                "externalElementBaseRefCount": 0,
-                "resourceMapMatchedElementBaseRefCount": 0,
+                "externalElementBaseRefCount": 3,
+                "resourceMapMatchedElementBaseRefCount": 3,
                 "resourceMapUnmatchedElementBaseRefCount": 0,
+                "elementBaseDataRefs": [
+                  {
+                    "fileId": 2,
+                    "roundedPathId": "-3406483301161858000",
+                    "status": "external-file",
+                    "sourceKey": "skillResourceMap",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100305
+                        ],
+                        "subSkillIds": [
+                          0
+                        ],
+                        "stateNames": [
+                          "Skill0_5"
+                        ],
+                        "effects": [
+                          "11_101003_125",
+                          "11_101003_035",
+                          "11_101003_036",
+                          "11_101003_037"
+                        ],
+                        "bulletEffects": [
+                          "pre_effect_empty"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "fileId": 2,
+                    "roundedPathId": "5614799294546611000",
+                    "status": "external-file",
+                    "sourceKey": "skillResourceMap",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100305
+                        ],
+                        "subSkillIds": [
+                          0
+                        ],
+                        "stateNames": [
+                          "Skill0_5"
+                        ],
+                        "effects": [
+                          "11_101003_125",
+                          "11_101003_035",
+                          "11_101003_036",
+                          "11_101003_037"
+                        ],
+                        "bulletEffects": [
+                          "pre_effect_empty"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "fileId": 2,
+                    "roundedPathId": "-1285658850712902700",
+                    "status": "external-file",
+                    "sourceKey": "skillResourceMap",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100305
+                        ],
+                        "subSkillIds": [
+                          0
+                        ],
+                        "stateNames": [
+                          "Skill0_5"
+                        ],
+                        "effects": [
+                          "11_101003_125",
+                          "11_101003_035",
+                          "11_101003_036",
+                          "11_101003_037"
+                        ],
+                        "bulletEffects": [
+                          "pre_effect_empty"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "resourceMapElementRefCount": 3,
                 "confidence": "medium",
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
-                "damageElementFieldMappingStatus": "damage-element-field-mappings-missing",
+                "damageElementFieldMappingStatus": "resource-map-element-refs-found-damage-element-fields-missing",
                 "damageElementFieldMappingCount": 0,
                 "damageElementElementConfigIds": [],
                 "damageElementPathIds": [],
@@ -100058,11 +104018,17 @@
               }
             ],
             "applied": false,
-            "damageElementFieldMappingStatus": "hit-groups-missing-damage-element-field-mappings",
-            "damageElementMappedHitGroupCount": 0,
-            "damageElementFieldMappingCount": 0,
-            "damageElementElementConfigIds": [],
-            "damageElementPathIds": []
+            "damageElementFieldMappingStatus": "partial-hit-groups-have-damage-element-field-mappings",
+            "damageElementMappedHitGroupCount": 2,
+            "damageElementFieldMappingCount": 2,
+            "damageElementElementConfigIds": [
+              101003037,
+              101003046
+            ],
+            "damageElementPathIds": [
+              "-668735999631003170",
+              "7736637370449973165"
+            ]
           },
           "targetSkillControls": [
             {

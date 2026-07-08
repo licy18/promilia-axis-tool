@@ -2438,10 +2438,7 @@ async function buildExternalElementObjectEvidence(currentSkillControlEvidence) {
         ?.targetSkillControls ?? []
     )
       .filter(
-        target =>
-          target.status === 'found' &&
-          (target.behaviorReferenceSummary?.resourceMapMatchedElementBaseRefs ??
-            0) > 0
+        target => target.status === 'found' && hasTraceableElementRefs(target)
       )
       .map(target => Number(target.skillId))
       .filter(Number.isFinite)
@@ -2538,6 +2535,18 @@ async function buildExternalElementObjectEvidence(currentSkillControlEvidence) {
       skills: [],
     };
   }
+}
+
+function hasTraceableElementRefs(skillControlEvidence) {
+  if (
+    (skillControlEvidence?.behaviorReferenceSummary
+      ?.resourceMapMatchedElementBaseRefs ?? 0) > 0
+  ) {
+    return true;
+  }
+  return (
+    (skillControlEvidence?.skillResourceMapEvidence?.elementRefCount ?? 0) > 0
+  );
 }
 
 function buildDamageElementFieldMappingEvidence({
@@ -2699,10 +2708,19 @@ function attachNormalAttackHitDamageElementEvidence(
   const mappingBySkillId = new Map();
   for (const skill of damageElementFieldMappingEvidence?.skills ?? []) {
     const byPathId = new Map();
+    const byRoundedPathId = new Map();
     for (const mapping of skill.fieldMappings ?? []) {
       byPathId.set(String(mapping.pathId), mapping);
+      const roundedPathId =
+        mapping.pathId == null ? null : String(numberOrNull(mapping.pathId));
+      if (roundedPathId) {
+        byRoundedPathId.set(roundedPathId, mapping);
+      }
     }
-    mappingBySkillId.set(Number(skill.skillId), byPathId);
+    mappingBySkillId.set(Number(skill.skillId), {
+      byPathId,
+      byRoundedPathId,
+    });
   }
 
   for (const item of currentSkillControlEvidence ?? []) {
@@ -2733,7 +2751,9 @@ function attachNormalAttackHitDamageElementEvidence(
       hitGroup.damageElementFieldMappingStatus =
         mappings.length > 0
           ? 'damage-element-field-mappings-found'
-          : 'damage-element-field-mappings-missing';
+          : (hitGroup.elementBaseDataRefs ?? []).length > 0
+            ? 'resource-map-element-refs-found-damage-element-fields-missing'
+            : 'damage-element-field-mappings-missing';
       hitGroup.damageElementFieldMappingCount = mappings.length;
       hitGroup.damageElementElementConfigIds = uniqueNumbers(
         mappings.map(mapping => mapping.elementConfigId)
@@ -2766,15 +2786,26 @@ function attachNormalAttackHitDamageElementEvidence(
 }
 
 function matchHitGroupDamageElementMappings(hitGroup, mappingBySkillId) {
-  const byPathId = mappingBySkillId.get(Number(hitGroup.skillId));
-  if (!byPathId) {
+  const indexes = mappingBySkillId.get(Number(hitGroup.skillId));
+  if (!indexes) {
     return [];
   }
-  return uniqueStrings(
-    (hitGroup.elementBaseDataRefs ?? []).map(ref => ref.pathId).filter(Boolean)
-  )
-    .map(pathId => byPathId.get(String(pathId)))
-    .filter(Boolean);
+  const mappings = [];
+  for (const ref of hitGroup.elementBaseDataRefs ?? []) {
+    const pathId = ref.pathId == null ? null : String(ref.pathId);
+    const roundedPathId =
+      ref.roundedPathId == null ? null : String(ref.roundedPathId);
+    const mapping =
+      (pathId ? indexes.byPathId.get(pathId) : null) ??
+      (roundedPathId ? indexes.byRoundedPathId.get(roundedPathId) : null);
+    if (mapping) {
+      mappings.push(mapping);
+    }
+  }
+  return uniqueByKey(
+    mappings,
+    mapping => `${mapping.elementConfigId ?? ''}|${mapping.pathId ?? ''}`
+  );
 }
 
 function compactHitDamageElementFieldMapping(mapping) {
@@ -4789,11 +4820,26 @@ function buildChildNormalAttackHitGroup({ control, hitIndex }) {
     .sort(compareTimelineCandidates);
   const candidateCount = numberOrNull(control.hpTimelineCandidateCount) ?? 0;
   const behaviorSummary = summarizeHitBehaviorChains(behaviorChains);
+  const resourceMapElementRefs =
+    (behaviorSummary.elementBaseDataRefs?.length ?? 0) === 0
+      ? summarizeSkillResourceMapHitElementRefs(
+          control.skillResourceMapEvidence
+        )
+      : [];
+  const elementRefSummary = mergeHitElementRefSummary(
+    behaviorSummary,
+    resourceMapElementRefs
+  );
 
   return compactObject({
     hitIndex,
     label: `普通攻击 ${hitIndex}段`,
-    candidateSource: 'event-bridge-child-skill-control-hp-timeline',
+    candidateSource:
+      candidateCount > 0
+        ? 'event-bridge-child-skill-control-hp-timeline'
+        : resourceMapElementRefs.length > 0
+          ? 'event-bridge-child-skill-control-resource-map'
+          : 'event-bridge-child-skill-control-hp-timeline',
     skillId: numberOrNull(control.skillId),
     discoveryDepth: numberOrNull(control.discoveryDepth),
     discoveredFromSkillId: numberOrNull(control.discoveredFromSkillId),
@@ -4811,11 +4857,66 @@ function buildChildNormalAttackHitGroup({ control, hitIndex }) {
     ),
     hpTimelineCandidates: hpTimelineCandidates.map(compactHpTimelineCandidate),
     ...behaviorSummary,
+    ...elementRefSummary,
+    resourceMapElementRefCount: resourceMapElementRefs.length,
     behaviorChains: behaviorChains.map(compactHitBehaviorChain),
     confidence: 'medium',
     bindingStatus: 'normal-attack-hit-candidate-unconfirmed',
     applied: false,
   });
+}
+
+function summarizeSkillResourceMapHitElementRefs(skillResourceMapEvidence) {
+  const resourceMaps = skillResourceMapEvidence?.resourceMaps ?? [];
+  return uniqueByKey(
+    resourceMaps.flatMap(resourceMap =>
+      (resourceMap.elements ?? [])
+        .filter(element => numberOrNull(element.fileId) !== 0)
+        .map(element =>
+          compactObject({
+            fileId: numberOrNull(element.fileId),
+            pathId: element.pathId ?? null,
+            roundedPathId: element.roundedPathId ?? null,
+            status: element.status ?? null,
+            sourceKey: 'skillResourceMap',
+            resourceMapMatchCount: 1,
+            resourceMapMatches: [
+              compactObject({
+                resourceMapIndex: resourceMap.index,
+                skillIds: resourceMap.skillIds,
+                subSkillIds: resourceMap.subSkillIds,
+                stateNames: resourceMap.stateNames,
+                effects: resourceMap.effects,
+                hitEffects: resourceMap.hitEffects,
+                bulletEffects: resourceMap.bulletEffects,
+              }),
+            ],
+          })
+        )
+    ),
+    ref => `${ref.fileId}|${ref.pathId ?? ''}|${ref.roundedPathId ?? ''}`
+  );
+}
+
+function mergeHitElementRefSummary(behaviorSummary, extraRefs) {
+  if (!extraRefs.length) {
+    return {};
+  }
+  const refs = uniqueByKey(
+    [...(behaviorSummary.elementBaseDataRefs ?? []), ...extraRefs],
+    ref => `${ref.fileId}|${ref.pathId ?? ''}|${ref.roundedPathId ?? ''}`
+  );
+  const externalRefs = refs.filter(ref => numberOrNull(ref.fileId) !== 0);
+  return {
+    externalElementBaseRefCount: externalRefs.length,
+    resourceMapMatchedElementBaseRefCount: externalRefs.filter(
+      ref => (numberOrNull(ref.resourceMapMatchCount) ?? 0) > 0
+    ).length,
+    resourceMapUnmatchedElementBaseRefCount: externalRefs.filter(
+      ref => (numberOrNull(ref.resourceMapMatchCount) ?? 0) === 0
+    ).length,
+    elementBaseDataRefs: refs,
+  };
 }
 
 function selectHitBehaviorChainsForWindows(behaviorChains, windows) {

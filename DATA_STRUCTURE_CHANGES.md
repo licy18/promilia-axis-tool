@@ -6708,3 +6708,53 @@ runtime-sampling-offline-samples-partially-validated
 ### 84.4 消费者注意
 
 `jsonFileCount > parsedJsonSampleFiles` 仍表示 evidence 报表不是全量解析。`jsonFileCount === parsedJsonSampleFiles` 只表示 MonoBehaviour 扫描覆盖完整，不代表 HP / 韧性 / 能量公式已最终应用；公式应用仍以 `formulaFunctionEvidence.applied` 和 runtime capture 验证为准。
+
+## 85. 阶段 5-8BF：寒悠悠普攻 resourceMap 子段绑定
+
+阶段 5-8BF 扩展了 `skill-asset-evidence.json` 中普通攻击子段绑定的证据来源。EventBridge 目标技能即使没有 `behaviorReferenceSummary.resourceMapMatchedElementBaseRefs`，只要 `skillResourceMapEvidence.elementRefCount > 0`，也会进入外部 Element 解析队列。
+
+### 85.1 生成器变化
+
+- `externalElementObjectEvidence` 的目标技能筛选新增根级 `skillResourceMapEvidence.elementRefCount` 判断。
+- `normalAttackHitChainCandidates.hitGroups[]` 新增或稳定输出 `resourceMapElementRefCount`，用于标记子技能 resourceMap fallback 引用数量。
+- `hitGroups[].candidateSource` 可为 `event-bridge-child-skill-control-resource-map`，表示该 hit 候选来自目标子技能根级 resourceMap，而不是行为链 HP timeline。
+- `hitGroups[].damageElementFieldMappingStatus` 新增 `resource-map-element-refs-found-damage-element-fields-missing`，表示 resourceMap 元素已解析，但没有命中 `TDamageElementParams` 字段。
+- hit group 到 DamageElement 字段映射支持 `roundedPathId`，用来对齐 Unity 导出的 64 位 pathId 与 JS 数字侧的近似值。
+
+### 85.2 Workbench 投影变化
+
+`createHitCandidatePreview()` 输出新增：
+
+- `resourceMapElementRefCount`
+- `resourceMapUnmatchedElementBaseRefCount`
+- `hasResourceMapElementRefs`
+
+当没有 DamageElement 字段映射但存在 resourceMap 元素引用时，preview 状态从普通缺字段升级为 `per-hit-resource-map-elements-found-fields-missing`。这让 UI 可以把“资源引用已找到但类型未识别”和“完全没有候选”分开显示。
+
+### 85.3 生成结果变化
+
+重生成后全局摘要变化为：
+
+```json
+{
+  "externalElementObjectResolvedSkills": 18,
+  "externalElementObjectResolvedRefs": 97,
+  "damageElementFieldMappedSkills": 15,
+  "damageElementFieldMappedObjects": 33,
+  "hpDamageFieldCandidateRefs": 33,
+  "toughnessDamageFieldCandidateRefs": 33,
+  "selfEnergyFieldCandidateRefs": 33,
+  "damageElementFormulaFunctionMatchedRefs": 66
+}
+```
+
+寒悠悠 `10100301` 普攻子链当前输出：
+
+- `10100302`：`resourceMapElementRefCount = 2`，映射到 DamageElement `101003046`。
+- `10100303`：`resourceMapElementRefCount = 1`，映射到 DamageElement `101003037`。
+- `10100304`：`resourceMapElementRefCount = 2`，存在 resourceMap 元素但 DamageElement 字段未确认。
+- `10100305`：`resourceMapElementRefCount = 3`，存在 resourceMap 元素但 DamageElement 字段未确认。
+
+### 85.4 兼容性
+
+该阶段只增加证据字段和缺口状态，不删除既有字段。消费者应将新状态视为比 `damage-element-field-mappings-missing` 更精确的中间态，而不是最终公式已应用。

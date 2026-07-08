@@ -4108,6 +4108,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8BF 目标：如果后续分析涉及 `11100101 / 10300201 / 10100712 / 10700212`，再引入目标技能全量解析或按角色白名单全量解析。
 - 继续闭合寒悠悠普攻子技能 hit 绑定，并接入真实 hook JSON / runtime capture。
 
+### 2026-07-08：阶段 5-8BF 寒悠悠普攻 resourceMap 子段绑定
+
+本轮完成：
+
+- `buildExternalElementObjectEvidence()` 开始追踪只有 `skillResourceMapEvidence.elementRefCount > 0` 的 EventBridge 目标技能，避免目标技能行为链未命中时漏掉根级 `skillResourceMaps.elements`。
+- `buildChildNormalAttackHitGroup()` 在 HP timeline / behavior chain 不足时补充 `skillResourceMap` fallback 元素引用。
+- hit group 的 DamageElement 匹配支持 `roundedPathId`，用于连接 Unity 导出里的大整数 pathId 和当前 JS 侧安全整数近似值。
+- Workbench 投影层新增 `resourceMapElementRefCount`、`resourceMapUnmatchedElementBaseRefCount` 与 `per-hit-resource-map-elements-found-fields-missing` 状态，能区分“已找到 resourceMap 元素但未确认 DamageElement 字段”的缺口。
+- 重新运行 `npm run data:generate`，外部元素解析范围从 14 个技能 / 89 个引用提高到 18 个技能 / 97 个引用，DamageElement 字段映射从 13 个技能 / 31 个对象提高到 15 个技能 / 33 个对象。
+
+寒悠悠 `10100301` 普攻当前结果：
+
+- 第 1 段仍来自主技能既有 DamageElement `101003087`，可见 `recoverSP = 6000`、`weakBreakDamageRate = 7000`。
+- 第 2 段 `10100302` 通过 resourceMap fallback 命中 DamageElement `101003046`，可见 `recoverSP = 6299`、`weakBreakDamageRate = 7000`。
+- 第 3 段 `10100303` 通过 resourceMap fallback 命中 DamageElement `101003037`，可见 `recoverSP = 3600`、`weakBreakDamageRate = 7000`。
+- 第 4 段 `10100304` 已解析到 `101003076 / TFxElementParams` 与 `101003180 / unknown scriptPathId 5576338162890961044`，但暂未确认 DamageElement 字段。
+- 第 5 段 `10100305` 已解析到 `101003101 / TFreezeFrameElementParams`、`101003038 / TFxElementParams` 与 `101003181 / unknown scriptPathId 5576338162890961044`，但暂未确认 DamageElement 字段。
+
+当前边界：
+
+- 第 2/3 段只是静态字段候选闭合，仍未应用最终 HP / 韧性 / 能量公式。
+- 第 4/5 段不是外部引用缺失，而是未知 Element 类型缺口；需要识别 `scriptPathId = 5576338162890961044` 对应的 IL2CPP 类型与嵌套引用语义。
+- 寒悠悠普攻描述段数仍未完成自动拆分；当前子链候选来自 `10100302/03/04/05` 四个 EventBridge 子技能，加上主技能第 1 段证据。
+- 真实 runtime capture 仍是最终确认帧、倍率、削韧和充能公式的必要条件。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/data/azprGenerated.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、21 条测试。
+
+下一步：
+
+- 阶段 5-8BG 目标：识别寒悠悠 `10100304/05` 的 unknown Element 脚本类型 `5576338162890961044`，确认它是伤害、生成器还是二级效果桥，并在确认后接入嵌套 Element 解析。
+- 如后续分析进入 `11100101 / 10300201 / 10100712 / 10700212`，再引入目标技能全量解析或按角色白名单全量解析。
+- 继续接入真实 hook JSON / runtime capture，把静态候选转成可验证的 HP / 韧性 / 能量三曲线。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
