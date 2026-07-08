@@ -309,6 +309,7 @@ import { Aim, EditPen, Tickets } from '@element-plus/icons-vue';
 import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
 import { createRuntimeDetailCalculatorRows } from './runtimeSelectedDetail';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
+import { createRuntimePointByDeltaId } from './runtimeProjectionPoints';
 
 const props = defineProps({
   eventLog: {
@@ -355,22 +356,9 @@ const runtimeTrackFilter = ref('all');
 const runtimeActorFilter = ref('all');
 const runtimeActionFilter = ref('all');
 const runtimeSimLogRows = computed(() => props.runtimeProjection?.simLog ?? []);
-const runtimePointByDeltaId = computed(() => {
-  const byId = new Map();
-  for (const point of props.runtimeProjection?.enemyStateCurve?.points ?? []) {
-    if (point?.sourceDeltaId) {
-      byId.set(point.sourceDeltaId, point);
-    }
-  }
-  for (const actor of props.runtimeProjection?.selfEnergyCurveByActor ?? []) {
-    for (const point of actor.points ?? []) {
-      if (point?.sourceDeltaId) {
-        byId.set(point.sourceDeltaId, point);
-      }
-    }
-  }
-  return byId;
-});
+const runtimePointByDeltaId = computed(() =>
+  createRuntimePointByDeltaId(props.runtimeProjection)
+);
 const runtimeTrackFilterOptions = computed(() => {
   const counts = countRuntimeOptions(runtimeSimLogRows.value, 'trackKey');
   return [

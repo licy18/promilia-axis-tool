@@ -1,4 +1,8 @@
 import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
+import {
+  getRuntimeEnemyStateCurve,
+  getRuntimeResourceCurveRows,
+} from './runtimeProjectionPoints';
 import { createThreeValueCalculatorDisplayRows } from '../../simulation/threeValueCalculatorAdapters';
 
 const RUNTIME_TRACK_META = {
@@ -55,9 +59,11 @@ export function createRuntimeSelectedDetail({
     frameLabel: pointRow.frameLabel ?? simLogRow?.frameLabel ?? '',
     timeMs: pointRow.timeMs ?? simLogRow?.timeMs ?? null,
     trackKey: pointRow.trackKey,
-    trackLabel: pointRow.trackLabel ?? RUNTIME_TRACK_META[pointRow.trackKey]?.label,
+    trackLabel:
+      pointRow.trackLabel ?? RUNTIME_TRACK_META[pointRow.trackKey]?.label,
     layerKey: pointRow.layerKey ?? simLogRow?.layerKey ?? 'applied',
-    valueUnit: pointRow.valueUnit ?? RUNTIME_TRACK_META[pointRow.trackKey]?.unit,
+    valueUnit:
+      pointRow.valueUnit ?? RUNTIME_TRACK_META[pointRow.trackKey]?.unit,
     delta: pointRow.delta,
     cumulative: pointRow.cumulative,
     stateLabel: pointRow.stateLabel ?? null,
@@ -115,18 +121,20 @@ export function createRuntimeSelectedDetail({
 }
 
 function createRuntimePointRows(runtimeProjection) {
+  const enemyStateCurve = getRuntimeEnemyStateCurve(runtimeProjection);
+  const resourceCurveRows = getRuntimeResourceCurveRows(runtimeProjection);
   return [
     ...createRuntimeTrackRows({
-      points: runtimeProjection.enemyStateCurve?.points ?? [],
+      points: enemyStateCurve.points ?? [],
       trackKey: 'enemyHpDamage',
-      stateMetric: runtimeProjection.enemyStateCurve?.stateMetrics?.hp,
+      stateMetric: enemyStateCurve.stateMetrics?.hp,
     }),
     ...createRuntimeTrackRows({
-      points: runtimeProjection.enemyStateCurve?.points ?? [],
+      points: enemyStateCurve.points ?? [],
       trackKey: 'enemyToughnessDamage',
-      stateMetric: runtimeProjection.enemyStateCurve?.stateMetrics?.toughness,
+      stateMetric: enemyStateCurve.stateMetrics?.toughness,
     }),
-    ...(runtimeProjection.selfEnergyCurveByActor ?? []).flatMap(actor =>
+    ...resourceCurveRows.flatMap(actor =>
       createRuntimeTrackRows({
         points: actor.points ?? [],
         trackKey: 'selfEnergyChange',

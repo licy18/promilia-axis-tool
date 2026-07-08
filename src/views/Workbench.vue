@@ -216,6 +216,7 @@ import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import WorkbenchFlowPanel from '../features/workbench/WorkbenchFlowPanel.vue';
 import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
+import { createRuntimePointByDeltaId } from '../features/workbench/runtimeProjectionPoints';
 import { createRuntimeStateCurvePointId } from '../features/workbench/stateCurvePointIdentity';
 import {
   SYSTEM_TIMELINE_LANE_ID,
@@ -1506,19 +1507,9 @@ function findRuntimePointByDeltaId(runtimeProjection, sourceDeltaId) {
   if (!sourceDeltaId) {
     return null;
   }
-  for (const point of runtimeProjection?.enemyStateCurve?.points ?? []) {
-    if (point.sourceDeltaId === sourceDeltaId) {
-      return point;
-    }
-  }
-  for (const actor of runtimeProjection?.selfEnergyCurveByActor ?? []) {
-    for (const point of actor.points ?? []) {
-      if (point.sourceDeltaId === sourceDeltaId) {
-        return point;
-      }
-    }
-  }
-  return null;
+  return (
+    createRuntimePointByDeltaId(runtimeProjection).get(sourceDeltaId) ?? null
+  );
 }
 
 function compareRuntimeStateRows(left, right) {

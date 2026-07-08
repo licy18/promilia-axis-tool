@@ -14416,3 +14416,78 @@ runtimeSequenceIndex
 - `simLog[]` 暴露 `runtimeSequenceIndex`，且不包含 candidate delta。
 - `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js`：通过，1 个测试文件、1 条测试。
 - `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、55 条测试。
+
+## 173. UI 主流程能力块：runtime 点位统一入口
+
+本阶段属于 UI 主流程。
+
+### 173.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 173.2 新增 Workbench helper
+
+新增文件：
+
+```text
+src/features/workbench/runtimeProjectionPoints.js
+```
+
+导出：
+
+```js
+getRuntimeEnemyStateCurve()
+getRuntimeResourceCurveRows()
+createRuntimeProjectionPoints()
+createRuntimePointByDeltaId()
+```
+
+### 173.3 runtime projection 读取优先级
+
+敌人状态曲线读取顺序：
+
+```text
+runtimeProjection.stateCurves.enemy
+runtimeProjection.enemyStateCurve
+```
+
+资源曲线读取顺序：
+
+```text
+runtimeProjection.resourceCurves.curvesByActor
+runtimeProjection.selfEnergyCurveByActor
+```
+
+### 173.4 接入范围
+
+以下 Workbench 模块改为复用该 helper：
+
+```text
+Workbench.vue
+WorkbenchFlowPanel.vue
+ResourceMonitorPanel.vue
+RuntimeSelectedDetail runtimeSelectedDetail.js
+EventLogPanel.vue
+AnalysisPanel.vue
+```
+
+影响路径：
+
+```text
+主流程导航 state point
+资源曲线点位
+日志 state point 映射
+分析 trace 映射
+右侧三值详情点位
+Workbench 顶层 runtime point 定位
+```
+
+### 173.5 验证
+
+新增和继续覆盖：
+
+- helper 优先消费 `stateCurves/resourceCurves`，旧字段只作为兼容回退。
+- Workbench 主流程、资源曲线、日志详情、分析追踪和右侧三值详情继续通过既有主流程测试。
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、43 条测试。
+- `npm run test -- --run`：通过，16 个测试文件、120 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

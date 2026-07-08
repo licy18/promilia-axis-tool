@@ -901,6 +901,7 @@ import {
   createStateCurvePointId,
   createRuntimeStateCurvePointId,
 } from './stateCurvePointIdentity';
+import { createRuntimePointByDeltaId } from './runtimeProjectionPoints';
 
 const CANDIDATE_CHART_COLORS = ['#f2b366', '#79c7b9', '#a6b7ff'];
 const candidateChartGridLines = [25, 50, 75];
@@ -1204,22 +1205,9 @@ const threeValueCalculatorDiagnosticRows = computed(() =>
     }),
   ].filter(Boolean)
 );
-const runtimePointByDeltaId = computed(() => {
-  const byId = new Map();
-  for (const point of props.runtimeProjection?.enemyStateCurve?.points ?? []) {
-    if (point?.sourceDeltaId) {
-      byId.set(point.sourceDeltaId, point);
-    }
-  }
-  for (const actor of props.runtimeProjection?.selfEnergyCurveByActor ?? []) {
-    for (const point of actor.points ?? []) {
-      if (point?.sourceDeltaId) {
-        byId.set(point.sourceDeltaId, point);
-      }
-    }
-  }
-  return byId;
-});
+const runtimePointByDeltaId = computed(() =>
+  createRuntimePointByDeltaId(props.runtimeProjection)
+);
 const runtimeTraceByActionId = computed(() => {
   const groups = new Map();
   for (const row of props.runtimeProjection?.simLog ?? []) {

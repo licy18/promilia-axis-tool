@@ -6967,6 +6967,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 下一阶段转向 UI 主流程能力块，优先把 Workbench 的“编辑动作 -> 运行模拟 -> 曲线监控 -> 日志/详情 -> 回到动作修改”串成更完整的 Endaxis 式操作闭环。
 - 不再新增单个状态标签、同步提示、缺口说明或公式追证阶段。
 
+### 2026-07-08：UI 主流程能力块 - runtime 点位统一入口
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `runtimeProjectionPoints.js`，把 Workbench 内部 runtime point 查找统一到 `stateCurves.enemy` 与 `resourceCurves.curvesByActor`，旧 `enemyStateCurve` / `selfEnergyCurveByActor` 只作为回退。
+- `WorkbenchFlowPanel`、`ResourceMonitorPanel`、`RuntimeSelectedDetail`、`EventLogPanel`、`AnalysisPanel` 和 Workbench 顶层定位逻辑改为复用同一入口。
+- 顶部主流程导航、资源曲线、日志详情、分析追踪和右侧三值详情现在都从 runtime 标准输出寻找同一批 state point。
+- 本阶段不修改三值数据、runtime 计算、保存结构或可见 UI 信息量。
+
+当前验证事实：
+
+- helper 单测确认新 `stateCurves/resourceCurves` 优先，旧字段仍可回退。
+- Workbench 主流程测试继续覆盖运行结果打开、曲线选点、日志详情、三值详情和回到动作修改。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、43 条测试。
+- `npm run test -- --run`：通过，16 个测试文件、120 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- UI 主流程能力块继续推进时，优先评估动作编辑区、运行曲线区、日志区和右侧详情区之间的操作顺序是否还需要进一步收束。
+- 不回到单个状态标签、同步提示、缺口说明或公式追证阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

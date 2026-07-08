@@ -141,6 +141,7 @@ import {
   TrendCharts,
 } from '@element-plus/icons-vue';
 import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
+import { createRuntimePointByDeltaId } from './runtimeProjectionPoints';
 
 const props = defineProps({
   selectedAction: {
@@ -258,23 +259,6 @@ function selectRuntimeNavigationPoint(point) {
     return;
   }
   emit('select-runtime-state-point', point.statePointId);
-}
-
-function createRuntimePointByDeltaId(runtimeProjection) {
-  const points = new Map();
-  for (const point of runtimeProjection?.enemyStateCurve?.points ?? []) {
-    if (point.sourceDeltaId) {
-      points.set(point.sourceDeltaId, point);
-    }
-  }
-  for (const actor of runtimeProjection?.selfEnergyCurveByActor ?? []) {
-    for (const point of actor.points ?? []) {
-      if (point.sourceDeltaId) {
-        points.set(point.sourceDeltaId, point);
-      }
-    }
-  }
-  return points;
 }
 
 function createRuntimeNavigationPoint(row, pointByDeltaId) {

@@ -341,6 +341,10 @@ import {
   TrendCharts,
 } from '@element-plus/icons-vue';
 import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
+import {
+  getRuntimeEnemyStateCurve,
+  getRuntimeResourceCurveRows,
+} from './runtimeProjectionPoints';
 
 const RUNTIME_CURVE_CHART_WIDTH = 320;
 const RUNTIME_CURVE_CHART_HEIGHT = 132;
@@ -406,8 +410,8 @@ const resourceTotals = computed(() => {
 
 const runtimeSummary = computed(() => props.runtimeProjection?.summary ?? {});
 
-const runtimeEnemyState = computed(
-  () => props.runtimeProjection?.enemyStateCurve ?? {}
+const runtimeEnemyState = computed(() =>
+  getRuntimeEnemyStateCurve(props.runtimeProjection)
 );
 
 const runtimeEnemyHpMetric = computed(
@@ -418,8 +422,8 @@ const runtimeEnemyToughnessMetric = computed(
   () => runtimeEnemyState.value.stateMetrics?.toughness ?? null
 );
 
-const runtimeActorEnergyRows = computed(
-  () => props.runtimeProjection?.selfEnergyCurveByActor ?? []
+const runtimeActorEnergyRows = computed(() =>
+  getRuntimeResourceCurveRows(props.runtimeProjection)
 );
 
 const runtimeCurveSourceSeries = computed(() =>
@@ -538,6 +542,8 @@ function createRuntimeCurveSourceSeries(runtimeProjection) {
   if (!runtimeProjection) {
     return [];
   }
+  const enemyStateCurve = getRuntimeEnemyStateCurve(runtimeProjection);
+  const resourceCurveRows = getRuntimeResourceCurveRows(runtimeProjection);
 
   return [
     createRuntimeEnemyCurveSeries({
@@ -546,8 +552,8 @@ function createRuntimeCurveSourceSeries(runtimeProjection) {
       label: '敌人 HP',
       color: RUNTIME_CURVE_COLORS.enemyHpDamage,
       valueField: 'hpDelta',
-      points: runtimeProjection.enemyStateCurve?.points ?? [],
-      stateMetric: runtimeProjection.enemyStateCurve?.stateMetrics?.hp,
+      points: enemyStateCurve.points ?? [],
+      stateMetric: enemyStateCurve.stateMetrics?.hp,
     }),
     createRuntimeEnemyCurveSeries({
       key: 'enemy-toughness',
@@ -555,10 +561,10 @@ function createRuntimeCurveSourceSeries(runtimeProjection) {
       label: '敌人韧性',
       color: RUNTIME_CURVE_COLORS.enemyToughnessDamage,
       valueField: 'toughnessDelta',
-      points: runtimeProjection.enemyStateCurve?.points ?? [],
-      stateMetric: runtimeProjection.enemyStateCurve?.stateMetrics?.toughness,
+      points: enemyStateCurve.points ?? [],
+      stateMetric: enemyStateCurve.stateMetrics?.toughness,
     }),
-    ...(runtimeProjection.selfEnergyCurveByActor ?? []).map((actor, index) =>
+    ...resourceCurveRows.map((actor, index) =>
       createRuntimeEnergyCurveSeries(actor, index)
     ),
   ];
