@@ -8406,6 +8406,30 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把主流程动作分发也从各面板本地 helper 逐步收束为共享入口，让查看、回改、回看三类动作更接近 Endaxis 的单一工作流。
 
+### 2026-07-09：UI 主流程能力块 - Shared Main Flow Actions
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `workbenchMainFlowActions`，把 Workbench 主流程里的查看运行结果、选择运行点、查看运行结果详情、回到动作编辑、返回刷新结果统一成共享 action builder。
+- `WorkbenchFlowPanel`、属性面板、三值详情、资源曲线、事件日志和分析面板的主流程相关动作改为通过共享 builder 创建。
+- 各面板保留原有 source 和 dispatch-flow-action 事件链路，controller 与 runtime 行为不变，只减少面板本地拼 action 的分散逻辑。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- 新增单元测试覆盖 open runtime、select runtime state point、select runtime result、focus runtime action、return runtime result 五类主流程动作。
+- Workbench 页面测试确认主流程闭环仍可完成“查看运行结果 -> 回到动作编辑 -> 产生刷新结果 -> 返回结果点 -> 继续修改动作”。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、62 条测试。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 Workbench 主界面的编辑、运行结果、曲线、日志、详情在视觉布局和操作顺序上进一步压成一个更紧凑的 Endaxis 式主工作流。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

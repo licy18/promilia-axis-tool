@@ -200,13 +200,14 @@ import { computed } from 'vue';
 import { Aim, DataAnalysis, EditPen } from '@element-plus/icons-vue';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import {
-  WORKBENCH_FLOW_ACTION_KINDS,
   createWorkbenchFlowRuntimeActionEditTarget,
-  createWorkbenchFlowAction,
   resolveWorkbenchMainFlowActionEditTarget,
   resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
-import { createRuntimeActionFocusFlowAction } from './runtimeActionFocusFlowAction';
+import {
+  createWorkbenchRuntimeActionEditFlowAction,
+  createWorkbenchRuntimeResultReturnFlowAction,
+} from './workbenchMainFlowActions';
 
 const props = defineProps({
   detail: {
@@ -276,22 +277,18 @@ function dispatchRuntimeDetailFlowAction(action) {
 }
 
 function getRuntimeDetailActionFocusFlowAction(detail) {
-  return createRuntimeActionFocusFlowAction({
+  return createWorkbenchRuntimeActionEditFlowAction({
     source: 'runtime-detail',
-    detail,
+    target: detail,
     enabled: Boolean(detail?.canFocusAction ?? detail?.actionId),
   });
 }
 
 function getRuntimeDetailReturnFlowAction(context) {
-  return createWorkbenchFlowAction({
-    kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+  return createWorkbenchRuntimeResultReturnFlowAction({
     source: 'runtime-detail',
-    actionId: context?.actionId ?? '',
-    statePointId: context?.statePointId ?? '',
-    payload: context ?? null,
+    target: context,
     enabled: Boolean(context?.statePointId),
-    disabledReason: 'missing-runtime-result',
   });
 }
 

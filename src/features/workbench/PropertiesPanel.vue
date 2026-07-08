@@ -448,11 +448,8 @@ import { computed } from 'vue';
 import { Aim, Operation } from '@element-plus/icons-vue';
 import { WORKBENCH_FRAME_MS, formatFrameTime } from '../../domain/timebase';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
-import {
-  WORKBENCH_FLOW_ACTION_KINDS,
-  createWorkbenchFlowAction,
-  resolveWorkbenchMainFlowResultReturnTarget,
-} from './workbenchFlowModel';
+import { resolveWorkbenchMainFlowResultReturnTarget } from './workbenchFlowModel';
+import { createWorkbenchRuntimeResultReturnFlowAction } from './workbenchMainFlowActions';
 
 const props = defineProps({
   selection: {
@@ -836,14 +833,10 @@ function emitTextPatch(key, value) {
 }
 
 function returnRuntimeResult() {
-  const action = createWorkbenchFlowAction({
-    kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+  const action = createWorkbenchRuntimeResultReturnFlowAction({
     source: 'properties-panel',
-    actionId: runtimeResultReturnContext.value?.actionId ?? '',
-    statePointId: runtimeResultReturnContext.value?.statePointId ?? '',
-    payload: runtimeResultReturnContext.value ?? null,
+    target: runtimeResultReturnContext.value,
     enabled: Boolean(runtimeResultReturnContext.value?.statePointId),
-    disabledReason: 'missing-runtime-result',
   });
   if (!action.canRun) {
     return;

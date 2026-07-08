@@ -215,11 +215,14 @@ import {
 } from '@element-plus/icons-vue';
 import {
   WORKBENCH_FLOW_ACTION_KINDS,
-  createWorkbenchFlowAction,
   createWorkbenchFlowModel,
 } from './workbenchFlowModel';
-import { createRuntimeActionFocusFlowAction } from './runtimeActionFocusFlowAction';
-import { createRuntimeStatePointFocusFlowAction } from './runtimeResultFocusFlowAction';
+import {
+  createWorkbenchOpenRuntimeResultsFlowAction,
+  createWorkbenchRuntimeActionEditFlowAction,
+  createWorkbenchRuntimeResultReturnFlowAction,
+  createWorkbenchRuntimeStatePointFlowAction,
+} from './workbenchMainFlowActions';
 
 const props = defineProps({
   selectedAction: {
@@ -302,21 +305,14 @@ function isPrimaryFlowAction(kind) {
 }
 
 function getOpenRuntimeResultsFlowAction(flow) {
-  return createWorkbenchFlowAction({
-    kind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+  return createWorkbenchOpenRuntimeResultsFlowAction({
+    flowModel: flow,
     source: 'workbench-flow-panel',
-    actionId: flow?.selectedActionId ?? '',
-    payload: {
-      runtimeSimLogCount: flow?.runtimeSimLogCount ?? 0,
-      fallbackToFirstRuntimePoint: true,
-    },
-    enabled: Boolean(flow?.controls?.canOpenRuntimeResults),
-    disabledReason: 'missing-runtime-results',
   });
 }
 
 function getRuntimeNavigationFlowAction(point) {
-  return createRuntimeStatePointFocusFlowAction({
+  return createWorkbenchRuntimeStatePointFlowAction({
     source: 'workbench-flow-navigation',
     detail: point,
     enabled: Boolean(point?.statePointId),
@@ -324,22 +320,17 @@ function getRuntimeNavigationFlowAction(point) {
 }
 
 function getRuntimeActionFocusFlowAction(detail) {
-  return createRuntimeActionFocusFlowAction({
+  return createWorkbenchRuntimeActionEditFlowAction({
     source: 'workbench-flow-panel',
-    detail,
+    target: detail,
     enabled: Boolean(detail?.canFocusAction),
   });
 }
 
 function getRuntimeReturnFlowAction(context) {
-  return createWorkbenchFlowAction({
-    kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+  return createWorkbenchRuntimeResultReturnFlowAction({
     source: 'workbench-flow-panel',
-    actionId: context?.actionId ?? '',
-    statePointId: context?.statePointId ?? '',
-    payload: context ?? null,
-    enabled: Boolean(context?.canReturn ?? context?.statePointId),
-    disabledReason: 'missing-runtime-result',
+    target: context,
   });
 }
 </script>

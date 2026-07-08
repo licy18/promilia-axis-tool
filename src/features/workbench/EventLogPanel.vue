@@ -314,14 +314,15 @@ import { createRuntimeDetailCalculatorRows } from './runtimeSelectedDetail';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
 import {
-  WORKBENCH_FLOW_ACTION_KINDS,
   createWorkbenchFlowRuntimeActionEditTarget,
-  createWorkbenchFlowAction,
   resolveWorkbenchMainFlowActionEditTarget,
   resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
-import { createRuntimeActionFocusFlowAction } from './runtimeActionFocusFlowAction';
-import { createRuntimeStatePointFocusFlowAction } from './runtimeResultFocusFlowAction';
+import {
+  createWorkbenchRuntimeActionEditFlowAction,
+  createWorkbenchRuntimeResultReturnFlowAction,
+  createWorkbenchRuntimeStatePointFlowAction,
+} from './workbenchMainFlowActions';
 import {
   isRuntimeResultFocusSource,
   normalizeRuntimeLogFocusScope,
@@ -793,7 +794,7 @@ function dispatchRuntimeLogFlowAction(action) {
 
 function getRuntimeLogRowFlowAction(row) {
   const statePointId = getRuntimeStatePointIdByRow(row);
-  return createRuntimeStatePointFocusFlowAction({
+  return createWorkbenchRuntimeStatePointFlowAction({
     source: 'event-log-runtime-row',
     detail: row,
     statePointId,
@@ -802,22 +803,18 @@ function getRuntimeLogRowFlowAction(row) {
 }
 
 function getRuntimeLogActionFocusFlowAction(focus) {
-  return createRuntimeActionFocusFlowAction({
+  return createWorkbenchRuntimeActionEditFlowAction({
     source: 'event-log-runtime-detail',
-    detail: focus,
+    target: focus,
     enabled: Boolean(focus?.canFocusAction ?? focus?.actionId),
   });
 }
 
 function getRuntimeLogReturnFlowAction(context) {
-  return createWorkbenchFlowAction({
-    kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+  return createWorkbenchRuntimeResultReturnFlowAction({
     source: 'event-log-runtime-detail',
-    actionId: context?.actionId ?? '',
-    statePointId: context?.statePointId ?? '',
-    payload: context ?? null,
+    target: context,
     enabled: Boolean(context?.statePointId),
-    disabledReason: 'missing-runtime-result',
   });
 }
 

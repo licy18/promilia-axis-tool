@@ -17888,3 +17888,78 @@ EventLogPanel -> selected log action edit / result return target
 - 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖主流程目标解析、状态点匹配和 fallback。
 - 更新 `src/__tests__/views/Workbench.test.js`，确认主流程面板、属性面板、三值详情、资源曲线和日志详情共享同一个刷新结果返回点。
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、58 条测试。
+
+## 227. UI 主流程能力块：Shared Main Flow Actions
+
+本阶段属于 UI 主流程。
+
+### 227.1 结构变化
+
+新增文件：
+
+```text
+src/features/workbench/workbenchMainFlowActions.js
+```
+
+该模块新增并导出：
+
+```js
+createWorkbenchOpenRuntimeResultsFlowAction({
+  flowModel,
+  source,
+  enabled
+})
+
+createWorkbenchRuntimeStatePointFlowAction(options)
+
+createWorkbenchRuntimeResultFlowAction(options)
+
+createWorkbenchRuntimeActionEditFlowAction({
+  source,
+  target,
+  enabled,
+  disabledReason
+})
+
+createWorkbenchRuntimeResultReturnFlowAction({
+  source,
+  target,
+  enabled,
+  disabledReason
+})
+```
+
+共享 action builder 统一生成以下 Workbench 主流程 action：
+
+```text
+open-runtime-results
+select-runtime-state-point
+select-runtime-result
+focus-runtime-action
+return-runtime-result
+```
+
+已接入位置：
+
+```text
+WorkbenchFlowPanel
+PropertiesPanel
+RuntimeSelectedDetailPanel
+ResourceMonitorPanel
+EventLogPanel
+AnalysisPanel
+```
+
+`runtimeActionFocusFlowAction.js` 与 `runtimeResultFocusFlowAction.js` 仍作为底层 action payload 合同保留，面板层改为通过 `workbenchMainFlowActions.js` 消费。
+
+### 227.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 主流程 action 创建入口；三值计算、runtime projection 数值结果和草稿保存结构不变。
+
+### 227.3 验证
+
+- 新增 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 open runtime、select runtime state point、select runtime result、focus runtime action、return runtime result。
+- 继续运行 `src/__tests__/features/workbenchFlowModel.test.js` 与 `src/__tests__/views/Workbench.test.js`，确认主流程闭环行为不变。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、62 条测试。
