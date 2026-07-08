@@ -12480,3 +12480,80 @@ select-runtime-state-point
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DP 应继续补从曲线点/三值详情反向定位对应动作和编辑控件的路径。
+
+## 149. 阶段 5-8DP：三值结果反向定位动作
+
+阶段目标：
+
+- 从资源曲线选中点回到对应动作和编辑入口，让结果巡检能自然进入修轴。
+
+### 149.1 数据结构变化
+
+本阶段不新增保存字段，不变更 `Project` schema、simulation 输出或 localStorage 数据。
+
+新增的是前端事件和派生焦点：
+
+```js
+focus-runtime-action
+focusRuntimeAction(payload)
+```
+
+事件 payload：
+
+```js
+{
+  actionId: string,
+  fieldKey: 'startMs',
+  frameLabel: string,
+  statePointId: string,
+  trackKey: string
+}
+```
+
+`Workbench` 会把该 payload 转换为既有 `actionEditFocus`：
+
+```js
+{
+  actionId,
+  fieldKey: 'startMs',
+  label: '结果定位',
+  changeSummary: '三值点 ... · 敌人 HP|敌人韧性|自身能量'
+}
+```
+
+这些字段仍是前端派生焦点状态，不写入 localStorage，不属于项目保存 schema。
+
+### 149.2 DOM 状态
+
+`workbench-runtime-resource-chart-selection` 新增动作定位按钮：
+
+```html
+data-testid="workbench-runtime-resource-chart-selection-action-focus"
+data-action-id
+data-focus-field="startMs"
+data-state-point-id
+```
+
+点击后现有组件会进入：
+
+```html
+workbench-timeline-action[data-edit-focused="true"]
+workbench-action-edit-control[data-edit-field="startMs"][data-edit-focused="true"]
+```
+
+### 149.3 验证
+
+当前测试覆盖：
+
+- 选中资源曲线点后，动作定位按钮携带对应 `actionId` 和 `startMs` 焦点字段。
+- 点击动作定位按钮后，时间轴对应动作进入选中和编辑焦点状态。
+- 时间轴动作写入 `data-edit-focus-label="结果定位"`。
+- 属性面板开始时间控件进入 `data-edit-focused="true"`，焦点摘要包含三值轨道。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DQ 应继续串起“定位动作 -> 修改字段 -> 结果回看”的编辑反馈闭环。

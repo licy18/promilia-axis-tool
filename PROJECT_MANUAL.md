@@ -6208,6 +6208,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DP 目标：继续对齐 Workbench 主流程体验，优先补从曲线点/三值详情反向定位对应动作和编辑控件的路径，让结果巡检能自然进入修轴。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DP 三值结果反向定位动作
+
+本轮完成：
+
+- `ResourceMonitorPanel` 的选中点摘要新增 `定位动作` 按钮。
+- 按钮会从当前选中三值点提取 `actionId`，并发出 `focus-runtime-action`。
+- `Workbench` 新增 `focusRuntimeAction()`，复用现有动作选择和 `actionEditFocus` 机制。
+- 点击 `定位动作` 后，会选中对应时间轴动作，并把属性面板的开始时间字段作为修轴入口高亮。
+- Workbench 测试覆盖“曲线点巡检 -> 定位动作 -> 时间轴动作选中 -> 属性面板开始时间高亮”的路径。
+
+当前验证事实：
+
+- 选中资源曲线点后，摘要区的 `workbench-runtime-resource-chart-selection-action-focus` 写入对应 `data-action-id` 和 `data-focus-field="startMs"`。
+- 点击 `定位动作` 后，目标 `workbench-timeline-action` 进入 `selected` 和 `data-edit-focused="true"`。
+- 时间轴动作写入 `data-edit-focus-field="startMs"`、`data-edit-focus-label="结果定位"`。
+- 属性面板 `startMs` 控件写入 `data-edit-focused="true"`，摘要包含对应三值点和轨道。
+- 本阶段只新增前端定位入口和派生焦点状态，不新增公式、simulation 输出或保存 schema。
+
+当前边界：
+
+- 反向定位默认聚焦开始时间字段，暂未根据命中类型自动选择技能等级、形态或倍率字段。
+- 暂未从独立“三值详情”面板单独提供反向定位按钮。
+- 暂未做完整编辑器体验收口。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8DQ 目标：继续完善 Workbench 主流程编辑体验，优先把反向定位动作后的编辑反馈和结果刷新状态串起来，让“定位动作 -> 修改字段 -> 结果回看”更顺滑。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -2155,6 +2155,47 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
         .attributes('data-state-point-id')
     ).toBe(statePointId);
+
+    const actionFocusButton = wrapper.find(
+      '[data-testid="workbench-runtime-resource-chart-selection-action-focus"]'
+    );
+    const focusedActionId = actionFocusButton.attributes('data-action-id');
+    expect(focusedActionId).toBeTruthy();
+    expect(actionFocusButton.attributes('data-focus-field')).toBe('startMs');
+    expect(actionFocusButton.attributes('disabled')).toBeUndefined();
+
+    await actionFocusButton.trigger('click');
+    await nextTick();
+
+    const focusedTimelineAction = wrapper.find(
+      `[data-testid="workbench-timeline-action"][data-action-id="${focusedActionId}"]`
+    );
+    expect(focusedTimelineAction.exists()).toBe(true);
+    expect(focusedTimelineAction.classes()).toContain('selected');
+    expect(focusedTimelineAction.attributes('data-edit-focused')).toBe('true');
+    expect(focusedTimelineAction.attributes('data-edit-focus-field')).toBe(
+      'startMs'
+    );
+    expect(focusedTimelineAction.attributes('data-edit-focus-label')).toBe(
+      '结果定位'
+    );
+    expect(focusedTimelineAction.attributes('data-edit-focus-summary')).toContain(
+      '三值点'
+    );
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+        )
+        .attributes('data-edit-focused')
+    ).toBe('true');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+        )
+        .attributes('data-edit-focus-summary')
+    ).toContain('敌人 HP');
   });
 
   it('links applied state curve points to the shared runtime detail', async () => {

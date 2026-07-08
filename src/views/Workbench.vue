@@ -122,6 +122,7 @@
           :summary="simulationResult.summary"
           :diagnostics="simulationResult.diagnostics"
           @select-runtime-state-point="selectRuntimeStatePoint"
+          @focus-runtime-action="focusRuntimeAction"
         />
 
         <RuntimeSelectedDetailPanel :detail="runtimeSelectedDetail" />
@@ -1162,6 +1163,48 @@ function selectActionResult({ actionId, statePointId } = {}) {
     selectAction(actionId);
   }
   selectActionResultRuntimePoint(statePointId);
+}
+
+function focusRuntimeAction({
+  actionId,
+  fieldKey = 'startMs',
+  frameLabel = '',
+  trackKey = '',
+} = {}) {
+  if (!actionId || !findActionDraftById(actionId)) {
+    return;
+  }
+  selectAction(actionId);
+  actionEditFocus.value = {
+    actionId,
+    fieldKey,
+    label: '结果定位',
+    previousValue: '',
+    nextValue: '',
+    changeSummary: formatRuntimeActionFocusSummary({ frameLabel, trackKey }),
+    sequence: actionEditFocus.value.sequence + 1,
+  };
+}
+
+function formatRuntimeActionFocusSummary({ frameLabel = '', trackKey = '' }) {
+  const parts = [
+    frameLabel ? `三值点 ${frameLabel}` : '三值点',
+    formatRuntimeActionFocusTrack(trackKey),
+  ].filter(Boolean);
+  return parts.join(' · ');
+}
+
+function formatRuntimeActionFocusTrack(trackKey) {
+  if (trackKey === 'enemyHpDamage') {
+    return '敌人 HP';
+  }
+  if (trackKey === 'enemyToughnessDamage') {
+    return '敌人韧性';
+  }
+  if (trackKey === 'selfEnergyChange') {
+    return '自身能量';
+  }
+  return '';
 }
 
 function focusActionEditSource(source = {}) {

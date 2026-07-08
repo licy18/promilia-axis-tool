@@ -207,6 +207,19 @@
             <span>选中点</span>
             <strong>{{ selectedRuntimeCurvePoint.seriesLabel }}</strong>
             <small>{{ formatRuntimeCurveSelectionSource(runtimeFocusSource) }}</small>
+            <button
+              type="button"
+              class="runtime-curve-action-focus"
+              :data-action-id="selectedRuntimeCurvePoint.actionId ?? ''"
+              data-focus-field="startMs"
+              :data-state-point-id="selectedRuntimeCurvePoint.statePointId"
+              data-testid="workbench-runtime-resource-chart-selection-action-focus"
+              :disabled="!selectedRuntimeCurvePoint.actionId"
+              @click="focusRuntimeCurveAction(selectedRuntimeCurvePoint)"
+            >
+              <EditPen class="runtime-curve-action-focus-icon" />
+              <span>定位动作</span>
+            </button>
             <div class="runtime-curve-selection-nav">
               <button
                 type="button"
@@ -300,7 +313,12 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import { ArrowLeft, ArrowRight, TrendCharts } from '@element-plus/icons-vue';
+import {
+  ArrowLeft,
+  ArrowRight,
+  EditPen,
+  TrendCharts,
+} from '@element-plus/icons-vue';
 import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
 
 const RUNTIME_CURVE_CHART_WIDTH = 320;
@@ -348,7 +366,10 @@ const props = defineProps({
     default: '',
   },
 });
-const emit = defineEmits(['select-runtime-state-point']);
+const emit = defineEmits([
+  'select-runtime-state-point',
+  'focus-runtime-action',
+]);
 const runtimeCurveMode = ref('delta');
 
 const resourceTotals = computed(() => {
@@ -878,6 +899,19 @@ function selectRuntimeCurveAdjacentPoint(point) {
   emit('select-runtime-state-point', point.statePointId);
 }
 
+function focusRuntimeCurveAction(point) {
+  if (!point?.actionId) {
+    return;
+  }
+  emit('focus-runtime-action', {
+    actionId: point.actionId,
+    fieldKey: 'startMs',
+    frameLabel: point.frameLabel ?? `${point.timeMs ?? 0}ms`,
+    statePointId: point.statePointId,
+    trackKey: point.trackKey,
+  });
+}
+
 function compareRuntimeCurveNavigationPoints(left, right) {
   return (
     compareRuntimeCurvePoints(left, right) ||
@@ -1168,7 +1202,7 @@ h2 {
 
 .runtime-curve-selection-heading {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  grid-template-columns: auto minmax(0, 1fr) auto auto auto;
   align-items: center;
   gap: 7px;
   min-width: 0;
@@ -1190,6 +1224,34 @@ h2 {
 .runtime-curve-selection-heading small {
   color: #79c7b9;
   white-space: nowrap;
+}
+
+.runtime-curve-action-focus {
+  display: inline-grid;
+  grid-template-columns: 13px auto;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  height: 24px;
+  border: 1px solid rgba(121, 199, 185, 0.28);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.12);
+  color: #dff9f3;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.runtime-curve-action-focus:disabled {
+  color: #6d7780;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.runtime-curve-action-focus-icon {
+  width: 13px;
+  height: 13px;
 }
 
 .runtime-curve-selection-nav {
