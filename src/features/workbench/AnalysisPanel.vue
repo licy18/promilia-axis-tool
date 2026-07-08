@@ -1108,9 +1108,7 @@ const emit = defineEmits([
   'update-state-curve-focus-mode',
   'focus-three-value-calculator-scope',
   'select-runtime-state-point',
-  'select-action-result',
-  'select-action-contribution-point',
-  'focus-action-edit-source',
+  'dispatch-flow-action',
 ]);
 
 const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
@@ -1953,15 +1951,16 @@ function getActionResultFlowAction(entry) {
   });
 }
 
-function selectActionResultRuntimePoint(entry) {
-  const action = getActionResultFlowAction(entry);
-  if (!action.canRun) {
+function dispatchAnalysisFlowAction(action) {
+  if (!action?.canRun) {
     return;
   }
-  emit('select-action-result', {
-    actionId: action.actionId,
-    statePointId: action.statePointId,
-  });
+  emit('dispatch-flow-action', action);
+}
+
+function selectActionResultRuntimePoint(entry) {
+  const action = getActionResultFlowAction(entry);
+  dispatchAnalysisFlowAction(action);
 }
 
 function isActionResultRuntimeSelected(entry) {
@@ -2003,31 +2002,19 @@ function focusActionEditSource(entry) {
   const action = getActionEditSourceFlowAction(
     getActionResultEditSource(entry)
   );
-  if (!action.canRun) {
-    return;
-  }
-  emit('focus-action-edit-source', action.payload);
+  dispatchAnalysisFlowAction(action);
 }
 
 function focusActionEditFeedback() {
   const action = getActionEditSourceFlowAction(props.actionEditSource);
-  if (!action.canRun) {
-    return;
-  }
-  emit('focus-action-edit-source', action.payload);
+  dispatchAnalysisFlowAction(action);
 }
 
 function selectActionEditFeedbackResult() {
   const action = getActionEditFeedbackResultFlowAction(
     actionEditFeedback.value
   );
-  if (!action.canRun) {
-    return;
-  }
-  emit('select-action-result', {
-    actionId: action.actionId,
-    statePointId: action.statePointId,
-  });
+  dispatchAnalysisFlowAction(action);
 }
 
 function getActionEditSourceFlowAction(source) {
@@ -2547,10 +2534,7 @@ function createCompactRuntimeResultRows(detail) {
 
 function selectActionContributionRow(row) {
   const action = getActionContributionFlowAction(row);
-  if (!action.canRun) {
-    return;
-  }
-  emit('select-action-contribution-point', action.statePointId);
+  dispatchAnalysisFlowAction(action);
 }
 
 function getActionContributionFlowAction(row) {

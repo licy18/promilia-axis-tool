@@ -2699,6 +2699,14 @@ describe('Workbench view', () => {
     await focusSourceButton.trigger('click');
     await nextTick();
 
+    expect(getLastDispatchedFlowAction(wrapper)).toMatchObject({
+      kind: 'focus-edit-source',
+      source: 'analysis-edit-source',
+      actionId: 'action-0001',
+      fieldKey: 'level',
+      canRun: true,
+    });
+
     const focusedLevelEditControl = wrapper.find(
       '[data-testid="workbench-action-edit-control"][data-edit-field="level"]'
     );
@@ -2846,6 +2854,14 @@ describe('Workbench view', () => {
 
     await jumpBackButton.trigger('click');
     await nextTick();
+
+    expect(getLastDispatchedFlowAction(wrapper)).toMatchObject({
+      kind: 'select-runtime-result',
+      source: 'analysis-edit-result',
+      actionId: 'action-0001',
+      statePointId: feedbackStatePointId,
+      canRun: true,
+    });
 
     const jumpedBackActionEditFeedback = wrapper.find(
       '[data-testid="workbench-action-edit-feedback"]'
@@ -6403,6 +6419,13 @@ function createStateCurvePanelProps() {
       overlaps: [],
     },
   };
+}
+
+function getLastDispatchedFlowAction(wrapper) {
+  const events =
+    wrapper.findComponent(AnalysisPanel).emitted('dispatch-flow-action') ?? [];
+  const lastEvent = events[events.length - 1];
+  return lastEvent?.[0] ?? null;
 }
 
 function createStateCurveLayer(key, overrides = {}) {

@@ -15708,3 +15708,60 @@ workbench-action-edit-feedback-result-focus
 - `npm run test -- --run`：通过，19 个测试文件、142 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示和命令通道噪声。
+
+## 199. UI 主流程能力块：Workbench Flow Action Dispatcher
+
+本阶段属于 UI 主流程。
+
+### 199.1 结构变化
+
+`AnalysisPanel` 的父子事件出口收束为：
+
+```js
+dispatch-flow-action
+```
+
+原先由 `AnalysisPanel` 分别发出的以下事件不再作为该面板的主流程出口：
+
+```js
+select-action-result
+select-action-contribution-point
+focus-action-edit-source
+```
+
+`Workbench.vue` 新增统一调度入口：
+
+```js
+dispatchWorkbenchFlowAction(action)
+```
+
+当前 dispatcher 支持的动作：
+
+```js
+select-runtime-result       -> selectActionResult()
+select-contribution-point   -> selectActionContributionRuntimePoint()
+focus-edit-source           -> focusActionEditSource()
+```
+
+`AnalysisPanel` 的点击处理函数现在只生成并上报标准 flow action：
+
+```js
+dispatchAnalysisFlowAction(action)
+```
+
+Workbench 负责把 action kind 落到现有的状态更新函数，因此选中动作、选中 runtime state point、资源曲线焦点、日志筛选和编辑字段聚焦仍沿用原有稳定实现。
+
+### 199.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 的父子事件合同和派生主流程动作调度；模拟结果、三值计算、项目文件、runtime projection 结构不变。
+
+### 199.3 验证
+
+- Workbench 视图测试覆盖：`AnalysisPanel` 发出 `dispatch-flow-action` 后，Workbench 能聚焦回编辑来源字段。
+- Workbench 视图测试覆盖：`select-runtime-result` flow action 能回到对应 runtime state point，并保持资源曲线、模拟日志和时间轴状态同步。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、57 条测试。
+- `npm run test -- --run`：通过，19 个测试文件、142 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。

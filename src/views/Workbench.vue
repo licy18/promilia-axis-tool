@@ -182,11 +182,7 @@
           @update-state-curve-layer-filter="updateStateCurveLayerFilter"
           @update-state-curve-track-filter="updateStateCurveTrackFilter"
           @focus-three-value-calculator-scope="focusThreeValueCalculatorScope"
-          @select-action-result="selectActionResult"
-          @select-action-contribution-point="
-            selectActionContributionRuntimePoint
-          "
-          @focus-action-edit-source="focusActionEditSource"
+          @dispatch-flow-action="dispatchWorkbenchFlowAction"
         />
       </div>
 
@@ -223,7 +219,11 @@ import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import WorkbenchFlowPanel from '../features/workbench/WorkbenchFlowPanel.vue';
 import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
-import { createWorkbenchFlowModel } from '../features/workbench/workbenchFlowModel';
+import {
+  WORKBENCH_FLOW_ACTION_KINDS,
+  createWorkbenchFlowAction,
+  createWorkbenchFlowModel,
+} from '../features/workbench/workbenchFlowModel';
 import {
   createRuntimeStatePointContexts,
   findFirstRuntimeStatePointForAction,
@@ -1337,6 +1337,31 @@ function selectRuntimeStatePoint(pointId) {
 
 function selectRuntimeFlowStatePoint(pointId) {
   selectRuntimeStatePoint(pointId);
+}
+
+function dispatchWorkbenchFlowAction(action = {}) {
+  const flowAction = createWorkbenchFlowAction(action);
+  if (!flowAction.canRun) {
+    return;
+  }
+  if (
+    flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT
+  ) {
+    selectActionResult({
+      actionId: flowAction.actionId,
+      statePointId: flowAction.statePointId,
+    });
+    return;
+  }
+  if (
+    flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT
+  ) {
+    selectActionContributionRuntimePoint(flowAction.statePointId);
+    return;
+  }
+  if (flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.FOCUS_EDIT_SOURCE) {
+    focusActionEditSource(flowAction.payload ?? flowAction);
+  }
 }
 
 function selectActionResultRuntimePoint(pointId) {

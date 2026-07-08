@@ -7643,6 +7643,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 flow action 上提到 Workbench 层的统一 action dispatcher，让编辑器、运行模拟、资源曲线、日志详情和回到动作修改形成更完整的 Endaxis 式闭环。
 
+### 2026-07-09：UI 主流程能力块 - Workbench Flow Action Dispatcher
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `AnalysisPanel` 现在只发出标准 `dispatch-flow-action`，不再把运行结果定位、贡献定位、编辑来源聚焦拆成三个父子事件。
+- `Workbench.vue` 新增统一 flow action dispatcher，按 `kind` 调用既有的运行结果定位、贡献拆分定位和编辑来源聚焦逻辑。
+- 分析面板的点击入口从“子组件直接驱动具体状态”推进到“子组件描述动作、Workbench 执行动作”，为后续把资源曲线、日志详情、属性面板也纳入同一主流程调度打基础。
+
+当前验证事实：
+
+- 最近编辑的“定位来源”按钮会发出 `focus-edit-source` flow action，并由 Workbench 聚焦回对应动作字段。
+- “定位结果”按钮会发出 `select-runtime-result` flow action，并由 Workbench 回到对应 runtime state point。
+- 原有运行结果、贡献拆分、资源曲线、模拟日志和时间轴 marker 行为保持不变。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、57 条测试。
+- `npm run test -- --run`：通过，19 个测试文件、142 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 ResourceMonitorPanel、EventLogPanel、RuntimeSelectedDetailPanel 的运行点选择和返回动作也逐步接入 Workbench flow action dispatcher，收束成单一主流程控制入口。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
