@@ -15256,3 +15256,70 @@ runtimeInputSource: threeValueGenerationBundle.runtimeInputSource
 - runtime 测试覆盖：当 `threeValueGenerationLayer.deltas` 为空但 `runtimeInputSource.deltas` 存在时，runtime projection 仍能输出 simLog、敌人状态曲线、资源曲线和 summary。
 - 第一纵切测试覆盖：真实 Workbench 模拟结果的 runtime 来源已切到 `runtimeInputSource.applied-deltas`，三值结果仍为 1 动作、6 命中、16 delta，runtime 只应用 1 个 HP delta。
 - `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、16 条测试。
+
+## 192. 运行时层能力块：Runtime Output Contract
+
+本阶段属于运行时层。
+
+### 192.1 结构变化
+
+`threeValueRuntimeProjection` 新增：
+
+```js
+{
+  outputContract
+}
+```
+
+`outputContract` 结构为：
+
+```js
+{
+  schemaVersion: 1,
+  sourceKind: 'azpr-three-value-runtime-output-contract',
+  status,
+  inputContractName,
+  inputSourceKind,
+  runtimeInputSourceKind,
+  outputNames: ['simLog', 'stateCurves', 'resourceCurves', 'summary'],
+  outputs: {
+    simLog,
+    stateCurves,
+    resourceCurves,
+    summary
+  },
+  summary
+}
+```
+
+`outputs.simLog` 声明运行日志输出的 key 字段、值字段和 calculator 字段。
+
+`outputs.stateCurves` 声明敌人 HP/韧性状态曲线和资源状态曲线的输出边界。
+
+`outputs.resourceCurves` 声明 `curvesByActor`、actor key、point key 和自身能量值字段。
+
+`outputs.summary` 声明 runtime summary 的值字段、计数字段和来源字段。
+
+### 192.2 summary 扩展
+
+`threeValueRuntimeProjection.summary` 新增：
+
+```js
+{
+  runtimeOutputContractSourceKind,
+  runtimeOutputContractStatus,
+  runtimeOutputContractOutputCount
+}
+```
+
+### 192.3 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化影响的是模拟结果结构：既有 `simLog`、`stateCurves`、`resourceCurves`、`enemyStateCurve`、`selfEnergyCurveByActor`、`summary` 仍保留；新增 `outputContract` 供 UI 和后续运行时层按合同读取输出边界。
+
+### 192.4 验证
+
+- runtime 测试覆盖：output contract 暴露 `simLog`、`stateCurves`、`resourceCurves`、`summary` 四类输出，并记录关键字段、值字段、来源和计数摘要。
+- 第一纵切测试覆盖：真实 Workbench 模拟结果暴露 runtime output contract；三值结果仍为 1 动作、6 命中、16 delta，runtime 只应用 1 个 HP delta。
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、16 条测试。

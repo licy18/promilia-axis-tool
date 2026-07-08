@@ -185,6 +185,66 @@ describe('three value runtime projection', () => {
         applied: true,
       },
       appliedOnly: true,
+      outputContract: {
+        sourceKind: 'azpr-three-value-runtime-output-contract',
+        status: 'runtime-output-contract-ready',
+        inputContractName: 'Action -> Hit -> ThreeValueDelta',
+        inputSourceKind: 'azpr-runtime-input-from-three-value-generation-layer',
+        outputNames: ['simLog', 'stateCurves', 'resourceCurves', 'summary'],
+        outputs: {
+          simLog: {
+            sourceKind: 'azpr-runtime-sim-log-output',
+            status: 'runtime-sim-log-ready',
+            rowCount: 2,
+            keyFields: ['sourceDeltaId', 'runtimeSequenceIndex'],
+            eventType: 'THREE_VALUE_DELTA_APPLIED',
+            valueFields: ['delta', 'hpDelta', 'toughnessDelta', 'energyDelta'],
+          },
+          stateCurves: {
+            sourceKind: 'azpr-runtime-state-curves-from-standard-deltas',
+            status: 'runtime-state-curves-ready-from-standard-deltas',
+            outputFields: ['enemy', 'resources', 'summary'],
+            enemy: {
+              pointCount: 1,
+              valueFields: ['hpDelta', 'toughnessDelta'],
+              stateMetricKeys: ['hp', 'toughness'],
+            },
+            resources: {
+              actorCount: 1,
+              pointCount: 1,
+              resourceKind: 'selfEnergy',
+              valueFields: ['energyDelta'],
+            },
+          },
+          resourceCurves: {
+            sourceKind: 'azpr-runtime-resource-curves-from-standard-deltas',
+            status: 'resource-curves-ready-from-standard-deltas',
+            curveCollectionField: 'curvesByActor',
+            actorCount: 1,
+            pointCount: 1,
+            valueFields: ['delta', 'energyDelta'],
+          },
+          summary: {
+            sourceKind: 'azpr-runtime-summary-output',
+            status: 'runtime-summary-ready',
+            source: 'threeValueGenerationLayer.applied-deltas',
+            appliedOnly: true,
+          },
+        },
+        summary: {
+          outputCount: 4,
+          appliedDeltaCount: 2,
+          simLogCount: 2,
+          enemyStatePointCount: 1,
+          resourceCurveActorCount: 1,
+          resourceCurvePointCount: 1,
+          enemyHpDelta: 1200,
+          enemyToughnessDelta: 0,
+          selfEnergyDelta: -30,
+          applied: true,
+        },
+        applied: true,
+      },
       stateCurves: {
         sourceKind: 'azpr-runtime-state-curves-from-standard-deltas',
         enemy: expect.objectContaining({
@@ -250,6 +310,10 @@ describe('three value runtime projection', () => {
         ],
         source: 'threeValueGenerationLayer.applied-deltas',
         runtimeInputSource: 'threeValueRuntimeInput.appliedDeltas',
+        runtimeOutputContractSourceKind:
+          'azpr-three-value-runtime-output-contract',
+        runtimeOutputContractStatus: 'runtime-output-contract-ready',
+        runtimeOutputContractOutputCount: 4,
         appliedOnly: true,
         applied: true,
       },
@@ -514,8 +578,43 @@ describe('three value runtime projection', () => {
         inputDeltaCount: 1,
         appliedDeltaCount: 1,
         enemyHpDelta: 800,
+        runtimeOutputContractSourceKind:
+          'azpr-three-value-runtime-output-contract',
+        runtimeOutputContractStatus: 'runtime-output-contract-ready',
+        runtimeOutputContractOutputCount: 4,
         source: 'runtimeInputSource.applied-deltas',
         simLogCount: 1,
+      },
+    });
+    expect(runtimeProjection.outputContract).toMatchObject({
+      sourceKind: 'azpr-three-value-runtime-output-contract',
+      status: 'runtime-output-contract-ready',
+      inputSourceKind: 'azpr-runtime-input-from-generation-builder-source',
+      runtimeInputSourceKind:
+        'azpr-runtime-input-source-from-generation-builder',
+      outputs: {
+        simLog: {
+          rowCount: 1,
+          keyFields: ['sourceDeltaId', 'runtimeSequenceIndex'],
+        },
+        stateCurves: {
+          enemy: {
+            pointCount: 1,
+          },
+          resources: {
+            actorCount: 1,
+            pointCount: 0,
+          },
+        },
+        summary: {
+          source: 'runtimeInputSource.applied-deltas',
+        },
+      },
+      summary: {
+        outputCount: 4,
+        appliedDeltaCount: 1,
+        simLogCount: 1,
+        enemyHpDelta: 800,
       },
     });
   });

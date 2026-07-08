@@ -1561,6 +1561,53 @@ describe('first vertical slice simulation', () => {
       status: 'runtime-projection-ready-from-runtime-input-source',
       inputContractName: 'Action -> Hit -> ThreeValueDelta',
       appliedOnly: true,
+      outputContract: {
+        sourceKind: 'azpr-three-value-runtime-output-contract',
+        status: 'runtime-output-contract-ready',
+        inputSourceKind: 'azpr-runtime-input-from-generation-builder-source',
+        runtimeInputSourceKind:
+          'azpr-runtime-input-source-from-generation-builder',
+        outputNames: ['simLog', 'stateCurves', 'resourceCurves', 'summary'],
+        outputs: {
+          simLog: {
+            sourceKind: 'azpr-runtime-sim-log-output',
+            status: 'runtime-sim-log-ready',
+            rowCount: 1,
+            eventType: 'THREE_VALUE_DELTA_APPLIED',
+          },
+          stateCurves: {
+            sourceKind: 'azpr-runtime-state-curves-from-standard-deltas',
+            enemy: {
+              pointCount: 1,
+              stateMetricKeys: ['hp', 'toughness'],
+            },
+            resources: {
+              actorCount: 1,
+              pointCount: 0,
+              resourceKind: 'selfEnergy',
+            },
+          },
+          resourceCurves: {
+            sourceKind: 'azpr-runtime-resource-curves-from-standard-deltas',
+            actorCount: 1,
+            pointCount: 0,
+          },
+          summary: {
+            sourceKind: 'azpr-runtime-summary-output',
+            source: 'runtimeInputSource.applied-deltas',
+          },
+        },
+        summary: {
+          outputCount: 4,
+          appliedDeltaCount: 1,
+          simLogCount: 1,
+          enemyStatePointCount: 1,
+          resourceCurveActorCount: 1,
+          resourceCurvePointCount: 0,
+          enemyHpDelta: 12461,
+          selfEnergyDelta: 0,
+        },
+      },
       enemyStateCurve: {
         pointCount: 1,
         hpDelta: 12461,
@@ -1634,6 +1681,10 @@ describe('first vertical slice simulation', () => {
           appliedToRuntimeCount: 1,
         },
         source: 'runtimeInputSource.applied-deltas',
+        runtimeOutputContractSourceKind:
+          'azpr-three-value-runtime-output-contract',
+        runtimeOutputContractStatus: 'runtime-output-contract-ready',
+        runtimeOutputContractOutputCount: 4,
         applied: true,
       },
       applied: true,

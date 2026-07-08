@@ -7461,6 +7461,28 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续运行时层能力块：梳理 `simLog`、`stateCurves`、资源曲线和 summary 的输出合同，减少 UI 对 runtime 内部派生字段的猜测。
 
+### 2026-07-09：运行时层能力块 - Runtime Output Contract
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- `threeValueRuntimeProjection` 新增 `outputContract`，明确 runtime 对外输出 `simLog`、`stateCurves`、`resourceCurves`、`summary` 四类结果。
+- output contract 记录每类输出的来源、状态、关键字段、值字段和计数摘要，供后续 UI 主流程按合同读取 runtime 结果。
+- 现有 `simLog`、敌人状态曲线、角色自身能量曲线、summary 保持原字段与原数值；本阶段不新增公式推断、不修改三值数值、不扩大 UI 信息量。
+
+当前验证事实：
+
+- 第一纵切结果仍保持 1 动作、6 命中、16 delta、runtime 只应用 1 个 HP delta；`outputContract.summary` 记录 4 类输出、1 条 simLog、1 个敌人状态点、0 个资源曲线点。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、16 条测试。
+
+下一步：
+
+- 切换到 UI 主流程能力块：让 Workbench 的运行结果面板优先读取 runtime `outputContract` 中的输出边界，用于减少组件对 runtime 内部字段的隐式猜测。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

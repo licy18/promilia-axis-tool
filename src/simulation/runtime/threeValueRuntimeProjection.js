@@ -27,7 +27,7 @@ export function createThreeValueRuntimeProjection({
     enemyStateCurve,
     resourceCurves,
   });
-  const summary = summarizeThreeValueRuntimeProjection({
+  const baseSummary = summarizeThreeValueRuntimeProjection({
     runtimeInput,
     appliedDeltas,
     enemyStateCurve,
@@ -35,6 +35,21 @@ export function createThreeValueRuntimeProjection({
     resourceCurves,
     simLog,
   });
+  const outputContract = createThreeValueRuntimeOutputContract({
+    runtimeInput,
+    appliedDeltas,
+    enemyStateCurve,
+    resourceCurves,
+    stateCurves,
+    simLog,
+    summary: baseSummary,
+  });
+  const summary = {
+    ...baseSummary,
+    runtimeOutputContractSourceKind: outputContract.sourceKind,
+    runtimeOutputContractStatus: outputContract.status,
+    runtimeOutputContractOutputCount: outputContract.summary.outputCount,
+  };
 
   return {
     schemaVersion: 1,
@@ -50,12 +65,176 @@ export function createThreeValueRuntimeProjection({
     inputContractName: runtimeInput.contractName,
     runtimeInput,
     appliedOnly: true,
+    outputContract,
     stateCurves,
     resourceCurves,
     enemyStateCurve,
     selfEnergyCurveByActor,
     simLog,
     summary,
+    applied: true,
+  };
+}
+
+function createThreeValueRuntimeOutputContract({
+  runtimeInput,
+  appliedDeltas,
+  enemyStateCurve,
+  resourceCurves,
+  stateCurves,
+  simLog,
+  summary,
+}) {
+  const outputs = {
+    simLog: createRuntimeSimLogOutputContract({
+      runtimeInput,
+      simLog,
+    }),
+    stateCurves: createRuntimeStateCurvesOutputContract({
+      stateCurves,
+      enemyStateCurve,
+      resourceCurves,
+    }),
+    resourceCurves: createRuntimeResourceCurvesOutputContract(resourceCurves),
+    summary: createRuntimeSummaryOutputContract(summary),
+  };
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-three-value-runtime-output-contract',
+    status:
+      appliedDeltas.length > 0
+        ? 'runtime-output-contract-ready'
+        : 'runtime-output-contract-ready-no-applied-deltas',
+    inputContractName: runtimeInput.contractName,
+    inputSourceKind: runtimeInput.sourceKind,
+    runtimeInputSourceKind: runtimeInput.runtimeInputSourceKind,
+    outputNames: Object.keys(outputs),
+    outputs,
+    summary: {
+      outputCount: Object.keys(outputs).length,
+      appliedDeltaCount: appliedDeltas.length,
+      simLogCount: simLog.length,
+      enemyStatePointCount: enemyStateCurve.pointCount,
+      resourceCurveActorCount: resourceCurves.summary.actorCount,
+      resourceCurvePointCount: resourceCurves.summary.pointCount,
+      enemyHpDelta: summary.enemyHpDelta,
+      enemyToughnessDelta: summary.enemyToughnessDelta,
+      selfEnergyDelta: summary.selfEnergyDelta,
+      applied: true,
+    },
+    applied: true,
+  };
+}
+
+function createRuntimeSimLogOutputContract({ runtimeInput, simLog }) {
+  return {
+    sourceKind: 'azpr-runtime-sim-log-output',
+    status:
+      simLog.length > 0
+        ? 'runtime-sim-log-ready'
+        : 'runtime-sim-log-ready-no-applied-deltas',
+    inputSource: 'threeValueRuntimeInput.appliedDeltas',
+    inputSourceKind: runtimeInput.sourceKind,
+    rowCount: simLog.length,
+    keyFields: ['sourceDeltaId', 'runtimeSequenceIndex'],
+    eventType: 'THREE_VALUE_DELTA_APPLIED',
+    valueFields: ['delta', 'hpDelta', 'toughnessDelta', 'energyDelta'],
+    calculatorFields: [
+      'calculatorKey',
+      'calculatorVersion',
+      'calculationKind',
+      'calculationStatus',
+      'calculationReplaceable',
+    ],
+    applied: true,
+  };
+}
+
+function createRuntimeStateCurvesOutputContract({
+  stateCurves,
+  enemyStateCurve,
+  resourceCurves,
+}) {
+  return {
+    sourceKind: stateCurves.sourceKind,
+    status: stateCurves.status,
+    outputFields: ['enemy', 'resources', 'summary'],
+    enemy: {
+      sourceKind: enemyStateCurve.sourceKind,
+      status: enemyStateCurve.status,
+      pointCount: enemyStateCurve.pointCount,
+      valueFields: ['hpDelta', 'toughnessDelta'],
+      stateMetricKeys: Object.keys(enemyStateCurve.stateMetrics ?? {}),
+    },
+    resources: {
+      sourceKind: resourceCurves.sourceKind,
+      status: resourceCurves.status,
+      actorCount: resourceCurves.summary.actorCount,
+      pointCount: resourceCurves.summary.pointCount,
+      resourceKind: resourceCurves.resourceKind,
+      valueFields: ['energyDelta'],
+    },
+    summaryFields: [
+      'enemyPointCount',
+      'enemyHpDelta',
+      'enemyToughnessDelta',
+      'resourceActorCount',
+      'resourcePointCount',
+      'selfEnergyDelta',
+    ],
+    applied: true,
+  };
+}
+
+function createRuntimeResourceCurvesOutputContract(resourceCurves) {
+  return {
+    sourceKind: resourceCurves.sourceKind,
+    status: resourceCurves.status,
+    resourceKind: resourceCurves.resourceKind,
+    curveCollectionField: 'curvesByActor',
+    actorCount: resourceCurves.summary.actorCount,
+    activeActorCount: resourceCurves.summary.activeActorCount,
+    pointCount: resourceCurves.summary.pointCount,
+    curveKeyFields: ['actorId'],
+    pointKeyFields: ['sourceDeltaId', 'runtimeSequenceIndex'],
+    valueFields: ['delta', 'energyDelta'],
+    stateMetricField: 'stateMetric',
+    applied: true,
+  };
+}
+
+function createRuntimeSummaryOutputContract(summary) {
+  return {
+    sourceKind: 'azpr-runtime-summary-output',
+    status: 'runtime-summary-ready',
+    source: summary.source,
+    valueFields: [
+      'enemyHpDelta',
+      'enemyToughnessDelta',
+      'selfEnergyDelta',
+      'enemyHpInitial',
+      'enemyHpRemaining',
+      'enemyToughnessInitial',
+      'enemyToughnessRemaining',
+    ],
+    countFields: [
+      'inputDeltaCount',
+      'appliedDeltaCount',
+      'enemyStatePointCount',
+      'selfEnergyPointCount',
+      'resourceCurveActorCount',
+      'resourceCurvePointCount',
+      'simLogCount',
+      'calculatorCount',
+    ],
+    sourceFields: [
+      'runtimeInputSourceKind',
+      'runtimeInputSourceInputKind',
+      'runtimeInputSourceInputStatus',
+      'runtimeGenerationLayerSourceKind',
+      'runtimeGenerationLayerStatus',
+    ],
+    appliedOnly: summary.appliedOnly,
     applied: true,
   };
 }
