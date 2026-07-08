@@ -8869,6 +8869,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 review 主操作对齐后的入口用于进一步压缩 Workbench 主工作面，让动作编辑区、运行曲线、日志和详情之间的往返更接近 Endaxis 的单工作面节奏。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Primary Command Model
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `runtimeReviewOperations` 新增 `primaryOperation`，统一承载当前 review 主操作的 kind、enabled、label、actionId、statePointId 和 target。
+- Workbench 运行结果 review 区改为直接消费 `runtimeReviewOperations.primaryOperation`，不再在页面层重复计算 target / label。
+- 顶部主流程按钮、review 区主操作、详情/曲线/日志 operation 入口现在都围绕同一套 review primary operation 合同推进。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- flow model 单元测试覆盖 empty、selected、pending-result、edit-result-review 下的 `primaryOperation` 合同。
+- Workbench 页面测试确认 review 主操作仍可执行 focus / return 主路径。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、62 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、197 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：基于 `primaryOperation` 合同继续整理 Workbench 主工作面，优先减少 review 区、顶部 flow panel、侧边详情之间的重复入口。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

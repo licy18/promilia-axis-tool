@@ -348,18 +348,19 @@ export function createWorkbenchRuntimeReviewOperations({
     focusAction,
     returnResult,
   });
+  const primaryOperation = createRuntimeReviewPrimaryOperation({
+    primaryOperationKind,
+    focusAction,
+    returnResult,
+  });
   return {
     primaryOperationKind,
-    primaryOperationEnabled:
-      primaryOperationKind === focusAction.kind
-        ? focusAction.enabled
-        : primaryOperationKind === returnResult.kind
-          ? returnResult.enabled
-          : false,
+    primaryOperationEnabled: primaryOperation.enabled,
     canRunAnyOperation: Boolean(focusAction.enabled || returnResult.enabled),
     selectionStatus: runtimeReviewSelection?.status ?? '',
     selectedStatePointId: runtimeReviewSelection?.selectedStatePointId ?? '',
     pendingStatePointId: runtimeReviewSelection?.pendingStatePointId ?? '',
+    primaryOperation,
     focusAction,
     returnResult,
   };
@@ -757,6 +758,39 @@ function resolveRuntimeReviewPrimaryOperationKind({
     return returnResult.kind;
   }
   return '';
+}
+
+function createRuntimeReviewPrimaryOperation({
+  primaryOperationKind = '',
+  focusAction = null,
+  returnResult = null,
+} = {}) {
+  const target =
+    primaryOperationKind === focusAction?.kind
+      ? focusAction
+      : primaryOperationKind === returnResult?.kind
+        ? returnResult
+        : null;
+  return {
+    kind: primaryOperationKind,
+    enabled: Boolean(target?.enabled),
+    disabledReason: target?.disabledReason ?? 'missing-runtime-review-operation',
+    label: formatRuntimeReviewPrimaryOperationLabel(primaryOperationKind),
+    actionId: target?.actionId ?? '',
+    statePointId: target?.statePointId ?? '',
+    sourceKind: target?.sourceKind ?? '',
+    target: target ?? null,
+  };
+}
+
+function formatRuntimeReviewPrimaryOperationLabel(operationKind = '') {
+  if (operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION) {
+    return '定位动作';
+  }
+  if (operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT) {
+    return '回到结果点';
+  }
+  return '主操作';
 }
 
 function createWorkbenchFlowEditResult(context) {

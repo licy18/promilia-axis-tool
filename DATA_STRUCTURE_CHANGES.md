@@ -18950,6 +18950,69 @@ runtime-review-primary
 - `npm run test -- --run`：通过，33 个测试文件、197 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 
+## 245. UI 主流程能力块：Runtime Review Primary Command Model
+
+### 245.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`runtimeReviewOperations` 新增运行时 UI 合同字段：
+
+```js
+primaryOperation
+```
+
+当前结构：
+
+```js
+{
+  kind,
+  enabled,
+  disabledReason,
+  label,
+  actionId,
+  statePointId,
+  sourceKind,
+  target
+}
+```
+
+字段来源：
+
+```text
+kind -> runtimeReviewOperations.primaryOperationKind
+target -> focusAction 或 returnResult
+enabled/actionId/statePointId/sourceKind -> target
+label -> kind 映射
+```
+
+当前 label 映射：
+
+```text
+focus-runtime-action -> 定位动作
+return-runtime-result -> 回到结果点
+其他/空 -> 主操作
+```
+
+`Workbench.vue` 运行结果 review 区现在直接消费：
+
+```text
+workbenchFlowModel.runtimeReviewOperations.primaryOperation
+```
+
+页面层不再单独计算 primary operation target / label。
+
+### 245.2 保存与迁移
+
+本阶段只新增 Workbench flow model 的运行时 UI 合同字段，不新增持久字段，不需要数据迁移。
+
+### 245.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖 empty、selected、pending-result、edit-result-review 下的 `primaryOperation` 合同。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、62 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、197 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
 ## 239. UI 主流程能力块：Runtime Review Selection Consumers
 
 ### 239.1 结构变化

@@ -263,25 +263,31 @@
             v-if="workbenchFlowModel.runtimeReviewOperations.canRunAnyOperation"
             class="runtime-review-primary-bar"
             :data-primary-operation-action-id="
-              runtimeReviewPrimaryOperationTarget.actionId
+              workbenchFlowModel.runtimeReviewOperations.primaryOperation
+                .actionId
             "
             :data-primary-operation-kind="
-              workbenchFlowModel.runtimeReviewOperations.primaryOperationKind
+              workbenchFlowModel.runtimeReviewOperations.primaryOperation.kind
             "
             :data-primary-operation-state-point-id="
-              runtimeReviewPrimaryOperationTarget.statePointId
+              workbenchFlowModel.runtimeReviewOperations.primaryOperation
+                .statePointId
             "
             data-testid="workbench-runtime-review-primary-bar"
           >
             <button
               type="button"
               class="runtime-review-primary-action"
-              :data-action-id="runtimeReviewPrimaryOperationTarget.actionId"
+              :data-action-id="
+                workbenchFlowModel.runtimeReviewOperations.primaryOperation
+                  .actionId
+              "
               :data-operation-kind="
-                workbenchFlowModel.runtimeReviewOperations.primaryOperationKind
+                workbenchFlowModel.runtimeReviewOperations.primaryOperation.kind
               "
               :data-state-point-id="
-                runtimeReviewPrimaryOperationTarget.statePointId
+                workbenchFlowModel.runtimeReviewOperations.primaryOperation
+                  .statePointId
               "
               data-testid="workbench-runtime-review-primary-operation"
               :disabled="
@@ -299,7 +305,10 @@
                 class="runtime-review-primary-action-icon"
               />
               <Aim v-else class="runtime-review-primary-action-icon" />
-              <span>{{ runtimeReviewPrimaryOperationLabel }}</span>
+              <span>{{
+                workbenchFlowModel.runtimeReviewOperations.primaryOperation
+                  .label
+              }}</span>
             </button>
           </div>
 
@@ -631,22 +640,6 @@ const workbenchFlowModel = computed(() =>
     flowDispatchState: workbenchFlowDispatchState.value,
   })
 );
-const runtimeReviewPrimaryOperationTarget = computed(() =>
-  getRuntimeReviewPrimaryOperationTarget(
-    workbenchFlowModel.value.runtimeReviewOperations
-  )
-);
-const runtimeReviewPrimaryOperationLabel = computed(() => {
-  const kind = workbenchFlowModel.value.runtimeReviewOperations
-    .primaryOperationKind;
-  if (kind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION) {
-    return '定位动作';
-  }
-  if (kind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT) {
-    return '回到结果点';
-  }
-  return '主操作';
-});
 const timelineDiagnostics = computed(() =>
   createTimelineDiagnostics({
     actors: scenario.value.actors,
@@ -1709,17 +1702,6 @@ function dispatchRuntimeReviewPrimaryOperation() {
       source: 'runtime-review-primary',
     })
   );
-}
-
-function getRuntimeReviewPrimaryOperationTarget(operations = null) {
-  const kind = operations?.primaryOperationKind ?? '';
-  if (kind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION) {
-    return operations?.focusAction ?? {};
-  }
-  if (kind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT) {
-    return operations?.returnResult ?? {};
-  }
-  return {};
 }
 
 function updateStateCurveFocusMode(mode) {

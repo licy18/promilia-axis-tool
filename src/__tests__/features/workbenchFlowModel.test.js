@@ -109,6 +109,14 @@ describe('workbench flow model', () => {
       selectionStatus: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.EMPTY,
       selectedStatePointId: '',
       pendingStatePointId: '',
+      primaryOperation: {
+        kind: '',
+        enabled: false,
+        label: '主操作',
+        actionId: '',
+        statePointId: '',
+        target: null,
+      },
       focusAction: {
         kind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
         enabled: false,
@@ -229,6 +237,19 @@ describe('workbench flow model', () => {
       canRunAnyOperation: true,
       selectionStatus: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.SELECTED,
       selectedStatePointId: firstPoint.statePointId,
+      primaryOperation: {
+        kind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+        enabled: true,
+        label: '定位动作',
+        actionId: 'action-0001',
+        statePointId: firstPoint.statePointId,
+        sourceKind: 'action-result',
+        target: {
+          kind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+          actionId: 'action-0001',
+          statePointId: firstPoint.statePointId,
+        },
+      },
       focusAction: {
         enabled: true,
         actionId: 'action-0001',
@@ -359,6 +380,18 @@ describe('workbench flow model', () => {
         WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.PENDING_RESULT,
       selectedStatePointId: '',
       pendingStatePointId: secondPoint.statePointId,
+      primaryOperation: {
+        kind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
+        enabled: true,
+        label: '回到结果点',
+        actionId: 'action-0002',
+        statePointId: secondPoint.statePointId,
+        target: {
+          kind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
+          actionId: 'action-0002',
+          statePointId: secondPoint.statePointId,
+        },
+      },
       focusAction: {
         enabled: false,
         disabledReason: 'missing-runtime-action',
@@ -460,6 +493,18 @@ describe('workbench flow model', () => {
       canRunAnyOperation: true,
       selectionStatus: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.SELECTED,
       selectedStatePointId: secondPoint.statePointId,
+      primaryOperation: {
+        kind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+        enabled: true,
+        label: '定位动作',
+        actionId: 'action-0002',
+        statePointId: secondPoint.statePointId,
+        target: {
+          kind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+          actionId: 'action-0002',
+          statePointId: secondPoint.statePointId,
+        },
+      },
       focusAction: {
         enabled: true,
         actionId: 'action-0002',
