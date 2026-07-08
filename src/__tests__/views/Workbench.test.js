@@ -113,6 +113,14 @@ describe('Workbench view', () => {
         'data-main-flow-selected-runtime-state-point-id'
       )
     ).toBe('');
+    expect(mainFlowWorkspace.attributes()).toMatchObject({
+      'data-main-flow-dispatch-sequence': '0',
+      'data-main-flow-dispatch-handled': 'false',
+      'data-main-flow-dispatch-kind': '',
+      'data-main-flow-dispatch-source': '',
+      'data-main-flow-dispatch-handler-key': '',
+      'data-main-flow-dispatch-reason': '',
+    });
     const primaryFlow = wrapper.find('[data-testid="workbench-primary-flow"]');
     expect(primaryFlow.exists()).toBe(true);
     expect(primaryFlow.attributes('data-flow-phase')).toBe('action-edit');
@@ -1767,6 +1775,18 @@ describe('Workbench view', () => {
         .attributes('data-main-flow-selected-runtime-state-point-id')
     ).toBe(selectedRuntimePointId);
     expect(
+      wrapper.find('[data-testid="workbench-main-flow-workspace"]').attributes()
+    ).toMatchObject({
+      'data-main-flow-dispatch-sequence': '1',
+      'data-main-flow-dispatch-handled': 'true',
+      'data-main-flow-dispatch-kind': 'open-runtime-results',
+      'data-main-flow-dispatch-source': 'workbench-flow-panel',
+      'data-main-flow-dispatch-handler-key': 'openRuntimeResults',
+      'data-main-flow-dispatch-reason': '',
+      'data-main-flow-dispatch-action-id': 'action-0001',
+      'data-main-flow-dispatch-state-point-id': '',
+    });
+    expect(
       wrapper
         .find('[data-testid="workbench-primary-flow"]')
         .attributes('data-main-flow-next-target-kind')
@@ -2098,6 +2118,38 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-return-result"]')
         .attributes('data-state-point-id')
     ).toBe(refreshedStatePointId);
+  });
+
+  it('records failed main flow dispatch results at the workbench layer', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    wrapper.findComponent(TimelineGridPreview).vm.$emit('dispatch-flow-action', {
+      kind: 'unsupported-flow-action',
+      source: 'test-flow-source',
+      statePointId: 'runtime-point-for-failure',
+    });
+    await nextTick();
+
+    expect(
+      wrapper.find('[data-testid="workbench-main-flow-workspace"]').attributes()
+    ).toMatchObject({
+      'data-main-flow-dispatch-sequence': '1',
+      'data-main-flow-dispatch-handled': 'false',
+      'data-main-flow-dispatch-kind': 'unsupported-flow-action',
+      'data-main-flow-dispatch-source': 'test-flow-source',
+      'data-main-flow-dispatch-handler-key': '',
+      'data-main-flow-dispatch-reason': 'unsupported-flow-action-kind',
+      'data-main-flow-dispatch-action-id': '',
+      'data-main-flow-dispatch-state-point-id': 'runtime-point-for-failure',
+    });
   });
 
   it('opens the refreshed runtime result after a direct action edit from the main flow panel', async () => {

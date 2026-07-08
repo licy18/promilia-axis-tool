@@ -76,6 +76,20 @@
       :data-main-flow-selected-runtime-state-point-id="
         workbenchFlowModel.mainFlowSelection.selectedRuntimeStatePointId
       "
+      :data-main-flow-dispatch-sequence="workbenchFlowDispatchState.sequence"
+      :data-main-flow-dispatch-handled="
+        workbenchFlowDispatchState.handled ? 'true' : 'false'
+      "
+      :data-main-flow-dispatch-kind="workbenchFlowDispatchState.kind"
+      :data-main-flow-dispatch-source="workbenchFlowDispatchState.source"
+      :data-main-flow-dispatch-handler-key="
+        workbenchFlowDispatchState.handlerKey
+      "
+      :data-main-flow-dispatch-reason="workbenchFlowDispatchState.reason"
+      :data-main-flow-dispatch-action-id="workbenchFlowDispatchState.actionId"
+      :data-main-flow-dispatch-state-point-id="
+        workbenchFlowDispatchState.statePointId
+      "
       data-testid="workbench-main-flow-workspace"
     >
       <ActionLibraryPanel
@@ -392,6 +406,7 @@ const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const draftStatus = ref('未保存草稿');
 const actionEditSource = ref(createEmptyActionEditSource());
 const actionEditFocus = ref(createEmptyActionEditFocus());
+const workbenchFlowDispatchState = ref(createEmptyWorkbenchFlowDispatchState());
 const workbenchFlowPlanController = createWorkbenchFlowPlanController({
   getRuntimeProjection: () =>
     simulationResult.value.threeValueRuntimeProjection,
@@ -1239,6 +1254,33 @@ function createEmptyActionEditFocus(sequence = 0) {
   };
 }
 
+function createEmptyWorkbenchFlowDispatchState(sequence = 0) {
+  return {
+    sequence,
+    handled: false,
+    kind: '',
+    source: '',
+    handlerKey: '',
+    reason: '',
+    actionId: '',
+    statePointId: '',
+  };
+}
+
+function createWorkbenchFlowDispatchState({ result, previousState } = {}) {
+  const action = result?.action ?? {};
+  return {
+    sequence: (previousState?.sequence ?? 0) + 1,
+    handled: Boolean(result?.handled),
+    kind: result?.kind ?? action.kind ?? '',
+    source: result?.source ?? action.source ?? '',
+    handlerKey: result?.handlerKey ?? '',
+    reason: result?.reason ?? '',
+    actionId: action.actionId ?? '',
+    statePointId: action.statePointId ?? '',
+  };
+}
+
 function clearActionEditSource() {
   actionEditSource.value = createEmptyActionEditSource(
     actionEditSource.value.sequence + 1
@@ -1503,7 +1545,12 @@ function selectRuntimeFlowStatePoint(pointId) {
 }
 
 function dispatchWorkbenchFlowAction(action = {}) {
-  workbenchFlowController.dispatch(action);
+  const result = workbenchFlowController.dispatch(action);
+  workbenchFlowDispatchState.value = createWorkbenchFlowDispatchState({
+    result,
+    previousState: workbenchFlowDispatchState.value,
+  });
+  return result;
 }
 
 function updateStateCurveFocusMode(mode) {

@@ -8531,6 +8531,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把主流程 action 的结果和失败状态收敛到 Workbench 层，便于后续做完整的运行回看/回改闭环，而不是继续扩展局部提示文案。
 
+### 2026-07-09：UI 主流程能力块 - Main Flow Dispatch Result State
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- Workbench 层开始记录最后一次主流程 action 的执行结果，包括 action kind/source、handler、handled、reason、目标 actionId 和 statePointId。
+- 主流程工作区暴露统一 dispatch result 状态，后续可以在不依赖各子面板本地判断的前提下处理成功跳转、失败原因和回退流程。
+- `dispatchWorkbenchFlowAction` 返回 controller dispatch 结果，同时把成功和失败都归档到 Workbench 状态；当前不新增可见提示文案。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- Workbench 页面测试确认初始状态没有 dispatch 结果、成功打开运行结果后记录 `openRuntimeResults` handler。
+- Workbench 页面测试确认不支持的主流程 action 不会破坏页面，并会在 Workbench 层记录 `unsupported-flow-action-kind`。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js src/__tests__/features/workbenchFlowController.test.js`：通过，2 个测试文件、58 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、184 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：基于 Workbench 层 dispatch result，把运行回看、回到动作修改、刷新结果回看这条主流程的成功路径和失败回退继续收敛到一个可控闭环。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

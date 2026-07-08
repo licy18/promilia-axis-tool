@@ -18233,3 +18233,58 @@ data-flow-runtime-focus-source
 - `npm run test -- --run src/__tests__/features/workbenchFlowController.test.js src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、65 条测试。
 - `npm run test -- --run`：通过，33 个测试文件、183 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 232. UI 主流程能力块：Main Flow Dispatch Result State
+
+### 232.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果，只在 Workbench UI 层新增主流程 action 执行结果状态。
+
+`src/views/Workbench.vue` 新增本地状态：
+
+```js
+workbenchFlowDispatchState
+```
+
+当前字段：
+
+```js
+{
+  sequence,
+  handled,
+  kind,
+  source,
+  handlerKey,
+  reason,
+  actionId,
+  statePointId
+}
+```
+
+`dispatchWorkbenchFlowAction(action)` 现在会返回 `workbenchFlowController.dispatch(action)` 的结果，并把该结果规范化写入 `workbenchFlowDispatchState`。成功和失败都会被记录。
+
+`workbench-main-flow-workspace` 新增诊断属性：
+
+```html
+data-main-flow-dispatch-sequence
+data-main-flow-dispatch-handled
+data-main-flow-dispatch-kind
+data-main-flow-dispatch-source
+data-main-flow-dispatch-handler-key
+data-main-flow-dispatch-reason
+data-main-flow-dispatch-action-id
+data-main-flow-dispatch-state-point-id
+```
+
+### 232.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、localStorage 草稿结构或任何游戏数据表结构。
+
+该变化只影响 Workbench UI 主流程 action 执行结果的运行时状态；`simLog`、`stateCurves`、资源曲线、summary 和三值数值结果不变。
+
+### 232.3 验证
+
+- 更新 `src/__tests__/views/Workbench.test.js`，确认初始状态、成功 action 和失败 action 都会在 Workbench 主流程工作区记录统一 dispatch result。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js src/__tests__/features/workbenchFlowController.test.js`：通过，2 个测试文件、58 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、184 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
