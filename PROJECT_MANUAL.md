@@ -7393,6 +7393,29 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 切换到生成层能力块，打通 `Action -> Hit -> ThreeValueDelta` 标准合同的统一生成入口；只做结构合同和运行接线，不追真实公式、真实倍率或测试期数值平衡。
 
+### 2026-07-08：生成层能力块 - Action/Hit/Delta 标准合同入口
+
+本阶段属于：生成层。
+
+完成的可用能力：
+
+- `threeValueGenerationLayer` 显式产出 `standardContract`，合同名固定为 `Action -> Hit -> ThreeValueDelta`。
+- 生成层现在同时暴露顶层 `actions`、`hits`、`deltas`，其中 `hits` 是从动作命中分组拉平后的统一命中入口。
+- runtime input 优先消费 `standardContract.deltas`，候选、采样、占位仍保留在同一合同中用于追溯，但 runtime 只应用 `applied=true` 的 delta。
+- 本阶段不新增公式推断、不修改三值数值、不扩大证据展示。
+
+当前验证事实：
+
+- 第一纵切结果仍为 1 动作、6 命中、16 个 delta，其中 1 个 applied、15 个 candidate；runtime 输入从 `standardContract` 接入后仍只应用 1 个 HP delta。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueGenerationLayer.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，3 个测试文件、17 条测试。
+
+下一步：
+
+- 继续生成层能力块：把动作结果、候选点、采样点、占位点的生成入口进一步收敛为一个可复用的 generation builder，减少 `projectSimulationResult` 对内部 tracks/layers 的直接组装责任。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

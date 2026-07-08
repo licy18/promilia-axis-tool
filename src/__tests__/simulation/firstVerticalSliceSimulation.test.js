@@ -1469,6 +1469,31 @@ describe('first vertical slice simulation', () => {
       calculatorReplaceableDeltaCount: 16,
       applied: false,
     });
+    expect(result.threeValueGenerationLayer.standardContract).toMatchObject({
+      sourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
+      status: 'action-hit-three-value-delta-contract-ready',
+      name: 'Action -> Hit -> ThreeValueDelta',
+      topology: ['Action', 'Hit', 'ThreeValueDelta'],
+      summary: {
+        actionCount: 1,
+        hitCount: 6,
+        deltaCount: 16,
+        appliedDeltaCount: 1,
+        candidateDeltaCount: 15,
+      },
+    });
+    expect(result.threeValueGenerationLayer.hits).toHaveLength(6);
+    expect(result.threeValueRuntimeProjection.runtimeInput).toMatchObject({
+      inputSourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
+      inputStatus: 'action-hit-three-value-delta-contract-ready',
+      generationLayerSourceKind: 'azpr-standard-three-value-generation-layer',
+      summary: {
+        standardContractActionCount: 1,
+        standardContractHitCount: 6,
+        inputDeltaCount: 16,
+        appliedDeltaCount: 1,
+      },
+    });
     const appliedGenerationDelta = result.threeValueGenerationLayer.deltas.find(
       delta => delta.applied
     );

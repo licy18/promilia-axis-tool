@@ -301,4 +301,93 @@ describe('three value runtime projection', () => {
       },
     ]);
   });
+
+  it('uses the standard Action -> Hit -> ThreeValueDelta contract as runtime input', () => {
+    const runtimeProjection = createThreeValueRuntimeProjection({
+      scenario: {
+        enemy: {
+          stats: {
+            maxHp: 10000,
+          },
+          hpMultiplier: 1,
+        },
+        actors: [
+          {
+            id: 'actor-001',
+            name: '末音',
+          },
+        ],
+      },
+      threeValueGenerationLayer: {
+        sourceKind: 'azpr-standard-three-value-generation-layer',
+        status: 'standard-three-value-generation-layer-ready',
+        deltas: [],
+        standardContract: {
+          sourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
+          status: 'action-hit-three-value-delta-contract-ready',
+          name: 'Action -> Hit -> ThreeValueDelta',
+          summary: {
+            actionCount: 1,
+            hitCount: 1,
+            deltaCount: 1,
+          },
+          deltas: [
+            {
+              id: 'action-001|hit-1|enemyHpDamage|applied|60|0',
+              actionId: 'action-001',
+              actionName: '普通攻击',
+              actionType: 'skill',
+              actorId: 'actor-001',
+              actorName: '末音',
+              hitKey: 'hit-1',
+              hitIndex: 1,
+              frameIndex: 60,
+              frameLabel: '1s0f',
+              timeMs: 1000,
+              trackKey: 'enemyHpDamage',
+              trackLabel: '敌人HP伤害',
+              layerKey: 'applied',
+              valueUnit: 'raw-damage',
+              delta: 800,
+              hpDelta: 800,
+              toughnessDelta: null,
+              energyDelta: null,
+              calculatorKey: 'azpr-hp-delta-calculator',
+              calculator: {
+                key: 'azpr-hp-delta-calculator',
+                outputField: 'hpDelta',
+                delta: 800,
+                replaceable: true,
+                appliedToRuntime: true,
+              },
+              applied: true,
+            },
+          ],
+        },
+      },
+    });
+
+    expect(runtimeProjection.runtimeInput).toMatchObject({
+      inputSourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
+      inputStatus: 'action-hit-three-value-delta-contract-ready',
+      generationLayerSourceKind: 'azpr-standard-three-value-generation-layer',
+      generationLayerStatus: 'standard-three-value-generation-layer-ready',
+      summary: {
+        standardContractSourceKind:
+          'azpr-action-hit-three-value-delta-standard-contract',
+        standardContractStatus: 'action-hit-three-value-delta-contract-ready',
+        standardContractActionCount: 1,
+        standardContractHitCount: 1,
+        inputDeltaCount: 1,
+        appliedDeltaCount: 1,
+      },
+    });
+    expect(runtimeProjection.simLog).toHaveLength(1);
+    expect(runtimeProjection.summary).toMatchObject({
+      inputDeltaCount: 1,
+      appliedDeltaCount: 1,
+      enemyHpDelta: 800,
+      simLogCount: 1,
+    });
+  });
 });

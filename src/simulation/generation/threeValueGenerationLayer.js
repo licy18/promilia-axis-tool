@@ -14,6 +14,8 @@ const THREE_VALUE_GENERATION_TRACK_ORDER = [
   'enemyToughnessDamage',
   'selfEnergyChange',
 ];
+export const ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME =
+  'Action -> Hit -> ThreeValueDelta';
 
 export const THREE_VALUE_DELTA_FIELD_BY_TRACK_KEY = {
   enemyHpDamage: 'hpDelta',
@@ -52,7 +54,14 @@ export function createThreeValueGenerationLayer({
     actionsById,
     deltas,
   });
-  const summary = summarizeThreeValueGenerationLayer({ actions, deltas });
+  const hits = createThreeValueGenerationHits(actions);
+  const summary = summarizeThreeValueGenerationLayer({ actions, hits, deltas });
+  const standardContract = createActionHitThreeValueDeltaStandardContract({
+    actions,
+    hits,
+    deltas,
+    summary,
+  });
 
   return {
     schemaVersion: 1,
@@ -62,7 +71,7 @@ export function createThreeValueGenerationLayer({
         ? 'standard-three-value-generation-layer-ready'
         : 'standard-three-value-generation-layer-empty',
     contract: {
-      name: 'Action -> Hit -> ThreeValueDelta',
+      name: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
       version: 1,
       frameRate: AZPR_TIMELINE_FRAME_RATE,
       frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
@@ -101,7 +110,9 @@ export function createThreeValueGenerationLayer({
     inputStatus: generationInput.status,
     replacementPolicy:
       'candidate, sampled and placeholder deltas can be replaced by later confirmed formulas without changing action/hit/track keys',
+    standardContract,
     actions,
+    hits,
     deltas,
     summary,
     applied: false,
@@ -368,6 +379,77 @@ function createThreeValueGenerationActions({ actionsById, deltas }) {
     .sort(compareThreeValueGenerationActions);
 }
 
+function createThreeValueGenerationHits(actions) {
+  return actions
+    .flatMap(action =>
+      (action.hits ?? []).map(hit => ({
+        actionId: action.actionId,
+        actionName: action.actionName,
+        actionType: action.actionType,
+        actorId: action.actorId,
+        actorName: action.actorName,
+        hitKey: hit.hitKey,
+        hitIndex: hit.hitIndex,
+        hitSkillId: hit.hitSkillId,
+        frameIndex: hit.frameIndex,
+        frameLabel: hit.frameLabel,
+        timeMs: hit.timeMs,
+        layerKeys: hit.layerKeys,
+        trackKeys: hit.trackKeys,
+        deltaCount: hit.deltaCount,
+        deltaIds: hit.deltas.map(delta => delta.id),
+        deltas: hit.deltas,
+      }))
+    )
+    .sort(compareThreeValueGenerationHits);
+}
+
+function createActionHitThreeValueDeltaStandardContract({
+  actions,
+  hits,
+  deltas,
+  summary,
+}) {
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
+    status:
+      deltas.length > 0
+        ? 'action-hit-three-value-delta-contract-ready'
+        : 'action-hit-three-value-delta-contract-empty',
+    name: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
+    version: 1,
+    topology: ['Action', 'Hit', 'ThreeValueDelta'],
+    frameRate: AZPR_TIMELINE_FRAME_RATE,
+    frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
+    keyFields: {
+      action: ['actionId'],
+      hit: ['actionId', 'hitKey', 'frameIndex', 'timeMs'],
+      delta: ['id'],
+    },
+    deltaFields: THREE_VALUE_DELTA_FIELDS,
+    runtimeDeltaPolicy: 'runtime consumes only deltas with applied=true',
+    diagnosticDeltaPolicy:
+      'candidate, sampled and placeholder deltas stay in the same contract for traceability but do not change runtime totals',
+    actions,
+    hits,
+    deltas,
+    summary: {
+      contractName: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
+      actionCount: summary.actionCount,
+      hitCount: summary.hitCount,
+      deltaCount: summary.deltaCount,
+      appliedDeltaCount: summary.appliedDeltaCount,
+      candidateDeltaCount: summary.candidateDeltaCount,
+      sampledDeltaCount: summary.sampledDeltaCount,
+      placeholderDeltaCount: summary.placeholderDeltaCount,
+      calculatorCount: summary.calculatorCount,
+      applied: false,
+    },
+    applied: false,
+  };
+}
+
 function createThreeValueGenerationHitGroupKey(delta) {
   return [delta.hitKey, delta.frameIndex, delta.timeMs]
     .map(createThreeValueGenerationIdPart)
@@ -413,16 +495,16 @@ function getThreeValueTrackOrder(trackKey) {
   return index >= 0 ? index : 99;
 }
 
-function summarizeThreeValueGenerationLayer({ actions, deltas }) {
+function summarizeThreeValueGenerationLayer({ actions, hits, deltas }) {
   const countLayer = layerKey =>
     deltas.filter(delta => delta.layerKey === layerKey).length;
   const calculatorSummary = summarizeThreeValueCalculators(deltas);
   return {
-    contractName: 'Action -> Hit -> ThreeValueDelta',
+    contractName: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
     actionCount: actions.length,
     actionWithDeltaCount: actions.filter(action => action.deltaCount > 0)
       .length,
-    hitCount: actions.reduce((sum, action) => sum + action.hitCount, 0),
+    hitCount: hits.length,
     deltaCount: deltas.length,
     trackCount: new Set(deltas.map(delta => delta.trackKey)).size,
     appliedDeltaCount: countLayer('applied'),

@@ -250,6 +250,25 @@ describe('three value generation layer', () => {
       calculatorCount: 1,
       calculatorKeys: ['azpr-hp-delta-calculator'],
     });
+    expect(layer.standardContract).toMatchObject({
+      sourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
+      status: 'action-hit-three-value-delta-contract-ready',
+      name: 'Action -> Hit -> ThreeValueDelta',
+      topology: ['Action', 'Hit', 'ThreeValueDelta'],
+      keyFields: {
+        action: ['actionId'],
+        hit: ['actionId', 'hitKey', 'frameIndex', 'timeMs'],
+        delta: ['id'],
+      },
+      deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
+      runtimeDeltaPolicy: 'runtime consumes only deltas with applied=true',
+      summary: {
+        actionCount: 1,
+        hitCount: 1,
+        deltaCount: 1,
+        appliedDeltaCount: 1,
+      },
+    });
     expect(layer.actions).toEqual([
       expect.objectContaining({
         actionId: 'action-001',
@@ -271,6 +290,22 @@ describe('three value generation layer', () => {
         ],
       }),
     ]);
+    expect(layer.hits).toEqual([
+      expect.objectContaining({
+        actionId: 'action-001',
+        hitKey: 'hit-1',
+        hitIndex: 1,
+        frameIndex: 60,
+        timeMs: 1000,
+        trackKeys: ['enemyHpDamage'],
+        layerKeys: ['applied'],
+        deltaCount: 1,
+        deltaIds: ['action-001|hit-1|enemyHpDamage|applied|60|0'],
+      }),
+    ]);
+    expect(layer.standardContract.actions).toBe(layer.actions);
+    expect(layer.standardContract.hits).toBe(layer.hits);
+    expect(layer.standardContract.deltas).toBe(layer.deltas);
     expect(layer.deltas).toEqual([
       expect.objectContaining({
         id: 'action-001|hit-1|enemyHpDamage|applied|60|0',

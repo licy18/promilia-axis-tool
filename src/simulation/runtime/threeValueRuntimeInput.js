@@ -1,9 +1,13 @@
-import { compareThreeValueGenerationDeltas } from '../generation/threeValueGenerationLayer';
-
-const STANDARD_THREE_VALUE_CONTRACT_NAME = 'Action -> Hit -> ThreeValueDelta';
+import {
+  ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
+  compareThreeValueGenerationDeltas,
+} from '../generation/threeValueGenerationLayer';
 
 export function createThreeValueRuntimeInput({ threeValueGenerationLayer }) {
-  const inputDeltas = [...(threeValueGenerationLayer?.deltas ?? [])].sort(
+  const standardContract = resolveActionHitThreeValueDeltaStandardContract(
+    threeValueGenerationLayer
+  );
+  const inputDeltas = [...(standardContract?.deltas ?? [])].sort(
     compareThreeValueGenerationDeltas
   );
   const appliedDeltas = inputDeltas
@@ -11,11 +15,12 @@ export function createThreeValueRuntimeInput({ threeValueGenerationLayer }) {
     .map((delta, index) => normalizeRuntimeInputDelta(delta, index));
   const ignoredDeltas = inputDeltas.filter(delta => !delta?.applied);
   const contractName =
-    threeValueGenerationLayer?.contract?.name ??
-    threeValueGenerationLayer?.summary?.contractName ??
-    STANDARD_THREE_VALUE_CONTRACT_NAME;
+    standardContract?.name ??
+    standardContract?.summary?.contractName ??
+    ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME;
   const summary = summarizeThreeValueRuntimeInput({
     contractName,
+    standardContract,
     inputDeltas,
     appliedDeltas,
     ignoredDeltas,
@@ -30,15 +35,44 @@ export function createThreeValueRuntimeInput({ threeValueGenerationLayer }) {
         : 'runtime-input-ready-no-applied-deltas',
     contractName,
     inputSourceKind:
+      standardContract?.sourceKind ??
+      'azpr-action-hit-three-value-delta-standard-contract',
+    inputStatus: standardContract?.status ?? null,
+    generationLayerSourceKind:
       threeValueGenerationLayer?.sourceKind ??
       'azpr-standard-three-value-generation-layer',
-    inputStatus: threeValueGenerationLayer?.status ?? null,
+    generationLayerStatus: threeValueGenerationLayer?.status ?? null,
     appliedOnly: true,
     deltas: appliedDeltas,
     appliedDeltas,
     ignoredDeltaCount: ignoredDeltas.length,
     summary,
     applied: true,
+  };
+}
+
+function resolveActionHitThreeValueDeltaStandardContract(
+  threeValueGenerationLayer
+) {
+  if (threeValueGenerationLayer?.standardContract) {
+    return threeValueGenerationLayer.standardContract;
+  }
+
+  return {
+    schemaVersion: 1,
+    sourceKind:
+      threeValueGenerationLayer?.sourceKind ??
+      'azpr-standard-three-value-generation-layer',
+    status: threeValueGenerationLayer?.status ?? null,
+    name:
+      threeValueGenerationLayer?.contract?.name ??
+      threeValueGenerationLayer?.summary?.contractName ??
+      ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
+    actions: threeValueGenerationLayer?.actions ?? [],
+    hits: threeValueGenerationLayer?.hits ?? [],
+    deltas: threeValueGenerationLayer?.deltas ?? [],
+    summary: threeValueGenerationLayer?.summary ?? {},
+    applied: false,
   };
 }
 
@@ -56,6 +90,7 @@ function normalizeRuntimeInputDelta(delta, runtimeSequenceIndex) {
 
 function summarizeThreeValueRuntimeInput({
   contractName,
+  standardContract,
   inputDeltas,
   appliedDeltas,
   ignoredDeltas,
@@ -66,6 +101,10 @@ function summarizeThreeValueRuntimeInput({
   );
   return {
     contractName,
+    standardContractSourceKind: standardContract?.sourceKind ?? null,
+    standardContractStatus: standardContract?.status ?? null,
+    standardContractActionCount: standardContract?.summary?.actionCount ?? null,
+    standardContractHitCount: standardContract?.summary?.hitCount ?? null,
     inputDeltaCount: inputDeltas.length,
     appliedDeltaCount: appliedDeltas.length,
     ignoredDeltaCount: ignoredDeltas.length,

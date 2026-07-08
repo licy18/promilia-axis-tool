@@ -15026,3 +15026,68 @@ syncRuntimeResultForSelectedAction(actionId)
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、53 条测试。
 - `npm run test -- --run`：通过，17 个测试文件、134 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 189. 生成层能力块：Action/Hit/Delta 标准合同入口
+
+本阶段属于生成层。
+
+### 189.1 结构变化
+
+`threeValueGenerationLayer` 新增顶层字段：
+
+```js
+{
+  standardContract,
+  hits
+}
+```
+
+`standardContract` 是生成层的统一消费入口，结构为：
+
+```js
+{
+  schemaVersion: 1,
+  sourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
+  status,
+  name: 'Action -> Hit -> ThreeValueDelta',
+  version: 1,
+  topology: ['Action', 'Hit', 'ThreeValueDelta'],
+  keyFields: {
+    action: ['actionId'],
+    hit: ['actionId', 'hitKey', 'frameIndex', 'timeMs'],
+    delta: ['id']
+  },
+  deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
+  actions,
+  hits,
+  deltas,
+  summary
+}
+```
+
+`hits` 是从 `actions[].hits` 拉平出的命中列表，每个命中保留 `actionId`、`hitKey`、帧时间、层/轨道集合、`deltaIds` 和对应 `deltas`。
+
+### 189.2 运行时消费策略
+
+`createThreeValueRuntimeInput()` 现在优先读取：
+
+```js
+threeValueGenerationLayer.standardContract.deltas
+```
+
+如果旧结构没有 `standardContract`，则回退到既有 `threeValueGenerationLayer.deltas`，保持兼容。
+
+runtime 仍只应用 `applied=true` 的 delta；candidate、sampled、placeholder 保留在合同中用于追溯和诊断，不改变运行总值。
+
+### 189.3 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化影响的是模拟结果结构：调用方可以继续读取既有 `threeValueGenerationLayer.actions` / `deltas`，也可以改为读取新的 `standardContract` / `hits`。
+
+### 189.4 验证
+
+- 生成层测试覆盖：`standardContract` 暴露 Action/Hit/ThreeValueDelta 拓扑、keyFields、deltaFields，并复用同一组 actions/hits/deltas。
+- runtime 测试覆盖：当顶层 `deltas` 为空但 `standardContract.deltas` 存在时，runtime input 仍能生成 simLog、stateCurves 和 summary。
+- 第一纵切测试覆盖：真实 Workbench 模拟结果带有 1 动作、6 命中、16 delta 的标准合同；runtime 从合同接入后仍只应用 1 个 HP delta。
+- `npm run test -- --run src/__tests__/simulation/threeValueGenerationLayer.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，3 个测试文件、17 条测试。
