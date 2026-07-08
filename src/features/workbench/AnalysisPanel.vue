@@ -462,8 +462,13 @@ function formatChainSource(sourceEvidence) {
     ownerShareProbe?.candidateCount > 0
       ? ` · 归属探针 ${ownerShareProbe.gateOpenCount}/${ownerShareProbe.candidateCount}`
       : '';
+  const samplingProbe = runtimeProbe?.runtimeSamplingProbe;
+  const samplingProbeText =
+    samplingProbe?.candidateCount > 0
+      ? ` · 采样契约 ${samplingProbe.gateOpenCount}/${samplingProbe.candidateCount}`
+      : '';
   if (sourceEvidence.candidateCount > 0) {
-    return `${sourceEvidence.candidateCount} 个候选 ${formatElementIds(sourceEvidence.matchedElementConfigIds)}${probeText}${sourceToArgsProbeText}${modifierProbeText}${ownerShareProbeText}`;
+    return `${sourceEvidence.candidateCount} 个候选 ${formatElementIds(sourceEvidence.matchedElementConfigIds)}${probeText}${sourceToArgsProbeText}${modifierProbeText}${ownerShareProbeText}${samplingProbeText}`;
   }
   if (sourceEvidence.logicElementIds?.length > 0) {
     return `未桥接 ${formatElementIds(sourceEvidence.logicElementIds)}`;
@@ -840,12 +845,16 @@ function formatFormulaExecutionMatrixSummary(summary) {
     external?.gapsWithRuntimeSelfEnergyOwnerShareIntervalProbe > 0
       ? ` · 归属探针 ${external.gapsWithRuntimeSelfEnergyOwnerShareIntervalProbe}/${external.gapCount}`
       : '';
+  const samplingProbeText =
+    external?.gapsWithRuntimeSelfEnergySamplingProbe > 0
+      ? ` · 采样契约 ${external.gapsWithRuntimeSelfEnergySamplingProbe}/${external.gapCount}`
+      : '';
   const alignment = gap?.elementSourceAlignmentSummary;
   const alignmentText =
     alignment?.gapCount > 0
       ? ` · 来源差异 ${alignment.divergentGapCount}/${alignment.gapCount}`
       : '';
-  return `执行矩阵摘要 ${summary.matrixActionCount} 动作 · ${summary.rowCount} 行 · ${summary.elementCount} element · 缩放 ${scaleRange}${perHitText}${spreadText}${hitBindingText}${gapText}${externalText}${relatedLevelText}${runtimeParameterText}${runtimeApplicationText}${nativeMethodText}${nativeDisassemblyText}${selfEnergyProbeText}${sourceToArgsProbeText}${modifierProbeText}${ownerShareProbeText}${alignmentText}`;
+  return `执行矩阵摘要 ${summary.matrixActionCount} 动作 · ${summary.rowCount} 行 · ${summary.elementCount} element · 缩放 ${scaleRange}${perHitText}${spreadText}${hitBindingText}${gapText}${externalText}${relatedLevelText}${runtimeParameterText}${runtimeApplicationText}${nativeMethodText}${nativeDisassemblyText}${selfEnergyProbeText}${sourceToArgsProbeText}${modifierProbeText}${ownerShareProbeText}${samplingProbeText}${alignmentText}`;
 }
 
 function formatScaleRange(min, max) {

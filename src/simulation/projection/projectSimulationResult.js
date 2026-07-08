@@ -1047,6 +1047,166 @@ const SELF_ENERGY_RUNTIME_MODIFIER_RULES = {
     'final-sp-curve-unconfirmed',
   ],
 };
+const SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA = {
+  status: 'runtime-sample-schema-ready-awaiting-capture',
+  version: 1,
+  sourceKind: 'azpr-self-energy-runtime-sample-schema',
+  hookPoints: [
+    {
+      key: 'damage-element-recover-sp-args-built',
+      functionKey: 'DamageElement.RecoverSP@0x138EEE0',
+      captureWhen:
+        'after RecoverSPArgs fields are written and before transmit type 0x12F',
+      requiredFields: [
+        'frameIndex',
+        'timeMs',
+        'sourceElementConfigId',
+        'pathId',
+        'recoverSP',
+        'petRecoverSP',
+        'recoverInterval',
+        'spgetup',
+        'spgetupAtk',
+        'args.id',
+        'args.baseDelta',
+        'args.delta',
+        'args.interval',
+        'args.tagType',
+        'args.skillId',
+        'args.sharePercent',
+        'args.petSharePercent',
+        'args.petDelta',
+        'args.mainPetSharePercent',
+      ],
+    },
+    {
+      key: 'alive-property-recover-sp-modifiers',
+      functionKey: 'AliveProperty.GetBattlePropertyCurrentValue@0x12A7EE0',
+      captureWhen: 'when id is 105 or 228 and isRatio is true',
+      requiredFields: [
+        'frameIndex',
+        'ownerEntityId',
+        'propertyId',
+        'propertyName',
+        'isRatio',
+        'myFloatRaw',
+        'floatValue',
+      ],
+    },
+    {
+      key: 'snapshot-property-recover-sp-modifiers',
+      functionKey:
+        'SnapshotPropertyManager.GetBattlePropertyCurrentValue@0x181D240',
+      captureWhen:
+        'when id is 105 or 228 and DamageElement uses attacker snapshot',
+      requiredFields: [
+        'frameIndex',
+        'attackerEntityId',
+        'propertyId',
+        'propertyName',
+        'isRatio',
+        'myFloatRaw',
+        'floatValue',
+      ],
+    },
+    {
+      key: 'sp-system-ontransmit-12f',
+      functionKey: 'SPSystem.OnTransmit@0x14837F0',
+      captureWhen:
+        'on transmit type 0x12F before and after throttle/share logic',
+      requiredFields: [
+        'frameIndex',
+        'receiverEntityId',
+        'args.id',
+        'args.interval',
+        'timerMapHit',
+        'timerPreviousTime',
+        'timerNextTime',
+        'directRecoverCalled',
+        'shareRebroadcastTargets',
+        'petShareTargets',
+        'mainPetShareTargets',
+      ],
+    },
+    {
+      key: 'sp-system-recover-sp-applied',
+      functionKey: 'SPSystem.RecoverSP@0x1483F40',
+      captureWhen:
+        'before and after SPSystem applies recoverTagType/baseDelta/delta',
+      requiredFields: [
+        'frameIndex',
+        'roleEntityId',
+        'recoverTagType',
+        'baseDelta',
+        'delta',
+        'spBefore',
+        'spAfter',
+        'spDeltaApplied',
+      ],
+    },
+  ],
+  offlineImportShape: {
+    rootFields: [
+      'schemaVersion',
+      'captureSessionId',
+      'clientRegion',
+      'clientBuild',
+      'source',
+      'events',
+    ],
+    eventCorrelationKeys: [
+      'captureSessionId',
+      'frameIndex',
+      'sourceElementConfigId',
+      'args.id',
+      'roleEntityId',
+    ],
+    eventTypes: [
+      'recover-sp-args-built',
+      'recover-sp-modifier-property-read',
+      'recover-sp-ontransmit-12f',
+      'recover-sp-applied',
+      'recover-sp-share-rebroadcast',
+    ],
+  },
+  validationChecks: [
+    {
+      key: 'base-delta-scale',
+      expression: 'args.baseDelta == recoverSP / 10000',
+      status: 'static-divisor-confirmed-runtime-sample-required',
+    },
+    {
+      key: 'pet-delta-scale-and-modifier',
+      expression:
+        'args.petDelta == petRecoverSP / 10000 * (1 + SPGETUP + SPGETUP_ATK)',
+      status: 'static-formula-confirmed-runtime-sample-required',
+    },
+    {
+      key: 'delta-scale-and-modifier',
+      expression:
+        'args.delta == recoverSP / 10000 * (1 + SPGETUP + SPGETUP_ATK)',
+      status: 'static-formula-confirmed-runtime-sample-required',
+    },
+    {
+      key: 'interval-scale',
+      expression: 'args.interval == recoverInterval / 1000',
+      status: 'static-divisor-confirmed-runtime-sample-required',
+    },
+    {
+      key: 'final-sp-curve',
+      expression:
+        'spAfter - spBefore == applied delta after owner/share/throttle rules',
+      status: 'runtime-sample-required',
+    },
+  ],
+  unresolved: [
+    'runtime-hook-not-connected',
+    'offline-runtime-samples-not-imported',
+    'spgetup-spgetup-atk-runtime-values-unconfirmed',
+    'owner-share-target-filter-unconfirmed',
+    'final-sp-curve-unconfirmed',
+  ],
+};
 
 export function projectSimulationResult({
   scenario,
@@ -2742,6 +2902,15 @@ function createHitBindingGapExternalElementBinding({
       0,
     runtimeSelfEnergyOwnerShareIntervalProbeGateOpenCount:
       runtimeSelfEnergyFormulaProbe.ownerShareIntervalProbe?.gateOpenCount ?? 0,
+    runtimeSelfEnergySamplingProbeStatuses:
+      runtimeSelfEnergyFormulaProbe.runtimeSamplingProbe?.status !==
+      'runtime-sampling-schema-missing'
+        ? [runtimeSelfEnergyFormulaProbe.runtimeSamplingProbe.status]
+        : [],
+    runtimeSelfEnergySamplingProbeCandidateCount:
+      runtimeSelfEnergyFormulaProbe.runtimeSamplingProbe?.candidateCount ?? 0,
+    runtimeSelfEnergySamplingProbeGateOpenCount:
+      runtimeSelfEnergyFormulaProbe.runtimeSamplingProbe?.gateOpenCount ?? 0,
     candidates,
     unresolved,
     applied: false,
@@ -3641,6 +3810,30 @@ function createHitBindingGapExternalElementBindingSummary(gaps) {
         (numberOrNull(
           binding.runtimeSelfEnergyOwnerShareIntervalProbeCandidateCount
         ) ?? 0) > 0
+    ).length,
+    runtimeSelfEnergySamplingProbeStatuses: uniqueStrings(
+      bindings.flatMap(
+        binding => binding.runtimeSelfEnergySamplingProbeStatuses ?? []
+      )
+    ),
+    runtimeSelfEnergySamplingProbeCandidateCount: bindings.reduce(
+      (sum, binding) =>
+        sum +
+        (numberOrNull(binding.runtimeSelfEnergySamplingProbeCandidateCount) ??
+          0),
+      0
+    ),
+    runtimeSelfEnergySamplingProbeGateOpenCount: bindings.reduce(
+      (sum, binding) =>
+        sum +
+        (numberOrNull(binding.runtimeSelfEnergySamplingProbeGateOpenCount) ??
+          0),
+      0
+    ),
+    gapsWithRuntimeSelfEnergySamplingProbe: bindings.filter(
+      binding =>
+        (numberOrNull(binding.runtimeSelfEnergySamplingProbeCandidateCount) ??
+          0) > 0
     ).length,
     unresolved: uniqueStrings(
       bindings.flatMap(binding => binding.unresolved ?? [])
@@ -5678,6 +5871,7 @@ function createSelfEnergyRuntimeFormulaProbe(candidates, options = {}) {
   const runtimeModifierProbe = createSelfEnergyRuntimeModifierProbe(samples);
   const ownerShareIntervalProbe =
     createSelfEnergyOwnerShareIntervalProbe(samples);
+  const runtimeSamplingProbe = createSelfEnergyRuntimeSamplingProbe(samples);
 
   return {
     status:
@@ -5696,6 +5890,7 @@ function createSelfEnergyRuntimeFormulaProbe(candidates, options = {}) {
     sourceToArgsProbe,
     runtimeModifierProbe,
     ownerShareIntervalProbe,
+    runtimeSamplingProbe,
     recoverSPValues,
     petRecoverSPValues,
     recoverIntervals,
@@ -5721,6 +5916,7 @@ function createSelfEnergyRuntimeFormulaProbe(candidates, options = {}) {
       'recover-interval-runtime-throttle-semantics-unconfirmed',
       'share-target-filter-unconfirmed',
       'baseDelta-vs-delta-role-unconfirmed',
+      'runtime-samples-not-imported',
     ],
     applied: false,
   };
@@ -5953,6 +6149,60 @@ function createSelfEnergyOwnerShareIntervalProbe(samples) {
       'recover-interval-runtime-throttle-semantics-unconfirmed',
       'recover-tag-type-non-damage-element-paths-unconfirmed',
     ],
+    applied: false,
+  };
+}
+
+function createSelfEnergyRuntimeSamplingProbe(samples) {
+  const candidateCount = samples.length;
+  const gateOpenCount = samples.filter(sample => sample.gateOpen).length;
+  const requiredEventTypes =
+    SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA.offlineImportShape.eventTypes;
+
+  return {
+    status:
+      candidateCount > 0
+        ? 'runtime-sampling-schema-built-awaiting-capture'
+        : 'runtime-sampling-schema-missing',
+    sourceKind: 'azpr-self-energy-runtime-sampling-subprobe',
+    sourceFunction: 'DamageElement.RecoverSP@0x138EEE0',
+    candidateCount,
+    gateOpenCount,
+    importedRuntimeSampleCount: 0,
+    importStatus: 'runtime-samples-not-imported',
+    sampleSchema: SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA,
+    requiredEventTypes,
+    sampleExpectations: samples.map(sample => ({
+      elementConfigId: sample.elementConfigId,
+      pathId: sample.pathId,
+      gateOpen: sample.gateOpen,
+      expectedRecoverSpArgs: {
+        baseDelta: scalePerTenThousand(sample.recoverSP),
+        deltaFormula: 'recoverSP / 10000 * (1 + SPGETUP + SPGETUP_ATK)',
+        petDeltaFormula: 'petRecoverSP / 10000 * (1 + SPGETUP + SPGETUP_ATK)',
+        intervalSecondsCandidate:
+          sample.recoverInterval == null ? null : sample.recoverInterval / 1000,
+        tagType: {
+          value: 0,
+          name: 'AttackRecoverySp',
+        },
+      },
+      requiredRuntimeValues: [
+        {
+          propertyId: 105,
+          propertyName: 'SPGETUP',
+        },
+        {
+          propertyId: 228,
+          propertyName: 'SPGETUP_ATK',
+        },
+      ],
+      correlationKeys:
+        SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA.offlineImportShape
+          .eventCorrelationKeys,
+      status: 'sample-contract-ready-awaiting-runtime-events',
+    })),
+    unresolved: SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA.unresolved,
     applied: false,
   };
 }

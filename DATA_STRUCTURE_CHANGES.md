@@ -6233,3 +6233,105 @@ hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1
 - `nativeConstantReadEvidence` 只证明二进制中的常量读数。
 - `SPGETUP/SPGETUP_ATK` 实时属性值仍未确认。
 - `intervalSecondsCandidate` 是基于 divisor 的候选单位；真实节流命中、share rebroadcast 顺序和最终每角色 SP 曲线仍需 runtime 样本验证。
+
+## 80. 阶段 5-8BA：runtimeSamplingProbe runtime 采样契约
+
+阶段 5-8BA 在 `selfEnergyRuntimeFormulaProbe` 下新增 `runtimeSamplingProbe`，用于把已确认的 `DamageElement.RecoverSP -> RecoverSPArgs -> SPSystem` 充能链路转成 runtime hook / 离线样本导入契约。该结构仍为 evidence-only，不参与最终自身能量值计算。
+
+### 80.1 runtimeSamplingProbe
+
+字段：
+
+- `status`：当前为 `runtime-sampling-schema-built-awaiting-capture`。
+- `sourceKind`：`azpr-self-energy-runtime-sampling-subprobe`。
+- `sourceFunction`：`DamageElement.RecoverSP@0x138EEE0`。
+- `candidateCount`：当前候选 DamageElement 数量。
+- `gateOpenCount`：当前通过 `m_recoverSP > 0` gate 的候选数量。
+- `importedRuntimeSampleCount`：已导入 runtime 样本数，当前为 `0`。
+- `importStatus`：当前为 `runtime-samples-not-imported`。
+- `sampleSchema`：引用 `SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA`。
+- `requiredEventTypes[]`：离线样本至少应覆盖的事件类型。
+- `sampleExpectations[]`：按 element 建立的样本预期，包含 `expectedRecoverSpArgs`、`requiredRuntimeValues`、`correlationKeys` 和 `status`。
+- `unresolved[]`：仍需 runtime 样本验证的缺口。
+- `applied`：固定为 `false`。
+
+`sampleExpectations[].expectedRecoverSpArgs` 当前记录：
+
+- `baseDelta = recoverSP / 10000`。
+- `deltaFormula = recoverSP / 10000 * (1 + SPGETUP + SPGETUP_ATK)`。
+- `petDeltaFormula = petRecoverSP / 10000 * (1 + SPGETUP + SPGETUP_ATK)`。
+- `intervalSecondsCandidate = recoverInterval / 1000`。
+- `tagType = AttackRecoverySp`。
+
+### 80.2 SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA
+
+`SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA` 定义 runtime hook / 离线导入样本的共同契约：
+
+- `status`：`runtime-sample-schema-ready-awaiting-capture`。
+- `version`：`1`。
+- `sourceKind`：`azpr-self-energy-runtime-sample-schema`。
+- `hookPoints[]`：运行时建议采样点。
+- `offlineImportShape`：离线 JSON 的根字段、关联键和事件类型。
+- `validationChecks[]`：导入样本后必须跑的验证项。
+- `unresolved[]`：schema 仍未解决的运行时缺口。
+- `applied`：固定为 `false`。
+
+当前 hook 点：
+
+- `damage-element-recover-sp-args-built`：`DamageElement.RecoverSP@0x138EEE0`，在 `RecoverSPArgs` 字段写完、type `0x12F` 发送前采样。
+- `alive-property-recover-sp-modifiers`：`AliveProperty.GetBattlePropertyCurrentValue@0x12A7EE0`，采样 id `105 / 228` 的 `SPGETUP / SPGETUP_ATK` 实时属性值。
+- `snapshot-property-recover-sp-modifiers`：`SnapshotPropertyManager.GetBattlePropertyCurrentValue@0x181D240`，采样攻击者 snapshot 下的同两类属性值。
+- `sp-system-ontransmit-12f`：`SPSystem.OnTransmit@0x14837F0`，采样 `0x12F` 分支的节流命中、share 目标和回传字段。
+- `sp-system-recover-sp-applied`：`SPSystem.RecoverSP@0x1483F40`，采样每个角色最终应用前后的 SP 值。
+
+离线导入事件类型：
+
+- `recover-sp-args-built`
+- `recover-sp-modifier-property-read`
+- `recover-sp-ontransmit-12f`
+- `recover-sp-applied`
+- `recover-sp-share-rebroadcast`
+
+建议关联键：
+
+- `captureSessionId`
+- `frameIndex`
+- `sourceElementConfigId`
+- `args.id`
+- `roleEntityId`
+
+验证项：
+
+- `base-delta-scale`：`args.baseDelta == recoverSP / 10000`。
+- `pet-delta-scale-and-modifier`：验证 `petRecoverSP / 10000` 与 modifier 后的 `petDelta`。
+- `delta-scale-and-modifier`：验证 `recoverSP / 10000 * (1 + SPGETUP + SPGETUP_ATK)`。
+- `interval-scale`：验证 `recoverInterval / 1000` 与 OnTransmit 节流时间。
+- `final-sp-curve`：验证 `SPSystem.RecoverSP` 前后差值与最终每角色 SP 曲线。
+
+### 80.3 外部缺口摘要字段
+
+`hitBindingGap.externalElementBinding` 和 `externalElementBindingSummary` 新增字段：
+
+- `runtimeSelfEnergySamplingProbeStatuses`：收集非普攻外部 DamageElement 的 `runtimeSamplingProbe.status`。
+- `runtimeSelfEnergySamplingProbeCandidateCount`：汇总候选数。
+- `runtimeSelfEnergySamplingProbeGateOpenCount`：汇总 gate 通过数。
+- `gapsWithRuntimeSelfEnergySamplingProbe`：具备采样契约的缺口动作数量。
+
+Workbench 执行矩阵摘要新增：
+
+```text
+采样契约 3/3
+```
+
+单动作切换到重击时可见：
+
+```text
+hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1/1 · 参数来源候选 1/1 · 应用入口候选 1/1 · 原生入口 1/1 · 反汇编片段 1/1 · 充能探针 1/1 · 构造探针 1/1 · 修正探针 1/1 · 归属探针 1/1 · 采样契约 1/1 · 来源差异 1/1
+```
+
+### 80.4 当前边界
+
+- `runtimeSamplingProbe.applied = false`。
+- `importedRuntimeSampleCount = 0`，当前还没有真实 runtime hook 样本导入。
+- `SPGETUP/SPGETUP_ATK` 实时属性值、owner/share 目标筛选、interval 节流命中和最终每角色 SP 曲线仍未确认。
+- 阶段 5-8BB 需要建立离线 runtime 样本导入/fixture 入口，再用真实 hook JSON 或手动整理样本驱动这些验证项。

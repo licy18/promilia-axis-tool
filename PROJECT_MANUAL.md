@@ -3918,6 +3918,44 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8BA 目标：设计或接入 runtime hook 采样点，按角色记录 `RecoverSPArgs` 字段快照、`SPGETUP/SPGETUP_ATK` 实时属性值、owner/share 目标筛选、interval 节流结果和最终自身能量曲线。
 - 若暂时无法直接 hook 客户端，先在项目中建立 runtime sample schema 和离线导入入口，确保后续采样能直接驱动 HP/削韧/能量三曲线验证。
 
+### 2026-07-08：阶段 5-8BA RecoverSP runtime 采样契约
+
+本轮完成：
+
+- 新增 `SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA`，把后续 hook / 离线导入需要的 runtime 样本字段固化为证据契约。
+- 新增 `runtimeSamplingProbe`，挂在 `selfEnergyRuntimeFormulaProbe.runtimeSamplingProbe` 下；action-level、每 hit 候选和非普攻缺口都能复用同一结构。
+- 采样契约覆盖 5 类 hook 点：
+  - `DamageElement.RecoverSP@0x138EEE0`：在 `RecoverSPArgs` 字段写完、type `0x12F` 发送前记录字段快照。
+  - `AliveProperty.GetBattlePropertyCurrentValue@0x12A7EE0`：采样 `SPGETUP(105)` / `SPGETUP_ATK(228)` 的实时属性值。
+  - `SnapshotPropertyManager.GetBattlePropertyCurrentValue@0x181D240`：采样 attacker snapshot 路径的同两项属性值。
+  - `SPSystem.OnTransmit@0x14837F0`：采样 `0x12F` 分支、timer map 节流、direct recover 和 share rebroadcast 目标。
+  - `SPSystem.RecoverSP@0x1483F40`：采样 `spBefore/spAfter/spDeltaApplied`，用于闭环最终每角色 SP 曲线。
+- 采样契约定义离线导入事件类型：`recover-sp-args-built`、`recover-sp-modifier-property-read`、`recover-sp-ontransmit-12f`、`recover-sp-applied`、`recover-sp-share-rebroadcast`。
+- Workbench 执行矩阵摘要新增 `采样契约 x/y`，切换到重击动作时可以看到 `采样契约 1/1`。
+
+当前样例结果：
+
+- 默认普通攻击 action-level：`runtimeSamplingProbe.candidateCount = 2`、`gateOpenCount = 2`、`importedRuntimeSampleCount = 0`，状态为 `runtime-sampling-schema-built-awaiting-capture`。
+- 非普攻外部 DamageElement：`109001251` 的采样预期包含 `baseDelta = 0.5899`、`intervalSecondsCandidate = 9.999`、`SPGETUP/SPGETUP_ATK` 两项必采实时值和事件关联键。
+- 四动作缺口摘要：`gapsWithRuntimeSelfEnergySamplingProbe = 3/3`，`runtimeSelfEnergySamplingProbeCandidateCount = 3`，`runtimeSelfEnergySamplingProbeGateOpenCount = 3`。
+
+验收结果：
+
+- `npx prettier --write src/simulation/projection/projectSimulationResult.js src/features/workbench/AnalysisPanel.vue src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、44 条测试通过。
+
+当前边界：
+
+- 阶段 5-8BA 证明的是 runtime hook / 离线样本导入契约已经建立，仍未导入真实 runtime 样本。
+- `runtimeSamplingProbe.importedRuntimeSampleCount = 0`，`importStatus = runtime-samples-not-imported`。
+- `SPGETUP/SPGETUP_ATK` 实时属性值、share rebroadcast 目标、timer map 节流命中和最终每角色 SP 曲线仍未确认。
+- `selfEnergyChange.value` 仍只应用显式资源事件，不应用候选充能。
+
+下一步：
+
+- 阶段 5-8BB 目标：建立离线 runtime 样本导入/fixture 入口，把真实 hook JSON 或手动整理样本映射为 `recover-sp-args-built`、`recover-sp-ontransmit-12f`、`recover-sp-applied` 等事件。
+- 导入后优先验证 4 个闭环：`baseDelta = recoverSP / 10000`、`delta = baseDelta * (1 + SPGETUP + SPGETUP_ATK)`、`interval = recoverInterval / 1000`、`spAfter - spBefore = final applied delta`。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

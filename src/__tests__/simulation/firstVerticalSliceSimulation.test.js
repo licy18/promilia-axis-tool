@@ -803,6 +803,68 @@ describe('first vertical slice simulation', () => {
                 ]),
               }),
             }),
+            runtimeSamplingProbe: expect.objectContaining({
+              status: 'runtime-sampling-schema-built-awaiting-capture',
+              sourceFunction: 'DamageElement.RecoverSP@0x138EEE0',
+              candidateCount: 2,
+              gateOpenCount: 2,
+              importedRuntimeSampleCount: 0,
+              importStatus: 'runtime-samples-not-imported',
+              requiredEventTypes: expect.arrayContaining([
+                'recover-sp-args-built',
+                'recover-sp-modifier-property-read',
+                'recover-sp-ontransmit-12f',
+                'recover-sp-applied',
+                'recover-sp-share-rebroadcast',
+              ]),
+              sampleSchema: expect.objectContaining({
+                status: 'runtime-sample-schema-ready-awaiting-capture',
+                hookPoints: expect.arrayContaining([
+                  expect.objectContaining({
+                    key: 'damage-element-recover-sp-args-built',
+                    functionKey: 'DamageElement.RecoverSP@0x138EEE0',
+                  }),
+                  expect.objectContaining({
+                    key: 'sp-system-ontransmit-12f',
+                    functionKey: 'SPSystem.OnTransmit@0x14837F0',
+                  }),
+                  expect.objectContaining({
+                    key: 'sp-system-recover-sp-applied',
+                    functionKey: 'SPSystem.RecoverSP@0x1483F40',
+                  }),
+                ]),
+                validationChecks: expect.arrayContaining([
+                  expect.objectContaining({
+                    key: 'delta-scale-and-modifier',
+                  }),
+                  expect.objectContaining({
+                    key: 'final-sp-curve',
+                    status: 'runtime-sample-required',
+                  }),
+                ]),
+              }),
+              sampleExpectations: expect.arrayContaining([
+                expect.objectContaining({
+                  elementConfigId: 109001081,
+                  expectedRecoverSpArgs: expect.objectContaining({
+                    baseDelta: 0.27,
+                    deltaFormula:
+                      'recoverSP / 10000 * (1 + SPGETUP + SPGETUP_ATK)',
+                    intervalSecondsCandidate: 9.999,
+                  }),
+                  requiredRuntimeValues: expect.arrayContaining([
+                    expect.objectContaining({
+                      propertyId: 105,
+                      propertyName: 'SPGETUP',
+                    }),
+                    expect.objectContaining({
+                      propertyId: 228,
+                      propertyName: 'SPGETUP_ATK',
+                    }),
+                  ]),
+                }),
+              ]),
+            }),
           }),
           candidates: expect.arrayContaining([
             expect.objectContaining({
@@ -1972,6 +2034,12 @@ describe('first vertical slice simulation', () => {
           runtimeSelfEnergyOwnerShareIntervalProbeCandidateCount: 3,
           runtimeSelfEnergyOwnerShareIntervalProbeGateOpenCount: 3,
           gapsWithRuntimeSelfEnergyOwnerShareIntervalProbe: 3,
+          runtimeSelfEnergySamplingProbeStatuses: [
+            'runtime-sampling-schema-built-awaiting-capture',
+          ],
+          runtimeSelfEnergySamplingProbeCandidateCount: 3,
+          runtimeSelfEnergySamplingProbeGateOpenCount: 3,
+          gapsWithRuntimeSelfEnergySamplingProbe: 3,
           applied: false,
         }),
         elementSourceAlignmentSummary: expect.objectContaining({
@@ -2130,6 +2198,11 @@ describe('first vertical slice simulation', () => {
               ],
               runtimeSelfEnergyOwnerShareIntervalProbeCandidateCount: 1,
               runtimeSelfEnergyOwnerShareIntervalProbeGateOpenCount: 1,
+              runtimeSelfEnergySamplingProbeStatuses: [
+                'runtime-sampling-schema-built-awaiting-capture',
+              ],
+              runtimeSelfEnergySamplingProbeCandidateCount: 1,
+              runtimeSelfEnergySamplingProbeGateOpenCount: 1,
               runtimeSelfEnergyFormulaProbe: expect.objectContaining({
                 status: 'recover-sp-runtime-probe-built-unapplied',
                 sourceStatus: 'external-damage-element-candidates',
@@ -2198,6 +2271,27 @@ describe('first vertical slice simulation', () => {
                           perTenThousand: 2.2999,
                         }),
                       }),
+                    }),
+                  ]),
+                }),
+                runtimeSamplingProbe: expect.objectContaining({
+                  status: 'runtime-sampling-schema-built-awaiting-capture',
+                  candidateCount: 1,
+                  gateOpenCount: 1,
+                  sampleExpectations: expect.arrayContaining([
+                    expect.objectContaining({
+                      elementConfigId: 109001251,
+                      expectedRecoverSpArgs: expect.objectContaining({
+                        baseDelta: 0.5899,
+                        intervalSecondsCandidate: 9.999,
+                      }),
+                      correlationKeys: expect.arrayContaining([
+                        'captureSessionId',
+                        'frameIndex',
+                        'sourceElementConfigId',
+                        'args.id',
+                        'roleEntityId',
+                      ]),
                     }),
                   ]),
                 }),
