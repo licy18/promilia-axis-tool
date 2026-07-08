@@ -20427,3 +20427,41 @@ applyCalculatorScope({
 - `npm run test -- --run`：通过，35 个测试文件、216 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `git diff --check`：通过。
+
+## 272. UI 主流程能力块：Runtime View State In Flow Runtime
+
+### 272.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`createWorkbenchFlowRuntime()` 新增可选回调：
+
+```js
+applyRuntimeViewState(viewState)
+```
+
+runtime flow plan 现在会被整理为内部 `RuntimeViewState`：
+
+```js
+{
+  clearRuntimeSelection,
+  stateCurveFocusMode,
+  stateCurveLayerFilters,
+  stateCurveTrackFilters,
+  runtimeLogFocus,
+}
+```
+
+Workbench 页面层从四个低层回调收束为一个 `applyRuntimeViewState()`；旧回调仍留在 `workbenchFlowRuntime` 内作为 fallback。
+
+### 272.2 保存与迁移
+
+本阶段只调整 Workbench 主流程 runtime 的内部 view state 应用入口，不新增持久字段，不需要数据迁移。
+
+### 272.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowRuntime.test.js`，覆盖 runtime result return 和 runtime overview plan 输出统一 view state。
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、63 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、216 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过。

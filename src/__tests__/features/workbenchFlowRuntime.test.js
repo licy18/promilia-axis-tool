@@ -82,13 +82,8 @@ describe('workbench flow runtime', () => {
       setCalculatorScope: scope => calls.push(['setCalculatorScope', scope]),
       applyRuntimePointSelectionState: selectionState =>
         calls.push(['applyRuntimePointSelectionState', selectionState]),
-      clearRuntimeSelection: payload =>
-        calls.push(['clearRuntimeSelection', payload]),
-      setStateCurveLayerFilters: filters =>
-        calls.push(['setStateCurveLayerFilters', filters]),
-      setStateCurveTrackFilters: filters =>
-        calls.push(['setStateCurveTrackFilters', filters]),
-      focusRuntimeLog: payload => calls.push(['focusRuntimeLog', payload]),
+      applyRuntimeViewState: viewState =>
+        calls.push(['applyRuntimeViewState', viewState]),
     });
 
     expect(
@@ -128,18 +123,19 @@ describe('workbench flow runtime', () => {
         },
       ],
       [
-        'setStateCurveLayerFilters',
+        'applyRuntimeViewState',
         {
-          applied: true,
-          candidate: false,
-        },
-      ],
-      ['setStateCurveTrackFilters', {}],
-      [
-        'focusRuntimeLog',
-        {
-          source: 'action-result',
-          statePointId: 'point-001',
+          clearRuntimeSelection: false,
+          stateCurveFocusMode: 'all',
+          stateCurveLayerFilters: {
+            applied: true,
+            candidate: false,
+          },
+          stateCurveTrackFilters: {},
+          runtimeLogFocus: {
+            source: 'action-result',
+            statePointId: 'point-001',
+          },
         },
       ],
     ]);
@@ -226,8 +222,8 @@ describe('workbench flow runtime', () => {
       getFirstRuntimeStatePointId: () => 'point-unused',
       applyCalculatorScopeState: scopeState =>
         calls.push(['applyCalculatorScopeState', scopeState]),
-      clearRuntimeSelection: payload =>
-        calls.push(['clearRuntimeSelection', payload]),
+      applyRuntimeViewState: viewState =>
+        calls.push(['applyRuntimeViewState', viewState]),
     });
 
     runtime.applyRuntimeFlowPlan({
@@ -263,9 +259,16 @@ describe('workbench flow runtime', () => {
         },
       ],
       [
-        'clearRuntimeSelection',
+        'applyRuntimeViewState',
         {
+          clearRuntimeSelection: true,
           stateCurveFocusMode: 'all',
+          stateCurveLayerFilters: null,
+          stateCurveTrackFilters: null,
+          runtimeLogFocus: {
+            source: '',
+            statePointId: '',
+          },
         },
       ],
     ]);

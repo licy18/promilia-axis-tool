@@ -9583,6 +9583,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 Workbench 页面层剩余的 runtime log focus、filter 写入和 action selection 回调是否还能进一步归入 flow runtime 边界，优先减少页面层直接拼装主流程状态。
 
+### 2026-07-09：UI 主流程能力块 - Runtime View State In Flow Runtime
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchFlowRuntime` 将 runtime flow plan 中的清空 runtime 选择、曲线过滤器、runtime log focus 合成为统一 `RuntimeViewState`。
+- Workbench 页面层不再给 flow runtime 分别传入 `clearRuntimeSelection`、`setStateCurveLayerFilters`、`setStateCurveTrackFilters`、`focusRuntimeLog` 四个低层回调，改为只提供 `applyRuntimeViewState()`。
+- 运行结果选择、贡献定位和 runtime overview 清空路径继续保持原有曲线过滤、日志聚焦和选择清空效果，但状态应用入口更集中。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- flow runtime 单测覆盖 runtime result return 和 runtime overview plan 输出统一 view state。
+- Workbench 页面测试确认现有主流程仍能完成 runtime 结果选择、贡献定位、日志详情和时间轴 marker 联动。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、63 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、216 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 action selection / action edit focus 这类页面回调是否还能进一步收束到 flow runtime 边界，优先减少 Workbench 页面层对主流程细节的直接编排。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

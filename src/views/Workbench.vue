@@ -556,23 +556,7 @@ const workbenchFlowRuntime = createWorkbenchFlowRuntime({
     applyCalculatorScopeFlowState(scopeState),
   applyRuntimePointSelectionState: selectionState =>
     applyRuntimePointSelectionState(selectionState),
-  clearRuntimeSelection: ({ stateCurveFocusMode: mode = 'all' } = {}) => {
-    selectedStateCurvePointId.value = '';
-    stateCurveFocusMode.value = mode;
-  },
-  setStateCurveLayerFilters: filters => {
-    stateCurveLayerFilters.value = { ...filters };
-  },
-  setStateCurveTrackFilters: filters => {
-    stateCurveTrackFilters.value = { ...filters };
-  },
-  focusRuntimeLog: ({ source, statePointId }) => {
-    runtimeLogFocus.value = {
-      source,
-      statePointId,
-      sequence: runtimeLogFocus.value.sequence + 1,
-    };
-  },
+  applyRuntimeViewState: viewState => applyRuntimeViewState(viewState),
 });
 const workbenchFlowController = createWorkbenchFlowController(
   createWorkbenchFlowPlanHandlers({
@@ -1691,6 +1675,26 @@ function applyRuntimePointSelectionState(selectionState = {}) {
     statePointId: selectionState.runtimeLogFocus?.statePointId ?? '',
     sequence: runtimeLogFocus.value.sequence,
   };
+}
+
+function applyRuntimeViewState(viewState = {}) {
+  if (viewState.clearRuntimeSelection) {
+    selectedStateCurvePointId.value = '';
+    stateCurveFocusMode.value = viewState.stateCurveFocusMode || 'all';
+  }
+  if (viewState.stateCurveLayerFilters) {
+    stateCurveLayerFilters.value = { ...viewState.stateCurveLayerFilters };
+  }
+  if (viewState.stateCurveTrackFilters) {
+    stateCurveTrackFilters.value = { ...viewState.stateCurveTrackFilters };
+  }
+  if (viewState.runtimeLogFocus?.statePointId) {
+    runtimeLogFocus.value = {
+      source: viewState.runtimeLogFocus.source ?? '',
+      statePointId: viewState.runtimeLogFocus.statePointId ?? '',
+      sequence: runtimeLogFocus.value.sequence + 1,
+    };
+  }
 }
 
 function dispatchWorkbenchFlowAction(action = {}) {
