@@ -13733,7 +13733,7 @@ select-runtime-state-point
 `Workbench.vue` 接线为：
 
 ```text
-select-runtime-state-point -> selectRuntimeStatePoint()
+select-runtime-state-point -> selectRuntimeFlowStatePoint()
 ```
 
 ### 164.4 DOM 状态
@@ -13787,3 +13787,64 @@ Workbench 测试新增覆盖：
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一步 UI 主流程能力块应继续围绕完整工作区节奏和编辑体验推进，不再拆成单个状态标签或提示文案阶段。
+
+## 165. UI 主流程能力块：运行结果同步当前动作
+
+本阶段属于 UI 主流程。
+
+### 165.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 165.2 Workbench 主流程接线变化
+
+`WorkbenchFlowPanel` 的运行结果导航事件仍为：
+
+```text
+select-runtime-state-point
+```
+
+`Workbench.vue` 将主流程条来源的事件接到：
+
+```text
+selectRuntimeFlowStatePoint(pointId)
+```
+
+该函数先复用既有 `selectRuntimeStatePoint(pointId)` 更新当前 runtime state point，再调用 `selectActionFromRuntimeStatePoint(pointId)` 同步当前动作。
+
+### 165.3 runtime state point 解析
+
+新增 Workbench 内部派生函数：
+
+```text
+findRuntimeStatePointContextById(runtimeProjection, statePointId)
+selectActionFromRuntimeStatePoint(pointId)
+```
+
+解析来源仍是：
+
+```text
+threeValueRuntimeProjection.simLog[]
+threeValueRuntimeProjection.enemyStateCurve.points[]
+threeValueRuntimeProjection.selfEnergyCurveByActor[].points[]
+createRuntimeStateCurvePointId(row, point)
+```
+
+不新增 runtime point ID 规则，不改变 simulation 输出结构。
+
+### 165.4 行为边界
+
+- `openRuntimeResultsFlow()` 进入 runtime 视角后，会同步当前动作到首条 runtime 结果所属动作。
+- 主流程条前后切换 runtime 结果时，会同步当前动作到目标 runtime sim log 的 `actionId`。
+- 资源曲线、日志、状态曲线的普通选点仍使用既有 `selectRuntimeStatePoint()` 行为，不强制切换当前动作。
+
+### 165.5 验证
+
+Workbench 测试新增覆盖：
+
+- 添加资源动作后，点击主流程条 `查看运行结果` 会把当前动作切到首条 runtime 结果所属动作。
+- 点击主流程条下一个 runtime 结果后，当前动作切到第二条结果所属动作。
+- 点击主流程条上一个 runtime 结果后，当前动作回到第一条结果所属动作。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
+- `npm run test -- --run`：通过，15 个测试文件、118 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

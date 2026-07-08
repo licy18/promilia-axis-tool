@@ -52,7 +52,7 @@
       @open-runtime-results="openRuntimeResultsFlow"
       @focus-runtime-action="focusRuntimeAction"
       @return-runtime-result="returnRuntimeResultFromProperties"
-      @select-runtime-state-point="selectRuntimeStatePoint"
+      @select-runtime-state-point="selectRuntimeFlowStatePoint"
     />
 
     <div class="workbench-grid">
@@ -1253,6 +1253,11 @@ function selectRuntimeStatePoint(pointId) {
   };
 }
 
+function selectRuntimeFlowStatePoint(pointId) {
+  selectRuntimeStatePoint(pointId);
+  selectActionFromRuntimeStatePoint(pointId);
+}
+
 function selectActionResultRuntimePoint(pointId) {
   focusRuntimePointFromAnalysis(pointId, 'action-result');
 }
@@ -1273,6 +1278,7 @@ function returnRuntimeResultFromProperties({ actionId, statePointId } = {}) {
 
 function openRuntimeResultsFlow() {
   focusThreeValueCalculatorScope('runtime');
+  selectActionFromRuntimeStatePoint(selectedStateCurvePointId.value);
 }
 
 function focusRuntimeAction({
@@ -1438,6 +1444,38 @@ function getFirstRuntimeStatePointId(runtimeProjection) {
   }
   const point = findRuntimePointByDeltaId(runtimeProjection, row.sourceDeltaId);
   return createRuntimeStateCurvePointId(row, point);
+}
+
+function selectActionFromRuntimeStatePoint(pointId) {
+  const context = findRuntimeStatePointContextById(
+    simulationResult.value.threeValueRuntimeProjection,
+    pointId
+  );
+  const actionId = context?.row?.actionId;
+  if (!actionId || !findActionDraftById(actionId)) {
+    return;
+  }
+  selectAction(actionId);
+}
+
+function findRuntimeStatePointContextById(runtimeProjection, statePointId) {
+  if (!statePointId) {
+    return null;
+  }
+  for (const row of runtimeProjection?.simLog ?? []) {
+    const point = findRuntimePointByDeltaId(
+      runtimeProjection,
+      row.sourceDeltaId
+    );
+    if (createRuntimeStateCurvePointId(row, point) === statePointId) {
+      return {
+        row,
+        point,
+        statePointId,
+      };
+    }
+  }
+  return null;
 }
 
 function findFirstRuntimeStatePointForAction(runtimeProjection, actionId) {
