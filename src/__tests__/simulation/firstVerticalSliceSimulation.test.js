@@ -1386,9 +1386,9 @@ describe('first vertical slice simulation', () => {
           stateTimingEvidence: expect.objectContaining({
             status: 'state-timing-evidence-found-action-binding-unconfirmed',
             hpStateWindowCount: 5,
-            timingControlChainCount: 5,
+            timingControlChainCount: 8,
             animationStateControlCount: 2,
-            eventBridgeControlCount: 5,
+            eventBridgeControlCount: 6,
             hpStateNames: ['Skill0_1', 'Skill0_6'],
             animationStateNames: ['Skill0_1', 'Skill0_6'],
             eventBridgeSkillIds: [0, 80102, 10900102],

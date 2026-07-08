@@ -741,20 +741,20 @@ describe('generated AzPr data', () => {
       ],
     });
     expect(mayoiAttack.behaviorReferenceSummary).toMatchObject({
-      behaviorListRefs: 36,
-      resolvedBehaviorListRefs: 36,
+      behaviorListRefs: 44,
+      resolvedBehaviorListRefs: 44,
       unresolvedBehaviorListRefs: 0,
       externalElementBaseRefs: 14,
       resourceMapMatchedElementBaseRefs: 14,
       resourceMapUnmatchedElementBaseRefs: 0,
-      scriptTypeCandidateBehaviorRefs: 10,
+      scriptTypeCandidateBehaviorRefs: 12,
       resolvedBehaviorRefsByLane: {
         hpDamage: 5,
         toughnessDamage: 0,
         selfEnergyChange: 0,
         elementEffect: 6,
-        timingControl: 5,
-        presentation: 20,
+        timingControl: 8,
+        presentation: 25,
       },
     });
     expect(hanyouyouUltimate).toMatchObject({
@@ -764,19 +764,19 @@ describe('generated AzPr data', () => {
       jsonFileCount: 177,
       effectLaneCandidateSummary: {
         hpDamage: {
-          count: 6,
+          count: 7,
         },
         toughnessDamage: {
           count: 1,
         },
       },
       behaviorReferenceSummary: {
-        behaviorListRefs: 25,
-        resolvedBehaviorListRefs: 25,
-        externalElementBaseRefs: 6,
-        resourceMapMatchedElementBaseRefs: 6,
+        behaviorListRefs: 28,
+        resolvedBehaviorListRefs: 28,
+        externalElementBaseRefs: 7,
+        resourceMapMatchedElementBaseRefs: 7,
         resolvedBehaviorRefsByLane: {
-          hpDamage: 6,
+          hpDamage: 7,
           toughnessDamage: 1,
         },
       },
@@ -858,9 +858,9 @@ describe('generated AzPr data', () => {
       status: 'state-timing-evidence-found-action-binding-unconfirmed',
       scope: 'skill-level-action-state-candidates',
       hpStateWindowCount: 5,
-      timingControlChainCount: 5,
+      timingControlChainCount: 8,
       animationStateControlCount: 2,
-      eventBridgeControlCount: 5,
+      eventBridgeControlCount: 6,
       hpStateNames: ['Skill0_1', 'Skill0_6'],
       animationStateNames: ['Skill0_1', 'Skill0_6'],
       eventBridgeSkillIds: [0, 80102, 10900102],
@@ -1129,7 +1129,11 @@ describe('generated AzPr data', () => {
         hpStartFrames: [12, 13],
         subSkillIds: [10900101],
         animationControlCount: 1,
-        overlappingEventBridgeNames: ['连击桥接'],
+        overlappingEventBridgeCount: 2,
+        overlappingEventBridgeNames: expect.arrayContaining([
+          '前摇打断',
+          '连击桥接',
+        ]),
       }),
       expect.objectContaining({
         stateName: 'Skill0_6',
@@ -1138,7 +1142,12 @@ describe('generated AzPr data', () => {
         hpStartFrames: [13, 16, 19],
         subSkillIds: [109001011],
         animationControlCount: 1,
-        overlappingEventBridgeNames: ['立即跳转', '连击桥接'],
+        overlappingEventBridgeCount: 3,
+        overlappingEventBridgeNames: expect.arrayContaining([
+          '前摇打断',
+          '立即跳转',
+          '连击桥接',
+        ]),
       }),
     ]);
     expect(mayoiAttack.effectLaneBehaviorChains).toEqual(

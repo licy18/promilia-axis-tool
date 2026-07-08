@@ -6630,7 +6630,7 @@ runtime-sampling-offline-samples-partially-validated
 
 ### 83.3 仍需保留的缺口标记
 
-当前 `SKILL_CONTROL_SAMPLE_FILE_LIMIT = 80` 仍会限制报表覆盖：
+阶段 5-8BD 时 `SKILL_CONTROL_SAMPLE_FILE_LIMIT = 80` 仍会限制报表覆盖：
 
 - `10900101`：97 个 JSON，解析 80 个，剩余 17 个未纳入当前报表。
 - `10900113`：95 个 JSON，解析 80 个，剩余 15 个未纳入当前报表。
@@ -6642,3 +6642,69 @@ runtime-sampling-offline-samples-partially-validated
 - `jsonFileCount > parsedJsonSampleFiles`：当前 evidence 仍是抽样解析，不是全量解析。
 - `formulaFunctionEvidence.applied = false`：字段和公式 ID 已匹配，但最终 HP / 韧性 / 能量公式仍未应用。
 - `selfEnergyChange` 主动作缺真实 runtime capture：仍需 hook 样本确认最终每角色能量曲线。
+
+## 84. 阶段 5-8BE：skill_control 抽样上限提高到 200
+
+阶段 5-8BE 将 `SKILL_CONTROL_SAMPLE_FILE_LIMIT` 从 80 提高到 200。该变更只扩大 `skill-asset-evidence.json` 的 MonoBehaviour 深度扫描范围，不改变项目保存 schema，也不改变最终公式应用边界。
+
+### 84.1 覆盖率变化
+
+重生成后当前技能覆盖率为：
+
+```json
+{
+  "totalJson": 7170,
+  "parsedCurrentSkillControlSampleFiles": 6694,
+  "remainingBySampleLimit": 476,
+  "cappedSkillCount": 4
+}
+```
+
+对比阶段 5-8BD 的 80 上限：
+
+- 解析数量从 5092 提高到 6694。
+- 被上限截断的技能从 33 个降到 4 个。
+- 末音 `109001*` 与寒悠悠 `101003*` 已全部覆盖。
+
+### 84.2 目标角色影响
+
+末音当前已全量解析：
+
+```json
+[
+  { "skillId": 10900101, "json": 97, "parsed": 97 },
+  { "skillId": 10900112, "json": 75, "parsed": 75 },
+  { "skillId": 10900113, "json": 95, "parsed": 95 },
+  { "skillId": 10900121, "json": 104, "parsed": 104 },
+  { "skillId": 10900161, "json": 3, "parsed": 3 },
+  { "skillId": 10900162, "json": 1, "parsed": 1 }
+]
+```
+
+寒悠悠当前已全量解析：
+
+```json
+[
+  { "skillId": 10100301, "json": 65, "parsed": 65 },
+  { "skillId": 10100312, "json": 137, "parsed": 137 },
+  { "skillId": 10100313, "json": 177, "parsed": 177 },
+  { "skillId": 10100322, "json": 73, "parsed": 73 },
+  { "skillId": 10100361, "json": 5, "parsed": 5 },
+  { "skillId": 10100362, "json": 5, "parsed": 5 }
+]
+```
+
+### 84.3 仍被截断的技能
+
+当前仍超过 200 上限的技能只有：
+
+- `11100101 疾风投羽`：431 / 200。
+- `10300201 灵感的火花`：351 / 200。
+- `10100712 蛟龙戏珠`：279 / 200。
+- `10700212 浮茵`：215 / 200。
+
+若这些技能进入重点分析，应使用目标技能全量解析或角色白名单全量解析，而不是继续全局盲目提高上限。
+
+### 84.4 消费者注意
+
+`jsonFileCount > parsedJsonSampleFiles` 仍表示 evidence 报表不是全量解析。`jsonFileCount === parsedJsonSampleFiles` 只表示 MonoBehaviour 扫描覆盖完整，不代表 HP / 韧性 / 能量公式已最终应用；公式应用仍以 `formulaFunctionEvidence.applied` 和 runtime capture 验证为准。

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-08T01:12:51.723Z",
+  "generatedAt": "2026-07-08T01:21:21.128Z",
   "sourceKind": "azpr-skill-asset-evidence-index",
   "source": {
     "sourceRoot": "C:/PC2/Codex/AzPr",
@@ -11451,7 +11451,7 @@
   },
   "damageElementFieldMappingEvidence": {
     "schemaVersion": 1,
-    "generatedAt": "2026-07-08T01:12:51.723Z",
+    "generatedAt": "2026-07-08T01:21:21.128Z",
     "sourceKind": "azpr-damage-element-field-mapping-evidence",
     "status": "damage-element-field-candidates-found",
     "source": {
@@ -31389,9 +31389,9 @@
     "uniqueSkillBytesPaths": 682,
     "existingSkillBytesPathsInAzPrAssets": 0,
     "extractedSkillControlDirectories": 4134,
-    "parsedCurrentSkillControlSampleFiles": 5092,
-    "timelineControlSampleCount": 268,
-    "behaviorNodeSampleCount": 550,
+    "parsedCurrentSkillControlSampleFiles": 6694,
+    "timelineControlSampleCount": 302,
+    "behaviorNodeSampleCount": 619,
     "effectLaneCandidateSkills": {
       "hpDamage": 7,
       "toughnessDamage": 7,
@@ -40067,7 +40067,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour",
       "jsonFileCount": 137,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 137,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "MonoBehaviour_-1015219542526630352__-1015219542526630352.json",
@@ -40077,8 +40077,8 @@
         "MonoBehaviour_-2029786967615379920__-2029786967615379920.json"
       ],
       "timelineControlSampleCount": 37,
-      "behaviorNodeSampleCount": 74,
-      "frameCandidateSampleCount": 74,
+      "behaviorNodeSampleCount": 76,
+      "frameCandidateSampleCount": 76,
       "elementListCandidateSampleCount": 0,
       "skillResourceMapEvidence": {
         "status": "root-skillResourceMaps-found",
@@ -43555,7 +43555,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour",
       "jsonFileCount": 177,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 177,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "MonoBehaviour_-1405335881868337684__-1405335881868337684.json",
@@ -43564,9 +43564,9 @@
         "MonoBehaviour_-1774003918157013524__-1774003918157013524.json",
         "MonoBehaviour_-2769192302275289620__-2769192302275289620.json"
       ],
-      "timelineControlSampleCount": 38,
-      "behaviorNodeSampleCount": 80,
-      "frameCandidateSampleCount": 80,
+      "timelineControlSampleCount": 44,
+      "behaviorNodeSampleCount": 89,
+      "frameCandidateSampleCount": 89,
       "elementListCandidateSampleCount": 0,
       "skillResourceMapEvidence": {
         "status": "root-skillResourceMaps-found",
@@ -43643,7 +43643,7 @@
       "effectLaneCandidateSummary": {
         "hpDamage": {
           "label": "敌人 HP 伤害",
-          "count": 6
+          "count": 7
         },
         "toughnessDamage": {
           "label": "敌人韧性削减",
@@ -43663,7 +43663,7 @@
         },
         "presentation": {
           "label": "表现/音画资源",
-          "count": 12
+          "count": 14
         }
       },
       "effectLaneCandidates": [
@@ -43955,6 +43955,22 @@
             "trackGroupIndex": 0,
             "startFrame": 193,
             "endFrame": 195,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "hpDamage"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_8739758879355608556__8739758879355608556.json",
+            "name": "脱手轨-攻击框1",
+            "trackName": "攻击框4",
+            "trackIndex": 23,
+            "trackGroupIndex": 0,
+            "startFrame": 201,
+            "endFrame": 203,
             "eventFrameCount": 0,
             "behaviorListCount": 1
           }
@@ -44269,24 +44285,56 @@
             "endFrame": 289,
             "eventFrameCount": 0,
             "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "presentation"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_8186346053680537068__8186346053680537068.json",
+            "name": "特效 - 双人联机大招（起跳）",
+            "trackName": "特效 - 双人联机大招（起跳）",
+            "trackIndex": 61,
+            "trackGroupIndex": 0,
+            "startFrame": 74,
+            "endFrame": 374,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "presentation"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_8761729422113152492__8761729422113152492.json",
+            "name": "特效 - 双人联机大招（龙头炮）",
+            "trackName": "特效 - 双人联机大招（龙头炮）",
+            "trackIndex": 62,
+            "trackGroupIndex": 0,
+            "startFrame": 0,
+            "endFrame": 300,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
           }
         ]
       },
       "behaviorReferenceSummary": {
-        "behaviorListRefs": 25,
-        "resolvedBehaviorListRefs": 25,
+        "behaviorListRefs": 28,
+        "resolvedBehaviorListRefs": 28,
         "unresolvedBehaviorListRefs": 0,
-        "externalElementBaseRefs": 6,
-        "resourceMapMatchedElementBaseRefs": 6,
+        "externalElementBaseRefs": 7,
+        "resourceMapMatchedElementBaseRefs": 7,
         "resourceMapUnmatchedElementBaseRefs": 0,
-        "scriptTypeCandidateBehaviorRefs": 11,
+        "scriptTypeCandidateBehaviorRefs": 12,
         "resolvedBehaviorRefsByLane": {
-          "hpDamage": 6,
+          "hpDamage": 7,
           "toughnessDamage": 1,
           "selfEnergyChange": 0,
           "elementEffect": 0,
           "timingControl": 6,
-          "presentation": 12
+          "presentation": 14
         }
       },
       "effectLaneBehaviorChains": [
@@ -45718,6 +45766,114 @@
                 "resourceMapMatchedElementBaseRefCount": 1
               }
             ]
+          },
+          {
+            "laneHints": [
+              "hpDamage"
+            ],
+            "sourceFile": "MonoBehaviour_8739758879355608556__8739758879355608556.json",
+            "sourceName": "脱手轨-攻击框1",
+            "sourceTrackName": "攻击框4",
+            "sourceStartFrame": 201,
+            "sourceEndFrame": 203,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-2968661751408910868",
+                "roundedPathId": "-2968661751408911000",
+                "targetFile": "MonoBehaviour_-2968661751408910868__-2968661751408910868.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-2968661751408910868__-2968661751408910868.json",
+                "pathId": "-2968661751408910868",
+                "scriptPathId": "8289252000250858251",
+                "scriptTypeCandidate": {
+                  "status": "field-signature-matched",
+                  "confidence": "medium",
+                  "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                  "sourceLineRange": "dump.cs:286170-286206",
+                  "scriptPathId": "8289252000250858251",
+                  "namespace": "Lens.Gameplay.Modules.BigWorld",
+                  "className": "InjectToTargetKeyFrameBehaviorData",
+                  "typeDefIndex": 7239,
+                  "baseType": "SkillBehaviorData",
+                  "interfaces": [
+                    "IElementSkillBehaviourData"
+                  ],
+                  "matchedFields": [
+                    "selectedStateName",
+                    "selectedClipName",
+                    "effectPath",
+                    "collisionLayer",
+                    "elementalType",
+                    "targetType",
+                    "keyFrameDatas",
+                    "elementBaseDatas",
+                    "toOwnElementBaseDatas",
+                    "damageEffectId"
+                  ],
+                  "methods": [
+                    "GetDirectlyUsedElements",
+                    "CollectReferencedElements"
+                  ],
+                  "note": "Matched by script PathID plus exported MonoBehaviour field signature; this is not yet a direct MonoScript asset-name resolution."
+                },
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": 1870600431,
+                "startFrame": 201,
+                "frameCount": 2,
+                "independentUse": 1,
+                "independentSkillGroup": 0,
+                "collisionLayer": 5,
+                "elementalType": 1023,
+                "targetType": 1,
+                "lockType": 0,
+                "interval": 9999,
+                "maxTargetCount": 99,
+                "maxTotalCount": 0,
+                "damageEffectId": 10100301,
+                "keyFrameCount": 2,
+                "elementBaseDataRefs": [
+                  {
+                    "fileId": 2,
+                    "pathId": "2114308111398669772",
+                    "roundedPathId": "2114308111398669800",
+                    "status": "external-file",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100313
+                        ],
+                        "subSkillIds": [
+                          10100313
+                        ],
+                        "stateNames": [
+                          "Skill1",
+                          "Skill1_Tps"
+                        ],
+                        "hitEffects": [
+                          "11_101003_011",
+                          "pre_common_element_wind_buff_2_start"
+                        ]
+                      }
+                    ],
+                    "sourceKey": "elementBaseDatas"
+                  }
+                ],
+                "elementRefSourceCounts": {
+                  "elementBaseDatas": 1
+                },
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 1,
+                "resourceMapMatchedElementBaseRefCount": 1
+              }
+            ]
           }
         ],
         "toughnessDamage": [
@@ -46657,6 +46813,80 @@
                 "resourceMapMatchedElementBaseRefCount": 0
               }
             ]
+          },
+          {
+            "laneHints": [
+              "presentation"
+            ],
+            "sourceFile": "MonoBehaviour_8186346053680537068__8186346053680537068.json",
+            "sourceName": "特效 - 双人联机大招（起跳）",
+            "sourceTrackName": "特效 - 双人联机大招（起跳）",
+            "sourceStartFrame": 74,
+            "sourceEndFrame": 374,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-7727882551950795284",
+                "roundedPathId": "-7727882551950796000",
+                "targetFile": "MonoBehaviour_-7727882551950795284__-7727882551950795284.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-7727882551950795284__-7727882551950795284.json",
+                "pathId": "-7727882551950795284",
+                "scriptPathId": "6422487387805496538",
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": -1651407648,
+                "startFrame": 74,
+                "frameCount": 300,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "elementRefSourceCounts": {},
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 0,
+                "resourceMapMatchedElementBaseRefCount": 0
+              }
+            ]
+          },
+          {
+            "laneHints": [
+              "presentation"
+            ],
+            "sourceFile": "MonoBehaviour_8761729422113152492__8761729422113152492.json",
+            "sourceName": "特效 - 双人联机大招（龙头炮）",
+            "sourceTrackName": "特效 - 双人联机大招（龙头炮）",
+            "sourceStartFrame": 0,
+            "sourceEndFrame": 300,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "7068366232528723436",
+                "roundedPathId": "7068366232528723000",
+                "targetFile": "MonoBehaviour_7068366232528723436__7068366232528723436.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_7068366232528723436__7068366232528723436.json",
+                "pathId": "7068366232528723436",
+                "scriptPathId": "6422487387805496538",
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": -1168286138,
+                "startFrame": 0,
+                "frameCount": 300,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "elementRefSourceCounts": {},
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 0,
+                "resourceMapMatchedElementBaseRefCount": 0
+              }
+            ]
           }
         ]
       },
@@ -46664,7 +46894,7 @@
         "status": "state-timing-evidence-found-action-binding-unconfirmed",
         "sourceKind": "azpr-skill-control-state-timing-evidence",
         "scope": "skill-level-action-state-candidates",
-        "hpStateWindowCount": 6,
+        "hpStateWindowCount": 7,
         "timingControlChainCount": 6,
         "animationStateControlCount": 2,
         "eventBridgeControlCount": 4,
@@ -46823,6 +47053,32 @@
             "sourceEndFrame": 195,
             "behaviorStartFrames": [
               193
+            ],
+            "behaviorFrameCounts": [
+              2
+            ],
+            "scriptClassNames": [
+              "InjectToTargetKeyFrameBehaviorData"
+            ],
+            "subSkillIds": [
+              10100313
+            ],
+            "stateNames": [
+              "Skill1",
+              "Skill1_Tps"
+            ],
+            "hitEffects": [
+              "11_101003_011",
+              "pre_common_element_wind_buff_2_start"
+            ]
+          },
+          {
+            "sourceName": "脱手轨-攻击框1",
+            "sourceTrackName": "攻击框4",
+            "sourceStartFrame": 201,
+            "sourceEndFrame": 203,
+            "behaviorStartFrames": [
+              201
             ],
             "behaviorFrameCounts": [
               2
@@ -47065,11 +47321,12 @@
           {
             "stateName": "Skill1",
             "status": "hp-state-has-animation-control-candidate",
-            "hpWindowCount": 6,
+            "hpWindowCount": 7,
             "hpStartFrames": [
               176,
               184,
               193,
+              201,
               207,
               213,
               223
@@ -47101,11 +47358,12 @@
           {
             "stateName": "Skill1_Tps",
             "status": "hp-state-has-animation-control-candidate",
-            "hpWindowCount": 6,
+            "hpWindowCount": 7,
             "hpStartFrames": [
               176,
               184,
               193,
+              201,
               207,
               213,
               223
@@ -50431,7 +50689,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100712.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100712.asset/MonoBehaviour",
       "jsonFileCount": 279,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 200,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10100712__-1027392458372015953.json",
@@ -50985,7 +51243,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour",
       "jsonFileCount": 149,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 149,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10101001__-1118225685825045095.json",
@@ -51216,7 +51474,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour",
       "jsonFileCount": 136,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 136,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10101013__-1058249236301801642.json",
@@ -51788,7 +52046,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour",
       "jsonFileCount": 95,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 95,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10200113__-103173230344090965.json",
@@ -52230,7 +52488,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour",
       "jsonFileCount": 351,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 200,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10300201__-1030987351687640033.json",
@@ -52462,7 +52720,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour",
       "jsonFileCount": 151,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 151,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10300213__-1045209970607141154.json",
@@ -52574,7 +52832,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour",
       "jsonFileCount": 133,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 133,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10300221__-1179798474082776989.json",
@@ -53022,7 +53280,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour",
       "jsonFileCount": 185,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 185,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10700112__-100960816061660808.json",
@@ -53134,7 +53392,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset/MonoBehaviour",
       "jsonFileCount": 151,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 151,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10700113__-1012036470135848626.json",
@@ -53701,7 +53959,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour",
       "jsonFileCount": 215,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 200,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10700212__-1049697259203860155.json",
@@ -53813,7 +54071,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour",
       "jsonFileCount": 89,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 89,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10700213__-102046188210177565.json",
@@ -54273,7 +54531,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700312.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700312.asset/MonoBehaviour",
       "jsonFileCount": 93,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 93,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10700312__-1221244429129291435.json",
@@ -54385,7 +54643,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700313.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700313.asset/MonoBehaviour",
       "jsonFileCount": 83,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 83,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10700313__-1132216726979003990.json",
@@ -54497,7 +54755,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700321.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700321.asset/MonoBehaviour",
       "jsonFileCount": 103,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 103,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10700321__-1144244606862978035.json",
@@ -56299,7 +56557,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800312.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800312.asset/MonoBehaviour",
       "jsonFileCount": 131,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 131,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10800312__-1006992688844322724.json",
@@ -57427,7 +57685,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour",
       "jsonFileCount": 97,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 97,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "MonoBehaviour_-1470319565813827264__-1470319565813827264.json",
@@ -57436,9 +57694,9 @@
         "MonoBehaviour_-19311014994001508__-19311014994001508.json",
         "MonoBehaviour_-2219364397070875723__-2219364397070875723.json"
       ],
-      "timelineControlSampleCount": 40,
-      "behaviorNodeSampleCount": 80,
-      "frameCandidateSampleCount": 80,
+      "timelineControlSampleCount": 48,
+      "behaviorNodeSampleCount": 99,
+      "frameCandidateSampleCount": 99,
       "elementListCandidateSampleCount": 0,
       "skillResourceMapEvidence": {
         "status": "root-skillResourceMaps-found",
@@ -57551,11 +57809,11 @@
         },
         "timingControl": {
           "label": "动作/时序控制",
-          "count": 5
+          "count": 8
         },
         "presentation": {
           "label": "表现/音画资源",
-          "count": 20
+          "count": 25
         }
       },
       "effectLaneCandidates": [
@@ -58015,6 +58273,54 @@
             "endFrame": 29,
             "eventFrameCount": 0,
             "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "timingControl"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_6194904216296227765__6194904216296227765.json",
+            "name": "前摇打断",
+            "trackName": "前摇打断",
+            "trackIndex": 5,
+            "trackGroupIndex": 0,
+            "startFrame": 0,
+            "endFrame": 74,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "timingControl"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_8761577016603951516__8761577016603951516.json",
+            "name": "动作",
+            "trackName": "动作",
+            "trackIndex": 25,
+            "trackGroupIndex": 0,
+            "startFrame": 0,
+            "endFrame": 300,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "timingControl"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "New Timeline__-1151315697224662628.json",
+            "name": "位移修正",
+            "trackName": "位移修正",
+            "trackIndex": 36,
+            "trackGroupIndex": 0,
+            "startFrame": 2,
+            "endFrame": 7,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
           }
         ],
         "presentation": [
@@ -58337,24 +58643,88 @@
             "endFrame": 67,
             "eventFrameCount": 0,
             "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "presentation"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_6662203860296546624__6662203860296546624.json",
+            "name": "SFX",
+            "trackName": "SFX",
+            "trackIndex": 67,
+            "trackGroupIndex": 0,
+            "startFrame": 23,
+            "endFrame": 72,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "presentation"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_6990022180561434944__6990022180561434944.json",
+            "name": "SFX",
+            "trackName": "SFX",
+            "trackIndex": 62,
+            "trackGroupIndex": 0,
+            "startFrame": 26,
+            "endFrame": 42,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "presentation"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_7256979824408475968__7256979824408475968.json",
+            "name": "SFX",
+            "trackName": "SFX",
+            "trackIndex": 56,
+            "trackGroupIndex": 0,
+            "startFrame": 36,
+            "endFrame": 121,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "presentation"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_8143784821517283364__8143784821517283364.json",
+            "name": "VO",
+            "trackName": "VO",
+            "trackIndex": 34,
+            "trackGroupIndex": 0,
+            "startFrame": 10,
+            "endFrame": 25,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
           }
         ]
       },
       "behaviorReferenceSummary": {
-        "behaviorListRefs": 36,
-        "resolvedBehaviorListRefs": 36,
+        "behaviorListRefs": 44,
+        "resolvedBehaviorListRefs": 44,
         "unresolvedBehaviorListRefs": 0,
         "externalElementBaseRefs": 14,
         "resourceMapMatchedElementBaseRefs": 14,
         "resourceMapUnmatchedElementBaseRefs": 0,
-        "scriptTypeCandidateBehaviorRefs": 10,
+        "scriptTypeCandidateBehaviorRefs": 12,
         "resolvedBehaviorRefsByLane": {
           "hpDamage": 5,
           "toughnessDamage": 0,
           "selfEnergyChange": 0,
           "elementEffect": 6,
-          "timingControl": 5,
-          "presentation": 20
+          "timingControl": 8,
+          "presentation": 25
         }
       },
       "effectLaneBehaviorChains": [
@@ -60736,6 +61106,207 @@
                 "resourceMapMatchedElementBaseRefCount": 0
               }
             ]
+          },
+          {
+            "laneHints": [
+              "timingControl"
+            ],
+            "sourceFile": "MonoBehaviour_6194904216296227765__6194904216296227765.json",
+            "sourceName": "前摇打断",
+            "sourceTrackName": "前摇打断",
+            "sourceStartFrame": 0,
+            "sourceEndFrame": 74,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-3222825000283470923",
+                "roundedPathId": "-3222825000283471000",
+                "targetFile": "MonoBehaviour_-3222825000283470923__-3222825000283470923.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-3222825000283470923__-3222825000283470923.json",
+                "pathId": "-3222825000283470923",
+                "scriptPathId": "-2061467371774231447",
+                "scriptTypeCandidate": {
+                  "status": "field-signature-matched",
+                  "confidence": "medium",
+                  "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                  "sourceLineRange": "dump.cs:285740-285783",
+                  "scriptPathId": "-2061467371774231447",
+                  "namespace": "Lens.Gameplay.Modules.BigWorld",
+                  "className": "EventBridgeBehaviorData",
+                  "typeDefIndex": 7223,
+                  "baseType": "SkillBehaviorData",
+                  "matchedFields": [
+                    "allowAttack",
+                    "allowSkill1",
+                    "allowSkill2",
+                    "allowSkill3",
+                    "allowMove",
+                    "allowJump",
+                    "allowDodge",
+                    "allowCountermeasuresSkill",
+                    "bridge",
+                    "type",
+                    "skillId",
+                    "skillIndex",
+                    "frameIndex",
+                    "interruptBehavior"
+                  ],
+                  "note": "Matched by script PathID plus exported MonoBehaviour field signature; this is not yet a direct MonoScript asset-name resolution."
+                },
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": 997605084,
+                "startFrame": 0,
+                "frameCount": 74,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "allowAttack": 0,
+                "allowSkill1": 0,
+                "allowSkill2": 0,
+                "allowSkill3": 1,
+                "allowMove": 0,
+                "allowJump": 0,
+                "allowDodge": 0,
+                "allowHomeSkill": 0,
+                "allowJointStrikeSkill": 0,
+                "allowCountermeasuresSkill": 1,
+                "bridge": 3,
+                "type": 0,
+                "skillId": 0,
+                "skillIndex": 0,
+                "frameIndex": 0,
+                "runFactor": 0,
+                "baseOnInput": 0,
+                "inputToIndex": 0,
+                "interruptBehavior": 0,
+                "elementRefSourceCounts": {},
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 0,
+                "resourceMapMatchedElementBaseRefCount": 0
+              }
+            ]
+          },
+          {
+            "laneHints": [
+              "timingControl"
+            ],
+            "sourceFile": "MonoBehaviour_8761577016603951516__8761577016603951516.json",
+            "sourceName": "动作",
+            "sourceTrackName": "动作",
+            "sourceStartFrame": 0,
+            "sourceEndFrame": 300,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-8513939418205142628",
+                "roundedPathId": "-8513939418205143000",
+                "targetFile": "MonoBehaviour_-8513939418205142628__-8513939418205142628.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-8513939418205142628__-8513939418205142628.json",
+                "pathId": "-8513939418205142628",
+                "scriptPathId": "-2619638872350711656",
+                "scriptTypeCandidate": {
+                  "status": "field-signature-matched",
+                  "confidence": "medium",
+                  "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                  "sourceLineRange": "dump.cs:284907-284946",
+                  "scriptPathId": "-2619638872350711656",
+                  "namespace": "Lens.Gameplay.Modules.BigWorld",
+                  "className": "AnimationBehaviorData",
+                  "typeDefIndex": 7192,
+                  "baseType": "SkillBehaviorData",
+                  "matchedFields": [
+                    "loop",
+                    "fadeTime",
+                    "selectedStateName",
+                    "rootmotion",
+                    "aniLength",
+                    "layerIndex",
+                    "defaultAniLength",
+                    "aniStartFrame",
+                    "aniEndFrame",
+                    "aniPlaySpeed"
+                  ],
+                  "note": "Matched by script PathID plus exported MonoBehaviour field signature; this is not yet a direct MonoScript asset-name resolution."
+                },
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": -1705296747,
+                "startFrame": 0,
+                "frameCount": 300,
+                "selectedStateName": "Skill0_1",
+                "loop": 0,
+                "fadeTime": 50,
+                "rootmotion": 1,
+                "cantBeBlock": 0,
+                "ignoreBlock": 0,
+                "lastLayerIndex": 0,
+                "isPartsAnimation": 0,
+                "aniLength": 300,
+                "layerIndex": 0,
+                "defaultAniLength": 300,
+                "aniStartFrame": 0,
+                "aniEndFrame": 300,
+                "aniPlaySpeed": 1,
+                "segmentedAnimation": 0,
+                "useBlendTree": 0,
+                "moveAttack": 0,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "elementRefSourceCounts": {},
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 0,
+                "resourceMapMatchedElementBaseRefCount": 0
+              }
+            ]
+          },
+          {
+            "laneHints": [
+              "timingControl"
+            ],
+            "sourceFile": "New Timeline__-1151315697224662628.json",
+            "sourceName": "位移修正",
+            "sourceTrackName": "位移修正",
+            "sourceStartFrame": 2,
+            "sourceEndFrame": 7,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-5695976582233341540",
+                "roundedPathId": "-5695976582233342000",
+                "targetFile": "MonoBehaviour_-5695976582233341540__-5695976582233341540.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-5695976582233341540__-5695976582233341540.json",
+                "pathId": "-5695976582233341540",
+                "scriptPathId": "1143000666662058119",
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": 1296889146,
+                "startFrame": 2,
+                "frameCount": 5,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "type": 1,
+                "targetType": 0,
+                "elementRefSourceCounts": {},
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 0,
+                "resourceMapMatchedElementBaseRefCount": 0
+              }
+            ]
           }
         ],
         "presentation": [
@@ -61493,6 +62064,158 @@
                 "resourceMapMatchedElementBaseRefCount": 0
               }
             ]
+          },
+          {
+            "laneHints": [
+              "presentation"
+            ],
+            "sourceFile": "MonoBehaviour_6662203860296546624__6662203860296546624.json",
+            "sourceName": "SFX",
+            "sourceTrackName": "SFX",
+            "sourceStartFrame": 23,
+            "sourceEndFrame": 72,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-331977608802649792",
+                "roundedPathId": "-331977608802649800",
+                "targetFile": "MonoBehaviour_-331977608802649792__-331977608802649792.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-331977608802649792__-331977608802649792.json",
+                "pathId": "-331977608802649792",
+                "scriptPathId": "7048992009349743623",
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": -178884065,
+                "startFrame": 23,
+                "frameCount": 49,
+                "loop": 0,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "elementRefSourceCounts": {},
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 0,
+                "resourceMapMatchedElementBaseRefCount": 0
+              }
+            ]
+          },
+          {
+            "laneHints": [
+              "presentation"
+            ],
+            "sourceFile": "MonoBehaviour_6990022180561434944__6990022180561434944.json",
+            "sourceName": "SFX",
+            "sourceTrackName": "SFX",
+            "sourceStartFrame": 26,
+            "sourceEndFrame": 42,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-945996082228020928",
+                "roundedPathId": "-945996082228021000",
+                "targetFile": "MonoBehaviour_-945996082228020928__-945996082228020928.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-945996082228020928__-945996082228020928.json",
+                "pathId": "-945996082228020928",
+                "scriptPathId": "7048992009349743623",
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": -382873386,
+                "startFrame": 26,
+                "frameCount": 16,
+                "loop": 0,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "elementRefSourceCounts": {},
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 0,
+                "resourceMapMatchedElementBaseRefCount": 0
+              }
+            ]
+          },
+          {
+            "laneHints": [
+              "presentation"
+            ],
+            "sourceFile": "MonoBehaviour_7256979824408475968__7256979824408475968.json",
+            "sourceName": "SFX",
+            "sourceTrackName": "SFX",
+            "sourceStartFrame": 36,
+            "sourceEndFrame": 121,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-9014214251897931456",
+                "roundedPathId": "-9014214251897932000",
+                "targetFile": "MonoBehaviour_-9014214251897931456__-9014214251897931456.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-9014214251897931456__-9014214251897931456.json",
+                "pathId": "-9014214251897931456",
+                "scriptPathId": "7048992009349743623",
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": -2106064857,
+                "startFrame": 36,
+                "frameCount": 85,
+                "loop": 0,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "elementRefSourceCounts": {},
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 0,
+                "resourceMapMatchedElementBaseRefCount": 0
+              }
+            ]
+          },
+          {
+            "laneHints": [
+              "presentation"
+            ],
+            "sourceFile": "MonoBehaviour_8143784821517283364__8143784821517283364.json",
+            "sourceName": "VO",
+            "sourceTrackName": "VO",
+            "sourceStartFrame": 10,
+            "sourceEndFrame": 25,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-8813998671819214812",
+                "roundedPathId": "-8813998671819215000",
+                "targetFile": "MonoBehaviour_-8813998671819214812__-8813998671819214812.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-8813998671819214812__-8813998671819214812.json",
+                "pathId": "-8813998671819214812",
+                "scriptPathId": "7048992009349743623",
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": -1215370837,
+                "startFrame": 10,
+                "frameCount": 15,
+                "loop": 0,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "elementRefSourceCounts": {},
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 0,
+                "resourceMapMatchedElementBaseRefCount": 0
+              }
+            ]
           }
         ]
       },
@@ -61501,9 +62224,9 @@
         "sourceKind": "azpr-skill-control-state-timing-evidence",
         "scope": "skill-level-action-state-candidates",
         "hpStateWindowCount": 5,
-        "timingControlChainCount": 5,
+        "timingControlChainCount": 8,
         "animationStateControlCount": 2,
-        "eventBridgeControlCount": 5,
+        "eventBridgeControlCount": 6,
         "hpStateNames": [
           "Skill0_1",
           "Skill0_6"
@@ -61678,6 +62401,10 @@
             "aniPlaySpeed": 1
           },
           {
+            "sourceName": "动作",
+            "sourceTrackName": "动作",
+            "sourceStartFrame": 0,
+            "sourceEndFrame": 300,
             "file": "MonoBehaviour_-8513939418205142628__-8513939418205142628.json",
             "pathId": "-8513939418205142628",
             "scriptTypeCandidate": {
@@ -61885,6 +62612,10 @@
             ]
           },
           {
+            "sourceName": "前摇打断",
+            "sourceTrackName": "前摇打断",
+            "sourceStartFrame": 0,
+            "sourceEndFrame": 74,
             "file": "MonoBehaviour_-3222825000283470923__-3222825000283470923.json",
             "pathId": "-3222825000283470923",
             "scriptTypeCandidate": {
@@ -61905,16 +62636,36 @@
             "allowMove": 0,
             "allowJump": 0,
             "allowDodge": 0,
+            "allowHomeSkill": 0,
+            "allowJointStrikeSkill": 0,
             "allowCountermeasuresSkill": 1,
             "bridge": 3,
             "type": 0,
             "skillId": 0,
             "skillIndex": 0,
             "frameIndex": 0,
+            "runFactor": 0,
+            "baseOnInput": 0,
+            "inputToIndex": 0,
+            "interruptBehavior": 0,
             "allowedInputs": [
               "skill3",
               "countermeasuresSkill"
             ]
+          },
+          {
+            "sourceName": "位移修正",
+            "sourceTrackName": "位移修正",
+            "sourceStartFrame": 2,
+            "sourceEndFrame": 7,
+            "file": "MonoBehaviour_-5695976582233341540__-5695976582233341540.json",
+            "pathId": "-5695976582233341540",
+            "behaviorStartFrame": 2,
+            "behaviorFrameCount": 5,
+            "timelineGroupIndex": 0,
+            "behaviorGroupId": 0,
+            "behaviorIndex": 1296889146,
+            "type": 1
           }
         ],
         "eventBridgeTargetSkillControlEvidence": {
@@ -73862,13 +74613,17 @@
             "animationControlCount": 1,
             "animationFrameWindows": [
               {
+                "sourceName": "动作",
+                "sourceStartFrame": 0,
+                "sourceEndFrame": 300,
                 "aniStartFrame": 0,
                 "aniEndFrame": 300,
                 "aniLength": 300
               }
             ],
-            "overlappingEventBridgeCount": 1,
+            "overlappingEventBridgeCount": 2,
             "overlappingEventBridgeNames": [
+              "前摇打断",
               "连击桥接"
             ],
             "applied": false
@@ -73900,8 +74655,9 @@
                 "aniLength": 230
               }
             ],
-            "overlappingEventBridgeCount": 2,
+            "overlappingEventBridgeCount": 3,
             "overlappingEventBridgeNames": [
+              "前摇打断",
               "立即跳转",
               "连击桥接"
             ],
@@ -81162,7 +81918,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900113.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900113.asset/MonoBehaviour",
       "jsonFileCount": 95,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 95,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "MonoBehaviour_-1430744253779101951__-1430744253779101951.json",
@@ -81171,9 +81927,9 @@
         "MonoBehaviour_-1961799169738655739__-1961799169738655739.json",
         "MonoBehaviour_-2402528415843305727__-2402528415843305727.json"
       ],
-      "timelineControlSampleCount": 40,
-      "behaviorNodeSampleCount": 80,
-      "frameCandidateSampleCount": 80,
+      "timelineControlSampleCount": 47,
+      "behaviorNodeSampleCount": 95,
+      "frameCandidateSampleCount": 95,
       "elementListCandidateSampleCount": 0,
       "skillResourceMapEvidence": {
         "status": "root-skillResourceMaps-found",
@@ -81275,7 +82031,7 @@
       "effectLaneCandidateSummary": {
         "hpDamage": {
           "label": "敌人 HP 伤害",
-          "count": 10
+          "count": 12
         },
         "toughnessDamage": {
           "label": "敌人韧性削减",
@@ -81291,11 +82047,11 @@
         },
         "timingControl": {
           "label": "动作/时序控制",
-          "count": 3
+          "count": 4
         },
         "presentation": {
           "label": "表现/音画资源",
-          "count": 12
+          "count": 14
         }
       },
       "effectLaneCandidates": [
@@ -81653,6 +82409,38 @@
             "endFrame": 146,
             "eventFrameCount": 0,
             "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "hpDamage"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_7638050040304842757__7638050040304842757.json",
+            "name": "攻击框7",
+            "trackName": "攻击判定-攻击框7",
+            "trackIndex": 93,
+            "trackGroupIndex": 0,
+            "startFrame": 213,
+            "endFrame": 214,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "hpDamage"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_8386742263716460549__8386742263716460549.json",
+            "name": "攻击框7",
+            "trackName": "攻击判定-攻击框7",
+            "trackIndex": 92,
+            "trackGroupIndex": 0,
+            "startFrame": 201,
+            "endFrame": 202,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
           }
         ],
         "toughnessDamage": [
@@ -81787,6 +82575,22 @@
             "trackGroupIndex": 0,
             "startFrame": 0,
             "endFrame": 340,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "timingControl"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_78380240433133573__78380240433133573.json",
+            "name": "位移修正",
+            "trackName": "位移修正",
+            "trackIndex": 121,
+            "trackGroupIndex": 0,
+            "startFrame": 121,
+            "endFrame": 124,
             "eventFrameCount": 0,
             "behaviorListCount": 1
           }
@@ -81984,24 +82788,56 @@
             "endFrame": 161,
             "eventFrameCount": 0,
             "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "presentation"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_8856977645385004801__8856977645385004801.json",
+            "name": "SFX",
+            "trackName": "SFX",
+            "trackIndex": 117,
+            "trackGroupIndex": 0,
+            "startFrame": 139,
+            "endFrame": 188,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "presentation"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_981110039749572353__981110039749572353.json",
+            "name": "SFX",
+            "trackName": "SFX",
+            "trackIndex": 116,
+            "trackGroupIndex": 0,
+            "startFrame": 145,
+            "endFrame": 235,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
           }
         ]
       },
       "behaviorReferenceSummary": {
-        "behaviorListRefs": 29,
-        "resolvedBehaviorListRefs": 29,
+        "behaviorListRefs": 34,
+        "resolvedBehaviorListRefs": 34,
         "unresolvedBehaviorListRefs": 0,
-        "externalElementBaseRefs": 25,
-        "resourceMapMatchedElementBaseRefs": 25,
+        "externalElementBaseRefs": 29,
+        "resourceMapMatchedElementBaseRefs": 29,
         "resourceMapUnmatchedElementBaseRefs": 0,
-        "scriptTypeCandidateBehaviorRefs": 13,
+        "scriptTypeCandidateBehaviorRefs": 15,
         "resolvedBehaviorRefsByLane": {
-          "hpDamage": 10,
+          "hpDamage": 12,
           "toughnessDamage": 1,
           "selfEnergyChange": 0,
           "elementEffect": 4,
-          "timingControl": 3,
-          "presentation": 12
+          "timingControl": 4,
+          "presentation": 14
         }
       },
       "effectLaneBehaviorChains": [
@@ -84301,6 +85137,276 @@
                 "resourceMapMatchedElementBaseRefCount": 4
               }
             ]
+          },
+          {
+            "laneHints": [
+              "hpDamage"
+            ],
+            "sourceFile": "MonoBehaviour_7638050040304842757__7638050040304842757.json",
+            "sourceName": "攻击框7",
+            "sourceTrackName": "攻击判定-攻击框7",
+            "sourceStartFrame": 213,
+            "sourceEndFrame": 214,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-2827151038018996219",
+                "roundedPathId": "-2827151038018996000",
+                "targetFile": "MonoBehaviour_-2827151038018996219__-2827151038018996219.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-2827151038018996219__-2827151038018996219.json",
+                "pathId": "-2827151038018996219",
+                "scriptPathId": "8289252000250858251",
+                "scriptTypeCandidate": {
+                  "status": "field-signature-matched",
+                  "confidence": "medium",
+                  "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                  "sourceLineRange": "dump.cs:286170-286206",
+                  "scriptPathId": "8289252000250858251",
+                  "namespace": "Lens.Gameplay.Modules.BigWorld",
+                  "className": "InjectToTargetKeyFrameBehaviorData",
+                  "typeDefIndex": 7239,
+                  "baseType": "SkillBehaviorData",
+                  "interfaces": [
+                    "IElementSkillBehaviourData"
+                  ],
+                  "matchedFields": [
+                    "selectedStateName",
+                    "selectedClipName",
+                    "effectPath",
+                    "collisionLayer",
+                    "elementalType",
+                    "targetType",
+                    "keyFrameDatas",
+                    "elementBaseDatas",
+                    "toOwnElementBaseDatas",
+                    "damageEffectId"
+                  ],
+                  "methods": [
+                    "GetDirectlyUsedElements",
+                    "CollectReferencedElements"
+                  ],
+                  "note": "Matched by script PathID plus exported MonoBehaviour field signature; this is not yet a direct MonoScript asset-name resolution."
+                },
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": -613844237,
+                "startFrame": 213,
+                "frameCount": 1,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "collisionLayer": 5,
+                "elementalType": 1023,
+                "targetType": 1,
+                "lockType": 1,
+                "interval": 999,
+                "maxTargetCount": 99,
+                "maxTotalCount": 0,
+                "damageEffectId": 0,
+                "keyFrameCount": 2,
+                "elementBaseDataRefs": [
+                  {
+                    "fileId": 2,
+                    "pathId": "1759694688090026391",
+                    "roundedPathId": "1759694688090026500",
+                    "status": "external-file",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10900113
+                        ],
+                        "subSkillIds": [
+                          10900113
+                        ],
+                        "stateNames": [
+                          "Skill1",
+                          "Skill1_Tps"
+                        ],
+                        "hitEffects": [
+                          "11_109001_130",
+                          "11_107001_039"
+                        ]
+                      }
+                    ],
+                    "sourceKey": "elementBaseDatas"
+                  },
+                  {
+                    "fileId": 2,
+                    "pathId": "-2183046451540947591",
+                    "roundedPathId": "-2183046451540947700",
+                    "status": "external-file",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10900113
+                        ],
+                        "subSkillIds": [
+                          10900113
+                        ],
+                        "stateNames": [
+                          "Skill1",
+                          "Skill1_Tps"
+                        ],
+                        "hitEffects": [
+                          "11_109001_130",
+                          "11_107001_039"
+                        ]
+                      }
+                    ],
+                    "sourceKey": "elementBaseDatas"
+                  }
+                ],
+                "elementRefSourceCounts": {
+                  "elementBaseDatas": 2
+                },
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 2,
+                "resourceMapMatchedElementBaseRefCount": 2
+              }
+            ]
+          },
+          {
+            "laneHints": [
+              "hpDamage"
+            ],
+            "sourceFile": "MonoBehaviour_8386742263716460549__8386742263716460549.json",
+            "sourceName": "攻击框7",
+            "sourceTrackName": "攻击判定-攻击框7",
+            "sourceStartFrame": 201,
+            "sourceEndFrame": 202,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-3798570921079064571",
+                "roundedPathId": "-3798570921079064600",
+                "targetFile": "MonoBehaviour_-3798570921079064571__-3798570921079064571.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-3798570921079064571__-3798570921079064571.json",
+                "pathId": "-3798570921079064571",
+                "scriptPathId": "8289252000250858251",
+                "scriptTypeCandidate": {
+                  "status": "field-signature-matched",
+                  "confidence": "medium",
+                  "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                  "sourceLineRange": "dump.cs:286170-286206",
+                  "scriptPathId": "8289252000250858251",
+                  "namespace": "Lens.Gameplay.Modules.BigWorld",
+                  "className": "InjectToTargetKeyFrameBehaviorData",
+                  "typeDefIndex": 7239,
+                  "baseType": "SkillBehaviorData",
+                  "interfaces": [
+                    "IElementSkillBehaviourData"
+                  ],
+                  "matchedFields": [
+                    "selectedStateName",
+                    "selectedClipName",
+                    "effectPath",
+                    "collisionLayer",
+                    "elementalType",
+                    "targetType",
+                    "keyFrameDatas",
+                    "elementBaseDatas",
+                    "toOwnElementBaseDatas",
+                    "damageEffectId"
+                  ],
+                  "methods": [
+                    "GetDirectlyUsedElements",
+                    "CollectReferencedElements"
+                  ],
+                  "note": "Matched by script PathID plus exported MonoBehaviour field signature; this is not yet a direct MonoScript asset-name resolution."
+                },
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": 1375086977,
+                "startFrame": 201,
+                "frameCount": 1,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "collisionLayer": 5,
+                "elementalType": 1023,
+                "targetType": 1,
+                "lockType": 1,
+                "interval": 999,
+                "maxTargetCount": 99,
+                "maxTotalCount": 0,
+                "damageEffectId": 0,
+                "keyFrameCount": 2,
+                "elementBaseDataRefs": [
+                  {
+                    "fileId": 2,
+                    "pathId": "1759694688090026391",
+                    "roundedPathId": "1759694688090026500",
+                    "status": "external-file",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10900113
+                        ],
+                        "subSkillIds": [
+                          10900113
+                        ],
+                        "stateNames": [
+                          "Skill1",
+                          "Skill1_Tps"
+                        ],
+                        "hitEffects": [
+                          "11_109001_130",
+                          "11_107001_039"
+                        ]
+                      }
+                    ],
+                    "sourceKey": "elementBaseDatas"
+                  },
+                  {
+                    "fileId": 2,
+                    "pathId": "-2183046451540947591",
+                    "roundedPathId": "-2183046451540947700",
+                    "status": "external-file",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10900113
+                        ],
+                        "subSkillIds": [
+                          10900113
+                        ],
+                        "stateNames": [
+                          "Skill1",
+                          "Skill1_Tps"
+                        ],
+                        "hitEffects": [
+                          "11_109001_130",
+                          "11_107001_039"
+                        ]
+                      }
+                    ],
+                    "sourceKey": "elementBaseDatas"
+                  }
+                ],
+                "elementRefSourceCounts": {
+                  "elementBaseDatas": 2
+                },
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 2,
+                "resourceMapMatchedElementBaseRefCount": 2
+              }
+            ]
           }
         ],
         "toughnessDamage": [
@@ -84766,6 +85872,45 @@
                 "resourceMapMatchedElementBaseRefCount": 0
               }
             ]
+          },
+          {
+            "laneHints": [
+              "timingControl"
+            ],
+            "sourceFile": "MonoBehaviour_78380240433133573__78380240433133573.json",
+            "sourceName": "位移修正",
+            "sourceTrackName": "位移修正",
+            "sourceStartFrame": 121,
+            "sourceEndFrame": 124,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-9125395582936467451",
+                "roundedPathId": "-9125395582936467000",
+                "targetFile": "MonoBehaviour_-9125395582936467451__-9125395582936467451.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-9125395582936467451__-9125395582936467451.json",
+                "pathId": "-9125395582936467451",
+                "scriptPathId": "1143000666662058119",
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": 1137122213,
+                "startFrame": 121,
+                "frameCount": 3,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "type": 1,
+                "targetType": 0,
+                "elementRefSourceCounts": {},
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 0,
+                "resourceMapMatchedElementBaseRefCount": 0
+              }
+            ]
           }
         ],
         "presentation": [
@@ -85220,6 +86365,82 @@
                 "resourceMapMatchedElementBaseRefCount": 0
               }
             ]
+          },
+          {
+            "laneHints": [
+              "presentation"
+            ],
+            "sourceFile": "MonoBehaviour_8856977645385004801__8856977645385004801.json",
+            "sourceName": "SFX",
+            "sourceTrackName": "SFX",
+            "sourceStartFrame": 139,
+            "sourceEndFrame": 188,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-7452313829032478975",
+                "roundedPathId": "-7452313829032479000",
+                "targetFile": "MonoBehaviour_-7452313829032478975__-7452313829032478975.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-7452313829032478975__-7452313829032478975.json",
+                "pathId": "-7452313829032478975",
+                "scriptPathId": "7048992009349743623",
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": -636420121,
+                "startFrame": 139,
+                "frameCount": 49,
+                "loop": 0,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "elementRefSourceCounts": {},
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 0,
+                "resourceMapMatchedElementBaseRefCount": 0
+              }
+            ]
+          },
+          {
+            "laneHints": [
+              "presentation"
+            ],
+            "sourceFile": "MonoBehaviour_981110039749572353__981110039749572353.json",
+            "sourceName": "SFX",
+            "sourceTrackName": "SFX",
+            "sourceStartFrame": 145,
+            "sourceEndFrame": 235,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-6875141482054174975",
+                "roundedPathId": "-6875141482054175000",
+                "targetFile": "MonoBehaviour_-6875141482054174975__-6875141482054174975.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-6875141482054174975__-6875141482054174975.json",
+                "pathId": "-6875141482054174975",
+                "scriptPathId": "7048992009349743623",
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": -439950349,
+                "startFrame": 145,
+                "frameCount": 90,
+                "loop": 0,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "elementRefSourceCounts": {},
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 0,
+                "resourceMapMatchedElementBaseRefCount": 0
+              }
+            ]
           }
         ]
       },
@@ -85227,10 +86448,10 @@
         "status": "state-timing-evidence-found-action-binding-unconfirmed",
         "sourceKind": "azpr-skill-control-state-timing-evidence",
         "scope": "skill-level-action-state-candidates",
-        "hpStateWindowCount": 10,
-        "timingControlChainCount": 3,
+        "hpStateWindowCount": 12,
+        "timingControlChainCount": 4,
         "animationStateControlCount": 2,
-        "eventBridgeControlCount": 1,
+        "eventBridgeControlCount": 2,
         "hpStateNames": [
           "Skill1",
           "Skill1_Tps"
@@ -85243,7 +86464,8 @@
           0
         ],
         "eventBridgeTypes": [
-          0
+          0,
+          1
         ],
         "eventBridgeValues": [
           3
@@ -85560,6 +86782,20 @@
               "dodge",
               "countermeasuresSkill"
             ]
+          },
+          {
+            "sourceName": "位移修正",
+            "sourceTrackName": "位移修正",
+            "sourceStartFrame": 121,
+            "sourceEndFrame": 124,
+            "file": "MonoBehaviour_-9125395582936467451__-9125395582936467451.json",
+            "pathId": "-9125395582936467451",
+            "behaviorStartFrame": 121,
+            "behaviorFrameCount": 3,
+            "timelineGroupIndex": 0,
+            "behaviorGroupId": 0,
+            "behaviorIndex": 1137122213,
+            "type": 1
           }
         ],
         "eventBridgeTargetSkillControlEvidence": {
@@ -85578,7 +86814,7 @@
           {
             "stateName": "Skill1",
             "status": "hp-state-has-animation-control-candidate",
-            "hpWindowCount": 10,
+            "hpWindowCount": 12,
             "hpStartFrames": [
               135,
               140,
@@ -85586,7 +86822,9 @@
               183,
               189,
               195,
+              201,
               207,
+              213,
               219,
               225,
               231
@@ -85615,7 +86853,7 @@
           {
             "stateName": "Skill1_Tps",
             "status": "hp-state-has-animation-control-candidate",
-            "hpWindowCount": 10,
+            "hpWindowCount": 12,
             "hpStartFrames": [
               135,
               140,
@@ -85623,7 +86861,9 @@
               183,
               189,
               195,
+              201,
               207,
+              213,
               219,
               225,
               231
@@ -85775,7 +87015,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900121.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900121.asset/MonoBehaviour",
       "jsonFileCount": 104,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 104,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "MonoBehaviour_-1601402233915211173__-1601402233915211173.json",
@@ -85784,9 +87024,9 @@
         "MonoBehaviour_-2047795946377851458__-2047795946377851458.json",
         "MonoBehaviour_-2114913900181992002__-2114913900181992002.json"
       ],
-      "timelineControlSampleCount": 39,
-      "behaviorNodeSampleCount": 81,
-      "frameCandidateSampleCount": 81,
+      "timelineControlSampleCount": 52,
+      "behaviorNodeSampleCount": 105,
+      "frameCandidateSampleCount": 105,
       "elementListCandidateSampleCount": 0,
       "skillResourceMapEvidence": {
         "status": "root-skillResourceMaps-found",
@@ -85838,7 +87078,7 @@
       "effectLaneCandidateSummary": {
         "hpDamage": {
           "label": "敌人 HP 伤害",
-          "count": 1
+          "count": 4
         },
         "toughnessDamage": {
           "label": "敌人韧性削减",
@@ -85858,7 +87098,7 @@
         },
         "presentation": {
           "label": "表现/音画资源",
-          "count": 22
+          "count": 31
         }
       },
       "effectLaneCandidates": [
@@ -86070,6 +87310,54 @@
             "trackGroupIndex": 0,
             "startFrame": 66,
             "endFrame": 70,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "hpDamage"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_5633706242008318555__5633706242008318555.json",
+            "name": "攻击框1",
+            "trackName": "攻击框1",
+            "trackIndex": 39,
+            "trackGroupIndex": 0,
+            "startFrame": 92,
+            "endFrame": 101,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "hpDamage"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_6458613763251536475__6458613763251536475.json",
+            "name": "攻击框1",
+            "trackName": "攻击框1",
+            "trackIndex": 31,
+            "trackGroupIndex": 0,
+            "startFrame": 76,
+            "endFrame": 81,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "hpDamage"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_9073787258880557659__9073787258880557659.json",
+            "name": "攻击框1",
+            "trackName": "攻击框1",
+            "trackIndex": 29,
+            "trackGroupIndex": 0,
+            "startFrame": 71,
+            "endFrame": 77,
             "eventFrameCount": 0,
             "behaviorListCount": 1
           }
@@ -86576,24 +87864,56 @@
             "endFrame": 120,
             "eventFrameCount": 0,
             "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "presentation"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_5665815960469884350__5665815960469884350.json",
+            "name": "SFX",
+            "trackName": "SFX",
+            "trackIndex": 92,
+            "trackGroupIndex": 0,
+            "startFrame": 15,
+            "endFrame": 74,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "presentation"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_5817733234745855422__5817733234745855422.json",
+            "name": "SFX",
+            "trackName": "SFX",
+            "trackIndex": 65,
+            "trackGroupIndex": 0,
+            "startFrame": 90,
+            "endFrame": 122,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
           }
         ]
       },
       "behaviorReferenceSummary": {
-        "behaviorListRefs": 32,
-        "resolvedBehaviorListRefs": 32,
+        "behaviorListRefs": 44,
+        "resolvedBehaviorListRefs": 44,
         "unresolvedBehaviorListRefs": 0,
-        "externalElementBaseRefs": 1,
-        "resourceMapMatchedElementBaseRefs": 1,
+        "externalElementBaseRefs": 4,
+        "resourceMapMatchedElementBaseRefs": 4,
         "resourceMapUnmatchedElementBaseRefs": 0,
-        "scriptTypeCandidateBehaviorRefs": 8,
+        "scriptTypeCandidateBehaviorRefs": 11,
         "resolvedBehaviorRefsByLane": {
-          "hpDamage": 1,
+          "hpDamage": 4,
           "toughnessDamage": 1,
           "selfEnergyChange": 0,
           "elementEffect": 0,
           "timingControl": 8,
-          "presentation": 22
+          "presentation": 31
         }
       },
       "effectLaneBehaviorChains": [
@@ -87203,6 +88523,360 @@
                 "behaviorIndex": -1157990813,
                 "startFrame": 66,
                 "frameCount": 4,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "collisionLayer": 5,
+                "elementalType": 1023,
+                "targetType": 1,
+                "lockType": 0,
+                "interval": 999,
+                "maxTargetCount": 99,
+                "maxTotalCount": 0,
+                "damageEffectId": 0,
+                "keyFrameCount": 2,
+                "elementBaseDataRefs": [
+                  {
+                    "fileId": 2,
+                    "pathId": "-7737634469737456931",
+                    "roundedPathId": "-7737634469737457000",
+                    "status": "external-file",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10900121
+                        ],
+                        "subSkillIds": [
+                          0
+                        ],
+                        "stateNames": [
+                          "Skill0_1",
+                          "Skill3"
+                        ],
+                        "effects": [
+                          "11_107003_035",
+                          "11_109001_092",
+                          "11_109001_093",
+                          "11_109001_094",
+                          "11_109001_095",
+                          "11_109001_097",
+                          "11_109001_096",
+                          "11_109001_137"
+                        ],
+                        "hitEffects": [
+                          "11_109001_129",
+                          "11_109001_128"
+                        ]
+                      }
+                    ],
+                    "sourceKey": "elementBaseDatas"
+                  }
+                ],
+                "elementRefSourceCounts": {
+                  "elementBaseDatas": 1
+                },
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 1,
+                "resourceMapMatchedElementBaseRefCount": 1
+              }
+            ]
+          },
+          {
+            "laneHints": [
+              "hpDamage"
+            ],
+            "sourceFile": "MonoBehaviour_5633706242008318555__5633706242008318555.json",
+            "sourceName": "攻击框1",
+            "sourceTrackName": "攻击框1",
+            "sourceStartFrame": 92,
+            "sourceEndFrame": 101,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "550755126083879515",
+                "roundedPathId": "550755126083879500",
+                "targetFile": "MonoBehaviour_550755126083879515__550755126083879515.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_550755126083879515__550755126083879515.json",
+                "pathId": "550755126083879515",
+                "scriptPathId": "8289252000250858251",
+                "scriptTypeCandidate": {
+                  "status": "field-signature-matched",
+                  "confidence": "medium",
+                  "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                  "sourceLineRange": "dump.cs:286170-286206",
+                  "scriptPathId": "8289252000250858251",
+                  "namespace": "Lens.Gameplay.Modules.BigWorld",
+                  "className": "InjectToTargetKeyFrameBehaviorData",
+                  "typeDefIndex": 7239,
+                  "baseType": "SkillBehaviorData",
+                  "interfaces": [
+                    "IElementSkillBehaviourData"
+                  ],
+                  "matchedFields": [
+                    "selectedStateName",
+                    "selectedClipName",
+                    "effectPath",
+                    "collisionLayer",
+                    "elementalType",
+                    "targetType",
+                    "keyFrameDatas",
+                    "elementBaseDatas",
+                    "toOwnElementBaseDatas",
+                    "damageEffectId"
+                  ],
+                  "methods": [
+                    "GetDirectlyUsedElements",
+                    "CollectReferencedElements"
+                  ],
+                  "note": "Matched by script PathID plus exported MonoBehaviour field signature; this is not yet a direct MonoScript asset-name resolution."
+                },
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": -217690133,
+                "startFrame": 92,
+                "frameCount": 9,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "collisionLayer": 5,
+                "elementalType": 1023,
+                "targetType": 1,
+                "lockType": 0,
+                "interval": 9999,
+                "maxTargetCount": 99,
+                "maxTotalCount": 0,
+                "damageEffectId": 0,
+                "keyFrameCount": 2,
+                "elementBaseDataRefs": [
+                  {
+                    "fileId": 2,
+                    "pathId": "-3956021691739248290",
+                    "roundedPathId": "-3956021691739248000",
+                    "status": "external-file",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10900121
+                        ],
+                        "subSkillIds": [
+                          0
+                        ],
+                        "stateNames": [
+                          "Skill0_1",
+                          "Skill3"
+                        ],
+                        "effects": [
+                          "11_107003_035",
+                          "11_109001_092",
+                          "11_109001_093",
+                          "11_109001_094",
+                          "11_109001_095",
+                          "11_109001_097",
+                          "11_109001_096",
+                          "11_109001_137"
+                        ],
+                        "hitEffects": [
+                          "11_109001_129",
+                          "11_109001_128"
+                        ]
+                      }
+                    ],
+                    "sourceKey": "elementBaseDatas"
+                  }
+                ],
+                "elementRefSourceCounts": {
+                  "elementBaseDatas": 1
+                },
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 1,
+                "resourceMapMatchedElementBaseRefCount": 1
+              }
+            ]
+          },
+          {
+            "laneHints": [
+              "hpDamage"
+            ],
+            "sourceFile": "MonoBehaviour_6458613763251536475__6458613763251536475.json",
+            "sourceName": "攻击框1",
+            "sourceTrackName": "攻击框1",
+            "sourceStartFrame": 76,
+            "sourceEndFrame": 81,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "8847803037066822235",
+                "roundedPathId": "8847803037066823000",
+                "targetFile": "MonoBehaviour_8847803037066822235__8847803037066822235.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_8847803037066822235__8847803037066822235.json",
+                "pathId": "8847803037066822235",
+                "scriptPathId": "8289252000250858251",
+                "scriptTypeCandidate": {
+                  "status": "field-signature-matched",
+                  "confidence": "medium",
+                  "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                  "sourceLineRange": "dump.cs:286170-286206",
+                  "scriptPathId": "8289252000250858251",
+                  "namespace": "Lens.Gameplay.Modules.BigWorld",
+                  "className": "InjectToTargetKeyFrameBehaviorData",
+                  "typeDefIndex": 7239,
+                  "baseType": "SkillBehaviorData",
+                  "interfaces": [
+                    "IElementSkillBehaviourData"
+                  ],
+                  "matchedFields": [
+                    "selectedStateName",
+                    "selectedClipName",
+                    "effectPath",
+                    "collisionLayer",
+                    "elementalType",
+                    "targetType",
+                    "keyFrameDatas",
+                    "elementBaseDatas",
+                    "toOwnElementBaseDatas",
+                    "damageEffectId"
+                  ],
+                  "methods": [
+                    "GetDirectlyUsedElements",
+                    "CollectReferencedElements"
+                  ],
+                  "note": "Matched by script PathID plus exported MonoBehaviour field signature; this is not yet a direct MonoScript asset-name resolution."
+                },
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": 333636939,
+                "startFrame": 76,
+                "frameCount": 5,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "collisionLayer": 5,
+                "elementalType": 1023,
+                "targetType": 1,
+                "lockType": 0,
+                "interval": 999,
+                "maxTargetCount": 99,
+                "maxTotalCount": 0,
+                "damageEffectId": 10900123,
+                "keyFrameCount": 2,
+                "elementBaseDataRefs": [
+                  {
+                    "fileId": 2,
+                    "pathId": "-7737634469737456931",
+                    "roundedPathId": "-7737634469737457000",
+                    "status": "external-file",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10900121
+                        ],
+                        "subSkillIds": [
+                          0
+                        ],
+                        "stateNames": [
+                          "Skill0_1",
+                          "Skill3"
+                        ],
+                        "effects": [
+                          "11_107003_035",
+                          "11_109001_092",
+                          "11_109001_093",
+                          "11_109001_094",
+                          "11_109001_095",
+                          "11_109001_097",
+                          "11_109001_096",
+                          "11_109001_137"
+                        ],
+                        "hitEffects": [
+                          "11_109001_129",
+                          "11_109001_128"
+                        ]
+                      }
+                    ],
+                    "sourceKey": "elementBaseDatas"
+                  }
+                ],
+                "elementRefSourceCounts": {
+                  "elementBaseDatas": 1
+                },
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 1,
+                "resourceMapMatchedElementBaseRefCount": 1
+              }
+            ]
+          },
+          {
+            "laneHints": [
+              "hpDamage"
+            ],
+            "sourceFile": "MonoBehaviour_9073787258880557659__9073787258880557659.json",
+            "sourceName": "攻击框1",
+            "sourceTrackName": "攻击框1",
+            "sourceStartFrame": 71,
+            "sourceEndFrame": 77,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-3452926799677390245",
+                "roundedPathId": "-3452926799677390300",
+                "targetFile": "MonoBehaviour_-3452926799677390245__-3452926799677390245.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-3452926799677390245__-3452926799677390245.json",
+                "pathId": "-3452926799677390245",
+                "scriptPathId": "8289252000250858251",
+                "scriptTypeCandidate": {
+                  "status": "field-signature-matched",
+                  "confidence": "medium",
+                  "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                  "sourceLineRange": "dump.cs:286170-286206",
+                  "scriptPathId": "8289252000250858251",
+                  "namespace": "Lens.Gameplay.Modules.BigWorld",
+                  "className": "InjectToTargetKeyFrameBehaviorData",
+                  "typeDefIndex": 7239,
+                  "baseType": "SkillBehaviorData",
+                  "interfaces": [
+                    "IElementSkillBehaviourData"
+                  ],
+                  "matchedFields": [
+                    "selectedStateName",
+                    "selectedClipName",
+                    "effectPath",
+                    "collisionLayer",
+                    "elementalType",
+                    "targetType",
+                    "keyFrameDatas",
+                    "elementBaseDatas",
+                    "toOwnElementBaseDatas",
+                    "damageEffectId"
+                  ],
+                  "methods": [
+                    "GetDirectlyUsedElements",
+                    "CollectReferencedElements"
+                  ],
+                  "note": "Matched by script PathID plus exported MonoBehaviour field signature; this is not yet a direct MonoScript asset-name resolution."
+                },
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": 1971791169,
+                "startFrame": 71,
+                "frameCount": 6,
                 "independentUse": 0,
                 "independentSkillGroup": 0,
                 "collisionLayer": 5,
@@ -88742,6 +90416,82 @@
                 "resourceMapMatchedElementBaseRefCount": 0
               }
             ]
+          },
+          {
+            "laneHints": [
+              "presentation"
+            ],
+            "sourceFile": "MonoBehaviour_5665815960469884350__5665815960469884350.json",
+            "sourceName": "SFX",
+            "sourceTrackName": "SFX",
+            "sourceStartFrame": 15,
+            "sourceEndFrame": 74,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-6698739676889428546",
+                "roundedPathId": "-6698739676889429000",
+                "targetFile": "MonoBehaviour_-6698739676889428546__-6698739676889428546.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-6698739676889428546__-6698739676889428546.json",
+                "pathId": "-6698739676889428546",
+                "scriptPathId": "7048992009349743623",
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": -2146811363,
+                "startFrame": 15,
+                "frameCount": 59,
+                "loop": 0,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "elementRefSourceCounts": {},
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 0,
+                "resourceMapMatchedElementBaseRefCount": 0
+              }
+            ]
+          },
+          {
+            "laneHints": [
+              "presentation"
+            ],
+            "sourceFile": "MonoBehaviour_5817733234745855422__5817733234745855422.json",
+            "sourceName": "SFX",
+            "sourceTrackName": "SFX",
+            "sourceStartFrame": 90,
+            "sourceEndFrame": 122,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-5874360396923220546",
+                "roundedPathId": "-5874360396923221000",
+                "targetFile": "MonoBehaviour_-5874360396923220546__-5874360396923220546.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-5874360396923220546__-5874360396923220546.json",
+                "pathId": "-5874360396923220546",
+                "scriptPathId": "7048992009349743623",
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": -2054611121,
+                "startFrame": 90,
+                "frameCount": 32,
+                "loop": 0,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "elementRefSourceCounts": {},
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 0,
+                "resourceMapMatchedElementBaseRefCount": 0
+              }
+            ]
           }
         ]
       },
@@ -88749,7 +90499,7 @@
         "status": "state-timing-evidence-found-action-binding-unconfirmed",
         "sourceKind": "azpr-skill-control-state-timing-evidence",
         "scope": "skill-level-action-state-candidates",
-        "hpStateWindowCount": 1,
+        "hpStateWindowCount": 4,
         "timingControlChainCount": 8,
         "animationStateControlCount": 3,
         "eventBridgeControlCount": 5,
@@ -88784,6 +90534,84 @@
             ],
             "behaviorFrameCounts": [
               4
+            ],
+            "scriptClassNames": [
+              "InjectToTargetKeyFrameBehaviorData"
+            ],
+            "subSkillIds": [
+              0
+            ],
+            "stateNames": [
+              "Skill0_1",
+              "Skill3"
+            ],
+            "hitEffects": [
+              "11_109001_128",
+              "11_109001_129"
+            ]
+          },
+          {
+            "sourceName": "攻击框1",
+            "sourceTrackName": "攻击框1",
+            "sourceStartFrame": 92,
+            "sourceEndFrame": 101,
+            "behaviorStartFrames": [
+              92
+            ],
+            "behaviorFrameCounts": [
+              9
+            ],
+            "scriptClassNames": [
+              "InjectToTargetKeyFrameBehaviorData"
+            ],
+            "subSkillIds": [
+              0
+            ],
+            "stateNames": [
+              "Skill0_1",
+              "Skill3"
+            ],
+            "hitEffects": [
+              "11_109001_128",
+              "11_109001_129"
+            ]
+          },
+          {
+            "sourceName": "攻击框1",
+            "sourceTrackName": "攻击框1",
+            "sourceStartFrame": 76,
+            "sourceEndFrame": 81,
+            "behaviorStartFrames": [
+              76
+            ],
+            "behaviorFrameCounts": [
+              5
+            ],
+            "scriptClassNames": [
+              "InjectToTargetKeyFrameBehaviorData"
+            ],
+            "subSkillIds": [
+              0
+            ],
+            "stateNames": [
+              "Skill0_1",
+              "Skill3"
+            ],
+            "hitEffects": [
+              "11_109001_128",
+              "11_109001_129"
+            ]
+          },
+          {
+            "sourceName": "攻击框1",
+            "sourceTrackName": "攻击框1",
+            "sourceStartFrame": 71,
+            "sourceEndFrame": 77,
+            "behaviorStartFrames": [
+              71
+            ],
+            "behaviorFrameCounts": [
+              6
             ],
             "scriptClassNames": [
               "InjectToTargetKeyFrameBehaviorData"
@@ -89104,7 +90932,7 @@
               "Skill0_1",
               "Skill3"
             ],
-            "hpTimelineCandidateCount": 1,
+            "hpTimelineCandidateCount": 4,
             "hpTrackNames": [
               "攻击框1"
             ],
@@ -89119,10 +90947,13 @@
                   "Skill0_1",
                   "Skill3"
                 ],
-                "hpTimelineCandidateCount": 1,
+                "hpTimelineCandidateCount": 4,
                 "candidateCountStatus": "complete-sample",
                 "hpFrameStartFrames": [
-                  66
+                  66,
+                  71,
+                  76,
+                  92
                 ],
                 "hpTrackNames": [
                   "攻击框1"
@@ -89151,18 +90982,105 @@
                       "11_109001_128",
                       "11_109001_129"
                     ]
+                  },
+                  {
+                    "name": "攻击框1",
+                    "trackName": "攻击框1",
+                    "startFrame": 71,
+                    "endFrame": 77,
+                    "stateNames": [
+                      "Skill0_1",
+                      "Skill3"
+                    ],
+                    "subSkillIds": [
+                      0
+                    ],
+                    "hitEffects": [
+                      "11_109001_128",
+                      "11_109001_129"
+                    ]
+                  },
+                  {
+                    "name": "攻击框1",
+                    "trackName": "攻击框1",
+                    "startFrame": 76,
+                    "endFrame": 81,
+                    "stateNames": [
+                      "Skill0_1",
+                      "Skill3"
+                    ],
+                    "subSkillIds": [
+                      0
+                    ],
+                    "hitEffects": [
+                      "11_109001_128",
+                      "11_109001_129"
+                    ]
+                  },
+                  {
+                    "name": "攻击框1",
+                    "trackName": "攻击框1",
+                    "startFrame": 92,
+                    "endFrame": 101,
+                    "stateNames": [
+                      "Skill0_1",
+                      "Skill3"
+                    ],
+                    "subSkillIds": [
+                      0
+                    ],
+                    "hitEffects": [
+                      "11_109001_128",
+                      "11_109001_129"
+                    ]
                   }
                 ],
-                "behaviorChainCandidateCount": 1,
-                "resolvedBehaviorCount": 1,
-                "externalElementBaseRefCount": 1,
-                "resourceMapMatchedElementBaseRefCount": 1,
+                "behaviorChainCandidateCount": 4,
+                "resolvedBehaviorCount": 4,
+                "externalElementBaseRefCount": 4,
+                "resourceMapMatchedElementBaseRefCount": 4,
                 "resourceMapUnmatchedElementBaseRefCount": 0,
                 "elementBaseDataRefs": [
                   {
                     "fileId": 2,
                     "pathId": "-7737634469737456931",
                     "roundedPathId": "-7737634469737457000",
+                    "status": "external-file",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10900121
+                        ],
+                        "subSkillIds": [
+                          0
+                        ],
+                        "stateNames": [
+                          "Skill0_1",
+                          "Skill3"
+                        ],
+                        "effects": [
+                          "11_107003_035",
+                          "11_109001_092",
+                          "11_109001_093",
+                          "11_109001_094",
+                          "11_109001_095",
+                          "11_109001_097",
+                          "11_109001_096",
+                          "11_109001_137"
+                        ],
+                        "hitEffects": [
+                          "11_109001_129",
+                          "11_109001_128"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "fileId": 2,
+                    "pathId": "-3956021691739248290",
+                    "roundedPathId": "-3956021691739248000",
                     "status": "external-file",
                     "resourceMapMatchCount": 1,
                     "resourceMapMatches": [
@@ -89263,20 +91181,311 @@
                         ]
                       }
                     ]
+                  },
+                  {
+                    "sourceName": "攻击框1",
+                    "sourceTrackName": "攻击框1",
+                    "sourceStartFrame": 71,
+                    "sourceEndFrame": 77,
+                    "resolvedBehaviorCount": 1,
+                    "behaviorRefs": [
+                      {
+                        "fileId": 0,
+                        "pathId": "-3452926799677390245",
+                        "roundedPathId": "-3452926799677390300",
+                        "targetFile": "MonoBehaviour_-3452926799677390245__-3452926799677390245.json",
+                        "status": "resolved-local-monoBehaviour"
+                      }
+                    ],
+                    "resolvedBehaviors": [
+                      {
+                        "pathId": "-3452926799677390245",
+                        "scriptTypeCandidate": {
+                          "status": "field-signature-matched",
+                          "confidence": "medium",
+                          "className": "InjectToTargetKeyFrameBehaviorData",
+                          "sourceLineRange": "dump.cs:286170-286206"
+                        },
+                        "startFrame": 71,
+                        "frameCount": 6,
+                        "elementBaseDataRefs": [
+                          {
+                            "fileId": 2,
+                            "pathId": "-7737634469737456931",
+                            "roundedPathId": "-7737634469737457000",
+                            "status": "external-file",
+                            "resourceMapMatchCount": 1,
+                            "resourceMapMatches": [
+                              {
+                                "resourceMapIndex": 0,
+                                "skillIds": [
+                                  10900121
+                                ],
+                                "subSkillIds": [
+                                  0
+                                ],
+                                "stateNames": [
+                                  "Skill0_1",
+                                  "Skill3"
+                                ],
+                                "effects": [
+                                  "11_107003_035",
+                                  "11_109001_092",
+                                  "11_109001_093",
+                                  "11_109001_094",
+                                  "11_109001_095",
+                                  "11_109001_097",
+                                  "11_109001_096",
+                                  "11_109001_137"
+                                ],
+                                "hitEffects": [
+                                  "11_109001_129",
+                                  "11_109001_128"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "sourceName": "攻击框1",
+                    "sourceTrackName": "攻击框1",
+                    "sourceStartFrame": 76,
+                    "sourceEndFrame": 81,
+                    "resolvedBehaviorCount": 1,
+                    "behaviorRefs": [
+                      {
+                        "fileId": 0,
+                        "pathId": "8847803037066822235",
+                        "roundedPathId": "8847803037066823000",
+                        "targetFile": "MonoBehaviour_8847803037066822235__8847803037066822235.json",
+                        "status": "resolved-local-monoBehaviour"
+                      }
+                    ],
+                    "resolvedBehaviors": [
+                      {
+                        "pathId": "8847803037066822235",
+                        "scriptTypeCandidate": {
+                          "status": "field-signature-matched",
+                          "confidence": "medium",
+                          "className": "InjectToTargetKeyFrameBehaviorData",
+                          "sourceLineRange": "dump.cs:286170-286206"
+                        },
+                        "startFrame": 76,
+                        "frameCount": 5,
+                        "elementBaseDataRefs": [
+                          {
+                            "fileId": 2,
+                            "pathId": "-7737634469737456931",
+                            "roundedPathId": "-7737634469737457000",
+                            "status": "external-file",
+                            "resourceMapMatchCount": 1,
+                            "resourceMapMatches": [
+                              {
+                                "resourceMapIndex": 0,
+                                "skillIds": [
+                                  10900121
+                                ],
+                                "subSkillIds": [
+                                  0
+                                ],
+                                "stateNames": [
+                                  "Skill0_1",
+                                  "Skill3"
+                                ],
+                                "effects": [
+                                  "11_107003_035",
+                                  "11_109001_092",
+                                  "11_109001_093",
+                                  "11_109001_094",
+                                  "11_109001_095",
+                                  "11_109001_097",
+                                  "11_109001_096",
+                                  "11_109001_137"
+                                ],
+                                "hitEffects": [
+                                  "11_109001_129",
+                                  "11_109001_128"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "sourceName": "攻击框1",
+                    "sourceTrackName": "攻击框1",
+                    "sourceStartFrame": 92,
+                    "sourceEndFrame": 101,
+                    "resolvedBehaviorCount": 1,
+                    "behaviorRefs": [
+                      {
+                        "fileId": 0,
+                        "pathId": "550755126083879515",
+                        "roundedPathId": "550755126083879500",
+                        "targetFile": "MonoBehaviour_550755126083879515__550755126083879515.json",
+                        "status": "resolved-local-monoBehaviour"
+                      }
+                    ],
+                    "resolvedBehaviors": [
+                      {
+                        "pathId": "550755126083879515",
+                        "scriptTypeCandidate": {
+                          "status": "field-signature-matched",
+                          "confidence": "medium",
+                          "className": "InjectToTargetKeyFrameBehaviorData",
+                          "sourceLineRange": "dump.cs:286170-286206"
+                        },
+                        "startFrame": 92,
+                        "frameCount": 9,
+                        "elementBaseDataRefs": [
+                          {
+                            "fileId": 2,
+                            "pathId": "-3956021691739248290",
+                            "roundedPathId": "-3956021691739248000",
+                            "status": "external-file",
+                            "resourceMapMatchCount": 1,
+                            "resourceMapMatches": [
+                              {
+                                "resourceMapIndex": 0,
+                                "skillIds": [
+                                  10900121
+                                ],
+                                "subSkillIds": [
+                                  0
+                                ],
+                                "stateNames": [
+                                  "Skill0_1",
+                                  "Skill3"
+                                ],
+                                "effects": [
+                                  "11_107003_035",
+                                  "11_109001_092",
+                                  "11_109001_093",
+                                  "11_109001_094",
+                                  "11_109001_095",
+                                  "11_109001_097",
+                                  "11_109001_096",
+                                  "11_109001_137"
+                                ],
+                                "hitEffects": [
+                                  "11_109001_129",
+                                  "11_109001_128"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
                   }
                 ],
                 "confidence": "medium",
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
                 "damageElementFieldMappingStatus": "damage-element-field-mappings-found",
-                "damageElementFieldMappingCount": 1,
+                "damageElementFieldMappingCount": 2,
                 "damageElementElementConfigIds": [
-                  109001349
+                  109001349,
+                  109001350
                 ],
                 "damageElementPathIds": [
+                  "-3956021691739248290",
                   "-7737634469737456931"
                 ],
                 "damageElementFieldMappings": [
+                  {
+                    "elementConfigId": 109001350,
+                    "pathId": "-3956021691739248290",
+                    "elementName": "�볡 hit 4",
+                    "scriptTypeCandidate": {
+                      "status": "field-signature-matched",
+                      "confidence": "medium",
+                      "className": "TDamageElementParams",
+                      "sourceLineRange": "dump.cs:395210-395289"
+                    },
+                    "hpDamage": {
+                      "status": "candidate-from-TDamageElementParams-formulaParams",
+                      "formulaFunctionIds": {
+                        "function_1": 1,
+                        "function_2": 2
+                      },
+                      "formulaFunctionStatus": "direct-element-formula-id-candidates-found",
+                      "formulaFunctionMatchedIds": [
+                        1,
+                        2
+                      ],
+                      "rawFormulaParamValues": [
+                        1000,
+                        6800,
+                        0,
+                        0,
+                        0,
+                        9000,
+                        10000,
+                        10000,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                      ],
+                      "damageFields": {
+                        "damageType": 1,
+                        "damageElementalType": 7,
+                        "elementCalFactor": 10000,
+                        "physicalRatio": 10000,
+                        "magicRatio": 0,
+                        "amp": 0,
+                        "burstId": 1,
+                        "armerPenetration": -1,
+                        "magicPenetration": 10000
+                      }
+                    },
+                    "toughnessDamage": {
+                      "status": "candidate-from-TDamageElementParams-weak-break-fields",
+                      "weakBreakDamageRate": 7000,
+                      "hitType": 0,
+                      "interruptPriority": 25,
+                      "useOneBreak": 0
+                    },
+                    "selfEnergyChange": {
+                      "status": "candidate-from-TDamageElementParams-recover-sp-fields",
+                      "recoverSP": 0,
+                      "petRecoverSP": 0,
+                      "recoverInterval": 9999,
+                      "ownerScope": "self-and-pet-candidate-unconfirmed"
+                    },
+                    "skillLevelBridge": {
+                      "status": "skillsub-element-level-bridge-found",
+                      "levelRows": 12,
+                      "parameterIds": [
+                        1,
+                        7
+                      ],
+                      "varyingParameterIds": [
+                        1
+                      ]
+                    },
+                    "applied": false
+                  },
                   {
                     "elementConfigId": 109001349,
                     "pathId": "-7737634469737456931",
@@ -89371,11 +91580,13 @@
             "applied": false,
             "damageElementFieldMappingStatus": "all-hit-groups-have-damage-element-field-mappings",
             "damageElementMappedHitGroupCount": 1,
-            "damageElementFieldMappingCount": 1,
+            "damageElementFieldMappingCount": 2,
             "damageElementElementConfigIds": [
-              109001349
+              109001349,
+              109001350
             ],
             "damageElementPathIds": [
+              "-3956021691739248290",
               "-7737634469737456931"
             ]
           },
@@ -90249,9 +92460,12 @@
           {
             "stateName": "Skill0_1",
             "status": "hp-state-has-animation-control-candidate",
-            "hpWindowCount": 1,
+            "hpWindowCount": 4,
             "hpStartFrames": [
-              66
+              66,
+              71,
+              76,
+              92
             ],
             "subSkillIds": [
               0
@@ -90281,9 +92495,12 @@
           {
             "stateName": "Skill3",
             "status": "hp-state-has-animation-control-candidate",
-            "hpWindowCount": 1,
+            "hpWindowCount": 4,
             "hpStartFrames": [
-              66
+              66,
+              71,
+              76,
+              92
             ],
             "subSkillIds": [
               0
@@ -91014,7 +93231,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900212.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900212.asset/MonoBehaviour",
       "jsonFileCount": 83,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 83,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10900212__-1140131731112844058.json",
@@ -91126,7 +93343,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900213.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900213.asset/MonoBehaviour",
       "jsonFileCount": 117,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 117,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10900213__-1023435852071096560.json",
@@ -91238,7 +93455,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900221.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900221.asset/MonoBehaviour",
       "jsonFileCount": 87,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 87,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10900221__-1236033014049003100.json",
@@ -91568,7 +93785,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100101.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100101.asset/MonoBehaviour",
       "jsonFileCount": 431,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 200,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_11100101__-1133458324910334968.json",
@@ -91688,7 +93905,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100112.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100112.asset/MonoBehaviour",
       "jsonFileCount": 129,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 129,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_11100112__-1408413467583376492.json",
@@ -91800,7 +94017,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour",
       "jsonFileCount": 107,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 107,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_11100113__-1128843960668497913.json",
@@ -91912,7 +94129,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100121.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100121.asset/MonoBehaviour",
       "jsonFileCount": 108,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 108,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_11100121__-1107951760108695686.json",
@@ -92476,7 +94693,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200113.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200113.asset/MonoBehaviour",
       "jsonFileCount": 89,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 89,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_11200113__-1220424577583308939.json",
@@ -92588,7 +94805,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200121.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200121.asset/MonoBehaviour",
       "jsonFileCount": 143,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 143,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_11200121__-1101381850110354581.json",
@@ -94286,7 +96503,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900212.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900212.asset/MonoBehaviour",
       "jsonFileCount": 87,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 87,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_19900212__-1647708149751662473.json",
@@ -94960,7 +97177,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900312.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900312.asset/MonoBehaviour",
       "jsonFileCount": 120,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 120,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_19900312__-1026049829694352712.json",
@@ -95072,7 +97289,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900313.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900313.asset/MonoBehaviour",
       "jsonFileCount": 103,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 103,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_19900313__-103034020623496844.json",
@@ -95184,7 +97401,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900321.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900321.asset/MonoBehaviour",
       "jsonFileCount": 160,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 160,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_19900321__-1011004253694876600.json",
@@ -99328,7 +101545,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour",
       "jsonFileCount": 137,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 137,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "MonoBehaviour_-1015219542526630352__-1015219542526630352.json",
@@ -99338,8 +101555,8 @@
         "MonoBehaviour_-2029786967615379920__-2029786967615379920.json"
       ],
       "timelineControlSampleCount": 37,
-      "behaviorNodeSampleCount": 74,
-      "frameCandidateSampleCount": 74,
+      "behaviorNodeSampleCount": 76,
+      "frameCandidateSampleCount": 76,
       "elementListCandidateSampleCount": 0,
       "skillResourceMapEvidence": {
         "status": "root-skillResourceMaps-found",
@@ -102816,7 +105033,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour",
       "jsonFileCount": 177,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 177,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "MonoBehaviour_-1405335881868337684__-1405335881868337684.json",
@@ -102825,9 +105042,9 @@
         "MonoBehaviour_-1774003918157013524__-1774003918157013524.json",
         "MonoBehaviour_-2769192302275289620__-2769192302275289620.json"
       ],
-      "timelineControlSampleCount": 38,
-      "behaviorNodeSampleCount": 80,
-      "frameCandidateSampleCount": 80,
+      "timelineControlSampleCount": 44,
+      "behaviorNodeSampleCount": 89,
+      "frameCandidateSampleCount": 89,
       "elementListCandidateSampleCount": 0,
       "skillResourceMapEvidence": {
         "status": "root-skillResourceMaps-found",
@@ -102904,7 +105121,7 @@
       "effectLaneCandidateSummary": {
         "hpDamage": {
           "label": "敌人 HP 伤害",
-          "count": 6
+          "count": 7
         },
         "toughnessDamage": {
           "label": "敌人韧性削减",
@@ -102924,7 +105141,7 @@
         },
         "presentation": {
           "label": "表现/音画资源",
-          "count": 12
+          "count": 14
         }
       },
       "effectLaneCandidates": [
@@ -103216,6 +105433,22 @@
             "trackGroupIndex": 0,
             "startFrame": 193,
             "endFrame": 195,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "hpDamage"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_8739758879355608556__8739758879355608556.json",
+            "name": "脱手轨-攻击框1",
+            "trackName": "攻击框4",
+            "trackIndex": 23,
+            "trackGroupIndex": 0,
+            "startFrame": 201,
+            "endFrame": 203,
             "eventFrameCount": 0,
             "behaviorListCount": 1
           }
@@ -103530,24 +105763,56 @@
             "endFrame": 289,
             "eventFrameCount": 0,
             "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "presentation"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_8186346053680537068__8186346053680537068.json",
+            "name": "特效 - 双人联机大招（起跳）",
+            "trackName": "特效 - 双人联机大招（起跳）",
+            "trackIndex": 61,
+            "trackGroupIndex": 0,
+            "startFrame": 74,
+            "endFrame": 374,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
+          },
+          {
+            "type": "timeline-control",
+            "laneHints": [
+              "presentation"
+            ],
+            "laneHintSource": "name-trackName-string-pattern",
+            "file": "MonoBehaviour_8761729422113152492__8761729422113152492.json",
+            "name": "特效 - 双人联机大招（龙头炮）",
+            "trackName": "特效 - 双人联机大招（龙头炮）",
+            "trackIndex": 62,
+            "trackGroupIndex": 0,
+            "startFrame": 0,
+            "endFrame": 300,
+            "eventFrameCount": 0,
+            "behaviorListCount": 1
           }
         ]
       },
       "behaviorReferenceSummary": {
-        "behaviorListRefs": 25,
-        "resolvedBehaviorListRefs": 25,
+        "behaviorListRefs": 28,
+        "resolvedBehaviorListRefs": 28,
         "unresolvedBehaviorListRefs": 0,
-        "externalElementBaseRefs": 6,
-        "resourceMapMatchedElementBaseRefs": 6,
+        "externalElementBaseRefs": 7,
+        "resourceMapMatchedElementBaseRefs": 7,
         "resourceMapUnmatchedElementBaseRefs": 0,
-        "scriptTypeCandidateBehaviorRefs": 11,
+        "scriptTypeCandidateBehaviorRefs": 12,
         "resolvedBehaviorRefsByLane": {
-          "hpDamage": 6,
+          "hpDamage": 7,
           "toughnessDamage": 1,
           "selfEnergyChange": 0,
           "elementEffect": 0,
           "timingControl": 6,
-          "presentation": 12
+          "presentation": 14
         }
       },
       "effectLaneBehaviorChains": [
@@ -104979,6 +107244,114 @@
                 "resourceMapMatchedElementBaseRefCount": 1
               }
             ]
+          },
+          {
+            "laneHints": [
+              "hpDamage"
+            ],
+            "sourceFile": "MonoBehaviour_8739758879355608556__8739758879355608556.json",
+            "sourceName": "脱手轨-攻击框1",
+            "sourceTrackName": "攻击框4",
+            "sourceStartFrame": 201,
+            "sourceEndFrame": 203,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-2968661751408910868",
+                "roundedPathId": "-2968661751408911000",
+                "targetFile": "MonoBehaviour_-2968661751408910868__-2968661751408910868.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-2968661751408910868__-2968661751408910868.json",
+                "pathId": "-2968661751408910868",
+                "scriptPathId": "8289252000250858251",
+                "scriptTypeCandidate": {
+                  "status": "field-signature-matched",
+                  "confidence": "medium",
+                  "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+                  "sourceLineRange": "dump.cs:286170-286206",
+                  "scriptPathId": "8289252000250858251",
+                  "namespace": "Lens.Gameplay.Modules.BigWorld",
+                  "className": "InjectToTargetKeyFrameBehaviorData",
+                  "typeDefIndex": 7239,
+                  "baseType": "SkillBehaviorData",
+                  "interfaces": [
+                    "IElementSkillBehaviourData"
+                  ],
+                  "matchedFields": [
+                    "selectedStateName",
+                    "selectedClipName",
+                    "effectPath",
+                    "collisionLayer",
+                    "elementalType",
+                    "targetType",
+                    "keyFrameDatas",
+                    "elementBaseDatas",
+                    "toOwnElementBaseDatas",
+                    "damageEffectId"
+                  ],
+                  "methods": [
+                    "GetDirectlyUsedElements",
+                    "CollectReferencedElements"
+                  ],
+                  "note": "Matched by script PathID plus exported MonoBehaviour field signature; this is not yet a direct MonoScript asset-name resolution."
+                },
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": 1870600431,
+                "startFrame": 201,
+                "frameCount": 2,
+                "independentUse": 1,
+                "independentSkillGroup": 0,
+                "collisionLayer": 5,
+                "elementalType": 1023,
+                "targetType": 1,
+                "lockType": 0,
+                "interval": 9999,
+                "maxTargetCount": 99,
+                "maxTotalCount": 0,
+                "damageEffectId": 10100301,
+                "keyFrameCount": 2,
+                "elementBaseDataRefs": [
+                  {
+                    "fileId": 2,
+                    "pathId": "2114308111398669772",
+                    "roundedPathId": "2114308111398669800",
+                    "status": "external-file",
+                    "resourceMapMatchCount": 1,
+                    "resourceMapMatches": [
+                      {
+                        "resourceMapIndex": 0,
+                        "skillIds": [
+                          10100313
+                        ],
+                        "subSkillIds": [
+                          10100313
+                        ],
+                        "stateNames": [
+                          "Skill1",
+                          "Skill1_Tps"
+                        ],
+                        "hitEffects": [
+                          "11_101003_011",
+                          "pre_common_element_wind_buff_2_start"
+                        ]
+                      }
+                    ],
+                    "sourceKey": "elementBaseDatas"
+                  }
+                ],
+                "elementRefSourceCounts": {
+                  "elementBaseDatas": 1
+                },
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 1,
+                "resourceMapMatchedElementBaseRefCount": 1
+              }
+            ]
           }
         ],
         "toughnessDamage": [
@@ -105918,6 +108291,80 @@
                 "resourceMapMatchedElementBaseRefCount": 0
               }
             ]
+          },
+          {
+            "laneHints": [
+              "presentation"
+            ],
+            "sourceFile": "MonoBehaviour_8186346053680537068__8186346053680537068.json",
+            "sourceName": "特效 - 双人联机大招（起跳）",
+            "sourceTrackName": "特效 - 双人联机大招（起跳）",
+            "sourceStartFrame": 74,
+            "sourceEndFrame": 374,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "-7727882551950795284",
+                "roundedPathId": "-7727882551950796000",
+                "targetFile": "MonoBehaviour_-7727882551950795284__-7727882551950795284.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_-7727882551950795284__-7727882551950795284.json",
+                "pathId": "-7727882551950795284",
+                "scriptPathId": "6422487387805496538",
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": -1651407648,
+                "startFrame": 74,
+                "frameCount": 300,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "elementRefSourceCounts": {},
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 0,
+                "resourceMapMatchedElementBaseRefCount": 0
+              }
+            ]
+          },
+          {
+            "laneHints": [
+              "presentation"
+            ],
+            "sourceFile": "MonoBehaviour_8761729422113152492__8761729422113152492.json",
+            "sourceName": "特效 - 双人联机大招（龙头炮）",
+            "sourceTrackName": "特效 - 双人联机大招（龙头炮）",
+            "sourceStartFrame": 0,
+            "sourceEndFrame": 300,
+            "behaviorRefs": [
+              {
+                "fileId": 0,
+                "pathId": "7068366232528723436",
+                "roundedPathId": "7068366232528723000",
+                "targetFile": "MonoBehaviour_7068366232528723436__7068366232528723436.json",
+                "status": "resolved-local-monoBehaviour"
+              }
+            ],
+            "resolvedBehaviors": [
+              {
+                "file": "MonoBehaviour_7068366232528723436__7068366232528723436.json",
+                "pathId": "7068366232528723436",
+                "scriptPathId": "6422487387805496538",
+                "behaviorGroupId": 0,
+                "timelineGroupIndex": 0,
+                "behaviorIndex": -1168286138,
+                "startFrame": 0,
+                "frameCount": 300,
+                "independentUse": 0,
+                "independentSkillGroup": 0,
+                "elementRefSourceCounts": {},
+                "toOwnElementBaseDataRefCount": 0,
+                "externalElementBaseRefCount": 0,
+                "resourceMapMatchedElementBaseRefCount": 0
+              }
+            ]
           }
         ]
       },
@@ -105925,7 +108372,7 @@
         "status": "state-timing-evidence-found-action-binding-unconfirmed",
         "sourceKind": "azpr-skill-control-state-timing-evidence",
         "scope": "skill-level-action-state-candidates",
-        "hpStateWindowCount": 6,
+        "hpStateWindowCount": 7,
         "timingControlChainCount": 6,
         "animationStateControlCount": 2,
         "eventBridgeControlCount": 4,
@@ -106084,6 +108531,32 @@
             "sourceEndFrame": 195,
             "behaviorStartFrames": [
               193
+            ],
+            "behaviorFrameCounts": [
+              2
+            ],
+            "scriptClassNames": [
+              "InjectToTargetKeyFrameBehaviorData"
+            ],
+            "subSkillIds": [
+              10100313
+            ],
+            "stateNames": [
+              "Skill1",
+              "Skill1_Tps"
+            ],
+            "hitEffects": [
+              "11_101003_011",
+              "pre_common_element_wind_buff_2_start"
+            ]
+          },
+          {
+            "sourceName": "脱手轨-攻击框1",
+            "sourceTrackName": "攻击框4",
+            "sourceStartFrame": 201,
+            "sourceEndFrame": 203,
+            "behaviorStartFrames": [
+              201
             ],
             "behaviorFrameCounts": [
               2
@@ -106326,11 +108799,12 @@
           {
             "stateName": "Skill1",
             "status": "hp-state-has-animation-control-candidate",
-            "hpWindowCount": 6,
+            "hpWindowCount": 7,
             "hpStartFrames": [
               176,
               184,
               193,
+              201,
               207,
               213,
               223
@@ -106362,11 +108836,12 @@
           {
             "stateName": "Skill1_Tps",
             "status": "hp-state-has-animation-control-candidate",
-            "hpWindowCount": 6,
+            "hpWindowCount": 7,
             "hpStartFrames": [
               176,
               184,
               193,
+              201,
               207,
               213,
               223
@@ -109692,7 +112167,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100712.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100712.asset/MonoBehaviour",
       "jsonFileCount": 279,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 200,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10100712__-1027392458372015953.json",
@@ -110246,7 +112721,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour",
       "jsonFileCount": 149,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 149,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10101001__-1118225685825045095.json",
@@ -110477,7 +112952,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour",
       "jsonFileCount": 136,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 136,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10101013__-1058249236301801642.json",
@@ -111041,7 +113516,7 @@
       "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset",
       "monoBehaviourRoot": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour",
       "jsonFileCount": 95,
-      "parsedJsonSampleFiles": 80,
+      "parsedJsonSampleFiles": 95,
       "unreadableJsonSampleFiles": 0,
       "sampleFiles": [
         "skill_control_10200113__-103173230344090965.json",
@@ -111157,8 +113632,8 @@
         "minStartFrame": 0,
         "maxEndFrame": 300
       },
-      "timelineControlSampleCount": 40,
-      "behaviorNodeSampleCount": 80,
+      "timelineControlSampleCount": 48,
+      "behaviorNodeSampleCount": 99,
       "sampleNodeCandidates": [
         {
           "type": "timeline-control",
@@ -111218,8 +113693,8 @@
         "minStartFrame": 0,
         "maxEndFrame": 999
       },
-      "timelineControlSampleCount": 39,
-      "behaviorNodeSampleCount": 81,
+      "timelineControlSampleCount": 52,
+      "behaviorNodeSampleCount": 105,
       "sampleNodeCandidates": [
         {
           "type": "behavior-node",
@@ -111266,56 +113741,6 @@
       "nextStep": "Parse MonoBehaviour references into action segments, hit frames, effect nodes, and formula candidates."
     },
     {
-      "skillId": 10100313,
-      "characterId": 101003,
-      "characterName": "寒悠悠",
-      "skillName": "沐星雨",
-      "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset",
-      "jsonFileCount": 177,
-      "frameRange": {
-        "minStartFrame": 0,
-        "maxEndFrame": 374
-      },
-      "timelineControlSampleCount": 38,
-      "behaviorNodeSampleCount": 80,
-      "sampleNodeCandidates": [
-        {
-          "type": "timeline-control",
-          "file": "MonoBehaviour_-1405335881868337684__-1405335881868337684.json",
-          "name": "大招时停 友方",
-          "trackName": "大招时停 友方",
-          "trackIndex": 53,
-          "trackGroupIndex": 0,
-          "startFrame": 0,
-          "endFrame": 151,
-          "eventFrameCount": 0,
-          "behaviorListCount": 1
-        },
-        {
-          "type": "behavior-node",
-          "file": "MonoBehaviour_-1405335881868337684__-1405335881868337684.json",
-          "name": "大招时停 友方",
-          "trackName": "大招时停 友方",
-          "trackIndex": 53,
-          "trackGroupIndex": 0,
-          "startFrame": 0,
-          "endFrame": 151,
-          "eventFrameCount": 0,
-          "behaviorListCount": 1
-        },
-        {
-          "type": "behavior-node",
-          "file": "MonoBehaviour_-1509657299112321556__-1509657299112321556.json",
-          "timelineGroupIndex": 0,
-          "behaviorGroupId": 0,
-          "behaviorIndex": -482881906,
-          "startFrame": 228,
-          "frameCount": 13
-        }
-      ],
-      "nextStep": "Parse MonoBehaviour references into action segments, hit frames, effect nodes, and formula candidates."
-    },
-    {
       "skillId": 10900113,
       "characterId": 109001,
       "characterName": "末音",
@@ -111326,8 +113751,8 @@
         "minStartFrame": 0,
         "maxEndFrame": 999
       },
-      "timelineControlSampleCount": 40,
-      "behaviorNodeSampleCount": 80,
+      "timelineControlSampleCount": 47,
+      "behaviorNodeSampleCount": 95,
       "sampleNodeCandidates": [
         {
           "type": "timeline-control",
@@ -111369,6 +113794,114 @@
           "behaviorIndex": -308770981,
           "startFrame": 116,
           "frameCount": 9
+        }
+      ],
+      "nextStep": "Parse MonoBehaviour references into action segments, hit frames, effect nodes, and formula candidates."
+    },
+    {
+      "skillId": 10100313,
+      "characterId": 101003,
+      "characterName": "寒悠悠",
+      "skillName": "沐星雨",
+      "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset",
+      "jsonFileCount": 177,
+      "frameRange": {
+        "minStartFrame": 0,
+        "maxEndFrame": 374
+      },
+      "timelineControlSampleCount": 44,
+      "behaviorNodeSampleCount": 89,
+      "sampleNodeCandidates": [
+        {
+          "type": "timeline-control",
+          "file": "MonoBehaviour_-1405335881868337684__-1405335881868337684.json",
+          "name": "大招时停 友方",
+          "trackName": "大招时停 友方",
+          "trackIndex": 53,
+          "trackGroupIndex": 0,
+          "startFrame": 0,
+          "endFrame": 151,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "behavior-node",
+          "file": "MonoBehaviour_-1405335881868337684__-1405335881868337684.json",
+          "name": "大招时停 友方",
+          "trackName": "大招时停 友方",
+          "trackIndex": 53,
+          "trackGroupIndex": 0,
+          "startFrame": 0,
+          "endFrame": 151,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "behavior-node",
+          "file": "MonoBehaviour_-1509657299112321556__-1509657299112321556.json",
+          "timelineGroupIndex": 0,
+          "behaviorGroupId": 0,
+          "behaviorIndex": -482881906,
+          "startFrame": 228,
+          "frameCount": 13
+        }
+      ],
+      "nextStep": "Parse MonoBehaviour references into action segments, hit frames, effect nodes, and formula candidates."
+    },
+    {
+      "skillId": 10100312,
+      "characterId": 101003,
+      "characterName": "寒悠悠",
+      "skillName": "花照夜",
+      "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset",
+      "jsonFileCount": 137,
+      "frameRange": {
+        "minStartFrame": 0,
+        "maxEndFrame": 208
+      },
+      "timelineControlSampleCount": 37,
+      "behaviorNodeSampleCount": 76,
+      "sampleNodeCandidates": [
+        {
+          "type": "timeline-control",
+          "laneHints": [
+            "timingControl"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-1015219542526630352__-1015219542526630352.json",
+          "name": "动作打断 - 全动作",
+          "trackName": "动作打断 - 全动作",
+          "trackIndex": 10,
+          "trackGroupIndex": 0,
+          "startFrame": 97,
+          "endFrame": 181,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "behavior-node",
+          "laneHints": [
+            "timingControl"
+          ],
+          "laneHintSource": "name-trackName-string-pattern",
+          "file": "MonoBehaviour_-1015219542526630352__-1015219542526630352.json",
+          "name": "动作打断 - 全动作",
+          "trackName": "动作打断 - 全动作",
+          "trackIndex": 10,
+          "trackGroupIndex": 0,
+          "startFrame": 97,
+          "endFrame": 181,
+          "eventFrameCount": 0,
+          "behaviorListCount": 1
+        },
+        {
+          "type": "behavior-node",
+          "file": "MonoBehaviour_-1123755805311539664__-1123755805311539664.json",
+          "timelineGroupIndex": 0,
+          "behaviorGroupId": 0,
+          "behaviorIndex": 207209672,
+          "startFrame": 61,
+          "frameCount": 1
         }
       ],
       "nextStep": "Parse MonoBehaviour references into action segments, hit frames, effect nodes, and formula candidates."
@@ -111427,64 +113960,6 @@
           "behaviorIndex": 1457190899,
           "startFrame": 72,
           "frameCount": 35
-        }
-      ],
-      "nextStep": "Parse MonoBehaviour references into action segments, hit frames, effect nodes, and formula candidates."
-    },
-    {
-      "skillId": 10100312,
-      "characterId": 101003,
-      "characterName": "寒悠悠",
-      "skillName": "花照夜",
-      "directory": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset",
-      "jsonFileCount": 137,
-      "frameRange": {
-        "minStartFrame": 0,
-        "maxEndFrame": 208
-      },
-      "timelineControlSampleCount": 37,
-      "behaviorNodeSampleCount": 74,
-      "sampleNodeCandidates": [
-        {
-          "type": "timeline-control",
-          "laneHints": [
-            "timingControl"
-          ],
-          "laneHintSource": "name-trackName-string-pattern",
-          "file": "MonoBehaviour_-1015219542526630352__-1015219542526630352.json",
-          "name": "动作打断 - 全动作",
-          "trackName": "动作打断 - 全动作",
-          "trackIndex": 10,
-          "trackGroupIndex": 0,
-          "startFrame": 97,
-          "endFrame": 181,
-          "eventFrameCount": 0,
-          "behaviorListCount": 1
-        },
-        {
-          "type": "behavior-node",
-          "laneHints": [
-            "timingControl"
-          ],
-          "laneHintSource": "name-trackName-string-pattern",
-          "file": "MonoBehaviour_-1015219542526630352__-1015219542526630352.json",
-          "name": "动作打断 - 全动作",
-          "trackName": "动作打断 - 全动作",
-          "trackIndex": 10,
-          "trackGroupIndex": 0,
-          "startFrame": 97,
-          "endFrame": 181,
-          "eventFrameCount": 0,
-          "behaviorListCount": 1
-        },
-        {
-          "type": "behavior-node",
-          "file": "MonoBehaviour_-1123755805311539664__-1123755805311539664.json",
-          "timelineGroupIndex": 0,
-          "behaviorGroupId": 0,
-          "behaviorIndex": 207209672,
-          "startFrame": 61,
-          "frameCount": 1
         }
       ],
       "nextStep": "Parse MonoBehaviour references into action segments, hit frames, effect nodes, and formula candidates."
