@@ -30,7 +30,7 @@ export function createRuntimeResultReturnContext({
 
   const refreshedStatePointId =
     resultContext?.actionId === normalizedActionId
-      ? resultContext.runtimeStatePointId
+      ? resultContext.runtimeStatePointId || resultContext.statePointId
       : '';
   const hasRefreshedResult = Boolean(refreshedStatePointId);
   if (!hasRefreshedResult && !allowOriginResult) {

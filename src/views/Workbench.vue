@@ -115,6 +115,7 @@
           :selected-state-curve-point-id="selectedStateCurvePointId"
           :runtime-focus-source="runtimeFocusSource"
           :action-edit-result-context="actionEditResultContext"
+          :flow-model="workbenchFlowModel"
           :summary="simulationResult.summary"
           :diagnostics="simulationResult.diagnostics"
           @select-runtime-state-point="selectRuntimeStatePoint"
@@ -148,6 +149,7 @@
           :detail="runtimeSelectedDetail"
           :action-edit-focus="actionEditFocus"
           :action-edit-result-context="actionEditResultContext"
+          :flow-model="workbenchFlowModel"
           @focus-runtime-action="focusRuntimeAction"
           @return-runtime-result="returnRuntimeResultFromProperties"
         />
@@ -197,6 +199,7 @@
         :runtime-log-focus="runtimeLogFocus"
         :action-edit-focus="actionEditFocus"
         :action-edit-result-context="actionEditResultContext"
+        :flow-model="workbenchFlowModel"
         @select-runtime-state-point="selectRuntimeStatePoint"
         @focus-runtime-action="focusRuntimeAction"
         @return-runtime-result="returnRuntimeResultFromProperties"
@@ -352,6 +355,7 @@ const workbenchFlowModel = computed(() =>
     runtimeProjection: simulationResult.value.threeValueRuntimeProjection,
     runtimeSelectedDetail: runtimeSelectedDetail.value,
     selectedStateCurvePointId: selectedStateCurvePointId.value,
+    runtimeFocusSource: runtimeFocusSource.value,
     runtimeOverviewActive: runtimeOverviewActive.value,
     actionEditResultContext: actionEditResultContext.value,
   })

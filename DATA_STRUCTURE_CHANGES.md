@@ -15433,6 +15433,7 @@ selectActionFromRuntimeStatePoint(pointId)
   runtimeProjection,
   runtimeSelectedDetail,
   selectedStateCurvePointId,
+  runtimeFocusSource,
   runtimeOverviewActive,
   actionEditResultContext
 }
@@ -15446,6 +15447,7 @@ selectActionFromRuntimeStatePoint(pointId)
   selectedActionId,
   selectedActionName,
   selectedStateCurvePointId,
+  runtimeFocusSource,
   runtimeOverviewActive,
   runtimeSummary,
   runtimeSimLogCount,
@@ -15481,6 +15483,87 @@ selectActionFromRuntimeStatePoint(pointId)
 - flow model 测试覆盖：主流程 phase、运行导航、当前 runtime 结果、编辑后刷新结果和按钮可用性。
 - Workbench 视图测试覆盖：初始编辑态、打开运行结果、编辑后刷新结果、返回刷新结果时，主流程面板 phase 与现有 UI 闭环一致。
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js -t "flow model|drives the edit-runtime-return loop|renders the first real-data"`：通过，2 个测试文件、5 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、53 条测试。
+- `npm run test -- --run`：通过，19 个测试文件、141 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 196. UI 主流程能力块：Runtime Panels 接入 Flow Model
+
+本阶段属于 UI 主流程。
+
+### 196.1 结构变化
+
+`createWorkbenchFlowModel()` 的输出继续扩展：
+
+```js
+{
+  runtimeFocusSource,
+  editResult: {
+    source,
+    status,
+    actionId,
+    statePointId,
+    runtimeStatePointId,
+    changeSummary,
+    originStatePointId,
+    originTrackKey,
+    originFrameLabel,
+    label,
+    canReturn
+  }
+}
+```
+
+`runtimeStatePointId` 作为兼容字段保留，`statePointId` 作为 flow model 内部统一字段使用。
+
+以下 Workbench 面板新增可选 `flowModel` prop，并优先消费 flow model：
+
+```js
+ResourceMonitorPanel
+EventLogPanel
+RuntimeSelectedDetailPanel
+```
+
+`ResourceMonitorPanel` 现在通过 flow model 读取：
+
+```js
+{
+  selectedStateCurvePointId,
+  runtimeFocusSource,
+  editResult
+}
+```
+
+用于资源曲线点选中、定位来源和刷新后结果匹配。
+
+`EventLogPanel` 现在通过 flow model 读取：
+
+```js
+{
+  selectedStateCurvePointId,
+  runtimeFocusSource,
+  editResult
+}
+```
+
+用于日志筛选摘要、日志选中、导航状态和返回刷新结果。
+
+`RuntimeSelectedDetailPanel` 现在通过 flow model 的 `editResult` 生成返回上下文。
+
+`createRuntimeResultReturnContext()` 兼容 `resultContext.statePointId`，不再只接受旧的 `runtimeStatePointId`。
+
+### 196.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 的派生主流程状态：资源曲线、模拟日志和三值详情面板从同一个 flow model 获取当前 phase / state point / edit result 语义；模拟结果、三值计算、项目文件和 runtime projection 结构不变。
+
+### 196.3 验证
+
+- flow model 测试覆盖：`runtimeFocusSource` 和标准化 `editResult.statePointId/runtimeStatePointId` 保持一致。
+- Workbench 视图测试覆盖：打开运行结果、编辑结果动作、返回刷新结果时，资源曲线、模拟日志、三值详情与主流程条处于同一 flow phase / state point。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js -t "flow model|drives the edit-runtime-return loop|links runtime resource curve points"`：通过，2 个测试文件、5 条测试。
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、53 条测试。
 - `npm run test -- --run`：通过，19 个测试文件、141 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

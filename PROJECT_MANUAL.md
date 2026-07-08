@@ -7561,6 +7561,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把资源曲线、模拟日志和详情面板逐步接入同一 flow model 的 phase / action / state point 语义，形成更完整的 Endaxis 式工作闭环。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Panels 接入 Flow Model
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchFlowModel` 扩展 `runtimeFocusSource` 与标准化 `editResult` 字段，资源曲线、模拟日志、三值详情面板开始优先消费同一份 flow model。
+- 资源曲线面板用 flow model 的 selected state point、focus source 和 edit result 判断选中点、定位来源和刷新后结果。
+- 模拟日志面板用 flow model 的 selected state point、focus source 和 edit result 维护筛选摘要、日志选中、导航状态和回到刷新结果。
+- 三值详情面板用 flow model 的 edit result 生成返回上下文；现有可见文案、三值数值、曲线和日志行为保持不变。
+
+当前验证事实：
+
+- 从主流程打开运行结果后，资源曲线、模拟日志、三值详情和主流程条都处于同一个 `runtime-result` phase 和同一个 state point。
+- 编辑动作后进入 `edit-result-ready`，返回刷新结果后进入 `edit-result-review`，资源曲线、模拟日志和三值详情都跟随同一 flow phase / state point。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js -t "flow model|drives the edit-runtime-return loop|links runtime resource curve points"`：通过，2 个测试文件、5 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、53 条测试。
+- `npm run test -- --run`：通过，19 个测试文件、141 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 flow model 的 phase / state point 语义继续用于 AnalysisPanel 的结果定位与贡献拆分，减少分析面板对 `actionEditResultContext` 的局部推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

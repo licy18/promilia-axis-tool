@@ -1,5 +1,9 @@
 <template>
-  <section class="panel event-log-panel">
+  <section
+    class="panel event-log-panel"
+    :data-flow-phase="flowModel?.phase ?? ''"
+    :data-flow-state-point-id="flowSelectedStatePointId"
+  >
     <div class="panel-title">
       <Tickets class="panel-icon" />
       <h2>事件日志</h2>
@@ -343,6 +347,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  flowModel: {
+    type: Object,
+    default: null,
+  },
 });
 const emit = defineEmits([
   'select-runtime-state-point',
@@ -365,6 +373,17 @@ const runtimeContextByRow = computed(
 );
 const runtimeSimLogRows = computed(() =>
   runtimeStatePointContexts.value.map(context => context.row)
+);
+const flowSelectedStatePointId = computed(
+  () =>
+    props.flowModel?.selectedStateCurvePointId ??
+    props.selectedStateCurvePointId
+);
+const flowRuntimeFocusSource = computed(
+  () => props.flowModel?.runtimeFocusSource ?? ''
+);
+const flowEditResult = computed(
+  () => props.flowModel?.editResult ?? props.actionEditResultContext
 );
 const runtimeTrackFilterOptions = computed(() => {
   const counts = countRuntimeOptions(runtimeSimLogRows.value, 'trackKey');
@@ -429,11 +448,10 @@ const filteredRuntimeSimLogRows = computed(() =>
   })
 );
 const runtimeLogFilterSummary = computed(() => {
-  const actionResultFocusActive =
-    isRuntimeLogFocusSource(props.runtimeLogFocus?.source) &&
-    props.runtimeLogFocus?.statePointId === props.selectedStateCurvePointId;
+  const focusSource = flowRuntimeFocusSource.value;
+  const actionResultFocusActive = isRuntimeLogFocusSource(focusSource);
   const scope = actionResultFocusActive
-    ? props.runtimeLogFocus.source
+    ? focusSource
     : props.calculatorDiagnosticFocus?.scope === 'runtime'
       ? 'runtime'
       : 'manual';
@@ -462,23 +480,23 @@ const runtimeLogFilterSummary = computed(() => {
 });
 const runtimeLogNavigationStatus = computed(() =>
   createRuntimeLogNavigationStatus({
-    selectedStatePointId: props.selectedStateCurvePointId,
+    selectedStatePointId: flowSelectedStatePointId.value,
     rows: runtimeSimLogRows.value,
     filteredRows: filteredRuntimeSimLogRows.value,
   })
 );
 const selectedRuntimeHiddenLogRow = computed(() => {
-  if (!props.selectedStateCurvePointId) {
+  if (!flowSelectedStatePointId.value) {
     return null;
   }
   const row = runtimeSimLogRows.value.find(
-    row => getRuntimeStatePointIdByRow(row) === props.selectedStateCurvePointId
+    row => getRuntimeStatePointIdByRow(row) === flowSelectedStatePointId.value
   );
   if (!row) {
     return null;
   }
   const visible = filteredRuntimeSimLogRows.value.some(
-    row => getRuntimeStatePointIdByRow(row) === props.selectedStateCurvePointId
+    row => getRuntimeStatePointIdByRow(row) === flowSelectedStatePointId.value
   );
   return visible ? null : row;
 });
@@ -600,7 +618,7 @@ const runtimeLogEditContext = computed(() =>
 const runtimeLogResultReturnActionId = computed(
   () =>
     (props.actionEditFocus?.editOrigin === 'runtime-focus'
-      ? props.actionEditResultContext?.actionId
+      ? flowEditResult.value?.actionId
       : '') ||
     runtimeLogActionFocus.value.actionId ||
     ''
@@ -609,7 +627,7 @@ const runtimeLogResultReturnContext = computed(() =>
   createRuntimeResultReturnContext({
     actionId: runtimeLogResultReturnActionId.value,
     focus: props.actionEditFocus,
-    resultContext: props.actionEditResultContext,
+    resultContext: flowEditResult.value,
   })
 );
 const selectedRuntimeContributionRows = computed(() =>
@@ -641,7 +659,7 @@ watch(filteredRuntimeSimLogRows, rows => {
 });
 
 watch(
-  () => props.selectedStateCurvePointId,
+  () => flowSelectedStatePointId.value,
   () => {
     syncSelectedRuntimeLogIndexFromStatePoint(filteredRuntimeSimLogRows.value);
   }
@@ -882,11 +900,11 @@ function createRuntimeLogEditContext({
 }
 
 function syncSelectedRuntimeLogIndexFromStatePoint(rows) {
-  if (!props.selectedStateCurvePointId) {
+  if (!flowSelectedStatePointId.value) {
     return;
   }
   const index = rows.findIndex(
-    row => getRuntimeStatePointIdByRow(row) === props.selectedStateCurvePointId
+    row => getRuntimeStatePointIdByRow(row) === flowSelectedStatePointId.value
   );
   if (index >= 0) {
     selectedRuntimeLogIndex.value = index;
@@ -914,8 +932,8 @@ function createRuntimeActionFilterKey(row) {
 }
 
 function isRuntimeLogRowSelected(row, index) {
-  if (props.selectedStateCurvePointId) {
-    return getRuntimeStatePointIdByRow(row) === props.selectedStateCurvePointId;
+  if (flowSelectedStatePointId.value) {
+    return getRuntimeStatePointIdByRow(row) === flowSelectedStatePointId.value;
   }
   return selectedRuntimeLogIndex.value === index;
 }

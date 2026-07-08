@@ -1,5 +1,9 @@
 <template>
-  <section class="panel resource-monitor-panel">
+  <section
+    class="panel resource-monitor-panel"
+    :data-flow-phase="flowModel?.phase ?? ''"
+    :data-flow-state-point-id="flowSelectedStatePointId"
+  >
     <div class="panel-title">
       <TrendCharts class="panel-icon" />
       <h2>资源</h2>
@@ -145,7 +149,7 @@
               :key="point.statePointId"
               class="runtime-curve-point"
               :class="{
-                selected: point.statePointId === selectedStateCurvePointId,
+                selected: point.statePointId === flowSelectedStatePointId,
               }"
               :cx="point.x"
               :cy="point.y"
@@ -164,12 +168,12 @@
               :data-curve-mode="runtimeCurveMode"
               :data-state-point-id="point.statePointId"
               :data-runtime-focus-source="
-                point.statePointId === selectedStateCurvePointId
-                  ? runtimeFocusSource
+                point.statePointId === flowSelectedStatePointId
+                  ? flowRuntimeFocusSource
                   : ''
               "
               :data-selected="
-                point.statePointId === selectedStateCurvePointId
+                point.statePointId === flowSelectedStatePointId
                   ? 'true'
                   : 'false'
               "
@@ -206,7 +210,7 @@
           :data-result-context-status="
             selectedRuntimeCurveResultContext?.status ?? ''
           "
-          :data-runtime-focus-source="runtimeFocusSource || 'manual'"
+          :data-runtime-focus-source="flowRuntimeFocusSource || 'manual'"
           :data-series-key="selectedRuntimeCurvePoint.seriesKey"
           :data-state-point-id="selectedRuntimeCurvePoint.statePointId"
           :data-track-key="selectedRuntimeCurvePoint.trackKey"
@@ -223,7 +227,7 @@
             >
               {{
                 formatRuntimeCurveSelectionSource(
-                  runtimeFocusSource,
+                  flowRuntimeFocusSource,
                   selectedRuntimeCurveResultContext
                 )
               }}
@@ -395,6 +399,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  flowModel: {
+    type: Object,
+    default: null,
+  },
 });
 const emit = defineEmits([
   'select-runtime-state-point',
@@ -427,6 +435,20 @@ const runtimeEnemyToughnessMetric = computed(
 
 const runtimeActorEnergyRows = computed(() =>
   getRuntimeResourceCurveRows(props.runtimeProjection)
+);
+
+const flowSelectedStatePointId = computed(
+  () =>
+    props.flowModel?.selectedStateCurvePointId ??
+    props.selectedStateCurvePointId
+);
+
+const flowRuntimeFocusSource = computed(
+  () => props.flowModel?.runtimeFocusSource ?? props.runtimeFocusSource
+);
+
+const flowEditResult = computed(
+  () => props.flowModel?.editResult ?? props.actionEditResultContext
 );
 
 const runtimeStatePointContexts = computed(() =>
@@ -504,11 +526,11 @@ const runtimeCurveNavigationPoints = computed(() =>
 );
 
 const selectedRuntimeCurvePointIndex = computed(() => {
-  if (!props.selectedStateCurvePointId) {
+  if (!flowSelectedStatePointId.value) {
     return -1;
   }
   return runtimeCurveNavigationPoints.value.findIndex(
-    item => item.statePointId === props.selectedStateCurvePointId
+    item => item.statePointId === flowSelectedStatePointId.value
   );
 });
 
@@ -524,7 +546,7 @@ const selectedRuntimeCurvePoint = computed(() => {
 
 const selectedRuntimeCurveResultContext = computed(() =>
   createSelectedRuntimeCurveResultContext(
-    props.actionEditResultContext,
+    flowEditResult.value,
     selectedRuntimeCurvePoint.value
   )
 );
@@ -933,10 +955,11 @@ function formatRuntimeCurvePointState(point) {
 }
 
 function createSelectedRuntimeCurveResultContext(context, point) {
-  if (!context?.runtimeStatePointId || !point?.statePointId) {
+  const statePointId = context?.runtimeStatePointId ?? context?.statePointId;
+  if (!statePointId || !point?.statePointId) {
     return null;
   }
-  if (context.runtimeStatePointId !== point.statePointId) {
+  if (statePointId !== point.statePointId) {
     return null;
   }
   return {

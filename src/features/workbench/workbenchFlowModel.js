@@ -17,6 +17,7 @@ export function createWorkbenchFlowModel({
   runtimeProjection = null,
   runtimeSelectedDetail = null,
   selectedStateCurvePointId = '',
+  runtimeFocusSource = '',
   runtimeOverviewActive = false,
   actionEditResultContext = null,
 } = {}) {
@@ -41,6 +42,7 @@ export function createWorkbenchFlowModel({
     selectedActionId: selectedAction?.id ?? '',
     selectedActionName: selectedAction?.name ?? '未选动作',
     selectedStateCurvePointId: selectedStateCurvePointId ?? '',
+    runtimeFocusSource: runtimeFocusSource ?? '',
     runtimeOverviewActive: Boolean(runtimeOverviewActive),
     runtimeSummary: getRuntimeOutputSummary(runtimeProjection),
     runtimeSimLogCount,
@@ -101,6 +103,11 @@ function createWorkbenchFlowEditResult(context) {
     status: context?.status ?? '',
     actionId,
     statePointId,
+    runtimeStatePointId: statePointId,
+    changeSummary: context?.changeSummary ?? '',
+    originStatePointId: context?.originStatePointId ?? '',
+    originTrackKey: context?.originTrackKey ?? '',
+    originFrameLabel: context?.originFrameLabel ?? '',
     label: statePointId
       ? [context?.label, context?.changeSummary].filter(Boolean).join(' ')
       : '无刷新结果',

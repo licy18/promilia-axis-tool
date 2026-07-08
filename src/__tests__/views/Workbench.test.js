@@ -1568,6 +1568,21 @@ describe('Workbench view', () => {
     expect(
       focusedFlowPanel.attributes('data-runtime-detail-state-point-id')
     ).toBe(selectedRuntimePointId);
+    expect(wrapper.find('.resource-monitor-panel').attributes()).toMatchObject(
+      {
+        'data-flow-phase': 'runtime-result',
+        'data-flow-state-point-id': selectedRuntimePointId,
+      }
+    );
+    expect(wrapper.find('.event-log-panel').attributes()).toMatchObject({
+      'data-flow-phase': 'runtime-result',
+      'data-flow-state-point-id': selectedRuntimePointId,
+    });
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail"]')
+        .attributes('data-flow-phase')
+    ).toBe('runtime-result');
     expect(
       focusedFlowPanel
         .find('[data-testid="workbench-flow-runtime-detail"]')
@@ -1621,6 +1636,14 @@ describe('Workbench view', () => {
     expect(editResultFlowPanel.attributes('data-flow-phase')).toBe(
       'edit-result-ready'
     );
+    expect(wrapper.find('.resource-monitor-panel').attributes()).toMatchObject(
+      {
+        'data-flow-phase': 'edit-result-ready',
+      }
+    );
+    expect(wrapper.find('.event-log-panel').attributes()).toMatchObject({
+      'data-flow-phase': 'edit-result-ready',
+    });
     const returnEditResultButton = editResultFlowPanel.find(
       '[data-testid="workbench-flow-return-edit-result"]'
     );
@@ -1648,6 +1671,24 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-flow-panel"]')
         .attributes('data-flow-phase')
     ).toBe('edit-result-review');
+    expect(wrapper.find('.resource-monitor-panel').attributes()).toMatchObject(
+      {
+        'data-flow-phase': 'edit-result-review',
+        'data-flow-state-point-id': refreshedStatePointId,
+      }
+    );
+    expect(wrapper.find('.event-log-panel').attributes()).toMatchObject({
+      'data-flow-phase': 'edit-result-review',
+      'data-flow-state-point-id': refreshedStatePointId,
+    });
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail"]')
+        .attributes()
+    ).toMatchObject({
+      'data-flow-phase': 'edit-result-review',
+      'data-flow-edit-result-state-point-id': refreshedStatePointId,
+    });
     expect(
       wrapper
         .find(

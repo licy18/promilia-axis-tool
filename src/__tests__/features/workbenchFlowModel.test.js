@@ -15,6 +15,7 @@ describe('workbench flow model', () => {
     expect(model.phase).toBe(WORKBENCH_FLOW_PHASES.ACTION_EDIT);
     expect(model.selectedActionId).toBe('action-0002');
     expect(model.selectedActionName).toBe('资源动作');
+    expect(model.runtimeFocusSource).toBe('');
     expect(model.runtimeSimLogCount).toBe(2);
     expect(model.controls).toMatchObject({
       canOpenRuntimeResults: true,
@@ -36,6 +37,7 @@ describe('workbench flow model', () => {
       selectedAction: { id: 'action-0001', name: '普通攻击' },
       runtimeProjection,
       selectedStateCurvePointId: firstPoint.statePointId,
+      runtimeFocusSource: 'action-result',
       runtimeSelectedDetail: {
         actionId: 'action-0001',
         statePointId: firstPoint.statePointId,
@@ -52,6 +54,7 @@ describe('workbench flow model', () => {
       label: '12f · 敌人 HP',
       canFocusAction: true,
     });
+    expect(model.runtimeFocusSource).toBe('action-result');
     expect(model.runtimeNavigation.index).toBe(0);
     expect(model.runtimeNavigation.label).toBe('1/2');
     expect(model.runtimeNavigation.previous).toBeNull();
@@ -80,7 +83,9 @@ describe('workbench flow model', () => {
     expect(readyModel.editResult).toMatchObject({
       actionId: 'action-0002',
       statePointId: secondPoint.statePointId,
+      runtimeStatePointId: secondPoint.statePointId,
       label: '开始时间 0ms -> 1000ms',
+      changeSummary: '0ms -> 1000ms',
       canReturn: true,
     });
 

@@ -2,6 +2,8 @@
   <section
     v-if="panelVisible"
     class="panel runtime-selected-detail-panel"
+    :data-flow-phase="flowModel?.phase ?? ''"
+    :data-flow-edit-result-state-point-id="flowEditResult?.statePointId ?? ''"
     data-testid="workbench-runtime-selected-detail"
   >
     <div class="panel-title">
@@ -211,6 +213,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  flowModel: {
+    type: Object,
+    default: null,
+  },
 });
 
 const emit = defineEmits(['focus-runtime-action', 'return-runtime-result']);
@@ -223,11 +229,14 @@ const runtimeDetailOriginStatePointId = computed(() =>
     ? props.detail.statePointId
     : ''
 );
+const flowEditResult = computed(
+  () => props.flowModel?.editResult ?? props.actionEditResultContext
+);
 const runtimeDetailResultReturnContext = computed(() =>
   createRuntimeResultReturnContext({
-    actionId: props.detail?.actionId ?? props.actionEditResultContext?.actionId,
+    actionId: props.detail?.actionId ?? flowEditResult.value?.actionId,
     focus: props.actionEditFocus,
-    resultContext: props.actionEditResultContext,
+    resultContext: flowEditResult.value,
     originStatePointId: runtimeDetailOriginStatePointId.value,
   })
 );
