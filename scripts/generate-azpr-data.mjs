@@ -360,12 +360,20 @@ const SKILL_EFFECT_LANES = Object.freeze([
   {
     key: 'hpDamage',
     label: '敌人 HP 伤害',
-    patterns: [/攻击碰撞/, /伤害/, /\bdamage\b/i, /\bhit\b/i],
+    patterns: [/攻击碰撞/, /攻击框/, /命中/, /伤害/, /\bdamage\b/i, /\bhit\b/i],
   },
   {
     key: 'toughnessDamage',
     label: '敌人韧性削减',
-    patterns: [/韧/, /失衡/, /削韧/, /破衡/, /\bstagger\b/i, /\btough/i],
+    patterns: [
+      /韧/,
+      /抗击/,
+      /失衡/,
+      /削韧/,
+      /破衡/,
+      /\bstagger\b/i,
+      /\btough/i,
+    ],
   },
   {
     key: 'selfEnergyChange',
@@ -5354,14 +5362,14 @@ function compactMonoBehaviourBehaviorTarget(
   skillResourceMapIndex
 ) {
   const scriptPathId = extractScriptPathId(text);
-  const elementBaseDataRefs = extractObjectRefsFromArraySection(
+  const elementBaseDataRefs = collectElementDataRefs(
     text,
-    'elementBaseDatas',
+    ['elementBaseDatas', 'elementDataList', 'elementIdDatas'],
     skillResourceMapIndex
   );
-  const toOwnElementBaseDataRefs = extractObjectRefsFromArraySection(
+  const toOwnElementBaseDataRefs = collectElementDataRefs(
     text,
-    'toOwnElementBaseDatas',
+    ['toOwnElementBaseDatas', 'toOwnElementDatas'],
     skillResourceMapIndex
   );
 
@@ -5431,6 +5439,7 @@ function compactMonoBehaviourBehaviorTarget(
       ? value.keyFrameDatas.length
       : null,
     elementBaseDataRefs,
+    elementRefSourceCounts: summarizeObjectRefSourceCounts(elementBaseDataRefs),
     toOwnElementBaseDataRefCount: toOwnElementBaseDataRefs.length,
     externalElementBaseRefCount: elementBaseDataRefs.filter(
       item => item.fileId !== 0
@@ -5439,6 +5448,28 @@ function compactMonoBehaviourBehaviorTarget(
       item => item.resourceMapMatchCount > 0
     ).length,
   });
+}
+
+function collectElementDataRefs(text, keys, skillResourceMapIndex) {
+  return keys.flatMap(key =>
+    extractObjectRefsFromArraySection(text, key, skillResourceMapIndex).map(
+      ref => ({
+        ...ref,
+        sourceKey: key,
+      })
+    )
+  );
+}
+
+function summarizeObjectRefSourceCounts(refs) {
+  const counts = {};
+  for (const ref of refs ?? []) {
+    if (!ref.sourceKey) {
+      continue;
+    }
+    counts[ref.sourceKey] = (counts[ref.sourceKey] ?? 0) + 1;
+  }
+  return counts;
 }
 
 function buildBehaviorScriptTypeCandidate(value, text, scriptPathId) {

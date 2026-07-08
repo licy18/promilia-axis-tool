@@ -4005,6 +4005,38 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8BC 目标：接入真实 hook JSON 或运行时采样导出的 capture 文件。
 - 优先扩大覆盖：默认普攻两个 action-level element、非普攻 `109001251`、share target 列表、interval throttle 命中/未命中两类样本、最终每角色 SP 曲线。
 
+### 2026-07-08：阶段 5-8BC 寒悠悠 skill_control 重导与中文命中轨解析
+
+本轮完成：
+
+- 使用 AzPr Extractor 对 `skill_control_101003*` 做聚焦 manifest-sliced 重导：30 个 bundle、900 个 MonoBehaviour 对象真实导出，错误数 0。
+- 确认寒悠悠原先不是缺资源，而是旧导出结果全为 `stubOnly` 壳；重导后项目生成器可以读取 `behaviorlineControl`、`behaviorList`、`skillControlData`、`elementBaseDatas`、`elementDataList`、`elementIdDatas` 等字段。
+- `scripts/generate-azpr-data.mjs` 扩展中文轨道识别：
+  - `攻击框` / `命中` 归入 HP 伤害候选。
+  - `抗击` 归入敌人韧性削减候选。
+- 行为对象元素引用不再只读 `elementBaseDatas`，同步读取 `elementDataList`、`elementIdDatas`、`toOwnElementDatas`，并记录 `elementRefSourceCounts`。
+- 重新生成 `skill-asset-evidence.json` 后，全局候选从 HP 1 技能 / 韧性 0 技能扩展为 HP 7 技能 / 韧性 7 技能；外部 Element 对象解析从 6 技能 43 引用扩展为 14 技能 89 引用；DamageElement 字段映射从 16 个对象扩展为 31 个对象。
+
+寒悠悠当前结果：
+
+- `10100301 鸢回影`：159 帧，桥接到 `10100302/03/04/05`；已解析 15 条行为引用、1 条外部 element 引用，外部对象包含 `TDamageElementParams 101003087`。
+- `10100312 花照夜`：180 帧；已解析 26 条行为引用、14 条外部 element 引用，外部 DamageElement 包含 `101003033 / 101003108`。
+- `10100313 沐星雨`：290 帧，存在 `Skill1` 与 `Skill1_Tps` 两条动画状态；已解析 25 条行为引用、6 条外部 element 引用，外部 DamageElement 包含 `101003118 / 101003122`。
+- `10100322 缚风烟`：191 帧；已解析 14 条行为引用、6 条外部 element 引用，外部 DamageElement 包含 `101003071 / 101003074`。
+- `10100361` / `10100362` 当前仍缺动作轨 timing evidence，只看到资源映射和元素引用壳。
+
+当前边界：
+
+- 本阶段只确认寒悠悠 skill_control 可以被读入并形成 HP/韧性/能量候选字段，不代表最终伤害公式已应用。
+- 部分外部 Element 名称仍有原始编码乱码；后续 UI 和报告应优先显示 `elementConfigId`、PathID、脚本类型和字段值。
+- `10100301` 的普攻入口已找到连段子技能，但普通攻击每段 hit 到 DamageElement 的精确绑定仍未闭合。
+- `selfEnergyChange.value`、`hpDamage.value`、`toughnessDamage.value` 仍不应用候选公式。
+
+下一步：
+
+- 阶段 5-8BD 目标：把寒悠悠 `10100302/03/04/05` 普攻子技能链拆成每段 hit 组，并把 hit 组绑定到 `TDamageElementParams`。
+- 之后再接入真实 hook JSON / runtime capture，验证默认普攻、寒悠悠样本、非普攻 `109001251` 的 HP / 韧性 / 能量三曲线。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

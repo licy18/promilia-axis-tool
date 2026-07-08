@@ -6515,3 +6515,77 @@ runtime-sampling-offline-samples-partially-validated
 - 当前 fixture 是手动整理样本，不是真实 hook 结果。
 - `runtimeSamplingProbe.applied = false`。
 - `109001306`、`109001251`、share target、interval throttle 命中/未命中和最终每角色 SP 曲线仍需真实 capture 验证。
+
+## 82. 阶段 5-8BC：寒悠悠 skill_control 中文命中轨与多字段元素引用
+
+阶段 5-8BC 扩展 `skill-asset-evidence.json` 的证据生成逻辑，用于支持寒悠悠 `101003` 这类 skill_control 导出形态。该阶段仍是 evidence-only，不改变项目保存 schema，不把候选字段应用到最终 HP / 韧性 / 能量计算。
+
+### 82.1 lane 识别扩展
+
+`SKILL_EFFECT_LANES` 新增中文轨道名模式：
+
+- HP 伤害候选新增 `攻击框`、`命中`。
+- 韧性削减候选新增 `抗击`。
+
+因此生成摘要中的候选数量会扩大：
+
+```json
+{
+  "effectLaneCandidateSkills": {
+    "hpDamage": 7,
+    "toughnessDamage": 7
+  },
+  "hpDamageBehaviorReferenceResolvedSkills": 7
+}
+```
+
+这些 lane 仍只是候选分类，不能单独证明最终命中、削韧或公式应用。
+
+### 82.2 元素引用字段扩展
+
+行为对象的元素引用来源从单一 `elementBaseDatas` 扩展为：
+
+- `elementBaseDatas`
+- `elementDataList`
+- `elementIdDatas`
+- `toOwnElementBaseDatas`
+- `toOwnElementDatas`
+
+`elementBaseDataRefs[]` 保持原字段名以兼容既有消费者，但现在可能来自多个 source key。每条引用新增：
+
+```json
+{
+  "sourceKey": "elementDataList"
+}
+```
+
+行为对象摘要新增：
+
+```json
+{
+  "elementRefSourceCounts": {
+    "elementDataList": 1,
+    "elementIdDatas": 2
+  }
+}
+```
+
+消费者应把 `sourceKey` 视为可选字段；旧数据缺失该字段时仍按 `elementBaseDatas` 兼容处理。
+
+### 82.3 寒悠悠当前证据结果
+
+重导 `skill_control_101003*` 后，生成器可解析寒悠悠主要动作：
+
+- `10100301 鸢回影`：159 帧，桥接 `10100302/03/04/05`，外部 DamageElement 包含 `101003087`。
+- `10100312 花照夜`：180 帧，外部 DamageElement 包含 `101003033 / 101003108`。
+- `10100313 沐星雨`：290 帧，外部 DamageElement 包含 `101003118 / 101003122`。
+- `10100322 缚风烟`：191 帧，外部 DamageElement 包含 `101003071 / 101003074`。
+
+全局外部 Element 解析摘要从 6 技能 43 引用扩展为 14 技能 89 引用，DamageElement 字段映射从 16 个对象扩展为 31 个对象。
+
+### 82.4 当前边界
+
+- `10100361` / `10100362` 仍没有可用动作轨 timing evidence。
+- `10100301` 的普攻子技能链已经发现，但每段 hit 到 DamageElement 的绑定仍未闭合。
+- 外部 Element 名称存在原始编码乱码，UI 和报告应优先显示 `elementConfigId`、PathID 和脚本类型。
+- 本阶段不改变最终公式、运行时采样 schema 或 `selfEnergyChange.value` 的应用边界。

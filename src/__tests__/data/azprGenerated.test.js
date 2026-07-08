@@ -148,20 +148,20 @@ describe('generated AzPr data', () => {
         existingSkillBytesPathsInAzPrAssets: 0,
         extractedSkillControlDirectories: 4134,
         effectLaneCandidateSkills: {
-          hpDamage: 1,
-          toughnessDamage: 0,
+          hpDamage: 7,
+          toughnessDamage: 7,
           selfEnergyChange: 1,
           elementEffect: 3,
-          timingControl: 4,
-          presentation: 4,
+          timingControl: 8,
+          presentation: 8,
         },
-        hpDamageCandidateSkills: 1,
-        toughnessCandidateSkills: 0,
+        hpDamageCandidateSkills: 7,
+        toughnessCandidateSkills: 7,
         selfEnergyCandidateSkills: 1,
-        behaviorReferenceResolvedSkills: 5,
-        hpDamageBehaviorReferenceResolvedSkills: 1,
-        externalElementBaseReferenceSkills: 1,
-        resourceMapMatchedElementBaseReferenceSkills: 1,
+        behaviorReferenceResolvedSkills: 9,
+        hpDamageBehaviorReferenceResolvedSkills: 7,
+        externalElementBaseReferenceSkills: 9,
+        resourceMapMatchedElementBaseReferenceSkills: 9,
         resourceMapUnmatchedElementBaseReferenceSkills: 0,
         relationStatus: 'skill-control-assets-found-in-azpr-extractor',
       },
@@ -345,6 +345,9 @@ describe('generated AzPr data', () => {
     const mayoiAttack = evidence.currentSkillControlEvidence.find(
       item => item.skillId === 10900101
     );
+    const hanyouyouUltimate = evidence.currentSkillControlEvidence.find(
+      item => item.skillId === 10100313
+    );
 
     expect(manifest.files.skillAssetEvidence).toBe('skill-asset-evidence.json');
     expect(evidence.probes).toMatchObject({
@@ -364,32 +367,32 @@ describe('generated AzPr data', () => {
       currentSkillsMissingExtractedSkillControl: 4,
       existingSkillBytesPathsInAzPrAssets: 0,
       effectLaneCandidateSkills: {
-        hpDamage: 1,
-        toughnessDamage: 0,
+        hpDamage: 7,
+        toughnessDamage: 7,
         selfEnergyChange: 1,
         elementEffect: 3,
-        timingControl: 4,
-        presentation: 4,
+        timingControl: 8,
+        presentation: 8,
       },
-      hpDamageCandidateSkills: 1,
-      toughnessCandidateSkills: 0,
+      hpDamageCandidateSkills: 7,
+      toughnessCandidateSkills: 7,
       selfEnergyCandidateSkills: 1,
-      behaviorReferenceResolvedSkills: 5,
-      hpDamageBehaviorReferenceResolvedSkills: 1,
-      externalElementBaseReferenceSkills: 1,
-      resourceMapMatchedElementBaseReferenceSkills: 1,
+      behaviorReferenceResolvedSkills: 9,
+      hpDamageBehaviorReferenceResolvedSkills: 7,
+      externalElementBaseReferenceSkills: 9,
+      resourceMapMatchedElementBaseReferenceSkills: 9,
       resourceMapUnmatchedElementBaseReferenceSkills: 0,
-      scriptTypeCandidateSkills: 4,
+      scriptTypeCandidateSkills: 8,
       elementTypeCatalogCandidates: 2,
-      externalElementObjectResolvedSkills: 6,
-      externalElementObjectResolvedRefs: 43,
+      externalElementObjectResolvedSkills: 14,
+      externalElementObjectResolvedRefs: 89,
       externalElementObjectUnresolvedRefs: 0,
-      damageElementFieldMappedSkills: 6,
-      damageElementFieldMappedObjects: 16,
-      hpDamageFieldCandidateRefs: 16,
-      toughnessDamageFieldCandidateRefs: 16,
-      selfEnergyFieldCandidateRefs: 16,
-      damageElementSkillLogicBridgeMatches: 2,
+      damageElementFieldMappedSkills: 13,
+      damageElementFieldMappedObjects: 31,
+      hpDamageFieldCandidateRefs: 31,
+      toughnessDamageFieldCandidateRefs: 31,
+      selfEnergyFieldCandidateRefs: 31,
+      damageElementSkillLogicBridgeMatches: 15,
       relationStatus: 'skill-control-assets-found-in-azpr-extractor',
     });
     expect(evidence.elementTypeCatalogEvidence).toMatchObject({
@@ -415,12 +418,12 @@ describe('generated AzPr data', () => {
     expect(evidence.externalElementObjectEvidence).toMatchObject({
       status: 'element-objects-resolved',
       summary: {
-        skillCount: 6,
-        resolvedSkills: 6,
-        requestedPathIds: 43,
-        resolvedPathIds: 43,
+        skillCount: 14,
+        resolvedSkills: 14,
+        requestedPathIds: 89,
+        resolvedPathIds: 89,
         unresolvedPathIds: 0,
-        sourceSkillCount: 1,
+        sourceSkillCount: 9,
         targetSkillCount: 5,
       },
       skills: expect.arrayContaining([
@@ -475,22 +478,22 @@ describe('generated AzPr data', () => {
     expect(evidence.damageElementFieldMappingEvidence).toMatchObject({
       status: 'damage-element-field-candidates-found',
       summary: {
-        skillCount: 6,
-        mappedSkills: 6,
-        damageElementObjects: 16,
-        hpDamageCandidateRefs: 16,
-        toughnessDamageCandidateRefs: 16,
-        selfEnergyCandidateRefs: 16,
-        skillsubElementBridgeMatchedObjects: 2,
-        skillsubElementBridgeMissingObjects: 1,
-        skillsubElementBridgeLevelRows: 24,
-        valueParamFormulaSlotDirectMatchObjects: 2,
-        valueParamFormulaSlotOverrideCandidateObjects: 2,
-        valueParamFormulaSlotUnresolvedObjects: 2,
-        formulaFunctionCheckedObjects: 16,
-        formulaFunctionDirectElementFormulaObjects: 16,
-        formulaFunctionRefs: 32,
-        formulaFunctionMatchedRefs: 32,
+        skillCount: 14,
+        mappedSkills: 13,
+        damageElementObjects: 31,
+        hpDamageCandidateRefs: 31,
+        toughnessDamageCandidateRefs: 31,
+        selfEnergyCandidateRefs: 31,
+        skillsubElementBridgeMatchedObjects: 15,
+        skillsubElementBridgeMissingObjects: 3,
+        skillsubElementBridgeLevelRows: 180,
+        valueParamFormulaSlotDirectMatchObjects: 15,
+        valueParamFormulaSlotOverrideCandidateObjects: 15,
+        valueParamFormulaSlotUnresolvedObjects: 15,
+        formulaFunctionCheckedObjects: 31,
+        formulaFunctionDirectElementFormulaObjects: 31,
+        formulaFunctionRefs: 62,
+        formulaFunctionMatchedRefs: 62,
         formulaFunctionUnmatchedRefs: 0,
         formulaFunctionUniqueIds: [1, 2, 101, 107205],
       },
@@ -741,8 +744,8 @@ describe('generated AzPr data', () => {
       behaviorListRefs: 36,
       resolvedBehaviorListRefs: 36,
       unresolvedBehaviorListRefs: 0,
-      externalElementBaseRefs: 13,
-      resourceMapMatchedElementBaseRefs: 13,
+      externalElementBaseRefs: 14,
+      resourceMapMatchedElementBaseRefs: 14,
       resourceMapUnmatchedElementBaseRefs: 0,
       scriptTypeCandidateBehaviorRefs: 10,
       resolvedBehaviorRefsByLane: {
@@ -754,6 +757,63 @@ describe('generated AzPr data', () => {
         presentation: 20,
       },
     });
+    expect(hanyouyouUltimate).toMatchObject({
+      status: 'found',
+      skillId: 10100313,
+      skillName: '沐星雨',
+      jsonFileCount: 177,
+      effectLaneCandidateSummary: {
+        hpDamage: {
+          count: 6,
+        },
+        toughnessDamage: {
+          count: 1,
+        },
+      },
+      behaviorReferenceSummary: {
+        behaviorListRefs: 25,
+        resolvedBehaviorListRefs: 25,
+        externalElementBaseRefs: 6,
+        resourceMapMatchedElementBaseRefs: 6,
+        resolvedBehaviorRefsByLane: {
+          hpDamage: 6,
+          toughnessDamage: 1,
+        },
+      },
+      stateTimingEvidence: {
+        status: 'state-timing-evidence-found-action-binding-unconfirmed',
+        animationStateNames: ['Skill1', 'Skill1_Tps'],
+        animationStateControlCount: 2,
+      },
+    });
+    expect(evidence.damageElementFieldMappingEvidence.skills).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          skillId: 10100313,
+          damageElementCount: 2,
+          fieldMappings: expect.arrayContaining([
+            expect.objectContaining({
+              elementConfigId: 101003118,
+              hpDamage: expect.objectContaining({
+                status: 'candidate-from-TDamageElementParams-formulaParams',
+              }),
+              toughnessDamage: expect.objectContaining({
+                weakBreakDamageRate: 7000,
+              }),
+            }),
+            expect.objectContaining({
+              elementConfigId: 101003122,
+              hpDamage: expect.objectContaining({
+                status: 'candidate-from-TDamageElementParams-formulaParams',
+              }),
+              toughnessDamage: expect.objectContaining({
+                weakBreakDamageRate: 7000,
+              }),
+            }),
+          ]),
+        }),
+      ])
+    );
     expect(mayoiAttack.effectLaneCandidates).toEqual(
       expect.arrayContaining([
         expect.objectContaining({

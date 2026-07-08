@@ -1375,8 +1375,8 @@ describe('first vertical slice simulation', () => {
           skillId: 10900101,
           hpLaneCandidateCount: 5,
           resolvedHpBehaviorRefCount: 5,
-          externalElementBaseRefCount: 13,
-          resourceMapMatchedElementBaseRefCount: 13,
+          externalElementBaseRefCount: 14,
+          resourceMapMatchedElementBaseRefCount: 14,
           sampledHpBehaviorChainCount: 5,
           sampledHpLaneCandidateCount: 5,
           sampledResolvedHpBehaviorCount: 5,
@@ -3116,14 +3116,31 @@ describe('first vertical slice simulation', () => {
       value: -Number(spSkill.spCost),
       applied: true,
       status: 'explicit-cost-applied-charge-formula-unmapped',
-      sourceEvidence: {
-        status: 'no-damage-element-field-mapping-for-skill',
+      sourceEvidence: expect.objectContaining({
+        status: 'candidate-fields-found',
         skillId: spSkill.id,
         logicElementIds: [101003118, 101003122],
-        candidateCount: 0,
-        matchedElementConfigIds: [],
-        candidates: [],
-      },
+        candidateCount: 2,
+        matchedElementConfigIds: [101003118, 101003122],
+        candidates: expect.arrayContaining([
+          expect.objectContaining({
+            elementConfigId: 101003118,
+            fieldCandidate: expect.objectContaining({
+              recoverSP: 0,
+              petRecoverSP: 0,
+              recoverInterval: 9999,
+            }),
+          }),
+          expect.objectContaining({
+            elementConfigId: 101003122,
+            fieldCandidate: expect.objectContaining({
+              recoverSP: 0,
+              petRecoverSP: 0,
+              recoverInterval: 9999,
+            }),
+          }),
+        ]),
+      }),
       formulaBreakdown: {
         appliedLayerKeys: ['explicitResourceDelta'],
         unappliedLayerKeys: [
@@ -3133,7 +3150,8 @@ describe('first vertical slice simulation', () => {
         ],
         layers: {
           actionChargeGain: expect.objectContaining({
-            status: 'formula-unmapped',
+            status: 'candidate-fields-found-formula-unmapped',
+            applied: false,
           }),
         },
       },
