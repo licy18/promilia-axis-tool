@@ -342,6 +342,7 @@ import {
 } from '@element-plus/icons-vue';
 import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
 import {
+  createRuntimeStatePointContexts,
   getRuntimeEnemyStateCurve,
   getRuntimeResourceCurveRows,
 } from './runtimeProjectionPoints';
@@ -426,8 +427,34 @@ const runtimeActorEnergyRows = computed(() =>
   getRuntimeResourceCurveRows(props.runtimeProjection)
 );
 
+const runtimeStatePointContexts = computed(() =>
+  createRuntimeStatePointContexts(props.runtimeProjection)
+);
+
+const runtimeStatePointContextByDeltaId = computed(
+  () =>
+    new Map(
+      runtimeStatePointContexts.value
+        .filter(context => context.row?.sourceDeltaId)
+        .map(context => [context.row.sourceDeltaId, context])
+    )
+);
+
+const runtimeStatePointOrderById = computed(
+  () =>
+    new Map(
+      runtimeStatePointContexts.value.map((context, index) => [
+        context.statePointId,
+        index,
+      ])
+    )
+);
+
 const runtimeCurveSourceSeries = computed(() =>
-  createRuntimeCurveSourceSeries(props.runtimeProjection)
+  createRuntimeCurveSourceSeries(
+    props.runtimeProjection,
+    runtimeStatePointContextByDeltaId.value
+  )
 );
 
 const runtimeCurveDomain = computed(() =>
@@ -465,7 +492,13 @@ const runtimeCurveNavigationPoints = computed(() =>
         actorId: series.actorId,
       }))
     )
-    .sort(compareRuntimeCurveNavigationPoints)
+    .sort((left, right) =>
+      compareRuntimeCurveNavigationPoints(
+        left,
+        right,
+        runtimeStatePointOrderById.value
+      )
+    )
 );
 
 const selectedRuntimeCurvePointIndex = computed(() => {
@@ -538,7 +571,10 @@ function formatRuntimeActorEnergyState(actor) {
   return `${formatRuntimeStateMetric(actor.stateMetric)} · ${actor.pointCount}点`;
 }
 
-function createRuntimeCurveSourceSeries(runtimeProjection) {
+function createRuntimeCurveSourceSeries(
+  runtimeProjection,
+  runtimeContextByDeltaId
+) {
   if (!runtimeProjection) {
     return [];
   }
@@ -554,6 +590,7 @@ function createRuntimeCurveSourceSeries(runtimeProjection) {
       valueField: 'hpDelta',
       points: enemyStateCurve.points ?? [],
       stateMetric: enemyStateCurve.stateMetrics?.hp,
+      runtimeContextByDeltaId,
     }),
     createRuntimeEnemyCurveSeries({
       key: 'enemy-toughness',
@@ -563,9 +600,10 @@ function createRuntimeCurveSourceSeries(runtimeProjection) {
       valueField: 'toughnessDelta',
       points: enemyStateCurve.points ?? [],
       stateMetric: enemyStateCurve.stateMetrics?.toughness,
+      runtimeContextByDeltaId,
     }),
     ...resourceCurveRows.map((actor, index) =>
-      createRuntimeEnergyCurveSeries(actor, index)
+      createRuntimeEnergyCurveSeries(actor, index, runtimeContextByDeltaId)
     ),
   ];
 }
@@ -578,6 +616,7 @@ function createRuntimeEnemyCurveSeries({
   valueField,
   points,
   stateMetric,
+  runtimeContextByDeltaId,
 }) {
   return createRuntimeCurveSeries({
     key,
@@ -587,10 +626,11 @@ function createRuntimeEnemyCurveSeries({
     points: points.filter(point => point.trackKey === trackKey),
     valueField,
     stateMetric,
+    runtimeContextByDeltaId,
   });
 }
 
-function createRuntimeEnergyCurveSeries(actor, index) {
+function createRuntimeEnergyCurveSeries(actor, index, runtimeContextByDeltaId) {
   return createRuntimeCurveSeries({
     key: `self-energy-${actor.actorId ?? index}`,
     trackKey: 'selfEnergyChange',
@@ -600,6 +640,7 @@ function createRuntimeEnergyCurveSeries(actor, index) {
     points: actor.points ?? [],
     valueField: 'energyDelta',
     stateMetric: actor.stateMetric,
+    runtimeContextByDeltaId,
   });
 }
 
@@ -612,6 +653,7 @@ function createRuntimeCurveSeries({
   points,
   valueField,
   stateMetric = null,
+  runtimeContextByDeltaId,
 }) {
   let cumulative = 0;
   const curvePoints = [...(points ?? [])]
@@ -630,7 +672,10 @@ function createRuntimeCurveSeries({
         overrunValue: statePoint.overrunValue,
         baselineStatus: statePoint.baselineStatus,
         baselineConfirmed: statePoint.baselineConfirmed,
-        statePointId: createRuntimeStateCurvePointId(point, point),
+        statePointId: getRuntimeCurvePointStatePointId(
+          point,
+          runtimeContextByDeltaId
+        ),
         frameIndex: numberOrNull(point.frameIndex) ?? 0,
         frameLabel: point.frameLabel ?? `${numberOrNull(point.timeMs) ?? 0}ms`,
         sequenceIndex: point.sequenceIndex ?? index,
@@ -657,6 +702,13 @@ function createRuntimeCurveSeries({
     finalStateValue:
       finalPoint?.stateValue ?? stateMetric?.currentValue ?? null,
   };
+}
+
+function getRuntimeCurvePointStatePointId(point, runtimeContextByDeltaId) {
+  return (
+    runtimeContextByDeltaId?.get(point?.sourceDeltaId)?.statePointId ??
+    createRuntimeStateCurvePointId(point, point)
+  );
 }
 
 function createRuntimeCurvePointState(stateMetric, cumulative) {
@@ -970,7 +1022,12 @@ function focusRuntimeCurveAction(point) {
   });
 }
 
-function compareRuntimeCurveNavigationPoints(left, right) {
+function compareRuntimeCurveNavigationPoints(left, right, runtimeOrderById) {
+  const runtimeOrder =
+    compareRuntimeCurveRuntimeOrder(left, right, runtimeOrderById);
+  if (runtimeOrder !== 0) {
+    return runtimeOrder;
+  }
   return (
     compareRuntimeCurvePoints(left, right) ||
     getRuntimeCurveTrackOrder(left.trackKey) -
@@ -979,6 +1036,23 @@ function compareRuntimeCurveNavigationPoints(left, right) {
       (numberOrNull(right.seriesIndex) ?? 0) ||
     (numberOrNull(left.pointIndex) ?? 0) - (numberOrNull(right.pointIndex) ?? 0)
   );
+}
+
+function compareRuntimeCurveRuntimeOrder(left, right, runtimeOrderById) {
+  const leftOrder = runtimeOrderById?.get(left.statePointId);
+  const rightOrder = runtimeOrderById?.get(right.statePointId);
+  const hasLeft = Number.isFinite(leftOrder);
+  const hasRight = Number.isFinite(rightOrder);
+  if (hasLeft && hasRight) {
+    return leftOrder - rightOrder;
+  }
+  if (hasLeft) {
+    return -1;
+  }
+  if (hasRight) {
+    return 1;
+  }
+  return 0;
 }
 
 function getRuntimeCurveTrackOrder(trackKey) {

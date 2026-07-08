@@ -306,10 +306,9 @@
 <script setup>
 import { computed, ref, watch } from 'vue';
 import { Aim, EditPen, Tickets } from '@element-plus/icons-vue';
-import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
 import { createRuntimeDetailCalculatorRows } from './runtimeSelectedDetail';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
-import { createRuntimePointByDeltaId } from './runtimeProjectionPoints';
+import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
 
 const props = defineProps({
   eventLog: {
@@ -355,9 +354,17 @@ const selectedRuntimeLogIndex = ref(0);
 const runtimeTrackFilter = ref('all');
 const runtimeActorFilter = ref('all');
 const runtimeActionFilter = ref('all');
-const runtimeSimLogRows = computed(() => props.runtimeProjection?.simLog ?? []);
-const runtimePointByDeltaId = computed(() =>
-  createRuntimePointByDeltaId(props.runtimeProjection)
+const runtimeStatePointContexts = computed(() =>
+  createRuntimeStatePointContexts(props.runtimeProjection)
+);
+const runtimeContextByRow = computed(
+  () =>
+    new Map(
+      runtimeStatePointContexts.value.map(context => [context.row, context])
+    )
+);
+const runtimeSimLogRows = computed(() =>
+  runtimeStatePointContexts.value.map(context => context.row)
 );
 const runtimeTrackFilterOptions = computed(() => {
   const counts = countRuntimeOptions(runtimeSimLogRows.value, 'trackKey');
@@ -485,10 +492,7 @@ const selectedRuntimeLogPoint = computed(() =>
   getRuntimePointByRow(selectedRuntimeLog.value)
 );
 const selectedRuntimeStatePointId = computed(() =>
-  createRuntimeStateCurvePointId(
-    selectedRuntimeLog.value,
-    selectedRuntimeLogPoint.value
-  )
+  getRuntimeStatePointIdByRow(selectedRuntimeLog.value)
 );
 const matchedRuntimeSelectedDetail = computed(() => {
   if (
@@ -593,9 +597,17 @@ const runtimeLogEditContext = computed(() =>
     focus: props.actionEditFocus,
   })
 );
+const runtimeLogResultReturnActionId = computed(
+  () =>
+    (props.actionEditFocus?.editOrigin === 'runtime-focus'
+      ? props.actionEditResultContext?.actionId
+      : '') ||
+    runtimeLogActionFocus.value.actionId ||
+    ''
+);
 const runtimeLogResultReturnContext = computed(() =>
   createRuntimeResultReturnContext({
-    actionId: runtimeLogActionFocus.value.actionId,
+    actionId: runtimeLogResultReturnActionId.value,
     focus: props.actionEditFocus,
     resultContext: props.actionEditResultContext,
   })
@@ -707,10 +719,7 @@ function formatSigned(value) {
 function selectRuntimeLog(index) {
   selectedRuntimeLogIndex.value = index;
   const row = filteredRuntimeSimLogRows.value[index];
-  emit(
-    'select-runtime-state-point',
-    createRuntimeStateCurvePointId(row, getRuntimePointByRow(row))
-  );
+  emit('select-runtime-state-point', getRuntimeStatePointIdByRow(row));
 }
 
 function showSelectedRuntimeLog() {
@@ -912,7 +921,7 @@ function isRuntimeLogRowSelected(row, index) {
 }
 
 function getRuntimeStatePointIdByRow(row) {
-  return createRuntimeStateCurvePointId(row, getRuntimePointByRow(row));
+  return runtimeContextByRow.value.get(row)?.statePointId ?? '';
 }
 
 function formatRuntimeTime(row) {
@@ -974,9 +983,7 @@ function formatRuntimeStatus(row) {
 }
 
 function getRuntimePointByRow(row) {
-  return row?.sourceDeltaId
-    ? runtimePointByDeltaId.value.get(row.sourceDeltaId)
-    : null;
+  return runtimeContextByRow.value.get(row)?.point ?? null;
 }
 
 function countRuntimeOptions(rows, field) {

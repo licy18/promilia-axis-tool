@@ -2879,6 +2879,82 @@ describe('Workbench view', () => {
     );
   });
 
+  it('keeps log and resource curve navigation synced after editing from a log result', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-add-resource-action"]')
+      .trigger('click');
+    await nextTick();
+
+    const firstLogRow = wrapper.find(
+      '[data-testid="workbench-runtime-sim-log-row"]'
+    );
+    const originStatePointId = firstLogRow.attributes('data-state-point-id');
+    expect(originStatePointId).toBeTruthy();
+
+    await firstLogRow.trigger('click');
+    await nextTick();
+
+    let runtimeLogNavigation = wrapper.find(
+      '[data-testid="workbench-runtime-sim-log-navigation"]'
+    );
+    expect(runtimeLogNavigation.attributes('data-navigation-index')).toBe('0');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-resource-chart-selection"]')
+        .attributes('data-navigation-index')
+    ).toBe('0');
+
+    await wrapper
+      .find('[data-testid="workbench-runtime-sim-log-action-focus"]')
+      .trigger('click');
+    await nextTick();
+
+    await wrapper.find('[data-testid="workbench-start-input"]').setValue('6000');
+    await nextTick();
+
+    const refreshedStatePointId = wrapper
+      .find('[data-testid="workbench-action-edit-feedback"]')
+      .attributes('data-runtime-state-point-id');
+    expect(refreshedStatePointId).toBeTruthy();
+    expect(refreshedStatePointId).not.toBe(originStatePointId);
+
+    await wrapper
+      .find('[data-testid="workbench-runtime-sim-log-return-result"]')
+      .trigger('click');
+    await nextTick();
+
+    runtimeLogNavigation = wrapper.find(
+      '[data-testid="workbench-runtime-sim-log-navigation"]'
+    );
+    expect(runtimeLogNavigation.attributes('data-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+    expect(runtimeLogNavigation.attributes('data-navigation-count')).toBe('2');
+    expect(runtimeLogNavigation.attributes('data-navigation-index')).toBe('1');
+
+    const curveSelection = wrapper.find(
+      '[data-testid="workbench-runtime-resource-chart-selection"]'
+    );
+    expect(curveSelection.attributes('data-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+    expect(curveSelection.attributes('data-navigation-count')).toBe('2');
+    expect(curveSelection.attributes('data-navigation-index')).toBe('1');
+    expect(curveSelection.attributes('data-runtime-focus-source')).toBe(
+      'action-result'
+    );
+  });
+
   it('links runtime resource curve points to the focused state curve point', async () => {
     const wrapper = mount(Workbench, {
       global: {

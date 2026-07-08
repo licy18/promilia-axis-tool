@@ -7130,6 +7130,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - UI 主流程能力块继续推进时，优先做“资源曲线/日志详情到动作编辑再回到结果”的跨面板闭环统一。
 - 不回到公式追证、候选数值平衡或单帧动作细节阶段。
 
+### 2026-07-08：UI 主流程能力块 - 跨面板结果回跳统一
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 日志详情和资源曲线都改为消费统一 runtime state point context，选中点、详情、前后巡检和回到刷新结果使用同一套 `statePointId` 与排序语义。
+- 从模拟日志进入动作编辑后，即使再次模拟导致日志顺序变化，日志面板仍能保留回到刷新后结果的主流程入口。
+- 本阶段不修改三值数据、runtime 计算、保存结构或 UI 信息量。
+
+当前验证事实：
+
+- 从模拟日志第一条结果进入编辑，把动作推迟到第二个结果之后，再回到刷新结果，日志导航和资源曲线导航都会落在新的第 2 项。
+- 既有“日志详情定位动作”和“资源曲线点定位详情/动作”链路继续通过。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js`：通过，1 个测试文件、3 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、46 条测试。
+- `npm run test -- --run`：通过，16 个测试文件、126 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- UI 主流程能力块继续推进时，优先把 Action Result / 贡献拆分里的 runtime trace 也收敛到统一 runtime state point context。
+- 不回到公式追证、候选数值平衡或单帧动作细节阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

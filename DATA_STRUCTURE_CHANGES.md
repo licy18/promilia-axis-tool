@@ -14725,3 +14725,36 @@ createRuntimeStatePointContexts(runtimeProjection);
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、45 条测试。
 - `npm run test -- --run`：通过，16 个测试文件、125 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 179. UI 主流程能力块：跨面板结果回跳统一
+
+本阶段属于 UI 主流程。
+
+### 179.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 179.2 EventLogPanel 消费 runtime context
+
+`EventLogPanel` 不再本地组合 `createRuntimeStateCurvePointId(row, point)`，而是通过：
+
+```js
+createRuntimeStatePointContexts(runtimeProjection)
+```
+
+取得 `row`、`point`、`statePointId`。模拟日志筛选、选中行、详情来源、日志导航、动作定位和结果回跳都复用同一份 runtime context。
+
+编辑来源来自 runtime 结果时，日志回跳上下文优先使用 `actionEditResultContext.actionId`，避免再次模拟后日志顺序变化导致回跳入口丢失。
+
+### 179.3 ResourceMonitorPanel 消费 runtime context
+
+`ResourceMonitorPanel` 的曲线点 `statePointId` 优先从 runtime context 的 `sourceDeltaId` 映射取得；资源曲线前后巡检优先按 runtime context 顺序排序，再回退到曲线点自身排序。
+
+### 179.4 验证
+
+- Workbench 测试覆盖：从模拟日志第一条结果进入编辑，把动作推迟到第二个结果之后，回到刷新结果时日志导航和资源曲线导航都更新为第 2 项。
+- 既有日志详情定位动作、资源曲线点定位详情/动作测试继续通过。
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js`：通过，1 个测试文件、3 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、46 条测试。
+- `npm run test -- --run`：通过，16 个测试文件、126 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
