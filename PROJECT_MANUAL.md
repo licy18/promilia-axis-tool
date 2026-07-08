@@ -6910,6 +6910,36 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 下一阶段转向生成层能力块，优先打通 `Action -> Hit -> ThreeValueDelta` 标准合同和统一生成入口。
 - Evidence、公式证据和候选数值仅保留来源追溯与诊断字段，不作为下一阶段主目标。
 
+### 2026-07-08：生成层能力块 - 标准 delta 生成入口
+
+本阶段属于：生成层。
+
+完成的可用能力：
+
+- 新增 `threeValueDeltaGenerationInput.js`，把 `actionResultTimeline`、`candidateValueSeries`、`runtimeSampleContext` 和占位动作统一整理为 `Action -> Hit -> ThreeValueDelta` 的生成输入。
+- `createThreeValueGenerationLayer()` 现在优先消费标准 generation input，再生成 `actions / hits / deltas / summary`；旧 `stateCurves` 仅作为兼容回退。
+- `projectSimulationResult()` 改为把动作结果、候选值和采样上下文直接交给生成层，`threeValueCurveFramework` 继续作为展示/诊断曲线存在，不再是生成层唯一入口。
+- runtime 投影仍只消费 `threeValueGenerationLayer.deltas` 中的 applied delta，本阶段不改变三值结果、不新增公式、不改变保存结构。
+
+当前验证事实：
+
+- 不经过 `stateCurves` 时，生成层也能从动作结果和候选 hit 值生成 applied / candidate / placeholder delta。
+- 第一条真实数据垂直切片的三值数量、runtime 汇总和 simLog 继续保持可用。
+- runtime projection 单测继续证明 runtime 只消费标准 generation deltas 中的 applied 部分。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueGenerationLayer.test.js`：通过，1 个测试文件、2 条测试。
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、13 条测试。
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js`：通过，1 个测试文件、1 条测试。
+- `npm run test -- --run`：通过，15 个测试文件、119 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 下一阶段转向运行时层能力块，优先整理 runtime 对标准 delta 合同的消费边界，明确 `simLog`、敌人 HP/韧性曲线、自身能量曲线和 summary 的统一输出责任。
+- 不继续追真实公式、真实倍率、单帧动作细节或候选数值平衡。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

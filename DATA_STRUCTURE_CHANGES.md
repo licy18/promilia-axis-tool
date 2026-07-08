@@ -14159,3 +14159,119 @@ Workbench 测试新增覆盖：
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
 - `npm run test -- --run`：通过，15 个测试文件、118 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 171. 生成层能力块：标准 delta 生成入口
+
+本阶段属于生成层。
+
+### 171.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 171.2 新增 generation input
+
+新增文件：
+
+```text
+src/simulation/generation/threeValueDeltaGenerationInput.js
+```
+
+新增导出：
+
+```js
+AZPR_TIMELINE_FRAME_RATE
+AZPR_TIMELINE_FRAME_MS
+THREE_VALUE_DELTA_GENERATION_TRACK_DEFINITIONS
+createThreeValueDeltaGenerationInput()
+```
+
+`createThreeValueDeltaGenerationInput()` 优先从以下输入生成标准轨道和层：
+
+```text
+actionResultTimeline.hpDamage
+actionResultTimeline.toughnessDamage
+actionResultTimeline.selfEnergyChange
+candidateValueSeries.chart.series
+runtimeSampleContext.events
+actionResultTimeline.placeholders
+```
+
+### 171.3 generation input 结构
+
+返回对象新增：
+
+```text
+schemaVersion
+sourceKind
+status
+contractName
+frameRate
+frameMs
+inputSources
+sourcePriority
+tracks
+summary
+applied
+```
+
+当传入 `actionResultTimeline` / `candidateValueSeries` / `runtimeSampleContext` 时，`sourceKind` 为：
+
+```text
+azpr-action-hit-three-value-delta-generation-input
+```
+
+没有这些标准输入时，仍可回退读取旧 `stateCurves.tracks`，`sourceKind` 为：
+
+```text
+azpr-state-curve-three-value-delta-generation-input
+```
+
+### 171.4 三值生成层变化
+
+`createThreeValueGenerationLayer()` 新增标准输入参数：
+
+```js
+actionResultTimeline
+candidateValueSeries
+runtimeSampleContext
+```
+
+返回对象新增：
+
+```text
+generationInput
+inputSourceKind
+inputStatus
+```
+
+`actions / hits / deltas / summary` 现在由 `generationInput.tracks` 生成。`stateCurves` 只作为兼容回退，不再是 `projectSimulationResult()` 中生成层的主入口。
+
+### 171.5 projection 接线变化
+
+`projectSimulationResult()` 的生成层接线从：
+
+```text
+threeValueCurveFramework.stateCurves -> createThreeValueGenerationLayer()
+```
+
+改为：
+
+```text
+actionResultTimeline + candidateValueSeries + runtimeSampleContext -> createThreeValueGenerationLayer()
+```
+
+`threeValueCurveFramework` 继续保留展示、诊断和曲线摘要职责。
+
+### 171.6 验证
+
+新增和继续覆盖：
+
+- 生成层可直接从 action result 与 candidate hit values 生成 applied / candidate / placeholder delta。
+- 旧 `stateCurves` 输入仍可作为兼容回退生成标准 delta。
+- 第一条真实数据垂直切片继续通过，三值数量和 runtime 汇总保持可用。
+- runtime projection 继续只消费标准 generation deltas 的 applied 部分。
+- `npm run test -- --run src/__tests__/simulation/threeValueGenerationLayer.test.js`：通过，1 个测试文件、2 条测试。
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、13 条测试。
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js`：通过，1 个测试文件、1 条测试。
+- `npm run test -- --run`：通过，15 个测试文件、119 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

@@ -1415,7 +1415,9 @@ export function projectSimulationResult({
   });
   const threeValueGenerationLayer = buildThreeValueGenerationLayer({
     scenario,
-    threeValueCurveFramework,
+    actionResultTimeline,
+    candidateValueSeries,
+    runtimeSampleContext,
   });
   const threeValueRuntimeProjection = createThreeValueRuntimeProjection({
     scenario,
@@ -1617,11 +1619,15 @@ function buildThreeValueCurveFramework({
 
 function buildThreeValueGenerationLayer({
   scenario,
-  threeValueCurveFramework,
+  actionResultTimeline,
+  candidateValueSeries,
+  runtimeSampleContext,
 }) {
   return createThreeValueGenerationLayer({
     scenario,
-    stateCurves: threeValueCurveFramework.stateCurves,
+    actionResultTimeline,
+    candidateValueSeries,
+    runtimeSampleContext,
   });
 }
 

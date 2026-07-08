@@ -3,9 +3,12 @@ import {
   getThreeValueCalculatorKeys,
   summarizeThreeValueCalculators,
 } from '../threeValueCalculatorAdapters';
+import {
+  AZPR_TIMELINE_FRAME_MS,
+  AZPR_TIMELINE_FRAME_RATE,
+  createThreeValueDeltaGenerationInput,
+} from './threeValueDeltaGenerationInput';
 
-const AZPR_TIMELINE_FRAME_RATE = 60;
-const AZPR_TIMELINE_FRAME_MS = 1000 / AZPR_TIMELINE_FRAME_RATE;
 const THREE_VALUE_GENERATION_TRACK_ORDER = [
   'enemyHpDamage',
   'enemyToughnessDamage',
@@ -24,13 +27,26 @@ export const THREE_VALUE_DELTA_FIELDS = [
   'energyDelta',
 ];
 
-export function createThreeValueGenerationLayer({ scenario, stateCurves }) {
+export function createThreeValueGenerationLayer({
+  scenario,
+  actionResultTimeline,
+  candidateValueSeries,
+  runtimeSampleContext,
+  stateCurves,
+}) {
   const actionsById = new Map(
     (scenario?.actions ?? []).map(action => [action.id, action])
   );
+  const generationInput = createThreeValueDeltaGenerationInput({
+    scenario,
+    actionResultTimeline,
+    candidateValueSeries,
+    runtimeSampleContext,
+    stateCurves,
+  });
   const deltas = createThreeValueGenerationDeltas({
     actionsById,
-    stateCurves,
+    tracks: generationInput.tracks,
   });
   const actions = createThreeValueGenerationActions({
     actionsById,
@@ -79,12 +95,10 @@ export function createThreeValueGenerationLayer({ scenario, stateCurves }) {
           'current HP/toughness/self-energy formulas are adapter outputs and remain replaceable until final AzPr formulas are confirmed',
       },
     },
-    inputSources: [
-      'threeValueCurveFramework.stateCurves.applied',
-      'threeValueCurveFramework.stateCurves.candidate',
-      'threeValueCurveFramework.stateCurves.sampled',
-      'threeValueCurveFramework.stateCurves.placeholder',
-    ],
+    generationInput,
+    inputSources: generationInput.inputSources,
+    inputSourceKind: generationInput.sourceKind,
+    inputStatus: generationInput.status,
     replacementPolicy:
       'candidate, sampled and placeholder deltas can be replaced by later confirmed formulas without changing action/hit/track keys',
     actions,
@@ -94,9 +108,9 @@ export function createThreeValueGenerationLayer({ scenario, stateCurves }) {
   };
 }
 
-function createThreeValueGenerationDeltas({ actionsById, stateCurves }) {
+function createThreeValueGenerationDeltas({ actionsById, tracks }) {
   const deltas = [];
-  for (const track of stateCurves?.tracks ?? []) {
+  for (const track of tracks ?? []) {
     for (const layer of track.layers ?? []) {
       for (const [pointIndex, point] of (layer.points ?? []).entries()) {
         const delta = createThreeValueGenerationDelta({
