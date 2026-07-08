@@ -2196,6 +2196,52 @@ describe('Workbench view', () => {
         )
         .attributes('data-edit-focus-summary')
     ).toContain('敌人 HP');
+
+    await wrapper.find('[data-testid="workbench-start-input"]').setValue('100');
+    await nextTick();
+
+    const runtimeOriginFeedback = wrapper.find(
+      '[data-testid="workbench-action-edit-feedback"]'
+    );
+    expect(runtimeOriginFeedback.exists()).toBe(true);
+    expect(runtimeOriginFeedback.attributes('data-action-id')).toBe(
+      focusedActionId
+    );
+    expect(runtimeOriginFeedback.attributes('data-edit-source-field')).toBe(
+      'startMs'
+    );
+    expect(runtimeOriginFeedback.attributes('data-edit-origin')).toBe(
+      'runtime-focus'
+    );
+    expect(
+      runtimeOriginFeedback.attributes('data-origin-state-point-id')
+    ).toBe(statePointId);
+    expect(runtimeOriginFeedback.attributes('data-origin-track-key')).toBe(
+      'enemyHpDamage'
+    );
+    expect(
+      runtimeOriginFeedback
+        .find('[data-testid="workbench-action-edit-feedback-origin"]')
+        .text()
+    ).toBe('来自结果定位');
+    const refreshedRuntimeStatePointId = runtimeOriginFeedback.attributes(
+      'data-runtime-state-point-id'
+    );
+    expect(refreshedRuntimeStatePointId).toBeTruthy();
+    expect(refreshedRuntimeStatePointId).not.toBe(statePointId);
+    const resultFocusButton = runtimeOriginFeedback.find(
+      '[data-testid="workbench-action-edit-feedback-result-focus"]'
+    );
+    expect(resultFocusButton.attributes('disabled')).toBeUndefined();
+
+    await resultFocusButton.trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(refreshedRuntimeStatePointId);
   });
 
   it('links applied state curve points to the shared runtime detail', async () => {

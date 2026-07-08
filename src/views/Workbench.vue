@@ -977,6 +977,11 @@ function createEmptyActionEditSource(sequence = 0) {
     previousValue: '',
     nextValue: '',
     changeSummary: '',
+    editOrigin: '',
+    originLabel: '',
+    originStatePointId: '',
+    originTrackKey: '',
+    originFrameLabel: '',
     sequence,
   };
 }
@@ -989,6 +994,10 @@ function createEmptyActionEditFocus(sequence = 0) {
     previousValue: '',
     nextValue: '',
     changeSummary: '',
+    editOrigin: '',
+    originStatePointId: '',
+    originTrackKey: '',
+    originFrameLabel: '',
     sequence,
   };
 }
@@ -1025,7 +1034,33 @@ function recordActionEditSource(
     fieldKey,
     label: ACTION_EDIT_SOURCE_LABELS[fieldKey] ?? `${fieldKey}变更`,
     ...change,
+    ...createActionEditOrigin(actionId),
     sequence: actionEditSource.value.sequence + 1,
+  };
+}
+
+function createActionEditOrigin(actionId) {
+  const focus = actionEditFocus.value;
+  if (
+    !actionId ||
+    !focus?.actionId ||
+    focus.actionId !== actionId ||
+    focus.editOrigin !== 'runtime-focus'
+  ) {
+    return {
+      editOrigin: '',
+      originLabel: '',
+      originStatePointId: '',
+      originTrackKey: '',
+      originFrameLabel: '',
+    };
+  }
+  return {
+    editOrigin: focus.editOrigin,
+    originLabel: '来自结果定位',
+    originStatePointId: focus.originStatePointId ?? '',
+    originTrackKey: focus.originTrackKey ?? '',
+    originFrameLabel: focus.originFrameLabel ?? '',
   };
 }
 
@@ -1169,6 +1204,7 @@ function focusRuntimeAction({
   actionId,
   fieldKey = 'startMs',
   frameLabel = '',
+  statePointId = '',
   trackKey = '',
 } = {}) {
   if (!actionId || !findActionDraftById(actionId)) {
@@ -1182,6 +1218,10 @@ function focusRuntimeAction({
     previousValue: '',
     nextValue: '',
     changeSummary: formatRuntimeActionFocusSummary({ frameLabel, trackKey }),
+    editOrigin: 'runtime-focus',
+    originStatePointId: statePointId,
+    originTrackKey: trackKey,
+    originFrameLabel: frameLabel,
     sequence: actionEditFocus.value.sequence + 1,
   };
 }

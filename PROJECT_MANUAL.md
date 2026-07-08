@@ -6243,6 +6243,42 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DQ 目标：继续完善 Workbench 主流程编辑体验，优先把反向定位动作后的编辑反馈和结果刷新状态串起来，让“定位动作 -> 修改字段 -> 结果回看”更顺滑。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DQ 结果定位编辑反馈闭环
+
+本轮完成：
+
+- `actionEditFocus` 增加前端派生的 runtime origin 信息，用于标记编辑动作是否来自三值结果定位。
+- `recordActionEditSource()` 在编辑发生时会识别当前焦点是否来自 `runtime-focus`，并把原始 state point、轨道和帧写入最近编辑来源。
+- `AnalysisPanel` 的最近编辑反馈条新增 `来自结果定位` 标签和 origin DOM 状态。
+- 最近编辑反馈条继续保留刷新后 runtime state point，用户可以从改动反馈一键回到刷新后的结果点。
+- Workbench 测试覆盖“曲线点巡检 -> 定位动作 -> 修改开始时间 -> 反馈条标记来源 -> 定位刷新后结果”的闭环。
+
+当前验证事实：
+
+- 通过资源曲线点 `定位动作` 后修改 `startMs`，反馈条写入 `data-edit-origin="runtime-focus"`。
+- 反馈条写入原始 `data-origin-state-point-id` 和 `data-origin-track-key="enemyHpDamage"`。
+- 反馈条显示 `来自结果定位`。
+- 修改开始时间后，反馈条的 `data-runtime-state-point-id` 指向刷新后的结果点，且不同于原始 origin state point。
+- 点击反馈条 `定位结果` 后，独立“三值详情”切到刷新后的 runtime state point。
+- 本阶段只新增前端 origin/反馈状态，不新增公式、simulation 输出或保存 schema。
+
+当前边界：
+
+- 目前只在最近编辑反馈条展示 origin，不保留多步编辑历史。
+- 反向定位后默认聚焦 `startMs`，尚未根据结果类型自动选择其他字段。
+- 独立“三值详情”面板仍未提供单独编辑入口。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8DR 目标：继续完善 Workbench 主流程编辑体验，优先补独立“三值详情”面板中的动作定位/编辑入口，让日志详情和曲线详情都能进入同一条修轴闭环。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

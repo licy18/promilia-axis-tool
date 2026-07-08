@@ -53,6 +53,10 @@
         :data-edit-source-field="actionEditFeedback.fieldKey"
         :data-edit-source-label="actionEditFeedback.label"
         :data-edit-source-summary="actionEditFeedback.changeSummary"
+        :data-edit-origin="actionEditFeedback.editOrigin"
+        :data-origin-frame-label="actionEditFeedback.originFrameLabel"
+        :data-origin-state-point-id="actionEditFeedback.originStatePointId"
+        :data-origin-track-key="actionEditFeedback.originTrackKey"
         :data-runtime-delta-count="actionEditFeedback.runtimeDeltaCount"
         :data-runtime-state-point-id="actionEditFeedback.runtimeStatePointId"
         :data-result-focused="actionEditFeedback.resultFocused"
@@ -69,6 +73,12 @@
           <span>最近编辑</span>
           <strong>{{ actionEditFeedback.actionName }}</strong>
           <small>{{ actionEditFeedback.display }}</small>
+          <em
+            v-if="actionEditFeedback.originLabel"
+            data-testid="workbench-action-edit-feedback-origin"
+          >
+            {{ actionEditFeedback.originLabel }}
+          </em>
         </div>
         <div class="action-edit-feedback-actions">
           <button
@@ -1903,6 +1913,11 @@ function createActionEditFeedback(source) {
     label: source.label,
     changeSummary: source.changeSummary ?? '',
     display: formatActionEditSourceDisplay(source),
+    editOrigin: source.editOrigin ?? '',
+    originLabel: source.originLabel ?? '',
+    originStatePointId: source.originStatePointId ?? '',
+    originTrackKey: source.originTrackKey ?? '',
+    originFrameLabel: source.originFrameLabel ?? '',
     runtimeStatePointId,
     runtimeDeltaCount: trace?.count ?? 0,
     resultFocused,
@@ -3020,6 +3035,17 @@ h2 {
   color: #f2b366;
   font-weight: 700;
   overflow-wrap: anywhere;
+}
+
+.action-edit-feedback-main em {
+  width: max-content;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.12);
+  color: #9ce0d2;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
 }
 
 .action-edit-feedback-actions {

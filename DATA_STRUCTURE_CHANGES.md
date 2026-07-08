@@ -12557,3 +12557,84 @@ workbench-action-edit-control[data-edit-field="startMs"][data-edit-focused="true
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DQ 应继续串起“定位动作 -> 修改字段 -> 结果回看”的编辑反馈闭环。
+
+## 150. 阶段 5-8DQ：结果定位编辑反馈闭环
+
+阶段目标：
+
+- 标记从三值结果定位进入编辑后的最近编辑来源，并保留回看刷新后结果点的路径。
+
+### 150.1 数据结构变化
+
+本阶段不新增保存字段，不变更 `Project` schema、simulation 输出或 localStorage 数据。
+
+`actionEditFocus` 新增前端派生字段：
+
+```js
+editOrigin: 'runtime-focus' | ''
+originStatePointId: string
+originTrackKey: string
+originFrameLabel: string
+```
+
+`actionEditSource` 新增前端派生字段：
+
+```js
+editOrigin: 'runtime-focus' | ''
+originLabel: string
+originStatePointId: string
+originTrackKey: string
+originFrameLabel: string
+```
+
+派生规则：
+
+```text
+actionEditFocus.editOrigin === 'runtime-focus'
+且 actionEditFocus.actionId === editedActionId
+-> 最近编辑来源继承 runtime origin
+```
+
+这些字段只存在于 Workbench 前端状态，不写入 localStorage，不属于项目保存 schema。
+
+### 150.2 DOM 状态
+
+`workbench-action-edit-feedback` 新增：
+
+```html
+data-edit-origin
+data-origin-state-point-id
+data-origin-track-key
+data-origin-frame-label
+```
+
+新增来源标签：
+
+```html
+data-testid="workbench-action-edit-feedback-origin"
+```
+
+刷新后结果点仍使用既有字段：
+
+```html
+data-runtime-state-point-id
+```
+
+### 150.3 验证
+
+当前测试覆盖：
+
+- 从资源曲线点点击 `定位动作` 后修改 `startMs`。
+- 最近编辑反馈条写入 `data-edit-origin="runtime-focus"`。
+- 最近编辑反馈条保留原始 `data-origin-state-point-id` 和 `data-origin-track-key`。
+- 最近编辑反馈条显示 `来自结果定位`。
+- 修改后 `data-runtime-state-point-id` 指向刷新后的结果点。
+- 点击 `定位结果` 后，独立“三值详情”切到刷新后的 runtime state point。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DR 应补独立“三值详情”面板中的动作定位/编辑入口。
