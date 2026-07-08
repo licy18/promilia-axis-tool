@@ -56,6 +56,11 @@ export const WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES = Object.freeze({
   PENDING_RESULT: 'pending-result',
 });
 
+export const WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS = Object.freeze({
+  FOCUS_ACTION: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+  RETURN_RESULT: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+});
+
 export function createWorkbenchFlowAction({
   kind = '',
   source = '',
@@ -167,6 +172,11 @@ export function createWorkbenchFlowModel({
     runtimeResultReturnTarget,
     mainFlowDispatchResult,
   });
+  const runtimeReviewOperations = createWorkbenchRuntimeReviewOperations({
+    runtimeReviewSelection,
+    runtimeActionEditTarget,
+    runtimeResultReturnTarget: mainFlowState.resultReturnTarget,
+  });
   const mainFlowLoopState = createWorkbenchMainFlowLoopState({
     phase,
     mainFlowState,
@@ -195,6 +205,7 @@ export function createWorkbenchFlowModel({
     mainFlowDispatchResult,
     mainFlowLoopState,
     runtimeReviewSelection,
+    runtimeReviewOperations,
     runtimeNavigation: {
       points: runtimeNavigationPoints,
       count: runtimeNavigationPoints.length,
@@ -316,6 +327,41 @@ export function createWorkbenchRuntimeReviewSelection({
     lastActionSource: lastReviewAction.source,
     lastActionHandled: lastReviewAction.handled,
     lastActionStatePointId: lastReviewAction.statePointId,
+  };
+}
+
+export function createWorkbenchRuntimeReviewOperations({
+  runtimeReviewSelection = null,
+  runtimeActionEditTarget = null,
+  runtimeResultReturnTarget = null,
+} = {}) {
+  const focusAction = createRuntimeReviewFocusActionOperation({
+    runtimeReviewSelection,
+    runtimeActionEditTarget,
+  });
+  const returnResult = createRuntimeReviewReturnResultOperation({
+    runtimeReviewSelection,
+    runtimeResultReturnTarget,
+  });
+  const primaryOperationKind = resolveRuntimeReviewPrimaryOperationKind({
+    runtimeReviewSelection,
+    focusAction,
+    returnResult,
+  });
+  return {
+    primaryOperationKind,
+    primaryOperationEnabled:
+      primaryOperationKind === focusAction.kind
+        ? focusAction.enabled
+        : primaryOperationKind === returnResult.kind
+          ? returnResult.enabled
+          : false,
+    canRunAnyOperation: Boolean(focusAction.enabled || returnResult.enabled),
+    selectionStatus: runtimeReviewSelection?.status ?? '',
+    selectedStatePointId: runtimeReviewSelection?.selectedStatePointId ?? '',
+    pendingStatePointId: runtimeReviewSelection?.pendingStatePointId ?? '',
+    focusAction,
+    returnResult,
   };
 }
 
@@ -623,6 +669,85 @@ function isRuntimeReviewDispatch(dispatchResult = null) {
     WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
     WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
   ].includes(dispatchResult.kind);
+}
+
+function createRuntimeReviewFocusActionOperation({
+  runtimeReviewSelection = null,
+  runtimeActionEditTarget = null,
+} = {}) {
+  const actionId =
+    runtimeActionEditTarget?.actionId ??
+    runtimeReviewSelection?.selectedActionId ??
+    '';
+  const statePointId =
+    runtimeActionEditTarget?.statePointId ??
+    runtimeReviewSelection?.selectedStatePointId ??
+    '';
+  const enabled = Boolean(
+    runtimeReviewSelection?.hasSelection &&
+      runtimeActionEditTarget?.canFocusAction &&
+      actionId
+  );
+  return {
+    kind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+    enabled,
+    disabledReason: enabled ? '' : 'missing-runtime-action',
+    actionId,
+    statePointId,
+    fieldKey: runtimeActionEditTarget?.fieldKey ?? 'startMs',
+    frameLabel:
+      runtimeActionEditTarget?.frameLabel ??
+      runtimeReviewSelection?.frameLabel ??
+      '',
+    sourceKind: runtimeReviewSelection?.sourceKind ?? '',
+  };
+}
+
+function createRuntimeReviewReturnResultOperation({
+  runtimeReviewSelection = null,
+  runtimeResultReturnTarget = null,
+} = {}) {
+  const actionId =
+    runtimeResultReturnTarget?.actionId ??
+    runtimeReviewSelection?.pendingActionId ??
+    runtimeReviewSelection?.selectedActionId ??
+    '';
+  const statePointId =
+    runtimeResultReturnTarget?.statePointId ??
+    runtimeReviewSelection?.pendingStatePointId ??
+    '';
+  const enabled = Boolean(runtimeResultReturnTarget?.statePointId);
+  return {
+    kind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
+    enabled,
+    disabledReason: enabled ? '' : 'missing-runtime-result',
+    actionId,
+    statePointId,
+    originStatePointId: runtimeResultReturnTarget?.originStatePointId ?? '',
+    status: runtimeResultReturnTarget?.status ?? '',
+    sourceKind: runtimeReviewSelection?.sourceKind ?? '',
+  };
+}
+
+function resolveRuntimeReviewPrimaryOperationKind({
+  runtimeReviewSelection = null,
+  focusAction = null,
+  returnResult = null,
+} = {}) {
+  if (
+    runtimeReviewSelection?.hasPendingResult &&
+    !runtimeReviewSelection?.hasSelection &&
+    returnResult?.enabled
+  ) {
+    return returnResult.kind;
+  }
+  if (focusAction?.enabled) {
+    return focusAction.kind;
+  }
+  if (returnResult?.enabled) {
+    return returnResult.kind;
+  }
+  return '';
 }
 
 function createWorkbenchFlowEditResult(context) {

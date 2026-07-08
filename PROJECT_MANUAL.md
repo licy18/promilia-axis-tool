@@ -8739,6 +8739,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：基于统一 review selection 改善运行结果定位后的主流程操作密度，优先推进“选中结果 -> 查看详情 -> 定位动作 -> 返回刷新结果”的连续操作闭环。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Operation State
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `WorkbenchFlowModel` 新增 `runtimeReviewOperations`，统一描述运行结果 review 状态下的“定位动作”和“返回刷新结果”操作能力。
+- `RuntimeSelectedDetailPanel` 改为消费 `runtimeReviewOperations` 控制详情面板的主操作状态，减少详情面板局部判断。
+- 直接编辑产生 pending 刷新结果时，模型主操作会切换为 `return-runtime-result`；选中运行结果详情时，模型主操作会切换为 `focus-runtime-action`。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- flow model 单元测试覆盖 empty、selected、pending-result、edit-result-review 下的 operation 状态。
+- Workbench 页面测试确认详情面板在 pending 刷新结果、日志选中、曲线选中三条路径下消费同一 operation 状态。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、191 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：基于 `runtimeReviewOperations` 继续压缩运行结果详情区的操作路径，把“定位动作 -> 修改 -> 返回刷新结果”的往返链路收敛到更直接的主流程入口。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

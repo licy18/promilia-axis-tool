@@ -18771,3 +18771,89 @@ data-runtime-review-detail-synced
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、55 条测试。
 - `npm run test -- --run`：通过，33 个测试文件、191 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 240. UI 主流程能力块：Runtime Review Operation State
+
+### 240.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增 `workbenchFlowModel` 枚举：
+
+```js
+WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS
+```
+
+当前取值：
+
+```text
+FOCUS_ACTION -> focus-runtime-action
+RETURN_RESULT -> return-runtime-result
+```
+
+`createWorkbenchFlowModel` 新增输出：
+
+```js
+runtimeReviewOperations
+```
+
+当前字段：
+
+```js
+{
+  primaryOperationKind,
+  primaryOperationEnabled,
+  canRunAnyOperation,
+  selectionStatus,
+  selectedStatePointId,
+  pendingStatePointId,
+  focusAction,
+  returnResult
+}
+```
+
+`focusAction`：
+
+```js
+{
+  kind,
+  enabled,
+  disabledReason,
+  actionId,
+  statePointId,
+  fieldKey,
+  frameLabel,
+  sourceKind
+}
+```
+
+`returnResult`：
+
+```js
+{
+  kind,
+  enabled,
+  disabledReason,
+  actionId,
+  statePointId,
+  originStatePointId,
+  status,
+  sourceKind
+}
+```
+
+`runtimeReviewOperations` 由 `runtimeReviewSelection`、`runtimeActionEditTarget` 和 `mainFlowState.resultReturnTarget` 派生。使用 `mainFlowState.resultReturnTarget` 是为了让直接编辑产生的 `editResult` 和运行点回改产生的 return context 共用同一返回结果操作合同。
+
+`RuntimeSelectedDetailPanel` 现在消费 `flowModel.runtimeReviewOperations` 控制详情面板的定位动作/返回结果操作状态。
+
+### 240.2 保存与迁移
+
+本阶段只新增 Workbench UI 主流程模型的运行时操作状态，不新增持久字段，不需要数据迁移。
+
+### 240.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖 empty、selected、pending-result、edit-result-review 下的 operation 状态。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认详情面板在 pending 刷新结果、日志选中、曲线选中路径下消费同一 operation 状态。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、191 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

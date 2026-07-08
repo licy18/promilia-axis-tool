@@ -21,6 +21,18 @@
     :data-runtime-review-detail-synced="
       runtimeReviewDetailSynced ? 'true' : 'false'
     "
+    :data-runtime-review-primary-operation-kind="
+      runtimeReviewOperations?.primaryOperationKind ?? ''
+    "
+    :data-runtime-review-primary-operation-enabled="
+      runtimeReviewOperations?.primaryOperationEnabled ? 'true' : 'false'
+    "
+    :data-runtime-review-focus-action-enabled="
+      runtimeReviewOperations?.focusAction?.enabled ? 'true' : 'false'
+    "
+    :data-runtime-review-return-result-enabled="
+      runtimeReviewOperations?.returnResult?.enabled ? 'true' : 'false'
+    "
     data-testid="workbench-runtime-selected-detail"
   >
     <div class="panel-title">
@@ -34,7 +46,7 @@
         :data-focus-field="runtimeDetailActionEditTarget.fieldKey"
         :data-state-point-id="runtimeDetailActionEditTarget.statePointId"
         data-testid="workbench-runtime-selected-detail-action-focus"
-        :disabled="!runtimeDetailActionEditTarget.canFocusAction"
+        :disabled="!runtimeReviewFocusActionEnabled"
         @click="focusRuntimeAction"
       >
         <EditPen class="runtime-detail-action-focus-icon" />
@@ -51,6 +63,7 @@
         :data-return-status="runtimeDetailResultReturnContext.status"
         :data-state-point-id="runtimeDetailResultReturnContext.statePointId"
         data-testid="workbench-runtime-selected-detail-return-result"
+        :disabled="!runtimeReviewReturnResultEnabled"
         @click="returnRuntimeResult"
       >
         <Aim class="runtime-detail-result-return-icon" />
@@ -261,6 +274,9 @@ const flowEditResult = computed(
 const runtimeReviewSelection = computed(
   () => props.flowModel?.runtimeReviewSelection ?? null
 );
+const runtimeReviewOperations = computed(
+  () => props.flowModel?.runtimeReviewOperations ?? null
+);
 const runtimeReviewSelectedStatePointId = computed(
   () =>
     runtimeReviewSelection.value?.selectedStatePointId ??
@@ -273,6 +289,16 @@ const runtimeReviewDetailSynced = computed(
     !runtimeReviewSelection.value?.selectedStatePointId ||
     props.detail.statePointId ===
       runtimeReviewSelection.value.selectedStatePointId
+);
+const runtimeReviewFocusActionEnabled = computed(
+  () =>
+    runtimeReviewOperations.value?.focusAction?.enabled ??
+    Boolean(runtimeDetailActionEditTarget.value?.canFocusAction)
+);
+const runtimeReviewReturnResultEnabled = computed(
+  () =>
+    runtimeReviewOperations.value?.returnResult?.enabled ??
+    Boolean(runtimeDetailResultReturnContext.value?.statePointId)
 );
 const runtimeDetailActionEditTarget = computed(() =>
   getRuntimeDetailActionEditTarget(props.flowModel, props.detail)

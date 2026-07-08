@@ -4,6 +4,7 @@ import {
   WORKBENCH_FLOW_PHASES,
   WORKBENCH_MAIN_FLOW_REGIONS,
   WORKBENCH_FLOW_PRIMARY_ACTION_KEYS,
+  WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS,
   WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES,
   createWorkbenchFlowAction,
   createWorkbenchFlowModel,
@@ -100,6 +101,24 @@ describe('workbench flow model', () => {
       overviewActive: false,
       canFocusAction: false,
       canReturnResult: false,
+    });
+    expect(model.runtimeReviewOperations).toMatchObject({
+      primaryOperationKind: '',
+      primaryOperationEnabled: false,
+      canRunAnyOperation: false,
+      selectionStatus: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.EMPTY,
+      selectedStatePointId: '',
+      pendingStatePointId: '',
+      focusAction: {
+        kind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+        enabled: false,
+        disabledReason: 'missing-runtime-action',
+      },
+      returnResult: {
+        kind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
+        enabled: false,
+        disabledReason: 'missing-runtime-result',
+      },
     });
     expect(model.runtimeNavigation.count).toBe(2);
     expect(model.runtimeNavigation.index).toBe(-1);
@@ -203,6 +222,25 @@ describe('workbench flow model', () => {
       lastActionSource: 'analysis-action-result',
       lastActionHandled: true,
       lastActionStatePointId: firstPoint.statePointId,
+    });
+    expect(model.runtimeReviewOperations).toMatchObject({
+      primaryOperationKind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+      primaryOperationEnabled: true,
+      canRunAnyOperation: true,
+      selectionStatus: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.SELECTED,
+      selectedStatePointId: firstPoint.statePointId,
+      focusAction: {
+        enabled: true,
+        actionId: 'action-0001',
+        statePointId: firstPoint.statePointId,
+        fieldKey: 'startMs',
+        frameLabel: '12f',
+        sourceKind: 'action-result',
+      },
+      returnResult: {
+        enabled: false,
+        statePointId: '',
+      },
     });
     expect(model.runtimeNavigation.index).toBe(0);
     expect(model.runtimeNavigation.label).toBe('1/2');
@@ -310,6 +348,27 @@ describe('workbench flow model', () => {
       resultReturnActionId: 'action-0002',
       resultReturnStatePointId: secondPoint.statePointId,
     });
+    expect(readyModel.runtimeReviewOperations).toMatchObject({
+      primaryOperationKind:
+        WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
+      primaryOperationEnabled: true,
+      canRunAnyOperation: true,
+      selectionStatus:
+        WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.PENDING_RESULT,
+      selectedStatePointId: '',
+      pendingStatePointId: secondPoint.statePointId,
+      focusAction: {
+        enabled: false,
+        disabledReason: 'missing-runtime-action',
+      },
+      returnResult: {
+        enabled: true,
+        actionId: 'action-0002',
+        statePointId: secondPoint.statePointId,
+        originStatePointId: firstPoint.statePointId,
+        status: 'refreshed-edit-result',
+      },
+    });
 
     const reviewModel = createWorkbenchFlowModel({
       runtimeProjection,
@@ -392,6 +451,25 @@ describe('workbench flow model', () => {
       canReturnResult: true,
       actionEditTargetStatePointId: secondPoint.statePointId,
       resultReturnStatePointId: secondPoint.statePointId,
+    });
+    expect(reviewModel.runtimeReviewOperations).toMatchObject({
+      primaryOperationKind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+      primaryOperationEnabled: true,
+      canRunAnyOperation: true,
+      selectionStatus: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.SELECTED,
+      selectedStatePointId: secondPoint.statePointId,
+      focusAction: {
+        enabled: true,
+        actionId: 'action-0002',
+        statePointId: secondPoint.statePointId,
+        frameLabel: '30f',
+      },
+      returnResult: {
+        enabled: true,
+        actionId: 'action-0002',
+        statePointId: secondPoint.statePointId,
+        originStatePointId: firstPoint.statePointId,
+      },
     });
     expect(
       resolveWorkbenchMainFlowActionEditTarget({

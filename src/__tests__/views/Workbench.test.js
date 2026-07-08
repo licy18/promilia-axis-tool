@@ -2309,6 +2309,23 @@ describe('Workbench view', () => {
       refreshedStatePointId
     );
     expect(actionEditFeedback.attributes('data-edit-origin')).toBe('');
+    const pendingRuntimeDetailPanel = wrapper.find(
+      '[data-testid="workbench-runtime-selected-detail"]'
+    );
+    expect(pendingRuntimeDetailPanel.exists()).toBe(true);
+    expect(pendingRuntimeDetailPanel.attributes()).toMatchObject({
+      'data-runtime-review-selection-status': 'pending-result',
+      'data-runtime-review-selected-state-point-id': '',
+      'data-runtime-review-primary-operation-kind': 'return-runtime-result',
+      'data-runtime-review-primary-operation-enabled': 'true',
+      'data-runtime-review-focus-action-enabled': 'false',
+      'data-runtime-review-return-result-enabled': 'true',
+    });
+    expect(
+      pendingRuntimeDetailPanel
+        .find('[data-testid="workbench-runtime-selected-detail-return-context"]')
+        .attributes('data-state-point-id')
+    ).toBe(refreshedStatePointId);
     const returnEditResultButton = flowPanel.find(
       '[data-testid="workbench-flow-return-edit-result"]'
     );
@@ -3581,6 +3598,12 @@ describe('Workbench view', () => {
     expect(
       logFocusedDetailPanel.attributes('data-runtime-review-detail-synced')
     ).toBe('true');
+    expect(logFocusedDetailPanel.attributes()).toMatchObject({
+      'data-runtime-review-primary-operation-kind': 'focus-runtime-action',
+      'data-runtime-review-primary-operation-enabled': 'true',
+      'data-runtime-review-focus-action-enabled': 'true',
+      'data-runtime-review-return-result-enabled': 'false',
+    });
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-detail"]')
@@ -4420,6 +4443,12 @@ describe('Workbench view', () => {
     expect(
       curveFocusedDetailPanel.attributes('data-runtime-review-detail-synced')
     ).toBe('true');
+    expect(curveFocusedDetailPanel.attributes()).toMatchObject({
+      'data-runtime-review-primary-operation-kind': 'focus-runtime-action',
+      'data-runtime-review-primary-operation-enabled': 'true',
+      'data-runtime-review-focus-action-enabled': 'true',
+      'data-runtime-review-return-result-enabled': 'false',
+    });
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-detail"]')
