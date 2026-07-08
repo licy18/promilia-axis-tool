@@ -148,6 +148,7 @@
         class="event-area"
         :event-log="simulationResult.eventLog"
         :runtime-projection="simulationResult.threeValueRuntimeProjection"
+        :runtime-selected-detail="runtimeSelectedDetail"
         :selected-state-curve-point-id="selectedStateCurvePointId"
         @select-runtime-state-point="selectRuntimeStatePoint"
       />

@@ -9812,3 +9812,69 @@ data-testid="workbench-runtime-sim-log-selection-filtered"
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8CI 应让 `EventLogPanel` 的内嵌三值详情消费 `RuntimeSelectedDetail` 派生结果，减少日志详情和右侧详情之间的重复逻辑。
+
+## 116. 阶段 5-8CI：EventLogPanel detail consumes RuntimeSelectedDetail
+
+阶段 5-8CI 不修改项目保存 schema。本阶段只新增 Workbench UI prop 和详情数据源标记。
+
+### 116.1 EventLogPanel 新增输入
+
+`EventLogPanel` 新增：
+
+```js
+runtimeSelectedDetail: Object | null
+```
+
+`Workbench` 将已有：
+
+```js
+runtimeSelectedDetail
+```
+
+传入 `EventLogPanel`。
+
+### 116.2 日志详情数据源
+
+runtime sim log 内嵌详情新增：
+
+```html
+data-detail-source="runtime-selected-detail | runtime-log-fallback"
+```
+
+规则：
+
+- 当 `runtimeSelectedDetail.statePointId === selectedRuntimeStatePointId` 时，使用 `runtime-selected-detail`。
+- 否则使用 `runtime-log-fallback`。
+
+优先来自统一详情的字段：
+
+```js
+actionName / actionId
+hitKey
+trackLabel / trackKey
+actorName / actorId
+status
+sourceDeltaId
+statePointId
+contributionRows
+sourceRows
+```
+
+fallback 仍使用当前 `selectedRuntimeLog` 和 `selectedRuntimeLogPoint`。
+
+### 116.3 验证
+
+当前测试覆盖：
+
+- 默认初始状态下，日志详情为 `data-detail-source="runtime-log-fallback"`。
+- 点击 runtime sim log 行后，日志详情切到 `data-detail-source="runtime-selected-detail"`。
+- 点击 runtime resource chart point 后，日志详情也使用 `runtime-selected-detail`。
+- SP 技能场景中，筛选隐藏 HP 点再切回 `全部` 后，目标 HP 日志高亮，日志详情使用 `runtime-selected-detail`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8CJ 应给 runtime sim log 的“选中点不在当前筛选内”提示增加一键显示当前选中日志的操作。

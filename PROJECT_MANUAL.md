@@ -5063,6 +5063,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 保留 runtime sim log 的行级筛选和本地行上下文，但三值贡献、来源标注、状态点 ID 应尽量来自统一详情。
 - 若统一详情为空，则继续保留当前日志行的最小详情作为降级显示。
 
+### 2026-07-08：阶段 5-8CI 日志内嵌详情接入统一详情
+
+本轮完成：
+
+- `EventLogPanel` 新增 `runtimeSelectedDetail` 输入，接收 Workbench 已派生好的统一运行时选中详情。
+- 日志内嵌详情区新增 `data-detail-source`，区分当前使用 `runtime-selected-detail` 还是 `runtime-log-fallback`。
+- 当当前日志行的 `statePointId` 与 `runtimeSelectedDetail.statePointId` 一致时，日志详情的动作、命中、三值、轨道、角色、状态、来源 delta、状态点 ID、贡献槽位和来源标注优先来自统一详情。
+- 当尚未建立全局选中点或统一详情为空时，日志详情继续使用当前日志行和 runtime point 作为 fallback，避免初始态空白。
+- `Workbench` 将 `runtimeSelectedDetail` 传入 `EventLogPanel`，让日志详情、右侧三值详情、资源曲线和状态曲线共享同一份派生数据。
+
+当前验证事实：
+
+- 默认初始状态下，runtime sim log 详情仍显示 `action-0001|applied-frame-0-point-0`，且 `data-detail-source="runtime-log-fallback"`。
+- 点击 runtime sim log 行后，日志详情切换为 `data-detail-source="runtime-selected-detail"`，并继续显示统一详情中的 HP 贡献和来源 element。
+- 点击 HP 资源曲线点后，对应日志行高亮，日志详情同样使用 `runtime-selected-detail`。
+- 在 SP 技能场景中，先筛选到能量日志，再从资源曲线选中 HP 点并切回 `全部` 后，HP 日志行恢复高亮，日志详情使用统一详情。
+
+当前边界：
+
+- `EventLogPanel` 仍保留一套 fallback 派生函数，用于未选中或统一详情为空的初始态。
+- 右侧 `RuntimeSelectedDetailPanel` 和日志内嵌详情仍是两个展示面板，只是数据来源已收束。
+- “选中三值点不在当前日志筛选内”提示还只是文字，没有一键显示该日志的操作。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8CJ 目标：给 runtime sim log 的“选中点不在当前筛选内”提示增加一键显示当前选中日志的操作。
+- 一键显示应只调整日志筛选到能包含当前 `selectedStateCurvePointId` 的最小范围，不改变时间轴或动作选择。
+- 同步补充测试：筛选隐藏 HP 点时点击按钮后，日志筛选恢复到可见状态并高亮目标日志。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

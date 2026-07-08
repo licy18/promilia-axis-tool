@@ -136,6 +136,11 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-detail"]').text()
     ).toContain('action-0001|applied-frame-0-point-0');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-detail"]')
+        .attributes('data-detail-source')
+    ).toBe('runtime-log-fallback');
     expect(runtimeCurvePoints[0].attributes('data-state-point-id')).toBe(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-state-point"]')
@@ -1064,6 +1069,11 @@ describe('Workbench view', () => {
     ).toBe(appliedStatePointId);
     expect(
       wrapper
+        .find('[data-testid="workbench-runtime-sim-log-detail"]')
+        .attributes('data-detail-source')
+    ).toBe('runtime-selected-detail');
+    expect(
+      wrapper
         .find('[data-testid="workbench-runtime-selected-detail-action"]')
         .text()
     ).toContain('普通攻击');
@@ -1147,6 +1157,11 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(statePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-detail"]')
+        .attributes('data-detail-source')
+    ).toBe('runtime-selected-detail');
     expect(
       wrapper
         .find(
@@ -2151,6 +2166,11 @@ describe('Workbench view', () => {
         )
         .attributes('data-selected')
     ).toBe('true');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-detail"]')
+        .attributes('data-detail-source')
+    ).toBe('runtime-selected-detail');
     expect(wrapper.text()).toContain('RESOURCE_CHANGE');
   });
 

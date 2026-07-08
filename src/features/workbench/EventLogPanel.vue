@@ -123,44 +123,41 @@
       <div
         v-if="selectedRuntimeLog"
         class="runtime-log-detail"
+        :data-detail-source="runtimeLogDetailSource"
         data-testid="workbench-runtime-sim-log-detail"
       >
         <div>
           <span>动作</span>
-          <strong>{{
-            selectedRuntimeLog.actionName ?? selectedRuntimeLog.actionId
-          }}</strong>
+          <strong>{{ runtimeLogDetailAction }}</strong>
         </div>
         <div>
           <span>命中</span>
-          <strong>{{ selectedRuntimeLog.hitKey ?? 'hit' }}</strong>
+          <strong>{{ runtimeLogDetailHit }}</strong>
         </div>
         <div>
           <span>三值</span>
-          <strong>{{ formatRuntimeDelta(selectedRuntimeLog) }}</strong>
+          <strong>{{ runtimeLogDetailDelta }}</strong>
         </div>
         <div>
           <span>轨道</span>
-          <strong>{{ formatRuntimeTrack(selectedRuntimeLog) }}</strong>
+          <strong>{{ runtimeLogDetailTrack }}</strong>
         </div>
         <div>
           <span>角色</span>
-          <strong>{{
-            selectedRuntimeLog.actorName ?? selectedRuntimeLog.actorId ?? '系统'
-          }}</strong>
+          <strong>{{ runtimeLogDetailActor }}</strong>
         </div>
         <div>
           <span>状态</span>
-          <strong>{{ formatRuntimeStatus(selectedRuntimeLog) }}</strong>
+          <strong>{{ runtimeLogDetailStatus }}</strong>
         </div>
         <div>
           <span>来源</span>
-          <strong>{{ selectedRuntimeLog.sourceDeltaId }}</strong>
+          <strong>{{ runtimeLogDetailSourceDeltaId }}</strong>
         </div>
         <div>
           <span>状态点</span>
           <strong data-testid="workbench-runtime-sim-log-state-point">
-            {{ selectedRuntimeStatePointId }}
+            {{ runtimeLogDetailStatePointId }}
           </strong>
         </div>
       </div>
@@ -219,6 +216,10 @@ const props = defineProps({
   selectedStateCurvePointId: {
     type: String,
     default: '',
+  },
+  runtimeSelectedDetail: {
+    type: Object,
+    default: null,
   },
 });
 const emit = defineEmits(['select-runtime-state-point']);
@@ -332,11 +333,77 @@ const selectedRuntimeStatePointId = computed(() =>
     selectedRuntimeLogPoint.value
   )
 );
+const matchedRuntimeSelectedDetail = computed(() => {
+  if (
+    !props.runtimeSelectedDetail?.statePointId ||
+    props.runtimeSelectedDetail.statePointId !== selectedRuntimeStatePointId.value
+  ) {
+    return null;
+  }
+  return props.runtimeSelectedDetail;
+});
+const runtimeLogDetailSource = computed(() =>
+  matchedRuntimeSelectedDetail.value
+    ? 'runtime-selected-detail'
+    : 'runtime-log-fallback'
+);
+const runtimeLogDetailAction = computed(
+  () =>
+    matchedRuntimeSelectedDetail.value?.actionName ||
+    matchedRuntimeSelectedDetail.value?.actionId ||
+    selectedRuntimeLog.value?.actionName ||
+    selectedRuntimeLog.value?.actionId ||
+    '动作'
+);
+const runtimeLogDetailHit = computed(
+  () =>
+    matchedRuntimeSelectedDetail.value?.hitKey ??
+    selectedRuntimeLog.value?.hitKey ??
+    'hit'
+);
+const runtimeLogDetailDelta = computed(() =>
+  matchedRuntimeSelectedDetail.value
+    ? formatRuntimeDetailDelta(matchedRuntimeSelectedDetail.value)
+    : formatRuntimeDelta(selectedRuntimeLog.value)
+);
+const runtimeLogDetailTrack = computed(
+  () =>
+    matchedRuntimeSelectedDetail.value?.trackLabel ??
+    formatRuntimeTrack(selectedRuntimeLog.value)
+);
+const runtimeLogDetailActor = computed(
+  () =>
+    matchedRuntimeSelectedDetail.value?.actorName ??
+    matchedRuntimeSelectedDetail.value?.actorId ??
+    selectedRuntimeLog.value?.actorName ??
+    selectedRuntimeLog.value?.actorId ??
+    '系统'
+);
+const runtimeLogDetailStatus = computed(
+  () =>
+    matchedRuntimeSelectedDetail.value?.status ??
+    formatRuntimeStatus(selectedRuntimeLog.value)
+);
+const runtimeLogDetailSourceDeltaId = computed(
+  () =>
+    matchedRuntimeSelectedDetail.value?.sourceDeltaId ??
+    selectedRuntimeLog.value?.sourceDeltaId ??
+    ''
+);
+const runtimeLogDetailStatePointId = computed(
+  () =>
+    matchedRuntimeSelectedDetail.value?.statePointId ??
+    selectedRuntimeStatePointId.value
+);
 const selectedRuntimeContributionRows = computed(() =>
-  createRuntimeContributionRows(selectedRuntimeLog.value)
+  matchedRuntimeSelectedDetail.value
+    ? createRuntimeContributionRowsFromDetail(matchedRuntimeSelectedDetail.value)
+    : createRuntimeContributionRows(selectedRuntimeLog.value)
 );
 const selectedRuntimeSourceRows = computed(() =>
-  createRuntimeSourceRows(selectedRuntimeLogPoint.value)
+  matchedRuntimeSelectedDetail.value
+    ? createRuntimeSourceRowsFromDetail(matchedRuntimeSelectedDetail.value)
+    : createRuntimeSourceRows(selectedRuntimeLogPoint.value)
 );
 
 watch(filteredRuntimeSimLogRows, rows => {
@@ -450,6 +517,9 @@ function formatRuntimePayload(row) {
 }
 
 function formatRuntimeDelta(row) {
+  if (!row) {
+    return '0';
+  }
   if (row.trackKey === 'enemyHpDamage') {
     return `HP ${formatNumber(row.hpDelta)}`;
   }
@@ -460,6 +530,19 @@ function formatRuntimeDelta(row) {
     return `SP ${formatSigned(row.energyDelta)}`;
   }
   return formatSigned(row.delta);
+}
+
+function formatRuntimeDetailDelta(detail) {
+  if (detail.trackKey === 'enemyHpDamage') {
+    return `HP ${formatNumber(detail.delta)}`;
+  }
+  if (detail.trackKey === 'enemyToughnessDamage') {
+    return `韧性 ${formatNumber(detail.delta)}`;
+  }
+  if (detail.trackKey === 'selfEnergyChange') {
+    return `SP ${formatSigned(detail.delta)}`;
+  }
+  return formatSigned(detail.delta);
 }
 
 function formatNumber(value) {
@@ -550,6 +633,14 @@ function createRuntimeContributionRows(row) {
   ];
 }
 
+function createRuntimeContributionRowsFromDetail(detail) {
+  return (detail.contributionRows ?? []).map(row => ({
+    key: row.key,
+    label: row.label,
+    value: row.signed ? formatSigned(row.value) : formatNumber(row.value),
+  }));
+}
+
 function createRuntimeSourceRows(point) {
   const sourceIds = point?.sourceIds ?? {};
   return [
@@ -574,6 +665,14 @@ function createRuntimeSourceRows(point) {
       value: formatRuntimeSourceList(sourceIds.pathIds),
     },
   ];
+}
+
+function createRuntimeSourceRowsFromDetail(detail) {
+  return (detail.sourceRows ?? []).map(row => ({
+    key: row.key,
+    label: row.label,
+    value: formatRuntimeSourceList(row.values),
+  }));
 }
 
 function formatRuntimeSourceList(values) {

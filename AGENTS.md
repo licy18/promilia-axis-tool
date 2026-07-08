@@ -51,7 +51,7 @@ npm run dev
   - UI 层：优先补 Endaxis 式资源监控、模拟日志、伤害/三值详情弹层、贡献拆分和编辑器体验。
 - Evidence 层保留为来源追溯和诊断信息，不再作为用户主路径，也不阻塞工具体验。
 - `actionResultTimeline[]` 必须持续按动作追踪三类数值变化：敌人 HP 伤害、敌人韧性削减、自身能量变化。不要把韧性或充能混进 HP 伤害公式。
-- 当前 `5-8CH` 已把全局 `selectedStateCurvePointId` 反向同步到 runtime sim log 高亮状态；下一步优先让日志内嵌详情消费统一 `RuntimeSelectedDetail` 派生结果。
+- 当前 `5-8CI` 已让日志内嵌详情消费统一 `RuntimeSelectedDetail` 派生结果；下一步优先给 runtime sim log 的筛选隐藏提示增加一键显示当前选中日志的操作。
 
 ## Endaxis 参考原则
 
