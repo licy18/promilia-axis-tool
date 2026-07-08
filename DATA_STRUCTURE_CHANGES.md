@@ -10801,3 +10801,59 @@ data-calculator-scope="manual | runtime"
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8CS 应继续把 candidate/sample/applied 的参与范围说明清楚，减少用户把候选诊断误读为已应用结果的风险。
+
+## 126. 阶段 5-8CS：three-value layer participation labels
+
+阶段 5-8CS 不修改项目保存 schema。本阶段新增 Workbench 状态曲线的只读参与范围说明。
+
+### 126.1 Layer role metadata
+
+`AnalysisPanel` 内部 `STATE_CURVE_LAYER_OPTIONS` 新增 UI 派生字段：
+
+```js
+roleLabel
+participationLabel
+pointParticipationLabel
+```
+
+当前语义：
+
+```text
+applied     已应用    进曲线/日志    参与当前三值曲线和模拟日志
+candidate   候选诊断  不进结果       候选诊断，不参与当前结果
+sampled     采样诊断  不进结果       采样诊断，不参与当前结果
+placeholder 缺口占位  不进结果       缺口占位，不参与当前结果
+```
+
+### 126.2 新增 DOM / attribute
+
+状态曲线层级开关新增：
+
+```html
+data-testid="workbench-state-curve-layer-role"
+```
+
+状态曲线点新增：
+
+```html
+data-participation="已应用 | 候选诊断 | 采样诊断 | 缺口占位"
+data-testid="workbench-state-curve-point-participation"
+```
+
+### 126.3 验证
+
+当前测试覆盖：
+
+- 默认样本四个层级开关显示 `进曲线/日志`、`不进结果`。
+- 默认 applied HP 点显示 `参与当前三值曲线和模拟日志`。
+- 默认 candidate HP 点显示 `候选诊断，不参与当前结果`。
+- sampled fixture 显示 `采样诊断，不参与当前结果`。
+- placeholder fixture 显示 `缺口占位，不参与当前结果`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8CT 应把 runtime applied 三值点与 actionResultTimeline 动作级三值结果继续对齐，强化 delta 来源追踪。

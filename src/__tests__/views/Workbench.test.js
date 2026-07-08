@@ -363,6 +363,11 @@ describe('Workbench view', () => {
     ).toBe('15');
     expect(getStateCurveLayerToggleText('sampled')).toContain('采样 0');
     expect(getStateCurveLayerToggleText('placeholder')).toContain('占位 0');
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-state-curve-layer-role"]')
+        .map(role => role.text())
+    ).toEqual(['进曲线/日志', '不进结果', '不进结果', '不进结果']);
     const stateCurveTrackToggles = Object.fromEntries(
       wrapper
         .findAll('[data-testid="workbench-state-curve-track-toggle"]')
@@ -393,8 +398,16 @@ describe('Workbench view', () => {
     );
     expect(hpStateCurvePoints).toHaveLength(6);
     expect(hpStateCurvePoints[0].attributes('data-layer-key')).toBe('applied');
+    expect(hpStateCurvePoints[0].attributes('data-participation')).toBe(
+      '已应用'
+    );
     expect(hpStateCurvePoints[0].attributes('data-frame-label')).toBe('0s0f');
     expect(hpStateCurvePoints[0].text()).toContain('已用 Δ12,461 Σ12,461');
+    expect(
+      hpStateCurvePoints[0]
+        .find('[data-testid="workbench-state-curve-point-participation"]')
+        .text()
+    ).toBe('参与当前三值曲线和模拟日志');
     expect(hpStateCurvePoints[0].text()).toContain('普通攻击');
     const firstCandidatePoint = hpStateCurvePoints.find(
       point =>
@@ -402,7 +415,15 @@ describe('Workbench view', () => {
         point.attributes('data-frame-label') === '0s12f'
     );
     expect(firstCandidatePoint).toBeTruthy();
+    expect(firstCandidatePoint.attributes('data-participation')).toBe(
+      '候选诊断'
+    );
     expect(firstCandidatePoint.text()).toContain('候选 Δ2,500 Σ2,500');
+    expect(
+      firstCandidatePoint
+        .find('[data-testid="workbench-state-curve-point-participation"]')
+        .text()
+    ).toBe('候选诊断，不参与当前结果');
     expect(firstCandidatePoint.text()).toContain('hit1');
     expect(firstCandidatePoint.text()).toContain('109001306');
     expect(firstCandidatePoint.text()).toContain('109001081');
@@ -1531,9 +1552,11 @@ describe('Workbench view', () => {
         .text()
     ).toBe('0');
     expect(getLayerToggleText('sampled')).toContain('采样 1');
+    expect(getLayerToggleText('sampled')).toContain('不进结果');
     expect(findLayerToggle('sampled').attributes('data-point-count')).toBe('1');
     expect(findLayerToggle('sampled').attributes('data-track-count')).toBe('1');
     expect(getLayerToggleText('placeholder')).toContain('占位 1');
+    expect(getLayerToggleText('placeholder')).toContain('不进结果');
     expect(findLayerToggle('placeholder').attributes('data-point-count')).toBe(
       '1'
     );
@@ -1560,8 +1583,16 @@ describe('Workbench view', () => {
     );
     expect(sampledPoints).toHaveLength(1);
     expect(sampledPoints[0].attributes('data-layer-key')).toBe('sampled');
+    expect(sampledPoints[0].attributes('data-participation')).toBe(
+      '采样诊断'
+    );
     expect(sampledPoints[0].attributes('data-frame-label')).toBe('0s12f');
     expect(sampledPoints[0].text()).toContain('采样 Δ0.3375 Σ0.3375');
+    expect(
+      sampledPoints[0]
+        .find('[data-testid="workbench-state-curve-point-participation"]')
+        .text()
+    ).toBe('采样诊断，不参与当前结果');
     expect(sampledPoints[0].text()).toContain('recover-sp-applied');
     expect(sampledPoints[0].text()).toContain('element 109001081');
     expect(sampledPoints[0].text()).toContain('SP 10->10.3375');
@@ -1587,8 +1618,16 @@ describe('Workbench view', () => {
     expect(placeholderPoints[0].attributes('data-layer-key')).toBe(
       'placeholder'
     );
+    expect(placeholderPoints[0].attributes('data-participation')).toBe(
+      '缺口占位'
+    );
     expect(placeholderPoints[0].attributes('data-frame-label')).toBe('1s0f');
     expect(placeholderPoints[0].text()).toContain('占位 Δ0 Σ0');
+    expect(
+      placeholderPoints[0]
+        .find('[data-testid="workbench-state-curve-point-participation"]')
+        .text()
+    ).toBe('缺口占位，不参与当前结果');
     expect(placeholderPoints[0].text()).toContain('资源动作');
     expect(placeholderPoints[0].text()).toContain('action-result-placeholder');
   });

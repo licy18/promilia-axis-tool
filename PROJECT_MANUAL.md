@@ -5430,6 +5430,47 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 优先减少用户误解：candidate/sample 是诊断和候选，不等于已应用结果；runtime applied 才进入当前三值曲线和模拟日志。
 - 仍不追逐最终公式或逐帧动作细节。
 
+### 2026-07-08：阶段 5-8CS 三值层级参与范围说明
+
+本轮完成：
+
+- `AnalysisPanel` 的状态曲线层级开关新增参与范围短标签：
+  - 已用：`进曲线/日志`
+  - 候选：`不进结果`
+  - 采样：`不进结果`
+  - 占位：`不进结果`
+- 状态曲线点新增参与范围说明：
+  - applied 点显示 `参与当前三值曲线和模拟日志`
+  - candidate 点显示 `候选诊断，不参与当前结果`
+  - sampled 点显示 `采样诊断，不参与当前结果`
+  - placeholder 点显示 `缺口占位，不参与当前结果`
+- 状态点 DOM 新增 `data-participation` 和 `workbench-state-curve-point-participation`，便于测试和后续筛选/说明联动。
+- Workbench 测试覆盖默认 applied/candidate 点，以及 sampled/placeholder fixture 的参与范围说明。
+
+当前验证事实：
+
+- 默认样本 applied HP 点带 `data-participation="已应用"`，说明为“参与当前三值曲线和模拟日志”。
+- 默认样本首个 HP candidate 点带 `data-participation="候选诊断"`，说明为“候选诊断，不参与当前结果”。
+- sampled fixture 的 self-energy 点显示“采样诊断，不参与当前结果”。
+- placeholder fixture 的 HP 点显示“缺口占位，不参与当前结果”。
+
+当前边界：
+
+- 参与范围说明只解释当前 UI/运行时语义，不代表最终 AzPr 公式已经确认。
+- candidate/sample/placeholder 仍可显示在状态曲线诊断视图里，但不会进入 runtime sim log 或当前应用结果。
+- 说明标签尚未接入 tooltip 或帮助文档；目前以列表内短文案为主。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8CT 目标：把 runtime applied 三值点与 actionResultTimeline 动作级三值结果进一步对齐，让用户能从动作结果、状态曲线点、模拟日志之间看到同一条 delta 的对应关系。
+- 优先做可追踪的 ID/来源显示和轻量交叉高亮，不扩展最终公式或逐帧动作细节。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

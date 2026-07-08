@@ -414,7 +414,12 @@
               setStateCurveLayerVisible(layer.key, $event.target.checked)
             "
           />
-          <span>{{ layer.label }} {{ layer.pointCount }}</span>
+          <span>
+            <strong>{{ layer.label }} {{ layer.pointCount }}</strong>
+            <small data-testid="workbench-state-curve-layer-role">
+              {{ layer.participationLabel }}
+            </small>
+          </span>
         </label>
       </div>
       <div class="state-curve-track-controls">
@@ -475,6 +480,7 @@
             }"
             :data-track-key="point.trackKey"
             :data-layer-key="point.layerKey"
+            :data-participation="getStateCurveLayerRole(point.layerKey).roleLabel"
             :data-action-id="point.actionId"
             :data-frame-label="formatStateCurvePointFrame(point)"
             :data-state-point-id="point.statePointId"
@@ -489,6 +495,9 @@
               {{ formatStateCurvePointFrame(point) }}
             </span>
             <strong>{{ formatStateCurvePointValue(point) }}</strong>
+            <em data-testid="workbench-state-curve-point-participation">
+              {{ getStateCurveLayerRole(point.layerKey).pointParticipationLabel }}
+            </em>
             <small>{{ formatStateCurvePointSource(point) }}</small>
           </li>
         </ol>
@@ -575,18 +584,30 @@ const STATE_CURVE_LAYER_OPTIONS = [
   {
     key: 'applied',
     label: '已用',
+    roleLabel: '已应用',
+    participationLabel: '进曲线/日志',
+    pointParticipationLabel: '参与当前三值曲线和模拟日志',
   },
   {
     key: 'candidate',
     label: '候选',
+    roleLabel: '候选诊断',
+    participationLabel: '不进结果',
+    pointParticipationLabel: '候选诊断，不参与当前结果',
   },
   {
     key: 'sampled',
     label: '采样',
+    roleLabel: '采样诊断',
+    participationLabel: '不进结果',
+    pointParticipationLabel: '采样诊断，不参与当前结果',
   },
   {
     key: 'placeholder',
     label: '占位',
+    roleLabel: '缺口占位',
+    participationLabel: '不进结果',
+    pointParticipationLabel: '缺口占位，不参与当前结果',
   },
 ];
 
@@ -1386,8 +1407,19 @@ function formatStateCurveLayer(layer) {
 }
 
 function formatStateCurveLayerLabel(key) {
-  const option = STATE_CURVE_LAYER_OPTIONS.find(layer => layer.key === key);
-  return option?.label ?? key;
+  return getStateCurveLayerRole(key).label;
+}
+
+function getStateCurveLayerRole(key) {
+  return (
+    STATE_CURVE_LAYER_OPTIONS.find(layer => layer.key === key) ?? {
+      key,
+      label: key ?? '状态',
+      roleLabel: '未知层',
+      participationLabel: '待确认',
+      pointParticipationLabel: '参与范围待确认',
+    }
+  );
 }
 
 function formatStateCurveActiveTrackSummary() {
@@ -2319,7 +2351,25 @@ h2 {
 
 .state-curve-layer-toggle span,
 .state-curve-track-toggle span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
   overflow-wrap: anywhere;
+}
+
+.state-curve-layer-toggle strong,
+.state-curve-layer-toggle small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.state-curve-layer-toggle strong {
+  font-size: 11px;
+}
+
+.state-curve-layer-toggle small {
+  color: #8f9aa3;
+  font-size: 10px;
 }
 
 .state-curve-row {
@@ -2397,7 +2447,7 @@ h2 {
 }
 
 .state-curve-point-time {
-  grid-row: span 2;
+  grid-row: span 3;
   align-self: center;
   color: #79c7b9;
   font-size: 11px;
@@ -2409,6 +2459,14 @@ h2 {
   overflow-wrap: anywhere;
   color: #dff9f3;
   font-size: 11px;
+}
+
+.state-curve-point-row em {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #a6b7ff;
+  font-size: 10px;
+  font-style: normal;
 }
 
 .state-curve-point-row small {
