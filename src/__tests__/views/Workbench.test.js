@@ -2048,6 +2048,54 @@ describe('Workbench view', () => {
     ).toBe(firstActionStatePointId);
   });
 
+  it('clears stale runtime detail when inserting a no-result action in the runtime view', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-flow-open-runtime"]')
+      .trigger('click');
+    await nextTick();
+
+    const initialStatePointId = wrapper
+      .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+      .text();
+    expect(initialStatePointId).toBeTruthy();
+
+    await wrapper
+      .find('[data-testid="workbench-add-wait-action"]')
+      .trigger('click');
+    await nextTick();
+
+    const flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0002');
+    expect(flowPanel.attributes('data-runtime-overview-active')).toBe('true');
+    expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('1');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('-1');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe('');
+    expect(flowPanel.attributes('data-runtime-detail-state-point-id')).toBe('');
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-selected-detail"]').exists()
+    ).toBe(false);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-resource-chart-selection"]')
+        .exists()
+    ).toBe(false);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-action"][data-action-id="action-0002"]')
+        .classes()
+    ).toContain('selected');
+  });
+
   it('keeps the selected action when opening runtime results without a matching runtime point', async () => {
     const wrapper = mount(Workbench, {
       global: {

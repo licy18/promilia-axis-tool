@@ -14904,3 +14904,29 @@ selectActionFromRuntimeStatePoint()
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、49 条测试。
 - `npm run test -- --run`：通过，17 个测试文件、130 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 185. UI 主流程能力块：运行视角新增动作同步
+
+本阶段属于 UI 主流程。
+
+### 185.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 185.2 addInsertedAction 运行视角策略
+
+`Workbench.addInsertedAction()` 在写入新动作前记录当前是否处于 runtime 结果视角。新动作插入并成为当前动作后，如果原本处于 runtime 结果视角，则调用：
+
+```js
+syncRuntimeResultForSelectedAction(nextAction.id)
+```
+
+这样新增有 runtime 结果的动作会直接同步到其结果点；新增等待、备注等无 runtime 结果动作时，会进入 runtime overview，并清掉旧动作的三值详情与资源曲线选点。
+
+### 185.3 验证
+
+- Workbench 测试覆盖：进入默认动作运行结果后新增等待动作，当前动作切到等待动作，主流程进入 runtime overview，旧三值详情和旧资源曲线选点被清空。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "clears stale runtime detail"`：通过，1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、50 条测试。
+- `npm run test -- --run`：通过，17 个测试文件、131 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

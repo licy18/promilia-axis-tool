@@ -1567,6 +1567,7 @@ function createNextActionId() {
 }
 
 function addInsertedAction(actionPatch, options = {}) {
+  const shouldSyncRuntimeAfterInsert = shouldSyncRuntimeResultOnActionSelect();
   const baseInsertIndex = resolveInsertIndex();
   const candidateAction = createWorkbenchActionDraft({
     ...actionPatch,
@@ -1585,6 +1586,9 @@ function addInsertedAction(actionPatch, options = {}) {
     ...actionDrafts.value.slice(placement.insertIndex),
   ];
   selectedActionId.value = nextAction.id;
+  if (shouldSyncRuntimeAfterInsert) {
+    syncRuntimeResultForSelectedAction(nextAction.id);
+  }
   markDraftDirty();
   return {
     action: nextAction,
