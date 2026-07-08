@@ -3560,6 +3560,27 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(appliedStatePointId);
+    const logFocusedResourcePanel = wrapper.find('.resource-monitor-panel');
+    const logFocusedEventPanel = wrapper.find('.event-log-panel');
+    const logFocusedDetailPanel = wrapper.find(
+      '[data-testid="workbench-runtime-selected-detail"]'
+    );
+    for (const panel of [
+      logFocusedResourcePanel,
+      logFocusedEventPanel,
+      logFocusedDetailPanel,
+    ]) {
+      expect(panel.attributes()).toMatchObject({
+        'data-runtime-review-selection-status': 'selected',
+        'data-runtime-review-selected-action-id': 'action-0001',
+        'data-runtime-review-selected-state-point-id': appliedStatePointId,
+        'data-runtime-review-source': 'event-log-runtime-row',
+        'data-runtime-review-source-kind': 'log',
+      });
+    }
+    expect(
+      logFocusedDetailPanel.attributes('data-runtime-review-detail-synced')
+    ).toBe('true');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-detail"]')
@@ -4378,6 +4399,27 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(statePointId);
+    const curveFocusedResourcePanel = wrapper.find('.resource-monitor-panel');
+    const curveFocusedEventPanel = wrapper.find('.event-log-panel');
+    const curveFocusedDetailPanel = wrapper.find(
+      '[data-testid="workbench-runtime-selected-detail"]'
+    );
+    for (const panel of [
+      curveFocusedResourcePanel,
+      curveFocusedEventPanel,
+      curveFocusedDetailPanel,
+    ]) {
+      expect(panel.attributes()).toMatchObject({
+        'data-runtime-review-selection-status': 'selected',
+        'data-runtime-review-selected-action-id': 'action-0001',
+        'data-runtime-review-selected-state-point-id': statePointId,
+        'data-runtime-review-source': 'resource-runtime-curve',
+        'data-runtime-review-source-kind': 'curve',
+      });
+    }
+    expect(
+      curveFocusedDetailPanel.attributes('data-runtime-review-detail-synced')
+    ).toBe('true');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-detail"]')

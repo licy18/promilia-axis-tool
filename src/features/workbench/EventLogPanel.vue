@@ -3,6 +3,15 @@
     class="panel event-log-panel"
     :data-flow-phase="flowModel?.phase ?? ''"
     :data-flow-state-point-id="flowSelectedStatePointId"
+    :data-runtime-review-selection-status="flowSelection?.status ?? ''"
+    :data-runtime-review-selected-action-id="
+      flowSelection?.selectedActionId ?? ''
+    "
+    :data-runtime-review-selected-state-point-id="
+      flowSelection?.selectedStatePointId ?? ''
+    "
+    :data-runtime-review-source="flowSelection?.source ?? ''"
+    :data-runtime-review-source-kind="flowSelection?.sourceKind ?? ''"
   >
     <div class="panel-title">
       <Tickets class="panel-icon" />

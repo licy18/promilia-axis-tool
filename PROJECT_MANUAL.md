@@ -8713,6 +8713,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：基于 `runtimeReviewSelection` 做曲线、日志、详情三处的选择同步与定位一致性收敛，推进 Endaxis 式结果定位体验。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Selection Consumers
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `ResourceMonitorPanel`、`EventLogPanel`、`RuntimeSelectedDetailPanel` 三处运行结果面板统一消费 `runtimeReviewSelection`，并在面板根状态上暴露同一份 review selection。
+- 详情面板新增 selection/detail 同步判断，确保当前详情点与模型选择点一致，后续可作为结果定位联动的共同依据。
+- Workbench 页面测试覆盖日志行选择和资源曲线点选择两条真实路径，确认曲线、日志、详情三处面板对同一个 state point/source 保持一致。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- 日志行选择后，资源面板、日志面板、详情面板同时指向 `event-log-runtime-row` 来源和同一个运行点。
+- 资源曲线点选择后，三处面板同时指向 `resource-runtime-curve` 来源和同一个运行点。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、55 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、191 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：基于统一 review selection 改善运行结果定位后的主流程操作密度，优先推进“选中结果 -> 查看详情 -> 定位动作 -> 返回刷新结果”的连续操作闭环。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

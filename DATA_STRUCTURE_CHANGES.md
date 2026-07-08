@@ -18716,3 +18716,58 @@ Workbench 主工作区和运行结果栈新增 `data-runtime-review-*` 诊断属
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、60 条测试。
 - `npm run test -- --run`：通过，33 个测试文件、191 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 239. UI 主流程能力块：Runtime Review Selection Consumers
+
+### 239.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+本阶段继续消费既有运行时模型：
+
+```js
+flowModel.runtimeReviewSelection
+```
+
+新增消费组件：
+
+```text
+RuntimeSelectedDetailPanel
+```
+
+补齐同源消费组件：
+
+```text
+ResourceMonitorPanel
+EventLogPanel
+RuntimeSelectedDetailPanel
+```
+
+三处面板根节点现在都可以从同一 `runtimeReviewSelection` 暴露以下运行时状态：
+
+```text
+data-runtime-review-selection-status
+data-runtime-review-selected-action-id
+data-runtime-review-selected-state-point-id
+data-runtime-review-source
+data-runtime-review-source-kind
+```
+
+详情面板额外暴露：
+
+```text
+data-runtime-review-detail-synced
+```
+
+用于表示当前详情 `detail.statePointId` 是否与 `runtimeReviewSelection.selectedStatePointId` 同步。
+
+### 239.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程的运行时消费关系，不新增持久字段，不需要数据迁移。
+
+### 239.3 验证
+
+- 更新 `src/__tests__/views/Workbench.test.js`，覆盖日志行选择和资源曲线点选择两条路径下，资源面板、日志面板、详情面板消费同一个 `runtimeReviewSelection`。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、55 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、191 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

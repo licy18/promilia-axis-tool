@@ -4,6 +4,23 @@
     class="panel runtime-selected-detail-panel"
     :data-flow-phase="flowModel?.phase ?? ''"
     :data-flow-edit-result-state-point-id="flowEditResult?.statePointId ?? ''"
+    :data-flow-state-point-id="runtimeReviewSelectedStatePointId"
+    :data-runtime-review-selection-status="
+      runtimeReviewSelection?.status ?? ''
+    "
+    :data-runtime-review-selected-action-id="
+      runtimeReviewSelection?.selectedActionId ?? ''
+    "
+    :data-runtime-review-selected-state-point-id="
+      runtimeReviewSelection?.selectedStatePointId ?? ''
+    "
+    :data-runtime-review-source="runtimeReviewSelection?.source ?? ''"
+    :data-runtime-review-source-kind="
+      runtimeReviewSelection?.sourceKind ?? ''
+    "
+    :data-runtime-review-detail-synced="
+      runtimeReviewDetailSynced ? 'true' : 'false'
+    "
     data-testid="workbench-runtime-selected-detail"
   >
     <div class="panel-title">
@@ -240,6 +257,22 @@ const runtimeDetailOriginStatePointId = computed(() =>
 );
 const flowEditResult = computed(
   () => props.flowModel?.editResult ?? props.actionEditResultContext
+);
+const runtimeReviewSelection = computed(
+  () => props.flowModel?.runtimeReviewSelection ?? null
+);
+const runtimeReviewSelectedStatePointId = computed(
+  () =>
+    runtimeReviewSelection.value?.selectedStatePointId ??
+    props.detail?.statePointId ??
+    ''
+);
+const runtimeReviewDetailSynced = computed(
+  () =>
+    !props.detail?.statePointId ||
+    !runtimeReviewSelection.value?.selectedStatePointId ||
+    props.detail.statePointId ===
+      runtimeReviewSelection.value.selectedStatePointId
 );
 const runtimeDetailActionEditTarget = computed(() =>
   getRuntimeDetailActionEditTarget(props.flowModel, props.detail)
