@@ -1489,6 +1489,8 @@ describe('Workbench view', () => {
       '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
     );
     expect(actionResultRow.attributes('data-current-action')).toBe('false');
+    expect(actionResultRow.attributes('data-draft-status')).toBe('dirty');
+    expect(actionResultRow.attributes('data-draft-dirty')).toBe('true');
 
     await actionResultRow.trigger('click');
     await nextTick();
@@ -1502,13 +1504,23 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-action-result-current-action"]')
         .text()
     ).toBe('正在编辑');
+    expect(
+      actionResultRow
+        .find('[data-testid="workbench-action-result-draft-status"]')
+        .text()
+    ).toBe('草稿已变更');
     const actionResultDetailPanel = wrapper.find(
       '[data-testid="workbench-action-result-detail-panel"]'
     );
     expect(actionResultDetailPanel.attributes('data-current-action')).toBe(
       'true'
     );
+    expect(actionResultDetailPanel.attributes('data-draft-status')).toBe(
+      'dirty'
+    );
+    expect(actionResultDetailPanel.attributes('data-draft-dirty')).toBe('true');
     expect(actionResultDetailPanel.text()).toContain('正在编辑');
+    expect(actionResultDetailPanel.text()).toContain('草稿已变更');
     expect(
       wrapper
         .find(
@@ -1529,6 +1541,25 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
     ).toBe('0');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    await nextTick();
+
+    actionResultRow = wrapper.find(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    );
+    expect(actionResultRow.attributes('data-draft-status')).toBe('saved');
+    expect(actionResultRow.attributes('data-draft-dirty')).toBe('false');
+    expect(
+      actionResultRow
+        .find('[data-testid="workbench-action-result-draft-status"]')
+        .text()
+    ).toBe('草稿已保存');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-action-result-detail-panel"]')
+        .attributes('data-draft-status')
+    ).toBe('saved');
   });
 
   it('links runtime sim log selection to the focused state curve point', async () => {

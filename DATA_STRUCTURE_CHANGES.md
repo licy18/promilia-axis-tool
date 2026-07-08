@@ -11442,3 +11442,91 @@ data-current-action
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DB 应继续改善动作编辑后的结果反馈，优先在结果详情或动作结果行展示草稿变更状态。
+
+## 135. 阶段 5-8DB：draft status on result rows
+
+阶段 5-8DB 不修改项目保存 schema，也不修改 simulation 输出结构。本阶段只把 Workbench 既有 `draftStatus` 作为前端派生状态传入 `AnalysisPanel`，用于结果区显示草稿状态。
+
+### 135.1 AnalysisPanel 新增 prop
+
+新增：
+
+```js
+draftStatus: String
+```
+
+由 `Workbench` 传入：
+
+```vue
+:draft-status="draftStatus"
+```
+
+该字段来自既有工作台状态，不新增保存字段。
+
+### 135.2 草稿状态归一化
+
+新增派生：
+
+```js
+draftResultStatus
+```
+
+当前映射：
+
+```text
+有未保存改动 -> dirty / 草稿已变更 / dirty=true
+已保存草稿 -> saved / 草稿已保存 / dirty=false
+已恢复草稿 -> restored / 草稿已恢复 / dirty=false
+已重置草稿 -> reset / 草稿已重置 / dirty=false
+草稿不可用 -> unavailable / 草稿不可用 / dirty=false
+其他 -> unsaved / 未保存草稿 / dirty=true
+```
+
+### 135.3 动作结果行新增 DOM 状态
+
+`workbench-action-result-source-row` 新增：
+
+```html
+data-draft-status
+data-draft-dirty
+```
+
+当前编辑动作结果行额外显示：
+
+```html
+data-testid="workbench-action-result-draft-status"
+```
+
+文案来自 `draftResultStatus.resultLabel`。
+
+### 135.4 结果详情区新增 DOM 状态
+
+`workbench-action-result-detail-panel` 新增：
+
+```html
+data-draft-status
+data-draft-dirty
+```
+
+当详情对应当前编辑动作时，标题摘要格式为：
+
+```text
+正在编辑 · {草稿状态} · Delta ...
+```
+
+### 135.5 验证
+
+当前测试覆盖：
+
+- 新建等待动作后，`action-0001` 结果行 `data-draft-status="dirty"`、`data-draft-dirty="true"`。
+- 点击 `action-0001` 动作结果后，当前编辑结果行显示 `草稿已变更`。
+- 结果详情区同步 `data-draft-status="dirty"` 并包含 `草稿已变更`。
+- 保存草稿后，同一结果行更新为 `data-draft-status="saved"`、`data-draft-dirty="false"`，标签显示 `草稿已保存`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DC 应继续改善动作编辑后的结果反馈，优先让动作字段变更后结果区明确提示“结果已随当前草稿刷新”。

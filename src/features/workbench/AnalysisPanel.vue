@@ -153,6 +153,8 @@
         }"
         :data-action-id="entry.actionId"
         :data-current-action="isActionResultCurrentAction(entry)"
+        :data-draft-dirty="draftResultStatus.dirty"
+        :data-draft-status="draftResultStatus.key"
         :data-has-runtime-trace="Boolean(getActionResultRuntimeTrace(entry))"
         :data-runtime-state-point-id="
           getActionResultRuntimeTrace(entry)?.firstStatePointId ?? ''
@@ -173,6 +175,13 @@
             data-testid="workbench-action-result-current-action"
           >
             正在编辑
+          </small>
+          <small
+            v-if="isActionResultCurrentAction(entry)"
+            class="action-result-draft-status"
+            data-testid="workbench-action-result-draft-status"
+          >
+            {{ draftResultStatus.resultLabel }}
           </small>
           <small>{{ formatActionResultSource(entry) }}</small>
           <small
@@ -242,6 +251,8 @@
           :data-current-action="
             isRuntimeResultCurrentAction(selectedRuntimeResultDetail)
           "
+          :data-draft-dirty="draftResultStatus.dirty"
+          :data-draft-status="draftResultStatus.key"
           :data-state-point-id="selectedRuntimeResultDetail.statePointId"
           :data-track-key="selectedRuntimeResultDetail.trackKey"
           data-testid="workbench-action-result-detail-panel"
@@ -829,6 +840,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  draftStatus: {
+    type: String,
+    default: '',
+  },
   candidateValueSeries: {
     type: Object,
     default: () => ({
@@ -1095,6 +1110,9 @@ const selectedActionContribution = computed(() => {
 });
 const selectedRuntimeResultDetail = computed(
   () => props.runtimeSelectedDetail ?? null
+);
+const draftResultStatus = computed(() =>
+  createDraftResultStatus(props.draftStatus)
 );
 const activeStateCurveLayerKeys = computed(() =>
   STATE_CURVE_LAYER_OPTIONS.filter(
@@ -1898,8 +1916,51 @@ function formatRuntimeResultMeta(detail) {
   const sourceText =
     source && source !== '-' ? `Delta ${source}` : 'Delta 待定位';
   return isRuntimeResultCurrentAction(detail)
-    ? `正在编辑 · ${sourceText}`
+    ? `正在编辑 · ${draftResultStatus.value.resultLabel} · ${sourceText}`
     : sourceText;
+}
+
+function createDraftResultStatus(status) {
+  if (status === '有未保存改动') {
+    return {
+      key: 'dirty',
+      dirty: true,
+      resultLabel: '草稿已变更',
+    };
+  }
+  if (status === '已保存草稿') {
+    return {
+      key: 'saved',
+      dirty: false,
+      resultLabel: '草稿已保存',
+    };
+  }
+  if (status === '已恢复草稿') {
+    return {
+      key: 'restored',
+      dirty: false,
+      resultLabel: '草稿已恢复',
+    };
+  }
+  if (status === '已重置草稿') {
+    return {
+      key: 'reset',
+      dirty: false,
+      resultLabel: '草稿已重置',
+    };
+  }
+  if (status === '草稿不可用') {
+    return {
+      key: 'unavailable',
+      dirty: false,
+      resultLabel: '草稿不可用',
+    };
+  }
+  return {
+    key: 'unsaved',
+    dirty: true,
+    resultLabel: '未保存草稿',
+  };
 }
 
 function isRuntimeResultCurrentAction(detail) {
@@ -3080,6 +3141,15 @@ h2 {
   border-radius: 4px;
   background: rgba(242, 179, 102, 0.14);
   color: #f2b366;
+  font-weight: 700;
+}
+
+.action-result-draft-status {
+  width: max-content;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(166, 183, 255, 0.12);
+  color: #d9e0ff;
   font-weight: 700;
 }
 

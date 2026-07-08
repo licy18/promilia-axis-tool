@@ -132,6 +132,7 @@
           :runtime-projection="simulationResult.threeValueRuntimeProjection"
           :runtime-selected-detail="runtimeSelectedDetail"
           :candidate-value-series="simulationResult.candidateValueSeries"
+          :draft-status="draftStatus"
           :three-value-curve-framework="
             simulationResult.threeValueCurveFramework
           "
