@@ -1,5 +1,9 @@
 <template>
-  <section class="panel analysis-panel">
+  <section
+    class="panel analysis-panel"
+    :data-flow-phase="flowPhase"
+    :data-flow-state-point-id="flowSelectedStatePointId"
+  >
     <div class="panel-title">
       <TrendCharts class="panel-icon" />
       <h2>分析</h2>
@@ -384,6 +388,8 @@
         v-if="selectedActionContribution"
         class="action-contribution-panel"
         :data-action-id="selectedActionContribution.actionId"
+        :data-flow-phase="flowPhase"
+        :data-flow-state-point-id="flowSelectedStatePointId"
         data-testid="workbench-action-contribution-panel"
       >
         <div class="action-contribution-heading">
@@ -644,7 +650,7 @@
             class="state-curve-focus-button"
             :class="{ active: effectiveStateCurveFocusMode === 'selected' }"
             type="button"
-            :disabled="!selectedStateCurvePointId"
+            :disabled="!flowSelectedStatePointId"
             data-testid="workbench-state-curve-focus-selected"
             @click="setStateCurveFocusMode('selected')"
           >
@@ -691,7 +697,7 @@
             :key="point.statePointId"
             class="state-curve-frame-group-button"
             :class="{
-              active: point.statePointId === selectedStateCurvePointId,
+              active: point.statePointId === flowSelectedStatePointId,
             }"
             type="button"
             :data-state-point-id="point.statePointId"
@@ -795,7 +801,7 @@
             :key="point.rowKey"
             class="state-curve-point-row"
             :class="{
-              selected: point.statePointId === selectedStateCurvePointId,
+              selected: point.statePointId === flowSelectedStatePointId,
             }"
             :data-track-key="point.trackKey"
             :data-layer-key="point.layerKey"
@@ -1055,6 +1061,10 @@ const props = defineProps({
       overlaps: [],
     }),
   },
+  flowModel: {
+    type: Object,
+    default: null,
+  },
 });
 
 const emit = defineEmits([
@@ -1229,17 +1239,29 @@ const runtimeTraceByActionId = computed(() => {
     ])
   );
 });
+const flowPhase = computed(() => props.flowModel?.phase ?? '');
+const flowSelectedStatePointId = computed(
+  () =>
+    props.flowModel?.selectedStateCurvePointId ??
+    props.selectedStateCurvePointId
+);
+const flowRuntimeSelectedDetail = computed(
+  () => props.flowModel?.runtimeDetail?.source ?? props.runtimeSelectedDetail
+);
+const flowEditResult = computed(
+  () => props.flowModel?.editResult ?? props.actionEditResultContext
+);
 const selectedActionContribution = computed(() => {
-  if (!props.selectedStateCurvePointId) {
+  if (!flowSelectedStatePointId.value) {
     return null;
   }
   const trace = [...runtimeTraceByActionId.value.values()].find(item =>
-    item.statePointIds.includes(props.selectedStateCurvePointId)
+    item.statePointIds.includes(flowSelectedStatePointId.value)
   );
   return trace ? createSelectedActionContribution(trace) : null;
 });
 const selectedRuntimeResultDetail = computed(
-  () => props.runtimeSelectedDetail ?? null
+  () => flowRuntimeSelectedDetail.value ?? null
 );
 const draftResultStatus = computed(() =>
   createDraftResultStatus(props.draftStatus)
@@ -1260,7 +1282,7 @@ const effectiveStateCurveTrackFilters = computed(
   () => props.stateCurveTrackFilters ?? {}
 );
 const effectiveStateCurveFocusMode = computed(() =>
-  props.stateCurveFocusMode === 'selected' && props.selectedStateCurvePointId
+  props.stateCurveFocusMode === 'selected' && flowSelectedStatePointId.value
     ? 'selected'
     : 'all'
 );
@@ -1302,7 +1324,7 @@ const stateCurveNavigationPointRows = computed(() =>
 );
 const selectedStateCurveNavigationIndex = computed(() =>
   stateCurveNavigationPointRows.value.findIndex(
-    point => point.statePointId === props.selectedStateCurvePointId
+    point => point.statePointId === flowSelectedStatePointId.value
   )
 );
 const selectedStateCurveNavigationPoint = computed(() =>
@@ -1899,8 +1921,8 @@ function selectActionResultRuntimePoint(entry) {
 function isActionResultRuntimeSelected(entry) {
   const trace = getActionResultRuntimeTrace(entry);
   return (
-    Boolean(props.selectedStateCurvePointId) &&
-    Boolean(trace?.statePointIds.includes(props.selectedStateCurvePointId))
+    Boolean(flowSelectedStatePointId.value) &&
+    Boolean(trace?.statePointIds.includes(flowSelectedStatePointId.value))
   );
 }
 
@@ -1910,7 +1932,7 @@ function getActionResultLocationStatus(entry) {
 
 function getActionResultSelectedStatePointId(entry) {
   return isActionResultRuntimeSelected(entry)
-    ? props.selectedStateCurvePointId
+    ? flowSelectedStatePointId.value
     : '';
 }
 
@@ -1971,8 +1993,8 @@ function createActionEditFeedback(source) {
   );
   const resultFocused = Boolean(
     runtimeStatePointId &&
-    props.selectedStateCurvePointId &&
-    props.selectedStateCurvePointId === runtimeStatePointId
+    flowSelectedStatePointId.value &&
+    flowSelectedStatePointId.value === runtimeStatePointId
   );
   const resultFocusStatus = runtimeStatePointId
     ? resultFocused
@@ -2016,11 +2038,12 @@ function createActionEditFeedback(source) {
 }
 
 function getActionEditFeedbackRuntimeStatePointId(source, trace) {
+  const editResult = flowEditResult.value;
   if (
-    props.actionEditResultContext?.actionId === source.actionId &&
-    props.actionEditResultContext?.runtimeStatePointId
+    editResult?.actionId === source.actionId &&
+    (editResult.runtimeStatePointId || editResult.statePointId)
   ) {
-    return props.actionEditResultContext.runtimeStatePointId;
+    return editResult.runtimeStatePointId || editResult.statePointId;
   }
   return trace?.firstStatePointId ?? '';
 }
@@ -2034,7 +2057,7 @@ function createActionEditFeedbackLocationChain({
   const resultSynced = resultFocusStatus === 'focused';
   const detailSynced = Boolean(
     runtimeStatePointId &&
-    props.runtimeSelectedDetail?.statePointId === runtimeStatePointId
+    flowRuntimeSelectedDetail.value?.statePointId === runtimeStatePointId
   );
   const items = [
     actionSynced ? '动作已选中' : '动作待选中',
@@ -2180,7 +2203,7 @@ function createActionContributionRow(trace, track) {
     matchingRows.map(item => item.row?.sourceDeltaId)
   );
   const active = matchingRows.some(
-    item => item.statePointId === props.selectedStateCurvePointId
+    item => item.statePointId === flowSelectedStatePointId.value
   );
   return {
     ...track,
@@ -2197,7 +2220,7 @@ function createActionContributionRow(trace, track) {
 function createActionContributionDetail(row) {
   const item =
     row.detailItems.find(
-      detail => detail.statePointId === props.selectedStateCurvePointId
+      detail => detail.statePointId === flowSelectedStatePointId.value
     ) ?? row.detailItems[0];
   if (!item) {
     return null;
@@ -2529,7 +2552,7 @@ function setStateCurveTrackVisible(trackKey, visible) {
 }
 
 function setStateCurveFocusMode(mode) {
-  if (mode === 'selected' && !props.selectedStateCurvePointId) {
+  if (mode === 'selected' && !flowSelectedStatePointId.value) {
     return;
   }
   emit(
@@ -2578,7 +2601,7 @@ function formatStateCurveTrackShortLabel(trackKey) {
 function isStateCurvePointInFocus(point) {
   return (
     !isStateCurveSelectedFocusActive.value ||
-    point.statePointId === props.selectedStateCurvePointId
+    point.statePointId === flowSelectedStatePointId.value
   );
 }
 

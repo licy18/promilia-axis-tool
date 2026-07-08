@@ -15568,3 +15568,73 @@ RuntimeSelectedDetailPanel
 - `npm run test -- --run`：通过，19 个测试文件、141 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 197. UI 主流程能力块：AnalysisPanel 接入 Flow Model
+
+本阶段属于 UI 主流程。
+
+### 197.1 结构变化
+
+`AnalysisPanel` 新增可选 prop：
+
+```js
+{
+  flowModel
+}
+```
+
+内部新增派生入口：
+
+```js
+{
+  flowPhase,
+  flowSelectedStatePointId,
+  flowRuntimeSelectedDetail,
+  flowEditResult
+}
+```
+
+这些入口优先读取 `workbenchFlowModel`，再回退到旧 props：
+
+```js
+{
+  selectedStateCurvePointId,
+  runtimeSelectedDetail,
+  actionEditResultContext
+}
+```
+
+`Workbench.vue` 现在把 `workbenchFlowModel` 传入 `AnalysisPanel`。
+
+`AnalysisPanel` 的以下派生逻辑改为 flow model 优先：
+
+```js
+selectedActionContribution
+selectedRuntimeResultDetail
+effectiveStateCurveFocusMode
+selectedStateCurveNavigationIndex
+isActionResultRuntimeSelected()
+getActionResultSelectedStatePointId()
+createActionEditFeedback()
+getActionEditFeedbackRuntimeStatePointId()
+createActionEditFeedbackLocationChain()
+createActionContributionRow()
+createActionContributionDetail()
+isStateCurvePointInFocus()
+```
+
+### 197.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 的派生主流程状态：分析面板的结果定位、贡献拆分、编辑反馈定位链和状态曲线选中判断从同一个 flow model 获取当前 phase / state point / edit result 语义；模拟结果、三值计算、项目文件和 runtime projection 结构不变。
+
+### 197.3 验证
+
+- Workbench 视图测试覆盖：动作贡献拆分面板与 AnalysisPanel 根节点跟随 `runtime-result` phase 和同一个 state point。
+- Workbench 视图测试覆盖：打开运行结果、编辑结果动作、返回刷新结果时，AnalysisPanel 与主流程条、资源曲线、模拟日志、三值详情处于同一 flow phase / state point。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "action contribution|drives the edit-runtime-return loop"`：通过，1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、53 条测试。
+- `npm run test -- --run`：通过，19 个测试文件、141 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。

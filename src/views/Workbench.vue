@@ -165,6 +165,7 @@
           :draft-status="draftStatus"
           :action-edit-source="actionEditSource"
           :action-edit-result-context="actionEditResultContext"
+          :flow-model="workbenchFlowModel"
           :three-value-curve-framework="
             simulationResult.threeValueCurveFramework
           "

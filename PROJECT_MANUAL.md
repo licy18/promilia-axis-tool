@@ -7589,6 +7589,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 flow model 的 phase / state point 语义继续用于 AnalysisPanel 的结果定位与贡献拆分，减少分析面板对 `actionEditResultContext` 的局部推断。
 
+### 2026-07-09：UI 主流程能力块 - AnalysisPanel 接入 Flow Model
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `AnalysisPanel` 开始接收 `workbenchFlowModel`，结果定位、动作贡献拆分、编辑反馈定位链和状态曲线选中判断优先从 flow model 获取 selected state point、runtime detail 和 edit result。
+- 动作结果列表、贡献拆分面板、状态曲线焦点与主流程条、资源曲线、模拟日志、三值详情共享同一 runtime state point 语义。
+- 现有可见文案、三值数值、曲线、日志和贡献拆分内容保持不变。
+
+当前验证事实：
+
+- 选中应用后的运行结果时，AnalysisPanel 根节点和动作贡献拆分面板都处于 `runtime-result` phase，并指向同一个 runtime state point。
+- 打开运行结果、编辑结果动作、返回刷新结果时，AnalysisPanel 与主流程条、资源曲线、模拟日志、三值详情保持同一 flow phase / state point。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "action contribution|drives the edit-runtime-return loop"`：通过，1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、53 条测试。
+- `npm run test -- --run`：通过，19 个测试文件、141 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 flow model 从状态锚点推进到更完整的主流程控制策略，例如分析面板的结果定位入口、贡献拆分入口和返回编辑入口都通过统一 flow action 语义描述。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

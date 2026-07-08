@@ -1363,6 +1363,14 @@ describe('Workbench view', () => {
     expect(actionContributionPanel.attributes('data-action-id')).toBe(
       'action-0001'
     );
+    expect(actionContributionPanel.attributes()).toMatchObject({
+      'data-flow-phase': 'runtime-result',
+      'data-flow-state-point-id': appliedStatePointId,
+    });
+    expect(wrapper.find('.analysis-panel').attributes()).toMatchObject({
+      'data-flow-phase': 'runtime-result',
+      'data-flow-state-point-id': appliedStatePointId,
+    });
     expect(actionContributionPanel.text()).toContain('动作贡献拆分');
     expect(actionContributionPanel.text()).toContain('普通攻击');
     const actionContributionRows = wrapper.findAll(
@@ -1568,6 +1576,10 @@ describe('Workbench view', () => {
     expect(
       focusedFlowPanel.attributes('data-runtime-detail-state-point-id')
     ).toBe(selectedRuntimePointId);
+    expect(wrapper.find('.analysis-panel').attributes()).toMatchObject({
+      'data-flow-phase': 'runtime-result',
+      'data-flow-state-point-id': selectedRuntimePointId,
+    });
     expect(wrapper.find('.resource-monitor-panel').attributes()).toMatchObject(
       {
         'data-flow-phase': 'runtime-result',
@@ -1636,6 +1648,9 @@ describe('Workbench view', () => {
     expect(editResultFlowPanel.attributes('data-flow-phase')).toBe(
       'edit-result-ready'
     );
+    expect(wrapper.find('.analysis-panel').attributes()).toMatchObject({
+      'data-flow-phase': 'edit-result-ready',
+    });
     expect(wrapper.find('.resource-monitor-panel').attributes()).toMatchObject(
       {
         'data-flow-phase': 'edit-result-ready',
@@ -1671,6 +1686,10 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-flow-panel"]')
         .attributes('data-flow-phase')
     ).toBe('edit-result-review');
+    expect(wrapper.find('.analysis-panel').attributes()).toMatchObject({
+      'data-flow-phase': 'edit-result-review',
+      'data-flow-state-point-id': refreshedStatePointId,
+    });
     expect(wrapper.find('.resource-monitor-panel').attributes()).toMatchObject(
       {
         'data-flow-phase': 'edit-result-review',
