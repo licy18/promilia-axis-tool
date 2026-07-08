@@ -13612,3 +13612,94 @@ src/__tests__/simulation/threeValueRuntimeProjection.test.js
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一步应进入 UI 主流程能力块，围绕 Endaxis 式完整流程推进：排轴动作编辑 -> 运行模拟 -> 资源曲线监控 -> 日志/详情查看 -> 回到动作修改。
+
+## 163. UI 主流程能力块：Workbench 主流程控制条
+
+本阶段属于 UI 主流程。
+
+### 163.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 163.2 新增组件
+
+新增：
+
+```text
+src/features/workbench/WorkbenchFlowPanel.vue
+```
+
+该组件读取：
+
+```text
+selectedAction
+threeValueRuntimeProjection
+runtimeSelectedDetail
+actionEditResultContext
+```
+
+该组件发出：
+
+```text
+open-runtime-results
+focus-runtime-action
+return-runtime-result
+```
+
+### 163.3 Workbench 接线
+
+`Workbench.vue` 在 `ScenarioHeader` 和 `workbench-grid` 之间接入：
+
+```vue
+<WorkbenchFlowPanel
+  :selected-action="selectedAction"
+  :runtime-projection="simulationResult.threeValueRuntimeProjection"
+  :runtime-selected-detail="runtimeSelectedDetail"
+  :action-edit-result-context="actionEditResultContext"
+/>
+```
+
+事件复用既有主路径函数：
+
+```text
+open-runtime-results -> focusThreeValueCalculatorScope('runtime')
+focus-runtime-action -> focusRuntimeAction()
+return-runtime-result -> returnRuntimeResultFromProperties()
+```
+
+### 163.4 DOM 状态
+
+新增主流程面板：
+
+```html
+data-testid="workbench-flow-panel"
+data-action-id
+data-runtime-sim-log-count
+data-runtime-detail-action-id
+data-runtime-detail-state-point-id
+data-edit-result-state-point-id
+```
+
+新增主流程按钮：
+
+```html
+data-testid="workbench-flow-open-runtime"
+data-testid="workbench-flow-edit-runtime-action"
+data-testid="workbench-flow-return-edit-result"
+```
+
+### 163.5 验证
+
+Workbench 测试新增覆盖：
+
+- 初始状态下主流程条显示当前动作和 runtime 日志数量。
+- 初始状态下 `查看运行结果` 可用，`编辑结果动作` 与 `回到刷新结果` 在缺少对应上下文时禁用。
+- 点击 `查看运行结果` 后选中 runtime state point。
+- 点击 `编辑结果动作` 后，属性面板动作编辑焦点来源为 `runtime-focus`。
+- 修改动作后，主流程条拿到刷新后的 runtime state point。
+- 点击 `回到刷新结果` 后，runtime detail 和动作结果行同步到刷新后的 state point。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、41 条测试。
+- `npm run test -- --run`：通过，15 个测试文件、117 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步 UI 主流程能力块应继续围绕完整工作区节奏推进，不再拆成单个状态标签或提示文案阶段。

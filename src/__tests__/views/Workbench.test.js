@@ -52,6 +52,37 @@ describe('Workbench view', () => {
         )
         .text()
     ).toBe('运行投影 HP 12,461 · 韧性 0 · 能量 0 · 日志 1');
+    const flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.exists()).toBe(true);
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0001');
+    expect(flowPanel.attributes('data-runtime-sim-log-count')).toBe('1');
+    expect(
+      flowPanel.find('[data-testid="workbench-flow-selected-action"]').text()
+    ).toBe('普通攻击');
+    expect(
+      flowPanel.find('[data-testid="workbench-flow-runtime-count"]').text()
+    ).toBe('1 日志');
+    expect(
+      flowPanel.find('[data-testid="workbench-flow-runtime-detail"]').text()
+    ).toBe('未选中');
+    expect(
+      flowPanel.find('[data-testid="workbench-flow-edit-result"]').text()
+    ).toBe('无刷新结果');
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-open-runtime"]')
+        .attributes('disabled')
+    ).toBeUndefined();
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-edit-runtime-action"]')
+        .attributes('disabled')
+    ).toBeDefined();
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-return-edit-result"]')
+        .attributes('disabled')
+    ).toBeDefined();
     expect(
       wrapper
         .findAll(
@@ -1463,6 +1494,118 @@ describe('Workbench view', () => {
     );
     expect(text).toContain('伤害 12,461 · 韧性 0 · 能量 0');
     expect(text).toContain('low');
+  });
+
+  it('drives the edit-runtime-return loop from the main flow panel', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    const openRuntimeButton = wrapper.find(
+      '[data-testid="workbench-flow-open-runtime"]'
+    );
+    expect(openRuntimeButton.attributes('disabled')).toBeUndefined();
+
+    await openRuntimeButton.trigger('click');
+    await nextTick();
+
+    const selectedRuntimePointId = wrapper
+      .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+      .text();
+    const focusedFlowPanel = wrapper.find(
+      '[data-testid="workbench-flow-panel"]'
+    );
+    expect(focusedFlowPanel.attributes('data-runtime-detail-action-id')).toBe(
+      'action-0001'
+    );
+    expect(
+      focusedFlowPanel.attributes('data-runtime-detail-state-point-id')
+    ).toBe(selectedRuntimePointId);
+    expect(
+      focusedFlowPanel
+        .find('[data-testid="workbench-flow-runtime-detail"]')
+        .text()
+    ).toContain('敌人HP伤害');
+
+    const editRuntimeActionButton = focusedFlowPanel.find(
+      '[data-testid="workbench-flow-edit-runtime-action"]'
+    );
+    expect(editRuntimeActionButton.attributes('disabled')).toBeUndefined();
+    expect(editRuntimeActionButton.attributes('data-action-id')).toBe(
+      'action-0001'
+    );
+    expect(editRuntimeActionButton.attributes('data-state-point-id')).toBe(
+      selectedRuntimePointId
+    );
+
+    await editRuntimeActionButton.trigger('click');
+    await nextTick();
+
+    const focusedTimelineAction = wrapper.find(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+    );
+    expect(focusedTimelineAction.classes()).toContain('selected');
+    expect(focusedTimelineAction.attributes('data-edit-focused')).toBe('true');
+    expect(focusedTimelineAction.attributes('data-edit-focus-label')).toBe(
+      '结果定位'
+    );
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+        )
+        .attributes('data-edit-focus-origin')
+    ).toBe('runtime-focus');
+
+    await wrapper.find('[data-testid="workbench-start-input"]').setValue('100');
+    await nextTick();
+
+    const refreshedFeedback = wrapper.find(
+      '[data-testid="workbench-action-edit-feedback"]'
+    );
+    const refreshedStatePointId = refreshedFeedback.attributes(
+      'data-runtime-state-point-id'
+    );
+    expect(refreshedStatePointId).toBeTruthy();
+    expect(refreshedStatePointId).not.toBe(selectedRuntimePointId);
+    const editResultFlowPanel = wrapper.find(
+      '[data-testid="workbench-flow-panel"]'
+    );
+    const returnEditResultButton = editResultFlowPanel.find(
+      '[data-testid="workbench-flow-return-edit-result"]'
+    );
+    expect(
+      editResultFlowPanel.attributes('data-edit-result-state-point-id')
+    ).toBe(refreshedStatePointId);
+    expect(returnEditResultButton.attributes('disabled')).toBeUndefined();
+    expect(returnEditResultButton.attributes('data-action-id')).toBe(
+      'action-0001'
+    );
+    expect(returnEditResultButton.attributes('data-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+
+    await returnEditResultButton.trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(refreshedStatePointId);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+        )
+        .attributes('data-selected-state-point-id')
+    ).toBe(refreshedStatePointId);
   });
 
   it('selects the source action when an action result is focused', async () => {

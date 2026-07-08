@@ -6682,6 +6682,36 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - UI 主流程能力块：在现有 runtime/generation 边界稳定后，围绕“排轴动作编辑 -> 运行模拟 -> 资源曲线监控 -> 日志/详情查看 -> 回到动作修改”推进完整可用体验。
 - 如果继续做运行时层，优先把 runtime module 的输入/输出边界文档化到架构说明，而不是补新的状态文案。
 
+### 2026-07-08：UI 主流程能力块 - Workbench 主流程控制条
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `src/features/workbench/WorkbenchFlowPanel.vue`，在场景摘要和工作台网格之间提供主流程控制条。
+- 控制条集中承接三条主路径：查看运行结果、编辑当前结果动作、回到最近编辑后的刷新结果。
+- `Workbench.vue` 复用既有 `focusThreeValueCalculatorScope('runtime')`、`focusRuntimeAction()` 和 `returnRuntimeResultFromProperties()`，不新增平行状态。
+- 主流程条读取 `selectedAction`、`threeValueRuntimeProjection`、`runtimeSelectedDetail` 和 `actionEditResultContext`，把动作编辑、运行结果、结果详情和回到编辑后的刷新点串成同一条链路。
+
+当前验证事实：
+
+- Workbench 初始渲染时，主流程条显示当前动作、runtime 日志数量，并禁用依赖当前结果或刷新结果的操作。
+- 点击 `查看运行结果` 后，Workbench 进入 runtime applied 视角并选中首个 runtime state point。
+- 点击 `编辑结果动作` 后，当前结果对应动作回到属性面板，编辑焦点来源为 `runtime-focus`。
+- 修改动作开始时间后，主流程条能拿到刷新后的 runtime state point，并通过 `回到刷新结果` 回到新的结果点。
+- 本阶段不新增保存字段，不改 simulation 输出，不追最终公式。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、41 条测试。
+- `npm run test -- --run`：通过，15 个测试文件、117 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- UI 主流程能力块继续推进时，优先补完整编辑体验的布局与操作闭环，例如把动作列表、时间轴、资源曲线、日志详情的焦点切换整理成更接近 Endaxis 的主工作区节奏。
+- 避免回到单个标签、同步提示或文案映射的微阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -43,6 +43,16 @@
       :summary="simulationResult.summary"
     />
 
+    <WorkbenchFlowPanel
+      :selected-action="selectedAction"
+      :runtime-projection="simulationResult.threeValueRuntimeProjection"
+      :runtime-selected-detail="runtimeSelectedDetail"
+      :action-edit-result-context="actionEditResultContext"
+      @open-runtime-results="openRuntimeResultsFlow"
+      @focus-runtime-action="focusRuntimeAction"
+      @return-runtime-result="returnRuntimeResultFromProperties"
+    />
+
     <div class="workbench-grid">
       <ActionLibraryPanel
         :actor="actionLibraryActor"
@@ -196,6 +206,7 @@ import ResourceMonitorPanel from '../features/workbench/ResourceMonitorPanel.vue
 import RuntimeSelectedDetailPanel from '../features/workbench/RuntimeSelectedDetailPanel.vue';
 import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
+import WorkbenchFlowPanel from '../features/workbench/WorkbenchFlowPanel.vue';
 import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
 import { createRuntimeStateCurvePointId } from '../features/workbench/stateCurvePointIdentity';
 import {
@@ -1256,6 +1267,10 @@ function returnRuntimeResultFromProperties({ actionId, statePointId } = {}) {
     selectAction(actionId);
   }
   selectActionResultRuntimePoint(statePointId);
+}
+
+function openRuntimeResultsFlow() {
+  focusThreeValueCalculatorScope('runtime');
 }
 
 function focusRuntimeAction({
