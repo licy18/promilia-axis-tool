@@ -448,14 +448,15 @@ const runtimeActorEnergyRows = computed(() =>
   getRuntimeResourceCurveRows(props.runtimeProjection)
 );
 
+const flowSelection = computed(() => props.flowModel?.mainFlowSelection ?? null);
 const flowSelectedStatePointId = computed(
   () =>
-    props.flowModel?.selectedStateCurvePointId ??
+    flowSelection.value?.selectedStateCurvePointId ??
     props.selectedStateCurvePointId
 );
 
 const flowRuntimeFocusSource = computed(
-  () => props.flowModel?.runtimeFocusSource ?? props.runtimeFocusSource
+  () => flowSelection.value?.runtimeFocusSource ?? props.runtimeFocusSource
 );
 
 const flowEditResult = computed(

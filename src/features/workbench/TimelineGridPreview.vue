@@ -1,5 +1,11 @@
 <template>
-  <section class="panel timeline-panel">
+  <section
+    class="panel timeline-panel"
+    :data-flow-selected-action-id="flowSelectedActionId"
+    :data-flow-selected-state-curve-point-id="flowSelectedStateCurvePointId"
+    :data-flow-runtime-focus-source="flowRuntimeFocusSource"
+    data-testid="workbench-timeline-grid-preview"
+  >
     <div class="panel-title">
       <Clock class="panel-icon" />
       <h2>时间轴</h2>
@@ -227,7 +233,7 @@
               class="action-block"
               :class="[
                 {
-                  selected: action.id === selectedActionId,
+                  selected: action.id === flowSelectedActionId,
                   dragging: action.id === draggingActionId,
                   overlap: overlapActionIds.has(action.id),
                   resizing: action.id === resizingActionId,
@@ -400,7 +406,10 @@
               :class="[
                 `state-layer-${marker.layerKey}`,
                 `state-track-${marker.trackKey}`,
-                { selected: marker.statePointId === selectedStateCurvePointId },
+                {
+                  selected:
+                    marker.statePointId === flowSelectedStateCurvePointId,
+                },
               ]"
               :style="stateCurveMarkerStyle(marker)"
               :title="formatStateCurveMarkerTitle(marker)"
@@ -414,8 +423,8 @@
               :data-cumulative="marker.cumulative"
               :data-state-point-id="marker.statePointId"
               :data-runtime-focus-source="
-                marker.statePointId === selectedStateCurvePointId
-                  ? runtimeFocusSource
+                marker.statePointId === flowSelectedStateCurvePointId
+                  ? flowRuntimeFocusSource
                   : ''
               "
               :data-marker-title="formatStateCurveMarkerTitle(marker)"
@@ -658,6 +667,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  flowModel: {
+    type: Object,
+    default: null,
+  },
   actionEditFocus: {
     type: Object,
     default: null,
@@ -802,6 +815,18 @@ const candidateActionOptions = computed(() =>
       };
     })
 );
+const flowSelection = computed(() => props.flowModel?.mainFlowSelection ?? null);
+const flowSelectedActionId = computed(
+  () => flowSelection.value?.selectedActionId ?? props.selectedActionId
+);
+const flowSelectedStateCurvePointId = computed(
+  () =>
+    flowSelection.value?.selectedStateCurvePointId ??
+    props.selectedStateCurvePointId
+);
+const flowRuntimeFocusSource = computed(
+  () => flowSelection.value?.runtimeFocusSource ?? props.runtimeFocusSource
+);
 const stateCurveTimelineLayerOptions = computed(() =>
   STATE_CURVE_TIMELINE_LAYER_OPTIONS.map(layer => {
     const matchingLayers = (
@@ -837,13 +862,14 @@ const effectiveStateCurveTrackFilters = computed(
 );
 const isStateCurveSelectedFocusActive = computed(
   () =>
-    props.stateCurveFocusMode === 'selected' && props.selectedStateCurvePointId
+    props.stateCurveFocusMode === 'selected' &&
+    flowSelectedStateCurvePointId.value
 );
 const overlapActionIds = computed(
   () => new Set(props.timelineDiagnostics?.overlapActionIds ?? [])
 );
 const selectedBatchId = computed(() => {
-  const selectedAction = actionsById.value.get(props.selectedActionId);
+  const selectedAction = actionsById.value.get(flowSelectedActionId.value);
   return selectedAction?.generationBatch?.batchId ?? null;
 });
 const timelineLanes = computed(() => {
@@ -930,7 +956,7 @@ const selectedCandidateElementComparisonRows = computed(() =>
     : []
 );
 const selectedStateCurvePoint = computed(() =>
-  findStateCurvePointById(props.selectedStateCurvePointId)
+  findStateCurvePointById(flowSelectedStateCurvePointId.value)
 );
 const selectedCandidateFocusSeriesKey = computed(() =>
   selectedStateCurvePoint.value?.layerKey === 'candidate'
@@ -943,7 +969,7 @@ const selectedCandidateFocusSeriesKey = computed(() =>
 watch(
   [
     () => props.stateCurveFocusMode,
-    () => props.selectedStateCurvePointId,
+    () => flowSelectedStateCurvePointId.value,
     () => props.threeValueCurveFramework,
     () => props.stateCurveLayerFilters,
     () => props.stateCurveTrackFilters,
@@ -1581,7 +1607,7 @@ function syncCandidateDisplayScopeFromStateFocus() {
   }
 
   const selectedPoint = findStateCurvePointById(
-    props.selectedStateCurvePointId
+    flowSelectedStateCurvePointId.value
   );
   if (!selectedPoint || selectedPoint.layerKey !== 'candidate') {
     if (candidateDisplayScope.value === 'selected-frame') {
@@ -1709,7 +1735,7 @@ function getStateCurveTimelineTrackPointCount(track) {
 function isStateCurveMarkerInFocus(marker) {
   return (
     !isStateCurveSelectedFocusActive.value ||
-    marker.statePointId === props.selectedStateCurvePointId
+    marker.statePointId === flowSelectedStateCurvePointId.value
   );
 }
 

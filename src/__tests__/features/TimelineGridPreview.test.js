@@ -3,6 +3,46 @@ import { nextTick } from 'vue';
 import TimelineGridPreview from '../../features/workbench/TimelineGridPreview.vue';
 
 describe('TimelineGridPreview', () => {
+  it('prefers main flow selection over legacy selection props', () => {
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        selectedActionId: 'action-a',
+        selectedStateCurvePointId: 'legacy-state-point',
+        runtimeFocusSource: 'legacy-source',
+        flowModel: {
+          mainFlowSelection: {
+            selectedActionId: 'action-b',
+            selectedStateCurvePointId: 'flow-state-point',
+            runtimeFocusSource: 'workbench-flow-panel',
+          },
+        },
+      }),
+    });
+
+    const timeline = wrapper.find(
+      '[data-testid="workbench-timeline-grid-preview"]'
+    );
+    expect(timeline.attributes()).toMatchObject({
+      'data-flow-selected-action-id': 'action-b',
+      'data-flow-selected-state-curve-point-id': 'flow-state-point',
+      'data-flow-runtime-focus-source': 'workbench-flow-panel',
+    });
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-a"]'
+        )
+        .classes()
+    ).not.toContain('selected');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-b"]'
+        )
+        .classes()
+    ).toContain('selected');
+  });
+
   it('filters candidate value curves by actor, action, and visible series', async () => {
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps(),
@@ -72,7 +112,7 @@ function findCandidateMarkers(wrapper) {
   );
 }
 
-function createTimelineProps() {
+function createTimelineProps(overrides = {}) {
   const actions = [
     createAction({
       id: 'action-a',
@@ -138,6 +178,7 @@ function createTimelineProps() {
       overlaps: [],
       overlapCount: 0,
     },
+    ...overrides,
   };
 }
 

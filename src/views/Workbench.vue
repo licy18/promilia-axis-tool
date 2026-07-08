@@ -132,6 +132,7 @@
           "
           :duration-ms="scenario.time.durationMs"
           :selected-action-id="selectedActionId"
+          :flow-model="workbenchFlowModel"
           :action-edit-focus="actionEditFocus"
           :selected-state-curve-point-id="selectedStateCurvePointId"
           :state-curve-focus-mode="stateCurveFocusMode"

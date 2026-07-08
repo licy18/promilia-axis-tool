@@ -125,6 +125,14 @@ describe('Workbench view', () => {
       'runtime-review'
     );
     expect(primaryFlow.find('.timeline-area').exists()).toBe(true);
+    expect(
+      primaryFlow
+        .find('[data-testid="workbench-timeline-grid-preview"]')
+        .attributes()
+    ).toMatchObject({
+      'data-flow-selected-action-id': 'action-0001',
+      'data-flow-selected-state-curve-point-id': '',
+    });
     const runtimeReviewStack = wrapper.find(
       '[data-testid="workbench-runtime-review-stack"]'
     );
@@ -1763,6 +1771,14 @@ describe('Workbench view', () => {
     expect(
       focusedFlowPanel.attributes('data-main-flow-return-state-point-id')
     ).toBe('');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-grid-preview"]')
+        .attributes()
+    ).toMatchObject({
+      'data-flow-selected-action-id': 'action-0001',
+      'data-flow-selected-state-curve-point-id': selectedRuntimePointId,
+    });
     expect(wrapper.find('.analysis-panel').attributes()).toMatchObject({
       'data-flow-phase': 'runtime-result',
       'data-flow-state-point-id': selectedRuntimePointId,
@@ -2019,6 +2035,14 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-side-inspector"]')
         .attributes('data-main-flow-inspector-mode')
     ).toBe('runtime-detail');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-grid-preview"]')
+        .attributes()
+    ).toMatchObject({
+      'data-flow-selected-action-id': 'action-0001',
+      'data-flow-selected-state-curve-point-id': refreshedStatePointId,
+    });
     expect(wrapper.find('.analysis-panel').attributes()).toMatchObject({
       'data-flow-phase': 'edit-result-review',
       'data-flow-state-point-id': refreshedStatePointId,

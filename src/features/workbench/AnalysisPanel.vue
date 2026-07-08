@@ -1274,9 +1274,13 @@ const runtimeTraceByActionId = computed(() => {
   );
 });
 const flowPhase = computed(() => props.flowModel?.phase ?? '');
+const flowSelection = computed(() => props.flowModel?.mainFlowSelection ?? null);
+const flowSelectedActionId = computed(
+  () => flowSelection.value?.selectedActionId ?? props.selectedActionId
+);
 const flowSelectedStatePointId = computed(
   () =>
-    props.flowModel?.selectedStateCurvePointId ??
+    flowSelection.value?.selectedStateCurvePointId ??
     props.selectedStateCurvePointId
 );
 const flowRuntimeSelectedDetail = computed(
@@ -1984,7 +1988,7 @@ function getActionResultSelectedStatePointId(entry) {
 
 function isActionResultCurrentAction(entry) {
   return Boolean(
-    props.selectedActionId && entry?.actionId === props.selectedActionId
+    flowSelectedActionId.value && entry?.actionId === flowSelectedActionId.value
   );
 }
 
@@ -2124,7 +2128,9 @@ function createActionEditFeedbackLocationChain({
   resultFocusStatus = 'unavailable',
   runtimeStatePointId = '',
 } = {}) {
-  const actionSynced = Boolean(actionId && props.selectedActionId === actionId);
+  const actionSynced = Boolean(
+    actionId && flowSelectedActionId.value === actionId
+  );
   const resultSynced = resultFocusStatus === 'focused';
   const detailSynced = Boolean(
     runtimeStatePointId &&
@@ -2448,7 +2454,7 @@ function createDraftResultStatus(status) {
 
 function isRuntimeResultCurrentAction(detail) {
   return Boolean(
-    props.selectedActionId && detail?.actionId === props.selectedActionId
+    flowSelectedActionId.value && detail?.actionId === flowSelectedActionId.value
   );
 }
 

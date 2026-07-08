@@ -18136,3 +18136,55 @@ data-main-flow-inspector-mode
 - 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖 action edit、runtime result、edit result ready、edit result review 四种阶段的 `mainFlowSelection`。
 - 更新 `src/__tests__/views/Workbench.test.js`，确认主流程布局容器同步当前区域、下一目标区域、选中运行点和待回看刷新点。
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、58 条测试。
+
+## 230. UI 主流程能力块：Main Flow Selection Consumers
+
+### 230.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema 或 runtime 数值结构，只调整 Workbench 面板消费选择状态的 UI 合同。
+
+`TimelineGridPreview` 新增可选输入：
+
+```js
+flowModel
+```
+
+当存在 `flowModel.mainFlowSelection` 时，时间轴优先使用：
+
+```js
+flowModel.mainFlowSelection.selectedActionId
+flowModel.mainFlowSelection.selectedStateCurvePointId
+flowModel.mainFlowSelection.runtimeFocusSource
+```
+
+缺省时继续回退到旧 props：
+
+```js
+selectedActionId
+selectedStateCurvePointId
+runtimeFocusSource
+```
+
+`ResourceMonitorPanel`、`EventLogPanel` 和 `AnalysisPanel` 的运行点选择也改为优先消费 `flowModel.mainFlowSelection.selectedStateCurvePointId`；`AnalysisPanel` 的当前动作判断改为优先消费 `flowModel.mainFlowSelection.selectedActionId`。
+
+`TimelineGridPreview` 根节点新增诊断属性，用于 Workbench 主流程测试确认选择合同已经传入实际时间轴面板：
+
+```html
+data-flow-selected-action-id
+data-flow-selected-state-curve-point-id
+data-flow-runtime-focus-source
+```
+
+### 230.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、localStorage 草稿结构或任何游戏数据表结构。
+
+该变化只影响 Workbench UI 面板消费主流程选择状态的方式；三值生成、runtime projection、simLog、stateCurves 和 summary 结果不变。
+
+### 230.3 验证
+
+- 更新 `src/__tests__/features/TimelineGridPreview.test.js`，覆盖时间轴在主流程选择合同与旧 props 冲突时优先采用 `mainFlowSelection`。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认 Workbench 中时间轴、资源曲线、事件日志和分析面板在 runtime result 与 edit result review 阶段同步到同一运行点。
+- `npm run test -- --run src/__tests__/features/TimelineGridPreview.test.js src/__tests__/views/Workbench.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，3 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、183 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

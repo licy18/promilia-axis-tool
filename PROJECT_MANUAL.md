@@ -8479,6 +8479,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：让时间轴、运行曲线、日志和详情面板逐步直接消费 `mainFlowSelection` 中的选择状态，进一步减少面板间重复判断。
 
+### 2026-07-09：UI 主流程能力块 - Main Flow Selection Consumers
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 时间轴、资源曲线、事件日志和分析面板开始优先消费 `WorkbenchFlowModel.mainFlowSelection`，把主流程选中动作、选中运行点和运行焦点来源收敛到同一个选择合同。
+- `TimelineGridPreview` 新增 `flowModel` 接口；在 Workbench 内由主流程模型驱动选中动作、状态点聚焦、候选帧跟随和运行焦点标记。
+- 资源曲线、事件日志和分析面板保留旧 props 作为兼容回退，但在主 Workbench 流程中不再优先依赖各自的旧选择字段。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- 时间轴组件测试覆盖 `mainFlowSelection` 与旧选择 props 不一致时，组件优先采用主流程选择合同。
+- Workbench 页面测试确认 action edit、runtime result、edit result review 阶段，时间轴、资源曲线、事件日志和分析面板同步到同一个主流程运行点。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/TimelineGridPreview.test.js src/__tests__/views/Workbench.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，3 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、183 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把“排轴动作编辑 -> 运行模拟 -> 资源曲线/日志/详情查看 -> 回到动作修改”的主操作闭环继续压实成完整可用流程，重点处理入口和跳转，不再扩展局部状态文案。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
