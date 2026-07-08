@@ -155,6 +155,7 @@
         :data-current-action="isActionResultCurrentAction(entry)"
         :data-draft-dirty="draftResultStatus.dirty"
         :data-draft-status="draftResultStatus.key"
+        :data-result-refresh-status="draftResultStatus.refreshKey"
         :data-has-runtime-trace="Boolean(getActionResultRuntimeTrace(entry))"
         :data-runtime-state-point-id="
           getActionResultRuntimeTrace(entry)?.firstStatePointId ?? ''
@@ -182,6 +183,13 @@
             data-testid="workbench-action-result-draft-status"
           >
             {{ draftResultStatus.resultLabel }}
+          </small>
+          <small
+            v-if="isActionResultCurrentAction(entry)"
+            class="action-result-refresh-status"
+            data-testid="workbench-action-result-refresh-status"
+          >
+            {{ draftResultStatus.refreshLabel }}
           </small>
           <small>{{ formatActionResultSource(entry) }}</small>
           <small
@@ -253,6 +261,7 @@
           "
           :data-draft-dirty="draftResultStatus.dirty"
           :data-draft-status="draftResultStatus.key"
+          :data-result-refresh-status="draftResultStatus.refreshKey"
           :data-state-point-id="selectedRuntimeResultDetail.statePointId"
           :data-track-key="selectedRuntimeResultDetail.trackKey"
           data-testid="workbench-action-result-detail-panel"
@@ -1916,7 +1925,7 @@ function formatRuntimeResultMeta(detail) {
   const sourceText =
     source && source !== '-' ? `Delta ${source}` : 'Delta 待定位';
   return isRuntimeResultCurrentAction(detail)
-    ? `正在编辑 · ${draftResultStatus.value.resultLabel} · ${sourceText}`
+    ? `正在编辑 · ${draftResultStatus.value.resultLabel} · ${draftResultStatus.value.refreshLabel} · ${sourceText}`
     : sourceText;
 }
 
@@ -1926,6 +1935,8 @@ function createDraftResultStatus(status) {
       key: 'dirty',
       dirty: true,
       resultLabel: '草稿已变更',
+      refreshKey: 'current-draft',
+      refreshLabel: '结果已随当前草稿刷新',
     };
   }
   if (status === '已保存草稿') {
@@ -1933,6 +1944,8 @@ function createDraftResultStatus(status) {
       key: 'saved',
       dirty: false,
       resultLabel: '草稿已保存',
+      refreshKey: 'saved-draft',
+      refreshLabel: '结果来自已保存草稿',
     };
   }
   if (status === '已恢复草稿') {
@@ -1940,6 +1953,8 @@ function createDraftResultStatus(status) {
       key: 'restored',
       dirty: false,
       resultLabel: '草稿已恢复',
+      refreshKey: 'restored-draft',
+      refreshLabel: '结果来自恢复草稿',
     };
   }
   if (status === '已重置草稿') {
@@ -1947,6 +1962,8 @@ function createDraftResultStatus(status) {
       key: 'reset',
       dirty: false,
       resultLabel: '草稿已重置',
+      refreshKey: 'reset-draft',
+      refreshLabel: '结果来自重置草稿',
     };
   }
   if (status === '草稿不可用') {
@@ -1954,12 +1971,16 @@ function createDraftResultStatus(status) {
       key: 'unavailable',
       dirty: false,
       resultLabel: '草稿不可用',
+      refreshKey: 'preview-only',
+      refreshLabel: '结果仅当前预览',
     };
   }
   return {
     key: 'unsaved',
     dirty: true,
     resultLabel: '未保存草稿',
+    refreshKey: 'unsaved-draft',
+    refreshLabel: '结果来自未保存草稿',
   };
 }
 
@@ -3150,6 +3171,15 @@ h2 {
   border-radius: 4px;
   background: rgba(166, 183, 255, 0.12);
   color: #d9e0ff;
+  font-weight: 700;
+}
+
+.action-result-refresh-status {
+  width: max-content;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.12);
+  color: #9ce0d2;
   font-weight: 700;
 }
 

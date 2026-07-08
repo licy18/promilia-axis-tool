@@ -5766,6 +5766,42 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DC 目标：继续改善动作编辑后的结果反馈，优先让动作字段变更后结果区明确提示“结果已随当前草稿刷新”，并为后续字段级变更来源留入口。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DC 结果区提示已随草稿刷新
+
+本轮完成：
+
+- `AnalysisPanel` 的草稿状态派生新增结果刷新状态：
+  - dirty 草稿显示 `结果已随当前草稿刷新`。
+  - saved 草稿显示 `结果来自已保存草稿`。
+  - restored/reset/unavailable/unsaved 状态也有对应短标签。
+- 动作结果行新增 `data-result-refresh-status`，当前编辑动作结果行显示刷新状态标签。
+- 结果详情区同样新增 `data-result-refresh-status`，标题摘要现在可显示 `正在编辑 · 草稿已变更 · 结果已随当前草稿刷新 · Delta ...`。
+- Workbench 测试覆盖 dirty -> saved 的刷新状态变化。
+
+当前验证事实：
+
+- 新建等待动作后，`action-0001` 结果行带 `data-result-refresh-status="current-draft"`。
+- 点击 `action-0001` 动作结果后，当前编辑结果行显示 `结果已随当前草稿刷新`。
+- 保存草稿后，同一结果行更新为 `data-result-refresh-status="saved-draft"`，标签显示 `结果来自已保存草稿`。
+- 本阶段仍只复用 `draftStatus` 前端状态，不新增 result revision、action revision、simulation 输出或保存 schema。
+
+当前边界：
+
+- 本阶段没有做字段级变更来源或编辑前后数值差异。
+- `结果已随当前草稿刷新` 只表达当前响应式模拟已经消费当前草稿，不代表最终公式已确认。
+- 尚未做自动定位具体变更字段、结果对比或 undo/redo 反馈。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8DD 目标：继续完善编辑反馈链路，优先在当前编辑动作附近提供最小字段变更来源入口，例如标记是开始时间、等级、动作形态或时长改变触发了结果刷新。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

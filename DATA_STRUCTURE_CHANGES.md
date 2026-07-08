@@ -11530,3 +11530,80 @@ data-draft-dirty
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DC 应继续改善动作编辑后的结果反馈，优先让动作字段变更后结果区明确提示“结果已随当前草稿刷新”。
+
+## 136. 阶段 5-8DC：result refresh status on current draft
+
+阶段 5-8DC 不修改项目保存 schema，也不修改 simulation 输出结构。本阶段继续扩展 `draftResultStatus` 前端派生，用于说明当前结果是否已经随工作台草稿刷新。
+
+### 136.1 draftResultStatus 新增字段
+
+`draftResultStatus` 新增：
+
+```js
+refreshKey: String
+refreshLabel: String
+```
+
+当前映射：
+
+```text
+dirty -> current-draft / 结果已随当前草稿刷新
+saved -> saved-draft / 结果来自已保存草稿
+restored -> restored-draft / 结果来自恢复草稿
+reset -> reset-draft / 结果来自重置草稿
+unavailable -> preview-only / 结果仅当前预览
+unsaved -> unsaved-draft / 结果来自未保存草稿
+```
+
+### 136.2 动作结果行新增 DOM 状态
+
+`workbench-action-result-source-row` 新增：
+
+```html
+data-result-refresh-status
+```
+
+当前编辑动作结果行额外显示：
+
+```html
+data-testid="workbench-action-result-refresh-status"
+```
+
+文案来自 `draftResultStatus.refreshLabel`。
+
+### 136.3 结果详情区新增 DOM 状态
+
+`workbench-action-result-detail-panel` 新增：
+
+```html
+data-result-refresh-status
+```
+
+当前编辑动作的标题摘要格式从：
+
+```text
+正在编辑 · 草稿状态 · Delta ...
+```
+
+扩展为：
+
+```text
+正在编辑 · 草稿状态 · 结果刷新状态 · Delta ...
+```
+
+### 136.4 验证
+
+当前测试覆盖：
+
+- dirty 草稿时，`action-0001` 结果行 `data-result-refresh-status="current-draft"`。
+- 当前编辑结果行显示 `结果已随当前草稿刷新`。
+- 结果详情区同步 `data-result-refresh-status="current-draft"` 并包含 `结果已随当前草稿刷新`。
+- 保存草稿后，同一结果行更新为 `data-result-refresh-status="saved-draft"`，标签显示 `结果来自已保存草稿`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DD 应继续完善编辑反馈链路，优先提供最小字段变更来源入口。
