@@ -16428,3 +16428,86 @@ const workbenchFlowController = createWorkbenchFlowController(
 - `npm run test -- --run`：通过，23 个测试文件、156 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 209. UI 主流程能力块：Workbench Flow Runtime
+
+本阶段属于 UI 主流程。
+
+### 209.1 结构变化
+
+新增模块：
+
+```js
+src/features/workbench/workbenchFlowRuntime.js
+```
+
+新增导出：
+
+```js
+createWorkbenchFlowRuntime()
+```
+
+`createWorkbenchFlowRuntime()` 接收 Workbench 本地状态写入回调：
+
+```js
+{
+  actionExists,
+  selectAction,
+  setActionEditFocus,
+  focusCalculatorScope,
+  setCalculatorScope,
+  selectRuntimeStatePoint,
+  clearRuntimeSelection,
+  setStateCurveLayerFilters,
+  setStateCurveTrackFilters,
+  focusRuntimeLog
+}
+```
+
+flow runtime 提供：
+
+```js
+applyActionEditFlowPlan(plan)
+applyRuntimeFlowPlan(plan)
+```
+
+`Workbench.vue` 不再维护本地函数：
+
+```js
+applyActionEditFlowPlan()
+applyRuntimeFlowPlan()
+```
+
+改为创建：
+
+```js
+const workbenchFlowRuntime = createWorkbenchFlowRuntime(...)
+```
+
+并把以下执行入口交给 `createWorkbenchFlowPlanHandlers()`：
+
+```js
+workbenchFlowRuntime.applyRuntimeFlowPlan
+workbenchFlowRuntime.applyActionEditFlowPlan
+```
+
+`syncRuntimeResultForSelectedAction()` 也改为通过：
+
+```js
+workbenchFlowRuntime.applyRuntimeFlowPlan(...)
+```
+
+### 209.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 的 flow plan 应用组织方式；模拟结果、三值计算、项目文件、runtime projection 结构不变。
+
+### 209.3 验证
+
+- 新增 `src/__tests__/features/workbenchFlowRuntime.test.js`，覆盖 action edit plan 应用、禁用 plan、缺失动作、runtime plan 应用、运行总览清空和 calculator focus。
+- Workbench 视图测试继续覆盖现有编辑、运行、查看、回改、回结果闭环行为。
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，24 个测试文件、160 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。

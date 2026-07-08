@@ -1,0 +1,173 @@
+import { describe, expect, it } from 'vitest';
+import { createWorkbenchFlowRuntime } from '../../features/workbench/workbenchFlowRuntime';
+
+describe('workbench flow runtime', () => {
+  it('applies action edit flow plans through workbench callbacks', () => {
+    const calls = [];
+    const runtime = createWorkbenchFlowRuntime({
+      actionExists: actionId => actionId === 'action-0001',
+      selectAction: (actionId, options) =>
+        calls.push(['selectAction', actionId, options]),
+      setActionEditFocus: focus => calls.push(['setActionEditFocus', focus]),
+    });
+
+    expect(
+      runtime.applyActionEditFlowPlan({
+        kind: 'runtime-action-focus',
+        canApply: true,
+        actionId: 'action-0001',
+        requiresExistingAction: true,
+        actionEditFocus: {
+          actionId: 'action-0001',
+          fieldKey: 'startMs',
+          sequence: 2,
+        },
+      })
+    ).toMatchObject({
+      applied: true,
+      kind: 'runtime-action-focus',
+    });
+
+    expect(calls).toEqual([
+      ['selectAction', 'action-0001', { syncRuntimeResult: false }],
+      [
+        'setActionEditFocus',
+        {
+          actionId: 'action-0001',
+          fieldKey: 'startMs',
+          sequence: 2,
+        },
+      ],
+    ]);
+  });
+
+  it('does not apply disabled or missing required action edit plans', () => {
+    const calls = [];
+    const runtime = createWorkbenchFlowRuntime({
+      actionExists: () => false,
+      selectAction: (...args) => calls.push(['selectAction', ...args]),
+      setActionEditFocus: (...args) =>
+        calls.push(['setActionEditFocus', ...args]),
+    });
+
+    expect(
+      runtime.applyActionEditFlowPlan({
+        kind: 'edit-source-focus',
+        canApply: false,
+      })
+    ).toMatchObject({
+      applied: false,
+      reason: 'disabled-action-edit-flow-plan',
+    });
+    expect(
+      runtime.applyActionEditFlowPlan({
+        kind: 'runtime-action-focus',
+        canApply: true,
+        actionId: 'missing-action',
+        requiresExistingAction: true,
+      })
+    ).toMatchObject({
+      applied: false,
+      reason: 'missing-action-draft',
+    });
+    expect(calls).toEqual([]);
+  });
+
+  it('applies runtime flow plans through workbench callbacks', () => {
+    const calls = [];
+    const runtime = createWorkbenchFlowRuntime({
+      actionExists: actionId => actionId === 'action-0001',
+      selectAction: (actionId, options) =>
+        calls.push(['selectAction', actionId, options]),
+      focusCalculatorScope: (scope, options) =>
+        calls.push(['focusCalculatorScope', scope, options]),
+      setCalculatorScope: scope => calls.push(['setCalculatorScope', scope]),
+      selectRuntimeStatePoint: statePointId =>
+        calls.push(['selectRuntimeStatePoint', statePointId]),
+      clearRuntimeSelection: payload =>
+        calls.push(['clearRuntimeSelection', payload]),
+      setStateCurveLayerFilters: filters =>
+        calls.push(['setStateCurveLayerFilters', filters]),
+      setStateCurveTrackFilters: filters =>
+        calls.push(['setStateCurveTrackFilters', filters]),
+      focusRuntimeLog: payload => calls.push(['focusRuntimeLog', payload]),
+    });
+
+    expect(
+      runtime.applyRuntimeFlowPlan({
+        kind: 'runtime-result-return',
+        selectActionId: 'action-0001',
+        calculatorScope: 'runtime',
+        pulseCalculatorFocus: false,
+        selectRuntimeStatePoint: true,
+        statePointId: 'point-001',
+        stateCurveLayerFilters: {
+          applied: true,
+          candidate: false,
+        },
+        stateCurveTrackFilters: {},
+        runtimeLogFocusSource: 'action-result',
+      })
+    ).toMatchObject({
+      applied: true,
+      kind: 'runtime-result-return',
+    });
+
+    expect(calls).toEqual([
+      ['selectAction', 'action-0001', { syncRuntimeResult: false }],
+      ['setCalculatorScope', 'runtime'],
+      ['selectRuntimeStatePoint', 'point-001'],
+      [
+        'setStateCurveLayerFilters',
+        {
+          applied: true,
+          candidate: false,
+        },
+      ],
+      ['setStateCurveTrackFilters', {}],
+      [
+        'focusRuntimeLog',
+        {
+          source: 'action-result',
+          statePointId: 'point-001',
+        },
+      ],
+    ]);
+  });
+
+  it('applies runtime overview clearing and pulsed calculator focus', () => {
+    const calls = [];
+    const runtime = createWorkbenchFlowRuntime({
+      focusCalculatorScope: (scope, options) =>
+        calls.push(['focusCalculatorScope', scope, options]),
+      clearRuntimeSelection: payload =>
+        calls.push(['clearRuntimeSelection', payload]),
+    });
+
+    runtime.applyRuntimeFlowPlan({
+      kind: 'runtime-entry',
+      calculatorScope: 'runtime',
+      pulseCalculatorFocus: true,
+      selectFirstRuntimePoint: false,
+      selectRuntimeStatePoint: false,
+      clearRuntimeSelection: true,
+      stateCurveFocusMode: 'all',
+    });
+
+    expect(calls).toEqual([
+      [
+        'focusCalculatorScope',
+        'runtime',
+        {
+          selectFirstRuntimePoint: false,
+        },
+      ],
+      [
+        'clearRuntimeSelection',
+        {
+          stateCurveFocusMode: 'all',
+        },
+      ],
+    ]);
+  });
+});

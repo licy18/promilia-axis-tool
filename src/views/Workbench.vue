@@ -219,6 +219,7 @@ import {
 import {
   createWorkbenchFlowPlanController,
 } from '../features/workbench/workbenchFlowPlanController';
+import { createWorkbenchFlowRuntime } from '../features/workbench/workbenchFlowRuntime';
 import {
   createWorkbenchFlowModel,
 } from '../features/workbench/workbenchFlowModel';
@@ -322,11 +323,44 @@ const workbenchFlowPlanController = createWorkbenchFlowPlanController({
   getSelectedActionId: () => selectedActionId.value,
   getActionEditFocusSequence: () => actionEditFocus.value.sequence,
 });
+const workbenchFlowRuntime = createWorkbenchFlowRuntime({
+  actionExists: actionId => Boolean(findActionDraftById(actionId)),
+  selectAction: (actionId, options) => selectAction(actionId, options),
+  setActionEditFocus: focus => {
+    actionEditFocus.value = { ...focus };
+  },
+  focusCalculatorScope: (scope, options) =>
+    focusThreeValueCalculatorScope(scope, options),
+  setCalculatorScope: scope => {
+    calculatorDiagnosticScope.value = scope;
+  },
+  selectRuntimeStatePoint: statePointId =>
+    selectRuntimeFlowStatePoint(statePointId),
+  clearRuntimeSelection: ({ stateCurveFocusMode: mode = 'all' } = {}) => {
+    selectedStateCurvePointId.value = '';
+    stateCurveFocusMode.value = mode;
+  },
+  setStateCurveLayerFilters: filters => {
+    stateCurveLayerFilters.value = { ...filters };
+  },
+  setStateCurveTrackFilters: filters => {
+    stateCurveTrackFilters.value = { ...filters };
+  },
+  focusRuntimeLog: ({ source, statePointId }) => {
+    runtimeLogFocus.value = {
+      source,
+      statePointId,
+      sequence: runtimeLogFocus.value.sequence + 1,
+    };
+  },
+});
 const workbenchFlowController = createWorkbenchFlowController(
   createWorkbenchFlowPlanHandlers({
     flowPlanController: workbenchFlowPlanController,
-    applyRuntimeFlowPlan,
-    applyActionEditFlowPlan,
+    applyRuntimeFlowPlan: plan =>
+      workbenchFlowRuntime.applyRuntimeFlowPlan(plan),
+    applyActionEditFlowPlan: plan =>
+      workbenchFlowRuntime.applyActionEditFlowPlan(plan),
     selectRuntimeStatePoint,
   })
 );
@@ -1355,20 +1389,6 @@ function dispatchWorkbenchFlowAction(action = {}) {
   workbenchFlowController.dispatch(action);
 }
 
-function applyActionEditFlowPlan(plan = {}) {
-  if (!plan.canApply) {
-    return;
-  }
-  if (findActionDraftById(plan.actionId)) {
-    selectAction(plan.actionId, { syncRuntimeResult: false });
-  } else if (plan.requiresExistingAction) {
-    return;
-  }
-  actionEditFocus.value = {
-    ...plan.actionEditFocus,
-  };
-}
-
 function updateStateCurveFocusMode(mode) {
   if (mode === 'selected' && !selectedStateCurvePointId.value) {
     return;
@@ -1485,48 +1505,11 @@ function getSelectedRuntimeStatePointActionId() {
 }
 
 function syncRuntimeResultForSelectedAction(actionId) {
-  applyRuntimeFlowPlan(
+  workbenchFlowRuntime.applyRuntimeFlowPlan(
     workbenchFlowPlanController.createRuntimeEntryPlan({
       actionId,
     })
   );
-}
-
-function applyRuntimeFlowPlan(plan = {}) {
-  if (plan.selectActionId && findActionDraftById(plan.selectActionId)) {
-    selectAction(plan.selectActionId, { syncRuntimeResult: false });
-  }
-
-  if (plan.calculatorScope) {
-    if (plan.pulseCalculatorFocus) {
-      focusThreeValueCalculatorScope(plan.calculatorScope, {
-        selectFirstRuntimePoint: plan.selectFirstRuntimePoint,
-      });
-    } else {
-      calculatorDiagnosticScope.value = plan.calculatorScope;
-    }
-  }
-
-  if (plan.selectRuntimeStatePoint) {
-    selectRuntimeFlowStatePoint(plan.statePointId);
-  } else if (plan.clearRuntimeSelection) {
-    selectedStateCurvePointId.value = '';
-    stateCurveFocusMode.value = plan.stateCurveFocusMode || 'all';
-  }
-
-  if (plan.stateCurveLayerFilters) {
-    stateCurveLayerFilters.value = { ...plan.stateCurveLayerFilters };
-  }
-  if (plan.stateCurveTrackFilters) {
-    stateCurveTrackFilters.value = { ...plan.stateCurveTrackFilters };
-  }
-  if (plan.runtimeLogFocusSource && plan.statePointId) {
-    runtimeLogFocus.value = {
-      source: plan.runtimeLogFocusSource,
-      statePointId: plan.statePointId,
-      sequence: runtimeLogFocus.value.sequence + 1,
-    };
-  }
 }
 
 function findRuntimeStatePointContextById(runtimeProjection, statePointId) {

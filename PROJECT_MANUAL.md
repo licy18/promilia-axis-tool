@@ -7923,6 +7923,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把主流程控制层从“controller + apply 函数”进一步整理为更明确的 Workbench flow runtime，减少视图层状态应用细节。
 
+### 2026-07-09：UI 主流程能力块 - Workbench Flow Runtime
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `workbenchFlowRuntime`，集中执行 runtime flow plan 与 action edit flow plan。
+- `Workbench.vue` 删除 `applyRuntimeFlowPlan()` 和 `applyActionEditFlowPlan()` 的本地实现，只把本地状态写入能力作为回调交给 flow runtime。
+- 主流程控制层从“controller + plan controller + 视图内 apply 函数”推进到“controller + plan controller + flow runtime”。
+- 本阶段不修改三值计算、模拟输出、项目保存结构或可见 UI 文案。
+
+当前验证事实：
+
+- flow runtime 单元测试覆盖 action edit plan 应用、禁用 plan、缺失动作、runtime plan 应用、运行总览清空和 calculator focus。
+- Workbench 集成测试继续覆盖现有编辑、运行、查看、回改、回结果闭环行为。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，24 个测试文件、160 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：围绕 Workbench flow runtime 继续收束状态写入回调，优先把运行点选择与 calculator scope 切换的共享状态写入整理成更窄的接口。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
