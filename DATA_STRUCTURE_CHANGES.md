@@ -14107,3 +14107,55 @@ Workbench 测试继续覆盖：
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
 - `npm run test -- --run`：通过，15 个测试文件、118 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 170. UI 主流程能力块：日志详情承接三值详情
+
+本阶段属于 UI 主流程。
+
+### 170.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 170.2 EventLogPanel 派生状态
+
+新增 `runtimeLogDetailHandoff` computed，仅当 `matchedRuntimeSelectedDetail` 存在时返回：
+
+```text
+source
+statePointId
+label
+detail
+```
+
+`source` 固定为 `runtime-selected-detail`，`statePointId` 来自 `matchedRuntimeSelectedDetail.statePointId`。
+
+### 170.3 DOM 变化
+
+`runtime-log-detail` 内新增：
+
+```html
+data-testid="workbench-runtime-sim-log-detail-handoff"
+data-detail-source
+data-state-point-id
+```
+
+当该承接条存在时，以下完整明细块不渲染：
+
+```html
+data-testid="workbench-runtime-sim-log-contribution"
+data-testid="workbench-runtime-sim-log-source"
+data-testid="workbench-runtime-sim-log-calculator"
+```
+
+fallback 模式仍保留这些块。
+
+### 170.4 验证
+
+Workbench 测试新增覆盖：
+
+- fallback 模式没有 handoff，完整贡献、来源和适配器明细仍存在。
+- runtime-selected-detail 模式显示 handoff，且 handoff state point 等于 selected runtime state point。
+- runtime-selected-detail 模式下日志内重复贡献、来源和适配器块不显示。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
+- `npm run test -- --run`：通过，15 个测试文件、118 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

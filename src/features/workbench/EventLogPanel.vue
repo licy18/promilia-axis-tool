@@ -234,10 +234,21 @@
           <strong>{{ runtimeLogEditContext.label }}</strong>
           <small>{{ runtimeLogEditContext.summary }}</small>
         </div>
+        <div
+          v-if="runtimeLogDetailHandoff"
+          class="runtime-log-detail-handoff"
+          :data-detail-source="runtimeLogDetailHandoff.source"
+          :data-state-point-id="runtimeLogDetailHandoff.statePointId"
+          data-testid="workbench-runtime-sim-log-detail-handoff"
+        >
+          <span>完整详情</span>
+          <strong>{{ runtimeLogDetailHandoff.label }}</strong>
+          <small>{{ runtimeLogDetailHandoff.detail }}</small>
+        </div>
       </div>
 
       <div
-        v-if="selectedRuntimeLog"
+        v-if="selectedRuntimeLog && !runtimeLogDetailHandoff"
         class="runtime-contribution-detail"
         data-testid="workbench-runtime-sim-log-contribution"
       >
@@ -254,7 +265,7 @@
       </div>
 
       <div
-        v-if="selectedRuntimeLogPoint"
+        v-if="selectedRuntimeLogPoint && !runtimeLogDetailHandoff"
         class="runtime-source-detail"
         data-testid="workbench-runtime-sim-log-source"
       >
@@ -271,7 +282,7 @@
       </div>
 
       <div
-        v-if="selectedRuntimeCalculatorRows.length"
+        v-if="selectedRuntimeCalculatorRows.length && !runtimeLogDetailHandoff"
         class="runtime-calculator-detail"
         data-testid="workbench-runtime-sim-log-calculator"
       >
@@ -505,6 +516,23 @@ const runtimeLogDetailSource = computed(() =>
   matchedRuntimeSelectedDetail.value
     ? 'runtime-selected-detail'
     : 'runtime-log-fallback'
+);
+const runtimeLogDetailHandoff = computed(() =>
+  matchedRuntimeSelectedDetail.value
+    ? {
+        source: 'runtime-selected-detail',
+        statePointId: matchedRuntimeSelectedDetail.value.statePointId,
+        label: '三值详情面板',
+        detail: [
+          matchedRuntimeSelectedDetail.value.trackLabel ??
+            formatRuntimeTrack(selectedRuntimeLog.value),
+          matchedRuntimeSelectedDetail.value.frameLabel ??
+            formatRuntimeTime(selectedRuntimeLog.value),
+        ]
+          .filter(Boolean)
+          .join(' · '),
+      }
+    : null
 );
 const runtimeLogDetailAction = computed(
   () =>
@@ -1435,6 +1463,18 @@ h2 {
   font-size: 11px;
 }
 
+.runtime-log-detail .runtime-log-detail-handoff {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(166, 183, 255, 0.26);
+  background: rgba(166, 183, 255, 0.09);
+  color: #e4e9ff;
+  font-size: 11px;
+}
+
 .runtime-log-edit-context span {
   margin: 0;
   color: #9ce0d2;
@@ -1448,6 +1488,26 @@ h2 {
 }
 
 .runtime-log-edit-context small {
+  min-width: 0;
+  overflow: hidden;
+  color: #aeb8c1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.runtime-log-detail-handoff span {
+  margin: 0;
+  color: #c7d2ff;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.runtime-log-detail-handoff strong {
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.runtime-log-detail-handoff small {
   min-width: 0;
   overflow: hidden;
   color: #aeb8c1;

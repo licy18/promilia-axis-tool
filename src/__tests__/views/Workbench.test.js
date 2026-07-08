@@ -296,6 +296,11 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-detail"]')
         .attributes('data-detail-source')
     ).toBe('runtime-log-fallback');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-detail-handoff"]')
+        .exists()
+    ).toBe(false);
     expect(runtimeCurvePoints[0].attributes('data-state-point-id')).toBe(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-state-point"]')
@@ -2164,6 +2169,30 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-detail"]')
         .attributes('data-detail-source')
     ).toBe('runtime-selected-detail');
+    const selectedLogDetailHandoff = wrapper.find(
+      '[data-testid="workbench-runtime-sim-log-detail-handoff"]'
+    );
+    expect(selectedLogDetailHandoff.exists()).toBe(true);
+    expect(selectedLogDetailHandoff.attributes('data-detail-source')).toBe(
+      'runtime-selected-detail'
+    );
+    expect(selectedLogDetailHandoff.attributes('data-state-point-id')).toBe(
+      appliedStatePointId
+    );
+    expect(selectedLogDetailHandoff.text()).toContain('三值详情面板');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-contribution"]')
+        .exists()
+    ).toBe(false);
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-sim-log-source"]').exists()
+    ).toBe(false);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-calculator"]')
+        .exists()
+    ).toBe(false);
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-action"]')

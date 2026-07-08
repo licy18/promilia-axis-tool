@@ -6882,6 +6882,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - UI 主流程能力块继续推进时，优先评估资源曲线选择摘要、日志详情和三值详情是否可以在布局上进一步合并阅读路径，而不是继续增加状态文案。
 - 避免回到单个状态提示、缺口说明或公式追证阶段。
 
+### 2026-07-08：UI 主流程能力块 - 日志详情承接三值详情
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `EventLogPanel` 在 `runtime-selected-detail` 模式下不再重复渲染完整贡献、来源和适配器明细。
+- 日志详情新增紧凑承接条，指向右侧 `RuntimeSelectedDetailPanel` 作为完整三值明细入口。
+- `runtime-log-fallback` 模式仍保留完整日志内贡献、来源和适配器明细，保证未选中 runtime detail 时信息不丢。
+- 本阶段不修改三值数据、simulation 输出、公式证据或项目保存结构。
+
+当前验证事实：
+
+- fallback 日志详情不显示承接条，仍保留贡献、来源和适配器行。
+- 选中 runtime state point 后，日志详情 `data-detail-source="runtime-selected-detail"`，显示承接条并隐藏重复明细块。
+- 右侧三值详情继续显示完整贡献、来源、适配器和回看入口。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
+- `npm run test -- --run`：通过，15 个测试文件、118 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 下一阶段转向生成层能力块，优先打通 `Action -> Hit -> ThreeValueDelta` 标准合同和统一生成入口。
+- Evidence、公式证据和候选数值仅保留来源追溯与诊断字段，不作为下一阶段主目标。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
