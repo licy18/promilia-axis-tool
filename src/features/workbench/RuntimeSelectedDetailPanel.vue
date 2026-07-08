@@ -253,6 +253,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  mainFlowCommandSurface: {
+    type: Object,
+    default: null,
+  },
 });
 
 const emit = defineEmits(['dispatch-flow-action']);
@@ -301,9 +305,8 @@ const runtimeDetailResultReturnCommand = computed(() =>
   runtimeDetailCommandView.value.returnResult
 );
 const runtimeDetailCommandView = computed(() =>
-  createWorkbenchRuntimeReviewPanelCommandView({
+  createRuntimeReviewPanelCommandViewFromSurface({
     source: 'runtime-detail',
-    flowModel: props.flowModel,
     focusTarget: runtimeDetailActionEditTarget.value,
     returnContext: runtimeDetailResultReturnContext.value,
   })
@@ -355,6 +358,18 @@ function dispatchRuntimeDetailFlowAction(action) {
     return;
   }
   emit('dispatch-flow-action', action);
+}
+
+function createRuntimeReviewPanelCommandViewFromSurface(options = {}) {
+  return (
+    props.mainFlowCommandSurface?.createRuntimeReviewPanelCommandView?.(
+      options
+    ) ??
+    createWorkbenchRuntimeReviewPanelCommandView({
+      flowModel: props.flowModel,
+      ...options,
+    })
+  );
 }
 
 function formatDetailDelta(detail) {

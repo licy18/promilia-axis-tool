@@ -252,6 +252,16 @@ export function createWorkbenchMainFlowCommandSurface({
       source: runtimeReviewPrimarySource || source,
     }
   );
+  const createRuntimeReviewOperationCommand = (options = {}) =>
+    createWorkbenchRuntimeReviewOperationCommand({
+      ...options,
+      flowModel: options.flowModel ?? flowModel,
+    });
+  const createRuntimeReviewPanelCommandView = (options = {}) =>
+    createWorkbenchRuntimeReviewPanelCommandView({
+      ...options,
+      flowModel: options.flowModel ?? flowModel,
+    });
 
   return {
     source,
@@ -271,6 +281,8 @@ export function createWorkbenchMainFlowCommandSurface({
       runtimeResultReturn: runtimeResultReturn.action,
       runtimeReviewPrimary: runtimeReviewPrimary.action,
     },
+    createRuntimeReviewOperationCommand,
+    createRuntimeReviewPanelCommandView,
   };
 }
 

@@ -9368,6 +9368,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：以页面级 `mainFlowCommandSurface` 为入口，继续减少 Workbench 页面和运行结果面板之间重复读取主流程命令的地方，优先服务完整编辑、运行、查看、回改闭环。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Panels Consume Main Flow Command Surface
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `createWorkbenchMainFlowCommandSurface()` 新增绑定当前 `flowModel` 的 `createRuntimeReviewOperationCommand()` 和 `createRuntimeReviewPanelCommandView()` 工厂。
+- `ResourceMonitorPanel`、`EventLogPanel`、`RuntimeSelectedDetailPanel`、`PropertiesPanel` 改为优先从页面级 `mainFlowCommandSurface` 生成运行结果 focus / return command。
+- `Workbench` 将同一份 `mainFlowCommandSurface` 传给顶部 FlowPanel、资源曲线、日志、运行详情和动作属性面板，减少“曲线/日志/详情/属性各自拼命令”的分散边界。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- main flow action 单测覆盖 command surface 的 panel command view 工厂，并确认 focus/return action 继续按 runtime review operation 优先级解析。
+- RuntimeSelectedDetailPanel 组件测试确认详情面板 focus/return 路径仍可分发。
+- Workbench 页面测试确认资源曲线、日志、详情、属性面板参与的主流程路径仍可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、81 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、213 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：基于同一份 `mainFlowCommandSurface` 继续整理运行结果选择、详情查看和回到动作修改的主路径，让页面层更少直接操作各面板内部命令。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

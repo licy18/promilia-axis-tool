@@ -564,6 +564,45 @@ describe('workbench main flow actions', () => {
     expect(surface.actions.runtimeReviewPrimary).toBe(
       surface.runtimeReviewPrimary.action
     );
+
+    const panelCommandView = surface.createRuntimeReviewPanelCommandView({
+      source: 'runtime-detail',
+      focusTarget: {
+        actionId: 'panel-action',
+        statePointId: 'panel-state-point',
+        canFocusAction: true,
+      },
+      returnContext: {
+        actionId: 'return-action',
+        originStatePointId: 'origin-state-point',
+        statePointId: 'return-state-point',
+      },
+    });
+    expect(panelCommandView).toMatchObject({
+      source: 'runtime-detail',
+      focus: {
+        actionId: 'review-action',
+        statePointId: 'review-state-point',
+        action: {
+          kind: 'focus-runtime-action',
+          source: 'runtime-detail',
+          actionId: 'review-action',
+          statePointId: 'review-state-point',
+          canRun: true,
+        },
+      },
+      returnResult: {
+        actionId: 'return-action',
+        statePointId: 'return-state-point',
+        action: {
+          kind: 'return-runtime-result',
+          source: 'runtime-detail',
+          actionId: 'return-action',
+          statePointId: 'return-state-point',
+          canRun: true,
+        },
+      },
+    });
   });
 
   it('creates runtime point and result focus actions with the same main flow factory', () => {

@@ -376,6 +376,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  mainFlowCommandSurface: {
+    type: Object,
+    default: null,
+  },
 });
 const emit = defineEmits(['dispatch-flow-action']);
 
@@ -625,17 +629,15 @@ const runtimeLogActionFocus = computed(() =>
   })
 );
 const runtimeLogActionFocusSeedCommand = computed(() =>
-  createWorkbenchRuntimeReviewOperationCommand({
+  createRuntimeReviewOperationCommandFromSurface({
     operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
     source: 'event-log-runtime-detail',
-    flowModel: props.flowModel,
     target: runtimeLogActionFocus.value,
   })
 );
 const runtimeLogCommandView = computed(() =>
-  createWorkbenchRuntimeReviewPanelCommandView({
+  createRuntimeReviewPanelCommandViewFromSurface({
     source: 'event-log-runtime-detail',
-    flowModel: props.flowModel,
     focusCommand: runtimeLogActionFocusSeedCommand.value,
     returnContext: runtimeLogResultReturnContext.value,
   })
@@ -838,6 +840,30 @@ function dispatchRuntimeLogFlowAction(action) {
     return;
   }
   emit('dispatch-flow-action', action);
+}
+
+function createRuntimeReviewOperationCommandFromSurface(options = {}) {
+  return (
+    props.mainFlowCommandSurface?.createRuntimeReviewOperationCommand?.(
+      options
+    ) ??
+    createWorkbenchRuntimeReviewOperationCommand({
+      flowModel: props.flowModel,
+      ...options,
+    })
+  );
+}
+
+function createRuntimeReviewPanelCommandViewFromSurface(options = {}) {
+  return (
+    props.mainFlowCommandSurface?.createRuntimeReviewPanelCommandView?.(
+      options
+    ) ??
+    createWorkbenchRuntimeReviewPanelCommandView({
+      flowModel: props.flowModel,
+      ...options,
+    })
+  );
 }
 
 function getRuntimeLogRowFlowAction(row) {

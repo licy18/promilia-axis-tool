@@ -301,6 +301,7 @@
               :runtime-focus-source="runtimeFocusSource"
               :action-edit-result-context="actionEditResultContext"
               :flow-model="workbenchFlowModel"
+              :main-flow-command-surface="mainFlowCommandSurface"
               :summary="simulationResult.summary"
               :diagnostics="simulationResult.diagnostics"
               @dispatch-flow-action="dispatchWorkbenchFlowAction"
@@ -318,6 +319,7 @@
             :action-edit-focus="actionEditFocus"
             :action-edit-result-context="actionEditResultContext"
             :flow-model="workbenchFlowModel"
+            :main-flow-command-surface="mainFlowCommandSurface"
             @dispatch-flow-action="dispatchWorkbenchFlowAction"
           />
         </div>
@@ -342,6 +344,7 @@
           :action-edit-focus="actionEditFocus"
           :action-edit-result-context="actionEditResultContext"
           :flow-model="workbenchFlowModel"
+          :main-flow-command-surface="mainFlowCommandSurface"
           @update-selection="updateSelection"
           @update-action="updateAction"
           @dispatch-flow-action="dispatchWorkbenchFlowAction"
@@ -358,6 +361,7 @@
           :action-edit-focus="actionEditFocus"
           :action-edit-result-context="actionEditResultContext"
           :flow-model="workbenchFlowModel"
+          :main-flow-command-surface="mainFlowCommandSurface"
           @dispatch-flow-action="dispatchWorkbenchFlowAction"
         />
 

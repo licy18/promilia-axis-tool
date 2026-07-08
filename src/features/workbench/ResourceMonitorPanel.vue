@@ -425,6 +425,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  mainFlowCommandSurface: {
+    type: Object,
+    default: null,
+  },
 });
 const emit = defineEmits(['dispatch-flow-action']);
 const runtimeCurveMode = ref('delta');
@@ -580,9 +584,8 @@ const selectedRuntimeCurveActionEditCommand = computed(() =>
   selectedRuntimeCurveCommandView.value.focus
 );
 const selectedRuntimeCurveCommandView = computed(() =>
-  createWorkbenchRuntimeReviewPanelCommandView({
+  createRuntimeReviewPanelCommandViewFromSurface({
     source: 'resource-runtime-curve',
-    flowModel: props.flowModel,
     focusTarget: getRuntimeCurveActionEditTarget(
       props.flowModel,
       selectedRuntimeCurvePoint.value
@@ -632,6 +635,18 @@ function formatRuntimeStateMetric(metric) {
 
 function formatRuntimeActorEnergyState(actor) {
   return `${formatRuntimeStateMetric(actor.stateMetric)} · ${actor.pointCount}点`;
+}
+
+function createRuntimeReviewPanelCommandViewFromSurface(options = {}) {
+  return (
+    props.mainFlowCommandSurface?.createRuntimeReviewPanelCommandView?.(
+      options
+    ) ??
+    createWorkbenchRuntimeReviewPanelCommandView({
+      flowModel: props.flowModel,
+      ...options,
+    })
+  );
 }
 
 function createRuntimeCurveSourceSeries(

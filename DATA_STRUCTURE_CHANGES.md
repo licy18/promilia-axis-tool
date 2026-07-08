@@ -20141,3 +20141,47 @@ props.mainFlowCommandSurface 不存在时：继续通过 createWorkbenchMainFlow
 - `npm run test -- --run src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、60 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、213 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 264. UI 主流程能力块：Runtime Panels Consume Main Flow Command Surface
+
+### 264.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`createWorkbenchMainFlowCommandSurface()` 新增两个绑定当前 `flowModel` 的工厂函数：
+
+```js
+{
+  createRuntimeReviewOperationCommand(options),
+  createRuntimeReviewPanelCommandView(options),
+}
+```
+
+默认行为：
+
+```text
+options.flowModel 存在时：使用 options.flowModel。
+options.flowModel 不存在时：使用 command surface 创建时绑定的 flowModel。
+```
+
+以下面板新增可选 `mainFlowCommandSurface` prop，并优先通过页面级 surface 生成运行结果操作命令：
+
+```text
+ResourceMonitorPanel
+EventLogPanel
+RuntimeSelectedDetailPanel
+PropertiesPanel
+```
+
+`Workbench` 页面层现在将同一份 `mainFlowCommandSurface` 传给顶部 FlowPanel、资源曲线、日志、运行详情和动作属性面板。
+
+### 264.2 保存与迁移
+
+本阶段只调整主流程 command surface 与运行面板之间的消费关系，不新增持久字段，不需要数据迁移。
+
+### 264.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 command surface 的 panel command view 工厂，并确认 focus/return action 继续按 runtime review operation 优先级解析。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、81 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、213 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

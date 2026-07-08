@@ -493,6 +493,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  mainFlowCommandSurface: {
+    type: Object,
+    default: null,
+  },
 });
 
 const emit = defineEmits([
@@ -685,9 +689,8 @@ const runtimeResultReturnContext = computed(() =>
   })
 );
 const runtimeResultReturnCommandView = computed(() =>
-  createWorkbenchRuntimeReviewPanelCommandView({
+  createRuntimeReviewPanelCommandViewFromSurface({
     source: 'properties-panel',
-    flowModel: props.flowModel,
     returnContext: runtimeResultReturnContext.value,
   })
 );
@@ -873,6 +876,18 @@ function createRuntimeResultReturnDisplayContext({ context, target } = {}) {
     label: target.label ?? context?.label ?? '回到结果点',
     summary: target.summary ?? context?.summary ?? '',
   };
+}
+
+function createRuntimeReviewPanelCommandViewFromSurface(options = {}) {
+  return (
+    props.mainFlowCommandSurface?.createRuntimeReviewPanelCommandView?.(
+      options
+    ) ??
+    createWorkbenchRuntimeReviewPanelCommandView({
+      flowModel: props.flowModel,
+      ...options,
+    })
+  );
 }
 
 function isEditFocusField(fieldKey) {
