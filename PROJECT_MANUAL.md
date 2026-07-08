@@ -4921,6 +4921,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 若先补资源监控，则优先用 `enemyStateCurve.points[]` 与 `selfEnergyCurveByActor[].points[]` 绘制 HP / 韧性 / 能量多曲线，而不是继续扩展 evidence 诊断。
 - 继续保持 `candidate / sampled / placeholder` 在诊断层，只有 applied delta 进入主运行时 UI。
 
+### 2026-07-08：阶段 5-8CE 模拟日志联动状态点焦点
+
+本轮完成：
+
+- `threeValueGenerationLayer.deltas[]` 新增 `stateCurveSequenceIndex`，保留源状态曲线点使用的序号，避免 runtime log / runtime point 自己的列表序号覆盖定位语义。
+- `threeValueRuntimeProjection.simLog[]` 与 runtime point 继承 `stateCurveSequenceIndex`，让运行日志能稳定回到 `threeValueCurveFramework.stateCurves` 的同一个 applied 点。
+- `EventLogPanel` 引入共享的 `createStateCurvePointId()`，在选中 runtime sim log 时生成同一个 `stateCurvePointId`，并在详情中显示 `状态点`。
+- `EventLogPanel` 新增 `select-runtime-state-point` 事件，点击或键盘选中日志行时把状态点 ID 回传给 `Workbench`。
+- `Workbench` 接到 runtime sim log 的状态点 ID 后，复用现有 `selectedStateCurvePointId`，并自动切换到状态曲线“选中”模式。
+- 新增 Workbench 页面级测试，确认点击 runtime sim log 后，状态曲线只保留对应点，时间轴 state marker 进入 selected 状态。
+
+当前验证事实：
+
+- 默认末音样例中，runtime sim log 详情显示的 `状态点` 与时间轴 applied state marker 的 `data-state-point-id` 完全一致。
+- 点击默认 runtime sim log 行后，分析面板状态曲线从 `16` 个可见点收窄到 `1` 个选中点。
+- 点击日志后，时间轴对应的 applied state marker 保留并显示 selected 状态。
+
+当前边界：
+
+- 本阶段只打通日志到状态点/帧定位，没有新增伤害、削韧或充能公式。
+- 状态点焦点仍依赖已应用的 applied delta；`candidate / sampled / placeholder` 继续只在诊断路径显示。
+- 资源监控仍是数值列表，还没有 Endaxis 式多曲线图。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、36 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、110 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8CF 目标：把运行时资源监控从摘要列表升级为 Endaxis 式 HP / 韧性 / 自身能量多曲线图。
+- 曲线数据只消费 `threeValueRuntimeProjection.enemyStateCurve.points[]` 和 `selfEnergyCurveByActor[].points[]`，不要重新读取 evidence 矩阵。
+- 曲线横轴继续使用 60fps 帧时间基准；点击曲线点时优先复用现有 `selectedStateCurvePointId` 联动链路。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

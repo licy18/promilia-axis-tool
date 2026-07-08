@@ -9396,3 +9396,99 @@ data-testid="workbench-runtime-sim-log-source-row"
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8CE 应把 runtime sim log 选中项与时间轴 / 状态点焦点联动，或优先补运行时资源监控的 HP / 韧性 / 能量多曲线图。
+
+## 112. 阶段 5-8CE：runtime sim log 状态点联动
+
+阶段 5-8CE 不修改项目保存 schema。本阶段只增强 simulation projection 字段，并新增 Workbench UI 事件联动。
+
+### 112.1 Generation / runtime projection 字段
+
+`threeValueGenerationLayer.deltas[]` 新增：
+
+```js
+{
+  stateCurveSequenceIndex,
+}
+```
+
+语义：保留源 `threeValueCurveFramework.stateCurves` 点在生成 `stateCurvePointId` 时使用的序号。它与 runtime log 的显示序号不同，后者可能按 applied delta 全局或按角色曲线重排。
+
+`threeValueRuntimeProjection.simLog[]` 与 runtime point 新增：
+
+```js
+{
+  stateCurveSequenceIndex,
+}
+```
+
+该字段从 generation delta 继承，用于 UI 重新生成同一个 `stateCurvePointId`：
+
+```js
+createStateCurvePointId({
+  trackKey,
+  layerKey,
+  point: {
+    actionId,
+    frameIndex,
+    sequenceIndex: stateCurveSequenceIndex,
+  },
+  pointIndex: stateCurveSequenceIndex,
+})
+```
+
+### 112.2 EventLogPanel 联动事件
+
+`EventLogPanel` 新增事件：
+
+```js
+emit('select-runtime-state-point', stateCurvePointId)
+```
+
+触发时机：
+
+- 点击 runtime sim log 行。
+- 对 runtime sim log 行按 Enter。
+- 对 runtime sim log 行按 Space。
+
+新增派生：
+
+```js
+selectedRuntimeStatePointId
+```
+
+新增测试入口：
+
+```html
+data-testid="workbench-runtime-sim-log-state-point"
+```
+
+### 112.3 Workbench 焦点行为
+
+`Workbench` 新增处理函数：
+
+```js
+selectRuntimeStatePoint(pointId)
+```
+
+行为：
+
+- 复用 `selectStateCurvePoint(pointId)` 更新全局 `selectedStateCurvePointId`。
+- 当 `pointId` 非空时，把 `stateCurveFocusMode` 切到 `selected`。
+- 时间轴 state marker 和分析面板状态曲线继续消费同一个选中状态，不新增第二套日志专用焦点状态。
+
+### 112.4 验证
+
+当前测试覆盖：
+
+- runtime sim log 详情中的 `状态点` 与时间轴 applied state marker 的 `data-state-point-id` 一致。
+- 点击 runtime sim log 行后，状态曲线焦点按钮切到 `选中`。
+- 点击 runtime sim log 行后，状态曲线可见点数从 `16` 收窄为 `1`。
+- 点击 runtime sim log 行后，对应时间轴 state marker 包含 `selected` 类。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、36 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、110 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8CF 应把 `ResourceMonitorPanel` 升级为 HP / 韧性 / 自身能量多曲线图，并复用本阶段建立的状态点焦点链路。

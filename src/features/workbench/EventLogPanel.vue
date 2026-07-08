@@ -148,6 +148,12 @@
           <span>来源</span>
           <strong>{{ selectedRuntimeLog.sourceDeltaId }}</strong>
         </div>
+        <div>
+          <span>状态点</span>
+          <strong data-testid="workbench-runtime-sim-log-state-point">
+            {{ selectedRuntimeStatePointId }}
+          </strong>
+        </div>
       </div>
 
       <div
@@ -190,6 +196,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue';
 import { Tickets } from '@element-plus/icons-vue';
+import { createStateCurvePointId } from './stateCurvePointIdentity';
 
 const props = defineProps({
   eventLog: {
@@ -201,6 +208,7 @@ const props = defineProps({
     default: null,
   },
 });
+const emit = defineEmits(['select-runtime-state-point']);
 
 const selectedRuntimeLogIndex = ref(0);
 const runtimeTrackFilter = ref('all');
@@ -289,9 +297,13 @@ const selectedRuntimeLog = computed(
   () => filteredRuntimeSimLogRows.value[selectedRuntimeLogIndex.value] ?? null
 );
 const selectedRuntimeLogPoint = computed(() =>
-  selectedRuntimeLog.value?.sourceDeltaId
-    ? runtimePointByDeltaId.value.get(selectedRuntimeLog.value.sourceDeltaId)
-    : null
+  getRuntimePointByRow(selectedRuntimeLog.value)
+);
+const selectedRuntimeStatePointId = computed(() =>
+  createRuntimeStateCurvePointId(
+    selectedRuntimeLog.value,
+    selectedRuntimeLogPoint.value
+  )
 );
 const selectedRuntimeContributionRows = computed(() =>
   createRuntimeContributionRows(selectedRuntimeLog.value)
@@ -354,6 +366,11 @@ function formatSigned(value) {
 
 function selectRuntimeLog(index) {
   selectedRuntimeLogIndex.value = index;
+  const row = filteredRuntimeSimLogRows.value[index];
+  emit(
+    'select-runtime-state-point',
+    createRuntimeStateCurvePointId(row, getRuntimePointByRow(row))
+  );
 }
 
 function formatRuntimeTime(row) {
@@ -392,12 +409,51 @@ function formatNumber(value) {
 }
 
 function formatRuntimeStatus(row) {
-  const point = row?.sourceDeltaId
-    ? runtimePointByDeltaId.value.get(row.sourceDeltaId)
-    : null;
+  const point = getRuntimePointByRow(row);
   return (
     point?.resultStatus ?? point?.sourceStatus ?? row?.confidence ?? 'applied'
   );
+}
+
+function getRuntimePointByRow(row) {
+  return row?.sourceDeltaId
+    ? runtimePointByDeltaId.value.get(row.sourceDeltaId)
+    : null;
+}
+
+function createRuntimeStateCurvePointId(row, point) {
+  if (!row && !point) {
+    return '';
+  }
+
+  const stateCurveSequenceIndex =
+    numberOrNull(row?.stateCurveSequenceIndex) ??
+    numberOrNull(point?.stateCurveSequenceIndex) ??
+    parseRuntimeStateCurveSequenceIndex(row?.hitKey ?? point?.hitKey) ??
+    numberOrNull(point?.sequenceIndex) ??
+    numberOrNull(row?.sequenceIndex) ??
+    0;
+
+  return createStateCurvePointId({
+    trackKey: row?.trackKey ?? point?.trackKey,
+    layerKey: row?.layerKey ?? point?.layerKey ?? 'applied',
+    point: {
+      ...(point ?? {}),
+      ...(row ?? {}),
+      sequenceIndex: stateCurveSequenceIndex,
+    },
+    pointIndex: stateCurveSequenceIndex,
+  });
+}
+
+function parseRuntimeStateCurveSequenceIndex(hitKey) {
+  const match = String(hitKey ?? '').match(/-point-(\d+)$/);
+  return match ? Number(match[1]) : null;
+}
+
+function numberOrNull(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
 }
 
 function countRuntimeOptions(rows, field) {

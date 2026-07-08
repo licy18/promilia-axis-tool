@@ -962,6 +962,63 @@ describe('Workbench view', () => {
     expect(text).toContain('low');
   });
 
+  it('links runtime sim log selection to the focused state curve point', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    const appliedMarker = wrapper.find(
+      '[data-testid="workbench-timeline-state-curve-marker"]'
+    );
+    const appliedStatePointId = appliedMarker.attributes(
+      'data-state-point-id'
+    );
+
+    expect(appliedStatePointId).toBeTruthy();
+    expect(
+      wrapper.find('[data-testid="workbench-state-curve-focus-all"]').classes()
+    ).toContain('active');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-state-point"]')
+        .text()
+    ).toBe(appliedStatePointId);
+
+    await wrapper
+      .find('[data-testid="workbench-runtime-sim-log-row"]')
+      .trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-focus-selected"]')
+        .classes()
+    ).toContain('active');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curves"] .source-heading strong')
+        .text()
+    ).toBe('1');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-point"]')
+        .attributes('data-state-point-id')
+    ).toBe(appliedStatePointId);
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-timeline-state-curve-marker"][data-state-point-id="${appliedStatePointId}"]`
+        )
+        .classes()
+    ).toContain('selected');
+  });
+
   it('exposes sampled and placeholder state curve layers before values are applied', async () => {
     let stateCurveLayerFilters = {
       applied: true,

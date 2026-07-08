@@ -144,6 +144,7 @@
         class="event-area"
         :event-log="simulationResult.eventLog"
         :runtime-projection="simulationResult.threeValueRuntimeProjection"
+        @select-runtime-state-point="selectRuntimeStatePoint"
       />
     </div>
   </main>
@@ -877,6 +878,13 @@ function selectStateCurvePoint(pointId) {
   selectedStateCurvePointId.value = pointId || '';
   if (!selectedStateCurvePointId.value) {
     stateCurveFocusMode.value = 'all';
+  }
+}
+
+function selectRuntimeStatePoint(pointId) {
+  selectStateCurvePoint(pointId);
+  if (pointId) {
+    stateCurveFocusMode.value = 'selected';
   }
 }
 

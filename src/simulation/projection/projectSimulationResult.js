@@ -1761,6 +1761,7 @@ function createThreeValueGenerationDelta({
     resultStatus: point.resultStatus ?? null,
     candidateCount: numberOrNull(point.candidateCount),
     sequenceIndex: numberOrNull(point.sequenceIndex) ?? pointIndex,
+    stateCurveSequenceIndex: numberOrNull(point.sequenceIndex) ?? pointIndex,
     applied: Boolean(point.applied && layer.applied),
     replaceable: !Boolean(point.applied && layer.applied),
   };
@@ -2137,6 +2138,7 @@ function createThreeValueRuntimeSimLog(appliedDeltas) {
     toughnessDelta: normalizeThreeValueRuntimeNumber(delta.toughnessDelta),
     energyDelta: normalizeThreeValueRuntimeNumber(delta.energyDelta),
     confidence: delta.confidence,
+    stateCurveSequenceIndex: delta.stateCurveSequenceIndex,
     applied: true,
   }));
 }
@@ -2146,6 +2148,7 @@ function createThreeValueRuntimePoint(delta, sequenceIndex) {
     sourceKind: 'three-value-generation-layer-applied-delta',
     sourceDeltaId: delta.id,
     sequenceIndex,
+    stateCurveSequenceIndex: delta.stateCurveSequenceIndex,
     actionId: delta.actionId,
     actionName: delta.actionName,
     actionType: delta.actionType,
