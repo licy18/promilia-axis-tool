@@ -7508,6 +7508,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：围绕 Endaxis 式闭环推进“动作编辑 -> 运行模拟 -> 曲线监控 -> 日志/详情查看 -> 回到动作修改”的完整路径，不再回到局部状态标签或提示文案阶段。
 
+### 2026-07-09：UI 主流程能力块 - 运行结果点定位动作
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- Workbench 的运行结果选择入口已统一：从资源曲线、模拟日志、分析定位等入口选中 runtime state point 时，会同步选中该结果点来源动作。
+- 进入 runtime 视角时，如果自动选中第一个运行结果，也会同步定位到来源动作。
+- 运行结果详情、曲线选中、日志选中和动作编辑面板现在围绕同一个 runtime state point / action 对齐；本阶段不新增公式推断、不修改三值数值、不扩大 UI 信息量。
+
+当前验证事实：
+
+- 在已有第二个动作被选中时，点击第一个动作的运行曲线点，会切回 `action-0001`；继续跳到下一个运行结果，会切到对应的 `action-0002`。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "links runtime resource curve points"`：通过，1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、53 条测试。
+- `npm run test -- --run`：通过，18 个测试文件、138 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 Workbench 的主流程状态进一步抽成可复用的 flow model，使动作编辑、运行模拟、曲线监控、日志详情和回到修改不再依赖分散的组件局部判断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

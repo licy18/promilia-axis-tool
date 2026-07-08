@@ -3551,6 +3551,11 @@ describe('Workbench view', () => {
       .findAll('[data-testid="workbench-runtime-resource-chart-point"]')
       .filter(point => point.attributes('data-state-point-id'));
     expect(runtimeCurvePoints.length).toBeGreaterThan(1);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-flow-panel"]')
+        .attributes('data-action-id')
+    ).toBe('action-0002');
     const runtimeCurvePoint = runtimeCurvePoints[0];
     const statePointId = runtimeCurvePoint.attributes('data-state-point-id');
 
@@ -3571,6 +3576,18 @@ describe('Workbench view', () => {
         )
         .attributes('data-selected')
     ).toBe('true');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-flow-panel"]')
+        .attributes('data-action-id')
+    ).toBe('action-0001');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+        )
+        .classes()
+    ).toContain('selected');
     expect(
       wrapper
         .find('[data-testid="workbench-state-curve-point"]')
@@ -3680,6 +3697,18 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(nextStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-flow-panel"]')
+        .attributes('data-action-id')
+    ).toBe('action-0002');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+        )
+        .classes()
+    ).toContain('selected');
     expect(
       wrapper
         .find(

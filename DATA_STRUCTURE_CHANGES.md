@@ -15371,3 +15371,41 @@ runtimeInputSource: threeValueGenerationBundle.runtimeInputSource
 - `npm run test -- --run`：通过，18 个测试文件、138 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 194. UI 主流程能力块：运行结果点定位动作
+
+本阶段属于 UI 主流程。
+
+### 194.1 结构变化
+
+`Workbench` 的运行结果选择入口收敛为：
+
+```js
+selectRuntimeStatePoint(pointId)
+```
+
+该入口现在会同时执行：
+
+```js
+selectStateCurvePoint(pointId)
+selectActionFromRuntimeStatePoint(pointId)
+```
+
+因此通过资源曲线、模拟日志、分析定位或 runtime 视角自动选择进入的 runtime state point，会同步选中该结果点来源动作。`selectRuntimeFlowStatePoint()` 不再单独重复执行动作同步。
+
+`focusThreeValueCalculatorScope('runtime')` 在自动选择第一个运行结果时，也改为通过 `selectRuntimeStatePoint()` 进入同一套选择路径。
+
+### 194.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 当前选择状态：`selectedStateCurvePointId` 和 `selectedActionId` 在 runtime 结果视角下保持同源，不改变模拟结果、三值计算或持久化项目文件。
+
+### 194.3 验证
+
+- Workbench 测试覆盖：当当前选中第二个动作时，点击第一个动作的运行曲线点会同步选中 `action-0001`；继续导航到下一个运行结果会同步选中 `action-0002`。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "links runtime resource curve points"`：通过，1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、53 条测试。
+- `npm run test -- --run`：通过，18 个测试文件、138 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。

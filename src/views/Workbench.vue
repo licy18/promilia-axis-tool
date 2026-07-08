@@ -1309,6 +1309,7 @@ function selectRuntimeStatePoint(pointId) {
   selectStateCurvePoint(pointId);
   if (pointId) {
     stateCurveFocusMode.value = 'selected';
+    selectActionFromRuntimeStatePoint(pointId);
   }
   runtimeLogFocus.value = {
     source: '',
@@ -1319,7 +1320,6 @@ function selectRuntimeStatePoint(pointId) {
 
 function selectRuntimeFlowStatePoint(pointId) {
   selectRuntimeStatePoint(pointId);
-  selectActionFromRuntimeStatePoint(pointId);
 }
 
 function selectActionResultRuntimePoint(pointId) {
@@ -1500,8 +1500,12 @@ function focusThreeValueCalculatorScope(
           simulationResult.value.threeValueRuntimeProjection
         )
       : '';
-    selectedStateCurvePointId.value = firstRuntimePointId;
-    stateCurveFocusMode.value = firstRuntimePointId ? 'selected' : 'all';
+    if (firstRuntimePointId) {
+      selectRuntimeStatePoint(firstRuntimePointId);
+    } else {
+      selectedStateCurvePointId.value = '';
+      stateCurveFocusMode.value = 'all';
+    }
     return;
   }
 
