@@ -1383,6 +1383,22 @@ describe('first vertical slice simulation', () => {
         version: 1,
         frameRate: 60,
         deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
+        calculatorContract: {
+          name: 'ThreeValueDeltaCalculator',
+          version: 1,
+          requiredOutputs: [
+            'delta',
+            'status',
+            'sourceIds',
+            'confidence',
+            'replaceable',
+          ],
+          calculatorKeys: [
+            'azpr-hp-delta-calculator',
+            'azpr-toughness-delta-calculator',
+            'azpr-self-energy-delta-calculator',
+          ],
+        },
       },
       summary: {
         actionCount: 1,
@@ -1394,6 +1410,13 @@ describe('first vertical slice simulation', () => {
         sampledDeltaCount: 0,
         placeholderDeltaCount: 0,
         replaceableDeltaCount: 15,
+        calculatorCount: 3,
+        calculatorKeys: [
+          'azpr-hp-delta-calculator',
+          'azpr-toughness-delta-calculator',
+          'azpr-self-energy-delta-calculator',
+        ],
+        calculatorReplaceableDeltaCount: 16,
         frameMin: 0,
         frameMax: 184,
         applied: false,
@@ -1407,7 +1430,32 @@ describe('first vertical slice simulation', () => {
       deltaCount: 16,
       candidateDeltaCount: 15,
       appliedDeltaCount: 1,
+      calculatorCount: 3,
+      calculatorReplaceableDeltaCount: 16,
       applied: false,
+    });
+    const appliedGenerationDelta = result.threeValueGenerationLayer.deltas.find(
+      delta => delta.applied
+    );
+    expect(appliedGenerationDelta).toMatchObject({
+      trackKey: 'enemyHpDamage',
+      layerKey: 'applied',
+      calculatorKey: 'azpr-hp-delta-calculator',
+      calculationKind: 'raw-result-preview',
+      calculationStatus: 'raw-hp-projection',
+      calculationReplaceable: true,
+      calculator: {
+        key: 'azpr-hp-delta-calculator',
+        outputField: 'hpDelta',
+        delta: 12461,
+        sourceIds: {
+          skillIds: [10900101],
+          elementConfigIds: [109001081, 109001306],
+        },
+        confidence: 'low',
+        replaceable: true,
+        appliedToRuntime: true,
+      },
     });
     expect(result.threeValueRuntimeProjection).toMatchObject({
       status: 'runtime-projection-ready-from-generation-layer',
@@ -1479,6 +1527,10 @@ describe('first vertical slice simulation', () => {
       hpDelta: 12461,
       toughnessDelta: null,
       energyDelta: null,
+      calculatorKey: 'azpr-hp-delta-calculator',
+      calculationKind: 'raw-result-preview',
+      calculationStatus: 'raw-hp-projection',
+      calculationReplaceable: true,
       applied: true,
     });
     expect(result.summary.threeValueRuntimeProjectionSummary).toMatchObject({
@@ -1524,6 +1576,9 @@ describe('first vertical slice simulation', () => {
         delta.energyDelta,
         delta.sourceKind,
         delta.confidence,
+        delta.calculatorKey,
+        delta.calculationKind,
+        delta.calculationReplaceable,
       ])
     ).toEqual([
       [
@@ -1535,6 +1590,9 @@ describe('first vertical slice simulation', () => {
         null,
         'candidate-chart-point',
         'candidate',
+        'azpr-hp-delta-calculator',
+        'damage-element-candidate-preview',
+        true,
       ],
       [
         'enemyToughnessDamage',
@@ -1545,6 +1603,9 @@ describe('first vertical slice simulation', () => {
         null,
         'candidate-chart-point',
         'candidate',
+        'azpr-toughness-delta-calculator',
+        'weak-break-field-candidate-preview',
+        true,
       ],
       [
         'selfEnergyChange',
@@ -1555,6 +1616,9 @@ describe('first vertical slice simulation', () => {
         2700,
         'candidate-chart-point',
         'candidate',
+        'azpr-self-energy-delta-calculator',
+        'recover-sp-candidate-preview',
+        true,
       ],
     ]);
     expect(generationHit1.deltas[0].sourceIds.elementConfigIds).toEqual([
@@ -2392,6 +2456,16 @@ describe('first vertical slice simulation', () => {
       energyDelta: 0.3375,
       hpDelta: null,
       toughnessDelta: null,
+      calculatorKey: 'azpr-self-energy-delta-calculator',
+      calculationKind: 'recover-sp-runtime-sample',
+      calculationStatus: 'recover-sp-runtime-sample-unapplied',
+      calculationReplaceable: true,
+      calculator: {
+        outputField: 'energyDelta',
+        delta: 0.3375,
+        confidence: 'sampled',
+        replaceable: true,
+      },
       sourceIds: {
         elementConfigIds: [109001081],
         captureSessionIds: ['fixture-recover-sp-109001081-v1'],
@@ -3703,6 +3777,16 @@ describe('first vertical slice simulation', () => {
               actionId: 'action-sp',
               trackKey: 'selfEnergyChange',
               energyDelta: -Number(spSkill.spCost),
+              calculatorKey: 'azpr-self-energy-delta-calculator',
+              calculationKind: 'explicit-resource-event-or-cost-preview',
+              calculationStatus: 'explicit-cost-applied-charge-formula-unmapped',
+              calculationReplaceable: true,
+              calculator: expect.objectContaining({
+                outputField: 'energyDelta',
+                delta: -Number(spSkill.spCost),
+                replaceable: true,
+                appliedToRuntime: true,
+              }),
               applied: true,
             }),
           ],

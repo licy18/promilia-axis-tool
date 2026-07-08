@@ -10197,3 +10197,126 @@ data-testid="workbench-runtime-selected-detail-baseline-status"
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
 
 下一阶段 5-8CM 应抽出三值运行时公式适配器框架，让 HP / 韧性 / 自身能量 delta 的产生入口统一成可替换 calculator contract。
+
+## 120. 阶段 5-8CM：three-value calculator contract
+
+阶段 5-8CM 不修改项目保存 schema。本阶段扩展 `threeValueGenerationLayer`、`threeValueRuntimeProjection` 的派生字段。
+
+### 120.1 Generation contract 新增 calculatorContract
+
+`threeValueGenerationLayer.contract` 新增：
+
+```js
+calculatorContract: {
+  name: 'ThreeValueDeltaCalculator',
+  version: 1,
+  outputFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
+  requiredOutputs: [
+    'delta',
+    'status',
+    'sourceIds',
+    'confidence',
+    'replaceable',
+  ],
+  calculatorKeys: [
+    'azpr-hp-delta-calculator',
+    'azpr-toughness-delta-calculator',
+    'azpr-self-energy-delta-calculator',
+  ],
+  policy,
+}
+```
+
+### 120.2 Delta 新增 calculator 字段
+
+`threeValueGenerationLayer.deltas[]` 新增：
+
+```js
+calculator: {
+  key,
+  version,
+  trackKey,
+  outputField,
+  kind,
+  status,
+  delta,
+  deltaFieldValue,
+  valueUnit,
+  sourceKind,
+  sourceIds,
+  confidence,
+  replaceable,
+  appliedToRuntime,
+  unresolved,
+}
+calculatorKey
+calculatorVersion
+calculationKind
+calculationStatus
+calculationReplaceable
+```
+
+语义：
+
+- `replaceable`：沿用 state layer 语义，表示该 delta 所在 layer 是否可被替换。
+- `calculationReplaceable`：表示该 calculator 输出是否可被最终 AzPr 公式替换。
+- 当前阶段这两个字段可能不同，例如 applied HP delta 的 layer 已应用，但 formula adapter 仍 `calculationReplaceable=true`。
+
+### 120.3 Runtime projection 透传字段
+
+`threeValueRuntimeProjection.enemyStateCurve.points[]`、`selfEnergyCurveByActor[].points[]`、`simLog[]` 透传：
+
+```js
+calculator
+calculatorKey
+calculatorVersion
+calculationKind
+calculationStatus
+calculationReplaceable
+```
+
+### 120.4 Summary 新增字段
+
+`threeValueGenerationLayer.summary` 新增：
+
+```js
+calculatorCount
+calculatorKeys
+calculatorReplaceableDeltaCount
+calculatorStatuses
+calculatorSummary
+```
+
+`calculatorSummary` 包含：
+
+```js
+contractName
+contractVersion
+calculatorCount
+calculatorKeys
+calculatorReplaceableDeltaCount
+statuses
+outputFields
+confidenceLevels
+appliedToRuntimeCount
+```
+
+### 120.5 验证
+
+当前测试覆盖：
+
+- 默认样本 calculator contract 暴露三条 calculator key。
+- 默认样本 `calculatorCount=3`，`calculatorReplaceableDeltaCount=16`。
+- 默认 applied HP delta 使用 `azpr-hp-delta-calculator`，`calculationKind=raw-result-preview`，`calculationStatus=raw-hp-projection`。
+- 候选 hit-1 的 HP / 韧性 / 自身能量 delta 分别使用三条对应 calculator。
+- recover-sp runtime sample 使用 self-energy calculator，`calculationKind=recover-sp-runtime-sample`。
+- 寒悠悠显式 SP 消耗使用 self-energy calculator，`calculationKind=explicit-resource-event-or-cost-preview`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、13 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有既有 Windows 换行提示。
+
+下一阶段 5-8CN 应把 calculator 来源接入 Workbench 统一三值详情和 runtime sim log 详情。

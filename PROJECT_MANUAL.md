@@ -5211,6 +5211,48 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 当前 raw HP 预览、韧性 pending、能量 cost / recover-sp evidence 都应通过同一适配器输出 `delta`、`status`、`sourceIds`、`confidence` 和 `replaceable`。
 - 本阶段仍不追最终公式数值，只把后续接入真实 AzPr 公式、采样校准和角色/敌人状态参数的位置固定下来。
 
+### 2026-07-08：阶段 5-8CM 三值运行时公式适配器框架
+
+本轮完成：
+
+- `threeValueGenerationLayer.contract` 新增 `calculatorContract`，明确 `ThreeValueDeltaCalculator` 的必要输出：`delta`、`status`、`sourceIds`、`confidence`、`replaceable`。
+- 新增三套 calculator 定义：
+  - `azpr-hp-delta-calculator`
+  - `azpr-toughness-delta-calculator`
+  - `azpr-self-energy-delta-calculator`
+- `createThreeValueGenerationDelta()` 现在会为每条 delta 生成 `calculator` 对象，并同步扁平字段 `calculatorKey`、`calculatorVersion`、`calculationKind`、`calculationStatus`、`calculationReplaceable`。
+- 当前 raw HP、候选 DamageElement HP、候选削韧、候选/采样/显式资源能量变化都通过同一 calculator 输出结构承载。
+- `threeValueGenerationLayer.summary` 新增 calculator 统计：`calculatorCount`、`calculatorKeys`、`calculatorReplaceableDeltaCount`、`calculatorStatuses`、`calculatorSummary`。
+- `threeValueRuntimeProjection` 的 runtime point 与 sim log 继续携带 calculator 元数据，后续 UI 详情或调试日志可直接显示公式适配器来源。
+
+当前验证事实：
+
+- 默认样本中 `calculatorContract.calculatorKeys` 覆盖 HP、韧性、自身能量三条轨。
+- 默认样本 `calculatorCount=3`，`calculatorReplaceableDeltaCount=16`，说明当前 16 条 delta 都仍是可替换适配器输出。
+- 默认 applied HP delta 使用 `azpr-hp-delta-calculator`，`calculationKind=raw-result-preview`，`calculationStatus=raw-hp-projection`，`calculationReplaceable=true`。
+- 候选 hit-1 的三条 delta 分别使用 HP / toughness / self-energy calculator，且均保留 `sourceIds` 与 `confidence=candidate`。
+- recover-sp runtime sample 使用 `azpr-self-energy-delta-calculator`，`calculationKind=recover-sp-runtime-sample`，保留采样 `captureSessionIds`。
+- 寒悠悠显式 SP 消耗点使用 `azpr-self-energy-delta-calculator`，`calculationKind=explicit-resource-event-or-cost-preview`，并继续进入 runtime projection。
+
+当前边界：
+
+- calculator contract 已固定，但 HP / 韧性 / 能量的最终 AzPr 公式仍未确认；当前输出仍以 preview / candidate / sampled / explicit event 为主。
+- 顶层 `replaceable` 仍表示 state layer 是否可替换；`calculationReplaceable` 表示公式适配器输出是否可被最终公式替换。两者语义不同，后续不要混用。
+- UI 尚未展示 calculator 来源；目前只把元数据带到 runtime point 和 sim log。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、13 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有既有 Windows 换行提示。
+
+下一步：
+
+- 阶段 5-8CN 目标：把 calculator 来源接入 Workbench 统一三值详情和 runtime sim log 详情，让用户能直接看到当前 delta 来自哪条适配器、是否可替换、还缺哪些确认项。
+- 展示时保留非技术但可追溯的标签，例如“HP预览 / 可替换 / 公式未确认”、“削韧候选 / 基线待确认”、“能量采样 / owner-share待确认”。
+- 不在 5-8CN 修改最终公式，只把来源透明度和调试入口补齐。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

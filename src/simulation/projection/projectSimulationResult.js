@@ -70,6 +70,65 @@ const THREE_VALUE_DELTA_FIELD_BY_TRACK_KEY = {
   selfEnergyChange: 'energyDelta',
 };
 const THREE_VALUE_DELTA_FIELDS = ['hpDelta', 'toughnessDelta', 'energyDelta'];
+const THREE_VALUE_CALCULATOR_DEFINITIONS = {
+  enemyHpDamage: {
+    key: 'azpr-hp-delta-calculator',
+    version: 1,
+    outputField: 'hpDelta',
+    valueUnit: 'raw-damage',
+    contractStatus: 'raw-preview-until-final-hp-formula-confirmed',
+    kindByLayer: {
+      applied: 'raw-result-preview',
+      candidate: 'damage-element-candidate-preview',
+      sampled: 'runtime-sample-preview',
+      placeholder: 'placeholder',
+    },
+    defaultStatusByLayer: {
+      applied: 'raw-hp-projection-applied-final-azpr-formula-unconfirmed',
+      candidate: 'formula-candidate-preview-unapplied',
+      sampled: 'runtime-sample-hp-delta-unconfirmed',
+      placeholder: 'hp-delta-placeholder-waiting-confirmed-formula',
+    },
+  },
+  enemyToughnessDamage: {
+    key: 'azpr-toughness-delta-calculator',
+    version: 1,
+    outputField: 'toughnessDelta',
+    valueUnit: 'raw-field',
+    contractStatus: 'weak-break-preview-until-final-toughness-formula-confirmed',
+    kindByLayer: {
+      applied: 'weak-break-result-preview',
+      candidate: 'weak-break-field-candidate-preview',
+      sampled: 'runtime-sample-preview',
+      placeholder: 'placeholder',
+    },
+    defaultStatusByLayer: {
+      applied: 'zero-placeholder-until-toughness-formula-confirmed',
+      candidate: 'weak-break-field-candidate-unapplied',
+      sampled: 'runtime-sample-toughness-delta-unconfirmed',
+      placeholder: 'toughness-delta-placeholder-waiting-confirmed-formula',
+    },
+  },
+  selfEnergyChange: {
+    key: 'azpr-self-energy-delta-calculator',
+    version: 1,
+    outputField: 'energyDelta',
+    valueUnit: 'sp',
+    contractStatus: 'resource-preview-until-final-self-energy-formula-confirmed',
+    kindByLayer: {
+      applied: 'explicit-resource-event-or-cost-preview',
+      candidate: 'recover-sp-candidate-preview',
+      sampled: 'recover-sp-runtime-sample',
+      placeholder: 'placeholder',
+    },
+    defaultStatusByLayer: {
+      applied: 'resource-delta-applied-recover-sp-candidate-unapplied',
+      candidate: 'recover-sp-runtime-probe-candidate-unapplied',
+      sampled: 'recover-sp-runtime-sample-unapplied',
+      placeholder: 'self-energy-placeholder-waiting-confirmed-formula',
+    },
+  },
+};
 const AZPR_IL2CPP_DUMP_CS_PATH =
   'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs';
 const AZPR_IL2CPP_SCRIPT_JSON_PATH =
@@ -1658,6 +1717,23 @@ function buildThreeValueGenerationLayer({
         'sourceIds',
         'confidence',
       ],
+      calculatorContract: {
+        name: 'ThreeValueDeltaCalculator',
+        version: 1,
+        outputFields: THREE_VALUE_DELTA_FIELDS,
+        requiredOutputs: [
+          'delta',
+          'status',
+          'sourceIds',
+          'confidence',
+          'replaceable',
+        ],
+        calculatorKeys: Object.values(THREE_VALUE_CALCULATOR_DEFINITIONS).map(
+          calculator => calculator.key
+        ),
+        policy:
+          'current HP/toughness/self-energy formulas are adapter outputs and remain replaceable until final AzPr formulas are confirmed',
+      },
     },
     inputSources: [
       'threeValueCurveFramework.stateCurves.applied',
@@ -1716,6 +1792,29 @@ function createThreeValueGenerationDelta({
   const trackKey = track.trackKey;
   const layerKey = layer.key;
   const deltaFields = createThreeValueDeltaFields(trackKey, deltaValue);
+  const sourceKind = point.sourceKind ?? layer.sourceKind;
+  const sourceIds = createThreeValueGenerationSourceIds(point);
+  const confidence = createThreeValueGenerationConfidence({
+    point,
+    layerKey,
+  });
+  const sourceStatus = point.sourceStatus ?? point.resultStatus ?? null;
+  const resultStatus = point.resultStatus ?? null;
+  const applied = Boolean(point.applied && layer.applied);
+  const calculator = createThreeValueCalculatorResult({
+    trackKey,
+    layerKey,
+    point,
+    layer,
+    delta: deltaValue,
+    deltaFields,
+    sourceKind,
+    sourceIds,
+    confidence,
+    sourceStatus,
+    resultStatus,
+    applied,
+  });
   const hitIndex = numberOrNull(point.hitIndex);
   const hitKey = createThreeValueGenerationHitKey({
     point,
@@ -1751,19 +1850,22 @@ function createThreeValueGenerationDelta({
     valueUnit: layer.valueUnit ?? track.valueUnit,
     delta: deltaValue,
     ...deltaFields,
-    sourceKind: point.sourceKind ?? layer.sourceKind,
-    sourceIds: createThreeValueGenerationSourceIds(point),
-    confidence: createThreeValueGenerationConfidence({
-      point,
-      layerKey,
-    }),
-    sourceStatus: point.sourceStatus ?? point.resultStatus ?? null,
-    resultStatus: point.resultStatus ?? null,
+    sourceKind,
+    sourceIds,
+    confidence,
+    sourceStatus,
+    resultStatus,
+    calculator,
+    calculatorKey: calculator.key,
+    calculatorVersion: calculator.version,
+    calculationKind: calculator.kind,
+    calculationStatus: calculator.status,
+    calculationReplaceable: calculator.replaceable,
     candidateCount: numberOrNull(point.candidateCount),
     sequenceIndex: numberOrNull(point.sequenceIndex) ?? pointIndex,
     stateCurveSequenceIndex: numberOrNull(point.sequenceIndex) ?? pointIndex,
-    applied: Boolean(point.applied && layer.applied),
-    replaceable: !Boolean(point.applied && layer.applied),
+    applied,
+    replaceable: !applied,
   };
 }
 
@@ -1774,6 +1876,100 @@ function createThreeValueDeltaFields(trackKey, delta) {
       THREE_VALUE_DELTA_FIELD_BY_TRACK_KEY[trackKey] === field ? delta : null,
     ])
   );
+}
+
+function createThreeValueCalculatorResult({
+  trackKey,
+  layerKey,
+  point,
+  layer,
+  delta,
+  deltaFields,
+  sourceKind,
+  sourceIds,
+  confidence,
+  sourceStatus,
+  resultStatus,
+  applied,
+}) {
+  const definition =
+    THREE_VALUE_CALCULATOR_DEFINITIONS[trackKey] ??
+    createFallbackThreeValueCalculatorDefinition(trackKey);
+  const status =
+    point.calculationStatus ??
+    resultStatus ??
+    sourceStatus ??
+    definition.defaultStatusByLayer?.[layerKey] ??
+    definition.contractStatus;
+  const kind =
+    point.calculationKind ??
+    definition.kindByLayer?.[layerKey] ??
+    `${layerKey ?? 'unknown'}-calculator`;
+
+  return {
+    key: definition.key,
+    version: definition.version,
+    trackKey,
+    outputField: definition.outputField,
+    kind,
+    status,
+    delta,
+    deltaFieldValue: deltaFields[definition.outputField] ?? null,
+    valueUnit: layer.valueUnit ?? definition.valueUnit,
+    sourceKind,
+    sourceIds,
+    confidence,
+    replaceable: isThreeValueCalculatorOutputReplaceable(status),
+    appliedToRuntime: applied,
+    unresolved: createThreeValueCalculatorUnresolved(trackKey, status),
+  };
+}
+
+function createFallbackThreeValueCalculatorDefinition(trackKey) {
+  return {
+    key: `unknown-${trackKey ?? 'track'}-delta-calculator`,
+    version: 1,
+    outputField: THREE_VALUE_DELTA_FIELD_BY_TRACK_KEY[trackKey] ?? 'delta',
+    valueUnit: 'unknown',
+    contractStatus: 'calculator-contract-missing',
+    kindByLayer: {},
+    defaultStatusByLayer: {},
+  };
+}
+
+function isThreeValueCalculatorOutputReplaceable(status) {
+  const statusText = String(status ?? '');
+  return ![
+    'final-formula-confirmed',
+    'runtime-final-confirmed',
+    'non-replaceable',
+  ].some(marker => statusText.includes(marker));
+}
+
+function createThreeValueCalculatorUnresolved(trackKey, status) {
+  const common = ['final-azpr-formula-confirmation'];
+  if (trackKey === 'enemyHpDamage') {
+    return uniqueStrings([
+      ...common,
+      'enemy-defense-resistance-critical-order',
+      'hit-to-damage-element-binding',
+    ]);
+  }
+  if (trackKey === 'enemyToughnessDamage') {
+    return uniqueStrings([
+      ...common,
+      'weak-break-damage-rate-unit-scale',
+      'target-toughness-state-baseline',
+    ]);
+  }
+  if (trackKey === 'selfEnergyChange') {
+    return uniqueStrings([
+      ...common,
+      'initial-current-sp-baseline',
+      'recover-sp-owner-share-and-throttle',
+    ]);
+  }
+  return uniqueStrings([...common, status]);
 }
 
 function createThreeValueGenerationHitKey({
@@ -1969,6 +2165,7 @@ function compareNullableTimelineNumber(left, right) {
 function summarizeThreeValueGenerationLayer({ actions, deltas }) {
   const countLayer = layerKey =>
     deltas.filter(delta => delta.layerKey === layerKey).length;
+  const calculatorSummary = summarizeThreeValueCalculators(deltas);
   return {
     contractName: 'Action -> Hit -> ThreeValueDelta',
     actionCount: actions.length,
@@ -1982,9 +2179,36 @@ function summarizeThreeValueGenerationLayer({ actions, deltas }) {
     sampledDeltaCount: countLayer('sampled'),
     placeholderDeltaCount: countLayer('placeholder'),
     replaceableDeltaCount: deltas.filter(delta => delta.replaceable).length,
+    calculatorCount: calculatorSummary.calculatorCount,
+    calculatorKeys: calculatorSummary.calculatorKeys,
+    calculatorReplaceableDeltaCount:
+      calculatorSummary.calculatorReplaceableDeltaCount,
+    calculatorStatuses: calculatorSummary.statuses,
+    calculatorSummary,
     frameMin: minNumber(deltas.map(delta => delta.frameIndex)),
     frameMax: maxNumber(deltas.map(delta => delta.frameIndex)),
     applied: false,
+  };
+}
+
+function summarizeThreeValueCalculators(deltas) {
+  const calculators = deltas
+    .map(delta => delta.calculator)
+    .filter(calculator => calculator?.key);
+  const calculatorKeys = uniqueStrings(calculators.map(item => item.key));
+  return {
+    contractName: 'ThreeValueDeltaCalculator',
+    contractVersion: 1,
+    calculatorCount: calculatorKeys.length,
+    calculatorKeys,
+    calculatorReplaceableDeltaCount: calculators.filter(
+      calculator => calculator.replaceable
+    ).length,
+    statuses: uniqueStrings(calculators.map(item => item.status)),
+    outputFields: uniqueStrings(calculators.map(item => item.outputField)),
+    confidenceLevels: uniqueStrings(calculators.map(item => item.confidence)),
+    appliedToRuntimeCount: calculators.filter(item => item.appliedToRuntime)
+      .length,
   };
 }
 
@@ -2183,6 +2407,18 @@ function createThreeValueRuntimeSimLog(appliedDeltas) {
     hpDelta: normalizeThreeValueRuntimeNumber(delta.hpDelta),
     toughnessDelta: normalizeThreeValueRuntimeNumber(delta.toughnessDelta),
     energyDelta: normalizeThreeValueRuntimeNumber(delta.energyDelta),
+    calculator: delta.calculator ?? null,
+    calculatorKey: delta.calculatorKey ?? delta.calculator?.key ?? null,
+    calculatorVersion:
+      numberOrNull(delta.calculatorVersion ?? delta.calculator?.version) ??
+      null,
+    calculationKind: delta.calculationKind ?? delta.calculator?.kind ?? null,
+    calculationStatus:
+      delta.calculationStatus ?? delta.calculator?.status ?? null,
+    calculationReplaceable:
+      typeof delta.calculationReplaceable === 'boolean'
+        ? delta.calculationReplaceable
+        : (delta.calculator?.replaceable ?? null),
     confidence: delta.confidence,
     stateCurveSequenceIndex: delta.stateCurveSequenceIndex,
     applied: true,
@@ -2214,6 +2450,18 @@ function createThreeValueRuntimePoint(delta, sequenceIndex) {
     hpDelta: normalizeThreeValueRuntimeNumber(delta.hpDelta),
     toughnessDelta: normalizeThreeValueRuntimeNumber(delta.toughnessDelta),
     energyDelta: normalizeThreeValueRuntimeNumber(delta.energyDelta),
+    calculator: delta.calculator ?? null,
+    calculatorKey: delta.calculatorKey ?? delta.calculator?.key ?? null,
+    calculatorVersion:
+      numberOrNull(delta.calculatorVersion ?? delta.calculator?.version) ??
+      null,
+    calculationKind: delta.calculationKind ?? delta.calculator?.kind ?? null,
+    calculationStatus:
+      delta.calculationStatus ?? delta.calculator?.status ?? null,
+    calculationReplaceable:
+      typeof delta.calculationReplaceable === 'boolean'
+        ? delta.calculationReplaceable
+        : (delta.calculator?.replaceable ?? null),
     confidence: delta.confidence,
     sourceStatus: delta.sourceStatus,
     resultStatus: delta.resultStatus,
