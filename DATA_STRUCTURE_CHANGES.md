@@ -11241,3 +11241,79 @@ data-runtime-focus-source
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
 
 下一阶段 5-8CY 应继续收束分析面板里的动作结果、贡献拆分和三值详情布局，减少跨面板跳读。
+
+## 132. 阶段 5-8CY：inline runtime result detail in AnalysisPanel
+
+阶段 5-8CY 不修改项目保存 schema，也不修改 simulation 输出结构。本阶段只把已有 `runtimeSelectedDetail` 派生结果接入 `AnalysisPanel`，用于主流程内的紧凑结果详情展示。
+
+### 132.1 Workbench prop 接线
+
+`Workbench` 向 `AnalysisPanel` 新增传入：
+
+```vue
+:runtime-selected-detail="runtimeSelectedDetail"
+```
+
+该对象仍由现有 `createRuntimeSelectedDetail()` 生成，来源是 `threeValueRuntimeProjection` 与 `selectedStateCurvePointId`。
+
+### 132.2 AnalysisPanel 新增 prop
+
+新增 prop：
+
+```js
+runtimeSelectedDetail: Object | null
+```
+
+新增本地派生：
+
+```js
+selectedRuntimeResultDetail
+```
+
+该派生仅返回当前 prop，不重新计算 runtime point，不改变 `runtimeTraceByActionId`、`selectedActionContribution` 或 state curve 逻辑。
+
+### 132.3 新增 DOM / 测试锚点
+
+`action-contribution-panel` 内新增紧凑结果详情区：
+
+```html
+data-testid="workbench-action-result-detail-panel"
+data-action-id
+data-state-point-id
+data-track-key
+```
+
+详情行新增：
+
+```html
+data-testid="workbench-action-result-detail-row"
+data-detail-key="frame|track|delta|cumulative|state|status"
+```
+
+当前展示字段全部来自 `runtimeSelectedDetail`：
+
+- `actionName` / `actionId`
+- `frameLabel` / `timeMs`
+- `trackLabel` / `trackKey`
+- `delta`
+- `cumulative`
+- `stateLabel` / `stateValue`
+- `status`
+- `sourceDeltaId`
+
+### 132.4 验证
+
+当前测试覆盖：
+
+- 点击动作结果后，`workbench-action-result-detail-panel` 与当前 `appliedStatePointId` 一致。
+- 结果详情区的 `data-action-id="action-0001"`、`data-track-key="enemyHpDamage"`。
+- 默认 HP 样本显示 `Delta12,461`、`累计12,461`、`剩余0`、`状态raw-hp-projection`。
+- 该区域与动作贡献拆分、右侧三值详情和模拟日志详情共用同一个 runtime state point。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8CZ 应继续贴近 Endaxis 主流程，优先改善结果定位后的动作编辑闭环。

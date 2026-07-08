@@ -224,6 +224,79 @@
             {{ selectedActionContribution.appliedDeltaCount }}条运行结果
           </small>
         </div>
+        <div
+          v-if="selectedRuntimeResultDetail"
+          class="action-result-detail-panel"
+          :data-action-id="selectedRuntimeResultDetail.actionId"
+          :data-state-point-id="selectedRuntimeResultDetail.statePointId"
+          :data-track-key="selectedRuntimeResultDetail.trackKey"
+          data-testid="workbench-action-result-detail-panel"
+        >
+          <div class="action-result-detail-heading">
+            <span>结果详情</span>
+            <strong data-testid="workbench-action-result-detail-action">
+              {{
+                selectedRuntimeResultDetail.actionName ||
+                selectedRuntimeResultDetail.actionId ||
+                '动作'
+              }}
+            </strong>
+            <small>{{ formatRuntimeResultMeta(selectedRuntimeResultDetail) }}</small>
+          </div>
+          <div class="action-result-detail-grid">
+            <div
+              class="action-result-detail-row"
+              data-detail-key="frame"
+              data-testid="workbench-action-result-detail-row"
+            >
+              <span>帧</span>
+              <strong>{{ formatRuntimeResultFrame(selectedRuntimeResultDetail) }}</strong>
+            </div>
+            <div
+              class="action-result-detail-row"
+              data-detail-key="track"
+              data-testid="workbench-action-result-detail-row"
+            >
+              <span>轨道</span>
+              <strong>{{ selectedRuntimeResultDetail.trackLabel }}</strong>
+            </div>
+            <div
+              class="action-result-detail-row"
+              data-detail-key="delta"
+              data-testid="workbench-action-result-detail-row"
+            >
+              <span>Delta</span>
+              <strong>{{ formatRuntimeResultDelta(selectedRuntimeResultDetail) }}</strong>
+            </div>
+            <div
+              class="action-result-detail-row"
+              data-detail-key="cumulative"
+              data-testid="workbench-action-result-detail-row"
+            >
+              <span>累计</span>
+              <strong>{{
+                formatRuntimeResultCumulative(selectedRuntimeResultDetail)
+              }}</strong>
+            </div>
+            <div
+              v-if="hasRuntimeResultState(selectedRuntimeResultDetail)"
+              class="action-result-detail-row"
+              data-detail-key="state"
+              data-testid="workbench-action-result-detail-row"
+            >
+              <span>{{ formatRuntimeResultStateLabel(selectedRuntimeResultDetail) }}</span>
+              <strong>{{ formatRuntimeResultStateValue(selectedRuntimeResultDetail) }}</strong>
+            </div>
+            <div
+              class="action-result-detail-row"
+              data-detail-key="status"
+              data-testid="workbench-action-result-detail-row"
+            >
+              <span>状态</span>
+              <strong>{{ formatRuntimeResultStatus(selectedRuntimeResultDetail) }}</strong>
+            </div>
+          </div>
+        </div>
         <div class="action-contribution-list">
           <button
             v-for="row in selectedActionContribution.rows"
@@ -738,6 +811,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  runtimeSelectedDetail: {
+    type: Object,
+    default: null,
+  },
   candidateValueSeries: {
     type: Object,
     default: () => ({
@@ -997,6 +1074,9 @@ const selectedActionContribution = computed(() => {
   );
   return trace ? createSelectedActionContribution(trace) : null;
 });
+const selectedRuntimeResultDetail = computed(
+  () => props.runtimeSelectedDetail ?? null
+);
 const activeStateCurveLayerKeys = computed(() =>
   STATE_CURVE_LAYER_OPTIONS.filter(
     layer => effectiveStateCurveLayerFilters.value[layer.key]
@@ -1783,6 +1863,51 @@ function createActionContributionDetail(row) {
       },
     ],
   };
+}
+
+function formatRuntimeResultMeta(detail) {
+  const source = formatSourceDeltaShortId(detail?.sourceDeltaId);
+  return source && source !== '-' ? `Delta ${source}` : 'Delta 待定位';
+}
+
+function formatRuntimeResultFrame(detail) {
+  return detail?.frameLabel || `${detail?.timeMs ?? 0}ms`;
+}
+
+function formatRuntimeResultDelta(detail) {
+  return detail?.trackKey === 'selfEnergyChange'
+    ? formatSignedNumber(detail.delta)
+    : formatStateCurveNumber(detail?.delta);
+}
+
+function formatRuntimeResultCumulative(detail) {
+  return detail?.trackKey === 'selfEnergyChange'
+    ? formatSignedNumber(detail.cumulative)
+    : formatStateCurveNumber(detail?.cumulative);
+}
+
+function hasRuntimeResultState(detail) {
+  return Boolean(
+    detail?.stateLabel ||
+      detail?.stateValue != null ||
+      detail?.stateValueStatus ||
+      detail?.baselineStatus
+  );
+}
+
+function formatRuntimeResultStateLabel(detail) {
+  return detail?.stateLabel || '状态值';
+}
+
+function formatRuntimeResultStateValue(detail) {
+  if (detail?.stateValue == null || detail.stateValue === '') {
+    return '待确认';
+  }
+  return formatStateCurveNumber(detail.stateValue);
+}
+
+function formatRuntimeResultStatus(detail) {
+  return detail?.status ?? '-';
 }
 
 function selectActionContributionRow(row) {
@@ -2951,6 +3076,75 @@ h2 {
   gap: 6px;
 }
 
+.action-result-detail-panel {
+  display: grid;
+  gap: 8px;
+  padding: 9px;
+  border: 1px solid rgba(121, 199, 185, 0.16);
+  border-radius: 4px;
+  background: rgba(18, 24, 31, 0.42);
+}
+
+.action-result-detail-heading {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.action-result-detail-heading span {
+  color: #79c7b9;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.action-result-detail-heading strong,
+.action-result-detail-heading small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.action-result-detail-heading strong {
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.action-result-detail-heading small {
+  color: #aeb7c2;
+  font-size: 11px;
+  text-align: right;
+}
+
+.action-result-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.action-result-detail-row {
+  min-width: 0;
+  padding: 7px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.action-result-detail-row span {
+  display: block;
+  margin-bottom: 4px;
+  color: #8f9aa3;
+  font-size: 10px;
+}
+
+.action-result-detail-row strong {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #dff9f3;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
 .action-contribution-row {
   display: grid;
   grid-template-columns: 72px minmax(0, 0.7fr) minmax(0, 1.3fr);
@@ -3283,5 +3477,21 @@ h2 {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   color: #b8c0c7;
   font-size: 12px;
+}
+
+@media (max-width: 760px) {
+  .action-result-detail-heading,
+  .action-contribution-heading,
+  .action-contribution-row {
+    grid-template-columns: 1fr;
+  }
+
+  .action-result-detail-heading small {
+    text-align: left;
+  }
+
+  .action-result-detail-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 </style>

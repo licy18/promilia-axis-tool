@@ -1245,6 +1245,36 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-row"]')
         .attributes('data-selected')
     ).toBe('true');
+    const actionResultDetailPanel = wrapper.find(
+      '[data-testid="workbench-action-result-detail-panel"]'
+    );
+    expect(actionResultDetailPanel.exists()).toBe(true);
+    expect(actionResultDetailPanel.attributes('data-action-id')).toBe(
+      'action-0001'
+    );
+    expect(actionResultDetailPanel.attributes('data-state-point-id')).toBe(
+      appliedStatePointId
+    );
+    expect(actionResultDetailPanel.attributes('data-track-key')).toBe(
+      'enemyHpDamage'
+    );
+    expect(
+      wrapper
+        .find('[data-testid="workbench-action-result-detail-action"]')
+        .text()
+    ).toContain('普通攻击');
+    const actionResultDetailRows = Object.fromEntries(
+      wrapper
+        .findAll('[data-testid="workbench-action-result-detail-row"]')
+        .map(row => [row.attributes('data-detail-key'), row])
+    );
+    expect(actionResultDetailRows.track.text()).toBe('轨道敌人HP伤害');
+    expect(actionResultDetailRows.delta.text()).toBe('Delta12,461');
+    expect(actionResultDetailRows.cumulative.text()).toBe('累计12,461');
+    expect(actionResultDetailRows.state.text()).toBe('剩余0');
+    expect(actionResultDetailRows.status.text()).toBe(
+      '状态raw-hp-projection'
+    );
     const actionContributionPanel = wrapper.find(
       '[data-testid="workbench-action-contribution-panel"]'
     );

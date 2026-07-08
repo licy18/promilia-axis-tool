@@ -130,6 +130,7 @@
           :damage-timeline="simulationResult.damageTimeline"
           :action-result-timeline="simulationResult.actionResultTimeline"
           :runtime-projection="simulationResult.threeValueRuntimeProjection"
+          :runtime-selected-detail="runtimeSelectedDetail"
           :candidate-value-series="simulationResult.candidateValueSeries"
           :three-value-curve-framework="
             simulationResult.threeValueCurveFramework
