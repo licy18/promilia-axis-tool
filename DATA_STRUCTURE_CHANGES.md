@@ -8438,3 +8438,104 @@ emit('select-state-curve-point', nextPoint.statePointId)
 - `npm run test -- --run`：通过。
 
 下一阶段 5-8BX 应补同帧三值点切换或状态点分组导航。
+
+## 103. 阶段 5-8BX：stateCurveFrameGroupRows
+
+阶段 5-8BX 不修改 `threeValueCurveFramework.stateCurves` 的模拟结果结构，只在 `AnalysisPanel` 中新增同帧状态点分组派生字段和 UI。该能力用于在同一动作 / 同一帧 / 同一 hit 或 event 的 HP、韧性、能量状态点之间直接切换。
+
+### 103.1 frameGroupKey
+
+`createStateCurveVisiblePointRows()` 为每个前端点行新增：
+
+```js
+frameGroupKey
+trackLabel
+```
+
+`frameGroupKey` 由以下字段组成：
+
+```js
+[
+  point.actionId ?? point.eventType ?? 'point',
+  point.frameIndex ?? point.timeMs ?? point.frameLabel ?? 'time',
+  point.hitIndex ?? point.eventIndex ?? point.sequenceIndex ?? point.eventType ?? 'event'
+].join('|')
+```
+
+该 key 只用于 Workbench 前端分组，不写回模拟结果。
+
+### 103.2 分组选项
+
+新增：
+
+```js
+selectedStateCurveNavigationPoint
+selectedStateCurveFrameGroupRows
+```
+
+`selectedStateCurveFrameGroupRows` 从 `stateCurveNavigationPointRows` 中筛选与当前选中点 `frameGroupKey` 相同的点。由于 `stateCurveNavigationPointRows` 已经应用 layer / track 过滤，分组选项不会绕过用户当前隐藏的层或轨道。
+
+### 103.3 UI 控件
+
+状态曲线标题新增：
+
+```html
+data-testid="workbench-state-curve-frame-group-controls"
+data-testid="workbench-state-curve-frame-group-option"
+```
+
+当同组点数大于 1 时显示。按钮上写入：
+
+```html
+data-state-point-id
+data-track-key
+data-layer-key
+data-frame-group-key
+```
+
+点击按钮触发：
+
+```js
+emit('select-state-curve-point', point.statePointId)
+```
+
+### 103.4 显示文案
+
+分组按钮显示：
+
+```text
+HP 候选 Δ2,500
+韧性 候选 Δ7,000
+能量 候选 Δ2,700
+```
+
+轨道短标签当前映射：
+
+- `enemyHpDamage` -> `HP`
+- `enemyToughnessDamage` -> `韧性`
+- `selfEnergyChange` -> `能量`
+
+### 103.5 DOM 标记
+
+状态点明细行新增：
+
+```html
+data-track-key
+```
+
+用于测试和人工调试当前选中点所属三值轨道。
+
+### 103.6 验证
+
+扩展 Workbench 测试覆盖：
+
+- 从 applied HP 点进入 selected-only 后，点击下一点切到第一条 candidate HP 点。
+- 同帧分组按钮出现 3 个选项，轨道顺序为 `enemyHpDamage / enemyToughnessDamage / selfEnergyChange`。
+- 点击韧性选项后，导航位置变为 `3/16`，点明细的 `data-track-key` 为 `enemyToughnessDamage`。
+- 点击 HP 选项后，导航位置回到 `2/16`，选中点恢复为第一条 candidate HP 点。
+
+阶段验收：
+
+- `npm run test -- --run`：通过。
+
+下一阶段 5-8BY 应把状态点导航与候选三值曲线帧热点联动。

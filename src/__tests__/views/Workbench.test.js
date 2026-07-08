@@ -282,6 +282,45 @@ describe('Workbench view', () => {
     expect(
       wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
     ).toHaveLength(0);
+    const frameGroupOptions = wrapper.findAll(
+      '[data-testid="workbench-state-curve-frame-group-option"]'
+    );
+    expect(frameGroupOptions).toHaveLength(3);
+    expect(
+      frameGroupOptions.map(option => option.attributes('data-track-key'))
+    ).toEqual(['enemyHpDamage', 'enemyToughnessDamage', 'selfEnergyChange']);
+    expect(frameGroupOptions[0].attributes('data-state-point-id')).toBe(
+      firstCandidateStatePointId
+    );
+    const toughnessFrameGroupOption = frameGroupOptions.find(
+      option => option.attributes('data-track-key') === 'enemyToughnessDamage'
+    );
+    expect(toughnessFrameGroupOption).toBeTruthy();
+    await toughnessFrameGroupOption.trigger('click');
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-state-curve-nav-position"]').text()
+    ).toBe('3/16');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-point"]')
+        .attributes('data-track-key')
+    ).toBe('enemyToughnessDamage');
+    expect(toughnessFrameGroupOption.text()).toContain('韧性');
+    const hpFrameGroupOption = wrapper
+      .findAll('[data-testid="workbench-state-curve-frame-group-option"]')
+      .find(option => option.attributes('data-track-key') === 'enemyHpDamage');
+    expect(hpFrameGroupOption).toBeTruthy();
+    await hpFrameGroupOption.trigger('click');
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-state-curve-nav-position"]').text()
+    ).toBe('2/16');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-point"]')
+        .attributes('data-state-point-id')
+    ).toBe(firstCandidateStatePointId);
     await wrapper
       .find('[data-testid="workbench-state-curve-nav-prev"]')
       .trigger('click');

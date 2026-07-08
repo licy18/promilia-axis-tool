@@ -311,6 +311,29 @@
             <ArrowRight class="state-curve-nav-icon" />
           </button>
         </div>
+        <div
+          v-if="selectedStateCurveFrameGroupRows.length > 1"
+          class="state-curve-frame-group-controls"
+          data-testid="workbench-state-curve-frame-group-controls"
+        >
+          <button
+            v-for="point in selectedStateCurveFrameGroupRows"
+            :key="point.statePointId"
+            class="state-curve-frame-group-button"
+            :class="{
+              active: point.statePointId === selectedStateCurvePointId,
+            }"
+            type="button"
+            :data-state-point-id="point.statePointId"
+            :data-track-key="point.trackKey"
+            :data-layer-key="point.layerKey"
+            :data-frame-group-key="point.frameGroupKey"
+            data-testid="workbench-state-curve-frame-group-option"
+            @click="selectStateCurveFrameGroupPoint(point)"
+          >
+            {{ formatStateCurveFrameGroupOption(point) }}
+          </button>
+        </div>
       </div>
       <div class="state-curve-layer-controls">
         <label
@@ -390,6 +413,7 @@
             :class="{
               selected: point.statePointId === selectedStateCurvePointId,
             }"
+            :data-track-key="point.trackKey"
             :data-layer-key="point.layerKey"
             :data-action-id="point.actionId"
             :data-frame-label="formatStateCurvePointFrame(point)"
@@ -739,6 +763,22 @@ const selectedStateCurveNavigationIndex = computed(() =>
     point => point.statePointId === props.selectedStateCurvePointId
   )
 );
+const selectedStateCurveNavigationPoint = computed(() =>
+  selectedStateCurveNavigationIndex.value >= 0
+    ? stateCurveNavigationPointRows.value[
+        selectedStateCurveNavigationIndex.value
+      ]
+    : null
+);
+const selectedStateCurveFrameGroupRows = computed(() => {
+  const selectedPoint = selectedStateCurveNavigationPoint.value;
+  if (!selectedPoint) {
+    return [];
+  }
+  return stateCurveNavigationPointRows.value.filter(
+    point => point.frameGroupKey === selectedPoint.frameGroupKey
+  );
+});
 const stateCurveNavigationSummary = computed(() => {
   const total = stateCurveNavigationPointRows.value.length;
   const selectedIndex = selectedStateCurveNavigationIndex.value;
@@ -1177,11 +1217,13 @@ function createStateCurveVisiblePointRows(track, visibleLayers, trackIndex) {
           pointIndex,
         }),
         trackKey: track.trackKey,
+        trackLabel: track.label,
         layerKey: layer.key,
         layerLabel: formatStateCurveLayerLabel(layer.key),
         trackIndex,
         layerIndex,
         pointIndex,
+        frameGroupKey: createStateCurveFrameGroupKey(point),
         valueUnit: layer.valueUnit ?? track.valueUnit,
       }))
     )
@@ -1238,6 +1280,50 @@ function selectAdjacentStateCurvePoint(direction) {
 function formatStateCurveNavigationPosition() {
   const { position, total } = stateCurveNavigationSummary.value;
   return total > 0 ? `${position}/${total}` : '0/0';
+}
+
+function selectStateCurveFrameGroupPoint(point) {
+  emit('select-state-curve-point', point.statePointId);
+}
+
+function formatStateCurveFrameGroupOption(point) {
+  return `${formatStateCurveTrackShortLabel(point.trackKey)} ${point.layerLabel} Δ${formatStateCurveNumber(point.delta)}`;
+}
+
+function formatStateCurveTrackShortLabel(trackKey) {
+  if (trackKey === 'enemyHpDamage') {
+    return 'HP';
+  }
+  if (trackKey === 'enemyToughnessDamage') {
+    return '韧性';
+  }
+  if (trackKey === 'selfEnergyChange') {
+    return '能量';
+  }
+  return trackKey ?? '状态';
+}
+
+function createStateCurveFrameGroupKey(point) {
+  return [
+    point.actionId ?? point.eventType ?? 'point',
+    normalizeStateCurveGroupKeyPart(
+      Number.isFinite(Number(point.frameIndex))
+        ? Number(point.frameIndex)
+        : (point.timeMs ?? point.frameLabel ?? 'time')
+    ),
+    normalizeStateCurveGroupKeyPart(
+      Number.isFinite(Number(point.hitIndex))
+        ? `hit${Number(point.hitIndex)}`
+        : (point.eventIndex ??
+            point.sequenceIndex ??
+            point.eventType ??
+            'event')
+    ),
+  ].join('|');
+}
+
+function normalizeStateCurveGroupKeyPart(value) {
+  return String(value ?? 'none').replace(/\|/g, '/');
 }
 
 function isStateCurvePointInFocus(point) {
@@ -2194,6 +2280,31 @@ h2 {
 .state-curve-nav-icon {
   width: 13px;
   height: 13px;
+}
+
+.state-curve-frame-group-controls {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+}
+
+.state-curve-frame-group-button {
+  min-height: 24px;
+  padding: 0 7px;
+  border: 1px solid rgba(166, 183, 255, 0.18);
+  border-radius: 4px;
+  background: rgba(18, 23, 28, 0.72);
+  color: #b8c0c7;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.state-curve-frame-group-button.active {
+  border-color: rgba(166, 183, 255, 0.46);
+  background: rgba(166, 183, 255, 0.16);
+  color: #d9e0ff;
 }
 
 .diagnostic-heading.neutral strong {
