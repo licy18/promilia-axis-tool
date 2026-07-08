@@ -14991,3 +14991,38 @@ syncRuntimeResultForSelectedAction(nextAction.id)
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、52 条测试。
 - `npm run test -- --run`：通过，17 个测试文件、133 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 188. UI 主流程能力块：运行视角批量动作移动同步
+
+本阶段属于 UI 主流程。
+
+### 188.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 188.2 shiftActionBatch / alignActionBatch 运行视角策略
+
+`Workbench.shiftActionBatch()` 在批量移动前记录：
+
+```js
+shouldSyncRuntimeAfterBatchShift
+selectedRuntimeActionId
+selectedActionInBatch
+selectedRuntimeActionInBatch
+```
+
+批量动作整体偏移后，如果当前动作或当前 runtime 结果所属动作在该批次中，则调用：
+
+```js
+syncRuntimeResultForSelectedAction(actionId)
+```
+
+`Workbench.alignActionBatch()` 继续委托 `shiftActionBatch()`，因此批量对齐起点也复用同一套 runtime 同步规则。
+
+### 188.3 验证
+
+- Workbench 测试覆盖：通过草稿恢复生成批次后进入第一个动作运行结果，点击批次 `+30f`，当前动作起点变为 `500ms`，主流程条、三值详情、资源曲线、模拟日志和 Action Result 都同步到新的 runtime state point。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "syncs runtime detail after shifting"`：通过，1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、53 条测试。
+- `npm run test -- --run`：通过，17 个测试文件、134 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

@@ -7368,6 +7368,31 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - UI 主流程能力块继续推进时，优先把批量动作和编辑焦点也纳入同一套运行视角同步规则。
 - 不回到公式追证、候选数值平衡或单帧动作细节阶段。
 
+### 2026-07-08：UI 主流程能力块 - 运行视角批量动作移动同步
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 当 Workbench 已处于 runtime 结果视角时，批量动作整体偏移或对齐起点后，会重新定位到受影响动作的新 runtime 结果点。
+- 批量移动后的主流程条、三值详情、资源曲线、模拟日志和 Action Result 使用同一个刷新后的 `statePointId`。
+- 本阶段不新增公式推断、不修改三值数值、不扩大证据展示。
+
+当前验证事实：
+
+- 通过草稿恢复生成批次后，进入第一个动作的运行结果，点击批次 `+30f`，当前动作起点从 `0ms` 移到 `500ms`，运行详情、资源曲线、模拟日志和 Action Result 都同步到新的 runtime state point。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "syncs runtime detail after shifting"`：通过，1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、53 条测试。
+- `npm run test -- --run`：通过，17 个测试文件、134 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 切换到生成层能力块，打通 `Action -> Hit -> ThreeValueDelta` 标准合同的统一生成入口；只做结构合同和运行接线，不追真实公式、真实倍率或测试期数值平衡。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

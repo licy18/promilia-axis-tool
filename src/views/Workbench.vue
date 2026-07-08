@@ -978,6 +978,15 @@ function shiftActionBatch({ batchId, offsetMs }) {
   const maxStartMs = Math.max(
     ...batchActions.map(action => Math.max(0, Number(action.startMs) || 0))
   );
+  const shouldSyncRuntimeAfterBatchShift =
+    shouldSyncRuntimeResultOnActionSelect();
+  const selectedRuntimeActionId = getSelectedRuntimeStatePointActionId();
+  const selectedActionInBatch = batchActions.some(
+    action => action.id === selectedActionId.value
+  );
+  const selectedRuntimeActionInBatch = batchActions.some(
+    action => action.id === selectedRuntimeActionId
+  );
   const appliedOffsetMs = clampNumber(
     offset,
     -minStartMs,
@@ -1003,6 +1012,16 @@ function shiftActionBatch({ batchId, offsetMs }) {
       startMs: nextStartMs,
     });
   });
+  if (
+    shouldSyncRuntimeAfterBatchShift &&
+    (selectedActionInBatch || selectedRuntimeActionInBatch)
+  ) {
+    syncRuntimeResultForSelectedAction(
+      selectedRuntimeActionInBatch
+        ? selectedRuntimeActionId
+        : selectedActionId.value
+    );
+  }
   markDraftDirty();
 }
 
