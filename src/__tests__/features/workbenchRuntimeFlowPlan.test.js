@@ -103,6 +103,26 @@ describe('workbench runtime flow plan', () => {
     });
   });
 
+  it('can focus a runtime point while preserving current curve filters', () => {
+    const plan = createRuntimePointFocusFlowPlan({
+      statePointId: 'hp-delta:enemyHpDamage:applied',
+      source: 'state-curve-point',
+      preserveStateCurveFilters: true,
+    });
+
+    expect(plan).toMatchObject({
+      kind: WORKBENCH_RUNTIME_FLOW_PLAN_KINDS.RUNTIME_POINT_FOCUS,
+      mode: WORKBENCH_RUNTIME_FLOW_PLAN_MODES.RUNTIME_RESULT,
+      statePointId: 'hp-delta:enemyHpDamage:applied',
+      calculatorScope: 'runtime',
+      selectRuntimeStatePoint: true,
+      stateCurveFocusMode: 'selected',
+      runtimeLogFocusSource: 'state-curve-point',
+      stateCurveLayerFilters: null,
+      stateCurveTrackFilters: null,
+    });
+  });
+
   it('clears runtime point focus when no state point is available', () => {
     const plan = createRuntimePointFocusFlowPlan({
       statePointId: '',

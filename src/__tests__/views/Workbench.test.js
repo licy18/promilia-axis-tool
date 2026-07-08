@@ -593,10 +593,16 @@ describe('Workbench view', () => {
     const focusSelectedButton = wrapper.find(
       '[data-testid="workbench-state-curve-focus-selected"]'
     );
-    expect(focusAllButton.classes()).toContain('active');
+    expect(focusAllButton.classes()).not.toContain('active');
     expect(focusSelectedButton.attributes('disabled')).toBeUndefined();
-    await focusSelectedButton.trigger('click');
-    await nextTick();
+    expect(focusSelectedButton.classes()).toContain('active');
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-timeline-state-curve-marker"][data-state-point-id="${appliedStatePointId}"]`
+        )
+        .attributes('data-runtime-focus-source')
+    ).toBe('state-curve-point');
     expect(
       wrapper
         .find('[data-testid="workbench-state-curves"] .source-heading strong')

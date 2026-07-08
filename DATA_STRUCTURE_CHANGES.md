@@ -17143,3 +17143,59 @@ flow action -> flow controller -> runtime point focus plan -> workbench flow run
 - `npm run test -- --run src/__tests__/features/workbenchFlowController.test.js src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、63 条测试。
 - `npm run test -- --run`：通过，29 个测试文件、170 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 217. UI 主流程能力块：State Curve Runtime Route
+
+本阶段属于 UI 主流程。
+
+### 217.1 结构变化
+
+`createRuntimePointFocusFlowPlan()` 新增可选输入：
+
+```js
+preserveStateCurveFilters
+```
+
+默认值为 `false`。默认 runtime point focus 行为不变：进入 runtime 视角、选中 runtime point，并应用 applied-only 状态曲线过滤。
+
+当 `preserveStateCurveFilters: true` 时，plan 仍会：
+
+```js
+{
+  calculatorScope: 'runtime',
+  selectRuntimeStatePoint: true,
+  stateCurveFocusMode: 'selected',
+  runtimeLogFocusSource
+}
+```
+
+但不会覆盖当前：
+
+```js
+stateCurveLayerFilters
+stateCurveTrackFilters
+```
+
+`createWorkbenchFlowPlanController().createRuntimePointFocusPlan()` 透传该参数。
+
+`Workbench.vue` 的 `selectStateCurvePoint(pointId)` 现在先判断 `pointId` 是否存在于 `threeValueRuntimeProjection` 的 runtime state point contexts：
+
+```text
+runtime point -> createRuntimePointFocusPlan({ source: 'state-curve-point', preserveStateCurveFilters: true })
+non-runtime point -> 保持原有 selectedStateCurvePointId 选择逻辑
+empty point -> 清空选择并回到 all 视角
+```
+
+### 217.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench 主流程路由；三值计算、runtime projection 数值结果和草稿保存结构不变。
+
+### 217.3 验证
+
+- 更新 `src/__tests__/features/workbenchRuntimeFlowPlan.test.js`，确认 runtime point focus 可以在保留曲线过滤的同时进入 runtime point。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认点击 applied 时间轴 marker 后进入 selected runtime 视角，并将 runtime focus source 标记为 `state-curve-point`。
+- `npm run test -- --run src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、64 条测试。
+- `npm run test -- --run`：通过，29 个测试文件、171 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

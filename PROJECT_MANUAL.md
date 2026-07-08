@@ -8141,6 +8141,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：围绕 Endaxis 式完整工作区节奏推进动作编辑、运行模拟、资源曲线监控、日志/详情查看、回到动作修改的闭环，不再拆成单个状态标签或提示文案阶段。
 
+### 2026-07-09：UI 主流程能力块 - State Curve Runtime Route
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 时间轴 marker 与分析面板中的 applied 状态曲线点现在会识别为 runtime state point，并进入 `runtime-point-focus` flow plan。
+- 从状态曲线点进入运行详情时，会同步当前动作、运行详情和模拟日志焦点；候选/占位等非 runtime 曲线点仍保持原有曲线选中逻辑。
+- `runtime-point-focus` plan 新增保留曲线过滤的能力，用于状态曲线入口：进入 runtime 详情但不打断用户当前的候选曲线分析上下文。
+- 本阶段不新增公式推断、不调整三值结果、不扩大微型状态提示。
+
+当前验证事实：
+
+- runtime flow plan 单元测试覆盖：默认 runtime point focus 仍应用 applied 运行视角；状态曲线入口可以保留当前曲线过滤。
+- Workbench 页面测试确认：点击 applied 时间轴 marker 后自动进入 selected runtime 视角，并将来源标记为 `state-curve-point`。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、64 条测试。
+- `npm run test -- --run`：通过，29 个测试文件、171 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 继续 UI 主流程能力块：把动作编辑后的回看路径继续收束到同一套 runtime/state point 路由上，让“改动作 -> 看刷新结果 -> 再回编辑”更稳定。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

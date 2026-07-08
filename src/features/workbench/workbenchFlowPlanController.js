@@ -36,10 +36,12 @@ export function createWorkbenchFlowPlanController({
     [WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_POINT_FOCUS]({
       statePointId = '',
       source = '',
+      preserveStateCurveFilters = false,
     } = {}) {
       return createRuntimePointFocusFlowPlan({
         statePointId,
         source,
+        preserveStateCurveFilters,
       });
     },
 

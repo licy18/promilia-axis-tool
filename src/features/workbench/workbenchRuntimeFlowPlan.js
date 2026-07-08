@@ -62,9 +62,12 @@ export function createRuntimeEntryFlowPlan({
 export function createRuntimePointFocusFlowPlan({
   statePointId = '',
   source = '',
+  preserveStateCurveFilters = false,
 } = {}) {
   const normalizedStatePointId = statePointId ?? '';
   const hasRuntimePoint = Boolean(normalizedStatePointId);
+  const shouldApplyRuntimeCurveFilters =
+    hasRuntimePoint && !preserveStateCurveFilters;
   return createRuntimeFlowPlan({
     kind: WORKBENCH_RUNTIME_FLOW_PLAN_KINDS.RUNTIME_POINT_FOCUS,
     mode: hasRuntimePoint
@@ -76,10 +79,10 @@ export function createRuntimePointFocusFlowPlan({
     selectRuntimeStatePoint: true,
     clearRuntimeSelection: !hasRuntimePoint,
     stateCurveFocusMode: hasRuntimePoint ? 'selected' : 'all',
-    stateCurveLayerFilters: hasRuntimePoint
+    stateCurveLayerFilters: shouldApplyRuntimeCurveFilters
       ? createRuntimeAppliedLayerFilters()
       : null,
-    stateCurveTrackFilters: hasRuntimePoint ? {} : null,
+    stateCurveTrackFilters: shouldApplyRuntimeCurveFilters ? {} : null,
     runtimeLogFocusSource: hasRuntimePoint ? source ?? '' : '',
   });
 }

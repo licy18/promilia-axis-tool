@@ -1365,10 +1365,36 @@ function selectAction(actionId, { syncRuntimeResult = true } = {}) {
 }
 
 function selectStateCurvePoint(pointId) {
-  selectedStateCurvePointId.value = pointId || '';
-  if (!selectedStateCurvePointId.value) {
+  const statePointId = pointId || '';
+  if (!statePointId) {
+    selectedStateCurvePointId.value = '';
     stateCurveFocusMode.value = 'all';
+    return;
   }
+  if (isRuntimeStatePointId(statePointId)) {
+    focusRuntimeStateCurvePoint(statePointId);
+    return;
+  }
+  selectedStateCurvePointId.value = statePointId;
+}
+
+function isRuntimeStatePointId(pointId) {
+  return Boolean(
+    findRuntimeStatePointContextById(
+      simulationResult.value.threeValueRuntimeProjection,
+      pointId
+    )
+  );
+}
+
+function focusRuntimeStateCurvePoint(pointId) {
+  workbenchFlowRuntime.applyRuntimeFlowPlan(
+    workbenchFlowPlanController.createRuntimePointFocusPlan({
+      statePointId: pointId,
+      source: 'state-curve-point',
+      preserveStateCurveFilters: true,
+    })
+  );
 }
 
 function selectRuntimeStatePoint(pointId) {
