@@ -52,6 +52,39 @@ describe('Workbench view', () => {
         )
         .text()
     ).toBe('运行投影 HP 12,461 · 韧性 0 · 能量 0 · 日志 1');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-resource-monitor"]')
+        .exists()
+    ).toBe(true);
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-enemy-hp-delta"]').text()
+    ).toBe('12,461');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-enemy-toughness-delta"]')
+        .text()
+    ).toBe('0');
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-sim-log-count"]').text()
+    ).toBe('1 日志');
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-runtime-energy-actor-row"]')
+        .map(row => row.text())
+    ).toEqual(expect.arrayContaining([expect.stringContaining('末音')]));
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-sim-log"]').exists()
+    ).toBe(true);
+    expect(
+      wrapper.findAll('[data-testid="workbench-runtime-sim-log-row"]')
+    ).toHaveLength(1);
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-sim-log-row"]').text()
+    ).toContain('普通攻击 · HP 12,461');
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-sim-log-detail"]').text()
+    ).toContain('action-0001|applied-frame-0-point-0');
     expect(text).toContain(
       'HP 2 个候选 (109001081, 109001306) / 削韧 2 个候选 (109001081, 109001306) / 充能 2 个候选 (109001081, 109001306)'
     );
@@ -1735,6 +1768,18 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-resource-sp-total"]').text()
     ).toBe(`-${spSkill.spCost}`);
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-sim-log-count"]').text()
+    ).toBe('2 日志');
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-runtime-energy-actor-row"]')
+        .map(row => row.text())
+        .some(text => text.includes(`SP -${spSkill.spCost}`))
+    ).toBe(true);
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-sim-log"]').text()
+    ).toContain(`SP -${spSkill.spCost}`);
     expect(wrapper.text()).toContain('RESOURCE_CHANGE');
   });
 

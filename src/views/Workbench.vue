@@ -113,6 +113,7 @@
 
         <ResourceMonitorPanel
           :resource-timeline="simulationResult.resourceTimeline"
+          :runtime-projection="simulationResult.threeValueRuntimeProjection"
           :summary="simulationResult.summary"
           :diagnostics="simulationResult.diagnostics"
         />
@@ -142,6 +143,7 @@
       <EventLogPanel
         class="event-area"
         :event-log="simulationResult.eventLog"
+        :runtime-projection="simulationResult.threeValueRuntimeProjection"
       />
     </div>
   </main>

@@ -8,11 +8,15 @@
     <div class="resource-summary">
       <div>
         <span>事件</span>
-        <strong data-testid="workbench-resource-event-count">{{ resourceTimeline.length }}</strong>
+        <strong data-testid="workbench-resource-event-count">{{
+          resourceTimeline.length
+        }}</strong>
       </div>
       <div>
         <span>SP 净值</span>
-        <strong data-testid="workbench-resource-sp-total">{{ formatSigned(resourceTotals.sp ?? 0) }}</strong>
+        <strong data-testid="workbench-resource-sp-total">{{
+          formatSigned(resourceTotals.sp ?? 0)
+        }}</strong>
       </div>
       <div>
         <span>命中</span>
@@ -24,14 +28,67 @@
       </div>
     </div>
 
+    <div
+      v-if="runtimeProjection"
+      class="runtime-resource-monitor"
+      data-testid="workbench-runtime-resource-monitor"
+    >
+      <div class="runtime-heading">
+        <span>运行投影</span>
+        <strong data-testid="workbench-runtime-sim-log-count">
+          {{ runtimeSummary.simLogCount ?? 0 }} 日志
+        </strong>
+      </div>
+
+      <div class="runtime-state-grid">
+        <div class="runtime-state-cell">
+          <span>敌人 HP 伤害</span>
+          <strong data-testid="workbench-runtime-enemy-hp-delta">
+            {{ formatNumber(runtimeEnemyState.hpDelta) }}
+          </strong>
+        </div>
+        <div class="runtime-state-cell">
+          <span>敌人韧性</span>
+          <strong data-testid="workbench-runtime-enemy-toughness-delta">
+            {{ formatNumber(runtimeEnemyState.toughnessDelta) }}
+          </strong>
+        </div>
+      </div>
+
+      <div
+        v-if="runtimeActorEnergyRows.length"
+        class="runtime-energy-list"
+        data-testid="workbench-runtime-energy-list"
+      >
+        <div
+          v-for="actor in runtimeActorEnergyRows"
+          :key="actor.actorId"
+          class="runtime-energy-row"
+          data-testid="workbench-runtime-energy-actor-row"
+        >
+          <span>{{ actor.actorName }}</span>
+          <strong
+            >{{ actor.resource.toUpperCase() }}
+            {{ formatSigned(actor.delta) }}</strong
+          >
+          <small>{{ actor.pointCount }}点</small>
+        </div>
+      </div>
+    </div>
+
     <ol v-if="resourceTimeline.length" class="resource-list">
-      <li v-for="entry in resourceTimeline" :key="`${entry.actionId}-${entry.resource}-${entry.timeMs}`">
+      <li
+        v-for="entry in resourceTimeline"
+        :key="`${entry.actionId}-${entry.resource}-${entry.timeMs}`"
+      >
         <span class="time">{{ entry.timeMs }}ms</span>
         <span class="resource">{{ entry.resource.toUpperCase() }}</span>
         <strong>{{ formatSigned(entry.change) }}</strong>
       </li>
     </ol>
-    <p v-else class="empty-state" data-testid="workbench-resource-empty">暂无资源事件</p>
+    <p v-else class="empty-state" data-testid="workbench-resource-empty">
+      暂无资源事件
+    </p>
   </section>
 </template>
 
@@ -43,6 +100,10 @@ const props = defineProps({
   resourceTimeline: {
     type: Array,
     required: true,
+  },
+  runtimeProjection: {
+    type: Object,
+    default: null,
   },
   summary: {
     type: Object,
@@ -61,9 +122,23 @@ const resourceTotals = computed(() => {
   }, {});
 });
 
+const runtimeSummary = computed(() => props.runtimeProjection?.summary ?? {});
+
+const runtimeEnemyState = computed(
+  () => props.runtimeProjection?.enemyStateCurve ?? {}
+);
+
+const runtimeActorEnergyRows = computed(
+  () => props.runtimeProjection?.selfEnergyCurveByActor ?? []
+);
+
 function formatSigned(value) {
   const number = Number(value) || 0;
   return `${number > 0 ? '+' : ''}${number}`;
+}
+
+function formatNumber(value) {
+  return Math.round(Number(value) || 0).toLocaleString('zh-CN');
 }
 </script>
 
@@ -119,6 +194,92 @@ h2 {
   display: block;
   color: #ffffff;
   font-size: 15px;
+}
+
+.runtime-resource-monitor {
+  display: grid;
+  gap: 10px;
+  margin: 0 14px 14px;
+  padding: 12px;
+  border: 1px solid rgba(121, 199, 185, 0.18);
+  border-radius: 6px;
+  background: rgba(121, 199, 185, 0.07);
+}
+
+.runtime-heading,
+.runtime-energy-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.runtime-heading span {
+  color: #d9dee3;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.runtime-heading strong {
+  color: #79c7b9;
+  font-size: 12px;
+}
+
+.runtime-state-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.runtime-state-cell {
+  min-width: 0;
+  padding: 8px 9px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.runtime-state-cell span {
+  display: block;
+  margin-bottom: 4px;
+  color: #8f9aa3;
+  font-size: 11px;
+}
+
+.runtime-state-cell strong {
+  color: #ffffff;
+  font-size: 15px;
+}
+
+.runtime-energy-list {
+  display: grid;
+  gap: 6px;
+}
+
+.runtime-energy-row {
+  padding: 7px 9px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 12px;
+}
+
+.runtime-energy-row span {
+  min-width: 0;
+  color: #d9dee3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.runtime-energy-row strong {
+  color: #ffffff;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.runtime-energy-row small {
+  color: #8f9aa3;
+  white-space: nowrap;
 }
 
 .resource-list {

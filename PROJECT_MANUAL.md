@@ -4850,6 +4850,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 资源监控先消费 `enemyStateCurve` 与 `selfEnergyCurveByActor`，模拟日志先消费 `simLog`，不要重新回头直接读 evidence / candidate。
 - 保持公式和逐帧行为细节可后补，当前优先让用户能看见三值如何随动作累积变化。
 
+### 2026-07-08：阶段 5-8CC 运行时资源监控与模拟日志入口
+
+本轮完成：
+
+- `Workbench.vue` 将 `simulationResult.threeValueRuntimeProjection` 传入 `ResourceMonitorPanel` 与 `EventLogPanel`，UI 层开始直接消费标准运行时投影。
+- `ResourceMonitorPanel` 新增 `运行投影` 区块，读取 `enemyStateCurve` 展示敌人 HP 伤害与韧性变化，读取 `selfEnergyCurveByActor` 展示每个角色自身 SP 变化和点数。
+- `EventLogPanel` 新增 `模拟日志` 区块，读取 `threeValueRuntimeProjection.simLog`，每条 applied delta 渲染为一条可选日志。
+- 模拟日志选中后显示最小三值详情：动作、命中键、三值变化和 `sourceDeltaId`，为后续详情弹层保留同一选择入口。
+- 旧 `eventLog` 和旧 `resourceTimeline` 展示保留，手动资源事件和原始事件日志没有被移除。
+
+当前验证事实：
+
+- 默认末音样例：资源监控显示敌人 HP 伤害 `12,461`、韧性 `0`、`1 日志`，模拟日志显示 `普通攻击 · HP 12,461`。
+- 默认末音样例的模拟日志详情能看到 `action-0001|applied-frame-0-point-0`，确认详情来源来自运行时 applied delta。
+- 切换到有 SP 消耗的技能后，运行时资源监控显示 `2 日志`，角色能量行与模拟日志都能显示 `SP -{spCost}`。
+
+当前边界：
+
+- 资源监控仍是数值列表和点数摘要，还没有绘制 Endaxis 式多曲线资源图。
+- 模拟日志已可选中并显示内嵌详情，但还不是完整弹层，也没有按 track / actor / action 筛选。
+- 详情只显示 applied delta 的最小字段，尚未接贡献拆分、候选来源对比或公式层详情。
+- `candidate / sampled / placeholder` 仍不进入运行时 UI 主路径，只保留在分析面板的诊断区。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、35 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、109 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8CD 目标：把模拟日志详情升级为 Endaxis 式三值详情弹层或右侧详情面板，支持按 HP / 韧性 / 能量、actor、action 过滤日志。
+- 详情面板优先消费 `threeValueRuntimeProjection.simLog` 和 runtime point 的 `sourceDeltaId / sourceIds`，不要直接回退读取 evidence 矩阵。
+- 若本阶段继续 UI，优先补日志筛选和贡献拆分骨架；若回运行时，优先补 applied delta 的 source 字段完整性。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

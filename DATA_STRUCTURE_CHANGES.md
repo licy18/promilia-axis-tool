@@ -9212,3 +9212,96 @@ summary.selfEnergyDeltaByActor
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8CC 应围绕 `threeValueRuntimeProjection` 补 Endaxis 式资源监控、模拟日志和三值详情弹层最小骨架。
+
+## 110. 阶段 5-8CC：Workbench 消费 threeValueRuntimeProjection
+
+阶段 5-8CC 不修改项目保存 schema，也不修改 `threeValueRuntimeProjection` 的模拟结果结构。本阶段新增的是 Workbench UI 消费关系：
+
+```vue
+<ResourceMonitorPanel
+  :runtime-projection="simulationResult.threeValueRuntimeProjection"
+/>
+
+<EventLogPanel
+  :runtime-projection="simulationResult.threeValueRuntimeProjection"
+/>
+```
+
+### 110.1 ResourceMonitorPanel
+
+`ResourceMonitorPanel` 新增 prop：
+
+```js
+runtimeProjection
+```
+
+新增前端派生：
+
+```js
+runtimeSummary = runtimeProjection.summary
+runtimeEnemyState = runtimeProjection.enemyStateCurve
+runtimeActorEnergyRows = runtimeProjection.selfEnergyCurveByActor
+```
+
+新增测试入口：
+
+```html
+data-testid="workbench-runtime-resource-monitor"
+data-testid="workbench-runtime-enemy-hp-delta"
+data-testid="workbench-runtime-enemy-toughness-delta"
+data-testid="workbench-runtime-sim-log-count"
+data-testid="workbench-runtime-energy-list"
+data-testid="workbench-runtime-energy-actor-row"
+```
+
+该面板仍保留原有 `resourceTimeline` 事件列表和 `workbench-resource-event-count / workbench-resource-sp-total / workbench-resource-empty` 测试入口。
+
+### 110.2 EventLogPanel
+
+`EventLogPanel` 新增 prop：
+
+```js
+runtimeProjection
+```
+
+新增前端派生：
+
+```js
+runtimeSimLogRows = runtimeProjection.simLog
+selectedRuntimeLogIndex
+selectedRuntimeLog
+```
+
+新增测试入口：
+
+```html
+data-testid="workbench-runtime-sim-log"
+data-testid="workbench-runtime-sim-log-row"
+data-testid="workbench-runtime-sim-log-detail"
+```
+
+`runtimeSimLogRows[]` 当前直接消费 5-8CB 的 `simLog[]`。点击或键盘选中一条日志后，详情区显示：
+
+```js
+actionName / actionId
+hitKey
+formatRuntimeDelta(row)
+sourceDeltaId
+```
+
+### 110.3 验证
+
+当前测试覆盖：
+
+- 默认末音样例显示运行资源监控入口、敌人 HP `12,461`、敌人韧性 `0`、`1 日志`。
+- 默认末音样例显示模拟日志入口，日志行文本包含 `普通攻击 · HP 12,461`。
+- 默认末音样例的模拟日志详情包含 `action-0001|applied-frame-0-point-0`。
+- 切换到有 SP 消耗的技能后，运行时日志数量变为 `2 日志`，角色能量行和模拟日志都包含 `SP -{spCost}`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、35 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、109 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8CD 应把 runtime sim log 详情升级为可筛选的三值详情弹层或右侧详情面板，并开始接贡献拆分骨架。
