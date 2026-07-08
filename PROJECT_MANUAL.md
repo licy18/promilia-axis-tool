@@ -5567,6 +5567,43 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8CW 目标：把动作贡献拆分从“面板入口”推进到更接近 Endaxis 的贡献详情入口，例如在贡献行下方提供统一的来源/适配器摘要，减少用户在多个面板之间跳读。
 - 仍不追最终公式；优先打磨主流程信息密度和定位体验。
 
+### 2026-07-08：阶段 5-8CW 贡献详情摘要就地展示
+
+本轮完成：
+
+- `AnalysisPanel` 的动作贡献拆分面板新增“贡献详情”摘要区。
+- 当前选中的贡献轨道会就地展示状态点、Delta 来源、Skill/Element 来源、适配器、来源类型、公式状态和缺口。
+- 默认 HP 贡献详情显示：
+  - 状态点：当前 runtime state point。
+  - Delta：`action-0001|applied-frame-0-point-0`。
+  - 来源：`Skill 10900101 / Element 109001081`。
+  - 适配器：`HP适配器`。
+  - 来源类型：`HP预览`。
+  - 公式状态：`公式未确认`。
+  - 缺口：`最终公式、防御抗性顺序、命中绑定`。
+- Workbench 测试覆盖贡献详情区的状态点、Delta、来源、适配器和缺口显示。
+
+当前验证事实：
+
+- 贡献详情复用 runtime applied point / sim log 已有字段，不改变 simulation 输出结构。
+- `calculator.unresolved` 已正确进入贡献详情，不会再显示成“缺口无”。
+- 贡献详情只在当前选中贡献轨道存在 applied delta 时展示。
+
+当前边界：
+
+- 本阶段仍是 UI 信息整合，不新增最终公式和逐帧动作细节。
+- 贡献详情展示的是当前 applied delta 的来源与适配器摘要，不是最终伤害归因。
+- 尚未做弹层、贡献排序、图表高亮、Buff/反应层拆分。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+
+下一步：
+
+- 阶段 5-8CX 目标：把贡献详情入口进一步接到图表/时间轴高亮，点击贡献轨道时除了详情同步，还能让对应 runtime resource curve / timeline marker 处于同一焦点。
+- 仍保持 Endaxis 式主流程 UI 优先，不追最终公式。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

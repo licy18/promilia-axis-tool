@@ -245,6 +245,31 @@
             <small>{{ formatActionContributionMeta(row) }}</small>
           </button>
         </div>
+        <div
+          v-if="selectedActionContribution.detail"
+          class="action-contribution-detail"
+          :data-state-point-id="selectedActionContribution.detail.statePointId"
+          :data-track-key="selectedActionContribution.detail.trackKey"
+          data-testid="workbench-action-contribution-detail"
+        >
+          <div class="action-contribution-detail-heading">
+            <span>贡献详情</span>
+            <strong>{{ selectedActionContribution.detail.label }}</strong>
+          </div>
+          <div class="action-contribution-detail-list">
+            <div
+              v-for="row in selectedActionContribution.detail.rows"
+              :key="row.key"
+              class="action-contribution-detail-row"
+              :data-detail-key="row.key"
+              :title="String(row.rawValue ?? row.value ?? '')"
+              data-testid="workbench-action-contribution-detail-row"
+            >
+              <span>{{ row.label }}</span>
+              <strong>{{ row.value }}</strong>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1653,13 +1678,16 @@ function createActionResultRuntimeTrace(actionId, rows) {
 }
 
 function createSelectedActionContribution(trace) {
+  const rows = ACTION_CONTRIBUTION_TRACKS.map(track =>
+    createActionContributionRow(trace, track)
+  );
+  const activeRow = rows.find(row => row.active) ?? rows.find(row => row.count > 0);
   return {
     actionId: trace.actionId,
     actionName: trace.actionName ?? trace.actionId ?? '动作',
     appliedDeltaCount: trace.count,
-    rows: ACTION_CONTRIBUTION_TRACKS.map(track =>
-      createActionContributionRow(trace, track)
-    ),
+    rows,
+    detail: activeRow ? createActionContributionDetail(activeRow) : null,
   };
 }
 
@@ -1685,6 +1713,75 @@ function createActionContributionRow(trace, track) {
     firstStatePointId: matchingRows[0]?.statePointId ?? '',
     sourceDeltaIds,
     shortSourceDeltaIds: sourceDeltaIds.map(formatSourceDeltaShortId),
+    detailItems: matchingRows,
+  };
+}
+
+function createActionContributionDetail(row) {
+  const item =
+    row.detailItems.find(
+      detail => detail.statePointId === props.selectedStateCurvePointId
+    ) ?? row.detailItems[0];
+  if (!item) {
+    return null;
+  }
+  const runtimeRow = item.row ?? {};
+  const point = item.point ?? {};
+  const sourceIds = point.sourceIds ?? {};
+  const calculator = runtimeRow.calculator ?? point.calculator ?? {};
+  const calculatorKey =
+    runtimeRow.calculatorKey ?? point.calculatorKey ?? calculator.key;
+  const calculationKind =
+    runtimeRow.calculationKind ?? point.calculationKind ?? calculator.kind;
+  const calculationStatus =
+    runtimeRow.calculationStatus ?? point.calculationStatus ?? calculator.status;
+  const unresolvedItems = calculator.unresolved ?? [];
+  return {
+    trackKey: row.trackKey,
+    label: row.label,
+    statePointId: item.statePointId,
+    rows: [
+      {
+        key: 'statePoint',
+        label: '状态点',
+        value: item.statePointId,
+      },
+      {
+        key: 'sourceDelta',
+        label: 'Delta',
+        value: formatSourceDeltaShortId(runtimeRow.sourceDeltaId),
+        rawValue: runtimeRow.sourceDeltaId,
+      },
+      {
+        key: 'sourceIds',
+        label: '来源',
+        value: formatActionContributionSourceSummary(sourceIds),
+      },
+      {
+        key: 'calculator',
+        label: '适配器',
+        value: formatThreeValueCalculatorKey(calculatorKey, row.trackKey),
+        rawValue: calculatorKey,
+      },
+      {
+        key: 'kind',
+        label: '来源类型',
+        value: formatThreeValueCalculationKind(calculationKind, row.trackKey),
+        rawValue: calculationKind,
+      },
+      {
+        key: 'status',
+        label: '公式状态',
+        value: formatThreeValueCalculationStatus(calculationStatus),
+        rawValue: calculationStatus,
+      },
+      {
+        key: 'unresolved',
+        label: '缺口',
+        value: formatThreeValueUnresolvedItems(unresolvedItems),
+        rawValue: unresolvedItems.join(','),
+      },
+    ],
   };
 }
 
@@ -1739,6 +1836,25 @@ function formatActionContributionMeta(row) {
     ? ` · ${row.shortSourceDeltaIds.join(' / ')}`
     : '';
   return `${activeText}${resultText}${sourceText}`;
+}
+
+function formatActionContributionSourceSummary(sourceIds) {
+  const parts = [
+    formatActionContributionSourceList('Skill', sourceIds.skillIds),
+    formatActionContributionSourceList('Element', sourceIds.elementConfigIds),
+    formatActionContributionSourceList('采样', sourceIds.captureSessionIds),
+    formatActionContributionSourceList('Path', sourceIds.pathIds),
+  ].filter(Boolean);
+  return parts.join(' / ') || '-';
+}
+
+function formatActionContributionSourceList(label, values = []) {
+  const uniqueValues = uniqueDisplayValues(values).slice(0, 3);
+  if (uniqueValues.length === 0) {
+    return '';
+  }
+  const remaining = uniqueDisplayValues(values).length - uniqueValues.length;
+  return `${label} ${uniqueValues.join(', ')}${remaining > 0 ? ` +${remaining}` : ''}`;
 }
 
 function formatSourceDeltaShortId(sourceDeltaId) {
@@ -2887,6 +3003,63 @@ h2 {
 
 .action-contribution-row small {
   color: #aeb7c2;
+  font-size: 11px;
+}
+
+.action-contribution-detail {
+  display: grid;
+  gap: 8px;
+  padding: 9px;
+  border: 1px solid rgba(121, 199, 185, 0.16);
+  border-radius: 4px;
+  background: rgba(18, 24, 31, 0.42);
+}
+
+.action-contribution-detail-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.action-contribution-detail-heading span {
+  color: #79c7b9;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.action-contribution-detail-heading strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.action-contribution-detail-list {
+  display: grid;
+  gap: 5px;
+}
+
+.action-contribution-detail-row {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 6px 7px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.action-contribution-detail-row span {
+  color: #8f9aa3;
+  font-size: 10px;
+}
+
+.action-contribution-detail-row strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #dff9f3;
   font-size: 11px;
 }
 

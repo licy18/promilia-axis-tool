@@ -1290,6 +1290,43 @@ describe('Workbench view', () => {
         expect.stringContaining('自身能量0暂无已应用结果'),
       ],
     ]);
+    const actionContributionDetail = wrapper.find(
+      '[data-testid="workbench-action-contribution-detail"]'
+    );
+    expect(actionContributionDetail.exists()).toBe(true);
+    expect(actionContributionDetail.attributes('data-track-key')).toBe(
+      'enemyHpDamage'
+    );
+    expect(actionContributionDetail.attributes('data-state-point-id')).toBe(
+      appliedStatePointId
+    );
+    const actionContributionDetailRows = Object.fromEntries(
+      wrapper
+        .findAll('[data-testid="workbench-action-contribution-detail-row"]')
+        .map(row => [row.attributes('data-detail-key'), row])
+    );
+    expect(actionContributionDetailRows.statePoint.text()).toContain(
+      appliedStatePointId
+    );
+    expect(actionContributionDetailRows.sourceDelta.text()).toContain(
+      'action-0001|applied-frame-0-point-0'
+    );
+    expect(actionContributionDetailRows.sourceIds.text()).toContain(
+      'Skill 10900101'
+    );
+    expect(actionContributionDetailRows.sourceIds.text()).toContain(
+      'Element 109001081'
+    );
+    expect(actionContributionDetailRows.calculator.text()).toBe(
+      '适配器HP适配器'
+    );
+    expect(actionContributionDetailRows.kind.text()).toBe('来源类型HP预览');
+    expect(actionContributionDetailRows.status.text()).toBe(
+      '公式状态公式未确认'
+    );
+    expect(actionContributionDetailRows.unresolved.text()).toContain(
+      '最终公式、防御抗性顺序、命中绑定'
+    );
     await actionContributionRows[0].trigger('click');
     await nextTick();
     expect(

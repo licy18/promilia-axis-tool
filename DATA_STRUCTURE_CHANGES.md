@@ -11097,3 +11097,71 @@ action-contribution
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
 
 下一阶段 5-8CW 应继续把贡献拆分入口做成更完整的贡献详情区域，优先整合来源、适配器和状态点摘要，不引入最终公式。
+
+## 130. 阶段 5-8CW：inline contribution detail summary
+
+阶段 5-8CW 不修改项目保存 schema，也不修改 simulation 输出结构。本阶段新增 `AnalysisPanel` 内的前端派生贡献详情摘要。
+
+### 130.1 新增派生结构
+
+`selectedActionContribution` 新增：
+
+```js
+detail: {
+  trackKey,
+  label,
+  statePointId,
+  rows: [
+    { key, label, value, rawValue? }
+  ],
+}
+```
+
+`detail` 来源于当前选中贡献行对应的 runtime applied delta，优先匹配 `selectedStateCurvePointId`。
+
+### 130.2 新增 DOM
+
+新增详情容器：
+
+```html
+data-testid="workbench-action-contribution-detail"
+data-track-key
+data-state-point-id
+```
+
+新增详情行：
+
+```html
+data-testid="workbench-action-contribution-detail-row"
+data-detail-key="statePoint | sourceDelta | sourceIds | calculator | kind | status | unresolved"
+```
+
+### 130.3 当前字段
+
+默认 HP 贡献详情当前展示：
+
+```text
+状态点: <runtime state point id>
+Delta: action-0001|applied-frame-0-point-0
+来源: Skill 10900101 / Element 109001081
+适配器: HP适配器
+来源类型: HP预览
+公式状态: 公式未确认
+缺口: 最终公式、防御抗性顺序、命中绑定
+```
+
+缺口字段从 `calculator.unresolved` 派生，和统一三值详情/日志详情保持一致。
+
+### 130.4 验证
+
+当前测试覆盖：
+
+- 贡献详情容器 track/state point 与当前 HP 贡献一致。
+- `statePoint` / `sourceDelta` / `sourceIds` / `calculator` / `kind` / `status` / `unresolved` 详情行显示正确。
+- `unresolved` 行包含最终公式、防御抗性顺序、命中绑定。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+
+下一阶段 5-8CX 应把贡献详情与 runtime resource curve / timeline marker 的焦点联动继续收束。
