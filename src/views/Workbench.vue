@@ -135,6 +135,7 @@
           :three-value-curve-framework="
             simulationResult.threeValueCurveFramework
           "
+          :selected-action-id="selectedActionId"
           :selected-state-curve-point-id="selectedStateCurvePointId"
           :state-curve-focus-mode="stateCurveFocusMode"
           :state-curve-layer-filters="stateCurveLayerFilters"

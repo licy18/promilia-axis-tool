@@ -1485,14 +1485,30 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-action-type"]').element.value
     ).toBe('等待动作');
+    let actionResultRow = wrapper.find(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    );
+    expect(actionResultRow.attributes('data-current-action')).toBe('false');
 
-    await wrapper
-      .find(
-        '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
-      )
-      .trigger('click');
+    await actionResultRow.trigger('click');
     await nextTick();
 
+    actionResultRow = wrapper.find(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    );
+    expect(actionResultRow.attributes('data-current-action')).toBe('true');
+    expect(
+      actionResultRow
+        .find('[data-testid="workbench-action-result-current-action"]')
+        .text()
+    ).toBe('正在编辑');
+    const actionResultDetailPanel = wrapper.find(
+      '[data-testid="workbench-action-result-detail-panel"]'
+    );
+    expect(actionResultDetailPanel.attributes('data-current-action')).toBe(
+      'true'
+    );
+    expect(actionResultDetailPanel.text()).toContain('正在编辑');
     expect(
       wrapper
         .find(

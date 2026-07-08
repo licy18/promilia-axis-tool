@@ -11378,3 +11378,67 @@ selectActionResult({ actionId, statePointId })
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DA 应继续完善 Endaxis 式编辑闭环，优先让动作编辑后的结果区反馈更清楚。
+
+## 134. 阶段 5-8DA：current action marker on result rows
+
+阶段 5-8DA 不修改项目保存 schema，也不修改 simulation 输出结构。本阶段只把 Workbench 当前 `selectedActionId` 作为前端派生状态传入 `AnalysisPanel`，用于结果区标记当前编辑动作。
+
+### 134.1 AnalysisPanel 新增 prop
+
+新增：
+
+```js
+selectedActionId: String
+```
+
+由 `Workbench` 传入：
+
+```vue
+:selected-action-id="selectedActionId"
+```
+
+该字段来自既有工作台状态，不新增保存字段。
+
+### 134.2 动作结果行新增 DOM 状态
+
+`workbench-action-result-source-row` 新增：
+
+```html
+data-current-action
+```
+
+当 `entry.actionId === selectedActionId` 时：
+
+- `data-current-action="true"`
+- 追加 `current-action` class
+- 显示 `workbench-action-result-current-action` 标签，文案为 `正在编辑`
+
+### 134.3 结果详情区新增 DOM 状态
+
+`workbench-action-result-detail-panel` 新增：
+
+```html
+data-current-action
+```
+
+当 `runtimeSelectedDetail.actionId === selectedActionId` 时：
+
+- `data-current-action="true"`
+- 标题摘要从 `Delta ...` 变为 `正在编辑 · Delta ...`
+
+### 134.4 验证
+
+当前测试覆盖：
+
+- 选中等待动作 `action-0002` 时，`action-0001` 的结果行 `data-current-action="false"`。
+- 点击 `action-0001` 动作结果后，结果行 `data-current-action="true"` 并显示 `正在编辑`。
+- 结果详情区 `data-current-action="true"` 且文本包含 `正在编辑`。
+- 时间轴和属性面板仍同步选回 `action-0001`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DB 应继续改善动作编辑后的结果反馈，优先在结果详情或动作结果行展示草稿变更状态。

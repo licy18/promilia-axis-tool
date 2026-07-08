@@ -147,8 +147,12 @@
         :key="entry.actionId"
         type="button"
         class="action-result-row"
-        :class="{ selected: isActionResultRuntimeSelected(entry) }"
+        :class="{
+          selected: isActionResultRuntimeSelected(entry),
+          'current-action': isActionResultCurrentAction(entry),
+        }"
         :data-action-id="entry.actionId"
+        :data-current-action="isActionResultCurrentAction(entry)"
         :data-has-runtime-trace="Boolean(getActionResultRuntimeTrace(entry))"
         :data-runtime-state-point-id="
           getActionResultRuntimeTrace(entry)?.firstStatePointId ?? ''
@@ -163,6 +167,13 @@
       >
         <div class="damage-row-main">
           <span>{{ entry.actionName }}</span>
+          <small
+            v-if="isActionResultCurrentAction(entry)"
+            class="action-result-current-action"
+            data-testid="workbench-action-result-current-action"
+          >
+            正在编辑
+          </small>
           <small>{{ formatActionResultSource(entry) }}</small>
           <small
             v-if="formatFormulaSlotAlignment(entry.hpDamage?.sourceEvidence)"
@@ -228,6 +239,9 @@
           v-if="selectedRuntimeResultDetail"
           class="action-result-detail-panel"
           :data-action-id="selectedRuntimeResultDetail.actionId"
+          :data-current-action="
+            isRuntimeResultCurrentAction(selectedRuntimeResultDetail)
+          "
           :data-state-point-id="selectedRuntimeResultDetail.statePointId"
           :data-track-key="selectedRuntimeResultDetail.trackKey"
           data-testid="workbench-action-result-detail-panel"
@@ -834,6 +848,10 @@ const props = defineProps({
         tracks: [],
       },
     }),
+  },
+  selectedActionId: {
+    type: String,
+    default: '',
   },
   selectedStateCurvePointId: {
     type: String,
@@ -1735,6 +1753,12 @@ function isActionResultRuntimeSelected(entry) {
   );
 }
 
+function isActionResultCurrentAction(entry) {
+  return Boolean(
+    props.selectedActionId && entry?.actionId === props.selectedActionId
+  );
+}
+
 function createActionResultRuntimeTrace(actionId, rows) {
   const sortedRows = [...rows].sort(compareRuntimeTraceRows);
   const sourceDeltaIds = uniqueDisplayValues(
@@ -1871,7 +1895,17 @@ function createActionContributionDetail(row) {
 
 function formatRuntimeResultMeta(detail) {
   const source = formatSourceDeltaShortId(detail?.sourceDeltaId);
-  return source && source !== '-' ? `Delta ${source}` : 'Delta 待定位';
+  const sourceText =
+    source && source !== '-' ? `Delta ${source}` : 'Delta 待定位';
+  return isRuntimeResultCurrentAction(detail)
+    ? `正在编辑 · ${sourceText}`
+    : sourceText;
+}
+
+function isRuntimeResultCurrentAction(detail) {
+  return Boolean(
+    props.selectedActionId && detail?.actionId === props.selectedActionId
+  );
 }
 
 function formatRuntimeResultFrame(detail) {
@@ -2639,6 +2673,10 @@ h2 {
   background: rgba(121, 199, 185, 0.2);
 }
 
+.action-result-row.current-action {
+  border-left-color: #f2b366;
+}
+
 .action-result-row:disabled {
   cursor: default;
   opacity: 0.82;
@@ -3034,6 +3072,15 @@ h2 {
 
 .action-result-row .action-result-runtime-trace {
   color: #a6b7ff;
+}
+
+.action-result-current-action {
+  width: max-content;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(242, 179, 102, 0.14);
+  color: #f2b366;
+  font-weight: 700;
 }
 
 .action-contribution-panel {
