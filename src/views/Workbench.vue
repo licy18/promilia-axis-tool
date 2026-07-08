@@ -77,51 +77,49 @@
         workbenchFlowModel.mainFlowSelection.selectedRuntimeStatePointId
       "
       :data-main-flow-dispatch-sequence="
-        workbenchFlowModel.mainFlowDispatchResult.sequence
+        mainFlowStatusView.dispatch.sequence
       "
       :data-main-flow-dispatch-status="
-        workbenchFlowModel.mainFlowDispatchResult.status
+        mainFlowStatusView.dispatch.status
       "
       :data-main-flow-dispatch-handled="
-        workbenchFlowModel.mainFlowDispatchResult.handled ? 'true' : 'false'
+        mainFlowStatusView.dispatch.handledState
       "
       :data-main-flow-dispatch-has-result="
-        workbenchFlowModel.mainFlowDispatchResult.hasResult ? 'true' : 'false'
+        mainFlowStatusView.dispatch.hasResultState
       "
-      :data-main-flow-dispatch-kind="
-        workbenchFlowModel.mainFlowDispatchResult.kind
-      "
+      :data-main-flow-dispatch-kind="mainFlowStatusView.dispatch.kind"
       :data-main-flow-dispatch-source="
-        workbenchFlowModel.mainFlowDispatchResult.source
+        mainFlowStatusView.dispatch.source
       "
       :data-main-flow-dispatch-handler-key="
-        workbenchFlowModel.mainFlowDispatchResult.handlerKey
+        mainFlowStatusView.dispatch.handlerKey
       "
       :data-main-flow-dispatch-reason="
-        workbenchFlowModel.mainFlowDispatchResult.reason
+        mainFlowStatusView.dispatch.reason
       "
       :data-main-flow-dispatch-action-id="
-        workbenchFlowModel.mainFlowDispatchResult.actionId
+        mainFlowStatusView.dispatch.actionId
       "
       :data-main-flow-dispatch-state-point-id="
-        workbenchFlowModel.mainFlowDispatchResult.statePointId
+        mainFlowStatusView.dispatch.statePointId
       "
-      :data-main-flow-loop-step="workbenchFlowModel.mainFlowLoopState.step"
-      :data-main-flow-loop-status="workbenchFlowModel.mainFlowLoopState.status"
+      :data-main-flow-loop-step="mainFlowStatusView.loop.step"
+      :data-main-flow-loop-status="mainFlowStatusView.loop.status"
       :data-main-flow-loop-recovery-needed="
-        workbenchFlowModel.mainFlowLoopState.recoveryNeeded ? 'true' : 'false'
+        mainFlowStatusView.loop.recoveryNeededState
       "
       :data-main-flow-loop-next-action-kind="
-        workbenchFlowModel.mainFlowLoopState.nextActionKind
+        mainFlowStatusView.loop.nextActionKind
       "
       :data-main-flow-loop-next-target-kind="
-        workbenchFlowModel.mainFlowLoopState.nextTargetKind
+        mainFlowStatusView.loop.nextTargetKind
       "
       :data-main-flow-loop-current-region="
-        workbenchFlowModel.mainFlowLoopState.currentRegion
+        mainFlowStatusView.loop.currentRegion
       "
       :data-main-flow-loop-next-region="
-        workbenchFlowModel.mainFlowLoopState.nextRegion
+        mainFlowStatusView.loop.nextRegion
       "
       :data-runtime-review-selection-status="
         workbenchFlowModel.runtimeReviewSelection.status
@@ -428,6 +426,7 @@ import { createWorkbenchFlowRuntime } from '../features/workbench/workbenchFlowR
 import { createWorkbenchFlowRuntimePointSelectionState } from '../features/workbench/workbenchFlowRuntimePointSelection';
 import { createWorkbenchFlowRuntimeScopeState } from '../features/workbench/workbenchFlowRuntimeScope';
 import {
+  createWorkbenchMainFlowStatusView,
   createWorkbenchFlowModel,
 } from '../features/workbench/workbenchFlowModel';
 import {
@@ -619,6 +618,11 @@ const workbenchFlowModel = computed(() =>
     actionEditFocus: actionEditFocus.value,
     actionEditResultContext: actionEditResultContext.value,
     flowDispatchState: workbenchFlowDispatchState.value,
+  })
+);
+const mainFlowStatusView = computed(() =>
+  createWorkbenchMainFlowStatusView({
+    flowModel: workbenchFlowModel.value,
   })
 );
 const runtimeReviewPrimaryOperationView = computed(() =>

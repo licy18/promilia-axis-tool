@@ -19479,3 +19479,77 @@ createWorkbenchRuntimeReviewPrimaryOperationView({
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、73 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、204 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示、chunk size 提示，以及本机 PowerShell `Import-Clixml` 通道噪声。
+
+## 252. UI 主流程能力块：Main Flow Status View Model
+
+### 252.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增共享函数：
+
+```js
+createWorkbenchMainFlowStatusView({
+  flowModel,
+  mainFlowDispatchResult,
+  mainFlowLoopState,
+})
+```
+
+输出结构：
+
+```js
+{
+  dispatch: {
+    sequence,
+    status,
+    handled,
+    handledState,
+    hasResult,
+    hasResultState,
+    kind,
+    source,
+    handlerKey,
+    reason,
+    actionId,
+    statePointId,
+  },
+  loop: {
+    step,
+    status,
+    recoveryNeeded,
+    recoveryNeededState,
+    nextActionKind,
+    nextTargetKind,
+    currentRegion,
+    nextRegion,
+  },
+}
+```
+
+Workbench 页面层新增：
+
+```js
+mainFlowStatusView
+```
+
+来源：
+
+```js
+createWorkbenchMainFlowStatusView({
+  flowModel: workbenchFlowModel.value,
+})
+```
+
+`workbench-main-flow-workspace` 根节点的 dispatch/loop data 属性现在从 `mainFlowStatusView` 读取，不再直接拼 `mainFlowDispatchResult.*` 和 `mainFlowLoopState.*`。
+
+### 252.2 保存与迁移
+
+本阶段只调整 Workbench 页面层的主流程状态 view model，不新增持久字段，不需要数据迁移。
+
+### 252.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖 handled 与 failed 两种 dispatch/loop 状态下的 `createWorkbenchMainFlowStatusView()` 输出。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、63 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、205 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

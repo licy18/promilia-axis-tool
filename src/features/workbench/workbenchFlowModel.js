@@ -247,6 +247,42 @@ export function createWorkbenchMainFlowDispatchResult(dispatchState = null) {
   };
 }
 
+export function createWorkbenchMainFlowStatusView({
+  flowModel = null,
+  mainFlowDispatchResult = null,
+  mainFlowLoopState = null,
+} = {}) {
+  const dispatch =
+    mainFlowDispatchResult ?? flowModel?.mainFlowDispatchResult ?? {};
+  const loop = mainFlowLoopState ?? flowModel?.mainFlowLoopState ?? {};
+  return {
+    dispatch: {
+      sequence: Number(dispatch.sequence ?? 0) || 0,
+      status: dispatch.status ?? 'idle',
+      handled: Boolean(dispatch.handled),
+      handledState: dispatch.handled ? 'true' : 'false',
+      hasResult: Boolean(dispatch.hasResult),
+      hasResultState: dispatch.hasResult ? 'true' : 'false',
+      kind: dispatch.kind ?? '',
+      source: dispatch.source ?? '',
+      handlerKey: dispatch.handlerKey ?? '',
+      reason: dispatch.reason ?? '',
+      actionId: dispatch.actionId ?? '',
+      statePointId: dispatch.statePointId ?? '',
+    },
+    loop: {
+      step: loop.step ?? '',
+      status: loop.status ?? '',
+      recoveryNeeded: Boolean(loop.recoveryNeeded),
+      recoveryNeededState: loop.recoveryNeeded ? 'true' : 'false',
+      nextActionKind: loop.nextActionKind ?? '',
+      nextTargetKind: loop.nextTargetKind ?? '',
+      currentRegion: loop.currentRegion ?? '',
+      nextRegion: loop.nextRegion ?? '',
+    },
+  };
+}
+
 export function createWorkbenchMainFlowLoopState({
   phase = '',
   mainFlowState = null,

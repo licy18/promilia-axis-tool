@@ -8,6 +8,7 @@ import {
   WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES,
   createWorkbenchFlowAction,
   createWorkbenchFlowModel,
+  createWorkbenchMainFlowStatusView,
   resolveWorkbenchMainFlowActionEditTarget,
   resolveWorkbenchMainFlowResultReturnTarget,
 } from '../../features/workbench/workbenchFlowModel';
@@ -640,6 +641,84 @@ describe('workbench flow model', () => {
       lastDispatchKind: 'unsupported-flow-action',
       lastDispatchHandled: false,
       lastDispatchReason: 'unsupported-flow-action-kind',
+    });
+  });
+
+  it('creates a main flow status view for dispatch and loop state', () => {
+    const handledModel = createWorkbenchFlowModel({
+      flowDispatchState: {
+        sequence: 2,
+        handled: true,
+        kind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+        source: 'workbench-flow-panel',
+        handlerKey: 'openRuntimeResults',
+        actionId: 'action-0001',
+        statePointId: 'state-point-0001',
+      },
+    });
+
+    expect(
+      createWorkbenchMainFlowStatusView({ flowModel: handledModel })
+    ).toMatchObject({
+      dispatch: {
+        sequence: 2,
+        status: 'handled',
+        handled: true,
+        handledState: 'true',
+        hasResult: true,
+        hasResultState: 'true',
+        kind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+        source: 'workbench-flow-panel',
+        handlerKey: 'openRuntimeResults',
+        reason: '',
+        actionId: 'action-0001',
+        statePointId: 'state-point-0001',
+      },
+      loop: {
+        status: 'advanced',
+        recoveryNeeded: false,
+        recoveryNeededState: 'false',
+        nextActionKind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+        nextTargetKind: 'runtime-results',
+      },
+    });
+
+    expect(
+      createWorkbenchMainFlowStatusView({
+        mainFlowDispatchResult: {
+          sequence: 3,
+          status: 'failed',
+          handled: false,
+          hasResult: true,
+          kind: 'unsupported-flow-action',
+          source: 'test-flow-source',
+          reason: 'unsupported-flow-action-kind',
+        },
+        mainFlowLoopState: {
+          step: 'action-edit',
+          status: 'blocked',
+          recoveryNeeded: true,
+          nextActionKind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+          nextTargetKind: 'runtime-results',
+          currentRegion: 'action-edit',
+          nextRegion: 'runtime-review',
+        },
+      })
+    ).toMatchObject({
+      dispatch: {
+        sequence: 3,
+        status: 'failed',
+        handledState: 'false',
+        hasResultState: 'true',
+        reason: 'unsupported-flow-action-kind',
+      },
+      loop: {
+        step: 'action-edit',
+        status: 'blocked',
+        recoveryNeededState: 'true',
+        currentRegion: 'action-edit',
+        nextRegion: 'runtime-review',
+      },
     });
   });
 

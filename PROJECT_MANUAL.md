@@ -9052,6 +9052,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把主流程 dispatch result 的展示/状态字段也逐步沉到共享 view model，让 Workbench 页面模板少直接拼 `mainFlowDispatchResult` 和 loop 状态。
 
+### 2026-07-09：UI 主流程能力块 - Main Flow Status View Model
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增共享 `createWorkbenchMainFlowStatusView()`，统一输出 main flow dispatch 与 loop 状态的页面消费字段。
+- Workbench 主工作区根节点的 dispatch sequence/status/handled/hasResult/kind/source/handler/reason/actionId/statePointId，以及 loop step/status/recovery/next action/target/region 改为读取同一份 `mainFlowStatusView`。
+- Workbench 页面不再直接拼 `mainFlowDispatchResult.*` 和 `mainFlowLoopState.*`，为后续把 FlowPanel 的同类状态消费继续收束到共享 view model 做准备。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- flow model 单测覆盖 handled 与 failed 两种 dispatch/loop 状态下的 view model 输出。
+- Workbench 页面测试确认主流程 data 状态和 review 主路径仍保持可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、63 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、205 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 `WorkbenchFlowPanel` 的 dispatch/loop 状态 data 属性也接入同一个 `createWorkbenchMainFlowStatusView()`，减少主流程顶部面板和工作区根节点之间的重复状态读取。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
