@@ -1511,6 +1511,14 @@ describe('first vertical slice simulation', () => {
         enemyToughnessBaselineStatus:
           'baseline-pending-azpr-enemy-toughness-state',
         simLogCount: 1,
+        calculatorCount: 1,
+        calculatorKeys: ['azpr-hp-delta-calculator'],
+        calculatorReplaceableDeltaCount: 1,
+        calculatorStatuses: ['raw-hp-projection'],
+        calculatorSummary: {
+          contractName: 'ThreeValueDeltaCalculator',
+          appliedToRuntimeCount: 1,
+        },
         source: 'threeValueGenerationLayer.applied-deltas',
         applied: true,
       },
@@ -1545,6 +1553,10 @@ describe('first vertical slice simulation', () => {
       enemyHpRemaining: 0,
       enemyToughnessBaselineStatus:
         'baseline-pending-azpr-enemy-toughness-state',
+      calculatorCount: 1,
+      calculatorKeys: ['azpr-hp-delta-calculator'],
+      calculatorReplaceableDeltaCount: 1,
+      calculatorStatuses: ['raw-hp-projection'],
       applied: true,
     });
     const generationAction = result.threeValueGenerationLayer.actions[0];
@@ -2440,6 +2452,9 @@ describe('first vertical slice simulation', () => {
       selfEnergyDelta: 0,
       selfEnergyPointCount: 0,
       simLogCount: 1,
+      calculatorCount: 1,
+      calculatorKeys: ['azpr-hp-delta-calculator'],
+      calculatorReplaceableDeltaCount: 1,
       applied: true,
     });
     const sampledDelta = result.threeValueGenerationLayer.deltas.find(
@@ -3755,6 +3770,20 @@ describe('first vertical slice simulation', () => {
       enemyStatePointCount: 1,
       selfEnergyPointCount: 1,
       simLogCount: 2,
+      calculatorCount: 2,
+      calculatorKeys: expect.arrayContaining([
+        'azpr-hp-delta-calculator',
+        'azpr-self-energy-delta-calculator',
+      ]),
+      calculatorReplaceableDeltaCount: 2,
+      calculatorStatuses: expect.arrayContaining([
+        'raw-hp-projection',
+        'explicit-cost-applied-charge-formula-unmapped',
+      ]),
+      calculatorSummary: expect.objectContaining({
+        contractName: 'ThreeValueDeltaCalculator',
+        appliedToRuntimeCount: 2,
+      }),
       applied: true,
     });
     expect(result.threeValueRuntimeProjection.selfEnergyCurveByActor).toEqual(

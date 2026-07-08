@@ -10418,3 +10418,101 @@ data-calculator-key="calculator | kind | replaceable | status | unresolved"
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
 
 下一阶段 5-8CO 应把 calculator 定义、状态映射和未确认项整理到独立运行时 adapter 模块，并补 calculator 诊断摘要入口。
+
+## 122. 阶段 5-8CO：three-value calculator adapter module
+
+阶段 5-8CO 不修改项目保存 schema。本阶段整理 projection/runtime 派生结构和 adapter 模块边界。
+
+### 122.1 新增 adapter 模块
+
+新增：
+
+```js
+src/simulation/threeValueCalculatorAdapters.js
+```
+
+导出：
+
+```js
+THREE_VALUE_CALCULATOR_DEFINITIONS
+getThreeValueCalculatorKeys()
+createThreeValueCalculatorResult(args)
+summarizeThreeValueCalculators(deltas)
+createThreeValueCalculatorDisplayRows(point, simLogRow)
+formatThreeValueCalculatorKey(calculatorKey, trackKey)
+formatThreeValueCalculationKind(kind, trackKey)
+formatThreeValueCalculationStatus(status)
+formatThreeValueUnresolvedItems(items)
+```
+
+其中 calculator 定义仍为：
+
+```text
+azpr-hp-delta-calculator
+azpr-toughness-delta-calculator
+azpr-self-energy-delta-calculator
+```
+
+### 122.2 runtime projection summary 新增诊断字段
+
+`threeValueRuntimeProjection.summary` 新增：
+
+```js
+calculatorCount
+calculatorKeys
+calculatorReplaceableDeltaCount
+calculatorStatuses
+calculatorSummary
+```
+
+字段语义与 generation layer summary 保持一致，但统计范围只包含 runtime projection 实际消费的 applied delta。
+
+`calculatorSummary` 结构继续沿用：
+
+```js
+{
+  contractName,
+  contractVersion,
+  calculatorCount,
+  calculatorKeys,
+  calculatorReplaceableDeltaCount,
+  statuses,
+  outputFields,
+  confidenceLevels,
+  appliedToRuntimeCount,
+}
+```
+
+### 122.3 UI 派生字段复用
+
+`runtimeSelectedDetail.js` 的：
+
+```js
+createRuntimeDetailCalculatorRows(point, simLogRow)
+```
+
+继续保留对外接口，但内部改为调用：
+
+```js
+createThreeValueCalculatorDisplayRows(point, simLogRow)
+```
+
+因此 Workbench 右侧三值详情和 runtime sim log 详情的 DOM 结构与保存 schema 均不变。
+
+### 122.4 验证
+
+当前测试覆盖：
+
+- 默认样本 runtime summary 只统计 applied HP calculator。
+- recover-sp sample 场景 generation 层仍保留 sampled self-energy calculator，runtime 层仍只统计 applied HP calculator。
+- 寒悠悠显式 SP 消耗场景 runtime summary 同时统计 HP calculator 和 self-energy calculator。
+- Workbench calculator rows 文案保持原行为。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、13 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8CP 应建立 Workbench 全局 calculator 诊断入口，把 generation/runtime 两层的 adapter 状态、状态分布和缺口集中展示。

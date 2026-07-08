@@ -5285,6 +5285,44 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 同步补 generation/runtime summary 的 calculator 诊断入口，让用户后续能看到每条轨道仍有多少 preview/candidate/sample 输出、哪些缺口最常见。
 - 仍不修改最终公式数值；这一阶段先把 adapter 模块边界和诊断摘要铺好。
 
+### 2026-07-08：阶段 5-8CO 三值 calculator adapter 模块化
+
+本轮完成：
+
+- 新增 `src/simulation/threeValueCalculatorAdapters.js`，集中维护 HP / 韧性 / 自身能量三条 calculator 定义、可替换判定、未确认项和中文展示映射。
+- `projectSimulationResult.js` 不再内联 calculator 定义和摘要函数，只从 adapter 模块读取 `createThreeValueCalculatorResult()`、`getThreeValueCalculatorKeys()` 和 `summarizeThreeValueCalculators()`。
+- `runtimeSelectedDetail.js` 的 calculator rows 改为复用 adapter 模块的 `createThreeValueCalculatorDisplayRows()`，避免运行时详情和日志面板各自维护一份文案映射。
+- `threeValueRuntimeProjection.summary` 新增 runtime 侧 calculator 诊断字段：`calculatorCount`、`calculatorKeys`、`calculatorReplaceableDeltaCount`、`calculatorStatuses`、`calculatorSummary`。
+- 测试补充 runtime projection summary 断言，锁定默认 HP applied 点、RecoverSP sample 场景和寒悠悠显式 SP 消耗场景的 calculator 统计。
+
+当前验证事实：
+
+- 默认样本 runtime projection 当前只应用 HP delta，因此 runtime 侧 `calculatorCount=1`、`calculatorKeys=[azpr-hp-delta-calculator]`、`calculatorStatuses=[raw-hp-projection]`。
+- 默认样本 generation 侧仍保留三条 calculator contract，候选 HP / 韧性 / 自身能量 delta 没有被本次模块化改写。
+- recover-sp runtime sample 仍作为 sampled delta 保留在 generation layer，runtime projection 仍只应用 HP delta。
+- 寒悠悠显式 SP 消耗场景 runtime 侧同时应用 HP calculator 和 self-energy calculator，`calculatorReplaceableDeltaCount=2`。
+- Workbench 详情中的“公式适配器”文案保持不变，来源只是从共享 adapter helper 派生。
+
+当前边界：
+
+- 本阶段只整理 adapter 模块边界和诊断摘要，没有接入最终 AzPr HP / 韧性 / 充能公式。
+- `calculatorSummary` 目前是 projection 派生字段，不属于项目保存 schema。
+- UI 仍只有详情区展示单点 calculator 来源，还没有全局 calculator 诊断/筛选面板。
+- 运行时曲线仍只消费 applied delta；sampled / candidate delta 继续留在 generation layer 与候选曲线中。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、13 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8CP 目标：建立 Workbench 全局 calculator 诊断入口，把 generation/runtime 两层的 calculator 摘要、状态分布和最常见缺口集中展示出来。
+- 诊断入口应服务当前开发阶段：帮助确认三值曲线框架、adapter 状态和缺口分布，而不是继续追逐每个角色每个动作的逐帧细节。
+- 仍不修改最终公式；下一阶段优先让用户能看清当前 HP / 韧性 / 能量曲线分别由哪些 preview/candidate/sample/applied 输出构成。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
