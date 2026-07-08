@@ -9529,6 +9529,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 Workbench 页面层是否还有主流程状态应用仍留在视图函数中，优先把“runtime 点选择 / 贡献定位 / 回到编辑”这类状态应用收束到 flow runtime，而不是继续打磨局部提示。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Point Selection State In Flow Runtime
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchFlowRuntime` 新增 `applyRuntimePointSelection()`，由 runtime 层统一创建并应用 `RuntimePointSelectionState`。
+- runtime flow plan 执行 `selectRuntimeStatePoint` 时，不再要求 Workbench 页面层自行创建 runtime 点选择状态；页面只提供 `applyRuntimePointSelectionState()` 写入 refs。
+- Workbench 页面移除对 `createWorkbenchFlowRuntimePointSelectionState()` 的直接依赖，减少页面视图函数对 runtime 点选择状态结构的了解。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- flow runtime 单测覆盖 runtime plan 选择点时输出共享选择状态，也覆盖直接调用 `applyRuntimePointSelection()` 的路径。
+- Workbench 页面测试确认现有主流程仍能完成 runtime 结果选择、贡献定位、日志详情和时间轴 marker 联动。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、62 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、215 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 calculator scope / runtime overview 清空这类状态应用是否也能进一步收束到 flow runtime，优先减少 Workbench 页面层直接拼装主流程状态。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

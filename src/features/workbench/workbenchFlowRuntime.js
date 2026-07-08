@@ -1,16 +1,39 @@
+import { createWorkbenchFlowRuntimePointSelectionState } from './workbenchFlowRuntimePointSelection';
+
 export function createWorkbenchFlowRuntime({
   actionExists = () => false,
   selectAction = () => {},
   setActionEditFocus = () => {},
   focusCalculatorScope = () => {},
   setCalculatorScope = () => {},
+  applyRuntimePointSelectionState = null,
   selectRuntimeStatePoint = () => {},
   clearRuntimeSelection = () => {},
   setStateCurveLayerFilters = () => {},
   setStateCurveTrackFilters = () => {},
   focusRuntimeLog = () => {},
 } = {}) {
+  function applyRuntimePointSelectionStateForPoint(statePointId = '') {
+    const selectionState = createWorkbenchFlowRuntimePointSelectionState({
+      statePointId,
+    });
+    if (typeof applyRuntimePointSelectionState === 'function') {
+      applyRuntimePointSelectionState(selectionState);
+    } else {
+      selectRuntimeStatePoint(selectionState.statePointId);
+    }
+    return selectionState;
+  }
+
   return {
+    applyRuntimePointSelection({ statePointId = '' } = {}) {
+      applyRuntimePointSelectionStateForPoint(statePointId);
+      return createFlowRuntimeResult({
+        applied: true,
+        kind: 'runtime-point-selection',
+      });
+    },
+
     applyActionEditFlowPlan(plan = {}) {
       const flowPlan = plan ?? {};
       if (!flowPlan.canApply) {
@@ -54,7 +77,7 @@ export function createWorkbenchFlowRuntime({
       }
 
       if (flowPlan.selectRuntimeStatePoint) {
-        selectRuntimeStatePoint(flowPlan.statePointId);
+        applyRuntimePointSelectionStateForPoint(flowPlan.statePointId);
       } else if (flowPlan.clearRuntimeSelection) {
         clearRuntimeSelection({
           stateCurveFocusMode: flowPlan.stateCurveFocusMode || 'all',

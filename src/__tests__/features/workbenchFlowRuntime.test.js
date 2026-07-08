@@ -82,8 +82,8 @@ describe('workbench flow runtime', () => {
       focusCalculatorScope: (scope, options) =>
         calls.push(['focusCalculatorScope', scope, options]),
       setCalculatorScope: scope => calls.push(['setCalculatorScope', scope]),
-      selectRuntimeStatePoint: statePointId =>
-        calls.push(['selectRuntimeStatePoint', statePointId]),
+      applyRuntimePointSelectionState: selectionState =>
+        calls.push(['applyRuntimePointSelectionState', selectionState]),
       clearRuntimeSelection: payload =>
         calls.push(['clearRuntimeSelection', payload]),
       setStateCurveLayerFilters: filters =>
@@ -116,7 +116,19 @@ describe('workbench flow runtime', () => {
     expect(calls).toEqual([
       ['selectAction', 'action-0001', { syncRuntimeResult: false }],
       ['setCalculatorScope', 'runtime'],
-      ['selectRuntimeStatePoint', 'point-001'],
+      [
+        'applyRuntimePointSelectionState',
+        {
+          statePointId: 'point-001',
+          selectedStatePointId: 'point-001',
+          stateCurveFocusMode: 'selected',
+          shouldSelectRuntimeAction: true,
+          runtimeLogFocus: {
+            source: '',
+            statePointId: '',
+          },
+        },
+      ],
       [
         'setStateCurveLayerFilters',
         {
@@ -130,6 +142,39 @@ describe('workbench flow runtime', () => {
         {
           source: 'action-result',
           statePointId: 'point-001',
+        },
+      ],
+    ]);
+  });
+
+  it('applies direct runtime point selection through the shared selection state', () => {
+    const calls = [];
+    const runtime = createWorkbenchFlowRuntime({
+      applyRuntimePointSelectionState: selectionState =>
+        calls.push(['applyRuntimePointSelectionState', selectionState]),
+    });
+
+    expect(
+      runtime.applyRuntimePointSelection({
+        statePointId: 'point-direct',
+      })
+    ).toMatchObject({
+      applied: true,
+      kind: 'runtime-point-selection',
+    });
+
+    expect(calls).toEqual([
+      [
+        'applyRuntimePointSelectionState',
+        {
+          statePointId: 'point-direct',
+          selectedStatePointId: 'point-direct',
+          stateCurveFocusMode: 'selected',
+          shouldSelectRuntimeAction: true,
+          runtimeLogFocus: {
+            source: '',
+            statePointId: '',
+          },
         },
       ],
     ]);

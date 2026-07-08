@@ -430,7 +430,6 @@ import {
   createWorkbenchFlowPlanController,
 } from '../features/workbench/workbenchFlowPlanController';
 import { createWorkbenchFlowRuntime } from '../features/workbench/workbenchFlowRuntime';
-import { createWorkbenchFlowRuntimePointSelectionState } from '../features/workbench/workbenchFlowRuntimePointSelection';
 import { createWorkbenchFlowRuntimeScopeState } from '../features/workbench/workbenchFlowRuntimeScope';
 import {
   createWorkbenchMainFlowStatusView,
@@ -552,8 +551,8 @@ const workbenchFlowRuntime = createWorkbenchFlowRuntime({
   setCalculatorScope: scope => {
     calculatorDiagnosticScope.value = scope;
   },
-  selectRuntimeStatePoint: statePointId =>
-    selectRuntimeFlowStatePoint(statePointId),
+  applyRuntimePointSelectionState: selectionState =>
+    applyRuntimePointSelectionState(selectionState),
   clearRuntimeSelection: ({ stateCurveFocusMode: mode = 'all' } = {}) => {
     selectedStateCurvePointId.value = '';
     stateCurveFocusMode.value = mode;
@@ -1673,11 +1672,9 @@ function focusRuntimeStateCurvePoint(pointId) {
 }
 
 function selectRuntimeStatePoint(pointId) {
-  applyRuntimePointSelectionState(
-    createWorkbenchFlowRuntimePointSelectionState({
-      statePointId: pointId,
-    })
-  );
+  workbenchFlowRuntime.applyRuntimePointSelection({
+    statePointId: pointId,
+  });
 }
 
 function applyRuntimePointSelectionState(selectionState = {}) {
@@ -1691,10 +1688,6 @@ function applyRuntimePointSelectionState(selectionState = {}) {
     statePointId: selectionState.runtimeLogFocus?.statePointId ?? '',
     sequence: runtimeLogFocus.value.sequence,
   };
-}
-
-function selectRuntimeFlowStatePoint(pointId) {
-  selectRuntimeStatePoint(pointId);
 }
 
 function dispatchWorkbenchFlowAction(action = {}) {
