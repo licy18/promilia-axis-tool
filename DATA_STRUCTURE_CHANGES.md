@@ -14965,3 +14965,29 @@ syncRuntimeResultForSelectedAction(selectedActionId.value)
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、51 条测试。
 - `npm run test -- --run`：通过，17 个测试文件、132 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 187. UI 主流程能力块：运行视角复制动作同步
+
+本阶段属于 UI 主流程。
+
+### 187.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 187.2 copyAction 运行视角策略
+
+`Workbench.copyAction()` 在复制前记录当前是否处于 runtime 结果视角。副本动作写入并成为当前动作后，如果原本处于 runtime 结果视角，则调用：
+
+```js
+syncRuntimeResultForSelectedAction(nextAction.id)
+```
+
+这样复制出的动作会立即定位到自己的 runtime 结果点，主流程条、三值详情、资源曲线、模拟日志和 Action Result 使用同一个刷新后的 `statePointId`。
+
+### 187.3 验证
+
+- Workbench 测试覆盖：进入默认动作运行结果后复制该动作，当前动作切到 `action-0002`，runtime 巡检位置切到第 2 项，三值详情、资源曲线、模拟日志和 Action Result 都指向新副本的 runtime state point。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "syncs runtime detail after copying"`：通过，1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、52 条测试。
+- `npm run test -- --run`：通过，17 个测试文件、133 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

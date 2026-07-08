@@ -2157,6 +2157,64 @@ describe('Workbench view', () => {
     ).toBe(firstActionStatePointId);
   });
 
+  it('syncs runtime detail after copying an action in the runtime view', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-flow-open-runtime"]')
+      .trigger('click');
+    await nextTick();
+
+    const originalStatePointId = wrapper
+      .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+      .text();
+    expect(originalStatePointId).toBeTruthy();
+
+    await wrapper
+      .find('[data-testid="workbench-copy-action"]')
+      .trigger('click');
+    await nextTick();
+
+    const flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0002');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
+      'action-0002'
+    );
+    expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('2');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('1');
+
+    const copiedStatePointId = wrapper
+      .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+      .text();
+    expect(copiedStatePointId).toBeTruthy();
+    expect(copiedStatePointId).not.toBe(originalStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-resource-chart-selection"]')
+        .attributes('data-state-point-id')
+    ).toBe(copiedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-navigation"]')
+        .attributes('data-state-point-id')
+    ).toBe(copiedStatePointId);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-result-source-row"][data-action-id="action-0002"]'
+        )
+        .attributes('data-selected-state-point-id')
+    ).toBe(copiedStatePointId);
+  });
+
   it('keeps the selected action when opening runtime results without a matching runtime point', async () => {
     const wrapper = mount(Workbench, {
       global: {

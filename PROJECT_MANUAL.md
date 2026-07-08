@@ -7342,6 +7342,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - UI 主流程能力块继续推进时，继续把复制、批量动作和编辑焦点也纳入同一套运行视角同步规则。
 - 不回到公式追证、候选数值平衡或单帧动作细节阶段。
 
+### 2026-07-08：UI 主流程能力块 - 运行视角复制动作同步
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 当 Workbench 已处于 runtime 结果视角时，复制动作后会同步到新副本动作的 runtime 结果点。
+- 复制后的主流程条、三值详情、资源曲线、模拟日志和 Action Result 指向同一个新副本结果。
+- 本阶段不新增公式推断、不修改三值数值、不扩大证据展示。
+
+当前验证事实：
+
+- 进入默认动作运行结果后复制该动作，会选中 `action-0002`，runtime 巡检位置切到第 2 项，并同步到新副本的 runtime state point。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "syncs runtime detail after copying"`：通过，1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、52 条测试。
+- `npm run test -- --run`：通过，17 个测试文件、133 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- UI 主流程能力块继续推进时，优先把批量动作和编辑焦点也纳入同一套运行视角同步规则。
+- 不回到公式追证、候选数值平衡或单帧动作细节阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

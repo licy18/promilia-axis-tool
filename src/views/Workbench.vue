@@ -823,6 +823,7 @@ function addEnemyEventAction() {
 
 function copyAction(actionId) {
   clearSegmentSplitPreview();
+  const shouldSyncRuntimeAfterCopy = shouldSyncRuntimeResultOnActionSelect();
   const sourceIndex = actionDrafts.value.findIndex(
     action => action.id === actionId
   );
@@ -850,6 +851,9 @@ function copyAction(actionId) {
   ];
   selectedActionId.value = nextAction.id;
   syncActionLibraryCharacterIdFromDraft(nextAction);
+  if (shouldSyncRuntimeAfterCopy) {
+    syncRuntimeResultForSelectedAction(nextAction.id);
+  }
   markDraftDirty();
 }
 
