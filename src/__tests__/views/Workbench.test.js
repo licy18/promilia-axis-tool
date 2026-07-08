@@ -91,19 +91,52 @@ describe('Workbench view', () => {
       'action-edit'
     );
     expect(
+      mainFlowWorkspace.attributes('data-main-flow-current-region')
+    ).toBe('action-edit');
+    expect(
       mainFlowWorkspace.attributes('data-main-flow-next-target-kind')
     ).toBe('runtime-results');
+    expect(mainFlowWorkspace.attributes('data-main-flow-next-region')).toBe(
+      'runtime-review'
+    );
+    expect(
+      mainFlowWorkspace.attributes(
+        'data-main-flow-pending-runtime-state-point-id'
+      )
+    ).toBe('');
+    expect(
+      mainFlowWorkspace.attributes('data-main-flow-selected-action-id')
+    ).toBe('action-0001');
+    expect(
+      mainFlowWorkspace.attributes(
+        'data-main-flow-selected-runtime-state-point-id'
+      )
+    ).toBe('');
     const primaryFlow = wrapper.find('[data-testid="workbench-primary-flow"]');
     expect(primaryFlow.exists()).toBe(true);
     expect(primaryFlow.attributes('data-flow-phase')).toBe('action-edit');
+    expect(primaryFlow.attributes('data-main-flow-current-region')).toBe(
+      'action-edit'
+    );
     expect(primaryFlow.attributes('data-main-flow-next-target-kind')).toBe(
       'runtime-results'
+    );
+    expect(primaryFlow.attributes('data-main-flow-next-region')).toBe(
+      'runtime-review'
     );
     expect(primaryFlow.find('.timeline-area').exists()).toBe(true);
     const runtimeReviewStack = wrapper.find(
       '[data-testid="workbench-runtime-review-stack"]'
     );
     expect(runtimeReviewStack.exists()).toBe(true);
+    expect(
+      runtimeReviewStack.attributes('data-main-flow-current-region')
+    ).toBe('action-edit');
+    expect(
+      runtimeReviewStack.attributes(
+        'data-main-flow-selected-runtime-state-point-id'
+      )
+    ).toBe('');
     expect(runtimeReviewStack.findComponent(ResourceMonitorPanel).exists()).toBe(
       true
     );
@@ -113,6 +146,9 @@ describe('Workbench view', () => {
     );
     expect(sideInspector.exists()).toBe(true);
     expect(sideInspector.attributes('data-flow-phase')).toBe('action-edit');
+    expect(sideInspector.attributes('data-main-flow-inspector-mode')).toBe(
+      'action-properties'
+    );
     expect(sideInspector.findComponent(PropertiesPanel).exists()).toBe(true);
     expect(sideInspector.find('.analysis-panel').exists()).toBe(true);
     expect(flowPanel.attributes('data-runtime-sim-log-count')).toBe('1');
@@ -1703,9 +1739,24 @@ describe('Workbench view', () => {
     ).toBe('runtime-result');
     expect(
       wrapper
+        .find('[data-testid="workbench-main-flow-workspace"]')
+        .attributes('data-main-flow-current-region')
+    ).toBe('runtime-review');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-main-flow-workspace"]')
+        .attributes('data-main-flow-selected-runtime-state-point-id')
+    ).toBe(selectedRuntimePointId);
+    expect(
+      wrapper
         .find('[data-testid="workbench-primary-flow"]')
         .attributes('data-main-flow-next-target-kind')
     ).toBe('runtime-action-edit');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-side-inspector"]')
+        .attributes('data-main-flow-inspector-mode')
+    ).toBe('runtime-detail');
     expect(
       focusedFlowPanel.attributes('data-main-flow-action-edit-state-point-id')
     ).toBe(selectedRuntimePointId);
@@ -1846,9 +1897,24 @@ describe('Workbench view', () => {
     ).toBe('edit-result-ready');
     expect(
       wrapper
+        .find('[data-testid="workbench-main-flow-workspace"]')
+        .attributes('data-main-flow-current-region')
+    ).toBe('action-edit');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-main-flow-workspace"]')
+        .attributes('data-main-flow-pending-runtime-state-point-id')
+    ).toBe(refreshedStatePointId);
+    expect(
+      wrapper
         .find('[data-testid="workbench-primary-flow"]')
         .attributes('data-main-flow-next-target-kind')
     ).toBe('runtime-result-return');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-side-inspector"]')
+        .attributes('data-main-flow-inspector-mode')
+    ).toBe('edit-result');
     expect(returnEditResultButton.attributes('disabled')).toBeUndefined();
     expect(returnEditResultButton.attributes('data-action-id')).toBe(
       'action-0001'
@@ -1930,9 +1996,29 @@ describe('Workbench view', () => {
     ).toBe('edit-result-review');
     expect(
       wrapper
+        .find('[data-testid="workbench-main-flow-workspace"]')
+        .attributes('data-main-flow-current-region')
+    ).toBe('runtime-review');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-main-flow-workspace"]')
+        .attributes('data-main-flow-selected-runtime-state-point-id')
+    ).toBe(refreshedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-main-flow-workspace"]')
+        .attributes('data-main-flow-pending-runtime-state-point-id')
+    ).toBe('');
+    expect(
+      wrapper
         .find('[data-testid="workbench-primary-flow"]')
         .attributes('data-main-flow-next-target-kind')
     ).toBe('runtime-action-edit');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-side-inspector"]')
+        .attributes('data-main-flow-inspector-mode')
+    ).toBe('runtime-detail');
     expect(wrapper.find('.analysis-panel').attributes()).toMatchObject({
       'data-flow-phase': 'edit-result-review',
       'data-flow-state-point-id': refreshedStatePointId,

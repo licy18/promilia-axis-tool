@@ -8455,6 +8455,30 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：围绕这个主流程布局，把编辑区和运行回看区之间的跳转、选中和详情定位继续整理成更少入口、更少分散判断的 Endaxis 式操作闭环。
 
+### 2026-07-09：UI 主流程能力块 - Primary Flow Selection Contract
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `WorkbenchFlowModel` 新增 `mainFlowSelection`，把当前主流程区域、下一目标区域、选中动作、选中运行点、待回看刷新点和右侧检查器模式统一成一个选择合同。
+- Workbench 主流程工作区、主流程列、运行回看区和右侧检查器开始消费 `mainFlowSelection`，布局状态不再只散落依赖 `selectedStateCurvePointId` 和 `runtimeSelectedDetail`。
+- `mainFlowSelection` 区分 action edit、runtime review、edit result pending/review，使“编辑区 -> 运行回看区 -> 回到动作修改”的状态迁移更清晰。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- flow model 单元测试覆盖 action edit、runtime result、edit result ready、edit result review 四种阶段的 `mainFlowSelection`。
+- Workbench 页面测试确认主流程布局容器在编辑、运行结果、刷新结果待回看、刷新结果已回看阶段同步选中区域、运行点和待回看点。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、58 条测试。
+
+下一步：
+
+- 继续 UI 主流程能力块：让时间轴、运行曲线、日志和详情面板逐步直接消费 `mainFlowSelection` 中的选择状态，进一步减少面板间重复判断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

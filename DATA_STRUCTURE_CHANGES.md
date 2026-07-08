@@ -18032,3 +18032,107 @@ data-flow-phase
 - 更新 `src/__tests__/views/Workbench.test.js`，覆盖主流程工作区、主流程列、运行回看区域和右侧检查器的结构。
 - 页面测试确认 action edit、runtime result、edit result ready、edit result review 阶段的布局状态跟随 `workbenchFlowModel` 更新。
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、54 条测试。
+
+## 229. UI 主流程能力块：Primary Flow Selection Contract
+
+本阶段属于 UI 主流程。
+
+### 229.1 结构变化
+
+`src/features/workbench/workbenchFlowModel.js` 新增：
+
+```js
+WORKBENCH_MAIN_FLOW_REGIONS
+```
+
+当前值：
+
+```js
+{
+  ACTION_EDIT: 'action-edit',
+  RUNTIME_REVIEW: 'runtime-review'
+}
+```
+
+`createWorkbenchFlowModel()` 输出新增：
+
+```js
+mainFlowSelection
+```
+
+新增并导出：
+
+```js
+createWorkbenchMainFlowSelection({
+  phase,
+  selectedAction,
+  selectedStateCurvePointId,
+  runtimeFocusSource,
+  runtimeOverviewActive,
+  runtimeDetail,
+  editResult,
+  mainFlowState
+})
+```
+
+`mainFlowSelection` 当前字段：
+
+```js
+{
+  phase,
+  currentRegion,
+  nextRegion,
+  inspectorMode,
+  selectedActionId,
+  selectedActionName,
+  selectedStateCurvePointId,
+  selectedRuntimeStatePointId,
+  pendingRuntimeStatePointId,
+  refreshedRuntimeStatePointId,
+  runtimeFocusSource,
+  runtimeOverviewActive,
+  hasRuntimeSelection,
+  hasPendingRuntimeResult
+}
+```
+
+`currentRegion` 表示当前主流程焦点在动作编辑区还是运行回看区。
+
+`nextRegion` 由 `mainFlowState.nextTargetKind` 推导：
+
+```text
+runtime-results -> runtime-review
+runtime-result-return -> runtime-review
+runtime-action-edit -> action-edit
+```
+
+`inspectorMode` 当前取值：
+
+```text
+action-properties
+edit-result
+runtime-detail
+```
+
+`src/views/Workbench.vue` 的主流程布局容器新增消费字段：
+
+```html
+data-main-flow-current-region
+data-main-flow-next-region
+data-main-flow-selected-action-id
+data-main-flow-selected-runtime-state-point-id
+data-main-flow-pending-runtime-state-point-id
+data-main-flow-inspector-mode
+```
+
+### 229.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 主流程选择状态合同；三值计算、runtime projection 数值结果和草稿保存结构不变。
+
+### 229.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖 action edit、runtime result、edit result ready、edit result review 四种阶段的 `mainFlowSelection`。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认主流程布局容器同步当前区域、下一目标区域、选中运行点和待回看刷新点。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、58 条测试。

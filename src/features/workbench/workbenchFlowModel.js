@@ -30,6 +30,11 @@ export const WORKBENCH_FLOW_PRIMARY_ACTION_KEYS = Object.freeze({
   RETURN_RUNTIME_RESULT: 'return-runtime-result',
 });
 
+export const WORKBENCH_MAIN_FLOW_REGIONS = Object.freeze({
+  ACTION_EDIT: 'action-edit',
+  RUNTIME_REVIEW: 'runtime-review',
+});
+
 export function createWorkbenchFlowAction({
   kind = '',
   source = '',
@@ -117,6 +122,16 @@ export function createWorkbenchFlowModel({
     editResult,
     runtimeResultReturnTarget,
   });
+  const mainFlowSelection = createWorkbenchMainFlowSelection({
+    phase,
+    selectedAction,
+    selectedStateCurvePointId,
+    runtimeFocusSource,
+    runtimeOverviewActive,
+    runtimeDetail,
+    editResult,
+    mainFlowState,
+  });
 
   return {
     phase,
@@ -135,6 +150,7 @@ export function createWorkbenchFlowModel({
     runtimeResultReturnTarget,
     primaryAction,
     mainFlowState,
+    mainFlowSelection,
     runtimeNavigation: {
       points: runtimeNavigationPoints,
       count: runtimeNavigationPoints.length,
@@ -246,6 +262,48 @@ export function createWorkbenchMainFlowState({
   };
 }
 
+export function createWorkbenchMainFlowSelection({
+  phase = '',
+  selectedAction = null,
+  selectedStateCurvePointId = '',
+  runtimeFocusSource = '',
+  runtimeOverviewActive = false,
+  runtimeDetail = null,
+  editResult = null,
+  mainFlowState = null,
+} = {}) {
+  const selectedRuntimeStatePointId = runtimeDetail?.statePointId ?? '';
+  const pendingRuntimeStatePointId =
+    editResult?.statePointId &&
+    editResult.statePointId !== selectedRuntimeStatePointId
+      ? editResult.statePointId
+      : '';
+  const currentRegion = selectedRuntimeStatePointId
+    ? WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW
+    : WORKBENCH_MAIN_FLOW_REGIONS.ACTION_EDIT;
+
+  return {
+    phase,
+    currentRegion,
+    nextRegion: resolveMainFlowNextRegion(mainFlowState?.nextTargetKind),
+    inspectorMode: resolveMainFlowInspectorMode({
+      currentRegion,
+      editResult,
+      pendingRuntimeStatePointId,
+    }),
+    selectedActionId: selectedAction?.id ?? '',
+    selectedActionName: selectedAction?.name ?? '未选动作',
+    selectedStateCurvePointId: selectedStateCurvePointId ?? '',
+    selectedRuntimeStatePointId,
+    pendingRuntimeStatePointId,
+    refreshedRuntimeStatePointId: editResult?.statePointId ?? '',
+    runtimeFocusSource: runtimeFocusSource ?? '',
+    runtimeOverviewActive: Boolean(runtimeOverviewActive),
+    hasRuntimeSelection: Boolean(selectedRuntimeStatePointId),
+    hasPendingRuntimeResult: Boolean(pendingRuntimeStatePointId),
+  };
+}
+
 export function resolveWorkbenchMainFlowActionEditTarget({
   flowModel = null,
   fallbackTarget = null,
@@ -296,6 +354,36 @@ function resolveMainFlowNextTargetKind(kind = '') {
     return 'runtime-result-return';
   }
   return '';
+}
+
+function resolveMainFlowNextRegion(nextTargetKind = '') {
+  if (nextTargetKind === 'runtime-action-edit') {
+    return WORKBENCH_MAIN_FLOW_REGIONS.ACTION_EDIT;
+  }
+  if (
+    nextTargetKind === 'runtime-results' ||
+    nextTargetKind === 'runtime-result-return'
+  ) {
+    return WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW;
+  }
+  return '';
+}
+
+function resolveMainFlowInspectorMode({
+  currentRegion = '',
+  editResult = null,
+  pendingRuntimeStatePointId = '',
+} = {}) {
+  if (pendingRuntimeStatePointId) {
+    return 'edit-result';
+  }
+  if (currentRegion === WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW) {
+    return 'runtime-detail';
+  }
+  if (editResult?.statePointId) {
+    return 'edit-result';
+  }
+  return 'action-properties';
 }
 
 function createWorkbenchFlowEditResult(context) {

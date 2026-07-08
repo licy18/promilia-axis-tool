@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   WORKBENCH_FLOW_ACTION_KINDS,
   WORKBENCH_FLOW_PHASES,
+  WORKBENCH_MAIN_FLOW_REGIONS,
   WORKBENCH_FLOW_PRIMARY_ACTION_KEYS,
   createWorkbenchFlowAction,
   createWorkbenchFlowModel,
@@ -61,6 +62,18 @@ describe('workbench flow model', () => {
       canFocusRuntimeAction: false,
       canReturnRuntimeResult: false,
     });
+    expect(model.mainFlowSelection).toMatchObject({
+      phase: WORKBENCH_FLOW_PHASES.ACTION_EDIT,
+      currentRegion: WORKBENCH_MAIN_FLOW_REGIONS.ACTION_EDIT,
+      nextRegion: WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW,
+      inspectorMode: 'action-properties',
+      selectedActionId: 'action-0002',
+      selectedActionName: '资源动作',
+      selectedRuntimeStatePointId: '',
+      pendingRuntimeStatePointId: '',
+      hasRuntimeSelection: false,
+      hasPendingRuntimeResult: false,
+    });
     expect(model.runtimeNavigation.count).toBe(2);
     expect(model.runtimeNavigation.index).toBe(-1);
     expect(model.runtimeNavigation.label).toBe('-/2');
@@ -119,6 +132,19 @@ describe('workbench flow model', () => {
       returnStatePointId: '',
       canFocusRuntimeAction: true,
       canReturnRuntimeResult: false,
+    });
+    expect(model.mainFlowSelection).toMatchObject({
+      phase: WORKBENCH_FLOW_PHASES.RUNTIME_RESULT,
+      currentRegion: WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW,
+      nextRegion: WORKBENCH_MAIN_FLOW_REGIONS.ACTION_EDIT,
+      inspectorMode: 'runtime-detail',
+      selectedActionId: 'action-0001',
+      selectedStateCurvePointId: firstPoint.statePointId,
+      selectedRuntimeStatePointId: firstPoint.statePointId,
+      pendingRuntimeStatePointId: '',
+      runtimeFocusSource: 'action-result',
+      hasRuntimeSelection: true,
+      hasPendingRuntimeResult: false,
     });
     expect(model.runtimeNavigation.index).toBe(0);
     expect(model.runtimeNavigation.label).toBe('1/2');
@@ -189,6 +215,18 @@ describe('workbench flow model', () => {
       canFocusRuntimeAction: false,
       canReturnRuntimeResult: true,
     });
+    expect(readyModel.mainFlowSelection).toMatchObject({
+      phase: WORKBENCH_FLOW_PHASES.EDIT_RESULT_READY,
+      currentRegion: WORKBENCH_MAIN_FLOW_REGIONS.ACTION_EDIT,
+      nextRegion: WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW,
+      inspectorMode: 'edit-result',
+      selectedActionId: 'action-0002',
+      selectedRuntimeStatePointId: '',
+      pendingRuntimeStatePointId: secondPoint.statePointId,
+      refreshedRuntimeStatePointId: secondPoint.statePointId,
+      hasRuntimeSelection: false,
+      hasPendingRuntimeResult: true,
+    });
 
     const reviewModel = createWorkbenchFlowModel({
       runtimeProjection,
@@ -234,6 +272,17 @@ describe('workbench flow model', () => {
       returnStatePointId: secondPoint.statePointId,
       canFocusRuntimeAction: true,
       canReturnRuntimeResult: true,
+    });
+    expect(reviewModel.mainFlowSelection).toMatchObject({
+      phase: WORKBENCH_FLOW_PHASES.EDIT_RESULT_REVIEW,
+      currentRegion: WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW,
+      nextRegion: WORKBENCH_MAIN_FLOW_REGIONS.ACTION_EDIT,
+      inspectorMode: 'runtime-detail',
+      selectedRuntimeStatePointId: secondPoint.statePointId,
+      pendingRuntimeStatePointId: '',
+      refreshedRuntimeStatePointId: secondPoint.statePointId,
+      hasRuntimeSelection: true,
+      hasPendingRuntimeResult: false,
     });
     expect(
       resolveWorkbenchMainFlowActionEditTarget({

@@ -58,8 +58,23 @@
     <div
       class="workbench-grid"
       :data-flow-phase="workbenchFlowModel.phase"
+      :data-main-flow-current-region="
+        workbenchFlowModel.mainFlowSelection.currentRegion
+      "
       :data-main-flow-next-target-kind="
         workbenchFlowModel.mainFlowState.nextTargetKind
+      "
+      :data-main-flow-next-region="
+        workbenchFlowModel.mainFlowSelection.nextRegion
+      "
+      :data-main-flow-pending-runtime-state-point-id="
+        workbenchFlowModel.mainFlowSelection.pendingRuntimeStatePointId
+      "
+      :data-main-flow-selected-action-id="
+        workbenchFlowModel.mainFlowSelection.selectedActionId
+      "
+      :data-main-flow-selected-runtime-state-point-id="
+        workbenchFlowModel.mainFlowSelection.selectedRuntimeStatePointId
       "
       data-testid="workbench-main-flow-workspace"
     >
@@ -89,8 +104,20 @@
       <div
         class="primary-flow"
         :data-flow-phase="workbenchFlowModel.phase"
+        :data-main-flow-current-region="
+          workbenchFlowModel.mainFlowSelection.currentRegion
+        "
         :data-main-flow-next-target-kind="
           workbenchFlowModel.mainFlowState.nextTargetKind
+        "
+        :data-main-flow-next-region="
+          workbenchFlowModel.mainFlowSelection.nextRegion
+        "
+        :data-main-flow-pending-runtime-state-point-id="
+          workbenchFlowModel.mainFlowSelection.pendingRuntimeStatePointId
+        "
+        :data-main-flow-selected-runtime-state-point-id="
+          workbenchFlowModel.mainFlowSelection.selectedRuntimeStatePointId
         "
         data-testid="workbench-primary-flow"
       >
@@ -125,6 +152,15 @@
 
         <div
           class="runtime-review-stack"
+          :data-main-flow-current-region="
+            workbenchFlowModel.mainFlowSelection.currentRegion
+          "
+          :data-main-flow-pending-runtime-state-point-id="
+            workbenchFlowModel.mainFlowSelection.pendingRuntimeStatePointId
+          "
+          :data-main-flow-selected-runtime-state-point-id="
+            workbenchFlowModel.mainFlowSelection.selectedRuntimeStatePointId
+          "
           data-testid="workbench-runtime-review-stack"
         >
           <div class="resource-area" data-testid="workbench-resource-area">
@@ -160,6 +196,9 @@
       <div
         class="side-stack"
         :data-flow-phase="workbenchFlowModel.phase"
+        :data-main-flow-inspector-mode="
+          workbenchFlowModel.mainFlowSelection.inspectorMode
+        "
         data-testid="workbench-side-inspector"
       >
         <PropertiesPanel
