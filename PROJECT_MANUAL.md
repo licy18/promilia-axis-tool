@@ -8609,6 +8609,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：基于 `mainFlowLoopState` 把主流程成功推进和失败恢复具体接入操作路径，使闭环状态进一步驱动实际回看/回改流程。
 
+### 2026-07-09：UI 主流程能力块 - Loop-Driven Primary Action
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `createWorkbenchMainFlowNextAction`，由 `mainFlowLoopState` 统一生成当前主流程下一步 action。
+- `WorkbenchFlowPanel` 的主动作按钮开始通过 loop state 执行“查看运行结果 / 编辑结果动作 / 回到刷新结果”；非主动作按钮仍保留原明确目标，避免破坏辅助路径。
+- 主流程下一步 action 会复用 loop state 中的目标 action/state point，使上一个阶段的闭环状态真正参与操作派发。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- `workbenchMainFlowActions` 单元测试覆盖 open runtime、focus runtime action、return runtime result 三种主路径均可从 loop state 生成 action。
+- Workbench 页面测试确认原有编辑-运行-回改-返回主流程仍可执行。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、61 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、187 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 loop-driven 主动作扩展到 Workbench 层的失败恢复入口，使失败后可以从同一主流程状态重新执行当前可用动作，而不是依赖各组件局部判断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

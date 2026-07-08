@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  createWorkbenchMainFlowNextAction,
   createWorkbenchOpenRuntimeResultsFlowAction,
   createWorkbenchRuntimeActionEditFlowAction,
   createWorkbenchRuntimeResultFlowAction,
@@ -34,6 +35,119 @@ describe('workbench main flow actions', () => {
         runtimeSimLogCount: 2,
         fallbackToFirstRuntimePoint: true,
       },
+    });
+  });
+
+  it('creates the primary main flow action from the loop state contract', () => {
+    const openAction = createWorkbenchMainFlowNextAction({
+      source: 'workbench-flow-panel',
+      flowModel: {
+        runtimeSimLogCount: 3,
+        controls: {
+          canOpenRuntimeResults: false,
+        },
+        mainFlowState: {
+          primaryAction: {
+            kind: 'open-runtime-results',
+            actionId: 'primary-action',
+          },
+        },
+        mainFlowLoopState: {
+          nextActionKind: 'open-runtime-results',
+          canRunNextAction: true,
+          targetActionId: 'loop-action',
+        },
+      },
+    });
+    expect(openAction).toMatchObject({
+      kind: 'open-runtime-results',
+      source: 'workbench-flow-panel',
+      actionId: 'loop-action',
+      canRun: true,
+      payload: {
+        runtimeSimLogCount: 3,
+        fallbackToFirstRuntimePoint: true,
+      },
+    });
+
+    const editAction = createWorkbenchMainFlowNextAction({
+      source: 'workbench-flow-panel',
+      flowModel: {
+        mainFlowState: {
+          primaryAction: {
+            kind: 'focus-runtime-action',
+          },
+          runtimeActionEditTarget: {
+            frameLabel: '30f',
+            trackKey: 'selfEnergyChange',
+          },
+        },
+        mainFlowLoopState: {
+          nextActionKind: 'focus-runtime-action',
+          canRunNextAction: true,
+          targetActionId: 'loop-action',
+          targetStatePointId: 'loop-state-point',
+        },
+      },
+    });
+    expect(editAction).toMatchObject({
+      kind: 'focus-runtime-action',
+      source: 'workbench-flow-panel',
+      actionId: 'loop-action',
+      statePointId: 'loop-state-point',
+      canRun: true,
+      payload: {
+        frameLabel: '30f',
+        trackKey: 'selfEnergyChange',
+      },
+    });
+
+    const returnAction = createWorkbenchMainFlowNextAction({
+      source: 'workbench-flow-panel',
+      flowModel: {
+        mainFlowState: {
+          primaryAction: {
+            kind: 'return-runtime-result',
+          },
+          resultReturnTarget: {
+            originStatePointId: 'origin-state-point',
+          },
+        },
+        mainFlowLoopState: {
+          nextActionKind: 'return-runtime-result',
+          canRunNextAction: true,
+          targetActionId: 'loop-action',
+          targetStatePointId: 'refreshed-state-point',
+        },
+      },
+    });
+    expect(returnAction).toMatchObject({
+      kind: 'return-runtime-result',
+      source: 'workbench-flow-panel',
+      actionId: 'loop-action',
+      statePointId: 'refreshed-state-point',
+      canRun: true,
+      payload: {
+        originStatePointId: 'origin-state-point',
+      },
+    });
+  });
+
+  it('keeps a disabled action when the main flow loop has no next action', () => {
+    expect(
+      createWorkbenchMainFlowNextAction({
+        source: 'workbench-flow-panel',
+        flowModel: {
+          mainFlowLoopState: {
+            nextActionKind: '',
+            canRunNextAction: false,
+          },
+        },
+      })
+    ).toMatchObject({
+      source: 'workbench-flow-panel',
+      canRun: false,
+      disabledReason: 'missing-main-flow-next-action',
     });
   });
 

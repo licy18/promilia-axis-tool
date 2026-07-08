@@ -18425,3 +18425,64 @@ edit-result-review
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、60 条测试。
 - `npm run test -- --run`：通过，33 个测试文件、185 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 235. UI 主流程能力块：Loop-Driven Primary Action
+
+### 235.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增 `workbenchMainFlowActions` 导出函数：
+
+```js
+createWorkbenchMainFlowNextAction({
+  flowModel,
+  source,
+  enabled
+})
+```
+
+该函数读取：
+
+```js
+flowModel.mainFlowLoopState
+flowModel.mainFlowState
+```
+
+并根据 `mainFlowLoopState.nextActionKind` 生成当前主流程下一步 action：
+
+```text
+open-runtime-results
+focus-runtime-action
+return-runtime-result
+```
+
+目标 action/state point 优先来自：
+
+```js
+mainFlowLoopState.targetActionId
+mainFlowLoopState.targetStatePointId
+```
+
+若 loop state 没有下一步 action，则返回禁用 action：
+
+```js
+{
+  canRun: false,
+  disabledReason: 'missing-main-flow-next-action'
+}
+```
+
+`WorkbenchFlowPanel` 的主动作按钮现在优先调用 `createWorkbenchMainFlowNextAction`；当按钮不是当前主动作时，仍使用原明确目标工厂，以保留辅助返回/编辑路径。
+
+### 235.2 保存与迁移
+
+本阶段只新增 UI 主流程 action 生成入口，不新增持久字段，不需要数据迁移。
+
+### 235.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖三种主流程下一步 action 均由 loop state 生成。
+- 复跑 `src/__tests__/views/Workbench.test.js`，确认主流程页面闭环仍可执行。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、61 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、187 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

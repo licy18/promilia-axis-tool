@@ -248,11 +248,14 @@ import {
   createWorkbenchFlowModel,
 } from './workbenchFlowModel';
 import {
+  createWorkbenchMainFlowNextAction,
   createWorkbenchOpenRuntimeResultsFlowAction,
   createWorkbenchRuntimeActionEditFlowAction,
   createWorkbenchRuntimeResultReturnFlowAction,
   createWorkbenchRuntimeStatePointFlowAction,
 } from './workbenchMainFlowActions';
+
+const MAIN_FLOW_PANEL_SOURCE = 'workbench-flow-panel';
 
 const props = defineProps({
   selectedAction: {
@@ -306,17 +309,25 @@ const workbenchFlow = computed(
 );
 
 function focusRuntimeAction() {
-  const detail = workbenchFlow.value.mainFlowState.runtimeActionEditTarget;
-  dispatchFlowAction(getRuntimeActionFocusFlowAction(detail));
+  dispatchMainFlowAction(WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION, () =>
+    getRuntimeActionFocusFlowAction(
+      workbenchFlow.value.mainFlowState.runtimeActionEditTarget
+    )
+  );
 }
 
 function returnRuntimeResult() {
-  const context = workbenchFlow.value.mainFlowState.resultReturnTarget;
-  dispatchFlowAction(getRuntimeReturnFlowAction(context));
+  dispatchMainFlowAction(WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT, () =>
+    getRuntimeReturnFlowAction(
+      workbenchFlow.value.mainFlowState.resultReturnTarget
+    )
+  );
 }
 
 function openRuntimeResults() {
-  dispatchFlowAction(getOpenRuntimeResultsFlowAction(workbenchFlow.value));
+  dispatchMainFlowAction(WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS, () =>
+    getOpenRuntimeResultsFlowAction(workbenchFlow.value)
+  );
 }
 
 function selectRuntimeNavigationPoint(point) {
@@ -330,6 +341,16 @@ function dispatchFlowAction(action) {
   emit('dispatch-flow-action', action);
 }
 
+function dispatchMainFlowAction(kind, createFallbackAction) {
+  const action = isPrimaryFlowAction(kind)
+    ? createWorkbenchMainFlowNextAction({
+        flowModel: workbenchFlow.value,
+        source: MAIN_FLOW_PANEL_SOURCE,
+      })
+    : createFallbackAction();
+  dispatchFlowAction(action);
+}
+
 function isPrimaryFlowAction(kind) {
   return workbenchFlow.value.mainFlowState.primaryAction.kind === kind;
 }
@@ -337,7 +358,7 @@ function isPrimaryFlowAction(kind) {
 function getOpenRuntimeResultsFlowAction(flow) {
   return createWorkbenchOpenRuntimeResultsFlowAction({
     flowModel: flow,
-    source: 'workbench-flow-panel',
+    source: MAIN_FLOW_PANEL_SOURCE,
   });
 }
 
@@ -351,7 +372,7 @@ function getRuntimeNavigationFlowAction(point) {
 
 function getRuntimeActionFocusFlowAction(detail) {
   return createWorkbenchRuntimeActionEditFlowAction({
-    source: 'workbench-flow-panel',
+    source: MAIN_FLOW_PANEL_SOURCE,
     target: detail,
     enabled: Boolean(detail?.canFocusAction),
   });
@@ -359,7 +380,7 @@ function getRuntimeActionFocusFlowAction(detail) {
 
 function getRuntimeReturnFlowAction(context) {
   return createWorkbenchRuntimeResultReturnFlowAction({
-    source: 'workbench-flow-panel',
+    source: MAIN_FLOW_PANEL_SOURCE,
     target: context,
   });
 }
