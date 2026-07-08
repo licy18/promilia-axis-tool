@@ -221,6 +221,10 @@ import {
   findFirstRuntimeStatePointForAction,
 } from '../features/workbench/runtimeProjectionPoints';
 import {
+  createRuntimeEntryFlowPlan,
+  createRuntimePointFocusFlowPlan,
+} from '../features/workbench/workbenchRuntimeFlowPlan';
+import {
   SYSTEM_TIMELINE_LANE_ID,
   createTimelineDiagnostics,
 } from '../features/workbench/timelineDiagnostics';
@@ -1368,18 +1372,12 @@ function returnRuntimeResultFromProperties({ actionId, statePointId } = {}) {
 
 function openRuntimeResultsFlow({ actionId } = {}) {
   const targetActionId = actionId || selectedActionId.value;
-  const actionRuntimePoint = findFirstRuntimeStatePointForAction(
-    simulationResult.value.threeValueRuntimeProjection,
-    targetActionId
+  applyRuntimeFlowPlan(
+    createRuntimeEntryFlowPlan({
+      runtimeProjection: simulationResult.value.threeValueRuntimeProjection,
+      actionId: targetActionId,
+    })
   );
-  if (actionRuntimePoint?.statePointId) {
-    focusThreeValueCalculatorScope('runtime');
-    selectRuntimeFlowStatePoint(actionRuntimePoint.statePointId);
-    return;
-  }
-  focusThreeValueCalculatorScope('runtime', {
-    selectFirstRuntimePoint: false,
-  });
 }
 
 function focusRuntimeAction({
@@ -1452,23 +1450,12 @@ function selectActionContributionRuntimePoint(pointId) {
 }
 
 function focusRuntimePointFromAnalysis(pointId, source) {
-  selectRuntimeStatePoint(pointId);
-  if (!pointId) {
-    return;
-  }
-  stateCurveLayerFilters.value = {
-    applied: true,
-    candidate: false,
-    sampled: false,
-    placeholder: false,
-  };
-  stateCurveTrackFilters.value = {};
-  calculatorDiagnosticScope.value = 'runtime';
-  runtimeLogFocus.value = {
-    source,
-    statePointId: pointId,
-    sequence: runtimeLogFocus.value.sequence + 1,
-  };
+  applyRuntimeFlowPlan(
+    createRuntimePointFocusFlowPlan({
+      statePointId: pointId,
+      source,
+    })
+  );
 }
 
 function updateStateCurveFocusMode(mode) {
@@ -1587,15 +1574,44 @@ function getSelectedRuntimeStatePointActionId() {
 }
 
 function syncRuntimeResultForSelectedAction(actionId) {
-  const runtimePoint = findFirstRuntimeStatePointForAction(
-    simulationResult.value.threeValueRuntimeProjection,
-    actionId
+  applyRuntimeFlowPlan(
+    createRuntimeEntryFlowPlan({
+      runtimeProjection: simulationResult.value.threeValueRuntimeProjection,
+      actionId,
+    })
   );
-  focusThreeValueCalculatorScope('runtime', {
-    selectFirstRuntimePoint: false,
-  });
-  if (runtimePoint?.statePointId) {
-    selectRuntimeStatePoint(runtimePoint.statePointId);
+}
+
+function applyRuntimeFlowPlan(plan = {}) {
+  if (plan.calculatorScope) {
+    if (plan.pulseCalculatorFocus) {
+      focusThreeValueCalculatorScope(plan.calculatorScope, {
+        selectFirstRuntimePoint: plan.selectFirstRuntimePoint,
+      });
+    } else {
+      calculatorDiagnosticScope.value = plan.calculatorScope;
+    }
+  }
+
+  if (plan.selectRuntimeStatePoint) {
+    selectRuntimeFlowStatePoint(plan.statePointId);
+  } else if (plan.clearRuntimeSelection) {
+    selectedStateCurvePointId.value = '';
+    stateCurveFocusMode.value = plan.stateCurveFocusMode || 'all';
+  }
+
+  if (plan.stateCurveLayerFilters) {
+    stateCurveLayerFilters.value = { ...plan.stateCurveLayerFilters };
+  }
+  if (plan.stateCurveTrackFilters) {
+    stateCurveTrackFilters.value = { ...plan.stateCurveTrackFilters };
+  }
+  if (plan.runtimeLogFocusSource && plan.statePointId) {
+    runtimeLogFocus.value = {
+      source: plan.runtimeLogFocusSource,
+      statePointId: plan.statePointId,
+      sequence: runtimeLogFocus.value.sequence + 1,
+    };
   }
 }
 

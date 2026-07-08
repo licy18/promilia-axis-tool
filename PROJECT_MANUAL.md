@@ -7783,6 +7783,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 Workbench 中运行入口、运行结果定位、详情查看和返回动作修改的流程状态整理成更清晰的闭环接口；暂不继续扩展公式证据或微型状态文案。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Flow Plan
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `workbenchRuntimeFlowPlan`，用纯数据 plan 描述进入运行结果、进入运行总览、聚焦运行点三类主流程状态转换。
+- `Workbench.vue` 的运行入口、运行结果同步、分析/贡献运行点聚焦改为先生成 runtime flow plan，再由 `applyRuntimeFlowPlan()` 执行到现有 Vue 状态。
+- 主流程从“多个函数各自拼状态更新”推进到“先描述流程意图，再统一应用状态变化”，便于后续继续收束 Endaxis 式编辑-运行-查看-返回闭环。
+- 本阶段不修改三值计算、模拟输出、项目保存结构或可见 UI 文案。
+
+当前验证事实：
+
+- runtime entry plan 能区分“选中动作存在运行点”和“选中动作没有运行点，需要进入运行总览”。
+- runtime point focus plan 能描述运行点聚焦、运行视角过滤和日志焦点来源。
+- Workbench 集成测试继续覆盖主流程条打开运行结果、编辑结果动作、返回刷新结果的闭环行为。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、63 条测试。
+- `npm run test -- --run`：通过，21 个测试文件、148 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 action edit focus / runtime result return 的状态转换也逐步纳入可测试的流程 plan 或控制层接口，保持主流程闭环优先。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
