@@ -40,8 +40,7 @@ const THREE_VALUE_CURVE_TRACK_DEFINITIONS = [
     candidateSeriesKey: 'hpDamageFormulaParamCandidate',
     ownerScope: 'enemy',
     valueUnit: 'raw-damage',
-    resultStatus:
-      'raw-hp-projection-applied-final-azpr-formula-unconfirmed',
+    resultStatus: 'raw-hp-projection-applied-final-azpr-formula-unconfirmed',
     formulaStatus: 'formula-candidate-preview-unapplied',
   },
   {
@@ -61,11 +60,16 @@ const THREE_VALUE_CURVE_TRACK_DEFINITIONS = [
     candidateSeriesKey: 'selfEnergyCandidate',
     ownerScope: 'actor',
     valueUnit: 'sp',
-    resultStatus:
-      'resource-delta-applied-recover-sp-candidate-unapplied',
+    resultStatus: 'resource-delta-applied-recover-sp-candidate-unapplied',
     formulaStatus: 'recover-sp-runtime-probe-partially-confirmed',
   },
 ];
+const THREE_VALUE_DELTA_FIELD_BY_TRACK_KEY = {
+  enemyHpDamage: 'hpDelta',
+  enemyToughnessDamage: 'toughnessDelta',
+  selfEnergyChange: 'energyDelta',
+};
+const THREE_VALUE_DELTA_FIELDS = ['hpDelta', 'toughnessDelta', 'energyDelta'];
 const AZPR_IL2CPP_DUMP_CS_PATH =
   'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs';
 const AZPR_IL2CPP_SCRIPT_JSON_PATH =
@@ -1410,6 +1414,10 @@ export function projectSimulationResult({
     candidateValueSeries,
     runtimeSampleContext,
   });
+  const threeValueGenerationLayer = buildThreeValueGenerationLayer({
+    scenario,
+    threeValueCurveFramework,
+  });
   const damageTimeline = damageEvents.map(event => ({
     timeMs: event.timeMs,
     actionId: event.actionId,
@@ -1481,6 +1489,7 @@ export function projectSimulationResult({
     actionResultTimeline,
     candidateValueSeries,
     threeValueCurveFramework,
+    threeValueGenerationLayer,
     damageTimeline,
     resourceTimeline,
     summary: {
@@ -1494,6 +1503,7 @@ export function projectSimulationResult({
       actionCount: scenario.actions.length,
       candidateValueSeriesSummary: candidateValueSeries.summary,
       threeValueCurveFrameworkSummary: threeValueCurveFramework.summary,
+      threeValueGenerationLayerSummary: threeValueGenerationLayer.summary,
       formulaVersion: damageEvents[0]?.payload.formulaVersion ?? null,
       formulaCandidatePatternSummary,
       formulaExecutionMatrixSummary,
@@ -1604,6 +1614,377 @@ function buildThreeValueCurveFramework({
       detailsDeferred: true,
       applied: false,
     },
+    applied: false,
+  };
+}
+
+function buildThreeValueGenerationLayer({
+  scenario,
+  threeValueCurveFramework,
+}) {
+  const actionsById = new Map(
+    scenario.actions.map(action => [action.id, action])
+  );
+  const deltas = createThreeValueGenerationDeltas({
+    actionsById,
+    stateCurves: threeValueCurveFramework.stateCurves,
+  });
+  const actions = createThreeValueGenerationActions({
+    actionsById,
+    deltas,
+  });
+  const summary = summarizeThreeValueGenerationLayer({ actions, deltas });
+
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-standard-three-value-generation-layer',
+    status:
+      deltas.length > 0
+        ? 'standard-three-value-generation-layer-ready'
+        : 'standard-three-value-generation-layer-empty',
+    contract: {
+      name: 'Action -> Hit -> ThreeValueDelta',
+      version: 1,
+      frameRate: AZPR_TIMELINE_FRAME_RATE,
+      frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
+      deltaFields: THREE_VALUE_DELTA_FIELDS,
+      requiredDeltaFields: [
+        'actionId',
+        'hitKey',
+        'frameIndex',
+        'timeMs',
+        'trackKey',
+        'layerKey',
+        'delta',
+        'sourceKind',
+        'sourceIds',
+        'confidence',
+      ],
+    },
+    inputSources: [
+      'threeValueCurveFramework.stateCurves.applied',
+      'threeValueCurveFramework.stateCurves.candidate',
+      'threeValueCurveFramework.stateCurves.sampled',
+      'threeValueCurveFramework.stateCurves.placeholder',
+    ],
+    replacementPolicy:
+      'candidate, sampled and placeholder deltas can be replaced by later confirmed formulas without changing action/hit/track keys',
+    actions,
+    deltas,
+    summary,
+    applied: false,
+  };
+}
+
+function createThreeValueGenerationDeltas({ actionsById, stateCurves }) {
+  const deltas = [];
+  for (const track of stateCurves?.tracks ?? []) {
+    for (const layer of track.layers ?? []) {
+      for (const [pointIndex, point] of (layer.points ?? []).entries()) {
+        const delta = createThreeValueGenerationDelta({
+          actionsById,
+          track,
+          layer,
+          point,
+          pointIndex,
+        });
+        if (delta) {
+          deltas.push(delta);
+        }
+      }
+    }
+  }
+  return deltas.sort(compareThreeValueGenerationDeltas);
+}
+
+function createThreeValueGenerationDelta({
+  actionsById,
+  track,
+  layer,
+  point,
+  pointIndex,
+}) {
+  const deltaValue = numberOrNull(point.delta);
+  if (!Number.isFinite(deltaValue)) {
+    return null;
+  }
+
+  const action = actionsById.get(point.actionId);
+  const frameIndex =
+    numberOrNull(point.frameIndex) ?? msToTimelineFrame(point.timeMs ?? 0);
+  const timeMs =
+    numberOrNull(point.timeMs) ??
+    roundTimelineMs(frameIndex * AZPR_TIMELINE_FRAME_MS);
+  const trackKey = track.trackKey;
+  const layerKey = layer.key;
+  const deltaFields = createThreeValueDeltaFields(trackKey, deltaValue);
+  const hitIndex = numberOrNull(point.hitIndex);
+  const hitKey = createThreeValueGenerationHitKey({
+    point,
+    layerKey,
+    frameIndex,
+    pointIndex,
+  });
+
+  return {
+    id: createThreeValueGenerationDeltaId({
+      actionId: point.actionId,
+      hitKey,
+      trackKey,
+      layerKey,
+      frameIndex,
+      pointIndex,
+    }),
+    actionId: point.actionId ?? null,
+    actionName: point.actionName ?? action?.name ?? null,
+    actionType: action?.type ?? null,
+    actorId: point.actorId ?? action?.actorId ?? null,
+    actorName: point.actorName ?? action?.actor?.name ?? null,
+    hitKey,
+    hitIndex: Number.isFinite(hitIndex) ? hitIndex : null,
+    hitSkillId: numberOrNull(point.hitSkillId),
+    frameIndex,
+    frameLabel: point.frameLabel ?? formatTimelineFrame(frameIndex),
+    timeMs: roundTimelineMs(timeMs),
+    trackKey,
+    trackLabel: track.label,
+    layerKey,
+    layerLabel: layer.label,
+    valueUnit: layer.valueUnit ?? track.valueUnit,
+    delta: deltaValue,
+    ...deltaFields,
+    sourceKind: point.sourceKind ?? layer.sourceKind,
+    sourceIds: createThreeValueGenerationSourceIds(point),
+    confidence: createThreeValueGenerationConfidence({
+      point,
+      layerKey,
+    }),
+    sourceStatus: point.sourceStatus ?? point.resultStatus ?? null,
+    resultStatus: point.resultStatus ?? null,
+    candidateCount: numberOrNull(point.candidateCount),
+    sequenceIndex: numberOrNull(point.sequenceIndex) ?? pointIndex,
+    applied: Boolean(point.applied && layer.applied),
+    replaceable: !Boolean(point.applied && layer.applied),
+  };
+}
+
+function createThreeValueDeltaFields(trackKey, delta) {
+  return Object.fromEntries(
+    THREE_VALUE_DELTA_FIELDS.map(field => [
+      field,
+      THREE_VALUE_DELTA_FIELD_BY_TRACK_KEY[trackKey] === field ? delta : null,
+    ])
+  );
+}
+
+function createThreeValueGenerationHitKey({
+  point,
+  layerKey,
+  frameIndex,
+  pointIndex,
+}) {
+  const hitIndex = numberOrNull(point.hitIndex);
+  if (Number.isFinite(hitIndex)) {
+    return `hit-${hitIndex}`;
+  }
+  if (point.eventType) {
+    return `event-${point.eventType}-${point.eventIndex ?? pointIndex}`;
+  }
+  return `${layerKey}-frame-${frameIndex}-point-${point.sequenceIndex ?? pointIndex}`;
+}
+
+function createThreeValueGenerationDeltaId({
+  actionId,
+  hitKey,
+  trackKey,
+  layerKey,
+  frameIndex,
+  pointIndex,
+}) {
+  return [
+    actionId ?? 'system',
+    hitKey,
+    trackKey,
+    layerKey,
+    frameIndex,
+    pointIndex,
+  ]
+    .map(createThreeValueGenerationIdPart)
+    .join('|');
+}
+
+function createThreeValueGenerationIdPart(value) {
+  return String(value ?? 'none').replace(/\|/g, '/');
+}
+
+function createThreeValueGenerationSourceIds(point) {
+  return {
+    skillIds: uniqueNumbers([point.skillId, point.hitSkillId]),
+    elementConfigIds: uniqueNumbers([
+      ...(point.elementConfigIds ?? []),
+      point.sourceElementConfigId,
+      point.elementConfigId,
+    ]),
+    captureSessionIds: uniqueStrings([point.captureSessionId]),
+    pathIds: uniqueStrings([point.pathId]),
+  };
+}
+
+function createThreeValueGenerationConfidence({ point, layerKey }) {
+  if (point.confidence) {
+    return point.confidence;
+  }
+  if (layerKey === 'sampled') {
+    return 'sampled';
+  }
+  if (layerKey === 'candidate') {
+    return 'candidate';
+  }
+  if (layerKey === 'placeholder') {
+    return 'placeholder';
+  }
+  return 'unknown';
+}
+
+function createThreeValueGenerationActions({ actionsById, deltas }) {
+  const actionGroups = new Map();
+  for (const delta of deltas) {
+    const actionKey = delta.actionId ?? 'system';
+    if (!actionGroups.has(actionKey)) {
+      const action = actionsById.get(delta.actionId);
+      actionGroups.set(actionKey, {
+        actionId: delta.actionId,
+        actionName: delta.actionName ?? action?.name ?? '系统',
+        actionType: delta.actionType ?? action?.type ?? 'system',
+        actorId: delta.actorId ?? action?.actorId ?? null,
+        actorName: delta.actorName ?? action?.actor?.name ?? null,
+        startMs: numberOrNull(action?.startMs),
+        hitGroups: new Map(),
+      });
+    }
+    const actionGroup = actionGroups.get(actionKey);
+    const hitGroupKey = createThreeValueGenerationHitGroupKey(delta);
+    if (!actionGroup.hitGroups.has(hitGroupKey)) {
+      actionGroup.hitGroups.set(hitGroupKey, {
+        hitKey: delta.hitKey,
+        hitIndex: delta.hitIndex,
+        hitSkillId: delta.hitSkillId,
+        frameIndex: delta.frameIndex,
+        frameLabel: delta.frameLabel,
+        timeMs: delta.timeMs,
+        layerKeys: new Set(),
+        trackKeys: new Set(),
+        deltas: [],
+      });
+    }
+    const hitGroup = actionGroup.hitGroups.get(hitGroupKey);
+    hitGroup.layerKeys.add(delta.layerKey);
+    hitGroup.trackKeys.add(delta.trackKey);
+    hitGroup.deltas.push(delta);
+  }
+
+  return [...actionGroups.values()]
+    .map(group => {
+      const hits = [...group.hitGroups.values()]
+        .map(hit => ({
+          ...hit,
+          layerKeys: [...hit.layerKeys].sort(),
+          trackKeys: [...hit.trackKeys].sort(),
+          deltaCount: hit.deltas.length,
+          deltas: hit.deltas.sort(compareThreeValueGenerationDeltas),
+        }))
+        .sort(compareThreeValueGenerationHits);
+      return {
+        actionId: group.actionId,
+        actionName: group.actionName,
+        actionType: group.actionType,
+        actorId: group.actorId,
+        actorName: group.actorName,
+        startMs: group.startMs,
+        hitCount: hits.length,
+        deltaCount: hits.reduce((sum, hit) => sum + hit.deltaCount, 0),
+        hits,
+      };
+    })
+    .sort(compareThreeValueGenerationActions);
+}
+
+function createThreeValueGenerationHitGroupKey(delta) {
+  return [delta.hitKey, delta.frameIndex, delta.timeMs]
+    .map(createThreeValueGenerationIdPart)
+    .join('|');
+}
+
+function compareThreeValueGenerationActions(left, right) {
+  return (
+    compareNullableTimelineNumber(left.startMs, right.startMs) ||
+    String(left.actionId ?? '').localeCompare(String(right.actionId ?? ''))
+  );
+}
+
+function compareThreeValueGenerationHits(left, right) {
+  return (
+    compareNullableTimelineNumber(left.frameIndex, right.frameIndex) ||
+    compareNullableTimelineNumber(left.hitIndex, right.hitIndex) ||
+    String(left.hitKey ?? '').localeCompare(String(right.hitKey ?? ''))
+  );
+}
+
+function compareThreeValueGenerationDeltas(left, right) {
+  return (
+    compareNullableTimelineNumber(left.frameIndex, right.frameIndex) ||
+    compareNullableTimelineNumber(left.timeMs, right.timeMs) ||
+    compareNullableTimelineNumber(left.hitIndex, right.hitIndex) ||
+    String(left.actionId ?? '').localeCompare(String(right.actionId ?? '')) ||
+    compareThreeValueTrackOrder(left.trackKey, right.trackKey) ||
+    String(left.layerKey ?? '').localeCompare(String(right.layerKey ?? '')) ||
+    compareNullableTimelineNumber(left.sequenceIndex, right.sequenceIndex)
+  );
+}
+
+function compareThreeValueTrackOrder(leftTrackKey, rightTrackKey) {
+  const getOrder = trackKey => {
+    const index = THREE_VALUE_CURVE_TRACK_DEFINITIONS.findIndex(
+      definition => definition.key === trackKey
+    );
+    return index >= 0 ? index : 99;
+  };
+  return getOrder(leftTrackKey) - getOrder(rightTrackKey);
+}
+
+function compareNullableTimelineNumber(left, right) {
+  const leftNumber = numberOrNull(left);
+  const rightNumber = numberOrNull(right);
+  if (Number.isFinite(leftNumber) && Number.isFinite(rightNumber)) {
+    return leftNumber - rightNumber;
+  }
+  if (Number.isFinite(leftNumber)) {
+    return -1;
+  }
+  if (Number.isFinite(rightNumber)) {
+    return 1;
+  }
+  return 0;
+}
+
+function summarizeThreeValueGenerationLayer({ actions, deltas }) {
+  const countLayer = layerKey =>
+    deltas.filter(delta => delta.layerKey === layerKey).length;
+  return {
+    contractName: 'Action -> Hit -> ThreeValueDelta',
+    actionCount: actions.length,
+    actionWithDeltaCount: actions.filter(action => action.deltaCount > 0)
+      .length,
+    hitCount: actions.reduce((sum, action) => sum + action.hitCount, 0),
+    deltaCount: deltas.length,
+    trackCount: new Set(deltas.map(delta => delta.trackKey)).size,
+    appliedDeltaCount: countLayer('applied'),
+    candidateDeltaCount: countLayer('candidate'),
+    sampledDeltaCount: countLayer('sampled'),
+    placeholderDeltaCount: countLayer('placeholder'),
+    replaceableDeltaCount: deltas.filter(delta => delta.replaceable).length,
+    frameMin: minNumber(deltas.map(delta => delta.frameIndex)),
+    frameMax: maxNumber(deltas.map(delta => delta.frameIndex)),
     applied: false,
   };
 }
@@ -1721,7 +2102,10 @@ function createThreeValueStateCurveTrack({
   chartSeries,
   runtimeSampleContext,
 }) {
-  const appliedLayer = createAppliedStateCurveLayer(track, actionResultTimeline);
+  const appliedLayer = createAppliedStateCurveLayer(
+    track,
+    actionResultTimeline
+  );
   const candidateLayer = createCandidateStateCurveLayer(track, chartSeries);
   const sampledLayer = createSampledStateCurveLayer({
     track,
@@ -1737,16 +2121,8 @@ function createThreeValueStateCurveTrack({
       ...sampledLayer.points.map(point => point.actionId).filter(Boolean),
     ]),
   });
-  const layers = [
-    appliedLayer,
-    candidateLayer,
-    sampledLayer,
-    placeholderLayer,
-  ];
-  const pointCount = layers.reduce(
-    (sum, layer) => sum + layer.pointCount,
-    0
-  );
+  const layers = [appliedLayer, candidateLayer, sampledLayer, placeholderLayer];
+  const pointCount = layers.reduce((sum, layer) => sum + layer.pointCount, 0);
 
   return {
     trackKey: track.key,
@@ -2024,18 +2400,16 @@ function createStateCurveLayer({
 
 function integrateStateCurvePoints(points) {
   let cumulative = 0;
-  return [...points]
-    .sort(compareStateCurvePoints)
-    .map((point, index) => {
-      const delta = numberOrNull(point.delta) ?? 0;
-      cumulative = roundCurveValue(cumulative + delta);
-      return {
-        ...point,
-        sequenceIndex: point.sequenceIndex ?? index,
-        delta,
-        cumulative,
-      };
-    });
+  return [...points].sort(compareStateCurvePoints).map((point, index) => {
+    const delta = numberOrNull(point.delta) ?? 0;
+    cumulative = roundCurveValue(cumulative + delta);
+    return {
+      ...point,
+      sequenceIndex: point.sequenceIndex ?? index,
+      delta,
+      cumulative,
+    };
+  });
 }
 
 function compareStateCurvePoints(a, b) {
@@ -2051,10 +2425,7 @@ function compareStateCurvePoints(a, b) {
 
 function summarizeThreeValueStateCurves(tracks) {
   const layers = tracks.flatMap(track => track.layers);
-  const pointCount = layers.reduce(
-    (sum, layer) => sum + layer.pointCount,
-    0
-  );
+  const pointCount = layers.reduce((sum, layer) => sum + layer.pointCount, 0);
   const countLayerPoints = key =>
     layers
       .filter(layer => layer.key === key)

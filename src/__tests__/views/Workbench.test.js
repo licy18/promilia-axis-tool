@@ -37,6 +37,14 @@ describe('Workbench view', () => {
       '三值框架 3轨 · 曲线 3条/15点 · 状态 16点 · 细节后补'
     );
     expect(text).toContain(
+      '生成合同 1动作/6命中 · Delta 16 · 候选 15 · 已用 1'
+    );
+    expect(
+      wrapper
+        .find('[data-testid="workbench-three-value-generation-layer-summary"]')
+        .text()
+    ).toBe('生成合同 1动作/6命中 · Delta 16 · 候选 15 · 已用 1');
+    expect(text).toContain(
       'HP 2 个候选 (109001081, 109001306) / 削韧 2 个候选 (109001081, 109001306) / 充能 2 个候选 (109001081, 109001306)'
     );
     expect(text).toContain(

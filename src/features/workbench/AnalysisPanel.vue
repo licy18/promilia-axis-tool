@@ -63,6 +63,21 @@
       </p>
       <p
         v-if="
+          formatThreeValueGenerationLayerSummary(
+            summary.threeValueGenerationLayerSummary
+          )
+        "
+        class="diagnostic-empty formula-pattern-summary"
+        data-testid="workbench-three-value-generation-layer-summary"
+      >
+        {{
+          formatThreeValueGenerationLayerSummary(
+            summary.threeValueGenerationLayerSummary
+          )
+        }}
+      </p>
+      <p
+        v-if="
           formatFormulaCandidatePatternSummary(
             summary.formulaCandidatePatternSummary
           )
@@ -1176,6 +1191,19 @@ function formatThreeValueCurveFrameworkSummary(summary) {
       ? ` · 状态 ${summary.stateCurvePointCount}点`
       : '';
   return `三值框架 ${summary.trackCount}轨 · 曲线 ${summary.candidateTrackCount}条/${summary.chartPointCount}点${stateCurveText}${deferredText}`;
+}
+
+function formatThreeValueGenerationLayerSummary(summary) {
+  if (!summary || summary.deltaCount <= 0) {
+    return '';
+  }
+  const sampledText =
+    summary.sampledDeltaCount > 0 ? ` · 采样 ${summary.sampledDeltaCount}` : '';
+  const placeholderText =
+    summary.placeholderDeltaCount > 0
+      ? ` · 占位 ${summary.placeholderDeltaCount}`
+      : '';
+  return `生成合同 ${summary.actionCount}动作/${summary.hitCount}命中 · Delta ${summary.deltaCount} · 候选 ${summary.candidateDeltaCount} · 已用 ${summary.appliedDeltaCount}${sampledText}${placeholderText}`;
 }
 
 function formatStateCurveTrackSummary(track) {

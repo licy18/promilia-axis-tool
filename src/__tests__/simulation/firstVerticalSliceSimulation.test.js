@@ -1376,6 +1376,104 @@ describe('first vertical slice simulation', () => {
       detailsDeferred: true,
       applied: false,
     });
+    expect(result.threeValueGenerationLayer).toMatchObject({
+      status: 'standard-three-value-generation-layer-ready',
+      contract: {
+        name: 'Action -> Hit -> ThreeValueDelta',
+        version: 1,
+        frameRate: 60,
+        deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
+      },
+      summary: {
+        actionCount: 1,
+        hitCount: 6,
+        deltaCount: 16,
+        trackCount: 3,
+        appliedDeltaCount: 1,
+        candidateDeltaCount: 15,
+        sampledDeltaCount: 0,
+        placeholderDeltaCount: 0,
+        replaceableDeltaCount: 15,
+        frameMin: 0,
+        frameMax: 184,
+        applied: false,
+      },
+      applied: false,
+    });
+    expect(result.summary.threeValueGenerationLayerSummary).toMatchObject({
+      contractName: 'Action -> Hit -> ThreeValueDelta',
+      actionCount: 1,
+      hitCount: 6,
+      deltaCount: 16,
+      candidateDeltaCount: 15,
+      appliedDeltaCount: 1,
+      applied: false,
+    });
+    const generationAction = result.threeValueGenerationLayer.actions[0];
+    expect(generationAction).toMatchObject({
+      actionId: 'action-0001',
+      actionName: '普通攻击',
+      actorId: 'actor-109001',
+      hitCount: 6,
+      deltaCount: 16,
+    });
+    const generationHit1 = generationAction.hits.find(
+      hit => hit.hitKey === 'hit-1'
+    );
+    expect(generationHit1).toMatchObject({
+      hitIndex: 1,
+      frameIndex: 12,
+      frameLabel: '0s12f',
+      deltaCount: 3,
+      layerKeys: ['candidate'],
+      trackKeys: ['enemyHpDamage', 'enemyToughnessDamage', 'selfEnergyChange'],
+    });
+    expect(
+      generationHit1.deltas.map(delta => [
+        delta.trackKey,
+        delta.layerKey,
+        delta.delta,
+        delta.hpDelta,
+        delta.toughnessDelta,
+        delta.energyDelta,
+        delta.sourceKind,
+        delta.confidence,
+      ])
+    ).toEqual([
+      [
+        'enemyHpDamage',
+        'candidate',
+        2500,
+        2500,
+        null,
+        null,
+        'candidate-chart-point',
+        'candidate',
+      ],
+      [
+        'enemyToughnessDamage',
+        'candidate',
+        7000,
+        null,
+        7000,
+        null,
+        'candidate-chart-point',
+        'candidate',
+      ],
+      [
+        'selfEnergyChange',
+        'candidate',
+        2700,
+        null,
+        null,
+        2700,
+        'candidate-chart-point',
+        'candidate',
+      ],
+    ]);
+    expect(generationHit1.deltas[0].sourceIds.elementConfigIds).toEqual([
+      109001081, 109001306,
+    ]);
     expect(
       result.threeValueCurveFramework.tracks.map(track => [
         track.key,
@@ -1403,9 +1501,10 @@ describe('first vertical slice simulation', () => {
       },
       applied: false,
     });
-    const hpStateTrack = result.threeValueCurveFramework.stateCurves.tracks.find(
-      track => track.trackKey === 'enemyHpDamage'
-    );
+    const hpStateTrack =
+      result.threeValueCurveFramework.stateCurves.tracks.find(
+        track => track.trackKey === 'enemyHpDamage'
+      );
     const hpAppliedLayer = hpStateTrack.layers.find(
       layer => layer.key === 'applied'
     );
@@ -1865,9 +1964,7 @@ describe('first vertical slice simulation', () => {
       summonTargetTriggerTimingStatuses: [
         'summon-target-trigger-frame-candidates-found-unconfirmed',
       ],
-      summonTargetTriggerFrameCandidates: [
-        0, 1, 4, 5, 20, 25, 29, 34, 38, 43,
-      ],
+      summonTargetTriggerFrameCandidates: [0, 1, 4, 5, 20, 25, 29, 34, 38, 43],
       applied: false,
     });
 
@@ -1988,6 +2085,28 @@ describe('first vertical slice simulation', () => {
       cumulativeLayerCount: 4,
       applied: false,
     });
+    expect(result.threeValueGenerationLayer.summary).toMatchObject({
+      actionCount: 1,
+      hitCount: 5,
+      deltaCount: 13,
+      appliedDeltaCount: 1,
+      candidateDeltaCount: 12,
+      sampledDeltaCount: 0,
+      placeholderDeltaCount: 0,
+      applied: false,
+    });
+    expect(
+      result.threeValueGenerationLayer.actions[0].hits
+        .filter(
+          hit => hit.hitIndex != null && Number.isFinite(Number(hit.hitIndex))
+        )
+        .map(hit => [hit.hitIndex, hit.deltaCount, hit.trackKeys])
+    ).toEqual([
+      [2, 3, ['enemyHpDamage', 'enemyToughnessDamage', 'selfEnergyChange']],
+      [3, 3, ['enemyHpDamage', 'enemyToughnessDamage', 'selfEnergyChange']],
+      [4, 3, ['enemyHpDamage', 'enemyToughnessDamage', 'selfEnergyChange']],
+      [5, 3, ['enemyHpDamage', 'enemyToughnessDamage', 'selfEnergyChange']],
+    ]);
     const hpSeries = result.candidateValueSeries.series.find(
       series => series.key === 'hpDamageFormulaParamCandidate'
     );
@@ -2153,6 +2272,34 @@ describe('first vertical slice simulation', () => {
       spAfter: 10.3375,
       recoverTagType: 0,
       applied: false,
+    });
+    expect(result.threeValueGenerationLayer.summary).toMatchObject({
+      deltaCount: 17,
+      appliedDeltaCount: 1,
+      candidateDeltaCount: 15,
+      sampledDeltaCount: 1,
+      placeholderDeltaCount: 0,
+      replaceableDeltaCount: 16,
+      applied: false,
+    });
+    const sampledDelta = result.threeValueGenerationLayer.deltas.find(
+      delta => delta.layerKey === 'sampled'
+    );
+    expect(sampledDelta).toMatchObject({
+      actionId: 'action-0001',
+      hitKey: 'event-recover-sp-applied-4',
+      trackKey: 'selfEnergyChange',
+      layerKey: 'sampled',
+      sourceKind: 'runtime-recover-sp-applied-sample',
+      confidence: 'sampled',
+      frameIndex: 12,
+      energyDelta: 0.3375,
+      hpDelta: null,
+      toughnessDelta: null,
+      sourceIds: {
+        elementConfigIds: [109001081],
+        captureSessionIds: ['fixture-recover-sp-109001081-v1'],
+      },
     });
     expect(matchedSample.runtimeSampleMatch.validationResults).toEqual(
       expect.arrayContaining([
@@ -3581,9 +3728,10 @@ describe('first vertical slice simulation', () => {
       placeholderPointCount: 5,
       applied: false,
     });
-    const hpStateTrack = result.threeValueCurveFramework.stateCurves.tracks.find(
-      track => track.trackKey === 'enemyHpDamage'
-    );
+    const hpStateTrack =
+      result.threeValueCurveFramework.stateCurves.tracks.find(
+        track => track.trackKey === 'enemyHpDamage'
+      );
     const hpPlaceholderLayer = hpStateTrack.layers.find(
       layer => layer.key === 'placeholder'
     );

@@ -8893,3 +8893,171 @@ data-track-focused
 - `npm run test -- --run`：通过。
 
 下一阶段仍为 5-8CA：落地标准生成层合同最小版本。
+
+## 108. 阶段 5-8CA：threeValueGenerationLayer 标准生成层合同
+
+阶段 5-8CA 在 `simulationResult` 顶层新增内部 projection：
+
+```js
+threeValueGenerationLayer
+```
+
+该结构是运行时和 UI 后续消费的标准生成层输入，不是项目保存 schema；当前不需要导入导出迁移。
+
+### 108.1 顶层结构
+
+```js
+{
+  schemaVersion: 1,
+  sourceKind: 'azpr-standard-three-value-generation-layer',
+  status: 'standard-three-value-generation-layer-ready',
+  contract: {
+    name: 'Action -> Hit -> ThreeValueDelta',
+    version: 1,
+    frameRate: 60,
+    frameMs: 16.666667,
+    deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
+    requiredDeltaFields: [
+      'actionId',
+      'hitKey',
+      'frameIndex',
+      'timeMs',
+      'trackKey',
+      'layerKey',
+      'delta',
+      'sourceKind',
+      'sourceIds',
+      'confidence'
+    ]
+  },
+  inputSources: [
+    'threeValueCurveFramework.stateCurves.applied',
+    'threeValueCurveFramework.stateCurves.candidate',
+    'threeValueCurveFramework.stateCurves.sampled',
+    'threeValueCurveFramework.stateCurves.placeholder'
+  ],
+  actions: [],
+  deltas: [],
+  summary: {},
+  applied: false
+}
+```
+
+### 108.2 ThreeValueDelta
+
+`threeValueGenerationLayer.deltas[]` 是扁平运行时输入。每条 delta 当前包含：
+
+```js
+{
+  id,
+  actionId,
+  actionName,
+  actionType,
+  actorId,
+  actorName,
+  hitKey,
+  hitIndex,
+  hitSkillId,
+  frameIndex,
+  frameLabel,
+  timeMs,
+  trackKey,
+  trackLabel,
+  layerKey,
+  layerLabel,
+  valueUnit,
+  delta,
+  hpDelta,
+  toughnessDelta,
+  energyDelta,
+  sourceKind,
+  sourceIds,
+  confidence,
+  sourceStatus,
+  resultStatus,
+  candidateCount,
+  sequenceIndex,
+  applied,
+  replaceable
+}
+```
+
+`hpDelta / toughnessDelta / energyDelta` 中只有当前 `trackKey` 对应字段有值，其他字段为 `null`。
+
+### 108.3 Action / Hit 分组
+
+`threeValueGenerationLayer.actions[]` 按动作聚合：
+
+```js
+{
+  actionId,
+  actionName,
+  actionType,
+  actorId,
+  actorName,
+  startMs,
+  hitCount,
+  deltaCount,
+  hits: []
+}
+```
+
+`hits[]` 按同一动作内的 `hitKey + frameIndex + timeMs` 聚合：
+
+```js
+{
+  hitKey,
+  hitIndex,
+  hitSkillId,
+  frameIndex,
+  frameLabel,
+  timeMs,
+  layerKeys,
+  trackKeys,
+  deltaCount,
+  deltas
+}
+```
+
+这样同一 hit 的 HP / 韧性 / 能量候选可以作为一组输入被运行时或详情面板消费。
+
+### 108.4 Summary
+
+`summary.threeValueGenerationLayerSummary` 指向 `threeValueGenerationLayer.summary`，字段包括：
+
+```js
+{
+  contractName: 'Action -> Hit -> ThreeValueDelta',
+  actionCount,
+  actionWithDeltaCount,
+  hitCount,
+  deltaCount,
+  trackCount,
+  appliedDeltaCount,
+  candidateDeltaCount,
+  sampledDeltaCount,
+  placeholderDeltaCount,
+  replaceableDeltaCount,
+  frameMin,
+  frameMax,
+  applied: false
+}
+```
+
+Workbench 分析面板通过该 summary 显示 `生成合同` 摘要。
+
+### 108.5 验证
+
+当前测试覆盖：
+
+- 默认末音样例：`deltaCount = 16`，`hitCount = 6`，`appliedDeltaCount = 1`，`candidateDeltaCount = 15`。
+- 默认末音 hit1：同帧聚合 3 条 candidate delta，分别为 HP `2500`、韧性 `7000`、能量 `2700`。
+- 寒悠悠普攻样例：`deltaCount = 13`，`hitCount = 5`，`candidateDeltaCount = 12`，召唤目标候选也进入合同。
+- RecoverSP 离线样本：`sampledDeltaCount = 1`，采样 delta 为 `selfEnergyChange / sampled / energyDelta = 0.3375`，并保留 `captureSessionId` 与 `elementConfigId`。
+- Workbench 渲染 `生成合同 1动作/6命中 · Delta 16 · 候选 15 · 已用 1`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
+
+下一阶段 5-8CB 应让运行时投影优先消费该标准合同，并保持现有 Workbench 可视化不倒退。

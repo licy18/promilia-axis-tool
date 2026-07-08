@@ -4784,6 +4784,37 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8CB 再让运行时投影改为消费该合同，并保持现有 Workbench 可视化不倒退。
 - 阶段 5-8CC 起优先补资源监控 / 模拟日志 / 详情弹层，而不是继续扩展证据矩阵。
 
+### 2026-07-08：阶段 5-8CA 标准生成层合同最小版
+
+本轮完成：
+
+- `projectSimulationResult()` 顶层新增 `threeValueGenerationLayer`，作为当前标准生成层合同的最小实现。
+- 合同名称固定为 `Action -> Hit -> ThreeValueDelta`，当前从 `threeValueCurveFramework.stateCurves` 的 `applied / candidate / sampled / placeholder` 四层生成，不新增项目保存 schema。
+- `threeValueGenerationLayer.deltas[]` 是运行时后续可直接消费的扁平 delta 列表，每个 delta 至少包含 `actionId / hitKey / frameIndex / timeMs / trackKey / layerKey / delta / hpDelta / toughnessDelta / energyDelta / sourceKind / sourceIds / confidence / replaceable`。
+- `threeValueGenerationLayer.actions[].hits[].deltas[]` 按动作和命中聚合同一帧的 HP / 韧性 / 能量 delta，服务后续 Endaxis 式运行时和详情面板。
+- `summary.threeValueGenerationLayerSummary` 接入 Workbench 分析面板，显示 `生成合同 {动作}/{命中} · Delta {数量} · 候选 {数量} · 已用 {数量}`。
+
+当前验证事实：
+
+- 默认末音样例：1 个动作、6 个命中组、16 个 delta，其中 applied 1、candidate 15；hit1 同帧聚合 HP / 韧性 / 能量 3 条 candidate delta。
+- 寒悠悠普攻样例：1 个动作、5 个命中组、13 个 delta，其中 applied 1、candidate 12；召唤目标候选同样进入标准合同。
+- RecoverSP 离线样本：标准合同 delta 数变为 17，其中 sampled 1；采样 delta 保留 `captureSessionId`、`elementConfigId`、`energyDelta = 0.3375`。
+
+当前边界：
+
+- 运行时仍未改为消费 `threeValueGenerationLayer`，本阶段只先建立标准输入合同。
+- `candidate` 和 `placeholder` delta 仍是可替换输入，不代表最终公式已确认。
+- 真实公式、倍率、命中次数、owner/target 归属和 runtime 条件仍作为后续 evidence 填充，不阻塞合同落地。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、48 条测试。
+
+下一步：
+
+- 阶段 5-8CB 目标：让运行时投影优先消费 `threeValueGenerationLayer` 的标准合同，并保持现有 `stateCurves`、候选曲线和 Workbench 展示不倒退。
+- 优先把 `simLog`、资源曲线和敌人状态曲线的输入来源改到标准合同，而不是直接分散读取 candidate/state/evidence。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
