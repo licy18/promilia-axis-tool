@@ -1417,6 +1417,34 @@ describe('first vertical slice simulation', () => {
         pointCount: 1,
         hpDelta: 12461,
         toughnessDelta: 0,
+        baseline: {
+          hp: {
+            initialValue: 8628,
+            baseValue: 8628,
+            multiplier: 1,
+            sourceStatus: 'baseline-derived-from-scenario-enemy-max-hp',
+          },
+          toughness: {
+            initialValue: null,
+            sourceStatus: 'baseline-pending-azpr-enemy-toughness-state',
+          },
+        },
+        stateMetrics: {
+          hp: {
+            initialValue: 8628,
+            delta: 12461,
+            currentValue: 0,
+            overrunValue: 3833,
+            stateLabel: '剩余',
+            baselineConfirmed: true,
+          },
+          toughness: {
+            initialValue: null,
+            currentValue: null,
+            stateLabel: '剩余',
+            baselineConfirmed: false,
+          },
+        },
         applied: true,
       },
       summary: {
@@ -1427,6 +1455,13 @@ describe('first vertical slice simulation', () => {
         selfEnergyDelta: 0,
         enemyStatePointCount: 1,
         selfEnergyPointCount: 0,
+        enemyHpInitial: 8628,
+        enemyHpRemaining: 0,
+        enemyHpBaselineStatus: 'baseline-derived-from-scenario-enemy-max-hp',
+        enemyToughnessInitial: null,
+        enemyToughnessRemaining: null,
+        enemyToughnessBaselineStatus:
+          'baseline-pending-azpr-enemy-toughness-state',
         simLogCount: 1,
         source: 'threeValueGenerationLayer.applied-deltas',
         applied: true,
@@ -1454,6 +1489,10 @@ describe('first vertical slice simulation', () => {
       enemyToughnessDelta: 0,
       selfEnergyDelta: 0,
       simLogCount: 1,
+      enemyHpInitial: 8628,
+      enemyHpRemaining: 0,
+      enemyToughnessBaselineStatus:
+        'baseline-pending-azpr-enemy-toughness-state',
       applied: true,
     });
     const generationAction = result.threeValueGenerationLayer.actions[0];
@@ -3650,6 +3689,14 @@ describe('first vertical slice simulation', () => {
           actorId: 'actor-101003',
           actorName: '寒悠悠',
           delta: -Number(spSkill.spCost),
+          stateMetric: expect.objectContaining({
+            initialValue: null,
+            currentValue: null,
+            delta: -Number(spSkill.spCost),
+            stateLabel: '当前',
+            baselineStatus: 'baseline-pending-azpr-initial-self-energy',
+            baselineConfirmed: false,
+          }),
           pointCount: 1,
           points: [
             expect.objectContaining({
@@ -3664,6 +3711,13 @@ describe('first vertical slice simulation', () => {
           actorId: 'actor-101007',
           actorName: '芃芃',
           delta: 0,
+          stateMetric: expect.objectContaining({
+            initialValue: null,
+            currentValue: null,
+            delta: 0,
+            stateLabel: '当前',
+            baselineStatus: 'baseline-pending-azpr-initial-self-energy',
+          }),
           pointCount: 0,
         }),
       ])

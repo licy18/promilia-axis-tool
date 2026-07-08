@@ -59,6 +59,13 @@ export function createRuntimeSelectedDetail({
     valueUnit: pointRow.valueUnit ?? RUNTIME_TRACK_META[pointRow.trackKey]?.unit,
     delta: pointRow.delta,
     cumulative: pointRow.cumulative,
+    stateLabel: pointRow.stateLabel ?? null,
+    stateValue: pointRow.stateValue ?? null,
+    stateValueStatus: pointRow.stateValueStatus ?? null,
+    baselineStatus: pointRow.baselineStatus ?? null,
+    baselineInitialValue: pointRow.baselineInitialValue ?? null,
+    baselineMaxValue: pointRow.baselineMaxValue ?? null,
+    baselineConfirmed: Boolean(pointRow.baselineConfirmed),
     hpDelta: numberOrZero(pointRow.hpDelta ?? simLogRow?.hpDelta),
     toughnessDelta: numberOrZero(
       pointRow.toughnessDelta ?? simLogRow?.toughnessDelta
@@ -83,10 +90,12 @@ function createRuntimePointRows(runtimeProjection) {
     ...createRuntimeTrackRows({
       points: runtimeProjection.enemyStateCurve?.points ?? [],
       trackKey: 'enemyHpDamage',
+      stateMetric: runtimeProjection.enemyStateCurve?.stateMetrics?.hp,
     }),
     ...createRuntimeTrackRows({
       points: runtimeProjection.enemyStateCurve?.points ?? [],
       trackKey: 'enemyToughnessDamage',
+      stateMetric: runtimeProjection.enemyStateCurve?.stateMetrics?.toughness,
     }),
     ...(runtimeProjection.selfEnergyCurveByActor ?? []).flatMap(actor =>
       createRuntimeTrackRows({
@@ -94,12 +103,19 @@ function createRuntimePointRows(runtimeProjection) {
         trackKey: 'selfEnergyChange',
         actorId: actor.actorId,
         actorName: actor.actorName,
+        stateMetric: actor.stateMetric,
       })
     ),
   ];
 }
 
-function createRuntimeTrackRows({ points, trackKey, actorId, actorName }) {
+function createRuntimeTrackRows({
+  points,
+  trackKey,
+  actorId,
+  actorName,
+  stateMetric = null,
+}) {
   const meta = RUNTIME_TRACK_META[trackKey];
   if (!meta) {
     return [];
@@ -112,18 +128,54 @@ function createRuntimeTrackRows({ points, trackKey, actorId, actorName }) {
     .map((point, index) => {
       const delta = numberOrZero(point[meta.valueField] ?? point.delta);
       cumulative = roundRuntimeValue(cumulative + delta);
+      const pointState = createRuntimePointState(stateMetric, cumulative);
       return {
         ...point,
         actorId: point.actorId ?? actorId,
         actorName: point.actorName ?? actorName,
         delta,
         cumulative,
+        stateLabel: pointState.stateLabel,
+        stateValue: pointState.stateValue,
+        stateValueStatus: pointState.stateValueStatus,
+        baselineStatus: pointState.baselineStatus,
+        baselineInitialValue: pointState.baselineInitialValue,
+        baselineMaxValue: pointState.baselineMaxValue,
+        baselineConfirmed: pointState.baselineConfirmed,
         pointIndex: index,
         statePointId: createRuntimeStateCurvePointId(point, point),
         trackLabel: point.trackLabel ?? meta.label,
         valueUnit: point.valueUnit ?? meta.unit,
       };
     });
+}
+
+function createRuntimePointState(stateMetric, cumulative) {
+  const initialValue = strictNumberOrNull(stateMetric?.initialValue);
+  const baselineConfirmed = Number.isFinite(initialValue);
+  const rawStateValue = baselineConfirmed
+    ? roundRuntimeValue(
+        stateMetric?.deltaDirection === 'decrease'
+          ? initialValue - numberOrZero(cumulative)
+          : initialValue + numberOrZero(cumulative)
+      )
+    : null;
+  const stateValue =
+    rawStateValue != null && stateMetric?.deltaDirection === 'decrease'
+      ? Math.max(0, rawStateValue)
+      : rawStateValue;
+
+  return {
+    stateLabel: stateMetric?.stateLabel ?? null,
+    stateValue,
+    stateValueStatus: baselineConfirmed
+      ? 'state-derived-from-baseline-and-cumulative-delta'
+      : (stateMetric?.stateStatus ?? 'state-baseline-pending'),
+    baselineStatus: stateMetric?.baselineStatus ?? null,
+    baselineInitialValue: baselineConfirmed ? initialValue : null,
+    baselineMaxValue: stateMetric?.maxValue ?? null,
+    baselineConfirmed,
+  };
 }
 
 function findRuntimeSimLogRow({
@@ -225,6 +277,14 @@ function numberOrNull(value) {
 
 function numberOrZero(value) {
   return numberOrNull(value) ?? 0;
+}
+
+function strictNumberOrNull(value) {
+  if (value == null || value === '') {
+    return null;
+  }
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
 }
 
 function roundRuntimeValue(value) {

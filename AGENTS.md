@@ -51,7 +51,8 @@ npm run dev
   - UI 层：优先补 Endaxis 式资源监控、模拟日志、伤害/三值详情弹层、贡献拆分和编辑器体验。
 - Evidence 层保留为来源追溯和诊断信息，不再作为用户主路径，也不阻塞工具体验。
 - `actionResultTimeline[]` 必须持续按动作追踪三类数值变化：敌人 HP 伤害、敌人韧性削减、自身能量变化。不要把韧性或充能混进 HP 伤害公式。
-- 当前 `5-8CJ` 已给 runtime sim log 的筛选隐藏提示增加一键显示当前选中日志的操作；下一步优先补运行时三值状态基线和“剩余/当前状态”标注。
+- 当前 `5-8CK` 已给运行时三值投影补 `baseline` / `stateMetrics` 和“剩余/当前状态”标注；下一步优先让 runtime resource chart 支持“累计变化量 / 状态值”视图切换。
+- HP 基线可从 `scenario.enemy.stats.maxHp * scenario.enemy.hpMultiplier` 派生；韧性基线和角色初始当前 SP 暂缺真实机制时必须保持待确认状态，不要用 0 或上限值冒充已确认当前值。
 
 ## Endaxis 参考原则
 

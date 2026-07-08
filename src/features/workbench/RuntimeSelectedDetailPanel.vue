@@ -49,6 +49,15 @@
           {{ formatDetailCumulative(detail) }}
         </strong>
       </div>
+      <div v-if="detail.stateLabel">
+        <span>{{ detail.stateLabel }}</span>
+        <strong
+          data-testid="workbench-runtime-selected-detail-state-value"
+          :title="detail.baselineStatus || detail.stateValueStatus || ''"
+        >
+          {{ formatDetailStateValue(detail) }}
+        </strong>
+      </div>
     </div>
 
     <div class="runtime-detail-contributions">
@@ -119,6 +128,17 @@ function formatDetailCumulative(detail) {
   return formatNumber(detail.cumulative);
 }
 
+function formatDetailStateValue(detail) {
+  if (detail.stateValue == null || detail.stateValue === '') {
+    return '待确认';
+  }
+  const value = Number(detail.stateValue);
+  if (!Number.isFinite(value)) {
+    return '待确认';
+  }
+  return formatNumber(value);
+}
+
 function formatContribution(row) {
   return row.signed ? formatSigned(row.value) : formatNumber(row.value);
 }
@@ -171,10 +191,16 @@ h2 {
 }
 
 .runtime-detail-summary,
-.runtime-detail-values,
 .runtime-detail-meta {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0 14px;
+}
+
+.runtime-detail-values {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
   padding: 0 14px;
 }

@@ -46,12 +46,24 @@
           <strong data-testid="workbench-runtime-enemy-hp-delta">
             {{ formatNumber(runtimeEnemyState.hpDelta) }}
           </strong>
+          <small
+            data-testid="workbench-runtime-enemy-hp-state"
+            :title="runtimeEnemyHpMetric.baselineStatus ?? ''"
+          >
+            {{ formatRuntimeStateMetric(runtimeEnemyHpMetric) }}
+          </small>
         </div>
         <div class="runtime-state-cell">
           <span>敌人韧性</span>
           <strong data-testid="workbench-runtime-enemy-toughness-delta">
             {{ formatNumber(runtimeEnemyState.toughnessDelta) }}
           </strong>
+          <small
+            data-testid="workbench-runtime-enemy-toughness-state"
+            :title="runtimeEnemyToughnessMetric.baselineStatus ?? ''"
+          >
+            {{ formatRuntimeStateMetric(runtimeEnemyToughnessMetric) }}
+          </small>
         </div>
       </div>
 
@@ -71,7 +83,12 @@
             >{{ actor.resource.toUpperCase() }}
             {{ formatSigned(actor.delta) }}</strong
           >
-          <small>{{ actor.pointCount }}点</small>
+          <small
+            data-testid="workbench-runtime-energy-actor-state"
+            :title="actor.stateMetric?.baselineStatus ?? ''"
+          >
+            {{ formatRuntimeActorEnergyState(actor) }}
+          </small>
         </div>
       </div>
 
@@ -228,6 +245,14 @@ const runtimeEnemyState = computed(
   () => props.runtimeProjection?.enemyStateCurve ?? {}
 );
 
+const runtimeEnemyHpMetric = computed(
+  () => runtimeEnemyState.value.stateMetrics?.hp ?? null
+);
+
+const runtimeEnemyToughnessMetric = computed(
+  () => runtimeEnemyState.value.stateMetrics?.toughness ?? null
+);
+
 const runtimeActorEnergyRows = computed(
   () => props.runtimeProjection?.selfEnergyCurveByActor ?? []
 );
@@ -257,6 +282,19 @@ function formatSigned(value) {
 
 function formatNumber(value) {
   return Math.round(Number(value) || 0).toLocaleString('zh-CN');
+}
+
+function formatRuntimeStateMetric(metric) {
+  const stateLabel = metric?.stateLabel ?? '当前';
+  const value = strictNumberOrNull(metric?.currentValue);
+  if (Number.isFinite(value)) {
+    return `${stateLabel} ${formatNumber(value)}`;
+  }
+  return `${stateLabel}待确认`;
+}
+
+function formatRuntimeActorEnergyState(actor) {
+  return `${formatRuntimeStateMetric(actor.stateMetric)} · ${actor.pointCount}点`;
 }
 
 function createRuntimeCurveSourceSeries(runtimeProjection) {
@@ -456,6 +494,14 @@ function numberOrZero(value) {
   return numberOrNull(value) ?? 0;
 }
 
+function strictNumberOrNull(value) {
+  if (value == null || value === '') {
+    return null;
+  }
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
 function roundCurveValue(value) {
   return Math.round((Number(value) || 0) * 1000) / 1000;
 }
@@ -569,8 +615,17 @@ h2 {
 }
 
 .runtime-state-cell strong {
+  display: block;
   color: #ffffff;
   font-size: 15px;
+}
+
+.runtime-state-cell small {
+  display: block;
+  margin-top: 3px;
+  color: #aeb8c1;
+  font-size: 11px;
+  white-space: nowrap;
 }
 
 .runtime-energy-list {

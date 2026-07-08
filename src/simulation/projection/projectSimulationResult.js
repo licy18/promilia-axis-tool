@@ -1995,7 +1995,10 @@ function buildThreeValueRuntimeProjection({
   const appliedDeltas = createThreeValueRuntimeAppliedDeltas(
     threeValueGenerationLayer
   );
-  const enemyStateCurve = createThreeValueRuntimeEnemyStateCurve(appliedDeltas);
+  const enemyStateCurve = createThreeValueRuntimeEnemyStateCurve({
+    scenario,
+    appliedDeltas,
+  });
   const selfEnergyCurveByActor = createThreeValueRuntimeSelfEnergyCurveByActor({
     scenario,
     appliedDeltas,
@@ -2034,12 +2037,35 @@ function createThreeValueRuntimeAppliedDeltas(threeValueGenerationLayer) {
     .sort(compareThreeValueGenerationDeltas);
 }
 
-function createThreeValueRuntimeEnemyStateCurve(appliedDeltas) {
+function createThreeValueRuntimeEnemyStateCurve({ scenario, appliedDeltas }) {
   const points = appliedDeltas
     .filter(delta =>
       ['enemyHpDamage', 'enemyToughnessDamage'].includes(delta.trackKey)
     )
     .map((delta, index) => createThreeValueRuntimePoint(delta, index));
+  const hpDelta = sumThreeValueRuntimeDeltas(points, 'hpDelta');
+  const toughnessDelta = sumThreeValueRuntimeDeltas(points, 'toughnessDelta');
+  const baseline = createThreeValueRuntimeEnemyBaseline(scenario);
+  const stateMetrics = {
+    hp: createThreeValueRuntimeStateMetric({
+      key: 'hp',
+      label: '敌人 HP',
+      valueUnit: 'hp',
+      baseline: baseline.hp,
+      delta: hpDelta,
+      deltaDirection: 'decrease',
+      stateLabel: '剩余',
+    }),
+    toughness: createThreeValueRuntimeStateMetric({
+      key: 'toughness',
+      label: '敌人韧性',
+      valueUnit: 'toughness',
+      baseline: baseline.toughness,
+      delta: toughnessDelta,
+      deltaDirection: 'decrease',
+      stateLabel: '剩余',
+    }),
+  };
 
   return {
     sourceKind: 'three-value-generation-layer-applied-enemy-deltas',
@@ -2050,8 +2076,16 @@ function createThreeValueRuntimeEnemyStateCurve(appliedDeltas) {
     pointCount: points.length,
     frameMin: minNumber(points.map(point => point.frameIndex)),
     frameMax: maxNumber(points.map(point => point.frameIndex)),
-    hpDelta: sumThreeValueRuntimeDeltas(points, 'hpDelta'),
-    toughnessDelta: sumThreeValueRuntimeDeltas(points, 'toughnessDelta'),
+    hpDelta,
+    toughnessDelta,
+    baseline,
+    stateMetrics,
+    hpInitial: stateMetrics.hp.initialValue,
+    hpRemaining: stateMetrics.hp.currentValue,
+    hpBaselineStatus: stateMetrics.hp.baselineStatus,
+    toughnessInitial: stateMetrics.toughness.initialValue,
+    toughnessRemaining: stateMetrics.toughness.currentValue,
+    toughnessBaselineStatus: stateMetrics.toughness.baselineStatus,
     points,
     applied: true,
   };
@@ -2068,6 +2102,7 @@ function createThreeValueRuntimeSelfEnergyCurveByActor({
         actorId: actor.id,
         actorName: actor.name,
         resource: 'sp',
+        baseline: createThreeValueRuntimeSelfEnergyBaseline(actor),
         order: index,
         delta: 0,
         pointCount: 0,
@@ -2086,6 +2121,7 @@ function createThreeValueRuntimeSelfEnergyCurveByActor({
         actorId,
         actorName: delta.actorName ?? '未知角色',
         resource: delta.valueUnit ?? 'sp',
+        baseline: createThreeValueRuntimeSelfEnergyBaseline(null),
         order: actorGroups.size,
         delta: 0,
         pointCount: 0,
@@ -2108,6 +2144,16 @@ function createThreeValueRuntimeSelfEnergyCurveByActor({
       actorName: group.actorName,
       resource: group.resource,
       delta: roundCurveValue(group.delta),
+      baseline: group.baseline,
+      stateMetric: createThreeValueRuntimeStateMetric({
+        key: 'selfEnergy',
+        label: '自身能量',
+        valueUnit: group.resource,
+        baseline: group.baseline,
+        delta: roundCurveValue(group.delta),
+        deltaDirection: 'increase',
+        stateLabel: '当前',
+      }),
       pointCount: group.pointCount,
       points: group.points.sort(compareThreeValueRuntimePoints),
       applied: true,
@@ -2203,6 +2249,19 @@ function summarizeThreeValueRuntimeProjection({
     selfEnergyActorCount: selfEnergyCurveByActor.length,
     enemyStatePointCount: enemyStateCurve.pointCount,
     selfEnergyPointCount,
+    enemyHpInitial: enemyStateCurve.stateMetrics?.hp?.initialValue ?? null,
+    enemyHpRemaining: enemyStateCurve.stateMetrics?.hp?.currentValue ?? null,
+    enemyHpBaselineStatus:
+      enemyStateCurve.stateMetrics?.hp?.baselineStatus ?? null,
+    enemyToughnessInitial:
+      enemyStateCurve.stateMetrics?.toughness?.initialValue ?? null,
+    enemyToughnessRemaining:
+      enemyStateCurve.stateMetrics?.toughness?.currentValue ?? null,
+    enemyToughnessBaselineStatus:
+      enemyStateCurve.stateMetrics?.toughness?.baselineStatus ?? null,
+    selfEnergyBaselineReadyActorCount: selfEnergyCurveByActor.filter(
+      actor => actor.stateMetric?.baselineConfirmed
+    ).length,
     simLogCount: simLog.length,
     source: 'threeValueGenerationLayer.applied-deltas',
     appliedOnly: true,
@@ -2216,7 +2275,156 @@ function createSelfEnergyDeltaSummaryByActor(selfEnergyCurveByActor) {
     actorName: actor.actorName,
     resource: actor.resource,
     delta: actor.delta,
+    currentValue: actor.stateMetric?.currentValue ?? null,
+    baselineStatus: actor.stateMetric?.baselineStatus ?? null,
   }));
+}
+
+function createThreeValueRuntimeEnemyBaseline(scenario) {
+  const enemy = scenario?.enemy ?? {};
+  const baseHp = firstRuntimeNumber(
+    enemy.stats?.maxHp,
+    enemy.maxHp,
+    enemy.baseHp,
+    enemy.source?.enemy?.stats?.maxHp,
+    enemy.source?.enemy?.maxHp
+  );
+  const hpMultiplier = firstRuntimeNumber(enemy.hpMultiplier, 1) ?? 1;
+  const hpInitial = Number.isFinite(baseHp)
+    ? roundCurveValue(baseHp * hpMultiplier)
+    : null;
+
+  return {
+    hp: {
+      sourceKind: 'scenario-enemy-hp-baseline',
+      sourceStatus:
+        hpInitial == null
+          ? 'baseline-pending-missing-scenario-enemy-max-hp'
+          : 'baseline-derived-from-scenario-enemy-max-hp',
+      sourcePath: 'scenario.enemy.stats.maxHp * scenario.enemy.hpMultiplier',
+      initialValue: hpInitial,
+      baseValue: Number.isFinite(baseHp) ? baseHp : null,
+      multiplier: Number.isFinite(hpMultiplier) ? hpMultiplier : null,
+      valueUnit: 'hp',
+      applied: hpInitial != null,
+    },
+    toughness: {
+      sourceKind: 'scenario-enemy-toughness-baseline',
+      sourceStatus: 'baseline-pending-azpr-enemy-toughness-state',
+      sourcePath: 'pending enemy weak-break/toughness state evidence',
+      initialValue: null,
+      baseValue: null,
+      multiplier: null,
+      valueUnit: 'toughness',
+      applied: false,
+    },
+  };
+}
+
+function createThreeValueRuntimeSelfEnergyBaseline(actor) {
+  const initialValue = firstRuntimeNumber(
+    actor?.initialSp,
+    actor?.initialEnergy,
+    actor?.resourceState?.sp,
+    actor?.resources?.sp,
+    actor?.stats?.sp
+  );
+  const maxValue = firstRuntimeNumber(
+    actor?.stats?.maxSp,
+    actor?.maxSp,
+    actor?.baseAttributes?.find(item => item.key === 'MAXSP')?.value
+  );
+
+  return {
+    sourceKind: 'scenario-actor-self-energy-baseline',
+    sourceStatus:
+      initialValue == null
+        ? 'baseline-pending-azpr-initial-self-energy'
+        : 'baseline-derived-from-scenario-actor-self-energy',
+    sourcePath:
+      initialValue == null
+        ? 'pending battle start/current SP evidence'
+        : 'scenario.actor.initialSp|initialEnergy|resourceState.sp',
+    initialValue: initialValue == null ? null : roundCurveValue(initialValue),
+    maxValue: maxValue == null ? null : roundCurveValue(maxValue),
+    maxValueSourceStatus:
+      maxValue == null ? 'max-sp-missing' : 'max-sp-derived-from-actor-stats',
+    valueUnit: 'sp',
+    applied: initialValue != null,
+  };
+}
+
+function createThreeValueRuntimeStateMetric({
+  key,
+  label,
+  valueUnit,
+  baseline,
+  delta,
+  deltaDirection,
+  stateLabel,
+}) {
+  const initialValue = strictRuntimeNumberOrNull(baseline?.initialValue);
+  const normalizedDelta = normalizeThreeValueRuntimeNumber(delta) ?? 0;
+  const baselineConfirmed = Number.isFinite(initialValue);
+  const rawCurrentValue = baselineConfirmed
+    ? roundCurveValue(
+        deltaDirection === 'decrease'
+          ? initialValue - normalizedDelta
+          : initialValue + normalizedDelta
+      )
+    : null;
+  const currentValue =
+    rawCurrentValue != null && deltaDirection === 'decrease'
+      ? Math.max(0, rawCurrentValue)
+      : rawCurrentValue;
+
+  return {
+    key,
+    label,
+    stateLabel,
+    valueUnit: baseline?.valueUnit ?? valueUnit,
+    initialValue: baselineConfirmed ? initialValue : null,
+    maxValue: baseline?.maxValue ?? null,
+    delta: normalizedDelta,
+    rawCurrentValue,
+    currentValue,
+    overrunValue:
+      rawCurrentValue != null && deltaDirection === 'decrease'
+        ? Math.max(0, roundCurveValue(-rawCurrentValue))
+        : 0,
+    remainingValue: deltaDirection === 'decrease' ? currentValue : null,
+    deltaDirection,
+    baselineConfirmed,
+    baselineStatus:
+      baseline?.sourceStatus ??
+      (baselineConfirmed ? 'baseline-confirmed' : 'baseline-pending'),
+    stateStatus: baselineConfirmed
+      ? 'state-derived-from-baseline-and-applied-delta'
+      : 'state-baseline-pending',
+    sourceKind: baseline?.sourceKind ?? null,
+    sourcePath: baseline?.sourcePath ?? null,
+    baseValue: baseline?.baseValue ?? null,
+    multiplier: baseline?.multiplier ?? null,
+    applied: baselineConfirmed,
+  };
+}
+
+function firstRuntimeNumber(...values) {
+  for (const value of values) {
+    const number = strictRuntimeNumberOrNull(value);
+    if (Number.isFinite(number)) {
+      return number;
+    }
+  }
+  return null;
+}
+
+function strictRuntimeNumberOrNull(value) {
+  if (value == null || value === '') {
+    return null;
+  }
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
 }
 
 function sumThreeValueRuntimeDeltas(items, field) {

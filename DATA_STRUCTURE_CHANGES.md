@@ -9935,3 +9935,177 @@ showSelectedRuntimeLog()
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8CK 应补运行时三值状态基线，让 HP / 韧性 / 能量除了累计变化量外，开始具备“剩余/当前状态”字段和 UI 标注。
+
+## 118. 阶段 5-8CK：runtime three-value state baselines
+
+阶段 5-8CK 不修改项目保存 schema。本阶段只扩展 `runSimulation()` 返回的运行时投影派生字段，以及 Workbench 的展示字段。
+
+### 118.1 敌人状态曲线新增字段
+
+`threeValueRuntimeProjection.enemyStateCurve` 新增：
+
+```js
+baseline: {
+  hp: {
+    sourceKind: 'scenario-enemy-hp-baseline',
+    sourceStatus: 'baseline-derived-from-scenario-enemy-max-hp',
+    sourcePath: 'scenario.enemy.stats.maxHp * scenario.enemy.hpMultiplier',
+    initialValue,
+    baseValue,
+    multiplier,
+    valueUnit: 'hp',
+    applied,
+  },
+  toughness: {
+    sourceKind: 'scenario-enemy-toughness-baseline',
+    sourceStatus: 'baseline-pending-azpr-enemy-toughness-state',
+    sourcePath: 'pending enemy weak-break/toughness state evidence',
+    initialValue: null,
+    valueUnit: 'toughness',
+    applied: false,
+  },
+}
+```
+
+并新增：
+
+```js
+stateMetrics: {
+  hp: {
+    key: 'hp',
+    label: '敌人 HP',
+    stateLabel: '剩余',
+    initialValue,
+    delta,
+    rawCurrentValue,
+    currentValue,
+    overrunValue,
+    remainingValue,
+    deltaDirection: 'decrease',
+    baselineConfirmed,
+    baselineStatus,
+    stateStatus,
+  },
+  toughness: {
+    key: 'toughness',
+    label: '敌人韧性',
+    stateLabel: '剩余',
+    initialValue: null,
+    currentValue: null,
+    baselineConfirmed: false,
+    baselineStatus: 'baseline-pending-azpr-enemy-toughness-state',
+  },
+}
+```
+
+兼容字段：
+
+```js
+hpInitial
+hpRemaining
+hpBaselineStatus
+toughnessInitial
+toughnessRemaining
+toughnessBaselineStatus
+```
+
+HP `currentValue` 按血条语义不小于 0；若累计 delta 超过初始值，差额记录在 `overrunValue`。
+
+### 118.2 自身能量曲线新增字段
+
+`threeValueRuntimeProjection.selfEnergyCurveByActor[]` 新增：
+
+```js
+baseline: {
+  sourceKind: 'scenario-actor-self-energy-baseline',
+  sourceStatus: 'baseline-pending-azpr-initial-self-energy',
+  sourcePath: 'pending battle start/current SP evidence',
+  initialValue: null,
+  maxValue,
+  maxValueSourceStatus,
+  valueUnit: 'sp',
+  applied: false,
+}
+stateMetric: {
+  key: 'selfEnergy',
+  label: '自身能量',
+  stateLabel: '当前',
+  initialValue: null,
+  currentValue: null,
+  delta,
+  deltaDirection: 'increase',
+  baselineConfirmed: false,
+  baselineStatus: 'baseline-pending-azpr-initial-self-energy',
+}
+```
+
+当前只读取 `maxSp` 作为上限证据，不把 `maxSp` 当成初始当前 SP。
+
+### 118.3 摘要新增字段
+
+`threeValueRuntimeProjection.summary` 新增：
+
+```js
+enemyHpInitial
+enemyHpRemaining
+enemyHpBaselineStatus
+enemyToughnessInitial
+enemyToughnessRemaining
+enemyToughnessBaselineStatus
+selfEnergyBaselineReadyActorCount
+```
+
+`summary.selfEnergyDeltaByActor[]` 新增：
+
+```js
+currentValue
+baselineStatus
+```
+
+### 118.4 UI 派生字段
+
+`createRuntimeSelectedDetail()` 现在为选中 runtime point 派生：
+
+```js
+stateLabel
+stateValue
+stateValueStatus
+baselineStatus
+baselineInitialValue
+baselineMaxValue
+baselineConfirmed
+```
+
+`ResourceMonitorPanel` 新增测试入口：
+
+```html
+data-testid="workbench-runtime-enemy-hp-state"
+data-testid="workbench-runtime-enemy-toughness-state"
+data-testid="workbench-runtime-energy-actor-state"
+```
+
+`RuntimeSelectedDetailPanel` 新增：
+
+```html
+data-testid="workbench-runtime-selected-detail-state-value"
+```
+
+### 118.5 验证
+
+当前测试覆盖：
+
+- 默认迅狼 HP 基线为 `8628`，累计 HP delta 为 `12461`，剩余 HP 为 `0`，`overrunValue` 为 `3833`。
+- 敌人韧性基线保持 `baseline-pending-azpr-enemy-toughness-state`。
+- 寒悠悠 SP 消耗场景中，自身能量初始/当前值保持 `null`，基线状态为 `baseline-pending-azpr-initial-self-energy`。
+- Workbench 资源面板显示 HP `剩余 0`、韧性 `剩余待确认`、角色能量 `当前待确认`。
+- 选中 runtime HP 点后，三值详情显示状态值 `0`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、13 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有既有 Windows 换行提示。
+
+下一阶段 5-8CL 应让 runtime resource chart 支持“累计变化量 / 状态值”两种视图，并把基线来源状态、HP 溢出值放进 tooltip / 详情提示。

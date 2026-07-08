@@ -5132,6 +5132,47 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 敌人 HP 优先从现有 enemy config / scenario enemy 派生初始值，韧性和角色能量若缺真实初始值则显式标注为待确认基线。
 - 不在本阶段硬填未知公式；只补清晰的数据字段、来源状态和 UI 标签，方便后续真实公式/采样结果接入。
 
+### 2026-07-08：阶段 5-8CK 运行时三值状态基线
+
+本轮完成：
+
+- `threeValueRuntimeProjection.enemyStateCurve` 新增 `baseline` 与 `stateMetrics`，把敌人 HP / 韧性从单纯累计 delta 扩展为可描述初始值、当前/剩余值、基线状态和来源路径的运行时字段。
+- 敌人 HP 基线先按 `scenario.enemy.stats.maxHp * scenario.enemy.hpMultiplier` 派生；默认迅狼样本为 `8628 * 1 = 8628`。
+- 敌人 HP 剩余值按血条语义钳制到 `0`，但仍保留原始累计伤害和 `overrunValue`，避免把临时 raw 公式造成的溢出隐藏掉。
+- 敌人韧性基线保持 `baseline-pending-azpr-enemy-toughness-state`，不把未知韧性条误填成 0。
+- `selfEnergyCurveByActor[]` 新增 `baseline` 与 `stateMetric`；可读取 `maxSp` 时仅记录上限，不把上限当成战斗初始当前 SP。
+- 角色自身能量初始值保持 `baseline-pending-azpr-initial-self-energy`，等待后续采样或真实战斗初始化规则接入。
+- `ResourceMonitorPanel` 新增状态文案：HP 显示 `剩余 0`，韧性显示 `剩余待确认`，角色 SP 行显示 `当前待确认`。
+- `RuntimeSelectedDetailPanel` 新增选中点后的状态值，当前默认 HP 点显示剩余 `0`；Delta 和累计值仍保留原始变化量。
+
+当前验证事实：
+
+- 默认末音 / 普通攻击样本中，运行时 HP delta 仍为 `12,461`，HP 基线为 `8,628`，状态剩余为 `0`，溢出为 `3,833`。
+- 默认韧性曲线 delta 为 `0`，但状态基线仍标记待确认，不再因 `null` 被数值转换为 0 而误判为已确认。
+- 寒悠悠 SP 消耗场景中，自身能量 delta 为技能消耗值，`stateMetric.initialValue/currentValue` 仍为 `null`，只记录 `maxSp` 来源。
+- 工作台资源面板和右侧三值详情均能展示新增状态值。
+
+当前边界：
+
+- HP 基线只是从当前敌人面板和倍率派生的状态起点，不代表最终敌人等级缩放、抗性、防御、护盾或真实战斗血量公式已经确认。
+- 韧性初始值、削韧单位、弱点状态与韧性条上限仍未从 AzPr 运行时机制完全确认。
+- 自身能量的初始当前值、共享规则、战斗开始 SP、技能消耗后恢复顺序仍等待采样或更深运行时证据。
+- 资源曲线图当前仍绘制累计 delta；新增的剩余/当前状态值只在摘要和详情中显示。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、13 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有既有 Windows 换行提示。
+
+下一步：
+
+- 阶段 5-8CL 目标：让 runtime resource chart 支持“累计变化量 / 状态值”两种视图，状态值视图使用本轮新增的 `stateMetrics` 派生曲线。
+- 状态值视图中，HP / 韧性采用剩余值语义，自身能量采用当前值语义；基线未知的曲线应明确显示待确认，而不是绘制伪 0 状态线。
+- 同步把选中点 tooltip / 详情补上基线来源状态和溢出值提示，为后续接入真实韧性/能量基线留好 UI 位置。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

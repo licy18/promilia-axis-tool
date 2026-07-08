@@ -61,10 +61,18 @@ describe('Workbench view', () => {
       wrapper.find('[data-testid="workbench-runtime-enemy-hp-delta"]').text()
     ).toBe('12,461');
     expect(
+      wrapper.find('[data-testid="workbench-runtime-enemy-hp-state"]').text()
+    ).toBe('剩余 0');
+    expect(
       wrapper
         .find('[data-testid="workbench-runtime-enemy-toughness-delta"]')
         .text()
     ).toBe('0');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-enemy-toughness-state"]')
+        .text()
+    ).toBe('剩余待确认');
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-count"]').text()
     ).toBe('1 日志');
@@ -92,6 +100,11 @@ describe('Workbench view', () => {
         .findAll('[data-testid="workbench-runtime-energy-actor-row"]')
         .map(row => row.text())
     ).toEqual(expect.arrayContaining([expect.stringContaining('末音')]));
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-runtime-energy-actor-state"]')
+        .map(row => row.text())
+    ).toEqual(expect.arrayContaining([expect.stringContaining('当前待确认')]));
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-resource-chart"]')
@@ -1087,6 +1100,11 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-selected-detail-cumulative"]')
         .text()
     ).toBe('12,461');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-value"]')
+        .text()
+    ).toBe('0');
     expect(
       wrapper
         .findAll(
