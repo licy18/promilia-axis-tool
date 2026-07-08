@@ -217,7 +217,10 @@ import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import WorkbenchFlowPanel from '../features/workbench/WorkbenchFlowPanel.vue';
 import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
-import { createRuntimePointByDeltaId } from '../features/workbench/runtimeProjectionPoints';
+import {
+  createRuntimePointByDeltaId,
+  findFirstRuntimeStatePointForAction,
+} from '../features/workbench/runtimeProjectionPoints';
 import { createRuntimeStateCurvePointId } from '../features/workbench/stateCurvePointIdentity';
 import {
   SYSTEM_TIMELINE_LANE_ID,
@@ -1124,7 +1127,10 @@ function createActionEditResultContext({
   }
   const resultPoint = findFirstRuntimeStatePointForAction(
     runtimeProjection,
-    source.actionId
+    source.actionId,
+    {
+      preferredTrackKey: source.originTrackKey ?? '',
+    }
   );
   if (!resultPoint?.statePointId) {
     return null;
@@ -1506,24 +1512,6 @@ function findRuntimeStatePointContextById(runtimeProjection, statePointId) {
   return null;
 }
 
-function findFirstRuntimeStatePointForAction(runtimeProjection, actionId) {
-  if (!actionId) {
-    return null;
-  }
-  const row = (runtimeProjection?.simLog ?? [])
-    .filter(item => item?.actionId === actionId)
-    .sort(compareRuntimeStateRows)[0];
-  if (!row) {
-    return null;
-  }
-  const point = findRuntimePointByDeltaId(runtimeProjection, row.sourceDeltaId);
-  return {
-    row,
-    point,
-    statePointId: createRuntimeStateCurvePointId(row, point),
-  };
-}
-
 function findRuntimePointByDeltaId(runtimeProjection, sourceDeltaId) {
   if (!sourceDeltaId) {
     return null;
@@ -1531,33 +1519,6 @@ function findRuntimePointByDeltaId(runtimeProjection, sourceDeltaId) {
   return (
     createRuntimePointByDeltaId(runtimeProjection).get(sourceDeltaId) ?? null
   );
-}
-
-function compareRuntimeStateRows(left, right) {
-  return (
-    compareOptionalNumber(left?.frameIndex, right?.frameIndex) ||
-    compareOptionalNumber(left?.sequenceIndex, right?.sequenceIndex) ||
-    String(left?.sourceDeltaId ?? '').localeCompare(
-      String(right?.sourceDeltaId ?? '')
-    )
-  );
-}
-
-function compareOptionalNumber(left, right) {
-  const leftNumber = Number(left);
-  const rightNumber = Number(right);
-  const hasLeft = Number.isFinite(leftNumber);
-  const hasRight = Number.isFinite(rightNumber);
-  if (hasLeft && hasRight) {
-    return leftNumber - rightNumber;
-  }
-  if (hasLeft) {
-    return -1;
-  }
-  if (hasRight) {
-    return 1;
-  }
-  return 0;
 }
 
 function findSkillById(skillId) {

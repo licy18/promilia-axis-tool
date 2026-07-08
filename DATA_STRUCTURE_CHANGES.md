@@ -14649,3 +14649,36 @@ Workbench 测试新增覆盖：
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、43 条测试。
 - `npm run test -- --run`：通过，16 个测试文件、121 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 177. UI 主流程能力块：编辑后回到同类运行结果
+
+本阶段属于 UI 主流程。
+
+### 177.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 177.2 Runtime 点查找入口
+
+`runtimeProjectionPoints.js` 新增统一查找入口：
+
+```js
+findFirstRuntimeStatePointForAction(runtimeProjection, actionId, {
+  preferredTrackKey,
+});
+```
+
+该入口按动作筛选 runtime simLog，并优先返回 `preferredTrackKey` 对应的 runtime point；偏好曲线不存在时回退到该动作按帧序排序后的第一个 runtime point。
+
+### 177.3 Workbench 回跳规则
+
+`createActionEditResultContext()` 会把运行结果编辑来源中的 `originTrackKey` 传给 runtime 点查找入口，使编辑后的“回到刷新结果”优先回到来源曲线类型。
+
+### 177.4 验证
+
+- runtime 点查找单元测试覆盖：默认第一个结果、优先匹配来源曲线、偏好缺失时回退。
+- Workbench 测试覆盖：从资源动作自身能量结果进入编辑，修改开始时间后回到刷新后的自身能量结果。
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js`：通过，1 个测试文件、2 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、44 条测试。
+- `npm run test -- --run`：通过，16 个测试文件、123 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

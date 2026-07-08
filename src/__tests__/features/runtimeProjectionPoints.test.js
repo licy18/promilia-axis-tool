@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   createRuntimePointByDeltaId,
+  findFirstRuntimeStatePointForAction,
   getRuntimeEnemyStateCurve,
   getRuntimeResourceCurveRows,
 } from '../../features/workbench/runtimeProjectionPoints';
@@ -81,5 +82,88 @@ describe('runtime projection points', () => {
       'legacy-enemy-delta',
       'legacy-resource-delta',
     ]);
+  });
+
+  it('can prefer the runtime point track when locating a result for an action', () => {
+    const runtimeProjection = {
+      simLog: [
+        {
+          sourceDeltaId: 'hp-delta',
+          actionId: 'action-0001',
+          frameIndex: 12,
+          sequenceIndex: 0,
+          stateCurveSequenceIndex: 0,
+          trackKey: 'enemyHpDamage',
+          layerKey: 'applied',
+        },
+        {
+          sourceDeltaId: 'energy-delta',
+          actionId: 'action-0001',
+          frameIndex: 18,
+          sequenceIndex: 1,
+          stateCurveSequenceIndex: 1,
+          trackKey: 'selfEnergyChange',
+          layerKey: 'applied',
+        },
+      ],
+      stateCurves: {
+        enemy: {
+          points: [
+            {
+              sourceDeltaId: 'hp-delta',
+              actionId: 'action-0001',
+              frameIndex: 12,
+              sequenceIndex: 0,
+              stateCurveSequenceIndex: 0,
+              trackKey: 'enemyHpDamage',
+              layerKey: 'applied',
+            },
+          ],
+        },
+      },
+      resourceCurves: {
+        curvesByActor: [
+          {
+            actorId: 'actor-001',
+            actorName: '末音',
+            resource: 'sp',
+            points: [
+              {
+                sourceDeltaId: 'energy-delta',
+                actionId: 'action-0001',
+                frameIndex: 18,
+                sequenceIndex: 1,
+                stateCurveSequenceIndex: 1,
+                trackKey: 'selfEnergyChange',
+                layerKey: 'applied',
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    expect(
+      findFirstRuntimeStatePointForAction(runtimeProjection, 'action-0001')?.row
+        .sourceDeltaId
+    ).toBe('hp-delta');
+    expect(
+      findFirstRuntimeStatePointForAction(
+        runtimeProjection,
+        'action-0001',
+        {
+          preferredTrackKey: 'selfEnergyChange',
+        }
+      )?.row.sourceDeltaId
+    ).toBe('energy-delta');
+    expect(
+      findFirstRuntimeStatePointForAction(
+        runtimeProjection,
+        'action-0001',
+        {
+          preferredTrackKey: 'enemyToughnessDamage',
+        }
+      )?.row.sourceDeltaId
+    ).toBe('hp-delta');
   });
 });
