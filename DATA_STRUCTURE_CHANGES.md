@@ -14682,3 +14682,46 @@ findFirstRuntimeStatePointForAction(runtimeProjection, actionId, {
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、44 条测试。
 - `npm run test -- --run`：通过，16 个测试文件、123 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 178. UI 主流程能力块：再次模拟后巡检顺序刷新
+
+本阶段属于 UI 主流程。
+
+### 178.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 178.2 Runtime state point context
+
+`runtimeProjectionPoints.js` 新增统一上下文入口：
+
+```js
+createRuntimeStatePointContexts(runtimeProjection);
+```
+
+返回项结构沿用现有运行结果点语义：
+
+```js
+{
+  row,
+  point,
+  statePointId,
+}
+```
+
+该入口从 `runtimeProjection.simLog` 和 runtime 曲线点创建可巡检的 state point context，并统一按 `frameIndex`、`sequenceIndex`、`sourceDeltaId` 排序。
+
+### 178.3 消费方
+
+- `WorkbenchFlowPanel` 的前后巡检直接消费 `createRuntimeStatePointContexts()`。
+- `Workbench` 的 runtime 首点选择与 `statePointId` 反查也消费同一入口。
+- `findFirstRuntimeStatePointForAction()` 改为复用该入口，再执行 action 和 `preferredTrackKey` 筛选。
+
+### 178.4 验证
+
+- runtime 点查找单元测试覆盖：乱序 `simLog` 会按帧序生成巡检上下文。
+- Workbench 测试覆盖：两个 runtime 结果中，把第一个动作推迟到第二个动作之后，回到刷新结果时主流程导航位置更新为第 2 项。
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js`：通过，1 个测试文件、3 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、45 条测试。
+- `npm run test -- --run`：通过，16 个测试文件、125 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

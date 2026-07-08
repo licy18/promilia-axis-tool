@@ -1724,6 +1724,97 @@ describe('Workbench view', () => {
     ).toContain('自身能量');
   });
 
+  it('refreshes runtime navigation order after editing a result action time', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-add-resource-action"]')
+      .trigger('click');
+    await nextTick();
+
+    await wrapper
+      .find('[data-testid="workbench-flow-open-runtime"]')
+      .trigger('click');
+    await nextTick();
+
+    let flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('1');
+    const previousRuntimePointButton = flowPanel.find(
+      '[data-testid="workbench-flow-runtime-previous"]'
+    );
+    const firstActionRuntimePointId = previousRuntimePointButton.attributes(
+      'data-state-point-id'
+    );
+
+    await previousRuntimePointButton.trigger('click');
+    await nextTick();
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
+      'action-0001'
+    );
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('0');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(firstActionRuntimePointId);
+
+    await flowPanel
+      .find('[data-testid="workbench-flow-edit-runtime-action"]')
+      .trigger('click');
+    await nextTick();
+
+    await wrapper.find('[data-testid="workbench-start-input"]').setValue('6000');
+    await nextTick();
+
+    const refreshedStatePointId = wrapper
+      .find('[data-testid="workbench-action-edit-feedback"]')
+      .attributes('data-runtime-state-point-id');
+    expect(refreshedStatePointId).toBeTruthy();
+    expect(refreshedStatePointId).not.toBe(firstActionRuntimePointId);
+
+    await wrapper
+      .find('[data-testid="workbench-flow-return-edit-result"]')
+      .trigger('click');
+    await nextTick();
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
+      'action-0001'
+    );
+    expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('2');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('1');
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-runtime-navigation-index"]')
+        .text()
+    ).toBe('2/2');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(refreshedStatePointId);
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-runtime-previous"]')
+        .attributes('disabled')
+    ).toBeUndefined();
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-runtime-next"]')
+        .attributes('disabled')
+    ).toBeDefined();
+  });
+
   it('navigates runtime result points from the main flow panel', async () => {
     const wrapper = mount(Workbench, {
       global: {

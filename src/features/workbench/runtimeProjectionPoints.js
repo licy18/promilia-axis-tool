@@ -42,6 +42,14 @@ export function createRuntimePointByDeltaId(runtimeProjection) {
   return byId;
 }
 
+export function createRuntimeStatePointContexts(runtimeProjection) {
+  const pointByDeltaId = createRuntimePointByDeltaId(runtimeProjection);
+  return (runtimeProjection?.simLog ?? [])
+    .map(row => createRuntimeStatePointContext(row, pointByDeltaId))
+    .filter(Boolean)
+    .sort((left, right) => compareRuntimeStateRows(left.row, right.row));
+}
+
 export function findFirstRuntimeStatePointForAction(
   runtimeProjection,
   actionId,
@@ -50,34 +58,41 @@ export function findFirstRuntimeStatePointForAction(
   if (!actionId) {
     return null;
   }
-  const pointByDeltaId = createRuntimePointByDeltaId(runtimeProjection);
-  const rows = (runtimeProjection?.simLog ?? [])
-    .filter(item => item?.actionId === actionId)
-    .sort(compareRuntimeStateRows);
-  const row =
-    findPreferredRuntimeStateRow(rows, pointByDeltaId, preferredTrackKey) ??
-    rows[0];
+  const contexts = createRuntimeStatePointContexts(runtimeProjection).filter(
+    context => context.row?.actionId === actionId
+  );
+  return (
+    findPreferredRuntimeStatePointContext(contexts, preferredTrackKey) ??
+    contexts[0] ??
+    null
+  );
+}
+
+function createRuntimeStatePointContext(row, pointByDeltaId) {
   if (!row) {
     return null;
   }
   const point = pointByDeltaId.get(row.sourceDeltaId) ?? null;
+  const statePointId = createRuntimeStateCurvePointId(row, point);
+  if (!statePointId) {
+    return null;
+  }
   return {
     row,
     point,
-    statePointId: createRuntimeStateCurvePointId(row, point),
+    statePointId,
   };
 }
 
-function findPreferredRuntimeStateRow(rows, pointByDeltaId, preferredTrackKey) {
+function findPreferredRuntimeStatePointContext(contexts, preferredTrackKey) {
   if (!preferredTrackKey) {
     return null;
   }
   return (
-    rows.find(row => {
-      const point = pointByDeltaId.get(row.sourceDeltaId) ?? null;
+    contexts.find(context => {
       return (
-        row?.trackKey === preferredTrackKey ||
-        point?.trackKey === preferredTrackKey
+        context.row?.trackKey === preferredTrackKey ||
+        context.point?.trackKey === preferredTrackKey
       );
     }) ?? null
   );

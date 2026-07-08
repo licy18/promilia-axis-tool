@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   createRuntimePointByDeltaId,
+  createRuntimeStatePointContexts,
   findFirstRuntimeStatePointForAction,
   getRuntimeEnemyStateCurve,
   getRuntimeResourceCurveRows,
@@ -82,6 +83,70 @@ describe('runtime projection points', () => {
       'legacy-enemy-delta',
       'legacy-resource-delta',
     ]);
+  });
+
+  it('creates runtime state point contexts in timeline order', () => {
+    const runtimeProjection = {
+      simLog: [
+        {
+          sourceDeltaId: 'energy-delta',
+          actionId: 'action-0002',
+          frameIndex: 60,
+          sequenceIndex: 1,
+          stateCurveSequenceIndex: 1,
+          trackKey: 'selfEnergyChange',
+          layerKey: 'applied',
+        },
+        {
+          sourceDeltaId: 'hp-delta',
+          actionId: 'action-0001',
+          frameIndex: 12,
+          sequenceIndex: 0,
+          stateCurveSequenceIndex: 0,
+          trackKey: 'enemyHpDamage',
+          layerKey: 'applied',
+        },
+      ],
+      stateCurves: {
+        enemy: {
+          points: [
+            {
+              sourceDeltaId: 'hp-delta',
+              actionId: 'action-0001',
+              frameIndex: 12,
+              sequenceIndex: 0,
+              stateCurveSequenceIndex: 0,
+              trackKey: 'enemyHpDamage',
+              layerKey: 'applied',
+            },
+          ],
+        },
+      },
+      resourceCurves: {
+        curvesByActor: [
+          {
+            actorId: 'actor-001',
+            points: [
+              {
+                sourceDeltaId: 'energy-delta',
+                actionId: 'action-0002',
+                frameIndex: 60,
+                sequenceIndex: 1,
+                stateCurveSequenceIndex: 1,
+                trackKey: 'selfEnergyChange',
+                layerKey: 'applied',
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    expect(
+      createRuntimeStatePointContexts(runtimeProjection).map(
+        context => context.row.sourceDeltaId
+      )
+    ).toEqual(['hp-delta', 'energy-delta']);
   });
 
   it('can prefer the runtime point track when locating a result for an action', () => {

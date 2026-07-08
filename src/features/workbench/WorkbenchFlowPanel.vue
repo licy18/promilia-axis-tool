@@ -141,8 +141,7 @@ import {
   EditPen,
   TrendCharts,
 } from '@element-plus/icons-vue';
-import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
-import { createRuntimePointByDeltaId } from './runtimeProjectionPoints';
+import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
 
 const props = defineProps({
   selectedAction: {
@@ -182,13 +181,8 @@ const runtimeSummary = computed(() => props.runtimeProjection?.summary ?? {});
 const hasRuntimeResults = computed(
   () => (runtimeSummary.value.simLogCount ?? 0) > 0
 );
-const runtimePointByDeltaId = computed(() =>
-  createRuntimePointByDeltaId(props.runtimeProjection)
-);
 const runtimeNavigationPoints = computed(() =>
-  (props.runtimeProjection?.simLog ?? [])
-    .map(row => createRuntimeNavigationPoint(row, runtimePointByDeltaId.value))
-    .filter(Boolean)
+  createRuntimeStatePointContexts(props.runtimeProjection)
 );
 const selectedRuntimeNavigationIndex = computed(() =>
   runtimeNavigationPoints.value.findIndex(
@@ -272,21 +266,6 @@ function selectRuntimeNavigationPoint(point) {
   emit('select-runtime-state-point', point.statePointId);
 }
 
-function createRuntimeNavigationPoint(row, pointByDeltaId) {
-  if (!row?.sourceDeltaId) {
-    return null;
-  }
-  const point = pointByDeltaId.get(row.sourceDeltaId) ?? null;
-  const statePointId = createRuntimeStateCurvePointId(row, point);
-  if (!statePointId) {
-    return null;
-  }
-  return {
-    row,
-    point,
-    statePointId,
-  };
-}
 </script>
 
 <style scoped>

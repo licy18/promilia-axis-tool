@@ -218,10 +218,9 @@ import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import WorkbenchFlowPanel from '../features/workbench/WorkbenchFlowPanel.vue';
 import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
 import {
-  createRuntimePointByDeltaId,
+  createRuntimeStatePointContexts,
   findFirstRuntimeStatePointForAction,
 } from '../features/workbench/runtimeProjectionPoints';
-import { createRuntimeStateCurvePointId } from '../features/workbench/stateCurvePointIdentity';
 import {
   SYSTEM_TIMELINE_LANE_ID,
   createTimelineDiagnostics,
@@ -1472,12 +1471,9 @@ function focusThreeValueCalculatorScope(
 }
 
 function getFirstRuntimeStatePointId(runtimeProjection) {
-  const row = runtimeProjection?.simLog?.[0];
-  if (!row) {
-    return '';
-  }
-  const point = findRuntimePointByDeltaId(runtimeProjection, row.sourceDeltaId);
-  return createRuntimeStateCurvePointId(row, point);
+  return (
+    createRuntimeStatePointContexts(runtimeProjection)[0]?.statePointId ?? ''
+  );
 }
 
 function selectActionFromRuntimeStatePoint(pointId) {
@@ -1496,28 +1492,10 @@ function findRuntimeStatePointContextById(runtimeProjection, statePointId) {
   if (!statePointId) {
     return null;
   }
-  for (const row of runtimeProjection?.simLog ?? []) {
-    const point = findRuntimePointByDeltaId(
-      runtimeProjection,
-      row.sourceDeltaId
-    );
-    if (createRuntimeStateCurvePointId(row, point) === statePointId) {
-      return {
-        row,
-        point,
-        statePointId,
-      };
-    }
-  }
-  return null;
-}
-
-function findRuntimePointByDeltaId(runtimeProjection, sourceDeltaId) {
-  if (!sourceDeltaId) {
-    return null;
-  }
   return (
-    createRuntimePointByDeltaId(runtimeProjection).get(sourceDeltaId) ?? null
+    createRuntimeStatePointContexts(runtimeProjection).find(
+      context => context.statePointId === statePointId
+    ) ?? null
   );
 }
 
