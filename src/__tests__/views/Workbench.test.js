@@ -64,6 +64,12 @@ describe('Workbench view', () => {
     expect(text).toContain('0s12f-3s4f · 2,500-13,000 · raw-param');
     expect(text).toContain('0s12f-3s4f · 7,000 · raw-field');
     expect(text).toContain('0s12f-3s4f · 2,399-3,000 · raw-field');
+    expect(text).toContain('状态曲线');
+    expect(text).toContain('敌人HP伤害');
+    expect(text).toContain('已用 1点 Δ12,461 Σ12,461');
+    expect(text).toContain('候选 5点 Δ2,500-13,000 Σ28,700');
+    expect(text).toContain('敌人韧性削减');
+    expect(text).toContain('自身能量变化');
     expect(
       wrapper.find('[data-testid="workbench-candidate-value-series"]').exists()
     ).toBe(true);
@@ -76,6 +82,54 @@ describe('Workbench view', () => {
     expect(
       wrapper.findAll('[data-testid="workbench-candidate-value-chart-row"]')
     ).toHaveLength(3);
+    expect(wrapper.find('[data-testid="workbench-state-curves"]').exists()).toBe(
+      true
+    );
+    expect(wrapper.findAll('[data-testid="workbench-state-curve-row"]')).toHaveLength(
+      3
+    );
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curves"] .source-heading strong')
+        .text()
+    ).toBe('16');
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-state-curve-layer-toggle"]')
+        .map(toggle => toggle.attributes('data-layer-key'))
+    ).toEqual(['applied', 'candidate', 'sampled', 'placeholder']);
+    const hpStateCurveRow = wrapper.find(
+      '[data-testid="workbench-state-curve-row"][data-track-key="enemyHpDamage"]'
+    );
+    expect(hpStateCurveRow.text()).toContain('raw-damage · 2/2层 · 6点');
+    expect(hpStateCurveRow.text()).toContain('已用 1点 Δ12,461 Σ12,461');
+    expect(hpStateCurveRow.text()).toContain(
+      '候选 5点 Δ2,500-13,000 Σ28,700'
+    );
+    await wrapper
+      .find(
+        '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="candidate"]'
+      )
+      .setValue(false);
+    await nextTick();
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curves"] .source-heading strong')
+        .text()
+    ).toBe('1');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-state-curve-row"][data-track-key="enemyHpDamage"]'
+        )
+        .text()
+    ).toContain('raw-damage · 1/1层 · 1点');
+    await wrapper
+      .find(
+        '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="candidate"]'
+      )
+      .setValue(true);
+    await nextTick();
     const candidateMarkers = wrapper.findAll(
       '[data-testid="workbench-timeline-candidate-value-marker"]'
     );
@@ -388,6 +442,8 @@ describe('Workbench view', () => {
     expect(text).toContain(
       '三值框架 3轨 · 曲线 3条/12点 · 状态 13点 · 细节后补'
     );
+    expect(text).toContain('状态曲线');
+    expect(text).toContain('候选 4点 Δ6,400-18,000 Σ44,300');
     expect(
       wrapper.findAll(
         '[data-testid="workbench-timeline-candidate-value-marker"]'

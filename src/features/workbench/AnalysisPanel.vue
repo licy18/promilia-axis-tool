@@ -249,6 +249,55 @@
       </div>
     </div>
 
+    <div
+      v-if="stateCurveTrackRows.length"
+      class="state-curve-list"
+      data-testid="workbench-state-curves"
+    >
+      <div class="diagnostic-heading source-heading">
+        <span>状态曲线</span>
+        <strong>{{ stateCurveVisiblePointCount }}</strong>
+      </div>
+      <div class="state-curve-layer-controls">
+        <label
+          v-for="layer in STATE_CURVE_LAYER_OPTIONS"
+          :key="layer.key"
+          class="state-curve-layer-toggle"
+        >
+          <input
+            v-model="stateCurveLayerFilters[layer.key]"
+            type="checkbox"
+            :data-layer-key="layer.key"
+            data-testid="workbench-state-curve-layer-toggle"
+          />
+          <span>{{ layer.label }}</span>
+        </label>
+      </div>
+      <div
+        v-for="track in stateCurveTrackRows"
+        :key="track.trackKey"
+        class="state-curve-row"
+        :data-track-key="track.trackKey"
+        data-testid="workbench-state-curve-row"
+      >
+        <div class="state-curve-main">
+          <span>{{ track.label }}</span>
+          <small>{{ formatStateCurveTrackSummary(track) }}</small>
+        </div>
+        <div class="state-curve-layers">
+          <span
+            v-for="layer in track.visibleLayers"
+            :key="`${track.trackKey}-${layer.key}`"
+            class="state-curve-layer-pill"
+            :data-layer-key="layer.key"
+            data-testid="workbench-state-curve-layer-pill"
+          >
+            {{ formatStateCurveLayer(layer) }}
+          </span>
+        </div>
+      </div>
+    </div>
+
     <div class="timeline-diagnostics">
       <div class="diagnostic-heading">
         <span>时间轴诊断</span>
@@ -310,11 +359,29 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { TrendCharts } from '@element-plus/icons-vue';
 
 const CANDIDATE_CHART_COLORS = ['#f2b366', '#79c7b9', '#a6b7ff'];
 const candidateChartGridLines = [25, 50, 75];
+const STATE_CURVE_LAYER_OPTIONS = [
+  {
+    key: 'applied',
+    label: '已用',
+  },
+  {
+    key: 'candidate',
+    label: '候选',
+  },
+  {
+    key: 'sampled',
+    label: '采样',
+  },
+  {
+    key: 'placeholder',
+    label: '占位',
+  },
+];
 
 const props = defineProps({
   summary: {
@@ -342,6 +409,17 @@ const props = defineProps({
       series: [],
     }),
   },
+  threeValueCurveFramework: {
+    type: Object,
+    default: () => ({
+      stateCurves: {
+        summary: {
+          pointCount: 0,
+        },
+        tracks: [],
+      },
+    }),
+  },
   insertionDiagnostics: {
     type: Object,
     default: () => ({
@@ -358,6 +436,12 @@ const props = defineProps({
   },
 });
 
+const stateCurveLayerFilters = ref({
+  applied: true,
+  candidate: true,
+  sampled: false,
+  placeholder: false,
+});
 const overlapItems = computed(() => props.timelineDiagnostics?.overlaps ?? []);
 const overlapCount = computed(
   () => props.timelineDiagnostics?.overlapCount ?? overlapItems.value.length
@@ -408,6 +492,42 @@ const candidateChartPointCount = computed(
       (sum, series) => sum + (series.pointCount ?? 0),
       0
     )
+);
+const stateCurves = computed(
+  () =>
+    props.threeValueCurveFramework?.stateCurves ?? {
+      summary: {
+        pointCount: 0,
+      },
+      tracks: [],
+    }
+);
+const activeStateCurveLayerKeys = computed(() =>
+  STATE_CURVE_LAYER_OPTIONS.filter(
+    layer => stateCurveLayerFilters.value[layer.key]
+  ).map(layer => layer.key)
+);
+const stateCurveTrackRows = computed(() => {
+  const activeLayers = new Set(activeStateCurveLayerKeys.value);
+  return (stateCurves.value?.tracks ?? [])
+    .filter(track => (track.pointCount ?? 0) > 0)
+    .map(track => ({
+      ...track,
+      visibleLayers: (track.layers ?? []).filter(layer =>
+        activeLayers.has(layer.key)
+      ),
+    }));
+});
+const stateCurveVisiblePointCount = computed(() =>
+  stateCurveTrackRows.value.reduce(
+    (sum, track) =>
+      sum +
+      track.visibleLayers.reduce(
+        (trackSum, layer) => trackSum + (layer.pointCount ?? 0),
+        0
+      ),
+    0
+  )
 );
 
 function formatNumber(value) {
@@ -766,6 +886,28 @@ function formatThreeValueCurveFrameworkSummary(summary) {
       ? ` · 状态 ${summary.stateCurvePointCount}点`
       : '';
   return `三值框架 ${summary.trackCount}轨 · 曲线 ${summary.candidateTrackCount}条/${summary.chartPointCount}点${stateCurveText}${deferredText}`;
+}
+
+function formatStateCurveTrackSummary(track) {
+  const visiblePointCount = (track.visibleLayers ?? []).reduce(
+    (sum, layer) => sum + (layer.pointCount ?? 0),
+    0
+  );
+  const nonEmptyLayerCount = (track.visibleLayers ?? []).filter(
+    layer => (layer.pointCount ?? 0) > 0
+  ).length;
+  return `${track.valueUnit} · ${nonEmptyLayerCount}/${track.visibleLayers.length}层 · ${visiblePointCount}点`;
+}
+
+function formatStateCurveLayer(layer) {
+  const label = formatStateCurveLayerLabel(layer.key);
+  const deltaRange = formatValueRange(layer.deltaMin, layer.deltaMax);
+  return `${label} ${layer.pointCount ?? 0}点 Δ${deltaRange} Σ${formatNumber(layer.finalCumulative)}`;
+}
+
+function formatStateCurveLayerLabel(key) {
+  const option = STATE_CURVE_LAYER_OPTIONS.find(layer => layer.key === key);
+  return option?.label ?? key;
 }
 
 function formatFrameRange(min, max) {
@@ -1304,6 +1446,88 @@ h2 {
   min-width: 0;
   overflow-wrap: anywhere;
   color: #8f9aa3;
+  font-size: 11px;
+}
+
+.state-curve-list {
+  display: grid;
+  gap: 8px;
+  padding: 0 14px 14px;
+}
+
+.state-curve-layer-controls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.state-curve-layer-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  padding: 6px 5px;
+  border: 1px solid rgba(121, 199, 185, 0.16);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.06);
+  color: #b8c0c7;
+  font-size: 11px;
+}
+
+.state-curve-layer-toggle input {
+  width: 12px;
+  height: 12px;
+  accent-color: #79c7b9;
+}
+
+.state-curve-layer-toggle span {
+  overflow-wrap: anywhere;
+}
+
+.state-curve-row {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  padding: 9px 10px;
+  border-left: 3px solid #a6b7ff;
+  border-radius: 4px;
+  background: rgba(166, 183, 255, 0.07);
+}
+
+.state-curve-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+
+.state-curve-main span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #d9e0ff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.state-curve-main small {
+  flex: 0 0 auto;
+  color: #8f9aa3;
+  font-size: 11px;
+}
+
+.state-curve-layers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.state-curve-layer-pill {
+  padding: 4px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #b8c0c7;
   font-size: 11px;
 }
 

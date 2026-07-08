@@ -114,6 +114,9 @@
           :damage-timeline="simulationResult.damageTimeline"
           :action-result-timeline="simulationResult.actionResultTimeline"
           :candidate-value-series="simulationResult.candidateValueSeries"
+          :three-value-curve-framework="
+            simulationResult.threeValueCurveFramework
+          "
           :insertion-diagnostics="insertionDiagnostics"
           :timeline-diagnostics="timelineDiagnostics"
         />

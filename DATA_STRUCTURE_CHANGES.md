@@ -7505,3 +7505,67 @@ Workbench 分析面板摘要从：
 - `stateCurves.applied` 继续为 `false`，表示该结构本身不代表最终公式已应用。
 - `applied` 层可以用于当前结果曲线；`candidate` / `sampled` / `placeholder` 层必须明确标识来源，不能直接进入最终 totals。
 - 下一阶段应把 `stateCurves` 接入更明确的 Workbench 层级展示或过滤，而不是继续追单个技能的逐帧细节。
+
+## 93. 阶段 5-8BN：stateCurves Workbench layer view
+
+阶段 5-8BN 不改变 `threeValueCurveFramework.stateCurves` 的持久结构，只把它接入 Workbench 分析面板的紧凑展示与过滤层。
+
+### 93.1 AnalysisPanel 输入
+
+`AnalysisPanel` 新增 prop：
+
+```vue
+<AnalysisPanel
+  :three-value-curve-framework="simulationResult.threeValueCurveFramework"
+/>
+```
+
+该 prop 读取：
+
+- `threeValueCurveFramework.stateCurves.summary`
+- `threeValueCurveFramework.stateCurves.tracks[]`
+- `tracks[].layers[]`
+
+### 93.2 UI 层级过滤
+
+分析面板新增“状态曲线”区块：
+
+```text
+状态曲线 16
+已用 候选 采样 占位
+敌人HP伤害 raw-damage · 2/2层 · 6点
+已用 1点 Δ12,461 Σ12,461
+候选 5点 Δ2,500-13,000 Σ28,700
+```
+
+默认层级：
+
+- `applied = true`
+- `candidate = true`
+- `sampled = false`
+- `placeholder = false`
+
+关闭 `candidate` 后，默认末音样本只剩 HP applied 1 点，标题计数从 `16` 变为 `1`。
+
+### 93.3 当前样例断言
+
+默认末音样本：
+
+- `workbench-state-curves` 存在。
+- `workbench-state-curve-row` 为 3 行。
+- 标题点数为 `16`。
+- HP 行显示 `raw-damage · 2/2层 · 6点`。
+- HP applied chip：`已用 1点 Δ12,461 Σ12,461`。
+- HP candidate chip：`候选 5点 Δ2,500-13,000 Σ28,700`。
+
+寒悠悠样本：
+
+- 标题摘要仍显示 `三值框架 3轨 · 曲线 3条/12点 · 状态 13点 · 细节后补`。
+- HP candidate chip 显示 `候选 4点 Δ6,400-18,000 Σ44,300`。
+
+### 93.4 兼容性与边界
+
+- 本阶段不修改 `candidateValueSeries.chart` 和主时间轴 marker。
+- 该展示层只负责层级可见性和摘要，不改变模拟结果。
+- `sampled` / `placeholder` 默认隐藏，是为了避免在没有真实点时制造噪音；后续可在样本导入和动作骨架视图成熟后默认开放。
+- 下一阶段应优先让 runtime sample 或占位动作真正进入对应层，而不是继续追单个技能逐帧细节。

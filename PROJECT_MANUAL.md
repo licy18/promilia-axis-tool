@@ -4384,6 +4384,37 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 优先保持 UI 信息密度接近 Endaxis，不新增解释型大段文字；用短标签和 tooltip 标明 `applied` / `candidate` / `sampled` / `placeholder`。
 - 继续不阻塞在具体技能细帧上；细帧、召唤触发和 buff 条件仍作为后续 evidence 填充。
 
+### 2026-07-08：阶段 5-8BN stateCurves Workbench 层级展示与过滤
+
+本轮完成：
+
+- `Workbench.vue` 已把完整 `simulationResult.threeValueCurveFramework` 传入 `AnalysisPanel`。
+- `AnalysisPanel` 新增“状态曲线”区块，读取 `threeValueCurveFramework.stateCurves.tracks[]`。
+- 新增四个层级复选框：`已用 / 候选 / 采样 / 占位`，默认显示 `applied + candidate`，隐藏尚未有点的 `sampled + placeholder`。
+- 每条三值轨道显示当前可见层数、点数和单位；层级 chip 显示 `点数 / Δ范围 / Σ累计值`。
+- 默认末音样本可见 `16` 个状态点：HP applied 1 点、HP/韧性/能量 candidate 共 15 点；关闭候选层后只剩 applied HP 1 点。
+- 寒悠悠样本可见 `13` 个状态点，并显示 HP candidate 累计 `44,300`。
+
+当前边界：
+
+- 该区块只展示 state curve 层级和累计，不替代主时间轴 candidate marker。
+- `sampled` 与 `placeholder` 层默认隐藏，且当前没有真实 sample 映射点。
+- `candidate` 层仍不能进入最终 totals；UI 只展示诊断累计。
+- 仍不在当前阶段追逐每个技能的最终触发帧或 buff 条件。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/views/Workbench.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、47 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、108 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提醒与 chunk 体积提醒。
+- `git diff --check`：通过；仅有 Windows 行尾转换提示。
+
+下一步：
+
+- 阶段 5-8BO 目标：把 `sampled` / `placeholder` 层推进到更真实的输入和表现。
+- 优先处理两条线：其一，让导入的 runtime sample 能形成 `sampled` state curve 点；其二，让没有候选数值的动作也能在 Workbench 中以占位层保持曲线骨架。
+- 继续保持三值框架优先，不把 `Delay#4`、召唤触发帧或 `焰火` buff 条件作为当前阻塞项。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
