@@ -7727,6 +7727,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：在 Workbench 层整理更明确的主流程控制模型，把“排轴动作编辑 -> 运行模拟 -> 曲线/日志/详情定位 -> 回到动作修改”的状态和动作入口从分散函数进一步归纳为可维护的流程控制层。
 
+### 2026-07-09：UI 主流程能力块 - Workbench Flow Controller
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `workbenchFlowController`，把标准 flow action 到 Workbench 主流程处理器的路由从 `Workbench.vue` 本地分支中抽离。
+- `Workbench.vue` 现在只创建 controller 并提供处理器，`dispatchWorkbenchFlowAction()` 不再直接维护 action kind 的分支细节。
+- controller 覆盖运行结果定位、运行点选择、贡献定位、运行时动作聚焦、编辑来源聚焦和返回运行结果六类主流程动作。
+- 现有 UI 行为保持不变；本阶段不新增公式推断、不修改运行结果和三值数值。
+
+当前验证事实：
+
+- controller 单元测试覆盖每个 action kind 到对应 handler 的路由。
+- controller 对 disabled、unsupported 和缺失 handler 的 action 会返回未处理结果，不会误触发状态变更。
+- Workbench 集成测试仍覆盖 dispatcher 接入后的实际主流程行为。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowController.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、59 条测试。
+- `npm run test -- --run`：通过，20 个测试文件、144 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把“排轴动作编辑 -> 运行模拟 -> 资源曲线监控 -> 日志/详情查看 -> 回到动作修改”整理成更明确的完整主流程闭环，暂不继续扩写微型状态提示或公式证据。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

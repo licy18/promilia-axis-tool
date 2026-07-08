@@ -213,9 +213,8 @@ import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import WorkbenchFlowPanel from '../features/workbench/WorkbenchFlowPanel.vue';
 import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
+import { createWorkbenchFlowController } from '../features/workbench/workbenchFlowController';
 import {
-  WORKBENCH_FLOW_ACTION_KINDS,
-  createWorkbenchFlowAction,
   createWorkbenchFlowModel,
 } from '../features/workbench/workbenchFlowModel';
 import {
@@ -312,6 +311,17 @@ const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const draftStatus = ref('未保存草稿');
 const actionEditSource = ref(createEmptyActionEditSource());
 const actionEditFocus = ref(createEmptyActionEditFocus());
+const workbenchFlowController = createWorkbenchFlowController({
+  selectRuntimeResult: ({ actionId, statePointId }) =>
+    selectActionResult({ actionId, statePointId }),
+  selectRuntimeStatePoint: statePointId => selectRuntimeStatePoint(statePointId),
+  selectContributionPoint: statePointId =>
+    selectActionContributionRuntimePoint(statePointId),
+  focusRuntimeAction: payload => focusRuntimeAction(payload),
+  focusEditSource: payload => focusActionEditSource(payload),
+  returnRuntimeResult: ({ actionId, statePointId }) =>
+    returnRuntimeResultFromProperties({ actionId, statePointId }),
+});
 
 const project = computed(() =>
   createWorkbenchProject(selection.value, {
@@ -1334,46 +1344,7 @@ function selectRuntimeFlowStatePoint(pointId) {
 }
 
 function dispatchWorkbenchFlowAction(action = {}) {
-  const flowAction = createWorkbenchFlowAction(action);
-  if (!flowAction.canRun) {
-    return;
-  }
-  if (
-    flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT
-  ) {
-    selectActionResult({
-      actionId: flowAction.actionId,
-      statePointId: flowAction.statePointId,
-    });
-    return;
-  }
-  if (
-    flowAction.kind ===
-    WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_STATE_POINT
-  ) {
-    selectRuntimeStatePoint(flowAction.statePointId);
-    return;
-  }
-  if (
-    flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT
-  ) {
-    selectActionContributionRuntimePoint(flowAction.statePointId);
-    return;
-  }
-  if (flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION) {
-    focusRuntimeAction(flowAction.payload ?? flowAction);
-    return;
-  }
-  if (flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.FOCUS_EDIT_SOURCE) {
-    focusActionEditSource(flowAction.payload ?? flowAction);
-    return;
-  }
-  if (flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT) {
-    returnRuntimeResultFromProperties({
-      actionId: flowAction.actionId,
-      statePointId: flowAction.statePointId,
-    });
-  }
+  workbenchFlowController.dispatch(action);
 }
 
 function selectActionResultRuntimePoint(pointId) {
