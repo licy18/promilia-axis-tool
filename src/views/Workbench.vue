@@ -50,6 +50,7 @@
       :selected-state-curve-point-id="selectedStateCurvePointId"
       :runtime-overview-active="runtimeOverviewActive"
       :action-edit-result-context="actionEditResultContext"
+      :flow-model="workbenchFlowModel"
       @open-runtime-results="openRuntimeResultsFlow"
       @focus-runtime-action="focusRuntimeAction"
       @return-runtime-result="returnRuntimeResultFromProperties"
@@ -218,6 +219,7 @@ import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import WorkbenchFlowPanel from '../features/workbench/WorkbenchFlowPanel.vue';
 import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
+import { createWorkbenchFlowModel } from '../features/workbench/workbenchFlowModel';
 import {
   createRuntimeStatePointContexts,
   findFirstRuntimeStatePointForAction,
@@ -342,6 +344,16 @@ const actionEditResultContext = computed(() =>
   createActionEditResultContext({
     source: actionEditSource.value,
     runtimeProjection: simulationResult.value.threeValueRuntimeProjection,
+  })
+);
+const workbenchFlowModel = computed(() =>
+  createWorkbenchFlowModel({
+    selectedAction: selectedAction.value,
+    runtimeProjection: simulationResult.value.threeValueRuntimeProjection,
+    runtimeSelectedDetail: runtimeSelectedDetail.value,
+    selectedStateCurvePointId: selectedStateCurvePointId.value,
+    runtimeOverviewActive: runtimeOverviewActive.value,
+    actionEditResultContext: actionEditResultContext.value,
   })
 );
 const timelineDiagnostics = computed(() =>

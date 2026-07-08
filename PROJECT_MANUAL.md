@@ -7534,6 +7534,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 Workbench 的主流程状态进一步抽成可复用的 flow model，使动作编辑、运行模拟、曲线监控、日志详情和回到修改不再依赖分散的组件局部判断。
 
+### 2026-07-09：UI 主流程能力块 - Workbench Flow Model
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `workbenchFlowModel`，统一生成主流程 phase、运行结果导航、当前 runtime 结果、编辑后刷新结果和主流程控制可用性。
+- `Workbench.vue` 在页面层生成 flow model，并传给 `WorkbenchFlowPanel`；主流程面板不再自己分散推断 runtime 导航、结果状态和按钮可用性。
+- 现有可见文案、运行结果数值、曲线和日志行为保持不变；本阶段不新增公式推断、不修改三值数值、不扩大 UI 信息量。
+
+当前验证事实：
+
+- flow model 能区分 `action-edit`、`runtime-result`、`edit-result-ready`、`edit-result-review` 等主流程阶段。
+- 打开运行结果、编辑结果动作、返回刷新结果时，Workbench 主流程面板的 phase 与同一个 runtime state point / action 对齐。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js -t "flow model|drives the edit-runtime-return loop|renders the first real-data"`：通过，2 个测试文件、5 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、53 条测试。
+- `npm run test -- --run`：通过，19 个测试文件、141 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把资源曲线、模拟日志和详情面板逐步接入同一 flow model 的 phase / action / state point 语义，形成更完整的 Endaxis 式工作闭环。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

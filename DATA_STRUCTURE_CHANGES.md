@@ -15409,3 +15409,79 @@ selectActionFromRuntimeStatePoint(pointId)
 - `npm run test -- --run`：通过，18 个测试文件、138 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 195. UI 主流程能力块：Workbench Flow Model
+
+本阶段属于 UI 主流程。
+
+### 195.1 结构变化
+
+新增 `src/features/workbench/workbenchFlowModel.js`，提供：
+
+```js
+{
+  WORKBENCH_FLOW_PHASES,
+  createWorkbenchFlowModel
+}
+```
+
+`createWorkbenchFlowModel()` 统一接收：
+
+```js
+{
+  selectedAction,
+  runtimeProjection,
+  runtimeSelectedDetail,
+  selectedStateCurvePointId,
+  runtimeOverviewActive,
+  actionEditResultContext
+}
+```
+
+并输出：
+
+```js
+{
+  phase,
+  selectedActionId,
+  selectedActionName,
+  selectedStateCurvePointId,
+  runtimeOverviewActive,
+  runtimeSummary,
+  runtimeSimLogCount,
+  runtimeDetail,
+  editResult,
+  runtimeNavigation,
+  controls
+}
+```
+
+`phase` 当前用于区分：
+
+```js
+[
+  'action-edit',
+  'runtime-overview',
+  'runtime-result',
+  'edit-result-ready',
+  'edit-result-review'
+]
+```
+
+`Workbench.vue` 在页面层生成 `workbenchFlowModel` 并传入 `WorkbenchFlowPanel`。`WorkbenchFlowPanel` 现在优先消费 `flowModel`，只在未传入时回退本地构造。
+
+### 195.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 的主流程派生状态：运行导航、当前结果、刷新结果和控制可用性由统一 flow model 提供；模拟结果、三值计算、项目文件和 runtime projection 结构不变。
+
+### 195.3 验证
+
+- flow model 测试覆盖：主流程 phase、运行导航、当前 runtime 结果、编辑后刷新结果和按钮可用性。
+- Workbench 视图测试覆盖：初始编辑态、打开运行结果、编辑后刷新结果、返回刷新结果时，主流程面板 phase 与现有 UI 闭环一致。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js -t "flow model|drives the edit-runtime-return loop|renders the first real-data"`：通过，2 个测试文件、5 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、53 条测试。
+- `npm run test -- --run`：通过，19 个测试文件、141 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。

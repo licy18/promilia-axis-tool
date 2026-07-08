@@ -61,6 +61,7 @@ describe('Workbench view', () => {
     const flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
     expect(flowPanel.exists()).toBe(true);
     expect(flowPanel.attributes('data-action-id')).toBe('action-0001');
+    expect(flowPanel.attributes('data-flow-phase')).toBe('action-edit');
     expect(flowPanel.attributes('data-runtime-sim-log-count')).toBe('1');
     expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('1');
     expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('-1');
@@ -1561,6 +1562,9 @@ describe('Workbench view', () => {
     expect(focusedFlowPanel.attributes('data-runtime-detail-action-id')).toBe(
       'action-0001'
     );
+    expect(focusedFlowPanel.attributes('data-flow-phase')).toBe(
+      'runtime-result'
+    );
     expect(
       focusedFlowPanel.attributes('data-runtime-detail-state-point-id')
     ).toBe(selectedRuntimePointId);
@@ -1614,6 +1618,9 @@ describe('Workbench view', () => {
     const editResultFlowPanel = wrapper.find(
       '[data-testid="workbench-flow-panel"]'
     );
+    expect(editResultFlowPanel.attributes('data-flow-phase')).toBe(
+      'edit-result-ready'
+    );
     const returnEditResultButton = editResultFlowPanel.find(
       '[data-testid="workbench-flow-return-edit-result"]'
     );
@@ -1636,6 +1643,11 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(refreshedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-flow-panel"]')
+        .attributes('data-flow-phase')
+    ).toBe('edit-result-review');
     expect(
       wrapper
         .find(

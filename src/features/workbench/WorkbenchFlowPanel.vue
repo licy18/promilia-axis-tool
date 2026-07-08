@@ -1,24 +1,23 @@
 <template>
   <section
     class="workbench-flow-panel"
-    :data-action-id="selectedAction?.id ?? ''"
-    :data-edit-result-state-point-id="
-      actionEditResultContext?.runtimeStatePointId ?? ''
+    :data-action-id="workbenchFlow.selectedActionId"
+    :data-edit-result-state-point-id="workbenchFlow.editResult.statePointId"
+    :data-flow-phase="workbenchFlow.phase"
+    :data-runtime-detail-action-id="workbenchFlow.runtimeDetail.actionId"
+    :data-runtime-detail-state-point-id="workbenchFlow.runtimeDetail.statePointId"
+    :data-runtime-navigation-count="workbenchFlow.runtimeNavigation.count"
+    :data-runtime-navigation-index="workbenchFlow.runtimeNavigation.index"
+    :data-runtime-overview-active="
+      workbenchFlow.runtimeOverviewActive ? 'true' : 'false'
     "
-    :data-runtime-detail-action-id="runtimeSelectedDetail?.actionId ?? ''"
-    :data-runtime-detail-state-point-id="
-      runtimeSelectedDetail?.statePointId ?? ''
-    "
-    :data-runtime-navigation-count="runtimeNavigationPoints.length"
-    :data-runtime-navigation-index="selectedRuntimeNavigationIndex"
-    :data-runtime-overview-active="runtimeOverviewActive ? 'true' : 'false'"
     :data-runtime-next-state-point-id="
-      selectedRuntimeNavigationNext?.statePointId ?? ''
+      workbenchFlow.runtimeNavigation.next?.statePointId ?? ''
     "
     :data-runtime-previous-state-point-id="
-      selectedRuntimeNavigationPrevious?.statePointId ?? ''
+      workbenchFlow.runtimeNavigation.previous?.statePointId ?? ''
     "
-    :data-runtime-sim-log-count="runtimeSummary.simLogCount ?? 0"
+    :data-runtime-sim-log-count="workbenchFlow.runtimeSimLogCount"
     data-testid="workbench-flow-panel"
   >
     <div class="flow-main">
@@ -27,7 +26,7 @@
         <div>
           <span>主流程</span>
           <strong data-testid="workbench-flow-selected-action">
-            {{ selectedAction?.name ?? '未选动作' }}
+            {{ workbenchFlow.selectedActionName }}
           </strong>
         </div>
       </div>
@@ -36,19 +35,19 @@
         <div>
           <span>运行</span>
           <strong data-testid="workbench-flow-runtime-count">
-            {{ runtimeSummary.simLogCount ?? 0 }} 日志
+            {{ workbenchFlow.runtimeSimLogCount }} 日志
           </strong>
         </div>
         <div>
           <span>当前结果</span>
           <strong data-testid="workbench-flow-runtime-detail">
-            {{ runtimeDetailLabel }}
+            {{ workbenchFlow.runtimeDetail.label }}
           </strong>
         </div>
         <div>
           <span>刷新结果</span>
           <strong data-testid="workbench-flow-edit-result">
-            {{ editResultLabel }}
+            {{ workbenchFlow.editResult.label }}
           </strong>
         </div>
       </div>
@@ -63,32 +62,34 @@
           type="button"
           class="flow-icon-button"
           :data-state-point-id="
-            selectedRuntimeNavigationPrevious?.statePointId ?? ''
+            workbenchFlow.runtimeNavigation.previous?.statePointId ?? ''
           "
           data-testid="workbench-flow-runtime-previous"
-          :disabled="!selectedRuntimeNavigationPrevious"
+          :disabled="!workbenchFlow.runtimeNavigation.previous"
           title="上一个运行结果"
           aria-label="上一个运行结果"
           @click="
-            selectRuntimeNavigationPoint(selectedRuntimeNavigationPrevious)
+            selectRuntimeNavigationPoint(workbenchFlow.runtimeNavigation.previous)
           "
         >
           <ArrowLeft class="flow-button-icon" />
         </button>
         <span data-testid="workbench-flow-runtime-navigation-index">
-          {{ runtimeNavigationLabel }}
+          {{ workbenchFlow.runtimeNavigation.label }}
         </span>
         <button
           type="button"
           class="flow-icon-button"
           :data-state-point-id="
-            selectedRuntimeNavigationNext?.statePointId ?? ''
+            workbenchFlow.runtimeNavigation.next?.statePointId ?? ''
           "
           data-testid="workbench-flow-runtime-next"
-          :disabled="!selectedRuntimeNavigationNext"
+          :disabled="!workbenchFlow.runtimeNavigation.next"
           title="下一个运行结果"
           aria-label="下一个运行结果"
-          @click="selectRuntimeNavigationPoint(selectedRuntimeNavigationNext)"
+          @click="
+            selectRuntimeNavigationPoint(workbenchFlow.runtimeNavigation.next)
+          "
         >
           <ArrowRight class="flow-button-icon" />
         </button>
@@ -97,7 +98,7 @@
         type="button"
         class="flow-button"
         data-testid="workbench-flow-open-runtime"
-        :disabled="!hasRuntimeResults"
+        :disabled="!workbenchFlow.controls.canOpenRuntimeResults"
         @click="$emit('open-runtime-results')"
       >
         <TrendCharts class="flow-button-icon" />
@@ -106,10 +107,10 @@
       <button
         type="button"
         class="flow-button"
-        :data-action-id="runtimeSelectedDetail?.actionId ?? ''"
-        :data-state-point-id="runtimeSelectedDetail?.statePointId ?? ''"
+        :data-action-id="workbenchFlow.runtimeDetail.actionId"
+        :data-state-point-id="workbenchFlow.runtimeDetail.statePointId"
         data-testid="workbench-flow-edit-runtime-action"
-        :disabled="!runtimeSelectedDetail?.actionId"
+        :disabled="!workbenchFlow.controls.canFocusRuntimeAction"
         @click="focusRuntimeAction"
       >
         <EditPen class="flow-button-icon" />
@@ -118,12 +119,10 @@
       <button
         type="button"
         class="flow-button secondary"
-        :data-action-id="actionEditResultContext?.actionId ?? ''"
-        :data-state-point-id="
-          actionEditResultContext?.runtimeStatePointId ?? ''
-        "
+        :data-action-id="workbenchFlow.editResult.actionId"
+        :data-state-point-id="workbenchFlow.editResult.statePointId"
         data-testid="workbench-flow-return-edit-result"
-        :disabled="!actionEditResultContext?.runtimeStatePointId"
+        :disabled="!workbenchFlow.controls.canReturnRuntimeResult"
         @click="returnRuntimeResult"
       >
         <ArrowRight class="flow-button-icon" />
@@ -141,11 +140,7 @@ import {
   EditPen,
   TrendCharts,
 } from '@element-plus/icons-vue';
-import {
-  createRuntimeStatePointContexts,
-  getRuntimeOutputSummary,
-  getRuntimeSimLogCount,
-} from './runtimeProjectionPoints';
+import { createWorkbenchFlowModel } from './workbenchFlowModel';
 
 const props = defineProps({
   selectedAction: {
@@ -172,6 +167,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  flowModel: {
+    type: Object,
+    default: null,
+  },
 });
 
 const emit = defineEmits([
@@ -181,68 +180,22 @@ const emit = defineEmits([
   'select-runtime-state-point',
 ]);
 
-const runtimeSummary = computed(() =>
-  getRuntimeOutputSummary(props.runtimeProjection)
+const workbenchFlow = computed(
+  () =>
+    props.flowModel ??
+    createWorkbenchFlowModel({
+      selectedAction: props.selectedAction,
+      runtimeProjection: props.runtimeProjection,
+      runtimeSelectedDetail: props.runtimeSelectedDetail,
+      selectedStateCurvePointId: props.selectedStateCurvePointId,
+      runtimeOverviewActive: props.runtimeOverviewActive,
+      actionEditResultContext: props.actionEditResultContext,
+    })
 );
-const hasRuntimeResults = computed(
-  () => getRuntimeSimLogCount(props.runtimeProjection) > 0
-);
-const runtimeNavigationPoints = computed(() =>
-  createRuntimeStatePointContexts(props.runtimeProjection)
-);
-const selectedRuntimeNavigationIndex = computed(() =>
-  runtimeNavigationPoints.value.findIndex(
-    point => point.statePointId === props.selectedStateCurvePointId
-  )
-);
-const selectedRuntimeNavigationPrevious = computed(() =>
-  selectedRuntimeNavigationIndex.value > 0
-    ? runtimeNavigationPoints.value[selectedRuntimeNavigationIndex.value - 1]
-    : props.runtimeOverviewActive && runtimeNavigationPoints.value.length > 0
-      ? runtimeNavigationPoints.value[runtimeNavigationPoints.value.length - 1]
-      : null
-);
-const selectedRuntimeNavigationNext = computed(() =>
-  selectedRuntimeNavigationIndex.value >= 0 &&
-  selectedRuntimeNavigationIndex.value <
-    runtimeNavigationPoints.value.length - 1
-    ? runtimeNavigationPoints.value[selectedRuntimeNavigationIndex.value + 1]
-    : selectedRuntimeNavigationIndex.value < 0 &&
-        props.runtimeOverviewActive &&
-        runtimeNavigationPoints.value.length > 0
-      ? runtimeNavigationPoints.value[0]
-      : null
-);
-const runtimeNavigationLabel = computed(() => {
-  const total = runtimeNavigationPoints.value.length;
-  if (total === 0) {
-    return '0/0';
-  }
-  if (selectedRuntimeNavigationIndex.value < 0) {
-    return `-/${total}`;
-  }
-  return `${selectedRuntimeNavigationIndex.value + 1}/${total}`;
-});
-const runtimeDetailLabel = computed(() => {
-  const detail = props.runtimeSelectedDetail;
-  if (!detail) {
-    return '未选中';
-  }
-  return [detail.frameLabel, detail.trackLabel || detail.trackKey]
-    .filter(Boolean)
-    .join(' · ');
-});
-const editResultLabel = computed(() => {
-  const context = props.actionEditResultContext;
-  if (!context?.runtimeStatePointId) {
-    return '无刷新结果';
-  }
-  return [context.label, context.changeSummary].filter(Boolean).join(' ');
-});
 
 function focusRuntimeAction() {
-  const detail = props.runtimeSelectedDetail;
-  if (!detail?.actionId) {
+  const detail = workbenchFlow.value.runtimeDetail;
+  if (!detail?.canFocusAction) {
     return;
   }
   emit('focus-runtime-action', {
@@ -255,13 +208,13 @@ function focusRuntimeAction() {
 }
 
 function returnRuntimeResult() {
-  const context = props.actionEditResultContext;
-  if (!context?.runtimeStatePointId) {
+  const context = workbenchFlow.value.editResult;
+  if (!context?.canReturn) {
     return;
   }
   emit('return-runtime-result', {
     actionId: context.actionId,
-    statePointId: context.runtimeStatePointId,
+    statePointId: context.statePointId,
   });
 }
 
