@@ -11718,3 +11718,105 @@ data-edit-source-label
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DE 应继续完善编辑闭环，优先让字段来源标签反向定位到对应编辑控件或时间轴入口。
+
+## 138. 阶段 5-8DE：字段来源反向定位属性控件
+
+阶段目标：
+
+- 在不改变三值计算结果、不新增保存 schema 的前提下，让动作结果中的最近编辑来源能够反向定位到属性面板对应控件。
+
+### 138.1 Workbench 新增前端派生状态
+
+新增：
+
+```js
+actionEditFocus = {
+  actionId: string,
+  fieldKey: string,
+  label: string,
+  sequence: number,
+}
+```
+
+用途：
+
+- `AnalysisPanel` 点击最近编辑来源标签后发出 `focus-action-edit-source`。
+- `Workbench` 接收来源后选中对应动作，并把字段聚焦目标传给 `PropertiesPanel`。
+- `applyDraftState()` 会清空该派生状态。
+
+该状态不写入 localStorage，不属于项目保存 schema。
+
+### 138.2 PropertiesPanel 新增 prop
+
+新增：
+
+```js
+actionEditFocus: Object | null
+```
+
+由 `Workbench` 传入：
+
+```vue
+:action-edit-focus="actionEditFocus"
+```
+
+### 138.3 属性控件新增 DOM 落点
+
+属性面板动作字段控件新增：
+
+```html
+data-testid="workbench-action-edit-control"
+data-edit-field
+data-edit-focused
+```
+
+当前覆盖字段：
+
+```text
+skillId
+startMs
+level
+durationMs
+change
+eventType
+targetCharacterId
+actorCharacterId
+actionVariantIndex
+resource
+reason
+note
+```
+
+字段归一：
+
+```text
+laneId -> actorCharacterId
+damageSegmentIndex -> actionVariantIndex
+```
+
+### 138.4 AnalysisPanel 新增事件
+
+新增 emit：
+
+```js
+focus-action-edit-source
+```
+
+`workbench-action-result-edit-source` 标签现在可点击；点击后只传递最近编辑来源，不改变 action result 的三值结果。
+
+### 138.5 验证
+
+当前测试覆盖：
+
+- 修改 `action-0001` 等级后，结果行显示 `等级变更`。
+- 点击 `等级变更` 后，属性面板 `data-edit-field="level"` 写入 `data-edit-focused="true"`。
+- `startMs` 控件保持 `data-edit-focused="false"`。
+- 来源动作仍保持选中。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DF 应继续完善编辑闭环，优先把来源反向定位扩展到时间轴入口高亮，或补字段级前后值摘要。

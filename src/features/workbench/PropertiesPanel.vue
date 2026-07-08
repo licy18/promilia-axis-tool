@@ -40,7 +40,12 @@
         </select>
       </label>
 
-      <label>
+      <label
+        data-testid="workbench-action-edit-control"
+        data-edit-field="skillId"
+        :data-edit-focused="isEditFocusField('skillId')"
+        :class="{ 'edit-focused': isEditFocusField('skillId') }"
+      >
         <span>技能</span>
         <select
           v-if="isSkillAction"
@@ -79,7 +84,12 @@
     </div>
 
     <div class="action-controls">
-      <label>
+      <label
+        data-testid="workbench-action-edit-control"
+        data-edit-field="startMs"
+        :data-edit-focused="isEditFocusField('startMs')"
+        :class="{ 'edit-focused': isEditFocusField('startMs') }"
+      >
         <span>开始时间 ms</span>
         <input
           type="number"
@@ -92,7 +102,12 @@
         />
       </label>
 
-      <label>
+      <label
+        data-testid="workbench-action-edit-control"
+        :data-edit-field="secondaryEditFieldKey"
+        :data-edit-focused="isEditFocusField(secondaryEditFieldKey)"
+        :class="{ 'edit-focused': isEditFocusField(secondaryEditFieldKey) }"
+      >
         <span>{{ secondaryControlLabel }}</span>
         <input
           v-if="isSkillAction"
@@ -143,7 +158,12 @@
         </select>
       </label>
 
-      <label>
+      <label
+        data-testid="workbench-action-edit-control"
+        data-edit-field="actorCharacterId"
+        :data-edit-focused="isEditFocusField('actorCharacterId')"
+        :class="{ 'edit-focused': isEditFocusField('actorCharacterId') }"
+      >
         <span>动作归属</span>
         <select
           v-if="canAssignActor"
@@ -167,7 +187,13 @@
         />
       </label>
 
-      <label v-if="isSkillAction">
+      <label
+        v-if="isSkillAction"
+        data-testid="workbench-action-edit-control"
+        data-edit-field="actionVariantIndex"
+        :data-edit-focused="isEditFocusField('actionVariantIndex')"
+        :class="{ 'edit-focused': isEditFocusField('actionVariantIndex') }"
+      >
         <span>动作形态</span>
         <select
           data-testid="workbench-damage-segment-select"
@@ -306,7 +332,12 @@
     </div>
 
     <div v-if="isResourceAction" class="action-controls contextual-controls">
-      <label>
+      <label
+        data-testid="workbench-action-edit-control"
+        data-edit-field="resource"
+        :data-edit-focused="isEditFocusField('resource')"
+        :class="{ 'edit-focused': isEditFocusField('resource') }"
+      >
         <span>资源</span>
         <input
           type="text"
@@ -316,7 +347,12 @@
         />
       </label>
 
-      <label>
+      <label
+        data-testid="workbench-action-edit-control"
+        data-edit-field="reason"
+        :data-edit-focused="isEditFocusField('reason')"
+        :class="{ 'edit-focused': isEditFocusField('reason') }"
+      >
         <span>原因</span>
         <input
           type="text"
@@ -327,7 +363,13 @@
       </label>
     </div>
 
-    <label class="note-control">
+    <label
+      class="note-control"
+      data-testid="workbench-action-edit-control"
+      data-edit-field="note"
+      :data-edit-focused="isEditFocusField('note')"
+      :class="{ 'edit-focused': isEditFocusField('note') }"
+    >
       <span>备注</span>
       <textarea
         data-testid="workbench-note-input"
@@ -375,6 +417,10 @@ const props = defineProps({
   durationMs: {
     type: Number,
     required: true,
+  },
+  actionEditFocus: {
+    type: Object,
+    default: null,
   },
 });
 
@@ -629,6 +675,24 @@ const secondaryControlLabel = computed(() => {
   }
   return '持续时间 ms';
 });
+const secondaryEditFieldKey = computed(() => {
+  if (isSkillAction.value) {
+    return 'level';
+  }
+  if (isResourceAction.value) {
+    return 'change';
+  }
+  if (isEnemyEventAction.value) {
+    return 'eventType';
+  }
+  if (isSwitchAction.value) {
+    return 'targetCharacterId';
+  }
+  if (isWaitAction.value || isAnnotationAction.value) {
+    return 'durationMs';
+  }
+  return '';
+});
 const selectedActionSummary = computed(() => {
   if (isSkillAction.value) {
     return formatActionVariantOption(props.selectedAction.selectedDamageSegment) || '倍率待补';
@@ -675,6 +739,27 @@ function emitTextPatch(key, value) {
   emit('update-action', {
     [key]: value,
   });
+}
+
+function isEditFocusField(fieldKey) {
+  const focus = props.actionEditFocus;
+  if (!fieldKey || !focus?.actionId || !props.selectedAction?.id) {
+    return false;
+  }
+  return (
+    focus.actionId === props.selectedAction.id &&
+    normalizeEditFocusField(focus.fieldKey) === normalizeEditFocusField(fieldKey)
+  );
+}
+
+function normalizeEditFocusField(fieldKey) {
+  if (fieldKey === 'damageSegmentIndex') {
+    return 'actionVariantIndex';
+  }
+  if (fieldKey === 'laneId') {
+    return 'actorCharacterId';
+  }
+  return fieldKey || '';
 }
 
 function formatSigned(value) {
@@ -780,9 +865,21 @@ label {
   min-width: 0;
 }
 
+label.edit-focused {
+  margin: -6px;
+  padding: 6px;
+  border-radius: 4px;
+  background: rgba(242, 179, 102, 0.08);
+}
+
 label span {
   color: #8f9aa3;
   font-size: 12px;
+}
+
+label.edit-focused span {
+  color: #f2b366;
+  font-weight: 700;
 }
 
 select,

@@ -198,7 +198,12 @@
           <small
             v-if="getActionResultEditSource(entry)"
             class="action-result-edit-source"
+            role="button"
+            tabindex="0"
             data-testid="workbench-action-result-edit-source"
+            @click.stop="focusActionEditSource(entry)"
+            @keydown.enter.stop.prevent="focusActionEditSource(entry)"
+            @keydown.space.stop.prevent="focusActionEditSource(entry)"
           >
             {{ getActionResultEditSource(entry).label }}
           </small>
@@ -949,6 +954,7 @@ const emit = defineEmits([
   'select-runtime-state-point',
   'select-action-result',
   'select-action-contribution-point',
+  'focus-action-edit-source',
 ]);
 
 const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
@@ -1810,6 +1816,14 @@ function isActionResultCurrentAction(entry) {
 
 function getActionResultEditSource(entry) {
   return getEditSourceForAction(entry?.actionId);
+}
+
+function focusActionEditSource(entry) {
+  const source = getActionResultEditSource(entry);
+  if (!source) {
+    return;
+  }
+  emit('focus-action-edit-source', source);
 }
 
 function createActionResultRuntimeTrace(actionId, rows) {
@@ -3229,7 +3243,13 @@ h2 {
   border-radius: 4px;
   background: rgba(242, 179, 102, 0.12);
   color: #f2b366;
+  cursor: pointer;
   font-weight: 700;
+}
+
+.action-result-edit-source:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(242, 179, 102, 0.2);
 }
 
 .action-contribution-panel {

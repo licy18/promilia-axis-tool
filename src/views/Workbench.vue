@@ -102,6 +102,7 @@
           :enemies="workbenchSeed.gameData.enemies"
           :selected-action="selectedAction"
           :duration-ms="scenario.time.durationMs"
+          :action-edit-focus="actionEditFocus"
           @update-selection="updateSelection"
           @update-action="updateAction"
         />
@@ -156,6 +157,7 @@
           @select-action-contribution-point="
             selectActionContributionRuntimePoint
           "
+          @focus-action-edit-source="focusActionEditSource"
         />
       </div>
 
@@ -276,6 +278,7 @@ const runtimeLogFocus = ref({ source: '', statePointId: '', sequence: 0 });
 const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const draftStatus = ref('未保存草稿');
 const actionEditSource = ref(createEmptyActionEditSource());
+const actionEditFocus = ref(createEmptyActionEditFocus());
 
 const project = computed(() =>
   createWorkbenchProject(selection.value, {
@@ -940,6 +943,7 @@ function applyDraftState(draft) {
     actionDrafts.value.find(action => action.id === draft.selectedActionId)
   );
   clearActionEditSource();
+  clearActionEditFocus();
 }
 
 function markDraftDirty() {
@@ -955,9 +959,24 @@ function createEmptyActionEditSource(sequence = 0) {
   };
 }
 
+function createEmptyActionEditFocus(sequence = 0) {
+  return {
+    actionId: '',
+    fieldKey: '',
+    label: '',
+    sequence,
+  };
+}
+
 function clearActionEditSource() {
   actionEditSource.value = createEmptyActionEditSource(
     actionEditSource.value.sequence + 1
+  );
+}
+
+function clearActionEditFocus() {
+  actionEditFocus.value = createEmptyActionEditFocus(
+    actionEditFocus.value.sequence + 1
   );
 }
 
@@ -1019,6 +1038,21 @@ function selectActionResult({ actionId, statePointId } = {}) {
     selectAction(actionId);
   }
   selectActionResultRuntimePoint(statePointId);
+}
+
+function focusActionEditSource(source = {}) {
+  if (!source.actionId || !source.fieldKey) {
+    return;
+  }
+  if (actionDrafts.value.some(action => action.id === source.actionId)) {
+    selectAction(source.actionId);
+  }
+  actionEditFocus.value = {
+    actionId: source.actionId,
+    fieldKey: source.fieldKey,
+    label: source.label ?? '',
+    sequence: actionEditFocus.value.sequence + 1,
+  };
 }
 
 function selectActionContributionRuntimePoint(pointId) {

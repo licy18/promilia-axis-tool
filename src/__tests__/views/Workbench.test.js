@@ -1583,6 +1583,39 @@ describe('Workbench view', () => {
     ).toBe('level');
     expect(editedActionResultDetailPanel.text()).toContain('等级变更');
 
+    const levelEditControl = wrapper.find(
+      '[data-testid="workbench-action-edit-control"][data-edit-field="level"]'
+    );
+    expect(levelEditControl.exists()).toBe(true);
+    expect(levelEditControl.attributes('data-edit-focused')).toBe('false');
+
+    await actionResultRow
+      .find('[data-testid="workbench-action-result-edit-source"]')
+      .trigger('click');
+    await nextTick();
+
+    const focusedLevelEditControl = wrapper.find(
+      '[data-testid="workbench-action-edit-control"][data-edit-field="level"]'
+    );
+    expect(focusedLevelEditControl.attributes('data-edit-focused')).toBe(
+      'true'
+    );
+    expect(focusedLevelEditControl.classes()).toContain('edit-focused');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+        )
+        .attributes('data-edit-focused')
+    ).toBe('false');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+        )
+        .classes()
+    ).toContain('selected');
+
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     await nextTick();
 
