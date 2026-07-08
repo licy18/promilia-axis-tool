@@ -1245,6 +1245,20 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-row"]')
         .attributes('data-selected')
     ).toBe('true');
+    const actionResultCurveSelection = wrapper.find(
+      '[data-testid="workbench-runtime-resource-chart-selection"]'
+    );
+    expect(actionResultCurveSelection.exists()).toBe(true);
+    expect(actionResultCurveSelection.attributes('data-state-point-id')).toBe(
+      appliedStatePointId
+    );
+    expect(actionResultCurveSelection.attributes('data-track-key')).toBe(
+      'enemyHpDamage'
+    );
+    expect(
+      actionResultCurveSelection.attributes('data-runtime-focus-source')
+    ).toBe('action-result');
+    expect(actionResultCurveSelection.text()).toContain('动作结果定位');
     const actionResultDetailPanel = wrapper.find(
       '[data-testid="workbench-action-result-detail-panel"]'
     );
@@ -2043,6 +2057,42 @@ describe('Workbench view', () => {
         )
         .text()
     ).toBe('敌人 HP12,461');
+    const runtimeCurveSelection = wrapper.find(
+      '[data-testid="workbench-runtime-resource-chart-selection"]'
+    );
+    expect(runtimeCurveSelection.exists()).toBe(true);
+    expect(runtimeCurveSelection.attributes('data-state-point-id')).toBe(
+      statePointId
+    );
+    expect(runtimeCurveSelection.attributes('data-track-key')).toBe(
+      'enemyHpDamage'
+    );
+    expect(runtimeCurveSelection.attributes('data-curve-mode')).toBe('delta');
+    expect(runtimeCurveSelection.attributes('data-runtime-focus-source')).toBe(
+      'manual'
+    );
+    expect(runtimeCurveSelection.text()).toContain('手动选择');
+    const runtimeCurveSelectionRows = Object.fromEntries(
+      runtimeCurveSelection
+        .findAll(
+          '[data-testid="workbench-runtime-resource-chart-selection-row"]'
+        )
+        .map(row => [row.attributes('data-detail-key'), row])
+    );
+    expect(Object.keys(runtimeCurveSelectionRows)).toEqual([
+      'point',
+      'action',
+      'delta',
+      'cumulative',
+      'state',
+    ]);
+    expect(runtimeCurveSelectionRows.point.text()).toContain('敌人 HP');
+    expect(runtimeCurveSelectionRows.action.text()).toContain('普通攻击');
+    expect(runtimeCurveSelectionRows.delta.text()).toBe('Delta12,461');
+    expect(runtimeCurveSelectionRows.cumulative.text()).toBe('累计12,461');
+    expect(runtimeCurveSelectionRows.state.text()).toBe(
+      '剩余0 · 溢出 3,833'
+    );
   });
 
   it('links applied state curve points to the shared runtime detail', async () => {

@@ -6138,6 +6138,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DN 目标：继续从“UI 还没完全对齐 Endaxis 的成品体验”这一阶段推进，优先补 Workbench 主流程里的曲线交互和结果定位细节，让用户从曲线点、运行日志、动作结果和贡献拆分之间更稳定地往返。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DN 资源曲线选中点摘要
+
+本轮完成：
+
+- `ResourceMonitorPanel` 在运行投影曲线下新增 `workbench-runtime-resource-chart-selection`。
+- 选中三值曲线点后，资源面板就地展示选中点的定位、动作、Delta、累计和状态值。
+- 选中点摘要复用已有 `selectedStateCurvePointId` 和 runtime curve source series，不新增 simulation 输出。
+- 摘要区会标明当前定位来源：手动选择、动作结果定位或贡献拆分定位。
+- Workbench 测试覆盖手动点击曲线点与动作结果定位两条路径，确认摘要、日志、曲线和独立三值详情使用同一个 state point。
+
+当前验证事实：
+
+- 点击运行资源曲线点后，摘要区写入同一个 `data-state-point-id`、`data-track-key` 和 `data-curve-mode`。
+- 手动曲线点选择时，摘要区写入 `data-runtime-focus-source="manual"` 并显示 `手动选择`。
+- 通过动作结果定位时，摘要区写入 `data-runtime-focus-source="action-result"` 并显示 `动作结果定位`。
+- 摘要行固定为 `point`、`action`、`delta`、`cumulative`、`state`，用于主流程快速确认；完整计算器和来源明细仍在独立“三值详情”和日志详情中。
+- 本阶段只调整前端展示和定位反馈，不新增公式、simulation 输出或保存 schema。
+
+当前边界：
+
+- 摘要区不提供编辑入口，只负责确认当前三值结果点。
+- 暂未加入曲线点前后跳转或键盘导航增强。
+- 暂未补完整编辑体验。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8DO 目标：继续从 Workbench 主流程 UI 对齐 Endaxis 成品体验，优先补曲线点前后切换或结果定位的邻近点导航，让用户能在三值点之间快速巡检。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

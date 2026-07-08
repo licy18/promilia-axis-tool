@@ -185,6 +185,35 @@
           </g>
         </svg>
 
+        <div
+          v-if="selectedRuntimeCurvePoint"
+          class="runtime-curve-selection"
+          :data-curve-mode="runtimeCurveMode"
+          :data-runtime-focus-source="runtimeFocusSource || 'manual'"
+          :data-series-key="selectedRuntimeCurvePoint.seriesKey"
+          :data-state-point-id="selectedRuntimeCurvePoint.statePointId"
+          :data-track-key="selectedRuntimeCurvePoint.trackKey"
+          data-testid="workbench-runtime-resource-chart-selection"
+        >
+          <div class="runtime-curve-selection-heading">
+            <span>选中点</span>
+            <strong>{{ selectedRuntimeCurvePoint.seriesLabel }}</strong>
+            <small>{{ formatRuntimeCurveSelectionSource(runtimeFocusSource) }}</small>
+          </div>
+          <div class="runtime-curve-selection-grid">
+            <div
+              v-for="row in selectedRuntimeCurvePointRows"
+              :key="row.key"
+              class="runtime-curve-selection-row"
+              :data-detail-key="row.key"
+              data-testid="workbench-runtime-resource-chart-selection-row"
+            >
+              <span>{{ row.label }}</span>
+              <strong>{{ row.value }}</strong>
+            </div>
+          </div>
+        </div>
+
         <div class="runtime-curve-legend">
           <div
             v-for="series in runtimeCurveSeries"
@@ -315,6 +344,32 @@ const runtimeCurveSeries = computed(() =>
 
 const runtimeCurveZeroY = computed(() =>
   scaleRuntimeCurveValue(0, runtimeCurveDomain.value)
+);
+
+const selectedRuntimeCurvePoint = computed(() => {
+  if (!props.selectedStateCurvePointId) {
+    return null;
+  }
+  for (const series of runtimeCurveSourceSeries.value) {
+    const point = (series.points ?? []).find(
+      item => item.statePointId === props.selectedStateCurvePointId
+    );
+    if (point) {
+      return {
+        ...point,
+        seriesKey: series.key,
+        seriesLabel: series.label,
+        seriesColor: series.color,
+        trackKey: series.trackKey,
+        actorId: series.actorId,
+      };
+    }
+  }
+  return null;
+});
+
+const selectedRuntimeCurvePointRows = computed(() =>
+  createSelectedRuntimeCurvePointRows(selectedRuntimeCurvePoint.value)
 );
 
 function formatSigned(value) {
@@ -616,6 +671,89 @@ function formatRuntimeCurvePointTitle(series, point) {
   return `${series.label} ${point.frameLabel}: ${formatSigned(point.delta)} -> ${formatSigned(point.cumulative)}${stateText}`;
 }
 
+function createSelectedRuntimeCurvePointRows(point) {
+  if (!point) {
+    return [];
+  }
+  return [
+    {
+      key: 'point',
+      label: '定位',
+      value: `${point.frameLabel ?? `${point.timeMs ?? 0}ms`} · ${
+        point.seriesLabel || formatRuntimeTrackLabel(point.trackKey)
+      }`,
+    },
+    {
+      key: 'action',
+      label: '动作',
+      value: point.actionName ?? point.actionId ?? '动作',
+    },
+    {
+      key: 'delta',
+      label: 'Delta',
+      value: formatRuntimeCurvePointDelta(point),
+    },
+    {
+      key: 'cumulative',
+      label: '累计',
+      value: formatRuntimeCurvePointCumulative(point),
+    },
+    {
+      key: 'state',
+      label: point.stateLabel ?? '状态',
+      value: formatRuntimeCurvePointState(point),
+    },
+  ];
+}
+
+function formatRuntimeCurvePointDelta(point) {
+  return point.trackKey === 'selfEnergyChange'
+    ? formatSigned(point.delta)
+    : formatNumber(point.delta);
+}
+
+function formatRuntimeCurvePointCumulative(point) {
+  return point.trackKey === 'selfEnergyChange'
+    ? formatSigned(point.cumulative)
+    : formatNumber(point.cumulative);
+}
+
+function formatRuntimeCurvePointState(point) {
+  const value = strictNumberOrNull(point.stateValue);
+  const stateText = Number.isFinite(value)
+    ? formatNumber(value)
+    : point.baselineStatus
+      ? formatBaselineStatus(point.baselineStatus)
+      : '待确认';
+  const overrun = numberOrZero(point.overrunValue);
+  return overrun > 0
+    ? `${stateText} · 溢出 ${formatNumber(overrun)}`
+    : stateText;
+}
+
+function formatRuntimeCurveSelectionSource(source) {
+  if (source === 'action-result') {
+    return '动作结果定位';
+  }
+  if (source === 'action-contribution') {
+    return '贡献拆分定位';
+  }
+  return '手动选择';
+}
+
+function formatRuntimeTrackLabel(trackKey) {
+  if (trackKey === 'enemyHpDamage') {
+    return '敌人 HP';
+  }
+  if (trackKey === 'enemyToughnessDamage') {
+    return '敌人韧性';
+  }
+  if (trackKey === 'selfEnergyChange') {
+    return '自身能量';
+  }
+  return trackKey ?? '三值';
+}
+
 function formatBaselineStatus(status) {
   if (status === 'baseline-derived-from-scenario-enemy-max-hp') {
     return '基线:敌人面板';
@@ -903,6 +1041,71 @@ h2 {
   outline: none;
   stroke: #ffffff;
   stroke-width: 2.5;
+}
+
+.runtime-curve-selection {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid rgba(121, 199, 185, 0.2);
+  border-radius: 4px;
+  background: rgba(15, 20, 25, 0.64);
+}
+
+.runtime-curve-selection-heading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  font-size: 12px;
+}
+
+.runtime-curve-selection-heading span {
+  color: #8f9aa3;
+}
+
+.runtime-curve-selection-heading strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #ffffff;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.runtime-curve-selection-heading small {
+  color: #79c7b9;
+  white-space: nowrap;
+}
+
+.runtime-curve-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.runtime-curve-selection-row {
+  min-width: 0;
+  padding: 6px 7px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.runtime-curve-selection-row span {
+  display: block;
+  margin-bottom: 3px;
+  color: #8f9aa3;
+  font-size: 10px;
+}
+
+.runtime-curve-selection-row strong {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #dff9f3;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
 }
 
 .runtime-curve-legend {

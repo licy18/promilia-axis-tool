@@ -12316,3 +12316,85 @@ data-full-detail-source="workbench-runtime-selected-detail"
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DN 应继续推进 Workbench 主流程 UI 的曲线交互和结果定位细节。
+
+## 147. 阶段 5-8DN：资源曲线选中点摘要
+
+阶段目标：
+
+- 在资源曲线面板内补充当前选中三值点的就地摘要，减少用户在曲线、日志和独立详情面板之间来回确认的成本。
+
+### 147.1 数据结构变化
+
+本阶段不新增保存字段，不变更 `Project` schema、simulation 输出或 localStorage 数据。
+
+新增的是 `ResourceMonitorPanel` 内部前端派生：
+
+```js
+selectedRuntimeCurvePoint
+selectedRuntimeCurvePointRows
+```
+
+派生来源：
+
+```text
+props.selectedStateCurvePointId
+runtimeCurveSourceSeries
+```
+
+当前摘要行 key：
+
+```text
+point
+action
+delta
+cumulative
+state
+```
+
+这些行只用于资源曲线面板内的选中点摘要，不作为持久化数据。
+
+### 147.2 DOM 状态
+
+新增选中点摘要容器：
+
+```html
+data-testid="workbench-runtime-resource-chart-selection"
+data-state-point-id
+data-track-key
+data-series-key
+data-curve-mode
+data-runtime-focus-source
+```
+
+`data-runtime-focus-source` 当前取值：
+
+```text
+manual
+action-result
+action-contribution
+```
+
+摘要行：
+
+```html
+data-testid="workbench-runtime-resource-chart-selection-row"
+data-detail-key="point|action|delta|cumulative|state"
+```
+
+### 147.3 验证
+
+当前测试覆盖：
+
+- 点击运行资源曲线点后，选中点摘要出现并绑定同一个 `statePointId`。
+- 手动曲线点选择时，摘要区写入 `data-runtime-focus-source="manual"`。
+- 通过动作结果定位时，摘要区写入 `data-runtime-focus-source="action-result"`。
+- 摘要区保留 `point`、`action`、`delta`、`cumulative`、`state` 五类行。
+- 运行日志、资源曲线、时间轴 marker 和独立“三值详情”仍共享同一个选中 state point。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DO 应继续补曲线点前后切换或邻近点导航。
