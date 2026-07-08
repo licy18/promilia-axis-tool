@@ -14540,3 +14540,50 @@ Workbench 测试更新覆盖：
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
 - `npm run test -- --run`：通过，16 个测试文件、120 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 175. UI 主流程能力块：无结果动作进入运行总览
+
+本阶段属于 UI 主流程。
+
+### 175.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 175.2 Workbench 事件行为变化
+
+`openRuntimeResultsFlow()` 的选择策略调整为：
+
+```text
+当前 selectedActionId 有 runtime state point -> 选中该 state point
+当前 selectedActionId 没有 runtime state point -> 进入 runtime 视角总览，保留 selectedActionId
+```
+
+无结果动作不再回退选中其他动作的第一个 runtime point。
+
+### 175.3 focusThreeValueCalculatorScope 参数
+
+`focusThreeValueCalculatorScope()` 新增可选参数：
+
+```js
+focusThreeValueCalculatorScope(scope, { selectFirstRuntimePoint = true } = {})
+```
+
+当：
+
+```text
+scope = runtime
+selectFirstRuntimePoint = false
+```
+
+会启用 runtime 视角的 applied 层筛选，但不自动选择第一个 runtime state point。
+
+### 175.4 验证
+
+Workbench 测试新增覆盖：
+
+- 选中等待动作后点击 `查看运行结果`，selected action 保持等待动作。
+- runtime 导航保留结果总数，runtime detail 保持未选中。
+- 当前动作有 runtime 结果时仍优先打开当前动作结果。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、43 条测试。
+- `npm run test -- --run`：通过，16 个测试文件、121 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

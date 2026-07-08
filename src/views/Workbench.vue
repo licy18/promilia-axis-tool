@@ -1288,12 +1288,14 @@ function openRuntimeResultsFlow() {
     simulationResult.value.threeValueRuntimeProjection,
     selectedActionId.value
   );
-  focusThreeValueCalculatorScope('runtime');
   if (actionRuntimePoint?.statePointId) {
+    focusThreeValueCalculatorScope('runtime');
     selectRuntimeFlowStatePoint(actionRuntimePoint.statePointId);
     return;
   }
-  selectActionFromRuntimeStatePoint(selectedStateCurvePointId.value);
+  focusThreeValueCalculatorScope('runtime', {
+    selectFirstRuntimePoint: false,
+  });
 }
 
 function focusRuntimeAction({
@@ -1412,7 +1414,10 @@ function updateStateCurveTrackFilter({ trackKey, visible }) {
   };
 }
 
-function focusThreeValueCalculatorScope(scope) {
+function focusThreeValueCalculatorScope(
+  scope,
+  { selectFirstRuntimePoint = true } = {}
+) {
   const normalizedScope = scope === 'runtime' ? 'runtime' : 'generation';
   calculatorDiagnosticScope.value = normalizedScope;
   calculatorDiagnosticFocus.value = {
@@ -1433,9 +1438,11 @@ function focusThreeValueCalculatorScope(scope) {
       placeholder: false,
     };
     stateCurveTrackFilters.value = {};
-    const firstRuntimePointId = getFirstRuntimeStatePointId(
-      simulationResult.value.threeValueRuntimeProjection
-    );
+    const firstRuntimePointId = selectFirstRuntimePoint
+      ? getFirstRuntimeStatePointId(
+          simulationResult.value.threeValueRuntimeProjection
+        )
+      : '';
     selectedStateCurvePointId.value = firstRuntimePointId;
     stateCurveFocusMode.value = firstRuntimePointId ? 'selected' : 'all';
     return;

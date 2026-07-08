@@ -1739,6 +1739,66 @@ describe('Workbench view', () => {
     expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('1');
   });
 
+  it('keeps the selected action when opening runtime results without a matching runtime point', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-add-wait-action"]')
+      .trigger('click');
+    await nextTick();
+
+    let flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0002');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+        )
+        .classes()
+    ).toContain('selected');
+
+    await flowPanel
+      .find('[data-testid="workbench-flow-open-runtime"]')
+      .trigger('click');
+    await nextTick();
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0002');
+    expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('1');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('-1');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe('');
+    expect(flowPanel.attributes('data-runtime-detail-state-point-id')).toBe('');
+    expect(
+      flowPanel.find('[data-testid="workbench-flow-runtime-detail"]').text()
+    ).toBe('未选中');
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-edit-runtime-action"]')
+        .attributes('disabled')
+    ).toBeDefined();
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+        )
+        .classes()
+    ).toContain('selected');
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-selected-detail"]').exists()
+    ).toBe(false);
+    expect(
+      wrapper.find('[data-testid="workbench-state-curve-focus-all"]').classes()
+    ).toContain('active');
+  });
+
   it('selects the source action when an action result is focused', async () => {
     const wrapper = mount(Workbench, {
       global: {
