@@ -8060,6 +8060,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 转向 UI 主流程能力块：把 Workbench 的“排轴动作编辑 -> 运行模拟 -> 资源曲线监控 -> 日志/详情查看 -> 回到动作修改”主流程继续收束到标准 generation/runtime 合同上，优先做能提升闭环可用性的页面流转，不做微型状态标签打磨。
 
+### 2026-07-09：UI 主流程能力块 - Workbench Flow Contract Context
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `workbenchFlowContractContext`，把 generation entry、standard contract、runtime input、runtime output 汇总为 Workbench 主流程可消费的合同上下文。
+- `workbenchFlowModel` 现在接收 `threeValueGenerationBundle` 与 `threeValueRuntimeProjection`，主流程控制可以判断 generation/runtime 合同是否 ready，而不只依赖零散日志数量。
+- `WorkbenchFlowPanel` 接入合同上下文的数据属性，后续“排轴编辑 -> 运行模拟 -> 资源曲线 -> 日志/详情 -> 回改动作”的页面流转可以基于同一套标准合同继续扩展。
+- 本阶段不新增可见 UI 文案，不打磨微型状态标签，不修改 HP / 韧性 / 自身能量数值结果。
+
+当前验证事实：
+
+- 新增合同上下文单元测试，覆盖 generation entry、standard contract、runtime input、runtime output 的来源、状态和 ready 判断。
+- Workbench flow model 测试确认主流程控制读取合同上下文，并用 runtime output readiness 决定能否打开运行结果。
+- Workbench 真实页面测试确认主流程面板能拿到 `Action -> Hit -> ThreeValueDelta`、generation entry 状态、runtime input 来源和 runtime output 状态。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、58 条测试。
+- `npm run test -- --run`：通过，29 个测试文件、168 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告，且本机 PowerShell/oh-my-posh 输出过非构建失败的通道噪声。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把当前合同上下文用于更明确的主流程动作入口，优先改善运行结果定位、资源曲线选择和回到动作修改的闭环，不进入公式追证或状态标签打磨。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

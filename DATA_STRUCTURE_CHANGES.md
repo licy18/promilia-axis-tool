@@ -16884,3 +16884,133 @@ createThreeValueRuntimeInput
 - `npm run test -- --run`：通过，28 个测试文件、167 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 214. UI 主流程能力块：Workbench Flow Contract Context
+
+本阶段属于 UI 主流程。
+
+### 214.1 结构变化
+
+新增模块：
+
+```js
+src/features/workbench/workbenchFlowContractContext.js
+```
+
+新增导出：
+
+```js
+createWorkbenchFlowContractContext()
+```
+
+`createWorkbenchFlowContractContext()` 输入：
+
+```js
+{
+  generationBundle,
+  runtimeProjection
+}
+```
+
+`createWorkbenchFlowContractContext()` 输出：
+
+```js
+{
+  contractName,
+  generationEntry,
+  standardContract,
+  runtimeInput,
+  runtimeOutput
+}
+```
+
+其中 `generationEntry` 与 `standardContract` 统一包含：
+
+```js
+{
+  sourceKind,
+  status,
+  actionCount,
+  hitCount,
+  deltaCount,
+  appliedDeltaCount,
+  ready
+}
+```
+
+`runtimeInput` 包含：
+
+```js
+{
+  sourceKind,
+  status,
+  runtimeInputSourceKind,
+  generationEntrySourceKind,
+  appliedDeltaSource,
+  inputDeltaCount,
+  appliedDeltaCount,
+  ignoredDeltaCount,
+  appliedOnly,
+  ready
+}
+```
+
+`runtimeOutput` 包含：
+
+```js
+{
+  sourceKind,
+  status,
+  simLogInputSource,
+  stateCurvesSourceKind,
+  resourceCurvesSourceKind,
+  outputCount,
+  simLogCount,
+  ready
+}
+```
+
+`createWorkbenchFlowModel()` 新增输入：
+
+```js
+generationBundle
+```
+
+`createWorkbenchFlowModel()` 输出新增字段：
+
+```js
+contractContext
+```
+
+`controls.canOpenRuntimeResults` 现在要求：
+
+```js
+contractContext.runtimeOutput.ready && runtimeSimLogCount > 0
+```
+
+`WorkbenchFlowPanel` 新增主流程数据属性：
+
+```html
+data-contract-name
+data-generation-entry-status
+data-runtime-input-source
+data-runtime-output-status
+```
+
+`Workbench.vue` 现在把 `simulationResult.threeValueGenerationBundle` 同时传入 `WorkbenchFlowPanel` 与 `createWorkbenchFlowModel()`。
+
+### 214.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench 主流程模型与面板的数据上下文；三值计算、runtime projection 数值结果和草稿保存结构不变。
+
+### 214.3 验证
+
+- 新增 `src/__tests__/features/workbenchFlowContractContext.test.js`，覆盖 generation entry、standard contract、runtime input、runtime output 的来源、状态和 ready 判断。
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，确认 flow model 暴露 `contractContext`，并用 runtime output readiness 控制运行结果入口。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认真实 Workbench 主流程面板暴露合同名称、generation entry 状态、runtime input 来源和 runtime output 状态。
+- `npm run test -- --run src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、58 条测试。
+- `npm run test -- --run`：通过，29 个测试文件、168 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告，且本机 PowerShell/oh-my-posh 输出过非构建失败的通道噪声。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。

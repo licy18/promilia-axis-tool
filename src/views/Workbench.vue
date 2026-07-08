@@ -45,6 +45,7 @@
 
     <WorkbenchFlowPanel
       :selected-action="selectedAction"
+      :generation-bundle="simulationResult.threeValueGenerationBundle"
       :runtime-projection="simulationResult.threeValueRuntimeProjection"
       :runtime-selected-detail="runtimeSelectedDetail"
       :selected-state-curve-point-id="selectedStateCurvePointId"
@@ -401,6 +402,7 @@ const actionEditResultContext = computed(() =>
 const workbenchFlowModel = computed(() =>
   createWorkbenchFlowModel({
     selectedAction: selectedAction.value,
+    generationBundle: simulationResult.value.threeValueGenerationBundle,
     runtimeProjection: simulationResult.value.threeValueRuntimeProjection,
     runtimeSelectedDetail: runtimeSelectedDetail.value,
     selectedStateCurvePointId: selectedStateCurvePointId.value,

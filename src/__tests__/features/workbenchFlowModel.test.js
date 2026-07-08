@@ -11,6 +11,7 @@ describe('workbench flow model', () => {
     const runtimeProjection = createRuntimeProjectionFixture();
     const model = createWorkbenchFlowModel({
       selectedAction: { id: 'action-0002', name: '资源动作' },
+      generationBundle: createGenerationBundleFixture(),
       runtimeProjection,
     });
 
@@ -19,6 +20,21 @@ describe('workbench flow model', () => {
     expect(model.selectedActionName).toBe('资源动作');
     expect(model.runtimeFocusSource).toBe('');
     expect(model.runtimeSimLogCount).toBe(2);
+    expect(model.contractContext).toMatchObject({
+      contractName: 'Action -> Hit -> ThreeValueDelta',
+      generationEntry: {
+        status: 'action-hit-three-value-delta-generation-ready',
+        ready: true,
+      },
+      runtimeInput: {
+        appliedDeltaSource: 'threeValueRuntimeInput.appliedDeltas',
+        ready: true,
+      },
+      runtimeOutput: {
+        status: 'runtime-output-contract-ready',
+        ready: true,
+      },
+    });
     expect(model.controls).toMatchObject({
       canOpenRuntimeResults: true,
       canFocusRuntimeAction: false,
@@ -150,9 +166,22 @@ describe('workbench flow model', () => {
 
 function createRuntimeProjectionFixture() {
   return {
+    runtimeInput: {
+      sourceKind: 'azpr-runtime-input-from-generation-builder-source',
+      status: 'runtime-input-ready-with-applied-deltas',
+      appliedDeltaSource: 'threeValueRuntimeInput.appliedDeltas',
+      summary: {
+        inputDeltaCount: 2,
+        appliedDeltaCount: 2,
+      },
+      appliedOnly: true,
+    },
     outputContract: {
+      sourceKind: 'azpr-three-value-runtime-output-contract',
+      status: 'runtime-output-contract-ready',
       outputs: {
         simLog: {
+          inputSource: 'threeValueRuntimeInput.appliedDeltas',
           rowCount: 2,
         },
       },
@@ -216,6 +245,33 @@ function createRuntimeProjectionFixture() {
           ],
         },
       ],
+    },
+  };
+}
+
+function createGenerationBundleFixture() {
+  return {
+    contractName: 'Action -> Hit -> ThreeValueDelta',
+    actionHitThreeValueDeltaGeneration: {
+      sourceKind: 'azpr-action-hit-three-value-delta-generation-entry',
+      status: 'action-hit-three-value-delta-generation-ready',
+      summary: {
+        actionCount: 2,
+        hitCount: 2,
+        deltaCount: 2,
+        appliedDeltaCount: 2,
+      },
+    },
+    standardContract: {
+      sourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
+      status: 'action-hit-three-value-delta-contract-ready',
+      name: 'Action -> Hit -> ThreeValueDelta',
+      summary: {
+        actionCount: 2,
+        hitCount: 2,
+        deltaCount: 2,
+        appliedDeltaCount: 2,
+      },
     },
   };
 }

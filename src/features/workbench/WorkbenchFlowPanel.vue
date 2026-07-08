@@ -18,6 +18,16 @@
       workbenchFlow.runtimeNavigation.previous?.statePointId ?? ''
     "
     :data-runtime-sim-log-count="workbenchFlow.runtimeSimLogCount"
+    :data-contract-name="workbenchFlow.contractContext.contractName"
+    :data-generation-entry-status="
+      workbenchFlow.contractContext.generationEntry.status
+    "
+    :data-runtime-input-source="
+      workbenchFlow.contractContext.runtimeInput.appliedDeltaSource
+    "
+    :data-runtime-output-status="
+      workbenchFlow.contractContext.runtimeOutput.status
+    "
     data-testid="workbench-flow-panel"
   >
     <div class="flow-main">
@@ -151,6 +161,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  generationBundle: {
+    type: Object,
+    default: null,
+  },
   runtimeProjection: {
     type: Object,
     default: null,
@@ -184,6 +198,7 @@ const workbenchFlow = computed(
     props.flowModel ??
     createWorkbenchFlowModel({
       selectedAction: props.selectedAction,
+      generationBundle: props.generationBundle,
       runtimeProjection: props.runtimeProjection,
       runtimeSelectedDetail: props.runtimeSelectedDetail,
       selectedStateCurvePointId: props.selectedStateCurvePointId,

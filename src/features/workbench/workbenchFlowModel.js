@@ -3,6 +3,7 @@ import {
   getRuntimeOutputSummary,
   getRuntimeSimLogCount,
 } from './runtimeProjectionPoints';
+import { createWorkbenchFlowContractContext } from './workbenchFlowContractContext';
 
 export const WORKBENCH_FLOW_PHASES = Object.freeze({
   ACTION_EDIT: 'action-edit',
@@ -51,6 +52,7 @@ export function createWorkbenchFlowAction({
 
 export function createWorkbenchFlowModel({
   selectedAction = null,
+  generationBundle = null,
   runtimeProjection = null,
   runtimeSelectedDetail = null,
   selectedStateCurvePointId = '',
@@ -68,6 +70,10 @@ export function createWorkbenchFlowModel({
   );
   const editResult = createWorkbenchFlowEditResult(actionEditResultContext);
   const runtimeSimLogCount = getRuntimeSimLogCount(runtimeProjection);
+  const contractContext = createWorkbenchFlowContractContext({
+    generationBundle,
+    runtimeProjection,
+  });
 
   return {
     phase: resolveWorkbenchFlowPhase({
@@ -81,6 +87,7 @@ export function createWorkbenchFlowModel({
     selectedStateCurvePointId: selectedStateCurvePointId ?? '',
     runtimeFocusSource: runtimeFocusSource ?? '',
     runtimeOverviewActive: Boolean(runtimeOverviewActive),
+    contractContext,
     runtimeSummary: getRuntimeOutputSummary(runtimeProjection),
     runtimeSimLogCount,
     runtimeDetail,
@@ -105,7 +112,8 @@ export function createWorkbenchFlowModel({
       }),
     },
     controls: {
-      canOpenRuntimeResults: runtimeSimLogCount > 0,
+      canOpenRuntimeResults:
+        contractContext.runtimeOutput.ready && runtimeSimLogCount > 0,
       canFocusRuntimeAction: runtimeDetail.canFocusAction,
       canReturnRuntimeResult: editResult.canReturn,
     },

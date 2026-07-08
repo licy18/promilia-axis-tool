@@ -68,6 +68,18 @@ describe('Workbench view', () => {
     expect(flowPanel.attributes('data-action-id')).toBe('action-0001');
     expect(flowPanel.attributes('data-flow-phase')).toBe('action-edit');
     expect(flowPanel.attributes('data-runtime-sim-log-count')).toBe('1');
+    expect(flowPanel.attributes('data-contract-name')).toBe(
+      'Action -> Hit -> ThreeValueDelta'
+    );
+    expect(flowPanel.attributes('data-generation-entry-status')).toBe(
+      'action-hit-three-value-delta-generation-ready'
+    );
+    expect(flowPanel.attributes('data-runtime-input-source')).toBe(
+      'threeValueRuntimeInput.appliedDeltas'
+    );
+    expect(flowPanel.attributes('data-runtime-output-status')).toBe(
+      'runtime-output-contract-ready'
+    );
     expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('1');
     expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('-1');
     expect(
