@@ -333,6 +333,16 @@ describe('Workbench view', () => {
     ).toBe('16');
     expect(
       wrapper
+        .find('[data-testid="workbench-state-curve-view-summary"]')
+        .text()
+    ).toBe('全部视角16/16点已用/候选 · 全部轨道 · 全部三值点');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-filter-summary"]')
+        .text()
+    ).toBe('日志筛选1/1条全部 · 全部角色 · 全部动作');
+    expect(
+      wrapper
         .findAll('[data-testid="workbench-state-curve-layer-toggle"]')
         .map(toggle => toggle.attributes('data-layer-key'))
     ).toEqual(['applied', 'candidate', 'sampled', 'placeholder']);
@@ -1140,6 +1150,11 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-state-curves"] .source-heading strong')
         .text()
     ).toBe('15');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-view-summary"]')
+        .text()
+    ).toBe('生成视角15/16点候选/采样/占位 · 全部轨道 · 全部三值点');
     await wrapper
       .find(
         '[data-testid="workbench-runtime-sim-log-track-filter"][data-track-filter="selfEnergyChange"]'
@@ -1151,6 +1166,11 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-filter-count"]')
         .text()
     ).toBe('0/1');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-filter-summary"]')
+        .text()
+    ).toBe('日志筛选0/1条能量 · 全部角色 · 全部动作');
     await wrapper
       .find(
         '[data-testid="workbench-three-value-calculator-diagnostic-row"][data-calculator-scope="runtime"]'
@@ -1188,6 +1208,16 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-filter-count"]')
         .text()
     ).toBe('1/1');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-view-summary"]')
+        .text()
+    ).toBe('运行视角1/16点已用 · 全部轨道 · 选中三值点');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-filter-summary"]')
+        .text()
+    ).toBe('运行视角1/1条全部 · 全部角色 · 全部动作');
     expect(
       wrapper
         .find(

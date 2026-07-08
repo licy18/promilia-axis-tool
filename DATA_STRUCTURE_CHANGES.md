@@ -10733,3 +10733,71 @@ selectedRuntimeLogIndex = 0
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8CR 应把三值曲线和模拟日志的当前视角反馈做得更清楚，补状态标签和空状态解释。
+
+## 125. 阶段 5-8CR：three-value view feedback labels
+
+阶段 5-8CR 不修改项目保存 schema。本阶段新增 Workbench 只读 UI 派生标签，用来解释当前三值曲线和模拟日志处于什么视角。
+
+### 125.1 状态曲线视角摘要
+
+`AnalysisPanel` 新增 DOM：
+
+```html
+data-testid="workbench-state-curve-view-summary"
+data-calculator-scope="all | generation | runtime"
+```
+
+显示结构：
+
+```text
+{视角标签}{可见点/总点}点{当前层级} · {当前轨道} · {focus模式}
+```
+
+默认样本示例：
+
+```text
+全部视角16/16点已用/候选 · 全部轨道 · 全部三值点
+生成视角15/16点候选/采样/占位 · 全部轨道 · 全部三值点
+运行视角1/16点已用 · 全部轨道 · 选中三值点
+```
+
+### 125.2 模拟日志筛选摘要
+
+`EventLogPanel` 新增 DOM：
+
+```html
+data-testid="workbench-runtime-sim-log-filter-summary"
+data-calculator-scope="manual | runtime"
+```
+
+显示结构：
+
+```text
+{视角标签}{可见日志/总日志}条{轨道筛选} · {角色筛选} · {动作筛选}
+```
+
+默认样本示例：
+
+```text
+日志筛选1/1条全部 · 全部角色 · 全部动作
+日志筛选0/1条能量 · 全部角色 · 全部动作
+运行视角1/1条全部 · 全部角色 · 全部动作
+```
+
+### 125.3 验证
+
+当前测试覆盖：
+
+- 初始状态曲线视角摘要。
+- 初始 runtime sim log 筛选摘要。
+- generation calculator 诊断联动后的状态曲线视角摘要。
+- 手动筛到能量后的 runtime sim log 空筛选摘要。
+- runtime calculator 诊断联动后的状态曲线和 runtime sim log 视角摘要。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8CS 应继续把 candidate/sample/applied 的参与范围说明清楚，减少用户把候选诊断误读为已应用结果的风险。

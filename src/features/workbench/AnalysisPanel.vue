@@ -386,6 +386,15 @@
           </button>
         </div>
       </div>
+      <div
+        class="state-curve-view-summary"
+        :data-calculator-scope="stateCurveViewSummary.scope"
+        data-testid="workbench-state-curve-view-summary"
+      >
+        <span>{{ stateCurveViewSummary.label }}</span>
+        <strong>{{ stateCurveViewSummary.count }}</strong>
+        <small>{{ stateCurveViewSummary.detail }}</small>
+      </div>
       <div class="state-curve-layer-controls">
         <label
           v-for="layer in stateCurveLayerOptions"
@@ -770,6 +779,28 @@ const stateCurveTrackOptions = computed(() =>
       valueUnit: track.valueUnit,
     }))
 );
+const stateCurveViewSummary = computed(() => {
+  const layerText = activeStateCurveLayerKeys.value
+    .map(formatStateCurveLayerLabel)
+    .join('/');
+  const trackText = formatStateCurveActiveTrackSummary();
+  const focusText =
+    effectiveStateCurveFocusMode.value === 'selected'
+      ? '选中三值点'
+      : '全部三值点';
+  const scope = props.calculatorDiagnosticScope || 'all';
+  const labels = {
+    generation: '生成视角',
+    runtime: '运行视角',
+    all: '全部视角',
+  };
+  return {
+    scope,
+    label: labels[scope] ?? '全部视角',
+    count: `${stateCurveVisiblePointCount.value}/${stateCurveTotalPointCount.value}点`,
+    detail: `${layerText || '无层'} · ${trackText} · ${focusText}`,
+  };
+});
 const threeValueCalculatorDiagnosticRows = computed(() =>
   [
     createThreeValueCalculatorDiagnosticRow({
@@ -1357,6 +1388,19 @@ function formatStateCurveLayer(layer) {
 function formatStateCurveLayerLabel(key) {
   const option = STATE_CURVE_LAYER_OPTIONS.find(layer => layer.key === key);
   return option?.label ?? key;
+}
+
+function formatStateCurveActiveTrackSummary() {
+  const visible = stateCurveTrackOptions.value.filter(track =>
+    isStateCurveTrackVisible(track.trackKey)
+  );
+  if (visible.length === 0) {
+    return '无轨道';
+  }
+  if (visible.length === stateCurveTrackOptions.value.length) {
+    return '全部轨道';
+  }
+  return visible.map(track => track.label).join('/');
 }
 
 function createStateCurveVisiblePointRows(track, visibleLayers, trackIndex) {
@@ -2196,6 +2240,47 @@ h2 {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 6px;
+}
+
+.state-curve-view-summary {
+  display: grid;
+  grid-template-columns: 72px minmax(70px, 0.6fr) minmax(0, 1.4fr);
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.state-curve-view-summary[data-calculator-scope='generation'] {
+  background: rgba(121, 199, 185, 0.1);
+}
+
+.state-curve-view-summary[data-calculator-scope='runtime'] {
+  background: rgba(166, 183, 255, 0.1);
+}
+
+.state-curve-view-summary span {
+  color: #d9dee3;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.state-curve-view-summary strong,
+.state-curve-view-summary small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.state-curve-view-summary strong {
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.state-curve-view-summary small {
+  color: #aeb7c2;
+  font-size: 11px;
 }
 
 .state-curve-track-controls {

@@ -29,6 +29,15 @@
           {{ filteredRuntimeSimLogRows.length }}/{{ runtimeSimLogRows.length }}
         </strong>
       </div>
+      <div
+        class="runtime-log-filter-summary"
+        :data-calculator-scope="runtimeLogFilterSummary.scope"
+        data-testid="workbench-runtime-sim-log-filter-summary"
+      >
+        <span>{{ runtimeLogFilterSummary.label }}</span>
+        <strong>{{ runtimeLogFilterSummary.count }}</strong>
+        <small>{{ runtimeLogFilterSummary.detail }}</small>
+      </div>
 
       <div
         class="runtime-log-filters"
@@ -338,6 +347,26 @@ const filteredRuntimeSimLogRows = computed(() =>
     return true;
   })
 );
+const runtimeLogFilterSummary = computed(() => {
+  const scope =
+    props.calculatorDiagnosticFocus?.scope === 'runtime' ? 'runtime' : 'manual';
+  return {
+    scope,
+    label: scope === 'runtime' ? '运行视角' : '日志筛选',
+    count: `${filteredRuntimeSimLogRows.value.length}/${runtimeSimLogRows.value.length}条`,
+    detail: [
+      getRuntimeTrackFilterLabel(runtimeTrackFilter.value),
+      getRuntimeSelectFilterLabel(
+        runtimeActorFilter.value,
+        runtimeActorFilterOptions.value
+      ),
+      getRuntimeSelectFilterLabel(
+        runtimeActionFilter.value,
+        runtimeActionFilterOptions.value
+      ),
+    ].join(' · '),
+  };
+});
 const selectedRuntimeHiddenLogRow = computed(() => {
   if (!props.selectedStateCurvePointId) {
     return null;
@@ -570,6 +599,18 @@ function syncSelectedRuntimeLogIndexFromStatePoint(rows) {
   if (index >= 0) {
     selectedRuntimeLogIndex.value = index;
   }
+}
+
+function getRuntimeTrackFilterLabel(trackKey) {
+  const option = runtimeTrackFilterOptions.value.find(
+    item => item.key === trackKey
+  );
+  return option?.label ?? trackKey ?? '全部';
+}
+
+function getRuntimeSelectFilterLabel(value, options) {
+  const option = options.find(item => item.key === value);
+  return option?.label ?? value ?? '全部';
 }
 
 function createRuntimeActorFilterKey(row) {
@@ -855,6 +896,43 @@ h2 {
 .runtime-log-heading strong {
   color: #79c7b9;
   font-size: 12px;
+}
+
+.runtime-log-filter-summary {
+  display: grid;
+  grid-template-columns: 72px minmax(64px, 0.55fr) minmax(0, 1.45fr);
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 9px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.runtime-log-filter-summary[data-calculator-scope='runtime'] {
+  background: rgba(166, 183, 255, 0.1);
+}
+
+.runtime-log-filter-summary span {
+  color: #d9dee3;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.runtime-log-filter-summary strong,
+.runtime-log-filter-summary small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.runtime-log-filter-summary strong {
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.runtime-log-filter-summary small {
+  color: #aeb7c2;
+  font-size: 11px;
 }
 
 .runtime-log-list {
