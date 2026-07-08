@@ -66,6 +66,8 @@ export function createRuntimeSelectedDetail({
     baselineInitialValue: pointRow.baselineInitialValue ?? null,
     baselineMaxValue: pointRow.baselineMaxValue ?? null,
     baselineConfirmed: Boolean(pointRow.baselineConfirmed),
+    rawStateValue: pointRow.rawStateValue ?? null,
+    overrunValue: pointRow.overrunValue ?? 0,
     hpDelta: numberOrZero(pointRow.hpDelta ?? simLogRow?.hpDelta),
     toughnessDelta: numberOrZero(
       pointRow.toughnessDelta ?? simLogRow?.toughnessDelta
@@ -137,6 +139,8 @@ function createRuntimeTrackRows({
         cumulative,
         stateLabel: pointState.stateLabel,
         stateValue: pointState.stateValue,
+        rawStateValue: pointState.rawStateValue,
+        overrunValue: pointState.overrunValue,
         stateValueStatus: pointState.stateValueStatus,
         baselineStatus: pointState.baselineStatus,
         baselineInitialValue: pointState.baselineInitialValue,
@@ -168,6 +172,11 @@ function createRuntimePointState(stateMetric, cumulative) {
   return {
     stateLabel: stateMetric?.stateLabel ?? null,
     stateValue,
+    rawStateValue,
+    overrunValue:
+      rawStateValue != null && stateMetric?.deltaDirection === 'decrease'
+        ? Math.max(0, roundRuntimeValue(-rawStateValue))
+        : 0,
     stateValueStatus: baselineConfirmed
       ? 'state-derived-from-baseline-and-cumulative-delta'
       : (stateMetric?.stateStatus ?? 'state-baseline-pending'),

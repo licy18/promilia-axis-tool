@@ -112,6 +112,18 @@ describe('Workbench view', () => {
     ).toBe(true);
     expect(
       wrapper
+        .findAll('[data-testid="workbench-runtime-resource-chart-mode"]')
+        .map(button => [
+          button.attributes('data-mode'),
+          button.attributes('data-active'),
+          button.text(),
+        ])
+    ).toEqual([
+      ['delta', 'true', '累计变化'],
+      ['state', 'false', '状态值'],
+    ]);
+    expect(
+      wrapper
         .findAll('[data-testid="workbench-runtime-resource-chart-series"]')
         .map(row => [
           row.attributes('data-series-key'),
@@ -129,12 +141,62 @@ describe('Workbench view', () => {
         ]),
       ])
     );
-    const runtimeCurvePoints = wrapper.findAll(
+    let runtimeCurvePoints = wrapper.findAll(
       '[data-testid="workbench-runtime-resource-chart-point"]'
     );
     expect(runtimeCurvePoints).toHaveLength(1);
     expect(runtimeCurvePoints[0].attributes('data-track-key')).toBe(
       'enemyHpDamage'
+    );
+    expect(runtimeCurvePoints[0].attributes('data-value')).toBe('12461');
+    expect(runtimeCurvePoints[0].attributes('data-curve-mode')).toBe('delta');
+    expect(runtimeCurvePoints[0].attributes('data-state-value')).toBe('0');
+    expect(runtimeCurvePoints[0].attributes('data-overrun')).toBe('3833');
+
+    await wrapper
+      .find(
+        '[data-testid="workbench-runtime-resource-chart-mode"][data-mode="state"]'
+      )
+      .trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-runtime-resource-chart-mode"][data-mode="state"]'
+        )
+        .attributes('data-active')
+    ).toBe('true');
+    const stateModeHpPoint = wrapper.find(
+      '[data-testid="workbench-runtime-resource-chart-point"][data-track-key="enemyHpDamage"]'
+    );
+    expect(stateModeHpPoint.attributes('data-curve-mode')).toBe('state');
+    expect(stateModeHpPoint.attributes('data-value')).toBe('0');
+    expect(stateModeHpPoint.attributes('data-cumulative')).toBe('12461');
+    expect(stateModeHpPoint.attributes('data-state-value')).toBe('0');
+    expect(stateModeHpPoint.attributes('data-overrun')).toBe('3833');
+    const stateModeSeriesRows = wrapper.findAll(
+      '[data-testid="workbench-runtime-resource-chart-series"]'
+    );
+    expect(
+      stateModeSeriesRows
+        .find(row => row.attributes('data-series-key') === 'enemy-hp')
+        ?.text()
+    ).toContain('剩余 0 / 溢出 3,833');
+    expect(
+      stateModeSeriesRows
+        .filter(row => row.attributes('data-track-key') === 'selfEnergyChange')
+        .map(row => row.text())
+    ).toEqual(expect.arrayContaining([expect.stringContaining('当前待确认')]));
+
+    await wrapper
+      .find(
+        '[data-testid="workbench-runtime-resource-chart-mode"][data-mode="delta"]'
+      )
+      .trigger('click');
+    await nextTick();
+    runtimeCurvePoints = wrapper.findAll(
+      '[data-testid="workbench-runtime-resource-chart-point"]'
     );
     expect(runtimeCurvePoints[0].attributes('data-value')).toBe('12461');
     expect(
@@ -1105,6 +1167,18 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-selected-detail-state-value"]')
         .text()
     ).toBe('0');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-overrun"]')
+        .text()
+    ).toBe('3,833');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-runtime-selected-detail-baseline-status"]'
+        )
+        .text()
+    ).toBe('敌人面板');
     expect(
       wrapper
         .findAll(

@@ -10109,3 +10109,91 @@ data-testid="workbench-runtime-selected-detail-state-value"
 - `git diff --check`：通过；仅有既有 Windows 换行提示。
 
 下一阶段 5-8CL 应让 runtime resource chart 支持“累计变化量 / 状态值”两种视图，并把基线来源状态、HP 溢出值放进 tooltip / 详情提示。
+
+## 119. 阶段 5-8CL：runtime resource chart mode projection
+
+阶段 5-8CL 不修改项目保存 schema。本阶段只扩展 Workbench 资源曲线的局部 UI 状态、DOM 测试入口和统一详情派生字段。
+
+### 119.1 曲线模式
+
+`ResourceMonitorPanel` 新增局部 UI 状态：
+
+```js
+runtimeCurveMode: 'delta' | 'state'
+```
+
+模式含义：
+
+- `delta`：默认模式，沿用累计变化量曲线，`plotValue = cumulative`。
+- `state`：状态值模式，使用 `stateMetrics` 派生，HP / 韧性为剩余值，自身能量为当前值。
+
+模式切换入口：
+
+```html
+data-testid="workbench-runtime-resource-chart-mode"
+data-mode="delta | state"
+data-active="true | false"
+```
+
+### 119.2 曲线点新增 DOM 字段
+
+runtime resource chart point 新增：
+
+```html
+data-curve-mode="delta | state"
+data-value="plotValue"
+data-cumulative="cumulativeDelta"
+data-state-value="stateValue"
+data-baseline-status="baselineStatus"
+data-overrun="overrunValue"
+```
+
+兼容规则：
+
+- `delta` 模式下 `data-value` 仍为累计变化量。
+- `state` 模式下 `data-value` 为状态值。
+- 基线未知时，状态值模式不绘制该点；图例仍显示待确认。
+
+### 119.3 曲线图例新增 DOM 字段
+
+runtime resource chart series 新增：
+
+```html
+data-source-point-count="sourcePointCount"
+data-baseline-status="baselineStatus"
+data-curve-mode="delta | state"
+```
+
+`data-point-count` 在当前模式下表示实际绘制点数量；`data-source-point-count` 表示该轨道来源点数量。
+
+### 119.4 统一详情新增字段
+
+`createRuntimeSelectedDetail()` 新增：
+
+```js
+rawStateValue
+overrunValue
+```
+
+`RuntimeSelectedDetailPanel` 新增显示入口：
+
+```html
+data-testid="workbench-runtime-selected-detail-overrun"
+data-testid="workbench-runtime-selected-detail-baseline-status"
+```
+
+### 119.5 验证
+
+当前测试覆盖：
+
+- 默认 runtime chart 模式为 `delta`，HP 点 `data-value=12461`。
+- 切换到 `state` 后，HP 点 `data-value=0`、`data-cumulative=12461`、`data-state-value=0`、`data-overrun=3833`。
+- 状态模式图例 HP 行显示 `剩余 0 / 溢出 3,833`。
+- 自身能量基线未知时显示 `当前待确认`。
+- 选中 runtime HP 点后，统一详情显示状态值 `0`、溢出 `3,833`、基线 `敌人面板`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+
+下一阶段 5-8CM 应抽出三值运行时公式适配器框架，让 HP / 韧性 / 自身能量 delta 的产生入口统一成可替换 calculator contract。

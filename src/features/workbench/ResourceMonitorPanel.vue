@@ -97,6 +97,21 @@
         class="runtime-curve-panel"
         data-testid="workbench-runtime-resource-chart"
       >
+        <div class="runtime-curve-toolbar">
+          <div class="runtime-curve-mode" role="group" aria-label="曲线模式">
+            <button
+              v-for="mode in RUNTIME_CURVE_MODES"
+              :key="mode.key"
+              type="button"
+              :data-mode="mode.key"
+              :data-active="runtimeCurveMode === mode.key ? 'true' : 'false'"
+              data-testid="workbench-runtime-resource-chart-mode"
+              @click="runtimeCurveMode = mode.key"
+            >
+              {{ mode.label }}
+            </button>
+          </div>
+        </div>
         <svg
           class="runtime-curve-chart"
           :viewBox="`0 0 ${RUNTIME_CURVE_CHART_WIDTH} ${RUNTIME_CURVE_CHART_HEIGHT}`"
@@ -122,6 +137,7 @@
               :style="{ stroke: series.color }"
               :data-series-key="series.key"
               :data-track-key="series.trackKey"
+              :data-curve-mode="runtimeCurveMode"
               data-testid="workbench-runtime-resource-chart-line"
             />
             <circle
@@ -139,8 +155,13 @@
               :data-track-key="series.trackKey"
               :data-actor-id="series.actorId"
               :data-frame-label="point.frameLabel"
-              :data-value="point.cumulative"
+              :data-value="point.plotValue"
               :data-delta="point.delta"
+              :data-cumulative="point.cumulative"
+              :data-state-value="point.stateValue"
+              :data-baseline-status="point.baselineStatus"
+              :data-overrun="point.overrunValue"
+              :data-curve-mode="runtimeCurveMode"
               :data-state-point-id="point.statePointId"
               :data-selected="
                 point.statePointId === selectedStateCurvePointId
@@ -167,6 +188,9 @@
             :data-series-key="series.key"
             :data-track-key="series.trackKey"
             :data-point-count="series.pointCount"
+            :data-source-point-count="series.sourcePointCount"
+            :data-baseline-status="series.baselineStatus"
+            :data-curve-mode="runtimeCurveMode"
             data-testid="workbench-runtime-resource-chart-series"
           >
             <i :style="{ background: series.color }" />
@@ -194,7 +218,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { TrendCharts } from '@element-plus/icons-vue';
 import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
 
@@ -207,6 +231,10 @@ const RUNTIME_CURVE_COLORS = {
   enemyToughnessDamage: '#e8c36a',
   selfEnergyChange: '#79c7b9',
 };
+const RUNTIME_CURVE_MODES = [
+  { key: 'delta', label: '累计变化' },
+  { key: 'state', label: '状态值' },
+];
 
 const props = defineProps({
   resourceTimeline: {
@@ -231,6 +259,7 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(['select-runtime-state-point']);
+const runtimeCurveMode = ref('delta');
 
 const resourceTotals = computed(() => {
   return props.resourceTimeline.reduce((totals, entry) => {
@@ -262,12 +291,16 @@ const runtimeCurveSourceSeries = computed(() =>
 );
 
 const runtimeCurveDomain = computed(() =>
-  createRuntimeCurveDomain(runtimeCurveSourceSeries.value)
+  createRuntimeCurveDomain(runtimeCurveSourceSeries.value, runtimeCurveMode.value)
 );
 
 const runtimeCurveSeries = computed(() =>
   runtimeCurveSourceSeries.value.map(series =>
-    layoutRuntimeCurveSeries(series, runtimeCurveDomain.value)
+    layoutRuntimeCurveSeries(
+      series,
+      runtimeCurveDomain.value,
+      runtimeCurveMode.value
+    )
   )
 );
 
@@ -310,6 +343,7 @@ function createRuntimeCurveSourceSeries(runtimeProjection) {
       color: RUNTIME_CURVE_COLORS.enemyHpDamage,
       valueField: 'hpDelta',
       points: runtimeProjection.enemyStateCurve?.points ?? [],
+      stateMetric: runtimeProjection.enemyStateCurve?.stateMetrics?.hp,
     }),
     createRuntimeEnemyCurveSeries({
       key: 'enemy-toughness',
@@ -318,6 +352,8 @@ function createRuntimeCurveSourceSeries(runtimeProjection) {
       color: RUNTIME_CURVE_COLORS.enemyToughnessDamage,
       valueField: 'toughnessDelta',
       points: runtimeProjection.enemyStateCurve?.points ?? [],
+      stateMetric:
+        runtimeProjection.enemyStateCurve?.stateMetrics?.toughness,
     }),
     ...(runtimeProjection.selfEnergyCurveByActor ?? []).map((actor, index) =>
       createRuntimeEnergyCurveSeries(actor, index)
@@ -332,6 +368,7 @@ function createRuntimeEnemyCurveSeries({
   color,
   valueField,
   points,
+  stateMetric,
 }) {
   return createRuntimeCurveSeries({
     key,
@@ -340,6 +377,7 @@ function createRuntimeEnemyCurveSeries({
     color,
     points: points.filter(point => point.trackKey === trackKey),
     valueField,
+    stateMetric,
   });
 }
 
@@ -352,6 +390,7 @@ function createRuntimeEnergyCurveSeries(actor, index) {
     color: index === 0 ? RUNTIME_CURVE_COLORS.selfEnergyChange : '#8db2ff',
     points: actor.points ?? [],
     valueField: 'energyDelta',
+    stateMetric: actor.stateMetric,
   });
 }
 
@@ -363,6 +402,7 @@ function createRuntimeCurveSeries({
   color,
   points,
   valueField,
+  stateMetric = null,
 }) {
   let cumulative = 0;
   const curvePoints = [...(points ?? [])]
@@ -370,16 +410,24 @@ function createRuntimeCurveSeries({
     .map((point, index) => {
       const delta = numberOrZero(point[valueField] ?? point.delta);
       cumulative = roundCurveValue(cumulative + delta);
+      const statePoint = createRuntimeCurvePointState(stateMetric, cumulative);
       return {
         ...point,
         delta,
         cumulative,
+        stateLabel: statePoint.stateLabel,
+        stateValue: statePoint.stateValue,
+        rawStateValue: statePoint.rawStateValue,
+        overrunValue: statePoint.overrunValue,
+        baselineStatus: statePoint.baselineStatus,
+        baselineConfirmed: statePoint.baselineConfirmed,
         statePointId: createRuntimeStateCurvePointId(point, point),
         frameIndex: numberOrNull(point.frameIndex) ?? 0,
         frameLabel: point.frameLabel ?? `${numberOrNull(point.timeMs) ?? 0}ms`,
         sequenceIndex: point.sequenceIndex ?? index,
       };
     });
+  const finalPoint = curvePoints[curvePoints.length - 1] ?? null;
 
   return {
     key,
@@ -387,16 +435,64 @@ function createRuntimeCurveSeries({
     actorId,
     label,
     color,
+    stateMetric,
+    baselineStatus: stateMetric?.baselineStatus ?? null,
+    baselineConfirmed: Boolean(stateMetric?.baselineConfirmed),
+    stateLabel: stateMetric?.stateLabel ?? null,
+    baselineInitialValue: stateMetric?.initialValue ?? null,
+    overrunValue: stateMetric?.overrunValue ?? finalPoint?.overrunValue ?? 0,
     points: curvePoints,
+    sourcePointCount: curvePoints.length,
     pointCount: curvePoints.length,
     finalValue: cumulative,
+    finalStateValue: finalPoint?.stateValue ?? stateMetric?.currentValue ?? null,
   };
 }
 
-function createRuntimeCurveDomain(seriesRows) {
-  const points = seriesRows.flatMap(series => series.points ?? []);
+function createRuntimeCurvePointState(stateMetric, cumulative) {
+  const initialValue = strictNumberOrNull(stateMetric?.initialValue);
+  const baselineConfirmed = Number.isFinite(initialValue);
+  const rawStateValue = baselineConfirmed
+    ? roundCurveValue(
+        stateMetric?.deltaDirection === 'decrease'
+          ? initialValue - numberOrZero(cumulative)
+          : initialValue + numberOrZero(cumulative)
+      )
+    : null;
+  const stateValue =
+    rawStateValue != null && stateMetric?.deltaDirection === 'decrease'
+      ? Math.max(0, rawStateValue)
+      : rawStateValue;
+
+  return {
+    stateLabel: stateMetric?.stateLabel ?? null,
+    stateValue,
+    rawStateValue,
+    overrunValue:
+      rawStateValue != null && stateMetric?.deltaDirection === 'decrease'
+        ? Math.max(0, roundCurveValue(-rawStateValue))
+        : 0,
+    baselineStatus: stateMetric?.baselineStatus ?? null,
+    baselineConfirmed,
+  };
+}
+
+function createRuntimeCurveDomain(seriesRows, curveMode) {
+  const points = seriesRows.flatMap(series =>
+    getRuntimeCurvePlottablePoints(series, curveMode)
+  );
   const frames = points.map(point => numberOrNull(point.frameIndex) ?? 0);
-  const values = [0, ...points.map(point => numberOrZero(point.cumulative))];
+  const values = [
+    0,
+    ...seriesRows
+      .map(series =>
+        curveMode === 'state'
+          ? strictNumberOrNull(series.baselineInitialValue)
+          : null
+      )
+      .filter(Number.isFinite),
+    ...points.map(point => numberOrZero(point.plotValue)),
+  ];
   const frameMin = Math.min(0, ...frames);
   const frameMax = Math.max(1, ...frames);
   let valueMin = Math.min(...values);
@@ -415,15 +511,29 @@ function createRuntimeCurveDomain(seriesRows) {
   };
 }
 
-function layoutRuntimeCurveSeries(series, domain) {
+function layoutRuntimeCurveSeries(series, domain, curveMode) {
+  const plottablePoints = getRuntimeCurvePlottablePoints(series, curveMode);
   return {
     ...series,
-    chartPoints: series.points.map(point => ({
+    pointCount: plottablePoints.length,
+    chartPoints: plottablePoints.map(point => ({
       ...point,
       x: scaleRuntimeCurveFrame(point.frameIndex, domain),
-      y: scaleRuntimeCurveValue(point.cumulative, domain),
+      y: scaleRuntimeCurveValue(point.plotValue, domain),
     })),
   };
+}
+
+function getRuntimeCurvePlottablePoints(series, curveMode) {
+  return (series.points ?? [])
+    .map(point => ({
+      ...point,
+      plotValue:
+        curveMode === 'state'
+          ? strictNumberOrNull(point.stateValue)
+          : numberOrZero(point.cumulative),
+    }))
+    .filter(point => Number.isFinite(point.plotValue));
 }
 
 function scaleRuntimeCurveFrame(frameIndex, domain) {
@@ -459,6 +569,18 @@ function formatRuntimeCurvePolyline(points) {
 }
 
 function formatRuntimeCurveSeries(series) {
+  if (runtimeCurveMode.value === 'state') {
+    const stateLabel = series.stateLabel ?? '状态';
+    const stateValue = strictNumberOrNull(series.finalStateValue);
+    if (!Number.isFinite(stateValue)) {
+      return `${stateLabel}待确认 / ${series.sourcePointCount}点`;
+    }
+    const overrun = numberOrZero(series.overrunValue);
+    if (overrun > 0) {
+      return `${stateLabel} ${formatNumber(stateValue)} / 溢出 ${formatNumber(overrun)}`;
+    }
+    return `${stateLabel} ${formatNumber(stateValue)} / ${series.pointCount}点`;
+  }
   if (series.pointCount === 0) {
     return '0点';
   }
@@ -466,7 +588,42 @@ function formatRuntimeCurveSeries(series) {
 }
 
 function formatRuntimeCurvePointTitle(series, point) {
-  return `${series.label} ${point.frameLabel}: ${formatSigned(point.delta)} -> ${formatSigned(point.cumulative)}`;
+  if (runtimeCurveMode.value === 'state') {
+    const stateLabel = point.stateLabel ?? series.stateLabel ?? '状态';
+    const overrun = numberOrZero(point.overrunValue);
+    const overrunText =
+      overrun > 0 ? ` / 溢出 ${formatNumber(overrun)}` : '';
+    const baselineText = point.baselineStatus
+      ? ` / ${formatBaselineStatus(point.baselineStatus)}`
+      : '';
+    return `${series.label} ${point.frameLabel}: ${stateLabel} ${formatNumber(point.plotValue)}${overrunText} (Δ ${formatSigned(point.delta)}, Σ ${formatSigned(point.cumulative)})${baselineText}`;
+  }
+  const stateValue = strictNumberOrNull(point.stateValue);
+  const stateText = Number.isFinite(stateValue)
+    ? ` / ${point.stateLabel ?? '状态'} ${formatNumber(stateValue)}`
+    : point.baselineStatus
+      ? ` / ${formatBaselineStatus(point.baselineStatus)}`
+      : '';
+  return `${series.label} ${point.frameLabel}: ${formatSigned(point.delta)} -> ${formatSigned(point.cumulative)}${stateText}`;
+}
+
+function formatBaselineStatus(status) {
+  if (status === 'baseline-derived-from-scenario-enemy-max-hp') {
+    return '基线:敌人面板';
+  }
+  if (status === 'baseline-derived-from-scenario-actor-self-energy') {
+    return '基线:角色状态';
+  }
+  if (
+    status === 'baseline-pending-azpr-enemy-toughness-state' ||
+    status === 'baseline-pending-azpr-initial-self-energy'
+  ) {
+    return '基线待确认';
+  }
+  if (status === 'baseline-pending-missing-scenario-enemy-max-hp') {
+    return 'HP基线缺失';
+  }
+  return status ?? '';
 }
 
 function selectRuntimeCurvePoint(point) {
@@ -667,6 +824,41 @@ h2 {
   padding: 9px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.04);
+}
+
+.runtime-curve-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.runtime-curve-mode {
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 142px;
+  padding: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background: rgba(15, 19, 24, 0.72);
+}
+
+.runtime-curve-mode button {
+  min-width: 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: #aeb8c1;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1;
+  padding: 6px 7px;
+  white-space: nowrap;
+}
+
+.runtime-curve-mode button[data-active='true'] {
+  background: rgba(121, 199, 185, 0.2);
+  color: #ffffff;
 }
 
 .runtime-curve-chart {

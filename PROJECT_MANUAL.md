@@ -5173,6 +5173,44 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 状态值视图中，HP / 韧性采用剩余值语义，自身能量采用当前值语义；基线未知的曲线应明确显示待确认，而不是绘制伪 0 状态线。
 - 同步把选中点 tooltip / 详情补上基线来源状态和溢出值提示，为后续接入真实韧性/能量基线留好 UI 位置。
 
+### 2026-07-08：阶段 5-8CL runtime resource chart 状态值视图
+
+本轮完成：
+
+- `ResourceMonitorPanel` 的 runtime resource chart 新增“累计变化 / 状态值”分段切换。
+- 默认仍使用“累计变化”模式，保持原有曲线、选中点、日志联动和测试行为不变。
+- “状态值”模式使用 `stateMetrics` 派生绘制值：HP / 韧性按剩余值语义，自身能量按当前值语义。
+- 状态值模式只绘制基线已确认的点；韧性和角色初始当前 SP 仍显示待确认，不绘制伪 0 曲线。
+- 曲线点新增 `data-curve-mode`、`data-cumulative`、`data-state-value`、`data-baseline-status`、`data-overrun`，便于后续联动和测试。
+- 曲线 tooltip 在状态值模式显示状态值、delta、累计、基线来源和 HP 溢出值；累计模式也附带状态值或基线待确认提示。
+- `RuntimeSelectedDetailPanel` 新增基线来源和溢出值显示：默认 HP 点显示基线 `敌人面板`、溢出 `3,833`。
+- `createRuntimeSelectedDetail()` 补充 `rawStateValue` 与 `overrunValue`，让统一详情和图表使用同一套状态派生语义。
+
+当前验证事实：
+
+- 默认模式按钮状态为 `累计变化=true`、`状态值=false`，默认 HP 曲线点 `data-value=12461`。
+- 切到状态值模式后，默认 HP 曲线点 `data-value=0`、`data-cumulative=12461`、`data-state-value=0`、`data-overrun=3833`。
+- 状态值图例中 HP 行显示 `剩余 0 / 溢出 3,833`。
+- 自身能量在缺初始当前 SP 时显示 `当前待确认`，没有被画成 0 状态线。
+- 选中默认 HP runtime 点后，三值详情显示状态值 `0`、溢出 `3,833`、基线 `敌人面板`。
+
+当前边界：
+
+- 状态值曲线仍只绘制应用后的离散 runtime point，没有额外插入战斗开始初始值锚点。
+- HP 基线来源仍是当前敌人面板与倍率，不代表最终战斗血量公式已经确认。
+- 韧性和自身能量当前状态仍等待真实运行时机制或采样补全。
+- 曲线模式当前是组件内局部 UI 状态，尚未持久化到项目或用户偏好。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+
+下一步：
+
+- 阶段 5-8CM 目标：抽出三值运行时公式适配器框架，把 HP / 韧性 / 自身能量 delta 的产生入口整理成可替换 calculator contract。
+- 当前 raw HP 预览、韧性 pending、能量 cost / recover-sp evidence 都应通过同一适配器输出 `delta`、`status`、`sourceIds`、`confidence` 和 `replaceable`。
+- 本阶段仍不追最终公式数值，只把后续接入真实 AzPr 公式、采样校准和角色/敌人状态参数的位置固定下来。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -58,6 +58,12 @@
           {{ formatDetailStateValue(detail) }}
         </strong>
       </div>
+      <div v-if="hasOverrun(detail)">
+        <span>溢出</span>
+        <strong data-testid="workbench-runtime-selected-detail-overrun">
+          {{ formatNumber(detail.overrunValue) }}
+        </strong>
+      </div>
     </div>
 
     <div class="runtime-detail-contributions">
@@ -85,6 +91,15 @@
         <span>状态点</span>
         <strong data-testid="workbench-runtime-selected-detail-state-point">
           {{ detail.statePointId }}
+        </strong>
+      </div>
+      <div v-if="detail.baselineStatus">
+        <span>基线</span>
+        <strong
+          data-testid="workbench-runtime-selected-detail-baseline-status"
+          :title="detail.baselineStatus"
+        >
+          {{ formatBaselineStatus(detail.baselineStatus) }}
         </strong>
       </div>
     </div>
@@ -137,6 +152,29 @@ function formatDetailStateValue(detail) {
     return '待确认';
   }
   return formatNumber(value);
+}
+
+function hasOverrun(detail) {
+  return Number(detail.overrunValue) > 0;
+}
+
+function formatBaselineStatus(status) {
+  if (status === 'baseline-derived-from-scenario-enemy-max-hp') {
+    return '敌人面板';
+  }
+  if (status === 'baseline-derived-from-scenario-actor-self-energy') {
+    return '角色状态';
+  }
+  if (
+    status === 'baseline-pending-azpr-enemy-toughness-state' ||
+    status === 'baseline-pending-azpr-initial-self-energy'
+  ) {
+    return '待确认';
+  }
+  if (status === 'baseline-pending-missing-scenario-enemy-max-hp') {
+    return 'HP缺失';
+  }
+  return status ?? '无';
 }
 
 function formatContribution(row) {
@@ -200,7 +238,7 @@ h2 {
 
 .runtime-detail-values {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(82px, 1fr));
   gap: 8px;
   padding: 0 14px;
 }
