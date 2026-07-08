@@ -7839,6 +7839,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 runtime result return 的状态转换也纳入可测试流程接口，继续收束“编辑 -> 运行 -> 查看 -> 回改 -> 回结果”的主流程。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Result Return Plan
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchRuntimeFlowPlan` 新增 `runtime-result-return`，用同一个 plan 描述“选择运行结果”和“回到刷新后运行结果”两类运行点返回。
+- `Workbench.vue` 的 `selectActionResult()` 与 `returnRuntimeResultFromProperties()` 改为复用 `createRuntimeResultReturnFlowPlan()`，再由 `applyRuntimeFlowPlan()` 统一应用动作选中、运行点选中、运行视角过滤和日志焦点。
+- 主流程从“result 与 return 各自拼状态更新”推进到“统一的 runtime result return 状态转换”。
+- 本阶段不修改三值计算、模拟输出、项目保存结构或可见 UI 文案。
+
+当前验证事实：
+
+- runtime result return plan 能描述目标动作、目标运行点、运行视角过滤和 `action-result` 日志焦点来源。
+- 空运行点返回会保持可控的清空行为，不强行制造运行结果。
+- Workbench 集成测试继续覆盖结果行定位、回到刷新结果、运行详情/曲线/日志同步。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、61 条测试。
+- `npm run test -- --run`：通过，22 个测试文件、153 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：围绕完整闭环接口做一次 Workbench 主流程控制层梳理，优先减少 `Workbench.vue` 内部对流程 plan 的直接拼接。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

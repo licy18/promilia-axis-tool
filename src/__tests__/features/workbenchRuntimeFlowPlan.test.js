@@ -4,6 +4,7 @@ import {
   WORKBENCH_RUNTIME_FLOW_PLAN_MODES,
   createRuntimeEntryFlowPlan,
   createRuntimePointFocusFlowPlan,
+  createRuntimeResultReturnFlowPlan,
 } from '../../features/workbench/workbenchRuntimeFlowPlan';
 
 describe('workbench runtime flow plan', () => {
@@ -88,6 +89,56 @@ describe('workbench runtime flow plan', () => {
     expect(plan).toMatchObject({
       kind: WORKBENCH_RUNTIME_FLOW_PLAN_KINDS.RUNTIME_POINT_FOCUS,
       mode: WORKBENCH_RUNTIME_FLOW_PLAN_MODES.RUNTIME_POINT_EMPTY,
+      statePointId: '',
+      calculatorScope: '',
+      selectRuntimeStatePoint: true,
+      clearRuntimeSelection: true,
+      stateCurveFocusMode: 'all',
+      stateCurveLayerFilters: null,
+      stateCurveTrackFilters: null,
+      runtimeLogFocusSource: '',
+    });
+  });
+
+  it('describes returning to a runtime result point with action selection', () => {
+    const plan = createRuntimeResultReturnFlowPlan({
+      actionId: 'action-0001',
+      statePointId: 'enemyHpDamage|applied|action-0001|12|0',
+    });
+
+    expect(plan).toMatchObject({
+      kind: WORKBENCH_RUNTIME_FLOW_PLAN_KINDS.RUNTIME_RESULT_RETURN,
+      mode: WORKBENCH_RUNTIME_FLOW_PLAN_MODES.RUNTIME_RESULT,
+      actionId: 'action-0001',
+      selectActionId: 'action-0001',
+      statePointId: 'enemyHpDamage|applied|action-0001|12|0',
+      calculatorScope: 'runtime',
+      pulseCalculatorFocus: false,
+      selectRuntimeStatePoint: true,
+      clearRuntimeSelection: false,
+      stateCurveFocusMode: 'selected',
+      runtimeLogFocusSource: 'action-result',
+      stateCurveLayerFilters: {
+        applied: true,
+        candidate: false,
+        sampled: false,
+        placeholder: false,
+      },
+      stateCurveTrackFilters: {},
+    });
+  });
+
+  it('describes an empty runtime result return without forcing action selection', () => {
+    const plan = createRuntimeResultReturnFlowPlan({
+      actionId: 'action-0001',
+      statePointId: '',
+    });
+
+    expect(plan).toMatchObject({
+      kind: WORKBENCH_RUNTIME_FLOW_PLAN_KINDS.RUNTIME_RESULT_RETURN,
+      mode: WORKBENCH_RUNTIME_FLOW_PLAN_MODES.RUNTIME_POINT_EMPTY,
+      actionId: 'action-0001',
+      selectActionId: 'action-0001',
       statePointId: '',
       calculatorScope: '',
       selectRuntimeStatePoint: true,

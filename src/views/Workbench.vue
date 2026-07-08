@@ -227,6 +227,7 @@ import {
 import {
   createRuntimeEntryFlowPlan,
   createRuntimePointFocusFlowPlan,
+  createRuntimeResultReturnFlowPlan,
 } from '../features/workbench/workbenchRuntimeFlowPlan';
 import {
   SYSTEM_TIMELINE_LANE_ID,
@@ -1356,22 +1357,24 @@ function dispatchWorkbenchFlowAction(action = {}) {
   workbenchFlowController.dispatch(action);
 }
 
-function selectActionResultRuntimePoint(pointId) {
-  focusRuntimePointFromAnalysis(pointId, 'action-result');
-}
-
 function selectActionResult({ actionId, statePointId } = {}) {
-  if (actionId && actionDrafts.value.some(action => action.id === actionId)) {
-    selectAction(actionId, { syncRuntimeResult: false });
-  }
-  selectActionResultRuntimePoint(statePointId);
+  applyRuntimeFlowPlan(
+    createRuntimeResultReturnFlowPlan({
+      actionId,
+      statePointId,
+      source: 'action-result',
+    })
+  );
 }
 
 function returnRuntimeResultFromProperties({ actionId, statePointId } = {}) {
-  if (actionId && actionDrafts.value.some(action => action.id === actionId)) {
-    selectAction(actionId, { syncRuntimeResult: false });
-  }
-  selectActionResultRuntimePoint(statePointId);
+  applyRuntimeFlowPlan(
+    createRuntimeResultReturnFlowPlan({
+      actionId,
+      statePointId,
+      source: 'action-result',
+    })
+  );
 }
 
 function openRuntimeResultsFlow({ actionId } = {}) {
@@ -1564,6 +1567,10 @@ function syncRuntimeResultForSelectedAction(actionId) {
 }
 
 function applyRuntimeFlowPlan(plan = {}) {
+  if (plan.selectActionId && findActionDraftById(plan.selectActionId)) {
+    selectAction(plan.selectActionId, { syncRuntimeResult: false });
+  }
+
   if (plan.calculatorScope) {
     if (plan.pulseCalculatorFocus) {
       focusThreeValueCalculatorScope(plan.calculatorScope, {

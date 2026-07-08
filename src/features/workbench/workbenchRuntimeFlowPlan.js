@@ -3,6 +3,7 @@ import { findFirstRuntimeStatePointForAction } from './runtimeProjectionPoints';
 export const WORKBENCH_RUNTIME_FLOW_PLAN_KINDS = Object.freeze({
   RUNTIME_ENTRY: 'runtime-entry',
   RUNTIME_POINT_FOCUS: 'runtime-point-focus',
+  RUNTIME_RESULT_RETURN: 'runtime-result-return',
 });
 
 export const WORKBENCH_RUNTIME_FLOW_PLAN_MODES = Object.freeze({
@@ -70,10 +71,39 @@ export function createRuntimePointFocusFlowPlan({
   });
 }
 
+export function createRuntimeResultReturnFlowPlan({
+  actionId = '',
+  statePointId = '',
+  source = 'action-result',
+} = {}) {
+  const normalizedStatePointId = statePointId ?? '';
+  const hasRuntimePoint = Boolean(normalizedStatePointId);
+  return createRuntimeFlowPlan({
+    kind: WORKBENCH_RUNTIME_FLOW_PLAN_KINDS.RUNTIME_RESULT_RETURN,
+    mode: hasRuntimePoint
+      ? WORKBENCH_RUNTIME_FLOW_PLAN_MODES.RUNTIME_RESULT
+      : WORKBENCH_RUNTIME_FLOW_PLAN_MODES.RUNTIME_POINT_EMPTY,
+    actionId,
+    statePointId: normalizedStatePointId,
+    selectActionId: actionId,
+    calculatorScope: hasRuntimePoint ? 'runtime' : '',
+    pulseCalculatorFocus: false,
+    selectRuntimeStatePoint: true,
+    clearRuntimeSelection: !hasRuntimePoint,
+    stateCurveFocusMode: hasRuntimePoint ? 'selected' : 'all',
+    stateCurveLayerFilters: hasRuntimePoint
+      ? createRuntimeAppliedLayerFilters()
+      : null,
+    stateCurveTrackFilters: hasRuntimePoint ? {} : null,
+    runtimeLogFocusSource: hasRuntimePoint ? source ?? 'action-result' : '',
+  });
+}
+
 function createRuntimeFlowPlan({
   kind,
   mode,
   actionId = '',
+  selectActionId = '',
   statePointId = '',
   calculatorScope = '',
   pulseCalculatorFocus = false,
@@ -89,6 +119,7 @@ function createRuntimeFlowPlan({
     kind,
     mode,
     actionId: actionId ?? '',
+    selectActionId: selectActionId ?? '',
     statePointId: statePointId ?? '',
     calculatorScope,
     pulseCalculatorFocus: Boolean(pulseCalculatorFocus),

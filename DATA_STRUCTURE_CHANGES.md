@@ -16193,3 +16193,84 @@ focusActionEditSource()
 - `npm run test -- --run`：通过，22 个测试文件、151 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 206. UI 主流程能力块：Runtime Result Return Plan
+
+本阶段属于 UI 主流程。
+
+### 206.1 结构变化
+
+`WORKBENCH_RUNTIME_FLOW_PLAN_KINDS` 新增：
+
+```js
+RUNTIME_RESULT_RETURN: 'runtime-result-return'
+```
+
+`workbenchRuntimeFlowPlan.js` 新增导出：
+
+```js
+createRuntimeResultReturnFlowPlan()
+```
+
+runtime flow plan 新增字段：
+
+```js
+selectActionId
+```
+
+`createRuntimeResultReturnFlowPlan()` 用于描述：
+
+```js
+runtime-result-return -> runtime-result
+runtime-result-return -> runtime-point-empty
+```
+
+其主要输出字段：
+
+```js
+{
+  kind,
+  mode,
+  actionId,
+  selectActionId,
+  statePointId,
+  calculatorScope,
+  pulseCalculatorFocus,
+  selectRuntimeStatePoint,
+  clearRuntimeSelection,
+  stateCurveFocusMode,
+  stateCurveLayerFilters,
+  stateCurveTrackFilters,
+  runtimeLogFocusSource
+}
+```
+
+`Workbench.vue` 的 `applyRuntimeFlowPlan(plan)` 新增：
+
+```js
+plan.selectActionId
+```
+
+用于在运行结果返回前选中目标动作。
+
+以下 Workbench 主流程函数改为先创建 runtime result return plan，再应用 plan：
+
+```js
+selectActionResult()
+returnRuntimeResultFromProperties()
+```
+
+### 206.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 的运行结果返回状态转换组织方式；模拟结果、三值计算、项目文件、runtime projection 结构不变。
+
+### 206.3 验证
+
+- `src/__tests__/features/workbenchRuntimeFlowPlan.test.js` 新增覆盖运行结果返回到目标运行点，以及空运行点返回。
+- Workbench 视图测试继续覆盖结果行定位、回到刷新结果、运行详情/曲线/日志同步。
+- `npm run test -- --run src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、61 条测试。
+- `npm run test -- --run`：通过，22 个测试文件、153 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
