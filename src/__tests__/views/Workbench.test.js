@@ -93,6 +93,38 @@ describe('Workbench view', () => {
         .map(row => row.text())
     ).toEqual(expect.arrayContaining([expect.stringContaining('末音')]));
     expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-resource-chart"]')
+        .exists()
+    ).toBe(true);
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-runtime-resource-chart-series"]')
+        .map(row => [
+          row.attributes('data-series-key'),
+          row.attributes('data-track-key'),
+          row.attributes('data-point-count'),
+        ])
+    ).toEqual(
+      expect.arrayContaining([
+        ['enemy-hp', 'enemyHpDamage', '1'],
+        ['enemy-toughness', 'enemyToughnessDamage', '0'],
+        expect.arrayContaining([
+          expect.stringContaining('self-energy-'),
+          'selfEnergyChange',
+          expect.any(String),
+        ]),
+      ])
+    );
+    const runtimeCurvePoints = wrapper.findAll(
+      '[data-testid="workbench-runtime-resource-chart-point"]'
+    );
+    expect(runtimeCurvePoints).toHaveLength(1);
+    expect(runtimeCurvePoints[0].attributes('data-track-key')).toBe(
+      'enemyHpDamage'
+    );
+    expect(runtimeCurvePoints[0].attributes('data-value')).toBe('12461');
+    expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log"]').exists()
     ).toBe(true);
     expect(
@@ -104,6 +136,11 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-detail"]').text()
     ).toContain('action-0001|applied-frame-0-point-0');
+    expect(runtimeCurvePoints[0].attributes('data-state-point-id')).toBe(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-state-point"]')
+        .text()
+    );
     expect(
       wrapper
         .findAll('[data-testid="workbench-runtime-sim-log-contribution-row"]')
@@ -1019,6 +1056,53 @@ describe('Workbench view', () => {
     ).toContain('selected');
   });
 
+  it('links runtime resource curve points to the focused state curve point', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    const runtimeCurvePoint = wrapper.find(
+      '[data-testid="workbench-runtime-resource-chart-point"]'
+    );
+    const statePointId = runtimeCurvePoint.attributes('data-state-point-id');
+
+    expect(statePointId).toBeTruthy();
+
+    await runtimeCurvePoint.trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-focus-selected"]')
+        .classes()
+    ).toContain('active');
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-runtime-resource-chart-point"][data-state-point-id="${statePointId}"]`
+        )
+        .attributes('data-selected')
+    ).toBe('true');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-point"]')
+        .attributes('data-state-point-id')
+    ).toBe(statePointId);
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-timeline-state-curve-marker"][data-state-point-id="${statePointId}"]`
+        )
+        .classes()
+    ).toContain('selected');
+  });
+
   it('exposes sampled and placeholder state curve layers before values are applied', async () => {
     let stateCurveLayerFilters = {
       applied: true,
@@ -1868,6 +1952,19 @@ describe('Workbench view', () => {
         .map(row => row.text())
         .some(text => text.includes(`SP -${spSkill.spCost}`))
     ).toBe(true);
+    const runtimeCurvePointTracks = wrapper
+      .findAll('[data-testid="workbench-runtime-resource-chart-point"]')
+      .map(point => point.attributes('data-track-key'));
+    expect(runtimeCurvePointTracks).toEqual(
+      expect.arrayContaining(['selfEnergyChange'])
+    );
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-runtime-resource-chart-point"][data-track-key="selfEnergyChange"]'
+        )
+        .attributes('data-delta')
+    ).toBe(`-${spSkill.spCost}`);
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log"]').text()
     ).toContain(`SP -${spSkill.spCost}`);

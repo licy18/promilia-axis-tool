@@ -34,6 +34,41 @@ export function createStateCurveFrameGroupKey(point = {}) {
   ].join('|');
 }
 
+export function createRuntimeStateCurvePointId(row, point) {
+  if (!row && !point) {
+    return '';
+  }
+
+  const stateCurveSequenceIndex =
+    numberOrNull(row?.stateCurveSequenceIndex) ??
+    numberOrNull(point?.stateCurveSequenceIndex) ??
+    parseRuntimeStateCurveSequenceIndex(row?.hitKey ?? point?.hitKey) ??
+    numberOrNull(point?.sequenceIndex) ??
+    numberOrNull(row?.sequenceIndex) ??
+    0;
+
+  return createStateCurvePointId({
+    trackKey: row?.trackKey ?? point?.trackKey,
+    layerKey: row?.layerKey ?? point?.layerKey ?? 'applied',
+    point: {
+      ...(point ?? {}),
+      ...(row ?? {}),
+      sequenceIndex: stateCurveSequenceIndex,
+    },
+    pointIndex: stateCurveSequenceIndex,
+  });
+}
+
 function normalizeStateCurvePointIdPart(value) {
   return String(value ?? 'none').replace(/\|/g, '/');
+}
+
+function parseRuntimeStateCurveSequenceIndex(hitKey) {
+  const match = String(hitKey ?? '').match(/-point-(\d+)$/);
+  return match ? Number(match[1]) : null;
+}
+
+function numberOrNull(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
 }

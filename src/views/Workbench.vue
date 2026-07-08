@@ -114,8 +114,10 @@
         <ResourceMonitorPanel
           :resource-timeline="simulationResult.resourceTimeline"
           :runtime-projection="simulationResult.threeValueRuntimeProjection"
+          :selected-state-curve-point-id="selectedStateCurvePointId"
           :summary="simulationResult.summary"
           :diagnostics="simulationResult.diagnostics"
+          @select-runtime-state-point="selectRuntimeStatePoint"
         />
 
         <AnalysisPanel

@@ -9492,3 +9492,119 @@ selectRuntimeStatePoint(pointId)
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8CF 应把 `ResourceMonitorPanel` 升级为 HP / 韧性 / 自身能量多曲线图，并复用本阶段建立的状态点焦点链路。
+
+## 113. 阶段 5-8CF：runtime resource multi-curve
+
+阶段 5-8CF 不修改项目保存 schema。本阶段新增 Workbench UI 派生结构和共享状态点 ID helper。
+
+### 113.1 共享 runtime 状态点 ID
+
+`src/features/workbench/stateCurvePointIdentity.js` 新增导出：
+
+```js
+createRuntimeStateCurvePointId(row, point)
+```
+
+输入可以是 `threeValueRuntimeProjection.simLog[]` 行，也可以是 runtime point。函数会按以下优先级恢复源状态曲线序号：
+
+```js
+row.stateCurveSequenceIndex
+point.stateCurveSequenceIndex
+hitKey 中的 -point-{index}
+point.sequenceIndex
+row.sequenceIndex
+0
+```
+
+然后复用 `createStateCurvePointId()` 生成同一个 `stateCurvePointId`。`EventLogPanel` 与 `ResourceMonitorPanel` 都应使用该 helper，不要各自拼接 ID。
+
+### 113.2 ResourceMonitorPanel 新增 props / event
+
+`ResourceMonitorPanel` 新增输入：
+
+```js
+selectedStateCurvePointId: string
+```
+
+新增事件：
+
+```js
+emit('select-runtime-state-point', stateCurvePointId)
+```
+
+`Workbench` 将该事件接回现有 `selectRuntimeStatePoint()`，继续复用全局 `selectedStateCurvePointId` 和 `stateCurveFocusMode`。
+
+### 113.3 Runtime resource curve 派生结构
+
+`ResourceMonitorPanel` 从 projection 派生曲线序列，不写回 simulation result：
+
+```js
+runtimeCurveSourceSeries[]
+runtimeCurveDomain
+runtimeCurveSeries[]
+runtimeCurveZeroY
+```
+
+当前序列：
+
+```js
+enemy-hp          // trackKey: enemyHpDamage, valueField: hpDelta
+enemy-toughness   // trackKey: enemyToughnessDamage, valueField: toughnessDelta
+self-energy-*     // trackKey: selfEnergyChange, valueField: energyDelta, per actor
+```
+
+每个曲线点包含：
+
+```js
+{
+  delta,
+  cumulative,
+  statePointId,
+  frameIndex,
+  frameLabel,
+  x,
+  y
+}
+```
+
+`cumulative` 是 UI 派生累计变化量，不代表敌人剩余 HP / 剩余韧性 / 角色当前能量。
+
+### 113.4 新增测试入口
+
+```html
+data-testid="workbench-runtime-resource-chart"
+data-testid="workbench-runtime-resource-chart-line"
+data-testid="workbench-runtime-resource-chart-point"
+data-testid="workbench-runtime-resource-chart-series"
+```
+
+曲线点暴露：
+
+```html
+data-series-key
+data-track-key
+data-actor-id
+data-frame-label
+data-value
+data-delta
+data-state-point-id
+data-selected
+```
+
+### 113.5 验证
+
+当前测试覆盖：
+
+- 默认末音样例中，runtime resource chart 存在。
+- legend 包含 `enemy-hp / enemy-toughness / self-energy-*` 序列。
+- 默认 HP 曲线点的 `data-value` 为 `12461`，且 `data-state-point-id` 与 runtime sim log 的状态点一致。
+- 点击曲线点后，状态曲线焦点切到 `选中`，对应时间轴 marker selected。
+- 切换到有 SP 消耗的技能后，曲线点包含 `selfEnergyChange`，且 `data-delta` 等于 `-spCost`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、37 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、111 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8CG 应建立统一的运行时三值选中详情入口，让 runtime sim log、资源曲线点、状态曲线点共享同一份 selected point 详情。

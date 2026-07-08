@@ -196,7 +196,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue';
 import { Tickets } from '@element-plus/icons-vue';
-import { createStateCurvePointId } from './stateCurvePointIdentity';
+import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
 
 const props = defineProps({
   eventLog: {
@@ -419,41 +419,6 @@ function getRuntimePointByRow(row) {
   return row?.sourceDeltaId
     ? runtimePointByDeltaId.value.get(row.sourceDeltaId)
     : null;
-}
-
-function createRuntimeStateCurvePointId(row, point) {
-  if (!row && !point) {
-    return '';
-  }
-
-  const stateCurveSequenceIndex =
-    numberOrNull(row?.stateCurveSequenceIndex) ??
-    numberOrNull(point?.stateCurveSequenceIndex) ??
-    parseRuntimeStateCurveSequenceIndex(row?.hitKey ?? point?.hitKey) ??
-    numberOrNull(point?.sequenceIndex) ??
-    numberOrNull(row?.sequenceIndex) ??
-    0;
-
-  return createStateCurvePointId({
-    trackKey: row?.trackKey ?? point?.trackKey,
-    layerKey: row?.layerKey ?? point?.layerKey ?? 'applied',
-    point: {
-      ...(point ?? {}),
-      ...(row ?? {}),
-      sequenceIndex: stateCurveSequenceIndex,
-    },
-    pointIndex: stateCurveSequenceIndex,
-  });
-}
-
-function parseRuntimeStateCurveSequenceIndex(hitKey) {
-  const match = String(hitKey ?? '').match(/-point-(\d+)$/);
-  return match ? Number(match[1]) : null;
-}
-
-function numberOrNull(value) {
-  const number = Number(value);
-  return Number.isFinite(number) ? number : null;
 }
 
 function countRuntimeOptions(rows, field) {

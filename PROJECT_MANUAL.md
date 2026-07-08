@@ -4956,6 +4956,43 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 曲线数据只消费 `threeValueRuntimeProjection.enemyStateCurve.points[]` 和 `selfEnergyCurveByActor[].points[]`，不要重新读取 evidence 矩阵。
 - 曲线横轴继续使用 60fps 帧时间基准；点击曲线点时优先复用现有 `selectedStateCurvePointId` 联动链路。
 
+### 2026-07-08：阶段 5-8CF 运行时 HP / 韧性 / 能量多曲线图
+
+本轮完成：
+
+- `ResourceMonitorPanel` 新增运行时多曲线图，直接消费 `threeValueRuntimeProjection.enemyStateCurve.points[]` 与 `selfEnergyCurveByActor[].points[]`。
+- 曲线序列覆盖三类运行时数值：敌人 HP 累计伤害、敌人韧性累计削减、每个角色自身 SP 累计变化。
+- 曲线横轴使用 runtime point 的 `frameIndex / frameLabel`，继续沿用 60fps 帧时间基准。
+- 曲线点复用共享的 `createRuntimeStateCurvePointId()`，与 runtime sim log、时间轴 state marker、分析面板状态曲线使用同一个状态点 ID。
+- `ResourceMonitorPanel` 新增 `select-runtime-state-point` 事件，点击曲线点后由 `Workbench` 切到对应 `selectedStateCurvePointId` 和“选中”模式。
+- `EventLogPanel` 不再本地复制 runtime 状态点 ID 拼接逻辑，改为复用 `stateCurvePointIdentity.js` 中的共享函数。
+- Workbench 测试新增：默认 HP 曲线点存在、曲线 legend 覆盖 HP / 韧性 / SP、点击曲线点联动状态曲线和时间轴、SP 消耗技能会生成 `selfEnergyChange` 曲线点。
+
+当前验证事实：
+
+- 默认末音样例中，资源监控曲线存在 1 个 HP 曲线点，其 `data-state-point-id` 与 runtime sim log 详情显示的状态点一致。
+- 默认末音样例中，曲线 legend 至少包含 `enemy-hp / enemy-toughness / self-energy-*` 三类序列；韧性和 SP 没有 applied 点时仍以 0 点占位显示。
+- 点击默认 HP 曲线点后，分析面板状态曲线收窄到该点，时间轴对应 state marker 进入 selected 状态。
+- 切换到有 SP 消耗的技能后，资源监控曲线点中出现 `selfEnergyChange`，点位 `data-delta` 等于该技能的 `-spCost`。
+
+当前边界：
+
+- 曲线现在显示的是累计变化量，不是敌人剩余 HP、敌人剩余韧性或角色当前能量上限约束。
+- 多曲线共享一套归一化坐标，适合先看趋势和点位联动；后续可按 Endaxis 风格拆分轨道或增加局部量尺。
+- 曲线点的详情仍依赖分析面板和 runtime sim log，资源监控自身还没有独立详情抽屉。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、37 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、111 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8CG 目标：建立统一的运行时三值选中详情入口，让 runtime sim log、资源曲线点、状态曲线点共享同一份 HP / 韧性 / 能量详情。
+- 详情优先展示当前选中点的动作、帧、轨道、delta、累计值、来源 ID、贡献槽位和应用状态。
+- 不在此阶段追逐最终公式；继续把公式、韧性和充能细节保留为可替换来源字段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
