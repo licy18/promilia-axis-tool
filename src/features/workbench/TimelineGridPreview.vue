@@ -247,6 +247,7 @@
               :data-edit-focused="isActionEditFocused(action)"
               :data-edit-focus-field="getActionEditFocusField(action)"
               :data-edit-focus-label="getActionEditFocusLabel(action)"
+              :data-edit-focus-summary="getActionEditFocusSummary(action)"
               data-testid="workbench-timeline-action"
               tabindex="0"
               @click="$emit('select-action', action.id)"
@@ -979,6 +980,12 @@ function getActionEditFocusField(action) {
 
 function getActionEditFocusLabel(action) {
   return isActionEditFocused(action) ? props.actionEditFocus?.label ?? '' : '';
+}
+
+function getActionEditFocusSummary(action) {
+  return isActionEditFocused(action)
+    ? props.actionEditFocus?.changeSummary ?? ''
+    : '';
 }
 
 function normalizeActionEditFocusField(fieldKey) {

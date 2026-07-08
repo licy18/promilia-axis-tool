@@ -11876,3 +11876,94 @@ damageSegmentIndex -> actionVariantIndex
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DG 应继续完善编辑闭环，优先为最近编辑来源补字段级前后值摘要。
+
+## 140. 阶段 5-8DG：字段来源前后值摘要
+
+阶段目标：
+
+- 为最近编辑来源补轻量字段前后值摘要，让结果定位链路能说明“哪个字段从什么改成什么”。
+
+### 140.1 actionEditSource / actionEditFocus 新增派生字段
+
+新增：
+
+```js
+previousValue: string
+nextValue: string
+changeSummary: string
+```
+
+完整前端状态形态：
+
+```js
+{
+  actionId: string,
+  fieldKey: string,
+  label: string,
+  previousValue: string,
+  nextValue: string,
+  changeSummary: string,
+  sequence: number,
+}
+```
+
+该状态只存在于 Workbench 前端运行时，不写入 localStorage，不属于项目保存 schema。
+
+### 140.2 记录来源
+
+以下入口会取编辑前后的动作草稿并生成摘要：
+
+```text
+updateAction(patch)
+updateActionTime({ actionId, startMs })
+updateActionDuration({ actionId, durationMs })
+updateActionLane({ actionId, laneId })
+```
+
+字段显示策略：
+
+```text
+startMs / durationMs -> 帧时间，例如 0s0f
+level / actionVariantIndex / damageSegmentIndex -> 数字文本
+skillId -> 技能名
+actorCharacterId / laneId / targetCharacterId -> 角色名
+change -> 带符号数字
+resource / reason / eventType / note -> 原文本
+```
+
+### 140.3 DOM 状态
+
+`AnalysisPanel` 结果行和结果详情区新增：
+
+```html
+data-edit-source-summary
+```
+
+`PropertiesPanel` 字段落点新增：
+
+```html
+data-edit-focus-summary
+```
+
+`TimelineGridPreview` 动作块新增：
+
+```html
+data-edit-focus-summary
+```
+
+### 140.4 验证
+
+当前测试覆盖：
+
+- 修改 `action-0001` 等级后，结果行 `data-edit-source-summary="1 -> 2"`。
+- 来源标签显示 `等级变更 1 -> 2`。
+- 结果详情区同步 `data-edit-source-summary="1 -> 2"`。
+- 点击来源标签后，属性面板等级控件和时间轴来源动作块同步 `data-edit-focus-summary="1 -> 2"`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DH 应继续完善 Workbench 主流程编辑体验，优先把最近编辑摘要接入结果定位/对比的小面板或操作反馈区域。

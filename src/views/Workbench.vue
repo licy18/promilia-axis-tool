@@ -215,7 +215,7 @@ import {
   normalizeWorkbenchSegmentSplitOptions,
   saveWorkbenchDraft,
 } from '../domain/workbenchDraftStorage';
-import { frameToMs } from '../domain/timebase';
+import { formatFrameTime, frameToMs } from '../domain/timebase';
 import { compileProject } from '../simulation/compiler/compileProject';
 import { simulateScenario } from '../simulation/engine/simulateScenario';
 
@@ -406,8 +406,10 @@ function updateSelection(patch) {
 
 function updateAction(patch) {
   clearSegmentSplitPreview();
+  const actionId = selectedActionId.value;
+  const previousAction = findActionDraftById(actionId);
   actionDrafts.value = actionDrafts.value.map(action => {
-    if (action.id !== selectedActionId.value) {
+    if (action.id !== actionId) {
       return action;
     }
 
@@ -471,7 +473,10 @@ function updateAction(patch) {
   if (patch.actorCharacterId != null) {
     setActionLibraryCharacterId(patch.actorCharacterId);
   }
-  recordActionEditSource(selectedActionId.value, patch);
+  recordActionEditSource(actionId, patch, {
+    previousAction,
+    nextAction: findActionDraftById(actionId),
+  });
   markDraftDirty();
 }
 
@@ -495,6 +500,7 @@ function updateSegmentSplitOptions(patch) {
 
 function updateActionTime({ actionId, startMs }) {
   clearSegmentSplitPreview();
+  const previousAction = findActionDraftById(actionId);
   selectedActionId.value = actionId;
   actionDrafts.value = actionDrafts.value.map(action => {
     if (action.id !== actionId) {
@@ -507,12 +513,16 @@ function updateActionTime({ actionId, startMs }) {
       startMs: clampNumber(startMs, 0, project.value.time.durationMs),
     });
   });
-  recordActionEditSource(actionId, { startMs });
+  recordActionEditSource(actionId, { startMs }, {
+    previousAction,
+    nextAction: findActionDraftById(actionId),
+  });
   markDraftDirty();
 }
 
 function updateActionDuration({ actionId, durationMs }) {
   clearSegmentSplitPreview();
+  const previousAction = findActionDraftById(actionId);
   selectedActionId.value = actionId;
   actionDrafts.value = actionDrafts.value.map(action => {
     if (action.id !== actionId) {
@@ -529,12 +539,16 @@ function updateActionDuration({ actionId, durationMs }) {
       ),
     });
   });
-  recordActionEditSource(actionId, { durationMs });
+  recordActionEditSource(actionId, { durationMs }, {
+    previousAction,
+    nextAction: findActionDraftById(actionId),
+  });
   markDraftDirty();
 }
 
 function updateActionLane({ actionId, laneId }) {
   clearSegmentSplitPreview();
+  const previousAction = findActionDraftById(actionId);
   const targetActor = scenario.value.actors.find(actor => actor.id === laneId);
   if (!targetActor) {
     return;
@@ -587,7 +601,10 @@ function updateActionLane({ actionId, laneId }) {
   });
 
   if (didUpdate) {
-    recordActionEditSource(actionId, { laneId });
+    recordActionEditSource(actionId, { laneId }, {
+      previousAction,
+      nextAction: findActionDraftById(actionId),
+    });
     markDraftDirty();
   }
 }
@@ -956,6 +973,9 @@ function createEmptyActionEditSource(sequence = 0) {
     actionId: '',
     fieldKey: '',
     label: '',
+    previousValue: '',
+    nextValue: '',
+    changeSummary: '',
     sequence,
   };
 }
@@ -965,6 +985,9 @@ function createEmptyActionEditFocus(sequence = 0) {
     actionId: '',
     fieldKey: '',
     label: '',
+    previousValue: '',
+    nextValue: '',
+    changeSummary: '',
     sequence,
   };
 }
@@ -981,16 +1004,26 @@ function clearActionEditFocus() {
   );
 }
 
-function recordActionEditSource(actionId, patch = {}) {
+function recordActionEditSource(
+  actionId,
+  patch = {},
+  { previousAction = null, nextAction = null } = {}
+) {
   const fieldKey = resolveActionEditSourceField(patch);
   if (!actionId || !fieldKey) {
     return;
   }
+  const change = createActionEditSourceChange({
+    fieldKey,
+    previousAction,
+    nextAction,
+  });
 
   actionEditSource.value = {
     actionId,
     fieldKey,
     label: ACTION_EDIT_SOURCE_LABELS[fieldKey] ?? `${fieldKey}变更`,
+    ...change,
     sequence: actionEditSource.value.sequence + 1,
   };
 }
@@ -999,6 +1032,96 @@ function resolveActionEditSourceField(patch = {}) {
   return ACTION_EDIT_SOURCE_PRIORITY.find(fieldKey =>
     Object.prototype.hasOwnProperty.call(patch, fieldKey)
   );
+}
+
+function createActionEditSourceChange({
+  fieldKey,
+  previousAction = null,
+  nextAction = null,
+}) {
+  const previousValue = formatActionEditSourceValue(
+    fieldKey,
+    getActionEditSourceRawValue(previousAction, fieldKey)
+  );
+  const nextValue = formatActionEditSourceValue(
+    fieldKey,
+    getActionEditSourceRawValue(nextAction, fieldKey)
+  );
+  return {
+    previousValue,
+    nextValue,
+    changeSummary: formatActionEditSourceChangeSummary(
+      previousValue,
+      nextValue
+    ),
+  };
+}
+
+function getActionEditSourceRawValue(action, fieldKey) {
+  if (!action) {
+    return null;
+  }
+  if (fieldKey === 'laneId') {
+    return action.actorCharacterId;
+  }
+  if (fieldKey === 'damageSegmentIndex') {
+    return action.actionVariantIndex ?? action.damageSegmentIndex;
+  }
+  return action[fieldKey];
+}
+
+function formatActionEditSourceValue(fieldKey, value) {
+  if (value == null || value === '') {
+    return '空';
+  }
+  if (fieldKey === 'startMs' || fieldKey === 'durationMs') {
+    return formatFrameTime(value);
+  }
+  if (fieldKey === 'skillId') {
+    return findSkillById(value)?.name ?? String(value);
+  }
+  if (
+    fieldKey === 'actorCharacterId' ||
+    fieldKey === 'laneId' ||
+    fieldKey === 'targetCharacterId'
+  ) {
+    return resolveActionEditCharacterName(value);
+  }
+  if (fieldKey === 'change') {
+    return formatSignedNumber(value);
+  }
+  return String(value);
+}
+
+function formatActionEditSourceChangeSummary(previousValue, nextValue) {
+  if (!previousValue && !nextValue) {
+    return '';
+  }
+  if (previousValue === nextValue) {
+    return previousValue;
+  }
+  return `${previousValue || '空'} -> ${nextValue || '空'}`;
+}
+
+function formatSignedNumber(value) {
+  const number = Number(value) || 0;
+  return `${number > 0 ? '+' : ''}${number}`;
+}
+
+function resolveActionEditCharacterName(characterId) {
+  return (
+    scenario.value.actors.find(
+      actor => Number(actor.characterId) === Number(characterId)
+    )?.name ??
+    workbenchSeed.gameData.characters.find(
+      character => Number(character.id) === Number(characterId)
+    )?.name ??
+    String(characterId)
+  );
+}
+
+function findActionDraftById(actionId) {
+  return actionDrafts.value.find(action => action.id === actionId) ?? null;
 }
 
 function selectAction(actionId) {
@@ -1052,6 +1175,9 @@ function focusActionEditSource(source = {}) {
     actionId: source.actionId,
     fieldKey: source.fieldKey,
     label: source.label ?? '',
+    previousValue: source.previousValue ?? '',
+    nextValue: source.nextValue ?? '',
+    changeSummary: source.changeSummary ?? '',
     sequence: actionEditFocus.value.sequence + 1,
   };
 }

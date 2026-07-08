@@ -44,6 +44,7 @@
         data-testid="workbench-action-edit-control"
         data-edit-field="skillId"
         :data-edit-focused="isEditFocusField('skillId')"
+        :data-edit-focus-summary="getEditFocusSummary('skillId')"
         :class="{ 'edit-focused': isEditFocusField('skillId') }"
       >
         <span>技能</span>
@@ -88,6 +89,7 @@
         data-testid="workbench-action-edit-control"
         data-edit-field="startMs"
         :data-edit-focused="isEditFocusField('startMs')"
+        :data-edit-focus-summary="getEditFocusSummary('startMs')"
         :class="{ 'edit-focused': isEditFocusField('startMs') }"
       >
         <span>开始时间 ms</span>
@@ -106,6 +108,7 @@
         data-testid="workbench-action-edit-control"
         :data-edit-field="secondaryEditFieldKey"
         :data-edit-focused="isEditFocusField(secondaryEditFieldKey)"
+        :data-edit-focus-summary="getEditFocusSummary(secondaryEditFieldKey)"
         :class="{ 'edit-focused': isEditFocusField(secondaryEditFieldKey) }"
       >
         <span>{{ secondaryControlLabel }}</span>
@@ -162,6 +165,7 @@
         data-testid="workbench-action-edit-control"
         data-edit-field="actorCharacterId"
         :data-edit-focused="isEditFocusField('actorCharacterId')"
+        :data-edit-focus-summary="getEditFocusSummary('actorCharacterId')"
         :class="{ 'edit-focused': isEditFocusField('actorCharacterId') }"
       >
         <span>动作归属</span>
@@ -192,6 +196,7 @@
         data-testid="workbench-action-edit-control"
         data-edit-field="actionVariantIndex"
         :data-edit-focused="isEditFocusField('actionVariantIndex')"
+        :data-edit-focus-summary="getEditFocusSummary('actionVariantIndex')"
         :class="{ 'edit-focused': isEditFocusField('actionVariantIndex') }"
       >
         <span>动作形态</span>
@@ -336,6 +341,7 @@
         data-testid="workbench-action-edit-control"
         data-edit-field="resource"
         :data-edit-focused="isEditFocusField('resource')"
+        :data-edit-focus-summary="getEditFocusSummary('resource')"
         :class="{ 'edit-focused': isEditFocusField('resource') }"
       >
         <span>资源</span>
@@ -351,6 +357,7 @@
         data-testid="workbench-action-edit-control"
         data-edit-field="reason"
         :data-edit-focused="isEditFocusField('reason')"
+        :data-edit-focus-summary="getEditFocusSummary('reason')"
         :class="{ 'edit-focused': isEditFocusField('reason') }"
       >
         <span>原因</span>
@@ -368,6 +375,7 @@
       data-testid="workbench-action-edit-control"
       data-edit-field="note"
       :data-edit-focused="isEditFocusField('note')"
+      :data-edit-focus-summary="getEditFocusSummary('note')"
       :class="{ 'edit-focused': isEditFocusField('note') }"
     >
       <span>备注</span>
@@ -750,6 +758,12 @@ function isEditFocusField(fieldKey) {
     focus.actionId === props.selectedAction.id &&
     normalizeEditFocusField(focus.fieldKey) === normalizeEditFocusField(fieldKey)
   );
+}
+
+function getEditFocusSummary(fieldKey) {
+  return isEditFocusField(fieldKey)
+    ? props.actionEditFocus?.changeSummary ?? ''
+    : '';
 }
 
 function normalizeEditFocusField(fieldKey) {

@@ -5902,6 +5902,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DG 目标：继续完善编辑闭环，优先为最近编辑来源补字段级前后值摘要，让用户能判断结果刷新来自哪个字段以及改动幅度。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DG 字段来源前后值摘要
+
+本轮完成：
+
+- `Workbench` 的 `actionEditSource` / `actionEditFocus` 新增前端派生摘要：`previousValue`、`nextValue`、`changeSummary`。
+- 动作编辑、时间轴拖动、时长调整、跨轨移动现在会在记录最近编辑来源时同时记录字段前后值。
+- `AnalysisPanel` 的结果行、来源标签和结果详情区新增 `data-edit-source-summary`，来源标签可显示类似 `等级变更 1 -> 2`。
+- `PropertiesPanel` 的字段落点新增 `data-edit-focus-summary`。
+- `TimelineGridPreview` 的动作块新增 `data-edit-focus-summary`。
+- Workbench 测试覆盖等级从 `1 -> 2` 后，结果区、详情区、属性面板和时间轴动作块都能读到同一个摘要。
+
+当前验证事实：
+
+- 修改 `action-0001` 等级后，结果行写入 `data-edit-source-summary="1 -> 2"`。
+- 来源标签显示 `等级变更 1 -> 2`，结果详情区也包含该摘要。
+- 点击来源标签后，属性面板等级控件和时间轴来源动作块都写入 `data-edit-focus-summary="1 -> 2"`。
+- 本阶段只新增前端派生状态，不新增公式、simulation 输出或保存 schema。
+
+当前边界：
+
+- 本阶段只保留最近一次字段编辑摘要，不保留多步编辑历史。
+- 摘要来自动作草稿字段变更，不代表三值公式差异归因。
+- 动作形态、技能、角色等字段已能生成摘要，但仍是轻量显示文本，不是独立对比面板。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8DH 目标：继续完善 Workbench 主流程编辑体验，优先把最近编辑摘要接入结果定位/对比的小面板或操作反馈区域，减少用户在结果、属性、时间轴之间来回确认的成本。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

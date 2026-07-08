@@ -159,6 +159,9 @@
           getActionResultEditSource(entry)?.fieldKey ?? ''
         "
         :data-edit-source-label="getActionResultEditSource(entry)?.label ?? ''"
+        :data-edit-source-summary="
+          getActionResultEditSource(entry)?.changeSummary ?? ''
+        "
         :data-result-refresh-status="draftResultStatus.refreshKey"
         :data-has-runtime-trace="Boolean(getActionResultRuntimeTrace(entry))"
         :data-runtime-state-point-id="
@@ -200,12 +203,15 @@
             class="action-result-edit-source"
             role="button"
             tabindex="0"
+            :data-edit-source-summary="
+              getActionResultEditSource(entry)?.changeSummary ?? ''
+            "
             data-testid="workbench-action-result-edit-source"
             @click.stop="focusActionEditSource(entry)"
             @keydown.enter.stop.prevent="focusActionEditSource(entry)"
             @keydown.space.stop.prevent="focusActionEditSource(entry)"
           >
-            {{ getActionResultEditSource(entry).label }}
+            {{ formatActionEditSourceDisplay(getActionResultEditSource(entry)) }}
           </small>
           <small>{{ formatActionResultSource(entry) }}</small>
           <small
@@ -283,6 +289,10 @@
           "
           :data-edit-source-label="
             getRuntimeResultEditSource(selectedRuntimeResultDetail)?.label ?? ''
+          "
+          :data-edit-source-summary="
+            getRuntimeResultEditSource(selectedRuntimeResultDetail)
+              ?.changeSummary ?? ''
           "
           :data-result-refresh-status="draftResultStatus.refreshKey"
           :data-state-point-id="selectedRuntimeResultDetail.statePointId"
@@ -1965,10 +1975,19 @@ function formatRuntimeResultMeta(detail) {
   const sourceText =
     source && source !== '-' ? `Delta ${source}` : 'Delta 待定位';
   const editSource = getRuntimeResultEditSource(detail);
-  const editSourceText = editSource ? ` · ${editSource.label}` : '';
+  const editSourceText = editSource
+    ? ` · ${formatActionEditSourceDisplay(editSource)}`
+    : '';
   return isRuntimeResultCurrentAction(detail)
     ? `正在编辑 · ${draftResultStatus.value.resultLabel} · ${draftResultStatus.value.refreshLabel}${editSourceText} · ${sourceText}`
     : sourceText;
+}
+
+function formatActionEditSourceDisplay(source) {
+  if (!source) {
+    return '';
+  }
+  return [source.label, source.changeSummary].filter(Boolean).join(' ');
 }
 
 function getRuntimeResultEditSource(detail) {

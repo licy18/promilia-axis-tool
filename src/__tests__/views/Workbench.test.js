@@ -1570,29 +1570,42 @@ describe('Workbench view', () => {
     expect(actionResultRow.attributes('data-edit-source-label')).toBe(
       '等级变更'
     );
+    expect(actionResultRow.attributes('data-edit-source-summary')).toBe(
+      '1 -> 2'
+    );
     expect(
       actionResultRow
         .find('[data-testid="workbench-action-result-edit-source"]')
         .text()
-    ).toBe('等级变更');
+    ).toBe('等级变更 1 -> 2');
+    expect(
+      actionResultRow
+        .find('[data-testid="workbench-action-result-edit-source"]')
+        .attributes('data-edit-source-summary')
+    ).toBe('1 -> 2');
     const editedActionResultDetailPanel = wrapper.find(
       '[data-testid="workbench-action-result-detail-panel"]'
     );
     expect(
       editedActionResultDetailPanel.attributes('data-edit-source-field')
     ).toBe('level');
-    expect(editedActionResultDetailPanel.text()).toContain('等级变更');
+    expect(
+      editedActionResultDetailPanel.attributes('data-edit-source-summary')
+    ).toBe('1 -> 2');
+    expect(editedActionResultDetailPanel.text()).toContain('等级变更 1 -> 2');
 
     const levelEditControl = wrapper.find(
       '[data-testid="workbench-action-edit-control"][data-edit-field="level"]'
     );
     expect(levelEditControl.exists()).toBe(true);
     expect(levelEditControl.attributes('data-edit-focused')).toBe('false');
+    expect(levelEditControl.attributes('data-edit-focus-summary')).toBe('');
     let sourceTimelineAction = wrapper.find(
       '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
     );
     expect(sourceTimelineAction.attributes('data-edit-focused')).toBe('false');
     expect(sourceTimelineAction.attributes('data-edit-focus-field')).toBe('');
+    expect(sourceTimelineAction.attributes('data-edit-focus-summary')).toBe('');
 
     await actionResultRow
       .find('[data-testid="workbench-action-result-edit-source"]')
@@ -1604,6 +1617,9 @@ describe('Workbench view', () => {
     );
     expect(focusedLevelEditControl.attributes('data-edit-focused')).toBe(
       'true'
+    );
+    expect(focusedLevelEditControl.attributes('data-edit-focus-summary')).toBe(
+      '1 -> 2'
     );
     expect(focusedLevelEditControl.classes()).toContain('edit-focused');
     expect(
@@ -1629,6 +1645,9 @@ describe('Workbench view', () => {
     );
     expect(sourceTimelineAction.attributes('data-edit-focus-label')).toBe(
       '等级变更'
+    );
+    expect(sourceTimelineAction.attributes('data-edit-focus-summary')).toBe(
+      '1 -> 2'
     );
     expect(sourceTimelineAction.classes()).toContain('edit-focused');
 
