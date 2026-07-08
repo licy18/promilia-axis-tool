@@ -347,6 +347,8 @@
           :data-result-refresh-status="draftResultStatus.refreshKey"
           :data-state-point-id="selectedRuntimeResultDetail.statePointId"
           :data-track-key="selectedRuntimeResultDetail.trackKey"
+          data-detail-mode="compact"
+          data-full-detail-source="workbench-runtime-selected-detail"
           data-testid="workbench-action-result-detail-panel"
         >
           <div class="action-result-detail-heading">
@@ -362,55 +364,16 @@
           </div>
           <div class="action-result-detail-grid">
             <div
+              v-for="row in createCompactRuntimeResultRows(
+                selectedRuntimeResultDetail
+              )"
+              :key="row.key"
               class="action-result-detail-row"
-              data-detail-key="frame"
+              :data-detail-key="row.key"
               data-testid="workbench-action-result-detail-row"
             >
-              <span>帧</span>
-              <strong>{{ formatRuntimeResultFrame(selectedRuntimeResultDetail) }}</strong>
-            </div>
-            <div
-              class="action-result-detail-row"
-              data-detail-key="track"
-              data-testid="workbench-action-result-detail-row"
-            >
-              <span>轨道</span>
-              <strong>{{ selectedRuntimeResultDetail.trackLabel }}</strong>
-            </div>
-            <div
-              class="action-result-detail-row"
-              data-detail-key="delta"
-              data-testid="workbench-action-result-detail-row"
-            >
-              <span>Delta</span>
-              <strong>{{ formatRuntimeResultDelta(selectedRuntimeResultDetail) }}</strong>
-            </div>
-            <div
-              class="action-result-detail-row"
-              data-detail-key="cumulative"
-              data-testid="workbench-action-result-detail-row"
-            >
-              <span>累计</span>
-              <strong>{{
-                formatRuntimeResultCumulative(selectedRuntimeResultDetail)
-              }}</strong>
-            </div>
-            <div
-              v-if="hasRuntimeResultState(selectedRuntimeResultDetail)"
-              class="action-result-detail-row"
-              data-detail-key="state"
-              data-testid="workbench-action-result-detail-row"
-            >
-              <span>{{ formatRuntimeResultStateLabel(selectedRuntimeResultDetail) }}</span>
-              <strong>{{ formatRuntimeResultStateValue(selectedRuntimeResultDetail) }}</strong>
-            </div>
-            <div
-              class="action-result-detail-row"
-              data-detail-key="status"
-              data-testid="workbench-action-result-detail-row"
-            >
-              <span>状态</span>
-              <strong>{{ formatRuntimeResultStatus(selectedRuntimeResultDetail) }}</strong>
+              <span>{{ row.label }}</span>
+              <strong>{{ row.value }}</strong>
             </div>
           </div>
         </div>
@@ -2239,6 +2202,46 @@ function formatRuntimeResultStatus(detail) {
   return detail?.status ?? '-';
 }
 
+function createCompactRuntimeResultRows(detail) {
+  if (!detail) {
+    return [];
+  }
+  const rows = [
+    {
+      key: 'point',
+      label: '定位',
+      value: `${formatRuntimeResultFrame(detail)} · ${
+        detail.trackLabel || detail.trackKey || '-'
+      }`,
+    },
+    {
+      key: 'delta',
+      label: 'Delta',
+      value: formatRuntimeResultDelta(detail),
+    },
+    {
+      key: 'cumulative',
+      label: '累计',
+      value: formatRuntimeResultCumulative(detail),
+    },
+  ];
+  const status = formatRuntimeResultStatus(detail);
+  rows.push(
+    hasRuntimeResultState(detail)
+      ? {
+          key: 'state-status',
+          label: `${formatRuntimeResultStateLabel(detail)} / 状态`,
+          value: `${formatRuntimeResultStateValue(detail)} · ${status}`,
+        }
+      : {
+          key: 'state-status',
+          label: '状态',
+          value: status,
+        }
+  );
+  return rows;
+}
+
 function selectActionContributionRow(row) {
   if (!row?.firstStatePointId) {
     return;
@@ -3570,7 +3573,7 @@ h2 {
 
 .action-result-detail-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px;
 }
 

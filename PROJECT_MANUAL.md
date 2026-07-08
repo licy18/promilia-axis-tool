@@ -6105,6 +6105,39 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DM 目标：继续完善 Workbench 主流程体验，优先检查贡献拆分与运行详情之间是否还有可收敛的重复摘要或状态标签。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DM 分析内结果详情压缩
+
+本轮完成：
+
+- `AnalysisPanel` 内的 `workbench-action-result-detail-panel` 从完整详情表格收敛为紧凑定位摘要。
+- 紧凑摘要只保留定位、Delta、累计、状态/结果状态四行，避免与独立 `RuntimeSelectedDetailPanel` 重复展示帧、轨道、状态、来源等完整明细。
+- 结果详情面板新增 `data-detail-mode="compact"` 和 `data-full-detail-source="workbench-runtime-selected-detail"`，明确完整详情由右侧“三值详情”面板承接。
+- Workbench 测试更新为确认紧凑摘要结构、结果点定位、贡献拆分和独立运行详情仍保持一致。
+
+当前验证事实：
+
+- 点击动作结果后，分析面板仍能定位到同一个 `statePointId` 和 `trackKey`。
+- 紧凑摘要显示当前结果点的轨道、Delta、累计和状态结果。
+- 独立“三值详情”继续展示完整运行明细、贡献行、计算器行和来源行。
+- 本阶段只调整前端展示颗粒度，不新增公式、simulation 输出或保存 schema。
+
+当前边界：
+
+- 紧凑摘要不是新的数据来源，只是 `selectedRuntimeResultDetail` 的前端派生展示。
+- 完整贡献拆分、calculator 来源和状态点信息仍以独立运行详情和贡献详情为准。
+- 本阶段不处理曲线交互增强，也不补完整编辑器体验。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8DN 目标：继续从“UI 还没完全对齐 Endaxis 的成品体验”这一阶段推进，优先补 Workbench 主流程里的曲线交互和结果定位细节，让用户从曲线点、运行日志、动作结果和贡献拆分之间更稳定地往返。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

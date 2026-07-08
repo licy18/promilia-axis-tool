@@ -1258,6 +1258,12 @@ describe('Workbench view', () => {
     expect(actionResultDetailPanel.attributes('data-track-key')).toBe(
       'enemyHpDamage'
     );
+    expect(actionResultDetailPanel.attributes('data-detail-mode')).toBe(
+      'compact'
+    );
+    expect(
+      actionResultDetailPanel.attributes('data-full-detail-source')
+    ).toBe('workbench-runtime-selected-detail');
     expect(
       wrapper
         .find('[data-testid="workbench-action-result-detail-action"]')
@@ -1268,12 +1274,17 @@ describe('Workbench view', () => {
         .findAll('[data-testid="workbench-action-result-detail-row"]')
         .map(row => [row.attributes('data-detail-key'), row])
     );
-    expect(actionResultDetailRows.track.text()).toBe('轨道敌人HP伤害');
+    expect(Object.keys(actionResultDetailRows)).toEqual([
+      'point',
+      'delta',
+      'cumulative',
+      'state-status',
+    ]);
+    expect(actionResultDetailRows.point.text()).toContain('敌人HP伤害');
     expect(actionResultDetailRows.delta.text()).toBe('Delta12,461');
     expect(actionResultDetailRows.cumulative.text()).toBe('累计12,461');
-    expect(actionResultDetailRows.state.text()).toBe('剩余0');
-    expect(actionResultDetailRows.status.text()).toBe(
-      '状态raw-hp-projection'
+    expect(actionResultDetailRows['state-status'].text()).toBe(
+      '剩余 / 状态0 · raw-hp-projection'
     );
     const actionContributionPanel = wrapper.find(
       '[data-testid="workbench-action-contribution-panel"]'

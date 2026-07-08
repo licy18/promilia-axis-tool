@@ -12258,3 +12258,61 @@ isActionEditFeedbackForAction(actionId)
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DM 应继续完善 Workbench 主流程体验，优先检查贡献拆分与运行详情之间是否还有可收敛的重复摘要或状态标签。
+
+## 146. 阶段 5-8DM：分析面板结果详情紧凑摘要
+
+阶段目标：
+
+- 减少分析面板内结果详情与独立“三值详情”面板之间的重复展示。
+
+### 146.1 数据结构变化
+
+本阶段不新增保存字段，不变更 `Project` schema、simulation 输出或 localStorage 数据。
+
+新增的是 `AnalysisPanel` 内部前端派生行：
+
+```js
+createCompactRuntimeResultRows(detail)
+```
+
+当前派生行 key：
+
+```text
+point
+delta
+cumulative
+state-status
+```
+
+这些行只由 `selectedRuntimeResultDetail` 派生，用于分析面板紧凑展示。
+
+### 146.2 DOM 状态
+
+`workbench-action-result-detail-panel` 新增：
+
+```html
+data-detail-mode="compact"
+data-full-detail-source="workbench-runtime-selected-detail"
+```
+
+含义：
+
+- `compact` 表示分析面板内只展示定位摘要。
+- `workbench-runtime-selected-detail` 表示完整运行明细由独立“三值详情”面板承接。
+
+### 146.3 验证
+
+当前测试覆盖：
+
+- 动作结果详情面板写入 `data-detail-mode="compact"`。
+- 动作结果详情面板写入 `data-full-detail-source="workbench-runtime-selected-detail"`。
+- 紧凑摘要只保留 `point`、`delta`、`cumulative`、`state-status` 四类行。
+- 贡献拆分和独立“三值详情”仍定位到同一个 runtime state point。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DN 应继续推进 Workbench 主流程 UI 的曲线交互和结果定位细节。
