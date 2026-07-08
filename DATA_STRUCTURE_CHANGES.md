@@ -7673,3 +7673,70 @@ RecoverSP fixture 导入后当前摘要：
 - 当前 sampled 映射只覆盖 RecoverSP / 自身能量；HP 和韧性采样仍待后续补充。
 - placeholder 点只表示“动作存在但该轨道没有已应用/候选/采样点”，不代表游戏中真实发生 0 值事件。
 - 下一阶段应让 Workbench 对 sampled / placeholder 的存在更可见，例如层级控件计数、自动提示或按动作骨架下钻。
+
+## 95. 阶段 5-8BP：stateCurves layer count UI
+
+阶段 5-8BP 不修改 `threeValueCurveFramework.stateCurves` 的持久结构，只补充 Workbench 对现有四层的消费规则。
+
+### 95.1 层级控件派生结构
+
+`AnalysisPanel` 新增前端派生的 `stateCurveLayerOptions`：
+
+```js
+[
+  { key: 'applied', label: '已用', pointCount: 1, trackCount: 1 },
+  { key: 'candidate', label: '候选', pointCount: 15, trackCount: 3 },
+  { key: 'sampled', label: '采样', pointCount: 0, trackCount: 0 },
+  { key: 'placeholder', label: '占位', pointCount: 0, trackCount: 0 }
+]
+```
+
+其中：
+
+- `pointCount` 为所有 track 中同名 layer 的点数总和。
+- `trackCount` 为该 layer 至少有 1 个点的 track 数。
+- 该结构只存在于界面层，不写回模拟结果。
+
+### 95.2 显示规则
+
+状态曲线区块的入口条件从 `stateCurveTrackRows.length > 0` 调整为：
+
+```js
+stateCurveTotalPointCount > 0
+```
+
+这样当默认启用的 `applied / candidate` 层没有点，但 `sampled / placeholder` 有点时，用户仍能看到层级开关并手动展开。
+
+轨道行的 `visibleLayers` 现在只保留：
+
+```js
+activeLayers.has(layer.key) && layer.pointCount > 0
+```
+
+因此 UI 不再显示 `0点` 空层，状态曲线标题中的数字表示当前启用层的可见点数。
+
+### 95.3 小数显示
+
+状态曲线 layer 摘要改用 `formatStateCurveNumber()`：
+
+- 普通整数仍走千分位，例如 `12,461`。
+- `0 < abs(value) < 1` 的值保留最多 4 位小数，并去掉尾随 0。
+- RecoverSP sampled fixture 的 `0.3375` 会显示为 `采样 1点 Δ0.3375 Σ0.3375`。
+
+### 95.4 验证
+
+新增 `AnalysisPanel` 组件级 fixture，覆盖：
+
+- `selfEnergyChange.sampled.pointCount = 1`
+- `enemyHpDamage.placeholder.pointCount = 1`
+- applied / candidate 均为 0 点时，状态曲线区块仍显示。
+- 勾选 sampled 后可见点数从 `0` 变为 `1`。
+- 再勾选 placeholder 后可见点数变为 `2`。
+
+阶段验收：
+
+- `npm test -- --run src\__tests__\views\Workbench.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过。
+- `npm run test -- --run`：通过。
+- `npm run build`：通过。
+
+下一阶段 5-8BQ 应把这些点级信息进一步接入下钻或时间轴提示，而不是改动 `stateCurves` 基础结构。

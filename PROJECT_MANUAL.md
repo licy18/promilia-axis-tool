@@ -4446,6 +4446,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 有 sampled 点时，状态曲线层级控制应能提示采样点存在；有 placeholder 点时，应能快速看出哪些动作只是曲线骨架。
 - 继续保持 HP / 韧性最终公式和具体技能细帧为后续 evidence 任务，不阻塞曲线框架建设。
 
+### 2026-07-08：阶段 5-8BP sampled / placeholder 层级计数与空层过滤
+
+本轮完成：
+
+- `AnalysisPanel` 的状态曲线层级控件改为读取汇总后的 `stateCurveLayerOptions`，按钮文案显示各层点数，例如默认末音样本为 `已用 1 / 候选 15 / 采样 0 / 占位 0`。
+- 状态曲线入口改为按 `stateCurves.summary.pointCount` 显示；即使默认启用的 applied / candidate 层没有点，只要 sampled / placeholder 有点，用户也能看到开关并展开。
+- 状态曲线列表现在过滤空层，只展示当前启用且 `pointCount > 0` 的层，避免采样/占位打开后被大量 `0点` 噪声淹没。
+- 状态曲线数值格式新增小数保留：`0 < abs(value) < 1` 的能量采样会显示为 `0.3375`，不再被四舍五入成 `0`。
+- 新增组件级 fixture 覆盖“只有 sampled / placeholder 点、没有 applied / candidate 点”的场景，确认采样和占位层都可发现、可展开。
+
+当前边界：
+
+- 本阶段不新增 `stateCurves` 数据字段，只改变 Workbench 消费和展示规则。
+- sampled / placeholder 仍是诊断/骨架层，不代表 HP / 韧性 / 能量的最终公式已经确认。
+- 状态曲线点还没有接入主时间轴 marker 或逐点详情弹层，用户当前只能在分析面板按轨道查看层摘要。
+
+验收结果：
+
+- `npm test -- --run src\__tests__\views\Workbench.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、48 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、109 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提醒与 chunk 体积提醒。
+
+下一步：
+
+- 阶段 5-8BQ 目标：把状态曲线点变得更可操作。
+- 优先考虑在 Workbench 里增加按层/轨道的点级下钻，或把 sampled / placeholder 点以轻量提示接入时间轴，让用户知道某个动作为什么只是一段骨架或真实采样。
+- 继续避免在当前阶段追逐每个技能的最终逐帧动作，把精确帧、命中次数、owner/target 和 buff 条件留给后续 evidence 填充。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -250,7 +250,7 @@
     </div>
 
     <div
-      v-if="stateCurveTrackRows.length"
+      v-if="stateCurveTotalPointCount > 0"
       class="state-curve-list"
       data-testid="workbench-state-curves"
     >
@@ -260,17 +260,21 @@
       </div>
       <div class="state-curve-layer-controls">
         <label
-          v-for="layer in STATE_CURVE_LAYER_OPTIONS"
+          v-for="layer in stateCurveLayerOptions"
           :key="layer.key"
           class="state-curve-layer-toggle"
+          :class="{ 'has-points': layer.pointCount > 0 }"
+          :data-point-count="layer.pointCount"
         >
           <input
             v-model="stateCurveLayerFilters[layer.key]"
             type="checkbox"
             :data-layer-key="layer.key"
+            :data-point-count="layer.pointCount"
+            :data-track-count="layer.trackCount"
             data-testid="workbench-state-curve-layer-toggle"
           />
-          <span>{{ layer.label }}</span>
+          <span>{{ layer.label }} {{ layer.pointCount }}</span>
         </label>
       </div>
       <div
@@ -502,6 +506,33 @@ const stateCurves = computed(
       tracks: [],
     }
 );
+const stateCurveTotalPointCount = computed(
+  () =>
+    stateCurves.value?.summary?.pointCount ??
+    (stateCurves.value?.tracks ?? []).reduce(
+      (sum, track) => sum + (track.pointCount ?? 0),
+      0
+    )
+);
+const stateCurveLayerOptions = computed(() =>
+  STATE_CURVE_LAYER_OPTIONS.map(layer => {
+    const matchingLayers = (stateCurves.value?.tracks ?? []).flatMap(track =>
+      (track.layers ?? []).filter(item => item.key === layer.key)
+    );
+    const pointCount = matchingLayers.reduce(
+      (sum, item) => sum + (item.pointCount ?? 0),
+      0
+    );
+    const trackCount = matchingLayers.filter(
+      item => (item.pointCount ?? 0) > 0
+    ).length;
+    return {
+      ...layer,
+      pointCount,
+      trackCount,
+    };
+  })
+);
 const activeStateCurveLayerKeys = computed(() =>
   STATE_CURVE_LAYER_OPTIONS.filter(
     layer => stateCurveLayerFilters.value[layer.key]
@@ -513,10 +544,11 @@ const stateCurveTrackRows = computed(() => {
     .filter(track => (track.pointCount ?? 0) > 0)
     .map(track => ({
       ...track,
-      visibleLayers: (track.layers ?? []).filter(layer =>
-        activeLayers.has(layer.key)
+      visibleLayers: (track.layers ?? []).filter(
+        layer => activeLayers.has(layer.key) && (layer.pointCount ?? 0) > 0
       ),
-    }));
+    }))
+    .filter(track => track.visibleLayers.length > 0);
 });
 const stateCurveVisiblePointCount = computed(() =>
   stateCurveTrackRows.value.reduce(
@@ -901,13 +933,34 @@ function formatStateCurveTrackSummary(track) {
 
 function formatStateCurveLayer(layer) {
   const label = formatStateCurveLayerLabel(layer.key);
-  const deltaRange = formatValueRange(layer.deltaMin, layer.deltaMax);
-  return `${label} ${layer.pointCount ?? 0}点 Δ${deltaRange} Σ${formatNumber(layer.finalCumulative)}`;
+  const deltaRange = formatStateCurveValueRange(layer.deltaMin, layer.deltaMax);
+  return `${label} ${layer.pointCount ?? 0}点 Δ${deltaRange} Σ${formatStateCurveNumber(layer.finalCumulative)}`;
 }
 
 function formatStateCurveLayerLabel(key) {
   const option = STATE_CURVE_LAYER_OPTIONS.find(layer => layer.key === key);
   return option?.label ?? key;
+}
+
+function formatStateCurveValueRange(min, max) {
+  if (!Number.isFinite(Number(min)) || !Number.isFinite(Number(max))) {
+    return '-';
+  }
+  if (Number(min) === Number(max)) {
+    return formatStateCurveNumber(min);
+  }
+  return `${formatStateCurveNumber(min)}-${formatStateCurveNumber(max)}`;
+}
+
+function formatStateCurveNumber(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return '-';
+  }
+  if (Math.abs(number) > 0 && Math.abs(number) < 1) {
+    return number.toFixed(4).replace(/0+$/, '').replace(/\.$/, '');
+  }
+  return formatNumber(number);
 }
 
 function formatFrameRange(min, max) {
@@ -1473,6 +1526,11 @@ h2 {
   background: rgba(121, 199, 185, 0.06);
   color: #b8c0c7;
   font-size: 11px;
+}
+
+.state-curve-layer-toggle.has-points {
+  border-color: rgba(121, 199, 185, 0.32);
+  color: #d9e0ff;
 }
 
 .state-curve-layer-toggle input {

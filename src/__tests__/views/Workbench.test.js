@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import workbenchSeed from '../../data/generated/workbench-seed.json';
 import { WORKBENCH_DRAFT_STORAGE_KEY } from '../../domain/workbenchDraftStorage';
 import { getSkillActionCatalog } from '../../domain/workbenchProjectFactory';
+import AnalysisPanel from '../../features/workbench/AnalysisPanel.vue';
 import Workbench from '../../views/Workbench.vue';
 
 describe('Workbench view', () => {
@@ -82,12 +83,12 @@ describe('Workbench view', () => {
     expect(
       wrapper.findAll('[data-testid="workbench-candidate-value-chart-row"]')
     ).toHaveLength(3);
-    expect(wrapper.find('[data-testid="workbench-state-curves"]').exists()).toBe(
-      true
-    );
-    expect(wrapper.findAll('[data-testid="workbench-state-curve-row"]')).toHaveLength(
-      3
-    );
+    expect(
+      wrapper.find('[data-testid="workbench-state-curves"]').exists()
+    ).toBe(true);
+    expect(
+      wrapper.findAll('[data-testid="workbench-state-curve-row"]')
+    ).toHaveLength(3);
     expect(
       wrapper
         .find('[data-testid="workbench-state-curves"] .source-heading strong')
@@ -98,14 +99,29 @@ describe('Workbench view', () => {
         .findAll('[data-testid="workbench-state-curve-layer-toggle"]')
         .map(toggle => toggle.attributes('data-layer-key'))
     ).toEqual(['applied', 'candidate', 'sampled', 'placeholder']);
+    const stateCurveLayerToggles = Object.fromEntries(
+      wrapper
+        .findAll('[data-testid="workbench-state-curve-layer-toggle"]')
+        .map(toggle => [toggle.attributes('data-layer-key'), toggle])
+    );
+    const getStateCurveLayerToggleText = key =>
+      stateCurveLayerToggles[key].element.closest('label')?.textContent ?? '';
+    expect(getStateCurveLayerToggleText('applied')).toContain('已用 1');
+    expect(stateCurveLayerToggles.applied.attributes('data-point-count')).toBe(
+      '1'
+    );
+    expect(getStateCurveLayerToggleText('candidate')).toContain('候选 15');
+    expect(
+      stateCurveLayerToggles.candidate.attributes('data-point-count')
+    ).toBe('15');
+    expect(getStateCurveLayerToggleText('sampled')).toContain('采样 0');
+    expect(getStateCurveLayerToggleText('placeholder')).toContain('占位 0');
     const hpStateCurveRow = wrapper.find(
       '[data-testid="workbench-state-curve-row"][data-track-key="enemyHpDamage"]'
     );
     expect(hpStateCurveRow.text()).toContain('raw-damage · 2/2层 · 6点');
     expect(hpStateCurveRow.text()).toContain('已用 1点 Δ12,461 Σ12,461');
-    expect(hpStateCurveRow.text()).toContain(
-      '候选 5点 Δ2,500-13,000 Σ28,700'
-    );
+    expect(hpStateCurveRow.text()).toContain('候选 5点 Δ2,500-13,000 Σ28,700');
     await wrapper
       .find(
         '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="candidate"]'
@@ -415,6 +431,67 @@ describe('Workbench view', () => {
     );
     expect(text).toContain('伤害 12,461 · 韧性 0 · 能量 0');
     expect(text).toContain('low');
+  });
+
+  it('exposes sampled and placeholder state curve layers before values are applied', async () => {
+    const wrapper = mount(AnalysisPanel, {
+      props: createStateCurvePanelProps(),
+    });
+    const findLayerToggle = key =>
+      wrapper.find(
+        `[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="${key}"]`
+      );
+    const getLayerToggleText = key =>
+      findLayerToggle(key).element.closest('label')?.textContent ?? '';
+
+    expect(
+      wrapper.find('[data-testid="workbench-state-curves"]').exists()
+    ).toBe(true);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curves"] .source-heading strong')
+        .text()
+    ).toBe('0');
+    expect(getLayerToggleText('sampled')).toContain('采样 1');
+    expect(findLayerToggle('sampled').attributes('data-point-count')).toBe('1');
+    expect(findLayerToggle('sampled').attributes('data-track-count')).toBe('1');
+    expect(getLayerToggleText('placeholder')).toContain('占位 1');
+    expect(findLayerToggle('placeholder').attributes('data-point-count')).toBe(
+      '1'
+    );
+    expect(
+      wrapper.findAll('[data-testid="workbench-state-curve-row"]')
+    ).toHaveLength(0);
+
+    await findLayerToggle('sampled').setValue(true);
+    await nextTick();
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curves"] .source-heading strong')
+        .text()
+    ).toBe('1');
+    const sampledRow = wrapper.find(
+      '[data-testid="workbench-state-curve-row"][data-track-key="selfEnergyChange"]'
+    );
+    expect(sampledRow.exists()).toBe(true);
+    expect(sampledRow.text()).toContain('sp · 1/1层 · 1点');
+    expect(sampledRow.text()).toContain('采样 1点 Δ0.3375 Σ0.3375');
+
+    await findLayerToggle('placeholder').setValue(true);
+    await nextTick();
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curves"] .source-heading strong')
+        .text()
+    ).toBe('2');
+    const placeholderRow = wrapper.find(
+      '[data-testid="workbench-state-curve-row"][data-track-key="enemyHpDamage"]'
+    );
+    expect(placeholderRow.exists()).toBe(true);
+    expect(placeholderRow.text()).toContain('raw-damage · 1/1层 · 1点');
+    expect(placeholderRow.text()).toContain('占位 1点 Δ0 Σ0');
   });
 
   it('shows Hanyouyou summon target candidates in per-hit workbench evidence', async () => {
@@ -2400,6 +2477,119 @@ describe('Workbench view', () => {
     );
   });
 });
+
+function createStateCurvePanelProps() {
+  return {
+    summary: {
+      totalRawDamage: 0,
+      formulaVersion: 'test',
+      confidence: 'medium',
+      projectedHitCount: 0,
+      threeValueCurveFrameworkSummary: {
+        trackCount: 3,
+        candidateTrackCount: 0,
+        chartPointCount: 0,
+        stateCurvePointCount: 2,
+        detailsDeferred: true,
+      },
+    },
+    diagnostics: {
+      limitations: [],
+    },
+    damageTimeline: [],
+    actionResultTimeline: [],
+    candidateValueSeries: {
+      summary: {
+        pointCount: 0,
+      },
+      series: [],
+      chart: {
+        summary: {
+          pointCount: 0,
+          displayFrameAdjustmentCount: 0,
+        },
+        series: [],
+      },
+    },
+    threeValueCurveFramework: {
+      stateCurves: {
+        summary: {
+          pointCount: 2,
+        },
+        tracks: [
+          {
+            trackKey: 'selfEnergyChange',
+            label: '自身能量变化',
+            valueUnit: 'sp',
+            pointCount: 1,
+            layers: [
+              createStateCurveLayer('applied'),
+              createStateCurveLayer('candidate'),
+              createStateCurveLayer('sampled', {
+                pointCount: 1,
+                deltaMin: 0.3375,
+                deltaMax: 0.3375,
+                finalCumulative: 0.3375,
+                points: [
+                  {
+                    frameIndex: 12,
+                    delta: 0.3375,
+                    cumulative: 0.3375,
+                  },
+                ],
+              }),
+              createStateCurveLayer('placeholder'),
+            ],
+          },
+          {
+            trackKey: 'enemyHpDamage',
+            label: '敌人HP伤害',
+            valueUnit: 'raw-damage',
+            pointCount: 1,
+            layers: [
+              createStateCurveLayer('applied'),
+              createStateCurveLayer('candidate'),
+              createStateCurveLayer('sampled'),
+              createStateCurveLayer('placeholder', {
+                pointCount: 1,
+                deltaMin: 0,
+                deltaMax: 0,
+                finalCumulative: 0,
+                points: [
+                  {
+                    frameIndex: 60,
+                    delta: 0,
+                    cumulative: 0,
+                  },
+                ],
+              }),
+            ],
+          },
+        ],
+      },
+    },
+    insertionDiagnostics: {
+      autoDelayedCount: 0,
+      autoDelayedItems: [],
+    },
+    timelineDiagnostics: {
+      overlapCount: 0,
+      overlaps: [],
+    },
+  };
+}
+
+function createStateCurveLayer(key, overrides = {}) {
+  return {
+    key,
+    pointCount: 0,
+    deltaMin: null,
+    deltaMax: null,
+    finalCumulative: 0,
+    points: [],
+    ...overrides,
+  };
+}
 
 function stubTimelineGeometry(wrapper) {
   const lane = wrapper.find('[data-testid="workbench-timeline-lane"]').element;
