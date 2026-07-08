@@ -1208,16 +1208,158 @@ const SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA = {
   ],
 };
 
+function createRecoverSpRuntimeSampleContext(capturesInput = []) {
+  const captures = normalizeRecoverSpRuntimeSampleCaptures(capturesInput);
+  const events = captures.flatMap(capture => capture.events);
+
+  return {
+    status:
+      events.length > 0
+        ? 'offline-runtime-samples-imported'
+        : 'runtime-samples-not-imported',
+    captureCount: captures.length,
+    eventCount: events.length,
+    importedRuntimeSampleCount: events.length,
+    eventTypes: uniqueStrings(events.map(event => event.eventType)),
+    captures: captures.map(capture => ({
+      captureSessionId: capture.captureSessionId,
+      schemaVersion: capture.schemaVersion,
+      clientRegion: capture.clientRegion,
+      clientBuild: capture.clientBuild,
+      source: capture.source,
+      eventCount: capture.events.length,
+      eventTypes: uniqueStrings(capture.events.map(event => event.eventType)),
+    })),
+    events,
+    applied: false,
+  };
+}
+
+function normalizeRecoverSpRuntimeSampleCaptures(capturesInput = []) {
+  return arrayOrSingle(capturesInput)
+    .map((capture, captureIndex) =>
+      normalizeRecoverSpRuntimeSampleCapture(capture, captureIndex)
+    )
+    .filter(Boolean);
+}
+
+function normalizeRecoverSpRuntimeSampleCapture(capture, captureIndex) {
+  if (!capture || typeof capture !== 'object') {
+    return null;
+  }
+
+  const captureSessionId =
+    capture.captureSessionId ??
+    capture.sessionId ??
+    `runtime-sample-capture-${captureIndex + 1}`;
+  const rawEvents = Array.isArray(capture.events) ? capture.events : [];
+
+  return {
+    schemaVersion: numberOrNull(capture.schemaVersion) ?? 1,
+    captureSessionId,
+    clientRegion: capture.clientRegion ?? null,
+    clientBuild: capture.clientBuild ?? null,
+    source: capture.source ?? capture.captureSource ?? null,
+    events: rawEvents
+      .map((event, eventIndex) =>
+        normalizeRecoverSpRuntimeSampleEvent({
+          event,
+          eventIndex,
+          captureSessionId,
+        })
+      )
+      .filter(Boolean),
+  };
+}
+
+function normalizeRecoverSpRuntimeSampleEvent({
+  event,
+  eventIndex,
+  captureSessionId,
+}) {
+  if (!event || typeof event !== 'object') {
+    return null;
+  }
+  const eventType = event.eventType ?? event.type;
+  if (!eventType) {
+    return null;
+  }
+
+  return {
+    ...event,
+    eventType,
+    captureSessionId: event.captureSessionId ?? captureSessionId,
+    eventIndex,
+    frameIndex: numberOrNull(event.frameIndex),
+    timeMs: numberOrNull(event.timeMs),
+    actionId: event.actionId ?? null,
+    actorId: event.actorId ?? null,
+    sourceElementConfigId: numberOrNull(event.sourceElementConfigId),
+    elementConfigId: numberOrNull(
+      event.elementConfigId ?? event.sourceElementConfigId
+    ),
+    pathId: event.pathId == null ? null : String(event.pathId),
+    roleEntityId: event.roleEntityId ?? event.receiverEntityId ?? null,
+    ownerEntityId: event.ownerEntityId ?? event.attackerEntityId ?? null,
+    receiverEntityId: event.receiverEntityId ?? null,
+    propertyId: numberOrNull(event.propertyId),
+    propertyName: event.propertyName ?? null,
+    floatValue: numberOrNull(event.floatValue),
+    args: normalizeRecoverSpRuntimeSampleArgs(event.args),
+    recoverSP: numberOrNull(event.recoverSP),
+    petRecoverSP: numberOrNull(event.petRecoverSP),
+    recoverInterval: numberOrNull(event.recoverInterval),
+    spgetup: numberOrNull(event.spgetup),
+    spgetupAtk: numberOrNull(event.spgetupAtk),
+    timerMapHit:
+      typeof event.timerMapHit === 'boolean' ? event.timerMapHit : null,
+    directRecoverCalled:
+      typeof event.directRecoverCalled === 'boolean'
+        ? event.directRecoverCalled
+        : null,
+    spBefore: numberOrNull(event.spBefore),
+    spAfter: numberOrNull(event.spAfter),
+    spDeltaApplied: numberOrNull(event.spDeltaApplied),
+    recoverTagType: numberOrNull(event.recoverTagType),
+    baseDelta: numberOrNull(event.baseDelta),
+    delta: numberOrNull(event.delta),
+  };
+}
+
+function normalizeRecoverSpRuntimeSampleArgs(args = {}) {
+  if (!args || typeof args !== 'object') {
+    return {};
+  }
+
+  return {
+    ...args,
+    id: args.id ?? null,
+    baseDelta: numberOrNull(args.baseDelta),
+    delta: numberOrNull(args.delta),
+    interval: numberOrNull(args.interval),
+    tagType: numberOrNull(args.tagType),
+    skillId: numberOrNull(args.skillId),
+    sharePercent: numberOrNull(args.sharePercent),
+    petSharePercent: numberOrNull(args.petSharePercent),
+    petDelta: numberOrNull(args.petDelta),
+    mainPetSharePercent: numberOrNull(args.mainPetSharePercent),
+  };
+}
+
 export function projectSimulationResult({
   scenario,
   eventLog,
   damageEvents,
   resourceEvents,
 }) {
+  const runtimeSampleContext = createRecoverSpRuntimeSampleContext(
+    scenario.runtimeSampleCaptures
+  );
   const actionResultTimeline = buildActionResultTimeline({
     scenario,
     damageEvents,
     resourceEvents,
+    runtimeSampleContext,
   });
   const candidateValueSeries = buildCandidateValueSeries(
     actionResultTimeline,
@@ -1271,7 +1413,8 @@ export function projectSimulationResult({
     summarizeFormulaCandidatePatterns(actionResultTimeline);
   const formulaExecutionMatrixSummary = summarizeFormulaExecutionMatrices(
     actionResultTimeline,
-    formulaCandidatePatternSummary
+    formulaCandidatePatternSummary,
+    runtimeSampleContext
   );
   const timingMissingActionIds = scenario.diagnostics.missingTimingActionIds;
 
@@ -2024,7 +2167,8 @@ function selectComparableFormulaCombinationPreview(previews) {
 
 function summarizeFormulaExecutionMatrices(
   actionResultTimeline,
-  formulaCandidatePatternSummary = null
+  formulaCandidatePatternSummary = null,
+  runtimeSampleContext = null
 ) {
   const behaviorBindingEvidenceByActionId =
     createFormulaPatternBindingEvidenceByActionId(
@@ -2034,7 +2178,8 @@ function summarizeFormulaExecutionMatrices(
     .map(entry =>
       createFormulaExecutionMatrixActionSummary(
         entry,
-        behaviorBindingEvidenceByActionId.get(entry.actionId)
+        behaviorBindingEvidenceByActionId.get(entry.actionId),
+        runtimeSampleContext
       )
     )
     .filter(Boolean);
@@ -2161,7 +2306,8 @@ function summarizeFormulaExecutionMatrices(
 
 function createFormulaExecutionMatrixActionSummary(
   entry,
-  behaviorBindingEvidence = null
+  behaviorBindingEvidence = null,
+  runtimeSampleContext = null
 ) {
   const matrix = entry.hpDamage?.sourceEvidence?.formulaExecutionEvidenceMatrix;
   if (!matrix || matrix.rowCount <= 0) {
@@ -2203,6 +2349,7 @@ function createFormulaExecutionMatrixActionSummary(
     actionLevelElementSource:
       entry.hpDamage?.sourceEvidence?.actionLevelElementSource ?? null,
     behaviorBindingEvidence,
+    runtimeSampleContext,
   });
 
   return {
@@ -2489,6 +2636,7 @@ function createFormulaExecutionHitBindingGap({
   matrixElementConfigIds = [],
   actionLevelElementSource = null,
   behaviorBindingEvidence,
+  runtimeSampleContext = null,
 }) {
   const missingRowCount = Math.max(0, rowCount - rowsWithHitBindings);
   if (missingRowCount === 0) {
@@ -2512,6 +2660,7 @@ function createFormulaExecutionHitBindingGap({
   const externalElementBinding = createHitBindingGapExternalElementBinding({
     skillId,
     behaviorBindingEvidence,
+    runtimeSampleContext,
   });
   const elementSourceAlignment = createHitBindingGapElementSourceAlignment({
     actionLevelElementSource,
@@ -2616,6 +2765,7 @@ function createFormulaExecutionHitBindingGapSummary(actionSummaries) {
 function createHitBindingGapExternalElementBinding({
   skillId,
   behaviorBindingEvidence,
+  runtimeSampleContext = null,
 }) {
   const numericSkillId = numberOrNull(skillId);
   const sourceCandidates = selectPrimaryHitBindingBehaviorCandidates(
@@ -2697,6 +2847,7 @@ function createHitBindingGapExternalElementBinding({
     })),
     {
       sourceStatus: 'external-damage-element-candidates',
+      runtimeSampleContext,
     }
   );
   const unresolved = uniqueStrings([
@@ -5232,7 +5383,12 @@ function numberRange(min, max) {
   return Number.isFinite(min) && Number.isFinite(max) ? max - min : null;
 }
 
-function buildActionResultTimeline({ scenario, damageEvents, resourceEvents }) {
+function buildActionResultTimeline({
+  scenario,
+  damageEvents,
+  resourceEvents,
+  runtimeSampleContext = null,
+}) {
   const damageByActionId = groupEventsByActionId(damageEvents);
   const resourcesByActionId = groupEventsByActionId(resourceEvents);
 
@@ -5272,7 +5428,8 @@ function buildActionResultTimeline({ scenario, damageEvents, resourceEvents }) {
       selfEnergyChange: createSelfEnergyChangeResult(
         action,
         actionResourceEvents,
-        damageElementSource
+        damageElementSource,
+        runtimeSampleContext
       ),
       hitCandidateSummary: summarizeActionHitCandidates(
         hitCandidates,
@@ -5871,7 +6028,14 @@ function createSelfEnergyRuntimeFormulaProbe(candidates, options = {}) {
   const runtimeModifierProbe = createSelfEnergyRuntimeModifierProbe(samples);
   const ownerShareIntervalProbe =
     createSelfEnergyOwnerShareIntervalProbe(samples);
-  const runtimeSamplingProbe = createSelfEnergyRuntimeSamplingProbe(samples);
+  const runtimeSamplingProbe = createSelfEnergyRuntimeSamplingProbe(
+    samples,
+    options.runtimeSampleContext,
+    {
+      action: options.action,
+      sourceStatus: options.sourceStatus,
+    }
+  );
 
   return {
     status:
@@ -6153,58 +6317,537 @@ function createSelfEnergyOwnerShareIntervalProbe(samples) {
   };
 }
 
-function createSelfEnergyRuntimeSamplingProbe(samples) {
+function createSelfEnergyRuntimeSamplingProbe(
+  samples,
+  runtimeSampleContext = null,
+  options = {}
+) {
   const candidateCount = samples.length;
   const gateOpenCount = samples.filter(sample => sample.gateOpen).length;
   const requiredEventTypes =
     SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA.offlineImportShape.eventTypes;
+  const importedRuntimeSampleCount =
+    runtimeSampleContext?.importedRuntimeSampleCount ?? 0;
+  const sampleExpectations = samples.map(sample =>
+    createSelfEnergyRuntimeSampleExpectation({
+      sample,
+      runtimeSampleContext,
+      options,
+    })
+  );
+  const matchedSampleCount = sampleExpectations.filter(
+    expectation => (expectation.runtimeSampleMatch?.matchedEventCount ?? 0) > 0
+  ).length;
+  const validatedSampleCount = sampleExpectations.filter(
+    expectation =>
+      expectation.runtimeSampleMatch?.validationStatus ===
+      'offline-runtime-sample-validated'
+  ).length;
+  const failedSampleCount = sampleExpectations.filter(
+    expectation =>
+      expectation.runtimeSampleMatch?.validationStatus ===
+      'offline-runtime-sample-validation-failed'
+  ).length;
+  const sampleImportSummary = {
+    status: createRuntimeSampleImportSummaryStatus({
+      candidateCount,
+      importedRuntimeSampleCount,
+      matchedSampleCount,
+      validatedSampleCount,
+      failedSampleCount,
+    }),
+    sourceStatus: options.sourceStatus ?? null,
+    captureCount: runtimeSampleContext?.captureCount ?? 0,
+    importedRuntimeSampleCount,
+    importedEventTypes: runtimeSampleContext?.eventTypes ?? [],
+    requiredEventTypes,
+    matchedSampleCount,
+    validatedSampleCount,
+    failedSampleCount,
+    missingSampleCount: Math.max(0, candidateCount - matchedSampleCount),
+    validationStatuses: uniqueStrings(
+      sampleExpectations
+        .map(expectation => expectation.runtimeSampleMatch?.validationStatus)
+        .filter(Boolean)
+    ),
+    applied: false,
+  };
 
   return {
-    status:
-      candidateCount > 0
-        ? 'runtime-sampling-schema-built-awaiting-capture'
-        : 'runtime-sampling-schema-missing',
+    status: createRuntimeSamplingProbeStatus({
+      candidateCount,
+      importedRuntimeSampleCount,
+      matchedSampleCount,
+      validatedSampleCount,
+      failedSampleCount,
+    }),
     sourceKind: 'azpr-self-energy-runtime-sampling-subprobe',
     sourceFunction: 'DamageElement.RecoverSP@0x138EEE0',
     candidateCount,
     gateOpenCount,
-    importedRuntimeSampleCount: 0,
-    importStatus: 'runtime-samples-not-imported',
+    importedRuntimeSampleCount,
+    importStatus: createRuntimeSampleImportStatus({
+      importedRuntimeSampleCount,
+      matchedSampleCount,
+      validatedSampleCount,
+      failedSampleCount,
+    }),
     sampleSchema: SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA,
     requiredEventTypes,
-    sampleExpectations: samples.map(sample => ({
-      elementConfigId: sample.elementConfigId,
-      pathId: sample.pathId,
-      gateOpen: sample.gateOpen,
-      expectedRecoverSpArgs: {
-        baseDelta: scalePerTenThousand(sample.recoverSP),
-        deltaFormula: 'recoverSP / 10000 * (1 + SPGETUP + SPGETUP_ATK)',
-        petDeltaFormula: 'petRecoverSP / 10000 * (1 + SPGETUP + SPGETUP_ATK)',
-        intervalSecondsCandidate:
-          sample.recoverInterval == null ? null : sample.recoverInterval / 1000,
-        tagType: {
-          value: 0,
-          name: 'AttackRecoverySp',
-        },
-      },
-      requiredRuntimeValues: [
-        {
-          propertyId: 105,
-          propertyName: 'SPGETUP',
-        },
-        {
-          propertyId: 228,
-          propertyName: 'SPGETUP_ATK',
-        },
-      ],
-      correlationKeys:
-        SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA.offlineImportShape
-          .eventCorrelationKeys,
-      status: 'sample-contract-ready-awaiting-runtime-events',
-    })),
-    unresolved: SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA.unresolved,
+    sampleImportSummary,
+    runtimeSampleCaptures: runtimeSampleContext?.captures ?? [],
+    sampleExpectations,
+    unresolved: createRuntimeSamplingProbeUnresolved({
+      importedRuntimeSampleCount,
+      matchedSampleCount,
+      candidateCount,
+      failedSampleCount,
+    }),
     applied: false,
   };
+}
+
+function createSelfEnergyRuntimeSampleExpectation({
+  sample,
+  runtimeSampleContext,
+  options,
+}) {
+  const runtimeSampleMatch = createSelfEnergyRuntimeSampleMatch({
+    sample,
+    runtimeSampleContext,
+    action: options.action,
+  });
+
+  return {
+    elementConfigId: sample.elementConfigId,
+    pathId: sample.pathId,
+    gateOpen: sample.gateOpen,
+    expectedRecoverSpArgs: {
+      baseDelta: scalePerTenThousand(sample.recoverSP),
+      deltaFormula: 'recoverSP / 10000 * (1 + SPGETUP + SPGETUP_ATK)',
+      petDeltaFormula: 'petRecoverSP / 10000 * (1 + SPGETUP + SPGETUP_ATK)',
+      intervalSecondsCandidate:
+        sample.recoverInterval == null ? null : sample.recoverInterval / 1000,
+      tagType: {
+        value: 0,
+        name: 'AttackRecoverySp',
+      },
+    },
+    requiredRuntimeValues: [
+      {
+        propertyId: 105,
+        propertyName: 'SPGETUP',
+      },
+      {
+        propertyId: 228,
+        propertyName: 'SPGETUP_ATK',
+      },
+    ],
+    correlationKeys:
+      SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA.offlineImportShape.eventCorrelationKeys,
+    runtimeSampleMatch,
+    status:
+      runtimeSampleMatch?.validationStatus ??
+      'sample-contract-ready-awaiting-runtime-events',
+  };
+}
+
+function createSelfEnergyRuntimeSampleMatch({
+  sample,
+  runtimeSampleContext,
+  action,
+}) {
+  if (!runtimeSampleContext?.eventCount) {
+    return null;
+  }
+
+  const events = findRecoverSpRuntimeSampleEventsForSample({
+    sample,
+    runtimeSampleContext,
+    action,
+  });
+  const eventTypeCounts = countRuntimeSampleEventsByType(events);
+
+  if (events.length === 0) {
+    return {
+      status: 'offline-runtime-sample-missing',
+      validationStatus: 'offline-runtime-sample-missing',
+      matchedEventCount: 0,
+      eventTypeCounts,
+      validationResults: [],
+      applied: false,
+    };
+  }
+
+  const argsEvent = findRuntimeSampleEvent(events, 'recover-sp-args-built');
+  const onTransmitEvent = findRuntimeSampleEvent(
+    events,
+    'recover-sp-ontransmit-12f'
+  );
+  const appliedEvent = findRuntimeSampleEvent(events, 'recover-sp-applied');
+  const shareEvents = events.filter(
+    event => event.eventType === 'recover-sp-share-rebroadcast'
+  );
+  const spgetup = findRecoverSpModifierValue(events, 105, argsEvent?.spgetup);
+  const spgetupAtk = findRecoverSpModifierValue(
+    events,
+    228,
+    argsEvent?.spgetupAtk
+  );
+  const expectedBaseDelta = scalePerTenThousand(sample.recoverSP);
+  const expectedPetBaseDelta = scalePerTenThousand(sample.petRecoverSP);
+  const modifierMultiplier =
+    spgetup == null || spgetupAtk == null ? null : 1 + spgetup + spgetupAtk;
+  const expectedDelta =
+    expectedBaseDelta == null || modifierMultiplier == null
+      ? null
+      : roundRuntimeSampleNumber(expectedBaseDelta * modifierMultiplier);
+  const expectedPetDelta =
+    expectedPetBaseDelta == null || modifierMultiplier == null
+      ? null
+      : roundRuntimeSampleNumber(expectedPetBaseDelta * modifierMultiplier);
+  const expectedInterval =
+    sample.recoverInterval == null
+      ? null
+      : roundRuntimeSampleNumber(sample.recoverInterval / 1000);
+  const appliedDelta = getRuntimeAppliedSpDelta(appliedEvent);
+
+  const validationResults = [
+    createRuntimeSampleValidationResult({
+      key: 'base-delta-scale',
+      expression: 'args.baseDelta == recoverSP / 10000',
+      expected: expectedBaseDelta,
+      actual: argsEvent?.args?.baseDelta,
+      missingReason: argsEvent ? null : 'recover-sp-args-built-missing',
+    }),
+    createRuntimeSampleValidationResult({
+      key: 'delta-scale-and-modifier',
+      expression:
+        'args.delta == recoverSP / 10000 * (1 + SPGETUP + SPGETUP_ATK)',
+      expected: expectedDelta,
+      actual: argsEvent?.args?.delta,
+      missingReason:
+        argsEvent && modifierMultiplier != null
+          ? null
+          : 'recover-sp-args-or-modifier-values-missing',
+    }),
+    createRuntimeSampleValidationResult({
+      key: 'pet-delta-scale-and-modifier',
+      expression:
+        'args.petDelta == petRecoverSP / 10000 * (1 + SPGETUP + SPGETUP_ATK)',
+      expected: expectedPetDelta,
+      actual: argsEvent?.args?.petDelta,
+      missingReason:
+        argsEvent && modifierMultiplier != null
+          ? null
+          : 'recover-sp-args-or-modifier-values-missing',
+    }),
+    createRuntimeSampleValidationResult({
+      key: 'interval-scale',
+      expression: 'args.interval == recoverInterval / 1000',
+      expected: expectedInterval,
+      actual: argsEvent?.args?.interval,
+      missingReason: argsEvent ? null : 'recover-sp-args-built-missing',
+    }),
+    createRuntimeSampleValidationResult({
+      key: 'final-sp-curve',
+      expression:
+        'spAfter - spBefore == applied delta after owner/share/throttle rules',
+      expected: argsEvent?.args?.delta,
+      actual: appliedDelta,
+      missingReason:
+        argsEvent && appliedEvent ? null : 'recover-sp-applied-missing',
+    }),
+  ];
+  const validationStatus =
+    createRuntimeSampleValidationStatus(validationResults);
+
+  return {
+    status: 'offline-runtime-sample-events-matched',
+    validationStatus,
+    matchedEventCount: events.length,
+    eventTypeCounts,
+    captureSessionIds: uniqueStrings(
+      events.map(event => event.captureSessionId).filter(Boolean)
+    ),
+    correlationIds: uniqueStrings(
+      events.map(event => event.args?.id).filter(Boolean)
+    ),
+    frameIndexes: uniqueNumbers(events.map(event => event.frameIndex)),
+    roleEntityIds: uniqueStrings(
+      events
+        .map(event => event.roleEntityId ?? event.receiverEntityId)
+        .filter(Boolean)
+    ),
+    modifierValues: {
+      SPGETUP: spgetup,
+      SPGETUP_ATK: spgetupAtk,
+      multiplier: modifierMultiplier,
+    },
+    expectedRuntimeArgs: {
+      baseDelta: expectedBaseDelta,
+      delta: expectedDelta,
+      petDelta: expectedPetDelta,
+      interval: expectedInterval,
+    },
+    observedRuntimeArgs: {
+      id: argsEvent?.args?.id ?? null,
+      baseDelta: argsEvent?.args?.baseDelta ?? null,
+      delta: argsEvent?.args?.delta ?? null,
+      petDelta: argsEvent?.args?.petDelta ?? null,
+      interval: argsEvent?.args?.interval ?? null,
+      tagType: argsEvent?.args?.tagType ?? null,
+      sharePercent: argsEvent?.args?.sharePercent ?? null,
+      petSharePercent: argsEvent?.args?.petSharePercent ?? null,
+      mainPetSharePercent: argsEvent?.args?.mainPetSharePercent ?? null,
+    },
+    onTransmit: onTransmitEvent
+      ? {
+          timerMapHit: onTransmitEvent.timerMapHit,
+          directRecoverCalled: onTransmitEvent.directRecoverCalled,
+          receiverEntityId: onTransmitEvent.receiverEntityId,
+          shareRebroadcastTargetCount:
+            onTransmitEvent.shareRebroadcastTargets?.length ?? 0,
+          petShareTargetCount: onTransmitEvent.petShareTargets?.length ?? 0,
+          mainPetShareTargetCount:
+            onTransmitEvent.mainPetShareTargets?.length ?? 0,
+        }
+      : null,
+    finalSpCurve: appliedEvent
+      ? {
+          roleEntityId: appliedEvent.roleEntityId,
+          spBefore: appliedEvent.spBefore,
+          spAfter: appliedEvent.spAfter,
+          spDeltaApplied: appliedDelta,
+          recoverTagType: appliedEvent.recoverTagType,
+        }
+      : null,
+    shareRebroadcastEventCount: shareEvents.length,
+    validationResults,
+    applied: false,
+  };
+}
+
+function findRecoverSpRuntimeSampleEventsForSample({
+  sample,
+  runtimeSampleContext,
+  action,
+}) {
+  const actionId = action?.id ?? null;
+  const sampleElementId = numberOrNull(sample.elementConfigId);
+  const samplePathId = sample.pathId == null ? null : String(sample.pathId);
+  const primaryEvents = (runtimeSampleContext.events ?? []).filter(event => {
+    if (actionId && event.actionId && event.actionId !== actionId) {
+      return false;
+    }
+    return (
+      (sampleElementId != null &&
+        (event.sourceElementConfigId === sampleElementId ||
+          event.elementConfigId === sampleElementId)) ||
+      (samplePathId != null && event.pathId === samplePathId)
+    );
+  });
+  const correlationIds = new Set(
+    primaryEvents
+      .map(event => event.args?.id)
+      .filter(value => value != null && String(value).length > 0)
+  );
+
+  return (runtimeSampleContext.events ?? [])
+    .filter(event => {
+      if (actionId && event.actionId && event.actionId !== actionId) {
+        return false;
+      }
+      if (primaryEvents.includes(event)) {
+        return true;
+      }
+      return event.args?.id != null && correlationIds.has(event.args.id);
+    })
+    .sort(
+      (left, right) =>
+        (numberOrNull(left.frameIndex) ?? 0) -
+          (numberOrNull(right.frameIndex) ?? 0) ||
+        (numberOrNull(left.eventIndex) ?? 0) -
+          (numberOrNull(right.eventIndex) ?? 0)
+    );
+}
+
+function findRuntimeSampleEvent(events, eventType) {
+  return events.find(event => event.eventType === eventType) ?? null;
+}
+
+function findRecoverSpModifierValue(events, propertyId, fallbackValue = null) {
+  const event = events.find(
+    item =>
+      item.eventType === 'recover-sp-modifier-property-read' &&
+      Number(item.propertyId) === Number(propertyId)
+  );
+  return numberOrNull(event?.floatValue ?? fallbackValue);
+}
+
+function getRuntimeAppliedSpDelta(appliedEvent) {
+  if (!appliedEvent) {
+    return null;
+  }
+  const explicitDelta = numberOrNull(appliedEvent.spDeltaApplied);
+  if (explicitDelta != null) {
+    return explicitDelta;
+  }
+  const before = numberOrNull(appliedEvent.spBefore);
+  const after = numberOrNull(appliedEvent.spAfter);
+  if (before == null || after == null) {
+    return null;
+  }
+  return roundRuntimeSampleNumber(after - before);
+}
+
+function createRuntimeSampleValidationResult({
+  key,
+  expression,
+  expected,
+  actual,
+  missingReason = null,
+  tolerance = 0.0001,
+}) {
+  const numericExpected = numberOrNull(expected);
+  const numericActual = numberOrNull(actual);
+  if (missingReason || numericExpected == null || numericActual == null) {
+    return {
+      key,
+      expression,
+      status: 'missing-runtime-value',
+      expected: numericExpected,
+      actual: numericActual,
+      tolerance,
+      reason: missingReason ?? 'expected-or-actual-missing',
+    };
+  }
+
+  const difference = roundRuntimeSampleNumber(numericActual - numericExpected);
+  return {
+    key,
+    expression,
+    status:
+      Math.abs(difference) <= tolerance
+        ? 'passed'
+        : 'failed-runtime-value-mismatch',
+    expected: numericExpected,
+    actual: numericActual,
+    difference,
+    tolerance,
+  };
+}
+
+function createRuntimeSampleValidationStatus(validationResults) {
+  if (validationResults.length === 0) {
+    return 'offline-runtime-sample-missing';
+  }
+  if (validationResults.every(result => result.status === 'passed')) {
+    return 'offline-runtime-sample-validated';
+  }
+  if (validationResults.some(result => result.status.includes('failed'))) {
+    return 'offline-runtime-sample-validation-failed';
+  }
+  return 'offline-runtime-sample-validation-incomplete';
+}
+
+function createRuntimeSamplingProbeStatus({
+  candidateCount,
+  importedRuntimeSampleCount,
+  matchedSampleCount,
+  validatedSampleCount,
+  failedSampleCount,
+}) {
+  if (candidateCount <= 0) {
+    return 'runtime-sampling-schema-missing';
+  }
+  if (importedRuntimeSampleCount <= 0) {
+    return 'runtime-sampling-schema-built-awaiting-capture';
+  }
+  if (failedSampleCount > 0) {
+    return 'runtime-sampling-offline-samples-validation-failed';
+  }
+  if (validatedSampleCount >= candidateCount) {
+    return 'runtime-sampling-offline-samples-validated';
+  }
+  if (matchedSampleCount > 0) {
+    return 'runtime-sampling-offline-samples-partially-validated';
+  }
+  return 'runtime-sampling-offline-samples-imported-no-matches';
+}
+
+function createRuntimeSampleImportStatus({
+  importedRuntimeSampleCount,
+  matchedSampleCount,
+  validatedSampleCount,
+  failedSampleCount,
+}) {
+  if (importedRuntimeSampleCount <= 0) {
+    return 'runtime-samples-not-imported';
+  }
+  if (failedSampleCount > 0) {
+    return 'offline-runtime-samples-validation-failed';
+  }
+  if (validatedSampleCount > 0) {
+    return 'offline-runtime-samples-validated';
+  }
+  if (matchedSampleCount > 0) {
+    return 'offline-runtime-samples-matched-validation-incomplete';
+  }
+  return 'offline-runtime-samples-imported-no-matches';
+}
+
+function createRuntimeSampleImportSummaryStatus({
+  candidateCount,
+  importedRuntimeSampleCount,
+  matchedSampleCount,
+  validatedSampleCount,
+  failedSampleCount,
+}) {
+  if (importedRuntimeSampleCount <= 0) {
+    return 'runtime-sample-import-missing';
+  }
+  if (failedSampleCount > 0) {
+    return 'runtime-sample-import-validation-failed';
+  }
+  if (candidateCount > 0 && validatedSampleCount >= candidateCount) {
+    return 'runtime-sample-import-validated';
+  }
+  if (matchedSampleCount > 0) {
+    return 'runtime-sample-import-partial';
+  }
+  return 'runtime-sample-import-no-matches';
+}
+
+function createRuntimeSamplingProbeUnresolved({
+  importedRuntimeSampleCount,
+  matchedSampleCount,
+  candidateCount,
+  failedSampleCount,
+}) {
+  return uniqueStrings([
+    ...SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA.unresolved.filter(item =>
+      importedRuntimeSampleCount > 0
+        ? item !== 'offline-runtime-samples-not-imported'
+        : true
+    ),
+    ...(matchedSampleCount < candidateCount && importedRuntimeSampleCount > 0
+      ? ['runtime-sample-coverage-incomplete']
+      : []),
+    ...(failedSampleCount > 0 ? ['runtime-sample-validation-failed'] : []),
+  ]);
+}
+
+function countRuntimeSampleEventsByType(events) {
+  return events.reduce((counts, event) => {
+    counts[event.eventType] = (counts[event.eventType] ?? 0) + 1;
+    return counts;
+  }, {});
+}
+
+function roundRuntimeSampleNumber(value) {
+  const number = numberOrNull(value);
+  return number == null ? null : Number(number.toFixed(6));
 }
 
 function normalizeSelfEnergyRuntimeProbeSample(candidate) {
@@ -6559,7 +7202,8 @@ function createToughnessDamageResult(action, damageEvent, damageElementSource) {
 function createSelfEnergyChangeResult(
   action,
   resourceEvents,
-  damageElementSource
+  damageElementSource,
+  runtimeSampleContext = null
 ) {
   const energyEvents = resourceEvents.filter(event =>
     ['sp', 'energy'].includes(String(event.payload.resource))
@@ -6572,7 +7216,11 @@ function createSelfEnergyChangeResult(
   const skillAction = isSkillAction(action);
   const sourceEvidence = createDamageElementChainSource(
     damageElementSource,
-    'selfEnergyChange'
+    'selfEnergyChange',
+    {
+      action,
+      runtimeSampleContext,
+    }
   );
   const hasCandidateFields =
     sourceEvidence?.status === 'candidate-fields-found';
@@ -6851,7 +7499,11 @@ function createActionLevelElementSource({
   };
 }
 
-function createDamageElementChainSource(damageElementSource, chainKey) {
+function createDamageElementChainSource(
+  damageElementSource,
+  chainKey,
+  options = {}
+) {
   if (!damageElementSource) {
     return null;
   }
@@ -6873,6 +7525,8 @@ function createDamageElementChainSource(damageElementSource, chainKey) {
         candidates.length > 0
           ? 'action-level-damage-element-candidates'
           : damageElementSource.status,
+      action: options.action,
+      runtimeSampleContext: options.runtimeSampleContext,
     }
   );
 
@@ -7711,6 +8365,13 @@ function pathLookupKey(pathId) {
 function numberOrNull(value) {
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
+}
+
+function arrayOrSingle(value) {
+  if (value == null) {
+    return [];
+  }
+  return Array.isArray(value) ? value : [value];
 }
 
 function attachDamageElementSourceToHpBreakdown(

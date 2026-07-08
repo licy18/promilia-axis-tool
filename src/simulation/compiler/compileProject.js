@@ -33,7 +33,9 @@ export function compileProject(project, gameData) {
       id: project.id,
       name: project.name,
       schemaVersion: project.schemaVersion,
+      metadata: project.metadata ?? {},
     },
+    runtimeSampleCaptures: collectRuntimeSampleCaptures(project.metadata),
     time: {
       ...project.time,
     },
@@ -47,6 +49,21 @@ export function compileProject(project, gameData) {
         .map(action => action.id),
     },
   };
+}
+
+function collectRuntimeSampleCaptures(metadata = {}) {
+  return [
+    ...arrayOrSingle(metadata.runtimeSampleCaptures),
+    ...arrayOrSingle(metadata.recoverSpRuntimeSampleCaptures),
+    ...arrayOrSingle(metadata.runtimeSamples),
+  ].filter(Boolean);
+}
+
+function arrayOrSingle(value) {
+  if (value == null) {
+    return [];
+  }
+  return Array.isArray(value) ? value : [value];
 }
 
 function compileActor(actor, charactersById) {
@@ -177,7 +194,9 @@ function compileAction(action, actorsById, enemy, skillsById) {
   const actor = actorsById.get(action.actorId);
   const skill = skillsById.get(Number(action.skillId));
   const damageSegments = parseDamageSegments(action);
-  const actionVariantIndex = Number(action.actionVariantIndex ?? action.damageSegmentIndex);
+  const actionVariantIndex = Number(
+    action.actionVariantIndex ?? action.damageSegmentIndex
+  );
   const selectedDamageSegment =
     damageSegments.find(
       segment => Number(segment.index) === actionVariantIndex

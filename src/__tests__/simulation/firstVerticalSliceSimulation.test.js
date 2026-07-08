@@ -12,6 +12,7 @@ import {
   CompileProjectError,
   runSimulation,
 } from '../../simulation';
+import { createRecoverSpRuntimeSampleFixture } from '../../simulation/fixtures/recoverSpRuntimeSampleFixture';
 
 describe('first vertical slice simulation', () => {
   it('compiles the real-data fixture into a scenario', () => {
@@ -1721,6 +1722,128 @@ describe('first vertical slice simulation', () => {
     expect(result.diagnostics.limitations.join('\n')).toContain(
       'Every action result tracks HP damage, toughness damage, and self energy delta'
     );
+  });
+
+  it('imports offline RecoverSP runtime sample fixtures for validation', () => {
+    const project = createFirstVerticalSliceProject();
+    project.metadata = {
+      ...project.metadata,
+      runtimeSampleCaptures: [createRecoverSpRuntimeSampleFixture()],
+    };
+
+    const scenario = compileProject(project, getFirstVerticalSliceGameData());
+    expect(scenario.runtimeSampleCaptures).toHaveLength(1);
+    expect(scenario.sourceProject.metadata.runtimeSampleCaptures).toHaveLength(
+      1
+    );
+
+    const result = runSimulation(project, getFirstVerticalSliceGameData());
+    const probe =
+      result.actionResultTimeline[0].selfEnergyChange.runtimeFormulaProbe
+        .runtimeSamplingProbe;
+    const matchedSample = probe.sampleExpectations.find(
+      sample => sample.elementConfigId === 109001081
+    );
+    const missingSample = probe.sampleExpectations.find(
+      sample => sample.elementConfigId === 109001306
+    );
+
+    expect(probe).toMatchObject({
+      status: 'runtime-sampling-offline-samples-partially-validated',
+      importedRuntimeSampleCount: 6,
+      importStatus: 'offline-runtime-samples-validated',
+      sampleImportSummary: expect.objectContaining({
+        status: 'runtime-sample-import-partial',
+        captureCount: 1,
+        importedRuntimeSampleCount: 6,
+        matchedSampleCount: 1,
+        validatedSampleCount: 1,
+        missingSampleCount: 1,
+      }),
+    });
+    expect(probe.sampleImportSummary.importedEventTypes).toEqual(
+      expect.arrayContaining([
+        'recover-sp-args-built',
+        'recover-sp-modifier-property-read',
+        'recover-sp-ontransmit-12f',
+        'recover-sp-applied',
+        'recover-sp-share-rebroadcast',
+      ])
+    );
+    expect(matchedSample).toMatchObject({
+      status: 'offline-runtime-sample-validated',
+      runtimeSampleMatch: expect.objectContaining({
+        validationStatus: 'offline-runtime-sample-validated',
+        matchedEventCount: 6,
+        eventTypeCounts: expect.objectContaining({
+          'recover-sp-args-built': 1,
+          'recover-sp-modifier-property-read': 2,
+          'recover-sp-ontransmit-12f': 1,
+          'recover-sp-applied': 1,
+          'recover-sp-share-rebroadcast': 1,
+        }),
+        modifierValues: {
+          SPGETUP: 0.2,
+          SPGETUP_ATK: 0.05,
+          multiplier: 1.25,
+        },
+        expectedRuntimeArgs: {
+          baseDelta: 0.27,
+          delta: 0.3375,
+          petDelta: 1.299875,
+          interval: 9.999,
+        },
+        observedRuntimeArgs: expect.objectContaining({
+          baseDelta: 0.27,
+          delta: 0.3375,
+          petDelta: 1.299875,
+          interval: 9.999,
+          tagType: 0,
+        }),
+        onTransmit: expect.objectContaining({
+          timerMapHit: false,
+          directRecoverCalled: true,
+          receiverEntityId: 'runtime-role-109001',
+        }),
+        finalSpCurve: expect.objectContaining({
+          roleEntityId: 'runtime-role-109001',
+          spBefore: 10,
+          spAfter: 10.3375,
+          spDeltaApplied: 0.3375,
+        }),
+      }),
+    });
+    expect(matchedSample.runtimeSampleMatch.validationResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          key: 'base-delta-scale',
+          status: 'passed',
+        }),
+        expect.objectContaining({
+          key: 'delta-scale-and-modifier',
+          status: 'passed',
+        }),
+        expect.objectContaining({
+          key: 'pet-delta-scale-and-modifier',
+          status: 'passed',
+        }),
+        expect.objectContaining({
+          key: 'interval-scale',
+          status: 'passed',
+        }),
+        expect.objectContaining({
+          key: 'final-sp-curve',
+          status: 'passed',
+        }),
+      ])
+    );
+    expect(missingSample).toMatchObject({
+      status: 'offline-runtime-sample-missing',
+      runtimeSampleMatch: expect.objectContaining({
+        validationStatus: 'offline-runtime-sample-missing',
+        matchedEventCount: 0,
+      }),
+    });
   });
 
   it('rejects invalid projects before simulation', () => {

@@ -467,8 +467,13 @@ function formatChainSource(sourceEvidence) {
     samplingProbe?.candidateCount > 0
       ? ` · 采样契约 ${samplingProbe.gateOpenCount}/${samplingProbe.candidateCount}`
       : '';
+  const samplingImport = samplingProbe?.sampleImportSummary;
+  const samplingImportText =
+    samplingImport?.importedRuntimeSampleCount > 0
+      ? ` · 样本验证 ${samplingImport.validatedSampleCount}/${samplingProbe.candidateCount}`
+      : '';
   if (sourceEvidence.candidateCount > 0) {
-    return `${sourceEvidence.candidateCount} 个候选 ${formatElementIds(sourceEvidence.matchedElementConfigIds)}${probeText}${sourceToArgsProbeText}${modifierProbeText}${ownerShareProbeText}${samplingProbeText}`;
+    return `${sourceEvidence.candidateCount} 个候选 ${formatElementIds(sourceEvidence.matchedElementConfigIds)}${probeText}${sourceToArgsProbeText}${modifierProbeText}${ownerShareProbeText}${samplingProbeText}${samplingImportText}`;
   }
   if (sourceEvidence.logicElementIds?.length > 0) {
     return `未桥接 ${formatElementIds(sourceEvidence.logicElementIds)}`;

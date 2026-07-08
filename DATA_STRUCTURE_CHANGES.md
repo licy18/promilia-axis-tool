@@ -6335,3 +6335,183 @@ hit绑定 0/2 · 缺口候选 1/1 · 伤害元素候选 1/1 · 关联等级链 1
 - `importedRuntimeSampleCount = 0`，当前还没有真实 runtime hook 样本导入。
 - `SPGETUP/SPGETUP_ATK` 实时属性值、owner/share 目标筛选、interval 节流命中和最终每角色 SP 曲线仍未确认。
 - 阶段 5-8BB 需要建立离线 runtime 样本导入/fixture 入口，再用真实 hook JSON 或手动整理样本驱动这些验证项。
+
+## 81. 阶段 5-8BB：runtimeSampleCaptures 离线样本导入结构
+
+阶段 5-8BB 新增 RecoverSP 离线 runtime 样本入口，用于把真实 hook JSON 或手动整理样本接入 `runtimeSamplingProbe` 的校验器。该结构仍为 evidence-only，不改变 `selfEnergyChange.value`。
+
+### 81.1 项目 metadata 入口
+
+`compileProject()` 会从项目 metadata 收集以下字段，并写入编译后 `scenario.runtimeSampleCaptures`：
+
+- `metadata.runtimeSampleCaptures`
+- `metadata.recoverSpRuntimeSampleCaptures`
+- `metadata.runtimeSamples`
+
+这些字段可以是单个 capture 对象，也可以是 capture 数组。推荐使用 `runtimeSampleCaptures`。
+
+capture 根字段：
+
+- `schemaVersion`
+- `captureSessionId`
+- `clientRegion`
+- `clientBuild`
+- `source`
+- `events[]`
+
+### 81.2 事件形状
+
+每个事件通过 `eventType` 区分类型。兼容旧输入的 `type`，但规范输出统一为 `eventType`。
+
+基础关联字段：
+
+- `captureSessionId`
+- `actionId`
+- `actorId`
+- `frameIndex`
+- `timeMs`
+- `sourceElementConfigId`
+- `pathId`
+- `args.id`
+
+RecoverSP 事件类型：
+
+- `recover-sp-args-built`
+- `recover-sp-modifier-property-read`
+- `recover-sp-ontransmit-12f`
+- `recover-sp-applied`
+- `recover-sp-share-rebroadcast`
+
+`recover-sp-args-built.args` 推荐字段：
+
+- `id`
+- `baseDelta`
+- `delta`
+- `interval`
+- `tagType`
+- `skillId`
+- `sharePercent`
+- `petSharePercent`
+- `petDelta`
+- `mainPetSharePercent`
+
+`recover-sp-modifier-property-read` 推荐字段：
+
+- `ownerEntityId`
+- `propertyId`
+- `propertyName`
+- `isRatio`
+- `myFloatRaw`
+- `floatValue`
+
+`recover-sp-ontransmit-12f` 推荐字段：
+
+- `receiverEntityId`
+- `timerMapHit`
+- `timerPreviousTime`
+- `timerNextTime`
+- `directRecoverCalled`
+- `shareRebroadcastTargets`
+- `petShareTargets`
+- `mainPetShareTargets`
+
+`recover-sp-applied` 推荐字段：
+
+- `roleEntityId`
+- `recoverTagType`
+- `baseDelta`
+- `delta`
+- `spBefore`
+- `spAfter`
+- `spDeltaApplied`
+
+### 81.3 runtimeSamplingProbe 新增输出
+
+`runtimeSamplingProbe` 新增或升级字段：
+
+- `importedRuntimeSampleCount`：当前导入的事件数量。
+- `importStatus`：
+  - `runtime-samples-not-imported`
+  - `offline-runtime-samples-validated`
+  - `offline-runtime-samples-matched-validation-incomplete`
+  - `offline-runtime-samples-validation-failed`
+  - `offline-runtime-samples-imported-no-matches`
+- `sampleImportSummary`：导入摘要。
+- `runtimeSampleCaptures`：capture 摘要，不包含完整事件 payload。
+- `sampleExpectations[].runtimeSampleMatch`：单个候选 element 的事件匹配和校验结果。
+
+`sampleImportSummary` 字段：
+
+- `status`
+- `captureCount`
+- `importedRuntimeSampleCount`
+- `importedEventTypes`
+- `requiredEventTypes`
+- `matchedSampleCount`
+- `validatedSampleCount`
+- `failedSampleCount`
+- `missingSampleCount`
+- `validationStatuses`
+
+`runtimeSampleMatch` 字段：
+
+- `status`
+- `validationStatus`
+- `matchedEventCount`
+- `eventTypeCounts`
+- `captureSessionIds`
+- `correlationIds`
+- `frameIndexes`
+- `roleEntityIds`
+- `modifierValues`
+- `expectedRuntimeArgs`
+- `observedRuntimeArgs`
+- `onTransmit`
+- `finalSpCurve`
+- `shareRebroadcastEventCount`
+- `validationResults[]`
+
+`validationResults[].key` 当前覆盖：
+
+- `base-delta-scale`
+- `delta-scale-and-modifier`
+- `pet-delta-scale-and-modifier`
+- `interval-scale`
+- `final-sp-curve`
+
+### 81.4 手动 fixture
+
+新增 fixture 文件：
+
+```text
+src/simulation/fixtures/recoverSpRuntimeSampleFixture.js
+```
+
+当前 fixture 覆盖 `109001081`：
+
+```json
+{
+  "recoverSP": 2700,
+  "petRecoverSP": 10399,
+  "recoverInterval": 9999,
+  "SPGETUP": 0.2,
+  "SPGETUP_ATK": 0.05,
+  "baseDelta": 0.27,
+  "delta": 0.3375,
+  "petDelta": 1.299875,
+  "interval": 9.999
+}
+```
+
+默认普通攻击 action-level 有 `109001081` 与 `109001306` 两个候选，因此当前导入此 fixture 后状态是部分验证：
+
+```text
+runtime-sampling-offline-samples-partially-validated
+样本验证 1/2
+```
+
+### 81.5 当前边界
+
+- 当前 fixture 是手动整理样本，不是真实 hook 结果。
+- `runtimeSamplingProbe.applied = false`。
+- `109001306`、`109001251`、share target、interval throttle 命中/未命中和最终每角色 SP 曲线仍需真实 capture 验证。

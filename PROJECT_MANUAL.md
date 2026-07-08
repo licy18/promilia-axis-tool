@@ -3956,6 +3956,55 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8BB 目标：建立离线 runtime 样本导入/fixture 入口，把真实 hook JSON 或手动整理样本映射为 `recover-sp-args-built`、`recover-sp-ontransmit-12f`、`recover-sp-applied` 等事件。
 - 导入后优先验证 4 个闭环：`baseDelta = recoverSP / 10000`、`delta = baseDelta * (1 + SPGETUP + SPGETUP_ATK)`、`interval = recoverInterval / 1000`、`spAfter - spBefore = final applied delta`。
 
+### 2026-07-08：阶段 5-8BB RecoverSP 离线 runtime 样本入口
+
+本轮完成：
+
+- `compileProject()` 现在会保留 `project.metadata.runtimeSampleCaptures`、`recoverSpRuntimeSampleCaptures` 或 `runtimeSamples`，并把它们带入编译后的 `scenario.runtimeSampleCaptures`。
+- `projectSimulationResult()` 新增 RecoverSP runtime sample context，把 capture 规范化为统一事件形状：`eventType`、`captureSessionId`、`frameIndex`、`sourceElementConfigId`、`pathId`、`args`、modifier 值、OnTransmit 信息和最终 SP 曲线字段。
+- `runtimeSamplingProbe` 已能消费离线样本并生成：
+  - `sampleImportSummary`
+  - `runtimeSampleCaptures`
+  - `sampleExpectations[].runtimeSampleMatch`
+  - `validationResults[]`
+- 新增手动 fixture：`src/simulation/fixtures/recoverSpRuntimeSampleFixture.js`，用于模拟一条 `109001081` 的 RecoverSP 采样链。
+- Workbench 三值来源文本在有导入样本时显示 `样本验证 x/y`。
+
+当前 fixture 覆盖的事件：
+
+- `recover-sp-args-built`
+- `recover-sp-modifier-property-read`，覆盖 `SPGETUP(105)` 与 `SPGETUP_ATK(228)`
+- `recover-sp-ontransmit-12f`
+- `recover-sp-applied`
+- `recover-sp-share-rebroadcast`
+
+当前样例结果：
+
+- `109001081` fixture 使用 `recoverSP = 2700`、`petRecoverSP = 10399`、`recoverInterval = 9999`、`SPGETUP = 0.2`、`SPGETUP_ATK = 0.05`。
+- 校验结果：
+  - `baseDelta = 0.27`
+  - `delta = 0.3375`
+  - `petDelta = 1.299875`
+  - `interval = 9.999`
+  - `spAfter - spBefore = 0.3375`
+- 默认普通攻击 action-level 当前有 2 个候选 element，fixture 只覆盖 `109001081`，因此 `runtimeSamplingProbe.status = runtime-sampling-offline-samples-partially-validated`，`sampleImportSummary.validatedSampleCount = 1`，`missingSampleCount = 1`。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、12 条测试通过。
+
+当前边界：
+
+- 阶段 5-8BB 证明的是离线样本入口、事件匹配和数值校验器已经落地。
+- 当前 fixture 是手动整理样本，不是真实客户端 hook 采样结果。
+- `109001306`、非普攻外部 DamageElement `109001251`、share rebroadcast 目标、timer map 节流命中和真实每角色 SP 曲线仍未由真实运行时样本确认。
+- `selfEnergyChange.value` 仍不应用候选充能；`runtimeSamplingProbe` 仍为 evidence-only。
+
+下一步：
+
+- 阶段 5-8BC 目标：接入真实 hook JSON 或运行时采样导出的 capture 文件。
+- 优先扩大覆盖：默认普攻两个 action-level element、非普攻 `109001251`、share target 列表、interval throttle 命中/未命中两类样本、最终每角色 SP 曲线。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

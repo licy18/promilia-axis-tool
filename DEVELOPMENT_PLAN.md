@@ -280,7 +280,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8AY，把 `DamageElement.RecoverSP` 中两个 runtime modifier 固化为 `EBattlePropertyType.SPGETUP(105)` 与 `SPGETUP_ATK(228)`，确认 `AliveProperty.GetBattlePropertyCurrentValue` / `SnapshotPropertyManager.GetBattlePropertyCurrentValue` + `MyFloat.op_Implicit(float)` 的取值链，确认 `BattleConfigData.shareEnergyPercent@0x108` 与 `petShareEnergyPercent@0x10C`，并新增 `runtimeModifierProbe`；Workbench 显示 `修正探针 x/y`。
 - 已完成：阶段 5-8AZ，从 `C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll` 的 `.rdata` 读取 float32 常量并新增 `nativeConstantReadEvidence`：`0x189956B08 = 1.0`、`0x189956D8C = 1000.0`、`0x189956FB0 = 10000.0`；`sourceToArgsProbe` 和 `runtimeModifierProbe` 已显示 divisor/value 证据。
 - 已完成：阶段 5-8BA，新增 `runtimeSamplingProbe` 与 `SELF_ENERGY_RUNTIME_SAMPLE_SCHEMA`，定义 `DamageElement.RecoverSP`、`AliveProperty.GetBattlePropertyCurrentValue`、`SnapshotPropertyManager.GetBattlePropertyCurrentValue`、`SPSystem.OnTransmit`、`SPSystem.RecoverSP` 五类采样点、离线导入事件类型和验证公式；Workbench 显示 `采样契约 x/y`。
-- 下一步：阶段 5-8BB，建立离线 runtime 样本导入/fixture 入口，把真实 hook JSON 或手动整理样本映射为 `recover-sp-args-built`、`recover-sp-ontransmit-12f`、`recover-sp-applied` 等事件，用于闭环验证最终每角色 SP 曲线。
+- 已完成：阶段 5-8BB，建立 `metadata.runtimeSampleCaptures` 离线样本入口，`runtimeSamplingProbe` 可消费手动整理的 RecoverSP fixture，按 `recover-sp-args-built`、modifier 读取、`recover-sp-ontransmit-12f`、`recover-sp-applied`、share rebroadcast 事件验证 `baseDelta/delta/petDelta/interval/final-sp-curve`；当前 fixture 覆盖 `109001081`，状态为 `runtime-sampling-offline-samples-partially-validated`，Workbench 在有样本时显示 `样本验证 x/y`。
+- 下一步：阶段 5-8BC，接入真实 hook JSON 或从 AzPr Extractor / 运行时采样导出的 capture 文件，扩大覆盖到默认普攻两个 action-level element 与非普攻 `109001251` 外部 DamageElement，并确认 share 目标、interval 节流命中和最终每角色 SP 曲线。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 
