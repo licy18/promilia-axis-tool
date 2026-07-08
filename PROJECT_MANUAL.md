@@ -4179,6 +4179,40 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 可优先检查 `C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/Hero/109001.asset/MonoBehaviour/` 中同样引用 `m_Script.m_PathID = 5576338162890961044` 的对象，用字段签名辅助反推类型。
 - 若能找到爆炸 DamageElement，再把它接入第 5 段 hit group，并保持公式仍为 evidence-only 直到 runtime capture 验证。
 
+### 2026-07-08：阶段 5-8BH TSummonElementParams 召唤桥确认
+
+本轮完成：
+
+- 通过 IL2CPP dump 确认 `scriptPathId = 5576338162890961044` 对应配置类型为 `TSummonElementParams`，来源锚点为 `dump.cs:396216-396258`，标签为 `召唤`。
+- 同步确认运行时类型为 `SummonElement : BaseElement`，来源锚点为 `dump.cs:275944-275984`，包含 `BeforeExecute()` / `Execute()` 入口。
+- `scripts/resolve-azpr-element-objects.py` 已把该脚本类型加入识别目录，并为外部对象导出 `summonFields`，包括 `summonUnitId`、`summonLifeTime`、`summonCount`、`summonTotalMaxCount`、召唤点和继承字段。
+- `scripts/generate-azpr-data.mjs` 已把 `TSummonElementParams` 加入 `elementTypeCatalogEvidence`，并把带 buff formula 参数的召唤对象标记为 `summon-element-buff-trigger-bridge-candidate`。
+- 寒悠悠普攻第 4 段 `10100304 / 101003180` 当前确认为召唤 Element：`summonUnitId = 480059`、`summonLifeTime = 2500`、`summonCount = 1`、`summonTotalMaxCount = 5`。该段仍没有 DamageElement 字段或 buff 引用。
+- 寒悠悠普攻第 5 段 `10100305 / 101003181` 当前确认为召唤 Element：`summonUnitId = 480060`、`summonLifeTime = 2500`、`summonCount = 1`、`summonTotalMaxCount = 5`，且 `formulaParams.formulaParamValues` 第 2、13 槽继续引用 `101003079 / 焰火`。
+- 辅助检查 `Element/Hero/109001.asset` 下同 scriptPathId 对象，确认同类对象也包含 `summonUnitId / summonLifeTime / summonCount / summonTotalMaxCount` 等字段，字段签名与 `TSummonElementParams` 一致。
+- BWiki / NewTable 侧额外线索显示 `101003079 / 焰火` 还出现在 `50000702 / 灼焰火环`、`50015702 / 焰火旋风`、`50015704 / 焰火雀-合击` 等技能链中，相关 `skillsub_ele_value` 有可升级的 A/G 槽位；但这些线索尚未直接绑定到寒悠悠普攻第 5 段召唤物。
+
+当前边界：
+
+- `101003180 / 101003181` 现在不再是 unknown Element，而是召唤桥；但它们仍不是直接 `TDamageElementParams`。
+- `101003181 -> 101003079 / 焰火` 只证明第 5 段召唤对象引用了 buff；爆炸实际 DamageElement、触发条件、触发帧、削韧和充能仍未闭合。
+- `summonUnitId = 480059 / 480060` 的单位、子技能、bullet、buff runtime 或二级效果资源尚未追到。
+- 该阶段只增加证据类型、字段导出和候选标注，不应用 HP / 韧性 / 能量最终公式。
+
+验收结果：
+
+- `python -m py_compile scripts/resolve-azpr-element-objects.py`：通过。
+- `npm run data:generate`：通过，重新生成 `src/data/generated`。
+- `npm test -- --run src/__tests__/data/azprGenerated.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、21 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、106 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用提示和大 chunk 提示。
+
+下一步：
+
+- 阶段 5-8BI 目标：沿 `summonFields.summonUnitId = 480059 / 480060` 继续追单位、bullet、技能、buff runtime 或二级效果资源，寻找真正的爆炸 `TDamageElementParams`。
+- 同步追踪 `101003079 / 焰火` 与 `50000702 / 灼焰火环`、`50015702 / 焰火旋风`、`50015704 / 焰火雀-合击` 的静态关系，判断它们是否能解释第 5 段召唤物的触发伤害。
+- 如果静态资源仍不能闭合，准备把第 5 段召唤物和 `焰火` 触发链纳入 runtime hook / 离线 capture 采样目标。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

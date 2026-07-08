@@ -6840,3 +6840,101 @@ runtime-sampling-offline-samples-partially-validated
 - `buffElementObject.scriptTypeCandidate.className = TBuffElementParams`
 
 该状态只证明第 5 段存在 buff 桥候选，不证明爆炸伤害 Element 已找到，也不应用最终 HP / 韧性 / 能量公式。
+
+## 87. 阶段 5-8BH：TSummonElementParams 召唤桥字段
+
+阶段 5-8BH 将 `scriptPathId = 5576338162890961044` 从 unknown Element 识别为 `TSummonElementParams`。该阶段仍只改变证据结构，不改变最终计算。
+
+### 87.1 elementTypeCatalogEvidence 新增类型
+
+`skill-asset-evidence.json.elementTypeCatalogEvidence.elementTypes[]` 新增：
+
+```json
+{
+  "role": "summon-unit-or-trigger-bridge",
+  "sourceLineRange": "dump.cs:396216-396258",
+  "namespace": "Lens.Gameplay.Modules.BigWorld.Config",
+  "className": "TSummonElementParams",
+  "label": "召唤",
+  "typeDefIndex": 9758,
+  "baseType": "TElementParams",
+  "evidenceKind": "config-element-params",
+  "runtimeType": "Lens.Gameplay.Modules.BigWorld.SummonElement",
+  "runtimeSourceLineRange": "dump.cs:275944-275984"
+}
+```
+
+### 87.2 externalElementObjectEvidence 新增字段
+
+当外部 Element 对象匹配 `TSummonElementParams` 时，该对象新增：
+
+- `scriptTypeCandidate.className = "TSummonElementParams"`
+- `scriptTypeCandidate.role = "summon-unit-or-trigger-bridge"`
+- `summonFields`
+
+`summonFields` 当前包含：
+
+- `summonUnitId`
+- `summonType`
+- `summonPropertyType`
+- `summonLifeTime`
+- `summonCount`
+- `summonTotalMaxCount`
+- `dieWithOwner`
+- `dieWithOutBattle`
+- `dieWithChangeHero`
+- `useFindPoint`
+- `dieOutTimeSkill`
+- `dieOutMaxCountSkill`
+- `dieWithChangeHeroSkill`
+- `dieWithOwnerSkill`
+- `summonCountType`
+- `summonPointType`
+- `ground`
+- `summonPositionType`
+- `summonInheritType`
+- `summonInheritTargetType`
+- `rotOffset`
+- `summonPoints`
+- `attributeData`
+- `effect`
+- `isCombo`
+- `capsuleHeight`
+- `capsuleRadius`
+- `isGetTargetList`
+
+如果该召唤对象的 `formulaParams.formulaParamValues` 同时命中 buff id，`formulaParamBridgeCandidate` 会改为：
+
+```json
+{
+  "status": "formula-param-buff-reference-found",
+  "scriptTypeCandidateStatus": "script-type-candidate-found",
+  "scriptTypeClassName": "TSummonElementParams",
+  "inferredRole": "summon-element-buff-trigger-bridge-candidate",
+  "confidence": "medium",
+  "referencedBuffIds": [101003079],
+  "summonFields": {}
+}
+```
+
+这比阶段 5-8BG 的 `buff-trigger-or-apply-bridge-candidate` 更具体：对象语义已确认是召唤桥，而不是未知脚本桥。
+
+### 87.3 normalAttackHitChainCandidate 变化
+
+`normalAttackHitChainCandidate.hitGroups[].externalElementObjectReferences[]` 会在召唤对象上携带：
+
+- `scriptTypeClassName = "TSummonElementParams"`
+- `summonFields`
+- 若存在 buff 引用，则继续携带 `formulaParamBridgeCandidate` 与 `formulaParamBuffReferenceIds`
+
+寒悠悠当前样例：
+
+- 第 4 段 `10100304 / 101003180`：`summonUnitId = 480059`，没有 DamageElement 字段或 buff 引用。
+- 第 5 段 `10100305 / 101003181`：`summonUnitId = 480060`，继续引用 `101003079 / 焰火`。
+
+### 87.4 兼容性
+
+- `externalElementObjectEvidence.summary.unknownScriptBuffReferenceObjects` 从 `7` 下降到 `6`。
+- `elementTypeCatalogCandidates` 从 `2` 增加到 `3`。
+- `damageElementFieldMappedObjects`、HP 候选、削韧候选和充能候选计数不变。
+- 读取方不能把 `TSummonElementParams` 当成 `TDamageElementParams`；它只说明下一跳应沿 `summonUnitId` 或 buff runtime 继续追踪。

@@ -554,6 +554,27 @@ const SKILL_ELEMENT_TYPE_CATALOG = Object.freeze([
       'outputDamageData',
     ],
   },
+  {
+    role: 'summon-unit-or-trigger-bridge',
+    sourceLineRange: 'dump.cs:396216-396258',
+    namespace: 'Lens.Gameplay.Modules.BigWorld.Config',
+    className: 'TSummonElementParams',
+    label: '召唤',
+    typeDefIndex: 9758,
+    baseType: 'TElementParams',
+    evidenceKind: 'config-element-params',
+    runtimeType: 'Lens.Gameplay.Modules.BigWorld.SummonElement',
+    runtimeSourceLineRange: 'dump.cs:275944-275984',
+    fields: [
+      'summonUnitId',
+      'summonType',
+      'summonLifeTime',
+      'summonCount',
+      'summonTotalMaxCount',
+      'dieWithOwner',
+      'summonPositionType',
+    ],
+  },
 ]);
 const FORMULA_PARAM_RELATION_INTERPRETATIONS = Object.freeze({
   'constant-direct-slot-match':
@@ -2773,16 +2794,24 @@ function compactReferencedBuffElementObject(object) {
 }
 
 function buildFormulaParamBridgeCandidate(object, referenceEvidence) {
+  const className = object.scriptTypeCandidate?.className ?? null;
+  const isSummonElement = className === 'TSummonElementParams';
   return compactObject({
     status: 'formula-param-buff-reference-found',
     scriptPathId: object.scriptPathId ?? null,
     scriptTypeCandidateStatus: object.scriptTypeCandidate
       ? 'script-type-candidate-found'
       : 'script-type-candidate-missing',
-    inferredRole: 'buff-trigger-or-apply-bridge-candidate',
-    confidence: object.scriptTypeCandidate ? 'low' : 'medium',
+    scriptTypeClassName: className,
+    inferredRole: isSummonElement
+      ? 'summon-element-buff-trigger-bridge-candidate'
+      : 'buff-trigger-or-apply-bridge-candidate',
+    confidence: isSummonElement ? 'medium' : 'low',
     referencedBuffIds: referenceEvidence.buffReferenceIds,
-    note: 'The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement.',
+    summonFields: object.summonFields ?? null,
+    note: isSummonElement
+      ? 'This object is TSummonElementParams and formulaParams contain buff_info ids; it is tracked as a summon-to-buff bridge candidate, not a direct DamageElement.'
+      : 'FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement.',
   });
 }
 
@@ -3138,6 +3167,7 @@ function compactHitExternalElementObjectReference(object) {
     formulaParamBridgeCandidate: object.formulaParamBridgeCandidate ?? null,
     formulaParamBuffReferenceIds:
       object.formulaParamReferenceEvidence?.buffReferenceIds ?? [],
+    summonFields: object.summonFields ?? null,
   });
 }
 

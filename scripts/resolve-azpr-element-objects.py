@@ -66,6 +66,22 @@ SCRIPT_TYPE_CANDIDATES: dict[str, dict[str, Any]] = {
             "injectElementDataList",
         ],
     },
+    "5576338162890961044": {
+        "className": "TSummonElementParams",
+        "typeDefIndex": 9758,
+        "label": "summon",
+        "sourceLineRange": "dump.cs:396216-396258",
+        "role": "summon-unit-or-trigger-bridge",
+        "signatureFields": [
+            "summonUnitId",
+            "summonType",
+            "summonLifeTime",
+            "summonCount",
+            "summonTotalMaxCount",
+            "dieWithOwner",
+            "summonPositionType",
+        ],
+    },
 }
 
 
@@ -247,6 +263,41 @@ def timing_fields(data: dict[str, Any]) -> dict[str, Any] | None:
     return present or None
 
 
+def summon_fields(data: dict[str, Any]) -> dict[str, Any] | None:
+    keys = [
+        "summonUnitId",
+        "summonType",
+        "summonPropertyType",
+        "summonLifeTime",
+        "summonCount",
+        "summonTotalMaxCount",
+        "dieWithOwner",
+        "dieWithOutBattle",
+        "dieWithChangeHero",
+        "useFindPoint",
+        "dieOutTimeSkill",
+        "dieOutMaxCountSkill",
+        "dieWithChangeHeroSkill",
+        "dieWithOwnerSkill",
+        "summonCountType",
+        "summonPointType",
+        "ground",
+        "summonPositionType",
+        "summonInheritType",
+        "summonInheritTargetType",
+        "rotOffset",
+        "summonPoints",
+        "attributeData",
+        "effect",
+        "isCombo",
+        "capsuleHeight",
+        "capsuleRadius",
+        "isGetTargetList",
+    ]
+    present = {key: compact_value(data.get(key)) for key in keys if key in data}
+    return present or None
+
+
 def collect_file2_preload_path_ids(env: Any) -> list[str]:
     bundle = read_asset_bundle_typetree(env)
     if not bundle:
@@ -335,6 +386,7 @@ def resolve_skill(manifest: Any, skill_id: int) -> dict[str, Any]:
                 "mediaPackNames": media_pack_names(data),
                 "damageFields": damage_fields(data),
                 "timingFields": timing_fields(data),
+                "summonFields": summon_fields(data),
             }
         )
 

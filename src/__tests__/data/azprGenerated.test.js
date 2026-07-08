@@ -386,7 +386,7 @@ describe('generated AzPr data', () => {
       resourceMapMatchedElementBaseReferenceSkills: 9,
       resourceMapUnmatchedElementBaseReferenceSkills: 0,
       scriptTypeCandidateSkills: 8,
-      elementTypeCatalogCandidates: 2,
+      elementTypeCatalogCandidates: 3,
       externalElementObjectResolvedSkills: 18,
       externalElementObjectResolvedRefs: 97,
       externalElementObjectUnresolvedRefs: 0,
@@ -416,6 +416,18 @@ describe('generated AzPr data', () => {
             'outputDamageData',
           ]),
         }),
+        expect.objectContaining({
+          className: 'TSummonElementParams',
+          label: '召唤',
+          evidenceKind: 'config-element-params',
+          runtimeType: 'Lens.Gameplay.Modules.BigWorld.SummonElement',
+          fields: expect.arrayContaining([
+            'summonUnitId',
+            'summonLifeTime',
+            'summonCount',
+            'summonTotalMaxCount',
+          ]),
+        }),
       ]),
     });
     expect(evidence.externalElementObjectEvidence).toMatchObject({
@@ -429,7 +441,7 @@ describe('generated AzPr data', () => {
         formulaParamBuffReferenceObjects: 15,
         formulaParamBuffReferences: 15,
         formulaParamBuffReferenceResolvedObjects: 1,
-        unknownScriptBuffReferenceObjects: 7,
+        unknownScriptBuffReferenceObjects: 6,
         sourceSkillCount: 9,
         targetSkillCount: 9,
       },
@@ -481,20 +493,61 @@ describe('generated AzPr data', () => {
           ]),
         }),
         expect.objectContaining({
+          skillId: 10100304,
+          status: 'element-objects-resolved',
+          scriptClassCounts: expect.objectContaining({
+            TSummonElementParams: 1,
+          }),
+          objects: expect.arrayContaining([
+            expect.objectContaining({
+              elementConfigId: 101003180,
+              scriptPathId: '5576338162890961044',
+              scriptTypeCandidate: expect.objectContaining({
+                className: 'TSummonElementParams',
+                typeDefIndex: 9758,
+                role: 'summon-unit-or-trigger-bridge',
+              }),
+              summonFields: expect.objectContaining({
+                summonUnitId: 480059,
+                summonLifeTime: 2500,
+                summonCount: 1,
+                summonTotalMaxCount: 5,
+              }),
+            }),
+          ]),
+        }),
+        expect.objectContaining({
           skillId: 10100305,
           status: 'element-objects-resolved',
           scriptClassCounts: expect.objectContaining({
-            unknown: 1,
+            TSummonElementParams: 1,
           }),
           objects: expect.arrayContaining([
             expect.objectContaining({
               elementConfigId: 101003181,
               scriptPathId: '5576338162890961044',
-              scriptTypeCandidate: null,
+              scriptTypeCandidate: expect.objectContaining({
+                className: 'TSummonElementParams',
+                typeDefIndex: 9758,
+                role: 'summon-unit-or-trigger-bridge',
+              }),
+              summonFields: expect.objectContaining({
+                summonUnitId: 480060,
+                summonLifeTime: 2500,
+                summonCount: 1,
+                summonTotalMaxCount: 5,
+              }),
               formulaParamBridgeCandidate: expect.objectContaining({
                 status: 'formula-param-buff-reference-found',
-                inferredRole: 'buff-trigger-or-apply-bridge-candidate',
+                scriptTypeCandidateStatus: 'script-type-candidate-found',
+                scriptTypeClassName: 'TSummonElementParams',
+                inferredRole: 'summon-element-buff-trigger-bridge-candidate',
+                confidence: 'medium',
                 referencedBuffIds: [101003079],
+                summonFields: expect.objectContaining({
+                  summonUnitId: 480060,
+                  summonLifeTime: 2500,
+                }),
               }),
               formulaParamReferenceEvidence: expect.objectContaining({
                 status: 'formula-param-buff-references-found',
@@ -884,6 +937,17 @@ describe('generated AzPr data', () => {
         damageElementFieldMappingStatus:
           'resource-map-element-refs-found-damage-element-fields-missing',
         damageElementFieldMappingCount: 0,
+        externalElementObjectReferenceCount: 2,
+        externalElementObjectReferences: expect.arrayContaining([
+          expect.objectContaining({
+            elementConfigId: 101003180,
+            scriptTypeClassName: 'TSummonElementParams',
+            summonFields: expect.objectContaining({
+              summonUnitId: 480059,
+              summonLifeTime: 2500,
+            }),
+          }),
+        ]),
       }),
       expect.objectContaining({
         hitIndex: 5,
@@ -895,6 +959,17 @@ describe('generated AzPr data', () => {
           'resource-map-element-buff-reference-found-damage-element-fields-missing',
         damageElementFieldMappingCount: 0,
         externalElementObjectReferenceCount: 3,
+        externalElementObjectReferences: expect.arrayContaining([
+          expect.objectContaining({
+            elementConfigId: 101003181,
+            scriptTypeClassName: 'TSummonElementParams',
+            formulaParamBuffReferenceIds: [101003079],
+            summonFields: expect.objectContaining({
+              summonUnitId: 480060,
+              summonLifeTime: 2500,
+            }),
+          }),
+        ]),
         formulaParamBuffReferenceCount: 1,
         formulaParamBuffReferenceIds: [101003079],
         formulaParamBuffReferences: [

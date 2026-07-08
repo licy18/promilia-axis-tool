@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-08T02:20:47.360Z",
+  "generatedAt": "2026-07-08T02:41:05.458Z",
   "sourceKind": "azpr-skill-asset-evidence-index",
   "source": {
     "sourceRoot": "C:/PC2/Codex/AzPr",
@@ -88,6 +88,28 @@
           "outputDamageData"
         ],
         "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
+      },
+      {
+        "role": "summon-unit-or-trigger-bridge",
+        "sourceLineRange": "dump.cs:396216-396258",
+        "namespace": "Lens.Gameplay.Modules.BigWorld.Config",
+        "className": "TSummonElementParams",
+        "label": "召唤",
+        "typeDefIndex": 9758,
+        "baseType": "TElementParams",
+        "evidenceKind": "config-element-params",
+        "runtimeType": "Lens.Gameplay.Modules.BigWorld.SummonElement",
+        "runtimeSourceLineRange": "dump.cs:275944-275984",
+        "fields": [
+          "summonUnitId",
+          "summonType",
+          "summonLifeTime",
+          "summonCount",
+          "summonTotalMaxCount",
+          "dieWithOwner",
+          "summonPositionType"
+        ],
+        "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs"
       }
     ]
   },
@@ -109,7 +131,7 @@
       "formulaParamBuffReferenceObjects": 15,
       "formulaParamBuffReferences": 15,
       "formulaParamBuffReferenceResolvedObjects": 1,
-      "unknownScriptBuffReferenceObjects": 7,
+      "unknownScriptBuffReferenceObjects": 6,
       "sourceSkillCount": 9,
       "targetSkillCount": 9
     },
@@ -287,7 +309,8 @@
               "floatParam4": 65536,
               "intParam1": 50,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "-3595258068044660447",
@@ -425,7 +448,8 @@
               "petRecoverSP": 23399,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           }
         ]
       },
@@ -602,7 +626,8 @@
               "floatParam4": 65536,
               "intParam1": 50,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "7736637370449973165",
@@ -740,7 +765,8 @@
               "petRecoverSP": 24700,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           }
         ]
       },
@@ -914,7 +940,8 @@
               "petRecoverSP": 13899,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           }
         ]
       },
@@ -952,7 +979,7 @@
         "unresolvedPathIds": [],
         "scriptClassCounts": {
           "TFxElementParams": 1,
-          "unknown": 1
+          "TSummonElementParams": 1
         },
         "objects": [
           {
@@ -1089,7 +1116,8 @@
               "floatParam4": 65536,
               "intParam1": 100,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "1572718271109451571",
@@ -1097,7 +1125,27 @@
             "objectType": "MonoBehaviour",
             "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003180.asset",
             "scriptPathId": "5576338162890961044",
-            "scriptTypeCandidate": null,
+            "scriptTypeCandidate": {
+              "status": "field-signature-matched",
+              "confidence": "medium",
+              "scriptPathId": "5576338162890961044",
+              "namespace": "Lens.Gameplay.Modules.BigWorld.Config",
+              "className": "TSummonElementParams",
+              "typeDefIndex": 9758,
+              "label": "summon",
+              "role": "summon-unit-or-trigger-bridge",
+              "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+              "sourceLineRange": "dump.cs:396216-396258",
+              "matchedFields": [
+                "summonUnitId",
+                "summonType",
+                "summonLifeTime",
+                "summonCount",
+                "summonTotalMaxCount",
+                "dieWithOwner",
+                "summonPositionType"
+              ]
+            },
             "mName": "ast_101003180",
             "elementConfigId": 101003180,
             "elementName": "�չ�4 ը�����汬ը",
@@ -1172,7 +1220,53 @@
             },
             "mediaPackNames": [],
             "damageFields": null,
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": {
+              "summonUnitId": 480059,
+              "summonType": 1,
+              "summonPropertyType": 0,
+              "summonLifeTime": 2500,
+              "summonCount": 1,
+              "summonTotalMaxCount": 5,
+              "dieWithOwner": 0,
+              "dieWithOutBattle": 0,
+              "dieWithChangeHero": 0,
+              "useFindPoint": 0,
+              "dieOutTimeSkill": 0,
+              "dieOutMaxCountSkill": 0,
+              "dieWithChangeHeroSkill": 0,
+              "dieWithOwnerSkill": 0,
+              "summonCountType": 0,
+              "summonPointType": 1,
+              "ground": 0,
+              "summonPositionType": 2,
+              "summonInheritType": 0,
+              "summonInheritTargetType": 2,
+              "rotOffset": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "summonPoints": [
+                {
+                  "x": 0,
+                  "y": 0,
+                  "z": 6553
+                }
+              ],
+              "attributeData": [
+                {
+                  "x": 0,
+                  "y": 1,
+                  "z": 1000
+                }
+              ],
+              "effect": "",
+              "isCombo": 0,
+              "capsuleHeight": 0,
+              "capsuleRadius": 0,
+              "isGetTargetList": 0
+            }
           }
         ]
       },
@@ -1212,7 +1306,7 @@
         "unresolvedPathIds": [],
         "scriptClassCounts": {
           "TFreezeFrameElementParams": 1,
-          "unknown": 1,
+          "TSummonElementParams": 1,
           "TFxElementParams": 1
         },
         "objects": [
@@ -1338,7 +1432,8 @@
               "freezeEffect": 0,
               "freezeBullet": 0,
               "freezeHitEffect": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "-1285658850712902661",
@@ -1346,7 +1441,27 @@
             "objectType": "MonoBehaviour",
             "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003181.asset",
             "scriptPathId": "5576338162890961044",
-            "scriptTypeCandidate": null,
+            "scriptTypeCandidate": {
+              "status": "field-signature-matched",
+              "confidence": "medium",
+              "scriptPathId": "5576338162890961044",
+              "namespace": "Lens.Gameplay.Modules.BigWorld.Config",
+              "className": "TSummonElementParams",
+              "typeDefIndex": 9758,
+              "label": "summon",
+              "role": "summon-unit-or-trigger-bridge",
+              "source": "C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs",
+              "sourceLineRange": "dump.cs:396216-396258",
+              "matchedFields": [
+                "summonUnitId",
+                "summonType",
+                "summonLifeTime",
+                "summonCount",
+                "summonTotalMaxCount",
+                "dieWithOwner",
+                "summonPositionType"
+              ]
+            },
             "mName": "ast_101003181",
             "elementConfigId": 101003181,
             "elementName": "�չ�5 ը�����汬ը",
@@ -1422,6 +1537,52 @@
             "mediaPackNames": [],
             "damageFields": null,
             "timingFields": null,
+            "summonFields": {
+              "summonUnitId": 480060,
+              "summonType": 1,
+              "summonPropertyType": 0,
+              "summonLifeTime": 2500,
+              "summonCount": 1,
+              "summonTotalMaxCount": 5,
+              "dieWithOwner": 0,
+              "dieWithOutBattle": 0,
+              "dieWithChangeHero": 0,
+              "useFindPoint": 0,
+              "dieOutTimeSkill": 0,
+              "dieOutMaxCountSkill": 0,
+              "dieWithChangeHeroSkill": 0,
+              "dieWithOwnerSkill": 0,
+              "summonCountType": 0,
+              "summonPointType": 1,
+              "ground": 0,
+              "summonPositionType": 2,
+              "summonInheritType": 0,
+              "summonInheritTargetType": 2,
+              "rotOffset": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "summonPoints": [
+                {
+                  "x": 0,
+                  "y": 0,
+                  "z": 6553
+                }
+              ],
+              "attributeData": [
+                {
+                  "x": 0,
+                  "y": 1,
+                  "z": 1000
+                }
+              ],
+              "effect": "",
+              "isCombo": 0,
+              "capsuleHeight": 0,
+              "capsuleRadius": 0,
+              "isGetTargetList": 0
+            },
             "formulaParamReferenceEvidence": {
               "status": "formula-param-buff-references-found",
               "sourceFields": [
@@ -1490,13 +1651,60 @@
             "formulaParamBridgeCandidate": {
               "status": "formula-param-buff-reference-found",
               "scriptPathId": "5576338162890961044",
-              "scriptTypeCandidateStatus": "script-type-candidate-missing",
-              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "scriptTypeClassName": "TSummonElementParams",
+              "inferredRole": "summon-element-buff-trigger-bridge-candidate",
               "confidence": "medium",
               "referencedBuffIds": [
                 101003079
               ],
-              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+              "summonFields": {
+                "summonUnitId": 480060,
+                "summonType": 1,
+                "summonPropertyType": 0,
+                "summonLifeTime": 2500,
+                "summonCount": 1,
+                "summonTotalMaxCount": 5,
+                "dieWithOwner": 0,
+                "dieWithOutBattle": 0,
+                "dieWithChangeHero": 0,
+                "useFindPoint": 0,
+                "dieOutTimeSkill": 0,
+                "dieOutMaxCountSkill": 0,
+                "dieWithChangeHeroSkill": 0,
+                "dieWithOwnerSkill": 0,
+                "summonCountType": 0,
+                "summonPointType": 1,
+                "ground": 0,
+                "summonPositionType": 2,
+                "summonInheritType": 0,
+                "summonInheritTargetType": 2,
+                "rotOffset": {
+                  "x": 0,
+                  "y": 0,
+                  "z": 0
+                },
+                "summonPoints": [
+                  {
+                    "x": 0,
+                    "y": 0,
+                    "z": 6553
+                  }
+                ],
+                "attributeData": [
+                  {
+                    "x": 0,
+                    "y": 1,
+                    "z": 1000
+                  }
+                ],
+                "effect": "",
+                "isCombo": 0,
+                "capsuleHeight": 0,
+                "capsuleRadius": 0,
+                "isGetTargetList": 0
+              },
+              "note": "This object is TSummonElementParams and formulaParams contain buff_info ids; it is tracked as a summon-to-buff bridge candidate, not a direct DamageElement."
             }
           },
           {
@@ -1635,7 +1843,8 @@
               "floatParam4": 65536,
               "intParam1": 150,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           }
         ]
       },
@@ -1796,7 +2005,8 @@
               "time": 10000,
               "frequencyType": 0,
               "frequency": 1
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "-2896751954573452079",
@@ -1934,7 +2144,8 @@
               "floatParam4": 65536,
               "intParam1": 50,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "-1498771669867596146",
@@ -2027,7 +2238,8 @@
             },
             "mediaPackNames": [],
             "damageFields": null,
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "466374251647106866",
@@ -2121,6 +2333,7 @@
               "frequencyType": 0,
               "frequency": 0
             },
+            "summonFields": null,
             "formulaParamReferenceEvidence": {
               "status": "formula-param-buff-references-found",
               "sourceFields": [
@@ -2167,11 +2380,11 @@
               "scriptPathId": "798776077322537027",
               "scriptTypeCandidateStatus": "script-type-candidate-missing",
               "inferredRole": "buff-trigger-or-apply-bridge-candidate",
-              "confidence": "medium",
+              "confidence": "low",
               "referencedBuffIds": [
                 750
               ],
-              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+              "note": "FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -2310,7 +2523,8 @@
               "petRecoverSP": 18600,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "8697618991190280668",
@@ -2448,7 +2662,8 @@
               "petRecoverSP": 18600,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           }
         ]
       },
@@ -2584,7 +2799,8 @@
             },
             "mediaPackNames": [],
             "damageFields": null,
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "-5652413049857383353",
@@ -2671,7 +2887,8 @@
               "time": 24000,
               "frequencyType": 0,
               "frequency": 99
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "-4841411980842434486",
@@ -2756,7 +2973,8 @@
               "time": -1,
               "frequencyType": 0,
               "frequency": 99
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "-1498771669867596146",
@@ -2849,7 +3067,8 @@
             },
             "mediaPackNames": [],
             "damageFields": null,
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "-87352517346442030",
@@ -2953,7 +3172,8 @@
               "time": 15000,
               "frequencyType": 0,
               "frequency": 1
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "466374251647106866",
@@ -3047,6 +3267,7 @@
               "frequencyType": 0,
               "frequency": 0
             },
+            "summonFields": null,
             "formulaParamReferenceEvidence": {
               "status": "formula-param-buff-references-found",
               "sourceFields": [
@@ -3093,11 +3314,11 @@
               "scriptPathId": "798776077322537027",
               "scriptTypeCandidateStatus": "script-type-candidate-missing",
               "inferredRole": "buff-trigger-or-apply-bridge-candidate",
-              "confidence": "medium",
+              "confidence": "low",
               "referencedBuffIds": [
                 750
               ],
-              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+              "note": "FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -3236,7 +3457,8 @@
               "petRecoverSP": 0,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "2114308111398669772",
@@ -3374,7 +3596,8 @@
               "petRecoverSP": 0,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "5524515095849424458",
@@ -3512,7 +3735,8 @@
               "floatParam4": 65536,
               "intParam1": 50,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           }
         ]
       },
@@ -3659,7 +3883,8 @@
             "damageFields": {
               "interruptPriority": 35
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "-7141218965533365560",
@@ -3746,7 +3971,8 @@
               "time": 114514,
               "frequencyType": 0,
               "frequency": 1
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "-2962000887134298392",
@@ -3884,7 +4110,8 @@
               "petRecoverSP": 0,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "-1498771669867596146",
@@ -3977,7 +4204,8 @@
             },
             "mediaPackNames": [],
             "damageFields": null,
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "-15343624725538709",
@@ -4064,7 +4292,8 @@
               "time": 114514,
               "frequencyType": 0,
               "frequency": 1
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "466374251647106866",
@@ -4158,6 +4387,7 @@
               "frequencyType": 0,
               "frequency": 0
             },
+            "summonFields": null,
             "formulaParamReferenceEvidence": {
               "status": "formula-param-buff-references-found",
               "sourceFields": [
@@ -4204,11 +4434,11 @@
               "scriptPathId": "798776077322537027",
               "scriptTypeCandidateStatus": "script-type-candidate-missing",
               "inferredRole": "buff-trigger-or-apply-bridge-candidate",
-              "confidence": "medium",
+              "confidence": "low",
               "referencedBuffIds": [
                 750
               ],
-              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+              "note": "FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -4313,7 +4543,8 @@
               "time": 8000,
               "frequencyType": 0,
               "frequency": 1
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "8048974219024052735",
@@ -4449,7 +4680,8 @@
               "petRecoverSP": 0,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           }
         ]
       },
@@ -4641,7 +4873,8 @@
               "petRecoverSP": 22999,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "-4052262175632216603",
@@ -4767,7 +5000,8 @@
               "petRecoverSP": 10399,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "2328920594663475271",
@@ -4905,7 +5139,8 @@
               "floatParam4": 65536,
               "intParam1": 20,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "2740651767650299388",
@@ -5043,7 +5278,8 @@
               "floatParam4": 65536,
               "intParam1": 20,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "2808556551677342926",
@@ -5150,7 +5386,8 @@
               "freezeEffect": 1,
               "freezeBullet": 0,
               "freezeHitEffect": 1
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "3476557355496561381",
@@ -5288,7 +5525,8 @@
               "petRecoverSP": 10399,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "7848597992417622553",
@@ -5403,7 +5641,8 @@
               "freezeEffect": 1,
               "freezeBullet": 0,
               "freezeHitEffect": 1
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "8949110464361487189",
@@ -5517,7 +5756,8 @@
               "time": 8000,
               "frequencyType": 0,
               "frequency": 0
-            }
+            },
+            "summonFields": null
           }
         ]
       },
@@ -5701,7 +5941,8 @@
               "floatParam4": 65536,
               "intParam1": 15,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "-1935126778876515862",
@@ -5839,7 +6080,8 @@
               "petRecoverSP": 10099,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "-1879432991646952387",
@@ -5978,6 +6220,7 @@
               "intParam1": 50,
               "intParam2": 0
             },
+            "summonFields": null,
             "formulaParamReferenceEvidence": {
               "status": "formula-param-buff-references-found",
               "sourceFields": [
@@ -6023,12 +6266,13 @@
               "status": "formula-param-buff-reference-found",
               "scriptPathId": "8877289764366981625",
               "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "scriptTypeClassName": "TFxElementParams",
               "inferredRole": "buff-trigger-or-apply-bridge-candidate",
               "confidence": "low",
               "referencedBuffIds": [
                 150
               ],
-              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+              "note": "FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -6144,7 +6388,8 @@
               "freezeEffect": 1,
               "freezeBullet": 0,
               "freezeHitEffect": 1
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "8630965654977666809",
@@ -6282,7 +6527,8 @@
               "petRecoverSP": 10099,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           }
         ]
       },
@@ -6464,7 +6710,8 @@
               "floatParam4": 65536,
               "intParam1": 20,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "293127652159246957",
@@ -6592,7 +6839,8 @@
               "petRecoverSP": 9399,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "2958776843239585724",
@@ -6707,7 +6955,8 @@
               "freezeEffect": 1,
               "freezeBullet": 0,
               "freezeHitEffect": 1
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "6124215426467374725",
@@ -6845,7 +7094,8 @@
               "petRecoverSP": 9399,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           }
         ]
       },
@@ -7038,7 +7288,8 @@
               "floatParam4": 65536,
               "intParam1": 15,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "-6711007604037179960",
@@ -7119,7 +7370,8 @@
             },
             "mediaPackNames": [],
             "damageFields": null,
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "-6207187402311472512",
@@ -7257,7 +7509,8 @@
               "floatParam4": 65536,
               "intParam1": 15,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "-5022202969777715803",
@@ -7385,6 +7638,7 @@
               "recoverInterval": 9999
             },
             "timingFields": null,
+            "summonFields": null,
             "formulaParamReferenceEvidence": {
               "status": "formula-param-buff-references-found",
               "sourceFields": [
@@ -7430,12 +7684,13 @@
               "status": "formula-param-buff-reference-found",
               "scriptPathId": "3156599909451817364",
               "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "scriptTypeClassName": "TDamageElementParams",
               "inferredRole": "buff-trigger-or-apply-bridge-candidate",
               "confidence": "low",
               "referencedBuffIds": [
                 250
               ],
-              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+              "note": "FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -7574,7 +7829,8 @@
               "petRecoverSP": 11900,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "610497198600338323",
@@ -7712,7 +7968,8 @@
               "petRecoverSP": 11900,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "1421320253435570920",
@@ -7850,7 +8107,8 @@
               "floatParam4": 65536,
               "intParam1": 50,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "2794308730194577100",
@@ -7957,7 +8215,8 @@
               "freezeEffect": 1,
               "freezeBullet": 0,
               "freezeHitEffect": 1
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "4184198133427158765",
@@ -8095,7 +8354,8 @@
               "petRecoverSP": 11900,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           }
         ]
       },
@@ -8269,7 +8529,8 @@
               "freezeEffect": 1,
               "freezeBullet": 0,
               "freezeHitEffect": 1
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "-7783775984244194322",
@@ -8365,6 +8626,7 @@
               "frequencyType": 0,
               "frequency": 0
             },
+            "summonFields": null,
             "formulaParamReferenceEvidence": {
               "status": "formula-param-buff-references-found",
               "sourceFields": [
@@ -8411,11 +8673,11 @@
               "scriptPathId": "798776077322537027",
               "scriptTypeCandidateStatus": "script-type-candidate-missing",
               "inferredRole": "buff-trigger-or-apply-bridge-candidate",
-              "confidence": "medium",
+              "confidence": "low",
               "referencedBuffIds": [
                 250
               ],
-              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+              "note": "FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -8531,7 +8793,8 @@
               "freezeEffect": 1,
               "freezeBullet": 0,
               "freezeHitEffect": 1
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "-4067071381797012601",
@@ -8659,7 +8922,8 @@
               "petRecoverSP": 10099,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "-3809486317990090417",
@@ -8752,7 +9016,8 @@
             },
             "mediaPackNames": [],
             "damageFields": null,
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "-1715488869977622004",
@@ -8848,6 +9113,7 @@
               "frequencyType": 0,
               "frequency": 0
             },
+            "summonFields": null,
             "formulaParamReferenceEvidence": {
               "status": "formula-param-buff-references-found",
               "sourceFields": [
@@ -8894,11 +9160,11 @@
               "scriptPathId": "798776077322537027",
               "scriptTypeCandidateStatus": "script-type-candidate-missing",
               "inferredRole": "buff-trigger-or-apply-bridge-candidate",
-              "confidence": "medium",
+              "confidence": "low",
               "referencedBuffIds": [
                 250
               ],
-              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+              "note": "FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -9037,7 +9303,8 @@
               "petRecoverSP": 10099,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "4932614284631475642",
@@ -9175,7 +9442,8 @@
               "floatParam4": 65536,
               "intParam1": 15,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "5068827089459744812",
@@ -9303,7 +9571,8 @@
               "petRecoverSP": 10099,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "5485634636675905737",
@@ -9386,7 +9655,8 @@
             },
             "mediaPackNames": [],
             "damageFields": null,
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "6547055219106824928",
@@ -9525,6 +9795,7 @@
               "intParam1": 100,
               "intParam2": 0
             },
+            "summonFields": null,
             "formulaParamReferenceEvidence": {
               "status": "formula-param-buff-references-found",
               "sourceFields": [
@@ -9570,12 +9841,13 @@
               "status": "formula-param-buff-reference-found",
               "scriptPathId": "8877289764366981625",
               "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "scriptTypeClassName": "TFxElementParams",
               "inferredRole": "buff-trigger-or-apply-bridge-candidate",
               "confidence": "low",
               "referencedBuffIds": [
                 250
               ],
-              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+              "note": "FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           }
         ]
@@ -9758,7 +10030,8 @@
               "petRecoverSP": 12999,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "-3050624262724251434",
@@ -9873,7 +10146,8 @@
               "freezeEffect": 1,
               "freezeBullet": 0,
               "freezeHitEffect": 1
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "3491256932001501304",
@@ -10011,7 +10285,8 @@
               "floatParam4": 65536,
               "intParam1": 16,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "7337825396973098198",
@@ -10149,7 +10424,8 @@
               "petRecoverSP": 12999,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           }
         ]
       },
@@ -10354,6 +10630,7 @@
               "intParam1": 16,
               "intParam2": 0
             },
+            "summonFields": null,
             "formulaParamReferenceEvidence": {
               "status": "formula-param-buff-references-found",
               "sourceFields": [
@@ -10399,12 +10676,13 @@
               "status": "formula-param-buff-reference-found",
               "scriptPathId": "8877289764366981625",
               "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "scriptTypeClassName": "TFxElementParams",
               "inferredRole": "buff-trigger-or-apply-bridge-candidate",
               "confidence": "low",
               "referencedBuffIds": [
                 150
               ],
-              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+              "note": "FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -10535,6 +10813,7 @@
               "recoverInterval": 9999
             },
             "timingFields": null,
+            "summonFields": null,
             "formulaParamReferenceEvidence": {
               "status": "formula-param-buff-references-found",
               "sourceFields": [
@@ -10580,12 +10859,13 @@
               "status": "formula-param-buff-reference-found",
               "scriptPathId": "3156599909451817364",
               "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "scriptTypeClassName": "TDamageElementParams",
               "inferredRole": "buff-trigger-or-apply-bridge-candidate",
               "confidence": "low",
               "referencedBuffIds": [
                 750
               ],
-              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+              "note": "FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -10714,6 +10994,7 @@
               "recoverInterval": 9999
             },
             "timingFields": null,
+            "summonFields": null,
             "formulaParamReferenceEvidence": {
               "status": "formula-param-buff-references-found",
               "sourceFields": [
@@ -10759,12 +11040,13 @@
               "status": "formula-param-buff-reference-found",
               "scriptPathId": "3156599909451817364",
               "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "scriptTypeClassName": "TDamageElementParams",
               "inferredRole": "buff-trigger-or-apply-bridge-candidate",
               "confidence": "low",
               "referencedBuffIds": [
                 250
               ],
-              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+              "note": "FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -10904,6 +11186,7 @@
               "intParam1": 16,
               "intParam2": 0
             },
+            "summonFields": null,
             "formulaParamReferenceEvidence": {
               "status": "formula-param-buff-references-found",
               "sourceFields": [
@@ -10949,12 +11232,13 @@
               "status": "formula-param-buff-reference-found",
               "scriptPathId": "8877289764366981625",
               "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "scriptTypeClassName": "TFxElementParams",
               "inferredRole": "buff-trigger-or-apply-bridge-candidate",
               "confidence": "low",
               "referencedBuffIds": [
                 150
               ],
-              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+              "note": "FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -11093,7 +11377,8 @@
               "petRecoverSP": 0,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "-1722401594839030113",
@@ -11175,6 +11460,7 @@
             "mediaPackNames": [],
             "damageFields": null,
             "timingFields": null,
+            "summonFields": null,
             "formulaParamReferenceEvidence": {
               "status": "formula-param-buff-references-found",
               "sourceFields": [
@@ -11221,11 +11507,11 @@
               "scriptPathId": "2679560984897556580",
               "scriptTypeCandidateStatus": "script-type-candidate-missing",
               "inferredRole": "buff-trigger-or-apply-bridge-candidate",
-              "confidence": "medium",
+              "confidence": "low",
               "referencedBuffIds": [
                 750
               ],
-              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+              "note": "FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -11317,7 +11603,8 @@
             },
             "mediaPackNames": [],
             "damageFields": null,
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "-1085330686087474031",
@@ -11398,7 +11685,8 @@
             },
             "mediaPackNames": [],
             "damageFields": null,
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "1759694688090026391",
@@ -11536,7 +11824,8 @@
               "petRecoverSP": 0,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "3106696351606465864",
@@ -11651,7 +11940,8 @@
               "freezeEffect": 0,
               "freezeBullet": 0,
               "freezeHitEffect": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "4475751446751874795",
@@ -11732,7 +12022,8 @@
             },
             "mediaPackNames": [],
             "damageFields": null,
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "4731523060341306954",
@@ -11834,7 +12125,8 @@
               "time": 100,
               "frequencyType": 0,
               "frequency": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "6963696584413796673",
@@ -11915,7 +12207,8 @@
             },
             "mediaPackNames": [],
             "damageFields": null,
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "7790893483898502906",
@@ -12153,7 +12446,8 @@
               "floatParam4": 65536,
               "intParam1": 1,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           }
         ]
       },
@@ -12329,7 +12623,8 @@
               "petRecoverSP": 0,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "-3956021691739248290",
@@ -12467,7 +12762,8 @@
               "petRecoverSP": 0,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           }
         ]
       },
@@ -12624,7 +12920,8 @@
               "freezeEffect": 1,
               "freezeBullet": 0,
               "freezeHitEffect": 1
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "-7506081561353179437",
@@ -12705,7 +13002,8 @@
             },
             "mediaPackNames": [],
             "damageFields": null,
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "-5022202969777715803",
@@ -12833,6 +13131,7 @@
               "recoverInterval": 9999
             },
             "timingFields": null,
+            "summonFields": null,
             "formulaParamReferenceEvidence": {
               "status": "formula-param-buff-references-found",
               "sourceFields": [
@@ -12878,12 +13177,13 @@
               "status": "formula-param-buff-reference-found",
               "scriptPathId": "3156599909451817364",
               "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "scriptTypeClassName": "TDamageElementParams",
               "inferredRole": "buff-trigger-or-apply-bridge-candidate",
               "confidence": "low",
               "referencedBuffIds": [
                 250
               ],
-              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+              "note": "FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -13012,7 +13312,8 @@
               "petRecoverSP": 22999,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "summonFields": null
           },
           {
             "pathId": "2740651767650299388",
@@ -13150,7 +13451,8 @@
               "floatParam4": 65536,
               "intParam1": 20,
               "intParam2": 0
-            }
+            },
+            "summonFields": null
           },
           {
             "pathId": "8949110464361487189",
@@ -13264,7 +13566,8 @@
               "time": 8000,
               "frequencyType": 0,
               "frequency": 0
-            }
+            },
+            "summonFields": null
           }
         ]
       },
@@ -13385,7 +13688,8 @@
               "time": -1,
               "frequencyType": 0,
               "frequency": 0
-            }
+            },
+            "summonFields": null
           }
         ]
       }
@@ -13393,7 +13697,7 @@
   },
   "damageElementFieldMappingEvidence": {
     "schemaVersion": 1,
-    "generatedAt": "2026-07-08T02:20:47.360Z",
+    "generatedAt": "2026-07-08T02:41:05.458Z",
     "sourceKind": "azpr-damage-element-field-mapping-evidence",
     "status": "damage-element-field-candidates-found",
     "source": {
@@ -35304,7 +35608,7 @@
     "resourceMapMatchedElementBaseReferenceSkills": 9,
     "resourceMapUnmatchedElementBaseReferenceSkills": 0,
     "scriptTypeCandidateSkills": 8,
-    "elementTypeCatalogCandidates": 2,
+    "elementTypeCatalogCandidates": 3,
     "externalElementObjectResolvedSkills": 18,
     "externalElementObjectResolvedRefs": 97,
     "externalElementObjectUnresolvedRefs": 0,
@@ -42826,8 +43130,54 @@
                     "elementConfigId": 101003180,
                     "pathId": "1572718271109451571",
                     "scriptPathId": "5576338162890961044",
-                    "scriptTypeClassName": "unknown",
-                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003180.asset"
+                    "scriptTypeClassName": "TSummonElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003180.asset",
+                    "summonFields": {
+                      "summonUnitId": 480059,
+                      "summonType": 1,
+                      "summonPropertyType": 0,
+                      "summonLifeTime": 2500,
+                      "summonCount": 1,
+                      "summonTotalMaxCount": 5,
+                      "dieWithOwner": 0,
+                      "dieWithOutBattle": 0,
+                      "dieWithChangeHero": 0,
+                      "useFindPoint": 0,
+                      "dieOutTimeSkill": 0,
+                      "dieOutMaxCountSkill": 0,
+                      "dieWithChangeHeroSkill": 0,
+                      "dieWithOwnerSkill": 0,
+                      "summonCountType": 0,
+                      "summonPointType": 1,
+                      "ground": 0,
+                      "summonPositionType": 2,
+                      "summonInheritType": 0,
+                      "summonInheritTargetType": 2,
+                      "rotOffset": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "summonPoints": [
+                        {
+                          "x": 0,
+                          "y": 0,
+                          "z": 6553
+                        }
+                      ],
+                      "attributeData": [
+                        {
+                          "x": 0,
+                          "y": 1,
+                          "z": 1000
+                        }
+                      ],
+                      "effect": "",
+                      "isCombo": 0,
+                      "capsuleHeight": 0,
+                      "capsuleRadius": 0,
+                      "isGetTargetList": 0
+                    }
                   }
                 ],
                 "formulaParamBuffReferenceCount": 0,
@@ -42972,22 +43322,115 @@
                     "elementConfigId": 101003181,
                     "pathId": "-1285658850712902661",
                     "scriptPathId": "5576338162890961044",
-                    "scriptTypeClassName": "unknown",
+                    "scriptTypeClassName": "TSummonElementParams",
                     "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003181.asset",
                     "formulaParamBridgeCandidate": {
                       "status": "formula-param-buff-reference-found",
                       "scriptPathId": "5576338162890961044",
-                      "scriptTypeCandidateStatus": "script-type-candidate-missing",
-                      "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+                      "scriptTypeCandidateStatus": "script-type-candidate-found",
+                      "scriptTypeClassName": "TSummonElementParams",
+                      "inferredRole": "summon-element-buff-trigger-bridge-candidate",
                       "confidence": "medium",
                       "referencedBuffIds": [
                         101003079
                       ],
-                      "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+                      "summonFields": {
+                        "summonUnitId": 480060,
+                        "summonType": 1,
+                        "summonPropertyType": 0,
+                        "summonLifeTime": 2500,
+                        "summonCount": 1,
+                        "summonTotalMaxCount": 5,
+                        "dieWithOwner": 0,
+                        "dieWithOutBattle": 0,
+                        "dieWithChangeHero": 0,
+                        "useFindPoint": 0,
+                        "dieOutTimeSkill": 0,
+                        "dieOutMaxCountSkill": 0,
+                        "dieWithChangeHeroSkill": 0,
+                        "dieWithOwnerSkill": 0,
+                        "summonCountType": 0,
+                        "summonPointType": 1,
+                        "ground": 0,
+                        "summonPositionType": 2,
+                        "summonInheritType": 0,
+                        "summonInheritTargetType": 2,
+                        "rotOffset": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0
+                        },
+                        "summonPoints": [
+                          {
+                            "x": 0,
+                            "y": 0,
+                            "z": 6553
+                          }
+                        ],
+                        "attributeData": [
+                          {
+                            "x": 0,
+                            "y": 1,
+                            "z": 1000
+                          }
+                        ],
+                        "effect": "",
+                        "isCombo": 0,
+                        "capsuleHeight": 0,
+                        "capsuleRadius": 0,
+                        "isGetTargetList": 0
+                      },
+                      "note": "This object is TSummonElementParams and formulaParams contain buff_info ids; it is tracked as a summon-to-buff bridge candidate, not a direct DamageElement."
                     },
                     "formulaParamBuffReferenceIds": [
                       101003079
-                    ]
+                    ],
+                    "summonFields": {
+                      "summonUnitId": 480060,
+                      "summonType": 1,
+                      "summonPropertyType": 0,
+                      "summonLifeTime": 2500,
+                      "summonCount": 1,
+                      "summonTotalMaxCount": 5,
+                      "dieWithOwner": 0,
+                      "dieWithOutBattle": 0,
+                      "dieWithChangeHero": 0,
+                      "useFindPoint": 0,
+                      "dieOutTimeSkill": 0,
+                      "dieOutMaxCountSkill": 0,
+                      "dieWithChangeHeroSkill": 0,
+                      "dieWithOwnerSkill": 0,
+                      "summonCountType": 0,
+                      "summonPointType": 1,
+                      "ground": 0,
+                      "summonPositionType": 2,
+                      "summonInheritType": 0,
+                      "summonInheritTargetType": 2,
+                      "rotOffset": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "summonPoints": [
+                        {
+                          "x": 0,
+                          "y": 0,
+                          "z": 6553
+                        }
+                      ],
+                      "attributeData": [
+                        {
+                          "x": 0,
+                          "y": 1,
+                          "z": 1000
+                        }
+                      ],
+                      "effect": "",
+                      "isCombo": 0,
+                      "capsuleHeight": 0,
+                      "capsuleRadius": 0,
+                      "isGetTargetList": 0
+                    }
                   }
                 ],
                 "formulaParamBuffReferenceCount": 1,
@@ -68449,12 +68892,13 @@
                       "status": "formula-param-buff-reference-found",
                       "scriptPathId": "8877289764366981625",
                       "scriptTypeCandidateStatus": "script-type-candidate-found",
+                      "scriptTypeClassName": "TFxElementParams",
                       "inferredRole": "buff-trigger-or-apply-bridge-candidate",
                       "confidence": "low",
                       "referencedBuffIds": [
                         150
                       ],
-                      "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+                      "note": "FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
                     },
                     "formulaParamBuffReferenceIds": [
                       150
@@ -72623,12 +73067,13 @@
                       "status": "formula-param-buff-reference-found",
                       "scriptPathId": "8877289764366981625",
                       "scriptTypeCandidateStatus": "script-type-candidate-found",
+                      "scriptTypeClassName": "TFxElementParams",
                       "inferredRole": "buff-trigger-or-apply-bridge-candidate",
                       "confidence": "low",
                       "referencedBuffIds": [
                         250
                       ],
-                      "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+                      "note": "FormulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
                     },
                     "formulaParamBuffReferenceIds": [
                       250
@@ -105248,8 +105693,54 @@
                     "elementConfigId": 101003180,
                     "pathId": "1572718271109451571",
                     "scriptPathId": "5576338162890961044",
-                    "scriptTypeClassName": "unknown",
-                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003180.asset"
+                    "scriptTypeClassName": "TSummonElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003180.asset",
+                    "summonFields": {
+                      "summonUnitId": 480059,
+                      "summonType": 1,
+                      "summonPropertyType": 0,
+                      "summonLifeTime": 2500,
+                      "summonCount": 1,
+                      "summonTotalMaxCount": 5,
+                      "dieWithOwner": 0,
+                      "dieWithOutBattle": 0,
+                      "dieWithChangeHero": 0,
+                      "useFindPoint": 0,
+                      "dieOutTimeSkill": 0,
+                      "dieOutMaxCountSkill": 0,
+                      "dieWithChangeHeroSkill": 0,
+                      "dieWithOwnerSkill": 0,
+                      "summonCountType": 0,
+                      "summonPointType": 1,
+                      "ground": 0,
+                      "summonPositionType": 2,
+                      "summonInheritType": 0,
+                      "summonInheritTargetType": 2,
+                      "rotOffset": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "summonPoints": [
+                        {
+                          "x": 0,
+                          "y": 0,
+                          "z": 6553
+                        }
+                      ],
+                      "attributeData": [
+                        {
+                          "x": 0,
+                          "y": 1,
+                          "z": 1000
+                        }
+                      ],
+                      "effect": "",
+                      "isCombo": 0,
+                      "capsuleHeight": 0,
+                      "capsuleRadius": 0,
+                      "isGetTargetList": 0
+                    }
                   }
                 ],
                 "formulaParamBuffReferenceCount": 0,
@@ -105394,22 +105885,115 @@
                     "elementConfigId": 101003181,
                     "pathId": "-1285658850712902661",
                     "scriptPathId": "5576338162890961044",
-                    "scriptTypeClassName": "unknown",
+                    "scriptTypeClassName": "TSummonElementParams",
                     "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003181.asset",
                     "formulaParamBridgeCandidate": {
                       "status": "formula-param-buff-reference-found",
                       "scriptPathId": "5576338162890961044",
-                      "scriptTypeCandidateStatus": "script-type-candidate-missing",
-                      "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+                      "scriptTypeCandidateStatus": "script-type-candidate-found",
+                      "scriptTypeClassName": "TSummonElementParams",
+                      "inferredRole": "summon-element-buff-trigger-bridge-candidate",
                       "confidence": "medium",
                       "referencedBuffIds": [
                         101003079
                       ],
-                      "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+                      "summonFields": {
+                        "summonUnitId": 480060,
+                        "summonType": 1,
+                        "summonPropertyType": 0,
+                        "summonLifeTime": 2500,
+                        "summonCount": 1,
+                        "summonTotalMaxCount": 5,
+                        "dieWithOwner": 0,
+                        "dieWithOutBattle": 0,
+                        "dieWithChangeHero": 0,
+                        "useFindPoint": 0,
+                        "dieOutTimeSkill": 0,
+                        "dieOutMaxCountSkill": 0,
+                        "dieWithChangeHeroSkill": 0,
+                        "dieWithOwnerSkill": 0,
+                        "summonCountType": 0,
+                        "summonPointType": 1,
+                        "ground": 0,
+                        "summonPositionType": 2,
+                        "summonInheritType": 0,
+                        "summonInheritTargetType": 2,
+                        "rotOffset": {
+                          "x": 0,
+                          "y": 0,
+                          "z": 0
+                        },
+                        "summonPoints": [
+                          {
+                            "x": 0,
+                            "y": 0,
+                            "z": 6553
+                          }
+                        ],
+                        "attributeData": [
+                          {
+                            "x": 0,
+                            "y": 1,
+                            "z": 1000
+                          }
+                        ],
+                        "effect": "",
+                        "isCombo": 0,
+                        "capsuleHeight": 0,
+                        "capsuleRadius": 0,
+                        "isGetTargetList": 0
+                      },
+                      "note": "This object is TSummonElementParams and formulaParams contain buff_info ids; it is tracked as a summon-to-buff bridge candidate, not a direct DamageElement."
                     },
                     "formulaParamBuffReferenceIds": [
                       101003079
-                    ]
+                    ],
+                    "summonFields": {
+                      "summonUnitId": 480060,
+                      "summonType": 1,
+                      "summonPropertyType": 0,
+                      "summonLifeTime": 2500,
+                      "summonCount": 1,
+                      "summonTotalMaxCount": 5,
+                      "dieWithOwner": 0,
+                      "dieWithOutBattle": 0,
+                      "dieWithChangeHero": 0,
+                      "useFindPoint": 0,
+                      "dieOutTimeSkill": 0,
+                      "dieOutMaxCountSkill": 0,
+                      "dieWithChangeHeroSkill": 0,
+                      "dieWithOwnerSkill": 0,
+                      "summonCountType": 0,
+                      "summonPointType": 1,
+                      "ground": 0,
+                      "summonPositionType": 2,
+                      "summonInheritType": 0,
+                      "summonInheritTargetType": 2,
+                      "rotOffset": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "summonPoints": [
+                        {
+                          "x": 0,
+                          "y": 0,
+                          "z": 6553
+                        }
+                      ],
+                      "attributeData": [
+                        {
+                          "x": 0,
+                          "y": 1,
+                          "z": 1000
+                        }
+                      ],
+                      "effect": "",
+                      "isCombo": 0,
+                      "capsuleHeight": 0,
+                      "capsuleRadius": 0,
+                      "isGetTargetList": 0
+                    }
                   }
                 ],
                 "formulaParamBuffReferenceCount": 1,
