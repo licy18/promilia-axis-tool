@@ -48,6 +48,21 @@
       </div>
       <p
         v-if="
+          formatThreeValueCurveFrameworkSummary(
+            summary.threeValueCurveFrameworkSummary
+          )
+        "
+        class="diagnostic-empty formula-pattern-summary"
+        data-testid="workbench-three-value-curve-framework-summary"
+      >
+        {{
+          formatThreeValueCurveFrameworkSummary(
+            summary.threeValueCurveFrameworkSummary
+          )
+        }}
+      </p>
+      <p
+        v-if="
           formatFormulaCandidatePatternSummary(
             summary.formulaCandidatePatternSummary
           )
@@ -739,6 +754,14 @@ function formatCandidateChartSeries(series) {
   const frameRange = formatFrameRange(series.frameMin, series.frameMax);
   const valueRange = formatValueRange(series.valueMin, series.valueMax);
   return `${frameRange} · ${valueRange} · ${series.unit}`;
+}
+
+function formatThreeValueCurveFrameworkSummary(summary) {
+  if (!summary || summary.trackCount <= 0) {
+    return '';
+  }
+  const deferredText = summary.detailsDeferred ? ' · 细节后补' : '';
+  return `三值框架 ${summary.trackCount}轨 · 曲线 ${summary.candidateTrackCount}条/${summary.chartPointCount}点${deferredText}`;
 }
 
 function formatFrameRange(min, max) {

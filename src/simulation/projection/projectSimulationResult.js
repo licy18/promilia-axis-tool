@@ -32,6 +32,40 @@ const SUMMON_TARGET_BY_UNIT_ID = createSummonTargetLookupByUnitId(
 );
 const AZPR_TIMELINE_FRAME_RATE = 60;
 const AZPR_TIMELINE_FRAME_MS = 1000 / AZPR_TIMELINE_FRAME_RATE;
+const THREE_VALUE_CURVE_TRACK_DEFINITIONS = [
+  {
+    key: 'enemyHpDamage',
+    label: '敌人HP伤害',
+    resultField: 'hpDamage',
+    candidateSeriesKey: 'hpDamageFormulaParamCandidate',
+    ownerScope: 'enemy',
+    valueUnit: 'raw-damage',
+    resultStatus:
+      'raw-hp-projection-applied-final-azpr-formula-unconfirmed',
+    formulaStatus: 'formula-candidate-preview-unapplied',
+  },
+  {
+    key: 'enemyToughnessDamage',
+    label: '敌人韧性削减',
+    resultField: 'toughnessDamage',
+    candidateSeriesKey: 'toughnessDamageCandidate',
+    ownerScope: 'enemy',
+    valueUnit: 'raw-field',
+    resultStatus: 'zero-placeholder-until-toughness-formula-confirmed',
+    formulaStatus: 'weak-break-field-candidate-unapplied',
+  },
+  {
+    key: 'selfEnergyChange',
+    label: '自身能量变化',
+    resultField: 'selfEnergyChange',
+    candidateSeriesKey: 'selfEnergyCandidate',
+    ownerScope: 'actor',
+    valueUnit: 'sp',
+    resultStatus:
+      'resource-delta-applied-recover-sp-candidate-unapplied',
+    formulaStatus: 'recover-sp-runtime-probe-partially-confirmed',
+  },
+];
 const AZPR_IL2CPP_DUMP_CS_PATH =
   'C:/Codex/AzPr Extractor/outputs/il2cpp-dump/dump.cs';
 const AZPR_IL2CPP_SCRIPT_JSON_PATH =
@@ -1370,6 +1404,11 @@ export function projectSimulationResult({
     actionResultTimeline,
     scenario.time.durationMs
   );
+  const threeValueCurveFramework = buildThreeValueCurveFramework({
+    scenario,
+    actionResultTimeline,
+    candidateValueSeries,
+  });
   const damageTimeline = damageEvents.map(event => ({
     timeMs: event.timeMs,
     actionId: event.actionId,
@@ -1440,6 +1479,7 @@ export function projectSimulationResult({
     eventLog,
     actionResultTimeline,
     candidateValueSeries,
+    threeValueCurveFramework,
     damageTimeline,
     resourceTimeline,
     summary: {
@@ -1452,6 +1492,7 @@ export function projectSimulationResult({
       actionResultCount: actionResultTimeline.length,
       actionCount: scenario.actions.length,
       candidateValueSeriesSummary: candidateValueSeries.summary,
+      threeValueCurveFrameworkSummary: threeValueCurveFramework.summary,
       formulaVersion: damageEvents[0]?.payload.formulaVersion ?? null,
       formulaCandidatePatternSummary,
       formulaExecutionMatrixSummary,
@@ -1466,11 +1507,170 @@ export function projectSimulationResult({
       limitations: [
         'Raw damage projection only; final AzPr formula is not implemented yet.',
         'Every action result tracks HP damage, toughness damage, and self energy delta; toughness and charge formulas remain unmapped until skill/effect nodes are parsed.',
+        'Detailed per-skill frame timing is a later evidence layer; the three-value curve framework can run on candidate, placeholder, or imported runtime sample points first.',
         'Formula breakdown exposes unapplied layers before they are confirmed.',
         'Skill timing is placeholder when timingMissingActionCount is greater than 0.',
       ],
     },
   };
+}
+
+function buildThreeValueCurveFramework({
+  scenario,
+  actionResultTimeline,
+  candidateValueSeries,
+}) {
+  const candidateSeriesByKey = new Map(
+    (candidateValueSeries.series ?? []).map(series => [series.key, series])
+  );
+  const chartSeriesByKey = new Map(
+    (candidateValueSeries.chart?.series ?? []).map(series => [
+      series.key,
+      series,
+    ])
+  );
+  const tracks = THREE_VALUE_CURVE_TRACK_DEFINITIONS.map(definition =>
+    createThreeValueCurveTrack({
+      definition,
+      scenario,
+      actionResultTimeline,
+      candidateSeries: candidateSeriesByKey.get(definition.candidateSeriesKey),
+      chartSeries: chartSeriesByKey.get(definition.candidateSeriesKey),
+    })
+  );
+  const candidateTrackCount = tracks.filter(
+    track => track.candidatePointCount > 0
+  ).length;
+  const candidatePointCount = tracks.reduce(
+    (sum, track) => sum + track.candidatePointCount,
+    0
+  );
+  const chartPointCount = tracks.reduce(
+    (sum, track) => sum + track.chartPointCount,
+    0
+  );
+
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-three-value-curve-framework',
+    status: 'three-value-curve-framework-ready-details-deferred',
+    developmentFocus: 'framework-first-before-frame-perfecting',
+    frameRate: AZPR_TIMELINE_FRAME_RATE,
+    frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
+    timebase: {
+      granularity: 'one-frame',
+      frameRate: AZPR_TIMELINE_FRAME_RATE,
+      frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
+      frameIndexBase: 0,
+    },
+    computationContract: {
+      inputLayers: [
+        'confirmed-action-result-values',
+        'candidate-hit-values',
+        'runtime-sample-captures',
+        'placeholder-values',
+      ],
+      curvePointPolicy:
+        'points may be candidate or sampled; unapplied candidates never change final totals',
+      unresolvedTimingPolicy:
+        'keep candidate/source/display frames separate until concrete skill frames are confirmed',
+      valueApplicationPolicy:
+        'only explicit applied result slots affect totals; candidate curves stay applied=false',
+    },
+    tracks,
+    summary: {
+      trackCount: tracks.length,
+      candidateTrackCount,
+      candidatePointCount,
+      chartPointCount,
+      actionResultCount: actionResultTimeline.length,
+      actionCount: scenario.actions.length,
+      actorCount: scenario.actors.length,
+      detailsDeferred: true,
+      applied: false,
+    },
+    applied: false,
+  };
+}
+
+function createThreeValueCurveTrack({
+  definition,
+  scenario,
+  actionResultTimeline,
+  candidateSeries,
+  chartSeries,
+}) {
+  const resultValues = actionResultTimeline
+    .map(entry => numberOrNull(entry[definition.resultField]?.value))
+    .filter(Number.isFinite);
+  const projectedValue = resultValues.reduce((sum, value) => sum + value, 0);
+
+  return {
+    key: definition.key,
+    label: definition.label,
+    resultField: definition.resultField,
+    candidateSeriesKey: definition.candidateSeriesKey,
+    ownerScope: definition.ownerScope,
+    valueUnit: definition.valueUnit,
+    status:
+      candidateSeries?.pointCount > 0
+        ? 'track-ready-with-candidate-points'
+        : resultValues.length > 0
+          ? 'track-ready-with-action-results'
+          : 'track-ready-waiting-for-values',
+    resultStatus: definition.resultStatus,
+    formulaStatus: definition.formulaStatus,
+    resultSlotCount: resultValues.length,
+    projectedValue,
+    projectedValueByActor:
+      definition.ownerScope === 'actor'
+        ? summarizeProjectedValueByActor({
+            scenario,
+            actionResultTimeline,
+            resultField: definition.resultField,
+          })
+        : [],
+    candidatePointCount: candidateSeries?.pointCount ?? 0,
+    chartPointCount: chartSeries?.pointCount ?? 0,
+    chartFrameMin: numberOrNull(chartSeries?.frameMin),
+    chartFrameMax: numberOrNull(chartSeries?.frameMax),
+    timeOrderStatus: chartSeries?.timeOrderStatus ?? 'no-candidate-points',
+    applied: false,
+  };
+}
+
+function summarizeProjectedValueByActor({
+  scenario,
+  actionResultTimeline,
+  resultField,
+}) {
+  const summaries = new Map(
+    scenario.actors.map(actor => [
+      actor.id,
+      {
+        actorId: actor.id,
+        actorName: actor.name,
+        value: 0,
+      },
+    ])
+  );
+
+  for (const entry of actionResultTimeline) {
+    if (!entry.actorId) {
+      continue;
+    }
+    if (!summaries.has(entry.actorId)) {
+      summaries.set(entry.actorId, {
+        actorId: entry.actorId,
+        actorName: entry.actorName,
+        value: 0,
+      });
+    }
+    summaries.get(entry.actorId).value +=
+      numberOrNull(entry[resultField]?.value) ?? 0;
+  }
+
+  return [...summaries.values()];
 }
 
 function summarizeSelfEnergyByActor(scenario, actionResultTimeline) {

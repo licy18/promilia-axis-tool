@@ -7270,3 +7270,110 @@ runtime-sampling-offline-samples-partially-validated
 - `triggerFrameCandidates` 是 item skill_control 内部候选帧，不是最终战斗时间轴触发帧。
 - 这些字段不能改变 `applied: false` 语义，也不能让二级 DamageElement 直接并入最终 HP / 韧性 / 能量曲线。
 - 仍需后续用来源 hitGroup、`Delay#4`、buff runtime 条件和真实采样确认最终触发帧、命中次数和 owner/target。
+
+## 91. 阶段 5-8BL：threeValueCurveFramework 框架优先摘要
+
+阶段 5-8BL 将当前开发重心从“继续收敛每个技能的具体命中帧”调整为“先搭稳 HP / 韧性 / 能量三值曲线框架”。新增字段不改变现有候选曲线算法，也不把候选值推进为最终公式。
+
+### 91.1 simulationResult.threeValueCurveFramework
+
+模拟结果顶层新增：
+
+```json
+{
+  "threeValueCurveFramework": {
+    "schemaVersion": 1,
+    "sourceKind": "azpr-three-value-curve-framework",
+    "status": "three-value-curve-framework-ready-details-deferred",
+    "developmentFocus": "framework-first-before-frame-perfecting",
+    "frameRate": 60,
+    "frameMs": 16.666667,
+    "timebase": {
+      "granularity": "one-frame",
+      "frameRate": 60,
+      "frameMs": 16.666667,
+      "frameIndexBase": 0
+    },
+    "summary": {
+      "trackCount": 3,
+      "candidateTrackCount": 3,
+      "candidatePointCount": 15,
+      "chartPointCount": 15,
+      "detailsDeferred": true,
+      "applied": false
+    },
+    "tracks": [],
+    "applied": false
+  }
+}
+```
+
+`developmentFocus = framework-first-before-frame-perfecting` 表示当前阶段允许细帧、命中次数、归属和 buff runtime 条件后补。读取方不应因为存在 `triggerFrameCandidates` 就要求唯一真实命中帧。
+
+### 91.2 computationContract
+
+`threeValueCurveFramework.computationContract` 记录框架输入层和未确认策略：
+
+- `inputLayers`：`confirmed-action-result-values`、`candidate-hit-values`、`runtime-sample-captures`、`placeholder-values`。
+- `curvePointPolicy`：候选点和采样点都可以进入曲线展示，但未应用候选不能改写最终 totals。
+- `unresolvedTimingPolicy`：候选帧、来源帧和显示帧必须分离，直到技能细帧被确认。
+- `valueApplicationPolicy`：只有显式 applied 的 result slot 能影响 totals。
+
+### 91.3 tracks[]
+
+固定三条轨道：
+
+- `enemyHpDamage`：读取 `actionResultTimeline[].hpDamage`，候选 series 为 `hpDamageFormulaParamCandidate`。
+- `enemyToughnessDamage`：读取 `actionResultTimeline[].toughnessDamage`，候选 series 为 `toughnessDamageCandidate`。
+- `selfEnergyChange`：读取 `actionResultTimeline[].selfEnergyChange`，候选 series 为 `selfEnergyCandidate`，并保留 `projectedValueByActor[]`。
+
+单条轨道字段：
+
+```json
+{
+  "key": "enemyHpDamage",
+  "label": "敌人HP伤害",
+  "resultField": "hpDamage",
+  "candidateSeriesKey": "hpDamageFormulaParamCandidate",
+  "ownerScope": "enemy",
+  "valueUnit": "raw-damage",
+  "status": "track-ready-with-candidate-points",
+  "resultSlotCount": 1,
+  "projectedValue": 12461,
+  "candidatePointCount": 5,
+  "chartPointCount": 5,
+  "timeOrderStatus": "source-times-monotonic",
+  "applied": false
+}
+```
+
+### 91.4 summary.threeValueCurveFrameworkSummary
+
+`simulationResult.summary` 新增 `threeValueCurveFrameworkSummary`，用于面板快速显示：
+
+```json
+{
+  "trackCount": 3,
+  "candidateTrackCount": 3,
+  "candidatePointCount": 15,
+  "chartPointCount": 15,
+  "actionResultCount": 1,
+  "actionCount": 1,
+  "actorCount": 2,
+  "detailsDeferred": true,
+  "applied": false
+}
+```
+
+Workbench 分析面板显示：
+
+```text
+三值框架 3轨 · 曲线 3条/15点 · 细节后补
+```
+
+### 91.5 兼容性与边界
+
+- `candidateValueSeries` 原结构不变，继续作为候选曲线输入。
+- `threeValueCurveFramework.applied` 必须保持 `false`，它是框架摘要，不是最终公式。
+- 现阶段不要为了填充该框架而继续深挖每个角色每个技能的逐帧动作；细帧应在框架稳定后作为可替换 evidence 或 runtime sample 接入。
+- 下一阶段应新增 delta / cumulative 曲线层，让三值变化可以按帧积分显示。

@@ -4318,9 +4318,39 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 下一步：
 
-- 阶段 5-8BL 目标：把 `48005901/48006001` 的候选帧与来源 hitGroup、第 4/5 段 `TSummonElementParams`、`battlefield_item.param = Delay#4` 和 `101003079 / 焰火` buff 条件交叉对齐。
-- 优先输出一个“触发帧假设矩阵”：源 hit 帧、item skill 内部候选帧、Delay#4 解释候选、DamageElement id、HP/韧性/能量字段、owner/target 未确认项。
-- 若静态证据仍无法从候选集中收敛到唯一触发帧，再把这组假设写入真实 hook / capture 采样清单。
+- 阶段 5-8BL 目标调整为框架优先：不在当前阶段继续收敛 `48005901/48006001` 的最终触发帧、命中次数或 `Delay#4` 解释。
+- 先把 HP / 韧性 / 能量三值变化的状态流、候选曲线、占位曲线和未来 runtime sample 输入契约搭稳；触发帧假设矩阵后移到框架稳定后的 evidence 补充阶段。
+
+### 2026-07-08：阶段 5-8BL 三值曲线框架优先调整
+
+本轮完成：
+
+- 接受阶段方向调整：当前不要求先搞清楚每个角色、每个技能在每一帧的具体动作；细帧、命中次数、owner/target 归属和 buff runtime 条件先作为后续 evidence 层补充。
+- `src/simulation/projection/projectSimulationResult.js` 新增 `threeValueCurveFramework` 顶层摘要，固定三条轨道：`enemyHpDamage`、`enemyToughnessDamage`、`selfEnergyChange`。
+- `threeValueCurveFramework.timebase` 固定 `60fps / one-frame`，但 `computationContract.unresolvedTimingPolicy` 明确候选帧、来源帧、显示帧分离，避免把候选细帧提前当最终结论。
+- `threeValueCurveFramework.tracks[]` 记录每条轨道的 result slot、候选 series、chart point 数、结果状态和公式状态；当前默认末音样本为 3 轨、15 个候选/图表点，寒悠悠样本为 3 轨、12 个候选/图表点。
+- `summary.threeValueCurveFrameworkSummary` 接入 Workbench 分析面板，显示 `三值框架 3轨 · 曲线 3条/{n}点 · 细节后补`。
+- 现有 `candidateValueSeries`、召唤目标候选帧、per-element 详情和公式矩阵保留，但在当前阶段都作为框架输入或 evidence，不驱动最终数值。
+
+当前边界：
+
+- `threeValueCurveFramework` 是框架契约和状态摘要，不是最终 HP / 韧性 / 能量公式。
+- HP 当前仍是 raw projection；削韧仍是字段候选；充能已有 RecoverSP 探针和手动 fixture，但真实 runtime sample 仍未导入。
+- 召唤目标 item skill 的候选帧继续保留在 evidence 中，但不再作为当前阶段主线。
+- 当前曲线仍偏“候选点展示”，尚未形成统一的 delta / cumulative 状态积分曲线。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、47 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、108 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提醒与 chunk 体积提醒。
+- `git diff --check`：通过；仅有 Windows 行尾转换提示。
+
+下一步：
+
+- 阶段 5-8BM 目标：新增三值曲线状态积分/累计曲线框架，把 `actionResultTimeline` 的已应用值、`candidateValueSeries` 的候选点、占位点和未来 `runtimeSampleCaptures` 统一投影为 HP / 韧性 / 能量的 delta 与 cumulative 曲线。
+- 明确曲线层级：`applied` 层用于当前可计入结果的值，`candidate` 层用于字段/公式候选，`sampled` 层用于真实采样导入，`placeholder` 层用于尚未填数值的动作骨架。
+- 继续保持细帧假设、`Delay#4` 解释和 `焰火` buff runtime 条件为后续 evidence 任务，不阻塞框架建设。
 
 ## 10. 文档维护规则
 

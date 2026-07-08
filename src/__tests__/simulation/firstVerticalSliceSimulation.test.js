@@ -1343,6 +1343,43 @@ describe('first vertical slice simulation', () => {
       timeOrderStatus: 'source-times-monotonic',
       applied: false,
     });
+    expect(result.threeValueCurveFramework).toMatchObject({
+      status: 'three-value-curve-framework-ready-details-deferred',
+      developmentFocus: 'framework-first-before-frame-perfecting',
+      frameRate: 60,
+      timebase: {
+        granularity: 'one-frame',
+        frameRate: 60,
+      },
+      summary: {
+        trackCount: 3,
+        candidateTrackCount: 3,
+        candidatePointCount: 15,
+        chartPointCount: 15,
+        actionResultCount: 1,
+        detailsDeferred: true,
+        applied: false,
+      },
+      applied: false,
+    });
+    expect(result.summary.threeValueCurveFrameworkSummary).toMatchObject({
+      trackCount: 3,
+      candidateTrackCount: 3,
+      chartPointCount: 15,
+      detailsDeferred: true,
+      applied: false,
+    });
+    expect(
+      result.threeValueCurveFramework.tracks.map(track => [
+        track.key,
+        track.status,
+        track.candidatePointCount,
+      ])
+    ).toEqual([
+      ['enemyHpDamage', 'track-ready-with-candidate-points', 5],
+      ['enemyToughnessDamage', 'track-ready-with-candidate-points', 5],
+      ['selfEnergyChange', 'track-ready-with-candidate-points', 5],
+    ]);
     const combinationPreview =
       result.actionResultTimeline[0].hpDamage.sourceEvidence.formulaCandidatePreview.combinationPreviews.find(
         item =>
@@ -1864,6 +1901,14 @@ describe('first vertical slice simulation', () => {
       pointCount: 12,
       hitCandidateCount: 4,
       actionCount: 1,
+      applied: false,
+    });
+    expect(result.threeValueCurveFramework.summary).toMatchObject({
+      trackCount: 3,
+      candidateTrackCount: 3,
+      candidatePointCount: 12,
+      chartPointCount: 12,
+      detailsDeferred: true,
       applied: false,
     });
     const hpSeries = result.candidateValueSeries.series.find(
