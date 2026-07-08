@@ -498,7 +498,10 @@
 <script setup>
 import { computed } from 'vue';
 import { ArrowLeft, ArrowRight, TrendCharts } from '@element-plus/icons-vue';
-import { createStateCurvePointId } from './stateCurvePointIdentity';
+import {
+  createStateCurveFrameGroupKey,
+  createStateCurvePointId,
+} from './stateCurvePointIdentity';
 
 const CANDIDATE_CHART_COLORS = ['#f2b366', '#79c7b9', '#a6b7ff'];
 const candidateChartGridLines = [25, 50, 75];
@@ -1301,29 +1304,6 @@ function formatStateCurveTrackShortLabel(trackKey) {
     return '能量';
   }
   return trackKey ?? '状态';
-}
-
-function createStateCurveFrameGroupKey(point) {
-  return [
-    point.actionId ?? point.eventType ?? 'point',
-    normalizeStateCurveGroupKeyPart(
-      Number.isFinite(Number(point.frameIndex))
-        ? Number(point.frameIndex)
-        : (point.timeMs ?? point.frameLabel ?? 'time')
-    ),
-    normalizeStateCurveGroupKeyPart(
-      Number.isFinite(Number(point.hitIndex))
-        ? `hit${Number(point.hitIndex)}`
-        : (point.eventIndex ??
-            point.sequenceIndex ??
-            point.eventType ??
-            'event')
-    ),
-  ].join('|');
-}
-
-function normalizeStateCurveGroupKeyPart(value) {
-  return String(value ?? 'none').replace(/\|/g, '/');
 }
 
 function isStateCurvePointInFocus(point) {

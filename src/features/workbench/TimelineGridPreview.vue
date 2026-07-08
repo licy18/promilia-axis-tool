@@ -506,7 +506,10 @@ import {
   formatFrameTime,
   snapMsToFrame,
 } from '../../domain/timebase';
-import { createStateCurvePointId } from './stateCurvePointIdentity';
+import {
+  createStateCurveFrameGroupKey,
+  createStateCurvePointId,
+} from './stateCurvePointIdentity';
 
 const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
@@ -1182,6 +1185,8 @@ function createCandidateValueFrameGroups(markers) {
         actionId: marker.actionId,
         hitIndex: marker.hitIndex,
         frameLabel: marker.frameLabel,
+        displayFrameIndex: marker.displayFrameIndex,
+        sourceFrameIndex: marker.sourceFrameIndex,
         timeMs: marker.timeMs,
         values: [],
       });
@@ -1350,14 +1355,64 @@ function isCandidateMarkerInDisplayScope(marker) {
 
 function selectCandidateFrameGroup(group) {
   selectedCandidateFrameGroupId.value = group.id;
+  selectStateCurvePointForCandidateFrame(group);
 }
 
 function selectCandidateFrameGroupByMarker(marker) {
   selectedCandidateFrameGroupId.value = marker.frameGroupId;
+  selectStateCurvePointForCandidateFrame(marker);
 }
 
 function selectStateCurveMarker(marker) {
   emit('select-state-curve-point', marker.statePointId);
+}
+
+function selectStateCurvePointForCandidateFrame(frame) {
+  const point = findCandidateStateCurvePointForFrame(frame);
+  if (point) {
+    emit('select-state-curve-point', point.statePointId);
+  }
+}
+
+function findCandidateStateCurvePointForFrame(frame) {
+  const frameGroupKey = createStateCurveFrameGroupKey({
+    actionId: frame.actionId,
+    frameIndex: frame.displayFrameIndex ?? frame.sourceFrameIndex,
+    timeMs: frame.timeMs,
+    frameLabel: frame.frameLabel,
+    hitIndex: frame.hitIndex,
+  });
+
+  for (const track of props.threeValueCurveFramework?.stateCurves?.tracks ??
+    []) {
+    if (!isStateCurveTrackVisible(track.trackKey)) {
+      continue;
+    }
+    const candidateLayer = (track.layers ?? []).find(
+      layer =>
+        layer.key === 'candidate' &&
+        isStateCurveTimelineLayerVisible(layer.key) &&
+        (layer.pointCount ?? 0) > 0
+    );
+    if (!candidateLayer) {
+      continue;
+    }
+    const pointIndex = (candidateLayer.points ?? []).findIndex(
+      point => createStateCurveFrameGroupKey(point) === frameGroupKey
+    );
+    if (pointIndex >= 0) {
+      return {
+        statePointId: createStateCurvePointId({
+          trackKey: track.trackKey,
+          layerKey: candidateLayer.key,
+          point: candidateLayer.points[pointIndex],
+          pointIndex,
+        }),
+      };
+    }
+  }
+
+  return null;
 }
 
 function isStateCurveTimelineLayerVisible(layerKey) {

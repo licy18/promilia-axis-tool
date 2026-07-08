@@ -4683,6 +4683,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 优先让用户从候选三值曲线帧热点反向定位到同帧 state point 分组，减少分析面板和时间轴之间的认知跳转。
 - 继续保持框架优先，真实采样和最终公式细化后续再接。
 
+### 2026-07-08：阶段 5-8BY 候选帧热点联动状态点
+
+本轮完成：
+
+- `createStateCurveFrameGroupKey()` 从 `AnalysisPanel` 内部函数抽到 `stateCurvePointIdentity.js`，让分析面板和时间轴共享同一套同帧分组语义。
+- `TimelineGridPreview` 的 candidate frame group 保留 `displayFrameIndex / sourceFrameIndex`，用于精确匹配 candidate state point。
+- 点击候选三值曲线 frame hotspot 或 candidate marker 时，除了原有候选帧摘要，也会尝试匹配当前 layer / track 过滤下的同帧 candidate state point。
+- 匹配成功后回传 `select-state-curve-point`，分析面板状态点导航位置同步跳到该 candidate 点，并激活同帧 HP / 韧性 / 能量分组按钮。
+- 默认末音样例点击 hit1 候选帧热点后，状态点导航位置变为 `2/16`，选中第一条 candidate HP state point。
+
+当前边界：
+
+- 联动只选择 candidate state point，不把 candidate 点渲染为时间轴 state marker。
+- 如果用户关闭 candidate layer 或对应 track，热点仍显示候选曲线摘要，但不会强行选择被过滤隐藏的 state point。
+- 没有改变 `threeValueCurveFramework.stateCurves` 模拟结果结构，也没有新增项目保存 schema 字段。
+
+验收结果：
+
+- `npm run test -- --run`：通过，13 个测试文件、109 条测试。
+
+下一步：
+
+- 阶段 5-8BZ 目标：补候选三值曲线 selected-frame scope 与状态点焦点模式联动。
+- 优先让用户从候选帧热点进入“只看该帧/该组”的联动查看，减少在全部点与候选帧摘要之间来回切换。
+- 继续保持框架优先，真实采样和最终公式细化后续再接。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

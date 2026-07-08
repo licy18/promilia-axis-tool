@@ -585,6 +585,24 @@ describe('Workbench view', () => {
         '[data-testid="workbench-timeline-candidate-value-frame-hotspot"][data-hit-index="1"]'
       )
       .trigger('click');
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-state-curve-nav-position"]').text()
+    ).toBe('2/16');
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-state-curve-point"][data-state-point-id="${firstCandidateStatePointId}"]`
+        )
+        .classes()
+    ).toContain('selected');
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-state-curve-frame-group-option"][data-state-point-id="${firstCandidateStatePointId}"]`
+        )
+        .classes()
+    ).toContain('active');
     expect(
       wrapper
         .find('[data-testid="workbench-candidate-value-frame-summary"]')

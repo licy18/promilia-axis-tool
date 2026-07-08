@@ -8539,3 +8539,95 @@ data-track-key
 - `npm run test -- --run`：通过。
 
 下一阶段 5-8BY 应把状态点导航与候选三值曲线帧热点联动。
+
+## 104. 阶段 5-8BY：candidate frame hotspot to state point link
+
+阶段 5-8BY 不修改 `threeValueCurveFramework.stateCurves` 的模拟结果结构，只把候选三值曲线的 frame hotspot / marker 与现有状态点导航联动起来。
+
+### 104.1 共享 frame group helper
+
+`createStateCurveFrameGroupKey()` 从 `AnalysisPanel.vue` 移到：
+
+```js
+src/features/workbench/stateCurvePointIdentity.js
+```
+
+现在导出：
+
+```js
+createStateCurvePointId()
+createStateCurveFrameGroupKey()
+```
+
+`AnalysisPanel` 与 `TimelineGridPreview` 共用该 helper，避免两边对“同动作 / 同帧 / 同 hit”产生不同解释。
+
+### 104.2 Candidate frame group 补充帧字段
+
+`TimelineGridPreview.createCandidateValueFrameGroups()` 的 group 派生对象新增：
+
+```js
+displayFrameIndex
+sourceFrameIndex
+```
+
+用于生成和 state point 一致的 `frameGroupKey`。优先使用 `displayFrameIndex`，回退到 `sourceFrameIndex / timeMs / frameLabel`。
+
+### 104.3 热点点击联动
+
+以下入口现在会在保留原候选帧摘要行为的同时，尝试选择对应状态点：
+
+```js
+selectCandidateFrameGroup(group)
+selectCandidateFrameGroupByMarker(marker)
+```
+
+新增流程：
+
+```js
+selectStateCurvePointForCandidateFrame(frame)
+findCandidateStateCurvePointForFrame(frame)
+```
+
+匹配条件：
+
+- state track 未被 `stateCurveTrackFilters` 隐藏。
+- `candidate` layer 未被 `stateCurveLayerFilters` 隐藏。
+- layer 有点。
+- `createStateCurveFrameGroupKey(point)` 与候选帧 group key 相同。
+
+匹配成功后：
+
+```js
+emit('select-state-curve-point', point.statePointId)
+```
+
+### 104.4 选择策略
+
+当前按 `threeValueCurveFramework.stateCurves.tracks[]` 顺序搜索。默认样本中顺序为：
+
+1. `enemyHpDamage`
+2. `enemyToughnessDamage`
+3. `selfEnergyChange`
+
+因此点击同帧候选热点会优先选中 HP candidate state point，再由 5-8BX 的同帧分组按钮切换到韧性或能量。
+
+### 104.5 边界
+
+- 该联动不会生成 candidate state marker；时间轴 candidate 仍由候选曲线 / marker / frame hotspot 负责。
+- 若用户隐藏 candidate layer 或对应 track，候选帧热点仍会显示候选摘要，但不会强行选中隐藏的 state point。
+- 匹配不到 state point 时不抛错，只保留原候选帧选中行为。
+
+### 104.6 验证
+
+扩展 Workbench 测试覆盖：
+
+- 点击 hit1 的 candidate frame hotspot 后，候选帧摘要仍显示。
+- 状态点导航位置同步变为 `2/16`。
+- 第一条 candidate HP state point 的明细行同步选中。
+- 同帧分组中的 HP candidate 按钮同步 active。
+
+阶段验收：
+
+- `npm run test -- --run`：通过。
+
+下一阶段 5-8BZ 应补候选三值曲线 selected-frame scope 与状态点焦点模式联动。
