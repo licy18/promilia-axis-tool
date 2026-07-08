@@ -7569,3 +7569,107 @@ Workbench 分析面板摘要从：
 - 该展示层只负责层级可见性和摘要，不改变模拟结果。
 - `sampled` / `placeholder` 默认隐藏，是为了避免在没有真实点时制造噪音；后续可在样本导入和动作骨架视图成熟后默认开放。
 - 下一阶段应优先让 runtime sample 或占位动作真正进入对应层，而不是继续追单个技能逐帧细节。
+
+## 94. 阶段 5-8BO：RecoverSP sampled state curve 与 placeholder 骨架
+
+阶段 5-8BO 扩展 `threeValueCurveFramework.stateCurves` 的输入来源，让 `sampled` 和 `placeholder` 不再只是空层。
+
+### 94.1 runtimeSampleContext 输入
+
+`projectSimulationResult()` 现在把 `runtimeSampleContext` 传给：
+
+```js
+buildThreeValueCurveFramework({
+  scenario,
+  actionResultTimeline,
+  candidateValueSeries,
+  runtimeSampleContext
+});
+```
+
+并继续下传到 `buildThreeValueStateCurves()` / `createSampledStateCurveLayer()`。
+
+### 94.2 sampled layer 映射
+
+当前只映射自身能量轨：
+
+- `track.key = selfEnergyChange`
+- `eventType = recover-sp-applied`
+
+映射为 state point：
+
+```json
+{
+  "sourceKind": "runtime-recover-sp-applied-sample",
+  "eventType": "recover-sp-applied",
+  "actionId": "action-0001",
+  "actorId": "actor-109001",
+  "sourceElementConfigId": 109001081,
+  "frameIndex": 12,
+  "frameLabel": "0s12f",
+  "delta": 0.3375,
+  "cumulative": 0.3375,
+  "spBefore": 10,
+  "spAfter": 10.3375,
+  "recoverTagType": 0,
+  "applied": false
+}
+```
+
+`sampled` layer 在有点时：
+
+```json
+{
+  "status": "delta-cumulative-points-built",
+  "mappingStatus": "runtime-samples-mapped-to-state-curve",
+  "runtimeSampleCount": 1,
+  "importedRuntimeSampleCount": 6,
+  "pointCount": 1,
+  "finalCumulative": 0.3375
+}
+```
+
+### 94.3 summary 扩展
+
+`summary.threeValueCurveFrameworkSummary` 新增：
+
+- `sampledStatePointCount`
+
+RecoverSP fixture 导入后当前摘要：
+
+```json
+{
+  "stateCurvePointCount": 17,
+  "appliedStatePointCount": 1,
+  "candidateStatePointCount": 15,
+  "sampledStatePointCount": 1,
+  "placeholderStatePointCount": 0
+}
+```
+
+### 94.4 placeholder 骨架验证
+
+`placeholder` 层继续由未被 `applied` / `candidate` / `sampled` 占用的 action 生成 0 delta 点。本阶段新增测试覆盖手动资源/敌人事件：
+
+```json
+{
+  "pointCount": 22,
+  "appliedPointCount": 2,
+  "candidatePointCount": 15,
+  "sampledPointCount": 0,
+  "placeholderPointCount": 5
+}
+```
+
+其中 HP placeholder 层覆盖：
+
+```json
+["action-resource", "action-enemy"]
+```
+
+### 94.5 兼容性与边界
+
+- sampled 点是 runtime evidence 层，仍不改写 `selfEnergyChange.value`。
+- 当前 sampled 映射只覆盖 RecoverSP / 自身能量；HP 和韧性采样仍待后续补充。
+- placeholder 点只表示“动作存在但该轨道没有已应用/候选/采样点”，不代表游戏中真实发生 0 值事件。
+- 下一阶段应让 Workbench 对 sampled / placeholder 的存在更可见，例如层级控件计数、自动提示或按动作骨架下钻。

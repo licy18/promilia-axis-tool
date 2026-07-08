@@ -4415,6 +4415,37 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 优先处理两条线：其一，让导入的 runtime sample 能形成 `sampled` state curve 点；其二，让没有候选数值的动作也能在 Workbench 中以占位层保持曲线骨架。
 - 继续保持三值框架优先，不把 `Delay#4`、召唤触发帧或 `焰火` buff 条件作为当前阻塞项。
 
+### 2026-07-08：阶段 5-8BO RecoverSP sampled 与 placeholder state curve
+
+本轮完成：
+
+- `projectSimulationResult()` 已把 `runtimeSampleContext` 传入 `threeValueCurveFramework.stateCurves` 构造层。
+- `selfEnergyChange` 的 `sampled` 层现在会消费 `runtimeSampleCaptures` 中的 `recover-sp-applied` 事件，生成真实采样 state point。
+- RecoverSP 手动 fixture 导入时，`selfEnergyChange.sampled` 会出现 1 个 sampled 点：`frameIndex = 12`、`delta = 0.3375`、`cumulative = 0.3375`、`sourceElementConfigId = 109001081`。
+- `summary.threeValueCurveFrameworkSummary` 新增 `sampledStatePointCount`，便于顶层识别真实采样点。
+- 手动资源/敌人事件等非伤害动作已验证会进入 placeholder 层：示例项目中 `placeholderPointCount = 5`，HP placeholder 覆盖 `action-resource / action-enemy`。
+
+当前边界：
+
+- sampled 层当前只映射 RecoverSP 的 `recover-sp-applied` 事件，也就是自身能量曲线；HP / 韧性 runtime sample 仍未接入。
+- sample 点仍为诊断层，不改写 `selfEnergyChange.value` 或最终 totals。
+- placeholder 层用于保持动作骨架，不代表实际 0 值机制已经确认。
+- Workbench 默认仍隐藏 sampled / placeholder 层；需要后续在 UI 里更自然地提示有采样或占位点。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、13 条测试。
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、47 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、108 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提醒与 chunk 体积提醒。
+- `git diff --check`：通过；仅有 Windows 行尾转换提示。
+
+下一步：
+
+- 阶段 5-8BP 目标：让 Workbench 对 sampled / placeholder 层有更明确的表现。
+- 有 sampled 点时，状态曲线层级控制应能提示采样点存在；有 placeholder 点时，应能快速看出哪些动作只是曲线骨架。
+- 继续保持 HP / 韧性最终公式和具体技能细帧为后续 evidence 任务，不阻塞曲线框架建设。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

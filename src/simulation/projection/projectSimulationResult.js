@@ -1408,6 +1408,7 @@ export function projectSimulationResult({
     scenario,
     actionResultTimeline,
     candidateValueSeries,
+    runtimeSampleContext,
   });
   const damageTimeline = damageEvents.map(event => ({
     timeMs: event.timeMs,
@@ -1519,6 +1520,7 @@ function buildThreeValueCurveFramework({
   scenario,
   actionResultTimeline,
   candidateValueSeries,
+  runtimeSampleContext,
 }) {
   const candidateSeriesByKey = new Map(
     (candidateValueSeries.series ?? []).map(series => [series.key, series])
@@ -1554,6 +1556,7 @@ function buildThreeValueCurveFramework({
     actionResultTimeline,
     tracks,
     candidateValueSeries,
+    runtimeSampleContext,
   });
 
   return {
@@ -1593,6 +1596,7 @@ function buildThreeValueCurveFramework({
       stateCurvePointCount: stateCurves.summary.pointCount,
       appliedStatePointCount: stateCurves.summary.appliedPointCount,
       candidateStatePointCount: stateCurves.summary.candidatePointCount,
+      sampledStatePointCount: stateCurves.summary.sampledPointCount,
       placeholderStatePointCount: stateCurves.summary.placeholderPointCount,
       actionResultCount: actionResultTimeline.length,
       actionCount: scenario.actions.length,
@@ -1655,6 +1659,7 @@ function buildThreeValueStateCurves({
   actionResultTimeline,
   tracks,
   candidateValueSeries,
+  runtimeSampleContext,
 }) {
   const chartSeriesByKey = new Map(
     (candidateValueSeries.chart?.series ?? []).map(series => [
@@ -1668,6 +1673,7 @@ function buildThreeValueStateCurves({
       scenario,
       actionResultTimeline,
       chartSeries: chartSeriesByKey.get(track.candidateSeriesKey),
+      runtimeSampleContext,
     })
   );
   const layerSummaries = curveTracks.flatMap(track =>
@@ -1713,10 +1719,15 @@ function createThreeValueStateCurveTrack({
   scenario,
   actionResultTimeline,
   chartSeries,
+  runtimeSampleContext,
 }) {
   const appliedLayer = createAppliedStateCurveLayer(track, actionResultTimeline);
   const candidateLayer = createCandidateStateCurveLayer(track, chartSeries);
-  const sampledLayer = createSampledStateCurveLayer(track, scenario);
+  const sampledLayer = createSampledStateCurveLayer({
+    track,
+    scenario,
+    runtimeSampleContext,
+  });
   const placeholderLayer = createPlaceholderStateCurveLayer({
     track,
     actionResultTimeline,
@@ -1848,8 +1859,19 @@ function createCandidateStateCurveLayer(track, chartSeries) {
   });
 }
 
-function createSampledStateCurveLayer(track, scenario) {
-  const runtimeSampleCount = scenario.runtimeSampleCaptures?.length ?? 0;
+function createSampledStateCurveLayer({
+  track,
+  scenario,
+  runtimeSampleContext,
+}) {
+  const runtimeSampleCount =
+    runtimeSampleContext?.captureCount ??
+    scenario.runtimeSampleCaptures?.length ??
+    0;
+  const points = createSampledStateCurvePoints({
+    track,
+    runtimeSampleContext,
+  });
   return createStateCurveLayer({
     key: 'sampled',
     label: '真实采样',
@@ -1859,16 +1881,69 @@ function createSampledStateCurveLayer(track, scenario) {
         ? 'runtime-samples-present-mapping-pending'
         : 'runtime-samples-not-imported',
     valueUnit: track.valueUnit,
-    points: [],
+    points,
     applied: false,
     extra: {
       runtimeSampleCount,
+      importedRuntimeSampleCount:
+        runtimeSampleContext?.importedRuntimeSampleCount ?? 0,
       mappingStatus:
-        runtimeSampleCount > 0
-          ? 'sample-to-curve-mapping-pending'
-          : 'waiting-for-runtime-samples',
+        points.length > 0
+          ? 'runtime-samples-mapped-to-state-curve'
+          : runtimeSampleCount > 0
+            ? 'sample-to-curve-mapping-pending'
+            : 'waiting-for-runtime-samples',
     },
   });
+}
+
+function createSampledStateCurvePoints({ track, runtimeSampleContext }) {
+  if (track.key !== 'selfEnergyChange') {
+    return [];
+  }
+
+  return (runtimeSampleContext?.events ?? [])
+    .filter(event => event.eventType === 'recover-sp-applied')
+    .map((event, index) => {
+      const delta =
+        numberOrNull(event.spDeltaApplied) ??
+        numberOrNull(event.delta) ??
+        numberOrNull(event.args?.delta);
+      if (!Number.isFinite(delta)) {
+        return null;
+      }
+      const frameIndex =
+        numberOrNull(event.frameIndex) ?? msToTimelineFrame(event.timeMs ?? 0);
+      const timeMs =
+        numberOrNull(event.timeMs) ??
+        roundTimelineMs(frameIndex * AZPR_TIMELINE_FRAME_MS);
+
+      return {
+        sourceKind: 'runtime-recover-sp-applied-sample',
+        captureSessionId: event.captureSessionId ?? null,
+        eventIndex: numberOrNull(event.eventIndex) ?? index,
+        eventType: event.eventType,
+        actionId: event.actionId,
+        actorId: event.actorId,
+        roleEntityId: event.roleEntityId,
+        ownerEntityId: event.ownerEntityId,
+        receiverEntityId: event.receiverEntityId,
+        sourceElementConfigId: numberOrNull(event.sourceElementConfigId),
+        elementConfigId: numberOrNull(event.elementConfigId),
+        pathId: event.pathId ?? null,
+        timeMs: roundTimelineMs(timeMs),
+        frameIndex,
+        frameLabel: formatTimelineFrame(frameIndex),
+        delta,
+        spBefore: numberOrNull(event.spBefore),
+        spAfter: numberOrNull(event.spAfter),
+        baseDelta: numberOrNull(event.baseDelta ?? event.args?.baseDelta),
+        argsDelta: numberOrNull(event.args?.delta),
+        recoverTagType: numberOrNull(event.recoverTagType),
+        applied: false,
+      };
+    })
+    .filter(Boolean);
 }
 
 function createPlaceholderStateCurveLayer({

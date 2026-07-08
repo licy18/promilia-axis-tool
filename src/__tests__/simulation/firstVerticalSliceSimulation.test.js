@@ -2105,6 +2105,55 @@ describe('first vertical slice simulation', () => {
         }),
       }),
     });
+    expect(result.summary.threeValueCurveFrameworkSummary).toMatchObject({
+      stateCurvePointCount: 17,
+      appliedStatePointCount: 1,
+      candidateStatePointCount: 15,
+      sampledStatePointCount: 1,
+      placeholderStatePointCount: 0,
+      applied: false,
+    });
+    expect(result.threeValueCurveFramework.stateCurves.summary).toMatchObject({
+      pointCount: 17,
+      appliedPointCount: 1,
+      candidatePointCount: 15,
+      sampledPointCount: 1,
+      placeholderPointCount: 0,
+      cumulativeLayerCount: 5,
+      applied: false,
+    });
+    const selfEnergyStateTrack =
+      result.threeValueCurveFramework.stateCurves.tracks.find(
+        track => track.trackKey === 'selfEnergyChange'
+      );
+    const sampledLayer = selfEnergyStateTrack.layers.find(
+      layer => layer.key === 'sampled'
+    );
+    expect(sampledLayer).toMatchObject({
+      status: 'delta-cumulative-points-built',
+      mappingStatus: 'runtime-samples-mapped-to-state-curve',
+      runtimeSampleCount: 1,
+      importedRuntimeSampleCount: 6,
+      pointCount: 1,
+      finalCumulative: 0.3375,
+      applied: false,
+    });
+    expect(sampledLayer.points[0]).toMatchObject({
+      sourceKind: 'runtime-recover-sp-applied-sample',
+      captureSessionId: 'fixture-recover-sp-109001081-v1',
+      eventType: 'recover-sp-applied',
+      actionId: 'action-0001',
+      actorId: 'actor-109001',
+      sourceElementConfigId: 109001081,
+      frameIndex: 12,
+      frameLabel: '0s12f',
+      delta: 0.3375,
+      cumulative: 0.3375,
+      spBefore: 10,
+      spAfter: 10.3375,
+      recoverTagType: 0,
+      applied: false,
+    });
     expect(matchedSample.runtimeSampleMatch.validationResults).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -3523,6 +3572,30 @@ describe('first vertical slice simulation', () => {
       ['action-skill', 12461, 0, 0],
       ['action-resource', 0, 0, -35],
       ['action-enemy', 0, 0, 0],
+    ]);
+    expect(result.threeValueCurveFramework.stateCurves.summary).toMatchObject({
+      pointCount: 22,
+      appliedPointCount: 2,
+      candidatePointCount: 15,
+      sampledPointCount: 0,
+      placeholderPointCount: 5,
+      applied: false,
+    });
+    const hpStateTrack = result.threeValueCurveFramework.stateCurves.tracks.find(
+      track => track.trackKey === 'enemyHpDamage'
+    );
+    const hpPlaceholderLayer = hpStateTrack.layers.find(
+      layer => layer.key === 'placeholder'
+    );
+    expect(hpPlaceholderLayer).toMatchObject({
+      status: 'delta-cumulative-points-built',
+      pointCount: 2,
+      finalCumulative: 0,
+      applied: false,
+    });
+    expect(hpPlaceholderLayer.points.map(point => point.actionId)).toEqual([
+      'action-resource',
+      'action-enemy',
     ]);
     expect(enemyEvent).toMatchObject({
       type: 'ENEMY_EVENT',
