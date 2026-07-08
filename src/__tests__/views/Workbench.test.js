@@ -32,7 +32,9 @@ describe('Workbench view', () => {
     expect(text).toContain('stage5-damage-layer-breakdown-v1');
     expect(text).toContain('攻击 1,920 × 倍率 649%');
     expect(text).toContain('三值来源');
-    expect(text).toContain('三值框架 3轨 · 曲线 3条/15点 · 细节后补');
+    expect(text).toContain(
+      '三值框架 3轨 · 曲线 3条/15点 · 状态 16点 · 细节后补'
+    );
     expect(text).toContain(
       'HP 2 个候选 (109001081, 109001306) / 削韧 2 个候选 (109001081, 109001306) / 充能 2 个候选 (109001081, 109001306)'
     );
@@ -383,7 +385,9 @@ describe('Workbench view', () => {
     expect(text).toContain(
       '逐hit候选 4/4段 · 三值字段 6 · 召唤目标 2/4段/4元素 · 触发候选 0f/1f/4f/5f/20f/25f/29f/34f'
     );
-    expect(text).toContain('三值框架 3轨 · 曲线 3条/12点 · 细节后补');
+    expect(text).toContain(
+      '三值框架 3轨 · 曲线 3条/12点 · 状态 13点 · 细节后补'
+    );
     expect(
       wrapper.findAll(
         '[data-testid="workbench-timeline-candidate-value-marker"]'

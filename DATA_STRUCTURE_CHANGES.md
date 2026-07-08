@@ -7377,3 +7377,131 @@ Workbench 分析面板显示：
 - `threeValueCurveFramework.applied` 必须保持 `false`，它是框架摘要，不是最终公式。
 - 现阶段不要为了填充该框架而继续深挖每个角色每个技能的逐帧动作；细帧应在框架稳定后作为可替换 evidence 或 runtime sample 接入。
 - 下一阶段应新增 delta / cumulative 曲线层，让三值变化可以按帧积分显示。
+
+## 92. 阶段 5-8BM：threeValueCurveFramework.stateCurves
+
+阶段 5-8BM 在 `threeValueCurveFramework` 下新增 `stateCurves`，把三值曲线从“候选点集合”推进到可计算的 delta / cumulative 状态曲线框架。
+
+### 92.1 stateCurves 顶层
+
+```json
+{
+  "stateCurves": {
+    "schemaVersion": 1,
+    "sourceKind": "azpr-three-value-delta-cumulative-state-curves",
+    "status": "state-curves-built-with-delta-cumulative-layers",
+    "frameRate": 60,
+    "frameMs": 16.666667,
+    "layerKeys": ["applied", "candidate", "sampled", "placeholder"],
+    "summary": {
+      "trackCount": 3,
+      "layerCount": 12,
+      "pointCount": 16,
+      "appliedPointCount": 1,
+      "candidatePointCount": 15,
+      "sampledPointCount": 0,
+      "placeholderPointCount": 0,
+      "cumulativeLayerCount": 4,
+      "applied": false
+    },
+    "tracks": [],
+    "applied": false
+  }
+}
+```
+
+### 92.2 曲线层语义
+
+固定四层：
+
+- `applied`：来自 `actionResultTimeline` 中 `applied = true` 的结果槽位，例如当前 raw HP 投影或显式资源 delta。
+- `candidate`：来自 `candidateValueSeries.chart` 的候选点，保留 raw-param / raw-field 语义，累计值只用于诊断。
+- `sampled`：预留真实 runtime sample 映射入口；有 capture 但未映射时保持 pending。
+- `placeholder`：动作骨架存在但没有 applied/candidate/sampled 点时生成 0 delta 占位。
+
+层之间必须隔离累计，不能把 `candidate.cumulative` 与 `applied.cumulative` 相加。
+
+### 92.3 state curve track
+
+单条 track：
+
+```json
+{
+  "trackKey": "enemyHpDamage",
+  "label": "敌人HP伤害",
+  "ownerScope": "enemy",
+  "valueUnit": "raw-damage",
+  "status": "state-curve-track-ready",
+  "pointCount": 6,
+  "layers": [],
+  "applied": false
+}
+```
+
+默认三条轨道仍是：
+
+- `enemyHpDamage`
+- `enemyToughnessDamage`
+- `selfEnergyChange`
+
+### 92.4 layer point
+
+点结构统一包含：
+
+```json
+{
+  "sourceKind": "candidate-chart-point",
+  "actionId": "action-0001",
+  "frameIndex": 12,
+  "frameLabel": "0s12f",
+  "delta": 2500,
+  "cumulative": 2500,
+  "applied": false
+}
+```
+
+`candidate` 点还会透传 `hitIndex`、`sourceFrameIndex`、`displayFrameIndex`、`localFrameIndex`、`chainStartFrame`、`valueSamples`、`elementConfigIds`、`triggerTimingStatus` 等候选来源字段。
+
+### 92.5 当前样例
+
+默认末音样本：
+
+- `stateCurves.summary.pointCount = 16`
+- `appliedPointCount = 1`
+- `candidatePointCount = 15`
+- HP applied layer：`delta = 12461`，`cumulative = 12461`
+- HP candidate layer：5 点，累计序列 `2500 -> 7300 -> 10300 -> 15700 -> 28700`
+
+寒悠悠样本：
+
+- `stateCurves.summary.pointCount = 13`
+- `appliedPointCount = 1`
+- `candidatePointCount = 12`
+
+### 92.6 Workbench
+
+`summary.threeValueCurveFrameworkSummary` 新增：
+
+- `stateCurvePointCount`
+- `appliedStatePointCount`
+- `candidateStatePointCount`
+- `placeholderStatePointCount`
+
+Workbench 分析面板摘要从：
+
+```text
+三值框架 3轨 · 曲线 3条/15点 · 细节后补
+```
+
+扩展为：
+
+```text
+三值框架 3轨 · 曲线 3条/15点 · 状态 16点 · 细节后补
+```
+
+### 92.7 兼容性与边界
+
+- `candidateValueSeries` 与 `candidateValueSeries.chart` 原结构不变。
+- `stateCurves.applied` 继续为 `false`，表示该结构本身不代表最终公式已应用。
+- `applied` 层可以用于当前结果曲线；`candidate` / `sampled` / `placeholder` 层必须明确标识来源，不能直接进入最终 totals。
+- 下一阶段应把 `stateCurves` 接入更明确的 Workbench 层级展示或过滤，而不是继续追单个技能的逐帧细节。

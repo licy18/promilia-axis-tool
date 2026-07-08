@@ -761,7 +761,11 @@ function formatThreeValueCurveFrameworkSummary(summary) {
     return '';
   }
   const deferredText = summary.detailsDeferred ? ' · 细节后补' : '';
-  return `三值框架 ${summary.trackCount}轨 · 曲线 ${summary.candidateTrackCount}条/${summary.chartPointCount}点${deferredText}`;
+  const stateCurveText =
+    summary.stateCurvePointCount > 0
+      ? ` · 状态 ${summary.stateCurvePointCount}点`
+      : '';
+  return `三值框架 ${summary.trackCount}轨 · 曲线 ${summary.candidateTrackCount}条/${summary.chartPointCount}点${stateCurveText}${deferredText}`;
 }
 
 function formatFrameRange(min, max) {

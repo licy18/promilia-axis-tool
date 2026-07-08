@@ -4352,6 +4352,38 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 明确曲线层级：`applied` 层用于当前可计入结果的值，`candidate` 层用于字段/公式候选，`sampled` 层用于真实采样导入，`placeholder` 层用于尚未填数值的动作骨架。
 - 继续保持细帧假设、`Delay#4` 解释和 `焰火` buff runtime 条件为后续 evidence 任务，不阻塞框架建设。
 
+### 2026-07-08：阶段 5-8BM 三值 delta / cumulative 状态曲线
+
+本轮完成：
+
+- `threeValueCurveFramework` 新增 `stateCurves` 子结构，把 HP / 韧性 / 自身能量三条轨道统一拆成 `applied`、`candidate`、`sampled`、`placeholder` 四层。
+- 每层曲线点都带 `delta` 与 `cumulative`，并按 60fps 帧排序累加；不同层之间不混算，候选累计值只用于诊断。
+- `applied` 层读取 `actionResultTimeline[].hpDamage/toughnessDamage/selfEnergyChange` 中已经 `applied = true` 的结果值；当前默认末音样本有 1 个 applied HP 点，累计 `12,461`。
+- `candidate` 层读取 `candidateValueSeries.chart.series[].points[]`；当前默认末音样本有 15 个 candidate state 点，寒悠悠样本有 12 个 candidate state 点。
+- `sampled` 层先保留 runtime sample 映射入口；存在 `runtimeSampleCaptures` 但尚未映射到曲线时会显示 mapping pending。
+- `placeholder` 层为没有 applied/candidate/sampled 点的动作保留 0 delta 占位，方便后续先搭动作骨架再填真实数值。
+- `summary.threeValueCurveFrameworkSummary` 已扩展 state 点数，Workbench 显示 `三值框架 3轨 · 曲线 3条/15点 · 状态 16点 · 细节后补`。
+
+当前边界：
+
+- `stateCurves` 是曲线状态框架，不表示最终公式已经确认。
+- `candidate` 层的 HP 参数、削韧字段、能量字段仍是 raw candidate，不能与 applied 层相加。
+- `sampled` 层目前只定义入口，尚未把真实 runtime sample 自动转换为曲线点。
+- 主时间轴仍显示原 `candidateValueSeries.chart`；`stateCurves` 暂时只在模拟结果和分析摘要中体现。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、47 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、108 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提醒与 chunk 体积提醒。
+- `git diff --check`：通过；仅有 Windows 行尾转换提示。
+
+下一步：
+
+- 阶段 5-8BN 目标：把 `threeValueCurveFramework.stateCurves` 接入 Workbench 更明确的展示/过滤层，例如状态曲线摘要、层级开关或按轨道查看 applied/candidate/sample/placeholder 点数。
+- 优先保持 UI 信息密度接近 Endaxis，不新增解释型大段文字；用短标签和 tooltip 标明 `applied` / `candidate` / `sampled` / `placeholder`。
+- 继续不阻塞在具体技能细帧上；细帧、召唤触发和 buff 条件仍作为后续 evidence 填充。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -1356,6 +1356,10 @@ describe('first vertical slice simulation', () => {
         candidateTrackCount: 3,
         candidatePointCount: 15,
         chartPointCount: 15,
+        stateCurvePointCount: 16,
+        appliedStatePointCount: 1,
+        candidateStatePointCount: 15,
+        placeholderStatePointCount: 0,
         actionResultCount: 1,
         detailsDeferred: true,
         applied: false,
@@ -1366,6 +1370,9 @@ describe('first vertical slice simulation', () => {
       trackCount: 3,
       candidateTrackCount: 3,
       chartPointCount: 15,
+      stateCurvePointCount: 16,
+      appliedStatePointCount: 1,
+      candidateStatePointCount: 15,
       detailsDeferred: true,
       applied: false,
     });
@@ -1379,6 +1386,65 @@ describe('first vertical slice simulation', () => {
       ['enemyHpDamage', 'track-ready-with-candidate-points', 5],
       ['enemyToughnessDamage', 'track-ready-with-candidate-points', 5],
       ['selfEnergyChange', 'track-ready-with-candidate-points', 5],
+    ]);
+    expect(result.threeValueCurveFramework.stateCurves).toMatchObject({
+      status: 'state-curves-built-with-delta-cumulative-layers',
+      layerKeys: ['applied', 'candidate', 'sampled', 'placeholder'],
+      summary: {
+        trackCount: 3,
+        layerCount: 12,
+        pointCount: 16,
+        appliedPointCount: 1,
+        candidatePointCount: 15,
+        sampledPointCount: 0,
+        placeholderPointCount: 0,
+        cumulativeLayerCount: 4,
+        applied: false,
+      },
+      applied: false,
+    });
+    const hpStateTrack = result.threeValueCurveFramework.stateCurves.tracks.find(
+      track => track.trackKey === 'enemyHpDamage'
+    );
+    const hpAppliedLayer = hpStateTrack.layers.find(
+      layer => layer.key === 'applied'
+    );
+    expect(hpAppliedLayer).toMatchObject({
+      status: 'delta-cumulative-points-built',
+      pointCount: 1,
+      finalCumulative: 12461,
+      applied: true,
+    });
+    expect(hpAppliedLayer.points[0]).toMatchObject({
+      sourceKind: 'action-result-applied-value',
+      frameIndex: 0,
+      frameLabel: '0s0f',
+      delta: 12461,
+      cumulative: 12461,
+      applied: true,
+    });
+    const hpCandidateLayer = hpStateTrack.layers.find(
+      layer => layer.key === 'candidate'
+    );
+    expect(hpCandidateLayer).toMatchObject({
+      status: 'delta-cumulative-points-built',
+      valueUnit: 'raw-param',
+      pointCount: 5,
+      finalCumulative: 28700,
+      applied: false,
+    });
+    expect(
+      hpCandidateLayer.points.map(point => [
+        point.frameIndex,
+        point.delta,
+        point.cumulative,
+      ])
+    ).toEqual([
+      [12, 2500, 2500],
+      [22, 4800, 7300],
+      [63, 3000, 10300],
+      [123, 5400, 15700],
+      [184, 13000, 28700],
     ]);
     const combinationPreview =
       result.actionResultTimeline[0].hpDamage.sourceEvidence.formulaCandidatePreview.combinationPreviews.find(
@@ -1908,7 +1974,18 @@ describe('first vertical slice simulation', () => {
       candidateTrackCount: 3,
       candidatePointCount: 12,
       chartPointCount: 12,
+      stateCurvePointCount: 13,
+      appliedStatePointCount: 1,
+      candidateStatePointCount: 12,
       detailsDeferred: true,
+      applied: false,
+    });
+    expect(result.threeValueCurveFramework.stateCurves.summary).toMatchObject({
+      pointCount: 13,
+      appliedPointCount: 1,
+      candidatePointCount: 12,
+      placeholderPointCount: 0,
+      cumulativeLayerCount: 4,
       applied: false,
     });
     const hpSeries = result.candidateValueSeries.series.find(

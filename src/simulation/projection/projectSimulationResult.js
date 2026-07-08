@@ -1549,6 +1549,12 @@ function buildThreeValueCurveFramework({
     (sum, track) => sum + track.chartPointCount,
     0
   );
+  const stateCurves = buildThreeValueStateCurves({
+    scenario,
+    actionResultTimeline,
+    tracks,
+    candidateValueSeries,
+  });
 
   return {
     schemaVersion: 1,
@@ -1578,11 +1584,16 @@ function buildThreeValueCurveFramework({
         'only explicit applied result slots affect totals; candidate curves stay applied=false',
     },
     tracks,
+    stateCurves,
     summary: {
       trackCount: tracks.length,
       candidateTrackCount,
       candidatePointCount,
       chartPointCount,
+      stateCurvePointCount: stateCurves.summary.pointCount,
+      appliedStatePointCount: stateCurves.summary.appliedPointCount,
+      candidateStatePointCount: stateCurves.summary.candidatePointCount,
+      placeholderStatePointCount: stateCurves.summary.placeholderPointCount,
       actionResultCount: actionResultTimeline.length,
       actionCount: scenario.actions.length,
       actorCount: scenario.actors.length,
@@ -1635,6 +1646,354 @@ function createThreeValueCurveTrack({
     chartFrameMin: numberOrNull(chartSeries?.frameMin),
     chartFrameMax: numberOrNull(chartSeries?.frameMax),
     timeOrderStatus: chartSeries?.timeOrderStatus ?? 'no-candidate-points',
+    applied: false,
+  };
+}
+
+function buildThreeValueStateCurves({
+  scenario,
+  actionResultTimeline,
+  tracks,
+  candidateValueSeries,
+}) {
+  const chartSeriesByKey = new Map(
+    (candidateValueSeries.chart?.series ?? []).map(series => [
+      series.key,
+      series,
+    ])
+  );
+  const curveTracks = tracks.map(track =>
+    createThreeValueStateCurveTrack({
+      track,
+      scenario,
+      actionResultTimeline,
+      chartSeries: chartSeriesByKey.get(track.candidateSeriesKey),
+    })
+  );
+  const layerSummaries = curveTracks.flatMap(track =>
+    track.layers.map(layer => ({
+      trackKey: track.trackKey,
+      layerKey: layer.key,
+      pointCount: layer.pointCount,
+      finalCumulative: layer.finalCumulative,
+      status: layer.status,
+    }))
+  );
+  const summary = summarizeThreeValueStateCurves(curveTracks);
+
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-three-value-delta-cumulative-state-curves',
+    status:
+      summary.pointCount > 0
+        ? 'state-curves-built-with-delta-cumulative-layers'
+        : 'state-curves-ready-waiting-for-points',
+    frameRate: AZPR_TIMELINE_FRAME_RATE,
+    frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
+    layerKeys: ['applied', 'candidate', 'sampled', 'placeholder'],
+    curvePolicy: {
+      deltaMeaning:
+        'per-point value change in the layer-specific unit and confidence',
+      cumulativeMeaning:
+        'running sum inside the same track/layer; candidate cumulative is diagnostic only',
+      layerIsolation:
+        'applied, candidate, sampled and placeholder layers are never mixed when accumulating',
+      replacementPolicy:
+        'later confirmed formulas or runtime samples can replace candidate/placeholder layers without changing track keys',
+    },
+    summary,
+    layerSummaries,
+    tracks: curveTracks,
+    applied: false,
+  };
+}
+
+function createThreeValueStateCurveTrack({
+  track,
+  scenario,
+  actionResultTimeline,
+  chartSeries,
+}) {
+  const appliedLayer = createAppliedStateCurveLayer(track, actionResultTimeline);
+  const candidateLayer = createCandidateStateCurveLayer(track, chartSeries);
+  const sampledLayer = createSampledStateCurveLayer(track, scenario);
+  const placeholderLayer = createPlaceholderStateCurveLayer({
+    track,
+    actionResultTimeline,
+    occupiedActionIds: new Set([
+      ...appliedLayer.points.map(point => point.actionId).filter(Boolean),
+      ...candidateLayer.points.map(point => point.actionId).filter(Boolean),
+      ...sampledLayer.points.map(point => point.actionId).filter(Boolean),
+    ]),
+  });
+  const layers = [
+    appliedLayer,
+    candidateLayer,
+    sampledLayer,
+    placeholderLayer,
+  ];
+  const pointCount = layers.reduce(
+    (sum, layer) => sum + layer.pointCount,
+    0
+  );
+
+  return {
+    trackKey: track.key,
+    label: track.label,
+    ownerScope: track.ownerScope,
+    valueUnit: track.valueUnit,
+    status:
+      pointCount > 0
+        ? 'state-curve-track-ready'
+        : 'state-curve-track-waiting-for-points',
+    pointCount,
+    layers,
+    applied: false,
+  };
+}
+
+function createAppliedStateCurveLayer(track, actionResultTimeline) {
+  const points = actionResultTimeline
+    .map((entry, index) => {
+      const result = entry[track.resultField];
+      const delta = numberOrNull(result?.value);
+      if (!result?.applied || !Number.isFinite(delta)) {
+        return null;
+      }
+
+      const timeMs = numberOrNull(entry.timeMs) ?? 0;
+      const frameIndex = msToTimelineFrame(timeMs);
+      return {
+        sourceKind: 'action-result-applied-value',
+        actionId: entry.actionId,
+        actionName: entry.actionName,
+        actorId: entry.actorId,
+        actorName: entry.actorName,
+        sequenceIndex: index,
+        timeMs: roundTimelineMs(timeMs),
+        frameIndex,
+        frameLabel: formatTimelineFrame(frameIndex),
+        delta,
+        resultStatus: result.status ?? null,
+        confidence: result.confidence ?? null,
+        precision: result.precision ?? null,
+        applied: true,
+      };
+    })
+    .filter(Boolean);
+
+  return createStateCurveLayer({
+    key: 'applied',
+    label: '已应用结果',
+    sourceKind: 'action-result-applied-values',
+    statusWhenEmpty: 'no-applied-result-points',
+    valueUnit: track.valueUnit,
+    points,
+    applied: true,
+  });
+}
+
+function createCandidateStateCurveLayer(track, chartSeries) {
+  const points = (chartSeries?.points ?? [])
+    .map((point, index) => {
+      const delta = numberOrNull(point.value);
+      if (!Number.isFinite(delta)) {
+        return null;
+      }
+
+      const frameIndex =
+        numberOrNull(point.displayFrameIndex) ??
+        msToTimelineFrame(point.displayTimeMs ?? point.sourceTimeMs ?? 0);
+      const timeMs =
+        numberOrNull(point.displayTimeMs) ??
+        roundTimelineMs(frameIndex * AZPR_TIMELINE_FRAME_MS);
+
+      return {
+        sourceKind: 'candidate-chart-point',
+        actionId: point.actionId,
+        actionName: point.actionName,
+        actorId: point.actorId ?? null,
+        actorName: point.actorName ?? null,
+        skillId: point.skillId,
+        hitSkillId: point.hitSkillId,
+        hitIndex: point.hitIndex,
+        sequenceIndex: point.sequenceIndex ?? index,
+        timeMs: roundTimelineMs(timeMs),
+        frameIndex,
+        frameLabel: formatTimelineFrame(frameIndex),
+        sourceFrameIndex: numberOrNull(point.sourceFrameIndex),
+        displayFrameIndex: numberOrNull(point.displayFrameIndex),
+        localFrameIndex: numberOrNull(point.localFrameIndex),
+        chainStartFrame: numberOrNull(point.chainStartFrame),
+        delta,
+        valueSamples: point.valueSamples ?? [],
+        candidateCount: point.candidateCount ?? null,
+        elementConfigIds: point.elementConfigIds ?? [],
+        sourceStatus: point.sourceStatus ?? null,
+        triggerTimingStatus: point.triggerTimingStatus ?? null,
+        timeAdjustmentStatus: point.timeAdjustmentStatus ?? null,
+        applied: false,
+      };
+    })
+    .filter(Boolean);
+
+  return createStateCurveLayer({
+    key: 'candidate',
+    label: '候选值',
+    sourceKind: 'candidate-value-chart-points',
+    statusWhenEmpty: 'no-candidate-points',
+    valueUnit: chartSeries?.unit ?? track.valueUnit,
+    points,
+    applied: false,
+  });
+}
+
+function createSampledStateCurveLayer(track, scenario) {
+  const runtimeSampleCount = scenario.runtimeSampleCaptures?.length ?? 0;
+  return createStateCurveLayer({
+    key: 'sampled',
+    label: '真实采样',
+    sourceKind: 'runtime-sample-captures',
+    statusWhenEmpty:
+      runtimeSampleCount > 0
+        ? 'runtime-samples-present-mapping-pending'
+        : 'runtime-samples-not-imported',
+    valueUnit: track.valueUnit,
+    points: [],
+    applied: false,
+    extra: {
+      runtimeSampleCount,
+      mappingStatus:
+        runtimeSampleCount > 0
+          ? 'sample-to-curve-mapping-pending'
+          : 'waiting-for-runtime-samples',
+    },
+  });
+}
+
+function createPlaceholderStateCurveLayer({
+  track,
+  actionResultTimeline,
+  occupiedActionIds,
+}) {
+  const points = actionResultTimeline
+    .filter(entry => !occupiedActionIds.has(entry.actionId))
+    .map((entry, index) => {
+      const timeMs = numberOrNull(entry.timeMs) ?? 0;
+      const frameIndex = msToTimelineFrame(timeMs);
+      return {
+        sourceKind: 'action-result-placeholder',
+        actionId: entry.actionId,
+        actionName: entry.actionName,
+        actorId: entry.actorId,
+        actorName: entry.actorName,
+        sequenceIndex: index,
+        timeMs: roundTimelineMs(timeMs),
+        frameIndex,
+        frameLabel: formatTimelineFrame(frameIndex),
+        delta: 0,
+        resultStatus: entry[track.resultField]?.status ?? null,
+        applied: false,
+      };
+    });
+
+  return createStateCurveLayer({
+    key: 'placeholder',
+    label: '占位',
+    sourceKind: 'action-result-placeholders',
+    statusWhenEmpty: 'no-placeholder-points-needed',
+    valueUnit: track.valueUnit,
+    points,
+    applied: false,
+  });
+}
+
+function createStateCurveLayer({
+  key,
+  label,
+  sourceKind,
+  statusWhenEmpty,
+  valueUnit,
+  points,
+  applied,
+  extra = {},
+}) {
+  const integratedPoints = integrateStateCurvePoints(points);
+  const cumulativeValues = integratedPoints.map(point => point.cumulative);
+
+  return {
+    key,
+    label,
+    sourceKind,
+    status:
+      integratedPoints.length > 0
+        ? 'delta-cumulative-points-built'
+        : statusWhenEmpty,
+    valueUnit,
+    pointCount: integratedPoints.length,
+    frameMin: minNumber(integratedPoints.map(point => point.frameIndex)),
+    frameMax: maxNumber(integratedPoints.map(point => point.frameIndex)),
+    deltaMin: minNumber(integratedPoints.map(point => point.delta)),
+    deltaMax: maxNumber(integratedPoints.map(point => point.delta)),
+    cumulativeMin: minNumber(cumulativeValues),
+    cumulativeMax: maxNumber(cumulativeValues),
+    finalCumulative:
+      integratedPoints.length > 0
+        ? integratedPoints[integratedPoints.length - 1].cumulative
+        : 0,
+    points: integratedPoints,
+    ...extra,
+    applied,
+  };
+}
+
+function integrateStateCurvePoints(points) {
+  let cumulative = 0;
+  return [...points]
+    .sort(compareStateCurvePoints)
+    .map((point, index) => {
+      const delta = numberOrNull(point.delta) ?? 0;
+      cumulative = roundCurveValue(cumulative + delta);
+      return {
+        ...point,
+        sequenceIndex: point.sequenceIndex ?? index,
+        delta,
+        cumulative,
+      };
+    });
+}
+
+function compareStateCurvePoints(a, b) {
+  const frameA = numberOrNull(a.frameIndex) ?? 0;
+  const frameB = numberOrNull(b.frameIndex) ?? 0;
+  if (frameA !== frameB) {
+    return frameA - frameB;
+  }
+  const sequenceA = numberOrNull(a.sequenceIndex) ?? 0;
+  const sequenceB = numberOrNull(b.sequenceIndex) ?? 0;
+  return sequenceA - sequenceB;
+}
+
+function summarizeThreeValueStateCurves(tracks) {
+  const layers = tracks.flatMap(track => track.layers);
+  const pointCount = layers.reduce(
+    (sum, layer) => sum + layer.pointCount,
+    0
+  );
+  const countLayerPoints = key =>
+    layers
+      .filter(layer => layer.key === key)
+      .reduce((sum, layer) => sum + layer.pointCount, 0);
+
+  return {
+    trackCount: tracks.length,
+    layerCount: layers.length,
+    pointCount,
+    appliedPointCount: countLayerPoints('applied'),
+    candidatePointCount: countLayerPoints('candidate'),
+    sampledPointCount: countLayerPoints('sampled'),
+    placeholderPointCount: countLayerPoints('placeholder'),
+    cumulativeLayerCount: layers.filter(layer => layer.pointCount > 0).length,
     applied: false,
   };
 }
@@ -7807,6 +8166,16 @@ function frameToTimelineMs(frame) {
 function roundTimelineMs(value) {
   const number = Number(value);
   return Number.isFinite(number) ? Number(number.toFixed(6)) : null;
+}
+
+function msToTimelineFrame(value) {
+  const timeMs = numberOrNull(value) ?? 0;
+  return Math.max(0, Math.round(timeMs / AZPR_TIMELINE_FRAME_MS));
+}
+
+function roundCurveValue(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? Number(number.toFixed(6)) : 0;
 }
 
 function roundChartPercent(value) {
