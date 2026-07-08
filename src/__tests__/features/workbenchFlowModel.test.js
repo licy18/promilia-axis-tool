@@ -110,17 +110,28 @@ describe('workbench flow model', () => {
   it('separates refreshed-result readiness from refreshed-result review', () => {
     const runtimeProjection = createRuntimeProjectionFixture();
     const baseModel = createWorkbenchFlowModel({ runtimeProjection });
+    const firstPoint = baseModel.runtimeNavigation.points[0];
     const secondPoint = baseModel.runtimeNavigation.points[1];
     const editResultContext = {
       status: 'refreshed-edit-result',
       actionId: 'action-0002',
       runtimeStatePointId: secondPoint.statePointId,
+      originStatePointId: firstPoint.statePointId,
       label: '开始时间',
+      changeSummary: '0ms -> 1000ms',
+    };
+    const actionEditFocus = {
+      actionId: 'action-0002',
+      fieldKey: 'startMs',
+      editOrigin: 'runtime-focus',
+      originStatePointId: firstPoint.statePointId,
       changeSummary: '0ms -> 1000ms',
     };
 
     const readyModel = createWorkbenchFlowModel({
+      selectedAction: { id: 'action-0002', name: '资源动作' },
       runtimeProjection,
+      actionEditFocus,
       actionEditResultContext: editResultContext,
     });
     expect(readyModel.phase).toBe(WORKBENCH_FLOW_PHASES.EDIT_RESULT_READY);
@@ -140,6 +151,13 @@ describe('workbench flow model', () => {
       statePointId: secondPoint.statePointId,
       enabled: true,
     });
+    expect(readyModel.runtimeResultReturnTarget).toMatchObject({
+      status: 'refreshed-edit-result',
+      actionId: 'action-0002',
+      fieldKey: 'startMs',
+      originStatePointId: firstPoint.statePointId,
+      statePointId: secondPoint.statePointId,
+    });
 
     const reviewModel = createWorkbenchFlowModel({
       runtimeProjection,
@@ -150,6 +168,7 @@ describe('workbench flow model', () => {
         frameLabel: '30f',
         trackLabel: '自身能量',
       },
+      actionEditFocus,
       actionEditResultContext: editResultContext,
     });
     expect(reviewModel.phase).toBe(WORKBENCH_FLOW_PHASES.EDIT_RESULT_REVIEW);
@@ -168,6 +187,12 @@ describe('workbench flow model', () => {
       actionId: 'action-0002',
       statePointId: secondPoint.statePointId,
       enabled: true,
+    });
+    expect(reviewModel.runtimeResultReturnTarget).toMatchObject({
+      status: 'refreshed-edit-result',
+      actionId: 'action-0002',
+      originStatePointId: firstPoint.statePointId,
+      statePointId: secondPoint.statePointId,
     });
   });
 

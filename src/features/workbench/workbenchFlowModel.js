@@ -3,6 +3,7 @@ import {
   getRuntimeOutputSummary,
   getRuntimeSimLogCount,
 } from './runtimeProjectionPoints';
+import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import { createWorkbenchFlowContractContext } from './workbenchFlowContractContext';
 
 export const WORKBENCH_FLOW_PHASES = Object.freeze({
@@ -64,6 +65,7 @@ export function createWorkbenchFlowModel({
   selectedStateCurvePointId = '',
   runtimeFocusSource = '',
   runtimeOverviewActive = false,
+  actionEditFocus = null,
   actionEditResultContext = null,
 } = {}) {
   const runtimeNavigationPoints =
@@ -77,6 +79,13 @@ export function createWorkbenchFlowModel({
   const editResult = createWorkbenchFlowEditResult(actionEditResultContext);
   const runtimeActionEditTarget =
     createWorkbenchFlowRuntimeActionEditTarget(runtimeDetail);
+  const runtimeResultReturnTarget =
+    createWorkbenchFlowRuntimeResultReturnTarget({
+      actionEditFocus,
+      editResult,
+      runtimeActionEditTarget,
+      selectedActionId: selectedAction?.id ?? '',
+    });
   const runtimeSimLogCount = getRuntimeSimLogCount(runtimeProjection);
   const contractContext = createWorkbenchFlowContractContext({
     generationBundle,
@@ -115,6 +124,7 @@ export function createWorkbenchFlowModel({
     runtimeDetail,
     runtimeActionEditTarget,
     editResult,
+    runtimeResultReturnTarget,
     primaryAction,
     runtimeNavigation: {
       points: runtimeNavigationPoints,
@@ -174,6 +184,30 @@ export function createWorkbenchFlowRuntimeActionEditTarget(runtimeDetail) {
     label: runtimeDetail?.label ?? '',
     canFocusAction: Boolean(actionId),
   };
+}
+
+export function createWorkbenchFlowRuntimeResultReturnTarget({
+  actionEditFocus = null,
+  editResult = null,
+  runtimeActionEditTarget = null,
+  selectedActionId = '',
+} = {}) {
+  const actionId =
+    runtimeActionEditTarget?.actionId ||
+    selectedActionId ||
+    editResult?.actionId ||
+    '';
+  const originStatePointId =
+    runtimeActionEditTarget?.statePointId &&
+    runtimeActionEditTarget.statePointId === actionEditFocus?.originStatePointId
+      ? runtimeActionEditTarget.statePointId
+      : '';
+  return createRuntimeResultReturnContext({
+    actionId,
+    focus: actionEditFocus,
+    resultContext: editResult,
+    originStatePointId,
+  });
 }
 
 function createWorkbenchFlowEditResult(context) {

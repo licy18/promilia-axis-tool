@@ -550,7 +550,8 @@ const selectedRuntimeCurvePoint = computed(() => {
 });
 
 const selectedRuntimeCurveResultContext = computed(() =>
-  createSelectedRuntimeCurveResultContext(
+  getSelectedRuntimeCurveResultContext(
+    props.flowModel,
     flowEditResult.value,
     selectedRuntimeCurvePoint.value
   )
@@ -978,6 +979,14 @@ function createSelectedRuntimeCurveResultContext(context, point) {
     actionId: context.actionId ?? '',
     originStatePointId: context.originStatePointId ?? '',
   };
+}
+
+function getSelectedRuntimeCurveResultContext(flowModel, context, point) {
+  const target = flowModel?.runtimeResultReturnTarget;
+  if (target?.statePointId && target.statePointId === point?.statePointId) {
+    return target;
+  }
+  return createSelectedRuntimeCurveResultContext(context, point);
 }
 
 function formatRuntimeCurveSelectionSource(source, resultContext = null) {

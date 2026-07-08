@@ -242,6 +242,7 @@ const runtimeDetailActionEditTarget = computed(() =>
   getRuntimeDetailActionEditTarget(props.flowModel, props.detail)
 );
 const runtimeDetailResultReturnContext = computed(() =>
+  props.flowModel?.runtimeResultReturnTarget ??
   createRuntimeResultReturnContext({
     actionId: props.detail?.actionId ?? flowEditResult.value?.actionId,
     focus: props.actionEditFocus,

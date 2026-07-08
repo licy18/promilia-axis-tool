@@ -623,6 +623,7 @@ const runtimeLogResultReturnActionId = computed(
     ''
 );
 const runtimeLogResultReturnContext = computed(() =>
+  props.flowModel?.runtimeResultReturnTarget ??
   createRuntimeResultReturnContext({
     actionId: runtimeLogResultReturnActionId.value,
     focus: props.actionEditFocus,

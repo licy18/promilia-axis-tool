@@ -407,6 +407,7 @@ const workbenchFlowModel = computed(() =>
     selectedStateCurvePointId: selectedStateCurvePointId.value,
     runtimeFocusSource: runtimeFocusSource.value,
     runtimeOverviewActive: runtimeOverviewActive.value,
+    actionEditFocus: actionEditFocus.value,
     actionEditResultContext: actionEditResultContext.value,
   })
 );
