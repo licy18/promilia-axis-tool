@@ -16511,3 +16511,72 @@ workbenchFlowRuntime.applyRuntimeFlowPlan(...)
 - `npm run test -- --run`：通过，24 个测试文件、160 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 210. UI 主流程能力块：Flow Runtime Scope State
+
+本阶段属于 UI 主流程。
+
+### 210.1 结构变化
+
+新增模块：
+
+```js
+src/features/workbench/workbenchFlowRuntimeScope.js
+```
+
+新增导出：
+
+```js
+WORKBENCH_FLOW_RUNTIME_SCOPES
+createWorkbenchFlowRuntimeScopeState()
+```
+
+`createWorkbenchFlowRuntimeScopeState()` 输出：
+
+```js
+{
+  calculatorScope,
+  statePointId,
+  selectRuntimeStatePoint,
+  clearRuntimeSelection,
+  stateCurveFocusMode,
+  stateCurveLayerFilters,
+  stateCurveTrackFilters,
+  runtimeLogFocus
+}
+```
+
+支持的 scope：
+
+```js
+runtime
+generation
+```
+
+`Workbench.vue` 的 `focusThreeValueCalculatorScope()` 不再直接维护 runtime / generation 分支细节，改为：
+
+```js
+createWorkbenchFlowRuntimeScopeState(...)
+applyCalculatorScopeFlowState(...)
+```
+
+新增内部应用函数：
+
+```js
+applyCalculatorScopeFlowState(scopeState)
+```
+
+### 210.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 的 calculator scope 切换状态组织方式；模拟结果、三值计算、项目文件、runtime projection 结构不变。
+
+### 210.3 验证
+
+- 新增 `src/__tests__/features/workbenchFlowRuntimeScope.test.js`，覆盖 runtime 有首点、runtime 无首点、generation 三种视角切换。
+- Workbench 视图测试继续覆盖 calculator scope 切换相关的资源曲线、日志和运行详情行为。
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntimeScope.test.js src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，25 个测试文件、163 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。

@@ -220,6 +220,7 @@ import {
   createWorkbenchFlowPlanController,
 } from '../features/workbench/workbenchFlowPlanController';
 import { createWorkbenchFlowRuntime } from '../features/workbench/workbenchFlowRuntime';
+import { createWorkbenchFlowRuntimeScopeState } from '../features/workbench/workbenchFlowRuntimeScope';
 import {
   createWorkbenchFlowModel,
 } from '../features/workbench/workbenchFlowModel';
@@ -1420,49 +1421,41 @@ function focusThreeValueCalculatorScope(
   scope,
   { selectFirstRuntimePoint = true } = {}
 ) {
-  const normalizedScope = scope === 'runtime' ? 'runtime' : 'generation';
-  calculatorDiagnosticScope.value = normalizedScope;
+  const firstRuntimeStatePointId = selectFirstRuntimePoint
+    ? getFirstRuntimeStatePointId(
+        simulationResult.value.threeValueRuntimeProjection
+      )
+    : '';
+  applyCalculatorScopeFlowState(
+    createWorkbenchFlowRuntimeScopeState({
+      scope,
+      firstRuntimeStatePointId,
+    })
+  );
+}
+
+function applyCalculatorScopeFlowState(scopeState = {}) {
+  calculatorDiagnosticScope.value = scopeState.calculatorScope ?? 'generation';
   calculatorDiagnosticFocus.value = {
-    scope: normalizedScope,
+    scope: calculatorDiagnosticScope.value,
     sequence: calculatorDiagnosticFocus.value.sequence + 1,
   };
   runtimeLogFocus.value = {
-    source: '',
-    statePointId: '',
+    source: scopeState.runtimeLogFocus?.source ?? '',
+    statePointId: scopeState.runtimeLogFocus?.statePointId ?? '',
     sequence: runtimeLogFocus.value.sequence,
   };
+  stateCurveLayerFilters.value = { ...scopeState.stateCurveLayerFilters };
+  stateCurveTrackFilters.value = { ...scopeState.stateCurveTrackFilters };
 
-  if (normalizedScope === 'runtime') {
-    stateCurveLayerFilters.value = {
-      applied: true,
-      candidate: false,
-      sampled: false,
-      placeholder: false,
-    };
-    stateCurveTrackFilters.value = {};
-    const firstRuntimePointId = selectFirstRuntimePoint
-      ? getFirstRuntimeStatePointId(
-          simulationResult.value.threeValueRuntimeProjection
-        )
-      : '';
-    if (firstRuntimePointId) {
-      selectRuntimeStatePoint(firstRuntimePointId);
-    } else {
-      selectedStateCurvePointId.value = '';
-      stateCurveFocusMode.value = 'all';
-    }
+  if (scopeState.selectRuntimeStatePoint) {
+    selectRuntimeStatePoint(scopeState.statePointId);
     return;
   }
-
-  stateCurveLayerFilters.value = {
-    applied: false,
-    candidate: true,
-    sampled: true,
-    placeholder: true,
-  };
-  stateCurveTrackFilters.value = {};
-  selectedStateCurvePointId.value = '';
-  stateCurveFocusMode.value = 'all';
+  if (scopeState.clearRuntimeSelection) {
+    selectedStateCurvePointId.value = '';
+    stateCurveFocusMode.value = scopeState.stateCurveFocusMode || 'all';
+  }
 }
 
 function getFirstRuntimeStatePointId(runtimeProjection) {

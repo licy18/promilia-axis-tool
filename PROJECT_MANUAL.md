@@ -7950,6 +7950,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：围绕 Workbench flow runtime 继续收束状态写入回调，优先把运行点选择与 calculator scope 切换的共享状态写入整理成更窄的接口。
 
+### 2026-07-09：UI 主流程能力块 - Flow Runtime Scope State
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `workbenchFlowRuntimeScope`，用纯数据描述 runtime / generation calculator scope 切换后的运行点选择、曲线过滤、轨道过滤和日志焦点清空。
+- `Workbench.vue` 的 `focusThreeValueCalculatorScope()` 改为生成 scope state，再由 `applyCalculatorScopeFlowState()` 应用到本地状态。
+- 运行视角首个运行点选择、运行总览清空、生成视角清空运行点三条路径从视图内联判断中抽出，成为可单测的主流程状态规则。
+- 本阶段不修改三值计算、模拟输出、项目保存结构或可见 UI 文案。
+
+当前验证事实：
+
+- scope state 单元测试覆盖 runtime 有首点、runtime 无首点、generation 三种视角切换。
+- Workbench 集成测试继续覆盖 calculator scope 切换相关的资源曲线、日志和运行详情行为。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntimeScope.test.js src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，25 个测试文件、163 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 `selectRuntimeStatePoint()` 的运行点选择副作用也整理成 flow runtime 可复用的状态接口，继续削薄 Workbench 视图层。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
