@@ -354,6 +354,7 @@ import {
   WORKBENCH_FLOW_ACTION_KINDS,
   createWorkbenchFlowAction,
 } from './workbenchFlowModel';
+import { createRuntimeActionFocusFlowAction } from './runtimeActionFocusFlowAction';
 import { isRuntimeResultFocusSource } from './runtimeFocusSource';
 
 const RUNTIME_CURVE_CHART_WIDTH = 320;
@@ -1056,20 +1057,10 @@ function getRuntimeCurvePointFlowAction(point) {
 }
 
 function getRuntimeCurveActionFocusFlowAction(point) {
-  return createWorkbenchFlowAction({
-    kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+  return createRuntimeActionFocusFlowAction({
     source: 'resource-runtime-curve',
-    actionId: point?.actionId ?? '',
-    statePointId: point?.statePointId ?? '',
-    payload: {
-      actionId: point?.actionId ?? '',
-      fieldKey: 'startMs',
-      frameLabel: point?.frameLabel ?? `${point?.timeMs ?? 0}ms`,
-      statePointId: point?.statePointId ?? '',
-      trackKey: point?.trackKey ?? '',
-    },
+    detail: point,
     enabled: Boolean(point?.actionId),
-    disabledReason: 'missing-runtime-action',
   });
 }
 

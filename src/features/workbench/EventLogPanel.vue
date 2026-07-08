@@ -317,6 +317,7 @@ import {
   WORKBENCH_FLOW_ACTION_KINDS,
   createWorkbenchFlowAction,
 } from './workbenchFlowModel';
+import { createRuntimeActionFocusFlowAction } from './runtimeActionFocusFlowAction';
 import {
   isRuntimeResultFocusSource,
   normalizeRuntimeLogFocusScope,
@@ -805,14 +806,10 @@ function getRuntimeLogRowFlowAction(row) {
 }
 
 function getRuntimeLogActionFocusFlowAction(focus) {
-  return createWorkbenchFlowAction({
-    kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+  return createRuntimeActionFocusFlowAction({
     source: 'event-log-runtime-detail',
-    actionId: focus?.actionId ?? '',
-    statePointId: focus?.statePointId ?? '',
-    payload: focus ?? null,
+    detail: focus,
     enabled: Boolean(focus?.actionId),
-    disabledReason: 'missing-runtime-action',
   });
 }
 

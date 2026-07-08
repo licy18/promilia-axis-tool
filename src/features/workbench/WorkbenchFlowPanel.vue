@@ -155,6 +155,7 @@ import {
   createWorkbenchFlowAction,
   createWorkbenchFlowModel,
 } from './workbenchFlowModel';
+import { createRuntimeActionFocusFlowAction } from './runtimeActionFocusFlowAction';
 
 const props = defineProps({
   selectedAction: {
@@ -259,20 +260,10 @@ function getRuntimeNavigationFlowAction(point) {
 }
 
 function getRuntimeActionFocusFlowAction(detail) {
-  return createWorkbenchFlowAction({
-    kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+  return createRuntimeActionFocusFlowAction({
     source: 'workbench-flow-panel',
-    actionId: detail?.actionId ?? '',
-    statePointId: detail?.statePointId ?? '',
-    payload: {
-      actionId: detail?.actionId ?? '',
-      fieldKey: 'startMs',
-      frameLabel: detail?.frameLabel ?? `${detail?.timeMs ?? 0}ms`,
-      statePointId: detail?.statePointId ?? '',
-      trackKey: detail?.trackKey ?? '',
-    },
+    detail,
     enabled: Boolean(detail?.canFocusAction),
-    disabledReason: 'missing-runtime-action',
   });
 }
 

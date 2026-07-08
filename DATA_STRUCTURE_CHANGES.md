@@ -17361,3 +17361,82 @@ AnalysisPanel action edit feedback
 - `npm run test -- --run src/__tests__/features/workbenchActionEditFlowPlan.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、62 条测试。
 - `npm run test -- --run`：通过，30 个测试文件、173 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 220. UI 主流程能力块：Runtime Action Focus Flow Action Helper
+
+本阶段属于 UI 主流程。
+
+### 220.1 结构变化
+
+新增：
+
+```text
+src/features/workbench/runtimeActionFocusFlowAction.js
+```
+
+提供统一入口：
+
+```js
+createRuntimeActionFocusFlowAction({
+  source,
+  detail,
+  enabled,
+  disabledReason
+})
+```
+
+该 helper 统一生成：
+
+```js
+{
+  kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+  source,
+  actionId,
+  statePointId,
+  payload: {
+    actionId,
+    fieldKey,
+    frameLabel,
+    statePointId,
+    trackKey
+  },
+  enabled,
+  disabledReason
+}
+```
+
+默认规则：
+
+```js
+fieldKey = detail?.fieldKey || 'startMs'
+frameLabel = detail?.frameLabel ?? `${detail?.timeMs ?? 0}ms`
+trackKey = detail?.trackKey ?? ''
+enabled = enabled ?? Boolean(actionId)
+disabledReason = 'missing-runtime-action'
+```
+
+已接入位置：
+
+```text
+WorkbenchFlowPanel -> source: workbench-flow-panel
+RuntimeSelectedDetailPanel -> source: runtime-detail
+EventLogPanel -> source: event-log-runtime-detail
+ResourceMonitorPanel -> source: resource-runtime-curve
+```
+
+这些入口不再各自手写 `focus-runtime-action` payload，后续 runtime action focus 合同调整时只需要改共享 helper。
+
+### 220.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 主流程 action 拼装；三值计算、runtime projection 数值结果和草稿保存结构不变。
+
+### 220.3 验证
+
+- 新增 `src/__tests__/features/runtimeActionFocusFlowAction.test.js`，覆盖共享 payload 合同、`frameLabel` fallback 和 `enabled` override。
+- 更新四个 Workbench 面板，继续使用原有 source，并改为消费共享 `createRuntimeActionFocusFlowAction()`。
+- `npm run test -- --run src/__tests__/features/runtimeActionFocusFlowAction.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、59 条测试。
+- `npm run test -- --run`：通过，31 个测试文件、175 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。

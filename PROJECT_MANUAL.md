@@ -8220,6 +8220,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 flow source / focus source 的路由语义进一步沉到共享模型，减少 Workbench 页面和面板之间重复拼装 route payload 的地方。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Action Focus Flow Action Helper
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `runtimeActionFocusFlowAction`，把 `focus-runtime-action` 的共享 payload 合同从四个面板中抽出。
+- 主流程面板、运行详情、日志详情和资源曲线现在只传 `source` / `detail` / `enabled`，由共享 helper 统一生成 `actionId`、`statePointId`、`fieldKey`、`frameLabel`、`trackKey` 和 flow action。
+- 该变化保持既有来源链路和 action edit focus 行为不变，只减少重复拼装和漏传风险。
+- 本阶段不新增公式推断、不调整三值结果、不增加可见状态标签。
+
+当前验证事实：
+
+- runtime action focus helper 单元测试覆盖共享 payload 合同、`frameLabel` fallback 和 `enabled` override。
+- Workbench 页面测试确认主流程面板、运行详情、日志详情和资源曲线四类入口仍能回到对应动作编辑并保留 source。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/runtimeActionFocusFlowAction.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、59 条测试。
+- `npm run test -- --run`：通过，31 个测试文件、175 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 Workbench 主流程的“动作编辑 -> 运行模拟 -> 曲线/日志定位 -> 回到动作修改”路径做成更完整的可用体验，优先收束较大的流程入口和详情查看能力，而不是继续打磨局部状态提示。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
