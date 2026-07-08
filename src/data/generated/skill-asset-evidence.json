@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-08T01:55:04.318Z",
+  "generatedAt": "2026-07-08T02:20:47.360Z",
   "sourceKind": "azpr-skill-asset-evidence-index",
   "source": {
     "sourceRoot": "C:/PC2/Codex/AzPr",
@@ -106,6 +106,10 @@
       "requestedPathIds": 97,
       "resolvedPathIds": 97,
       "unresolvedPathIds": 0,
+      "formulaParamBuffReferenceObjects": 15,
+      "formulaParamBuffReferences": 15,
+      "formulaParamBuffReferenceResolvedObjects": 1,
+      "unknownScriptBuffReferenceObjects": 7,
       "sourceSkillCount": 9,
       "targetSkillCount": 9
     },
@@ -1417,7 +1421,83 @@
             },
             "mediaPackNames": [],
             "damageFields": null,
-            "timingFields": null
+            "timingFields": null,
+            "formulaParamReferenceEvidence": {
+              "status": "formula-param-buff-references-found",
+              "sourceFields": [
+                "formulaParams.formulaParamValues"
+              ],
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "buffReferenceCount": 1,
+              "buffReferenceIds": [
+                101003079
+              ],
+              "references": [
+                {
+                  "buffId": 101003079,
+                  "formulaParamSlots": [
+                    2,
+                    13
+                  ],
+                  "formulaParamValues": [
+                    101003079
+                  ],
+                  "status": "buff-info-and-buff-element-object-found",
+                  "relationStatus": "formula-param-value-matches-buff-info-id",
+                  "buffInfo": {
+                    "id": 101003079,
+                    "name": "焰火",
+                    "description": "受到特定伤害时触发爆炸",
+                    "type": 2,
+                    "tips": "焰火",
+                    "icon": "tex_icon_buff_101003_Skill0.png",
+                    "stages": 0,
+                    "times": 1,
+                    "displayPriority": 1,
+                    "source": {
+                      "table": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/buff_info.json",
+                      "langTable": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_buff_info.json"
+                    }
+                  },
+                  "buffElementObject": {
+                    "elementConfigId": 101003079,
+                    "pathId": "-3716196104709416648",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003079.asset",
+                    "scriptPathId": "4171700675270990854",
+                    "scriptTypeCandidate": {
+                      "status": "field-signature-matched",
+                      "confidence": "medium",
+                      "className": "TBuffElementParams",
+                      "sourceLineRange": "dump.cs:394732-394799"
+                    },
+                    "elementName": "�̻�debuff ����ǣ�",
+                    "describe": "����8��",
+                    "formulaParams": {
+                      "function_1": 1,
+                      "function_2": 0
+                    },
+                    "timingFields": {
+                      "time": 10000,
+                      "frequencyType": 0,
+                      "frequency": 1
+                    }
+                  }
+                }
+              ],
+              "applied": false,
+              "calculationBoundary": "Formula parameter values match buff_info ids only; this identifies a buff bridge candidate, not direct HP/toughness/self-energy formula application."
+            },
+            "formulaParamBridgeCandidate": {
+              "status": "formula-param-buff-reference-found",
+              "scriptPathId": "5576338162890961044",
+              "scriptTypeCandidateStatus": "script-type-candidate-missing",
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "confidence": "medium",
+              "referencedBuffIds": [
+                101003079
+              ],
+              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+            }
           },
           {
             "pathId": "5614799294546611630",
@@ -2040,6 +2120,58 @@
               "time": -1,
               "frequencyType": 0,
               "frequency": 0
+            },
+            "formulaParamReferenceEvidence": {
+              "status": "formula-param-buff-references-found",
+              "sourceFields": [
+                "formulaParams.formulaParamValues"
+              ],
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "buffReferenceCount": 1,
+              "buffReferenceIds": [
+                750
+              ],
+              "references": [
+                {
+                  "buffId": 750,
+                  "formulaParamSlots": [
+                    8
+                  ],
+                  "formulaParamValues": [
+                    750
+                  ],
+                  "status": "buff-info-found-buff-element-object-missing",
+                  "relationStatus": "formula-param-value-matches-buff-info-id",
+                  "buffInfo": {
+                    "id": 750,
+                    "name": "风属性调谐",
+                    "description": "",
+                    "type": 3,
+                    "tips": "",
+                    "icon": "tex_battle_icon_feng.png",
+                    "stages": 1,
+                    "times": 0,
+                    "displayPriority": 10,
+                    "source": {
+                      "table": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/buff_info.json",
+                      "langTable": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_buff_info.json"
+                    }
+                  }
+                }
+              ],
+              "applied": false,
+              "calculationBoundary": "Formula parameter values match buff_info ids only; this identifies a buff bridge candidate, not direct HP/toughness/self-energy formula application."
+            },
+            "formulaParamBridgeCandidate": {
+              "status": "formula-param-buff-reference-found",
+              "scriptPathId": "798776077322537027",
+              "scriptTypeCandidateStatus": "script-type-candidate-missing",
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "confidence": "medium",
+              "referencedBuffIds": [
+                750
+              ],
+              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -2914,6 +3046,58 @@
               "time": -1,
               "frequencyType": 0,
               "frequency": 0
+            },
+            "formulaParamReferenceEvidence": {
+              "status": "formula-param-buff-references-found",
+              "sourceFields": [
+                "formulaParams.formulaParamValues"
+              ],
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "buffReferenceCount": 1,
+              "buffReferenceIds": [
+                750
+              ],
+              "references": [
+                {
+                  "buffId": 750,
+                  "formulaParamSlots": [
+                    8
+                  ],
+                  "formulaParamValues": [
+                    750
+                  ],
+                  "status": "buff-info-found-buff-element-object-missing",
+                  "relationStatus": "formula-param-value-matches-buff-info-id",
+                  "buffInfo": {
+                    "id": 750,
+                    "name": "风属性调谐",
+                    "description": "",
+                    "type": 3,
+                    "tips": "",
+                    "icon": "tex_battle_icon_feng.png",
+                    "stages": 1,
+                    "times": 0,
+                    "displayPriority": 10,
+                    "source": {
+                      "table": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/buff_info.json",
+                      "langTable": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_buff_info.json"
+                    }
+                  }
+                }
+              ],
+              "applied": false,
+              "calculationBoundary": "Formula parameter values match buff_info ids only; this identifies a buff bridge candidate, not direct HP/toughness/self-energy formula application."
+            },
+            "formulaParamBridgeCandidate": {
+              "status": "formula-param-buff-reference-found",
+              "scriptPathId": "798776077322537027",
+              "scriptTypeCandidateStatus": "script-type-candidate-missing",
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "confidence": "medium",
+              "referencedBuffIds": [
+                750
+              ],
+              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -3973,6 +4157,58 @@
               "time": -1,
               "frequencyType": 0,
               "frequency": 0
+            },
+            "formulaParamReferenceEvidence": {
+              "status": "formula-param-buff-references-found",
+              "sourceFields": [
+                "formulaParams.formulaParamValues"
+              ],
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "buffReferenceCount": 1,
+              "buffReferenceIds": [
+                750
+              ],
+              "references": [
+                {
+                  "buffId": 750,
+                  "formulaParamSlots": [
+                    8
+                  ],
+                  "formulaParamValues": [
+                    750
+                  ],
+                  "status": "buff-info-found-buff-element-object-missing",
+                  "relationStatus": "formula-param-value-matches-buff-info-id",
+                  "buffInfo": {
+                    "id": 750,
+                    "name": "风属性调谐",
+                    "description": "",
+                    "type": 3,
+                    "tips": "",
+                    "icon": "tex_battle_icon_feng.png",
+                    "stages": 1,
+                    "times": 0,
+                    "displayPriority": 10,
+                    "source": {
+                      "table": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/buff_info.json",
+                      "langTable": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_buff_info.json"
+                    }
+                  }
+                }
+              ],
+              "applied": false,
+              "calculationBoundary": "Formula parameter values match buff_info ids only; this identifies a buff bridge candidate, not direct HP/toughness/self-energy formula application."
+            },
+            "formulaParamBridgeCandidate": {
+              "status": "formula-param-buff-reference-found",
+              "scriptPathId": "798776077322537027",
+              "scriptTypeCandidateStatus": "script-type-candidate-missing",
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "confidence": "medium",
+              "referencedBuffIds": [
+                750
+              ],
+              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -5741,6 +5977,58 @@
               "floatParam4": 65536,
               "intParam1": 50,
               "intParam2": 0
+            },
+            "formulaParamReferenceEvidence": {
+              "status": "formula-param-buff-references-found",
+              "sourceFields": [
+                "formulaParams.formulaParamValues"
+              ],
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "buffReferenceCount": 1,
+              "buffReferenceIds": [
+                150
+              ],
+              "references": [
+                {
+                  "buffId": 150,
+                  "formulaParamSlots": [
+                    1
+                  ],
+                  "formulaParamValues": [
+                    150
+                  ],
+                  "status": "buff-info-found-buff-element-object-missing",
+                  "relationStatus": "formula-param-value-matches-buff-info-id",
+                  "buffInfo": {
+                    "id": 150,
+                    "name": "火属性调谐",
+                    "description": "",
+                    "type": 3,
+                    "tips": "",
+                    "icon": "tex_battle_icon_huo.png",
+                    "stages": 1,
+                    "times": 0,
+                    "displayPriority": 10,
+                    "source": {
+                      "table": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/buff_info.json",
+                      "langTable": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_buff_info.json"
+                    }
+                  }
+                }
+              ],
+              "applied": false,
+              "calculationBoundary": "Formula parameter values match buff_info ids only; this identifies a buff bridge candidate, not direct HP/toughness/self-energy formula application."
+            },
+            "formulaParamBridgeCandidate": {
+              "status": "formula-param-buff-reference-found",
+              "scriptPathId": "8877289764366981625",
+              "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "confidence": "low",
+              "referencedBuffIds": [
+                150
+              ],
+              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -7096,7 +7384,59 @@
               "petRecoverSP": 0,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "formulaParamReferenceEvidence": {
+              "status": "formula-param-buff-references-found",
+              "sourceFields": [
+                "formulaParams.formulaParamValues"
+              ],
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "buffReferenceCount": 1,
+              "buffReferenceIds": [
+                250
+              ],
+              "references": [
+                {
+                  "buffId": 250,
+                  "formulaParamSlots": [
+                    13
+                  ],
+                  "formulaParamValues": [
+                    250
+                  ],
+                  "status": "buff-info-found-buff-element-object-missing",
+                  "relationStatus": "formula-param-value-matches-buff-info-id",
+                  "buffInfo": {
+                    "id": 250,
+                    "name": "雷属性调谐",
+                    "description": "",
+                    "type": 3,
+                    "tips": "",
+                    "icon": "tex_battle_icon_lei.png",
+                    "stages": 1,
+                    "times": 0,
+                    "displayPriority": 10,
+                    "source": {
+                      "table": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/buff_info.json",
+                      "langTable": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_buff_info.json"
+                    }
+                  }
+                }
+              ],
+              "applied": false,
+              "calculationBoundary": "Formula parameter values match buff_info ids only; this identifies a buff bridge candidate, not direct HP/toughness/self-energy formula application."
+            },
+            "formulaParamBridgeCandidate": {
+              "status": "formula-param-buff-reference-found",
+              "scriptPathId": "3156599909451817364",
+              "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "confidence": "low",
+              "referencedBuffIds": [
+                250
+              ],
+              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+            }
           },
           {
             "pathId": "-1163125552202303495",
@@ -8024,6 +8364,58 @@
               "time": -1,
               "frequencyType": 0,
               "frequency": 0
+            },
+            "formulaParamReferenceEvidence": {
+              "status": "formula-param-buff-references-found",
+              "sourceFields": [
+                "formulaParams.formulaParamValues"
+              ],
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "buffReferenceCount": 1,
+              "buffReferenceIds": [
+                250
+              ],
+              "references": [
+                {
+                  "buffId": 250,
+                  "formulaParamSlots": [
+                    8
+                  ],
+                  "formulaParamValues": [
+                    250
+                  ],
+                  "status": "buff-info-found-buff-element-object-missing",
+                  "relationStatus": "formula-param-value-matches-buff-info-id",
+                  "buffInfo": {
+                    "id": 250,
+                    "name": "雷属性调谐",
+                    "description": "",
+                    "type": 3,
+                    "tips": "",
+                    "icon": "tex_battle_icon_lei.png",
+                    "stages": 1,
+                    "times": 0,
+                    "displayPriority": 10,
+                    "source": {
+                      "table": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/buff_info.json",
+                      "langTable": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_buff_info.json"
+                    }
+                  }
+                }
+              ],
+              "applied": false,
+              "calculationBoundary": "Formula parameter values match buff_info ids only; this identifies a buff bridge candidate, not direct HP/toughness/self-energy formula application."
+            },
+            "formulaParamBridgeCandidate": {
+              "status": "formula-param-buff-reference-found",
+              "scriptPathId": "798776077322537027",
+              "scriptTypeCandidateStatus": "script-type-candidate-missing",
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "confidence": "medium",
+              "referencedBuffIds": [
+                250
+              ],
+              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -8455,6 +8847,58 @@
               "time": -1,
               "frequencyType": 0,
               "frequency": 0
+            },
+            "formulaParamReferenceEvidence": {
+              "status": "formula-param-buff-references-found",
+              "sourceFields": [
+                "formulaParams.formulaParamValues"
+              ],
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "buffReferenceCount": 1,
+              "buffReferenceIds": [
+                250
+              ],
+              "references": [
+                {
+                  "buffId": 250,
+                  "formulaParamSlots": [
+                    8
+                  ],
+                  "formulaParamValues": [
+                    250
+                  ],
+                  "status": "buff-info-found-buff-element-object-missing",
+                  "relationStatus": "formula-param-value-matches-buff-info-id",
+                  "buffInfo": {
+                    "id": 250,
+                    "name": "雷属性调谐",
+                    "description": "",
+                    "type": 3,
+                    "tips": "",
+                    "icon": "tex_battle_icon_lei.png",
+                    "stages": 1,
+                    "times": 0,
+                    "displayPriority": 10,
+                    "source": {
+                      "table": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/buff_info.json",
+                      "langTable": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_buff_info.json"
+                    }
+                  }
+                }
+              ],
+              "applied": false,
+              "calculationBoundary": "Formula parameter values match buff_info ids only; this identifies a buff bridge candidate, not direct HP/toughness/self-energy formula application."
+            },
+            "formulaParamBridgeCandidate": {
+              "status": "formula-param-buff-reference-found",
+              "scriptPathId": "798776077322537027",
+              "scriptTypeCandidateStatus": "script-type-candidate-missing",
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "confidence": "medium",
+              "referencedBuffIds": [
+                250
+              ],
+              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -9080,6 +9524,58 @@
               "floatParam4": 65536,
               "intParam1": 100,
               "intParam2": 0
+            },
+            "formulaParamReferenceEvidence": {
+              "status": "formula-param-buff-references-found",
+              "sourceFields": [
+                "formulaParams.formulaParamValues"
+              ],
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "buffReferenceCount": 1,
+              "buffReferenceIds": [
+                250
+              ],
+              "references": [
+                {
+                  "buffId": 250,
+                  "formulaParamSlots": [
+                    1
+                  ],
+                  "formulaParamValues": [
+                    250
+                  ],
+                  "status": "buff-info-found-buff-element-object-missing",
+                  "relationStatus": "formula-param-value-matches-buff-info-id",
+                  "buffInfo": {
+                    "id": 250,
+                    "name": "雷属性调谐",
+                    "description": "",
+                    "type": 3,
+                    "tips": "",
+                    "icon": "tex_battle_icon_lei.png",
+                    "stages": 1,
+                    "times": 0,
+                    "displayPriority": 10,
+                    "source": {
+                      "table": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/buff_info.json",
+                      "langTable": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_buff_info.json"
+                    }
+                  }
+                }
+              ],
+              "applied": false,
+              "calculationBoundary": "Formula parameter values match buff_info ids only; this identifies a buff bridge candidate, not direct HP/toughness/self-energy formula application."
+            },
+            "formulaParamBridgeCandidate": {
+              "status": "formula-param-buff-reference-found",
+              "scriptPathId": "8877289764366981625",
+              "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "confidence": "low",
+              "referencedBuffIds": [
+                250
+              ],
+              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           }
         ]
@@ -9857,6 +10353,58 @@
               "floatParam4": 65536,
               "intParam1": 16,
               "intParam2": 0
+            },
+            "formulaParamReferenceEvidence": {
+              "status": "formula-param-buff-references-found",
+              "sourceFields": [
+                "formulaParams.formulaParamValues"
+              ],
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "buffReferenceCount": 1,
+              "buffReferenceIds": [
+                150
+              ],
+              "references": [
+                {
+                  "buffId": 150,
+                  "formulaParamSlots": [
+                    1
+                  ],
+                  "formulaParamValues": [
+                    150
+                  ],
+                  "status": "buff-info-found-buff-element-object-missing",
+                  "relationStatus": "formula-param-value-matches-buff-info-id",
+                  "buffInfo": {
+                    "id": 150,
+                    "name": "火属性调谐",
+                    "description": "",
+                    "type": 3,
+                    "tips": "",
+                    "icon": "tex_battle_icon_huo.png",
+                    "stages": 1,
+                    "times": 0,
+                    "displayPriority": 10,
+                    "source": {
+                      "table": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/buff_info.json",
+                      "langTable": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_buff_info.json"
+                    }
+                  }
+                }
+              ],
+              "applied": false,
+              "calculationBoundary": "Formula parameter values match buff_info ids only; this identifies a buff bridge candidate, not direct HP/toughness/self-energy formula application."
+            },
+            "formulaParamBridgeCandidate": {
+              "status": "formula-param-buff-reference-found",
+              "scriptPathId": "8877289764366981625",
+              "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "confidence": "low",
+              "referencedBuffIds": [
+                150
+              ],
+              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -9986,7 +10534,59 @@
               "petRecoverSP": 0,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "formulaParamReferenceEvidence": {
+              "status": "formula-param-buff-references-found",
+              "sourceFields": [
+                "formulaParams.formulaParamValues"
+              ],
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "buffReferenceCount": 1,
+              "buffReferenceIds": [
+                750
+              ],
+              "references": [
+                {
+                  "buffId": 750,
+                  "formulaParamSlots": [
+                    13
+                  ],
+                  "formulaParamValues": [
+                    750
+                  ],
+                  "status": "buff-info-found-buff-element-object-missing",
+                  "relationStatus": "formula-param-value-matches-buff-info-id",
+                  "buffInfo": {
+                    "id": 750,
+                    "name": "风属性调谐",
+                    "description": "",
+                    "type": 3,
+                    "tips": "",
+                    "icon": "tex_battle_icon_feng.png",
+                    "stages": 1,
+                    "times": 0,
+                    "displayPriority": 10,
+                    "source": {
+                      "table": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/buff_info.json",
+                      "langTable": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_buff_info.json"
+                    }
+                  }
+                }
+              ],
+              "applied": false,
+              "calculationBoundary": "Formula parameter values match buff_info ids only; this identifies a buff bridge candidate, not direct HP/toughness/self-energy formula application."
+            },
+            "formulaParamBridgeCandidate": {
+              "status": "formula-param-buff-reference-found",
+              "scriptPathId": "3156599909451817364",
+              "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "confidence": "low",
+              "referencedBuffIds": [
+                750
+              ],
+              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+            }
           },
           {
             "pathId": "-5022202969777715803",
@@ -10113,7 +10713,59 @@
               "petRecoverSP": 0,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "formulaParamReferenceEvidence": {
+              "status": "formula-param-buff-references-found",
+              "sourceFields": [
+                "formulaParams.formulaParamValues"
+              ],
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "buffReferenceCount": 1,
+              "buffReferenceIds": [
+                250
+              ],
+              "references": [
+                {
+                  "buffId": 250,
+                  "formulaParamSlots": [
+                    13
+                  ],
+                  "formulaParamValues": [
+                    250
+                  ],
+                  "status": "buff-info-found-buff-element-object-missing",
+                  "relationStatus": "formula-param-value-matches-buff-info-id",
+                  "buffInfo": {
+                    "id": 250,
+                    "name": "雷属性调谐",
+                    "description": "",
+                    "type": 3,
+                    "tips": "",
+                    "icon": "tex_battle_icon_lei.png",
+                    "stages": 1,
+                    "times": 0,
+                    "displayPriority": 10,
+                    "source": {
+                      "table": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/buff_info.json",
+                      "langTable": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_buff_info.json"
+                    }
+                  }
+                }
+              ],
+              "applied": false,
+              "calculationBoundary": "Formula parameter values match buff_info ids only; this identifies a buff bridge candidate, not direct HP/toughness/self-energy formula application."
+            },
+            "formulaParamBridgeCandidate": {
+              "status": "formula-param-buff-reference-found",
+              "scriptPathId": "3156599909451817364",
+              "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "confidence": "low",
+              "referencedBuffIds": [
+                250
+              ],
+              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+            }
           },
           {
             "pathId": "-2183046451540947591",
@@ -10251,6 +10903,58 @@
               "floatParam4": 65536,
               "intParam1": 16,
               "intParam2": 0
+            },
+            "formulaParamReferenceEvidence": {
+              "status": "formula-param-buff-references-found",
+              "sourceFields": [
+                "formulaParams.formulaParamValues"
+              ],
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "buffReferenceCount": 1,
+              "buffReferenceIds": [
+                150
+              ],
+              "references": [
+                {
+                  "buffId": 150,
+                  "formulaParamSlots": [
+                    1
+                  ],
+                  "formulaParamValues": [
+                    150
+                  ],
+                  "status": "buff-info-found-buff-element-object-missing",
+                  "relationStatus": "formula-param-value-matches-buff-info-id",
+                  "buffInfo": {
+                    "id": 150,
+                    "name": "火属性调谐",
+                    "description": "",
+                    "type": 3,
+                    "tips": "",
+                    "icon": "tex_battle_icon_huo.png",
+                    "stages": 1,
+                    "times": 0,
+                    "displayPriority": 10,
+                    "source": {
+                      "table": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/buff_info.json",
+                      "langTable": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_buff_info.json"
+                    }
+                  }
+                }
+              ],
+              "applied": false,
+              "calculationBoundary": "Formula parameter values match buff_info ids only; this identifies a buff bridge candidate, not direct HP/toughness/self-energy formula application."
+            },
+            "formulaParamBridgeCandidate": {
+              "status": "formula-param-buff-reference-found",
+              "scriptPathId": "8877289764366981625",
+              "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "confidence": "low",
+              "referencedBuffIds": [
+                150
+              ],
+              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
             }
           },
           {
@@ -10470,7 +11174,59 @@
             },
             "mediaPackNames": [],
             "damageFields": null,
-            "timingFields": null
+            "timingFields": null,
+            "formulaParamReferenceEvidence": {
+              "status": "formula-param-buff-references-found",
+              "sourceFields": [
+                "formulaParams.formulaParamValues"
+              ],
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "buffReferenceCount": 1,
+              "buffReferenceIds": [
+                750
+              ],
+              "references": [
+                {
+                  "buffId": 750,
+                  "formulaParamSlots": [
+                    13
+                  ],
+                  "formulaParamValues": [
+                    750
+                  ],
+                  "status": "buff-info-found-buff-element-object-missing",
+                  "relationStatus": "formula-param-value-matches-buff-info-id",
+                  "buffInfo": {
+                    "id": 750,
+                    "name": "风属性调谐",
+                    "description": "",
+                    "type": 3,
+                    "tips": "",
+                    "icon": "tex_battle_icon_feng.png",
+                    "stages": 1,
+                    "times": 0,
+                    "displayPriority": 10,
+                    "source": {
+                      "table": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/buff_info.json",
+                      "langTable": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_buff_info.json"
+                    }
+                  }
+                }
+              ],
+              "applied": false,
+              "calculationBoundary": "Formula parameter values match buff_info ids only; this identifies a buff bridge candidate, not direct HP/toughness/self-energy formula application."
+            },
+            "formulaParamBridgeCandidate": {
+              "status": "formula-param-buff-reference-found",
+              "scriptPathId": "2679560984897556580",
+              "scriptTypeCandidateStatus": "script-type-candidate-missing",
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "confidence": "medium",
+              "referencedBuffIds": [
+                750
+              ],
+              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+            }
           },
           {
             "pathId": "-1203829837708589376",
@@ -12076,7 +12832,59 @@
               "petRecoverSP": 0,
               "recoverInterval": 9999
             },
-            "timingFields": null
+            "timingFields": null,
+            "formulaParamReferenceEvidence": {
+              "status": "formula-param-buff-references-found",
+              "sourceFields": [
+                "formulaParams.formulaParamValues"
+              ],
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "buffReferenceCount": 1,
+              "buffReferenceIds": [
+                250
+              ],
+              "references": [
+                {
+                  "buffId": 250,
+                  "formulaParamSlots": [
+                    13
+                  ],
+                  "formulaParamValues": [
+                    250
+                  ],
+                  "status": "buff-info-found-buff-element-object-missing",
+                  "relationStatus": "formula-param-value-matches-buff-info-id",
+                  "buffInfo": {
+                    "id": 250,
+                    "name": "雷属性调谐",
+                    "description": "",
+                    "type": 3,
+                    "tips": "",
+                    "icon": "tex_battle_icon_lei.png",
+                    "stages": 1,
+                    "times": 0,
+                    "displayPriority": 10,
+                    "source": {
+                      "table": "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/buff_info.json",
+                      "langTable": "C:/PC2/Codex/AzPr/Assets/ResourcesLang/chs/Table/lang_buff_info.json"
+                    }
+                  }
+                }
+              ],
+              "applied": false,
+              "calculationBoundary": "Formula parameter values match buff_info ids only; this identifies a buff bridge candidate, not direct HP/toughness/self-energy formula application."
+            },
+            "formulaParamBridgeCandidate": {
+              "status": "formula-param-buff-reference-found",
+              "scriptPathId": "3156599909451817364",
+              "scriptTypeCandidateStatus": "script-type-candidate-found",
+              "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+              "confidence": "low",
+              "referencedBuffIds": [
+                250
+              ],
+              "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+            }
           },
           {
             "pathId": "2642523047740593292",
@@ -12585,7 +13393,7 @@
   },
   "damageElementFieldMappingEvidence": {
     "schemaVersion": 1,
-    "generatedAt": "2026-07-08T01:55:04.318Z",
+    "generatedAt": "2026-07-08T02:20:47.360Z",
     "sourceKind": "azpr-damage-element-field-mapping-evidence",
     "status": "damage-element-field-candidates-found",
     "source": {
@@ -41647,6 +42455,26 @@
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
                 "damageElementFieldMappingStatus": "damage-element-field-mappings-found",
+                "externalElementObjectReferenceCount": 2,
+                "externalElementObjectReferences": [
+                  {
+                    "elementConfigId": 101003025,
+                    "pathId": "-4373351994372761995",
+                    "scriptPathId": "8877289764366981625",
+                    "scriptTypeClassName": "TFxElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003025.asset"
+                  },
+                  {
+                    "elementConfigId": 101003046,
+                    "pathId": "7736637370449973165",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003046.asset"
+                  }
+                ],
+                "formulaParamBuffReferenceCount": 0,
+                "formulaParamBuffReferenceIds": [],
+                "formulaParamBuffReferences": [],
                 "damageElementFieldMappingCount": 1,
                 "damageElementElementConfigIds": [
                   101003046
@@ -41795,6 +42623,19 @@
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
                 "damageElementFieldMappingStatus": "damage-element-field-mappings-found",
+                "externalElementObjectReferenceCount": 1,
+                "externalElementObjectReferences": [
+                  {
+                    "elementConfigId": 101003037,
+                    "pathId": "-668735999631003170",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003037.asset"
+                  }
+                ],
+                "formulaParamBuffReferenceCount": 0,
+                "formulaParamBuffReferenceIds": [],
+                "formulaParamBuffReferences": [],
                 "damageElementFieldMappingCount": 1,
                 "damageElementElementConfigIds": [
                   101003037
@@ -41972,6 +42813,26 @@
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
                 "damageElementFieldMappingStatus": "resource-map-element-refs-found-damage-element-fields-missing",
+                "externalElementObjectReferenceCount": 2,
+                "externalElementObjectReferences": [
+                  {
+                    "elementConfigId": 101003076,
+                    "pathId": "-4280404759535193379",
+                    "scriptPathId": "8877289764366981625",
+                    "scriptTypeClassName": "TFxElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003076.asset"
+                  },
+                  {
+                    "elementConfigId": 101003180,
+                    "pathId": "1572718271109451571",
+                    "scriptPathId": "5576338162890961044",
+                    "scriptTypeClassName": "unknown",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003180.asset"
+                  }
+                ],
+                "formulaParamBuffReferenceCount": 0,
+                "formulaParamBuffReferenceIds": [],
+                "formulaParamBuffReferences": [],
                 "damageElementFieldMappingCount": 0,
                 "damageElementElementConfigIds": [],
                 "damageElementPathIds": [],
@@ -42090,7 +42951,93 @@
                 "confidence": "medium",
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
-                "damageElementFieldMappingStatus": "resource-map-element-refs-found-damage-element-fields-missing",
+                "damageElementFieldMappingStatus": "resource-map-element-buff-reference-found-damage-element-fields-missing",
+                "externalElementObjectReferenceCount": 3,
+                "externalElementObjectReferences": [
+                  {
+                    "elementConfigId": 101003101,
+                    "pathId": "-3406483301161857991",
+                    "scriptPathId": "7293914887559091286",
+                    "scriptTypeClassName": "TFreezeFrameElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003101.asset"
+                  },
+                  {
+                    "elementConfigId": 101003038,
+                    "pathId": "5614799294546611630",
+                    "scriptPathId": "8877289764366981625",
+                    "scriptTypeClassName": "TFxElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003038.asset"
+                  },
+                  {
+                    "elementConfigId": 101003181,
+                    "pathId": "-1285658850712902661",
+                    "scriptPathId": "5576338162890961044",
+                    "scriptTypeClassName": "unknown",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003181.asset",
+                    "formulaParamBridgeCandidate": {
+                      "status": "formula-param-buff-reference-found",
+                      "scriptPathId": "5576338162890961044",
+                      "scriptTypeCandidateStatus": "script-type-candidate-missing",
+                      "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+                      "confidence": "medium",
+                      "referencedBuffIds": [
+                        101003079
+                      ],
+                      "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+                    },
+                    "formulaParamBuffReferenceIds": [
+                      101003079
+                    ]
+                  }
+                ],
+                "formulaParamBuffReferenceCount": 1,
+                "formulaParamBuffReferenceIds": [
+                  101003079
+                ],
+                "formulaParamBuffReferences": [
+                  {
+                    "sourceElementConfigId": 101003181,
+                    "sourcePathId": "-1285658850712902661",
+                    "buffId": 101003079,
+                    "status": "buff-info-and-buff-element-object-found",
+                    "relationStatus": "formula-param-value-matches-buff-info-id",
+                    "formulaParamSlots": [
+                      2,
+                      13
+                    ],
+                    "buffInfo": {
+                      "id": 101003079,
+                      "name": "焰火",
+                      "description": "受到特定伤害时触发爆炸",
+                      "type": 2,
+                      "tips": "焰火",
+                      "icon": "tex_icon_buff_101003_Skill0.png"
+                    },
+                    "buffElementObject": {
+                      "elementConfigId": 101003079,
+                      "pathId": "-3716196104709416648",
+                      "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003079.asset",
+                      "scriptPathId": "4171700675270990854",
+                      "scriptTypeCandidate": {
+                        "status": "field-signature-matched",
+                        "confidence": "medium",
+                        "className": "TBuffElementParams",
+                        "sourceLineRange": "dump.cs:394732-394799"
+                      },
+                      "elementName": "�̻�debuff ����ǣ�",
+                      "describe": "����8��",
+                      "formulaParams": {
+                        "function_1": 1,
+                        "function_2": 0
+                      },
+                      "timingFields": {
+                        "time": 10000,
+                        "frequencyType": 0,
+                        "frequency": 1
+                      }
+                    }
+                  }
+                ],
                 "damageElementFieldMappingCount": 0,
                 "damageElementElementConfigIds": [],
                 "damageElementPathIds": [],
@@ -42108,6 +43055,10 @@
             "damageElementPathIds": [
               "-668735999631003170",
               "7736637370449973165"
+            ],
+            "formulaParamBuffReferenceHitGroupCount": 1,
+            "formulaParamBuffReferenceIds": [
+              101003079
             ]
           },
           "targetSkillControls": [
@@ -66652,6 +67603,40 @@
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
                 "damageElementFieldMappingStatus": "damage-element-field-mappings-found",
+                "externalElementObjectReferenceCount": 4,
+                "externalElementObjectReferences": [
+                  {
+                    "elementConfigId": 109001081,
+                    "pathId": "3476557355496561381",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001081.asset"
+                  },
+                  {
+                    "elementConfigId": 109001138,
+                    "pathId": "2328920594663475271",
+                    "scriptPathId": "8877289764366981625",
+                    "scriptTypeClassName": "TFxElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001138.asset"
+                  },
+                  {
+                    "elementConfigId": 109001307,
+                    "pathId": "2808556551677342926",
+                    "scriptPathId": "7293914887559091286",
+                    "scriptTypeClassName": "TFreezeFrameElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001307.asset"
+                  },
+                  {
+                    "elementConfigId": 109001306,
+                    "pathId": "-4052262175632216603",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001306.asset"
+                  }
+                ],
+                "formulaParamBuffReferenceCount": 0,
+                "formulaParamBuffReferenceIds": [],
+                "formulaParamBuffReferences": [],
                 "damageElementFieldMappingCount": 2,
                 "damageElementElementConfigIds": [
                   109001081,
@@ -67431,6 +68416,82 @@
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
                 "damageElementFieldMappingStatus": "damage-element-field-mappings-found",
+                "externalElementObjectReferenceCount": 5,
+                "externalElementObjectReferences": [
+                  {
+                    "elementConfigId": 109001186,
+                    "pathId": "6247013104382573178",
+                    "scriptPathId": "7293914887559091286",
+                    "scriptTypeClassName": "TFreezeFrameElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001186.asset"
+                  },
+                  {
+                    "elementConfigId": 109001187,
+                    "pathId": "-7040675187909744264",
+                    "scriptPathId": "8877289764366981625",
+                    "scriptTypeClassName": "TFxElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001187.asset"
+                  },
+                  {
+                    "elementConfigId": 109001018,
+                    "pathId": "-1935126778876515862",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001018.asset"
+                  },
+                  {
+                    "elementConfigId": 109001191,
+                    "pathId": "-1879432991646952387",
+                    "scriptPathId": "8877289764366981625",
+                    "scriptTypeClassName": "TFxElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001191.asset",
+                    "formulaParamBridgeCandidate": {
+                      "status": "formula-param-buff-reference-found",
+                      "scriptPathId": "8877289764366981625",
+                      "scriptTypeCandidateStatus": "script-type-candidate-found",
+                      "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+                      "confidence": "low",
+                      "referencedBuffIds": [
+                        150
+                      ],
+                      "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+                    },
+                    "formulaParamBuffReferenceIds": [
+                      150
+                    ]
+                  },
+                  {
+                    "elementConfigId": 109001137,
+                    "pathId": "8630965654977666809",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001137.asset"
+                  }
+                ],
+                "formulaParamBuffReferenceCount": 1,
+                "formulaParamBuffReferenceIds": [
+                  150
+                ],
+                "formulaParamBuffReferences": [
+                  {
+                    "sourceElementConfigId": 109001191,
+                    "sourcePathId": "-1879432991646952387",
+                    "buffId": 150,
+                    "status": "buff-info-found-buff-element-object-missing",
+                    "relationStatus": "formula-param-value-matches-buff-info-id",
+                    "formulaParamSlots": [
+                      1
+                    ],
+                    "buffInfo": {
+                      "id": 150,
+                      "name": "火属性调谐",
+                      "description": "",
+                      "type": 3,
+                      "tips": "",
+                      "icon": "tex_battle_icon_huo.png"
+                    }
+                  }
+                ],
                 "damageElementFieldMappingCount": 2,
                 "damageElementElementConfigIds": [
                   109001018,
@@ -68628,6 +69689,40 @@
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
                 "damageElementFieldMappingStatus": "damage-element-field-mappings-found",
+                "externalElementObjectReferenceCount": 4,
+                "externalElementObjectReferences": [
+                  {
+                    "elementConfigId": 109001202,
+                    "pathId": "2958776843239585724",
+                    "scriptPathId": "7293914887559091286",
+                    "scriptTypeClassName": "TFreezeFrameElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001202.asset"
+                  },
+                  {
+                    "elementConfigId": 109001203,
+                    "pathId": "-4176157692360296989",
+                    "scriptPathId": "8877289764366981625",
+                    "scriptTypeClassName": "TFxElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001203.asset"
+                  },
+                  {
+                    "elementConfigId": 109001280,
+                    "pathId": "293127652159246957",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001280.asset"
+                  },
+                  {
+                    "elementConfigId": 109001134,
+                    "pathId": "6124215426467374725",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001134.asset"
+                  }
+                ],
+                "formulaParamBuffReferenceCount": 0,
+                "formulaParamBuffReferenceIds": [],
+                "formulaParamBuffReferences": [],
                 "damageElementFieldMappingCount": 2,
                 "damageElementElementConfigIds": [
                   109001134,
@@ -69899,6 +70994,68 @@
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
                 "damageElementFieldMappingStatus": "damage-element-field-mappings-found",
+                "externalElementObjectReferenceCount": 8,
+                "externalElementObjectReferences": [
+                  {
+                    "elementConfigId": 109001021,
+                    "pathId": "610497198600338323",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001021.asset"
+                  },
+                  {
+                    "elementConfigId": 109001329,
+                    "pathId": "-6207187402311472512",
+                    "scriptPathId": "8877289764366981625",
+                    "scriptTypeClassName": "TFxElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001329.asset"
+                  },
+                  {
+                    "elementConfigId": 109001212,
+                    "pathId": "-7558321500286744358",
+                    "scriptPathId": "8877289764366981625",
+                    "scriptTypeClassName": "TFxElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001212.asset"
+                  },
+                  {
+                    "elementConfigId": 109001135,
+                    "pathId": "4184198133427158765",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001135.asset"
+                  },
+                  {
+                    "elementConfigId": 109001303,
+                    "pathId": "2794308730194577100",
+                    "scriptPathId": "7293914887559091286",
+                    "scriptTypeClassName": "TFreezeFrameElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001303.asset"
+                  },
+                  {
+                    "elementConfigId": 109001362,
+                    "pathId": "-6711007604037179960",
+                    "scriptPathId": "-5846053185818197805",
+                    "scriptTypeClassName": "unknown",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001362.asset"
+                  },
+                  {
+                    "elementConfigId": 109001330,
+                    "pathId": "1421320253435570920",
+                    "scriptPathId": "8877289764366981625",
+                    "scriptTypeClassName": "TFxElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001330.asset"
+                  },
+                  {
+                    "elementConfigId": 109001328,
+                    "pathId": "-1163125552202303495",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001328.asset"
+                  }
+                ],
+                "formulaParamBuffReferenceCount": 0,
+                "formulaParamBuffReferenceIds": [],
+                "formulaParamBuffReferences": [],
                 "damageElementFieldMappingCount": 3,
                 "damageElementElementConfigIds": [
                   109001021,
@@ -71426,6 +72583,96 @@
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
                 "damageElementFieldMappingStatus": "damage-element-field-mappings-found",
+                "externalElementObjectReferenceCount": 7,
+                "externalElementObjectReferences": [
+                  {
+                    "elementConfigId": 109001215,
+                    "pathId": "-6739523999625231858",
+                    "scriptPathId": "7293914887559091286",
+                    "scriptTypeClassName": "TFreezeFrameElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001215.asset"
+                  },
+                  {
+                    "elementConfigId": 109001216,
+                    "pathId": "4932614284631475642",
+                    "scriptPathId": "8877289764366981625",
+                    "scriptTypeClassName": "TFxElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001216.asset"
+                  },
+                  {
+                    "elementConfigId": 109001313,
+                    "pathId": "-4067071381797012601",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001313.asset"
+                  },
+                  {
+                    "elementConfigId": 109001285,
+                    "pathId": "5068827089459744812",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001285.asset"
+                  },
+                  {
+                    "elementConfigId": 109001220,
+                    "pathId": "6547055219106824928",
+                    "scriptPathId": "8877289764366981625",
+                    "scriptTypeClassName": "TFxElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001220.asset",
+                    "formulaParamBridgeCandidate": {
+                      "status": "formula-param-buff-reference-found",
+                      "scriptPathId": "8877289764366981625",
+                      "scriptTypeCandidateStatus": "script-type-candidate-found",
+                      "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+                      "confidence": "low",
+                      "referencedBuffIds": [
+                        250
+                      ],
+                      "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+                    },
+                    "formulaParamBuffReferenceIds": [
+                      250
+                    ]
+                  },
+                  {
+                    "elementConfigId": 109001219,
+                    "pathId": "-8433193966435274326",
+                    "scriptPathId": "7293914887559091286",
+                    "scriptTypeClassName": "TFreezeFrameElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001219.asset"
+                  },
+                  {
+                    "elementConfigId": 109001117,
+                    "pathId": "2602386345610884148",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001117.asset"
+                  }
+                ],
+                "formulaParamBuffReferenceCount": 1,
+                "formulaParamBuffReferenceIds": [
+                  250
+                ],
+                "formulaParamBuffReferences": [
+                  {
+                    "sourceElementConfigId": 109001220,
+                    "sourcePathId": "6547055219106824928",
+                    "buffId": 250,
+                    "status": "buff-info-found-buff-element-object-missing",
+                    "relationStatus": "formula-param-value-matches-buff-info-id",
+                    "formulaParamSlots": [
+                      1
+                    ],
+                    "buffInfo": {
+                      "id": 250,
+                      "name": "雷属性调谐",
+                      "description": "",
+                      "type": 3,
+                      "tips": "",
+                      "icon": "tex_battle_icon_lei.png"
+                    }
+                  }
+                ],
                 "damageElementFieldMappingCount": 3,
                 "damageElementElementConfigIds": [
                   109001117,
@@ -71721,6 +72968,11 @@
               "610497198600338323",
               "6124215426467374725",
               "8630965654977666809"
+            ],
+            "formulaParamBuffReferenceHitGroupCount": 2,
+            "formulaParamBuffReferenceIds": [
+              150,
+              250
             ]
           },
           "targetSkillControls": [
@@ -82645,6 +83897,40 @@
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
                 "damageElementFieldMappingStatus": "damage-element-field-mappings-found",
+                "externalElementObjectReferenceCount": 4,
+                "externalElementObjectReferences": [
+                  {
+                    "elementConfigId": 109001302,
+                    "pathId": "2642523047740593292",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001302.asset"
+                  },
+                  {
+                    "elementConfigId": 109001312,
+                    "pathId": "-8727059443864412643",
+                    "scriptPathId": "7293914887559091286",
+                    "scriptTypeClassName": "TFreezeFrameElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001312.asset"
+                  },
+                  {
+                    "elementConfigId": 109001253,
+                    "pathId": "2740651767650299388",
+                    "scriptPathId": "8877289764366981625",
+                    "scriptTypeClassName": "TFxElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001253.asset"
+                  },
+                  {
+                    "elementConfigId": 109001359,
+                    "pathId": "-7506081561353179437",
+                    "scriptPathId": "-5846053185818197805",
+                    "scriptTypeClassName": "unknown",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001359.asset"
+                  }
+                ],
+                "formulaParamBuffReferenceCount": 0,
+                "formulaParamBuffReferenceIds": [],
+                "formulaParamBuffReferences": [],
                 "damageElementFieldMappingCount": 1,
                 "damageElementElementConfigIds": [
                   109001302
@@ -82748,7 +84034,9 @@
             ],
             "damageElementPathIds": [
               "2642523047740593292"
-            ]
+            ],
+            "formulaParamBuffReferenceHitGroupCount": 0,
+            "formulaParamBuffReferenceIds": []
           },
           "targetSkillControls": [
             {
@@ -94917,6 +96205,26 @@
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
                 "damageElementFieldMappingStatus": "damage-element-field-mappings-found",
+                "externalElementObjectReferenceCount": 2,
+                "externalElementObjectReferences": [
+                  {
+                    "elementConfigId": 109001349,
+                    "pathId": "-7737634469737456931",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001349.asset"
+                  },
+                  {
+                    "elementConfigId": 109001350,
+                    "pathId": "-3956021691739248290",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_109001350.asset"
+                  }
+                ],
+                "formulaParamBuffReferenceCount": 0,
+                "formulaParamBuffReferenceIds": [],
+                "formulaParamBuffReferences": [],
                 "damageElementFieldMappingCount": 2,
                 "damageElementElementConfigIds": [
                   109001349,
@@ -95117,7 +96425,9 @@
             "damageElementPathIds": [
               "-3956021691739248290",
               "-7737634469737456931"
-            ]
+            ],
+            "formulaParamBuffReferenceHitGroupCount": 0,
+            "formulaParamBuffReferenceIds": []
           },
           "targetSkillControls": [
             {
@@ -103567,6 +104877,26 @@
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
                 "damageElementFieldMappingStatus": "damage-element-field-mappings-found",
+                "externalElementObjectReferenceCount": 2,
+                "externalElementObjectReferences": [
+                  {
+                    "elementConfigId": 101003025,
+                    "pathId": "-4373351994372761995",
+                    "scriptPathId": "8877289764366981625",
+                    "scriptTypeClassName": "TFxElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003025.asset"
+                  },
+                  {
+                    "elementConfigId": 101003046,
+                    "pathId": "7736637370449973165",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003046.asset"
+                  }
+                ],
+                "formulaParamBuffReferenceCount": 0,
+                "formulaParamBuffReferenceIds": [],
+                "formulaParamBuffReferences": [],
                 "damageElementFieldMappingCount": 1,
                 "damageElementElementConfigIds": [
                   101003046
@@ -103715,6 +105045,19 @@
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
                 "damageElementFieldMappingStatus": "damage-element-field-mappings-found",
+                "externalElementObjectReferenceCount": 1,
+                "externalElementObjectReferences": [
+                  {
+                    "elementConfigId": 101003037,
+                    "pathId": "-668735999631003170",
+                    "scriptPathId": "3156599909451817364",
+                    "scriptTypeClassName": "TDamageElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003037.asset"
+                  }
+                ],
+                "formulaParamBuffReferenceCount": 0,
+                "formulaParamBuffReferenceIds": [],
+                "formulaParamBuffReferences": [],
                 "damageElementFieldMappingCount": 1,
                 "damageElementElementConfigIds": [
                   101003037
@@ -103892,6 +105235,26 @@
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
                 "damageElementFieldMappingStatus": "resource-map-element-refs-found-damage-element-fields-missing",
+                "externalElementObjectReferenceCount": 2,
+                "externalElementObjectReferences": [
+                  {
+                    "elementConfigId": 101003076,
+                    "pathId": "-4280404759535193379",
+                    "scriptPathId": "8877289764366981625",
+                    "scriptTypeClassName": "TFxElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003076.asset"
+                  },
+                  {
+                    "elementConfigId": 101003180,
+                    "pathId": "1572718271109451571",
+                    "scriptPathId": "5576338162890961044",
+                    "scriptTypeClassName": "unknown",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003180.asset"
+                  }
+                ],
+                "formulaParamBuffReferenceCount": 0,
+                "formulaParamBuffReferenceIds": [],
+                "formulaParamBuffReferences": [],
                 "damageElementFieldMappingCount": 0,
                 "damageElementElementConfigIds": [],
                 "damageElementPathIds": [],
@@ -104010,7 +105373,93 @@
                 "confidence": "medium",
                 "bindingStatus": "normal-attack-hit-candidate-unconfirmed",
                 "applied": false,
-                "damageElementFieldMappingStatus": "resource-map-element-refs-found-damage-element-fields-missing",
+                "damageElementFieldMappingStatus": "resource-map-element-buff-reference-found-damage-element-fields-missing",
+                "externalElementObjectReferenceCount": 3,
+                "externalElementObjectReferences": [
+                  {
+                    "elementConfigId": 101003101,
+                    "pathId": "-3406483301161857991",
+                    "scriptPathId": "7293914887559091286",
+                    "scriptTypeClassName": "TFreezeFrameElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003101.asset"
+                  },
+                  {
+                    "elementConfigId": 101003038,
+                    "pathId": "5614799294546611630",
+                    "scriptPathId": "8877289764366981625",
+                    "scriptTypeClassName": "TFxElementParams",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003038.asset"
+                  },
+                  {
+                    "elementConfigId": 101003181,
+                    "pathId": "-1285658850712902661",
+                    "scriptPathId": "5576338162890961044",
+                    "scriptTypeClassName": "unknown",
+                    "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003181.asset",
+                    "formulaParamBridgeCandidate": {
+                      "status": "formula-param-buff-reference-found",
+                      "scriptPathId": "5576338162890961044",
+                      "scriptTypeCandidateStatus": "script-type-candidate-missing",
+                      "inferredRole": "buff-trigger-or-apply-bridge-candidate",
+                      "confidence": "medium",
+                      "referencedBuffIds": [
+                        101003079
+                      ],
+                      "note": "The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement."
+                    },
+                    "formulaParamBuffReferenceIds": [
+                      101003079
+                    ]
+                  }
+                ],
+                "formulaParamBuffReferenceCount": 1,
+                "formulaParamBuffReferenceIds": [
+                  101003079
+                ],
+                "formulaParamBuffReferences": [
+                  {
+                    "sourceElementConfigId": 101003181,
+                    "sourcePathId": "-1285658850712902661",
+                    "buffId": 101003079,
+                    "status": "buff-info-and-buff-element-object-found",
+                    "relationStatus": "formula-param-value-matches-buff-info-id",
+                    "formulaParamSlots": [
+                      2,
+                      13
+                    ],
+                    "buffInfo": {
+                      "id": 101003079,
+                      "name": "焰火",
+                      "description": "受到特定伤害时触发爆炸",
+                      "type": 2,
+                      "tips": "焰火",
+                      "icon": "tex_icon_buff_101003_Skill0.png"
+                    },
+                    "buffElementObject": {
+                      "elementConfigId": 101003079,
+                      "pathId": "-3716196104709416648",
+                      "containerPath": "Assets/ResourcesAssets/Config/Battle/Element/Assets/ast_101003079.asset",
+                      "scriptPathId": "4171700675270990854",
+                      "scriptTypeCandidate": {
+                        "status": "field-signature-matched",
+                        "confidence": "medium",
+                        "className": "TBuffElementParams",
+                        "sourceLineRange": "dump.cs:394732-394799"
+                      },
+                      "elementName": "�̻�debuff ����ǣ�",
+                      "describe": "����8��",
+                      "formulaParams": {
+                        "function_1": 1,
+                        "function_2": 0
+                      },
+                      "timingFields": {
+                        "time": 10000,
+                        "frequencyType": 0,
+                        "frequency": 1
+                      }
+                    }
+                  }
+                ],
                 "damageElementFieldMappingCount": 0,
                 "damageElementElementConfigIds": [],
                 "damageElementPathIds": [],
@@ -104028,6 +105477,10 @@
             "damageElementPathIds": [
               "-668735999631003170",
               "7736637370449973165"
+            ],
+            "formulaParamBuffReferenceHitGroupCount": 1,
+            "formulaParamBuffReferenceIds": [
+              101003079
             ]
           },
           "targetSkillControls": [

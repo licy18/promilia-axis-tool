@@ -426,6 +426,10 @@ describe('generated AzPr data', () => {
         requestedPathIds: 97,
         resolvedPathIds: 97,
         unresolvedPathIds: 0,
+        formulaParamBuffReferenceObjects: 15,
+        formulaParamBuffReferences: 15,
+        formulaParamBuffReferenceResolvedObjects: 1,
+        unknownScriptBuffReferenceObjects: 7,
         sourceSkillCount: 9,
         targetSkillCount: 9,
       },
@@ -473,6 +477,52 @@ describe('generated AzPr data', () => {
                 recoverInterval: 9999,
               }),
               mediaPackNames: ['11_109001_133'],
+            }),
+          ]),
+        }),
+        expect.objectContaining({
+          skillId: 10100305,
+          status: 'element-objects-resolved',
+          scriptClassCounts: expect.objectContaining({
+            unknown: 1,
+          }),
+          objects: expect.arrayContaining([
+            expect.objectContaining({
+              elementConfigId: 101003181,
+              scriptPathId: '5576338162890961044',
+              scriptTypeCandidate: null,
+              formulaParamBridgeCandidate: expect.objectContaining({
+                status: 'formula-param-buff-reference-found',
+                inferredRole: 'buff-trigger-or-apply-bridge-candidate',
+                referencedBuffIds: [101003079],
+              }),
+              formulaParamReferenceEvidence: expect.objectContaining({
+                status: 'formula-param-buff-references-found',
+                buffReferenceIds: [101003079],
+                references: [
+                  expect.objectContaining({
+                    buffId: 101003079,
+                    formulaParamSlots: [2, 13],
+                    status: 'buff-info-and-buff-element-object-found',
+                    buffInfo: expect.objectContaining({
+                      name: '焰火',
+                      description: '受到特定伤害时触发爆炸',
+                      type: 2,
+                      tips: '焰火',
+                    }),
+                    buffElementObject: expect.objectContaining({
+                      elementConfigId: 101003079,
+                      scriptTypeCandidate: expect.objectContaining({
+                        className: 'TBuffElementParams',
+                      }),
+                      timingFields: expect.objectContaining({
+                        time: 10000,
+                        frequency: 1,
+                      }),
+                    }),
+                  }),
+                ],
+              }),
             }),
           ]),
         }),
@@ -801,6 +851,8 @@ describe('generated AzPr data', () => {
       damageElementMappedHitGroupCount: 2,
       damageElementFieldMappingCount: 2,
       damageElementElementConfigIds: [101003037, 101003046],
+      formulaParamBuffReferenceHitGroupCount: 1,
+      formulaParamBuffReferenceIds: [101003079],
     });
     expect(hanyouyouHitChain.hitGroups).toEqual([
       expect.objectContaining({
@@ -840,8 +892,22 @@ describe('generated AzPr data', () => {
         hpTimelineCandidateCount: 0,
         resourceMapElementRefCount: 3,
         damageElementFieldMappingStatus:
-          'resource-map-element-refs-found-damage-element-fields-missing',
+          'resource-map-element-buff-reference-found-damage-element-fields-missing',
         damageElementFieldMappingCount: 0,
+        externalElementObjectReferenceCount: 3,
+        formulaParamBuffReferenceCount: 1,
+        formulaParamBuffReferenceIds: [101003079],
+        formulaParamBuffReferences: [
+          expect.objectContaining({
+            sourceElementConfigId: 101003181,
+            buffId: 101003079,
+            formulaParamSlots: [2, 13],
+            buffInfo: expect.objectContaining({
+              name: '焰火',
+              description: '受到特定伤害时触发爆炸',
+            }),
+          }),
+        ],
       }),
     ]);
     expect(evidence.damageElementFieldMappingEvidence.skills).toEqual(

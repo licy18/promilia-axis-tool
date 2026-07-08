@@ -251,6 +251,22 @@ const sourceFiles = {
     'Table',
     'lang_battle_info.json'
   ),
+  buffInfo: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'buff_info.json'
+  ),
+  buffInfoLang: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesLang',
+    'chs',
+    'Table',
+    'lang_buff_info.json'
+  ),
   roleAttributeWorkbook: path.join(
     sourceRoot,
     'BWiki',
@@ -682,6 +698,8 @@ const [
   talentRuneTable,
   battleInfoTable,
   battleInfoLangTable,
+  buffInfoTable,
+  buffInfoLangTable,
 ] = await Promise.all([
   readJson(sourceFiles.elementSystem),
   readJson(sourceFiles.kibos),
@@ -709,10 +727,16 @@ const [
   readJson(sourceFiles.talentRune),
   readJson(sourceFiles.battleInfo),
   readJson(sourceFiles.battleInfoLang),
+  readJson(sourceFiles.buffInfo),
+  readJson(sourceFiles.buffInfoLang),
 ]);
 
 const battleInfoLang = mapRowsById(battleInfoLangTable.rows);
 const skillLevelLang = mapRowsById(skillLevelLangTable.rows);
+const buffInfoLang = mapRowsByIdWithLargeNumericNeighbors(
+  buffInfoLangTable.rows
+);
+const buffInfoById = buildBuffInfoById(buffInfoTable, buffInfoLang);
 const attributeInfoById = new Map(
   battleInfoTable.rows.map(row => [
     Number(row.attrVal),
@@ -796,7 +820,10 @@ const skillAssetEvidence = await buildSkillAssetEvidenceIndex({
     skillLevelTable,
     skillsubLogicTable,
     skillsubEleValueTable,
+    buffInfoTable,
+    buffInfoLangTable,
   },
+  buffInfoById,
 });
 const characterAttributePanels = buildCharacterAttributePanels({
   characters,
@@ -1620,6 +1647,63 @@ function mapRowsById(rows = []) {
   return new Map(rows.map(row => [String(row.id), row]));
 }
 
+function mapRowsByIdWithLargeNumericNeighbors(rows = []) {
+  const result = mapRowsById(rows);
+  for (const row of rows) {
+    const id = numberOrNull(row.id);
+    if (!Number.isFinite(id) || Math.abs(id) <= Number.MAX_SAFE_INTEGER) {
+      continue;
+    }
+    const rounded = BigInt(String(Math.trunc(id)));
+    for (let offset = -256; offset <= 256; offset += 1) {
+      const key = String(rounded + BigInt(offset));
+      if (!result.has(key)) {
+        result.set(key, row);
+      }
+    }
+  }
+  return result;
+}
+
+function buildBuffInfoById(buffInfoTable, buffInfoLang) {
+  return new Map(
+    (buffInfoTable?.rows ?? [])
+      .map(row => {
+        const id = Number(row.id);
+        if (!Number.isFinite(id)) {
+          return null;
+        }
+        return [
+          id,
+          {
+            id,
+            name: resolveLangValue(buffInfoLang, row.name),
+            description: resolveLangValue(buffInfoLang, row.desc),
+            type: numberOrNull(row.type),
+            tips: resolveLangValue(buffInfoLang, row.tips),
+            icon: assetFileName(row.unitId),
+            stages: numberOrNull(row.stages),
+            times: numberOrNull(row.times),
+            displayPriority: numberOrNull(row.displaypriority),
+            source: {
+              table: normalizePath(sourceFiles.buffInfo),
+              langTable: normalizePath(sourceFiles.buffInfoLang),
+            },
+          },
+        ];
+      })
+      .filter(Boolean)
+  );
+}
+
+function resolveLangValue(langRowsById, id) {
+  if (id == null || id === '') {
+    return null;
+  }
+  const key = String(id);
+  return langRowsById?.get(key)?.value ?? key;
+}
+
 function buildSkillLevelCrossCheck({
   skills,
   skillLevelTable,
@@ -2186,6 +2270,7 @@ async function buildSkillAssetEvidenceIndex({
   skillLogicIndex,
   elementFormulaTable,
   tables,
+  buffInfoById,
 }) {
   const currentSkillIds = new Set(skills.map(skill => Number(skill.id)));
   const currentCharacterIds = new Set(
@@ -2285,7 +2370,10 @@ async function buildSkillAssetEvidenceIndex({
   ).length;
   const elementTypeCatalogEvidence = buildSkillElementTypeCatalogEvidence();
   const externalElementObjectEvidence =
-    await buildExternalElementObjectEvidence(currentSkillControlEvidence);
+    await buildExternalElementObjectEvidence(
+      currentSkillControlEvidence,
+      buffInfoById
+    );
   const damageElementFieldMappingEvidence =
     buildDamageElementFieldMappingEvidence({
       externalElementObjectEvidence,
@@ -2299,7 +2387,8 @@ async function buildSkillAssetEvidenceIndex({
     });
   attachNormalAttackHitDamageElementEvidence(
     currentSkillControlEvidence,
-    damageElementFieldMappingEvidence
+    damageElementFieldMappingEvidence,
+    externalElementObjectEvidence
   );
 
   return {
@@ -2421,7 +2510,10 @@ function buildSkillElementTypeCatalogEvidence() {
   };
 }
 
-async function buildExternalElementObjectEvidence(currentSkillControlEvidence) {
+async function buildExternalElementObjectEvidence(
+  currentSkillControlEvidence,
+  buffInfoById
+) {
   const skillIds = currentSkillControlEvidence
     .filter(
       item =>
@@ -2505,7 +2597,10 @@ async function buildExternalElementObjectEvidence(currentSkillControlEvidence) {
         windowsHide: true,
       }
     );
-    const parsed = JSON.parse(stdout);
+    const parsed = enrichExternalElementObjectReferenceEvidence(
+      JSON.parse(stdout),
+      buffInfoById
+    );
     parsed.summary = {
       ...(parsed.summary ?? {}),
       sourceSkillCount: uniqueSkillIds.length,
@@ -2535,6 +2630,160 @@ async function buildExternalElementObjectEvidence(currentSkillControlEvidence) {
       skills: [],
     };
   }
+}
+
+function enrichExternalElementObjectReferenceEvidence(evidence, buffInfoById) {
+  const buffElementObjectById = buildBuffElementObjectIndex(evidence);
+  let formulaParamBuffReferenceObjects = 0;
+  let formulaParamBuffReferences = 0;
+  let formulaParamBuffReferenceResolvedObjects = 0;
+  let unknownScriptBuffReferenceObjects = 0;
+
+  for (const skill of evidence?.skills ?? []) {
+    for (const object of skill.objects ?? []) {
+      const referenceEvidence = buildFormulaParamReferenceEvidence(
+        object,
+        buffInfoById,
+        buffElementObjectById
+      );
+      if (!referenceEvidence) {
+        continue;
+      }
+      object.formulaParamReferenceEvidence = referenceEvidence;
+      object.formulaParamBridgeCandidate = buildFormulaParamBridgeCandidate(
+        object,
+        referenceEvidence
+      );
+      formulaParamBuffReferenceObjects += 1;
+      formulaParamBuffReferences += referenceEvidence.buffReferenceCount;
+      if (
+        referenceEvidence.references.some(
+          ref => ref.status === 'buff-info-and-buff-element-object-found'
+        )
+      ) {
+        formulaParamBuffReferenceResolvedObjects += 1;
+      }
+      if (!object.scriptTypeCandidate) {
+        unknownScriptBuffReferenceObjects += 1;
+      }
+    }
+  }
+
+  evidence.summary = {
+    ...(evidence.summary ?? {}),
+    formulaParamBuffReferenceObjects,
+    formulaParamBuffReferences,
+    formulaParamBuffReferenceResolvedObjects,
+    unknownScriptBuffReferenceObjects,
+  };
+  return evidence;
+}
+
+function buildBuffElementObjectIndex(evidence) {
+  const items = (evidence?.skills ?? []).flatMap(skill =>
+    (skill.objects ?? [])
+      .filter(
+        object => object.scriptTypeCandidate?.className === 'TBuffElementParams'
+      )
+      .map(object => [Number(object.elementConfigId), object])
+  );
+  return new Map(items.filter(([id]) => Number.isFinite(id)));
+}
+
+function buildFormulaParamReferenceEvidence(
+  object,
+  buffInfoById,
+  buffElementObjectById
+) {
+  const formulaParamValues = normalizeNumberArray(
+    object?.formulaParams?.formulaParamValues ?? object?.functionParams
+  );
+  if (formulaParamValues.length === 0 || !buffInfoById?.size) {
+    return null;
+  }
+
+  const refsByBuffId = new Map();
+  formulaParamValues.forEach((value, index) => {
+    const buffId = numberOrNull(value);
+    if (!Number.isFinite(buffId) || !buffInfoById.has(buffId)) {
+      return;
+    }
+    const item = refsByBuffId.get(buffId) ?? {
+      buffId,
+      formulaParamSlots: [],
+      formulaParamValues: [],
+    };
+    item.formulaParamSlots.push(index + 1);
+    item.formulaParamValues.push(buffId);
+    refsByBuffId.set(buffId, item);
+  });
+
+  const references = [...refsByBuffId.values()].map(ref => {
+    const buffInfo = buffInfoById.get(ref.buffId);
+    const buffElementObject = buffElementObjectById.get(ref.buffId);
+    return compactObject({
+      ...ref,
+      formulaParamValues: uniqueNumbers(ref.formulaParamValues),
+      status: buffElementObject
+        ? 'buff-info-and-buff-element-object-found'
+        : 'buff-info-found-buff-element-object-missing',
+      relationStatus: 'formula-param-value-matches-buff-info-id',
+      buffInfo,
+      buffElementObject: compactReferencedBuffElementObject(buffElementObject),
+    });
+  });
+
+  if (references.length === 0) {
+    return null;
+  }
+
+  return {
+    status: 'formula-param-buff-references-found',
+    sourceFields: ['formulaParams.formulaParamValues'],
+    inferredRole: 'buff-trigger-or-apply-bridge-candidate',
+    buffReferenceCount: references.length,
+    buffReferenceIds: uniqueNumbers(references.map(ref => ref.buffId)),
+    references,
+    applied: false,
+    calculationBoundary:
+      'Formula parameter values match buff_info ids only; this identifies a buff bridge candidate, not direct HP/toughness/self-energy formula application.',
+  };
+}
+
+function compactReferencedBuffElementObject(object) {
+  if (!object) {
+    return null;
+  }
+  return compactObject({
+    elementConfigId: numberOrNull(object.elementConfigId),
+    pathId: object.pathId ?? null,
+    containerPath: object.containerPath ?? null,
+    scriptPathId: object.scriptPathId ?? null,
+    scriptTypeCandidate: compactScriptTypeCandidate(object.scriptTypeCandidate),
+    elementName: object.elementName ?? null,
+    describe: object.describe ?? null,
+    formulaParams: object.formulaParams
+      ? {
+          function_1: numberOrNull(object.formulaParams.function_1),
+          function_2: numberOrNull(object.formulaParams.function_2),
+        }
+      : null,
+    timingFields: object.timingFields ?? null,
+  });
+}
+
+function buildFormulaParamBridgeCandidate(object, referenceEvidence) {
+  return compactObject({
+    status: 'formula-param-buff-reference-found',
+    scriptPathId: object.scriptPathId ?? null,
+    scriptTypeCandidateStatus: object.scriptTypeCandidate
+      ? 'script-type-candidate-found'
+      : 'script-type-candidate-missing',
+    inferredRole: 'buff-trigger-or-apply-bridge-candidate',
+    confidence: object.scriptTypeCandidate ? 'low' : 'medium',
+    referencedBuffIds: referenceEvidence.buffReferenceIds,
+    note: 'The exact element script type is still unresolved; formulaParams contain buff_info ids, so this object is tracked as a buff bridge candidate instead of a DamageElement.',
+  });
 }
 
 function hasTraceableElementRefs(skillControlEvidence) {
@@ -2703,7 +2952,8 @@ function buildDamageElementFieldMappingEvidence({
 
 function attachNormalAttackHitDamageElementEvidence(
   currentSkillControlEvidence,
-  damageElementFieldMappingEvidence
+  damageElementFieldMappingEvidence,
+  externalElementObjectEvidence
 ) {
   const mappingBySkillId = new Map();
   for (const skill of damageElementFieldMappingEvidence?.skills ?? []) {
@@ -2722,6 +2972,9 @@ function attachNormalAttackHitDamageElementEvidence(
       byRoundedPathId,
     });
   }
+  const externalObjectBySkillId = buildExternalElementObjectIndexes(
+    externalElementObjectEvidence
+  );
 
   for (const item of currentSkillControlEvidence ?? []) {
     const candidate =
@@ -2740,6 +2993,22 @@ function attachNormalAttackHitDamageElementEvidence(
         hitGroup,
         mappingBySkillId
       );
+      const externalObjects = matchHitGroupExternalElementObjects(
+        hitGroup,
+        externalObjectBySkillId
+      );
+      const formulaParamBuffReferences = uniqueByKey(
+        externalObjects.flatMap(
+          object =>
+            object.formulaParamReferenceEvidence?.references?.map(ref => ({
+              ...ref,
+              sourceElementConfigId: numberOrNull(object.elementConfigId),
+              sourcePathId: object.pathId ?? null,
+            })) ?? []
+        ),
+        ref =>
+          `${ref.sourceElementConfigId ?? ''}|${ref.sourcePathId ?? ''}|${ref.buffId ?? ''}`
+      );
       if (mappings.length > 0) {
         mappedHitGroupCount += 1;
       }
@@ -2751,9 +3020,23 @@ function attachNormalAttackHitDamageElementEvidence(
       hitGroup.damageElementFieldMappingStatus =
         mappings.length > 0
           ? 'damage-element-field-mappings-found'
-          : (hitGroup.elementBaseDataRefs ?? []).length > 0
-            ? 'resource-map-element-refs-found-damage-element-fields-missing'
-            : 'damage-element-field-mappings-missing';
+          : formulaParamBuffReferences.length > 0
+            ? 'resource-map-element-buff-reference-found-damage-element-fields-missing'
+            : (hitGroup.elementBaseDataRefs ?? []).length > 0
+              ? 'resource-map-element-refs-found-damage-element-fields-missing'
+              : 'damage-element-field-mappings-missing';
+      hitGroup.externalElementObjectReferenceCount = externalObjects.length;
+      hitGroup.externalElementObjectReferences = externalObjects.map(
+        compactHitExternalElementObjectReference
+      );
+      hitGroup.formulaParamBuffReferenceCount =
+        formulaParamBuffReferences.length;
+      hitGroup.formulaParamBuffReferenceIds = uniqueNumbers(
+        formulaParamBuffReferences.map(ref => ref.buffId)
+      );
+      hitGroup.formulaParamBuffReferences = formulaParamBuffReferences.map(
+        compactHitFormulaParamBuffReference
+      );
       hitGroup.damageElementFieldMappingCount = mappings.length;
       hitGroup.damageElementElementConfigIds = uniqueNumbers(
         mappings.map(mapping => mapping.elementConfigId)
@@ -2782,7 +3065,102 @@ function attachNormalAttackHitDamageElementEvidence(
       mappedElementConfigIds
     );
     candidate.damageElementPathIds = uniqueStrings(mappedPathIds);
+    candidate.formulaParamBuffReferenceHitGroupCount =
+      candidate.hitGroups.filter(
+        hitGroup =>
+          (numberOrNull(hitGroup.formulaParamBuffReferenceCount) ?? 0) > 0
+      ).length;
+    candidate.formulaParamBuffReferenceIds = uniqueNumbers(
+      candidate.hitGroups.flatMap(
+        hitGroup => hitGroup.formulaParamBuffReferenceIds ?? []
+      )
+    );
   }
+}
+
+function buildExternalElementObjectIndexes(externalElementObjectEvidence) {
+  const bySkillId = new Map();
+  for (const skill of externalElementObjectEvidence?.skills ?? []) {
+    const byPathId = new Map();
+    const byRoundedPathId = new Map();
+    for (const object of skill.objects ?? []) {
+      const pathId = object.pathId == null ? null : String(object.pathId);
+      if (pathId) {
+        byPathId.set(pathId, object);
+      }
+      const roundedPathId =
+        object.pathId == null ? null : String(numberOrNull(object.pathId));
+      if (roundedPathId) {
+        byRoundedPathId.set(roundedPathId, object);
+      }
+    }
+    bySkillId.set(Number(skill.skillId), {
+      byPathId,
+      byRoundedPathId,
+    });
+  }
+  return bySkillId;
+}
+
+function matchHitGroupExternalElementObjects(
+  hitGroup,
+  externalObjectBySkillId
+) {
+  const indexes = externalObjectBySkillId.get(Number(hitGroup.skillId));
+  if (!indexes) {
+    return [];
+  }
+  const objects = [];
+  for (const ref of hitGroup.elementBaseDataRefs ?? []) {
+    const pathId = ref.pathId == null ? null : String(ref.pathId);
+    const roundedPathId =
+      ref.roundedPathId == null ? null : String(ref.roundedPathId);
+    const object =
+      (pathId ? indexes.byPathId.get(pathId) : null) ??
+      (roundedPathId ? indexes.byRoundedPathId.get(roundedPathId) : null);
+    if (object) {
+      objects.push(object);
+    }
+  }
+  return uniqueByKey(
+    objects,
+    object => `${object.elementConfigId ?? ''}|${object.pathId ?? ''}`
+  );
+}
+
+function compactHitExternalElementObjectReference(object) {
+  return compactObject({
+    elementConfigId: numberOrNull(object.elementConfigId),
+    pathId: object.pathId ?? null,
+    scriptPathId: object.scriptPathId ?? null,
+    scriptTypeClassName: object.scriptTypeCandidate?.className ?? 'unknown',
+    containerPath: object.containerPath ?? null,
+    formulaParamBridgeCandidate: object.formulaParamBridgeCandidate ?? null,
+    formulaParamBuffReferenceIds:
+      object.formulaParamReferenceEvidence?.buffReferenceIds ?? [],
+  });
+}
+
+function compactHitFormulaParamBuffReference(reference) {
+  return compactObject({
+    sourceElementConfigId: numberOrNull(reference.sourceElementConfigId),
+    sourcePathId: reference.sourcePathId ?? null,
+    buffId: numberOrNull(reference.buffId),
+    status: reference.status ?? null,
+    relationStatus: reference.relationStatus ?? null,
+    formulaParamSlots: reference.formulaParamSlots ?? [],
+    buffInfo: reference.buffInfo
+      ? {
+          id: numberOrNull(reference.buffInfo.id),
+          name: reference.buffInfo.name ?? null,
+          description: reference.buffInfo.description ?? null,
+          type: numberOrNull(reference.buffInfo.type),
+          tips: reference.buffInfo.tips ?? null,
+          icon: reference.buffInfo.icon ?? null,
+        }
+      : null,
+    buffElementObject: reference.buffElementObject ?? null,
+  });
 }
 
 function matchHitGroupDamageElementMappings(hitGroup, mappingBySkillId) {

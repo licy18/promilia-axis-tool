@@ -4143,6 +4143,42 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 如后续分析进入 `11100101 / 10300201 / 10100712 / 10700212`，再引入目标技能全量解析或按角色白名单全量解析。
 - 继续接入真实 hook JSON / runtime capture，把静态候选转成可验证的 HP / 韧性 / 能量三曲线。
 
+### 2026-07-08：阶段 5-8BG 寒悠悠普攻第 5 段 buff 引用桥确认
+
+本轮完成：
+
+- `scripts/generate-azpr-data.mjs` 新增 `buff_info.json` 与 `lang_buff_info.json` 输入，用于识别 Element `formulaParams.formulaParamValues` 中直接出现的 buff id。
+- 新增 `formulaParamReferenceEvidence`：当 Element 的 formula 参数命中 `buff_info.id` 时，记录 buff 名称、描述、图标、类型、引用槽位和目标 `TBuffElementParams` 对象。
+- 新增 `formulaParamBridgeCandidate`：对脚本类型仍未知但 formula 参数引用 buff 的 Element 标记为 `buff-trigger-or-apply-bridge-candidate`。
+- hit group 新增 `externalElementObjectReferenceCount`、`externalElementObjectReferences`、`formulaParamBuffReferenceCount`、`formulaParamBuffReferenceIds` 与 `formulaParamBuffReferences`。
+- Workbench 投影层新增 `per-hit-buff-reference-found-fields-missing` 状态，用来区分“找到 buff 桥但未找到 DamageElement 字段”和普通 resourceMap 缺字段。
+- 为 `lang_buff_info` 的超大语言 ID 增加局部 BigInt 近邻索引，避免 JS 数字精度丢失导致 `433804...` 语言 ID 不能还原为中文。
+
+寒悠悠 `10100301` 普攻新增确认：
+
+- 第 5 段 `10100305` 的 `101003181 / scriptPathId 5576338162890961044` 在 `formulaParams.formulaParamValues` 第 2、13 槽引用 `101003079`。
+- `101003079` 在 `buff_info` 中为 `焰火`，描述为 `受到特定伤害时触发爆炸`，类型 `2`，图标 `tex_icon_buff_101003_Skill0.png`。
+- 外部 Element 解析中已经找到 `101003079 / TBuffElementParams`，持续时间字段 `time = 10000`、`frequency = 1`。
+- 因此第 5 段当前不再是“完全未知外部缺口”，而是“命中时通过 unknown Element 引用焰火 buff 的桥候选”；但它仍不是直接 DamageElement。
+
+当前边界：
+
+- `scriptPathId = 5576338162890961044` 的准确 IL2CPP 类型名仍未解析出来。
+- 第 4 段 `10100304 / 101003180` 仍没有 buff id 或 DamageElement 字段，只能标记为 resourceMap 元素已解析但字段未确认。
+- `焰火` 的“受到特定伤害时触发爆炸”说明了后续触发语义，但爆炸实际伤害 Element、触发条件、触发帧、削韧和充能仍未闭合。
+- 该阶段只增加证据和 UI 状态，不应用 HP / 韧性 / 能量最终公式。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/data/azprGenerated.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、21 条测试。
+
+下一步：
+
+- 阶段 5-8BH 目标：追踪 `焰火 / buff 101003079` 的爆炸触发链，查找它是否通过 buff runtime、子 Element、或 `scriptPathId 5576338162890961044` 派生出真正的 DamageElement。
+- 继续尝试从 IL2CPP dump、原生符号或 Extractor typetree 中识别 `5576338162890961044` 的准确类型名。
+- 可优先检查 `C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/Hero/109001.asset/MonoBehaviour/` 中同样引用 `m_Script.m_PathID = 5576338162890961044` 的对象，用字段签名辅助反推类型。
+- 若能找到爆炸 DamageElement，再把它接入第 5 段 hit group，并保持公式仍为 evidence-only 直到 runtime capture 验证。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

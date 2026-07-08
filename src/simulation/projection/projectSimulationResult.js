@@ -5792,6 +5792,8 @@ function createHitCandidatePreview({
   ).length;
   const resourceMapElementRefCount =
     numberOrNull(hitGroup.resourceMapElementRefCount) ?? 0;
+  const formulaParamBuffReferenceCount =
+    numberOrNull(hitGroup.formulaParamBuffReferenceCount) ?? 0;
   const hasResourceMapElementRefs =
     resourceMapElementRefCount > 0 ||
     (numberOrNull(hitGroup.resourceMapMatchedElementBaseRefCount) ?? 0) > 0;
@@ -5841,6 +5843,12 @@ function createHitCandidatePreview({
       numberOrNull(hitGroup.resourceMapMatchedElementBaseRefCount) ?? 0,
     resourceMapUnmatchedElementBaseRefCount:
       numberOrNull(hitGroup.resourceMapUnmatchedElementBaseRefCount) ?? 0,
+    externalElementObjectReferenceCount:
+      numberOrNull(hitGroup.externalElementObjectReferenceCount) ?? 0,
+    formulaParamBuffReferenceCount,
+    formulaParamBuffReferenceIds: hitGroup.formulaParamBuffReferenceIds ?? [],
+    hasFormulaParamBuffReferences: formulaParamBuffReferenceCount > 0,
+    formulaParamBuffReferences: hitGroup.formulaParamBuffReferences ?? [],
     damageElementFieldMappingStatus:
       hitGroup.damageElementFieldMappingStatus ?? null,
     damageElementFieldMappingCount: mappings.length,
@@ -5874,9 +5882,11 @@ function createHitCandidatePreview({
     status:
       mappings.length > 0
         ? 'per-hit-candidate-fields-found-formula-unapplied'
-        : hasResourceMapElementRefs
-          ? 'per-hit-resource-map-elements-found-fields-missing'
-          : 'per-hit-candidate-fields-missing',
+        : formulaParamBuffReferenceCount > 0
+          ? 'per-hit-buff-reference-found-fields-missing'
+          : hasResourceMapElementRefs
+            ? 'per-hit-resource-map-elements-found-fields-missing'
+            : 'per-hit-candidate-fields-missing',
     unresolved: [
       'damage-element-execution-order',
       'multi-candidate-combination-rule',

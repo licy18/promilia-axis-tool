@@ -6758,3 +6758,85 @@ runtime-sampling-offline-samples-partially-validated
 ### 85.4 兼容性
 
 该阶段只增加证据字段和缺口状态，不删除既有字段。消费者应将新状态视为比 `damage-element-field-mappings-missing` 更精确的中间态，而不是最终公式已应用。
+
+## 86. 阶段 5-8BG：formulaParam buff 引用桥证据
+
+阶段 5-8BG 在 `skill-asset-evidence.json` 中新增 formula 参数引用 buff 的结构化证据。该证据用于识别“Element 本身不是 DamageElement，但 formulaParams 指向 buff_info”的桥接对象。
+
+### 86.1 新增输入表
+
+生成器新增读取：
+
+- `Assets/ResourcesAssets/Config/NewTable/buff_info.json`
+- `Assets/ResourcesLang/chs/Table/lang_buff_info.json`
+
+`lang_buff_info` 的 id 是超出 JS 安全整数范围的大数字，生成器会对该表建立局部 BigInt 近邻索引，避免 `433804921100305152` 这类语言 ID 被解析成近似数字后无法匹配。
+
+### 86.2 externalElementObjectEvidence 新字段
+
+当外部 Element 对象的 `formulaParams.formulaParamValues` 命中 `buff_info.id` 时，该对象新增：
+
+- `formulaParamReferenceEvidence.status = "formula-param-buff-references-found"`
+- `formulaParamReferenceEvidence.buffReferenceIds`
+- `formulaParamReferenceEvidence.references[].formulaParamSlots`
+- `formulaParamReferenceEvidence.references[].buffInfo`
+- `formulaParamReferenceEvidence.references[].buffElementObject`
+- `formulaParamBridgeCandidate.status = "formula-param-buff-reference-found"`
+- `formulaParamBridgeCandidate.inferredRole = "buff-trigger-or-apply-bridge-candidate"`
+
+`externalElementObjectEvidence.summary` 新增：
+
+```json
+{
+  "formulaParamBuffReferenceObjects": 15,
+  "formulaParamBuffReferences": 15,
+  "formulaParamBuffReferenceResolvedObjects": 1,
+  "unknownScriptBuffReferenceObjects": 7
+}
+```
+
+### 86.3 normalAttackHitChainCandidate 新字段
+
+`normalAttackHitChainCandidate.hitGroups[]` 新增：
+
+- `externalElementObjectReferenceCount`
+- `externalElementObjectReferences`
+- `formulaParamBuffReferenceCount`
+- `formulaParamBuffReferenceIds`
+- `formulaParamBuffReferences`
+
+当 hit group 没有 DamageElement 字段映射，但存在 formulaParam buff 引用时：
+
+- `damageElementFieldMappingStatus = "resource-map-element-buff-reference-found-damage-element-fields-missing"`
+
+顶层候选新增：
+
+- `formulaParamBuffReferenceHitGroupCount`
+- `formulaParamBuffReferenceIds`
+
+### 86.4 Workbench 投影变化
+
+`createHitCandidatePreview()` 新增：
+
+- `externalElementObjectReferenceCount`
+- `formulaParamBuffReferenceCount`
+- `formulaParamBuffReferenceIds`
+- `hasFormulaParamBuffReferences`
+- `formulaParamBuffReferences`
+
+当 per-hit 没有 DamageElement 字段映射，但存在 buff 引用桥时，preview 状态为：
+
+- `per-hit-buff-reference-found-fields-missing`
+
+### 86.5 寒悠悠当前样例
+
+寒悠悠普攻第 5 段 `10100305` 当前为：
+
+- `101003181 / scriptPathId 5576338162890961044`
+- `formulaParamSlots = [2, 13]`
+- `buffId = 101003079`
+- `buffInfo.name = 焰火`
+- `buffInfo.description = 受到特定伤害时触发爆炸`
+- `buffElementObject.scriptTypeCandidate.className = TBuffElementParams`
+
+该状态只证明第 5 段存在 buff 桥候选，不证明爆炸伤害 Element 已找到，也不应用最终 HP / 韧性 / 能量公式。
