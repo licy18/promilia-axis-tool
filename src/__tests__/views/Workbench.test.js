@@ -1576,13 +1576,8 @@ describe('Workbench view', () => {
     expect(
       actionResultRow
         .find('[data-testid="workbench-action-result-edit-source"]')
-        .text()
-    ).toBe('等级变更 1 -> 2');
-    expect(
-      actionResultRow
-        .find('[data-testid="workbench-action-result-edit-source"]')
-        .attributes('data-edit-source-summary')
-    ).toBe('1 -> 2');
+        .exists()
+    ).toBe(false);
     const editedActionResultDetailPanel = wrapper.find(
       '[data-testid="workbench-action-result-detail-panel"]'
     );
@@ -1592,7 +1587,9 @@ describe('Workbench view', () => {
     expect(
       editedActionResultDetailPanel.attributes('data-edit-source-summary')
     ).toBe('1 -> 2');
-    expect(editedActionResultDetailPanel.text()).toContain('等级变更 1 -> 2');
+    expect(editedActionResultDetailPanel.text()).not.toContain(
+      '等级变更 1 -> 2'
+    );
     const actionEditFeedback = wrapper.find(
       '[data-testid="workbench-action-edit-feedback"]'
     );

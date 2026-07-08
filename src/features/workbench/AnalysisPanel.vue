@@ -249,7 +249,7 @@
             {{ draftResultStatus.refreshLabel }}
           </small>
           <small
-            v-if="getActionResultEditSource(entry)"
+            v-if="shouldShowActionResultEditSource(entry)"
             class="action-result-edit-source"
             role="button"
             tabindex="0"
@@ -1881,6 +1881,13 @@ function getActionResultEditSource(entry) {
   return getEditSourceForAction(entry?.actionId);
 }
 
+function shouldShowActionResultEditSource(entry) {
+  return Boolean(
+    getActionResultEditSource(entry) &&
+      !isActionEditFeedbackForAction(entry?.actionId)
+  );
+}
+
 function focusActionEditSource(entry) {
   const source = getActionResultEditSource(entry);
   if (!source) {
@@ -1945,6 +1952,13 @@ function createActionEditFeedback(source) {
 
 function isValidActionEditSource(source) {
   return Boolean(source?.actionId && source?.fieldKey && source?.label);
+}
+
+function isActionEditFeedbackForAction(actionId) {
+  return Boolean(
+    actionEditFeedback.value?.actionId &&
+      actionEditFeedback.value.actionId === actionId
+  );
 }
 
 function formatActionEditFeedbackResultFocusLabel(status) {
@@ -2096,9 +2110,10 @@ function formatRuntimeResultMeta(detail) {
   const sourceText =
     source && source !== '-' ? `Delta ${source}` : 'Delta 待定位';
   const editSource = getRuntimeResultEditSource(detail);
-  const editSourceText = editSource
-    ? ` · ${formatActionEditSourceDisplay(editSource)}`
-    : '';
+  const editSourceText =
+    editSource && !isActionEditFeedbackForAction(detail?.actionId)
+      ? ` · ${formatActionEditSourceDisplay(editSource)}`
+      : '';
   return isRuntimeResultCurrentAction(detail)
     ? `正在编辑 · ${draftResultStatus.value.resultLabel} · ${draftResultStatus.value.refreshLabel}${editSourceText} · ${sourceText}`
     : sourceText;

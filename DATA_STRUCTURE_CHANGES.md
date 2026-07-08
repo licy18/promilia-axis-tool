@@ -12205,3 +12205,56 @@ runtimeDeltaCount
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DL 应继续完善 Workbench 主流程体验，优先减少最近编辑反馈、动作结果行、贡献拆分之间的重复信息。
+
+## 145. 阶段 5-8DL：最近编辑摘要集中展示
+
+阶段目标：
+
+- 将最近编辑摘要的视觉展示集中到 `workbench-action-edit-feedback`，减少动作结果行和结果详情标题的重复文本。
+
+### 145.1 数据结构变化
+
+本阶段不新增字段。
+
+继续复用：
+
+```html
+data-edit-source-field
+data-edit-source-label
+data-edit-source-summary
+```
+
+这些 DOM 状态仍保留在动作结果行和结果详情区，只是视觉摘要由集中反馈条承接。
+
+### 145.2 展示规则
+
+新增内部判断：
+
+```js
+shouldShowActionResultEditSource(entry)
+isActionEditFeedbackForAction(actionId)
+```
+
+规则：
+
+- 当 `actionEditFeedback.actionId === entry.actionId` 时，动作结果行不渲染 `workbench-action-result-edit-source`。
+- 当 `actionEditFeedback.actionId === detail.actionId` 时，结果详情标题不再拼接编辑摘要。
+- `workbench-action-edit-feedback` 继续显示 `formatActionEditSourceDisplay(source)` 并保留定位入口。
+
+### 145.3 验证
+
+当前测试覆盖：
+
+- 动作结果行仍保留 `data-edit-source-summary="1 -> 2"`。
+- 同一动作的 `workbench-action-result-edit-source` 不再渲染。
+- 结果详情区仍保留 `data-edit-source-summary="1 -> 2"`。
+- 结果详情标题不再重复显示 `等级变更 1 -> 2`。
+- 最近编辑反馈条仍显示 `等级变更 1 -> 2`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DM 应继续完善 Workbench 主流程体验，优先检查贡献拆分与运行详情之间是否还有可收敛的重复摘要或状态标签。
