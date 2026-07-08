@@ -8043,3 +8043,103 @@ emit('select-state-curve-point', point.statePointId)
 - `npm test -- --run src\__tests__\views\Workbench.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过。
 
 下一阶段 5-8BT 应补状态点 layer / track 筛选或 selected-only 焦点模式。
+
+## 99. 阶段 5-8BT：stateCurveLayerFilters shared UI state
+
+阶段 5-8BT 不修改 `threeValueCurveFramework.stateCurves` 的模拟结果结构，只把 Workbench 对 state layer 的可见性改为共享前端状态，让分析面板和时间轴消费同一套过滤条件。
+
+### 99.1 Workbench 共享状态
+
+`Workbench.vue` 新增：
+
+```js
+const stateCurveLayerFilters = ref({
+  applied: true,
+  candidate: true,
+  sampled: false,
+  placeholder: false
+});
+
+function updateStateCurveLayerFilter({ layerKey, visible }) {
+  stateCurveLayerFilters.value = {
+    ...stateCurveLayerFilters.value,
+    [layerKey]: Boolean(visible)
+  };
+}
+```
+
+并传给：
+
+- `TimelineGridPreview`
+- `AnalysisPanel`
+
+两者都通过 `update-state-curve-layer-filter` 回传 layer 开关变化。
+
+### 99.2 AnalysisPanel 受控过滤
+
+`AnalysisPanel` 新增 prop：
+
+```js
+stateCurveLayerFilters
+```
+
+状态曲线 layer 开关从内部 `v-model` 改为：
+
+```html
+:checked="isStateCurveLayerVisible(layer.key)"
+@change="setStateCurveLayerVisible(layer.key, $event.target.checked)"
+```
+
+`stateCurveTrackRows` 继续只按可见 layer 生成 `visibleLayers` 和 `visiblePointRows`。这仍是 UI 派生结构，不写回 `stateCurves`。
+
+### 99.3 TimelineGridPreview layer toggle
+
+`TimelineGridPreview` 新增时间轴层开关：
+
+```html
+data-testid="workbench-timeline-state-layer-toggle"
+```
+
+时间轴只列出会渲染为 marker 的层：
+
+```js
+applied
+sampled
+placeholder
+```
+
+`candidate` 层仍由候选三值曲线和分析面板明细负责，不重复生成状态点 marker。
+
+`createStateCurveTimelineMarkers()` 新增过滤条件：
+
+```js
+STATE_CURVE_TIMELINE_LAYER_KEYS.has(layer.key) &&
+isStateCurveTimelineLayerVisible(layer.key) &&
+(layer.pointCount ?? 0) > 0
+```
+
+### 99.4 默认值与语义
+
+默认可见性保持：
+
+- `applied = true`
+- `candidate = true`
+- `sampled = false`
+- `placeholder = false`
+
+因此默认末音样本仍会显示 applied 状态点；手动资源/敌人事件产生的 placeholder 状态点需要显式打开“占位”层后才会在时间轴显示。
+
+### 99.5 验证
+
+扩展 Workbench 测试覆盖：
+
+- 时间轴“已用”开关关闭后，applied 状态 marker 消失，分析面板 applied layer 同步关闭。
+- 从分析面板重新打开 applied 后，时间轴 marker 同步恢复。
+- 单测挂载 `AnalysisPanel` 时模拟父组件回传 `stateCurveLayerFilters`，验证 sampled / placeholder 仍可被打开。
+- 资源动作和敌人事件测试显式打开 placeholder 后，再验证 placeholder 状态 marker。
+
+阶段验收：
+
+- `npm run test -- --run`：通过。
+
+下一阶段 5-8BU 应补状态点 track 筛选或 selected-only 焦点模式。

@@ -77,9 +77,11 @@
         :duration-ms="scenario.time.durationMs"
         :selected-action-id="selectedActionId"
         :selected-state-curve-point-id="selectedStateCurvePointId"
+        :state-curve-layer-filters="stateCurveLayerFilters"
         :timeline-diagnostics="timelineDiagnostics"
         @select-action="selectAction"
         @select-state-curve-point="selectStateCurvePoint"
+        @update-state-curve-layer-filter="updateStateCurveLayerFilter"
         @delete-action="deleteAction"
         @update-action-duration="updateActionDuration"
         @update-action-lane="updateActionLane"
@@ -121,9 +123,11 @@
             simulationResult.threeValueCurveFramework
           "
           :selected-state-curve-point-id="selectedStateCurvePointId"
+          :state-curve-layer-filters="stateCurveLayerFilters"
           :insertion-diagnostics="insertionDiagnostics"
           :timeline-diagnostics="timelineDiagnostics"
           @select-state-curve-point="selectStateCurvePoint"
+          @update-state-curve-layer-filter="updateStateCurveLayerFilter"
         />
       </div>
 
@@ -178,6 +182,12 @@ import { simulateScenario } from '../simulation/engine/simulateScenario';
 const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
 const NEW_ACTION_INSERT_GAP_MS = frameToMs(60);
+const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
+  applied: true,
+  candidate: true,
+  sampled: false,
+  placeholder: false,
+};
 const AUTO_DELAY_NOTE_PATTERN =
   /^自动推迟：同轨已有动作占用，已从 \d+(?:\.\d+)?ms 调整到 \d+(?:\.\d+)?ms。$/;
 const initialDraft = createDefaultWorkbenchDraftState();
@@ -188,6 +198,7 @@ const segmentSplitPreview = ref(null);
 const actionDrafts = ref([...initialDraft.actionDrafts]);
 const selectedActionId = ref(initialDraft.selectedActionId);
 const selectedStateCurvePointId = ref('');
+const stateCurveLayerFilters = ref({ ...DEFAULT_STATE_CURVE_LAYER_FILTERS });
 const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const draftStatus = ref('未保存草稿');
 
@@ -852,6 +863,16 @@ function selectAction(actionId) {
 
 function selectStateCurvePoint(pointId) {
   selectedStateCurvePointId.value = pointId || '';
+}
+
+function updateStateCurveLayerFilter({ layerKey, visible }) {
+  if (!layerKey) {
+    return;
+  }
+  stateCurveLayerFilters.value = {
+    ...stateCurveLayerFilters.value,
+    [layerKey]: Boolean(visible),
+  };
 }
 
 function findSkillById(skillId) {

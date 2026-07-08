@@ -4553,6 +4553,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 优先让用户在时间轴上快速切换“只看采样 / 只看占位 / 只看已用”，避免状态点增多后视觉过载。
 - 继续保持框架优先，具体技能逐帧与最终公式仍后补。
 
+### 2026-07-08：阶段 5-8BT 状态点 layer 共享过滤
+
+本轮完成：
+
+- `Workbench` 新增共享 `stateCurveLayerFilters`，默认保持 `applied / candidate` 开启、`sampled / placeholder` 关闭。
+- `AnalysisPanel` 的状态曲线 layer 开关改为受控输入，通过 `update-state-curve-layer-filter` 回传变更，不再在组件内部单独保存过滤状态。
+- `TimelineGridPreview` 新增状态点 layer 开关，只列出当前时间轴会渲染的 `applied / sampled / placeholder` 层，并按同一套共享过滤条件渲染 marker。
+- 时间轴关闭“已用”后，applied 状态点 marker 会消失，分析面板同步取消 applied 层；从分析面板重新打开后，时间轴 marker 同步恢复。
+- 资源动作和敌人事件产生的 `placeholder` 状态点默认仍隐藏，用户显式打开“占位”层后才在时间轴显示，避免后续状态点过多时视觉拥挤。
+
+当前边界：
+
+- 本阶段只做 layer 过滤，不做 track 过滤，也不做 selected-only 焦点模式。
+- `candidate` 状态点仍由分析面板明细和候选三值曲线承担，时间轴不重复渲染 candidate state marker。
+- 没有改变 `threeValueCurveFramework.stateCurves` 模拟结果结构，也没有把 sampled / placeholder 推进为最终公式。
+
+验收结果：
+
+- `npm run test -- --run`：通过，13 个测试文件、109 条测试。
+
+下一步：
+
+- 阶段 5-8BU 目标：补状态点 track 筛选或 selected-only 焦点模式。
+- 优先让用户按“敌人HP伤害 / 敌人韧性削减 / 自身能量变化”筛选状态点，或在点明细选中后只聚焦当前 state point。
+- 继续保持框架优先，具体技能逐帧、召唤触发和最终公式仍按后续采样证据逐步补齐。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

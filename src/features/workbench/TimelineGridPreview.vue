@@ -122,6 +122,31 @@
           </select>
         </label>
       </div>
+      <div
+        v-if="stateCurveTimelineLayerOptions.length"
+        class="state-layer-toggle-group"
+        data-testid="workbench-timeline-state-layer-toggle-group"
+      >
+        <label
+          v-for="layer in stateCurveTimelineLayerOptions"
+          :key="layer.key"
+          class="state-layer-toggle"
+          :class="{ 'has-points': layer.pointCount > 0 }"
+          :data-layer-key="layer.key"
+        >
+          <input
+            type="checkbox"
+            :checked="isStateCurveTimelineLayerVisible(layer.key)"
+            :data-layer-key="layer.key"
+            :data-point-count="layer.pointCount"
+            data-testid="workbench-timeline-state-layer-toggle"
+            @change="
+              setStateCurveLayerVisible(layer.key, $event.target.checked)
+            "
+          />
+          <span>{{ layer.label }} {{ layer.pointCount }}</span>
+        </label>
+      </div>
     </div>
 
     <div class="timeline-scale">
@@ -469,6 +494,26 @@ const STATE_CURVE_TIMELINE_LAYER_KEYS = new Set([
   'sampled',
   'placeholder',
 ]);
+const STATE_CURVE_TIMELINE_LAYER_OPTIONS = [
+  {
+    key: 'applied',
+    label: '已用',
+  },
+  {
+    key: 'sampled',
+    label: '采样',
+  },
+  {
+    key: 'placeholder',
+    label: '占位',
+  },
+];
+const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
+  applied: true,
+  candidate: true,
+  sampled: false,
+  placeholder: false,
+};
 const STATE_CURVE_TRACK_MARKER_TOP = {
   enemyHpDamage: 92,
   enemyToughnessDamage: 99,
@@ -544,6 +589,15 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  stateCurveLayerFilters: {
+    type: Object,
+    default: () => ({
+      applied: true,
+      candidate: true,
+      sampled: false,
+      placeholder: false,
+    }),
+  },
   timelineDiagnostics: {
     type: Object,
     default: () => ({
@@ -565,6 +619,7 @@ const emit = defineEmits([
   'update-action-duration',
   'update-action-lane',
   'select-state-curve-point',
+  'update-state-curve-layer-filter',
 ]);
 const laneRef = ref(null);
 const laneRowRefs = new Map();
@@ -656,6 +711,27 @@ const candidateActionOptions = computed(() =>
       };
     })
 );
+const stateCurveTimelineLayerOptions = computed(() =>
+  STATE_CURVE_TIMELINE_LAYER_OPTIONS.map(layer => {
+    const matchingLayers = (
+      props.threeValueCurveFramework?.stateCurves?.tracks ?? []
+    ).flatMap(track =>
+      (track.layers ?? []).filter(item => item.key === layer.key)
+    );
+    const pointCount = matchingLayers.reduce(
+      (sum, item) => sum + (item.pointCount ?? 0),
+      0
+    );
+    return {
+      ...layer,
+      pointCount,
+    };
+  }).filter(layer => layer.pointCount > 0)
+);
+const effectiveStateCurveLayerFilters = computed(() => ({
+  ...DEFAULT_STATE_CURVE_LAYER_FILTERS,
+  ...(props.stateCurveLayerFilters ?? {}),
+}));
 const overlapActionIds = computed(
   () => new Set(props.timelineDiagnostics?.overlapActionIds ?? [])
 );
@@ -925,6 +1001,7 @@ function createStateCurveTimelineMarkers() {
         .filter(
           layer =>
             STATE_CURVE_TIMELINE_LAYER_KEYS.has(layer.key) &&
+            isStateCurveTimelineLayerVisible(layer.key) &&
             (layer.pointCount ?? 0) > 0
         )
         .flatMap((layer, layerIndex) =>
@@ -1228,6 +1305,17 @@ function selectCandidateFrameGroupByMarker(marker) {
 
 function selectStateCurveMarker(marker) {
   emit('select-state-curve-point', marker.statePointId);
+}
+
+function isStateCurveTimelineLayerVisible(layerKey) {
+  return Boolean(effectiveStateCurveLayerFilters.value[layerKey]);
+}
+
+function setStateCurveLayerVisible(layerKey, visible) {
+  emit('update-state-curve-layer-filter', {
+    layerKey,
+    visible: Boolean(visible),
+  });
 }
 
 function formatCandidateFrameGroupValues(group) {
@@ -1954,6 +2042,42 @@ h2 {
 }
 
 .candidate-toggle span {
+  white-space: nowrap;
+}
+
+.state-layer-toggle-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.state-layer-toggle {
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+  gap: 5px;
+  padding: 0 8px;
+  border: 1px solid rgba(223, 249, 243, 0.18);
+  border-radius: 4px;
+  background: #151b20;
+  color: #b8c0c7;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.state-layer-toggle.has-points {
+  color: #dff6f1;
+}
+
+.state-layer-toggle input {
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  accent-color: #dff9f3;
+}
+
+.state-layer-toggle span {
   white-space: nowrap;
 }
 

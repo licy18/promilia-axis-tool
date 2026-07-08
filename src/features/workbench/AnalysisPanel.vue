@@ -267,12 +267,15 @@
           :data-point-count="layer.pointCount"
         >
           <input
-            v-model="stateCurveLayerFilters[layer.key]"
+            :checked="isStateCurveLayerVisible(layer.key)"
             type="checkbox"
             :data-layer-key="layer.key"
             :data-point-count="layer.pointCount"
             :data-track-count="layer.trackCount"
             data-testid="workbench-state-curve-layer-toggle"
+            @change="
+              setStateCurveLayerVisible(layer.key, $event.target.checked)
+            "
           />
           <span>{{ layer.label }} {{ layer.pointCount }}</span>
         </label>
@@ -393,7 +396,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { TrendCharts } from '@element-plus/icons-vue';
 import { createStateCurvePointId } from './stateCurvePointIdentity';
 
@@ -459,6 +462,15 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  stateCurveLayerFilters: {
+    type: Object,
+    default: () => ({
+      applied: true,
+      candidate: true,
+      sampled: false,
+      placeholder: false,
+    }),
+  },
   insertionDiagnostics: {
     type: Object,
     default: () => ({
@@ -475,14 +487,17 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['select-state-curve-point']);
+const emit = defineEmits([
+  'select-state-curve-point',
+  'update-state-curve-layer-filter',
+]);
 
-const stateCurveLayerFilters = ref({
+const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
   applied: true,
   candidate: true,
   sampled: false,
   placeholder: false,
-});
+};
 const overlapItems = computed(() => props.timelineDiagnostics?.overlaps ?? []);
 const overlapCount = computed(
   () => props.timelineDiagnostics?.overlapCount ?? overlapItems.value.length
@@ -572,9 +587,13 @@ const stateCurveLayerOptions = computed(() =>
 );
 const activeStateCurveLayerKeys = computed(() =>
   STATE_CURVE_LAYER_OPTIONS.filter(
-    layer => stateCurveLayerFilters.value[layer.key]
+    layer => effectiveStateCurveLayerFilters.value[layer.key]
   ).map(layer => layer.key)
 );
+const effectiveStateCurveLayerFilters = computed(() => ({
+  ...DEFAULT_STATE_CURVE_LAYER_FILTERS,
+  ...(props.stateCurveLayerFilters ?? {}),
+}));
 const stateCurveTrackRows = computed(() => {
   const activeLayers = new Set(activeStateCurveLayerKeys.value);
   return (stateCurves.value?.tracks ?? [])
@@ -1016,6 +1035,17 @@ function createStateCurveVisiblePointRows(track, visibleLayers) {
 
 function selectStateCurvePoint(point) {
   emit('select-state-curve-point', point.statePointId);
+}
+
+function isStateCurveLayerVisible(layerKey) {
+  return Boolean(effectiveStateCurveLayerFilters.value[layerKey]);
+}
+
+function setStateCurveLayerVisible(layerKey, visible) {
+  emit('update-state-curve-layer-filter', {
+    layerKey,
+    visible: Boolean(visible),
+  });
 }
 
 function compareStateCurvePointRows(left, right) {

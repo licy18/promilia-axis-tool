@@ -193,6 +193,42 @@ describe('Workbench view', () => {
         )
         .classes()
     ).toContain('selected');
+    const timelineStateLayerToggles = wrapper.findAll(
+      '[data-testid="workbench-timeline-state-layer-toggle"]'
+    );
+    expect(
+      timelineStateLayerToggles.map(toggle =>
+        toggle.attributes('data-layer-key')
+      )
+    ).toEqual(['applied']);
+    expect(timelineStateLayerToggles[0].attributes('data-point-count')).toBe(
+      '1'
+    );
+    expect(timelineStateLayerToggles[0].element.checked).toBe(true);
+    await timelineStateLayerToggles[0].setValue(false);
+    await nextTick();
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
+    ).toHaveLength(0);
+    expect(
+      wrapper.find(
+        '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="applied"]'
+      ).element.checked
+    ).toBe(false);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curves"] .source-heading strong')
+        .text()
+    ).toBe('15');
+    await wrapper
+      .find(
+        '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="applied"]'
+      )
+      .setValue(true);
+    await nextTick();
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
+    ).toHaveLength(1);
     await wrapper
       .find(
         '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="candidate"]'
@@ -512,8 +548,26 @@ describe('Workbench view', () => {
   });
 
   it('exposes sampled and placeholder state curve layers before values are applied', async () => {
-    const wrapper = mount(AnalysisPanel, {
-      props: createStateCurvePanelProps(),
+    let stateCurveLayerFilters = {
+      applied: true,
+      candidate: true,
+      sampled: false,
+      placeholder: false,
+    };
+    let wrapper;
+    const updateStateCurveLayerFilters = event => {
+      stateCurveLayerFilters = {
+        ...stateCurveLayerFilters,
+        [event.layerKey]: event.visible,
+      };
+      void wrapper.setProps({ stateCurveLayerFilters });
+    };
+    wrapper = mount(AnalysisPanel, {
+      props: {
+        ...createStateCurvePanelProps(),
+        stateCurveLayerFilters,
+        onUpdateStateCurveLayerFilter: updateStateCurveLayerFilters,
+      },
     });
     const findLayerToggle = key =>
       wrapper.find(
@@ -1404,6 +1458,12 @@ describe('Workbench view', () => {
     expect(wrapper.text()).toContain('ENEMY_EVENT');
     expect(wrapper.text()).toContain('phase-2 / 进入二阶段');
     expect(wrapper.text()).not.toContain('DAMAGE_SKIPPED');
+    const placeholderStateLayerToggle = wrapper.find(
+      '[data-testid="workbench-timeline-state-layer-toggle"][data-layer-key="placeholder"]'
+    );
+    expect(placeholderStateLayerToggle.exists()).toBe(true);
+    await placeholderStateLayerToggle.setValue(true);
+    await nextTick();
     const placeholderStateMarkers = wrapper
       .findAll('[data-testid="workbench-timeline-state-curve-marker"]')
       .filter(marker => marker.attributes('data-layer-key') === 'placeholder');
