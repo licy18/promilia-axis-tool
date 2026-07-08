@@ -278,6 +278,17 @@ export function createWorkbenchMainFlowCommandSurface({
       enabled: options.enabled,
       disabledReason: options.disabledReason ?? 'missing-edit-source',
     });
+  const createContributionPointFlowAction = (options = {}) =>
+    createWorkbenchFlowAction({
+      kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT,
+      source: options.source ?? '',
+      actionId: options.actionId ?? '',
+      statePointId: options.statePointId ?? '',
+      payload: options.payload ?? null,
+      enabled: options.enabled,
+      disabledReason:
+        options.disabledReason ?? 'missing-contribution-state-point',
+    });
 
   return {
     source,
@@ -303,6 +314,7 @@ export function createWorkbenchMainFlowCommandSurface({
     createRuntimeStatePointFlowAction,
     createRuntimeResultFlowAction,
     createFocusEditSourceFlowAction,
+    createContributionPointFlowAction,
   };
 }
 

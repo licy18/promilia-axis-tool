@@ -9475,6 +9475,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查剩余 UI 主路径是否仍绕过 `mainFlowCommandSurface`，优先处理会影响编辑、运行结果选择和回改闭环的入口，而不是扩展局部提示。
 
+### 2026-07-09：UI 主流程能力块 - Contribution Actions Consume Command Surface
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `createWorkbenchMainFlowCommandSurface()` 新增 `createContributionPointFlowAction()`，用于统一生成贡献拆分行定位 action。
+- `AnalysisPanel` 的动作贡献拆分行选择改为优先通过页面级 `mainFlowCommandSurface` 创建 `select-contribution-point` action。
+- 分析面板内“运行结果 -> 贡献拆分 -> 曲线/日志/详情定位”的主路径 action 来源与 runtime selection、edit source、focus/return 继续汇合到同一 command surface。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- main flow action 单测覆盖 command surface 的 contribution point action 工厂。
+- Workbench 页面测试确认贡献拆分行点击仍能定位到对应资源曲线点、日志详情和时间轴 runtime marker。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、79 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、214 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 Workbench 页面层剩余主路径 dispatch 是否还能进一步通过 `mainFlowCommandSurface` 或 flow controller 收束，优先服务“选择结果 -> 贡献/详情查看 -> 回到动作修改”的完整循环。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

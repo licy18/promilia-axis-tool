@@ -670,6 +670,20 @@ describe('workbench main flow actions', () => {
       },
       canRun: true,
     });
+    expect(
+      surface.createContributionPointFlowAction({
+        source: 'analysis-action-contribution',
+        actionId: 'contribution-action',
+        statePointId: 'contribution-state',
+        enabled: true,
+      })
+    ).toMatchObject({
+      kind: 'select-contribution-point',
+      source: 'analysis-action-contribution',
+      actionId: 'contribution-action',
+      statePointId: 'contribution-state',
+      canRun: true,
+    });
   });
 
   it('creates runtime point and result focus actions with the same main flow factory', () => {

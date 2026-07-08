@@ -20292,3 +20292,38 @@ createFocusEditSourceFlowAction({
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、79 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、214 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 268. UI 主流程能力块：Contribution Actions Consume Command Surface
+
+### 268.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`createWorkbenchMainFlowCommandSurface()` 新增：
+
+```js
+createContributionPointFlowAction({
+  source,
+  actionId,
+  statePointId,
+  payload,
+  enabled,
+  disabledReason,
+})
+```
+
+该工厂生成既有 `select-contribution-point` action。
+
+`AnalysisPanel` 的动作贡献拆分行选择入口改为优先通过页面级 `mainFlowCommandSurface` 创建该 action；未传入 surface 时回退到本地 `createWorkbenchFlowAction()`。
+
+### 268.2 保存与迁移
+
+本阶段只调整贡献拆分定位 action 的创建入口，不新增持久字段，不需要数据迁移。
+
+### 268.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 command surface 的 contribution point action 工厂。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、79 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、214 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过。

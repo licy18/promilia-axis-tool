@@ -2556,8 +2556,7 @@ function selectActionContributionRow(row) {
 }
 
 function getActionContributionFlowAction(row) {
-  return createWorkbenchFlowAction({
-    kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT,
+  return createContributionPointFlowActionFromSurface({
     source: 'analysis-action-contribution',
     actionId: selectedActionContribution.value?.actionId ?? '',
     statePointId: row?.firstStatePointId ?? '',
@@ -2725,6 +2724,24 @@ function createFocusEditSourceFlowActionFromSurface(options = {}) {
       payload: options.payload ?? null,
       enabled: options.enabled,
       disabledReason: options.disabledReason ?? 'missing-edit-source',
+    })
+  );
+}
+
+function createContributionPointFlowActionFromSurface(options = {}) {
+  return (
+    props.mainFlowCommandSurface?.createContributionPointFlowAction?.(
+      options
+    ) ??
+    createWorkbenchFlowAction({
+      kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT,
+      source: options.source ?? '',
+      actionId: options.actionId ?? '',
+      statePointId: options.statePointId ?? '',
+      payload: options.payload ?? null,
+      enabled: options.enabled,
+      disabledReason:
+        options.disabledReason ?? 'missing-contribution-state-point',
     })
   );
 }
