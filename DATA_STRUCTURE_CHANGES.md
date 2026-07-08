@@ -11021,3 +11021,79 @@ selfEnergyChange -> sum(row.energyDelta)
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
 
 下一阶段 5-8CV 应把动作贡献拆分和右侧三值详情/模拟日志详情继续收束，形成更稳定的 Endaxis 式贡献详情入口。
+
+## 129. 阶段 5-8CV：contribution breakdown detail focus
+
+阶段 5-8CV 不修改项目保存 schema，也不修改 simulation 输出结构。本阶段只新增 Workbench 前端事件来源和日志筛选摘要，让动作贡献拆分、右侧三值详情和模拟日志详情使用同一个 runtime state point。
+
+### 129.1 AnalysisPanel 新增事件
+
+动作贡献行点击时不再复用普通 runtime 选择事件，而是发出：
+
+```js
+select-action-contribution-point(statePointId)
+```
+
+该事件用于表达“从动作贡献拆分入口定位到 runtime point”。
+
+### 129.2 Workbench runtimeLogFocus 来源
+
+`runtimeLogFocus.source` 当前可见值扩展为：
+
+```text
+action-result
+action-contribution
+```
+
+两种来源都会让 Workbench：
+
+```js
+stateCurveLayerFilters = { applied: true, candidate: false, sampled: false, placeholder: false }
+stateCurveTrackFilters = {}
+stateCurveFocusMode = 'selected'
+calculatorDiagnosticScope = 'runtime'
+```
+
+区别只在于日志筛选摘要来源标签。
+
+### 129.3 EventLogPanel 新增摘要来源
+
+`workbench-runtime-sim-log-filter-summary` 的 `data-calculator-scope` 现在可见：
+
+```text
+manual
+runtime
+action-result
+action-contribution
+```
+
+当来源为 `action-contribution` 时显示：
+
+```text
+贡献定位 1/1条 全部 · 全部角色 · 全部动作
+```
+
+### 129.4 贡献行文案
+
+当前选中的贡献行会在 meta 中显示：
+
+```text
+详情已同步 · 已应用 1条 · action-0001|applied-frame-0-point-0
+```
+
+该文案表示动作贡献拆分、右侧三值详情和模拟日志详情正在消费同一个 runtime state point。
+
+### 129.5 验证
+
+当前测试覆盖：
+
+- 点击 HP 贡献行后，日志筛选摘要切换为 `贡献定位`。
+- `RuntimeSelectedDetailPanel` 的状态点等于贡献行目标状态点。
+- `EventLogPanel` 的日志状态点等于贡献行目标状态点。
+- 日志详情来源为 `runtime-selected-detail`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+
+下一阶段 5-8CW 应继续把贡献拆分入口做成更完整的贡献详情区域，优先整合来源、适配器和状态点摘要，不引入最终公式。

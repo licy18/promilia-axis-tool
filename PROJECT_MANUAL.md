@@ -5536,6 +5536,37 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8CV 目标：把动作贡献拆分进一步接入右侧详情/日志详情，让选中贡献轨道时能稳定定位到对应三值详情，并为后续 Endaxis 式贡献弹层留入口。
 - 仍保持框架和 UI 主流程优先，不追最终公式和逐帧动作细节。
 
+### 2026-07-08：阶段 5-8CV 贡献拆分同步三值详情
+
+本轮完成：
+
+- `AnalysisPanel` 的动作贡献行改为发出专门的贡献定位事件。
+- `Workbench` 区分动作结果定位和贡献定位，二者都会切到 runtime applied 视角，但 `runtimeLogFocus.source` 分别记录为 `action-result` / `action-contribution`。
+- `EventLogPanel` 新增 `贡献定位` 筛选摘要；点击贡献行后，模拟日志恢复到对应 runtime log，并显示 `贡献定位 1/1条 全部 · 全部角色 · 全部动作`。
+- 贡献行在当前选中轨道上显示 `详情已同步`，说明右侧三值详情、模拟日志详情和贡献拆分正在看同一个 runtime state point。
+- Workbench 测试覆盖点击 HP 贡献行后，右侧三值详情状态点、日志详情状态点和日志详情来源同步为 `runtime-selected-detail`。
+
+当前验证事实：
+
+- 默认样本从动作结果进入贡献拆分后，HP 贡献行能再次定位到同一个 `appliedStatePointId`。
+- 点击 HP 贡献行后，`RuntimeSelectedDetailPanel` 与 `EventLogPanel` 都显示同一个状态点。
+- 日志详情使用统一详情数据源，而不是 fallback：`data-detail-source="runtime-selected-detail"`。
+
+当前边界：
+
+- 本阶段仍是前端定位和详情收束，不新增最终公式和逐帧命中细节。
+- 贡献定位目前只对已有 applied delta 的贡献行可点击；没有 applied delta 的韧性/能量行继续禁用。
+- 还没有做弹层、排序、图表贡献高亮或公式层/Buff层拆分。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+
+下一步：
+
+- 阶段 5-8CW 目标：把动作贡献拆分从“面板入口”推进到更接近 Endaxis 的贡献详情入口，例如在贡献行下方提供统一的来源/适配器摘要，减少用户在多个面板之间跳读。
+- 仍不追最终公式；优先打磨主流程信息密度和定位体验。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

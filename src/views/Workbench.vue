@@ -147,6 +147,9 @@
             focusThreeValueCalculatorScope
           "
           @select-runtime-state-point="selectActionResultRuntimePoint"
+          @select-action-contribution-point="
+            selectActionContributionRuntimePoint
+          "
         />
       </div>
 
@@ -915,6 +918,14 @@ function selectRuntimeStatePoint(pointId) {
 }
 
 function selectActionResultRuntimePoint(pointId) {
+  focusRuntimePointFromAnalysis(pointId, 'action-result');
+}
+
+function selectActionContributionRuntimePoint(pointId) {
+  focusRuntimePointFromAnalysis(pointId, 'action-contribution');
+}
+
+function focusRuntimePointFromAnalysis(pointId, source) {
   selectRuntimeStatePoint(pointId);
   if (!pointId) {
     return;
@@ -928,7 +939,7 @@ function selectActionResultRuntimePoint(pointId) {
   stateCurveTrackFilters.value = {};
   calculatorDiagnosticScope.value = 'runtime';
   runtimeLogFocus.value = {
-    source: 'action-result',
+    source,
     statePointId: pointId,
     sequence: runtimeLogFocus.value.sequence + 1,
   };

@@ -353,15 +353,16 @@ const filteredRuntimeSimLogRows = computed(() =>
 );
 const runtimeLogFilterSummary = computed(() => {
   const actionResultFocusActive =
-    props.runtimeLogFocus?.source === 'action-result' &&
+    isRuntimeLogFocusSource(props.runtimeLogFocus?.source) &&
     props.runtimeLogFocus?.statePointId === props.selectedStateCurvePointId;
   const scope = actionResultFocusActive
-    ? 'action-result'
+    ? props.runtimeLogFocus.source
     : props.calculatorDiagnosticFocus?.scope === 'runtime'
       ? 'runtime'
       : 'manual';
   const labels = {
     'action-result': '结果定位',
+    'action-contribution': '贡献定位',
     runtime: '运行视角',
     manual: '日志筛选',
   };
@@ -528,7 +529,7 @@ watch(
 watch(
   () => props.runtimeLogFocus?.sequence,
   () => {
-    if (props.runtimeLogFocus?.source !== 'action-result') {
+    if (!isRuntimeLogFocusSource(props.runtimeLogFocus?.source)) {
       return;
     }
     focusRuntimeLogByStatePoint(props.runtimeLogFocus.statePointId);
@@ -627,6 +628,10 @@ function focusRuntimeLogByStatePoint(statePointId) {
   if (index >= 0) {
     selectedRuntimeLogIndex.value = index;
   }
+}
+
+function isRuntimeLogFocusSource(source) {
+  return source === 'action-result' || source === 'action-contribution';
 }
 
 function syncSelectedRuntimeLogIndexFromStatePoint(rows) {

@@ -781,6 +781,7 @@ const emit = defineEmits([
   'update-state-curve-focus-mode',
   'focus-three-value-calculator-scope',
   'select-runtime-state-point',
+  'select-action-contribution-point',
 ]);
 
 const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
@@ -1691,7 +1692,7 @@ function selectActionContributionRow(row) {
   if (!row?.firstStatePointId) {
     return;
   }
-  emit('select-runtime-state-point', row.firstStatePointId);
+  emit('select-action-contribution-point', row.firstStatePointId);
 }
 
 function compareRuntimeTraceRows(left, right) {
@@ -1731,12 +1732,13 @@ function formatActionContributionValue(row) {
 }
 
 function formatActionContributionMeta(row) {
+  const activeText = row.active ? '详情已同步 · ' : '';
   const resultText =
     row.count > 0 ? `已应用 ${row.count}条` : '暂无已应用结果';
   const sourceText = row.shortSourceDeltaIds.length
     ? ` · ${row.shortSourceDeltaIds.join(' / ')}`
     : '';
-  return `${resultText}${sourceText}`;
+  return `${activeText}${resultText}${sourceText}`;
 }
 
 function formatSourceDeltaShortId(sourceDeltaId) {

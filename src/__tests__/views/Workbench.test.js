@@ -1272,7 +1272,7 @@ describe('Workbench view', () => {
         '1',
         '12461',
         expect.stringContaining(
-          '敌人 HP12,461已应用 1条 · action-0001|applied-frame-0-point-0'
+          '敌人 HP12,461详情已同步 · 已应用 1条 · action-0001|applied-frame-0-point-0'
         ),
       ],
       [
@@ -1290,6 +1290,28 @@ describe('Workbench view', () => {
         expect.stringContaining('自身能量0暂无已应用结果'),
       ],
     ]);
+    await actionContributionRows[0].trigger('click');
+    await nextTick();
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-filter-summary"]')
+        .text()
+    ).toBe('贡献定位1/1条全部 · 全部角色 · 全部动作');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(appliedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-state-point"]')
+        .text()
+    ).toBe(appliedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-detail"]')
+        .attributes('data-detail-source')
+    ).toBe('runtime-selected-detail');
     await wrapper
       .find(
         '[data-testid="workbench-three-value-calculator-diagnostic-row"][data-calculator-scope="runtime"]'
