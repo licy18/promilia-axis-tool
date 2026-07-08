@@ -1417,6 +1417,41 @@ describe('first vertical slice simulation', () => {
           'azpr-self-energy-delta-calculator',
         ],
         calculatorReplaceableDeltaCount: 16,
+        calculatorSummary: expect.objectContaining({
+          outputCount: 16,
+          calculatorKeyCounts: expect.arrayContaining([
+            expect.objectContaining({
+              key: 'azpr-hp-delta-calculator',
+              count: 6,
+              replaceableCount: 6,
+            }),
+            expect.objectContaining({
+              key: 'azpr-toughness-delta-calculator',
+              count: 5,
+            }),
+            expect.objectContaining({
+              key: 'azpr-self-energy-delta-calculator',
+              count: 5,
+            }),
+          ]),
+          statusCounts: expect.arrayContaining([
+            expect.objectContaining({
+              status: 'per-hit-candidate-fields-found-formula-unapplied',
+              count: 15,
+            }),
+            expect.objectContaining({ status: 'raw-hp-projection', count: 1 }),
+          ]),
+          unresolvedItemCounts: expect.arrayContaining([
+            expect.objectContaining({
+              item: 'final-azpr-formula-confirmation',
+              count: 16,
+            }),
+            expect.objectContaining({
+              item: 'hit-to-damage-element-binding',
+              count: 6,
+            }),
+          ]),
+        }),
         frameMin: 0,
         frameMax: 184,
         applied: false,
@@ -1517,6 +1552,13 @@ describe('first vertical slice simulation', () => {
         calculatorStatuses: ['raw-hp-projection'],
         calculatorSummary: {
           contractName: 'ThreeValueDeltaCalculator',
+          outputCount: 1,
+          unresolvedItemCounts: expect.arrayContaining([
+            expect.objectContaining({
+              item: 'final-azpr-formula-confirmation',
+              count: 1,
+            }),
+          ]),
           appliedToRuntimeCount: 1,
         },
         source: 'threeValueGenerationLayer.applied-deltas',

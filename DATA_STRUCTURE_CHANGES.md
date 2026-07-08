@@ -10516,3 +10516,106 @@ createThreeValueCalculatorDisplayRows(point, simLogRow)
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8CP 应建立 Workbench 全局 calculator 诊断入口，把 generation/runtime 两层的 adapter 状态、状态分布和缺口集中展示。
+
+## 123. 阶段 5-8CP：calculator diagnostics summary
+
+阶段 5-8CP 不修改项目保存 schema。本阶段扩展 `calculatorSummary` 派生字段，并在 Workbench 中新增只读诊断入口。
+
+### 123.1 calculatorSummary 新增统计字段
+
+`summarizeThreeValueCalculators(deltas)` 现在额外输出：
+
+```js
+outputCount
+calculatorKeyCounts
+kindCounts
+statusCounts
+unresolvedItemCounts
+layerCounts
+trackCounts
+```
+
+其中 `calculatorKeyCounts[]` 的行结构为：
+
+```js
+{
+  key,
+  count,
+  trackKeys,
+  kinds,
+  statuses,
+  outputFields,
+  unresolvedItems,
+  replaceableCount,
+  appliedToRuntimeCount,
+}
+```
+
+通用计数行结构为：
+
+```js
+{
+  kind | status | item | layerKey | trackKey,
+  count,
+}
+```
+
+这些字段同时出现在：
+
+```js
+threeValueGenerationLayer.summary.calculatorSummary
+threeValueRuntimeProjection.summary.calculatorSummary
+summary.threeValueGenerationLayerSummary.calculatorSummary
+summary.threeValueRuntimeProjectionSummary.calculatorSummary
+```
+
+### 123.2 缺口排序规则
+
+`unresolvedItemCounts` 先按 `count` 降序排序；同数时按固定缺口优先级排序：
+
+```text
+final-azpr-formula-confirmation
+enemy-defense-resistance-critical-order
+hit-to-damage-element-binding
+weak-break-damage-rate-unit-scale
+target-toughness-state-baseline
+initial-current-sp-baseline
+recover-sp-owner-share-and-throttle
+```
+
+这样默认 runtime HP 点会稳定显示为“最终公式、防御抗性顺序、命中绑定”。
+
+### 123.3 Workbench 新增诊断 DOM
+
+`AnalysisPanel` 在“三值来源”区域新增：
+
+```html
+data-testid="workbench-three-value-calculator-diagnostics"
+data-testid="workbench-three-value-calculator-diagnostic-row"
+data-calculator-scope="generation | runtime"
+```
+
+默认样本当前显示两行：
+
+```text
+生成适配器 3类/16条 · 可替换 16
+运行适配器 1类/1条 · 可替换 1
+```
+
+### 123.4 验证
+
+当前测试覆盖：
+
+- generation `calculatorSummary.outputCount = 16`。
+- 默认样本 HP / 韧性 / 自身能量 calculator 分布为 `6 / 5 / 5`。
+- 默认样本候选 delta 的状态汇总为 `per-hit-candidate-fields-found-formula-unapplied = 15`。
+- Workbench 全局诊断行稳定显示 generation/runtime 两层摘要、来源分布、状态分布和缺口分布。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、13 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8CQ 应把全局 calculator 诊断入口与现有三值曲线/日志筛选轻量联动。

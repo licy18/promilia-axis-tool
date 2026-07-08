@@ -120,13 +120,18 @@ export function createThreeValueCalculatorResult({
 }
 
 export function summarizeThreeValueCalculators(deltas) {
-  const calculators = deltas
-    .map(delta => delta.calculator)
-    .filter(calculator => calculator?.key);
+  const records = (deltas ?? [])
+    .map(delta => ({
+      delta,
+      calculator: delta?.calculator,
+    }))
+    .filter(record => record.calculator?.key);
+  const calculators = records.map(record => record.calculator);
   const calculatorKeys = uniqueStrings(calculators.map(item => item.key));
   return {
     contractName: 'ThreeValueDeltaCalculator',
     contractVersion: 1,
+    outputCount: records.length,
     calculatorCount: calculatorKeys.length,
     calculatorKeys,
     calculatorReplaceableDeltaCount: calculators.filter(
@@ -137,6 +142,44 @@ export function summarizeThreeValueCalculators(deltas) {
     confidenceLevels: uniqueStrings(calculators.map(item => item.confidence)),
     appliedToRuntimeCount: calculators.filter(item => item.appliedToRuntime)
       .length,
+    calculatorKeyCounts: countCalculatorRecordsBy(records, {
+      keyField: 'key',
+      valueName: 'key',
+      decorate: (items, key) => ({
+        trackKeys: uniqueStrings(items.map(item => item.calculator.trackKey)),
+        kinds: uniqueStrings(items.map(item => item.calculator.kind)),
+        statuses: uniqueStrings(items.map(item => item.calculator.status)),
+        outputFields: uniqueStrings(
+          items.map(item => item.calculator.outputField)
+        ),
+        unresolvedItems: uniqueStrings(
+          items.flatMap(item => item.calculator.unresolved ?? [])
+        ),
+        replaceableCount: items.filter(item => item.calculator.replaceable)
+          .length,
+        appliedToRuntimeCount: items.filter(
+          item => item.calculator.appliedToRuntime
+        ).length,
+        key,
+      }),
+    }),
+    kindCounts: countCalculatorRecordsBy(records, {
+      keyField: 'kind',
+      valueName: 'kind',
+    }),
+    statusCounts: countCalculatorRecordsBy(records, {
+      keyField: 'status',
+      valueName: 'status',
+    }),
+    unresolvedItemCounts: countCalculatorUnresolvedItems(records),
+    layerCounts: countCalculatorRecordsBy(records, {
+      keyGetter: item => item.delta.layerKey,
+      valueName: 'layerKey',
+    }),
+    trackCounts: countCalculatorRecordsBy(records, {
+      keyGetter: item => item.delta.trackKey,
+      valueName: 'trackKey',
+    }),
   };
 }
 
@@ -371,6 +414,80 @@ function formatUnresolvedItem(item) {
 
 function normalizeList(values) {
   return Array.isArray(values) ? values.filter(value => value != null) : [];
+}
+
+function countCalculatorRecordsBy(
+  records,
+  { keyField, keyGetter, valueName, decorate }
+) {
+  const groups = new Map();
+  for (const record of records) {
+    const key = keyGetter
+      ? keyGetter(record)
+      : record.calculator?.[keyField] ?? null;
+    if (key == null || String(key).trim() === '') {
+      continue;
+    }
+    const normalizedKey = String(key);
+    if (!groups.has(normalizedKey)) {
+      groups.set(normalizedKey, []);
+    }
+    groups.get(normalizedKey).push(record);
+  }
+
+  return [...groups.entries()]
+    .map(([key, items]) => ({
+      [valueName]: key,
+      count: items.length,
+      ...(decorate ? decorate(items, key) : {}),
+    }))
+    .sort(compareCountRows);
+}
+
+function countCalculatorUnresolvedItems(records) {
+  const rows = countCalculatorRecordsBy(
+    records.flatMap(record =>
+      (record.calculator.unresolved ?? []).map(item => ({
+        ...record,
+        unresolvedItem: item,
+      }))
+    ),
+    {
+      keyGetter: item => item.unresolvedItem,
+      valueName: 'item',
+    }
+  );
+  return rows;
+}
+
+function compareCountRows(left, right) {
+  const countOrder = right.count - left.count;
+  if (countOrder !== 0) {
+    return countOrder;
+  }
+  return getCountRowSortKey(left).localeCompare(getCountRowSortKey(right));
+}
+
+function getCountRowSortKey(row) {
+  if (row.item) {
+    return `${getUnresolvedSortOrder(row.item)}:${row.item}`;
+  }
+  return String(
+    row.key ?? row.kind ?? row.status ?? row.layerKey ?? row.trackKey ?? ''
+  );
+}
+
+function getUnresolvedSortOrder(item) {
+  const order = [
+    'final-azpr-formula-confirmation',
+    'enemy-defense-resistance-critical-order',
+    'hit-to-damage-element-binding',
+    'weak-break-damage-rate-unit-scale',
+    'target-toughness-state-baseline',
+    'initial-current-sp-baseline',
+    'recover-sp-owner-share-and-throttle',
+  ].indexOf(String(item ?? ''));
+  return order >= 0 ? String(order).padStart(2, '0') : '99';
 }
 
 function uniqueStrings(values) {

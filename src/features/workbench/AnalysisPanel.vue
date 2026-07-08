@@ -91,6 +91,23 @@
           )
         }}
       </p>
+      <div
+        v-if="threeValueCalculatorDiagnosticRows.length"
+        class="calculator-diagnostic-list"
+        data-testid="workbench-three-value-calculator-diagnostics"
+      >
+        <div
+          v-for="row in threeValueCalculatorDiagnosticRows"
+          :key="row.scope"
+          class="calculator-diagnostic-row"
+          :data-calculator-scope="row.scope"
+          data-testid="workbench-three-value-calculator-diagnostic-row"
+        >
+          <span>{{ row.label }}</span>
+          <strong>{{ row.summary }}</strong>
+          <small>{{ row.detail }}</small>
+        </div>
+      </div>
       <p
         v-if="
           formatFormulaCandidatePatternSummary(
@@ -529,6 +546,12 @@
 import { computed } from 'vue';
 import { ArrowLeft, ArrowRight, TrendCharts } from '@element-plus/icons-vue';
 import {
+  formatThreeValueCalculationKind,
+  formatThreeValueCalculationStatus,
+  formatThreeValueCalculatorKey,
+  formatThreeValueUnresolvedItems,
+} from '../../simulation/threeValueCalculatorAdapters';
+import {
   createStateCurveFrameGroupKey,
   createStateCurvePointId,
 } from './stateCurvePointIdentity';
@@ -737,6 +760,20 @@ const stateCurveTrackOptions = computed(() =>
       pointCount: track.pointCount ?? 0,
       valueUnit: track.valueUnit,
     }))
+);
+const threeValueCalculatorDiagnosticRows = computed(() =>
+  [
+    createThreeValueCalculatorDiagnosticRow({
+      scope: 'generation',
+      label: '生成适配器',
+      summary: props.summary.threeValueGenerationLayerSummary,
+    }),
+    createThreeValueCalculatorDiagnosticRow({
+      scope: 'runtime',
+      label: '运行适配器',
+      summary: props.summary.threeValueRuntimeProjectionSummary,
+    }),
+  ].filter(Boolean)
 );
 const activeStateCurveLayerKeys = computed(() =>
   STATE_CURVE_LAYER_OPTIONS.filter(
@@ -1226,6 +1263,63 @@ function formatThreeValueRuntimeProjectionSummary(summary) {
     return '';
   }
   return `运行投影 HP ${formatNumber(summary.enemyHpDelta)} · 韧性 ${formatNumber(summary.enemyToughnessDelta)} · 能量 ${formatNumber(summary.selfEnergyDelta)} · 日志 ${summary.simLogCount}`;
+}
+
+function createThreeValueCalculatorDiagnosticRow({ scope, label, summary }) {
+  const calculatorSummary = summary?.calculatorSummary;
+  const outputCount =
+    calculatorSummary?.outputCount ??
+    summary?.deltaCount ??
+    summary?.appliedDeltaCount ??
+    0;
+  if (!calculatorSummary || outputCount <= 0) {
+    return null;
+  }
+
+  const calculatorText = formatCalculatorCountList(
+    calculatorSummary.calculatorKeyCounts,
+    item => formatThreeValueCalculatorKey(item.key, item.trackKeys?.[0])
+  );
+  const kindText = formatCalculatorCountList(
+    calculatorSummary.kindCounts,
+    item => formatThreeValueCalculationKind(item.kind)
+  );
+  const statusText = formatCalculatorCountList(
+    calculatorSummary.statusCounts,
+    item => formatThreeValueCalculationStatus(item.status)
+  );
+  const unresolvedText = formatCalculatorCountList(
+    calculatorSummary.unresolvedItemCounts,
+    item => formatThreeValueUnresolvedItems([item.item])
+  );
+  const detailParts = [
+    calculatorText ? `适配器 ${calculatorText}` : '',
+    kindText ? `来源 ${kindText}` : '',
+    statusText ? `状态 ${statusText}` : '',
+    unresolvedText ? `缺口 ${unresolvedText}` : '',
+  ].filter(Boolean);
+
+  return {
+    scope,
+    label,
+    summary: `${calculatorSummary.calculatorCount}类/${outputCount}条 · 可替换 ${calculatorSummary.calculatorReplaceableDeltaCount}`,
+    detail: detailParts.join(' · '),
+  };
+}
+
+function formatCalculatorCountList(items, formatter, limit = 3) {
+  const rows = (items ?? []).filter(item => (item.count ?? 0) > 0);
+  if (rows.length === 0) {
+    return '';
+  }
+  const visible = rows.slice(0, limit).map(item => {
+    const label = formatter(item);
+    return `${label} ${item.count}`;
+  });
+  const hiddenCount = rows.length - visible.length;
+  return hiddenCount > 0
+    ? `${visible.join(' / ')} / +${hiddenCount}`
+    : visible.join(' / ');
 }
 
 function formatStateCurveTrackSummary(track) {
@@ -1918,6 +2012,45 @@ h2 {
   border-left: 3px solid #79c7b9;
   border-radius: 4px;
   background: rgba(121, 199, 185, 0.1);
+}
+
+.calculator-diagnostic-list {
+  display: grid;
+  gap: 6px;
+}
+
+.calculator-diagnostic-row {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 0.8fr) minmax(0, 1.3fr);
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 10px;
+  border-left: 3px solid #a6b7ff;
+  border-radius: 4px;
+  background: rgba(166, 183, 255, 0.08);
+}
+
+.calculator-diagnostic-row span {
+  color: #d9e0ff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.calculator-diagnostic-row strong,
+.calculator-diagnostic-row small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.calculator-diagnostic-row strong {
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.calculator-diagnostic-row small {
+  color: #aeb7c2;
+  font-size: 11px;
 }
 
 .candidate-series-row {

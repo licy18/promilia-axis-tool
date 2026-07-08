@@ -5323,6 +5323,44 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 诊断入口应服务当前开发阶段：帮助确认三值曲线框架、adapter 状态和缺口分布，而不是继续追逐每个角色每个动作的逐帧细节。
 - 仍不修改最终公式；下一阶段优先让用户能看清当前 HP / 韧性 / 能量曲线分别由哪些 preview/candidate/sample/applied 输出构成。
 
+### 2026-07-08：阶段 5-8CP Workbench 全局 calculator 诊断入口
+
+本轮完成：
+
+- `summarizeThreeValueCalculators()` 新增结构化统计：`outputCount`、`calculatorKeyCounts`、`kindCounts`、`statusCounts`、`unresolvedItemCounts`、`layerCounts`、`trackCounts`。
+- `threeValueGenerationLayer.summary.calculatorSummary` 和 `threeValueRuntimeProjection.summary.calculatorSummary` 现在都能回答“有多少条输出、来自哪些适配器、是什么来源/状态、最常见缺口是什么”。
+- `AnalysisPanel` 的“三值来源”区新增全局 calculator 诊断入口，分别展示 generation 和 runtime 两层的适配器统计。
+- 默认样本当前显示：
+  - 生成适配器：`3类/16条 · 可替换 16`
+  - 运行适配器：`1类/1条 · 可替换 1`
+- Workbench 测试新增 DOM 断言，锁定全局诊断行的 scope、摘要和详情文案。
+
+当前验证事实：
+
+- 默认 generation 层 16 条 calculator 输出中，HP 6 条、能量 5 条、削韧 5 条。
+- 默认 generation 层 15 条候选 delta 当前统一状态为 `per-hit-candidate-fields-found-formula-unapplied`，UI 汇总为“候选未确认 15”。
+- 默认 runtime 层只应用 HP calculator，缺口显示为“最终公式、防御抗性顺序、命中绑定”。
+- `unresolvedItemCounts` 同数时按固定缺口优先级排序，保证“最终公式”优先于其他同数缺口。
+
+当前边界：
+
+- 全局诊断入口目前是只读摘要，尚未与三值曲线筛选、日志筛选或详情选中联动。
+- 统计来自现有 generation/runtime projection；它不证明最终 AzPr 公式已确认。
+- 候选 delta 的状态汇总已经可见，但还没有按状态点击过滤或定位到具体 delta 列表。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、13 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8CQ 目标：把全局 calculator 诊断入口与现有三值曲线/日志筛选轻量联动。
+- 优先支持从“生成适配器 / 运行适配器”诊断行切换到对应层级视角：generation 侧聚焦候选/采样来源，runtime 侧聚焦已应用曲线和 sim log。
+- 仍保持框架优先，不追逐每个动作的逐帧精细数值；下一阶段重点是让用户能从诊断摘要快速定位三值曲线和日志。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

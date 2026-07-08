@@ -54,6 +54,29 @@ describe('Workbench view', () => {
     ).toBe('运行投影 HP 12,461 · 韧性 0 · 能量 0 · 日志 1');
     expect(
       wrapper
+        .findAll('[data-testid="workbench-three-value-calculator-diagnostic-row"]')
+        .map(row => [
+          row.attributes('data-calculator-scope'),
+          row.find('span').text(),
+          row.find('strong').text(),
+          row.find('small').text(),
+        ])
+    ).toEqual([
+      [
+        'generation',
+        '生成适配器',
+        '3类/16条 · 可替换 16',
+        '适配器 HP适配器 6 / 能量适配器 5 / 削韧适配器 5 · 来源 HP候选 5 / 能量候选 5 / 削韧候选 5 / +1 · 状态 候选未确认 15 / 公式未确认 1 · 缺口 最终公式 16 / 防御抗性顺序 6 / 命中绑定 6 / +4',
+      ],
+      [
+        'runtime',
+        '运行适配器',
+        '1类/1条 · 可替换 1',
+        '适配器 HP适配器 1 · 来源 HP预览 1 · 状态 公式未确认 1 · 缺口 最终公式 1 / 防御抗性顺序 1 / 命中绑定 1',
+      ],
+    ]);
+    expect(
+      wrapper
         .find('[data-testid="workbench-runtime-resource-monitor"]')
         .exists()
     ).toBe(true);
