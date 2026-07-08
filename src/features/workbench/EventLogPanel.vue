@@ -261,6 +261,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  runtimeLogFocus: {
+    type: Object,
+    default: null,
+  },
 });
 const emit = defineEmits(['select-runtime-state-point']);
 
@@ -348,11 +352,22 @@ const filteredRuntimeSimLogRows = computed(() =>
   })
 );
 const runtimeLogFilterSummary = computed(() => {
-  const scope =
-    props.calculatorDiagnosticFocus?.scope === 'runtime' ? 'runtime' : 'manual';
+  const actionResultFocusActive =
+    props.runtimeLogFocus?.source === 'action-result' &&
+    props.runtimeLogFocus?.statePointId === props.selectedStateCurvePointId;
+  const scope = actionResultFocusActive
+    ? 'action-result'
+    : props.calculatorDiagnosticFocus?.scope === 'runtime'
+      ? 'runtime'
+      : 'manual';
+  const labels = {
+    'action-result': '结果定位',
+    runtime: '运行视角',
+    manual: '日志筛选',
+  };
   return {
     scope,
-    label: scope === 'runtime' ? '运行视角' : '日志筛选',
+    label: labels[scope] ?? '日志筛选',
     count: `${filteredRuntimeSimLogRows.value.length}/${runtimeSimLogRows.value.length}条`,
     detail: [
       getRuntimeTrackFilterLabel(runtimeTrackFilter.value),
@@ -510,6 +525,16 @@ watch(
   }
 );
 
+watch(
+  () => props.runtimeLogFocus?.sequence,
+  () => {
+    if (props.runtimeLogFocus?.source !== 'action-result') {
+      return;
+    }
+    focusRuntimeLogByStatePoint(props.runtimeLogFocus.statePointId);
+  }
+);
+
 function formatPayload(event) {
   if (event.type === 'DAMAGE_PROJECTED') {
     return `${event.payload.skillName} / ${event.payload.segment.label} / ${event.payload.rawDamage}`;
@@ -586,6 +611,21 @@ function showSelectedRuntimeLog() {
     runtimeActionFilter.value !== actionKey
   ) {
     runtimeActionFilter.value = actionKey;
+  }
+}
+
+function focusRuntimeLogByStatePoint(statePointId) {
+  if (!statePointId) {
+    return;
+  }
+  runtimeTrackFilter.value = 'all';
+  runtimeActorFilter.value = 'all';
+  runtimeActionFilter.value = 'all';
+  const index = runtimeSimLogRows.value.findIndex(
+    row => getRuntimeStatePointIdByRow(row) === statePointId
+  );
+  if (index >= 0) {
+    selectedRuntimeLogIndex.value = index;
   }
 }
 

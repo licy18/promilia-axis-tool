@@ -458,6 +458,23 @@ describe('Workbench view', () => {
     expect(hpStateCurvePoints[0].attributes('data-state-point-id')).toBe(
       appliedStatePointId
     );
+    let actionResultRow = wrapper.find(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    );
+    expect(actionResultRow.attributes('data-has-runtime-trace')).toBe('true');
+    expect(actionResultRow.attributes('data-runtime-state-point-id')).toBe(
+      appliedStatePointId
+    );
+    expect(actionResultRow.attributes('data-source-delta-ids')).toContain(
+      'action-0001|applied-frame-0-point-0'
+    );
+    expect(
+      actionResultRow
+        .find('[data-testid="workbench-action-result-runtime-trace"]')
+        .text()
+    ).toContain(
+      '定位 1条运行结果 · HP 12,461 · Delta action-0001|applied-frame-0-point-0'
+    );
     await firstCandidatePoint.trigger('click');
     await nextTick();
     expect(firstCandidatePoint.classes()).toContain('selected');
@@ -1192,6 +1209,42 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-filter-summary"]')
         .text()
     ).toBe('日志筛选0/1条能量 · 全部角色 · 全部动作');
+    actionResultRow = wrapper.find(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    );
+    await actionResultRow.trigger('click');
+    await nextTick();
+    actionResultRow = wrapper.find(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    );
+    expect(actionResultRow.attributes('data-selected')).toBe('true');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-view-summary"]')
+        .text()
+    ).toBe('运行视角1/16点已用 · 全部轨道 · 选中三值点');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-filter-summary"]')
+        .text()
+    ).toBe('结果定位1/1条全部 · 全部角色 · 全部动作');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-filter-count"]')
+        .text()
+    ).toBe('1/1');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-runtime-sim-log-track-filter"][data-track-filter="all"]'
+        )
+        .attributes('data-active')
+    ).toBe('true');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-row"]')
+        .attributes('data-selected')
+    ).toBe('true');
     await wrapper
       .find(
         '[data-testid="workbench-three-value-calculator-diagnostic-row"][data-calculator-scope="runtime"]'

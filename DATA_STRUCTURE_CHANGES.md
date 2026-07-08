@@ -10857,3 +10857,90 @@ data-testid="workbench-state-curve-point-participation"
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8CT 应把 runtime applied 三值点与 actionResultTimeline 动作级三值结果继续对齐，强化 delta 来源追踪。
+
+## 127. 阶段 5-8CT：action result runtime point locator
+
+阶段 5-8CT 不修改项目保存 schema，也不修改 simulation 输出结构。本阶段新增 Workbench 前端派生定位关系，让动作级三值结果可以定位到 runtime applied 状态点和模拟日志。
+
+### 127.1 AnalysisPanel 新增输入
+
+`AnalysisPanel` 新增 prop：
+
+```js
+runtimeProjection
+```
+
+该 prop 只读消费：
+
+```js
+runtimeProjection.simLog[]
+runtimeProjection.enemyStateCurve.points[]
+runtimeProjection.selfEnergyCurveByActor[].points[]
+```
+
+用于按 `actionId` 建立动作结果到 runtime applied delta 的派生索引。
+
+### 127.2 动作结果行新增派生 DOM
+
+`workbench-action-result-source-row` 新增：
+
+```html
+data-action-id
+data-has-runtime-trace
+data-runtime-state-point-id
+data-selected
+data-source-delta-ids
+```
+
+并新增只读摘要：
+
+```html
+data-testid="workbench-action-result-runtime-trace"
+```
+
+默认样本当前显示：
+
+```text
+定位 1条运行结果 · HP 12,461 · Delta action-0001|applied-frame-0-point-0
+```
+
+### 127.3 Workbench / EventLogPanel 新增定位事件
+
+`AnalysisPanel` 点击动作结果行时发出：
+
+```js
+select-runtime-state-point(statePointId)
+```
+
+`Workbench` 接收后：
+
+```js
+stateCurveLayerFilters = { applied: true, candidate: false, sampled: false, placeholder: false }
+stateCurveTrackFilters = {}
+stateCurveFocusMode = 'selected'
+calculatorDiagnosticScope = 'runtime'
+runtimeLogFocus = { source: 'action-result', statePointId, sequence }
+```
+
+`EventLogPanel` 新增 prop：
+
+```js
+runtimeLogFocus
+```
+
+当 `runtimeLogFocus.source === 'action-result'` 时，模拟日志筛选恢复为全部，并定位到相同 `statePointId` 对应的 runtime log。
+
+### 127.4 验证
+
+当前测试覆盖：
+
+- 默认动作结果行携带 applied HP 状态点 ID 和 source delta ID。
+- 动作结果行显示 runtime trace 摘要。
+- 当模拟日志被筛到能量导致 `0/1` 后，点击动作结果行会恢复日志为 `1/1`。
+- 状态曲线切到 `运行视角 1/16点 已用 · 全部轨道 · 选中三值点`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+
+下一阶段 5-8CU 应从结果定位继续推进到动作级贡献拆分面板入口，让用户能在不追最终公式的前提下看到 HP / 韧性 / 能量三条当前贡献。

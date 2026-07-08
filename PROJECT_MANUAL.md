@@ -5471,6 +5471,37 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8CT 目标：把 runtime applied 三值点与 actionResultTimeline 动作级三值结果进一步对齐，让用户能从动作结果、状态曲线点、模拟日志之间看到同一条 delta 的对应关系。
 - 优先做可追踪的 ID/来源显示和轻量交叉高亮，不扩展最终公式或逐帧动作细节。
 
+### 2026-07-08：阶段 5-8CT 动作结果定位 runtime 三值点
+
+本轮完成：
+
+- `AnalysisPanel` 的动作级三值结果行接入 `threeValueRuntimeProjection`，按 `actionId` 汇总 runtime applied delta。
+- 动作结果行现在显示可定位的运行结果摘要，例如 `定位 1条运行结果 · HP 12,461 · Delta action-0001|applied-frame-0-point-0`。
+- 点击动作结果行会切到 runtime applied 视角，选中对应状态曲线点，并让模拟日志恢复显示同一条 runtime log。
+- `EventLogPanel` 新增动作结果定位来源的筛选摘要，显示 `结果定位 1/1条 全部 · 全部角色 · 全部动作`，避免日志被旧筛选隐藏后用户找不到结果。
+- Workbench 测试覆盖动作结果行的 trace、状态点 ID、source delta ID，以及日志先被筛掉后点击动作结果恢复可见的闭环。
+
+当前验证事实：
+
+- 默认样本 `action-0001` 的动作结果行能定位到同一个 applied HP 状态点。
+- 动作结果、状态曲线点和模拟日志共享 `action-0001|applied-frame-0-point-0` 这条 delta 来源。
+- 手动把 runtime sim log 筛到能量导致 `0/1` 后，点击动作结果会恢复为 `1/1` 并选中 HP applied 日志。
+
+当前边界：
+
+- 本阶段只做 UI 定位链路，不改变项目保存 schema，不引入最终公式，也不扩展逐帧动作细节。
+- 当前定位粒度是 action 级 runtime applied delta；多条 runtime delta 时先定位该动作下排序最靠前的状态点。
+- 尚未做自动滚动、跨面板动画高亮或贡献拆分弹层。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+
+下一步：
+
+- 阶段 5-8CU 目标：继续推进 Endaxis 式主流程 UI，把结果定位后的“贡献拆分”做成稳定面板入口。
+- 优先从已存在的三值贡献行开始，按动作/三值轨道展示 HP、韧性、能量的当前贡献，不追逐最终公式或逐帧命中细节。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

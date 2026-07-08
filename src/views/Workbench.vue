@@ -127,6 +127,7 @@
           :diagnostics="simulationResult.diagnostics"
           :damage-timeline="simulationResult.damageTimeline"
           :action-result-timeline="simulationResult.actionResultTimeline"
+          :runtime-projection="simulationResult.threeValueRuntimeProjection"
           :candidate-value-series="simulationResult.candidateValueSeries"
           :three-value-curve-framework="
             simulationResult.threeValueCurveFramework
@@ -145,6 +146,7 @@
           @focus-three-value-calculator-scope="
             focusThreeValueCalculatorScope
           "
+          @select-runtime-state-point="selectActionResultRuntimePoint"
         />
       </div>
 
@@ -155,6 +157,7 @@
         :runtime-selected-detail="runtimeSelectedDetail"
         :selected-state-curve-point-id="selectedStateCurvePointId"
         :calculator-diagnostic-focus="calculatorDiagnosticFocus"
+        :runtime-log-focus="runtimeLogFocus"
         @select-runtime-state-point="selectRuntimeStatePoint"
       />
     </div>
@@ -228,6 +231,7 @@ const stateCurveLayerFilters = ref({ ...DEFAULT_STATE_CURVE_LAYER_FILTERS });
 const stateCurveTrackFilters = ref({});
 const calculatorDiagnosticScope = ref('');
 const calculatorDiagnosticFocus = ref({ scope: '', sequence: 0 });
+const runtimeLogFocus = ref({ source: '', statePointId: '', sequence: 0 });
 const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const draftStatus = ref('未保存草稿');
 
@@ -910,6 +914,26 @@ function selectRuntimeStatePoint(pointId) {
   }
 }
 
+function selectActionResultRuntimePoint(pointId) {
+  selectRuntimeStatePoint(pointId);
+  if (!pointId) {
+    return;
+  }
+  stateCurveLayerFilters.value = {
+    applied: true,
+    candidate: false,
+    sampled: false,
+    placeholder: false,
+  };
+  stateCurveTrackFilters.value = {};
+  calculatorDiagnosticScope.value = 'runtime';
+  runtimeLogFocus.value = {
+    source: 'action-result',
+    statePointId: pointId,
+    sequence: runtimeLogFocus.value.sequence + 1,
+  };
+}
+
 function updateStateCurveFocusMode(mode) {
   if (mode === 'selected' && !selectedStateCurvePointId.value) {
     return;
@@ -943,6 +967,11 @@ function focusThreeValueCalculatorScope(scope) {
   calculatorDiagnosticFocus.value = {
     scope: normalizedScope,
     sequence: calculatorDiagnosticFocus.value.sequence + 1,
+  };
+  runtimeLogFocus.value = {
+    source: '',
+    statePointId: '',
+    sequence: runtimeLogFocus.value.sequence,
   };
 
   if (normalizedScope === 'runtime') {

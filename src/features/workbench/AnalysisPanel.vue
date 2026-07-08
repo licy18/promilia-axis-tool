@@ -142,11 +142,24 @@
           )
         }}
       </p>
-      <div
+      <button
         v-for="entry in actionResultTimeline"
         :key="entry.actionId"
+        type="button"
         class="action-result-row"
+        :class="{ selected: isActionResultRuntimeSelected(entry) }"
+        :data-action-id="entry.actionId"
+        :data-has-runtime-trace="Boolean(getActionResultRuntimeTrace(entry))"
+        :data-runtime-state-point-id="
+          getActionResultRuntimeTrace(entry)?.firstStatePointId ?? ''
+        "
+        :data-selected="isActionResultRuntimeSelected(entry)"
+        :data-source-delta-ids="
+          getActionResultRuntimeTrace(entry)?.sourceDeltaIds.join(',') ?? ''
+        "
         data-testid="workbench-action-result-source-row"
+        :disabled="!getActionResultRuntimeTrace(entry)"
+        @click="selectActionResultRuntimePoint(entry)"
       >
         <div class="damage-row-main">
           <span>{{ entry.actionName }}</span>
@@ -183,9 +196,20 @@
           <small v-if="formatHitCandidateSummary(entry)">
             {{ formatHitCandidateSummary(entry) }}
           </small>
+          <small
+            v-if="getActionResultRuntimeTrace(entry)"
+            class="action-result-runtime-trace"
+            data-testid="workbench-action-result-runtime-trace"
+          >
+            {{
+              formatActionResultRuntimeTrace(
+                getActionResultRuntimeTrace(entry)
+              )
+            }}
+          </small>
         </div>
         <strong>{{ formatActionResultValues(entry) }}</strong>
-      </div>
+      </button>
     </div>
 
     <div
@@ -576,6 +600,7 @@ import {
 import {
   createStateCurveFrameGroupKey,
   createStateCurvePointId,
+  createRuntimeStateCurvePointId,
 } from './stateCurvePointIdentity';
 
 const CANDIDATE_CHART_COLORS = ['#f2b366', '#79c7b9', '#a6b7ff'];
@@ -627,6 +652,10 @@ const props = defineProps({
   actionResultTimeline: {
     type: Array,
     default: () => [],
+  },
+  runtimeProjection: {
+    type: Object,
+    default: null,
   },
   candidateValueSeries: {
     type: Object,
@@ -695,6 +724,7 @@ const emit = defineEmits([
   'update-state-curve-track-filter',
   'update-state-curve-focus-mode',
   'focus-three-value-calculator-scope',
+  'select-runtime-state-point',
 ]);
 
 const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
@@ -836,6 +866,46 @@ const threeValueCalculatorDiagnosticRows = computed(() =>
     }),
   ].filter(Boolean)
 );
+const runtimePointByDeltaId = computed(() => {
+  const byId = new Map();
+  for (const point of props.runtimeProjection?.enemyStateCurve?.points ?? []) {
+    if (point?.sourceDeltaId) {
+      byId.set(point.sourceDeltaId, point);
+    }
+  }
+  for (const actor of props.runtimeProjection?.selfEnergyCurveByActor ?? []) {
+    for (const point of actor.points ?? []) {
+      if (point?.sourceDeltaId) {
+        byId.set(point.sourceDeltaId, point);
+      }
+    }
+  }
+  return byId;
+});
+const runtimeTraceByActionId = computed(() => {
+  const groups = new Map();
+  for (const row of props.runtimeProjection?.simLog ?? []) {
+    if (!row?.actionId) {
+      continue;
+    }
+    const group = groups.get(row.actionId) ?? [];
+    const point = row.sourceDeltaId
+      ? runtimePointByDeltaId.value.get(row.sourceDeltaId)
+      : null;
+    group.push({
+      row,
+      point,
+      statePointId: createRuntimeStateCurvePointId(row, point),
+    });
+    groups.set(row.actionId, group);
+  }
+  return new Map(
+    [...groups.entries()].map(([actionId, rows]) => [
+      actionId,
+      createActionResultRuntimeTrace(actionId, rows),
+    ])
+  );
+});
 const activeStateCurveLayerKeys = computed(() =>
   STATE_CURVE_LAYER_OPTIONS.filter(
     layer => effectiveStateCurveLayerFilters.value[layer.key]
@@ -1470,6 +1540,85 @@ function selectStateCurvePoint(point) {
   emit('select-state-curve-point', point.statePointId);
 }
 
+function getActionResultRuntimeTrace(entry) {
+  return runtimeTraceByActionId.value.get(entry?.actionId) ?? null;
+}
+
+function selectActionResultRuntimePoint(entry) {
+  const trace = getActionResultRuntimeTrace(entry);
+  if (!trace?.firstStatePointId) {
+    return;
+  }
+  emit('select-runtime-state-point', trace.firstStatePointId);
+}
+
+function isActionResultRuntimeSelected(entry) {
+  const trace = getActionResultRuntimeTrace(entry);
+  return (
+    Boolean(props.selectedStateCurvePointId) &&
+    Boolean(trace?.statePointIds.includes(props.selectedStateCurvePointId))
+  );
+}
+
+function createActionResultRuntimeTrace(actionId, rows) {
+  const sortedRows = [...rows].sort(compareRuntimeTraceRows);
+  const sourceDeltaIds = uniqueDisplayValues(
+    sortedRows.map(item => item.row.sourceDeltaId)
+  );
+  const statePointIds = uniqueDisplayValues(
+    sortedRows.map(item => item.statePointId)
+  );
+  return {
+    actionId,
+    count: sortedRows.length,
+    firstStatePointId: statePointIds[0] ?? '',
+    statePointIds,
+    sourceDeltaIds,
+    trackSummary: sortedRows
+      .map(item => formatRuntimeTraceTrack(item.row))
+      .filter(Boolean)
+      .join(' / '),
+    shortSourceDeltaIds: sourceDeltaIds.map(formatSourceDeltaShortId),
+  };
+}
+
+function compareRuntimeTraceRows(left, right) {
+  return (
+    compareNullableNumber(left.row?.frameIndex, right.row?.frameIndex) ||
+    compareNullableNumber(left.row?.sequenceIndex, right.row?.sequenceIndex) ||
+    String(left.row?.sourceDeltaId ?? '').localeCompare(
+      String(right.row?.sourceDeltaId ?? '')
+    )
+  );
+}
+
+function formatActionResultRuntimeTrace(trace) {
+  const sourceText = trace.shortSourceDeltaIds.length
+    ? ` · Delta ${trace.shortSourceDeltaIds.join(' / ')}`
+    : '';
+  return `定位 ${trace.count}条运行结果 · ${trace.trackSummary}${sourceText}`;
+}
+
+function formatRuntimeTraceTrack(row) {
+  if (row?.trackKey === 'enemyHpDamage') {
+    return `HP ${formatStateCurveNumber(row.hpDelta)}`;
+  }
+  if (row?.trackKey === 'enemyToughnessDamage') {
+    return `韧性 ${formatStateCurveNumber(row.toughnessDelta)}`;
+  }
+  if (row?.trackKey === 'selfEnergyChange') {
+    return `能量 ${formatSignedNumber(row.energyDelta)}`;
+  }
+  return formatStateCurveNumber(row?.delta);
+}
+
+function formatSourceDeltaShortId(sourceDeltaId) {
+  const parts = String(sourceDeltaId ?? '')
+    .split('|')
+    .filter(Boolean);
+  return parts.slice(0, 2).join('|') || '-';
+}
+
 function isStateCurveLayerVisible(layerKey) {
   return Boolean(effectiveStateCurveLayerFilters.value[layerKey]);
 }
@@ -2097,10 +2246,28 @@ h2 {
   display: grid;
   gap: 6px;
   min-width: 0;
+  width: 100%;
   padding: 9px 10px;
+  border: 0;
   border-left: 3px solid #79c7b9;
   border-radius: 4px;
   background: rgba(121, 199, 185, 0.1);
+  text-align: left;
+  cursor: pointer;
+}
+
+.action-result-row:hover,
+.action-result-row:focus {
+  background: rgba(121, 199, 185, 0.16);
+}
+
+.action-result-row.selected {
+  background: rgba(121, 199, 185, 0.2);
+}
+
+.action-result-row:disabled {
+  cursor: default;
+  opacity: 0.82;
 }
 
 .calculator-diagnostic-list {
@@ -2489,6 +2656,10 @@ h2 {
 .action-result-row small {
   color: #b8c0c7;
   font-size: 11px;
+}
+
+.action-result-row .action-result-runtime-trace {
+  color: #a6b7ff;
 }
 
 .damage-row-main {
