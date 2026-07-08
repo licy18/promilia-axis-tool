@@ -7,6 +7,7 @@ import {
   createWorkbenchMainFlowRecoveryAction,
   createWorkbenchOpenRuntimeResultsFlowAction,
   createWorkbenchRuntimeActionEditFlowAction,
+  createWorkbenchRuntimeReviewOperationCommand,
   createWorkbenchRuntimeReviewOperationConsumer,
   createWorkbenchRuntimeReviewOperationFlowAction,
   createWorkbenchRuntimeReviewPrimaryOperationFlowAction,
@@ -802,6 +803,53 @@ describe('workbench main flow actions', () => {
         canRun: true,
       },
     });
+  });
+
+  it('creates a shared runtime review operation command for panel actions', () => {
+    const command = createWorkbenchRuntimeReviewOperationCommand({
+      operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+      source: 'runtime-detail',
+      flowModel: {
+        runtimeReviewOperations: {
+          primaryOperationKind:
+            WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+          primaryOperationEnabled: false,
+          returnResult: {},
+        },
+      },
+      context: {
+        actionId: 'fallback-action',
+        originStatePointId: 'origin-state-point',
+        statePointId: 'fallback-return-state-point',
+        status: 'refreshed-edit-result',
+      },
+    });
+
+    expect(command).toMatchObject({
+      operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+      source: 'runtime-detail',
+      enabled: true,
+      actionId: 'fallback-action',
+      statePointId: 'fallback-return-state-point',
+      context: {
+        originStatePointId: 'origin-state-point',
+        status: 'refreshed-edit-result',
+      },
+      view: {
+        operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+        enabled: true,
+        actionId: 'fallback-action',
+        statePointId: 'fallback-return-state-point',
+      },
+      action: {
+        kind: 'return-runtime-result',
+        source: 'runtime-detail',
+        actionId: 'fallback-action',
+        statePointId: 'fallback-return-state-point',
+        canRun: true,
+      },
+    });
+    expect(command.action).toBe(command.view.action);
   });
 
   it('creates the runtime review primary operation view from the consumer', () => {

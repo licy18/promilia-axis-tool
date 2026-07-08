@@ -9183,6 +9183,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 ResourceMonitorPanel、EventLogPanel、RuntimeSelectedDetailPanel 中各自消费 review operation 的入口逐步收束为共享 command/view 形态，让曲线、日志、详情三处的“定位动作 / 回到结果点”主路径更一致。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Operation Command Consumers
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增共享 `createWorkbenchRuntimeReviewOperationCommand()`，为非 primary 的运行结果操作统一输出 `target`、`context`、`enabled`、`action` 和 `view`。
+- `RuntimeSelectedDetailPanel` 的“定位动作 / 回到结果点”、`EventLogPanel` 的“定位动作 / 回到结果点”、`ResourceMonitorPanel` 的曲线点“定位动作”改为消费共享 operation command。
+- 曲线、日志、详情三处运行结果面板不再直接引用 `createWorkbenchRuntimeReviewOperationConsumer()`，具体 action 创建继续由 `workbenchMainFlowActions` 统一负责。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- main flow action 单测覆盖 operation command 的 context/action/view 同源关系。
+- RuntimeSelectedDetailPanel 组件测试确认 focus 与 return 两条按钮路径仍可分发。
+- Workbench 页面测试覆盖曲线、日志、详情三处运行结果操作路径仍可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、79 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、209 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把运行结果区的 command 消费进一步整理成可复用的面板 view model，让曲线、日志、详情和顶部 FlowPanel 在“选择结果 -> 定位动作 -> 修改 -> 回看结果”的主路径上共享更少分散状态。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

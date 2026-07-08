@@ -207,11 +207,11 @@
         <button
           type="button"
           class="runtime-log-action-focus"
-          :data-action-id="runtimeLogActionFocusOperationTarget.actionId"
-          :data-focus-field="runtimeLogActionFocusOperationTarget.fieldKey"
-          :data-state-point-id="runtimeLogActionFocusOperationTarget.statePointId"
+          :data-action-id="runtimeLogActionFocusCommandTarget.actionId"
+          :data-focus-field="runtimeLogActionFocusCommandTarget.fieldKey"
+          :data-state-point-id="runtimeLogActionFocusCommandTarget.statePointId"
           data-testid="workbench-runtime-sim-log-action-focus"
-          :disabled="!runtimeLogActionFocusOperation.enabled"
+          :disabled="!runtimeLogActionFocusCommand.enabled"
           @click="focusRuntimeLogAction"
         >
           <EditPen class="runtime-log-action-focus-icon" />
@@ -221,14 +221,14 @@
           v-if="runtimeLogResultReturnButtonVisible"
           type="button"
           class="runtime-log-result-return"
-          :data-action-id="runtimeLogResultReturnOperationContext.actionId"
+          :data-action-id="runtimeLogResultReturnCommandContext.actionId"
           :data-origin-state-point-id="
-            runtimeLogResultReturnOperationContext.originStatePointId
+            runtimeLogResultReturnCommandContext.originStatePointId
           "
-          :data-return-status="runtimeLogResultReturnOperationContext.status"
-          :data-state-point-id="runtimeLogResultReturnOperationContext.statePointId"
+          :data-return-status="runtimeLogResultReturnCommandContext.status"
+          :data-state-point-id="runtimeLogResultReturnCommandContext.statePointId"
           data-testid="workbench-runtime-sim-log-return-result"
-          :disabled="!runtimeLogResultReturnOperation.enabled"
+          :disabled="!runtimeLogResultReturnCommand.enabled"
           @click="returnRuntimeLogResult"
         >
           <Aim class="runtime-log-result-return-icon" />
@@ -331,7 +331,7 @@ import {
 import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
   createWorkbenchRuntimeReviewFlowAction,
-  createWorkbenchRuntimeReviewOperationConsumer,
+  createWorkbenchRuntimeReviewOperationCommand,
 } from './workbenchMainFlowActions';
 import {
   isRuntimeResultFocusSource,
@@ -623,20 +623,20 @@ const runtimeLogActionFocus = computed(() =>
     statePointId: runtimeLogDetailStatePointId.value,
   })
 );
-const runtimeLogActionFocusOperation = computed(() =>
-  createWorkbenchRuntimeReviewOperationConsumer({
+const runtimeLogActionFocusCommand = computed(() =>
+  createWorkbenchRuntimeReviewOperationCommand({
     operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
     source: 'event-log-runtime-detail',
     flowModel: props.flowModel,
     target: runtimeLogActionFocus.value,
   })
 );
-const runtimeLogActionFocusOperationTarget = computed(
-  () => runtimeLogActionFocusOperation.value.target
+const runtimeLogActionFocusCommandTarget = computed(
+  () => runtimeLogActionFocusCommand.value.target
 );
 const runtimeLogEditContext = computed(() =>
   createRuntimeLogEditContext({
-    actionId: runtimeLogActionFocusOperationTarget.value.actionId,
+    actionId: runtimeLogActionFocusCommandTarget.value.actionId,
     statePointId: runtimeLogDetailStatePointId.value,
     focus: props.actionEditFocus,
   })
@@ -646,7 +646,7 @@ const runtimeLogResultReturnActionId = computed(
     (props.actionEditFocus?.editOrigin === 'runtime-focus'
       ? flowEditResult.value?.actionId
       : '') ||
-    runtimeLogActionFocusOperationTarget.value.actionId ||
+    runtimeLogActionFocusCommandTarget.value.actionId ||
     ''
 );
 const runtimeLogResultReturnContext = computed(() =>
@@ -659,20 +659,20 @@ const runtimeLogResultReturnContext = computed(() =>
     }),
   })
 );
-const runtimeLogResultReturnOperation = computed(() =>
-  createWorkbenchRuntimeReviewOperationConsumer({
+const runtimeLogResultReturnCommand = computed(() =>
+  createWorkbenchRuntimeReviewOperationCommand({
     operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
     source: 'event-log-runtime-detail',
     flowModel: props.flowModel,
     context: runtimeLogResultReturnContext.value,
   })
 );
-const runtimeLogResultReturnOperationContext = computed(
-  () => runtimeLogResultReturnOperation.value.context
+const runtimeLogResultReturnCommandContext = computed(
+  () => runtimeLogResultReturnCommand.value.context
 );
 const runtimeLogResultReturnButtonVisible = computed(() =>
   Boolean(
-    runtimeLogResultReturnOperationContext.value?.statePointId ||
+    runtimeLogResultReturnCommandContext.value?.statePointId ||
       runtimeLogResultReturnContext.value
   )
 );
@@ -816,11 +816,11 @@ function showSelectedRuntimeLog() {
 }
 
 function focusRuntimeLogAction() {
-  dispatchRuntimeLogFlowAction(runtimeLogActionFocusOperation.value.action);
+  dispatchRuntimeLogFlowAction(runtimeLogActionFocusCommand.value.action);
 }
 
 function returnRuntimeLogResult() {
-  dispatchRuntimeLogFlowAction(runtimeLogResultReturnOperation.value.action);
+  dispatchRuntimeLogFlowAction(runtimeLogResultReturnCommand.value.action);
 }
 
 function dispatchRuntimeLogFlowAction(action) {

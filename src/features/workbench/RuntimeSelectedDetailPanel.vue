@@ -236,7 +236,7 @@ import {
 } from './workbenchFlowModel';
 import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
-  createWorkbenchRuntimeReviewOperationConsumer,
+  createWorkbenchRuntimeReviewOperationCommand,
 } from './workbenchMainFlowActions';
 
 const props = defineProps({
@@ -292,10 +292,10 @@ const runtimeReviewDetailSynced = computed(
       runtimeReviewSelection.value.selectedStatePointId
 );
 const runtimeDetailActionEditButtonTarget = computed(() =>
-  runtimeDetailActionEditOperation.value.target
+  runtimeDetailActionEditCommand.value.target
 );
-const runtimeDetailActionEditOperation = computed(() =>
-  createWorkbenchRuntimeReviewOperationConsumer({
+const runtimeDetailActionEditCommand = computed(() =>
+  createWorkbenchRuntimeReviewOperationCommand({
     operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
     source: 'runtime-detail',
     flowModel: props.flowModel,
@@ -303,10 +303,10 @@ const runtimeDetailActionEditOperation = computed(() =>
   })
 );
 const runtimeDetailResultReturnButtonTarget = computed(() =>
-  runtimeDetailResultReturnOperation.value.context
+  runtimeDetailResultReturnCommand.value.context
 );
-const runtimeDetailResultReturnOperation = computed(() =>
-  createWorkbenchRuntimeReviewOperationConsumer({
+const runtimeDetailResultReturnCommand = computed(() =>
+  createWorkbenchRuntimeReviewOperationCommand({
     operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
     source: 'runtime-detail',
     flowModel: props.flowModel,
@@ -314,10 +314,10 @@ const runtimeDetailResultReturnOperation = computed(() =>
   })
 );
 const runtimeReviewFocusActionEnabled = computed(
-  () => runtimeDetailActionEditOperation.value.enabled
+  () => runtimeDetailActionEditCommand.value.enabled
 );
 const runtimeReviewReturnResultEnabled = computed(
-  () => runtimeDetailResultReturnOperation.value.enabled
+  () => runtimeDetailResultReturnCommand.value.enabled
 );
 const runtimeDetailActionEditTarget = computed(() =>
   getRuntimeDetailActionEditTarget(props.flowModel, props.detail)
@@ -348,11 +348,11 @@ const panelVisible = computed(() =>
 );
 
 function focusRuntimeAction() {
-  dispatchRuntimeDetailFlowAction(runtimeDetailActionEditOperation.value.action);
+  dispatchRuntimeDetailFlowAction(runtimeDetailActionEditCommand.value.action);
 }
 
 function returnRuntimeResult() {
-  dispatchRuntimeDetailFlowAction(runtimeDetailResultReturnOperation.value.action);
+  dispatchRuntimeDetailFlowAction(runtimeDetailResultReturnCommand.value.action);
 }
 
 function dispatchRuntimeDetailFlowAction(action) {

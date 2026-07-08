@@ -286,6 +286,48 @@ export function createWorkbenchRuntimeReviewOperationFlowAction({
   }).action;
 }
 
+export function createWorkbenchRuntimeReviewOperationCommand({
+  operationKind = '',
+  flowModel = null,
+  source = '',
+  target = null,
+  context = null,
+  enabled,
+  consumer = null,
+} = {}) {
+  const resolvedConsumer =
+    consumer ??
+    createWorkbenchRuntimeReviewOperationConsumer({
+      operationKind,
+      flowModel,
+      source,
+      target,
+      context,
+      enabled,
+    });
+  const resolvedTarget = resolvedConsumer?.target ?? {};
+  const resolvedContext = resolvedConsumer?.context ?? resolvedTarget;
+  const resolvedOperationKind =
+    resolvedConsumer?.operationKind ?? operationKind;
+  const view = {
+    operationKind: resolvedOperationKind,
+    source: resolvedConsumer?.source ?? source,
+    enabled: Boolean(resolvedConsumer?.enabled),
+    disabledReason:
+      resolvedConsumer?.disabledReason ?? 'missing-runtime-review-operation',
+    actionId: resolvedTarget.actionId ?? resolvedContext.actionId ?? '',
+    statePointId:
+      resolvedTarget.statePointId ?? resolvedContext.statePointId ?? '',
+    target: resolvedTarget,
+    context: resolvedContext,
+    action: resolvedConsumer?.action ?? null,
+  };
+  return {
+    ...view,
+    view,
+  };
+}
+
 export function createWorkbenchRuntimeReviewOperationConsumer({
   operationKind = '',
   flowModel = null,

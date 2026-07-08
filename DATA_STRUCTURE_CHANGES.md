@@ -19742,3 +19742,68 @@ Workbench 页面层的运行结果主操作按钮现在消费 `runtimeReviewPrim
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、76 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、208 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 257. UI 主流程能力块：Runtime Review Operation Command Consumers
+
+### 257.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增共享函数：
+
+```js
+createWorkbenchRuntimeReviewOperationCommand({
+  operationKind,
+  flowModel,
+  source,
+  target,
+  context,
+  enabled,
+  consumer,
+})
+```
+
+输出结构：
+
+```js
+{
+  operationKind,
+  source,
+  enabled,
+  disabledReason,
+  actionId,
+  statePointId,
+  target,
+  context,
+  action,
+  view,
+}
+```
+
+行为：
+
+```text
+通过 createWorkbenchRuntimeReviewOperationConsumer() 解析 operation target/context/enabled/action。
+command.target / command.context 保留面板按钮读取的目标数据。
+command.action 作为面板 dispatch 的统一 action 来源。
+command.view 与 command.action 同源，供后续面板 view model 继续复用。
+```
+
+以下面板改为消费 `createWorkbenchRuntimeReviewOperationCommand()`：
+
+```text
+RuntimeSelectedDetailPanel：定位动作 / 回到结果点
+EventLogPanel：定位动作 / 回到结果点
+ResourceMonitorPanel：曲线点定位动作
+```
+
+### 257.2 保存与迁移
+
+本阶段只调整运行结果区三个面板的 operation command 消费关系，不新增持久字段，不需要数据迁移。
+
+### 257.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 operation command 的 context/action/view 同源关系。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、79 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、209 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

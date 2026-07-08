@@ -250,7 +250,7 @@
                 selectedRuntimeCurveActionEditTarget.statePointId
               "
               data-testid="workbench-runtime-resource-chart-selection-action-focus"
-              :disabled="!selectedRuntimeCurveActionEditOperation.enabled"
+              :disabled="!selectedRuntimeCurveActionEditCommand.enabled"
               @click="focusRuntimeCurveAction"
             >
               <EditPen class="runtime-curve-action-focus-icon" />
@@ -369,7 +369,7 @@ import {
 import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
   createWorkbenchRuntimeReviewFlowAction,
-  createWorkbenchRuntimeReviewOperationConsumer,
+  createWorkbenchRuntimeReviewOperationCommand,
 } from './workbenchMainFlowActions';
 import { isRuntimeResultFocusSource } from './runtimeFocusSource';
 
@@ -574,10 +574,10 @@ const selectedRuntimeCurveResultContext = computed(() =>
   )
 );
 const selectedRuntimeCurveActionEditTarget = computed(() =>
-  selectedRuntimeCurveActionEditOperation.value.target
+  selectedRuntimeCurveActionEditCommand.value.target
 );
-const selectedRuntimeCurveActionEditOperation = computed(() =>
-  createWorkbenchRuntimeReviewOperationConsumer({
+const selectedRuntimeCurveActionEditCommand = computed(() =>
+  createWorkbenchRuntimeReviewOperationCommand({
     operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
     source: 'resource-runtime-curve',
     flowModel: props.flowModel,
@@ -1085,7 +1085,7 @@ function selectRuntimeCurveAdjacentPoint(point) {
 
 function focusRuntimeCurveAction() {
   dispatchRuntimeCurveFlowAction(
-    selectedRuntimeCurveActionEditOperation.value.action
+    selectedRuntimeCurveActionEditCommand.value.action
   );
 }
 
