@@ -1,5 +1,5 @@
 import skillAssetEvidence from '../../data/generated/skill-asset-evidence.json';
-import { createThreeValueGenerationLayer } from '../generation/threeValueGenerationLayer';
+import { createThreeValueGenerationBundle } from '../generation/threeValueGenerationBuilder';
 import {
   createSelfEnergyDeltaSummaryByActor,
   createThreeValueRuntimeProjection,
@@ -1413,12 +1413,14 @@ export function projectSimulationResult({
     candidateValueSeries,
     runtimeSampleContext,
   });
-  const threeValueGenerationLayer = buildThreeValueGenerationLayer({
+  const threeValueGenerationBundle = createThreeValueGenerationBundle({
     scenario,
     actionResultTimeline,
     candidateValueSeries,
     runtimeSampleContext,
   });
+  const threeValueGenerationLayer =
+    threeValueGenerationBundle.threeValueGenerationLayer;
   const threeValueRuntimeProjection = createThreeValueRuntimeProjection({
     scenario,
     threeValueGenerationLayer,
@@ -1486,6 +1488,7 @@ export function projectSimulationResult({
     actionResultTimeline,
     candidateValueSeries,
     threeValueCurveFramework,
+    threeValueGenerationBundle,
     threeValueGenerationLayer,
     threeValueRuntimeProjection,
     damageTimeline,
@@ -1501,6 +1504,7 @@ export function projectSimulationResult({
       actionCount: scenario.actions.length,
       candidateValueSeriesSummary: candidateValueSeries.summary,
       threeValueCurveFrameworkSummary: threeValueCurveFramework.summary,
+      threeValueGenerationBundleSummary: threeValueGenerationBundle.summary,
       threeValueGenerationLayerSummary: threeValueGenerationLayer.summary,
       threeValueRuntimeProjectionSummary: threeValueRuntimeProjection.summary,
       formulaVersion: damageEvents[0]?.payload.formulaVersion ?? null,
@@ -1615,20 +1619,6 @@ function buildThreeValueCurveFramework({
     },
     applied: false,
   };
-}
-
-function buildThreeValueGenerationLayer({
-  scenario,
-  actionResultTimeline,
-  candidateValueSeries,
-  runtimeSampleContext,
-}) {
-  return createThreeValueGenerationLayer({
-    scenario,
-    actionResultTimeline,
-    candidateValueSeries,
-    runtimeSampleContext,
-  });
 }
 
 function compareNullableTimelineNumber(left, right) {

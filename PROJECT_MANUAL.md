@@ -7416,6 +7416,28 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续生成层能力块：把动作结果、候选点、采样点、占位点的生成入口进一步收敛为一个可复用的 generation builder，减少 `projectSimulationResult` 对内部 tracks/layers 的直接组装责任。
 
+### 2026-07-09：生成层能力块 - Generation Builder 收口
+
+本阶段属于：生成层。
+
+完成的可用能力：
+
+- 新增 `createThreeValueGenerationBundle()`，统一打包 `threeValueGenerationLayer`、`standardContract`、顶层 `actions/hits/deltas` 和 runtime 输入来源摘要。
+- `projectSimulationResult` 改为通过 generation builder 获取三值生成层结果，并在模拟结果中暴露 `threeValueGenerationBundle` 与 `threeValueGenerationBundleSummary`。
+- 第一纵切结果仍保持 1 动作、6 命中、16 delta、runtime 只应用 1 个 HP delta；本阶段不新增公式推断、不修改三值数值、不扩大证据展示。
+
+当前验证事实：
+
+- `projectSimulationResult` 不再直接调用 `createThreeValueGenerationLayer()`；直接构造只留在 generation builder 和 generation layer 自身测试中。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、14 条测试。
+
+下一步：
+
+- 切换到运行时层能力块：让 runtime 层进一步直接围绕 `standardContract` / `runtimeInputSource` 工作，并检查 `simLog`、`stateCurves`、资源曲线、summary 的输出边界。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

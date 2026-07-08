@@ -1469,6 +1469,38 @@ describe('first vertical slice simulation', () => {
       calculatorReplaceableDeltaCount: 16,
       applied: false,
     });
+    expect(result.threeValueGenerationBundle).toMatchObject({
+      sourceKind: 'azpr-three-value-generation-builder-bundle',
+      status: 'three-value-generation-builder-ready',
+      contractName: 'Action -> Hit -> ThreeValueDelta',
+      summary: {
+        generationLayerStatus: 'standard-three-value-generation-layer-ready',
+        standardContractStatus: 'action-hit-three-value-delta-contract-ready',
+        runtimeInputSourceKind:
+          'azpr-runtime-input-source-from-generation-builder',
+        actionCount: 1,
+        hitCount: 6,
+        deltaCount: 16,
+        appliedDeltaCount: 1,
+        candidateDeltaCount: 15,
+      },
+    });
+    expect(result.threeValueGenerationBundle.threeValueGenerationLayer).toBe(
+      result.threeValueGenerationLayer
+    );
+    expect(result.threeValueGenerationBundle.standardContract).toBe(
+      result.threeValueGenerationLayer.standardContract
+    );
+    expect(result.summary.threeValueGenerationBundleSummary).toMatchObject({
+      contractName: 'Action -> Hit -> ThreeValueDelta',
+      actionCount: 1,
+      hitCount: 6,
+      deltaCount: 16,
+      appliedDeltaCount: 1,
+      runtimeInputSourceKind:
+        'azpr-runtime-input-source-from-generation-builder',
+      applied: false,
+    });
     expect(result.threeValueGenerationLayer.standardContract).toMatchObject({
       sourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
       status: 'action-hit-three-value-delta-contract-ready',

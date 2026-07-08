@@ -15091,3 +15091,78 @@ runtime 仍只应用 `applied=true` 的 delta；candidate、sampled、placeholde
 - runtime 测试覆盖：当顶层 `deltas` 为空但 `standardContract.deltas` 存在时，runtime input 仍能生成 simLog、stateCurves 和 summary。
 - 第一纵切测试覆盖：真实 Workbench 模拟结果带有 1 动作、6 命中、16 delta 的标准合同；runtime 从合同接入后仍只应用 1 个 HP delta。
 - `npm run test -- --run src/__tests__/simulation/threeValueGenerationLayer.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，3 个测试文件、17 条测试。
+
+## 190. 生成层能力块：Generation Builder 收口
+
+本阶段属于生成层。
+
+### 190.1 结构变化
+
+新增 `createThreeValueGenerationBundle()`，作为生成层统一 builder。模拟结果新增：
+
+```js
+{
+  threeValueGenerationBundle,
+  summary: {
+    threeValueGenerationBundleSummary
+  }
+}
+```
+
+`threeValueGenerationBundle` 结构为：
+
+```js
+{
+  schemaVersion: 1,
+  sourceKind: 'azpr-three-value-generation-builder-bundle',
+  status,
+  contractName: 'Action -> Hit -> ThreeValueDelta',
+  threeValueGenerationLayer,
+  standardContract,
+  runtimeInputSource,
+  actions,
+  hits,
+  deltas,
+  summary
+}
+```
+
+其中 `runtimeInputSource` 只描述 runtime 应消费的标准合同入口：
+
+```js
+{
+  sourceKind: 'azpr-runtime-input-source-from-generation-builder',
+  contractName: 'Action -> Hit -> ThreeValueDelta',
+  standardContract,
+  deltas,
+  summary
+}
+```
+
+### 190.2 投影层接线
+
+`projectSimulationResult` 现在调用：
+
+```js
+createThreeValueGenerationBundle(...)
+```
+
+再从 bundle 中取得：
+
+```js
+threeValueGenerationBundle.threeValueGenerationLayer
+```
+
+供现有 runtime projection 使用。这样投影层不再直接调用 `createThreeValueGenerationLayer()`，后续可以继续把 runtime 消费入口切到 `runtimeInputSource` / `standardContract`。
+
+### 190.3 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化影响的是模拟结果结构：既有 `threeValueGenerationLayer` 仍保留；新增 `threeValueGenerationBundle` 用于后续运行时层和 UI 层收敛入口。
+
+### 190.4 验证
+
+- builder 测试覆盖：`createThreeValueGenerationBundle()` 同时返回 generation layer、standard contract、runtime input source、actions/hits/deltas，并保持引用一致。
+- 第一纵切测试覆盖：真实 Workbench 模拟结果暴露 `threeValueGenerationBundle` 与 `threeValueGenerationBundleSummary`；三值结果仍为 1 动作、6 命中、16 delta，runtime 只应用 1 个 HP delta。
+- `npm run test -- --run src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、14 条测试。
