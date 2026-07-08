@@ -5970,6 +5970,40 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DI 目标：继续完善结果定位体验，优先把最近编辑反馈与贡献拆分或曲线选中状态联动，让用户从编辑摘要进一步跳到对应三值结果点。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DI 最近编辑联动三值结果点
+
+本轮完成：
+
+- 最近编辑反馈条新增 `定位结果` 按钮。
+- `AnalysisPanel` 从既有 runtime trace 中为最近编辑动作派生首个 runtime state point。
+- 点击 `定位结果` 会复用既有 `select-action-result` 链路，选中对应三值结果点，并带起曲线 selected 模式、贡献拆分和运行详情。
+- Workbench 测试覆盖反馈条 runtime point DOM 状态、按钮可用性、贡献拆分和运行详情联动。
+
+当前验证事实：
+
+- 修改 `action-0001` 等级后，反馈条写入 `data-runtime-state-point-id` 和 `data-runtime-delta-count="1"`。
+- `定位结果` 按钮携带同一个 `data-runtime-state-point-id`，且在有 runtime trace 时可点击。
+- 点击 `定位结果` 后，状态曲线切到 selected 模式，动作贡献拆分面板定位到 `action-0001`。
+- 运行详情的 state point 与反馈条携带的 runtime state point 一致。
+- 本阶段只新增前端结果定位入口，不新增公式、simulation 输出或保存 schema。
+
+当前边界：
+
+- 本阶段使用该动作首个 runtime state point，不细分到每个字段变化对应的具体 delta。
+- 不计算字段编辑导致的三值差异，只把最近编辑动作定位到已有三值结果点。
+- 缺少 runtime trace 的动作会保留反馈条，但 `定位结果` 按钮不可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8DJ 目标：继续完善结果定位体验，优先在最近编辑反馈条中标明当前结果定位状态，避免用户重复点击或不清楚是否已经选中对应三值结果点。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

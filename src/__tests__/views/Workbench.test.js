@@ -1606,6 +1606,16 @@ describe('Workbench view', () => {
     expect(actionEditFeedback.attributes('data-edit-source-summary')).toBe(
       '1 -> 2'
     );
+    const feedbackStatePointId = actionEditFeedback.attributes(
+      'data-runtime-state-point-id'
+    );
+    expect(feedbackStatePointId).toBeTruthy();
+    expect(actionEditFeedback.attributes('data-runtime-delta-count')).toBe(
+      '1'
+    );
+    expect(feedbackStatePointId).toBe(
+      actionResultRow.attributes('data-runtime-state-point-id')
+    );
     expect(actionEditFeedback.text()).toContain('最近编辑');
     expect(actionEditFeedback.text()).toContain('等级变更 1 -> 2');
 
@@ -1665,6 +1675,33 @@ describe('Workbench view', () => {
       '1 -> 2'
     );
     expect(sourceTimelineAction.classes()).toContain('edit-focused');
+
+    const resultFocusButton = wrapper.find(
+      '[data-testid="workbench-action-edit-feedback-result-focus"]'
+    );
+    expect(resultFocusButton.attributes('data-runtime-state-point-id')).toBe(
+      feedbackStatePointId
+    );
+    expect(resultFocusButton.attributes('disabled')).toBeUndefined();
+
+    await resultFocusButton.trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-focus-selected"]')
+        .classes()
+    ).toContain('active');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-action-contribution-panel"]')
+        .attributes('data-action-id')
+    ).toBe('action-0001');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(feedbackStatePointId);
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     await nextTick();

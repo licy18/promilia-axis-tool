@@ -53,6 +53,8 @@
         :data-edit-source-field="actionEditFeedback.fieldKey"
         :data-edit-source-label="actionEditFeedback.label"
         :data-edit-source-summary="actionEditFeedback.changeSummary"
+        :data-runtime-delta-count="actionEditFeedback.runtimeDeltaCount"
+        :data-runtime-state-point-id="actionEditFeedback.runtimeStatePointId"
         data-testid="workbench-action-edit-feedback"
       >
         <div class="action-edit-feedback-main">
@@ -60,14 +62,28 @@
           <strong>{{ actionEditFeedback.actionName }}</strong>
           <small>{{ actionEditFeedback.display }}</small>
         </div>
-        <button
-          type="button"
-          class="action-edit-feedback-focus"
-          data-testid="workbench-action-edit-feedback-focus"
-          @click="focusActionEditFeedback"
-        >
-          定位来源
-        </button>
+        <div class="action-edit-feedback-actions">
+          <button
+            type="button"
+            class="action-edit-feedback-focus"
+            data-testid="workbench-action-edit-feedback-focus"
+            @click="focusActionEditFeedback"
+          >
+            定位来源
+          </button>
+          <button
+            type="button"
+            class="action-edit-feedback-focus"
+            :data-runtime-state-point-id="
+              actionEditFeedback.runtimeStatePointId
+            "
+            :disabled="!actionEditFeedback.runtimeStatePointId"
+            data-testid="workbench-action-edit-feedback-result-focus"
+            @click="selectActionEditFeedbackResult"
+          >
+            定位结果
+          </button>
+        </div>
       </div>
       <p
         v-if="
@@ -1869,6 +1885,17 @@ function focusActionEditFeedback() {
   emit('focus-action-edit-source', props.actionEditSource);
 }
 
+function selectActionEditFeedbackResult() {
+  const feedback = actionEditFeedback.value;
+  if (!feedback?.runtimeStatePointId) {
+    return;
+  }
+  emit('select-action-result', {
+    actionId: feedback.actionId,
+    statePointId: feedback.runtimeStatePointId,
+  });
+}
+
 function createActionEditFeedback(source) {
   if (!isValidActionEditSource(source)) {
     return null;
@@ -1876,6 +1903,7 @@ function createActionEditFeedback(source) {
   const action = props.actionResultTimeline.find(
     entry => entry.actionId === source.actionId
   );
+  const trace = runtimeTraceByActionId.value.get(source.actionId);
   return {
     actionId: source.actionId,
     actionName: action?.actionName ?? source.actionId,
@@ -1883,6 +1911,8 @@ function createActionEditFeedback(source) {
     label: source.label,
     changeSummary: source.changeSummary ?? '',
     display: formatActionEditSourceDisplay(source),
+    runtimeStatePointId: trace?.firstStatePointId ?? '',
+    runtimeDeltaCount: trace?.count ?? 0,
   };
 }
 
@@ -2927,6 +2957,13 @@ h2 {
   overflow-wrap: anywhere;
 }
 
+.action-edit-feedback-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
 .action-edit-feedback-focus {
   min-height: 28px;
   padding: 0 10px;
@@ -2937,6 +2974,11 @@ h2 {
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
+}
+
+.action-edit-feedback-focus:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
 }
 
 .action-edit-feedback-focus:hover,

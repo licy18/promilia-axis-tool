@@ -12038,3 +12038,66 @@ focus-action-edit-source
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DI 应继续完善结果定位体验，优先把最近编辑反馈与贡献拆分或曲线选中状态联动。
+
+## 142. 阶段 5-8DI：最近编辑联动三值结果点
+
+阶段目标：
+
+- 让最近编辑反馈条能直接定位到该动作对应的三值 runtime state point，并复用现有贡献拆分与曲线选中链路。
+
+### 142.1 actionEditFeedback 新增派生字段
+
+新增内部派生：
+
+```js
+runtimeStatePointId: string
+runtimeDeltaCount: number
+```
+
+来源：
+
+- `runtimeTraceByActionId.get(actionEditSource.actionId)`
+- `runtimeStatePointId` 取该 trace 的 `firstStatePointId`
+- `runtimeDeltaCount` 取该 trace 的 `count`
+
+这些字段只存在于 `AnalysisPanel` 运行时派生中，不写入 localStorage，不属于项目保存 schema。
+
+### 142.2 DOM 状态
+
+`workbench-action-edit-feedback` 新增：
+
+```html
+data-runtime-state-point-id
+data-runtime-delta-count
+```
+
+新增结果定位按钮：
+
+```html
+data-testid="workbench-action-edit-feedback-result-focus"
+data-runtime-state-point-id
+```
+
+点击按钮会发出既有事件：
+
+```js
+select-action-result
+```
+
+### 142.3 验证
+
+当前测试覆盖：
+
+- 修改 `action-0001` 等级后，反馈条携带 runtime state point。
+- `workbench-action-edit-feedback-result-focus` 与反馈条携带同一个 state point。
+- 点击结果定位按钮后，`workbench-state-curve-focus-selected` 进入 active。
+- `workbench-action-contribution-panel` 定位到 `action-0001`。
+- `workbench-runtime-selected-detail-state-point` 等于反馈条携带的 state point。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DJ 应继续完善结果定位体验，优先在最近编辑反馈条中标明当前结果定位状态。
