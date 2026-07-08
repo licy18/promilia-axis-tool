@@ -10,6 +10,7 @@ import {
   createWorkbenchRuntimeReviewOperationConsumer,
   createWorkbenchRuntimeReviewOperationFlowAction,
   createWorkbenchRuntimeReviewPrimaryOperationFlowAction,
+  createWorkbenchRuntimeReviewPrimaryOperationCommand,
   createWorkbenchRuntimeReviewPrimaryOperationView,
   createWorkbenchRuntimeResultFlowAction,
   createWorkbenchRuntimeResultReturnFlowAction,
@@ -855,6 +856,61 @@ describe('workbench main flow actions', () => {
         canRun: true,
       },
     });
+  });
+
+  it('creates the runtime review primary operation command from the same view action', () => {
+    const command = createWorkbenchRuntimeReviewPrimaryOperationCommand({
+      source: 'runtime-review-primary',
+      flowModel: {
+        runtimeReviewOperations: {
+          primaryOperationKind:
+            WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+          primaryOperationEnabled: true,
+          canRunAnyOperation: true,
+          primaryOperation: {
+            kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+            enabled: true,
+            label: '回到结果点',
+            target: {
+              actionId: 'action-0002',
+              originStatePointId: 'origin-state-point',
+              statePointId: 'state-point-0002',
+              status: 'refreshed-edit-result',
+            },
+          },
+          returnResult: {
+            kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+            enabled: true,
+            actionId: 'fallback-action',
+            statePointId: 'fallback-state-point',
+          },
+        },
+      },
+    });
+
+    expect(command).toMatchObject({
+      source: 'runtime-review-primary',
+      visible: true,
+      operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+      enabled: true,
+      actionId: 'action-0002',
+      statePointId: 'state-point-0002',
+      label: '回到结果点',
+      view: {
+        operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+        enabled: true,
+        actionId: 'action-0002',
+        statePointId: 'state-point-0002',
+      },
+      action: {
+        kind: 'return-runtime-result',
+        source: 'runtime-review-primary',
+        actionId: 'action-0002',
+        statePointId: 'state-point-0002',
+        canRun: true,
+      },
+    });
+    expect(command.action).toBe(command.view.action);
   });
 
   it('creates the pending result primary runtime review action', () => {

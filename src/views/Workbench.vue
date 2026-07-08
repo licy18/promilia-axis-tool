@@ -430,7 +430,7 @@ import {
   createWorkbenchFlowModel,
 } from '../features/workbench/workbenchFlowModel';
 import {
-  createWorkbenchRuntimeReviewPrimaryOperationView,
+  createWorkbenchRuntimeReviewPrimaryOperationCommand,
   createWorkbenchRuntimeStatePointFlowAction,
 } from '../features/workbench/workbenchMainFlowActions';
 import {
@@ -625,11 +625,14 @@ const mainFlowStatusView = computed(() =>
     flowModel: workbenchFlowModel.value,
   })
 );
-const runtimeReviewPrimaryOperationView = computed(() =>
-  createWorkbenchRuntimeReviewPrimaryOperationView({
+const runtimeReviewPrimaryOperationCommand = computed(() =>
+  createWorkbenchRuntimeReviewPrimaryOperationCommand({
     flowModel: workbenchFlowModel.value,
     source: 'runtime-review-primary',
   })
+);
+const runtimeReviewPrimaryOperationView = computed(() =>
+  runtimeReviewPrimaryOperationCommand.value.view
 );
 const timelineDiagnostics = computed(() =>
   createTimelineDiagnostics({
@@ -1687,7 +1690,7 @@ function dispatchWorkbenchFlowAction(action = {}) {
 }
 
 function dispatchRuntimeReviewPrimaryOperation() {
-  dispatchWorkbenchFlowAction(runtimeReviewPrimaryOperationView.value.action);
+  dispatchWorkbenchFlowAction(runtimeReviewPrimaryOperationCommand.value.action);
 }
 
 function updateStateCurveFocusMode(mode) {

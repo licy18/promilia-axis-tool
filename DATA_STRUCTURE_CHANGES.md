@@ -19686,3 +19686,59 @@ createWorkbenchMainFlowButtonView({
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、77 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、207 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 256. UI 主流程能力块：Runtime Review Primary Command
+
+### 256.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增共享函数：
+
+```js
+createWorkbenchRuntimeReviewPrimaryOperationCommand({
+  flowModel,
+  source,
+  view,
+  consumer,
+  operations,
+})
+```
+
+输出结构：
+
+```js
+{
+  source,
+  visible,
+  operationKind,
+  enabled,
+  actionId,
+  statePointId,
+  label,
+  target,
+  view,
+  action,
+}
+```
+
+行为：
+
+```text
+通过 createWorkbenchRuntimeReviewPrimaryOperationView() 生成 view。
+command.view 用于页面展示。
+command.action 直接复用 view.action，作为页面层 dispatch 的唯一 action 来源。
+```
+
+Workbench 页面层的运行结果主操作按钮现在消费 `runtimeReviewPrimaryOperationCommand.view` 展示，并通过 `runtimeReviewPrimaryOperationCommand.action` 分发。
+
+### 256.2 保存与迁移
+
+本阶段只调整 Workbench 运行结果主操作的页面消费结构，不新增持久字段，不需要数据迁移。
+
+### 256.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 command 的 view/action 同源关系。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、76 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、208 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

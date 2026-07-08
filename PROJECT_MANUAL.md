@@ -9157,6 +9157,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 Workbench 页面层的 review primary operation dispatch 与 FlowPanel button view/loop action 继续合并，减少运行结果区、顶部主流程条和详情面板之间重复创建 action 的路径。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Primary Command
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增共享 `createWorkbenchRuntimeReviewPrimaryOperationCommand()`，把运行结果区主操作的显示 view 与 dispatch action 收束到同一个 command 对象。
+- Workbench 页面层的运行结果主操作按钮现在消费 command.view 展示、command.action 分发，不再直接从 view 对象取 action。
+- 运行结果区主操作与顶部 FlowPanel 的 button view / loop action 收束方向保持一致：页面层只消费共享命令对象，具体 action 创建仍由 `workbenchMainFlowActions` 统一负责。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- main flow action 单测覆盖 command 的 view/action 同源关系。
+- Workbench 页面测试确认运行结果主操作的 focus 和 return 两条路径仍可分发并更新主流程状态。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、76 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、208 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 ResourceMonitorPanel、EventLogPanel、RuntimeSelectedDetailPanel 中各自消费 review operation 的入口逐步收束为共享 command/view 形态，让曲线、日志、详情三处的“定位动作 / 回到结果点”主路径更一致。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

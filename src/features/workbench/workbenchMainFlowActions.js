@@ -408,6 +408,35 @@ export function createWorkbenchRuntimeReviewPrimaryOperationView({
   };
 }
 
+export function createWorkbenchRuntimeReviewPrimaryOperationCommand({
+  flowModel = null,
+  source = '',
+  view = null,
+  consumer = null,
+  operations = null,
+} = {}) {
+  const resolvedView =
+    view ??
+    createWorkbenchRuntimeReviewPrimaryOperationView({
+      flowModel,
+      source,
+      consumer,
+      operations,
+    });
+  return {
+    source,
+    visible: resolvedView.visible,
+    operationKind: resolvedView.operationKind,
+    enabled: resolvedView.enabled,
+    actionId: resolvedView.actionId,
+    statePointId: resolvedView.statePointId,
+    label: resolvedView.label,
+    target: resolvedView.target,
+    view: resolvedView,
+    action: resolvedView.action ?? null,
+  };
+}
+
 export function createWorkbenchRuntimeActionEditFlowAction({
   source = '',
   target = null,
