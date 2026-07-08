@@ -6619,8 +6619,38 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 下一步：
 
-- 阶段 5-8EB 目标：继续完善 Workbench 主流程编辑体验，优先减少最近编辑反馈、动作结果行和详情面板中的重复状态标签，让主路径摘要承担更多确认职责。
-- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+- 后续不再继续 `5-8EB / 5-8EC` 这类微型状态标签阶段，改为按生成层、运行时层、UI 主流程三个大能力块推进。
+- 下一能力块优先回到生成层和运行时层主干，先保证 `Action -> Hit -> ThreeValueDelta` 标准合同有清晰入口，再推进 runtime 稳定消费。
+
+### 2026-07-08：生成层能力块 - 标准合同入口模块化
+
+本阶段属于：生成层。
+
+完成的可用能力：
+
+- 新增 `src/simulation/generation/threeValueGenerationLayer.js` 作为 `Action -> Hit -> ThreeValueDelta` 标准生成层入口。
+- `projectSimulationResult()` 不再在 projection 内部直接生成标准 delta，而是通过 `createThreeValueGenerationLayer()` 接入生成层模块。
+- runtime applied delta 排序复用 generation 模块导出的 `compareThreeValueGenerationDeltas()`，为后续运行时层只消费标准合同铺路。
+- 生成层模块独立暴露 `THREE_VALUE_DELTA_FIELDS` 和 `THREE_VALUE_DELTA_FIELD_BY_TRACK_KEY`，统一 HP / 韧性 / 自身能量三类 delta 字段。
+- `AGENTS.md` 移除当前阶段流水，只保留长期路线边界和规则。
+
+当前验证事实：
+
+- 独立 generation 测试直接输入最小 state curve，生成标准 action、hit、delta 分组。
+- 生成出的 delta 固定包含 `actionId`、`hitKey`、`trackKey`、`layerKey`、`delta`、`hpDelta/toughnessDelta/energyDelta`、`sourceIds`、`confidence` 和 calculator 信息。
+- 既有 simulation 回归继续证明 runtime projection 的 `inputContractName` 为 `Action -> Hit -> ThreeValueDelta`，并且三值结果保持不变。
+- 本阶段不新增保存字段，不追最终公式，不扩写 UI 状态提示。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueGenerationLayer.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、14 条测试。
+- `npm run test -- --run`：通过，14 个测试文件、115 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 运行时层能力块：把 runtime projection 的 enemy curve、self energy curve、simLog 和 summary 进一步收束为只消费 generation layer applied deltas 的稳定模块，减少 projection 文件里的混合职责。
+- UI 主流程暂不继续细抠状态标签，等运行时层边界更稳后再做 Endaxis 式完整流程体验。
 
 ## 10. 文档维护规则
 

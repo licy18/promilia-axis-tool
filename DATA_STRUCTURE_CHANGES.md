@@ -13416,4 +13416,114 @@ data-detail-synced="true|false"
 - `npm run test -- --run`：通过，13 个测试文件、114 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
-下一阶段 5-8EB 应继续减少最近编辑反馈、动作结果行和详情面板中的重复状态标签，让主路径摘要承担更多确认职责。
+后续不再继续 5-8EB/EC 这类微型状态标签阶段；下一步按生成层、运行时层、UI 主流程三个大能力块推进。
+
+## 161. 生成层能力块：标准合同入口模块化
+
+本阶段属于生成层。
+
+### 161.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 161.2 新增模块
+
+新增生成层入口：
+
+```text
+src/simulation/generation/threeValueGenerationLayer.js
+```
+
+该模块导出：
+
+```js
+createThreeValueGenerationLayer({ scenario, stateCurves })
+compareThreeValueGenerationDeltas(left, right)
+THREE_VALUE_DELTA_FIELD_BY_TRACK_KEY
+THREE_VALUE_DELTA_FIELDS
+```
+
+`THREE_VALUE_DELTA_FIELDS` 当前固定为：
+
+```js
+['hpDelta', 'toughnessDelta', 'energyDelta']
+```
+
+`THREE_VALUE_DELTA_FIELD_BY_TRACK_KEY` 当前固定为：
+
+```js
+{
+  enemyHpDamage: 'hpDelta',
+  enemyToughnessDamage: 'toughnessDelta',
+  selfEnergyChange: 'energyDelta'
+}
+```
+
+### 161.3 接线变化
+
+`projectSimulationResult()` 的生成层接线从 projection 内部函数改为：
+
+```js
+createThreeValueGenerationLayer({
+  scenario,
+  stateCurves: threeValueCurveFramework.stateCurves
+})
+```
+
+runtime applied delta 排序改为复用 generation 模块：
+
+```js
+compareThreeValueGenerationDeltas
+```
+
+### 161.4 标准合同
+
+生成层仍输出：
+
+```text
+Action -> Hit -> ThreeValueDelta
+```
+
+标准 delta 继续包含：
+
+```text
+actionId
+hitKey
+hitIndex
+frameIndex
+timeMs
+trackKey
+layerKey
+delta
+hpDelta
+toughnessDelta
+energyDelta
+sourceKind
+sourceIds
+confidence
+calculator
+calculatorKey
+calculationKind
+calculationStatus
+calculationReplaceable
+applied
+replaceable
+```
+
+### 161.5 验证
+
+新增测试：
+
+```text
+src/__tests__/simulation/threeValueGenerationLayer.test.js
+```
+
+当前验证：
+
+- 独立 generation 测试直接输入最小 state curve，并生成 action / hit / delta 标准分组。
+- 既有 `firstVerticalSliceSimulation.test.js` 继续验证完整 simulation 结果、runtime projection 和三值曲线结果不变。
+- `npm run test -- --run src/__tests__/simulation/threeValueGenerationLayer.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、14 条测试。
+- `npm run test -- --run`：通过，14 个测试文件、115 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步应进入运行时层能力块，把 runtime projection 的曲线、日志和 summary 继续模块化为只消费 generation layer applied deltas 的稳定入口。
