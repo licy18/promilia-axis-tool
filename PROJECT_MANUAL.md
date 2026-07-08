@@ -6279,6 +6279,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DR 目标：继续完善 Workbench 主流程编辑体验，优先补独立“三值详情”面板中的动作定位/编辑入口，让日志详情和曲线详情都能进入同一条修轴闭环。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DR 三值详情动作定位入口
+
+本轮完成：
+
+- `RuntimeSelectedDetailPanel` 标题区新增 `定位动作` 按钮。
+- 按钮从当前 `runtimeSelectedDetail` 提取 `actionId`、`statePointId`、`trackKey` 和帧标签，并发出 `focus-runtime-action`。
+- `Workbench` 复用阶段 5-8DP 的 `focusRuntimeAction()`，因此三值详情和资源曲线详情进入同一条修轴闭环。
+- 点击三值详情的 `定位动作` 后，会选中对应时间轴动作，并把属性面板 `startMs` 控件作为修轴入口高亮。
+- Workbench 测试覆盖“运行日志/三值详情 -> 定位动作 -> 修改开始时间 -> 反馈条标记来自结果定位”的路径。
+
+当前验证事实：
+
+- `workbench-runtime-selected-detail-action-focus` 写入当前 `data-action-id`、`data-state-point-id` 和 `data-focus-field="startMs"`。
+- 点击按钮后，目标 `workbench-timeline-action` 进入选中和编辑焦点状态。
+- 属性面板 `startMs` 控件进入 `data-edit-focused="true"`。
+- 从三值详情入口修改 `startMs` 后，最近编辑反馈条继续写入 `data-edit-origin="runtime-focus"` 和原始 state point。
+- 本阶段只新增前端入口和事件复用，不新增公式、simulation 输出或保存 schema。
+
+当前边界：
+
+- 三值详情入口默认聚焦开始时间字段，暂未根据命中类型自动选择其他字段。
+- 暂未在事件日志详情块中单独放置动作定位按钮。
+- 暂未做完整编辑器布局/批量编辑收口。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8DS 目标：继续完善 Workbench 主流程编辑体验，优先补事件日志详情中的动作定位入口，确保日志、曲线、三值详情三处都能进入同一条修轴闭环。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

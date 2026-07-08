@@ -12638,3 +12638,69 @@ data-runtime-state-point-id
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DR 应补独立“三值详情”面板中的动作定位/编辑入口。
+
+## 151. 阶段 5-8DR：三值详情动作定位入口
+
+阶段目标：
+
+- 让独立“三值详情”面板也能进入与资源曲线一致的修轴闭环。
+
+### 151.1 数据结构变化
+
+本阶段不新增保存字段，不变更 `Project` schema、simulation 输出或 localStorage 数据。
+
+`RuntimeSelectedDetailPanel` 新增前端事件：
+
+```js
+focus-runtime-action
+```
+
+事件 payload 复用阶段 5-8DP：
+
+```js
+{
+  actionId: string,
+  fieldKey: 'startMs',
+  frameLabel: string,
+  statePointId: string,
+  trackKey: string
+}
+```
+
+`Workbench` 继续使用既有 `focusRuntimeAction()` 处理该事件。
+
+### 151.2 DOM 状态
+
+`RuntimeSelectedDetailPanel` 新增按钮：
+
+```html
+data-testid="workbench-runtime-selected-detail-action-focus"
+data-action-id
+data-focus-field="startMs"
+data-state-point-id
+```
+
+点击后继续进入既有状态：
+
+```html
+workbench-timeline-action[data-edit-focused="true"]
+workbench-action-edit-control[data-edit-field="startMs"][data-edit-focused="true"]
+workbench-action-edit-feedback[data-edit-origin="runtime-focus"]
+```
+
+### 151.3 验证
+
+当前测试覆盖：
+
+- 运行日志选中结果点后，独立“三值详情”显示动作定位按钮。
+- 点击三值详情动作定位按钮后，对应时间轴动作进入选中和编辑焦点状态。
+- 属性面板开始时间控件进入编辑焦点状态。
+- 修改开始时间后，最近编辑反馈条继续保留 `runtime-focus` origin 和原始 state point。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DS 应补事件日志详情中的动作定位入口。

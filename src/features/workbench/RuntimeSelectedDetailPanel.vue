@@ -7,6 +7,19 @@
     <div class="panel-title">
       <DataAnalysis class="panel-icon" />
       <h2>三值详情</h2>
+      <button
+        type="button"
+        class="runtime-detail-action-focus"
+        :data-action-id="detail.actionId || ''"
+        data-focus-field="startMs"
+        :data-state-point-id="detail.statePointId || ''"
+        data-testid="workbench-runtime-selected-detail-action-focus"
+        :disabled="!detail.actionId"
+        @click="focusRuntimeAction"
+      >
+        <EditPen class="runtime-detail-action-focus-icon" />
+        <span>定位动作</span>
+      </button>
     </div>
 
     <div class="runtime-detail-summary">
@@ -134,14 +147,30 @@
 </template>
 
 <script setup>
-import { DataAnalysis } from '@element-plus/icons-vue';
+import { DataAnalysis, EditPen } from '@element-plus/icons-vue';
 
-defineProps({
+const props = defineProps({
   detail: {
     type: Object,
     default: null,
   },
 });
+
+const emit = defineEmits(['focus-runtime-action']);
+
+function focusRuntimeAction() {
+  const detail = props.detail;
+  if (!detail?.actionId) {
+    return;
+  }
+  emit('focus-runtime-action', {
+    actionId: detail.actionId,
+    fieldKey: 'startMs',
+    frameLabel: detail.frameLabel ?? `${detail.timeMs ?? 0}ms`,
+    statePointId: detail.statePointId ?? '',
+    trackKey: detail.trackKey ?? '',
+  });
+}
 
 function formatDetailDelta(detail) {
   if (detail.trackKey === 'selfEnergyChange') {
@@ -234,6 +263,37 @@ function formatSourceValues(values) {
 h2 {
   margin: 0;
   font-size: 15px;
+}
+
+.runtime-detail-action-focus {
+  display: inline-grid;
+  grid-template-columns: 13px auto;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  min-height: 28px;
+  margin-left: auto;
+  padding: 0 9px;
+  border: 1px solid rgba(121, 199, 185, 0.28);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.12);
+  color: #dff9f3;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.runtime-detail-action-focus:disabled {
+  color: #6d7780;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.runtime-detail-action-focus-icon {
+  width: 13px;
+  height: 13px;
 }
 
 .runtime-selected-detail-panel {

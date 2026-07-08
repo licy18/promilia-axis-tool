@@ -1986,6 +1986,64 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-runtime-selected-detail"]').text()
     ).toContain('109001081');
+
+    const runtimeDetailActionFocus = wrapper.find(
+      '[data-testid="workbench-runtime-selected-detail-action-focus"]'
+    );
+    expect(runtimeDetailActionFocus.exists()).toBe(true);
+    expect(runtimeDetailActionFocus.attributes('data-action-id')).toBe(
+      'action-0001'
+    );
+    expect(runtimeDetailActionFocus.attributes('data-focus-field')).toBe(
+      'startMs'
+    );
+    expect(runtimeDetailActionFocus.attributes('data-state-point-id')).toBe(
+      appliedStatePointId
+    );
+    expect(runtimeDetailActionFocus.attributes('disabled')).toBeUndefined();
+
+    await runtimeDetailActionFocus.trigger('click');
+    await nextTick();
+
+    const focusedTimelineAction = wrapper.find(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+    );
+    expect(focusedTimelineAction.classes()).toContain('selected');
+    expect(focusedTimelineAction.attributes('data-edit-focused')).toBe('true');
+    expect(focusedTimelineAction.attributes('data-edit-focus-field')).toBe(
+      'startMs'
+    );
+    expect(focusedTimelineAction.attributes('data-edit-focus-label')).toBe(
+      '结果定位'
+    );
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+        )
+        .attributes('data-edit-focused')
+    ).toBe('true');
+
+    await wrapper.find('[data-testid="workbench-start-input"]').setValue('100');
+    await nextTick();
+
+    const runtimeDetailEditFeedback = wrapper.find(
+      '[data-testid="workbench-action-edit-feedback"]'
+    );
+    expect(runtimeDetailEditFeedback.attributes('data-edit-origin')).toBe(
+      'runtime-focus'
+    );
+    expect(
+      runtimeDetailEditFeedback.attributes('data-origin-state-point-id')
+    ).toBe(appliedStatePointId);
+    expect(runtimeDetailEditFeedback.attributes('data-origin-track-key')).toBe(
+      'enemyHpDamage'
+    );
+    expect(
+      runtimeDetailEditFeedback
+        .find('[data-testid="workbench-action-edit-feedback-origin"]')
+        .text()
+    ).toBe('来自结果定位');
   });
 
   it('links runtime resource curve points to the focused state curve point', async () => {

@@ -125,7 +125,10 @@
           @focus-runtime-action="focusRuntimeAction"
         />
 
-        <RuntimeSelectedDetailPanel :detail="runtimeSelectedDetail" />
+        <RuntimeSelectedDetailPanel
+          :detail="runtimeSelectedDetail"
+          @focus-runtime-action="focusRuntimeAction"
+        />
 
         <AnalysisPanel
           :summary="simulationResult.summary"
