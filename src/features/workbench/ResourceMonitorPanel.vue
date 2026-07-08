@@ -163,6 +163,11 @@
               :data-overrun="point.overrunValue"
               :data-curve-mode="runtimeCurveMode"
               :data-state-point-id="point.statePointId"
+              :data-runtime-focus-source="
+                point.statePointId === selectedStateCurvePointId
+                  ? runtimeFocusSource
+                  : ''
+              "
               :data-selected="
                 point.statePointId === selectedStateCurvePointId
                   ? 'true'
@@ -254,6 +259,10 @@ const props = defineProps({
     required: true,
   },
   selectedStateCurvePointId: {
+    type: String,
+    default: '',
+  },
+  runtimeFocusSource: {
     type: String,
     default: '',
   },

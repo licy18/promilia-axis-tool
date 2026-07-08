@@ -407,6 +407,11 @@
               :data-delta="marker.delta"
               :data-cumulative="marker.cumulative"
               :data-state-point-id="marker.statePointId"
+              :data-runtime-focus-source="
+                marker.statePointId === selectedStateCurvePointId
+                  ? runtimeFocusSource
+                  : ''
+              "
               :data-marker-title="formatStateCurveMarkerTitle(marker)"
               data-testid="workbench-timeline-state-curve-marker"
               role="button"
@@ -648,6 +653,10 @@ const props = defineProps({
     required: true,
   },
   selectedStateCurvePointId: {
+    type: String,
+    default: '',
+  },
+  runtimeFocusSource: {
     type: String,
     default: '',
   },

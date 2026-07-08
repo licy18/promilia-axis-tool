@@ -11165,3 +11165,79 @@ Delta: action-0001|applied-frame-0-point-0
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
 
 下一阶段 5-8CX 应把贡献详情与 runtime resource curve / timeline marker 的焦点联动继续收束。
+
+## 131. 阶段 5-8CX：contribution focus source on resource and timeline markers
+
+阶段 5-8CX 不修改项目保存 schema，也不修改 simulation 输出结构。本阶段新增 Workbench 前端焦点来源派生字段。
+
+### 131.1 Workbench 新增派生状态
+
+新增：
+
+```js
+runtimeFocusSource
+```
+
+派生规则：
+
+```js
+runtimeLogFocus.statePointId === selectedStateCurvePointId
+  ? runtimeLogFocus.source
+  : ''
+```
+
+当前来源值继续使用：
+
+```text
+action-result
+action-contribution
+```
+
+普通 `selectRuntimeStatePoint()` 会清空 `runtimeLogFocus.source`，避免手动点击资源曲线或日志时保留旧来源。
+
+### 131.2 ResourceMonitorPanel 新增 prop / DOM
+
+新增 prop：
+
+```js
+runtimeFocusSource: String
+```
+
+`workbench-runtime-resource-chart-point` 新增：
+
+```html
+data-runtime-focus-source
+```
+
+只有当该点是当前 `selectedStateCurvePointId` 时写入来源，否则为空字符串。
+
+### 131.3 TimelineGridPreview 新增 prop / DOM
+
+新增 prop：
+
+```js
+runtimeFocusSource: String
+```
+
+`workbench-timeline-state-curve-marker` 新增：
+
+```html
+data-runtime-focus-source
+```
+
+同样只在 marker 对应当前选中 runtime state point 时写入来源。
+
+### 131.4 验证
+
+当前测试覆盖：
+
+- 点击 HP 贡献行后，runtime resource chart point 的 `data-selected="true"`。
+- 同一曲线点的 `data-runtime-focus-source="action-contribution"`。
+- 对应 timeline marker 带 `selected` class。
+- 同一 marker 的 `data-runtime-focus-source="action-contribution"`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+
+下一阶段 5-8CY 应继续收束分析面板里的动作结果、贡献拆分和三值详情布局，减少跨面板跳读。

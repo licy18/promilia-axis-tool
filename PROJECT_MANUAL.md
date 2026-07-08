@@ -5604,6 +5604,37 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8CX 目标：把贡献详情入口进一步接到图表/时间轴高亮，点击贡献轨道时除了详情同步，还能让对应 runtime resource curve / timeline marker 处于同一焦点。
 - 仍保持 Endaxis 式主流程 UI 优先，不追最终公式。
 
+### 2026-07-08：阶段 5-8CX 贡献焦点联动资源曲线和时间轴
+
+本轮完成：
+
+- `Workbench` 新增 `runtimeFocusSource` 派生状态，用来表达当前 runtime state point 是从动作结果、贡献拆分还是普通交互进入。
+- `ResourceMonitorPanel` 的 runtime 资源曲线点新增 `data-runtime-focus-source`。
+- `TimelineGridPreview` 的状态曲线 marker 新增 `data-runtime-focus-source`。
+- 点击动作贡献行后，资源曲线点和时间轴 marker 除了 `selected` 外，还会标记 `action-contribution` 来源。
+- 普通资源曲线/日志交互会清空该来源，避免把后续手动选择误标为贡献定位。
+- Workbench 测试覆盖点击 HP 贡献行后，资源曲线点与时间轴 marker 同步选中且来源为 `action-contribution`。
+
+当前验证事实：
+
+- 默认样本 HP 贡献行、右侧三值详情、模拟日志详情、资源曲线点和时间轴 marker 都指向同一个 `appliedStatePointId`。
+- `data-runtime-focus-source="action-contribution"` 只作为前端焦点来源提示，不进入 simulation 输出或保存 schema。
+
+当前边界：
+
+- 本阶段只做焦点来源收束，不新增图表动画、自动滚动或弹层。
+- 时间轴和资源曲线已有 selected 样式，本阶段先补 DOM/状态来源，后续可继续做更明显的高亮反馈。
+- 不涉及最终公式、逐帧动作细节或数值机制推断。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+
+下一步：
+
+- 阶段 5-8CY 目标：继续改善 Endaxis 式主流程信息密度，优先把动作结果、贡献拆分、三值详情的布局压缩成更连贯的“结果详情区”，减少用户在分析面板和右侧面板之间来回扫视。
+- 仍不追最终公式和逐帧动作细节。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

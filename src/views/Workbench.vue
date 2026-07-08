@@ -80,6 +80,7 @@
         :state-curve-focus-mode="stateCurveFocusMode"
         :state-curve-layer-filters="stateCurveLayerFilters"
         :state-curve-track-filters="stateCurveTrackFilters"
+        :runtime-focus-source="runtimeFocusSource"
         :timeline-diagnostics="timelineDiagnostics"
         @select-action="selectAction"
         @select-state-curve-point="selectStateCurvePoint"
@@ -115,6 +116,7 @@
           :resource-timeline="simulationResult.resourceTimeline"
           :runtime-projection="simulationResult.threeValueRuntimeProjection"
           :selected-state-curve-point-id="selectedStateCurvePointId"
+          :runtime-focus-source="runtimeFocusSource"
           :summary="simulationResult.summary"
           :diagnostics="simulationResult.diagnostics"
           @select-runtime-state-point="selectRuntimeStatePoint"
@@ -251,6 +253,12 @@ const runtimeSelectedDetail = computed(() =>
     runtimeProjection: simulationResult.value.threeValueRuntimeProjection,
     selectedStateCurvePointId: selectedStateCurvePointId.value,
   })
+);
+const runtimeFocusSource = computed(() =>
+  runtimeLogFocus.value.statePointId &&
+  runtimeLogFocus.value.statePointId === selectedStateCurvePointId.value
+    ? runtimeLogFocus.value.source
+    : ''
 );
 const timelineDiagnostics = computed(() =>
   createTimelineDiagnostics({
@@ -915,6 +923,11 @@ function selectRuntimeStatePoint(pointId) {
   if (pointId) {
     stateCurveFocusMode.value = 'selected';
   }
+  runtimeLogFocus.value = {
+    source: '',
+    statePointId: '',
+    sequence: runtimeLogFocus.value.sequence,
+  };
 }
 
 function selectActionResultRuntimePoint(pointId) {

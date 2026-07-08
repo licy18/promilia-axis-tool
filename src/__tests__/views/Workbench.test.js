@@ -1349,6 +1349,24 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-detail"]')
         .attributes('data-detail-source')
     ).toBe('runtime-selected-detail');
+    const contributionFocusedCurvePoint = wrapper.find(
+      `[data-testid="workbench-runtime-resource-chart-point"][data-state-point-id="${appliedStatePointId}"]`
+    );
+    expect(contributionFocusedCurvePoint.exists()).toBe(true);
+    expect(contributionFocusedCurvePoint.attributes('data-selected')).toBe(
+      'true'
+    );
+    expect(
+      contributionFocusedCurvePoint.attributes('data-runtime-focus-source')
+    ).toBe('action-contribution');
+    const contributionFocusedTimelineMarker = wrapper.find(
+      `[data-testid="workbench-timeline-state-curve-marker"][data-state-point-id="${appliedStatePointId}"]`
+    );
+    expect(contributionFocusedTimelineMarker.exists()).toBe(true);
+    expect(contributionFocusedTimelineMarker.classes()).toContain('selected');
+    expect(
+      contributionFocusedTimelineMarker.attributes('data-runtime-focus-source')
+    ).toBe('action-contribution');
     await wrapper
       .find(
         '[data-testid="workbench-three-value-calculator-diagnostic-row"][data-calculator-scope="runtime"]'
