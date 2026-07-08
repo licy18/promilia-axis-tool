@@ -7811,6 +7811,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 action edit focus / runtime result return 的状态转换也逐步纳入可测试的流程 plan 或控制层接口，保持主流程闭环优先。
 
+### 2026-07-09：UI 主流程能力块 - Action Edit Flow Plan
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `workbenchActionEditFlowPlan`，用纯数据 plan 描述“运行结果定位到动作编辑”和“分析编辑来源定位到动作编辑”两类焦点转换。
+- `Workbench.vue` 的 `focusRuntimeAction()` 和 `focusActionEditSource()` 改为先生成 action edit flow plan，再由 `applyActionEditFlowPlan()` 统一应用。
+- 运行结果定位仍要求目标动作存在；分析编辑来源仍保留原先可记录焦点的行为。
+- 本阶段不修改三值计算、模拟输出、项目保存结构或可见 UI 文案。
+
+当前验证事实：
+
+- runtime action edit focus plan 能生成带 `runtime-focus` 来源、原运行点、轨道和帧信息的编辑焦点。
+- edit-source focus plan 能生成来自分析面板编辑来源的编辑焦点。
+- Workbench 集成测试继续覆盖从运行结果定位到动作编辑、修改动作、回到刷新结果的闭环行为。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchActionEditFlowPlan.test.js src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、62 条测试。
+- `npm run test -- --run`：通过，22 个测试文件、151 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 runtime result return 的状态转换也纳入可测试流程接口，继续收束“编辑 -> 运行 -> 查看 -> 回改 -> 回结果”的主流程。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

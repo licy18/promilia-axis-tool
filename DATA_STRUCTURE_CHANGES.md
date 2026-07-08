@@ -16103,3 +16103,93 @@ syncRuntimeResultForSelectedAction()
 - `npm run test -- --run`：通过，21 个测试文件、148 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 205. UI 主流程能力块：Action Edit Flow Plan
+
+本阶段属于 UI 主流程。
+
+### 205.1 结构变化
+
+新增模块：
+
+```js
+src/features/workbench/workbenchActionEditFlowPlan.js
+```
+
+新增导出：
+
+```js
+WORKBENCH_ACTION_EDIT_FLOW_PLAN_KINDS
+createRuntimeActionEditFocusPlan()
+createEditSourceActionEditFocusPlan()
+```
+
+action edit flow plan 的主要字段：
+
+```js
+{
+  kind,
+  canApply,
+  actionId,
+  requiresExistingAction,
+  actionEditFocus
+}
+```
+
+`createRuntimeActionEditFocusPlan()` 用于描述：
+
+```js
+runtime-action-focus
+```
+
+其 `actionEditFocus` 保留运行结果定位所需的字段：
+
+```js
+{
+  actionId,
+  fieldKey,
+  label,
+  previousValue,
+  nextValue,
+  changeSummary,
+  editOrigin,
+  originStatePointId,
+  originTrackKey,
+  originFrameLabel,
+  sequence
+}
+```
+
+`createEditSourceActionEditFocusPlan()` 用于描述：
+
+```js
+edit-source-focus
+```
+
+`Workbench.vue` 新增内部执行入口：
+
+```js
+applyActionEditFlowPlan(plan)
+```
+
+以下 Workbench 主流程函数改为先创建 plan，再应用 plan：
+
+```js
+focusRuntimeAction()
+focusActionEditSource()
+```
+
+### 205.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 的动作编辑焦点状态转换组织方式；模拟结果、三值计算、项目文件、runtime projection 结构不变。
+
+### 205.3 验证
+
+- 新增 `src/__tests__/features/workbenchActionEditFlowPlan.test.js`，覆盖运行结果定位编辑焦点、分析编辑来源焦点和不完整 plan 禁用。
+- Workbench 视图测试继续覆盖运行结果定位动作、编辑动作和回到刷新结果的闭环行为。
+- `npm run test -- --run src/__tests__/features/workbenchActionEditFlowPlan.test.js src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、62 条测试。
+- `npm run test -- --run`：通过，22 个测试文件、151 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。

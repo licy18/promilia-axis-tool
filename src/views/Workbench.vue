@@ -212,6 +212,10 @@ import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import WorkbenchFlowPanel from '../features/workbench/WorkbenchFlowPanel.vue';
 import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
+import {
+  createEditSourceActionEditFocusPlan,
+  createRuntimeActionEditFocusPlan,
+} from '../features/workbench/workbenchActionEditFlowPlan';
 import { createWorkbenchFlowController } from '../features/workbench/workbenchFlowController';
 import {
   createWorkbenchFlowModel,
@@ -1387,61 +1391,38 @@ function focusRuntimeAction({
   statePointId = '',
   trackKey = '',
 } = {}) {
-  if (!actionId || !findActionDraftById(actionId)) {
-    return;
-  }
-  selectAction(actionId, { syncRuntimeResult: false });
-  actionEditFocus.value = {
-    actionId,
-    fieldKey,
-    label: '结果定位',
-    previousValue: '',
-    nextValue: '',
-    changeSummary: formatRuntimeActionFocusSummary({ frameLabel, trackKey }),
-    editOrigin: 'runtime-focus',
-    originStatePointId: statePointId,
-    originTrackKey: trackKey,
-    originFrameLabel: frameLabel,
-    sequence: actionEditFocus.value.sequence + 1,
-  };
-}
-
-function formatRuntimeActionFocusSummary({ frameLabel = '', trackKey = '' }) {
-  const parts = [
-    frameLabel ? `三值点 ${frameLabel}` : '三值点',
-    formatRuntimeActionFocusTrack(trackKey),
-  ].filter(Boolean);
-  return parts.join(' · ');
-}
-
-function formatRuntimeActionFocusTrack(trackKey) {
-  if (trackKey === 'enemyHpDamage') {
-    return '敌人 HP';
-  }
-  if (trackKey === 'enemyToughnessDamage') {
-    return '敌人韧性';
-  }
-  if (trackKey === 'selfEnergyChange') {
-    return '自身能量';
-  }
-  return '';
+  applyActionEditFlowPlan(
+    createRuntimeActionEditFocusPlan({
+      actionId,
+      fieldKey,
+      frameLabel,
+      statePointId,
+      trackKey,
+      sequence: actionEditFocus.value.sequence,
+    })
+  );
 }
 
 function focusActionEditSource(source = {}) {
-  if (!source.actionId || !source.fieldKey) {
+  applyActionEditFlowPlan(
+    createEditSourceActionEditFocusPlan({
+      source,
+      sequence: actionEditFocus.value.sequence,
+    })
+  );
+}
+
+function applyActionEditFlowPlan(plan = {}) {
+  if (!plan.canApply) {
     return;
   }
-  if (actionDrafts.value.some(action => action.id === source.actionId)) {
-    selectAction(source.actionId, { syncRuntimeResult: false });
+  if (findActionDraftById(plan.actionId)) {
+    selectAction(plan.actionId, { syncRuntimeResult: false });
+  } else if (plan.requiresExistingAction) {
+    return;
   }
   actionEditFocus.value = {
-    actionId: source.actionId,
-    fieldKey: source.fieldKey,
-    label: source.label ?? '',
-    previousValue: source.previousValue ?? '',
-    nextValue: source.nextValue ?? '',
-    changeSummary: source.changeSummary ?? '',
-    sequence: actionEditFocus.value.sequence + 1,
+    ...plan.actionEditFocus,
   };
 }
 
