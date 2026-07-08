@@ -89,25 +89,26 @@
 
     <div class="action-controls">
       <div
-        v-if="runtimeResultReturnContext"
+        v-if="runtimeResultReturnDisplayContext"
         class="action-result-return"
-        :data-action-id="runtimeResultReturnContext.actionId"
+        :data-action-id="runtimeResultReturnDisplayContext.actionId"
         :data-origin-state-point-id="
-          runtimeResultReturnContext.originStatePointId
+          runtimeResultReturnDisplayContext.originStatePointId
         "
-        :data-return-status="runtimeResultReturnContext.status"
-        :data-state-point-id="runtimeResultReturnContext.statePointId"
+        :data-return-status="runtimeResultReturnDisplayContext.status"
+        :data-state-point-id="runtimeResultReturnDisplayContext.statePointId"
         data-testid="workbench-action-edit-result-return"
       >
         <div>
           <span>结果回看</span>
-          <strong>{{ runtimeResultReturnContext.label }}</strong>
-          <small>{{ runtimeResultReturnContext.summary }}</small>
+          <strong>{{ runtimeResultReturnDisplayContext.label }}</strong>
+          <small>{{ runtimeResultReturnDisplayContext.summary }}</small>
         </div>
         <button
           type="button"
-          :data-state-point-id="runtimeResultReturnContext.statePointId"
+          :data-state-point-id="runtimeResultReturnButtonTarget.statePointId"
           data-testid="workbench-action-edit-result-return-button"
+          :disabled="!runtimeResultReturnCommand.enabled"
           @click="returnRuntimeResult"
         >
           <Aim class="action-result-return-icon" />
@@ -449,7 +450,7 @@ import { Aim, Operation } from '@element-plus/icons-vue';
 import { WORKBENCH_FRAME_MS, formatFrameTime } from '../../domain/timebase';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import { resolveWorkbenchMainFlowResultReturnTarget } from './workbenchFlowModel';
-import { createWorkbenchRuntimeResultReturnFlowAction } from './workbenchMainFlowActions';
+import { createWorkbenchRuntimeReviewPanelCommandView } from './workbenchMainFlowActions';
 
 const props = defineProps({
   selection: {
@@ -683,6 +684,25 @@ const runtimeResultReturnContext = computed(() =>
     fallbackTarget: fallbackRuntimeResultReturnContext.value,
   })
 );
+const runtimeResultReturnCommandView = computed(() =>
+  createWorkbenchRuntimeReviewPanelCommandView({
+    source: 'properties-panel',
+    flowModel: props.flowModel,
+    returnContext: runtimeResultReturnContext.value,
+  })
+);
+const runtimeResultReturnCommand = computed(
+  () => runtimeResultReturnCommandView.value.returnResult
+);
+const runtimeResultReturnButtonTarget = computed(
+  () => runtimeResultReturnCommand.value.context
+);
+const runtimeResultReturnDisplayContext = computed(() =>
+  createRuntimeResultReturnDisplayContext({
+    context: runtimeResultReturnContext.value,
+    target: runtimeResultReturnButtonTarget.value,
+  })
+);
 const valueParamSemanticLabel = computed(() => {
   const params = displayedElementValues.value.flatMap(row => row.params ?? []);
   const uniqueParams = [];
@@ -833,15 +853,26 @@ function emitTextPatch(key, value) {
 }
 
 function returnRuntimeResult() {
-  const action = createWorkbenchRuntimeResultReturnFlowAction({
-    source: 'properties-panel',
-    target: runtimeResultReturnContext.value,
-    enabled: Boolean(runtimeResultReturnContext.value?.statePointId),
-  });
+  const action = runtimeResultReturnCommand.value.action;
   if (!action.canRun) {
     return;
   }
   emit('dispatch-flow-action', action);
+}
+
+function createRuntimeResultReturnDisplayContext({ context, target } = {}) {
+  if (!context && !target?.statePointId) {
+    return null;
+  }
+  if (!target?.statePointId) {
+    return context;
+  }
+  return {
+    ...(context ?? {}),
+    ...target,
+    label: target.label ?? context?.label ?? '回到结果点',
+    summary: target.summary ?? context?.summary ?? '',
+  };
 }
 
 function isEditFocusField(fieldKey) {

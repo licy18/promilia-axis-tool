@@ -19995,3 +19995,42 @@ buttonView
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、80 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、211 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 261. UI 主流程能力块：Action Edit Result Return Command View
+
+### 261.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`PropertiesPanel` 的刷新结果回看入口改为消费：
+
+```js
+createWorkbenchRuntimeReviewPanelCommandView({
+  flowModel,
+  source: 'properties-panel',
+  returnContext,
+})
+```
+
+其中 `returnResult` command 继续输出：
+
+```js
+{
+  context,
+  enabled,
+  action,
+}
+```
+
+用于按钮目标、可用状态和 dispatch。侧边栏原有显示 context 继续保留，只把实际 return action 创建收束到共享 runtime review command/view。
+
+### 261.2 保存与迁移
+
+本阶段只调整动作编辑侧边面板的 return command 消费关系，不新增持久字段，不需要数据迁移。
+
+### 261.3 验证
+
+- Workbench 页面测试确认从动作编辑侧边面板返回刷新后结果仍可分发并定位到 refreshed runtime state point。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、78 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、211 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

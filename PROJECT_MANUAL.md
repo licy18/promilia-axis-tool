@@ -9289,6 +9289,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 shared button view / flow view / panel command view 的消费关系进一步用于主流程回改后的刷新回看入口，减少“修改后回结果”的分散判断。
 
+### 2026-07-09：UI 主流程能力块 - Action Edit Result Return Command View
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `PropertiesPanel` 的“回到刷新后结果”入口改为消费共享 `createWorkbenchRuntimeReviewPanelCommandView()` 的 returnResult command。
+- 动作编辑侧边面板的刷新结果回看 action 创建与运行结果区曲线、日志、详情面板保持同一套 runtime review command/view 路径。
+- `PropertiesPanel` 不再本地直接创建 runtime result return action，减少“修改动作 -> 回看刷新结果”主路径的分散判断。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- Workbench 页面测试确认从动作编辑侧边面板返回刷新后结果仍可分发并定位到 refreshed runtime state point。
+- main flow action 单测确认共享 runtime review command/view 合同仍保持可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、78 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、211 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 shared button view、runtime review flow view、panel command view 的消费关系整理成更明确的主流程 command surface，优先服务“排轴动作编辑 -> 运行模拟 -> 曲线/日志/详情查看 -> 回到动作修改”的完整闭环。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
