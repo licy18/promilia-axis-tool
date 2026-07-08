@@ -2,6 +2,7 @@ import {
   WORKBENCH_FLOW_ACTION_KINDS,
   createWorkbenchFlowAction,
 } from './workbenchFlowModel';
+import { WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS } from './workbenchFlowPlanController';
 
 export const WORKBENCH_FLOW_CONTROLLER_HANDLERS = Object.freeze({
   OPEN_RUNTIME_RESULTS: 'openRuntimeResults',
@@ -117,6 +118,102 @@ export function createWorkbenchFlowController(handlers = {}) {
       });
     },
   };
+}
+
+export function createWorkbenchFlowPlanHandlers({
+  flowPlanController = null,
+  applyRuntimeFlowPlan = () => {},
+  applyActionEditFlowPlan = () => {},
+  selectRuntimeStatePoint = () => {},
+} = {}) {
+  return {
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.OPEN_RUNTIME_RESULTS]: ({
+      actionId,
+    } = {}) =>
+      applyRuntimeFlowPlan(
+        createPlan(
+          flowPlanController,
+          WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_ENTRY,
+          {
+            actionId,
+          }
+        )
+      ),
+
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_RESULT]: ({
+      actionId,
+      statePointId,
+    } = {}) =>
+      applyRuntimeFlowPlan(
+        createPlan(
+          flowPlanController,
+          WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_RESULT_RETURN,
+          {
+            actionId,
+            statePointId,
+            source: 'action-result',
+          }
+        )
+      ),
+
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_STATE_POINT]:
+      statePointId => selectRuntimeStatePoint(statePointId),
+
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_CONTRIBUTION_POINT]:
+      statePointId =>
+        applyRuntimeFlowPlan(
+          createPlan(
+            flowPlanController,
+            WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_POINT_FOCUS,
+            {
+              statePointId,
+              source: 'action-contribution',
+            }
+          )
+        ),
+
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.FOCUS_RUNTIME_ACTION]: payload =>
+      applyActionEditFlowPlan(
+        createPlan(
+          flowPlanController,
+          WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_ACTION_EDIT_FOCUS,
+          payload
+        )
+      ),
+
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.FOCUS_EDIT_SOURCE]: payload =>
+      applyActionEditFlowPlan(
+        createPlan(
+          flowPlanController,
+          WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.EDIT_SOURCE_ACTION_EDIT_FOCUS,
+          payload
+        )
+      ),
+
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.RETURN_RUNTIME_RESULT]: ({
+      actionId,
+      statePointId,
+    } = {}) =>
+      applyRuntimeFlowPlan(
+        createPlan(
+          flowPlanController,
+          WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_RESULT_RETURN,
+          {
+            actionId,
+            statePointId,
+            source: 'action-result',
+          }
+        )
+      ),
+  };
+}
+
+function createPlan(flowPlanController, methodKey, payload) {
+  const createFlowPlan = flowPlanController?.[methodKey];
+  if (typeof createFlowPlan !== 'function') {
+    return {};
+  }
+  return createFlowPlan(payload);
 }
 
 function callWorkbenchFlowHandler({

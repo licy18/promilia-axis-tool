@@ -16346,3 +16346,85 @@ const workbenchFlowPlanController = createWorkbenchFlowPlanController(...)
 - `npm run test -- --run`：通过，23 个测试文件、155 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 208. UI 主流程能力块：Flow Controller Plan Handlers
+
+本阶段属于 UI 主流程。
+
+### 208.1 结构变化
+
+`src/features/workbench/workbenchFlowController.js` 新增导出：
+
+```js
+createWorkbenchFlowPlanHandlers()
+```
+
+`createWorkbenchFlowPlanHandlers()` 接收：
+
+```js
+{
+  flowPlanController,
+  applyRuntimeFlowPlan,
+  applyActionEditFlowPlan,
+  selectRuntimeStatePoint
+}
+```
+
+并为 `createWorkbenchFlowController()` 生成标准 handlers：
+
+```js
+openRuntimeResults
+selectRuntimeResult
+selectRuntimeStatePoint
+selectContributionPoint
+focusRuntimeAction
+focusEditSource
+returnRuntimeResult
+```
+
+其中：
+
+```js
+openRuntimeResults      -> createRuntimeEntryPlan -> applyRuntimeFlowPlan
+selectRuntimeResult     -> createRuntimeResultReturnPlan -> applyRuntimeFlowPlan
+selectContributionPoint -> createRuntimePointFocusPlan -> applyRuntimeFlowPlan
+focusRuntimeAction      -> createRuntimeActionEditFocusPlan -> applyActionEditFlowPlan
+focusEditSource         -> createEditSourceActionEditFocusPlan -> applyActionEditFlowPlan
+returnRuntimeResult     -> createRuntimeResultReturnPlan -> applyRuntimeFlowPlan
+selectRuntimeStatePoint -> selectRuntimeStatePoint
+```
+
+`Workbench.vue` 不再维护以下中转函数：
+
+```js
+openRuntimeResultsFlow()
+selectActionResult()
+returnRuntimeResultFromProperties()
+focusRuntimeAction()
+focusActionEditSource()
+selectActionContributionRuntimePoint()
+focusRuntimePointFromAnalysis()
+```
+
+`Workbench.vue` 改为：
+
+```js
+const workbenchFlowController = createWorkbenchFlowController(
+  createWorkbenchFlowPlanHandlers(...)
+)
+```
+
+### 208.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 的 flow action 到 plan 的主流程接线方式；模拟结果、三值计算、项目文件、runtime projection 结构不变。
+
+### 208.3 验证
+
+- `src/__tests__/features/workbenchFlowController.test.js` 新增覆盖 flow action 到 plan controller 与 apply 函数的绑定。
+- Workbench 视图测试继续覆盖现有编辑、运行、查看、回改、回结果闭环行为。
+- `npm run test -- --run src/__tests__/features/workbenchFlowController.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、58 条测试。
+- `npm run test -- --run`：通过，23 个测试文件、156 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。

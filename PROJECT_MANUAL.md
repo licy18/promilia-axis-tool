@@ -7895,6 +7895,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：进一步把 Workbench flow action dispatch 与 flow plan controller 串成更完整的主流程控制器，减少 Workbench 内部 handler 函数数量。
 
+### 2026-07-09：UI 主流程能力块 - Flow Controller Plan Handlers
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchFlowController` 新增 `createWorkbenchFlowPlanHandlers()`，直接把标准 flow action 映射到 `workbenchFlowPlanController` 的 plan 生成方法。
+- `Workbench.vue` 不再维护 open runtime、select result、return result、focus runtime action、focus edit source、contribution point 等一组中转 handler。
+- Workbench 现在只向 flow controller 提供三个执行入口：`applyRuntimeFlowPlan()`、`applyActionEditFlowPlan()`、`selectRuntimeStatePoint()`。
+- 本阶段不修改三值计算、模拟输出、项目保存结构或可见 UI 文案。
+
+当前验证事实：
+
+- flow controller 单元测试覆盖：flow action 可以直接生成 runtime/action-edit plan，并调用对应 apply 函数。
+- `select-runtime-state-point` 仍保持直接选中运行点的旧行为。
+- Workbench 集成测试继续覆盖现有编辑、运行、查看、回改、回结果闭环行为。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowController.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、58 条测试。
+- `npm run test -- --run`：通过，23 个测试文件、156 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把主流程控制层从“controller + apply 函数”进一步整理为更明确的 Workbench flow runtime，减少视图层状态应用细节。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
