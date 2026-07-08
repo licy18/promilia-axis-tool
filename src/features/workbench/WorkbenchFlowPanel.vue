@@ -264,6 +264,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  mainFlowCommandSurface: {
+    type: Object,
+    default: null,
+  },
 });
 
 const emit = defineEmits(['dispatch-flow-action']);
@@ -286,33 +290,41 @@ const mainFlowStatusView = computed(() =>
     flowModel: workbenchFlow.value,
   })
 );
-const mainFlowCommandSurface = computed(() =>
-  createWorkbenchMainFlowCommandSurface({
-    flowModel: workbenchFlow.value,
-    source: MAIN_FLOW_PANEL_SOURCE,
-    recoverySource: MAIN_FLOW_RECOVERY_SOURCE,
-  })
+const resolvedMainFlowCommandSurface = computed(
+  () =>
+    props.mainFlowCommandSurface ??
+    createWorkbenchMainFlowCommandSurface({
+      flowModel: workbenchFlow.value,
+      source: MAIN_FLOW_PANEL_SOURCE,
+      recoverySource: MAIN_FLOW_RECOVERY_SOURCE,
+    })
 );
 const openRuntimeButtonView = computed(() =>
-  mainFlowCommandSurface.value.openRuntimeResults
+  resolvedMainFlowCommandSurface.value.openRuntimeResults
 );
 const runtimeActionEditButtonView = computed(() =>
-  mainFlowCommandSurface.value.runtimeActionEdit
+  resolvedMainFlowCommandSurface.value.runtimeActionEdit
 );
 const runtimeResultReturnButtonView = computed(() =>
-  mainFlowCommandSurface.value.runtimeResultReturn
+  resolvedMainFlowCommandSurface.value.runtimeResultReturn
 );
 
 function focusRuntimeAction() {
-  dispatchFlowAction(mainFlowCommandSurface.value.actions.runtimeActionEdit);
+  dispatchFlowAction(
+    resolvedMainFlowCommandSurface.value.actions.runtimeActionEdit
+  );
 }
 
 function returnRuntimeResult() {
-  dispatchFlowAction(mainFlowCommandSurface.value.actions.runtimeResultReturn);
+  dispatchFlowAction(
+    resolvedMainFlowCommandSurface.value.actions.runtimeResultReturn
+  );
 }
 
 function openRuntimeResults() {
-  dispatchFlowAction(mainFlowCommandSurface.value.actions.openRuntimeResults);
+  dispatchFlowAction(
+    resolvedMainFlowCommandSurface.value.actions.openRuntimeResults
+  );
 }
 
 function selectRuntimeNavigationPoint(point) {

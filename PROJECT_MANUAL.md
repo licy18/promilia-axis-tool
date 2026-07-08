@@ -9342,6 +9342,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：基于 `createWorkbenchMainFlowCommandSurface()` 进一步整理 Workbench 页面和各面板的主流程消费边界，让“排轴动作编辑 -> 运行模拟 -> 曲线/日志/详情查看 -> 回到动作修改”更接近单一 command surface 驱动的闭环。
 
+### 2026-07-09：UI 主流程能力块 - FlowPanel Shares Page Command Surface
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `Workbench` 页面层将已创建的 `mainFlowCommandSurface` 直接传给 `WorkbenchFlowPanel`。
+- `WorkbenchFlowPanel` 新增 `mainFlowCommandSurface` prop，优先消费页面级 command surface；组件独立挂载时仍可基于 `flowModel` fallback 创建。
+- 顶部主流程按钮与页面运行结果 primary 操作现在共享同一份 surface 来源，减少“页面一份、面板一份”的重复生成边界。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- WorkbenchFlowPanel 组件测试覆盖注入的 command surface，确认按钮 view 和 dispatch action 均来自外部 surface。
+- Workbench 页面测试确认页面级传入后，主流程、运行结果 primary 和刷新回看路径仍可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、213 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：以页面级 `mainFlowCommandSurface` 为入口，继续减少 Workbench 页面和运行结果面板之间重复读取主流程命令的地方，优先服务完整编辑、运行、查看、回改闭环。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

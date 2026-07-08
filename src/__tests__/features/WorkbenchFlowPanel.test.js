@@ -116,6 +116,44 @@ describe('WorkbenchFlowPanel', () => {
       },
     });
   });
+
+  it('uses an injected main flow command surface for button views and actions', async () => {
+    const wrapper = mount(WorkbenchFlowPanel, {
+      props: {
+        flowModel: createFlowModel({
+          primaryKind: 'focus-runtime-action',
+          primaryOperation: {
+            kind: 'focus-runtime-action',
+            enabled: true,
+            target: {
+              actionId: 'review-action',
+              statePointId: 'review-state-point',
+            },
+          },
+        }),
+        mainFlowCommandSurface: createInjectedMainFlowCommandSurface(),
+      },
+    });
+
+    const button = wrapper.find(
+      '[data-testid="workbench-flow-edit-runtime-action"]'
+    );
+    expect(button.attributes()).toMatchObject({
+      'data-action-id': 'surface-action',
+      'data-primary-action': 'false',
+      'data-state-point-id': 'surface-state-point',
+    });
+
+    await button.trigger('click');
+
+    expect(getLastDispatchedFlowAction(wrapper)).toMatchObject({
+      kind: 'focus-runtime-action',
+      source: 'shared-surface-test',
+      actionId: 'surface-action',
+      statePointId: 'surface-state-point',
+      canRun: true,
+    });
+  });
 });
 
 function createFlowModel({ primaryKind, primaryOperation }) {
@@ -219,4 +257,66 @@ function createFlowModel({ primaryKind, primaryOperation }) {
 function getLastDispatchedFlowAction(wrapper) {
   const events = wrapper.emitted('dispatch-flow-action') ?? [];
   return events.at(-1)?.[0] ?? null;
+}
+
+function createInjectedMainFlowCommandSurface() {
+  const runtimeActionEditAction = {
+    kind: 'focus-runtime-action',
+    source: 'shared-surface-test',
+    actionId: 'surface-action',
+    statePointId: 'surface-state-point',
+    canRun: true,
+  };
+  const openRuntimeResultsAction = {
+    kind: 'open-runtime-results',
+    source: 'shared-surface-test',
+    actionId: 'surface-action',
+    canRun: true,
+  };
+  const runtimeResultReturnAction = {
+    kind: 'return-runtime-result',
+    source: 'shared-surface-test',
+    actionId: 'surface-action',
+    statePointId: 'surface-return-state-point',
+    canRun: true,
+  };
+
+  return {
+    openRuntimeResults: {
+      kind: 'open-runtime-results',
+      isPrimary: false,
+      enabled: true,
+      target: {},
+      action: openRuntimeResultsAction,
+    },
+    runtimeActionEdit: {
+      kind: 'focus-runtime-action',
+      isPrimary: false,
+      enabled: true,
+      actionId: 'surface-action',
+      statePointId: 'surface-state-point',
+      target: {
+        actionId: 'surface-action',
+        statePointId: 'surface-state-point',
+      },
+      action: runtimeActionEditAction,
+    },
+    runtimeResultReturn: {
+      kind: 'return-runtime-result',
+      isPrimary: false,
+      enabled: true,
+      actionId: 'surface-action',
+      statePointId: 'surface-return-state-point',
+      target: {
+        actionId: 'surface-action',
+        statePointId: 'surface-return-state-point',
+      },
+      action: runtimeResultReturnAction,
+    },
+    actions: {
+      openRuntimeResults: openRuntimeResultsAction,
+      runtimeActionEdit: runtimeActionEditAction,
+      runtimeResultReturn: runtimeResultReturnAction,
+    },
+  };
 }

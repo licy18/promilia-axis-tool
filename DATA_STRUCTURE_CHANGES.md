@@ -20100,3 +20100,44 @@ primary 场景下 `action` 来自 `createWorkbenchMainFlowLoopAction()`；非 pr
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、81 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、212 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 263. UI 主流程能力块：FlowPanel Shares Page Command Surface
+
+### 263.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`WorkbenchFlowPanel` 新增可选 prop：
+
+```js
+mainFlowCommandSurface: Object | null
+```
+
+消费规则：
+
+```text
+props.mainFlowCommandSurface 存在时：直接作为顶部主流程按钮的 command surface。
+props.mainFlowCommandSurface 不存在时：继续通过 createWorkbenchMainFlowCommandSurface({ flowModel, source, recoverySource }) fallback 创建。
+```
+
+`Workbench` 页面层现在将页面级 `mainFlowCommandSurface` 传给 `WorkbenchFlowPanel`：
+
+```vue
+<WorkbenchFlowPanel
+  :flow-model="workbenchFlowModel"
+  :main-flow-command-surface="mainFlowCommandSurface"
+/>
+```
+
+这样顶部主流程按钮与页面运行结果 primary 操作共享同一份 command surface 来源。
+
+### 263.2 保存与迁移
+
+本阶段只调整组件间 command surface 传递关系，不新增持久字段，不需要数据迁移。
+
+### 263.3 验证
+
+- 更新 `src/__tests__/features/WorkbenchFlowPanel.test.js`，覆盖注入的 command surface，确认按钮 view 和 dispatch action 均来自外部 surface。
+- `npm run test -- --run src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、213 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

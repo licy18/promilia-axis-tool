@@ -52,6 +52,7 @@
       :runtime-overview-active="runtimeOverviewActive"
       :action-edit-result-context="actionEditResultContext"
       :flow-model="workbenchFlowModel"
+      :main-flow-command-surface="mainFlowCommandSurface"
       @dispatch-flow-action="dispatchWorkbenchFlowAction"
     />
 
