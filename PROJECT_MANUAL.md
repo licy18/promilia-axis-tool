@@ -7867,6 +7867,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：围绕完整闭环接口做一次 Workbench 主流程控制层梳理，优先减少 `Workbench.vue` 内部对流程 plan 的直接拼接。
 
+### 2026-07-09：UI 主流程能力块 - Workbench Flow Plan Controller
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `workbenchFlowPlanController`，集中生成 runtime flow plan 与 action edit flow plan。
+- `Workbench.vue` 不再直接导入具体 plan 构造器，而是通过 `workbenchFlowPlanController` 获取运行入口、运行点聚焦、运行结果返回、运行结果定位编辑焦点和分析编辑来源焦点 plan。
+- Workbench 的职责进一步收束为“接收 flow action -> 获取 plan -> 应用 plan”，主流程规则从视图文件里继续外移。
+- 本阶段不修改三值计算、模拟输出、项目保存结构或可见 UI 文案。
+
+当前验证事实：
+
+- flow plan controller 能使用当前 runtime projection 和 selected action 生成运行入口 plan。
+- flow plan controller 能集中生成运行结果返回、运行点聚焦和动作编辑焦点 plan。
+- Workbench 集成测试继续覆盖编辑、运行、查看、回改、回结果的现有闭环行为。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/features/workbenchActionEditFlowPlan.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、64 条测试。
+- `npm run test -- --run`：通过，23 个测试文件、155 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：进一步把 Workbench flow action dispatch 与 flow plan controller 串成更完整的主流程控制器，减少 Workbench 内部 handler 函数数量。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

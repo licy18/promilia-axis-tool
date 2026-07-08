@@ -16274,3 +16274,75 @@ returnRuntimeResultFromProperties()
 - `npm run test -- --run`：通过，22 个测试文件、153 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 207. UI 主流程能力块：Workbench Flow Plan Controller
+
+本阶段属于 UI 主流程。
+
+### 207.1 结构变化
+
+新增模块：
+
+```js
+src/features/workbench/workbenchFlowPlanController.js
+```
+
+新增导出：
+
+```js
+WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS
+createWorkbenchFlowPlanController()
+```
+
+`createWorkbenchFlowPlanController()` 接收以下 getter：
+
+```js
+{
+  getRuntimeProjection,
+  getSelectedActionId,
+  getActionEditFocusSequence
+}
+```
+
+controller 统一提供以下 plan 生成方法：
+
+```js
+createRuntimeEntryPlan()
+createRuntimePointFocusPlan()
+createRuntimeResultReturnPlan()
+createRuntimeActionEditFocusPlan()
+createEditSourceActionEditFocusPlan()
+```
+
+`Workbench.vue` 不再直接导入以下具体 plan 构造器：
+
+```js
+createRuntimeEntryFlowPlan
+createRuntimePointFocusFlowPlan
+createRuntimeResultReturnFlowPlan
+createRuntimeActionEditFocusPlan
+createEditSourceActionEditFocusPlan
+```
+
+改为创建：
+
+```js
+const workbenchFlowPlanController = createWorkbenchFlowPlanController(...)
+```
+
+再通过 `WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS` 获取对应 plan。
+
+### 207.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 的主流程 plan 生成组织方式；模拟结果、三值计算、项目文件、runtime projection 结构不变。
+
+### 207.3 验证
+
+- 新增 `src/__tests__/features/workbenchFlowPlanController.test.js`，覆盖运行入口、运行结果返回、运行点聚焦、运行结果定位编辑焦点和分析编辑来源焦点 plan 创建。
+- Workbench 视图测试继续覆盖现有编辑、运行、查看、回改、回结果闭环行为。
+- `npm run test -- --run src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/features/workbenchActionEditFlowPlan.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、64 条测试。
+- `npm run test -- --run`：通过，23 个测试文件、155 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。

@@ -212,11 +212,11 @@ import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import WorkbenchFlowPanel from '../features/workbench/WorkbenchFlowPanel.vue';
 import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
-import {
-  createEditSourceActionEditFocusPlan,
-  createRuntimeActionEditFocusPlan,
-} from '../features/workbench/workbenchActionEditFlowPlan';
 import { createWorkbenchFlowController } from '../features/workbench/workbenchFlowController';
+import {
+  WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS,
+  createWorkbenchFlowPlanController,
+} from '../features/workbench/workbenchFlowPlanController';
 import {
   createWorkbenchFlowModel,
 } from '../features/workbench/workbenchFlowModel';
@@ -224,11 +224,6 @@ import {
   createRuntimeStatePointContexts,
   findFirstRuntimeStatePointForAction,
 } from '../features/workbench/runtimeProjectionPoints';
-import {
-  createRuntimeEntryFlowPlan,
-  createRuntimePointFocusFlowPlan,
-  createRuntimeResultReturnFlowPlan,
-} from '../features/workbench/workbenchRuntimeFlowPlan';
 import {
   SYSTEM_TIMELINE_LANE_ID,
   createTimelineDiagnostics,
@@ -319,6 +314,12 @@ const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const draftStatus = ref('未保存草稿');
 const actionEditSource = ref(createEmptyActionEditSource());
 const actionEditFocus = ref(createEmptyActionEditFocus());
+const workbenchFlowPlanController = createWorkbenchFlowPlanController({
+  getRuntimeProjection: () =>
+    simulationResult.value.threeValueRuntimeProjection,
+  getSelectedActionId: () => selectedActionId.value,
+  getActionEditFocusSequence: () => actionEditFocus.value.sequence,
+});
 const workbenchFlowController = createWorkbenchFlowController({
   openRuntimeResults: ({ actionId }) =>
     openRuntimeResultsFlow({ actionId }),
@@ -1359,7 +1360,9 @@ function dispatchWorkbenchFlowAction(action = {}) {
 
 function selectActionResult({ actionId, statePointId } = {}) {
   applyRuntimeFlowPlan(
-    createRuntimeResultReturnFlowPlan({
+    workbenchFlowPlanController[
+      WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_RESULT_RETURN
+    ]({
       actionId,
       statePointId,
       source: 'action-result',
@@ -1369,7 +1372,9 @@ function selectActionResult({ actionId, statePointId } = {}) {
 
 function returnRuntimeResultFromProperties({ actionId, statePointId } = {}) {
   applyRuntimeFlowPlan(
-    createRuntimeResultReturnFlowPlan({
+    workbenchFlowPlanController[
+      WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_RESULT_RETURN
+    ]({
       actionId,
       statePointId,
       source: 'action-result',
@@ -1378,11 +1383,11 @@ function returnRuntimeResultFromProperties({ actionId, statePointId } = {}) {
 }
 
 function openRuntimeResultsFlow({ actionId } = {}) {
-  const targetActionId = actionId || selectedActionId.value;
   applyRuntimeFlowPlan(
-    createRuntimeEntryFlowPlan({
-      runtimeProjection: simulationResult.value.threeValueRuntimeProjection,
-      actionId: targetActionId,
+    workbenchFlowPlanController[
+      WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_ENTRY
+    ]({
+      actionId,
     })
   );
 }
@@ -1395,23 +1400,23 @@ function focusRuntimeAction({
   trackKey = '',
 } = {}) {
   applyActionEditFlowPlan(
-    createRuntimeActionEditFocusPlan({
+    workbenchFlowPlanController[
+      WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_ACTION_EDIT_FOCUS
+    ]({
       actionId,
       fieldKey,
       frameLabel,
       statePointId,
       trackKey,
-      sequence: actionEditFocus.value.sequence,
     })
   );
 }
 
 function focusActionEditSource(source = {}) {
   applyActionEditFlowPlan(
-    createEditSourceActionEditFocusPlan({
-      source,
-      sequence: actionEditFocus.value.sequence,
-    })
+    workbenchFlowPlanController[
+      WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.EDIT_SOURCE_ACTION_EDIT_FOCUS
+    ](source)
   );
 }
 
@@ -1435,7 +1440,9 @@ function selectActionContributionRuntimePoint(pointId) {
 
 function focusRuntimePointFromAnalysis(pointId, source) {
   applyRuntimeFlowPlan(
-    createRuntimePointFocusFlowPlan({
+    workbenchFlowPlanController[
+      WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_POINT_FOCUS
+    ]({
       statePointId: pointId,
       source,
     })
@@ -1559,8 +1566,9 @@ function getSelectedRuntimeStatePointActionId() {
 
 function syncRuntimeResultForSelectedAction(actionId) {
   applyRuntimeFlowPlan(
-    createRuntimeEntryFlowPlan({
-      runtimeProjection: simulationResult.value.threeValueRuntimeProjection,
+    workbenchFlowPlanController[
+      WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_ENTRY
+    ]({
       actionId,
     })
   );
