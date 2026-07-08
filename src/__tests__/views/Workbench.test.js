@@ -122,6 +122,24 @@ describe('Workbench view', () => {
     expect(hpStateCurveRow.text()).toContain('raw-damage · 2/2层 · 6点');
     expect(hpStateCurveRow.text()).toContain('已用 1点 Δ12,461 Σ12,461');
     expect(hpStateCurveRow.text()).toContain('候选 5点 Δ2,500-13,000 Σ28,700');
+    const hpStateCurvePoints = hpStateCurveRow.findAll(
+      '[data-testid="workbench-state-curve-point"]'
+    );
+    expect(hpStateCurvePoints).toHaveLength(6);
+    expect(hpStateCurvePoints[0].attributes('data-layer-key')).toBe('applied');
+    expect(hpStateCurvePoints[0].attributes('data-frame-label')).toBe('0s0f');
+    expect(hpStateCurvePoints[0].text()).toContain('已用 Δ12,461 Σ12,461');
+    expect(hpStateCurvePoints[0].text()).toContain('普通攻击');
+    const firstCandidatePoint = hpStateCurvePoints.find(
+      point =>
+        point.attributes('data-layer-key') === 'candidate' &&
+        point.attributes('data-frame-label') === '0s12f'
+    );
+    expect(firstCandidatePoint).toBeTruthy();
+    expect(firstCandidatePoint.text()).toContain('候选 Δ2,500 Σ2,500');
+    expect(firstCandidatePoint.text()).toContain('hit1');
+    expect(firstCandidatePoint.text()).toContain('109001306');
+    expect(firstCandidatePoint.text()).toContain('109001081');
     await wrapper
       .find(
         '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="candidate"]'
@@ -140,6 +158,13 @@ describe('Workbench view', () => {
         )
         .text()
     ).toContain('raw-damage · 1/1层 · 1点');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-state-curve-row"][data-track-key="enemyHpDamage"]'
+        )
+        .findAll('[data-testid="workbench-state-curve-point"]')
+    ).toHaveLength(1);
     await wrapper
       .find(
         '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="candidate"]'
@@ -477,6 +502,16 @@ describe('Workbench view', () => {
     expect(sampledRow.exists()).toBe(true);
     expect(sampledRow.text()).toContain('sp · 1/1层 · 1点');
     expect(sampledRow.text()).toContain('采样 1点 Δ0.3375 Σ0.3375');
+    const sampledPoints = sampledRow.findAll(
+      '[data-testid="workbench-state-curve-point"]'
+    );
+    expect(sampledPoints).toHaveLength(1);
+    expect(sampledPoints[0].attributes('data-layer-key')).toBe('sampled');
+    expect(sampledPoints[0].attributes('data-frame-label')).toBe('0s12f');
+    expect(sampledPoints[0].text()).toContain('采样 Δ0.3375 Σ0.3375');
+    expect(sampledPoints[0].text()).toContain('recover-sp-applied');
+    expect(sampledPoints[0].text()).toContain('element 109001081');
+    expect(sampledPoints[0].text()).toContain('SP 10->10.3375');
 
     await findLayerToggle('placeholder').setValue(true);
     await nextTick();
@@ -492,6 +527,17 @@ describe('Workbench view', () => {
     expect(placeholderRow.exists()).toBe(true);
     expect(placeholderRow.text()).toContain('raw-damage · 1/1层 · 1点');
     expect(placeholderRow.text()).toContain('占位 1点 Δ0 Σ0');
+    const placeholderPoints = placeholderRow.findAll(
+      '[data-testid="workbench-state-curve-point"]'
+    );
+    expect(placeholderPoints).toHaveLength(1);
+    expect(placeholderPoints[0].attributes('data-layer-key')).toBe(
+      'placeholder'
+    );
+    expect(placeholderPoints[0].attributes('data-frame-label')).toBe('1s0f');
+    expect(placeholderPoints[0].text()).toContain('占位 Δ0 Σ0');
+    expect(placeholderPoints[0].text()).toContain('资源动作');
+    expect(placeholderPoints[0].text()).toContain('action-result-placeholder');
   });
 
   it('shows Hanyouyou summon target candidates in per-hit workbench evidence', async () => {
@@ -2532,9 +2578,16 @@ function createStateCurvePanelProps() {
                 finalCumulative: 0.3375,
                 points: [
                   {
+                    sourceKind: 'runtime-recover-sp-applied-sample',
+                    eventType: 'recover-sp-applied',
+                    actionId: 'action-sample',
+                    sourceElementConfigId: 109001081,
                     frameIndex: 12,
+                    frameLabel: '0s12f',
                     delta: 0.3375,
                     cumulative: 0.3375,
+                    spBefore: 10,
+                    spAfter: 10.3375,
                   },
                 ],
               }),
@@ -2557,7 +2610,11 @@ function createStateCurvePanelProps() {
                 finalCumulative: 0,
                 points: [
                   {
+                    sourceKind: 'action-result-placeholder',
+                    actionId: 'action-placeholder',
+                    actionName: '资源动作',
                     frameIndex: 60,
+                    frameLabel: '1s0f',
                     delta: 0,
                     cumulative: 0,
                   },

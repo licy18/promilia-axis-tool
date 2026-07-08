@@ -7720,7 +7720,7 @@ activeLayers.has(layer.key) && layer.pointCount > 0
 状态曲线 layer 摘要改用 `formatStateCurveNumber()`：
 
 - 普通整数仍走千分位，例如 `12,461`。
-- `0 < abs(value) < 1` 的值保留最多 4 位小数，并去掉尾随 0。
+- 非整数值保留最多 4 位小数，并去掉尾随 0。
 - RecoverSP sampled fixture 的 `0.3375` 会显示为 `采样 1点 Δ0.3375 Σ0.3375`。
 
 ### 95.4 验证
@@ -7740,3 +7740,89 @@ activeLayers.has(layer.key) && layer.pointCount > 0
 - `npm run build`：通过。
 
 下一阶段 5-8BQ 应把这些点级信息进一步接入下钻或时间轴提示，而不是改动 `stateCurves` 基础结构。
+
+## 96. 阶段 5-8BQ：stateCurves point detail view
+
+阶段 5-8BQ 不修改 `threeValueCurveFramework.stateCurves` 的模拟结果结构，只在 Workbench 分析面板中新增点级消费视图。
+
+### 96.1 前端派生点行
+
+`AnalysisPanel` 通过 `createStateCurveVisiblePointRows(track, visibleLayers)` 从可见 layer 里派生点行：
+
+```js
+{
+  ...point,
+  rowKey,
+  trackKey,
+  layerKey,
+  layerLabel,
+  layerIndex,
+  pointIndex,
+  valueUnit
+}
+```
+
+排序规则：
+
+1. `frameIndex`
+2. `timeMs`
+3. `layerIndex`
+4. `sequenceIndex`
+5. `eventIndex`
+6. `hitIndex`
+7. `pointIndex`
+
+这只是 UI 派生结构，不写回 `stateCurves`。
+
+### 96.2 点级展示字段
+
+每个可见点渲染为：
+
+```text
+0s12f
+候选 Δ2,500 Σ2,500
+普通攻击 · hit1 · element 109001306/109001081 · candidate-chart-point
+```
+
+对 RecoverSP sampled 点，可展示：
+
+```text
+0s12f
+采样 Δ0.3375 Σ0.3375
+action-sample · element 109001081 · recover-sp-applied · SP 10->10.3375 · runtime-recover-sp-applied-sample
+```
+
+对 placeholder 点，可展示：
+
+```text
+1s0f
+占位 Δ0 Σ0
+资源动作 · action-result-placeholder
+```
+
+### 96.3 数值格式
+
+`formatStateCurveNumber()` 当前规则：
+
+- 整数继续走 `formatNumber()` 千分位。
+- 非整数保留最多 4 位小数并去掉尾随 0。
+- 支持负数，例如 `-10.25`。
+
+该规则用于 layer 摘要和 point 明细，避免 SP 曲线里的 `10.3375` 被显示为 `10`。
+
+### 96.4 验证
+
+新增 / 扩展 Workbench 测试覆盖：
+
+- 默认末音 HP 状态曲线下有 6 个可见点：1 个 applied、5 个 candidate。
+- 首个 applied 点显示 `0s0f / 已用 Δ12,461 Σ12,461 / 普通攻击`。
+- 首个 candidate 点显示 `0s12f / 候选 Δ2,500 Σ2,500 / hit1 / 109001306 / 109001081`。
+- 关闭 candidate 层后，HP 轨道只剩 1 个点。
+- sampled fixture 展开后显示 `recover-sp-applied`、`element 109001081`、`SP 10->10.3375`。
+- placeholder fixture 展开后显示 `1s0f`、`资源动作`、`action-result-placeholder`。
+
+阶段验收：
+
+- `npm test -- --run src\__tests__\views\Workbench.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过。
+
+下一阶段 5-8BR 应把 state point 接入主时间轴轻量 marker 或提示，让分析面板明细和时间轴位置能互相对应。

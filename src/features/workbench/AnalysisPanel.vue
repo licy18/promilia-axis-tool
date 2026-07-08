@@ -299,6 +299,27 @@
             {{ formatStateCurveLayer(layer) }}
           </span>
         </div>
+        <ol
+          v-if="track.visiblePointRows.length"
+          class="state-curve-points"
+          data-testid="workbench-state-curve-points"
+        >
+          <li
+            v-for="point in track.visiblePointRows"
+            :key="point.rowKey"
+            class="state-curve-point-row"
+            :data-layer-key="point.layerKey"
+            :data-action-id="point.actionId"
+            :data-frame-label="formatStateCurvePointFrame(point)"
+            data-testid="workbench-state-curve-point"
+          >
+            <span class="state-curve-point-time">
+              {{ formatStateCurvePointFrame(point) }}
+            </span>
+            <strong>{{ formatStateCurvePointValue(point) }}</strong>
+            <small>{{ formatStateCurvePointSource(point) }}</small>
+          </li>
+        </ol>
       </div>
     </div>
 
@@ -542,12 +563,19 @@ const stateCurveTrackRows = computed(() => {
   const activeLayers = new Set(activeStateCurveLayerKeys.value);
   return (stateCurves.value?.tracks ?? [])
     .filter(track => (track.pointCount ?? 0) > 0)
-    .map(track => ({
-      ...track,
-      visibleLayers: (track.layers ?? []).filter(
+    .map(track => {
+      const visibleLayers = (track.layers ?? []).filter(
         layer => activeLayers.has(layer.key) && (layer.pointCount ?? 0) > 0
-      ),
-    }))
+      );
+      return {
+        ...track,
+        visibleLayers,
+        visiblePointRows: createStateCurveVisiblePointRows(
+          track,
+          visibleLayers
+        ),
+      };
+    })
     .filter(track => track.visibleLayers.length > 0);
 });
 const stateCurveVisiblePointCount = computed(() =>
@@ -942,6 +970,129 @@ function formatStateCurveLayerLabel(key) {
   return option?.label ?? key;
 }
 
+function createStateCurveVisiblePointRows(track, visibleLayers) {
+  return visibleLayers
+    .flatMap((layer, layerIndex) =>
+      (layer.points ?? []).map((point, pointIndex) => ({
+        ...point,
+        rowKey: [
+          track.trackKey,
+          layer.key,
+          point.actionId ?? point.eventType ?? 'point',
+          point.frameIndex ?? point.timeMs ?? pointIndex,
+          point.sequenceIndex ??
+            point.eventIndex ??
+            point.hitIndex ??
+            pointIndex,
+        ].join(':'),
+        trackKey: track.trackKey,
+        layerKey: layer.key,
+        layerLabel: formatStateCurveLayerLabel(layer.key),
+        layerIndex,
+        pointIndex,
+        valueUnit: layer.valueUnit ?? track.valueUnit,
+      }))
+    )
+    .sort(compareStateCurvePointRows);
+}
+
+function compareStateCurvePointRows(left, right) {
+  return (
+    compareNullableNumber(left.frameIndex, right.frameIndex) ||
+    compareNullableNumber(left.timeMs, right.timeMs) ||
+    compareNullableNumber(left.layerIndex, right.layerIndex) ||
+    compareNullableNumber(left.sequenceIndex, right.sequenceIndex) ||
+    compareNullableNumber(left.eventIndex, right.eventIndex) ||
+    compareNullableNumber(left.hitIndex, right.hitIndex) ||
+    compareNullableNumber(left.pointIndex, right.pointIndex)
+  );
+}
+
+function compareNullableNumber(left, right) {
+  const leftNumber = Number(left);
+  const rightNumber = Number(right);
+  const leftFinite = Number.isFinite(leftNumber);
+  const rightFinite = Number.isFinite(rightNumber);
+  if (leftFinite && rightFinite && leftNumber !== rightNumber) {
+    return leftNumber - rightNumber;
+  }
+  if (leftFinite !== rightFinite) {
+    return leftFinite ? -1 : 1;
+  }
+  return 0;
+}
+
+function formatStateCurvePointFrame(point) {
+  if (point.frameLabel) {
+    return point.frameLabel;
+  }
+  if (Number.isFinite(Number(point.frameIndex))) {
+    return formatFrameIndex(point.frameIndex);
+  }
+  if (Number.isFinite(Number(point.timeMs))) {
+    return `${formatNumber(point.timeMs)}ms`;
+  }
+  return '-';
+}
+
+function formatStateCurvePointValue(point) {
+  return `${point.layerLabel} Δ${formatStateCurveNumber(point.delta)} Σ${formatStateCurveNumber(point.cumulative)}`;
+}
+
+function formatStateCurvePointSource(point) {
+  const parts = [];
+  const actionText = point.actionName ?? point.actionId;
+  if (actionText) {
+    parts.push(actionText);
+  }
+  if (Number.isFinite(Number(point.hitIndex))) {
+    parts.push(`hit${Number(point.hitIndex)}`);
+  }
+  const elementText = formatStateCurvePointElements(point);
+  if (elementText) {
+    parts.push(elementText);
+  }
+  if (point.eventType) {
+    parts.push(point.eventType);
+  }
+  const spText = formatStateCurvePointSpRange(point);
+  if (spText) {
+    parts.push(spText);
+  }
+  if (point.resultStatus) {
+    parts.push(point.resultStatus);
+  }
+  if (point.sourceKind) {
+    parts.push(point.sourceKind);
+  }
+  return parts.join(' · ') || '-';
+}
+
+function formatStateCurvePointElements(point) {
+  const ids = [
+    ...(point.elementConfigIds ?? []),
+    point.sourceElementConfigId,
+    point.elementConfigId,
+  ]
+    .map(id => Number(id))
+    .filter(Number.isFinite);
+  const uniqueIds = [...new Set(ids)];
+  if (uniqueIds.length === 0) {
+    return '';
+  }
+  return `element ${uniqueIds.join('/')}`;
+}
+
+function formatStateCurvePointSpRange(point) {
+  if (
+    !Number.isFinite(Number(point.spBefore)) ||
+    !Number.isFinite(Number(point.spAfter))
+  ) {
+    return '';
+  }
+  return `SP ${formatStateCurveNumber(point.spBefore)}->${formatStateCurveNumber(point.spAfter)}`;
+}
+
 function formatStateCurveValueRange(min, max) {
   if (!Number.isFinite(Number(min)) || !Number.isFinite(Number(max))) {
     return '-';
@@ -957,8 +1108,14 @@ function formatStateCurveNumber(value) {
   if (!Number.isFinite(number)) {
     return '-';
   }
-  if (Math.abs(number) > 0 && Math.abs(number) < 1) {
-    return number.toFixed(4).replace(/0+$/, '').replace(/\.$/, '');
+  if (!Number.isInteger(number)) {
+    const sign = number < 0 ? '-' : '';
+    const normalized = Math.abs(number)
+      .toFixed(4)
+      .replace(/0+$/, '')
+      .replace(/\.$/, '');
+    const [integerPart, decimalPart] = normalized.split('.');
+    return `${sign}${formatNumber(integerPart)}${decimalPart ? `.${decimalPart}` : ''}`;
   }
   return formatNumber(number);
 }
@@ -1587,6 +1744,45 @@ h2 {
   background: rgba(255, 255, 255, 0.06);
   color: #b8c0c7;
   font-size: 11px;
+}
+
+.state-curve-points {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 2px 0 0;
+  list-style: none;
+}
+
+.state-curve-point-row {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 2px 8px;
+  min-width: 0;
+  padding-top: 5px;
+  border-top: 1px solid rgba(166, 183, 255, 0.1);
+}
+
+.state-curve-point-time {
+  grid-row: span 2;
+  align-self: center;
+  color: #79c7b9;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.state-curve-point-row strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #dff9f3;
+  font-size: 11px;
+}
+
+.state-curve-point-row small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #8f9aa3;
+  font-size: 10px;
 }
 
 .action-result-row strong {

@@ -4453,7 +4453,7 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - `AnalysisPanel` 的状态曲线层级控件改为读取汇总后的 `stateCurveLayerOptions`，按钮文案显示各层点数，例如默认末音样本为 `已用 1 / 候选 15 / 采样 0 / 占位 0`。
 - 状态曲线入口改为按 `stateCurves.summary.pointCount` 显示；即使默认启用的 applied / candidate 层没有点，只要 sampled / placeholder 有点，用户也能看到开关并展开。
 - 状态曲线列表现在过滤空层，只展示当前启用且 `pointCount > 0` 的层，避免采样/占位打开后被大量 `0点` 噪声淹没。
-- 状态曲线数值格式新增小数保留：`0 < abs(value) < 1` 的能量采样会显示为 `0.3375`，不再被四舍五入成 `0`。
+- 状态曲线数值格式新增小数保留：非整数能量采样会保留最多 4 位小数，例如 `0.3375`，不再被四舍五入成 `0`。
 - 新增组件级 fixture 覆盖“只有 sampled / placeholder 点、没有 applied / candidate 点”的场景，确认采样和占位层都可发现、可展开。
 
 当前边界：
@@ -4473,6 +4473,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8BQ 目标：把状态曲线点变得更可操作。
 - 优先考虑在 Workbench 里增加按层/轨道的点级下钻，或把 sampled / placeholder 点以轻量提示接入时间轴，让用户知道某个动作为什么只是一段骨架或真实采样。
 - 继续避免在当前阶段追逐每个技能的最终逐帧动作，把精确帧、命中次数、owner/target 和 buff 条件留给后续 evidence 填充。
+
+### 2026-07-08：阶段 5-8BQ 状态曲线点级下钻
+
+本轮完成：
+
+- `AnalysisPanel` 在每条状态曲线轨道下新增点级明细列表，按当前启用层汇总 `layer.points[]` 并按帧/时间排序。
+- 每个点显示：帧标签、层级、`Δ`、`Σ`、动作、hit、element、event、SP 前后值、`sourceKind`。
+- 已用 / 候选 / 采样 / 占位四层共用同一套点级展示，不新增模拟结果字段。
+- 状态曲线数字格式改为“整数千分位、非整数最多 4 位小数”，避免 `spAfter = 10.3375` 被显示为 `10`。
+- 默认末音样例中，HP 轨道可看到 1 个 applied 点和 5 个 candidate 点；fixture 中可看到 RecoverSP sampled 点和 placeholder 点的来源明细。
+
+当前边界：
+
+- 下钻仍只在分析面板内显示，主时间轴还没有对应 marker。
+- sampled / placeholder 点仍是 evidence / 骨架层，不参与最终 totals。
+- 这个阶段没有追逐技能最终帧、命中次数、owner/target 归属或 buff runtime 条件。
+
+验收结果：
+
+- `npm test -- --run src\__tests__\views\Workbench.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、48 条测试。
+
+下一步：
+
+- 阶段 5-8BR 目标：把状态曲线点以轻量 marker 或提示接入主时间轴。
+- 优先让 sampled / placeholder 点在时间轴上可被发现，并与分析面板的点级明细互相对应。
+- 继续保持框架优先，不把未确认的逐帧技能细节当作阻塞项。
 
 ## 10. 文档维护规则
 
