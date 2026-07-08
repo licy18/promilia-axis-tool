@@ -119,6 +119,7 @@
           :runtime-projection="simulationResult.threeValueRuntimeProjection"
           :selected-state-curve-point-id="selectedStateCurvePointId"
           :runtime-focus-source="runtimeFocusSource"
+          :action-edit-result-context="actionEditResultContext"
           :summary="simulationResult.summary"
           :diagnostics="simulationResult.diagnostics"
           @select-runtime-state-point="selectRuntimeStatePoint"
@@ -155,9 +156,7 @@
           @update-state-curve-focus-mode="updateStateCurveFocusMode"
           @update-state-curve-layer-filter="updateStateCurveLayerFilter"
           @update-state-curve-track-filter="updateStateCurveTrackFilter"
-          @focus-three-value-calculator-scope="
-            focusThreeValueCalculatorScope
-          "
+          @focus-three-value-calculator-scope="focusThreeValueCalculatorScope"
           @select-action-result="selectActionResult"
           @select-action-contribution-point="
             selectActionContributionRuntimePoint
@@ -305,6 +304,12 @@ const runtimeFocusSource = computed(() =>
   runtimeLogFocus.value.statePointId === selectedStateCurvePointId.value
     ? runtimeLogFocus.value.source
     : ''
+);
+const actionEditResultContext = computed(() =>
+  createActionEditResultContext({
+    source: actionEditSource.value,
+    runtimeProjection: simulationResult.value.threeValueRuntimeProjection,
+  })
 );
 const timelineDiagnostics = computed(() =>
   createTimelineDiagnostics({
@@ -518,10 +523,14 @@ function updateActionTime({ actionId, startMs }) {
       startMs: clampNumber(startMs, 0, project.value.time.durationMs),
     });
   });
-  recordActionEditSource(actionId, { startMs }, {
-    previousAction,
-    nextAction: findActionDraftById(actionId),
-  });
+  recordActionEditSource(
+    actionId,
+    { startMs },
+    {
+      previousAction,
+      nextAction: findActionDraftById(actionId),
+    }
+  );
   markDraftDirty();
 }
 
@@ -544,10 +553,14 @@ function updateActionDuration({ actionId, durationMs }) {
       ),
     });
   });
-  recordActionEditSource(actionId, { durationMs }, {
-    previousAction,
-    nextAction: findActionDraftById(actionId),
-  });
+  recordActionEditSource(
+    actionId,
+    { durationMs },
+    {
+      previousAction,
+      nextAction: findActionDraftById(actionId),
+    }
+  );
   markDraftDirty();
 }
 
@@ -606,10 +619,14 @@ function updateActionLane({ actionId, laneId }) {
   });
 
   if (didUpdate) {
-    recordActionEditSource(actionId, { laneId }, {
-      previousAction,
-      nextAction: findActionDraftById(actionId),
-    });
+    recordActionEditSource(
+      actionId,
+      { laneId },
+      {
+        previousAction,
+        nextAction: findActionDraftById(actionId),
+      }
+    );
     markDraftDirty();
   }
 }
@@ -1068,6 +1085,35 @@ function createActionEditOrigin(actionId) {
   };
 }
 
+function createActionEditResultContext({
+  source = {},
+  runtimeProjection = null,
+} = {}) {
+  if (!source?.actionId || source.editOrigin !== 'runtime-focus') {
+    return null;
+  }
+  const resultPoint = findFirstRuntimeStatePointForAction(
+    runtimeProjection,
+    source.actionId
+  );
+  if (!resultPoint?.statePointId) {
+    return null;
+  }
+  return {
+    status: 'refreshed-edit-result',
+    actionId: source.actionId,
+    fieldKey: source.fieldKey ?? '',
+    label: source.label ?? '',
+    changeSummary: source.changeSummary ?? '',
+    originStatePointId: source.originStatePointId ?? '',
+    originTrackKey: source.originTrackKey ?? '',
+    originFrameLabel: source.originFrameLabel ?? '',
+    runtimeStatePointId: resultPoint.statePointId,
+    runtimeTrackKey:
+      resultPoint.row?.trackKey ?? resultPoint.point?.trackKey ?? '',
+  };
+}
+
 function resolveActionEditSourceField(patch = {}) {
   return ACTION_EDIT_SOURCE_PRIORITY.find(fieldKey =>
     Object.prototype.hasOwnProperty.call(patch, fieldKey)
@@ -1195,10 +1241,7 @@ function selectActionResultRuntimePoint(pointId) {
 }
 
 function selectActionResult({ actionId, statePointId } = {}) {
-  if (
-    actionId &&
-    actionDrafts.value.some(action => action.id === actionId)
-  ) {
+  if (actionId && actionDrafts.value.some(action => action.id === actionId)) {
     selectAction(actionId);
   }
   selectActionResultRuntimePoint(statePointId);
@@ -1369,6 +1412,24 @@ function getFirstRuntimeStatePointId(runtimeProjection) {
   return createRuntimeStateCurvePointId(row, point);
 }
 
+function findFirstRuntimeStatePointForAction(runtimeProjection, actionId) {
+  if (!actionId) {
+    return null;
+  }
+  const row = (runtimeProjection?.simLog ?? [])
+    .filter(item => item?.actionId === actionId)
+    .sort(compareRuntimeStateRows)[0];
+  if (!row) {
+    return null;
+  }
+  const point = findRuntimePointByDeltaId(runtimeProjection, row.sourceDeltaId);
+  return {
+    row,
+    point,
+    statePointId: createRuntimeStateCurvePointId(row, point),
+  };
+}
+
 function findRuntimePointByDeltaId(runtimeProjection, sourceDeltaId) {
   if (!sourceDeltaId) {
     return null;
@@ -1386,6 +1447,33 @@ function findRuntimePointByDeltaId(runtimeProjection, sourceDeltaId) {
     }
   }
   return null;
+}
+
+function compareRuntimeStateRows(left, right) {
+  return (
+    compareOptionalNumber(left?.frameIndex, right?.frameIndex) ||
+    compareOptionalNumber(left?.sequenceIndex, right?.sequenceIndex) ||
+    String(left?.sourceDeltaId ?? '').localeCompare(
+      String(right?.sourceDeltaId ?? '')
+    )
+  );
+}
+
+function compareOptionalNumber(left, right) {
+  const leftNumber = Number(left);
+  const rightNumber = Number(right);
+  const hasLeft = Number.isFinite(leftNumber);
+  const hasRight = Number.isFinite(rightNumber);
+  if (hasLeft && hasRight) {
+    return leftNumber - rightNumber;
+  }
+  if (hasLeft) {
+    return -1;
+  }
+  if (hasRight) {
+    return 1;
+  }
+  return 0;
 }
 
 function findSkillById(skillId) {

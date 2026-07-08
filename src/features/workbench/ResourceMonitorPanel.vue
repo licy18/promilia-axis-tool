@@ -197,6 +197,15 @@
           :data-previous-state-point-id="
             selectedRuntimeCurvePreviousPoint?.statePointId ?? ''
           "
+          :data-result-context-action-id="
+            selectedRuntimeCurveResultContext?.actionId ?? ''
+          "
+          :data-result-context-origin-state-point-id="
+            selectedRuntimeCurveResultContext?.originStatePointId ?? ''
+          "
+          :data-result-context-status="
+            selectedRuntimeCurveResultContext?.status ?? ''
+          "
           :data-runtime-focus-source="runtimeFocusSource || 'manual'"
           :data-series-key="selectedRuntimeCurvePoint.seriesKey"
           :data-state-point-id="selectedRuntimeCurvePoint.statePointId"
@@ -206,7 +215,19 @@
           <div class="runtime-curve-selection-heading">
             <span>选中点</span>
             <strong>{{ selectedRuntimeCurvePoint.seriesLabel }}</strong>
-            <small>{{ formatRuntimeCurveSelectionSource(runtimeFocusSource) }}</small>
+            <small
+              :data-result-context-active="
+                selectedRuntimeCurveResultContext ? 'true' : 'false'
+              "
+              data-testid="workbench-runtime-resource-chart-selection-source"
+            >
+              {{
+                formatRuntimeCurveSelectionSource(
+                  runtimeFocusSource,
+                  selectedRuntimeCurveResultContext
+                )
+              }}
+            </small>
             <button
               type="button"
               class="runtime-curve-action-focus"
@@ -365,6 +386,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  actionEditResultContext: {
+    type: Object,
+    default: null,
+  },
 });
 const emit = defineEmits([
   'select-runtime-state-point',
@@ -402,7 +427,10 @@ const runtimeCurveSourceSeries = computed(() =>
 );
 
 const runtimeCurveDomain = computed(() =>
-  createRuntimeCurveDomain(runtimeCurveSourceSeries.value, runtimeCurveMode.value)
+  createRuntimeCurveDomain(
+    runtimeCurveSourceSeries.value,
+    runtimeCurveMode.value
+  )
 );
 
 const runtimeCurveSeries = computed(() =>
@@ -455,6 +483,13 @@ const selectedRuntimeCurvePoint = computed(() => {
   );
 });
 
+const selectedRuntimeCurveResultContext = computed(() =>
+  createSelectedRuntimeCurveResultContext(
+    props.actionEditResultContext,
+    selectedRuntimeCurvePoint.value
+  )
+);
+
 const selectedRuntimeCurvePointRows = computed(() =>
   createSelectedRuntimeCurvePointRows(selectedRuntimeCurvePoint.value)
 );
@@ -469,7 +504,8 @@ const selectedRuntimeCurvePreviousPoint = computed(() =>
 
 const selectedRuntimeCurveNextPoint = computed(() =>
   selectedRuntimeCurvePointIndex.value >= 0 &&
-  selectedRuntimeCurvePointIndex.value < runtimeCurveNavigationPoints.value.length - 1
+  selectedRuntimeCurvePointIndex.value <
+    runtimeCurveNavigationPoints.value.length - 1
     ? runtimeCurveNavigationPoints.value[
         selectedRuntimeCurvePointIndex.value + 1
       ]
@@ -520,8 +556,7 @@ function createRuntimeCurveSourceSeries(runtimeProjection) {
       color: RUNTIME_CURVE_COLORS.enemyToughnessDamage,
       valueField: 'toughnessDelta',
       points: runtimeProjection.enemyStateCurve?.points ?? [],
-      stateMetric:
-        runtimeProjection.enemyStateCurve?.stateMetrics?.toughness,
+      stateMetric: runtimeProjection.enemyStateCurve?.stateMetrics?.toughness,
     }),
     ...(runtimeProjection.selfEnergyCurveByActor ?? []).map((actor, index) =>
       createRuntimeEnergyCurveSeries(actor, index)
@@ -613,7 +648,8 @@ function createRuntimeCurveSeries({
     sourcePointCount: curvePoints.length,
     pointCount: curvePoints.length,
     finalValue: cumulative,
-    finalStateValue: finalPoint?.stateValue ?? stateMetric?.currentValue ?? null,
+    finalStateValue:
+      finalPoint?.stateValue ?? stateMetric?.currentValue ?? null,
   };
 }
 
@@ -759,8 +795,7 @@ function formatRuntimeCurvePointTitle(series, point) {
   if (runtimeCurveMode.value === 'state') {
     const stateLabel = point.stateLabel ?? series.stateLabel ?? '状态';
     const overrun = numberOrZero(point.overrunValue);
-    const overrunText =
-      overrun > 0 ? ` / 溢出 ${formatNumber(overrun)}` : '';
+    const overrunText = overrun > 0 ? ` / 溢出 ${formatNumber(overrun)}` : '';
     const baselineText = point.baselineStatus
       ? ` / ${formatBaselineStatus(point.baselineStatus)}`
       : '';
@@ -835,7 +870,24 @@ function formatRuntimeCurvePointState(point) {
     : stateText;
 }
 
-function formatRuntimeCurveSelectionSource(source) {
+function createSelectedRuntimeCurveResultContext(context, point) {
+  if (!context?.runtimeStatePointId || !point?.statePointId) {
+    return null;
+  }
+  if (context.runtimeStatePointId !== point.statePointId) {
+    return null;
+  }
+  return {
+    status: context.status ?? 'refreshed-edit-result',
+    actionId: context.actionId ?? '',
+    originStatePointId: context.originStatePointId ?? '',
+  };
+}
+
+function formatRuntimeCurveSelectionSource(source, resultContext = null) {
+  if (resultContext?.status === 'refreshed-edit-result') {
+    return '刷新后结果';
+  }
   if (source === 'action-result') {
     return '动作结果定位';
   }

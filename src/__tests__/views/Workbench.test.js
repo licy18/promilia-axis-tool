@@ -54,7 +54,9 @@ describe('Workbench view', () => {
     ).toBe('运行投影 HP 12,461 · 韧性 0 · 能量 0 · 日志 1');
     expect(
       wrapper
-        .findAll('[data-testid="workbench-three-value-calculator-diagnostic-row"]')
+        .findAll(
+          '[data-testid="workbench-three-value-calculator-diagnostic-row"]'
+        )
         .map(row => [
           row.attributes('data-calculator-scope'),
           row.find('span').text(),
@@ -129,9 +131,7 @@ describe('Workbench view', () => {
         .map(row => row.text())
     ).toEqual(expect.arrayContaining([expect.stringContaining('当前待确认')]));
     expect(
-      wrapper
-        .find('[data-testid="workbench-runtime-resource-chart"]')
-        .exists()
+      wrapper.find('[data-testid="workbench-runtime-resource-chart"]').exists()
     ).toBe(true);
     expect(
       wrapper
@@ -262,10 +262,7 @@ describe('Workbench view', () => {
     expect(
       wrapper
         .findAll('[data-testid="workbench-runtime-sim-log-calculator-row"]')
-        .map(row => [
-          row.attributes('data-calculator-key'),
-          row.text(),
-        ])
+        .map(row => [row.attributes('data-calculator-key'), row.text()])
     ).toEqual([
       ['calculator', '适配器HP适配器'],
       ['kind', '来源HP预览'],
@@ -332,9 +329,7 @@ describe('Workbench view', () => {
         .text()
     ).toBe('16');
     expect(
-      wrapper
-        .find('[data-testid="workbench-state-curve-view-summary"]')
-        .text()
+      wrapper.find('[data-testid="workbench-state-curve-view-summary"]').text()
     ).toBe('全部视角16/16点已用/候选 · 全部轨道 · 全部三值点');
     expect(
       wrapper
@@ -1170,18 +1165,14 @@ describe('Workbench view', () => {
         .attributes('data-active')
     ).toBe('true');
     expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="applied"]'
-        )
-        .element.checked
+      wrapper.find(
+        '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="applied"]'
+      ).element.checked
     ).toBe(false);
     expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="candidate"]'
-        )
-        .element.checked
+      wrapper.find(
+        '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="candidate"]'
+      ).element.checked
     ).toBe(true);
     expect(
       wrapper
@@ -1189,9 +1180,7 @@ describe('Workbench view', () => {
         .text()
     ).toBe('15');
     expect(
-      wrapper
-        .find('[data-testid="workbench-state-curve-view-summary"]')
-        .text()
+      wrapper.find('[data-testid="workbench-state-curve-view-summary"]').text()
     ).toBe('生成视角15/16点候选/采样/占位 · 全部轨道 · 全部三值点');
     await wrapper
       .find(
@@ -1219,9 +1208,7 @@ describe('Workbench view', () => {
     );
     expect(actionResultRow.attributes('data-selected')).toBe('true');
     expect(
-      wrapper
-        .find('[data-testid="workbench-state-curve-view-summary"]')
-        .text()
+      wrapper.find('[data-testid="workbench-state-curve-view-summary"]').text()
     ).toBe('运行视角1/16点已用 · 全部轨道 · 选中三值点');
     expect(
       wrapper
@@ -1275,9 +1262,9 @@ describe('Workbench view', () => {
     expect(actionResultDetailPanel.attributes('data-detail-mode')).toBe(
       'compact'
     );
-    expect(
-      actionResultDetailPanel.attributes('data-full-detail-source')
-    ).toBe('workbench-runtime-selected-detail');
+    expect(actionResultDetailPanel.attributes('data-full-detail-source')).toBe(
+      'workbench-runtime-selected-detail'
+    );
     expect(
       wrapper
         .find('[data-testid="workbench-action-result-detail-action"]')
@@ -1436,18 +1423,14 @@ describe('Workbench view', () => {
         .attributes('data-active')
     ).toBe('true');
     expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="applied"]'
-        )
-        .element.checked
+      wrapper.find(
+        '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="applied"]'
+      ).element.checked
     ).toBe(true);
     expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="candidate"]'
-        )
-        .element.checked
+      wrapper.find(
+        '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="candidate"]'
+      ).element.checked
     ).toBe(false);
     expect(
       wrapper
@@ -1460,9 +1443,7 @@ describe('Workbench view', () => {
         .text()
     ).toBe('1/1');
     expect(
-      wrapper
-        .find('[data-testid="workbench-state-curve-view-summary"]')
-        .text()
+      wrapper.find('[data-testid="workbench-state-curve-view-summary"]').text()
     ).toBe('运行视角1/16点已用 · 全部轨道 · 选中三值点');
     expect(
       wrapper
@@ -1561,9 +1542,7 @@ describe('Workbench view', () => {
     );
     expect(actionResultDetailPanel.text()).toContain('正在编辑');
     expect(actionResultDetailPanel.text()).toContain('草稿已变更');
-    expect(actionResultDetailPanel.text()).toContain(
-      '结果已随当前草稿刷新'
-    );
+    expect(actionResultDetailPanel.text()).toContain('结果已随当前草稿刷新');
     expect(
       wrapper
         .find(
@@ -1619,9 +1598,7 @@ describe('Workbench view', () => {
       '[data-testid="workbench-action-edit-feedback"]'
     );
     expect(actionEditFeedback.exists()).toBe(true);
-    expect(actionEditFeedback.attributes('data-action-id')).toBe(
-      'action-0001'
-    );
+    expect(actionEditFeedback.attributes('data-action-id')).toBe('action-0001');
     expect(actionEditFeedback.attributes('data-edit-source-field')).toBe(
       'level'
     );
@@ -1632,9 +1609,7 @@ describe('Workbench view', () => {
       'data-runtime-state-point-id'
     );
     expect(feedbackStatePointId).toBeTruthy();
-    expect(actionEditFeedback.attributes('data-runtime-delta-count')).toBe(
-      '1'
-    );
+    expect(actionEditFeedback.attributes('data-runtime-delta-count')).toBe('1');
     expect(actionEditFeedback.attributes('data-result-focused')).toBe('true');
     expect(actionEditFeedback.attributes('data-result-focus-status')).toBe(
       'focused'
@@ -1868,9 +1843,7 @@ describe('Workbench view', () => {
     const appliedMarker = wrapper.find(
       '[data-testid="workbench-timeline-state-curve-marker"]'
     );
-    const appliedStatePointId = appliedMarker.attributes(
-      'data-state-point-id'
-    );
+    const appliedStatePointId = appliedMarker.attributes('data-state-point-id');
 
     expect(appliedStatePointId).toBeTruthy();
     expect(
@@ -1956,11 +1929,10 @@ describe('Workbench view', () => {
     ).toBe('敌人面板');
     expect(
       wrapper
-        .findAll('[data-testid="workbench-runtime-selected-detail-calculator-row"]')
-        .map(row => [
-          row.attributes('data-calculator-key'),
-          row.text(),
-        ])
+        .findAll(
+          '[data-testid="workbench-runtime-selected-detail-calculator-row"]'
+        )
+        .map(row => [row.attributes('data-calculator-key'), row.text()])
     ).toEqual([
       ['calculator', '适配器HP适配器'],
       ['kind', '来源HP预览'],
@@ -2080,9 +2052,7 @@ describe('Workbench view', () => {
     expect(logActionFocus.exists()).toBe(true);
     expect(logActionFocus.attributes('data-action-id')).toBe('action-0001');
     expect(logActionFocus.attributes('data-focus-field')).toBe('startMs');
-    expect(logActionFocus.attributes('data-state-point-id')).toBe(
-      statePointId
-    );
+    expect(logActionFocus.attributes('data-state-point-id')).toBe(statePointId);
     expect(logActionFocus.attributes('disabled')).toBeUndefined();
 
     await logActionFocus.trigger('click');
@@ -2225,9 +2195,17 @@ describe('Workbench view', () => {
     expect(runtimeCurveSelection.attributes('data-runtime-focus-source')).toBe(
       'manual'
     );
-    expect(Number(runtimeCurveSelection.attributes('data-navigation-count'))).toBeGreaterThan(1);
+    expect(
+      Number(runtimeCurveSelection.attributes('data-navigation-count'))
+    ).toBeGreaterThan(1);
     expect(runtimeCurveSelection.attributes('data-navigation-index')).toBe('0');
-    expect(runtimeCurveSelection.text()).toContain('手动选择');
+    const runtimeCurveSelectionSource = runtimeCurveSelection.find(
+      '[data-testid="workbench-runtime-resource-chart-selection-source"]'
+    );
+    expect(runtimeCurveSelectionSource.text()).toBe('手动选择');
+    expect(
+      runtimeCurveSelectionSource.attributes('data-result-context-active')
+    ).toBe('false');
     const runtimeCurveSelectionRows = Object.fromEntries(
       runtimeCurveSelection
         .findAll(
@@ -2246,9 +2224,7 @@ describe('Workbench view', () => {
     expect(runtimeCurveSelectionRows.action.text()).toContain('普通攻击');
     expect(runtimeCurveSelectionRows.delta.text()).toBe('Delta12,461');
     expect(runtimeCurveSelectionRows.cumulative.text()).toBe('累计12,461');
-    expect(runtimeCurveSelectionRows.state.text()).toBe(
-      '剩余0 · 溢出 3,833'
-    );
+    expect(runtimeCurveSelectionRows.state.text()).toBe('剩余0 · 溢出 3,833');
 
     const nextButton = runtimeCurveSelection.find(
       '[data-testid="workbench-runtime-resource-chart-selection-next"]'
@@ -2289,9 +2265,7 @@ describe('Workbench view', () => {
     const previousButton = nextRuntimeCurveSelection.find(
       '[data-testid="workbench-runtime-resource-chart-selection-prev"]'
     );
-    expect(previousButton.attributes('data-state-point-id')).toBe(
-      statePointId
-    );
+    expect(previousButton.attributes('data-state-point-id')).toBe(statePointId);
     expect(previousButton.attributes('disabled')).toBeUndefined();
 
     await previousButton.trigger('click');
@@ -2326,9 +2300,9 @@ describe('Workbench view', () => {
     expect(focusedTimelineAction.attributes('data-edit-focus-label')).toBe(
       '结果定位'
     );
-    expect(focusedTimelineAction.attributes('data-edit-focus-summary')).toContain(
-      '三值点'
-    );
+    expect(
+      focusedTimelineAction.attributes('data-edit-focus-summary')
+    ).toContain('三值点');
     expect(
       wrapper
         .find(
@@ -2360,9 +2334,9 @@ describe('Workbench view', () => {
     expect(runtimeOriginFeedback.attributes('data-edit-origin')).toBe(
       'runtime-focus'
     );
-    expect(
-      runtimeOriginFeedback.attributes('data-origin-state-point-id')
-    ).toBe(statePointId);
+    expect(runtimeOriginFeedback.attributes('data-origin-state-point-id')).toBe(
+      statePointId
+    );
     expect(runtimeOriginFeedback.attributes('data-origin-track-key')).toBe(
       'enemyHpDamage'
     );
@@ -2410,6 +2384,33 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(refreshedRuntimeStatePointId);
+    const refreshedCurveSelection = wrapper.find(
+      '[data-testid="workbench-runtime-resource-chart-selection"]'
+    );
+    expect(refreshedCurveSelection.attributes('data-state-point-id')).toBe(
+      refreshedRuntimeStatePointId
+    );
+    expect(
+      refreshedCurveSelection.attributes('data-runtime-focus-source')
+    ).toBe('action-result');
+    expect(
+      refreshedCurveSelection.attributes('data-result-context-status')
+    ).toBe('refreshed-edit-result');
+    expect(
+      refreshedCurveSelection.attributes(
+        'data-result-context-origin-state-point-id'
+      )
+    ).toBe(statePointId);
+    expect(
+      refreshedCurveSelection.attributes('data-result-context-action-id')
+    ).toBe(focusedActionId);
+    const refreshedCurveSelectionSource = refreshedCurveSelection.find(
+      '[data-testid="workbench-runtime-resource-chart-selection-source"]'
+    );
+    expect(refreshedCurveSelectionSource.text()).toBe('刷新后结果');
+    expect(
+      refreshedCurveSelectionSource.attributes('data-result-context-active')
+    ).toBe('true');
   });
 
   it('links applied state curve points to the shared runtime detail', async () => {
@@ -2536,9 +2537,7 @@ describe('Workbench view', () => {
     );
     expect(sampledPoints).toHaveLength(1);
     expect(sampledPoints[0].attributes('data-layer-key')).toBe('sampled');
-    expect(sampledPoints[0].attributes('data-participation')).toBe(
-      '采样诊断'
-    );
+    expect(sampledPoints[0].attributes('data-participation')).toBe('采样诊断');
     expect(sampledPoints[0].attributes('data-frame-label')).toBe('0s12f');
     expect(sampledPoints[0].text()).toContain('采样 Δ0.3375 Σ0.3375');
     expect(

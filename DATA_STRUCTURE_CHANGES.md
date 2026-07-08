@@ -12916,3 +12916,82 @@ data-result-point-key="origin|runtime"
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DV 应补刷新后结果点在资源曲线选中点摘要中的同步提示。
+
+## 155. 阶段 5-8DV：资源曲线刷新后结果上下文
+
+阶段目标：
+
+- 让资源曲线选中点摘要同步最近编辑反馈条中的刷新后结果点状态。
+
+### 155.1 数据结构变化
+
+本阶段不新增保存字段，不变更 `Project` schema、simulation 输出或 localStorage 数据。
+
+`Workbench` 新增前端派生的 `actionEditResultContext`，并传给 `ResourceMonitorPanel`：
+
+```js
+{
+  status: 'refreshed-edit-result',
+  actionId: string,
+  fieldKey: string,
+  label: string,
+  changeSummary: string,
+  originStatePointId: string,
+  originTrackKey: string,
+  originFrameLabel: string,
+  runtimeStatePointId: string,
+  runtimeTrackKey: string
+}
+```
+
+派生来源：
+
+```text
+actionEditSource
+threeValueRuntimeProjection.simLog[]
+threeValueRuntimeProjection.enemyStateCurve.points[]
+threeValueRuntimeProjection.selfEnergyCurveByActor[].points[]
+```
+
+`ResourceMonitorPanel` 内部新增 `selectedRuntimeCurveResultContext`，只在当前选中资源曲线点的 `statePointId` 等于 `actionEditResultContext.runtimeStatePointId` 时生效。
+
+### 155.2 DOM 状态
+
+资源曲线选中点摘要新增状态：
+
+```html
+data-testid="workbench-runtime-resource-chart-selection"
+data-result-context-status="refreshed-edit-result"
+data-result-context-action-id
+data-result-context-origin-state-point-id
+```
+
+摘要来源标签新增：
+
+```html
+data-testid="workbench-runtime-resource-chart-selection-source"
+data-result-context-active="true|false"
+```
+
+含义：
+
+- `data-result-context-active="false"`：普通手动选择、动作结果定位或贡献拆分定位。
+- `data-result-context-active="true"`：当前选中点是最近编辑后的刷新后结果点，来源标签显示 `刷新后结果`。
+
+### 155.3 验证
+
+当前测试覆盖：
+
+- 手动选择资源曲线点时，摘要来源显示 `手动选择`。
+- 从资源曲线定位动作后修改 `startMs`。
+- 点击最近编辑反馈条 `定位结果` 后，资源曲线摘要选中刷新后的 state point。
+- 刷新后结果摘要写入 `data-result-context-status="refreshed-edit-result"`。
+- 刷新后结果摘要保留原始结果点 ID 和 action ID。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、40 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、114 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DW 应继续压缩结果定位后的编辑路径，让资源曲线、三值详情、模拟日志和动作属性面板之间的当前编辑上下文更紧凑一致。
