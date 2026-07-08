@@ -234,10 +234,7 @@ import {
   resolveWorkbenchMainFlowActionEditTarget,
   resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
-import {
-  WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
-  createWorkbenchRuntimeReviewOperationCommand,
-} from './workbenchMainFlowActions';
+import { createWorkbenchRuntimeReviewPanelCommandView } from './workbenchMainFlowActions';
 
 const props = defineProps({
   detail: {
@@ -295,22 +292,20 @@ const runtimeDetailActionEditButtonTarget = computed(() =>
   runtimeDetailActionEditCommand.value.target
 );
 const runtimeDetailActionEditCommand = computed(() =>
-  createWorkbenchRuntimeReviewOperationCommand({
-    operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
-    source: 'runtime-detail',
-    flowModel: props.flowModel,
-    target: runtimeDetailActionEditTarget.value,
-  })
+  runtimeDetailCommandView.value.focus
 );
 const runtimeDetailResultReturnButtonTarget = computed(() =>
   runtimeDetailResultReturnCommand.value.context
 );
 const runtimeDetailResultReturnCommand = computed(() =>
-  createWorkbenchRuntimeReviewOperationCommand({
-    operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+  runtimeDetailCommandView.value.returnResult
+);
+const runtimeDetailCommandView = computed(() =>
+  createWorkbenchRuntimeReviewPanelCommandView({
     source: 'runtime-detail',
     flowModel: props.flowModel,
-    context: runtimeDetailResultReturnContext.value,
+    focusTarget: runtimeDetailActionEditTarget.value,
+    returnContext: runtimeDetailResultReturnContext.value,
   })
 );
 const runtimeReviewFocusActionEnabled = computed(

@@ -369,7 +369,7 @@ import {
 import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
   createWorkbenchRuntimeReviewFlowAction,
-  createWorkbenchRuntimeReviewOperationCommand,
+  createWorkbenchRuntimeReviewPanelCommandView,
 } from './workbenchMainFlowActions';
 import { isRuntimeResultFocusSource } from './runtimeFocusSource';
 
@@ -577,11 +577,13 @@ const selectedRuntimeCurveActionEditTarget = computed(() =>
   selectedRuntimeCurveActionEditCommand.value.target
 );
 const selectedRuntimeCurveActionEditCommand = computed(() =>
-  createWorkbenchRuntimeReviewOperationCommand({
-    operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+  selectedRuntimeCurveCommandView.value.focus
+);
+const selectedRuntimeCurveCommandView = computed(() =>
+  createWorkbenchRuntimeReviewPanelCommandView({
     source: 'resource-runtime-curve',
     flowModel: props.flowModel,
-    target: getRuntimeCurveActionEditTarget(
+    focusTarget: getRuntimeCurveActionEditTarget(
       props.flowModel,
       selectedRuntimeCurvePoint.value
     ),

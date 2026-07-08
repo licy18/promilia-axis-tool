@@ -19807,3 +19807,69 @@ ResourceMonitorPanel：曲线点定位动作
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、79 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、209 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 258. UI 主流程能力块：Runtime Review Panel Command View
+
+### 258.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增共享函数：
+
+```js
+createWorkbenchRuntimeReviewPanelCommandView({
+  flowModel,
+  source,
+  focusTarget,
+  returnContext,
+  focusCommand,
+  returnCommand,
+  focusEnabled,
+  returnEnabled,
+})
+```
+
+输出结构：
+
+```js
+{
+  source,
+  focus,
+  returnResult,
+  focusTarget,
+  returnContext,
+  canFocus,
+  canReturn,
+  actions: {
+    focus,
+    returnResult,
+  },
+}
+```
+
+行为：
+
+```text
+focusCommand 未传入时，通过 createWorkbenchRuntimeReviewOperationCommand(FOCUS_ACTION) 生成。
+returnCommand 未传入时，通过 createWorkbenchRuntimeReviewOperationCommand(RETURN_RESULT) 生成。
+focusTarget / returnContext / actions 均来自同一组 command，供运行结果面板统一消费。
+```
+
+以下面板改为消费 `createWorkbenchRuntimeReviewPanelCommandView()`：
+
+```text
+RuntimeSelectedDetailPanel：读取 view.focus / view.returnResult
+ResourceMonitorPanel：读取 view.focus
+EventLogPanel：读取 view.focus / view.returnResult；保留 focus seed command 以维持 return actionId 解析顺序
+```
+
+### 258.2 保存与迁移
+
+本阶段只调整运行结果区面板 command view model，不新增持久字段，不需要数据迁移。
+
+### 258.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 panel command view 同时输出 focus / returnResult 两类 command 与 actions。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、80 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、210 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

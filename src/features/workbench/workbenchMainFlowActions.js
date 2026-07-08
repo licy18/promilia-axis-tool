@@ -328,6 +328,50 @@ export function createWorkbenchRuntimeReviewOperationCommand({
   };
 }
 
+export function createWorkbenchRuntimeReviewPanelCommandView({
+  flowModel = null,
+  source = '',
+  focusTarget = null,
+  returnContext = null,
+  focusCommand = null,
+  returnCommand = null,
+  focusEnabled,
+  returnEnabled,
+} = {}) {
+  const focus =
+    focusCommand ??
+    createWorkbenchRuntimeReviewOperationCommand({
+      operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+      flowModel,
+      source,
+      target: focusTarget,
+      enabled: focusEnabled,
+    });
+  const returnResult =
+    returnCommand ??
+    createWorkbenchRuntimeReviewOperationCommand({
+      operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+      flowModel,
+      source,
+      context: returnContext,
+      enabled: returnEnabled,
+    });
+
+  return {
+    source,
+    focus,
+    returnResult,
+    focusTarget: focus.target,
+    returnContext: returnResult.context,
+    canFocus: Boolean(focus.enabled),
+    canReturn: Boolean(returnResult.enabled),
+    actions: {
+      focus: focus.action,
+      returnResult: returnResult.action,
+    },
+  };
+}
+
 export function createWorkbenchRuntimeReviewOperationConsumer({
   operationKind = '',
   flowModel = null,

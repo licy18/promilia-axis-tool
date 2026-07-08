@@ -10,6 +10,7 @@ import {
   createWorkbenchRuntimeReviewOperationCommand,
   createWorkbenchRuntimeReviewOperationConsumer,
   createWorkbenchRuntimeReviewOperationFlowAction,
+  createWorkbenchRuntimeReviewPanelCommandView,
   createWorkbenchRuntimeReviewPrimaryOperationFlowAction,
   createWorkbenchRuntimeReviewPrimaryOperationCommand,
   createWorkbenchRuntimeReviewPrimaryOperationView,
@@ -850,6 +851,80 @@ describe('workbench main flow actions', () => {
       },
     });
     expect(command.action).toBe(command.view.action);
+  });
+
+  it('creates a shared runtime review panel command view for focus and return actions', () => {
+    const view = createWorkbenchRuntimeReviewPanelCommandView({
+      source: 'runtime-detail',
+      flowModel: {
+        runtimeReviewOperations: {
+          primaryOperationKind:
+            WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+          primaryOperationEnabled: false,
+          focusAction: {},
+          returnResult: {},
+        },
+      },
+      focusTarget: {
+        actionId: 'focus-action',
+        statePointId: 'focus-state-point',
+        fieldKey: 'startMs',
+        frameLabel: '18f',
+        canFocusAction: true,
+      },
+      returnContext: {
+        actionId: 'return-action',
+        originStatePointId: 'origin-state-point',
+        statePointId: 'return-state-point',
+        status: 'refreshed-edit-result',
+      },
+    });
+
+    expect(view).toMatchObject({
+      source: 'runtime-detail',
+      canFocus: true,
+      canReturn: true,
+      focusTarget: {
+        actionId: 'focus-action',
+        statePointId: 'focus-state-point',
+      },
+      returnContext: {
+        actionId: 'return-action',
+        statePointId: 'return-state-point',
+      },
+      focus: {
+        operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+        enabled: true,
+        action: {
+          kind: 'focus-runtime-action',
+          actionId: 'focus-action',
+          statePointId: 'focus-state-point',
+          canRun: true,
+        },
+      },
+      returnResult: {
+        operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+        enabled: true,
+        action: {
+          kind: 'return-runtime-result',
+          actionId: 'return-action',
+          statePointId: 'return-state-point',
+          canRun: true,
+        },
+      },
+      actions: {
+        focus: {
+          kind: 'focus-runtime-action',
+          actionId: 'focus-action',
+        },
+        returnResult: {
+          kind: 'return-runtime-result',
+          actionId: 'return-action',
+        },
+      },
+    });
+    expect(view.actions.focus).toBe(view.focus.action);
+    expect(view.actions.returnResult).toBe(view.returnResult.action);
   });
 
   it('creates the runtime review primary operation view from the consumer', () => {

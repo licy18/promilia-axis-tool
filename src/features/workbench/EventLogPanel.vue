@@ -332,6 +332,7 @@ import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
   createWorkbenchRuntimeReviewFlowAction,
   createWorkbenchRuntimeReviewOperationCommand,
+  createWorkbenchRuntimeReviewPanelCommandView,
 } from './workbenchMainFlowActions';
 import {
   isRuntimeResultFocusSource,
@@ -623,7 +624,7 @@ const runtimeLogActionFocus = computed(() =>
     statePointId: runtimeLogDetailStatePointId.value,
   })
 );
-const runtimeLogActionFocusCommand = computed(() =>
+const runtimeLogActionFocusSeedCommand = computed(() =>
   createWorkbenchRuntimeReviewOperationCommand({
     operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
     source: 'event-log-runtime-detail',
@@ -631,8 +632,22 @@ const runtimeLogActionFocusCommand = computed(() =>
     target: runtimeLogActionFocus.value,
   })
 );
+const runtimeLogCommandView = computed(() =>
+  createWorkbenchRuntimeReviewPanelCommandView({
+    source: 'event-log-runtime-detail',
+    flowModel: props.flowModel,
+    focusCommand: runtimeLogActionFocusSeedCommand.value,
+    returnContext: runtimeLogResultReturnContext.value,
+  })
+);
+const runtimeLogActionFocusCommand = computed(
+  () => runtimeLogCommandView.value.focus
+);
 const runtimeLogActionFocusCommandTarget = computed(
   () => runtimeLogActionFocusCommand.value.target
+);
+const runtimeLogActionFocusSeedTarget = computed(
+  () => runtimeLogActionFocusSeedCommand.value.target
 );
 const runtimeLogEditContext = computed(() =>
   createRuntimeLogEditContext({
@@ -646,7 +661,7 @@ const runtimeLogResultReturnActionId = computed(
     (props.actionEditFocus?.editOrigin === 'runtime-focus'
       ? flowEditResult.value?.actionId
       : '') ||
-    runtimeLogActionFocusCommandTarget.value.actionId ||
+    runtimeLogActionFocusSeedTarget.value.actionId ||
     ''
 );
 const runtimeLogResultReturnContext = computed(() =>
@@ -659,13 +674,8 @@ const runtimeLogResultReturnContext = computed(() =>
     }),
   })
 );
-const runtimeLogResultReturnCommand = computed(() =>
-  createWorkbenchRuntimeReviewOperationCommand({
-    operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
-    source: 'event-log-runtime-detail',
-    flowModel: props.flowModel,
-    context: runtimeLogResultReturnContext.value,
-  })
+const runtimeLogResultReturnCommand = computed(
+  () => runtimeLogCommandView.value.returnResult
 );
 const runtimeLogResultReturnCommandContext = computed(
   () => runtimeLogResultReturnCommand.value.context
