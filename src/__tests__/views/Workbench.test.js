@@ -1026,6 +1026,9 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-state-point"]')
         .text()
     ).toBe(appliedStatePointId);
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-selected-detail"]').exists()
+    ).toBe(false);
 
     await wrapper
       .find('[data-testid="workbench-runtime-sim-log-row"]')
@@ -1054,6 +1057,44 @@ describe('Workbench view', () => {
         )
         .classes()
     ).toContain('selected');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(appliedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-action"]')
+        .text()
+    ).toContain('普通攻击');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-delta"]')
+        .text()
+    ).toBe('12,461');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-cumulative"]')
+        .text()
+    ).toBe('12,461');
+    expect(
+      wrapper
+        .findAll(
+          '[data-testid="workbench-runtime-selected-detail-contribution-row"]'
+        )
+        .map(row => [
+          row.attributes('data-contribution-key'),
+          row.attributes('data-active'),
+          row.text(),
+        ])
+    ).toEqual([
+      ['hp', 'true', '敌人 HP12,461'],
+      ['toughness', 'false', '敌人韧性0'],
+      ['energy', 'false', '自身能量0'],
+    ]);
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-selected-detail"]').text()
+    ).toContain('109001081');
   });
 
   it('links runtime resource curve points to the focused state curve point', async () => {
@@ -1101,6 +1142,66 @@ describe('Workbench view', () => {
         )
         .classes()
     ).toContain('selected');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(statePointId);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-runtime-selected-detail-contribution-row"][data-active="true"]'
+        )
+        .text()
+    ).toBe('敌人 HP12,461');
+  });
+
+  it('links applied state curve points to the shared runtime detail', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    const appliedStatePoint = wrapper.find(
+      '[data-testid="workbench-state-curve-point"][data-layer-key="applied"]'
+    );
+    const statePointId = appliedStatePoint.attributes('data-state-point-id');
+
+    expect(statePointId).toBeTruthy();
+
+    await appliedStatePoint.trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-state-curve-point"][data-state-point-id="${statePointId}"]`
+        )
+        .classes()
+    ).toContain('selected');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(statePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-track"]')
+        .text()
+    ).toContain('HP');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-source-delta"]')
+        .text()
+    ).toContain('action-0001|applied-frame-0-point-0');
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-selected-detail"]').text()
+    ).toContain('10900101');
   });
 
   it('exposes sampled and placeholder state curve layers before values are applied', async () => {

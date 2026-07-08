@@ -120,6 +120,8 @@
           @select-runtime-state-point="selectRuntimeStatePoint"
         />
 
+        <RuntimeSelectedDetailPanel :detail="runtimeSelectedDetail" />
+
         <AnalysisPanel
           :summary="simulationResult.summary"
           :diagnostics="simulationResult.diagnostics"
@@ -161,8 +163,10 @@ import EnemyPanel from '../features/workbench/EnemyPanel.vue';
 import EventLogPanel from '../features/workbench/EventLogPanel.vue';
 import PropertiesPanel from '../features/workbench/PropertiesPanel.vue';
 import ResourceMonitorPanel from '../features/workbench/ResourceMonitorPanel.vue';
+import RuntimeSelectedDetailPanel from '../features/workbench/RuntimeSelectedDetailPanel.vue';
 import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
+import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
 import {
   SYSTEM_TIMELINE_LANE_ID,
   createTimelineDiagnostics,
@@ -225,6 +229,12 @@ const project = computed(() =>
 );
 const scenario = computed(() => compileProject(project.value, gameData));
 const simulationResult = computed(() => simulateScenario(scenario.value));
+const runtimeSelectedDetail = computed(() =>
+  createRuntimeSelectedDetail({
+    runtimeProjection: simulationResult.value.threeValueRuntimeProjection,
+    selectedStateCurvePointId: selectedStateCurvePointId.value,
+  })
+);
 const timelineDiagnostics = computed(() =>
   createTimelineDiagnostics({
     actors: scenario.value.actors,

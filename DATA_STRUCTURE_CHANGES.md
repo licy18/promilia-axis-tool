@@ -9608,3 +9608,122 @@ data-selected
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8CG 应建立统一的运行时三值选中详情入口，让 runtime sim log、资源曲线点、状态曲线点共享同一份 selected point 详情。
+
+## 114. 阶段 5-8CG：runtime selected detail
+
+阶段 5-8CG 不修改项目保存 schema。本阶段新增 Workbench UI 派生结构和一个详情展示组件。
+
+### 114.1 统一详情派生
+
+新增文件：
+
+```text
+src/features/workbench/runtimeSelectedDetail.js
+```
+
+主要导出：
+
+```js
+createRuntimeSelectedDetail({
+  runtimeProjection,
+  selectedStateCurvePointId,
+})
+```
+
+返回值为 `null` 或详情对象：
+
+```js
+{
+  statePointId,
+  sourceDeltaId,
+  actionId,
+  actionName,
+  actorId,
+  actorName,
+  hitKey,
+  hitIndex,
+  frameIndex,
+  frameLabel,
+  timeMs,
+  trackKey,
+  trackLabel,
+  layerKey,
+  valueUnit,
+  delta,
+  cumulative,
+  hpDelta,
+  toughnessDelta,
+  energyDelta,
+  status,
+  confidence,
+  sourceIds,
+  contributionRows,
+  sourceRows,
+  simLogRow,
+  point,
+}
+```
+
+派生规则：
+
+- 只从 `threeValueRuntimeProjection` 读取 applied runtime point 和 `simLog`。
+- 使用 `createRuntimeStateCurvePointId()` 匹配 `selectedStateCurvePointId`。
+- `delta / cumulative` 按运行时序列重新累计，其中 HP、韧性按敌人曲线累计，能量按角色 SP 曲线累计。
+- 不从 evidence 矩阵回读，不写回 simulation result。
+
+### 114.2 新增详情面板
+
+新增组件：
+
+```text
+src/features/workbench/RuntimeSelectedDetailPanel.vue
+```
+
+输入：
+
+```js
+detail: Object | null
+```
+
+新增测试入口：
+
+```html
+data-testid="workbench-runtime-selected-detail"
+data-testid="workbench-runtime-selected-detail-action"
+data-testid="workbench-runtime-selected-detail-frame"
+data-testid="workbench-runtime-selected-detail-track"
+data-testid="workbench-runtime-selected-detail-status"
+data-testid="workbench-runtime-selected-detail-delta"
+data-testid="workbench-runtime-selected-detail-cumulative"
+data-testid="workbench-runtime-selected-detail-contribution-row"
+data-testid="workbench-runtime-selected-detail-source-delta"
+data-testid="workbench-runtime-selected-detail-state-point"
+data-testid="workbench-runtime-selected-detail-source-row"
+```
+
+`Workbench` 新增：
+
+```js
+runtimeSelectedDetail = computed(() =>
+  createRuntimeSelectedDetail({
+    runtimeProjection: simulationResult.value.threeValueRuntimeProjection,
+    selectedStateCurvePointId: selectedStateCurvePointId.value,
+  })
+)
+```
+
+### 114.3 验证
+
+当前测试覆盖：
+
+- 点击 runtime sim log 行后，统一详情显示同一个状态点 ID、动作、delta、累计、贡献槽位和来源 element。
+- 点击 runtime resource chart point 后，统一详情状态点 ID 与曲线点一致，HP 贡献槽激活。
+- 点击 applied state curve point 后，统一详情状态点 ID 与状态曲线点一致，来源 delta 与 Skill 来源可见。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8CH 应把全局 `selectedStateCurvePointId` 反向同步到 runtime sim log，让从资源曲线或状态曲线选中的点也能高亮对应日志行。

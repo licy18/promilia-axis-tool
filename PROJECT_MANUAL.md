@@ -4993,6 +4993,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 详情优先展示当前选中点的动作、帧、轨道、delta、累计值、来源 ID、贡献槽位和应用状态。
 - 不在此阶段追逐最终公式；继续把公式、韧性和充能细节保留为可替换来源字段。
 
+### 2026-07-08：阶段 5-8CG 统一运行时三值选中详情
+
+本轮完成：
+
+- 新增 `runtimeSelectedDetail.js`，从 `threeValueRuntimeProjection` 和全局 `selectedStateCurvePointId` 派生统一运行时选中详情。
+- 统一详情会反查 runtime point 与对应 `simLog` 行，输出动作、角色、命中、帧、轨道、delta、累计值、应用状态、来源 delta、贡献槽位和来源 ID。
+- 新增 `RuntimeSelectedDetailPanel.vue`，在 Workbench 右侧展示当前选中三值点详情。
+- runtime sim log、运行时资源曲线点、状态曲线 applied point 现在都通过同一个 `selectedStateCurvePointId` 触发同一份详情。
+- `RuntimeSelectedDetailPanel` 只展示 applied runtime point；选中 candidate / sampled / placeholder 诊断点时不伪造运行时详情。
+- Workbench 测试新增三路覆盖：点击 runtime sim log、点击 runtime resource chart point、点击 applied state curve point 后，都能看到同一个状态点 ID 和统一详情。
+
+当前验证事实：
+
+- 点击默认末音 runtime sim log 后，统一详情显示动作 `普通攻击`、Delta `12,461`、累计 `12,461`、HP 贡献槽激活，并包含来源 element `109001081`。
+- 点击默认 HP 资源曲线点后，统一详情状态点 ID 与曲线点 `data-state-point-id` 一致，HP 贡献槽显示 `敌人 HP12,461`。
+- 点击分析面板里的 applied state curve point 后，统一详情状态点 ID 与状态曲线点一致，来源 delta 为 `action-0001|applied-frame-0-point-0`，来源包含 Skill `10900101`。
+
+当前边界：
+
+- 统一详情已经集中数据派生，但 `EventLogPanel` 旧内嵌详情仍保留，后续可改为消费统一详情或变成日志行上下文。
+- 统一详情当前只覆盖 applied runtime point，不覆盖 candidate / sampled / placeholder。
+- 详情中的累计值仍是 UI 对 runtime applied 点的累计变化量，不是敌人/角色真实剩余资源。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8CH 目标：把全局 `selectedStateCurvePointId` 反向同步到 runtime sim log，让从资源曲线或状态曲线选中的点也能高亮对应日志行。
+- 同步时保持当前筛选可控：如果当前筛选隐藏了目标日志，先显示“选中点不在当前筛选内”的轻量状态，不强行重置用户筛选。
+- 后续再把 `EventLogPanel` 的内嵌详情改为消费统一详情，减少重复派生逻辑。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
