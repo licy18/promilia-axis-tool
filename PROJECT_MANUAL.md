@@ -9422,6 +9422,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把仍直接创建 runtime selection action 的分析面板和时间轴入口纳入同一 surface，继续压实“选择结果 -> 查看详情 -> 回到动作修改”的主流程。
 
+### 2026-07-09：UI 主流程能力块 - Analysis Timeline Selection Uses Command Surface
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `AnalysisPanel` 新增 `mainFlowCommandSurface` 输入，动作结果定位、最近编辑结果定位和状态曲线 runtime 点选择优先通过页面级 surface 创建 action。
+- `TimelineGridPreview` 新增 `mainFlowCommandSurface` 输入，时间轴 runtime state marker 选择优先通过页面级 surface 创建 action。
+- `Workbench` 将同一份 `mainFlowCommandSurface` 传给 `AnalysisPanel` 和 `TimelineGridPreview`，使分析面板、时间轴、资源曲线、日志、详情和顶部主流程按钮的 runtime selection action 来源进一步统一。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- main flow action 单测覆盖 command surface 的 runtime result selection action 工厂。
+- TimelineGridPreview 组件测试确认注入的 command surface 会接管 runtime state marker 的 action 创建。
+- Workbench 页面测试确认 AnalysisPanel 和 TimelineGridPreview 的 runtime selection 路径仍可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/TimelineGridPreview.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、82 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、214 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：基于统一 command surface 检查剩余直接创建 flow action 的 UI 入口，优先收束真正影响“编辑 -> 运行 -> 选择结果 -> 回改”的主路径。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

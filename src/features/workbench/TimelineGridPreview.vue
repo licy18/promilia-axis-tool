@@ -674,6 +674,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  mainFlowCommandSurface: {
+    type: Object,
+    default: null,
+  },
   actionEditFocus: {
     type: Object,
     default: null,
@@ -1552,7 +1556,7 @@ function selectStateCurveMarker(marker) {
   if (isRuntimeStateCurveMarker(marker)) {
     emit(
       'dispatch-flow-action',
-      createWorkbenchRuntimeStatePointFlowAction({
+      createRuntimeStatePointFlowActionFromSurface({
         source: 'state-curve-point',
         actionId: marker.actionId,
         statePointId: marker.statePointId,
@@ -1564,6 +1568,14 @@ function selectStateCurveMarker(marker) {
     return;
   }
   emit('select-state-curve-point', marker.statePointId);
+}
+
+function createRuntimeStatePointFlowActionFromSurface(options = {}) {
+  return (
+    props.mainFlowCommandSurface?.createRuntimeStatePointFlowAction?.(
+      options
+    ) ?? createWorkbenchRuntimeStatePointFlowAction(options)
+  );
 }
 
 function isRuntimeStateCurveMarker(marker) {

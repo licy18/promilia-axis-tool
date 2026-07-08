@@ -635,6 +635,19 @@ describe('workbench main flow actions', () => {
       statePointId: 'nav-state',
       canRun: true,
     });
+    expect(
+      surface.createRuntimeResultFlowAction({
+        source: 'analysis-action-result',
+        actionId: 'result-action',
+        statePointId: 'result-state',
+      })
+    ).toMatchObject({
+      kind: 'select-runtime-result',
+      source: 'analysis-action-result',
+      actionId: 'result-action',
+      statePointId: 'result-state',
+      canRun: true,
+    });
   });
 
   it('creates runtime point and result focus actions with the same main flow factory', () => {

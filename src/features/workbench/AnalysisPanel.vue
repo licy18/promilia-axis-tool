@@ -1104,6 +1104,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  mainFlowCommandSurface: {
+    type: Object,
+    default: null,
+  },
 });
 
 const emit = defineEmits([
@@ -1956,7 +1960,7 @@ function getActionResultRuntimeTrace(entry) {
 
 function getActionResultFlowAction(entry) {
   const trace = getActionResultRuntimeTrace(entry);
-  return createWorkbenchRuntimeResultFlowAction({
+  return createRuntimeResultFlowActionFromSurface({
     source: 'analysis-action-result',
     actionId: trace?.actionId ?? entry?.actionId ?? '',
     statePointId: trace?.firstStatePointId ?? '',
@@ -2044,7 +2048,7 @@ function getActionEditSourceFlowAction(source) {
 }
 
 function getActionEditFeedbackResultFlowAction(feedback) {
-  return createWorkbenchRuntimeResultFlowAction({
+  return createRuntimeResultFlowActionFromSurface({
     source: 'analysis-edit-result',
     detail: feedback,
     enabled: Boolean(
@@ -2682,7 +2686,7 @@ function selectStateCurvePointFromMainFlow(point, source) {
   }
   if (isRuntimeStateCurvePoint(point)) {
     dispatchAnalysisFlowAction(
-      createWorkbenchRuntimeStatePointFlowAction({
+      createRuntimeStatePointFlowActionFromSurface({
         source,
         actionId: point.actionId,
         statePointId: point.statePointId,
@@ -2694,6 +2698,21 @@ function selectStateCurvePointFromMainFlow(point, source) {
     return;
   }
   emit('select-state-curve-point', point.statePointId);
+}
+
+function createRuntimeResultFlowActionFromSurface(options = {}) {
+  return (
+    props.mainFlowCommandSurface?.createRuntimeResultFlowAction?.(options) ??
+    createWorkbenchRuntimeResultFlowAction(options)
+  );
+}
+
+function createRuntimeStatePointFlowActionFromSurface(options = {}) {
+  return (
+    props.mainFlowCommandSurface?.createRuntimeStatePointFlowAction?.(
+      options
+    ) ?? createWorkbenchRuntimeStatePointFlowAction(options)
+  );
 }
 
 function isRuntimeStateCurvePoint(point) {

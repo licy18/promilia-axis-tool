@@ -20223,3 +20223,38 @@ Workbench：state curve runtime 点选择使用 createRuntimeStatePointFlowActio
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、82 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、213 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 266. UI 主流程能力块：Analysis Timeline Selection Uses Command Surface
+
+### 266.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+以下组件新增可选 `mainFlowCommandSurface` prop：
+
+```text
+AnalysisPanel
+TimelineGridPreview
+```
+
+消费关系调整：
+
+```text
+AnalysisPanel：动作结果定位、最近编辑结果定位、状态曲线 runtime 点选择优先通过页面级 command surface 创建 action。
+TimelineGridPreview：时间轴 runtime state marker 选择优先通过页面级 command surface 创建 action。
+Workbench：向 AnalysisPanel 与 TimelineGridPreview 传入同一份 mainFlowCommandSurface。
+```
+
+这些入口仍生成原有 `select-runtime-state-point` / `select-runtime-result` action；本阶段只调整 action 创建入口。
+
+### 266.2 保存与迁移
+
+本阶段只调整分析面板和时间轴的 runtime selection action 创建入口，不新增持久字段，不需要数据迁移。
+
+### 266.3 验证
+
+- 更新 `src/__tests__/features/TimelineGridPreview.test.js`，确认注入的 command surface 会接管 runtime state marker 的 action 创建。
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 command surface 的 runtime result selection action 工厂。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/TimelineGridPreview.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、82 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、214 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

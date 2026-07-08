@@ -104,6 +104,33 @@ describe('TimelineGridPreview', () => {
       )
     ).toEqual(['toughnessDamageCandidate', 'selfEnergyCandidate']);
   });
+
+  it('uses an injected main flow command surface for runtime state markers', async () => {
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        threeValueCurveFramework: createRuntimeStateCurveFramework(),
+        mainFlowCommandSurface: createInjectedMainFlowCommandSurface(),
+      }),
+    });
+
+    const marker = wrapper.find(
+      '[data-testid="workbench-timeline-state-curve-marker"]'
+    );
+    expect(marker.exists()).toBe(true);
+
+    await marker.trigger('click');
+
+    expect(getLastDispatchedFlowAction(wrapper)).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'timeline-surface-test',
+      actionId: 'action-a',
+      statePointId: 'enemyHpDamage|applied|action-a|0|0',
+      canRun: true,
+      payload: {
+        preserveStateCurveFilters: true,
+      },
+    });
+  });
 });
 
 function findCandidateMarkers(wrapper) {
@@ -143,6 +170,11 @@ function createTimelineProps(overrides = {}) {
     ],
     actions,
     damageTimeline: [],
+    threeValueCurveFramework: {
+      stateCurves: {
+        tracks: [],
+      },
+    },
     candidateValueChart: {
       series: [
         createCandidateSeries({
@@ -180,6 +212,57 @@ function createTimelineProps(overrides = {}) {
     },
     ...overrides,
   };
+}
+
+function createRuntimeStateCurveFramework() {
+  return {
+    stateCurves: {
+      tracks: [
+        {
+          trackKey: 'enemyHpDamage',
+          label: '敌人HP伤害',
+          layers: [
+            {
+              key: 'applied',
+              pointCount: 1,
+              points: [
+                {
+                  actionId: 'action-a',
+                  actionName: '普通攻击',
+                  frameIndex: 0,
+                  frameLabel: '0s0f',
+                  delta: 100,
+                  cumulative: 100,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  };
+}
+
+function createInjectedMainFlowCommandSurface() {
+  return {
+    createRuntimeStatePointFlowAction(options = {}) {
+      return {
+        kind: 'select-runtime-state-point',
+        source: 'timeline-surface-test',
+        actionId: options.actionId ?? options.detail?.actionId ?? '',
+        statePointId: options.statePointId ?? options.detail?.statePointId ?? '',
+        payload: options.payload ?? null,
+        canRun: Boolean(
+          options.statePointId ?? options.detail?.statePointId
+        ),
+      };
+    },
+  };
+}
+
+function getLastDispatchedFlowAction(wrapper) {
+  const events = wrapper.emitted('dispatch-flow-action') ?? [];
+  return events.at(-1)?.[0] ?? null;
 }
 
 function createAction({ id, name, actorId, startMs }) {
