@@ -196,6 +196,7 @@
 <script setup>
 import { computed } from 'vue';
 import { Aim, DataAnalysis, EditPen } from '@element-plus/icons-vue';
+import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 
 const props = defineProps({
   detail: {
@@ -218,10 +219,11 @@ const runtimeDetailEditContext = computed(() =>
   createRuntimeDetailEditContext(props.detail, props.actionEditFocus)
 );
 const runtimeDetailResultReturnContext = computed(() =>
-  createRuntimeDetailResultReturnContext({
-    detail: props.detail,
+  createRuntimeResultReturnContext({
+    actionId: props.detail?.actionId ?? props.actionEditResultContext?.actionId,
     focus: props.actionEditFocus,
     resultContext: props.actionEditResultContext,
+    originStatePointId: props.detail?.statePointId,
   })
 );
 const panelVisible = computed(() =>
@@ -337,38 +339,6 @@ function createRuntimeDetailEditContext(detail, focus) {
     label: focus.label ?? '结果定位',
     statePointId: detail.statePointId,
     summary: focus.changeSummary ?? '',
-  };
-}
-
-function createRuntimeDetailResultReturnContext({
-  detail = null,
-  focus = null,
-  resultContext = null,
-} = {}) {
-  const actionId = detail?.actionId ?? resultContext?.actionId ?? '';
-  if (
-    !actionId ||
-    !focus?.actionId ||
-    focus.editOrigin !== 'runtime-focus' ||
-    focus.actionId !== actionId ||
-    resultContext?.actionId !== actionId ||
-    !resultContext?.runtimeStatePointId
-  ) {
-    return null;
-  }
-  if (
-    detail?.statePointId &&
-    focus.originStatePointId !== detail.statePointId
-  ) {
-    return null;
-  }
-  return {
-    status: 'refreshed-edit-result',
-    actionId,
-    originStatePointId: focus.originStatePointId ?? '',
-    statePointId: resultContext.runtimeStatePointId,
-    label: '回到刷新后结果',
-    summary: resultContext.changeSummary || focus.changeSummary || '',
   };
 }
 </script>

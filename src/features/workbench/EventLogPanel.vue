@@ -297,6 +297,7 @@ import { computed, ref, watch } from 'vue';
 import { Aim, EditPen, Tickets } from '@element-plus/icons-vue';
 import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
 import { createRuntimeDetailCalculatorRows } from './runtimeSelectedDetail';
+import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 
 const props = defineProps({
   eventLog: {
@@ -577,7 +578,7 @@ const runtimeLogEditContext = computed(() =>
   })
 );
 const runtimeLogResultReturnContext = computed(() =>
-  createRuntimeLogResultReturnContext({
+  createRuntimeResultReturnContext({
     actionId: runtimeLogActionFocus.value.actionId,
     focus: props.actionEditFocus,
     resultContext: props.actionEditResultContext,
@@ -852,30 +853,6 @@ function createRuntimeLogEditContext({
     label: focus.label ?? '结果定位',
     statePointId,
     summary: focus.changeSummary ?? '',
-  };
-}
-
-function createRuntimeLogResultReturnContext({
-  actionId = '',
-  focus = null,
-  resultContext = null,
-} = {}) {
-  if (
-    !actionId ||
-    !focus?.actionId ||
-    focus.editOrigin !== 'runtime-focus' ||
-    focus.actionId !== actionId ||
-    resultContext?.actionId !== actionId ||
-    !resultContext?.runtimeStatePointId
-  ) {
-    return null;
-  }
-  return {
-    status: 'refreshed-edit-result',
-    actionId,
-    originStatePointId: focus.originStatePointId ?? '',
-    statePointId: resultContext.runtimeStatePointId,
-    summary: resultContext.changeSummary || focus.changeSummary || '',
   };
 }
 

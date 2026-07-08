@@ -6854,6 +6854,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - UI 主流程能力块继续推进时，优先整理资源曲线、日志详情和三值详情三处入口的共同工作节奏，减少重复但保留完整往返。
 - 避免回到单个状态提示、缺口说明或公式追证阶段。
 
+### 2026-07-08：UI 主流程能力块 - 统一回看上下文
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `runtimeResultReturnContext.js`，统一派生“来源结果 / 刷新后结果”的回看上下文。
+- `PropertiesPanel`、`EventLogPanel`、`RuntimeSelectedDetailPanel` 改为复用同一个回看上下文 helper。
+- 三处入口继续保留各自 UI，但“是否可回看、回看到哪个 state point、显示来源还是刷新后结果”的判断收束到同一处。
+- 本阶段不修改三值数据、simulation 输出、公式证据或项目保存结构。
+
+当前验证事实：
+
+- 属性面板仍能显示来源结果和刷新后结果回看。
+- 日志详情与三值详情仍能在动作修改后回到刷新后的 runtime state point。
+- 既有 Workbench 主流程测试继续覆盖三处回看路径。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
+- `npm run test -- --run`：通过，15 个测试文件、118 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- UI 主流程能力块继续推进时，优先评估资源曲线选择摘要、日志详情和三值详情是否可以在布局上进一步合并阅读路径，而不是继续增加状态文案。
+- 避免回到单个状态提示、缺口说明或公式追证阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

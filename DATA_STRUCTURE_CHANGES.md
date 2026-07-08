@@ -14034,3 +14034,76 @@ Workbench 测试新增覆盖：
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
 - `npm run test -- --run`：通过，15 个测试文件、118 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 169. UI 主流程能力块：统一 runtime 回看上下文
+
+本阶段属于 UI 主流程。
+
+### 169.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 169.2 新增共享 helper
+
+新增文件：
+
+```text
+src/features/workbench/runtimeResultReturnContext.js
+```
+
+导出：
+
+```js
+createRuntimeResultReturnContext({
+  actionId,
+  focus,
+  resultContext,
+  originStatePointId,
+  allowOriginResult,
+})
+```
+
+输入含义：
+
+- `actionId`：当前入口对应动作。
+- `focus`：Workbench 的 `actionEditFocus`。
+- `resultContext`：Workbench 的 `actionEditResultContext`。
+- `originStatePointId`：当前入口限定的来源 runtime state point；不传时使用 `focus.originStatePointId`。
+- `allowOriginResult`：是否允许尚未产生刷新结果时返回来源结果。
+
+返回值仍沿用现有字段：
+
+```text
+status
+actionId
+fieldKey
+label
+summary
+originStatePointId
+statePointId
+```
+
+### 169.3 接入面板
+
+以下组件改为复用该 helper：
+
+```text
+PropertiesPanel.vue
+EventLogPanel.vue
+RuntimeSelectedDetailPanel.vue
+```
+
+`PropertiesPanel` 使用 `allowOriginResult: true`，保留来源结果回看。
+
+`EventLogPanel` 与 `RuntimeSelectedDetailPanel` 只在刷新后结果可用时显示回看入口。
+
+### 169.4 验证
+
+Workbench 测试继续覆盖：
+
+- 属性面板来源结果与刷新后结果回看。
+- 日志详情刷新后结果回看。
+- 三值详情刷新后结果回看。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
+- `npm run test -- --run`：通过，15 个测试文件、118 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

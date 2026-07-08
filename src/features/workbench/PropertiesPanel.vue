@@ -439,6 +439,7 @@
 import { computed } from 'vue';
 import { Aim, Operation } from '@element-plus/icons-vue';
 import { WORKBENCH_FRAME_MS, formatFrameTime } from '../../domain/timebase';
+import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 
 const props = defineProps({
   selection: {
@@ -656,9 +657,10 @@ const attributePanelRows = computed(() => {
 });
 const runtimeResultReturnContext = computed(() =>
   createRuntimeResultReturnContext({
-    selectedAction: props.selectedAction,
+    actionId: props.selectedAction?.id,
     focus: props.actionEditFocus,
     resultContext: props.actionEditResultContext,
+    allowOriginResult: true,
   })
 );
 const valueParamSemanticLabel = computed(() => {
@@ -857,41 +859,6 @@ function normalizeEditFocusField(fieldKey) {
     return 'actorCharacterId';
   }
   return fieldKey || '';
-}
-
-function createRuntimeResultReturnContext({
-  selectedAction = null,
-  focus = null,
-  resultContext = null,
-} = {}) {
-  if (
-    !selectedAction?.id ||
-    !focus?.actionId ||
-    focus.editOrigin !== 'runtime-focus' ||
-    focus.actionId !== selectedAction.id ||
-    !focus.originStatePointId
-  ) {
-    return null;
-  }
-  const refreshedStatePointId =
-    resultContext?.actionId === selectedAction.id
-      ? resultContext.runtimeStatePointId
-      : '';
-  const hasRefreshedResult = Boolean(refreshedStatePointId);
-  return {
-    status: hasRefreshedResult ? 'refreshed-edit-result' : 'origin-result',
-    actionId: selectedAction.id,
-    fieldKey: focus.fieldKey ?? '',
-    label: hasRefreshedResult ? '回到刷新后结果' : '回到来源结果',
-    summary:
-      (hasRefreshedResult
-        ? resultContext?.changeSummary || focus.changeSummary
-        : focus.changeSummary) ?? '',
-    originStatePointId: focus.originStatePointId,
-    statePointId: hasRefreshedResult
-      ? refreshedStatePointId
-      : focus.originStatePointId,
-  };
 }
 
 function formatSigned(value) {
