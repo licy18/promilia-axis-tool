@@ -281,6 +281,36 @@
             选中
           </button>
         </div>
+        <div
+          class="state-curve-navigation-controls"
+          data-testid="workbench-state-curve-navigation-controls"
+        >
+          <button
+            class="state-curve-nav-button"
+            type="button"
+            :disabled="!stateCurveNavigationSummary.canPrevious"
+            title="上一个状态点"
+            aria-label="上一个状态点"
+            data-testid="workbench-state-curve-nav-prev"
+            @click="selectAdjacentStateCurvePoint(-1)"
+          >
+            <ArrowLeft class="state-curve-nav-icon" />
+          </button>
+          <span data-testid="workbench-state-curve-nav-position">
+            {{ formatStateCurveNavigationPosition() }}
+          </span>
+          <button
+            class="state-curve-nav-button"
+            type="button"
+            :disabled="!stateCurveNavigationSummary.canNext"
+            title="下一个状态点"
+            aria-label="下一个状态点"
+            data-testid="workbench-state-curve-nav-next"
+            @click="selectAdjacentStateCurvePoint(1)"
+          >
+            <ArrowRight class="state-curve-nav-icon" />
+          </button>
+        </div>
       </div>
       <div class="state-curve-layer-controls">
         <label
@@ -443,7 +473,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { TrendCharts } from '@element-plus/icons-vue';
+import { ArrowLeft, ArrowRight, TrendCharts } from '@element-plus/icons-vue';
 import { createStateCurvePointId } from './stateCurvePointIdentity';
 
 const CANDIDATE_CHART_COLORS = ['#f2b366', '#79c7b9', '#a6b7ff'];
@@ -671,33 +701,75 @@ const effectiveStateCurveFocusMode = computed(() =>
 const isStateCurveSelectedFocusActive = computed(
   () => effectiveStateCurveFocusMode.value === 'selected'
 );
-const stateCurveTrackRows = computed(() => {
+const stateCurveBaseTrackRows = computed(() => {
   const activeLayers = new Set(activeStateCurveLayerKeys.value);
   return (stateCurves.value?.tracks ?? [])
-    .filter(track => (track.pointCount ?? 0) > 0)
-    .filter(track => isStateCurveTrackVisible(track.trackKey))
-    .map(track => {
+    .map((track, trackIndex) => ({
+      track,
+      trackIndex,
+    }))
+    .filter(({ track }) => (track.pointCount ?? 0) > 0)
+    .filter(({ track }) => isStateCurveTrackVisible(track.trackKey))
+    .map(({ track, trackIndex }) => {
       const layerRows = (track.layers ?? []).filter(
         layer => activeLayers.has(layer.key) && (layer.pointCount ?? 0) > 0
       );
       const visiblePointRows = createStateCurveVisiblePointRows(
         track,
-        layerRows
+        layerRows,
+        trackIndex
       );
-      const focusedLayerKeys = new Set(
-        visiblePointRows.map(point => point.layerKey)
-      );
-      const visibleLayers = isStateCurveSelectedFocusActive.value
-        ? layerRows.filter(layer => focusedLayerKeys.has(layer.key))
-        : layerRows;
       return {
         ...track,
-        visibleLayers,
+        visibleLayers: layerRows,
         visiblePointRows,
+        trackIndex,
       };
     })
     .filter(track => track.visiblePointRows.length > 0);
 });
+const stateCurveNavigationPointRows = computed(() =>
+  stateCurveBaseTrackRows.value
+    .flatMap(track => track.visiblePointRows)
+    .slice()
+    .sort(compareStateCurvePointRows)
+);
+const selectedStateCurveNavigationIndex = computed(() =>
+  stateCurveNavigationPointRows.value.findIndex(
+    point => point.statePointId === props.selectedStateCurvePointId
+  )
+);
+const stateCurveNavigationSummary = computed(() => {
+  const total = stateCurveNavigationPointRows.value.length;
+  const selectedIndex = selectedStateCurveNavigationIndex.value;
+  return {
+    total,
+    position: selectedIndex >= 0 ? selectedIndex + 1 : 0,
+    canPrevious: selectedIndex > 0,
+    canNext: selectedIndex >= 0 && selectedIndex < total - 1,
+  };
+});
+const stateCurveTrackRows = computed(() =>
+  stateCurveBaseTrackRows.value
+    .map(track => {
+      const visiblePointRows = isStateCurveSelectedFocusActive.value
+        ? track.visiblePointRows.filter(point =>
+            isStateCurvePointInFocus(point)
+          )
+        : track.visiblePointRows;
+      const visibleLayerKeys = new Set(
+        visiblePointRows.map(point => point.layerKey)
+      );
+      return {
+        ...track,
+        visibleLayers: track.visibleLayers.filter(layer =>
+          visibleLayerKeys.has(layer.key)
+        ),
+        visiblePointRows,
+      };
+    })
+    .filter(track => track.visiblePointRows.length > 0)
+);
 const stateCurveVisiblePointCount = computed(() =>
   stateCurveTrackRows.value.reduce(
     (sum, track) => sum + track.visiblePointRows.length,
@@ -1087,7 +1159,7 @@ function formatStateCurveLayerLabel(key) {
   return option?.label ?? key;
 }
 
-function createStateCurveVisiblePointRows(track, visibleLayers) {
+function createStateCurveVisiblePointRows(track, visibleLayers, trackIndex) {
   return visibleLayers
     .flatMap((layer, layerIndex) =>
       (layer.points ?? []).map((point, pointIndex) => ({
@@ -1107,12 +1179,12 @@ function createStateCurveVisiblePointRows(track, visibleLayers) {
         trackKey: track.trackKey,
         layerKey: layer.key,
         layerLabel: formatStateCurveLayerLabel(layer.key),
+        trackIndex,
         layerIndex,
         pointIndex,
         valueUnit: layer.valueUnit ?? track.valueUnit,
       }))
     )
-    .filter(point => isStateCurvePointInFocus(point))
     .sort(compareStateCurvePointRows);
 }
 
@@ -1152,6 +1224,22 @@ function setStateCurveFocusMode(mode) {
   );
 }
 
+function selectAdjacentStateCurvePoint(direction) {
+  const offset = Number(direction) < 0 ? -1 : 1;
+  const nextPoint =
+    stateCurveNavigationPointRows.value[
+      selectedStateCurveNavigationIndex.value + offset
+    ];
+  if (nextPoint) {
+    emit('select-state-curve-point', nextPoint.statePointId);
+  }
+}
+
+function formatStateCurveNavigationPosition() {
+  const { position, total } = stateCurveNavigationSummary.value;
+  return total > 0 ? `${position}/${total}` : '0/0';
+}
+
 function isStateCurvePointInFocus(point) {
   return (
     !isStateCurveSelectedFocusActive.value ||
@@ -1163,6 +1251,7 @@ function compareStateCurvePointRows(left, right) {
   return (
     compareNullableNumber(left.frameIndex, right.frameIndex) ||
     compareNullableNumber(left.timeMs, right.timeMs) ||
+    compareNullableNumber(left.trackIndex, right.trackIndex) ||
     compareNullableNumber(left.layerIndex, right.layerIndex) ||
     compareNullableNumber(left.sequenceIndex, right.sequenceIndex) ||
     compareNullableNumber(left.eventIndex, right.eventIndex) ||
@@ -2075,6 +2164,36 @@ h2 {
 .state-curve-focus-button:disabled {
   cursor: not-allowed;
   opacity: 0.42;
+}
+
+.state-curve-navigation-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #8f9aa3;
+  font-size: 11px;
+}
+
+.state-curve-nav-button {
+  display: inline-grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border: 1px solid rgba(121, 199, 185, 0.18);
+  border-radius: 4px;
+  background: rgba(18, 23, 28, 0.72);
+  color: #dff6f1;
+  cursor: pointer;
+}
+
+.state-curve-nav-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+.state-curve-nav-icon {
+  width: 13px;
+  height: 13px;
 }
 
 .diagnostic-heading.neutral strong {

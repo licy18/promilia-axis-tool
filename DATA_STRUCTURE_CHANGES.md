@@ -8337,3 +8337,104 @@ marker.statePointId === props.selectedStateCurvePointId
 - `npm run test -- --run`：通过。
 
 下一阶段 5-8BW 应补状态点邻近导航或同帧三值点切换。
+
+## 102. 阶段 5-8BW：stateCurveNavigationPointRows
+
+阶段 5-8BW 不修改 `threeValueCurveFramework.stateCurves` 的模拟结果结构，只新增 `AnalysisPanel` 内的状态点导航派生序列。该序列用于在当前 layer / track 过滤结果内做上一点 / 下一点切换。
+
+### 102.1 派生层拆分
+
+`AnalysisPanel` 将原本直接生成 `stateCurveTrackRows` 的逻辑拆成两层：
+
+```js
+stateCurveBaseTrackRows
+stateCurveTrackRows
+```
+
+- `stateCurveBaseTrackRows`：只应用 layer / track 过滤，保留完整可导航点序列。
+- `stateCurveTrackRows`：在 base rows 上再叠加 selected-only 焦点过滤，用于实际展示。
+
+这样进入 `stateCurveFocusMode = selected` 后，界面可以只显示当前点，但导航仍能基于完整过滤序列跳到相邻点。
+
+### 102.2 导航序列
+
+新增：
+
+```js
+stateCurveNavigationPointRows
+selectedStateCurveNavigationIndex
+stateCurveNavigationSummary
+```
+
+`stateCurveNavigationPointRows` 来自：
+
+```js
+stateCurveBaseTrackRows.value.flatMap(track => track.visiblePointRows)
+```
+
+并通过 `compareStateCurvePointRows` 排序。
+
+### 102.3 排序规则
+
+`compareStateCurvePointRows()` 新增 `trackIndex` 排序项：
+
+```js
+frameIndex
+timeMs
+trackIndex
+layerIndex
+sequenceIndex
+eventIndex
+hitIndex
+pointIndex
+```
+
+这让同一帧的 HP / 韧性 / 能量点顺序稳定，为下一阶段同帧三值切换做准备。
+
+### 102.4 UI 控件
+
+`AnalysisPanel` 状态曲线标题新增：
+
+```html
+data-testid="workbench-state-curve-nav-prev"
+data-testid="workbench-state-curve-nav-next"
+data-testid="workbench-state-curve-nav-position"
+```
+
+导航按钮通过：
+
+```js
+selectAdjacentStateCurvePoint(direction)
+```
+
+触发原有：
+
+```js
+emit('select-state-curve-point', nextPoint.statePointId)
+```
+
+不会改变 layer / track / focus 设置。
+
+### 102.5 candidate 边界
+
+若导航跳到 `candidate` 层 state point：
+
+- `AnalysisPanel` 可以在 selected-only 模式下只显示该 candidate 点。
+- `TimelineGridPreview` 仍不会生成 candidate state marker。
+- 候选层继续由候选三值曲线和候选 marker 负责。
+
+### 102.6 验证
+
+扩展 Workbench 测试覆盖：
+
+- 选中 applied HP 点并进入 selected-only 后，导航位置为 `1/16`。
+- “上一点”禁用，“下一点”可用。
+- 点击“下一点”后，位置变为 `2/16`，点明细切到第一条 candidate HP 点。
+- 因为 candidate 不生成 state marker，时间轴状态 marker 数量变为 0。
+- 点击“上一点”后回到 applied HP 点，时间轴状态 marker 恢复为 1。
+
+阶段验收：
+
+- `npm run test -- --run`：通过。
+
+下一阶段 5-8BX 应补同帧三值点切换或状态点分组导航。

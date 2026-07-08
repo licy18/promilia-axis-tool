@@ -159,6 +159,10 @@ describe('Workbench view', () => {
     expect(firstCandidatePoint.text()).toContain('hit1');
     expect(firstCandidatePoint.text()).toContain('109001306');
     expect(firstCandidatePoint.text()).toContain('109001081');
+    const firstCandidateStatePointId = firstCandidatePoint.attributes(
+      'data-state-point-id'
+    );
+    expect(firstCandidateStatePointId).toBeTruthy();
     const stateTimelineMarkers = wrapper.findAll(
       '[data-testid="workbench-timeline-state-curve-marker"]'
     );
@@ -250,6 +254,49 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-state-curve-focus-selected"]')
         .classes()
     ).toContain('active');
+    expect(
+      wrapper.find('[data-testid="workbench-state-curve-nav-position"]').text()
+    ).toBe('1/16');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-nav-prev"]')
+        .attributes('disabled')
+    ).toBeDefined();
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-nav-next"]')
+        .attributes('disabled')
+    ).toBeUndefined();
+    await wrapper
+      .find('[data-testid="workbench-state-curve-nav-next"]')
+      .trigger('click');
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-state-curve-nav-position"]').text()
+    ).toBe('2/16');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-point"]')
+        .attributes('data-state-point-id')
+    ).toBe(firstCandidateStatePointId);
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
+    ).toHaveLength(0);
+    await wrapper
+      .find('[data-testid="workbench-state-curve-nav-prev"]')
+      .trigger('click');
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-state-curve-nav-position"]').text()
+    ).toBe('1/16');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-point"]')
+        .attributes('data-state-point-id')
+    ).toBe(appliedStatePointId);
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
+    ).toHaveLength(1);
     await focusAllButton.trigger('click');
     await nextTick();
     expect(

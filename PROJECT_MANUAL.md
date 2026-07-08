@@ -4630,6 +4630,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 优先让用户在同一帧/同一动作附近快速切换 HP / 韧性 / 能量状态点，并保留当前 layer / track / focus 过滤语义。
 - 继续保持框架优先，真实公式和技能逐帧细节后续再补。
 
+### 2026-07-08：阶段 5-8BW 状态点邻近导航
+
+本轮完成：
+
+- `AnalysisPanel` 在状态曲线标题新增上一点 / 下一点导航按钮和当前位置计数。
+- 导航序列基于当前 `stateCurveLayerFilters` 与 `stateCurveTrackFilters` 后的完整状态点列表，而不是基于 selected-only 焦点后的 1 点列表。
+- 状态点排序按帧、时间、轨道、层级和 hit/event 顺序稳定排列，为后续同帧 HP / 韧性 / 能量切换打基础。
+- 在 selected-only 模式下点击“下一点”会切换 `selectedStateCurvePointId`，分析面板继续只显示新选中点。
+- 从默认 applied HP 点跳到下一个 candidate HP 点后，分析面板聚焦 candidate 点；时间轴状态 marker 变为 0，符合“candidate 仍由候选三值曲线负责，不生成 state marker”的边界。
+
+当前边界：
+
+- 本阶段只做线性上一点 / 下一点导航，不做同帧分组按钮或轨道优先跳转。
+- 导航遵守当前 layer / track 过滤；若过滤条件把选中点排除，导航会按当前可见序列禁用。
+- 没有改变 `threeValueCurveFramework.stateCurves` 模拟结果结构，也没有新增项目保存 schema 字段。
+
+验收结果：
+
+- `npm run test -- --run`：通过，13 个测试文件、109 条测试。
+
+下一步：
+
+- 阶段 5-8BX 目标：补同帧三值点切换或状态点分组导航。
+- 优先在同一帧/同一动作存在多个 HP / 韧性 / 能量点时提供分组跳转，减少用户在长序列里线性翻找。
+- 继续保持框架优先，真实采样和最终公式细化后续再接。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
