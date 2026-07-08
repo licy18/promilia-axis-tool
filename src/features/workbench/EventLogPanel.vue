@@ -176,6 +176,19 @@
             {{ runtimeLogDetailStatePointId }}
           </strong>
         </div>
+        <button
+          type="button"
+          class="runtime-log-action-focus"
+          :data-action-id="runtimeLogActionFocus.actionId"
+          data-focus-field="startMs"
+          :data-state-point-id="runtimeLogActionFocus.statePointId"
+          data-testid="workbench-runtime-sim-log-action-focus"
+          :disabled="!runtimeLogActionFocus.actionId"
+          @click="focusRuntimeLogAction"
+        >
+          <EditPen class="runtime-log-action-focus-icon" />
+          <span>定位动作</span>
+        </button>
       </div>
 
       <div
@@ -236,7 +249,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue';
-import { Tickets } from '@element-plus/icons-vue';
+import { EditPen, Tickets } from '@element-plus/icons-vue';
 import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
 import { createRuntimeDetailCalculatorRows } from './runtimeSelectedDetail';
 
@@ -266,7 +279,7 @@ const props = defineProps({
     default: null,
   },
 });
-const emit = defineEmits(['select-runtime-state-point']);
+const emit = defineEmits(['select-runtime-state-point', 'focus-runtime-action']);
 
 const selectedRuntimeLogIndex = ref(0);
 const runtimeTrackFilter = ref('all');
@@ -475,6 +488,22 @@ const runtimeLogDetailStatePointId = computed(
     matchedRuntimeSelectedDetail.value?.statePointId ??
     selectedRuntimeStatePointId.value
 );
+const runtimeLogActionFocus = computed(() => ({
+  actionId:
+    matchedRuntimeSelectedDetail.value?.actionId ??
+    selectedRuntimeLog.value?.actionId ??
+    '',
+  fieldKey: 'startMs',
+  frameLabel:
+    matchedRuntimeSelectedDetail.value?.frameLabel ??
+    selectedRuntimeLog.value?.frameLabel ??
+    `${selectedRuntimeLog.value?.timeMs ?? 0}ms`,
+  statePointId: runtimeLogDetailStatePointId.value ?? '',
+  trackKey:
+    matchedRuntimeSelectedDetail.value?.trackKey ??
+    selectedRuntimeLog.value?.trackKey ??
+    '',
+}));
 const selectedRuntimeContributionRows = computed(() =>
   matchedRuntimeSelectedDetail.value
     ? createRuntimeContributionRowsFromDetail(matchedRuntimeSelectedDetail.value)
@@ -613,6 +642,13 @@ function showSelectedRuntimeLog() {
   ) {
     runtimeActionFilter.value = actionKey;
   }
+}
+
+function focusRuntimeLogAction() {
+  if (!runtimeLogActionFocus.value.actionId) {
+    return;
+  }
+  emit('focus-runtime-action', runtimeLogActionFocus.value);
 }
 
 function focusRuntimeLogByStatePoint(statePointId) {
@@ -1147,6 +1183,35 @@ h2 {
   font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.runtime-log-action-focus {
+  display: inline-grid;
+  grid-template-columns: 13px auto;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  min-height: 36px;
+  border: 1px solid rgba(121, 199, 185, 0.28);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.12);
+  color: #dff9f3;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.runtime-log-action-focus:disabled {
+  color: #6d7780;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.runtime-log-action-focus-icon {
+  width: 13px;
+  height: 13px;
 }
 
 .runtime-contribution-detail,

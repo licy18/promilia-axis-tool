@@ -6314,6 +6314,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DS 目标：继续完善 Workbench 主流程编辑体验，优先补事件日志详情中的动作定位入口，确保日志、曲线、三值详情三处都能进入同一条修轴闭环。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DS 事件日志动作定位入口
+
+本轮完成：
+
+- `EventLogPanel` 的运行日志详情块新增 `定位动作` 按钮。
+- 按钮从当前 `selectedRuntimeLog` / `runtimeSelectedDetail` 派生 `actionId`、`statePointId`、`trackKey` 和帧标签，并发出 `focus-runtime-action`。
+- `Workbench` 继续复用 `focusRuntimeAction()`，因此事件日志、资源曲线和独立“三值详情”进入同一条修轴闭环。
+- 点击事件日志详情的 `定位动作` 后，会选中对应时间轴动作，并把属性面板 `startMs` 控件作为修轴入口高亮。
+- Workbench 测试新增独立用例，覆盖“事件日志详情 -> 定位动作 -> 修改开始时间 -> 反馈条标记来自结果定位”的路径。
+
+当前验证事实：
+
+- `workbench-runtime-sim-log-action-focus` 写入当前 `data-action-id`、`data-state-point-id` 和 `data-focus-field="startMs"`。
+- 点击按钮后，目标 `workbench-timeline-action` 进入选中和编辑焦点状态。
+- 属性面板 `startMs` 控件进入 `data-edit-focused="true"`。
+- 从事件日志入口修改 `startMs` 后，最近编辑反馈条继续写入 `data-edit-origin="runtime-focus"` 和原始 state point。
+- 本阶段只新增前端入口和事件复用，不新增公式、simulation 输出或保存 schema。
+
+当前边界：
+
+- 事件日志入口默认聚焦开始时间字段，暂未根据日志类型自动选择其他字段。
+- 暂未做完整编辑器布局/批量编辑收口。
+- 暂未做键盘快捷巡检。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、40 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、114 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8DT 目标：继续完善 Workbench 主流程编辑体验，优先收敛属性面板内的编辑焦点提示与可操作控件，让修轴入口在视觉上更明确。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

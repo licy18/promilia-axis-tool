@@ -175,6 +175,7 @@
         :calculator-diagnostic-focus="calculatorDiagnosticFocus"
         :runtime-log-focus="runtimeLogFocus"
         @select-runtime-state-point="selectRuntimeStatePoint"
+        @focus-runtime-action="focusRuntimeAction"
       />
     </div>
   </main>
