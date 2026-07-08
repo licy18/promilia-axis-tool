@@ -390,6 +390,8 @@ describe('generated AzPr data', () => {
       externalElementObjectResolvedSkills: 18,
       externalElementObjectResolvedRefs: 97,
       externalElementObjectUnresolvedRefs: 0,
+      summonTargetSkillCount: 2,
+      summonTargetDamageElementObjects: 4,
       damageElementFieldMappedSkills: 15,
       damageElementFieldMappedObjects: 33,
       hpDamageFieldCandidateRefs: 33,
@@ -513,6 +515,13 @@ describe('generated AzPr data', () => {
                 summonCount: 1,
                 summonTotalMaxCount: 5,
               }),
+              summonTargetSkillEvidence: expect.objectContaining({
+                status: 'summon-target-damage-elements-found',
+                summonUnitId: 480059,
+                targetSkillIds: [48005901],
+                damageElementConfigIds: [101003156, 101003182],
+                applied: false,
+              }),
             }),
           ]),
         }),
@@ -536,6 +545,13 @@ describe('generated AzPr data', () => {
                 summonLifeTime: 2500,
                 summonCount: 1,
                 summonTotalMaxCount: 5,
+              }),
+              summonTargetSkillEvidence: expect.objectContaining({
+                status: 'summon-target-damage-elements-found',
+                summonUnitId: 480060,
+                targetSkillIds: [48006001],
+                damageElementConfigIds: [101003157, 101003179],
+                applied: false,
               }),
               formulaParamBridgeCandidate: expect.objectContaining({
                 status: 'formula-param-buff-reference-found',
@@ -580,6 +596,127 @@ describe('generated AzPr data', () => {
           ]),
         }),
       ]),
+    });
+    expect(evidence.summonTargetSkillEvidence).toMatchObject({
+      status: 'summon-target-damage-elements-found',
+      summary: {
+        summonSourceObjectCount: 2,
+        summonUnitCount: 2,
+        targetSkillCount: 2,
+        resolvedTargetSkillCount: 2,
+        targetSkillControlStubOnlySkillCount: 2,
+        requestedPathIds: 4,
+        resolvedPathIds: 4,
+        unresolvedPathIds: 0,
+        damageElementObjectCount: 4,
+        damageElementFieldMappingCount: 4,
+      },
+      targets: expect.arrayContaining([
+        expect.objectContaining({
+          summonUnitId: 480059,
+          status: 'summon-target-damage-elements-found',
+          targetSkillIds: [48005901],
+          battlefieldItem: expect.objectContaining({
+            id: 480059,
+            skillList: '1#48005901',
+            skillBytesPath:
+              'Config/Battle/Skill/Item/480059.asset,Config/Battle/SkillPreload/Item/480059.asset',
+          }),
+          damageElementConfigIds: [101003156, 101003182],
+          targetSkills: [
+            expect.objectContaining({
+              skillId: 48005901,
+              skillRow: expect.objectContaining({
+                parentSkill: 10100301,
+                skillModuleTag: 2,
+              }),
+              skillControlDirectory: expect.objectContaining({
+                status: 'skill-control-json-stub-only',
+                jsonFileCount: 13,
+                stubOnlyJsonFiles: 13,
+              }),
+              damageElementConfigIds: [101003156, 101003182],
+              skillElementValueSummaries: expect.arrayContaining([
+                expect.objectContaining({
+                  elementId: 101003156,
+                  firstLevel: expect.objectContaining({
+                    valueParam: '1#3500|7#10000',
+                  }),
+                  lastLevel: expect.objectContaining({
+                    valueParam: '1#7350|7#10000',
+                  }),
+                }),
+                expect.objectContaining({
+                  elementId: 101003182,
+                  firstLevel: expect.objectContaining({
+                    valueParam: '1#1500|7#10000',
+                  }),
+                  lastLevel: expect.objectContaining({
+                    valueParam: '1#3150|7#10000',
+                  }),
+                }),
+              ]),
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          summonUnitId: 480060,
+          status: 'summon-target-damage-elements-found',
+          targetSkillIds: [48006001],
+          battlefieldItem: expect.objectContaining({
+            id: 480060,
+            skillList: '1#48006001',
+            skillBytesPath:
+              'Config/Battle/Skill/Item/480060.asset,Config/Battle/SkillPreload/Item/480060.asset',
+          }),
+          damageElementConfigIds: [101003157, 101003179],
+          targetSkills: [
+            expect.objectContaining({
+              skillId: 48006001,
+              skillRow: expect.objectContaining({
+                parentSkill: 10100301,
+                skillModuleTag: 2,
+              }),
+              skillControlDirectory: expect.objectContaining({
+                status: 'skill-control-json-stub-only',
+                jsonFileCount: 13,
+                stubOnlyJsonFiles: 13,
+              }),
+              damageElementConfigIds: [101003157, 101003179],
+              skillElementValueSummaries: expect.arrayContaining([
+                expect.objectContaining({
+                  elementId: 101003157,
+                  firstLevel: expect.objectContaining({
+                    valueParam: '1#5000|7#10000',
+                  }),
+                  lastLevel: expect.objectContaining({
+                    valueParam: '1#10500|7#10000',
+                  }),
+                }),
+                expect.objectContaining({
+                  elementId: 101003179,
+                  firstLevel: expect.objectContaining({
+                    valueParam: '1#3000|7#10000',
+                  }),
+                  lastLevel: expect.objectContaining({
+                    valueParam: '1#6300|7#10000',
+                  }),
+                }),
+              ]),
+            }),
+          ],
+        }),
+      ]),
+      damageElementFieldMappingEvidence: expect.objectContaining({
+        summary: expect.objectContaining({
+          mappedSkills: 2,
+          damageElementObjects: 4,
+          hpDamageCandidateRefs: 4,
+          toughnessDamageCandidateRefs: 4,
+          selfEnergyCandidateRefs: 4,
+          formulaFunctionMatchedRefs: 8,
+        }),
+      }),
     });
     expect(evidence.damageElementFieldMappingEvidence).toMatchObject({
       status: 'damage-element-field-candidates-found',
@@ -946,6 +1083,11 @@ describe('generated AzPr data', () => {
               summonUnitId: 480059,
               summonLifeTime: 2500,
             }),
+            summonTargetSkillEvidence: expect.objectContaining({
+              targetSkillIds: [48005901],
+              damageElementConfigIds: [101003156, 101003182],
+              applied: false,
+            }),
           }),
         ]),
       }),
@@ -967,6 +1109,11 @@ describe('generated AzPr data', () => {
             summonFields: expect.objectContaining({
               summonUnitId: 480060,
               summonLifeTime: 2500,
+            }),
+            summonTargetSkillEvidence: expect.objectContaining({
+              targetSkillIds: [48006001],
+              damageElementConfigIds: [101003157, 101003179],
+              applied: false,
             }),
           }),
         ]),

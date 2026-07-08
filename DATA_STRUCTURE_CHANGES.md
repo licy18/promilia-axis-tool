@@ -6938,3 +6938,101 @@ runtime-sampling-offline-samples-partially-validated
 - `elementTypeCatalogCandidates` 从 `2` 增加到 `3`。
 - `damageElementFieldMappedObjects`、HP 候选、削韧候选和充能候选计数不变。
 - 读取方不能把 `TSummonElementParams` 当成 `TDamageElementParams`；它只说明下一跳应沿 `summonUnitId` 或 buff runtime 继续追踪。
+
+## 88. 阶段 5-8BI：summonTargetSkillEvidence
+
+阶段 5-8BI 新增 `skill-asset-evidence.json.summonTargetSkillEvidence`，用于记录召唤 Element 的二级目标 skill 和目标 DamageElement。
+
+### 88.1 顶层字段
+
+新增：
+
+- `summonTargetSkillEvidence`
+- `summary.summonTargetSkillCount`
+- `summary.summonTargetDamageElementObjects`
+
+当前生成摘要：
+
+```json
+{
+  "summonTargetSkillCount": 2,
+  "summonTargetDamageElementObjects": 4
+}
+```
+
+`summonTargetSkillEvidence.summary` 当前为：
+
+```json
+{
+  "summonSourceObjectCount": 2,
+  "summonUnitCount": 2,
+  "targetSkillCount": 2,
+  "resolvedTargetSkillCount": 2,
+  "targetSkillControlStubOnlySkillCount": 2,
+  "requestedPathIds": 4,
+  "resolvedPathIds": 4,
+  "unresolvedPathIds": 0,
+  "damageElementObjectCount": 4,
+  "damageElementFieldMappingCount": 4
+}
+```
+
+### 88.2 targets[]
+
+`summonTargetSkillEvidence.targets[]` 每项表示一个 `summonUnitId`：
+
+- `summonUnitId`
+- `sourceObjects[]`：来源召唤 Element，例如 `101003180` 或 `101003181`
+- `battlefieldItem`：`battlefield_item` 摘要
+- `targetSkillIds`
+- `targetSkills[]`
+- `damageElementObjectCount`
+- `damageElementConfigIds`
+- `applied = false`
+
+当前样例：
+
+- `480059 -> 48005901 -> 101003156 / 101003182`
+- `480060 -> 48006001 -> 101003157 / 101003179`
+
+### 88.3 targetSkills[]
+
+`targetSkills[]` 每项记录：
+
+- `skillRow.parentSkill`
+- `skillLevelRows`
+- `skillsubLogicRow`
+- `skillElementValueSummaries[]`
+- `skillControlDirectory`
+- `externalElementObjectStatus`
+- `scriptClassCounts`
+- `damageElementConfigIds`
+- `damageElementObjects[]`
+- `damageElementFieldMappings[]`
+
+注意：当前 `skill_control_48005901.asset` 与 `skill_control_48006001.asset` 的落盘 MonoBehaviour JSON 都是：
+
+- `skillControlDirectory.status = "skill-control-json-stub-only"`
+- `jsonFileCount = 13`
+- `stubOnlyJsonFiles = 13`
+
+这表示落盘 JSON 不能确认行为轨、触发帧或命中次数；二级 DamageElement 来自 compact bundle preload 解析。
+
+### 88.4 summon object 轻量引用
+
+外部召唤对象新增：
+
+- `summonTargetSkillEvidence.status`
+- `summonTargetSkillEvidence.summonUnitId`
+- `summonTargetSkillEvidence.targetSkillIds`
+- `summonTargetSkillEvidence.damageElementObjectCount`
+- `summonTargetSkillEvidence.damageElementConfigIds`
+- `summonTargetSkillEvidence.applied = false`
+
+`normalAttackHitChainCandidate.hitGroups[].externalElementObjectReferences[]` 也会携带这份轻量引用，方便第 4/5 段下钻。
+
+### 88.5 兼容性与边界
+
+- 该字段不改变主 `damageElementFieldMappingEvidence` 的 33 个当前技能 DamageElement 统计。
+- 二级目标的 4 个 DamageElement 记录在 `summonTargetSkillEvidence.damageElementFieldMappingEvidence` 中。
+- 消费方必须把这些二级 DamageElement 视为 nested candidate；在触发帧、命中次数、owner/target 和 runtime 条件确认前，不能并入最终 HP / 韧性 / 能量曲线。

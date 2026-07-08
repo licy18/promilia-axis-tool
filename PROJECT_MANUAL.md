@@ -4213,6 +4213,45 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 同步追踪 `101003079 / 焰火` 与 `50000702 / 灼焰火环`、`50015702 / 焰火旋风`、`50015704 / 焰火雀-合击` 的静态关系，判断它们是否能解释第 5 段召唤物的触发伤害。
 - 如果静态资源仍不能闭合，准备把第 5 段召唤物和 `焰火` 触发链纳入 runtime hook / 离线 capture 采样目标。
 
+### 2026-07-08：阶段 5-8BI 召唤目标 item skill 与二级 DamageElement 确认
+
+本轮完成：
+
+- 新增 `summonTargetSkillEvidence`，专门记录 `TSummonElementParams.summonUnitId -> battlefield_item -> item skill -> compact bundle preload -> TDamageElementParams` 的二级静态链路。
+- `10100304 / 101003180` 的 `summonUnitId = 480059` 已匹配 `battlefield_item.id = 480059`，其 `skillList = 1#48005901`，`skillBytesPath = Config/Battle/Skill/Item/480059.asset,Config/Battle/SkillPreload/Item/480059.asset`。
+- `48005901` 的 skill 表行存在，`parentSkill = 10100301`、`skillModuleTag = 2`；Extractor 中 `skill_control_48005901.asset` 存在但 13 个 MonoBehaviour JSON 全部为 `stubOnly`。
+- 直接通过 compact bundle preload 解析 `48005901`，确认其外部 Element 对象为 `101003156 / TDamageElementParams` 与 `101003182 / TDamageElementParams`，两者均带 HP、削韧、充能候选字段。
+- `48005901` 的 `skillsub_ele_value` 有 2 个 element 的 12 级倍率行：`101003156` 的 A 槽 `3500 -> 7350`，`101003182` 的 A 槽 `1500 -> 3150`，G 槽均为 `10000`。
+- `10100305 / 101003181` 的 `summonUnitId = 480060` 已匹配 `battlefield_item.id = 480060`，其 `skillList = 1#48006001`，`skillBytesPath = Config/Battle/Skill/Item/480060.asset,Config/Battle/SkillPreload/Item/480060.asset`。
+- `48006001` 的 skill 表行存在，`parentSkill = 10100301`、`skillModuleTag = 2`；Extractor 中 `skill_control_48006001.asset` 存在但 13 个 MonoBehaviour JSON 全部为 `stubOnly`。
+- 直接通过 compact bundle preload 解析 `48006001`，确认其外部 Element 对象为 `101003157 / TDamageElementParams` 与 `101003179 / TDamageElementParams`，两者均带 HP、削韧、充能候选字段。
+- `48006001` 的 `skillsub_ele_value` 有 2 个 element 的 12 级倍率行：`101003157` 的 A 槽 `5000 -> 10500`，`101003179` 的 A 槽 `3000 -> 6300`，G 槽均为 `10000`。
+- `summonTargetSkillEvidence.damageElementFieldMappingEvidence` 已对 2 个目标 skill、4 个 `TDamageElementParams` 建立三值字段映射和 formula function 证据：`function_1 = 1`、`function_2 = 2` 均能命中 `element_formula`，但仍为 `applied: false`。
+- `normalAttackHitChainCandidate.hitGroups[].externalElementObjectReferences[]` 的召唤对象现在带轻量 `summonTargetSkillEvidence`，可在第 4/5 段看到目标 skill 与二级 DamageElement 列表。
+
+当前边界：
+
+- 第 4/5 段已经从“召唤目标 DamageElement 未找到”推进为“召唤目标二级 DamageElement 静态闭合”。
+- `skill_control_48005901/48006001` 的落盘 JSON 是 `stubOnly`，所以行为轨、触发帧、命中次数、hit 分组和动画状态仍不能从落盘 JSON 直接确认。
+- `summonLifeTime = 2500`、`battlefield_item.param = Delay#4` 和目标 DamageElement 的关系尚未确认；不能把 Delay 或 lifespan 直接当成触发帧。
+- `101003181 -> 101003079 / 焰火` 的 buff 触发语义仍未闭合到 runtime 条件；`48006001` 二级 DamageElement 说明目标伤害对象存在，但不证明焰火爆炸触发条件和触发时机。
+- 四个二级 DamageElement 的 HP、削韧、充能字段仍是候选来源，不应用最终公式。
+
+验收结果：
+
+- `npm run data:generate`：通过，重新生成 `src/data/generated`。
+- `npm test -- --run src/__tests__/data/azprGenerated.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、21 条测试。
+- `python -m py_compile scripts/resolve-azpr-element-objects.py`：通过。
+- `npm run test -- --run`：通过，13 个测试文件、106 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提醒与 chunk 体积提醒。
+- `git diff --check`：通过；仅有 Windows 行尾转换提示。
+
+下一步：
+
+- 阶段 5-8BJ 目标：把 `summonTargetSkillEvidence` 接入 per-hit 候选详情和 Workbench 展示，让第 4/5 段能显示二级 DamageElement 的 HP / 韧性 / 能量候选，但继续标记为“触发帧未确认、公式未应用”。
+- 继续追 `skill_control_48005901/48006001` 的 stub 产生原因，必要时从 compact bundle typetree、Yoo index 或运行时 capture 补触发帧、命中次数和 target ownership。
+- 继续追 `101003079 / 焰火` buff runtime，确认它是否只负责触发 `48006001`，还是另有 buff 条件、二次注入或伤害过滤。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

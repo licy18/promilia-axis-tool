@@ -2395,6 +2395,14 @@ async function buildSkillAssetEvidenceIndex({
       currentSkillControlEvidence,
       buffInfoById
     );
+  const summonTargetSkillEvidence = await buildSummonTargetSkillEvidence({
+    externalElementObjectEvidence,
+    tables,
+    buffInfoById,
+    skillLogicIndex,
+    elementFormulaTable,
+    characters,
+  });
   const damageElementFieldMappingEvidence =
     buildDamageElementFieldMappingEvidence({
       externalElementObjectEvidence,
@@ -2434,6 +2442,7 @@ async function buildSkillAssetEvidenceIndex({
     probes,
     elementTypeCatalogEvidence,
     externalElementObjectEvidence,
+    summonTargetSkillEvidence,
     damageElementFieldMappingEvidence,
     summary: {
       skillTableRows: skillTableRows.length,
@@ -2483,6 +2492,10 @@ async function buildSkillAssetEvidenceIndex({
         externalElementObjectEvidence.summary?.resolvedPathIds ?? 0,
       externalElementObjectUnresolvedRefs:
         externalElementObjectEvidence.summary?.unresolvedPathIds ?? 0,
+      summonTargetSkillCount:
+        summonTargetSkillEvidence.summary?.targetSkillCount ?? 0,
+      summonTargetDamageElementObjects:
+        summonTargetSkillEvidence.summary?.damageElementObjectCount ?? 0,
       damageElementFieldMappedSkills:
         damageElementFieldMappingEvidence.summary?.mappedSkills ?? 0,
       damageElementFieldMappedObjects:
@@ -2579,6 +2592,22 @@ async function buildExternalElementObjectEvidence(
     };
   }
 
+  return resolveExternalElementObjectsBySkillIds({
+    skillIds: uniqueTraceSkillIds,
+    buffInfoById,
+    summaryExtras: {
+      sourceSkillCount: uniqueSkillIds.length,
+      targetSkillCount: uniqueTargetSkillIds.length,
+    },
+  });
+}
+
+async function resolveExternalElementObjectsBySkillIds({
+  skillIds,
+  buffInfoById,
+  summaryExtras = {},
+}) {
+  const uniqueSkillIds = uniqueNumbers(skillIds);
   const resolverPath = path.join(
     repoRoot,
     'scripts',
@@ -2591,9 +2620,8 @@ async function buildExternalElementObjectEvidence(
       status: 'resolver-script-missing',
       resolverPath: normalizePath(resolverPath),
       summary: {
-        skillCount: uniqueTraceSkillIds.length,
-        sourceSkillCount: uniqueSkillIds.length,
-        targetSkillCount: uniqueTargetSkillIds.length,
+        skillCount: uniqueSkillIds.length,
+        ...summaryExtras,
         resolvedSkills: 0,
         requestedPathIds: 0,
         resolvedPathIds: 0,
@@ -2611,7 +2639,7 @@ async function buildExternalElementObjectEvidence(
         '--extractor',
         extractorRoot,
         '--skill-ids',
-        uniqueTraceSkillIds.join(','),
+        uniqueSkillIds.join(','),
       ],
       {
         maxBuffer: 50 * 1024 * 1024,
@@ -2624,8 +2652,7 @@ async function buildExternalElementObjectEvidence(
     );
     parsed.summary = {
       ...(parsed.summary ?? {}),
-      sourceSkillCount: uniqueSkillIds.length,
-      targetSkillCount: uniqueTargetSkillIds.length,
+      ...summaryExtras,
     };
     if (stderr?.trim()) {
       parsed.stderr = stderr.trim().slice(0, 2000);
@@ -2640,9 +2667,8 @@ async function buildExternalElementObjectEvidence(
       error: `${error?.name ?? 'Error'}: ${error?.message ?? String(error)}`,
       stderr: String(error?.stderr ?? '').slice(0, 2000),
       summary: {
-        skillCount: uniqueTraceSkillIds.length,
-        sourceSkillCount: uniqueSkillIds.length,
-        targetSkillCount: uniqueTargetSkillIds.length,
+        skillCount: uniqueSkillIds.length,
+        ...summaryExtras,
         resolvedSkills: 0,
         requestedPathIds: 0,
         resolvedPathIds: 0,
@@ -2651,6 +2677,544 @@ async function buildExternalElementObjectEvidence(
       skills: [],
     };
   }
+}
+
+async function buildSummonTargetSkillEvidence({
+  externalElementObjectEvidence,
+  tables,
+  buffInfoById,
+  elementFormulaTable,
+  characters,
+}) {
+  const sourceObjects = collectSummonTargetSourceObjects(
+    externalElementObjectEvidence
+  );
+  if (sourceObjects.length === 0) {
+    return {
+      schemaVersion: 1,
+      generatedAt,
+      sourceKind: 'azpr-summon-target-skill-evidence',
+      status: 'no-summon-target-objects',
+      summary: {
+        summonSourceObjectCount: 0,
+        summonUnitCount: 0,
+        targetSkillCount: 0,
+        damageElementObjectCount: 0,
+      },
+      targets: [],
+    };
+  }
+
+  const battlefieldItemById = new Map(
+    (tables.battlefieldItemTable?.rows ?? [])
+      .map(row => [Number(row.id), row])
+      .filter(([id]) => Number.isFinite(id))
+  );
+  const skillRowsById = new Map(
+    (tables.skillTable?.rows ?? [])
+      .map(row => [Number(row.id), row])
+      .filter(([id]) => Number.isFinite(id))
+  );
+  const skillLevelRowsBySkillId = groupRowsByNumberKey(
+    tables.skillLevelTable?.rows ?? [],
+    'skillId'
+  );
+  const skillsubLogicRowsBySkillId = new Map(
+    (tables.skillsubLogicTable?.rows ?? [])
+      .map(row => [Number(row.skillId), row])
+      .filter(([id]) => Number.isFinite(id))
+  );
+  const skillsubElementRowsBySkillId = groupRowsByNumberKey(
+    tables.skillsubEleValueTable?.rows ?? [],
+    'skillId'
+  );
+  const sourceObjectsBySummonUnitId = groupByNumber(
+    sourceObjects,
+    item => item.summonUnitId
+  );
+  const targetSeedItems = [...sourceObjectsBySummonUnitId.entries()]
+    .map(([summonUnitId, sources]) => {
+      const battlefieldItem = battlefieldItemById.get(Number(summonUnitId));
+      const targetSkillIds = uniqueNumbers(
+        parseSkillReferenceIds(battlefieldItem?.skillList)
+      );
+      return {
+        summonUnitId: Number(summonUnitId),
+        sourceObjects: sources,
+        battlefieldItem,
+        targetSkillIds,
+      };
+    })
+    .sort((left, right) => left.summonUnitId - right.summonUnitId);
+  const targetSkillIds = uniqueNumbers(
+    targetSeedItems.flatMap(item => item.targetSkillIds)
+  );
+  const targetExternalElementObjectEvidence =
+    targetSkillIds.length > 0
+      ? await resolveExternalElementObjectsBySkillIds({
+          skillIds: targetSkillIds,
+          buffInfoById,
+          summaryExtras: {
+            sourceKind: 'summon-target-skill',
+            summonUnitCount: targetSeedItems.length,
+          },
+        })
+      : createEmptyExternalElementObjectEvidence('no-summon-target-skill-ids');
+  const targetSkillRows = targetSkillIds
+    .map(skillId => skillRowsById.get(Number(skillId)))
+    .filter(Boolean);
+  const targetSkillLogicIndex = buildSkillLogicIndex({
+    skills: targetSkillRows.map(row => ({
+      id: Number(row.id),
+      name: `skill:${row.id}`,
+      displayName: `skill:${row.id}`,
+      characterId: Number(row.parentSkill) || null,
+      characterName: 'summon-target-item-skill',
+    })),
+    skillLevelTable: tables.skillLevelTable,
+    skillsubLogicTable: tables.skillsubLogicTable,
+    skillsubEleValueTable: tables.skillsubEleValueTable,
+  });
+  const targetDamageElementFieldMappingEvidence =
+    buildDamageElementFieldMappingEvidence({
+      externalElementObjectEvidence: targetExternalElementObjectEvidence,
+      skillLogicIndex: targetSkillLogicIndex,
+      elementFormulaTable,
+      skillsubEleValueTable: tables.skillsubEleValueTable,
+      characters,
+      skillTable: tables.skillTable,
+      skillLevelTable: tables.skillLevelTable,
+      skillsubLogicTable: tables.skillsubLogicTable,
+    });
+  const externalBySkillId = new Map(
+    (targetExternalElementObjectEvidence.skills ?? []).map(skill => [
+      Number(skill.skillId),
+      skill,
+    ])
+  );
+  const mappingsBySkillId = new Map(
+    (targetDamageElementFieldMappingEvidence.skills ?? []).map(skill => [
+      Number(skill.skillId),
+      skill,
+    ])
+  );
+
+  const skillControlSummariesBySkillId = new Map();
+  for (const skillId of targetSkillIds) {
+    skillControlSummariesBySkillId.set(
+      Number(skillId),
+      await buildSummonTargetSkillControlDirectorySummary(skillId)
+    );
+  }
+
+  const targets = targetSeedItems.map(item => {
+    const target = buildSummonTargetItemEvidence({
+      seed: item,
+      skillRowsById,
+      skillLevelRowsBySkillId,
+      skillsubLogicRowsBySkillId,
+      skillsubElementRowsBySkillId,
+      externalBySkillId,
+      mappingsBySkillId,
+      skillControlSummariesBySkillId,
+    });
+    for (const sourceObject of item.sourceObjects) {
+      sourceObject.object.summonTargetSkillEvidence =
+        compactSummonTargetObjectEvidenceRef(target);
+    }
+    return target;
+  });
+  const damageElementObjectCount = targets.reduce(
+    (sum, target) => sum + (target.damageElementObjectCount ?? 0),
+    0
+  );
+  const stubOnlySkillCount = uniqueNumbers(
+    targets.flatMap(target =>
+      (target.targetSkills ?? [])
+        .filter(
+          skill =>
+            skill.skillControlDirectory?.status ===
+            'skill-control-json-stub-only'
+        )
+        .map(skill => skill.skillId)
+    )
+  ).length;
+
+  return {
+    schemaVersion: 1,
+    generatedAt,
+    sourceKind: 'azpr-summon-target-skill-evidence',
+    status:
+      damageElementObjectCount > 0
+        ? 'summon-target-damage-elements-found'
+        : 'summon-target-skills-found-damage-elements-missing',
+    source: {
+      battlefieldItemTable: normalizePath(sourceFiles.battlefieldItemTable),
+      skillTable: normalizePath(sourceFiles.skillTable),
+      skillLevelTable: normalizePath(sourceFiles.skillLevel),
+      skillsubLogicTable: normalizePath(sourceFiles.skillsubLogic),
+      skillsubEleValueTable: normalizePath(sourceFiles.skillsubEleValue),
+      externalElementResolver: normalizePath(
+        path.join(repoRoot, 'scripts', 'resolve-azpr-element-objects.py')
+      ),
+      calculationBoundary:
+        'Summon target skill evidence follows static battlefield_item.skillList and compact bundle preload refs only; target hit frames and runtime trigger conditions still need skill_control behavior or runtime capture.',
+    },
+    summary: {
+      summonSourceObjectCount: sourceObjects.length,
+      summonUnitCount: targets.length,
+      targetSkillCount: targetSkillIds.length,
+      resolvedTargetSkillCount:
+        targetExternalElementObjectEvidence.summary?.resolvedSkills ?? 0,
+      targetSkillControlStubOnlySkillCount: stubOnlySkillCount,
+      requestedPathIds:
+        targetExternalElementObjectEvidence.summary?.requestedPathIds ?? 0,
+      resolvedPathIds:
+        targetExternalElementObjectEvidence.summary?.resolvedPathIds ?? 0,
+      unresolvedPathIds:
+        targetExternalElementObjectEvidence.summary?.unresolvedPathIds ?? 0,
+      damageElementObjectCount,
+      damageElementFieldMappingCount:
+        targetDamageElementFieldMappingEvidence.summary?.damageElementObjects ??
+        0,
+    },
+    targets,
+    externalElementObjectEvidence: targetExternalElementObjectEvidence,
+    damageElementFieldMappingEvidence: targetDamageElementFieldMappingEvidence,
+  };
+}
+
+function collectSummonTargetSourceObjects(externalElementObjectEvidence) {
+  const items = [];
+  for (const skill of externalElementObjectEvidence?.skills ?? []) {
+    for (const object of skill.objects ?? []) {
+      const summonUnitId = numberOrNull(object.summonFields?.summonUnitId);
+      if (!Number.isFinite(summonUnitId) || summonUnitId <= 0) {
+        continue;
+      }
+      items.push({
+        sourceSkillId: Number(skill.skillId),
+        sourceElementConfigId: numberOrNull(object.elementConfigId),
+        sourcePathId: object.pathId ?? null,
+        summonUnitId,
+        formulaParamBuffReferenceIds:
+          object.formulaParamReferenceEvidence?.buffReferenceIds ?? [],
+        object,
+      });
+    }
+  }
+  return items;
+}
+
+function buildSummonTargetItemEvidence({
+  seed,
+  skillRowsById,
+  skillLevelRowsBySkillId,
+  skillsubLogicRowsBySkillId,
+  skillsubElementRowsBySkillId,
+  externalBySkillId,
+  mappingsBySkillId,
+  skillControlSummariesBySkillId,
+}) {
+  const targetSkills = seed.targetSkillIds.map(skillId => {
+    const externalSkill = externalBySkillId.get(Number(skillId));
+    const mappingSkill = mappingsBySkillId.get(Number(skillId));
+    const skillElementRows =
+      skillsubElementRowsBySkillId.get(Number(skillId)) ?? [];
+    return compactObject({
+      skillId: Number(skillId),
+      skillRow: compactSummonTargetSkillRow(skillRowsById.get(Number(skillId))),
+      skillLevelRows: summarizeSummonTargetSkillLevelRows(
+        skillLevelRowsBySkillId.get(Number(skillId)) ?? []
+      ),
+      skillsubLogicRow: compactSummonTargetSkillsubLogicRow(
+        skillsubLogicRowsBySkillId.get(Number(skillId))
+      ),
+      skillElementValueSummaries:
+        summarizeSummonTargetSkillElementValueRows(skillElementRows),
+      skillControlDirectory: skillControlSummariesBySkillId.get(
+        Number(skillId)
+      ),
+      externalElementObjectStatus: externalSkill?.status ?? 'missing',
+      externalElementObjectCount: externalSkill?.objects?.length ?? 0,
+      scriptClassCounts: externalSkill?.scriptClassCounts ?? {},
+      damageElementObjectCount:
+        externalSkill?.objects?.filter(isResolvedDamageElementParamsObject)
+          .length ?? 0,
+      damageElementConfigIds: uniqueNumbers(
+        (externalSkill?.objects ?? [])
+          .filter(isResolvedDamageElementParamsObject)
+          .map(object => Number(object.elementConfigId))
+      ),
+      damageElementObjects: (externalSkill?.objects ?? [])
+        .filter(isResolvedDamageElementParamsObject)
+        .map(compactSummonTargetDamageElementObject),
+      damageElementFieldMappings: mappingSkill?.fieldMappings ?? [],
+    });
+  });
+  const damageElementConfigIds = uniqueNumbers(
+    targetSkills.flatMap(skill => skill.damageElementConfigIds ?? [])
+  );
+  const damageElementObjectCount = targetSkills.reduce(
+    (sum, skill) => sum + (skill.damageElementObjectCount ?? 0),
+    0
+  );
+
+  return compactObject({
+    status:
+      damageElementObjectCount > 0
+        ? 'summon-target-damage-elements-found'
+        : 'summon-target-damage-elements-missing',
+    summonUnitId: seed.summonUnitId,
+    relationStatus: seed.battlefieldItem
+      ? 'summonUnitId-matches-battlefield_item-id'
+      : 'summonUnitId-battlefield_item-row-missing',
+    sourceObjects: seed.sourceObjects.map(item => ({
+      sourceSkillId: item.sourceSkillId,
+      sourceElementConfigId: item.sourceElementConfigId,
+      sourcePathId: item.sourcePathId,
+      formulaParamBuffReferenceIds: item.formulaParamBuffReferenceIds,
+    })),
+    battlefieldItem: compactSummonTargetBattlefieldItem(seed.battlefieldItem),
+    targetSkillIds: seed.targetSkillIds,
+    targetSkills,
+    damageElementObjectCount,
+    damageElementConfigIds,
+    applied: false,
+    calculationBoundary:
+      'The summon target skill resolves to DamageElement candidates, but the summon trigger frame, hit count, runtime target ownership and final formulas are still unconfirmed.',
+  });
+}
+
+async function buildSummonTargetSkillControlDirectorySummary(skillId) {
+  const directory = path.join(
+    extractorSkillListRoot,
+    `skill_control_${skillId}.asset`
+  );
+  const monoBehaviourRoot = path.join(directory, 'MonoBehaviour');
+  if (!(await pathExists(directory))) {
+    return {
+      status: 'skill-control-directory-missing',
+      expectedDirectory: normalizePath(directory),
+    };
+  }
+
+  const jsonFiles = await listJsonFileNames(monoBehaviourRoot);
+  let stubOnlyJsonFiles = 0;
+  const stubOnlyReasonSamples = [];
+  for (const fileName of jsonFiles) {
+    try {
+      const json = JSON.parse(
+        await fs.readFile(path.join(monoBehaviourRoot, fileName), 'utf8')
+      );
+      if (json?.stubOnly) {
+        stubOnlyJsonFiles += 1;
+        if (
+          json.reason &&
+          !stubOnlyReasonSamples.includes(json.reason) &&
+          stubOnlyReasonSamples.length < 3
+        ) {
+          stubOnlyReasonSamples.push(json.reason);
+        }
+      }
+    } catch {
+      // Keep this summary best-effort; resolver evidence is authoritative.
+    }
+  }
+
+  return compactObject({
+    status:
+      jsonFiles.length > 0 && stubOnlyJsonFiles === jsonFiles.length
+        ? 'skill-control-json-stub-only'
+        : 'skill-control-json-readable',
+    directory: normalizePath(directory),
+    monoBehaviourRoot: normalizePath(monoBehaviourRoot),
+    jsonFileCount: jsonFiles.length,
+    stubOnlyJsonFiles,
+    readableJsonFiles: jsonFiles.length - stubOnlyJsonFiles,
+    sampleFiles: jsonFiles.slice(0, 5),
+    stubOnlyReasonSamples,
+  });
+}
+
+function compactSummonTargetBattlefieldItem(row) {
+  if (!row) {
+    return null;
+  }
+  return compactObject({
+    id: numberOrNull(row.id),
+    path: row.path ?? null,
+    param: row.param ?? null,
+    skillList: row.skillList ?? null,
+    skillBytesPath: row.skillBytesPath ?? null,
+    modelParam: row.modelParam ?? null,
+    collisionType: numberOrNull(row.collisionType),
+    element: numberOrNull(row.element),
+    canBeAttacked: Boolean(row.CanBeAttacked),
+  });
+}
+
+function compactSummonTargetSkillRow(row) {
+  if (!row) {
+    return null;
+  }
+  return compactObject({
+    id: numberOrNull(row.id),
+    skillType: numberOrNull(row.skillType),
+    skillDisplayType: numberOrNull(row.skillDisplayType),
+    parentSkill: numberOrNull(row.parentSkill),
+    skillModuleTag: numberOrNull(row.skillModuleTag),
+    icon: assetFileName(row.icon),
+    battleSkillIcon: assetFileName(row.battleSkillIcon),
+  });
+}
+
+function summarizeSummonTargetSkillLevelRows(rows) {
+  const sorted = rows
+    .slice()
+    .sort((left, right) => Number(left.level) - Number(right.level));
+  return {
+    rowCount: sorted.length,
+    levels: uniqueNumbers(sorted.map(row => Number(row.level))),
+    firstLevel: compactSummonTargetSkillLevelRow(sorted[0]),
+    lastLevel: compactSummonTargetSkillLevelRow(sorted.at(-1)),
+  };
+}
+
+function compactSummonTargetSkillLevelRow(row) {
+  if (!row) {
+    return null;
+  }
+  return compactObject({
+    id: numberOrNull(row.id),
+    skillId: numberOrNull(row.skillId),
+    level: numberOrNull(row.level),
+    subSkillId: numberOrNull(row.subSkillId),
+    coolDown: numberOrNull(row.coolDown),
+    spCost: numberOrNull(row.spCost),
+  });
+}
+
+function compactSummonTargetSkillsubLogicRow(row) {
+  if (!row) {
+    return null;
+  }
+  return compactObject({
+    skillId: numberOrNull(row.skillId),
+    skillLogicType: numberOrNull(row.skillLogicType),
+    targetType: numberOrNull(row.targetType),
+    directionType: numberOrNull(row.directionType),
+    priority: numberOrNull(row.priority),
+    battleLockPriority: row.battleLockPriority ?? null,
+    lockRange: numberOrNull(row.lockRange),
+    aiToken: numberOrNull(row.aiToken),
+    aiTokenType: numberOrNull(row.aiTokenType),
+  });
+}
+
+function summarizeSummonTargetSkillElementValueRows(rows) {
+  const rowsByElementId = groupByNumber(rows, row => row.elementId);
+  return [...rowsByElementId.entries()]
+    .sort((left, right) => left[0] - right[0])
+    .map(([elementId, elementRows]) => {
+      const sorted = elementRows
+        .slice()
+        .sort((left, right) => Number(left.level) - Number(right.level));
+      const parameterIds = uniqueNumbers(
+        sorted.flatMap(row =>
+          parseParamPairs(row.valueParam).map(pair => pair.id)
+        )
+      );
+      const varyingParameterIds = parameterIds.filter(id => {
+        const values = uniqueNumbers(
+          sorted.flatMap(row =>
+            parseParamPairs(row.valueParam)
+              .filter(pair => pair.id === id)
+              .map(pair => pair.value)
+          )
+        );
+        return values.length > 1;
+      });
+      return compactObject({
+        elementId: Number(elementId),
+        rowCount: sorted.length,
+        levels: uniqueNumbers(sorted.map(row => Number(row.level))),
+        parameterIds,
+        varyingParameterIds,
+        firstLevel: compactSummonTargetElementValueRow(sorted[0]),
+        lastLevel: compactSummonTargetElementValueRow(sorted.at(-1)),
+      });
+    });
+}
+
+function compactSummonTargetElementValueRow(row) {
+  if (!row) {
+    return null;
+  }
+  return compactObject({
+    id: numberOrNull(row.id),
+    skillId: numberOrNull(row.skillId),
+    elementId: numberOrNull(row.elementId),
+    level: numberOrNull(row.level),
+    valueParam: row.valueParam ?? null,
+    paramPairs: parseParamPairs(row.valueParam),
+  });
+}
+
+function compactSummonTargetDamageElementObject(object) {
+  return compactObject({
+    elementConfigId: numberOrNull(object.elementConfigId),
+    pathId: object.pathId ?? null,
+    containerPath: object.containerPath ?? null,
+    scriptTypeClassName: object.scriptTypeCandidate?.className ?? null,
+    formulaParams: object.formulaParams ?? null,
+    damageFields: object.damageFields ?? null,
+    mediaPackNames: object.mediaPackNames ?? [],
+  });
+}
+
+function compactSummonTargetObjectEvidenceRef(target) {
+  return compactObject({
+    status: target.status,
+    summonUnitId: target.summonUnitId,
+    relationStatus: target.relationStatus,
+    targetSkillIds: target.targetSkillIds,
+    damageElementObjectCount: target.damageElementObjectCount,
+    damageElementConfigIds: target.damageElementConfigIds,
+    applied: false,
+    calculationBoundary:
+      'Summon target DamageElement candidates are linked statically; trigger timing and final formula application are still unconfirmed.',
+  });
+}
+
+function createEmptyExternalElementObjectEvidence(status) {
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-skill-external-element-object-evidence',
+    status,
+    summary: {
+      skillCount: 0,
+      resolvedSkills: 0,
+      requestedPathIds: 0,
+      resolvedPathIds: 0,
+      unresolvedPathIds: 0,
+    },
+    skills: [],
+  };
+}
+
+function groupByNumber(items, keySelector) {
+  const groups = new Map();
+  for (const item of items ?? []) {
+    const key = Number(keySelector(item));
+    if (!Number.isFinite(key)) {
+      continue;
+    }
+    const group = groups.get(key) ?? [];
+    group.push(item);
+    groups.set(key, group);
+  }
+  return groups;
 }
 
 function enrichExternalElementObjectReferenceEvidence(evidence, buffInfoById) {
@@ -3168,6 +3732,7 @@ function compactHitExternalElementObjectReference(object) {
     formulaParamBuffReferenceIds:
       object.formulaParamReferenceEvidence?.buffReferenceIds ?? [],
     summonFields: object.summonFields ?? null,
+    summonTargetSkillEvidence: object.summonTargetSkillEvidence ?? null,
   });
 }
 
