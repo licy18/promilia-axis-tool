@@ -1,5 +1,5 @@
-import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
 import {
+  createRuntimeStatePointContexts,
   getRuntimeEnemyStateCurve,
   getRuntimeResourceCurveRows,
 } from './runtimeProjectionPoints';
@@ -31,7 +31,19 @@ export function createRuntimeSelectedDetail({
     return null;
   }
 
-  const runtimePointRows = createRuntimePointRows(runtimeProjection);
+  const runtimeStatePointContexts =
+    createRuntimeStatePointContexts(runtimeProjection);
+  const selectedContext = runtimeStatePointContexts.find(
+    context => context.statePointId === selectedStateCurvePointId
+  );
+  if (!selectedContext) {
+    return null;
+  }
+
+  const runtimePointRows = createRuntimePointRows(
+    runtimeProjection,
+    runtimeStatePointContexts
+  );
   const pointRow = runtimePointRows.find(
     row => row.statePointId === selectedStateCurvePointId
   );
@@ -39,11 +51,7 @@ export function createRuntimeSelectedDetail({
     return null;
   }
 
-  const simLogRow = findRuntimeSimLogRow({
-    runtimeProjection,
-    pointRow,
-    selectedStateCurvePointId,
-  });
+  const simLogRow = selectedContext.row ?? null;
   const sourceIds = pointRow.sourceIds ?? {};
 
   return {
@@ -120,19 +128,24 @@ export function createRuntimeSelectedDetail({
   };
 }
 
-function createRuntimePointRows(runtimeProjection) {
+function createRuntimePointRows(runtimeProjection, runtimeStatePointContexts) {
   const enemyStateCurve = getRuntimeEnemyStateCurve(runtimeProjection);
   const resourceCurveRows = getRuntimeResourceCurveRows(runtimeProjection);
+  const contextByDeltaId = createRuntimeContextByDeltaId(
+    runtimeStatePointContexts
+  );
   return [
     ...createRuntimeTrackRows({
       points: enemyStateCurve.points ?? [],
       trackKey: 'enemyHpDamage',
       stateMetric: enemyStateCurve.stateMetrics?.hp,
+      contextByDeltaId,
     }),
     ...createRuntimeTrackRows({
       points: enemyStateCurve.points ?? [],
       trackKey: 'enemyToughnessDamage',
       stateMetric: enemyStateCurve.stateMetrics?.toughness,
+      contextByDeltaId,
     }),
     ...resourceCurveRows.flatMap(actor =>
       createRuntimeTrackRows({
@@ -141,9 +154,18 @@ function createRuntimePointRows(runtimeProjection) {
         actorId: actor.actorId,
         actorName: actor.actorName,
         stateMetric: actor.stateMetric,
+        contextByDeltaId,
       })
     ),
   ];
+}
+
+function createRuntimeContextByDeltaId(runtimeStatePointContexts) {
+  return new Map(
+    (runtimeStatePointContexts ?? [])
+      .filter(context => context.row?.sourceDeltaId)
+      .map(context => [context.row.sourceDeltaId, context])
+  );
 }
 
 function createRuntimeTrackRows({
@@ -152,6 +174,7 @@ function createRuntimeTrackRows({
   actorId,
   actorName,
   stateMetric = null,
+  contextByDeltaId,
 }) {
   const meta = RUNTIME_TRACK_META[trackKey];
   if (!meta) {
@@ -163,6 +186,10 @@ function createRuntimeTrackRows({
     .filter(point => point.trackKey === trackKey)
     .sort(compareRuntimePoints)
     .map((point, index) => {
+      const context = contextByDeltaId.get(point.sourceDeltaId);
+      if (!context?.statePointId) {
+        return null;
+      }
       const delta = numberOrZero(point[meta.valueField] ?? point.delta);
       cumulative = roundRuntimeValue(cumulative + delta);
       const pointState = createRuntimePointState(stateMetric, cumulative);
@@ -190,11 +217,12 @@ function createRuntimeTrackRows({
         calculationReplaceable:
           point.calculationReplaceable ?? point.calculator?.replaceable ?? null,
         pointIndex: index,
-        statePointId: createRuntimeStateCurvePointId(point, point),
+        statePointId: context.statePointId,
         trackLabel: point.trackLabel ?? meta.label,
         valueUnit: point.valueUnit ?? meta.unit,
       };
-    });
+    })
+    .filter(Boolean);
 }
 
 function createRuntimePointState(stateMetric, cumulative) {
@@ -228,30 +256,6 @@ function createRuntimePointState(stateMetric, cumulative) {
     baselineMaxValue: stateMetric?.maxValue ?? null,
     baselineConfirmed,
   };
-}
-
-function findRuntimeSimLogRow({
-  runtimeProjection,
-  pointRow,
-  selectedStateCurvePointId,
-}) {
-  const runtimePointByDeltaId = new Map(
-    createRuntimePointRows(runtimeProjection)
-      .filter(point => point.sourceDeltaId)
-      .map(point => [point.sourceDeltaId, point])
-  );
-
-  return (runtimeProjection.simLog ?? []).find(row => {
-    if (row.sourceDeltaId && row.sourceDeltaId === pointRow.sourceDeltaId) {
-      return true;
-    }
-    return (
-      createRuntimeStateCurvePointId(
-        row,
-        runtimePointByDeltaId.get(row.sourceDeltaId)
-      ) === selectedStateCurvePointId
-    );
-  });
 }
 
 function createRuntimeDetailContributionRows(point) {

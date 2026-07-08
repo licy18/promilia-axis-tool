@@ -340,7 +340,6 @@ import {
   EditPen,
   TrendCharts,
 } from '@element-plus/icons-vue';
-import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
 import {
   createRuntimeStatePointContexts,
   getRuntimeEnemyStateCurve,
@@ -659,6 +658,13 @@ function createRuntimeCurveSeries({
   const curvePoints = [...(points ?? [])]
     .sort(compareRuntimeCurvePoints)
     .map((point, index) => {
+      const statePointId = getRuntimeCurvePointStatePointId(
+        point,
+        runtimeContextByDeltaId
+      );
+      if (!statePointId) {
+        return null;
+      }
       const delta = numberOrZero(point[valueField] ?? point.delta);
       cumulative = roundCurveValue(cumulative + delta);
       const statePoint = createRuntimeCurvePointState(stateMetric, cumulative);
@@ -672,15 +678,13 @@ function createRuntimeCurveSeries({
         overrunValue: statePoint.overrunValue,
         baselineStatus: statePoint.baselineStatus,
         baselineConfirmed: statePoint.baselineConfirmed,
-        statePointId: getRuntimeCurvePointStatePointId(
-          point,
-          runtimeContextByDeltaId
-        ),
+        statePointId,
         frameIndex: numberOrNull(point.frameIndex) ?? 0,
         frameLabel: point.frameLabel ?? `${numberOrNull(point.timeMs) ?? 0}ms`,
         sequenceIndex: point.sequenceIndex ?? index,
       };
-    });
+    })
+    .filter(Boolean);
   const finalPoint = curvePoints[curvePoints.length - 1] ?? null;
 
   return {
@@ -705,10 +709,7 @@ function createRuntimeCurveSeries({
 }
 
 function getRuntimeCurvePointStatePointId(point, runtimeContextByDeltaId) {
-  return (
-    runtimeContextByDeltaId?.get(point?.sourceDeltaId)?.statePointId ??
-    createRuntimeStateCurvePointId(point, point)
-  );
+  return runtimeContextByDeltaId?.get(point?.sourceDeltaId)?.statePointId ?? '';
 }
 
 function createRuntimeCurvePointState(stateMetric, cumulative) {

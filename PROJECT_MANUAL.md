@@ -7183,6 +7183,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - UI 主流程能力块继续推进时，优先做主流程编辑体验的完整性检查，确认动作编辑、运行巡检、日志/曲线/贡献详情之间没有剩余本地结果点拼接。
 - 不回到公式追证、候选数值平衡或单帧动作细节阶段。
 
+### 2026-07-08：UI 主流程能力块 - 运行详情同源化
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 右侧三值详情面板改为从统一 runtime state point context 解析选中结果，不再自行重建 simLog 与曲线点映射。
+- 资源曲线去掉本地 runtime state point id 兜底，只有进入统一 runtime context 的点才参与主流程选中与巡检。
+- 本阶段不修改三值数据、runtime 计算、保存结构或 UI 信息量。
+
+当前验证事实：
+
+- 乱序 `simLog` 下，三值详情仍能通过统一 runtime context 解析正确的状态点、simLog 行、累计值和状态值。
+- 主流程组件中直接拼接 runtime state point id 的调用已收敛到 `runtimeProjectionPoints.js` 统一入口。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/runtimeSelectedDetail.test.js`：通过，1 个测试文件、1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、46 条测试。
+- `npm run test -- --run`：通过，17 个测试文件、127 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- UI 主流程能力块继续推进时，优先做 Workbench 主流程的实际操作体验检查：新增/编辑动作、运行巡检、详情查看和返回修改是否能形成完整闭环。
+- 不回到公式追证、候选数值平衡或单帧动作细节阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

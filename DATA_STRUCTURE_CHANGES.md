@@ -14787,3 +14787,34 @@ createRuntimeStatePointContexts(runtimeProjection)
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、46 条测试。
 - `npm run test -- --run`：通过，16 个测试文件、126 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 181. UI 主流程能力块：运行详情同源化
+
+本阶段属于 UI 主流程。
+
+### 181.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 181.2 RuntimeSelectedDetail 来源
+
+`runtimeSelectedDetail.js` 改为通过：
+
+```js
+createRuntimeStatePointContexts(runtimeProjection)
+```
+
+确认当前选中 `statePointId` 对应的 runtime context，再用该 context 提供的 `row` 作为 `simLogRow`。详情面板仍保留每点累计值、状态值、溢出值等展示补全，但不再自行重建 simLog 与曲线点映射。
+
+### 181.3 ResourceMonitorPanel 兜底收束
+
+`ResourceMonitorPanel` 不再用 `createRuntimeStateCurvePointId(point, point)` 为资源曲线点兜底生成 runtime id；没有进入统一 runtime context 的点不会作为可选 runtime 结果点参与主流程巡检。
+
+### 181.4 验证
+
+- 新增 `runtimeSelectedDetail.test.js` 覆盖：乱序 `simLog` 下，三值详情通过统一 runtime context 解析正确状态点、simLog 行、累计值和状态值。
+- 搜索确认主流程组件中直接拼接 runtime state point id 的调用已收敛到 `runtimeProjectionPoints.js` 统一入口。
+- `npm run test -- --run src/__tests__/features/runtimeSelectedDetail.test.js`：通过，1 个测试文件、1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、46 条测试。
+- `npm run test -- --run`：通过，17 个测试文件、127 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
