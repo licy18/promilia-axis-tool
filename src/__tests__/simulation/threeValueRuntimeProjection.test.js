@@ -390,4 +390,133 @@ describe('three value runtime projection', () => {
       simLogCount: 1,
     });
   });
+
+  it('consumes the generation builder runtime input source directly', () => {
+    const runtimeProjection = createThreeValueRuntimeProjection({
+      scenario: {
+        enemy: {
+          stats: {
+            maxHp: 10000,
+          },
+          hpMultiplier: 1,
+        },
+        actors: [
+          {
+            id: 'actor-001',
+            name: '末音',
+          },
+        ],
+      },
+      runtimeInputSource: {
+        sourceKind: 'azpr-runtime-input-source-from-generation-builder',
+        status: 'runtime-input-source-ready',
+        contractName: 'Action -> Hit -> ThreeValueDelta',
+        generationLayerSourceKind: 'azpr-standard-three-value-generation-layer',
+        generationLayerStatus: 'standard-three-value-generation-layer-ready',
+        standardContract: {
+          sourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
+          status: 'action-hit-three-value-delta-contract-ready',
+          name: 'Action -> Hit -> ThreeValueDelta',
+          summary: {
+            actionCount: 1,
+            hitCount: 1,
+            deltaCount: 1,
+          },
+          deltas: [
+            {
+              id: 'action-001|hit-1|enemyHpDamage|applied|60|0',
+              actionId: 'action-001',
+              actionName: '普通攻击',
+              actionType: 'skill',
+              actorId: 'actor-001',
+              actorName: '末音',
+              hitKey: 'hit-1',
+              hitIndex: 1,
+              frameIndex: 60,
+              frameLabel: '1s0f',
+              timeMs: 1000,
+              trackKey: 'enemyHpDamage',
+              trackLabel: '敌人HP伤害',
+              layerKey: 'applied',
+              valueUnit: 'raw-damage',
+              delta: 800,
+              hpDelta: 800,
+              toughnessDelta: null,
+              energyDelta: null,
+              calculatorKey: 'azpr-hp-delta-calculator',
+              calculator: {
+                key: 'azpr-hp-delta-calculator',
+                outputField: 'hpDelta',
+                delta: 800,
+                replaceable: true,
+                appliedToRuntime: true,
+              },
+              applied: true,
+            },
+          ],
+        },
+        deltas: [
+          {
+            id: 'action-001|hit-1|enemyHpDamage|applied|60|0',
+            actionId: 'action-001',
+            actionName: '普通攻击',
+            actionType: 'skill',
+            actorId: 'actor-001',
+            actorName: '末音',
+            hitKey: 'hit-1',
+            hitIndex: 1,
+            frameIndex: 60,
+            frameLabel: '1s0f',
+            timeMs: 1000,
+            trackKey: 'enemyHpDamage',
+            trackLabel: '敌人HP伤害',
+            layerKey: 'applied',
+            valueUnit: 'raw-damage',
+            delta: 800,
+            hpDelta: 800,
+            toughnessDelta: null,
+            energyDelta: null,
+            calculatorKey: 'azpr-hp-delta-calculator',
+            applied: true,
+          },
+        ],
+      },
+      threeValueGenerationLayer: {
+        sourceKind: 'azpr-standard-three-value-generation-layer',
+        status: 'standard-three-value-generation-layer-ready',
+        deltas: [],
+      },
+    });
+
+    expect(runtimeProjection).toMatchObject({
+      sourceKind: 'azpr-runtime-projection-from-runtime-input-source',
+      status: 'runtime-projection-ready-from-runtime-input-source',
+      runtimeInput: {
+        sourceKind: 'azpr-runtime-input-from-generation-builder-source',
+        runtimeInputSourceKind:
+          'azpr-runtime-input-source-from-generation-builder',
+        runtimeInputSourceStatus: 'runtime-input-source-ready',
+        generationLayerSourceKind: 'azpr-standard-three-value-generation-layer',
+        generationLayerStatus: 'standard-three-value-generation-layer-ready',
+        summary: {
+          runtimeInputSourceKind:
+            'azpr-runtime-input-source-from-generation-builder',
+          standardContractSourceKind:
+            'azpr-action-hit-three-value-delta-standard-contract',
+          inputDeltaCount: 1,
+          appliedDeltaCount: 1,
+        },
+      },
+      summary: {
+        runtimeInputSourceKind: 'azpr-runtime-input-from-generation-builder-source',
+        runtimeInputSourceInputKind:
+          'azpr-runtime-input-source-from-generation-builder',
+        inputDeltaCount: 1,
+        appliedDeltaCount: 1,
+        enemyHpDelta: 800,
+        source: 'runtimeInputSource.applied-deltas',
+        simLogCount: 1,
+      },
+    });
+  });
 });

@@ -3,11 +3,16 @@ import {
   compareThreeValueGenerationDeltas,
 } from '../generation/threeValueGenerationLayer';
 
-export function createThreeValueRuntimeInput({ threeValueGenerationLayer }) {
-  const standardContract = resolveActionHitThreeValueDeltaStandardContract(
-    threeValueGenerationLayer
-  );
-  const inputDeltas = [...(standardContract?.deltas ?? [])].sort(
+export function createThreeValueRuntimeInput({
+  runtimeInputSource,
+  threeValueGenerationLayer,
+} = {}) {
+  const resolvedSource = resolveThreeValueRuntimeInputSource({
+    runtimeInputSource,
+    threeValueGenerationLayer,
+  });
+  const standardContract = resolvedSource.standardContract;
+  const inputDeltas = [...(resolvedSource.deltas ?? [])].sort(
     compareThreeValueGenerationDeltas
   );
   const appliedDeltas = inputDeltas
@@ -20,6 +25,7 @@ export function createThreeValueRuntimeInput({ threeValueGenerationLayer }) {
     ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME;
   const summary = summarizeThreeValueRuntimeInput({
     contractName,
+    resolvedSource,
     standardContract,
     inputDeltas,
     appliedDeltas,
@@ -28,7 +34,9 @@ export function createThreeValueRuntimeInput({ threeValueGenerationLayer }) {
 
   return {
     schemaVersion: 1,
-    sourceKind: 'azpr-runtime-input-from-three-value-generation-layer',
+    sourceKind: resolvedSource.runtimeInputSourceKind
+      ? 'azpr-runtime-input-from-generation-builder-source'
+      : 'azpr-runtime-input-from-three-value-generation-layer',
     status:
       appliedDeltas.length > 0
         ? 'runtime-input-ready-with-applied-deltas'
@@ -38,10 +46,10 @@ export function createThreeValueRuntimeInput({ threeValueGenerationLayer }) {
       standardContract?.sourceKind ??
       'azpr-action-hit-three-value-delta-standard-contract',
     inputStatus: standardContract?.status ?? null,
-    generationLayerSourceKind:
-      threeValueGenerationLayer?.sourceKind ??
-      'azpr-standard-three-value-generation-layer',
-    generationLayerStatus: threeValueGenerationLayer?.status ?? null,
+    runtimeInputSourceKind: resolvedSource.runtimeInputSourceKind,
+    runtimeInputSourceStatus: resolvedSource.runtimeInputSourceStatus,
+    generationLayerSourceKind: resolvedSource.generationLayerSourceKind,
+    generationLayerStatus: resolvedSource.generationLayerStatus,
     appliedOnly: true,
     deltas: appliedDeltas,
     appliedDeltas,
@@ -51,9 +59,38 @@ export function createThreeValueRuntimeInput({ threeValueGenerationLayer }) {
   };
 }
 
+function resolveThreeValueRuntimeInputSource({
+  runtimeInputSource,
+  threeValueGenerationLayer,
+}) {
+  const standardContract = resolveActionHitThreeValueDeltaStandardContract({
+    runtimeInputSource,
+    threeValueGenerationLayer,
+  });
+
+  return {
+    runtimeInputSourceKind: runtimeInputSource?.sourceKind ?? null,
+    runtimeInputSourceStatus: runtimeInputSource?.status ?? null,
+    generationLayerSourceKind:
+      runtimeInputSource?.generationLayerSourceKind ??
+      threeValueGenerationLayer?.sourceKind ??
+      'azpr-standard-three-value-generation-layer',
+    generationLayerStatus:
+      runtimeInputSource?.generationLayerStatus ??
+      threeValueGenerationLayer?.status ??
+      null,
+    standardContract,
+    deltas: runtimeInputSource?.deltas ?? standardContract?.deltas ?? [],
+  };
+}
+
 function resolveActionHitThreeValueDeltaStandardContract(
-  threeValueGenerationLayer
+  { runtimeInputSource, threeValueGenerationLayer } = {}
 ) {
+  if (runtimeInputSource?.standardContract) {
+    return runtimeInputSource.standardContract;
+  }
+
   if (threeValueGenerationLayer?.standardContract) {
     return threeValueGenerationLayer.standardContract;
   }
@@ -90,6 +127,7 @@ function normalizeRuntimeInputDelta(delta, runtimeSequenceIndex) {
 
 function summarizeThreeValueRuntimeInput({
   contractName,
+  resolvedSource,
   standardContract,
   inputDeltas,
   appliedDeltas,
@@ -101,6 +139,10 @@ function summarizeThreeValueRuntimeInput({
   );
   return {
     contractName,
+    runtimeInputSourceKind: resolvedSource.runtimeInputSourceKind,
+    runtimeInputSourceStatus: resolvedSource.runtimeInputSourceStatus,
+    generationLayerSourceKind: resolvedSource.generationLayerSourceKind,
+    generationLayerStatus: resolvedSource.generationLayerStatus,
     standardContractSourceKind: standardContract?.sourceKind ?? null,
     standardContractStatus: standardContract?.status ?? null,
     standardContractActionCount: standardContract?.summary?.actionCount ?? null,

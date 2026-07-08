@@ -3,9 +3,11 @@ import { createThreeValueRuntimeInput } from './threeValueRuntimeInput';
 
 export function createThreeValueRuntimeProjection({
   scenario,
+  runtimeInputSource,
   threeValueGenerationLayer,
 }) {
   const runtimeInput = createThreeValueRuntimeInput({
+    runtimeInputSource,
     threeValueGenerationLayer,
   });
   const appliedDeltas = runtimeInput.appliedDeltas;
@@ -36,10 +38,14 @@ export function createThreeValueRuntimeProjection({
 
   return {
     schemaVersion: 1,
-    sourceKind: 'azpr-runtime-projection-from-three-value-generation-layer',
+    sourceKind: runtimeInput.runtimeInputSourceKind
+      ? 'azpr-runtime-projection-from-runtime-input-source'
+      : 'azpr-runtime-projection-from-three-value-generation-layer',
     status:
       appliedDeltas.length > 0
-        ? 'runtime-projection-ready-from-generation-layer'
+        ? runtimeInput.runtimeInputSourceKind
+          ? 'runtime-projection-ready-from-runtime-input-source'
+          : 'runtime-projection-ready-from-generation-layer'
         : 'runtime-projection-ready-no-applied-deltas',
     inputContractName: runtimeInput.contractName,
     runtimeInput,
@@ -338,6 +344,10 @@ function summarizeThreeValueRuntimeProjection({
     inputDeltaCount: runtimeInput.summary.inputDeltaCount,
     runtimeInputStatus: runtimeInput.status,
     runtimeInputSourceKind: runtimeInput.sourceKind,
+    runtimeInputSourceInputKind: runtimeInput.runtimeInputSourceKind,
+    runtimeInputSourceInputStatus: runtimeInput.runtimeInputSourceStatus,
+    runtimeGenerationLayerSourceKind: runtimeInput.generationLayerSourceKind,
+    runtimeGenerationLayerStatus: runtimeInput.generationLayerStatus,
     runtimeInputIgnoredDeltaCount: runtimeInput.ignoredDeltaCount,
     appliedDeltaCount: appliedDeltas.length,
     enemyHpDelta: sumThreeValueRuntimeDeltas(appliedDeltas, 'hpDelta'),
@@ -372,7 +382,9 @@ function summarizeThreeValueRuntimeProjection({
       calculatorSummary.calculatorReplaceableDeltaCount,
     calculatorStatuses: calculatorSummary.statuses,
     calculatorSummary,
-    source: 'threeValueGenerationLayer.applied-deltas',
+    source: runtimeInput.runtimeInputSourceKind
+      ? 'runtimeInputSource.applied-deltas'
+      : 'threeValueGenerationLayer.applied-deltas',
     runtimeInputSource: 'threeValueRuntimeInput.appliedDeltas',
     appliedOnly: true,
     applied: true,

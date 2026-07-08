@@ -15166,3 +15166,93 @@ threeValueGenerationBundle.threeValueGenerationLayer
 - builder 测试覆盖：`createThreeValueGenerationBundle()` 同时返回 generation layer、standard contract、runtime input source、actions/hits/deltas，并保持引用一致。
 - 第一纵切测试覆盖：真实 Workbench 模拟结果暴露 `threeValueGenerationBundle` 与 `threeValueGenerationBundleSummary`；三值结果仍为 1 动作、6 命中、16 delta，runtime 只应用 1 个 HP delta。
 - `npm run test -- --run src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、14 条测试。
+
+## 191. 运行时层能力块：runtimeInputSource 直连
+
+本阶段属于运行时层。
+
+### 191.1 结构变化
+
+`createThreeValueRuntimeInput()` 新增一等输入：
+
+```js
+createThreeValueRuntimeInput({
+  runtimeInputSource,
+  threeValueGenerationLayer
+})
+```
+
+`runtimeInputSource` 优先级高于 `threeValueGenerationLayer`。当它存在时，runtime input 返回：
+
+```js
+{
+  sourceKind: 'azpr-runtime-input-from-generation-builder-source',
+  runtimeInputSourceKind,
+  runtimeInputSourceStatus,
+  generationLayerSourceKind,
+  generationLayerStatus,
+  inputSourceKind,
+  inputStatus,
+  appliedDeltas,
+  summary
+}
+```
+
+`summary` 同步增加：
+
+```js
+{
+  runtimeInputSourceKind,
+  runtimeInputSourceStatus,
+  generationLayerSourceKind,
+  generationLayerStatus,
+  standardContractSourceKind,
+  standardContractStatus,
+  inputDeltaCount,
+  appliedDeltaCount
+}
+```
+
+### 191.2 投影层接线
+
+`createThreeValueRuntimeProjection()` 新增可选输入：
+
+```js
+createThreeValueRuntimeProjection({
+  scenario,
+  runtimeInputSource,
+  threeValueGenerationLayer
+})
+```
+
+当 `runtimeInputSource` 存在时，runtime projection 的来源变为：
+
+```js
+{
+  sourceKind: 'azpr-runtime-projection-from-runtime-input-source',
+  status: 'runtime-projection-ready-from-runtime-input-source',
+  summary: {
+    source: 'runtimeInputSource.applied-deltas'
+  }
+}
+```
+
+`projectSimulationResult` 现在传入：
+
+```js
+runtimeInputSource: threeValueGenerationBundle.runtimeInputSource
+```
+
+旧的 `threeValueGenerationLayer` 参数仍保留为兼容回退。
+
+### 191.3 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化影响的是模拟结果结构和 runtime 输入路径：既有 `threeValueRuntimeProjection.runtimeInput.appliedDeltas` 仍保留；新增来源字段用于明确运行时来自 generation builder 的标准合同入口。
+
+### 191.4 验证
+
+- runtime 测试覆盖：当 `threeValueGenerationLayer.deltas` 为空但 `runtimeInputSource.deltas` 存在时，runtime projection 仍能输出 simLog、敌人状态曲线、资源曲线和 summary。
+- 第一纵切测试覆盖：真实 Workbench 模拟结果的 runtime 来源已切到 `runtimeInputSource.applied-deltas`，三值结果仍为 1 动作、6 命中、16 delta，runtime 只应用 1 个 HP delta。
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、16 条测试。

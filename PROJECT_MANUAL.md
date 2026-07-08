@@ -7438,6 +7438,29 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 切换到运行时层能力块：让 runtime 层进一步直接围绕 `standardContract` / `runtimeInputSource` 工作，并检查 `simLog`、`stateCurves`、资源曲线、summary 的输出边界。
 
+### 2026-07-09：运行时层能力块 - runtimeInputSource 直连
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- `createThreeValueRuntimeInput()` 支持直接消费 generation builder 提供的 `runtimeInputSource`，并保留旧的 `threeValueGenerationLayer` 兼容入口。
+- `createThreeValueRuntimeProjection()` 支持接收 `runtimeInputSource`；`projectSimulationResult` 现在把 `threeValueGenerationBundle.runtimeInputSource` 传给 runtime。
+- runtime 的 `simLog`、敌人状态曲线、角色自身能量曲线和 summary 仍只应用 `applied=true` 的 delta；候选、采样和占位不改变运行总值。
+- 本阶段不新增公式推断、不修改三值数值、不扩大证据展示。
+
+当前验证事实：
+
+- 第一纵切结果仍保持 1 动作、6 命中、16 delta、runtime 只应用 1 个 HP delta；runtime summary 的来源已切到 `runtimeInputSource.applied-deltas`。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、16 条测试。
+
+下一步：
+
+- 继续运行时层能力块：梳理 `simLog`、`stateCurves`、资源曲线和 summary 的输出合同，减少 UI 对 runtime 内部派生字段的猜测。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -1516,10 +1516,17 @@ describe('first vertical slice simulation', () => {
     });
     expect(result.threeValueGenerationLayer.hits).toHaveLength(6);
     expect(result.threeValueRuntimeProjection.runtimeInput).toMatchObject({
+      sourceKind: 'azpr-runtime-input-from-generation-builder-source',
       inputSourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
       inputStatus: 'action-hit-three-value-delta-contract-ready',
+      runtimeInputSourceKind:
+        'azpr-runtime-input-source-from-generation-builder',
+      runtimeInputSourceStatus: 'runtime-input-source-ready',
       generationLayerSourceKind: 'azpr-standard-three-value-generation-layer',
       summary: {
+        runtimeInputSourceKind:
+          'azpr-runtime-input-source-from-generation-builder',
+        runtimeInputSourceStatus: 'runtime-input-source-ready',
         standardContractActionCount: 1,
         standardContractHitCount: 6,
         inputDeltaCount: 16,
@@ -1550,7 +1557,8 @@ describe('first vertical slice simulation', () => {
       },
     });
     expect(result.threeValueRuntimeProjection).toMatchObject({
-      status: 'runtime-projection-ready-from-generation-layer',
+      sourceKind: 'azpr-runtime-projection-from-runtime-input-source',
+      status: 'runtime-projection-ready-from-runtime-input-source',
       inputContractName: 'Action -> Hit -> ThreeValueDelta',
       appliedOnly: true,
       enemyStateCurve: {
@@ -1589,6 +1597,13 @@ describe('first vertical slice simulation', () => {
       },
       summary: {
         inputDeltaCount: 16,
+        runtimeInputSourceKind:
+          'azpr-runtime-input-from-generation-builder-source',
+        runtimeInputSourceInputKind:
+          'azpr-runtime-input-source-from-generation-builder',
+        runtimeInputSourceInputStatus: 'runtime-input-source-ready',
+        runtimeGenerationLayerSourceKind:
+          'azpr-standard-three-value-generation-layer',
         appliedDeltaCount: 1,
         enemyHpDelta: 12461,
         enemyToughnessDelta: 0,
@@ -1618,7 +1633,7 @@ describe('first vertical slice simulation', () => {
           ]),
           appliedToRuntimeCount: 1,
         },
-        source: 'threeValueGenerationLayer.applied-deltas',
+        source: 'runtimeInputSource.applied-deltas',
         applied: true,
       },
       applied: true,

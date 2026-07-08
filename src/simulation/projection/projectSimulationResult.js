@@ -1423,6 +1423,7 @@ export function projectSimulationResult({
     threeValueGenerationBundle.threeValueGenerationLayer;
   const threeValueRuntimeProjection = createThreeValueRuntimeProjection({
     scenario,
+    runtimeInputSource: threeValueGenerationBundle.runtimeInputSource,
     threeValueGenerationLayer,
   });
   const damageTimeline = damageEvents.map(event => ({
