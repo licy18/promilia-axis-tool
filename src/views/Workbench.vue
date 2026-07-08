@@ -106,6 +106,23 @@
       :data-main-flow-dispatch-state-point-id="
         workbenchFlowModel.mainFlowDispatchResult.statePointId
       "
+      :data-main-flow-loop-step="workbenchFlowModel.mainFlowLoopState.step"
+      :data-main-flow-loop-status="workbenchFlowModel.mainFlowLoopState.status"
+      :data-main-flow-loop-recovery-needed="
+        workbenchFlowModel.mainFlowLoopState.recoveryNeeded ? 'true' : 'false'
+      "
+      :data-main-flow-loop-next-action-kind="
+        workbenchFlowModel.mainFlowLoopState.nextActionKind
+      "
+      :data-main-flow-loop-next-target-kind="
+        workbenchFlowModel.mainFlowLoopState.nextTargetKind
+      "
+      :data-main-flow-loop-current-region="
+        workbenchFlowModel.mainFlowLoopState.currentRegion
+      "
+      :data-main-flow-loop-next-region="
+        workbenchFlowModel.mainFlowLoopState.nextRegion
+      "
       data-testid="workbench-main-flow-workspace"
     >
       <ActionLibraryPanel

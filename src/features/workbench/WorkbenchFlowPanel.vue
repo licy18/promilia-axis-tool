@@ -63,6 +63,17 @@
     :data-main-flow-dispatch-reason="
       workbenchFlow.mainFlowDispatchResult.reason
     "
+    :data-main-flow-loop-step="workbenchFlow.mainFlowLoopState.step"
+    :data-main-flow-loop-status="workbenchFlow.mainFlowLoopState.status"
+    :data-main-flow-loop-recovery-needed="
+      workbenchFlow.mainFlowLoopState.recoveryNeeded ? 'true' : 'false'
+    "
+    :data-main-flow-loop-next-action-kind="
+      workbenchFlow.mainFlowLoopState.nextActionKind
+    "
+    :data-main-flow-loop-next-target-kind="
+      workbenchFlow.mainFlowLoopState.nextTargetKind
+    "
     data-testid="workbench-flow-panel"
   >
     <div class="flow-main">

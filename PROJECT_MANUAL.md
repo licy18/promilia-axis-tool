@@ -8583,6 +8583,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：基于 `mainFlowDispatchResult` 对运行回看/回改/刷新回看链路做统一闭环控制，优先处理真实主路径的状态转换，而不是扩展局部提示文案。
 
+### 2026-07-09：UI 主流程能力块 - Main Flow Loop State Contract
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `WorkbenchFlowModel` 新增 `mainFlowLoopState`，把主流程当前步骤、闭环状态、下一 action、下一目标区域和失败恢复需求统一成一个模型合同。
+- Workbench 主流程工作区和 `WorkbenchFlowPanel` 开始消费同一份 loop state，使运行回看、回改动作、刷新结果回看可以从同一闭环状态继续推进。
+- loop state 将 dispatch result 与当前 phase/selection/mainFlowState 合并，区分 ready、advanced、blocked 三种主流程推进状态。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- flow model 单元测试覆盖 action edit、edit result ready、edit result review，以及 handled/failed dispatch 下的 loop state。
+- Workbench 页面测试确认主流程工作区和主流程面板同步消费 loop state。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、185 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：基于 `mainFlowLoopState` 把主流程成功推进和失败恢复具体接入操作路径，使闭环状态进一步驱动实际回看/回改流程。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

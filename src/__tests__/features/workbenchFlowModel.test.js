@@ -74,6 +74,18 @@ describe('workbench flow model', () => {
       hasRuntimeSelection: false,
       hasPendingRuntimeResult: false,
     });
+    expect(model.mainFlowLoopState).toMatchObject({
+      step: 'action-edit',
+      status: 'ready',
+      recoveryNeeded: false,
+      currentRegion: WORKBENCH_MAIN_FLOW_REGIONS.ACTION_EDIT,
+      nextRegion: WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW,
+      nextActionKind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+      nextTargetKind: 'runtime-results',
+      canRunNextAction: true,
+      targetActionId: 'action-0002',
+      targetStatePointId: '',
+    });
     expect(model.runtimeNavigation.count).toBe(2);
     expect(model.runtimeNavigation.index).toBe(-1);
     expect(model.runtimeNavigation.label).toBe('-/2');
@@ -227,6 +239,17 @@ describe('workbench flow model', () => {
       hasRuntimeSelection: false,
       hasPendingRuntimeResult: true,
     });
+    expect(readyModel.mainFlowLoopState).toMatchObject({
+      step: 'edit-result-ready',
+      status: 'ready',
+      currentRegion: WORKBENCH_MAIN_FLOW_REGIONS.ACTION_EDIT,
+      nextRegion: WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW,
+      nextActionKind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+      nextTargetKind: 'runtime-result-return',
+      canRunNextAction: true,
+      targetActionId: 'action-0002',
+      targetStatePointId: secondPoint.statePointId,
+    });
 
     const reviewModel = createWorkbenchFlowModel({
       runtimeProjection,
@@ -283,6 +306,17 @@ describe('workbench flow model', () => {
       refreshedRuntimeStatePointId: secondPoint.statePointId,
       hasRuntimeSelection: true,
       hasPendingRuntimeResult: false,
+    });
+    expect(reviewModel.mainFlowLoopState).toMatchObject({
+      step: 'edit-result-review',
+      status: 'ready',
+      currentRegion: WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW,
+      nextRegion: WORKBENCH_MAIN_FLOW_REGIONS.ACTION_EDIT,
+      nextActionKind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+      nextTargetKind: 'runtime-action-edit',
+      canRunNextAction: true,
+      targetActionId: 'action-0002',
+      targetStatePointId: secondPoint.statePointId,
     });
     expect(
       resolveWorkbenchMainFlowActionEditTarget({
@@ -369,6 +403,14 @@ describe('workbench flow model', () => {
       reason: '',
       actionId: 'action-0001',
     });
+    expect(handledModel.mainFlowLoopState).toMatchObject({
+      status: 'advanced',
+      recoveryNeeded: false,
+      lastDispatchStatus: 'handled',
+      lastDispatchKind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+      lastDispatchHandled: true,
+      lastDispatchReason: '',
+    });
 
     const failedModel = createWorkbenchFlowModel({
       flowDispatchState: {
@@ -389,6 +431,14 @@ describe('workbench flow model', () => {
       source: 'test-flow-source',
       reason: 'unsupported-flow-action-kind',
       statePointId: 'runtime-point-for-failure',
+    });
+    expect(failedModel.mainFlowLoopState).toMatchObject({
+      status: 'blocked',
+      recoveryNeeded: true,
+      lastDispatchStatus: 'failed',
+      lastDispatchKind: 'unsupported-flow-action',
+      lastDispatchHandled: false,
+      lastDispatchReason: 'unsupported-flow-action-kind',
     });
   });
 

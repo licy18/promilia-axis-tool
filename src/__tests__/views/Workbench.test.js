@@ -122,12 +122,24 @@ describe('Workbench view', () => {
       'data-main-flow-dispatch-source': '',
       'data-main-flow-dispatch-handler-key': '',
       'data-main-flow-dispatch-reason': '',
+      'data-main-flow-loop-step': 'action-edit',
+      'data-main-flow-loop-status': 'ready',
+      'data-main-flow-loop-recovery-needed': 'false',
+      'data-main-flow-loop-next-action-kind': 'open-runtime-results',
+      'data-main-flow-loop-next-target-kind': 'runtime-results',
+      'data-main-flow-loop-current-region': 'action-edit',
+      'data-main-flow-loop-next-region': 'runtime-review',
     });
     expect(flowPanel.attributes()).toMatchObject({
       'data-main-flow-dispatch-sequence': '0',
       'data-main-flow-dispatch-status': 'idle',
       'data-main-flow-dispatch-handled': 'false',
       'data-main-flow-dispatch-kind': '',
+      'data-main-flow-loop-step': 'action-edit',
+      'data-main-flow-loop-status': 'ready',
+      'data-main-flow-loop-recovery-needed': 'false',
+      'data-main-flow-loop-next-action-kind': 'open-runtime-results',
+      'data-main-flow-loop-next-target-kind': 'runtime-results',
     });
     const primaryFlow = wrapper.find('[data-testid="workbench-primary-flow"]');
     expect(primaryFlow.exists()).toBe(true);
@@ -1795,6 +1807,13 @@ describe('Workbench view', () => {
       'data-main-flow-dispatch-reason': '',
       'data-main-flow-dispatch-action-id': 'action-0001',
       'data-main-flow-dispatch-state-point-id': '',
+      'data-main-flow-loop-step': 'runtime-review',
+      'data-main-flow-loop-status': 'advanced',
+      'data-main-flow-loop-recovery-needed': 'false',
+      'data-main-flow-loop-next-action-kind': 'focus-runtime-action',
+      'data-main-flow-loop-next-target-kind': 'runtime-action-edit',
+      'data-main-flow-loop-current-region': 'runtime-review',
+      'data-main-flow-loop-next-region': 'action-edit',
     });
     expect(focusedFlowPanel.attributes()).toMatchObject({
       'data-main-flow-dispatch-sequence': '1',
@@ -1804,6 +1823,11 @@ describe('Workbench view', () => {
       'data-main-flow-dispatch-source': 'workbench-flow-panel',
       'data-main-flow-dispatch-handler-key': 'openRuntimeResults',
       'data-main-flow-dispatch-reason': '',
+      'data-main-flow-loop-step': 'runtime-review',
+      'data-main-flow-loop-status': 'advanced',
+      'data-main-flow-loop-recovery-needed': 'false',
+      'data-main-flow-loop-next-action-kind': 'focus-runtime-action',
+      'data-main-flow-loop-next-target-kind': 'runtime-action-edit',
     });
     expect(
       wrapper
@@ -2170,6 +2194,11 @@ describe('Workbench view', () => {
       'data-main-flow-dispatch-reason': 'unsupported-flow-action-kind',
       'data-main-flow-dispatch-action-id': '',
       'data-main-flow-dispatch-state-point-id': 'runtime-point-for-failure',
+      'data-main-flow-loop-step': 'action-edit',
+      'data-main-flow-loop-status': 'blocked',
+      'data-main-flow-loop-recovery-needed': 'true',
+      'data-main-flow-loop-next-action-kind': 'open-runtime-results',
+      'data-main-flow-loop-next-target-kind': 'runtime-results',
     });
   });
 

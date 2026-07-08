@@ -18349,3 +18349,79 @@ failed
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、60 条测试。
 - `npm run test -- --run`：通过，33 个测试文件、185 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 234. UI 主流程能力块：Main Flow Loop State Contract
+
+### 234.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果，只在 `WorkbenchFlowModel` 中新增主流程闭环状态。
+
+新增枚举：
+
+```js
+WORKBENCH_MAIN_FLOW_LOOP_STATUSES
+WORKBENCH_MAIN_FLOW_LOOP_STEPS
+```
+
+`createWorkbenchFlowModel` 新增输出：
+
+```js
+mainFlowLoopState
+```
+
+当前字段：
+
+```js
+{
+  step,
+  status,
+  recoveryNeeded,
+  currentRegion,
+  nextRegion,
+  nextActionKind,
+  nextTargetKind,
+  canRunNextAction,
+  targetActionId,
+  targetStatePointId,
+  lastDispatchStatus,
+  lastDispatchKind,
+  lastDispatchHandled,
+  lastDispatchReason
+}
+```
+
+`status` 当前取值：
+
+```text
+ready
+advanced
+blocked
+```
+
+`step` 当前取值：
+
+```text
+action-edit
+runtime-overview
+runtime-review
+edit-result-ready
+edit-result-review
+```
+
+`mainFlowLoopState` 由 `phase`、`mainFlowState`、`mainFlowSelection` 和 `mainFlowDispatchResult` 派生，用于描述主流程当前步骤、下一 action、下一目标区域和是否需要失败恢复。
+
+`Workbench.vue` 与 `WorkbenchFlowPanel` 新增消费 `mainFlowLoopState` 的诊断属性，后续主流程 UI 可以基于同一模型合同驱动运行回看/回改/刷新回看闭环。
+
+### 234.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、localStorage 草稿结构或任何游戏数据表结构。
+
+该变化只影响 Workbench UI 主流程模型的运行时状态；`simLog`、`stateCurves`、资源曲线、summary 和三值数值结果不变。
+
+### 234.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖 action edit、edit result ready、edit result review，以及 handled/failed dispatch 下的 loop state。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认 Workbench 主流程工作区和 `WorkbenchFlowPanel` 消费同一份 loop state。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、185 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

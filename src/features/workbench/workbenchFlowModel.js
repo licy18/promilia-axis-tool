@@ -35,6 +35,20 @@ export const WORKBENCH_MAIN_FLOW_REGIONS = Object.freeze({
   RUNTIME_REVIEW: 'runtime-review',
 });
 
+export const WORKBENCH_MAIN_FLOW_LOOP_STATUSES = Object.freeze({
+  READY: 'ready',
+  ADVANCED: 'advanced',
+  BLOCKED: 'blocked',
+});
+
+export const WORKBENCH_MAIN_FLOW_LOOP_STEPS = Object.freeze({
+  ACTION_EDIT: 'action-edit',
+  RUNTIME_OVERVIEW: 'runtime-overview',
+  RUNTIME_REVIEW: 'runtime-review',
+  EDIT_RESULT_READY: 'edit-result-ready',
+  EDIT_RESULT_REVIEW: 'edit-result-review',
+});
+
 export function createWorkbenchFlowAction({
   kind = '',
   source = '',
@@ -135,6 +149,12 @@ export function createWorkbenchFlowModel({
   });
   const mainFlowDispatchResult =
     createWorkbenchMainFlowDispatchResult(flowDispatchState);
+  const mainFlowLoopState = createWorkbenchMainFlowLoopState({
+    phase,
+    mainFlowState,
+    mainFlowSelection,
+    mainFlowDispatchResult,
+  });
 
   return {
     phase,
@@ -155,6 +175,7 @@ export function createWorkbenchFlowModel({
     mainFlowState,
     mainFlowSelection,
     mainFlowDispatchResult,
+    mainFlowLoopState,
     runtimeNavigation: {
       points: runtimeNavigationPoints,
       count: runtimeNavigationPoints.length,
@@ -193,6 +214,35 @@ export function createWorkbenchMainFlowDispatchResult(dispatchState = null) {
     reason: dispatchState?.reason ?? '',
     actionId: dispatchState?.actionId ?? '',
     statePointId: dispatchState?.statePointId ?? '',
+  };
+}
+
+export function createWorkbenchMainFlowLoopState({
+  phase = '',
+  mainFlowState = null,
+  mainFlowSelection = null,
+  mainFlowDispatchResult = null,
+} = {}) {
+  const primaryAction = mainFlowState?.primaryAction ?? {};
+  const dispatchStatus = mainFlowDispatchResult?.status ?? 'idle';
+  const recoveryNeeded = dispatchStatus === 'failed';
+  return {
+    step: resolveMainFlowLoopStep(phase),
+    status: resolveMainFlowLoopStatus(mainFlowDispatchResult),
+    recoveryNeeded,
+    currentRegion: mainFlowSelection?.currentRegion ?? '',
+    nextRegion: mainFlowSelection?.nextRegion ?? '',
+    nextActionKind: primaryAction.kind ?? '',
+    nextTargetKind: mainFlowState?.nextTargetKind ?? '',
+    canRunNextAction: Boolean(primaryAction.enabled),
+    targetActionId: primaryAction.actionId ?? '',
+    targetStatePointId: primaryAction.statePointId ?? '',
+    lastDispatchStatus: dispatchStatus,
+    lastDispatchKind: mainFlowDispatchResult?.kind ?? '',
+    lastDispatchHandled: Boolean(mainFlowDispatchResult?.handled),
+    lastDispatchReason: recoveryNeeded
+      ? (mainFlowDispatchResult?.reason ?? '')
+      : '',
   };
 }
 
@@ -406,6 +456,32 @@ function resolveMainFlowInspectorMode({
     return 'edit-result';
   }
   return 'action-properties';
+}
+
+function resolveMainFlowLoopStep(phase = '') {
+  if (phase === WORKBENCH_FLOW_PHASES.RUNTIME_RESULT) {
+    return WORKBENCH_MAIN_FLOW_LOOP_STEPS.RUNTIME_REVIEW;
+  }
+  if (phase === WORKBENCH_FLOW_PHASES.EDIT_RESULT_REVIEW) {
+    return WORKBENCH_MAIN_FLOW_LOOP_STEPS.EDIT_RESULT_REVIEW;
+  }
+  if (phase === WORKBENCH_FLOW_PHASES.EDIT_RESULT_READY) {
+    return WORKBENCH_MAIN_FLOW_LOOP_STEPS.EDIT_RESULT_READY;
+  }
+  if (phase === WORKBENCH_FLOW_PHASES.RUNTIME_OVERVIEW) {
+    return WORKBENCH_MAIN_FLOW_LOOP_STEPS.RUNTIME_OVERVIEW;
+  }
+  return WORKBENCH_MAIN_FLOW_LOOP_STEPS.ACTION_EDIT;
+}
+
+function resolveMainFlowLoopStatus(dispatchResult = null) {
+  if (dispatchResult?.status === 'failed') {
+    return WORKBENCH_MAIN_FLOW_LOOP_STATUSES.BLOCKED;
+  }
+  if (dispatchResult?.status === 'handled') {
+    return WORKBENCH_MAIN_FLOW_LOOP_STATUSES.ADVANCED;
+  }
+  return WORKBENCH_MAIN_FLOW_LOOP_STATUSES.READY;
 }
 
 function createWorkbenchFlowEditResult(context) {
