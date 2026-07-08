@@ -12398,3 +12398,85 @@ data-detail-key="point|action|delta|cumulative|state"
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DO 应继续补曲线点前后切换或邻近点导航。
+
+## 148. 阶段 5-8DO：资源曲线邻近点导航
+
+阶段目标：
+
+- 让用户能从当前选中三值点快速切换到前后邻近结果点，提升曲线巡检效率。
+
+### 148.1 数据结构变化
+
+本阶段不新增保存字段，不变更 `Project` schema、simulation 输出或 localStorage 数据。
+
+新增的是 `ResourceMonitorPanel` 内部前端派生：
+
+```js
+runtimeCurveNavigationPoints
+selectedRuntimeCurvePointIndex
+selectedRuntimeCurvePreviousPoint
+selectedRuntimeCurveNextPoint
+```
+
+派生来源：
+
+```text
+runtimeCurveSourceSeries
+props.selectedStateCurvePointId
+```
+
+排序规则：
+
+```text
+frameIndex -> sequenceIndex -> track order -> seriesIndex -> pointIndex
+```
+
+当前轨道顺序：
+
+```text
+enemyHpDamage -> enemyToughnessDamage -> selfEnergyChange
+```
+
+这些字段只用于资源曲线面板导航，不作为持久化数据。
+
+### 148.2 DOM 状态
+
+`workbench-runtime-resource-chart-selection` 新增：
+
+```html
+data-navigation-count
+data-navigation-index
+data-previous-state-point-id
+data-next-state-point-id
+```
+
+新增按钮：
+
+```html
+data-testid="workbench-runtime-resource-chart-selection-prev"
+data-testid="workbench-runtime-resource-chart-selection-next"
+data-testid="workbench-runtime-resource-chart-selection-index"
+```
+
+按钮点击继续复用既有事件：
+
+```js
+select-runtime-state-point
+```
+
+### 148.3 验证
+
+当前测试覆盖：
+
+- 新增资源动作后，资源曲线存在多个 runtime state point。
+- 选中第一个曲线点后，摘要区写入 `data-navigation-count > 1` 和 `data-navigation-index="0"`。
+- 点击下一点后，资源曲线选中点、运行日志选中行和独立“三值详情”同步到 next state point。
+- 点击上一点后，摘要区回到原 state point。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DP 应继续补从曲线点/三值详情反向定位对应动作和编辑控件的路径。

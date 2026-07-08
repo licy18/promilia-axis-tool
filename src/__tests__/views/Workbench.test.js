@@ -1999,9 +1999,16 @@ describe('Workbench view', () => {
       },
     });
 
-    const runtimeCurvePoint = wrapper.find(
-      '[data-testid="workbench-runtime-resource-chart-point"]'
-    );
+    await wrapper
+      .find('[data-testid="workbench-add-resource-action"]')
+      .trigger('click');
+    await nextTick();
+
+    const runtimeCurvePoints = wrapper
+      .findAll('[data-testid="workbench-runtime-resource-chart-point"]')
+      .filter(point => point.attributes('data-state-point-id'));
+    expect(runtimeCurvePoints.length).toBeGreaterThan(1);
+    const runtimeCurvePoint = runtimeCurvePoints[0];
     const statePointId = runtimeCurvePoint.attributes('data-state-point-id');
 
     expect(statePointId).toBeTruthy();
@@ -2071,6 +2078,8 @@ describe('Workbench view', () => {
     expect(runtimeCurveSelection.attributes('data-runtime-focus-source')).toBe(
       'manual'
     );
+    expect(Number(runtimeCurveSelection.attributes('data-navigation-count'))).toBeGreaterThan(1);
+    expect(runtimeCurveSelection.attributes('data-navigation-index')).toBe('0');
     expect(runtimeCurveSelection.text()).toContain('手动选择');
     const runtimeCurveSelectionRows = Object.fromEntries(
       runtimeCurveSelection
@@ -2093,6 +2102,59 @@ describe('Workbench view', () => {
     expect(runtimeCurveSelectionRows.state.text()).toBe(
       '剩余0 · 溢出 3,833'
     );
+
+    const nextButton = runtimeCurveSelection.find(
+      '[data-testid="workbench-runtime-resource-chart-selection-next"]'
+    );
+    const nextStatePointId = nextButton.attributes('data-state-point-id');
+    expect(nextStatePointId).toBeTruthy();
+    expect(nextButton.attributes('disabled')).toBeUndefined();
+
+    await nextButton.trigger('click');
+    await nextTick();
+
+    const nextRuntimeCurveSelection = wrapper.find(
+      '[data-testid="workbench-runtime-resource-chart-selection"]'
+    );
+    expect(nextRuntimeCurveSelection.attributes('data-state-point-id')).toBe(
+      nextStatePointId
+    );
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-runtime-resource-chart-point"][data-state-point-id="${nextStatePointId}"]`
+        )
+        .attributes('data-selected')
+    ).toBe('true');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(nextStatePointId);
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${nextStatePointId}"]`
+        )
+        .attributes('data-selected')
+    ).toBe('true');
+
+    const previousButton = nextRuntimeCurveSelection.find(
+      '[data-testid="workbench-runtime-resource-chart-selection-prev"]'
+    );
+    expect(previousButton.attributes('data-state-point-id')).toBe(
+      statePointId
+    );
+    expect(previousButton.attributes('disabled')).toBeUndefined();
+
+    await previousButton.trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-resource-chart-selection"]')
+        .attributes('data-state-point-id')
+    ).toBe(statePointId);
   });
 
   it('links applied state curve points to the shared runtime detail', async () => {

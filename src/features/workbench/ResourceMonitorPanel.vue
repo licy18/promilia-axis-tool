@@ -189,6 +189,14 @@
           v-if="selectedRuntimeCurvePoint"
           class="runtime-curve-selection"
           :data-curve-mode="runtimeCurveMode"
+          :data-navigation-count="runtimeCurveNavigationPoints.length"
+          :data-navigation-index="selectedRuntimeCurvePointIndex"
+          :data-next-state-point-id="
+            selectedRuntimeCurveNextPoint?.statePointId ?? ''
+          "
+          :data-previous-state-point-id="
+            selectedRuntimeCurvePreviousPoint?.statePointId ?? ''
+          "
           :data-runtime-focus-source="runtimeFocusSource || 'manual'"
           :data-series-key="selectedRuntimeCurvePoint.seriesKey"
           :data-state-point-id="selectedRuntimeCurvePoint.statePointId"
@@ -199,6 +207,45 @@
             <span>选中点</span>
             <strong>{{ selectedRuntimeCurvePoint.seriesLabel }}</strong>
             <small>{{ formatRuntimeCurveSelectionSource(runtimeFocusSource) }}</small>
+            <div class="runtime-curve-selection-nav">
+              <button
+                type="button"
+                :data-state-point-id="
+                  selectedRuntimeCurvePreviousPoint?.statePointId ?? ''
+                "
+                data-testid="workbench-runtime-resource-chart-selection-prev"
+                :disabled="!selectedRuntimeCurvePreviousPoint"
+                title="上一个三值点"
+                aria-label="上一个三值点"
+                @click="
+                  selectRuntimeCurveAdjacentPoint(
+                    selectedRuntimeCurvePreviousPoint
+                  )
+                "
+              >
+                <ArrowLeft class="runtime-curve-nav-icon" />
+              </button>
+              <span
+                data-testid="workbench-runtime-resource-chart-selection-index"
+              >
+                {{ formatRuntimeCurveSelectionIndex() }}
+              </span>
+              <button
+                type="button"
+                :data-state-point-id="
+                  selectedRuntimeCurveNextPoint?.statePointId ?? ''
+                "
+                data-testid="workbench-runtime-resource-chart-selection-next"
+                :disabled="!selectedRuntimeCurveNextPoint"
+                title="下一个三值点"
+                aria-label="下一个三值点"
+                @click="
+                  selectRuntimeCurveAdjacentPoint(selectedRuntimeCurveNextPoint)
+                "
+              >
+                <ArrowRight class="runtime-curve-nav-icon" />
+              </button>
+            </div>
           </div>
           <div class="runtime-curve-selection-grid">
             <div
@@ -253,7 +300,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import { TrendCharts } from '@element-plus/icons-vue';
+import { ArrowLeft, ArrowRight, TrendCharts } from '@element-plus/icons-vue';
 import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
 
 const RUNTIME_CURVE_CHART_WIDTH = 320;
@@ -264,6 +311,11 @@ const RUNTIME_CURVE_COLORS = {
   enemyHpDamage: '#ef767a',
   enemyToughnessDamage: '#e8c36a',
   selfEnergyChange: '#79c7b9',
+};
+const RUNTIME_CURVE_TRACK_ORDER = {
+  enemyHpDamage: 0,
+  enemyToughnessDamage: 1,
+  selfEnergyChange: 2,
 };
 const RUNTIME_CURVE_MODES = [
   { key: 'delta', label: '累计变化' },
@@ -346,30 +398,61 @@ const runtimeCurveZeroY = computed(() =>
   scaleRuntimeCurveValue(0, runtimeCurveDomain.value)
 );
 
-const selectedRuntimeCurvePoint = computed(() => {
-  if (!props.selectedStateCurvePointId) {
-    return null;
-  }
-  for (const series of runtimeCurveSourceSeries.value) {
-    const point = (series.points ?? []).find(
-      item => item.statePointId === props.selectedStateCurvePointId
-    );
-    if (point) {
-      return {
+const runtimeCurveNavigationPoints = computed(() =>
+  runtimeCurveSourceSeries.value
+    .flatMap((series, seriesIndex) =>
+      (series.points ?? []).map((point, pointIndex) => ({
         ...point,
         seriesKey: series.key,
         seriesLabel: series.label,
         seriesColor: series.color,
+        seriesIndex,
+        pointIndex,
         trackKey: series.trackKey,
         actorId: series.actorId,
-      };
-    }
+      }))
+    )
+    .sort(compareRuntimeCurveNavigationPoints)
+);
+
+const selectedRuntimeCurvePointIndex = computed(() => {
+  if (!props.selectedStateCurvePointId) {
+    return -1;
   }
-  return null;
+  return runtimeCurveNavigationPoints.value.findIndex(
+    item => item.statePointId === props.selectedStateCurvePointId
+  );
+});
+
+const selectedRuntimeCurvePoint = computed(() => {
+  if (selectedRuntimeCurvePointIndex.value < 0) {
+    return null;
+  }
+  return (
+    runtimeCurveNavigationPoints.value[selectedRuntimeCurvePointIndex.value] ??
+    null
+  );
 });
 
 const selectedRuntimeCurvePointRows = computed(() =>
   createSelectedRuntimeCurvePointRows(selectedRuntimeCurvePoint.value)
+);
+
+const selectedRuntimeCurvePreviousPoint = computed(() =>
+  selectedRuntimeCurvePointIndex.value > 0
+    ? runtimeCurveNavigationPoints.value[
+        selectedRuntimeCurvePointIndex.value - 1
+      ]
+    : null
+);
+
+const selectedRuntimeCurveNextPoint = computed(() =>
+  selectedRuntimeCurvePointIndex.value >= 0 &&
+  selectedRuntimeCurvePointIndex.value < runtimeCurveNavigationPoints.value.length - 1
+    ? runtimeCurveNavigationPoints.value[
+        selectedRuntimeCurvePointIndex.value + 1
+      ]
+    : null
 );
 
 function formatSigned(value) {
@@ -741,6 +824,14 @@ function formatRuntimeCurveSelectionSource(source) {
   return '手动选择';
 }
 
+function formatRuntimeCurveSelectionIndex() {
+  const total = runtimeCurveNavigationPoints.value.length;
+  if (selectedRuntimeCurvePointIndex.value < 0 || total <= 0) {
+    return `0/${total}`;
+  }
+  return `${selectedRuntimeCurvePointIndex.value + 1}/${total}`;
+}
+
 function formatRuntimeTrackLabel(trackKey) {
   if (trackKey === 'enemyHpDamage') {
     return '敌人 HP';
@@ -778,6 +869,28 @@ function selectRuntimeCurvePoint(point) {
     return;
   }
   emit('select-runtime-state-point', point.statePointId);
+}
+
+function selectRuntimeCurveAdjacentPoint(point) {
+  if (!point?.statePointId) {
+    return;
+  }
+  emit('select-runtime-state-point', point.statePointId);
+}
+
+function compareRuntimeCurveNavigationPoints(left, right) {
+  return (
+    compareRuntimeCurvePoints(left, right) ||
+    getRuntimeCurveTrackOrder(left.trackKey) -
+      getRuntimeCurveTrackOrder(right.trackKey) ||
+    (numberOrNull(left.seriesIndex) ?? 0) -
+      (numberOrNull(right.seriesIndex) ?? 0) ||
+    (numberOrNull(left.pointIndex) ?? 0) - (numberOrNull(right.pointIndex) ?? 0)
+  );
+}
+
+function getRuntimeCurveTrackOrder(trackKey) {
+  return RUNTIME_CURVE_TRACK_ORDER[trackKey] ?? 99;
 }
 
 function compareRuntimeCurvePoints(left, right) {
@@ -1055,7 +1168,7 @@ h2 {
 
 .runtime-curve-selection-heading {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
   gap: 7px;
   min-width: 0;
@@ -1077,6 +1190,43 @@ h2 {
 .runtime-curve-selection-heading small {
   color: #79c7b9;
   white-space: nowrap;
+}
+
+.runtime-curve-selection-nav {
+  display: grid;
+  grid-template-columns: 24px auto 24px;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.runtime-curve-selection-nav button {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #dff9f3;
+  cursor: pointer;
+}
+
+.runtime-curve-selection-nav button:disabled {
+  color: #6d7780;
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.runtime-curve-selection-nav span {
+  color: #aeb8c1;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.runtime-curve-nav-icon {
+  width: 13px;
+  height: 13px;
 }
 
 .runtime-curve-selection-grid {
