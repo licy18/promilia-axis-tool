@@ -2145,7 +2145,7 @@ describe('Workbench view', () => {
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-selection-filtered"]')
         .text()
-    ).toBe('选中三值点不在当前日志筛选内');
+    ).toContain('选中三值点不在当前日志筛选内');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-row"]')
@@ -2153,12 +2153,27 @@ describe('Workbench view', () => {
     ).toBe('false');
 
     await wrapper
-      .find(
-        '[data-testid="workbench-runtime-sim-log-track-filter"][data-track-filter="all"]'
-      )
+      .find('[data-testid="workbench-runtime-sim-log-show-selected"]')
       .trigger('click');
     await nextTick();
 
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-filter-count"]')
+        .text()
+    ).toBe('1/2');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-runtime-sim-log-track-filter"][data-track-filter="enemyHpDamage"]'
+        )
+        .attributes('data-active')
+    ).toBe('true');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-selection-filtered"]')
+        .exists()
+    ).toBe(false);
     expect(
       wrapper
         .find(

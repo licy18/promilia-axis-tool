@@ -112,13 +112,20 @@
         当前筛选无模拟日志
       </p>
 
-      <p
+      <div
         v-if="selectedRuntimeLogFilteredOut"
         class="runtime-log-selection-note"
         data-testid="workbench-runtime-sim-log-selection-filtered"
       >
-        选中三值点不在当前日志筛选内
-      </p>
+        <span>选中三值点不在当前日志筛选内</span>
+        <button
+          type="button"
+          data-testid="workbench-runtime-sim-log-show-selected"
+          @click="showSelectedRuntimeLog"
+        >
+          显示日志
+        </button>
+      </div>
 
       <div
         v-if="selectedRuntimeLog"
@@ -307,20 +314,24 @@ const filteredRuntimeSimLogRows = computed(() =>
     return true;
   })
 );
-const selectedRuntimeLogFilteredOut = computed(() => {
+const selectedRuntimeHiddenLogRow = computed(() => {
   if (!props.selectedStateCurvePointId) {
-    return false;
+    return null;
   }
-  const existsInAllRows = runtimeSimLogRows.value.some(
+  const row = runtimeSimLogRows.value.find(
     row => getRuntimeStatePointIdByRow(row) === props.selectedStateCurvePointId
   );
-  if (!existsInAllRows) {
-    return false;
+  if (!row) {
+    return null;
   }
-  return !filteredRuntimeSimLogRows.value.some(
+  const visible = filteredRuntimeSimLogRows.value.some(
     row => getRuntimeStatePointIdByRow(row) === props.selectedStateCurvePointId
   );
+  return visible ? null : row;
 });
+const selectedRuntimeLogFilteredOut = computed(() =>
+  Boolean(selectedRuntimeHiddenLogRow.value)
+);
 const selectedRuntimeLog = computed(
   () => filteredRuntimeSimLogRows.value[selectedRuntimeLogIndex.value] ?? null
 );
@@ -475,6 +486,35 @@ function selectRuntimeLog(index) {
   );
 }
 
+function showSelectedRuntimeLog() {
+  const row = selectedRuntimeHiddenLogRow.value;
+  if (!row) {
+    return;
+  }
+  if (
+    runtimeTrackFilter.value !== 'all' &&
+    runtimeTrackFilter.value !== row.trackKey
+  ) {
+    runtimeTrackFilter.value = row.trackKey;
+  }
+
+  const actorKey = createRuntimeActorFilterKey(row);
+  if (
+    runtimeActorFilter.value !== 'all' &&
+    runtimeActorFilter.value !== actorKey
+  ) {
+    runtimeActorFilter.value = actorKey;
+  }
+
+  const actionKey = createRuntimeActionFilterKey(row);
+  if (
+    runtimeActionFilter.value !== 'all' &&
+    runtimeActionFilter.value !== actionKey
+  ) {
+    runtimeActionFilter.value = actionKey;
+  }
+}
+
 function syncSelectedRuntimeLogIndexFromStatePoint(rows) {
   if (!props.selectedStateCurvePointId) {
     return;
@@ -485,6 +525,14 @@ function syncSelectedRuntimeLogIndexFromStatePoint(rows) {
   if (index >= 0) {
     selectedRuntimeLogIndex.value = index;
   }
+}
+
+function createRuntimeActorFilterKey(row) {
+  return String(row?.actorId ?? 'system');
+}
+
+function createRuntimeActionFilterKey(row) {
+  return String(row?.actionId ?? 'system');
 }
 
 function isRuntimeLogRowSelected(row, index) {
@@ -870,12 +918,28 @@ h2 {
 }
 
 .runtime-log-selection-note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   margin: 0;
   padding: 8px 9px;
   border: 1px solid rgba(230, 162, 60, 0.3);
   border-radius: 4px;
   background: rgba(230, 162, 60, 0.1);
   color: #efc574;
+  font-size: 12px;
+}
+
+.runtime-log-selection-note button {
+  flex: 0 0 auto;
+  padding: 4px 7px;
+  border: 1px solid rgba(230, 162, 60, 0.46);
+  border-radius: 4px;
+  background: rgba(230, 162, 60, 0.12);
+  color: #ffe0a3;
+  cursor: pointer;
+  font: inherit;
   font-size: 12px;
 }
 

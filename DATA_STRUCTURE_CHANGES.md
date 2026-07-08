@@ -9878,3 +9878,60 @@ fallback 仍使用当前 `selectedRuntimeLog` 和 `selectedRuntimeLogPoint`。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8CJ 应给 runtime sim log 的“选中点不在当前筛选内”提示增加一键显示当前选中日志的操作。
+
+## 117. 阶段 5-8CJ：runtime sim log show selected action
+
+阶段 5-8CJ 不修改项目保存 schema。本阶段只新增 Workbench UI 操作和筛选状态调整函数。
+
+### 117.1 EventLogPanel 新增操作
+
+在 `selectedRuntimeLogFilteredOut` 为 `true` 时，提示区新增按钮：
+
+```html
+data-testid="workbench-runtime-sim-log-show-selected"
+```
+
+按钮文案：
+
+```text
+显示日志
+```
+
+点击后调用：
+
+```js
+showSelectedRuntimeLog()
+```
+
+### 117.2 筛选调整规则
+
+`showSelectedRuntimeLog()` 查找当前 `selectedStateCurvePointId` 对应的 runtime sim log 行。
+
+调整规则：
+
+- `runtimeTrackFilter` 为 `all` 或已等于目标 `trackKey` 时不改；否则改为目标 `trackKey`。
+- `runtimeActorFilter` 为 `all` 或已等于目标 `actorId` 时不改；否则改为目标 `actorId`，缺省为 `system`。
+- `runtimeActionFilter` 为 `all` 或已等于目标 `actionId` 时不改；否则改为目标 `actionId`，缺省为 `system`。
+
+该操作不修改：
+
+- `selectedStateCurvePointId`
+- 时间轴选择
+- 动作选择
+- 项目保存 schema
+
+### 117.3 验证
+
+当前测试覆盖：
+
+- SP 技能场景中，runtime sim log 筛选为 `selfEnergyChange` 时，从资源曲线选中 HP 点会显示隐藏提示。
+- 点击 `显示日志` 后，筛选计数保持 `1/2`，但 active track filter 切到 `enemyHpDamage`。
+- 点击后隐藏提示消失，对应 HP 日志行 `data-selected="true"`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8CK 应补运行时三值状态基线，让 HP / 韧性 / 能量除了累计变化量外，开始具备“剩余/当前状态”字段和 UI 标注。
