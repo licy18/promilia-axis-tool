@@ -9078,6 +9078,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 `WorkbenchFlowPanel` 的 dispatch/loop 状态 data 属性也接入同一个 `createWorkbenchMainFlowStatusView()`，减少主流程顶部面板和工作区根节点之间的重复状态读取。
 
+### 2026-07-09：UI 主流程能力块 - Flow Panel Status View Consumer
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `WorkbenchFlowPanel` 接入共享 `createWorkbenchMainFlowStatusView()`。
+- 顶部主流程面板的 dispatch sequence/status/handled/kind/source/handler/reason 与 loop step/status/recovery/next action/target data 属性改为读取同一份 `mainFlowStatusView`。
+- 顶部主流程面板与 Workbench 主工作区根节点现在共用同一套 dispatch/loop 状态 view model，减少重复读取 `mainFlowDispatchResult.*` 和 `mainFlowLoopState.*` 的位置。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- `WorkbenchFlowPanel` 组件测试覆盖 focus / return 两条 primary operation 路径下的 dispatch/loop data 属性。
+- flow model 单测和 Workbench 页面测试确认共享 status view 与主流程页面路径仍可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、65 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、205 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 FlowPanel 中 recovery 分发判断也逐步收敛到共享主流程 action/view helper，让顶部面板的状态读取和动作创建继续减少本地判断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -19553,3 +19553,44 @@ createWorkbenchMainFlowStatusView({
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、63 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、205 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 253. UI 主流程能力块：Flow Panel Status View Consumer
+
+### 253.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`WorkbenchFlowPanel` 新增共享状态 view 消费：
+
+```js
+mainFlowStatusView
+```
+
+来源：
+
+```js
+createWorkbenchMainFlowStatusView({
+  flowModel: workbenchFlow.value,
+})
+```
+
+影响范围：
+
+```text
+workbench-flow-panel
+data-main-flow-dispatch-*
+data-main-flow-loop-*
+```
+
+顶部主流程面板的 dispatch/loop data 属性现在从 `mainFlowStatusView` 读取，和 Workbench 主工作区根节点共用同一套状态 view model。
+
+### 253.2 保存与迁移
+
+本阶段只调整 `WorkbenchFlowPanel` 的主流程状态消费关系，不新增持久字段，不需要数据迁移。
+
+### 253.3 验证
+
+- 更新 `src/__tests__/features/WorkbenchFlowPanel.test.js`，覆盖 focus / return 两条 primary operation 路径下的 dispatch/loop data 属性。
+- `npm run test -- --run src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、65 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、205 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

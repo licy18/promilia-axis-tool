@@ -25,6 +25,20 @@ describe('WorkbenchFlowPanel', () => {
     const button = wrapper.find(
       '[data-testid="workbench-flow-edit-runtime-action"]'
     );
+    expect(wrapper.attributes()).toMatchObject({
+      'data-main-flow-dispatch-sequence': '2',
+      'data-main-flow-dispatch-status': 'handled',
+      'data-main-flow-dispatch-handled': 'true',
+      'data-main-flow-dispatch-kind': 'focus-runtime-action',
+      'data-main-flow-dispatch-source': 'runtime-review-primary',
+      'data-main-flow-dispatch-handler-key': 'focusRuntimeAction',
+      'data-main-flow-dispatch-reason': '',
+      'data-main-flow-loop-step': 'runtime-review',
+      'data-main-flow-loop-status': 'advanced',
+      'data-main-flow-loop-recovery-needed': 'false',
+      'data-main-flow-loop-next-action-kind': 'focus-runtime-action',
+      'data-main-flow-loop-next-target-kind': 'runtime-action-edit',
+    });
     expect(button.attributes()).toMatchObject({
       'data-action-id': 'review-action',
       'data-primary-action': 'true',
@@ -68,6 +82,15 @@ describe('WorkbenchFlowPanel', () => {
     const button = wrapper.find(
       '[data-testid="workbench-flow-return-edit-result"]'
     );
+    expect(wrapper.attributes()).toMatchObject({
+      'data-main-flow-dispatch-sequence': '2',
+      'data-main-flow-dispatch-status': 'handled',
+      'data-main-flow-dispatch-handled': 'true',
+      'data-main-flow-dispatch-kind': 'return-runtime-result',
+      'data-main-flow-dispatch-source': 'runtime-review-primary',
+      'data-main-flow-loop-next-action-kind': 'return-runtime-result',
+      'data-main-flow-loop-next-target-kind': 'runtime-result-return',
+    });
     expect(button.attributes()).toMatchObject({
       'data-action-id': 'review-action',
       'data-primary-action': 'true',
@@ -151,17 +174,21 @@ function createFlowModel({ primaryKind, primaryOperation }) {
       canReturnRuntimeResult: true,
     },
     mainFlowDispatchResult: {
-      sequence: 0,
-      status: '',
-      handled: false,
-      kind: '',
-      source: '',
-      handlerKey: '',
+      sequence: 2,
+      status: 'handled',
+      handled: true,
+      hasResult: true,
+      kind: primaryKind,
+      source: 'runtime-review-primary',
+      handlerKey:
+        primaryKind === 'return-runtime-result'
+          ? 'returnRuntimeResult'
+          : 'focusRuntimeAction',
       reason: '',
     },
     mainFlowLoopState: {
       step: 'runtime-review',
-      status: 'ready',
+      status: 'advanced',
       recoveryNeeded: false,
       nextActionKind: primaryKind,
       nextTargetKind:

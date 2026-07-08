@@ -45,34 +45,32 @@
       workbenchFlow.contractContext.runtimeOutput.status
     "
     :data-main-flow-dispatch-sequence="
-      workbenchFlow.mainFlowDispatchResult.sequence
+      mainFlowStatusView.dispatch.sequence
     "
     :data-main-flow-dispatch-status="
-      workbenchFlow.mainFlowDispatchResult.status
+      mainFlowStatusView.dispatch.status
     "
     :data-main-flow-dispatch-handled="
-      workbenchFlow.mainFlowDispatchResult.handled ? 'true' : 'false'
+      mainFlowStatusView.dispatch.handledState
     "
-    :data-main-flow-dispatch-kind="workbenchFlow.mainFlowDispatchResult.kind"
-    :data-main-flow-dispatch-source="
-      workbenchFlow.mainFlowDispatchResult.source
-    "
+    :data-main-flow-dispatch-kind="mainFlowStatusView.dispatch.kind"
+    :data-main-flow-dispatch-source="mainFlowStatusView.dispatch.source"
     :data-main-flow-dispatch-handler-key="
-      workbenchFlow.mainFlowDispatchResult.handlerKey
+      mainFlowStatusView.dispatch.handlerKey
     "
     :data-main-flow-dispatch-reason="
-      workbenchFlow.mainFlowDispatchResult.reason
+      mainFlowStatusView.dispatch.reason
     "
-    :data-main-flow-loop-step="workbenchFlow.mainFlowLoopState.step"
-    :data-main-flow-loop-status="workbenchFlow.mainFlowLoopState.status"
+    :data-main-flow-loop-step="mainFlowStatusView.loop.step"
+    :data-main-flow-loop-status="mainFlowStatusView.loop.status"
     :data-main-flow-loop-recovery-needed="
-      workbenchFlow.mainFlowLoopState.recoveryNeeded ? 'true' : 'false'
+      mainFlowStatusView.loop.recoveryNeededState
     "
     :data-main-flow-loop-next-action-kind="
-      workbenchFlow.mainFlowLoopState.nextActionKind
+      mainFlowStatusView.loop.nextActionKind
     "
     :data-main-flow-loop-next-target-kind="
-      workbenchFlow.mainFlowLoopState.nextTargetKind
+      mainFlowStatusView.loop.nextTargetKind
     "
     data-testid="workbench-flow-panel"
   >
@@ -237,6 +235,7 @@ import {
 } from '@element-plus/icons-vue';
 import {
   WORKBENCH_FLOW_ACTION_KINDS,
+  createWorkbenchMainFlowStatusView,
   createWorkbenchFlowModel,
 } from './workbenchFlowModel';
 import {
@@ -300,6 +299,11 @@ const workbenchFlow = computed(
       runtimeOverviewActive: props.runtimeOverviewActive,
       actionEditResultContext: props.actionEditResultContext,
     })
+);
+const mainFlowStatusView = computed(() =>
+  createWorkbenchMainFlowStatusView({
+    flowModel: workbenchFlow.value,
+  })
 );
 const runtimeReviewPrimaryOperation = computed(
   () => workbenchFlow.value.runtimeReviewOperations?.primaryOperation ?? null
