@@ -38,6 +38,21 @@
         <strong>{{ runtimeLogFilterSummary.count }}</strong>
         <small>{{ runtimeLogFilterSummary.detail }}</small>
       </div>
+      <div
+        v-if="runtimeLogNavigationStatus.status !== 'none'"
+        class="runtime-log-navigation"
+        :data-navigation-count="runtimeLogNavigationStatus.navigationCount"
+        :data-navigation-index="runtimeLogNavigationStatus.navigationIndex"
+        :data-navigation-status="runtimeLogNavigationStatus.status"
+        :data-source-count="runtimeLogNavigationStatus.sourceCount"
+        :data-source-index="runtimeLogNavigationStatus.sourceIndex"
+        :data-state-point-id="runtimeLogNavigationStatus.statePointId"
+        data-testid="workbench-runtime-sim-log-navigation"
+      >
+        <span>日志导航</span>
+        <strong>{{ runtimeLogNavigationStatus.label }}</strong>
+        <small>{{ runtimeLogNavigationStatus.detail }}</small>
+      </div>
 
       <div
         class="runtime-log-filters"
@@ -417,6 +432,13 @@ const runtimeLogFilterSummary = computed(() => {
     ].join(' · '),
   };
 });
+const runtimeLogNavigationStatus = computed(() =>
+  createRuntimeLogNavigationStatus({
+    selectedStatePointId: props.selectedStateCurvePointId,
+    rows: runtimeSimLogRows.value,
+    filteredRows: filteredRuntimeSimLogRows.value,
+  })
+);
 const selectedRuntimeHiddenLogRow = computed(() => {
   if (!props.selectedStateCurvePointId) {
     return null;
@@ -699,6 +721,73 @@ function focusRuntimeLogByStatePoint(statePointId) {
 
 function isRuntimeLogFocusSource(source) {
   return source === 'action-result' || source === 'action-contribution';
+}
+
+function createRuntimeLogNavigationStatus({
+  selectedStatePointId = '',
+  rows = [],
+  filteredRows = [],
+} = {}) {
+  const base = {
+    statePointId: selectedStatePointId ?? '',
+    navigationCount: filteredRows.length,
+    navigationIndex: -1,
+    sourceCount: rows.length,
+    sourceIndex: -1,
+  };
+  if (!selectedStatePointId) {
+    return {
+      ...base,
+      status: 'none',
+      label: '',
+      detail: '',
+    };
+  }
+
+  const sourceIndex = findRuntimeLogRowIndexByStatePoint(
+    rows,
+    selectedStatePointId
+  );
+  if (sourceIndex < 0) {
+    return {
+      ...base,
+      status: 'missing',
+      label: '日志未命中',
+      detail: '当前三值点不在模拟日志内',
+    };
+  }
+
+  const navigationIndex = findRuntimeLogRowIndexByStatePoint(
+    filteredRows,
+    selectedStatePointId
+  );
+  if (navigationIndex < 0) {
+    return {
+      ...base,
+      sourceIndex,
+      status: 'filtered-out',
+      label: '筛选外',
+      detail: `全部 ${sourceIndex + 1}/${rows.length}`,
+    };
+  }
+
+  return {
+    ...base,
+    navigationIndex,
+    sourceIndex,
+    status: 'synced',
+    label: '日志已同步',
+    detail: `当前筛选 ${navigationIndex + 1}/${filteredRows.length} · 全部 ${sourceIndex + 1}/${rows.length}`,
+  };
+}
+
+function findRuntimeLogRowIndexByStatePoint(rows, statePointId) {
+  if (!statePointId) {
+    return -1;
+  }
+  return rows.findIndex(
+    row => getRuntimeStatePointIdByRow(row) === statePointId
+  );
 }
 
 function createRuntimeLogEditContext({
@@ -1070,6 +1159,58 @@ h2 {
 .runtime-log-filter-summary small {
   color: #aeb7c2;
   font-size: 11px;
+}
+
+.runtime-log-navigation {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 7px 9px;
+  border: 1px solid rgba(121, 199, 185, 0.22);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.08);
+  font-size: 11px;
+}
+
+.runtime-log-navigation[data-navigation-status='filtered-out'] {
+  border-color: rgba(230, 162, 60, 0.28);
+  background: rgba(230, 162, 60, 0.08);
+}
+
+.runtime-log-navigation[data-navigation-status='missing'] {
+  border-color: rgba(245, 108, 108, 0.24);
+  background: rgba(245, 108, 108, 0.08);
+}
+
+.runtime-log-navigation span {
+  color: #9ce0d2;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.runtime-log-navigation[data-navigation-status='filtered-out'] span,
+.runtime-log-navigation[data-navigation-status='filtered-out'] strong {
+  color: #efc574;
+}
+
+.runtime-log-navigation[data-navigation-status='missing'] span,
+.runtime-log-navigation[data-navigation-status='missing'] strong {
+  color: #ffb3b3;
+}
+
+.runtime-log-navigation strong {
+  color: #dff9f3;
+  white-space: nowrap;
+}
+
+.runtime-log-navigation small {
+  min-width: 0;
+  overflow: hidden;
+  color: #aeb8c1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .runtime-log-list {

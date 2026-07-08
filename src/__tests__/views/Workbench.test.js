@@ -2129,6 +2129,16 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-action-result-detail-location-status"]')
         .text()
     ).toBe('当前位置已同步');
+    const syncedRuntimeLogNavigation = wrapper.find(
+      '[data-testid="workbench-runtime-sim-log-navigation"]'
+    );
+    expect(
+      syncedRuntimeLogNavigation.attributes('data-navigation-status')
+    ).toBe('synced');
+    expect(syncedRuntimeLogNavigation.attributes('data-state-point-id')).toBe(
+      refreshedRuntimeStatePointId
+    );
+    expect(syncedRuntimeLogNavigation.text()).toContain('日志已同步');
   });
 
   it('links runtime sim log detail to the action edit focus', async () => {
@@ -3519,6 +3529,19 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-selection-filtered"]')
         .text()
     ).toContain('选中三值点不在当前日志筛选内');
+    const filteredRuntimeLogNavigation = wrapper.find(
+      '[data-testid="workbench-runtime-sim-log-navigation"]'
+    );
+    expect(
+      filteredRuntimeLogNavigation.attributes('data-navigation-status')
+    ).toBe('filtered-out');
+    expect(filteredRuntimeLogNavigation.attributes('data-state-point-id')).toBe(
+      hpRuntimeCurvePoint.attributes('data-state-point-id')
+    );
+    expect(
+      filteredRuntimeLogNavigation.attributes('data-navigation-index')
+    ).toBe('-1');
+    expect(filteredRuntimeLogNavigation.text()).toContain('筛选外');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-row"]')
@@ -3554,6 +3577,19 @@ describe('Workbench view', () => {
         )
         .attributes('data-selected')
     ).toBe('true');
+    const syncedRuntimeLogNavigation = wrapper.find(
+      '[data-testid="workbench-runtime-sim-log-navigation"]'
+    );
+    expect(
+      syncedRuntimeLogNavigation.attributes('data-navigation-status')
+    ).toBe('synced');
+    expect(syncedRuntimeLogNavigation.attributes('data-state-point-id')).toBe(
+      hpRuntimeCurvePoint.attributes('data-state-point-id')
+    );
+    expect(syncedRuntimeLogNavigation.attributes('data-navigation-index')).toBe(
+      '0'
+    );
+    expect(syncedRuntimeLogNavigation.text()).toContain('日志已同步');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-detail"]')

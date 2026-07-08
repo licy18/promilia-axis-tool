@@ -13260,3 +13260,81 @@ data-testid="workbench-action-result-detail-location-status"
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DZ 应补当前结果定位后的筛选/导航反馈，让日志、曲线和结果面板围绕同一 state point 工作时更可见。
+
+## 159. 阶段 5-8DZ：模拟日志导航同步状态
+
+阶段目标：
+
+- 让模拟日志明确显示当前选中 runtime state point 是否已经进入当前日志筛选和导航位置。
+
+### 159.1 数据结构变化
+
+本阶段不新增保存字段，不变更 `Project` schema、simulation 输出或 localStorage 数据。
+
+`EventLogPanel` 复用已有：
+
+```text
+selectedStateCurvePointId
+runtimeProjection.simLog[]
+filteredRuntimeSimLogRows
+```
+
+新增前端派生状态 `runtimeLogNavigationStatus`：
+
+```js
+{
+  status: 'none' | 'synced' | 'filtered-out' | 'missing',
+  label: string,
+  detail: string,
+  statePointId: string,
+  navigationCount: number,
+  navigationIndex: number,
+  sourceCount: number,
+  sourceIndex: number
+}
+```
+
+状态含义：
+
+- `none`：当前没有选中 runtime state point。
+- `synced`：当前 state point 已进入当前日志筛选列表。
+- `filtered-out`：当前 state point 存在于全量日志，但被当前筛选隐藏。
+- `missing`：当前 state point 不在模拟日志中。
+
+### 159.2 DOM 状态
+
+模拟日志新增导航同步条：
+
+```html
+data-testid="workbench-runtime-sim-log-navigation"
+data-navigation-status="synced|filtered-out|missing"
+data-state-point-id
+data-navigation-index
+data-navigation-count
+data-source-index
+data-source-count
+```
+
+含义：
+
+- `data-navigation-index`：当前筛选列表中的 0 基索引；筛选外或缺失时为 `-1`。
+- `data-source-index`：全量模拟日志中的 0 基索引；缺失时为 `-1`。
+- `data-state-point-id`：当前正在同步/追踪的 runtime state point。
+
+### 159.3 验证
+
+当前测试覆盖：
+
+- 属性面板回看刷新后结果点后，模拟日志导航显示 `synced`。
+- HP state point 被能量日志筛选隐藏后，模拟日志导航显示 `filtered-out`。
+- 筛选外状态写入 `data-navigation-index="-1"`。
+- 点击 `显示日志` 后，模拟日志导航切回 `synced`。
+- 同步状态写入当前 state point 和当前筛选 index。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、40 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、114 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8EA 应整理结果定位链路的主路径提示，减少重复状态标签，让当前动作、当前结果点和当前日志位置的关系更清楚。

@@ -6555,6 +6555,39 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DZ 目标：继续完善 Workbench 主流程编辑体验，优先补当前结果定位后的筛选/导航反馈，让用户知道日志、曲线和结果面板是否正在围绕同一 state point 工作。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DZ 模拟日志筛选导航同步提示
+
+本轮完成：
+
+- `EventLogPanel` 新增日志导航同步条，显示当前选中 runtime state point 与模拟日志筛选的关系。
+- 当前 state point 在筛选内时显示 `日志已同步`，并展示当前筛选序号和全量日志序号。
+- 当前 state point 被筛选隐藏时显示 `筛选外`，配合既有 `显示日志` 按钮帮助用户恢复定位。
+- Workbench 测试覆盖属性面板回看刷新后结果点后的日志同步状态，以及 HP 点被能量筛选隐藏后再显示日志的 `filtered-out -> synced` 状态切换。
+
+当前验证事实：
+
+- 回到刷新后结果点后，模拟日志导航写入 `data-navigation-status="synced"`。
+- HP state point 被能量日志筛选隐藏时，导航写入 `data-navigation-status="filtered-out"` 和 `data-navigation-index="-1"`。
+- 点击 `显示日志` 后，导航切换为 `data-navigation-status="synced"`，并写入当前筛选 index。
+- 本阶段只新增前端派生状态和 UI 提示，不新增公式、simulation 输出或保存 schema。
+
+当前边界：
+
+- 日志导航状态只说明当前 state point 与模拟日志筛选/列表的关系，不代表最终公式已确认。
+- 暂未新增自动滚动到日志行或键盘快捷键。
+- 暂未修改曲线筛选、结果筛选或项目保存结构。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、40 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、114 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8EA 目标：继续完善 Workbench 主流程编辑体验，优先梳理结果定位链路的最终一组紧凑状态，把重复标签压缩为更清楚的主路径提示。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
