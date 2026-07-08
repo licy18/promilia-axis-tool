@@ -2233,6 +2233,54 @@ describe('Workbench view', () => {
     ).toContain('selected');
   });
 
+  it('opens the first runtime result from a selected no-result action', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-add-wait-action"]')
+      .trigger('click');
+    await nextTick();
+
+    let flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0002');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe('');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('-1');
+
+    await flowPanel
+      .find('[data-testid="workbench-flow-open-runtime"]')
+      .trigger('click');
+    await nextTick();
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(getLastDispatchedFlowAction(wrapper, WorkbenchFlowPanel)).toMatchObject({
+      kind: 'open-runtime-results',
+      source: 'workbench-flow-panel',
+      actionId: 'action-0002',
+      payload: {
+        fallbackToFirstRuntimePoint: true,
+      },
+      canRun: true,
+    });
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0001');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
+      'action-0001'
+    );
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('0');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBeTruthy();
+  });
+
   it('syncs runtime detail after deleting the selected runtime action', async () => {
     const wrapper = mount(Workbench, {
       global: {
@@ -2473,7 +2521,7 @@ describe('Workbench view', () => {
     ).toBe(shiftedStatePointId);
   });
 
-  it('keeps the selected action when opening runtime results without a matching runtime point', async () => {
+  it('falls back to the first runtime result when opening without a matching action point', async () => {
     const wrapper = mount(Workbench, {
       global: {
         stubs: {
@@ -2505,55 +2553,39 @@ describe('Workbench view', () => {
     await nextTick();
 
     flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
-    expect(flowPanel.attributes('data-action-id')).toBe('action-0002');
-    expect(flowPanel.attributes('data-runtime-overview-active')).toBe('true');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0001');
+    expect(flowPanel.attributes('data-runtime-overview-active')).toBe('false');
     expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('1');
-    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('-1');
-    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe('');
-    expect(flowPanel.attributes('data-runtime-detail-state-point-id')).toBe('');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('0');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
+      'action-0001'
+    );
+    expect(
+      flowPanel.attributes('data-runtime-detail-state-point-id')
+    ).toBeTruthy();
     expect(
       flowPanel.find('[data-testid="workbench-flow-runtime-detail"]').text()
-    ).toBe('未选中');
+    ).toContain('敌人HP伤害');
     expect(
       flowPanel
         .find('[data-testid="workbench-flow-edit-runtime-action"]')
         .attributes('disabled')
-    ).toBeDefined();
+    ).toBeUndefined();
     expect(
       wrapper
         .find(
-          '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
         )
         .classes()
     ).toContain('selected');
     expect(
       wrapper.find('[data-testid="workbench-runtime-selected-detail"]').exists()
-    ).toBe(false);
-    expect(
-      wrapper.find('[data-testid="workbench-state-curve-focus-all"]').classes()
-    ).toContain('active');
-
-    const overviewNextButton = flowPanel.find(
-      '[data-testid="workbench-flow-runtime-next"]'
-    );
-    const overviewNextStatePointId = overviewNextButton.attributes(
-      'data-state-point-id'
-    );
-    expect(overviewNextButton.attributes('disabled')).toBeUndefined();
-    expect(overviewNextStatePointId).toBeTruthy();
-
-    await overviewNextButton.trigger('click');
-    await nextTick();
-
-    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
-    expect(flowPanel.attributes('data-action-id')).toBe('action-0001');
-    expect(flowPanel.attributes('data-runtime-overview-active')).toBe('false');
-    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('0');
+    ).toBe(true);
     expect(
       wrapper
-        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
-        .text()
-    ).toBe(overviewNextStatePointId);
+        .find('[data-testid="workbench-state-curve-focus-selected"]')
+        .classes()
+    ).toContain('active');
     expect(
       wrapper
         .find(

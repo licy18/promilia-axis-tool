@@ -24,7 +24,23 @@ describe('workbench flow plan controller', () => {
       kind: WORKBENCH_RUNTIME_FLOW_PLAN_KINDS.RUNTIME_ENTRY,
       mode: WORKBENCH_RUNTIME_FLOW_PLAN_MODES.RUNTIME_RESULT,
       actionId: 'action-0002',
+      routeSource: 'selected-action-runtime-point',
       statePointId: 'selfEnergyChange|applied|action-0002|30|1',
+    });
+
+    expect(
+      controller[
+        WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_ENTRY
+      ]({
+        actionId: 'action-missing',
+        fallbackToFirstRuntimePoint: true,
+      })
+    ).toMatchObject({
+      kind: WORKBENCH_RUNTIME_FLOW_PLAN_KINDS.RUNTIME_ENTRY,
+      mode: WORKBENCH_RUNTIME_FLOW_PLAN_MODES.RUNTIME_RESULT,
+      actionId: 'action-missing',
+      routeSource: 'first-runtime-point',
+      statePointId: 'enemyHpDamage|applied|action-0001|12|0',
     });
 
     expect(

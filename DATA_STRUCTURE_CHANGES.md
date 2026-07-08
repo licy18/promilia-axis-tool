@@ -17014,3 +17014,75 @@ data-runtime-output-status
 - `npm run test -- --run`：通过，29 个测试文件、168 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告，且本机 PowerShell/oh-my-posh 输出过非构建失败的通道噪声。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 215. UI 主流程能力块：Workbench Runtime Entry Route
+
+本阶段属于 UI 主流程。
+
+### 215.1 结构变化
+
+`createRuntimeEntryFlowPlan()` 新增输入：
+
+```js
+fallbackToFirstRuntimePoint
+```
+
+`runtime entry` plan 新增字段：
+
+```js
+routeSource
+```
+
+可取值：
+
+```js
+selected-action-runtime-point
+first-runtime-point
+runtime-overview
+```
+
+行为规则：
+
+```js
+selectedActionRuntimePoint = findFirstRuntimeStatePointForAction(...)
+fallbackRuntimePoint = fallbackToFirstRuntimePoint
+  ? createRuntimeStatePointContexts(runtimeProjection)[0]
+  : null
+runtimePoint = selectedActionRuntimePoint ?? fallbackRuntimePoint
+```
+
+`createWorkbenchFlowPlanController().createRuntimeEntryPlan()` 透传：
+
+```js
+fallbackToFirstRuntimePoint
+```
+
+`createWorkbenchFlowController()` 对 `OPEN_RUNTIME_RESULTS` 透传 action payload。
+
+`createWorkbenchFlowPlanHandlers().openRuntimeResults` 透传：
+
+```js
+fallbackToFirstRuntimePoint
+```
+
+`WorkbenchFlowPanel` 的 open runtime action payload 新增：
+
+```js
+fallbackToFirstRuntimePoint: true
+```
+
+### 215.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench 主流程动作路由；三值计算、runtime projection 数值结果和草稿保存结构不变。
+
+### 215.3 验证
+
+- 更新 `src/__tests__/features/workbenchRuntimeFlowPlan.test.js`，覆盖 selected action runtime point、runtime overview、first runtime point fallback 三种 route source。
+- 更新 `src/__tests__/features/workbenchFlowPlanController.test.js` 与 `src/__tests__/features/workbenchFlowController.test.js`，确认 fallback payload 能从主流程 action 进入 runtime entry plan。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认选中无结果动作后主动打开运行结果会定位首个运行点，并确认无结果动作自动同步仍会清空 stale runtime detail。
+- `npm run test -- --run src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、66 条测试。
+- `npm run test -- --run`：通过，29 个测试文件、170 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。

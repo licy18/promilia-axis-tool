@@ -1,4 +1,7 @@
-import { findFirstRuntimeStatePointForAction } from './runtimeProjectionPoints';
+import {
+  createRuntimeStatePointContexts,
+  findFirstRuntimeStatePointForAction,
+} from './runtimeProjectionPoints';
 
 export const WORKBENCH_RUNTIME_FLOW_PLAN_KINDS = Object.freeze({
   RUNTIME_ENTRY: 'runtime-entry',
@@ -22,11 +25,16 @@ const RUNTIME_APPLIED_LAYER_FILTERS = Object.freeze({
 export function createRuntimeEntryFlowPlan({
   runtimeProjection = null,
   actionId = '',
+  fallbackToFirstRuntimePoint = false,
 } = {}) {
-  const runtimePoint = findFirstRuntimeStatePointForAction(
+  const selectedActionRuntimePoint = findFirstRuntimeStatePointForAction(
     runtimeProjection,
     actionId
   );
+  const fallbackRuntimePoint = fallbackToFirstRuntimePoint
+    ? createRuntimeStatePointContexts(runtimeProjection)[0]
+    : null;
+  const runtimePoint = selectedActionRuntimePoint ?? fallbackRuntimePoint;
   const statePointId = runtimePoint?.statePointId ?? '';
   return createRuntimeFlowPlan({
     kind: WORKBENCH_RUNTIME_FLOW_PLAN_KINDS.RUNTIME_ENTRY,
@@ -34,6 +42,11 @@ export function createRuntimeEntryFlowPlan({
       ? WORKBENCH_RUNTIME_FLOW_PLAN_MODES.RUNTIME_RESULT
       : WORKBENCH_RUNTIME_FLOW_PLAN_MODES.RUNTIME_OVERVIEW,
     actionId,
+    routeSource: selectedActionRuntimePoint
+      ? 'selected-action-runtime-point'
+      : fallbackRuntimePoint
+        ? 'first-runtime-point'
+        : 'runtime-overview',
     statePointId,
     calculatorScope: 'runtime',
     pulseCalculatorFocus: true,
@@ -104,6 +117,7 @@ function createRuntimeFlowPlan({
   mode,
   actionId = '',
   selectActionId = '',
+  routeSource = '',
   statePointId = '',
   calculatorScope = '',
   pulseCalculatorFocus = false,
@@ -120,6 +134,7 @@ function createRuntimeFlowPlan({
     mode,
     actionId: actionId ?? '',
     selectActionId: selectActionId ?? '',
+    routeSource,
     statePointId: statePointId ?? '',
     calculatorScope,
     pulseCalculatorFocus: Boolean(pulseCalculatorFocus),

@@ -223,6 +223,9 @@ describe('workbench flow controller', () => {
     controller.dispatch({
       kind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
       actionId: 'action-open',
+      payload: {
+        fallbackToFirstRuntimePoint: true,
+      },
     });
     controller.dispatch({
       kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
@@ -265,6 +268,7 @@ describe('workbench flow controller', () => {
         plan: 'runtime-entry',
         payload: {
           actionId: 'action-open',
+          fallbackToFirstRuntimePoint: true,
         },
       },
       {

@@ -239,6 +239,7 @@ function getOpenRuntimeResultsFlowAction(flow) {
     actionId: flow?.selectedActionId ?? '',
     payload: {
       runtimeSimLogCount: flow?.runtimeSimLogCount ?? 0,
+      fallbackToFirstRuntimePoint: true,
     },
     enabled: Boolean(flow?.controls?.canOpenRuntimeResults),
     disabledReason: 'missing-runtime-results',

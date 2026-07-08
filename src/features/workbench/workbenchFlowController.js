@@ -34,6 +34,7 @@ export function createWorkbenchFlowController(handlers = {}) {
           flowAction,
           payload: {
             actionId: flowAction.actionId,
+            ...(flowAction.payload ?? {}),
           },
         });
       }
@@ -129,6 +130,7 @@ export function createWorkbenchFlowPlanHandlers({
   return {
     [WORKBENCH_FLOW_CONTROLLER_HANDLERS.OPEN_RUNTIME_RESULTS]: ({
       actionId,
+      fallbackToFirstRuntimePoint = false,
     } = {}) =>
       applyRuntimeFlowPlan(
         createPlan(
@@ -136,6 +138,7 @@ export function createWorkbenchFlowPlanHandlers({
           WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_ENTRY,
           {
             actionId,
+            fallbackToFirstRuntimePoint,
           }
         )
       ),

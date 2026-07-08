@@ -18,6 +18,7 @@ describe('workbench runtime flow plan', () => {
       kind: WORKBENCH_RUNTIME_FLOW_PLAN_KINDS.RUNTIME_ENTRY,
       mode: WORKBENCH_RUNTIME_FLOW_PLAN_MODES.RUNTIME_RESULT,
       actionId: 'action-0002',
+      routeSource: 'selected-action-runtime-point',
       statePointId: 'selfEnergyChange|applied|action-0002|30|1',
       calculatorScope: 'runtime',
       pulseCalculatorFocus: true,
@@ -45,12 +46,34 @@ describe('workbench runtime flow plan', () => {
       kind: WORKBENCH_RUNTIME_FLOW_PLAN_KINDS.RUNTIME_ENTRY,
       mode: WORKBENCH_RUNTIME_FLOW_PLAN_MODES.RUNTIME_OVERVIEW,
       actionId: 'action-missing',
+      routeSource: 'runtime-overview',
       statePointId: '',
       calculatorScope: 'runtime',
       pulseCalculatorFocus: true,
       selectRuntimeStatePoint: false,
       clearRuntimeSelection: true,
       stateCurveFocusMode: 'all',
+    });
+  });
+
+  it('can fall back to the first runtime result when opening from the main flow', () => {
+    const plan = createRuntimeEntryFlowPlan({
+      runtimeProjection: createRuntimeProjectionFixture(),
+      actionId: 'action-missing',
+      fallbackToFirstRuntimePoint: true,
+    });
+
+    expect(plan).toMatchObject({
+      kind: WORKBENCH_RUNTIME_FLOW_PLAN_KINDS.RUNTIME_ENTRY,
+      mode: WORKBENCH_RUNTIME_FLOW_PLAN_MODES.RUNTIME_RESULT,
+      actionId: 'action-missing',
+      routeSource: 'first-runtime-point',
+      statePointId: 'enemyHpDamage|applied|action-0001|12|0',
+      calculatorScope: 'runtime',
+      pulseCalculatorFocus: true,
+      selectRuntimeStatePoint: true,
+      clearRuntimeSelection: false,
+      stateCurveFocusMode: 'selected',
     });
   });
 

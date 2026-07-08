@@ -8088,6 +8088,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把当前合同上下文用于更明确的主流程动作入口，优先改善运行结果定位、资源曲线选择和回到动作修改的闭环，不进入公式追证或状态标签打磨。
 
+### 2026-07-09：UI 主流程能力块 - Workbench Runtime Entry Route
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `runtime entry` plan 新增显式路由来源：当前动作运行点、首个运行点、运行总览。
+- 主流程面板的“查看运行结果”会在当前动作没有运行点时 fallback 到第一个真实运行结果点，从而直接进入可查看的运行详情。
+- 普通动作同步路径不启用 fallback，仍然保持“选中无结果动作时清空旧运行详情”的行为，避免 stale runtime detail。
+- 本阶段不新增可见 UI 文案，不调整三值公式或数值结果。
+
+当前验证事实：
+
+- flow plan / plan controller / controller 单元测试覆盖 fallback payload 从主流程按钮传递到 runtime entry plan。
+- Workbench 真实页面测试覆盖：选中无结果动作后主动打开运行结果，会定位首个运行点并同步到源动作；插入无结果动作时旧详情仍会被清空。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、66 条测试。
+- `npm run test -- --run`：通过，29 个测试文件、170 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把资源曲线选择与日志/详情查看纳入同一 runtime entry route，让曲线点、日志行和详情面板之间的定位闭环更稳定。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

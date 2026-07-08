@@ -24,10 +24,12 @@ export function createWorkbenchFlowPlanController({
   return {
     [WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_ENTRY]({
       actionId = '',
+      fallbackToFirstRuntimePoint = false,
     } = {}) {
       return createRuntimeEntryFlowPlan({
         runtimeProjection: getRuntimeProjection(),
         actionId: actionId || getSelectedActionId(),
+        fallbackToFirstRuntimePoint,
       });
     },
 
