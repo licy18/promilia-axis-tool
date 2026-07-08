@@ -9,6 +9,14 @@
     :data-runtime-detail-state-point-id="
       runtimeSelectedDetail?.statePointId ?? ''
     "
+    :data-runtime-navigation-count="runtimeNavigationPoints.length"
+    :data-runtime-navigation-index="selectedRuntimeNavigationIndex"
+    :data-runtime-next-state-point-id="
+      selectedRuntimeNavigationNext?.statePointId ?? ''
+    "
+    :data-runtime-previous-state-point-id="
+      selectedRuntimeNavigationPrevious?.statePointId ?? ''
+    "
     :data-runtime-sim-log-count="runtimeSummary.simLogCount ?? 0"
     data-testid="workbench-flow-panel"
   >
@@ -46,6 +54,44 @@
     </div>
 
     <div class="flow-actions">
+      <div
+        class="flow-navigation"
+        data-testid="workbench-flow-runtime-navigation"
+      >
+        <button
+          type="button"
+          class="flow-icon-button"
+          :data-state-point-id="
+            selectedRuntimeNavigationPrevious?.statePointId ?? ''
+          "
+          data-testid="workbench-flow-runtime-previous"
+          :disabled="!selectedRuntimeNavigationPrevious"
+          title="上一个运行结果"
+          aria-label="上一个运行结果"
+          @click="
+            selectRuntimeNavigationPoint(selectedRuntimeNavigationPrevious)
+          "
+        >
+          <ArrowLeft class="flow-button-icon" />
+        </button>
+        <span data-testid="workbench-flow-runtime-navigation-index">
+          {{ runtimeNavigationLabel }}
+        </span>
+        <button
+          type="button"
+          class="flow-icon-button"
+          :data-state-point-id="
+            selectedRuntimeNavigationNext?.statePointId ?? ''
+          "
+          data-testid="workbench-flow-runtime-next"
+          :disabled="!selectedRuntimeNavigationNext"
+          title="下一个运行结果"
+          aria-label="下一个运行结果"
+          @click="selectRuntimeNavigationPoint(selectedRuntimeNavigationNext)"
+        >
+          <ArrowRight class="flow-button-icon" />
+        </button>
+      </div>
       <button
         type="button"
         class="flow-button"
@@ -88,7 +134,13 @@
 
 <script setup>
 import { computed } from 'vue';
-import { ArrowRight, EditPen, TrendCharts } from '@element-plus/icons-vue';
+import {
+  ArrowLeft,
+  ArrowRight,
+  EditPen,
+  TrendCharts,
+} from '@element-plus/icons-vue';
+import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
 
 const props = defineProps({
   selectedAction: {
@@ -103,6 +155,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  selectedStateCurvePointId: {
+    type: String,
+    default: '',
+  },
   actionEditResultContext: {
     type: Object,
     default: null,
@@ -113,12 +169,48 @@ const emit = defineEmits([
   'open-runtime-results',
   'focus-runtime-action',
   'return-runtime-result',
+  'select-runtime-state-point',
 ]);
 
 const runtimeSummary = computed(() => props.runtimeProjection?.summary ?? {});
 const hasRuntimeResults = computed(
   () => (runtimeSummary.value.simLogCount ?? 0) > 0
 );
+const runtimePointByDeltaId = computed(() =>
+  createRuntimePointByDeltaId(props.runtimeProjection)
+);
+const runtimeNavigationPoints = computed(() =>
+  (props.runtimeProjection?.simLog ?? [])
+    .map(row => createRuntimeNavigationPoint(row, runtimePointByDeltaId.value))
+    .filter(Boolean)
+);
+const selectedRuntimeNavigationIndex = computed(() =>
+  runtimeNavigationPoints.value.findIndex(
+    point => point.statePointId === props.selectedStateCurvePointId
+  )
+);
+const selectedRuntimeNavigationPrevious = computed(() =>
+  selectedRuntimeNavigationIndex.value > 0
+    ? runtimeNavigationPoints.value[selectedRuntimeNavigationIndex.value - 1]
+    : null
+);
+const selectedRuntimeNavigationNext = computed(() =>
+  selectedRuntimeNavigationIndex.value >= 0 &&
+  selectedRuntimeNavigationIndex.value <
+    runtimeNavigationPoints.value.length - 1
+    ? runtimeNavigationPoints.value[selectedRuntimeNavigationIndex.value + 1]
+    : null
+);
+const runtimeNavigationLabel = computed(() => {
+  const total = runtimeNavigationPoints.value.length;
+  if (total === 0) {
+    return '0/0';
+  }
+  if (selectedRuntimeNavigationIndex.value < 0) {
+    return `-/${total}`;
+  }
+  return `${selectedRuntimeNavigationIndex.value + 1}/${total}`;
+});
 const runtimeDetailLabel = computed(() => {
   const detail = props.runtimeSelectedDetail;
   if (!detail) {
@@ -159,6 +251,46 @@ function returnRuntimeResult() {
     actionId: context.actionId,
     statePointId: context.runtimeStatePointId,
   });
+}
+
+function selectRuntimeNavigationPoint(point) {
+  if (!point?.statePointId) {
+    return;
+  }
+  emit('select-runtime-state-point', point.statePointId);
+}
+
+function createRuntimePointByDeltaId(runtimeProjection) {
+  const points = new Map();
+  for (const point of runtimeProjection?.enemyStateCurve?.points ?? []) {
+    if (point.sourceDeltaId) {
+      points.set(point.sourceDeltaId, point);
+    }
+  }
+  for (const actor of runtimeProjection?.selfEnergyCurveByActor ?? []) {
+    for (const point of actor.points ?? []) {
+      if (point.sourceDeltaId) {
+        points.set(point.sourceDeltaId, point);
+      }
+    }
+  }
+  return points;
+}
+
+function createRuntimeNavigationPoint(row, pointByDeltaId) {
+  if (!row?.sourceDeltaId) {
+    return null;
+  }
+  const point = pointByDeltaId.get(row.sourceDeltaId) ?? null;
+  const statePointId = createRuntimeStateCurvePointId(row, point);
+  if (!statePointId) {
+    return null;
+  }
+  return {
+    row,
+    point,
+    statePointId,
+  };
 }
 </script>
 
@@ -230,6 +362,24 @@ function returnRuntimeResult() {
   gap: 8px;
 }
 
+.flow-navigation {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.flow-navigation span {
+  min-width: 34px;
+  color: #d9dee3;
+  font-size: 12px;
+  text-align: center;
+}
+
 .flow-button {
   display: inline-flex;
   align-items: center;
@@ -245,17 +395,32 @@ function returnRuntimeResult() {
   font-size: 12px;
 }
 
+.flow-icon-button {
+  display: inline-grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border: 1px solid rgba(121, 199, 185, 0.22);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.08);
+  color: #dff6f1;
+  cursor: pointer;
+}
+
 .flow-button.secondary {
   border-color: rgba(255, 255, 255, 0.14);
   background: rgba(255, 255, 255, 0.06);
   color: #d9dee3;
 }
 
+.flow-icon-button:disabled,
 .flow-button:disabled {
   cursor: not-allowed;
   opacity: 0.45;
 }
 
+.flow-icon-button:not(:disabled):hover,
+.flow-icon-button:not(:disabled):focus,
 .flow-button:not(:disabled):hover,
 .flow-button:not(:disabled):focus {
   filter: brightness(1.15);

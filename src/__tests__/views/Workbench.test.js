@@ -56,6 +56,8 @@ describe('Workbench view', () => {
     expect(flowPanel.exists()).toBe(true);
     expect(flowPanel.attributes('data-action-id')).toBe('action-0001');
     expect(flowPanel.attributes('data-runtime-sim-log-count')).toBe('1');
+    expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('1');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('-1');
     expect(
       flowPanel.find('[data-testid="workbench-flow-selected-action"]').text()
     ).toBe('普通攻击');
@@ -68,6 +70,21 @@ describe('Workbench view', () => {
     expect(
       flowPanel.find('[data-testid="workbench-flow-edit-result"]').text()
     ).toBe('无刷新结果');
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-runtime-navigation-index"]')
+        .text()
+    ).toBe('-/1');
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-runtime-previous"]')
+        .attributes('disabled')
+    ).toBeDefined();
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-runtime-next"]')
+        .attributes('disabled')
+    ).toBeDefined();
     expect(
       flowPanel
         .find('[data-testid="workbench-flow-open-runtime"]')
@@ -1606,6 +1623,93 @@ describe('Workbench view', () => {
         )
         .attributes('data-selected-state-point-id')
     ).toBe(refreshedStatePointId);
+  });
+
+  it('navigates runtime result points from the main flow panel', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-add-resource-action"]')
+      .trigger('click');
+    await nextTick();
+
+    await wrapper
+      .find('[data-testid="workbench-flow-open-runtime"]')
+      .trigger('click');
+    await nextTick();
+
+    let flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('2');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('0');
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-runtime-navigation-index"]')
+        .text()
+    ).toBe('1/2');
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-runtime-previous"]')
+        .attributes('disabled')
+    ).toBeDefined();
+    const nextRuntimePointButton = flowPanel.find(
+      '[data-testid="workbench-flow-runtime-next"]'
+    );
+    const nextRuntimePointId = nextRuntimePointButton.attributes(
+      'data-state-point-id'
+    );
+    expect(nextRuntimePointButton.attributes('disabled')).toBeUndefined();
+    expect(nextRuntimePointId).toBeTruthy();
+
+    await nextRuntimePointButton.trigger('click');
+    await nextTick();
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(nextRuntimePointId);
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('1');
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-runtime-navigation-index"]')
+        .text()
+    ).toBe('2/2');
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-runtime-next"]')
+        .attributes('disabled')
+    ).toBeDefined();
+    const previousRuntimePointButton = flowPanel.find(
+      '[data-testid="workbench-flow-runtime-previous"]'
+    );
+    const previousRuntimePointId = previousRuntimePointButton.attributes(
+      'data-state-point-id'
+    );
+    expect(previousRuntimePointButton.attributes('disabled')).toBeUndefined();
+    expect(previousRuntimePointId).toBeTruthy();
+
+    await previousRuntimePointButton.trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(previousRuntimePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-flow-panel"]')
+        .attributes('data-runtime-navigation-index')
+    ).toBe('0');
   });
 
   it('selects the source action when an action result is focused', async () => {

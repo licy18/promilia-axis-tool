@@ -13703,3 +13703,87 @@ Workbench 测试新增覆盖：
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一步 UI 主流程能力块应继续围绕完整工作区节奏推进，不再拆成单个状态标签或提示文案阶段。
+
+## 164. UI 主流程能力块：主流程运行结果导航
+
+本阶段属于 UI 主流程。
+
+### 164.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 164.2 WorkbenchFlowPanel 输入变化
+
+`WorkbenchFlowPanel` 新增输入：
+
+```text
+selectedStateCurvePointId
+```
+
+该字段用于在主流程条内判断当前选中的 runtime state point 位于第几个 applied runtime 结果。
+
+### 164.3 WorkbenchFlowPanel 事件变化
+
+`WorkbenchFlowPanel` 新增事件：
+
+```text
+select-runtime-state-point
+```
+
+`Workbench.vue` 接线为：
+
+```text
+select-runtime-state-point -> selectRuntimeStatePoint()
+```
+
+### 164.4 DOM 状态
+
+`workbench-flow-panel` 新增：
+
+```html
+data-runtime-navigation-count
+data-runtime-navigation-index
+data-runtime-next-state-point-id
+data-runtime-previous-state-point-id
+```
+
+新增主流程运行结果导航：
+
+```html
+data-testid="workbench-flow-runtime-navigation"
+data-testid="workbench-flow-runtime-navigation-index"
+data-testid="workbench-flow-runtime-previous"
+data-testid="workbench-flow-runtime-next"
+```
+
+### 164.5 运行时点 ID
+
+主流程条复用：
+
+```js
+createRuntimeStateCurvePointId(row, point)
+```
+
+输入来自：
+
+```text
+threeValueRuntimeProjection.simLog[]
+threeValueRuntimeProjection.enemyStateCurve.points[]
+threeValueRuntimeProjection.selfEnergyCurveByActor[].points[]
+```
+
+不新增独立 runtime point ID 规则。
+
+### 164.6 验证
+
+Workbench 测试新增覆盖：
+
+- 默认单 runtime 结果时，导航数量为 1，未选中时索引为 `-/1`，前后按钮禁用。
+- 添加资源动作后，主流程条 runtime 导航数量为 2。
+- 点击下一个 runtime 结果后，`runtimeSelectedDetail.statePointId` 切到下一个 state point。
+- 点击上一个 runtime 结果后，`runtimeSelectedDetail.statePointId` 回到上一个 state point。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
+- `npm run test -- --run`：通过，15 个测试文件、118 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步 UI 主流程能力块应继续围绕完整工作区节奏和编辑体验推进，不再拆成单个状态标签或提示文案阶段。

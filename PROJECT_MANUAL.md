@@ -6712,6 +6712,35 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - UI 主流程能力块继续推进时，优先补完整编辑体验的布局与操作闭环，例如把动作列表、时间轴、资源曲线、日志详情的焦点切换整理成更接近 Endaxis 的主工作区节奏。
 - 避免回到单个标签、同步提示或文案映射的微阶段。
 
+### 2026-07-08：UI 主流程能力块 - 运行结果前后导航
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `WorkbenchFlowPanel` 新增运行结果前后导航，直接基于 `threeValueRuntimeProjection.simLog` 和 runtime point 生成可浏览的 state point 列表。
+- `Workbench.vue` 将 `selectedStateCurvePointId` 传入主流程条，并把 `select-runtime-state-point` 事件接回既有 `selectRuntimeStatePoint()`。
+- 主流程条现在可在多个 applied runtime delta 间前后切换，同时保持资源曲线、三值详情和动作结果行使用同一个 runtime state point。
+- 该能力复用 `createRuntimeStateCurvePointId()`，不新增平行 ID 规则或保存字段。
+
+当前验证事实：
+
+- 默认单结果场景下，主流程条显示 1 条运行结果，未选中时导航为 `-/1` 且前后按钮禁用。
+- 添加资源动作后，runtime applied 结果增加到 2 条；点击主流程条的下一个/上一个按钮会切换 runtime detail 的 state point。
+- 切换后的 state point 会继续驱动既有资源曲线和动作结果定位链路。
+- 本阶段不新增保存字段，不改 simulation 输出，不追最终公式。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
+- `npm run test -- --run`：通过，15 个测试文件、118 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- UI 主流程能力块继续推进时，优先处理布局节奏和完整编辑体验，例如把主流程条、时间轴、运行详情和属性面板的空间关系进一步整理为更接近 Endaxis 的工作台。
+- 避免拆成单个状态提示阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

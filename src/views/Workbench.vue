@@ -47,10 +47,12 @@
       :selected-action="selectedAction"
       :runtime-projection="simulationResult.threeValueRuntimeProjection"
       :runtime-selected-detail="runtimeSelectedDetail"
+      :selected-state-curve-point-id="selectedStateCurvePointId"
       :action-edit-result-context="actionEditResultContext"
       @open-runtime-results="openRuntimeResultsFlow"
       @focus-runtime-action="focusRuntimeAction"
       @return-runtime-result="returnRuntimeResultFromProperties"
+      @select-runtime-state-point="selectRuntimeStatePoint"
     />
 
     <div class="workbench-grid">
