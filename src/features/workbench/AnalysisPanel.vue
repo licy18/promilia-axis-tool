@@ -155,6 +155,10 @@
         :data-current-action="isActionResultCurrentAction(entry)"
         :data-draft-dirty="draftResultStatus.dirty"
         :data-draft-status="draftResultStatus.key"
+        :data-edit-source-field="
+          getActionResultEditSource(entry)?.fieldKey ?? ''
+        "
+        :data-edit-source-label="getActionResultEditSource(entry)?.label ?? ''"
         :data-result-refresh-status="draftResultStatus.refreshKey"
         :data-has-runtime-trace="Boolean(getActionResultRuntimeTrace(entry))"
         :data-runtime-state-point-id="
@@ -190,6 +194,13 @@
             data-testid="workbench-action-result-refresh-status"
           >
             {{ draftResultStatus.refreshLabel }}
+          </small>
+          <small
+            v-if="getActionResultEditSource(entry)"
+            class="action-result-edit-source"
+            data-testid="workbench-action-result-edit-source"
+          >
+            {{ getActionResultEditSource(entry).label }}
           </small>
           <small>{{ formatActionResultSource(entry) }}</small>
           <small
@@ -261,6 +272,13 @@
           "
           :data-draft-dirty="draftResultStatus.dirty"
           :data-draft-status="draftResultStatus.key"
+          :data-edit-source-field="
+            getRuntimeResultEditSource(selectedRuntimeResultDetail)?.fieldKey ??
+            ''
+          "
+          :data-edit-source-label="
+            getRuntimeResultEditSource(selectedRuntimeResultDetail)?.label ?? ''
+          "
           :data-result-refresh-status="draftResultStatus.refreshKey"
           :data-state-point-id="selectedRuntimeResultDetail.statePointId"
           :data-track-key="selectedRuntimeResultDetail.trackKey"
@@ -852,6 +870,10 @@ const props = defineProps({
   draftStatus: {
     type: String,
     default: '',
+  },
+  actionEditSource: {
+    type: Object,
+    default: null,
   },
   candidateValueSeries: {
     type: Object,
@@ -1786,6 +1808,10 @@ function isActionResultCurrentAction(entry) {
   );
 }
 
+function getActionResultEditSource(entry) {
+  return getEditSourceForAction(entry?.actionId);
+}
+
 function createActionResultRuntimeTrace(actionId, rows) {
   const sortedRows = [...rows].sort(compareRuntimeTraceRows);
   const sourceDeltaIds = uniqueDisplayValues(
@@ -1924,9 +1950,23 @@ function formatRuntimeResultMeta(detail) {
   const source = formatSourceDeltaShortId(detail?.sourceDeltaId);
   const sourceText =
     source && source !== '-' ? `Delta ${source}` : 'Delta 待定位';
+  const editSource = getRuntimeResultEditSource(detail);
+  const editSourceText = editSource ? ` · ${editSource.label}` : '';
   return isRuntimeResultCurrentAction(detail)
-    ? `正在编辑 · ${draftResultStatus.value.resultLabel} · ${draftResultStatus.value.refreshLabel} · ${sourceText}`
+    ? `正在编辑 · ${draftResultStatus.value.resultLabel} · ${draftResultStatus.value.refreshLabel}${editSourceText} · ${sourceText}`
     : sourceText;
+}
+
+function getRuntimeResultEditSource(detail) {
+  return getEditSourceForAction(detail?.actionId);
+}
+
+function getEditSourceForAction(actionId) {
+  const source = props.actionEditSource;
+  if (!source?.actionId || !actionId || source.actionId !== actionId) {
+    return null;
+  }
+  return source.fieldKey && source.label ? source : null;
 }
 
 function createDraftResultStatus(status) {
@@ -3180,6 +3220,15 @@ h2 {
   border-radius: 4px;
   background: rgba(121, 199, 185, 0.12);
   color: #9ce0d2;
+  font-weight: 700;
+}
+
+.action-result-edit-source {
+  width: max-content;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(242, 179, 102, 0.12);
+  color: #f2b366;
   font-weight: 700;
 }
 

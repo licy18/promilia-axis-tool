@@ -1494,6 +1494,7 @@ describe('Workbench view', () => {
     expect(actionResultRow.attributes('data-result-refresh-status')).toBe(
       'current-draft'
     );
+    expect(actionResultRow.attributes('data-edit-source-field')).toBe('');
 
     await actionResultRow.trigger('click');
     await nextTick();
@@ -1530,6 +1531,9 @@ describe('Workbench view', () => {
     expect(
       actionResultDetailPanel.attributes('data-result-refresh-status')
     ).toBe('current-draft');
+    expect(actionResultDetailPanel.attributes('data-edit-source-field')).toBe(
+      ''
+    );
     expect(actionResultDetailPanel.text()).toContain('正在编辑');
     expect(actionResultDetailPanel.text()).toContain('草稿已变更');
     expect(actionResultDetailPanel.text()).toContain(
@@ -1555,6 +1559,29 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
     ).toBe('0');
+
+    await wrapper.find('[data-testid="workbench-level-input"]').setValue('2');
+    await nextTick();
+
+    actionResultRow = wrapper.find(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    );
+    expect(actionResultRow.attributes('data-edit-source-field')).toBe('level');
+    expect(actionResultRow.attributes('data-edit-source-label')).toBe(
+      '等级变更'
+    );
+    expect(
+      actionResultRow
+        .find('[data-testid="workbench-action-result-edit-source"]')
+        .text()
+    ).toBe('等级变更');
+    const editedActionResultDetailPanel = wrapper.find(
+      '[data-testid="workbench-action-result-detail-panel"]'
+    );
+    expect(
+      editedActionResultDetailPanel.attributes('data-edit-source-field')
+    ).toBe('level');
+    expect(editedActionResultDetailPanel.text()).toContain('等级变更');
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     await nextTick();

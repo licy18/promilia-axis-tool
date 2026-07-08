@@ -11607,3 +11607,114 @@ data-result-refresh-status
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DD 应继续完善编辑反馈链路，优先提供最小字段变更来源入口。
+
+## 137. 阶段 5-8DD：last action edit source on result rows
+
+阶段 5-8DD 不修改项目保存 schema，也不修改 simulation 输出结构。本阶段只新增 Workbench 前端派生状态，用于把最近一次动作字段编辑来源展示到结果区。
+
+### 137.1 Workbench 新增前端状态
+
+新增：
+
+```js
+actionEditSource
+```
+
+结构：
+
+```js
+{
+  actionId: string,
+  fieldKey: string,
+  label: string,
+  sequence: number,
+}
+```
+
+该状态不保存到 `workbench-draft`，恢复/重置草稿时清空。
+
+### 137.2 字段来源映射
+
+当前最小映射：
+
+```text
+startMs -> 开始时间变更
+level -> 等级变更
+actionVariantIndex / damageSegmentIndex -> 动作形态变更
+durationMs -> 时长变更
+actorCharacterId -> 动作归属变更
+skillId -> 技能变更
+laneId -> 轨道变更
+change -> 资源变化变更
+eventType -> 敌人事件变更
+targetCharacterId -> 切换目标变更
+resource -> 资源类型变更
+reason -> 资源原因变更
+note -> 备注变更
+```
+
+当前记录点：
+
+- `updateAction(patch)`
+- `updateActionTime({ actionId, startMs })`
+- `updateActionDuration({ actionId, durationMs })`
+- `updateActionLane({ actionId, laneId })`
+
+### 137.3 AnalysisPanel 新增 prop
+
+新增：
+
+```js
+actionEditSource: Object | null
+```
+
+由 `Workbench` 传入：
+
+```vue
+:action-edit-source="actionEditSource"
+```
+
+只有 `actionEditSource.actionId` 与结果行 / 结果详情对应动作一致时展示。
+
+### 137.4 动作结果行新增 DOM 状态
+
+`workbench-action-result-source-row` 新增：
+
+```html
+data-edit-source-field
+data-edit-source-label
+```
+
+当前编辑动作结果行额外显示：
+
+```html
+data-testid="workbench-action-result-edit-source"
+```
+
+### 137.5 结果详情区新增 DOM 状态
+
+`workbench-action-result-detail-panel` 新增：
+
+```html
+data-edit-source-field
+data-edit-source-label
+```
+
+当前编辑动作的标题摘要会在刷新状态后追加最近编辑来源。
+
+### 137.6 验证
+
+当前测试覆盖：
+
+- 尚未编辑字段时，`action-0001` 结果行 `data-edit-source-field=""`。
+- 修改等级后，结果行 `data-edit-source-field="level"`、`data-edit-source-label="等级变更"`。
+- 当前编辑动作结果行显示 `等级变更`。
+- 结果详情区同步 `data-edit-source-field="level"` 并包含 `等级变更`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DE 应继续完善编辑闭环，优先让字段来源标签反向定位到对应编辑控件或时间轴入口。

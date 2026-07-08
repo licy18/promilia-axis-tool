@@ -5802,6 +5802,39 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DD 目标：继续完善编辑反馈链路，优先在当前编辑动作附近提供最小字段变更来源入口，例如标记是开始时间、等级、动作形态或时长改变触发了结果刷新。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DD 结果区展示最近编辑字段来源
+
+本轮完成：
+
+- `Workbench` 新增前端 `actionEditSource` 状态，记录最近一次动作字段编辑来源。
+- 属性面板编辑和时间轴编辑会记录最小字段来源，例如 `level -> 等级变更`、`startMs -> 开始时间变更`、`durationMs -> 时长变更`、`actionVariantIndex -> 动作形态变更`。
+- `AnalysisPanel` 接入 `actionEditSource`，当前编辑动作的结果行和结果详情区新增字段来源 DOM 状态与标签。
+- Workbench 测试覆盖编辑等级后，结果行和结果详情区都显示 `等级变更`。
+
+当前验证事实：
+
+- 选中 `action-0001` 但尚未编辑字段时，结果行 `data-edit-source-field=""`。
+- 修改等级后，结果行写入 `data-edit-source-field="level"`、`data-edit-source-label="等级变更"`，并显示 `等级变更` 标签。
+- 结果详情区同步 `data-edit-source-field="level"` 并显示 `等级变更`。
+- 本阶段只记录最近一次动作字段编辑来源，不新增 result revision、action revision、simulation 输出或保存 schema。
+
+当前边界：
+
+- 本阶段不是完整字段级 diff 历史，只是最近编辑来源提示。
+- 来源记录仅覆盖当前动作编辑入口和时间轴动作编辑入口；全局敌人/角色选择等非动作字段暂不纳入动作结果来源。
+- 尚未做点击来源后聚焦属性控件、时间轴控件或字段级前后值对比。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、39 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、113 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8DE 目标：继续完善编辑闭环，优先让字段来源标签能够反向定位到对应编辑控件或时间轴入口，减少用户看到来源后还要手动寻找控件的步骤。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

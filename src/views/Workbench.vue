@@ -133,6 +133,7 @@
           :runtime-selected-detail="runtimeSelectedDetail"
           :candidate-value-series="simulationResult.candidateValueSeries"
           :draft-status="draftStatus"
+          :action-edit-source="actionEditSource"
           :three-value-curve-framework="
             simulationResult.threeValueCurveFramework
           "
@@ -224,6 +225,38 @@ const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
   sampled: false,
   placeholder: false,
 };
+const ACTION_EDIT_SOURCE_LABELS = {
+  startMs: '开始时间变更',
+  level: '等级变更',
+  actionVariantIndex: '动作形态变更',
+  damageSegmentIndex: '动作形态变更',
+  durationMs: '时长变更',
+  actorCharacterId: '动作归属变更',
+  skillId: '技能变更',
+  laneId: '轨道变更',
+  change: '资源变化变更',
+  eventType: '敌人事件变更',
+  targetCharacterId: '切换目标变更',
+  resource: '资源类型变更',
+  reason: '资源原因变更',
+  note: '备注变更',
+};
+const ACTION_EDIT_SOURCE_PRIORITY = [
+  'startMs',
+  'level',
+  'actionVariantIndex',
+  'damageSegmentIndex',
+  'durationMs',
+  'actorCharacterId',
+  'skillId',
+  'laneId',
+  'change',
+  'eventType',
+  'targetCharacterId',
+  'resource',
+  'reason',
+  'note',
+];
 const AUTO_DELAY_NOTE_PATTERN =
   /^自动推迟：同轨已有动作占用，已从 \d+(?:\.\d+)?ms 调整到 \d+(?:\.\d+)?ms。$/;
 const initialDraft = createDefaultWorkbenchDraftState();
@@ -242,6 +275,7 @@ const calculatorDiagnosticFocus = ref({ scope: '', sequence: 0 });
 const runtimeLogFocus = ref({ source: '', statePointId: '', sequence: 0 });
 const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const draftStatus = ref('未保存草稿');
+const actionEditSource = ref(createEmptyActionEditSource());
 
 const project = computed(() =>
   createWorkbenchProject(selection.value, {
@@ -433,6 +467,7 @@ function updateAction(patch) {
   if (patch.actorCharacterId != null) {
     setActionLibraryCharacterId(patch.actorCharacterId);
   }
+  recordActionEditSource(selectedActionId.value, patch);
   markDraftDirty();
 }
 
@@ -468,6 +503,7 @@ function updateActionTime({ actionId, startMs }) {
       startMs: clampNumber(startMs, 0, project.value.time.durationMs),
     });
   });
+  recordActionEditSource(actionId, { startMs });
   markDraftDirty();
 }
 
@@ -489,6 +525,7 @@ function updateActionDuration({ actionId, durationMs }) {
       ),
     });
   });
+  recordActionEditSource(actionId, { durationMs });
   markDraftDirty();
 }
 
@@ -546,6 +583,7 @@ function updateActionLane({ actionId, laneId }) {
   });
 
   if (didUpdate) {
+    recordActionEditSource(actionId, { laneId });
     markDraftDirty();
   }
 }
@@ -901,10 +939,46 @@ function applyDraftState(draft) {
   syncActionLibraryCharacterIdFromDraft(
     actionDrafts.value.find(action => action.id === draft.selectedActionId)
   );
+  clearActionEditSource();
 }
 
 function markDraftDirty() {
   draftStatus.value = '有未保存改动';
+}
+
+function createEmptyActionEditSource(sequence = 0) {
+  return {
+    actionId: '',
+    fieldKey: '',
+    label: '',
+    sequence,
+  };
+}
+
+function clearActionEditSource() {
+  actionEditSource.value = createEmptyActionEditSource(
+    actionEditSource.value.sequence + 1
+  );
+}
+
+function recordActionEditSource(actionId, patch = {}) {
+  const fieldKey = resolveActionEditSourceField(patch);
+  if (!actionId || !fieldKey) {
+    return;
+  }
+
+  actionEditSource.value = {
+    actionId,
+    fieldKey,
+    label: ACTION_EDIT_SOURCE_LABELS[fieldKey] ?? `${fieldKey}变更`,
+    sequence: actionEditSource.value.sequence + 1,
+  };
+}
+
+function resolveActionEditSourceField(patch = {}) {
+  return ACTION_EDIT_SOURCE_PRIORITY.find(fieldKey =>
+    Object.prototype.hasOwnProperty.call(patch, fieldKey)
+  );
 }
 
 function selectAction(actionId) {

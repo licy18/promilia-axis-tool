@@ -51,7 +51,7 @@ npm run dev
   - UI 层：优先补 Endaxis 式资源监控、模拟日志、伤害/三值详情弹层、贡献拆分和编辑器体验。
 - Evidence 层保留为来源追溯和诊断信息，不再作为用户主路径，也不阻塞工具体验。
 - `actionResultTimeline[]` 必须持续按动作追踪三类数值变化：敌人 HP 伤害、敌人韧性削减、自身能量变化。不要把韧性或充能混进 HP 伤害公式。
-- 当前 `5-8DC` 已让动作结果行和结果详情区提示结果已随当前草稿刷新；下一步优先提供最小字段变更来源入口。
+- 当前 `5-8DD` 已让动作结果行和结果详情区展示最近编辑字段来源；下一步优先让来源标签反向定位到对应编辑控件。
 - HP 基线可从 `scenario.enemy.stats.maxHp * scenario.enemy.hpMultiplier` 派生；韧性基线和角色初始当前 SP 暂缺真实机制时必须保持待确认状态，不要用 0 或上限值冒充已确认当前值。
 - HP / 韧性 / 自身能量 delta 的产生入口应收束为可替换 calculator contract，当前 evidence/raw/pending 输出必须带 `status`、`sourceIds`、`confidence` 和 `replaceable`，为后续接入真实 AzPr 公式留接口。
 
