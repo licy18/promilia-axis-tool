@@ -12776,3 +12776,74 @@ workbench-action-edit-feedback[data-edit-origin="runtime-focus"]
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DT 应收敛属性面板内的编辑焦点提示与可操作控件。
+
+## 153. 阶段 5-8DT：属性面板编辑焦点提示
+
+阶段目标：
+
+- 让属性面板内被结果定位命中的编辑控件更明确地显示自身来源和用途。
+
+### 153.1 数据结构变化
+
+本阶段不新增保存字段，不变更 `Project` schema、simulation 输出或 localStorage 数据。
+
+`PropertiesPanel` 动作编辑控件新增前端 DOM 派生状态：
+
+```html
+data-edit-focus-label
+data-edit-focus-origin
+```
+
+继续复用既有字段：
+
+```html
+data-edit-focused
+data-edit-focus-summary
+```
+
+派生来源：
+
+```text
+props.actionEditFocus.label
+props.actionEditFocus.editOrigin
+props.actionEditFocus.changeSummary
+```
+
+### 153.2 展示规则
+
+当控件满足：
+
+```text
+data-edit-focused="true"
+```
+
+控件通过统一 CSS 显示：
+
+```text
+{data-edit-focus-label} · {data-edit-focus-summary}
+```
+
+当：
+
+```text
+data-edit-focus-origin="runtime-focus"
+```
+
+提示使用 runtime 结果定位样式。
+
+### 153.3 验证
+
+当前测试覆盖：
+
+- 从独立“三值详情”入口定位动作后，属性面板 `startMs` 控件写入 `data-edit-focus-label="结果定位"`。
+- 同一控件写入 `data-edit-focus-origin="runtime-focus"`。
+- 同一控件摘要包含三值轨道。
+- 从事件日志详情入口定位动作后，也能得到同一组属性面板焦点状态。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、40 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、114 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DU 应补编辑后的结果回看提示，区分原始结果点和刷新后结果点。

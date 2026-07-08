@@ -2016,13 +2016,21 @@ describe('Workbench view', () => {
     expect(focusedTimelineAction.attributes('data-edit-focus-label')).toBe(
       '结果定位'
     );
+    const runtimeDetailStartControl = wrapper.find(
+      '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+    );
+    expect(runtimeDetailStartControl.attributes('data-edit-focused')).toBe(
+      'true'
+    );
+    expect(runtimeDetailStartControl.attributes('data-edit-focus-label')).toBe(
+      '结果定位'
+    );
+    expect(runtimeDetailStartControl.attributes('data-edit-focus-origin')).toBe(
+      'runtime-focus'
+    );
     expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
-        )
-        .attributes('data-edit-focused')
-    ).toBe('true');
+      runtimeDetailStartControl.attributes('data-edit-focus-summary')
+    ).toContain('敌人 HP');
 
     await wrapper.find('[data-testid="workbench-start-input"]').setValue('100');
     await nextTick();
@@ -2091,13 +2099,19 @@ describe('Workbench view', () => {
     expect(focusedTimelineAction.attributes('data-edit-focus-label')).toBe(
       '结果定位'
     );
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
-        )
-        .attributes('data-edit-focused')
-    ).toBe('true');
+    const logStartControl = wrapper.find(
+      '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+    );
+    expect(logStartControl.attributes('data-edit-focused')).toBe('true');
+    expect(logStartControl.attributes('data-edit-focus-label')).toBe(
+      '结果定位'
+    );
+    expect(logStartControl.attributes('data-edit-focus-origin')).toBe(
+      'runtime-focus'
+    );
+    expect(logStartControl.attributes('data-edit-focus-summary')).toContain(
+      '敌人 HP'
+    );
 
     await wrapper.find('[data-testid="workbench-start-input"]').setValue('100');
     await nextTick();

@@ -44,6 +44,8 @@
         data-testid="workbench-action-edit-control"
         data-edit-field="skillId"
         :data-edit-focused="isEditFocusField('skillId')"
+        :data-edit-focus-label="getEditFocusLabel('skillId')"
+        :data-edit-focus-origin="getEditFocusOrigin('skillId')"
         :data-edit-focus-summary="getEditFocusSummary('skillId')"
         :class="{ 'edit-focused': isEditFocusField('skillId') }"
       >
@@ -89,6 +91,8 @@
         data-testid="workbench-action-edit-control"
         data-edit-field="startMs"
         :data-edit-focused="isEditFocusField('startMs')"
+        :data-edit-focus-label="getEditFocusLabel('startMs')"
+        :data-edit-focus-origin="getEditFocusOrigin('startMs')"
         :data-edit-focus-summary="getEditFocusSummary('startMs')"
         :class="{ 'edit-focused': isEditFocusField('startMs') }"
       >
@@ -108,6 +112,8 @@
         data-testid="workbench-action-edit-control"
         :data-edit-field="secondaryEditFieldKey"
         :data-edit-focused="isEditFocusField(secondaryEditFieldKey)"
+        :data-edit-focus-label="getEditFocusLabel(secondaryEditFieldKey)"
+        :data-edit-focus-origin="getEditFocusOrigin(secondaryEditFieldKey)"
         :data-edit-focus-summary="getEditFocusSummary(secondaryEditFieldKey)"
         :class="{ 'edit-focused': isEditFocusField(secondaryEditFieldKey) }"
       >
@@ -165,6 +171,8 @@
         data-testid="workbench-action-edit-control"
         data-edit-field="actorCharacterId"
         :data-edit-focused="isEditFocusField('actorCharacterId')"
+        :data-edit-focus-label="getEditFocusLabel('actorCharacterId')"
+        :data-edit-focus-origin="getEditFocusOrigin('actorCharacterId')"
         :data-edit-focus-summary="getEditFocusSummary('actorCharacterId')"
         :class="{ 'edit-focused': isEditFocusField('actorCharacterId') }"
       >
@@ -196,6 +204,8 @@
         data-testid="workbench-action-edit-control"
         data-edit-field="actionVariantIndex"
         :data-edit-focused="isEditFocusField('actionVariantIndex')"
+        :data-edit-focus-label="getEditFocusLabel('actionVariantIndex')"
+        :data-edit-focus-origin="getEditFocusOrigin('actionVariantIndex')"
         :data-edit-focus-summary="getEditFocusSummary('actionVariantIndex')"
         :class="{ 'edit-focused': isEditFocusField('actionVariantIndex') }"
       >
@@ -341,6 +351,8 @@
         data-testid="workbench-action-edit-control"
         data-edit-field="resource"
         :data-edit-focused="isEditFocusField('resource')"
+        :data-edit-focus-label="getEditFocusLabel('resource')"
+        :data-edit-focus-origin="getEditFocusOrigin('resource')"
         :data-edit-focus-summary="getEditFocusSummary('resource')"
         :class="{ 'edit-focused': isEditFocusField('resource') }"
       >
@@ -357,6 +369,8 @@
         data-testid="workbench-action-edit-control"
         data-edit-field="reason"
         :data-edit-focused="isEditFocusField('reason')"
+        :data-edit-focus-label="getEditFocusLabel('reason')"
+        :data-edit-focus-origin="getEditFocusOrigin('reason')"
         :data-edit-focus-summary="getEditFocusSummary('reason')"
         :class="{ 'edit-focused': isEditFocusField('reason') }"
       >
@@ -375,6 +389,8 @@
       data-testid="workbench-action-edit-control"
       data-edit-field="note"
       :data-edit-focused="isEditFocusField('note')"
+      :data-edit-focus-label="getEditFocusLabel('note')"
+      :data-edit-focus-origin="getEditFocusOrigin('note')"
       :data-edit-focus-summary="getEditFocusSummary('note')"
       :class="{ 'edit-focused': isEditFocusField('note') }"
     >
@@ -766,6 +782,16 @@ function getEditFocusSummary(fieldKey) {
     : '';
 }
 
+function getEditFocusLabel(fieldKey) {
+  return isEditFocusField(fieldKey) ? props.actionEditFocus?.label ?? '' : '';
+}
+
+function getEditFocusOrigin(fieldKey) {
+  return isEditFocusField(fieldKey)
+    ? props.actionEditFocus?.editOrigin ?? ''
+    : '';
+}
+
 function normalizeEditFocusField(fieldKey) {
   if (fieldKey === 'damageSegmentIndex') {
     return 'actionVariantIndex';
@@ -894,6 +920,23 @@ label span {
 label.edit-focused span {
   color: #f2b366;
   font-weight: 700;
+}
+
+label.edit-focused::after {
+  min-width: 0;
+  padding: 5px 7px;
+  border-radius: 4px;
+  background: rgba(242, 179, 102, 0.12);
+  color: #ffd8a6;
+  content: attr(data-edit-focus-label) ' · ' attr(data-edit-focus-summary);
+  font-size: 11px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+label.edit-focused[data-edit-focus-origin='runtime-focus']::after {
+  background: rgba(121, 199, 185, 0.12);
+  color: #9ce0d2;
 }
 
 select,

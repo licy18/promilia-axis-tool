@@ -6349,6 +6349,40 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DT 目标：继续完善 Workbench 主流程编辑体验，优先收敛属性面板内的编辑焦点提示与可操作控件，让修轴入口在视觉上更明确。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DT 属性面板编辑焦点提示
+
+本轮完成：
+
+- `PropertiesPanel` 的所有动作编辑控件新增 `data-edit-focus-label` 和 `data-edit-focus-origin`。
+- 被 `actionEditFocus` 命中的控件会通过统一样式显示焦点标签和摘要，例如 `结果定位 · 三值点 0s0f · 敌人 HP`。
+- runtime 结果定位来源会通过 `data-edit-focus-origin="runtime-focus"` 使用独立提示色，和普通字段来源聚焦区分。
+- Workbench 测试补充三值详情入口和事件日志入口进入修轴后，属性面板 `startMs` 控件携带 `结果定位`、`runtime-focus` 和三值轨道摘要。
+
+当前验证事实：
+
+- 从三值详情 `定位动作` 后，属性面板 `startMs` 控件写入 `data-edit-focus-label="结果定位"`。
+- 同一控件写入 `data-edit-focus-origin="runtime-focus"`。
+- 同一控件 `data-edit-focus-summary` 包含 `敌人 HP`。
+- 从事件日志详情 `定位动作` 后也能得到同一组属性面板焦点状态。
+- 本阶段只新增前端 DOM 状态和样式提示，不新增公式、simulation 输出或保存 schema。
+
+当前边界：
+
+- 焦点提示仍只展示最近一次焦点，不保留多步历史。
+- 仍未根据日志/结果类型自动选择除 `startMs` 外的字段。
+- 暂未做批量编辑或快捷键。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、40 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、114 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8DU 目标：继续完善 Workbench 主流程编辑体验，优先补编辑后的结果回看提示，让用户修改字段后能更明确地区分原始结果点和刷新后结果点。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
