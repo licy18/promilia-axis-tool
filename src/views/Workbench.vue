@@ -128,6 +128,7 @@
 
         <RuntimeSelectedDetailPanel
           :detail="runtimeSelectedDetail"
+          :action-edit-focus="actionEditFocus"
           @focus-runtime-action="focusRuntimeAction"
         />
 
@@ -173,6 +174,7 @@
         :selected-state-curve-point-id="selectedStateCurvePointId"
         :calculator-diagnostic-focus="calculatorDiagnosticFocus"
         :runtime-log-focus="runtimeLogFocus"
+        :action-edit-focus="actionEditFocus"
         @select-runtime-state-point="selectRuntimeStatePoint"
         @focus-runtime-action="focusRuntimeAction"
       />

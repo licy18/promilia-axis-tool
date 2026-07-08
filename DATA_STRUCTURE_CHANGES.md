@@ -12995,3 +12995,88 @@ data-result-context-active="true|false"
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DW 应继续压缩结果定位后的编辑路径，让资源曲线、三值详情、模拟日志和动作属性面板之间的当前编辑上下文更紧凑一致。
+
+## 156. 阶段 5-8DW：结果定位编辑焦点同步状态
+
+阶段目标：
+
+- 让三值详情、模拟日志和动作属性面板共享结果定位后的当前编辑焦点状态。
+
+### 156.1 数据结构变化
+
+本阶段不新增保存字段，不变更 `Project` schema、simulation 输出或 localStorage 数据。
+
+`Workbench` 将已有的前端状态 `actionEditFocus` 传给：
+
+```text
+RuntimeSelectedDetailPanel
+EventLogPanel
+```
+
+两个面板仅在以下条件同时满足时派生同步状态：
+
+```text
+actionEditFocus.editOrigin === "runtime-focus"
+actionEditFocus.actionId === 当前详情 actionId
+actionEditFocus.originStatePointId === 当前详情 statePointId
+```
+
+派生出的状态结构：
+
+```js
+{
+  status: 'edit-focus-synced',
+  actionId: string,
+  fieldKey: string,
+  label: string,
+  statePointId: string,
+  summary: string
+}
+```
+
+### 156.2 DOM 状态
+
+三值详情新增：
+
+```html
+data-testid="workbench-runtime-selected-detail-edit-context"
+data-edit-context-status="edit-focus-synced"
+data-action-id
+data-edit-focus-field
+data-edit-focus-label
+data-state-point-id
+```
+
+模拟日志详情新增：
+
+```html
+data-testid="workbench-runtime-sim-log-edit-context"
+data-edit-context-status="edit-focus-synced"
+data-action-id
+data-edit-focus-field
+data-edit-focus-label
+data-state-point-id
+```
+
+含义：
+
+- 状态存在：当前详情或日志点已经把编辑焦点同步到动作属性面板。
+- 状态不存在：尚未从该结果点进入动作编辑，或当前编辑焦点来自其他动作/其他 state point。
+
+### 156.3 验证
+
+当前测试覆盖：
+
+- 三值详情点击 `定位动作` 前，不显示同步状态。
+- 三值详情点击 `定位动作` 后，显示 `edit-focus-synced`。
+- 模拟日志点击 `定位动作` 前，不显示同步状态。
+- 模拟日志点击 `定位动作` 后，显示 `edit-focus-synced`。
+- 两个入口仍会同步属性面板 `startMs` 控件的 `runtime-focus` 高亮。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、40 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、114 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DX 应补结果定位后的快捷往返，让编辑、结果回看和日志定位之间的切换更少。

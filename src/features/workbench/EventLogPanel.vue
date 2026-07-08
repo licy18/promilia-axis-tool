@@ -189,6 +189,20 @@
           <EditPen class="runtime-log-action-focus-icon" />
           <span>定位动作</span>
         </button>
+        <div
+          v-if="runtimeLogEditContext"
+          class="runtime-log-edit-context"
+          :data-action-id="runtimeLogEditContext.actionId"
+          :data-edit-context-status="runtimeLogEditContext.status"
+          :data-edit-focus-field="runtimeLogEditContext.fieldKey"
+          :data-edit-focus-label="runtimeLogEditContext.label"
+          :data-state-point-id="runtimeLogEditContext.statePointId"
+          data-testid="workbench-runtime-sim-log-edit-context"
+        >
+          <span>编辑焦点已同步</span>
+          <strong>{{ runtimeLogEditContext.label }}</strong>
+          <small>{{ runtimeLogEditContext.summary }}</small>
+        </div>
       </div>
 
       <div
@@ -278,8 +292,15 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  actionEditFocus: {
+    type: Object,
+    default: null,
+  },
 });
-const emit = defineEmits(['select-runtime-state-point', 'focus-runtime-action']);
+const emit = defineEmits([
+  'select-runtime-state-point',
+  'focus-runtime-action',
+]);
 
 const selectedRuntimeLogIndex = ref(0);
 const runtimeTrackFilter = ref('all');
@@ -429,7 +450,8 @@ const selectedRuntimeStatePointId = computed(() =>
 const matchedRuntimeSelectedDetail = computed(() => {
   if (
     !props.runtimeSelectedDetail?.statePointId ||
-    props.runtimeSelectedDetail.statePointId !== selectedRuntimeStatePointId.value
+    props.runtimeSelectedDetail.statePointId !==
+      selectedRuntimeStatePointId.value
   ) {
     return null;
   }
@@ -504,9 +526,18 @@ const runtimeLogActionFocus = computed(() => ({
     selectedRuntimeLog.value?.trackKey ??
     '',
 }));
+const runtimeLogEditContext = computed(() =>
+  createRuntimeLogEditContext({
+    actionId: runtimeLogActionFocus.value.actionId,
+    statePointId: runtimeLogDetailStatePointId.value,
+    focus: props.actionEditFocus,
+  })
+);
 const selectedRuntimeContributionRows = computed(() =>
   matchedRuntimeSelectedDetail.value
-    ? createRuntimeContributionRowsFromDetail(matchedRuntimeSelectedDetail.value)
+    ? createRuntimeContributionRowsFromDetail(
+        matchedRuntimeSelectedDetail.value
+      )
     : createRuntimeContributionRows(selectedRuntimeLog.value)
 );
 const selectedRuntimeSourceRows = computed(() =>
@@ -668,6 +699,31 @@ function focusRuntimeLogByStatePoint(statePointId) {
 
 function isRuntimeLogFocusSource(source) {
   return source === 'action-result' || source === 'action-contribution';
+}
+
+function createRuntimeLogEditContext({
+  actionId = '',
+  statePointId = '',
+  focus = null,
+} = {}) {
+  if (
+    !actionId ||
+    !statePointId ||
+    !focus?.actionId ||
+    focus.editOrigin !== 'runtime-focus' ||
+    focus.actionId !== actionId ||
+    focus.originStatePointId !== statePointId
+  ) {
+    return null;
+  }
+  return {
+    status: 'edit-focus-synced',
+    actionId: focus.actionId,
+    fieldKey: focus.fieldKey ?? '',
+    label: focus.label ?? '结果定位',
+    statePointId,
+    summary: focus.changeSummary ?? '',
+  };
 }
 
 function syncSelectedRuntimeLogIndexFromStatePoint(rows) {
@@ -1181,6 +1237,38 @@ h2 {
   overflow: hidden;
   color: #ffffff;
   font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.runtime-log-detail .runtime-log-edit-context {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(121, 199, 185, 0.28);
+  background: rgba(121, 199, 185, 0.1);
+  color: #dff9f3;
+  font-size: 11px;
+}
+
+.runtime-log-edit-context span {
+  margin: 0;
+  color: #9ce0d2;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.runtime-log-edit-context strong {
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.runtime-log-edit-context small {
+  min-width: 0;
+  overflow: hidden;
+  color: #aeb8c1;
   text-overflow: ellipsis;
   white-space: nowrap;
 }

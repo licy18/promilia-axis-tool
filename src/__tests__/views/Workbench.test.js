@@ -1973,6 +1973,11 @@ describe('Workbench view', () => {
       appliedStatePointId
     );
     expect(runtimeDetailActionFocus.attributes('disabled')).toBeUndefined();
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-edit-context"]')
+        .exists()
+    ).toBe(false);
 
     await runtimeDetailActionFocus.trigger('click');
     await nextTick();
@@ -2003,6 +2008,24 @@ describe('Workbench view', () => {
     expect(
       runtimeDetailStartControl.attributes('data-edit-focus-summary')
     ).toContain('敌人 HP');
+    const runtimeDetailEditContext = wrapper.find(
+      '[data-testid="workbench-runtime-selected-detail-edit-context"]'
+    );
+    expect(runtimeDetailEditContext.exists()).toBe(true);
+    expect(
+      runtimeDetailEditContext.attributes('data-edit-context-status')
+    ).toBe('edit-focus-synced');
+    expect(runtimeDetailEditContext.attributes('data-action-id')).toBe(
+      'action-0001'
+    );
+    expect(runtimeDetailEditContext.attributes('data-edit-focus-field')).toBe(
+      'startMs'
+    );
+    expect(runtimeDetailEditContext.attributes('data-state-point-id')).toBe(
+      appliedStatePointId
+    );
+    expect(runtimeDetailEditContext.text()).toContain('编辑焦点已同步');
+    expect(runtimeDetailEditContext.text()).toContain('结果定位');
 
     await wrapper.find('[data-testid="workbench-start-input"]').setValue('100');
     await nextTick();
@@ -2054,6 +2077,11 @@ describe('Workbench view', () => {
     expect(logActionFocus.attributes('data-focus-field')).toBe('startMs');
     expect(logActionFocus.attributes('data-state-point-id')).toBe(statePointId);
     expect(logActionFocus.attributes('disabled')).toBeUndefined();
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-edit-context"]')
+        .exists()
+    ).toBe(false);
 
     await logActionFocus.trigger('click');
     await nextTick();
@@ -2082,6 +2110,18 @@ describe('Workbench view', () => {
     expect(logStartControl.attributes('data-edit-focus-summary')).toContain(
       '敌人 HP'
     );
+    const logEditContext = wrapper.find(
+      '[data-testid="workbench-runtime-sim-log-edit-context"]'
+    );
+    expect(logEditContext.exists()).toBe(true);
+    expect(logEditContext.attributes('data-edit-context-status')).toBe(
+      'edit-focus-synced'
+    );
+    expect(logEditContext.attributes('data-action-id')).toBe('action-0001');
+    expect(logEditContext.attributes('data-edit-focus-field')).toBe('startMs');
+    expect(logEditContext.attributes('data-state-point-id')).toBe(statePointId);
+    expect(logEditContext.text()).toContain('编辑焦点已同步');
+    expect(logEditContext.text()).toContain('结果定位');
 
     await wrapper.find('[data-testid="workbench-start-input"]').setValue('100');
     await nextTick();

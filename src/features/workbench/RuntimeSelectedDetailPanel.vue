@@ -49,6 +49,21 @@
       </div>
     </div>
 
+    <div
+      v-if="runtimeDetailEditContext"
+      class="runtime-detail-edit-context"
+      :data-action-id="runtimeDetailEditContext.actionId"
+      :data-edit-context-status="runtimeDetailEditContext.status"
+      :data-edit-focus-field="runtimeDetailEditContext.fieldKey"
+      :data-edit-focus-label="runtimeDetailEditContext.label"
+      :data-state-point-id="runtimeDetailEditContext.statePointId"
+      data-testid="workbench-runtime-selected-detail-edit-context"
+    >
+      <span>编辑焦点已同步</span>
+      <strong>{{ runtimeDetailEditContext.label }}</strong>
+      <small>{{ runtimeDetailEditContext.summary }}</small>
+    </div>
+
     <div class="runtime-detail-values">
       <div>
         <span>Delta</span>
@@ -147,6 +162,7 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { DataAnalysis, EditPen } from '@element-plus/icons-vue';
 
 const props = defineProps({
@@ -154,9 +170,17 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  actionEditFocus: {
+    type: Object,
+    default: null,
+  },
 });
 
 const emit = defineEmits(['focus-runtime-action']);
+
+const runtimeDetailEditContext = computed(() =>
+  createRuntimeDetailEditContext(props.detail, props.actionEditFocus)
+);
 
 function focusRuntimeAction() {
   const detail = props.detail;
@@ -235,6 +259,27 @@ function formatNumber(value) {
 
 function formatSourceValues(values) {
   return values?.length ? values.join(', ') : '无';
+}
+
+function createRuntimeDetailEditContext(detail, focus) {
+  if (
+    !detail?.actionId ||
+    !detail?.statePointId ||
+    !focus?.actionId ||
+    focus.editOrigin !== 'runtime-focus' ||
+    focus.actionId !== detail.actionId ||
+    focus.originStatePointId !== detail.statePointId
+  ) {
+    return null;
+  }
+  return {
+    status: 'edit-focus-synced',
+    actionId: focus.actionId,
+    fieldKey: focus.fieldKey ?? '',
+    label: focus.label ?? '结果定位',
+    statePointId: detail.statePointId,
+    summary: focus.changeSummary ?? '',
+  };
 }
 </script>
 
@@ -319,6 +364,40 @@ h2 {
 
 .runtime-detail-summary {
   padding-top: 14px;
+}
+
+.runtime-detail-edit-context {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  margin: 0 14px;
+  padding: 7px 9px;
+  border: 1px solid rgba(121, 199, 185, 0.28);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.1);
+  color: #dff9f3;
+  font-size: 11px;
+}
+
+.runtime-detail-edit-context span {
+  color: #9ce0d2;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.runtime-detail-edit-context strong {
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.runtime-detail-edit-context small {
+  min-width: 0;
+  overflow: hidden;
+  color: #aeb8c1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .runtime-detail-summary div,
