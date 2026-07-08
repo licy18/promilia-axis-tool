@@ -1114,12 +1114,19 @@ function dispatchRuntimeCurveFlowAction(action) {
 }
 
 function getRuntimeCurvePointFlowAction(point) {
-  return createWorkbenchRuntimeReviewFlowAction({
+  return createRuntimeReviewFlowActionFromSurface({
     kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_STATE_POINT,
     source: 'resource-runtime-curve',
     detail: point,
     enabled: Boolean(point?.statePointId),
   });
+}
+
+function createRuntimeReviewFlowActionFromSurface(options = {}) {
+  return (
+    props.mainFlowCommandSurface?.createRuntimeReviewFlowAction?.(options) ??
+    createWorkbenchRuntimeReviewFlowAction(options)
+  );
 }
 
 function compareRuntimeCurveNavigationPoints(left, right, runtimeOrderById) {

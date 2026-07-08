@@ -603,6 +603,38 @@ describe('workbench main flow actions', () => {
         },
       },
     });
+
+    expect(
+      surface.createRuntimeReviewFlowAction({
+        kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_STATE_POINT,
+        source: 'resource-runtime-curve',
+        detail: {
+          actionId: 'point-action',
+          statePointId: 'point-state',
+        },
+      })
+    ).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'resource-runtime-curve',
+      actionId: 'point-action',
+      statePointId: 'point-state',
+      canRun: true,
+    });
+    expect(
+      surface.createRuntimeStatePointFlowAction({
+        source: 'workbench-flow-navigation',
+        detail: {
+          actionId: 'nav-action',
+          statePointId: 'nav-state',
+        },
+      })
+    ).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'workbench-flow-navigation',
+      actionId: 'nav-action',
+      statePointId: 'nav-state',
+      canRun: true,
+    });
   });
 
   it('creates runtime point and result focus actions with the same main flow factory', () => {

@@ -225,7 +225,6 @@ import {
 } from './workbenchFlowModel';
 import {
   createWorkbenchMainFlowCommandSurface,
-  createWorkbenchRuntimeStatePointFlowAction,
 } from './workbenchMainFlowActions';
 
 const MAIN_FLOW_PANEL_SOURCE = 'workbench-flow-panel';
@@ -339,7 +338,7 @@ function dispatchFlowAction(action) {
 }
 
 function getRuntimeNavigationFlowAction(point) {
-  return createWorkbenchRuntimeStatePointFlowAction({
+  return resolvedMainFlowCommandSurface.value.createRuntimeStatePointFlowAction({
     source: 'workbench-flow-navigation',
     detail: point,
     enabled: Boolean(point?.statePointId),

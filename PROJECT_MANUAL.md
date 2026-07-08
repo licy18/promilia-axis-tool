@@ -9395,6 +9395,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：基于同一份 `mainFlowCommandSurface` 继续整理运行结果选择、详情查看和回到动作修改的主路径，让页面层更少直接操作各面板内部命令。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Selection Actions Consume Command Surface
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `createWorkbenchMainFlowCommandSurface()` 新增 runtime selection action 工厂，覆盖 runtime review action、state point action 和 result action。
+- `WorkbenchFlowPanel` 的上一条/下一条运行结果导航改为通过 command surface 创建 state point selection action。
+- `ResourceMonitorPanel` 的曲线点选择、`EventLogPanel` 的日志行选择、`Workbench` 页面层的 state curve runtime 点选择改为优先通过页面级 command surface 创建选择动作。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- main flow action 单测覆盖 command surface 的 runtime review selection action 与 state point selection action 工厂。
+- WorkbenchFlowPanel 组件测试确认顶部主流程仍可分发原有 focus/return 路径。
+- Workbench 页面测试确认资源曲线、日志行和 state curve runtime 点选择路径仍可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、82 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、213 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把仍直接创建 runtime selection action 的分析面板和时间轴入口纳入同一 surface，继续压实“选择结果 -> 查看详情 -> 回到动作修改”的主流程。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

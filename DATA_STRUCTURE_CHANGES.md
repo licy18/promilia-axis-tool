@@ -20185,3 +20185,41 @@ PropertiesPanel
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、81 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、213 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 265. UI 主流程能力块：Runtime Selection Actions Consume Command Surface
+
+### 265.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`createWorkbenchMainFlowCommandSurface()` 新增 runtime selection action 工厂：
+
+```js
+{
+  createRuntimeReviewFlowAction(options),
+  createRuntimeStatePointFlowAction(options),
+  createRuntimeResultFlowAction(options),
+}
+```
+
+消费关系调整：
+
+```text
+WorkbenchFlowPanel：上一条/下一条运行结果导航使用 createRuntimeStatePointFlowAction。
+ResourceMonitorPanel：曲线点选择使用 createRuntimeReviewFlowAction。
+EventLogPanel：日志行选择使用 createRuntimeReviewFlowAction。
+Workbench：state curve runtime 点选择使用 createRuntimeStatePointFlowAction。
+```
+
+这些入口仍生成原有 `select-runtime-state-point` / `select-runtime-result` 类 action，只是 action 创建入口收束到页面级 command surface。
+
+### 265.2 保存与迁移
+
+本阶段只调整运行结果选择 action 的创建入口，不新增持久字段，不需要数据迁移。
+
+### 265.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 command surface 的 runtime review selection action 与 state point selection action 工厂。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、82 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、213 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

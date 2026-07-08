@@ -437,7 +437,6 @@ import {
 } from '../features/workbench/workbenchFlowModel';
 import {
   createWorkbenchMainFlowCommandSurface,
-  createWorkbenchRuntimeStatePointFlowAction,
 } from '../features/workbench/workbenchMainFlowActions';
 import {
   createRuntimeStatePointContexts,
@@ -1661,7 +1660,7 @@ function isRuntimeStatePointId(pointId) {
 
 function focusRuntimeStateCurvePoint(pointId) {
   dispatchWorkbenchFlowAction(
-    createWorkbenchRuntimeStatePointFlowAction({
+    mainFlowCommandSurface.value.createRuntimeStatePointFlowAction({
       source: 'state-curve-point',
       statePointId: pointId,
       payload: {
