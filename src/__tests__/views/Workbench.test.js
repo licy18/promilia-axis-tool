@@ -2200,6 +2200,45 @@ describe('Workbench view', () => {
       'data-main-flow-loop-next-action-kind': 'open-runtime-results',
       'data-main-flow-loop-next-target-kind': 'runtime-results',
     });
+
+    const recoveryButton = wrapper.find(
+      '[data-testid="workbench-flow-open-runtime"]'
+    );
+    expect(recoveryButton.attributes('disabled')).toBeUndefined();
+
+    await recoveryButton.trigger('click');
+    await nextTick();
+
+    expect(
+      getLastDispatchedFlowAction(wrapper, WorkbenchFlowPanel)
+    ).toMatchObject({
+      kind: 'open-runtime-results',
+      source: 'workbench-flow-recovery',
+      actionId: 'action-0001',
+      canRun: true,
+    });
+    expect(
+      wrapper.find('[data-testid="workbench-main-flow-workspace"]').attributes()
+    ).toMatchObject({
+      'data-flow-phase': 'runtime-result',
+      'data-main-flow-dispatch-sequence': '2',
+      'data-main-flow-dispatch-status': 'handled',
+      'data-main-flow-dispatch-handled': 'true',
+      'data-main-flow-dispatch-has-result': 'true',
+      'data-main-flow-dispatch-kind': 'open-runtime-results',
+      'data-main-flow-dispatch-source': 'workbench-flow-recovery',
+      'data-main-flow-dispatch-handler-key': 'openRuntimeResults',
+      'data-main-flow-dispatch-reason': '',
+      'data-main-flow-dispatch-action-id': 'action-0001',
+      'data-main-flow-loop-step': 'runtime-review',
+      'data-main-flow-loop-status': 'advanced',
+      'data-main-flow-loop-recovery-needed': 'false',
+      'data-main-flow-loop-next-action-kind': 'focus-runtime-action',
+      'data-main-flow-loop-next-target-kind': 'runtime-action-edit',
+    });
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-selected-detail"]').exists()
+    ).toBe(true);
   });
 
   it('opens the refreshed runtime result after a direct action edit from the main flow panel', async () => {

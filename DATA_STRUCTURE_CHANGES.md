@@ -18486,3 +18486,60 @@ mainFlowLoopState.targetStatePointId
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、61 条测试。
 - `npm run test -- --run`：通过，33 个测试文件、187 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 236. UI 主流程能力块：Loop-Driven Recovery Action
+
+### 236.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增 `workbenchMainFlowActions` 导出函数：
+
+```js
+createWorkbenchMainFlowRecoveryAction({
+  flowModel,
+  source,
+  enabled
+})
+```
+
+该函数读取：
+
+```js
+flowModel.mainFlowLoopState.recoveryNeeded
+flowModel.mainFlowLoopState.nextActionKind
+flowModel.mainFlowLoopState.canRunNextAction
+flowModel.mainFlowLoopState.targetActionId
+flowModel.mainFlowLoopState.targetStatePointId
+```
+
+当 `recoveryNeeded` 为 true 时，恢复 action 复用 `createWorkbenchMainFlowNextAction` 的生成逻辑，因此恢复路径与正常主流程下一步共享同一 action 合同。
+
+当 `recoveryNeeded` 为 false 时，返回禁用 action：
+
+```js
+{
+  canRun: false,
+  disabledReason: 'main-flow-recovery-not-needed'
+}
+```
+
+`WorkbenchFlowPanel` 新增内部恢复来源：
+
+```js
+workbench-flow-recovery
+```
+
+当当前按钮是主流程主动作且 `mainFlowLoopState.recoveryNeeded` 为 true 时，面板改用 `createWorkbenchMainFlowRecoveryAction` 派发；非 blocked 状态继续使用 `createWorkbenchMainFlowNextAction`。
+
+### 236.2 保存与迁移
+
+本阶段只新增 UI 主流程恢复 action 生成入口，不新增持久字段，不需要数据迁移。
+
+### 236.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 blocked 状态生成 recovery action，以及非 blocked 状态禁用 recovery action。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认失败 dispatch 后可以通过主流程主动作恢复到运行结果，并把 loop state 从 blocked 推进到 advanced。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、63 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、189 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

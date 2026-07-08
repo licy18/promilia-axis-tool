@@ -249,6 +249,7 @@ import {
 } from './workbenchFlowModel';
 import {
   createWorkbenchMainFlowNextAction,
+  createWorkbenchMainFlowRecoveryAction,
   createWorkbenchOpenRuntimeResultsFlowAction,
   createWorkbenchRuntimeActionEditFlowAction,
   createWorkbenchRuntimeResultReturnFlowAction,
@@ -256,6 +257,7 @@ import {
 } from './workbenchMainFlowActions';
 
 const MAIN_FLOW_PANEL_SOURCE = 'workbench-flow-panel';
+const MAIN_FLOW_RECOVERY_SOURCE = 'workbench-flow-recovery';
 
 const props = defineProps({
   selectedAction: {
@@ -342,12 +344,20 @@ function dispatchFlowAction(action) {
 }
 
 function dispatchMainFlowAction(kind, createFallbackAction) {
-  const action = isPrimaryFlowAction(kind)
-    ? createWorkbenchMainFlowNextAction({
+  const isPrimaryAction = isPrimaryFlowAction(kind);
+  if (!isPrimaryAction) {
+    dispatchFlowAction(createFallbackAction());
+    return;
+  }
+  const action = workbenchFlow.value.mainFlowLoopState.recoveryNeeded
+    ? createWorkbenchMainFlowRecoveryAction({
+        flowModel: workbenchFlow.value,
+        source: MAIN_FLOW_RECOVERY_SOURCE,
+      })
+    : createWorkbenchMainFlowNextAction({
         flowModel: workbenchFlow.value,
         source: MAIN_FLOW_PANEL_SOURCE,
-      })
-    : createFallbackAction();
+      });
   dispatchFlowAction(action);
 }
 

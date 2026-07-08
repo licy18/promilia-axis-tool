@@ -82,6 +82,32 @@ export function createWorkbenchMainFlowNextAction({
   });
 }
 
+export function createWorkbenchMainFlowRecoveryAction({
+  flowModel = null,
+  source = '',
+  enabled,
+} = {}) {
+  const loopState = flowModel?.mainFlowLoopState ?? {};
+  if (!loopState.recoveryNeeded) {
+    return createWorkbenchFlowAction({
+      kind:
+        loopState.nextActionKind ??
+        flowModel?.mainFlowState?.primaryAction?.kind ??
+        '',
+      source,
+      actionId: loopState.targetActionId ?? '',
+      statePointId: loopState.targetStatePointId ?? '',
+      enabled: false,
+      disabledReason: 'main-flow-recovery-not-needed',
+    });
+  }
+  return createWorkbenchMainFlowNextAction({
+    flowModel,
+    source,
+    enabled: enabled ?? Boolean(loopState.canRunNextAction),
+  });
+}
+
 export function createWorkbenchRuntimeStatePointFlowAction(options = {}) {
   return createRuntimeStatePointFocusFlowAction(options);
 }

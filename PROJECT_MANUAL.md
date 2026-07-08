@@ -8635,6 +8635,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 loop-driven 主动作扩展到 Workbench 层的失败恢复入口，使失败后可以从同一主流程状态重新执行当前可用动作，而不是依赖各组件局部判断。
 
+### 2026-07-09：UI 主流程能力块 - Loop-Driven Recovery Action
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `createWorkbenchMainFlowRecoveryAction`，当 `mainFlowLoopState.recoveryNeeded` 为 true 时，从同一 loop state 生成恢复 action。
+- `WorkbenchFlowPanel` 在主流程 blocked 状态下再次执行当前主动作时，会走 `workbench-flow-recovery` 来源并复用 loop state 的下一步目标。
+- Workbench 页面现在覆盖“失败 dispatch -> blocked loop state -> 点击主流程主动作 -> 恢复到运行结果”的闭环。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- `workbenchMainFlowActions` 单元测试覆盖 blocked 状态生成 recovery action，以及非 blocked 状态禁用 recovery action。
+- Workbench 页面测试确认失败后恢复会产生 handled dispatch result，并把 loop state 从 blocked 推进到 advanced。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、63 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、189 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把运行结果页中的曲线/日志/详情入口进一步收敛到同一主流程 action 合同，使“结果定位 -> 详情查看 -> 回到动作修改”减少组件局部路径分叉。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   createWorkbenchMainFlowNextAction,
+  createWorkbenchMainFlowRecoveryAction,
   createWorkbenchOpenRuntimeResultsFlowAction,
   createWorkbenchRuntimeActionEditFlowAction,
   createWorkbenchRuntimeResultFlowAction,
@@ -148,6 +149,68 @@ describe('workbench main flow actions', () => {
       source: 'workbench-flow-panel',
       canRun: false,
       disabledReason: 'missing-main-flow-next-action',
+    });
+  });
+
+  it('creates a recovery action from the blocked main flow loop state', () => {
+    const recoveryAction = createWorkbenchMainFlowRecoveryAction({
+      source: 'workbench-flow-recovery',
+      flowModel: {
+        runtimeSimLogCount: 2,
+        controls: {
+          canOpenRuntimeResults: false,
+        },
+        mainFlowState: {
+          primaryAction: {
+            kind: 'open-runtime-results',
+            actionId: 'primary-action',
+          },
+        },
+        mainFlowLoopState: {
+          recoveryNeeded: true,
+          nextActionKind: 'open-runtime-results',
+          canRunNextAction: true,
+          targetActionId: 'loop-action',
+        },
+      },
+    });
+
+    expect(recoveryAction).toMatchObject({
+      kind: 'open-runtime-results',
+      source: 'workbench-flow-recovery',
+      actionId: 'loop-action',
+      canRun: true,
+      payload: {
+        runtimeSimLogCount: 2,
+        fallbackToFirstRuntimePoint: true,
+      },
+    });
+  });
+
+  it('keeps recovery disabled when the main flow loop is not blocked', () => {
+    expect(
+      createWorkbenchMainFlowRecoveryAction({
+        source: 'workbench-flow-recovery',
+        flowModel: {
+          mainFlowState: {
+            primaryAction: {
+              kind: 'open-runtime-results',
+            },
+          },
+          mainFlowLoopState: {
+            recoveryNeeded: false,
+            nextActionKind: 'open-runtime-results',
+            canRunNextAction: true,
+            targetActionId: 'loop-action',
+          },
+        },
+      })
+    ).toMatchObject({
+      kind: 'open-runtime-results',
+      source: 'workbench-flow-recovery',
+      actionId: 'loop-action',
+      canRun: false,
+      disabledReason: 'main-flow-recovery-not-needed',
     });
   });
 
