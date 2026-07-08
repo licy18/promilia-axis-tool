@@ -20327,3 +20327,35 @@ createContributionPointFlowAction({
 - `npm run test -- --run`：通过，35 个测试文件、214 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `git diff --check`：通过。
+
+## 269. UI 主流程能力块：Contribution Flow Plan Payload
+
+### 269.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`select-contribution-point` 进入 `workbenchFlowController` 后的 handler payload 从裸 `statePointId` 字符串调整为结构化对象：
+
+```js
+{
+  actionId,
+  statePointId,
+  source,
+  runtimeFocusSource,
+  preserveStateCurveFilters,
+}
+```
+
+`createWorkbenchFlowPlanHandlers()` 的贡献拆分 handler 继续生成既有 runtime point focus plan，其中实际 runtime 日志/曲线聚焦来源保持为 `action-contribution`。
+
+### 269.2 保存与迁移
+
+本阶段只调整 Workbench 主流程 controller 内部 payload 合同，不新增持久字段，不需要数据迁移。
+
+### 269.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowController.test.js`，覆盖贡献拆分 action 的结构化 payload 分发与 runtime point focus plan 生成。
+- `npm run test -- --run src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、214 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过。

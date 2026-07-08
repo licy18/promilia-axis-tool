@@ -76,7 +76,7 @@ export function createWorkbenchFlowController(handlers = {}) {
           handlerKey:
             WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_CONTRIBUTION_POINT,
           flowAction,
-          payload: flowAction.statePointId,
+          payload: createContributionPointFocusPayload(flowAction),
         });
       }
 
@@ -178,18 +178,23 @@ export function createWorkbenchFlowPlanHandlers({
         )
       ),
 
-    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_CONTRIBUTION_POINT]:
-      statePointId =>
-        applyRuntimeFlowPlan(
-          createPlan(
-            flowPlanController,
-            WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_POINT_FOCUS,
-            {
-              statePointId,
-              source: 'action-contribution',
-            }
-          )
-        ),
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_CONTRIBUTION_POINT]: payload => {
+      const pointPayload =
+        typeof payload === 'string' ? { statePointId: payload } : payload ?? {};
+      return applyRuntimeFlowPlan(
+        createPlan(
+          flowPlanController,
+          WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_POINT_FOCUS,
+          {
+            statePointId: pointPayload.statePointId ?? '',
+            source: pointPayload.runtimeFocusSource || 'action-contribution',
+            preserveStateCurveFilters: Boolean(
+              pointPayload.preserveStateCurveFilters
+            ),
+          }
+        )
+      );
+    },
 
     [WORKBENCH_FLOW_CONTROLLER_HANDLERS.FOCUS_RUNTIME_ACTION]: payload =>
       applyActionEditFlowPlan(
@@ -259,6 +264,21 @@ function createRuntimeStatePointFocusPayload(flowAction) {
     actionId: flowAction?.actionId || payload.actionId || '',
     statePointId: flowAction?.statePointId || payload.statePointId || '',
     source: flowAction?.source || payload.source || '',
+  };
+}
+
+function createContributionPointFocusPayload(flowAction) {
+  const payload =
+    flowAction?.payload && typeof flowAction.payload === 'object'
+      ? { ...flowAction.payload }
+      : {};
+  return {
+    ...payload,
+    actionId: flowAction?.actionId || payload.actionId || '',
+    statePointId: flowAction?.statePointId || payload.statePointId || '',
+    source: flowAction?.source || payload.source || '',
+    runtimeFocusSource: payload.runtimeFocusSource || 'action-contribution',
+    preserveStateCurveFilters: Boolean(payload.preserveStateCurveFilters),
   };
 }
 

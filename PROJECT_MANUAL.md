@@ -9502,6 +9502,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 Workbench 页面层剩余主路径 dispatch 是否还能进一步通过 `mainFlowCommandSurface` 或 flow controller 收束，优先服务“选择结果 -> 贡献/详情查看 -> 回到动作修改”的完整循环。
 
+### 2026-07-09：UI 主流程能力块 - Contribution Flow Plan Payload
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `select-contribution-point` 在 `workbenchFlowController` 中不再降成裸 `statePointId` 字符串，而是保留 `actionId`、`statePointId`、原始 action `source`、`runtimeFocusSource` 和 `preserveStateCurveFilters` 的结构化 payload。
+- `createWorkbenchFlowPlanHandlers()` 的贡献拆分 handler 改为从结构化 payload 生成 runtime point focus plan，并继续把实际 runtime 聚焦来源稳定为 `action-contribution`。
+- 贡献拆分的“选择结果 -> 贡献查看 -> 曲线/日志/时间轴定位”路径现在与其他 runtime focus 路由共享更明确的 controller/plan 合同。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- flow controller 单测覆盖贡献拆分 action 的结构化 payload 分发，以及 plan handler 生成 runtime point focus plan。
+- Workbench 页面测试确认贡献拆分行点击仍能定位到对应资源曲线点、日志详情和时间轴 runtime marker。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、214 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 Workbench 页面层是否还有主流程状态应用仍留在视图函数中，优先把“runtime 点选择 / 贡献定位 / 回到编辑”这类状态应用收束到 flow runtime，而不是继续打磨局部提示。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

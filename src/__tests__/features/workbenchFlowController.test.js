@@ -136,7 +136,16 @@ describe('workbench flow controller', () => {
           source: 'resource-runtime-curve',
         },
       ],
-      ['selectContributionPoint', 'runtime-point-003'],
+      [
+        'selectContributionPoint',
+        {
+          actionId: '',
+          statePointId: 'runtime-point-003',
+          source: 'analysis-action-contribution',
+          runtimeFocusSource: 'action-contribution',
+          preserveStateCurveFilters: false,
+        },
+      ],
       [
         'focusRuntimeAction',
         {
@@ -260,7 +269,12 @@ describe('workbench flow controller', () => {
     });
     controller.dispatch({
       kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT,
+      source: 'analysis-action-contribution',
+      actionId: 'action-contribution',
       statePointId: 'point-contribution',
+      payload: {
+        runtimeFocusSource: 'action-contribution',
+      },
     });
     controller.dispatch({
       kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
@@ -316,6 +330,7 @@ describe('workbench flow controller', () => {
         payload: {
           statePointId: 'point-contribution',
           source: 'action-contribution',
+          preserveStateCurveFilters: false,
         },
       },
       {
