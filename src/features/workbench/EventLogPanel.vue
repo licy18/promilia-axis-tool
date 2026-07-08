@@ -318,6 +318,7 @@ import {
   createWorkbenchFlowAction,
 } from './workbenchFlowModel';
 import { createRuntimeActionFocusFlowAction } from './runtimeActionFocusFlowAction';
+import { createRuntimeStatePointFocusFlowAction } from './runtimeResultFocusFlowAction';
 import {
   isRuntimeResultFocusSource,
   normalizeRuntimeLogFocusScope,
@@ -794,14 +795,11 @@ function dispatchRuntimeLogFlowAction(action) {
 
 function getRuntimeLogRowFlowAction(row) {
   const statePointId = getRuntimeStatePointIdByRow(row);
-  return createWorkbenchFlowAction({
-    kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_STATE_POINT,
+  return createRuntimeStatePointFocusFlowAction({
     source: 'event-log-runtime-row',
-    actionId: row?.actionId ?? '',
+    detail: row,
     statePointId,
-    payload: row ?? null,
     enabled: Boolean(statePointId),
-    disabledReason: 'missing-runtime-state-point',
   });
 }
 

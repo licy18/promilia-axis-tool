@@ -8273,6 +8273,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：围绕同一个 `primaryAction` 合同补齐更完整的详情查看与修改回路，例如让运行详情、曲线点和日志行共享更稳定的主流程定位/回改入口。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Result Focus Flow Action Helper
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `runtimeResultFocusFlowAction`，把运行结果定位入口拆成两个共享合同：`select-runtime-state-point` 和 `select-runtime-result`。
+- 主流程导航、资源曲线点、日志行现在统一通过 `createRuntimeStatePointFocusFlowAction()` 进入运行点定位。
+- 分析面板的动作结果和刷新后结果统一通过 `createRuntimeResultFocusFlowAction()` 进入运行结果定位。
+- 该变化保持既有 source、actionId、statePointId 和 dispatch-flow-action 回路不变，只把运行结果定位入口收束到共享 helper。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- 新 helper 单元测试覆盖曲线/日志运行点定位、显式 statePointId 和刷新结果 disabled 状态。
+- Workbench 页面测试确认主流程导航、资源曲线、日志行、分析结果和刷新结果入口仍保持原有运行结果定位行为。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/runtimeResultFocusFlowAction.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，32 个测试文件、178 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 继续 UI 主流程能力块：把运行详情、曲线点、日志行和分析结果的“定位后回改”体验继续收束到 WorkbenchFlowModel，而不是让各面板各自决定下一步。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -200,6 +200,7 @@ import {
   createWorkbenchFlowModel,
 } from './workbenchFlowModel';
 import { createRuntimeActionFocusFlowAction } from './runtimeActionFocusFlowAction';
+import { createRuntimeStatePointFocusFlowAction } from './runtimeResultFocusFlowAction';
 
 const props = defineProps({
   selectedAction: {
@@ -296,14 +297,10 @@ function getOpenRuntimeResultsFlowAction(flow) {
 }
 
 function getRuntimeNavigationFlowAction(point) {
-  return createWorkbenchFlowAction({
-    kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_STATE_POINT,
+  return createRuntimeStatePointFocusFlowAction({
     source: 'workbench-flow-navigation',
-    actionId: point?.row?.actionId ?? '',
-    statePointId: point?.statePointId ?? '',
-    payload: point ?? null,
+    detail: point,
     enabled: Boolean(point?.statePointId),
-    disabledReason: 'missing-runtime-state-point',
   });
 }
 

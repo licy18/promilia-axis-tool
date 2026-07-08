@@ -942,6 +942,7 @@ import {
   WORKBENCH_FLOW_ACTION_KINDS,
   createWorkbenchFlowAction,
 } from './workbenchFlowModel';
+import { createRuntimeResultFocusFlowAction } from './runtimeResultFocusFlowAction';
 
 const CANDIDATE_CHART_COLORS = ['#f2b366', '#79c7b9', '#a6b7ff'];
 const candidateChartGridLines = [25, 50, 75];
@@ -1942,8 +1943,7 @@ function getActionResultRuntimeTrace(entry) {
 
 function getActionResultFlowAction(entry) {
   const trace = getActionResultRuntimeTrace(entry);
-  return createWorkbenchFlowAction({
-    kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+  return createRuntimeResultFocusFlowAction({
     source: 'analysis-action-result',
     actionId: trace?.actionId ?? entry?.actionId ?? '',
     statePointId: trace?.firstStatePointId ?? '',
@@ -2031,11 +2031,9 @@ function getActionEditSourceFlowAction(source) {
 }
 
 function getActionEditFeedbackResultFlowAction(feedback) {
-  return createWorkbenchFlowAction({
-    kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+  return createRuntimeResultFocusFlowAction({
     source: 'analysis-edit-result',
-    actionId: feedback?.actionId ?? '',
-    statePointId: feedback?.runtimeStatePointId ?? '',
+    detail: feedback,
     enabled: Boolean(
       feedback?.runtimeStatePointId && !feedback?.resultFocused
     ),

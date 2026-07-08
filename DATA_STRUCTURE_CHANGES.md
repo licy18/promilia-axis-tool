@@ -17513,3 +17513,112 @@ data-primary-action="true|false"
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、58 条测试。
 - `npm run test -- --run`：通过，31 个测试文件、175 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 222. UI 主流程能力块：Runtime Result Focus Flow Action Helper
+
+本阶段属于 UI 主流程。
+
+### 222.1 结构变化
+
+新增：
+
+```text
+src/features/workbench/runtimeResultFocusFlowAction.js
+```
+
+提供两个统一入口。
+
+运行点定位：
+
+```js
+createRuntimeStatePointFocusFlowAction({
+  source,
+  detail,
+  actionId,
+  statePointId,
+  payload,
+  enabled,
+  disabledReason
+})
+```
+
+生成：
+
+```js
+{
+  kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_STATE_POINT,
+  source,
+  actionId,
+  statePointId,
+  payload,
+  enabled,
+  disabledReason
+}
+```
+
+默认 action 解析顺序：
+
+```js
+actionId || detail?.row?.actionId || detail?.actionId || ''
+```
+
+默认 state point 解析顺序：
+
+```js
+statePointId || detail?.statePointId || detail?.runtimeStatePointId || ''
+```
+
+运行结果定位：
+
+```js
+createRuntimeResultFocusFlowAction({
+  source,
+  detail,
+  actionId,
+  statePointId,
+  payload,
+  enabled,
+  disabledReason
+})
+```
+
+生成：
+
+```js
+{
+  kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+  source,
+  actionId,
+  statePointId,
+  payload,
+  enabled,
+  disabledReason
+}
+```
+
+已接入位置：
+
+```text
+WorkbenchFlowPanel runtime navigation -> createRuntimeStatePointFocusFlowAction()
+ResourceMonitorPanel runtime curve point -> createRuntimeStatePointFocusFlowAction()
+EventLogPanel runtime log row -> createRuntimeStatePointFocusFlowAction()
+AnalysisPanel action result -> createRuntimeResultFocusFlowAction()
+AnalysisPanel edit feedback result -> createRuntimeResultFocusFlowAction()
+```
+
+搜索确认 `SELECT_RUNTIME_STATE_POINT` / `SELECT_RUNTIME_RESULT` 的前端面板拼装已集中到该 helper。
+
+### 222.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 主流程运行结果定位 action 拼装；三值计算、runtime projection 数值结果和草稿保存结构不变。
+
+### 222.3 验证
+
+- 新增 `src/__tests__/features/runtimeResultFocusFlowAction.test.js`，覆盖曲线/日志运行点定位、显式 statePointId 和刷新结果 disabled 状态。
+- 更新 Workbench 主流程导航、资源曲线点、日志行、分析动作结果和刷新结果反馈，改为消费共享 helper。
+- `rg -n "kind:\s*WORKBENCH_FLOW_ACTION_KINDS\.(SELECT_RUNTIME_RESULT|SELECT_RUNTIME_STATE_POINT)" src\features\workbench`：只剩 `runtimeResultFocusFlowAction.js` 内的集中生成点。
+- `npm run test -- --run src/__tests__/features/runtimeResultFocusFlowAction.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，32 个测试文件、178 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
