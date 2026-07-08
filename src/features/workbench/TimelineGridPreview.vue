@@ -614,6 +614,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  stateCurveFocusMode: {
+    type: String,
+    default: 'all',
+  },
   stateCurveLayerFilters: {
     type: Object,
     default: () => ({
@@ -773,6 +777,10 @@ const effectiveStateCurveLayerFilters = computed(() => ({
 }));
 const effectiveStateCurveTrackFilters = computed(
   () => props.stateCurveTrackFilters ?? {}
+);
+const isStateCurveSelectedFocusActive = computed(
+  () =>
+    props.stateCurveFocusMode === 'selected' && props.selectedStateCurvePointId
 );
 const overlapActionIds = computed(
   () => new Set(props.timelineDiagnostics?.overlapActionIds ?? [])
@@ -1058,6 +1066,7 @@ function createStateCurveTimelineMarkers() {
                 })
               )
             )
+            .filter(marker => isStateCurveMarkerInFocus(marker))
         : []
   );
 }
@@ -1377,6 +1386,13 @@ function getStateCurveTimelineTrackPointCount(track) {
   return (track.layers ?? [])
     .filter(layer => STATE_CURVE_TIMELINE_LAYER_KEYS.has(layer.key))
     .reduce((sum, layer) => sum + (layer.pointCount ?? 0), 0);
+}
+
+function isStateCurveMarkerInFocus(marker) {
+  return (
+    !isStateCurveSelectedFocusActive.value ||
+    marker.statePointId === props.selectedStateCurvePointId
+  );
 }
 
 function formatCandidateFrameGroupValues(group) {

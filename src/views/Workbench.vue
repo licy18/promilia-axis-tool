@@ -77,6 +77,7 @@
         :duration-ms="scenario.time.durationMs"
         :selected-action-id="selectedActionId"
         :selected-state-curve-point-id="selectedStateCurvePointId"
+        :state-curve-focus-mode="stateCurveFocusMode"
         :state-curve-layer-filters="stateCurveLayerFilters"
         :state-curve-track-filters="stateCurveTrackFilters"
         :timeline-diagnostics="timelineDiagnostics"
@@ -125,11 +126,13 @@
             simulationResult.threeValueCurveFramework
           "
           :selected-state-curve-point-id="selectedStateCurvePointId"
+          :state-curve-focus-mode="stateCurveFocusMode"
           :state-curve-layer-filters="stateCurveLayerFilters"
           :state-curve-track-filters="stateCurveTrackFilters"
           :insertion-diagnostics="insertionDiagnostics"
           :timeline-diagnostics="timelineDiagnostics"
           @select-state-curve-point="selectStateCurvePoint"
+          @update-state-curve-focus-mode="updateStateCurveFocusMode"
           @update-state-curve-layer-filter="updateStateCurveLayerFilter"
           @update-state-curve-track-filter="updateStateCurveTrackFilter"
         />
@@ -202,6 +205,7 @@ const segmentSplitPreview = ref(null);
 const actionDrafts = ref([...initialDraft.actionDrafts]);
 const selectedActionId = ref(initialDraft.selectedActionId);
 const selectedStateCurvePointId = ref('');
+const stateCurveFocusMode = ref('all');
 const stateCurveLayerFilters = ref({ ...DEFAULT_STATE_CURVE_LAYER_FILTERS });
 const stateCurveTrackFilters = ref({});
 const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
@@ -868,6 +872,16 @@ function selectAction(actionId) {
 
 function selectStateCurvePoint(pointId) {
   selectedStateCurvePointId.value = pointId || '';
+  if (!selectedStateCurvePointId.value) {
+    stateCurveFocusMode.value = 'all';
+  }
+}
+
+function updateStateCurveFocusMode(mode) {
+  if (mode === 'selected' && !selectedStateCurvePointId.value) {
+    return;
+  }
+  stateCurveFocusMode.value = mode === 'selected' ? 'selected' : 'all';
 }
 
 function updateStateCurveLayerFilter({ layerKey, visible }) {

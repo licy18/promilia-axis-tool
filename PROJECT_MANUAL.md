@@ -4604,6 +4604,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 优先让用户点击一个 state point 后，可以快速只看当前点、跳回全部点，或在同一帧/同一动作附近切换 HP / 韧性 / 能量点。
 - 继续保持框架优先，后续再接入真实采样和最终公式细化。
 
+### 2026-07-08：阶段 5-8BV 状态点 selected-only 焦点模式
+
+本轮完成：
+
+- `Workbench` 新增共享 `stateCurveFocusMode`，默认 `all`，可切换到 `selected`。
+- `AnalysisPanel` 的状态曲线标题新增“全部 / 选中”分段按钮；未选中 state point 时“选中”不可用。
+- 进入“选中”模式后，状态曲线明细只保留当前 `selectedStateCurvePointId` 对应的点，顶部可见点数和轨道摘要同步收窄。
+- `TimelineGridPreview` 同样消费 `stateCurveFocusMode`，只渲染当前选中 state point 对应的时间轴 marker。
+- 选中默认末音 applied HP marker 后切到“选中”，状态曲线可见点数从 16 降为 1；切回“全部”后恢复 16 点。
+
+当前边界：
+
+- 本阶段只做 selected-only 焦点模式，不做上一点 / 下一点导航。
+- 候选层 state point 仍不渲染为时间轴状态 marker；若聚焦候选点，分析面板能只显示该候选点，但时间轴不会额外生成 candidate marker。
+- 没有改变 `threeValueCurveFramework.stateCurves` 模拟结果结构，也没有新增项目保存 schema 字段。
+
+验收结果：
+
+- `npm run test -- --run`：通过，13 个测试文件、109 条测试。
+
+下一步：
+
+- 阶段 5-8BW 目标：补状态点邻近导航或同帧三值点切换。
+- 优先让用户在同一帧/同一动作附近快速切换 HP / 韧性 / 能量状态点，并保留当前 layer / track / focus 过滤语义。
+- 继续保持框架优先，真实公式和技能逐帧细节后续再补。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

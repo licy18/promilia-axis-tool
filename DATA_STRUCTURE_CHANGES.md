@@ -8243,3 +8243,97 @@ isStateCurveTrackVisible(track.trackKey)
 - `npm run test -- --run`：通过。
 
 下一阶段 5-8BV 应补 selected-only 焦点模式或状态点导航。
+
+## 101. 阶段 5-8BV：stateCurveFocusMode selected-only UI state
+
+阶段 5-8BV 不修改 `threeValueCurveFramework.stateCurves` 的模拟结果结构，只新增 Workbench 前端共享的焦点模式。该模式叠加在 `stateCurveLayerFilters` 和 `stateCurveTrackFilters` 之后，用于快速把状态曲线视图收窄到当前选中的 state point。
+
+### 101.1 Workbench 共享状态
+
+`Workbench.vue` 新增：
+
+```js
+const stateCurveFocusMode = ref('all');
+
+function updateStateCurveFocusMode(mode) {
+  if (mode === 'selected' && !selectedStateCurvePointId.value) {
+    return;
+  }
+  stateCurveFocusMode.value = mode === 'selected' ? 'selected' : 'all';
+}
+```
+
+`selectStateCurvePoint('')` 会把焦点模式恢复为 `all`，避免无选中点时停留在空焦点。
+
+### 101.2 AnalysisPanel focus controls
+
+`AnalysisPanel` 新增 prop：
+
+```js
+stateCurveFocusMode
+```
+
+并新增分段按钮：
+
+```html
+data-testid="workbench-state-curve-focus-all"
+data-testid="workbench-state-curve-focus-selected"
+```
+
+有效焦点模式：
+
+```js
+props.stateCurveFocusMode === 'selected' && props.selectedStateCurvePointId
+  ? 'selected'
+  : 'all'
+```
+
+因此未选中 state point 时，“选中”按钮不可用，且视图保持 `all`。
+
+### 101.3 点明细过滤
+
+`createStateCurveVisiblePointRows()` 新增 selected-only gate：
+
+```js
+!isStateCurveSelectedFocusActive.value ||
+point.statePointId === props.selectedStateCurvePointId
+```
+
+进入 selected-only 后：
+
+- `stateCurveVisiblePointCount` 按 `visiblePointRows.length` 计算。
+- `stateCurveTrackRows` 会过滤掉不包含选中点的轨道。
+- 轨道摘要和 layer pill 只保留包含选中点的可见层。
+
+### 101.4 时间轴 marker 过滤
+
+`TimelineGridPreview` 新增 prop：
+
+```js
+stateCurveFocusMode
+```
+
+`createStateCurveTimelineMarkers()` 新增 marker gate：
+
+```js
+!isStateCurveSelectedFocusActive.value ||
+marker.statePointId === props.selectedStateCurvePointId
+```
+
+注意：时间轴仍只渲染 `applied / sampled / placeholder` 状态 marker。若当前选中点属于 `candidate` 层，分析面板可以聚焦该候选点，但时间轴不会额外生成 candidate state marker；candidate 仍由原候选三值曲线负责。
+
+### 101.5 验证
+
+扩展 Workbench 测试覆盖：
+
+- 选中默认 applied HP 状态点后，“选中”按钮可用。
+- 点击“选中”后，状态曲线可见点数从 `16` 降为 `1`。
+- 点明细只剩当前 `data-state-point-id` 对应的 applied HP 点。
+- 时间轴 marker 同步保持 1 个当前选中点。
+- 点击“全部”后，可见点数恢复为 `16`，点明细恢复 16 行。
+
+阶段验收：
+
+- `npm run test -- --run`：通过。
+
+下一阶段 5-8BW 应补状态点邻近导航或同帧三值点切换。

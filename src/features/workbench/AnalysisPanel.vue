@@ -257,6 +257,30 @@
       <div class="diagnostic-heading source-heading">
         <span>状态曲线</span>
         <strong>{{ stateCurveVisiblePointCount }}</strong>
+        <div
+          class="state-curve-focus-controls"
+          data-testid="workbench-state-curve-focus-controls"
+        >
+          <button
+            class="state-curve-focus-button"
+            :class="{ active: effectiveStateCurveFocusMode === 'all' }"
+            type="button"
+            data-testid="workbench-state-curve-focus-all"
+            @click="setStateCurveFocusMode('all')"
+          >
+            全部
+          </button>
+          <button
+            class="state-curve-focus-button"
+            :class="{ active: effectiveStateCurveFocusMode === 'selected' }"
+            type="button"
+            :disabled="!selectedStateCurvePointId"
+            data-testid="workbench-state-curve-focus-selected"
+            @click="setStateCurveFocusMode('selected')"
+          >
+            选中
+          </button>
+        </div>
       </div>
       <div class="state-curve-layer-controls">
         <label
@@ -484,6 +508,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  stateCurveFocusMode: {
+    type: String,
+    default: 'all',
+  },
   stateCurveLayerFilters: {
     type: Object,
     default: () => ({
@@ -517,6 +545,7 @@ const emit = defineEmits([
   'select-state-curve-point',
   'update-state-curve-layer-filter',
   'update-state-curve-track-filter',
+  'update-state-curve-focus-mode',
 ]);
 
 const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
@@ -634,34 +663,44 @@ const effectiveStateCurveLayerFilters = computed(() => ({
 const effectiveStateCurveTrackFilters = computed(
   () => props.stateCurveTrackFilters ?? {}
 );
+const effectiveStateCurveFocusMode = computed(() =>
+  props.stateCurveFocusMode === 'selected' && props.selectedStateCurvePointId
+    ? 'selected'
+    : 'all'
+);
+const isStateCurveSelectedFocusActive = computed(
+  () => effectiveStateCurveFocusMode.value === 'selected'
+);
 const stateCurveTrackRows = computed(() => {
   const activeLayers = new Set(activeStateCurveLayerKeys.value);
   return (stateCurves.value?.tracks ?? [])
     .filter(track => (track.pointCount ?? 0) > 0)
     .filter(track => isStateCurveTrackVisible(track.trackKey))
     .map(track => {
-      const visibleLayers = (track.layers ?? []).filter(
+      const layerRows = (track.layers ?? []).filter(
         layer => activeLayers.has(layer.key) && (layer.pointCount ?? 0) > 0
       );
+      const visiblePointRows = createStateCurveVisiblePointRows(
+        track,
+        layerRows
+      );
+      const focusedLayerKeys = new Set(
+        visiblePointRows.map(point => point.layerKey)
+      );
+      const visibleLayers = isStateCurveSelectedFocusActive.value
+        ? layerRows.filter(layer => focusedLayerKeys.has(layer.key))
+        : layerRows;
       return {
         ...track,
         visibleLayers,
-        visiblePointRows: createStateCurveVisiblePointRows(
-          track,
-          visibleLayers
-        ),
+        visiblePointRows,
       };
     })
-    .filter(track => track.visibleLayers.length > 0);
+    .filter(track => track.visiblePointRows.length > 0);
 });
 const stateCurveVisiblePointCount = computed(() =>
   stateCurveTrackRows.value.reduce(
-    (sum, track) =>
-      sum +
-      track.visibleLayers.reduce(
-        (trackSum, layer) => trackSum + (layer.pointCount ?? 0),
-        0
-      ),
+    (sum, track) => sum + track.visiblePointRows.length,
     0
   )
 );
@@ -1025,10 +1064,12 @@ function formatThreeValueCurveFrameworkSummary(summary) {
 }
 
 function formatStateCurveTrackSummary(track) {
-  const visiblePointCount = (track.visibleLayers ?? []).reduce(
-    (sum, layer) => sum + (layer.pointCount ?? 0),
-    0
-  );
+  const visiblePointCount =
+    track.visiblePointRows?.length ??
+    (track.visibleLayers ?? []).reduce(
+      (sum, layer) => sum + (layer.pointCount ?? 0),
+      0
+    );
   const nonEmptyLayerCount = (track.visibleLayers ?? []).filter(
     layer => (layer.pointCount ?? 0) > 0
   ).length;
@@ -1071,6 +1112,7 @@ function createStateCurveVisiblePointRows(track, visibleLayers) {
         valueUnit: layer.valueUnit ?? track.valueUnit,
       }))
     )
+    .filter(point => isStateCurvePointInFocus(point))
     .sort(compareStateCurvePointRows);
 }
 
@@ -1098,6 +1140,23 @@ function setStateCurveTrackVisible(trackKey, visible) {
     trackKey,
     visible: Boolean(visible),
   });
+}
+
+function setStateCurveFocusMode(mode) {
+  if (mode === 'selected' && !props.selectedStateCurvePointId) {
+    return;
+  }
+  emit(
+    'update-state-curve-focus-mode',
+    mode === 'selected' ? 'selected' : 'all'
+  );
+}
+
+function isStateCurvePointInFocus(point) {
+  return (
+    !isStateCurveSelectedFocusActive.value ||
+    point.statePointId === props.selectedStateCurvePointId
+  );
 }
 
 function compareStateCurvePointRows(left, right) {
@@ -1984,6 +2043,38 @@ h2 {
 
 .diagnostic-heading.source-heading strong {
   color: #9ce0d2;
+}
+
+.state-curve-focus-controls {
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
+  padding: 2px;
+  border: 1px solid rgba(121, 199, 185, 0.16);
+  border-radius: 4px;
+  background: rgba(18, 23, 28, 0.72);
+}
+
+.state-curve-focus-button {
+  min-height: 22px;
+  min-width: 42px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: #8f9aa3;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.state-curve-focus-button.active {
+  background: rgba(121, 199, 185, 0.18);
+  color: #dff6f1;
+}
+
+.state-curve-focus-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
 }
 
 .diagnostic-heading.neutral strong {

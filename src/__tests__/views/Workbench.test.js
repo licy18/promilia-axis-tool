@@ -212,6 +212,57 @@ describe('Workbench view', () => {
         )
         .classes()
     ).toContain('selected');
+    const focusAllButton = wrapper.find(
+      '[data-testid="workbench-state-curve-focus-all"]'
+    );
+    const focusSelectedButton = wrapper.find(
+      '[data-testid="workbench-state-curve-focus-selected"]'
+    );
+    expect(focusAllButton.classes()).toContain('active');
+    expect(focusSelectedButton.attributes('disabled')).toBeUndefined();
+    await focusSelectedButton.trigger('click');
+    await nextTick();
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curves"] .source-heading strong')
+        .text()
+    ).toBe('1');
+    expect(
+      wrapper.findAll('[data-testid="workbench-state-curve-point"]')
+    ).toHaveLength(1);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-point"]')
+        .attributes('data-state-point-id')
+    ).toBe(appliedStatePointId);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-state-curve-row"][data-track-key="enemyHpDamage"]'
+        )
+        .text()
+    ).toContain('raw-damage · 1/1层 · 1点');
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
+    ).toHaveLength(1);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curve-focus-selected"]')
+        .classes()
+    ).toContain('active');
+    await focusAllButton.trigger('click');
+    await nextTick();
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curves"] .source-heading strong')
+        .text()
+    ).toBe('16');
+    expect(
+      wrapper.findAll('[data-testid="workbench-state-curve-point"]')
+    ).toHaveLength(16);
+    expect(
+      wrapper.find('[data-testid="workbench-state-curve-focus-all"]').classes()
+    ).toContain('active');
     const timelineStateTrackToggles = wrapper.findAll(
       '[data-testid="workbench-timeline-state-track-toggle"]'
     );
