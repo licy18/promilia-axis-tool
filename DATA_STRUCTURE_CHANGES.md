@@ -18543,3 +18543,81 @@ workbench-flow-recovery
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、63 条测试。
 - `npm run test -- --run`：通过，33 个测试文件、189 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 237. UI 主流程能力块：Runtime Review Action Contract
+
+### 237.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增 `workbenchMainFlowActions` 导出枚举：
+
+```js
+WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS
+```
+
+当前取值映射到既有 flow action kind：
+
+```text
+SELECT_STATE_POINT -> select-runtime-state-point
+SELECT_RESULT -> select-runtime-result
+FOCUS_ACTION -> focus-runtime-action
+RETURN_RESULT -> return-runtime-result
+```
+
+新增统一入口：
+
+```js
+createWorkbenchRuntimeReviewFlowAction({
+  kind,
+  source,
+  detail,
+  target,
+  context,
+  actionId,
+  statePointId,
+  payload,
+  enabled,
+  disabledReason
+})
+```
+
+该入口按 `kind` 分发到既有 action 工厂：
+
+```text
+select-runtime-state-point -> createWorkbenchRuntimeStatePointFlowAction
+select-runtime-result -> createWorkbenchRuntimeResultFlowAction
+focus-runtime-action -> createWorkbenchRuntimeActionEditFlowAction
+return-runtime-result -> createWorkbenchRuntimeResultReturnFlowAction
+```
+
+不支持的 `kind` 返回禁用 action：
+
+```js
+{
+  canRun: false,
+  disabledReason: 'unsupported-runtime-review-flow-action'
+}
+```
+
+接入组件：
+
+```text
+ResourceMonitorPanel
+EventLogPanel
+RuntimeSelectedDetailPanel
+```
+
+这些组件的曲线点选择、日志行选择、详情动作编辑和返回刷新结果入口现在通过同一 runtime review action 合同派发。
+
+### 237.2 保存与迁移
+
+本阶段只新增 UI 主流程 action 生成入口，不新增持久字段，不需要数据迁移。
+
+### 237.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 review 合同生成四类 action，以及不支持 `kind` 时返回禁用 action。
+- 复跑 `src/__tests__/views/Workbench.test.js`，确认现有运行结果查看、曲线/日志/详情定位、回改与返回主流程仍可执行。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、65 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、191 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

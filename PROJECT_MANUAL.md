@@ -8661,6 +8661,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把运行结果页中的曲线/日志/详情入口进一步收敛到同一主流程 action 合同，使“结果定位 -> 详情查看 -> 回到动作修改”减少组件局部路径分叉。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Action Contract
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `createWorkbenchRuntimeReviewFlowAction`，把运行结果 review 区的“选中运行点 / 选中结果 / 聚焦动作编辑 / 返回刷新结果”统一到一个 action 入口。
+- `ResourceMonitorPanel`、`EventLogPanel`、`RuntimeSelectedDetailPanel` 改为通过同一 review action 合同派发曲线、日志和详情入口动作。
+- 原有细分 action 工厂保留为兼容层，新的 review 合同负责收敛运行结果页的主流程入口分叉。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- `workbenchMainFlowActions` 单元测试覆盖 review 合同生成四类 action，以及不支持意图时返回禁用 action。
+- Workbench 页面测试确认现有运行结果查看、曲线/日志/详情定位、回改与返回主流程仍可执行。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、65 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、191 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把运行结果 review action 的选择结果进一步沉淀到 Workbench flow model 中，形成统一的 review selection 状态，为后续曲线/日志/详情联动和结果定位体验对齐 Endaxis 做准备。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -8,6 +8,13 @@ import {
   createRuntimeStatePointFocusFlowAction,
 } from './runtimeResultFocusFlowAction';
 
+export const WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS = Object.freeze({
+  SELECT_STATE_POINT: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_STATE_POINT,
+  SELECT_RESULT: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+  FOCUS_ACTION: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+  RETURN_RESULT: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+});
+
 export function createWorkbenchOpenRuntimeResultsFlowAction({
   flowModel = null,
   source = '',
@@ -114,6 +121,73 @@ export function createWorkbenchRuntimeStatePointFlowAction(options = {}) {
 
 export function createWorkbenchRuntimeResultFlowAction(options = {}) {
   return createRuntimeResultFocusFlowAction(options);
+}
+
+export function createWorkbenchRuntimeReviewFlowAction({
+  kind = '',
+  source = '',
+  detail = null,
+  target = null,
+  context = null,
+  actionId = '',
+  statePointId = '',
+  payload,
+  enabled,
+  disabledReason,
+} = {}) {
+  if (
+    kind === WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_STATE_POINT
+  ) {
+    return createWorkbenchRuntimeStatePointFlowAction({
+      source,
+      detail,
+      actionId,
+      statePointId,
+      payload,
+      enabled,
+      disabledReason,
+    });
+  }
+
+  if (kind === WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_RESULT) {
+    return createWorkbenchRuntimeResultFlowAction({
+      source,
+      detail,
+      actionId,
+      statePointId,
+      payload,
+      enabled,
+      disabledReason,
+    });
+  }
+
+  if (kind === WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION) {
+    return createWorkbenchRuntimeActionEditFlowAction({
+      source,
+      target: target ?? detail,
+      enabled,
+      disabledReason,
+    });
+  }
+
+  if (kind === WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT) {
+    return createWorkbenchRuntimeResultReturnFlowAction({
+      source,
+      target: target ?? context ?? detail,
+      enabled,
+      disabledReason,
+    });
+  }
+
+  return createWorkbenchFlowAction({
+    kind,
+    source,
+    actionId: actionId ?? '',
+    statePointId: statePointId ?? '',
+    payload: payload ?? target ?? context ?? detail ?? null,
+    enabled: false,
+    disabledReason: 'unsupported-runtime-review-flow-action',
+  });
 }
 
 export function createWorkbenchRuntimeActionEditFlowAction({

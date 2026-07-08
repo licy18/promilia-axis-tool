@@ -319,9 +319,8 @@ import {
   resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
 import {
-  createWorkbenchRuntimeActionEditFlowAction,
-  createWorkbenchRuntimeResultReturnFlowAction,
-  createWorkbenchRuntimeStatePointFlowAction,
+  WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
+  createWorkbenchRuntimeReviewFlowAction,
 } from './workbenchMainFlowActions';
 import {
   isRuntimeResultFocusSource,
@@ -795,7 +794,8 @@ function dispatchRuntimeLogFlowAction(action) {
 
 function getRuntimeLogRowFlowAction(row) {
   const statePointId = getRuntimeStatePointIdByRow(row);
-  return createWorkbenchRuntimeStatePointFlowAction({
+  return createWorkbenchRuntimeReviewFlowAction({
+    kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_STATE_POINT,
     source: 'event-log-runtime-row',
     detail: row,
     statePointId,
@@ -804,7 +804,8 @@ function getRuntimeLogRowFlowAction(row) {
 }
 
 function getRuntimeLogActionFocusFlowAction(focus) {
-  return createWorkbenchRuntimeActionEditFlowAction({
+  return createWorkbenchRuntimeReviewFlowAction({
+    kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
     source: 'event-log-runtime-detail',
     target: focus,
     enabled: Boolean(focus?.canFocusAction ?? focus?.actionId),
@@ -812,7 +813,8 @@ function getRuntimeLogActionFocusFlowAction(focus) {
 }
 
 function getRuntimeLogReturnFlowAction(context) {
-  return createWorkbenchRuntimeResultReturnFlowAction({
+  return createWorkbenchRuntimeReviewFlowAction({
+    kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
     source: 'event-log-runtime-detail',
     target: context,
     enabled: Boolean(context?.statePointId),

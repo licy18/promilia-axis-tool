@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
+  WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
   createWorkbenchMainFlowNextAction,
   createWorkbenchMainFlowRecoveryAction,
   createWorkbenchOpenRuntimeResultsFlowAction,
   createWorkbenchRuntimeActionEditFlowAction,
   createWorkbenchRuntimeResultFlowAction,
   createWorkbenchRuntimeResultReturnFlowAction,
+  createWorkbenchRuntimeReviewFlowAction,
   createWorkbenchRuntimeStatePointFlowAction,
 } from '../../features/workbench/workbenchMainFlowActions';
 
@@ -241,6 +243,96 @@ describe('workbench main flow actions', () => {
       actionId: 'action-0001',
       statePointId: 'enemyHpDamage|applied|action-0001|12|0',
       canRun: true,
+    });
+  });
+
+  it('creates runtime review actions through one contract entry', () => {
+    const pointAction = createWorkbenchRuntimeReviewFlowAction({
+      kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_STATE_POINT,
+      source: 'resource-runtime-curve',
+      detail: {
+        actionId: 'action-0001',
+        statePointId: 'enemyHpDamage|applied|action-0001|12|0',
+      },
+    });
+    expect(pointAction).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'resource-runtime-curve',
+      actionId: 'action-0001',
+      statePointId: 'enemyHpDamage|applied|action-0001|12|0',
+      canRun: true,
+    });
+
+    const resultAction = createWorkbenchRuntimeReviewFlowAction({
+      kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_RESULT,
+      source: 'analysis-action-result',
+      actionId: 'action-0001',
+      statePointId: 'enemyHpDamage|applied|action-0001|12|0',
+    });
+    expect(resultAction).toMatchObject({
+      kind: 'select-runtime-result',
+      source: 'analysis-action-result',
+      actionId: 'action-0001',
+      statePointId: 'enemyHpDamage|applied|action-0001|12|0',
+      canRun: true,
+    });
+
+    const editAction = createWorkbenchRuntimeReviewFlowAction({
+      kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+      source: 'runtime-detail',
+      target: {
+        actionId: 'action-0002',
+        statePointId: 'selfEnergyChange|applied|action-0002|30|1',
+        frameLabel: '30f',
+      },
+    });
+    expect(editAction).toMatchObject({
+      kind: 'focus-runtime-action',
+      source: 'runtime-detail',
+      actionId: 'action-0002',
+      statePointId: 'selfEnergyChange|applied|action-0002|30|1',
+      canRun: true,
+      payload: {
+        frameLabel: '30f',
+      },
+    });
+
+    const returnAction = createWorkbenchRuntimeReviewFlowAction({
+      kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+      source: 'event-log-runtime-detail',
+      context: {
+        actionId: 'action-0002',
+        statePointId: 'selfEnergyChange|applied|action-0002|30|1',
+        originStatePointId: 'selfEnergyChange|applied|action-0002|12|0',
+      },
+    });
+    expect(returnAction).toMatchObject({
+      kind: 'return-runtime-result',
+      source: 'event-log-runtime-detail',
+      actionId: 'action-0002',
+      statePointId: 'selfEnergyChange|applied|action-0002|30|1',
+      canRun: true,
+      payload: {
+        originStatePointId: 'selfEnergyChange|applied|action-0002|12|0',
+      },
+    });
+  });
+
+  it('keeps unsupported runtime review actions disabled', () => {
+    expect(
+      createWorkbenchRuntimeReviewFlowAction({
+        kind: 'unknown-runtime-review-action',
+        source: 'runtime-detail',
+        actionId: 'action-0001',
+        statePointId: 'state-point-001',
+      })
+    ).toMatchObject({
+      kind: 'unknown-runtime-review-action',
+      source: 'runtime-detail',
+      actionId: 'action-0001',
+      statePointId: 'state-point-001',
+      canRun: false,
+      disabledReason: 'unsupported-runtime-review-flow-action',
     });
   });
 

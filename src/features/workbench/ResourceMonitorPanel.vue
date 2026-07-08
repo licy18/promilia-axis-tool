@@ -360,8 +360,8 @@ import {
   resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
 import {
-  createWorkbenchRuntimeActionEditFlowAction,
-  createWorkbenchRuntimeStatePointFlowAction,
+  WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
+  createWorkbenchRuntimeReviewFlowAction,
 } from './workbenchMainFlowActions';
 import { isRuntimeResultFocusSource } from './runtimeFocusSource';
 
@@ -1077,7 +1077,8 @@ function dispatchRuntimeCurveFlowAction(action) {
 }
 
 function getRuntimeCurvePointFlowAction(point) {
-  return createWorkbenchRuntimeStatePointFlowAction({
+  return createWorkbenchRuntimeReviewFlowAction({
+    kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_STATE_POINT,
     source: 'resource-runtime-curve',
     detail: point,
     enabled: Boolean(point?.statePointId),
@@ -1085,7 +1086,8 @@ function getRuntimeCurvePointFlowAction(point) {
 }
 
 function getRuntimeCurveActionFocusFlowAction(point) {
-  return createWorkbenchRuntimeActionEditFlowAction({
+  return createWorkbenchRuntimeReviewFlowAction({
+    kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
     source: 'resource-runtime-curve',
     target: point,
     enabled: Boolean(point?.canFocusAction ?? point?.actionId),
