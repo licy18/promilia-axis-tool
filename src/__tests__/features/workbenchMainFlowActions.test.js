@@ -138,6 +138,95 @@ describe('workbench main flow actions', () => {
     });
   });
 
+  it('uses runtime review primary operations for main flow focus and return actions', () => {
+    const focusAction = createWorkbenchMainFlowNextAction({
+      source: 'workbench-flow-panel',
+      flowModel: {
+        mainFlowState: {
+          primaryAction: {
+            kind: 'focus-runtime-action',
+          },
+          runtimeActionEditTarget: {
+            actionId: 'fallback-action',
+            statePointId: 'fallback-state-point',
+          },
+        },
+        mainFlowLoopState: {
+          nextActionKind: 'focus-runtime-action',
+          canRunNextAction: true,
+        },
+        runtimeReviewOperations: {
+          primaryOperationKind: 'focus-runtime-action',
+          primaryOperationEnabled: true,
+          focusAction: {
+            kind: 'focus-runtime-action',
+            enabled: true,
+            actionId: 'review-action',
+            statePointId: 'review-state-point',
+            fieldKey: 'startMs',
+            frameLabel: '18f',
+            trackKey: 'enemyHpDamage',
+            trackLabel: '敌人HP伤害',
+          },
+        },
+      },
+    });
+    expect(focusAction).toMatchObject({
+      kind: 'focus-runtime-action',
+      source: 'workbench-flow-panel',
+      actionId: 'review-action',
+      statePointId: 'review-state-point',
+      canRun: true,
+      payload: {
+        frameLabel: '18f',
+        trackKey: 'enemyHpDamage',
+        trackLabel: '敌人HP伤害',
+      },
+    });
+
+    const returnAction = createWorkbenchMainFlowNextAction({
+      source: 'workbench-flow-panel',
+      flowModel: {
+        mainFlowState: {
+          primaryAction: {
+            kind: 'return-runtime-result',
+          },
+          resultReturnTarget: {
+            actionId: 'fallback-action',
+            statePointId: 'fallback-state-point',
+          },
+        },
+        mainFlowLoopState: {
+          nextActionKind: 'return-runtime-result',
+          canRunNextAction: true,
+        },
+        runtimeReviewOperations: {
+          primaryOperationKind: 'return-runtime-result',
+          primaryOperationEnabled: true,
+          returnResult: {
+            kind: 'return-runtime-result',
+            enabled: true,
+            actionId: 'review-action',
+            originStatePointId: 'origin-state-point',
+            statePointId: 'review-state-point',
+            status: 'refreshed-edit-result',
+          },
+        },
+      },
+    });
+    expect(returnAction).toMatchObject({
+      kind: 'return-runtime-result',
+      source: 'workbench-flow-panel',
+      actionId: 'review-action',
+      statePointId: 'review-state-point',
+      canRun: true,
+      payload: {
+        originStatePointId: 'origin-state-point',
+        status: 'refreshed-edit-result',
+      },
+    });
+  });
+
   it('keeps a disabled action when the main flow loop has no next action', () => {
     expect(
       createWorkbenchMainFlowNextAction({

@@ -18905,6 +18905,51 @@ workbench-runtime-review-primary-operation
 - `npm run test -- --run`：通过，33 个测试文件、196 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 
+## 244. UI 主流程能力块：Main Flow Uses Review Primary Operation
+
+### 244.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`createWorkbenchMainFlowNextAction()` 的主流程 action 生成路径调整：
+
+```text
+focus-runtime-action
+return-runtime-result
+```
+
+当 `flowModel.runtimeReviewOperations.primaryOperationKind` 与下一步 action kind 一致时，改为复用：
+
+```js
+createWorkbenchRuntimeReviewPrimaryOperationFlowAction()
+```
+
+fallback 规则保持不变：如果没有匹配的 `runtimeReviewOperations.primaryOperationKind`，继续使用：
+
+```js
+createWorkbenchRuntimeActionEditFlowAction()
+createWorkbenchRuntimeResultReturnFlowAction()
+```
+
+因此顶部 `WorkbenchFlowPanel` 主流程按钮和 Workbench runtime review 区主操作现在共享同一套 review operation 目标解析，但 source 仍保留调用入口自身，例如：
+
+```text
+workbench-flow-panel
+runtime-review-primary
+```
+
+### 244.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程 action 生成路径，不新增持久字段，不需要数据迁移。
+
+### 244.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖主流程 focus / return 在存在 `runtimeReviewOperations` 时复用 review primary operation。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认顶部主流程 focus / return dispatch 保留 review primary 的轨道上下文和返回结果上下文。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、70 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、197 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
 ## 239. UI 主流程能力块：Runtime Review Selection Consumers
 
 ### 239.1 结构变化

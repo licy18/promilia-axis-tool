@@ -8843,6 +8843,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 review 主操作和 WorkbenchFlowPanel 的主流程按钮进一步对齐，减少顶部主流程条与运行结果区之间的重复入口和状态分叉。
 
+### 2026-07-09：UI 主流程能力块 - Main Flow Uses Review Primary Operation
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `createWorkbenchMainFlowNextAction()` 在下一步为 `focus-runtime-action` 或 `return-runtime-result`，且 `runtimeReviewOperations.primaryOperationKind` 匹配时，复用 `createWorkbenchRuntimeReviewPrimaryOperationFlowAction()`。
+- 顶部 `WorkbenchFlowPanel` 主流程按钮与运行结果 review 区主操作现在共用同一套 review primary operation 目标解析。
+- 保留无 `runtimeReviewOperations` 时的旧 fallback，确保 helper 单测和非 review 路径仍可独立工作。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- main flow action 单测覆盖顶部主流程 focus / return 从 review primary operation 取目标，而不是使用 fallback target。
+- Workbench 页面测试确认顶部主流程 focus / return dispatch 保留 review primary 的轨道上下文和返回结果上下文。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、70 条测试。
+- `npm run test -- --run`：通过，33 个测试文件、197 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 review 主操作对齐后的入口用于进一步压缩 Workbench 主工作面，让动作编辑区、运行曲线、日志和详情之间的往返更接近 Endaxis 的单工作面节奏。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

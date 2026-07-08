@@ -59,6 +59,13 @@ export function createWorkbenchMainFlowNextAction({
   }
 
   if (nextActionKind === WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION) {
+    if (isRuntimeReviewPrimaryOperationKind(flowModel, nextActionKind)) {
+      return createWorkbenchRuntimeReviewPrimaryOperationFlowAction({
+        flowModel,
+        source,
+        enabled: canRunNextAction,
+      });
+    }
     return createWorkbenchRuntimeActionEditFlowAction({
       source,
       target: createMainFlowLoopTarget({
@@ -70,6 +77,13 @@ export function createWorkbenchMainFlowNextAction({
   }
 
   if (nextActionKind === WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT) {
+    if (isRuntimeReviewPrimaryOperationKind(flowModel, nextActionKind)) {
+      return createWorkbenchRuntimeReviewPrimaryOperationFlowAction({
+        flowModel,
+        source,
+        enabled: canRunNextAction,
+      });
+    }
     return createWorkbenchRuntimeResultReturnFlowAction({
       source,
       target: createMainFlowLoopTarget({
@@ -322,4 +336,11 @@ function getRuntimeReviewOperationTarget({
   }
 
   return null;
+}
+
+function isRuntimeReviewPrimaryOperationKind(flowModel = null, actionKind = '') {
+  return Boolean(
+    actionKind &&
+      flowModel?.runtimeReviewOperations?.primaryOperationKind === actionKind
+  );
 }

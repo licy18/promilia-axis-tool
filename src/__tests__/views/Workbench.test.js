@@ -1924,6 +1924,10 @@ describe('Workbench view', () => {
       actionId: 'action-0001',
       statePointId: selectedRuntimePointId,
       canRun: true,
+      payload: {
+        trackKey: 'enemyHpDamage',
+        trackLabel: '敌人HP伤害',
+      },
     });
     const focusedTimelineAction = wrapper.find(
       '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
@@ -2071,6 +2075,10 @@ describe('Workbench view', () => {
       actionId: 'action-0001',
       statePointId: refreshedStatePointId,
       canRun: true,
+      payload: {
+        originStatePointId: selectedRuntimePointId,
+        status: 'refreshed-edit-result',
+      },
     });
     expect(
       wrapper
