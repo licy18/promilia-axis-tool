@@ -13169,3 +13169,94 @@ data-state-point-id
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DY 应补结果回看后的当前动作/结果区域状态一致性，让用户更少依赖手动筛选或滚动确认当前位置。
+
+## 158. 阶段 5-8DY：动作结果当前位置同步状态
+
+阶段目标：
+
+- 在结果回看后，让动作结果行和结果详情区明确显示当前 runtime state point 已经对齐。
+
+### 158.1 数据结构变化
+
+本阶段不新增保存字段，不变更 `Project` schema、simulation 输出或 localStorage 数据。
+
+`AnalysisPanel` 复用已有：
+
+```text
+selectedStateCurvePointId
+runtimeTraceByActionId[actionId].statePointIds
+```
+
+新增前端派生状态：
+
+```js
+getActionResultLocationStatus(entry): 'selected-result' | 'available'
+getActionResultSelectedStatePointId(entry): string
+```
+
+当 `selectedStateCurvePointId` 属于当前动作 runtime trace 时：
+
+```text
+status = "selected-result"
+selectedStatePointId = selectedStateCurvePointId
+```
+
+否则：
+
+```text
+status = "available"
+selectedStatePointId = ""
+```
+
+### 158.2 DOM 状态
+
+动作结果行新增：
+
+```html
+data-testid="workbench-action-result-source-row"
+data-result-location-status="selected-result|available"
+data-selected-state-point-id
+```
+
+当状态为 `selected-result` 时显示：
+
+```html
+data-testid="workbench-action-result-location-status"
+```
+
+结果详情区新增：
+
+```html
+data-testid="workbench-action-result-detail-panel"
+data-result-location-status="selected-result"
+data-selected-state-point-id
+```
+
+详情区状态标签：
+
+```html
+data-testid="workbench-action-result-detail-location-status"
+```
+
+含义：
+
+- `selected-result`：当前选中的 runtime state point 已经映射到该动作结果行/详情。
+- `available`：该动作有 runtime trace，但当前选中的 state point 不属于该动作结果。
+
+### 158.3 验证
+
+当前测试覆盖：
+
+- 属性面板回看刷新后结果点后，动作结果行 `data-selected="true"`。
+- 同一行写入 `data-result-location-status="selected-result"`。
+- 同一行写入刷新后的 `data-selected-state-point-id`。
+- 结果详情区写入同一状态和同一 selected state point。
+- 两处都显示 `当前位置已同步`。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、40 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、114 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DZ 应补当前结果定位后的筛选/导航反馈，让日志、曲线和结果面板围绕同一 state point 工作时更可见。

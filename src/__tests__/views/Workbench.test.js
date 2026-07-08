@@ -2100,6 +2100,35 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(refreshedRuntimeStatePointId);
+    const syncedActionResultRow = wrapper.find(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    );
+    expect(syncedActionResultRow.attributes('data-selected')).toBe('true');
+    expect(
+      syncedActionResultRow.attributes('data-result-location-status')
+    ).toBe('selected-result');
+    expect(
+      syncedActionResultRow.attributes('data-selected-state-point-id')
+    ).toBe(refreshedRuntimeStatePointId);
+    expect(
+      syncedActionResultRow
+        .find('[data-testid="workbench-action-result-location-status"]')
+        .text()
+    ).toBe('当前位置已同步');
+    const syncedActionResultDetail = wrapper.find(
+      '[data-testid="workbench-action-result-detail-panel"]'
+    );
+    expect(
+      syncedActionResultDetail.attributes('data-result-location-status')
+    ).toBe('selected-result');
+    expect(
+      syncedActionResultDetail.attributes('data-selected-state-point-id')
+    ).toBe(refreshedRuntimeStatePointId);
+    expect(
+      syncedActionResultDetail
+        .find('[data-testid="workbench-action-result-detail-location-status"]')
+        .text()
+    ).toBe('当前位置已同步');
   });
 
   it('links runtime sim log detail to the action edit focus', async () => {

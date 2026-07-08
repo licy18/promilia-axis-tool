@@ -82,9 +82,7 @@
           <div
             v-if="actionEditFeedback.hasResultPointMap"
             class="action-edit-feedback-result-map"
-            :data-origin-state-point-id="
-              actionEditFeedback.originStatePointId
-            "
+            :data-origin-state-point-id="actionEditFeedback.originStatePointId"
             :data-runtime-state-point-id="
               actionEditFeedback.runtimeStatePointId
             "
@@ -249,11 +247,15 @@
           getActionResultEditSource(entry)?.changeSummary ?? ''
         "
         :data-result-refresh-status="draftResultStatus.refreshKey"
+        :data-result-location-status="getActionResultLocationStatus(entry)"
         :data-has-runtime-trace="Boolean(getActionResultRuntimeTrace(entry))"
         :data-runtime-state-point-id="
           getActionResultRuntimeTrace(entry)?.firstStatePointId ?? ''
         "
         :data-selected="isActionResultRuntimeSelected(entry)"
+        :data-selected-state-point-id="
+          getActionResultSelectedStatePointId(entry)
+        "
         :data-source-delta-ids="
           getActionResultRuntimeTrace(entry)?.sourceDeltaIds.join(',') ?? ''
         "
@@ -285,6 +287,13 @@
             {{ draftResultStatus.refreshLabel }}
           </small>
           <small
+            v-if="isActionResultRuntimeSelected(entry)"
+            class="action-result-location-status"
+            data-testid="workbench-action-result-location-status"
+          >
+            当前位置已同步
+          </small>
+          <small
             v-if="shouldShowActionResultEditSource(entry)"
             class="action-result-edit-source"
             role="button"
@@ -297,7 +306,9 @@
             @keydown.enter.stop.prevent="focusActionEditSource(entry)"
             @keydown.space.stop.prevent="focusActionEditSource(entry)"
           >
-            {{ formatActionEditSourceDisplay(getActionResultEditSource(entry)) }}
+            {{
+              formatActionEditSourceDisplay(getActionResultEditSource(entry))
+            }}
           </small>
           <small>{{ formatActionResultSource(entry) }}</small>
           <small
@@ -338,9 +349,7 @@
             data-testid="workbench-action-result-runtime-trace"
           >
             {{
-              formatActionResultRuntimeTrace(
-                getActionResultRuntimeTrace(entry)
-              )
+              formatActionResultRuntimeTrace(getActionResultRuntimeTrace(entry))
             }}
           </small>
         </div>
@@ -381,6 +390,10 @@
               ?.changeSummary ?? ''
           "
           :data-result-refresh-status="draftResultStatus.refreshKey"
+          data-result-location-status="selected-result"
+          :data-selected-state-point-id="
+            selectedRuntimeResultDetail.statePointId
+          "
           :data-state-point-id="selectedRuntimeResultDetail.statePointId"
           :data-track-key="selectedRuntimeResultDetail.trackKey"
           data-detail-mode="compact"
@@ -396,7 +409,15 @@
                 '动作'
               }}
             </strong>
-            <small>{{ formatRuntimeResultMeta(selectedRuntimeResultDetail) }}</small>
+            <small>{{
+              formatRuntimeResultMeta(selectedRuntimeResultDetail)
+            }}</small>
+            <small
+              class="action-result-detail-location-status"
+              data-testid="workbench-action-result-detail-location-status"
+            >
+              当前位置已同步
+            </small>
           </div>
           <div class="action-result-detail-grid">
             <div
@@ -754,7 +775,9 @@
             }"
             :data-track-key="point.trackKey"
             :data-layer-key="point.layerKey"
-            :data-participation="getStateCurveLayerRole(point.layerKey).roleLabel"
+            :data-participation="
+              getStateCurveLayerRole(point.layerKey).roleLabel
+            "
             :data-action-id="point.actionId"
             :data-frame-label="formatStateCurvePointFrame(point)"
             :data-state-point-id="point.statePointId"
@@ -770,7 +793,9 @@
             </span>
             <strong>{{ formatStateCurvePointValue(point) }}</strong>
             <em data-testid="workbench-state-curve-point-participation">
-              {{ getStateCurveLayerRole(point.layerKey).pointParticipationLabel }}
+              {{
+                getStateCurveLayerRole(point.layerKey).pointParticipationLabel
+              }}
             </em>
             <small>{{ formatStateCurvePointSource(point) }}</small>
           </li>
@@ -1870,6 +1895,16 @@ function isActionResultRuntimeSelected(entry) {
   );
 }
 
+function getActionResultLocationStatus(entry) {
+  return isActionResultRuntimeSelected(entry) ? 'selected-result' : 'available';
+}
+
+function getActionResultSelectedStatePointId(entry) {
+  return isActionResultRuntimeSelected(entry)
+    ? props.selectedStateCurvePointId
+    : '';
+}
+
 function isActionResultCurrentAction(entry) {
   return Boolean(
     props.selectedActionId && entry?.actionId === props.selectedActionId
@@ -1883,7 +1918,7 @@ function getActionResultEditSource(entry) {
 function shouldShowActionResultEditSource(entry) {
   return Boolean(
     getActionResultEditSource(entry) &&
-      !isActionEditFeedbackForAction(entry?.actionId)
+    !isActionEditFeedbackForAction(entry?.actionId)
   );
 }
 
@@ -1924,8 +1959,8 @@ function createActionEditFeedback(source) {
   const runtimeStatePointId = trace?.firstStatePointId ?? '';
   const resultFocused = Boolean(
     runtimeStatePointId &&
-      props.selectedStateCurvePointId &&
-      props.selectedStateCurvePointId === runtimeStatePointId
+    props.selectedStateCurvePointId &&
+    props.selectedStateCurvePointId === runtimeStatePointId
   );
   const resultFocusStatus = runtimeStatePointId
     ? resultFocused
@@ -1952,12 +1987,13 @@ function createActionEditFeedback(source) {
       runtimeDeltaCount: trace?.count ?? 0,
       resultFocusStatus,
     }),
-    hasResultPointMap: Boolean(source.originStatePointId || runtimeStatePointId),
+    hasResultPointMap: Boolean(
+      source.originStatePointId || runtimeStatePointId
+    ),
     resultFocused,
     resultFocusStatus,
-    resultFocusLabel: formatActionEditFeedbackResultFocusLabel(
-      resultFocusStatus
-    ),
+    resultFocusLabel:
+      formatActionEditFeedbackResultFocusLabel(resultFocusStatus),
   };
 }
 
@@ -2003,7 +2039,7 @@ function isValidActionEditSource(source) {
 function isActionEditFeedbackForAction(actionId) {
   return Boolean(
     actionEditFeedback.value?.actionId &&
-      actionEditFeedback.value.actionId === actionId
+    actionEditFeedback.value.actionId === actionId
   );
 }
 
@@ -2047,7 +2083,8 @@ function createSelectedActionContribution(trace) {
   const rows = ACTION_CONTRIBUTION_TRACKS.map(track =>
     createActionContributionRow(trace, track)
   );
-  const activeRow = rows.find(row => row.active) ?? rows.find(row => row.count > 0);
+  const activeRow =
+    rows.find(row => row.active) ?? rows.find(row => row.count > 0);
   return {
     actionId: trace.actionId,
     actionName: trace.actionName ?? trace.actionId ?? '动作',
@@ -2100,7 +2137,9 @@ function createActionContributionDetail(row) {
   const calculationKind =
     runtimeRow.calculationKind ?? point.calculationKind ?? calculator.kind;
   const calculationStatus =
-    runtimeRow.calculationStatus ?? point.calculationStatus ?? calculator.status;
+    runtimeRow.calculationStatus ??
+    point.calculationStatus ??
+    calculator.status;
   const unresolvedItems = calculator.unresolved ?? [];
   return {
     trackKey: row.trackKey,
@@ -2264,9 +2303,9 @@ function formatRuntimeResultCumulative(detail) {
 function hasRuntimeResultState(detail) {
   return Boolean(
     detail?.stateLabel ||
-      detail?.stateValue != null ||
-      detail?.stateValueStatus ||
-      detail?.baselineStatus
+    detail?.stateValue != null ||
+    detail?.stateValueStatus ||
+    detail?.baselineStatus
   );
 }
 
@@ -2370,8 +2409,7 @@ function formatActionContributionValue(row) {
 
 function formatActionContributionMeta(row) {
   const activeText = row.active ? '详情已同步 · ' : '';
-  const resultText =
-    row.count > 0 ? `已应用 ${row.count}条` : '暂无已应用结果';
+  const resultText = row.count > 0 ? `已应用 ${row.count}条` : '暂无已应用结果';
   const sourceText = row.shortSourceDeltaIds.length
     ? ` · ${row.shortSourceDeltaIds.join(' / ')}`
     : '';
@@ -3590,6 +3628,16 @@ h2 {
   border-radius: 4px;
   background: rgba(121, 199, 185, 0.12);
   color: #9ce0d2;
+  font-weight: 700;
+}
+
+.action-result-location-status,
+.action-result-detail-location-status {
+  width: max-content;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.16);
+  color: #dff9f3;
   font-weight: 700;
 }
 

@@ -6521,6 +6521,40 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DY 目标：继续完善 Workbench 主流程编辑体验，优先补结果回看后的当前动作/结果区域状态一致性，让用户能更少依赖手动筛选或滚动确认当前位置。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DY 动作结果当前位置同步提示
+
+本轮完成：
+
+- `AnalysisPanel` 的动作结果行新增当前位置同步状态。
+- 当当前选中的 runtime state point 属于某条动作结果时，该动作结果行显示 `当前位置已同步`。
+- 结果详情区同步写入同一状态，让用户从属性面板 `回到结果点` 后能直接确认结果区域已经对齐。
+- Workbench 测试覆盖属性面板回看刷新后结果点后，动作结果行和结果详情区都显示当前位置同步状态。
+
+当前验证事实：
+
+- 回到刷新后结果点后，动作结果行写入 `data-result-location-status="selected-result"`。
+- 同一动作结果行写入 `data-selected-state-point-id`，值为刷新后的 runtime state point。
+- 结果详情区写入 `data-result-location-status="selected-result"` 和同一个 selected state point。
+- 动作结果行与结果详情区都显示 `当前位置已同步`。
+- 本阶段只新增前端派生状态和 UI 提示，不新增公式、simulation 输出或保存 schema。
+
+当前边界：
+
+- 同步状态只说明当前选中的 runtime state point 已在结果区域对齐，不代表最终公式已确认。
+- 暂未增加自动滚动到结果行或键盘快捷键。
+- 暂未修改日志筛选、曲线筛选或项目保存结构。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、40 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、114 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8DZ 目标：继续完善 Workbench 主流程编辑体验，优先补当前结果定位后的筛选/导航反馈，让用户知道日志、曲线和结果面板是否正在围绕同一 state point 工作。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
