@@ -1772,6 +1772,7 @@ describe('Workbench view', () => {
 
     flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
     expect(flowPanel.attributes('data-action-id')).toBe('action-0002');
+    expect(flowPanel.attributes('data-runtime-overview-active')).toBe('true');
     expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('1');
     expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('-1');
     expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe('');
@@ -1797,6 +1798,35 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-state-curve-focus-all"]').classes()
     ).toContain('active');
+
+    const overviewNextButton = flowPanel.find(
+      '[data-testid="workbench-flow-runtime-next"]'
+    );
+    const overviewNextStatePointId = overviewNextButton.attributes(
+      'data-state-point-id'
+    );
+    expect(overviewNextButton.attributes('disabled')).toBeUndefined();
+    expect(overviewNextStatePointId).toBeTruthy();
+
+    await overviewNextButton.trigger('click');
+    await nextTick();
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0001');
+    expect(flowPanel.attributes('data-runtime-overview-active')).toBe('false');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('0');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(overviewNextStatePointId);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+        )
+        .classes()
+    ).toContain('selected');
   });
 
   it('selects the source action when an action result is focused', async () => {

@@ -11,6 +11,7 @@
     "
     :data-runtime-navigation-count="runtimeNavigationPoints.length"
     :data-runtime-navigation-index="selectedRuntimeNavigationIndex"
+    :data-runtime-overview-active="runtimeOverviewActive ? 'true' : 'false'"
     :data-runtime-next-state-point-id="
       selectedRuntimeNavigationNext?.statePointId ?? ''
     "
@@ -160,6 +161,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  runtimeOverviewActive: {
+    type: Boolean,
+    default: false,
+  },
   actionEditResultContext: {
     type: Object,
     default: null,
@@ -193,14 +198,20 @@ const selectedRuntimeNavigationIndex = computed(() =>
 const selectedRuntimeNavigationPrevious = computed(() =>
   selectedRuntimeNavigationIndex.value > 0
     ? runtimeNavigationPoints.value[selectedRuntimeNavigationIndex.value - 1]
-    : null
+    : props.runtimeOverviewActive && runtimeNavigationPoints.value.length > 0
+      ? runtimeNavigationPoints.value[runtimeNavigationPoints.value.length - 1]
+      : null
 );
 const selectedRuntimeNavigationNext = computed(() =>
   selectedRuntimeNavigationIndex.value >= 0 &&
   selectedRuntimeNavigationIndex.value <
     runtimeNavigationPoints.value.length - 1
     ? runtimeNavigationPoints.value[selectedRuntimeNavigationIndex.value + 1]
-    : null
+    : selectedRuntimeNavigationIndex.value < 0 &&
+        props.runtimeOverviewActive &&
+        runtimeNavigationPoints.value.length > 0
+      ? runtimeNavigationPoints.value[0]
+      : null
 );
 const runtimeNavigationLabel = computed(() => {
   const total = runtimeNavigationPoints.value.length;

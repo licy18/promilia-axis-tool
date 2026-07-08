@@ -48,6 +48,7 @@
       :runtime-projection="simulationResult.threeValueRuntimeProjection"
       :runtime-selected-detail="runtimeSelectedDetail"
       :selected-state-curve-point-id="selectedStateCurvePointId"
+      :runtime-overview-active="runtimeOverviewActive"
       :action-edit-result-context="actionEditResultContext"
       @open-runtime-results="openRuntimeResultsFlow"
       @focus-runtime-action="focusRuntimeAction"
@@ -328,6 +329,11 @@ const runtimeFocusSource = computed(() =>
   runtimeLogFocus.value.statePointId === selectedStateCurvePointId.value
     ? runtimeLogFocus.value.source
     : ''
+);
+const runtimeOverviewActive = computed(
+  () =>
+    calculatorDiagnosticScope.value === 'runtime' &&
+    !selectedStateCurvePointId.value
 );
 const actionEditResultContext = computed(() =>
   createActionEditResultContext({

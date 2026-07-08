@@ -14587,3 +14587,65 @@ Workbench 测试新增覆盖：
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、43 条测试。
 - `npm run test -- --run`：通过，16 个测试文件、121 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 176. UI 主流程能力块：运行总览结果巡检入口
+
+本阶段属于 UI 主流程。
+
+### 176.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 176.2 WorkbenchFlowPanel prop
+
+`WorkbenchFlowPanel` 新增 prop：
+
+```js
+runtimeOverviewActive
+```
+
+Workbench 传入条件：
+
+```text
+calculatorDiagnosticScope === runtime
+selectedStateCurvePointId 为空
+```
+
+### 176.3 DOM 标记
+
+`workbench-flow-panel` 新增：
+
+```html
+data-runtime-overview-active
+```
+
+用于测试和主流程状态识别。
+
+### 176.4 导航规则
+
+普通选中态保持原规则：
+
+```text
+previous = 当前结果前一项
+next = 当前结果后一项
+```
+
+runtime 总览态且未选中具体结果点时：
+
+```text
+previous = 最后一项 runtime navigation point
+next = 第一项 runtime navigation point
+```
+
+非 runtime 总览态且未选中结果点时，仍不启用前后导航。
+
+### 176.5 验证
+
+Workbench 测试新增覆盖：
+
+- 等待动作进入 runtime 总览后 `data-runtime-overview-active = true`。
+- 总览态下一结果按钮可进入第一条 runtime state point。
+- 进入具体结果后恢复普通 runtime 导航并同步 selected action。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、43 条测试。
+- `npm run test -- --run`：通过，16 个测试文件、121 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
