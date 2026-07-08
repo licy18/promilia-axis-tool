@@ -4,6 +4,11 @@
     :data-action-id="workbenchFlow.selectedActionId"
     :data-edit-result-state-point-id="workbenchFlow.editResult.statePointId"
     :data-flow-phase="workbenchFlow.phase"
+    :data-flow-primary-action-id="workbenchFlow.primaryAction.actionId"
+    :data-flow-primary-kind="workbenchFlow.primaryAction.kind"
+    :data-flow-primary-state-point-id="
+      workbenchFlow.primaryAction.statePointId
+    "
     :data-runtime-detail-action-id="workbenchFlow.runtimeDetail.actionId"
     :data-runtime-detail-state-point-id="workbenchFlow.runtimeDetail.statePointId"
     :data-runtime-navigation-count="workbenchFlow.runtimeNavigation.count"
@@ -106,7 +111,19 @@
       </div>
       <button
         type="button"
-        class="flow-button"
+        :class="[
+          'flow-button',
+          {
+            primary: isPrimaryFlowAction(
+              WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS
+            ),
+          },
+        ]"
+        :data-primary-action="
+          isPrimaryFlowAction(WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS)
+            ? 'true'
+            : 'false'
+        "
         data-testid="workbench-flow-open-runtime"
         :disabled="!workbenchFlow.controls.canOpenRuntimeResults"
         @click="openRuntimeResults"
@@ -116,8 +133,20 @@
       </button>
       <button
         type="button"
-        class="flow-button"
+        :class="[
+          'flow-button',
+          {
+            primary: isPrimaryFlowAction(
+              WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION
+            ),
+          },
+        ]"
         :data-action-id="workbenchFlow.runtimeDetail.actionId"
+        :data-primary-action="
+          isPrimaryFlowAction(WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION)
+            ? 'true'
+            : 'false'
+        "
         :data-state-point-id="workbenchFlow.runtimeDetail.statePointId"
         data-testid="workbench-flow-edit-runtime-action"
         :disabled="!workbenchFlow.controls.canFocusRuntimeAction"
@@ -128,8 +157,23 @@
       </button>
       <button
         type="button"
-        class="flow-button secondary"
+        :class="[
+          'flow-button',
+          {
+            primary: isPrimaryFlowAction(
+              WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT
+            ),
+            secondary: !isPrimaryFlowAction(
+              WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT
+            ),
+          },
+        ]"
         :data-action-id="workbenchFlow.editResult.actionId"
+        :data-primary-action="
+          isPrimaryFlowAction(WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT)
+            ? 'true'
+            : 'false'
+        "
         :data-state-point-id="workbenchFlow.editResult.statePointId"
         data-testid="workbench-flow-return-edit-result"
         :disabled="!workbenchFlow.controls.canReturnRuntimeResult"
@@ -231,6 +275,10 @@ function dispatchFlowAction(action) {
     return;
   }
   emit('dispatch-flow-action', action);
+}
+
+function isPrimaryFlowAction(kind) {
+  return workbenchFlow.value.primaryAction.kind === kind;
 }
 
 function getOpenRuntimeResultsFlowAction(flow) {
@@ -397,6 +445,13 @@ function getRuntimeReturnFlowAction(context) {
   border-color: rgba(255, 255, 255, 0.14);
   background: rgba(255, 255, 255, 0.06);
   color: #d9dee3;
+}
+
+.flow-button.primary {
+  border-color: rgba(121, 199, 185, 0.68);
+  background: rgba(121, 199, 185, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(121, 199, 185, 0.18);
+  color: #f2fffb;
 }
 
 .flow-icon-button:disabled,

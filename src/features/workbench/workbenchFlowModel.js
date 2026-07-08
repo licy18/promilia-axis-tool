@@ -23,6 +23,12 @@ export const WORKBENCH_FLOW_ACTION_KINDS = Object.freeze({
   RETURN_RUNTIME_RESULT: 'return-runtime-result',
 });
 
+export const WORKBENCH_FLOW_PRIMARY_ACTION_KEYS = Object.freeze({
+  OPEN_RUNTIME_RESULTS: 'open-runtime-results',
+  FOCUS_RUNTIME_ACTION: 'focus-runtime-action',
+  RETURN_RUNTIME_RESULT: 'return-runtime-result',
+});
+
 export function createWorkbenchFlowAction({
   kind = '',
   source = '',
@@ -74,13 +80,27 @@ export function createWorkbenchFlowModel({
     generationBundle,
     runtimeProjection,
   });
+  const phase = resolveWorkbenchFlowPhase({
+    runtimeDetail,
+    editResult,
+    runtimeOverviewActive,
+  });
+  const controls = {
+    canOpenRuntimeResults:
+      contractContext.runtimeOutput.ready && runtimeSimLogCount > 0,
+    canFocusRuntimeAction: runtimeDetail.canFocusAction,
+    canReturnRuntimeResult: editResult.canReturn,
+  };
+  const primaryAction = createWorkbenchFlowPrimaryAction({
+    phase,
+    selectedActionId: selectedAction?.id ?? '',
+    controls,
+    runtimeDetail,
+    editResult,
+  });
 
   return {
-    phase: resolveWorkbenchFlowPhase({
-      runtimeDetail,
-      editResult,
-      runtimeOverviewActive,
-    }),
+    phase,
     selectedAction,
     selectedActionId: selectedAction?.id ?? '',
     selectedActionName: selectedAction?.name ?? '未选动作',
@@ -92,6 +112,7 @@ export function createWorkbenchFlowModel({
     runtimeSimLogCount,
     runtimeDetail,
     editResult,
+    primaryAction,
     runtimeNavigation: {
       points: runtimeNavigationPoints,
       count: runtimeNavigationPoints.length,
@@ -111,12 +132,7 @@ export function createWorkbenchFlowModel({
         selectedRuntimeNavigationIndex,
       }),
     },
-    controls: {
-      canOpenRuntimeResults:
-        contractContext.runtimeOutput.ready && runtimeSimLogCount > 0,
-      canFocusRuntimeAction: runtimeDetail.canFocusAction,
-      canReturnRuntimeResult: editResult.canReturn,
-    },
+    controls,
   };
 }
 
@@ -182,6 +198,73 @@ function resolveWorkbenchFlowPhase({
     return WORKBENCH_FLOW_PHASES.RUNTIME_OVERVIEW;
   }
   return WORKBENCH_FLOW_PHASES.ACTION_EDIT;
+}
+
+function createWorkbenchFlowPrimaryAction({
+  phase,
+  selectedActionId = '',
+  controls = {},
+  runtimeDetail,
+  editResult,
+}) {
+  if (phase === WORKBENCH_FLOW_PHASES.EDIT_RESULT_READY) {
+    return createPrimaryAction({
+      key: WORKBENCH_FLOW_PRIMARY_ACTION_KEYS.RETURN_RUNTIME_RESULT,
+      kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+      label: '回到刷新结果',
+      actionId: editResult.actionId,
+      statePointId: editResult.statePointId,
+      enabled: controls.canReturnRuntimeResult,
+      disabledReason: 'missing-runtime-result',
+    });
+  }
+
+  if (
+    phase === WORKBENCH_FLOW_PHASES.RUNTIME_RESULT ||
+    phase === WORKBENCH_FLOW_PHASES.EDIT_RESULT_REVIEW
+  ) {
+    return createPrimaryAction({
+      key: WORKBENCH_FLOW_PRIMARY_ACTION_KEYS.FOCUS_RUNTIME_ACTION,
+      kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+      label:
+        phase === WORKBENCH_FLOW_PHASES.EDIT_RESULT_REVIEW
+          ? '继续修改动作'
+          : '编辑结果动作',
+      actionId: runtimeDetail.actionId,
+      statePointId: runtimeDetail.statePointId,
+      enabled: controls.canFocusRuntimeAction,
+      disabledReason: 'missing-runtime-action',
+    });
+  }
+
+  return createPrimaryAction({
+    key: WORKBENCH_FLOW_PRIMARY_ACTION_KEYS.OPEN_RUNTIME_RESULTS,
+    kind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+    label: '查看运行结果',
+    actionId: selectedActionId,
+    enabled: controls.canOpenRuntimeResults,
+    disabledReason: 'missing-runtime-results',
+  });
+}
+
+function createPrimaryAction({
+  key,
+  kind,
+  label,
+  actionId = '',
+  statePointId = '',
+  enabled = false,
+  disabledReason = '',
+}) {
+  return {
+    key,
+    kind,
+    label,
+    actionId: actionId ?? '',
+    statePointId: statePointId ?? '',
+    enabled: Boolean(enabled),
+    disabledReason: enabled ? '' : disabledReason,
+  };
 }
 
 function getRuntimeNavigationPrevious({

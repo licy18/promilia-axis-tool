@@ -17440,3 +17440,76 @@ ResourceMonitorPanel -> source: resource-runtime-curve
 - `npm run test -- --run`：通过，31 个测试文件、175 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 221. UI 主流程能力块：Primary Flow Action Contract
+
+本阶段属于 UI 主流程。
+
+### 221.1 结构变化
+
+`src/features/workbench/workbenchFlowModel.js` 新增：
+
+```js
+WORKBENCH_FLOW_PRIMARY_ACTION_KEYS
+```
+
+当前主操作 key：
+
+```text
+open-runtime-results
+focus-runtime-action
+return-runtime-result
+```
+
+`createWorkbenchFlowModel()` 输出新增：
+
+```js
+primaryAction: {
+  key,
+  kind,
+  label,
+  actionId,
+  statePointId,
+  enabled,
+  disabledReason
+}
+```
+
+当前阶段映射：
+
+```text
+action-edit / runtime-overview -> open-runtime-results
+runtime-result -> focus-runtime-action
+edit-result-ready -> return-runtime-result
+edit-result-review -> focus-runtime-action
+```
+
+`WorkbenchFlowPanel` 根节点新增派生属性：
+
+```html
+data-flow-primary-kind
+data-flow-primary-action-id
+data-flow-primary-state-point-id
+```
+
+现有三个主流程按钮新增：
+
+```html
+data-primary-action="true|false"
+```
+
+并由 `primaryAction.kind` 决定哪一个按钮使用主操作样式。该变化只改变主流程按钮的模型合同和视觉优先级，不新增额外按钮。
+
+### 221.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 主流程状态；三值计算、runtime projection 数值结果和草稿保存结构不变。
+
+### 221.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖四种主流程阶段下的 `primaryAction` 合同。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认真实 Workbench 中主操作从 `open-runtime-results` 切到 `focus-runtime-action`，再切到 `return-runtime-result`，并保持原 dispatch 回路。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、58 条测试。
+- `npm run test -- --run`：通过，31 个测试文件、175 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

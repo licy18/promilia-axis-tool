@@ -8247,6 +8247,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 Workbench 主流程的“动作编辑 -> 运行模拟 -> 曲线/日志定位 -> 回到动作修改”路径做成更完整的可用体验，优先收束较大的流程入口和详情查看能力，而不是继续打磨局部状态提示。
 
+### 2026-07-09：UI 主流程能力块 - Primary Flow Action Contract
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `WorkbenchFlowModel` 新增 `primaryAction`，由模型统一决定当前主流程最该执行的动作。
+- 主流程按钮不再只是一组三个并列入口；在动作编辑、运行结果、刷新结果待回看、刷新结果回看阶段，会分别把“查看运行结果”“编辑结果动作”“回到刷新结果”标记为当前主操作。
+- WorkbenchFlowPanel 只消费 `primaryAction` 合同并对现有按钮做主操作标记，不新增冗余流程按钮。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- flow model 单元测试覆盖 action edit、runtime result、edit result ready、edit result review 四种阶段的主操作切换。
+- Workbench 页面测试确认真实工作台中主操作会从查看运行结果切到编辑结果动作，再切到回到刷新结果，并保持已有 dispatch-flow-action 回路。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、58 条测试。
+- `npm run test -- --run`：通过，31 个测试文件、175 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 继续 UI 主流程能力块：围绕同一个 `primaryAction` 合同补齐更完整的详情查看与修改回路，例如让运行详情、曲线点和日志行共享更稳定的主流程定位/回改入口。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   WORKBENCH_FLOW_ACTION_KINDS,
   WORKBENCH_FLOW_PHASES,
+  WORKBENCH_FLOW_PRIMARY_ACTION_KEYS,
   createWorkbenchFlowAction,
   createWorkbenchFlowModel,
 } from '../../features/workbench/workbenchFlowModel';
@@ -40,6 +41,14 @@ describe('workbench flow model', () => {
       canFocusRuntimeAction: false,
       canReturnRuntimeResult: false,
     });
+    expect(model.primaryAction).toMatchObject({
+      key: WORKBENCH_FLOW_PRIMARY_ACTION_KEYS.OPEN_RUNTIME_RESULTS,
+      kind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+      label: '查看运行结果',
+      actionId: 'action-0002',
+      statePointId: '',
+      enabled: true,
+    });
     expect(model.runtimeNavigation.count).toBe(2);
     expect(model.runtimeNavigation.index).toBe(-1);
     expect(model.runtimeNavigation.label).toBe('-/2');
@@ -73,6 +82,14 @@ describe('workbench flow model', () => {
       canFocusAction: true,
     });
     expect(model.runtimeFocusSource).toBe('action-result');
+    expect(model.primaryAction).toMatchObject({
+      key: WORKBENCH_FLOW_PRIMARY_ACTION_KEYS.FOCUS_RUNTIME_ACTION,
+      kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+      label: '编辑结果动作',
+      actionId: 'action-0001',
+      statePointId: firstPoint.statePointId,
+      enabled: true,
+    });
     expect(model.runtimeNavigation.index).toBe(0);
     expect(model.runtimeNavigation.label).toBe('1/2');
     expect(model.runtimeNavigation.previous).toBeNull();
@@ -106,6 +123,14 @@ describe('workbench flow model', () => {
       changeSummary: '0ms -> 1000ms',
       canReturn: true,
     });
+    expect(readyModel.primaryAction).toMatchObject({
+      key: WORKBENCH_FLOW_PRIMARY_ACTION_KEYS.RETURN_RUNTIME_RESULT,
+      kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+      label: '回到刷新结果',
+      actionId: 'action-0002',
+      statePointId: secondPoint.statePointId,
+      enabled: true,
+    });
 
     const reviewModel = createWorkbenchFlowModel({
       runtimeProjection,
@@ -119,6 +144,14 @@ describe('workbench flow model', () => {
       actionEditResultContext: editResultContext,
     });
     expect(reviewModel.phase).toBe(WORKBENCH_FLOW_PHASES.EDIT_RESULT_REVIEW);
+    expect(reviewModel.primaryAction).toMatchObject({
+      key: WORKBENCH_FLOW_PRIMARY_ACTION_KEYS.FOCUS_RUNTIME_ACTION,
+      kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+      label: '继续修改动作',
+      actionId: 'action-0002',
+      statePointId: secondPoint.statePointId,
+      enabled: true,
+    });
   });
 
   it('describes enabled and disabled workbench flow actions', () => {
