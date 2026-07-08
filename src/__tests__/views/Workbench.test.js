@@ -1669,6 +1669,9 @@ describe('Workbench view', () => {
     expect(focusedTimelineAction.attributes('data-edit-focus-label')).toBe(
       '结果定位'
     );
+    expect(focusedTimelineAction.attributes('data-edit-focus-source')).toBe(
+      'workbench-flow-panel'
+    );
     expect(
       wrapper
         .find(
@@ -1676,6 +1679,13 @@ describe('Workbench view', () => {
         )
         .attributes('data-edit-focus-origin')
     ).toBe('runtime-focus');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+        )
+        .attributes('data-edit-focus-source')
+    ).toBe('workbench-flow-panel');
 
     await wrapper.find('[data-testid="workbench-start-input"]').setValue('100');
     await nextTick();
@@ -3205,6 +3215,9 @@ describe('Workbench view', () => {
     expect(focusedTimelineAction.attributes('data-edit-focus-label')).toBe(
       '结果定位'
     );
+    expect(focusedTimelineAction.attributes('data-edit-focus-source')).toBe(
+      'runtime-detail'
+    );
     const runtimeDetailStartControl = wrapper.find(
       '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
     );
@@ -3216,6 +3229,9 @@ describe('Workbench view', () => {
     );
     expect(runtimeDetailStartControl.attributes('data-edit-focus-origin')).toBe(
       'runtime-focus'
+    );
+    expect(runtimeDetailStartControl.attributes('data-edit-focus-source')).toBe(
+      'runtime-detail'
     );
     expect(
       runtimeDetailStartControl.attributes('data-edit-focus-summary')
@@ -3262,6 +3278,9 @@ describe('Workbench view', () => {
     );
     expect(runtimeDetailEditFeedback.attributes('data-edit-origin')).toBe(
       'runtime-focus'
+    );
+    expect(runtimeDetailEditFeedback.attributes('data-edit-focus-source')).toBe(
+      'runtime-detail'
     );
     expect(
       runtimeDetailEditFeedback.attributes('data-origin-state-point-id')
@@ -3571,6 +3590,9 @@ describe('Workbench view', () => {
     expect(focusedTimelineAction.attributes('data-edit-focus-label')).toBe(
       '结果定位'
     );
+    expect(focusedTimelineAction.attributes('data-edit-focus-source')).toBe(
+      'event-log-runtime-detail'
+    );
     const logStartControl = wrapper.find(
       '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
     );
@@ -3580,6 +3602,9 @@ describe('Workbench view', () => {
     );
     expect(logStartControl.attributes('data-edit-focus-origin')).toBe(
       'runtime-focus'
+    );
+    expect(logStartControl.attributes('data-edit-focus-source')).toBe(
+      'event-log-runtime-detail'
     );
     expect(logStartControl.attributes('data-edit-focus-summary')).toContain(
       '敌人 HP'
@@ -3605,6 +3630,9 @@ describe('Workbench view', () => {
     );
     expect(logEditFeedback.attributes('data-edit-origin')).toBe(
       'runtime-focus'
+    );
+    expect(logEditFeedback.attributes('data-edit-focus-source')).toBe(
+      'event-log-runtime-detail'
     );
     expect(logEditFeedback.attributes('data-origin-state-point-id')).toBe(
       statePointId
@@ -4022,23 +4050,22 @@ describe('Workbench view', () => {
     expect(focusedTimelineAction.attributes('data-edit-focus-label')).toBe(
       '结果定位'
     );
+    expect(focusedTimelineAction.attributes('data-edit-focus-source')).toBe(
+      'resource-runtime-curve'
+    );
     expect(
       focusedTimelineAction.attributes('data-edit-focus-summary')
     ).toContain('三值点');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
-        )
-        .attributes('data-edit-focused')
-    ).toBe('true');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
-        )
-        .attributes('data-edit-focus-summary')
-    ).toContain('敌人 HP');
+    const resourceStartControl = wrapper.find(
+      '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+    );
+    expect(resourceStartControl.attributes('data-edit-focused')).toBe('true');
+    expect(resourceStartControl.attributes('data-edit-focus-source')).toBe(
+      'resource-runtime-curve'
+    );
+    expect(resourceStartControl.attributes('data-edit-focus-summary')).toContain(
+      '敌人 HP'
+    );
 
     await wrapper.find('[data-testid="workbench-start-input"]').setValue('100');
     await nextTick();
@@ -4055,6 +4082,9 @@ describe('Workbench view', () => {
     );
     expect(runtimeOriginFeedback.attributes('data-edit-origin')).toBe(
       'runtime-focus'
+    );
+    expect(runtimeOriginFeedback.attributes('data-edit-focus-source')).toBe(
+      'resource-runtime-curve'
     );
     expect(runtimeOriginFeedback.attributes('data-origin-state-point-id')).toBe(
       statePointId

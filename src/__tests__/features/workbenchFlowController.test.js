@@ -137,7 +137,13 @@ describe('workbench flow controller', () => {
         },
       ],
       ['selectContributionPoint', 'runtime-point-003'],
-      ['focusRuntimeAction', runtimeFocusPayload],
+      [
+        'focusRuntimeAction',
+        {
+          ...runtimeFocusPayload,
+          source: 'runtime-detail',
+        },
+      ],
       ['focusEditSource', editSourcePayload],
       [
         'returnRuntimeResult',
@@ -255,6 +261,7 @@ describe('workbench flow controller', () => {
     });
     controller.dispatch({
       kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+      source: 'runtime-detail',
       actionId: 'action-focus',
       payload: {
         actionId: 'action-focus',
@@ -322,6 +329,8 @@ describe('workbench flow controller', () => {
         payload: {
           actionId: 'action-focus',
           fieldKey: 'startMs',
+          statePointId: '',
+          source: 'runtime-detail',
         },
       },
       {

@@ -58,6 +58,7 @@
         :data-edit-source-label="actionEditFeedback.label"
         :data-edit-source-summary="actionEditFeedback.changeSummary"
         :data-edit-origin="actionEditFeedback.editOrigin"
+        :data-edit-focus-source="actionEditFeedback.focusSource"
         :data-origin-frame-label="actionEditFeedback.originFrameLabel"
         :data-origin-state-point-id="actionEditFeedback.originStatePointId"
         :data-origin-track-key="actionEditFeedback.originTrackKey"
@@ -2079,6 +2080,7 @@ function createActionEditFeedback(source) {
     changeSummary: source.changeSummary ?? '',
     display: formatActionEditSourceDisplay(source),
     editOrigin: source.editOrigin ?? '',
+    focusSource: source.focusSource ?? '',
     originLabel: source.originLabel ?? '',
     originStatePointId: source.originStatePointId ?? '',
     originTrackKey: source.originTrackKey ?? '',

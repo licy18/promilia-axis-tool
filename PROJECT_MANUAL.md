@@ -8194,6 +8194,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把“回到结果点后继续编辑同一动作”的入口再收束一层，让动作属性面板、运行详情和时间轴编辑焦点更一致。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Action Edit Source Route
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `focus-runtime-action` 现在会把真实入口来源写入 action edit focus，不再只保留笼统的 `runtime-focus`。
+- 时间轴动作块、属性面板编辑控件和最近编辑反馈都能读取同一个 `focusSource`，从而保持“结果点 -> 回到动作编辑 -> 修改动作 -> 查看刷新结果”的来源链路一致。
+- 主流程面板、运行详情、日志详情、资源曲线四类回到动作编辑入口都已在 Workbench 集成测试中覆盖。
+- 本阶段不新增公式推断、不调整三值结果、不增加可见状态标签。
+
+当前验证事实：
+
+- action edit flow plan / flow controller / plan controller 单元测试确认 runtime action focus 会保留 source。
+- Workbench 页面测试确认：从主流程面板、运行详情、日志详情、资源曲线回到动作编辑后，时间轴、属性面板和最近编辑反馈保留对应 `data-edit-focus-source`。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchActionEditFlowPlan.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、62 条测试。
+- `npm run test -- --run`：通过，30 个测试文件、173 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 flow source / focus source 的路由语义进一步沉到共享模型，减少 Workbench 页面和面板之间重复拼装 route payload 的地方。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

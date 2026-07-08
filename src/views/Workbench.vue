@@ -1140,6 +1140,7 @@ function createEmptyActionEditSource(sequence = 0) {
     nextValue: '',
     changeSummary: '',
     editOrigin: '',
+    focusSource: '',
     originLabel: '',
     originStatePointId: '',
     originTrackKey: '',
@@ -1157,6 +1158,7 @@ function createEmptyActionEditFocus(sequence = 0) {
     nextValue: '',
     changeSummary: '',
     editOrigin: '',
+    focusSource: '',
     originStatePointId: '',
     originTrackKey: '',
     originFrameLabel: '',
@@ -1211,6 +1213,7 @@ function createActionEditOrigin(actionId) {
   ) {
     return {
       editOrigin: '',
+      focusSource: '',
       originLabel: '',
       originStatePointId: '',
       originTrackKey: '',
@@ -1219,6 +1222,7 @@ function createActionEditOrigin(actionId) {
   }
   return {
     editOrigin: focus.editOrigin,
+    focusSource: focus.focusSource ?? '',
     originLabel: '来自结果定位',
     originStatePointId: focus.originStatePointId ?? '',
     originTrackKey: focus.originTrackKey ?? '',
@@ -1250,6 +1254,7 @@ function createActionEditResultContext({
     label: source.label ?? '',
     changeSummary: source.changeSummary ?? '',
     originStatePointId: source.originStatePointId ?? '',
+    focusSource: source.focusSource ?? '',
     originTrackKey: source.originTrackKey ?? '',
     originFrameLabel: source.originFrameLabel ?? '',
     runtimeStatePointId: resultPoint.statePointId,

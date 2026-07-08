@@ -13,6 +13,7 @@ describe('workbench action edit flow plan', () => {
       frameLabel: '12f',
       statePointId: 'enemyHpDamage|applied|action-0001|12|0',
       trackKey: 'enemyHpDamage',
+      source: 'runtime-detail',
       sequence: 7,
     });
 
@@ -29,6 +30,7 @@ describe('workbench action edit flow plan', () => {
         nextValue: '',
         changeSummary: '三值点 12f · 敌人 HP',
         editOrigin: 'runtime-focus',
+        focusSource: 'runtime-detail',
         originStatePointId: 'enemyHpDamage|applied|action-0001|12|0',
         originTrackKey: 'enemyHpDamage',
         originFrameLabel: '12f',
@@ -62,6 +64,7 @@ describe('workbench action edit flow plan', () => {
         previousValue: '1',
         nextValue: '2',
         changeSummary: '1 -> 2',
+        focusSource: '',
         sequence: 4,
       },
     });

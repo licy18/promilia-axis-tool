@@ -17281,3 +17281,83 @@ workbench-flow-panel
 - `npm run test -- --run src/__tests__/features/runtimeFocusSource.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、59 条测试。
 - `npm run test -- --run`：通过，30 个测试文件、173 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 219. UI 主流程能力块：Runtime Action Edit Source Route
+
+本阶段属于 UI 主流程。
+
+### 219.1 结构变化
+
+`createWorkbenchFlowController()` 对 `FOCUS_RUNTIME_ACTION` 不再直接把 `flowAction.payload` 交给 handler，而是先补齐 runtime action focus payload：
+
+```js
+{
+  ...payload,
+  actionId,
+  statePointId,
+  source
+}
+```
+
+`createRuntimeActionEditFocusPlan()` 新增输入：
+
+```js
+source
+```
+
+并在 `actionEditFocus` 中写入：
+
+```js
+focusSource
+```
+
+`createEditSourceActionEditFocusPlan()` 也会保留传入 source 上的 `focusSource`，用于最近编辑反馈回到字段时不丢失来源链路。
+
+Workbench 本地 `actionEditSource` / `actionEditFocus` 空状态新增：
+
+```js
+focusSource
+```
+
+`createActionEditOrigin()` 会在 runtime focus 产生的字段编辑中保留：
+
+```js
+{
+  editOrigin: 'runtime-focus',
+  focusSource,
+  originStatePointId,
+  originTrackKey,
+  originFrameLabel
+}
+```
+
+`createActionEditResultContext()` 继续把 `focusSource` 传给刷新后结果上下文。
+
+前端派生属性新增：
+
+```html
+data-edit-focus-source
+```
+
+当前接入位置：
+
+```text
+TimelineGridPreview action block
+PropertiesPanel action edit controls
+AnalysisPanel action edit feedback
+```
+
+### 219.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench 主流程前端状态；三值计算、runtime projection 数值结果和草稿保存结构不变。
+
+### 219.3 验证
+
+- 更新 `src/__tests__/features/workbenchActionEditFlowPlan.test.js`，确认 runtime action edit focus 写入 `focusSource`。
+- 更新 `src/__tests__/features/workbenchFlowController.test.js` 与 `src/__tests__/features/workbenchFlowPlanController.test.js`，确认 `FOCUS_RUNTIME_ACTION` 的 source 能进入 action edit plan。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认主流程面板、运行详情、日志详情、资源曲线回到动作编辑后，时间轴、属性面板和最近编辑反馈保留对应 `data-edit-focus-source`。
+- `npm run test -- --run src/__tests__/features/workbenchActionEditFlowPlan.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、62 条测试。
+- `npm run test -- --run`：通过，30 个测试文件、173 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

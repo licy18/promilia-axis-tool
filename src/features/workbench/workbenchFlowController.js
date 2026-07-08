@@ -91,7 +91,7 @@ export function createWorkbenchFlowController(handlers = {}) {
           handlers,
           handlerKey: WORKBENCH_FLOW_CONTROLLER_HANDLERS.FOCUS_RUNTIME_ACTION,
           flowAction,
-          payload: flowAction.payload ?? flowAction,
+          payload: createRuntimeActionFocusPayload(flowAction),
         });
       }
 
@@ -236,6 +236,19 @@ function createPlan(flowPlanController, methodKey, payload) {
     return {};
   }
   return createFlowPlan(payload);
+}
+
+function createRuntimeActionFocusPayload(flowAction) {
+  const payload =
+    flowAction?.payload && typeof flowAction.payload === 'object'
+      ? { ...flowAction.payload }
+      : {};
+  return {
+    ...payload,
+    actionId: payload.actionId || flowAction?.actionId || '',
+    statePointId: payload.statePointId || flowAction?.statePointId || '',
+    source: payload.source || flowAction?.source || '',
+  };
 }
 
 function callWorkbenchFlowHandler({

@@ -9,6 +9,7 @@ export function createRuntimeActionEditFocusPlan({
   frameLabel = '',
   statePointId = '',
   trackKey = '',
+  source = '',
   sequence = 0,
 } = {}) {
   const normalizedActionId = actionId ?? '';
@@ -28,6 +29,7 @@ export function createRuntimeActionEditFocusPlan({
         trackKey,
       }),
       editOrigin: 'runtime-focus',
+      focusSource: source ?? '',
       originStatePointId: statePointId ?? '',
       originTrackKey: trackKey ?? '',
       originFrameLabel: frameLabel ?? '',
@@ -54,6 +56,7 @@ export function createEditSourceActionEditFocusPlan({
       previousValue: source?.previousValue ?? '',
       nextValue: source?.nextValue ?? '',
       changeSummary: source?.changeSummary ?? '',
+      focusSource: source?.focusSource ?? '',
       sequence: Number(sequence) + 1,
     },
   });

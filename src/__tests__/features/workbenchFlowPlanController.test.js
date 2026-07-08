@@ -86,6 +86,7 @@ describe('workbench flow plan controller', () => {
         frameLabel: '12f',
         statePointId: 'enemyHpDamage|applied|action-0001|12|0',
         trackKey: 'enemyHpDamage',
+        source: 'runtime-detail',
       })
     ).toMatchObject({
       kind: WORKBENCH_ACTION_EDIT_FLOW_PLAN_KINDS.RUNTIME_ACTION_FOCUS,
@@ -94,6 +95,7 @@ describe('workbench flow plan controller', () => {
         actionId: 'action-0001',
         sequence: 10,
         editOrigin: 'runtime-focus',
+        focusSource: 'runtime-detail',
         changeSummary: '三值点 12f · 敌人 HP',
       },
     });

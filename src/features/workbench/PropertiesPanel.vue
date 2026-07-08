@@ -46,6 +46,7 @@
         :data-edit-focused="isEditFocusField('skillId')"
         :data-edit-focus-label="getEditFocusLabel('skillId')"
         :data-edit-focus-origin="getEditFocusOrigin('skillId')"
+        :data-edit-focus-source="getEditFocusSource('skillId')"
         :data-edit-focus-summary="getEditFocusSummary('skillId')"
         :class="{ 'edit-focused': isEditFocusField('skillId') }"
       >
@@ -120,6 +121,7 @@
         :data-edit-focused="isEditFocusField('startMs')"
         :data-edit-focus-label="getEditFocusLabel('startMs')"
         :data-edit-focus-origin="getEditFocusOrigin('startMs')"
+        :data-edit-focus-source="getEditFocusSource('startMs')"
         :data-edit-focus-summary="getEditFocusSummary('startMs')"
         :class="{ 'edit-focused': isEditFocusField('startMs') }"
       >
@@ -141,6 +143,7 @@
         :data-edit-focused="isEditFocusField(secondaryEditFieldKey)"
         :data-edit-focus-label="getEditFocusLabel(secondaryEditFieldKey)"
         :data-edit-focus-origin="getEditFocusOrigin(secondaryEditFieldKey)"
+        :data-edit-focus-source="getEditFocusSource(secondaryEditFieldKey)"
         :data-edit-focus-summary="getEditFocusSummary(secondaryEditFieldKey)"
         :class="{ 'edit-focused': isEditFocusField(secondaryEditFieldKey) }"
       >
@@ -200,6 +203,7 @@
         :data-edit-focused="isEditFocusField('actorCharacterId')"
         :data-edit-focus-label="getEditFocusLabel('actorCharacterId')"
         :data-edit-focus-origin="getEditFocusOrigin('actorCharacterId')"
+        :data-edit-focus-source="getEditFocusSource('actorCharacterId')"
         :data-edit-focus-summary="getEditFocusSummary('actorCharacterId')"
         :class="{ 'edit-focused': isEditFocusField('actorCharacterId') }"
       >
@@ -233,6 +237,7 @@
         :data-edit-focused="isEditFocusField('actionVariantIndex')"
         :data-edit-focus-label="getEditFocusLabel('actionVariantIndex')"
         :data-edit-focus-origin="getEditFocusOrigin('actionVariantIndex')"
+        :data-edit-focus-source="getEditFocusSource('actionVariantIndex')"
         :data-edit-focus-summary="getEditFocusSummary('actionVariantIndex')"
         :class="{ 'edit-focused': isEditFocusField('actionVariantIndex') }"
       >
@@ -380,6 +385,7 @@
         :data-edit-focused="isEditFocusField('resource')"
         :data-edit-focus-label="getEditFocusLabel('resource')"
         :data-edit-focus-origin="getEditFocusOrigin('resource')"
+        :data-edit-focus-source="getEditFocusSource('resource')"
         :data-edit-focus-summary="getEditFocusSummary('resource')"
         :class="{ 'edit-focused': isEditFocusField('resource') }"
       >
@@ -398,6 +404,7 @@
         :data-edit-focused="isEditFocusField('reason')"
         :data-edit-focus-label="getEditFocusLabel('reason')"
         :data-edit-focus-origin="getEditFocusOrigin('reason')"
+        :data-edit-focus-source="getEditFocusSource('reason')"
         :data-edit-focus-summary="getEditFocusSummary('reason')"
         :class="{ 'edit-focused': isEditFocusField('reason') }"
       >
@@ -418,6 +425,7 @@
       :data-edit-focused="isEditFocusField('note')"
       :data-edit-focus-label="getEditFocusLabel('note')"
       :data-edit-focus-origin="getEditFocusOrigin('note')"
+      :data-edit-focus-source="getEditFocusSource('note')"
       :data-edit-focus-summary="getEditFocusSummary('note')"
       :class="{ 'edit-focused': isEditFocusField('note') }"
     >
@@ -857,6 +865,12 @@ function getEditFocusLabel(fieldKey) {
 function getEditFocusOrigin(fieldKey) {
   return isEditFocusField(fieldKey)
     ? (props.actionEditFocus?.editOrigin ?? '')
+    : '';
+}
+
+function getEditFocusSource(fieldKey) {
+  return isEditFocusField(fieldKey)
+    ? (props.actionEditFocus?.focusSource ?? '')
     : '';
 }
 
