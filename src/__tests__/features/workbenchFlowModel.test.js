@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
+  WORKBENCH_FLOW_ACTION_KINDS,
   WORKBENCH_FLOW_PHASES,
+  createWorkbenchFlowAction,
   createWorkbenchFlowModel,
 } from '../../features/workbench/workbenchFlowModel';
 
@@ -101,6 +103,38 @@ describe('workbench flow model', () => {
       actionEditResultContext: editResultContext,
     });
     expect(reviewModel.phase).toBe(WORKBENCH_FLOW_PHASES.EDIT_RESULT_REVIEW);
+  });
+
+  it('describes enabled and disabled workbench flow actions', () => {
+    const enabledAction = createWorkbenchFlowAction({
+      kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+      source: 'analysis-action-result',
+      actionId: 'action-0001',
+      statePointId: 'state-point-001',
+    });
+
+    expect(enabledAction).toMatchObject({
+      kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+      source: 'analysis-action-result',
+      actionId: 'action-0001',
+      statePointId: 'state-point-001',
+      canRun: true,
+      disabledReason: '',
+    });
+
+    const disabledAction = createWorkbenchFlowAction({
+      kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT,
+      source: 'analysis-action-contribution',
+      enabled: false,
+      disabledReason: 'missing-contribution-state-point',
+    });
+
+    expect(disabledAction).toMatchObject({
+      kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT,
+      source: 'analysis-action-contribution',
+      canRun: false,
+      disabledReason: 'missing-contribution-state-point',
+    });
   });
 });
 

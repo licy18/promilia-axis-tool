@@ -12,6 +12,39 @@ export const WORKBENCH_FLOW_PHASES = Object.freeze({
   EDIT_RESULT_REVIEW: 'edit-result-review',
 });
 
+export const WORKBENCH_FLOW_ACTION_KINDS = Object.freeze({
+  SELECT_RUNTIME_RESULT: 'select-runtime-result',
+  SELECT_CONTRIBUTION_POINT: 'select-contribution-point',
+  FOCUS_EDIT_SOURCE: 'focus-edit-source',
+});
+
+export function createWorkbenchFlowAction({
+  kind = '',
+  source = '',
+  actionId = '',
+  statePointId = '',
+  fieldKey = '',
+  payload = null,
+  enabled,
+  disabledReason = '',
+} = {}) {
+  const canRun =
+    enabled ??
+    Boolean(kind && (statePointId || actionId || fieldKey || payload));
+  return {
+    kind,
+    source,
+    actionId: actionId ?? '',
+    statePointId: statePointId ?? '',
+    fieldKey: fieldKey ?? '',
+    payload,
+    canRun,
+    disabledReason: canRun
+      ? ''
+      : disabledReason || 'missing-flow-action-target',
+  };
+}
+
 export function createWorkbenchFlowModel({
   selectedAction = null,
   runtimeProjection = null,

@@ -7616,6 +7616,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 flow model 从状态锚点推进到更完整的主流程控制策略，例如分析面板的结果定位入口、贡献拆分入口和返回编辑入口都通过统一 flow action 语义描述。
 
+### 2026-07-09：UI 主流程能力块 - Analysis Flow Actions
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchFlowModel` 新增统一 flow action 描述，覆盖运行结果定位、贡献拆分定位和回到编辑来源三类主流程动作。
+- `AnalysisPanel` 的动作结果行、贡献拆分行、最近编辑来源按钮和刷新后结果按钮都通过统一 flow action 生成点击语义；原有事件、文案、运行结果和三值数值保持不变。
+- 分析面板从“读取同一个 state point”推进到“用同一套动作语义驱动结果定位和编辑回跳”，为后续 Workbench 主流程调度器留出入口。
+
+当前验证事实：
+
+- 点击动作结果行仍会定位到该动作的首个 runtime state point。
+- 点击贡献拆分行仍会定位到对应贡献的 runtime state point，并保持资源曲线、模拟日志、时间轴 marker 同步。
+- 最近编辑的“定位来源”和“定位结果”按钮现在携带同一套 flow action 语义，行为与原先一致。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、57 条测试。
+- `npm run test -- --run`：通过，19 个测试文件、142 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示和命令通道噪声。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 flow action 上提到 Workbench 层的统一 action dispatcher，让编辑器、运行模拟、资源曲线、日志详情和回到动作修改形成更完整的 Endaxis 式闭环。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

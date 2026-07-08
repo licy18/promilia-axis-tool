@@ -15638,3 +15638,73 @@ isStateCurvePointInFocus()
 - `npm run test -- --run`：通过，19 个测试文件、141 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 198. UI 主流程能力块：Analysis Flow Actions
+
+本阶段属于 UI 主流程。
+
+### 198.1 结构变化
+
+`src/features/workbench/workbenchFlowModel.js` 新增：
+
+```js
+WORKBENCH_FLOW_ACTION_KINDS
+createWorkbenchFlowAction()
+```
+
+标准 flow action 形状：
+
+```js
+{
+  kind,
+  source,
+  actionId,
+  statePointId,
+  fieldKey,
+  payload,
+  canRun,
+  disabledReason
+}
+```
+
+当前已接入的 action kind：
+
+```js
+select-runtime-result
+select-contribution-point
+focus-edit-source
+```
+
+`AnalysisPanel` 的以下入口改为先生成 flow action，再沿用既有事件输出：
+
+```js
+selectActionResultRuntimePoint()
+selectActionContributionRow()
+focusActionEditSource()
+focusActionEditFeedback()
+selectActionEditFeedbackResult()
+```
+
+相关 DOM 节点新增派生 `data-flow-action-*` 标识，用于测试和后续 Workbench 统一调度：
+
+```js
+workbench-action-result-source-row
+workbench-action-contribution-row
+workbench-action-edit-feedback-focus
+workbench-action-edit-feedback-result-focus
+```
+
+### 198.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 的派生主流程动作语义：结果定位、贡献定位、回到编辑来源继续发出原有事件；模拟结果、三值计算、项目文件和 runtime projection 结构不变。
+
+### 198.3 验证
+
+- flow model 测试覆盖：enabled / disabled flow action 的标准字段和禁用原因。
+- Workbench 视图测试覆盖：动作结果行、贡献拆分行、编辑来源按钮、编辑结果回跳按钮携带标准 flow action 语义，并保持原有点击行为。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、57 条测试。
+- `npm run test -- --run`：通过，19 个测试文件、142 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示和命令通道噪声。

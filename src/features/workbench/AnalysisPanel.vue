@@ -136,6 +136,15 @@
           <button
             type="button"
             class="action-edit-feedback-focus"
+            :data-flow-action-field="
+              actionEditFeedback.focusSourceAction.fieldKey
+            "
+            :data-flow-action-kind="
+              actionEditFeedback.focusSourceAction.kind
+            "
+            :data-flow-action-source="
+              actionEditFeedback.focusSourceAction.source
+            "
             data-testid="workbench-action-edit-feedback-focus"
             @click="focusActionEditFeedback"
           >
@@ -146,6 +155,15 @@
             class="action-edit-feedback-focus"
             :data-runtime-state-point-id="
               actionEditFeedback.runtimeStatePointId
+            "
+            :data-flow-action-kind="
+              actionEditFeedback.resultFocusAction.kind
+            "
+            :data-flow-action-source="
+              actionEditFeedback.resultFocusAction.source
+            "
+            :data-flow-action-state-point-id="
+              actionEditFeedback.resultFocusAction.statePointId
             "
             :disabled="
               !actionEditFeedback.runtimeStatePointId ||
@@ -286,6 +304,11 @@
         "
         :data-source-delta-ids="
           getActionResultRuntimeTrace(entry)?.sourceDeltaIds.join(',') ?? ''
+        "
+        :data-flow-action-kind="getActionResultFlowAction(entry).kind"
+        :data-flow-action-source="getActionResultFlowAction(entry).source"
+        :data-flow-action-state-point-id="
+          getActionResultFlowAction(entry).statePointId
         "
         data-testid="workbench-action-result-source-row"
         :disabled="!getActionResultRuntimeTrace(entry)"
@@ -474,6 +497,13 @@
             :data-active="row.active"
             :data-count="row.count"
             :data-delta="row.value"
+            :data-flow-action-kind="getActionContributionFlowAction(row).kind"
+            :data-flow-action-source="
+              getActionContributionFlowAction(row).source
+            "
+            :data-flow-action-state-point-id="
+              getActionContributionFlowAction(row).statePointId
+            "
             :data-state-point-id="row.firstStatePointId"
             :data-track-key="row.trackKey"
             data-testid="workbench-action-contribution-row"
@@ -907,6 +937,10 @@ import {
   createStateCurvePointId,
 } from './stateCurvePointIdentity';
 import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
+import {
+  WORKBENCH_FLOW_ACTION_KINDS,
+  createWorkbenchFlowAction,
+} from './workbenchFlowModel';
 
 const CANDIDATE_CHART_COLORS = ['#f2b366', '#79c7b9', '#a6b7ff'];
 const candidateChartGridLines = [25, 50, 75];
@@ -1907,14 +1941,26 @@ function getActionResultRuntimeTrace(entry) {
   return runtimeTraceByActionId.value.get(entry?.actionId) ?? null;
 }
 
-function selectActionResultRuntimePoint(entry) {
+function getActionResultFlowAction(entry) {
   const trace = getActionResultRuntimeTrace(entry);
-  if (!trace?.firstStatePointId) {
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+    source: 'analysis-action-result',
+    actionId: trace?.actionId ?? entry?.actionId ?? '',
+    statePointId: trace?.firstStatePointId ?? '',
+    enabled: Boolean(trace?.firstStatePointId),
+    disabledReason: 'missing-runtime-trace',
+  });
+}
+
+function selectActionResultRuntimePoint(entry) {
+  const action = getActionResultFlowAction(entry);
+  if (!action.canRun) {
     return;
   }
   emit('select-action-result', {
-    actionId: trace.actionId,
-    statePointId: trace.firstStatePointId,
+    actionId: action.actionId,
+    statePointId: action.statePointId,
   });
 }
 
@@ -1954,28 +2000,60 @@ function shouldShowActionResultEditSource(entry) {
 }
 
 function focusActionEditSource(entry) {
-  const source = getActionResultEditSource(entry);
-  if (!source) {
+  const action = getActionEditSourceFlowAction(
+    getActionResultEditSource(entry)
+  );
+  if (!action.canRun) {
     return;
   }
-  emit('focus-action-edit-source', source);
+  emit('focus-action-edit-source', action.payload);
 }
 
 function focusActionEditFeedback() {
-  if (!isValidActionEditSource(props.actionEditSource)) {
+  const action = getActionEditSourceFlowAction(props.actionEditSource);
+  if (!action.canRun) {
     return;
   }
-  emit('focus-action-edit-source', props.actionEditSource);
+  emit('focus-action-edit-source', action.payload);
 }
 
 function selectActionEditFeedbackResult() {
-  const feedback = actionEditFeedback.value;
-  if (!feedback?.runtimeStatePointId) {
+  const action = getActionEditFeedbackResultFlowAction(
+    actionEditFeedback.value
+  );
+  if (!action.canRun) {
     return;
   }
   emit('select-action-result', {
-    actionId: feedback.actionId,
-    statePointId: feedback.runtimeStatePointId,
+    actionId: action.actionId,
+    statePointId: action.statePointId,
+  });
+}
+
+function getActionEditSourceFlowAction(source) {
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_EDIT_SOURCE,
+    source: 'analysis-edit-source',
+    actionId: source?.actionId ?? '',
+    fieldKey: source?.fieldKey ?? '',
+    payload: source ?? null,
+    enabled: isValidActionEditSource(source),
+    disabledReason: 'missing-edit-source',
+  });
+}
+
+function getActionEditFeedbackResultFlowAction(feedback) {
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+    source: 'analysis-edit-result',
+    actionId: feedback?.actionId ?? '',
+    statePointId: feedback?.runtimeStatePointId ?? '',
+    enabled: Boolean(
+      feedback?.runtimeStatePointId && !feedback?.resultFocused
+    ),
+    disabledReason: feedback?.resultFocused
+      ? 'runtime-result-already-focused'
+      : 'missing-runtime-state-point',
   });
 }
 
@@ -2033,6 +2111,12 @@ function createActionEditFeedback(source) {
     resultFocusStatus,
     resultFocusLabel:
       formatActionEditFeedbackResultFocusLabel(resultFocusStatus),
+    focusSourceAction: getActionEditSourceFlowAction(source),
+    resultFocusAction: getActionEditFeedbackResultFlowAction({
+      actionId: source.actionId,
+      runtimeStatePointId,
+      resultFocused,
+    }),
     locationChain,
   };
 }
@@ -2462,10 +2546,22 @@ function createCompactRuntimeResultRows(detail) {
 }
 
 function selectActionContributionRow(row) {
-  if (!row?.firstStatePointId) {
+  const action = getActionContributionFlowAction(row);
+  if (!action.canRun) {
     return;
   }
-  emit('select-action-contribution-point', row.firstStatePointId);
+  emit('select-action-contribution-point', action.statePointId);
+}
+
+function getActionContributionFlowAction(row) {
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT,
+    source: 'analysis-action-contribution',
+    actionId: selectedActionContribution.value?.actionId ?? '',
+    statePointId: row?.firstStatePointId ?? '',
+    enabled: Boolean(row?.firstStatePointId),
+    disabledReason: 'missing-contribution-state-point',
+  });
 }
 
 function formatActionResultRuntimeTrace(trace) {

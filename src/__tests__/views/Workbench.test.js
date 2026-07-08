@@ -532,6 +532,11 @@ describe('Workbench view', () => {
     expect(actionResultRow.attributes('data-source-delta-ids')).toContain(
       'action-0001|applied-frame-0-point-0'
     );
+    expect(actionResultRow.attributes()).toMatchObject({
+      'data-flow-action-kind': 'select-runtime-result',
+      'data-flow-action-source': 'analysis-action-result',
+      'data-flow-action-state-point-id': appliedStatePointId,
+    });
     expect(
       actionResultRow
         .find('[data-testid="workbench-action-result-runtime-trace"]')
@@ -1376,6 +1381,11 @@ describe('Workbench view', () => {
     const actionContributionRows = wrapper.findAll(
       '[data-testid="workbench-action-contribution-row"]'
     );
+    expect(actionContributionRows[0].attributes()).toMatchObject({
+      'data-flow-action-kind': 'select-contribution-point',
+      'data-flow-action-source': 'analysis-action-contribution',
+      'data-flow-action-state-point-id': appliedStatePointId,
+    });
     expect(
       actionContributionRows.map(row => [
         row.attributes('data-track-key'),
@@ -2677,9 +2687,16 @@ describe('Workbench view', () => {
     expect(sourceTimelineAction.attributes('data-edit-focus-field')).toBe('');
     expect(sourceTimelineAction.attributes('data-edit-focus-summary')).toBe('');
 
-    await actionEditFeedback
-      .find('[data-testid="workbench-action-edit-feedback-focus"]')
-      .trigger('click');
+    const focusSourceButton = actionEditFeedback.find(
+      '[data-testid="workbench-action-edit-feedback-focus"]'
+    );
+    expect(focusSourceButton.attributes()).toMatchObject({
+      'data-flow-action-kind': 'focus-edit-source',
+      'data-flow-action-source': 'analysis-edit-source',
+      'data-flow-action-field': 'level',
+    });
+
+    await focusSourceButton.trigger('click');
     await nextTick();
 
     const focusedLevelEditControl = wrapper.find(
@@ -2727,6 +2744,11 @@ describe('Workbench view', () => {
     expect(resultFocusButton.attributes('data-runtime-state-point-id')).toBe(
       feedbackStatePointId
     );
+    expect(resultFocusButton.attributes()).toMatchObject({
+      'data-flow-action-kind': 'select-runtime-result',
+      'data-flow-action-source': 'analysis-edit-result',
+      'data-flow-action-state-point-id': feedbackStatePointId,
+    });
     expect(resultFocusButton.attributes('disabled')).toBeDefined();
     expect(resultFocusButton.text()).toBe('结果已定位');
 
@@ -2807,6 +2829,11 @@ describe('Workbench view', () => {
     const jumpBackButton = unfocusedActionEditFeedback.find(
       '[data-testid="workbench-action-edit-feedback-result-focus"]'
     );
+    expect(jumpBackButton.attributes()).toMatchObject({
+      'data-flow-action-kind': 'select-runtime-result',
+      'data-flow-action-source': 'analysis-edit-result',
+      'data-flow-action-state-point-id': feedbackStatePointId,
+    });
     expect(jumpBackButton.attributes('disabled')).toBeUndefined();
     expect(jumpBackButton.text()).toBe('定位结果');
     expect(
@@ -3901,6 +3928,11 @@ describe('Workbench view', () => {
     const resultFocusButton = runtimeOriginFeedback.find(
       '[data-testid="workbench-action-edit-feedback-result-focus"]'
     );
+    expect(resultFocusButton.attributes()).toMatchObject({
+      'data-flow-action-kind': 'select-runtime-result',
+      'data-flow-action-source': 'analysis-edit-result',
+      'data-flow-action-state-point-id': refreshedRuntimeStatePointId,
+    });
     expect(resultFocusButton.attributes('disabled')).toBeUndefined();
 
     await resultFocusButton.trigger('click');
