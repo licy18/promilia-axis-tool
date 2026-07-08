@@ -2746,6 +2746,115 @@ describe('Workbench view', () => {
     expect(feedbackLocationChain.text()).toContain('详情已同步');
   });
 
+  it('keeps runtime detail return synced after a result edit reorders points', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-add-resource-action"]')
+      .trigger('click');
+    await nextTick();
+
+    const firstLogRow = wrapper.find(
+      '[data-testid="workbench-runtime-sim-log-row"]'
+    );
+    const originStatePointId = firstLogRow.attributes('data-state-point-id');
+    expect(originStatePointId).toBeTruthy();
+
+    await firstLogRow.trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-action"]')
+        .text()
+    ).toContain('普通攻击');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(originStatePointId);
+
+    await wrapper
+      .find('[data-testid="workbench-runtime-selected-detail-action-focus"]')
+      .trigger('click');
+    await nextTick();
+
+    await wrapper.find('[data-testid="workbench-start-input"]').setValue('6000');
+    await nextTick();
+
+    const refreshedStatePointId = wrapper
+      .find('[data-testid="workbench-action-edit-feedback"]')
+      .attributes('data-runtime-state-point-id');
+    expect(refreshedStatePointId).toBeTruthy();
+    expect(refreshedStatePointId).not.toBe(originStatePointId);
+
+    const detailReturnButton = wrapper.find(
+      '[data-testid="workbench-runtime-selected-detail-return-result"]'
+    );
+    expect(detailReturnButton.exists()).toBe(true);
+    expect(detailReturnButton.attributes('data-action-id')).toBe('action-0001');
+    expect(detailReturnButton.attributes('data-origin-state-point-id')).toBe(
+      originStatePointId
+    );
+    expect(detailReturnButton.attributes('data-return-status')).toBe(
+      'refreshed-edit-result'
+    );
+    expect(detailReturnButton.attributes('data-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+
+    await detailReturnButton.trigger('click');
+    await nextTick();
+
+    const flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
+      'action-0001'
+    );
+    expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('2');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('1');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(refreshedStatePointId);
+
+    const logNavigation = wrapper.find(
+      '[data-testid="workbench-runtime-sim-log-navigation"]'
+    );
+    expect(logNavigation.attributes('data-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+    expect(logNavigation.attributes('data-navigation-count')).toBe('2');
+    expect(logNavigation.attributes('data-navigation-index')).toBe('1');
+
+    const curveSelection = wrapper.find(
+      '[data-testid="workbench-runtime-resource-chart-selection"]'
+    );
+    expect(curveSelection.attributes('data-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+    expect(curveSelection.attributes('data-navigation-count')).toBe('2');
+    expect(curveSelection.attributes('data-navigation-index')).toBe('1');
+
+    const actionResultRow = wrapper.find(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    );
+    expect(actionResultRow.attributes('data-selected-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+    expect(actionResultRow.attributes('data-result-location-status')).toBe(
+      'selected-result'
+    );
+  });
+
   it('links runtime sim log detail to the action edit focus', async () => {
     const wrapper = mount(Workbench, {
       global: {

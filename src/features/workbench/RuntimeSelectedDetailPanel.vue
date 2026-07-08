@@ -218,12 +218,17 @@ const emit = defineEmits(['focus-runtime-action', 'return-runtime-result']);
 const runtimeDetailEditContext = computed(() =>
   createRuntimeDetailEditContext(props.detail, props.actionEditFocus)
 );
+const runtimeDetailOriginStatePointId = computed(() =>
+  props.detail?.statePointId === props.actionEditFocus?.originStatePointId
+    ? props.detail.statePointId
+    : ''
+);
 const runtimeDetailResultReturnContext = computed(() =>
   createRuntimeResultReturnContext({
     actionId: props.detail?.actionId ?? props.actionEditResultContext?.actionId,
     focus: props.actionEditFocus,
     resultContext: props.actionEditResultContext,
-    originStatePointId: props.detail?.statePointId,
+    originStatePointId: runtimeDetailOriginStatePointId.value,
   })
 );
 const panelVisible = computed(() =>

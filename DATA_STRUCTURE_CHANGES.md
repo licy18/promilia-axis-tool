@@ -14818,3 +14818,23 @@ createRuntimeStatePointContexts(runtimeProjection)
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、46 条测试。
 - `npm run test -- --run`：通过，17 个测试文件、127 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 182. UI 主流程能力块：详情编辑重排回跳闭环
+
+本阶段属于 UI 主流程。
+
+### 182.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 182.2 RuntimeSelectedDetailPanel 返回上下文
+
+`RuntimeSelectedDetailPanel` 继续通过 `createRuntimeResultReturnContext()` 生成结果回跳上下文，但只在当前详情点仍等于编辑来源点时把 `detail.statePointId` 作为 `originStatePointId` 参与校验。编辑后如果 runtime 重新排序或刷新状态点，回跳上下文会回退到 `actionEditFocus.originStatePointId` 与 `actionEditResultContext.runtimeStatePointId` 的标准链路，避免旧详情点和刷新结果点互相打断。
+
+### 182.3 验证
+
+- Workbench 测试覆盖：两个 runtime 结果中，从第一条三值详情进入动作编辑，把动作推迟到第二条结果之后，再从详情面板回到刷新结果；主流程巡检、模拟日志、资源曲线和 Action Result 指向同一个刷新后 `statePointId`。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "keeps runtime detail return synced"`：通过，1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、47 条测试。
+- `npm run test -- --run`：通过，17 个测试文件、128 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
