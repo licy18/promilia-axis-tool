@@ -7264,6 +7264,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - UI 主流程能力块继续推进时，优先把 Workbench 的结果查看与编辑路径压成更紧凑的 Endaxis 式工作面：动作列表、时间轴、资源曲线、日志/详情之间应减少绕路。
 - 不回到公式追证、候选数值平衡或单帧动作细节阶段。
 
+### 2026-07-08：UI 主流程能力块 - 运行视角动作选择同步
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 当 Workbench 已处于 runtime 结果视角时，直接在时间轴/动作列表选择另一个动作，会同步切到该动作的首个 runtime 结果点。
+- 由 runtime 结果反向选中动作的路径保持当前结果点，不会被动作选择逻辑重置到同动作首点。
+- 本阶段不新增公式推断、不修改三值数值、不扩大证据展示。
+
+当前验证事实：
+
+- 添加资源动作并进入运行结果视角后，从第二个动作切回时间轴上的第一个动作，主流程条、三值详情、资源曲线和模拟日志都同步到第一个动作的 runtime state point。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "syncs runtime detail when selecting"`：通过，1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、49 条测试。
+- `npm run test -- --run`：通过，17 个测试文件、130 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- UI 主流程能力块继续推进时，优先继续压缩动作选择、运行巡检、结果详情和回到编辑之间的绕路，让 Workbench 更接近 Endaxis 单工作面操作。
+- 不回到公式追证、候选数值平衡或单帧动作细节阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

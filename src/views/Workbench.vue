@@ -1246,11 +1246,14 @@ function findActionDraftById(actionId) {
   return actionDrafts.value.find(action => action.id === actionId) ?? null;
 }
 
-function selectAction(actionId) {
+function selectAction(actionId, { syncRuntimeResult = true } = {}) {
   clearSegmentSplitPreview();
   selectedActionId.value = actionId;
   const draft = actionDrafts.value.find(action => action.id === actionId);
   syncActionLibraryCharacterIdFromDraft(draft);
+  if (syncRuntimeResult && shouldSyncRuntimeResultOnActionSelect()) {
+    syncRuntimeResultForSelectedAction(actionId);
+  }
 }
 
 function selectStateCurvePoint(pointId) {
@@ -1283,14 +1286,14 @@ function selectActionResultRuntimePoint(pointId) {
 
 function selectActionResult({ actionId, statePointId } = {}) {
   if (actionId && actionDrafts.value.some(action => action.id === actionId)) {
-    selectAction(actionId);
+    selectAction(actionId, { syncRuntimeResult: false });
   }
   selectActionResultRuntimePoint(statePointId);
 }
 
 function returnRuntimeResultFromProperties({ actionId, statePointId } = {}) {
   if (actionId && actionDrafts.value.some(action => action.id === actionId)) {
-    selectAction(actionId);
+    selectAction(actionId, { syncRuntimeResult: false });
   }
   selectActionResultRuntimePoint(statePointId);
 }
@@ -1320,7 +1323,7 @@ function focusRuntimeAction({
   if (!actionId || !findActionDraftById(actionId)) {
     return;
   }
-  selectAction(actionId);
+  selectAction(actionId, { syncRuntimeResult: false });
   actionEditFocus.value = {
     actionId,
     fieldKey,
@@ -1362,7 +1365,7 @@ function focusActionEditSource(source = {}) {
     return;
   }
   if (actionDrafts.value.some(action => action.id === source.actionId)) {
-    selectAction(source.actionId);
+    selectAction(source.actionId, { syncRuntimeResult: false });
   }
   actionEditFocus.value = {
     actionId: source.actionId,
@@ -1486,7 +1489,32 @@ function selectActionFromRuntimeStatePoint(pointId) {
   if (!actionId || !findActionDraftById(actionId)) {
     return;
   }
-  selectAction(actionId);
+  selectAction(actionId, { syncRuntimeResult: false });
+}
+
+function shouldSyncRuntimeResultOnActionSelect() {
+  if (runtimeOverviewActive.value) {
+    return true;
+  }
+  return Boolean(
+    findRuntimeStatePointContextById(
+      simulationResult.value.threeValueRuntimeProjection,
+      selectedStateCurvePointId.value
+    )
+  );
+}
+
+function syncRuntimeResultForSelectedAction(actionId) {
+  const runtimePoint = findFirstRuntimeStatePointForAction(
+    simulationResult.value.threeValueRuntimeProjection,
+    actionId
+  );
+  focusThreeValueCalculatorScope('runtime', {
+    selectFirstRuntimePoint: false,
+  });
+  if (runtimePoint?.statePointId) {
+    selectRuntimeStatePoint(runtimePoint.statePointId);
+  }
 }
 
 function findRuntimeStatePointContextById(runtimeProjection, statePointId) {

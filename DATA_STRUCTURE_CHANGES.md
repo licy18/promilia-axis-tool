@@ -14868,3 +14868,39 @@ findFirstRuntimeStatePointForAction(runtimeProjection, source.actionId)
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、48 条测试。
 - `npm run test -- --run`：通过，17 个测试文件、129 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 184. UI 主流程能力块：运行视角动作选择同步
+
+本阶段属于 UI 主流程。
+
+### 184.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 184.2 Workbench selectAction 运行视角策略
+
+`Workbench.selectAction()` 新增可选参数：
+
+```js
+{ syncRuntimeResult = true }
+```
+
+当当前视角已经选中 runtime state point，或处于 runtime overview 时，用户直接选择另一个动作会调用 `findFirstRuntimeStatePointForAction()` 找到该动作的首个 runtime 结果，并同步主流程条、三值详情、资源曲线和模拟日志。
+
+以下从 runtime state point 反向选中动作的路径显式传入 `syncRuntimeResult: false`，避免覆盖用户当前选中的结果点：
+
+```js
+selectActionResult()
+returnRuntimeResultFromProperties()
+focusRuntimeAction()
+focusActionEditSource()
+selectActionFromRuntimeStatePoint()
+```
+
+### 184.3 验证
+
+- Workbench 测试覆盖：添加资源动作并进入运行结果视角后，点击时间轴上的第一个动作，主流程条、三值详情、资源曲线和模拟日志都同步到第一个动作的 runtime state point。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "syncs runtime detail when selecting"`：通过，1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、49 条测试。
+- `npm run test -- --run`：通过，17 个测试文件、130 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
