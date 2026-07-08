@@ -380,7 +380,7 @@ describe('Workbench view', () => {
     const text = wrapper.text();
     expect(text).toContain('寒悠悠');
     expect(text).toContain(
-      '逐hit候选 4/4段 · 三值字段 6 · 召唤目标 2/4段/4元素 · 触发未确认'
+      '逐hit候选 4/4段 · 三值字段 6 · 召唤目标 2/4段/4元素 · 触发候选 0f/1f/4f/5f/20f/25f/29f/34f'
     );
     expect(
       wrapper.findAll(
@@ -399,7 +399,7 @@ describe('Workbench view', () => {
       wrapper
         .find('[data-testid="workbench-candidate-value-frame-summary-source"]')
         .text()
-    ).toContain('召唤目标 480059->48005901 · 触发帧未确认');
+    ).toContain('召唤目标 480059->48005901 · 触发候选帧 0/1/4/25/34/43');
     const hpFrameDetail = wrapper.find(
       '[data-testid="workbench-candidate-value-frame-detail-row"][data-series-key="hpDamageFormulaParamCandidate"]'
     );
@@ -417,9 +417,12 @@ describe('Workbench view', () => {
       row => row.attributes('data-element-config-id') === '101003156'
     );
     expect(summonRow).toBeTruthy();
-    expect(summonRow.text()).toContain('召唤触发待确认');
+    expect(summonRow.text()).toContain('召唤触发候选待确认');
     expect(summonRow.attributes('title')).toContain(
       '召唤目标 480059->48005901'
+    );
+    expect(summonRow.attributes('title')).toContain(
+      '召唤候选帧 0/1/4/25/34/43'
     );
   });
 

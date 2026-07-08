@@ -660,9 +660,19 @@ function formatHitCandidateSummary(entry) {
       : '';
   const summonTargetText =
     summary.summonTargetMappedHitCandidateCount > 0
-      ? ` · 召唤目标 ${summary.summonTargetMappedHitCandidateCount}/${summary.hitCandidateCount}段/${summary.summonTargetDamageElementFieldMappingCount}元素 · 触发未确认`
+      ? ` · 召唤目标 ${summary.summonTargetMappedHitCandidateCount}/${summary.hitCandidateCount}段/${summary.summonTargetDamageElementFieldMappingCount}元素 · ${formatSummonTargetTriggerSummary(summary)}`
       : '';
   return `逐hit候选 ${summary.mappedHitCandidateCount}/${summary.hitCandidateCount}段 · 三值字段 ${summary.damageElementFieldMappingCount}${summonTargetText}${frameText}${absoluteFrameText}${transitionText}`;
+}
+
+function formatSummonTargetTriggerSummary(summary) {
+  const frames = uniqueDisplayValues(
+    summary.summonTargetTriggerFrameCandidates ?? []
+  )
+    .slice(0, 8)
+    .map(frame => `${Math.round(Number(frame))}f`)
+    .join('/');
+  return frames ? `触发候选 ${frames}` : '触发未确认';
 }
 
 function formatCandidateSeries(series) {

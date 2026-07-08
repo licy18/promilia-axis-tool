@@ -3000,13 +3000,27 @@ async function buildSummonTargetSkillControlDirectorySummary(skillId) {
   }
 
   const jsonFiles = await listJsonFileNames(monoBehaviourRoot);
+  const monoBehaviourFileIndex = buildMonoBehaviourFileIndex(jsonFiles);
+  const monoBehaviourPayloadCache = new Map();
+  const skillResourceMapEvidence = await buildSkillResourceMapEvidence(
+    { id: Number(skillId) },
+    monoBehaviourRoot,
+    jsonFiles,
+    monoBehaviourPayloadCache
+  );
+  const behaviorEvidence = createEmptySkillControlNodeEvidence();
   let stubOnlyJsonFiles = 0;
+  let parsedReadableJsonFiles = 0;
+  let unreadableJsonFiles = 0;
   const stubOnlyReasonSamples = [];
   for (const fileName of jsonFiles) {
     try {
-      const json = JSON.parse(
-        await fs.readFile(path.join(monoBehaviourRoot, fileName), 'utf8')
+      const payload = await readMonoBehaviourPayload(
+        monoBehaviourRoot,
+        fileName,
+        monoBehaviourPayloadCache
       );
+      const json = payload.json;
       if (json?.stubOnly) {
         stubOnlyJsonFiles += 1;
         if (
@@ -3016,11 +3030,31 @@ async function buildSummonTargetSkillControlDirectorySummary(skillId) {
         ) {
           stubOnlyReasonSamples.push(json.reason);
         }
+        continue;
       }
+      parsedReadableJsonFiles += 1;
+      mergeSkillControlNodeEvidence(
+        behaviorEvidence,
+        await extractSkillControlNodeEvidence(json, fileName, {
+          monoBehaviourRoot,
+          monoBehaviourFileIndex,
+          monoBehaviourPayloadCache,
+          skillResourceMapIndex:
+            skillResourceMapEvidence.elementRefsByRoundedPathId,
+        })
+      );
     } catch {
-      // Keep this summary best-effort; resolver evidence is authoritative.
+      unreadableJsonFiles += 1;
     }
   }
+  const frameRange = buildFrameRange(
+    behaviorEvidence.startFrames,
+    behaviorEvidence.endFrames
+  );
+  const startFrameCandidates = uniqueNumbers(behaviorEvidence.startFrames).slice(
+    0,
+    16
+  );
 
   return compactObject({
     status:
@@ -3032,8 +3066,42 @@ async function buildSummonTargetSkillControlDirectorySummary(skillId) {
     jsonFileCount: jsonFiles.length,
     stubOnlyJsonFiles,
     readableJsonFiles: jsonFiles.length - stubOnlyJsonFiles,
+    parsedReadableJsonFiles,
+    unreadableJsonFiles,
     sampleFiles: jsonFiles.slice(0, 5),
     stubOnlyReasonSamples,
+    skillResourceMapEvidence: skillResourceMapEvidence.evidence,
+    timelineControlSampleCount: behaviorEvidence.timelineControlCount,
+    behaviorNodeSampleCount: behaviorEvidence.behaviorNodeCount,
+    frameCandidateSampleCount: behaviorEvidence.frameCandidateCount,
+    elementListCandidateSampleCount:
+      behaviorEvidence.elementListCandidateCount,
+    frameRange,
+    startFrameCandidates,
+    triggerFrameCandidateSummary: compactObject({
+      status:
+        startFrameCandidates.length > 0
+          ? 'skill-control-trigger-frame-candidates-found-unconfirmed'
+          : 'skill-control-trigger-frame-candidates-missing',
+      sourceKind: 'azpr-summon-target-skill-control-frame-candidate-summary',
+      candidateStartFrames: startFrameCandidates,
+      frameRange,
+      timelineControlCount: behaviorEvidence.timelineControlCount,
+      behaviorNodeCount: behaviorEvidence.behaviorNodeCount,
+      applied: false,
+    }),
+    effectLaneCandidateSummary: behaviorEvidence.laneCandidateSummary,
+    behaviorReferenceSummary: behaviorEvidence.behaviorReferenceSummary,
+    hpBehaviorChainCount:
+      behaviorEvidence.behaviorChainsByLane.hpDamage.length,
+    hpBehaviorChains: behaviorEvidence.behaviorChainsByLane.hpDamage.slice(
+      0,
+      SKILL_EFFECT_LANE_SPECIFIC_SAMPLE_LIMIT
+    ),
+    sampleNodeCandidates: behaviorEvidence.candidates.slice(
+      0,
+      SKILL_CONTROL_SAMPLE_NODE_LIMIT
+    ),
   });
 }
 

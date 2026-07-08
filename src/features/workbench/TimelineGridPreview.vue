@@ -1042,7 +1042,7 @@ function formatCandidateFrameGroupSummonTarget(group) {
     summaries.flatMap(summary => summary.targetSkillIds ?? []),
     '目标skill'
   );
-  return ` · 召唤目标 ${unitText}->${skillText} · 触发帧未确认`;
+  return ` · 召唤目标 ${unitText}->${skillText} · ${formatSummonTargetTriggerText(summaries)}`;
 }
 
 function formatCandidateFrameDetailValue(value) {
@@ -1102,7 +1102,8 @@ function formatCandidateElementSourceDetail(element) {
 
   const unit = target.summonUnitId ?? '未知召唤';
   const skill = target.targetSkillId ?? '目标skill';
-  return `召唤目标${unit}->${skill}`;
+  const triggerText = formatSummonTargetTriggerText([target]);
+  return `召唤目标${unit}->${skill} ${triggerText}`;
 }
 
 function formatCandidateElementHpDetail(hpDamage) {
@@ -1226,6 +1227,7 @@ function createCandidateElementComparisonRows(group) {
           skillLevelBridge: null,
           sourceKinds: [],
           summonTargets: [],
+          summonTriggerFrameCandidates: [],
         });
       }
 
@@ -1237,6 +1239,12 @@ function createCandidateElementComparisonRows(group) {
       row.summonTargets = uniqueDisplayValues([
         ...row.summonTargets,
         formatElementSummonTargetKey(element.summonTarget),
+      ]);
+      row.summonTriggerFrameCandidates = uniqueDisplayValues([
+        ...row.summonTriggerFrameCandidates,
+        ...(element.summonTarget?.triggerFrameCandidates ?? []),
+        ...((element.summonTarget?.triggerFrameCandidateSummary
+          ?.candidateStartFrames ?? []) ?? []),
       ]);
       row.hpDamage = mergeElementCandidateObject(
         row.hpDamage,
@@ -1301,7 +1309,11 @@ function mergeElementCandidateObject(current, incoming) {
 function formatCandidateElementComparisonStatus(row) {
   const parts = ['未应用'];
   if (row.sourceKinds.includes('azpr-summon-target-damage-element-candidate')) {
-    parts.push('召唤触发待确认');
+    parts.push(
+      row.summonTriggerFrameCandidates?.length
+        ? '召唤触发候选待确认'
+        : '召唤触发待确认'
+    );
   }
   if (row.functionText !== '未确认') {
     parts.push('function组合待验证');
@@ -1326,6 +1338,9 @@ function formatCandidateElementComparisonTooltip(row) {
     `削韧 ${row.toughnessText}`,
     `能量 ${row.energyText}`,
     row.summonTargets.length ? `召唤目标 ${row.summonTargets.join(',')}` : '',
+    row.summonTriggerFrameCandidates?.length
+      ? `召唤候选帧 ${row.summonTriggerFrameCandidates.join('/')}`
+      : '',
     row.statusText,
   ]
     .filter(Boolean)
@@ -1339,6 +1354,22 @@ function formatElementSummonTargetKey(target) {
   const unit = target.summonUnitId ?? '?';
   const skill = target.targetSkillId ?? '?';
   return `${unit}->${skill}`;
+}
+
+function formatSummonTargetTriggerText(summaries) {
+  const frames = uniqueDisplayValues(
+    (summaries ?? []).flatMap(summary => [
+      ...(summary.triggerFrameCandidates ?? []),
+      ...((summary.triggerFrameCandidateSummaries ?? []).flatMap(
+        item => item.candidateStartFrames ?? []
+      ) ?? []),
+      ...((summary.triggerFrameCandidateSummary?.candidateStartFrames ?? []) ??
+        []),
+    ])
+  );
+  return frames.length
+    ? `触发候选帧 ${frames.join('/')}`
+    : '触发帧未确认';
 }
 
 function createElementNumberPart(label, value) {

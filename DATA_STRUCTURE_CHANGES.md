@@ -7145,3 +7145,128 @@ runtime-sampling-offline-samples-partially-validated
 - 该阶段只改变运行时投影和 Workbench 展示，不改变生成数据的 `summonTargetSkillEvidence` 静态结构。
 - 第 4/5 段曲线点仍使用来源 hitGroup 的候选帧；目标 item skill 的真实触发帧未确认。
 - `applied` 必须保持 `false`，不能把召唤目标二级 DamageElement 当成最终 HP / 韧性 / 能量公式结果。
+
+## 90. 阶段 5-8BK：summon target skill_control frame candidates
+
+阶段 5-8BK 通过 AzPr Extractor 聚焦 manifest-sliced 重导补齐 `skill_control_48005901/48006001` 的真实 MonoBehaviour JSON，并把目标 item skill_control 的行为轨候选写入生成数据和 Workbench。
+
+### 90.1 skill-asset-evidence summonTargetSkillEvidence
+
+`summonTargetSkillEvidence.summary.targetSkillControlStubOnlySkillCount` 从 `2` 变为 `0`。
+
+`summonTargetSkillEvidence.targets[].targetSkills[].skillControlDirectory` 新增：
+
+- `parsedReadableJsonFiles`
+- `unreadableJsonFiles`
+- `skillResourceMapEvidence`
+- `timelineControlSampleCount`
+- `behaviorNodeSampleCount`
+- `frameCandidateSampleCount`
+- `elementListCandidateSampleCount`
+- `frameRange`
+- `startFrameCandidates`
+- `triggerFrameCandidateSummary`
+- `effectLaneCandidateSummary`
+- `behaviorReferenceSummary`
+- `hpBehaviorChainCount`
+- `hpBehaviorChains`
+- `sampleNodeCandidates`
+
+当前目标摘要：
+
+```json
+[
+  {
+    "skillId": 48005901,
+    "jsonFileCount": 13,
+    "stubOnlyJsonFiles": 0,
+    "parsedReadableJsonFiles": 13,
+    "timelineControlSampleCount": 6,
+    "behaviorNodeSampleCount": 13,
+    "startFrameCandidates": [0, 1, 4, 25, 34, 43],
+    "frameRange": { "minStartFrame": 0, "maxEndFrame": 112 },
+    "hpBehaviorChainCount": 4
+  },
+  {
+    "skillId": 48006001,
+    "jsonFileCount": 13,
+    "stubOnlyJsonFiles": 0,
+    "parsedReadableJsonFiles": 13,
+    "timelineControlSampleCount": 6,
+    "behaviorNodeSampleCount": 13,
+    "startFrameCandidates": [0, 1, 5, 20, 29, 38],
+    "frameRange": { "minStartFrame": 0, "maxEndFrame": 105 },
+    "hpBehaviorChainCount": 4
+  }
+]
+```
+
+`triggerFrameCandidateSummary` 结构：
+
+```json
+{
+  "status": "skill-control-trigger-frame-candidates-found-unconfirmed",
+  "sourceKind": "azpr-summon-target-skill-control-frame-candidate-summary",
+  "candidateStartFrames": [0, 1, 4, 25, 34, 43],
+  "frameRange": { "minStartFrame": 0, "maxEndFrame": 112 },
+  "timelineControlCount": 6,
+  "behaviorNodeCount": 13,
+  "applied": false
+}
+```
+
+### 90.2 actionResultTimeline[].hitCandidateSummary
+
+`hitCandidateSummary` 新增：
+
+- `summonTargetTriggerFrameCandidates`
+
+寒悠悠普攻当前值：
+
+```json
+{
+  "summonTargetTriggerTimingStatuses": [
+    "summon-target-trigger-frame-candidates-found-unconfirmed"
+  ],
+  "summonTargetTriggerFrameCandidates": [0, 1, 4, 5, 20, 25, 29, 34, 38, 43]
+}
+```
+
+### 90.3 hitCandidates[].summonTargetEvidenceSummary
+
+`summonTargetEvidenceSummary` 更新：
+
+- `triggerTimingStatus` 可为 `summon-target-trigger-frame-candidates-found-unconfirmed`。
+- 新增 `triggerFrameCandidates`。
+- 新增 `triggerFrameCandidateSummaries[]`。
+
+第 4 段当前候选：
+
+```json
+{
+  "targetSkillIds": [48005901],
+  "triggerTimingStatus": "summon-target-trigger-frame-candidates-found-unconfirmed",
+  "triggerFrameCandidates": [0, 1, 4, 25, 34, 43]
+}
+```
+
+### 90.4 candidates[].summonTarget
+
+召唤目标 candidate 的 `summonTarget` 新增：
+
+- `triggerFrameCandidates`
+- `triggerFrameCandidateSummary`
+
+`skillControlStatus` 现在可为 `skill-control-json-readable`，不再固定为 `skill-control-json-stub-only`。
+
+### 90.5 Workbench
+
+- `AnalysisPanel` 的逐 hit 摘要会显示 `触发候选 {frames}`。
+- `TimelineGridPreview` 的候选帧来源会显示 `触发候选帧 {frames}`。
+- element 对比状态在存在候选帧时显示 `召唤触发候选待确认`。
+
+### 90.6 兼容性与边界
+
+- `triggerFrameCandidates` 是 item skill_control 内部候选帧，不是最终战斗时间轴触发帧。
+- 这些字段不能改变 `applied: false` 语义，也不能让二级 DamageElement 直接并入最终 HP / 韧性 / 能量曲线。
+- 仍需后续用来源 hitGroup、`Delay#4`、buff runtime 条件和真实采样确认最终触发帧、命中次数和 owner/target。

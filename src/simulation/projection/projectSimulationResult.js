@@ -6030,6 +6030,9 @@ function createSummonTargetHitCandidateMappingResult(hitGroup) {
         compactSummary?.damageElementConfigIds ??
         target.damageElementConfigIds ??
         [],
+      triggerFrameCandidateSummaries: (target.targetSkills ?? [])
+        .map(createSummonTargetSkillControlFrameSummary)
+        .filter(Boolean),
       calculationBoundary:
         compactSummary?.calculationBoundary ??
         target.calculationBoundary ??
@@ -6079,7 +6082,19 @@ function createSummonTargetHitCandidateMappingResult(hitGroup) {
         summaries.flatMap(summary => summary.damageElementConfigIds)
       ),
       damageElementCandidateCount: mappings.length,
-      triggerTimingStatus: 'summon-target-trigger-frame-unconfirmed',
+      triggerTimingStatus: createSummonTargetTriggerTimingStatus(summaries),
+      triggerFrameCandidates: uniqueNumbers(
+        summaries.flatMap(summary =>
+          (summary.triggerFrameCandidateSummaries ?? []).flatMap(
+            item => item.candidateStartFrames ?? []
+          )
+        )
+      ),
+      triggerFrameCandidateSummaries: compactSummonTargetFrameSummaries(
+        summaries.flatMap(
+          summary => summary.triggerFrameCandidateSummaries ?? []
+        )
+      ),
       hitCountStatus: 'summon-target-hit-count-unconfirmed',
       runtimeOwnershipStatus: 'summon-target-runtime-ownership-unconfirmed',
       calculationBoundary:
@@ -6131,7 +6146,14 @@ function createSummonTargetHitCandidateMapping({
       battlefieldItemId: numberOrNull(target.battlefieldItem?.id),
       battlefieldItemParam: target.battlefieldItem?.param ?? null,
       skillControlStatus: targetSkill.skillControlDirectory?.status ?? null,
-      triggerTimingStatus: 'summon-target-trigger-frame-unconfirmed',
+      triggerTimingStatus:
+        createSummonTargetSkillControlFrameSummary(targetSkill)?.status ??
+        'summon-target-trigger-frame-unconfirmed',
+      triggerFrameCandidates:
+        createSummonTargetSkillControlFrameSummary(targetSkill)
+          ?.candidateStartFrames ?? [],
+      triggerFrameCandidateSummary:
+        createSummonTargetSkillControlFrameSummary(targetSkill),
       hitCountStatus: 'summon-target-hit-count-unconfirmed',
       runtimeOwnershipStatus: 'summon-target-runtime-ownership-unconfirmed',
       calculationBoundary:
@@ -6146,10 +6168,71 @@ function createSummonTargetHitCandidateMapping({
     }),
     unresolved: uniqueStrings([
       ...(mapping.unresolved ?? []),
-      'summon-target-trigger-frame-unconfirmed',
+      createSummonTargetSkillControlFrameSummary(targetSkill)?.status ??
+        'summon-target-trigger-frame-unconfirmed',
       'summon-target-hit-count-unconfirmed',
       'summon-target-runtime-ownership-unconfirmed',
     ]),
+    applied: false,
+  };
+}
+
+function createSummonTargetTriggerTimingStatus(summaries) {
+  const hasFrameCandidates = summaries.some(summary =>
+    (summary.triggerFrameCandidateSummaries ?? []).some(
+      item => (item.candidateStartFrames ?? []).length > 0
+    )
+  );
+  return hasFrameCandidates
+    ? 'summon-target-trigger-frame-candidates-found-unconfirmed'
+    : 'summon-target-trigger-frame-unconfirmed';
+}
+
+function compactSummonTargetFrameSummaries(summaries) {
+  const seen = new Set();
+  const result = [];
+  for (const summary of summaries) {
+    const key = `${summary.targetSkillId ?? ''}:${(
+      summary.candidateStartFrames ?? []
+    ).join(',')}`;
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    result.push(summary);
+  }
+  return result;
+}
+
+function createSummonTargetSkillControlFrameSummary(targetSkill) {
+  const directory = targetSkill?.skillControlDirectory;
+  if (!directory) {
+    return null;
+  }
+  const triggerSummary = directory.triggerFrameCandidateSummary ?? {};
+  const candidateStartFrames = uniqueNumbers(
+    triggerSummary.candidateStartFrames ?? directory.startFrameCandidates ?? []
+  );
+  return {
+    status:
+      candidateStartFrames.length > 0
+        ? 'summon-target-trigger-frame-candidates-found-unconfirmed'
+        : 'summon-target-trigger-frame-unconfirmed',
+    sourceKind:
+      triggerSummary.sourceKind ??
+      'azpr-summon-target-skill-control-frame-candidate-summary',
+    targetSkillId: numberOrNull(targetSkill.skillId),
+    skillControlStatus: directory.status ?? null,
+    jsonFileCount: numberOrNull(directory.jsonFileCount),
+    parsedReadableJsonFiles: numberOrNull(directory.parsedReadableJsonFiles),
+    candidateStartFrames,
+    frameRange: directory.frameRange ?? triggerSummary.frameRange ?? null,
+    timelineControlCount: numberOrNull(directory.timelineControlSampleCount),
+    behaviorNodeCount: numberOrNull(directory.behaviorNodeSampleCount),
+    hpBehaviorChainCount: numberOrNull(directory.hpBehaviorChainCount),
+    externalElementBaseRefCount: numberOrNull(
+      directory.behaviorReferenceSummary?.externalElementBaseRefs
+    ),
     applied: false,
   };
 }
@@ -7451,6 +7534,12 @@ function summarizeActionHitCandidates(hitCandidates, sequenceTimingEvidence) {
     summonTargetTriggerTimingStatuses: uniqueStrings(
       hitCandidates.map(
         candidate => candidate.summonTargetEvidenceSummary?.triggerTimingStatus
+      )
+    ),
+    summonTargetTriggerFrameCandidates: uniqueNumbers(
+      hitCandidates.flatMap(
+        candidate =>
+          candidate.summonTargetEvidenceSummary?.triggerFrameCandidates ?? []
       )
     ),
     frameRate: AZPR_TIMELINE_FRAME_RATE,

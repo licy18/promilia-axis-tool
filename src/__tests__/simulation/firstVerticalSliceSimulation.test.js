@@ -1760,7 +1760,10 @@ describe('first vertical slice simulation', () => {
       summonTargetSkillIds: [48005901, 48006001],
       summonUnitIds: [480059, 480060],
       summonTargetTriggerTimingStatuses: [
-        'summon-target-trigger-frame-unconfirmed',
+        'summon-target-trigger-frame-candidates-found-unconfirmed',
+      ],
+      summonTargetTriggerFrameCandidates: [
+        0, 1, 4, 5, 20, 25, 29, 34, 38, 43,
       ],
       applied: false,
     });
@@ -1780,7 +1783,9 @@ describe('first vertical slice simulation', () => {
         summonUnitIds: [480059],
         targetSkillIds: [48005901],
         damageElementConfigIds: [101003156, 101003182],
-        triggerTimingStatus: 'summon-target-trigger-frame-unconfirmed',
+        triggerTimingStatus:
+          'summon-target-trigger-frame-candidates-found-unconfirmed',
+        triggerFrameCandidates: [0, 1, 4, 25, 34, 43],
         hitCountStatus: 'summon-target-hit-count-unconfirmed',
         runtimeOwnershipStatus: 'summon-target-runtime-ownership-unconfirmed',
         applied: false,
@@ -1808,8 +1813,10 @@ describe('first vertical slice simulation', () => {
           summonTarget: expect.objectContaining({
             summonUnitId: 480059,
             targetSkillId: 48005901,
-            triggerTimingStatus: 'summon-target-trigger-frame-unconfirmed',
-            skillControlStatus: 'skill-control-json-stub-only',
+            triggerTimingStatus:
+              'summon-target-trigger-frame-candidates-found-unconfirmed',
+            triggerFrameCandidates: [0, 1, 4, 25, 34, 43],
+            skillControlStatus: 'skill-control-json-readable',
           }),
           skillLevelBridge: expect.objectContaining({
             source: 'summon-target-skill-element-values',
@@ -1870,7 +1877,8 @@ describe('first vertical slice simulation', () => {
         summonUnitIds: [480059],
         targetSkillIds: [48005901],
       }),
-      triggerTimingStatus: 'summon-target-trigger-frame-unconfirmed',
+      triggerTimingStatus:
+        'summon-target-trigger-frame-candidates-found-unconfirmed',
     });
     expect(hpHit4Point.elementDetails).toEqual(
       expect.arrayContaining([

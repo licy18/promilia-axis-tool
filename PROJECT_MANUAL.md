@@ -4286,6 +4286,42 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 若静态导出仍不能打开目标 item skill 行为轨，则把 `10100304/10100305` 的召唤触发和 `101003079 / 焰火` runtime 条件加入真实 hook / capture 采样目标。
 - Workbench 侧后续可把召唤目标候选加过滤/徽标，但在触发帧确认前不要把二级 DamageElement 合并进最终 HP / 韧性 / 能量结果。
 
+### 2026-07-08：阶段 5-8BK 召唤目标 item skill_control 重导与触发候选帧
+
+本轮完成：
+
+- 确认 `skill_control_48005901/48006001` 的旧缺口不是寒悠悠个例：现有 Extractor 目录里 89 个 `4800*` item `skill_control` 曾全部是 `stubOnly`，reason 均为旧批次为规避 UnityPy typetree 风险而主动不读。
+- 使用 AzPr Extractor 对 `skill_control_48005901/48006001` 做聚焦 manifest-sliced dry-run：2 个逻辑切片、26 个 MonoBehaviour 可读、错误数 0；随后执行真实重导并覆盖目标导出。
+- 清理两个目标 `MonoBehaviour` 目录中旧的 `stubOnly` JSON 共 24 个；当前 `48005901` 与 `48006001` 均为 13 个真实 JSON、0 stub。
+- `48005901` 当前可确认：6 条 `behaviorlineControl`、13 个行为节点、4 个 `elementBaseDatas` 外部引用，候选起始帧 `0 / 1 / 4 / 25 / 34 / 43f`，frameRange `0-112f`。
+- `48006001` 当前可确认：6 条 `behaviorlineControl`、13 个行为节点、4 个 `elementBaseDatas` 外部引用，候选起始帧 `0 / 1 / 5 / 20 / 29 / 38f`，frameRange `0-105f`。
+- `scripts/generate-azpr-data.mjs` 的 `summonTargetSkillEvidence.targetSkills[].skillControlDirectory` 新增真实行为轨摘要：`parsedReadableJsonFiles`、`timelineControlSampleCount`、`behaviorNodeSampleCount`、`frameCandidateSampleCount`、`startFrameCandidates`、`triggerFrameCandidateSummary`、`behaviorReferenceSummary`、`hpBehaviorChainCount`。
+- `src/simulation/projection/projectSimulationResult.js` 已把目标 item skill 的候选帧透传到 `summonTargetEvidenceSummary`、`hitCandidateSummary` 和每个召唤目标 candidate 的 `summonTarget` 明细。
+- Workbench 现在把寒悠悠召唤目标摘要从 `触发未确认` 升级为 `触发候选 0f/1f/4f/5f/20f/25f/29f/34f`，选中第 4 段时可看到 `触发候选帧 0/1/4/25/34/43`。
+
+当前边界：
+
+- 这些帧仍是 item skill_control 内部行为轨候选，不等于第 4/5 段召唤在战斗时间轴上的最终触发帧。
+- `hitCountStatus` 仍为 `summon-target-hit-count-unconfirmed`，`runtimeOwnershipStatus` 仍为 `summon-target-runtime-ownership-unconfirmed`。
+- `battlefield_item.param = Delay#4` 仍未解释为最终帧延迟、秒延迟或 runtime 调度参数。
+- `101003079 / 焰火` buff 已有静态引用桥，但还没有确认它与 `48006001` 的运行时触发条件、触发次数或伤害过滤关系。
+
+验收结果：
+
+- AzPr Extractor dry-run：`outputs/unity-manifest-sliced-skill-control-480059-480060-real-monobehaviour-dryrun.json`，2 个切片、26 个 MonoBehaviour、0 错误。
+- AzPr Extractor 真实重导：`outputs/unity-manifest-sliced-skill-control-480059-480060-real-monobehaviour.json`，2 个切片、26 个 MonoBehaviour、0 错误。
+- `npm run data:generate`：通过，生成数量稳定。
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、47 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、108 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提醒与 chunk 体积提醒。
+- `git diff --check`：通过；仅有 Windows 行尾转换提示。
+
+下一步：
+
+- 阶段 5-8BL 目标：把 `48005901/48006001` 的候选帧与来源 hitGroup、第 4/5 段 `TSummonElementParams`、`battlefield_item.param = Delay#4` 和 `101003079 / 焰火` buff 条件交叉对齐。
+- 优先输出一个“触发帧假设矩阵”：源 hit 帧、item skill 内部候选帧、Delay#4 解释候选、DamageElement id、HP/韧性/能量字段、owner/target 未确认项。
+- 若静态证据仍无法从候选集中收敛到唯一触发帧，再把这组假设写入真实 hook / capture 采样清单。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

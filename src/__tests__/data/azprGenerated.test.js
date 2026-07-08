@@ -604,7 +604,7 @@ describe('generated AzPr data', () => {
         summonUnitCount: 2,
         targetSkillCount: 2,
         resolvedTargetSkillCount: 2,
-        targetSkillControlStubOnlySkillCount: 2,
+        targetSkillControlStubOnlySkillCount: 0,
         requestedPathIds: 4,
         resolvedPathIds: 4,
         unresolvedPathIds: 0,
@@ -631,9 +631,31 @@ describe('generated AzPr data', () => {
                 skillModuleTag: 2,
               }),
               skillControlDirectory: expect.objectContaining({
-                status: 'skill-control-json-stub-only',
+                status: 'skill-control-json-readable',
                 jsonFileCount: 13,
-                stubOnlyJsonFiles: 13,
+                stubOnlyJsonFiles: 0,
+                parsedReadableJsonFiles: 13,
+                timelineControlSampleCount: 6,
+                behaviorNodeSampleCount: 13,
+                frameCandidateSampleCount: 13,
+                startFrameCandidates: [0, 1, 4, 25, 34, 43],
+                frameRange: {
+                  minStartFrame: 0,
+                  maxEndFrame: 112,
+                },
+                triggerFrameCandidateSummary: expect.objectContaining({
+                  status:
+                    'skill-control-trigger-frame-candidates-found-unconfirmed',
+                  candidateStartFrames: [0, 1, 4, 25, 34, 43],
+                  applied: false,
+                }),
+                behaviorReferenceSummary: expect.objectContaining({
+                  behaviorListRefs: 6,
+                  resolvedBehaviorListRefs: 6,
+                  externalElementBaseRefs: 4,
+                  resourceMapMatchedElementBaseRefs: 4,
+                }),
+                hpBehaviorChainCount: 4,
               }),
               damageElementConfigIds: [101003156, 101003182],
               skillElementValueSummaries: expect.arrayContaining([
@@ -678,9 +700,31 @@ describe('generated AzPr data', () => {
                 skillModuleTag: 2,
               }),
               skillControlDirectory: expect.objectContaining({
-                status: 'skill-control-json-stub-only',
+                status: 'skill-control-json-readable',
                 jsonFileCount: 13,
-                stubOnlyJsonFiles: 13,
+                stubOnlyJsonFiles: 0,
+                parsedReadableJsonFiles: 13,
+                timelineControlSampleCount: 6,
+                behaviorNodeSampleCount: 13,
+                frameCandidateSampleCount: 13,
+                startFrameCandidates: [0, 1, 5, 20, 29, 38],
+                frameRange: {
+                  minStartFrame: 0,
+                  maxEndFrame: 105,
+                },
+                triggerFrameCandidateSummary: expect.objectContaining({
+                  status:
+                    'skill-control-trigger-frame-candidates-found-unconfirmed',
+                  candidateStartFrames: [0, 1, 5, 20, 29, 38],
+                  applied: false,
+                }),
+                behaviorReferenceSummary: expect.objectContaining({
+                  behaviorListRefs: 6,
+                  resolvedBehaviorListRefs: 6,
+                  externalElementBaseRefs: 4,
+                  resourceMapMatchedElementBaseRefs: 4,
+                }),
+                hpBehaviorChainCount: 4,
               }),
               damageElementConfigIds: [101003157, 101003179],
               skillElementValueSummaries: expect.arrayContaining([
