@@ -235,12 +235,16 @@
             <button
               type="button"
               class="runtime-curve-action-focus"
-              :data-action-id="selectedRuntimeCurvePoint.actionId ?? ''"
-              data-focus-field="startMs"
-              :data-state-point-id="selectedRuntimeCurvePoint.statePointId"
+              :data-action-id="selectedRuntimeCurveActionEditTarget.actionId"
+              :data-focus-field="selectedRuntimeCurveActionEditTarget.fieldKey"
+              :data-state-point-id="
+                selectedRuntimeCurveActionEditTarget.statePointId
+              "
               data-testid="workbench-runtime-resource-chart-selection-action-focus"
-              :disabled="!selectedRuntimeCurvePoint.actionId"
-              @click="focusRuntimeCurveAction(selectedRuntimeCurvePoint)"
+              :disabled="!selectedRuntimeCurveActionEditTarget.canFocusAction"
+              @click="
+                focusRuntimeCurveAction(selectedRuntimeCurveActionEditTarget)
+              "
             >
               <EditPen class="runtime-curve-action-focus-icon" />
               <span>定位动作</span>
@@ -350,6 +354,7 @@ import {
   getRuntimeOutputSummary,
   getRuntimeResourceCurveRows,
 } from './runtimeProjectionPoints';
+import { createWorkbenchFlowRuntimeActionEditTarget } from './workbenchFlowModel';
 import { createRuntimeActionFocusFlowAction } from './runtimeActionFocusFlowAction';
 import { createRuntimeStatePointFocusFlowAction } from './runtimeResultFocusFlowAction';
 import { isRuntimeResultFocusSource } from './runtimeFocusSource';
@@ -547,6 +552,12 @@ const selectedRuntimeCurvePoint = computed(() => {
 const selectedRuntimeCurveResultContext = computed(() =>
   createSelectedRuntimeCurveResultContext(
     flowEditResult.value,
+    selectedRuntimeCurvePoint.value
+  )
+);
+const selectedRuntimeCurveActionEditTarget = computed(() =>
+  getRuntimeCurveActionEditTarget(
+    props.flowModel,
     selectedRuntimeCurvePoint.value
   )
 );
@@ -990,6 +1001,14 @@ function formatRuntimeCurveSelectionIndex() {
   return `${selectedRuntimeCurvePointIndex.value + 1}/${total}`;
 }
 
+function getRuntimeCurveActionEditTarget(flowModel, point) {
+  const target = flowModel?.runtimeActionEditTarget;
+  if (target?.statePointId && target.statePointId === point?.statePointId) {
+    return target;
+  }
+  return createWorkbenchFlowRuntimeActionEditTarget(point);
+}
+
 function formatRuntimeTrackLabel(trackKey) {
   if (trackKey === 'enemyHpDamage') {
     return '敌人 HP';
@@ -1053,7 +1072,7 @@ function getRuntimeCurveActionFocusFlowAction(point) {
   return createRuntimeActionFocusFlowAction({
     source: 'resource-runtime-curve',
     detail: point,
-    enabled: Boolean(point?.actionId),
+    enabled: Boolean(point?.canFocusAction ?? point?.actionId),
   });
 }
 

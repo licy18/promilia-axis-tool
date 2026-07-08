@@ -75,6 +75,8 @@ export function createWorkbenchFlowModel({
     runtimeSelectedDetail
   );
   const editResult = createWorkbenchFlowEditResult(actionEditResultContext);
+  const runtimeActionEditTarget =
+    createWorkbenchFlowRuntimeActionEditTarget(runtimeDetail);
   const runtimeSimLogCount = getRuntimeSimLogCount(runtimeProjection);
   const contractContext = createWorkbenchFlowContractContext({
     generationBundle,
@@ -111,6 +113,7 @@ export function createWorkbenchFlowModel({
     runtimeSummary: getRuntimeOutputSummary(runtimeProjection),
     runtimeSimLogCount,
     runtimeDetail,
+    runtimeActionEditTarget,
     editResult,
     primaryAction,
     runtimeNavigation: {
@@ -152,6 +155,23 @@ function createWorkbenchFlowRuntimeDetail(detail) {
           .filter(Boolean)
           .join(' · ')
       : '未选中',
+    canFocusAction: Boolean(actionId),
+  };
+}
+
+export function createWorkbenchFlowRuntimeActionEditTarget(runtimeDetail) {
+  const actionId = runtimeDetail?.actionId ?? '';
+  const statePointId = runtimeDetail?.statePointId ?? '';
+  const frameLabel =
+    runtimeDetail?.frameLabel || `${runtimeDetail?.timeMs ?? 0}ms`;
+  return {
+    actionId,
+    fieldKey: 'startMs',
+    frameLabel,
+    statePointId,
+    trackKey: runtimeDetail?.trackKey ?? '',
+    trackLabel: runtimeDetail?.trackLabel ?? '',
+    label: runtimeDetail?.label ?? '',
     canFocusAction: Boolean(actionId),
   };
 }

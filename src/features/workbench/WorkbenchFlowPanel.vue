@@ -141,13 +141,13 @@
             ),
           },
         ]"
-        :data-action-id="workbenchFlow.runtimeDetail.actionId"
+        :data-action-id="workbenchFlow.runtimeActionEditTarget.actionId"
         :data-primary-action="
           isPrimaryFlowAction(WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION)
             ? 'true'
             : 'false'
         "
-        :data-state-point-id="workbenchFlow.runtimeDetail.statePointId"
+        :data-state-point-id="workbenchFlow.runtimeActionEditTarget.statePointId"
         data-testid="workbench-flow-edit-runtime-action"
         :disabled="!workbenchFlow.controls.canFocusRuntimeAction"
         @click="focusRuntimeAction"
@@ -254,7 +254,7 @@ const workbenchFlow = computed(
 );
 
 function focusRuntimeAction() {
-  const detail = workbenchFlow.value.runtimeDetail;
+  const detail = workbenchFlow.value.runtimeActionEditTarget;
   dispatchFlowAction(getRuntimeActionFocusFlowAction(detail));
 }
 

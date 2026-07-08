@@ -17622,3 +17622,63 @@ AnalysisPanel edit feedback result -> createRuntimeResultFocusFlowAction()
 - `npm run test -- --run src/__tests__/features/runtimeResultFocusFlowAction.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、60 条测试。
 - `npm run test -- --run`：通过，32 个测试文件、178 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 223. UI 主流程能力块：Runtime Action Edit Target Contract
+
+本阶段属于 UI 主流程。
+
+### 223.1 结构变化
+
+`src/features/workbench/workbenchFlowModel.js` 新增并导出：
+
+```js
+createWorkbenchFlowRuntimeActionEditTarget(runtimeDetail)
+```
+
+该函数输出统一的运行结果回改目标：
+
+```js
+{
+  actionId,
+  fieldKey: 'startMs',
+  frameLabel,
+  statePointId,
+  trackKey,
+  trackLabel,
+  label,
+  canFocusAction
+}
+```
+
+`createWorkbenchFlowModel()` 输出新增：
+
+```js
+runtimeActionEditTarget
+```
+
+来源为当前 `runtimeDetail`。当当前运行详情为空时，字段保持空值，`canFocusAction` 为 `false`。
+
+已接入位置：
+
+```text
+WorkbenchFlowPanel edit runtime action button
+RuntimeSelectedDetailPanel action focus button
+ResourceMonitorPanel runtime curve selected point action focus
+EventLogPanel runtime log action focus
+```
+
+这些入口会优先使用 `flowModel.runtimeActionEditTarget`；当状态点不匹配或没有 flow model 时，使用 `createWorkbenchFlowRuntimeActionEditTarget()` 从本地 detail / point / row 构造同形 fallback。
+
+### 223.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 主流程的运行结果回改目标；三值计算、runtime projection 数值结果和草稿保存结构不变。
+
+### 223.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖 runtime result 与 edit result review 阶段的 `runtimeActionEditTarget`。
+- 更新 WorkbenchFlowPanel、RuntimeSelectedDetailPanel、ResourceMonitorPanel、EventLogPanel，改为优先消费模型层回改目标。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/runtimeActionFocusFlowAction.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，32 个测试文件、178 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

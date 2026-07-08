@@ -315,6 +315,7 @@ import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
 import {
   WORKBENCH_FLOW_ACTION_KINDS,
+  createWorkbenchFlowRuntimeActionEditTarget,
   createWorkbenchFlowAction,
 } from './workbenchFlowModel';
 import { createRuntimeActionFocusFlowAction } from './runtimeActionFocusFlowAction';
@@ -598,22 +599,14 @@ const runtimeLogDetailStatePointId = computed(
     matchedRuntimeSelectedDetail.value?.statePointId ??
     selectedRuntimeStatePointId.value
 );
-const runtimeLogActionFocus = computed(() => ({
-  actionId:
-    matchedRuntimeSelectedDetail.value?.actionId ??
-    selectedRuntimeLog.value?.actionId ??
-    '',
-  fieldKey: 'startMs',
-  frameLabel:
-    matchedRuntimeSelectedDetail.value?.frameLabel ??
-    selectedRuntimeLog.value?.frameLabel ??
-    `${selectedRuntimeLog.value?.timeMs ?? 0}ms`,
-  statePointId: runtimeLogDetailStatePointId.value ?? '',
-  trackKey:
-    matchedRuntimeSelectedDetail.value?.trackKey ??
-    selectedRuntimeLog.value?.trackKey ??
-    '',
-}));
+const runtimeLogActionFocus = computed(() =>
+  getRuntimeLogActionEditTarget({
+    flowModel: props.flowModel,
+    detail: matchedRuntimeSelectedDetail.value,
+    row: selectedRuntimeLog.value,
+    statePointId: runtimeLogDetailStatePointId.value,
+  })
+);
 const runtimeLogEditContext = computed(() =>
   createRuntimeLogEditContext({
     actionId: runtimeLogActionFocus.value.actionId,
@@ -807,7 +800,7 @@ function getRuntimeLogActionFocusFlowAction(focus) {
   return createRuntimeActionFocusFlowAction({
     source: 'event-log-runtime-detail',
     detail: focus,
-    enabled: Boolean(focus?.actionId),
+    enabled: Boolean(focus?.canFocusAction ?? focus?.actionId),
   });
 }
 
@@ -836,6 +829,26 @@ function focusRuntimeLogByStatePoint(statePointId) {
   if (index >= 0) {
     selectedRuntimeLogIndex.value = index;
   }
+}
+
+function getRuntimeLogActionEditTarget({
+  flowModel,
+  detail = null,
+  row = null,
+  statePointId = '',
+} = {}) {
+  const target = flowModel?.runtimeActionEditTarget;
+  if (target?.statePointId && target.statePointId === statePointId) {
+    return target;
+  }
+  return createWorkbenchFlowRuntimeActionEditTarget({
+    actionId: detail?.actionId ?? row?.actionId ?? '',
+    frameLabel:
+      detail?.frameLabel ?? row?.frameLabel ?? `${row?.timeMs ?? 0}ms`,
+    statePointId: statePointId ?? '',
+    trackKey: detail?.trackKey ?? row?.trackKey ?? '',
+    trackLabel: detail?.trackLabel ?? '',
+  });
 }
 
 function isRuntimeLogFocusSource(source) {

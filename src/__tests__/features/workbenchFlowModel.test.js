@@ -81,6 +81,15 @@ describe('workbench flow model', () => {
       label: '12f · 敌人 HP',
       canFocusAction: true,
     });
+    expect(model.runtimeActionEditTarget).toMatchObject({
+      actionId: 'action-0001',
+      fieldKey: 'startMs',
+      frameLabel: '12f',
+      statePointId: firstPoint.statePointId,
+      trackKey: 'enemyHpDamage',
+      trackLabel: '敌人 HP',
+      canFocusAction: true,
+    });
     expect(model.runtimeFocusSource).toBe('action-result');
     expect(model.primaryAction).toMatchObject({
       key: WORKBENCH_FLOW_PRIMARY_ACTION_KEYS.FOCUS_RUNTIME_ACTION,
@@ -144,6 +153,14 @@ describe('workbench flow model', () => {
       actionEditResultContext: editResultContext,
     });
     expect(reviewModel.phase).toBe(WORKBENCH_FLOW_PHASES.EDIT_RESULT_REVIEW);
+    expect(reviewModel.runtimeActionEditTarget).toMatchObject({
+      actionId: 'action-0002',
+      fieldKey: 'startMs',
+      frameLabel: '30f',
+      statePointId: secondPoint.statePointId,
+      trackLabel: '自身能量',
+      canFocusAction: true,
+    });
     expect(reviewModel.primaryAction).toMatchObject({
       key: WORKBENCH_FLOW_PRIMARY_ACTION_KEYS.FOCUS_RUNTIME_ACTION,
       kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,

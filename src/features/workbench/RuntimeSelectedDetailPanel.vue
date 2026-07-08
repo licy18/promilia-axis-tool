@@ -13,11 +13,11 @@
         v-if="detail"
         type="button"
         class="runtime-detail-action-focus"
-        :data-action-id="detail.actionId || ''"
-        data-focus-field="startMs"
-        :data-state-point-id="detail.statePointId || ''"
+        :data-action-id="runtimeDetailActionEditTarget.actionId"
+        :data-focus-field="runtimeDetailActionEditTarget.fieldKey"
+        :data-state-point-id="runtimeDetailActionEditTarget.statePointId"
         data-testid="workbench-runtime-selected-detail-action-focus"
-        :disabled="!detail.actionId"
+        :disabled="!runtimeDetailActionEditTarget.canFocusAction"
         @click="focusRuntimeAction"
       >
         <EditPen class="runtime-detail-action-focus-icon" />
@@ -201,6 +201,7 @@ import { Aim, DataAnalysis, EditPen } from '@element-plus/icons-vue';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import {
   WORKBENCH_FLOW_ACTION_KINDS,
+  createWorkbenchFlowRuntimeActionEditTarget,
   createWorkbenchFlowAction,
 } from './workbenchFlowModel';
 import { createRuntimeActionFocusFlowAction } from './runtimeActionFocusFlowAction';
@@ -237,6 +238,9 @@ const runtimeDetailOriginStatePointId = computed(() =>
 const flowEditResult = computed(
   () => props.flowModel?.editResult ?? props.actionEditResultContext
 );
+const runtimeDetailActionEditTarget = computed(() =>
+  getRuntimeDetailActionEditTarget(props.flowModel, props.detail)
+);
 const runtimeDetailResultReturnContext = computed(() =>
   createRuntimeResultReturnContext({
     actionId: props.detail?.actionId ?? flowEditResult.value?.actionId,
@@ -250,7 +254,7 @@ const panelVisible = computed(() =>
 );
 
 function focusRuntimeAction() {
-  const detail = props.detail;
+  const detail = runtimeDetailActionEditTarget.value;
   dispatchRuntimeDetailFlowAction(getRuntimeDetailActionFocusFlowAction(detail));
 }
 
@@ -270,7 +274,7 @@ function getRuntimeDetailActionFocusFlowAction(detail) {
   return createRuntimeActionFocusFlowAction({
     source: 'runtime-detail',
     detail,
-    enabled: Boolean(detail?.actionId),
+    enabled: Boolean(detail?.canFocusAction ?? detail?.actionId),
   });
 }
 
@@ -370,6 +374,14 @@ function createRuntimeDetailEditContext(detail, focus) {
     statePointId: detail.statePointId,
     summary: focus.changeSummary ?? '',
   };
+}
+
+function getRuntimeDetailActionEditTarget(flowModel, detail) {
+  const target = flowModel?.runtimeActionEditTarget;
+  if (target?.statePointId && target.statePointId === detail?.statePointId) {
+    return target;
+  }
+  return createWorkbenchFlowRuntimeActionEditTarget(detail);
 }
 </script>
 

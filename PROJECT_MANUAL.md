@@ -8300,6 +8300,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把运行详情、曲线点、日志行和分析结果的“定位后回改”体验继续收束到 WorkbenchFlowModel，而不是让各面板各自决定下一步。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Action Edit Target Contract
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `WorkbenchFlowModel` 新增 `runtimeActionEditTarget`，统一描述当前运行结果回到动作编辑时要定位的 action、field、state point、frame 和 track。
+- 主流程面板、运行详情面板、资源曲线选中点和模拟日志详情现在优先消费同一个 `runtimeActionEditTarget`；状态点不匹配时才回退到各自的本地选中点。
+- `createWorkbenchFlowRuntimeActionEditTarget()` 从模型层导出，面板 fallback 也复用同一个目标结构。
+- 该变化保持既有 `focus-runtime-action` source 与 dispatch-flow-action 回路不变，只把“定位后回改”的目标沉到 WorkbenchFlowModel。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- flow model 单元测试覆盖 runtime result 与 edit result review 阶段的 `runtimeActionEditTarget`。
+- Workbench 页面测试确认主流程面板、运行详情、资源曲线和日志详情仍能从运行结果回到动作编辑。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/runtimeActionFocusFlowAction.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，32 个测试文件、178 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 继续 UI 主流程能力块：把“回改后产生刷新结果”的回看入口也沉成同类模型目标，让详情面板、日志和曲线共享同一个刷新结果返回合同。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
