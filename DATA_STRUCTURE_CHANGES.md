@@ -19200,3 +19200,53 @@ src/__tests__/features/WorkbenchFlowPanel.test.js
 - `npm run test -- --run src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、72 条测试。
 - `npm run test -- --run`：通过，34 个测试文件、199 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 247. UI 主流程能力块：Runtime Detail Primary Operation Consumer
+
+### 247.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`RuntimeSelectedDetailPanel` 的详情按钮新增对以下运行时 UI 合同的消费：
+
+```js
+flowModel.runtimeReviewOperations.primaryOperation
+flowModel.runtimeReviewOperations.focusAction
+flowModel.runtimeReviewOperations.returnResult
+```
+
+适用按钮：
+
+```text
+workbench-runtime-selected-detail-action-focus
+workbench-runtime-selected-detail-return-result
+```
+
+解析顺序：
+
+```text
+primaryOperation.target
+focusAction / returnResult
+旧 fallback target
+```
+
+其中 `primaryOperation.target` 只在 `primaryOperation.kind` 与按钮操作类型一致，且 target 有内容时接管。空 operation 对象不会遮住旧 fallback。
+
+同时修正 `runtimeDetailOriginStatePointId` 的空值判断：没有当前详情时，不再因为两个空 origin 值相等而读取空 detail。
+
+新增测试文件：
+
+```text
+src/__tests__/features/RuntimeSelectedDetailPanel.test.js
+```
+
+### 247.2 保存与迁移
+
+本阶段只调整 Workbench 详情面板的运行时 UI 消费关系，不新增持久字段，不需要数据迁移。
+
+### 247.3 验证
+
+- 新增 `src/__tests__/features/RuntimeSelectedDetailPanel.test.js`，覆盖 fallback target 与 primaryOperation target 不一致时，详情面板 focus / return 按钮展示和 dispatch 均消费 `primaryOperation.target`。
+- `npm run test -- --run src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、74 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、201 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

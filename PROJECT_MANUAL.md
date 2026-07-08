@@ -8921,6 +8921,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：基于同一 `primaryOperation` 合同进一步削减侧边详情面板与 review 主操作之间的重复 focus / return 入口。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Detail Primary Operation Consumer
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `RuntimeSelectedDetailPanel` 的“定位动作”和“回到结果点”按钮改为从 `runtimeReviewOperations` 解析操作目标。
+- 当详情面板按钮对应当前 `primaryOperation.kind` 时，按钮展示、启用状态和 dispatch 目标优先消费 `primaryOperation.target`。
+- 保留 `focusAction` / `returnResult` 与旧 fallback 目标；空 operation 对象不会遮住旧路径。
+- 修复仅有返回结果上下文、没有当前详情时的 origin state point 空值误判，确保 pending return 主路径可独立渲染。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- 新增 `RuntimeSelectedDetailPanel` 组件测试，构造 fallback target 与 primaryOperation target 不一致的场景，确认 focus / return 两个详情按钮展示和 dispatch 均使用 primary operation 目标。
+- Workbench 页面测试、WorkbenchFlowPanel 组件测试和 main flow action 单测确认主流程闭环仍可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、74 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、201 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把资源曲线、日志行、详情面板三处 review operation 入口进一步收束为更少重复参数的共享消费层，让运行结果定位、详情查看和回到动作修改保持同一个主流程合同。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

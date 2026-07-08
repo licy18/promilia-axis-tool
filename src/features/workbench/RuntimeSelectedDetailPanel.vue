@@ -42,9 +42,9 @@
         v-if="detail"
         type="button"
         class="runtime-detail-action-focus"
-        :data-action-id="runtimeDetailActionEditTarget.actionId"
-        :data-focus-field="runtimeDetailActionEditTarget.fieldKey"
-        :data-state-point-id="runtimeDetailActionEditTarget.statePointId"
+        :data-action-id="runtimeDetailActionEditButtonTarget.actionId"
+        :data-focus-field="runtimeDetailActionEditButtonTarget.fieldKey"
+        :data-state-point-id="runtimeDetailActionEditButtonTarget.statePointId"
         data-testid="workbench-runtime-selected-detail-action-focus"
         :disabled="!runtimeReviewFocusActionEnabled"
         @click="focusRuntimeAction"
@@ -53,15 +53,15 @@
         <span>定位动作</span>
       </button>
       <button
-        v-if="runtimeDetailResultReturnContext"
+        v-if="runtimeDetailResultReturnButtonVisible"
         type="button"
         class="runtime-detail-result-return"
-        :data-action-id="runtimeDetailResultReturnContext.actionId"
+        :data-action-id="runtimeDetailResultReturnButtonTarget.actionId"
         :data-origin-state-point-id="
-          runtimeDetailResultReturnContext.originStatePointId
+          runtimeDetailResultReturnButtonTarget.originStatePointId
         "
-        :data-return-status="runtimeDetailResultReturnContext.status"
-        :data-state-point-id="runtimeDetailResultReturnContext.statePointId"
+        :data-return-status="runtimeDetailResultReturnButtonTarget.status"
+        :data-state-point-id="runtimeDetailResultReturnButtonTarget.statePointId"
         data-testid="workbench-runtime-selected-detail-return-result"
         :disabled="!runtimeReviewReturnResultEnabled"
         @click="returnRuntimeResult"
@@ -264,7 +264,8 @@ const runtimeDetailEditContext = computed(() =>
   createRuntimeDetailEditContext(props.detail, props.actionEditFocus)
 );
 const runtimeDetailOriginStatePointId = computed(() =>
-  props.detail?.statePointId === props.actionEditFocus?.originStatePointId
+  props.detail?.statePointId &&
+  props.detail.statePointId === props.actionEditFocus?.originStatePointId
     ? props.detail.statePointId
     : ''
 );
@@ -290,14 +291,28 @@ const runtimeReviewDetailSynced = computed(
     props.detail.statePointId ===
       runtimeReviewSelection.value.selectedStatePointId
 );
+const runtimeDetailActionEditButtonTarget = computed(() =>
+  resolveRuntimeDetailReviewOperationTarget({
+    operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+    operationTarget: runtimeReviewOperations.value?.focusAction,
+    fallbackTarget: runtimeDetailActionEditTarget.value,
+  })
+);
+const runtimeDetailResultReturnButtonTarget = computed(() =>
+  resolveRuntimeDetailReviewOperationTarget({
+    operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+    operationTarget: runtimeReviewOperations.value?.returnResult,
+    fallbackTarget: runtimeDetailResultReturnContext.value,
+  })
+);
 const runtimeReviewFocusActionEnabled = computed(
   () =>
-    runtimeReviewOperations.value?.focusAction?.enabled ??
+    runtimeDetailActionEditButtonTarget.value?.enabled ??
     Boolean(runtimeDetailActionEditTarget.value?.canFocusAction)
 );
 const runtimeReviewReturnResultEnabled = computed(
   () =>
-    runtimeReviewOperations.value?.returnResult?.enabled ??
+    runtimeDetailResultReturnButtonTarget.value?.enabled ??
     Boolean(runtimeDetailResultReturnContext.value?.statePointId)
 );
 const runtimeDetailActionEditTarget = computed(() =>
@@ -314,17 +329,27 @@ const runtimeDetailResultReturnContext = computed(() =>
     }),
   })
 );
+const runtimeDetailResultReturnButtonVisible = computed(() =>
+  Boolean(
+    runtimeDetailResultReturnButtonTarget.value?.statePointId ||
+      runtimeDetailResultReturnContext.value
+  )
+);
 const panelVisible = computed(() =>
-  Boolean(props.detail || runtimeDetailResultReturnContext.value)
+  Boolean(
+    props.detail ||
+      runtimeDetailResultReturnContext.value ||
+      runtimeDetailResultReturnButtonTarget.value?.statePointId
+  )
 );
 
 function focusRuntimeAction() {
-  const detail = runtimeDetailActionEditTarget.value;
+  const detail = runtimeDetailActionEditButtonTarget.value;
   dispatchRuntimeDetailFlowAction(getRuntimeDetailActionFocusFlowAction(detail));
 }
 
 function returnRuntimeResult() {
-  const context = runtimeDetailResultReturnContext.value;
+  const context = runtimeDetailResultReturnButtonTarget.value;
   dispatchRuntimeDetailFlowAction(getRuntimeDetailReturnFlowAction(context));
 }
 
@@ -447,6 +472,29 @@ function getRuntimeDetailActionEditTarget(flowModel, detail) {
     fallbackTarget: createWorkbenchFlowRuntimeActionEditTarget(detail),
     statePointId: detail?.statePointId ?? '',
   });
+}
+
+function resolveRuntimeDetailReviewOperationTarget({
+  operationKind = '',
+  operationTarget = null,
+  fallbackTarget = null,
+} = {}) {
+  const primaryOperation = runtimeReviewOperations.value?.primaryOperation;
+  const primaryOperationTarget = primaryOperation?.target ?? primaryOperation;
+  if (
+    primaryOperation?.kind === operationKind &&
+    hasRuntimeDetailReviewOperationTarget(primaryOperationTarget)
+  ) {
+    return primaryOperationTarget;
+  }
+  if (hasRuntimeDetailReviewOperationTarget(operationTarget)) {
+    return operationTarget;
+  }
+  return fallbackTarget ?? {};
+}
+
+function hasRuntimeDetailReviewOperationTarget(target = null) {
+  return Boolean(target && Object.keys(target).length);
 }
 </script>
 
