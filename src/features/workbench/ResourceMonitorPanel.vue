@@ -350,6 +350,10 @@ import {
   getRuntimeOutputSummary,
   getRuntimeResourceCurveRows,
 } from './runtimeProjectionPoints';
+import {
+  WORKBENCH_FLOW_ACTION_KINDS,
+  createWorkbenchFlowAction,
+} from './workbenchFlowModel';
 
 const RUNTIME_CURVE_CHART_WIDTH = 320;
 const RUNTIME_CURVE_CHART_HEIGHT = 132;
@@ -404,10 +408,7 @@ const props = defineProps({
     default: null,
   },
 });
-const emit = defineEmits([
-  'select-runtime-state-point',
-  'focus-runtime-action',
-]);
+const emit = defineEmits(['dispatch-flow-action']);
 const runtimeCurveMode = ref('delta');
 
 const resourceTotals = computed(() => {
@@ -1023,29 +1024,51 @@ function formatBaselineStatus(status) {
 }
 
 function selectRuntimeCurvePoint(point) {
-  if (!point?.statePointId) {
-    return;
-  }
-  emit('select-runtime-state-point', point.statePointId);
+  dispatchRuntimeCurveFlowAction(getRuntimeCurvePointFlowAction(point));
 }
 
 function selectRuntimeCurveAdjacentPoint(point) {
-  if (!point?.statePointId) {
-    return;
-  }
-  emit('select-runtime-state-point', point.statePointId);
+  dispatchRuntimeCurveFlowAction(getRuntimeCurvePointFlowAction(point));
 }
 
 function focusRuntimeCurveAction(point) {
-  if (!point?.actionId) {
+  dispatchRuntimeCurveFlowAction(getRuntimeCurveActionFocusFlowAction(point));
+}
+
+function dispatchRuntimeCurveFlowAction(action) {
+  if (!action?.canRun) {
     return;
   }
-  emit('focus-runtime-action', {
-    actionId: point.actionId,
-    fieldKey: 'startMs',
-    frameLabel: point.frameLabel ?? `${point.timeMs ?? 0}ms`,
-    statePointId: point.statePointId,
-    trackKey: point.trackKey,
+  emit('dispatch-flow-action', action);
+}
+
+function getRuntimeCurvePointFlowAction(point) {
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_STATE_POINT,
+    source: 'resource-runtime-curve',
+    actionId: point?.actionId ?? '',
+    statePointId: point?.statePointId ?? '',
+    payload: point ?? null,
+    enabled: Boolean(point?.statePointId),
+    disabledReason: 'missing-runtime-state-point',
+  });
+}
+
+function getRuntimeCurveActionFocusFlowAction(point) {
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+    source: 'resource-runtime-curve',
+    actionId: point?.actionId ?? '',
+    statePointId: point?.statePointId ?? '',
+    payload: {
+      actionId: point?.actionId ?? '',
+      fieldKey: 'startMs',
+      frameLabel: point?.frameLabel ?? `${point?.timeMs ?? 0}ms`,
+      statePointId: point?.statePointId ?? '',
+      trackKey: point?.trackKey ?? '',
+    },
+    enabled: Boolean(point?.actionId),
+    disabledReason: 'missing-runtime-action',
   });
 }
 

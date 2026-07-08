@@ -118,8 +118,7 @@
           :flow-model="workbenchFlowModel"
           :summary="simulationResult.summary"
           :diagnostics="simulationResult.diagnostics"
-          @select-runtime-state-point="selectRuntimeStatePoint"
-          @focus-runtime-action="focusRuntimeAction"
+          @dispatch-flow-action="dispatchWorkbenchFlowAction"
         />
       </div>
 
@@ -150,8 +149,7 @@
           :action-edit-focus="actionEditFocus"
           :action-edit-result-context="actionEditResultContext"
           :flow-model="workbenchFlowModel"
-          @focus-runtime-action="focusRuntimeAction"
-          @return-runtime-result="returnRuntimeResultFromProperties"
+          @dispatch-flow-action="dispatchWorkbenchFlowAction"
         />
 
         <AnalysisPanel
@@ -197,9 +195,7 @@
         :action-edit-focus="actionEditFocus"
         :action-edit-result-context="actionEditResultContext"
         :flow-model="workbenchFlowModel"
-        @select-runtime-state-point="selectRuntimeStatePoint"
-        @focus-runtime-action="focusRuntimeAction"
-        @return-runtime-result="returnRuntimeResultFromProperties"
+        @dispatch-flow-action="dispatchWorkbenchFlowAction"
       />
     </div>
   </main>
@@ -1354,13 +1350,31 @@ function dispatchWorkbenchFlowAction(action = {}) {
     return;
   }
   if (
+    flowAction.kind ===
+    WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_STATE_POINT
+  ) {
+    selectRuntimeStatePoint(flowAction.statePointId);
+    return;
+  }
+  if (
     flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT
   ) {
     selectActionContributionRuntimePoint(flowAction.statePointId);
     return;
   }
+  if (flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION) {
+    focusRuntimeAction(flowAction.payload ?? flowAction);
+    return;
+  }
   if (flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.FOCUS_EDIT_SOURCE) {
     focusActionEditSource(flowAction.payload ?? flowAction);
+    return;
+  }
+  if (flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT) {
+    returnRuntimeResultFromProperties({
+      actionId: flowAction.actionId,
+      statePointId: flowAction.statePointId,
+    });
   }
 }
 

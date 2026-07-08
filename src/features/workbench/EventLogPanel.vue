@@ -313,6 +313,10 @@ import { Aim, EditPen, Tickets } from '@element-plus/icons-vue';
 import { createRuntimeDetailCalculatorRows } from './runtimeSelectedDetail';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
+import {
+  WORKBENCH_FLOW_ACTION_KINDS,
+  createWorkbenchFlowAction,
+} from './workbenchFlowModel';
 
 const props = defineProps({
   eventLog: {
@@ -352,11 +356,7 @@ const props = defineProps({
     default: null,
   },
 });
-const emit = defineEmits([
-  'select-runtime-state-point',
-  'focus-runtime-action',
-  'return-runtime-result',
-]);
+const emit = defineEmits(['dispatch-flow-action']);
 
 const selectedRuntimeLogIndex = ref(0);
 const runtimeTrackFilter = ref('all');
@@ -737,7 +737,7 @@ function formatSigned(value) {
 function selectRuntimeLog(index) {
   selectedRuntimeLogIndex.value = index;
   const row = filteredRuntimeSimLogRows.value[index];
-  emit('select-runtime-state-point', getRuntimeStatePointIdByRow(row));
+  dispatchRuntimeLogFlowAction(getRuntimeLogRowFlowAction(row));
 }
 
 function showSelectedRuntimeLog() {
@@ -770,21 +770,57 @@ function showSelectedRuntimeLog() {
 }
 
 function focusRuntimeLogAction() {
-  if (!runtimeLogActionFocus.value.actionId) {
-    return;
-  }
-  emit('focus-runtime-action', runtimeLogActionFocus.value);
+  dispatchRuntimeLogFlowAction(
+    getRuntimeLogActionFocusFlowAction(runtimeLogActionFocus.value)
+  );
 }
 
 function returnRuntimeLogResult() {
   const context = runtimeLogResultReturnContext.value;
-  if (!context?.statePointId) {
+  dispatchRuntimeLogFlowAction(getRuntimeLogReturnFlowAction(context));
+}
+
+function dispatchRuntimeLogFlowAction(action) {
+  if (!action?.canRun) {
     return;
   }
-  emit('return-runtime-result', {
-    actionId: context.actionId,
-    statePointId: context.statePointId,
-    status: context.status,
+  emit('dispatch-flow-action', action);
+}
+
+function getRuntimeLogRowFlowAction(row) {
+  const statePointId = getRuntimeStatePointIdByRow(row);
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_STATE_POINT,
+    source: 'event-log-runtime-row',
+    actionId: row?.actionId ?? '',
+    statePointId,
+    payload: row ?? null,
+    enabled: Boolean(statePointId),
+    disabledReason: 'missing-runtime-state-point',
+  });
+}
+
+function getRuntimeLogActionFocusFlowAction(focus) {
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+    source: 'event-log-runtime-detail',
+    actionId: focus?.actionId ?? '',
+    statePointId: focus?.statePointId ?? '',
+    payload: focus ?? null,
+    enabled: Boolean(focus?.actionId),
+    disabledReason: 'missing-runtime-action',
+  });
+}
+
+function getRuntimeLogReturnFlowAction(context) {
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+    source: 'event-log-runtime-detail',
+    actionId: context?.actionId ?? '',
+    statePointId: context?.statePointId ?? '',
+    payload: context ?? null,
+    enabled: Boolean(context?.statePointId),
+    disabledReason: 'missing-runtime-result',
   });
 }
 

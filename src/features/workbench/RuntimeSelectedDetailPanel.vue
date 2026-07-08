@@ -199,6 +199,10 @@
 import { computed } from 'vue';
 import { Aim, DataAnalysis, EditPen } from '@element-plus/icons-vue';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
+import {
+  WORKBENCH_FLOW_ACTION_KINDS,
+  createWorkbenchFlowAction,
+} from './workbenchFlowModel';
 
 const props = defineProps({
   detail: {
@@ -219,7 +223,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['focus-runtime-action', 'return-runtime-result']);
+const emit = defineEmits(['dispatch-flow-action']);
 
 const runtimeDetailEditContext = computed(() =>
   createRuntimeDetailEditContext(props.detail, props.actionEditFocus)
@@ -246,27 +250,48 @@ const panelVisible = computed(() =>
 
 function focusRuntimeAction() {
   const detail = props.detail;
-  if (!detail?.actionId) {
-    return;
-  }
-  emit('focus-runtime-action', {
-    actionId: detail.actionId,
-    fieldKey: 'startMs',
-    frameLabel: detail.frameLabel ?? `${detail.timeMs ?? 0}ms`,
-    statePointId: detail.statePointId ?? '',
-    trackKey: detail.trackKey ?? '',
-  });
+  dispatchRuntimeDetailFlowAction(getRuntimeDetailActionFocusFlowAction(detail));
 }
 
 function returnRuntimeResult() {
   const context = runtimeDetailResultReturnContext.value;
-  if (!context?.statePointId) {
+  dispatchRuntimeDetailFlowAction(getRuntimeDetailReturnFlowAction(context));
+}
+
+function dispatchRuntimeDetailFlowAction(action) {
+  if (!action?.canRun) {
     return;
   }
-  emit('return-runtime-result', {
-    actionId: context.actionId,
-    statePointId: context.statePointId,
-    status: context.status,
+  emit('dispatch-flow-action', action);
+}
+
+function getRuntimeDetailActionFocusFlowAction(detail) {
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+    source: 'runtime-detail',
+    actionId: detail?.actionId ?? '',
+    statePointId: detail?.statePointId ?? '',
+    payload: {
+      actionId: detail?.actionId ?? '',
+      fieldKey: 'startMs',
+      frameLabel: detail?.frameLabel ?? `${detail?.timeMs ?? 0}ms`,
+      statePointId: detail?.statePointId ?? '',
+      trackKey: detail?.trackKey ?? '',
+    },
+    enabled: Boolean(detail?.actionId),
+    disabledReason: 'missing-runtime-action',
+  });
+}
+
+function getRuntimeDetailReturnFlowAction(context) {
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+    source: 'runtime-detail',
+    actionId: context?.actionId ?? '',
+    statePointId: context?.statePointId ?? '',
+    payload: context ?? null,
+    enabled: Boolean(context?.statePointId),
+    disabledReason: 'missing-runtime-result',
   });
 }
 

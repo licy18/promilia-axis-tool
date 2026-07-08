@@ -11,6 +11,9 @@ import {
   getSkillActionCatalog,
 } from '../../domain/workbenchProjectFactory';
 import AnalysisPanel from '../../features/workbench/AnalysisPanel.vue';
+import EventLogPanel from '../../features/workbench/EventLogPanel.vue';
+import ResourceMonitorPanel from '../../features/workbench/ResourceMonitorPanel.vue';
+import RuntimeSelectedDetailPanel from '../../features/workbench/RuntimeSelectedDetailPanel.vue';
 import Workbench from '../../views/Workbench.vue';
 
 describe('Workbench view', () => {
@@ -3098,6 +3101,15 @@ describe('Workbench view', () => {
     await runtimeDetailActionFocus.trigger('click');
     await nextTick();
 
+    expect(
+      getLastDispatchedFlowAction(wrapper, RuntimeSelectedDetailPanel)
+    ).toMatchObject({
+      kind: 'focus-runtime-action',
+      source: 'runtime-detail',
+      actionId: 'action-0001',
+      statePointId: appliedStatePointId,
+      canRun: true,
+    });
     const focusedTimelineAction = wrapper.find(
       '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
     );
@@ -3356,6 +3368,16 @@ describe('Workbench view', () => {
     await detailReturnButton.trigger('click');
     await nextTick();
 
+    expect(
+      getLastDispatchedFlowAction(wrapper, RuntimeSelectedDetailPanel)
+    ).toMatchObject({
+      kind: 'return-runtime-result',
+      source: 'runtime-detail',
+      actionId: 'action-0001',
+      statePointId: refreshedStatePointId,
+      canRun: true,
+    });
+
     const flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
     expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
       'action-0001'
@@ -3416,6 +3438,12 @@ describe('Workbench view', () => {
     const statePointId = wrapper
       .find('[data-testid="workbench-runtime-sim-log-state-point"]')
       .text();
+    expect(getLastDispatchedFlowAction(wrapper, EventLogPanel)).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'event-log-runtime-row',
+      statePointId,
+      canRun: true,
+    });
     const logActionFocus = wrapper.find(
       '[data-testid="workbench-runtime-sim-log-action-focus"]'
     );
@@ -3434,6 +3462,13 @@ describe('Workbench view', () => {
     await logActionFocus.trigger('click');
     await nextTick();
 
+    expect(getLastDispatchedFlowAction(wrapper, EventLogPanel)).toMatchObject({
+      kind: 'focus-runtime-action',
+      source: 'event-log-runtime-detail',
+      actionId: 'action-0001',
+      statePointId,
+      canRun: true,
+    });
     const focusedTimelineAction = wrapper.find(
       '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
     );
@@ -3514,6 +3549,13 @@ describe('Workbench view', () => {
     await logResultReturnButton.trigger('click');
     await nextTick();
 
+    expect(getLastDispatchedFlowAction(wrapper, EventLogPanel)).toMatchObject({
+      kind: 'return-runtime-result',
+      source: 'event-log-runtime-detail',
+      actionId: 'action-0001',
+      statePointId: refreshedStatePointId,
+      canRun: true,
+    });
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
@@ -3679,6 +3721,12 @@ describe('Workbench view', () => {
     await runtimeCurvePoint.trigger('click');
     await nextTick();
 
+    expect(getLastDispatchedFlowAction(wrapper, ResourceMonitorPanel)).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'resource-runtime-curve',
+      statePointId,
+      canRun: true,
+    });
     expect(
       wrapper
         .find('[data-testid="workbench-state-curve-focus-selected"]')
@@ -3794,6 +3842,12 @@ describe('Workbench view', () => {
     await nextButton.trigger('click');
     await nextTick();
 
+    expect(getLastDispatchedFlowAction(wrapper, ResourceMonitorPanel)).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'resource-runtime-curve',
+      statePointId: nextStatePointId,
+      canRun: true,
+    });
     const nextRuntimeCurveSelection = wrapper.find(
       '[data-testid="workbench-runtime-resource-chart-selection"]'
     );
@@ -3858,6 +3912,13 @@ describe('Workbench view', () => {
     await actionFocusButton.trigger('click');
     await nextTick();
 
+    expect(getLastDispatchedFlowAction(wrapper, ResourceMonitorPanel)).toMatchObject({
+      kind: 'focus-runtime-action',
+      source: 'resource-runtime-curve',
+      actionId: focusedActionId,
+      statePointId,
+      canRun: true,
+    });
     const focusedTimelineAction = wrapper.find(
       `[data-testid="workbench-timeline-action"][data-action-id="${focusedActionId}"]`
     );
@@ -6421,9 +6482,9 @@ function createStateCurvePanelProps() {
   };
 }
 
-function getLastDispatchedFlowAction(wrapper) {
+function getLastDispatchedFlowAction(wrapper, component = AnalysisPanel) {
   const events =
-    wrapper.findComponent(AnalysisPanel).emitted('dispatch-flow-action') ?? [];
+    wrapper.findComponent(component).emitted('dispatch-flow-action') ?? [];
   const lastEvent = events[events.length - 1];
   return lastEvent?.[0] ?? null;
 }

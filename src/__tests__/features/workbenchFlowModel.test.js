@@ -106,6 +106,15 @@ describe('workbench flow model', () => {
   });
 
   it('describes enabled and disabled workbench flow actions', () => {
+    expect(WORKBENCH_FLOW_ACTION_KINDS).toMatchObject({
+      SELECT_RUNTIME_RESULT: 'select-runtime-result',
+      SELECT_RUNTIME_STATE_POINT: 'select-runtime-state-point',
+      SELECT_CONTRIBUTION_POINT: 'select-contribution-point',
+      FOCUS_RUNTIME_ACTION: 'focus-runtime-action',
+      FOCUS_EDIT_SOURCE: 'focus-edit-source',
+      RETURN_RUNTIME_RESULT: 'return-runtime-result',
+    });
+
     const enabledAction = createWorkbenchFlowAction({
       kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
       source: 'analysis-action-result',

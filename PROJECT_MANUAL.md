@@ -7670,6 +7670,35 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 ResourceMonitorPanel、EventLogPanel、RuntimeSelectedDetailPanel 的运行点选择和返回动作也逐步接入 Workbench flow action dispatcher，收束成单一主流程控制入口。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Panels 接入 Dispatcher
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `ResourceMonitorPanel` 的运行曲线点选择、相邻点导航和定位动作改为发出标准 `dispatch-flow-action`。
+- `EventLogPanel` 的模拟日志行选择、日志详情定位动作和回到结果点改为发出标准 `dispatch-flow-action`。
+- `RuntimeSelectedDetailPanel` 的定位动作和回到结果点改为发出标准 `dispatch-flow-action`。
+- `Workbench.vue` 的 dispatcher 新增运行点选择、运行时动作聚焦和返回运行结果三类动作执行分支；现有曲线、日志、详情、时间轴和动作编辑行为保持不变。
+
+当前验证事实：
+
+- 点击资源曲线点会发出 `select-runtime-state-point` flow action，并由 Workbench 选中对应 runtime state point。
+- 点击日志行会发出 `select-runtime-state-point` flow action，日志详情、三值详情和资源曲线保持同步。
+- 点击三值详情或日志详情的“定位动作”会发出 `focus-runtime-action` flow action，并聚焦回动作开始字段。
+- 点击三值详情或日志详情的“回到结果点”会发出 `return-runtime-result` flow action，并回到刷新后的 runtime state point。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、57 条测试。
+- `npm run test -- --run`：通过，19 个测试文件、142 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 WorkbenchFlowPanel 和 PropertiesPanel 的返回/定位动作也接入统一 dispatcher，然后开始把“排轴动作编辑 -> 运行模拟 -> 曲线/日志/详情定位 -> 回到动作修改”整理成更明确的主流程控制模型。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
