@@ -10944,3 +10944,80 @@ runtimeLogFocus
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
 
 下一阶段 5-8CU 应从结果定位继续推进到动作级贡献拆分面板入口，让用户能在不追最终公式的前提下看到 HP / 韧性 / 能量三条当前贡献。
+
+## 128. 阶段 5-8CU：action contribution breakdown entry
+
+阶段 5-8CU 不修改项目保存 schema，也不修改 simulation 输出结构。本阶段新增 Workbench 前端派生贡献面板，来源仍是 `threeValueRuntimeProjection` 的 applied runtime delta。
+
+### 128.1 贡献面板显示条件
+
+`AnalysisPanel` 新增内部派生：
+
+```js
+selectedActionContribution
+```
+
+当 `selectedStateCurvePointId` 能在 `runtimeTraceByActionId` 中找到对应动作时显示贡献面板；选中 candidate / sampled / placeholder 诊断点时不会伪造动作贡献。
+
+### 128.2 新增 DOM
+
+新增面板：
+
+```html
+data-testid="workbench-action-contribution-panel"
+data-action-id
+```
+
+新增贡献行：
+
+```html
+data-testid="workbench-action-contribution-row"
+data-track-key="enemyHpDamage | enemyToughnessDamage | selfEnergyChange"
+data-active="true | false"
+data-count
+data-delta
+data-state-point-id
+```
+
+三条固定轨道为：
+
+```text
+敌人 HP
+敌人韧性
+自身能量
+```
+
+### 128.3 当前汇总规则
+
+每条贡献行只汇总当前动作下 runtime applied delta：
+
+```js
+enemyHpDamage -> sum(row.hpDelta)
+enemyToughnessDamage -> sum(row.toughnessDelta)
+selfEnergyChange -> sum(row.energyDelta)
+```
+
+没有 applied delta 的轨道显示 `0` 和 `暂无已应用结果`。
+
+默认样本当前显示：
+
+```text
+敌人 HP 12,461 已应用 1条 · action-0001|applied-frame-0-point-0
+敌人韧性 0 暂无已应用结果
+自身能量 0 暂无已应用结果
+```
+
+### 128.4 验证
+
+当前测试覆盖：
+
+- 点击动作结果定位 runtime applied 点后显示动作贡献拆分面板。
+- 默认 `action-0001` 面板包含 HP / 韧性 / 能量三条贡献。
+- HP 行携带 `data-count=1`、`data-delta=12461` 和 source delta 短 ID。
+- 韧性/能量行在没有 applied delta 时显示 0 和暂无已应用结果。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+
+下一阶段 5-8CV 应把动作贡献拆分和右侧三值详情/模拟日志详情继续收束，形成更稳定的 Endaxis 式贡献详情入口。

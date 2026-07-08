@@ -210,6 +210,42 @@
         </div>
         <strong>{{ formatActionResultValues(entry) }}</strong>
       </button>
+
+      <div
+        v-if="selectedActionContribution"
+        class="action-contribution-panel"
+        :data-action-id="selectedActionContribution.actionId"
+        data-testid="workbench-action-contribution-panel"
+      >
+        <div class="action-contribution-heading">
+          <span>动作贡献拆分</span>
+          <strong>{{ selectedActionContribution.actionName }}</strong>
+          <small>
+            {{ selectedActionContribution.appliedDeltaCount }}条运行结果
+          </small>
+        </div>
+        <div class="action-contribution-list">
+          <button
+            v-for="row in selectedActionContribution.rows"
+            :key="row.trackKey"
+            type="button"
+            class="action-contribution-row"
+            :class="{ active: row.active }"
+            :data-active="row.active"
+            :data-count="row.count"
+            :data-delta="row.value"
+            :data-state-point-id="row.firstStatePointId"
+            :data-track-key="row.trackKey"
+            data-testid="workbench-action-contribution-row"
+            :disabled="!row.firstStatePointId"
+            @click="selectActionContributionRow(row)"
+          >
+            <span>{{ row.label }}</span>
+            <strong>{{ formatActionContributionValue(row) }}</strong>
+            <small>{{ formatActionContributionMeta(row) }}</small>
+          </button>
+        </div>
+      </div>
     </div>
 
     <div
@@ -635,6 +671,26 @@ const STATE_CURVE_LAYER_OPTIONS = [
     pointParticipationLabel: '缺口占位，不参与当前结果',
   },
 ];
+const ACTION_CONTRIBUTION_TRACKS = [
+  {
+    trackKey: 'enemyHpDamage',
+    label: '敌人 HP',
+    valueField: 'hpDelta',
+    signed: false,
+  },
+  {
+    trackKey: 'enemyToughnessDamage',
+    label: '敌人韧性',
+    valueField: 'toughnessDelta',
+    signed: false,
+  },
+  {
+    trackKey: 'selfEnergyChange',
+    label: '自身能量',
+    valueField: 'energyDelta',
+    signed: true,
+  },
+];
 
 const props = defineProps({
   summary: {
@@ -905,6 +961,15 @@ const runtimeTraceByActionId = computed(() => {
       createActionResultRuntimeTrace(actionId, rows),
     ])
   );
+});
+const selectedActionContribution = computed(() => {
+  if (!props.selectedStateCurvePointId) {
+    return null;
+  }
+  const trace = [...runtimeTraceByActionId.value.values()].find(item =>
+    item.statePointIds.includes(props.selectedStateCurvePointId)
+  );
+  return trace ? createSelectedActionContribution(trace) : null;
 });
 const activeStateCurveLayerKeys = computed(() =>
   STATE_CURVE_LAYER_OPTIONS.filter(
@@ -1570,16 +1635,63 @@ function createActionResultRuntimeTrace(actionId, rows) {
   );
   return {
     actionId,
+    actionName:
+      sortedRows.find(item => item.row?.actionName)?.row?.actionName ??
+      actionId,
     count: sortedRows.length,
     firstStatePointId: statePointIds[0] ?? '',
     statePointIds,
     sourceDeltaIds,
+    rows: sortedRows,
     trackSummary: sortedRows
       .map(item => formatRuntimeTraceTrack(item.row))
       .filter(Boolean)
       .join(' / '),
     shortSourceDeltaIds: sourceDeltaIds.map(formatSourceDeltaShortId),
   };
+}
+
+function createSelectedActionContribution(trace) {
+  return {
+    actionId: trace.actionId,
+    actionName: trace.actionName ?? trace.actionId ?? '动作',
+    appliedDeltaCount: trace.count,
+    rows: ACTION_CONTRIBUTION_TRACKS.map(track =>
+      createActionContributionRow(trace, track)
+    ),
+  };
+}
+
+function createActionContributionRow(trace, track) {
+  const matchingRows = trace.rows.filter(
+    item => item.row?.trackKey === track.trackKey
+  );
+  const value = matchingRows.reduce(
+    (sum, item) => sum + (Number(item.row?.[track.valueField]) || 0),
+    0
+  );
+  const sourceDeltaIds = uniqueDisplayValues(
+    matchingRows.map(item => item.row?.sourceDeltaId)
+  );
+  const active = matchingRows.some(
+    item => item.statePointId === props.selectedStateCurvePointId
+  );
+  return {
+    ...track,
+    value,
+    count: matchingRows.length,
+    active,
+    firstStatePointId: matchingRows[0]?.statePointId ?? '',
+    sourceDeltaIds,
+    shortSourceDeltaIds: sourceDeltaIds.map(formatSourceDeltaShortId),
+  };
+}
+
+function selectActionContributionRow(row) {
+  if (!row?.firstStatePointId) {
+    return;
+  }
+  emit('select-runtime-state-point', row.firstStatePointId);
 }
 
 function compareRuntimeTraceRows(left, right) {
@@ -1610,6 +1722,21 @@ function formatRuntimeTraceTrack(row) {
     return `能量 ${formatSignedNumber(row.energyDelta)}`;
   }
   return formatStateCurveNumber(row?.delta);
+}
+
+function formatActionContributionValue(row) {
+  return row.signed
+    ? formatSignedNumber(row.value)
+    : formatStateCurveNumber(row.value);
+}
+
+function formatActionContributionMeta(row) {
+  const resultText =
+    row.count > 0 ? `已应用 ${row.count}条` : '暂无已应用结果';
+  const sourceText = row.shortSourceDeltaIds.length
+    ? ` · ${row.shortSourceDeltaIds.join(' / ')}`
+    : '';
+  return `${resultText}${sourceText}`;
 }
 
 function formatSourceDeltaShortId(sourceDeltaId) {
@@ -2660,6 +2787,105 @@ h2 {
 
 .action-result-row .action-result-runtime-trace {
   color: #a6b7ff;
+}
+
+.action-contribution-panel {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid rgba(166, 183, 255, 0.2);
+  border-radius: 4px;
+  background: rgba(166, 183, 255, 0.08);
+}
+
+.action-contribution-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr) auto;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.action-contribution-heading span {
+  color: #a6b7ff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.action-contribution-heading strong,
+.action-contribution-heading small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.action-contribution-heading strong {
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.action-contribution-heading small {
+  color: #aeb7c2;
+  font-size: 11px;
+}
+
+.action-contribution-list {
+  display: grid;
+  gap: 6px;
+}
+
+.action-contribution-row {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 0.7fr) minmax(0, 1.3fr);
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  padding: 8px 9px;
+  border: 0;
+  border-left: 3px solid rgba(166, 183, 255, 0.55);
+  border-radius: 4px;
+  background: rgba(18, 24, 31, 0.52);
+  text-align: left;
+}
+
+.action-contribution-row:not(:disabled) {
+  cursor: pointer;
+}
+
+.action-contribution-row:not(:disabled):hover,
+.action-contribution-row:not(:disabled):focus {
+  background: rgba(166, 183, 255, 0.14);
+}
+
+.action-contribution-row.active {
+  border-left-color: #79c7b9;
+  background: rgba(121, 199, 185, 0.16);
+}
+
+.action-contribution-row:disabled {
+  opacity: 0.72;
+}
+
+.action-contribution-row span {
+  color: #d9e0ff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.action-contribution-row strong,
+.action-contribution-row small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.action-contribution-row strong {
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.action-contribution-row small {
+  color: #aeb7c2;
+  font-size: 11px;
 }
 
 .damage-row-main {

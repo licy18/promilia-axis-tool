@@ -1245,6 +1245,51 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-row"]')
         .attributes('data-selected')
     ).toBe('true');
+    const actionContributionPanel = wrapper.find(
+      '[data-testid="workbench-action-contribution-panel"]'
+    );
+    expect(actionContributionPanel.exists()).toBe(true);
+    expect(actionContributionPanel.attributes('data-action-id')).toBe(
+      'action-0001'
+    );
+    expect(actionContributionPanel.text()).toContain('动作贡献拆分');
+    expect(actionContributionPanel.text()).toContain('普通攻击');
+    const actionContributionRows = wrapper.findAll(
+      '[data-testid="workbench-action-contribution-row"]'
+    );
+    expect(
+      actionContributionRows.map(row => [
+        row.attributes('data-track-key'),
+        row.attributes('data-active'),
+        row.attributes('data-count'),
+        row.attributes('data-delta'),
+        row.text(),
+      ])
+    ).toEqual([
+      [
+        'enemyHpDamage',
+        'true',
+        '1',
+        '12461',
+        expect.stringContaining(
+          '敌人 HP12,461已应用 1条 · action-0001|applied-frame-0-point-0'
+        ),
+      ],
+      [
+        'enemyToughnessDamage',
+        'false',
+        '0',
+        '0',
+        expect.stringContaining('敌人韧性0暂无已应用结果'),
+      ],
+      [
+        'selfEnergyChange',
+        'false',
+        '0',
+        '0',
+        expect.stringContaining('自身能量0暂无已应用结果'),
+      ],
+    ]);
     await wrapper
       .find(
         '[data-testid="workbench-three-value-calculator-diagnostic-row"][data-calculator-scope="runtime"]'

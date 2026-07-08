@@ -5502,6 +5502,40 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8CU 目标：继续推进 Endaxis 式主流程 UI，把结果定位后的“贡献拆分”做成稳定面板入口。
 - 优先从已存在的三值贡献行开始，按动作/三值轨道展示 HP、韧性、能量的当前贡献，不追逐最终公式或逐帧命中细节。
 
+### 2026-07-08：阶段 5-8CU 动作级三值贡献拆分入口
+
+本轮完成：
+
+- `AnalysisPanel` 在选中动作级 runtime 结果后显示“动作贡献拆分”面板。
+- 面板按动作汇总当前已应用 runtime delta，并固定展示敌人 HP、敌人韧性、自身能量三条贡献。
+- 默认样本中，点击 `action-0001` 动作结果后会显示：
+  - 敌人 HP：`12,461`，已应用 1 条。
+  - 敌人韧性：`0`，暂无已应用结果。
+  - 自身能量：`0`，暂无已应用结果。
+- 贡献行携带 `data-track-key`、`data-count`、`data-delta`、`data-state-point-id`，后续可继续接入轨道高亮、详情弹层或结果排序。
+- Workbench 测试覆盖动作结果定位后贡献面板的三条贡献行。
+
+当前验证事实：
+
+- 贡献面板只在当前选中 runtime applied 点能映射回动作结果时显示。
+- 动作贡献拆分复用 `threeValueRuntimeProjection.simLog` 和 runtime state point ID，不改变 simulation 输出结构。
+- 当前 HP 贡献行与动作结果、状态曲线点、模拟日志共享同一条 `action-0001|applied-frame-0-point-0` 来源。
+
+当前边界：
+
+- 本阶段是动作级 applied delta 汇总，不拆公式层、Buff 层、反应层或最终伤害归因。
+- 没有新增蓝色星原最终公式，也不补逐帧命中细节。
+- 当前默认样本只有 HP applied delta，因此韧性/能量贡献行显示 0；后续真实 applied delta 增加后会自然进入同一面板。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+
+下一步：
+
+- 阶段 5-8CV 目标：把动作贡献拆分进一步接入右侧详情/日志详情，让选中贡献轨道时能稳定定位到对应三值详情，并为后续 Endaxis 式贡献弹层留入口。
+- 仍保持框架和 UI 主流程优先，不追最终公式和逐帧动作细节。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
