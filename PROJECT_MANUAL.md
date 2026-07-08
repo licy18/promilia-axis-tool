@@ -8430,6 +8430,31 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 Workbench 主界面的编辑、运行结果、曲线、日志、详情在视觉布局和操作顺序上进一步压成一个更紧凑的 Endaxis 式主工作流。
 
+### 2026-07-09：UI 主流程能力块 - Primary Flow Workspace Layout
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- Workbench 主界面新增主流程工作区结构，把动作库、主流程、右侧检查器分成稳定三列。
+- 中间 `primary-flow` 现在按“时间轴编辑 -> 运行回看”的顺序组织，运行回看区域把资源曲线和事件日志放进同一个 `runtime-review-stack`。
+- 右侧检查器继续承载属性、敌人、三值详情和分析面板，作为动作编辑和运行结果之间的上下文检查区。
+- 主流程工作区、主流程列和右侧检查器都消费同一份 `workbenchFlowModel.phase / mainFlowState.nextTargetKind`，布局状态跟随完整主流程变化。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- Workbench 页面测试覆盖主流程工作区、主流程列、运行回看区域和右侧检查器的结构存在。
+- 页面测试确认 action edit、runtime result、edit result ready、edit result review 阶段的主流程布局状态同步更新。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、54 条测试。
+
+下一步：
+
+- 继续 UI 主流程能力块：围绕这个主流程布局，把编辑区和运行回看区之间的跳转、选中和详情定位继续整理成更少入口、更少分散判断的 Endaxis 式操作闭环。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

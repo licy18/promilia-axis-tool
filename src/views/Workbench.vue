@@ -55,7 +55,14 @@
       @dispatch-flow-action="dispatchWorkbenchFlowAction"
     />
 
-    <div class="workbench-grid">
+    <div
+      class="workbench-grid"
+      :data-flow-phase="workbenchFlowModel.phase"
+      :data-main-flow-next-target-kind="
+        workbenchFlowModel.mainFlowState.nextTargetKind
+      "
+      data-testid="workbench-main-flow-workspace"
+    >
       <ActionLibraryPanel
         :actor="actionLibraryActor"
         :actors="scenario.actors"
@@ -79,48 +86,82 @@
         @update-active-actor="setActionLibraryCharacterId"
       />
 
-      <TimelineGridPreview
-        class="timeline-area"
-        :actors="scenario.actors"
-        :actions="scenario.actions"
-        :damage-timeline="simulationResult.damageTimeline"
-        :candidate-value-chart="simulationResult.candidateValueSeries.chart"
-        :three-value-curve-framework="simulationResult.threeValueCurveFramework"
-        :duration-ms="scenario.time.durationMs"
-        :selected-action-id="selectedActionId"
-        :action-edit-focus="actionEditFocus"
-        :selected-state-curve-point-id="selectedStateCurvePointId"
-        :state-curve-focus-mode="stateCurveFocusMode"
-        :state-curve-layer-filters="stateCurveLayerFilters"
-        :state-curve-track-filters="stateCurveTrackFilters"
-        :runtime-focus-source="runtimeFocusSource"
-        :timeline-diagnostics="timelineDiagnostics"
-        @select-action="selectAction"
-        @select-state-curve-point="selectStateCurvePoint"
-        @update-state-curve-layer-filter="updateStateCurveLayerFilter"
-        @update-state-curve-track-filter="updateStateCurveTrackFilter"
-        @update-state-curve-focus-mode="updateStateCurveFocusMode"
-        @delete-action="deleteAction"
-        @update-action-duration="updateActionDuration"
-        @update-action-lane="updateActionLane"
-        @update-action-time="updateActionTime"
-      />
-
-      <div class="resource-area" data-testid="workbench-resource-area">
-        <ResourceMonitorPanel
-          :resource-timeline="simulationResult.resourceTimeline"
-          :runtime-projection="simulationResult.threeValueRuntimeProjection"
+      <div
+        class="primary-flow"
+        :data-flow-phase="workbenchFlowModel.phase"
+        :data-main-flow-next-target-kind="
+          workbenchFlowModel.mainFlowState.nextTargetKind
+        "
+        data-testid="workbench-primary-flow"
+      >
+        <TimelineGridPreview
+          class="timeline-area"
+          :actors="scenario.actors"
+          :actions="scenario.actions"
+          :damage-timeline="simulationResult.damageTimeline"
+          :candidate-value-chart="simulationResult.candidateValueSeries.chart"
+          :three-value-curve-framework="
+            simulationResult.threeValueCurveFramework
+          "
+          :duration-ms="scenario.time.durationMs"
+          :selected-action-id="selectedActionId"
+          :action-edit-focus="actionEditFocus"
           :selected-state-curve-point-id="selectedStateCurvePointId"
+          :state-curve-focus-mode="stateCurveFocusMode"
+          :state-curve-layer-filters="stateCurveLayerFilters"
+          :state-curve-track-filters="stateCurveTrackFilters"
           :runtime-focus-source="runtimeFocusSource"
-          :action-edit-result-context="actionEditResultContext"
-          :flow-model="workbenchFlowModel"
-          :summary="simulationResult.summary"
-          :diagnostics="simulationResult.diagnostics"
-          @dispatch-flow-action="dispatchWorkbenchFlowAction"
+          :timeline-diagnostics="timelineDiagnostics"
+          @select-action="selectAction"
+          @select-state-curve-point="selectStateCurvePoint"
+          @update-state-curve-layer-filter="updateStateCurveLayerFilter"
+          @update-state-curve-track-filter="updateStateCurveTrackFilter"
+          @update-state-curve-focus-mode="updateStateCurveFocusMode"
+          @delete-action="deleteAction"
+          @update-action-duration="updateActionDuration"
+          @update-action-lane="updateActionLane"
+          @update-action-time="updateActionTime"
         />
+
+        <div
+          class="runtime-review-stack"
+          data-testid="workbench-runtime-review-stack"
+        >
+          <div class="resource-area" data-testid="workbench-resource-area">
+            <ResourceMonitorPanel
+              :resource-timeline="simulationResult.resourceTimeline"
+              :runtime-projection="simulationResult.threeValueRuntimeProjection"
+              :selected-state-curve-point-id="selectedStateCurvePointId"
+              :runtime-focus-source="runtimeFocusSource"
+              :action-edit-result-context="actionEditResultContext"
+              :flow-model="workbenchFlowModel"
+              :summary="simulationResult.summary"
+              :diagnostics="simulationResult.diagnostics"
+              @dispatch-flow-action="dispatchWorkbenchFlowAction"
+            />
+          </div>
+
+          <EventLogPanel
+            class="event-area"
+            :event-log="simulationResult.eventLog"
+            :runtime-projection="simulationResult.threeValueRuntimeProjection"
+            :runtime-selected-detail="runtimeSelectedDetail"
+            :selected-state-curve-point-id="selectedStateCurvePointId"
+            :calculator-diagnostic-focus="calculatorDiagnosticFocus"
+            :runtime-log-focus="runtimeLogFocus"
+            :action-edit-focus="actionEditFocus"
+            :action-edit-result-context="actionEditResultContext"
+            :flow-model="workbenchFlowModel"
+            @dispatch-flow-action="dispatchWorkbenchFlowAction"
+          />
+        </div>
       </div>
 
-      <div class="side-stack">
+      <div
+        class="side-stack"
+        :data-flow-phase="workbenchFlowModel.phase"
+        data-testid="workbench-side-inspector"
+      >
         <PropertiesPanel
           :selection="selection"
           :characters="workbenchSeed.gameData.characters"
@@ -182,20 +223,6 @@
           @dispatch-flow-action="dispatchWorkbenchFlowAction"
         />
       </div>
-
-      <EventLogPanel
-        class="event-area"
-        :event-log="simulationResult.eventLog"
-        :runtime-projection="simulationResult.threeValueRuntimeProjection"
-        :runtime-selected-detail="runtimeSelectedDetail"
-        :selected-state-curve-point-id="selectedStateCurvePointId"
-        :calculator-diagnostic-focus="calculatorDiagnosticFocus"
-        :runtime-log-focus="runtimeLogFocus"
-        :action-edit-focus="actionEditFocus"
-        :action-edit-result-context="actionEditResultContext"
-        :flow-model="workbenchFlowModel"
-        @dispatch-flow-action="dispatchWorkbenchFlowAction"
-      />
     </div>
   </main>
 </template>
@@ -2264,10 +2291,7 @@ function getLocalStorage() {
       260px,
       340px
     );
-  grid-template-areas:
-    'actions timeline analysis'
-    'actions resources analysis'
-    'actions events analysis';
+  grid-template-areas: 'actions mainflow inspector';
   gap: 14px;
   padding: 14px;
 }
@@ -2276,33 +2300,47 @@ function getLocalStorage() {
   grid-area: actions;
 }
 
-.timeline-area {
-  grid-area: timeline;
+.primary-flow {
+  display: grid;
+  grid-area: mainflow;
+  align-content: start;
+  gap: 14px;
+  min-width: 0;
 }
 
-.resource-area {
-  grid-area: resources;
+.runtime-review-stack {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.92fr) minmax(320px, 1.08fr);
+  align-items: start;
+  gap: 14px;
+  min-width: 0;
+}
+
+.timeline-area,
+.resource-area,
+.event-area {
   min-width: 0;
 }
 
 .side-stack {
-  grid-area: analysis;
+  grid-area: inspector;
   display: grid;
   align-content: start;
   gap: 14px;
 }
 
-.event-area {
-  grid-area: events;
+@media (max-width: 1320px) {
+  .runtime-review-stack {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 1100px) {
   .workbench-grid {
     grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
     grid-template-areas:
-      'actions timeline'
-      'actions resources'
-      'analysis events';
+      'actions mainflow'
+      'actions inspector';
   }
 }
 
@@ -2329,10 +2367,8 @@ function getLocalStorage() {
     grid-template-columns: 1fr;
     grid-template-areas:
       'actions'
-      'timeline'
-      'resources'
-      'analysis'
-      'events';
+      'mainflow'
+      'inspector';
     padding: 10px;
   }
 }

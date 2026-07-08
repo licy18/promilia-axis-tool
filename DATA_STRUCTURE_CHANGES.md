@@ -17963,3 +17963,72 @@ AnalysisPanel
 - 新增 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 open runtime、select runtime state point、select runtime result、focus runtime action、return runtime result。
 - 继续运行 `src/__tests__/features/workbenchFlowModel.test.js` 与 `src/__tests__/views/Workbench.test.js`，确认主流程闭环行为不变。
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、62 条测试。
+
+## 228. UI 主流程能力块：Primary Flow Workspace Layout
+
+本阶段属于 UI 主流程。
+
+### 228.1 结构变化
+
+`src/views/Workbench.vue` 的主界面布局由原先的同级 grid 区域：
+
+```text
+actions / timeline / resources / analysis / events
+```
+
+调整为：
+
+```text
+actions / mainflow / inspector
+```
+
+新增主流程容器：
+
+```html
+data-testid="workbench-main-flow-workspace"
+data-testid="workbench-primary-flow"
+data-testid="workbench-runtime-review-stack"
+data-testid="workbench-side-inspector"
+```
+
+布局语义：
+
+```text
+workbench-main-flow-workspace
+  actions: ActionLibraryPanel
+  mainflow:
+    TimelineGridPreview
+    runtime-review-stack:
+      ResourceMonitorPanel
+      EventLogPanel
+  inspector:
+    PropertiesPanel
+    EnemyPanel
+    RuntimeSelectedDetailPanel
+    AnalysisPanel
+```
+
+`workbench-main-flow-workspace` 与 `workbench-primary-flow` 暴露：
+
+```html
+data-flow-phase
+data-main-flow-next-target-kind
+```
+
+`workbench-side-inspector` 暴露：
+
+```html
+data-flow-phase
+```
+
+### 228.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 布局结构；三值计算、runtime projection 数值结果和草稿保存结构不变。
+
+### 228.3 验证
+
+- 更新 `src/__tests__/views/Workbench.test.js`，覆盖主流程工作区、主流程列、运行回看区域和右侧检查器的结构。
+- 页面测试确认 action edit、runtime result、edit result ready、edit result review 阶段的布局状态跟随 `workbenchFlowModel` 更新。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、54 条测试。
