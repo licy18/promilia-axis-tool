@@ -227,7 +227,7 @@ describe('three value runtime projection', () => {
           summary: {
             sourceKind: 'azpr-runtime-summary-output',
             status: 'runtime-summary-ready',
-            source: 'threeValueGenerationLayer.applied-deltas',
+            source: 'threeValueRuntimeInput.appliedDeltas',
             appliedOnly: true,
           },
         },
@@ -308,7 +308,7 @@ describe('three value runtime projection', () => {
           'azpr-hp-delta-calculator',
           'azpr-self-energy-delta-calculator',
         ],
-        source: 'threeValueGenerationLayer.applied-deltas',
+        source: 'threeValueRuntimeInput.appliedDeltas',
         runtimeInputSource: 'threeValueRuntimeInput.appliedDeltas',
         runtimeOutputContractSourceKind:
           'azpr-three-value-runtime-output-contract',
@@ -582,7 +582,7 @@ describe('three value runtime projection', () => {
           'azpr-three-value-runtime-output-contract',
         runtimeOutputContractStatus: 'runtime-output-contract-ready',
         runtimeOutputContractOutputCount: 4,
-        source: 'runtimeInputSource.applied-deltas',
+        source: 'threeValueRuntimeInput.appliedDeltas',
         simLogCount: 1,
       },
     });
@@ -607,7 +607,7 @@ describe('three value runtime projection', () => {
           },
         },
         summary: {
-          source: 'runtimeInputSource.applied-deltas',
+          source: 'threeValueRuntimeInput.appliedDeltas',
         },
       },
       summary: {

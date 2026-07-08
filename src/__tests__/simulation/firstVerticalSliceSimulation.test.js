@@ -1594,7 +1594,7 @@ describe('first vertical slice simulation', () => {
           },
           summary: {
             sourceKind: 'azpr-runtime-summary-output',
-            source: 'runtimeInputSource.applied-deltas',
+            source: 'threeValueRuntimeInput.appliedDeltas',
           },
         },
         summary: {
@@ -1680,7 +1680,7 @@ describe('first vertical slice simulation', () => {
           ]),
           appliedToRuntimeCount: 1,
         },
-        source: 'runtimeInputSource.applied-deltas',
+        source: 'threeValueRuntimeInput.appliedDeltas',
         runtimeOutputContractSourceKind:
           'azpr-three-value-runtime-output-contract',
         runtimeOutputContractStatus: 'runtime-output-contract-ready',

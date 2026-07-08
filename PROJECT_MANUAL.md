@@ -8032,6 +8032,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 转向运行时层能力块：进一步收束 runtime input / runtime projection 对标准合同入口的消费边界，确保 `simLog`、`stateCurves`、`resourceCurves`、summary 都只由 `Action -> Hit -> ThreeValueDelta` runtime input 派生。
 
+### 2026-07-09：运行时层能力块 - Action Hit ThreeValueDelta Runtime Input
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- 新增 `actionHitThreeValueRuntimeInput`，把 `Action -> Hit -> ThreeValueDelta` 标准合同转换为 runtime input 的逻辑从 `threeValueRuntimeInput` 中抽出。
+- `threeValueRuntimeInput` 保留原导出名作为兼容入口，但实际委托给 `createActionHitThreeValueRuntimeInput()`。
+- `threeValueRuntimeProjection` 现在接收 generation entry，并把 `simLog`、enemy state curve、resource curves 和 summary 的来源统一标记为 `threeValueRuntimeInput.appliedDeltas`。
+- runtime input summary 增加 generation entry 来源字段，运行时输出可以追踪：generation entry -> standard contract -> runtime input -> simLog / curves / summary。
+- 本阶段保持 HP / 韧性 / 自身能量数值结果不变，不新增公式推断，不扩大 UI 信息量。
+
+当前验证事实：
+
+- 新增 runtime input 单元测试，覆盖标准合同 deltas 的 applied-only 筛选、运行时序号、三值字段归一化、ignored layer 统计和 generation entry 来源追踪。
+- runtime projection 与纵切模拟测试确认 `simLog`、`stateCurves`、`resourceCurves`、summary 均由 runtime input 的 applied deltas 派生，数值输出保持不变。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，5 个测试文件、19 条测试。
+- `npm run test -- --run`：通过，28 个测试文件、167 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 转向 UI 主流程能力块：把 Workbench 的“排轴动作编辑 -> 运行模拟 -> 资源曲线监控 -> 日志/详情查看 -> 回到动作修改”主流程继续收束到标准 generation/runtime 合同上，优先做能提升闭环可用性的页面流转，不做微型状态标签打磨。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -1,13 +1,18 @@
 import { summarizeThreeValueCalculators } from '../threeValueCalculatorAdapters';
-import { createThreeValueRuntimeInput } from './threeValueRuntimeInput';
+import {
+  ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE,
+  createThreeValueRuntimeInput,
+} from './threeValueRuntimeInput';
 
 export function createThreeValueRuntimeProjection({
   scenario,
   runtimeInputSource,
+  actionHitThreeValueDeltaGeneration,
   threeValueGenerationLayer,
 }) {
   const runtimeInput = createThreeValueRuntimeInput({
     runtimeInputSource,
+    actionHitThreeValueDeltaGeneration,
     threeValueGenerationLayer,
   });
   const appliedDeltas = runtimeInput.appliedDeltas;
@@ -108,6 +113,7 @@ function createThreeValueRuntimeOutputContract({
     inputContractName: runtimeInput.contractName,
     inputSourceKind: runtimeInput.sourceKind,
     runtimeInputSourceKind: runtimeInput.runtimeInputSourceKind,
+    generationEntrySourceKind: runtimeInput.generationEntrySourceKind,
     outputNames: Object.keys(outputs),
     outputs,
     summary: {
@@ -133,7 +139,7 @@ function createRuntimeSimLogOutputContract({ runtimeInput, simLog }) {
       simLog.length > 0
         ? 'runtime-sim-log-ready'
         : 'runtime-sim-log-ready-no-applied-deltas',
-    inputSource: 'threeValueRuntimeInput.appliedDeltas',
+    inputSource: ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE,
     inputSourceKind: runtimeInput.sourceKind,
     rowCount: simLog.length,
     keyFields: ['sourceDeltaId', 'runtimeSequenceIndex'],
@@ -231,6 +237,8 @@ function createRuntimeSummaryOutputContract(summary) {
       'runtimeInputSourceKind',
       'runtimeInputSourceInputKind',
       'runtimeInputSourceInputStatus',
+      'runtimeGenerationEntrySourceKind',
+      'runtimeGenerationEntryStatus',
       'runtimeGenerationLayerSourceKind',
       'runtimeGenerationLayerStatus',
     ],
@@ -270,7 +278,7 @@ function createThreeValueRuntimeEnemyStateCurve({ scenario, appliedDeltas }) {
   };
 
   return {
-    sourceKind: 'three-value-generation-layer-applied-enemy-deltas',
+    sourceKind: 'three-value-runtime-input-applied-enemy-deltas',
     status:
       points.length > 0
         ? 'enemy-state-curve-ready-from-applied-deltas'
@@ -406,7 +414,7 @@ function createThreeValueRuntimeSimLog(appliedDeltas) {
 
 function createThreeValueRuntimePoint(delta, sequenceIndex) {
   return {
-    sourceKind: 'three-value-generation-layer-applied-delta',
+    sourceKind: 'three-value-runtime-input-applied-delta',
     sourceDeltaId: delta.id,
     sequenceIndex,
     runtimeSequenceIndex: delta.runtimeSequenceIndex ?? sequenceIndex,
@@ -525,6 +533,8 @@ function summarizeThreeValueRuntimeProjection({
     runtimeInputSourceKind: runtimeInput.sourceKind,
     runtimeInputSourceInputKind: runtimeInput.runtimeInputSourceKind,
     runtimeInputSourceInputStatus: runtimeInput.runtimeInputSourceStatus,
+    runtimeGenerationEntrySourceKind: runtimeInput.generationEntrySourceKind,
+    runtimeGenerationEntryStatus: runtimeInput.generationEntryStatus,
     runtimeGenerationLayerSourceKind: runtimeInput.generationLayerSourceKind,
     runtimeGenerationLayerStatus: runtimeInput.generationLayerStatus,
     runtimeInputIgnoredDeltaCount: runtimeInput.ignoredDeltaCount,
@@ -561,10 +571,8 @@ function summarizeThreeValueRuntimeProjection({
       calculatorSummary.calculatorReplaceableDeltaCount,
     calculatorStatuses: calculatorSummary.statuses,
     calculatorSummary,
-    source: runtimeInput.runtimeInputSourceKind
-      ? 'runtimeInputSource.applied-deltas'
-      : 'threeValueGenerationLayer.applied-deltas',
-    runtimeInputSource: 'threeValueRuntimeInput.appliedDeltas',
+    source: ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE,
+    runtimeInputSource: ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE,
     appliedOnly: true,
     applied: true,
   };

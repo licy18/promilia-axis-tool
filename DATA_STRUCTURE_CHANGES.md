@@ -16743,3 +16743,144 @@ createActionHitThreeValueDeltaGeneration
 - `npm run test -- --run`：通过，27 个测试文件、166 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 213. 运行时层能力块：Action Hit ThreeValueDelta Runtime Input
+
+本阶段属于运行时层。
+
+### 213.1 结构变化
+
+新增模块：
+
+```js
+src/simulation/runtime/actionHitThreeValueRuntimeInput.js
+```
+
+新增导出：
+
+```js
+ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE
+createActionHitThreeValueRuntimeInput()
+```
+
+`ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE` 固定为：
+
+```js
+threeValueRuntimeInput.appliedDeltas
+```
+
+`createActionHitThreeValueRuntimeInput()` 输入支持：
+
+```js
+{
+  runtimeInputSource,
+  actionHitThreeValueDeltaGeneration,
+  threeValueGenerationLayer
+}
+```
+
+`createActionHitThreeValueRuntimeInput()` 输出：
+
+```js
+{
+  schemaVersion,
+  sourceKind,
+  status,
+  contractName,
+  appliedDeltaSource,
+  inputSourceKind,
+  inputStatus,
+  runtimeInputSourceKind,
+  runtimeInputSourceStatus,
+  generationEntrySourceKind,
+  generationEntryStatus,
+  generationLayerSourceKind,
+  generationLayerStatus,
+  standardContractSourceKind,
+  standardContractStatus,
+  appliedOnly,
+  deltas,
+  appliedDeltas,
+  ignoredDeltaCount,
+  summary,
+  applied
+}
+```
+
+`summary` 新增或明确字段：
+
+```js
+{
+  appliedDeltaSource,
+  generationEntrySourceKind,
+  generationEntryStatus,
+  generationLayerSourceKind,
+  generationLayerStatus,
+  standardContractSourceKind,
+  standardContractStatus,
+  standardContractActionCount,
+  standardContractHitCount,
+  inputDeltaCount,
+  appliedDeltaCount,
+  ignoredDeltaCount,
+  appliedTrackKeys,
+  appliedLayerKeys,
+  ignoredLayerCounts,
+  appliedOnly,
+  applied
+}
+```
+
+`src/simulation/runtime/threeValueRuntimeInput.js` 变更为兼容导出层：
+
+```js
+createThreeValueRuntimeInput(options) -> createActionHitThreeValueRuntimeInput(options)
+```
+
+`createThreeValueRuntimeProjection()` 新增可选输入：
+
+```js
+actionHitThreeValueDeltaGeneration
+```
+
+runtime projection 输出来源调整：
+
+```js
+summary.source = 'threeValueRuntimeInput.appliedDeltas'
+summary.runtimeInputSource = 'threeValueRuntimeInput.appliedDeltas'
+outputContract.outputs.simLog.inputSource = 'threeValueRuntimeInput.appliedDeltas'
+enemyStateCurve.sourceKind = 'three-value-runtime-input-applied-enemy-deltas'
+runtime point sourceKind = 'three-value-runtime-input-applied-delta'
+```
+
+runtime projection summary 新增字段：
+
+```js
+runtimeGenerationEntrySourceKind
+runtimeGenerationEntryStatus
+```
+
+`src/simulation/projection/projectSimulationResult.js` 现在把 bundle 里的 `actionHitThreeValueDeltaGeneration` 传给 runtime projection。
+
+`src/simulation/index.js` 新增导出：
+
+```js
+ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE
+createActionHitThreeValueRuntimeInput
+createThreeValueRuntimeInput
+```
+
+### 213.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响运行时中间结构与来源追踪；HP / 韧性 / 自身能量 delta 数值、runtime projection 曲线结果、Workbench 草稿结构不变。
+
+### 213.3 验证
+
+- 新增 `src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js`，覆盖 runtime input 的 applied-only 筛选、运行时序号、三值字段归一化、ignored layer 统计和 generation entry 来源追踪。
+- 更新 `src/__tests__/simulation/threeValueRuntimeProjection.test.js` 与 `src/__tests__/simulation/firstVerticalSliceSimulation.test.js`，确认 runtime 输出来源统一到 `threeValueRuntimeInput.appliedDeltas`。
+- `npm run test -- --run src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，5 个测试文件、19 条测试。
+- `npm run test -- --run`：通过，28 个测试文件、167 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。

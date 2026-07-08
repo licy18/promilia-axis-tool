@@ -7,6 +7,11 @@ export { DAMAGE_FORMULA_VERSION, parsePercentMultiplier, parseDamageSegments } f
 export { projectSimulationResult } from './projection/projectSimulationResult';
 export { createThreeValueGenerationBundle } from './generation/threeValueGenerationBuilder';
 export { createActionHitThreeValueDeltaGeneration } from './generation/actionHitThreeValueDeltaGeneration';
+export {
+  ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE,
+  createActionHitThreeValueRuntimeInput,
+  createThreeValueRuntimeInput,
+} from './runtime/threeValueRuntimeInput';
 
 export function runSimulation(project, gameData) {
   return simulateScenario(compileProject(project, gameData));
