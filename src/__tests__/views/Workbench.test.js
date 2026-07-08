@@ -1150,6 +1150,13 @@ describe('Workbench view', () => {
     expect(
       wrapper
         .find(
+          `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${statePointId}"]`
+        )
+        .attributes('data-selected')
+    ).toBe('true');
+    expect(
+      wrapper
+        .find(
           '[data-testid="workbench-runtime-selected-detail-contribution-row"][data-active="true"]'
         )
         .text()
@@ -1189,6 +1196,13 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(statePointId);
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${statePointId}"]`
+        )
+        .attributes('data-selected')
+    ).toBe('true');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-track"]')
@@ -2100,6 +2114,43 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-source"]').text()
     ).toContain(String(spSkill.id));
+
+    const hpRuntimeCurvePoint = wrapper.find(
+      '[data-testid="workbench-runtime-resource-chart-point"][data-track-key="enemyHpDamage"]'
+    );
+    await hpRuntimeCurvePoint.trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-filter-count"]')
+        .text()
+    ).toBe('1/2');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-selection-filtered"]')
+        .text()
+    ).toBe('选中三值点不在当前日志筛选内');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-row"]')
+        .attributes('data-selected')
+    ).toBe('false');
+
+    await wrapper
+      .find(
+        '[data-testid="workbench-runtime-sim-log-track-filter"][data-track-filter="all"]'
+      )
+      .trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${hpRuntimeCurvePoint.attributes('data-state-point-id')}"]`
+        )
+        .attributes('data-selected')
+    ).toBe('true');
     expect(wrapper.text()).toContain('RESOURCE_CHANGE');
   });
 

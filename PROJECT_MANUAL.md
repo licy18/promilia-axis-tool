@@ -5028,6 +5028,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 同步时保持当前筛选可控：如果当前筛选隐藏了目标日志，先显示“选中点不在当前筛选内”的轻量状态，不强行重置用户筛选。
 - 后续再把 `EventLogPanel` 的内嵌详情改为消费统一详情，减少重复派生逻辑。
 
+### 2026-07-08：阶段 5-8CH runtime sim log 反向同步选中状态
+
+本轮完成：
+
+- `EventLogPanel` 新增 `selectedStateCurvePointId` 输入，接收 Workbench 全局状态点选中值。
+- runtime sim log 行新增 `data-state-point-id`，使用 `createRuntimeStateCurvePointId()` 与资源曲线、时间轴和状态曲线保持同一套 ID。
+- 当外部选中点对应的日志行在当前筛选内时，`EventLogPanel` 自动同步 `selectedRuntimeLogIndex` 并高亮该日志行。
+- 当外部选中点存在但被当前 HP / 韧性 / 能量、actor、action 筛选隐藏时，日志区显示“选中三值点不在当前日志筛选内”，不重置用户筛选。
+- Workbench 把 `selectedStateCurvePointId` 传给 `EventLogPanel`，形成资源曲线 / 状态曲线 / 日志三者的双向焦点链路。
+
+当前验证事实：
+
+- 点击默认 HP 资源曲线点后，对应 runtime sim log 行的 `data-selected` 变为 `true`。
+- 点击分析面板中的 applied state curve point 后，对应 runtime sim log 行同样高亮。
+- 在有 SP 消耗技能场景中，先把 runtime sim log 筛选为 `selfEnergyChange` 后，再从资源曲线选中 HP 点，日志计数仍保持 `1/2`，并显示“选中三值点不在当前日志筛选内”。
+- 从隐藏提示状态切回 `全部` 筛选后，HP 日志行恢复高亮。
+
+当前边界：
+
+- `EventLogPanel` 内嵌详情仍使用本地 `selectedRuntimeLog` 派生；与右侧统一详情存在重复显示。
+- 筛选隐藏提示只提示当前选中点被隐藏，不自动提供“一键显示全部”按钮。
+- 反向同步只覆盖 runtime applied 点，不覆盖 candidate / sampled / placeholder 诊断点。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8CI 目标：让 `EventLogPanel` 的内嵌三值详情消费 `RuntimeSelectedDetail` 派生结果，减少日志详情和右侧详情之间的重复逻辑。
+- 保留 runtime sim log 的行级筛选和本地行上下文，但三值贡献、来源标注、状态点 ID 应尽量来自统一详情。
+- 若统一详情为空，则继续保留当前日志行的最小详情作为降级显示。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

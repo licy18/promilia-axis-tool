@@ -9727,3 +9727,88 @@ runtimeSelectedDetail = computed(() =>
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8CH 应把全局 `selectedStateCurvePointId` 反向同步到 runtime sim log，让从资源曲线或状态曲线选中的点也能高亮对应日志行。
+
+## 115. 阶段 5-8CH：runtime sim log selected sync
+
+阶段 5-8CH 不修改项目保存 schema。本阶段只新增 Workbench UI prop、DOM 标记和筛选提示状态。
+
+### 115.1 EventLogPanel 新增输入
+
+`EventLogPanel` 新增：
+
+```js
+selectedStateCurvePointId: string
+```
+
+`Workbench` 将全局 `selectedStateCurvePointId` 传入 `EventLogPanel`。
+
+### 115.2 日志行状态点标记
+
+runtime sim log 行新增：
+
+```html
+data-state-point-id
+```
+
+行选中判断变为：
+
+```js
+isRuntimeLogRowSelected(row, index)
+```
+
+规则：
+
+- 如果存在外部 `selectedStateCurvePointId`，优先比较日志行 `statePointId`。
+- 如果没有外部选中点，保留原来的 `selectedRuntimeLogIndex === index` 行为。
+
+当外部选中点在当前筛选结果内时：
+
+```js
+syncSelectedRuntimeLogIndexFromStatePoint(filteredRuntimeSimLogRows)
+```
+
+会把内部 `selectedRuntimeLogIndex` 同步到对应行。
+
+### 115.3 筛选隐藏提示
+
+新增派生：
+
+```js
+selectedRuntimeLogFilteredOut
+```
+
+条件：
+
+- `selectedStateCurvePointId` 对应某条 runtime sim log；
+- 但该日志行不在当前 `filteredRuntimeSimLogRows` 内。
+
+新增测试入口：
+
+```html
+data-testid="workbench-runtime-sim-log-selection-filtered"
+```
+
+文案：
+
+```text
+选中三值点不在当前日志筛选内
+```
+
+该提示不重置 HP / 韧性 / 能量、actor、action 筛选。
+
+### 115.4 验证
+
+当前测试覆盖：
+
+- 从 runtime resource chart point 选中 HP 点后，对应 runtime sim log 行 `data-selected="true"`。
+- 从 applied state curve point 选中 HP 点后，对应 runtime sim log 行 `data-selected="true"`。
+- 在 runtime sim log 筛选为 `selfEnergyChange` 时，从资源曲线选中 HP 点，筛选计数仍为 `1/2`，并显示隐藏提示。
+- 切回 `全部` 筛选后，HP 日志行恢复高亮。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、38 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、112 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8CI 应让 `EventLogPanel` 的内嵌三值详情消费 `RuntimeSelectedDetail` 派生结果，减少日志详情和右侧详情之间的重复逻辑。

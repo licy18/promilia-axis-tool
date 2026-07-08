@@ -148,6 +148,7 @@
         class="event-area"
         :event-log="simulationResult.eventLog"
         :runtime-projection="simulationResult.threeValueRuntimeProjection"
+        :selected-state-curve-point-id="selectedStateCurvePointId"
         @select-runtime-state-point="selectRuntimeStatePoint"
       />
     </div>

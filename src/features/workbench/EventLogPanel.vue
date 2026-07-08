@@ -89,7 +89,8 @@
           v-for="(row, index) in filteredRuntimeSimLogRows"
           :key="row.sourceDeltaId ?? `${row.eventType}-${index}`"
           class="runtime-log-row"
-          :data-selected="selectedRuntimeLogIndex === index"
+          :data-selected="isRuntimeLogRowSelected(row, index)"
+          :data-state-point-id="getRuntimeStatePointIdByRow(row)"
           data-testid="workbench-runtime-sim-log-row"
           role="button"
           tabindex="0"
@@ -109,6 +110,14 @@
         data-testid="workbench-runtime-sim-log-empty"
       >
         当前筛选无模拟日志
+      </p>
+
+      <p
+        v-if="selectedRuntimeLogFilteredOut"
+        class="runtime-log-selection-note"
+        data-testid="workbench-runtime-sim-log-selection-filtered"
+      >
+        选中三值点不在当前日志筛选内
       </p>
 
       <div
@@ -207,6 +216,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  selectedStateCurvePointId: {
+    type: String,
+    default: '',
+  },
 });
 const emit = defineEmits(['select-runtime-state-point']);
 
@@ -293,6 +306,20 @@ const filteredRuntimeSimLogRows = computed(() =>
     return true;
   })
 );
+const selectedRuntimeLogFilteredOut = computed(() => {
+  if (!props.selectedStateCurvePointId) {
+    return false;
+  }
+  const existsInAllRows = runtimeSimLogRows.value.some(
+    row => getRuntimeStatePointIdByRow(row) === props.selectedStateCurvePointId
+  );
+  if (!existsInAllRows) {
+    return false;
+  }
+  return !filteredRuntimeSimLogRows.value.some(
+    row => getRuntimeStatePointIdByRow(row) === props.selectedStateCurvePointId
+  );
+});
 const selectedRuntimeLog = computed(
   () => filteredRuntimeSimLogRows.value[selectedRuntimeLogIndex.value] ?? null
 );
@@ -313,10 +340,18 @@ const selectedRuntimeSourceRows = computed(() =>
 );
 
 watch(filteredRuntimeSimLogRows, rows => {
+  syncSelectedRuntimeLogIndexFromStatePoint(rows);
   if (selectedRuntimeLogIndex.value >= rows.length) {
     selectedRuntimeLogIndex.value = 0;
   }
 });
+
+watch(
+  () => props.selectedStateCurvePointId,
+  () => {
+    syncSelectedRuntimeLogIndexFromStatePoint(filteredRuntimeSimLogRows.value);
+  }
+);
 
 watch(runtimeSimLogRows, () => {
   syncRuntimeFilterValue(runtimeActorFilter, runtimeActorFilterOptions.value);
@@ -371,6 +406,29 @@ function selectRuntimeLog(index) {
     'select-runtime-state-point',
     createRuntimeStateCurvePointId(row, getRuntimePointByRow(row))
   );
+}
+
+function syncSelectedRuntimeLogIndexFromStatePoint(rows) {
+  if (!props.selectedStateCurvePointId) {
+    return;
+  }
+  const index = rows.findIndex(
+    row => getRuntimeStatePointIdByRow(row) === props.selectedStateCurvePointId
+  );
+  if (index >= 0) {
+    selectedRuntimeLogIndex.value = index;
+  }
+}
+
+function isRuntimeLogRowSelected(row, index) {
+  if (props.selectedStateCurvePointId) {
+    return getRuntimeStatePointIdByRow(row) === props.selectedStateCurvePointId;
+  }
+  return selectedRuntimeLogIndex.value === index;
+}
+
+function getRuntimeStatePointIdByRow(row) {
+  return createRuntimeStateCurvePointId(row, getRuntimePointByRow(row));
 }
 
 function formatRuntimeTime(row) {
@@ -709,6 +767,16 @@ h2 {
 .runtime-log-empty {
   margin: 0;
   color: #8f9aa3;
+  font-size: 12px;
+}
+
+.runtime-log-selection-note {
+  margin: 0;
+  padding: 8px 9px;
+  border: 1px solid rgba(230, 162, 60, 0.3);
+  border-radius: 4px;
+  background: rgba(230, 162, 60, 0.1);
+  color: #efc574;
   font-size: 12px;
 }
 
