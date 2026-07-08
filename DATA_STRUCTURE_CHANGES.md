@@ -14491,3 +14491,52 @@ Workbench 顶层 runtime point 定位
 - `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、43 条测试。
 - `npm run test -- --run`：通过，16 个测试文件、120 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 174. UI 主流程能力块：当前动作优先打开运行结果
+
+本阶段属于 UI 主流程。
+
+### 174.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 174.2 Workbench 事件行为变化
+
+`openRuntimeResultsFlow()` 的 runtime state point 选择顺序从：
+
+```text
+全局第一个 runtime simLog 点
+```
+
+调整为：
+
+```text
+当前 selectedActionId 对应的第一个 runtime state point
+全局第一个 runtime simLog 点兜底
+```
+
+### 174.3 复用函数
+
+优先查找当前动作结果使用既有：
+
+```js
+findFirstRuntimeStatePointForAction(runtimeProjection, actionId)
+```
+
+选中后继续复用：
+
+```js
+selectRuntimeFlowStatePoint(statePointId)
+```
+
+因此动作选择、state curve focus、runtime detail 和主流程导航仍走同一条路径。
+
+### 174.4 验证
+
+Workbench 测试更新覆盖：
+
+- 选中追加的资源动作后，`查看运行结果` 直接定位到该动作的 runtime 点。
+- 主流程前后导航仍会同步切换 selected action 和 runtime selected detail。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、42 条测试。
+- `npm run test -- --run`：通过，16 个测试文件、120 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

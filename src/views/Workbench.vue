@@ -1284,7 +1284,15 @@ function returnRuntimeResultFromProperties({ actionId, statePointId } = {}) {
 }
 
 function openRuntimeResultsFlow() {
+  const actionRuntimePoint = findFirstRuntimeStatePointForAction(
+    simulationResult.value.threeValueRuntimeProjection,
+    selectedActionId.value
+  );
   focusThreeValueCalculatorScope('runtime');
+  if (actionRuntimePoint?.statePointId) {
+    selectRuntimeFlowStatePoint(actionRuntimePoint.statePointId);
+    return;
+  }
   selectActionFromRuntimeStatePoint(selectedStateCurvePointId.value);
 }
 

@@ -1667,45 +1667,8 @@ describe('Workbench view', () => {
     await nextTick();
 
     let flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
-    expect(flowPanel.attributes('data-action-id')).toBe('action-0001');
-    expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('2');
-    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('0');
-    expect(
-      flowPanel
-        .find('[data-testid="workbench-flow-runtime-navigation-index"]')
-        .text()
-    ).toBe('1/2');
-    expect(
-      flowPanel
-        .find('[data-testid="workbench-flow-runtime-previous"]')
-        .attributes('disabled')
-    ).toBeDefined();
-    const nextRuntimePointButton = flowPanel.find(
-      '[data-testid="workbench-flow-runtime-next"]'
-    );
-    const nextRuntimePointId = nextRuntimePointButton.attributes(
-      'data-state-point-id'
-    );
-    expect(nextRuntimePointButton.attributes('disabled')).toBeUndefined();
-    expect(nextRuntimePointId).toBeTruthy();
-
-    await nextRuntimePointButton.trigger('click');
-    await nextTick();
-
-    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
     expect(flowPanel.attributes('data-action-id')).toBe('action-0002');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
-        )
-        .classes()
-    ).toContain('selected');
-    expect(
-      wrapper
-        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
-        .text()
-    ).toBe(nextRuntimePointId);
+    expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('2');
     expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('1');
     expect(
       flowPanel
@@ -1730,13 +1693,50 @@ describe('Workbench view', () => {
     await nextTick();
 
     flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0001');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+        )
+        .classes()
+    ).toContain('selected');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
         .text()
     ).toBe(previousRuntimePointId);
-    expect(flowPanel.attributes('data-action-id')).toBe('action-0001');
     expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('0');
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-runtime-navigation-index"]')
+        .text()
+    ).toBe('1/2');
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-runtime-previous"]')
+        .attributes('disabled')
+    ).toBeDefined();
+    const nextRuntimePointButton = flowPanel.find(
+      '[data-testid="workbench-flow-runtime-next"]'
+    );
+    const nextRuntimePointId = nextRuntimePointButton.attributes(
+      'data-state-point-id'
+    );
+    expect(nextRuntimePointButton.attributes('disabled')).toBeUndefined();
+    expect(nextRuntimePointId).toBeTruthy();
+
+    await nextRuntimePointButton.trigger('click');
+    await nextTick();
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(nextRuntimePointId);
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0002');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('1');
   });
 
   it('selects the source action when an action result is focused', async () => {
