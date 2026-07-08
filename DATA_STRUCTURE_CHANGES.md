@@ -19631,3 +19631,58 @@ mainFlowLoopState.recoveryNeeded === true -> createWorkbenchMainFlowRecoveryActi
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、76 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、206 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 255. UI 主流程能力块：Main Flow Button View Helper
+
+### 255.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增共享函数：
+
+```js
+createWorkbenchMainFlowButtonView({
+  flowModel,
+  kind,
+  fallbackTarget,
+  fallbackEnabled,
+  source,
+})
+```
+
+输出结构：
+
+```js
+{
+  kind,
+  isPrimary,
+  enabled,
+  actionId,
+  statePointId,
+  target,
+  action,
+}
+```
+
+行为：
+
+```text
+当 kind 是当前 mainFlowState.primaryAction.kind，且 runtimeReviewOperations.primaryOperationKind 与 kind 一致：
+  通过 createWorkbenchRuntimeReviewOperationConsumer() 解析 review primary operation target / enabled / action。
+否则：
+  使用 fallbackTarget 与 fallbackEnabled 生成按钮视图。
+```
+
+`WorkbenchFlowPanel` 的查看运行结果、编辑结果动作、回到刷新结果按钮现在消费 `createWorkbenchMainFlowButtonView()`，不再本地解析 primary operation target / enabled。
+
+### 255.2 保存与迁移
+
+本阶段只调整 Workbench 顶部主流程面板的按钮视图 helper，不新增持久字段，不需要数据迁移。
+
+### 255.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 fallback target 与 wrapped review primary operation target 两类 button view。
+- 更新 `src/__tests__/features/WorkbenchFlowPanel.test.js`，使用 wrapped target 验证按钮展示和 dispatch 仍能定位到真实 review operation 目标。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、77 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、207 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

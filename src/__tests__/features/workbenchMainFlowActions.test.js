@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
+  createWorkbenchMainFlowButtonView,
   createWorkbenchMainFlowLoopAction,
   createWorkbenchMainFlowNextAction,
   createWorkbenchMainFlowRecoveryAction,
@@ -368,6 +369,93 @@ describe('workbench main flow actions', () => {
       actionId: 'recovery-action',
       canRun: true,
     });
+  });
+
+  it('creates main flow button views from fallback and review primary operation targets', () => {
+    const focusView = createWorkbenchMainFlowButtonView({
+      kind: 'focus-runtime-action',
+      source: 'workbench-flow-panel',
+      fallbackTarget: {
+        actionId: 'fallback-action',
+        statePointId: 'fallback-state-point',
+        canFocusAction: true,
+      },
+      fallbackEnabled: true,
+      flowModel: {
+        mainFlowState: {
+          primaryAction: {
+            kind: 'focus-runtime-action',
+          },
+        },
+        runtimeReviewOperations: {
+          primaryOperationKind: 'focus-runtime-action',
+          primaryOperationEnabled: true,
+          primaryOperation: {
+            kind: 'focus-runtime-action',
+            enabled: true,
+            target: {
+              actionId: 'review-action',
+              statePointId: 'review-state-point',
+              fieldKey: 'startMs',
+              frameLabel: '18f',
+            },
+          },
+          focusAction: {
+            kind: 'focus-runtime-action',
+            enabled: true,
+            actionId: 'model-action',
+            statePointId: 'model-state-point',
+          },
+        },
+      },
+    });
+    expect(focusView).toMatchObject({
+      kind: 'focus-runtime-action',
+      isPrimary: true,
+      enabled: true,
+      actionId: 'review-action',
+      statePointId: 'review-state-point',
+      target: {
+        actionId: 'review-action',
+        statePointId: 'review-state-point',
+        fieldKey: 'startMs',
+      },
+      action: {
+        kind: 'focus-runtime-action',
+        source: 'workbench-flow-panel',
+        actionId: 'review-action',
+        statePointId: 'review-state-point',
+        canRun: true,
+      },
+    });
+
+    const returnView = createWorkbenchMainFlowButtonView({
+      kind: 'return-runtime-result',
+      fallbackTarget: {
+        actionId: 'fallback-action',
+        statePointId: 'fallback-state-point',
+      },
+      fallbackEnabled: true,
+      flowModel: {
+        mainFlowState: {
+          primaryAction: {
+            kind: 'focus-runtime-action',
+          },
+        },
+      },
+    });
+    expect(returnView).toMatchObject({
+      kind: 'return-runtime-result',
+      isPrimary: false,
+      enabled: true,
+      actionId: 'fallback-action',
+      statePointId: 'fallback-state-point',
+      target: {
+        actionId: 'fallback-action',
+        statePointId: 'fallback-state-point',
+      },
+    });
+    expect(returnView.action).toBeNull();
   });
 
   it('creates runtime point and result focus actions with the same main flow factory', () => {

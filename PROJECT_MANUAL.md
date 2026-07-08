@@ -9130,6 +9130,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 FlowPanel 中 button target / enabled 的 primary operation 解析也逐步沉到共享 helper，进一步减少顶部面板对 review operation 的本地判断。
 
+### 2026-07-09：UI 主流程能力块 - Main Flow Button View Helper
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增共享 `createWorkbenchMainFlowButtonView()`，统一为 Workbench 顶部主流程按钮解析 `isPrimary`、`target`、`enabled`、`actionId` 和 `statePointId`。
+- `WorkbenchFlowPanel` 的查看运行结果、编辑结果动作、回到刷新结果三个按钮改为消费共享 button view，不再在组件内本地解析 primary operation target / enabled。
+- FlowPanel 现在通过共享 status view、loop action helper 和 button view helper 共同消费主流程状态，顶部主流程条的状态读取、动作创建和按钮目标解析进一步集中。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- main flow action 单测覆盖 fallback target 和 wrapped review primary operation target 两类 button view。
+- WorkbenchFlowPanel 组件测试使用 wrapped target 验证按钮展示和 dispatch 仍能定位到真实 review operation 目标。
+- Workbench 页面测试确认主流程页面路径仍可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、77 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、207 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 Workbench 页面层的 review primary operation dispatch 与 FlowPanel button view/loop action 继续合并，减少运行结果区、顶部主流程条和详情面板之间重复创建 action 的路径。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

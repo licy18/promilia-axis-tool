@@ -151,6 +151,48 @@ export function createWorkbenchMainFlowLoopAction({
   });
 }
 
+export function createWorkbenchMainFlowButtonView({
+  flowModel = null,
+  kind = '',
+  fallbackTarget = null,
+  fallbackEnabled,
+  source = '',
+} = {}) {
+  const mainFlowState = flowModel?.mainFlowState ?? {};
+  const primaryAction = mainFlowState.primaryAction ?? {};
+  const isPrimary = primaryAction.kind === kind;
+  const fallback = fallbackTarget ?? {};
+
+  if (isPrimary && isRuntimeReviewPrimaryOperationKind(flowModel, kind)) {
+    const consumer = createWorkbenchRuntimeReviewOperationConsumer({
+      operationKind: kind,
+      flowModel,
+      source,
+      target: fallback,
+      context: fallback,
+      enabled: fallbackEnabled,
+    });
+    return createMainFlowButtonView({
+      kind,
+      isPrimary,
+      target: consumer.target,
+      enabled: consumer.enabled,
+      action: consumer.action,
+    });
+  }
+
+  const target = fallbackTarget ?? (isPrimary ? primaryAction : {});
+  return createMainFlowButtonView({
+    kind,
+    isPrimary,
+    target,
+    enabled:
+      fallbackEnabled ??
+      target?.enabled ??
+      (isPrimary ? primaryAction.enabled : false),
+  });
+}
+
 export function createWorkbenchRuntimeStatePointFlowAction(options = {}) {
   return createRuntimeStatePointFocusFlowAction(options);
 }
@@ -402,6 +444,25 @@ function createMainFlowLoopTarget({ loopState = {}, target = null } = {}) {
     ...(target ?? {}),
     actionId: target?.actionId || loopState.targetActionId || '',
     statePointId: target?.statePointId || loopState.targetStatePointId || '',
+  };
+}
+
+function createMainFlowButtonView({
+  kind = '',
+  isPrimary = false,
+  target = null,
+  enabled = false,
+  action = null,
+} = {}) {
+  const resolvedTarget = target ?? {};
+  return {
+    kind,
+    isPrimary: Boolean(isPrimary),
+    enabled: Boolean(enabled),
+    actionId: resolvedTarget.actionId ?? '',
+    statePointId: resolvedTarget.statePointId ?? '',
+    target: resolvedTarget,
+    action,
   };
 }
 

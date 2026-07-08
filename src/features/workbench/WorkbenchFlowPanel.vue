@@ -153,18 +153,14 @@
         :class="[
           'flow-button',
           {
-            primary: isPrimaryFlowAction(
-              WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS
-            ),
+            primary: openRuntimeButtonView.isPrimary,
           },
         ]"
         :data-primary-action="
-          isPrimaryFlowAction(WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS)
-            ? 'true'
-            : 'false'
+          openRuntimeButtonView.isPrimary ? 'true' : 'false'
         "
         data-testid="workbench-flow-open-runtime"
-        :disabled="!workbenchFlow.controls.canOpenRuntimeResults"
+        :disabled="!openRuntimeButtonView.enabled"
         @click="openRuntimeResults"
       >
         <TrendCharts class="flow-button-icon" />
@@ -175,20 +171,16 @@
         :class="[
           'flow-button',
           {
-            primary: isPrimaryFlowAction(
-              WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION
-            ),
+            primary: runtimeActionEditButtonView.isPrimary,
           },
         ]"
-        :data-action-id="runtimeActionEditButtonTarget.actionId"
+        :data-action-id="runtimeActionEditButtonView.actionId"
         :data-primary-action="
-          isPrimaryFlowAction(WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION)
-            ? 'true'
-            : 'false'
+          runtimeActionEditButtonView.isPrimary ? 'true' : 'false'
         "
-        :data-state-point-id="runtimeActionEditButtonTarget.statePointId"
+        :data-state-point-id="runtimeActionEditButtonView.statePointId"
         data-testid="workbench-flow-edit-runtime-action"
-        :disabled="!runtimeActionEditButtonEnabled"
+        :disabled="!runtimeActionEditButtonView.enabled"
         @click="focusRuntimeAction"
       >
         <EditPen class="flow-button-icon" />
@@ -199,23 +191,17 @@
         :class="[
           'flow-button',
           {
-            primary: isPrimaryFlowAction(
-              WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT
-            ),
-            secondary: !isPrimaryFlowAction(
-              WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT
-            ),
+            primary: runtimeResultReturnButtonView.isPrimary,
+            secondary: !runtimeResultReturnButtonView.isPrimary,
           },
         ]"
-        :data-action-id="runtimeResultReturnButtonTarget.actionId"
+        :data-action-id="runtimeResultReturnButtonView.actionId"
         :data-primary-action="
-          isPrimaryFlowAction(WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT)
-            ? 'true'
-            : 'false'
+          runtimeResultReturnButtonView.isPrimary ? 'true' : 'false'
         "
-        :data-state-point-id="runtimeResultReturnButtonTarget.statePointId"
+        :data-state-point-id="runtimeResultReturnButtonView.statePointId"
         data-testid="workbench-flow-return-edit-result"
-        :disabled="!runtimeResultReturnButtonEnabled"
+        :disabled="!runtimeResultReturnButtonView.enabled"
         @click="returnRuntimeResult"
       >
         <ArrowRight class="flow-button-icon" />
@@ -239,6 +225,7 @@ import {
   createWorkbenchFlowModel,
 } from './workbenchFlowModel';
 import {
+  createWorkbenchMainFlowButtonView,
   createWorkbenchMainFlowLoopAction,
   createWorkbenchOpenRuntimeResultsFlowAction,
   createWorkbenchRuntimeActionEditFlowAction,
@@ -304,41 +291,43 @@ const mainFlowStatusView = computed(() =>
     flowModel: workbenchFlow.value,
   })
 );
-const runtimeReviewPrimaryOperation = computed(
-  () => workbenchFlow.value.runtimeReviewOperations?.primaryOperation ?? null
+const openRuntimeButtonView = computed(() =>
+  createWorkbenchMainFlowButtonView({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+    flowModel: workbenchFlow.value,
+    fallbackTarget: workbenchFlow.value.mainFlowState.primaryAction,
+    fallbackEnabled: workbenchFlow.value.controls.canOpenRuntimeResults,
+    source: MAIN_FLOW_PANEL_SOURCE,
+  })
 );
-const runtimeActionEditButtonTarget = computed(() =>
-  resolveMainFlowButtonOperation({
+const runtimeActionEditButtonView = computed(() =>
+  createWorkbenchMainFlowButtonView({
     kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+    flowModel: workbenchFlow.value,
     fallbackTarget: workbenchFlow.value.mainFlowState.runtimeActionEditTarget,
+    fallbackEnabled: workbenchFlow.value.mainFlowState.canFocusRuntimeAction,
+    source: MAIN_FLOW_PANEL_SOURCE,
   })
 );
-const runtimeResultReturnButtonTarget = computed(() =>
-  resolveMainFlowButtonOperation({
+const runtimeResultReturnButtonView = computed(() =>
+  createWorkbenchMainFlowButtonView({
     kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+    flowModel: workbenchFlow.value,
     fallbackTarget: workbenchFlow.value.mainFlowState.resultReturnTarget,
+    fallbackEnabled: workbenchFlow.value.mainFlowState.canReturnRuntimeResult,
+    source: MAIN_FLOW_PANEL_SOURCE,
   })
-);
-const runtimeActionEditButtonEnabled = computed(
-  () =>
-    runtimeActionEditButtonTarget.value.enabled ??
-    workbenchFlow.value.mainFlowState.canFocusRuntimeAction
-);
-const runtimeResultReturnButtonEnabled = computed(
-  () =>
-    runtimeResultReturnButtonTarget.value.enabled ??
-    workbenchFlow.value.mainFlowState.canReturnRuntimeResult
 );
 
 function focusRuntimeAction() {
   dispatchMainFlowAction(WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION, () =>
-    getRuntimeActionFocusFlowAction(runtimeActionEditButtonTarget.value)
+    getRuntimeActionFocusFlowAction(runtimeActionEditButtonView.value.target)
   );
 }
 
 function returnRuntimeResult() {
   dispatchMainFlowAction(WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT, () =>
-    getRuntimeReturnFlowAction(runtimeResultReturnButtonTarget.value)
+    getRuntimeReturnFlowAction(runtimeResultReturnButtonView.value.target)
   );
 }
 
@@ -375,14 +364,6 @@ function dispatchMainFlowAction(kind, createFallbackAction) {
 
 function isPrimaryFlowAction(kind) {
   return workbenchFlow.value.mainFlowState.primaryAction.kind === kind;
-}
-
-function resolveMainFlowButtonOperation({ kind = '', fallbackTarget = null }) {
-  const primaryOperation = runtimeReviewPrimaryOperation.value;
-  if (isPrimaryFlowAction(kind) && primaryOperation?.kind === kind) {
-    return primaryOperation;
-  }
-  return fallbackTarget ?? {};
 }
 
 function getOpenRuntimeResultsFlowAction(flow) {
