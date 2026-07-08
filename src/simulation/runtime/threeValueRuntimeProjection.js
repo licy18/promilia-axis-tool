@@ -1,13 +1,14 @@
-import { compareThreeValueGenerationDeltas as compareStandardThreeValueGenerationDeltas } from '../generation/threeValueGenerationLayer';
 import { summarizeThreeValueCalculators } from '../threeValueCalculatorAdapters';
+import { createThreeValueRuntimeInput } from './threeValueRuntimeInput';
 
 export function createThreeValueRuntimeProjection({
   scenario,
   threeValueGenerationLayer,
 }) {
-  const appliedDeltas = createThreeValueRuntimeAppliedDeltas(
-    threeValueGenerationLayer
-  );
+  const runtimeInput = createThreeValueRuntimeInput({
+    threeValueGenerationLayer,
+  });
+  const appliedDeltas = runtimeInput.appliedDeltas;
   const enemyStateCurve = createThreeValueRuntimeEnemyStateCurve({
     scenario,
     appliedDeltas,
@@ -17,11 +18,19 @@ export function createThreeValueRuntimeProjection({
     appliedDeltas,
   });
   const simLog = createThreeValueRuntimeSimLog(appliedDeltas);
+  const resourceCurves = createThreeValueRuntimeResourceCurves(
+    selfEnergyCurveByActor
+  );
+  const stateCurves = createThreeValueRuntimeStateCurves({
+    enemyStateCurve,
+    resourceCurves,
+  });
   const summary = summarizeThreeValueRuntimeProjection({
-    threeValueGenerationLayer,
+    runtimeInput,
     appliedDeltas,
     enemyStateCurve,
     selfEnergyCurveByActor,
+    resourceCurves,
     simLog,
   });
 
@@ -32,22 +41,17 @@ export function createThreeValueRuntimeProjection({
       appliedDeltas.length > 0
         ? 'runtime-projection-ready-from-generation-layer'
         : 'runtime-projection-ready-no-applied-deltas',
-    inputContractName:
-      threeValueGenerationLayer?.contract?.name ??
-      'Action -> Hit -> ThreeValueDelta',
+    inputContractName: runtimeInput.contractName,
+    runtimeInput,
     appliedOnly: true,
+    stateCurves,
+    resourceCurves,
     enemyStateCurve,
     selfEnergyCurveByActor,
     simLog,
     summary,
     applied: true,
   };
-}
-
-function createThreeValueRuntimeAppliedDeltas(threeValueGenerationLayer) {
-  return [...(threeValueGenerationLayer?.deltas ?? [])]
-    .filter(delta => delta.applied)
-    .sort(compareStandardThreeValueGenerationDeltas);
 }
 
 function createThreeValueRuntimeEnemyStateCurve({ scenario, appliedDeltas }) {
@@ -210,6 +214,7 @@ function createThreeValueRuntimeSimLog(appliedDeltas) {
         : (delta.calculator?.replaceable ?? null),
     confidence: delta.confidence,
     stateCurveSequenceIndex: delta.stateCurveSequenceIndex,
+    runtimeSequenceIndex: delta.runtimeSequenceIndex ?? index,
     applied: true,
   }));
 }
@@ -219,6 +224,7 @@ function createThreeValueRuntimePoint(delta, sequenceIndex) {
     sourceKind: 'three-value-generation-layer-applied-delta',
     sourceDeltaId: delta.id,
     sequenceIndex,
+    runtimeSequenceIndex: delta.runtimeSequenceIndex ?? sequenceIndex,
     stateCurveSequenceIndex: delta.stateCurveSequenceIndex,
     actionId: delta.actionId,
     actionName: delta.actionName,
@@ -259,11 +265,66 @@ function createThreeValueRuntimePoint(delta, sequenceIndex) {
   };
 }
 
+function createThreeValueRuntimeStateCurves({
+  enemyStateCurve,
+  resourceCurves,
+}) {
+  return {
+    sourceKind: 'azpr-runtime-state-curves-from-standard-deltas',
+    status: 'runtime-state-curves-ready-from-standard-deltas',
+    enemy: enemyStateCurve,
+    resources: resourceCurves,
+    summary: {
+      enemyPointCount: enemyStateCurve.pointCount,
+      enemyHpDelta: enemyStateCurve.hpDelta,
+      enemyToughnessDelta: enemyStateCurve.toughnessDelta,
+      resourceActorCount: resourceCurves.summary.actorCount,
+      activeResourceActorCount: resourceCurves.summary.activeActorCount,
+      resourcePointCount: resourceCurves.summary.pointCount,
+      selfEnergyDelta: resourceCurves.summary.selfEnergyDelta,
+      applied: true,
+    },
+    applied: true,
+  };
+}
+
+function createThreeValueRuntimeResourceCurves(selfEnergyCurveByActor) {
+  const pointCount = selfEnergyCurveByActor.reduce(
+    (sum, actor) => sum + actor.pointCount,
+    0
+  );
+  return {
+    sourceKind: 'azpr-runtime-resource-curves-from-standard-deltas',
+    status:
+      pointCount > 0
+        ? 'resource-curves-ready-from-standard-deltas'
+        : 'resource-curves-ready-no-applied-resource-deltas',
+    resourceKind: 'selfEnergy',
+    curvesByActor: selfEnergyCurveByActor,
+    summary: {
+      actorCount: selfEnergyCurveByActor.length,
+      activeActorCount: selfEnergyCurveByActor.filter(
+        actor => actor.pointCount > 0
+      ).length,
+      pointCount,
+      selfEnergyDelta: roundCurveValue(
+        selfEnergyCurveByActor.reduce(
+          (sum, actor) => sum + (numberOrNull(actor.delta) ?? 0),
+          0
+        )
+      ),
+      applied: true,
+    },
+    applied: true,
+  };
+}
+
 function summarizeThreeValueRuntimeProjection({
-  threeValueGenerationLayer,
+  runtimeInput,
   appliedDeltas,
   enemyStateCurve,
   selfEnergyCurveByActor,
+  resourceCurves,
   simLog,
 }) {
   const selfEnergyPointCount = selfEnergyCurveByActor.reduce(
@@ -273,10 +334,11 @@ function summarizeThreeValueRuntimeProjection({
   const calculatorSummary = summarizeThreeValueCalculators(appliedDeltas);
 
   return {
-    inputContractName:
-      threeValueGenerationLayer?.contract?.name ??
-      'Action -> Hit -> ThreeValueDelta',
-    inputDeltaCount: threeValueGenerationLayer?.deltas?.length ?? 0,
+    inputContractName: runtimeInput.contractName,
+    inputDeltaCount: runtimeInput.summary.inputDeltaCount,
+    runtimeInputStatus: runtimeInput.status,
+    runtimeInputSourceKind: runtimeInput.sourceKind,
+    runtimeInputIgnoredDeltaCount: runtimeInput.ignoredDeltaCount,
     appliedDeltaCount: appliedDeltas.length,
     enemyHpDelta: sumThreeValueRuntimeDeltas(appliedDeltas, 'hpDelta'),
     enemyToughnessDelta: sumThreeValueRuntimeDeltas(
@@ -287,6 +349,9 @@ function summarizeThreeValueRuntimeProjection({
     selfEnergyActorCount: selfEnergyCurveByActor.length,
     enemyStatePointCount: enemyStateCurve.pointCount,
     selfEnergyPointCount,
+    resourceCurveActorCount: resourceCurves.summary.actorCount,
+    activeResourceCurveActorCount: resourceCurves.summary.activeActorCount,
+    resourceCurvePointCount: resourceCurves.summary.pointCount,
     enemyHpInitial: enemyStateCurve.stateMetrics?.hp?.initialValue ?? null,
     enemyHpRemaining: enemyStateCurve.stateMetrics?.hp?.currentValue ?? null,
     enemyHpBaselineStatus:
@@ -308,6 +373,7 @@ function summarizeThreeValueRuntimeProjection({
     calculatorStatuses: calculatorSummary.statuses,
     calculatorSummary,
     source: 'threeValueGenerationLayer.applied-deltas',
+    runtimeInputSource: 'threeValueRuntimeInput.appliedDeltas',
     appliedOnly: true,
     applied: true,
   };

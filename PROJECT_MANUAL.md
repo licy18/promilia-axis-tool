@@ -6940,6 +6940,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 下一阶段转向运行时层能力块，优先整理 runtime 对标准 delta 合同的消费边界，明确 `simLog`、敌人 HP/韧性曲线、自身能量曲线和 summary 的统一输出责任。
 - 不继续追真实公式、真实倍率、单帧动作细节或候选数值平衡。
 
+### 2026-07-08：运行时层能力块 - 标准 delta 消费边界
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- 新增 `threeValueRuntimeInput.js`，把 `threeValueGenerationLayer.deltas` 归一化为 runtime 只消费的 applied delta 输入。
+- `createThreeValueRuntimeProjection()` 现在从 `runtimeInput.appliedDeltas` 派生 `simLog`、敌人 HP/韧性状态、角色自身能量曲线和 summary。
+- runtime 输出新增统一 `stateCurves` 与 `resourceCurves` 外壳，同时保留既有 `enemyStateCurve` 和 `selfEnergyCurveByActor` 字段，保证 Workbench 现有读取路径不被打断。
+- 本阶段不修改三值计算公式、不改变 applied 三值结果、不扩大 UI 信息量。
+
+当前验证事实：
+
+- candidate delta 会被 runtime input 记录为 ignored，不进入 `simLog` 和 runtime 曲线。
+- `runtimeInput` 记录输入合同、applied/ignored 数量和 applied track/layer。
+- `stateCurves` 汇总敌人 HP/韧性与资源曲线，`resourceCurves.curvesByActor` 与既有 `selfEnergyCurveByActor` 保持同源。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js`：通过，1 个测试文件、1 条测试。
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、55 条测试。
+
+下一步：
+
+- 下一阶段转向 UI 主流程能力块，优先把 Workbench 的“编辑动作 -> 运行模拟 -> 曲线监控 -> 日志/详情 -> 回到动作修改”串成更完整的 Endaxis 式操作闭环。
+- 不再新增单个状态标签、同步提示、缺口说明或公式追证阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

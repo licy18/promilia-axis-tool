@@ -166,7 +166,59 @@ describe('three value runtime projection', () => {
     expect(runtimeProjection).toMatchObject({
       sourceKind: 'azpr-runtime-projection-from-three-value-generation-layer',
       inputContractName: 'Action -> Hit -> ThreeValueDelta',
+      runtimeInput: {
+        sourceKind: 'azpr-runtime-input-from-three-value-generation-layer',
+        status: 'runtime-input-ready-with-applied-deltas',
+        contractName: 'Action -> Hit -> ThreeValueDelta',
+        appliedOnly: true,
+        ignoredDeltaCount: 1,
+        summary: {
+          inputDeltaCount: 3,
+          appliedDeltaCount: 2,
+          ignoredDeltaCount: 1,
+          appliedTrackKeys: ['enemyHpDamage', 'selfEnergyChange'],
+          appliedLayerKeys: ['applied'],
+          ignoredLayerCounts: [{ key: 'candidate', count: 1 }],
+          appliedOnly: true,
+          applied: true,
+        },
+        applied: true,
+      },
       appliedOnly: true,
+      stateCurves: {
+        sourceKind: 'azpr-runtime-state-curves-from-standard-deltas',
+        enemy: expect.objectContaining({
+          hpDelta: 1200,
+          toughnessDelta: 0,
+        }),
+        resources: expect.objectContaining({
+          sourceKind: 'azpr-runtime-resource-curves-from-standard-deltas',
+        }),
+        summary: {
+          enemyPointCount: 1,
+          enemyHpDelta: 1200,
+          enemyToughnessDelta: 0,
+          resourceActorCount: 1,
+          activeResourceActorCount: 1,
+          resourcePointCount: 1,
+          selfEnergyDelta: -30,
+          applied: true,
+        },
+        applied: true,
+      },
+      resourceCurves: {
+        sourceKind: 'azpr-runtime-resource-curves-from-standard-deltas',
+        status: 'resource-curves-ready-from-standard-deltas',
+        resourceKind: 'selfEnergy',
+        summary: {
+          actorCount: 1,
+          activeActorCount: 1,
+          pointCount: 1,
+          selfEnergyDelta: -30,
+          applied: true,
+        },
+        applied: true,
+      },
       enemyStateCurve: {
         pointCount: 1,
         hpDelta: 1200,
@@ -178,11 +230,18 @@ describe('three value runtime projection', () => {
       summary: {
         inputDeltaCount: 3,
         appliedDeltaCount: 2,
+        runtimeInputStatus: 'runtime-input-ready-with-applied-deltas',
+        runtimeInputSourceKind:
+          'azpr-runtime-input-from-three-value-generation-layer',
+        runtimeInputIgnoredDeltaCount: 1,
         enemyHpDelta: 1200,
         enemyToughnessDelta: 0,
         selfEnergyDelta: -30,
         enemyStatePointCount: 1,
         selfEnergyPointCount: 1,
+        resourceCurveActorCount: 1,
+        activeResourceCurveActorCount: 1,
+        resourceCurvePointCount: 1,
         simLogCount: 2,
         calculatorCount: 2,
         calculatorKeys: [
@@ -190,6 +249,7 @@ describe('three value runtime projection', () => {
           'azpr-self-energy-delta-calculator',
         ],
         source: 'threeValueGenerationLayer.applied-deltas',
+        runtimeInputSource: 'threeValueRuntimeInput.appliedDeltas',
         appliedOnly: true,
         applied: true,
       },
@@ -200,6 +260,9 @@ describe('three value runtime projection', () => {
       'action-001|hit-1|enemyHpDamage|applied|60|0',
       'action-002|event-RESOURCE_CHANGE-0|selfEnergyChange|applied|90|0',
     ]);
+    expect(
+      runtimeProjection.simLog.map(row => row.runtimeSequenceIndex)
+    ).toEqual([0, 1]);
     expect(
       runtimeProjection.simLog.some(row =>
         row.sourceDeltaId.includes('candidate')
@@ -220,6 +283,9 @@ describe('three value runtime projection', () => {
         }),
       }),
     ]);
+    expect(runtimeProjection.resourceCurves.curvesByActor).toEqual(
+      runtimeProjection.selfEnergyCurveByActor
+    );
     expect(
       createSelfEnergyDeltaSummaryByActor(
         runtimeProjection.selfEnergyCurveByActor

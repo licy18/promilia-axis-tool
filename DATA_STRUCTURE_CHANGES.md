@@ -14275,3 +14275,144 @@ actionResultTimeline + candidateValueSeries + runtimeSampleContext -> createThre
 - `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js`：通过，1 个测试文件、1 条测试。
 - `npm run test -- --run`：通过，15 个测试文件、119 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 172. 运行时层能力块：标准 delta 消费边界
+
+本阶段属于运行时层。
+
+### 172.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 172.2 新增 runtime input
+
+新增文件：
+
+```text
+src/simulation/runtime/threeValueRuntimeInput.js
+```
+
+新增导出：
+
+```js
+createThreeValueRuntimeInput()
+```
+
+输入：
+
+```text
+threeValueGenerationLayer
+```
+
+输出：
+
+```text
+schemaVersion
+sourceKind
+status
+contractName
+inputSourceKind
+inputStatus
+appliedOnly
+deltas
+appliedDeltas
+ignoredDeltaCount
+summary
+applied
+```
+
+`appliedDeltas` 只包含 `threeValueGenerationLayer.deltas` 中 `applied === true` 的标准 delta，并在进入 runtime 前补 `runtimeSequenceIndex` 与数值归一化。
+
+### 172.3 runtime projection 新字段
+
+`createThreeValueRuntimeProjection()` 返回对象新增：
+
+```text
+runtimeInput
+stateCurves
+resourceCurves
+```
+
+兼容保留：
+
+```text
+enemyStateCurve
+selfEnergyCurveByActor
+simLog
+summary
+```
+
+### 172.4 stateCurves / resourceCurves 结构
+
+`stateCurves`：
+
+```text
+sourceKind
+status
+enemy
+resources
+summary
+applied
+```
+
+其中：
+
+```text
+enemy = enemyStateCurve
+resources = resourceCurves
+```
+
+`resourceCurves`：
+
+```text
+sourceKind
+status
+resourceKind
+curvesByActor
+summary
+applied
+```
+
+其中：
+
+```text
+resourceKind = selfEnergy
+curvesByActor = selfEnergyCurveByActor
+```
+
+### 172.5 summary 新增字段
+
+`threeValueRuntimeProjection.summary` 新增：
+
+```text
+runtimeInputStatus
+runtimeInputSourceKind
+runtimeInputIgnoredDeltaCount
+resourceCurveActorCount
+activeResourceCurveActorCount
+resourceCurvePointCount
+runtimeInputSource
+```
+
+既有字段 `source = threeValueGenerationLayer.applied-deltas` 保留，用于兼容现有 UI 和测试。
+
+### 172.6 simLog / point 新增字段
+
+`simLog[]` 和 runtime point 新增：
+
+```text
+runtimeSequenceIndex
+```
+
+该字段来自 `runtimeInput.appliedDeltas[]`，用于标识 runtime 消费 applied delta 的顺序。
+
+### 172.7 验证
+
+新增和继续覆盖：
+
+- runtime input 只消费 applied delta，candidate delta 进入 ignored 统计。
+- `stateCurves` 汇总敌人 HP/韧性与资源曲线。
+- `resourceCurves.curvesByActor` 与既有 `selfEnergyCurveByActor` 保持同源。
+- `simLog[]` 暴露 `runtimeSequenceIndex`，且不包含 candidate delta。
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js`：通过，1 个测试文件、1 条测试。
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、55 条测试。
