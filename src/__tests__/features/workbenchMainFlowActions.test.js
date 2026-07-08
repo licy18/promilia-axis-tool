@@ -971,6 +971,13 @@ describe('workbench main flow actions', () => {
         actionId: 'action-0002',
         statePointId: 'state-point-0002',
       },
+      buttonView: {
+        kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+        isPrimary: true,
+        enabled: true,
+        actionId: 'action-0002',
+        statePointId: 'state-point-0002',
+      },
       action: {
         kind: 'focus-runtime-action',
         source: 'runtime-review-primary',
@@ -1024,6 +1031,13 @@ describe('workbench main flow actions', () => {
         enabled: true,
         actionId: 'action-0002',
         statePointId: 'state-point-0002',
+        buttonView: {
+          kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+          isPrimary: true,
+          enabled: true,
+          actionId: 'action-0002',
+          statePointId: 'state-point-0002',
+        },
       },
       action: {
         kind: 'return-runtime-result',
@@ -1034,6 +1048,7 @@ describe('workbench main flow actions', () => {
       },
     });
     expect(command.action).toBe(command.view.action);
+    expect(command.action).toBe(command.view.buttonView.action);
   });
 
   it('creates the pending result primary runtime review action', () => {

@@ -9263,6 +9263,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：基于 `runtimeReviewFlowView` 与 panel command view，把运行结果区的主操作入口进一步和顶部 FlowPanel 的 primary action 合流，减少“顶部按钮”和“结果区按钮”之间的状态分叉。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Primary Uses Main Flow Button View
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `createWorkbenchRuntimeReviewPrimaryOperationView()` 改为通过共享 `createWorkbenchMainFlowButtonView()` 解析 primary operation 的 target、enabled 和 action。
+- 运行结果区 primary 操作按钮与顶部 `WorkbenchFlowPanel` 的 primary 按钮现在共用同一套 main flow button view 解析入口，减少两处各自决定 primary action 的状态分叉。
+- `createWorkbenchMainFlowButtonView()` 支持在没有显式 `mainFlowState.primaryAction` 的运行结果 primary view 场景下，根据 `runtimeReviewOperations.primaryOperationKind` 识别 primary 操作。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- main flow action 单测确认 runtime review primary view/command 暴露并复用 `buttonView`，且 action 与 button view action 同源。
+- WorkbenchFlowPanel 组件测试和 Workbench 页面测试确认顶部主流程按钮与运行结果区 primary 按钮仍可分发原有 focus/return 路径。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、80 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、211 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把 shared button view / flow view / panel command view 的消费关系进一步用于主流程回改后的刷新回看入口，减少“修改后回结果”的分散判断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

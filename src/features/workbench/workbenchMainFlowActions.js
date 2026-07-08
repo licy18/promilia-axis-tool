@@ -160,10 +160,16 @@ export function createWorkbenchMainFlowButtonView({
 } = {}) {
   const mainFlowState = flowModel?.mainFlowState ?? {};
   const primaryAction = mainFlowState.primaryAction ?? {};
-  const isPrimary = primaryAction.kind === kind;
+  const isRuntimeReviewPrimary = isRuntimeReviewPrimaryOperationKind(
+    flowModel,
+    kind
+  );
+  const isPrimary = primaryAction.kind
+    ? primaryAction.kind === kind
+    : isRuntimeReviewPrimary;
   const fallback = fallbackTarget ?? {};
 
-  if (isPrimary && isRuntimeReviewPrimaryOperationKind(flowModel, kind)) {
+  if (isPrimary && isRuntimeReviewPrimary) {
     const consumer = createWorkbenchRuntimeReviewOperationConsumer({
       operationKind: kind,
       flowModel,
@@ -466,31 +472,38 @@ export function createWorkbenchRuntimeReviewPrimaryOperationView({
   source = '',
   consumer = null,
   operations = null,
+  buttonView = null,
 } = {}) {
   const resolvedOperations =
     operations ?? flowModel?.runtimeReviewOperations ?? null;
-  const resolvedConsumer =
-    consumer ??
-    createWorkbenchRuntimeReviewOperationConsumer({
-      flowModel,
-      source,
-    });
-  const target = resolvedConsumer?.target ?? {};
   const operationKind =
-    resolvedConsumer?.operationKind ??
+    consumer?.operationKind ??
     resolvedOperations?.primaryOperationKind ??
     '';
+  const resolvedButtonView =
+    buttonView ??
+    createWorkbenchMainFlowButtonView({
+      flowModel,
+      kind: operationKind,
+      source,
+      fallbackTarget:
+        resolvedOperations?.primaryOperation?.target ??
+        resolvedOperations?.primaryOperation,
+      fallbackEnabled: resolvedOperations?.primaryOperationEnabled,
+    });
+  const target = resolvedButtonView?.target ?? {};
   return {
     visible: Boolean(resolvedOperations?.canRunAnyOperation),
     operationKind,
-    enabled: Boolean(resolvedConsumer?.enabled),
+    enabled: Boolean(resolvedButtonView?.enabled),
     isFocusAction:
       operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
-    actionId: target.actionId ?? '',
-    statePointId: target.statePointId ?? '',
+    actionId: resolvedButtonView?.actionId ?? target.actionId ?? '',
+    statePointId: resolvedButtonView?.statePointId ?? target.statePointId ?? '',
     label: resolvedOperations?.primaryOperation?.label ?? '',
     target,
-    action: resolvedConsumer?.action ?? null,
+    action: resolvedButtonView?.action ?? consumer?.action ?? null,
+    buttonView: resolvedButtonView ?? null,
   };
 }
 

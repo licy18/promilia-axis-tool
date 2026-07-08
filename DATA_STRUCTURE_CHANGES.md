@@ -19953,3 +19953,45 @@ createWorkbenchRuntimeReviewFlowView({
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、64 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、211 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 260. UI 主流程能力块：Runtime Review Primary Uses Main Flow Button View
+
+### 260.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`createWorkbenchMainFlowButtonView()` 的 primary 判断扩展为：
+
+```text
+mainFlowState.primaryAction.kind 存在时：按 primaryAction.kind === kind 判断。
+mainFlowState.primaryAction.kind 不存在时：允许 runtimeReviewOperations.primaryOperationKind === kind 的运行结果 primary 场景被识别为 primary。
+```
+
+`createWorkbenchRuntimeReviewPrimaryOperationView()` 现在通过 `createWorkbenchMainFlowButtonView()` 解析：
+
+```text
+target
+enabled
+actionId
+statePointId
+action
+```
+
+新增输出字段：
+
+```js
+buttonView
+```
+
+`createWorkbenchRuntimeReviewPrimaryOperationCommand()` 的 `view.action` 与 `view.buttonView.action` 保持同源。
+
+### 260.2 保存与迁移
+
+本阶段只调整运行结果区 primary operation 与主流程按钮 view 的共享解析关系，不新增持久字段，不需要数据迁移。
+
+### 260.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，确认 runtime review primary view/command 暴露并复用 `buttonView`，且 action 与 button view action 同源。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、80 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、211 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
