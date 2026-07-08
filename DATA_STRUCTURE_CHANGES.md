@@ -13080,3 +13080,92 @@ data-state-point-id
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DX 应补结果定位后的快捷往返，让编辑、结果回看和日志定位之间的切换更少。
+
+## 157. 阶段 5-8DX：属性面板结果回看入口
+
+阶段目标：
+
+- 在动作属性面板提供结果定位后的快捷回看入口，减少编辑和结果点之间的往返成本。
+
+### 157.1 数据结构变化
+
+本阶段不新增保存字段，不变更 `Project` schema、simulation 输出或 localStorage 数据。
+
+`PropertiesPanel` 新增 prop：
+
+```js
+actionEditResultContext: Object | null
+```
+
+该 prop 复用阶段 5-8DV 已有的前端派生状态。属性面板内部新增 `runtimeResultReturnContext`：
+
+```js
+{
+  status: 'origin-result' | 'refreshed-edit-result',
+  actionId: string,
+  fieldKey: string,
+  label: string,
+  summary: string,
+  originStatePointId: string,
+  statePointId: string
+}
+```
+
+派生规则：
+
+```text
+actionEditFocus.editOrigin === "runtime-focus"
+actionEditFocus.actionId === selectedAction.id
+```
+
+当 `actionEditResultContext.runtimeStatePointId` 可用时：
+
+```text
+status = "refreshed-edit-result"
+statePointId = actionEditResultContext.runtimeStatePointId
+```
+
+否则：
+
+```text
+status = "origin-result"
+statePointId = actionEditFocus.originStatePointId
+```
+
+### 157.2 DOM 状态
+
+属性面板动作编辑区新增：
+
+```html
+data-testid="workbench-action-edit-result-return"
+data-return-status="origin-result|refreshed-edit-result"
+data-action-id
+data-origin-state-point-id
+data-state-point-id
+```
+
+按钮：
+
+```html
+data-testid="workbench-action-edit-result-return-button"
+data-state-point-id
+```
+
+点击按钮会向 `Workbench` 发出 `return-runtime-result`，由 Workbench 复用动作结果定位流程选中对应 runtime state point。
+
+### 157.3 验证
+
+当前测试覆盖：
+
+- 未进入结果定位编辑时，属性面板不显示结果回看入口。
+- 点击三值详情 `定位动作` 后，入口显示 `origin-result` 并指向来源 state point。
+- 修改 `startMs` 后，入口切换为 `refreshed-edit-result` 并指向刷新后的 state point。
+- 点击 `回到结果点` 后，三值详情选中刷新后的 runtime state point。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、40 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、114 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DY 应补结果回看后的当前动作/结果区域状态一致性，让用户更少依赖手动筛选或滚动确认当前位置。

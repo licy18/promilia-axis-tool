@@ -87,6 +87,33 @@
     </div>
 
     <div class="action-controls">
+      <div
+        v-if="runtimeResultReturnContext"
+        class="action-result-return"
+        :data-action-id="runtimeResultReturnContext.actionId"
+        :data-origin-state-point-id="
+          runtimeResultReturnContext.originStatePointId
+        "
+        :data-return-status="runtimeResultReturnContext.status"
+        :data-state-point-id="runtimeResultReturnContext.statePointId"
+        data-testid="workbench-action-edit-result-return"
+      >
+        <div>
+          <span>结果回看</span>
+          <strong>{{ runtimeResultReturnContext.label }}</strong>
+          <small>{{ runtimeResultReturnContext.summary }}</small>
+        </div>
+        <button
+          type="button"
+          :data-state-point-id="runtimeResultReturnContext.statePointId"
+          data-testid="workbench-action-edit-result-return-button"
+          @click="returnRuntimeResult"
+        >
+          <Aim class="action-result-return-icon" />
+          <span>回到结果点</span>
+        </button>
+      </div>
+
       <label
         data-testid="workbench-action-edit-control"
         data-edit-field="startMs"
@@ -410,7 +437,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { Operation } from '@element-plus/icons-vue';
+import { Aim, Operation } from '@element-plus/icons-vue';
 import { WORKBENCH_FRAME_MS, formatFrameTime } from '../../domain/timebase';
 
 const props = defineProps({
@@ -446,9 +473,17 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  actionEditResultContext: {
+    type: Object,
+    default: null,
+  },
 });
 
-const emit = defineEmits(['update-selection', 'update-action']);
+const emit = defineEmits([
+  'update-selection',
+  'update-action',
+  'return-runtime-result',
+]);
 
 const frameStepMs = WORKBENCH_FRAME_MS;
 
@@ -619,6 +654,13 @@ const attributePanelRows = computed(() => {
     })
     .filter(Boolean);
 });
+const runtimeResultReturnContext = computed(() =>
+  createRuntimeResultReturnContext({
+    selectedAction: props.selectedAction,
+    focus: props.actionEditFocus,
+    resultContext: props.actionEditResultContext,
+  })
+);
 const valueParamSemanticLabel = computed(() => {
   const params = displayedElementValues.value.flatMap(row => row.params ?? []);
   const uniqueParams = [];
@@ -719,7 +761,10 @@ const secondaryEditFieldKey = computed(() => {
 });
 const selectedActionSummary = computed(() => {
   if (isSkillAction.value) {
-    return formatActionVariantOption(props.selectedAction.selectedDamageSegment) || '倍率待补';
+    return (
+      formatActionVariantOption(props.selectedAction.selectedDamageSegment) ||
+      '倍率待补'
+    );
   }
   if (isWaitAction.value) {
     return formatFrameTime(props.selectedAction.durationMs ?? 0);
@@ -765,6 +810,17 @@ function emitTextPatch(key, value) {
   });
 }
 
+function returnRuntimeResult() {
+  if (!runtimeResultReturnContext.value?.statePointId) {
+    return;
+  }
+  emit('return-runtime-result', {
+    actionId: runtimeResultReturnContext.value.actionId,
+    statePointId: runtimeResultReturnContext.value.statePointId,
+    status: runtimeResultReturnContext.value.status,
+  });
+}
+
 function isEditFocusField(fieldKey) {
   const focus = props.actionEditFocus;
   if (!fieldKey || !focus?.actionId || !props.selectedAction?.id) {
@@ -772,23 +828,24 @@ function isEditFocusField(fieldKey) {
   }
   return (
     focus.actionId === props.selectedAction.id &&
-    normalizeEditFocusField(focus.fieldKey) === normalizeEditFocusField(fieldKey)
+    normalizeEditFocusField(focus.fieldKey) ===
+      normalizeEditFocusField(fieldKey)
   );
 }
 
 function getEditFocusSummary(fieldKey) {
   return isEditFocusField(fieldKey)
-    ? props.actionEditFocus?.changeSummary ?? ''
+    ? (props.actionEditFocus?.changeSummary ?? '')
     : '';
 }
 
 function getEditFocusLabel(fieldKey) {
-  return isEditFocusField(fieldKey) ? props.actionEditFocus?.label ?? '' : '';
+  return isEditFocusField(fieldKey) ? (props.actionEditFocus?.label ?? '') : '';
 }
 
 function getEditFocusOrigin(fieldKey) {
   return isEditFocusField(fieldKey)
-    ? props.actionEditFocus?.editOrigin ?? ''
+    ? (props.actionEditFocus?.editOrigin ?? '')
     : '';
 }
 
@@ -800,6 +857,41 @@ function normalizeEditFocusField(fieldKey) {
     return 'actorCharacterId';
   }
   return fieldKey || '';
+}
+
+function createRuntimeResultReturnContext({
+  selectedAction = null,
+  focus = null,
+  resultContext = null,
+} = {}) {
+  if (
+    !selectedAction?.id ||
+    !focus?.actionId ||
+    focus.editOrigin !== 'runtime-focus' ||
+    focus.actionId !== selectedAction.id ||
+    !focus.originStatePointId
+  ) {
+    return null;
+  }
+  const refreshedStatePointId =
+    resultContext?.actionId === selectedAction.id
+      ? resultContext.runtimeStatePointId
+      : '';
+  const hasRefreshedResult = Boolean(refreshedStatePointId);
+  return {
+    status: hasRefreshedResult ? 'refreshed-edit-result' : 'origin-result',
+    actionId: selectedAction.id,
+    fieldKey: focus.fieldKey ?? '',
+    label: hasRefreshedResult ? '回到刷新后结果' : '回到来源结果',
+    summary:
+      (hasRefreshedResult
+        ? resultContext?.changeSummary || focus.changeSummary
+        : focus.changeSummary) ?? '',
+    originStatePointId: focus.originStatePointId,
+    statePointId: hasRefreshedResult
+      ? refreshedStatePointId
+      : focus.originStatePointId,
+  };
 }
 
 function formatSigned(value) {
@@ -889,6 +981,77 @@ h2 {
 .action-controls {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   padding-top: 0;
+}
+
+.action-result-return {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 9px;
+  border: 1px solid rgba(121, 199, 185, 0.26);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.09);
+}
+
+.action-result-return div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.action-result-return span,
+.action-result-return small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action-result-return span {
+  color: #9ce0d2;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.action-result-return strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #ffffff;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action-result-return small {
+  color: #aeb8c1;
+  font-size: 11px;
+}
+
+.action-result-return button {
+  display: inline-grid;
+  grid-template-columns: 13px auto;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  min-height: 28px;
+  padding: 0 9px;
+  border: 1px solid rgba(121, 199, 185, 0.3);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.14);
+  color: #dff9f3;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.action-result-return-icon {
+  width: 13px;
+  height: 13px;
 }
 
 .contextual-controls {

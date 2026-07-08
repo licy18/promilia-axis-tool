@@ -104,8 +104,10 @@
           :selected-action="selectedAction"
           :duration-ms="scenario.time.durationMs"
           :action-edit-focus="actionEditFocus"
+          :action-edit-result-context="actionEditResultContext"
           @update-selection="updateSelection"
           @update-action="updateAction"
+          @return-runtime-result="returnRuntimeResultFromProperties"
         />
 
         <EnemyPanel
@@ -1243,6 +1245,13 @@ function selectActionResultRuntimePoint(pointId) {
 }
 
 function selectActionResult({ actionId, statePointId } = {}) {
+  if (actionId && actionDrafts.value.some(action => action.id === actionId)) {
+    selectAction(actionId);
+  }
+  selectActionResultRuntimePoint(statePointId);
+}
+
+function returnRuntimeResultFromProperties({ actionId, statePointId } = {}) {
   if (actionId && actionDrafts.value.some(action => action.id === actionId)) {
     selectAction(actionId);
   }

@@ -1978,6 +1978,11 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-selected-detail-edit-context"]')
         .exists()
     ).toBe(false);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-action-edit-result-return"]')
+        .exists()
+    ).toBe(false);
 
     await runtimeDetailActionFocus.trigger('click');
     await nextTick();
@@ -2026,6 +2031,21 @@ describe('Workbench view', () => {
     );
     expect(runtimeDetailEditContext.text()).toContain('编辑焦点已同步');
     expect(runtimeDetailEditContext.text()).toContain('结果定位');
+    const originResultReturn = wrapper.find(
+      '[data-testid="workbench-action-edit-result-return"]'
+    );
+    expect(originResultReturn.exists()).toBe(true);
+    expect(originResultReturn.attributes('data-return-status')).toBe(
+      'origin-result'
+    );
+    expect(originResultReturn.attributes('data-action-id')).toBe('action-0001');
+    expect(originResultReturn.attributes('data-state-point-id')).toBe(
+      appliedStatePointId
+    );
+    expect(originResultReturn.attributes('data-origin-state-point-id')).toBe(
+      appliedStatePointId
+    );
+    expect(originResultReturn.text()).toContain('回到来源结果');
 
     await wrapper.find('[data-testid="workbench-start-input"]').setValue('100');
     await nextTick();
@@ -2047,6 +2067,39 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-action-edit-feedback-origin"]')
         .text()
     ).toBe('来自结果定位');
+    const refreshedRuntimeStatePointId = runtimeDetailEditFeedback.attributes(
+      'data-runtime-state-point-id'
+    );
+    expect(refreshedRuntimeStatePointId).toBeTruthy();
+    expect(refreshedRuntimeStatePointId).not.toBe(appliedStatePointId);
+    const refreshedResultReturn = wrapper.find(
+      '[data-testid="workbench-action-edit-result-return"]'
+    );
+    expect(refreshedResultReturn.attributes('data-return-status')).toBe(
+      'refreshed-edit-result'
+    );
+    expect(refreshedResultReturn.attributes('data-state-point-id')).toBe(
+      refreshedRuntimeStatePointId
+    );
+    expect(refreshedResultReturn.attributes('data-origin-state-point-id')).toBe(
+      appliedStatePointId
+    );
+    expect(refreshedResultReturn.text()).toContain('回到刷新后结果');
+    const refreshedResultReturnButton = refreshedResultReturn.find(
+      '[data-testid="workbench-action-edit-result-return-button"]'
+    );
+    expect(refreshedResultReturnButton.attributes('data-state-point-id')).toBe(
+      refreshedRuntimeStatePointId
+    );
+
+    await refreshedResultReturnButton.trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(refreshedRuntimeStatePointId);
   });
 
   it('links runtime sim log detail to the action edit focus', async () => {

@@ -6486,6 +6486,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DX 目标：继续完善 Workbench 主流程编辑体验，优先补结果定位后的快捷回到当前编辑动作或当前结果点，让编辑、结果回看和日志定位之间的往返更少。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DX 属性面板结果回看快捷入口
+
+本轮完成：
+
+- `PropertiesPanel` 接入当前 `actionEditResultContext`，在结果定位后的动作编辑区显示 `结果回看` 入口。
+- 入口在尚未修改字段时指向来源结果点，显示 `回到来源结果`。
+- 入口在字段修改并刷新 runtime projection 后自动指向刷新后结果点，显示 `回到刷新后结果`。
+- `Workbench` 新增属性面板回看事件处理，复用现有动作结果定位流程选中目标 runtime state point。
+- Workbench 测试覆盖三值详情定位动作、属性面板回看来源结果、修改 `startMs` 后回看刷新后结果，并确认点击后选中刷新后的三值点。
+
+当前验证事实：
+
+- 未进入结果定位编辑时，属性面板不显示 `workbench-action-edit-result-return`。
+- 点击三值详情 `定位动作` 后，属性面板显示 `data-return-status="origin-result"`。
+- 修改 `startMs` 后，属性面板回看入口切换为 `data-return-status="refreshed-edit-result"`。
+- 点击 `回到结果点` 后，三值详情选中刷新后的 runtime state point。
+- 本阶段只新增前端派生状态和 UI 捷径，不新增公式、simulation 输出或保存 schema。
+
+当前边界：
+
+- 回看入口只在当前选中动作与 `runtime-focus` 编辑焦点匹配时显示。
+- 来源结果点不保留历史快照；编辑后优先回到刷新后的当前 runtime state point。
+- 暂未增加键盘快捷键或跨面板自动滚动。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、40 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、114 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8DY 目标：继续完善 Workbench 主流程编辑体验，优先补结果回看后的当前动作/结果区域状态一致性，让用户能更少依赖手动筛选或滚动确认当前位置。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
