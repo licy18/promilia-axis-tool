@@ -343,6 +343,7 @@ import {
 import {
   createRuntimeStatePointContexts,
   getRuntimeEnemyStateCurve,
+  getRuntimeOutputSummary,
   getRuntimeResourceCurveRows,
 } from './runtimeProjectionPoints';
 
@@ -408,7 +409,9 @@ const resourceTotals = computed(() => {
   }, {});
 });
 
-const runtimeSummary = computed(() => props.runtimeProjection?.summary ?? {});
+const runtimeSummary = computed(() =>
+  getRuntimeOutputSummary(props.runtimeProjection)
+);
 
 const runtimeEnemyState = computed(() =>
   getRuntimeEnemyStateCurve(props.runtimeProjection)

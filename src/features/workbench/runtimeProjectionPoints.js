@@ -1,6 +1,71 @@
 import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
 
+export function getRuntimeOutputContract(runtimeProjection) {
+  return runtimeProjection?.outputContract ?? null;
+}
+
+export function getRuntimeOutputContractOutput(runtimeProjection, outputName) {
+  return (
+    getRuntimeOutputContract(runtimeProjection)?.outputs?.[outputName] ?? null
+  );
+}
+
+export function getRuntimeOutputSummary(runtimeProjection) {
+  const summary = runtimeProjection?.summary ?? {};
+  const contractSummary = getRuntimeOutputContract(runtimeProjection)?.summary;
+  if (!contractSummary) {
+    return summary;
+  }
+  return {
+    ...summary,
+    ...contractSummary,
+  };
+}
+
+export function getRuntimeSimLogRows(runtimeProjection) {
+  const simLogOutput = getRuntimeOutputContractOutput(
+    runtimeProjection,
+    'simLog'
+  );
+  const rows = runtimeProjection?.simLog;
+  if (simLogOutput && Array.isArray(rows)) {
+    return rows;
+  }
+  return Array.isArray(rows) ? rows : [];
+}
+
+export function getRuntimeSimLogCount(runtimeProjection) {
+  const simLogOutputCount = numberOrNull(
+    getRuntimeOutputContractOutput(runtimeProjection, 'simLog')?.rowCount
+  );
+  if (Number.isFinite(simLogOutputCount)) {
+    return simLogOutputCount;
+  }
+
+  const contractSummaryCount = numberOrNull(
+    getRuntimeOutputContract(runtimeProjection)?.summary?.simLogCount
+  );
+  if (Number.isFinite(contractSummaryCount)) {
+    return contractSummaryCount;
+  }
+
+  const summaryCount = numberOrNull(runtimeProjection?.summary?.simLogCount);
+  if (Number.isFinite(summaryCount)) {
+    return summaryCount;
+  }
+
+  return getRuntimeSimLogRows(runtimeProjection).length;
+}
+
 export function getRuntimeEnemyStateCurve(runtimeProjection) {
+  const stateCurvesOutput = getRuntimeOutputContractOutput(
+    runtimeProjection,
+    'stateCurves'
+  );
+  if (stateCurvesOutput && runtimeProjection?.stateCurves?.enemy) {
+    return runtimeProjection.stateCurves.enemy;
+  }
+
   return (
     runtimeProjection?.stateCurves?.enemy ??
     runtimeProjection?.enemyStateCurve ??
@@ -9,6 +74,17 @@ export function getRuntimeEnemyStateCurve(runtimeProjection) {
 }
 
 export function getRuntimeResourceCurveRows(runtimeProjection) {
+  const resourceCurvesOutput = getRuntimeOutputContractOutput(
+    runtimeProjection,
+    'resourceCurves'
+  );
+  if (
+    resourceCurvesOutput &&
+    Array.isArray(runtimeProjection?.resourceCurves?.curvesByActor)
+  ) {
+    return runtimeProjection.resourceCurves.curvesByActor;
+  }
+
   return (
     runtimeProjection?.resourceCurves?.curvesByActor ??
     runtimeProjection?.selfEnergyCurveByActor ??
@@ -44,7 +120,7 @@ export function createRuntimePointByDeltaId(runtimeProjection) {
 
 export function createRuntimeStatePointContexts(runtimeProjection) {
   const pointByDeltaId = createRuntimePointByDeltaId(runtimeProjection);
-  return (runtimeProjection?.simLog ?? [])
+  return getRuntimeSimLogRows(runtimeProjection)
     .map(row => createRuntimeStatePointContext(row, pointByDeltaId))
     .filter(Boolean)
     .sort((left, right) => compareRuntimeStateRows(left.row, right.row));
@@ -123,4 +199,9 @@ function compareOptionalNumber(left, right) {
     return 1;
   }
   return 0;
+}
+
+function numberOrNull(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
 }

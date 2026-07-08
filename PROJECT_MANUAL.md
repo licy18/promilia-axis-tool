@@ -1,6 +1,6 @@
 # promilia-axis-tool 项目手册
 
-最后更新：2026-07-08
+最后更新：2026-07-09
 
 当前策略是以 Endaxis 为架构和交互参考，对 `promilia-axis-tool` 进行从头重构；旧实现只保留为功能原型和迁移参考。完整任务拆解见 `DEVELOPMENT_PLAN.md`，本文件保留最终目标、阶段目标、项目状态和当前事实。
 
@@ -7482,6 +7482,31 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 下一步：
 
 - 切换到 UI 主流程能力块：让 Workbench 的运行结果面板优先读取 runtime `outputContract` 中的输出边界，用于减少组件对 runtime 内部字段的隐式猜测。
+
+### 2026-07-09：UI 主流程能力块 - Runtime Output Contract 读取入口
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- Workbench 主流程条和资源曲线面板开始通过 `runtimeProjectionPoints` 的统一 helper 读取 runtime `outputContract` 输出边界。
+- `simLog` 计数、summary、敌人状态曲线和角色自身能量曲线保留旧字段回退；页面显示、曲线数值和三值结果不变。
+- 本阶段不新增公式推断、不修改三值数值、不扩大 UI 信息量。
+
+当前验证事实：
+
+- UI helper 可以优先读取 output contract 的 `simLog` 计数摘要，同时实际日志行和曲线点仍来自 runtime projection 的真实输出。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、57 条测试。
+- `npm run test -- --run`：通过，18 个测试文件、138 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：围绕 Endaxis 式闭环推进“动作编辑 -> 运行模拟 -> 曲线监控 -> 日志/详情查看 -> 回到动作修改”的完整路径，不再回到局部状态标签或提示文案阶段。
 
 ## 10. 文档维护规则
 

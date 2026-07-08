@@ -141,7 +141,11 @@ import {
   EditPen,
   TrendCharts,
 } from '@element-plus/icons-vue';
-import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
+import {
+  createRuntimeStatePointContexts,
+  getRuntimeOutputSummary,
+  getRuntimeSimLogCount,
+} from './runtimeProjectionPoints';
 
 const props = defineProps({
   selectedAction: {
@@ -177,9 +181,11 @@ const emit = defineEmits([
   'select-runtime-state-point',
 ]);
 
-const runtimeSummary = computed(() => props.runtimeProjection?.summary ?? {});
+const runtimeSummary = computed(() =>
+  getRuntimeOutputSummary(props.runtimeProjection)
+);
 const hasRuntimeResults = computed(
-  () => (runtimeSummary.value.simLogCount ?? 0) > 0
+  () => getRuntimeSimLogCount(props.runtimeProjection) > 0
 );
 const runtimeNavigationPoints = computed(() =>
   createRuntimeStatePointContexts(props.runtimeProjection)

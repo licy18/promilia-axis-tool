@@ -15323,3 +15323,51 @@ runtimeInputSource: threeValueGenerationBundle.runtimeInputSource
 - runtime 测试覆盖：output contract 暴露 `simLog`、`stateCurves`、`resourceCurves`、`summary` 四类输出，并记录关键字段、值字段、来源和计数摘要。
 - 第一纵切测试覆盖：真实 Workbench 模拟结果暴露 runtime output contract；三值结果仍为 1 动作、6 命中、16 delta，runtime 只应用 1 个 HP delta。
 - `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、16 条测试。
+
+## 193. UI 主流程能力块：Runtime Output Contract 读取入口
+
+本阶段属于 UI 主流程。
+
+### 193.1 结构变化
+
+`runtimeProjectionPoints` 新增 UI 读取 helper：
+
+```js
+{
+  getRuntimeOutputContract,
+  getRuntimeOutputContractOutput,
+  getRuntimeOutputSummary,
+  getRuntimeSimLogRows,
+  getRuntimeSimLogCount
+}
+```
+
+这些 helper 让 Workbench UI 优先读取 `threeValueRuntimeProjection.outputContract` 的输出边界和计数摘要，再回退到既有字段：
+
+```js
+{
+  summary,
+  simLog,
+  stateCurves.enemy,
+  resourceCurves.curvesByActor,
+  enemyStateCurve,
+  selfEnergyCurveByActor
+}
+```
+
+`WorkbenchFlowPanel` 和 `ResourceMonitorPanel` 已改为通过该 helper 读取 runtime summary / simLog count。状态曲线和资源曲线仍返回 runtime projection 的真实输出数据，不把 output contract 元数据当作曲线点使用。
+
+### 193.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 UI 对 runtime projection 的读取入口：既有 `summary`、`simLog`、`stateCurves`、`resourceCurves` 和兼容字段仍可读取；新增 helper 作为后续 Workbench 主流程统一消费 runtime 输出合同的入口。
+
+### 193.3 验证
+
+- Workbench helper 测试覆盖：UI 计数优先读取 output contract，实际日志行和曲线点仍来自 runtime projection 输出。
+- Workbench 视图测试覆盖：主流程面板和资源曲线面板在接入 helper 后保持现有行为。
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、57 条测试。
+- `npm run test -- --run`：通过，18 个测试文件、138 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。

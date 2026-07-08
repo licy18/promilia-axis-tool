@@ -4,7 +4,10 @@ import {
   createRuntimeStatePointContexts,
   findFirstRuntimeStatePointForAction,
   getRuntimeEnemyStateCurve,
+  getRuntimeOutputSummary,
   getRuntimeResourceCurveRows,
+  getRuntimeSimLogCount,
+  getRuntimeSimLogRows,
 } from '../../features/workbench/runtimeProjectionPoints';
 
 describe('runtime projection points', () => {
@@ -82,6 +85,79 @@ describe('runtime projection points', () => {
     expect([...createRuntimePointByDeltaId(legacyProjection).keys()]).toEqual([
       'legacy-enemy-delta',
       'legacy-resource-delta',
+    ]);
+  });
+
+  it('reads runtime output contract boundaries while preserving runtime rows', () => {
+    const runtimeProjection = {
+      outputContract: {
+        outputs: {
+          simLog: {
+            rowCount: 2,
+          },
+          stateCurves: {
+            status: 'runtime-state-curves-ready',
+          },
+          resourceCurves: {
+            status: 'runtime-resource-curves-ready',
+          },
+        },
+        summary: {
+          simLogCount: 2,
+          enemyHpDelta: 24,
+          outputCount: 4,
+        },
+      },
+      summary: {
+        simLogCount: 99,
+        enemyHpDelta: 12,
+        legacyOnly: 'kept',
+      },
+      simLog: [
+        {
+          sourceDeltaId: 'hp-delta',
+        },
+      ],
+      stateCurves: {
+        enemy: {
+          points: [
+            {
+              sourceDeltaId: 'hp-delta',
+              trackKey: 'enemyHpDamage',
+            },
+          ],
+        },
+      },
+      resourceCurves: {
+        curvesByActor: [
+          {
+            actorId: 'actor-001',
+            points: [
+              {
+                sourceDeltaId: 'energy-delta',
+                trackKey: 'selfEnergyChange',
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    expect(getRuntimeSimLogCount(runtimeProjection)).toBe(2);
+    expect(getRuntimeOutputSummary(runtimeProjection)).toMatchObject({
+      simLogCount: 2,
+      enemyHpDelta: 24,
+      outputCount: 4,
+      legacyOnly: 'kept',
+    });
+    expect(getRuntimeSimLogRows(runtimeProjection)).toEqual([
+      expect.objectContaining({ sourceDeltaId: 'hp-delta' }),
+    ]);
+    expect(getRuntimeEnemyStateCurve(runtimeProjection).points).toEqual([
+      expect.objectContaining({ sourceDeltaId: 'hp-delta' }),
+    ]);
+    expect(getRuntimeResourceCurveRows(runtimeProjection)).toEqual([
+      expect.objectContaining({ actorId: 'actor-001' }),
     ]);
   });
 
