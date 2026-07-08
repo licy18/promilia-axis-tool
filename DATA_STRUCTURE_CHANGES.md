@@ -7036,3 +7036,112 @@ runtime-sampling-offline-samples-partially-validated
 - 该字段不改变主 `damageElementFieldMappingEvidence` 的 33 个当前技能 DamageElement 统计。
 - 二级目标的 4 个 DamageElement 记录在 `summonTargetSkillEvidence.damageElementFieldMappingEvidence` 中。
 - 消费方必须把这些二级 DamageElement 视为 nested candidate；在触发帧、命中次数、owner/target 和 runtime 条件确认前，不能并入最终 HP / 韧性 / 能量曲线。
+
+## 89. 阶段 5-8BJ：per-hit summon target candidates
+
+阶段 5-8BJ 将 5-8BI 的静态 `summonTargetSkillEvidence` 接入运行时投影和 Workbench 展示。该阶段仍不应用最终公式。
+
+### 89.1 actionResultTimeline[].hitCandidates[]
+
+`hitCandidates[]` 中若某 hit 来源为 `TSummonElementParams` 且能追到目标 item skill，会新增或更新：
+
+- `damageElementFieldMappingCount`：包含直接 DamageElement 与召唤目标二级 DamageElement。
+- `directDamageElementFieldMappingCount`
+- `summonTargetDamageElementFieldMappingCount`
+- `summonTargetEvidenceSummary`
+- `damageElementElementConfigIds`：包含二级目标 DamageElement ids。
+- `status = "per-hit-summon-target-candidate-fields-found-trigger-unconfirmed"`：仅召唤目标命中时使用。
+
+`summonTargetEvidenceSummary` 结构：
+
+```json
+{
+  "status": "summon-target-damage-element-candidates-linked-unapplied",
+  "sourceKind": "azpr-summon-target-hit-candidate-summary",
+  "sourceElementConfigIds": [101003180],
+  "sourcePathIds": ["1572718271109451571"],
+  "summonUnitIds": [480059],
+  "targetSkillIds": [48005901],
+  "damageElementConfigIds": [101003156, 101003182],
+  "damageElementCandidateCount": 2,
+  "triggerTimingStatus": "summon-target-trigger-frame-unconfirmed",
+  "hitCountStatus": "summon-target-hit-count-unconfirmed",
+  "runtimeOwnershipStatus": "summon-target-runtime-ownership-unconfirmed",
+  "applied": false
+}
+```
+
+### 89.2 candidates[]
+
+召唤目标展开后的每个 `candidates[]` 项新增：
+
+- `sourceKind = "azpr-summon-target-damage-element-candidate"`
+- `sourceElementConfigId`
+- `sourcePathId`
+- `summonTarget`
+
+`summonTarget` 记录：
+
+- `summonUnitId`
+- `targetSkillId`
+- `battlefieldItemId`
+- `battlefieldItemParam`
+- `skillControlStatus`
+- `triggerTimingStatus`
+- `hitCountStatus`
+- `runtimeOwnershipStatus`
+- `calculationBoundary`
+- `applied = false`
+
+`skillLevelBridge` 会保留 `source = "summon-target-skill-element-values"`，并用目标 item skill 的 `skillElementValueSummaries[]` 扩展 12 级 A/G 槽位范围。例如：
+
+- `101003156`：A 槽 `3500 -> 7350`，G 槽 `10000`。
+- `101003182`：A 槽 `1500 -> 3150`，G 槽 `10000`。
+- `101003157`：A 槽 `5000 -> 10500`，G 槽 `10000`。
+- `101003179`：A 槽 `3000 -> 6300`，G 槽 `10000`。
+
+### 89.3 hitCandidateSummary
+
+`hitCandidateSummary` 新增：
+
+- `summonTargetMappedHitCandidateCount`
+- `summonTargetDamageElementFieldMappingCount`
+- `summonTargetDamageElementConfigIds`
+- `summonTargetSkillIds`
+- `summonUnitIds`
+- `summonTargetTriggerTimingStatuses`
+
+寒悠悠普攻当前摘要：
+
+```json
+{
+  "hitCandidateCount": 4,
+  "mappedHitCandidateCount": 4,
+  "damageElementFieldMappingCount": 6,
+  "summonTargetMappedHitCandidateCount": 2,
+  "summonTargetDamageElementFieldMappingCount": 4,
+  "summonTargetDamageElementConfigIds": [101003156, 101003157, 101003179, 101003182],
+  "summonTargetSkillIds": [48005901, 48006001],
+  "summonUnitIds": [480059, 480060],
+  "summonTargetTriggerTimingStatuses": ["summon-target-trigger-frame-unconfirmed"]
+}
+```
+
+### 89.4 candidateValueSeries / Workbench
+
+`candidateValueSeries` 和 `candidateValueSeries.chart.series[].points[]` 会透传：
+
+- `summonTargetEvidenceSummary`
+- `triggerTimingStatus`
+- `elementDetails[].sourceKind`
+- `elementDetails[].sourceElementConfigId`
+- `elementDetails[].sourcePathId`
+- `elementDetails[].summonTarget`
+
+`TimelineGridPreview` 会在选中候选帧来源中显示 `召唤目标 {summonUnitId}->{targetSkillId} · 触发帧未确认`，并在 element 对比表状态中追加 `召唤触发待确认`。
+
+### 89.5 兼容性与边界
+
+- 该阶段只改变运行时投影和 Workbench 展示，不改变生成数据的 `summonTargetSkillEvidence` 静态结构。
+- 第 4/5 段曲线点仍使用来源 hitGroup 的候选帧；目标 item skill 的真实触发帧未确认。
+- `applied` 必须保持 `false`，不能把召唤目标二级 DamageElement 当成最终 HP / 韧性 / 能量公式结果。

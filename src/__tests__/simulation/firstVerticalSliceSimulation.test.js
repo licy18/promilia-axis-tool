@@ -1724,6 +1724,168 @@ describe('first vertical slice simulation', () => {
     );
   });
 
+  it('surfaces Hanyouyou summon target damage element candidates per hit', () => {
+    const project = createWorkbenchProject(
+      {
+        characterId: 101003,
+        secondaryCharacterId: 109001,
+        skillId: 10100301,
+      },
+      {
+        actions: [
+          {
+            id: 'action-hanyouyou-normal',
+            type: 'skill',
+            skillId: 10100301,
+            actorCharacterId: 101003,
+            level: 1,
+            actionVariantIndex: 0,
+            durationMs: 5000,
+          },
+        ],
+      }
+    );
+    const result = runSimulation(project, getWorkbenchGameData());
+    const actionResult = result.actionResultTimeline[0];
+
+    expect(actionResult.hitCandidateSummary).toMatchObject({
+      hitCandidateCount: 4,
+      mappedHitCandidateCount: 4,
+      damageElementFieldMappingCount: 6,
+      summonTargetMappedHitCandidateCount: 2,
+      summonTargetDamageElementFieldMappingCount: 4,
+      summonTargetDamageElementConfigIds: [
+        101003156, 101003157, 101003179, 101003182,
+      ],
+      summonTargetSkillIds: [48005901, 48006001],
+      summonUnitIds: [480059, 480060],
+      summonTargetTriggerTimingStatuses: [
+        'summon-target-trigger-frame-unconfirmed',
+      ],
+      applied: false,
+    });
+
+    const hit4 = actionResult.hitCandidates.find(
+      candidate => candidate.hitIndex === 4
+    );
+    expect(hit4).toMatchObject({
+      hitSkillId: 10100304,
+      status:
+        'per-hit-summon-target-candidate-fields-found-trigger-unconfirmed',
+      damageElementFieldMappingCount: 2,
+      directDamageElementFieldMappingCount: 0,
+      summonTargetDamageElementFieldMappingCount: 2,
+      damageElementElementConfigIds: [101003156, 101003182],
+      summonTargetEvidenceSummary: expect.objectContaining({
+        summonUnitIds: [480059],
+        targetSkillIds: [48005901],
+        damageElementConfigIds: [101003156, 101003182],
+        triggerTimingStatus: 'summon-target-trigger-frame-unconfirmed',
+        hitCountStatus: 'summon-target-hit-count-unconfirmed',
+        runtimeOwnershipStatus: 'summon-target-runtime-ownership-unconfirmed',
+        applied: false,
+      }),
+      hpDamage: expect.objectContaining({
+        status: 'candidate-fields-found-formula-unmapped',
+        candidateCount: 2,
+        formulaFunctionIds: [1, 2],
+      }),
+      toughnessDamage: expect.objectContaining({
+        candidateCount: 2,
+        weakBreakDamageRates: [7000],
+      }),
+      selfEnergyChange: expect.objectContaining({
+        candidateCount: 2,
+        recoverSPValues: [4300],
+      }),
+      applied: false,
+    });
+    expect(hit4.candidates).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          sourceKind: 'azpr-summon-target-damage-element-candidate',
+          elementConfigId: 101003156,
+          summonTarget: expect.objectContaining({
+            summonUnitId: 480059,
+            targetSkillId: 48005901,
+            triggerTimingStatus: 'summon-target-trigger-frame-unconfirmed',
+            skillControlStatus: 'skill-control-json-stub-only',
+          }),
+          skillLevelBridge: expect.objectContaining({
+            source: 'summon-target-skill-element-values',
+            levelRows: 12,
+            formulaSlotAlignment: expect.objectContaining({
+              overrideCandidateParamIds: [1],
+              parameterSummaries: expect.arrayContaining([
+                expect.objectContaining({
+                  id: 1,
+                  relationStatus: 'level-scaling-override-candidate',
+                  firstLevelValue: 3500,
+                  lastLevelValue: 7350,
+                }),
+                expect.objectContaining({
+                  id: 7,
+                  relationStatus: 'constant-direct-slot-match',
+                  firstLevelValue: 10000,
+                  lastLevelValue: 10000,
+                }),
+              ]),
+            }),
+          }),
+        }),
+      ])
+    );
+
+    const hit5 = actionResult.hitCandidates.find(
+      candidate => candidate.hitIndex === 5
+    );
+    expect(hit5).toMatchObject({
+      hitSkillId: 10100305,
+      damageElementElementConfigIds: [101003157, 101003179],
+      summonTargetEvidenceSummary: expect.objectContaining({
+        summonUnitIds: [480060],
+        targetSkillIds: [48006001],
+        damageElementConfigIds: [101003157, 101003179],
+      }),
+      selfEnergyChange: expect.objectContaining({
+        recoverSPValues: [7099],
+      }),
+    });
+
+    expect(result.candidateValueSeries.summary).toMatchObject({
+      seriesCount: 3,
+      pointCount: 12,
+      hitCandidateCount: 4,
+      actionCount: 1,
+      applied: false,
+    });
+    const hpSeries = result.candidateValueSeries.series.find(
+      series => series.key === 'hpDamageFormulaParamCandidate'
+    );
+    const hpHit4Point = hpSeries.points.find(point => point.hitIndex === 4);
+    expect(hpHit4Point).toMatchObject({
+      hitSkillId: 10100304,
+      elementConfigIds: [101003156, 101003182],
+      summonTargetEvidenceSummary: expect.objectContaining({
+        summonUnitIds: [480059],
+        targetSkillIds: [48005901],
+      }),
+      triggerTimingStatus: 'summon-target-trigger-frame-unconfirmed',
+    });
+    expect(hpHit4Point.elementDetails).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          sourceKind: 'azpr-summon-target-damage-element-candidate',
+          elementConfigId: 101003156,
+          summonTarget: expect.objectContaining({
+            summonUnitId: 480059,
+            targetSkillId: 48005901,
+          }),
+        }),
+      ])
+    );
+  });
+
   it('imports offline RecoverSP runtime sample fixtures for validation', () => {
     const project = createFirstVerticalSliceProject();
     project.metadata = {

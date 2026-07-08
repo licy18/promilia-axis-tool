@@ -25,6 +25,11 @@ const CURRENT_SKILL_CONTROL_EVIDENCE_BY_SKILL_ID = new Map(
     .map(skill => [Number(skill.skillId), skill])
     .filter(([skillId]) => Number.isFinite(skillId))
 );
+const SUMMON_TARGET_SKILL_EVIDENCE =
+  skillAssetEvidence.summonTargetSkillEvidence ?? {};
+const SUMMON_TARGET_BY_UNIT_ID = createSummonTargetLookupByUnitId(
+  SUMMON_TARGET_SKILL_EVIDENCE
+);
 const AZPR_TIMELINE_FRAME_RATE = 60;
 const AZPR_TIMELINE_FRAME_MS = 1000 / AZPR_TIMELINE_FRAME_RATE;
 const AZPR_IL2CPP_DUMP_CS_PATH =
@@ -1732,6 +1737,8 @@ function createCandidateChartPoint({
     candidateCount: point.candidateCount,
     elementConfigIds: point.elementConfigIds ?? [],
     elementDetails: point.elementDetails ?? [],
+    summonTargetEvidenceSummary: point.summonTargetEvidenceSummary ?? null,
+    triggerTimingStatus: point.triggerTimingStatus ?? null,
     sourceStatus: point.sourceStatus,
     applied: false,
   };
@@ -1804,6 +1811,10 @@ function createCandidateSeriesPoint(hitCandidate, sequenceIndex, rawValues) {
     candidateCount: valueSamples.length,
     elementConfigIds: hitCandidate.damageElementElementConfigIds ?? [],
     elementDetails: createCandidateElementDetails(hitCandidate),
+    summonTargetEvidenceSummary:
+      hitCandidate.summonTargetEvidenceSummary ?? null,
+    triggerTimingStatus:
+      hitCandidate.summonTargetEvidenceSummary?.triggerTimingStatus ?? null,
     sourceStatus: hitCandidate.status,
     applied: false,
   };
@@ -1820,9 +1831,13 @@ function createHpCandidateSeriesValues(hitCandidate) {
 
 function createCandidateElementDetails(hitCandidate) {
   return (hitCandidate.candidates ?? []).map(candidate => ({
+    sourceKind: candidate.sourceKind ?? null,
     elementConfigId: numberOrNull(candidate.elementConfigId),
     elementName: candidate.elementName ?? null,
     pathId: candidate.pathId ?? null,
+    sourceElementConfigId: numberOrNull(candidate.sourceElementConfigId),
+    sourcePathId: candidate.sourcePathId ?? null,
+    summonTarget: candidate.summonTarget ?? null,
     hpDamage: candidate.hpDamage
       ? {
           status: candidate.hpDamage.status ?? null,
@@ -1898,6 +1913,7 @@ function compactCandidateSkillLevelBridge(bridge) {
   }
   return {
     status: bridge.status ?? null,
+    source: bridge.source ?? null,
     levelRows: numberOrNull(bridge.levelRows) ?? 0,
     parameterIds: bridge.parameterIds ?? [],
     varyingParameterIds: bridge.varyingParameterIds ?? [],
@@ -3671,6 +3687,7 @@ function compactHitBindingDamageElementFieldMapping(mapping) {
       : null,
     skillLevelBridge: {
       status: mapping.skillLevelBridge?.status ?? null,
+      source: mapping.skillLevelBridge?.source ?? null,
       levelRows: numberOrNull(mapping.skillLevelBridge?.levelRows) ?? 0,
       parameterIds: mapping.skillLevelBridge?.parameterIds ?? [],
       varyingParameterIds: mapping.skillLevelBridge?.varyingParameterIds ?? [],
@@ -5070,6 +5087,13 @@ function compactNormalAttackHitChainCandidate(candidate) {
         numberOrNull(group.resourceMapMatchedElementBaseRefCount) ?? 0,
       resourceMapUnmatchedElementBaseRefCount:
         numberOrNull(group.resourceMapUnmatchedElementBaseRefCount) ?? 0,
+      externalElementObjectReferenceCount:
+        numberOrNull(group.externalElementObjectReferenceCount) ?? 0,
+      externalElementObjectReferences: (
+        group.externalElementObjectReferences ?? []
+      )
+        .slice(0, 8)
+        .map(compactNormalAttackExternalElementObjectReference),
       elementBaseDataRefs: (group.elementBaseDataRefs ?? [])
         .slice(0, 12)
         .map(compactNormalAttackHitElementBaseDataRef),
@@ -5097,6 +5121,48 @@ function compactNormalAttackHitChainCandidate(candidate) {
         })),
       applied: false,
     })),
+    applied: false,
+  };
+}
+
+function compactNormalAttackExternalElementObjectReference(ref) {
+  return {
+    elementConfigId: numberOrNull(ref.elementConfigId),
+    pathId: ref.pathId ?? null,
+    roundedPathId: ref.roundedPathId ?? null,
+    status: ref.status ?? null,
+    scriptTypeClassName: ref.scriptTypeClassName ?? null,
+    inferredRole: ref.inferredRole ?? null,
+    formulaParamBuffReferenceIds: ref.formulaParamBuffReferenceIds ?? [],
+    summonFields: ref.summonFields
+      ? {
+          summonUnitId: numberOrNull(ref.summonFields.summonUnitId),
+          summonLifeTime: numberOrNull(ref.summonFields.summonLifeTime),
+          summonCount: numberOrNull(ref.summonFields.summonCount),
+          summonTotalMaxCount: numberOrNull(
+            ref.summonFields.summonTotalMaxCount
+          ),
+        }
+      : null,
+    summonTargetSkillEvidence: ref.summonTargetSkillEvidence
+      ? {
+          status: ref.summonTargetSkillEvidence.status ?? null,
+          summonUnitId: numberOrNull(
+            ref.summonTargetSkillEvidence.summonUnitId
+          ),
+          relationStatus: ref.summonTargetSkillEvidence.relationStatus ?? null,
+          targetSkillIds: ref.summonTargetSkillEvidence.targetSkillIds ?? [],
+          damageElementObjectCount:
+            numberOrNull(
+              ref.summonTargetSkillEvidence.damageElementObjectCount
+            ) ?? 0,
+          damageElementConfigIds:
+            ref.summonTargetSkillEvidence.damageElementConfigIds ?? [],
+          applied: ref.summonTargetSkillEvidence.applied === true,
+          calculationBoundary:
+            ref.summonTargetSkillEvidence.calculationBoundary ?? null,
+        }
+      : null,
     applied: false,
   };
 }
@@ -5164,6 +5230,7 @@ function compactNormalAttackHitDamageElementFieldMapping(mapping) {
     },
     skillLevelBridge: {
       status: mapping.skillLevelBridge?.status ?? null,
+      source: mapping.skillLevelBridge?.source ?? null,
       levelRows: numberOrNull(mapping.skillLevelBridge?.levelRows) ?? 0,
       parameterIds: mapping.skillLevelBridge?.parameterIds ?? [],
       varyingParameterIds: mapping.skillLevelBridge?.varyingParameterIds ?? [],
@@ -5757,7 +5824,10 @@ function createHitCandidatePreview({
   hitChain,
   sequenceTimingEvidence,
 }) {
-  const mappings = hitGroup.damageElementFieldMappings ?? [];
+  const directMappings = hitGroup.damageElementFieldMappings ?? [];
+  const summonTargetResult =
+    createSummonTargetHitCandidateMappingResult(hitGroup);
+  const mappings = [...directMappings, ...summonTargetResult.mappings];
   const actionLevelCandidateByElementId = new Map(
     (damageElementSource?.candidates ?? [])
       .map(candidate => [Number(candidate.elementConfigId), candidate])
@@ -5787,7 +5857,7 @@ function createHitCandidatePreview({
     : localCandidateTimeMs;
   const actionLevelMatchedElementIds =
     damageElementSource?.matchedElementConfigIds ?? [];
-  const actionLevelElementMatchCount = mappings.filter(mapping =>
+  const actionLevelElementMatchCount = directMappings.filter(mapping =>
     actionLevelMatchedElementIds.includes(Number(mapping.elementConfigId))
   ).length;
   const resourceMapElementRefCount =
@@ -5850,13 +5920,23 @@ function createHitCandidatePreview({
     hasFormulaParamBuffReferences: formulaParamBuffReferenceCount > 0,
     formulaParamBuffReferences: hitGroup.formulaParamBuffReferences ?? [],
     damageElementFieldMappingStatus:
-      hitGroup.damageElementFieldMappingStatus ?? null,
+      createHitCandidateDamageElementMappingStatus({
+        hitGroup,
+        directMappingCount: directMappings.length,
+        summonTargetMappingCount: summonTargetResult.mappings.length,
+      }),
     damageElementFieldMappingCount: mappings.length,
+    directDamageElementFieldMappingCount: directMappings.length,
+    summonTargetDamageElementFieldMappingCount:
+      summonTargetResult.mappings.length,
+    summonTargetEvidenceSummary: summonTargetResult.summary,
     actionLevelElementMatchCount,
     actionLevelElementMatchStatus:
       actionLevelElementMatchCount > 0
         ? 'some-hit-elements-bridge-to-action-element-values'
-        : 'hit-elements-not-bridged-to-action-element-values',
+        : summonTargetResult.mappings.length > 0
+          ? 'summon-target-elements-not-bridged-to-action-element-values'
+          : 'hit-elements-not-bridged-to-action-element-values',
     damageElementElementConfigIds: uniqueNumbers(
       mappings.map(mapping => mapping.elementConfigId)
     ),
@@ -5881,7 +5961,11 @@ function createHitCandidatePreview({
       : null,
     status:
       mappings.length > 0
-        ? 'per-hit-candidate-fields-found-formula-unapplied'
+        ? directMappings.length === 0 && summonTargetResult.mappings.length > 0
+          ? 'per-hit-summon-target-candidate-fields-found-trigger-unconfirmed'
+          : summonTargetResult.mappings.length > 0
+            ? 'per-hit-candidate-and-summon-target-fields-found-formula-unapplied'
+            : 'per-hit-candidate-fields-found-formula-unapplied'
         : formulaParamBuffReferenceCount > 0
           ? 'per-hit-buff-reference-found-fields-missing'
           : hasResourceMapElementRefs
@@ -5893,9 +5977,318 @@ function createHitCandidatePreview({
       'per-hit-scale-or-hit-count-weight',
       'enemy-defense-and-resistance-application',
       'self-energy-owner-and-interval-rule',
+      ...(summonTargetResult.mappings.length > 0
+        ? [
+            'summon-target-trigger-frame-unconfirmed',
+            'summon-target-hit-count-unconfirmed',
+            'summon-target-runtime-ownership-unconfirmed',
+          ]
+        : []),
     ],
     applied: false,
   };
+}
+
+function createHitCandidateDamageElementMappingStatus({
+  hitGroup,
+  directMappingCount,
+  summonTargetMappingCount,
+}) {
+  if (directMappingCount > 0 && summonTargetMappingCount > 0) {
+    return 'direct-and-summon-target-damage-element-fields-found';
+  }
+  if (summonTargetMappingCount > 0) {
+    return 'summon-target-damage-element-fields-found-trigger-unconfirmed';
+  }
+  return hitGroup.damageElementFieldMappingStatus ?? null;
+}
+
+function createSummonTargetHitCandidateMappingResult(hitGroup) {
+  const summonRefs = (hitGroup.externalElementObjectReferences ?? []).filter(
+    ref => ref.summonTargetSkillEvidence
+  );
+  const mappings = [];
+  const summaries = [];
+
+  for (const ref of summonRefs) {
+    const target = findSummonTargetEvidence(ref);
+    const compactSummary = ref.summonTargetSkillEvidence;
+    if (!target) {
+      continue;
+    }
+
+    summaries.push({
+      status: compactSummary?.status ?? target.status ?? null,
+      summonUnitId:
+        numberOrNull(compactSummary?.summonUnitId) ??
+        numberOrNull(target.summonUnitId),
+      sourceElementConfigId: numberOrNull(ref.elementConfigId),
+      sourcePathId: ref.pathId ?? null,
+      targetSkillIds:
+        compactSummary?.targetSkillIds ?? target.targetSkillIds ?? [],
+      damageElementConfigIds:
+        compactSummary?.damageElementConfigIds ??
+        target.damageElementConfigIds ??
+        [],
+      calculationBoundary:
+        compactSummary?.calculationBoundary ??
+        target.calculationBoundary ??
+        null,
+    });
+
+    for (const targetSkill of target.targetSkills ?? []) {
+      for (const mapping of targetSkill.damageElementFieldMappings ?? []) {
+        mappings.push(
+          createSummonTargetHitCandidateMapping({
+            mapping,
+            ref,
+            target,
+            targetSkill,
+            compactSummary,
+          })
+        );
+      }
+    }
+  }
+
+  if (mappings.length === 0) {
+    return {
+      mappings: [],
+      summary: null,
+    };
+  }
+
+  return {
+    mappings,
+    summary: {
+      status: 'summon-target-damage-element-candidates-linked-unapplied',
+      sourceKind: 'azpr-summon-target-hit-candidate-summary',
+      sourceElementConfigIds: uniqueNumbers(
+        summaries.map(summary => summary.sourceElementConfigId)
+      ),
+      sourcePathIds: uniqueStrings(
+        summaries.map(summary => summary.sourcePathId)
+      ),
+      summonUnitIds: uniqueNumbers(
+        summaries.map(summary => summary.summonUnitId)
+      ),
+      targetSkillIds: uniqueNumbers(
+        summaries.flatMap(summary => summary.targetSkillIds)
+      ),
+      damageElementConfigIds: uniqueNumbers(
+        summaries.flatMap(summary => summary.damageElementConfigIds)
+      ),
+      damageElementCandidateCount: mappings.length,
+      triggerTimingStatus: 'summon-target-trigger-frame-unconfirmed',
+      hitCountStatus: 'summon-target-hit-count-unconfirmed',
+      runtimeOwnershipStatus: 'summon-target-runtime-ownership-unconfirmed',
+      calculationBoundary:
+        summaries.find(summary => summary.calculationBoundary)
+          ?.calculationBoundary ?? null,
+      applied: false,
+    },
+  };
+}
+
+function findSummonTargetEvidence(ref) {
+  const summonUnitId =
+    numberOrNull(ref.summonTargetSkillEvidence?.summonUnitId) ??
+    numberOrNull(ref.summonFields?.summonUnitId);
+  if (!Number.isFinite(summonUnitId)) {
+    return null;
+  }
+  return SUMMON_TARGET_BY_UNIT_ID.get(summonUnitId) ?? null;
+}
+
+function createSummonTargetHitCandidateMapping({
+  mapping,
+  ref,
+  target,
+  targetSkill,
+  compactSummary,
+}) {
+  return {
+    ...mapping,
+    sourceKind: 'azpr-summon-target-damage-element-candidate',
+    sourceElementConfigId: numberOrNull(ref.elementConfigId),
+    sourcePathId: ref.pathId ?? null,
+    sourceScriptTypeClassName: ref.scriptTypeClassName ?? null,
+    summonTarget: {
+      status:
+        compactSummary?.status ??
+        target.status ??
+        'summon-target-damage-elements-found',
+      summonUnitId:
+        numberOrNull(compactSummary?.summonUnitId) ??
+        numberOrNull(target.summonUnitId),
+      sourceElementConfigId: numberOrNull(ref.elementConfigId),
+      sourcePathId: ref.pathId ?? null,
+      relationStatus:
+        compactSummary?.relationStatus ?? target.relationStatus ?? null,
+      targetSkillId: numberOrNull(targetSkill.skillId),
+      targetSkillIds:
+        compactSummary?.targetSkillIds ?? target.targetSkillIds ?? [],
+      battlefieldItemId: numberOrNull(target.battlefieldItem?.id),
+      battlefieldItemParam: target.battlefieldItem?.param ?? null,
+      skillControlStatus: targetSkill.skillControlDirectory?.status ?? null,
+      triggerTimingStatus: 'summon-target-trigger-frame-unconfirmed',
+      hitCountStatus: 'summon-target-hit-count-unconfirmed',
+      runtimeOwnershipStatus: 'summon-target-runtime-ownership-unconfirmed',
+      calculationBoundary:
+        compactSummary?.calculationBoundary ??
+        target.calculationBoundary ??
+        null,
+      applied: false,
+    },
+    skillLevelBridge: createSummonTargetSkillLevelBridge({
+      mapping,
+      targetSkill,
+    }),
+    unresolved: uniqueStrings([
+      ...(mapping.unresolved ?? []),
+      'summon-target-trigger-frame-unconfirmed',
+      'summon-target-hit-count-unconfirmed',
+      'summon-target-runtime-ownership-unconfirmed',
+    ]),
+    applied: false,
+  };
+}
+
+function createSummonTargetSkillLevelBridge({ mapping, targetSkill }) {
+  const elementId = numberOrNull(mapping.elementConfigId);
+  const valueSummary = (targetSkill.skillElementValueSummaries ?? []).find(
+    summary => Number(summary.elementId) === elementId
+  );
+  if (!valueSummary) {
+    return mapping.skillLevelBridge ?? null;
+  }
+
+  return {
+    ...(mapping.skillLevelBridge ?? {}),
+    status:
+      mapping.skillLevelBridge?.status ??
+      'summon-target-skillsub-element-level-bridge-found',
+    source: 'summon-target-skill-element-values',
+    sourceSkillId: numberOrNull(targetSkill.skillId),
+    elementConfigId: elementId,
+    levelRows:
+      numberOrNull(valueSummary.rowCount) ??
+      numberOrNull(mapping.skillLevelBridge?.levelRows) ??
+      0,
+    parameterIds: valueSummary.parameterIds ?? [],
+    varyingParameterIds: valueSummary.varyingParameterIds ?? [],
+    firstLevel: compactSummonTargetLevelValue(valueSummary.firstLevel),
+    lastLevel: compactSummonTargetLevelValue(valueSummary.lastLevel),
+    formulaSlotAlignment: createSummonTargetFormulaSlotAlignment({
+      mapping,
+      valueSummary,
+    }),
+    applied: false,
+  };
+}
+
+function compactSummonTargetLevelValue(levelRow) {
+  if (!levelRow) {
+    return null;
+  }
+  return {
+    level: numberOrNull(levelRow.level),
+    rowId: numberOrNull(levelRow.id),
+    valueParam: levelRow.valueParam ?? null,
+    paramPairs: (levelRow.paramPairs ?? []).map(pair => ({
+      id: numberOrNull(pair.id),
+      value: numberOrNull(pair.value),
+    })),
+  };
+}
+
+function createSummonTargetFormulaSlotAlignment({ mapping, valueSummary }) {
+  const base =
+    mapping.skillLevelBridge?.formulaParamAlignment ??
+    mapping.skillLevelBridge?.formulaSlotAlignment ??
+    null;
+  if (!base?.parameterSummaries?.length) {
+    return compactFormulaSlotAlignment(base);
+  }
+
+  const firstPairs = new Map(
+    (valueSummary.firstLevel?.paramPairs ?? []).map(pair => [
+      Number(pair.id),
+      Number(pair.value),
+    ])
+  );
+  const lastPairs = new Map(
+    (valueSummary.lastLevel?.paramPairs ?? []).map(pair => [
+      Number(pair.id),
+      Number(pair.value),
+    ])
+  );
+  const varyingIds = new Set(
+    (valueSummary.varyingParameterIds ?? []).map(id => Number(id))
+  );
+  const rowCount = numberOrNull(valueSummary.rowCount) ?? 0;
+  const parameterSummaries = base.parameterSummaries.map(summary => {
+    const id = Number(summary.id);
+    const firstLevelValue = firstPairs.get(id) ?? summary.firstLevelValue;
+    const lastLevelValue = lastPairs.get(id) ?? summary.lastLevelValue;
+    const minValue = Math.min(Number(firstLevelValue), Number(lastLevelValue));
+    const maxValue = Math.max(Number(firstLevelValue), Number(lastLevelValue));
+    const isConstantAcrossLevels =
+      Number(firstLevelValue) === Number(lastLevelValue);
+    const directSlotMatch =
+      Number(summary.formulaParamValue) === Number(firstLevelValue) &&
+      Number(summary.formulaParamValue) === Number(lastLevelValue);
+    const relationStatus = directSlotMatch
+      ? 'constant-direct-slot-match'
+      : varyingIds.has(id)
+        ? 'level-scaling-override-candidate'
+        : 'constant-override-candidate';
+    const step =
+      rowCount > 1 &&
+      Number.isFinite(firstLevelValue) &&
+      Number.isFinite(lastLevelValue)
+        ? (Number(lastLevelValue) - Number(firstLevelValue)) / (rowCount - 1)
+        : null;
+
+    return {
+      ...summary,
+      levelRows: rowCount || summary.levelRows,
+      firstLevelValue,
+      lastLevelValue,
+      minValue,
+      maxValue,
+      isConstantAcrossLevels,
+      relationStatus,
+      progression: {
+        status:
+          rowCount > 1
+            ? isConstantAcrossLevels
+              ? 'constant-across-levels'
+              : 'arithmetic-progression-candidate-unverified'
+            : 'insufficient-level-rows',
+        step,
+        isArithmetic: rowCount > 1 && !isConstantAcrossLevels,
+      },
+    };
+  });
+  const directSlotMatchParamIds = parameterSummaries
+    .filter(summary => summary.relationStatus === 'constant-direct-slot-match')
+    .map(summary => summary.id);
+  const overrideCandidateParamIds = parameterSummaries
+    .filter(summary => summary.relationStatus !== 'constant-direct-slot-match')
+    .map(summary => summary.id);
+
+  return compactFormulaSlotAlignment({
+    ...base,
+    status: 'summon-target-skill-level-slot-alignment-unverified',
+    conclusion:
+      overrideCandidateParamIds.length > 0
+        ? 'slot-override-candidate-unconfirmed'
+        : 'constant-slot-match-unconfirmed',
+    directSlotMatchParamIds,
+    overrideCandidateParamIds,
+    parameterSummaries,
+  });
 }
 
 function mergeHitCandidateMappingEvidence(mapping, actionLevelCandidate) {
@@ -6916,9 +7309,13 @@ function scalePerTenThousand(value) {
 
 function compactHitCandidateDamageElementMapping(mapping) {
   return {
+    sourceKind: mapping.sourceKind ?? null,
     elementConfigId: numberOrNull(mapping.elementConfigId),
     pathId: mapping.pathId ?? null,
     elementName: mapping.elementName ?? null,
+    sourceElementConfigId: numberOrNull(mapping.sourceElementConfigId),
+    sourcePathId: mapping.sourcePathId ?? null,
+    summonTarget: mapping.summonTarget ?? null,
     hpDamage: mapping.hpDamage
       ? {
           status: mapping.hpDamage.status ?? null,
@@ -6961,6 +7358,7 @@ function compactHitCandidateDamageElementMapping(mapping) {
       : null,
     skillLevelBridge: {
       status: mapping.skillLevelBridge?.status ?? null,
+      source: mapping.skillLevelBridge?.source ?? null,
       levelRows: numberOrNull(mapping.skillLevelBridge?.levelRows) ?? 0,
       parameterIds: mapping.skillLevelBridge?.parameterIds ?? [],
       varyingParameterIds: mapping.skillLevelBridge?.varyingParameterIds ?? [],
@@ -7006,6 +7404,12 @@ function summarizeActionHitCandidates(hitCandidates, sequenceTimingEvidence) {
   const mappedHitCandidates = hitCandidates.filter(
     candidate => candidate.damageElementFieldMappingCount > 0
   );
+  const summonTargetHitCandidates = hitCandidates.filter(
+    candidate =>
+      (numberOrNull(
+        candidate.summonTargetEvidenceSummary?.damageElementCandidateCount
+      ) ?? 0) > 0
+  );
 
   return {
     status:
@@ -7019,6 +7423,35 @@ function summarizeActionHitCandidates(hitCandidates, sequenceTimingEvidence) {
     damageElementFieldMappingCount: hitCandidates.reduce(
       (sum, candidate) => sum + candidate.damageElementFieldMappingCount,
       0
+    ),
+    summonTargetMappedHitCandidateCount: summonTargetHitCandidates.length,
+    summonTargetDamageElementFieldMappingCount: hitCandidates.reduce(
+      (sum, candidate) =>
+        sum +
+        (numberOrNull(candidate.summonTargetDamageElementFieldMappingCount) ??
+          0),
+      0
+    ),
+    summonTargetDamageElementConfigIds: uniqueNumbers(
+      hitCandidates.flatMap(
+        candidate =>
+          candidate.summonTargetEvidenceSummary?.damageElementConfigIds ?? []
+      )
+    ),
+    summonTargetSkillIds: uniqueNumbers(
+      hitCandidates.flatMap(
+        candidate => candidate.summonTargetEvidenceSummary?.targetSkillIds ?? []
+      )
+    ),
+    summonUnitIds: uniqueNumbers(
+      hitCandidates.flatMap(
+        candidate => candidate.summonTargetEvidenceSummary?.summonUnitIds ?? []
+      )
+    ),
+    summonTargetTriggerTimingStatuses: uniqueStrings(
+      hitCandidates.map(
+        candidate => candidate.summonTargetEvidenceSummary?.triggerTimingStatus
+      )
     ),
     frameRate: AZPR_TIMELINE_FRAME_RATE,
     primaryFrames: hitCandidates
@@ -8320,6 +8753,18 @@ function parseValueParamPairs(rawValue) {
     .filter(item => Number.isFinite(item.id) && Number.isFinite(item.value));
 }
 
+function createSummonTargetLookupByUnitId(evidence) {
+  const byUnitId = new Map();
+  for (const target of evidence?.targets ?? []) {
+    const summonUnitId = numberOrNull(target.summonUnitId);
+    if (!Number.isFinite(summonUnitId)) {
+      continue;
+    }
+    byUnitId.set(summonUnitId, target);
+  }
+  return byUnitId;
+}
+
 function createDamageElementFieldMappingBySkillIdAndPathId(evidence) {
   return createSkillPathLookup(evidence?.skills, 'fieldMappings');
 }
@@ -8466,5 +8911,11 @@ function uniqueNumbers(values) {
 }
 
 function uniqueStrings(values) {
-  return [...new Set(values.map(value => String(value)).filter(Boolean))];
+  return [
+    ...new Set(
+      values
+        .filter(value => value != null && String(value).trim() !== '')
+        .map(value => String(value))
+    ),
+  ];
 }

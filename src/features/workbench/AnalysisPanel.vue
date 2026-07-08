@@ -658,7 +658,11 @@ function formatHitCandidateSummary(entry) {
     summary.sequenceTimingTransitionCount > 0
       ? ` · 连段桥 ${summary.sequenceTimingResolvedTransitionCount}/${summary.sequenceTimingTransitionCount}`
       : '';
-  return `逐hit候选 ${summary.mappedHitCandidateCount}/${summary.hitCandidateCount}段 · 三值字段 ${summary.damageElementFieldMappingCount}${frameText}${absoluteFrameText}${transitionText}`;
+  const summonTargetText =
+    summary.summonTargetMappedHitCandidateCount > 0
+      ? ` · 召唤目标 ${summary.summonTargetMappedHitCandidateCount}/${summary.hitCandidateCount}段/${summary.summonTargetDamageElementFieldMappingCount}元素 · 触发未确认`
+      : '';
+  return `逐hit候选 ${summary.mappedHitCandidateCount}/${summary.hitCandidateCount}段 · 三值字段 ${summary.damageElementFieldMappingCount}${summonTargetText}${frameText}${absoluteFrameText}${transitionText}`;
 }
 
 function formatCandidateSeries(series) {

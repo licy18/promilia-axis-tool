@@ -360,6 +360,69 @@ describe('Workbench view', () => {
     expect(text).toContain('low');
   });
 
+  it('shows Hanyouyou summon target candidates in per-hit workbench evidence', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-character-select"]')
+      .setValue('101003');
+    await nextTick();
+    await nextTick();
+
+    const text = wrapper.text();
+    expect(text).toContain('寒悠悠');
+    expect(text).toContain(
+      '逐hit候选 4/4段 · 三值字段 6 · 召唤目标 2/4段/4元素 · 触发未确认'
+    );
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-candidate-value-marker"]'
+      )
+    ).toHaveLength(12);
+
+    const hit4Hotspot = wrapper.find(
+      '[data-testid="workbench-timeline-candidate-value-frame-hotspot"][data-hit-index="4"]'
+    );
+    expect(hit4Hotspot.exists()).toBe(true);
+    await hit4Hotspot.trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-candidate-value-frame-summary-source"]')
+        .text()
+    ).toContain('召唤目标 480059->48005901 · 触发帧未确认');
+    const hpFrameDetail = wrapper.find(
+      '[data-testid="workbench-candidate-value-frame-detail-row"][data-series-key="hpDamageFormulaParamCandidate"]'
+    );
+    expect(hpFrameDetail.text()).toContain(
+      '101003156 召唤目标480059->48005901'
+    );
+    expect(hpFrameDetail.text()).toContain(
+      '101003182 召唤目标480059->48005901'
+    );
+
+    const comparisonRows = wrapper.findAll(
+      '[data-testid="workbench-candidate-element-comparison-row"]'
+    );
+    const summonRow = comparisonRows.find(
+      row => row.attributes('data-element-config-id') === '101003156'
+    );
+    expect(summonRow).toBeTruthy();
+    expect(summonRow.text()).toContain('召唤触发待确认');
+    expect(summonRow.attributes('title')).toContain(
+      '召唤目标 480059->48005901'
+    );
+  });
+
   it('shows the selected actor current-rank attribute panel', async () => {
     const wrapper = mount(Workbench, {
       global: {

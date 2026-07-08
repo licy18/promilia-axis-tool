@@ -1,6 +1,6 @@
 # promilia-axis-tool 项目手册
 
-最后更新：2026-07-07
+最后更新：2026-07-08
 
 当前策略是以 Endaxis 为架构和交互参考，对 `promilia-axis-tool` 进行从头重构；旧实现只保留为功能原型和迁移参考。完整任务拆解见 `DEVELOPMENT_PLAN.md`，本文件保留最终目标、阶段目标、项目状态和当前事实。
 
@@ -55,7 +55,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；13 个测试文件、106 条测试通过。
+- `npm run test -- --run`：通过；13 个测试文件、108 条测试通过。
 
 ## 3. 目录速览
 
@@ -4251,6 +4251,40 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8BJ 目标：把 `summonTargetSkillEvidence` 接入 per-hit 候选详情和 Workbench 展示，让第 4/5 段能显示二级 DamageElement 的 HP / 韧性 / 能量候选，但继续标记为“触发帧未确认、公式未应用”。
 - 继续追 `skill_control_48005901/48006001` 的 stub 产生原因，必要时从 compact bundle typetree、Yoo index 或运行时 capture 补触发帧、命中次数和 target ownership。
 - 继续追 `101003079 / 焰火` buff runtime，确认它是否只负责触发 `48006001`，还是另有 buff 条件、二次注入或伤害过滤。
+
+### 2026-07-08：阶段 5-8BJ 召唤目标候选接入 Workbench
+
+本轮完成：
+
+- `src/simulation/projection/projectSimulationResult.js` 新增 `summonTargetSkillEvidence` 运行时索引，把 `normalAttackHitChainCandidate.hitGroups[].externalElementObjectReferences[].summonTargetSkillEvidence` 展开为 per-hit 的 nested `TDamageElementParams` 候选。
+- 寒悠悠普攻第 4 段现在在模拟结果中显示为 `hitIndex = 4`、`hitSkillId = 10100304`、`summonUnitId = 480059`、`targetSkillId = 48005901`，并带二级 DamageElement `101003156 / 101003182`。
+- 寒悠悠普攻第 5 段现在在模拟结果中显示为 `hitIndex = 5`、`hitSkillId = 10100305`、`summonUnitId = 480060`、`targetSkillId = 48006001`，并带二级 DamageElement `101003157 / 101003179`。
+- `hitCandidateSummary` 新增召唤目标摘要：寒悠悠当前为 `hitCandidateCount = 4`、`mappedHitCandidateCount = 4`、`damageElementFieldMappingCount = 6`、`summonTargetMappedHitCandidateCount = 2`、`summonTargetDamageElementFieldMappingCount = 4`。
+- 二级召唤目标候选进入 `candidateValueSeries`：寒悠悠当前 4 个 hit candidate 形成 3 条候选曲线、12 个曲线点；第 4/5 段的 HP / 削韧 / 充能候选来自目标 item skill 的 DamageElement。
+- `TimelineGridPreview` 的选中帧详情和 element 对比表已经能显示 `召唤目标480059->48005901` / `召唤目标480060->48006001`，并在状态中标记 `召唤触发待确认`。
+- `AnalysisPanel` 的逐 hit 摘要已经显示 `召唤目标 2/4段/4元素 · 触发未确认`。
+- `uniqueStrings()` 已修正，不再把 `undefined` 字面量写入汇总状态。
+
+当前边界：
+
+- 第 4/5 段的二级 DamageElement 已经进入 per-hit 候选和 Workbench 展示，但仍是 `applied: false`。
+- 当前曲线点使用来源 hitGroup 的候选帧定位；召唤目标 item skill 自身的真实触发帧、命中次数、owner/target 归属和 runtime 条件仍未确认。
+- `skill_control_48005901/48006001` 仍是 `stubOnly`，所以 Workbench 只能展示“二级候选存在”，不能把它当成最终爆炸时机或最终公式。
+- `battlefield_item.param = Delay#4` 继续只作为字段展示，不解释为帧、秒或命中延迟。
+
+验收结果：
+
+- `npm test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、47 条测试。
+- `npm run data:generate`：通过，生成数量稳定。
+- `npm run test -- --run`：通过，13 个测试文件、108 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提醒与 chunk 体积提醒。
+- `git diff --check`：通过；仅有 Windows 行尾转换提示。
+
+下一步：
+
+- 阶段 5-8BK 目标：追 `skill_control_48005901/48006001` 为何只导出 `stubOnly`，优先检查 compact bundle typetree、Yoo index、Extractor stub 保护规则和可安全读取的替代导出路径。
+- 若静态导出仍不能打开目标 item skill 行为轨，则把 `10100304/10100305` 的召唤触发和 `101003079 / 焰火` runtime 条件加入真实 hook / capture 采样目标。
+- Workbench 侧后续可把召唤目标候选加过滤/徽标，但在触发帧确认前不要把二级 DamageElement 合并进最终 HP / 韧性 / 能量结果。
 
 ## 10. 文档维护规则
 

@@ -820,6 +820,9 @@ function createCandidateValueTimelineMarkers() {
             displayTimeMs: point.displayTimeMs,
             elementConfigIds: point.elementConfigIds ?? [],
             elementDetails: point.elementDetails ?? [],
+            summonTargetEvidenceSummary:
+              point.summonTargetEvidenceSummary ?? null,
+            triggerTimingStatus: point.triggerTimingStatus ?? null,
             sourceStatus: point.sourceStatus,
             timeAdjustmentStatus: point.timeAdjustmentStatus,
             seriesOrder: meta.order,
@@ -1019,7 +1022,27 @@ function formatCandidateFrameGroupSource(group) {
     group.values.map(value => value.timeAdjustmentStatus),
     '时序候选'
   );
-  return `${group.actionId} · ${hitSkillText} · ${elementText} · ${sourceText} · ${timingText} · 未应用候选`;
+  const summonTargetText = formatCandidateFrameGroupSummonTarget(group);
+  return `${group.actionId} · ${hitSkillText} · ${elementText} · ${sourceText} · ${timingText}${summonTargetText} · 未应用候选`;
+}
+
+function formatCandidateFrameGroupSummonTarget(group) {
+  const summaries = (group.values ?? [])
+    .map(value => value.summonTargetEvidenceSummary)
+    .filter(Boolean);
+  if (summaries.length === 0) {
+    return '';
+  }
+
+  const unitText = formatCompactList(
+    summaries.flatMap(summary => summary.summonUnitIds ?? []),
+    '召唤目标'
+  );
+  const skillText = formatCompactList(
+    summaries.flatMap(summary => summary.targetSkillIds ?? []),
+    '目标skill'
+  );
+  return ` · 召唤目标 ${unitText}->${skillText} · 触发帧未确认`;
 }
 
 function formatCandidateFrameDetailValue(value) {
@@ -1059,6 +1082,7 @@ function formatCandidateFrameDetailElements(value) {
 function formatCandidateElementDetail(element) {
   const elementId = element.elementConfigId ?? '未知';
   const parts = [
+    formatCandidateElementSourceDetail(element),
     formatCandidateElementHpDetail(element.hpDamage),
     formatCandidateElementFormulaFunctionDetail(element.hpDamage),
     formatCandidateElementSlotAlignmentDetail(
@@ -1068,6 +1092,17 @@ function formatCandidateElementDetail(element) {
     formatCandidateElementEnergyDetail(element.selfEnergyChange),
   ].filter(Boolean);
   return parts.length ? `${elementId} ${parts.join(' ')}` : `${elementId}`;
+}
+
+function formatCandidateElementSourceDetail(element) {
+  const target = element.summonTarget;
+  if (!target) {
+    return null;
+  }
+
+  const unit = target.summonUnitId ?? '未知召唤';
+  const skill = target.targetSkillId ?? '目标skill';
+  return `召唤目标${unit}->${skill}`;
 }
 
 function formatCandidateElementHpDetail(hpDamage) {
@@ -1189,10 +1224,20 @@ function createCandidateElementComparisonRows(group) {
           toughnessDamage: null,
           selfEnergyChange: null,
           skillLevelBridge: null,
+          sourceKinds: [],
+          summonTargets: [],
         });
       }
 
       const row = rowsByElement.get(key);
+      row.sourceKinds = uniqueDisplayValues([
+        ...row.sourceKinds,
+        element.sourceKind,
+      ]);
+      row.summonTargets = uniqueDisplayValues([
+        ...row.summonTargets,
+        formatElementSummonTargetKey(element.summonTarget),
+      ]);
       row.hpDamage = mergeElementCandidateObject(
         row.hpDamage,
         element.hpDamage
@@ -1255,6 +1300,9 @@ function mergeElementCandidateObject(current, incoming) {
 
 function formatCandidateElementComparisonStatus(row) {
   const parts = ['未应用'];
+  if (row.sourceKinds.includes('azpr-summon-target-damage-element-candidate')) {
+    parts.push('召唤触发待确认');
+  }
   if (row.functionText !== '未确认') {
     parts.push('function组合待验证');
   }
@@ -1277,8 +1325,20 @@ function formatCandidateElementComparisonTooltip(row) {
     `槽位 ${row.slotText}`,
     `削韧 ${row.toughnessText}`,
     `能量 ${row.energyText}`,
+    row.summonTargets.length ? `召唤目标 ${row.summonTargets.join(',')}` : '',
     row.statusText,
-  ].join(' / ');
+  ]
+    .filter(Boolean)
+    .join(' / ');
+}
+
+function formatElementSummonTargetKey(target) {
+  if (!target) {
+    return null;
+  }
+  const unit = target.summonUnitId ?? '?';
+  const skill = target.targetSkillId ?? '?';
+  return `${unit}->${skill}`;
 }
 
 function createElementNumberPart(label, value) {
@@ -1304,6 +1364,16 @@ function formatCompactList(values, fallback) {
     ),
   ];
   return uniqueValues.length ? uniqueValues.join('/') : fallback;
+}
+
+function uniqueDisplayValues(values) {
+  return [
+    ...new Set(
+      values
+        .map(value => String(value ?? '').trim())
+        .filter(value => value.length > 0)
+    ),
+  ];
 }
 
 function formatTimelineNumber(value) {
