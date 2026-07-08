@@ -2376,6 +2376,27 @@ describe('Workbench view', () => {
     );
     expect(refreshedRuntimeStatePointId).toBeTruthy();
     expect(refreshedRuntimeStatePointId).not.toBe(statePointId);
+    const resultPointMap = runtimeOriginFeedback.find(
+      '[data-testid="workbench-action-edit-feedback-result-map"]'
+    );
+    expect(resultPointMap.exists()).toBe(true);
+    expect(resultPointMap.attributes('data-origin-state-point-id')).toBe(
+      statePointId
+    );
+    expect(resultPointMap.attributes('data-runtime-state-point-id')).toBe(
+      refreshedRuntimeStatePointId
+    );
+    const resultPointMapRows = Object.fromEntries(
+      resultPointMap
+        .findAll(
+          '[data-testid="workbench-action-edit-feedback-result-map-row"]'
+        )
+        .map(row => [row.attributes('data-result-point-key'), row])
+    );
+    expect(resultPointMapRows.origin.text()).toContain('原结果');
+    expect(resultPointMapRows.origin.text()).toContain('敌人 HP');
+    expect(resultPointMapRows.runtime.text()).toContain('刷新后');
+    expect(resultPointMapRows.runtime.text()).toContain('结果未定位');
     const resultFocusButton = runtimeOriginFeedback.find(
       '[data-testid="workbench-action-edit-feedback-result-focus"]'
     );

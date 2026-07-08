@@ -12847,3 +12847,72 @@ data-edit-focus-origin="runtime-focus"
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 
 下一阶段 5-8DU 应补编辑后的结果回看提示，区分原始结果点和刷新后结果点。
+
+## 154. 阶段 5-8DU：编辑反馈结果点映射
+
+阶段目标：
+
+- 在最近编辑反馈条中明确区分编辑来源的原始结果点和当前刷新后的结果点。
+
+### 154.1 数据结构变化
+
+本阶段不新增保存字段，不变更 `Project` schema、simulation 输出或 localStorage 数据。
+
+`AnalysisPanel` 的 `actionEditFeedback` 新增前端派生字段：
+
+```js
+originPointDisplay: string
+runtimePointDisplay: string
+hasResultPointMap: boolean
+```
+
+派生来源：
+
+```text
+actionEditSource.originStatePointId
+actionEditSource.originFrameLabel
+actionEditSource.originTrackKey
+runtimeTraceByActionId[actionId].firstStatePointId
+runtimeTraceByActionId[actionId].count
+resultFocusStatus
+```
+
+### 154.2 DOM 状态
+
+`workbench-action-edit-feedback` 内新增结果点映射容器：
+
+```html
+data-testid="workbench-action-edit-feedback-result-map"
+data-origin-state-point-id
+data-runtime-state-point-id
+```
+
+映射行：
+
+```html
+data-testid="workbench-action-edit-feedback-result-map-row"
+data-result-point-key="origin|runtime"
+```
+
+含义：
+
+- `origin`：编辑前定位来源的原始结果点。
+- `runtime`：当前动作刷新后的可定位结果点。
+
+### 154.3 验证
+
+当前测试覆盖：
+
+- 从资源曲线点定位动作后修改 `startMs`。
+- 最近编辑反馈条结果点映射保留原始 state point。
+- 最近编辑反馈条结果点映射保留刷新后 state point。
+- 原始 state point 与刷新后 state point 不同。
+- 映射行显示 `原结果`、`刷新后` 和三值轨道/定位状态。
+
+阶段验收：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、40 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、114 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8DV 应补刷新后结果点在资源曲线选中点摘要中的同步提示。

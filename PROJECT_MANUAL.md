@@ -6383,6 +6383,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8DU 目标：继续完善 Workbench 主流程编辑体验，优先补编辑后的结果回看提示，让用户修改字段后能更明确地区分原始结果点和刷新后结果点。
 - 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
 
+### 2026-07-08：阶段 5-8DU 编辑反馈结果点映射
+
+本轮完成：
+
+- `AnalysisPanel` 的最近编辑反馈条新增结果点映射区。
+- 当最近编辑来自 runtime 结果定位时，反馈条显示 `原结果` 和 `刷新后` 两行。
+- `原结果` 使用 `originStatePointId`、`originFrameLabel` 和 `originTrackKey`，帮助用户确认修改前来自哪个三值点。
+- `刷新后` 使用当前 action 的刷新后 runtime state point 和结果定位状态，帮助用户确认 `定位结果` 按钮会跳到哪个点。
+- Workbench 测试覆盖从资源曲线定位动作并修改 `startMs` 后，反馈条同时写入原始 state point 和刷新后 state point，且两者不同。
+
+当前验证事实：
+
+- 修改字段后，`workbench-action-edit-feedback-result-map` 写入 `data-origin-state-point-id` 和 `data-runtime-state-point-id`。
+- 原始结果点行显示 `原结果` 和轨道摘要。
+- 刷新后结果点行显示 `刷新后` 和当前定位状态。
+- 原始结果点与刷新后结果点在 `startMs` 改动后不同。
+- 本阶段只新增前端派生展示，不新增公式、simulation 输出或保存 schema。
+
+当前边界：
+
+- 原始结果点只是编辑前来源标记，不保证在当前刷新后的 runtime projection 中仍可选中。
+- 暂未增加原结果回放或历史快照。
+- 暂未做批量编辑或快捷键。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、40 条测试。
+- `npm run test -- --run`：通过，13 个测试文件、114 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8DV 目标：继续完善 Workbench 主流程编辑体验，优先补刷新后结果点的回看状态在资源曲线选中点摘要中的同步提示。
+- 仍保持 UI 主流程与框架体验优先，不扩展公式证据或数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

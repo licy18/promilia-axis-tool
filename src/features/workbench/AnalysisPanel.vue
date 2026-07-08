@@ -79,6 +79,32 @@
           >
             {{ actionEditFeedback.originLabel }}
           </em>
+          <div
+            v-if="actionEditFeedback.hasResultPointMap"
+            class="action-edit-feedback-result-map"
+            :data-origin-state-point-id="
+              actionEditFeedback.originStatePointId
+            "
+            :data-runtime-state-point-id="
+              actionEditFeedback.runtimeStatePointId
+            "
+            data-testid="workbench-action-edit-feedback-result-map"
+          >
+            <span
+              data-result-point-key="origin"
+              data-testid="workbench-action-edit-feedback-result-map-row"
+            >
+              原结果
+              <strong>{{ actionEditFeedback.originPointDisplay }}</strong>
+            </span>
+            <span
+              data-result-point-key="runtime"
+              data-testid="workbench-action-edit-feedback-result-map-row"
+            >
+              刷新后
+              <strong>{{ actionEditFeedback.runtimePointDisplay }}</strong>
+            </span>
+          </div>
         </div>
         <div class="action-edit-feedback-actions">
           <button
@@ -1918,14 +1944,56 @@ function createActionEditFeedback(source) {
     originStatePointId: source.originStatePointId ?? '',
     originTrackKey: source.originTrackKey ?? '',
     originFrameLabel: source.originFrameLabel ?? '',
+    originPointDisplay: formatActionEditFeedbackOriginPoint(source),
     runtimeStatePointId,
     runtimeDeltaCount: trace?.count ?? 0,
+    runtimePointDisplay: formatActionEditFeedbackRuntimePoint({
+      runtimeStatePointId,
+      runtimeDeltaCount: trace?.count ?? 0,
+      resultFocusStatus,
+    }),
+    hasResultPointMap: Boolean(source.originStatePointId || runtimeStatePointId),
     resultFocused,
     resultFocusStatus,
     resultFocusLabel: formatActionEditFeedbackResultFocusLabel(
       resultFocusStatus
     ),
   };
+}
+
+function formatActionEditFeedbackOriginPoint(source) {
+  if (!source?.originStatePointId) {
+    return '无原结果点';
+  }
+  const parts = [
+    source.originFrameLabel || '原结果点',
+    formatActionEditFeedbackTrack(source.originTrackKey),
+  ].filter(Boolean);
+  return parts.join(' · ');
+}
+
+function formatActionEditFeedbackRuntimePoint({
+  runtimeStatePointId,
+  runtimeDeltaCount,
+  resultFocusStatus,
+}) {
+  if (!runtimeStatePointId) {
+    return '暂无刷新结果点';
+  }
+  return `${formatActionEditFeedbackResultFocusLabel(resultFocusStatus)} · ${runtimeDeltaCount}条运行结果`;
+}
+
+function formatActionEditFeedbackTrack(trackKey) {
+  if (trackKey === 'enemyHpDamage') {
+    return '敌人 HP';
+  }
+  if (trackKey === 'enemyToughnessDamage') {
+    return '敌人韧性';
+  }
+  if (trackKey === 'selfEnergyChange') {
+    return '自身能量';
+  }
+  return '';
 }
 
 function isValidActionEditSource(source) {
@@ -3045,6 +3113,33 @@ h2 {
   color: #9ce0d2;
   font-size: 11px;
   font-style: normal;
+  font-weight: 700;
+}
+
+.action-edit-feedback-result-map {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+  min-width: 0;
+}
+
+.action-edit-feedback-result-map span {
+  min-width: 0;
+  padding: 5px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.045);
+  color: #8f9aa3;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.action-edit-feedback-result-map strong {
+  display: block;
+  margin-top: 2px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #dff9f3;
+  font-size: 11px;
   font-weight: 700;
 }
 
