@@ -17754,3 +17754,79 @@ PropertiesPanel 保留原本 `allowOriginResult: true` 的本地来源结果 fal
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、61 条测试。
 - `npm run test -- --run`：通过，32 个测试文件、178 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 225. UI 主流程能力块：Main Flow State Contract
+
+本阶段属于 UI 主流程。
+
+### 225.1 结构变化
+
+`createWorkbenchFlowModel()` 输出新增：
+
+```js
+mainFlowState
+```
+
+`src/features/workbench/workbenchFlowModel.js` 新增并导出：
+
+```js
+createWorkbenchMainFlowState({
+  phase,
+  primaryAction,
+  runtimeDetail,
+  runtimeActionEditTarget,
+  editResult,
+  runtimeResultReturnTarget
+})
+```
+
+`mainFlowState` 当前字段：
+
+```js
+{
+  phase,
+  primaryAction,
+  runtimeDetail,
+  runtimeActionEditTarget,
+  editResult,
+  runtimeResultReturnTarget,
+  resultReturnTarget,
+  nextTargetKind,
+  currentRuntimeStatePointId,
+  refreshedRuntimeStatePointId,
+  actionEditStatePointId,
+  returnStatePointId,
+  canFocusRuntimeAction,
+  canReturnRuntimeResult
+}
+```
+
+`nextTargetKind` 当前映射：
+
+```text
+open-runtime-results -> runtime-results
+focus-runtime-action -> runtime-action-edit
+return-runtime-result -> runtime-result-return
+```
+
+`WorkbenchFlowPanel` 改为消费 `mainFlowState` 中的主操作、回改目标和结果返回目标，并暴露以下主流程定位字段：
+
+```html
+data-main-flow-next-target-kind
+data-main-flow-action-edit-state-point-id
+data-main-flow-return-state-point-id
+```
+
+### 225.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 主流程状态合同；三值计算、runtime projection 数值结果和草稿保存结构不变。
+
+### 225.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖 action edit、runtime result、edit result ready、edit result review 四种阶段的 `mainFlowState`。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认主流程面板在编辑、运行结果、刷新结果待回看、刷新结果已回看阶段暴露对应 `mainFlowState` 目标。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、58 条测试。
+- `npm run test -- --run`：通过，32 个测试文件、178 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

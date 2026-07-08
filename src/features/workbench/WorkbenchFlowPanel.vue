@@ -4,10 +4,21 @@
     :data-action-id="workbenchFlow.selectedActionId"
     :data-edit-result-state-point-id="workbenchFlow.editResult.statePointId"
     :data-flow-phase="workbenchFlow.phase"
-    :data-flow-primary-action-id="workbenchFlow.primaryAction.actionId"
-    :data-flow-primary-kind="workbenchFlow.primaryAction.kind"
+    :data-flow-primary-action-id="
+      workbenchFlow.mainFlowState.primaryAction.actionId
+    "
+    :data-flow-primary-kind="workbenchFlow.mainFlowState.primaryAction.kind"
     :data-flow-primary-state-point-id="
-      workbenchFlow.primaryAction.statePointId
+      workbenchFlow.mainFlowState.primaryAction.statePointId
+    "
+    :data-main-flow-action-edit-state-point-id="
+      workbenchFlow.mainFlowState.actionEditStatePointId
+    "
+    :data-main-flow-next-target-kind="
+      workbenchFlow.mainFlowState.nextTargetKind
+    "
+    :data-main-flow-return-state-point-id="
+      workbenchFlow.mainFlowState.returnStatePointId
     "
     :data-runtime-detail-action-id="workbenchFlow.runtimeDetail.actionId"
     :data-runtime-detail-state-point-id="workbenchFlow.runtimeDetail.statePointId"
@@ -141,15 +152,19 @@
             ),
           },
         ]"
-        :data-action-id="workbenchFlow.runtimeActionEditTarget.actionId"
+        :data-action-id="
+          workbenchFlow.mainFlowState.runtimeActionEditTarget.actionId
+        "
         :data-primary-action="
           isPrimaryFlowAction(WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION)
             ? 'true'
             : 'false'
         "
-        :data-state-point-id="workbenchFlow.runtimeActionEditTarget.statePointId"
+        :data-state-point-id="
+          workbenchFlow.mainFlowState.runtimeActionEditTarget.statePointId
+        "
         data-testid="workbench-flow-edit-runtime-action"
-        :disabled="!workbenchFlow.controls.canFocusRuntimeAction"
+        :disabled="!workbenchFlow.mainFlowState.canFocusRuntimeAction"
         @click="focusRuntimeAction"
       >
         <EditPen class="flow-button-icon" />
@@ -168,15 +183,19 @@
             ),
           },
         ]"
-        :data-action-id="workbenchFlow.editResult.actionId"
+        :data-action-id="
+          workbenchFlow.mainFlowState.resultReturnTarget.actionId
+        "
         :data-primary-action="
           isPrimaryFlowAction(WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT)
             ? 'true'
             : 'false'
         "
-        :data-state-point-id="workbenchFlow.editResult.statePointId"
+        :data-state-point-id="
+          workbenchFlow.mainFlowState.resultReturnTarget.statePointId
+        "
         data-testid="workbench-flow-return-edit-result"
-        :disabled="!workbenchFlow.controls.canReturnRuntimeResult"
+        :disabled="!workbenchFlow.mainFlowState.canReturnRuntimeResult"
         @click="returnRuntimeResult"
       >
         <ArrowRight class="flow-button-icon" />
@@ -254,12 +273,12 @@ const workbenchFlow = computed(
 );
 
 function focusRuntimeAction() {
-  const detail = workbenchFlow.value.runtimeActionEditTarget;
+  const detail = workbenchFlow.value.mainFlowState.runtimeActionEditTarget;
   dispatchFlowAction(getRuntimeActionFocusFlowAction(detail));
 }
 
 function returnRuntimeResult() {
-  const context = workbenchFlow.value.editResult;
+  const context = workbenchFlow.value.mainFlowState.resultReturnTarget;
   dispatchFlowAction(getRuntimeReturnFlowAction(context));
 }
 
@@ -279,7 +298,7 @@ function dispatchFlowAction(action) {
 }
 
 function isPrimaryFlowAction(kind) {
-  return workbenchFlow.value.primaryAction.kind === kind;
+  return workbenchFlow.value.mainFlowState.primaryAction.kind === kind;
 }
 
 function getOpenRuntimeResultsFlowAction(flow) {
@@ -319,7 +338,7 @@ function getRuntimeReturnFlowAction(context) {
     actionId: context?.actionId ?? '',
     statePointId: context?.statePointId ?? '',
     payload: context ?? null,
-    enabled: Boolean(context?.canReturn),
+    enabled: Boolean(context?.canReturn ?? context?.statePointId),
     disabledReason: 'missing-runtime-result',
   });
 }

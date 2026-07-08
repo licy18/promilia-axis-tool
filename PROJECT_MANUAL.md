@@ -8354,6 +8354,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把模型中的 `primaryAction`、`runtimeActionEditTarget`、`runtimeResultReturnTarget` 汇合成更完整的主流程状态，逐步减少面板内部对下一步动作的本地推断。
 
+### 2026-07-09：UI 主流程能力块 - Main Flow State Contract
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `WorkbenchFlowModel` 新增 `mainFlowState`，把 `primaryAction`、`runtimeActionEditTarget`、`runtimeResultReturnTarget`、当前运行点和刷新结果点汇成一个主流程状态节点。
+- `WorkbenchFlowPanel` 改为从 `mainFlowState` 读取主操作、回改目标和结果返回目标，不再分别直接消费多个散字段。
+- `mainFlowState.nextTargetKind` 明确当前主流程下一步目标：查看运行结果、回到动作编辑或返回刷新结果。
+- 该变化保持既有 `dispatch-flow-action`、运行模拟结果和三值曲线输出不变，只收束 UI 主流程状态合同。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部同步提示或缺口说明。
+
+当前验证事实：
+
+- flow model 单元测试覆盖 action edit、runtime result、edit result ready、edit result review 四种阶段的 `mainFlowState`。
+- Workbench 页面测试确认主流程面板在编辑、运行结果、刷新结果待回看、刷新结果已回看阶段暴露对应 `mainFlowState` 目标。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、58 条测试。
+- `npm run test -- --run`：通过，32 个测试文件、178 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 继续 UI 主流程能力块：让更多面板逐步消费 `mainFlowState`，并把“排轴动作编辑 -> 运行模拟 -> 曲线/日志/详情查看 -> 回到动作修改”的路径整理成更少本地推断、更接近 Endaxis 工作流的主流程。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

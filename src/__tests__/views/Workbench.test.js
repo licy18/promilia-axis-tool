@@ -74,6 +74,15 @@ describe('Workbench view', () => {
       'action-0001'
     );
     expect(flowPanel.attributes('data-flow-primary-state-point-id')).toBe('');
+    expect(flowPanel.attributes('data-main-flow-next-target-kind')).toBe(
+      'runtime-results'
+    );
+    expect(
+      flowPanel.attributes('data-main-flow-action-edit-state-point-id')
+    ).toBe('');
+    expect(
+      flowPanel.attributes('data-main-flow-return-state-point-id')
+    ).toBe('');
     expect(flowPanel.attributes('data-runtime-sim-log-count')).toBe('1');
     expect(flowPanel.attributes('data-contract-name')).toBe(
       'Action -> Hit -> ThreeValueDelta'
@@ -1652,6 +1661,15 @@ describe('Workbench view', () => {
     expect(
       focusedFlowPanel.attributes('data-flow-primary-state-point-id')
     ).toBe(selectedRuntimePointId);
+    expect(focusedFlowPanel.attributes('data-main-flow-next-target-kind')).toBe(
+      'runtime-action-edit'
+    );
+    expect(
+      focusedFlowPanel.attributes('data-main-flow-action-edit-state-point-id')
+    ).toBe(selectedRuntimePointId);
+    expect(
+      focusedFlowPanel.attributes('data-main-flow-return-state-point-id')
+    ).toBe('');
     expect(wrapper.find('.analysis-panel').attributes()).toMatchObject({
       'data-flow-phase': 'runtime-result',
       'data-flow-state-point-id': selectedRuntimePointId,
@@ -1770,6 +1788,15 @@ describe('Workbench view', () => {
     expect(
       editResultFlowPanel.attributes('data-flow-primary-state-point-id')
     ).toBe(refreshedStatePointId);
+    expect(
+      editResultFlowPanel.attributes('data-main-flow-next-target-kind')
+    ).toBe('runtime-result-return');
+    expect(
+      editResultFlowPanel.attributes('data-main-flow-action-edit-state-point-id')
+    ).toBe('');
+    expect(
+      editResultFlowPanel.attributes('data-main-flow-return-state-point-id')
+    ).toBe(refreshedStatePointId);
     expect(returnEditResultButton.attributes('disabled')).toBeUndefined();
     expect(returnEditResultButton.attributes('data-action-id')).toBe(
       'action-0001'
@@ -1806,6 +1833,21 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-flow-panel"]')
         .attributes('data-flow-primary-kind')
     ).toBe('focus-runtime-action');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-flow-panel"]')
+        .attributes('data-main-flow-next-target-kind')
+    ).toBe('runtime-action-edit');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-flow-panel"]')
+        .attributes('data-main-flow-action-edit-state-point-id')
+    ).toBe(refreshedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-flow-panel"]')
+        .attributes('data-main-flow-return-state-point-id')
+    ).toBe(refreshedStatePointId);
     expect(wrapper.find('.analysis-panel').attributes()).toMatchObject({
       'data-flow-phase': 'edit-result-review',
       'data-flow-state-point-id': refreshedStatePointId,

@@ -109,6 +109,14 @@ export function createWorkbenchFlowModel({
     runtimeDetail,
     editResult,
   });
+  const mainFlowState = createWorkbenchMainFlowState({
+    phase,
+    primaryAction,
+    runtimeDetail,
+    runtimeActionEditTarget,
+    editResult,
+    runtimeResultReturnTarget,
+  });
 
   return {
     phase,
@@ -126,6 +134,7 @@ export function createWorkbenchFlowModel({
     editResult,
     runtimeResultReturnTarget,
     primaryAction,
+    mainFlowState,
     runtimeNavigation: {
       points: runtimeNavigationPoints,
       count: runtimeNavigationPoints.length,
@@ -208,6 +217,46 @@ export function createWorkbenchFlowRuntimeResultReturnTarget({
     resultContext: editResult,
     originStatePointId,
   });
+}
+
+export function createWorkbenchMainFlowState({
+  phase = '',
+  primaryAction = null,
+  runtimeDetail = null,
+  runtimeActionEditTarget = null,
+  editResult = null,
+  runtimeResultReturnTarget = null,
+} = {}) {
+  const resultReturnTarget = runtimeResultReturnTarget ?? editResult ?? null;
+  return {
+    phase,
+    primaryAction,
+    runtimeDetail,
+    runtimeActionEditTarget,
+    editResult,
+    runtimeResultReturnTarget,
+    resultReturnTarget,
+    nextTargetKind: resolveMainFlowNextTargetKind(primaryAction?.kind),
+    currentRuntimeStatePointId: runtimeDetail?.statePointId ?? '',
+    refreshedRuntimeStatePointId: editResult?.statePointId ?? '',
+    actionEditStatePointId: runtimeActionEditTarget?.statePointId ?? '',
+    returnStatePointId: resultReturnTarget?.statePointId ?? '',
+    canFocusRuntimeAction: Boolean(runtimeActionEditTarget?.canFocusAction),
+    canReturnRuntimeResult: Boolean(resultReturnTarget?.statePointId),
+  };
+}
+
+function resolveMainFlowNextTargetKind(kind = '') {
+  if (kind === WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS) {
+    return 'runtime-results';
+  }
+  if (kind === WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION) {
+    return 'runtime-action-edit';
+  }
+  if (kind === WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT) {
+    return 'runtime-result-return';
+  }
+  return '';
 }
 
 function createWorkbenchFlowEditResult(context) {

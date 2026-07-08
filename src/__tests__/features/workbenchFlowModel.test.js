@@ -49,6 +49,16 @@ describe('workbench flow model', () => {
       statePointId: '',
       enabled: true,
     });
+    expect(model.mainFlowState).toMatchObject({
+      phase: WORKBENCH_FLOW_PHASES.ACTION_EDIT,
+      nextTargetKind: 'runtime-results',
+      currentRuntimeStatePointId: '',
+      refreshedRuntimeStatePointId: '',
+      actionEditStatePointId: '',
+      returnStatePointId: '',
+      canFocusRuntimeAction: false,
+      canReturnRuntimeResult: false,
+    });
     expect(model.runtimeNavigation.count).toBe(2);
     expect(model.runtimeNavigation.index).toBe(-1);
     expect(model.runtimeNavigation.label).toBe('-/2');
@@ -98,6 +108,15 @@ describe('workbench flow model', () => {
       actionId: 'action-0001',
       statePointId: firstPoint.statePointId,
       enabled: true,
+    });
+    expect(model.mainFlowState).toMatchObject({
+      phase: WORKBENCH_FLOW_PHASES.RUNTIME_RESULT,
+      nextTargetKind: 'runtime-action-edit',
+      currentRuntimeStatePointId: firstPoint.statePointId,
+      actionEditStatePointId: firstPoint.statePointId,
+      returnStatePointId: '',
+      canFocusRuntimeAction: true,
+      canReturnRuntimeResult: false,
     });
     expect(model.runtimeNavigation.index).toBe(0);
     expect(model.runtimeNavigation.label).toBe('1/2');
@@ -158,6 +177,16 @@ describe('workbench flow model', () => {
       originStatePointId: firstPoint.statePointId,
       statePointId: secondPoint.statePointId,
     });
+    expect(readyModel.mainFlowState).toMatchObject({
+      phase: WORKBENCH_FLOW_PHASES.EDIT_RESULT_READY,
+      nextTargetKind: 'runtime-result-return',
+      currentRuntimeStatePointId: '',
+      refreshedRuntimeStatePointId: secondPoint.statePointId,
+      actionEditStatePointId: '',
+      returnStatePointId: secondPoint.statePointId,
+      canFocusRuntimeAction: false,
+      canReturnRuntimeResult: true,
+    });
 
     const reviewModel = createWorkbenchFlowModel({
       runtimeProjection,
@@ -193,6 +222,16 @@ describe('workbench flow model', () => {
       actionId: 'action-0002',
       originStatePointId: firstPoint.statePointId,
       statePointId: secondPoint.statePointId,
+    });
+    expect(reviewModel.mainFlowState).toMatchObject({
+      phase: WORKBENCH_FLOW_PHASES.EDIT_RESULT_REVIEW,
+      nextTargetKind: 'runtime-action-edit',
+      currentRuntimeStatePointId: secondPoint.statePointId,
+      refreshedRuntimeStatePointId: secondPoint.statePointId,
+      actionEditStatePointId: secondPoint.statePointId,
+      returnStatePointId: secondPoint.statePointId,
+      canFocusRuntimeAction: true,
+      canReturnRuntimeResult: true,
     });
   });
 
