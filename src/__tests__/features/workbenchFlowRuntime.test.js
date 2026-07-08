@@ -2,13 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { createWorkbenchFlowRuntime } from '../../features/workbench/workbenchFlowRuntime';
 
 describe('workbench flow runtime', () => {
-  it('applies action edit flow plans through workbench callbacks', () => {
+  it('applies action edit flow plans through shared action edit state', () => {
     const calls = [];
     const runtime = createWorkbenchFlowRuntime({
       actionExists: actionId => actionId === 'action-0001',
-      selectAction: (actionId, options) =>
-        calls.push(['selectAction', actionId, options]),
-      setActionEditFocus: focus => calls.push(['setActionEditFocus', focus]),
+      applyActionEditState: editState =>
+        calls.push(['applyActionEditState', editState]),
     });
 
     expect(
@@ -29,13 +28,21 @@ describe('workbench flow runtime', () => {
     });
 
     expect(calls).toEqual([
-      ['selectAction', 'action-0001', { syncRuntimeResult: false }],
       [
-        'setActionEditFocus',
+        'applyActionEditState',
         {
           actionId: 'action-0001',
-          fieldKey: 'startMs',
-          sequence: 2,
+          actionSelection: {
+            requestedActionId: 'action-0001',
+            actionId: 'action-0001',
+            shouldSelectAction: true,
+            syncRuntimeResult: false,
+          },
+          actionEditFocus: {
+            actionId: 'action-0001',
+            fieldKey: 'startMs',
+            sequence: 2,
+          },
         },
       ],
     ]);
@@ -45,9 +52,8 @@ describe('workbench flow runtime', () => {
     const calls = [];
     const runtime = createWorkbenchFlowRuntime({
       actionExists: () => false,
-      selectAction: (...args) => calls.push(['selectAction', ...args]),
-      setActionEditFocus: (...args) =>
-        calls.push(['setActionEditFocus', ...args]),
+      applyActionEditState: (...args) =>
+        calls.push(['applyActionEditState', ...args]),
     });
 
     expect(
@@ -73,12 +79,56 @@ describe('workbench flow runtime', () => {
     expect(calls).toEqual([]);
   });
 
+  it('applies optional action edit focus without selecting a missing action', () => {
+    const calls = [];
+    const runtime = createWorkbenchFlowRuntime({
+      actionExists: () => false,
+      applyActionEditState: editState =>
+        calls.push(['applyActionEditState', editState]),
+    });
+
+    expect(
+      runtime.applyActionEditFlowPlan({
+        kind: 'edit-source-focus',
+        canApply: true,
+        actionId: 'missing-action',
+        requiresExistingAction: false,
+        actionEditFocus: {
+          actionId: 'missing-action',
+          fieldKey: 'level',
+        },
+      })
+    ).toMatchObject({
+      applied: true,
+      kind: 'edit-source-focus',
+    });
+
+    expect(calls).toEqual([
+      [
+        'applyActionEditState',
+        {
+          actionId: 'missing-action',
+          actionSelection: {
+            requestedActionId: 'missing-action',
+            actionId: '',
+            shouldSelectAction: false,
+            syncRuntimeResult: false,
+          },
+          actionEditFocus: {
+            actionId: 'missing-action',
+            fieldKey: 'level',
+          },
+        },
+      ],
+    ]);
+  });
+
   it('applies runtime flow plans through workbench callbacks', () => {
     const calls = [];
     const runtime = createWorkbenchFlowRuntime({
       actionExists: actionId => actionId === 'action-0001',
-      selectAction: (actionId, options) =>
-        calls.push(['selectAction', actionId, options]),
+      applyActionSelectionState: selectionState =>
+        calls.push(['applyActionSelectionState', selectionState]),
       setCalculatorScope: scope => calls.push(['setCalculatorScope', scope]),
       applyRuntimePointSelectionState: selectionState =>
         calls.push(['applyRuntimePointSelectionState', selectionState]),
@@ -107,7 +157,15 @@ describe('workbench flow runtime', () => {
     });
 
     expect(calls).toEqual([
-      ['selectAction', 'action-0001', { syncRuntimeResult: false }],
+      [
+        'applyActionSelectionState',
+        {
+          requestedActionId: 'action-0001',
+          actionId: 'action-0001',
+          shouldSelectAction: true,
+          syncRuntimeResult: false,
+        },
+      ],
       ['setCalculatorScope', 'runtime'],
       [
         'applyRuntimePointSelectionState',

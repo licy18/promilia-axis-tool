@@ -5,6 +5,8 @@ export function createWorkbenchFlowRuntime({
   actionExists = () => false,
   selectAction = () => {},
   setActionEditFocus = () => {},
+  applyActionSelectionState = null,
+  applyActionEditState = null,
   setCalculatorScope = () => {},
   getFirstRuntimeStatePointId = () => '',
   applyCalculatorScopeState = null,
@@ -16,6 +18,58 @@ export function createWorkbenchFlowRuntime({
   setStateCurveTrackFilters = () => {},
   focusRuntimeLog = () => {},
 } = {}) {
+  function createActionSelectionState(actionId = '') {
+    const requestedActionId = actionId ?? '';
+    const shouldSelectAction = Boolean(
+      requestedActionId && actionExists(requestedActionId)
+    );
+    return {
+      requestedActionId,
+      actionId: shouldSelectAction ? requestedActionId : '',
+      shouldSelectAction,
+      syncRuntimeResult: false,
+    };
+  }
+
+  function applyActionSelectionStateForAction(actionId = '') {
+    const selectionState = createActionSelectionState(actionId);
+    if (!selectionState.shouldSelectAction) {
+      return selectionState;
+    }
+    if (typeof applyActionSelectionState === 'function') {
+      applyActionSelectionState(selectionState);
+    } else {
+      selectAction(selectionState.actionId, {
+        syncRuntimeResult: selectionState.syncRuntimeResult,
+      });
+    }
+    return selectionState;
+  }
+
+  function createActionEditState(flowPlan = {}) {
+    const actionSelection = createActionSelectionState(flowPlan.actionId);
+    return {
+      actionId: flowPlan.actionId ?? '',
+      actionSelection,
+      actionEditFocus: { ...(flowPlan.actionEditFocus ?? {}) },
+    };
+  }
+
+  function applyActionEditStateForPlan(flowPlan = {}) {
+    const editState = createActionEditState(flowPlan);
+    if (typeof applyActionEditState === 'function') {
+      applyActionEditState(editState);
+    } else {
+      if (editState.actionSelection.shouldSelectAction) {
+        selectAction(editState.actionSelection.actionId, {
+          syncRuntimeResult: editState.actionSelection.syncRuntimeResult,
+        });
+      }
+      setActionEditFocus({ ...editState.actionEditFocus });
+    }
+    return editState;
+  }
+
   function applyRuntimePointSelectionStateForPoint(statePointId = '') {
     const selectionState = createWorkbenchFlowRuntimePointSelectionState({
       statePointId,
@@ -102,9 +156,8 @@ export function createWorkbenchFlowRuntime({
           reason: 'disabled-action-edit-flow-plan',
         });
       }
-      if (actionExists(flowPlan.actionId)) {
-        selectAction(flowPlan.actionId, { syncRuntimeResult: false });
-      } else if (flowPlan.requiresExistingAction) {
+      const actionSelection = createActionSelectionState(flowPlan.actionId);
+      if (!actionSelection.shouldSelectAction && flowPlan.requiresExistingAction) {
         return createFlowRuntimeResult({
           applied: false,
           kind: flowPlan.kind,
@@ -112,7 +165,7 @@ export function createWorkbenchFlowRuntime({
         });
       }
 
-      setActionEditFocus({ ...(flowPlan.actionEditFocus ?? {}) });
+      applyActionEditStateForPlan(flowPlan);
       return createFlowRuntimeResult({
         applied: true,
         kind: flowPlan.kind,
@@ -121,8 +174,8 @@ export function createWorkbenchFlowRuntime({
 
     applyRuntimeFlowPlan(plan = {}) {
       const flowPlan = plan ?? {};
-      if (flowPlan.selectActionId && actionExists(flowPlan.selectActionId)) {
-        selectAction(flowPlan.selectActionId, { syncRuntimeResult: false });
+      if (flowPlan.selectActionId) {
+        applyActionSelectionStateForAction(flowPlan.selectActionId);
       }
 
       if (flowPlan.calculatorScope) {

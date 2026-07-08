@@ -541,10 +541,9 @@ const workbenchFlowPlanController = createWorkbenchFlowPlanController({
 });
 const workbenchFlowRuntime = createWorkbenchFlowRuntime({
   actionExists: actionId => Boolean(findActionDraftById(actionId)),
-  selectAction: (actionId, options) => selectAction(actionId, options),
-  setActionEditFocus: focus => {
-    actionEditFocus.value = { ...focus };
-  },
+  applyActionSelectionState: selectionState =>
+    applyActionSelectionState(selectionState),
+  applyActionEditState: editState => applyActionEditState(editState),
   setCalculatorScope: scope => {
     calculatorDiagnosticScope.value = scope;
   },
@@ -1621,6 +1620,20 @@ function selectAction(actionId, { syncRuntimeResult = true } = {}) {
   if (syncRuntimeResult && shouldSyncRuntimeResultOnActionSelect()) {
     syncRuntimeResultForSelectedAction(actionId);
   }
+}
+
+function applyActionSelectionState(selectionState = {}) {
+  if (!selectionState.shouldSelectAction) {
+    return;
+  }
+  selectAction(selectionState.actionId, {
+    syncRuntimeResult: selectionState.syncRuntimeResult ?? false,
+  });
+}
+
+function applyActionEditState(editState = {}) {
+  applyActionSelectionState(editState.actionSelection);
+  actionEditFocus.value = { ...(editState.actionEditFocus ?? {}) };
 }
 
 function selectStateCurvePoint(pointId) {

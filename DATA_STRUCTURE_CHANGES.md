@@ -20465,3 +20465,51 @@ Workbench 页面层从四个低层回调收束为一个 `applyRuntimeViewState()
 - `npm run test -- --run`：通过，35 个测试文件、216 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `git diff --check`：通过。
+
+## 273. UI 主流程能力块：Action Edit State In Flow Runtime
+
+### 273.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`createWorkbenchFlowRuntime()` 新增可选回调：
+
+```js
+applyActionSelectionState(selectionState)
+applyActionEditState(editState)
+```
+
+runtime flow plan 中的 action selection 会整理为内部 `ActionSelectionState`：
+
+```js
+{
+  requestedActionId,
+  actionId,
+  shouldSelectAction,
+  syncRuntimeResult,
+}
+```
+
+action edit flow plan 会整理为内部 `ActionEditState`：
+
+```js
+{
+  actionId,
+  actionSelection,
+  actionEditFocus,
+}
+```
+
+Workbench 页面层从 `selectAction` / `setActionEditFocus` 两个低层回调收束为 `applyActionSelectionState()` / `applyActionEditState()`。
+
+### 273.2 保存与迁移
+
+本阶段只调整 Workbench 主流程 runtime 的内部 action state 应用入口，不新增持久字段，不需要数据迁移。
+
+### 273.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowRuntime.test.js`，覆盖 action edit plan 输出统一 edit state、runtime flow plan 输出统一 selection state，以及 optional edit-source focus 在动作不存在时仍能应用编辑焦点且不选择动作。
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、64 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、217 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过。
