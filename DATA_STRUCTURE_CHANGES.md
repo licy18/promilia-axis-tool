@@ -9061,3 +9061,154 @@ Workbench 分析面板通过该 summary 显示 `生成合同` 摘要。
 - `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/views/Workbench.test.js`：通过。
 
 下一阶段 5-8CB 应让运行时投影优先消费该标准合同，并保持现有 Workbench 可视化不倒退。
+
+## 109. 阶段 5-8CB：threeValueRuntimeProjection 消费生成层合同
+
+阶段 5-8CB 在 `simulationResult` 顶层新增内部 projection：
+
+```js
+threeValueRuntimeProjection
+```
+
+该结构是运行时消费层结果，不是项目保存 schema；当前不需要导入导出迁移。它的输入来源固定为：
+
+```js
+threeValueGenerationLayer.deltas[].applied === true
+```
+
+也就是说，`candidate / sampled / placeholder` delta 仍保留在生成层作为可替换来源和诊断依据，默认不进入运行时累计。
+
+### 109.1 顶层结构
+
+```js
+{
+  schemaVersion: 1,
+  sourceKind: 'azpr-runtime-projection-from-three-value-generation-layer',
+  status,
+  inputContractName: 'Action -> Hit -> ThreeValueDelta',
+  appliedOnly: true,
+  enemyStateCurve,
+  selfEnergyCurveByActor,
+  simLog,
+  summary,
+  applied: true
+}
+```
+
+### 109.2 enemyStateCurve
+
+`enemyStateCurve` 当前聚合 `enemyHpDamage` 和 `enemyToughnessDamage` 的 applied delta：
+
+```js
+{
+  sourceKind: 'three-value-generation-layer-applied-enemy-deltas',
+  status,
+  pointCount,
+  frameMin,
+  frameMax,
+  hpDelta,
+  toughnessDelta,
+  points,
+  applied: true
+}
+```
+
+`points[]` 是 applied delta 的运行时点位，保留 `sourceDeltaId / actionId / hitKey / frameIndex / timeMs / trackKey / layerKey / hpDelta / toughnessDelta / energyDelta / confidence / sourceIds` 等字段，供后续敌人状态曲线和详情弹层消费。
+
+### 109.3 selfEnergyCurveByActor
+
+`selfEnergyCurveByActor[]` 按项目中的 actor 顺序输出，即使某个角色没有能量变化也保留 0 值：
+
+```js
+{
+  actorId,
+  actorName,
+  resource: 'sp',
+  delta,
+  pointCount,
+  points,
+  applied: true
+}
+```
+
+这保持了 `summary.selfEnergyDeltaByActor` 的旧输出形状，同时给后续资源监控曲线留下逐点数据。
+
+### 109.4 simLog
+
+`simLog[]` 当前是一条 applied delta 一条日志的最小版：
+
+```js
+{
+  eventType: 'THREE_VALUE_DELTA_APPLIED',
+  sequenceIndex,
+  sourceDeltaId,
+  timeMs,
+  frameIndex,
+  frameLabel,
+  actionId,
+  actionName,
+  actorId,
+  actorName,
+  hitKey,
+  hitIndex,
+  trackKey,
+  layerKey,
+  delta,
+  hpDelta,
+  toughnessDelta,
+  energyDelta,
+  confidence,
+  applied: true
+}
+```
+
+后续 UI 层应直接消费该日志，而不是再回头读取 evidence 或候选矩阵。
+
+### 109.5 Summary 与兼容字段
+
+`summary.threeValueRuntimeProjectionSummary` 指向 `threeValueRuntimeProjection.summary`：
+
+```js
+{
+  inputContractName,
+  inputDeltaCount,
+  appliedDeltaCount,
+  enemyHpDelta,
+  enemyToughnessDelta,
+  selfEnergyDelta,
+  selfEnergyActorCount,
+  enemyStatePointCount,
+  selfEnergyPointCount,
+  simLogCount,
+  source: 'threeValueGenerationLayer.applied-deltas',
+  appliedOnly: true,
+  applied: true
+}
+```
+
+以下既有 summary 字段现在从 `threeValueRuntimeProjection` 派生：
+
+```js
+summary.totalRawDamage
+summary.totalProjectedToughnessDamage
+summary.totalSelfEnergyDelta
+summary.selfEnergyDeltaByActor
+```
+
+这让旧 Workbench 指标保持可用，同时把真实运行时来源迁移到标准合同消费层。
+
+### 109.6 验证
+
+当前测试覆盖：
+
+- 默认末音样例：运行时投影 `inputDeltaCount = 16`、`appliedDeltaCount = 1`、`enemyHpDelta = 12461`、`selfEnergyDelta = 0`、`simLogCount = 1`。
+- RecoverSP 离线样本：生成层存在 sampled delta，但运行时投影仍只消费 applied delta。
+- 寒悠悠 SP 技能样例：运行时投影包含 1 个 self energy point，寒悠悠自身能量变化等于技能 SP 消耗，队友保持 0。
+- Workbench 渲染 `运行投影 HP 12,461 · 韧性 0 · 能量 0 · 日志 1`。
+
+阶段验收：
+
+- `npm run test -- --run`：通过，13 个测试文件、109 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一阶段 5-8CC 应围绕 `threeValueRuntimeProjection` 补 Endaxis 式资源监控、模拟日志和三值详情弹层最小骨架。

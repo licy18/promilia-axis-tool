@@ -4815,6 +4815,41 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 阶段 5-8CB 目标：让运行时投影优先消费 `threeValueGenerationLayer` 的标准合同，并保持现有 `stateCurves`、候选曲线和 Workbench 展示不倒退。
 - 优先把 `simLog`、资源曲线和敌人状态曲线的输入来源改到标准合同，而不是直接分散读取 candidate/state/evidence。
 
+### 2026-07-08：阶段 5-8CB 运行时投影消费标准合同
+
+本轮完成：
+
+- `projectSimulationResult()` 顶层新增 `threeValueRuntimeProjection`，作为当前运行时消费层的最小实现。
+- `threeValueRuntimeProjection` 只读取 `threeValueGenerationLayer.deltas[]` 中 `applied = true` 的 delta，暂不把 `candidate / sampled / placeholder` 自动混入运行时结果。
+- 运行时投影输出 `enemyStateCurve`、`selfEnergyCurveByActor`、`simLog` 和 `summary`，输入合同固定为 `Action -> Hit -> ThreeValueDelta`。
+- `summary.totalRawDamage`、`summary.totalProjectedToughnessDamage`、`summary.totalSelfEnergyDelta` 和 `summary.selfEnergyDeltaByActor` 已改为从 `threeValueRuntimeProjection.summary / selfEnergyCurveByActor` 派生。
+- Workbench 分析面板新增 `运行投影 HP ... · 韧性 ... · 能量 ... · 日志 ...` 摘要，确认三值已经进入运行时层，而不仅停留在生成合同。
+
+当前验证事实：
+
+- 默认末音样例：`inputDeltaCount = 16`、`appliedDeltaCount = 1`、`enemyHpDelta = 12461`、`enemyToughnessDelta = 0`、`selfEnergyDelta = 0`、`simLogCount = 1`。
+- RecoverSP 离线样本：`sampledDeltaCount = 1` 继续保留在生成层，但运行时投影仍只消费 1 条 applied HP delta，避免采样数据在未确认映射前进入最终汇总。
+- 寒悠悠 SP 技能样例：运行时投影同时消费 HP applied delta 和 selfEnergy applied delta，`selfEnergyPointCount = 1`，寒悠悠自身能量变化等于技能 SP 消耗，队友保持 0。
+- Workbench 默认切片显示 `运行投影 HP 12,461 · 韧性 0 · 能量 0 · 日志 1`。
+
+当前边界：
+
+- `threeValueRuntimeProjection` 仍是 simulation projection 内部字段，不是项目保存 schema。
+- `simLog` 当前是一条 applied delta 一条日志的最小版，还没有 Endaxis 式可筛选日志面板。
+- `enemyStateCurve` 和 `selfEnergyCurveByActor` 已可作为 UI 输入，但还没有独立资源监控曲线组件。
+- `candidate / sampled / placeholder` 仍保留在生成层，只有后续确认公式或采样映射后才可推进到 applied。
+
+验收结果：
+
+- `npm run test -- --run`：通过，13 个测试文件、109 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 阶段 5-8CC 目标：围绕 `threeValueRuntimeProjection` 补 UI 层消费入口，优先做 Endaxis 式资源监控 / 模拟日志 / 三值详情弹层的最小骨架。
+- 资源监控先消费 `enemyStateCurve` 与 `selfEnergyCurveByActor`，模拟日志先消费 `simLog`，不要重新回头直接读 evidence / candidate。
+- 保持公式和逐帧行为细节可后补，当前优先让用户能看见三值如何随动作累积变化。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

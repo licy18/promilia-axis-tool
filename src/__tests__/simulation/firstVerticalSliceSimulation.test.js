@@ -1409,6 +1409,53 @@ describe('first vertical slice simulation', () => {
       appliedDeltaCount: 1,
       applied: false,
     });
+    expect(result.threeValueRuntimeProjection).toMatchObject({
+      status: 'runtime-projection-ready-from-generation-layer',
+      inputContractName: 'Action -> Hit -> ThreeValueDelta',
+      appliedOnly: true,
+      enemyStateCurve: {
+        pointCount: 1,
+        hpDelta: 12461,
+        toughnessDelta: 0,
+        applied: true,
+      },
+      summary: {
+        inputDeltaCount: 16,
+        appliedDeltaCount: 1,
+        enemyHpDelta: 12461,
+        enemyToughnessDelta: 0,
+        selfEnergyDelta: 0,
+        enemyStatePointCount: 1,
+        selfEnergyPointCount: 0,
+        simLogCount: 1,
+        source: 'threeValueGenerationLayer.applied-deltas',
+        applied: true,
+      },
+      applied: true,
+    });
+    expect(result.threeValueRuntimeProjection.simLog[0]).toMatchObject({
+      eventType: 'THREE_VALUE_DELTA_APPLIED',
+      sourceDeltaId: expect.stringContaining(
+        'action-0001|applied-frame-0-point-0'
+      ),
+      actionId: 'action-0001',
+      trackKey: 'enemyHpDamage',
+      layerKey: 'applied',
+      hpDelta: 12461,
+      toughnessDelta: null,
+      energyDelta: null,
+      applied: true,
+    });
+    expect(result.summary.threeValueRuntimeProjectionSummary).toMatchObject({
+      inputContractName: 'Action -> Hit -> ThreeValueDelta',
+      inputDeltaCount: 16,
+      appliedDeltaCount: 1,
+      enemyHpDelta: 12461,
+      enemyToughnessDelta: 0,
+      selfEnergyDelta: 0,
+      simLogCount: 1,
+      applied: true,
+    });
     const generationAction = result.threeValueGenerationLayer.actions[0];
     expect(generationAction).toMatchObject({
       actionId: 'action-0001',
@@ -1899,6 +1946,7 @@ describe('first vertical slice simulation', () => {
     expect(result.summary).toMatchObject({
       projectedHitCount: 1,
       actionResultCount: 1,
+      totalRawDamage: 12461,
       totalProjectedToughnessDamage: 0,
       totalSelfEnergyDelta: 0,
       selfEnergyDeltaByActor: [
@@ -2281,6 +2329,15 @@ describe('first vertical slice simulation', () => {
       placeholderDeltaCount: 0,
       replaceableDeltaCount: 16,
       applied: false,
+    });
+    expect(result.threeValueRuntimeProjection.summary).toMatchObject({
+      inputDeltaCount: 17,
+      appliedDeltaCount: 1,
+      enemyHpDelta: 12461,
+      selfEnergyDelta: 0,
+      selfEnergyPointCount: 0,
+      simLogCount: 1,
+      applied: true,
     });
     const sampledDelta = result.threeValueGenerationLayer.deltas.find(
       delta => delta.layerKey === 'sampled'
@@ -3577,6 +3634,40 @@ describe('first vertical slice simulation', () => {
     });
     expect(result.summary.resourceEventCount).toBe(1);
     expect(result.summary.totalSelfEnergyDelta).toBe(-Number(spSkill.spCost));
+    expect(result.threeValueRuntimeProjection.summary).toMatchObject({
+      appliedDeltaCount: 2,
+      enemyHpDelta: result.summary.totalRawDamage,
+      enemyToughnessDelta: 0,
+      selfEnergyDelta: -Number(spSkill.spCost),
+      enemyStatePointCount: 1,
+      selfEnergyPointCount: 1,
+      simLogCount: 2,
+      applied: true,
+    });
+    expect(result.threeValueRuntimeProjection.selfEnergyCurveByActor).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actorId: 'actor-101003',
+          actorName: '寒悠悠',
+          delta: -Number(spSkill.spCost),
+          pointCount: 1,
+          points: [
+            expect.objectContaining({
+              actionId: 'action-sp',
+              trackKey: 'selfEnergyChange',
+              energyDelta: -Number(spSkill.spCost),
+              applied: true,
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          actorId: 'actor-101007',
+          actorName: '芃芃',
+          delta: 0,
+          pointCount: 0,
+        }),
+      ])
+    );
     expect(result.summary.selfEnergyDeltaByActor).toEqual(
       expect.arrayContaining([
         expect.objectContaining({

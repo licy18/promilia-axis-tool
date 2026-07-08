@@ -78,6 +78,21 @@
       </p>
       <p
         v-if="
+          formatThreeValueRuntimeProjectionSummary(
+            summary.threeValueRuntimeProjectionSummary
+          )
+        "
+        class="diagnostic-empty formula-pattern-summary"
+        data-testid="workbench-three-value-runtime-projection-summary"
+      >
+        {{
+          formatThreeValueRuntimeProjectionSummary(
+            summary.threeValueRuntimeProjectionSummary
+          )
+        }}
+      </p>
+      <p
+        v-if="
           formatFormulaCandidatePatternSummary(
             summary.formulaCandidatePatternSummary
           )
@@ -1204,6 +1219,13 @@ function formatThreeValueGenerationLayerSummary(summary) {
       ? ` · 占位 ${summary.placeholderDeltaCount}`
       : '';
   return `生成合同 ${summary.actionCount}动作/${summary.hitCount}命中 · Delta ${summary.deltaCount} · 候选 ${summary.candidateDeltaCount} · 已用 ${summary.appliedDeltaCount}${sampledText}${placeholderText}`;
+}
+
+function formatThreeValueRuntimeProjectionSummary(summary) {
+  if (!summary || summary.appliedDeltaCount <= 0) {
+    return '';
+  }
+  return `运行投影 HP ${formatNumber(summary.enemyHpDelta)} · 韧性 ${formatNumber(summary.enemyToughnessDelta)} · 能量 ${formatNumber(summary.selfEnergyDelta)} · 日志 ${summary.simLogCount}`;
 }
 
 function formatStateCurveTrackSummary(track) {

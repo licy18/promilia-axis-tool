@@ -1418,6 +1418,10 @@ export function projectSimulationResult({
     scenario,
     threeValueCurveFramework,
   });
+  const threeValueRuntimeProjection = buildThreeValueRuntimeProjection({
+    scenario,
+    threeValueGenerationLayer,
+  });
   const damageTimeline = damageEvents.map(event => ({
     timeMs: event.timeMs,
     actionId: event.actionId,
@@ -1446,21 +1450,13 @@ export function projectSimulationResult({
     confidence: event.payload.confidence,
   }));
 
-  const totalRawDamage = damageTimeline.reduce(
-    (sum, entry) => sum + entry.rawDamage,
-    0
-  );
-  const totalProjectedToughnessDamage = actionResultTimeline.reduce(
-    (sum, entry) => sum + entry.toughnessDamage.value,
-    0
-  );
-  const totalSelfEnergyDelta = actionResultTimeline.reduce(
-    (sum, entry) => sum + entry.selfEnergyChange.value,
-    0
-  );
-  const selfEnergyDeltaByActor = summarizeSelfEnergyByActor(
-    scenario,
-    actionResultTimeline
+  const totalRawDamage = threeValueRuntimeProjection.summary.enemyHpDelta;
+  const totalProjectedToughnessDamage =
+    threeValueRuntimeProjection.summary.enemyToughnessDelta;
+  const totalSelfEnergyDelta =
+    threeValueRuntimeProjection.summary.selfEnergyDelta;
+  const selfEnergyDeltaByActor = createSelfEnergyDeltaSummaryByActor(
+    threeValueRuntimeProjection.selfEnergyCurveByActor
   );
   const formulaCandidatePatternSummary =
     summarizeFormulaCandidatePatterns(actionResultTimeline);
@@ -1490,6 +1486,7 @@ export function projectSimulationResult({
     candidateValueSeries,
     threeValueCurveFramework,
     threeValueGenerationLayer,
+    threeValueRuntimeProjection,
     damageTimeline,
     resourceTimeline,
     summary: {
@@ -1504,6 +1501,7 @@ export function projectSimulationResult({
       candidateValueSeriesSummary: candidateValueSeries.summary,
       threeValueCurveFrameworkSummary: threeValueCurveFramework.summary,
       threeValueGenerationLayerSummary: threeValueGenerationLayer.summary,
+      threeValueRuntimeProjectionSummary: threeValueRuntimeProjection.summary,
       formulaVersion: damageEvents[0]?.payload.formulaVersion ?? null,
       formulaCandidatePatternSummary,
       formulaExecutionMatrixSummary,
@@ -1987,6 +1985,263 @@ function summarizeThreeValueGenerationLayer({ actions, deltas }) {
     frameMax: maxNumber(deltas.map(delta => delta.frameIndex)),
     applied: false,
   };
+}
+
+function buildThreeValueRuntimeProjection({
+  scenario,
+  threeValueGenerationLayer,
+}) {
+  const appliedDeltas = createThreeValueRuntimeAppliedDeltas(
+    threeValueGenerationLayer
+  );
+  const enemyStateCurve = createThreeValueRuntimeEnemyStateCurve(appliedDeltas);
+  const selfEnergyCurveByActor = createThreeValueRuntimeSelfEnergyCurveByActor({
+    scenario,
+    appliedDeltas,
+  });
+  const simLog = createThreeValueRuntimeSimLog(appliedDeltas);
+  const summary = summarizeThreeValueRuntimeProjection({
+    threeValueGenerationLayer,
+    appliedDeltas,
+    enemyStateCurve,
+    selfEnergyCurveByActor,
+    simLog,
+  });
+
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-runtime-projection-from-three-value-generation-layer',
+    status:
+      appliedDeltas.length > 0
+        ? 'runtime-projection-ready-from-generation-layer'
+        : 'runtime-projection-ready-no-applied-deltas',
+    inputContractName:
+      threeValueGenerationLayer?.contract?.name ??
+      'Action -> Hit -> ThreeValueDelta',
+    appliedOnly: true,
+    enemyStateCurve,
+    selfEnergyCurveByActor,
+    simLog,
+    summary,
+    applied: true,
+  };
+}
+
+function createThreeValueRuntimeAppliedDeltas(threeValueGenerationLayer) {
+  return [...(threeValueGenerationLayer?.deltas ?? [])]
+    .filter(delta => delta.applied)
+    .sort(compareThreeValueGenerationDeltas);
+}
+
+function createThreeValueRuntimeEnemyStateCurve(appliedDeltas) {
+  const points = appliedDeltas
+    .filter(delta =>
+      ['enemyHpDamage', 'enemyToughnessDamage'].includes(delta.trackKey)
+    )
+    .map((delta, index) => createThreeValueRuntimePoint(delta, index));
+
+  return {
+    sourceKind: 'three-value-generation-layer-applied-enemy-deltas',
+    status:
+      points.length > 0
+        ? 'enemy-state-curve-ready-from-applied-deltas'
+        : 'enemy-state-curve-ready-no-applied-deltas',
+    pointCount: points.length,
+    frameMin: minNumber(points.map(point => point.frameIndex)),
+    frameMax: maxNumber(points.map(point => point.frameIndex)),
+    hpDelta: sumThreeValueRuntimeDeltas(points, 'hpDelta'),
+    toughnessDelta: sumThreeValueRuntimeDeltas(points, 'toughnessDelta'),
+    points,
+    applied: true,
+  };
+}
+
+function createThreeValueRuntimeSelfEnergyCurveByActor({
+  scenario,
+  appliedDeltas,
+}) {
+  const actorGroups = new Map(
+    scenario.actors.map((actor, index) => [
+      actor.id,
+      {
+        actorId: actor.id,
+        actorName: actor.name,
+        resource: 'sp',
+        order: index,
+        delta: 0,
+        pointCount: 0,
+        points: [],
+      },
+    ])
+  );
+  const selfEnergyDeltas = appliedDeltas.filter(
+    delta => delta.trackKey === 'selfEnergyChange'
+  );
+
+  for (const [index, delta] of selfEnergyDeltas.entries()) {
+    const actorId = delta.actorId ?? 'unknown';
+    if (!actorGroups.has(actorId)) {
+      actorGroups.set(actorId, {
+        actorId,
+        actorName: delta.actorName ?? '未知角色',
+        resource: delta.valueUnit ?? 'sp',
+        order: actorGroups.size,
+        delta: 0,
+        pointCount: 0,
+        points: [],
+      });
+    }
+    const group = actorGroups.get(actorId);
+    const point = createThreeValueRuntimePoint(delta, index);
+    group.points.push(point);
+    group.pointCount += 1;
+    group.delta = roundCurveValue(
+      group.delta + (numberOrNull(point.energyDelta) ?? 0)
+    );
+    group.resource = point.valueUnit ?? group.resource;
+  }
+
+  return [...actorGroups.values()]
+    .map(group => ({
+      actorId: group.actorId,
+      actorName: group.actorName,
+      resource: group.resource,
+      delta: roundCurveValue(group.delta),
+      pointCount: group.pointCount,
+      points: group.points.sort(compareThreeValueRuntimePoints),
+      applied: true,
+      order: group.order,
+    }))
+    .sort((left, right) => left.order - right.order)
+    .map(({ order, ...group }) => group);
+}
+
+function createThreeValueRuntimeSimLog(appliedDeltas) {
+  return appliedDeltas.map((delta, index) => ({
+    eventType: 'THREE_VALUE_DELTA_APPLIED',
+    sequenceIndex: index,
+    sourceDeltaId: delta.id,
+    timeMs: delta.timeMs,
+    frameIndex: delta.frameIndex,
+    frameLabel: delta.frameLabel,
+    actionId: delta.actionId,
+    actionName: delta.actionName,
+    actorId: delta.actorId,
+    actorName: delta.actorName,
+    hitKey: delta.hitKey,
+    hitIndex: delta.hitIndex,
+    trackKey: delta.trackKey,
+    layerKey: delta.layerKey,
+    delta: normalizeThreeValueRuntimeNumber(delta.delta),
+    hpDelta: normalizeThreeValueRuntimeNumber(delta.hpDelta),
+    toughnessDelta: normalizeThreeValueRuntimeNumber(delta.toughnessDelta),
+    energyDelta: normalizeThreeValueRuntimeNumber(delta.energyDelta),
+    confidence: delta.confidence,
+    applied: true,
+  }));
+}
+
+function createThreeValueRuntimePoint(delta, sequenceIndex) {
+  return {
+    sourceKind: 'three-value-generation-layer-applied-delta',
+    sourceDeltaId: delta.id,
+    sequenceIndex,
+    actionId: delta.actionId,
+    actionName: delta.actionName,
+    actionType: delta.actionType,
+    actorId: delta.actorId,
+    actorName: delta.actorName,
+    hitKey: delta.hitKey,
+    hitIndex: delta.hitIndex,
+    hitSkillId: delta.hitSkillId,
+    frameIndex: delta.frameIndex,
+    frameLabel: delta.frameLabel,
+    timeMs: delta.timeMs,
+    trackKey: delta.trackKey,
+    trackLabel: delta.trackLabel,
+    layerKey: delta.layerKey,
+    valueUnit: delta.valueUnit,
+    delta: normalizeThreeValueRuntimeNumber(delta.delta),
+    hpDelta: normalizeThreeValueRuntimeNumber(delta.hpDelta),
+    toughnessDelta: normalizeThreeValueRuntimeNumber(delta.toughnessDelta),
+    energyDelta: normalizeThreeValueRuntimeNumber(delta.energyDelta),
+    confidence: delta.confidence,
+    sourceStatus: delta.sourceStatus,
+    resultStatus: delta.resultStatus,
+    sourceIds: delta.sourceIds,
+    applied: true,
+  };
+}
+
+function summarizeThreeValueRuntimeProjection({
+  threeValueGenerationLayer,
+  appliedDeltas,
+  enemyStateCurve,
+  selfEnergyCurveByActor,
+  simLog,
+}) {
+  const selfEnergyPointCount = selfEnergyCurveByActor.reduce(
+    (sum, actor) => sum + actor.pointCount,
+    0
+  );
+
+  return {
+    inputContractName:
+      threeValueGenerationLayer?.contract?.name ??
+      'Action -> Hit -> ThreeValueDelta',
+    inputDeltaCount: threeValueGenerationLayer?.deltas?.length ?? 0,
+    appliedDeltaCount: appliedDeltas.length,
+    enemyHpDelta: sumThreeValueRuntimeDeltas(appliedDeltas, 'hpDelta'),
+    enemyToughnessDelta: sumThreeValueRuntimeDeltas(
+      appliedDeltas,
+      'toughnessDelta'
+    ),
+    selfEnergyDelta: sumThreeValueRuntimeDeltas(appliedDeltas, 'energyDelta'),
+    selfEnergyActorCount: selfEnergyCurveByActor.length,
+    enemyStatePointCount: enemyStateCurve.pointCount,
+    selfEnergyPointCount,
+    simLogCount: simLog.length,
+    source: 'threeValueGenerationLayer.applied-deltas',
+    appliedOnly: true,
+    applied: true,
+  };
+}
+
+function createSelfEnergyDeltaSummaryByActor(selfEnergyCurveByActor) {
+  return selfEnergyCurveByActor.map(actor => ({
+    actorId: actor.actorId,
+    actorName: actor.actorName,
+    resource: actor.resource,
+    delta: actor.delta,
+  }));
+}
+
+function sumThreeValueRuntimeDeltas(items, field) {
+  return roundCurveValue(
+    items.reduce((sum, item) => {
+      const value = numberOrNull(item[field]);
+      return sum + (Number.isFinite(value) ? value : 0);
+    }, 0)
+  );
+}
+
+function normalizeThreeValueRuntimeNumber(value) {
+  if (value == null || value === '') {
+    return null;
+  }
+  const numericValue = numberOrNull(value);
+  return Number.isFinite(numericValue) ? roundCurveValue(numericValue) : null;
+}
+
+function compareThreeValueRuntimePoints(left, right) {
+  return (
+    compareNullableTimelineNumber(left.frameIndex, right.frameIndex) ||
+    compareNullableTimelineNumber(left.timeMs, right.timeMs) ||
+    compareNullableTimelineNumber(left.sequenceIndex, right.sequenceIndex) ||
+    String(left.sourceDeltaId ?? '').localeCompare(
+      String(right.sourceDeltaId ?? '')
+    )
+  );
 }
 
 function createThreeValueCurveTrack({

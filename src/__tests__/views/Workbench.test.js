@@ -39,11 +39,19 @@ describe('Workbench view', () => {
     expect(text).toContain(
       '生成合同 1动作/6命中 · Delta 16 · 候选 15 · 已用 1'
     );
+    expect(text).toContain('运行投影 HP 12,461 · 韧性 0 · 能量 0 · 日志 1');
     expect(
       wrapper
         .find('[data-testid="workbench-three-value-generation-layer-summary"]')
         .text()
     ).toBe('生成合同 1动作/6命中 · Delta 16 · 候选 15 · 已用 1');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-three-value-runtime-projection-summary"]'
+        )
+        .text()
+    ).toBe('运行投影 HP 12,461 · 韧性 0 · 能量 0 · 日志 1');
     expect(text).toContain(
       'HP 2 个候选 (109001081, 109001306) / 削韧 2 个候选 (109001081, 109001306) / 充能 2 个候选 (109001081, 109001306)'
     );
