@@ -147,6 +147,31 @@
           <span>{{ layer.label }} {{ layer.pointCount }}</span>
         </label>
       </div>
+      <div
+        v-if="stateCurveTimelineTrackOptions.length"
+        class="state-track-toggle-group"
+        data-testid="workbench-timeline-state-track-toggle-group"
+      >
+        <label
+          v-for="track in stateCurveTimelineTrackOptions"
+          :key="track.trackKey"
+          class="state-track-toggle"
+          :class="{ 'has-points': track.pointCount > 0 }"
+          :data-track-key="track.trackKey"
+        >
+          <input
+            type="checkbox"
+            :checked="isStateCurveTrackVisible(track.trackKey)"
+            :data-track-key="track.trackKey"
+            :data-point-count="track.pointCount"
+            data-testid="workbench-timeline-state-track-toggle"
+            @change="
+              setStateCurveTrackVisible(track.trackKey, $event.target.checked)
+            "
+          />
+          <span>{{ track.label }} {{ track.pointCount }}</span>
+        </label>
+      </div>
     </div>
 
     <div class="timeline-scale">
@@ -598,6 +623,10 @@ const props = defineProps({
       placeholder: false,
     }),
   },
+  stateCurveTrackFilters: {
+    type: Object,
+    default: () => ({}),
+  },
   timelineDiagnostics: {
     type: Object,
     default: () => ({
@@ -620,6 +649,7 @@ const emit = defineEmits([
   'update-action-lane',
   'select-state-curve-point',
   'update-state-curve-layer-filter',
+  'update-state-curve-track-filter',
 ]);
 const laneRef = ref(null);
 const laneRowRefs = new Map();
@@ -728,10 +758,22 @@ const stateCurveTimelineLayerOptions = computed(() =>
     };
   }).filter(layer => layer.pointCount > 0)
 );
+const stateCurveTimelineTrackOptions = computed(() =>
+  (props.threeValueCurveFramework?.stateCurves?.tracks ?? [])
+    .map(track => ({
+      trackKey: track.trackKey,
+      label: track.label,
+      pointCount: getStateCurveTimelineTrackPointCount(track),
+    }))
+    .filter(track => track.pointCount > 0)
+);
 const effectiveStateCurveLayerFilters = computed(() => ({
   ...DEFAULT_STATE_CURVE_LAYER_FILTERS,
   ...(props.stateCurveLayerFilters ?? {}),
 }));
+const effectiveStateCurveTrackFilters = computed(
+  () => props.stateCurveTrackFilters ?? {}
+);
 const overlapActionIds = computed(
   () => new Set(props.timelineDiagnostics?.overlapActionIds ?? [])
 );
@@ -997,24 +1039,26 @@ function createCandidateValueTimelineMarkers() {
 function createStateCurveTimelineMarkers() {
   return (props.threeValueCurveFramework?.stateCurves?.tracks ?? []).flatMap(
     track =>
-      (track.layers ?? [])
-        .filter(
-          layer =>
-            STATE_CURVE_TIMELINE_LAYER_KEYS.has(layer.key) &&
-            isStateCurveTimelineLayerVisible(layer.key) &&
-            (layer.pointCount ?? 0) > 0
-        )
-        .flatMap((layer, layerIndex) =>
-          (layer.points ?? []).map((point, pointIndex) =>
-            createStateCurveTimelineMarker({
-              track,
-              layer,
-              point,
-              layerIndex,
-              pointIndex,
-            })
-          )
-        )
+      isStateCurveTrackVisible(track.trackKey)
+        ? (track.layers ?? [])
+            .filter(
+              layer =>
+                STATE_CURVE_TIMELINE_LAYER_KEYS.has(layer.key) &&
+                isStateCurveTimelineLayerVisible(layer.key) &&
+                (layer.pointCount ?? 0) > 0
+            )
+            .flatMap((layer, layerIndex) =>
+              (layer.points ?? []).map((point, pointIndex) =>
+                createStateCurveTimelineMarker({
+                  track,
+                  layer,
+                  point,
+                  layerIndex,
+                  pointIndex,
+                })
+              )
+            )
+        : []
   );
 }
 
@@ -1316,6 +1360,23 @@ function setStateCurveLayerVisible(layerKey, visible) {
     layerKey,
     visible: Boolean(visible),
   });
+}
+
+function isStateCurveTrackVisible(trackKey) {
+  return effectiveStateCurveTrackFilters.value[trackKey] !== false;
+}
+
+function setStateCurveTrackVisible(trackKey, visible) {
+  emit('update-state-curve-track-filter', {
+    trackKey,
+    visible: Boolean(visible),
+  });
+}
+
+function getStateCurveTimelineTrackPointCount(track) {
+  return (track.layers ?? [])
+    .filter(layer => STATE_CURVE_TIMELINE_LAYER_KEYS.has(layer.key))
+    .reduce((sum, layer) => sum + (layer.pointCount ?? 0), 0);
 }
 
 function formatCandidateFrameGroupValues(group) {
@@ -2045,14 +2106,16 @@ h2 {
   white-space: nowrap;
 }
 
-.state-layer-toggle-group {
+.state-layer-toggle-group,
+.state-track-toggle-group {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
 }
 
-.state-layer-toggle {
+.state-layer-toggle,
+.state-track-toggle {
   display: inline-flex;
   min-height: 26px;
   align-items: center;
@@ -2066,18 +2129,21 @@ h2 {
   cursor: pointer;
 }
 
-.state-layer-toggle.has-points {
+.state-layer-toggle.has-points,
+.state-track-toggle.has-points {
   color: #dff6f1;
 }
 
-.state-layer-toggle input {
+.state-layer-toggle input,
+.state-track-toggle input {
   width: 13px;
   height: 13px;
   margin: 0;
   accent-color: #dff9f3;
 }
 
-.state-layer-toggle span {
+.state-layer-toggle span,
+.state-track-toggle span {
   white-space: nowrap;
 }
 

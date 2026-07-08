@@ -4579,6 +4579,31 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 优先让用户按“敌人HP伤害 / 敌人韧性削减 / 自身能量变化”筛选状态点，或在点明细选中后只聚焦当前 state point。
 - 继续保持框架优先，具体技能逐帧、召唤触发和最终公式仍按后续采样证据逐步补齐。
 
+### 2026-07-08：阶段 5-8BU 状态点 track 共享过滤
+
+本轮完成：
+
+- `Workbench` 新增共享 `stateCurveTrackFilters`，默认采用“未显式关闭即显示”的策略，避免新轨道出现时被误隐藏。
+- `AnalysisPanel` 的状态曲线区块新增轨道开关，可按“敌人HP伤害 / 敌人韧性削减 / 自身能量变化”过滤状态点明细和层级摘要。
+- `TimelineGridPreview` 新增状态点轨道开关，只列出当前时间轴会渲染 marker 的轨道，并按同一套共享 `stateCurveTrackFilters` 过滤 marker。
+- 从分析面板关闭“敌人HP伤害”后，HP 状态曲线行隐藏、可见状态点数从 16 降为 10，时间轴 applied HP marker 同步消失；从时间轴重新打开后，分析面板和 marker 同步恢复。
+
+当前边界：
+
+- 本阶段只做 track 过滤，不做 selected-only 焦点模式。
+- 时间轴轨道开关只统计 `applied / sampled / placeholder` marker 层；`candidate` 仍由候选三值曲线和分析面板明细负责。
+- 没有改变 `threeValueCurveFramework.stateCurves` 模拟结果结构，也没有新增保存到项目文件的 schema 字段。
+
+验收结果：
+
+- `npm run test -- --run`：通过，13 个测试文件、109 条测试。
+
+下一步：
+
+- 阶段 5-8BV 目标：补 selected-only 焦点模式或状态点导航。
+- 优先让用户点击一个 state point 后，可以快速只看当前点、跳回全部点，或在同一帧/同一动作附近切换 HP / 韧性 / 能量点。
+- 继续保持框架优先，后续再接入真实采样和最终公式细化。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -116,6 +116,25 @@ describe('Workbench view', () => {
     ).toBe('15');
     expect(getStateCurveLayerToggleText('sampled')).toContain('采样 0');
     expect(getStateCurveLayerToggleText('placeholder')).toContain('占位 0');
+    const stateCurveTrackToggles = Object.fromEntries(
+      wrapper
+        .findAll('[data-testid="workbench-state-curve-track-toggle"]')
+        .map(toggle => [toggle.attributes('data-track-key'), toggle])
+    );
+    expect(Object.keys(stateCurveTrackToggles)).toEqual([
+      'enemyHpDamage',
+      'enemyToughnessDamage',
+      'selfEnergyChange',
+    ]);
+    expect(
+      stateCurveTrackToggles.enemyHpDamage.attributes('data-point-count')
+    ).toBe('6');
+    expect(
+      stateCurveTrackToggles.enemyToughnessDamage.attributes('data-point-count')
+    ).toBe('5');
+    expect(
+      stateCurveTrackToggles.selfEnergyChange.attributes('data-point-count')
+    ).toBe('5');
     const hpStateCurveRow = wrapper.find(
       '[data-testid="workbench-state-curve-row"][data-track-key="enemyHpDamage"]'
     );
@@ -193,6 +212,59 @@ describe('Workbench view', () => {
         )
         .classes()
     ).toContain('selected');
+    const timelineStateTrackToggles = wrapper.findAll(
+      '[data-testid="workbench-timeline-state-track-toggle"]'
+    );
+    expect(
+      timelineStateTrackToggles.map(toggle =>
+        toggle.attributes('data-track-key')
+      )
+    ).toEqual(['enemyHpDamage']);
+    expect(timelineStateTrackToggles[0].attributes('data-point-count')).toBe(
+      '1'
+    );
+    expect(timelineStateTrackToggles[0].element.checked).toBe(true);
+    await stateCurveTrackToggles.enemyHpDamage.setValue(false);
+    await nextTick();
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curves"] .source-heading strong')
+        .text()
+    ).toBe('10');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-state-curve-row"][data-track-key="enemyHpDamage"]'
+        )
+        .exists()
+    ).toBe(false);
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
+    ).toHaveLength(0);
+    expect(
+      wrapper.find(
+        '[data-testid="workbench-timeline-state-track-toggle"][data-track-key="enemyHpDamage"]'
+      ).element.checked
+    ).toBe(false);
+    await wrapper
+      .find(
+        '[data-testid="workbench-timeline-state-track-toggle"][data-track-key="enemyHpDamage"]'
+      )
+      .setValue(true);
+    await nextTick();
+    expect(
+      wrapper
+        .find('[data-testid="workbench-state-curves"] .source-heading strong')
+        .text()
+    ).toBe('16');
+    expect(
+      wrapper.find(
+        '[data-testid="workbench-state-curve-track-toggle"][data-track-key="enemyHpDamage"]'
+      ).element.checked
+    ).toBe(true);
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-state-curve-marker"]')
+    ).toHaveLength(1);
     const timelineStateLayerToggles = wrapper.findAll(
       '[data-testid="workbench-timeline-state-layer-toggle"]'
     );

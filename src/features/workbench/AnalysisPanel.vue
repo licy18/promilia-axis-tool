@@ -280,6 +280,28 @@
           <span>{{ layer.label }} {{ layer.pointCount }}</span>
         </label>
       </div>
+      <div class="state-curve-track-controls">
+        <label
+          v-for="track in stateCurveTrackOptions"
+          :key="track.trackKey"
+          class="state-curve-track-toggle"
+          :class="{ 'has-points': track.pointCount > 0 }"
+          :data-track-key="track.trackKey"
+          :data-point-count="track.pointCount"
+        >
+          <input
+            :checked="isStateCurveTrackVisible(track.trackKey)"
+            type="checkbox"
+            :data-track-key="track.trackKey"
+            :data-point-count="track.pointCount"
+            data-testid="workbench-state-curve-track-toggle"
+            @change="
+              setStateCurveTrackVisible(track.trackKey, $event.target.checked)
+            "
+          />
+          <span>{{ track.label }} {{ track.pointCount }}</span>
+        </label>
+      </div>
       <div
         v-for="track in stateCurveTrackRows"
         :key="track.trackKey"
@@ -471,6 +493,10 @@ const props = defineProps({
       placeholder: false,
     }),
   },
+  stateCurveTrackFilters: {
+    type: Object,
+    default: () => ({}),
+  },
   insertionDiagnostics: {
     type: Object,
     default: () => ({
@@ -490,6 +516,7 @@ const props = defineProps({
 const emit = defineEmits([
   'select-state-curve-point',
   'update-state-curve-layer-filter',
+  'update-state-curve-track-filter',
 ]);
 
 const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
@@ -585,6 +612,16 @@ const stateCurveLayerOptions = computed(() =>
     };
   })
 );
+const stateCurveTrackOptions = computed(() =>
+  (stateCurves.value?.tracks ?? [])
+    .filter(track => (track.pointCount ?? 0) > 0)
+    .map(track => ({
+      trackKey: track.trackKey,
+      label: track.label,
+      pointCount: track.pointCount ?? 0,
+      valueUnit: track.valueUnit,
+    }))
+);
 const activeStateCurveLayerKeys = computed(() =>
   STATE_CURVE_LAYER_OPTIONS.filter(
     layer => effectiveStateCurveLayerFilters.value[layer.key]
@@ -594,10 +631,14 @@ const effectiveStateCurveLayerFilters = computed(() => ({
   ...DEFAULT_STATE_CURVE_LAYER_FILTERS,
   ...(props.stateCurveLayerFilters ?? {}),
 }));
+const effectiveStateCurveTrackFilters = computed(
+  () => props.stateCurveTrackFilters ?? {}
+);
 const stateCurveTrackRows = computed(() => {
   const activeLayers = new Set(activeStateCurveLayerKeys.value);
   return (stateCurves.value?.tracks ?? [])
     .filter(track => (track.pointCount ?? 0) > 0)
+    .filter(track => isStateCurveTrackVisible(track.trackKey))
     .map(track => {
       const visibleLayers = (track.layers ?? []).filter(
         layer => activeLayers.has(layer.key) && (layer.pointCount ?? 0) > 0
@@ -1044,6 +1085,17 @@ function isStateCurveLayerVisible(layerKey) {
 function setStateCurveLayerVisible(layerKey, visible) {
   emit('update-state-curve-layer-filter', {
     layerKey,
+    visible: Boolean(visible),
+  });
+}
+
+function isStateCurveTrackVisible(trackKey) {
+  return effectiveStateCurveTrackFilters.value[trackKey] !== false;
+}
+
+function setStateCurveTrackVisible(trackKey, visible) {
+  emit('update-state-curve-track-filter', {
+    trackKey,
     visible: Boolean(visible),
   });
 }
@@ -1723,7 +1775,14 @@ h2 {
   gap: 6px;
 }
 
-.state-curve-layer-toggle {
+.state-curve-track-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.state-curve-layer-toggle,
+.state-curve-track-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1737,18 +1796,21 @@ h2 {
   font-size: 11px;
 }
 
-.state-curve-layer-toggle.has-points {
+.state-curve-layer-toggle.has-points,
+.state-curve-track-toggle.has-points {
   border-color: rgba(121, 199, 185, 0.32);
   color: #d9e0ff;
 }
 
-.state-curve-layer-toggle input {
+.state-curve-layer-toggle input,
+.state-curve-track-toggle input {
   width: 12px;
   height: 12px;
   accent-color: #79c7b9;
 }
 
-.state-curve-layer-toggle span {
+.state-curve-layer-toggle span,
+.state-curve-track-toggle span {
   overflow-wrap: anywhere;
 }
 

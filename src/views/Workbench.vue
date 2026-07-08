@@ -78,10 +78,12 @@
         :selected-action-id="selectedActionId"
         :selected-state-curve-point-id="selectedStateCurvePointId"
         :state-curve-layer-filters="stateCurveLayerFilters"
+        :state-curve-track-filters="stateCurveTrackFilters"
         :timeline-diagnostics="timelineDiagnostics"
         @select-action="selectAction"
         @select-state-curve-point="selectStateCurvePoint"
         @update-state-curve-layer-filter="updateStateCurveLayerFilter"
+        @update-state-curve-track-filter="updateStateCurveTrackFilter"
         @delete-action="deleteAction"
         @update-action-duration="updateActionDuration"
         @update-action-lane="updateActionLane"
@@ -124,10 +126,12 @@
           "
           :selected-state-curve-point-id="selectedStateCurvePointId"
           :state-curve-layer-filters="stateCurveLayerFilters"
+          :state-curve-track-filters="stateCurveTrackFilters"
           :insertion-diagnostics="insertionDiagnostics"
           :timeline-diagnostics="timelineDiagnostics"
           @select-state-curve-point="selectStateCurvePoint"
           @update-state-curve-layer-filter="updateStateCurveLayerFilter"
+          @update-state-curve-track-filter="updateStateCurveTrackFilter"
         />
       </div>
 
@@ -199,6 +203,7 @@ const actionDrafts = ref([...initialDraft.actionDrafts]);
 const selectedActionId = ref(initialDraft.selectedActionId);
 const selectedStateCurvePointId = ref('');
 const stateCurveLayerFilters = ref({ ...DEFAULT_STATE_CURVE_LAYER_FILTERS });
+const stateCurveTrackFilters = ref({});
 const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const draftStatus = ref('未保存草稿');
 
@@ -872,6 +877,16 @@ function updateStateCurveLayerFilter({ layerKey, visible }) {
   stateCurveLayerFilters.value = {
     ...stateCurveLayerFilters.value,
     [layerKey]: Boolean(visible),
+  };
+}
+
+function updateStateCurveTrackFilter({ trackKey, visible }) {
+  if (!trackKey) {
+    return;
+  }
+  stateCurveTrackFilters.value = {
+    ...stateCurveTrackFilters.value,
+    [trackKey]: Boolean(visible),
   };
 }
 

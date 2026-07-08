@@ -8143,3 +8143,103 @@ isStateCurveTimelineLayerVisible(layer.key) &&
 - `npm run test -- --run`：通过。
 
 下一阶段 5-8BU 应补状态点 track 筛选或 selected-only 焦点模式。
+
+## 100. 阶段 5-8BU：stateCurveTrackFilters shared UI state
+
+阶段 5-8BU 不修改 `threeValueCurveFramework.stateCurves` 的模拟结果结构，只新增 Workbench 前端共享的 track 可见性状态。它和阶段 5-8BT 的 `stateCurveLayerFilters` 并列，用于在状态点数量增加后按三值轨道过滤展示。
+
+### 100.1 Workbench 共享状态
+
+`Workbench.vue` 新增：
+
+```js
+const stateCurveTrackFilters = ref({});
+
+function updateStateCurveTrackFilter({ trackKey, visible }) {
+  stateCurveTrackFilters.value = {
+    ...stateCurveTrackFilters.value,
+    [trackKey]: Boolean(visible)
+  };
+}
+```
+
+默认语义是“未显式关闭即显示”：
+
+```js
+effectiveStateCurveTrackFilters[trackKey] !== false
+```
+
+这样后续如果新增三值轨道或调试轨道，不会因为默认过滤表缺少 key 而被隐藏。
+
+### 100.2 AnalysisPanel track controls
+
+`AnalysisPanel` 新增 prop：
+
+```js
+stateCurveTrackFilters
+```
+
+并新增轨道开关：
+
+```html
+data-testid="workbench-state-curve-track-toggle"
+```
+
+轨道选项来自：
+
+```js
+threeValueCurveFramework.stateCurves.tracks[]
+```
+
+当前默认样本会显示：
+
+- `enemyHpDamage`：6 点
+- `enemyToughnessDamage`：5 点
+- `selfEnergyChange`：5 点
+
+`stateCurveTrackRows` 同时满足 layer 可见与 track 可见后才生成 `visibleLayers` 和 `visiblePointRows`。
+
+### 100.3 TimelineGridPreview track controls
+
+`TimelineGridPreview` 新增 prop：
+
+```js
+stateCurveTrackFilters
+```
+
+并新增时间轴轨道开关：
+
+```html
+data-testid="workbench-timeline-state-track-toggle"
+```
+
+时间轴轨道选项只统计会渲染为 marker 的层：
+
+```js
+applied
+sampled
+placeholder
+```
+
+因此默认末音样本时间轴只出现 `enemyHpDamage 1`，因为默认只有 applied HP 状态点会渲染为 marker；candidate HP / 韧性 / 能量点继续由候选三值曲线显示。
+
+`createStateCurveTimelineMarkers()` 新增 track gate：
+
+```js
+isStateCurveTrackVisible(track.trackKey)
+```
+
+### 100.4 验证
+
+扩展 Workbench 测试覆盖：
+
+- 分析面板显示 3 个状态曲线 track toggle，点数为 `6 / 5 / 5`。
+- 时间轴默认显示 `enemyHpDamage 1` track toggle。
+- 从分析面板关闭 `enemyHpDamage` 后，可见状态点数从 `16` 降为 `10`，HP row 消失，时间轴状态 marker 消失。
+- 从时间轴重新打开 `enemyHpDamage` 后，分析面板 HP track toggle 和时间轴 marker 同步恢复。
+
+阶段验收：
+
+- `npm run test -- --run`：通过。
+
+下一阶段 5-8BV 应补 selected-only 焦点模式或状态点导航。
