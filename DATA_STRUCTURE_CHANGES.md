@@ -14838,3 +14838,33 @@ createRuntimeStatePointContexts(runtimeProjection)
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、47 条测试。
 - `npm run test -- --run`：通过，17 个测试文件、128 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 183. UI 主流程能力块：直接编辑结果入口统一
+
+本阶段属于 UI 主流程。
+
+### 183.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 183.2 Workbench actionEditResultContext 范围
+
+`Workbench` 顶层 `createActionEditResultContext()` 不再只接受 `runtime-focus` 来源。只要 `actionEditSource.actionId` 有对应 runtime 结果，就会通过：
+
+```js
+findFirstRuntimeStatePointForAction(runtimeProjection, source.actionId)
+```
+
+解析刷新后的 `runtimeStatePointId`，供主流程条、资源曲线、日志/详情和分析面板共享。
+
+### 183.3 AnalysisPanel 接线
+
+`Workbench.vue` 显式把 `actionEditResultContext` 传入 `AnalysisPanel`。这样 AnalysisPanel 的最近编辑反馈优先使用 Workbench 顶层解析的结果点，不再只依赖自身 trace fallback。
+
+### 183.4 验证
+
+- Workbench 测试覆盖：未从 runtime 反向定位时，直接把当前动作等级从 1 改到 2，主流程条获得刷新后的 `runtimeStatePointId`；点击回到刷新结果后，三值详情和 Action Result 指向同一个 runtime state point。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "opens the refreshed runtime result"`：通过，1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、48 条测试。
+- `npm run test -- --run`：通过，17 个测试文件、129 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

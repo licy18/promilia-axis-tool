@@ -1639,6 +1639,77 @@ describe('Workbench view', () => {
     ).toBe(refreshedStatePointId);
   });
 
+  it('opens the refreshed runtime result after a direct action edit from the main flow panel', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    let flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0001');
+    expect(flowPanel.attributes('data-edit-result-state-point-id')).toBe('');
+    expect(
+      flowPanel
+        .find('[data-testid="workbench-flow-return-edit-result"]')
+        .attributes('disabled')
+    ).toBeDefined();
+    expect(
+      wrapper.find('[data-testid="workbench-runtime-selected-detail"]').exists()
+    ).toBe(false);
+
+    await wrapper.find('[data-testid="workbench-level-input"]').setValue('2');
+    await nextTick();
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    const refreshedStatePointId = flowPanel.attributes(
+      'data-edit-result-state-point-id'
+    );
+    expect(refreshedStatePointId).toBeTruthy();
+    const actionEditFeedback = wrapper.find(
+      '[data-testid="workbench-action-edit-feedback"]'
+    );
+    expect(actionEditFeedback.attributes('data-runtime-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+    expect(actionEditFeedback.attributes('data-edit-origin')).toBe('');
+    const returnEditResultButton = flowPanel.find(
+      '[data-testid="workbench-flow-return-edit-result"]'
+    );
+    expect(returnEditResultButton.attributes('disabled')).toBeUndefined();
+    expect(returnEditResultButton.attributes('data-action-id')).toBe(
+      'action-0001'
+    );
+    expect(returnEditResultButton.attributes('data-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+
+    await returnEditResultButton.trigger('click');
+    await nextTick();
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
+      'action-0001'
+    );
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('0');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(refreshedStatePointId);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+        )
+        .attributes('data-selected-state-point-id')
+    ).toBe(refreshedStatePointId);
+  });
+
   it('returns to the refreshed resource result from the main flow panel', async () => {
     const wrapper = mount(Workbench, {
       global: {

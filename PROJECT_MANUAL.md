@@ -7237,6 +7237,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - UI 主流程能力块继续推进时，优先做 Workbench 主流程完整体验整理：动作列表编辑、运行模拟触发、资源曲线巡检、日志/详情查看、回到动作修改之间的操作路径应更接近 Endaxis。
 - 不回到公式追证、候选数值平衡或单帧动作细节阶段。
 
+### 2026-07-08：UI 主流程能力块 - 直接编辑结果入口统一
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 手动编辑动作后，Workbench 顶层会解析该动作刷新后的 runtime 结果点，主流程条可直接回到刷新后结果。
+- AnalysisPanel 与 Workbench 主流程条共用同一个 `actionEditResultContext`，避免“分析面板知道结果、主流程条不知道结果”的分叉。
+- 本阶段不新增公式推断、不修改三值数值、不扩大证据展示。
+
+当前验证事实：
+
+- 初始未选中运行结果时，直接把当前动作等级从 1 改到 2，主流程条获得刷新后的 `runtimeStatePointId`。
+- 点击主流程条回到刷新结果后，三值详情和 Action Result 都同步到同一个 runtime state point。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "opens the refreshed runtime result"`：通过，1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、48 条测试。
+- `npm run test -- --run`：通过，17 个测试文件、129 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- UI 主流程能力块继续推进时，优先把 Workbench 的结果查看与编辑路径压成更紧凑的 Endaxis 式工作面：动作列表、时间轴、资源曲线、日志/详情之间应减少绕路。
+- 不回到公式追证、候选数值平衡或单帧动作细节阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

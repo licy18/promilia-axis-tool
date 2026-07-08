@@ -161,6 +161,7 @@
           :candidate-value-series="simulationResult.candidateValueSeries"
           :draft-status="draftStatus"
           :action-edit-source="actionEditSource"
+          :action-edit-result-context="actionEditResultContext"
           :three-value-curve-framework="
             simulationResult.threeValueCurveFramework
           "
@@ -1121,7 +1122,7 @@ function createActionEditResultContext({
   source = {},
   runtimeProjection = null,
 } = {}) {
-  if (!source?.actionId || source.editOrigin !== 'runtime-focus') {
+  if (!source?.actionId) {
     return null;
   }
   const resultPoint = findFirstRuntimeStatePointForAction(
