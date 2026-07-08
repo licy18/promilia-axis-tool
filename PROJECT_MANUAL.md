@@ -9637,6 +9637,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 Workbench 页面层新增、复制、删除、批量移动动作后的 runtime 同步逻辑，优先把“动作编辑后回看结果”的主流程状态继续整理进 flow runtime / flow controller 边界。
 
+### 2026-07-09：UI 主流程能力块 - Action Mutation Runtime Sync State
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchFlowRuntime` 新增动作变更后的 runtime 回看同步入口，把新增、复制、删除、批量移动动作后的“是否需要刷新结果回看、刷新哪个动作”收束为统一 `ActionMutationRuntimeSyncState`。
+- Workbench 页面层只在动作变更前采集当前回看快照，并把变更事实交给 flow runtime；实际结果回看同步仍通过统一 runtime flow plan 执行。
+- 新增、复制、删除、批量移动动作后，若用户正在运行结果回看、曲线点详情或日志详情中，仍会自动定位到可用的对应动作结果，支持“编辑动作 -> 回看结果 -> 再回到编辑”的连续主流程。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- flow runtime 单测覆盖 runtime overview、选中 runtime 点、变更前回看快照和未处于回看时跳过同步四类 action mutation sync 场景。
+- Workbench 页面测试确认删除选中的 runtime 动作、批量移动生成动作组后，结果详情、资源曲线和日志导航仍能同步到新的 runtime state point。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、68 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、221 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把动作编辑后的“返回/刷新结果”路径继续接入同一主流程 command surface，优先保证排轴动作编辑、运行模拟、资源曲线/日志/详情查看、回到动作修改这一闭环更像 Endaxis 的单工作面体验。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

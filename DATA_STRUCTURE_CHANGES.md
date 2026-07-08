@@ -20513,3 +20513,45 @@ Workbench 页面层从 `selectAction` / `setActionEditFocus` 两个低层回调�
 - `npm run test -- --run`：通过，35 个测试文件、217 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `git diff --check`：通过。
+
+## 274. UI 主流程能力块：Action Mutation Runtime Sync State
+
+### 274.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`createWorkbenchFlowRuntime()` 新增可选回调和状态查询：
+
+```js
+applyActionMutationRuntimeSyncState(syncState)
+isRuntimeOverviewActive()
+isRuntimeStatePointSelected()
+```
+
+动作新增、复制、删除、批量移动后的 runtime 回看同步会整理为内部 `ActionMutationRuntimeSyncState`：
+
+```js
+{
+  requestedActionId,
+  actionId,
+  actionAvailable,
+  shouldSyncRuntimeResult,
+  mutationSelectedAction,
+  mutationTouchedRuntimeAction,
+  force,
+}
+```
+
+Workbench 页面层新增 `captureActionMutationRuntimeReviewState()`，只负责在动作变更前采集当前回看快照；后续是否同步、同步哪个 action 由 `workbenchFlowRuntime.applyActionMutationRuntimeSync()` 统一处理。
+
+### 274.2 保存与迁移
+
+本阶段只调整 Workbench 主流程 runtime 的内部 action mutation sync state 应用入口，不新增持久字段，不需要数据迁移。
+
+### 274.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowRuntime.test.js`，覆盖 runtime overview、选中 runtime 点、变更前回看快照和未处于回看时跳过同步四类 action mutation sync 场景。
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、68 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、221 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。

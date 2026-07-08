@@ -7,8 +7,11 @@ export function createWorkbenchFlowRuntime({
   setActionEditFocus = () => {},
   applyActionSelectionState = null,
   applyActionEditState = null,
+  applyActionMutationRuntimeSyncState = null,
   setCalculatorScope = () => {},
   getFirstRuntimeStatePointId = () => '',
+  isRuntimeOverviewActive = () => false,
+  isRuntimeStatePointSelected = () => false,
   applyCalculatorScopeState = null,
   applyRuntimePointSelectionState = null,
   applyRuntimeViewState = null,
@@ -68,6 +71,53 @@ export function createWorkbenchFlowRuntime({
       setActionEditFocus({ ...editState.actionEditFocus });
     }
     return editState;
+  }
+
+  function createActionMutationRuntimeSyncState({
+    actionId = '',
+    shouldSyncRuntimeResult = null,
+    mutationSelectedAction = false,
+    mutationTouchedRuntimeAction = false,
+    force = false,
+  } = {}) {
+    const requestedActionId = actionId ?? '';
+    const actionAvailable = Boolean(
+      requestedActionId && actionExists(requestedActionId)
+    );
+    const resolvedShouldSyncRuntimeResult = Boolean(
+      force ||
+        (typeof shouldSyncRuntimeResult === 'boolean'
+          ? shouldSyncRuntimeResult
+          : isRuntimeOverviewActive() || isRuntimeStatePointSelected())
+    );
+    const mutationAffectsCurrentReview = Boolean(
+      force || mutationSelectedAction || mutationTouchedRuntimeAction
+    );
+    const shouldSyncAction = Boolean(
+      resolvedShouldSyncRuntimeResult &&
+        mutationAffectsCurrentReview &&
+        actionAvailable
+    );
+    return {
+      requestedActionId,
+      actionId: shouldSyncAction ? requestedActionId : '',
+      actionAvailable,
+      shouldSyncRuntimeResult: resolvedShouldSyncRuntimeResult,
+      mutationSelectedAction: Boolean(mutationSelectedAction),
+      mutationTouchedRuntimeAction: Boolean(mutationTouchedRuntimeAction),
+      force: Boolean(force),
+    };
+  }
+
+  function applyActionMutationRuntimeSyncStateForMutation(mutation = {}) {
+    const syncState = createActionMutationRuntimeSyncState(mutation);
+    if (
+      syncState.actionId &&
+      typeof applyActionMutationRuntimeSyncState === 'function'
+    ) {
+      applyActionMutationRuntimeSyncState(syncState);
+    }
+    return syncState;
   }
 
   function applyRuntimePointSelectionStateForPoint(statePointId = '') {
@@ -147,6 +197,16 @@ export function createWorkbenchFlowRuntime({
       });
     },
 
+    applyActionMutationRuntimeSync(mutation = {}) {
+      const syncState =
+        applyActionMutationRuntimeSyncStateForMutation(mutation);
+      return createFlowRuntimeResult({
+        applied: Boolean(syncState.actionId),
+        kind: 'action-mutation-runtime-sync',
+        reason: getActionMutationRuntimeSyncReason(syncState),
+      });
+    },
+
     applyActionEditFlowPlan(plan = {}) {
       const flowPlan = plan ?? {};
       if (!flowPlan.canApply) {
@@ -199,6 +259,26 @@ export function createWorkbenchFlowRuntime({
       });
     },
   };
+}
+
+function getActionMutationRuntimeSyncReason(syncState = {}) {
+  if (syncState.actionId) {
+    return '';
+  }
+  if (!syncState.shouldSyncRuntimeResult) {
+    return 'runtime-review-inactive';
+  }
+  if (!syncState.actionAvailable) {
+    return 'missing-action-draft';
+  }
+  if (
+    !syncState.force &&
+    !syncState.mutationSelectedAction &&
+    !syncState.mutationTouchedRuntimeAction
+  ) {
+    return 'unaffected-action-mutation';
+  }
+  return 'runtime-sync-skipped';
 }
 
 function createRuntimeViewState(flowPlan = {}) {

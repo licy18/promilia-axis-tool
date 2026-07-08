@@ -232,6 +232,134 @@ describe('workbench flow runtime', () => {
     ]);
   });
 
+  it('applies action mutation runtime sync when runtime overview is active', () => {
+    const calls = [];
+    const runtime = createWorkbenchFlowRuntime({
+      actionExists: actionId => actionId === 'action-copy',
+      isRuntimeOverviewActive: () => true,
+      applyActionMutationRuntimeSyncState: syncState =>
+        calls.push(['applyActionMutationRuntimeSyncState', syncState]),
+    });
+
+    expect(
+      runtime.applyActionMutationRuntimeSync({
+        actionId: 'action-copy',
+        mutationSelectedAction: true,
+      })
+    ).toMatchObject({
+      applied: true,
+      kind: 'action-mutation-runtime-sync',
+    });
+
+    expect(calls).toEqual([
+      [
+        'applyActionMutationRuntimeSyncState',
+        {
+          requestedActionId: 'action-copy',
+          actionId: 'action-copy',
+          actionAvailable: true,
+          shouldSyncRuntimeResult: true,
+          mutationSelectedAction: true,
+          mutationTouchedRuntimeAction: false,
+          force: false,
+        },
+      ],
+    ]);
+  });
+
+  it('applies action mutation runtime sync for the selected runtime point', () => {
+    const calls = [];
+    const runtime = createWorkbenchFlowRuntime({
+      actionExists: actionId => actionId === 'action-runtime',
+      isRuntimeStatePointSelected: () => true,
+      applyActionMutationRuntimeSyncState: syncState =>
+        calls.push(['applyActionMutationRuntimeSyncState', syncState]),
+    });
+
+    expect(
+      runtime.applyActionMutationRuntimeSync({
+        actionId: 'action-runtime',
+        mutationTouchedRuntimeAction: true,
+      })
+    ).toMatchObject({
+      applied: true,
+      kind: 'action-mutation-runtime-sync',
+    });
+
+    expect(calls).toEqual([
+      [
+        'applyActionMutationRuntimeSyncState',
+        {
+          requestedActionId: 'action-runtime',
+          actionId: 'action-runtime',
+          actionAvailable: true,
+          shouldSyncRuntimeResult: true,
+          mutationSelectedAction: false,
+          mutationTouchedRuntimeAction: true,
+          force: false,
+        },
+      ],
+    ]);
+  });
+
+  it('uses captured runtime review state for action mutation sync', () => {
+    const calls = [];
+    const runtime = createWorkbenchFlowRuntime({
+      actionExists: actionId => actionId === 'action-captured',
+      isRuntimeStatePointSelected: () => false,
+      applyActionMutationRuntimeSyncState: syncState =>
+        calls.push(['applyActionMutationRuntimeSyncState', syncState]),
+    });
+
+    expect(
+      runtime.applyActionMutationRuntimeSync({
+        actionId: 'action-captured',
+        shouldSyncRuntimeResult: true,
+        mutationTouchedRuntimeAction: true,
+      })
+    ).toMatchObject({
+      applied: true,
+      kind: 'action-mutation-runtime-sync',
+    });
+
+    expect(calls).toEqual([
+      [
+        'applyActionMutationRuntimeSyncState',
+        {
+          requestedActionId: 'action-captured',
+          actionId: 'action-captured',
+          actionAvailable: true,
+          shouldSyncRuntimeResult: true,
+          mutationSelectedAction: false,
+          mutationTouchedRuntimeAction: true,
+          force: false,
+        },
+      ],
+    ]);
+  });
+
+  it('skips action mutation runtime sync outside runtime review', () => {
+    const calls = [];
+    const runtime = createWorkbenchFlowRuntime({
+      actionExists: () => true,
+      applyActionMutationRuntimeSyncState: syncState =>
+        calls.push(['applyActionMutationRuntimeSyncState', syncState]),
+    });
+
+    expect(
+      runtime.applyActionMutationRuntimeSync({
+        actionId: 'action-idle',
+        mutationSelectedAction: true,
+      })
+    ).toMatchObject({
+      applied: false,
+      kind: 'action-mutation-runtime-sync',
+      reason: 'runtime-review-inactive',
+    });
+
+    expect(calls).toEqual([]);
+  });
+
   it('applies calculator scope selection through the shared scope state', () => {
     const calls = [];
     const runtime = createWorkbenchFlowRuntime({
