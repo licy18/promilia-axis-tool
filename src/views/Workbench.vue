@@ -250,51 +250,47 @@
             workbenchFlowModel.runtimeReviewSelection.sourceKind
           "
           :data-runtime-review-primary-operation-kind="
-            workbenchFlowModel.runtimeReviewOperations.primaryOperationKind
+            runtimeReviewPrimaryOperationView.operationKind
           "
           :data-runtime-review-primary-operation-enabled="
-            workbenchFlowModel.runtimeReviewOperations.primaryOperationEnabled
-              ? 'true'
-              : 'false'
+            runtimeReviewPrimaryOperationView.enabled ? 'true' : 'false'
           "
           data-testid="workbench-runtime-review-stack"
         >
           <div
-            v-if="workbenchFlowModel.runtimeReviewOperations.canRunAnyOperation"
+            v-if="runtimeReviewPrimaryOperationView.visible"
             class="runtime-review-primary-bar"
             :data-primary-operation-action-id="
-              runtimeReviewPrimaryOperationTarget.actionId
+              runtimeReviewPrimaryOperationView.actionId
             "
-            :data-primary-operation-kind="runtimeReviewPrimaryOperationKind"
+            :data-primary-operation-kind="
+              runtimeReviewPrimaryOperationView.operationKind
+            "
             :data-primary-operation-state-point-id="
-              runtimeReviewPrimaryOperationTarget.statePointId
+              runtimeReviewPrimaryOperationView.statePointId
             "
             data-testid="workbench-runtime-review-primary-bar"
           >
             <button
               type="button"
               class="runtime-review-primary-action"
-              :data-action-id="runtimeReviewPrimaryOperationTarget.actionId"
-              :data-operation-kind="runtimeReviewPrimaryOperationKind"
+              :data-action-id="runtimeReviewPrimaryOperationView.actionId"
+              :data-operation-kind="
+                runtimeReviewPrimaryOperationView.operationKind
+              "
               :data-state-point-id="
-                runtimeReviewPrimaryOperationTarget.statePointId
+                runtimeReviewPrimaryOperationView.statePointId
               "
               data-testid="workbench-runtime-review-primary-operation"
-              :disabled="!runtimeReviewPrimaryOperationConsumer.enabled"
+              :disabled="!runtimeReviewPrimaryOperationView.enabled"
               @click="dispatchRuntimeReviewPrimaryOperation"
             >
               <EditPen
-                v-if="
-                  runtimeReviewPrimaryOperationKind ===
-                  WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION
-                "
+                v-if="runtimeReviewPrimaryOperationView.isFocusAction"
                 class="runtime-review-primary-action-icon"
               />
               <Aim v-else class="runtime-review-primary-action-icon" />
-              <span>{{
-                workbenchFlowModel.runtimeReviewOperations.primaryOperation
-                  .label
-              }}</span>
+              <span>{{ runtimeReviewPrimaryOperationView.label }}</span>
             </button>
           </div>
 
@@ -632,11 +628,11 @@ const runtimeReviewPrimaryOperationConsumer = computed(() =>
     source: 'runtime-review-primary',
   })
 );
-const runtimeReviewPrimaryOperationTarget = computed(
-  () => runtimeReviewPrimaryOperationConsumer.value.target
-);
-const runtimeReviewPrimaryOperationKind = computed(
-  () => runtimeReviewPrimaryOperationConsumer.value.operationKind
+const runtimeReviewPrimaryOperationView = computed(() =>
+  createRuntimeReviewPrimaryOperationView({
+    consumer: runtimeReviewPrimaryOperationConsumer.value,
+    operations: workbenchFlowModel.value.runtimeReviewOperations,
+  })
 );
 const timelineDiagnostics = computed(() =>
   createTimelineDiagnostics({
@@ -1694,7 +1690,28 @@ function dispatchWorkbenchFlowAction(action = {}) {
 }
 
 function dispatchRuntimeReviewPrimaryOperation() {
-  dispatchWorkbenchFlowAction(runtimeReviewPrimaryOperationConsumer.value.action);
+  dispatchWorkbenchFlowAction(runtimeReviewPrimaryOperationView.value.action);
+}
+
+function createRuntimeReviewPrimaryOperationView({
+  consumer = null,
+  operations = null,
+} = {}) {
+  const target = consumer?.target ?? {};
+  const operationKind =
+    consumer?.operationKind ?? operations?.primaryOperationKind ?? '';
+  return {
+    visible: Boolean(operations?.canRunAnyOperation),
+    operationKind,
+    enabled: Boolean(consumer?.enabled),
+    isFocusAction:
+      operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+    actionId: target.actionId ?? '',
+    statePointId: target.statePointId ?? '',
+    label: operations?.primaryOperation?.label ?? '',
+    target,
+    action: consumer?.action ?? null,
+  };
 }
 
 function updateStateCurveFocusMode(mode) {

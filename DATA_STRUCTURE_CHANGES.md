@@ -19359,3 +19359,61 @@ review 主操作按钮的 actionId、statePointId、operationKind、disabled 状
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、72 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、203 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 250. UI 主流程能力块：Workbench Review Primary View Model
+
+### 250.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+Workbench 页面层新增主操作 view model：
+
+```js
+runtimeReviewPrimaryOperationView
+```
+
+输出字段：
+
+```js
+{
+  visible,
+  operationKind,
+  enabled,
+  isFocusAction,
+  actionId,
+  statePointId,
+  label,
+  target,
+  action
+}
+```
+
+来源：
+
+```js
+createRuntimeReviewPrimaryOperationView({
+  consumer: runtimeReviewPrimaryOperationConsumer.value,
+  operations: workbenchFlowModel.value.runtimeReviewOperations,
+})
+```
+
+影响范围：
+
+```text
+workbench-runtime-review-stack
+workbench-runtime-review-primary-bar
+workbench-runtime-review-primary-operation
+dispatchRuntimeReviewPrimaryOperation()
+```
+
+模板主操作区域不再直接读取 `runtimeReviewOperations.primaryOperation*`，主操作显示与点击分发统一从 `runtimeReviewPrimaryOperationView` 读取。
+
+### 250.2 保存与迁移
+
+本阶段只调整 Workbench 页面层的 UI view model，不新增持久字段，不需要数据迁移。
+
+### 250.3 验证
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、57 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、203 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
