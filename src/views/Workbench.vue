@@ -364,7 +364,6 @@ const workbenchFlowController = createWorkbenchFlowController(
       workbenchFlowRuntime.applyRuntimeFlowPlan(plan),
     applyActionEditFlowPlan: plan =>
       workbenchFlowRuntime.applyActionEditFlowPlan(plan),
-    selectRuntimeStatePoint,
   })
 );
 

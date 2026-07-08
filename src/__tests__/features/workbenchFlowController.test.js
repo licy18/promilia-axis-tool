@@ -124,7 +124,14 @@ describe('workbench flow controller', () => {
         'selectRuntimeResult',
         { actionId: 'action-0001', statePointId: 'runtime-point-001' },
       ],
-      ['selectRuntimeStatePoint', 'runtime-point-002'],
+      [
+        'selectRuntimeStatePoint',
+        {
+          actionId: '',
+          statePointId: 'runtime-point-002',
+          source: 'resource-runtime-curve',
+        },
+      ],
       ['selectContributionPoint', 'runtime-point-003'],
       ['focusRuntimeAction', runtimeFocusPayload],
       ['focusEditSource', editSourcePayload],
@@ -183,7 +190,6 @@ describe('workbench flow controller', () => {
   it('binds flow actions to flow plan creation and application handlers', () => {
     const runtimePlans = [];
     const actionEditPlans = [];
-    const selectedRuntimePoints = [];
     const flowPlanController = {
       [WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_ENTRY]: payload => ({
         plan: 'runtime-entry',
@@ -215,8 +221,6 @@ describe('workbench flow controller', () => {
         flowPlanController,
         applyRuntimeFlowPlan: plan => runtimePlans.push(plan),
         applyActionEditFlowPlan: plan => actionEditPlans.push(plan),
-        selectRuntimeStatePoint: statePointId =>
-          selectedRuntimePoints.push(statePointId),
       })
     );
 
@@ -282,6 +286,13 @@ describe('workbench flow controller', () => {
       {
         plan: 'runtime-point-focus',
         payload: {
+          statePointId: 'point-direct',
+          source: 'runtime-state-point',
+        },
+      },
+      {
+        plan: 'runtime-point-focus',
+        payload: {
           statePointId: 'point-contribution',
           source: 'action-contribution',
         },
@@ -311,6 +322,5 @@ describe('workbench flow controller', () => {
         },
       },
     ]);
-    expect(selectedRuntimePoints).toEqual(['point-direct']);
   });
 });

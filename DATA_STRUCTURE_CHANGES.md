@@ -17086,3 +17086,60 @@ fallbackToFirstRuntimePoint: true
 - `npm run test -- --run`：通过，29 个测试文件、170 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 216. UI 主流程能力块：Runtime Point Focus Route
+
+本阶段属于 UI 主流程。
+
+### 216.1 结构变化
+
+`createWorkbenchFlowController()` 对 `SELECT_RUNTIME_STATE_POINT` 的 handler payload 从单个字符串：
+
+```js
+statePointId
+```
+
+调整为结构化对象：
+
+```js
+{
+  actionId,
+  statePointId,
+  source
+}
+```
+
+`createWorkbenchFlowPlanHandlers()` 对 `SELECT_RUNTIME_STATE_POINT` 不再直接调用 `selectRuntimeStatePoint()`，而是创建并应用：
+
+```js
+WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_POINT_FOCUS
+```
+
+payload 为：
+
+```js
+{
+  statePointId,
+  source: source || 'runtime-state-point'
+}
+```
+
+`Workbench.vue` 移除 `createWorkbenchFlowPlanHandlers()` 中的旧直连 `selectRuntimeStatePoint` 参数。运行点选择现在统一通过：
+
+```text
+flow action -> flow controller -> runtime point focus plan -> workbench flow runtime
+```
+
+### 216.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench 主流程路由；三值计算、runtime projection 数值结果和草稿保存结构不变。
+
+### 216.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowController.test.js`，确认 `select-runtime-state-point` 进入 `runtime-point-focus` plan，并保留 flow action 来源。
+- 更新 `src/__tests__/views/Workbench.test.js`，确认资源曲线点选择后的 runtime focus source 来自 `resource-runtime-curve`。
+- `npm run test -- --run src/__tests__/features/workbenchFlowController.test.js src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、63 条测试。
+- `npm run test -- --run`：通过，29 个测试文件、170 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

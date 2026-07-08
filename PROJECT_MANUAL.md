@@ -8115,6 +8115,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把资源曲线选择与日志/详情查看纳入同一 runtime entry route，让曲线点、日志行和详情面板之间的定位闭环更稳定。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Point Focus Route
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 资源曲线点、模拟日志行、主流程运行点导航发出的 `select-runtime-state-point` 现在统一进入 `runtime-point-focus` flow plan。
+- 运行点选择会经由 Workbench flow runtime 统一执行：进入 runtime 视角、选择对应 state point、应用 applied 曲线过滤、聚焦对应日志来源。
+- `Workbench.vue` 移除 controller 到 `selectRuntimeStatePoint()` 的旧直连绑定，运行点定位不再绕过 plan/controller/runtime 主流程。
+- 本阶段不新增可见 UI 文案，不调整三值公式或数值结果，不继续扩展微型状态标签。
+
+当前验证事实：
+
+- flow controller 单元测试确认 `select-runtime-state-point` 会生成 `runtime-point-focus` plan，并保留来源追踪。
+- Workbench 页面测试确认资源曲线点点击后，曲线、时间轴 marker、运行详情、日志行和当前动作仍围绕同一个 state point 同步。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowController.test.js src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、63 条测试。
+- `npm run test -- --run`：通过，29 个测试文件、170 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- 继续 UI 主流程能力块：围绕 Endaxis 式完整工作区节奏推进动作编辑、运行模拟、资源曲线监控、日志/详情查看、回到动作修改的闭环，不再拆成单个状态标签或提示文案阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

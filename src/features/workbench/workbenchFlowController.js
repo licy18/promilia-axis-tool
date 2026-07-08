@@ -62,7 +62,11 @@ export function createWorkbenchFlowController(handlers = {}) {
           handlerKey:
             WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_STATE_POINT,
           flowAction,
-          payload: flowAction.statePointId,
+          payload: {
+            actionId: flowAction.actionId,
+            statePointId: flowAction.statePointId,
+            source: flowAction.source,
+          },
         });
       }
 
@@ -125,7 +129,6 @@ export function createWorkbenchFlowPlanHandlers({
   flowPlanController = null,
   applyRuntimeFlowPlan = () => {},
   applyActionEditFlowPlan = () => {},
-  selectRuntimeStatePoint = () => {},
 } = {}) {
   return {
     [WORKBENCH_FLOW_CONTROLLER_HANDLERS.OPEN_RUNTIME_RESULTS]: ({
@@ -159,8 +162,20 @@ export function createWorkbenchFlowPlanHandlers({
         )
       ),
 
-    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_STATE_POINT]:
-      statePointId => selectRuntimeStatePoint(statePointId),
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_STATE_POINT]: ({
+      statePointId,
+      source,
+    } = {}) =>
+      applyRuntimeFlowPlan(
+        createPlan(
+          flowPlanController,
+          WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_POINT_FOCUS,
+          {
+            statePointId,
+            source: source || 'runtime-state-point',
+          }
+        )
+      ),
 
     [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_CONTRIBUTION_POINT]:
       statePointId =>

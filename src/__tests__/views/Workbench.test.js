@@ -3884,7 +3884,7 @@ describe('Workbench view', () => {
     );
     expect(runtimeCurveSelection.attributes('data-curve-mode')).toBe('delta');
     expect(runtimeCurveSelection.attributes('data-runtime-focus-source')).toBe(
-      'manual'
+      'resource-runtime-curve'
     );
     expect(
       Number(runtimeCurveSelection.attributes('data-navigation-count'))
