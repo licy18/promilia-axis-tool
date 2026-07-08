@@ -1,7 +1,7 @@
 import {
-  ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
-  createThreeValueGenerationLayer,
-} from './threeValueGenerationLayer';
+  createActionHitThreeValueDeltaGeneration,
+} from './actionHitThreeValueDeltaGeneration';
+import { ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME } from './threeValueGenerationLayer';
 
 export function createThreeValueGenerationBundle({
   scenario,
@@ -10,23 +10,28 @@ export function createThreeValueGenerationBundle({
   runtimeSampleContext,
   stateCurves,
 }) {
-  const threeValueGenerationLayer = createThreeValueGenerationLayer({
-    scenario,
-    actionResultTimeline,
-    candidateValueSeries,
-    runtimeSampleContext,
-    stateCurves,
-  });
+  const actionHitThreeValueDeltaGeneration =
+    createActionHitThreeValueDeltaGeneration({
+      scenario,
+      actionResultTimeline,
+      candidateValueSeries,
+      runtimeSampleContext,
+      stateCurves,
+    });
+  const threeValueGenerationLayer =
+    actionHitThreeValueDeltaGeneration.threeValueGenerationLayer;
   const standardContract =
-    threeValueGenerationLayer.standardContract ??
+    actionHitThreeValueDeltaGeneration.standardContract ??
     createFallbackStandardContract(threeValueGenerationLayer);
   const runtimeInputSource = createRuntimeInputSource({
     standardContract,
     threeValueGenerationLayer,
+    actionHitThreeValueDeltaGeneration,
   });
   const summary = createThreeValueGenerationBundleSummary({
     standardContract,
     threeValueGenerationLayer,
+    actionHitThreeValueDeltaGeneration,
     runtimeInputSource,
   });
 
@@ -38,6 +43,7 @@ export function createThreeValueGenerationBundle({
         ? 'three-value-generation-builder-ready'
         : 'three-value-generation-builder-empty',
     contractName: standardContract.name,
+    actionHitThreeValueDeltaGeneration,
     threeValueGenerationLayer,
     standardContract,
     runtimeInputSource,
@@ -52,6 +58,7 @@ export function createThreeValueGenerationBundle({
 function createRuntimeInputSource({
   standardContract,
   threeValueGenerationLayer,
+  actionHitThreeValueDeltaGeneration,
 }) {
   return {
     schemaVersion: 1,
@@ -61,6 +68,8 @@ function createRuntimeInputSource({
         ? 'runtime-input-source-ready'
         : 'runtime-input-source-empty',
     contractName: standardContract.name,
+    generationEntrySourceKind: actionHitThreeValueDeltaGeneration.sourceKind,
+    generationEntryStatus: actionHitThreeValueDeltaGeneration.status,
     generationLayerSourceKind: threeValueGenerationLayer.sourceKind,
     generationLayerStatus: threeValueGenerationLayer.status,
     standardContractSourceKind: standardContract.sourceKind,
@@ -82,10 +91,13 @@ function createRuntimeInputSource({
 function createThreeValueGenerationBundleSummary({
   standardContract,
   threeValueGenerationLayer,
+  actionHitThreeValueDeltaGeneration,
   runtimeInputSource,
 }) {
   return {
     contractName: standardContract.name,
+    generationEntrySourceKind: actionHitThreeValueDeltaGeneration.sourceKind,
+    generationEntryStatus: actionHitThreeValueDeltaGeneration.status,
     generationLayerStatus: threeValueGenerationLayer.status,
     generationLayerSourceKind: threeValueGenerationLayer.sourceKind,
     standardContractStatus: standardContract.status,

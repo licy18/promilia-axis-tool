@@ -8004,6 +8004,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 转向生成层能力块：打通 `Action -> Hit -> ThreeValueDelta` 标准合同，明确动作、命中、HP / 韧性 / 自身能量 delta 的统一生成入口；Evidence、公式和候选数值只作为追溯与诊断字段保留。
 
+### 2026-07-09：生成层能力块 - Action Hit ThreeValueDelta Generation Entry
+
+本阶段属于：生成层。
+
+完成的可用能力：
+
+- 新增 `actionHitThreeValueDeltaGeneration`，把 `Action -> Hit -> ThreeValueDelta` 标准合同提升为生成层统一入口。
+- `threeValueGenerationBuilder` 不再直接从 generation layer 拼装 bundle，而是先生成 `actionHitThreeValueDeltaGeneration`，再从该入口取得 `standardContract`、actions、hits、deltas 和 runtime input source。
+- bundle summary 与 runtime input source 增加 generation entry 来源字段，后续 runtime / UI 可以明确追踪自己消费的是标准合同入口，而不是页面或证据层临时结构。
+- 本阶段保持既有三值结果不变，不修改 HP / 韧性 / 自身能量公式，不新增候选数值推断，也不扩大 UI 信息量。
+
+当前验证事实：
+
+- 新增 generation entry 单元测试，覆盖入口输出的 topology、delta fields、runtime delta policy、标准合同引用关系和 HP / 韧性 / 自身能量 delta 字段。
+- generation builder 测试确认 bundle 从 generation entry 获取标准合同，并把入口来源写入 runtime input source。
+- generation layer 与 runtime projection 既有测试继续通过，说明输出数值和 runtime 消费规则未改变。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/threeValueGenerationLayer.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js`：通过，4 个测试文件、7 条测试。
+- `npm run test -- --run`：通过，27 个测试文件、166 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 转向运行时层能力块：进一步收束 runtime input / runtime projection 对标准合同入口的消费边界，确保 `simLog`、`stateCurves`、`resourceCurves`、summary 都只由 `Action -> Hit -> ThreeValueDelta` runtime input 派生。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -16638,3 +16638,108 @@ applyRuntimePointSelectionState(selectionState)
 - `npm run test -- --run`：通过，26 个测试文件、165 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 212. 生成层能力块：Action Hit ThreeValueDelta Generation Entry
+
+本阶段属于生成层。
+
+### 212.1 结构变化
+
+新增模块：
+
+```js
+src/simulation/generation/actionHitThreeValueDeltaGeneration.js
+```
+
+新增导出：
+
+```js
+createActionHitThreeValueDeltaGeneration()
+```
+
+`createActionHitThreeValueDeltaGeneration()` 输出：
+
+```js
+{
+  schemaVersion,
+  sourceKind,
+  status,
+  contractName,
+  inputSourceKind,
+  inputStatus,
+  inputSources,
+  threeValueGenerationLayer,
+  standardContract,
+  actions,
+  hits,
+  deltas,
+  summary,
+  applied
+}
+```
+
+其中 `summary` 明确记录：
+
+```js
+{
+  contractName,
+  generationLayerSourceKind,
+  generationLayerStatus,
+  standardContractSourceKind,
+  standardContractStatus,
+  inputSourceKind,
+  inputStatus,
+  topology,
+  deltaFields,
+  runtimeDeltaPolicy,
+  actionCount,
+  hitCount,
+  deltaCount,
+  appliedDeltaCount,
+  candidateDeltaCount,
+  sampledDeltaCount,
+  placeholderDeltaCount,
+  applied
+}
+```
+
+`createThreeValueGenerationBundle()` 结构新增字段：
+
+```js
+actionHitThreeValueDeltaGeneration
+```
+
+`runtimeInputSource` 新增字段：
+
+```js
+generationEntrySourceKind
+generationEntryStatus
+```
+
+bundle `summary` 新增字段：
+
+```js
+generationEntrySourceKind
+generationEntryStatus
+```
+
+`src/simulation/index.js` 新增导出：
+
+```js
+createActionHitThreeValueDeltaGeneration
+```
+
+### 212.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响生成层 bundle / runtime input source 的中间结构；HP / 韧性 / 自身能量 delta 结果、runtime projection、UI 保存草稿结构不变。
+
+### 212.3 验证
+
+- 新增 `src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js`，覆盖 generation entry 的 topology、delta fields、runtime delta policy、标准合同引用关系和三值 delta 字段。
+- 更新 `src/__tests__/simulation/threeValueGenerationBuilder.test.js`，确认 bundle 从 generation entry 取得 `standardContract`，并写入 generation entry 来源字段。
+- `npm run test -- --run src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/threeValueGenerationLayer.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js`：通过，4 个测试文件、7 条测试。
+- `npm run test -- --run`：通过，27 个测试文件、166 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
