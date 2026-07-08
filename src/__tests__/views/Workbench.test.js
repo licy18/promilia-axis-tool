@@ -2096,6 +2096,67 @@ describe('Workbench view', () => {
     ).toContain('selected');
   });
 
+  it('syncs runtime detail after deleting the selected runtime action', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-add-resource-action"]')
+      .trigger('click');
+    await nextTick();
+
+    await wrapper
+      .find('[data-testid="workbench-flow-open-runtime"]')
+      .trigger('click');
+    await nextTick();
+
+    let flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0002');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
+      'action-0002'
+    );
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('1');
+    const firstActionStatePointId = flowPanel
+      .find('[data-testid="workbench-flow-runtime-previous"]')
+      .attributes('data-state-point-id');
+    expect(firstActionStatePointId).toBeTruthy();
+
+    await wrapper
+      .findAll('[data-testid="workbench-delete-action"]')[1]
+      .trigger('click');
+    await nextTick();
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0001');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
+      'action-0001'
+    );
+    expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('1');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('0');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(firstActionStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-resource-chart-selection"]')
+        .attributes('data-state-point-id')
+    ).toBe(firstActionStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-navigation"]')
+        .attributes('data-state-point-id')
+    ).toBe(firstActionStatePointId);
+  });
+
   it('keeps the selected action when opening runtime results without a matching runtime point', async () => {
     const wrapper = mount(Workbench, {
       global: {

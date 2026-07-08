@@ -7316,6 +7316,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - UI 主流程能力块继续推进时，优先继续处理“新增/选择/编辑动作”和“运行结果巡检”之间的工作面一致性。
 - 不回到公式追证、候选数值平衡或单帧动作细节阶段。
 
+### 2026-07-08：UI 主流程能力块 - 运行视角删除动作同步
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 当 Workbench 已处于 runtime 结果视角时，删除当前动作或当前结果所属动作后，会同步到新的当前动作结果或运行总览。
+- 删除动作不会留下已失效的旧 runtime state point，主流程条、三值详情、资源曲线和模拟日志保持一致。
+- 本阶段不新增公式推断、不修改三值数值、不扩大证据展示。
+
+当前验证事实：
+
+- 添加资源动作并进入第二个动作的运行结果后，删除该动作会自动回到剩余第一个动作的 runtime state point。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "syncs runtime detail after deleting"`：通过，1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、51 条测试。
+- `npm run test -- --run`：通过，17 个测试文件、132 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+下一步：
+
+- UI 主流程能力块继续推进时，继续把复制、批量动作和编辑焦点也纳入同一套运行视角同步规则。
+- 不回到公式追证、候选数值平衡或单帧动作细节阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

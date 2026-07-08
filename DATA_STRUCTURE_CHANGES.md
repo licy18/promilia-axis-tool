@@ -14930,3 +14930,38 @@ syncRuntimeResultForSelectedAction(nextAction.id)
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、50 条测试。
 - `npm run test -- --run`：通过，17 个测试文件、131 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+
+## 186. UI 主流程能力块：运行视角删除动作同步
+
+本阶段属于 UI 主流程。
+
+### 186.1 保存结构
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+### 186.2 deleteAction / deleteActionBatch 运行视角策略
+
+`Workbench.deleteAction()` 和 `Workbench.deleteActionBatch()` 在删除前记录：
+
+```js
+shouldSyncRuntimeAfterDelete
+selectedRuntimeActionId
+selectedWasRemoved
+selectedRuntimeWasRemoved
+```
+
+删除后，如果当前动作或当前 runtime 结果所属动作被移除，则调用：
+
+```js
+syncRuntimeResultForSelectedAction(selectedActionId.value)
+```
+
+这样主流程会切到新的当前动作结果；如果新动作没有 runtime 结果，则进入 runtime overview。
+
+### 186.3 验证
+
+- Workbench 测试覆盖：添加资源动作并进入第二个动作的运行结果后，删除该动作，主流程条、三值详情、资源曲线和模拟日志都会同步到剩余第一个动作的 runtime state point。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "syncs runtime detail after deleting"`：通过，1 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、51 条测试。
+- `npm run test -- --run`：通过，17 个测试文件、132 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。

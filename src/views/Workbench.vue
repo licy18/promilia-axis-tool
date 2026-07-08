@@ -864,14 +864,24 @@ function deleteAction(actionId) {
     return;
   }
 
+  const shouldSyncRuntimeAfterDelete = shouldSyncRuntimeResultOnActionSelect();
+  const selectedRuntimeActionId = getSelectedRuntimeStatePointActionId();
+  const selectedWasRemoved = selectedActionId.value === actionId;
+  const selectedRuntimeWasRemoved = selectedRuntimeActionId === actionId;
   actionDrafts.value = actionDrafts.value.filter(
     action => action.id !== actionId
   );
 
-  if (selectedActionId.value === actionId) {
+  if (selectedWasRemoved) {
     const nextIndex = Math.min(index, actionDrafts.value.length - 1);
     selectedActionId.value = actionDrafts.value[nextIndex].id;
     syncActionLibraryCharacterIdFromDraft(actionDrafts.value[nextIndex]);
+  }
+  if (
+    shouldSyncRuntimeAfterDelete &&
+    (selectedWasRemoved || selectedRuntimeWasRemoved)
+  ) {
+    syncRuntimeResultForSelectedAction(selectedActionId.value);
   }
   markDraftDirty();
 }
@@ -897,7 +907,10 @@ function deleteActionBatch(batchId) {
   const firstRemovedIndex = actionDrafts.value.findIndex(action =>
     batchActionIds.has(action.id)
   );
+  const shouldSyncRuntimeAfterDelete = shouldSyncRuntimeResultOnActionSelect();
+  const selectedRuntimeActionId = getSelectedRuntimeStatePointActionId();
   const selectedWasRemoved = batchActionIds.has(selectedActionId.value);
+  const selectedRuntimeWasRemoved = batchActionIds.has(selectedRuntimeActionId);
   actionDrafts.value = actionDrafts.value.filter(
     action => !batchActionIds.has(action.id)
   );
@@ -909,6 +922,12 @@ function deleteActionBatch(batchId) {
     );
     selectedActionId.value = actionDrafts.value[nextIndex].id;
     syncActionLibraryCharacterIdFromDraft(actionDrafts.value[nextIndex]);
+  }
+  if (
+    shouldSyncRuntimeAfterDelete &&
+    (selectedWasRemoved || selectedRuntimeWasRemoved)
+  ) {
+    syncRuntimeResultForSelectedAction(selectedActionId.value);
   }
   markDraftDirty();
 }
@@ -1501,6 +1520,15 @@ function shouldSyncRuntimeResultOnActionSelect() {
       simulationResult.value.threeValueRuntimeProjection,
       selectedStateCurvePointId.value
     )
+  );
+}
+
+function getSelectedRuntimeStatePointActionId() {
+  return (
+    findRuntimeStatePointContextById(
+      simulationResult.value.threeValueRuntimeProjection,
+      selectedStateCurvePointId.value
+    )?.row?.actionId ?? ''
   );
 }
 
