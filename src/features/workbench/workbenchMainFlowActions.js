@@ -312,6 +312,39 @@ export function createWorkbenchRuntimeReviewPrimaryOperationFlowAction({
   });
 }
 
+export function createWorkbenchRuntimeReviewPrimaryOperationView({
+  flowModel = null,
+  source = '',
+  consumer = null,
+  operations = null,
+} = {}) {
+  const resolvedOperations =
+    operations ?? flowModel?.runtimeReviewOperations ?? null;
+  const resolvedConsumer =
+    consumer ??
+    createWorkbenchRuntimeReviewOperationConsumer({
+      flowModel,
+      source,
+    });
+  const target = resolvedConsumer?.target ?? {};
+  const operationKind =
+    resolvedConsumer?.operationKind ??
+    resolvedOperations?.primaryOperationKind ??
+    '';
+  return {
+    visible: Boolean(resolvedOperations?.canRunAnyOperation),
+    operationKind,
+    enabled: Boolean(resolvedConsumer?.enabled),
+    isFocusAction:
+      operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+    actionId: target.actionId ?? '',
+    statePointId: target.statePointId ?? '',
+    label: resolvedOperations?.primaryOperation?.label ?? '',
+    target,
+    action: resolvedConsumer?.action ?? null,
+  };
+}
+
 export function createWorkbenchRuntimeActionEditFlowAction({
   source = '',
   target = null,

@@ -429,10 +429,9 @@ import { createWorkbenchFlowRuntimePointSelectionState } from '../features/workb
 import { createWorkbenchFlowRuntimeScopeState } from '../features/workbench/workbenchFlowRuntimeScope';
 import {
   createWorkbenchFlowModel,
-  WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS,
 } from '../features/workbench/workbenchFlowModel';
 import {
-  createWorkbenchRuntimeReviewOperationConsumer,
+  createWorkbenchRuntimeReviewPrimaryOperationView,
   createWorkbenchRuntimeStatePointFlowAction,
 } from '../features/workbench/workbenchMainFlowActions';
 import {
@@ -622,16 +621,10 @@ const workbenchFlowModel = computed(() =>
     flowDispatchState: workbenchFlowDispatchState.value,
   })
 );
-const runtimeReviewPrimaryOperationConsumer = computed(() =>
-  createWorkbenchRuntimeReviewOperationConsumer({
+const runtimeReviewPrimaryOperationView = computed(() =>
+  createWorkbenchRuntimeReviewPrimaryOperationView({
     flowModel: workbenchFlowModel.value,
     source: 'runtime-review-primary',
-  })
-);
-const runtimeReviewPrimaryOperationView = computed(() =>
-  createRuntimeReviewPrimaryOperationView({
-    consumer: runtimeReviewPrimaryOperationConsumer.value,
-    operations: workbenchFlowModel.value.runtimeReviewOperations,
   })
 );
 const timelineDiagnostics = computed(() =>
@@ -1691,27 +1684,6 @@ function dispatchWorkbenchFlowAction(action = {}) {
 
 function dispatchRuntimeReviewPrimaryOperation() {
   dispatchWorkbenchFlowAction(runtimeReviewPrimaryOperationView.value.action);
-}
-
-function createRuntimeReviewPrimaryOperationView({
-  consumer = null,
-  operations = null,
-} = {}) {
-  const target = consumer?.target ?? {};
-  const operationKind =
-    consumer?.operationKind ?? operations?.primaryOperationKind ?? '';
-  return {
-    visible: Boolean(operations?.canRunAnyOperation),
-    operationKind,
-    enabled: Boolean(consumer?.enabled),
-    isFocusAction:
-      operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
-    actionId: target.actionId ?? '',
-    statePointId: target.statePointId ?? '',
-    label: operations?.primaryOperation?.label ?? '',
-    target,
-    action: consumer?.action ?? null,
-  };
 }
 
 function updateStateCurveFocusMode(mode) {

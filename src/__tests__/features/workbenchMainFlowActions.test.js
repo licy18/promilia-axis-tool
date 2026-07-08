@@ -8,6 +8,7 @@ import {
   createWorkbenchRuntimeReviewOperationConsumer,
   createWorkbenchRuntimeReviewOperationFlowAction,
   createWorkbenchRuntimeReviewPrimaryOperationFlowAction,
+  createWorkbenchRuntimeReviewPrimaryOperationView,
   createWorkbenchRuntimeResultFlowAction,
   createWorkbenchRuntimeResultReturnFlowAction,
   createWorkbenchRuntimeReviewFlowAction,
@@ -648,6 +649,60 @@ describe('workbench main flow actions', () => {
         source: 'runtime-detail',
         actionId: 'fallback-action',
         statePointId: 'fallback-return-state-point',
+        canRun: true,
+      },
+    });
+  });
+
+  it('creates the runtime review primary operation view from the consumer', () => {
+    const view = createWorkbenchRuntimeReviewPrimaryOperationView({
+      source: 'runtime-review-primary',
+      flowModel: {
+        runtimeReviewOperations: {
+          primaryOperationKind:
+            WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+          primaryOperationEnabled: true,
+          canRunAnyOperation: true,
+          primaryOperation: {
+            kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+            enabled: true,
+            label: '定位动作',
+            target: {
+              kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+              enabled: true,
+              actionId: 'action-0002',
+              statePointId: 'state-point-0002',
+              fieldKey: 'startMs',
+              frameLabel: '30f',
+            },
+          },
+          focusAction: {
+            kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+            enabled: true,
+            actionId: 'fallback-action',
+            statePointId: 'fallback-state-point',
+          },
+        },
+      },
+    });
+
+    expect(view).toMatchObject({
+      visible: true,
+      operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+      enabled: true,
+      isFocusAction: true,
+      actionId: 'action-0002',
+      statePointId: 'state-point-0002',
+      label: '定位动作',
+      target: {
+        actionId: 'action-0002',
+        statePointId: 'state-point-0002',
+      },
+      action: {
+        kind: 'focus-runtime-action',
+        source: 'runtime-review-primary',
+        actionId: 'action-0002',
+        statePointId: 'state-point-0002',
         canRun: true,
       },
     });

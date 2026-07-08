@@ -19417,3 +19417,65 @@ dispatchRuntimeReviewPrimaryOperation()
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、57 条测试。
 - `npm run test -- --run`：通过，35 个测试文件、203 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 251. UI 主流程能力块：Shared Review Primary View Model
+
+### 251.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增共享函数：
+
+```js
+createWorkbenchRuntimeReviewPrimaryOperationView({
+  flowModel,
+  source,
+  consumer,
+  operations,
+})
+```
+
+输出字段：
+
+```js
+{
+  visible,
+  operationKind,
+  enabled,
+  isFocusAction,
+  actionId,
+  statePointId,
+  label,
+  target,
+  action
+}
+```
+
+默认来源：
+
+```js
+createWorkbenchRuntimeReviewOperationConsumer({
+  flowModel,
+  source,
+})
+```
+
+Workbench 页面层的 `runtimeReviewPrimaryOperationView` 现在直接调用共享函数：
+
+```js
+createWorkbenchRuntimeReviewPrimaryOperationView({
+  flowModel: workbenchFlowModel.value,
+  source: 'runtime-review-primary',
+})
+```
+
+### 251.2 保存与迁移
+
+本阶段只把 Workbench 页面层的 review 主操作 view model 下沉到共享模块，不新增持久字段，不需要数据迁移。
+
+### 251.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖共享 view model 的 visible、operationKind、enabled、isFocusAction、actionId、statePointId、label、target 和 action。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、73 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、204 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示、chunk size 提示，以及本机 PowerShell `Import-Clixml` 通道噪声。
