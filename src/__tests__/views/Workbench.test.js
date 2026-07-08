@@ -140,6 +140,26 @@ describe('Workbench view', () => {
     expect(firstCandidatePoint.text()).toContain('hit1');
     expect(firstCandidatePoint.text()).toContain('109001306');
     expect(firstCandidatePoint.text()).toContain('109001081');
+    const stateTimelineMarkers = wrapper.findAll(
+      '[data-testid="workbench-timeline-state-curve-marker"]'
+    );
+    expect(stateTimelineMarkers).toHaveLength(1);
+    expect(stateTimelineMarkers[0].attributes('data-track-key')).toBe(
+      'enemyHpDamage'
+    );
+    expect(stateTimelineMarkers[0].attributes('data-layer-key')).toBe(
+      'applied'
+    );
+    expect(stateTimelineMarkers[0].attributes('data-frame-label')).toBe('0s0f');
+    expect(stateTimelineMarkers[0].attributes('data-lane-id')).toBe(
+      'actor-109001'
+    );
+    expect(stateTimelineMarkers[0].attributes('data-marker-title')).toContain(
+      '状态点 敌人HP伤害 已用 0s0f: Δ12,461 Σ12,461'
+    );
+    expect(stateTimelineMarkers[0].attributes('data-marker-title')).toContain(
+      '普通攻击'
+    );
     await wrapper
       .find(
         '[data-testid="workbench-state-curve-layer-toggle"][data-layer-key="candidate"]'
@@ -1351,6 +1371,27 @@ describe('Workbench view', () => {
     expect(wrapper.text()).toContain('ENEMY_EVENT');
     expect(wrapper.text()).toContain('phase-2 / 进入二阶段');
     expect(wrapper.text()).not.toContain('DAMAGE_SKIPPED');
+    const placeholderStateMarkers = wrapper
+      .findAll('[data-testid="workbench-timeline-state-curve-marker"]')
+      .filter(marker => marker.attributes('data-layer-key') === 'placeholder');
+    expect(placeholderStateMarkers.length).toBeGreaterThan(0);
+    expect(
+      placeholderStateMarkers.some(
+        marker => marker.attributes('data-action-id') === 'action-0002'
+      )
+    ).toBe(true);
+    expect(
+      placeholderStateMarkers.some(
+        marker => marker.attributes('data-action-id') === 'action-0003'
+      )
+    ).toBe(true);
+    expect(
+      placeholderStateMarkers.every(marker =>
+        marker
+          .attributes('data-marker-title')
+          ?.includes('action-result-placeholder')
+      )
+    ).toBe(true);
   });
 
   it('adds a switch action targeting a secondary actor', async () => {

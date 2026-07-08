@@ -4500,6 +4500,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 - 优先让 sampled / placeholder 点在时间轴上可被发现，并与分析面板的点级明细互相对应。
 - 继续保持框架优先，不把未确认的逐帧技能细节当作阻塞项。
 
+### 2026-07-08：阶段 5-8BR 状态点时间轴 marker
+
+本轮完成：
+
+- `Workbench` 已把 `simulationResult.threeValueCurveFramework` 传给 `TimelineGridPreview`。
+- `TimelineGridPreview` 新增 `stateCurveMarkers` lane 数据，读取 `threeValueCurveFramework.stateCurves.tracks[].layers[].points[]`。
+- 主时间轴现在渲染 `applied / sampled / placeholder` 三层 state point 的轻量 marker；`candidate` 层继续由原“候选三值”曲线和 marker 负责，避免重复铺点。
+- marker tooltip 显示状态点摘要：轨道、层级、帧、`Δ`、`Σ`、动作、hit、element、event、SP 前后值和 `sourceKind`。
+- 时间轴图例新增“状态点”。
+- 默认末音样例会在 actor-109001 lane 上显示 applied HP 状态点；加入资源/敌人事件后，placeholder 状态点会出现在对应动作的时间轴位置。
+
+当前边界：
+
+- marker 目前只是轻量提示和 tooltip，没有点击选中、筛选或与分析面板点级明细联动。
+- 本阶段不渲染 `candidate` state point marker，因为候选层已经由候选曲线覆盖。
+- 仍不追逐每个技能的最终逐帧动作、命中次数、归属或 buff 条件。
+
+验收结果：
+
+- `npm test -- --run src\__tests__\views\Workbench.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、48 条测试。
+
+下一步：
+
+- 阶段 5-8BS 目标：补状态点 marker 的筛选或选中联动。
+- 优先让时间轴 marker 与分析面板中的点级明细能互相定位，或提供按 state layer / track 的显示控制。
+- 保持三值曲线框架优先，具体数值机制仍按采样和公式证据逐步替换。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

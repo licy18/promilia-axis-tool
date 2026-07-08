@@ -7826,3 +7826,118 @@ action-sample · element 109001081 · recover-sp-applied · SP 10->10.3375 · ru
 - `npm test -- --run src\__tests__\views\Workbench.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过。
 
 下一阶段 5-8BR 应把 state point 接入主时间轴轻量 marker 或提示，让分析面板明细和时间轴位置能互相对应。
+
+## 97. 阶段 5-8BR：stateCurves timeline markers
+
+阶段 5-8BR 不修改 `threeValueCurveFramework.stateCurves` 的模拟结果结构，只在 `TimelineGridPreview` 中新增时间轴派生 marker。
+
+### 97.1 输入
+
+`Workbench.vue` 现在把完整三值曲线框架传给时间轴：
+
+```vue
+<TimelineGridPreview
+  :three-value-curve-framework="simulationResult.threeValueCurveFramework"
+/>
+```
+
+`TimelineGridPreview` 新增 prop：
+
+```js
+threeValueCurveFramework: {
+  type: Object,
+  default: () => ({
+    stateCurves: {
+      tracks: []
+    }
+  })
+}
+```
+
+### 97.2 渲染层选择
+
+当前时间轴 state marker 只消费：
+
+```js
+new Set(['applied', 'sampled', 'placeholder'])
+```
+
+原因：
+
+- `candidate` 层已经由原有“候选三值”曲线、marker 和 frame hotspot 展示。
+- `applied / sampled / placeholder` 是此前最容易在主时间轴上不可见的状态变化层。
+
+### 97.3 派生 marker
+
+`createStateCurveTimelineMarker()` 从 state point 派生：
+
+```js
+{
+  id,
+  trackKey,
+  trackLabel,
+  layerKey,
+  layerLabel,
+  valueUnit,
+  actionId,
+  actionName,
+  actorId,
+  frameIndex,
+  frameLabel,
+  timeMs,
+  top,
+  delta,
+  cumulative,
+  hitIndex,
+  eventType,
+  resultStatus,
+  sourceKind,
+  elementConfigIds,
+  sourceElementConfigId,
+  elementConfigId,
+  spBefore,
+  spAfter
+}
+```
+
+lane 解析顺序：
+
+1. 若 `actionId` 对应已有 action，沿 action lane。
+2. 否则若 `actorId` 是 actor lane，沿 actor lane。
+3. 否则进入 system lane。
+
+### 97.4 tooltip
+
+marker title 格式：
+
+```text
+状态点 敌人HP伤害 已用 0s0f: Δ12,461 Σ12,461 · 普通攻击 · action-result-applied-value
+```
+
+RecoverSP sampled marker 可包含：
+
+```text
+SP 10->10.3375
+```
+
+placeholder marker 可包含：
+
+```text
+action-result-placeholder
+```
+
+### 97.5 验证
+
+扩展 Workbench 测试覆盖：
+
+- 默认末音样例生成 1 个 state marker。
+- 该 marker 位于 `actor-109001` lane，`trackKey = enemyHpDamage`，`layerKey = applied`，`frameLabel = 0s0f`。
+- marker title 包含 `状态点 敌人HP伤害 已用 0s0f: Δ12,461 Σ12,461` 和 `普通攻击`。
+- 添加资源/敌人事件后，placeholder marker 覆盖 `action-0002` 和 `action-0003`。
+- placeholder marker title 均包含 `action-result-placeholder`。
+
+阶段验收：
+
+- `npm test -- --run src\__tests__\views\Workbench.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过。
+
+下一阶段 5-8BS 应补状态点 marker 筛选、选中或与分析面板点级明细联动。

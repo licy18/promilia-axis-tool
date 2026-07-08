@@ -319,6 +319,30 @@
               @keydown.enter.prevent="selectCandidateFrameGroupByMarker(marker)"
               @keydown.space.prevent="selectCandidateFrameGroupByMarker(marker)"
             />
+
+            <div
+              v-for="marker in lane.stateCurveMarkers"
+              :key="marker.id"
+              class="state-curve-marker"
+              :class="[
+                `state-layer-${marker.layerKey}`,
+                `state-track-${marker.trackKey}`,
+              ]"
+              :style="stateCurveMarkerStyle(marker)"
+              :title="formatStateCurveMarkerTitle(marker)"
+              :aria-label="formatStateCurveMarkerTitle(marker)"
+              :data-action-id="marker.actionId"
+              :data-lane-id="lane.id"
+              :data-track-key="marker.trackKey"
+              :data-layer-key="marker.layerKey"
+              :data-frame-label="marker.frameLabel"
+              :data-delta="marker.delta"
+              :data-cumulative="marker.cumulative"
+              :data-marker-title="formatStateCurveMarkerTitle(marker)"
+              data-testid="workbench-timeline-state-curve-marker"
+              role="img"
+              tabindex="0"
+            />
           </div>
         </div>
       </div>
@@ -406,6 +430,7 @@
       <span><i class="legend-action" /> 动作</span>
       <span><i class="legend-damage" /> 伤害投影</span>
       <span><i class="legend-candidate" /> 候选三值</span>
+      <span><i class="legend-state" /> 状态点</span>
       <span><i class="legend-system" /> 系统轨</span>
       <span><i class="legend-overlap" /> 重叠</span>
       <span><i class="legend-delay" /> 自动推迟</span>
@@ -433,6 +458,16 @@ const MAX_ZOOM = 4;
 const ZOOM_STEP = 0.25;
 const CANDIDATE_VALUE_CURVE_TOP = 68;
 const CANDIDATE_VALUE_CURVE_HEIGHT = 34;
+const STATE_CURVE_TIMELINE_LAYER_KEYS = new Set([
+  'applied',
+  'sampled',
+  'placeholder',
+]);
+const STATE_CURVE_TRACK_MARKER_TOP = {
+  enemyHpDamage: 92,
+  enemyToughnessDamage: 99,
+  selfEnergyChange: 106,
+};
 const CANDIDATE_VALUE_SERIES_META = {
   hpDamageFormulaParamCandidate: {
     order: 0,
@@ -480,6 +515,14 @@ const props = defineProps({
       series: [],
       summary: {
         pointCount: 0,
+      },
+    }),
+  },
+  threeValueCurveFramework: {
+    type: Object,
+    default: () => ({
+      stateCurves: {
+        tracks: [],
       },
     }),
   },
@@ -620,6 +663,7 @@ const timelineLanes = computed(() => {
     candidateValueMarkers: [],
     candidateValueCurves: [],
     candidateValueFrameGroups: [],
+    stateCurveMarkers: [],
   }));
   const lanesById = new Map(actorLanes.map(lane => [lane.id, lane]));
   const systemLane = {
@@ -632,6 +676,7 @@ const timelineLanes = computed(() => {
     candidateValueMarkers: [],
     candidateValueCurves: [],
     candidateValueFrameGroups: [],
+    stateCurveMarkers: [],
   };
 
   props.actions.forEach(action => {
@@ -650,6 +695,11 @@ const timelineLanes = computed(() => {
     lane.candidateValueMarkers.push(marker);
   });
 
+  createStateCurveTimelineMarkers().forEach(marker => {
+    const lane = lanesById.get(resolveStateCurveLaneId(marker)) ?? systemLane;
+    lane.stateCurveMarkers.push(marker);
+  });
+
   [...actorLanes, systemLane].forEach(lane => {
     lane.candidateValueCurves = createCandidateValueTimelineCurves(
       lane.candidateValueMarkers
@@ -661,7 +711,8 @@ const timelineLanes = computed(() => {
 
   return systemLane.actions.length > 0 ||
     systemLane.damageMarkers.length > 0 ||
-    systemLane.candidateValueMarkers.length > 0
+    systemLane.candidateValueMarkers.length > 0 ||
+    systemLane.stateCurveMarkers.length > 0
     ? [...actorLanes, systemLane]
     : actorLanes;
 });
@@ -730,6 +781,14 @@ function candidateValueMarkerStyle(marker) {
   };
 }
 
+function stateCurveMarkerStyle(marker) {
+  const left = clampPercent((marker.timeMs / props.durationMs) * 100);
+  return {
+    left: `${left}%`,
+    top: `${marker.top}px`,
+  };
+}
+
 function candidateValueFrameHotspotStyle(group) {
   const left = clampPercent((group.timeMs / props.durationMs) * 100);
   return {
@@ -776,6 +835,17 @@ function resolveDamageLaneId(damage) {
 function resolveCandidateValueLaneId(marker) {
   const action = actionsById.value.get(marker.actionId);
   return action ? resolveActionLaneId(action) : 'system';
+}
+
+function resolveStateCurveLaneId(marker) {
+  const action = actionsById.value.get(marker.actionId);
+  if (action) {
+    return resolveActionLaneId(action);
+  }
+  if (marker.actorId && actorLaneIds.value.has(marker.actorId)) {
+    return marker.actorId;
+  }
+  return 'system';
 }
 
 function createCandidateValueTimelineMarkers() {
@@ -835,6 +905,82 @@ function createCandidateValueTimelineMarkers() {
             isCandidateMarkerInDisplayScope(marker)
         );
     });
+}
+
+function createStateCurveTimelineMarkers() {
+  return (props.threeValueCurveFramework?.stateCurves?.tracks ?? []).flatMap(
+    track =>
+      (track.layers ?? [])
+        .filter(
+          layer =>
+            STATE_CURVE_TIMELINE_LAYER_KEYS.has(layer.key) &&
+            (layer.pointCount ?? 0) > 0
+        )
+        .flatMap((layer, layerIndex) =>
+          (layer.points ?? []).map((point, pointIndex) =>
+            createStateCurveTimelineMarker({
+              track,
+              layer,
+              point,
+              layerIndex,
+              pointIndex,
+            })
+          )
+        )
+  );
+}
+
+function createStateCurveTimelineMarker({
+  track,
+  layer,
+  point,
+  layerIndex,
+  pointIndex,
+}) {
+  const frameIndex = Number(point.frameIndex);
+  const timeMs = Number.isFinite(Number(point.timeMs))
+    ? Number(point.timeMs)
+    : Number.isFinite(frameIndex)
+      ? frameIndex * WORKBENCH_FRAME_MS
+      : 0;
+  const frameLabel =
+    point.frameLabel ??
+    (Number.isFinite(frameIndex)
+      ? formatFrameTime(frameIndex * WORKBENCH_FRAME_MS)
+      : formatFrameTime(timeMs));
+
+  return {
+    id: [
+      track.trackKey,
+      layer.key,
+      point.actionId ?? point.eventType ?? 'point',
+      point.frameIndex ?? point.timeMs ?? pointIndex,
+      point.sequenceIndex ?? point.eventIndex ?? point.hitIndex ?? layerIndex,
+    ].join('-'),
+    trackKey: track.trackKey,
+    trackLabel: track.label,
+    layerKey: layer.key,
+    layerLabel: formatStateCurveLayerLabel(layer.key),
+    valueUnit: layer.valueUnit ?? track.valueUnit,
+    actionId: point.actionId ?? '',
+    actionName: point.actionName ?? '',
+    actorId: point.actorId ?? '',
+    frameIndex,
+    frameLabel,
+    timeMs,
+    top: STATE_CURVE_TRACK_MARKER_TOP[track.trackKey] ?? 99,
+    delta: point.delta,
+    cumulative: point.cumulative,
+    hitIndex: point.hitIndex,
+    eventType: point.eventType ?? '',
+    resultStatus: point.resultStatus ?? '',
+    sourceKind: point.sourceKind ?? '',
+    elementConfigIds: point.elementConfigIds ?? [],
+    sourceElementConfigId: point.sourceElementConfigId,
+    elementConfigId: point.elementConfigId,
+    spBefore: point.spBefore,
+    spAfter: point.spAfter,
+  };
 }
 
 function createCandidateValueTimelineCurves(markers) {
@@ -926,6 +1072,74 @@ function createCandidateValueFrameGroups(markers) {
 
 function formatCandidateValueMarkerTitle(marker) {
   return `${marker.seriesLabel} ${marker.frameLabel} hit${marker.hitIndex}: ${formatTimelineNumber(marker.value)} ${marker.unit}`;
+}
+
+function formatStateCurveMarkerTitle(marker) {
+  const sourceParts = [];
+  const actionText = marker.actionName || marker.actionId;
+  if (actionText) {
+    sourceParts.push(actionText);
+  }
+  if (Number.isFinite(Number(marker.hitIndex))) {
+    sourceParts.push(`hit${Number(marker.hitIndex)}`);
+  }
+  const elementText = formatStateCurveMarkerElements(marker);
+  if (elementText) {
+    sourceParts.push(elementText);
+  }
+  if (marker.eventType) {
+    sourceParts.push(marker.eventType);
+  }
+  const spText = formatStateCurveMarkerSpRange(marker);
+  if (spText) {
+    sourceParts.push(spText);
+  }
+  if (marker.resultStatus) {
+    sourceParts.push(marker.resultStatus);
+  }
+  if (marker.sourceKind) {
+    sourceParts.push(marker.sourceKind);
+  }
+  const sourceText = sourceParts.length ? ` · ${sourceParts.join(' · ')}` : '';
+  return `状态点 ${marker.trackLabel} ${marker.layerLabel} ${marker.frameLabel}: Δ${formatStateCurveTimelineNumber(marker.delta)} Σ${formatStateCurveTimelineNumber(marker.cumulative)}${sourceText}`;
+}
+
+function formatStateCurveLayerLabel(key) {
+  if (key === 'applied') {
+    return '已用';
+  }
+  if (key === 'sampled') {
+    return '采样';
+  }
+  if (key === 'placeholder') {
+    return '占位';
+  }
+  return key;
+}
+
+function formatStateCurveMarkerElements(marker) {
+  const ids = [
+    ...(marker.elementConfigIds ?? []),
+    marker.sourceElementConfigId,
+    marker.elementConfigId,
+  ]
+    .map(id => Number(id))
+    .filter(Number.isFinite);
+  const uniqueIds = [...new Set(ids)];
+  if (uniqueIds.length === 0) {
+    return '';
+  }
+  return `element ${uniqueIds.join('/')}`;
+}
+
+function formatStateCurveMarkerSpRange(marker) {
+  if (
+    !Number.isFinite(Number(marker.spBefore)) ||
+    !Number.isFinite(Number(marker.spAfter))
+  ) {
+    return '';
+  }
+  return `SP ${formatStateCurveTimelineNumber(marker.spBefore)}->${formatStateCurveTimelineNumber(marker.spAfter)}`;
 }
 
 function getCandidateSeriesMeta(seriesKey) {
@@ -1243,8 +1457,10 @@ function createCandidateElementComparisonRows(group) {
       row.summonTriggerFrameCandidates = uniqueDisplayValues([
         ...row.summonTriggerFrameCandidates,
         ...(element.summonTarget?.triggerFrameCandidates ?? []),
-        ...((element.summonTarget?.triggerFrameCandidateSummary
-          ?.candidateStartFrames ?? []) ?? []),
+        ...(element.summonTarget?.triggerFrameCandidateSummary
+          ?.candidateStartFrames ??
+          [] ??
+          []),
       ]);
       row.hpDamage = mergeElementCandidateObject(
         row.hpDamage,
@@ -1363,13 +1579,12 @@ function formatSummonTargetTriggerText(summaries) {
       ...((summary.triggerFrameCandidateSummaries ?? []).flatMap(
         item => item.candidateStartFrames ?? []
       ) ?? []),
-      ...((summary.triggerFrameCandidateSummary?.candidateStartFrames ?? []) ??
+      ...(summary.triggerFrameCandidateSummary?.candidateStartFrames ??
+        [] ??
         []),
     ])
   );
-  return frames.length
-    ? `触发候选帧 ${frames.join('/')}`
-    : '触发帧未确认';
+  return frames.length ? `触发候选帧 ${frames.join('/')}` : '触发帧未确认';
 }
 
 function createElementNumberPart(label, value) {
@@ -1409,6 +1624,23 @@ function uniqueDisplayValues(values) {
 
 function formatTimelineNumber(value) {
   return Math.round(Number(value) || 0).toLocaleString('zh-CN');
+}
+
+function formatStateCurveTimelineNumber(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return '-';
+  }
+  if (!Number.isInteger(number)) {
+    const sign = number < 0 ? '-' : '';
+    const normalized = Math.abs(number)
+      .toFixed(4)
+      .replace(/0+$/, '')
+      .replace(/\.$/, '');
+    const [integerPart, decimalPart] = normalized.split('.');
+    return `${sign}${formatTimelineNumber(integerPart)}${decimalPart ? `.${decimalPart}` : ''}`;
+  }
+  return formatTimelineNumber(number);
 }
 
 function formatSigned(value) {
@@ -2283,6 +2515,34 @@ h2 {
   outline-offset: 3px;
 }
 
+.state-curve-marker {
+  position: absolute;
+  z-index: 3;
+  width: 7px;
+  height: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.74);
+  border-radius: 2px;
+  background: #dff9f3;
+  box-shadow: 0 0 10px rgba(223, 249, 243, 0.38);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.state-curve-marker:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.86);
+  outline-offset: 3px;
+}
+
+.state-curve-marker.state-layer-sampled {
+  background: #79c7b9;
+  box-shadow: 0 0 12px rgba(121, 199, 185, 0.52);
+}
+
+.state-curve-marker.state-layer-placeholder {
+  border-color: rgba(239, 197, 116, 0.82);
+  background: rgba(20, 25, 30, 0.96);
+  box-shadow: 0 0 10px rgba(239, 197, 116, 0.36);
+}
+
 .empty-lane {
   margin: 12px 18px;
   padding: 24px;
@@ -2328,6 +2588,12 @@ h2 {
     #79c7b9 33% 66%,
     #a6b7ff 66% 100%
   );
+}
+
+.legend-state {
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  background: #dff9f3;
+  transform: rotate(45deg) scale(0.82);
 }
 
 .legend-system {
