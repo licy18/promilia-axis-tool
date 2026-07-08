@@ -220,6 +220,7 @@ import {
   createWorkbenchFlowPlanController,
 } from '../features/workbench/workbenchFlowPlanController';
 import { createWorkbenchFlowRuntime } from '../features/workbench/workbenchFlowRuntime';
+import { createWorkbenchFlowRuntimePointSelectionState } from '../features/workbench/workbenchFlowRuntimePointSelection';
 import { createWorkbenchFlowRuntimeScopeState } from '../features/workbench/workbenchFlowRuntimeScope';
 import {
   createWorkbenchFlowModel,
@@ -1370,14 +1371,22 @@ function selectStateCurvePoint(pointId) {
 }
 
 function selectRuntimeStatePoint(pointId) {
-  selectStateCurvePoint(pointId);
-  if (pointId) {
-    stateCurveFocusMode.value = 'selected';
-    selectActionFromRuntimeStatePoint(pointId);
+  applyRuntimePointSelectionState(
+    createWorkbenchFlowRuntimePointSelectionState({
+      statePointId: pointId,
+    })
+  );
+}
+
+function applyRuntimePointSelectionState(selectionState = {}) {
+  selectedStateCurvePointId.value = selectionState.selectedStatePointId ?? '';
+  stateCurveFocusMode.value = selectionState.stateCurveFocusMode || 'all';
+  if (selectionState.shouldSelectRuntimeAction) {
+    selectActionFromRuntimeStatePoint(selectionState.statePointId);
   }
   runtimeLogFocus.value = {
-    source: '',
-    statePointId: '',
+    source: selectionState.runtimeLogFocus?.source ?? '',
+    statePointId: selectionState.runtimeLogFocus?.statePointId ?? '',
     sequence: runtimeLogFocus.value.sequence,
   };
 }

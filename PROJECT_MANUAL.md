@@ -7977,6 +7977,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把 `selectRuntimeStatePoint()` 的运行点选择副作用也整理成 flow runtime 可复用的状态接口，继续削薄 Workbench 视图层。
 
+### 2026-07-09：UI 主流程能力块 - Flow Runtime Point Selection
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `workbenchFlowRuntimePointSelection`，用纯数据描述运行结果点被选中或清空后，曲线焦点、动作同步和日志焦点应如何变化。
+- `Workbench.vue` 的 `selectRuntimeStatePoint()` 改为消费 point selection state，再应用到本地状态；运行结果点选中逻辑不再以内联分支散落在页面函数里。
+- 选中运行点仍保持原有行为：曲线进入 selected 视角，自动同步该运行点对应动作，并清空旧日志焦点。
+- 本阶段不修改三值计算、模拟输出、项目保存结构、公式证据、候选数值或可见 UI 文案。
+
+当前验证事实：
+
+- point selection state 单元测试覆盖运行点选中和运行点清空两条主流程。
+- Workbench 集成测试继续覆盖动作编辑、运行结果查看、资源曲线和详情回跳行为。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntimePointSelection.test.js src/__tests__/features/workbenchFlowRuntimeScope.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、58 条测试。
+- `npm run test -- --run`：通过，26 个测试文件、165 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+下一步：
+
+- 转向生成层能力块：打通 `Action -> Hit -> ThreeValueDelta` 标准合同，明确动作、命中、HP / 韧性 / 自身能量 delta 的统一生成入口；Evidence、公式和候选数值只作为追溯与诊断字段保留。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

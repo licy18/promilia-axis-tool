@@ -16580,3 +16580,61 @@ applyCalculatorScopeFlowState(scopeState)
 - `npm run test -- --run`：通过，25 个测试文件、163 条测试。
 - `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
 - `git diff --check`：通过；仅有 Windows CRLF 提示。
+
+## 211. UI 主流程能力块：Flow Runtime Point Selection
+
+本阶段属于 UI 主流程。
+
+### 211.1 结构变化
+
+新增模块：
+
+```js
+src/features/workbench/workbenchFlowRuntimePointSelection.js
+```
+
+新增导出：
+
+```js
+createWorkbenchFlowRuntimePointSelectionState()
+```
+
+`createWorkbenchFlowRuntimePointSelectionState()` 输出：
+
+```js
+{
+  statePointId,
+  selectedStatePointId,
+  stateCurveFocusMode,
+  shouldSelectRuntimeAction,
+  runtimeLogFocus
+}
+```
+
+`Workbench.vue` 的 `selectRuntimeStatePoint()` 不再直接维护运行点选择分支，改为：
+
+```js
+createWorkbenchFlowRuntimePointSelectionState(...)
+applyRuntimePointSelectionState(...)
+```
+
+新增内部应用函数：
+
+```js
+applyRuntimePointSelectionState(selectionState)
+```
+
+### 211.2 保存与迁移
+
+本阶段不新增项目保存字段，不变更 `Project` schema、导入导出结构或 localStorage 数据。
+
+该变化只影响 Workbench UI 的运行点选择状态组织方式；模拟结果、三值计算、项目文件、runtime projection 结构不变。
+
+### 211.3 验证
+
+- 新增 `src/__tests__/features/workbenchFlowRuntimePointSelection.test.js`，覆盖运行点选中和运行点清空两条主流程。
+- Workbench 视图测试继续覆盖动作编辑、运行结果查看、资源曲线和详情回跳行为。
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntimePointSelection.test.js src/__tests__/features/workbenchFlowRuntimeScope.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、58 条测试。
+- `npm run test -- --run`：通过，26 个测试文件、165 条测试。
+- `npm run build`：通过；仍有既有 Sass `@import` 弃用警告和 chunk 体积警告。
+- `git diff --check`：通过；仅有 Windows CRLF 提示。
