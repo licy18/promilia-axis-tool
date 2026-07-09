@@ -11899,6 +11899,35 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：单独补齐 Analysis 状态曲线帧组选项入口的浏览器级路径；若该入口仍主要服务候选点，则先固定“候选帧组选择 -> 曲线/时间轴同步”的可见路径，再回到生成层或运行时层边界收敛。
 
+### 2026-07-09：UI 主流程 Analysis 状态曲线帧组选项闭环 - Analysis Frame Group Candidate Loop
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 用户可以从 Analysis 状态曲线候选点进入同帧候选组，并在同一帧内切换 HP、韧性等三值候选点。
+- 帧组选项切换后，Analysis 选中点、时间轴候选 marker、候选曲线高亮和候选帧详情保持同步。
+- 该入口当前服务候选诊断曲线，不作为运行结果详情或动作编辑入口；已用运行结果的编辑回跳仍由曲线点、日志、详情、时间轴 marker 和 Analysis 已用点/导航闭环承担。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、保存数据或导入导出结构。
+
+当前验证事实：
+
+- 新增浏览器级闭环场景：`Analysis 候选状态点 -> 切到选中帧 -> 帧组选项切换韧性候选 -> 时间轴候选 marker/曲线/帧详情同步 -> 切回 HP 候选`。
+- 该场景复用既有 Analysis 状态曲线帧组选项和时间轴候选曲线，不新增内部抽象层。
+
+验收结果：
+
+- `npm run test:e2e -- --grep "analysis state curve frame group"`：通过，1 条浏览器级闭环测试。
+- `npm run test:e2e`：通过，12 条浏览器级烟测。
+- `npm run test -- --run`：通过，38 个测试文件、271 条测试。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md e2e/workbench-continuous-edit.spec.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 建议进入生成层能力块：收敛 `Action -> Hit -> ThreeValueDelta` 的统一生成入口，让后续 UI 主流程消费更稳定的三值合同。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -414,6 +414,141 @@ test('keeps analysis state curve navigation tied to edit return', async ({
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps analysis state curve frame group tied to timeline candidate values', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/workbench');
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'action-edit'
+  );
+
+  await page.getByTestId('workbench-state-curve-focus-all').click();
+  const candidateHpPoint = page
+    .locator(
+      '[data-testid="workbench-state-curve-point"][data-layer-key="candidate"][data-track-key="enemyHpDamage"]'
+    )
+    .first();
+  await expect(candidateHpPoint).toBeVisible();
+  const hpStatePointId = await candidateHpPoint.getAttribute(
+    'data-state-point-id'
+  );
+  expect(hpStatePointId).toBeTruthy();
+  await candidateHpPoint.click();
+
+  const focusSelectedButton = page.getByTestId(
+    'workbench-state-curve-focus-selected'
+  );
+  await expect(focusSelectedButton).not.toBeDisabled();
+  await focusSelectedButton.click();
+  await expect(focusSelectedButton).toHaveClass(/active/);
+  await expect(
+    page.locator(
+      `[data-testid="workbench-state-curve-frame-group-option"][data-state-point-id="${hpStatePointId}"]`
+    )
+  ).toHaveClass(/active/);
+
+  const selectedFrameSummary = page.getByTestId(
+    'workbench-candidate-value-frame-summary'
+  );
+  await expect(selectedFrameSummary).toBeVisible();
+  const selectedFrameLabel =
+    await selectedFrameSummary.getAttribute('data-frame-label');
+  const selectedHitIndex =
+    await selectedFrameSummary.getAttribute('data-hit-index');
+  expect(selectedFrameLabel).toBeTruthy();
+  expect(selectedHitIndex).toBeTruthy();
+  await expect(
+    page.locator(
+      '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="selected-frame"]'
+    )
+  ).toHaveClass(/active/);
+  await expect(
+    page.locator(
+      '[data-testid="workbench-candidate-value-frame-detail-row"][data-track-focused="true"]'
+    )
+  ).toHaveAttribute('data-state-track-key', 'enemyHpDamage');
+
+  const toughnessFrameGroupOption = page
+    .locator(
+      '[data-testid="workbench-state-curve-frame-group-option"][data-track-key="enemyToughnessDamage"]'
+    )
+    .first();
+  await expect(toughnessFrameGroupOption).toBeVisible();
+  const toughnessStatePointId = await toughnessFrameGroupOption.getAttribute(
+    'data-state-point-id'
+  );
+  expect(toughnessStatePointId).toBeTruthy();
+  await toughnessFrameGroupOption.click();
+
+  await expect(toughnessFrameGroupOption).toHaveClass(/active/);
+  await expect(
+    page.locator(
+      `[data-testid="workbench-state-curve-point"][data-state-point-id="${toughnessStatePointId}"]`
+    )
+  ).toHaveClass(/selected/);
+  await expect(selectedFrameSummary).toHaveAttribute(
+    'data-frame-label',
+    selectedFrameLabel
+  );
+  await expect(selectedFrameSummary).toHaveAttribute(
+    'data-hit-index',
+    selectedHitIndex
+  );
+  await expect(
+    page.locator(
+      '[data-testid="workbench-candidate-value-frame-detail-row"][data-track-focused="true"]'
+    )
+  ).toHaveAttribute('data-state-track-key', 'enemyToughnessDamage');
+  await expect(
+    page.locator(
+      '[data-testid="workbench-timeline-candidate-value-marker"][data-track-focused="true"]'
+    )
+  ).toHaveAttribute('data-state-track-key', 'enemyToughnessDamage');
+  await expect(
+    page.locator(
+      '[data-testid="workbench-timeline-candidate-value-curve"][data-series-key="toughnessDamageCandidate"]'
+    )
+  ).toHaveAttribute('data-track-focused', 'true');
+  await expect(
+    page.locator(
+      '[data-testid="workbench-timeline-candidate-value-curve"][data-series-key="hpDamageFormulaParamCandidate"]'
+    )
+  ).toHaveAttribute('data-track-focused', 'false');
+  await expect(
+    page.locator(
+      '[data-testid="workbench-timeline-candidate-value-frame-hotspot"].selected'
+    )
+  ).toHaveAttribute('data-frame-label', selectedFrameLabel);
+
+  const hpFrameGroupOption = page
+    .locator(
+      '[data-testid="workbench-state-curve-frame-group-option"][data-track-key="enemyHpDamage"]'
+    )
+    .first();
+  await hpFrameGroupOption.click();
+  await expect(hpFrameGroupOption).toHaveClass(/active/);
+  await expect(
+    page.locator(
+      `[data-testid="workbench-state-curve-point"][data-state-point-id="${hpStatePointId}"]`
+    )
+  ).toHaveClass(/selected/);
+  await expect(
+    page.locator(
+      '[data-testid="workbench-candidate-value-frame-detail-row"][data-track-focused="true"]'
+    )
+  ).toHaveAttribute('data-state-track-key', 'enemyHpDamage');
+  await expect(
+    page.locator(
+      '[data-testid="workbench-timeline-candidate-value-marker"][data-track-focused="true"]'
+    )
+  ).toHaveAttribute('data-state-track-key', 'enemyHpDamage');
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps direct, log, and contribution edit returns synced', async ({
   page,
 }) => {
