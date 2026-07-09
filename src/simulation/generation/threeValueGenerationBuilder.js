@@ -141,6 +141,12 @@ function createThreeValueGenerationOutputs({
       generationEntry.contractValidation?.aggregateValidation?.status ?? '',
     generationEntryAggregateValidationIssueCount:
       generationEntry.contractValidation?.aggregateValidation?.issueCount ?? 0,
+    generationEntryBoundaryStatus:
+      generationEntry.standardEntryBoundary?.status ?? '',
+    generationEntryBoundaryReady:
+      generationEntry.standardEntryBoundary?.ready === true,
+    generationEntryBoundaryIssueCount:
+      generationEntry.standardEntryBoundary?.issueCount ?? 0,
     generationOutputBoundaryStatus: standardOutputBoundary.status,
     generationOutputBoundaryReady: standardOutputBoundary.ready,
     generationOutputBoundaryPath: 'generationOutputs.standardOutputBoundary',
@@ -308,9 +314,7 @@ function createThreeValueGenerationOutputBoundary({
     contractValidationStatus: contractValidation.status ?? '',
     contractValidationIssueCount: numberOrZero(contractValidation.issueCount),
     aggregateValidationStatus: aggregateValidation.status ?? '',
-    aggregateValidationIssueCount: numberOrZero(
-      aggregateValidation.issueCount
-    ),
+    aggregateValidationIssueCount: numberOrZero(aggregateValidation.issueCount),
     checkCount: checks.length,
     issueCount: failedChecks.length,
     issueKeys: failedChecks.map(check => check.key),
@@ -374,6 +378,10 @@ function createStandardGenerationEntry({
     applied: false,
   };
   const contractValidation = validateStandardGenerationEntryContract(entry);
+  const standardEntryBoundary = createStandardGenerationEntryBoundary({
+    generationEntry: entry,
+    contractValidation,
+  });
   return {
     ...entry,
     status: !contractValidation.valid
@@ -382,6 +390,8 @@ function createStandardGenerationEntry({
         ? 'action-hit-three-value-delta-standard-generation-entry-ready'
         : 'action-hit-three-value-delta-standard-generation-entry-empty',
     contractValidation,
+    standardEntryBoundary,
+    entryBoundary: standardEntryBoundary,
     summary: {
       contractName: standardContract.name,
       actionCount: standardContract.summary?.actionCount ?? 0,
@@ -403,9 +413,136 @@ function createStandardGenerationEntry({
       aggregateValidationStatus: contractValidation.aggregateValidation.status,
       aggregateValidationIssueCount:
         contractValidation.aggregateValidation.issueCount,
+      entryBoundaryStatus: standardEntryBoundary.status,
+      entryBoundaryReady: standardEntryBoundary.ready,
+      entryBoundaryIssueCount: standardEntryBoundary.issueCount,
       applied: false,
     },
     applied: false,
+  };
+}
+
+function createStandardGenerationEntryBoundary({
+  generationEntry,
+  contractValidation,
+}) {
+  const standardContract = generationEntry.standardContract;
+  const aggregateValidation = contractValidation.aggregateValidation ?? {};
+  const checks = [
+    createGenerationEntryBoundaryCheck({
+      key: 'entry-output-names',
+      valid: arraysEqual(
+        generationEntry.outputNames,
+        STANDARD_GENERATION_ENTRY_OUTPUT_NAMES
+      ),
+    }),
+    createGenerationEntryBoundaryCheck({
+      key: 'entry-generation-input-present',
+      valid: Boolean(generationEntry.generationInput),
+    }),
+    createGenerationEntryBoundaryCheck({
+      key: 'entry-standard-contract-present',
+      valid: Boolean(standardContract),
+    }),
+    createGenerationEntryBoundaryCheck({
+      key: 'entry-actions-reference',
+      valid: generationEntry.actions === standardContract?.actions,
+    }),
+    createGenerationEntryBoundaryCheck({
+      key: 'entry-hits-reference',
+      valid: generationEntry.hits === standardContract?.hits,
+    }),
+    createGenerationEntryBoundaryCheck({
+      key: 'entry-deltas-reference',
+      valid: generationEntry.deltas === standardContract?.deltas,
+    }),
+    createGenerationEntryBoundaryCheck({
+      key: 'entry-value-source-slots-reference',
+      valid:
+        generationEntry.valueSourceSlots === standardContract?.valueSourceSlots,
+    }),
+    createGenerationEntryBoundaryCheck({
+      key: 'entry-runtime-input-source-present',
+      valid: Boolean(generationEntry.runtimeInputSource),
+    }),
+    createGenerationEntryBoundaryCheck({
+      key: 'entry-runtime-input-source-contract-reference',
+      valid:
+        generationEntry.runtimeInputSource?.standardContract ===
+        standardContract,
+    }),
+    createGenerationEntryBoundaryCheck({
+      key: 'entry-runtime-input-source-deltas-reference',
+      valid:
+        generationEntry.runtimeInputSource?.deltas === generationEntry.deltas,
+    }),
+    createGenerationEntryBoundaryCheck({
+      key: 'entry-runtime-input-source-value-source-slots-reference',
+      valid:
+        generationEntry.runtimeInputSource?.valueSourceSlots ===
+        generationEntry.valueSourceSlots,
+    }),
+    createGenerationEntryBoundaryCheck({
+      key: 'entry-contract-validation-valid',
+      valid: contractValidation.valid === true,
+    }),
+    createGenerationEntryBoundaryCheck({
+      key: 'entry-aggregate-validation-valid',
+      valid: aggregateValidation.valid === true,
+    }),
+  ];
+  const failedChecks = checks.filter(check => !check.valid);
+
+  return {
+    schemaVersion: 1,
+    sourceKind:
+      'azpr-action-hit-three-value-delta-standard-generation-entry-boundary',
+    status:
+      failedChecks.length > 0
+        ? 'standard-generation-entry-boundary-invalid'
+        : 'standard-generation-entry-boundary-ready',
+    contractName:
+      standardContract?.name ?? ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
+    entryPath: 'generationEntry',
+    generationInputPath: 'generationEntry.generationInput',
+    standardContractPath: 'generationEntry.standardContract',
+    actionsPath: 'generationEntry.actions',
+    hitsPath: 'generationEntry.hits',
+    deltasPath: 'generationEntry.deltas',
+    valueSourceSlotsPath: 'generationEntry.valueSourceSlots',
+    runtimeInputSourcePath: 'generationEntry.runtimeInputSource',
+    contractValidationPath: 'generationEntry.contractValidation',
+    aggregateValidationPath:
+      'generationEntry.contractValidation.aggregateValidation',
+    outputNames: generationEntry.outputNames ?? [],
+    requiredOutputNames: STANDARD_GENERATION_ENTRY_OUTPUT_NAMES,
+    standardOutputNames: [
+      ...STANDARD_GENERATION_ENTRY_OUTPUT_NAMES,
+      'contractValidation',
+    ],
+    standardOutputCount: STANDARD_GENERATION_ENTRY_OUTPUT_NAMES.length + 1,
+    actionCount: generationEntry.actions?.length ?? 0,
+    hitCount: generationEntry.hits?.length ?? 0,
+    deltaCount: generationEntry.deltas?.length ?? 0,
+    valueSourceSlotCount: generationEntry.valueSourceSlots?.length ?? 0,
+    contractValidationStatus: contractValidation.status ?? '',
+    contractValidationIssueCount: numberOrZero(contractValidation.issueCount),
+    aggregateValidationStatus: aggregateValidation.status ?? '',
+    aggregateValidationIssueCount: numberOrZero(aggregateValidation.issueCount),
+    checkCount: checks.length,
+    issueCount: failedChecks.length,
+    issueKeys: failedChecks.map(check => check.key),
+    checks,
+    ready: failedChecks.length === 0,
+    applied: false,
+  };
+}
+
+function createGenerationEntryBoundaryCheck({ key, valid }) {
+  return {
+    key,
+    status: valid ? 'valid' : 'invalid',
+    valid: Boolean(valid),
   };
 }
 
@@ -853,6 +990,12 @@ function createThreeValueGenerationBundleSummary({
       generationEntry.contractValidation?.aggregateValidation?.status ?? '',
     standardGenerationEntryAggregateValidationIssueCount:
       generationEntry.contractValidation?.aggregateValidation?.issueCount ?? 0,
+    standardGenerationEntryBoundaryStatus:
+      generationEntry.standardEntryBoundary?.status ?? '',
+    standardGenerationEntryBoundaryReady:
+      generationEntry.standardEntryBoundary?.ready === true,
+    standardGenerationEntryBoundaryIssueCount:
+      generationEntry.standardEntryBoundary?.issueCount ?? 0,
     generationOutputBoundaryStatus:
       generationOutputs.standardOutputBoundary?.status ?? '',
     generationOutputBoundaryReady:

@@ -24287,3 +24287,75 @@ runtimeContractGenerationOutputBoundaryIssueCount
 - `workbenchFlowModel.test.js` 覆盖 runtime output consistency view 继续透出 generation output boundary。
 - `threeValueRuntimeProjection.test.js` 覆盖 runtime projection / runtime outputs 标准摘要仍可正常构建。
 - `npm run test -- --run src\__tests__\features\workbenchFlowContractContext.test.js src\__tests__\features\workbenchFlowModel.test.js src\__tests__\simulation\threeValueRuntimeProjection.test.js`：通过，3 个测试文件、17 条测试。
+
+## 339. 生成层标准入口边界：Generation Entry Boundary
+
+### 339.1 字段变化
+
+`generationEntry` 新增标准入口边界摘要：
+
+```text
+generationEntry.standardEntryBoundary
+generationEntry.entryBoundary
+```
+
+其中 `entryBoundary` 是 `standardEntryBoundary` 的别名。边界对象用于固定 `Action -> Hit -> ThreeValueDelta` 标准入口本体的输入输出合同，核心字段包括：
+
+```text
+sourceKind = azpr-action-hit-three-value-delta-standard-generation-entry-boundary
+status = standard-generation-entry-boundary-ready | standard-generation-entry-boundary-invalid
+entryPath
+generationInputPath
+standardContractPath
+actionsPath
+hitsPath
+deltasPath
+valueSourceSlotsPath
+runtimeInputSourcePath
+contractValidationPath
+aggregateValidationPath
+standardOutputNames
+standardOutputCount
+checkCount
+issueCount
+issueKeys
+checks
+ready
+```
+
+`generationEntry.summary` 新增：
+
+```text
+entryBoundaryStatus
+entryBoundaryReady
+entryBoundaryIssueCount
+```
+
+`generationOutputs.summary` 新增：
+
+```text
+generationEntryBoundaryStatus
+generationEntryBoundaryReady
+generationEntryBoundaryIssueCount
+```
+
+`threeValueGenerationBundle.summary` 新增：
+
+```text
+standardGenerationEntryBoundaryStatus
+standardGenerationEntryBoundaryReady
+standardGenerationEntryBoundaryIssueCount
+```
+
+### 339.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只让生成层标准入口本体可直接报告 `generationInput -> standardContract/actions/hits/deltas/valueSourceSlots -> runtimeInputSource -> contractValidation` 是否完整且引用一致；三值计算结果、公式、倍率、applied delta 筛选、运行日志行、曲线数值和 UI 文案均不改变。
+
+### 339.3 验证
+
+- `threeValueGenerationBuilder.test.js` 覆盖 `standardEntryBoundary` ready 状态、标准 path、引用自检和 `entryBoundary` 别名。
+- `threeValueGenerationBuilder.test.js` 覆盖 bundle summary、generation entry summary 和 generation outputs summary 均透出标准入口边界状态。
+- `npm run test -- src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，5 个测试文件、28 条测试。
+- `npx prettier --check src/simulation/generation/threeValueGenerationBuilder.js src/__tests__/simulation/threeValueGenerationBuilder.test.js PROJECT_MANUAL.md`：通过。

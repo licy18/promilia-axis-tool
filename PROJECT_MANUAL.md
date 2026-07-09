@@ -13528,6 +13528,27 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：如继续补守门，优先覆盖多动作或筛选组合下的顶部主流程条；若主流程守门已经足够稳定，则转入生成层收束 `Action -> Hit -> ThreeValueDelta` 的统一生成入口。
 
+### 2026-07-10：生成层 - 标准入口边界
+
+本阶段属于：生成层。
+
+完成的可用能力：
+
+- `generationEntry` 现在直接暴露 `standardEntryBoundary` / `entryBoundary`，用于判断标准入口本体的 `generationInput`、`standardContract`、`actions`、`hits`、`deltas`、`valueSourceSlots`、`runtimeInputSource` 和 `contractValidation` 是否齐全且引用一致。
+- `generationEntry.summary`、`generationOutputs.summary` 和 `threeValueGenerationBundle.summary` 均透出入口边界状态、ready 状态和 issue 数量；后续 runtime / Workbench 可以不钻内部对象就确认标准入口是否完整。
+- 本阶段不改变三值计算结果、公式、倍率、applied delta 筛选、运行日志行、曲线数值、UI 文案或草稿保存 schema。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `339. 生成层标准入口边界：Generation Entry Boundary`。
+
+验收结果：
+
+- `npm run test -- src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，5 个测试文件、28 条测试。
+- `npx prettier --check src/simulation/generation/threeValueGenerationBuilder.js src/__tests__/simulation/threeValueGenerationBuilder.test.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅出现 Windows 换行提示。
+
+下一步：
+
+- 进入运行时层：让 runtime input / runtime summary 消费 `generationEntry.standardEntryBoundary`，把“标准入口本体 ready”纳入运行时边界摘要；仍不追真实公式、真实倍率或测试期数值平衡。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
