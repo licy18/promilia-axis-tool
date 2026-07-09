@@ -22907,3 +22907,60 @@ generationBatch.copiedFromBatchId = 原批次 batchId
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、70 条测试。
 - `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps runtime result flow usable after copying a generated action batch"`：通过，1 条浏览器级闭环测试。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 322. Workbench 批次结果入口：Batch Runtime Result Entry
+
+### 322.1 结构变化
+
+`Workbench.vue` 新增运行期动作结果映射：
+
+```text
+runtimeActionResults
+createRuntimeActionResultMap(runtimeProjection)
+```
+
+映射结构：
+
+```text
+runtimeActionResults[actionId] = {
+  actionId,
+  statePointId
+}
+```
+
+`ActionLibraryPanel.vue` 新增 prop：
+
+```text
+runtimeActionResults
+```
+
+批次摘要在运行期派生以下字段，用于把批次卡片连接到结果复盘：
+
+```text
+firstResultActionId
+firstResultStatePointId
+firstResultStartMs
+hasRuntimeResult
+```
+
+新增批次结果入口：
+
+```text
+workbench-summary-view-action-batch-result
+source = "action-batch-summary-result"
+kind = "select-runtime-result"
+```
+
+### 322.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要迁移。
+
+本阶段只增加 Workbench 运行期 UI 入口和 action -> statePoint 映射。三值计算结果、公式、倍率、证据字段、运行日志行和曲线数值均不改变。
+
+### 322.3 验证
+
+- `Workbench.test.js` 覆盖从批次“查看结果”进入 runtime result 后，再删除该生成批次，结果详情、曲线、日志和贡献拆分回退到可用动作。
+- `workbench-continuous-edit.spec.js` 覆盖浏览器级路径：载入批次 -> 批次查看结果 -> 删除批次 -> 查看回退结果 -> 编辑动作 -> 回到刷新后的结果定位。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、70 条测试。
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps runtime result flow usable after deleting a generated action batch"`：通过，1 条浏览器级闭环测试。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。

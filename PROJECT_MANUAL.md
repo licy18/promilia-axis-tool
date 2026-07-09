@@ -12636,6 +12636,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把排轴编辑到运行复盘的主路径整理成更完整的 Workbench 操作流，例如批量插入/复制/删除/撤销之后的结果定位与回到编辑路径统一验收。
 
+### 2026-07-09：UI 主流程可见闭环 - 批次结果入口
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 批次管理新增“查看结果”入口；用户可以从批次卡片直接进入该批次第一条可复盘动作的运行结果。
+- 这条入口会走现有主流程调度，进入后曲线、日志、三值详情和贡献拆分同步到同一个运行状态点。
+- 用户现在能完成：载入/生成批次 -> 在批次管理点击查看结果 -> 删除或调整批次 -> 查看刷新后的结果定位 -> 回到动作编辑继续修改。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、生成层合同、运行时输出或保存 schema。
+
+当前验证事实：
+
+- 批次卡片会选择组内最早且有运行状态点的动作作为结果入口；没有可复盘结果的动作不会被当作入口。
+- 删除生成批次的浏览器闭环现在从批次“查看结果”进入，之后仍能落到回退动作的曲线、日志和三值详情。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、70 条测试。
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps runtime result flow usable after deleting a generated action batch"`：通过，1 条浏览器级闭环测试。
+- `npx prettier --check src/views/Workbench.vue src/features/workbench/ActionLibraryPanel.vue src/__tests__/views/Workbench.test.js e2e/workbench-continuous-edit.spec.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把批次查看结果、复制批次、删除批次和撤销/重做串成同一条 Workbench 主流程验收，减少用户在排轴和结果复盘之间来回找入口的成本。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

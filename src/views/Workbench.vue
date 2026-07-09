@@ -169,6 +169,7 @@
         :active-actor-character-id="actionLibraryCharacterId"
         :actions="scenario.actions"
         :main-flow-command-surface="mainFlowCommandSurface"
+        :runtime-action-results="runtimeActionResults"
         :skills="actionLibrarySkills"
         :selected-action-id="selectedActionId"
         @select-action="selectAction"
@@ -639,6 +640,9 @@ const actionEditResultContext = computed(() =>
     source: actionEditSource.value,
     runtimeProjection: runtimeOutputs.value,
   })
+);
+const runtimeActionResults = computed(() =>
+  createRuntimeActionResultMap(runtimeOutputs.value)
 );
 const workbenchFlowModel = computed(() =>
   createWorkbenchFlowModel({
@@ -2140,6 +2144,26 @@ function findRuntimeStatePointContextById(runtimeProjection, statePointId) {
     createRuntimeStatePointContexts(runtimeProjection).find(
       context => context.statePointId === statePointId
     ) ?? null
+  );
+}
+
+function createRuntimeActionResultMap(runtimeProjection) {
+  return createRuntimeStatePointContexts(runtimeProjection).reduce(
+    (resultMap, context) => {
+      const actionId = context?.row?.actionId ?? context?.actionId ?? '';
+      const statePointId =
+        context?.statePointId ?? context?.runtimeStatePointId ?? '';
+      if (!actionId || !statePointId || resultMap[actionId]) {
+        return resultMap;
+      }
+
+      resultMap[actionId] = {
+        actionId,
+        statePointId,
+      };
+      return resultMap;
+    },
+    {}
   );
 }
 

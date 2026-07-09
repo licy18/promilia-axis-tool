@@ -1576,7 +1576,18 @@ test('keeps runtime result flow usable after copying a generated action batch', 
     page.getByTestId('workbench-action-batch-summary-count')
   ).toHaveText('1');
 
-  await page.getByTestId('workbench-flow-open-runtime').click();
+  const batchResultButton = page.getByTestId(
+    'workbench-summary-view-action-batch-result'
+  );
+  await expect(batchResultButton).toHaveAttribute(
+    'data-action-id',
+    'action-0002'
+  );
+  await expect(batchResultButton).toHaveAttribute(
+    'data-state-point-id',
+    /action-0002/
+  );
+  await batchResultButton.click();
   const batchRuntimeState = await waitForRuntimeAction(page, 'action-0002');
   expectRuntimeReviewState(batchRuntimeState, {
     phase: 'runtime-result',
@@ -1654,7 +1665,18 @@ test('keeps runtime result flow usable after deleting a generated action batch',
     page.getByTestId('workbench-action-batch-summary-count')
   ).toHaveText('1');
 
-  await page.getByTestId('workbench-flow-open-runtime').click();
+  const batchResultButton = page.getByTestId(
+    'workbench-summary-view-action-batch-result'
+  );
+  await expect(batchResultButton).toHaveAttribute(
+    'data-action-id',
+    'action-0002'
+  );
+  await expect(batchResultButton).toHaveAttribute(
+    'data-state-point-id',
+    /action-0002/
+  );
+  await batchResultButton.click();
   const batchRuntimeState = await waitForRuntimeAction(page, 'action-0002');
   expectRuntimeReviewState(batchRuntimeState, {
     phase: 'runtime-result',
@@ -1667,6 +1689,12 @@ test('keeps runtime result flow usable after deleting a generated action batch',
   expectRuntimeStatePointSynced(
     batchRuntimeState,
     batchRuntimeState.statePointId
+  );
+  await expect(
+    page.getByTestId('workbench-main-flow-workspace')
+  ).toHaveAttribute(
+    'data-main-flow-dispatch-source',
+    'action-batch-summary-result'
   );
 
   await page.getByTestId('workbench-summary-delete-action-batch').click();

@@ -159,6 +159,17 @@
         </strong>
         <div class="batch-summary-actions">
           <button
+            v-if="batch.hasRuntimeResult"
+            class="tool-button"
+            data-testid="workbench-summary-view-action-batch-result"
+            type="button"
+            :data-action-id="batch.firstResultActionId"
+            :data-state-point-id="batch.firstResultStatePointId"
+            @click.stop="focusBatchResult(batch)"
+          >
+            查看结果
+          </button>
+          <button
             class="tool-button"
             data-testid="workbench-summary-copy-action-batch"
             type="button"
@@ -366,6 +377,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  runtimeActionResults: {
+    type: Object,
+    default: () => ({}),
+  },
   skills: {
     type: Array,
     required: true,
@@ -419,11 +434,21 @@ const actionBatches = computed(() => {
 
     const startMs = Math.max(0, Number(action.startMs) || 0);
     const batchId = batch.batchId;
+    const runtimeResult = getActionRuntimeResult(action.id);
     const existing = batches.get(batchId);
     if (existing) {
       existing.count += 1;
       if (startMs < existing.minStartMs) {
         existing.firstActionId = action.id;
+      }
+      if (
+        runtimeResult?.statePointId &&
+        startMs < existing.firstResultStartMs
+      ) {
+        existing.firstResultActionId = action.id;
+        existing.firstResultStatePointId = runtimeResult.statePointId;
+        existing.firstResultStartMs = startMs;
+        existing.hasRuntimeResult = true;
       }
       existing.minStartMs = Math.min(existing.minStartMs, startMs);
       existing.maxStartMs = Math.max(existing.maxStartMs, startMs);
@@ -436,6 +461,12 @@ const actionBatches = computed(() => {
       batchId,
       count: 1,
       firstActionId: action.id,
+      firstResultActionId: runtimeResult?.statePointId ? action.id : '',
+      firstResultStatePointId: runtimeResult?.statePointId ?? '',
+      firstResultStartMs: runtimeResult?.statePointId
+        ? startMs
+        : Number.POSITIVE_INFINITY,
+      hasRuntimeResult: Boolean(runtimeResult?.statePointId),
       minStartMs: startMs,
       maxStartMs: startMs,
       selected: action.id === props.selectedActionId,
@@ -456,6 +487,32 @@ function selectBatchFirstAction(batch) {
   if (batch?.firstActionId) {
     emit('select-action', batch.firstActionId);
   }
+}
+
+function focusBatchResult(batch) {
+  const actionId = batch?.firstResultActionId ?? '';
+  const statePointId = batch?.firstResultStatePointId ?? '';
+  if (!actionId || !statePointId) {
+    return;
+  }
+
+  const action = props.mainFlowCommandSurface?.createRuntimeResultFlowAction?.({
+    source: 'action-batch-summary-result',
+    actionId,
+    statePointId,
+    enabled: true,
+  }) ?? {
+    kind: 'select-runtime-result',
+    source: 'action-batch-summary-result',
+    actionId,
+    statePointId,
+    canRun: true,
+  };
+  emit('dispatch-flow-action', action);
+}
+
+function getActionRuntimeResult(actionId) {
+  return props.runtimeActionResults?.[actionId] ?? null;
 }
 
 function isActionInSelectedBatch(action) {

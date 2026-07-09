@@ -4557,8 +4557,15 @@ describe('Workbench view', () => {
         .text()
     ).toBe('1');
 
+    const batchResultButton = wrapper.find(
+      '[data-testid="workbench-summary-view-action-batch-result"]'
+    );
+    expect(batchResultButton.attributes('data-action-id')).toBe('action-0002');
+    expect(batchResultButton.attributes('data-state-point-id')).toContain(
+      'action-0002'
+    );
     await wrapper
-      .find('[data-testid="workbench-flow-open-runtime"]')
+      .find('[data-testid="workbench-summary-view-action-batch-result"]')
       .trigger('click');
     await nextTick();
 
@@ -4571,6 +4578,14 @@ describe('Workbench view', () => {
       .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
       .text();
     expect(batchStatePointId).toContain('action-0002');
+    expect(
+      wrapper.find('[data-testid="workbench-main-flow-workspace"]').attributes()
+    ).toMatchObject({
+      'data-main-flow-dispatch-kind': 'select-runtime-result',
+      'data-main-flow-dispatch-source': 'action-batch-summary-result',
+      'data-main-flow-dispatch-action-id': 'action-0002',
+      'data-main-flow-dispatch-state-point-id': batchStatePointId,
+    });
 
     await wrapper
       .find('[data-testid="workbench-summary-delete-action-batch"]')
