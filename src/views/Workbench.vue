@@ -429,7 +429,10 @@ import {
 import {
   createWorkbenchFlowPlanController,
 } from '../features/workbench/workbenchFlowPlanController';
-import { createWorkbenchFlowRuntime } from '../features/workbench/workbenchFlowRuntime';
+import {
+  createWorkbenchActionMutationRuntimeSyncRequest,
+  createWorkbenchFlowRuntime,
+} from '../features/workbench/workbenchFlowRuntime';
 import {
   createWorkbenchMainFlowStatusView,
   createWorkbenchRuntimeReviewFlowView,
@@ -1159,10 +1162,11 @@ function copyAction(actionId) {
   ];
   selectedActionId.value = nextAction.id;
   syncActionLibraryCharacterIdFromDraft(nextAction);
-  workbenchFlowRuntime.applyActionMutationRuntimeSync({
+  applyActionMutationRuntimeSyncRequest({
     actionId: nextAction.id,
-    shouldSyncRuntimeResult: runtimeReviewState.shouldSyncRuntimeResult,
-    mutationSelectedAction: true,
+    runtimeReviewState,
+    selectedActionChanged: true,
+    affectedActionIds: [nextAction.id],
   });
   markDraftDirty();
 }
@@ -1179,9 +1183,7 @@ function deleteAction(actionId) {
   }
 
   const runtimeReviewState = captureActionMutationRuntimeReviewState();
-  const selectedRuntimeActionId = runtimeReviewState.selectedRuntimeActionId;
   const selectedWasRemoved = selectedActionId.value === actionId;
-  const selectedRuntimeWasRemoved = selectedRuntimeActionId === actionId;
   actionDrafts.value = actionDrafts.value.filter(
     action => action.id !== actionId
   );
@@ -1191,11 +1193,11 @@ function deleteAction(actionId) {
     selectedActionId.value = actionDrafts.value[nextIndex].id;
     syncActionLibraryCharacterIdFromDraft(actionDrafts.value[nextIndex]);
   }
-  workbenchFlowRuntime.applyActionMutationRuntimeSync({
+  applyActionMutationRuntimeSyncRequest({
     actionId: selectedActionId.value,
-    shouldSyncRuntimeResult: runtimeReviewState.shouldSyncRuntimeResult,
-    mutationSelectedAction: selectedWasRemoved,
-    mutationTouchedRuntimeAction: selectedRuntimeWasRemoved,
+    runtimeReviewState,
+    selectedActionChanged: selectedWasRemoved,
+    affectedActionIds: [actionId],
   });
   markDraftDirty();
 }
@@ -1222,9 +1224,7 @@ function deleteActionBatch(batchId) {
     batchActionIds.has(action.id)
   );
   const runtimeReviewState = captureActionMutationRuntimeReviewState();
-  const selectedRuntimeActionId = runtimeReviewState.selectedRuntimeActionId;
   const selectedWasRemoved = batchActionIds.has(selectedActionId.value);
-  const selectedRuntimeWasRemoved = batchActionIds.has(selectedRuntimeActionId);
   actionDrafts.value = actionDrafts.value.filter(
     action => !batchActionIds.has(action.id)
   );
@@ -1237,11 +1237,11 @@ function deleteActionBatch(batchId) {
     selectedActionId.value = actionDrafts.value[nextIndex].id;
     syncActionLibraryCharacterIdFromDraft(actionDrafts.value[nextIndex]);
   }
-  workbenchFlowRuntime.applyActionMutationRuntimeSync({
+  applyActionMutationRuntimeSyncRequest({
     actionId: selectedActionId.value,
-    shouldSyncRuntimeResult: runtimeReviewState.shouldSyncRuntimeResult,
-    mutationSelectedAction: selectedWasRemoved,
-    mutationTouchedRuntimeAction: selectedRuntimeWasRemoved,
+    runtimeReviewState,
+    selectedActionChanged: selectedWasRemoved,
+    affectedActionIds: batchActionIds,
   });
   markDraftDirty();
 }
@@ -1289,13 +1289,10 @@ function shiftActionBatch({ batchId, offsetMs }) {
     ...batchActions.map(action => Math.max(0, Number(action.startMs) || 0))
   );
   const runtimeReviewState = captureActionMutationRuntimeReviewState();
-  const selectedRuntimeActionId = runtimeReviewState.selectedRuntimeActionId;
   const selectedActionInBatch = batchActions.some(
     action => action.id === selectedActionId.value
   );
-  const selectedRuntimeActionInBatch = batchActions.some(
-    action => action.id === selectedRuntimeActionId
-  );
+  const affectedActionIds = batchActions.map(action => action.id);
   const appliedOffsetMs = clampNumber(
     offset,
     -minStartMs,
@@ -1321,13 +1318,11 @@ function shiftActionBatch({ batchId, offsetMs }) {
       startMs: nextStartMs,
     });
   });
-  workbenchFlowRuntime.applyActionMutationRuntimeSync({
-    actionId: selectedRuntimeActionInBatch
-      ? selectedRuntimeActionId
-      : selectedActionId.value,
-    shouldSyncRuntimeResult: runtimeReviewState.shouldSyncRuntimeResult,
-    mutationSelectedAction: selectedActionInBatch,
-    mutationTouchedRuntimeAction: selectedRuntimeActionInBatch,
+  applyActionMutationRuntimeSyncRequest({
+    fallbackActionId: selectedActionId.value,
+    runtimeReviewState,
+    selectedActionChanged: selectedActionInBatch,
+    affectedActionIds,
   });
   markDraftDirty();
 }
@@ -1658,6 +1653,12 @@ function applyActionMutationRuntimeSyncState(syncState = {}) {
   syncRuntimeResultForSelectedAction(syncState.actionId);
 }
 
+function applyActionMutationRuntimeSyncRequest(options = {}) {
+  workbenchFlowRuntime.applyActionMutationRuntimeSync(
+    createWorkbenchActionMutationRuntimeSyncRequest(options)
+  );
+}
+
 function captureActionMutationRuntimeReviewState() {
   return {
     shouldSyncRuntimeResult: shouldSyncRuntimeResultOnActionSelect(),
@@ -1907,10 +1908,11 @@ function addInsertedAction(actionPatch, options = {}) {
     ...actionDrafts.value.slice(placement.insertIndex),
   ];
   selectedActionId.value = nextAction.id;
-  workbenchFlowRuntime.applyActionMutationRuntimeSync({
+  applyActionMutationRuntimeSyncRequest({
     actionId: nextAction.id,
-    shouldSyncRuntimeResult: runtimeReviewState.shouldSyncRuntimeResult,
-    mutationSelectedAction: true,
+    runtimeReviewState,
+    selectedActionChanged: true,
+    affectedActionIds: [nextAction.id],
   });
   markDraftDirty();
   return {

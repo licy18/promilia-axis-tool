@@ -21612,3 +21612,59 @@ applyWorkbenchRuntimeViewPatch(patch, handlers)
 - `npm run test -- --run src/__tests__/features/workbenchRuntimeViewState.test.js src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、79 条测试。
 - `npm run test -- --run`：通过，37 个测试文件、248 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 297. UI 主流程能力块：Action Mutation Runtime Sync Request
+
+### 297.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`workbenchFlowRuntime` 新增 action mutation 到 runtime sync 的请求构造入口：
+
+```js
+createWorkbenchActionMutationRuntimeSyncRequest({
+  actionId,
+  fallbackActionId,
+  runtimeReviewState,
+  shouldSyncRuntimeResult,
+  selectedActionChanged,
+  affectedActionIds,
+  mutationTouchedRuntimeAction,
+  force,
+})
+```
+
+输出结构保持为 `applyActionMutationRuntimeSync()` 可直接消费的请求：
+
+```js
+{
+  actionId,
+  shouldSyncRuntimeResult,
+  mutationSelectedAction,
+  mutationTouchedRuntimeAction,
+  force,
+}
+```
+
+解析规则：
+
+- `shouldSyncRuntimeResult` 未显式传入时，从 `runtimeReviewState.shouldSyncRuntimeResult` 派生。
+- `affectedActionIds` 命中 `runtimeReviewState.selectedRuntimeActionId` 时，自动标记 `mutationTouchedRuntimeAction = true`。
+- 当未提供 `actionId`，且命中了当前 runtime action 时，优先使用 `selectedRuntimeActionId`；否则回退到 `fallbackActionId`。
+- `selectedActionChanged` 映射为既有 `mutationSelectedAction`，保持 flow runtime 内部同步判定不变。
+
+消费方变化：
+
+- `Workbench.vue` 新增本地 `applyActionMutationRuntimeSyncRequest()`，只负责把共享 request 交给 `workbenchFlowRuntime.applyActionMutationRuntimeSync()`。
+- 新增、复制、删除、批量删除、批量移动动作改为声明 `affectedActionIds` 和 `selectedActionChanged`，不再在页面层各自手算 `mutationTouchedRuntimeAction`。
+
+### 297.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程 action mutation runtime sync 的内部请求合同，不新增持久字段，不需要数据迁移。
+
+### 297.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowRuntime.test.js`，覆盖 action mutation runtime sync request 的新增/复制、批量移动 runtime action 优先、删除 fallback 三类场景。
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、71 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、249 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

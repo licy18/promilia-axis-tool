@@ -1,7 +1,62 @@
 import { describe, expect, it } from 'vitest';
-import { createWorkbenchFlowRuntime } from '../../features/workbench/workbenchFlowRuntime';
+import {
+  createWorkbenchActionMutationRuntimeSyncRequest,
+  createWorkbenchFlowRuntime,
+} from '../../features/workbench/workbenchFlowRuntime';
 
 describe('workbench flow runtime', () => {
+  it('creates action mutation runtime sync requests from mutation context', () => {
+    const runtimeReviewState = {
+      shouldSyncRuntimeResult: true,
+      selectedRuntimeActionId: 'action-runtime',
+    };
+
+    expect(
+      createWorkbenchActionMutationRuntimeSyncRequest({
+        actionId: 'action-copy',
+        runtimeReviewState,
+        selectedActionChanged: true,
+        affectedActionIds: ['action-copy'],
+      })
+    ).toEqual({
+      actionId: 'action-copy',
+      shouldSyncRuntimeResult: true,
+      mutationSelectedAction: true,
+      mutationTouchedRuntimeAction: false,
+      force: false,
+    });
+
+    expect(
+      createWorkbenchActionMutationRuntimeSyncRequest({
+        fallbackActionId: 'action-selected',
+        runtimeReviewState,
+        selectedActionChanged: true,
+        affectedActionIds: ['action-runtime', 'action-selected'],
+      })
+    ).toEqual({
+      actionId: 'action-runtime',
+      shouldSyncRuntimeResult: true,
+      mutationSelectedAction: true,
+      mutationTouchedRuntimeAction: true,
+      force: false,
+    });
+
+    expect(
+      createWorkbenchActionMutationRuntimeSyncRequest({
+        actionId: 'action-next',
+        runtimeReviewState,
+        selectedActionChanged: false,
+        affectedActionIds: ['action-runtime'],
+      })
+    ).toEqual({
+      actionId: 'action-next',
+      shouldSyncRuntimeResult: true,
+      mutationSelectedAction: false,
+      mutationTouchedRuntimeAction: true,
+      force: false,
+    });
+  });
+
   it('applies action edit flow plans through shared action edit state', () => {
     const calls = [];
     const runtime = createWorkbenchFlowRuntime({

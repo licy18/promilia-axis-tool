@@ -6,6 +6,39 @@ import {
   createWorkbenchRuntimePointSelectionViewPatch,
 } from './workbenchRuntimeViewState';
 
+export function createWorkbenchActionMutationRuntimeSyncRequest({
+  actionId = '',
+  fallbackActionId = '',
+  runtimeReviewState = null,
+  shouldSyncRuntimeResult,
+  selectedActionChanged = false,
+  affectedActionIds = [],
+  mutationTouchedRuntimeAction,
+  force = false,
+} = {}) {
+  const affectedActionIdSet = createActionIdSet(affectedActionIds);
+  const selectedRuntimeActionId =
+    runtimeReviewState?.selectedRuntimeActionId ?? '';
+  const runtimeActionAffected = Boolean(
+    selectedRuntimeActionId && affectedActionIdSet.has(selectedRuntimeActionId)
+  );
+  return {
+    actionId:
+      actionId ||
+      (runtimeActionAffected ? selectedRuntimeActionId : fallbackActionId) ||
+      '',
+    shouldSyncRuntimeResult:
+      typeof shouldSyncRuntimeResult === 'boolean'
+        ? shouldSyncRuntimeResult
+        : Boolean(runtimeReviewState?.shouldSyncRuntimeResult),
+    mutationSelectedAction: Boolean(selectedActionChanged),
+    mutationTouchedRuntimeAction: Boolean(
+      mutationTouchedRuntimeAction ?? runtimeActionAffected
+    ),
+    force: Boolean(force),
+  };
+}
+
 export function createWorkbenchFlowRuntime({
   actionExists = () => false,
   selectAction = () => {},
@@ -359,4 +392,12 @@ function createFlowRuntimeResult({ applied, kind = '', reason = '' } = {}) {
     kind: kind ?? '',
     reason: applied ? '' : reason,
   };
+}
+
+function createActionIdSet(actionIds = []) {
+  return new Set(
+    Array.from(actionIds)
+      .map(actionId => actionId ?? '')
+      .filter(Boolean)
+  );
 }

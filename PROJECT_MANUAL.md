@@ -10241,6 +10241,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 Workbench 根页面里动作新增、删除、复制、批量移动后的 runtime sync 是否还能进一步收束为更统一的 mutation -> flow runtime 合同。
 
+### 2026-07-09：UI 主流程能力块 - Action Mutation Runtime Sync Request
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchFlowRuntime` 新增 `createWorkbenchActionMutationRuntimeSyncRequest()`，把 action mutation 的受影响动作集合、runtime review 快照和当前选择变化统一转换为 `applyActionMutationRuntimeSync()` 请求。
+- `Workbench.vue` 的新增/复制/删除/批量删除/批量移动动作不再各自手算 `mutationTouchedRuntimeAction` 和 `shouldSyncRuntimeResult`，统一通过共享 request 进入 flow runtime。
+- 批量移动仍优先刷新当前选中的 runtime action；删除场景仍使用删除后的当前动作作为同步 fallback，保持既有回看行为不变。
+- 本阶段只收束 UI 主流程 action mutation 到 runtime sync 的合同，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- flow runtime 单测覆盖新增/复制、批量移动优先 runtime action、删除后 fallback action 三类 request 生成。
+- Workbench 页面测试继续覆盖 runtime 视角下新增无结果动作、删除选中 runtime 动作、复制动作和批量移动后的结果同步。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、71 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、249 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查普通动作字段编辑和 timeline 拖拽/调时后的结果回看是否还能进一步复用 action mutation / edit-result 两条主流程合同，避免 Workbench 页面层继续扩散编辑后状态同步逻辑。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
