@@ -70,6 +70,7 @@ export function createActionHitThreeValueRuntimeInput({
     deltas: appliedDeltas,
     appliedDeltas,
     ignoredDeltaCount: ignoredDeltas.length,
+    generationReadSources: resolvedSource.generationReadSources,
     summary,
     applied: true,
   };
@@ -81,22 +82,41 @@ function resolveActionHitThreeValueRuntimeInputSource({
   actionHitThreeValueDeltaGeneration,
   threeValueGenerationLayer,
 }) {
-  const generationOutputRuntimeInputSource =
-    generationOutputs?.runtimeInputSource ??
-    generationOutputs?.runtimeInput ??
-    generationOutputs?.outputs?.runtimeInputSource ??
-    generationOutputs?.outputs?.runtimeInput ??
-    null;
-  const resolvedRuntimeInputSource =
-    runtimeInputSource ?? generationOutputRuntimeInputSource;
+  const runtimeInputSourceReadSource =
+    resolveRuntimeInputSourceReadSource({
+      runtimeInputSource,
+      generationOutputs,
+    }) ??
+    createGenerationReadSourceCandidate({
+      key: 'runtimeInputSource',
+      path: '',
+      tier: 'missing',
+      value: null,
+    });
+  const resolvedRuntimeInputSource = runtimeInputSourceReadSource.value;
   const generationLayer =
     actionHitThreeValueDeltaGeneration?.threeValueGenerationLayer ??
     threeValueGenerationLayer;
-  const standardContract = resolveActionHitThreeValueDeltaStandardContract({
+  const standardContractReadSource =
+    resolveActionHitThreeValueDeltaStandardContractReadSource({
+      generationOutputs,
+      runtimeInputSource: resolvedRuntimeInputSource,
+      runtimeInputSourceReadSource,
+      actionHitThreeValueDeltaGeneration,
+      threeValueGenerationLayer: generationLayer,
+    });
+  const standardContract = standardContractReadSource.value;
+  const deltaReadSource = resolveRuntimeInputDeltaReadSource({
     generationOutputs,
     runtimeInputSource: resolvedRuntimeInputSource,
-    actionHitThreeValueDeltaGeneration,
-    threeValueGenerationLayer: generationLayer,
+    runtimeInputSourceReadSource,
+    standardContract,
+  });
+  const generationReadSources = createActionHitThreeValueGenerationReadSources({
+    generationOutputs,
+    runtimeInputSourceReadSource,
+    standardContractReadSource,
+    deltaReadSource,
   });
 
   return {
@@ -123,41 +143,54 @@ function resolveActionHitThreeValueRuntimeInputSource({
       generationLayer?.status ??
       null,
     standardContract,
-    deltas:
-      resolvedRuntimeInputSource?.deltas ??
-      generationOutputs?.deltas ??
-      generationOutputs?.outputs?.deltas ??
-      standardContract?.deltas ??
-      [],
+    deltas: deltaReadSource.value ?? [],
+    generationReadSources,
   };
 }
 
-function resolveActionHitThreeValueDeltaStandardContract({
-  generationOutputs,
+function resolveRuntimeInputSourceReadSource({
   runtimeInputSource,
-  actionHitThreeValueDeltaGeneration,
-  threeValueGenerationLayer,
+  generationOutputs,
 } = {}) {
-  if (runtimeInputSource?.standardContract) {
-    return runtimeInputSource.standardContract;
-  }
+  return selectGenerationReadSourceCandidate([
+    createGenerationReadSourceCandidate({
+      key: 'runtimeInputSource',
+      path: 'runtimeInputSource',
+      tier: 'explicit-runtime-input-source',
+      value: runtimeInputSource,
+    }),
+    createGenerationReadSourceCandidate({
+      key: 'outputs.runtimeInputSource',
+      path: 'generationOutputs.outputs.runtimeInputSource',
+      tier: 'standard-output',
+      value: generationOutputs?.outputs?.runtimeInputSource,
+    }),
+    createGenerationReadSourceCandidate({
+      key: 'outputs.runtimeInput',
+      path: 'generationOutputs.outputs.runtimeInput',
+      tier: 'standard-output',
+      value: generationOutputs?.outputs?.runtimeInput,
+      aliasFor: 'runtimeInputSource',
+    }),
+    createGenerationReadSourceCandidate({
+      key: 'runtimeInputSource',
+      path: 'generationOutputs.runtimeInputSource',
+      tier: 'generation-output-field',
+      value: generationOutputs?.runtimeInputSource,
+    }),
+    createGenerationReadSourceCandidate({
+      key: 'runtimeInput',
+      path: 'generationOutputs.runtimeInput',
+      tier: 'generation-output-field',
+      value: generationOutputs?.runtimeInput,
+      aliasFor: 'runtimeInputSource',
+    }),
+  ]);
+}
 
-  if (generationOutputs?.standardContract) {
-    return generationOutputs.standardContract;
-  }
-
-  if (generationOutputs?.outputs?.standardContract) {
-    return generationOutputs.outputs.standardContract;
-  }
-
-  if (actionHitThreeValueDeltaGeneration?.standardContract) {
-    return actionHitThreeValueDeltaGeneration.standardContract;
-  }
-
-  if (threeValueGenerationLayer?.standardContract) {
-    return threeValueGenerationLayer.standardContract;
-  }
-
+function createFallbackActionHitThreeValueDeltaStandardContract(
+  threeValueGenerationLayer
+) {
   return {
     schemaVersion: 1,
     sourceKind:
@@ -174,6 +207,236 @@ function resolveActionHitThreeValueDeltaStandardContract({
     summary: threeValueGenerationLayer?.summary ?? {},
     applied: false,
   };
+}
+
+function resolveActionHitThreeValueDeltaStandardContractReadSource({
+  generationOutputs,
+  runtimeInputSource,
+  runtimeInputSourceReadSource,
+  actionHitThreeValueDeltaGeneration,
+  threeValueGenerationLayer,
+} = {}) {
+  const explicitRuntimeInputSource =
+    runtimeInputSourceReadSource?.tier === 'explicit-runtime-input-source';
+  const runtimeInputSourceContractCandidate =
+    createGenerationReadSourceCandidate({
+      key: `${runtimeInputSourceReadSource?.key ?? 'runtimeInputSource'}.standardContract`,
+      path: joinGenerationReadSourcePath(
+        runtimeInputSourceReadSource?.path,
+        'standardContract'
+      ),
+      tier: explicitRuntimeInputSource
+        ? 'explicit-runtime-input-source-field'
+        : 'runtime-input-source-field',
+      value: runtimeInputSource?.standardContract,
+    });
+  const selected = selectGenerationReadSourceCandidate([
+    ...(explicitRuntimeInputSource
+      ? [runtimeInputSourceContractCandidate]
+      : []),
+    createGenerationReadSourceCandidate({
+      key: 'outputs.standardContract',
+      path: 'generationOutputs.outputs.standardContract',
+      tier: 'standard-output',
+      value: generationOutputs?.outputs?.standardContract,
+    }),
+    createGenerationReadSourceCandidate({
+      key: 'standardContract',
+      path: 'generationOutputs.standardContract',
+      tier: 'generation-output-field',
+      value: generationOutputs?.standardContract,
+    }),
+    ...(!explicitRuntimeInputSource
+      ? [runtimeInputSourceContractCandidate]
+      : []),
+    createGenerationReadSourceCandidate({
+      key: 'actionHitThreeValueDeltaGeneration.standardContract',
+      path: 'actionHitThreeValueDeltaGeneration.standardContract',
+      tier: 'generation-entry-field',
+      value: actionHitThreeValueDeltaGeneration?.standardContract,
+    }),
+    createGenerationReadSourceCandidate({
+      key: 'threeValueGenerationLayer.standardContract',
+      path: 'threeValueGenerationLayer.standardContract',
+      tier: 'generation-layer-field',
+      value: threeValueGenerationLayer?.standardContract,
+    }),
+  ]);
+
+  if (selected) {
+    return selected;
+  }
+
+  return createGenerationReadSourceCandidate({
+    key: 'fallbackStandardContract',
+    path: 'fallbackStandardContract',
+    tier: 'fallback-standard-contract',
+    value: createFallbackActionHitThreeValueDeltaStandardContract(
+      threeValueGenerationLayer
+    ),
+  });
+}
+
+function resolveRuntimeInputDeltaReadSource({
+  generationOutputs,
+  runtimeInputSource,
+  runtimeInputSourceReadSource,
+  standardContract,
+} = {}) {
+  const explicitRuntimeInputSource =
+    runtimeInputSourceReadSource?.tier === 'explicit-runtime-input-source';
+  const runtimeInputSourceDeltaCandidate = createGenerationReadSourceCandidate({
+    key: `${runtimeInputSourceReadSource?.key ?? 'runtimeInputSource'}.deltas`,
+    path: joinGenerationReadSourcePath(
+      runtimeInputSourceReadSource?.path,
+      'deltas'
+    ),
+    tier: explicitRuntimeInputSource
+      ? 'explicit-runtime-input-source-field'
+      : 'runtime-input-source-field',
+    value: runtimeInputSource?.deltas,
+  });
+
+  return (
+    selectGenerationReadSourceCandidate([
+      ...(explicitRuntimeInputSource ? [runtimeInputSourceDeltaCandidate] : []),
+      createGenerationReadSourceCandidate({
+        key: 'outputs.deltas',
+        path: 'generationOutputs.outputs.deltas',
+        tier: 'standard-output',
+        value: generationOutputs?.outputs?.deltas,
+      }),
+      createGenerationReadSourceCandidate({
+        key: 'deltas',
+        path: 'generationOutputs.deltas',
+        tier: 'generation-output-field',
+        value: generationOutputs?.deltas,
+      }),
+      ...(!explicitRuntimeInputSource
+        ? [runtimeInputSourceDeltaCandidate]
+        : []),
+      createGenerationReadSourceCandidate({
+        key: 'standardContract.deltas',
+        path: 'standardContract.deltas',
+        tier: 'standard-contract-field',
+        value: standardContract?.deltas,
+      }),
+    ]) ??
+    createGenerationReadSourceCandidate({
+      key: 'deltas',
+      path: '',
+      tier: 'missing',
+      value: [],
+    })
+  );
+}
+
+function createActionHitThreeValueGenerationReadSources({
+  generationOutputs,
+  runtimeInputSourceReadSource,
+  standardContractReadSource,
+  deltaReadSource,
+}) {
+  const inputs = {
+    runtimeInputSource: createGenerationReadSourceView(
+      runtimeInputSourceReadSource,
+      'runtimeInputSource'
+    ),
+    standardContract: createGenerationReadSourceView(
+      standardContractReadSource,
+      'standardContract'
+    ),
+    deltas: createGenerationReadSourceView(deltaReadSource, 'deltas'),
+  };
+  const inputNames = Object.keys(inputs);
+  const standardOutputNames = inputNames.filter(
+    inputName => inputs[inputName].standardOutputPresent
+  );
+  const fallbackInputNames = inputNames.filter(
+    inputName => inputs[inputName].fallback
+  );
+
+  return {
+    schemaVersion: 1,
+    sourceKind:
+      'azpr-action-hit-three-value-runtime-input-generation-read-sources',
+    status: generationOutputs
+      ? 'runtime-input-generation-read-sources-ready'
+      : 'runtime-input-generation-read-sources-legacy',
+    generationOutputsSourceKind: generationOutputs?.sourceKind ?? '',
+    generationOutputsStatus: generationOutputs?.status ?? '',
+    inputs,
+    standardOutputNames,
+    fallbackInputNames,
+    standardOutputCount: standardOutputNames.length,
+    fallbackInputCount: fallbackInputNames.length,
+    usesLegacyGenerationFallback: inputNames.some(
+      inputName => inputs[inputName].legacyGenerationFallback
+    ),
+  };
+}
+
+function createGenerationReadSourceView(candidate, inputName) {
+  const sourceTier = candidate?.tier ?? 'missing';
+  return {
+    inputName,
+    sourceKey: candidate?.key ?? inputName,
+    sourcePath: candidate?.path ?? '',
+    sourceTier,
+    aliasFor: candidate?.aliasFor ?? '',
+    present: Boolean(candidate?.present),
+    fallback:
+      Boolean(candidate?.present) &&
+      ![
+        'standard-output',
+        'explicit-runtime-input-source',
+        'explicit-runtime-input-source-field',
+      ].includes(sourceTier),
+    standardOutputPresent:
+      Boolean(candidate?.present) && sourceTier === 'standard-output',
+    legacyGenerationFallback:
+      Boolean(candidate?.present) &&
+      [
+        'generation-output-field',
+        'runtime-input-source-field',
+        'generation-entry-field',
+        'generation-layer-field',
+        'fallback-standard-contract',
+        'standard-contract-field',
+      ].includes(sourceTier),
+  };
+}
+
+function createGenerationReadSourceCandidate({
+  key,
+  path,
+  tier,
+  value,
+  aliasFor = '',
+}) {
+  return {
+    key,
+    path,
+    tier,
+    value,
+    aliasFor,
+    present: hasGenerationReadSourceValue(value),
+  };
+}
+
+function selectGenerationReadSourceCandidate(candidates) {
+  return candidates.find(candidate => candidate.present) ?? null;
+}
+
+function joinGenerationReadSourcePath(sourcePath, fieldPath) {
+  return sourcePath && fieldPath ? `${sourcePath}.${fieldPath}` : '';
+}
+
+function hasGenerationReadSourceValue(value) {
+  if (Array.isArray(value)) {
+    return true;
+  }
+  return value !== null && value !== undefined;
 }
 
 function createRuntimeInputSourceKind(resolvedSource) {

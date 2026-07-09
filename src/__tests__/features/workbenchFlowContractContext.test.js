@@ -72,6 +72,23 @@ describe('workbench flow contract context', () => {
           appliedDeltaSource: 'threeValueRuntimeInput.appliedDeltas',
           ignoredDeltaCount: 2,
           appliedOnly: true,
+          generationReadSources: {
+            status: 'runtime-input-generation-read-sources-ready',
+            standardOutputCount: 3,
+            fallbackInputCount: 0,
+            usesLegacyGenerationFallback: false,
+            inputs: {
+              runtimeInputSource: {
+                sourcePath: 'generationOutputs.outputs.runtimeInputSource',
+              },
+              standardContract: {
+                sourcePath: 'generationOutputs.outputs.standardContract',
+              },
+              deltas: {
+                sourcePath: 'generationOutputs.outputs.deltas',
+              },
+            },
+          },
           summary: {
             inputDeltaCount: 3,
             appliedDeltaCount: 1,
@@ -160,6 +177,16 @@ describe('workbench flow contract context', () => {
         inputDeltaCount: 3,
         appliedDeltaCount: 1,
         ignoredDeltaCount: 2,
+        generationReadSourcesStatus:
+          'runtime-input-generation-read-sources-ready',
+        generationReadStandardOutputCount: 3,
+        generationReadFallbackInputCount: 0,
+        generationReadUsesLegacyFallback: false,
+        generationRuntimeInputSourcePath:
+          'generationOutputs.outputs.runtimeInputSource',
+        generationStandardContractSourcePath:
+          'generationOutputs.outputs.standardContract',
+        generationDeltasSourcePath: 'generationOutputs.outputs.deltas',
         appliedOnly: true,
         ready: true,
       },

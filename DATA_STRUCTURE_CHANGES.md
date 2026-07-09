@@ -23020,3 +23020,84 @@ outputReadSources.usesLegacyProjectionFallback
 - `npm run test:e2e:workbench-flow`：通过，5 条浏览器级主流程测试。
 - `npx prettier --check src/simulation/runtime/threeValueRuntimeOutputConsumer.js src/__tests__/features/runtimeProjectionPoints.test.js PROJECT_MANUAL.md`：通过。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 324. Runtime Input 生成层读取来源诊断：Generation Read Sources
+
+### 324.1 结构变化
+
+`createActionHitThreeValueRuntimeInput()` 返回的 runtime input 新增运行期诊断字段：
+
+```text
+generationReadSources
+```
+
+`generationReadSources` 描述 runtime input 从生成层读取以下三类输入的实际来源：
+
+```text
+generationReadSources.inputs.runtimeInputSource
+generationReadSources.inputs.standardContract
+generationReadSources.inputs.deltas
+```
+
+每个输入来源包含：
+
+```text
+inputName
+sourceKey
+sourcePath
+sourceTier
+aliasFor
+present
+fallback
+standardOutputPresent
+legacyGenerationFallback
+```
+
+汇总字段：
+
+```text
+generationReadSources.standardOutputNames
+generationReadSources.fallbackInputNames
+generationReadSources.standardOutputCount
+generationReadSources.fallbackInputCount
+generationReadSources.usesLegacyGenerationFallback
+```
+
+读取优先级调整为：
+
+```text
+显式 runtimeInputSource 参数
+generationOutputs.outputs.*
+generationOutputs 旧直挂字段
+runtimeInputSource 内部字段
+generation entry / generation layer fallback
+```
+
+其中显式 `runtimeInputSource` 参数保持最高优先级；仅传入 `generationOutputs` 时，标准 `generationOutputs.outputs.runtimeInputSource`、`generationOutputs.outputs.standardContract`、`generationOutputs.outputs.deltas` 优先于旧直挂字段。
+
+`createWorkbenchFlowContractContext().runtimeInput` 新增运行期合同字段：
+
+```text
+generationReadSourcesStatus
+generationReadStandardOutputCount
+generationReadFallbackInputCount
+generationReadUsesLegacyFallback
+generationRuntimeInputSourcePath
+generationStandardContractSourcePath
+generationDeltasSourcePath
+```
+
+### 324.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只新增运行期诊断结构和生成层输入读取优先级；三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值和 UI 文案均不改变。
+
+### 324.3 验证
+
+- `actionHitThreeValueRuntimeInput.test.js` 覆盖标准 `generationOutputs.outputs.*` 与旧字段冲突时，runtime input 优先读取标准输出。
+- `workbenchFlowContractContext.test.js` 覆盖 Workbench 合同上下文承接 runtime input 的生成层读取来源状态和来源路径。
+- `npm run test -- --run src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，4 个测试文件、19 条测试。
+- `npm run test:e2e:workbench-flow`：通过，5 条浏览器级主流程测试。
+- `npx prettier --check src/simulation/runtime/actionHitThreeValueRuntimeInput.js src/features/workbench/workbenchFlowContractContext.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/features/workbenchFlowContractContext.test.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。

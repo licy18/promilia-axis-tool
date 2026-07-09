@@ -12765,6 +12765,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续运行时层或生成层能力块：把 runtime output 读取来源诊断接入更上层合同验收，随后再用 `npm run test:e2e:workbench-flow` 守住 UI 主流程闭环。
 
+### 2026-07-09：生成层 - Runtime input 标准生成输出入口
+
+本阶段属于：生成层。
+
+完成的可用能力：
+
+- `createActionHitThreeValueRuntimeInput()` 现在会记录 `runtimeInputSource`、`standardContract`、`deltas` 实际从标准 `generationOutputs.outputs.*`、显式 `runtimeInputSource`、generationOutputs 旧直挂字段还是 generation entry / layer fallback 读取。
+- 当标准 `generationOutputs.outputs.*` 与旧直挂字段冲突时，runtime input 稳定优先消费标准 outputs；显式传入的 `runtimeInputSource` 仍保持显式入口优先。
+- Workbench 合同上下文现在能看到 runtime input 的生成层读取来源状态、标准输出计数、fallback 计数和三条关键来源路径。
+- 本阶段不改变 UI 文案、三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值或草稿保存 schema。
+
+当前验证事实：
+
+- 回归用例故意让 `generationOutputs.outputs.*`、generationOutputs 旧字段和 runtime input source 内部字段返回不同 delta / contract，确认 runtime input 取标准 outputs。
+- 既有 runtime projection 路径仍能从 legacy generation layer 和显式 runtime input source fallback 正常生成曲线、日志和 summary。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，4 个测试文件、19 条测试。
+- `npm run test:e2e:workbench-flow`：通过，5 条浏览器级主流程测试。
+- `npx prettier --check src/simulation/runtime/actionHitThreeValueRuntimeInput.js src/features/workbench/workbenchFlowContractContext.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/features/workbenchFlowContractContext.test.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续生成层能力块：把 `generationOutputs.outputs.*` 的标准入口进一步接入 projection / Workbench 的端到端合同验收，再用主流程 e2e 防止 UI 闭环回退。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

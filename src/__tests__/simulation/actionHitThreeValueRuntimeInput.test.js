@@ -181,6 +181,41 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
       runtimeInputSourceKind:
         'azpr-runtime-input-source-from-generation-builder',
       runtimeInputSourceStatus: 'runtime-input-source-ready',
+      generationReadSources: {
+        sourceKind:
+          'azpr-action-hit-three-value-runtime-input-generation-read-sources',
+        status: 'runtime-input-generation-read-sources-ready',
+        standardOutputNames: [
+          'runtimeInputSource',
+          'standardContract',
+          'deltas',
+        ],
+        fallbackInputNames: [],
+        usesLegacyGenerationFallback: false,
+        inputs: {
+          runtimeInputSource: {
+            sourceKey: 'outputs.runtimeInputSource',
+            sourcePath: 'generationOutputs.outputs.runtimeInputSource',
+            sourceTier: 'standard-output',
+            fallback: false,
+            standardOutputPresent: true,
+          },
+          standardContract: {
+            sourceKey: 'outputs.standardContract',
+            sourcePath: 'generationOutputs.outputs.standardContract',
+            sourceTier: 'standard-output',
+            fallback: false,
+            standardOutputPresent: true,
+          },
+          deltas: {
+            sourceKey: 'outputs.deltas',
+            sourcePath: 'generationOutputs.outputs.deltas',
+            sourceTier: 'standard-output',
+            fallback: false,
+            standardOutputPresent: true,
+          },
+        },
+      },
       summary: {
         generationOutputsSourceKind: 'azpr-three-value-generation-outputs',
         generationOutputsStatus: 'generation-outputs-ready',
@@ -203,4 +238,160 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
       }),
     ]);
   });
+
+  it('prefers standard generation outputs over legacy generation fields', () => {
+    const standardDelta = createRuntimeInputDelta({
+      sourceDeltaId: 'standard-output-delta',
+      actionId: 'action-standard',
+      delta: 420,
+    });
+    const directDelta = createRuntimeInputDelta({
+      sourceDeltaId: 'direct-generation-output-delta',
+      actionId: 'action-direct',
+      delta: 900,
+    });
+    const runtimeSourceDelta = createRuntimeInputDelta({
+      sourceDeltaId: 'runtime-input-source-delta',
+      actionId: 'action-runtime-source',
+      delta: 777,
+    });
+    const standardContract = createRuntimeInputContract({
+      sourceKind: 'standard-contract-from-outputs',
+      delta: standardDelta,
+    });
+    const directContract = createRuntimeInputContract({
+      sourceKind: 'direct-generation-output-contract',
+      delta: directDelta,
+    });
+    const runtimeSourceContract = createRuntimeInputContract({
+      sourceKind: 'runtime-input-source-contract',
+      delta: runtimeSourceDelta,
+    });
+    const generationOutputs = {
+      sourceKind: 'azpr-three-value-generation-outputs',
+      status: 'generation-outputs-ready',
+      outputs: {
+        runtimeInputSource: {
+          sourceKind: 'azpr-runtime-input-source-from-generation-builder',
+          status: 'runtime-input-source-ready',
+          generationEntrySourceKind:
+            'azpr-action-hit-three-value-delta-generation-entry',
+          generationEntryStatus:
+            'action-hit-three-value-delta-generation-ready',
+          generationLayerSourceKind:
+            'azpr-standard-three-value-generation-layer',
+          generationLayerStatus: 'standard-three-value-generation-layer-ready',
+          standardContract: runtimeSourceContract,
+          deltas: [runtimeSourceDelta],
+        },
+        standardContract,
+        deltas: [standardDelta],
+      },
+      runtimeInputSource: {
+        sourceKind: 'legacy-runtime-input-source',
+        status: 'legacy-runtime-input-source-ready',
+        standardContract: runtimeSourceContract,
+        deltas: [runtimeSourceDelta],
+      },
+      standardContract: directContract,
+      deltas: [directDelta],
+    };
+
+    const runtimeInput = createActionHitThreeValueRuntimeInput({
+      generationOutputs,
+    });
+
+    expect(runtimeInput).toMatchObject({
+      sourceKind: 'azpr-runtime-input-from-generation-builder-source',
+      runtimeInputSourceKind:
+        'azpr-runtime-input-source-from-generation-builder',
+      standardContractSourceKind: 'standard-contract-from-outputs',
+      inputSourceKind: 'standard-contract-from-outputs',
+      generationReadSources: {
+        inputs: {
+          runtimeInputSource: {
+            sourceKey: 'outputs.runtimeInputSource',
+            sourcePath: 'generationOutputs.outputs.runtimeInputSource',
+            sourceTier: 'standard-output',
+            fallback: false,
+          },
+          standardContract: {
+            sourceKey: 'outputs.standardContract',
+            sourcePath: 'generationOutputs.outputs.standardContract',
+            sourceTier: 'standard-output',
+            fallback: false,
+          },
+          deltas: {
+            sourceKey: 'outputs.deltas',
+            sourcePath: 'generationOutputs.outputs.deltas',
+            sourceTier: 'standard-output',
+            fallback: false,
+          },
+        },
+        standardOutputNames: [
+          'runtimeInputSource',
+          'standardContract',
+          'deltas',
+        ],
+        fallbackInputNames: [],
+        usesLegacyGenerationFallback: false,
+      },
+      summary: {
+        standardContractSourceKind: 'standard-contract-from-outputs',
+        inputDeltaCount: 1,
+        appliedDeltaCount: 1,
+      },
+    });
+    expect(runtimeInput.appliedDeltas).toEqual([
+      expect.objectContaining({
+        sourceDeltaId: 'standard-output-delta',
+        actionId: 'action-standard',
+        delta: 420,
+        hpDelta: 420,
+        runtimeSequenceIndex: 0,
+      }),
+    ]);
+  });
 });
+
+function createRuntimeInputDelta({ sourceDeltaId, actionId, delta }) {
+  return {
+    id: sourceDeltaId,
+    sourceDeltaId,
+    actionId,
+    actionName: actionId,
+    hitKey: `${actionId}|hit-1`,
+    hitIndex: 0,
+    frameIndex: 12,
+    timeMs: 200,
+    sequenceIndex: 0,
+    trackKey: 'enemyHpDamage',
+    layerKey: 'applied',
+    delta,
+    hpDelta: delta,
+    toughnessDelta: 0,
+    energyDelta: 0,
+    applied: true,
+  };
+}
+
+function createRuntimeInputContract({ sourceKind, delta }) {
+  return {
+    schemaVersion: 1,
+    sourceKind,
+    status: 'action-hit-three-value-delta-contract-ready',
+    name: 'Action -> Hit -> ThreeValueDelta',
+    actions: [],
+    hits: [],
+    deltas: [delta],
+    summary: {
+      actionCount: 1,
+      hitCount: 1,
+      deltaCount: 1,
+      appliedDeltaCount: 1,
+      candidateDeltaCount: 0,
+      sampledDeltaCount: 0,
+      placeholderDeltaCount: 0,
+    },
+  };
+}

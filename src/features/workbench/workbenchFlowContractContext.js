@@ -23,6 +23,10 @@ export function createWorkbenchFlowContractContext({
     legacyGenerationEntry?.standardContract ??
     null;
   const runtimeInput = runtimeProjection?.runtimeInput ?? null;
+  const runtimeInputGenerationReadSources =
+    runtimeInput?.generationReadSources ?? {};
+  const runtimeInputGenerationReadInputs =
+    runtimeInputGenerationReadSources.inputs ?? {};
   const runtimeOutputSource =
     runtimeOutputs ?? runtimeProjection?.runtimeOutputs ?? runtimeProjection;
   const runtimeOutputConsumerView =
@@ -112,6 +116,23 @@ export function createWorkbenchFlowContractContext({
           runtimeInput?.summary?.ignoredDeltaCount ??
           runtimeSummary.runtimeInputIgnoredDeltaCount
       ),
+      generationReadSourcesStatus:
+        runtimeInputGenerationReadSources.status ?? '',
+      generationReadStandardOutputCount: numberOrZero(
+        runtimeInputGenerationReadSources.standardOutputCount
+      ),
+      generationReadFallbackInputCount: numberOrZero(
+        runtimeInputGenerationReadSources.fallbackInputCount
+      ),
+      generationReadUsesLegacyFallback: Boolean(
+        runtimeInputGenerationReadSources.usesLegacyGenerationFallback
+      ),
+      generationRuntimeInputSourcePath:
+        runtimeInputGenerationReadInputs.runtimeInputSource?.sourcePath ?? '',
+      generationStandardContractSourcePath:
+        runtimeInputGenerationReadInputs.standardContract?.sourcePath ?? '',
+      generationDeltasSourcePath:
+        runtimeInputGenerationReadInputs.deltas?.sourcePath ?? '',
       appliedOnly: Boolean(runtimeInput?.appliedOnly ?? true),
       ready: isReadyStatus(runtimeInput?.status),
     },
