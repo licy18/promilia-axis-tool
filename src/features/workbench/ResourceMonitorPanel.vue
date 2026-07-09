@@ -371,7 +371,7 @@ import {
   createWorkbenchRuntimeReviewPanelCommandView,
   createWorkbenchRuntimeSelectionFlowActionFromSurface,
 } from './workbenchMainFlowActions';
-import { isRuntimeResultFocusSource } from './runtimeFocusSource';
+import { createRuntimeFocusSourceView } from './runtimeFocusSource';
 
 const RUNTIME_CURVE_CHART_WIDTH = 320;
 const RUNTIME_CURVE_CHART_HEIGHT = 132;
@@ -1038,13 +1038,7 @@ function formatRuntimeCurveSelectionSource(source, resultContext = null) {
   if (resultContext?.status === 'refreshed-edit-result') {
     return '刷新后结果';
   }
-  if (isRuntimeResultFocusSource(source)) {
-    return '动作结果定位';
-  }
-  if (source === 'action-contribution') {
-    return '贡献拆分定位';
-  }
-  return '手动选择';
+  return createRuntimeFocusSourceView(source).curveSelectionLabel;
 }
 
 function formatRuntimeCurveSelectionIndex() {

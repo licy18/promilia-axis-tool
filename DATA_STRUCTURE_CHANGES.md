@@ -21212,3 +21212,56 @@ createRuntimeResultReturnFlowPlan({
 - `npm run test -- --run src/__tests__/features/workbenchFlowPlanRequests.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/views/Workbench.test.js`：通过，5 个测试文件、77 条测试。
 - `npm run test -- --run`：通过，37 个测试文件、245 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 289. UI 主流程能力块：Runtime Focus Source View
+
+### 289.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`runtimeFocusSource` 新增共享 source view：
+
+```js
+createRuntimeFocusSourceView(source)
+```
+
+输出结构：
+
+```js
+{
+  source,
+  sourceKind,
+  runtimeLogScope,
+  runtimeLogLabel,
+  curveSelectionLabel,
+  isRuntimeResultFocus,
+  isContributionFocus,
+  isRuntimeLogFocusSource,
+}
+```
+
+同步新增/改造 helper：
+
+```js
+isRuntimeLogFocusSource(source)
+resolveRuntimeFocusSourceKind(source)
+normalizeRuntimeLogFocusScope(source)
+```
+
+`workbenchFlowModel` 的 runtime review `sourceKind` 改为通过 `resolveRuntimeFocusSourceKind()` 获取。`action-contribution` 现在会归类为 `action-contribution`，而不是通用 `other`。
+
+`EventLogPanel` 改为消费 `createRuntimeFocusSourceView()` 获取日志 scope 和 label；runtime log focus watcher 改为使用共享 `isRuntimeLogFocusSource()`。
+
+`ResourceMonitorPanel` 的曲线选择来源显示改为消费 `createRuntimeFocusSourceView(source).curveSelectionLabel`。
+
+### 289.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程 runtime focus source 的内部解释层，不新增持久字段，不需要数据迁移。
+
+### 289.3 验证
+
+- 更新 `src/__tests__/features/runtimeFocusSource.test.js`，覆盖结果定位、贡献定位、曲线/手动来源的 source view。
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖贡献点来源的 `sourceKind: action-contribution`。
+- `npm run test -- --run src/__tests__/features/runtimeFocusSource.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、68 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、246 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

@@ -752,6 +752,20 @@ describe('workbench flow model', () => {
       detailSyncedState: 'true',
     });
 
+    const contributionModel = createWorkbenchFlowModel({
+      runtimeProjection,
+      selectedStateCurvePointId: firstPoint.statePointId,
+      runtimeFocusSource: 'action-contribution',
+      runtimeSelectedDetail: {
+        actionId: 'action-0001',
+        statePointId: firstPoint.statePointId,
+      },
+    });
+    expect(contributionModel.runtimeReviewContextView).toMatchObject({
+      source: 'action-contribution',
+      sourceKind: 'action-contribution',
+    });
+
     expect(
       createWorkbenchRuntimeReviewContextView({
         runtimeReviewSelection: {

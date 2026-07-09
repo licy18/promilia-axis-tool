@@ -10036,6 +10036,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 runtime focus source 是否可以被 `runtimeFocusSource` 视图 helper 统一解释，优先让日志、曲线、时间轴和详情面板消费同一套焦点来源分类。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Focus Source View
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `runtimeFocusSource` 新增 `createRuntimeFocusSourceView()`，统一输出 `sourceKind`、runtime log scope、日志标签、曲线选择来源标签和结果/贡献焦点布尔状态。
+- `workbenchFlowModel` 改为通过共享 helper 解析 runtime review `sourceKind`，贡献点来源现在归类为 `action-contribution`，不再落到通用 `other`。
+- `EventLogPanel` 的日志筛选 scope / label 和 runtime log focus 判断改为消费共享 source view。
+- `ResourceMonitorPanel` 的曲线选择来源标签改为消费共享 source view，保持现有显示文案不扩展。
+- 本阶段只集中 UI 主流程 runtime focus source 解释，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- runtime focus source 单测覆盖结果定位、贡献定位、曲线/手动来源的统一 source view。
+- flow model 单测覆盖贡献点来源的 `sourceKind: action-contribution`。
+- Workbench 页面测试确认日志、曲线、贡献点定位和运行结果查看路径保持可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/runtimeFocusSource.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、68 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、246 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 runtime review context / panel view 是否可以直接携带 source view，优先减少各面板重复读取 `source` 后再派生分类的步骤。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

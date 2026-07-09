@@ -4,6 +4,7 @@ import {
   getRuntimeSimLogCount,
 } from './runtimeProjectionPoints';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
+import { resolveRuntimeFocusSourceKind } from './runtimeFocusSource';
 import { createWorkbenchFlowContractContext } from './workbenchFlowContractContext';
 
 export const WORKBENCH_FLOW_PHASES = Object.freeze({
@@ -489,7 +490,7 @@ export function createWorkbenchRuntimeReviewSelection({
     pendingStatePointId,
     refreshedStatePointId: editResult?.statePointId ?? '',
     source: runtimeFocusSource ?? '',
-    sourceKind: resolveRuntimeReviewSelectionSourceKind(runtimeFocusSource),
+    sourceKind: resolveRuntimeFocusSourceKind(runtimeFocusSource),
     frameLabel: runtimeDetail?.frameLabel ?? '',
     timeMs: runtimeDetail?.timeMs ?? null,
     trackKey: runtimeDetail?.trackKey ?? '',
@@ -799,28 +800,6 @@ function resolveRuntimeReviewSelectionStatus({
     return WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.OVERVIEW;
   }
   return WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.EMPTY;
-}
-
-function resolveRuntimeReviewSelectionSourceKind(source = '') {
-  if (!source) {
-    return 'none';
-  }
-  if (source.includes('state-curve')) {
-    return 'state-curve';
-  }
-  if (source.includes('resource') || source.includes('curve')) {
-    return 'curve';
-  }
-  if (source.includes('event-log')) {
-    return 'log';
-  }
-  if (source.includes('runtime-detail')) {
-    return 'detail';
-  }
-  if (source.includes('action-result')) {
-    return 'action-result';
-  }
-  return 'other';
 }
 
 function createRuntimeReviewLastAction(dispatchResult = null) {

@@ -336,8 +336,8 @@ import {
   createWorkbenchRuntimeSelectionFlowActionFromSurface,
 } from './workbenchMainFlowActions';
 import {
-  isRuntimeResultFocusSource,
-  normalizeRuntimeLogFocusScope,
+  createRuntimeFocusSourceView,
+  isRuntimeLogFocusSource,
 } from './runtimeFocusSource';
 
 const props = defineProps({
@@ -414,6 +414,9 @@ const flowSelectedStatePointId = computed(
 const flowRuntimeFocusSource = computed(
   () => runtimeReviewContextView.value.source
 );
+const flowRuntimeFocusSourceView = computed(() =>
+  createRuntimeFocusSourceView(flowRuntimeFocusSource.value)
+);
 const flowEditResult = computed(
   () => props.flowModel?.editResult ?? props.actionEditResultContext
 );
@@ -480,22 +483,16 @@ const filteredRuntimeSimLogRows = computed(() =>
   })
 );
 const runtimeLogFilterSummary = computed(() => {
-  const focusSource = flowRuntimeFocusSource.value;
-  const actionResultFocusActive = isRuntimeLogFocusSource(focusSource);
-  const scope = actionResultFocusActive
-    ? normalizeRuntimeLogFocusScope(focusSource)
+  const focusSourceView = flowRuntimeFocusSourceView.value;
+  const scope = focusSourceView.isRuntimeLogFocusSource
+    ? focusSourceView.runtimeLogScope
     : props.calculatorDiagnosticFocus?.scope === 'runtime'
       ? 'runtime'
       : 'manual';
-  const labels = {
-    'action-result': '结果定位',
-    'action-contribution': '贡献定位',
-    runtime: '运行视角',
-    manual: '日志筛选',
-  };
+  const scopeView = createRuntimeFocusSourceView(scope);
   return {
     scope,
-    label: labels[scope] ?? '日志筛选',
+    label: scopeView.runtimeLogLabel,
     count: `${filteredRuntimeSimLogRows.value.length}/${runtimeSimLogRows.value.length}条`,
     detail: [
       getRuntimeTrackFilterLabel(runtimeTrackFilter.value),
@@ -914,12 +911,6 @@ function getRuntimeLogActionEditTarget({
     }),
     statePointId,
   });
-}
-
-function isRuntimeLogFocusSource(source) {
-  return (
-    isRuntimeResultFocusSource(source) || source === 'action-contribution'
-  );
 }
 
 function createRuntimeLogNavigationStatus({
