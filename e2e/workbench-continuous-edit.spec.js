@@ -251,6 +251,65 @@ test('keeps the continuous edit result loop synced in the browser', async ({
     'data-selected-state-point-id',
     timelineJumpState.statePointId
   );
+
+  const actionTwoStatePointId = timelineJumpState.statePointId;
+  await page.getByTestId('workbench-start-frame-input').fill('126');
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-ready'
+  );
+  const selectedActionEditState = await readEditState(page);
+  expect(selectedActionEditState).toMatchObject({
+    actionId: 'action-0002',
+    phase: 'edit-result-ready',
+    resultFocused: 'false',
+    startFrameValue: '126',
+    startMsValue: '2100',
+    returnButtonText: '查看刷新结果',
+    pageOverflowX: 0,
+  });
+  expect(selectedActionEditState.feedbackOriginStatePointId).toBe(
+    actionTwoStatePointId
+  );
+  expect(selectedActionEditState.feedbackStatePointId).toContain('action-0002');
+  expect(selectedActionEditState.feedbackStatePointId).not.toBe(
+    actionTwoStatePointId
+  );
+  expect(selectedActionEditState.returnButtonStatePointId).toBe(
+    selectedActionEditState.feedbackStatePointId
+  );
+
+  await page.getByTestId('workbench-flow-return-edit-result').click();
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-review'
+  );
+  const editedActionTwoState = await readWorkbenchState(page);
+  expect(editedActionTwoState).toMatchObject({
+    phase: 'edit-result-review',
+    actionId: 'action-0002',
+    runtimeDetailActionId: 'action-0002',
+    contributionActionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    hpContributionActive: 'true',
+    selectedActionListId: 'action-0002',
+    selectedTimelineActionId: 'action-0002',
+    pageOverflowX: 0,
+  });
+  expect(editedActionTwoState.statePointId).toBe(
+    selectedActionEditState.feedbackStatePointId
+  );
+  expect(editedActionTwoState.curveStatePointId).toBe(
+    selectedActionEditState.feedbackStatePointId
+  );
+  expect(editedActionTwoState.logStatePointId).toBe(
+    selectedActionEditState.feedbackStatePointId
+  );
+  expect(editedActionTwoState.hpContributionStatePointId).toBe(
+    selectedActionEditState.feedbackStatePointId
+  );
+
   expect(browserIssues.filter(issue => !isExpectedBrowserIssue(issue))).toEqual(
     []
   );

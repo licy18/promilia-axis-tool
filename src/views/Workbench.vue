@@ -65,9 +65,7 @@
       :data-main-flow-next-target-kind="
         mainFlowWorkspaceView.region.nextTargetKind
       "
-      :data-main-flow-next-region="
-        mainFlowWorkspaceView.region.nextRegion
-      "
+      :data-main-flow-next-region="mainFlowWorkspaceView.region.nextRegion"
       :data-main-flow-pending-runtime-state-point-id="
         mainFlowWorkspaceView.region.pendingRuntimeStatePointId
       "
@@ -80,9 +78,7 @@
       :data-main-flow-dispatch-sequence="
         mainFlowWorkspaceView.dispatch.sequence
       "
-      :data-main-flow-dispatch-status="
-        mainFlowWorkspaceView.dispatch.status
-      "
+      :data-main-flow-dispatch-status="mainFlowWorkspaceView.dispatch.status"
       :data-main-flow-dispatch-handled="
         mainFlowWorkspaceView.dispatch.handledState
       "
@@ -90,15 +86,11 @@
         mainFlowWorkspaceView.dispatch.hasResultState
       "
       :data-main-flow-dispatch-kind="mainFlowWorkspaceView.dispatch.kind"
-      :data-main-flow-dispatch-source="
-        mainFlowWorkspaceView.dispatch.source
-      "
+      :data-main-flow-dispatch-source="mainFlowWorkspaceView.dispatch.source"
       :data-main-flow-dispatch-handler-key="
         mainFlowWorkspaceView.dispatch.handlerKey
       "
-      :data-main-flow-dispatch-reason="
-        mainFlowWorkspaceView.dispatch.reason
-      "
+      :data-main-flow-dispatch-reason="mainFlowWorkspaceView.dispatch.reason"
       :data-main-flow-dispatch-action-id="
         mainFlowWorkspaceView.dispatch.actionId
       "
@@ -119,9 +111,7 @@
       :data-main-flow-loop-current-region="
         mainFlowWorkspaceView.loop.currentRegion
       "
-      :data-main-flow-loop-next-region="
-        mainFlowWorkspaceView.loop.nextRegion
-      "
+      :data-main-flow-loop-next-region="mainFlowWorkspaceView.loop.nextRegion"
       :data-runtime-review-selection-status="
         mainFlowWorkspaceView.reviewSelection.status
       "
@@ -134,9 +124,7 @@
       :data-runtime-review-pending-state-point-id="
         mainFlowWorkspaceView.reviewSelection.pendingStatePointId
       "
-      :data-runtime-review-source="
-        mainFlowWorkspaceView.reviewSelection.source
-      "
+      :data-runtime-review-source="mainFlowWorkspaceView.reviewSelection.source"
       :data-runtime-review-source-kind="
         mainFlowWorkspaceView.reviewSelection.sourceKind
       "
@@ -180,9 +168,7 @@
         :data-main-flow-next-target-kind="
           mainFlowWorkspaceView.region.nextTargetKind
         "
-        :data-main-flow-next-region="
-          mainFlowWorkspaceView.region.nextRegion
-        "
+        :data-main-flow-next-region="mainFlowWorkspaceView.region.nextRegion"
         :data-main-flow-pending-runtime-state-point-id="
           mainFlowWorkspaceView.region.pendingRuntimeStatePointId
         "
@@ -335,9 +321,7 @@
       <div
         class="side-stack"
         :data-flow-phase="mainFlowWorkspaceView.phase"
-        :data-main-flow-inspector-mode="
-          mainFlowWorkspaceView.inspector.mode
-        "
+        :data-main-flow-inspector-mode="mainFlowWorkspaceView.inspector.mode"
         data-testid="workbench-side-inspector"
       >
         <div
@@ -464,9 +448,7 @@ import {
   createWorkbenchFlowController,
   createWorkbenchFlowPlanHandlers,
 } from '../features/workbench/workbenchFlowController';
-import {
-  createWorkbenchFlowPlanController,
-} from '../features/workbench/workbenchFlowPlanController';
+import { createWorkbenchFlowPlanController } from '../features/workbench/workbenchFlowPlanController';
 import {
   createWorkbenchActionMutationRuntimeSyncRequest,
   createWorkbenchFlowRuntime,
@@ -487,9 +469,7 @@ import {
   createWorkbenchMainFlowCommandSurface,
 } from '../features/workbench/workbenchMainFlowActions';
 import { createRuntimeStatePointContexts } from '../features/workbench/runtimeProjectionPoints';
-import {
-  applyWorkbenchRuntimeViewPatch,
-} from '../features/workbench/workbenchRuntimeViewState';
+import { applyWorkbenchRuntimeViewPatch } from '../features/workbench/workbenchRuntimeViewState';
 import {
   SYSTEM_TIMELINE_LANE_ID,
   createTimelineDiagnostics,
@@ -659,8 +639,8 @@ const mainFlowActionSurface = computed(() =>
 const runtimeReviewPrimaryOperationCommand = computed(
   () => mainFlowCommandSurface.value.runtimeReviewPrimary
 );
-const runtimeReviewPrimaryOperationView = computed(() =>
-  runtimeReviewPrimaryOperationCommand.value.view
+const runtimeReviewPrimaryOperationView = computed(
+  () => runtimeReviewPrimaryOperationCommand.value.view
 );
 const runtimeReviewLayoutMode = computed(() =>
   mainFlowWorkspaceView.value.reviewSelection.hasSelection ||
@@ -781,6 +761,7 @@ function updateAction(patch) {
   clearSegmentSplitPreview();
   const actionId = selectedActionId.value;
   const previousAction = findActionDraftById(actionId);
+  const editSourceFocus = captureActionEditSourceFocus(actionId);
   actionDrafts.value = actionDrafts.value.map(action => {
     if (action.id !== actionId) {
       return action;
@@ -849,6 +830,7 @@ function updateAction(patch) {
   recordActionEditSource(actionId, patch, {
     previousAction,
     nextAction: findActionDraftById(actionId),
+    focus: editSourceFocus,
   });
   markDraftDirty();
 }
@@ -874,6 +856,7 @@ function updateSegmentSplitOptions(patch) {
 function updateActionTime({ actionId, startMs }) {
   clearSegmentSplitPreview();
   const previousAction = findActionDraftById(actionId);
+  const editSourceFocus = captureActionEditSourceFocus(actionId);
   selectedActionId.value = actionId;
   actionDrafts.value = actionDrafts.value.map(action => {
     if (action.id !== actionId) {
@@ -892,6 +875,7 @@ function updateActionTime({ actionId, startMs }) {
     {
       previousAction,
       nextAction: findActionDraftById(actionId),
+      focus: editSourceFocus,
     }
   );
   markDraftDirty();
@@ -900,6 +884,7 @@ function updateActionTime({ actionId, startMs }) {
 function updateActionDuration({ actionId, durationMs }) {
   clearSegmentSplitPreview();
   const previousAction = findActionDraftById(actionId);
+  const editSourceFocus = captureActionEditSourceFocus(actionId);
   selectedActionId.value = actionId;
   actionDrafts.value = actionDrafts.value.map(action => {
     if (action.id !== actionId) {
@@ -922,6 +907,7 @@ function updateActionDuration({ actionId, durationMs }) {
     {
       previousAction,
       nextAction: findActionDraftById(actionId),
+      focus: editSourceFocus,
     }
   );
   markDraftDirty();
@@ -930,6 +916,7 @@ function updateActionDuration({ actionId, durationMs }) {
 function updateActionLane({ actionId, laneId }) {
   clearSegmentSplitPreview();
   const previousAction = findActionDraftById(actionId);
+  const editSourceFocus = captureActionEditSourceFocus(actionId);
   const targetActor = scenario.value.actors.find(actor => actor.id === laneId);
   if (!targetActor) {
     return;
@@ -988,6 +975,7 @@ function updateActionLane({ actionId, laneId }) {
       {
         previousAction,
         nextAction: findActionDraftById(actionId),
+        focus: editSourceFocus,
       }
     );
     markDraftDirty();
@@ -1428,7 +1416,7 @@ function clearActionEditFocus() {
 function recordActionEditSource(
   actionId,
   patch = {},
-  { previousAction = null, nextAction = null } = {}
+  { previousAction = null, nextAction = null, focus = null } = {}
 ) {
   const nextSource = createWorkbenchActionEditSource({
     actionId,
@@ -1436,7 +1424,7 @@ function recordActionEditSource(
     previousAction,
     nextAction,
     previousSource: actionEditSource.value,
-    focus: actionEditFocus.value,
+    focus: focus ?? actionEditFocus.value,
     resolveSkillName: resolveActionEditSkillName,
     resolveCharacterName: resolveActionEditCharacterName,
   });
@@ -1445,6 +1433,41 @@ function recordActionEditSource(
   }
 
   actionEditSource.value = nextSource;
+}
+
+function captureActionEditSourceFocus(actionId) {
+  if (isRuntimeActionEditFocusForAction(actionEditFocus.value, actionId)) {
+    return actionEditFocus.value;
+  }
+
+  const detail = runtimeSelectedDetail.value;
+  if (!actionId || detail?.actionId !== actionId || !detail?.statePointId) {
+    return actionEditFocus.value;
+  }
+
+  return {
+    ...createEmptyWorkbenchActionEditFocus(actionEditFocus.value.sequence),
+    actionId,
+    fieldKey: 'startMs',
+    label: '结果定位',
+    changeSummary: [detail.frameLabel, detail.trackLabel || detail.trackKey]
+      .filter(Boolean)
+      .join(' · '),
+    editOrigin: 'runtime-focus',
+    focusSource: runtimeFocusSource.value || 'runtime-result',
+    originStatePointId: detail.statePointId,
+    originTrackKey: detail.trackKey ?? '',
+    originTrackLabel: detail.trackLabel ?? '',
+    originFrameLabel: detail.frameLabel ?? '',
+  };
+}
+
+function isRuntimeActionEditFocusForAction(focus, actionId) {
+  return Boolean(
+    actionId &&
+    focus?.actionId === actionId &&
+    focus.editOrigin === 'runtime-focus'
+  );
 }
 
 function resolveActionEditSkillName(skillId) {
@@ -1658,7 +1681,9 @@ function normalizeActionEditScrollField(fieldKey) {
 }
 
 function dispatchRuntimeReviewPrimaryOperation() {
-  dispatchWorkbenchFlowAction(runtimeReviewPrimaryOperationCommand.value.action);
+  dispatchWorkbenchFlowAction(
+    runtimeReviewPrimaryOperationCommand.value.action
+  );
 }
 
 function updateStateCurveFocusMode(mode) {
@@ -2507,11 +2532,19 @@ function getLocalStorage() {
   min-width: 0;
 }
 
-.primary-flow:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-review-stack {
+.primary-flow:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .runtime-review-stack {
   order: -1;
 }
 
-.primary-flow:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .timeline-area {
+.primary-flow:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .timeline-area {
   order: 1;
 }
 
