@@ -748,6 +748,19 @@ describe('Workbench view', () => {
         )
         .classes()
     ).toContain('selected');
+    wrapper
+      .findComponent(AnalysisPanel)
+      .vm.$emit('select-state-curve-point', appliedStatePointId);
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-main-flow-workspace"]').attributes()
+    ).toMatchObject({
+      'data-main-flow-dispatch-kind': 'select-runtime-state-point',
+      'data-main-flow-dispatch-source': 'state-curve-point',
+      'data-main-flow-dispatch-state-point-id': appliedStatePointId,
+      'data-runtime-review-selected-state-point-id': appliedStatePointId,
+      'data-runtime-review-source': 'state-curve-point',
+    });
     const focusAllButton = wrapper.find(
       '[data-testid="workbench-state-curve-focus-all"]'
     );

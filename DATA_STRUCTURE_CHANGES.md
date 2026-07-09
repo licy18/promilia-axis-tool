@@ -21512,3 +21512,42 @@ createWorkbenchRuntimeReviewPanelCommandViewFromSurface(input)
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、88 条测试。
 - `npm run test -- --run`：通过，37 个测试文件、247 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 295. UI 主流程能力块：Workbench Root Action Surface
+
+### 295.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`Workbench.vue` 新增页面级 action surface：
+
+```js
+mainFlowActionSurface = createWorkbenchMainFlowActionSurface({
+  mainFlowCommandSurface,
+})
+```
+
+根页面运行点选择路径从直接调用 command surface：
+
+```js
+mainFlowCommandSurface.createRuntimeStatePointFlowAction(...)
+```
+
+调整为通过 action surface：
+
+```js
+mainFlowActionSurface.createRuntimeSelectionFlowAction(...)
+```
+
+该变化让 Workbench 根页面与 `AnalysisPanel`、`TimelineGridPreview` 的 runtime state point 选择入口共用同一层 action surface。`source: 'state-curve-point'`、`statePointId` 和 `preserveStateCurveFilters` payload 保持不变。
+
+### 295.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程的内部 action 生成边界，不新增持久字段，不需要数据迁移。
+
+### 295.3 验证
+
+- 更新 `src/__tests__/views/Workbench.test.js`，覆盖根页面接收 runtime state point `select-state-curve-point` 事件后，通过主流程 dispatch 得到 `select-runtime-state-point`。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/TimelineGridPreview.test.js`：通过，3 个测试文件、89 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、247 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

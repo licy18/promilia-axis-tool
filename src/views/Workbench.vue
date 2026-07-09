@@ -436,6 +436,7 @@ import {
   createWorkbenchFlowModel,
 } from '../features/workbench/workbenchFlowModel';
 import {
+  createWorkbenchMainFlowActionSurface,
   createWorkbenchMainFlowCommandSurface,
 } from '../features/workbench/workbenchMainFlowActions';
 import {
@@ -635,6 +636,11 @@ const mainFlowCommandSurface = computed(() =>
     source: 'workbench-flow-panel',
     recoverySource: 'workbench-flow-recovery',
     runtimeReviewPrimarySource: 'runtime-review-primary',
+  })
+);
+const mainFlowActionSurface = computed(() =>
+  createWorkbenchMainFlowActionSurface({
+    mainFlowCommandSurface: mainFlowCommandSurface.value,
   })
 );
 const runtimeReviewPrimaryOperationCommand = computed(
@@ -1681,7 +1687,7 @@ function isRuntimeStatePointId(pointId) {
 
 function focusRuntimeStateCurvePoint(pointId) {
   dispatchWorkbenchFlowAction(
-    mainFlowCommandSurface.value.createRuntimeStatePointFlowAction({
+    mainFlowActionSurface.value.createRuntimeSelectionFlowAction({
       source: 'state-curve-point',
       statePointId: pointId,
       payload: {

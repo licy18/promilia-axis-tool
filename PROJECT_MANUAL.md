@@ -10191,6 +10191,31 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查运行结果选择、属性修改和回看结果之间是否还存在页面层手动拼 action 的入口，优先把完整“选择结果 -> 定位动作 -> 修改 -> 回看结果”闭环继续收束到 command surface / flow runtime，而不是回到局部状态提示。
 
+### 2026-07-09：UI 主流程能力块 - Workbench Root Action Surface
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `Workbench.vue` 根页面新增 `mainFlowActionSurface`，与 `AnalysisPanel`、`TimelineGridPreview` 共用同一套运行点选择 action surface。
+- 根页面 `focusRuntimeStateCurvePoint()` 不再直接调用 `mainFlowCommandSurface.createRuntimeStatePointFlowAction()`，改为通过 `mainFlowActionSurface.createRuntimeSelectionFlowAction()` 派发运行点选择。
+- 本阶段只收束 Workbench 根页面的运行点选择 action 生成边界，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- Workbench 页面测试新增根页面接收 runtime state point `select-state-curve-point` 事件后的 dispatch 状态断言，确认仍派发 `select-runtime-state-point` 并保持 `state-curve-point` 来源。
+- TimelineGridPreview 和 main flow action 单测继续覆盖子面板/时间轴通过 action surface 派发运行点选择。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/TimelineGridPreview.test.js`：通过，3 个测试文件、89 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、247 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 Workbench 根页面是否还有 dispatch 后的状态应用可以继续收束进 flow runtime，优先减少页面层直接拼接 runtime view state 的位置。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
