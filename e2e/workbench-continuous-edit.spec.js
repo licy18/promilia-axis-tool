@@ -430,6 +430,18 @@ test('keeps refreshed runtime results editable for another visible loop @workben
   await expect(
     page.getByTestId('workbench-runtime-selected-detail-action-focus')
   ).toHaveText('继续修改动作');
+  const flowContinueButton = flowPanel.getByTestId(
+    'workbench-flow-edit-runtime-action'
+  );
+  await expect(flowContinueButton).toHaveText('继续修改动作');
+  await expect(flowContinueButton).toHaveAttribute(
+    'data-state-point-id',
+    firstReturnedState.statePointId
+  );
+  await expect(flowContinueButton).toHaveAttribute(
+    'data-primary-action',
+    'true'
+  );
 
   const primaryOperation = page.getByTestId(
     'workbench-runtime-review-primary-operation'
@@ -443,7 +455,7 @@ test('keeps refreshed runtime results editable for another visible loop @workben
     firstReturnedState.statePointId
   );
   await expect(primaryOperation).toHaveText('继续修改动作');
-  await primaryOperation.click();
+  await flowContinueButton.click();
   await expectRuntimeFocusInEditor(page);
 
   const { returnedState: secondReturnedState } =
