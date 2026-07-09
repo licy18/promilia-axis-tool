@@ -440,6 +440,114 @@ test('keeps the continuous edit result loop synced in the browser', async ({
     contributionActionEditState.feedbackStatePointId
   );
 
+  const actionThreeResultRow = page.locator(
+    '[data-testid="workbench-action-result-source-row"][data-action-id="action-0003"]'
+  );
+  await expect(actionThreeResultRow).toHaveAttribute(
+    'data-runtime-state-point-id',
+    refreshedState.statePointId
+  );
+  await actionThreeResultRow.click();
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-runtime-detail-action-id',
+    'action-0003'
+  );
+  const actionThreeReturnState = await readWorkbenchState(page);
+  expect(actionThreeReturnState).toMatchObject({
+    phase: 'runtime-result',
+    actionId: 'action-0003',
+    runtimeDetailActionId: 'action-0003',
+    contributionActionId: 'action-0003',
+    navigationCount: '3',
+    navigationIndex: '2',
+    hpContributionActive: 'true',
+    selectedActionListId: 'action-0003',
+    selectedTimelineActionId: 'action-0003',
+    pageOverflowX: 0,
+  });
+  expect(actionThreeReturnState.statePointId).toBe(refreshedState.statePointId);
+  expect(actionThreeReturnState.curveStatePointId).toBe(
+    refreshedState.statePointId
+  );
+  expect(actionThreeReturnState.logStatePointId).toBe(
+    refreshedState.statePointId
+  );
+  expect(actionThreeReturnState.hpContributionStatePointId).toBe(
+    refreshedState.statePointId
+  );
+
+  await page
+    .getByTestId('workbench-runtime-selected-detail-action-focus')
+    .click();
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+    )
+  ).toHaveAttribute('data-edit-focus-origin', 'runtime-focus');
+  await page.getByTestId('workbench-start-frame-input').fill('204');
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-ready'
+  );
+  const actionThreeSecondEditState = await readEditState(page);
+  expect(actionThreeSecondEditState).toMatchObject({
+    actionId: 'action-0003',
+    phase: 'edit-result-ready',
+    resultFocused: 'false',
+    startFrameValue: '204',
+    startMsValue: '3400',
+    returnButtonText: '查看刷新结果',
+    pageOverflowX: 0,
+  });
+  expect(actionThreeSecondEditState.feedbackOriginStatePointId).toBe(
+    actionThreeReturnState.statePointId
+  );
+  expect(actionThreeSecondEditState.feedbackStatePointId).toContain(
+    'action-0003'
+  );
+  expect(actionThreeSecondEditState.feedbackStatePointId).not.toBe(
+    actionThreeReturnState.statePointId
+  );
+
+  await page.getByTestId('workbench-flow-return-edit-result').click();
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-review'
+  );
+  const actionThreeSecondReturnedState = await readWorkbenchState(page);
+  expect(actionThreeSecondReturnedState).toMatchObject({
+    phase: 'edit-result-review',
+    actionId: 'action-0003',
+    runtimeDetailActionId: 'action-0003',
+    contributionActionId: 'action-0003',
+    navigationCount: '3',
+    navigationIndex: '2',
+    hpContributionActive: 'true',
+    selectedActionListId: 'action-0003',
+    selectedTimelineActionId: 'action-0003',
+    pageOverflowX: 0,
+  });
+  expect(actionThreeSecondReturnedState.statePointId).toBe(
+    actionThreeSecondEditState.feedbackStatePointId
+  );
+  expect(actionThreeSecondReturnedState.curveStatePointId).toBe(
+    actionThreeSecondEditState.feedbackStatePointId
+  );
+  expect(actionThreeSecondReturnedState.logStatePointId).toBe(
+    actionThreeSecondEditState.feedbackStatePointId
+  );
+  expect(actionThreeSecondReturnedState.hpContributionStatePointId).toBe(
+    actionThreeSecondEditState.feedbackStatePointId
+  );
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0002"]'
+    )
+  ).toHaveAttribute(
+    'data-runtime-state-point-id',
+    contributionEditedActionState.statePointId
+  );
+
   expect(browserIssues.filter(issue => !isExpectedBrowserIssue(issue))).toEqual(
     []
   );

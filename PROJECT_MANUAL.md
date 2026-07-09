@@ -11355,6 +11355,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：优先检查连续修改多个动作后的结果列表定位稳定性，以及最终是否需要拆分更轻的 Workbench e2e 场景来覆盖常用操作组合。
 
+### 2026-07-09：UI 主流程连续多动作编辑 - Multi Action Edit Loop
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 用户连续编辑多个动作时，可以在 `action-0002` 和 `action-0003` 的结果之间来回定位。
+- 编辑 `action-0002` 后再回到 `action-0003` 的结果列表项，仍能定位到 `action-0003` 已刷新过的结果点。
+- 再次编辑 `action-0003` 并回看刷新结果后，资源曲线、模拟日志、三值详情、动作贡献拆分、动作列表和时间轴仍同步到同一动作结果。
+- 同时确认 `action-0002` 的结果列表定位不会被后续 `action-0003` 编辑冲掉。
+- 本阶段只固定连续多动作编辑闭环，不改变三值输出、公式、证据字段或持久数据结构。
+
+当前验证事实：
+
+- 扩展 `e2e/workbench-continuous-edit.spec.js`：在既有主流程后追加 `action-0002` 多次编辑 -> 回到 `action-0003` 结果 -> 二次编辑 `action-0003` -> 验证 `action-0002` 结果列表仍稳定。
+
+验收结果：
+
+- `npm run test:e2e`：通过，2 条浏览器级烟测。
+- `npx prettier --check e2e/workbench-continuous-edit.spec.js PROJECT_MANUAL.md`：通过。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：优先拆分或整理 Workbench e2e 场景，避免单条烟测过长，同时保持排轴编辑、运行模拟、资源曲线、日志详情、贡献拆分和回到动作修改这些核心闭环都有覆盖。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
