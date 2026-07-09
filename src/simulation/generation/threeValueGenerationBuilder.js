@@ -1,6 +1,16 @@
 import { createActionHitThreeValueDeltaGeneration } from './actionHitThreeValueDeltaGeneration';
 import { ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME } from './threeValueGenerationLayer';
 
+const STANDARD_GENERATION_ENTRY_OUTPUT_NAMES = [
+  'generationInput',
+  'standardContract',
+  'actions',
+  'hits',
+  'deltas',
+  'runtimeInputSource',
+];
+const STANDARD_GENERATION_ENTRY_TOPOLOGY = ['Action', 'Hit', 'ThreeValueDelta'];
+
 export function createThreeValueGenerationBundle({
   scenario,
   actionResultTimeline,
@@ -107,6 +117,10 @@ function createThreeValueGenerationOutputs({
     placeholderDeltaCount: standardContract.summary?.placeholderDeltaCount ?? 0,
     runtimeInputSourceKind: runtimeInputSource.sourceKind,
     runtimeInputSourceStatus: runtimeInputSource.status,
+    generationEntryContractValidationStatus:
+      generationEntry.contractValidation?.status ?? '',
+    generationEntryContractValidationIssueCount:
+      generationEntry.contractValidation?.issueCount ?? 0,
     generationInputSourceKind: generationInput?.sourceKind ?? '',
     generationInputStatus: generationInput?.status ?? '',
     generationInputPointCount: generationInput?.summary?.pointCount ?? 0,
@@ -163,14 +177,13 @@ function createStandardGenerationEntry({
   threeValueGenerationLayer,
   actionHitThreeValueDeltaGeneration,
 }) {
+  const actions = standardContract.actions ?? [];
+  const hits = standardContract.hits ?? [];
   const deltas = standardContract.deltas ?? [];
-  return {
+  const entry = {
     schemaVersion: 1,
     sourceKind: 'azpr-action-hit-three-value-delta-standard-generation-entry',
-    status:
-      deltas.length > 0
-        ? 'action-hit-three-value-delta-standard-generation-entry-ready'
-        : 'action-hit-three-value-delta-standard-generation-entry-empty',
+    status: '',
     contractName: standardContract.name,
     generationEntrySourceKind: actionHitThreeValueDeltaGeneration.sourceKind,
     generationEntryStatus: actionHitThreeValueDeltaGeneration.status,
@@ -182,26 +195,30 @@ function createStandardGenerationEntry({
     runtimeInputSourceStatus: runtimeInputSource.status,
     generationInput,
     standardContract,
-    actions: standardContract.actions,
-    hits: standardContract.hits,
+    actions,
+    hits,
     deltas,
     runtimeInputSource,
     outputs: {
       generationInput,
       standardContract,
-      actions: standardContract.actions,
-      hits: standardContract.hits,
+      actions,
+      hits,
       deltas,
       runtimeInputSource,
     },
-    outputNames: [
-      'generationInput',
-      'standardContract',
-      'actions',
-      'hits',
-      'deltas',
-      'runtimeInputSource',
-    ],
+    outputNames: STANDARD_GENERATION_ENTRY_OUTPUT_NAMES,
+    applied: false,
+  };
+  const contractValidation = validateStandardGenerationEntryContract(entry);
+  return {
+    ...entry,
+    status: !contractValidation.valid
+      ? 'action-hit-three-value-delta-standard-generation-entry-contract-invalid'
+      : deltas.length > 0
+        ? 'action-hit-three-value-delta-standard-generation-entry-ready'
+        : 'action-hit-three-value-delta-standard-generation-entry-empty',
+    contractValidation,
     summary: {
       contractName: standardContract.name,
       actionCount: standardContract.summary?.actionCount ?? 0,
@@ -213,10 +230,207 @@ function createStandardGenerationEntry({
       placeholderDeltaCount:
         standardContract.summary?.placeholderDeltaCount ?? 0,
       runtimeDeltaPolicy: standardContract.runtimeDeltaPolicy,
+      contractValidationStatus: contractValidation.status,
+      contractValidationIssueCount: contractValidation.issueCount,
       applied: false,
     },
     applied: false,
   };
+}
+
+export function validateStandardGenerationEntryContract(generationEntry = {}) {
+  const standardContract = generationEntry.standardContract;
+  const actions = generationEntry.actions;
+  const hits = generationEntry.hits;
+  const deltas = generationEntry.deltas;
+  const actionKeys = new Set(
+    (actions ?? []).map(action => createGenerationEntryActionKey(action))
+  );
+  const hitKeys = new Set(
+    (hits ?? []).map(hit => createGenerationEntryHitKey(hit))
+  );
+  const hitDeltaIds = new Set(
+    (hits ?? []).flatMap(hit => [
+      ...(hit.deltaIds ?? []),
+      ...(hit.deltas ?? []).map(delta => delta?.id),
+    ])
+  );
+  const checks = [
+    createGenerationEntryValidationCheck({
+      key: 'contract-name',
+      valid:
+        (standardContract?.name ?? generationEntry.contractName) ===
+        ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'topology',
+      valid: arraysEqual(
+        standardContract?.topology,
+        STANDARD_GENERATION_ENTRY_TOPOLOGY
+      ),
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'output-names',
+      valid: arraysEqual(
+        generationEntry.outputNames,
+        STANDARD_GENERATION_ENTRY_OUTPUT_NAMES
+      ),
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'standard-contract-actions-reference',
+      valid: actions === standardContract?.actions,
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'standard-contract-hits-reference',
+      valid: hits === standardContract?.hits,
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'standard-contract-deltas-reference',
+      valid: deltas === standardContract?.deltas,
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'runtime-input-source-contract-reference',
+      valid:
+        generationEntry.runtimeInputSource?.standardContract ===
+        standardContract,
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'runtime-input-source-deltas-reference',
+      valid: generationEntry.runtimeInputSource?.deltas === deltas,
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'outputs-standard-contract-reference',
+      valid: generationEntry.outputs?.standardContract === standardContract,
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'outputs-actions-reference',
+      valid: generationEntry.outputs?.actions === actions,
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'outputs-hits-reference',
+      valid: generationEntry.outputs?.hits === hits,
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'outputs-deltas-reference',
+      valid: generationEntry.outputs?.deltas === deltas,
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'summary-action-count',
+      valid:
+        numberOrZero(standardContract?.summary?.actionCount) ===
+        actions?.length,
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'summary-hit-count',
+      valid: numberOrZero(standardContract?.summary?.hitCount) === hits?.length,
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'summary-delta-count',
+      valid:
+        numberOrZero(standardContract?.summary?.deltaCount) === deltas?.length,
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'summary-applied-delta-count',
+      valid:
+        numberOrZero(standardContract?.summary?.appliedDeltaCount) ===
+        countMatching(deltas, delta => delta?.applied),
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'delta-required-fields',
+      valid: (deltas ?? []).every(delta =>
+        ['id', 'hitKey', 'frameIndex', 'timeMs', 'trackKey', 'layerKey'].every(
+          field => delta?.[field] !== null && delta?.[field] !== undefined
+        )
+      ),
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'deltas-linked-to-actions',
+      valid: (deltas ?? []).every(delta =>
+        actionKeys.has(createGenerationEntryActionKey(delta))
+      ),
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'deltas-linked-to-hits',
+      valid: (deltas ?? []).every(delta =>
+        hitKeys.has(createGenerationEntryHitKey(delta))
+      ),
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'deltas-listed-by-hits',
+      valid: (deltas ?? []).every(delta => hitDeltaIds.has(delta?.id)),
+    }),
+  ];
+  const failedChecks = checks.filter(check => !check.valid);
+
+  return {
+    schemaVersion: 1,
+    sourceKind:
+      'azpr-action-hit-three-value-delta-generation-entry-contract-validation',
+    status:
+      failedChecks.length > 0
+        ? 'generation-entry-contract-invalid'
+        : 'generation-entry-contract-valid',
+    contractName:
+      standardContract?.name ??
+      generationEntry.contractName ??
+      ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
+    topology: standardContract?.topology ?? [],
+    outputNames: generationEntry.outputNames ?? [],
+    actionCount: actions?.length ?? 0,
+    hitCount: hits?.length ?? 0,
+    deltaCount: deltas?.length ?? 0,
+    checkCount: checks.length,
+    issueCount: failedChecks.length,
+    issueKeys: failedChecks.map(check => check.key),
+    checks,
+    valid: failedChecks.length === 0,
+    applied: false,
+  };
+}
+
+function createGenerationEntryValidationCheck({ key, valid }) {
+  return {
+    key,
+    status: valid ? 'valid' : 'invalid',
+    valid: Boolean(valid),
+  };
+}
+
+function createGenerationEntryActionKey(item) {
+  return createGenerationEntryIdPart(item?.actionId ?? 'system');
+}
+
+function createGenerationEntryHitKey(item) {
+  return [
+    item?.actionId ?? 'system',
+    item?.hitKey,
+    item?.frameIndex,
+    item?.timeMs,
+  ]
+    .map(createGenerationEntryIdPart)
+    .join('|');
+}
+
+function createGenerationEntryIdPart(value) {
+  return String(value ?? 'none').replace(/\|/g, '/');
+}
+
+function arraysEqual(left, right) {
+  const leftItems = left ?? [];
+  const rightItems = right ?? [];
+  return (
+    leftItems.length === rightItems.length &&
+    leftItems.every((item, index) => item === rightItems[index])
+  );
+}
+
+function countMatching(items, predicate) {
+  return (items ?? []).filter(predicate).length;
+}
+
+function numberOrZero(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : 0;
 }
 
 function createRuntimeInputSource({
@@ -271,6 +485,10 @@ function createThreeValueGenerationBundleSummary({
     standardContractSourceKind: standardContract.sourceKind,
     standardGenerationEntrySourceKind: generationEntry.sourceKind,
     standardGenerationEntryStatus: generationEntry.status,
+    standardGenerationEntryContractValidationStatus:
+      generationEntry.contractValidation?.status ?? '',
+    standardGenerationEntryContractValidationIssueCount:
+      generationEntry.contractValidation?.issueCount ?? 0,
     generationInputSourceKind: generationInput?.sourceKind ?? '',
     generationInputStatus: generationInput?.status ?? '',
     generationInputPointCount: generationInput?.summary?.pointCount ?? 0,

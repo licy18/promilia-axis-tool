@@ -12985,6 +12985,26 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续生成层能力块：把 `generationEntry` 的 Action/Hit/Delta 层级合同补成更明确的输入/输出校验边界，随后再让 runtime summary 和 Workbench 合同只依赖该标准入口。
 
+### 2026-07-09：生成层 - Generation Entry 合同校验边界
+
+本阶段属于：生成层。
+
+完成的可用能力：
+
+- `generationEntry` 现在随生成结果产出 `contractValidation`，用于确认 `Action -> Hit -> ThreeValueDelta` 标准入口的拓扑、输出名、引用一致性、动作/命中/delta 链接和 summary 计数是否对齐。
+- `generationEntry.summary`、`generationOutputs.summary` 和 bundle summary 均透出校验状态与问题数量，后续 runtime / Workbench 不需要散读临时结构即可判断生成入口是否可信。
+- `validateStandardGenerationEntryContract()` 已作为 simulation API 暴露，后续运行时层可以直接复用同一套入口校验。
+- 本阶段不改变 UI 可见文案、三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值或草稿保存 schema。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，7 个测试文件、36 条测试。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `329. 生成层标准入口校验：Generation Entry Contract Validation`。
+
+下一步：
+
+- 进入运行时层能力块：让 runtime input / runtime summary 优先携带并消费 `generationEntry.contractValidation`，把“使用标准入口且校验有效”固定为 runtime 边界的一部分。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

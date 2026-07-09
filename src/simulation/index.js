@@ -3,9 +3,16 @@ import { simulateScenario } from './engine/simulateScenario';
 
 export { compileProject, CompileProjectError } from './compiler/compileProject';
 export { simulateScenario } from './engine/simulateScenario';
-export { DAMAGE_FORMULA_VERSION, parsePercentMultiplier, parseDamageSegments } from './mechanics/damage';
+export {
+  DAMAGE_FORMULA_VERSION,
+  parsePercentMultiplier,
+  parseDamageSegments,
+} from './mechanics/damage';
 export { projectSimulationResult } from './projection/projectSimulationResult';
-export { createThreeValueGenerationBundle } from './generation/threeValueGenerationBuilder';
+export {
+  createThreeValueGenerationBundle,
+  validateStandardGenerationEntryContract,
+} from './generation/threeValueGenerationBuilder';
 export { createActionHitThreeValueDeltaGeneration } from './generation/actionHitThreeValueDeltaGeneration';
 export {
   ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE,

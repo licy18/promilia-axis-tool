@@ -23348,3 +23348,100 @@ generationOutputs.deltas
 - `threeValueGenerationBuilder.test.js` 覆盖 `generationEntry` 标准输出、别名和 outputCount = 8。
 - `actionHitThreeValueRuntimeInput.test.js` 覆盖 runtime input 优先从 `generationOutputs.outputs.generationEntry.*` 读取。
 - `threeValueRuntimeProjection.test.js`、`firstVerticalSliceSimulation.test.js`、`workbenchFlowContractContext.test.js` 和 `workbenchFlowModel.test.js` 覆盖投影、纵切和 Workbench 合同上下文仍保持标准边界。
+
+## 329. 生成层标准入口校验：Generation Entry Contract Validation
+
+### 329.1 结构变化
+
+`generationEntry` 新增运行期合同校验对象：
+
+```text
+generationEntry.contractValidation
+```
+
+结构为：
+
+```text
+schemaVersion = 1
+sourceKind = azpr-action-hit-three-value-delta-generation-entry-contract-validation
+status = generation-entry-contract-valid | generation-entry-contract-invalid
+contractName
+topology
+outputNames
+actionCount
+hitCount
+deltaCount
+checkCount
+issueCount
+issueKeys
+checks[]
+valid
+applied = false
+```
+
+`checks[]` 当前覆盖：
+
+```text
+contract-name
+topology
+output-names
+standard-contract-actions-reference
+standard-contract-hits-reference
+standard-contract-deltas-reference
+runtime-input-source-contract-reference
+runtime-input-source-deltas-reference
+outputs-standard-contract-reference
+outputs-actions-reference
+outputs-hits-reference
+outputs-deltas-reference
+summary-action-count
+summary-hit-count
+summary-delta-count
+summary-applied-delta-count
+delta-required-fields
+deltas-linked-to-actions
+deltas-linked-to-hits
+deltas-listed-by-hits
+```
+
+`generationEntry.status` 在校验失败时会进入：
+
+```text
+action-hit-three-value-delta-standard-generation-entry-contract-invalid
+```
+
+现有 ready / empty 状态保持不变：
+
+```text
+action-hit-three-value-delta-standard-generation-entry-ready
+action-hit-three-value-delta-standard-generation-entry-empty
+```
+
+新增 summary 字段：
+
+```text
+generationEntry.summary.contractValidationStatus
+generationEntry.summary.contractValidationIssueCount
+generationOutputs.summary.generationEntryContractValidationStatus
+generationOutputs.summary.generationEntryContractValidationIssueCount
+threeValueGenerationBundle.summary.standardGenerationEntryContractValidationStatus
+threeValueGenerationBundle.summary.standardGenerationEntryContractValidationIssueCount
+```
+
+`src/simulation/index.js` 新增导出：
+
+```text
+validateStandardGenerationEntryContract()
+```
+
+### 329.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只新增运行期生成入口校验边界；三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值和 UI 文案均不改变。
+
+### 329.3 验证
+
+- `threeValueGenerationBuilder.test.js` 覆盖有效 `generationEntry` 的合同校验结果。
+- `threeValueGenerationBuilder.test.js` 覆盖故意打散 `generationEntry.deltas` 引用时，校验会在 runtime 消费前报告 contract drift。
+- `npm run test -- --run src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，7 个测试文件、36 条测试。
