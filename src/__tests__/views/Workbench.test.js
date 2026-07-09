@@ -2619,6 +2619,52 @@ describe('Workbench view', () => {
     );
   });
 
+  it('guards the narrow result loop layout contract', () => {
+    const workbenchSource = compactSource(
+      readTestSource('../../views/Workbench.vue')
+    );
+    const resourcePanelSource = compactSource(
+      readTestSource('../../features/workbench/ResourceMonitorPanel.vue')
+    );
+    const eventPanelSource = compactSource(
+      readTestSource('../../features/workbench/EventLogPanel.vue')
+    );
+
+    expect(workbenchSource).toContain(
+      ".runtime-review-stack[data-runtime-review-layout='result-check']{grid-template-columns:1fr;}"
+    );
+    expect(resourcePanelSource).toContain(
+      '@media(max-width:760px){.runtime-state-grid,.runtime-curve-selection-primary,.runtime-curve-selection-grid{grid-template-columns:1fr;}'
+    );
+    expect(resourcePanelSource).toContain(
+      '.runtime-curve-selection-heading{grid-template-columns:minmax(0,1fr);align-items:stretch;}'
+    );
+    expect(resourcePanelSource).toContain(
+      '.runtime-curve-action-focus{width:100%;}'
+    );
+    expect(resourcePanelSource).toContain(
+      '.runtime-curve-selection-nav{grid-template-columns:28pxminmax(0,1fr)28px;}'
+    );
+    expect(resourcePanelSource).toContain(
+      '.runtime-curve-legend-row{grid-template-columns:9pxminmax(0,1fr);}'
+    );
+    expect(eventPanelSource).toContain(
+      '@media(max-width:760px){.event-list>li,.runtime-log-row,.runtime-log-detail,.runtime-select-filters{grid-template-columns:1fr;gap:4px;}'
+    );
+    expect(eventPanelSource).toContain(
+      '.runtime-track-filters{grid-template-columns:repeat(2,minmax(0,1fr));}'
+    );
+    expect(eventPanelSource).toContain(
+      ".runtime-log-filter-summary,.runtime-log-navigation,.runtime-log-detail[data-detail-layout='compact'],.runtime-log-detail.runtime-log-edit-context,.runtime-log-detail.runtime-log-detail-handoff{grid-template-columns:1fr;}"
+    );
+    expect(eventPanelSource).toContain(
+      '.runtime-log-selection-note{align-items:stretch;flex-direction:column;}'
+    );
+    expect(eventPanelSource).toContain(
+      '.runtime-log-selection-notebutton,.runtime-log-action-focus,.runtime-log-result-return{width:100%;}'
+    );
+  });
+
   it('edits selected action timing with 60fps frame controls', async () => {
     const wrapper = mount(Workbench, {
       global: {

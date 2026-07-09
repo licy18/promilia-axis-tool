@@ -1784,4 +1784,50 @@ li strong {
   color: #8f9aa3;
   font-size: 12px;
 }
+
+@media (max-width: 760px) {
+  .runtime-state-grid,
+  .runtime-curve-selection-primary,
+  .runtime-curve-selection-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .runtime-energy-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .runtime-curve-selection-heading {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .runtime-curve-selection-heading strong,
+  .runtime-curve-selection-heading small {
+    white-space: normal;
+  }
+
+  .runtime-curve-action-focus {
+    width: 100%;
+  }
+
+  .runtime-curve-selection-nav {
+    grid-template-columns: 28px minmax(0, 1fr) 28px;
+  }
+
+  .runtime-curve-selection-nav span {
+    text-align: center;
+    white-space: normal;
+  }
+
+  .runtime-curve-legend-row {
+    grid-template-columns: 9px minmax(0, 1fr);
+  }
+
+  .runtime-curve-legend-row strong {
+    grid-column: 2;
+    white-space: normal;
+  }
+}
 </style>

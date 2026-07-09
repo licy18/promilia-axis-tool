@@ -2035,6 +2035,50 @@ h2 {
     gap: 4px;
   }
 
+  .runtime-track-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .runtime-log-filter-summary,
+  .runtime-log-navigation,
+  .runtime-log-detail[data-detail-layout='compact'],
+  .runtime-log-detail .runtime-log-edit-context,
+  .runtime-log-detail .runtime-log-detail-handoff {
+    grid-template-columns: 1fr;
+  }
+
+  .runtime-log-selection-note {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .runtime-log-selection-note button,
+  .runtime-log-action-focus,
+  .runtime-log-result-return {
+    width: 100%;
+  }
+
+  .runtime-log-edit-context strong,
+  .runtime-log-edit-context small,
+  .runtime-log-detail-handoff strong,
+  .runtime-log-detail-handoff small {
+    white-space: normal;
+  }
+
+  .runtime-contribution-row,
+  .runtime-calculator-row,
+  .runtime-source-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .runtime-contribution-row strong,
+  .runtime-calculator-row strong,
+  .runtime-source-row strong {
+    text-align: left;
+  }
+
   .payload {
     white-space: normal;
   }
