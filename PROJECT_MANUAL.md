@@ -11068,6 +11068,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：优先推进复制动作后的结果定位与贡献拆分完整闭环，之后再回到更大一层的动作编辑体验串联。
 
+### 2026-07-09：UI 主流程复制动作结果 - Copied Action Result Loop
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 固定 `查看运行结果 -> 复制动作 -> 自动查看复制动作结果 -> 曲线/日志/三值详情/贡献拆分同步` 的 Workbench 闭环。
+- 用户在运行结果态复制当前动作后，主流程会定位到复制出的新动作结果，而不是继续停留在原动作结果上。
+- 复制动作结果打开后，资源曲线选中点、模拟日志导航、动作结果行和 HP 贡献拆分都会同步到复制动作对应的 state point。
+- 本阶段只补齐 UI 主流程复制动作后的结果定位回归，不改变运行时输出、三值结果、公式、证据字段或数据结构。
+
+当前验证事实：
+
+- 扩展 `opens the copied action result and contribution split in the runtime view`。
+- 该用例覆盖：从 `runtime-result` 打开原动作结果，复制后选中 `action-0002`，并确认三值详情、曲线、日志、动作结果和贡献拆分都同步到 `action-0002` 的 state point。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "opens the copied action result"`：通过，1 条目标测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、66 条测试。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把新增/复制/拖拽/删除这些局部闭环串成一条更完整的 Workbench 演示路径，优先覆盖用户连续排轴编辑后的结果定位。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

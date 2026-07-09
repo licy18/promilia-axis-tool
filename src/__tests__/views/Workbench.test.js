@@ -3659,7 +3659,7 @@ describe('Workbench view', () => {
     ).toBe(firstActionStatePointId);
   });
 
-  it('syncs runtime detail after copying an action in the runtime view', async () => {
+  it('opens the copied action result and contribution split in the runtime view', async () => {
     const wrapper = mount(Workbench, {
       global: {
         stubs: {
@@ -3708,12 +3708,33 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-navigation"]')
         .attributes('data-state-point-id')
     ).toBe(copiedStatePointId);
+    const actionResultRow = wrapper.find(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0002"]'
+    );
+    expect(actionResultRow.attributes('data-selected-state-point-id')).toBe(
+      copiedStatePointId
+    );
+    expect(actionResultRow.attributes('data-result-location-status')).toBe(
+      'selected-result'
+    );
+
+    const actionContributionPanel = wrapper.find(
+      '[data-testid="workbench-action-contribution-panel"]'
+    );
+    expect(actionContributionPanel.attributes('data-action-id')).toBe(
+      'action-0002'
+    );
+    const hpContributionRow = wrapper.find(
+      '[data-testid="workbench-action-contribution-row"][data-track-key="enemyHpDamage"]'
+    );
+    expect(hpContributionRow.attributes('data-state-point-id')).toBe(
+      copiedStatePointId
+    );
+    expect(hpContributionRow.attributes('data-active')).toBe('true');
     expect(
       wrapper
-        .find(
-          '[data-testid="workbench-action-result-source-row"][data-action-id="action-0002"]'
-        )
-        .attributes('data-selected-state-point-id')
+        .find('[data-testid="workbench-action-contribution-detail"]')
+        .attributes('data-state-point-id')
     ).toBe(copiedStatePointId);
   });
 
