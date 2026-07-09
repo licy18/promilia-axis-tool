@@ -205,6 +205,10 @@ function createRuntimeSimLogOutputContract({ runtimeInput, simLog }) {
     keyFields: ['sourceDeltaId', 'runtimeSequenceIndex'],
     eventType: 'THREE_VALUE_DELTA_APPLIED',
     valueFields: ['delta', 'hpDelta', 'toughnessDelta', 'energyDelta'],
+    aggregateFields: [
+      'actionThreeValueDeltaAggregate',
+      'hitThreeValueDeltaAggregate',
+    ],
     calculatorFields: [
       'calculatorKey',
       'calculatorVersion',
@@ -453,6 +457,9 @@ function createThreeValueRuntimeSimLog(appliedDeltas) {
     hpDelta: normalizeThreeValueRuntimeNumber(delta.hpDelta),
     toughnessDelta: normalizeThreeValueRuntimeNumber(delta.toughnessDelta),
     energyDelta: normalizeThreeValueRuntimeNumber(delta.energyDelta),
+    actionThreeValueDeltaAggregate:
+      delta.actionThreeValueDeltaAggregate ?? null,
+    hitThreeValueDeltaAggregate: delta.hitThreeValueDeltaAggregate ?? null,
     calculator: delta.calculator ?? null,
     calculatorKey: delta.calculatorKey ?? delta.calculator?.key ?? null,
     calculatorVersion:
@@ -498,6 +505,9 @@ function createThreeValueRuntimePoint(delta, sequenceIndex) {
     hpDelta: normalizeThreeValueRuntimeNumber(delta.hpDelta),
     toughnessDelta: normalizeThreeValueRuntimeNumber(delta.toughnessDelta),
     energyDelta: normalizeThreeValueRuntimeNumber(delta.energyDelta),
+    actionThreeValueDeltaAggregate:
+      delta.actionThreeValueDeltaAggregate ?? null,
+    hitThreeValueDeltaAggregate: delta.hitThreeValueDeltaAggregate ?? null,
     calculator: delta.calculator ?? null,
     calculatorKey: delta.calculatorKey ?? delta.calculator?.key ?? null,
     calculatorVersion:

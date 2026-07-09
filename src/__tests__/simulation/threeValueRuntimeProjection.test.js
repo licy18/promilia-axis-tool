@@ -742,6 +742,56 @@ describe('three value runtime projection', () => {
               hitCount: 1,
               deltaCount: 1,
             },
+            actions: [
+              {
+                actionId: 'action-001',
+                actionName: '普通攻击',
+                threeValueDeltaAggregate: {
+                  sourceKind: 'azpr-action-hit-three-value-delta-aggregate',
+                  deltaCount: 1,
+                  layerKeys: ['applied'],
+                  trackKeys: ['enemyHpDamage'],
+                  layers: {
+                    applied: {
+                      layerKey: 'applied',
+                      runtimeApplied: true,
+                      deltaCount: 1,
+                      trackKeys: ['enemyHpDamage'],
+                      hpDelta: 800,
+                      toughnessDelta: 0,
+                      energyDelta: 0,
+                    },
+                  },
+                },
+              },
+            ],
+            hits: [
+              {
+                actionId: 'action-001',
+                actionName: '普通攻击',
+                hitKey: 'hit-1',
+                hitIndex: 1,
+                frameIndex: 60,
+                timeMs: 1000,
+                threeValueDeltaAggregate: {
+                  sourceKind: 'azpr-action-hit-three-value-delta-aggregate',
+                  deltaCount: 1,
+                  layerKeys: ['applied'],
+                  trackKeys: ['enemyHpDamage'],
+                  layers: {
+                    applied: {
+                      layerKey: 'applied',
+                      runtimeApplied: true,
+                      deltaCount: 1,
+                      trackKeys: ['enemyHpDamage'],
+                      hpDelta: 800,
+                      toughnessDelta: 0,
+                      energyDelta: 0,
+                    },
+                  },
+                },
+              },
+            ],
             deltas: [
               {
                 id: 'action-001|hit-1|enemyHpDamage|applied|60|0',
@@ -821,6 +871,47 @@ describe('three value runtime projection', () => {
       appliedDeltaCount: 1,
       enemyHpDelta: 800,
       simLogCount: 1,
+    });
+    expect(runtimeProjection.outputContract.outputs.simLog).toMatchObject({
+      aggregateFields: [
+        'actionThreeValueDeltaAggregate',
+        'hitThreeValueDeltaAggregate',
+      ],
+    });
+    expect(runtimeProjection.runtimeInput.appliedDeltas[0]).toMatchObject({
+      actionThreeValueDeltaAggregate: expect.objectContaining({
+        deltaCount: 1,
+      }),
+      hitThreeValueDeltaAggregate: expect.objectContaining({
+        layers: {
+          applied: expect.objectContaining({
+            hpDelta: 800,
+            toughnessDelta: 0,
+            energyDelta: 0,
+          }),
+        },
+      }),
+    });
+    expect(runtimeProjection.simLog[0]).toMatchObject({
+      actionThreeValueDeltaAggregate: expect.objectContaining({
+        deltaCount: 1,
+      }),
+      hitThreeValueDeltaAggregate: expect.objectContaining({
+        layers: {
+          applied: expect.objectContaining({
+            hpDelta: 800,
+          }),
+        },
+      }),
+    });
+    expect(runtimeProjection.enemyStateCurve.points[0]).toMatchObject({
+      hitThreeValueDeltaAggregate: expect.objectContaining({
+        layers: {
+          applied: expect.objectContaining({
+            hpDelta: 800,
+          }),
+        },
+      }),
     });
     expect(runtimeProjection.runtimeOutputs.outputSummary).toMatchObject({
       outputCount: 4,

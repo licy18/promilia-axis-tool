@@ -27,6 +27,28 @@ describe('runtime selected detail', () => {
           trackKey: 'enemyHpDamage',
           layerKey: 'applied',
           hpDelta: 10,
+          actionThreeValueDeltaAggregate: {
+            sourceKind: 'azpr-action-hit-three-value-delta-aggregate',
+            deltaCount: 3,
+            layers: {
+              applied: {
+                hpDelta: 10,
+                toughnessDelta: 3,
+                energyDelta: -5,
+              },
+            },
+          },
+          hitThreeValueDeltaAggregate: {
+            sourceKind: 'azpr-action-hit-three-value-delta-aggregate',
+            deltaCount: 3,
+            layers: {
+              applied: {
+                hpDelta: 10,
+                toughnessDelta: 3,
+                energyDelta: -5,
+              },
+            },
+          },
         },
       ],
       stateCurves: {
@@ -107,8 +129,28 @@ describe('runtime selected detail', () => {
         delta: 10,
         cumulative: 10,
         stateValue: 90,
+        hitThreeValueDeltaAggregate: expect.objectContaining({
+          deltaCount: 3,
+        }),
       })
     );
+    expect(detail?.contributionRows).toEqual([
+      expect.objectContaining({
+        key: 'hp',
+        value: 10,
+        active: true,
+      }),
+      expect.objectContaining({
+        key: 'toughness',
+        value: 3,
+        active: false,
+      }),
+      expect.objectContaining({
+        key: 'energy',
+        value: -5,
+        active: false,
+      }),
+    ]);
     expect(detail?.simLogRow?.sourceDeltaId).toBe('hp-delta');
     expect(detail?.sourceRows).toEqual(
       expect.arrayContaining([

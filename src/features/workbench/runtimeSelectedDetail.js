@@ -53,6 +53,14 @@ export function createRuntimeSelectedDetail({
 
   const simLogRow = selectedContext.row ?? null;
   const sourceIds = pointRow.sourceIds ?? {};
+  const actionThreeValueDeltaAggregate =
+    pointRow.actionThreeValueDeltaAggregate ??
+    simLogRow?.actionThreeValueDeltaAggregate ??
+    null;
+  const hitThreeValueDeltaAggregate =
+    pointRow.hitThreeValueDeltaAggregate ??
+    simLogRow?.hitThreeValueDeltaAggregate ??
+    null;
 
   return {
     statePointId: selectedStateCurvePointId,
@@ -113,6 +121,8 @@ export function createRuntimeSelectedDetail({
       pointRow.toughnessDelta ?? simLogRow?.toughnessDelta
     ),
     energyDelta: numberOrZero(pointRow.energyDelta ?? simLogRow?.energyDelta),
+    actionThreeValueDeltaAggregate,
+    hitThreeValueDeltaAggregate,
     status:
       pointRow.resultStatus ??
       pointRow.sourceStatus ??
@@ -120,7 +130,10 @@ export function createRuntimeSelectedDetail({
       'applied',
     confidence: pointRow.confidence ?? simLogRow?.confidence ?? null,
     sourceIds,
-    contributionRows: createRuntimeDetailContributionRows(pointRow),
+    contributionRows: createRuntimeDetailContributionRows(
+      pointRow,
+      hitThreeValueDeltaAggregate
+    ),
     sourceRows: createRuntimeDetailSourceRows(sourceIds),
     calculatorRows: createRuntimeDetailCalculatorRows(pointRow, simLogRow),
     simLogRow,
@@ -209,6 +222,14 @@ function createRuntimeTrackRows({
         baselineMaxValue: pointState.baselineMaxValue,
         baselineConfirmed: pointState.baselineConfirmed,
         calculator: point.calculator ?? null,
+        actionThreeValueDeltaAggregate:
+          point.actionThreeValueDeltaAggregate ??
+          context?.row?.actionThreeValueDeltaAggregate ??
+          null,
+        hitThreeValueDeltaAggregate:
+          point.hitThreeValueDeltaAggregate ??
+          context?.row?.hitThreeValueDeltaAggregate ??
+          null,
         calculatorKey: point.calculatorKey ?? point.calculator?.key ?? null,
         calculationKind:
           point.calculationKind ?? point.calculator?.kind ?? null,
@@ -258,12 +279,18 @@ function createRuntimePointState(stateMetric, cumulative) {
   };
 }
 
-function createRuntimeDetailContributionRows(point) {
+function createRuntimeDetailContributionRows(point, hitAggregate = null) {
+  const appliedAggregate = hitAggregate?.layers?.applied ?? null;
   return [
     {
       key: 'hp',
       label: '敌人 HP',
-      value: point.trackKey === 'enemyHpDamage' ? numberOrZero(point.delta) : 0,
+      value:
+        appliedAggregate != null
+          ? numberOrZero(appliedAggregate.hpDelta)
+          : point.trackKey === 'enemyHpDamage'
+            ? numberOrZero(point.delta)
+            : 0,
       active: point.trackKey === 'enemyHpDamage',
       signed: false,
     },
@@ -271,9 +298,11 @@ function createRuntimeDetailContributionRows(point) {
       key: 'toughness',
       label: '敌人韧性',
       value:
-        point.trackKey === 'enemyToughnessDamage'
-          ? numberOrZero(point.delta)
-          : 0,
+        appliedAggregate != null
+          ? numberOrZero(appliedAggregate.toughnessDelta)
+          : point.trackKey === 'enemyToughnessDamage'
+            ? numberOrZero(point.delta)
+            : 0,
       active: point.trackKey === 'enemyToughnessDamage',
       signed: false,
     },
@@ -281,7 +310,11 @@ function createRuntimeDetailContributionRows(point) {
       key: 'energy',
       label: '自身能量',
       value:
-        point.trackKey === 'selfEnergyChange' ? numberOrZero(point.delta) : 0,
+        appliedAggregate != null
+          ? numberOrZero(appliedAggregate.energyDelta)
+          : point.trackKey === 'selfEnergyChange'
+            ? numberOrZero(point.delta)
+            : 0,
       active: point.trackKey === 'selfEnergyChange',
       signed: true,
     },

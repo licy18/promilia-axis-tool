@@ -92,6 +92,35 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
         hpDelta: 1200,
         toughnessDelta: null,
         energyDelta: null,
+        actionThreeValueDeltaAggregate: expect.objectContaining({
+          sourceKind: 'azpr-action-hit-three-value-delta-aggregate',
+          deltaCount: 3,
+          layerKeys: ['applied', 'placeholder'],
+          layers: {
+            applied: expect.objectContaining({
+              hpDelta: 1200,
+              toughnessDelta: 0,
+              energyDelta: 0,
+            }),
+            placeholder: expect.objectContaining({
+              hpDelta: 0,
+              toughnessDelta: 0,
+              energyDelta: 0,
+            }),
+          },
+        }),
+        hitThreeValueDeltaAggregate: expect.objectContaining({
+          sourceKind: 'azpr-action-hit-three-value-delta-aggregate',
+          deltaCount: 1,
+          layerKeys: ['applied'],
+          layers: {
+            applied: expect.objectContaining({
+              hpDelta: 1200,
+              toughnessDelta: 0,
+              energyDelta: 0,
+            }),
+          },
+        }),
         applied: true,
       }),
     ]);

@@ -22221,5 +22221,56 @@ aggregateLayerKeys = ["applied", "candidate", "sampled", "placeholder"]
 - `npm run test -- --run`：通过，38 个测试文件、272 条测试。
 - `npm run test:e2e`：通过，12 条浏览器级烟测。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/simulation/runtime/actionHitThreeValueRuntimeInput.js src/simulation/runtime/threeValueRuntimeProjection.js src/features/workbench/runtimeSelectedDetail.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/features/runtimeSelectedDetail.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
 - `npx prettier --check PROJECT_MANUAL.md src/simulation/generation/threeValueGenerationLayer.js src/__tests__/simulation/threeValueGenerationLayer.test.js`：通过。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 310. 运行时消费动作/命中三值聚合：Runtime Aggregate Propagation
+
+### 310.1 结构变化
+
+`createActionHitThreeValueRuntimeInput()` 现在会从标准合同的 `actions[] / hits[]` 查找聚合，并挂到每条 applied delta：
+
+```text
+appliedDelta.actionThreeValueDeltaAggregate
+appliedDelta.hitThreeValueDeltaAggregate
+```
+
+`threeValueRuntimeProjection` 继续把这两个字段透传到：
+
+```text
+simLog[].actionThreeValueDeltaAggregate
+simLog[].hitThreeValueDeltaAggregate
+enemyStateCurve.points[].actionThreeValueDeltaAggregate
+enemyStateCurve.points[].hitThreeValueDeltaAggregate
+resourceCurves.curvesByActor[].points[].actionThreeValueDeltaAggregate
+resourceCurves.curvesByActor[].points[].hitThreeValueDeltaAggregate
+```
+
+`outputContract.outputs.simLog` 新增：
+
+```text
+aggregateFields = [
+  "actionThreeValueDeltaAggregate",
+  "hitThreeValueDeltaAggregate"
+]
+```
+
+`runtimeSelectedDetail` 新增同名字段，并且 `contributionRows` 优先从 `hitThreeValueDeltaAggregate.layers.applied` 读取 HP / 韧性 / 自身能量三值贡献；没有聚合时回退旧的单点 delta 逻辑。
+
+### 310.2 保存与迁移
+
+不新增项目草稿字段，不改变导入导出 schema，不需要数据迁移。
+
+本阶段不改变 HP、韧性、自身能量计算结果，不改变公式、倍率或证据字段。
+
+### 310.3 验证
+
+- `actionHitThreeValueRuntimeInput.test.js` 覆盖标准合同 action / hit 聚合进入 runtime applied delta。
+- `threeValueRuntimeProjection.test.js` 覆盖 simLog output contract 声明聚合字段，并确认 simLog 与 enemy state point 透传 hit 聚合。
+- `runtimeSelectedDetail.test.js` 覆盖三值详情贡献行优先读取 hit applied 聚合。
+- `npm run test -- --run src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/features/runtimeSelectedDetail.test.js`：通过，3 个测试文件、7 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、272 条测试。
+- `npm run test:e2e`：通过，12 条浏览器级烟测。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

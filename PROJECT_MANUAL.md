@@ -11958,6 +11958,35 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议进入运行时层或 UI 主流程：让贡献拆分、日志详情或资源曲线优先消费 action / hit 的 `threeValueDeltaAggregate`，减少各处重复扫描 delta。
 
+### 2026-07-09：运行时层能力块 - Action / Hit 三值聚合消费
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- runtime input 现在从 `Action -> Hit -> ThreeValueDelta` 标准合同读取 action / hit 聚合，并挂到每条 applied delta。
+- runtime projection 将聚合透传到 `simLog`、敌人状态曲线点和资源曲线点，`outputContract.outputs.simLog` 明确声明聚合字段。
+- 三值详情的贡献行优先读取当前 hit 的 applied 聚合，因此同一命中以后若同时产生 HP、韧性、自身能量变化，详情能直接展示完整三值槽位。
+- 本阶段不改变任何三值计算结果，不改公式、倍率、证据字段、保存数据或导入导出结构。
+
+当前验证事实：
+
+- 新增 runtime input / projection / detail 单元断言，固定 `standardContract aggregate -> runtime applied delta -> simLog / runtime point -> runtimeSelectedDetail.contributionRows` 链路。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `310. 运行时消费动作/命中三值聚合`。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/features/runtimeSelectedDetail.test.js`：通过，3 个测试文件、7 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、272 条测试。
+- `npm run test:e2e`：通过，12 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/simulation/runtime/actionHitThreeValueRuntimeInput.js src/simulation/runtime/threeValueRuntimeProjection.js src/features/workbench/runtimeSelectedDetail.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/features/runtimeSelectedDetail.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 建议进入 UI 主流程：让贡献拆分面板或日志详情显式展示 hit 聚合来源，完成“运行结果 -> 日志/贡献 -> 三值详情”的更直观可见闭环。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

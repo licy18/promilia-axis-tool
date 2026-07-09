@@ -22,9 +22,13 @@ export function createActionHitThreeValueRuntimeInput({
   const inputDeltas = [...(resolvedSource.deltas ?? [])].sort(
     compareThreeValueGenerationDeltas
   );
+  const aggregateIndex =
+    createActionHitThreeValueRuntimeAggregateIndex(standardContract);
   const appliedDeltas = inputDeltas
     .filter(delta => delta?.applied)
-    .map((delta, index) => normalizeRuntimeInputDelta(delta, index));
+    .map((delta, index) =>
+      normalizeRuntimeInputDelta(delta, index, aggregateIndex)
+    );
   const ignoredDeltas = inputDeltas.filter(delta => !delta?.applied);
   const contractName =
     standardContract?.name ??
@@ -182,7 +186,11 @@ function createRuntimeInputSourceKind(resolvedSource) {
   return 'azpr-runtime-input-from-three-value-generation-layer';
 }
 
-function normalizeRuntimeInputDelta(delta, runtimeSequenceIndex) {
+function normalizeRuntimeInputDelta(
+  delta,
+  runtimeSequenceIndex,
+  aggregateIndex
+) {
   return {
     ...delta,
     runtimeSequenceIndex,
@@ -190,8 +198,50 @@ function normalizeRuntimeInputDelta(delta, runtimeSequenceIndex) {
     hpDelta: normalizeRuntimeInputNumber(delta.hpDelta),
     toughnessDelta: normalizeRuntimeInputNumber(delta.toughnessDelta),
     energyDelta: normalizeRuntimeInputNumber(delta.energyDelta),
+    actionThreeValueDeltaAggregate:
+      aggregateIndex.actionAggregates.get(createAggregateActionKey(delta)) ??
+      null,
+    hitThreeValueDeltaAggregate:
+      aggregateIndex.hitAggregates.get(createAggregateHitKey(delta)) ?? null,
     applied: true,
   };
+}
+
+function createActionHitThreeValueRuntimeAggregateIndex(standardContract) {
+  return {
+    actionAggregates: new Map(
+      (standardContract?.actions ?? [])
+        .filter(action => action?.threeValueDeltaAggregate)
+        .map(action => [
+          createAggregateActionKey(action),
+          action.threeValueDeltaAggregate,
+        ])
+    ),
+    hitAggregates: new Map(
+      (standardContract?.hits ?? [])
+        .filter(hit => hit?.threeValueDeltaAggregate)
+        .map(hit => [createAggregateHitKey(hit), hit.threeValueDeltaAggregate])
+    ),
+  };
+}
+
+function createAggregateActionKey(item) {
+  return createAggregateIdPart(item?.actionId ?? 'system');
+}
+
+function createAggregateHitKey(item) {
+  return [
+    item?.actionId ?? 'system',
+    item?.hitKey,
+    item?.frameIndex,
+    item?.timeMs,
+  ]
+    .map(createAggregateIdPart)
+    .join('|');
+}
+
+function createAggregateIdPart(value) {
+  return String(value ?? 'none').replace(/\|/g, '/');
 }
 
 function summarizeActionHitThreeValueRuntimeInput({
