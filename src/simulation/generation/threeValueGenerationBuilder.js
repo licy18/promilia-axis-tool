@@ -10,6 +10,7 @@ const STANDARD_GENERATION_ENTRY_OUTPUT_NAMES = [
   'actions',
   'hits',
   'deltas',
+  'valueSourceSlots',
   'runtimeInputSource',
 ];
 const STANDARD_GENERATION_ENTRY_TOPOLOGY = ['Action', 'Hit', 'ThreeValueDelta'];
@@ -106,6 +107,7 @@ function createThreeValueGenerationOutputs({
     actions: standardContract.actions,
     hits: standardContract.hits,
     deltas: standardContract.deltas,
+    valueSourceSlots: standardContract.valueSourceSlots ?? [],
     runtimeInputSource,
     runtimeInput: runtimeInputSource,
   };
@@ -118,6 +120,11 @@ function createThreeValueGenerationOutputs({
     candidateDeltaCount: standardContract.summary?.candidateDeltaCount ?? 0,
     sampledDeltaCount: standardContract.summary?.sampledDeltaCount ?? 0,
     placeholderDeltaCount: standardContract.summary?.placeholderDeltaCount ?? 0,
+    valueSourceSlotCount: standardContract.summary?.valueSourceSlotCount ?? 0,
+    runtimeValueSourceSlotCount:
+      standardContract.summary?.runtimeValueSourceSlotCount ?? 0,
+    replaceableValueSourceSlotCount:
+      standardContract.summary?.replaceableValueSourceSlotCount ?? 0,
     runtimeInputSourceKind: runtimeInputSource.sourceKind,
     runtimeInputSourceStatus: runtimeInputSource.status,
     generationEntryContractValidationStatus:
@@ -168,6 +175,7 @@ function createThreeValueGenerationOutputs({
     actions: standardContract.actions,
     hits: standardContract.hits,
     deltas: standardContract.deltas,
+    valueSourceSlots: standardContract.valueSourceSlots ?? [],
     runtimeInputSource,
     runtimeInput: runtimeInputSource,
     outputs,
@@ -187,6 +195,7 @@ function createStandardGenerationEntry({
   const actions = standardContract.actions ?? [];
   const hits = standardContract.hits ?? [];
   const deltas = standardContract.deltas ?? [];
+  const valueSourceSlots = standardContract.valueSourceSlots ?? [];
   const entry = {
     schemaVersion: 1,
     sourceKind: 'azpr-action-hit-three-value-delta-standard-generation-entry',
@@ -205,6 +214,7 @@ function createStandardGenerationEntry({
     actions,
     hits,
     deltas,
+    valueSourceSlots,
     runtimeInputSource,
     outputs: {
       generationInput,
@@ -212,6 +222,7 @@ function createStandardGenerationEntry({
       actions,
       hits,
       deltas,
+      valueSourceSlots,
       runtimeInputSource,
     },
     outputNames: STANDARD_GENERATION_ENTRY_OUTPUT_NAMES,
@@ -236,6 +247,11 @@ function createStandardGenerationEntry({
       sampledDeltaCount: standardContract.summary?.sampledDeltaCount ?? 0,
       placeholderDeltaCount:
         standardContract.summary?.placeholderDeltaCount ?? 0,
+      valueSourceSlotCount: standardContract.summary?.valueSourceSlotCount ?? 0,
+      runtimeValueSourceSlotCount:
+        standardContract.summary?.runtimeValueSourceSlotCount ?? 0,
+      replaceableValueSourceSlotCount:
+        standardContract.summary?.replaceableValueSourceSlotCount ?? 0,
       runtimeDeltaPolicy: standardContract.runtimeDeltaPolicy,
       contractValidationStatus: contractValidation.status,
       contractValidationIssueCount: contractValidation.issueCount,
@@ -253,6 +269,7 @@ export function validateStandardGenerationEntryContract(generationEntry = {}) {
   const actions = generationEntry.actions;
   const hits = generationEntry.hits;
   const deltas = generationEntry.deltas;
+  const valueSourceSlots = generationEntry.valueSourceSlots;
   const actionKeys = new Set(
     (actions ?? []).map(action => createGenerationEntryActionKey(action))
   );
@@ -303,6 +320,10 @@ export function validateStandardGenerationEntryContract(generationEntry = {}) {
       valid: deltas === standardContract?.deltas,
     }),
     createGenerationEntryValidationCheck({
+      key: 'standard-contract-value-source-slots-reference',
+      valid: valueSourceSlots === standardContract?.valueSourceSlots,
+    }),
+    createGenerationEntryValidationCheck({
       key: 'runtime-input-source-contract-reference',
       valid:
         generationEntry.runtimeInputSource?.standardContract ===
@@ -311,6 +332,12 @@ export function validateStandardGenerationEntryContract(generationEntry = {}) {
     createGenerationEntryValidationCheck({
       key: 'runtime-input-source-deltas-reference',
       valid: generationEntry.runtimeInputSource?.deltas === deltas,
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'runtime-input-source-value-source-slots-reference',
+      valid:
+        generationEntry.runtimeInputSource?.valueSourceSlots ===
+        valueSourceSlots,
     }),
     createGenerationEntryValidationCheck({
       key: 'outputs-standard-contract-reference',
@@ -327,6 +354,10 @@ export function validateStandardGenerationEntryContract(generationEntry = {}) {
     createGenerationEntryValidationCheck({
       key: 'outputs-deltas-reference',
       valid: generationEntry.outputs?.deltas === deltas,
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'outputs-value-source-slots-reference',
+      valid: generationEntry.outputs?.valueSourceSlots === valueSourceSlots,
     }),
     createGenerationEntryValidationCheck({
       key: 'summary-action-count',
@@ -399,6 +430,7 @@ export function validateStandardGenerationEntryContract(generationEntry = {}) {
     actionCount: actions?.length ?? 0,
     hitCount: hits?.length ?? 0,
     deltaCount: deltas?.length ?? 0,
+    valueSourceSlotCount: valueSourceSlots?.length ?? 0,
     checkCount: checks.length,
     issueCount: failedChecks.length,
     issueKeys: failedChecks.map(check => check.key),
@@ -631,11 +663,17 @@ function createRuntimeInputSource({
     standardContractStatus: standardContract.status,
     standardContract,
     deltas: standardContract.deltas,
+    valueSourceSlots: standardContract.valueSourceSlots ?? [],
     summary: {
       actionCount: standardContract.summary?.actionCount ?? 0,
       hitCount: standardContract.summary?.hitCount ?? 0,
       deltaCount: standardContract.summary?.deltaCount ?? 0,
       appliedDeltaCount: standardContract.summary?.appliedDeltaCount ?? 0,
+      valueSourceSlotCount: standardContract.summary?.valueSourceSlotCount ?? 0,
+      runtimeValueSourceSlotCount:
+        standardContract.summary?.runtimeValueSourceSlotCount ?? 0,
+      replaceableValueSourceSlotCount:
+        standardContract.summary?.replaceableValueSourceSlotCount ?? 0,
       runtimeDeltaPolicy: standardContract.runtimeDeltaPolicy,
       applied: false,
     },
@@ -685,6 +723,11 @@ function createThreeValueGenerationBundleSummary({
     candidateDeltaCount: standardContract.summary?.candidateDeltaCount ?? 0,
     sampledDeltaCount: standardContract.summary?.sampledDeltaCount ?? 0,
     placeholderDeltaCount: standardContract.summary?.placeholderDeltaCount ?? 0,
+    valueSourceSlotCount: standardContract.summary?.valueSourceSlotCount ?? 0,
+    runtimeValueSourceSlotCount:
+      standardContract.summary?.runtimeValueSourceSlotCount ?? 0,
+    replaceableValueSourceSlotCount:
+      standardContract.summary?.replaceableValueSourceSlotCount ?? 0,
     calculatorCount: standardContract.summary?.calculatorCount ?? 0,
     applied: false,
   };
@@ -705,6 +748,7 @@ function createFallbackStandardContract(threeValueGenerationLayer) {
     actions: threeValueGenerationLayer?.actions ?? [],
     hits: threeValueGenerationLayer?.hits ?? [],
     deltas: threeValueGenerationLayer?.deltas ?? [],
+    valueSourceSlots: threeValueGenerationLayer?.valueSourceSlots ?? [],
     summary: threeValueGenerationLayer?.summary ?? {},
     applied: false,
   };

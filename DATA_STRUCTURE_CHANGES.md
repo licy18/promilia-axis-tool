@@ -23822,3 +23822,150 @@ simLog input source connected to applied deltas
 - `firstVerticalSliceSimulation.test.js` 覆盖真实纵切路径的 runtime input 具备 `standardGenerationAggregateBoundaryReady`。
 - `workbenchFlowContractContext.test.js` 和 `workbenchFlowModel.test.js` 覆盖 Workbench runtime contract boundary 将 aggregate validation 纳入标准边界。
 - `npm run test -- --run src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js`：通过，6 个测试文件、39 条测试。
+
+## 334. 生成层可替换数值来源槽位：Generation Value Source Slots
+
+### 334.1 结构变化
+
+标准 `Action -> Hit -> ThreeValueDelta` 生成层新增 `valueSourceSlots`，用于把 HP / 韧性 / 自身能量三条轨道在 `applied / candidate / sampled / placeholder` 四层中的数值来源固定为可替换槽位。
+
+`threeValueGenerationLayer.contract` 新增：
+
+```text
+valueSourceSlotContract
+```
+
+该合同描述：
+
+```text
+name = ThreeValueReplaceableSourceSlot
+keyFields = trackKey, layerKey
+runtimeEligibleLayerKey = applied
+replaceableLayerKeys = candidate, sampled, placeholder
+```
+
+`threeValueGenerationLayer`、`standardContract`、`generationEntry`、`generationOutputs` 和 `runtimeInputSource` 新增：
+
+```text
+valueSourceSlots
+```
+
+`generationOutputs.outputs` 新增标准输出：
+
+```text
+outputs.valueSourceSlots
+```
+
+因此 `generationOutputs.outputNames` 从：
+
+```text
+generationEntry
+generationInput
+standardContract
+actions
+hits
+deltas
+runtimeInputSource
+runtimeInput
+```
+
+扩展为：
+
+```text
+generationEntry
+generationInput
+standardContract
+actions
+hits
+deltas
+valueSourceSlots
+runtimeInputSource
+runtimeInput
+```
+
+每个 `ThreeValueDelta` 新增：
+
+```text
+valueField
+valueSourceKey
+valueSource
+```
+
+`valueSource` 结构包含：
+
+```text
+key
+trackKey
+trackLabel
+layerKey
+layerLabel
+valueField
+valueUnit
+valueSourceKind
+valueSourceStatus
+sourceIds
+confidence
+calculatorKey
+calculationStatus
+runtimeEligible
+replaceable
+replacementScope
+```
+
+`valueSourceSlots[]` 每项包含：
+
+```text
+key
+trackKey
+trackLabel
+layerKey
+layerLabel
+valueField
+valueUnit
+inputSourceKind
+inputStatus
+pointCount
+deltaCount
+appliedDeltaCount
+replaceableDeltaCount
+sourceKinds
+calculatorKeys
+confidenceKeys
+runtimeEligible
+replaceable
+replacementPolicy
+```
+
+生成层、标准入口、generation outputs 和 runtime input source 的 summary 新增：
+
+```text
+valueSourceSlotCount
+runtimeValueSourceSlotCount
+replaceableValueSourceSlotCount
+readyValueSourceSlotCount
+```
+
+其中 `readyValueSourceSlotCount` 只在 `threeValueGenerationLayer.summary` 直接记录。
+
+`validateStandardGenerationEntryContract()` 新增引用一致性检查：
+
+```text
+standard-contract-value-source-slots-reference
+runtime-input-source-value-source-slots-reference
+outputs-value-source-slots-reference
+```
+
+### 334.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只增强生成层标准入口的可替换来源合同；三值计算结果、公式、倍率、运行时 applied delta 筛选、运行日志行、曲线数值、UI 文案和项目保存结构均不改变。
+
+### 334.3 验证
+
+- `threeValueGenerationBuilder.test.js` 覆盖 `valueSourceSlots` 标准输出、`ThreeValueDelta.valueSource`、以及 generation entry / generation outputs 的 slot 计数。
+- `firstVerticalSliceSimulation.test.js` 覆盖真实纵切路径中 12 个来源槽位、3 个 runtime eligible 槽位、9 个 replaceable 槽位，并确认 `generationOutputs.outputs.valueSourceSlots` 与标准合同同源。
+- `actionHitThreeValueRuntimeInput.test.js` 和 `threeValueRuntimeProjection.test.js` 覆盖新增标准输出不改变 runtime applied delta 消费结果。
+- `npm run test -- --run src\__tests__\simulation\threeValueGenerationBuilder.test.js`：通过，1 个测试文件、3 条测试。
+- `npm run test -- --run src\__tests__\simulation\actionHitThreeValueRuntimeInput.test.js src\__tests__\simulation\threeValueRuntimeProjection.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过，3 个测试文件、24 条测试。
+- `npm run test:e2e:workbench-flow`：通过，16 条 `@workbench-main-flow` 主流程回归全部通过。

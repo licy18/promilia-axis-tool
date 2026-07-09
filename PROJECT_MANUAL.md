@@ -13251,6 +13251,28 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：优先做真实页面的紧凑操作体验和结果定位可读性；如果可见主流程已足够稳定，再恢复被暂存的生成层数值来源槽位 WIP，并按生成层大能力块单独收口。
 
+### 2026-07-10：生成层 - 可替换数值来源槽位
+
+本阶段属于：生成层。
+
+完成的可用能力：
+
+- 标准 `Action -> Hit -> ThreeValueDelta` 生成入口新增 `valueSourceSlots`，把 HP / 韧性 / 自身能量三条轨道在 `applied / candidate / sampled / placeholder` 四层中的数值来源固定成可替换槽位。
+- 每个 `ThreeValueDelta` 现在携带 `valueField`、`valueSourceKey` 和 `valueSource`，后续真实 HP 公式、削韧公式、充能公式或真实采样值可以按同一个 slot 替换，不需要改 action / hit / track key。
+- `generationEntry`、`generationOutputs.outputs` 和 `runtimeInputSource` 都透出同一组 `valueSourceSlots`，并由 generation entry contract validation 校验引用一致性。
+- 本阶段不改变三值计算结果、公式、倍率、运行时 applied delta 筛选、运行日志行、曲线数值、UI 文案或草稿保存 schema。
+
+验收结果：
+
+- `npm run test -- --run src\__tests__\simulation\threeValueGenerationBuilder.test.js`：通过，1 个测试文件、3 条测试。
+- `npm run test -- --run src\__tests__\simulation\actionHitThreeValueRuntimeInput.test.js src\__tests__\simulation\threeValueRuntimeProjection.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过，3 个测试文件、24 条测试。
+- `npm run test:e2e:workbench-flow`：通过，16 条 `@workbench-main-flow` 主流程回归全部通过。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `334. 生成层可替换数值来源槽位：Generation Value Source Slots`。
+
+下一步：
+
+- 进入运行时层能力块：让 runtime input / runtime summary 可选透出 `valueSourceSlots` 摘要，便于 Workbench 后续在不读取 generation 内部结构的前提下诊断真实数值来源替换状态。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

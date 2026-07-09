@@ -1410,6 +1410,9 @@ describe('first vertical slice simulation', () => {
         sampledDeltaCount: 0,
         placeholderDeltaCount: 0,
         replaceableDeltaCount: 15,
+        valueSourceSlotCount: 12,
+        runtimeValueSourceSlotCount: 3,
+        replaceableValueSourceSlotCount: 9,
         calculatorCount: 3,
         calculatorKeys: [
           'azpr-hp-delta-calculator',
@@ -1467,6 +1470,9 @@ describe('first vertical slice simulation', () => {
       appliedDeltaCount: 1,
       calculatorCount: 3,
       calculatorReplaceableDeltaCount: 16,
+      valueSourceSlotCount: 12,
+      runtimeValueSourceSlotCount: 3,
+      replaceableValueSourceSlotCount: 9,
       applied: false,
     });
     expect(result.threeValueGenerationBundle).toMatchObject({
@@ -1484,7 +1490,7 @@ describe('first vertical slice simulation', () => {
         generationInputPointCount: 16,
         generationOutputsSourceKind: 'azpr-three-value-generation-outputs',
         generationOutputsStatus: 'generation-outputs-ready',
-        generationOutputsOutputCount: 8,
+        generationOutputsOutputCount: 9,
         standardGenerationEntrySourceKind:
           'azpr-action-hit-three-value-delta-standard-generation-entry',
         standardGenerationEntryStatus:
@@ -1494,6 +1500,9 @@ describe('first vertical slice simulation', () => {
         deltaCount: 16,
         appliedDeltaCount: 1,
         candidateDeltaCount: 15,
+        valueSourceSlotCount: 12,
+        runtimeValueSourceSlotCount: 3,
+        replaceableValueSourceSlotCount: 9,
       },
     });
     expect(result.threeValueGenerationBundle.threeValueGenerationLayer).toBe(
@@ -1516,6 +1525,7 @@ describe('first vertical slice simulation', () => {
         'actions',
         'hits',
         'deltas',
+        'valueSourceSlots',
         'runtimeInputSource',
         'runtimeInput',
       ],
@@ -1534,14 +1544,20 @@ describe('first vertical slice simulation', () => {
           hitCount: 6,
           deltaCount: 16,
           appliedDeltaCount: 1,
+          valueSourceSlotCount: 12,
+          runtimeValueSourceSlotCount: 3,
+          replaceableValueSourceSlotCount: 9,
         },
       },
       summary: {
-        outputCount: 8,
+        outputCount: 9,
         actionCount: 1,
         hitCount: 6,
         deltaCount: 16,
         appliedDeltaCount: 1,
+        valueSourceSlotCount: 12,
+        runtimeValueSourceSlotCount: 3,
+        replaceableValueSourceSlotCount: 9,
         generationInputSourceKind:
           'azpr-action-hit-three-value-delta-generation-input',
         generationInputStatus: 'three-value-delta-generation-input-ready',
@@ -1563,6 +1579,12 @@ describe('first vertical slice simulation', () => {
     expect(result.generationOutputs.standardContract).toBe(
       result.threeValueGenerationLayer.standardContract
     );
+    expect(result.generationOutputs.valueSourceSlots).toBe(
+      result.threeValueGenerationLayer.standardContract.valueSourceSlots
+    );
+    expect(result.generationOutputs.outputs.valueSourceSlots).toBe(
+      result.threeValueGenerationLayer.standardContract.valueSourceSlots
+    );
     expect(result.summary.threeValueGenerationBundleSummary).toMatchObject({
       contractName: 'Action -> Hit -> ThreeValueDelta',
       actionCount: 1,
@@ -1577,14 +1599,20 @@ describe('first vertical slice simulation', () => {
       generationInputPointCount: 16,
       generationOutputsSourceKind: 'azpr-three-value-generation-outputs',
       generationOutputsStatus: 'generation-outputs-ready',
+      valueSourceSlotCount: 12,
+      runtimeValueSourceSlotCount: 3,
+      replaceableValueSourceSlotCount: 9,
       applied: false,
     });
     expect(result.summary.threeValueGenerationOutputsSummary).toMatchObject({
-      outputCount: 8,
+      outputCount: 9,
       actionCount: 1,
       hitCount: 6,
       deltaCount: 16,
       appliedDeltaCount: 1,
+      valueSourceSlotCount: 12,
+      runtimeValueSourceSlotCount: 3,
+      replaceableValueSourceSlotCount: 9,
       generationInputSourceKind:
         'azpr-action-hit-three-value-delta-generation-input',
       generationInputStatus: 'three-value-delta-generation-input-ready',

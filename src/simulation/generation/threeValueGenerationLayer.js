@@ -56,16 +56,26 @@ export function createThreeValueGenerationLayer({
     actionsById,
     tracks: generationInput.tracks,
   });
+  const valueSourceSlots = createThreeValueGenerationValueSourceSlots({
+    generationInput,
+    deltas,
+  });
   const actions = createThreeValueGenerationActions({
     actionsById,
     deltas,
   });
   const hits = createThreeValueGenerationHits(actions);
-  const summary = summarizeThreeValueGenerationLayer({ actions, hits, deltas });
+  const summary = summarizeThreeValueGenerationLayer({
+    actions,
+    hits,
+    deltas,
+    valueSourceSlots,
+  });
   const standardContract = createActionHitThreeValueDeltaStandardContract({
     actions,
     hits,
     deltas,
+    valueSourceSlots,
     summary,
   });
 
@@ -111,6 +121,15 @@ export function createThreeValueGenerationLayer({
         policy:
           'current HP/toughness/self-energy formulas are adapter outputs and remain replaceable until final AzPr formulas are confirmed',
       },
+      valueSourceSlotContract: {
+        name: 'ThreeValueReplaceableSourceSlot',
+        version: 1,
+        keyFields: ['trackKey', 'layerKey'],
+        runtimeEligibleLayerKey: 'applied',
+        replaceableLayerKeys: ['candidate', 'sampled', 'placeholder'],
+        policy:
+          'each track/layer slot is a stable replacement point for future confirmed AzPr formula, toughness, or energy sources',
+      },
     },
     generationInput,
     inputSources: generationInput.inputSources,
@@ -118,6 +137,7 @@ export function createThreeValueGenerationLayer({
     inputStatus: generationInput.status,
     replacementPolicy:
       'candidate, sampled and placeholder deltas can be replaced by later confirmed formulas without changing action/hit/track keys',
+    valueSourceSlots,
     standardContract,
     actions,
     hits,
@@ -168,6 +188,7 @@ function createThreeValueGenerationDelta({
     roundTimelineMs(frameIndex * AZPR_TIMELINE_FRAME_MS);
   const trackKey = track.trackKey;
   const layerKey = layer.key;
+  const valueField = THREE_VALUE_DELTA_FIELD_BY_TRACK_KEY[trackKey] ?? null;
   const deltaFields = createThreeValueDeltaFields(trackKey, deltaValue);
   const sourceKind = point.sourceKind ?? layer.sourceKind;
   const sourceIds = createThreeValueGenerationSourceIds(point);
@@ -199,6 +220,21 @@ function createThreeValueGenerationDelta({
     frameIndex,
     pointIndex,
   });
+  const valueSource = createThreeValueGenerationDeltaValueSource({
+    trackKey,
+    trackLabel: track.label,
+    layerKey,
+    layerLabel: layer.label,
+    valueField,
+    valueUnit: layer.valueUnit ?? track.valueUnit,
+    sourceKind,
+    sourceStatus,
+    resultStatus,
+    sourceIds,
+    confidence,
+    calculator,
+    applied,
+  });
 
   return {
     id: createThreeValueGenerationDeltaId({
@@ -224,6 +260,7 @@ function createThreeValueGenerationDelta({
     trackLabel: track.label,
     layerKey,
     layerLabel: layer.label,
+    valueField,
     valueUnit: layer.valueUnit ?? track.valueUnit,
     delta: deltaValue,
     ...deltaFields,
@@ -238,12 +275,123 @@ function createThreeValueGenerationDelta({
     calculationKind: calculator.kind,
     calculationStatus: calculator.status,
     calculationReplaceable: calculator.replaceable,
+    valueSourceKey: valueSource.key,
+    valueSource,
     candidateCount: numberOrNull(point.candidateCount),
     sequenceIndex: numberOrNull(point.sequenceIndex) ?? pointIndex,
     stateCurveSequenceIndex: numberOrNull(point.sequenceIndex) ?? pointIndex,
     applied,
     replaceable: !applied,
   };
+}
+
+function createThreeValueGenerationDeltaValueSource({
+  trackKey,
+  trackLabel,
+  layerKey,
+  layerLabel,
+  valueField,
+  valueUnit,
+  sourceKind,
+  sourceStatus,
+  resultStatus,
+  sourceIds,
+  confidence,
+  calculator,
+  applied,
+}) {
+  const replaceable = !applied;
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-three-value-delta-value-source',
+    key: createThreeValueGenerationValueSourceSlotKey({
+      trackKey,
+      layerKey,
+    }),
+    trackKey,
+    trackLabel,
+    layerKey,
+    layerLabel,
+    valueField,
+    valueUnit,
+    valueSourceKind: sourceKind ?? '',
+    valueSourceStatus: sourceStatus ?? resultStatus ?? '',
+    sourceIds,
+    confidence: confidence ?? '',
+    calculatorKey: calculator?.key ?? '',
+    calculationStatus: calculator?.status ?? '',
+    runtimeEligible: Boolean(applied),
+    replaceable,
+    replacementScope: applied ? 'runtime-applied' : 'diagnostic-replaceable',
+    applied: Boolean(applied),
+  };
+}
+
+function createThreeValueGenerationValueSourceSlots({
+  generationInput,
+  deltas,
+}) {
+  const deltasBySlotKey = new Map();
+  for (const delta of deltas ?? []) {
+    const key = createThreeValueGenerationValueSourceSlotKey(delta);
+    if (!deltasBySlotKey.has(key)) {
+      deltasBySlotKey.set(key, []);
+    }
+    deltasBySlotKey.get(key).push(delta);
+  }
+
+  return (generationInput?.tracks ?? []).flatMap(track =>
+    (track.layers ?? []).map(layer => {
+      const key = createThreeValueGenerationValueSourceSlotKey({
+        trackKey: track.trackKey,
+        layerKey: layer.key,
+      });
+      const slotDeltas = deltasBySlotKey.get(key) ?? [];
+      const runtimeEligible = Boolean(layer.applied);
+      const replaceable = !runtimeEligible;
+      return {
+        schemaVersion: 1,
+        sourceKind: 'azpr-three-value-replaceable-source-slot',
+        status:
+          slotDeltas.length > 0
+            ? 'value-source-slot-ready'
+            : 'value-source-slot-empty',
+        key,
+        trackKey: track.trackKey,
+        trackLabel: track.label,
+        layerKey: layer.key,
+        layerLabel: layer.label,
+        valueField: THREE_VALUE_DELTA_FIELD_BY_TRACK_KEY[track.trackKey] ?? '',
+        valueUnit: layer.valueUnit ?? track.valueUnit ?? '',
+        inputSourceKind: layer.sourceKind ?? '',
+        inputStatus: layer.status ?? '',
+        pointCount: numberOrNull(layer.pointCount) ?? 0,
+        deltaCount: slotDeltas.length,
+        appliedDeltaCount: slotDeltas.filter(delta => delta.applied).length,
+        replaceableDeltaCount: slotDeltas.filter(delta => delta.replaceable)
+          .length,
+        sourceKinds: uniqueStrings(slotDeltas.map(delta => delta.sourceKind)),
+        calculatorKeys: uniqueStrings(
+          slotDeltas.map(delta => delta.calculatorKey)
+        ),
+        confidenceKeys: uniqueStrings(
+          slotDeltas.map(delta => delta.confidence)
+        ),
+        runtimeEligible,
+        replaceable,
+        replacementPolicy: runtimeEligible
+          ? 'runtime consumes this slot now; later confirmed formulas may replace the upstream applied value before runtime input is built'
+          : 'diagnostic slot stays outside runtime totals until promoted or replaced by a confirmed source',
+        applied: false,
+      };
+    })
+  );
+}
+
+function createThreeValueGenerationValueSourceSlotKey({ trackKey, layerKey }) {
+  return [trackKey ?? 'unknown-track', layerKey ?? 'unknown-layer']
+    .map(createThreeValueGenerationIdPart)
+    .join(':');
 }
 
 function createThreeValueDeltaFields(trackKey, delta) {
@@ -490,6 +638,7 @@ function createActionHitThreeValueDeltaStandardContract({
   actions,
   hits,
   deltas,
+  valueSourceSlots,
   summary,
 }) {
   return {
@@ -515,6 +664,7 @@ function createActionHitThreeValueDeltaStandardContract({
     runtimeDeltaPolicy: 'runtime consumes only deltas with applied=true',
     diagnosticDeltaPolicy:
       'candidate, sampled and placeholder deltas stay in the same contract for traceability but do not change runtime totals',
+    valueSourceSlots,
     actions,
     hits,
     deltas,
@@ -527,6 +677,9 @@ function createActionHitThreeValueDeltaStandardContract({
       candidateDeltaCount: summary.candidateDeltaCount,
       sampledDeltaCount: summary.sampledDeltaCount,
       placeholderDeltaCount: summary.placeholderDeltaCount,
+      valueSourceSlotCount: summary.valueSourceSlotCount,
+      runtimeValueSourceSlotCount: summary.runtimeValueSourceSlotCount,
+      replaceableValueSourceSlotCount: summary.replaceableValueSourceSlotCount,
       calculatorCount: summary.calculatorCount,
       applied: false,
     },
@@ -600,7 +753,12 @@ function getThreeValueLayerOrder(layerKey) {
   return index >= 0 ? index : 99;
 }
 
-function summarizeThreeValueGenerationLayer({ actions, hits, deltas }) {
+function summarizeThreeValueGenerationLayer({
+  actions,
+  hits,
+  deltas,
+  valueSourceSlots,
+}) {
   const countLayer = layerKey =>
     deltas.filter(delta => delta.layerKey === layerKey).length;
   const calculatorSummary = summarizeThreeValueCalculators(deltas);
@@ -617,6 +775,16 @@ function summarizeThreeValueGenerationLayer({ actions, hits, deltas }) {
     sampledDeltaCount: countLayer('sampled'),
     placeholderDeltaCount: countLayer('placeholder'),
     replaceableDeltaCount: deltas.filter(delta => delta.replaceable).length,
+    valueSourceSlotCount: valueSourceSlots.length,
+    runtimeValueSourceSlotCount: valueSourceSlots.filter(
+      slot => slot.runtimeEligible
+    ).length,
+    replaceableValueSourceSlotCount: valueSourceSlots.filter(
+      slot => slot.replaceable
+    ).length,
+    readyValueSourceSlotCount: valueSourceSlots.filter(
+      slot => slot.status === 'value-source-slot-ready'
+    ).length,
     calculatorCount: calculatorSummary.calculatorCount,
     calculatorKeys: calculatorSummary.calculatorKeys,
     calculatorReplaceableDeltaCount:

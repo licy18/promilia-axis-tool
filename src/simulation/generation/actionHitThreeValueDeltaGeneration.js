@@ -79,6 +79,11 @@ function createActionHitThreeValueDeltaGenerationSummary({
     candidateDeltaCount: standardContract.summary?.candidateDeltaCount ?? 0,
     sampledDeltaCount: standardContract.summary?.sampledDeltaCount ?? 0,
     placeholderDeltaCount: standardContract.summary?.placeholderDeltaCount ?? 0,
+    valueSourceSlotCount: standardContract.summary?.valueSourceSlotCount ?? 0,
+    runtimeValueSourceSlotCount:
+      standardContract.summary?.runtimeValueSourceSlotCount ?? 0,
+    replaceableValueSourceSlotCount:
+      standardContract.summary?.replaceableValueSourceSlotCount ?? 0,
     applied: false,
   };
 }
@@ -100,6 +105,7 @@ function createFallbackActionHitThreeValueDeltaContract(
     actions: threeValueGenerationLayer?.actions ?? [],
     hits: threeValueGenerationLayer?.hits ?? [],
     deltas: threeValueGenerationLayer?.deltas ?? [],
+    valueSourceSlots: threeValueGenerationLayer?.valueSourceSlots ?? [],
     summary: threeValueGenerationLayer?.summary ?? {},
     applied: false,
   };

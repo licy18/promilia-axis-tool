@@ -98,13 +98,16 @@ describe('three value generation builder', () => {
         generationInputPointCount: 3,
         generationOutputsSourceKind: 'azpr-three-value-generation-outputs',
         generationOutputsStatus: 'generation-outputs-ready',
-        generationOutputsOutputCount: 8,
+        generationOutputsOutputCount: 9,
         actionCount: 1,
         hitCount: 3,
         deltaCount: 3,
         appliedDeltaCount: 1,
         candidateDeltaCount: 1,
         placeholderDeltaCount: 1,
+        valueSourceSlotCount: 12,
+        runtimeValueSourceSlotCount: 3,
+        replaceableValueSourceSlotCount: 9,
         standardGenerationEntryContractValidationStatus:
           'generation-entry-contract-valid',
         standardGenerationEntryContractValidationIssueCount: 0,
@@ -119,8 +122,50 @@ describe('three value generation builder', () => {
       summary: {
         topology: ['Action', 'Hit', 'ThreeValueDelta'],
         deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
+        valueSourceSlotCount: 12,
+        runtimeValueSourceSlotCount: 3,
+        replaceableValueSourceSlotCount: 9,
       },
     });
+    expect(bundle.standardContract.valueSourceSlots).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          key: 'enemyHpDamage:applied',
+          trackKey: 'enemyHpDamage',
+          layerKey: 'applied',
+          valueField: 'hpDelta',
+          deltaCount: 1,
+          runtimeEligible: true,
+          replaceable: false,
+        }),
+        expect.objectContaining({
+          key: 'selfEnergyChange:candidate',
+          trackKey: 'selfEnergyChange',
+          layerKey: 'candidate',
+          valueField: 'energyDelta',
+          deltaCount: 1,
+          runtimeEligible: false,
+          replaceable: true,
+        }),
+      ])
+    );
+    expect(bundle.deltas).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          trackKey: 'enemyHpDamage',
+          layerKey: 'applied',
+          valueField: 'hpDelta',
+          valueSourceKey: 'enemyHpDamage:applied',
+          valueSource: expect.objectContaining({
+            sourceKind: 'azpr-three-value-delta-value-source',
+            key: 'enemyHpDamage:applied',
+            valueField: 'hpDelta',
+            runtimeEligible: true,
+            replaceable: false,
+          }),
+        }),
+      ])
+    );
     expect(bundle.standardContract).toBe(
       bundle.actionHitThreeValueDeltaGeneration.standardContract
     );
@@ -168,6 +213,7 @@ describe('three value generation builder', () => {
         'actions',
         'hits',
         'deltas',
+        'valueSourceSlots',
         'runtimeInputSource',
       ],
       contractValidation: {
@@ -196,6 +242,9 @@ describe('three value generation builder', () => {
         contractValidationIssueCount: 0,
         aggregateValidationStatus: 'generation-entry-aggregate-valid',
         aggregateValidationIssueCount: 0,
+        valueSourceSlotCount: 12,
+        runtimeValueSourceSlotCount: 3,
+        replaceableValueSourceSlotCount: 9,
       },
     });
     expect(bundle.generationEntry.contractValidation.checks).toEqual(
@@ -245,6 +294,7 @@ describe('three value generation builder', () => {
         'actions',
         'hits',
         'deltas',
+        'valueSourceSlots',
         'runtimeInputSource',
         'runtimeInput',
       ],
@@ -253,7 +303,7 @@ describe('three value generation builder', () => {
         runtimeInput: 'runtimeInputSource',
       },
       summary: {
-        outputCount: 8,
+        outputCount: 9,
         actionCount: 1,
         hitCount: 3,
         deltaCount: 3,
@@ -265,6 +315,9 @@ describe('three value generation builder', () => {
         generationInputAppliedPointCount: 1,
         generationInputCandidatePointCount: 1,
         generationInputPlaceholderPointCount: 1,
+        valueSourceSlotCount: 12,
+        runtimeValueSourceSlotCount: 3,
+        replaceableValueSourceSlotCount: 9,
         runtimeInputSourceKind:
           'azpr-runtime-input-source-from-generation-builder',
         runtimeInputSourceStatus: 'runtime-input-source-ready',
@@ -276,7 +329,7 @@ describe('three value generation builder', () => {
         generationEntryAggregateValidationIssueCount: 0,
       },
       outputSummary: {
-        outputCount: 8,
+        outputCount: 9,
         actionCount: 1,
         hitCount: 3,
         deltaCount: 3,
@@ -300,6 +353,12 @@ describe('three value generation builder', () => {
     );
     expect(bundle.generationOutputs.outputs.generationInput).toBe(
       bundle.generationInput
+    );
+    expect(bundle.generationOutputs.valueSourceSlots).toBe(
+      bundle.standardContract.valueSourceSlots
+    );
+    expect(bundle.generationOutputs.outputs.valueSourceSlots).toBe(
+      bundle.standardContract.valueSourceSlots
     );
     expect(bundle.generationOutputs.runtimeInputSource).toBe(
       bundle.runtimeInputSource
