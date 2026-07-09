@@ -465,7 +465,7 @@ test('keeps contribution navigation tied to multi-action edit return', async ({
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
-test('keeps result review entrances interchangeable before edit return', async ({
+test('keeps result review entrances interchangeable before edit return @workbench-main-flow', async ({
   page,
 }) => {
   const browserIssues = collectBrowserIssues(page);
