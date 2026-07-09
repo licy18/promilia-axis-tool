@@ -1380,7 +1380,7 @@ h2 {
   font-size: 15px;
 }
 
-.event-log-panel[data-flow-phase='runtime-result'] .panel-title {
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .panel-title {
   padding: 10px 12px;
 }
 
@@ -1398,7 +1398,7 @@ h2 {
   padding: 14px;
 }
 
-.event-log-panel[data-flow-phase='runtime-result'] .event-list {
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .event-list {
   gap: 6px;
   max-height: 88px;
   padding: 10px 12px;
@@ -1416,7 +1416,7 @@ h2 {
   font-size: 12px;
 }
 
-.event-log-panel[data-flow-phase='runtime-result'] .event-list > li {
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .event-list > li {
   grid-template-columns: 58px minmax(84px, 116px) minmax(0, 1fr);
   gap: 6px;
   padding: 6px 8px;
@@ -1432,7 +1432,7 @@ h2 {
   background: rgba(121, 199, 185, 0.07);
 }
 
-.event-log-panel[data-flow-phase='runtime-result'] .runtime-sim-log {
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-sim-log {
   gap: 8px;
   margin: 0 12px 12px;
   padding: 10px;
@@ -1599,7 +1599,7 @@ h2 {
   padding: 0;
 }
 
-.event-log-panel[data-flow-phase='runtime-result'] .runtime-log-list {
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-log-list {
   max-height: 132px;
 }
 
@@ -1608,7 +1608,7 @@ h2 {
   gap: 8px;
 }
 
-.event-log-panel[data-flow-phase='runtime-result'] .runtime-log-filters {
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-log-filters {
   gap: 6px;
 }
 
@@ -1618,7 +1618,7 @@ h2 {
   gap: 6px;
 }
 
-.event-log-panel[data-flow-phase='runtime-result'] .runtime-track-filters {
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-track-filters {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -1638,7 +1638,7 @@ h2 {
   cursor: pointer;
 }
 
-.event-log-panel[data-flow-phase='runtime-result'] .runtime-filter-button {
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-filter-button {
   padding: 5px 7px;
 }
 
@@ -1666,7 +1666,7 @@ h2 {
   gap: 8px;
 }
 
-.event-log-panel[data-flow-phase='runtime-result'] .runtime-select-filters {
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-select-filters {
   grid-template-columns: 1fr;
   gap: 6px;
 }
@@ -1693,7 +1693,7 @@ h2 {
   font-size: 12px;
 }
 
-.event-log-panel[data-flow-phase='runtime-result'] .runtime-select-filters select {
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-select-filters select {
   padding: 5px 7px;
 }
 
@@ -1705,7 +1705,7 @@ h2 {
   cursor: pointer;
 }
 
-.event-log-panel[data-flow-phase='runtime-result'] .runtime-log-row {
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-log-row {
   grid-template-columns: 52px 46px minmax(0, 1fr);
   gap: 6px;
   padding: 6px 8px;
@@ -1776,10 +1776,10 @@ h2 {
   background: rgba(255, 255, 255, 0.05);
 }
 
-.event-log-panel[data-flow-phase='runtime-result'] .runtime-log-detail-row,
-.event-log-panel[data-flow-phase='runtime-result'] .runtime-contribution-row,
-.event-log-panel[data-flow-phase='runtime-result'] .runtime-calculator-row,
-.event-log-panel[data-flow-phase='runtime-result'] .runtime-source-row {
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-log-detail-row,
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-contribution-row,
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-calculator-row,
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-source-row {
   padding: 6px 7px;
 }
 
@@ -1887,7 +1887,7 @@ h2 {
   font-weight: 700;
 }
 
-.event-log-panel[data-flow-phase='runtime-result'] .runtime-log-action-focus {
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-log-action-focus {
   min-height: 30px;
 }
 
@@ -1909,7 +1909,7 @@ h2 {
   font-weight: 700;
 }
 
-.event-log-panel[data-flow-phase='runtime-result']
+.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review'])
   .runtime-log-result-return {
   min-height: 30px;
 }

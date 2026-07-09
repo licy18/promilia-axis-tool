@@ -2507,11 +2507,11 @@ function getLocalStorage() {
   min-width: 0;
 }
 
-.primary-flow[data-flow-phase='runtime-result'] .runtime-review-stack {
+.primary-flow:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-review-stack {
   order: -1;
 }
 
-.primary-flow[data-flow-phase='runtime-result'] .timeline-area {
+.primary-flow:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .timeline-area {
   order: 1;
 }
 

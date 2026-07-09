@@ -2344,6 +2344,19 @@ describe('Workbench view', () => {
     ).toBe('runtime-result');
     expect(
       wrapper
+        .find('[data-testid="workbench-runtime-review-stack"]')
+        .attributes('data-runtime-review-layout')
+    ).toBe('result-check');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-resource-area"]')
+        .attributes('data-runtime-review-role')
+    ).toBe('primary');
+    expect(
+      wrapper.find('.event-area').attributes('data-runtime-review-role')
+    ).toBe('secondary');
+    expect(
+      wrapper
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
         .attributes('data-state-point-id')
     ).toBe(openedStatePointId);
@@ -2510,6 +2523,19 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-flow-panel"]')
         .attributes('data-flow-phase')
     ).toBe('edit-result-review');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-review-stack"]')
+        .attributes('data-runtime-review-layout')
+    ).toBe('result-check');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-resource-area"]')
+        .attributes('data-runtime-review-role')
+    ).toBe('primary');
+    expect(
+      wrapper.find('.event-area').attributes('data-runtime-review-role')
+    ).toBe('secondary');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
