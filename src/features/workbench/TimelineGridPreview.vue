@@ -242,6 +242,7 @@
                   'auto-delayed': action.insertion?.autoDelayed,
                   'batch-selected': isActionInSelectedBatch(action),
                   'edit-focused': isActionEditFocused(action),
+                  'has-result-edit': isTimelineActionResultEditVisible(action),
                 },
                 `type-${action.type}`,
               ]"
@@ -271,6 +272,25 @@
               <small v-if="actionDetail(action)">{{
                 actionDetail(action)
               }}</small>
+              <button
+                v-if="isTimelineActionResultEditVisible(action)"
+                class="timeline-action-result-edit-button"
+                type="button"
+                title="编辑结果"
+                aria-label="编辑结果"
+                data-testid="workbench-timeline-edit-result-action"
+                :data-action-id="
+                  getTimelineActionResultEditCommand(action).actionId
+                "
+                :data-state-point-id="
+                  getTimelineActionResultEditCommand(action).statePointId
+                "
+                :disabled="!getTimelineActionResultEditCommand(action).enabled"
+                @click.stop="focusTimelineActionResult(action)"
+                @pointerdown.stop
+              >
+                <EditPen class="timeline-action-result-edit-icon" />
+              </button>
               <span
                 v-if="overlapActionIds.has(action.id)"
                 class="overlap-badge"
@@ -543,7 +563,7 @@
 
 <script setup>
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
-import { Clock, Minus, Plus } from '@element-plus/icons-vue';
+import { Clock, EditPen, Minus, Plus } from '@element-plus/icons-vue';
 import {
   DEFAULT_TIMELINE_ACTION_DURATION_MS,
   resolveTimelineActionLaneId,
@@ -1029,6 +1049,26 @@ function isDamageInSelectedBatch(damage) {
 
 function isActionEditFocused(action) {
   return Boolean(getActionEditFocusField(action));
+}
+
+function isTimelineActionResultEditVisible(action) {
+  return getTimelineActionResultEditCommand(action).actionId === action.id;
+}
+
+function getTimelineActionResultEditCommand(action) {
+  const command = props.mainFlowCommandSurface?.runtimeActionEdit ?? {};
+  if (!action?.id || command.actionId !== action.id) {
+    return {};
+  }
+  return command;
+}
+
+function focusTimelineActionResult(action) {
+  const command = getTimelineActionResultEditCommand(action);
+  if (!command.enabled || !command.action?.canRun) {
+    return;
+  }
+  emit('dispatch-flow-action', command.action);
 }
 
 function getActionEditFocusField(action) {
@@ -3026,6 +3066,10 @@ h2 {
   cursor: ew-resize;
 }
 
+.action-block.has-result-edit {
+  padding-right: clamp(46px, 24%, 76px);
+}
+
 .action-block span,
 .action-block small {
   display: block;
@@ -3039,6 +3083,44 @@ h2 {
   color: #b8d8d2;
   font-size: 10px;
   font-weight: 500;
+}
+
+.timeline-action-result-edit-button {
+  position: absolute;
+  top: 50%;
+  right: 22px;
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(121, 199, 185, 0.56);
+  border-radius: 4px;
+  background: rgba(10, 18, 22, 0.68);
+  color: #dff6f1;
+  transform: translateY(-50%);
+}
+
+.timeline-action-result-edit-button:hover,
+.timeline-action-result-edit-button:focus {
+  border-color: rgba(255, 255, 255, 0.82);
+  background: rgba(121, 199, 185, 0.24);
+  outline: none;
+}
+
+.timeline-action-result-edit-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.46;
+}
+
+.timeline-action-result-edit-icon {
+  width: 13px;
+  height: 13px;
+}
+
+.action-block.has-result-edit .overlap-badge,
+.action-block.has-result-edit .auto-delay-badge {
+  right: 46px;
 }
 
 .action-block .overlap-badge {

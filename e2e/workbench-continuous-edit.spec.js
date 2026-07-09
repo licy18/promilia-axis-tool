@@ -131,6 +131,17 @@ test('keeps direct, log, and contribution edit returns synced', async ({
     timelineJumpState.statePointId
   );
 
+  const timelineEditButton = page
+    .locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+    )
+    .getByTestId('workbench-timeline-edit-result-action');
+  await expect(timelineEditButton).toHaveAttribute(
+    'data-state-point-id',
+    timelineJumpState.statePointId
+  );
+  await timelineEditButton.click();
+  await expectRuntimeFocusInEditor(page);
   const { returnedState: selectedActionReturnedState } =
     await editCurrentActionFrameAndReturn(page, {
       actionId: 'action-0002',
