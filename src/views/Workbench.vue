@@ -540,6 +540,8 @@ const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
 const NEW_ACTION_INSERT_GAP_MS = frameToMs(60);
 const WORKBENCH_HISTORY_LIMIT = 50;
+const WORKBENCH_RUNTIME_NAVIGATION_SHORTCUT_SOURCE =
+  'workbench-keyboard-runtime-navigation';
 const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
   applied: true,
   candidate: true,
@@ -1567,6 +1569,10 @@ function handleWorkbenchKeyboardShortcut(event) {
     return;
   }
 
+  if (handleRuntimeNavigationKeyboardShortcut(event)) {
+    return;
+  }
+
   if (!(event.ctrlKey || event.metaKey) || event.altKey) {
     return;
   }
@@ -1592,6 +1598,40 @@ function handleWorkbenchKeyboardShortcut(event) {
     event.preventDefault();
     copySelectedActionFromShortcut();
   }
+}
+
+function handleRuntimeNavigationKeyboardShortcut(event) {
+  if (!event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
+    return false;
+  }
+
+  const key = String(event.key ?? '');
+  if (!['ArrowLeft', 'ArrowRight'].includes(key)) {
+    return false;
+  }
+
+  const runtimeNavigation = workbenchFlowModel.value.runtimeNavigation ?? {};
+  if (!runtimeNavigation.count) {
+    return false;
+  }
+
+  event.preventDefault();
+  event.stopPropagation?.();
+
+  const targetPoint =
+    key === 'ArrowLeft' ? runtimeNavigation.previous : runtimeNavigation.next;
+  if (!targetPoint?.statePointId) {
+    return true;
+  }
+
+  dispatchWorkbenchFlowAction(
+    mainFlowCommandSurface.value.createRuntimeStatePointFlowAction({
+      source: WORKBENCH_RUNTIME_NAVIGATION_SHORTCUT_SOURCE,
+      detail: targetPoint,
+      enabled: true,
+    })
+  );
+  return true;
 }
 
 function copySelectedActionFromShortcut() {

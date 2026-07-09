@@ -3580,6 +3580,85 @@ describe('Workbench view', () => {
     expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('1');
   });
 
+  it('navigates runtime result points from keyboard review shortcuts', async () => {
+    const wrapper = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-add-resource-action"]')
+      .trigger('click');
+    await nextTick();
+
+    await wrapper
+      .find('[data-testid="workbench-flow-open-runtime"]')
+      .trigger('click');
+    await nextTick();
+
+    let flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0002');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('1');
+    const previousRuntimePointId = flowPanel
+      .find('[data-testid="workbench-flow-runtime-previous"]')
+      .attributes('data-state-point-id');
+
+    window.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'ArrowLeft',
+        altKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-main-flow-dispatch-kind')).toBe(
+      'select-runtime-state-point'
+    );
+    expect(flowPanel.attributes('data-main-flow-dispatch-source')).toBe(
+      'workbench-keyboard-runtime-navigation'
+    );
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0001');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('0');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(previousRuntimePointId);
+
+    const nextRuntimePointId = flowPanel
+      .find('[data-testid="workbench-flow-runtime-next"]')
+      .attributes('data-state-point-id');
+    window.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'ArrowRight',
+        altKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0002');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('1');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(nextRuntimePointId);
+
+    wrapper.unmount();
+  });
+
   it('navigates runtime result points from the runtime detail panel', async () => {
     const wrapper = mount(Workbench, {
       global: {

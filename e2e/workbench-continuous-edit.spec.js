@@ -1217,6 +1217,40 @@ test('keeps keyboard edit shortcuts tied to runtime review flow @workbench-main-
     copiedRuntimeState.statePointId
   );
 
+  await page.keyboard.down('Alt');
+  await page.keyboard.press('ArrowLeft');
+  await page.keyboard.up('Alt');
+  const previousRuntimeState = await waitForRuntimeAction(page, 'action-0001');
+  expectRuntimeReviewState(previousRuntimeState, {
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    navigationCount: '2',
+    navigationIndex: '0',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(
+    previousRuntimeState,
+    previousRuntimeState.statePointId
+  );
+  await expectCurveAndLogSelection(page, previousRuntimeState.statePointId);
+
+  await page.keyboard.down('Alt');
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.up('Alt');
+  const nextRuntimeState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(nextRuntimeState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '2',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(
+    nextRuntimeState,
+    nextRuntimeState.statePointId
+  );
+  await expectCurveAndLogSelection(page, nextRuntimeState.statePointId);
+
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
