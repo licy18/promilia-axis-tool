@@ -5038,8 +5038,23 @@ describe('Workbench view', () => {
 
     expect(statePointId).toBeTruthy();
 
-    await runtimeCurvePoint.trigger('click');
-    await nextTick();
+    const originalRuntimeCurveScrollIntoView =
+      Element.prototype.scrollIntoView;
+    const runtimeCurveScrollIntoView = vi.fn();
+    Element.prototype.scrollIntoView = runtimeCurveScrollIntoView;
+
+    try {
+      await runtimeCurvePoint.trigger('click');
+      await nextTick();
+      await nextTick();
+      await Promise.resolve();
+    } finally {
+      if (originalRuntimeCurveScrollIntoView) {
+        Element.prototype.scrollIntoView = originalRuntimeCurveScrollIntoView;
+      } else {
+        delete Element.prototype.scrollIntoView;
+      }
+    }
 
     const runtimeReviewStack = wrapper.find(
       '[data-testid="workbench-runtime-review-stack"]'
@@ -5149,6 +5164,14 @@ describe('Workbench view', () => {
         )
         .attributes('data-selected')
     ).toBe('true');
+    const curveScrolledRuntimeLogRow =
+      runtimeCurveScrollIntoView.mock.contexts.find(
+        element =>
+          element?.getAttribute('data-testid') ===
+            'workbench-runtime-sim-log-row' &&
+          element.getAttribute('data-state-point-id') === statePointId
+      );
+    expect(curveScrolledRuntimeLogRow).toBeTruthy();
     expect(
       wrapper
         .find(
