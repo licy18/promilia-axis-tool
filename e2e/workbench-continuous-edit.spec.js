@@ -2042,7 +2042,7 @@ test('keeps runtime result flow usable after deleting a generated action batch @
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
-test('keeps the edit result loop usable at a narrow viewport', async ({
+test('keeps the edit result loop usable at a narrow viewport @workbench-main-flow', async ({
   page,
 }) => {
   const browserIssues = collectBrowserIssues(page);
@@ -2063,6 +2063,7 @@ test('keeps the edit result loop usable at a narrow viewport', async ({
     selected: true,
   });
   await expectRuntimeOutputConsistent(page);
+  await expectCurveAndLogSelection(page, narrowRuntimeState.statePointId);
 
   const contributionEditButton = page.getByTestId(
     'workbench-action-contribution-edit-action'
