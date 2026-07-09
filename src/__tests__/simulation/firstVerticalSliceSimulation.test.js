@@ -1706,6 +1706,84 @@ describe('first vertical slice simulation', () => {
       calculationReplaceable: true,
       applied: true,
     });
+    expect(result.runtimeOutputs).toMatchObject({
+      sourceKind: 'azpr-three-value-runtime-outputs',
+      status: 'runtime-outputs-ready',
+      inputContractName: 'Action -> Hit -> ThreeValueDelta',
+      inputSourceKind: 'azpr-runtime-input-from-generation-builder-source',
+      runtimeInputSourceKind:
+        'azpr-runtime-input-source-from-generation-builder',
+      outputNames: ['simLog', 'stateCurves', 'resourceCurves', 'summary'],
+      outputAliases: {
+        resources: 'resourceCurves',
+      },
+      outputContract: {
+        sourceKind: 'azpr-three-value-runtime-output-contract',
+        status: 'runtime-output-contract-ready',
+      },
+      simLog: [
+        expect.objectContaining({
+          eventType: 'THREE_VALUE_DELTA_APPLIED',
+          actionId: 'action-0001',
+          trackKey: 'enemyHpDamage',
+          hpDelta: 12461,
+        }),
+      ],
+      stateCurves: {
+        sourceKind: 'azpr-runtime-state-curves-from-standard-deltas',
+        summary: {
+          enemyPointCount: 1,
+          enemyHpDelta: 12461,
+          enemyToughnessDelta: 0,
+          resourcePointCount: 0,
+          selfEnergyDelta: 0,
+        },
+      },
+      resources: {
+        sourceKind: 'azpr-runtime-resource-curves-from-standard-deltas',
+        resourceKind: 'selfEnergy',
+        summary: {
+          actorCount: 1,
+          activeActorCount: 0,
+          pointCount: 0,
+          selfEnergyDelta: 0,
+        },
+      },
+      summary: {
+        enemyHpDelta: 12461,
+        enemyToughnessDelta: 0,
+        selfEnergyDelta: 0,
+        simLogCount: 1,
+      },
+      outputSummary: {
+        outputCount: 4,
+        appliedDeltaCount: 1,
+        simLogCount: 1,
+        enemyStatePointCount: 1,
+        resourceCurveActorCount: 1,
+        resourceCurvePointCount: 0,
+        enemyHpDelta: 12461,
+        enemyToughnessDelta: 0,
+        selfEnergyDelta: 0,
+        applied: true,
+      },
+      applied: true,
+    });
+    expect(result.runtimeOutputs).toBe(
+      result.threeValueRuntimeProjection.runtimeOutputs
+    );
+    expect(result.runtimeOutputs.simLog).toBe(
+      result.threeValueRuntimeProjection.simLog
+    );
+    expect(result.runtimeOutputs.stateCurves).toBe(
+      result.threeValueRuntimeProjection.stateCurves
+    );
+    expect(result.runtimeOutputs.resources).toBe(
+      result.threeValueRuntimeProjection.resourceCurves
+    );
+    expect(result.runtimeOutputs.outputs.resources).toBe(
+      result.threeValueRuntimeProjection.resourceCurves
+    );
     expect(result.summary.threeValueRuntimeProjectionSummary).toMatchObject({
       inputContractName: 'Action -> Hit -> ThreeValueDelta',
       inputDeltaCount: 16,
@@ -1722,6 +1800,17 @@ describe('first vertical slice simulation', () => {
       calculatorKeys: ['azpr-hp-delta-calculator'],
       calculatorReplaceableDeltaCount: 1,
       calculatorStatuses: ['raw-hp-projection'],
+      applied: true,
+    });
+    expect(result.summary.runtimeOutputsSummary).toMatchObject({
+      outputCount: 4,
+      appliedDeltaCount: 1,
+      simLogCount: 1,
+      enemyStatePointCount: 1,
+      resourceCurvePointCount: 0,
+      enemyHpDelta: 12461,
+      enemyToughnessDelta: 0,
+      selfEnergyDelta: 0,
       applied: true,
     });
     const generationAction = result.threeValueGenerationLayer.actions[0];
@@ -3973,7 +4062,8 @@ describe('first vertical slice simulation', () => {
               energyDelta: -Number(spSkill.spCost),
               calculatorKey: 'azpr-self-energy-delta-calculator',
               calculationKind: 'explicit-resource-event-or-cost-preview',
-              calculationStatus: 'explicit-cost-applied-charge-formula-unmapped',
+              calculationStatus:
+                'explicit-cost-applied-charge-formula-unmapped',
               calculationReplaceable: true,
               calculator: expect.objectContaining({
                 outputField: 'energyDelta',

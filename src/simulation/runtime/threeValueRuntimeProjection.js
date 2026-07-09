@@ -55,6 +55,13 @@ export function createThreeValueRuntimeProjection({
     runtimeOutputContractStatus: outputContract.status,
     runtimeOutputContractOutputCount: outputContract.summary.outputCount,
   };
+  const runtimeOutputs = createThreeValueRuntimeOutputs({
+    outputContract,
+    simLog,
+    stateCurves,
+    resourceCurves,
+    summary,
+  });
 
   return {
     schemaVersion: 1,
@@ -71,12 +78,63 @@ export function createThreeValueRuntimeProjection({
     runtimeInput,
     appliedOnly: true,
     outputContract,
+    runtimeOutputs,
     stateCurves,
     resourceCurves,
     enemyStateCurve,
     selfEnergyCurveByActor,
     simLog,
     summary,
+    applied: true,
+  };
+}
+
+function createThreeValueRuntimeOutputs({
+  outputContract,
+  simLog,
+  stateCurves,
+  resourceCurves,
+  summary,
+}) {
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-three-value-runtime-outputs',
+    status:
+      outputContract.status === 'runtime-output-contract-ready'
+        ? 'runtime-outputs-ready'
+        : 'runtime-outputs-ready-no-applied-deltas',
+    inputContractName: outputContract.inputContractName,
+    inputSourceKind: outputContract.inputSourceKind,
+    runtimeInputSourceKind: outputContract.runtimeInputSourceKind,
+    outputNames: outputContract.outputNames,
+    outputAliases: {
+      resources: 'resourceCurves',
+    },
+    outputContract,
+    simLog,
+    stateCurves,
+    resourceCurves,
+    resources: resourceCurves,
+    summary,
+    outputs: {
+      simLog,
+      stateCurves,
+      resourceCurves,
+      resources: resourceCurves,
+      summary,
+    },
+    outputSummary: {
+      outputCount: outputContract.summary.outputCount,
+      appliedDeltaCount: outputContract.summary.appliedDeltaCount,
+      simLogCount: outputContract.summary.simLogCount,
+      enemyStatePointCount: outputContract.summary.enemyStatePointCount,
+      resourceCurveActorCount: outputContract.summary.resourceCurveActorCount,
+      resourceCurvePointCount: outputContract.summary.resourceCurvePointCount,
+      enemyHpDelta: outputContract.summary.enemyHpDelta,
+      enemyToughnessDelta: outputContract.summary.enemyToughnessDelta,
+      selfEnergyDelta: outputContract.summary.selfEnergyDelta,
+      applied: true,
+    },
     applied: true,
   };
 }

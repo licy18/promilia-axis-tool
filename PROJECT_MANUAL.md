@@ -11461,6 +11461,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：优先检查曲线点、日志详情、贡献拆分、动作列表和时间轴这些入口是否已经形成统一的编辑-回看主路径；若入口闭环足够稳定，下一阶段转向运行时层的标准输出稳定性。
 
+### 2026-07-09：运行时层标准输出入口 - Runtime Outputs Envelope
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- `threeValueRuntimeProjection` 现在提供统一的 `runtimeOutputs` 输出封套，上层可以从同一入口读取 `simLog`、`stateCurves`、`resourceCurves/resources`、`summary` 和 `outputContract`。
+- `projectSimulationResult` 顶层同步暴露 `runtimeOutputs`，后续 Workbench 或其他运行时消费者不必继续拼接分散字段。
+- 旧字段 `threeValueRuntimeProjection.simLog`、`stateCurves`、`resourceCurves`、`summary` 继续保留，并与 `runtimeOutputs` 指向同一份对象。
+- 本阶段只建立运行时输出入口，不改变三值计算结果、公式、候选证据或 UI 信息量。
+
+当前验证事实：
+
+- `threeValueRuntimeProjection.test.js` 覆盖 `runtimeOutputs` 的合同字段、四类输出和 `resources -> resourceCurves` 别名。
+- `firstVerticalSliceSimulation.test.js` 覆盖真实项目运行后的顶层 `result.runtimeOutputs`，并确认它与 `threeValueRuntimeProjection.runtimeOutputs` 是同一份输出。
+- `vite.config.js` 将 Vitest 单测范围限定在 `src/**/*.{test,spec}.{js,jsx,ts,tsx}`，避免全量单测误导入 Playwright e2e 用例。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、16 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、266 条测试。
+- `npm run test:e2e`：通过，4 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+
+下一步：
+
+- 继续运行时层能力块：让 Workbench 主流程逐步消费 `runtimeOutputs`，优先替换只读路径中的 `threeValueRuntimeProjection.simLog/stateCurves/resourceCurves/summary` 分散读取。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

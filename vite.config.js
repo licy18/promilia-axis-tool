@@ -7,11 +7,12 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src')
-    }
+      '@': resolve(__dirname, 'src'),
+    },
   },
   test: {
+    include: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'],
     globals: true,
-    environment: 'jsdom'
-  }
+    environment: 'jsdom',
+  },
 });

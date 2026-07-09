@@ -1428,6 +1428,7 @@ export function projectSimulationResult({
       threeValueGenerationBundle.actionHitThreeValueDeltaGeneration,
     threeValueGenerationLayer,
   });
+  const runtimeOutputs = threeValueRuntimeProjection.runtimeOutputs;
   const damageTimeline = damageEvents.map(event => ({
     timeMs: event.timeMs,
     actionId: event.actionId,
@@ -1494,6 +1495,7 @@ export function projectSimulationResult({
     threeValueGenerationBundle,
     threeValueGenerationLayer,
     threeValueRuntimeProjection,
+    runtimeOutputs,
     damageTimeline,
     resourceTimeline,
     summary: {
@@ -1510,6 +1512,7 @@ export function projectSimulationResult({
       threeValueGenerationBundleSummary: threeValueGenerationBundle.summary,
       threeValueGenerationLayerSummary: threeValueGenerationLayer.summary,
       threeValueRuntimeProjectionSummary: threeValueRuntimeProjection.summary,
+      runtimeOutputsSummary: runtimeOutputs.outputSummary,
       formulaVersion: damageEvents[0]?.payload.formulaVersion ?? null,
       formulaCandidatePatternSummary,
       formulaExecutionMatrixSummary,

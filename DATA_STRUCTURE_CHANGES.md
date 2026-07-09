@@ -22014,3 +22014,53 @@ runtimeDetailNavigation = flowModel.runtimeNavigation
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、61 条测试。
 - `npm run test -- --run`：通过，38 个测试文件、260 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 306. 运行时层标准输出入口：Runtime Outputs Envelope
+
+### 306.1 结构变化
+
+`threeValueRuntimeProjection` 新增只读输出封套：
+
+```text
+threeValueRuntimeProjection.runtimeOutputs = {
+  outputContract,
+  simLog,
+  stateCurves,
+  resourceCurves,
+  resources,
+  summary,
+  outputs,
+  outputSummary
+}
+```
+
+`projectSimulationResult` 顶层同步暴露：
+
+```text
+result.runtimeOutputs = result.threeValueRuntimeProjection.runtimeOutputs
+result.summary.runtimeOutputsSummary = result.runtimeOutputs.outputSummary
+```
+
+消费规则：
+
+- `runtimeOutputs.simLog` 指向既有 `threeValueRuntimeProjection.simLog`。
+- `runtimeOutputs.stateCurves` 指向既有 `threeValueRuntimeProjection.stateCurves`。
+- `runtimeOutputs.resourceCurves` 和 `runtimeOutputs.resources` 都指向既有 `threeValueRuntimeProjection.resourceCurves`。
+- `runtimeOutputs.summary` 指向既有 `threeValueRuntimeProjection.summary`。
+- `runtimeOutputs.outputContract` 指向既有 `threeValueRuntimeProjection.outputContract`。
+- `runtimeOutputs.outputAliases.resources = "resourceCurves"`，供后续消费者使用更贴近日常表达的 resources 名称。
+
+### 306.2 保存与迁移
+
+不新增项目草稿字段，不改变导入导出 schema，不需要数据迁移。
+
+旧字段全部保留；新增封套只是运行结果的统一消费入口。
+
+### 306.3 验证
+
+- `threeValueRuntimeProjection.test.js` 覆盖 `runtimeOutputs` 的合同字段、四类输出和 `resources -> resourceCurves` 别名。
+- `firstVerticalSliceSimulation.test.js` 覆盖真实项目运行后的顶层 `result.runtimeOutputs`，并确认它与 `threeValueRuntimeProjection.runtimeOutputs` 是同一份输出。
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、16 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、266 条测试。
+- `npm run test:e2e`：通过，4 条浏览器级烟测。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
