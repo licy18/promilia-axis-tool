@@ -249,7 +249,7 @@
         @click="focusRuntimeAction"
       >
         <EditPen class="flow-button-icon" />
-        <span>编辑结果动作</span>
+        <span>{{ runtimeActionEditButtonLabel }}</span>
       </button>
       <button
         type="button"
@@ -378,6 +378,9 @@ const openRuntimeButtonLabel = computed(
 );
 const runtimeActionEditButtonView = computed(
   () => resolvedMainFlowCommandSurface.value.runtimeActionEdit
+);
+const runtimeActionEditButtonLabel = computed(
+  () => runtimeActionEditButtonView.value?.label || '编辑结果动作'
 );
 const runtimeResultReturnButtonView = computed(
   () => resolvedMainFlowCommandSurface.value.runtimeResultReturn

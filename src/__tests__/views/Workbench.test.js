@@ -6707,6 +6707,55 @@ describe('Workbench view', () => {
     expect(
       refreshedCurveSelectionSource.attributes('data-result-context-active')
     ).toBe('true');
+
+    const refreshedFlowPanel = wrapper.find(
+      '[data-testid="workbench-flow-panel"]'
+    );
+    expect(refreshedFlowPanel.attributes('data-flow-phase')).toBe(
+      'edit-result-review'
+    );
+    const continueEditButton = refreshedFlowPanel.find(
+      '[data-testid="workbench-flow-edit-runtime-action"]'
+    );
+    expect(continueEditButton.text()).toBe('继续修改动作');
+    expect(continueEditButton.attributes()).toMatchObject({
+      'data-action-id': focusedActionId,
+      'data-primary-action': 'true',
+      'data-state-point-id': refreshedRuntimeStatePointId,
+    });
+    expect(continueEditButton.attributes('disabled')).toBeUndefined();
+
+    await continueEditButton.trigger('click');
+    await nextTick();
+
+    expect(
+      getLastDispatchedFlowAction(wrapper, WorkbenchFlowPanel)
+    ).toMatchObject({
+      kind: 'focus-runtime-action',
+      source: 'workbench-flow-panel',
+      actionId: focusedActionId,
+      statePointId: refreshedRuntimeStatePointId,
+      canRun: true,
+    });
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+        )
+        .attributes()
+    ).toMatchObject({
+      'data-edit-focused': 'true',
+      'data-edit-focus-origin': 'runtime-focus',
+      'data-edit-focus-source': 'workbench-flow-panel',
+    });
+    expect(
+      wrapper
+        .find('[data-testid="workbench-action-edit-feedback"]')
+        .attributes()
+    ).toMatchObject({
+      'data-runtime-state-point-id': refreshedRuntimeStatePointId,
+      'data-result-focused': 'true',
+    });
   });
 
   it('links applied state curve points to the shared runtime detail', async () => {
