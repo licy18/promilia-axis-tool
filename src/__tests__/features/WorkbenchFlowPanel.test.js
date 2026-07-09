@@ -155,6 +155,108 @@ describe('WorkbenchFlowPanel', () => {
       canRun: true,
     });
   });
+
+  it('builds its fallback flow model from runtimeOutputs', () => {
+    const runtimeProjection = {
+      runtimeInput: {
+        contractName: 'Action -> Hit -> ThreeValueDelta',
+        status: 'runtime-input-ready-with-applied-deltas',
+        appliedDeltaSource: 'threeValueRuntimeInput.appliedDeltas',
+        summary: {
+          inputDeltaCount: 2,
+          appliedDeltaCount: 2,
+        },
+      },
+      simLog: [
+        { sourceDeltaId: 'legacy-row-1' },
+        { sourceDeltaId: 'legacy-row-2' },
+      ],
+      summary: {
+        simLogCount: 2,
+      },
+    };
+    const runtimeOutputs = {
+      sourceKind: 'azpr-three-value-runtime-outputs',
+      status: 'runtime-outputs-ready',
+      outputContract: {
+        sourceKind: 'azpr-three-value-runtime-output-contract',
+        status: 'runtime-output-contract-ready',
+        outputs: {
+          simLog: {
+            rowCount: 1,
+          },
+          stateCurves: {
+            sourceKind: 'azpr-runtime-state-curves-from-standard-deltas',
+          },
+          resourceCurves: {
+            sourceKind: 'azpr-runtime-resource-curves-from-standard-deltas',
+          },
+        },
+        summary: {
+          outputCount: 4,
+          simLogCount: 1,
+        },
+      },
+      outputSummary: {
+        outputCount: 4,
+        simLogCount: 1,
+      },
+      summary: {
+        simLogCount: 1,
+      },
+      simLog: [
+        {
+          sourceDeltaId: 'runtime-output-row',
+          actionId: 'action-0001',
+          frameIndex: 12,
+          sequenceIndex: 0,
+          trackKey: 'enemyHpDamage',
+          layerKey: 'applied',
+        },
+      ],
+      stateCurves: {
+        enemy: {
+          points: [
+            {
+              sourceDeltaId: 'runtime-output-row',
+              actionId: 'action-0001',
+              frameIndex: 12,
+              sequenceIndex: 0,
+              trackKey: 'enemyHpDamage',
+              layerKey: 'applied',
+            },
+          ],
+        },
+      },
+      resourceCurves: {
+        curvesByActor: [],
+      },
+    };
+    const wrapper = mount(WorkbenchFlowPanel, {
+      props: {
+        selectedAction: {
+          id: 'action-0001',
+          name: '普通攻击',
+        },
+        generationBundle: {
+          contractName: 'Action -> Hit -> ThreeValueDelta',
+          actionHitThreeValueDeltaGeneration: {
+            status: 'action-hit-three-value-delta-generation-ready',
+          },
+        },
+        runtimeProjection,
+        runtimeOutputs,
+      },
+    });
+
+    expect(wrapper.attributes()).toMatchObject({
+      'data-action-id': 'action-0001',
+      'data-flow-phase': 'action-edit',
+      'data-runtime-navigation-count': '1',
+      'data-runtime-sim-log-count': '1',
+      'data-runtime-output-status': 'runtime-output-contract-ready',
+    });
+  });
 });
 
 function createFlowModel({ primaryKind, primaryOperation }) {

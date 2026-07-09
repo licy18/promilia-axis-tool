@@ -11516,6 +11516,38 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续运行时层能力块：检查 `workbenchFlowModel` / `workbenchFlowContractContext` 是否需要同时暴露完整 projection 和 `runtimeOutputs`，让主流程合同上下文也能清楚区分 input contract 与 output contract。
 
+### 2026-07-09：UI 主流程可见闭环 - Curve Log Detail Loop
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 用户可以从动作编辑进入运行结果，点击资源曲线点，并看到模拟日志、三值详情同步到同一个运行点。
+- 用户点击模拟日志行后，三值详情稳定定位到同一运行点，并可从详情入口回到对应动作编辑。
+- 用户修改动作帧后，可以通过“查看刷新结果”回到刷新后的运行点，资源曲线、模拟日志、三值详情和动作结果列表保持同步。
+- Workbench 主流程现在把完整 runtime projection 和标准 `runtimeOutputs` 分开传递，避免可见闭环在输入追溯和输出读取之间读到不同来源。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段或 UI 信息量。
+
+当前验证事实：
+
+- 新增浏览器级闭环场景：`排轴动作编辑 -> 运行模拟 -> 点击资源曲线 -> 点击日志 -> 三值详情回编辑 -> 查看刷新结果`。
+- `WorkbenchFlowPanel`、`workbenchFlowModel`、`workbenchFlowContractContext` 覆盖 `runtimeOutputs` 接入，保证主流程读取同一份运行输出。
+- `Workbench.test.js` 覆盖主页面把同一份 `runtimeOutputs` 传给资源曲线、日志、分析面板和主流程面板。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、81 条测试。
+- `npm run test:e2e -- --grep "visible curve-log-detail"`：通过，1 条浏览器级闭环测试。
+- `npm run test -- --run`：通过，38 个测试文件、268 条测试。
+- `npm run test:e2e`：通过，5 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md e2e/workbench-continuous-edit.spec.js src/features/workbench/workbenchFlowContractContext.js src/features/workbench/workbenchFlowModel.js src/features/workbench/WorkbenchFlowPanel.vue src/views/Workbench.vue src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：以浏览器场景为准检查完整编辑体验的高频摩擦；若可见闭环稳定，再转向运行时层输出消费收敛。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -47,6 +47,7 @@
       :selected-action="selectedAction"
       :generation-bundle="simulationResult.threeValueGenerationBundle"
       :runtime-projection="simulationResult.threeValueRuntimeProjection"
+      :runtime-outputs="runtimeOutputs"
       :runtime-selected-detail="runtimeSelectedDetail"
       :selected-state-curve-point-id="selectedStateCurvePointId"
       :runtime-overview-active="runtimeOverviewActive"
@@ -607,6 +608,7 @@ const workbenchFlowModel = computed(() =>
     selectedAction: selectedAction.value,
     generationBundle: simulationResult.value.threeValueGenerationBundle,
     runtimeProjection: simulationResult.value.threeValueRuntimeProjection,
+    runtimeOutputs: runtimeOutputs.value,
     runtimeSelectedDetail: runtimeSelectedDetail.value,
     selectedStateCurvePointId: selectedStateCurvePointId.value,
     runtimeFocusSource: runtimeFocusSource.value,

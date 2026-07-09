@@ -46,6 +46,13 @@ describe('workbench flow contract context', () => {
             ignoredDeltaCount: 2,
           },
         },
+      },
+      runtimeOutputs: {
+        sourceKind: 'azpr-three-value-runtime-outputs',
+        status: 'runtime-outputs-ready',
+        outputAliases: {
+          resources: 'resourceCurves',
+        },
         outputContract: {
           sourceKind: 'azpr-three-value-runtime-output-contract',
           status: 'runtime-output-contract-ready',
@@ -62,8 +69,12 @@ describe('workbench flow contract context', () => {
           },
           summary: {
             outputCount: 4,
-            simLogCount: 1,
+            simLogCount: 99,
           },
+        },
+        outputSummary: {
+          outputCount: 4,
+          simLogCount: 1,
         },
       },
     });
@@ -106,6 +117,9 @@ describe('workbench flow contract context', () => {
       runtimeOutput: {
         sourceKind: 'azpr-three-value-runtime-output-contract',
         status: 'runtime-output-contract-ready',
+        runtimeOutputsSourceKind: 'azpr-three-value-runtime-outputs',
+        runtimeOutputsStatus: 'runtime-outputs-ready',
+        resourcesAlias: 'resourceCurves',
         simLogInputSource: 'threeValueRuntimeInput.appliedDeltas',
         stateCurvesSourceKind: 'azpr-runtime-state-curves-from-standard-deltas',
         resourceCurvesSourceKind:

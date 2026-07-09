@@ -22,15 +22,19 @@ import {
 describe('workbench flow model', () => {
   it('centralizes runtime navigation, controls, and action-edit phase', () => {
     const runtimeProjection = createRuntimeProjectionFixture();
+    const runtimeOutputs = createRuntimeOutputsFixture(runtimeProjection);
     const model = createWorkbenchFlowModel({
       selectedAction: { id: 'action-0002', name: '资源动作' },
       generationBundle: createGenerationBundleFixture(),
       runtimeProjection,
+      runtimeOutputs,
     });
 
     expect(model.phase).toBe(WORKBENCH_FLOW_PHASES.ACTION_EDIT);
     expect(model.selectedActionId).toBe('action-0002');
     expect(model.selectedActionName).toBe('资源动作');
+    expect(model.runtimeProjection).toBe(runtimeProjection);
+    expect(model.runtimeOutputs).toBe(runtimeOutputs);
     expect(model.runtimeFocusSource).toBe('');
     expect(model.runtimeSimLogCount).toBe(2);
     expect(model.contractContext).toMatchObject({
@@ -45,6 +49,8 @@ describe('workbench flow model', () => {
       },
       runtimeOutput: {
         status: 'runtime-output-contract-ready',
+        runtimeOutputsSourceKind: 'azpr-three-value-runtime-outputs',
+        resourcesAlias: 'resourceCurves',
         ready: true,
       },
     });
@@ -245,7 +251,8 @@ describe('workbench flow model', () => {
       lastActionStatePointId: firstPoint.statePointId,
     });
     expect(model.runtimeReviewOperations).toMatchObject({
-      primaryOperationKind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+      primaryOperationKind:
+        WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
       primaryOperationEnabled: true,
       canRunAnyOperation: true,
       selectionStatus: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.SELECTED,
@@ -532,7 +539,8 @@ describe('workbench flow model', () => {
       resultReturnStatePointId: secondPoint.statePointId,
     });
     expect(reviewModel.runtimeReviewOperations).toMatchObject({
-      primaryOperationKind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+      primaryOperationKind:
+        WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
       primaryOperationEnabled: true,
       canRunAnyOperation: true,
       selectionStatus: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.SELECTED,
@@ -1386,6 +1394,26 @@ function createRuntimeProjectionFixture() {
         },
       ],
     },
+  };
+}
+
+function createRuntimeOutputsFixture(runtimeProjection) {
+  return {
+    sourceKind: 'azpr-three-value-runtime-outputs',
+    status: 'runtime-outputs-ready',
+    outputAliases: {
+      resources: 'resourceCurves',
+    },
+    outputContract: runtimeProjection.outputContract,
+    outputSummary: {
+      outputCount: 4,
+      simLogCount: 2,
+    },
+    summary: runtimeProjection.summary,
+    simLog: runtimeProjection.simLog,
+    stateCurves: runtimeProjection.stateCurves,
+    resourceCurves: runtimeProjection.resourceCurves,
+    resources: runtimeProjection.resourceCurves,
   };
 }
 

@@ -93,6 +93,7 @@ export function createWorkbenchFlowModel({
   selectedAction = null,
   generationBundle = null,
   runtimeProjection = null,
+  runtimeOutputs = null,
   runtimeSelectedDetail = null,
   selectedStateCurvePointId = '',
   runtimeFocusSource = '',
@@ -101,14 +102,15 @@ export function createWorkbenchFlowModel({
   actionEditResultContext = null,
   flowDispatchState = null,
 } = {}) {
-  const runtimeNavigationPoints =
-    createRuntimeStatePointContexts(runtimeProjection);
+  const resolvedRuntimeOutputs =
+    runtimeOutputs ?? runtimeProjection?.runtimeOutputs ?? runtimeProjection;
+  const runtimeNavigationPoints = createRuntimeStatePointContexts(
+    resolvedRuntimeOutputs
+  );
   const selectedRuntimeNavigationIndex = runtimeNavigationPoints.findIndex(
     point => point.statePointId === selectedStateCurvePointId
   );
-  const runtimeDetail = createWorkbenchFlowRuntimeDetail(
-    runtimeSelectedDetail
-  );
+  const runtimeDetail = createWorkbenchFlowRuntimeDetail(runtimeSelectedDetail);
   const editResult = createWorkbenchFlowEditResult(actionEditResultContext);
   const runtimeActionEditTarget =
     createWorkbenchFlowRuntimeActionEditTarget(runtimeDetail);
@@ -119,10 +121,11 @@ export function createWorkbenchFlowModel({
       runtimeActionEditTarget,
       selectedActionId: selectedAction?.id ?? '',
     });
-  const runtimeSimLogCount = getRuntimeSimLogCount(runtimeProjection);
+  const runtimeSimLogCount = getRuntimeSimLogCount(resolvedRuntimeOutputs);
   const contractContext = createWorkbenchFlowContractContext({
     generationBundle,
     runtimeProjection,
+    runtimeOutputs: resolvedRuntimeOutputs,
   });
   const phase = resolveWorkbenchFlowPhase({
     runtimeDetail,
@@ -209,8 +212,10 @@ export function createWorkbenchFlowModel({
     selectedStateCurvePointId: selectedStateCurvePointId ?? '',
     runtimeFocusSource: runtimeFocusSource ?? '',
     runtimeOverviewActive: Boolean(runtimeOverviewActive),
+    runtimeProjection,
+    runtimeOutputs: resolvedRuntimeOutputs,
     contractContext,
-    runtimeSummary: getRuntimeOutputSummary(runtimeProjection),
+    runtimeSummary: getRuntimeOutputSummary(resolvedRuntimeOutputs),
     runtimeSimLogCount,
     runtimeDetail,
     runtimeActionEditTarget,
@@ -368,9 +373,7 @@ export function createWorkbenchRuntimeReviewFlowView({
         ? 'true'
         : 'false',
       canRunAnyOperation: Boolean(operations.canRunAnyOperation),
-      canRunAnyOperationState: operations.canRunAnyOperation
-        ? 'true'
-        : 'false',
+      canRunAnyOperationState: operations.canRunAnyOperation ? 'true' : 'false',
       primaryActionId: primaryOperation.actionId ?? '',
       primaryStatePointId: primaryOperation.statePointId ?? '',
       primaryLabel: primaryOperation.label ?? '',
@@ -411,8 +414,7 @@ export function createWorkbenchMainFlowWorkspaceView({
       selectedActionId: region.selectedActionId ?? '',
       selectedRuntimeStatePointId: region.selectedRuntimeStatePointId ?? '',
       pendingRuntimeStatePointId: region.pendingRuntimeStatePointId ?? '',
-      refreshedRuntimeStatePointId:
-        region.refreshedRuntimeStatePointId ?? '',
+      refreshedRuntimeStatePointId: region.refreshedRuntimeStatePointId ?? '',
     },
     dispatch: statusView.dispatch ?? {},
     loop: statusView.loop ?? {},
@@ -453,8 +455,8 @@ export function createWorkbenchRuntimeReviewContextView({
   const hasSelection = Boolean(selection.hasSelection ?? selectedStatePointId);
   const detailSynced = Boolean(
     !detailStatePointId ||
-      !selectedStatePointId ||
-      detailStatePointId === selectedStatePointId
+    !selectedStatePointId ||
+    detailStatePointId === selectedStatePointId
   );
   const source = pickRuntimeReviewContextValue(
     selection.source,
@@ -562,17 +564,14 @@ export function createWorkbenchRuntimeReviewPanelView({
     resultReturnActionId: returnContext?.actionId ?? '',
     resultReturnStatePointId: returnContext?.statePointId ?? '',
     hasResultReturnContext: Boolean(returnContext?.statePointId),
-    hasResultReturnContextState: returnContext?.statePointId
-      ? 'true'
-      : 'false',
+    hasResultReturnContextState: returnContext?.statePointId ? 'true' : 'false',
     commandView: createRuntimeReviewPanelCommandTargetView({
       focusAction,
       focusTarget,
       returnResult,
       returnContext,
     }),
-    status:
-      context.status ?? WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.EMPTY,
+    status: context.status ?? WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.EMPTY,
     selectedActionId: context.selectedActionId ?? '',
     selectedStatePointId: context.selectedStatePointId ?? '',
     source: sourceView.source,
@@ -602,22 +601,21 @@ function createRuntimeReviewPanelCommandTargetView({
   const resolvedReturnContext = returnContext ?? null;
   const focusEnabled = Boolean(
     focusAction?.enabled ??
-      resolvedFocusTarget?.enabled ??
-      resolvedFocusTarget?.canFocusAction
+    resolvedFocusTarget?.enabled ??
+    resolvedFocusTarget?.canFocusAction
   );
   const returnEnabled = Boolean(
     returnResult?.enabled ??
-      resolvedReturnContext?.enabled ??
-      resolvedReturnContext?.canReturn ??
-      resolvedReturnContext?.statePointId
+    resolvedReturnContext?.enabled ??
+    resolvedReturnContext?.canReturn ??
+    resolvedReturnContext?.statePointId
   );
   return {
     focus: {
       operationKind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
       enabled: focusEnabled,
       enabledState: focusEnabled ? 'true' : 'false',
-      actionId:
-        resolvedFocusTarget?.actionId ?? focusAction?.actionId ?? '',
+      actionId: resolvedFocusTarget?.actionId ?? focusAction?.actionId ?? '',
       statePointId:
         resolvedFocusTarget?.statePointId ?? focusAction?.statePointId ?? '',
       fieldKey: resolvedFocusTarget?.fieldKey ?? focusAction?.fieldKey ?? '',
@@ -627,12 +625,9 @@ function createRuntimeReviewPanelCommandTargetView({
       operationKind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
       enabled: returnEnabled,
       enabledState: returnEnabled ? 'true' : 'false',
-      actionId:
-        resolvedReturnContext?.actionId ?? returnResult?.actionId ?? '',
+      actionId: resolvedReturnContext?.actionId ?? returnResult?.actionId ?? '',
       statePointId:
-        resolvedReturnContext?.statePointId ??
-        returnResult?.statePointId ??
-        '',
+        resolvedReturnContext?.statePointId ?? returnResult?.statePointId ?? '',
       context: resolvedReturnContext,
       target: returnResult ?? {},
     },
@@ -1069,8 +1064,8 @@ function createRuntimeReviewFocusActionOperation({
     '';
   const enabled = Boolean(
     runtimeReviewSelection?.hasSelection &&
-      runtimeActionEditTarget?.canFocusAction &&
-      actionId
+    runtimeActionEditTarget?.canFocusAction &&
+    actionId
   );
   return {
     kind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
@@ -1163,7 +1158,8 @@ function createRuntimeReviewPrimaryOperation({
   return {
     kind: primaryOperationKind,
     enabled: Boolean(target?.enabled),
-    disabledReason: target?.disabledReason ?? 'missing-runtime-review-operation',
+    disabledReason:
+      target?.disabledReason ?? 'missing-runtime-review-operation',
     label: formatRuntimeReviewPrimaryOperationLabel(
       primaryOperationKind,
       target
@@ -1182,7 +1178,9 @@ function formatRuntimeReviewPrimaryOperationLabel(
   if (operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION) {
     return '编辑结果动作';
   }
-  if (operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT) {
+  if (
+    operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT
+  ) {
     const status = target?.status ?? target?.context?.status ?? '';
     if (status === 'refreshed-edit-result') {
       return '查看刷新结果';

@@ -22064,3 +22064,50 @@ result.summary.runtimeOutputsSummary = result.runtimeOutputs.outputSummary
 - `npm run test -- --run`：通过，38 个测试文件、266 条测试。
 - `npm run test:e2e`：通过，4 条浏览器级烟测。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 307. UI 主流程可见闭环：Runtime Outputs Flow Boundary
+
+### 307.1 结构变化
+
+本阶段不新增保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+Workbench 主流程消费边界调整为：
+
+```text
+createWorkbenchFlowModel({
+  runtimeProjection,
+  runtimeOutputs
+})
+
+flowModel.runtimeProjection = runtimeProjection
+flowModel.runtimeOutputs = runtimeOutputs
+```
+
+`WorkbenchFlowPanel` 新增只读 prop：
+
+```text
+runtimeOutputs
+```
+
+消费规则：
+
+- `runtimeProjection` 继续保留完整运行投影，用于追踪 `runtimeInput` 和旧字段 fallback。
+- `runtimeOutputs` 作为主流程运行输出读取入口，用于导航点、日志数量、输出摘要和 output contract 上下文。
+- `workbenchFlowContractContext` 从完整 projection 读取 runtime input，从 `runtimeOutputs` 读取 runtime output。
+- 该边界只影响 Workbench 主流程消费方式，不写入项目草稿。
+
+### 307.2 保存与迁移
+
+不新增项目草稿字段，不改变导入导出 schema，不需要数据迁移。
+
+### 307.3 验证
+
+- 新增 Playwright 场景覆盖：动作编辑进入运行结果、点击资源曲线点、点击日志行、从三值详情回到动作编辑、再查看刷新后的结果定位。
+- `WorkbenchFlowPanel.test.js` 覆盖 fallback flow model 从 `runtimeOutputs` 读取运行日志和导航。
+- `workbenchFlowModel.test.js` 覆盖 flow model 同时暴露完整 projection 与输出封套。
+- `workbenchFlowContractContext.test.js` 覆盖 runtime input 来自完整 projection、runtime output 来自 `runtimeOutputs`。
+- `Workbench.test.js` 覆盖主页面向 FlowPanel 传入同一份 `runtimeOutputs`。
+- `npm run test -- --run`：通过，38 个测试文件、268 条测试。
+- `npm run test:e2e`：通过，5 条浏览器级烟测。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 LF/CRLF 提示。

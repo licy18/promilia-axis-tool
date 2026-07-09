@@ -107,6 +107,74 @@ test('keeps setup, edit return, and result selection synced', async ({
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('runs the visible curve-log-detail edit loop end to end', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/workbench');
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'action-edit'
+  );
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  const openedState = await waitForRuntimeAction(page, 'action-0001');
+  expectRuntimeReviewState(openedState, {
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: false,
+  });
+  expectRuntimeStatePointSynced(openedState, openedState.statePointId);
+
+  const curvePoint = page
+    .locator(
+      `[data-testid="workbench-runtime-resource-chart-point"][data-state-point-id="${openedState.statePointId}"]`
+    )
+    .first();
+  await curvePoint.click();
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail')
+  ).toHaveAttribute('data-runtime-review-source', 'resource-runtime-curve');
+  await expectCurveAndLogSelection(page, openedState.statePointId);
+
+  const logRow = page
+    .locator(
+      `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${openedState.statePointId}"]`
+    )
+    .first();
+  await logRow.click();
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail')
+  ).toHaveAttribute('data-runtime-review-source', 'event-log-runtime-row');
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail')
+  ).toHaveAttribute('data-runtime-review-source-kind', 'log');
+  await expectCurveAndLogSelection(page, openedState.statePointId);
+
+  await focusRuntimeDetailAction(page);
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
+    actionId: 'action-0001',
+    frameValue: '24',
+    msValue: '400',
+    originStatePointId: openedState.statePointId,
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: true,
+  });
+
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    )
+  ).toHaveAttribute('data-selected-state-point-id', returnedState.statePointId);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps direct, log, and contribution edit returns synced', async ({
   page,
 }) => {
@@ -478,6 +546,29 @@ function expectRuntimeStatePointSynced(state, statePointId) {
   expect(state.curveStatePointId).toBe(statePointId);
   expect(state.logStatePointId).toBe(statePointId);
   expect(state.hpContributionStatePointId).toBe(statePointId);
+}
+
+async function expectCurveAndLogSelection(page, statePointId) {
+  await expect(
+    page
+      .locator(
+        `[data-testid="workbench-runtime-resource-chart-point"][data-state-point-id="${statePointId}"]`
+      )
+      .first()
+  ).toHaveAttribute('data-selected', 'true');
+  await expect(
+    page
+      .locator(
+        `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${statePointId}"]`
+      )
+      .first()
+  ).toHaveAttribute('data-selected', 'true');
+  await expect(
+    page.getByTestId('workbench-runtime-resource-chart-selection')
+  ).toHaveAttribute('data-state-point-id', statePointId);
+  await expect(
+    page.getByTestId('workbench-runtime-sim-log-navigation')
+  ).toHaveAttribute('data-state-point-id', statePointId);
 }
 
 function expectNoUnexpectedBrowserIssues(browserIssues) {

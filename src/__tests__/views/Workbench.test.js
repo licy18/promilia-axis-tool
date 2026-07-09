@@ -224,6 +224,13 @@ describe('Workbench view', () => {
         .runtimeOutputs
     ).toBe(runtimeOutputs);
     expect(
+      wrapper.findComponent(WorkbenchFlowPanel).props('runtimeOutputs')
+    ).toBe(runtimeOutputs);
+    expect(
+      wrapper.findComponent(WorkbenchFlowPanel).props('flowModel')
+        .runtimeOutputs
+    ).toBe(runtimeOutputs);
+    expect(
       wrapper
         .find('[data-testid="workbench-resource-area"]')
         .attributes('data-runtime-review-role')

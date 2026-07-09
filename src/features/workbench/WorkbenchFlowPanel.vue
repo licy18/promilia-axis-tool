@@ -21,7 +21,9 @@
       workbenchFlow.mainFlowState.returnStatePointId
     "
     :data-runtime-detail-action-id="workbenchFlow.runtimeDetail.actionId"
-    :data-runtime-detail-state-point-id="workbenchFlow.runtimeDetail.statePointId"
+    :data-runtime-detail-state-point-id="
+      workbenchFlow.runtimeDetail.statePointId
+    "
     :data-runtime-navigation-count="workbenchFlow.runtimeNavigation.count"
     :data-runtime-navigation-index="workbenchFlow.runtimeNavigation.index"
     :data-runtime-overview-active="
@@ -44,23 +46,15 @@
     :data-runtime-output-status="
       workbenchFlow.contractContext.runtimeOutput.status
     "
-    :data-main-flow-dispatch-sequence="
-      mainFlowStatusView.dispatch.sequence
-    "
-    :data-main-flow-dispatch-status="
-      mainFlowStatusView.dispatch.status
-    "
-    :data-main-flow-dispatch-handled="
-      mainFlowStatusView.dispatch.handledState
-    "
+    :data-main-flow-dispatch-sequence="mainFlowStatusView.dispatch.sequence"
+    :data-main-flow-dispatch-status="mainFlowStatusView.dispatch.status"
+    :data-main-flow-dispatch-handled="mainFlowStatusView.dispatch.handledState"
     :data-main-flow-dispatch-kind="mainFlowStatusView.dispatch.kind"
     :data-main-flow-dispatch-source="mainFlowStatusView.dispatch.source"
     :data-main-flow-dispatch-handler-key="
       mainFlowStatusView.dispatch.handlerKey
     "
-    :data-main-flow-dispatch-reason="
-      mainFlowStatusView.dispatch.reason
-    "
+    :data-main-flow-dispatch-reason="mainFlowStatusView.dispatch.reason"
     :data-main-flow-loop-step="mainFlowStatusView.loop.step"
     :data-main-flow-loop-status="mainFlowStatusView.loop.status"
     :data-main-flow-loop-recovery-needed="
@@ -123,7 +117,9 @@
           title="上一个运行结果"
           aria-label="上一个运行结果"
           @click="
-            selectRuntimeNavigationPoint(workbenchFlow.runtimeNavigation.previous)
+            selectRuntimeNavigationPoint(
+              workbenchFlow.runtimeNavigation.previous
+            )
           "
         >
           <ArrowLeft class="flow-button-icon" />
@@ -223,9 +219,7 @@ import {
   createWorkbenchMainFlowStatusView,
   createWorkbenchFlowModel,
 } from './workbenchFlowModel';
-import {
-  createWorkbenchMainFlowCommandSurface,
-} from './workbenchMainFlowActions';
+import { createWorkbenchMainFlowCommandSurface } from './workbenchMainFlowActions';
 
 const MAIN_FLOW_PANEL_SOURCE = 'workbench-flow-panel';
 const MAIN_FLOW_RECOVERY_SOURCE = 'workbench-flow-recovery';
@@ -240,6 +234,10 @@ const props = defineProps({
     default: null,
   },
   runtimeProjection: {
+    type: Object,
+    default: null,
+  },
+  runtimeOutputs: {
     type: Object,
     default: null,
   },
@@ -278,6 +276,7 @@ const workbenchFlow = computed(
       selectedAction: props.selectedAction,
       generationBundle: props.generationBundle,
       runtimeProjection: props.runtimeProjection,
+      runtimeOutputs: props.runtimeOutputs,
       runtimeSelectedDetail: props.runtimeSelectedDetail,
       selectedStateCurvePointId: props.selectedStateCurvePointId,
       runtimeOverviewActive: props.runtimeOverviewActive,
@@ -298,14 +297,14 @@ const resolvedMainFlowCommandSurface = computed(
       recoverySource: MAIN_FLOW_RECOVERY_SOURCE,
     })
 );
-const openRuntimeButtonView = computed(() =>
-  resolvedMainFlowCommandSurface.value.openRuntimeResults
+const openRuntimeButtonView = computed(
+  () => resolvedMainFlowCommandSurface.value.openRuntimeResults
 );
-const runtimeActionEditButtonView = computed(() =>
-  resolvedMainFlowCommandSurface.value.runtimeActionEdit
+const runtimeActionEditButtonView = computed(
+  () => resolvedMainFlowCommandSurface.value.runtimeActionEdit
 );
-const runtimeResultReturnButtonView = computed(() =>
-  resolvedMainFlowCommandSurface.value.runtimeResultReturn
+const runtimeResultReturnButtonView = computed(
+  () => resolvedMainFlowCommandSurface.value.runtimeResultReturn
 );
 const runtimeResultReturnButtonLabel = computed(() =>
   formatRuntimeResultReturnButtonLabel(runtimeResultReturnButtonView.value)
@@ -353,11 +352,13 @@ function formatRuntimeResultReturnButtonLabel(buttonView = null) {
 }
 
 function getRuntimeNavigationFlowAction(point) {
-  return resolvedMainFlowCommandSurface.value.createRuntimeStatePointFlowAction({
-    source: 'workbench-flow-navigation',
-    detail: point,
-    enabled: Boolean(point?.statePointId),
-  });
+  return resolvedMainFlowCommandSurface.value.createRuntimeStatePointFlowAction(
+    {
+      source: 'workbench-flow-navigation',
+      detail: point,
+      enabled: Boolean(point?.statePointId),
+    }
+  );
 }
 </script>
 

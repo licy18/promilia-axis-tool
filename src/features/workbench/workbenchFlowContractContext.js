@@ -1,6 +1,7 @@
 export function createWorkbenchFlowContractContext({
   generationBundle = null,
   runtimeProjection = null,
+  runtimeOutputs = null,
 } = {}) {
   const generationEntry =
     generationBundle?.actionHitThreeValueDeltaGeneration ?? null;
@@ -9,9 +10,14 @@ export function createWorkbenchFlowContractContext({
     generationEntry?.standardContract ??
     null;
   const runtimeInput = runtimeProjection?.runtimeInput ?? null;
-  const outputContract = runtimeProjection?.outputContract ?? null;
-  const runtimeSummary = runtimeProjection?.summary ?? {};
-  const outputSummary = outputContract?.summary ?? {};
+  const runtimeOutputSource =
+    runtimeOutputs ?? runtimeProjection?.runtimeOutputs ?? runtimeProjection;
+  const outputContract = runtimeOutputSource?.outputContract ?? null;
+  const runtimeSummary = runtimeOutputSource?.summary ?? {};
+  const outputSummary = {
+    ...(outputContract?.summary ?? {}),
+    ...(runtimeOutputSource?.outputSummary ?? {}),
+  };
   const simLogOutput = outputContract?.outputs?.simLog ?? null;
   const stateCurvesOutput = outputContract?.outputs?.stateCurves ?? null;
   const resourceCurvesOutput = outputContract?.outputs?.resourceCurves ?? null;
@@ -47,8 +53,7 @@ export function createWorkbenchFlowContractContext({
         runtimeSummary.runtimeInputSource ??
         '',
       inputDeltaCount: numberOrZero(
-        runtimeInput?.summary?.inputDeltaCount ??
-          runtimeSummary.inputDeltaCount
+        runtimeInput?.summary?.inputDeltaCount ?? runtimeSummary.inputDeltaCount
       ),
       appliedDeltaCount: numberOrZero(
         runtimeInput?.summary?.appliedDeltaCount ??
@@ -65,6 +70,9 @@ export function createWorkbenchFlowContractContext({
     runtimeOutput: {
       sourceKind: outputContract?.sourceKind ?? '',
       status: outputContract?.status ?? '',
+      runtimeOutputsSourceKind: runtimeOutputSource?.sourceKind ?? '',
+      runtimeOutputsStatus: runtimeOutputSource?.status ?? '',
+      resourcesAlias: runtimeOutputSource?.outputAliases?.resources ?? '',
       simLogInputSource: simLogOutput?.inputSource ?? '',
       stateCurvesSourceKind: stateCurvesOutput?.sourceKind ?? '',
       resourceCurvesSourceKind: resourceCurvesOutput?.sourceKind ?? '',
