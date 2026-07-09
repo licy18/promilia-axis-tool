@@ -206,6 +206,68 @@ test('runs the visible curve-log-detail edit loop end to end @workbench-main-flo
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('returns refreshed results from the runtime detail panel @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/workbench');
+  const flowPanel = page.getByTestId('workbench-flow-panel');
+  await expect(flowPanel).toHaveAttribute('data-flow-phase', 'action-edit');
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  const openedState = await waitForRuntimeAction(page, 'action-0001');
+  expectRuntimeReviewState(openedState, {
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: false,
+  });
+  expectRuntimeStatePointSynced(openedState, openedState.statePointId);
+
+  const logRow = page
+    .locator(
+      `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${openedState.statePointId}"]`
+    )
+    .first();
+  await expect(logRow).toBeVisible();
+  await logRow.click();
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail')
+  ).toHaveAttribute('data-runtime-review-source', 'event-log-runtime-row');
+  await expectCurveAndLogSelection(page, openedState.statePointId);
+
+  await focusRuntimeDetailAction(page);
+  const { editState, returnedState } = await editCurrentActionFrameAndReturn(
+    page,
+    {
+      actionId: 'action-0001',
+      frameValue: '30',
+      msValue: '500',
+      originStatePointId: openedState.statePointId,
+      navigationCount: '1',
+      navigationIndex: '0',
+      selected: true,
+      returnButtonTestId: 'workbench-runtime-selected-detail-return-result',
+    }
+  );
+
+  expect(returnedState.statePointId).toBe(editState.feedbackStatePointId);
+  await expectCurveAndLogSelection(page, editState.feedbackStatePointId);
+  await expectRuntimeOutputConsistent(page);
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    )
+  ).toHaveAttribute(
+    'data-selected-state-point-id',
+    editState.feedbackStatePointId
+  );
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('runs the Workbench flow panel edit-result loop end to end @workbench-main-flow', async ({
   page,
 }) => {
