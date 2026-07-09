@@ -13427,6 +13427,25 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块或转入生成层：若继续 UI，应优先把“动作编辑 -> 运行模拟 -> 曲线/日志/贡献拆分 -> 回改刷新”整理成少量稳定的主流程守门；若转入生成层，则开始收束 `Action -> Hit -> ThreeValueDelta` 的统一生成入口。
 
+### 2026-07-10：生成层 - 标准输出边界
+
+本阶段属于：生成层。
+
+完成的可用能力：
+
+- `generationOutputs` 新增 `standardOutputBoundary`，明确标准生成入口为 `generationOutputs.outputs.generationEntry`，并固定 runtime 应读取的 `runtimeInputSource`、`standardContract`、`deltas`、`valueSourceSlots` 和 contract validation 路径。
+- runtime input 与 runtime projection summary 现在能报告同一条生成输出边界是否 ready、是否存在 issue、以及是否走标准入口；后续运行时和 UI 可从 runtime summary 判断边界状态，不必回读 generation 内部结构。
+- 本阶段不改变三值计算结果、公式、倍率、applied delta 筛选、运行日志行、曲线数值、UI 文案或草稿保存 schema。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `337. 生成层标准输出边界：Generation Standard Output Boundary`。
+
+验收结果：
+
+- `npm run test -- --run src\__tests__\simulation\threeValueGenerationBuilder.test.js src\__tests__\simulation\actionHitThreeValueRuntimeInput.test.js src\__tests__\simulation\threeValueRuntimeProjection.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过，4 个测试文件、27 条测试。
+
+下一步：
+
+- 进入运行时层：让 runtime output / Workbench contract context 消费新的 generation output boundary 摘要，主流程可直接诊断生成入口是否标准、是否发生旧回退；仍不追真实公式、真实倍率或测试期数值平衡。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

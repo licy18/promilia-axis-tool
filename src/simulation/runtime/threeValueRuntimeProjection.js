@@ -859,6 +859,50 @@ function summarizeRuntimeInputGenerationReadSources(runtimeInput) {
   const generationReadInputs = generationReadSources.inputs ?? {};
   return {
     runtimeInputGenerationReadSourcesStatus: generationReadSources.status ?? '',
+    runtimeInputGenerationOutputBoundaryStatus:
+      runtimeInput?.generationOutputBoundaryStatus ??
+      generationReadSources.generationOutputBoundaryStatus ??
+      '',
+    runtimeInputGenerationOutputBoundaryReady: Boolean(
+      runtimeInput?.generationOutputBoundaryReady ??
+        generationReadSources.generationOutputBoundaryReady
+    ),
+    runtimeInputGenerationOutputBoundaryPath:
+      runtimeInput?.generationOutputBoundaryPath ??
+      generationReadSources.generationOutputBoundaryPath ??
+      '',
+    runtimeInputGenerationOutputBoundaryEntryPath:
+      runtimeInput?.generationOutputBoundaryEntryPath ??
+      generationReadSources.generationOutputBoundaryEntryPath ??
+      '',
+    runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath:
+      runtimeInput?.generationOutputBoundaryRuntimeInputSourcePath ??
+      generationReadSources.generationOutputBoundaryRuntimeInputSourcePath ??
+      '',
+    runtimeInputGenerationOutputBoundaryStandardContractPath:
+      runtimeInput?.generationOutputBoundaryStandardContractPath ??
+      generationReadSources.generationOutputBoundaryStandardContractPath ??
+      '',
+    runtimeInputGenerationOutputBoundaryDeltasPath:
+      runtimeInput?.generationOutputBoundaryDeltasPath ??
+      generationReadSources.generationOutputBoundaryDeltasPath ??
+      '',
+    runtimeInputGenerationOutputBoundaryValueSourceSlotsPath:
+      runtimeInput?.generationOutputBoundaryValueSourceSlotsPath ??
+      generationReadSources.generationOutputBoundaryValueSourceSlotsPath ??
+      '',
+    runtimeInputGenerationOutputBoundaryContractValidationPath:
+      runtimeInput?.generationOutputBoundaryContractValidationPath ??
+      generationReadSources.generationOutputBoundaryContractValidationPath ??
+      '',
+    runtimeInputGenerationOutputBoundaryStandardOutputCount: numberOrZero(
+      runtimeInput?.generationOutputBoundaryStandardOutputCount ??
+        generationReadSources.generationOutputBoundaryStandardOutputCount
+    ),
+    runtimeInputGenerationOutputBoundaryIssueCount: numberOrZero(
+      runtimeInput?.generationOutputBoundaryIssueCount ??
+        generationReadSources.generationOutputBoundaryIssueCount
+    ),
     runtimeInputGenerationReadStandardOutputCount: numberOrZero(
       generationReadSources.standardOutputCount
     ),

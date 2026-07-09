@@ -99,6 +99,9 @@ describe('three value generation builder', () => {
         generationOutputsSourceKind: 'azpr-three-value-generation-outputs',
         generationOutputsStatus: 'generation-outputs-ready',
         generationOutputsOutputCount: 9,
+        generationOutputBoundaryStatus: 'generation-output-boundary-ready',
+        generationOutputBoundaryReady: true,
+        generationOutputBoundaryIssueCount: 0,
         actionCount: 1,
         hitCount: 3,
         deltaCount: 3,
@@ -327,6 +330,23 @@ describe('three value generation builder', () => {
         generationEntryAggregateValidationStatus:
           'generation-entry-aggregate-valid',
         generationEntryAggregateValidationIssueCount: 0,
+        generationOutputBoundaryStatus: 'generation-output-boundary-ready',
+        generationOutputBoundaryReady: true,
+        generationOutputBoundaryPath: 'generationOutputs.standardOutputBoundary',
+        generationOutputBoundaryEntryPath:
+          'generationOutputs.outputs.generationEntry',
+        generationOutputBoundaryRuntimeInputSourcePath:
+          'generationOutputs.outputs.generationEntry.runtimeInputSource',
+        generationOutputBoundaryStandardContractPath:
+          'generationOutputs.outputs.generationEntry.standardContract',
+        generationOutputBoundaryDeltasPath:
+          'generationOutputs.outputs.generationEntry.deltas',
+        generationOutputBoundaryValueSourceSlotsPath:
+          'generationOutputs.outputs.generationEntry.valueSourceSlots',
+        generationOutputBoundaryContractValidationPath:
+          'generationOutputs.outputs.generationEntry.contractValidation',
+        generationOutputBoundaryStandardOutputCount: 6,
+        generationOutputBoundaryIssueCount: 0,
       },
       outputSummary: {
         outputCount: 9,
@@ -367,6 +387,52 @@ describe('three value generation builder', () => {
       bundle.runtimeInputSource
     );
     expect(bundle.generationOutputs.deltas).toBe(bundle.deltas);
+    expect(bundle.generationOutputs.standardOutputBoundary).toMatchObject({
+      sourceKind: 'azpr-action-hit-three-value-generation-output-boundary',
+      status: 'generation-output-boundary-ready',
+      contractName: 'Action -> Hit -> ThreeValueDelta',
+      entryPath: 'generationOutputs.outputs.generationEntry',
+      runtimeInputSourcePath:
+        'generationOutputs.outputs.generationEntry.runtimeInputSource',
+      standardContractPath:
+        'generationOutputs.outputs.generationEntry.standardContract',
+      deltasPath: 'generationOutputs.outputs.generationEntry.deltas',
+      valueSourceSlotsPath:
+        'generationOutputs.outputs.generationEntry.valueSourceSlots',
+      contractValidationPath:
+        'generationOutputs.outputs.generationEntry.contractValidation',
+      standardOutputCount: 6,
+      issueCount: 0,
+      ready: true,
+      usesLegacyFallback: false,
+    });
+    expect(bundle.generationOutputs.outputBoundary).toBe(
+      bundle.generationOutputs.standardOutputBoundary
+    );
+    expect(bundle.generationOutputs.standardOutputBoundary.checks).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          key: 'entry-required-outputs-present',
+          status: 'valid',
+          valid: true,
+        }),
+        expect.objectContaining({
+          key: 'entry-runtime-input-source-reference',
+          status: 'valid',
+          valid: true,
+        }),
+        expect.objectContaining({
+          key: 'entry-contract-validation-valid',
+          status: 'valid',
+          valid: true,
+        }),
+        expect.objectContaining({
+          key: 'entry-aggregate-validation-valid',
+          status: 'valid',
+          valid: true,
+        }),
+      ])
+    );
   });
 
   it('flags aggregate drift before runtime consumes the generation entry', () => {

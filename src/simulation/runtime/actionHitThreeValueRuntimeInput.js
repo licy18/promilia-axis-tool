@@ -57,6 +57,30 @@ export function createActionHitThreeValueRuntimeInput({
     runtimeInputSourceStatus: resolvedSource.runtimeInputSourceStatus,
     generationOutputsSourceKind: resolvedSource.generationOutputsSourceKind,
     generationOutputsStatus: resolvedSource.generationOutputsStatus,
+    generationOutputBoundary: resolvedSource.generationOutputBoundary,
+    generationOutputBoundarySourceKind:
+      resolvedSource.generationOutputBoundarySourceKind,
+    generationOutputBoundaryStatus:
+      resolvedSource.generationOutputBoundaryStatus,
+    generationOutputBoundaryReady:
+      resolvedSource.generationOutputBoundaryReady,
+    generationOutputBoundaryPath: resolvedSource.generationOutputBoundaryPath,
+    generationOutputBoundaryEntryPath:
+      resolvedSource.generationOutputBoundaryEntryPath,
+    generationOutputBoundaryRuntimeInputSourcePath:
+      resolvedSource.generationOutputBoundaryRuntimeInputSourcePath,
+    generationOutputBoundaryStandardContractPath:
+      resolvedSource.generationOutputBoundaryStandardContractPath,
+    generationOutputBoundaryDeltasPath:
+      resolvedSource.generationOutputBoundaryDeltasPath,
+    generationOutputBoundaryValueSourceSlotsPath:
+      resolvedSource.generationOutputBoundaryValueSourceSlotsPath,
+    generationOutputBoundaryContractValidationPath:
+      resolvedSource.generationOutputBoundaryContractValidationPath,
+    generationOutputBoundaryStandardOutputCount:
+      resolvedSource.generationOutputBoundaryStandardOutputCount,
+    generationOutputBoundaryIssueCount:
+      resolvedSource.generationOutputBoundaryIssueCount,
     generationEntrySourceKind: resolvedSource.generationEntrySourceKind,
     generationEntryStatus: resolvedSource.generationEntryStatus,
     standardGenerationEntrySourceKind:
@@ -120,6 +144,12 @@ function resolveActionHitThreeValueRuntimeInputSource({
     actionHitThreeValueDeltaGeneration,
   });
   const standardGenerationEntry = generationEntryReadSource?.value ?? null;
+  const generationOutputBoundaryReadSource =
+    resolveGenerationOutputBoundaryReadSource({
+      generationOutputs,
+    });
+  const generationOutputBoundary =
+    generationOutputBoundaryReadSource?.value ?? null;
   const generationEntryContractValidationReadSource =
     resolveGenerationEntryContractValidationReadSource({
       generationEntry: standardGenerationEntry,
@@ -161,6 +191,8 @@ function resolveActionHitThreeValueRuntimeInputSource({
     standardContractReadSource,
     deltaReadSource,
     valueSourceSlotReadSource,
+    generationOutputBoundaryReadSource,
+    generationOutputBoundary,
     generationEntryContractValidationReadSource,
     generationEntryContractValidation,
     generationEntryAggregateValidation,
@@ -171,6 +203,30 @@ function resolveActionHitThreeValueRuntimeInputSource({
     runtimeInputSourceStatus: resolvedRuntimeInputSource?.status ?? null,
     generationOutputsSourceKind: generationOutputs?.sourceKind ?? null,
     generationOutputsStatus: generationOutputs?.status ?? null,
+    generationOutputBoundary,
+    generationOutputBoundarySourceKind:
+      generationOutputBoundary?.sourceKind ?? null,
+    generationOutputBoundaryStatus: generationOutputBoundary?.status ?? null,
+    generationOutputBoundaryReady: generationOutputBoundary?.ready === true,
+    generationOutputBoundaryPath:
+      generationOutputBoundaryReadSource?.path ?? '',
+    generationOutputBoundaryEntryPath: generationOutputBoundary?.entryPath ?? '',
+    generationOutputBoundaryRuntimeInputSourcePath:
+      generationOutputBoundary?.runtimeInputSourcePath ?? '',
+    generationOutputBoundaryStandardContractPath:
+      generationOutputBoundary?.standardContractPath ?? '',
+    generationOutputBoundaryDeltasPath:
+      generationOutputBoundary?.deltasPath ?? '',
+    generationOutputBoundaryValueSourceSlotsPath:
+      generationOutputBoundary?.valueSourceSlotsPath ?? '',
+    generationOutputBoundaryContractValidationPath:
+      generationOutputBoundary?.contractValidationPath ?? '',
+    generationOutputBoundaryStandardOutputCount: numberOrNull(
+      generationOutputBoundary?.standardOutputCount
+    ),
+    generationOutputBoundaryIssueCount: numberOrNull(
+      generationOutputBoundary?.issueCount
+    ),
     standardGenerationEntrySourceKind:
       standardGenerationEntry?.sourceKind ?? null,
     standardGenerationEntryStatus: standardGenerationEntry?.status ?? null,
@@ -243,6 +299,26 @@ function resolveGenerationEntryReadSource({
       path: 'actionHitThreeValueDeltaGeneration',
       tier: 'generation-entry-field',
       value: actionHitThreeValueDeltaGeneration,
+    }),
+  ]);
+}
+
+function resolveGenerationOutputBoundaryReadSource({
+  generationOutputs,
+} = {}) {
+  return selectGenerationReadSourceCandidate([
+    createGenerationReadSourceCandidate({
+      key: 'standardOutputBoundary',
+      path: 'generationOutputs.standardOutputBoundary',
+      tier: 'generation-output-boundary',
+      value: generationOutputs?.standardOutputBoundary,
+    }),
+    createGenerationReadSourceCandidate({
+      key: 'outputBoundary',
+      path: 'generationOutputs.outputBoundary',
+      tier: 'generation-output-boundary-alias',
+      value: generationOutputs?.outputBoundary,
+      aliasFor: 'standardOutputBoundary',
     }),
   ]);
 }
@@ -551,6 +627,8 @@ function createActionHitThreeValueGenerationReadSources({
   standardContractReadSource,
   deltaReadSource,
   valueSourceSlotReadSource,
+  generationOutputBoundaryReadSource,
+  generationOutputBoundary,
   generationEntryContractValidationReadSource,
   generationEntryContractValidation,
   generationEntryAggregateValidation,
@@ -593,6 +671,9 @@ function createActionHitThreeValueGenerationReadSources({
     generationEntryContractValidation?.valid === true;
   const generationEntryAggregateValidationValid =
     generationEntryAggregateValidation?.valid === true;
+  const generationOutputBoundaryReady = generationOutputBoundary
+    ? generationOutputBoundary.ready === true
+    : true;
   const usesLegacyGenerationFallback = inputNames.some(
     inputName =>
       !optionalInputNames.includes(inputName) &&
@@ -603,6 +684,7 @@ function createActionHitThreeValueGenerationReadSources({
     requiredInputNames.every(
       inputName => inputs[inputName].standardOutputPresent
     ) &&
+    generationOutputBoundaryReady &&
     !usesLegacyGenerationFallback;
   const standardGenerationAggregateBoundaryReady =
     standardGenerationBoundaryReady && generationEntryAggregateValidationValid;
@@ -616,6 +698,29 @@ function createActionHitThreeValueGenerationReadSources({
       : 'runtime-input-generation-read-sources-legacy',
     generationOutputsSourceKind: generationOutputs?.sourceKind ?? '',
     generationOutputsStatus: generationOutputs?.status ?? '',
+    generationOutputBoundaryStatus: generationOutputBoundary?.status ?? '',
+    generationOutputBoundaryReady: generationOutputBoundary?.ready === true,
+    generationOutputBoundaryReadyState:
+      generationOutputBoundary?.ready === true ? 'true' : 'false',
+    generationOutputBoundaryPath:
+      generationOutputBoundaryReadSource?.path ?? '',
+    generationOutputBoundaryEntryPath: generationOutputBoundary?.entryPath ?? '',
+    generationOutputBoundaryRuntimeInputSourcePath:
+      generationOutputBoundary?.runtimeInputSourcePath ?? '',
+    generationOutputBoundaryStandardContractPath:
+      generationOutputBoundary?.standardContractPath ?? '',
+    generationOutputBoundaryDeltasPath:
+      generationOutputBoundary?.deltasPath ?? '',
+    generationOutputBoundaryValueSourceSlotsPath:
+      generationOutputBoundary?.valueSourceSlotsPath ?? '',
+    generationOutputBoundaryContractValidationPath:
+      generationOutputBoundary?.contractValidationPath ?? '',
+    generationOutputBoundaryStandardOutputCount: numberOrZero(
+      generationOutputBoundary?.standardOutputCount
+    ),
+    generationOutputBoundaryIssueCount: numberOrZero(
+      generationOutputBoundary?.issueCount
+    ),
     inputs,
     standardOutputNames,
     fallbackInputNames,
@@ -850,6 +955,29 @@ function summarizeActionHitThreeValueRuntimeInput({
     standardContractHitCount: standardContract?.summary?.hitCount ?? null,
     standardContractValueSourceSlotCount:
       standardContract?.summary?.valueSourceSlotCount ?? null,
+    generationOutputBoundarySourceKind:
+      resolvedSource.generationOutputBoundarySourceKind,
+    generationOutputBoundaryStatus:
+      resolvedSource.generationOutputBoundaryStatus,
+    generationOutputBoundaryReady:
+      resolvedSource.generationOutputBoundaryReady,
+    generationOutputBoundaryPath: resolvedSource.generationOutputBoundaryPath,
+    generationOutputBoundaryEntryPath:
+      resolvedSource.generationOutputBoundaryEntryPath,
+    generationOutputBoundaryRuntimeInputSourcePath:
+      resolvedSource.generationOutputBoundaryRuntimeInputSourcePath,
+    generationOutputBoundaryStandardContractPath:
+      resolvedSource.generationOutputBoundaryStandardContractPath,
+    generationOutputBoundaryDeltasPath:
+      resolvedSource.generationOutputBoundaryDeltasPath,
+    generationOutputBoundaryValueSourceSlotsPath:
+      resolvedSource.generationOutputBoundaryValueSourceSlotsPath,
+    generationOutputBoundaryContractValidationPath:
+      resolvedSource.generationOutputBoundaryContractValidationPath,
+    generationOutputBoundaryStandardOutputCount:
+      resolvedSource.generationOutputBoundaryStandardOutputCount,
+    generationOutputBoundaryIssueCount:
+      resolvedSource.generationOutputBoundaryIssueCount,
     ...valueSourceSlotSummary,
     inputDeltaCount: inputDeltas.length,
     appliedDeltaCount: appliedDeltas.length,

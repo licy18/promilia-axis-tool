@@ -178,6 +178,23 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
       appliedDeltaSource: ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE,
       generationOutputsSourceKind: 'azpr-three-value-generation-outputs',
       generationOutputsStatus: 'generation-outputs-ready',
+      generationOutputBoundaryStatus: 'generation-output-boundary-ready',
+      generationOutputBoundaryReady: true,
+      generationOutputBoundaryPath: 'generationOutputs.standardOutputBoundary',
+      generationOutputBoundaryEntryPath:
+        'generationOutputs.outputs.generationEntry',
+      generationOutputBoundaryRuntimeInputSourcePath:
+        'generationOutputs.outputs.generationEntry.runtimeInputSource',
+      generationOutputBoundaryStandardContractPath:
+        'generationOutputs.outputs.generationEntry.standardContract',
+      generationOutputBoundaryDeltasPath:
+        'generationOutputs.outputs.generationEntry.deltas',
+      generationOutputBoundaryValueSourceSlotsPath:
+        'generationOutputs.outputs.generationEntry.valueSourceSlots',
+      generationOutputBoundaryContractValidationPath:
+        'generationOutputs.outputs.generationEntry.contractValidation',
+      generationOutputBoundaryStandardOutputCount: 6,
+      generationOutputBoundaryIssueCount: 0,
       runtimeInputSourceKind:
         'azpr-runtime-input-source-from-generation-builder',
       runtimeInputSourceStatus: 'runtime-input-source-ready',
@@ -216,6 +233,24 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
           'generation-entry-aggregate-valid',
         generationEntryAggregateValidationIssueCount: 0,
         generationEntryAggregateValidationValid: true,
+        generationOutputBoundaryStatus: 'generation-output-boundary-ready',
+        generationOutputBoundaryReady: true,
+        generationOutputBoundaryPath:
+          'generationOutputs.standardOutputBoundary',
+        generationOutputBoundaryEntryPath:
+          'generationOutputs.outputs.generationEntry',
+        generationOutputBoundaryRuntimeInputSourcePath:
+          'generationOutputs.outputs.generationEntry.runtimeInputSource',
+        generationOutputBoundaryStandardContractPath:
+          'generationOutputs.outputs.generationEntry.standardContract',
+        generationOutputBoundaryDeltasPath:
+          'generationOutputs.outputs.generationEntry.deltas',
+        generationOutputBoundaryValueSourceSlotsPath:
+          'generationOutputs.outputs.generationEntry.valueSourceSlots',
+        generationOutputBoundaryContractValidationPath:
+          'generationOutputs.outputs.generationEntry.contractValidation',
+        generationOutputBoundaryStandardOutputCount: 6,
+        generationOutputBoundaryIssueCount: 0,
         standardGenerationBoundaryReady: true,
         standardGenerationAggregateBoundaryReady: true,
         inputs: {
@@ -276,6 +311,24 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
       summary: {
         generationOutputsSourceKind: 'azpr-three-value-generation-outputs',
         generationOutputsStatus: 'generation-outputs-ready',
+        generationOutputBoundaryStatus: 'generation-output-boundary-ready',
+        generationOutputBoundaryReady: true,
+        generationOutputBoundaryPath:
+          'generationOutputs.standardOutputBoundary',
+        generationOutputBoundaryEntryPath:
+          'generationOutputs.outputs.generationEntry',
+        generationOutputBoundaryRuntimeInputSourcePath:
+          'generationOutputs.outputs.generationEntry.runtimeInputSource',
+        generationOutputBoundaryStandardContractPath:
+          'generationOutputs.outputs.generationEntry.standardContract',
+        generationOutputBoundaryDeltasPath:
+          'generationOutputs.outputs.generationEntry.deltas',
+        generationOutputBoundaryValueSourceSlotsPath:
+          'generationOutputs.outputs.generationEntry.valueSourceSlots',
+        generationOutputBoundaryContractValidationPath:
+          'generationOutputs.outputs.generationEntry.contractValidation',
+        generationOutputBoundaryStandardOutputCount: 6,
+        generationOutputBoundaryIssueCount: 0,
         runtimeInputSourceKind:
           'azpr-runtime-input-source-from-generation-builder',
         generationEntryContractValidationStatus:

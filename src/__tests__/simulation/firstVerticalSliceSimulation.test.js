@@ -1491,6 +1491,9 @@ describe('first vertical slice simulation', () => {
         generationOutputsSourceKind: 'azpr-three-value-generation-outputs',
         generationOutputsStatus: 'generation-outputs-ready',
         generationOutputsOutputCount: 9,
+        generationOutputBoundaryStatus: 'generation-output-boundary-ready',
+        generationOutputBoundaryReady: true,
+        generationOutputBoundaryIssueCount: 0,
         standardGenerationEntrySourceKind:
           'azpr-action-hit-three-value-delta-standard-generation-entry',
         standardGenerationEntryStatus:
@@ -1532,6 +1535,24 @@ describe('first vertical slice simulation', () => {
       runtimeInputSource: {
         sourceKind: 'azpr-runtime-input-source-from-generation-builder',
         status: 'runtime-input-source-ready',
+      },
+      standardOutputBoundary: {
+        sourceKind: 'azpr-action-hit-three-value-generation-output-boundary',
+        status: 'generation-output-boundary-ready',
+        entryPath: 'generationOutputs.outputs.generationEntry',
+        runtimeInputSourcePath:
+          'generationOutputs.outputs.generationEntry.runtimeInputSource',
+        standardContractPath:
+          'generationOutputs.outputs.generationEntry.standardContract',
+        deltasPath: 'generationOutputs.outputs.generationEntry.deltas',
+        valueSourceSlotsPath:
+          'generationOutputs.outputs.generationEntry.valueSourceSlots',
+        contractValidationPath:
+          'generationOutputs.outputs.generationEntry.contractValidation',
+        standardOutputCount: 6,
+        issueCount: 0,
+        ready: true,
+        usesLegacyFallback: false,
       },
       generationEntry: {
         sourceKind:
@@ -1599,6 +1620,9 @@ describe('first vertical slice simulation', () => {
       generationInputPointCount: 16,
       generationOutputsSourceKind: 'azpr-three-value-generation-outputs',
       generationOutputsStatus: 'generation-outputs-ready',
+      generationOutputBoundaryStatus: 'generation-output-boundary-ready',
+      generationOutputBoundaryReady: true,
+      generationOutputBoundaryIssueCount: 0,
       valueSourceSlotCount: 12,
       runtimeValueSourceSlotCount: 3,
       replaceableValueSourceSlotCount: 9,
@@ -1613,6 +1637,23 @@ describe('first vertical slice simulation', () => {
       valueSourceSlotCount: 12,
       runtimeValueSourceSlotCount: 3,
       replaceableValueSourceSlotCount: 9,
+      generationOutputBoundaryStatus: 'generation-output-boundary-ready',
+      generationOutputBoundaryReady: true,
+      generationOutputBoundaryPath: 'generationOutputs.standardOutputBoundary',
+      generationOutputBoundaryEntryPath:
+        'generationOutputs.outputs.generationEntry',
+      generationOutputBoundaryRuntimeInputSourcePath:
+        'generationOutputs.outputs.generationEntry.runtimeInputSource',
+      generationOutputBoundaryStandardContractPath:
+        'generationOutputs.outputs.generationEntry.standardContract',
+      generationOutputBoundaryDeltasPath:
+        'generationOutputs.outputs.generationEntry.deltas',
+      generationOutputBoundaryValueSourceSlotsPath:
+        'generationOutputs.outputs.generationEntry.valueSourceSlots',
+      generationOutputBoundaryContractValidationPath:
+        'generationOutputs.outputs.generationEntry.contractValidation',
+      generationOutputBoundaryStandardOutputCount: 6,
+      generationOutputBoundaryIssueCount: 0,
       generationInputSourceKind:
         'azpr-action-hit-three-value-delta-generation-input',
       generationInputStatus: 'three-value-delta-generation-input-ready',

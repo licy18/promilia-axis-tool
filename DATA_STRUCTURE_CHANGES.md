@@ -24076,3 +24076,124 @@ valueSourceSlotsStandardOutputPresent
 - `workbenchFlowContractContext.test.js` 覆盖 runtime input、runtime output 和 contract boundary 从 runtime summary / generation read sources 读取来源槽位摘要。
 - `workbenchFlowModel.test.js` 覆盖 runtime output consistency view 继续透出来源槽位摘要，供 Workbench 后续诊断消费。
 - `npm run test -- --run src\__tests__\features\workbenchFlowContractContext.test.js src\__tests__\features\workbenchFlowModel.test.js`：通过，2 个测试文件、11 条测试。
+
+## 337. 生成层标准输出边界：Generation Standard Output Boundary
+
+### 337.1 字段变化
+
+`createThreeValueGenerationBundle()` 产出的 `generationOutputs` 新增只读边界对象：
+
+```text
+generationOutputs.standardOutputBoundary
+generationOutputs.outputBoundary
+```
+
+其中 `outputBoundary` 是 `standardOutputBoundary` 的别名，不新增额外数据源。边界对象用于固定 `Action -> Hit -> ThreeValueDelta` 标准生成入口，核心字段包括：
+
+```text
+sourceKind = azpr-action-hit-three-value-generation-output-boundary
+status
+ready
+entryPath
+runtimeInputSourcePath
+standardContractPath
+deltasPath
+valueSourceSlotsPath
+contractValidationPath
+aggregateValidationPath
+standardOutputNames
+standardOutputCount
+issueCount
+issueKeys
+checks[]
+usesLegacyFallback
+```
+
+`generationOutputs.summary` / `generationOutputs.outputSummary` 新增：
+
+```text
+generationOutputBoundaryStatus
+generationOutputBoundaryReady
+generationOutputBoundaryPath
+generationOutputBoundaryEntryPath
+generationOutputBoundaryRuntimeInputSourcePath
+generationOutputBoundaryStandardContractPath
+generationOutputBoundaryDeltasPath
+generationOutputBoundaryValueSourceSlotsPath
+generationOutputBoundaryContractValidationPath
+generationOutputBoundaryStandardOutputCount
+generationOutputBoundaryIssueCount
+```
+
+`threeValueGenerationBundle.summary` 新增：
+
+```text
+generationOutputBoundaryStatus
+generationOutputBoundaryReady
+generationOutputBoundaryIssueCount
+```
+
+`threeValueRuntimeInput` 顶层与 `summary` 新增同名只读字段：
+
+```text
+generationOutputBoundary
+generationOutputBoundarySourceKind
+generationOutputBoundaryStatus
+generationOutputBoundaryReady
+generationOutputBoundaryPath
+generationOutputBoundaryEntryPath
+generationOutputBoundaryRuntimeInputSourcePath
+generationOutputBoundaryStandardContractPath
+generationOutputBoundaryDeltasPath
+generationOutputBoundaryValueSourceSlotsPath
+generationOutputBoundaryContractValidationPath
+generationOutputBoundaryStandardOutputCount
+generationOutputBoundaryIssueCount
+```
+
+`threeValueRuntimeInput.generationReadSources` 新增：
+
+```text
+generationOutputBoundaryStatus
+generationOutputBoundaryReady
+generationOutputBoundaryReadyState
+generationOutputBoundaryPath
+generationOutputBoundaryEntryPath
+generationOutputBoundaryRuntimeInputSourcePath
+generationOutputBoundaryStandardContractPath
+generationOutputBoundaryDeltasPath
+generationOutputBoundaryValueSourceSlotsPath
+generationOutputBoundaryContractValidationPath
+generationOutputBoundaryStandardOutputCount
+generationOutputBoundaryIssueCount
+```
+
+`threeValueRuntimeProjection.summary` / `runtimeOutputs.summary` 继续透出为：
+
+```text
+runtimeInputGenerationOutputBoundaryStatus
+runtimeInputGenerationOutputBoundaryReady
+runtimeInputGenerationOutputBoundaryPath
+runtimeInputGenerationOutputBoundaryEntryPath
+runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath
+runtimeInputGenerationOutputBoundaryStandardContractPath
+runtimeInputGenerationOutputBoundaryDeltasPath
+runtimeInputGenerationOutputBoundaryValueSourceSlotsPath
+runtimeInputGenerationOutputBoundaryContractValidationPath
+runtimeInputGenerationOutputBoundaryStandardOutputCount
+runtimeInputGenerationOutputBoundaryIssueCount
+```
+
+### 337.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只让生成层标准入口、runtime input 和 projection summary 可明确报告同一条 `generationOutputs.outputs.generationEntry -> runtimeInputSource -> standardContract/deltas/valueSourceSlots` 边界；三值计算结果、公式、倍率、applied delta 筛选、运行日志行、曲线数值和 UI 文案均不改变。
+
+### 337.3 验证
+
+- `threeValueGenerationBuilder.test.js` 覆盖 `standardOutputBoundary` ready 状态、标准 path、引用自检和 `outputBoundary` 别名。
+- `actionHitThreeValueRuntimeInput.test.js` 覆盖 runtime input 从 `generationOutputs.standardOutputBoundary` 读取边界摘要，并继续确认不使用旧回退。
+- `threeValueRuntimeProjection.test.js` 覆盖 runtime projection 保持标准 generation outputs 消费路径。
+- `firstVerticalSliceSimulation.test.js` 覆盖真实纵切路径中 generation outputs、generation bundle summary 和 runtime summary 均透出标准输出边界。
+- `npm run test -- --run src\__tests__\simulation\threeValueGenerationBuilder.test.js src\__tests__\simulation\actionHitThreeValueRuntimeInput.test.js src\__tests__\simulation\threeValueRuntimeProjection.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过，4 个测试文件、27 条测试。
