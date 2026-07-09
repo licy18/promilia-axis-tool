@@ -10319,6 +10319,30 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：基于 `mainFlowWorkspaceView` 做 Workbench 主流程缺口检查，优先补齐真正影响“资源曲线监控 / 日志详情查看 / 回到动作修改”的入口或状态边界；若转到底层，则回到生成层或运行时层标准合同消费，不拆局部提示阶段。
 
+### 2026-07-09：UI 主流程能力块 - Analysis Runtime Review Panel View
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `AnalysisPanel` 改为和 `ResourceMonitorPanel`、`EventLogPanel`、`RuntimeSelectedDetailPanel` 一样优先消费 `flowModel.runtimeReviewPanelView`。
+- 分析面板的选中运行点和运行结果详情不再直接从较早的 `runtimeReviewContextView` / `runtimeDetail` 分叉读取，而是经由同一个 panel view 的 `context` 与 `selectedDetail`。
+- 本阶段只收束运行结果查看区面板的上下文入口，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- Workbench 页面测试继续覆盖分析、资源曲线、日志、详情面板在运行结果选择和编辑后回看路径上的状态同步。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，2 个测试文件、66 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、256 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查运行结果查看区是否还存在绕过 `runtimeReviewPanelView` / `mainFlowWorkspaceView` 的状态入口，优先处理会影响“资源曲线监控 -> 日志/详情查看 -> 回到动作修改”的主路径边界。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

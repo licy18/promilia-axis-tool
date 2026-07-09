@@ -21829,3 +21829,39 @@ createWorkbenchMainFlowWorkspaceView({
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、66 条测试。
 - `npm run test -- --run`：通过，38 个测试文件、256 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 300. UI 主流程能力块：Analysis Runtime Review Panel View
+
+### 300.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`AnalysisPanel` 的运行结果上下文入口从：
+
+```js
+props.flowModel?.runtimeReviewContextView ??
+createWorkbenchRuntimeReviewContextView(...)
+```
+
+调整为：
+
+```js
+props.flowModel?.runtimeReviewPanelView ??
+createWorkbenchRuntimeReviewPanelView(...)
+```
+
+消费规则：
+
+- 选中运行点继续从 `runtimeReviewPanelView.context.selectedStatePointId` 读取。
+- 选中运行结果详情优先从 `runtimeReviewPanelView.selectedDetail` 读取，再回退到 `flowModel.runtimeDetail.source` 和 `props.runtimeSelectedDetail`。
+- `AnalysisPanel` 因此与 `ResourceMonitorPanel`、`EventLogPanel`、`RuntimeSelectedDetailPanel` 共享同一 runtime review panel view 入口。
+
+### 300.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程中分析面板的运行结果上下文消费边界，不新增持久字段，不需要数据迁移。
+
+### 300.3 验证
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，2 个测试文件、66 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、256 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
