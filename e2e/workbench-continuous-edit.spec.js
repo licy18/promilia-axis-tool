@@ -1104,6 +1104,99 @@ test('keeps skill level and action variant edits tied to refreshed results', asy
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps saved draft restore tied to runtime result selection', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+  await createThreeActionRuntime(page);
+
+  await page.locator('.action-item[data-action-id="action-0002"]').click();
+  const actionListState = await waitForRuntimeAction(page, 'action-0002');
+  await page
+    .locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+    )
+    .getByTestId('workbench-timeline-edit-result-action')
+    .click();
+  await expectRuntimeFocusInEditor(page);
+
+  await page.getByTestId('workbench-level-input').fill('2');
+  const levelEditState = await ensureActionContentEditResultSynced(page, {
+    actionId: 'action-0002',
+    fieldKey: 'level',
+    originStatePointId: actionListState.statePointId,
+  });
+  await page.getByTestId('workbench-damage-segment-select').selectOption('1');
+  await ensureActionContentEditResultSynced(page, {
+    actionId: 'action-0002',
+    fieldKey: 'actionVariantIndex',
+    originStatePointId: levelEditState.feedbackStatePointId,
+  });
+
+  await page.getByTestId('workbench-save-draft').click();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已保存草稿'
+  );
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0002"]'
+    )
+  ).toHaveAttribute('data-draft-status', 'saved');
+
+  const savedDraft = await readStoredWorkbenchDraft(page);
+  expect(savedDraft).toMatchObject({
+    selectedActionId: 'action-0002',
+    enemyConfig: {
+      level: 80,
+    },
+  });
+  expect(savedDraft.actionDrafts).toHaveLength(3);
+  expect(
+    savedDraft.actionDrafts.find(action => action.id === 'action-0002')
+  ).toMatchObject({
+    level: 2,
+    actionVariantIndex: 1,
+    damageSegmentIndex: 1,
+  });
+
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '3 action'
+  );
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-action-id',
+    'action-0002'
+  );
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'action-edit'
+  );
+  await expect(page.getByTestId('workbench-level-input')).toHaveValue('2');
+  await expect(page.getByTestId('workbench-damage-segment-select')).toHaveValue(
+    '1'
+  );
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  const restoredRuntimeState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(restoredRuntimeState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(
+    restoredRuntimeState,
+    restoredRuntimeState.statePointId
+  );
+  await expectRuntimeOutputConsistent(page);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps result rows stable across multi-action edits', async ({ page }) => {
   const browserIssues = collectBrowserIssues(page);
   const { copiedState } = await createThreeActionRuntime(page);
@@ -1561,6 +1654,15 @@ async function ensureActionContentEditResultSynced(
   await expect(feedback).toHaveAttribute('data-result-focus-status', 'focused');
 
   return editState;
+}
+
+async function readStoredWorkbenchDraft(page) {
+  return await page.evaluate(() => {
+    const rawDraft = window.localStorage.getItem(
+      'promilia-axis-tool:workbench-draft:v1'
+    );
+    return rawDraft ? JSON.parse(rawDraft) : null;
+  });
 }
 
 async function editCurrentActionFrameAndReturn(
