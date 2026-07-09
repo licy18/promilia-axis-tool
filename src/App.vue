@@ -10,7 +10,8 @@
 
 <style scoped>
 .app {
-  width: 100vw;
+  width: 100%;
+  min-width: 0;
   min-height: 100vh;
   background-color: var(--bg-color);
   color: var(--text-color);
