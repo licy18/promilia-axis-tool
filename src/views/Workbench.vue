@@ -431,9 +431,9 @@ import {
 } from '../features/workbench/workbenchFlowPlanController';
 import { createWorkbenchFlowRuntime } from '../features/workbench/workbenchFlowRuntime';
 import {
-  createWorkbenchCalculatorScopeApplyState,
-  createWorkbenchRuntimePointSelectionApplyState,
-  createWorkbenchRuntimeViewApplyState,
+  createWorkbenchCalculatorScopeViewPatch,
+  createWorkbenchRuntimeFlowViewPatch,
+  createWorkbenchRuntimePointSelectionViewPatch,
 } from '../features/workbench/workbenchRuntimeViewState';
 import {
   createWorkbenchMainFlowStatusView,
@@ -1706,37 +1706,57 @@ function selectRuntimeStatePoint(pointId) {
 }
 
 function applyRuntimePointSelectionState(selectionState = {}) {
-  const applyState = createWorkbenchRuntimePointSelectionApplyState(
-    selectionState,
-    {
+  applyRuntimeViewPatch(
+    createWorkbenchRuntimePointSelectionViewPatch(selectionState, {
       currentRuntimeLogFocus: runtimeLogFocus.value,
-    }
+    })
   );
-  selectedStateCurvePointId.value = applyState.selectedStatePointId;
-  stateCurveFocusMode.value = applyState.stateCurveFocusMode;
-  if (applyState.shouldSelectRuntimeAction) {
-    selectActionFromRuntimeStatePoint(applyState.statePointId);
-  }
-  runtimeLogFocus.value = applyState.runtimeLogFocus;
 }
 
 function applyRuntimeViewState(viewState = {}) {
-  const applyState = createWorkbenchRuntimeViewApplyState(viewState, {
-    currentRuntimeLogFocus: runtimeLogFocus.value,
-  });
-  if (applyState.clearRuntimeSelection) {
-    selectedStateCurvePointId.value = applyState.selectedStatePointId;
-    stateCurveFocusMode.value = applyState.stateCurveFocusMode;
+  applyRuntimeViewPatch(
+    createWorkbenchRuntimeFlowViewPatch(viewState, {
+      currentRuntimeLogFocus: runtimeLogFocus.value,
+    })
+  );
+}
+
+function applyRuntimeViewPatch(patch = {}) {
+  const changes = patch.changes ?? {};
+  if (hasRuntimeViewPatchChange(changes, 'selectedStatePointId')) {
+    selectedStateCurvePointId.value = changes.selectedStatePointId;
   }
-  if (applyState.stateCurveLayerFilters) {
-    stateCurveLayerFilters.value = { ...applyState.stateCurveLayerFilters };
+  if (hasRuntimeViewPatchChange(changes, 'stateCurveFocusMode')) {
+    stateCurveFocusMode.value = changes.stateCurveFocusMode;
   }
-  if (applyState.stateCurveTrackFilters) {
-    stateCurveTrackFilters.value = { ...applyState.stateCurveTrackFilters };
+  if (hasRuntimeViewPatchChange(changes, 'stateCurveLayerFilters')) {
+    stateCurveLayerFilters.value = { ...changes.stateCurveLayerFilters };
   }
-  if (applyState.shouldFocusRuntimeLog) {
-    runtimeLogFocus.value = applyState.runtimeLogFocus;
+  if (hasRuntimeViewPatchChange(changes, 'stateCurveTrackFilters')) {
+    stateCurveTrackFilters.value = { ...changes.stateCurveTrackFilters };
   }
+  if (hasRuntimeViewPatchChange(changes, 'calculatorScope')) {
+    calculatorDiagnosticScope.value = changes.calculatorScope;
+  }
+  if (patch.pulseCalculatorFocus) {
+    calculatorDiagnosticFocus.value = {
+      scope: calculatorDiagnosticScope.value,
+      sequence: calculatorDiagnosticFocus.value.sequence + 1,
+    };
+  }
+  if (hasRuntimeViewPatchChange(changes, 'runtimeLogFocus')) {
+    runtimeLogFocus.value = changes.runtimeLogFocus;
+  }
+  if (patch.selectRuntimeActionStatePointId) {
+    selectActionFromRuntimeStatePoint(patch.selectRuntimeActionStatePointId);
+  }
+  if (patch.selectRuntimeStatePointId) {
+    selectRuntimeStatePoint(patch.selectRuntimeStatePointId);
+  }
+}
+
+function hasRuntimeViewPatchChange(changes, key) {
+  return Object.prototype.hasOwnProperty.call(changes, key);
 }
 
 function dispatchWorkbenchFlowAction(action = {}) {
@@ -1790,26 +1810,11 @@ function focusThreeValueCalculatorScope(
 }
 
 function applyCalculatorScopeFlowState(scopeState = {}) {
-  const applyState = createWorkbenchCalculatorScopeApplyState(scopeState, {
-    currentRuntimeLogFocus: runtimeLogFocus.value,
-  });
-  calculatorDiagnosticScope.value = applyState.calculatorScope;
-  calculatorDiagnosticFocus.value = {
-    scope: calculatorDiagnosticScope.value,
-    sequence: calculatorDiagnosticFocus.value.sequence + 1,
-  };
-  runtimeLogFocus.value = applyState.runtimeLogFocus;
-  stateCurveLayerFilters.value = { ...applyState.stateCurveLayerFilters };
-  stateCurveTrackFilters.value = { ...applyState.stateCurveTrackFilters };
-
-  if (applyState.selectRuntimeStatePoint) {
-    selectRuntimeStatePoint(applyState.statePointId);
-    return;
-  }
-  if (applyState.clearRuntimeSelection) {
-    selectedStateCurvePointId.value = '';
-    stateCurveFocusMode.value = applyState.stateCurveFocusMode;
-  }
+  applyRuntimeViewPatch(
+    createWorkbenchCalculatorScopeViewPatch(scopeState, {
+      currentRuntimeLogFocus: runtimeLogFocus.value,
+    })
+  );
 }
 
 function getFirstRuntimeStatePointId(runtimeProjection) {

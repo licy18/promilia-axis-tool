@@ -16,6 +16,24 @@ export function createWorkbenchRuntimePointSelectionApplyState(
   };
 }
 
+export function createWorkbenchRuntimePointSelectionViewPatch(
+  selectionState = {},
+  options = {}
+) {
+  const applyState = createWorkbenchRuntimePointSelectionApplyState(
+    selectionState,
+    options
+  );
+  return createWorkbenchRuntimeViewPatch({
+    selectedStatePointId: applyState.selectedStatePointId,
+    stateCurveFocusMode: applyState.stateCurveFocusMode,
+    runtimeLogFocus: applyState.runtimeLogFocus,
+    selectRuntimeActionStatePointId: applyState.shouldSelectRuntimeAction
+      ? applyState.statePointId
+      : '',
+  });
+}
+
 export function createWorkbenchRuntimeViewApplyState(
   viewState = {},
   { currentRuntimeLogFocus = null } = {}
@@ -42,6 +60,26 @@ export function createWorkbenchRuntimeViewApplyState(
   };
 }
 
+export function createWorkbenchRuntimeFlowViewPatch(
+  viewState = {},
+  options = {}
+) {
+  const applyState = createWorkbenchRuntimeViewApplyState(viewState, options);
+  return createWorkbenchRuntimeViewPatch({
+    selectedStatePointId: applyState.clearRuntimeSelection
+      ? applyState.selectedStatePointId
+      : undefined,
+    stateCurveFocusMode: applyState.clearRuntimeSelection
+      ? applyState.stateCurveFocusMode
+      : undefined,
+    stateCurveLayerFilters: applyState.stateCurveLayerFilters,
+    stateCurveTrackFilters: applyState.stateCurveTrackFilters,
+    runtimeLogFocus: applyState.shouldFocusRuntimeLog
+      ? applyState.runtimeLogFocus
+      : null,
+  });
+}
+
 export function createWorkbenchCalculatorScopeApplyState(
   scopeState = {},
   { currentRuntimeLogFocus = null } = {}
@@ -65,6 +103,33 @@ export function createWorkbenchCalculatorScopeApplyState(
   };
 }
 
+export function createWorkbenchCalculatorScopeViewPatch(
+  scopeState = {},
+  options = {}
+) {
+  const applyState = createWorkbenchCalculatorScopeApplyState(
+    scopeState,
+    options
+  );
+  const shouldClearRuntimeSelection = Boolean(
+    applyState.clearRuntimeSelection && !applyState.selectRuntimeStatePoint
+  );
+  return createWorkbenchRuntimeViewPatch({
+    calculatorScope: applyState.calculatorScope,
+    pulseCalculatorFocus: true,
+    selectedStatePointId: shouldClearRuntimeSelection ? '' : undefined,
+    stateCurveFocusMode: shouldClearRuntimeSelection
+      ? applyState.stateCurveFocusMode
+      : undefined,
+    stateCurveLayerFilters: applyState.stateCurveLayerFilters,
+    stateCurveTrackFilters: applyState.stateCurveTrackFilters,
+    runtimeLogFocus: applyState.runtimeLogFocus,
+    selectRuntimeStatePointId: applyState.selectRuntimeStatePoint
+      ? applyState.statePointId
+      : '',
+  });
+}
+
 export function createWorkbenchRuntimeLogFocusState({
   runtimeLogFocus = null,
   currentRuntimeLogFocus = null,
@@ -77,4 +142,40 @@ export function createWorkbenchRuntimeLogFocusState({
     statePointId,
     sequence: sequence + (incrementSequence && statePointId ? 1 : 0),
   };
+}
+
+function createWorkbenchRuntimeViewPatch({
+  selectedStatePointId,
+  stateCurveFocusMode,
+  stateCurveLayerFilters = null,
+  stateCurveTrackFilters = null,
+  runtimeLogFocus = null,
+  calculatorScope,
+  pulseCalculatorFocus = false,
+  selectRuntimeActionStatePointId = '',
+  selectRuntimeStatePointId = '',
+} = {}) {
+  const changes = {};
+  assignPatchChange(changes, 'selectedStatePointId', selectedStatePointId);
+  assignPatchChange(changes, 'stateCurveFocusMode', stateCurveFocusMode);
+  assignPatchChange(changes, 'stateCurveLayerFilters', stateCurveLayerFilters);
+  assignPatchChange(changes, 'stateCurveTrackFilters', stateCurveTrackFilters);
+  assignPatchChange(changes, 'runtimeLogFocus', runtimeLogFocus);
+  assignPatchChange(changes, 'calculatorScope', calculatorScope);
+  return {
+    changes,
+    pulseCalculatorFocus: Boolean(pulseCalculatorFocus),
+    selectRuntimeActionStatePointId: selectRuntimeActionStatePointId ?? '',
+    selectRuntimeStatePointId: selectRuntimeStatePointId ?? '',
+  };
+}
+
+function assignPatchChange(changes, key, value) {
+  if (value === undefined || value === null) {
+    return;
+  }
+  changes[key] =
+    value && typeof value === 'object' && !Array.isArray(value)
+      ? { ...value }
+      : value;
 }

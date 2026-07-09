@@ -21025,3 +21025,58 @@ analysis-state-curve / analysis-state-curve-nav / analysis-state-curve-frame-gro
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/TimelineGridPreview.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、88 条测试。
 - `npm run test -- --run`：通过，37 个测试文件、237 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 286. UI 主流程能力块：Runtime View Patch Boundary
+
+### 286.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`workbenchRuntimeViewState` 新增 runtime view patch helper：
+
+```js
+createWorkbenchRuntimePointSelectionViewPatch(selectionState, options)
+createWorkbenchRuntimeFlowViewPatch(viewState, options)
+createWorkbenchCalculatorScopeViewPatch(scopeState, options)
+```
+
+这些 helper 仍复用既有 apply state 规则，统一输出 Workbench 页面可应用的 patch：
+
+```js
+{
+  changes: {
+    selectedStatePointId,
+    stateCurveFocusMode,
+    stateCurveLayerFilters,
+    stateCurveTrackFilters,
+    runtimeLogFocus,
+    calculatorScope,
+  },
+  pulseCalculatorFocus,
+  selectRuntimeActionStatePointId,
+  selectRuntimeStatePointId,
+}
+```
+
+`changes` 只携带需要应用的字段；`selectRuntimeActionStatePointId` 和 `selectRuntimeStatePointId` 表示页面应用 patch 后需要继续执行的主流程操作。
+
+`Workbench.vue` 新增页面内部 `applyRuntimeViewPatch()`，并将以下入口改为先生成 patch 再统一应用：
+
+```js
+applyRuntimePointSelectionState(selectionState)
+applyRuntimeViewState(viewState)
+applyCalculatorScopeFlowState(scopeState)
+```
+
+Calculator scope patch 保持旧行为优先级：当 `selectRuntimeStatePoint` 与 `clearRuntimeSelection` 同时存在时，runtime state point selection 优先，patch 不额外输出 clear selection change。
+
+### 286.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程 runtime view 状态应用边界，不新增持久字段，不需要数据迁移。
+
+### 286.3 验证
+
+- 更新 `src/__tests__/features/workbenchRuntimeViewState.test.js`，覆盖 runtime point selection patch、runtime flow view patch、calculator scope patch，以及 runtime selection 优先于 clear selection 的边界。
+- `npm run test -- --run src/__tests__/features/workbenchRuntimeViewState.test.js src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、76 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、241 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
