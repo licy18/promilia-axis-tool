@@ -968,7 +968,7 @@ test('keeps direct, log, and contribution edit returns synced', async ({
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
-test('keeps action list, timeline nudge, frame step, and result return in one loop', async ({
+test('keeps action list, timeline nudge, frame step, and result return in one loop @workbench-main-flow', async ({
   page,
 }) => {
   const browserIssues = collectBrowserIssues(page);
@@ -1060,6 +1060,8 @@ test('keeps action list, timeline nudge, frame step, and result return in one lo
     returnedState,
     steppedEditState.feedbackStatePointId
   );
+  await expectCurveAndLogSelection(page, steppedEditState.feedbackStatePointId);
+  await expectRuntimeOutputConsistent(page);
   expect(returnedState.selectedActionListId).toBe('action-0002');
   expect(returnedState.selectedTimelineActionId).toBe('action-0002');
   await expect(
