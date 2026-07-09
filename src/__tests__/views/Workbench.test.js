@@ -473,6 +473,11 @@ describe('Workbench view', () => {
     ).toBe('runtime-log-fallback');
     expect(
       wrapper
+        .find('[data-testid="workbench-runtime-sim-log-detail"]')
+        .attributes('data-detail-layout')
+    ).toBe('full');
+    expect(
+      wrapper
         .find('[data-testid="workbench-runtime-sim-log-detail-handoff"]')
         .exists()
     ).toBe(false);
@@ -4161,6 +4166,19 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-detail"]')
         .attributes('data-detail-source')
     ).toBe('runtime-selected-detail');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-detail"]')
+        .attributes('data-detail-layout')
+    ).toBe('compact');
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-runtime-sim-log-detail-row"]')
+        .map(row => [row.attributes('data-detail-key'), row.text()])
+    ).toEqual([
+      ['action', '动作普通攻击'],
+      ['state-point', `状态点${appliedStatePointId}`],
+    ]);
     const selectedLogDetailHandoff = wrapper.find(
       '[data-testid="workbench-runtime-sim-log-detail-handoff"]'
     );

@@ -167,41 +167,20 @@
       <div
         v-if="selectedRuntimeLog"
         class="runtime-log-detail"
+        :data-detail-layout="runtimeLogDetailLayout"
         :data-detail-source="runtimeLogDetailSource"
         data-testid="workbench-runtime-sim-log-detail"
       >
-        <div>
-          <span>动作</span>
-          <strong>{{ runtimeLogDetailAction }}</strong>
-        </div>
-        <div>
-          <span>命中</span>
-          <strong>{{ runtimeLogDetailHit }}</strong>
-        </div>
-        <div>
-          <span>三值</span>
-          <strong>{{ runtimeLogDetailDelta }}</strong>
-        </div>
-        <div>
-          <span>轨道</span>
-          <strong>{{ runtimeLogDetailTrack }}</strong>
-        </div>
-        <div>
-          <span>角色</span>
-          <strong>{{ runtimeLogDetailActor }}</strong>
-        </div>
-        <div>
-          <span>状态</span>
-          <strong>{{ runtimeLogDetailStatus }}</strong>
-        </div>
-        <div>
-          <span>来源</span>
-          <strong>{{ runtimeLogDetailSourceDeltaId }}</strong>
-        </div>
-        <div>
-          <span>状态点</span>
-          <strong data-testid="workbench-runtime-sim-log-state-point">
-            {{ runtimeLogDetailStatePointId }}
+        <div
+          v-for="item in runtimeLogDetailRows"
+          :key="item.key"
+          class="runtime-log-detail-row"
+          :data-detail-key="item.key"
+          data-testid="workbench-runtime-sim-log-detail-row"
+        >
+          <span>{{ item.label }}</span>
+          <strong :data-testid="item.testId">
+            {{ item.value }}
           </strong>
         </div>
         <button
@@ -577,6 +556,63 @@ const runtimeLogDetailHandoff = computed(() =>
       }
     : null
 );
+const runtimeLogDetailLayout = computed(() =>
+  runtimeLogDetailHandoff.value ? 'compact' : 'full'
+);
+const runtimeLogDetailRows = computed(() => {
+  const baseRows = [
+    {
+      key: 'action',
+      label: '动作',
+      value: runtimeLogDetailAction.value,
+    },
+    {
+      key: 'state-point',
+      label: '状态点',
+      value: runtimeLogDetailStatePointId.value,
+      testId: 'workbench-runtime-sim-log-state-point',
+    },
+  ];
+
+  if (runtimeLogDetailHandoff.value) {
+    return baseRows;
+  }
+
+  return [
+    baseRows[0],
+    {
+      key: 'hit',
+      label: '命中',
+      value: runtimeLogDetailHit.value,
+    },
+    {
+      key: 'delta',
+      label: '三值',
+      value: runtimeLogDetailDelta.value,
+    },
+    {
+      key: 'track',
+      label: '轨道',
+      value: runtimeLogDetailTrack.value,
+    },
+    {
+      key: 'actor',
+      label: '角色',
+      value: runtimeLogDetailActor.value,
+    },
+    {
+      key: 'status',
+      label: '状态',
+      value: runtimeLogDetailStatus.value,
+    },
+    {
+      key: 'source',
+      label: '来源',
+      value: runtimeLogDetailSourceDeltaId.value,
+    },
+    baseRows[1],
+  ];
+});
 const runtimeLogDetailAction = computed(
   () =>
     matchedRuntimeSelectedDetail.value?.actionName ||
@@ -1544,7 +1580,11 @@ h2 {
   gap: 8px;
 }
 
-.runtime-log-detail div,
+.runtime-log-detail[data-detail-layout='compact'] {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.9fr);
+}
+
+.runtime-log-detail-row,
 .runtime-contribution-row,
 .runtime-calculator-row,
 .runtime-source-row {
@@ -1554,7 +1594,7 @@ h2 {
   background: rgba(255, 255, 255, 0.05);
 }
 
-.runtime-log-detail span,
+.runtime-log-detail-row > span,
 .runtime-contribution-row span,
 .runtime-calculator-row span,
 .runtime-source-row span {
@@ -1564,7 +1604,7 @@ h2 {
   font-size: 11px;
 }
 
-.runtime-log-detail strong,
+.runtime-log-detail-row > strong,
 .runtime-contribution-row strong,
 .runtime-calculator-row strong,
 .runtime-source-row strong {
