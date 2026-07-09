@@ -296,6 +296,9 @@ describe('Workbench view', () => {
         .attributes('disabled')
     ).toBeUndefined();
     expect(
+      flowPanel.find('[data-testid="workbench-flow-open-runtime"]').text()
+    ).toBe('运行模拟');
+    expect(
       flowPanel
         .find('[data-testid="workbench-flow-open-runtime"]')
         .attributes('data-primary-action')
@@ -1869,6 +1872,7 @@ describe('Workbench view', () => {
     );
     expect(openRuntimeButton.attributes('disabled')).toBeUndefined();
     expect(openRuntimeButton.attributes('data-primary-action')).toBe('true');
+    expect(openRuntimeButton.text()).toBe('运行模拟');
     expect(
       wrapper
         .find('[data-testid="workbench-flow-panel"]')
@@ -2365,9 +2369,12 @@ describe('Workbench view', () => {
       },
     });
 
-    await wrapper
-      .find('[data-testid="workbench-flow-open-runtime"]')
-      .trigger('click');
+    const runSimulationButton = wrapper.find(
+      '[data-testid="workbench-flow-open-runtime"]'
+    );
+    expect(runSimulationButton.text()).toBe('运行模拟');
+
+    await runSimulationButton.trigger('click');
     await nextTick();
 
     const openedStatePointId = wrapper

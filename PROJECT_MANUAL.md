@@ -12288,6 +12288,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议继续生成层能力块：把 `generationInput -> standardContract -> runtimeInputSource` 的来源链路进一步做成可校验 summary，明确 applied/candidate/sampled/placeholder 各层进入 runtime 前的筛选原因；或转入运行时层，确认 runtime outputs 完全由该链路派生。
 
+### 2026-07-09：UI 主流程可见闭环 - 运行模拟入口收口
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 主流程条的第一步现在以“运行模拟”作为可见入口，用户从排轴动作编辑区可以直接进入运行结果检查，而不是把第一步理解成单纯查看已有结果。
+- 既有闭环保持不变：运行模拟后进入资源曲线与日志结果，点击曲线或日志可定位同一状态点，再从三值详情回到动作编辑，修改后通过“查看刷新结果”回到刷新后的结果定位。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、生成层合同、运行时输出或保存数据。
+
+当前验证事实：
+
+- `WorkbenchFlowPanel` 入口按钮消费主流程模型的 primary action label，不再硬编码旧入口文案。
+- `createWorkbenchFlowModel()` 在动作编辑阶段的 primary action label 变为“运行模拟”。
+- `Workbench.test.js` 的完整闭环用例从“运行模拟”入口开始，继续覆盖曲线、日志、详情、编辑和刷新结果返回。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、80 条测试。
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps result review entrances interchangeable before edit return"`：通过，1 条浏览器级主流程闭环测试。
+- `npx prettier --check PROJECT_MANUAL.md src/features/workbench/WorkbenchFlowPanel.vue src/features/workbench/workbenchFlowModel.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 建议继续 UI 主流程：围绕完整编辑体验做用户可见能力，例如结果定位后的动作修改面板更完整、动作列表与时间轴编辑联动更顺滑；若切到能力底座，则进入运行时层，固定 runtime 输出对 UI 的稳定消费合同。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

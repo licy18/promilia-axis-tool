@@ -1337,7 +1337,7 @@ function createWorkbenchFlowPrimaryAction({
   return createPrimaryAction({
     key: WORKBENCH_FLOW_PRIMARY_ACTION_KEYS.OPEN_RUNTIME_RESULTS,
     kind: WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
-    label: '查看运行结果',
+    label: '运行模拟',
     actionId: selectedActionId,
     enabled: controls.canOpenRuntimeResults,
     disabledReason: 'missing-runtime-results',

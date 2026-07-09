@@ -271,6 +271,9 @@ describe('WorkbenchFlowPanel', () => {
       'data-runtime-output-state-curve-point-count': '1',
       'data-runtime-output-navigation-synced': 'true',
     });
+    expect(
+      wrapper.find('[data-testid="workbench-flow-open-runtime"]').text()
+    ).toBe('运行模拟');
   });
 });
 

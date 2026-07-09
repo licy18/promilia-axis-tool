@@ -175,7 +175,7 @@
         @click="openRuntimeResults"
       >
         <TrendCharts class="flow-button-icon" />
-        <span>查看运行结果</span>
+        <span>{{ openRuntimeButtonLabel }}</span>
       </button>
       <button
         type="button"
@@ -314,6 +314,9 @@ const resolvedMainFlowCommandSurface = computed(
 );
 const openRuntimeButtonView = computed(
   () => resolvedMainFlowCommandSurface.value.openRuntimeResults
+);
+const openRuntimeButtonLabel = computed(
+  () => openRuntimeButtonView.value?.label || '运行模拟'
 );
 const runtimeActionEditButtonView = computed(
   () => resolvedMainFlowCommandSurface.value.runtimeActionEdit
