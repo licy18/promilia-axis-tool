@@ -5,9 +5,7 @@
     :data-flow-phase="flowModel?.phase ?? ''"
     :data-flow-edit-result-state-point-id="flowEditResult?.statePointId ?? ''"
     :data-flow-state-point-id="runtimeReviewSelectedStatePointId"
-    :data-runtime-review-selection-status="
-      runtimeReviewContextView.status
-    "
+    :data-runtime-review-selection-status="runtimeReviewContextView.status"
     :data-runtime-review-selected-action-id="
       runtimeReviewContextView.selectedActionId
     "
@@ -15,9 +13,7 @@
       runtimeReviewContextView.selectedStatePointId
     "
     :data-runtime-review-source="runtimeReviewContextView.source"
-    :data-runtime-review-source-kind="
-      runtimeReviewContextView.sourceKind
-    "
+    :data-runtime-review-source-kind="runtimeReviewContextView.sourceKind"
     :data-runtime-review-detail-synced="
       runtimeReviewContextView.detailSyncedState
     "
@@ -61,7 +57,9 @@
           runtimeDetailResultReturnButtonTarget.originStatePointId
         "
         :data-return-status="runtimeDetailResultReturnButtonTarget.status"
-        :data-state-point-id="runtimeDetailResultReturnButtonTarget.statePointId"
+        :data-state-point-id="
+          runtimeDetailResultReturnButtonTarget.statePointId
+        "
         data-testid="workbench-runtime-selected-detail-return-result"
         :disabled="!runtimeReviewReturnResultEnabled"
         @click="returnRuntimeResult"
@@ -118,7 +116,9 @@
       class="runtime-detail-navigation"
       :data-navigation-count="runtimeDetailNavigation.count"
       :data-navigation-index="runtimeDetailNavigation.index"
-      :data-previous-state-point-id="runtimeDetailNavigation.previousStatePointId"
+      :data-previous-state-point-id="
+        runtimeDetailNavigation.previousStatePointId
+      "
       :data-next-state-point-id="runtimeDetailNavigation.nextStatePointId"
       data-testid="workbench-runtime-selected-detail-navigation"
     >
@@ -147,7 +147,9 @@
         :disabled="!runtimeDetailNavigation.next"
         aria-label="下一条运行结果"
         title="下一条运行结果"
-        @click="selectRuntimeDetailNavigationPoint(runtimeDetailNavigation.next)"
+        @click="
+          selectRuntimeDetailNavigationPoint(runtimeDetailNavigation.next)
+        "
       >
         <ArrowRight class="runtime-detail-navigation-icon" />
       </button>
@@ -203,9 +205,7 @@
       class="runtime-detail-contribution-summary"
       :data-active-count="runtimeContributionSummary.activeCount"
       :data-total-count="runtimeContributionSummary.totalCount"
-      :data-primary-contribution-key="
-        runtimeContributionSummary.primaryKey
-      "
+      :data-primary-contribution-key="runtimeContributionSummary.primaryKey"
       data-testid="workbench-runtime-selected-detail-contribution-summary"
     >
       <span>本点贡献</span>
@@ -363,15 +363,17 @@ const runtimeContributionSummary = computed(() =>
 const runtimeDetailNavigation = computed(() =>
   createRuntimeDetailNavigationView(props.flowModel?.runtimeNavigation)
 );
-const runtimeDetailActionEditButtonTarget = computed(() =>
-  runtimeDetailActionEditCommand.value.target
+const runtimeDetailActionEditButtonTarget = computed(
+  () => runtimeDetailActionEditCommand.value.target
 );
-const runtimeDetailActionEditButtonLabel = computed(() => '编辑结果动作');
-const runtimeDetailActionEditCommand = computed(() =>
-  runtimeDetailCommandView.value.focus
+const runtimeDetailActionEditButtonLabel = computed(
+  () => runtimeDetailActionEditCommand.value.label || '编辑结果动作'
 );
-const runtimeDetailResultReturnButtonTarget = computed(() =>
-  runtimeDetailResultReturnCommand.value.context
+const runtimeDetailActionEditCommand = computed(
+  () => runtimeDetailCommandView.value.focus
+);
+const runtimeDetailResultReturnButtonTarget = computed(
+  () => runtimeDetailResultReturnCommand.value.context
 );
 const runtimeDetailResultReturnButtonLabel = computed(() =>
   formatRuntimeDetailResultReturnButtonLabel(
@@ -379,8 +381,8 @@ const runtimeDetailResultReturnButtonLabel = computed(() =>
       runtimeDetailResultReturnContext.value
   )
 );
-const runtimeDetailResultReturnCommand = computed(() =>
-  runtimeDetailCommandView.value.returnResult
+const runtimeDetailResultReturnCommand = computed(
+  () => runtimeDetailCommandView.value.returnResult
 );
 const runtimeDetailCommandView = computed(() =>
   createWorkbenchRuntimeReviewPanelCommandViewFromSurface({
@@ -404,27 +406,28 @@ const runtimeDetailActionEditTarget = computed(() =>
     runtimeReviewPanelView.value
   )
 );
-const runtimeDetailResultReturnContext = computed(() =>
-  runtimeReviewPanelView.value.commandView?.returnResult?.context ??
-  runtimeReviewPanelView.value.resultReturnContext ??
-  createRuntimeResultReturnContext({
-    actionId: props.detail?.actionId ?? flowEditResult.value?.actionId,
-    focus: props.actionEditFocus,
-    resultContext: flowEditResult.value,
-    originStatePointId: runtimeDetailOriginStatePointId.value,
-  })
+const runtimeDetailResultReturnContext = computed(
+  () =>
+    runtimeReviewPanelView.value.commandView?.returnResult?.context ??
+    runtimeReviewPanelView.value.resultReturnContext ??
+    createRuntimeResultReturnContext({
+      actionId: props.detail?.actionId ?? flowEditResult.value?.actionId,
+      focus: props.actionEditFocus,
+      resultContext: flowEditResult.value,
+      originStatePointId: runtimeDetailOriginStatePointId.value,
+    })
 );
 const runtimeDetailResultReturnButtonVisible = computed(() =>
   Boolean(
     runtimeDetailResultReturnButtonTarget.value?.statePointId ||
-      runtimeDetailResultReturnContext.value
+    runtimeDetailResultReturnContext.value
   )
 );
 const panelVisible = computed(() =>
   Boolean(
     props.detail ||
-      runtimeDetailResultReturnContext.value ||
-      runtimeDetailResultReturnButtonTarget.value?.statePointId
+    runtimeDetailResultReturnContext.value ||
+    runtimeDetailResultReturnButtonTarget.value?.statePointId
   )
 );
 
@@ -433,7 +436,9 @@ function focusRuntimeAction() {
 }
 
 function returnRuntimeResult() {
-  dispatchRuntimeDetailFlowAction(runtimeDetailResultReturnCommand.value.action);
+  dispatchRuntimeDetailFlowAction(
+    runtimeDetailResultReturnCommand.value.action
+  );
 }
 
 function selectRuntimeDetailNavigationPoint(point) {
@@ -614,7 +619,6 @@ function getRuntimeReviewPanelFocusTargetForStatePoint(
   }
   return target;
 }
-
 </script>
 
 <style scoped>

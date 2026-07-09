@@ -587,6 +587,7 @@ export function createWorkbenchRuntimeReviewOperationCommand({
     enabled: Boolean(resolvedConsumer?.enabled),
     disabledReason:
       resolvedConsumer?.disabledReason ?? 'missing-runtime-review-operation',
+    label: resolvedConsumer?.label ?? '',
     actionId: resolvedTarget.actionId ?? resolvedContext.actionId ?? '',
     statePointId:
       resolvedTarget.statePointId ?? resolvedContext.statePointId ?? '',
@@ -747,8 +748,41 @@ export function createWorkbenchRuntimeReviewOperationConsumer({
     context: operationTarget ?? {},
     enabled: operationEnabled,
     disabledReason,
+    label: getRuntimeReviewOperationLabel({
+      operations,
+      operationKind: resolvedOperationKind,
+      target: operationTarget,
+    }),
     action,
   };
+}
+
+function getRuntimeReviewOperationLabel({
+  operations = null,
+  operationKind = '',
+  target = null,
+} = {}) {
+  const primaryOperation = operations?.primaryOperation ?? null;
+  if (
+    primaryOperation?.kind === operationKind &&
+    primaryOperation?.target === target
+  ) {
+    return primaryOperation.label ?? '';
+  }
+  if (
+    primaryOperation?.kind === operationKind &&
+    primaryOperation?.statePointId &&
+    primaryOperation.statePointId === target?.statePointId
+  ) {
+    return primaryOperation.label ?? '';
+  }
+  if (
+    operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION &&
+    target?.isRefreshedResult
+  ) {
+    return '继续修改动作';
+  }
+  return target?.label ?? '';
 }
 
 export function createWorkbenchRuntimeReviewPrimaryOperationFlowAction({

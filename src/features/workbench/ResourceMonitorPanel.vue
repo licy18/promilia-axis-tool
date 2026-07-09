@@ -595,7 +595,7 @@ const selectedRuntimeCurveActionEditTarget = computed(
   () => selectedRuntimeCurveActionEditCommand.value.target
 );
 const selectedRuntimeCurveActionEditButtonLabel = computed(
-  () => '编辑结果动作'
+  () => selectedRuntimeCurveActionEditCommand.value.label || '编辑结果动作'
 );
 const selectedRuntimeCurveActionEditCommand = computed(
   () => selectedRuntimeCurveCommandView.value.focus

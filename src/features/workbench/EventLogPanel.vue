@@ -711,7 +711,9 @@ const runtimeLogCommandView = computed(() =>
 const runtimeLogActionFocusCommand = computed(
   () => runtimeLogCommandView.value.focus
 );
-const runtimeLogActionFocusButtonLabel = computed(() => '编辑结果动作');
+const runtimeLogActionFocusButtonLabel = computed(
+  () => runtimeLogActionFocusCommand.value.label || '编辑结果动作'
+);
 const runtimeLogActionFocusCommandTarget = computed(
   () => runtimeLogActionFocusCommand.value.target
 );

@@ -357,6 +357,15 @@ test('keeps refreshed runtime results editable for another visible loop @workben
       selected: true,
     });
   await expectCurveAndLogSelection(page, firstReturnedState.statePointId);
+  await expect(
+    page.getByTestId('workbench-runtime-resource-chart-selection-action-focus')
+  ).toHaveText('继续修改动作');
+  await expect(
+    page.getByTestId('workbench-runtime-sim-log-action-focus')
+  ).toHaveText('继续修改动作');
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-action-focus')
+  ).toHaveText('继续修改动作');
 
   const primaryOperation = page.getByTestId(
     'workbench-runtime-review-primary-operation'
