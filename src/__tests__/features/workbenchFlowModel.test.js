@@ -1384,13 +1384,15 @@ function createRuntimeProjectionFixture() {
         usesLegacyGenerationFallback: false,
         inputs: {
           runtimeInputSource: {
-            sourcePath: 'generationOutputs.outputs.runtimeInputSource',
+            sourcePath:
+              'generationOutputs.outputs.generationEntry.runtimeInputSource',
           },
           standardContract: {
-            sourcePath: 'generationOutputs.outputs.standardContract',
+            sourcePath:
+              'generationOutputs.outputs.generationEntry.standardContract',
           },
           deltas: {
-            sourcePath: 'generationOutputs.outputs.deltas',
+            sourcePath: 'generationOutputs.outputs.generationEntry.deltas',
           },
         },
       },

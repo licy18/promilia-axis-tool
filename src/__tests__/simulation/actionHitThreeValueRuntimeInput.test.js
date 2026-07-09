@@ -194,23 +194,28 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
         usesLegacyGenerationFallback: false,
         inputs: {
           runtimeInputSource: {
-            sourceKey: 'outputs.runtimeInputSource',
-            sourcePath: 'generationOutputs.outputs.runtimeInputSource',
+            sourceKey: 'outputs.generationEntry.runtimeInputSource',
+            sourcePath:
+              'generationOutputs.outputs.generationEntry.runtimeInputSource',
             sourceTier: 'standard-output',
+            containerKey: 'generationEntry',
             fallback: false,
             standardOutputPresent: true,
           },
           standardContract: {
-            sourceKey: 'outputs.standardContract',
-            sourcePath: 'generationOutputs.outputs.standardContract',
+            sourceKey: 'outputs.generationEntry.standardContract',
+            sourcePath:
+              'generationOutputs.outputs.generationEntry.standardContract',
             sourceTier: 'standard-output',
+            containerKey: 'generationEntry',
             fallback: false,
             standardOutputPresent: true,
           },
           deltas: {
-            sourceKey: 'outputs.deltas',
-            sourcePath: 'generationOutputs.outputs.deltas',
+            sourceKey: 'outputs.generationEntry.deltas',
+            sourcePath: 'generationOutputs.outputs.generationEntry.deltas',
             sourceTier: 'standard-output',
+            containerKey: 'generationEntry',
             fallback: false,
             standardOutputPresent: true,
           },
@@ -271,6 +276,28 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
       sourceKind: 'azpr-three-value-generation-outputs',
       status: 'generation-outputs-ready',
       outputs: {
+        generationEntry: {
+          sourceKind:
+            'azpr-action-hit-three-value-delta-standard-generation-entry',
+          status:
+            'action-hit-three-value-delta-standard-generation-entry-ready',
+          runtimeInputSource: {
+            sourceKind: 'azpr-runtime-input-source-from-generation-builder',
+            status: 'runtime-input-source-ready',
+            generationEntrySourceKind:
+              'azpr-action-hit-three-value-delta-generation-entry',
+            generationEntryStatus:
+              'action-hit-three-value-delta-generation-ready',
+            generationLayerSourceKind:
+              'azpr-standard-three-value-generation-layer',
+            generationLayerStatus:
+              'standard-three-value-generation-layer-ready',
+            standardContract: runtimeSourceContract,
+            deltas: [runtimeSourceDelta],
+          },
+          standardContract,
+          deltas: [standardDelta],
+        },
         runtimeInputSource: {
           sourceKind: 'azpr-runtime-input-source-from-generation-builder',
           status: 'runtime-input-source-ready',
@@ -310,21 +337,26 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
       generationReadSources: {
         inputs: {
           runtimeInputSource: {
-            sourceKey: 'outputs.runtimeInputSource',
-            sourcePath: 'generationOutputs.outputs.runtimeInputSource',
+            sourceKey: 'outputs.generationEntry.runtimeInputSource',
+            sourcePath:
+              'generationOutputs.outputs.generationEntry.runtimeInputSource',
             sourceTier: 'standard-output',
+            containerKey: 'generationEntry',
             fallback: false,
           },
           standardContract: {
-            sourceKey: 'outputs.standardContract',
-            sourcePath: 'generationOutputs.outputs.standardContract',
+            sourceKey: 'outputs.generationEntry.standardContract',
+            sourcePath:
+              'generationOutputs.outputs.generationEntry.standardContract',
             sourceTier: 'standard-output',
+            containerKey: 'generationEntry',
             fallback: false,
           },
           deltas: {
-            sourceKey: 'outputs.deltas',
-            sourcePath: 'generationOutputs.outputs.deltas',
+            sourceKey: 'outputs.generationEntry.deltas',
+            sourcePath: 'generationOutputs.outputs.generationEntry.deltas',
             sourceTier: 'standard-output',
+            containerKey: 'generationEntry',
             fallback: false,
           },
         },

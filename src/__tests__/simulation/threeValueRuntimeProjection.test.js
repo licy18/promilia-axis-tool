@@ -1070,6 +1070,28 @@ describe('three value runtime projection', () => {
         sourceKind: 'azpr-three-value-generation-outputs',
         status: 'generation-outputs-ready',
         outputs: {
+          generationEntry: {
+            sourceKind:
+              'azpr-action-hit-three-value-delta-standard-generation-entry',
+            status:
+              'action-hit-three-value-delta-standard-generation-entry-ready',
+            runtimeInputSource: {
+              sourceKind: 'azpr-runtime-input-source-from-generation-builder',
+              status: 'runtime-input-source-ready',
+              generationEntrySourceKind:
+                'azpr-action-hit-three-value-delta-generation-entry',
+              generationEntryStatus:
+                'action-hit-three-value-delta-generation-ready',
+              generationLayerSourceKind:
+                'azpr-standard-three-value-generation-layer',
+              generationLayerStatus:
+                'standard-three-value-generation-layer-ready',
+              standardContract: runtimeSourceContract,
+              deltas: [runtimeSourceDelta],
+            },
+            standardContract,
+            deltas: [standardDelta],
+          },
           runtimeInputSource: {
             sourceKind: 'azpr-runtime-input-source-from-generation-builder',
             status: 'runtime-input-source-ready',
@@ -1114,10 +1136,11 @@ describe('three value runtime projection', () => {
       runtimeInputGenerationReadFallbackInputCount: 0,
       runtimeInputGenerationReadUsesLegacyFallback: false,
       runtimeInputGenerationRuntimeInputSourcePath:
-        'generationOutputs.outputs.runtimeInputSource',
+        'generationOutputs.outputs.generationEntry.runtimeInputSource',
       runtimeInputGenerationStandardContractPath:
-        'generationOutputs.outputs.standardContract',
-      runtimeInputGenerationDeltasPath: 'generationOutputs.outputs.deltas',
+        'generationOutputs.outputs.generationEntry.standardContract',
+      runtimeInputGenerationDeltasPath:
+        'generationOutputs.outputs.generationEntry.deltas',
     });
     expect(runtimeProjection.outputContract.summary).toMatchObject({
       enemyHpDelta: 420,
@@ -1135,10 +1158,11 @@ describe('three value runtime projection', () => {
       runtimeInputGenerationReadFallbackInputCount: 0,
       runtimeInputGenerationReadUsesLegacyFallback: false,
       runtimeInputGenerationRuntimeInputSourcePath:
-        'generationOutputs.outputs.runtimeInputSource',
+        'generationOutputs.outputs.generationEntry.runtimeInputSource',
       runtimeInputGenerationStandardContractPath:
-        'generationOutputs.outputs.standardContract',
-      runtimeInputGenerationDeltasPath: 'generationOutputs.outputs.deltas',
+        'generationOutputs.outputs.generationEntry.standardContract',
+      runtimeInputGenerationDeltasPath:
+        'generationOutputs.outputs.generationEntry.deltas',
     });
   });
 

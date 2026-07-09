@@ -1484,7 +1484,11 @@ describe('first vertical slice simulation', () => {
         generationInputPointCount: 16,
         generationOutputsSourceKind: 'azpr-three-value-generation-outputs',
         generationOutputsStatus: 'generation-outputs-ready',
-        generationOutputsOutputCount: 7,
+        generationOutputsOutputCount: 8,
+        standardGenerationEntrySourceKind:
+          'azpr-action-hit-three-value-delta-standard-generation-entry',
+        standardGenerationEntryStatus:
+          'action-hit-three-value-delta-standard-generation-entry-ready',
         actionCount: 1,
         hitCount: 6,
         deltaCount: 16,
@@ -1506,6 +1510,7 @@ describe('first vertical slice simulation', () => {
       status: 'generation-outputs-ready',
       contractName: 'Action -> Hit -> ThreeValueDelta',
       outputNames: [
+        'generationEntry',
         'generationInput',
         'standardContract',
         'actions',
@@ -1518,8 +1523,21 @@ describe('first vertical slice simulation', () => {
         sourceKind: 'azpr-runtime-input-source-from-generation-builder',
         status: 'runtime-input-source-ready',
       },
+      generationEntry: {
+        sourceKind:
+          'azpr-action-hit-three-value-delta-standard-generation-entry',
+        status: 'action-hit-three-value-delta-standard-generation-entry-ready',
+        runtimeInputSourceKind:
+          'azpr-runtime-input-source-from-generation-builder',
+        summary: {
+          actionCount: 1,
+          hitCount: 6,
+          deltaCount: 16,
+          appliedDeltaCount: 1,
+        },
+      },
       summary: {
-        outputCount: 7,
+        outputCount: 8,
         actionCount: 1,
         hitCount: 6,
         deltaCount: 16,
@@ -1532,6 +1550,12 @@ describe('first vertical slice simulation', () => {
     });
     expect(result.generationOutputs.runtimeInputSource).toBe(
       result.threeValueGenerationBundle.runtimeInputSource
+    );
+    expect(result.generationOutputs.generationEntry).toBe(
+      result.threeValueGenerationBundle.generationEntry
+    );
+    expect(result.generationOutputs.outputs.generationEntry).toBe(
+      result.threeValueGenerationBundle.generationEntry
     );
     expect(result.generationOutputs.generationInput).toBe(
       result.threeValueGenerationBundle.generationInput
@@ -1556,7 +1580,7 @@ describe('first vertical slice simulation', () => {
       applied: false,
     });
     expect(result.summary.threeValueGenerationOutputsSummary).toMatchObject({
-      outputCount: 7,
+      outputCount: 8,
       actionCount: 1,
       hitCount: 6,
       deltaCount: 16,
@@ -1600,13 +1624,15 @@ describe('first vertical slice simulation', () => {
         usesLegacyGenerationFallback: false,
         inputs: {
           runtimeInputSource: {
-            sourcePath: 'generationOutputs.outputs.runtimeInputSource',
+            sourcePath:
+              'generationOutputs.outputs.generationEntry.runtimeInputSource',
           },
           standardContract: {
-            sourcePath: 'generationOutputs.outputs.standardContract',
+            sourcePath:
+              'generationOutputs.outputs.generationEntry.standardContract',
           },
           deltas: {
-            sourcePath: 'generationOutputs.outputs.deltas',
+            sourcePath: 'generationOutputs.outputs.generationEntry.deltas',
           },
         },
       },
@@ -1701,10 +1727,11 @@ describe('first vertical slice simulation', () => {
           runtimeInputGenerationReadFallbackInputCount: 0,
           runtimeInputGenerationReadUsesLegacyFallback: false,
           runtimeInputGenerationRuntimeInputSourcePath:
-            'generationOutputs.outputs.runtimeInputSource',
+            'generationOutputs.outputs.generationEntry.runtimeInputSource',
           runtimeInputGenerationStandardContractPath:
-            'generationOutputs.outputs.standardContract',
-          runtimeInputGenerationDeltasPath: 'generationOutputs.outputs.deltas',
+            'generationOutputs.outputs.generationEntry.standardContract',
+          runtimeInputGenerationDeltasPath:
+            'generationOutputs.outputs.generationEntry.deltas',
         },
       },
       enemyStateCurve: {
@@ -1756,10 +1783,11 @@ describe('first vertical slice simulation', () => {
         runtimeInputGenerationReadFallbackInputCount: 0,
         runtimeInputGenerationReadUsesLegacyFallback: false,
         runtimeInputGenerationRuntimeInputSourcePath:
-          'generationOutputs.outputs.runtimeInputSource',
+          'generationOutputs.outputs.generationEntry.runtimeInputSource',
         runtimeInputGenerationStandardContractPath:
-          'generationOutputs.outputs.standardContract',
-        runtimeInputGenerationDeltasPath: 'generationOutputs.outputs.deltas',
+          'generationOutputs.outputs.generationEntry.standardContract',
+        runtimeInputGenerationDeltasPath:
+          'generationOutputs.outputs.generationEntry.deltas',
         appliedDeltaCount: 1,
         enemyHpDelta: 12461,
         enemyToughnessDelta: 0,
@@ -1894,10 +1922,11 @@ describe('first vertical slice simulation', () => {
         runtimeInputGenerationReadFallbackInputCount: 0,
         runtimeInputGenerationReadUsesLegacyFallback: false,
         runtimeInputGenerationRuntimeInputSourcePath:
-          'generationOutputs.outputs.runtimeInputSource',
+          'generationOutputs.outputs.generationEntry.runtimeInputSource',
         runtimeInputGenerationStandardContractPath:
-          'generationOutputs.outputs.standardContract',
-        runtimeInputGenerationDeltasPath: 'generationOutputs.outputs.deltas',
+          'generationOutputs.outputs.generationEntry.standardContract',
+        runtimeInputGenerationDeltasPath:
+          'generationOutputs.outputs.generationEntry.deltas',
         outputConsistencyStatus: 'runtime-output-consistent',
         outputConsistent: true,
         applied: true,
@@ -1957,10 +1986,11 @@ describe('first vertical slice simulation', () => {
       runtimeInputGenerationReadFallbackInputCount: 0,
       runtimeInputGenerationReadUsesLegacyFallback: false,
       runtimeInputGenerationRuntimeInputSourcePath:
-        'generationOutputs.outputs.runtimeInputSource',
+        'generationOutputs.outputs.generationEntry.runtimeInputSource',
       runtimeInputGenerationStandardContractPath:
-        'generationOutputs.outputs.standardContract',
-      runtimeInputGenerationDeltasPath: 'generationOutputs.outputs.deltas',
+        'generationOutputs.outputs.generationEntry.standardContract',
+      runtimeInputGenerationDeltasPath:
+        'generationOutputs.outputs.generationEntry.deltas',
       applied: true,
     });
     expect(result.summary.runtimeOutputsSummary).toMatchObject({
@@ -1979,10 +2009,11 @@ describe('first vertical slice simulation', () => {
       runtimeInputGenerationReadFallbackInputCount: 0,
       runtimeInputGenerationReadUsesLegacyFallback: false,
       runtimeInputGenerationRuntimeInputSourcePath:
-        'generationOutputs.outputs.runtimeInputSource',
+        'generationOutputs.outputs.generationEntry.runtimeInputSource',
       runtimeInputGenerationStandardContractPath:
-        'generationOutputs.outputs.standardContract',
-      runtimeInputGenerationDeltasPath: 'generationOutputs.outputs.deltas',
+        'generationOutputs.outputs.generationEntry.standardContract',
+      runtimeInputGenerationDeltasPath:
+        'generationOutputs.outputs.generationEntry.deltas',
       outputConsistencyStatus: 'runtime-output-consistent',
       outputConsistent: true,
       applied: true,

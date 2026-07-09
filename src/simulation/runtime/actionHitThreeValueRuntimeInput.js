@@ -160,6 +160,13 @@ function resolveRuntimeInputSourceReadSource({
       value: runtimeInputSource,
     }),
     createGenerationReadSourceCandidate({
+      key: 'outputs.generationEntry.runtimeInputSource',
+      path: 'generationOutputs.outputs.generationEntry.runtimeInputSource',
+      tier: 'standard-output',
+      value: generationOutputs?.outputs?.generationEntry?.runtimeInputSource,
+      containerKey: 'generationEntry',
+    }),
+    createGenerationReadSourceCandidate({
       key: 'outputs.runtimeInputSource',
       path: 'generationOutputs.outputs.runtimeInputSource',
       tier: 'standard-output',
@@ -235,6 +242,13 @@ function resolveActionHitThreeValueDeltaStandardContractReadSource({
       ? [runtimeInputSourceContractCandidate]
       : []),
     createGenerationReadSourceCandidate({
+      key: 'outputs.generationEntry.standardContract',
+      path: 'generationOutputs.outputs.generationEntry.standardContract',
+      tier: 'standard-output',
+      value: generationOutputs?.outputs?.generationEntry?.standardContract,
+      containerKey: 'generationEntry',
+    }),
+    createGenerationReadSourceCandidate({
       key: 'outputs.standardContract',
       path: 'generationOutputs.outputs.standardContract',
       tier: 'standard-output',
@@ -300,6 +314,13 @@ function resolveRuntimeInputDeltaReadSource({
   return (
     selectGenerationReadSourceCandidate([
       ...(explicitRuntimeInputSource ? [runtimeInputSourceDeltaCandidate] : []),
+      createGenerationReadSourceCandidate({
+        key: 'outputs.generationEntry.deltas',
+        path: 'generationOutputs.outputs.generationEntry.deltas',
+        tier: 'standard-output',
+        value: generationOutputs?.outputs?.generationEntry?.deltas,
+        containerKey: 'generationEntry',
+      }),
       createGenerationReadSourceCandidate({
         key: 'outputs.deltas',
         path: 'generationOutputs.outputs.deltas',
@@ -384,6 +405,7 @@ function createGenerationReadSourceView(candidate, inputName) {
     sourcePath: candidate?.path ?? '',
     sourceTier,
     aliasFor: candidate?.aliasFor ?? '',
+    containerKey: candidate?.containerKey ?? '',
     present: Boolean(candidate?.present),
     fallback:
       Boolean(candidate?.present) &&
@@ -413,6 +435,7 @@ function createGenerationReadSourceCandidate({
   tier,
   value,
   aliasFor = '',
+  containerKey = '',
 }) {
   return {
     key,
@@ -420,6 +443,7 @@ function createGenerationReadSourceCandidate({
     tier,
     value,
     aliasFor,
+    containerKey,
     present: hasGenerationReadSourceValue(value),
   };
 }

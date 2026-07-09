@@ -30,7 +30,15 @@ export function createThreeValueGenerationBundle({
     threeValueGenerationLayer,
     actionHitThreeValueDeltaGeneration,
   });
+  const generationEntry = createStandardGenerationEntry({
+    generationInput,
+    standardContract,
+    runtimeInputSource,
+    threeValueGenerationLayer,
+    actionHitThreeValueDeltaGeneration,
+  });
   const generationOutputs = createThreeValueGenerationOutputs({
+    generationEntry,
     generationInput,
     standardContract,
     runtimeInputSource,
@@ -41,6 +49,7 @@ export function createThreeValueGenerationBundle({
     standardContract,
     threeValueGenerationLayer,
     actionHitThreeValueDeltaGeneration,
+    generationEntry,
     generationInput,
     runtimeInputSource,
     generationOutputs,
@@ -56,6 +65,7 @@ export function createThreeValueGenerationBundle({
     contractName: standardContract.name,
     actionHitThreeValueDeltaGeneration,
     threeValueGenerationLayer,
+    generationEntry,
     generationInput,
     standardContract,
     runtimeInputSource,
@@ -69,6 +79,7 @@ export function createThreeValueGenerationBundle({
 }
 
 function createThreeValueGenerationOutputs({
+  generationEntry,
   generationInput,
   standardContract,
   runtimeInputSource,
@@ -76,6 +87,7 @@ function createThreeValueGenerationOutputs({
   actionHitThreeValueDeltaGeneration,
 }) {
   const outputs = {
+    generationEntry,
     generationInput,
     standardContract,
     actions: standardContract.actions,
@@ -126,8 +138,10 @@ function createThreeValueGenerationOutputs({
     standardContractStatus: standardContract.status,
     outputNames: Object.keys(outputs),
     outputAliases: {
+      actionHitThreeValueDeltaGeneration: 'generationEntry',
       runtimeInput: 'runtimeInputSource',
     },
+    generationEntry,
     generationInput,
     standardContract,
     actions: standardContract.actions,
@@ -138,6 +152,69 @@ function createThreeValueGenerationOutputs({
     outputs,
     summary: outputSummary,
     outputSummary,
+    applied: false,
+  };
+}
+
+function createStandardGenerationEntry({
+  generationInput,
+  standardContract,
+  runtimeInputSource,
+  threeValueGenerationLayer,
+  actionHitThreeValueDeltaGeneration,
+}) {
+  const deltas = standardContract.deltas ?? [];
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-action-hit-three-value-delta-standard-generation-entry',
+    status:
+      deltas.length > 0
+        ? 'action-hit-three-value-delta-standard-generation-entry-ready'
+        : 'action-hit-three-value-delta-standard-generation-entry-empty',
+    contractName: standardContract.name,
+    generationEntrySourceKind: actionHitThreeValueDeltaGeneration.sourceKind,
+    generationEntryStatus: actionHitThreeValueDeltaGeneration.status,
+    generationLayerSourceKind: threeValueGenerationLayer.sourceKind,
+    generationLayerStatus: threeValueGenerationLayer.status,
+    standardContractSourceKind: standardContract.sourceKind,
+    standardContractStatus: standardContract.status,
+    runtimeInputSourceKind: runtimeInputSource.sourceKind,
+    runtimeInputSourceStatus: runtimeInputSource.status,
+    generationInput,
+    standardContract,
+    actions: standardContract.actions,
+    hits: standardContract.hits,
+    deltas,
+    runtimeInputSource,
+    outputs: {
+      generationInput,
+      standardContract,
+      actions: standardContract.actions,
+      hits: standardContract.hits,
+      deltas,
+      runtimeInputSource,
+    },
+    outputNames: [
+      'generationInput',
+      'standardContract',
+      'actions',
+      'hits',
+      'deltas',
+      'runtimeInputSource',
+    ],
+    summary: {
+      contractName: standardContract.name,
+      actionCount: standardContract.summary?.actionCount ?? 0,
+      hitCount: standardContract.summary?.hitCount ?? 0,
+      deltaCount: standardContract.summary?.deltaCount ?? 0,
+      appliedDeltaCount: standardContract.summary?.appliedDeltaCount ?? 0,
+      candidateDeltaCount: standardContract.summary?.candidateDeltaCount ?? 0,
+      sampledDeltaCount: standardContract.summary?.sampledDeltaCount ?? 0,
+      placeholderDeltaCount:
+        standardContract.summary?.placeholderDeltaCount ?? 0,
+      runtimeDeltaPolicy: standardContract.runtimeDeltaPolicy,
+      applied: false,
+    },
     applied: false,
   };
 }
@@ -179,6 +256,7 @@ function createThreeValueGenerationBundleSummary({
   standardContract,
   threeValueGenerationLayer,
   actionHitThreeValueDeltaGeneration,
+  generationEntry,
   generationInput,
   runtimeInputSource,
   generationOutputs,
@@ -191,6 +269,8 @@ function createThreeValueGenerationBundleSummary({
     generationLayerSourceKind: threeValueGenerationLayer.sourceKind,
     standardContractStatus: standardContract.status,
     standardContractSourceKind: standardContract.sourceKind,
+    standardGenerationEntrySourceKind: generationEntry.sourceKind,
+    standardGenerationEntryStatus: generationEntry.status,
     generationInputSourceKind: generationInput?.sourceKind ?? '',
     generationInputStatus: generationInput?.status ?? '',
     generationInputPointCount: generationInput?.summary?.pointCount ?? 0,

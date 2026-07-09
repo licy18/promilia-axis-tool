@@ -23275,3 +23275,76 @@ data-runtime-contract-uses-legacy-fallback = false
 - `npm run test:e2e:workbench-flow`：通过，5 条浏览器级主流程测试。
 - `npx prettier --check src/features/workbench/WorkbenchFlowPanel.vue src/__tests__/features/WorkbenchFlowPanel.test.js e2e/workbench-continuous-edit.spec.js`：通过。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 328. 生成层标准入口输出：Generation Entry Standard Output
+
+### 328.1 结构变化
+
+`createThreeValueGenerationBundle()` 新增一等生成入口：
+
+```text
+generationEntry
+```
+
+该入口也会作为标准输出暴露在：
+
+```text
+generationOutputs.generationEntry
+generationOutputs.outputs.generationEntry
+```
+
+`generationEntry` 聚合 `Action -> Hit -> ThreeValueDelta` 的统一生成合同入口：
+
+```text
+sourceKind = azpr-action-hit-three-value-delta-standard-generation-entry
+status = action-hit-three-value-delta-standard-generation-entry-ready | action-hit-three-value-delta-standard-generation-entry-empty
+generationInput
+standardContract
+actions
+hits
+deltas
+runtimeInputSource
+outputs.generationInput
+outputs.standardContract
+outputs.actions
+outputs.hits
+outputs.deltas
+outputs.runtimeInputSource
+```
+
+`generationOutputs.outputNames` 新增 `generationEntry`，`generationOutputs.outputAliases` 新增：
+
+```text
+actionHitThreeValueDeltaGeneration -> generationEntry
+```
+
+`createActionHitThreeValueRuntimeInput()` 的标准读取路径优先级调整为：
+
+```text
+generationOutputs.outputs.generationEntry.runtimeInputSource
+generationOutputs.outputs.generationEntry.standardContract
+generationOutputs.outputs.generationEntry.deltas
+```
+
+旧的直出路径仍保留为兼容后备：
+
+```text
+generationOutputs.outputs.runtimeInputSource
+generationOutputs.outputs.standardContract
+generationOutputs.outputs.deltas
+generationOutputs.runtimeInputSource
+generationOutputs.standardContract
+generationOutputs.deltas
+```
+
+### 328.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只改变运行期生成输出结构和 runtime input 的读取优先级；三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值和 UI 文案均不改变。
+
+### 328.3 验证
+
+- `threeValueGenerationBuilder.test.js` 覆盖 `generationEntry` 标准输出、别名和 outputCount = 8。
+- `actionHitThreeValueRuntimeInput.test.js` 覆盖 runtime input 优先从 `generationOutputs.outputs.generationEntry.*` 读取。
+- `threeValueRuntimeProjection.test.js`、`firstVerticalSliceSimulation.test.js`、`workbenchFlowContractContext.test.js` 和 `workbenchFlowModel.test.js` 覆盖投影、纵切和 Workbench 合同上下文仍保持标准边界。

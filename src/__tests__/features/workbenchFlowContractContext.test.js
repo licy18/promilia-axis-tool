@@ -79,13 +79,15 @@ describe('workbench flow contract context', () => {
             usesLegacyGenerationFallback: false,
             inputs: {
               runtimeInputSource: {
-                sourcePath: 'generationOutputs.outputs.runtimeInputSource',
+                sourcePath:
+                  'generationOutputs.outputs.generationEntry.runtimeInputSource',
               },
               standardContract: {
-                sourcePath: 'generationOutputs.outputs.standardContract',
+                sourcePath:
+                  'generationOutputs.outputs.generationEntry.standardContract',
               },
               deltas: {
-                sourcePath: 'generationOutputs.outputs.deltas',
+                sourcePath: 'generationOutputs.outputs.generationEntry.deltas',
               },
             },
           },
@@ -223,10 +225,11 @@ describe('workbench flow contract context', () => {
         generationReadFallbackInputCount: 0,
         generationReadUsesLegacyFallback: false,
         generationRuntimeInputSourcePath:
-          'generationOutputs.outputs.runtimeInputSource',
+          'generationOutputs.outputs.generationEntry.runtimeInputSource',
         generationStandardContractSourcePath:
-          'generationOutputs.outputs.standardContract',
-        generationDeltasSourcePath: 'generationOutputs.outputs.deltas',
+          'generationOutputs.outputs.generationEntry.standardContract',
+        generationDeltasSourcePath:
+          'generationOutputs.outputs.generationEntry.deltas',
         appliedOnly: true,
         ready: true,
       },
@@ -286,7 +289,8 @@ describe('workbench flow contract context', () => {
         runtimeOutputReadStandardOutputCount: 4,
         generationReadFallbackInputCount: 0,
         runtimeOutputReadFallbackOutputCount: 0,
-        generationDeltasSourcePath: 'generationOutputs.outputs.deltas',
+        generationDeltasSourcePath:
+          'generationOutputs.outputs.generationEntry.deltas',
         runtimeSimLogSourcePath: 'runtimeOutputs.outputs.simLog',
         runtimeSummarySourcePath:
           'runtimeOutputs.outputConsumerContract.summary',
