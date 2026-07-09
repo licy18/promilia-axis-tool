@@ -156,6 +156,22 @@ test('runs the visible curve-log-detail edit loop end to end', async ({
   await expectCurveAndLogSelection(page, openedState.statePointId);
   await expectRuntimeSimLogHitAggregateContributions(page);
 
+  await page
+    .locator(
+      '[data-testid="workbench-runtime-sim-log-track-filter"][data-track-filter="selfEnergyChange"]'
+    )
+    .click();
+  await expect(
+    page.getByTestId('workbench-runtime-sim-log-selection-filtered')
+  ).toBeVisible();
+  await expect(
+    page.getByTestId('workbench-runtime-sim-log-navigation')
+  ).toHaveAttribute('data-state-point-id', openedState.statePointId);
+  await page.getByTestId('workbench-runtime-sim-log-show-selected').click();
+  await expectCurveAndLogSelection(page, openedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+  await expectRuntimeSimLogHitAggregateContributions(page);
+
   await focusRuntimeDetailAction(page);
   const { returnedState } = await editCurrentActionFrameAndReturn(page, {
     actionId: 'action-0001',
