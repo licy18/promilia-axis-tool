@@ -11042,6 +11042,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：推进动作插入/复制后的连续编辑闭环，优先确认新增动作或复制动作后用户能立刻查看对应结果并回到贡献拆分。
 
+### 2026-07-09：UI 主流程新增动作结果 - Inserted Action Result Loop
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 固定 `查看运行结果 -> 新增动作 -> 自动查看新增动作结果 -> 曲线/日志/三值详情/贡献拆分同步` 的 Workbench 闭环。
+- 用户在运行结果态继续插入一条普通动作后，主流程会定位到新动作的结果点，而不是停留在旧动作结果上。
+- 新增动作结果打开后，资源曲线选中点、模拟日志导航、动作结果行和 HP 贡献拆分都会同步到新动作对应的 state point。
+- 本阶段只补齐 UI 主流程新增动作后的结果定位回归，不改变运行时输出、三值结果、公式、证据字段或数据结构。
+
+当前验证事实：
+
+- 新增 `opens the inserted action result and contribution split when adding an action in the runtime view`。
+- 该用例覆盖：从 `runtime-result` 打开 `action-0001`，点击新增动作后选中 `action-0002`，并确认三值详情、曲线、日志、动作结果和贡献拆分都同步到 `action-0002` 的 state point。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、66 条测试。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：优先推进复制动作后的结果定位与贡献拆分完整闭环，之后再回到更大一层的动作编辑体验串联。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
