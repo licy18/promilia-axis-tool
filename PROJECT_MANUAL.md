@@ -9691,6 +9691,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：围绕 command surface 检查剩余动作编辑入口和运行结果入口，优先把真正影响“编辑 -> 运行 -> 结果查看 -> 回改”的 dispatch 入口继续归一，而不是扩展局部提示。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Action Edit Command Surface
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `createWorkbenchMainFlowCommandSurface()` 新增共享的 `createRuntimeActionEditCommand()`，把“从运行结果定位并编辑动作”提升为 command surface 的一等命令入口。
+- `createWorkbenchRuntimeReviewPanelCommandView()` 的 focus 分支改为复用同一入口，运行详情面板和顶部主流程按钮可以继续共享同形态的 focus-runtime-action。
+- 动作编辑命令会优先消费 flow model 中的 `runtimeReviewOperations.focusAction`，再回退到面板传入的 target，和上一阶段的 return-result command 形成“结果查看 -> 动作编辑 -> 回到结果”的成对主流程命令。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- main flow action 单测覆盖 surface 直接创建 action-edit command，以及 helper 从共享 review focus target 生成 action。
+- Workbench、FlowPanel、RuntimeSelectedDetailPanel 相关测试确认现有主流程按钮和详情面板点击路径不变。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、86 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、223 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 Workbench 页面和子面板中剩余直接创建 flow action 的 fallback，优先把仍影响运行结果选择、动作编辑回跳和贡献定位的入口迁到 command surface，而不是扩展局部提示。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

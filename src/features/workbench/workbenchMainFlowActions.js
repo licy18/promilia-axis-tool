@@ -219,6 +219,11 @@ export function createWorkbenchMainFlowCommandSurface({
         source,
       }),
   });
+  const createRuntimeActionEditCommand = (options = {}) =>
+    createWorkbenchRuntimeActionEditCommand({
+      ...options,
+      flowModel: options.flowModel ?? flowModel,
+    });
   const runtimeActionEdit = createWorkbenchMainFlowButtonCommand({
     flowModel,
     kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
@@ -227,11 +232,11 @@ export function createWorkbenchMainFlowCommandSurface({
     fallbackTarget: mainFlowState.runtimeActionEditTarget,
     fallbackEnabled: mainFlowState.canFocusRuntimeAction,
     createFallbackAction: ({ target }) =>
-      createWorkbenchRuntimeActionEditFlowAction({
+      createRuntimeActionEditCommand({
         source,
         target,
         enabled: Boolean(target?.canFocusAction),
-      }),
+      }).action,
   });
   const createRuntimeResultReturnCommand = (options = {}) =>
     createWorkbenchRuntimeResultReturnCommand({
@@ -313,6 +318,7 @@ export function createWorkbenchMainFlowCommandSurface({
       runtimeResultReturn: runtimeResultReturn.action,
       runtimeReviewPrimary: runtimeReviewPrimary.action,
     },
+    createRuntimeActionEditCommand,
     createRuntimeReviewOperationCommand,
     createRuntimeReviewPanelCommandView,
     createRuntimeResultReturnCommand,
@@ -471,8 +477,7 @@ export function createWorkbenchRuntimeReviewPanelCommandView({
 } = {}) {
   const focus =
     focusCommand ??
-    createWorkbenchRuntimeReviewOperationCommand({
-      operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+    createWorkbenchRuntimeActionEditCommand({
       flowModel,
       source,
       target: focusTarget,
@@ -500,6 +505,23 @@ export function createWorkbenchRuntimeReviewPanelCommandView({
       returnResult: returnResult.action,
     },
   };
+}
+
+export function createWorkbenchRuntimeActionEditCommand({
+  flowModel = null,
+  source = '',
+  target = null,
+  context = null,
+  enabled,
+} = {}) {
+  return createWorkbenchRuntimeReviewOperationCommand({
+    operationKind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+    flowModel,
+    source,
+    target,
+    context: context ?? target,
+    enabled,
+  });
 }
 
 export function createWorkbenchRuntimeResultReturnCommand({

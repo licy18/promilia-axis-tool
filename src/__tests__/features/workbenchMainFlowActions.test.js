@@ -7,6 +7,7 @@ import {
   createWorkbenchMainFlowNextAction,
   createWorkbenchMainFlowRecoveryAction,
   createWorkbenchOpenRuntimeResultsFlowAction,
+  createWorkbenchRuntimeActionEditCommand,
   createWorkbenchRuntimeActionEditFlowAction,
   createWorkbenchRuntimeReviewOperationCommand,
   createWorkbenchRuntimeReviewOperationConsumer,
@@ -717,6 +718,35 @@ describe('workbench main flow actions', () => {
         canRun: true,
       },
     });
+    expect(
+      surface.createRuntimeActionEditCommand({
+        source: 'runtime-detail',
+        target: {
+          actionId: 'detail-action',
+          statePointId: 'detail-state-point',
+          fieldKey: 'startMs',
+          canFocusAction: true,
+        },
+      })
+    ).toMatchObject({
+      operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+      source: 'runtime-detail',
+      enabled: true,
+      actionId: 'review-action',
+      statePointId: 'review-state-point',
+      target: {
+        actionId: 'review-action',
+        statePointId: 'review-state-point',
+        fieldKey: 'startMs',
+      },
+      action: {
+        kind: 'focus-runtime-action',
+        source: 'runtime-detail',
+        actionId: 'review-action',
+        statePointId: 'review-state-point',
+        canRun: true,
+      },
+    });
   });
 
   it('creates runtime point and result focus actions with the same main flow factory', () => {
@@ -790,6 +820,60 @@ describe('workbench main flow actions', () => {
         payload: {
           originStatePointId: 'origin-state-point',
           status: 'refreshed-edit-result',
+        },
+        canRun: true,
+      },
+    });
+  });
+
+  it('creates runtime action edit commands from the shared review focus target', () => {
+    const command = createWorkbenchRuntimeActionEditCommand({
+      source: 'runtime-detail',
+      flowModel: {
+        runtimeReviewOperations: {
+          focusAction: {
+            kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+            enabled: true,
+            actionId: 'review-action',
+            statePointId: 'review-state-point',
+            fieldKey: 'startMs',
+            frameLabel: '18f',
+            trackKey: 'enemyHpDamage',
+            trackLabel: '敌人HP伤害',
+          },
+        },
+      },
+      target: {
+        actionId: 'fallback-action',
+        statePointId: 'fallback-state-point',
+        canFocusAction: true,
+      },
+    });
+
+    expect(command).toMatchObject({
+      operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+      source: 'runtime-detail',
+      enabled: true,
+      actionId: 'review-action',
+      statePointId: 'review-state-point',
+      target: {
+        actionId: 'review-action',
+        statePointId: 'review-state-point',
+        fieldKey: 'startMs',
+        frameLabel: '18f',
+        trackKey: 'enemyHpDamage',
+        trackLabel: '敌人HP伤害',
+      },
+      action: {
+        kind: 'focus-runtime-action',
+        source: 'runtime-detail',
+        actionId: 'review-action',
+        statePointId: 'review-state-point',
+        payload: {
+          fieldKey: 'startMs',
+          frameLabel: '18f',
+          trackKey: 'enemyHpDamage',
+          trackLabel: '敌人HP伤害',
         },
         canRun: true,
       },
