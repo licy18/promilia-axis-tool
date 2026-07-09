@@ -46,6 +46,21 @@
     :data-runtime-output-status="
       workbenchFlow.contractContext.runtimeOutput.status
     "
+    :data-runtime-output-consistency-status="
+      mainFlowStatusView.runtimeOutput.status
+    "
+    :data-runtime-output-consistent="
+      mainFlowStatusView.runtimeOutput.consistentState
+    "
+    :data-runtime-output-sim-log-count="
+      mainFlowStatusView.runtimeOutput.simLogCount
+    "
+    :data-runtime-output-state-curve-point-count="
+      mainFlowStatusView.runtimeOutput.stateCurvePointCount
+    "
+    :data-runtime-output-navigation-synced="
+      mainFlowStatusView.runtimeOutput.stateCurveNavigationSyncedState
+    "
     :data-main-flow-dispatch-sequence="mainFlowStatusView.dispatch.sequence"
     :data-main-flow-dispatch-status="mainFlowStatusView.dispatch.status"
     :data-main-flow-dispatch-handled="mainFlowStatusView.dispatch.handledState"

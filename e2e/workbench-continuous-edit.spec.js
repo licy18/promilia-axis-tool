@@ -128,6 +128,7 @@ test('runs the visible curve-log-detail edit loop end to end', async ({
     selected: false,
   });
   expectRuntimeStatePointSynced(openedState, openedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
 
   const curvePoint = page
     .locator(
@@ -1140,6 +1141,22 @@ async function expectCurveAndLogSelection(page, statePointId) {
   await expect(
     page.getByTestId('workbench-runtime-sim-log-navigation')
   ).toHaveAttribute('data-state-point-id', statePointId);
+}
+
+async function expectRuntimeOutputConsistent(page) {
+  const flowPanel = page.getByTestId('workbench-flow-panel');
+  await expect(flowPanel).toHaveAttribute(
+    'data-runtime-output-consistency-status',
+    'runtime-output-consistent'
+  );
+  await expect(flowPanel).toHaveAttribute(
+    'data-runtime-output-consistent',
+    'true'
+  );
+  await expect(flowPanel).toHaveAttribute(
+    'data-runtime-output-navigation-synced',
+    'true'
+  );
 }
 
 async function selectHpContributionAndExpectResultFocus(page, state) {

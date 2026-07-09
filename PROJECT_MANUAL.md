@@ -12104,6 +12104,39 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议继续运行时层：把 `outputConsistency` 用到 Workbench 主流程状态或诊断入口中，出现不一致时能明确定位是哪条输出断开；或回到 UI 主流程继续做窄屏/筛选下的结果定位稳定性。
 
+### 2026-07-09：运行时层能力块 - Workbench 主流程一致性入口
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- Workbench 主流程模型现在直接生成 `runtimeOutputConsistency`，把 runtime output 的一致性状态、日志计数、状态曲线点计数、资源点计数、导航同步状态集中到同一个视图。
+- `WorkbenchFlowPanel` 通过 data 属性暴露 runtime output consistency，后续 e2e 和诊断可以直接判断主流程使用的 simLog、stateCurves、resourceCurves 是否同步。
+- 真实 Workbench e2e 已确认：打开运行结果后，主流程面板的 runtime output 状态为 consistent，且状态曲线导航与 runtime output 计数同步。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、保存数据或导入导出结构。
+
+当前验证事实：
+
+- `workbenchFlowModel.test.js` 覆盖主流程模型中的 `runtimeOutputConsistency`。
+- `WorkbenchFlowPanel.test.js` 覆盖主流程面板 data 属性。
+- `workbench-continuous-edit.spec.js` 覆盖真实页面打开运行结果后的 consistency 状态。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `313. Workbench 主流程 runtime 输出一致性视图`。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js`：通过，2 个测试文件、13 条测试。
+- `npm run test:e2e -- --grep "runs the visible curve-log-detail edit loop end to end"`：通过，1 条浏览器级主流程测试。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowContractContext.test.js`：通过，3 个测试文件、15 条测试。
+- `npm run test -- --run`：通过，39 个测试文件、273 条测试。
+- `npm run test:e2e`：通过，12 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/features/workbench/workbenchFlowModel.js src/features/workbench/WorkbenchFlowPanel.vue src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js e2e/workbench-continuous-edit.spec.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 建议继续 UI 主流程：在窄屏、筛选、删除/重排动作后继续固定 runtime output consistency 与结果定位；或继续运行时层，把不一致状态接入更明确的诊断定位。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -195,11 +195,21 @@ describe('WorkbenchFlowPanel', () => {
         summary: {
           outputCount: 4,
           simLogCount: 1,
+          stateCurvePointCount: 1,
         },
       },
       outputSummary: {
         outputCount: 4,
         simLogCount: 1,
+        enemyStatePointCount: 1,
+        stateCurvePointCount: 1,
+        resourceCurvePointCount: 0,
+        outputConsistencyStatus: 'runtime-output-consistent',
+        outputConsistent: true,
+      },
+      outputConsistency: {
+        status: 'runtime-output-consistent',
+        consistent: true,
       },
       summary: {
         simLogCount: 1,
@@ -255,6 +265,11 @@ describe('WorkbenchFlowPanel', () => {
       'data-runtime-navigation-count': '1',
       'data-runtime-sim-log-count': '1',
       'data-runtime-output-status': 'runtime-output-contract-ready',
+      'data-runtime-output-consistency-status': 'runtime-output-consistent',
+      'data-runtime-output-consistent': 'true',
+      'data-runtime-output-sim-log-count': '1',
+      'data-runtime-output-state-curve-point-count': '1',
+      'data-runtime-output-navigation-synced': 'true',
     });
   });
 });

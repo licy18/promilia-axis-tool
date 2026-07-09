@@ -22403,3 +22403,66 @@ outputConsistent
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `npx prettier --check PROJECT_MANUAL.md src/simulation/runtime/threeValueRuntimeProjection.js src/features/workbench/workbenchFlowContractContext.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js`：通过。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 313. Workbench 主流程 runtime 输出一致性视图：Workbench Runtime Output Consistency View
+
+### 313.1 结构变化
+
+`createWorkbenchFlowModel()` 新增：
+
+```text
+runtimeOutputConsistency = {
+  status,
+  sourceStatus,
+  consistent,
+  consistentState,
+  simLogCount,
+  runtimeSimLogCount,
+  simLogCountSynced,
+  simLogCountSyncedState,
+  enemyStatePointCount,
+  stateCurvePointCount,
+  resourceCurvePointCount,
+  runtimeNavigationPointCount,
+  stateCurveNavigationSynced,
+  stateCurveNavigationSyncedState
+}
+```
+
+`createWorkbenchMainFlowStatusView()` 新增：
+
+```text
+runtimeOutput
+```
+
+该字段复用 `runtimeOutputConsistency`，作为主流程状态视图的 runtime 输出诊断入口。
+
+`WorkbenchFlowPanel` 新增 data 属性：
+
+```text
+data-runtime-output-consistency-status
+data-runtime-output-consistent
+data-runtime-output-sim-log-count
+data-runtime-output-state-curve-point-count
+data-runtime-output-navigation-synced
+```
+
+### 313.2 保存与迁移
+
+不新增项目草稿字段，不改变导入导出 schema，不需要数据迁移。
+
+本阶段不改变三值计算结果、公式、倍率、证据字段或 runtime output 原始结构；新增字段只让 Workbench 主流程直接消费上一阶段的 `runtimeOutputs.outputConsistency`。
+
+### 313.3 验证
+
+- `workbenchFlowModel.test.js` 覆盖 `runtimeOutputConsistency` 与主流程模型读取 runtime output 一致性字段。
+- `WorkbenchFlowPanel.test.js` 覆盖主流程面板 data 属性暴露一致性状态。
+- `workbench-continuous-edit.spec.js` 覆盖真实 Workbench 页面运行结果打开后，主流程面板显示 runtime output consistent 且导航同步。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js`：通过，2 个测试文件、13 条测试。
+- `npm run test:e2e -- --grep "runs the visible curve-log-detail edit loop end to end"`：通过，1 条浏览器级主流程测试。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowContractContext.test.js`：通过，3 个测试文件、15 条测试。
+- `npm run test -- --run`：通过，39 个测试文件、273 条测试。
+- `npm run test:e2e`：通过，12 条浏览器级烟测。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/features/workbench/workbenchFlowModel.js src/features/workbench/WorkbenchFlowPanel.vue src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js e2e/workbench-continuous-edit.spec.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。

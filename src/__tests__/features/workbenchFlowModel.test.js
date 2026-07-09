@@ -51,8 +51,24 @@ describe('workbench flow model', () => {
         status: 'runtime-output-contract-ready',
         runtimeOutputsSourceKind: 'azpr-three-value-runtime-outputs',
         resourcesAlias: 'resourceCurves',
+        stateCurvePointCount: 2,
+        outputConsistencyStatus: 'runtime-output-consistent',
+        outputConsistent: true,
         ready: true,
       },
+    });
+    expect(model.runtimeOutputConsistency).toMatchObject({
+      status: 'runtime-output-consistent',
+      consistent: true,
+      consistentState: 'true',
+      simLogCount: 2,
+      runtimeSimLogCount: 2,
+      simLogCountSynced: true,
+      enemyStatePointCount: 1,
+      stateCurvePointCount: 2,
+      resourceCurvePointCount: 1,
+      runtimeNavigationPointCount: 2,
+      stateCurveNavigationSynced: true,
     });
     expect(model.controls).toMatchObject({
       canOpenRuntimeResults: true,
@@ -1335,6 +1351,7 @@ function createRuntimeProjectionFixture() {
       },
       summary: {
         simLogCount: 2,
+        stateCurvePointCount: 2,
       },
     },
     summary: {
@@ -1408,6 +1425,15 @@ function createRuntimeOutputsFixture(runtimeProjection) {
     outputSummary: {
       outputCount: 4,
       simLogCount: 2,
+      enemyStatePointCount: 1,
+      stateCurvePointCount: 2,
+      resourceCurvePointCount: 1,
+      outputConsistencyStatus: 'runtime-output-consistent',
+      outputConsistent: true,
+    },
+    outputConsistency: {
+      status: 'runtime-output-consistent',
+      consistent: true,
     },
     summary: runtimeProjection.summary,
     simLog: runtimeProjection.simLog,

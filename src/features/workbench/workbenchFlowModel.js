@@ -127,6 +127,11 @@ export function createWorkbenchFlowModel({
     runtimeProjection,
     runtimeOutputs: resolvedRuntimeOutputs,
   });
+  const runtimeOutputConsistency = createWorkbenchRuntimeOutputConsistencyView({
+    contractContext,
+    runtimeSimLogCount,
+    runtimeNavigationPointCount: runtimeNavigationPoints.length,
+  });
   const phase = resolveWorkbenchFlowPhase({
     runtimeDetail,
     editResult,
@@ -217,6 +222,7 @@ export function createWorkbenchFlowModel({
     contractContext,
     runtimeSummary: getRuntimeOutputSummary(resolvedRuntimeOutputs),
     runtimeSimLogCount,
+    runtimeOutputConsistency,
     runtimeDetail,
     runtimeActionEditTarget,
     editResult,
@@ -279,6 +285,13 @@ export function createWorkbenchMainFlowStatusView({
   const dispatch =
     mainFlowDispatchResult ?? flowModel?.mainFlowDispatchResult ?? {};
   const loop = mainFlowLoopState ?? flowModel?.mainFlowLoopState ?? {};
+  const runtimeOutput =
+    flowModel?.runtimeOutputConsistency ??
+    createWorkbenchRuntimeOutputConsistencyView({
+      contractContext: flowModel?.contractContext,
+      runtimeSimLogCount: flowModel?.runtimeSimLogCount,
+      runtimeNavigationPointCount: flowModel?.runtimeNavigation?.count,
+    });
   return {
     dispatch: {
       sequence: Number(dispatch.sequence ?? 0) || 0,
@@ -304,6 +317,53 @@ export function createWorkbenchMainFlowStatusView({
       currentRegion: loop.currentRegion ?? '',
       nextRegion: loop.nextRegion ?? '',
     },
+    runtimeOutput,
+  };
+}
+
+export function createWorkbenchRuntimeOutputConsistencyView({
+  contractContext = null,
+  runtimeSimLogCount = 0,
+  runtimeNavigationPointCount = 0,
+} = {}) {
+  const runtimeOutput = contractContext?.runtimeOutput ?? {};
+  const simLogCount = numberOrZero(runtimeOutput.simLogCount);
+  const stateCurvePointCount = numberOrZero(runtimeOutput.stateCurvePointCount);
+  const outputConsistent = Boolean(runtimeOutput.outputConsistent);
+  const hasConsistencyStatus = Boolean(runtimeOutput.outputConsistencyStatus);
+  const simLogCountSynced = simLogCount === numberOrZero(runtimeSimLogCount);
+  const navigationPointCount = numberOrZero(runtimeNavigationPointCount);
+  const stateCurveNavigationSynced =
+    stateCurvePointCount === 0 ||
+    navigationPointCount === 0 ||
+    stateCurvePointCount === navigationPointCount;
+  const consistent = hasConsistencyStatus
+    ? outputConsistent && simLogCountSynced && stateCurveNavigationSynced
+    : simLogCountSynced;
+
+  return {
+    status: hasConsistencyStatus
+      ? consistent
+        ? 'runtime-output-consistent'
+        : 'runtime-output-inconsistent'
+      : 'runtime-output-consistency-unavailable',
+    sourceStatus: runtimeOutput.outputConsistencyStatus ?? '',
+    consistent,
+    consistentState: consistent ? 'true' : 'false',
+    simLogCount,
+    runtimeSimLogCount: numberOrZero(runtimeSimLogCount),
+    simLogCountSynced,
+    simLogCountSyncedState: simLogCountSynced ? 'true' : 'false',
+    enemyStatePointCount: numberOrZero(runtimeOutput.enemyStatePointCount),
+    stateCurvePointCount,
+    resourceCurvePointCount: numberOrZero(
+      runtimeOutput.resourceCurvePointCount
+    ),
+    runtimeNavigationPointCount: navigationPointCount,
+    stateCurveNavigationSynced,
+    stateCurveNavigationSyncedState: stateCurveNavigationSynced
+      ? 'true'
+      : 'false',
   };
 }
 
@@ -1350,4 +1410,9 @@ function formatRuntimeNavigationLabel({
     return `-/${total}`;
   }
   return `${selectedRuntimeNavigationIndex + 1}/${total}`;
+}
+
+function numberOrZero(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : 0;
 }
