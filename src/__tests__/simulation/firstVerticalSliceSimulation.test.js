@@ -1784,6 +1784,21 @@ describe('first vertical slice simulation', () => {
     expect(result.runtimeOutputs.outputs.resources).toBe(
       result.threeValueRuntimeProjection.resourceCurves
     );
+    expect(result.summary.threeValueRuntimeProjectionSummary).toBe(
+      result.runtimeOutputs.summary
+    );
+    expect(result.summary.runtimeOutputsSummary).toBe(
+      result.runtimeOutputs.outputSummary
+    );
+    expect(result.summary.totalRawDamage).toBe(
+      result.runtimeOutputs.summary.enemyHpDelta
+    );
+    expect(result.summary.totalProjectedToughnessDamage).toBe(
+      result.runtimeOutputs.summary.enemyToughnessDelta
+    );
+    expect(result.summary.totalSelfEnergyDelta).toBe(
+      result.runtimeOutputs.summary.selfEnergyDelta
+    );
     expect(result.summary.threeValueRuntimeProjectionSummary).toMatchObject({
       inputContractName: 'Action -> Hit -> ThreeValueDelta',
       inputDeltaCount: 16,
@@ -4016,6 +4031,12 @@ describe('first vertical slice simulation', () => {
     });
     expect(result.summary.resourceEventCount).toBe(1);
     expect(result.summary.totalSelfEnergyDelta).toBe(-Number(spSkill.spCost));
+    expect(result.summary.totalSelfEnergyDelta).toBe(
+      result.runtimeOutputs.summary.selfEnergyDelta
+    );
+    expect(result.runtimeOutputs.resourceCurves.curvesByActor).toBe(
+      result.threeValueRuntimeProjection.selfEnergyCurveByActor
+    );
     expect(result.threeValueRuntimeProjection.summary).toMatchObject({
       appliedDeltaCount: 2,
       enemyHpDelta: result.summary.totalRawDamage,
@@ -4103,6 +4124,17 @@ describe('first vertical slice simulation', () => {
           delta: 0,
         }),
       ])
+    );
+    expect(
+      result.summary.selfEnergyDeltaByActor.map(actor => ({
+        actorId: actor.actorId,
+        delta: actor.delta,
+      }))
+    ).toEqual(
+      result.runtimeOutputs.resourceCurves.curvesByActor.map(actor => ({
+        actorId: actor.actorId,
+        delta: actor.delta,
+      }))
     );
     expect(result.resourceTimeline).toEqual([
       expect.objectContaining({

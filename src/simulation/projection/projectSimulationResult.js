@@ -1457,13 +1457,15 @@ export function projectSimulationResult({
     confidence: event.payload.confidence,
   }));
 
-  const totalRawDamage = threeValueRuntimeProjection.summary.enemyHpDelta;
+  const runtimeOutputSummary = runtimeOutputs.summary ?? {};
+  const runtimeOutputResourceCurves =
+    runtimeOutputs.resourceCurves ?? runtimeOutputs.resources ?? {};
+  const totalRawDamage = runtimeOutputSummary.enemyHpDelta;
   const totalProjectedToughnessDamage =
-    threeValueRuntimeProjection.summary.enemyToughnessDelta;
-  const totalSelfEnergyDelta =
-    threeValueRuntimeProjection.summary.selfEnergyDelta;
+    runtimeOutputSummary.enemyToughnessDelta;
+  const totalSelfEnergyDelta = runtimeOutputSummary.selfEnergyDelta;
   const selfEnergyDeltaByActor = createSelfEnergyDeltaSummaryByActor(
-    threeValueRuntimeProjection.selfEnergyCurveByActor
+    runtimeOutputResourceCurves.curvesByActor ?? []
   );
   const formulaCandidatePatternSummary =
     summarizeFormulaCandidatePatterns(actionResultTimeline);
@@ -1511,7 +1513,7 @@ export function projectSimulationResult({
       threeValueCurveFrameworkSummary: threeValueCurveFramework.summary,
       threeValueGenerationBundleSummary: threeValueGenerationBundle.summary,
       threeValueGenerationLayerSummary: threeValueGenerationLayer.summary,
-      threeValueRuntimeProjectionSummary: threeValueRuntimeProjection.summary,
+      threeValueRuntimeProjectionSummary: runtimeOutputs.summary,
       runtimeOutputsSummary: runtimeOutputs.outputSummary,
       formulaVersion: damageEvents[0]?.payload.formulaVersion ?? null,
       formulaCandidatePatternSummary,

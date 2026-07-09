@@ -11578,6 +11578,35 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查完整编辑体验里还有没有必须跨面板跳转的高频动作；若主路径已足够顺，转向运行时层输出消费收敛。
 
+### 2026-07-09：运行时层顶层摘要收敛 - Runtime Output Summary Source
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- `projectSimulationResult.summary` 的 HP、韧性、自身能量总量现在从标准 `runtimeOutputs.summary` 派生。
+- `summary.selfEnergyDeltaByActor` 现在从 `runtimeOutputs.resourceCurves.curvesByActor` 派生。
+- `summary.threeValueRuntimeProjectionSummary` 继续保留旧字段名兼容，但内容来源收敛为同一份 `runtimeOutputs.summary`。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、保存数据或导入导出结构。
+
+当前验证事实：
+
+- `firstVerticalSliceSimulation.test.js` 覆盖顶层 summary 与 `runtimeOutputs.summary / outputSummary / resourceCurves` 的同源关系。
+- `threeValueRuntimeProjection.test.js` 继续覆盖旧 projection 字段与 `runtimeOutputs` 指向同一份运行输出。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js`：通过，2 个测试文件、16 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、268 条测试。
+- `npm run test:e2e`：通过，5 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/simulation/projection/projectSimulationResult.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续运行时层能力块：清理剩余只读消费者对旧 `threeValueRuntimeProjection.*` 字段的直接依赖；若生产读路径已收敛，再转向生成层 `Action -> Hit -> ThreeValueDelta` 标准入口补强。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
