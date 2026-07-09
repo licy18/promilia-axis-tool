@@ -1717,13 +1717,65 @@ test('keeps runtime result flow usable after deleting a generated action batch',
   expect(fallbackState.statePointId).not.toBe(batchRuntimeState.statePointId);
   expectRuntimeStatePointSynced(fallbackState, fallbackState.statePointId);
   await expectRuntimeOutputConsistent(page);
+  await expect(page.getByTestId('workbench-undo-edit')).toBeEnabled();
+  await expect(page.getByTestId('workbench-redo-edit')).toBeDisabled();
+
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已撤销编辑'
+  );
+  await expect(
+    page.getByTestId('workbench-action-batch-summary-count')
+  ).toHaveText('1');
+  await expect(
+    page.locator('.action-item[data-batch-id="segment-batch-0001"]')
+  ).toHaveCount(2);
+  const restoredBatchState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(restoredBatchState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(
+    restoredBatchState,
+    batchRuntimeState.statePointId
+  );
+  await expectRuntimeOutputConsistent(page);
+  await expect(page.getByTestId('workbench-undo-edit')).toBeDisabled();
+  await expect(page.getByTestId('workbench-redo-edit')).toBeEnabled();
+
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已重做编辑'
+  );
+  await expect(
+    page.getByTestId('workbench-action-batch-summary-count')
+  ).toHaveText('0');
+  await expect(
+    page.locator('.action-item[data-batch-id="segment-batch-0001"]')
+  ).toHaveCount(0);
+  const redoneFallbackState = await waitForRuntimeAction(page, 'action-0001');
+  expectRuntimeReviewState(redoneFallbackState, {
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(
+    redoneFallbackState,
+    fallbackState.statePointId
+  );
+  await expectRuntimeOutputConsistent(page);
 
   await focusRuntimeDetailAction(page);
   const { returnedState } = await editCurrentActionFrameAndReturn(page, {
     actionId: 'action-0001',
     frameValue: '18',
     msValue: '300',
-    originStatePointId: fallbackState.statePointId,
+    originStatePointId: redoneFallbackState.statePointId,
     navigationCount: '1',
     navigationIndex: '0',
     selected: true,
