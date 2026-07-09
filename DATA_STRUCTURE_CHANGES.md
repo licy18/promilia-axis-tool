@@ -21893,3 +21893,34 @@ createWorkbenchRuntimeReviewPanelView(...)
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、58 条测试。
 - `npm run test -- --run`：通过，38 个测试文件、257 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 302. UI 主流程可见编辑体验：60fps Frame Timing Controls
+
+### 302.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`PropertiesPanel` 新增前端帧级编辑入口：
+
+```text
+开始帧 -> startMs = frameToMs(frame)
+持续帧 -> durationMs = frameToMs(frame)
+```
+
+消费规则：
+
+- 帧控件使用 `WORKBENCH_FPS = 60` 和 `frameToMs()` / `msToFrame()` 与现有毫秒字段互相映射。
+- 用户修改开始帧或持续帧后，仍通过现有 `update-action` 事件写回 `startMs` / `durationMs`。
+- 动作编辑后的刷新结果定位继续复用既有 `actionEditResultContext` / runtime result return 链路。
+
+### 302.2 保存与迁移
+
+不新增持久字段，不需要数据迁移。现有草稿仍只保存 `startMs`、`durationMs` 等原字段。
+
+### 302.3 验证
+
+- Workbench 可见闭环测试改为通过“开始帧”修改动作后回到刷新后的运行结果。
+- 新增 `src/__tests__/views/Workbench.test.js` 用例覆盖 60fps 帧控件将 `30` 帧保存为 `500ms`、`45` 持续帧保存为 `750ms`。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、59 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、258 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

@@ -116,6 +116,52 @@
         </button>
       </div>
 
+      <div
+        class="frame-edit-controls"
+        :data-frame-rate="workbenchFrameRate"
+        data-testid="workbench-action-frame-controls"
+      >
+        <label
+          class="frame-edit-control"
+          :data-edit-focused="isEditFocusField('startMs')"
+          :data-edit-focus-origin="getEditFocusOrigin('startMs')"
+          :class="{ 'edit-focused': isEditFocusField('startMs') }"
+          data-edit-field="startMs"
+          data-testid="workbench-action-frame-control"
+        >
+          <span>开始帧</span>
+          <input
+            type="number"
+            data-testid="workbench-start-frame-input"
+            min="0"
+            :max="maxStartFrame"
+            step="1"
+            :value="selectedActionStartFrame"
+            @input="emitFrameActionPatch('startMs', $event.target.value)"
+          />
+        </label>
+
+        <label
+          class="frame-edit-control"
+          :data-edit-focused="isEditFocusField('durationMs')"
+          :data-edit-focus-origin="getEditFocusOrigin('durationMs')"
+          :class="{ 'edit-focused': isEditFocusField('durationMs') }"
+          data-edit-field="durationMs"
+          data-testid="workbench-action-frame-control"
+        >
+          <span>持续帧</span>
+          <input
+            type="number"
+            data-testid="workbench-duration-frame-input"
+            min="1"
+            :max="maxDurationFrame"
+            step="1"
+            :value="selectedActionDurationFrame"
+            @input="emitFrameActionPatch('durationMs', $event.target.value)"
+          />
+        </label>
+      </div>
+
       <label
         data-testid="workbench-action-edit-control"
         data-edit-field="startMs"
@@ -447,7 +493,13 @@
 <script setup>
 import { computed } from 'vue';
 import { Aim, Operation } from '@element-plus/icons-vue';
-import { WORKBENCH_FRAME_MS, formatFrameTime } from '../../domain/timebase';
+import {
+  WORKBENCH_FPS,
+  WORKBENCH_FRAME_MS,
+  formatFrameTime,
+  frameToMs,
+  msToFrame,
+} from '../../domain/timebase';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import { resolveWorkbenchMainFlowResultReturnTarget } from './workbenchFlowModel';
 import { createWorkbenchRuntimeReviewPanelCommandViewFromSurface } from './workbenchMainFlowActions';
@@ -506,6 +558,7 @@ const emit = defineEmits([
 ]);
 
 const frameStepMs = WORKBENCH_FRAME_MS;
+const workbenchFrameRate = WORKBENCH_FPS;
 
 const maxSkillLevel = computed(() =>
   Math.max(
@@ -594,6 +647,18 @@ const selectedDamageSegmentIndex = computed(() => {
     props.selectedAction.damageSegmentIndex ??
     0
   );
+});
+const selectedActionStartFrame = computed(() =>
+  msToFrame(props.selectedAction.startMs ?? 0)
+);
+const selectedActionDurationFrame = computed(() =>
+  Math.max(1, msToFrame(props.selectedAction.durationMs ?? frameStepMs))
+);
+const maxStartFrame = computed(() => Math.max(0, msToFrame(props.durationMs)));
+const maxDurationFrame = computed(() => {
+  const remainingMs =
+    Number(props.durationMs) - (Number(props.selectedAction.startMs) || 0);
+  return Math.max(1, msToFrame(Math.max(frameStepMs, remainingMs)));
 });
 const skillLogicModel = computed(() => props.selectedAction.logicModel ?? null);
 const displayTiming = computed(
@@ -851,6 +916,19 @@ function emitActionPatch(key, value) {
   emit('update-action', patch);
 }
 
+function emitFrameActionPatch(key, value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return;
+  }
+  const frame = Math.round(number);
+  const normalizedFrame =
+    key === 'durationMs' ? Math.max(1, frame) : Math.max(0, frame);
+  emit('update-action', {
+    [key]: frameToMs(normalizedFrame),
+  });
+}
+
 function emitTextPatch(key, value) {
   emit('update-action', {
     [key]: value,
@@ -1082,6 +1160,18 @@ h2 {
 .action-result-return-icon {
   width: 13px;
   height: 13px;
+}
+
+.frame-edit-controls {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  min-width: 0;
+}
+
+.frame-edit-control {
+  min-width: 0;
 }
 
 .contextual-controls {

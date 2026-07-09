@@ -2324,9 +2324,21 @@ describe('Workbench view', () => {
         )
         .attributes('data-edit-focus-origin')
     ).toBe('runtime-focus');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-frame-control"][data-edit-field="startMs"]'
+        )
+        .attributes('data-edit-focus-origin')
+    ).toBe('runtime-focus');
 
-    await wrapper.find('[data-testid="workbench-start-input"]').setValue('100');
+    await wrapper
+      .find('[data-testid="workbench-start-frame-input"]')
+      .setValue('6');
     await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-start-input"]').element.value
+    ).toBe('100');
 
     const editFeedback = wrapper.find(
       '[data-testid="workbench-action-edit-feedback"]'
@@ -2379,6 +2391,58 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
         .attributes('data-result-context-status')
     ).toBe('refreshed-edit-result');
+  });
+
+  it('edits selected action timing with 60fps frame controls', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-action-frame-controls"]')
+        .attributes('data-frame-rate')
+    ).toBe('60');
+    expect(
+      wrapper.find('[data-testid="workbench-start-frame-input"]').element.value
+    ).toBe('0');
+    expect(
+      wrapper.find('[data-testid="workbench-duration-frame-input"]').element
+        .value
+    ).toBe('60');
+
+    await wrapper
+      .find('[data-testid="workbench-start-frame-input"]')
+      .setValue('30');
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-start-input"]').element.value
+    ).toBe('500');
+
+    await wrapper
+      .find('[data-testid="workbench-duration-frame-input"]')
+      .setValue('45');
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-duration-frame-input"]').element
+        .value
+    ).toBe('45');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(
+      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
+    );
+    expect(savedDraft.actionDrafts[0]).toMatchObject({
+      id: 'action-0001',
+      startMs: 500,
+      durationMs: 750,
+    });
   });
 
   it('records failed main flow dispatch results at the workbench layer', async () => {
