@@ -959,5 +959,45 @@ h2 {
   .runtime-detail-meta {
     grid-template-columns: 1fr;
   }
+
+  .runtime-detail-summary strong,
+  .runtime-detail-values strong,
+  .runtime-detail-meta strong {
+    overflow-wrap: anywhere;
+    text-align: left;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  .runtime-detail-edit-context,
+  .runtime-detail-return-context,
+  .runtime-detail-contribution-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .runtime-detail-edit-context strong,
+  .runtime-detail-edit-context small,
+  .runtime-detail-return-context strong,
+  .runtime-detail-return-context small,
+  .runtime-detail-contribution-summary strong {
+    text-align: left;
+    white-space: normal;
+  }
+
+  .runtime-detail-contribution-row,
+  .runtime-detail-calculator-row,
+  .runtime-detail-source-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .runtime-detail-contribution-row strong,
+  .runtime-detail-calculator-row strong,
+  .runtime-detail-source-row strong {
+    overflow-wrap: anywhere;
+    text-align: left;
+    white-space: normal;
+  }
 }
 </style>

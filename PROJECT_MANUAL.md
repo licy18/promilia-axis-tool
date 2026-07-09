@@ -10961,6 +10961,35 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：优先做一次真实窄屏页面复核；如果复核通过，再进入更完整的动作编辑体验打磨，例如批量动作编辑、动作插入/删除后的结果定位和贡献拆分查看。
 
+### 2026-07-09：UI 主流程真实窄屏复核 - Runtime Detail Wrap
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 用本地真实页面复核 390px 窄屏下的结果检查区，确认 `查看运行结果` 后仍保持 `result-check` 单列布局。
+- 修复三值详情中长 `sourceDeltaId`、状态点、贡献/公式/来源明细在窄屏下的内部横向溢出，让用户查看日志/三值详情时不再遇到被截断的长来源字段。
+- 本阶段只补齐 UI 主流程窄屏详情可读性，不改变运行时输出、三值结果、公式、证据字段或数据结构。
+
+当前验证事实：
+
+- 本地开发页面：`http://127.0.0.1:5178/#/workbench`。
+- 390px 视口查看运行结果后：`phase=runtime-result`，`layout=result-check`。
+- 页面宽度：`documentWidth=375`，`viewportWidth=390`，无横向页面溢出。
+- `workbench-runtime-selected-detail-source-delta`：`whiteSpace=normal`，`overflowWrap=anywhere`，`scrollWidth=307`，`clientWidth=307`，内部不再溢出。
+- `guards the narrow result loop layout contract` 已纳入 RuntimeSelectedDetailPanel 的窄屏详情换行合同。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js`：通过，2 个测试文件、65 条测试。
+- 应用内浏览器真实窄屏复核：通过。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：进入更完整的动作编辑体验闭环，优先做动作插入/删除/批量调整后结果定位与贡献拆分查看，避免再停留在单个字段或标签微调。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

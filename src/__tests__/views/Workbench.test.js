@@ -2629,6 +2629,9 @@ describe('Workbench view', () => {
     const eventPanelSource = compactSource(
       readTestSource('../../features/workbench/EventLogPanel.vue')
     );
+    const runtimeDetailPanelSource = compactSource(
+      readTestSource('../../features/workbench/RuntimeSelectedDetailPanel.vue')
+    );
 
     expect(workbenchSource).toContain(
       ".runtime-review-stack[data-runtime-review-layout='result-check']{grid-template-columns:1fr;}"
@@ -2662,6 +2665,18 @@ describe('Workbench view', () => {
     );
     expect(eventPanelSource).toContain(
       '.runtime-log-selection-notebutton,.runtime-log-action-focus,.runtime-log-result-return{width:100%;}'
+    );
+    expect(runtimeDetailPanelSource).toContain(
+      '.runtime-detail-edit-context,.runtime-detail-return-context,.runtime-detail-contribution-summary{grid-template-columns:1fr;}'
+    );
+    expect(runtimeDetailPanelSource).toContain(
+      '.runtime-detail-summarystrong,.runtime-detail-valuesstrong,.runtime-detail-metastrong{overflow-wrap:anywhere;text-align:left;text-overflow:clip;white-space:normal;}'
+    );
+    expect(runtimeDetailPanelSource).toContain(
+      '.runtime-detail-contribution-row,.runtime-detail-calculator-row,.runtime-detail-source-row{align-items:flex-start;flex-direction:column;gap:3px;}'
+    );
+    expect(runtimeDetailPanelSource).toContain(
+      '.runtime-detail-contribution-rowstrong,.runtime-detail-calculator-rowstrong,.runtime-detail-source-rowstrong{overflow-wrap:anywhere;text-align:left;white-space:normal;}'
     );
   });
 
