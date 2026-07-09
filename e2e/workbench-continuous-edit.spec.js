@@ -632,6 +632,69 @@ test('keeps runtime detail navigation tied to edit return', async ({
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps runtime log navigation tied to result review @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+  const { copiedState } = await createThreeActionRuntime(page);
+  expectRuntimeReviewState(copiedState, {
+    phase: 'runtime-result',
+    actionId: 'action-0003',
+    navigationCount: '3',
+    navigationIndex: '2',
+    selected: false,
+  });
+  await expectCurveAndLogSelection(page, copiedState.statePointId);
+
+  const previousLogResult = page.getByTestId(
+    'workbench-runtime-sim-log-navigation-prev'
+  );
+  await expect(previousLogResult).toHaveAttribute(
+    'data-state-point-id',
+    /action-0002/
+  );
+  await previousLogResult.click();
+
+  const previousState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(previousState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(previousState, previousState.statePointId);
+  await expectCurveAndLogSelection(page, previousState.statePointId);
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail')
+  ).toHaveAttribute(
+    'data-runtime-review-source',
+    'event-log-runtime-navigation'
+  );
+
+  const nextLogResult = page.getByTestId(
+    'workbench-runtime-sim-log-navigation-next'
+  );
+  await expect(nextLogResult).toHaveAttribute(
+    'data-state-point-id',
+    /action-0003/
+  );
+  await nextLogResult.click();
+
+  const nextState = await waitForRuntimeAction(page, 'action-0003');
+  expectRuntimeReviewState(nextState, {
+    phase: 'runtime-result',
+    actionId: 'action-0003',
+    navigationCount: '3',
+    navigationIndex: '2',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(nextState, nextState.statePointId);
+  await expectCurveAndLogSelection(page, nextState.statePointId);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps multi-action resource chart navigation tied to middle edit return', async ({
   page,
 }) => {

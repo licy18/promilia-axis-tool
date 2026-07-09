@@ -66,6 +66,40 @@
         <span>日志导航</span>
         <strong>{{ runtimeLogNavigationStatus.label }}</strong>
         <small>{{ runtimeLogNavigationStatus.detail }}</small>
+        <div class="runtime-log-navigation-actions">
+          <button
+            type="button"
+            class="runtime-log-navigation-button"
+            :data-state-point-id="
+              runtimeLogPreviousNavigationTarget.statePointId
+            "
+            data-testid="workbench-runtime-sim-log-navigation-prev"
+            :disabled="!runtimeLogPreviousNavigationTarget.enabled"
+            title="上一条日志结果"
+            aria-label="上一条日志结果"
+            @click="
+              selectRuntimeLogNavigationTarget(
+                runtimeLogPreviousNavigationTarget
+              )
+            "
+          >
+            <ArrowLeft class="runtime-log-navigation-icon" />
+          </button>
+          <button
+            type="button"
+            class="runtime-log-navigation-button"
+            :data-state-point-id="runtimeLogNextNavigationTarget.statePointId"
+            data-testid="workbench-runtime-sim-log-navigation-next"
+            :disabled="!runtimeLogNextNavigationTarget.enabled"
+            title="下一条日志结果"
+            aria-label="下一条日志结果"
+            @click="
+              selectRuntimeLogNavigationTarget(runtimeLogNextNavigationTarget)
+            "
+          >
+            <ArrowRight class="runtime-log-navigation-icon" />
+          </button>
+        </div>
       </div>
 
       <div
@@ -305,7 +339,13 @@
 
 <script setup>
 import { computed, nextTick, ref, watch } from 'vue';
-import { Aim, EditPen, Tickets } from '@element-plus/icons-vue';
+import {
+  Aim,
+  ArrowLeft,
+  ArrowRight,
+  EditPen,
+  Tickets,
+} from '@element-plus/icons-vue';
 import { createRuntimeDetailCalculatorRows } from './runtimeSelectedDetail';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import { createWorkbenchRuntimeOutputConsumerView } from './runtimeProjectionPoints';
@@ -512,6 +552,22 @@ const runtimeLogNavigationStatus = computed(() =>
     rows: runtimeSimLogRows.value,
     filteredRows: filteredRuntimeSimLogRows.value,
   })
+);
+const runtimeLogPreviousNavigationTarget = computed(() =>
+  createRuntimeLogNavigationTarget(
+    filteredRuntimeSimLogRows.value[
+      runtimeLogNavigationStatus.value.navigationIndex - 1
+    ],
+    runtimeLogNavigationStatus.value.navigationIndex - 1
+  )
+);
+const runtimeLogNextNavigationTarget = computed(() =>
+  createRuntimeLogNavigationTarget(
+    filteredRuntimeSimLogRows.value[
+      runtimeLogNavigationStatus.value.navigationIndex + 1
+    ],
+    runtimeLogNavigationStatus.value.navigationIndex + 1
+  )
 );
 const selectedRuntimeHiddenLogRow = computed(() => {
   if (!flowSelectedStatePointId.value) {
@@ -883,6 +939,15 @@ function selectRuntimeLog(index) {
   dispatchRuntimeLogFlowAction(getRuntimeLogRowFlowAction(row));
 }
 
+function selectRuntimeLogNavigationTarget(target) {
+  if (!target?.enabled) {
+    return;
+  }
+  selectedRuntimeLogIndex.value = target.index;
+  dispatchRuntimeLogFlowAction(getRuntimeLogNavigationFlowAction(target));
+  scheduleSelectedRuntimeLogRowScroll(target.statePointId);
+}
+
 function showSelectedRuntimeLog() {
   const row = selectedRuntimeHiddenLogRow.value;
   if (!row) {
@@ -948,6 +1013,16 @@ function getRuntimeLogRowFlowAction(row) {
     detail: row,
     statePointId,
     enabled: Boolean(statePointId),
+  });
+}
+
+function getRuntimeLogNavigationFlowAction(target) {
+  return createWorkbenchRuntimeSelectionFlowActionFromSurface({
+    mainFlowCommandSurface: props.mainFlowCommandSurface,
+    source: 'event-log-runtime-navigation',
+    detail: target?.row,
+    statePointId: target?.statePointId ?? '',
+    enabled: Boolean(target?.statePointId),
   });
 }
 
@@ -1073,6 +1148,16 @@ function findRuntimeLogRowIndexByStatePoint(rows, statePointId) {
   return rows.findIndex(
     row => getRuntimeStatePointIdByRow(row) === statePointId
   );
+}
+
+function createRuntimeLogNavigationTarget(row, index) {
+  const statePointId = getRuntimeStatePointIdByRow(row);
+  return {
+    row: row ?? null,
+    index,
+    statePointId,
+    enabled: Boolean(row && statePointId && index >= 0),
+  };
 }
 
 function createRuntimeLogEditContext({
@@ -1597,7 +1682,7 @@ h2 {
 
 .runtime-log-navigation {
   display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr);
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 6px;
   min-width: 0;
@@ -1645,6 +1730,36 @@ h2 {
   color: #aeb8c1;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.runtime-log-navigation-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.runtime-log-navigation-button {
+  display: inline-grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border: 1px solid rgba(121, 199, 185, 0.28);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.12);
+  color: #dff9f3;
+  cursor: pointer;
+}
+
+.runtime-log-navigation-button:disabled {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: #67717a;
+  cursor: not-allowed;
+}
+
+.runtime-log-navigation-icon {
+  width: 13px;
+  height: 13px;
 }
 
 .runtime-log-list {
