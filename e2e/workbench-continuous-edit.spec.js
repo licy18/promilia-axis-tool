@@ -128,6 +128,50 @@ test('keeps the continuous edit result loop synced in the browser', async ({
   expect(refreshedState.hpContributionStatePointId).toBe(
     editState.feedbackStatePointId
   );
+
+  const firstActionResultRow = page.locator(
+    '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+  );
+  await expect(firstActionResultRow).toHaveAttribute(
+    'data-result-location-status',
+    'available'
+  );
+  const firstActionStatePointId = await firstActionResultRow.getAttribute(
+    'data-runtime-state-point-id'
+  );
+  expect(firstActionStatePointId).toContain('action-0001');
+
+  await firstActionResultRow.click();
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-runtime-detail-action-id',
+    'action-0001'
+  );
+  const firstActionState = await readWorkbenchState(page);
+  expect(firstActionState).toMatchObject({
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    runtimeDetailActionId: 'action-0001',
+    contributionActionId: 'action-0001',
+    navigationCount: '3',
+    navigationIndex: '0',
+    hpContributionActive: 'true',
+    selectedTimelineActionId: 'action-0001',
+    pageOverflowX: 0,
+  });
+  expect(firstActionState.statePointId).toBe(firstActionStatePointId);
+  expect(firstActionState.curveStatePointId).toBe(firstActionStatePointId);
+  expect(firstActionState.logStatePointId).toBe(firstActionStatePointId);
+  expect(firstActionState.hpContributionStatePointId).toBe(
+    firstActionStatePointId
+  );
+  await expect(firstActionResultRow).toHaveAttribute(
+    'data-result-location-status',
+    'selected-result'
+  );
+  await expect(firstActionResultRow).toHaveAttribute(
+    'data-selected-state-point-id',
+    firstActionStatePointId
+  );
   expect(browserIssues.filter(issue => !isExpectedBrowserIssue(issue))).toEqual(
     []
   );
@@ -185,6 +229,10 @@ async function readWorkbenchState(page) {
         '[data-testid="workbench-action-contribution-row"][data-track-key="enemyHpDamage"]',
         'data-active'
       ),
+      selectedTimelineActionId:
+        document
+          .querySelector('[data-testid="workbench-timeline-action"].selected')
+          ?.getAttribute('data-action-id') ?? '',
       pageOverflowX: Math.max(
         0,
         document.documentElement.scrollWidth - window.innerWidth

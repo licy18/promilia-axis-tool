@@ -11186,6 +11186,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：围绕动作列表/结果列表之间的快速定位补完整可见体验，优先确保多动作排轴中从结果列表点回任意动作时，时间轴、曲线、日志、详情和贡献拆分同时定位。
 
+### 2026-07-09：UI 主流程结果列表定位 - Result List Jump Smoke
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 扩展浏览器级 e2e，固定多动作排轴中从结果列表点回任意动作的快速定位路径。
+- 连续编辑并回看 `action-0003` 刷新结果后，用户可以直接点击结果列表里的 `action-0001`，页面会跳回首个动作的运行结果。
+- 跳回后，时间轴选中动作、资源曲线选中点、模拟日志导航、三值详情和 HP 贡献拆分都会同步到 `action-0001` 的 state point。
+- 本阶段只补齐 UI 主流程结果列表定位回归，不改变运行时输出、三值结果、公式、证据字段或数据结构。
+
+当前验证事实：
+
+- 扩展 `e2e/workbench-continuous-edit.spec.js` 中的 `keeps the continuous edit result loop synced in the browser`。
+- e2e 覆盖：`action-0001 -> 新增 action-0002 -> 复制 action-0003 -> 编辑并回看 action-0003 刷新结果 -> 点击结果列表 action-0001 -> 时间轴/曲线/日志/详情/贡献拆分同步回 action-0001`。
+
+验收结果：
+
+- `npm run test:e2e`：通过，1 条浏览器级烟测。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "keeps the result loop usable"`：通过，1 条目标组件回归。
+- `npx prettier --check e2e/workbench-continuous-edit.spec.js`：通过。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：在结果列表定位已可用的基础上，优先完善动作列表/时间轴到结果列表的反向定位体验，让用户从编辑态选择某个动作后也能清楚回到对应运行结果。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
