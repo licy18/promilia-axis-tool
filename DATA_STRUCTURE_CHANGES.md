@@ -22466,3 +22466,74 @@ data-runtime-output-navigation-synced
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `npx prettier --check PROJECT_MANUAL.md src/features/workbench/workbenchFlowModel.js src/features/workbench/WorkbenchFlowPanel.vue src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js e2e/workbench-continuous-edit.spec.js`：通过。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 314. 生成层 generation input 一等输出：Generation Input Output Member
+
+### 314.1 结构变化
+
+`createActionHitThreeValueDeltaGeneration()` 新增：
+
+```text
+generationInput
+summary.inputPointCount
+summary.inputAppliedPointCount
+summary.inputCandidatePointCount
+summary.inputSampledPointCount
+summary.inputPlaceholderPointCount
+```
+
+`createThreeValueGenerationBundle()` 新增：
+
+```text
+generationInput
+summary.generationInputSourceKind
+summary.generationInputStatus
+summary.generationInputPointCount
+```
+
+`generationOutputs` 新增一等输出成员：
+
+```text
+generationInput
+outputs.generationInput
+outputNames += generationInput
+summary.generationInputSourceKind
+summary.generationInputStatus
+summary.generationInputPointCount
+summary.generationInputAppliedPointCount
+summary.generationInputCandidatePointCount
+summary.generationInputSampledPointCount
+summary.generationInputPlaceholderPointCount
+```
+
+因此 `generationOutputs.summary.outputCount` 从 `6` 增加为 `7`。新增输出成员与既有 `standardContract`、`runtimeInputSource` 指向同一条生成链路；三值结果、runtime applied delta 和保存数据不变。
+
+`createWorkbenchFlowContractContext().generationEntry` 新增：
+
+```text
+generationInputSourceKind
+generationInputStatus
+generationInputPointCount
+generationInputAppliedPointCount
+generationInputCandidatePointCount
+generationInputSampledPointCount
+generationInputPlaceholderPointCount
+```
+
+### 314.2 保存与迁移
+
+不新增项目草稿字段，不改变导入导出 schema，不需要数据迁移。
+
+本阶段只把已有 `threeValueGenerationLayer.generationInput` 暴露为生成层标准输出成员，便于后续真实倍率、削韧、充能接入时追踪输入来源；不改变公式、倍率、证据字段或 runtime 数值。
+
+### 314.3 验证
+
+- `actionHitThreeValueDeltaGeneration.test.js` 覆盖 generation entry 暴露 `generationInput` 引用和输入点数摘要。
+- `threeValueGenerationBuilder.test.js` 覆盖 generation bundle / generation outputs 的 `generationInput` 一等输出、outputCount=7 和输入来源摘要。
+- `firstVerticalSliceSimulation.test.js` 覆盖真实纵切结果中的 generation input 输出、16 个输入点和 summary 同步。
+- `workbenchFlowContractContext.test.js` 覆盖 Workbench 主流程合同可读取 generation input 来源和点数摘要。
+- `npm run test -- --run src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js`：通过，4 个测试文件、17 条测试。
+- `npm run test -- --run`：通过，39 个测试文件、273 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/simulation/generation/actionHitThreeValueDeltaGeneration.js src/simulation/generation/threeValueGenerationBuilder.js src/features/workbench/workbenchFlowContractContext.js src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。

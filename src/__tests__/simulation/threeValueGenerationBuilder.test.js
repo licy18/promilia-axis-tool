@@ -85,9 +85,13 @@ describe('three value generation builder', () => {
         standardContractStatus: 'action-hit-three-value-delta-contract-ready',
         runtimeInputSourceKind:
           'azpr-runtime-input-source-from-generation-builder',
+        generationInputSourceKind:
+          'azpr-action-hit-three-value-delta-generation-input',
+        generationInputStatus: 'three-value-delta-generation-input-ready',
+        generationInputPointCount: 3,
         generationOutputsSourceKind: 'azpr-three-value-generation-outputs',
         generationOutputsStatus: 'generation-outputs-ready',
-        generationOutputsOutputCount: 6,
+        generationOutputsOutputCount: 7,
         actionCount: 1,
         hitCount: 3,
         deltaCount: 3,
@@ -139,6 +143,7 @@ describe('three value generation builder', () => {
       status: 'generation-outputs-ready',
       contractName: 'Action -> Hit -> ThreeValueDelta',
       outputNames: [
+        'generationInput',
         'standardContract',
         'actions',
         'hits',
@@ -150,17 +155,24 @@ describe('three value generation builder', () => {
         runtimeInput: 'runtimeInputSource',
       },
       summary: {
-        outputCount: 6,
+        outputCount: 7,
         actionCount: 1,
         hitCount: 3,
         deltaCount: 3,
         appliedDeltaCount: 1,
+        generationInputSourceKind:
+          'azpr-action-hit-three-value-delta-generation-input',
+        generationInputStatus: 'three-value-delta-generation-input-ready',
+        generationInputPointCount: 3,
+        generationInputAppliedPointCount: 1,
+        generationInputCandidatePointCount: 1,
+        generationInputPlaceholderPointCount: 1,
         runtimeInputSourceKind:
           'azpr-runtime-input-source-from-generation-builder',
         runtimeInputSourceStatus: 'runtime-input-source-ready',
       },
       outputSummary: {
-        outputCount: 6,
+        outputCount: 7,
         actionCount: 1,
         hitCount: 3,
         deltaCount: 3,
@@ -169,6 +181,15 @@ describe('three value generation builder', () => {
     });
     expect(bundle.generationOutputs.standardContract).toBe(
       bundle.standardContract
+    );
+    expect(bundle.generationInput).toBe(
+      bundle.actionHitThreeValueDeltaGeneration.generationInput
+    );
+    expect(bundle.generationOutputs.generationInput).toBe(
+      bundle.generationInput
+    );
+    expect(bundle.generationOutputs.outputs.generationInput).toBe(
+      bundle.generationInput
     );
     expect(bundle.generationOutputs.runtimeInputSource).toBe(
       bundle.runtimeInputSource

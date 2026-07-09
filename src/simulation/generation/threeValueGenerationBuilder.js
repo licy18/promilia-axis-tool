@@ -21,12 +21,17 @@ export function createThreeValueGenerationBundle({
   const standardContract =
     actionHitThreeValueDeltaGeneration.standardContract ??
     createFallbackStandardContract(threeValueGenerationLayer);
+  const generationInput =
+    actionHitThreeValueDeltaGeneration.generationInput ??
+    threeValueGenerationLayer.generationInput ??
+    null;
   const runtimeInputSource = createRuntimeInputSource({
     standardContract,
     threeValueGenerationLayer,
     actionHitThreeValueDeltaGeneration,
   });
   const generationOutputs = createThreeValueGenerationOutputs({
+    generationInput,
     standardContract,
     runtimeInputSource,
     threeValueGenerationLayer,
@@ -36,6 +41,7 @@ export function createThreeValueGenerationBundle({
     standardContract,
     threeValueGenerationLayer,
     actionHitThreeValueDeltaGeneration,
+    generationInput,
     runtimeInputSource,
     generationOutputs,
   });
@@ -50,6 +56,7 @@ export function createThreeValueGenerationBundle({
     contractName: standardContract.name,
     actionHitThreeValueDeltaGeneration,
     threeValueGenerationLayer,
+    generationInput,
     standardContract,
     runtimeInputSource,
     generationOutputs,
@@ -62,12 +69,14 @@ export function createThreeValueGenerationBundle({
 }
 
 function createThreeValueGenerationOutputs({
+  generationInput,
   standardContract,
   runtimeInputSource,
   threeValueGenerationLayer,
   actionHitThreeValueDeltaGeneration,
 }) {
   const outputs = {
+    generationInput,
     standardContract,
     actions: standardContract.actions,
     hits: standardContract.hits,
@@ -86,6 +95,17 @@ function createThreeValueGenerationOutputs({
     placeholderDeltaCount: standardContract.summary?.placeholderDeltaCount ?? 0,
     runtimeInputSourceKind: runtimeInputSource.sourceKind,
     runtimeInputSourceStatus: runtimeInputSource.status,
+    generationInputSourceKind: generationInput?.sourceKind ?? '',
+    generationInputStatus: generationInput?.status ?? '',
+    generationInputPointCount: generationInput?.summary?.pointCount ?? 0,
+    generationInputAppliedPointCount:
+      generationInput?.summary?.appliedPointCount ?? 0,
+    generationInputCandidatePointCount:
+      generationInput?.summary?.candidatePointCount ?? 0,
+    generationInputSampledPointCount:
+      generationInput?.summary?.sampledPointCount ?? 0,
+    generationInputPlaceholderPointCount:
+      generationInput?.summary?.placeholderPointCount ?? 0,
     runtimeDeltaPolicy: standardContract.runtimeDeltaPolicy,
     applied: false,
   };
@@ -108,6 +128,7 @@ function createThreeValueGenerationOutputs({
     outputAliases: {
       runtimeInput: 'runtimeInputSource',
     },
+    generationInput,
     standardContract,
     actions: standardContract.actions,
     hits: standardContract.hits,
@@ -158,6 +179,7 @@ function createThreeValueGenerationBundleSummary({
   standardContract,
   threeValueGenerationLayer,
   actionHitThreeValueDeltaGeneration,
+  generationInput,
   runtimeInputSource,
   generationOutputs,
 }) {
@@ -169,6 +191,9 @@ function createThreeValueGenerationBundleSummary({
     generationLayerSourceKind: threeValueGenerationLayer.sourceKind,
     standardContractStatus: standardContract.status,
     standardContractSourceKind: standardContract.sourceKind,
+    generationInputSourceKind: generationInput?.sourceKind ?? '',
+    generationInputStatus: generationInput?.status ?? '',
+    generationInputPointCount: generationInput?.summary?.pointCount ?? 0,
     runtimeInputSourceKind: runtimeInputSource.sourceKind,
     runtimeInputSourceStatus: runtimeInputSource.status,
     generationOutputsSourceKind: generationOutputs.sourceKind,

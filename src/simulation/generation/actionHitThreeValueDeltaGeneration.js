@@ -17,11 +17,13 @@ export function createActionHitThreeValueDeltaGeneration({
     runtimeSampleContext,
     stateCurves,
   });
+  const generationInput = threeValueGenerationLayer.generationInput ?? null;
   const standardContract =
     threeValueGenerationLayer.standardContract ??
     createFallbackActionHitThreeValueDeltaContract(threeValueGenerationLayer);
   const summary = createActionHitThreeValueDeltaGenerationSummary({
     threeValueGenerationLayer,
+    generationInput,
     standardContract,
   });
 
@@ -36,6 +38,7 @@ export function createActionHitThreeValueDeltaGeneration({
     inputSourceKind: threeValueGenerationLayer.inputSourceKind,
     inputStatus: threeValueGenerationLayer.inputStatus,
     inputSources: threeValueGenerationLayer.inputSources ?? [],
+    generationInput,
     threeValueGenerationLayer,
     standardContract,
     actions: standardContract.actions ?? [],
@@ -48,6 +51,7 @@ export function createActionHitThreeValueDeltaGeneration({
 
 function createActionHitThreeValueDeltaGenerationSummary({
   threeValueGenerationLayer,
+  generationInput,
   standardContract,
 }) {
   return {
@@ -58,11 +62,14 @@ function createActionHitThreeValueDeltaGenerationSummary({
     standardContractStatus: standardContract.status,
     inputSourceKind: threeValueGenerationLayer.inputSourceKind,
     inputStatus: threeValueGenerationLayer.inputStatus,
-    topology: standardContract.topology ?? [
-      'Action',
-      'Hit',
-      'ThreeValueDelta',
-    ],
+    inputPointCount: generationInput?.summary?.pointCount ?? 0,
+    inputAppliedPointCount: generationInput?.summary?.appliedPointCount ?? 0,
+    inputCandidatePointCount:
+      generationInput?.summary?.candidatePointCount ?? 0,
+    inputSampledPointCount: generationInput?.summary?.sampledPointCount ?? 0,
+    inputPlaceholderPointCount:
+      generationInput?.summary?.placeholderPointCount ?? 0,
+    topology: standardContract.topology ?? ['Action', 'Hit', 'ThreeValueDelta'],
     deltaFields: standardContract.deltaFields ?? [],
     runtimeDeltaPolicy: standardContract.runtimeDeltaPolicy ?? null,
     actionCount: standardContract.summary?.actionCount ?? 0,

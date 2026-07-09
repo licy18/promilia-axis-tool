@@ -7,6 +7,13 @@ export function createWorkbenchFlowContractContext({
   const legacyGenerationEntry =
     generationBundle?.actionHitThreeValueDeltaGeneration ?? null;
   const generationEntry = generationOutputs ?? legacyGenerationEntry;
+  const generationInput =
+    generationOutputs?.generationInput ??
+    generationOutputs?.outputs?.generationInput ??
+    generationBundle?.generationInput ??
+    legacyGenerationEntry?.generationInput ??
+    legacyGenerationEntry?.threeValueGenerationLayer?.generationInput ??
+    null;
   const standardContract =
     generationOutputs?.standardContract ??
     generationOutputs?.outputs?.standardContract ??
@@ -45,6 +52,25 @@ export function createWorkbenchFlowContractContext({
       readyStatus: generationOutputs
         ? 'generation-outputs-ready'
         : 'action-hit-three-value-delta-generation-ready',
+      extra: {
+        generationInputSourceKind: generationInput?.sourceKind ?? '',
+        generationInputStatus: generationInput?.status ?? '',
+        generationInputPointCount: numberOrZero(
+          generationInput?.summary?.pointCount
+        ),
+        generationInputAppliedPointCount: numberOrZero(
+          generationInput?.summary?.appliedPointCount
+        ),
+        generationInputCandidatePointCount: numberOrZero(
+          generationInput?.summary?.candidatePointCount
+        ),
+        generationInputSampledPointCount: numberOrZero(
+          generationInput?.summary?.sampledPointCount
+        ),
+        generationInputPlaceholderPointCount: numberOrZero(
+          generationInput?.summary?.placeholderPointCount
+        ),
+      },
     }),
     standardContract: createFlowSourceState({
       sourceKind: standardContract?.sourceKind,
@@ -117,6 +143,7 @@ function createFlowSourceState({
   status = '',
   summary = {},
   readyStatus = '',
+  extra = {},
 } = {}) {
   return {
     sourceKind: sourceKind ?? '',
@@ -126,6 +153,7 @@ function createFlowSourceState({
     deltaCount: numberOrZero(summary?.deltaCount),
     appliedDeltaCount: numberOrZero(summary?.appliedDeltaCount),
     ready: readyStatus ? status === readyStatus : isReadyStatus(status),
+    ...extra,
   };
 }
 

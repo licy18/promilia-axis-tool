@@ -9,6 +9,17 @@ describe('workbench flow contract context', () => {
         generationOutputs: {
           sourceKind: 'azpr-three-value-generation-outputs',
           status: 'generation-outputs-ready',
+          generationInput: {
+            sourceKind: 'azpr-action-hit-three-value-delta-generation-input',
+            status: 'three-value-delta-generation-input-ready',
+            summary: {
+              pointCount: 4,
+              appliedPointCount: 1,
+              candidatePointCount: 2,
+              sampledPointCount: 1,
+              placeholderPointCount: 0,
+            },
+          },
           outputSummary: {
             actionCount: 1,
             hitCount: 2,
@@ -119,6 +130,14 @@ describe('workbench flow contract context', () => {
         deltaCount: 3,
         appliedDeltaCount: 1,
         ready: true,
+        generationInputSourceKind:
+          'azpr-action-hit-three-value-delta-generation-input',
+        generationInputStatus: 'three-value-delta-generation-input-ready',
+        generationInputPointCount: 4,
+        generationInputAppliedPointCount: 1,
+        generationInputCandidatePointCount: 2,
+        generationInputSampledPointCount: 1,
+        generationInputPlaceholderPointCount: 0,
       },
       standardContract: {
         sourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
@@ -191,6 +210,13 @@ describe('workbench flow contract context', () => {
       deltaCount: 1,
       appliedDeltaCount: 1,
       ready: true,
+      generationInputSourceKind: '',
+      generationInputStatus: '',
+      generationInputPointCount: 0,
+      generationInputAppliedPointCount: 0,
+      generationInputCandidatePointCount: 0,
+      generationInputSampledPointCount: 0,
+      generationInputPlaceholderPointCount: 0,
     });
   });
 });

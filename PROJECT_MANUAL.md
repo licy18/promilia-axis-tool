@@ -12259,6 +12259,35 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议进入生成层能力块：整理 `Action -> Hit -> ThreeValueDelta` 的统一生成入口，让后续填真实倍率、削韧、充能数值时直接接入稳定合同；UI 主流程后续只做发现的成品体验缺口。
 
+### 2026-07-09：生成层能力块 - Generation Input 一等输出
+
+本阶段属于：生成层。
+
+完成的可用能力：
+
+- `Action -> Hit -> ThreeValueDelta` 生成入口现在显式暴露 `generationInput`，后续接入真实倍率、削韧、充能数值时可以从同一条生成链路追踪输入来源。
+- `generationOutputs` 把 `generationInput`、`standardContract`、actions、hits、deltas、runtime input source 放在同一个输出集合中；上层不需要反查 `threeValueGenerationLayer` 才能知道输入点数和来源状态。
+- Workbench 主流程合同上下文可以读取 generation input 来源和点数摘要，后续 UI/诊断能判断“输入已准备好、标准合同已生成、runtime 是否消费”这三层状态。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、保存数据、导入导出结构或 runtime applied delta。
+
+当前验证事实：
+
+- 默认纵切结果中 `generationOutputs.outputCount` 从 6 增加到 7，新增成员为 `generationInput`；真实样例 generation input 点数为 16，仍输出 1 个 applied delta 和 15 个 candidate delta。
+- generation bundle / generation outputs / Workbench contract context 均能读取 `generationInputSourceKind`、`generationInputStatus`、`generationInputPointCount`。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `314. 生成层 generation input 一等输出`。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js`：通过，4 个测试文件、17 条测试。
+- `npm run test -- --run`：通过，39 个测试文件、273 条测试。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/simulation/generation/actionHitThreeValueDeltaGeneration.js src/simulation/generation/threeValueGenerationBuilder.js src/features/workbench/workbenchFlowContractContext.js src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 建议继续生成层能力块：把 `generationInput -> standardContract -> runtimeInputSource` 的来源链路进一步做成可校验 summary，明确 applied/candidate/sampled/placeholder 各层进入 runtime 前的筛选原因；或转入运行时层，确认 runtime outputs 完全由该链路派生。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

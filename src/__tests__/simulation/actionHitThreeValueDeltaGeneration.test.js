@@ -55,6 +55,13 @@ describe('Action -> Hit -> ThreeValueDelta generation entry', () => {
         standardContractSourceKind:
           'azpr-action-hit-three-value-delta-standard-contract',
         standardContractStatus: 'action-hit-three-value-delta-contract-ready',
+        inputSourceKind: 'azpr-action-hit-three-value-delta-generation-input',
+        inputStatus: 'three-value-delta-generation-input-ready',
+        inputPointCount: 3,
+        inputAppliedPointCount: 1,
+        inputCandidatePointCount: 0,
+        inputSampledPointCount: 0,
+        inputPlaceholderPointCount: 2,
         topology: ['Action', 'Hit', 'ThreeValueDelta'],
         deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
         runtimeDeltaPolicy: 'runtime consumes only deltas with applied=true',
@@ -67,6 +74,18 @@ describe('Action -> Hit -> ThreeValueDelta generation entry', () => {
     expect(generation.standardContract).toBe(
       generation.threeValueGenerationLayer.standardContract
     );
+    expect(generation.generationInput).toBe(
+      generation.threeValueGenerationLayer.generationInput
+    );
+    expect(generation.generationInput).toMatchObject({
+      sourceKind: 'azpr-action-hit-three-value-delta-generation-input',
+      status: 'three-value-delta-generation-input-ready',
+      summary: {
+        pointCount: 3,
+        appliedPointCount: 1,
+        placeholderPointCount: 2,
+      },
+    });
     expect(generation.actions).toBe(generation.standardContract.actions);
     expect(generation.hits).toBe(generation.standardContract.hits);
     expect(generation.deltas).toBe(generation.standardContract.deltas);
