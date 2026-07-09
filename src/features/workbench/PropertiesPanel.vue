@@ -450,7 +450,7 @@ import { Aim, Operation } from '@element-plus/icons-vue';
 import { WORKBENCH_FRAME_MS, formatFrameTime } from '../../domain/timebase';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import { resolveWorkbenchMainFlowResultReturnTarget } from './workbenchFlowModel';
-import { createWorkbenchRuntimeReviewPanelCommandView } from './workbenchMainFlowActions';
+import { createWorkbenchRuntimeReviewPanelCommandViewFromSurface } from './workbenchMainFlowActions';
 
 const props = defineProps({
   selection: {
@@ -689,7 +689,9 @@ const runtimeResultReturnContext = computed(() =>
   })
 );
 const runtimeResultReturnCommandView = computed(() =>
-  createRuntimeReviewPanelCommandViewFromSurface({
+  createWorkbenchRuntimeReviewPanelCommandViewFromSurface({
+    mainFlowCommandSurface: props.mainFlowCommandSurface,
+    flowModel: props.flowModel,
     source: 'properties-panel',
     returnContext: runtimeResultReturnContext.value,
   })
@@ -876,18 +878,6 @@ function createRuntimeResultReturnDisplayContext({ context, target } = {}) {
     label: target.label ?? context?.label ?? '回到结果点',
     summary: target.summary ?? context?.summary ?? '',
   };
-}
-
-function createRuntimeReviewPanelCommandViewFromSurface(options = {}) {
-  return (
-    props.mainFlowCommandSurface?.createRuntimeReviewPanelCommandView?.(
-      options
-    ) ??
-    createWorkbenchRuntimeReviewPanelCommandView({
-      flowModel: props.flowModel,
-      ...options,
-    })
-  );
 }
 
 function isEditFocusField(fieldKey) {

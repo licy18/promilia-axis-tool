@@ -330,8 +330,8 @@ import {
 } from './workbenchFlowModel';
 import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
-  createWorkbenchRuntimeReviewOperationCommand,
-  createWorkbenchRuntimeReviewPanelCommandView,
+  createWorkbenchRuntimeReviewOperationCommandFromSurface,
+  createWorkbenchRuntimeReviewPanelCommandViewFromSurface,
   createWorkbenchRuntimeSelectionFlowActionFromSurface,
 } from './workbenchMainFlowActions';
 import {
@@ -635,14 +635,18 @@ const runtimeLogActionFocus = computed(() =>
   })
 );
 const runtimeLogActionFocusSeedCommand = computed(() =>
-  createRuntimeReviewOperationCommandFromSurface({
+  createWorkbenchRuntimeReviewOperationCommandFromSurface({
+    mainFlowCommandSurface: props.mainFlowCommandSurface,
+    flowModel: props.flowModel,
     operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
     source: 'event-log-runtime-detail',
     target: runtimeLogActionFocus.value,
   })
 );
 const runtimeLogCommandView = computed(() =>
-  createRuntimeReviewPanelCommandViewFromSurface({
+  createWorkbenchRuntimeReviewPanelCommandViewFromSurface({
+    mainFlowCommandSurface: props.mainFlowCommandSurface,
+    flowModel: props.flowModel,
     source: 'event-log-runtime-detail',
     focusCommand: runtimeLogActionFocusSeedCommand.value,
     returnContext: runtimeLogResultReturnContext.value,
@@ -845,30 +849,6 @@ function dispatchRuntimeLogFlowAction(action) {
     return;
   }
   emit('dispatch-flow-action', action);
-}
-
-function createRuntimeReviewOperationCommandFromSurface(options = {}) {
-  return (
-    props.mainFlowCommandSurface?.createRuntimeReviewOperationCommand?.(
-      options
-    ) ??
-    createWorkbenchRuntimeReviewOperationCommand({
-      flowModel: props.flowModel,
-      ...options,
-    })
-  );
-}
-
-function createRuntimeReviewPanelCommandViewFromSurface(options = {}) {
-  return (
-    props.mainFlowCommandSurface?.createRuntimeReviewPanelCommandView?.(
-      options
-    ) ??
-    createWorkbenchRuntimeReviewPanelCommandView({
-      flowModel: props.flowModel,
-      ...options,
-    })
-  );
 }
 
 function getRuntimeLogRowFlowAction(row) {

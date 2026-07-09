@@ -21459,3 +21459,56 @@ runtimeReviewPanelView
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、67 条测试。
 - `npm run test -- --run`：通过，37 个测试文件、246 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 294. UI 主流程能力块：Runtime Review Surface Helpers
+
+### 294.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`workbenchMainFlowActions` 新增共享 surface helper：
+
+```js
+createWorkbenchRuntimeReviewOperationCommandFromSurface(input)
+createWorkbenchRuntimeReviewPanelCommandViewFromSurface(input)
+```
+
+输入合同：
+
+```js
+{
+  mainFlowCommandSurface,
+  flowModel,
+  source,
+  operationKind,
+  target,
+  context,
+  focusTarget,
+  returnContext,
+  focusCommand,
+  returnCommand,
+}
+```
+
+解析规则：
+
+- 当 `mainFlowCommandSurface` 提供对应方法时，优先调用页面级 command surface。
+- 没有页面级 command surface 时，回退到 `createWorkbenchRuntimeReviewOperationCommand()` 或 `createWorkbenchRuntimeReviewPanelCommandView()`。
+- `mainFlowCommandSurface` 本身不会传入底层 options；其余字段保持原样传递，方便面板只声明 source / target / context。
+
+消费方变化：
+
+- `EventLogPanel` 改为通过共享 `createWorkbenchRuntimeReviewOperationCommandFromSurface()` 生成日志详情 focus seed command。
+- `EventLogPanel`、`ResourceMonitorPanel`、`RuntimeSelectedDetailPanel`、`PropertiesPanel` 改为通过共享 `createWorkbenchRuntimeReviewPanelCommandViewFromSurface()` 生成面板命令视图。
+- 各面板不再保留本地 `createRuntimeReviewPanelCommandViewFromSurface()` 包装函数，运行结果区和属性面板的“定位动作 / 回到结果点”入口统一消费同一个 helper。
+
+### 294.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程 command surface 的内部消费边界，不新增持久字段，不需要数据迁移。
+
+### 294.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖共享 `FromSurface` helper 优先消费页面级 surface 的路径。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、88 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、247 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

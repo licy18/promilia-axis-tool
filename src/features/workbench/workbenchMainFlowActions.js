@@ -391,6 +391,28 @@ export function createWorkbenchContributionPointFlowActionFromSurface(
   );
 }
 
+export function createWorkbenchRuntimeReviewOperationCommandFromSurface(
+  input = {}
+) {
+  const { mainFlowCommandSurface, options } =
+    createMainFlowSurfaceActionOptions(input);
+  return (
+    mainFlowCommandSurface?.createRuntimeReviewOperationCommand?.(options) ??
+    createWorkbenchRuntimeReviewOperationCommand(options)
+  );
+}
+
+export function createWorkbenchRuntimeReviewPanelCommandViewFromSurface(
+  input = {}
+) {
+  const { mainFlowCommandSurface, options } =
+    createMainFlowSurfaceActionOptions(input);
+  return (
+    mainFlowCommandSurface?.createRuntimeReviewPanelCommandView?.(options) ??
+    createWorkbenchRuntimeReviewPanelCommandView(options)
+  );
+}
+
 export function createWorkbenchMainFlowActionSurface({
   mainFlowCommandSurface = null,
 } = {}) {

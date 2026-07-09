@@ -13,9 +13,11 @@ import {
   createWorkbenchRuntimeActionEditCommand,
   createWorkbenchRuntimeActionEditFlowAction,
   createWorkbenchRuntimeReviewOperationCommand,
+  createWorkbenchRuntimeReviewOperationCommandFromSurface,
   createWorkbenchRuntimeReviewOperationConsumer,
   createWorkbenchRuntimeReviewOperationFlowAction,
   createWorkbenchRuntimeReviewPanelCommandView,
+  createWorkbenchRuntimeReviewPanelCommandViewFromSurface,
   createWorkbenchRuntimeReviewPrimaryOperationFlowAction,
   createWorkbenchRuntimeReviewPrimaryOperationCommand,
   createWorkbenchRuntimeReviewPrimaryOperationView,
@@ -768,6 +770,130 @@ describe('workbench main flow actions', () => {
         actionId: 'review-action',
         statePointId: 'review-state-point',
         canRun: true,
+      },
+    });
+  });
+
+  it('routes runtime review panel command helpers through the shared surface', () => {
+    const calls = [];
+    const mainFlowCommandSurface = {
+      createRuntimeReviewOperationCommand(options) {
+        calls.push({ type: 'operation', options });
+        return {
+          operationKind: options.operationKind,
+          source: options.source,
+          enabled: true,
+          actionId: 'surface-focus-action',
+          statePointId: 'surface-focus-state',
+          target: {
+            actionId: 'surface-focus-action',
+            statePointId: 'surface-focus-state',
+          },
+          context: {
+            actionId: 'surface-focus-action',
+            statePointId: 'surface-focus-state',
+          },
+          action: {
+            kind: 'focus-runtime-action',
+            source: options.source,
+            actionId: 'surface-focus-action',
+            statePointId: 'surface-focus-state',
+            canRun: true,
+          },
+        };
+      },
+      createRuntimeReviewPanelCommandView(options) {
+        calls.push({ type: 'panel', options });
+        return {
+          source: options.source,
+          focus: options.focusCommand,
+          returnResult: {
+            operationKind:
+              WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+            source: options.source,
+            enabled: true,
+            actionId: options.returnContext.actionId,
+            statePointId: options.returnContext.statePointId,
+            context: options.returnContext,
+            action: {
+              kind: 'return-runtime-result',
+              source: options.source,
+              actionId: options.returnContext.actionId,
+              statePointId: options.returnContext.statePointId,
+              canRun: true,
+            },
+          },
+          actions: {
+            focus: options.focusCommand.action,
+          },
+        };
+      },
+    };
+
+    const focusCommand = createWorkbenchRuntimeReviewOperationCommandFromSurface(
+      {
+        mainFlowCommandSurface,
+        flowModel: { ignoredBySurfaceHelper: true },
+        operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+        source: 'event-log-runtime-detail',
+        target: {
+          actionId: 'fallback-focus-action',
+          statePointId: 'fallback-focus-state',
+          canFocusAction: true,
+        },
+      }
+    );
+    const panelView = createWorkbenchRuntimeReviewPanelCommandViewFromSurface({
+      mainFlowCommandSurface,
+      flowModel: { ignoredBySurfaceHelper: true },
+      source: 'event-log-runtime-detail',
+      focusCommand,
+      returnContext: {
+        actionId: 'return-action',
+        statePointId: 'return-state',
+      },
+    });
+
+    expect(calls).toMatchObject([
+      {
+        type: 'operation',
+        options: {
+          source: 'event-log-runtime-detail',
+          operationKind:
+            WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
+        },
+      },
+      {
+        type: 'panel',
+        options: {
+          source: 'event-log-runtime-detail',
+          returnContext: {
+            actionId: 'return-action',
+            statePointId: 'return-state',
+          },
+        },
+      },
+    ]);
+    expect(focusCommand).toMatchObject({
+      actionId: 'surface-focus-action',
+      statePointId: 'surface-focus-state',
+      action: {
+        kind: 'focus-runtime-action',
+        canRun: true,
+      },
+    });
+    expect(panelView).toMatchObject({
+      source: 'event-log-runtime-detail',
+      focus: {
+        actionId: 'surface-focus-action',
+      },
+      returnResult: {
+        actionId: 'return-action',
+        statePointId: 'return-state',
+        action: {
+          kind: 'return-runtime-result',
+          canRun: true,
+        },
       },
     });
   });

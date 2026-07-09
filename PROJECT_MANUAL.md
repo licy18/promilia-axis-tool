@@ -10166,6 +10166,31 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把运行结果区的命令目标、选中详情和顶部 FlowPanel 的主流程状态进一步汇合，优先推进“选择结果 -> 定位动作 -> 修改 -> 回看结果”的完整闭环，而不是扩展局部提示文案。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Surface Helpers
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchMainFlowActions` 新增 runtime review operation command 和 panel command view 的 `FromSurface` 共享入口，统一处理“有页面级 command surface 时优先消费 surface、没有时回退本地 flow model”的分支。
+- `EventLogPanel`、`ResourceMonitorPanel`、`RuntimeSelectedDetailPanel`、`PropertiesPanel` 删除各自重复的 surface/fallback 包装，统一通过共享入口生成“定位动作 / 回到结果点”的可点击命令。
+- 本阶段只收束 UI 主流程 command surface 消费边界，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- main flow action 单测覆盖共享 `FromSurface` 入口优先走页面级 surface，并保持 fallback 入口可用。
+- Workbench 和三值详情面板测试确认结果查看、定位动作、回到结果点和属性面板回看入口保持可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、88 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、247 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查运行结果选择、属性修改和回看结果之间是否还存在页面层手动拼 action 的入口，优先把完整“选择结果 -> 定位动作 -> 修改 -> 回看结果”闭环继续收束到 command surface / flow runtime，而不是回到局部状态提示。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

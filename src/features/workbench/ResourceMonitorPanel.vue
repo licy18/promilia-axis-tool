@@ -367,7 +367,7 @@ import {
   resolveWorkbenchMainFlowActionEditTarget,
 } from './workbenchFlowModel';
 import {
-  createWorkbenchRuntimeReviewPanelCommandView,
+  createWorkbenchRuntimeReviewPanelCommandViewFromSurface,
   createWorkbenchRuntimeSelectionFlowActionFromSurface,
 } from './workbenchMainFlowActions';
 import { createRuntimeFocusSourceView } from './runtimeFocusSource';
@@ -593,7 +593,9 @@ const selectedRuntimeCurveActionEditCommand = computed(() =>
   selectedRuntimeCurveCommandView.value.focus
 );
 const selectedRuntimeCurveCommandView = computed(() =>
-  createRuntimeReviewPanelCommandViewFromSurface({
+  createWorkbenchRuntimeReviewPanelCommandViewFromSurface({
+    mainFlowCommandSurface: props.mainFlowCommandSurface,
+    flowModel: props.flowModel,
     source: 'resource-runtime-curve',
     focusTarget: getRuntimeCurveActionEditTarget(
       runtimeReviewPanelView.value,
@@ -645,18 +647,6 @@ function formatRuntimeStateMetric(metric) {
 
 function formatRuntimeActorEnergyState(actor) {
   return `${formatRuntimeStateMetric(actor.stateMetric)} · ${actor.pointCount}点`;
-}
-
-function createRuntimeReviewPanelCommandViewFromSurface(options = {}) {
-  return (
-    props.mainFlowCommandSurface?.createRuntimeReviewPanelCommandView?.(
-      options
-    ) ??
-    createWorkbenchRuntimeReviewPanelCommandView({
-      flowModel: props.flowModel,
-      ...options,
-    })
-  );
 }
 
 function createRuntimeCurveSourceSeries(

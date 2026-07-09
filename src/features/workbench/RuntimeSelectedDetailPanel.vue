@@ -234,7 +234,7 @@ import {
   createWorkbenchRuntimeReviewPanelView,
   resolveWorkbenchMainFlowActionEditTarget,
 } from './workbenchFlowModel';
-import { createWorkbenchRuntimeReviewPanelCommandView } from './workbenchMainFlowActions';
+import { createWorkbenchRuntimeReviewPanelCommandViewFromSurface } from './workbenchMainFlowActions';
 
 const props = defineProps({
   detail: {
@@ -303,7 +303,9 @@ const runtimeDetailResultReturnCommand = computed(() =>
   runtimeDetailCommandView.value.returnResult
 );
 const runtimeDetailCommandView = computed(() =>
-  createRuntimeReviewPanelCommandViewFromSurface({
+  createWorkbenchRuntimeReviewPanelCommandViewFromSurface({
+    mainFlowCommandSurface: props.mainFlowCommandSurface,
+    flowModel: props.flowModel,
     source: 'runtime-detail',
     focusTarget: runtimeDetailActionEditTarget.value,
     returnContext: runtimeDetailResultReturnContext.value,
@@ -359,18 +361,6 @@ function dispatchRuntimeDetailFlowAction(action) {
     return;
   }
   emit('dispatch-flow-action', action);
-}
-
-function createRuntimeReviewPanelCommandViewFromSurface(options = {}) {
-  return (
-    props.mainFlowCommandSurface?.createRuntimeReviewPanelCommandView?.(
-      options
-    ) ??
-    createWorkbenchRuntimeReviewPanelCommandView({
-      flowModel: props.flowModel,
-      ...options,
-    })
-  );
 }
 
 function formatDetailDelta(detail) {
