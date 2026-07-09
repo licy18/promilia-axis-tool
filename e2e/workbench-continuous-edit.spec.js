@@ -384,6 +384,71 @@ test('keeps runtime result flow usable after deleting the focused action', async
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps runtime result flow usable after deleting a generated action batch', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await seedGeneratedActionBatchDraft(page);
+  await page.goto('/#/workbench');
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'action-edit'
+  );
+  await expect(
+    page.getByTestId('workbench-action-batch-summary-count')
+  ).toHaveText('1');
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  const batchRuntimeState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(batchRuntimeState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expect(batchRuntimeState.statePointId).toContain('action-0002');
+  expectRuntimeStatePointSynced(
+    batchRuntimeState,
+    batchRuntimeState.statePointId
+  );
+
+  await page.getByTestId('workbench-summary-delete-action-batch').click();
+  await expect(
+    page.getByTestId('workbench-action-batch-summary-count')
+  ).toHaveText('0');
+  await expect(
+    page.locator('.action-item[data-batch-id="segment-batch-0001"]')
+  ).toHaveCount(0);
+
+  const fallbackState = await waitForRuntimeAction(page, 'action-0001');
+  expectRuntimeReviewState(fallbackState, {
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: true,
+  });
+  expect(fallbackState.statePointId).toContain('action-0001');
+  expect(fallbackState.statePointId).not.toBe(batchRuntimeState.statePointId);
+  expectRuntimeStatePointSynced(fallbackState, fallbackState.statePointId);
+
+  await focusRuntimeDetailAction(page);
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
+    actionId: 'action-0001',
+    frameValue: '18',
+    msValue: '300',
+    originStatePointId: fallbackState.statePointId,
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: true,
+  });
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps the edit result loop usable at a narrow viewport', async ({
   page,
 }) => {
@@ -485,6 +550,84 @@ async function createThreeActionRuntime(page) {
     insertedState,
     copiedState,
   };
+}
+
+async function seedGeneratedActionBatchDraft(page) {
+  await page.addInitScript(() => {
+    const generationBatch = {
+      batchId: 'segment-batch-0001',
+      source: 'skill-action-variant-split',
+      skillId: 10900101,
+      actorCharacterId: 109001,
+      level: 1,
+      variantCount: 2,
+      segmentCount: 2,
+      createdAt: '2026-07-09T00:00:00.000Z',
+    };
+    window.localStorage.setItem(
+      'promilia-axis-tool:workbench-draft:v1',
+      JSON.stringify({
+        schemaVersion: 1,
+        game: 'azur-promilia',
+        type: 'workbench-draft',
+        savedAt: '2026-07-09T00:00:00.000Z',
+        selection: {
+          characterId: 109001,
+          secondaryCharacterId: 101003,
+          skillId: 10900101,
+          enemyId: 300032,
+        },
+        enemyConfig: {
+          level: 80,
+          hpMultiplier: 1,
+          defenseMultiplier: 1,
+        },
+        segmentSplitOptions: {
+          intervalMs: 2000,
+          startAfterSelectedAction: false,
+          skipExistingSegments: false,
+        },
+        actionDrafts: [
+          {
+            id: 'action-0001',
+            type: 'skill',
+            skillId: 10900101,
+            actorCharacterId: 109001,
+            startMs: 0,
+            durationMs: 1000,
+            level: 1,
+            actionVariantIndex: 0,
+            damageSegmentIndex: 0,
+          },
+          {
+            id: 'action-0002',
+            type: 'skill',
+            skillId: 10900101,
+            actorCharacterId: 109001,
+            startMs: 1000,
+            durationMs: 1000,
+            level: 1,
+            actionVariantIndex: 1,
+            damageSegmentIndex: 1,
+            generationBatch,
+          },
+          {
+            id: 'action-0003',
+            type: 'skill',
+            skillId: 10900101,
+            actorCharacterId: 109001,
+            startMs: 2000,
+            durationMs: 1000,
+            level: 1,
+            actionVariantIndex: 2,
+            damageSegmentIndex: 2,
+            generationBatch,
+          },
+        ],
+        selectedActionId: 'action-0002',
+      })
+    );
+  });
 }
 
 async function focusRuntimeDetailAction(page) {
