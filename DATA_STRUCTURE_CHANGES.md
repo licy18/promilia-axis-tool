@@ -21668,3 +21668,94 @@ createWorkbenchActionMutationRuntimeSyncRequest({
 - `npm run test -- --run src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、71 条测试。
 - `npm run test -- --run`：通过，37 个测试文件、249 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 298. UI 主流程能力块：Action Edit Source Model
+
+### 298.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增 `workbenchActionEditSource` 模型入口：
+
+```js
+createWorkbenchActionEditSource({
+  actionId,
+  patch,
+  previousAction,
+  nextAction,
+  previousSource,
+  focus,
+  resolveSkillName,
+  resolveCharacterName,
+})
+```
+
+输出结构保持为既有 UI 主流程消费的 `actionEditSource`：
+
+```js
+{
+  actionId,
+  fieldKey,
+  label,
+  previousValue,
+  nextValue,
+  changeSummary,
+  editOrigin,
+  focusSource,
+  originLabel,
+  originStatePointId,
+  originTrackKey,
+  originFrameLabel,
+  sequence,
+}
+```
+
+新增 refreshed edit result context 入口：
+
+```js
+createWorkbenchActionEditResultContext({
+  source,
+  runtimeProjection,
+})
+```
+
+输出结构保持为既有面板消费的 `actionEditResultContext`：
+
+```js
+{
+  status: 'refreshed-edit-result',
+  actionId,
+  fieldKey,
+  label,
+  changeSummary,
+  originStatePointId,
+  focusSource,
+  originTrackKey,
+  originFrameLabel,
+  runtimeStatePointId,
+  runtimeTrackKey,
+}
+```
+
+解析规则：
+
+- 字段优先级和中文 label 从 Workbench 页面内移入共享模型。
+- `laneId` 仍通过动作的 `actorCharacterId` 归一为角色变化，保持换轨编辑来源语义不变。
+- `damageSegmentIndex` 仍优先读取 `actionVariantIndex`，保持动作形态变化语义不变。
+- 当 `focus.editOrigin === 'runtime-focus'` 且 action 一致时，编辑来源携带原 runtime 点位和轨道；刷新结果时优先在同一 `originTrackKey` 中寻找新运行时点。
+
+消费方变化：
+
+- `Workbench.vue` 的普通字段编辑、timeline 调时/调长度/换轨继续调用本地 `recordActionEditSource()`，但该函数只委托共享模型生成 `actionEditSource`。
+- `Workbench.vue` 的 `actionEditResultContext` 改为委托 `createWorkbenchActionEditResultContext()`，页面层不再直接调用 runtime projection point 查找函数。
+
+### 298.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程中“动作编辑来源 -> 刷新后结果回看”的内部模型边界，不新增持久字段，不需要数据迁移。
+
+### 298.3 验证
+
+- 新增 `src/__tests__/features/workbenchActionEditSource.test.js`，覆盖时间字段变化、换轨角色名归一、runtime focus origin 透传、字段优先级、无效来源过滤和 preferred track 结果回看。
+- `npm run test -- --run src/__tests__/features/workbenchActionEditSource.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、63 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、255 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

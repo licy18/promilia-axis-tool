@@ -10267,6 +10267,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查普通动作字段编辑和 timeline 拖拽/调时后的结果回看是否还能进一步复用 action mutation / edit-result 两条主流程合同，避免 Workbench 页面层继续扩散编辑后状态同步逻辑。
 
+### 2026-07-09：UI 主流程能力块 - Action Edit Source Model
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `workbenchActionEditSource` 模型，把普通动作字段编辑、timeline 调时/调长度/换轨后的编辑来源统一生成为 `actionEditSource`。
+- `actionEditSource -> actionEditResultContext` 的结果回看定位改为共享模型处理，优先按原 runtime 轨道寻找刷新后的运行时结果点。
+- `Workbench.vue` 不再本地维护动作编辑来源字段优先级、变化摘要、runtime focus origin 和 refreshed edit result context 拼装，只保留技能名/角色名解析这类项目上下文。
+- 本阶段只收束 UI 主流程动作编辑后结果回看模型，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- 新增模型单测覆盖时间字段变化、换轨时的角色名归一、runtime focus origin 透传、字段优先级、无效来源过滤和 preferred track 结果回看。
+- Workbench 页面测试继续覆盖动作编辑、运行结果选择和回看相关主流程。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchActionEditSource.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、63 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、255 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续按大能力块推进：优先做 Workbench 主流程端到端检查，围绕“排轴动作编辑 -> 运行模拟 -> 资源曲线监控 -> 日志/详情查看 -> 回到动作修改”补主路径缺口；若进入底层，则回到生成层/运行时层的标准合同消费边界，不再拆局部状态提示阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

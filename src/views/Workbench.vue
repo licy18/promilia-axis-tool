@@ -434,6 +434,12 @@ import {
   createWorkbenchFlowRuntime,
 } from '../features/workbench/workbenchFlowRuntime';
 import {
+  createEmptyWorkbenchActionEditFocus,
+  createEmptyWorkbenchActionEditSource,
+  createWorkbenchActionEditResultContext,
+  createWorkbenchActionEditSource,
+} from '../features/workbench/workbenchActionEditSource';
+import {
   createWorkbenchMainFlowStatusView,
   createWorkbenchRuntimeReviewFlowView,
   createWorkbenchFlowModel,
@@ -442,10 +448,7 @@ import {
   createWorkbenchMainFlowActionSurface,
   createWorkbenchMainFlowCommandSurface,
 } from '../features/workbench/workbenchMainFlowActions';
-import {
-  createRuntimeStatePointContexts,
-  findFirstRuntimeStatePointForAction,
-} from '../features/workbench/runtimeProjectionPoints';
+import { createRuntimeStatePointContexts } from '../features/workbench/runtimeProjectionPoints';
 import {
   applyWorkbenchRuntimeViewPatch,
 } from '../features/workbench/workbenchRuntimeViewState';
@@ -474,7 +477,7 @@ import {
   normalizeWorkbenchSegmentSplitOptions,
   saveWorkbenchDraft,
 } from '../domain/workbenchDraftStorage';
-import { formatFrameTime, frameToMs } from '../domain/timebase';
+import { frameToMs } from '../domain/timebase';
 import { compileProject } from '../simulation/compiler/compileProject';
 import { simulateScenario } from '../simulation/engine/simulateScenario';
 
@@ -487,38 +490,6 @@ const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
   sampled: false,
   placeholder: false,
 };
-const ACTION_EDIT_SOURCE_LABELS = {
-  startMs: '开始时间变更',
-  level: '等级变更',
-  actionVariantIndex: '动作形态变更',
-  damageSegmentIndex: '动作形态变更',
-  durationMs: '时长变更',
-  actorCharacterId: '动作归属变更',
-  skillId: '技能变更',
-  laneId: '轨道变更',
-  change: '资源变化变更',
-  eventType: '敌人事件变更',
-  targetCharacterId: '切换目标变更',
-  resource: '资源类型变更',
-  reason: '资源原因变更',
-  note: '备注变更',
-};
-const ACTION_EDIT_SOURCE_PRIORITY = [
-  'startMs',
-  'level',
-  'actionVariantIndex',
-  'damageSegmentIndex',
-  'durationMs',
-  'actorCharacterId',
-  'skillId',
-  'laneId',
-  'change',
-  'eventType',
-  'targetCharacterId',
-  'resource',
-  'reason',
-  'note',
-];
 const AUTO_DELAY_NOTE_PATTERN =
   /^自动推迟：同轨已有动作占用，已从 \d+(?:\.\d+)?ms 调整到 \d+(?:\.\d+)?ms。$/;
 const initialDraft = createDefaultWorkbenchDraftState();
@@ -537,8 +508,8 @@ const calculatorDiagnosticFocus = ref({ scope: '', sequence: 0 });
 const runtimeLogFocus = ref({ source: '', statePointId: '', sequence: 0 });
 const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const draftStatus = ref('未保存草稿');
-const actionEditSource = ref(createEmptyActionEditSource());
-const actionEditFocus = ref(createEmptyActionEditFocus());
+const actionEditSource = ref(createEmptyWorkbenchActionEditSource());
+const actionEditFocus = ref(createEmptyWorkbenchActionEditFocus());
 const workbenchFlowDispatchState = ref(createEmptyWorkbenchFlowDispatchState());
 const workbenchFlowPlanController = createWorkbenchFlowPlanController({
   getRuntimeProjection: () =>
@@ -607,7 +578,7 @@ const runtimeOverviewActive = computed(
     !selectedStateCurvePointId.value
 );
 const actionEditResultContext = computed(() =>
-  createActionEditResultContext({
+  createWorkbenchActionEditResultContext({
     source: actionEditSource.value,
     runtimeProjection: simulationResult.value.threeValueRuntimeProjection,
   })
@@ -1367,41 +1338,6 @@ function markDraftDirty() {
   draftStatus.value = '有未保存改动';
 }
 
-function createEmptyActionEditSource(sequence = 0) {
-  return {
-    actionId: '',
-    fieldKey: '',
-    label: '',
-    previousValue: '',
-    nextValue: '',
-    changeSummary: '',
-    editOrigin: '',
-    focusSource: '',
-    originLabel: '',
-    originStatePointId: '',
-    originTrackKey: '',
-    originFrameLabel: '',
-    sequence,
-  };
-}
-
-function createEmptyActionEditFocus(sequence = 0) {
-  return {
-    actionId: '',
-    fieldKey: '',
-    label: '',
-    previousValue: '',
-    nextValue: '',
-    changeSummary: '',
-    editOrigin: '',
-    focusSource: '',
-    originStatePointId: '',
-    originTrackKey: '',
-    originFrameLabel: '',
-    sequence,
-  };
-}
-
 function createEmptyWorkbenchFlowDispatchState(sequence = 0) {
   return {
     sequence,
@@ -1430,13 +1366,13 @@ function createWorkbenchFlowDispatchState({ result, previousState } = {}) {
 }
 
 function clearActionEditSource() {
-  actionEditSource.value = createEmptyActionEditSource(
+  actionEditSource.value = createEmptyWorkbenchActionEditSource(
     actionEditSource.value.sequence + 1
   );
 }
 
 function clearActionEditFocus() {
-  actionEditFocus.value = createEmptyActionEditFocus(
+  actionEditFocus.value = createEmptyWorkbenchActionEditFocus(
     actionEditFocus.value.sequence + 1
   );
 }
@@ -1446,164 +1382,25 @@ function recordActionEditSource(
   patch = {},
   { previousAction = null, nextAction = null } = {}
 ) {
-  const fieldKey = resolveActionEditSourceField(patch);
-  if (!actionId || !fieldKey) {
-    return;
-  }
-  const change = createActionEditSourceChange({
-    fieldKey,
+  const nextSource = createWorkbenchActionEditSource({
+    actionId,
+    patch,
     previousAction,
     nextAction,
+    previousSource: actionEditSource.value,
+    focus: actionEditFocus.value,
+    resolveSkillName: resolveActionEditSkillName,
+    resolveCharacterName: resolveActionEditCharacterName,
   });
+  if (!nextSource) {
+    return;
+  }
 
-  actionEditSource.value = {
-    actionId,
-    fieldKey,
-    label: ACTION_EDIT_SOURCE_LABELS[fieldKey] ?? `${fieldKey}变更`,
-    ...change,
-    ...createActionEditOrigin(actionId),
-    sequence: actionEditSource.value.sequence + 1,
-  };
+  actionEditSource.value = nextSource;
 }
 
-function createActionEditOrigin(actionId) {
-  const focus = actionEditFocus.value;
-  if (
-    !actionId ||
-    !focus?.actionId ||
-    focus.actionId !== actionId ||
-    focus.editOrigin !== 'runtime-focus'
-  ) {
-    return {
-      editOrigin: '',
-      focusSource: '',
-      originLabel: '',
-      originStatePointId: '',
-      originTrackKey: '',
-      originFrameLabel: '',
-    };
-  }
-  return {
-    editOrigin: focus.editOrigin,
-    focusSource: focus.focusSource ?? '',
-    originLabel: '来自结果定位',
-    originStatePointId: focus.originStatePointId ?? '',
-    originTrackKey: focus.originTrackKey ?? '',
-    originFrameLabel: focus.originFrameLabel ?? '',
-  };
-}
-
-function createActionEditResultContext({
-  source = {},
-  runtimeProjection = null,
-} = {}) {
-  if (!source?.actionId) {
-    return null;
-  }
-  const resultPoint = findFirstRuntimeStatePointForAction(
-    runtimeProjection,
-    source.actionId,
-    {
-      preferredTrackKey: source.originTrackKey ?? '',
-    }
-  );
-  if (!resultPoint?.statePointId) {
-    return null;
-  }
-  return {
-    status: 'refreshed-edit-result',
-    actionId: source.actionId,
-    fieldKey: source.fieldKey ?? '',
-    label: source.label ?? '',
-    changeSummary: source.changeSummary ?? '',
-    originStatePointId: source.originStatePointId ?? '',
-    focusSource: source.focusSource ?? '',
-    originTrackKey: source.originTrackKey ?? '',
-    originFrameLabel: source.originFrameLabel ?? '',
-    runtimeStatePointId: resultPoint.statePointId,
-    runtimeTrackKey:
-      resultPoint.row?.trackKey ?? resultPoint.point?.trackKey ?? '',
-  };
-}
-
-function resolveActionEditSourceField(patch = {}) {
-  return ACTION_EDIT_SOURCE_PRIORITY.find(fieldKey =>
-    Object.prototype.hasOwnProperty.call(patch, fieldKey)
-  );
-}
-
-function createActionEditSourceChange({
-  fieldKey,
-  previousAction = null,
-  nextAction = null,
-}) {
-  const previousValue = formatActionEditSourceValue(
-    fieldKey,
-    getActionEditSourceRawValue(previousAction, fieldKey)
-  );
-  const nextValue = formatActionEditSourceValue(
-    fieldKey,
-    getActionEditSourceRawValue(nextAction, fieldKey)
-  );
-  return {
-    previousValue,
-    nextValue,
-    changeSummary: formatActionEditSourceChangeSummary(
-      previousValue,
-      nextValue
-    ),
-  };
-}
-
-function getActionEditSourceRawValue(action, fieldKey) {
-  if (!action) {
-    return null;
-  }
-  if (fieldKey === 'laneId') {
-    return action.actorCharacterId;
-  }
-  if (fieldKey === 'damageSegmentIndex') {
-    return action.actionVariantIndex ?? action.damageSegmentIndex;
-  }
-  return action[fieldKey];
-}
-
-function formatActionEditSourceValue(fieldKey, value) {
-  if (value == null || value === '') {
-    return '空';
-  }
-  if (fieldKey === 'startMs' || fieldKey === 'durationMs') {
-    return formatFrameTime(value);
-  }
-  if (fieldKey === 'skillId') {
-    return findSkillById(value)?.name ?? String(value);
-  }
-  if (
-    fieldKey === 'actorCharacterId' ||
-    fieldKey === 'laneId' ||
-    fieldKey === 'targetCharacterId'
-  ) {
-    return resolveActionEditCharacterName(value);
-  }
-  if (fieldKey === 'change') {
-    return formatSignedNumber(value);
-  }
-  return String(value);
-}
-
-function formatActionEditSourceChangeSummary(previousValue, nextValue) {
-  if (!previousValue && !nextValue) {
-    return '';
-  }
-  if (previousValue === nextValue) {
-    return previousValue;
-  }
-  return `${previousValue || '空'} -> ${nextValue || '空'}`;
-}
-
-function formatSignedNumber(value) {
-  const number = Number(value) || 0;
-  return `${number > 0 ? '+' : ''}${number}`;
+function resolveActionEditSkillName(skillId) {
+  return findSkillById(skillId)?.name ?? String(skillId);
 }
 
 function resolveActionEditCharacterName(characterId) {
