@@ -9798,6 +9798,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：做 Workbench 端到端主流程闭环检查，围绕“排轴动作编辑 -> 运行模拟 -> 曲线/日志/详情查看 -> 回到动作修改”补齐真正影响完整体验的入口和状态边界，不再拆小标签阶段。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Context Consumers
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `runtimeReviewContextView` 增加对 `mainFlowSelection` 的兼容读取，运行结果上下文可以覆盖完整主流程选择源，而不只依赖 runtime review selection。
+- `TimelineGridPreview` 与 `AnalysisPanel` 改为通过共享 context view 读取当前运行/状态曲线选中点，和资源曲线、日志、详情面板使用同一套选中状态入口。
+- 候选点选择、运行点选择、日志选择、资源曲线选择继续保持原行为，但主流程中的“当前结果点”读取边界更集中，减少后续完整编辑闭环里的分叉。
+- 本阶段只调整 UI 主流程状态消费边界，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- flow model 单测覆盖 context view 从 `runtimeReviewSelection`、`mainFlowSelection` 和独立 `selectedStateCurvePointId` 读取的兼容路径。
+- TimelineGridPreview 与 Workbench 页面测试确认主流程选择优先级、候选点选择和运行结果联动保持可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/TimelineGridPreview.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、68 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、227 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 Workbench 主流程中“动作修改后回到结果点”的端到端状态恢复，优先收束 dispatch/result-return/runtime-log focus 的页面级边界，而不是继续扩展提示细节。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

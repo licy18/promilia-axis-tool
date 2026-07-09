@@ -557,6 +557,7 @@ import {
 import {
   createWorkbenchRuntimeStatePointFlowActionFromSurface,
 } from './workbenchMainFlowActions';
+import { createWorkbenchRuntimeReviewContextView } from './workbenchFlowModel';
 
 const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
@@ -824,16 +825,22 @@ const candidateActionOptions = computed(() =>
     })
 );
 const flowSelection = computed(() => props.flowModel?.mainFlowSelection ?? null);
+const runtimeReviewContextView = computed(
+  () =>
+    props.flowModel?.runtimeReviewContextView ??
+    createWorkbenchRuntimeReviewContextView({
+      flowModel: props.flowModel,
+      selectedStateCurvePointId: props.selectedStateCurvePointId,
+    })
+);
 const flowSelectedActionId = computed(
   () => flowSelection.value?.selectedActionId ?? props.selectedActionId
 );
 const flowSelectedStateCurvePointId = computed(
-  () =>
-    flowSelection.value?.selectedStateCurvePointId ??
-    props.selectedStateCurvePointId
+  () => runtimeReviewContextView.value.selectedStatePointId
 );
 const flowRuntimeFocusSource = computed(
-  () => flowSelection.value?.runtimeFocusSource ?? props.runtimeFocusSource
+  () => runtimeReviewContextView.value.source || props.runtimeFocusSource
 );
 const stateCurveTimelineLayerOptions = computed(() =>
   STATE_CURVE_TIMELINE_LAYER_OPTIONS.map(layer => {

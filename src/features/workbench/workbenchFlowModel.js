@@ -372,30 +372,44 @@ export function createWorkbenchRuntimeReviewContextView({
 } = {}) {
   const selection =
     runtimeReviewSelection ?? flowModel?.runtimeReviewSelection ?? {};
+  const mainFlowSelection = flowModel?.mainFlowSelection ?? {};
   const detail = runtimeDetail ?? flowModel?.runtimeDetail ?? null;
   const detailStatePointId = detail?.statePointId ?? '';
   const selectedStatePointId =
-    selection.selectedStatePointId ??
-    selectedStateCurvePointId ??
-    flowModel?.selectedStateCurvePointId ??
-    detailStatePointId ??
-    '';
+    pickRuntimeReviewContextValue(
+      selection.selectedStatePointId,
+      mainFlowSelection.selectedStateCurvePointId,
+      mainFlowSelection.selectedRuntimeStatePointId,
+      selectedStateCurvePointId,
+      flowModel?.selectedStateCurvePointId,
+      detailStatePointId
+    ) ?? '';
   const hasSelection = Boolean(selection.hasSelection ?? selectedStatePointId);
   const detailSynced = Boolean(
     !detailStatePointId ||
       !selectedStatePointId ||
       detailStatePointId === selectedStatePointId
   );
+  const source = pickRuntimeReviewContextValue(
+    selection.source,
+    mainFlowSelection.runtimeFocusSource
+  );
+  const selectedActionId =
+    pickRuntimeReviewContextValue(
+      selection.selectedActionId,
+      mainFlowSelection.selectedActionId,
+      detail?.actionId
+    ) ?? '';
 
   return {
     status:
       selection.status ?? WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.EMPTY,
-    selectedActionId: selection.selectedActionId ?? detail?.actionId ?? '',
+    selectedActionId,
     selectedStatePointId,
     pendingActionId: selection.pendingActionId ?? '',
     pendingStatePointId: selection.pendingStatePointId ?? '',
     refreshedStatePointId: selection.refreshedStatePointId ?? '',
-    source: selection.source ?? '',
+    source: source ?? '',
     sourceKind: selection.sourceKind ?? 'none',
     hasSelection,
     hasSelectionState: hasSelection ? 'true' : 'false',
@@ -407,6 +421,10 @@ export function createWorkbenchRuntimeReviewContextView({
     detailSynced,
     detailSyncedState: detailSynced ? 'true' : 'false',
   };
+}
+
+function pickRuntimeReviewContextValue(...values) {
+  return values.find(value => value != null && value !== '');
 }
 
 export function createWorkbenchMainFlowLoopState({

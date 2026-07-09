@@ -776,6 +776,34 @@ describe('workbench flow model', () => {
       detailSynced: false,
       detailSyncedState: 'false',
     });
+
+    expect(
+      createWorkbenchRuntimeReviewContextView({
+        flowModel: {
+          mainFlowSelection: {
+            selectedActionId: 'action-from-flow',
+            selectedStateCurvePointId: 'state-point-from-flow',
+            runtimeFocusSource: 'workbench-flow-panel',
+          },
+        },
+      })
+    ).toMatchObject({
+      selectedActionId: 'action-from-flow',
+      selectedStatePointId: 'state-point-from-flow',
+      source: 'workbench-flow-panel',
+      hasSelection: true,
+      hasSelectionState: 'true',
+    });
+
+    expect(
+      createWorkbenchRuntimeReviewContextView({
+        selectedStateCurvePointId: 'standalone-state-point',
+      })
+    ).toMatchObject({
+      selectedStatePointId: 'standalone-state-point',
+      hasSelection: true,
+      hasSelectionState: 'true',
+    });
   });
 
   it('creates a runtime review flow view for selected and pending result states', () => {

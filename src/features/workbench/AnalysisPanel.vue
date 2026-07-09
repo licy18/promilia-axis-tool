@@ -944,6 +944,7 @@ import {
   createWorkbenchRuntimeResultFlowActionFromSurface,
   createWorkbenchRuntimeStatePointFlowActionFromSurface,
 } from './workbenchMainFlowActions';
+import { createWorkbenchRuntimeReviewContextView } from './workbenchFlowModel';
 
 const CANDIDATE_CHART_COLORS = ['#f2b366', '#79c7b9', '#a6b7ff'];
 const candidateChartGridLines = [25, 50, 75];
@@ -1286,13 +1287,20 @@ const runtimeTraceByActionId = computed(() => {
 });
 const flowPhase = computed(() => props.flowModel?.phase ?? '');
 const flowSelection = computed(() => props.flowModel?.mainFlowSelection ?? null);
+const runtimeReviewContextView = computed(
+  () =>
+    props.flowModel?.runtimeReviewContextView ??
+    createWorkbenchRuntimeReviewContextView({
+      flowModel: props.flowModel,
+      selectedStateCurvePointId: props.selectedStateCurvePointId,
+      runtimeDetail: props.runtimeSelectedDetail,
+    })
+);
 const flowSelectedActionId = computed(
   () => flowSelection.value?.selectedActionId ?? props.selectedActionId
 );
 const flowSelectedStatePointId = computed(
-  () =>
-    flowSelection.value?.selectedStateCurvePointId ??
-    props.selectedStateCurvePointId
+  () => runtimeReviewContextView.value.selectedStatePointId
 );
 const flowRuntimeSelectedDetail = computed(
   () => props.flowModel?.runtimeDetail?.source ?? props.runtimeSelectedDetail
