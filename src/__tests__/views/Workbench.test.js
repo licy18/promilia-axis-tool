@@ -2732,6 +2732,7 @@ describe('Workbench view', () => {
       'data-state-point-id': statePointId,
     });
     expect(primaryOperation.attributes('disabled')).toBeUndefined();
+    expect(primaryOperation.text()).toBe('编辑结果动作');
 
     await primaryOperation.trigger('click');
     await nextTick();
@@ -2801,6 +2802,7 @@ describe('Workbench view', () => {
       'data-operation-kind': 'return-runtime-result',
       'data-state-point-id': refreshedStatePointId,
     });
+    expect(primaryOperation.text()).toBe('查看刷新结果');
 
     await primaryOperation.trigger('click');
     await nextTick();

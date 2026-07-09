@@ -1164,7 +1164,10 @@ function createRuntimeReviewPrimaryOperation({
     kind: primaryOperationKind,
     enabled: Boolean(target?.enabled),
     disabledReason: target?.disabledReason ?? 'missing-runtime-review-operation',
-    label: formatRuntimeReviewPrimaryOperationLabel(primaryOperationKind),
+    label: formatRuntimeReviewPrimaryOperationLabel(
+      primaryOperationKind,
+      target
+    ),
     actionId: target?.actionId ?? '',
     statePointId: target?.statePointId ?? '',
     sourceKind: target?.sourceKind ?? '',
@@ -1172,11 +1175,21 @@ function createRuntimeReviewPrimaryOperation({
   };
 }
 
-function formatRuntimeReviewPrimaryOperationLabel(operationKind = '') {
+function formatRuntimeReviewPrimaryOperationLabel(
+  operationKind = '',
+  target = null
+) {
   if (operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION) {
-    return '定位动作';
+    return '编辑结果动作';
   }
   if (operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT) {
+    const status = target?.status ?? target?.context?.status ?? '';
+    if (status === 'refreshed-edit-result') {
+      return '查看刷新结果';
+    }
+    if (status === 'origin-result') {
+      return '回到来源结果';
+    }
     return '回到结果点';
   }
   return '主操作';

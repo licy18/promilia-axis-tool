@@ -253,7 +253,7 @@ describe('workbench flow model', () => {
       primaryOperation: {
         kind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
         enabled: true,
-        label: '定位动作',
+        label: '编辑结果动作',
         actionId: 'action-0001',
         statePointId: firstPoint.statePointId,
         sourceKind: 'action-result',
@@ -396,7 +396,7 @@ describe('workbench flow model', () => {
       primaryOperation: {
         kind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
         enabled: true,
-        label: '回到结果点',
+        label: '查看刷新结果',
         actionId: 'action-0002',
         statePointId: secondPoint.statePointId,
         target: {
@@ -540,7 +540,7 @@ describe('workbench flow model', () => {
       primaryOperation: {
         kind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
         enabled: true,
-        label: '定位动作',
+        label: '编辑结果动作',
         actionId: 'action-0002',
         statePointId: secondPoint.statePointId,
         target: {
@@ -1050,7 +1050,7 @@ describe('workbench flow model', () => {
         canRunAnyOperationState: 'true',
         primaryActionId: 'action-0001',
         primaryStatePointId: firstPoint.statePointId,
-        primaryLabel: '定位动作',
+        primaryLabel: '编辑结果动作',
         focusActionEnabledState: 'true',
         returnResultEnabledState: 'false',
       },
@@ -1102,7 +1102,7 @@ describe('workbench flow model', () => {
         primaryOperationEnabledState: 'true',
         primaryActionId: 'action-0002',
         primaryStatePointId: secondPoint.statePointId,
-        primaryLabel: '回到结果点',
+        primaryLabel: '查看刷新结果',
         focusActionEnabledState: 'false',
         returnResultEnabledState: 'true',
       },
