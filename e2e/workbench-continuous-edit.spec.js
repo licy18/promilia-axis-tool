@@ -1633,13 +1633,73 @@ test('keeps runtime result flow usable after copying a generated action batch', 
   );
   await expectCurveAndLogSelection(page, copiedBatchState.statePointId);
   await expectRuntimeOutputConsistent(page);
+  await expect(page.getByTestId('workbench-undo-edit')).toBeEnabled();
+  await expect(page.getByTestId('workbench-redo-edit')).toBeDisabled();
+
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已撤销编辑'
+  );
+  await expect(
+    page.getByTestId('workbench-action-batch-summary-count')
+  ).toHaveText('1');
+  await expect(
+    page.locator('.action-item[data-action-id="action-0004"]')
+  ).toHaveCount(0);
+  const restoredOriginalBatchState = await waitForRuntimeAction(
+    page,
+    'action-0002'
+  );
+  expectRuntimeReviewState(restoredOriginalBatchState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(
+    restoredOriginalBatchState,
+    batchRuntimeState.statePointId
+  );
+  await expectCurveAndLogSelection(page, batchRuntimeState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+  await expect(page.getByTestId('workbench-undo-edit')).toBeDisabled();
+  await expect(page.getByTestId('workbench-redo-edit')).toBeEnabled();
+
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已重做编辑'
+  );
+  await expect(
+    page.getByTestId('workbench-action-batch-summary-count')
+  ).toHaveText('2');
+  await expect(
+    page.locator('.action-item[data-action-id="action-0004"]')
+  ).toHaveAttribute('data-batch-id', 'segment-batch-0002');
+  const redoneCopiedBatchState = await waitForRuntimeAction(
+    page,
+    'action-0004'
+  );
+  expectRuntimeReviewState(redoneCopiedBatchState, {
+    phase: 'runtime-result',
+    actionId: 'action-0004',
+    navigationCount: '5',
+    navigationIndex: '3',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(
+    redoneCopiedBatchState,
+    copiedBatchState.statePointId
+  );
+  await expectCurveAndLogSelection(page, copiedBatchState.statePointId);
+  await expectRuntimeOutputConsistent(page);
 
   await focusRuntimeDetailAction(page);
   const { returnedState } = await editCurrentActionFrameAndReturn(page, {
     actionId: 'action-0004',
     frameValue: '270',
     msValue: '4500',
-    originStatePointId: copiedBatchState.statePointId,
+    originStatePointId: redoneCopiedBatchState.statePointId,
     navigationCount: '5',
     navigationIndex: '3',
     selected: true,
