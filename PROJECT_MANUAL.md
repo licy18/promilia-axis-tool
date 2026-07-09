@@ -12739,6 +12739,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 可以转入运行时层能力块：以 `test:e2e:workbench-flow` 守住 UI 主流程，同时继续把 runtime 输出边界、summary、simLog 与 stateCurves 的消费路径收束到标准合同。
 
+### 2026-07-09：运行时层 - Runtime output 读取来源诊断
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- Workbench 运行输出 view 现在会记录 `simLog`、`stateCurves`、`resourceCurves`、`summary` 实际从标准 `runtimeOutputs.outputs.*`、`runtimeOutputs` 直接字段、alias 字段还是 legacy projection 字段读取。
+- 当标准输出和旧字段同时存在且内容冲突时，运行时消费路径稳定优先读取标准 `outputs.*`；旧 projection fallback 仍保留兼容，但会被标记为 fallback。
+- 本阶段不改变 UI 文案、三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值或草稿保存 schema。
+
+当前验证事实：
+
+- 回归用例故意让 `runtimeOutputs.outputs.*` 与旧字段返回不同动作 / 角色 ID，确认 Workbench 的曲线点、日志行和资源行来自标准输出。
+- 纯 legacy projection 输入仍能生成运行点，但 `outputReadSources` 会记录 `legacy-projection-field` fallback，方便后续收束运行时边界。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/runtimeSelectedDetail.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，4 个测试文件、18 条测试。
+- `npm run test:e2e:workbench-flow`：通过，5 条浏览器级主流程测试。
+- `npx prettier --check src/simulation/runtime/threeValueRuntimeOutputConsumer.js src/__tests__/features/runtimeProjectionPoints.test.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续运行时层或生成层能力块：把 runtime output 读取来源诊断接入更上层合同验收，随后再用 `npm run test:e2e:workbench-flow` 守住 UI 主流程闭环。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

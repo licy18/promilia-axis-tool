@@ -152,8 +152,13 @@ export function createThreeValueRuntimeOutputConsumerContract({
 }
 
 export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
-  const runtimeOutputSource =
-    getThreeValueRuntimeOutputSource(runtimeProjection);
+  const runtimeOutputSourceResolution =
+    getThreeValueRuntimeOutputSourceResolution(runtimeProjection);
+  const runtimeOutputSource = runtimeOutputSourceResolution.source;
+  const outputReadSources = createThreeValueRuntimeOutputReadSources(
+    runtimeOutputSource,
+    runtimeOutputSourceResolution
+  );
   const outputContract = runtimeOutputSource?.outputContract ?? null;
   const outputSummary = getThreeValueRuntimeOutputSummary(runtimeOutputSource);
   const simLog = getThreeValueRuntimeSimLogRows(runtimeOutputSource);
@@ -222,11 +227,51 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
       (isReadyStatus(outputConsumerContract?.status) ||
         isReadyStatus(outputContract?.status) ||
         isReadyStatus(runtimeOutputSource?.status)),
+    runtimeOutputSourceResolution: createRuntimeOutputSourceResolutionView(
+      runtimeOutputSourceResolution
+    ),
+    outputReadSources,
+  };
+}
+
+export function getThreeValueRuntimeOutputSourceResolution(runtimeProjection) {
+  const hasRuntimeOutputsEnvelope = Boolean(runtimeProjection?.runtimeOutputs);
+  const source = hasRuntimeOutputsEnvelope
+    ? runtimeProjection.runtimeOutputs
+    : (runtimeProjection ?? null);
+  const directRuntimeOutputs =
+    !hasRuntimeOutputsEnvelope &&
+    source?.sourceKind === 'azpr-three-value-runtime-outputs';
+  const sourceTier = hasRuntimeOutputsEnvelope
+    ? 'runtime-outputs-envelope'
+    : directRuntimeOutputs
+      ? 'runtime-outputs-direct'
+      : source
+        ? 'legacy-projection'
+        : 'missing';
+  const sourcePath = hasRuntimeOutputsEnvelope
+    ? 'runtimeProjection.runtimeOutputs'
+    : directRuntimeOutputs
+      ? 'runtimeOutputs'
+      : source
+        ? 'runtimeProjection'
+        : '';
+
+  return {
+    source,
+    sourcePath,
+    sourceTier,
+    sourceKind: source?.sourceKind ?? '',
+    status: source?.status ?? '',
+    hasRuntimeOutputsEnvelope,
+    directRuntimeOutputs,
+    legacyProjectionFallback: sourceTier === 'legacy-projection',
+    ready: Boolean(source),
   };
 }
 
 export function getThreeValueRuntimeOutputSource(runtimeProjection) {
-  return runtimeProjection?.runtimeOutputs ?? runtimeProjection ?? null;
+  return getThreeValueRuntimeOutputSourceResolution(runtimeProjection).source;
 }
 
 export function getThreeValueRuntimeOutputContract(runtimeProjection) {
@@ -338,6 +383,255 @@ export function getThreeValueRuntimeResourceCurveRows(runtimeProjection) {
 
 function isReadyStatus(status = '') {
   return String(status).includes('ready');
+}
+
+function createRuntimeOutputSourceResolutionView(resolution) {
+  return {
+    sourcePath: resolution.sourcePath,
+    sourceTier: resolution.sourceTier,
+    sourceKind: resolution.sourceKind,
+    status: resolution.status,
+    hasRuntimeOutputsEnvelope: resolution.hasRuntimeOutputsEnvelope,
+    directRuntimeOutputs: resolution.directRuntimeOutputs,
+    legacyProjectionFallback: resolution.legacyProjectionFallback,
+    ready: resolution.ready,
+  };
+}
+
+function createThreeValueRuntimeOutputReadSources(
+  runtimeOutputSource,
+  runtimeOutputSourceResolution
+) {
+  const sourcePath = runtimeOutputSourceResolution.sourcePath;
+  const sourceTier = runtimeOutputSourceResolution.sourceTier;
+  const outputs = {
+    simLog: resolveRuntimeOutputReadSource({
+      runtimeOutputSource,
+      sourcePath,
+      sourceTier,
+      outputName: 'simLog',
+      fieldName: 'simLog',
+    }),
+    stateCurves: resolveRuntimeOutputReadSource({
+      runtimeOutputSource,
+      sourcePath,
+      sourceTier,
+      outputName: 'stateCurves',
+      fieldName: 'stateCurves',
+      aliasFieldName: 'enemyStateCurve',
+    }),
+    resourceCurves: resolveRuntimeOutputReadSource({
+      runtimeOutputSource,
+      sourcePath,
+      sourceTier,
+      outputName: 'resourceCurves',
+      fieldName: 'resourceCurves',
+      aliasFieldNames: ['resources', 'selfEnergyCurveByActor'],
+    }),
+    summary: resolveRuntimeSummaryReadSource({
+      runtimeOutputSource,
+      sourcePath,
+      sourceTier,
+    }),
+  };
+  const outputNames = Object.keys(outputs);
+  const standardOutputNames = outputNames.filter(
+    outputName => outputs[outputName].standardOutputPresent
+  );
+  const fallbackOutputNames = outputNames.filter(
+    outputName => outputs[outputName].fallback
+  );
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-three-value-runtime-output-read-sources',
+    status: runtimeOutputSource
+      ? 'runtime-output-read-sources-ready'
+      : 'runtime-output-read-sources-missing',
+    root: createRuntimeOutputSourceResolutionView(
+      runtimeOutputSourceResolution
+    ),
+    outputs,
+    standardOutputNames,
+    fallbackOutputNames,
+    standardOutputCount: standardOutputNames.length,
+    fallbackOutputCount: fallbackOutputNames.length,
+    usesLegacyProjectionFallback: outputNames.some(
+      outputName => outputs[outputName].legacyProjectionFallback
+    ),
+  };
+}
+
+function resolveRuntimeOutputReadSource({
+  runtimeOutputSource,
+  sourcePath,
+  sourceTier,
+  outputName,
+  fieldName,
+  aliasFieldName = '',
+  aliasFieldNames = [],
+}) {
+  const fieldTier =
+    sourceTier === 'legacy-projection'
+      ? 'legacy-projection-field'
+      : 'runtime-output-field';
+  const aliases = [
+    ...(aliasFieldName ? [aliasFieldName] : []),
+    ...aliasFieldNames,
+  ];
+  const candidates = [
+    createReadSourceCandidate({
+      key: `outputs.${fieldName}`,
+      path: joinReadSourcePath(sourcePath, `outputs.${fieldName}`),
+      tier: 'standard-output',
+      present: hasValue(runtimeOutputSource?.outputs?.[fieldName]),
+    }),
+    createReadSourceCandidate({
+      key: fieldName,
+      path: joinReadSourcePath(sourcePath, fieldName),
+      tier: fieldTier,
+      present: hasValue(runtimeOutputSource?.[fieldName]),
+    }),
+  ];
+  for (const alias of aliases) {
+    candidates.push(
+      createReadSourceCandidate({
+        key: alias,
+        path: joinReadSourcePath(sourcePath, alias),
+        tier: fieldTier,
+        present: hasValue(runtimeOutputSource?.[alias]),
+        aliasFor: fieldName,
+      })
+    );
+  }
+  const selected =
+    candidates.find(candidate => candidate.present) ??
+    createMissingReadSourceCandidate(outputName);
+
+  return {
+    outputName,
+    sourceKey: selected.key,
+    sourcePath: selected.path,
+    sourceTier: selected.tier,
+    aliasFor: selected.aliasFor,
+    present: selected.present,
+    fallback: selected.present && selected.tier !== 'standard-output',
+    standardOutputPresent: candidates.some(
+      candidate => candidate.present && candidate.tier === 'standard-output'
+    ),
+    legacyProjectionFallback:
+      selected.present && selected.tier === 'legacy-projection-field',
+    candidateSourcePaths: candidates
+      .filter(candidate => candidate.present)
+      .map(candidate => candidate.path),
+  };
+}
+
+function resolveRuntimeSummaryReadSource({
+  runtimeOutputSource,
+  sourcePath,
+  sourceTier,
+}) {
+  const fieldTier =
+    sourceTier === 'legacy-projection'
+      ? 'legacy-projection-field'
+      : 'runtime-output-summary-field';
+  const candidates = [
+    createReadSourceCandidate({
+      key: 'outputs.summary',
+      path: joinReadSourcePath(sourcePath, 'outputs.summary'),
+      tier: 'standard-output',
+      present: hasObjectValue(runtimeOutputSource?.outputs?.summary),
+    }),
+    createReadSourceCandidate({
+      key: 'summary',
+      path: joinReadSourcePath(sourcePath, 'summary'),
+      tier: fieldTier,
+      present: hasObjectValue(runtimeOutputSource?.summary),
+    }),
+    createReadSourceCandidate({
+      key: 'outputContract.summary',
+      path: joinReadSourcePath(sourcePath, 'outputContract.summary'),
+      tier: 'runtime-output-contract-summary',
+      present: hasObjectValue(runtimeOutputSource?.outputContract?.summary),
+    }),
+    createReadSourceCandidate({
+      key: 'outputSummary',
+      path: joinReadSourcePath(sourcePath, 'outputSummary'),
+      tier: 'runtime-output-summary-alias',
+      present: hasObjectValue(runtimeOutputSource?.outputSummary),
+    }),
+    createReadSourceCandidate({
+      key: 'outputConsumerContract.summary',
+      path: joinReadSourcePath(sourcePath, 'outputConsumerContract.summary'),
+      tier: 'runtime-output-consumer-contract-summary',
+      present: hasObjectValue(
+        runtimeOutputSource?.outputConsumerContract?.summary
+      ),
+    }),
+  ];
+  const presentCandidates = candidates.filter(candidate => candidate.present);
+  const selected =
+    presentCandidates[presentCandidates.length - 1] ??
+    createMissingReadSourceCandidate('summary');
+
+  return {
+    outputName: 'summary',
+    sourceKey: selected.key,
+    sourcePath: selected.path,
+    sourceTier: selected.tier,
+    aliasFor: selected.aliasFor,
+    present: selected.present,
+    fallback:
+      selected.present &&
+      !['standard-output', 'runtime-output-consumer-contract-summary'].includes(
+        selected.tier
+      ),
+    standardOutputPresent: presentCandidates.some(
+      candidate => candidate.tier === 'standard-output'
+    ),
+    legacyProjectionFallback:
+      selected.present && selected.tier === 'legacy-projection-field',
+    mergeSourcePaths: presentCandidates.map(candidate => candidate.path),
+    candidateSourcePaths: presentCandidates.map(candidate => candidate.path),
+  };
+}
+
+function createReadSourceCandidate({
+  key,
+  path,
+  tier,
+  present,
+  aliasFor = '',
+}) {
+  return {
+    key,
+    path,
+    tier,
+    present: Boolean(present),
+    aliasFor,
+  };
+}
+
+function createMissingReadSourceCandidate(outputName) {
+  return {
+    key: outputName,
+    path: '',
+    tier: 'missing',
+    present: false,
+    aliasFor: '',
+  };
+}
+
+function joinReadSourcePath(sourcePath, fieldPath) {
+  return sourcePath && fieldPath ? `${sourcePath}.${fieldPath}` : '';
+}
+
+function hasValue(value) {
+  return value !== null && value !== undefined;
+}
+
+function hasObjectValue(value) {
+  return Boolean(value && typeof value === 'object');
 }
 
 function numberOrZero(value) {

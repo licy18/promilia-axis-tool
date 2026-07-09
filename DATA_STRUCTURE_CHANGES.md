@@ -22964,3 +22964,59 @@ kind = "select-runtime-result"
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、70 条测试。
 - `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps runtime result flow usable after deleting a generated action batch"`：通过，1 条浏览器级闭环测试。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 323. Runtime Output 读取来源诊断：Runtime Output Read Sources
+
+### 323.1 结构变化
+
+`createThreeValueRuntimeOutputConsumerView(runtimeProjection)` 新增运行期诊断字段：
+
+```text
+runtimeOutputSourceResolution
+outputReadSources
+```
+
+`runtimeOutputSourceResolution` 描述本次 runtime 输出根来源：
+
+```text
+sourcePath
+sourceTier
+sourceKind
+status
+hasRuntimeOutputsEnvelope
+directRuntimeOutputs
+legacyProjectionFallback
+ready
+```
+
+`outputReadSources` 描述 `simLog`、`stateCurves`、`resourceCurves`、`summary` 的实际读取来源：
+
+```text
+outputReadSources.root
+outputReadSources.outputs[outputName].sourceKey
+outputReadSources.outputs[outputName].sourcePath
+outputReadSources.outputs[outputName].sourceTier
+outputReadSources.outputs[outputName].fallback
+outputReadSources.outputs[outputName].standardOutputPresent
+outputReadSources.outputs[outputName].legacyProjectionFallback
+outputReadSources.standardOutputNames
+outputReadSources.fallbackOutputNames
+outputReadSources.usesLegacyProjectionFallback
+```
+
+读取优先级保持为：标准 `runtimeOutputs.outputs.*` 优先，其次兼容 `runtimeOutputs` 直接字段、alias 字段和 legacy projection 字段。`summary` 继续保留既有多来源 merge 逻辑，并记录 `mergeSourcePaths`。
+
+### 323.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只新增运行期诊断结构；三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值和 UI 文案均不改变。
+
+### 323.3 验证
+
+- `runtimeProjectionPoints.test.js` 覆盖标准 `runtimeOutputs.outputs.*` 与旧字段冲突时，Workbench 运行输出 view 优先读取标准输出。
+- `runtimeProjectionPoints.test.js` 覆盖纯 legacy projection 输入时，`outputReadSources` 标记 `legacy-projection-field` fallback。
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/runtimeSelectedDetail.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，4 个测试文件、18 条测试。
+- `npm run test:e2e:workbench-flow`：通过，5 条浏览器级主流程测试。
+- `npx prettier --check src/simulation/runtime/threeValueRuntimeOutputConsumer.js src/__tests__/features/runtimeProjectionPoints.test.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。

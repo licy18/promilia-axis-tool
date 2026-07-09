@@ -87,6 +87,33 @@ describe('runtime projection points', () => {
       'legacy-enemy-delta',
       'legacy-resource-delta',
     ]);
+    expect(
+      createWorkbenchRuntimeOutputConsumerView(legacyProjection)
+        .outputReadSources
+    ).toMatchObject({
+      root: {
+        sourceTier: 'legacy-projection',
+        sourcePath: 'runtimeProjection',
+        legacyProjectionFallback: true,
+      },
+      outputs: {
+        stateCurves: {
+          sourceKey: 'enemyStateCurve',
+          sourcePath: 'runtimeProjection.enemyStateCurve',
+          sourceTier: 'legacy-projection-field',
+          fallback: true,
+          legacyProjectionFallback: true,
+        },
+        resourceCurves: {
+          sourceKey: 'selfEnergyCurveByActor',
+          sourcePath: 'runtimeProjection.selfEnergyCurveByActor',
+          sourceTier: 'legacy-projection-field',
+          fallback: true,
+          legacyProjectionFallback: true,
+        },
+      },
+      usesLegacyProjectionFallback: true,
+    });
   });
 
   it('reads runtime output contract boundaries while preserving runtime rows', () => {
@@ -164,6 +191,8 @@ describe('runtime projection points', () => {
 
   it('consumes the runtimeOutputs envelope before scattered projection fields', () => {
     const runtimeOutputs = {
+      sourceKind: 'azpr-three-value-runtime-outputs',
+      status: 'runtime-outputs-ready',
       outputContract: {
         outputs: {
           simLog: {
@@ -181,18 +210,66 @@ describe('runtime projection points', () => {
           enemyHpDelta: 320,
         },
       },
-      outputSummary: {
-        outputCount: 4,
-        simLogCount: 1,
-        enemyHpDelta: 320,
+      outputConsumerContract: {
+        sourceKind: 'azpr-three-value-runtime-output-consumer-contract',
+        status: 'runtime-output-consumer-contract-ready',
+        summary: {
+          outputCount: 4,
+          simLogCount: 1,
+          enemyHpDelta: 320,
+        },
+      },
+      outputs: {
+        simLog: [
+          {
+            sourceDeltaId: 'runtime-output-hp-delta',
+            actionId: 'action-0001',
+            frameIndex: 10,
+            sequenceIndex: 0,
+            trackKey: 'enemyHpDamage',
+            layerKey: 'applied',
+          },
+        ],
+        stateCurves: {
+          enemy: {
+            points: [
+              {
+                sourceDeltaId: 'runtime-output-hp-delta',
+                actionId: 'action-0001',
+                frameIndex: 10,
+                sequenceIndex: 0,
+                trackKey: 'enemyHpDamage',
+                layerKey: 'applied',
+              },
+            ],
+          },
+        },
+        resourceCurves: {
+          curvesByActor: [
+            {
+              actorId: 'actor-001',
+              points: [
+                {
+                  sourceDeltaId: 'runtime-output-energy-delta',
+                  trackKey: 'selfEnergyChange',
+                },
+              ],
+            },
+          ],
+        },
+        summary: {
+          outputCount: 4,
+          simLogCount: 1,
+          enemyHpDelta: 320,
+        },
       },
       summary: {
-        simLogCount: 1,
-        enemyHpDelta: 320,
+        simLogCount: 77,
+        enemyHpDelta: 770,
       },
       simLog: [
         {
-          sourceDeltaId: 'runtime-output-hp-delta',
+          sourceDeltaId: 'direct-runtime-output-hp-delta',
           actionId: 'action-0001',
           frameIndex: 10,
           sequenceIndex: 0,
@@ -204,7 +281,7 @@ describe('runtime projection points', () => {
         enemy: {
           points: [
             {
-              sourceDeltaId: 'runtime-output-hp-delta',
+              sourceDeltaId: 'direct-runtime-output-hp-delta',
               actionId: 'action-0001',
               frameIndex: 10,
               sequenceIndex: 0,
@@ -217,10 +294,10 @@ describe('runtime projection points', () => {
       resources: {
         curvesByActor: [
           {
-            actorId: 'actor-001',
+            actorId: 'direct-actor',
             points: [
               {
-                sourceDeltaId: 'runtime-output-energy-delta',
+                sourceDeltaId: 'direct-runtime-output-energy-delta',
                 trackKey: 'selfEnergyChange',
               },
             ],
@@ -285,6 +362,60 @@ describe('runtime projection points', () => {
         simLogCount: 1,
         statePointContextCount: 1,
         projectionPointCount: 2,
+      },
+      runtimeOutputSourceResolution: {
+        sourcePath: 'runtimeProjection.runtimeOutputs',
+        sourceTier: 'runtime-outputs-envelope',
+        sourceKind: 'azpr-three-value-runtime-outputs',
+        status: 'runtime-outputs-ready',
+        hasRuntimeOutputsEnvelope: true,
+        legacyProjectionFallback: false,
+      },
+      outputReadSources: {
+        root: {
+          sourcePath: 'runtimeProjection.runtimeOutputs',
+          sourceTier: 'runtime-outputs-envelope',
+        },
+        outputs: {
+          simLog: {
+            sourceKey: 'outputs.simLog',
+            sourcePath: 'runtimeProjection.runtimeOutputs.outputs.simLog',
+            sourceTier: 'standard-output',
+            fallback: false,
+            standardOutputPresent: true,
+          },
+          stateCurves: {
+            sourceKey: 'outputs.stateCurves',
+            sourcePath: 'runtimeProjection.runtimeOutputs.outputs.stateCurves',
+            sourceTier: 'standard-output',
+            fallback: false,
+            standardOutputPresent: true,
+          },
+          resourceCurves: {
+            sourceKey: 'outputs.resourceCurves',
+            sourcePath:
+              'runtimeProjection.runtimeOutputs.outputs.resourceCurves',
+            sourceTier: 'standard-output',
+            fallback: false,
+            standardOutputPresent: true,
+          },
+          summary: {
+            sourceKey: 'outputConsumerContract.summary',
+            sourcePath:
+              'runtimeProjection.runtimeOutputs.outputConsumerContract.summary',
+            sourceTier: 'runtime-output-consumer-contract-summary',
+            fallback: false,
+            standardOutputPresent: true,
+          },
+        },
+        standardOutputNames: [
+          'simLog',
+          'stateCurves',
+          'resourceCurves',
+          'summary',
+        ],
+        fallbackOutputNames: [],
+        usesLegacyProjectionFallback: false,
       },
     });
     expect([...workbenchRuntimeOutputView.pointByDeltaId.keys()]).toEqual([
