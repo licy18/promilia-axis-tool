@@ -255,6 +255,7 @@
           :data-runtime-review-primary-operation-enabled="
             mainFlowWorkspaceView.reviewOperations.primaryOperationEnabledState
           "
+          :data-runtime-review-layout="runtimeReviewLayoutMode"
           data-testid="workbench-runtime-review-stack"
         >
           <div
@@ -294,7 +295,11 @@
             </button>
           </div>
 
-          <div class="resource-area" data-testid="workbench-resource-area">
+          <div
+            class="resource-area"
+            :data-runtime-review-role="runtimeReviewResourceRole"
+            data-testid="workbench-resource-area"
+          >
             <ResourceMonitorPanel
               :resource-timeline="simulationResult.resourceTimeline"
               :runtime-projection="simulationResult.threeValueRuntimeProjection"
@@ -311,6 +316,7 @@
 
           <EventLogPanel
             class="event-area"
+            :data-runtime-review-role="runtimeReviewEventRole"
             :event-log="simulationResult.eventLog"
             :runtime-projection="simulationResult.threeValueRuntimeProjection"
             :runtime-selected-detail="runtimeSelectedDetail"
@@ -654,6 +660,18 @@ const runtimeReviewPrimaryOperationCommand = computed(
 );
 const runtimeReviewPrimaryOperationView = computed(() =>
   runtimeReviewPrimaryOperationCommand.value.view
+);
+const runtimeReviewLayoutMode = computed(() =>
+  mainFlowWorkspaceView.value.reviewSelection.hasSelection ||
+  mainFlowWorkspaceView.value.reviewSelection.hasPendingResult
+    ? 'result-check'
+    : 'overview'
+);
+const runtimeReviewResourceRole = computed(() =>
+  runtimeReviewLayoutMode.value === 'result-check' ? 'primary' : 'overview'
+);
+const runtimeReviewEventRole = computed(() =>
+  runtimeReviewLayoutMode.value === 'result-check' ? 'secondary' : 'overview'
 );
 const timelineDiagnostics = computed(() =>
   createTimelineDiagnostics({
@@ -2427,6 +2445,12 @@ function getLocalStorage() {
   min-width: 0;
 }
 
+.runtime-review-stack[data-runtime-review-layout='result-check'] {
+  grid-template-columns: minmax(360px, 1.18fr) minmax(260px, 0.82fr);
+  align-items: stretch;
+  gap: 12px;
+}
+
 .runtime-review-primary-bar {
   display: flex;
   grid-column: 1 / -1;
@@ -2464,6 +2488,17 @@ function getLocalStorage() {
 .resource-area,
 .event-area {
   min-width: 0;
+}
+
+.runtime-review-stack[data-runtime-review-layout='result-check']
+  .resource-monitor-panel,
+.runtime-review-stack[data-runtime-review-layout='result-check']
+  .event-log-panel {
+  height: 100%;
+}
+
+.runtime-review-stack[data-runtime-review-layout='result-check'] .event-area {
+  align-self: stretch;
 }
 
 .side-stack {

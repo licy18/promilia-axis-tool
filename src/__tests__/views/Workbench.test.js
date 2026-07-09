@@ -183,6 +183,7 @@ describe('Workbench view', () => {
       )
     ).toBe('');
     expect(runtimeReviewStack.attributes()).toMatchObject({
+      'data-runtime-review-layout': 'overview',
       'data-runtime-review-selection-status': 'empty',
       'data-runtime-review-selected-action-id': '',
       'data-runtime-review-selected-state-point-id': '',
@@ -193,6 +194,14 @@ describe('Workbench view', () => {
       true
     );
     expect(runtimeReviewStack.findComponent(EventLogPanel).exists()).toBe(true);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-resource-area"]')
+        .attributes('data-runtime-review-role')
+    ).toBe('overview');
+    expect(
+      wrapper.find('.event-area').attributes('data-runtime-review-role')
+    ).toBe('overview');
     const sideInspector = wrapper.find(
       '[data-testid="workbench-side-inspector"]'
     );
@@ -4959,6 +4968,23 @@ describe('Workbench view', () => {
 
     await runtimeCurvePoint.trigger('click');
     await nextTick();
+
+    const runtimeReviewStack = wrapper.find(
+      '[data-testid="workbench-runtime-review-stack"]'
+    );
+    expect(runtimeReviewStack.attributes()).toMatchObject({
+      'data-runtime-review-layout': 'result-check',
+      'data-runtime-review-selection-status': 'selected',
+      'data-runtime-review-selected-state-point-id': statePointId,
+    });
+    expect(
+      wrapper
+        .find('[data-testid="workbench-resource-area"]')
+        .attributes('data-runtime-review-role')
+    ).toBe('primary');
+    expect(
+      wrapper.find('.event-area').attributes('data-runtime-review-role')
+    ).toBe('secondary');
 
     expect(getLastDispatchedFlowAction(wrapper, ResourceMonitorPanel)).toMatchObject({
       kind: 'select-runtime-state-point',
