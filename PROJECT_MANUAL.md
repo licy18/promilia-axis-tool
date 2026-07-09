@@ -10990,6 +10990,31 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：进入更完整的动作编辑体验闭环，优先做动作插入/删除/批量调整后结果定位与贡献拆分查看，避免再停留在单个字段或标签微调。
 
+### 2026-07-09：UI 主流程批量删除回落 - Batch Delete Result Loop
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 固定 `查看批次动作结果 -> 删除整批生成动作 -> 自动回到剩余动作结果 -> 贡献拆分继续可看` 的 Workbench 闭环。
+- 当用户在运行结果态删除一个生成动作批次后，当前动作、三值详情、资源曲线选中点、模拟日志导航、动作结果行和贡献拆分面板都会回落到仍存在的动作，而不是停在已删除动作的旧结果上。
+- 本阶段只补齐 UI 主流程批量编辑后的结果定位回归，不改变运行时输出、三值结果、公式、证据字段或数据结构。
+
+当前验证事实：
+
+- 新增 `keeps result detail and contribution split usable after deleting a generated action batch in the runtime view`。
+- 该用例覆盖：选中批次动作结果 `action-0002`，删除 `segment-batch-0001` 后只保留 `action-0001`，运行详情、曲线选中、日志导航、动作结果行和 HP 贡献行全部同步到 `action-0001` 的 state point。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、64 条测试。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：推进动作插入/复制/拖拽后的结果定位和贡献拆分闭环，优先覆盖用户会连续编辑动作后需要重新确认结果的路径。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

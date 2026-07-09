@@ -3838,6 +3838,150 @@ describe('Workbench view', () => {
     ).toBe(shiftedStatePointId);
   });
 
+  it('keeps result detail and contribution split usable after deleting a generated action batch in the runtime view', async () => {
+    const secondaryCharacterId =
+      workbenchSeed.defaults.secondaryCharacterId ??
+      workbenchSeed.gameData.characters.find(
+        character => character.id !== workbenchSeed.defaults.characterId
+      ).id;
+    const generationBatch = {
+      batchId: 'segment-batch-0001',
+      source: 'skill-action-variant-split',
+      skillId: workbenchSeed.defaults.skillId,
+      actorCharacterId: workbenchSeed.defaults.characterId,
+      level: 1,
+      variantCount: 2,
+      segmentCount: 2,
+      createdAt: '2026-07-08T00:00:00.000Z',
+    };
+    const draft = createWorkbenchDraftSnapshot(
+      {
+        selection: {
+          characterId: workbenchSeed.defaults.characterId,
+          secondaryCharacterId,
+          skillId: workbenchSeed.defaults.skillId,
+          enemyId: workbenchSeed.defaults.enemyId,
+        },
+        actionDrafts: [
+          createWorkbenchActionDraft({
+            id: 'action-0001',
+            skillId: workbenchSeed.defaults.skillId,
+            actorCharacterId: workbenchSeed.defaults.characterId,
+            startMs: 0,
+          }),
+          createWorkbenchActionDraft({
+            id: 'action-0002',
+            skillId: workbenchSeed.defaults.skillId,
+            actorCharacterId: workbenchSeed.defaults.characterId,
+            startMs: 1000,
+            generationBatch,
+          }),
+          createWorkbenchActionDraft({
+            id: 'action-0003',
+            skillId: workbenchSeed.defaults.skillId,
+            actorCharacterId: workbenchSeed.defaults.characterId,
+            startMs: 2000,
+            generationBatch,
+          }),
+        ],
+        selectedActionId: 'action-0002',
+      },
+      '2026-07-08T00:00:00.000Z'
+    );
+    window.localStorage.setItem(
+      WORKBENCH_DRAFT_STORAGE_KEY,
+      JSON.stringify(draft)
+    );
+
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await nextTick();
+
+    expect(
+      wrapper.find('[data-testid="workbench-action-batch-summary-count"]').text()
+    ).toBe('1');
+
+    await wrapper
+      .find('[data-testid="workbench-flow-open-runtime"]')
+      .trigger('click');
+    await nextTick();
+
+    let flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0002');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
+      'action-0002'
+    );
+    const batchStatePointId = wrapper
+      .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+      .text();
+    expect(batchStatePointId).toContain('action-0002');
+
+    await wrapper
+      .find('[data-testid="workbench-summary-delete-action-batch"]')
+      .trigger('click');
+    await nextTick();
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe(
+      '1 action'
+    );
+    expect(
+      wrapper.find('[data-testid="workbench-action-batch-summary-count"]').text()
+    ).toBe('0');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0001');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
+      'action-0001'
+    );
+    expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('1');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('0');
+
+    const fallbackStatePointId = wrapper
+      .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+      .text();
+    expect(fallbackStatePointId).toContain('action-0001');
+    expect(fallbackStatePointId).not.toBe(batchStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-resource-chart-selection"]')
+        .attributes('data-state-point-id')
+    ).toBe(fallbackStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-navigation"]')
+        .attributes('data-state-point-id')
+    ).toBe(fallbackStatePointId);
+
+    const actionResultRow = wrapper.find(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    );
+    expect(actionResultRow.attributes('data-selected-state-point-id')).toBe(
+      fallbackStatePointId
+    );
+    expect(actionResultRow.attributes('data-result-location-status')).toBe(
+      'selected-result'
+    );
+    const actionContributionPanel = wrapper.find(
+      '[data-testid="workbench-action-contribution-panel"]'
+    );
+    expect(actionContributionPanel.attributes('data-action-id')).toBe(
+      'action-0001'
+    );
+    const hpContributionRow = wrapper.find(
+      '[data-testid="workbench-action-contribution-row"][data-track-key="enemyHpDamage"]'
+    );
+    expect(hpContributionRow.attributes('data-state-point-id')).toBe(
+      fallbackStatePointId
+    );
+    expect(hpContributionRow.attributes('data-active')).toBe('true');
+  });
+
   it('falls back to the first runtime result when opening without a matching action point', async () => {
     const wrapper = mount(Workbench, {
       global: {
