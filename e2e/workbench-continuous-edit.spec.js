@@ -1547,7 +1547,7 @@ test('keeps result rows stable across multi-action edits', async ({ page }) => {
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
-test('keeps runtime result flow usable after deleting the focused action', async ({
+test('keeps runtime result flow usable after deleting the focused action @workbench-main-flow', async ({
   page,
 }) => {
   const browserIssues = collectBrowserIssues(page);
@@ -1576,6 +1576,7 @@ test('keeps runtime result flow usable after deleting the focused action', async
   expect(fallbackState.statePointId).toContain('action-0002');
   expect(fallbackState.statePointId).not.toBe(copiedState.statePointId);
   expectRuntimeStatePointSynced(fallbackState, fallbackState.statePointId);
+  await expectCurveAndLogSelection(page, fallbackState.statePointId);
   await expectRuntimeOutputConsistent(page);
   await expect(
     page.locator('.action-item[data-action-id="action-0003"]')
