@@ -1840,8 +1840,22 @@ describe('Workbench view', () => {
         .attributes('data-flow-primary-kind')
     ).toBe('open-runtime-results');
 
-    await openRuntimeButton.trigger('click');
-    await nextTick();
+    const originalRuntimeLogScrollIntoView = Element.prototype.scrollIntoView;
+    const runtimeLogScrollIntoView = vi.fn();
+    Element.prototype.scrollIntoView = runtimeLogScrollIntoView;
+
+    try {
+      await openRuntimeButton.trigger('click');
+      await nextTick();
+      await nextTick();
+      await Promise.resolve();
+    } finally {
+      if (originalRuntimeLogScrollIntoView) {
+        Element.prototype.scrollIntoView = originalRuntimeLogScrollIntoView;
+      } else {
+        delete Element.prototype.scrollIntoView;
+      }
+    }
 
     expect(getLastDispatchedFlowAction(wrapper, WorkbenchFlowPanel)).toMatchObject({
       kind: 'open-runtime-results',
@@ -1852,6 +1866,13 @@ describe('Workbench view', () => {
     const selectedRuntimePointId = wrapper
       .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
       .text();
+    const scrolledRuntimeLogRow = runtimeLogScrollIntoView.mock.contexts.find(
+      element =>
+        element?.getAttribute('data-testid') ===
+          'workbench-runtime-sim-log-row' &&
+        element.getAttribute('data-state-point-id') === selectedRuntimePointId
+    );
+    expect(scrolledRuntimeLogRow).toBeTruthy();
     const focusedFlowPanel = wrapper.find(
       '[data-testid="workbench-flow-panel"]'
     );

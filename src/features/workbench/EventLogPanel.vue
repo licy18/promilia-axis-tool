@@ -1,5 +1,6 @@
 <template>
   <section
+    ref="eventLogPanelRef"
     class="panel event-log-panel"
     :data-flow-phase="flowModel?.phase ?? ''"
     :data-flow-state-point-id="flowSelectedStatePointId"
@@ -298,7 +299,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 import { Aim, EditPen, Tickets } from '@element-plus/icons-vue';
 import { createRuntimeDetailCalculatorRows } from './runtimeSelectedDetail';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
@@ -363,6 +364,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['dispatch-flow-action']);
 
+const eventLogPanelRef = ref(null);
 const selectedRuntimeLogIndex = ref(0);
 const runtimeTrackFilter = ref('all');
 const runtimeActorFilter = ref('all');
@@ -770,12 +772,14 @@ watch(filteredRuntimeSimLogRows, rows => {
   if (selectedRuntimeLogIndex.value >= rows.length) {
     selectedRuntimeLogIndex.value = 0;
   }
+  scheduleSelectedRuntimeLogRowScroll();
 });
 
 watch(
   () => flowSelectedStatePointId.value,
   () => {
     syncSelectedRuntimeLogIndexFromStatePoint(filteredRuntimeSimLogRows.value);
+    scheduleSelectedRuntimeLogRowScroll();
   }
 );
 
@@ -804,6 +808,7 @@ watch(
       return;
     }
     focusRuntimeLogByStatePoint(props.runtimeLogFocus.statePointId);
+    scheduleSelectedRuntimeLogRowScroll();
   }
 );
 
@@ -1109,6 +1114,40 @@ function isRuntimeLogRowSelected(row, index) {
 
 function getRuntimeStatePointIdByRow(row) {
   return runtimeContextByRow.value.get(row)?.statePointId ?? '';
+}
+
+function scheduleSelectedRuntimeLogRowScroll() {
+  if (!shouldScrollSelectedRuntimeLogRow()) {
+    return;
+  }
+  void nextTick().then(() => {
+    scrollSelectedRuntimeLogRowIntoView();
+  });
+}
+
+function shouldScrollSelectedRuntimeLogRow() {
+  return Boolean(
+    props.flowModel?.phase === 'runtime-result' &&
+      flowSelectedStatePointId.value &&
+      filteredRuntimeSimLogRows.value.length > 0
+  );
+}
+
+function scrollSelectedRuntimeLogRowIntoView() {
+  const panel = eventLogPanelRef.value;
+  if (!panel) {
+    return;
+  }
+  const statePointId = flowSelectedStatePointId.value;
+  const target = Array.from(
+    panel.querySelectorAll('[data-testid="workbench-runtime-sim-log-row"]')
+  ).find(
+    row => row.getAttribute('data-state-point-id') === statePointId
+  );
+  target?.scrollIntoView?.({
+    block: 'nearest',
+    inline: 'nearest',
+  });
 }
 
 function formatRuntimeTime(row) {
