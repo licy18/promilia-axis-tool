@@ -158,6 +158,24 @@
       </div>
     </div>
 
+    <div
+      v-if="runtimeContributionSummary.visible"
+      class="runtime-detail-contribution-summary"
+      :data-active-count="runtimeContributionSummary.activeCount"
+      :data-total-count="runtimeContributionSummary.totalCount"
+      :data-primary-contribution-key="
+        runtimeContributionSummary.primaryKey
+      "
+      data-testid="workbench-runtime-selected-detail-contribution-summary"
+    >
+      <span>本点贡献</span>
+      <strong
+        data-testid="workbench-runtime-selected-detail-contribution-summary-primary"
+      >
+        {{ runtimeContributionSummary.label }}
+      </strong>
+    </div>
+
     <div v-if="detail" class="runtime-detail-contributions">
       <div
         v-for="row in detail.contributionRows"
@@ -290,6 +308,9 @@ const runtimeReviewContextView = computed(
 const runtimeReviewSelectedStatePointId = computed(
   () => runtimeReviewContextView.value.selectedStatePointId
 );
+const runtimeContributionSummary = computed(() =>
+  createRuntimeContributionSummary(props.detail)
+);
 const runtimeDetailActionEditButtonTarget = computed(() =>
   runtimeDetailActionEditCommand.value.target
 );
@@ -413,6 +434,21 @@ function formatBaselineStatus(status) {
 
 function formatContribution(row) {
   return row.signed ? formatSigned(row.value) : formatNumber(row.value);
+}
+
+function createRuntimeContributionSummary(detail) {
+  const rows = detail?.contributionRows ?? [];
+  const activeRows = rows.filter(row => row.active);
+  const primaryRow = activeRows[0] ?? null;
+  return {
+    visible: rows.length > 0,
+    activeCount: activeRows.length,
+    totalCount: rows.length,
+    primaryKey: primaryRow?.key ?? '',
+    label: primaryRow
+      ? `${primaryRow.label} ${formatContribution(primaryRow)}`
+      : '无三值变化',
+  };
 }
 
 function formatSigned(value) {
@@ -711,6 +747,36 @@ h2 {
   display: grid;
   gap: 6px;
   padding: 0 14px;
+}
+
+.runtime-detail-contribution-summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin: 0 14px;
+  padding: 8px 9px;
+  border: 1px solid rgba(121, 199, 185, 0.3);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.1);
+}
+
+.runtime-detail-contribution-summary span {
+  color: #9ce0d2;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.runtime-detail-contribution-summary strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #ffffff;
+  font-size: 12px;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .runtime-detail-contribution-row,

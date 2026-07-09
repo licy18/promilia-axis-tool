@@ -4921,6 +4921,21 @@ describe('Workbench view', () => {
         )
         .text()
     ).toBe('敌人 HP12,461');
+    const runtimeContributionSummary = wrapper.find(
+      '[data-testid="workbench-runtime-selected-detail-contribution-summary"]'
+    );
+    expect(runtimeContributionSummary.attributes()).toMatchObject({
+      'data-active-count': '1',
+      'data-total-count': '3',
+      'data-primary-contribution-key': 'hp',
+    });
+    expect(
+      runtimeContributionSummary
+        .find(
+          '[data-testid="workbench-runtime-selected-detail-contribution-summary-primary"]'
+        )
+        .text()
+    ).toBe('敌人 HP 12,461');
     const runtimeCurveSelection = wrapper.find(
       '[data-testid="workbench-runtime-resource-chart-selection"]'
     );

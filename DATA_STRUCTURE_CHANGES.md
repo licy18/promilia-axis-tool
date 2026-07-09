@@ -21956,3 +21956,32 @@ analysis
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、60 条测试。
 - `npm run test -- --run`：通过，38 个测试文件、259 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 304. UI 主流程结果详情：Contribution Summary
+
+### 304.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`RuntimeSelectedDetailPanel` 新增前端派生摘要：
+
+```text
+runtimeContributionSummary = first active row from detail.contributionRows
+```
+
+消费规则：
+
+- 摘要只读取既有 `runtimeSelectedDetail.contributionRows`。
+- `active` 的贡献行作为“本点贡献”主显示；原有 HP / 韧性 / 能量三条贡献明细仍保留。
+- 该摘要只服务 Workbench 右侧三值详情展示，不写回项目草稿。
+
+### 304.2 保存与迁移
+
+不新增持久字段，不需要数据迁移。
+
+### 304.3 验证
+
+- Workbench 页面测试覆盖资源曲线选中运行点后三值详情显示贡献摘要，且 HP 贡献为当前活跃项。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、259 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
