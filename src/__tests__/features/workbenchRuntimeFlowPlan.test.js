@@ -123,6 +123,20 @@ describe('workbench runtime flow plan', () => {
     });
   });
 
+  it('uses explicit runtime log focus source when it differs from request source', () => {
+    const plan = createRuntimePointFocusFlowPlan({
+      statePointId: 'hp-delta:enemyHpDamage:applied',
+      source: 'analysis-action-contribution',
+      runtimeLogFocusSource: 'action-contribution',
+    });
+
+    expect(plan).toMatchObject({
+      kind: WORKBENCH_RUNTIME_FLOW_PLAN_KINDS.RUNTIME_POINT_FOCUS,
+      statePointId: 'hp-delta:enemyHpDamage:applied',
+      runtimeLogFocusSource: 'action-contribution',
+    });
+  });
+
   it('clears runtime point focus when no state point is available', () => {
     const plan = createRuntimePointFocusFlowPlan({
       statePointId: '',
@@ -168,6 +182,22 @@ describe('workbench runtime flow plan', () => {
         placeholder: false,
       },
       stateCurveTrackFilters: {},
+    });
+  });
+
+  it('uses explicit runtime log focus source for runtime result return', () => {
+    const plan = createRuntimeResultReturnFlowPlan({
+      actionId: 'action-0001',
+      statePointId: 'enemyHpDamage|applied|action-0001|12|0',
+      source: 'properties-panel',
+      runtimeLogFocusSource: 'action-result',
+    });
+
+    expect(plan).toMatchObject({
+      kind: WORKBENCH_RUNTIME_FLOW_PLAN_KINDS.RUNTIME_RESULT_RETURN,
+      actionId: 'action-0001',
+      statePointId: 'enemyHpDamage|applied|action-0001|12|0',
+      runtimeLogFocusSource: 'action-result',
     });
   });
 

@@ -315,6 +315,7 @@ describe('workbench flow controller', () => {
           actionId: 'action-result',
           statePointId: 'point-result',
           source: 'analysis-edit-result',
+          runtimeLogFocusSource: 'analysis-edit-result',
         },
       },
       {
@@ -322,6 +323,7 @@ describe('workbench flow controller', () => {
         payload: {
           statePointId: 'point-direct',
           source: 'runtime-state-point',
+          runtimeLogFocusSource: 'runtime-state-point',
           preserveStateCurveFilters: true,
         },
       },
@@ -329,7 +331,8 @@ describe('workbench flow controller', () => {
         plan: 'runtime-point-focus',
         payload: {
           statePointId: 'point-contribution',
-          source: 'action-contribution',
+          source: 'analysis-action-contribution',
+          runtimeLogFocusSource: 'action-contribution',
           preserveStateCurveFilters: false,
         },
       },
@@ -339,6 +342,7 @@ describe('workbench flow controller', () => {
           actionId: 'action-return',
           statePointId: 'point-return',
           source: 'properties-panel',
+          runtimeLogFocusSource: 'properties-panel',
         },
       },
     ]);

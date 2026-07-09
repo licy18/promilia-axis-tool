@@ -10010,6 +10010,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 `workbenchFlowPlanRequests` / `workbenchFlowPlanController` 是否还能把 runtime view patch 的来源字段进一步标准化，优先让“面板 action -> plan request -> flow runtime patch -> 页面状态”的闭环合同更清晰。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Focus Source Contract
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchFlowPlanRequests` 的 runtime point / runtime result request payload 新增 `runtimeLogFocusSource`，把面板来源 `source` 与真正驱动 runtime log / 曲线焦点的来源字段分开。
+- `workbenchFlowPlanController` 和 `workbenchRuntimeFlowPlan` 透传并消费 `runtimeLogFocusSource`；未提供时继续回退到旧 `source`，保持既有行为。
+- 贡献点定位现在可以保留 `source: analysis-action-contribution`，同时明确 `runtimeLogFocusSource: action-contribution`，后续日志、曲线和贡献详情可以依赖统一焦点来源。
+- 本阶段只标准化 UI 主流程 runtime focus source 合同，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- flow plan request、flow controller、flow plan controller、runtime flow plan 单测覆盖 `runtimeLogFocusSource` 的 request / plan 透传和贡献点来源分离。
+- Workbench 页面测试确认主流程 dispatch、运行结果查看、贡献点定位和编辑回跳路径保持可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowPlanRequests.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/views/Workbench.test.js`：通过，5 个测试文件、77 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、245 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 runtime focus source 是否可以被 `runtimeFocusSource` 视图 helper 统一解释，优先让日志、曲线、时间轴和详情面板消费同一套焦点来源分类。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

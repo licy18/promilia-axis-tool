@@ -66,6 +66,7 @@ describe('workbench flow plan requests', () => {
           actionId: 'action-return',
           statePointId: 'point-return',
           source: 'workbench-flow-panel',
+          runtimeLogFocusSource: 'workbench-flow-panel',
         },
       },
     });
@@ -159,6 +160,7 @@ describe('workbench flow plan requests', () => {
         actionId: 'action-result',
         statePointId: 'point-result',
         source: 'action-result',
+        runtimeLogFocusSource: 'action-result',
       },
     });
 
@@ -173,6 +175,7 @@ describe('workbench flow plan requests', () => {
       payload: {
         statePointId: 'point-direct',
         source: 'runtime-state-point',
+        runtimeLogFocusSource: 'runtime-state-point',
         preserveStateCurveFilters: true,
       },
     });
@@ -187,6 +190,24 @@ describe('workbench flow plan requests', () => {
       payload: {
         statePointId: 'point-contribution',
         source: 'action-contribution',
+        runtimeLogFocusSource: 'action-contribution',
+        preserveStateCurveFilters: false,
+      },
+    });
+
+    expect(
+      createWorkbenchContributionPointFocusPlanRequest({
+        statePointId: 'point-contribution',
+        source: 'analysis-action-contribution',
+        runtimeFocusSource: 'action-contribution',
+      })
+    ).toEqual({
+      applicationKind: WORKBENCH_FLOW_PLAN_APPLICATION_KINDS.RUNTIME,
+      methodKey: WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_POINT_FOCUS,
+      payload: {
+        statePointId: 'point-contribution',
+        source: 'analysis-action-contribution',
+        runtimeLogFocusSource: 'action-contribution',
         preserveStateCurveFilters: false,
       },
     });
@@ -261,6 +282,7 @@ describe('workbench flow plan requests', () => {
         actionId: 'action-return',
         statePointId: 'point-return',
         source: 'workbench-flow-panel',
+        runtimeLogFocusSource: 'workbench-flow-panel',
       },
     });
 
@@ -284,6 +306,7 @@ describe('workbench flow plan requests', () => {
           actionId: 'action-return',
           statePointId: 'point-return',
           source: 'workbench-flow-panel',
+          runtimeLogFocusSource: 'workbench-flow-panel',
         },
       },
     ]);

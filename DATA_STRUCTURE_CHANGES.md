@@ -21137,3 +21137,78 @@ applyRuntimeViewState
 - `npm run test -- --run src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/features/workbenchRuntimeViewState.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、78 条测试。
 - `npm run test -- --run`：通过，37 个测试文件、243 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 288. UI 主流程能力块：Runtime Focus Source Contract
+
+### 288.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`workbenchFlowPlanRequests` 的 runtime view 相关 request payload 新增标准字段：
+
+```js
+runtimeLogFocusSource
+```
+
+适用入口：
+
+```js
+createWorkbenchRuntimePointFocusPlanRequest(...)
+createWorkbenchRuntimeResultReturnPlanRequest(...)
+createWorkbenchContributionPointFocusPlanRequest(...)
+```
+
+新增内部归一规则：
+
+```js
+createRuntimeViewFocusPlanPayload({
+  statePointId,
+  source,
+  runtimeLogFocusSource,
+  defaultRuntimeLogFocusSource,
+})
+```
+
+该规则会保留调用来源 `source`，并单独计算运行日志/曲线焦点来源 `runtimeLogFocusSource`。当 `statePointId` 为空时，`runtimeLogFocusSource` 会输出为空，避免空结果点驱动日志焦点。
+
+`workbenchFlowPlanController` 将 `runtimeLogFocusSource` 透传给 runtime flow plan：
+
+```js
+createRuntimePointFocusFlowPlan({
+  statePointId,
+  source,
+  runtimeLogFocusSource,
+  preserveStateCurveFilters,
+})
+
+createRuntimeResultReturnFlowPlan({
+  actionId,
+  statePointId,
+  source,
+  runtimeLogFocusSource,
+})
+```
+
+`workbenchRuntimeFlowPlan` 继续兼容旧调用：如果未传 `runtimeLogFocusSource`，会回退使用 `source`，runtime result return 再回退到 `action-result`。
+
+贡献点定位的 request payload 现在可以同时表达：
+
+```js
+{
+  source: 'analysis-action-contribution',
+  runtimeLogFocusSource: 'action-contribution',
+}
+```
+
+### 288.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程 request / plan 的内部来源字段，不新增持久字段，不需要数据迁移。
+
+### 288.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowPlanRequests.test.js`，覆盖 runtime point、runtime result、contribution point request payload 的 `runtimeLogFocusSource`。
+- 更新 `src/__tests__/features/workbenchFlowController.test.js`，覆盖 flow action 到 plan request 后的 runtime focus source 透传。
+- 更新 `src/__tests__/features/workbenchRuntimeFlowPlan.test.js`，覆盖 `runtimeLogFocusSource` 与 `source` 不一致时的 runtime flow plan 输出。
+- `npm run test -- --run src/__tests__/features/workbenchFlowPlanRequests.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/features/workbenchRuntimeFlowPlan.test.js src/__tests__/views/Workbench.test.js`：通过，5 个测试文件、77 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、245 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

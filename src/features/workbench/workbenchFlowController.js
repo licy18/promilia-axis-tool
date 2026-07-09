@@ -75,7 +75,7 @@ export function createWorkbenchFlowPlanHandlers({
       ),
 
     [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_RESULT]: (
-      { actionId, statePointId, source } = {},
+      { actionId, statePointId, source, runtimeLogFocusSource } = {},
       _flowAction = null,
       planRequest = null
     ) =>
@@ -85,11 +85,17 @@ export function createWorkbenchFlowPlanHandlers({
             actionId,
             statePointId,
             source,
+            runtimeLogFocusSource,
           })
       ),
 
     [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_STATE_POINT]: (
-      { statePointId, source, preserveStateCurveFilters = false } = {},
+      {
+        statePointId,
+        source,
+        runtimeLogFocusSource,
+        preserveStateCurveFilters = false,
+      } = {},
       _flowAction = null,
       planRequest = null
     ) =>
@@ -98,6 +104,7 @@ export function createWorkbenchFlowPlanHandlers({
           createWorkbenchRuntimePointFocusPlanRequest({
             statePointId,
             source,
+            runtimeLogFocusSource,
             preserveStateCurveFilters,
           })
       ),
@@ -130,7 +137,7 @@ export function createWorkbenchFlowPlanHandlers({
       ),
 
     [WORKBENCH_FLOW_CONTROLLER_HANDLERS.RETURN_RUNTIME_RESULT]: (
-      { actionId, statePointId, source } = {},
+      { actionId, statePointId, source, runtimeLogFocusSource } = {},
       _flowAction = null,
       planRequest = null
     ) =>
@@ -140,6 +147,7 @@ export function createWorkbenchFlowPlanHandlers({
             actionId,
             statePointId,
             source,
+            runtimeLogFocusSource,
           })
       ),
   };

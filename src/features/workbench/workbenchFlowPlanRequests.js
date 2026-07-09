@@ -137,15 +137,21 @@ export function createWorkbenchRuntimeResultReturnPlanRequest({
   actionId = '',
   statePointId = '',
   source = '',
-  defaultSource = 'action-result',
+  runtimeLogFocusSource = '',
+  defaultRuntimeLogFocusSource = 'action-result',
 } = {}) {
+  const focusPayload = createRuntimeViewFocusPlanPayload({
+    statePointId,
+    source,
+    runtimeLogFocusSource,
+    defaultRuntimeLogFocusSource,
+  });
   return createWorkbenchFlowPlanRequest({
     applicationKind: WORKBENCH_FLOW_PLAN_APPLICATION_KINDS.RUNTIME,
     methodKey: WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_RESULT_RETURN,
     payload: {
       actionId,
-      statePointId,
-      source: source || defaultSource,
+      ...focusPayload,
     },
   });
 }
@@ -153,15 +159,21 @@ export function createWorkbenchRuntimeResultReturnPlanRequest({
 export function createWorkbenchRuntimePointFocusPlanRequest({
   statePointId = '',
   source = '',
-  defaultSource = 'runtime-state-point',
+  runtimeLogFocusSource = '',
+  defaultRuntimeLogFocusSource = 'runtime-state-point',
   preserveStateCurveFilters = false,
 } = {}) {
+  const focusPayload = createRuntimeViewFocusPlanPayload({
+    statePointId,
+    source,
+    runtimeLogFocusSource,
+    defaultRuntimeLogFocusSource,
+  });
   return createWorkbenchFlowPlanRequest({
     applicationKind: WORKBENCH_FLOW_PLAN_APPLICATION_KINDS.RUNTIME,
     methodKey: WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_POINT_FOCUS,
     payload: {
-      statePointId,
-      source: source || defaultSource,
+      ...focusPayload,
       preserveStateCurveFilters: Boolean(preserveStateCurveFilters),
     },
   });
@@ -172,7 +184,10 @@ export function createWorkbenchContributionPointFocusPlanRequest(payload = {}) {
     typeof payload === 'string' ? { statePointId: payload } : payload ?? {};
   return createWorkbenchRuntimePointFocusPlanRequest({
     statePointId: pointPayload.statePointId ?? '',
-    source: pointPayload.runtimeFocusSource || 'action-contribution',
+    source: pointPayload.source ?? '',
+    runtimeLogFocusSource:
+      pointPayload.runtimeFocusSource || 'action-contribution',
+    defaultRuntimeLogFocusSource: 'action-contribution',
     preserveStateCurveFilters: Boolean(pointPayload.preserveStateCurveFilters),
   });
 }
@@ -240,6 +255,24 @@ function createWorkbenchFlowPlanRequest({
     applicationKind,
     methodKey,
     payload,
+  };
+}
+
+function createRuntimeViewFocusPlanPayload({
+  statePointId = '',
+  source = '',
+  runtimeLogFocusSource = '',
+  defaultRuntimeLogFocusSource = '',
+} = {}) {
+  const normalizedStatePointId = statePointId ?? '';
+  const normalizedRuntimeLogFocusSource =
+    runtimeLogFocusSource || source || defaultRuntimeLogFocusSource;
+  return {
+    statePointId: normalizedStatePointId,
+    source: source || normalizedRuntimeLogFocusSource,
+    runtimeLogFocusSource: normalizedStatePointId
+      ? normalizedRuntimeLogFocusSource
+      : '',
   };
 }
 
