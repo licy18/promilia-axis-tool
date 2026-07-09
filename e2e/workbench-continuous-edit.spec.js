@@ -445,6 +445,110 @@ test('keeps the continuous edit result loop synced in the browser', async ({
   );
 });
 
+test('keeps the edit result loop usable at a narrow viewport', async ({
+  page,
+}) => {
+  const browserIssues = [];
+  page.on('console', message => {
+    if (['error', 'warning'].includes(message.type())) {
+      browserIssues.push(`${message.type()}: ${message.text()}`);
+    }
+  });
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/#/workbench');
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'action-edit'
+  );
+  expect(await readPageOverflowX(page)).toBe(0);
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-runtime-detail-action-id',
+    'action-0001'
+  );
+  const narrowRuntimeState = await readWorkbenchState(page);
+  expect(narrowRuntimeState).toMatchObject({
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    runtimeDetailActionId: 'action-0001',
+    contributionActionId: 'action-0001',
+    hpContributionActive: 'true',
+    selectedActionListId: 'action-0001',
+    selectedTimelineActionId: 'action-0001',
+    pageOverflowX: 0,
+  });
+
+  const contributionEditButton = page.getByTestId(
+    'workbench-action-contribution-edit-action'
+  );
+  await expect(contributionEditButton).toHaveAttribute(
+    'data-state-point-id',
+    narrowRuntimeState.statePointId
+  );
+  await contributionEditButton.click();
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+    )
+  ).toHaveAttribute('data-edit-focus-origin', 'runtime-focus');
+  expect(await readPageOverflowX(page)).toBe(0);
+
+  await page.getByTestId('workbench-start-frame-input').fill('18');
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-ready'
+  );
+  const narrowEditState = await readEditState(page);
+  expect(narrowEditState).toMatchObject({
+    actionId: 'action-0001',
+    phase: 'edit-result-ready',
+    resultFocused: 'false',
+    startFrameValue: '18',
+    startMsValue: '300',
+    returnButtonText: '查看刷新结果',
+    pageOverflowX: 0,
+  });
+  expect(narrowEditState.feedbackOriginStatePointId).toBe(
+    narrowRuntimeState.statePointId
+  );
+  expect(narrowEditState.feedbackStatePointId).toContain('action-0001');
+
+  await page.getByTestId('workbench-flow-return-edit-result').click();
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-review'
+  );
+  const narrowReturnedState = await readWorkbenchState(page);
+  expect(narrowReturnedState).toMatchObject({
+    phase: 'edit-result-review',
+    actionId: 'action-0001',
+    runtimeDetailActionId: 'action-0001',
+    contributionActionId: 'action-0001',
+    hpContributionActive: 'true',
+    selectedActionListId: 'action-0001',
+    selectedTimelineActionId: 'action-0001',
+    pageOverflowX: 0,
+  });
+  expect(narrowReturnedState.statePointId).toBe(
+    narrowEditState.feedbackStatePointId
+  );
+  expect(narrowReturnedState.curveStatePointId).toBe(
+    narrowEditState.feedbackStatePointId
+  );
+  expect(narrowReturnedState.logStatePointId).toBe(
+    narrowEditState.feedbackStatePointId
+  );
+  expect(narrowReturnedState.hpContributionStatePointId).toBe(
+    narrowEditState.feedbackStatePointId
+  );
+
+  expect(browserIssues.filter(issue => !isExpectedBrowserIssue(issue))).toEqual(
+    []
+  );
+});
+
 function isExpectedBrowserIssue(issue) {
   return (
     issue.includes('[intlify] Legacy API mode has been deprecated in v11') ||
@@ -549,4 +653,10 @@ async function readEditState(page) {
       ),
     };
   });
+}
+
+async function readPageOverflowX(page) {
+  return await page.evaluate(() =>
+    Math.max(0, document.documentElement.scrollWidth - window.innerWidth)
+  );
 }
