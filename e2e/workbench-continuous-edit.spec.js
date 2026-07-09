@@ -164,6 +164,7 @@ test('keeps the continuous edit result loop synced in the browser', async ({
   expect(firstActionState.hpContributionStatePointId).toBe(
     firstActionStatePointId
   );
+  expect(firstActionState.selectedActionListId).toBe('action-0001');
   await expect(firstActionResultRow).toHaveAttribute(
     'data-result-location-status',
     'selected-result'
@@ -171,6 +172,84 @@ test('keeps the continuous edit result loop synced in the browser', async ({
   await expect(firstActionResultRow).toHaveAttribute(
     'data-selected-state-point-id',
     firstActionStatePointId
+  );
+
+  await page.locator('.action-item[data-action-id="action-0003"]').click();
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-runtime-detail-action-id',
+    'action-0003'
+  );
+  const actionListJumpState = await readWorkbenchState(page);
+  expect(actionListJumpState).toMatchObject({
+    phase: 'edit-result-review',
+    actionId: 'action-0003',
+    runtimeDetailActionId: 'action-0003',
+    contributionActionId: 'action-0003',
+    navigationCount: '3',
+    navigationIndex: '2',
+    hpContributionActive: 'true',
+    selectedActionListId: 'action-0003',
+    selectedTimelineActionId: 'action-0003',
+    pageOverflowX: 0,
+  });
+  expect(actionListJumpState.statePointId).toContain('action-0003');
+  expect(actionListJumpState.curveStatePointId).toBe(
+    actionListJumpState.statePointId
+  );
+  expect(actionListJumpState.logStatePointId).toBe(
+    actionListJumpState.statePointId
+  );
+  expect(actionListJumpState.hpContributionStatePointId).toBe(
+    actionListJumpState.statePointId
+  );
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0003"]'
+    )
+  ).toHaveAttribute(
+    'data-selected-state-point-id',
+    actionListJumpState.statePointId
+  );
+
+  await page
+    .locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+    )
+    .click({ position: { x: 8, y: 10 } });
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-runtime-detail-action-id',
+    'action-0001'
+  );
+  const timelineJumpState = await readWorkbenchState(page);
+  expect(timelineJumpState).toMatchObject({
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    runtimeDetailActionId: 'action-0001',
+    contributionActionId: 'action-0001',
+    navigationCount: '3',
+    navigationIndex: '0',
+    hpContributionActive: 'true',
+    selectedActionListId: 'action-0001',
+    selectedTimelineActionId: 'action-0001',
+    pageOverflowX: 0,
+  });
+  expect(timelineJumpState.statePointId).toBe(firstActionStatePointId);
+  expect(timelineJumpState.curveStatePointId).toBe(
+    timelineJumpState.statePointId
+  );
+  expect(timelineJumpState.logStatePointId).toBe(
+    timelineJumpState.statePointId
+  );
+  expect(timelineJumpState.hpContributionStatePointId).toBe(
+    timelineJumpState.statePointId
+  );
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    )
+  ).toHaveAttribute(
+    'data-selected-state-point-id',
+    timelineJumpState.statePointId
   );
   expect(browserIssues.filter(issue => !isExpectedBrowserIssue(issue))).toEqual(
     []
@@ -232,6 +311,10 @@ async function readWorkbenchState(page) {
       selectedTimelineActionId:
         document
           .querySelector('[data-testid="workbench-timeline-action"].selected')
+          ?.getAttribute('data-action-id') ?? '',
+      selectedActionListId:
+        document
+          .querySelector('.action-item.selected')
           ?.getAttribute('data-action-id') ?? '',
       pageOverflowX: Math.max(
         0,

@@ -11214,6 +11214,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：在结果列表定位已可用的基础上，优先完善动作列表/时间轴到结果列表的反向定位体验，让用户从编辑态选择某个动作后也能清楚回到对应运行结果。
 
+### 2026-07-09：UI 主流程动作反向定位 - Action To Result Jump Smoke
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 扩展浏览器级 e2e，固定动作列表和时间轴到运行结果的反向定位路径。
+- 在多动作排轴里，用户从结果列表跳回 `action-0001` 后，再点动作列表里的 `action-0003`，页面会回到 `action-0003` 的刷新结果上下文，曲线/日志/详情/HP 贡献拆分同步。
+- 用户点时间轴中 `action-0001` 的可见起点区域后，页面会切回 `action-0001` 的运行结果，时间轴、动作列表、曲线、日志、详情和 HP 贡献拆分同步。
+- 本阶段只补齐 UI 主流程动作选择到结果定位的浏览器回归，不改变运行时输出、三值结果、公式、证据字段或数据结构。
+
+当前验证事实：
+
+- 扩展 `e2e/workbench-continuous-edit.spec.js` 中的 `keeps the continuous edit result loop synced in the browser`。
+- e2e 覆盖：`action-0003` 刷新结果 -> 结果列表 `action-0001` -> 动作列表 `action-0003` -> 时间轴 `action-0001`。
+- 发现：长持续时间动作块在时间轴上会出现重叠，默认点击重叠动作中心可能被上层动作拦截；当前 e2e 固定的是用户可见的动作起点区域点击，后续可单独优化重叠动作的分层/选择体验。
+
+验收结果：
+
+- `npm run test:e2e`：通过，1 条浏览器级烟测。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "keeps the result loop usable"`：通过，1 条目标组件回归。
+- `npx prettier --check e2e/workbench-continuous-edit.spec.js`：通过。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：优先处理时间轴重叠动作的可选中体验，避免长持续时间动作覆盖其他动作中心点击，让排轴编辑更接近 Endaxis 的稳定操作感。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
