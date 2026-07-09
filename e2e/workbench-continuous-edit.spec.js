@@ -336,6 +336,54 @@ test('keeps result rows stable across multi-action edits', async ({ page }) => {
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps runtime result flow usable after deleting the focused action', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+  const { copiedState } = await createThreeActionRuntime(page);
+  expectRuntimeReviewState(copiedState, {
+    phase: 'runtime-result',
+    actionId: 'action-0003',
+    navigationCount: '3',
+    navigationIndex: '2',
+    selected: false,
+  });
+
+  await page
+    .locator('.action-item[data-action-id="action-0003"]')
+    .getByTestId('workbench-delete-action')
+    .click();
+
+  const fallbackState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(fallbackState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '2',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expect(fallbackState.statePointId).toContain('action-0002');
+  expect(fallbackState.statePointId).not.toBe(copiedState.statePointId);
+  expectRuntimeStatePointSynced(fallbackState, fallbackState.statePointId);
+  await expect(
+    page.locator('.action-item[data-action-id="action-0003"]')
+  ).toHaveCount(0);
+
+  await focusRuntimeDetailAction(page);
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
+    actionId: 'action-0002',
+    frameValue: '144',
+    msValue: '2400',
+    originStatePointId: fallbackState.statePointId,
+    navigationCount: '2',
+    navigationIndex: '1',
+    selected: true,
+  });
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps the edit result loop usable at a narrow viewport', async ({
   page,
 }) => {

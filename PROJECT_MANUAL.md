@@ -11637,6 +11637,35 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续运行时层能力块：让 runtime 主入口逐步减少对 generation entry / generation layer fallback 的生产依赖；若输入输出封套稳定，再回到 UI 主流程做结果详情的完整编辑体验补齐。
 
+### 2026-07-09：UI 主流程删除回落闭环 - Delete Result Fallback Loop
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 用户在多动作运行结果中查看某个动作的曲线、日志和三值详情后，可以直接删除这个动作。
+- 被查看动作删除后，Workbench 会自动定位到剩余的可用运行结果，资源曲线、模拟日志、三值详情、贡献拆分和动作选择保持同步。
+- 用户可以从回落后的结果详情继续进入动作编辑，并通过“查看刷新结果”回到刷新后的运行点。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、保存数据或导入导出结构。
+
+当前验证事实：
+
+- 新增浏览器级闭环场景：`多动作运行结果 -> 删除当前结果动作 -> 自动落到剩余结果 -> 编辑回看刷新结果`。
+- 该场景复用现有 runtime sync request 和主流程 action，不新增内部抽象层。
+
+验收结果：
+
+- `npm run test:e2e -- --grep "deleting the focused action"`：通过，1 条浏览器级闭环测试。
+- `npm run test -- --run`：通过，38 个测试文件、269 条测试。
+- `npm run test:e2e`：通过，6 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md e2e/workbench-continuous-edit.spec.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查完整编辑体验里“批量删除/批量生成动作”后的结果定位是否同样稳定；若已稳定，再回到运行时层收敛 runtime 输入输出边界。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
