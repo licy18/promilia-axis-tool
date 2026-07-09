@@ -24,6 +24,8 @@ import {
   createWorkbenchRuntimeResultReturnFlowAction,
   createWorkbenchRuntimeReviewFlowAction,
   createWorkbenchRuntimeReviewFlowActionFromSurface,
+  createWorkbenchRuntimeSelectionFlowAction,
+  createWorkbenchRuntimeSelectionFlowActionFromSurface,
   createWorkbenchRuntimeStatePointFlowAction,
   createWorkbenchRuntimeStatePointFlowActionFromSurface,
 } from '../../features/workbench/workbenchMainFlowActions';
@@ -628,6 +630,21 @@ describe('workbench main flow actions', () => {
       canRun: true,
     });
     expect(
+      surface.createRuntimeSelectionFlowAction({
+        source: 'event-log-runtime-row',
+        detail: {
+          actionId: 'selection-action',
+          statePointId: 'selection-state',
+        },
+      })
+    ).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'event-log-runtime-row',
+      actionId: 'selection-action',
+      statePointId: 'selection-state',
+      canRun: true,
+    });
+    expect(
       surface.createRuntimeStatePointFlowAction({
         source: 'workbench-flow-navigation',
         detail: {
@@ -755,6 +772,13 @@ describe('workbench main flow actions', () => {
   });
 
   it('creates runtime point and result focus actions with the same main flow factory', () => {
+    const selectionAction = createWorkbenchRuntimeSelectionFlowAction({
+      source: 'event-log-runtime-row',
+      detail: {
+        actionId: 'action-0001',
+        statePointId: 'enemyHpDamage|applied|action-0001|12|0',
+      },
+    });
     const statePointAction = createWorkbenchRuntimeStatePointFlowAction({
       source: 'resource-runtime-curve',
       detail: {
@@ -768,6 +792,13 @@ describe('workbench main flow actions', () => {
       statePointId: 'enemyHpDamage|applied|action-0001|12|0',
     });
 
+    expect(selectionAction).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'event-log-runtime-row',
+      actionId: 'action-0001',
+      statePointId: 'enemyHpDamage|applied|action-0001|12|0',
+      canRun: true,
+    });
     expect(statePointAction).toMatchObject({
       kind: 'select-runtime-state-point',
       source: 'resource-runtime-curve',
@@ -843,6 +874,16 @@ describe('workbench main flow actions', () => {
           canRun: true,
         };
       },
+      createRuntimeSelectionFlowAction(options = {}) {
+        calls.push(['selection', options]);
+        return {
+          kind: 'select-runtime-state-point',
+          source: options.source,
+          actionId: 'surface-selection-action',
+          statePointId: options.statePointId,
+          canRun: true,
+        };
+      },
       createRuntimeStatePointFlowAction(options = {}) {
         calls.push(['state-point', options]);
         return {
@@ -876,6 +917,18 @@ describe('workbench main flow actions', () => {
     ).toMatchObject({
       actionId: 'surface-review-action',
       statePointId: 'review-point',
+      canRun: true,
+    });
+    expect(
+      createWorkbenchRuntimeSelectionFlowActionFromSurface({
+        mainFlowCommandSurface,
+        source: 'event-log-runtime-row',
+        statePointId: 'selection-point',
+        enabled: true,
+      })
+    ).toMatchObject({
+      actionId: 'surface-selection-action',
+      statePointId: 'selection-point',
       canRun: true,
     });
     expect(
@@ -915,6 +968,14 @@ describe('workbench main flow actions', () => {
         },
       ],
       [
+        'selection',
+        {
+          source: 'event-log-runtime-row',
+          statePointId: 'selection-point',
+          enabled: true,
+        },
+      ],
+      [
         'state-point',
         {
           source: 'state-curve-point',
@@ -946,6 +1007,18 @@ describe('workbench main flow actions', () => {
       kind: 'select-runtime-state-point',
       source: 'event-log-runtime-row',
       statePointId: 'review-point',
+      canRun: true,
+    });
+    expect(
+      createWorkbenchRuntimeSelectionFlowActionFromSurface({
+        source: 'event-log-runtime-row',
+        statePointId: 'selection-point',
+        enabled: true,
+      })
+    ).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'event-log-runtime-row',
+      statePointId: 'selection-point',
       canRun: true,
     });
     expect(

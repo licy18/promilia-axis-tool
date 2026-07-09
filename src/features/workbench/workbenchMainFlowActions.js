@@ -274,6 +274,8 @@ export function createWorkbenchMainFlowCommandSurface({
     });
   const createRuntimeReviewFlowAction = (options = {}) =>
     createWorkbenchRuntimeReviewFlowAction(options);
+  const createRuntimeSelectionFlowAction = (options = {}) =>
+    createWorkbenchRuntimeSelectionFlowAction(options);
   const createRuntimeStatePointFlowAction = (options = {}) =>
     createWorkbenchRuntimeStatePointFlowAction(options);
   const createRuntimeResultFlowAction = (options = {}) =>
@@ -306,6 +308,7 @@ export function createWorkbenchMainFlowCommandSurface({
     createRuntimeReviewPanelCommandView,
     createRuntimeResultReturnCommand,
     createRuntimeReviewFlowAction,
+    createRuntimeSelectionFlowAction,
     createRuntimeStatePointFlowAction,
     createRuntimeResultFlowAction,
     createFocusEditSourceFlowAction,
@@ -315,6 +318,10 @@ export function createWorkbenchMainFlowCommandSurface({
 
 export function createWorkbenchRuntimeStatePointFlowAction(options = {}) {
   return createRuntimeStatePointFocusFlowAction(options);
+}
+
+export function createWorkbenchRuntimeSelectionFlowAction(options = {}) {
+  return createWorkbenchRuntimeStatePointFlowAction(options);
 }
 
 export function createWorkbenchRuntimeResultFlowAction(options = {}) {
@@ -338,6 +345,18 @@ export function createWorkbenchRuntimeStatePointFlowActionFromSurface(
   return (
     mainFlowCommandSurface?.createRuntimeStatePointFlowAction?.(options) ??
     createWorkbenchRuntimeStatePointFlowAction(options)
+  );
+}
+
+export function createWorkbenchRuntimeSelectionFlowActionFromSurface(
+  input = {}
+) {
+  const { mainFlowCommandSurface, options } =
+    createMainFlowSurfaceActionOptions(input);
+  return (
+    mainFlowCommandSurface?.createRuntimeSelectionFlowAction?.(options) ??
+    mainFlowCommandSurface?.createRuntimeStatePointFlowAction?.(options) ??
+    createWorkbenchRuntimeSelectionFlowAction(options)
   );
 }
 

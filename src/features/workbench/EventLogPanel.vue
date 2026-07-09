@@ -331,9 +331,9 @@ import {
 } from './workbenchFlowModel';
 import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
-  createWorkbenchRuntimeReviewFlowActionFromSurface,
   createWorkbenchRuntimeReviewOperationCommand,
   createWorkbenchRuntimeReviewPanelCommandView,
+  createWorkbenchRuntimeSelectionFlowActionFromSurface,
 } from './workbenchMainFlowActions';
 import {
   isRuntimeResultFocusSource,
@@ -872,9 +872,8 @@ function createRuntimeReviewPanelCommandViewFromSurface(options = {}) {
 
 function getRuntimeLogRowFlowAction(row) {
   const statePointId = getRuntimeStatePointIdByRow(row);
-  return createWorkbenchRuntimeReviewFlowActionFromSurface({
+  return createWorkbenchRuntimeSelectionFlowActionFromSurface({
     mainFlowCommandSurface: props.mainFlowCommandSurface,
-    kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_STATE_POINT,
     source: 'event-log-runtime-row',
     detail: row,
     statePointId,

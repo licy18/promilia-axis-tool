@@ -368,9 +368,8 @@ import {
   resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
 import {
-  WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
-  createWorkbenchRuntimeReviewFlowActionFromSurface,
   createWorkbenchRuntimeReviewPanelCommandView,
+  createWorkbenchRuntimeSelectionFlowActionFromSurface,
 } from './workbenchMainFlowActions';
 import { isRuntimeResultFocusSource } from './runtimeFocusSource';
 
@@ -1118,9 +1117,8 @@ function dispatchRuntimeCurveFlowAction(action) {
 }
 
 function getRuntimeCurvePointFlowAction(point) {
-  return createWorkbenchRuntimeReviewFlowActionFromSurface({
+  return createWorkbenchRuntimeSelectionFlowActionFromSurface({
     mainFlowCommandSurface: props.mainFlowCommandSurface,
-    kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_STATE_POINT,
     source: 'resource-runtime-curve',
     detail: point,
     enabled: Boolean(point?.statePointId),

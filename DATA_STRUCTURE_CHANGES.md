@@ -20556,6 +20556,43 @@ Workbench 页面层新增 `captureActionMutationRuntimeReviewState()`，只负�
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `git diff --check`：通过；仅有 Git 换行转换提示。
 
+## 284. UI 主流程能力块：Runtime Selection Action Surface
+
+### 284.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`workbenchMainFlowActions` 新增 runtime selection action surface：
+
+```js
+createWorkbenchRuntimeSelectionFlowAction(options)
+createWorkbenchRuntimeSelectionFlowActionFromSurface(input)
+createRuntimeSelectionFlowAction(options)
+```
+
+其中 `createRuntimeSelectionFlowAction()` 是 `createWorkbenchMainFlowCommandSurface()` 暴露的面板侧工厂。它生成的 flow action 仍为既有 `select-runtime-state-point`，只是把面板侧“选择运行时点”的语义入口从泛用 runtime review action kind 中抽出来。
+
+`createWorkbenchRuntimeSelectionFlowActionFromSurface()` 的回退顺序为：
+
+```js
+mainFlowCommandSurface.createRuntimeSelectionFlowAction(options)
+mainFlowCommandSurface.createRuntimeStatePointFlowAction(options)
+createWorkbenchRuntimeSelectionFlowAction(options)
+```
+
+`ResourceMonitorPanel` 与 `EventLogPanel` 的运行点选择改为消费新的 selection surface，不再直接传 `WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_STATE_POINT`。
+
+### 284.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程 action factory 暴露边界，不新增持久字段，不需要数据迁移。
+
+### 284.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 runtime selection factory、command surface 注入路径和无 surface 回退路径。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、84 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、236 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
 ## 275. UI 主流程能力块：Result Return Command Surface
 
 ### 275.1 结构变化

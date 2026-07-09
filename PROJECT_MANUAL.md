@@ -9906,6 +9906,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 command surface 暴露给各面板的 action factory，优先减少仍需要面板理解 action kind / fallback payload 的位置，继续服务完整“编辑 -> 运行 -> 查看 -> 回改”闭环。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Selection Action Surface
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchMainFlowActions` 新增 runtime selection action surface，面板可以用“选择运行时点”的语义入口生成 flow action，不再为资源曲线/日志行选择直接传 runtime review kind。
+- `ResourceMonitorPanel` 和 `EventLogPanel` 的运行点选择改为消费 selection surface，继续输出同一种 `select-runtime-state-point` flow action，保持现有曲线、日志、详情联动行为不变。
+- command surface 保留旧的 runtime state point factory 兼容入口，并让新的 selection factory 可以在无 surface 时回退到共享 factory。
+- 本阶段只收束 UI 主流程 action factory 暴露边界，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- main flow action 单测覆盖 runtime selection factory、surface 注入路径和无 surface 回退路径。
+- Workbench 页面测试确认主流程 action 分发和运行结果查看路径保持可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、84 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、236 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 AnalysisPanel / TimelineGridPreview 仍由面板包装的 runtime result、edit-source、contribution point action factory，优先把完整“编辑 -> 运行 -> 查看 -> 回改”闭环的面板动作继续接到 command surface，而不是新增状态标签或提示文案。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
