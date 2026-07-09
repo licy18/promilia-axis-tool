@@ -54,16 +54,32 @@ describe('workbench flow model', () => {
       },
       runtimeInput: {
         appliedDeltaSource: 'threeValueRuntimeInput.appliedDeltas',
+        generationReadStandardOutputCount: 3,
+        generationReadFallbackInputCount: 0,
+        generationReadUsesLegacyFallback: false,
         ready: true,
       },
       runtimeOutput: {
         status: 'runtime-output-contract-ready',
         runtimeOutputsSourceKind: 'azpr-three-value-runtime-outputs',
         resourcesAlias: 'resourceCurves',
+        outputReadStandardOutputCount: 4,
+        outputReadFallbackOutputCount: 0,
+        outputReadUsesLegacyFallback: false,
         stateCurvePointCount: 2,
         outputConsistencyStatus: 'runtime-output-consistent',
         outputConsistent: true,
         ready: true,
+      },
+      runtimeContractBoundary: {
+        status: 'workbench-runtime-contract-boundary-standard',
+        ready: true,
+        standardBoundaryReady: true,
+        generationStandardReady: true,
+        runtimeOutputStandardReady: true,
+        simLogConnectedToAppliedDeltas: true,
+        usesLegacyFallback: false,
+        fallbackCount: 0,
       },
     });
     expect(model.runtimeOutputConsistency).toMatchObject({
@@ -74,6 +90,14 @@ describe('workbench flow model', () => {
       consumerViewReady: true,
       consumerViewReadyState: 'true',
       outputConsumerContractStatus: 'runtime-output-consumer-contract-ready',
+      runtimeContractBoundaryStatus:
+        'workbench-runtime-contract-boundary-standard',
+      runtimeContractBoundaryReady: true,
+      runtimeContractBoundaryReadyState: 'true',
+      runtimeContractStandardBoundaryReady: true,
+      runtimeContractStandardBoundaryReadyState: 'true',
+      runtimeContractUsesLegacyFallback: false,
+      runtimeContractUsesLegacyFallbackState: 'false',
       simLogCount: 2,
       runtimeSimLogCount: 2,
       simLogCountSynced: true,
@@ -1350,7 +1374,26 @@ function createRuntimeProjectionFixture() {
     runtimeInput: {
       sourceKind: 'azpr-runtime-input-from-generation-builder-source',
       status: 'runtime-input-ready-with-applied-deltas',
+      runtimeInputSourceKind:
+        'azpr-runtime-input-source-from-generation-builder',
       appliedDeltaSource: 'threeValueRuntimeInput.appliedDeltas',
+      generationReadSources: {
+        status: 'runtime-input-generation-read-sources-ready',
+        standardOutputCount: 3,
+        fallbackInputCount: 0,
+        usesLegacyGenerationFallback: false,
+        inputs: {
+          runtimeInputSource: {
+            sourcePath: 'generationOutputs.outputs.runtimeInputSource',
+          },
+          standardContract: {
+            sourcePath: 'generationOutputs.outputs.standardContract',
+          },
+          deltas: {
+            sourcePath: 'generationOutputs.outputs.deltas',
+          },
+        },
+      },
       summary: {
         inputDeltaCount: 2,
         appliedDeltaCount: 2,
@@ -1451,6 +1494,22 @@ function createRuntimeOutputsFixture(runtimeProjection) {
     outputConsistency: {
       status: 'runtime-output-consistent',
       consistent: true,
+    },
+    outputConsumerContract: {
+      sourceKind: 'azpr-three-value-runtime-output-consumer-contract',
+      status: 'runtime-output-consumer-contract-ready',
+      summary: {
+        outputCount: 4,
+        simLogCount: 2,
+        stateCurvePointCount: 2,
+      },
+    },
+    outputs: {
+      simLog: runtimeProjection.simLog,
+      stateCurves: runtimeProjection.stateCurves,
+      resourceCurves: runtimeProjection.resourceCurves,
+      resources: runtimeProjection.resourceCurves,
+      summary: runtimeProjection.summary,
     },
     summary: runtimeProjection.summary,
     simLog: runtimeProjection.simLog,

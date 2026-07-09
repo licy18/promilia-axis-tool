@@ -31,6 +31,9 @@ export function createWorkbenchFlowContractContext({
     runtimeOutputs ?? runtimeProjection?.runtimeOutputs ?? runtimeProjection;
   const runtimeOutputConsumerView =
     createThreeValueRuntimeOutputConsumerView(runtimeOutputSource);
+  const runtimeOutputReadSources =
+    runtimeOutputConsumerView.outputReadSources ?? {};
+  const runtimeOutputReadOutputs = runtimeOutputReadSources.outputs ?? {};
   const outputContract = runtimeOutputConsumerView.outputContract;
   const outputConsumerContract =
     runtimeOutputConsumerView.outputConsumerContract ?? null;
@@ -55,6 +58,101 @@ export function createWorkbenchFlowContractContext({
     runtimeInput?.contractName ??
     runtimeProjection?.inputContractName ??
     '';
+  const runtimeInputContext = {
+    sourceKind: runtimeInput?.sourceKind ?? '',
+    status: runtimeInput?.status ?? '',
+    runtimeInputSourceKind: runtimeInput?.runtimeInputSourceKind ?? '',
+    generationEntrySourceKind: runtimeInput?.generationEntrySourceKind ?? '',
+    appliedDeltaSource:
+      runtimeInput?.appliedDeltaSource ??
+      runtimeInput?.summary?.appliedDeltaSource ??
+      runtimeSummary.runtimeInputSource ??
+      '',
+    inputDeltaCount: numberOrZero(
+      runtimeInput?.summary?.inputDeltaCount ?? runtimeSummary.inputDeltaCount
+    ),
+    appliedDeltaCount: numberOrZero(
+      runtimeInput?.summary?.appliedDeltaCount ??
+        runtimeSummary.appliedDeltaCount
+    ),
+    ignoredDeltaCount: numberOrZero(
+      runtimeInput?.ignoredDeltaCount ??
+        runtimeInput?.summary?.ignoredDeltaCount ??
+        runtimeSummary.runtimeInputIgnoredDeltaCount
+    ),
+    generationReadSourcesStatus: runtimeInputGenerationReadSources.status ?? '',
+    generationReadStandardOutputCount: numberOrZero(
+      runtimeInputGenerationReadSources.standardOutputCount
+    ),
+    generationReadFallbackInputCount: numberOrZero(
+      runtimeInputGenerationReadSources.fallbackInputCount
+    ),
+    generationReadUsesLegacyFallback: Boolean(
+      runtimeInputGenerationReadSources.usesLegacyGenerationFallback
+    ),
+    generationRuntimeInputSourcePath:
+      runtimeInputGenerationReadInputs.runtimeInputSource?.sourcePath ?? '',
+    generationStandardContractSourcePath:
+      runtimeInputGenerationReadInputs.standardContract?.sourcePath ?? '',
+    generationDeltasSourcePath:
+      runtimeInputGenerationReadInputs.deltas?.sourcePath ?? '',
+    appliedOnly: Boolean(runtimeInput?.appliedOnly ?? true),
+    ready: isReadyStatus(runtimeInput?.status),
+  };
+  const runtimeOutputContext = {
+    sourceKind: outputContract?.sourceKind ?? '',
+    status: outputContract?.status ?? '',
+    consumerContractSourceKind: outputConsumerContract?.sourceKind ?? '',
+    consumerContractStatus: outputConsumerContract?.status ?? '',
+    runtimeOutputsSourceKind: runtimeOutputSource?.sourceKind ?? '',
+    runtimeOutputsStatus: runtimeOutputSource?.status ?? '',
+    resourcesAlias: runtimeOutputSource?.outputAliases?.resources ?? '',
+    simLogInputSource: simLogOutput?.inputSource ?? '',
+    stateCurvesSourceKind: stateCurvesOutput?.sourceKind ?? '',
+    resourceCurvesSourceKind: resourceCurvesOutput?.sourceKind ?? '',
+    outputReadSourcesStatus: runtimeOutputReadSources.status ?? '',
+    outputReadStandardOutputCount: numberOrZero(
+      runtimeOutputReadSources.standardOutputCount
+    ),
+    outputReadFallbackOutputCount: numberOrZero(
+      runtimeOutputReadSources.fallbackOutputCount
+    ),
+    outputReadUsesLegacyFallback: Boolean(
+      runtimeOutputReadSources.usesLegacyProjectionFallback
+    ),
+    outputReadSimLogSourcePath:
+      runtimeOutputReadOutputs.simLog?.sourcePath ?? '',
+    outputReadStateCurvesSourcePath:
+      runtimeOutputReadOutputs.stateCurves?.sourcePath ?? '',
+    outputReadResourceCurvesSourcePath:
+      runtimeOutputReadOutputs.resourceCurves?.sourcePath ?? '',
+    outputReadSummarySourcePath:
+      runtimeOutputReadOutputs.summary?.sourcePath ?? '',
+    outputCount: numberOrZero(outputSummary.outputCount),
+    simLogCount: numberOrZero(
+      outputSummary.simLogCount ?? runtimeSummary.simLogCount
+    ),
+    enemyStatePointCount: numberOrZero(
+      outputSummary.enemyStatePointCount ?? runtimeSummary.enemyStatePointCount
+    ),
+    stateCurvePointCount: numberOrZero(
+      outputSummary.stateCurvePointCount ?? runtimeSummary.stateCurvePointCount
+    ),
+    resourceCurvePointCount: numberOrZero(
+      outputSummary.resourceCurvePointCount ??
+        runtimeSummary.resourceCurvePointCount
+    ),
+    outputConsistencyStatus:
+      outputSummary.outputConsistencyStatus ?? outputConsistency.status ?? '',
+    outputConsistent: Boolean(
+      outputSummary.outputConsistent ?? outputConsistency.consistent
+    ),
+    ready: runtimeOutputConsumerView.ready,
+  };
+  const runtimeContractBoundary = createWorkbenchRuntimeContractBoundary({
+    runtimeInput: runtimeInputContext,
+    runtimeOutput: runtimeOutputContext,
+  });
 
   return {
     contractName,
@@ -94,82 +192,9 @@ export function createWorkbenchFlowContractContext({
       summary: standardContract?.summary,
       readyStatus: 'action-hit-three-value-delta-contract-ready',
     }),
-    runtimeInput: {
-      sourceKind: runtimeInput?.sourceKind ?? '',
-      status: runtimeInput?.status ?? '',
-      runtimeInputSourceKind: runtimeInput?.runtimeInputSourceKind ?? '',
-      generationEntrySourceKind: runtimeInput?.generationEntrySourceKind ?? '',
-      appliedDeltaSource:
-        runtimeInput?.appliedDeltaSource ??
-        runtimeInput?.summary?.appliedDeltaSource ??
-        runtimeSummary.runtimeInputSource ??
-        '',
-      inputDeltaCount: numberOrZero(
-        runtimeInput?.summary?.inputDeltaCount ?? runtimeSummary.inputDeltaCount
-      ),
-      appliedDeltaCount: numberOrZero(
-        runtimeInput?.summary?.appliedDeltaCount ??
-          runtimeSummary.appliedDeltaCount
-      ),
-      ignoredDeltaCount: numberOrZero(
-        runtimeInput?.ignoredDeltaCount ??
-          runtimeInput?.summary?.ignoredDeltaCount ??
-          runtimeSummary.runtimeInputIgnoredDeltaCount
-      ),
-      generationReadSourcesStatus:
-        runtimeInputGenerationReadSources.status ?? '',
-      generationReadStandardOutputCount: numberOrZero(
-        runtimeInputGenerationReadSources.standardOutputCount
-      ),
-      generationReadFallbackInputCount: numberOrZero(
-        runtimeInputGenerationReadSources.fallbackInputCount
-      ),
-      generationReadUsesLegacyFallback: Boolean(
-        runtimeInputGenerationReadSources.usesLegacyGenerationFallback
-      ),
-      generationRuntimeInputSourcePath:
-        runtimeInputGenerationReadInputs.runtimeInputSource?.sourcePath ?? '',
-      generationStandardContractSourcePath:
-        runtimeInputGenerationReadInputs.standardContract?.sourcePath ?? '',
-      generationDeltasSourcePath:
-        runtimeInputGenerationReadInputs.deltas?.sourcePath ?? '',
-      appliedOnly: Boolean(runtimeInput?.appliedOnly ?? true),
-      ready: isReadyStatus(runtimeInput?.status),
-    },
-    runtimeOutput: {
-      sourceKind: outputContract?.sourceKind ?? '',
-      status: outputContract?.status ?? '',
-      consumerContractSourceKind: outputConsumerContract?.sourceKind ?? '',
-      consumerContractStatus: outputConsumerContract?.status ?? '',
-      runtimeOutputsSourceKind: runtimeOutputSource?.sourceKind ?? '',
-      runtimeOutputsStatus: runtimeOutputSource?.status ?? '',
-      resourcesAlias: runtimeOutputSource?.outputAliases?.resources ?? '',
-      simLogInputSource: simLogOutput?.inputSource ?? '',
-      stateCurvesSourceKind: stateCurvesOutput?.sourceKind ?? '',
-      resourceCurvesSourceKind: resourceCurvesOutput?.sourceKind ?? '',
-      outputCount: numberOrZero(outputSummary.outputCount),
-      simLogCount: numberOrZero(
-        outputSummary.simLogCount ?? runtimeSummary.simLogCount
-      ),
-      enemyStatePointCount: numberOrZero(
-        outputSummary.enemyStatePointCount ??
-          runtimeSummary.enemyStatePointCount
-      ),
-      stateCurvePointCount: numberOrZero(
-        outputSummary.stateCurvePointCount ??
-          runtimeSummary.stateCurvePointCount
-      ),
-      resourceCurvePointCount: numberOrZero(
-        outputSummary.resourceCurvePointCount ??
-          runtimeSummary.resourceCurvePointCount
-      ),
-      outputConsistencyStatus:
-        outputSummary.outputConsistencyStatus ?? outputConsistency.status ?? '',
-      outputConsistent: Boolean(
-        outputSummary.outputConsistent ?? outputConsistency.consistent
-      ),
-      ready: runtimeOutputConsumerView.ready,
-    },
+    runtimeInput: runtimeInputContext,
+    runtimeOutput: runtimeOutputContext,
+    runtimeContractBoundary,
   };
 }
 
@@ -189,6 +214,77 @@ function createFlowSourceState({
     appliedDeltaCount: numberOrZero(summary?.appliedDeltaCount),
     ready: readyStatus ? status === readyStatus : isReadyStatus(status),
     ...extra,
+  };
+}
+
+function createWorkbenchRuntimeContractBoundary({
+  runtimeInput = {},
+  runtimeOutput = {},
+} = {}) {
+  const generationStandardReady =
+    runtimeInput.generationReadStandardOutputCount >= 3 &&
+    !runtimeInput.generationReadUsesLegacyFallback;
+  const runtimeOutputStandardReady =
+    runtimeOutput.outputReadStandardOutputCount >= 4 &&
+    !runtimeOutput.outputReadUsesLegacyFallback;
+  const ready = Boolean(runtimeInput.ready && runtimeOutput.ready);
+  const standardBoundaryReady =
+    ready && generationStandardReady && runtimeOutputStandardReady;
+  const usesLegacyFallback = Boolean(
+    runtimeInput.generationReadUsesLegacyFallback ||
+    runtimeOutput.outputReadUsesLegacyFallback
+  );
+  const fallbackCount =
+    numberOrZero(runtimeInput.generationReadFallbackInputCount) +
+    numberOrZero(runtimeOutput.outputReadFallbackOutputCount);
+  const simLogConnectedToAppliedDeltas = Boolean(
+    runtimeInput.appliedDeltaSource &&
+    runtimeInput.appliedDeltaSource === runtimeOutput.simLogInputSource
+  );
+  const status = !ready
+    ? 'workbench-runtime-contract-boundary-incomplete'
+    : standardBoundaryReady && simLogConnectedToAppliedDeltas
+      ? 'workbench-runtime-contract-boundary-standard'
+      : 'workbench-runtime-contract-boundary-ready-with-fallbacks';
+
+  return {
+    schemaVersion: 1,
+    sourceKind: 'workbench-runtime-contract-boundary',
+    status,
+    ready,
+    readyState: ready ? 'true' : 'false',
+    standardBoundaryReady,
+    standardBoundaryReadyState: standardBoundaryReady ? 'true' : 'false',
+    generationStandardReady,
+    generationStandardReadyState: generationStandardReady ? 'true' : 'false',
+    runtimeOutputStandardReady,
+    runtimeOutputStandardReadyState: runtimeOutputStandardReady
+      ? 'true'
+      : 'false',
+    simLogConnectedToAppliedDeltas,
+    simLogConnectedToAppliedDeltasState: simLogConnectedToAppliedDeltas
+      ? 'true'
+      : 'false',
+    usesLegacyFallback,
+    usesLegacyFallbackState: usesLegacyFallback ? 'true' : 'false',
+    fallbackCount,
+    generationReadSourcesStatus: runtimeInput.generationReadSourcesStatus ?? '',
+    runtimeOutputReadSourcesStatus: runtimeOutput.outputReadSourcesStatus ?? '',
+    generationReadStandardOutputCount: numberOrZero(
+      runtimeInput.generationReadStandardOutputCount
+    ),
+    runtimeOutputReadStandardOutputCount: numberOrZero(
+      runtimeOutput.outputReadStandardOutputCount
+    ),
+    generationReadFallbackInputCount: numberOrZero(
+      runtimeInput.generationReadFallbackInputCount
+    ),
+    runtimeOutputReadFallbackOutputCount: numberOrZero(
+      runtimeOutput.outputReadFallbackOutputCount
+    ),
+    generationDeltasSourcePath: runtimeInput.generationDeltasSourcePath ?? '',
+    runtimeSimLogSourcePath: runtimeOutput.outputReadSimLogSourcePath ?? '',
+    runtimeSummarySourcePath: runtimeOutput.outputReadSummarySourcePath ?? '',
   };
 }
 

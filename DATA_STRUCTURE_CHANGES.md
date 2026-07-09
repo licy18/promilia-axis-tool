@@ -23147,3 +23147,85 @@ projectSimulationResult.summary.runtimeOutputsSummary
 - `npm run test:e2e:workbench-flow`：通过，5 条浏览器级主流程测试。
 - `npx prettier --check src/simulation/runtime/threeValueRuntimeProjection.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js PROJECT_MANUAL.md`：通过。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 326. Workbench Runtime 合同边界：Runtime Contract Boundary
+
+### 326.1 结构变化
+
+`createWorkbenchFlowContractContext()` 新增顶层运行期诊断对象：
+
+```text
+runtimeContractBoundary
+```
+
+`runtimeContractBoundary` 将 runtime input 的 generation read source 与 runtime output 的 output read source 合并为一条 Workbench 运行时合同边界：
+
+```text
+schemaVersion
+sourceKind
+status
+ready
+readyState
+standardBoundaryReady
+standardBoundaryReadyState
+generationStandardReady
+generationStandardReadyState
+runtimeOutputStandardReady
+runtimeOutputStandardReadyState
+simLogConnectedToAppliedDeltas
+simLogConnectedToAppliedDeltasState
+usesLegacyFallback
+usesLegacyFallbackState
+fallbackCount
+generationReadSourcesStatus
+runtimeOutputReadSourcesStatus
+generationReadStandardOutputCount
+runtimeOutputReadStandardOutputCount
+generationReadFallbackInputCount
+runtimeOutputReadFallbackOutputCount
+generationDeltasSourcePath
+runtimeSimLogSourcePath
+runtimeSummarySourcePath
+```
+
+`createWorkbenchFlowContractContext().runtimeOutput` 同步新增 runtime output 读取来源摘要：
+
+```text
+outputReadSourcesStatus
+outputReadStandardOutputCount
+outputReadFallbackOutputCount
+outputReadUsesLegacyFallback
+outputReadSimLogSourcePath
+outputReadStateCurvesSourcePath
+outputReadResourceCurvesSourcePath
+outputReadSummarySourcePath
+```
+
+`createWorkbenchRuntimeOutputConsistencyView()` 新增运行期边界状态字段：
+
+```text
+runtimeContractBoundaryStatus
+runtimeContractBoundaryReady
+runtimeContractBoundaryReadyState
+runtimeContractStandardBoundaryReady
+runtimeContractStandardBoundaryReadyState
+runtimeContractUsesLegacyFallback
+runtimeContractUsesLegacyFallbackState
+```
+
+### 326.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只新增 Workbench 运行期合同诊断结构；三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值和 UI 文案均不改变。
+
+### 326.3 验证
+
+- `workbenchFlowContractContext.test.js` 覆盖标准 generation outputs + 标准 runtime outputs 时，`runtimeContractBoundary.status = workbench-runtime-contract-boundary-standard`。
+- `workbenchFlowContractContext.test.js` 覆盖缺少 runtime output 时，`runtimeContractBoundary.status = workbench-runtime-contract-boundary-incomplete`。
+- `workbenchFlowModel.test.js` 覆盖主流程模型的 runtime consistency view 承接 runtime contract boundary 状态。
+- `npm run test -- --run src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，2 个测试文件、11 条测试。
+- `npm run test -- --run src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js`：通过，3 个测试文件、15 条测试。
+- `npm run test:e2e:workbench-flow`：通过，5 条浏览器级主流程测试。
+- `npx prettier --check src/features/workbench/workbenchFlowContractContext.js src/features/workbench/workbenchFlowModel.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。

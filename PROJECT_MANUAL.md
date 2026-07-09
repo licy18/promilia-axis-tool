@@ -12822,6 +12822,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续生成层或运行时层能力块：把 generation/read source 与 runtime/output source 两组诊断合并成更高层的 Workbench 合同验收，再用主流程 e2e 守住可见闭环。
 
+### 2026-07-09：运行时层 - Workbench runtime 合同边界
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- Workbench 合同上下文新增 `runtimeContractBoundary`，把 runtime input 的 generation read source 和 runtime output 的 output read source 合成同一条运行时合同边界。
+- 主流程模型的 runtime consistency view 现在能判断这条链路是否满足“标准 generation outputs 入口 -> applied deltas -> 标准 runtime outputs 输出”，并记录是否发生 legacy fallback。
+- 本阶段不改变 UI 文案、三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值或草稿保存 schema。
+
+当前验证事实：
+
+- 标准路径会得到 `workbench-runtime-contract-boundary-standard`，同时确认 generation 标准输出数为 3、runtime output 标准输出数为 4、fallback 数为 0。
+- 缺少 runtime output 时，边界状态保持 `workbench-runtime-contract-boundary-incomplete`，不会误报标准链路完成。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，2 个测试文件、11 条测试。
+- `npm run test -- --run src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js`：通过，3 个测试文件、15 条测试。
+- `npm run test:e2e:workbench-flow`：通过，5 条浏览器级主流程测试。
+- `npx prettier --check src/features/workbench/workbenchFlowContractContext.js src/features/workbench/workbenchFlowModel.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续运行时层能力块：把 `runtimeContractBoundary` 接入更完整的 Workbench 主流程验收，再用 `npm run test:e2e:workbench-flow` 守住可见闭环。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

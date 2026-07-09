@@ -328,6 +328,8 @@ export function createWorkbenchRuntimeOutputConsistencyView({
   runtimeNavigationPointCount = 0,
 } = {}) {
   const runtimeOutput = contractContext?.runtimeOutput ?? {};
+  const runtimeContractBoundary =
+    contractContext?.runtimeContractBoundary ?? {};
   const simLogCount = numberOrZero(runtimeOutput.simLogCount);
   const stateCurvePointCount = numberOrZero(runtimeOutput.stateCurvePointCount);
   const outputConsistent = Boolean(runtimeOutput.outputConsistent);
@@ -369,6 +371,21 @@ export function createWorkbenchRuntimeOutputConsistencyView({
     consumerViewReadyState: runtimeOutputView?.ready ? 'true' : 'false',
     outputConsumerContractStatus:
       runtimeOutputView?.summary?.outputConsumerContractStatus ?? '',
+    runtimeContractBoundaryStatus: runtimeContractBoundary.status ?? '',
+    runtimeContractBoundaryReady: Boolean(runtimeContractBoundary.ready),
+    runtimeContractBoundaryReadyState: runtimeContractBoundary.ready
+      ? 'true'
+      : 'false',
+    runtimeContractStandardBoundaryReady: Boolean(
+      runtimeContractBoundary.standardBoundaryReady
+    ),
+    runtimeContractStandardBoundaryReadyState:
+      runtimeContractBoundary.standardBoundaryReady ? 'true' : 'false',
+    runtimeContractUsesLegacyFallback: Boolean(
+      runtimeContractBoundary.usesLegacyFallback
+    ),
+    runtimeContractUsesLegacyFallbackState:
+      runtimeContractBoundary.usesLegacyFallback ? 'true' : 'false',
     simLogCount,
     runtimeSimLogCount: numberOrZero(runtimeSimLogCount),
     simLogCountSynced,

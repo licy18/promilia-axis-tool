@@ -121,6 +121,46 @@ describe('workbench flow contract context', () => {
             simLogCount: 99,
           },
         },
+        outputConsumerContract: {
+          sourceKind: 'azpr-three-value-runtime-output-consumer-contract',
+          status: 'runtime-output-consumer-contract-ready',
+          summary: {
+            outputCount: 4,
+            simLogCount: 1,
+          },
+        },
+        outputs: {
+          simLog: [
+            {
+              sourceDeltaId: 'hp-delta',
+            },
+          ],
+          stateCurves: {
+            enemy: {
+              points: [
+                {
+                  sourceDeltaId: 'hp-delta',
+                },
+              ],
+            },
+          },
+          resourceCurves: {
+            curvesByActor: [
+              {
+                actorId: 'actor-001',
+                points: [
+                  {
+                    sourceDeltaId: 'energy-delta',
+                  },
+                ],
+              },
+            ],
+          },
+          summary: {
+            outputCount: 4,
+            simLogCount: 1,
+          },
+        },
         outputSummary: {
           outputCount: 4,
           simLogCount: 1,
@@ -203,6 +243,16 @@ describe('workbench flow contract context', () => {
         stateCurvesSourceKind: 'azpr-runtime-state-curves-from-standard-deltas',
         resourceCurvesSourceKind:
           'azpr-runtime-resource-curves-from-standard-deltas',
+        outputReadSourcesStatus: 'runtime-output-read-sources-ready',
+        outputReadStandardOutputCount: 4,
+        outputReadFallbackOutputCount: 0,
+        outputReadUsesLegacyFallback: false,
+        outputReadSimLogSourcePath: 'runtimeOutputs.outputs.simLog',
+        outputReadStateCurvesSourcePath: 'runtimeOutputs.outputs.stateCurves',
+        outputReadResourceCurvesSourcePath:
+          'runtimeOutputs.outputs.resourceCurves',
+        outputReadSummarySourcePath:
+          'runtimeOutputs.outputConsumerContract.summary',
         outputCount: 4,
         simLogCount: 1,
         enemyStatePointCount: 1,
@@ -211,6 +261,35 @@ describe('workbench flow contract context', () => {
         outputConsistencyStatus: 'runtime-output-consistent',
         outputConsistent: true,
         ready: true,
+      },
+      runtimeContractBoundary: {
+        schemaVersion: 1,
+        sourceKind: 'workbench-runtime-contract-boundary',
+        status: 'workbench-runtime-contract-boundary-standard',
+        ready: true,
+        readyState: 'true',
+        standardBoundaryReady: true,
+        standardBoundaryReadyState: 'true',
+        generationStandardReady: true,
+        generationStandardReadyState: 'true',
+        runtimeOutputStandardReady: true,
+        runtimeOutputStandardReadyState: 'true',
+        simLogConnectedToAppliedDeltas: true,
+        simLogConnectedToAppliedDeltasState: 'true',
+        usesLegacyFallback: false,
+        usesLegacyFallbackState: 'false',
+        fallbackCount: 0,
+        generationReadSourcesStatus:
+          'runtime-input-generation-read-sources-ready',
+        runtimeOutputReadSourcesStatus: 'runtime-output-read-sources-ready',
+        generationReadStandardOutputCount: 3,
+        runtimeOutputReadStandardOutputCount: 4,
+        generationReadFallbackInputCount: 0,
+        runtimeOutputReadFallbackOutputCount: 0,
+        generationDeltasSourcePath: 'generationOutputs.outputs.deltas',
+        runtimeSimLogSourcePath: 'runtimeOutputs.outputs.simLog',
+        runtimeSummarySourcePath:
+          'runtimeOutputs.outputConsumerContract.summary',
       },
     });
   });
@@ -261,6 +340,11 @@ describe('workbench flow contract context', () => {
       stateCurvePointCount: 0,
       outputConsistent: false,
       ready: false,
+    });
+    expect(context.runtimeContractBoundary).toMatchObject({
+      status: 'workbench-runtime-contract-boundary-incomplete',
+      ready: false,
+      standardBoundaryReady: false,
     });
   });
 });
