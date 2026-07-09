@@ -957,6 +957,112 @@ test('keeps direct, log, and contribution edit returns synced', async ({
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps action list, timeline nudge, frame step, and result return in one loop', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+  await createThreeActionRuntime(page);
+
+  const actionListItem = page.locator(
+    '.action-item[data-action-id="action-0002"]'
+  );
+  await actionListItem.click();
+  const actionListState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(actionListState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(actionListState, actionListState.statePointId);
+
+  const timelineEditButton = page
+    .locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+    )
+    .getByTestId('workbench-timeline-edit-result-action');
+  await expect(timelineEditButton).toHaveAttribute(
+    'data-state-point-id',
+    actionListState.statePointId
+  );
+  await timelineEditButton.click();
+  await expectRuntimeFocusInEditor(page);
+
+  await nudgeTimelineAction(page, 'action-0002');
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-ready'
+  );
+  const timelineNudgeEditState = await readEditState(
+    page,
+    'workbench-flow-return-edit-result'
+  );
+  expect(timelineNudgeEditState).toMatchObject({
+    actionId: 'action-0002',
+    phase: 'edit-result-ready',
+    feedbackOriginStatePointId: actionListState.statePointId,
+    resultFocused: 'false',
+    returnButtonText: '查看刷新结果',
+  });
+  expect(Number(timelineNudgeEditState.startFrameValue)).toBeGreaterThan(60);
+  expect(timelineNudgeEditState.feedbackStatePointId).toContain('action-0002');
+
+  await page
+    .locator(
+      '[data-testid="workbench-start-frame-step"][data-step-direction="increase"]'
+    )
+    .click();
+  const steppedEditState = await readEditState(
+    page,
+    'workbench-flow-return-edit-result'
+  );
+  expect(steppedEditState).toMatchObject({
+    actionId: 'action-0002',
+    phase: 'edit-result-ready',
+    feedbackOriginStatePointId: actionListState.statePointId,
+    resultFocused: 'false',
+    returnButtonText: '查看刷新结果',
+  });
+  expect(Number(steppedEditState.startFrameValue)).toBe(
+    Number(timelineNudgeEditState.startFrameValue) + 1
+  );
+  expect(steppedEditState.feedbackStatePointId).toContain('action-0002');
+  expect(steppedEditState.feedbackStatePointId).not.toBe(
+    actionListState.statePointId
+  );
+
+  await page.getByTestId('workbench-flow-return-edit-result').click();
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-review'
+  );
+  const returnedState = await readWorkbenchState(page);
+  expectRuntimeReviewState(returnedState, {
+    phase: 'edit-result-review',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(
+    returnedState,
+    steppedEditState.feedbackStatePointId
+  );
+  expect(returnedState.selectedActionListId).toBe('action-0002');
+  expect(returnedState.selectedTimelineActionId).toBe('action-0002');
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0002"]'
+    )
+  ).toHaveAttribute(
+    'data-selected-state-point-id',
+    steppedEditState.feedbackStatePointId
+  );
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps result rows stable across multi-action edits', async ({ page }) => {
   const browserIssues = collectBrowserIssues(page);
   const { copiedState } = await createThreeActionRuntime(page);
@@ -1350,6 +1456,17 @@ async function expectRuntimeFocusInEditor(page) {
       '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
     )
   ).toHaveAttribute('data-edit-focus-origin', 'runtime-focus');
+}
+
+async function nudgeTimelineAction(page, actionId) {
+  const action = page
+    .locator(
+      `[data-testid="workbench-timeline-action"][data-action-id="${actionId}"]`
+    )
+    .first();
+  await expect(action).toBeVisible();
+  await action.focus();
+  await action.press('ArrowRight');
 }
 
 async function editCurrentActionFrameAndReturn(

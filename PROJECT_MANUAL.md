@@ -12342,6 +12342,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议继续 UI 主流程：把动作列表选择、时间轴拖拽/微调、属性面板编辑和刷新结果回跳做一次更完整的浏览器级连续验收；如果要切到底座，则进入运行时层，整理 runtime outputs 对 UI 的稳定消费合同。
 
+### 2026-07-09：UI 主流程可见闭环 - 连续工作台验收
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 浏览器级主流程现在覆盖一条更接近实际使用的连续工作台路径：动作列表选择结果、时间轴动作微调、属性面板 1 帧步进、查看刷新结果回跳。
+- 用户可以从动作列表定位中间动作结果，再用时间轴键盘微调生成刷新结果，继续在属性面板微调 1 帧，最后回到刷新后的资源曲线、模拟日志和三值详情。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、生成层合同、运行时输出、保存 schema 或 DATA_STRUCTURE_CHANGES。
+
+当前验证事实：
+
+- `workbench-continuous-edit.spec.js` 新增连续工作台路径：`action-0002` 动作列表定位 -> 时间轴动作 `ArrowRight` 微调 -> 属性面板开始帧 `+1` -> 主流程“查看刷新结果”。
+- 刷新后确认资源曲线、模拟日志、三值详情、动作列表选中项和时间轴选中动作都定位到同一个刷新后状态点。
+- 这条路径复用现有 UI 入口，不新增提示标签或内部抽象层。
+
+验收结果：
+
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps action list, timeline nudge, frame step, and result return in one loop"`：通过，1 条浏览器级主流程闭环测试。
+- `npx prettier --check PROJECT_MANUAL.md e2e/workbench-continuous-edit.spec.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 建议继续 UI 主流程：补动作编辑成品体验中仍缺的高频操作，例如动作形态/技能等级变更后刷新结果的可见回跳；或转入运行时层，整理 runtime outputs 对 UI 的稳定消费合同。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
