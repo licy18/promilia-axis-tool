@@ -628,6 +628,7 @@ const runtimeLogDetailStatePointId = computed(
 const runtimeLogActionFocus = computed(() =>
   getRuntimeLogActionEditTarget({
     flowModel: props.flowModel,
+    panelView: runtimeReviewPanelView.value,
     detail: matchedRuntimeSelectedDetail.value,
     row: selectedRuntimeLog.value,
     statePointId: runtimeLogDetailStatePointId.value,
@@ -672,6 +673,7 @@ const runtimeLogResultReturnActionId = computed(
     ''
 );
 const runtimeLogResultReturnContext = computed(() =>
+  runtimeReviewPanelView.value.commandView?.returnResult?.context ??
   runtimeReviewPanelView.value.resultReturnContext ??
   createRuntimeResultReturnContext({
     actionId: runtimeLogResultReturnActionId.value,
@@ -897,10 +899,18 @@ function focusRuntimeLogByStatePoint(statePointId) {
 
 function getRuntimeLogActionEditTarget({
   flowModel,
+  panelView = null,
   detail = null,
   row = null,
   statePointId = '',
 } = {}) {
+  const panelTarget = getRuntimeReviewPanelFocusTargetForStatePoint(
+    panelView,
+    statePointId
+  );
+  if (panelTarget) {
+    return panelTarget;
+  }
   return resolveWorkbenchMainFlowActionEditTarget({
     flowModel,
     fallbackTarget: createWorkbenchFlowRuntimeActionEditTarget({
@@ -913,6 +923,20 @@ function getRuntimeLogActionEditTarget({
     }),
     statePointId,
   });
+}
+
+function getRuntimeReviewPanelFocusTargetForStatePoint(
+  panelView,
+  statePointId = ''
+) {
+  const target = panelView?.commandView?.focus?.target ?? null;
+  if (!target?.statePointId) {
+    return null;
+  }
+  if (statePointId && target.statePointId !== statePointId) {
+    return null;
+  }
+  return target;
 }
 
 function createRuntimeLogNavigationStatus({

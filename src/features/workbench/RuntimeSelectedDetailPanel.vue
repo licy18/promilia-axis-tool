@@ -316,9 +316,14 @@ const runtimeReviewReturnResultEnabled = computed(
   () => runtimeDetailResultReturnCommand.value.enabled
 );
 const runtimeDetailActionEditTarget = computed(() =>
-  getRuntimeDetailActionEditTarget(props.flowModel, props.detail)
+  getRuntimeDetailActionEditTarget(
+    props.flowModel,
+    props.detail,
+    runtimeReviewPanelView.value
+  )
 );
 const runtimeDetailResultReturnContext = computed(() =>
+  runtimeReviewPanelView.value.commandView?.returnResult?.context ??
   runtimeReviewPanelView.value.resultReturnContext ??
   createRuntimeResultReturnContext({
     actionId: props.detail?.actionId ?? flowEditResult.value?.actionId,
@@ -454,12 +459,33 @@ function createRuntimeDetailEditContext(detail, focus) {
   };
 }
 
-function getRuntimeDetailActionEditTarget(flowModel, detail) {
+function getRuntimeDetailActionEditTarget(flowModel, detail, panelView = null) {
+  const panelTarget = getRuntimeReviewPanelFocusTargetForStatePoint(
+    panelView,
+    detail?.statePointId ?? ''
+  );
+  if (panelTarget) {
+    return panelTarget;
+  }
   return resolveWorkbenchMainFlowActionEditTarget({
     flowModel,
     fallbackTarget: createWorkbenchFlowRuntimeActionEditTarget(detail),
     statePointId: detail?.statePointId ?? '',
   });
+}
+
+function getRuntimeReviewPanelFocusTargetForStatePoint(
+  panelView,
+  statePointId = ''
+) {
+  const target = panelView?.commandView?.focus?.target ?? null;
+  if (!target?.statePointId) {
+    return null;
+  }
+  if (statePointId && target.statePointId !== statePointId) {
+    return null;
+  }
+  return target;
 }
 
 </script>

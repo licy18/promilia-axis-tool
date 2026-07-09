@@ -21403,3 +21403,59 @@ runtimeReviewPanelView
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、67 条测试。
 - `npm run test -- --run`：通过，37 个测试文件、246 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 293. UI 主流程能力块：Runtime Review Panel Command Target View
+
+### 293.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`runtimeReviewPanelView` 新增面板命令目标 view：
+
+```js
+{
+  commandView: {
+    focus: {
+      operationKind,
+      enabled,
+      enabledState,
+      actionId,
+      statePointId,
+      fieldKey,
+      target,
+    },
+    returnResult: {
+      operationKind,
+      enabled,
+      enabledState,
+      actionId,
+      statePointId,
+      context,
+      target,
+    },
+  },
+}
+```
+
+字段来源：
+
+- `commandView.focus.target` 优先来自 `runtimeActionEditTarget`，再回退到 `mainFlowState.runtimeActionEditTarget`、`flowModel.runtimeActionEditTarget` 或既有 focus operation。
+- `commandView.returnResult.context` 只携带真实 `resultReturnContext`；没有回看 context 时保持 `null`，避免把禁用 operation 误当成可回看上下文。
+- `commandView.returnResult.target` 保留既有 return-result operation，用于后续 action surface 继续生成实际点击动作。
+
+消费方变化：
+
+- `EventLogPanel`、`ResourceMonitorPanel`、`RuntimeSelectedDetailPanel` 优先从 `runtimeReviewPanelView.commandView.focus.target` 读取动作回改目标，并按 `statePointId` 防止串用其它结果点。
+- 三处运行结果面板优先从 `runtimeReviewPanelView.commandView.returnResult.context` 读取回看 context，再回退到 `runtimeReviewPanelView.resultReturnContext` 或本地兼容 context。
+- 实际 flow action 仍由既有主流程 command surface / action factory 生成，本阶段只统一 panel view 的命令目标消费边界。
+
+### 293.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程的内部 panel view model，不新增持久字段，不需要数据迁移。
+
+### 293.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖 `runtimeReviewPanelView.commandView` 的 focus / returnResult 启用状态、目标状态点和回看 context。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、67 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、246 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

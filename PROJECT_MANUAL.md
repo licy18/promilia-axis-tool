@@ -10141,6 +10141,31 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查运行结果面板的 command view 是否也可以直接并入 `runtimeReviewPanelView`，让“详情/日志/曲线 -> 定位动作 / 回到结果点”的命令来源进一步统一。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Panel Command Target View
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `runtimeReviewPanelView` 现在直接携带 `commandView.focus` 和 `commandView.returnResult`，把运行结果面板的“定位动作”和“回到结果点”命令目标并入同一 panel view。
+- `EventLogPanel`、`ResourceMonitorPanel`、`RuntimeSelectedDetailPanel` 优先消费 `runtimeReviewPanelView.commandView` 的目标与回看 context；只有状态点不匹配或没有 flow model 时才回退到本地兼容路径。
+- 实际点击动作仍复用既有主流程 command surface / action factory；本阶段只统一消费入口，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- flow model 单测覆盖 `runtimeReviewPanelView.commandView` 的 focus / returnResult 启用状态、目标状态点和回看 context。
+- Workbench、日志、曲线和三值详情入口继续沿既有主流程 action 路径工作。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、67 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、246 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把运行结果区的命令目标、选中详情和顶部 FlowPanel 的主流程状态进一步汇合，优先推进“选择结果 -> 定位动作 -> 修改 -> 回看结果”的完整闭环，而不是扩展局部提示文案。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

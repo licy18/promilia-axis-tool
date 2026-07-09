@@ -187,6 +187,7 @@ export function createWorkbenchFlowModel({
     runtimeReviewContextView,
     runtimeReviewOperations,
     runtimeDetail,
+    actionEditTarget: runtimeActionEditTarget,
     resultReturnContext:
       runtimeResultReturnTarget ??
       (runtimeReviewContextView.hasPendingResult
@@ -455,6 +456,7 @@ export function createWorkbenchRuntimeReviewPanelView({
   runtimeReviewOperations = null,
   runtimeReviewSelection = null,
   runtimeDetail = null,
+  actionEditTarget = null,
   resultReturnContext = null,
   selectedStateCurvePointId = '',
 } = {}) {
@@ -483,6 +485,12 @@ export function createWorkbenchRuntimeReviewPanelView({
   const returnResult = operations.returnResult ?? {};
   const detailModel = runtimeDetail ?? flowModel?.runtimeDetail ?? {};
   const selectedDetail = detailModel?.source ?? null;
+  const focusTarget =
+    actionEditTarget ??
+    flowModel?.mainFlowState?.runtimeActionEditTarget ??
+    flowModel?.runtimeActionEditTarget ??
+    focusAction ??
+    null;
   const returnContext =
     resultReturnContext ??
     flowModel?.runtimeResultReturnTarget ??
@@ -509,6 +517,12 @@ export function createWorkbenchRuntimeReviewPanelView({
     hasResultReturnContextState: returnContext?.statePointId
       ? 'true'
       : 'false',
+    commandView: createRuntimeReviewPanelCommandTargetView({
+      focusAction,
+      focusTarget,
+      returnResult,
+      returnContext,
+    }),
     status:
       context.status ?? WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.EMPTY,
     selectedActionId: context.selectedActionId ?? '',
@@ -527,6 +541,53 @@ export function createWorkbenchRuntimeReviewPanelView({
     returnResultEnabledState: returnResult.enabled ? 'true' : 'false',
     canRunAnyOperation: Boolean(operations.canRunAnyOperation),
     canRunAnyOperationState: operations.canRunAnyOperation ? 'true' : 'false',
+  };
+}
+
+function createRuntimeReviewPanelCommandTargetView({
+  focusAction = null,
+  focusTarget = null,
+  returnResult = null,
+  returnContext = null,
+} = {}) {
+  const resolvedFocusTarget = focusTarget ?? focusAction ?? {};
+  const resolvedReturnContext = returnContext ?? null;
+  const focusEnabled = Boolean(
+    focusAction?.enabled ??
+      resolvedFocusTarget?.enabled ??
+      resolvedFocusTarget?.canFocusAction
+  );
+  const returnEnabled = Boolean(
+    returnResult?.enabled ??
+      resolvedReturnContext?.enabled ??
+      resolvedReturnContext?.canReturn ??
+      resolvedReturnContext?.statePointId
+  );
+  return {
+    focus: {
+      operationKind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+      enabled: focusEnabled,
+      enabledState: focusEnabled ? 'true' : 'false',
+      actionId:
+        resolvedFocusTarget?.actionId ?? focusAction?.actionId ?? '',
+      statePointId:
+        resolvedFocusTarget?.statePointId ?? focusAction?.statePointId ?? '',
+      fieldKey: resolvedFocusTarget?.fieldKey ?? focusAction?.fieldKey ?? '',
+      target: resolvedFocusTarget,
+    },
+    returnResult: {
+      operationKind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
+      enabled: returnEnabled,
+      enabledState: returnEnabled ? 'true' : 'false',
+      actionId:
+        resolvedReturnContext?.actionId ?? returnResult?.actionId ?? '',
+      statePointId:
+        resolvedReturnContext?.statePointId ??
+        returnResult?.statePointId ??
+        '',
+      context: resolvedReturnContext,
+      target: returnResult ?? {},
+    },
   };
 }
 

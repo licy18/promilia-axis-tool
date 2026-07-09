@@ -596,6 +596,7 @@ const selectedRuntimeCurveCommandView = computed(() =>
   createRuntimeReviewPanelCommandViewFromSurface({
     source: 'resource-runtime-curve',
     focusTarget: getRuntimeCurveActionEditTarget(
+      runtimeReviewPanelView.value,
       props.flowModel,
       selectedRuntimeCurvePoint.value
     ),
@@ -1033,6 +1034,10 @@ function createSelectedRuntimeCurveResultContext(context, point) {
 }
 
 function getSelectedRuntimeCurveResultContext(panelView, context, point) {
+  const commandContext = panelView?.commandView?.returnResult?.context ?? null;
+  if (isRuntimeResultReturnContextForPoint(commandContext, point)) {
+    return commandContext;
+  }
   if (
     isRuntimeResultReturnContextForPoint(
       panelView?.resultReturnContext,
@@ -1071,12 +1076,33 @@ function formatRuntimeCurveSelectionIndex() {
   return `${selectedRuntimeCurvePointIndex.value + 1}/${total}`;
 }
 
-function getRuntimeCurveActionEditTarget(flowModel, point) {
+function getRuntimeCurveActionEditTarget(panelView, flowModel, point) {
+  const panelTarget = getRuntimeReviewPanelFocusTargetForStatePoint(
+    panelView,
+    point?.statePointId ?? ''
+  );
+  if (panelTarget) {
+    return panelTarget;
+  }
   return resolveWorkbenchMainFlowActionEditTarget({
     flowModel,
     fallbackTarget: createWorkbenchFlowRuntimeActionEditTarget(point),
     statePointId: point?.statePointId ?? '',
   });
+}
+
+function getRuntimeReviewPanelFocusTargetForStatePoint(
+  panelView,
+  statePointId = ''
+) {
+  const target = panelView?.commandView?.focus?.target ?? null;
+  if (!target?.statePointId) {
+    return null;
+  }
+  if (statePointId && target.statePointId !== statePointId) {
+    return null;
+  }
+  return target;
 }
 
 function formatRuntimeTrackLabel(trackKey) {

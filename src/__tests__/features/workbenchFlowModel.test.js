@@ -430,6 +430,20 @@ describe('workbench flow model', () => {
       primaryOperationKind:
         WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
       returnResultEnabledState: 'true',
+      commandView: {
+        focus: {
+          enabledState: 'false',
+          statePointId: '',
+        },
+        returnResult: {
+          enabledState: 'true',
+          actionId: 'action-0002',
+          statePointId: secondPoint.statePointId,
+          context: {
+            statePointId: secondPoint.statePointId,
+          },
+        },
+      },
     });
 
     const reviewModel = createWorkbenchFlowModel({
@@ -815,6 +829,20 @@ describe('workbench flow model', () => {
       focusActionEnabledState: 'true',
       returnResultEnabledState: 'false',
       canRunAnyOperationState: 'true',
+      commandView: {
+        focus: {
+          enabledState: 'true',
+          actionId: 'action-0001',
+          statePointId: firstPoint.statePointId,
+          target: {
+            statePointId: firstPoint.statePointId,
+          },
+        },
+        returnResult: {
+          enabledState: 'false',
+          context: null,
+        },
+      },
     });
 
     const contributionModel = createWorkbenchFlowModel({
@@ -949,6 +977,16 @@ describe('workbench flow model', () => {
       primaryOperationEnabledState: 'true',
       returnResultEnabledState: 'true',
       canRunAnyOperationState: 'true',
+      commandView: {
+        returnResult: {
+          enabledState: 'true',
+          actionId: 'action-standalone',
+          statePointId: 'state-point-return',
+          context: {
+            statePointId: 'state-point-return',
+          },
+        },
+      },
     });
   });
 
