@@ -206,6 +206,123 @@ test('runs the visible curve-log-detail edit loop end to end @workbench-main-flo
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('runs the Workbench flow panel edit-result loop end to end @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/workbench');
+  const flowPanel = page.getByTestId('workbench-flow-panel');
+  await expect(flowPanel).toHaveAttribute('data-flow-phase', 'action-edit');
+
+  const openRuntimeButton = page.getByTestId('workbench-flow-open-runtime');
+  await expect(openRuntimeButton).toBeEnabled();
+  await expect(openRuntimeButton).toContainText('运行模拟');
+  await openRuntimeButton.click();
+
+  const openedState = await waitForRuntimeAction(page, 'action-0001');
+  expectRuntimeReviewState(openedState, {
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: false,
+  });
+  expectRuntimeStatePointSynced(openedState, openedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+
+  const curvePoint = page
+    .locator(
+      `[data-testid="workbench-runtime-resource-chart-point"][data-state-point-id="${openedState.statePointId}"]`
+    )
+    .first();
+  await expect(curvePoint).toBeVisible();
+  await curvePoint.click();
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail')
+  ).toHaveAttribute('data-runtime-review-source', 'resource-runtime-curve');
+  await expectCurveAndLogSelection(page, openedState.statePointId);
+
+  const logRow = page
+    .locator(
+      `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${openedState.statePointId}"]`
+    )
+    .first();
+  await expect(logRow).toBeVisible();
+  await logRow.click();
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail')
+  ).toHaveAttribute('data-runtime-review-source', 'event-log-runtime-row');
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail')
+  ).toHaveAttribute('data-runtime-review-source-kind', 'log');
+  await expectCurveAndLogSelection(page, openedState.statePointId);
+
+  const flowEditButton = page.getByTestId('workbench-flow-edit-runtime-action');
+  await expect(flowEditButton).toBeEnabled();
+  await expect(flowEditButton).toHaveAttribute(
+    'data-state-point-id',
+    openedState.statePointId
+  );
+  await flowEditButton.click();
+  await expectRuntimeFocusInEditor(page);
+
+  await page.getByTestId('workbench-start-frame-input').fill('36');
+  await expect(flowPanel).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-ready'
+  );
+  const editState = await readEditState(
+    page,
+    'workbench-flow-return-edit-result'
+  );
+  expect(editState).toMatchObject({
+    actionId: 'action-0001',
+    phase: 'edit-result-ready',
+    resultFocused: 'false',
+    startFrameValue: '36',
+    startMsValue: '600',
+    returnButtonText: '查看刷新结果',
+    pageOverflowX: 0,
+  });
+  expect(editState.feedbackOriginStatePointId).toBe(openedState.statePointId);
+  expect(editState.feedbackStatePointId).toContain('action-0001');
+  expect(editState.feedbackStatePointId).not.toBe(openedState.statePointId);
+
+  const returnResultButton = page.getByTestId(
+    'workbench-flow-return-edit-result'
+  );
+  await expect(returnResultButton).toBeEnabled();
+  await expect(returnResultButton).toHaveText('查看刷新结果');
+  await returnResultButton.click();
+
+  await expect(flowPanel).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-review'
+  );
+  const returnedState = await readWorkbenchState(page);
+  expectRuntimeReviewState(returnedState, {
+    phase: 'edit-result-review',
+    actionId: 'action-0001',
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(returnedState, editState.feedbackStatePointId);
+  await expectCurveAndLogSelection(page, editState.feedbackStatePointId);
+  await expectRuntimeOutputConsistent(page);
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    )
+  ).toHaveAttribute(
+    'data-selected-state-point-id',
+    editState.feedbackStatePointId
+  );
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps runtime detail navigation tied to edit return', async ({
   page,
 }) => {
