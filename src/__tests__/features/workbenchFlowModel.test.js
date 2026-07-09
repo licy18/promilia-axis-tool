@@ -54,9 +54,13 @@ describe('workbench flow model', () => {
       },
       runtimeInput: {
         appliedDeltaSource: 'threeValueRuntimeInput.appliedDeltas',
-        generationReadStandardOutputCount: 3,
+        generationReadStandardOutputCount: 5,
         generationReadFallbackInputCount: 0,
         generationReadUsesLegacyFallback: false,
+        generationStandardBoundaryReady: true,
+        generationEntryContractValidationStatus:
+          'generation-entry-contract-valid',
+        generationEntryContractValidationValid: true,
         ready: true,
       },
       runtimeOutput: {
@@ -1379,10 +1383,18 @@ function createRuntimeProjectionFixture() {
       appliedDeltaSource: 'threeValueRuntimeInput.appliedDeltas',
       generationReadSources: {
         status: 'runtime-input-generation-read-sources-ready',
-        standardOutputCount: 3,
+        standardOutputCount: 5,
         fallbackInputCount: 0,
         usesLegacyGenerationFallback: false,
+        standardGenerationBoundaryReady: true,
+        generationEntryContractValidationStatus:
+          'generation-entry-contract-valid',
+        generationEntryContractValidationIssueCount: 0,
+        generationEntryContractValidationValid: true,
         inputs: {
+          generationEntry: {
+            sourcePath: 'generationOutputs.outputs.generationEntry',
+          },
           runtimeInputSource: {
             sourcePath:
               'generationOutputs.outputs.generationEntry.runtimeInputSource',
@@ -1393,6 +1405,10 @@ function createRuntimeProjectionFixture() {
           },
           deltas: {
             sourcePath: 'generationOutputs.outputs.generationEntry.deltas',
+          },
+          contractValidation: {
+            sourcePath:
+              'generationOutputs.outputs.generationEntry.contractValidation',
           },
         },
       },

@@ -23445,3 +23445,120 @@ validateStandardGenerationEntryContract()
 - `threeValueGenerationBuilder.test.js` 覆盖有效 `generationEntry` 的合同校验结果。
 - `threeValueGenerationBuilder.test.js` 覆盖故意打散 `generationEntry.deltas` 引用时，校验会在 runtime 消费前报告 contract drift。
 - `npm run test -- --run src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，7 个测试文件、36 条测试。
+
+## 330. 运行时消费生成入口校验：Runtime Generation Entry Validation Boundary
+
+### 330.1 结构变化
+
+`createActionHitThreeValueRuntimeInput()` 的 `generationReadSources.inputs` 从 3 类扩展为 5 类：
+
+```text
+generationReadSources.inputs.generationEntry
+generationReadSources.inputs.runtimeInputSource
+generationReadSources.inputs.standardContract
+generationReadSources.inputs.deltas
+generationReadSources.inputs.contractValidation
+```
+
+标准读取路径新增：
+
+```text
+generationOutputs.outputs.generationEntry
+generationOutputs.outputs.generationEntry.contractValidation
+```
+
+因此标准生成输入满足完整入口时：
+
+```text
+generationReadSources.standardOutputNames = [
+  generationEntry,
+  runtimeInputSource,
+  standardContract,
+  deltas,
+  contractValidation,
+]
+generationReadSources.standardOutputCount = 5
+```
+
+`runtimeInput` 新增字段：
+
+```text
+standardGenerationEntrySourceKind
+standardGenerationEntryStatus
+generationEntryContractValidation
+generationEntryContractValidationSourceKind
+generationEntryContractValidationStatus
+generationEntryContractValidationIssueCount
+generationEntryContractValidationValid
+```
+
+`runtimeInput.summary` 同步新增：
+
+```text
+standardGenerationEntrySourceKind
+standardGenerationEntryStatus
+generationEntryContractValidationSourceKind
+generationEntryContractValidationStatus
+generationEntryContractValidationIssueCount
+generationEntryContractValidationValid
+```
+
+`generationReadSources` 新增：
+
+```text
+generationEntryContractValidationStatus
+generationEntryContractValidationIssueCount
+generationEntryContractValidationValid
+generationEntryContractValidationValidState
+standardGenerationBoundaryReady
+standardGenerationBoundaryReadyState
+```
+
+当 `generationEntry.contractValidation.valid = false` 时，runtime input 状态为：
+
+```text
+runtime-input-invalid-generation-entry-contract
+```
+
+runtime projection summary / runtime output summary 新增：
+
+```text
+runtimeInputGenerationStandardBoundaryReady
+runtimeInputGenerationEntryContractValidationStatus
+runtimeInputGenerationEntryContractValidationIssueCount
+runtimeInputGenerationEntryContractValidationValid
+runtimeInputGenerationEntryPath
+runtimeInputGenerationContractValidationPath
+```
+
+Workbench runtime contract boundary 新增：
+
+```text
+generationEntryContractValidationStatus
+generationEntryContractValidationIssueCount
+generationEntryContractValidationValid
+generationEntryContractValidationValidState
+generationEntrySourcePath
+generationContractValidationSourcePath
+```
+
+Workbench 的 generation 标准边界现在要求：
+
+```text
+generationReadStandardOutputCount >= 5
+generationEntryContractValidationValid = true
+generationReadUsesLegacyFallback = false
+```
+
+### 330.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只改变运行期诊断合同和标准边界判断；三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值和 UI 文案均不改变。
+
+### 330.3 验证
+
+- `actionHitThreeValueRuntimeInput.test.js` 覆盖 runtime input 从 5 类标准生成输入读取，并在 `contractValidation.valid = false` 时进入 invalid boundary 状态。
+- `threeValueRuntimeProjection.test.js` 和 `firstVerticalSliceSimulation.test.js` 覆盖 runtime projection / runtime output summary 继续传递标准生成入口校验状态。
+- `workbenchFlowContractContext.test.js`、`workbenchFlowModel.test.js` 和 `WorkbenchFlowPanel.test.js` 覆盖 Workbench 主流程合同边界仍保持 standard，且标准边界以生成入口校验有效为条件。
+- `npm run test -- --run src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js`：通过，6 个测试文件、38 条测试。

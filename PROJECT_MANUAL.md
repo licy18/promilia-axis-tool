@@ -13005,6 +13005,26 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 进入运行时层能力块：让 runtime input / runtime summary 优先携带并消费 `generationEntry.contractValidation`，把“使用标准入口且校验有效”固定为 runtime 边界的一部分。
 
+### 2026-07-09：运行时层 - 标准生成入口校验消费
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- runtime input 现在会把 `generationOutputs.outputs.generationEntry` 和 `generationEntry.contractValidation` 纳入读取源，标准生成输入从 3 类扩展为 5 类：`generationEntry / runtimeInputSource / standardContract / deltas / contractValidation`。
+- runtime input、runtime projection summary、runtime output summary 和 Workbench runtime contract boundary 都会携带生成入口校验状态；当 `contractValidation.valid = false` 时，runtime input 会进入 `runtime-input-invalid-generation-entry-contract`，Workbench 标准边界不会误判为通过。
+- 主流程合同边界现在要求“读取标准生成入口 + 无 legacy fallback + 入口校验有效”，再结合 runtime outputs 标准输出，才算 `workbench-runtime-contract-boundary-standard`。
+- 本阶段不改变 UI 可见文案、三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值或草稿保存 schema。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js`：通过，6 个测试文件、38 条测试。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `330. 运行时消费生成入口校验：Runtime Generation Entry Validation Boundary`。
+
+下一步：
+
+- 继续运行时层能力块：把 simLog / stateCurves / resourceCurves / summary 的输出合同进一步收敛到同一 runtime output consumer 边界，减少 Workbench 对 projection 临时结构的依赖。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

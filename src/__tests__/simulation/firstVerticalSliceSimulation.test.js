@@ -1619,7 +1619,7 @@ describe('first vertical slice simulation', () => {
       generationLayerSourceKind: 'azpr-standard-three-value-generation-layer',
       generationReadSources: {
         status: 'runtime-input-generation-read-sources-ready',
-        standardOutputCount: 3,
+        standardOutputCount: 5,
         fallbackInputCount: 0,
         usesLegacyGenerationFallback: false,
         inputs: {
@@ -1723,7 +1723,7 @@ describe('first vertical slice simulation', () => {
           selfEnergyDelta: 0,
           runtimeInputGenerationReadSourcesStatus:
             'runtime-input-generation-read-sources-ready',
-          runtimeInputGenerationReadStandardOutputCount: 3,
+          runtimeInputGenerationReadStandardOutputCount: 5,
           runtimeInputGenerationReadFallbackInputCount: 0,
           runtimeInputGenerationReadUsesLegacyFallback: false,
           runtimeInputGenerationRuntimeInputSourcePath:
@@ -1779,7 +1779,7 @@ describe('first vertical slice simulation', () => {
           'azpr-standard-three-value-generation-layer',
         runtimeInputGenerationReadSourcesStatus:
           'runtime-input-generation-read-sources-ready',
-        runtimeInputGenerationReadStandardOutputCount: 3,
+        runtimeInputGenerationReadStandardOutputCount: 5,
         runtimeInputGenerationReadFallbackInputCount: 0,
         runtimeInputGenerationReadUsesLegacyFallback: false,
         runtimeInputGenerationRuntimeInputSourcePath:
@@ -1918,7 +1918,7 @@ describe('first vertical slice simulation', () => {
         selfEnergyDelta: 0,
         runtimeInputGenerationReadSourcesStatus:
           'runtime-input-generation-read-sources-ready',
-        runtimeInputGenerationReadStandardOutputCount: 3,
+        runtimeInputGenerationReadStandardOutputCount: 5,
         runtimeInputGenerationReadFallbackInputCount: 0,
         runtimeInputGenerationReadUsesLegacyFallback: false,
         runtimeInputGenerationRuntimeInputSourcePath:
@@ -1982,7 +1982,7 @@ describe('first vertical slice simulation', () => {
       calculatorStatuses: ['raw-hp-projection'],
       runtimeInputGenerationReadSourcesStatus:
         'runtime-input-generation-read-sources-ready',
-      runtimeInputGenerationReadStandardOutputCount: 3,
+      runtimeInputGenerationReadStandardOutputCount: 5,
       runtimeInputGenerationReadFallbackInputCount: 0,
       runtimeInputGenerationReadUsesLegacyFallback: false,
       runtimeInputGenerationRuntimeInputSourcePath:
@@ -2005,7 +2005,7 @@ describe('first vertical slice simulation', () => {
       selfEnergyDelta: 0,
       runtimeInputGenerationReadSourcesStatus:
         'runtime-input-generation-read-sources-ready',
-      runtimeInputGenerationReadStandardOutputCount: 3,
+      runtimeInputGenerationReadStandardOutputCount: 5,
       runtimeInputGenerationReadFallbackInputCount: 0,
       runtimeInputGenerationReadUsesLegacyFallback: false,
       runtimeInputGenerationRuntimeInputSourcePath:

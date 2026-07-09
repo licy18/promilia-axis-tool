@@ -74,10 +74,18 @@ describe('workbench flow contract context', () => {
           appliedOnly: true,
           generationReadSources: {
             status: 'runtime-input-generation-read-sources-ready',
-            standardOutputCount: 3,
+            standardOutputCount: 5,
             fallbackInputCount: 0,
             usesLegacyGenerationFallback: false,
+            standardGenerationBoundaryReady: true,
+            generationEntryContractValidationStatus:
+              'generation-entry-contract-valid',
+            generationEntryContractValidationIssueCount: 0,
+            generationEntryContractValidationValid: true,
             inputs: {
+              generationEntry: {
+                sourcePath: 'generationOutputs.outputs.generationEntry',
+              },
               runtimeInputSource: {
                 sourcePath:
                   'generationOutputs.outputs.generationEntry.runtimeInputSource',
@@ -88,6 +96,10 @@ describe('workbench flow contract context', () => {
               },
               deltas: {
                 sourcePath: 'generationOutputs.outputs.generationEntry.deltas',
+              },
+              contractValidation: {
+                sourcePath:
+                  'generationOutputs.outputs.generationEntry.contractValidation',
               },
             },
           },
@@ -221,15 +233,23 @@ describe('workbench flow contract context', () => {
         ignoredDeltaCount: 2,
         generationReadSourcesStatus:
           'runtime-input-generation-read-sources-ready',
-        generationReadStandardOutputCount: 3,
+        generationReadStandardOutputCount: 5,
         generationReadFallbackInputCount: 0,
         generationReadUsesLegacyFallback: false,
+        generationStandardBoundaryReady: true,
+        generationEntryContractValidationStatus:
+          'generation-entry-contract-valid',
+        generationEntryContractValidationIssueCount: 0,
+        generationEntryContractValidationValid: true,
+        generationEntrySourcePath: 'generationOutputs.outputs.generationEntry',
         generationRuntimeInputSourcePath:
           'generationOutputs.outputs.generationEntry.runtimeInputSource',
         generationStandardContractSourcePath:
           'generationOutputs.outputs.generationEntry.standardContract',
         generationDeltasSourcePath:
           'generationOutputs.outputs.generationEntry.deltas',
+        generationContractValidationSourcePath:
+          'generationOutputs.outputs.generationEntry.contractValidation',
         appliedOnly: true,
         ready: true,
       },
@@ -285,12 +305,20 @@ describe('workbench flow contract context', () => {
         generationReadSourcesStatus:
           'runtime-input-generation-read-sources-ready',
         runtimeOutputReadSourcesStatus: 'runtime-output-read-sources-ready',
-        generationReadStandardOutputCount: 3,
+        generationReadStandardOutputCount: 5,
         runtimeOutputReadStandardOutputCount: 4,
         generationReadFallbackInputCount: 0,
         runtimeOutputReadFallbackOutputCount: 0,
+        generationEntryContractValidationStatus:
+          'generation-entry-contract-valid',
+        generationEntryContractValidationIssueCount: 0,
+        generationEntryContractValidationValid: true,
+        generationEntryContractValidationValidState: 'true',
+        generationEntrySourcePath: 'generationOutputs.outputs.generationEntry',
         generationDeltasSourcePath:
           'generationOutputs.outputs.generationEntry.deltas',
+        generationContractValidationSourcePath:
+          'generationOutputs.outputs.generationEntry.contractValidation',
         runtimeSimLogSourcePath: 'runtimeOutputs.outputs.simLog',
         runtimeSummarySourcePath:
           'runtimeOutputs.outputConsumerContract.summary',

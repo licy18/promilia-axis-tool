@@ -1075,6 +1075,13 @@ describe('three value runtime projection', () => {
               'azpr-action-hit-three-value-delta-standard-generation-entry',
             status:
               'action-hit-three-value-delta-standard-generation-entry-ready',
+            contractValidation: {
+              sourceKind:
+                'azpr-action-hit-three-value-delta-generation-entry-contract-validation',
+              status: 'generation-entry-contract-valid',
+              issueCount: 0,
+              valid: true,
+            },
             runtimeInputSource: {
               sourceKind: 'azpr-runtime-input-source-from-generation-builder',
               status: 'runtime-input-source-ready',
@@ -1132,37 +1139,58 @@ describe('three value runtime projection', () => {
       enemyHpDelta: 420,
       runtimeInputGenerationReadSourcesStatus:
         'runtime-input-generation-read-sources-ready',
-      runtimeInputGenerationReadStandardOutputCount: 3,
+      runtimeInputGenerationReadStandardOutputCount: 5,
       runtimeInputGenerationReadFallbackInputCount: 0,
       runtimeInputGenerationReadUsesLegacyFallback: false,
+      runtimeInputGenerationStandardBoundaryReady: true,
+      runtimeInputGenerationEntryContractValidationStatus:
+        'generation-entry-contract-valid',
+      runtimeInputGenerationEntryContractValidationIssueCount: 0,
+      runtimeInputGenerationEntryContractValidationValid: true,
+      runtimeInputGenerationEntryPath:
+        'generationOutputs.outputs.generationEntry',
       runtimeInputGenerationRuntimeInputSourcePath:
         'generationOutputs.outputs.generationEntry.runtimeInputSource',
       runtimeInputGenerationStandardContractPath:
         'generationOutputs.outputs.generationEntry.standardContract',
       runtimeInputGenerationDeltasPath:
         'generationOutputs.outputs.generationEntry.deltas',
+      runtimeInputGenerationContractValidationPath:
+        'generationOutputs.outputs.generationEntry.contractValidation',
     });
     expect(runtimeProjection.outputContract.summary).toMatchObject({
       enemyHpDelta: 420,
       runtimeInputGenerationReadSourcesStatus:
         'runtime-input-generation-read-sources-ready',
-      runtimeInputGenerationReadStandardOutputCount: 3,
+      runtimeInputGenerationReadStandardOutputCount: 5,
       runtimeInputGenerationReadFallbackInputCount: 0,
       runtimeInputGenerationReadUsesLegacyFallback: false,
+      runtimeInputGenerationStandardBoundaryReady: true,
+      runtimeInputGenerationEntryContractValidationStatus:
+        'generation-entry-contract-valid',
+      runtimeInputGenerationEntryContractValidationValid: true,
     });
     expect(runtimeProjection.runtimeOutputs.outputSummary).toMatchObject({
       enemyHpDelta: 420,
       runtimeInputGenerationReadSourcesStatus:
         'runtime-input-generation-read-sources-ready',
-      runtimeInputGenerationReadStandardOutputCount: 3,
+      runtimeInputGenerationReadStandardOutputCount: 5,
       runtimeInputGenerationReadFallbackInputCount: 0,
       runtimeInputGenerationReadUsesLegacyFallback: false,
+      runtimeInputGenerationStandardBoundaryReady: true,
+      runtimeInputGenerationEntryContractValidationStatus:
+        'generation-entry-contract-valid',
+      runtimeInputGenerationEntryContractValidationValid: true,
+      runtimeInputGenerationEntryPath:
+        'generationOutputs.outputs.generationEntry',
       runtimeInputGenerationRuntimeInputSourcePath:
         'generationOutputs.outputs.generationEntry.runtimeInputSource',
       runtimeInputGenerationStandardContractPath:
         'generationOutputs.outputs.generationEntry.standardContract',
       runtimeInputGenerationDeltasPath:
         'generationOutputs.outputs.generationEntry.deltas',
+      runtimeInputGenerationContractValidationPath:
+        'generationOutputs.outputs.generationEntry.contractValidation',
     });
   });
 

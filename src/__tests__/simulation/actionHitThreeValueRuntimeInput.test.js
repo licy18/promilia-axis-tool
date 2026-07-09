@@ -181,18 +181,42 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
       runtimeInputSourceKind:
         'azpr-runtime-input-source-from-generation-builder',
       runtimeInputSourceStatus: 'runtime-input-source-ready',
+      standardGenerationEntrySourceKind:
+        'azpr-action-hit-three-value-delta-standard-generation-entry',
+      standardGenerationEntryStatus:
+        'action-hit-three-value-delta-standard-generation-entry-ready',
+      generationEntryContractValidationStatus:
+        'generation-entry-contract-valid',
+      generationEntryContractValidationIssueCount: 0,
+      generationEntryContractValidationValid: true,
       generationReadSources: {
         sourceKind:
           'azpr-action-hit-three-value-runtime-input-generation-read-sources',
         status: 'runtime-input-generation-read-sources-ready',
         standardOutputNames: [
+          'generationEntry',
           'runtimeInputSource',
           'standardContract',
           'deltas',
+          'contractValidation',
         ],
+        standardOutputCount: 5,
         fallbackInputNames: [],
         usesLegacyGenerationFallback: false,
+        generationEntryContractValidationStatus:
+          'generation-entry-contract-valid',
+        generationEntryContractValidationIssueCount: 0,
+        generationEntryContractValidationValid: true,
+        standardGenerationBoundaryReady: true,
         inputs: {
+          generationEntry: {
+            sourceKey: 'outputs.generationEntry',
+            sourcePath: 'generationOutputs.outputs.generationEntry',
+            sourceTier: 'standard-output',
+            containerKey: 'generationEntry',
+            fallback: false,
+            standardOutputPresent: true,
+          },
           runtimeInputSource: {
             sourceKey: 'outputs.generationEntry.runtimeInputSource',
             sourcePath:
@@ -219,6 +243,15 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
             fallback: false,
             standardOutputPresent: true,
           },
+          contractValidation: {
+            sourceKey: 'outputs.generationEntry.contractValidation',
+            sourcePath:
+              'generationOutputs.outputs.generationEntry.contractValidation',
+            sourceTier: 'standard-output',
+            containerKey: 'generationEntry',
+            fallback: false,
+            standardOutputPresent: true,
+          },
         },
       },
       summary: {
@@ -226,6 +259,10 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
         generationOutputsStatus: 'generation-outputs-ready',
         runtimeInputSourceKind:
           'azpr-runtime-input-source-from-generation-builder',
+        generationEntryContractValidationStatus:
+          'generation-entry-contract-valid',
+        generationEntryContractValidationIssueCount: 0,
+        generationEntryContractValidationValid: true,
         inputDeltaCount: 3,
         appliedDeltaCount: 1,
         ignoredDeltaCount: 2,
@@ -281,6 +318,9 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
             'azpr-action-hit-three-value-delta-standard-generation-entry',
           status:
             'action-hit-three-value-delta-standard-generation-entry-ready',
+          contractValidation: createGenerationEntryContractValidation({
+            valid: true,
+          }),
           runtimeInputSource: {
             sourceKind: 'azpr-runtime-input-source-from-generation-builder',
             status: 'runtime-input-source-ready',
@@ -336,6 +376,13 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
       inputSourceKind: 'standard-contract-from-outputs',
       generationReadSources: {
         inputs: {
+          generationEntry: {
+            sourceKey: 'outputs.generationEntry',
+            sourcePath: 'generationOutputs.outputs.generationEntry',
+            sourceTier: 'standard-output',
+            containerKey: 'generationEntry',
+            fallback: false,
+          },
           runtimeInputSource: {
             sourceKey: 'outputs.generationEntry.runtimeInputSource',
             sourcePath:
@@ -359,17 +406,35 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
             containerKey: 'generationEntry',
             fallback: false,
           },
+          contractValidation: {
+            sourceKey: 'outputs.generationEntry.contractValidation',
+            sourcePath:
+              'generationOutputs.outputs.generationEntry.contractValidation',
+            sourceTier: 'standard-output',
+            containerKey: 'generationEntry',
+            fallback: false,
+          },
         },
         standardOutputNames: [
+          'generationEntry',
           'runtimeInputSource',
           'standardContract',
           'deltas',
+          'contractValidation',
         ],
+        standardOutputCount: 5,
         fallbackInputNames: [],
+        generationEntryContractValidationStatus:
+          'generation-entry-contract-valid',
+        generationEntryContractValidationValid: true,
+        standardGenerationBoundaryReady: true,
         usesLegacyGenerationFallback: false,
       },
       summary: {
         standardContractSourceKind: 'standard-contract-from-outputs',
+        generationEntryContractValidationStatus:
+          'generation-entry-contract-valid',
+        generationEntryContractValidationValid: true,
         inputDeltaCount: 1,
         appliedDeltaCount: 1,
       },
@@ -383,6 +448,71 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
         runtimeSequenceIndex: 0,
       }),
     ]);
+  });
+
+  it('marks the runtime input boundary invalid when generation entry validation fails', () => {
+    const standardDelta = createRuntimeInputDelta({
+      sourceDeltaId: 'standard-output-delta',
+      actionId: 'action-standard',
+      delta: 420,
+    });
+    const standardContract = createRuntimeInputContract({
+      sourceKind: 'standard-contract-from-outputs',
+      delta: standardDelta,
+    });
+    const generationOutputs = {
+      sourceKind: 'azpr-three-value-generation-outputs',
+      status: 'generation-outputs-ready',
+      outputs: {
+        generationEntry: {
+          sourceKind:
+            'azpr-action-hit-three-value-delta-standard-generation-entry',
+          status:
+            'action-hit-three-value-delta-standard-generation-entry-contract-invalid',
+          contractValidation: createGenerationEntryContractValidation({
+            valid: false,
+            issueKeys: ['standard-contract-deltas-reference'],
+          }),
+          runtimeInputSource: {
+            sourceKind: 'azpr-runtime-input-source-from-generation-builder',
+            status: 'runtime-input-source-ready',
+            standardContract,
+            deltas: [standardDelta],
+          },
+          standardContract,
+          deltas: [standardDelta],
+        },
+      },
+    };
+
+    const runtimeInput = createActionHitThreeValueRuntimeInput({
+      generationOutputs,
+    });
+
+    expect(runtimeInput).toMatchObject({
+      status: 'runtime-input-invalid-generation-entry-contract',
+      generationEntryContractValidationStatus:
+        'generation-entry-contract-invalid',
+      generationEntryContractValidationIssueCount: 1,
+      generationEntryContractValidationValid: false,
+      generationReadSources: {
+        standardOutputCount: 5,
+        generationEntryContractValidationStatus:
+          'generation-entry-contract-invalid',
+        generationEntryContractValidationIssueCount: 1,
+        generationEntryContractValidationValid: false,
+        standardGenerationBoundaryReady: false,
+        usesLegacyGenerationFallback: false,
+      },
+      summary: {
+        generationEntryContractValidationStatus:
+          'generation-entry-contract-invalid',
+        generationEntryContractValidationIssueCount: 1,
+        generationEntryContractValidationValid: false,
+        inputDeltaCount: 1,
+        appliedDeltaCount: 1,
+      },
+    });
   });
 });
 
@@ -425,5 +555,24 @@ function createRuntimeInputContract({ sourceKind, delta }) {
       sampledDeltaCount: 0,
       placeholderDeltaCount: 0,
     },
+  };
+}
+
+function createGenerationEntryContractValidation({
+  valid,
+  issueKeys = [],
+} = {}) {
+  const normalizedValid = valid !== false;
+  return {
+    schemaVersion: 1,
+    sourceKind:
+      'azpr-action-hit-three-value-delta-generation-entry-contract-validation',
+    status: normalizedValid
+      ? 'generation-entry-contract-valid'
+      : 'generation-entry-contract-invalid',
+    issueCount: normalizedValid ? 0 : issueKeys.length,
+    issueKeys,
+    valid: normalizedValid,
+    applied: false,
   };
 }

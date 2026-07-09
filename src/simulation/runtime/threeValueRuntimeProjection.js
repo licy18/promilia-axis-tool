@@ -163,12 +163,27 @@ function createThreeValueRuntimeOutputs({
         outputContract.summary.runtimeInputGenerationReadFallbackInputCount,
       runtimeInputGenerationReadUsesLegacyFallback:
         outputContract.summary.runtimeInputGenerationReadUsesLegacyFallback,
+      runtimeInputGenerationStandardBoundaryReady:
+        outputContract.summary.runtimeInputGenerationStandardBoundaryReady,
+      runtimeInputGenerationEntryContractValidationStatus:
+        outputContract.summary
+          .runtimeInputGenerationEntryContractValidationStatus,
+      runtimeInputGenerationEntryContractValidationIssueCount:
+        outputContract.summary
+          .runtimeInputGenerationEntryContractValidationIssueCount,
+      runtimeInputGenerationEntryContractValidationValid:
+        outputContract.summary
+          .runtimeInputGenerationEntryContractValidationValid,
+      runtimeInputGenerationEntryPath:
+        outputContract.summary.runtimeInputGenerationEntryPath,
       runtimeInputGenerationRuntimeInputSourcePath:
         outputContract.summary.runtimeInputGenerationRuntimeInputSourcePath,
       runtimeInputGenerationStandardContractPath:
         outputContract.summary.runtimeInputGenerationStandardContractPath,
       runtimeInputGenerationDeltasPath:
         outputContract.summary.runtimeInputGenerationDeltasPath,
+      runtimeInputGenerationContractValidationPath:
+        outputContract.summary.runtimeInputGenerationContractValidationPath,
       outputConsumerContractSourceKind: outputConsumerContract.sourceKind,
       outputConsumerContractStatus: outputConsumerContract.status,
       outputConsistencyStatus: outputConsistency.status,
@@ -286,12 +301,23 @@ function createThreeValueRuntimeOutputContract({
         summary.runtimeInputGenerationReadFallbackInputCount,
       runtimeInputGenerationReadUsesLegacyFallback:
         summary.runtimeInputGenerationReadUsesLegacyFallback,
+      runtimeInputGenerationStandardBoundaryReady:
+        summary.runtimeInputGenerationStandardBoundaryReady,
+      runtimeInputGenerationEntryContractValidationStatus:
+        summary.runtimeInputGenerationEntryContractValidationStatus,
+      runtimeInputGenerationEntryContractValidationIssueCount:
+        summary.runtimeInputGenerationEntryContractValidationIssueCount,
+      runtimeInputGenerationEntryContractValidationValid:
+        summary.runtimeInputGenerationEntryContractValidationValid,
+      runtimeInputGenerationEntryPath: summary.runtimeInputGenerationEntryPath,
       runtimeInputGenerationRuntimeInputSourcePath:
         summary.runtimeInputGenerationRuntimeInputSourcePath,
       runtimeInputGenerationStandardContractPath:
         summary.runtimeInputGenerationStandardContractPath,
       runtimeInputGenerationDeltasPath:
         summary.runtimeInputGenerationDeltasPath,
+      runtimeInputGenerationContractValidationPath:
+        summary.runtimeInputGenerationContractValidationPath,
       applied: true,
     },
     applied: true,
@@ -779,12 +805,31 @@ function summarizeRuntimeInputGenerationReadSources(runtimeInput) {
     runtimeInputGenerationReadUsesLegacyFallback: Boolean(
       generationReadSources.usesLegacyGenerationFallback
     ),
+    runtimeInputGenerationStandardBoundaryReady: Boolean(
+      generationReadSources.standardGenerationBoundaryReady
+    ),
+    runtimeInputGenerationEntryContractValidationStatus:
+      runtimeInput?.generationEntryContractValidationStatus ??
+      generationReadSources.generationEntryContractValidationStatus ??
+      '',
+    runtimeInputGenerationEntryContractValidationIssueCount: numberOrZero(
+      runtimeInput?.generationEntryContractValidationIssueCount ??
+        generationReadSources.generationEntryContractValidationIssueCount
+    ),
+    runtimeInputGenerationEntryContractValidationValid: Boolean(
+      runtimeInput?.generationEntryContractValidationValid ??
+      generationReadSources.generationEntryContractValidationValid
+    ),
+    runtimeInputGenerationEntryPath:
+      generationReadInputs.generationEntry?.sourcePath ?? '',
     runtimeInputGenerationRuntimeInputSourcePath:
       generationReadInputs.runtimeInputSource?.sourcePath ?? '',
     runtimeInputGenerationStandardContractPath:
       generationReadInputs.standardContract?.sourcePath ?? '',
     runtimeInputGenerationDeltasPath:
       generationReadInputs.deltas?.sourcePath ?? '',
+    runtimeInputGenerationContractValidationPath:
+      generationReadInputs.contractValidation?.sourcePath ?? '',
   };
 }
 

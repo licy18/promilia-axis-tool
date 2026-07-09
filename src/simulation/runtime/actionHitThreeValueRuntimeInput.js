@@ -46,10 +46,7 @@ export function createActionHitThreeValueRuntimeInput({
   return {
     schemaVersion: 1,
     sourceKind: createRuntimeInputSourceKind(resolvedSource),
-    status:
-      appliedDeltas.length > 0
-        ? 'runtime-input-ready-with-applied-deltas'
-        : 'runtime-input-ready-no-applied-deltas',
+    status: createRuntimeInputStatus({ resolvedSource, appliedDeltas }),
     contractName,
     appliedDeltaSource: ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE,
     inputSourceKind:
@@ -62,6 +59,19 @@ export function createActionHitThreeValueRuntimeInput({
     generationOutputsStatus: resolvedSource.generationOutputsStatus,
     generationEntrySourceKind: resolvedSource.generationEntrySourceKind,
     generationEntryStatus: resolvedSource.generationEntryStatus,
+    standardGenerationEntrySourceKind:
+      resolvedSource.standardGenerationEntrySourceKind,
+    standardGenerationEntryStatus: resolvedSource.standardGenerationEntryStatus,
+    generationEntryContractValidation:
+      resolvedSource.generationEntryContractValidation,
+    generationEntryContractValidationSourceKind:
+      resolvedSource.generationEntryContractValidationSourceKind,
+    generationEntryContractValidationStatus:
+      resolvedSource.generationEntryContractValidationStatus,
+    generationEntryContractValidationIssueCount:
+      resolvedSource.generationEntryContractValidationIssueCount,
+    generationEntryContractValidationValid:
+      resolvedSource.generationEntryContractValidationValid,
     generationLayerSourceKind: resolvedSource.generationLayerSourceKind,
     generationLayerStatus: resolvedSource.generationLayerStatus,
     standardContractSourceKind: standardContract?.sourceKind ?? null,
@@ -94,6 +104,18 @@ function resolveActionHitThreeValueRuntimeInputSource({
       value: null,
     });
   const resolvedRuntimeInputSource = runtimeInputSourceReadSource.value;
+  const generationEntryReadSource = resolveGenerationEntryReadSource({
+    generationOutputs,
+    actionHitThreeValueDeltaGeneration,
+  });
+  const standardGenerationEntry = generationEntryReadSource?.value ?? null;
+  const generationEntryContractValidationReadSource =
+    resolveGenerationEntryContractValidationReadSource({
+      generationEntry: standardGenerationEntry,
+      generationEntryReadSource,
+    });
+  const generationEntryContractValidation =
+    generationEntryContractValidationReadSource?.value ?? null;
   const generationLayer =
     actionHitThreeValueDeltaGeneration?.threeValueGenerationLayer ??
     threeValueGenerationLayer;
@@ -114,9 +136,12 @@ function resolveActionHitThreeValueRuntimeInputSource({
   });
   const generationReadSources = createActionHitThreeValueGenerationReadSources({
     generationOutputs,
+    generationEntryReadSource,
     runtimeInputSourceReadSource,
     standardContractReadSource,
     deltaReadSource,
+    generationEntryContractValidationReadSource,
+    generationEntryContractValidation,
   });
 
   return {
@@ -124,6 +149,19 @@ function resolveActionHitThreeValueRuntimeInputSource({
     runtimeInputSourceStatus: resolvedRuntimeInputSource?.status ?? null,
     generationOutputsSourceKind: generationOutputs?.sourceKind ?? null,
     generationOutputsStatus: generationOutputs?.status ?? null,
+    standardGenerationEntrySourceKind:
+      standardGenerationEntry?.sourceKind ?? null,
+    standardGenerationEntryStatus: standardGenerationEntry?.status ?? null,
+    generationEntryContractValidation,
+    generationEntryContractValidationSourceKind:
+      generationEntryContractValidation?.sourceKind ?? null,
+    generationEntryContractValidationStatus:
+      generationEntryContractValidation?.status ?? null,
+    generationEntryContractValidationIssueCount: numberOrNull(
+      generationEntryContractValidation?.issueCount
+    ),
+    generationEntryContractValidationValid:
+      generationEntryContractValidation?.valid === true,
     generationEntrySourceKind:
       resolvedRuntimeInputSource?.generationEntrySourceKind ??
       actionHitThreeValueDeltaGeneration?.sourceKind ??
@@ -146,6 +184,59 @@ function resolveActionHitThreeValueRuntimeInputSource({
     deltas: deltaReadSource.value ?? [],
     generationReadSources,
   };
+}
+
+function resolveGenerationEntryReadSource({
+  generationOutputs,
+  actionHitThreeValueDeltaGeneration,
+} = {}) {
+  return selectGenerationReadSourceCandidate([
+    createGenerationReadSourceCandidate({
+      key: 'outputs.generationEntry',
+      path: 'generationOutputs.outputs.generationEntry',
+      tier: 'standard-output',
+      value: generationOutputs?.outputs?.generationEntry,
+      containerKey: 'generationEntry',
+    }),
+    createGenerationReadSourceCandidate({
+      key: 'generationEntry',
+      path: 'generationOutputs.generationEntry',
+      tier: 'generation-output-field',
+      value: generationOutputs?.generationEntry,
+      containerKey: 'generationEntry',
+    }),
+    createGenerationReadSourceCandidate({
+      key: 'actionHitThreeValueDeltaGeneration',
+      path: 'actionHitThreeValueDeltaGeneration',
+      tier: 'generation-entry-field',
+      value: actionHitThreeValueDeltaGeneration,
+    }),
+  ]);
+}
+
+function resolveGenerationEntryContractValidationReadSource({
+  generationEntry,
+  generationEntryReadSource,
+} = {}) {
+  if (!generationEntryReadSource?.present) {
+    return createGenerationReadSourceCandidate({
+      key: 'generationEntry.contractValidation',
+      path: '',
+      tier: 'missing',
+      value: null,
+    });
+  }
+
+  return createGenerationReadSourceCandidate({
+    key: `${generationEntryReadSource.key}.contractValidation`,
+    path: joinGenerationReadSourcePath(
+      generationEntryReadSource.path,
+      'contractValidation'
+    ),
+    tier: generationEntryReadSource.tier,
+    value: generationEntry?.contractValidation,
+    containerKey: generationEntryReadSource.containerKey,
+  });
 }
 
 function resolveRuntimeInputSourceReadSource({
@@ -354,11 +445,18 @@ function resolveRuntimeInputDeltaReadSource({
 
 function createActionHitThreeValueGenerationReadSources({
   generationOutputs,
+  generationEntryReadSource,
   runtimeInputSourceReadSource,
   standardContractReadSource,
   deltaReadSource,
+  generationEntryContractValidationReadSource,
+  generationEntryContractValidation,
 }) {
   const inputs = {
+    generationEntry: createGenerationReadSourceView(
+      generationEntryReadSource,
+      'generationEntry'
+    ),
     runtimeInputSource: createGenerationReadSourceView(
       runtimeInputSourceReadSource,
       'runtimeInputSource'
@@ -368,6 +466,10 @@ function createActionHitThreeValueGenerationReadSources({
       'standardContract'
     ),
     deltas: createGenerationReadSourceView(deltaReadSource, 'deltas'),
+    contractValidation: createGenerationReadSourceView(
+      generationEntryContractValidationReadSource,
+      'contractValidation'
+    ),
   };
   const inputNames = Object.keys(inputs);
   const standardOutputNames = inputNames.filter(
@@ -376,6 +478,15 @@ function createActionHitThreeValueGenerationReadSources({
   const fallbackInputNames = inputNames.filter(
     inputName => inputs[inputName].fallback
   );
+  const generationEntryContractValidationValid =
+    generationEntryContractValidation?.valid === true;
+  const usesLegacyGenerationFallback = inputNames.some(
+    inputName => inputs[inputName].legacyGenerationFallback
+  );
+  const standardGenerationBoundaryReady =
+    generationEntryContractValidationValid &&
+    standardOutputNames.length === inputNames.length &&
+    !usesLegacyGenerationFallback;
 
   return {
     schemaVersion: 1,
@@ -391,9 +502,19 @@ function createActionHitThreeValueGenerationReadSources({
     fallbackInputNames,
     standardOutputCount: standardOutputNames.length,
     fallbackInputCount: fallbackInputNames.length,
-    usesLegacyGenerationFallback: inputNames.some(
-      inputName => inputs[inputName].legacyGenerationFallback
+    generationEntryContractValidationStatus:
+      generationEntryContractValidation?.status ?? '',
+    generationEntryContractValidationIssueCount: numberOrZero(
+      generationEntryContractValidation?.issueCount
     ),
+    generationEntryContractValidationValid,
+    generationEntryContractValidationValidState:
+      generationEntryContractValidationValid ? 'true' : 'false',
+    standardGenerationBoundaryReady,
+    standardGenerationBoundaryReadyState: standardGenerationBoundaryReady
+      ? 'true'
+      : 'false',
+    usesLegacyGenerationFallback,
   };
 }
 
@@ -471,6 +592,18 @@ function createRuntimeInputSourceKind(resolvedSource) {
     return 'azpr-runtime-input-from-action-hit-three-value-delta-generation';
   }
   return 'azpr-runtime-input-from-three-value-generation-layer';
+}
+
+function createRuntimeInputStatus({ resolvedSource, appliedDeltas }) {
+  if (
+    resolvedSource.generationEntryContractValidation &&
+    !resolvedSource.generationEntryContractValidationValid
+  ) {
+    return 'runtime-input-invalid-generation-entry-contract';
+  }
+  return appliedDeltas.length > 0
+    ? 'runtime-input-ready-with-applied-deltas'
+    : 'runtime-input-ready-no-applied-deltas';
 }
 
 function normalizeRuntimeInputDelta(
@@ -552,6 +685,17 @@ function summarizeActionHitThreeValueRuntimeInput({
     generationOutputsStatus: resolvedSource.generationOutputsStatus,
     generationEntrySourceKind: resolvedSource.generationEntrySourceKind,
     generationEntryStatus: resolvedSource.generationEntryStatus,
+    standardGenerationEntrySourceKind:
+      resolvedSource.standardGenerationEntrySourceKind,
+    standardGenerationEntryStatus: resolvedSource.standardGenerationEntryStatus,
+    generationEntryContractValidationSourceKind:
+      resolvedSource.generationEntryContractValidationSourceKind,
+    generationEntryContractValidationStatus:
+      resolvedSource.generationEntryContractValidationStatus,
+    generationEntryContractValidationIssueCount:
+      resolvedSource.generationEntryContractValidationIssueCount,
+    generationEntryContractValidationValid:
+      resolvedSource.generationEntryContractValidationValid,
     generationLayerSourceKind: resolvedSource.generationLayerSourceKind,
     generationLayerStatus: resolvedSource.generationLayerStatus,
     standardContractSourceKind: standardContract?.sourceKind ?? null,
@@ -596,4 +740,14 @@ function normalizeRuntimeInputNumber(value) {
   }
   const number = Number(value);
   return Number.isFinite(number) ? Number(number.toFixed(6)) : null;
+}
+
+function numberOrNull(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+function numberOrZero(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : 0;
 }

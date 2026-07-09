@@ -90,12 +90,38 @@ export function createWorkbenchFlowContractContext({
     generationReadUsesLegacyFallback: Boolean(
       runtimeInputGenerationReadSources.usesLegacyGenerationFallback
     ),
+    generationStandardBoundaryReady: Boolean(
+      runtimeInputGenerationReadSources.standardGenerationBoundaryReady ??
+      runtimeSummary.runtimeInputGenerationStandardBoundaryReady
+    ),
+    generationEntryContractValidationStatus:
+      runtimeInput?.generationEntryContractValidationStatus ??
+      runtimeInput?.summary?.generationEntryContractValidationStatus ??
+      runtimeInputGenerationReadSources.generationEntryContractValidationStatus ??
+      runtimeSummary.runtimeInputGenerationEntryContractValidationStatus ??
+      '',
+    generationEntryContractValidationIssueCount: numberOrZero(
+      runtimeInput?.generationEntryContractValidationIssueCount ??
+        runtimeInput?.summary?.generationEntryContractValidationIssueCount ??
+        runtimeInputGenerationReadSources.generationEntryContractValidationIssueCount ??
+        runtimeSummary.runtimeInputGenerationEntryContractValidationIssueCount
+    ),
+    generationEntryContractValidationValid: Boolean(
+      runtimeInput?.generationEntryContractValidationValid ??
+      runtimeInput?.summary?.generationEntryContractValidationValid ??
+      runtimeInputGenerationReadSources.generationEntryContractValidationValid ??
+      runtimeSummary.runtimeInputGenerationEntryContractValidationValid
+    ),
+    generationEntrySourcePath:
+      runtimeInputGenerationReadInputs.generationEntry?.sourcePath ?? '',
     generationRuntimeInputSourcePath:
       runtimeInputGenerationReadInputs.runtimeInputSource?.sourcePath ?? '',
     generationStandardContractSourcePath:
       runtimeInputGenerationReadInputs.standardContract?.sourcePath ?? '',
     generationDeltasSourcePath:
       runtimeInputGenerationReadInputs.deltas?.sourcePath ?? '',
+    generationContractValidationSourcePath:
+      runtimeInputGenerationReadInputs.contractValidation?.sourcePath ?? '',
     appliedOnly: Boolean(runtimeInput?.appliedOnly ?? true),
     ready: isReadyStatus(runtimeInput?.status),
   };
@@ -222,8 +248,10 @@ function createWorkbenchRuntimeContractBoundary({
   runtimeOutput = {},
 } = {}) {
   const generationStandardReady =
-    runtimeInput.generationReadStandardOutputCount >= 3 &&
-    !runtimeInput.generationReadUsesLegacyFallback;
+    Boolean(runtimeInput.generationStandardBoundaryReady) ||
+    (runtimeInput.generationReadStandardOutputCount >= 5 &&
+      runtimeInput.generationEntryContractValidationValid &&
+      !runtimeInput.generationReadUsesLegacyFallback);
   const runtimeOutputStandardReady =
     runtimeOutput.outputReadStandardOutputCount >= 4 &&
     !runtimeOutput.outputReadUsesLegacyFallback;
@@ -282,7 +310,20 @@ function createWorkbenchRuntimeContractBoundary({
     runtimeOutputReadFallbackOutputCount: numberOrZero(
       runtimeOutput.outputReadFallbackOutputCount
     ),
+    generationEntryContractValidationStatus:
+      runtimeInput.generationEntryContractValidationStatus ?? '',
+    generationEntryContractValidationIssueCount: numberOrZero(
+      runtimeInput.generationEntryContractValidationIssueCount
+    ),
+    generationEntryContractValidationValid: Boolean(
+      runtimeInput.generationEntryContractValidationValid
+    ),
+    generationEntryContractValidationValidState:
+      runtimeInput.generationEntryContractValidationValid ? 'true' : 'false',
+    generationEntrySourcePath: runtimeInput.generationEntrySourcePath ?? '',
     generationDeltasSourcePath: runtimeInput.generationDeltasSourcePath ?? '',
+    generationContractValidationSourcePath:
+      runtimeInput.generationContractValidationSourcePath ?? '',
     runtimeSimLogSourcePath: runtimeOutput.outputReadSimLogSourcePath ?? '',
     runtimeSummarySourcePath: runtimeOutput.outputReadSummarySourcePath ?? '',
   };
