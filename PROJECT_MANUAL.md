@@ -11122,6 +11122,39 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：做真实页面级复核或 Playwright 化主流程烟测，确认这条连续编辑演示路径在浏览器里也可操作、可定位、无明显布局遮挡。
 
+### 2026-07-09：UI 主流程真实页面复核 - Browser Continuous Edit Smoke
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 用真实浏览器页面复核上一阶段的连续编辑演示路径，确认它不是只在组件测试里成立。
+- 实际页面可走通：`查看运行结果 -> 新增动作 -> 复制动作 -> 从结果详情回到动作编辑 -> 修改起始帧 -> 查看刷新结果 -> 曲线/日志/三值详情/贡献拆分同步`。
+- 最终页面处于 `edit-result-review`，选中 `action-0003` 刷新后的 state point，资源曲线、模拟日志、三值详情、动作结果和 HP 贡献拆分一致。
+- 本阶段只做真实页面复核和项目状态记录，不改变运行时输出、三值结果、公式、证据字段或数据结构。
+
+当前验证事实：
+
+- 本地开发页面：`http://127.0.0.1:5181/#/workbench`。
+- 初始状态：`phase=action-edit`，`action-0001`，页面横向溢出 `0px`。
+- 查看运行结果后：`phase=runtime-result`，`action-0001`，曲线/日志/详情/HP 贡献拆分都定位到 `enemyHpDamage|applied|action-0001|0|0`。
+- 新增动作后：`action-0002`，曲线/日志/详情/HP 贡献拆分都定位到 `enemyHpDamage|applied|action-0002|120|1`。
+- 复制动作后：`action-0003`，曲线/日志/详情/HP 贡献拆分都定位到 `enemyHpDamage|applied|action-0003|180|2`。
+- 修改起始帧为 `186` 后：`phase=edit-result-ready`，刷新结果点为 `enemyHpDamage|applied|action-0003|186|2`。
+- 查看刷新结果后：`phase=edit-result-review`，曲线/日志/详情/HP 贡献拆分都定位到 `enemyHpDamage|applied|action-0003|186|2`，页面横向溢出 `0px`。
+- 浏览器控制台 error/warning：无。
+- 项目当前没有 `@playwright/test` / `playwright` 依赖，也没有全局 `playwright` 命令；本阶段先采用 Codex 内置浏览器复核，后续再决定是否正式引入 e2e 测试栈。
+
+验收结果：
+
+- 真实浏览器页面复核：通过。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "keeps the result loop usable"`：通过，1 条目标测试。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：若要把真实页面复核自动化，优先评估是否引入 Playwright 依赖和 `test:e2e` 脚本；否则继续补齐 Workbench 成品体验里更大的可见流程，例如动作列表/结果列表之间的快速定位和完整编辑体验。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
