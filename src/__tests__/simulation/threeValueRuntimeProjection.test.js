@@ -1022,6 +1022,126 @@ describe('three value runtime projection', () => {
     });
   });
 
+  it('propagates standard generation output read sources into projection summaries', () => {
+    const standardDelta = createRuntimeProjectionDelta({
+      sourceDeltaId: 'standard-output-delta',
+      actionId: 'action-standard',
+      delta: 420,
+    });
+    const directDelta = createRuntimeProjectionDelta({
+      sourceDeltaId: 'direct-generation-output-delta',
+      actionId: 'action-direct',
+      delta: 900,
+    });
+    const runtimeSourceDelta = createRuntimeProjectionDelta({
+      sourceDeltaId: 'runtime-input-source-delta',
+      actionId: 'action-runtime-source',
+      delta: 777,
+    });
+    const standardContract = createRuntimeProjectionContract({
+      sourceKind: 'standard-contract-from-outputs',
+      delta: standardDelta,
+    });
+    const directContract = createRuntimeProjectionContract({
+      sourceKind: 'direct-generation-output-contract',
+      delta: directDelta,
+    });
+    const runtimeSourceContract = createRuntimeProjectionContract({
+      sourceKind: 'runtime-input-source-contract',
+      delta: runtimeSourceDelta,
+    });
+
+    const runtimeProjection = createThreeValueRuntimeProjection({
+      scenario: {
+        enemy: {
+          stats: {
+            maxHp: 10000,
+          },
+          hpMultiplier: 1,
+        },
+        actors: [
+          {
+            id: 'actor-standard',
+            name: '标准角色',
+          },
+        ],
+      },
+      generationOutputs: {
+        sourceKind: 'azpr-three-value-generation-outputs',
+        status: 'generation-outputs-ready',
+        outputs: {
+          runtimeInputSource: {
+            sourceKind: 'azpr-runtime-input-source-from-generation-builder',
+            status: 'runtime-input-source-ready',
+            generationEntrySourceKind:
+              'azpr-action-hit-three-value-delta-generation-entry',
+            generationEntryStatus:
+              'action-hit-three-value-delta-generation-ready',
+            generationLayerSourceKind:
+              'azpr-standard-three-value-generation-layer',
+            generationLayerStatus:
+              'standard-three-value-generation-layer-ready',
+            standardContract: runtimeSourceContract,
+            deltas: [runtimeSourceDelta],
+          },
+          standardContract,
+          deltas: [standardDelta],
+        },
+        runtimeInputSource: {
+          sourceKind: 'legacy-runtime-input-source',
+          status: 'legacy-runtime-input-source-ready',
+          standardContract: runtimeSourceContract,
+          deltas: [runtimeSourceDelta],
+        },
+        standardContract: directContract,
+        deltas: [directDelta],
+      },
+    });
+
+    expect(runtimeProjection.runtimeInput.appliedDeltas).toEqual([
+      expect.objectContaining({
+        sourceDeltaId: 'standard-output-delta',
+        actionId: 'action-standard',
+        delta: 420,
+        hpDelta: 420,
+      }),
+    ]);
+    expect(runtimeProjection.summary).toMatchObject({
+      enemyHpDelta: 420,
+      runtimeInputGenerationReadSourcesStatus:
+        'runtime-input-generation-read-sources-ready',
+      runtimeInputGenerationReadStandardOutputCount: 3,
+      runtimeInputGenerationReadFallbackInputCount: 0,
+      runtimeInputGenerationReadUsesLegacyFallback: false,
+      runtimeInputGenerationRuntimeInputSourcePath:
+        'generationOutputs.outputs.runtimeInputSource',
+      runtimeInputGenerationStandardContractPath:
+        'generationOutputs.outputs.standardContract',
+      runtimeInputGenerationDeltasPath: 'generationOutputs.outputs.deltas',
+    });
+    expect(runtimeProjection.outputContract.summary).toMatchObject({
+      enemyHpDelta: 420,
+      runtimeInputGenerationReadSourcesStatus:
+        'runtime-input-generation-read-sources-ready',
+      runtimeInputGenerationReadStandardOutputCount: 3,
+      runtimeInputGenerationReadFallbackInputCount: 0,
+      runtimeInputGenerationReadUsesLegacyFallback: false,
+    });
+    expect(runtimeProjection.runtimeOutputs.outputSummary).toMatchObject({
+      enemyHpDelta: 420,
+      runtimeInputGenerationReadSourcesStatus:
+        'runtime-input-generation-read-sources-ready',
+      runtimeInputGenerationReadStandardOutputCount: 3,
+      runtimeInputGenerationReadFallbackInputCount: 0,
+      runtimeInputGenerationReadUsesLegacyFallback: false,
+      runtimeInputGenerationRuntimeInputSourcePath:
+        'generationOutputs.outputs.runtimeInputSource',
+      runtimeInputGenerationStandardContractPath:
+        'generationOutputs.outputs.standardContract',
+      runtimeInputGenerationDeltasPath: 'generationOutputs.outputs.deltas',
+    });
+  });
+
   it('keeps no-applied-delta status in the output consumer contract', () => {
     const runtimeProjection = createThreeValueRuntimeProjection({
       scenario: {
@@ -1072,3 +1192,49 @@ describe('three value runtime projection', () => {
     });
   });
 });
+
+function createRuntimeProjectionDelta({ sourceDeltaId, actionId, delta }) {
+  return {
+    id: sourceDeltaId,
+    sourceDeltaId,
+    actionId,
+    actionName: actionId,
+    actionType: 'skill',
+    actorId: 'actor-standard',
+    actorName: '标准角色',
+    hitKey: `${actionId}|hit-1`,
+    hitIndex: 0,
+    frameIndex: 12,
+    frameLabel: '0s12f',
+    timeMs: 200,
+    sequenceIndex: 0,
+    trackKey: 'enemyHpDamage',
+    layerKey: 'applied',
+    delta,
+    hpDelta: delta,
+    toughnessDelta: 0,
+    energyDelta: 0,
+    applied: true,
+  };
+}
+
+function createRuntimeProjectionContract({ sourceKind, delta }) {
+  return {
+    schemaVersion: 1,
+    sourceKind,
+    status: 'action-hit-three-value-delta-contract-ready',
+    name: 'Action -> Hit -> ThreeValueDelta',
+    actions: [],
+    hits: [],
+    deltas: [delta],
+    summary: {
+      actionCount: 1,
+      hitCount: 1,
+      deltaCount: 1,
+      appliedDeltaCount: 1,
+      candidateDeltaCount: 0,
+      sampledDeltaCount: 0,
+      placeholderDeltaCount: 0,
+    },
+  };
+}

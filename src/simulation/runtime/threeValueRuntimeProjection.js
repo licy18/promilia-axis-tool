@@ -155,6 +155,20 @@ function createThreeValueRuntimeOutputs({
       enemyHpDelta: outputContract.summary.enemyHpDelta,
       enemyToughnessDelta: outputContract.summary.enemyToughnessDelta,
       selfEnergyDelta: outputContract.summary.selfEnergyDelta,
+      runtimeInputGenerationReadSourcesStatus:
+        outputContract.summary.runtimeInputGenerationReadSourcesStatus,
+      runtimeInputGenerationReadStandardOutputCount:
+        outputContract.summary.runtimeInputGenerationReadStandardOutputCount,
+      runtimeInputGenerationReadFallbackInputCount:
+        outputContract.summary.runtimeInputGenerationReadFallbackInputCount,
+      runtimeInputGenerationReadUsesLegacyFallback:
+        outputContract.summary.runtimeInputGenerationReadUsesLegacyFallback,
+      runtimeInputGenerationRuntimeInputSourcePath:
+        outputContract.summary.runtimeInputGenerationRuntimeInputSourcePath,
+      runtimeInputGenerationStandardContractPath:
+        outputContract.summary.runtimeInputGenerationStandardContractPath,
+      runtimeInputGenerationDeltasPath:
+        outputContract.summary.runtimeInputGenerationDeltasPath,
       outputConsumerContractSourceKind: outputConsumerContract.sourceKind,
       outputConsumerContractStatus: outputConsumerContract.status,
       outputConsistencyStatus: outputConsistency.status,
@@ -264,6 +278,20 @@ function createThreeValueRuntimeOutputContract({
       enemyHpDelta: summary.enemyHpDelta,
       enemyToughnessDelta: summary.enemyToughnessDelta,
       selfEnergyDelta: summary.selfEnergyDelta,
+      runtimeInputGenerationReadSourcesStatus:
+        summary.runtimeInputGenerationReadSourcesStatus,
+      runtimeInputGenerationReadStandardOutputCount:
+        summary.runtimeInputGenerationReadStandardOutputCount,
+      runtimeInputGenerationReadFallbackInputCount:
+        summary.runtimeInputGenerationReadFallbackInputCount,
+      runtimeInputGenerationReadUsesLegacyFallback:
+        summary.runtimeInputGenerationReadUsesLegacyFallback,
+      runtimeInputGenerationRuntimeInputSourcePath:
+        summary.runtimeInputGenerationRuntimeInputSourcePath,
+      runtimeInputGenerationStandardContractPath:
+        summary.runtimeInputGenerationStandardContractPath,
+      runtimeInputGenerationDeltasPath:
+        summary.runtimeInputGenerationDeltasPath,
       applied: true,
     },
     applied: true,
@@ -678,6 +706,8 @@ function summarizeThreeValueRuntimeProjection({
     0
   );
   const calculatorSummary = summarizeThreeValueCalculators(appliedDeltas);
+  const generationReadSummary =
+    summarizeRuntimeInputGenerationReadSources(runtimeInput);
 
   return {
     inputContractName: runtimeInput.contractName,
@@ -691,6 +721,7 @@ function summarizeThreeValueRuntimeProjection({
     runtimeGenerationLayerSourceKind: runtimeInput.generationLayerSourceKind,
     runtimeGenerationLayerStatus: runtimeInput.generationLayerStatus,
     runtimeInputIgnoredDeltaCount: runtimeInput.ignoredDeltaCount,
+    ...generationReadSummary,
     appliedDeltaCount: appliedDeltas.length,
     enemyHpDelta: sumThreeValueRuntimeDeltas(appliedDeltas, 'hpDelta'),
     enemyToughnessDelta: sumThreeValueRuntimeDeltas(
@@ -731,6 +762,29 @@ function summarizeThreeValueRuntimeProjection({
     runtimeInputSource: ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE,
     appliedOnly: true,
     applied: true,
+  };
+}
+
+function summarizeRuntimeInputGenerationReadSources(runtimeInput) {
+  const generationReadSources = runtimeInput?.generationReadSources ?? {};
+  const generationReadInputs = generationReadSources.inputs ?? {};
+  return {
+    runtimeInputGenerationReadSourcesStatus: generationReadSources.status ?? '',
+    runtimeInputGenerationReadStandardOutputCount: numberOrZero(
+      generationReadSources.standardOutputCount
+    ),
+    runtimeInputGenerationReadFallbackInputCount: numberOrZero(
+      generationReadSources.fallbackInputCount
+    ),
+    runtimeInputGenerationReadUsesLegacyFallback: Boolean(
+      generationReadSources.usesLegacyGenerationFallback
+    ),
+    runtimeInputGenerationRuntimeInputSourcePath:
+      generationReadInputs.runtimeInputSource?.sourcePath ?? '',
+    runtimeInputGenerationStandardContractPath:
+      generationReadInputs.standardContract?.sourcePath ?? '',
+    runtimeInputGenerationDeltasPath:
+      generationReadInputs.deltas?.sourcePath ?? '',
   };
 }
 
@@ -938,6 +992,11 @@ function compareNullableTimelineNumber(left, right) {
 function numberOrNull(value) {
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
+}
+
+function numberOrZero(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : 0;
 }
 
 function finiteValues(values) {

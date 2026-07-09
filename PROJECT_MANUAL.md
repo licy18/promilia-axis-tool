@@ -12792,6 +12792,36 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续生成层能力块：把 `generationOutputs.outputs.*` 的标准入口进一步接入 projection / Workbench 的端到端合同验收，再用主流程 e2e 防止 UI 闭环回退。
 
+### 2026-07-09：生成层 - Runtime projection 生成入口摘要
+
+本阶段属于：生成层。
+
+完成的可用能力：
+
+- runtime projection 的 `summary`、`outputContract.summary` 和 `runtimeOutputs.outputSummary` 现在都会带出 runtime input 的生成层读取来源摘要。
+- 端到端纵切结果的 `threeValueRuntimeProjectionSummary` 和 `runtimeOutputsSummary` 可以直接证明本次模拟是否通过标准 `generationOutputs.outputs.*` 进入 runtime，而不需要钻进 runtime input 内部对象。
+- 本阶段不改变 UI 文案、三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值或草稿保存 schema。
+
+当前验证事实：
+
+- projection 回归用例故意让标准 `generationOutputs.outputs.*`、旧 generationOutputs 字段和 runtime input source 内部字段返回不同 delta，确认 projection summary 与 output summary 都来自标准 outputs。
+- 纵切回归确认 `projectSimulationResult()` 的 runtime projection summary 和 runtime outputs summary 都保留同一组标准生成入口来源路径。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js`：通过，1 个测试文件、6 条测试。
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、13 条测试。
+- `npm run test -- --run src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，2 个测试文件、11 条测试。
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js --pool=threads`：通过，4 个测试文件、30 条测试。
+- `npm run test:e2e:workbench-flow`：通过，5 条浏览器级主流程测试。
+- `npx prettier --check src/simulation/runtime/threeValueRuntimeProjection.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+- 合并运行 `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js` 时出现一次 Vitest worker 退出异常；拆分后同一范围全部通过。
+
+下一步：
+
+- 继续生成层或运行时层能力块：把 generation/read source 与 runtime/output source 两组诊断合并成更高层的 Workbench 合同验收，再用主流程 e2e 守住可见闭环。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

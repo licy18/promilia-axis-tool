@@ -23101,3 +23101,49 @@ generationDeltasSourcePath
 - `npm run test:e2e:workbench-flow`：通过，5 条浏览器级主流程测试。
 - `npx prettier --check src/simulation/runtime/actionHitThreeValueRuntimeInput.js src/features/workbench/workbenchFlowContractContext.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/features/workbenchFlowContractContext.test.js PROJECT_MANUAL.md`：通过。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 325. Runtime Projection 生成入口摘要：Generation Read Summary
+
+### 325.1 结构变化
+
+runtime projection 的 summary 结构新增生成层读取来源摘要字段：
+
+```text
+runtimeInputGenerationReadSourcesStatus
+runtimeInputGenerationReadStandardOutputCount
+runtimeInputGenerationReadFallbackInputCount
+runtimeInputGenerationReadUsesLegacyFallback
+runtimeInputGenerationRuntimeInputSourcePath
+runtimeInputGenerationStandardContractPath
+runtimeInputGenerationDeltasPath
+```
+
+这些字段同步出现在：
+
+```text
+threeValueRuntimeProjection.summary
+threeValueRuntimeProjection.outputContract.summary
+threeValueRuntimeProjection.runtimeOutputs.outputSummary
+projectSimulationResult.summary.threeValueRuntimeProjectionSummary
+projectSimulationResult.summary.runtimeOutputsSummary
+```
+
+字段来自 `runtimeInput.generationReadSources`，用于在 projection / output summary 层直接判断 runtime input 是否来自标准 `generationOutputs.outputs.*`，以及是否发生 legacy generation fallback。
+
+### 325.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只新增运行期 summary 诊断字段；三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值和 UI 文案均不改变。
+
+### 325.3 验证
+
+- `threeValueRuntimeProjection.test.js` 覆盖标准 `generationOutputs.outputs.*`、旧 generationOutputs 字段和 runtime input source 内部字段冲突时，projection summary 与 runtime output summary 均记录标准 outputs 来源。
+- `firstVerticalSliceSimulation.test.js` 覆盖完整 `projectSimulationResult()` 输出的 runtime projection summary 和 runtime outputs summary 承接标准生成入口来源路径。
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js`：通过，1 个测试文件、6 条测试。
+- `npm run test -- --run src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，1 个测试文件、13 条测试。
+- `npm run test -- --run src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，2 个测试文件、11 条测试。
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js --pool=threads`：通过，4 个测试文件、30 条测试。
+- `npm run test:e2e:workbench-flow`：通过，5 条浏览器级主流程测试。
+- `npx prettier --check src/simulation/runtime/threeValueRuntimeProjection.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
