@@ -107,7 +107,7 @@ test('keeps setup, edit return, and result selection synced', async ({
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
-test('runs the visible curve-log-detail edit loop end to end', async ({
+test('runs the visible curve-log-detail edit loop end to end @workbench-main-flow', async ({
   page,
 }) => {
   const browserIssues = collectBrowserIssues(page);
@@ -1074,7 +1074,7 @@ test('keeps action list, timeline nudge, frame step, and result return in one lo
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
-test('keeps undo and redo tied to refreshed runtime results', async ({
+test('keeps undo and redo tied to refreshed runtime results @workbench-main-flow', async ({
   page,
 }) => {
   const browserIssues = collectBrowserIssues(page);
@@ -1162,7 +1162,7 @@ test('keeps undo and redo tied to refreshed runtime results', async ({
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
-test('keeps keyboard edit shortcuts tied to runtime review flow', async ({
+test('keeps keyboard edit shortcuts tied to runtime review flow @workbench-main-flow', async ({
   page,
 }) => {
   const browserIssues = collectBrowserIssues(page);
@@ -1561,7 +1561,7 @@ test('keeps runtime result flow usable after deleting the focused action', async
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
-test('keeps runtime result flow usable after copying a generated action batch', async ({
+test('keeps runtime result flow usable after copying a generated action batch @workbench-main-flow', async ({
   page,
 }) => {
   const browserIssues = collectBrowserIssues(page);
@@ -1710,7 +1710,7 @@ test('keeps runtime result flow usable after copying a generated action batch', 
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
-test('keeps runtime result flow usable after deleting a generated action batch', async ({
+test('keeps runtime result flow usable after deleting a generated action batch @workbench-main-flow', async ({
   page,
 }) => {
   const browserIssues = collectBrowserIssues(page);

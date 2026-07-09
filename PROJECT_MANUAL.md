@@ -12713,6 +12713,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：将批次查看/复制/删除/撤销/重做这组路径汇总成 Workbench 主流程回归套件，再考虑进入运行时层或生成层的大能力块。
 
+### 2026-07-09：UI 主流程可见闭环 - Workbench 主流程回归套件
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 新增 `npm run test:e2e:workbench-flow`，用于一次运行核心 Workbench 主流程浏览器回归。
+- 核心回归标签 `@workbench-main-flow` 当前覆盖 5 条路径：完整曲线/日志/三值详情编辑闭环、撤销/重做、键盘快捷编辑、批次复制、批次删除。
+- 这让后续进入运行时层或生成层时，可以快速验证 Endaxis 式主流程没有被破坏。
+- 本阶段不改变 UI 交互、三值计算结果、公式、倍率、证据字段、生成层合同、运行时输出或保存 schema。
+
+当前验证事实：
+
+- `npm run test:e2e:workbench-flow` 会执行 `e2e/workbench-continuous-edit.spec.js -g @workbench-main-flow`。
+- 当前 5 条核心浏览器路径全部通过，覆盖“排轴动作编辑 -> 运行模拟 -> 资源曲线/日志/详情 -> 回到动作修改 -> 查看刷新结果”的主循环和批次操作主循环。
+
+验收结果：
+
+- `npm run test:e2e:workbench-flow`：通过，5 条浏览器级主流程测试。
+- `npx prettier --check package.json e2e/workbench-continuous-edit.spec.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 可以转入运行时层能力块：以 `test:e2e:workbench-flow` 守住 UI 主流程，同时继续把 runtime 输出边界、summary、simLog 与 stateCurves 的消费路径收束到标准合同。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

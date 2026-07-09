@@ -12,6 +12,7 @@
     "format": "prettier --write src/",
     "test": "vitest",
     "test:e2e": "playwright test",
+    "test:e2e:workbench-flow": "playwright test e2e/workbench-continuous-edit.spec.js -g @workbench-main-flow",
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
