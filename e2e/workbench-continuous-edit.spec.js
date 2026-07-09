@@ -309,6 +309,55 @@ test('keeps timeline state curve marker selection tied to edit return', async ({
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps analysis state curve point selection tied to edit return', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+  const { insertedState } = await createThreeActionRuntime(page);
+
+  await page.getByTestId('workbench-state-curve-focus-all').click();
+
+  const analysisStatePoint = page
+    .locator(
+      `[data-testid="workbench-state-curve-point"][data-state-point-id="${insertedState.statePointId}"]`
+    )
+    .first();
+  await expect(analysisStatePoint).toHaveAttribute(
+    'data-action-id',
+    'action-0002'
+  );
+  await analysisStatePoint.click();
+
+  const analysisPointState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(analysisPointState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(analysisPointState, insertedState.statePointId);
+  await expectCurveAndLogSelection(page, insertedState.statePointId);
+  await expect(analysisStatePoint).toHaveClass(/selected/);
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail')
+  ).toHaveAttribute('data-runtime-review-source', 'analysis-state-curve');
+
+  await focusRuntimeDetailAction(page);
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
+    actionId: 'action-0002',
+    frameValue: '156',
+    msValue: '2600',
+    originStatePointId: insertedState.statePointId,
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps direct, log, and contribution edit returns synced', async ({
   page,
 }) => {
