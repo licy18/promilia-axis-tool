@@ -16,6 +16,7 @@ import {
   createWorkbenchRuntimeReviewPrimaryOperationCommand,
   createWorkbenchRuntimeReviewPrimaryOperationView,
   createWorkbenchRuntimeResultFlowAction,
+  createWorkbenchRuntimeResultReturnCommand,
   createWorkbenchRuntimeResultReturnFlowAction,
   createWorkbenchRuntimeReviewFlowAction,
   createWorkbenchRuntimeStatePointFlowAction,
@@ -684,6 +685,38 @@ describe('workbench main flow actions', () => {
       statePointId: 'contribution-state',
       canRun: true,
     });
+    expect(
+      surface.createRuntimeResultReturnCommand({
+        source: 'properties-panel',
+        context: {
+          actionId: 'properties-action',
+          originStatePointId: 'origin-state-point',
+          statePointId: 'properties-state-point',
+          status: 'refreshed-edit-result',
+        },
+      })
+    ).toMatchObject({
+      operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+      source: 'properties-panel',
+      enabled: true,
+      actionId: 'properties-action',
+      statePointId: 'properties-state-point',
+      context: {
+        originStatePointId: 'origin-state-point',
+        status: 'refreshed-edit-result',
+      },
+      action: {
+        kind: 'return-runtime-result',
+        source: 'properties-panel',
+        actionId: 'properties-action',
+        statePointId: 'properties-state-point',
+        payload: {
+          originStatePointId: 'origin-state-point',
+          status: 'refreshed-edit-result',
+        },
+        canRun: true,
+      },
+    });
   });
 
   it('creates runtime point and result focus actions with the same main flow factory', () => {
@@ -713,6 +746,53 @@ describe('workbench main flow actions', () => {
       actionId: 'action-0001',
       statePointId: 'enemyHpDamage|applied|action-0001|12|0',
       canRun: true,
+    });
+  });
+
+  it('creates runtime result return commands from the shared review return target', () => {
+    const command = createWorkbenchRuntimeResultReturnCommand({
+      source: 'runtime-detail',
+      flowModel: {
+        runtimeReviewOperations: {
+          returnResult: {
+            kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+            enabled: true,
+            actionId: 'review-action',
+            originStatePointId: 'origin-state-point',
+            statePointId: 'review-state-point',
+            status: 'refreshed-edit-result',
+          },
+        },
+      },
+      context: {
+        actionId: 'fallback-action',
+        statePointId: 'fallback-state-point',
+      },
+    });
+
+    expect(command).toMatchObject({
+      operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.RETURN_RESULT,
+      source: 'runtime-detail',
+      enabled: true,
+      actionId: 'review-action',
+      statePointId: 'review-state-point',
+      target: {
+        actionId: 'review-action',
+        originStatePointId: 'origin-state-point',
+        statePointId: 'review-state-point',
+        status: 'refreshed-edit-result',
+      },
+      action: {
+        kind: 'return-runtime-result',
+        source: 'runtime-detail',
+        actionId: 'review-action',
+        statePointId: 'review-state-point',
+        payload: {
+          originStatePointId: 'origin-state-point',
+          status: 'refreshed-edit-result',
+        },
+        canRun: true,
+      },
     });
   });
 

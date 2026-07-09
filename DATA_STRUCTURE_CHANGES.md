@@ -20555,3 +20555,50 @@ Workbench 页面层新增 `captureActionMutationRuntimeReviewState()`，只负�
 - `npm run test -- --run`：通过，35 个测试文件、221 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `git diff --check`：通过；仅有 Git 换行转换提示。
+
+## 275. UI 主流程能力块：Result Return Command Surface
+
+### 275.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`createWorkbenchMainFlowCommandSurface()` 新增共享命令工厂：
+
+```js
+createRuntimeResultReturnCommand({
+  source,
+  target,
+  context,
+  enabled,
+})
+```
+
+该工厂返回现有 runtime review operation command 形态：
+
+```js
+{
+  operationKind,
+  source,
+  enabled,
+  disabledReason,
+  actionId,
+  statePointId,
+  target,
+  context,
+  action,
+}
+```
+
+`createWorkbenchRuntimeReviewPanelCommandView()` 的 `returnResult` 分支改为通过 `createWorkbenchRuntimeResultReturnCommand()` 创建。返回结果命令会优先消费 `flowModel.runtimeReviewOperations.returnResult` / `primaryOperation`，再回退到调用方传入的 `context` 或 `target`。
+
+### 275.2 保存与迁移
+
+本阶段只调整 Workbench 主流程 command surface 的内部命令生成入口，不新增持久字段，不需要数据迁移。
+
+### 275.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 surface 直接创建 return-result command，以及 helper 从共享 review return target 生成 action。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、85 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、222 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。

@@ -9664,6 +9664,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把动作编辑后的“返回/刷新结果”路径继续接入同一主流程 command surface，优先保证排轴动作编辑、运行模拟、资源曲线/日志/详情查看、回到动作修改这一闭环更像 Endaxis 的单工作面体验。
 
+### 2026-07-09：UI 主流程能力块 - Result Return Command Surface
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `createWorkbenchMainFlowCommandSurface()` 新增共享的 `createRuntimeResultReturnCommand()`，把“回到刷新结果 / 回到结果点”提升为 command surface 的一等命令入口。
+- `createWorkbenchRuntimeReviewPanelCommandView()` 的返回结果命令改为复用同一入口，属性面板、运行详情面板和顶部主流程按钮可以继续共享同形态的 return-result action。
+- 返回结果命令会优先消费 flow model 中的 `runtimeReviewOperations.returnResult`，再回退到面板传入的 context，减少“动作编辑后回看结果”在不同面板各自拼 action 的分叉。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- main flow action 单测覆盖 surface 直接创建 return-result command，以及 helper 从共享 review return target 生成 action。
+- Workbench、FlowPanel、RuntimeSelectedDetailPanel 相关测试确认现有主流程按钮和详情面板点击路径不变。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、85 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、222 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：围绕 command surface 检查剩余动作编辑入口和运行结果入口，优先把真正影响“编辑 -> 运行 -> 结果查看 -> 回改”的 dispatch 入口继续归一，而不是扩展局部提示。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
