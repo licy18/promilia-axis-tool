@@ -11812,6 +11812,35 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：补齐结果定位和曲线交互在更多编辑入口下的成品级闭环；若 UI 主流程已稳定，再切回生成层标准合同或运行时层输出边界。
 
+### 2026-07-09：UI 主流程时间轴状态点闭环 - Timeline State Marker Loop
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 用户在时间轴上把曲线显示范围切回“全部”后，可以直接点击状态曲线 marker 定位到对应运行结果。
+- 时间轴 marker 选择后，三值详情、资源曲线、模拟日志、贡献拆分、动作列表和时间轴选中态保持同步。
+- 用户可以从该结果进入动作编辑，并通过“查看刷新结果”回到刷新后的运行点。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、保存数据或导入导出结构。
+
+当前验证事实：
+
+- 新增浏览器级闭环场景：`多动作运行结果 -> 时间轴曲线视图切回全部 -> 点击状态曲线 marker -> 曲线/日志/贡献同步 -> 编辑动作 -> 查看刷新结果`。
+- 该场景复用既有时间轴状态曲线 marker、主流程 action 和 runtime sync request，不新增内部抽象层。
+
+验收结果：
+
+- `npm run test:e2e -- --grep "timeline state curve marker"`：通过，1 条浏览器级闭环测试。
+- `npm run test -- --run`：通过，38 个测试文件、271 条测试。
+- `npm run test:e2e`：通过，9 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md e2e/workbench-continuous-edit.spec.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：补齐 Analysis 状态曲线列表/帧组入口到编辑回跳的浏览器级闭环；若 UI 主流程入口都稳定，再转入生成层或运行时层边界收敛。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

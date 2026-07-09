@@ -249,6 +249,66 @@ test('keeps runtime detail navigation tied to edit return', async ({
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps timeline state curve marker selection tied to edit return', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+  const { insertedState } = await createThreeActionRuntime(page);
+
+  await page
+    .locator(
+      '[data-testid="workbench-candidate-value-scope-option"][data-scope-key="all"]'
+    )
+    .click();
+
+  const timelineStateMarker = page
+    .locator(
+      `[data-testid="workbench-timeline-state-curve-marker"][data-state-point-id="${insertedState.statePointId}"]`
+    )
+    .first();
+  await expect(timelineStateMarker).toHaveAttribute(
+    'data-action-id',
+    'action-0002'
+  );
+  await timelineStateMarker.click();
+
+  const timelineMarkerState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(timelineMarkerState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(
+    timelineMarkerState,
+    insertedState.statePointId
+  );
+  await expectCurveAndLogSelection(page, insertedState.statePointId);
+  await expect(timelineStateMarker).toHaveClass(/selected/);
+  await expect(timelineStateMarker).toHaveAttribute(
+    'data-runtime-focus-source',
+    'state-curve-point'
+  );
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail')
+  ).toHaveAttribute('data-runtime-review-source', 'state-curve-point');
+
+  await focusRuntimeDetailAction(page);
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
+    actionId: 'action-0002',
+    frameValue: '150',
+    msValue: '2500',
+    originStatePointId: insertedState.statePointId,
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps direct, log, and contribution edit returns synced', async ({
   page,
 }) => {
