@@ -5093,6 +5093,27 @@ describe('Workbench view', () => {
     expect(
       runtimeCurveSelectionSource.attributes('data-result-context-active')
     ).toBe('false');
+    const runtimeCurveSelectionPrimary = runtimeCurveSelection.find(
+      '[data-testid="workbench-runtime-resource-chart-selection-primary"]'
+    );
+    expect(runtimeCurveSelectionPrimary.attributes()).toMatchObject({
+      'data-track-key': 'enemyHpDamage',
+      'data-state-point-id': statePointId,
+    });
+    expect(
+      runtimeCurveSelectionPrimary
+        .find(
+          '[data-testid="workbench-runtime-resource-chart-selection-primary-delta"]'
+        )
+        .text()
+    ).toBe('12,461');
+    expect(
+      runtimeCurveSelectionPrimary
+        .find(
+          '[data-testid="workbench-runtime-resource-chart-selection-primary-state"]'
+        )
+        .text()
+    ).toBe('累计 12,461 · 剩余 0 · 溢出 3,833');
     const runtimeCurveSelectionRows = Object.fromEntries(
       runtimeCurveSelection
         .findAll(
@@ -5103,15 +5124,9 @@ describe('Workbench view', () => {
     expect(Object.keys(runtimeCurveSelectionRows)).toEqual([
       'point',
       'action',
-      'delta',
-      'cumulative',
-      'state',
     ]);
     expect(runtimeCurveSelectionRows.point.text()).toContain('敌人 HP');
     expect(runtimeCurveSelectionRows.action.text()).toContain('普通攻击');
-    expect(runtimeCurveSelectionRows.delta.text()).toBe('Delta12,461');
-    expect(runtimeCurveSelectionRows.cumulative.text()).toBe('累计12,461');
-    expect(runtimeCurveSelectionRows.state.text()).toBe('剩余0 · 溢出 3,833');
 
     const nextButton = runtimeCurveSelection.find(
       '[data-testid="workbench-runtime-resource-chart-selection-next"]'

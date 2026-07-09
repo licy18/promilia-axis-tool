@@ -296,6 +296,21 @@
               </button>
             </div>
           </div>
+          <div
+            v-if="selectedRuntimeCurvePointSummary"
+            class="runtime-curve-selection-primary"
+            :data-track-key="selectedRuntimeCurvePointSummary.trackKey"
+            :data-state-point-id="selectedRuntimeCurvePointSummary.statePointId"
+            data-testid="workbench-runtime-resource-chart-selection-primary"
+          >
+            <span>{{ selectedRuntimeCurvePointSummary.trackLabel }}</span>
+            <strong data-testid="workbench-runtime-resource-chart-selection-primary-delta">
+              {{ selectedRuntimeCurvePointSummary.delta }}
+            </strong>
+            <small data-testid="workbench-runtime-resource-chart-selection-primary-state">
+              {{ selectedRuntimeCurvePointSummary.state }}
+            </small>
+          </div>
           <div class="runtime-curve-selection-grid">
             <div
               v-for="row in selectedRuntimeCurvePointRows"
@@ -607,6 +622,9 @@ const selectedRuntimeCurveCommandView = computed(() =>
 
 const selectedRuntimeCurvePointRows = computed(() =>
   createSelectedRuntimeCurvePointRows(selectedRuntimeCurvePoint.value)
+);
+const selectedRuntimeCurvePointSummary = computed(() =>
+  createSelectedRuntimeCurvePointSummary(selectedRuntimeCurvePoint.value)
 );
 
 const selectedRuntimeCurvePreviousPoint = computed(() =>
@@ -965,22 +983,22 @@ function createSelectedRuntimeCurvePointRows(point) {
       label: '动作',
       value: point.actionName ?? point.actionId ?? '动作',
     },
-    {
-      key: 'delta',
-      label: 'Delta',
-      value: formatRuntimeCurvePointDelta(point),
-    },
-    {
-      key: 'cumulative',
-      label: '累计',
-      value: formatRuntimeCurvePointCumulative(point),
-    },
-    {
-      key: 'state',
-      label: point.stateLabel ?? '状态',
-      value: formatRuntimeCurvePointState(point),
-    },
   ];
+}
+
+function createSelectedRuntimeCurvePointSummary(point) {
+  if (!point) {
+    return null;
+  }
+  return {
+    statePointId: point.statePointId ?? '',
+    trackKey: point.trackKey ?? '',
+    trackLabel: point.seriesLabel || formatRuntimeTrackLabel(point.trackKey),
+    delta: formatRuntimeCurvePointDelta(point),
+    state: `累计 ${formatRuntimeCurvePointCumulative(point)} · ${
+      point.stateLabel ?? '状态'
+    } ${formatRuntimeCurvePointState(point)}`,
+  };
 }
 
 function formatRuntimeCurvePointDelta(point) {
@@ -1556,6 +1574,45 @@ h2 {
 .runtime-curve-nav-icon {
   width: 13px;
   height: 13px;
+}
+
+.runtime-curve-selection-primary {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 0.9fr) minmax(0, 1.6fr);
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid rgba(121, 199, 185, 0.22);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.09);
+}
+
+.runtime-curve-selection-primary span,
+.runtime-curve-selection-primary strong,
+.runtime-curve-selection-primary small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.runtime-curve-selection-primary span {
+  color: #9ce0d2;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.runtime-curve-selection-primary strong {
+  color: #ffffff;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+.runtime-curve-selection-primary small {
+  color: #d2dae1;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .runtime-curve-selection-grid {
