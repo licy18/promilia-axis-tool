@@ -256,6 +256,29 @@
               <EditPen class="runtime-curve-action-focus-icon" />
               <span>{{ selectedRuntimeCurveActionEditButtonLabel }}</span>
             </button>
+            <button
+              v-if="selectedRuntimeCurveResultReturnButtonVisible"
+              type="button"
+              class="runtime-curve-result-return"
+              :data-action-id="
+                selectedRuntimeCurveResultReturnCommandContext.actionId
+              "
+              :data-origin-state-point-id="
+                selectedRuntimeCurveResultReturnCommandContext.originStatePointId
+              "
+              :data-return-status="
+                selectedRuntimeCurveResultReturnCommandContext.status
+              "
+              :data-state-point-id="
+                selectedRuntimeCurveResultReturnCommandContext.statePointId
+              "
+              data-testid="workbench-runtime-resource-chart-selection-return-result"
+              :disabled="!selectedRuntimeCurveResultReturnCommand.enabled"
+              @click="returnRuntimeCurveResult"
+            >
+              <Aim class="runtime-curve-result-return-icon" />
+              <span>{{ selectedRuntimeCurveResultReturnButtonLabel }}</span>
+            </button>
             <div class="runtime-curve-selection-nav">
               <button
                 type="button"
@@ -369,6 +392,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import {
+  Aim,
   ArrowLeft,
   ArrowRight,
   EditPen,
@@ -485,8 +509,12 @@ const runtimeReviewPanelView = computed(
 const runtimeReviewContextView = computed(
   () => runtimeReviewPanelView.value.context
 );
-const flowSelectedStatePointId = computed(
-  () => runtimeReviewContextView.value.selectedStatePointId
+const flowSelectedStatePointId = computed(() =>
+  resolveRuntimeCurveSelectedStatePointId({
+    context: runtimeReviewContextView.value,
+    resultContext: runtimeReviewPanelView.value.resultReturnContext,
+    editResult: flowEditResult.value,
+  })
 );
 
 const flowRuntimeFocusSource = computed(
@@ -600,6 +628,26 @@ const selectedRuntimeCurveActionEditButtonLabel = computed(
 const selectedRuntimeCurveActionEditCommand = computed(
   () => selectedRuntimeCurveCommandView.value.focus
 );
+const selectedRuntimeCurveResultReturnCommand = computed(
+  () => selectedRuntimeCurveCommandView.value.returnResult
+);
+const selectedRuntimeCurveResultReturnCommandContext = computed(
+  () =>
+    selectedRuntimeCurveResultReturnCommand.value.context ??
+    selectedRuntimeCurveResultContext.value ??
+    {}
+);
+const selectedRuntimeCurveResultReturnButtonLabel = computed(() =>
+  formatRuntimeCurveResultReturnButtonLabel(
+    selectedRuntimeCurveResultReturnCommandContext.value
+  )
+);
+const selectedRuntimeCurveResultReturnButtonVisible = computed(() =>
+  Boolean(
+    selectedRuntimeCurveResultReturnCommandContext.value?.statePointId ||
+    selectedRuntimeCurveResultContext.value
+  )
+);
 const selectedRuntimeCurveCommandView = computed(() =>
   createWorkbenchRuntimeReviewPanelCommandViewFromSurface({
     mainFlowCommandSurface: props.mainFlowCommandSurface,
@@ -610,6 +658,7 @@ const selectedRuntimeCurveCommandView = computed(() =>
       props.flowModel,
       selectedRuntimeCurvePoint.value
     ),
+    returnContext: selectedRuntimeCurveResultContext.value,
   })
 );
 
@@ -959,6 +1008,31 @@ function formatRuntimeCurvePointTitle(series, point) {
   return `${series.label} ${point.frameLabel}: ${formatSigned(point.delta)} -> ${formatSigned(point.cumulative)}${stateText}`;
 }
 
+function resolveRuntimeCurveSelectedStatePointId({
+  context = null,
+  resultContext = null,
+  editResult = null,
+} = {}) {
+  const selectedStatePointId = context?.selectedStatePointId ?? '';
+  const pendingStatePointId =
+    context?.pendingStatePointId ||
+    resultContext?.statePointId ||
+    editResult?.runtimeStatePointId ||
+    editResult?.statePointId ||
+    '';
+  const originStatePointId =
+    resultContext?.originStatePointId ?? editResult?.originStatePointId ?? '';
+
+  if (
+    pendingStatePointId &&
+    (!selectedStatePointId || selectedStatePointId === originStatePointId)
+  ) {
+    return pendingStatePointId;
+  }
+
+  return selectedStatePointId || pendingStatePointId;
+}
+
 function createSelectedRuntimeCurvePointRows(point) {
   if (!point) {
     return [];
@@ -1031,6 +1105,7 @@ function createSelectedRuntimeCurveResultContext(context, point) {
     status: context.status ?? 'refreshed-edit-result',
     actionId: context.actionId ?? '',
     originStatePointId: context.originStatePointId ?? '',
+    statePointId,
   };
 }
 
@@ -1149,6 +1224,12 @@ function focusRuntimeCurveAction() {
   );
 }
 
+function returnRuntimeCurveResult() {
+  dispatchRuntimeCurveFlowAction(
+    selectedRuntimeCurveResultReturnCommand.value.action
+  );
+}
+
 function dispatchRuntimeCurveFlowAction(action) {
   if (!action?.canRun) {
     return;
@@ -1163,6 +1244,16 @@ function getRuntimeCurvePointFlowAction(point) {
     detail: point,
     enabled: Boolean(point?.statePointId),
   });
+}
+
+function formatRuntimeCurveResultReturnButtonLabel(context = null) {
+  if (context?.status === 'refreshed-edit-result') {
+    return '查看刷新结果';
+  }
+  if (context?.status === 'origin-result') {
+    return '回到来源结果';
+  }
+  return '回到结果点';
 }
 
 function compareRuntimeCurveNavigationPoints(left, right, runtimeOrderById) {
@@ -1561,7 +1652,7 @@ h2 {
 
 .runtime-curve-selection-heading {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+  grid-template-columns: auto minmax(0, 1fr) auto auto auto auto;
   align-items: center;
   gap: 7px;
   min-width: 0;
@@ -1585,7 +1676,8 @@ h2 {
   white-space: nowrap;
 }
 
-.runtime-curve-action-focus {
+.runtime-curve-action-focus,
+.runtime-curve-result-return {
   display: inline-grid;
   grid-template-columns: 13px auto;
   align-items: center;
@@ -1602,13 +1694,15 @@ h2 {
   white-space: nowrap;
 }
 
-.runtime-curve-action-focus:disabled {
+.runtime-curve-action-focus:disabled,
+.runtime-curve-result-return:disabled {
   color: #6d7780;
   cursor: not-allowed;
   opacity: 0.5;
 }
 
-.runtime-curve-action-focus-icon {
+.runtime-curve-action-focus-icon,
+.runtime-curve-result-return-icon {
   width: 13px;
   height: 13px;
 }

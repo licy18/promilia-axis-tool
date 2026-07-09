@@ -193,6 +193,8 @@ test('runs the visible curve-log-detail edit loop end to end @workbench-main-flo
     navigationIndex: '0',
     selected: true,
     preNudgeStartFrame: true,
+    returnButtonTestId:
+      'workbench-runtime-resource-chart-selection-return-result',
   });
 
   await expectCurveAndLogSelection(page, returnedState.statePointId);
