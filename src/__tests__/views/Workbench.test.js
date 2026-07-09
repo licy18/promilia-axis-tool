@@ -4941,10 +4941,26 @@ describe('Workbench view', () => {
     expect(refreshedStatePointId).toBeTruthy();
     expect(refreshedStatePointId).not.toBe(originStatePointId);
 
-    await wrapper
-      .find('[data-testid="workbench-runtime-sim-log-return-result"]')
-      .trigger('click');
-    await nextTick();
+    const originalLogReturnScrollIntoView = Element.prototype.scrollIntoView;
+    const logReturnScrollIntoView = vi.fn();
+    Element.prototype.scrollIntoView = logReturnScrollIntoView;
+
+    try {
+      await wrapper
+        .find('[data-testid="workbench-runtime-sim-log-return-result"]')
+        .trigger('click');
+      await nextTick();
+      await nextTick();
+      await nextTick();
+      await Promise.resolve();
+      await Promise.resolve();
+    } finally {
+      if (originalLogReturnScrollIntoView) {
+        Element.prototype.scrollIntoView = originalLogReturnScrollIntoView;
+      } else {
+        delete Element.prototype.scrollIntoView;
+      }
+    }
 
     runtimeLogNavigation = wrapper.find(
       '[data-testid="workbench-runtime-sim-log-navigation"]'
@@ -4954,6 +4970,19 @@ describe('Workbench view', () => {
     );
     expect(runtimeLogNavigation.attributes('data-navigation-count')).toBe('2');
     expect(runtimeLogNavigation.attributes('data-navigation-index')).toBe('1');
+    const returnedRuntimeLogRow = wrapper.find(
+      `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${refreshedStatePointId}"]`
+    );
+    expect(returnedRuntimeLogRow.exists()).toBe(true);
+    expect(returnedRuntimeLogRow.attributes('data-selected')).toBe('true');
+    const scrolledReturnedRuntimeLogRow =
+      logReturnScrollIntoView.mock.contexts.find(
+        element =>
+          element?.getAttribute('data-testid') ===
+            'workbench-runtime-sim-log-row' &&
+          element.getAttribute('data-state-point-id') === refreshedStatePointId
+      );
+    expect(scrolledReturnedRuntimeLogRow).toBeTruthy();
 
     const curveSelection = wrapper.find(
       '[data-testid="workbench-runtime-resource-chart-selection"]'

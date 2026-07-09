@@ -320,6 +320,11 @@ import {
   isRuntimeLogFocusSource,
 } from './runtimeFocusSource';
 
+const RUNTIME_LOG_SCROLL_FLOW_PHASES = new Set([
+  'runtime-result',
+  'edit-result-review',
+]);
+
 const props = defineProps({
   eventLog: {
     type: Array,
@@ -783,6 +788,13 @@ watch(
   }
 );
 
+watch(
+  () => props.flowModel?.phase,
+  () => {
+    scheduleSelectedRuntimeLogRowScroll();
+  }
+);
+
 watch(runtimeSimLogRows, () => {
   syncRuntimeFilterValue(runtimeActorFilter, runtimeActorFilterOptions.value);
   syncRuntimeFilterValue(runtimeActionFilter, runtimeActionFilterOptions.value);
@@ -893,7 +905,10 @@ function focusRuntimeLogAction() {
 }
 
 function returnRuntimeLogResult() {
-  dispatchRuntimeLogFlowAction(runtimeLogResultReturnCommand.value.action);
+  const action = runtimeLogResultReturnCommand.value.action;
+  const statePointId = action?.statePointId ?? '';
+  dispatchRuntimeLogFlowAction(action);
+  scheduleSelectedRuntimeLogRowScroll(statePointId);
 }
 
 function dispatchRuntimeLogFlowAction(action) {
@@ -1116,29 +1131,34 @@ function getRuntimeStatePointIdByRow(row) {
   return runtimeContextByRow.value.get(row)?.statePointId ?? '';
 }
 
-function scheduleSelectedRuntimeLogRowScroll() {
-  if (!shouldScrollSelectedRuntimeLogRow()) {
+function scheduleSelectedRuntimeLogRowScroll(statePointId = '') {
+  const targetStatePointId = statePointId || flowSelectedStatePointId.value;
+  if (!targetStatePointId) {
     return;
   }
-  void nextTick().then(() => {
-    scrollSelectedRuntimeLogRowIntoView();
-  });
+  void nextTick()
+    .then(() => nextTick())
+    .then(() => {
+      if (!shouldScrollRuntimeLogRow(targetStatePointId)) {
+        return;
+      }
+      scrollRuntimeLogRowIntoView(targetStatePointId);
+    });
 }
 
-function shouldScrollSelectedRuntimeLogRow() {
+function shouldScrollRuntimeLogRow(statePointId = '') {
   return Boolean(
-    props.flowModel?.phase === 'runtime-result' &&
-      flowSelectedStatePointId.value &&
+    RUNTIME_LOG_SCROLL_FLOW_PHASES.has(props.flowModel?.phase) &&
+      statePointId &&
       filteredRuntimeSimLogRows.value.length > 0
   );
 }
 
-function scrollSelectedRuntimeLogRowIntoView() {
+function scrollRuntimeLogRowIntoView(statePointId = '') {
   const panel = eventLogPanelRef.value;
   if (!panel) {
     return;
   }
-  const statePointId = flowSelectedStatePointId.value;
   const target = Array.from(
     panel.querySelectorAll('[data-testid="workbench-runtime-sim-log-row"]')
   ).find(
