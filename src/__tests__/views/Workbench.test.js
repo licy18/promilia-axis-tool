@@ -3816,6 +3816,162 @@ describe('Workbench view', () => {
     ).toBe(insertedStatePointId);
   });
 
+  it('keeps the result loop usable across adding, copying, editing, and reviewing a refreshed result', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    stubTimelineGeometry(wrapper);
+
+    await wrapper
+      .find('[data-testid="workbench-flow-open-runtime"]')
+      .trigger('click');
+    await nextTick();
+
+    const originalStatePointId = wrapper
+      .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+      .text();
+    expect(originalStatePointId).toContain('action-0001');
+
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await nextTick();
+
+    let flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0002');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
+      'action-0002'
+    );
+    const insertedStatePointId = wrapper
+      .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+      .text();
+    expect(insertedStatePointId).toContain('action-0002');
+
+    await wrapper
+      .find(
+        '.action-item[data-action-id="action-0002"] [data-testid="workbench-copy-action"]'
+      )
+      .trigger('click');
+    await nextTick();
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0003');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
+      'action-0003'
+    );
+    expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('3');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('2');
+    const copiedStatePointId = wrapper
+      .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+      .text();
+    expect(copiedStatePointId).toContain('action-0003');
+    expect(copiedStatePointId).not.toBe(insertedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-resource-chart-selection"]')
+        .attributes('data-state-point-id')
+    ).toBe(copiedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-navigation"]')
+        .attributes('data-state-point-id')
+    ).toBe(copiedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-action-contribution-panel"]')
+        .attributes('data-action-id')
+    ).toBe('action-0003');
+
+    await wrapper
+      .find('[data-testid="workbench-runtime-selected-detail-action-focus"]')
+      .trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+        )
+        .attributes('data-edit-focus-origin')
+    ).toBe('runtime-focus');
+
+    await dragTimelineAction(wrapper, 'action-0003', {
+      fromX: 220,
+      toX: 286,
+      fromY: 20,
+      toY: 20,
+    });
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-flow-phase')).toBe('edit-result-ready');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0003');
+
+    const dragEditFeedback = wrapper.find(
+      '[data-testid="workbench-action-edit-feedback"]'
+    );
+    expect(dragEditFeedback.attributes('data-edit-origin')).toBe(
+      'runtime-focus'
+    );
+    expect(dragEditFeedback.attributes('data-origin-state-point-id')).toBe(
+      copiedStatePointId
+    );
+    const refreshedStatePointId = dragEditFeedback.attributes(
+      'data-runtime-state-point-id'
+    );
+    expect(refreshedStatePointId).toContain('action-0003');
+    expect(refreshedStatePointId).not.toBe(copiedStatePointId);
+
+    await wrapper
+      .find('[data-testid="workbench-flow-return-edit-result"]')
+      .trigger('click');
+    await nextTick();
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-flow-phase')).toBe('edit-result-review');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(refreshedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-resource-chart-selection"]')
+        .attributes('data-state-point-id')
+    ).toBe(refreshedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-navigation"]')
+        .attributes('data-state-point-id')
+    ).toBe(refreshedStatePointId);
+
+    const actionResultRow = wrapper.find(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0003"]'
+    );
+    expect(actionResultRow.attributes('data-selected-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+    expect(actionResultRow.attributes('data-result-location-status')).toBe(
+      'selected-result'
+    );
+    const hpContributionRow = wrapper.find(
+      '[data-testid="workbench-action-contribution-row"][data-track-key="enemyHpDamage"]'
+    );
+    expect(hpContributionRow.attributes('data-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+    expect(hpContributionRow.attributes('data-active')).toBe('true');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-action-contribution-detail"]')
+        .attributes('data-state-point-id')
+    ).toBe(refreshedStatePointId);
+  });
+
   it('syncs runtime detail after shifting a generated action batch in the runtime view', async () => {
     const secondaryCharacterId =
       workbenchSeed.defaults.secondaryCharacterId ??

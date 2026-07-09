@@ -11095,6 +11095,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把新增/复制/拖拽/删除这些局部闭环串成一条更完整的 Workbench 演示路径，优先覆盖用户连续排轴编辑后的结果定位。
 
+### 2026-07-09：UI 主流程连续编辑演示 - Continuous Edit Result Loop
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 固定一条连续可演示路径：`查看运行结果 -> 新增动作 -> 复制动作 -> 从结果详情回到动作编辑 -> 拖拽调整时间轴 -> 查看刷新结果 -> 曲线/日志/三值详情/贡献拆分同步`。
+- 用户可以在一次排轴编辑会话里连续新增、复制并调整动作，然后回到刷新后的结果定位，不需要重新打开页面或手动找回结果点。
+- 回到刷新结果后，资源曲线选中点、模拟日志导航、动作结果行和 HP 贡献拆分都会同步到连续编辑后的动作 state point。
+- 本阶段把前几个局部闭环串成一条完整 Workbench 主流程验收路径，不改变运行时输出、三值结果、公式、证据字段或数据结构。
+
+当前验证事实：
+
+- 新增 `keeps the result loop usable across adding, copying, editing, and reviewing a refreshed result`。
+- 该用例覆盖：从 `runtime-result` 打开 `action-0001`，新增 `action-0002`，复制成 `action-0003`，从 `action-0003` 的结果详情进入动作编辑，拖拽调整时间轴后点击 `查看刷新结果`，并确认三值详情、曲线、日志、动作结果和贡献拆分都同步到刷新后的 `action-0003` state point。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "keeps the result loop usable"`：通过，1 条目标测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、67 条测试。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：做真实页面级复核或 Playwright 化主流程烟测，确认这条连续编辑演示路径在浏览器里也可操作、可定位、无明显布局遮挡。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
