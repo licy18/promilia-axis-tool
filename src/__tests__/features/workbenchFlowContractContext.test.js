@@ -221,5 +221,19 @@ describe('workbench flow contract context', () => {
       generationInputSampledPointCount: 0,
       generationInputPlaceholderPointCount: 0,
     });
+    expect(context.runtimeOutput).toMatchObject({
+      sourceKind: '',
+      status: '',
+      consumerContractSourceKind:
+        'azpr-three-value-runtime-output-consumer-contract',
+      consumerContractStatus:
+        'runtime-output-consumer-contract-ready-no-applied-deltas',
+      runtimeOutputsSourceKind: '',
+      runtimeOutputsStatus: '',
+      simLogCount: 0,
+      stateCurvePointCount: 0,
+      outputConsistent: false,
+      ready: false,
+    });
   });
 });

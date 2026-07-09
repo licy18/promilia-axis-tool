@@ -12501,6 +12501,35 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续运行时层能力块：把 runtime output view 的 summary/consistency 状态进一步接入主流程调度和端到端验收；稳定后再回到 UI 主流程做结果复盘与编辑效率提升。
 
+### 2026-07-09：运行时层 - 主流程 runtime output view 一致性接入
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- `workbenchFlowModel` 现在直接持有 `runtimeOutputView`，主流程导航、运行日志计数和 runtime output consistency 都从同一份 Workbench runtime output view 读取。
+- 主流程一致性判断新增 consumer view ready、state point context 同步和 projection point 同步检查，避免只靠分散 summary 计数判断运行输出是否可靠。
+- 浏览器级 Workbench 闭环验收现在同时确认 consumer view ready、state point context count、projection point count 和同步状态。
+- 三值结果、曲线数值、日志行和 UI 可见信息量不变；本阶段仍不引入新公式、不补倍率、不做证据考古。
+
+当前验证事实：
+
+- 空 runtime output source 不再被 `createThreeValueRuntimeOutputConsumerView()` 误判为 ready。
+- `WorkbenchFlowPanel` 暴露主流程验收用 data 属性：consumer view source/ready、consumer contract status、state point context count/sync、projection point count/sync。
+- `workbench-continuous-edit.spec.js` 的完整曲线-日志-详情-编辑-刷新结果闭环会校验这些 runtime output view 一致性字段。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/runtimeSelectedDetail.test.js`：通过，5 个测试文件、22 条测试。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/runtimeSelectedDetail.test.js src/__tests__/views/Workbench.test.js`：通过，6 个测试文件、89 条测试。
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "runs the visible curve-log-detail edit loop end to end"`：通过，1 条浏览器级闭环测试。
+- `npx prettier --check src/simulation/runtime/threeValueRuntimeOutputConsumer.js src/features/workbench/workbenchFlowModel.js src/features/workbench/WorkbenchFlowPanel.vue src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowContractContext.test.js e2e/workbench-continuous-edit.spec.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续运行时层能力块：将同一 runtime output view 的 consistency gate 接入主流程计划/恢复路径，确保运行输出异常时能明确阻止或恢复，而不是让 UI 面板各自兜底。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

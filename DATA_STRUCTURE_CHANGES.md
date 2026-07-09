@@ -22667,3 +22667,74 @@ findFirstRuntimeStatePointForAction
 - `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/runtimeSelectedDetail.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，5 个测试文件、85 条测试。
 - `npx prettier --check src/features/workbench/runtimeProjectionPoints.js src/features/workbench/ResourceMonitorPanel.vue src/features/workbench/EventLogPanel.vue src/features/workbench/AnalysisPanel.vue src/features/workbench/runtimeSelectedDetail.js src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/runtimeSelectedDetail.test.js PROJECT_MANUAL.md`：通过。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 317. 主流程运行输出一致性：Main Flow Runtime Output Consistency
+
+### 317.1 结构变化
+
+`createWorkbenchFlowModel()` 返回值新增：
+
+```text
+runtimeOutputView
+```
+
+该字段为 `createWorkbenchRuntimeOutputConsumerView(resolvedRuntimeOutputs)` 的结果。主流程模型内部的运行导航、运行日志计数和 runtime output consistency 均改为读取该 view。
+
+`createWorkbenchRuntimeOutputConsistencyView()` 新增输入：
+
+```text
+runtimeOutputView
+```
+
+返回值新增：
+
+```text
+consumerViewSourceKind
+consumerViewReady
+consumerViewReadyState
+outputConsumerContractStatus
+statePointContextCount
+statePointContextSynced
+statePointContextSyncedState
+projectionPointCount
+projectionPointCountSynced
+projectionPointCountSyncedState
+```
+
+同步语义：
+
+- `statePointContextSynced`：`runtimeOutput.simLogCount` 与 Workbench runtime output view 的 `statePointContextCount` 对齐，表示模拟日志行可绑定到 Workbench 运行点上下文。
+- `projectionPointCountSynced`：`runtimeOutput.stateCurvePointCount` 与 Workbench runtime output view 的 `projectionPointCount` 对齐，表示 state/resource 曲线点已进入统一 projection point 列表。
+- `stateCurveNavigationSynced`：现在由 `statePointContextSynced && projectionPointCountSynced` 得出，替代旧的单一 navigation count 比较。
+
+`WorkbenchFlowPanel` 新增 data 属性：
+
+```text
+data-runtime-output-consumer-view-source
+data-runtime-output-consumer-ready
+data-runtime-output-consumer-contract-status
+data-runtime-output-state-point-context-count
+data-runtime-output-state-point-context-synced
+data-runtime-output-projection-point-count
+data-runtime-output-projection-synced
+```
+
+`createThreeValueRuntimeOutputConsumerView()` 的 `ready` 判定调整为必须存在 runtime output source；空源不再因为 no-applied-delta 状态字符串包含 `ready` 而被误判为 ready。
+
+### 317.2 保存与迁移
+
+不新增项目草稿字段，不改变导入导出 schema，不需要数据迁移。
+
+本阶段只增强 Workbench 主流程对 runtime output view 的一致性判断和验收数据；不改变 runtime output 原始数据、三值计算结果、公式、倍率、证据字段、运行日志行或曲线数值。
+
+### 317.3 验证
+
+- `workbenchFlowModel.test.js` 覆盖 `runtimeOutputView` 被主流程持有，以及 consistency view 新增 consumer/projection 同步字段。
+- `WorkbenchFlowPanel.test.js` 覆盖主流程面板新增 data 属性。
+- `workbenchFlowContractContext.test.js` 覆盖空 runtime output source 不会被判定 ready。
+- `workbench-continuous-edit.spec.js` 覆盖浏览器闭环中 consumer view ready、state point context count/sync、projection point count/sync。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/runtimeSelectedDetail.test.js`：通过，5 个测试文件、22 条测试。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/runtimeSelectedDetail.test.js src/__tests__/views/Workbench.test.js`：通过，6 个测试文件、89 条测试。
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "runs the visible curve-log-detail edit loop end to end"`：通过，1 条浏览器级闭环测试。
+- `npx prettier --check src/simulation/runtime/threeValueRuntimeOutputConsumer.js src/features/workbench/workbenchFlowModel.js src/features/workbench/WorkbenchFlowPanel.vue src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowContractContext.test.js e2e/workbench-continuous-edit.spec.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。

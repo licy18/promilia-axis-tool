@@ -61,6 +61,27 @@
     :data-runtime-output-navigation-synced="
       mainFlowStatusView.runtimeOutput.stateCurveNavigationSyncedState
     "
+    :data-runtime-output-consumer-view-source="
+      mainFlowStatusView.runtimeOutput.consumerViewSourceKind
+    "
+    :data-runtime-output-consumer-ready="
+      mainFlowStatusView.runtimeOutput.consumerViewReadyState
+    "
+    :data-runtime-output-consumer-contract-status="
+      mainFlowStatusView.runtimeOutput.outputConsumerContractStatus
+    "
+    :data-runtime-output-state-point-context-count="
+      mainFlowStatusView.runtimeOutput.statePointContextCount
+    "
+    :data-runtime-output-state-point-context-synced="
+      mainFlowStatusView.runtimeOutput.statePointContextSyncedState
+    "
+    :data-runtime-output-projection-point-count="
+      mainFlowStatusView.runtimeOutput.projectionPointCount
+    "
+    :data-runtime-output-projection-synced="
+      mainFlowStatusView.runtimeOutput.projectionPointCountSyncedState
+    "
     :data-main-flow-dispatch-sequence="mainFlowStatusView.dispatch.sequence"
     :data-main-flow-dispatch-status="mainFlowStatusView.dispatch.status"
     :data-main-flow-dispatch-handled="mainFlowStatusView.dispatch.handledState"

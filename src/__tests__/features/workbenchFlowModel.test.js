@@ -35,6 +35,15 @@ describe('workbench flow model', () => {
     expect(model.selectedActionName).toBe('资源动作');
     expect(model.runtimeProjection).toBe(runtimeProjection);
     expect(model.runtimeOutputs).toBe(runtimeOutputs);
+    expect(model.runtimeOutputView).toMatchObject({
+      sourceKind: 'workbench-runtime-output-consumer-view',
+      ready: true,
+      outputPanelSummary: {
+        simLogCount: 2,
+        statePointContextCount: 2,
+        projectionPointCount: 2,
+      },
+    });
     expect(model.runtimeFocusSource).toBe('');
     expect(model.runtimeSimLogCount).toBe(2);
     expect(model.contractContext).toMatchObject({
@@ -61,6 +70,10 @@ describe('workbench flow model', () => {
       status: 'runtime-output-consistent',
       consistent: true,
       consistentState: 'true',
+      consumerViewSourceKind: 'workbench-runtime-output-consumer-view',
+      consumerViewReady: true,
+      consumerViewReadyState: 'true',
+      outputConsumerContractStatus: 'runtime-output-consumer-contract-ready',
       simLogCount: 2,
       runtimeSimLogCount: 2,
       simLogCountSynced: true,
@@ -68,6 +81,10 @@ describe('workbench flow model', () => {
       stateCurvePointCount: 2,
       resourceCurvePointCount: 1,
       runtimeNavigationPointCount: 2,
+      statePointContextCount: 2,
+      statePointContextSynced: true,
+      projectionPointCount: 2,
+      projectionPointCountSynced: true,
       stateCurveNavigationSynced: true,
     });
     expect(model.controls).toMatchObject({

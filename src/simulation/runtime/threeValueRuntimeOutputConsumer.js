@@ -218,9 +218,10 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
       ),
     },
     ready:
-      isReadyStatus(outputConsumerContract?.status) ||
-      isReadyStatus(outputContract?.status) ||
-      isReadyStatus(runtimeOutputSource?.status),
+      Boolean(runtimeOutputSource) &&
+      (isReadyStatus(outputConsumerContract?.status) ||
+        isReadyStatus(outputContract?.status) ||
+        isReadyStatus(runtimeOutputSource?.status)),
   };
 }
 

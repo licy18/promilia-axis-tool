@@ -1,8 +1,4 @@
-import {
-  createRuntimeStatePointContexts,
-  getRuntimeOutputSummary,
-  getRuntimeSimLogCount,
-} from './runtimeProjectionPoints';
+import { createWorkbenchRuntimeOutputConsumerView } from './runtimeProjectionPoints';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import { createRuntimeFocusSourceView } from './runtimeFocusSource';
 import { createWorkbenchFlowContractContext } from './workbenchFlowContractContext';
@@ -104,9 +100,10 @@ export function createWorkbenchFlowModel({
 } = {}) {
   const resolvedRuntimeOutputs =
     runtimeOutputs ?? runtimeProjection?.runtimeOutputs ?? runtimeProjection;
-  const runtimeNavigationPoints = createRuntimeStatePointContexts(
+  const runtimeOutputView = createWorkbenchRuntimeOutputConsumerView(
     resolvedRuntimeOutputs
   );
+  const runtimeNavigationPoints = runtimeOutputView.statePointContexts;
   const selectedRuntimeNavigationIndex = runtimeNavigationPoints.findIndex(
     point => point.statePointId === selectedStateCurvePointId
   );
@@ -121,7 +118,7 @@ export function createWorkbenchFlowModel({
       runtimeActionEditTarget,
       selectedActionId: selectedAction?.id ?? '',
     });
-  const runtimeSimLogCount = getRuntimeSimLogCount(resolvedRuntimeOutputs);
+  const runtimeSimLogCount = runtimeOutputView.summary.simLogCount;
   const contractContext = createWorkbenchFlowContractContext({
     generationBundle,
     runtimeProjection,
@@ -129,6 +126,7 @@ export function createWorkbenchFlowModel({
   });
   const runtimeOutputConsistency = createWorkbenchRuntimeOutputConsistencyView({
     contractContext,
+    runtimeOutputView,
     runtimeSimLogCount,
     runtimeNavigationPointCount: runtimeNavigationPoints.length,
   });
@@ -219,8 +217,9 @@ export function createWorkbenchFlowModel({
     runtimeOverviewActive: Boolean(runtimeOverviewActive),
     runtimeProjection,
     runtimeOutputs: resolvedRuntimeOutputs,
+    runtimeOutputView,
     contractContext,
-    runtimeSummary: getRuntimeOutputSummary(resolvedRuntimeOutputs),
+    runtimeSummary: runtimeOutputView.outputSummary,
     runtimeSimLogCount,
     runtimeOutputConsistency,
     runtimeDetail,
@@ -291,6 +290,7 @@ export function createWorkbenchMainFlowStatusView({
       contractContext: flowModel?.contractContext,
       runtimeSimLogCount: flowModel?.runtimeSimLogCount,
       runtimeNavigationPointCount: flowModel?.runtimeNavigation?.count,
+      runtimeOutputView: flowModel?.runtimeOutputView,
     });
   return {
     dispatch: {
@@ -323,6 +323,7 @@ export function createWorkbenchMainFlowStatusView({
 
 export function createWorkbenchRuntimeOutputConsistencyView({
   contractContext = null,
+  runtimeOutputView = null,
   runtimeSimLogCount = 0,
   runtimeNavigationPointCount = 0,
 } = {}) {
@@ -332,11 +333,24 @@ export function createWorkbenchRuntimeOutputConsistencyView({
   const outputConsistent = Boolean(runtimeOutput.outputConsistent);
   const hasConsistencyStatus = Boolean(runtimeOutput.outputConsistencyStatus);
   const simLogCountSynced = simLogCount === numberOrZero(runtimeSimLogCount);
-  const navigationPointCount = numberOrZero(runtimeNavigationPointCount);
-  const stateCurveNavigationSynced =
+  const panelSummary = runtimeOutputView?.outputPanelSummary ?? {};
+  const statePointContextCount = numberOrZero(
+    panelSummary.statePointContextCount ?? runtimeNavigationPointCount
+  );
+  const projectionPointCount = numberOrZero(panelSummary.projectionPointCount);
+  const navigationPointCount = numberOrZero(
+    runtimeNavigationPointCount || statePointContextCount
+  );
+  const statePointContextSynced =
+    simLogCount === 0 ||
+    statePointContextCount === 0 ||
+    simLogCount === statePointContextCount;
+  const projectionPointCountSynced =
     stateCurvePointCount === 0 ||
-    navigationPointCount === 0 ||
-    stateCurvePointCount === navigationPointCount;
+    projectionPointCount === 0 ||
+    stateCurvePointCount === projectionPointCount;
+  const stateCurveNavigationSynced =
+    statePointContextSynced && projectionPointCountSynced;
   const consistent = hasConsistencyStatus
     ? outputConsistent && simLogCountSynced && stateCurveNavigationSynced
     : simLogCountSynced;
@@ -350,6 +364,11 @@ export function createWorkbenchRuntimeOutputConsistencyView({
     sourceStatus: runtimeOutput.outputConsistencyStatus ?? '',
     consistent,
     consistentState: consistent ? 'true' : 'false',
+    consumerViewSourceKind: runtimeOutputView?.sourceKind ?? '',
+    consumerViewReady: Boolean(runtimeOutputView?.ready),
+    consumerViewReadyState: runtimeOutputView?.ready ? 'true' : 'false',
+    outputConsumerContractStatus:
+      runtimeOutputView?.summary?.outputConsumerContractStatus ?? '',
     simLogCount,
     runtimeSimLogCount: numberOrZero(runtimeSimLogCount),
     simLogCountSynced,
@@ -360,6 +379,14 @@ export function createWorkbenchRuntimeOutputConsistencyView({
       runtimeOutput.resourceCurvePointCount
     ),
     runtimeNavigationPointCount: navigationPointCount,
+    statePointContextCount,
+    statePointContextSynced,
+    statePointContextSyncedState: statePointContextSynced ? 'true' : 'false',
+    projectionPointCount,
+    projectionPointCountSynced,
+    projectionPointCountSyncedState: projectionPointCountSynced
+      ? 'true'
+      : 'false',
     stateCurveNavigationSynced,
     stateCurveNavigationSyncedState: stateCurveNavigationSynced
       ? 'true'

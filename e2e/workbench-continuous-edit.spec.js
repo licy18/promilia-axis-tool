@@ -1888,6 +1888,34 @@ async function expectRuntimeOutputConsistent(page) {
     'data-runtime-output-navigation-synced',
     'true'
   );
+  await expect(flowPanel).toHaveAttribute(
+    'data-runtime-output-consumer-view-source',
+    'workbench-runtime-output-consumer-view'
+  );
+  await expect(flowPanel).toHaveAttribute(
+    'data-runtime-output-consumer-ready',
+    'true'
+  );
+  await expect(flowPanel).toHaveAttribute(
+    'data-runtime-output-consumer-contract-status',
+    /runtime-output-consumer-contract-ready/
+  );
+  await expect(flowPanel).toHaveAttribute(
+    'data-runtime-output-state-point-context-count',
+    /[1-9]\d*/
+  );
+  await expect(flowPanel).toHaveAttribute(
+    'data-runtime-output-state-point-context-synced',
+    'true'
+  );
+  await expect(flowPanel).toHaveAttribute(
+    'data-runtime-output-projection-point-count',
+    /[1-9]\d*/
+  );
+  await expect(flowPanel).toHaveAttribute(
+    'data-runtime-output-projection-synced',
+    'true'
+  );
 }
 
 async function selectHpContributionAndExpectResultFocus(page, state) {

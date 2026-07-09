@@ -270,6 +270,15 @@ describe('WorkbenchFlowPanel', () => {
       'data-runtime-output-sim-log-count': '1',
       'data-runtime-output-state-curve-point-count': '1',
       'data-runtime-output-navigation-synced': 'true',
+      'data-runtime-output-consumer-view-source':
+        'workbench-runtime-output-consumer-view',
+      'data-runtime-output-consumer-ready': 'true',
+      'data-runtime-output-consumer-contract-status':
+        'runtime-output-consumer-contract-ready',
+      'data-runtime-output-state-point-context-count': '1',
+      'data-runtime-output-state-point-context-synced': 'true',
+      'data-runtime-output-projection-point-count': '1',
+      'data-runtime-output-projection-synced': 'true',
     });
     expect(
       wrapper.find('[data-testid="workbench-flow-open-runtime"]').text()
