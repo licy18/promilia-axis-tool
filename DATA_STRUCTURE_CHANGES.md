@@ -22537,3 +22537,67 @@ generationInputPlaceholderPointCount
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `npx prettier --check PROJECT_MANUAL.md src/simulation/generation/actionHitThreeValueDeltaGeneration.js src/simulation/generation/threeValueGenerationBuilder.js src/features/workbench/workbenchFlowContractContext.js src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js`：通过。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 315. 运行时输出消费合同：Runtime Output Consumer Contract
+
+### 315.1 结构变化
+
+`runtimeOutputs` 新增：
+
+```text
+outputConsumerContract
+consumerContract
+outputSummary.outputConsumerContractSourceKind
+outputSummary.outputConsumerContractStatus
+```
+
+`outputConsumerContract` 是 UI/Workbench 消费 runtime 输出的稳定合同，当前包含：
+
+```text
+schemaVersion
+sourceKind = azpr-three-value-runtime-output-consumer-contract
+status
+contractSourceKind
+contractStatus
+canonicalOutputNames = simLog, stateCurves, resourceCurves, summary
+aliases.resources = resourceCurves
+outputs.simLog
+outputs.stateCurves
+outputs.resourceCurves
+outputs.summary
+summary
+applied
+```
+
+其中 `outputs.*` 记录 canonical output 名称、数据路径、原 output contract 路径、来源状态和关键计数字段；`summary` 记录输出数量、applied delta 数量、日志数量、状态曲线点数、资源曲线点数、三值 delta 汇总和 output consistency 状态。
+
+新增运行时消费工具：
+
+```text
+src/simulation/runtime/threeValueRuntimeOutputConsumer.js
+```
+
+该工具提供 `createThreeValueRuntimeOutputConsumerView()` 和配套 getter。Workbench 侧的 `runtimeProjectionPoints` 保持原有对外函数名，但内部改为通过该消费视图读取 `simLog`、敌人状态曲线和资源曲线。
+
+`createWorkbenchFlowContractContext().runtimeOutput` 新增：
+
+```text
+consumerContractSourceKind
+consumerContractStatus
+```
+
+### 315.2 保存与迁移
+
+不新增项目草稿字段，不改变导入导出 schema，不需要数据迁移。
+
+本阶段只新增 runtime outputs 的消费合同和读取入口；不改变三值计算结果、公式、倍率、证据字段、运行日志行或曲线数值。
+
+### 315.3 验证
+
+- `threeValueRuntimeProjection.test.js` 覆盖 `runtimeOutputs.outputConsumerContract`、canonical output、路径、计数、no-applied-delta 状态和 consistency 状态。
+- `runtimeProjectionPoints.test.js` 覆盖 Workbench 运行点解析通过 runtime consumer view 消费 `runtimeOutputs`。
+- `workbenchFlowContractContext.test.js` 覆盖主流程合同上下文暴露 consumer contract 来源和状态。
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/workbenchFlowContractContext.test.js`：通过，3 个测试文件、12 条测试。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/runtimeSelectedDetail.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、77 条测试。
+- `npx prettier --check src/simulation/runtime/threeValueRuntimeOutputConsumer.js src/simulation/runtime/threeValueRuntimeProjection.js src/features/workbench/runtimeProjectionPoints.js src/features/workbench/workbenchFlowContractContext.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/workbenchFlowContractContext.test.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。

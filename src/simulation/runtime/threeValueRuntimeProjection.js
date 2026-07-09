@@ -3,6 +3,7 @@ import {
   ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE,
   createThreeValueRuntimeInput,
 } from './threeValueRuntimeInput';
+import { createThreeValueRuntimeOutputConsumerContract } from './threeValueRuntimeOutputConsumer';
 
 export function createThreeValueRuntimeProjection({
   scenario,
@@ -105,6 +106,14 @@ function createThreeValueRuntimeOutputs({
     resourceCurves,
     summary,
   });
+  const outputConsumerContract = createThreeValueRuntimeOutputConsumerContract({
+    outputContract,
+    simLog,
+    stateCurves,
+    resourceCurves,
+    summary,
+    outputConsistency,
+  });
   return {
     schemaVersion: 1,
     sourceKind: 'azpr-three-value-runtime-outputs',
@@ -120,6 +129,8 @@ function createThreeValueRuntimeOutputs({
       resources: 'resourceCurves',
     },
     outputContract,
+    outputConsumerContract,
+    consumerContract: outputConsumerContract,
     simLog,
     stateCurves,
     resourceCurves,
@@ -144,6 +155,8 @@ function createThreeValueRuntimeOutputs({
       enemyHpDelta: outputContract.summary.enemyHpDelta,
       enemyToughnessDelta: outputContract.summary.enemyToughnessDelta,
       selfEnergyDelta: outputContract.summary.selfEnergyDelta,
+      outputConsumerContractSourceKind: outputConsumerContract.sourceKind,
+      outputConsumerContractStatus: outputConsumerContract.status,
       outputConsistencyStatus: outputConsistency.status,
       outputConsistent: outputConsistency.consistent,
       applied: true,

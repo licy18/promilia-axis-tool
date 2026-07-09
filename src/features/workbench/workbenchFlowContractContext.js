@@ -1,3 +1,5 @@
+import { createThreeValueRuntimeOutputConsumerView } from '../../simulation/runtime/threeValueRuntimeOutputConsumer';
+
 export function createWorkbenchFlowContractContext({
   generationBundle = null,
   runtimeProjection = null,
@@ -23,16 +25,26 @@ export function createWorkbenchFlowContractContext({
   const runtimeInput = runtimeProjection?.runtimeInput ?? null;
   const runtimeOutputSource =
     runtimeOutputs ?? runtimeProjection?.runtimeOutputs ?? runtimeProjection;
-  const outputContract = runtimeOutputSource?.outputContract ?? null;
-  const runtimeSummary = runtimeOutputSource?.summary ?? {};
-  const outputSummary = {
-    ...(outputContract?.summary ?? {}),
-    ...(runtimeOutputSource?.outputSummary ?? {}),
-  };
-  const outputConsistency = runtimeOutputSource?.outputConsistency ?? {};
-  const simLogOutput = outputContract?.outputs?.simLog ?? null;
-  const stateCurvesOutput = outputContract?.outputs?.stateCurves ?? null;
-  const resourceCurvesOutput = outputContract?.outputs?.resourceCurves ?? null;
+  const runtimeOutputConsumerView =
+    createThreeValueRuntimeOutputConsumerView(runtimeOutputSource);
+  const outputContract = runtimeOutputConsumerView.outputContract;
+  const outputConsumerContract =
+    runtimeOutputConsumerView.outputConsumerContract ?? null;
+  const runtimeSummary = runtimeOutputConsumerView.outputSummary ?? {};
+  const outputSummary = runtimeOutputConsumerView.outputSummary ?? {};
+  const outputConsistency = runtimeOutputConsumerView.outputConsistency ?? {};
+  const simLogOutput =
+    outputConsumerContract?.outputs?.simLog ??
+    outputContract?.outputs?.simLog ??
+    null;
+  const stateCurvesOutput =
+    outputConsumerContract?.outputs?.stateCurves ??
+    outputContract?.outputs?.stateCurves ??
+    null;
+  const resourceCurvesOutput =
+    outputConsumerContract?.outputs?.resourceCurves ??
+    outputContract?.outputs?.resourceCurves ??
+    null;
   const contractName =
     standardContract?.name ??
     generationBundle?.contractName ??
@@ -106,6 +118,8 @@ export function createWorkbenchFlowContractContext({
     runtimeOutput: {
       sourceKind: outputContract?.sourceKind ?? '',
       status: outputContract?.status ?? '',
+      consumerContractSourceKind: outputConsumerContract?.sourceKind ?? '',
+      consumerContractStatus: outputConsumerContract?.status ?? '',
       runtimeOutputsSourceKind: runtimeOutputSource?.sourceKind ?? '',
       runtimeOutputsStatus: runtimeOutputSource?.status ?? '',
       resourcesAlias: runtimeOutputSource?.outputAliases?.resources ?? '',
@@ -133,7 +147,7 @@ export function createWorkbenchFlowContractContext({
       outputConsistent: Boolean(
         outputSummary.outputConsistent ?? outputConsistency.consistent
       ),
-      ready: isReadyStatus(outputContract?.status),
+      ready: runtimeOutputConsumerView.ready,
     },
   };
 }

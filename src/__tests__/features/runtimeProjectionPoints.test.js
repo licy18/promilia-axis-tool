@@ -9,6 +9,7 @@ import {
   getRuntimeSimLogCount,
   getRuntimeSimLogRows,
 } from '../../features/workbench/runtimeProjectionPoints';
+import { createThreeValueRuntimeOutputConsumerView } from '../../simulation/runtime/threeValueRuntimeOutputConsumer';
 
 describe('runtime projection points', () => {
   it('prefers runtime state/resource curves and keeps legacy fields as fallback', () => {
@@ -259,6 +260,26 @@ describe('runtime projection points', () => {
     expect(getRuntimeResourceCurveRows(runtimeProjection)).toEqual([
       expect.objectContaining({ actorId: 'actor-001' }),
     ]);
+    expect(
+      createThreeValueRuntimeOutputConsumerView(runtimeProjection)
+    ).toMatchObject({
+      sourceKind: 'azpr-three-value-runtime-output-consumer-view',
+      status: 'runtime-output-consumer-view-ready',
+      outputSummary: {
+        outputCount: 4,
+        simLogCount: 1,
+        enemyHpDelta: 320,
+      },
+      simLog: [
+        expect.objectContaining({ sourceDeltaId: 'runtime-output-hp-delta' }),
+      ],
+      enemyStateCurve: {
+        points: [
+          expect.objectContaining({ sourceDeltaId: 'runtime-output-hp-delta' }),
+        ],
+      },
+      resourceCurveRows: [expect.objectContaining({ actorId: 'actor-001' })],
+    });
     expect(createRuntimeStatePointContexts(runtimeOutputs)).toEqual([
       expect.objectContaining({
         row: expect.objectContaining({

@@ -1,109 +1,51 @@
 import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
+import {
+  createThreeValueRuntimeOutputConsumerView,
+  getThreeValueRuntimeEnemyStateCurve,
+  getThreeValueRuntimeOutputContract,
+  getThreeValueRuntimeOutputContractOutput,
+  getThreeValueRuntimeOutputSummary,
+  getThreeValueRuntimeResourceCurveRows,
+  getThreeValueRuntimeSimLogCount,
+  getThreeValueRuntimeSimLogRows,
+} from '../../simulation/runtime/threeValueRuntimeOutputConsumer';
 
 export function getRuntimeOutputContract(runtimeProjection) {
-  return getRuntimeOutputSource(runtimeProjection)?.outputContract ?? null;
+  return getThreeValueRuntimeOutputContract(runtimeProjection);
 }
 
 export function getRuntimeOutputContractOutput(runtimeProjection, outputName) {
-  return (
-    getRuntimeOutputContract(runtimeProjection)?.outputs?.[outputName] ?? null
+  return getThreeValueRuntimeOutputContractOutput(
+    runtimeProjection,
+    outputName
   );
 }
 
 export function getRuntimeOutputSummary(runtimeProjection) {
-  const runtimeOutputSource = getRuntimeOutputSource(runtimeProjection);
-  const summary = runtimeOutputSource?.summary ?? {};
-  const contractSummary = getRuntimeOutputContract(runtimeProjection)?.summary;
-  return {
-    ...summary,
-    ...(contractSummary ?? {}),
-    ...(runtimeOutputSource?.outputSummary ?? {}),
-  };
+  return getThreeValueRuntimeOutputSummary(runtimeProjection);
 }
 
 export function getRuntimeSimLogRows(runtimeProjection) {
-  const runtimeOutputSource = getRuntimeOutputSource(runtimeProjection);
-  const simLogOutput = getRuntimeOutputContractOutput(
-    runtimeProjection,
-    'simLog'
-  );
-  const rows = runtimeOutputSource?.simLog;
-  if (simLogOutput && Array.isArray(rows)) {
-    return rows;
-  }
-  return Array.isArray(rows) ? rows : [];
+  return getThreeValueRuntimeSimLogRows(runtimeProjection);
 }
 
 export function getRuntimeSimLogCount(runtimeProjection) {
-  const runtimeOutputSource = getRuntimeOutputSource(runtimeProjection);
-  const simLogOutputCount = numberOrNull(
-    getRuntimeOutputContractOutput(runtimeProjection, 'simLog')?.rowCount
-  );
-  if (Number.isFinite(simLogOutputCount)) {
-    return simLogOutputCount;
-  }
-
-  const contractSummaryCount = numberOrNull(
-    getRuntimeOutputContract(runtimeProjection)?.summary?.simLogCount
-  );
-  if (Number.isFinite(contractSummaryCount)) {
-    return contractSummaryCount;
-  }
-
-  const outputSummaryCount = numberOrNull(
-    runtimeOutputSource?.outputSummary?.simLogCount
-  );
-  if (Number.isFinite(outputSummaryCount)) {
-    return outputSummaryCount;
-  }
-
-  const summaryCount = numberOrNull(runtimeOutputSource?.summary?.simLogCount);
-  if (Number.isFinite(summaryCount)) {
-    return summaryCount;
-  }
-
-  return getRuntimeSimLogRows(runtimeProjection).length;
+  return getThreeValueRuntimeSimLogCount(runtimeProjection);
 }
 
 export function getRuntimeEnemyStateCurve(runtimeProjection) {
-  const runtimeOutputSource = getRuntimeOutputSource(runtimeProjection);
-  const stateCurvesOutput = getRuntimeOutputContractOutput(
-    runtimeProjection,
-    'stateCurves'
-  );
-  if (stateCurvesOutput && runtimeOutputSource?.stateCurves?.enemy) {
-    return runtimeOutputSource.stateCurves.enemy;
-  }
-
-  return (
-    runtimeOutputSource?.stateCurves?.enemy ??
-    runtimeProjection?.enemyStateCurve ??
-    {}
-  );
+  return getThreeValueRuntimeEnemyStateCurve(runtimeProjection);
 }
 
 export function getRuntimeResourceCurveRows(runtimeProjection) {
-  const runtimeOutputSource = getRuntimeOutputSource(runtimeProjection);
-  const resourceCurvesOutput = getRuntimeOutputContractOutput(
-    runtimeProjection,
-    'resourceCurves'
-  );
-  const resourceCurves =
-    runtimeOutputSource?.resourceCurves ?? runtimeOutputSource?.resources;
-  if (resourceCurvesOutput && Array.isArray(resourceCurves?.curvesByActor)) {
-    return resourceCurves.curvesByActor;
-  }
-
-  return (
-    resourceCurves?.curvesByActor ??
-    runtimeProjection?.selfEnergyCurveByActor ??
-    []
-  );
+  return getThreeValueRuntimeResourceCurveRows(runtimeProjection);
 }
 
 export function createRuntimeProjectionPoints(runtimeProjection) {
-  const enemyStateCurve = getRuntimeEnemyStateCurve(runtimeProjection);
-  const resourceCurveRows = getRuntimeResourceCurveRows(runtimeProjection);
+  const consumerView =
+    createThreeValueRuntimeOutputConsumerView(runtimeProjection);
+  const enemyStateCurve = consumerView.enemyStateCurve;
+  const resourceCurveRows = consumerView.resourceCurveRows;
   return [
     ...(enemyStateCurve.points ?? []),
     ...resourceCurveRows.flatMap(actor =>
@@ -151,10 +93,6 @@ export function findFirstRuntimeStatePointForAction(
     contexts[0] ??
     null
   );
-}
-
-function getRuntimeOutputSource(runtimeProjection) {
-  return runtimeProjection?.runtimeOutputs ?? runtimeProjection ?? null;
 }
 
 function createRuntimeStatePointContext(row, pointByDeltaId) {
@@ -212,9 +150,4 @@ function compareOptionalNumber(left, right) {
     return 1;
   }
   return 0;
-}
-
-function numberOrNull(value) {
-  const number = Number(value);
-  return Number.isFinite(number) ? number : null;
 }

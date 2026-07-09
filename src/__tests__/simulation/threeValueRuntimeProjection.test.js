@@ -259,6 +259,61 @@ describe('three value runtime projection', () => {
           sourceKind: 'azpr-three-value-runtime-output-contract',
           status: 'runtime-output-contract-ready',
         },
+        outputConsumerContract: {
+          sourceKind: 'azpr-three-value-runtime-output-consumer-contract',
+          status: 'runtime-output-consumer-contract-ready',
+          contractSourceKind: 'azpr-three-value-runtime-output-contract',
+          canonicalOutputNames: [
+            'simLog',
+            'stateCurves',
+            'resourceCurves',
+            'summary',
+          ],
+          aliases: {
+            resources: 'resourceCurves',
+          },
+          outputs: {
+            simLog: {
+              outputName: 'simLog',
+              dataPath: 'runtimeOutputs.simLog',
+              rowCount: 2,
+              valueFields: [
+                'delta',
+                'hpDelta',
+                'toughnessDelta',
+                'energyDelta',
+              ],
+            },
+            stateCurves: {
+              outputName: 'stateCurves',
+              dataPath: 'runtimeOutputs.stateCurves',
+              enemyPointCount: 1,
+              stateCurvePointCount: 2,
+            },
+            resourceCurves: {
+              outputName: 'resourceCurves',
+              dataPath: 'runtimeOutputs.resourceCurves',
+              aliasPath: 'runtimeOutputs.resources',
+              actorCount: 1,
+              pointCount: 1,
+            },
+          },
+          summary: {
+            outputCount: 4,
+            appliedDeltaCount: 2,
+            simLogCount: 2,
+            enemyStatePointCount: 1,
+            stateCurvePointCount: 2,
+            resourceCurveActorCount: 1,
+            resourceCurvePointCount: 1,
+            enemyHpDelta: 1200,
+            enemyToughnessDelta: 0,
+            selfEnergyDelta: -30,
+            outputConsistencyStatus: 'runtime-output-consistent',
+            outputConsistent: true,
+            applied: true,
+          },
+        },
         simLog: [
           expect.objectContaining({
             sourceDeltaId: 'action-001|hit-1|enemyHpDamage|applied|60|0',
@@ -328,6 +383,10 @@ describe('three value runtime projection', () => {
           enemyHpDelta: 1200,
           enemyToughnessDelta: 0,
           selfEnergyDelta: -30,
+          outputConsumerContractSourceKind:
+            'azpr-three-value-runtime-output-consumer-contract',
+          outputConsumerContractStatus:
+            'runtime-output-consumer-contract-ready',
           outputConsistencyStatus: 'runtime-output-consistent',
           outputConsistent: true,
           applied: true,
@@ -960,6 +1019,56 @@ describe('three value runtime projection', () => {
       enemyHpDelta: 800,
       outputConsistencyStatus: 'runtime-output-consistent',
       outputConsistent: true,
+    });
+  });
+
+  it('keeps no-applied-delta status in the output consumer contract', () => {
+    const runtimeProjection = createThreeValueRuntimeProjection({
+      scenario: {
+        enemy: {},
+        actors: [],
+      },
+      threeValueGenerationLayer: {
+        contract: {
+          name: 'Action -> Hit -> ThreeValueDelta',
+        },
+        deltas: [
+          {
+            id: 'candidate-only-delta',
+            actionId: 'action-001',
+            trackKey: 'enemyHpDamage',
+            layerKey: 'candidate',
+            delta: 1200,
+            hpDelta: 1200,
+            applied: false,
+          },
+        ],
+      },
+    });
+
+    expect(runtimeProjection.outputContract).toMatchObject({
+      status: 'runtime-output-contract-ready-no-applied-deltas',
+      summary: {
+        appliedDeltaCount: 0,
+        simLogCount: 0,
+        stateCurvePointCount: 0,
+      },
+    });
+    expect(runtimeProjection.runtimeOutputs).toMatchObject({
+      status: 'runtime-outputs-ready-no-applied-deltas',
+      outputConsumerContract: {
+        status: 'runtime-output-consumer-contract-ready-no-applied-deltas',
+        summary: {
+          appliedDeltaCount: 0,
+          simLogCount: 0,
+          stateCurvePointCount: 0,
+        },
+      },
+      outputSummary: {
+        outputConsumerContractStatus:
+          'runtime-output-consumer-contract-ready-no-applied-deltas',
+        outputConsistent: true,
+      },
     });
   });
 });

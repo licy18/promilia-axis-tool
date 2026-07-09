@@ -12446,6 +12446,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议转入运行时层：整理 runtime outputs 对 UI 的稳定消费合同，减少 UI 主流程对临时字段和来源结构的耦合。
 
+### 2026-07-09：运行时层 - runtime outputs 稳定消费合同
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- runtime outputs 新增统一的 `outputConsumerContract`，明确 UI/Workbench 应消费的标准输出：`simLog`、`stateCurves`、`resourceCurves`、`summary`。
+- Workbench 的运行点解析和主流程合同上下文改为通过运行时层 consumer view 读取输出，减少对散落 projection 字段、旧 alias 和临时来源结构的耦合。
+- 现有三值结果、曲线数值、日志行和 UI 信息量不变；本阶段不引入新公式、不补倍率、不做证据考古。
+
+当前验证事实：
+
+- `runtimeOutputs.outputConsumerContract` 记录 canonical output 名称、数据路径、别名、计数字段和一致性状态。
+- `runtimeProjectionPoints` 保持原有对外函数名，但内部从 `threeValueRuntimeOutputConsumer` 统一读取运行输出。
+- `workbenchFlowContractContext.runtimeOutput` 暴露 consumer contract 来源和状态，主流程仍能判断 runtime output ready/consistent。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/workbenchFlowContractContext.test.js`：通过，3 个测试文件、12 条测试。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/runtimeSelectedDetail.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、77 条测试。
+- `npx prettier --check src/simulation/runtime/threeValueRuntimeOutputConsumer.js src/simulation/runtime/threeValueRuntimeProjection.js src/features/workbench/runtimeProjectionPoints.js src/features/workbench/workbenchFlowContractContext.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/workbenchFlowContractContext.test.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续运行时层能力块：让 runtime summary / state curves / resource curves 的消费合同进一步覆盖 Workbench 主要面板，随后再回到 UI 主流程做更完整的编辑与结果复盘体验。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

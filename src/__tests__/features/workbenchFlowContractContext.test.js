@@ -166,6 +166,9 @@ describe('workbench flow contract context', () => {
       runtimeOutput: {
         sourceKind: 'azpr-three-value-runtime-output-contract',
         status: 'runtime-output-contract-ready',
+        consumerContractSourceKind:
+          'azpr-three-value-runtime-output-consumer-contract',
+        consumerContractStatus: 'runtime-output-consumer-contract-ready',
         runtimeOutputsSourceKind: 'azpr-three-value-runtime-outputs',
         runtimeOutputsStatus: 'runtime-outputs-ready',
         resourcesAlias: 'resourceCurves',
