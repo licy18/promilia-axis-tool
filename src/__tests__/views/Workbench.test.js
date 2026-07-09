@@ -4886,7 +4886,21 @@ describe('Workbench view', () => {
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-contribution"]')
         .exists()
-    ).toBe(false);
+    ).toBe(true);
+    expect(
+      wrapper
+        .findAll('[data-testid="workbench-runtime-sim-log-contribution-row"]')
+        .map(row => [
+          row.attributes('data-contribution-key'),
+          row.attributes('data-contribution-source'),
+          row.attributes('data-value'),
+          row.text(),
+        ])
+    ).toEqual([
+      ['hp', 'hit-aggregate', '12461', '敌人 HP12,461'],
+      ['toughness', 'hit-aggregate', '0', '敌人韧性0'],
+      ['energy', 'hit-aggregate', '0', '自身能量0'],
+    ]);
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-source"]').exists()
     ).toBe(false);

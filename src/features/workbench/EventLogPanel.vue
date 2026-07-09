@@ -245,7 +245,7 @@
       </div>
 
       <div
-        v-if="selectedRuntimeLog && !runtimeLogDetailHandoff"
+        v-if="selectedRuntimeLog"
         class="runtime-contribution-detail"
         data-testid="workbench-runtime-sim-log-contribution"
       >

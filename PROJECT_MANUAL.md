@@ -12016,6 +12016,35 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议继续 UI 主流程：把“编辑动作 -> 运行模拟 -> 曲线点/日志详情定位 -> 回到动作修改”的端到端路径固定成浏览器级测试，确保主流程体验不再倒退。
 
+### 2026-07-09：UI 主流程可见闭环 - 曲线日志详情编辑返回
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 用户现在可以按“运行模拟 -> 点击资源曲线点 -> 点击对应模拟日志 -> 查看同命中 HP / 韧性 / 自身能量贡献 -> 编辑结果动作 -> 查看刷新结果”的路径完整走完主流程。
+- 模拟日志进入“三值详情面板”交接模式时，日志侧仍保留三值贡献区，不再把同命中的 HP / 韧性 / 自身能量贡献隐藏掉。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、保存数据或导入导出结构。
+
+当前验证事实：
+
+- `workbench-continuous-edit.spec.js` 的可见主流程测试新增三值贡献断言：确认日志详情显示 3 行贡献，来源为 `hit-aggregate`，且 HP 贡献为正。
+- 该端到端路径同时覆盖曲线点选择、日志选择、详情同步、编辑动作、返回刷新结果和刷新后的结果定位。
+
+验收结果：
+
+- `npm run test:e2e -- --grep "runs the visible curve-log-detail edit loop end to end"`：通过，1 条浏览器级主流程测试。
+- `npm run test -- --run src/__tests__/features/EventLogPanel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、68 条测试。
+- `npm run test -- --run`：通过，39 个测试文件、273 条测试。
+- `npm run test:e2e`：通过，12 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md e2e/workbench-continuous-edit.spec.js src/features/workbench/EventLogPanel.vue src/__tests__/views/Workbench.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 建议继续 UI 主流程：把贡献拆分面板与日志详情的交互路径进一步统一，让用户能从三值贡献行直接定位到对应动作和刷新后的曲线点。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

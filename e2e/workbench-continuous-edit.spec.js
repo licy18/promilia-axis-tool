@@ -153,6 +153,7 @@ test('runs the visible curve-log-detail edit loop end to end', async ({
     page.getByTestId('workbench-runtime-selected-detail')
   ).toHaveAttribute('data-runtime-review-source-kind', 'log');
   await expectCurveAndLogSelection(page, openedState.statePointId);
+  await expectRuntimeSimLogHitAggregateContributions(page);
 
   await focusRuntimeDetailAction(page);
   const { returnedState } = await editCurrentActionFrameAndReturn(page, {
@@ -166,6 +167,7 @@ test('runs the visible curve-log-detail edit loop end to end', async ({
   });
 
   await expectCurveAndLogSelection(page, returnedState.statePointId);
+  await expectRuntimeSimLogHitAggregateContributions(page);
   await expect(
     page.locator(
       '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
@@ -1136,6 +1138,35 @@ async function expectCurveAndLogSelection(page, statePointId) {
   await expect(
     page.getByTestId('workbench-runtime-sim-log-navigation')
   ).toHaveAttribute('data-state-point-id', statePointId);
+}
+
+async function expectRuntimeSimLogHitAggregateContributions(page) {
+  const contribution = page.getByTestId(
+    'workbench-runtime-sim-log-contribution'
+  );
+  await expect(contribution).toBeVisible();
+
+  const rows = page.getByTestId('workbench-runtime-sim-log-contribution-row');
+  await expect(rows).toHaveCount(3);
+
+  const expectedRows = [
+    { key: 'hp', label: /敌人 HP/, positive: true },
+    { key: 'toughness', label: /敌人韧性/ },
+    { key: 'energy', label: /自身能量/ },
+  ];
+  for (const [index, expectedRow] of expectedRows.entries()) {
+    const row = rows.nth(index);
+    await expect(row).toHaveAttribute('data-contribution-key', expectedRow.key);
+    await expect(row).toHaveAttribute(
+      'data-contribution-source',
+      'hit-aggregate'
+    );
+    await expect(row).toContainText(expectedRow.label);
+    if (expectedRow.positive) {
+      const value = Number(await row.getAttribute('data-value'));
+      expect(value).toBeGreaterThan(0);
+    }
+  }
 }
 
 function expectNoUnexpectedBrowserIssues(browserIssues) {
