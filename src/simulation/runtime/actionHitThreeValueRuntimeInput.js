@@ -89,6 +89,7 @@ export function createActionHitThreeValueRuntimeInput({
     appliedOnly: true,
     deltas: appliedDeltas,
     appliedDeltas,
+    valueSourceSlots: resolvedSource.valueSourceSlots ?? [],
     ignoredDeltaCount: ignoredDeltas.length,
     generationReadSources: resolvedSource.generationReadSources,
     summary,
@@ -146,12 +147,20 @@ function resolveActionHitThreeValueRuntimeInputSource({
     runtimeInputSourceReadSource,
     standardContract,
   });
+  const valueSourceSlotReadSource =
+    resolveRuntimeInputValueSourceSlotReadSource({
+      generationOutputs,
+      runtimeInputSource: resolvedRuntimeInputSource,
+      runtimeInputSourceReadSource,
+      standardContract,
+    });
   const generationReadSources = createActionHitThreeValueGenerationReadSources({
     generationOutputs,
     generationEntryReadSource,
     runtimeInputSourceReadSource,
     standardContractReadSource,
     deltaReadSource,
+    valueSourceSlotReadSource,
     generationEntryContractValidationReadSource,
     generationEntryContractValidation,
     generationEntryAggregateValidation,
@@ -205,6 +214,7 @@ function resolveActionHitThreeValueRuntimeInputSource({
       null,
     standardContract,
     deltas: deltaReadSource.value ?? [],
+    valueSourceSlots: valueSourceSlotReadSource.value ?? [],
     generationReadSources,
   };
 }
@@ -325,6 +335,10 @@ function createFallbackActionHitThreeValueDeltaStandardContract(
     actions: threeValueGenerationLayer?.actions ?? [],
     hits: threeValueGenerationLayer?.hits ?? [],
     deltas: threeValueGenerationLayer?.deltas ?? [],
+    valueSourceSlots:
+      threeValueGenerationLayer?.valueSourceSlots ??
+      threeValueGenerationLayer?.standardContract?.valueSourceSlots ??
+      [],
     summary: threeValueGenerationLayer?.summary ?? {},
     applied: false,
   };
@@ -466,12 +480,77 @@ function resolveRuntimeInputDeltaReadSource({
   );
 }
 
+function resolveRuntimeInputValueSourceSlotReadSource({
+  generationOutputs,
+  runtimeInputSource,
+  runtimeInputSourceReadSource,
+  standardContract,
+} = {}) {
+  const explicitRuntimeInputSource =
+    runtimeInputSourceReadSource?.tier === 'explicit-runtime-input-source';
+  const runtimeInputSourceValueSourceSlotCandidate =
+    createGenerationReadSourceCandidate({
+      key: `${runtimeInputSourceReadSource?.key ?? 'runtimeInputSource'}.valueSourceSlots`,
+      path: joinGenerationReadSourcePath(
+        runtimeInputSourceReadSource?.path,
+        'valueSourceSlots'
+      ),
+      tier: explicitRuntimeInputSource
+        ? 'explicit-runtime-input-source-field'
+        : 'runtime-input-source-field',
+      value: runtimeInputSource?.valueSourceSlots,
+    });
+
+  return (
+    selectGenerationReadSourceCandidate([
+      ...(explicitRuntimeInputSource
+        ? [runtimeInputSourceValueSourceSlotCandidate]
+        : []),
+      createGenerationReadSourceCandidate({
+        key: 'outputs.generationEntry.valueSourceSlots',
+        path: 'generationOutputs.outputs.generationEntry.valueSourceSlots',
+        tier: 'standard-output',
+        value: generationOutputs?.outputs?.generationEntry?.valueSourceSlots,
+        containerKey: 'generationEntry',
+      }),
+      createGenerationReadSourceCandidate({
+        key: 'outputs.valueSourceSlots',
+        path: 'generationOutputs.outputs.valueSourceSlots',
+        tier: 'standard-output',
+        value: generationOutputs?.outputs?.valueSourceSlots,
+      }),
+      createGenerationReadSourceCandidate({
+        key: 'valueSourceSlots',
+        path: 'generationOutputs.valueSourceSlots',
+        tier: 'generation-output-field',
+        value: generationOutputs?.valueSourceSlots,
+      }),
+      ...(!explicitRuntimeInputSource
+        ? [runtimeInputSourceValueSourceSlotCandidate]
+        : []),
+      createGenerationReadSourceCandidate({
+        key: 'standardContract.valueSourceSlots',
+        path: 'standardContract.valueSourceSlots',
+        tier: 'standard-contract-field',
+        value: standardContract?.valueSourceSlots,
+      }),
+    ]) ??
+    createGenerationReadSourceCandidate({
+      key: 'valueSourceSlots',
+      path: '',
+      tier: 'missing',
+      value: [],
+    })
+  );
+}
+
 function createActionHitThreeValueGenerationReadSources({
   generationOutputs,
   generationEntryReadSource,
   runtimeInputSourceReadSource,
   standardContractReadSource,
   deltaReadSource,
+  valueSourceSlotReadSource,
   generationEntryContractValidationReadSource,
   generationEntryContractValidation,
   generationEntryAggregateValidation,
@@ -490,16 +569,24 @@ function createActionHitThreeValueGenerationReadSources({
       'standardContract'
     ),
     deltas: createGenerationReadSourceView(deltaReadSource, 'deltas'),
+    valueSourceSlots: createGenerationReadSourceView(
+      valueSourceSlotReadSource,
+      'valueSourceSlots'
+    ),
     contractValidation: createGenerationReadSourceView(
       generationEntryContractValidationReadSource,
       'contractValidation'
     ),
   };
   const inputNames = Object.keys(inputs);
+  const optionalInputNames = ['valueSourceSlots'];
+  const requiredInputNames = inputNames.filter(
+    inputName => !optionalInputNames.includes(inputName)
+  );
   const standardOutputNames = inputNames.filter(
     inputName => inputs[inputName].standardOutputPresent
   );
-  const fallbackInputNames = inputNames.filter(
+  const fallbackInputNames = requiredInputNames.filter(
     inputName => inputs[inputName].fallback
   );
   const generationEntryContractValidationValid =
@@ -507,11 +594,15 @@ function createActionHitThreeValueGenerationReadSources({
   const generationEntryAggregateValidationValid =
     generationEntryAggregateValidation?.valid === true;
   const usesLegacyGenerationFallback = inputNames.some(
-    inputName => inputs[inputName].legacyGenerationFallback
+    inputName =>
+      !optionalInputNames.includes(inputName) &&
+      inputs[inputName].legacyGenerationFallback
   );
   const standardGenerationBoundaryReady =
     generationEntryContractValidationValid &&
-    standardOutputNames.length === inputNames.length &&
+    requiredInputNames.every(
+      inputName => inputs[inputName].standardOutputPresent
+    ) &&
     !usesLegacyGenerationFallback;
   const standardGenerationAggregateBoundaryReady =
     standardGenerationBoundaryReady && generationEntryAggregateValidationValid;
@@ -721,6 +812,8 @@ function summarizeActionHitThreeValueRuntimeInput({
     ignoredDeltas,
     delta => delta?.layerKey ?? 'unknown'
   );
+  const valueSourceSlotSummary =
+    summarizeRuntimeInputValueSourceSlots(resolvedSource);
   return {
     contractName,
     appliedDeltaSource: ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE,
@@ -755,6 +848,9 @@ function summarizeActionHitThreeValueRuntimeInput({
     standardContractStatus: standardContract?.status ?? null,
     standardContractActionCount: standardContract?.summary?.actionCount ?? null,
     standardContractHitCount: standardContract?.summary?.hitCount ?? null,
+    standardContractValueSourceSlotCount:
+      standardContract?.summary?.valueSourceSlotCount ?? null,
+    ...valueSourceSlotSummary,
     inputDeltaCount: inputDeltas.length,
     appliedDeltaCount: appliedDeltas.length,
     ignoredDeltaCount: ignoredDeltas.length,
@@ -763,6 +859,27 @@ function summarizeActionHitThreeValueRuntimeInput({
     ignoredLayerCounts,
     appliedOnly: true,
     applied: true,
+  };
+}
+
+function summarizeRuntimeInputValueSourceSlots(resolvedSource) {
+  const valueSourceSlots = resolvedSource.valueSourceSlots ?? [];
+  const readSource =
+    resolvedSource.generationReadSources?.inputs?.valueSourceSlots ?? {};
+  return {
+    valueSourceSlotCount: valueSourceSlots.length,
+    runtimeValueSourceSlotCount: valueSourceSlots.filter(
+      slot => slot?.runtimeEligible
+    ).length,
+    replaceableValueSourceSlotCount: valueSourceSlots.filter(
+      slot => slot?.replaceable
+    ).length,
+    runtimeInputGenerationValueSourceSlotsPath: readSource.sourcePath ?? '',
+    runtimeInputGenerationValueSourceSlotsSourceTier:
+      readSource.sourceTier ?? '',
+    runtimeInputGenerationValueSourceSlotsStandardOutputPresent: Boolean(
+      readSource.standardOutputPresent
+    ),
   };
 }
 

@@ -13321,6 +13321,27 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：优先检查日志导航加入后完整 Workbench 主流程、窄视口和结果回改链路是否稳定；稳定后再评估是否转入生成层或运行时层的大能力块。
 
+### 2026-07-10：运行时层 - 可替换数值来源槽位摘要接入
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- runtime input 现在会从标准 generation outputs 读取 `valueSourceSlots`，并把来源 path、总槽位数、runtime eligible 槽位数、replaceable 槽位数写入运行时摘要。
+- runtime projection、runtime output contract、runtime outputs summary 现在同步透出这些槽位摘要；后续 Workbench 诊断真实公式/采样替换状态时，可以读取 runtime 层，不需要回读 generation 内部结构。
+- `valueSourceSlots` 作为可选诊断输入处理：旧式或手写 generation outputs 缺少该字段时，不会破坏原本有效的 runtime boundary。
+- 本阶段不改变三值计算结果、公式、倍率、applied delta 筛选、运行日志行、曲线数值、UI 文案或草稿保存 schema。
+
+验收结果：
+
+- `npm run test -- --run src\__tests__\simulation\actionHitThreeValueRuntimeInput.test.js src\__tests__\simulation\threeValueRuntimeProjection.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过，3 个测试文件、24 条测试。
+- `npm run test:e2e:workbench-flow`：通过，18 条 `@workbench-main-flow` 主流程回归全部通过。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `335. 运行时可替换数值来源槽位摘要：Runtime Value Source Slot Summary`。
+
+下一步：
+
+- 继续运行时层或转入 UI 主流程：优先让 Workbench 通过 runtime summary 读取 replacement readiness，而不是直接读取 generation 内部字段；仍不追真实公式和真实倍率。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

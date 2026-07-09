@@ -23969,3 +23969,66 @@ outputs-value-source-slots-reference
 - `npm run test -- --run src\__tests__\simulation\threeValueGenerationBuilder.test.js`：通过，1 个测试文件、3 条测试。
 - `npm run test -- --run src\__tests__\simulation\actionHitThreeValueRuntimeInput.test.js src\__tests__\simulation\threeValueRuntimeProjection.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过，3 个测试文件、24 条测试。
 - `npm run test:e2e:workbench-flow`：通过，16 条 `@workbench-main-flow` 主流程回归全部通过。
+
+## 335. 运行时可替换数值来源槽位摘要：Runtime Value Source Slot Summary
+
+### 335.1 字段变化
+
+`threeValueRuntimeInput` 新增标准读取项：
+
+```text
+generationReadSources.inputs.valueSourceSlots
+```
+
+在新版 generation outputs 中，该项优先读取：
+
+```text
+generationOutputs.outputs.generationEntry.valueSourceSlots
+```
+
+旧输入或手写测试数据缺少该字段时，可回落到 `runtimeInputSource.valueSourceSlots` 或 `standardContract.valueSourceSlots`，但该项作为可选诊断输入，不会让原本有效的 runtime boundary 失效。
+
+`threeValueRuntimeInput` 新增：
+
+```text
+valueSourceSlots
+```
+
+`threeValueRuntimeInput.summary`、`threeValueRuntimeProjection.summary`、`runtimeOutputs.summary`、`runtimeOutputs.outputSummary` 和 `runtimeOutputContract.summary` 新增：
+
+```text
+valueSourceSlotCount
+runtimeValueSourceSlotCount
+replaceableValueSourceSlotCount
+runtimeInputGenerationValueSourceSlotsPath
+runtimeInputGenerationValueSourceSlotsSourceTier
+runtimeInputGenerationValueSourceSlotsStandardOutputPresent
+```
+
+`runtimeOutputContract.outputs.summary.countFields` 新增：
+
+```text
+valueSourceSlotCount
+runtimeValueSourceSlotCount
+replaceableValueSourceSlotCount
+```
+
+`runtimeOutputContract.outputs.summary.sourceFields` 新增：
+
+```text
+runtimeInputGenerationValueSourceSlotsPath
+runtimeInputGenerationValueSourceSlotsSourceTier
+```
+
+### 335.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只把生成层的 `valueSourceSlots` 摘要接入运行时合同；三值计算结果、公式、倍率、applied delta 筛选、运行日志行、曲线数值和 UI 文案均不改变。
+
+### 335.3 验证
+
+- `actionHitThreeValueRuntimeInput.test.js` 覆盖 runtime input 从标准 generation output 读取 `valueSourceSlots`，并把来源 path 与 slot 计数写入 summary。
+- `threeValueRuntimeProjection.test.js` 覆盖旧式手写 generation outputs 缺少 `valueSourceSlots` 时不会破坏原本的标准运行时边界。
+- `firstVerticalSliceSimulation.test.js` 覆盖真实纵切路径中 runtime input、runtime projection summary、runtime outputs summary 均透出 12 个来源槽位、3 个 runtime eligible 槽位、9 个 replaceable 槽位。
+- `npm run test -- --run src\__tests__\simulation\actionHitThreeValueRuntimeInput.test.js src\__tests__\simulation\threeValueRuntimeProjection.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过，3 个测试文件、24 条测试。

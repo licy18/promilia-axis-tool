@@ -202,9 +202,10 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
           'runtimeInputSource',
           'standardContract',
           'deltas',
+          'valueSourceSlots',
           'contractValidation',
         ],
-        standardOutputCount: 5,
+        standardOutputCount: 6,
         fallbackInputNames: [],
         usesLegacyGenerationFallback: false,
         generationEntryContractValidationStatus:
@@ -252,6 +253,15 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
             fallback: false,
             standardOutputPresent: true,
           },
+          valueSourceSlots: {
+            sourceKey: 'outputs.generationEntry.valueSourceSlots',
+            sourcePath:
+              'generationOutputs.outputs.generationEntry.valueSourceSlots',
+            sourceTier: 'standard-output',
+            containerKey: 'generationEntry',
+            fallback: false,
+            standardOutputPresent: true,
+          },
           contractValidation: {
             sourceKey: 'outputs.generationEntry.contractValidation',
             sourcePath:
@@ -276,11 +286,23 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
           'generation-entry-aggregate-valid',
         generationEntryAggregateValidationIssueCount: 0,
         generationEntryAggregateValidationValid: true,
+        valueSourceSlotCount: runtimeInput.valueSourceSlots.length,
+        runtimeValueSourceSlotCount: runtimeInput.valueSourceSlots.filter(
+          slot => slot.runtimeEligible
+        ).length,
+        replaceableValueSourceSlotCount: runtimeInput.valueSourceSlots.filter(
+          slot => slot.replaceable
+        ).length,
+        runtimeInputGenerationValueSourceSlotsPath:
+          'generationOutputs.outputs.generationEntry.valueSourceSlots',
+        runtimeInputGenerationValueSourceSlotsSourceTier: 'standard-output',
+        runtimeInputGenerationValueSourceSlotsStandardOutputPresent: true,
         inputDeltaCount: 3,
         appliedDeltaCount: 1,
         ignoredDeltaCount: 2,
       },
     });
+    expect(runtimeInput.valueSourceSlots.length).toBeGreaterThan(0);
     expect(runtimeInput.appliedDeltas).toEqual([
       expect.objectContaining({
         actionId: 'action-001',

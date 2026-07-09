@@ -197,6 +197,18 @@ function createThreeValueRuntimeOutputs({
         outputContract.summary.runtimeInputGenerationContractValidationPath,
       runtimeInputGenerationAggregateValidationPath:
         outputContract.summary.runtimeInputGenerationAggregateValidationPath,
+      valueSourceSlotCount: outputContract.summary.valueSourceSlotCount,
+      runtimeValueSourceSlotCount:
+        outputContract.summary.runtimeValueSourceSlotCount,
+      replaceableValueSourceSlotCount:
+        outputContract.summary.replaceableValueSourceSlotCount,
+      runtimeInputGenerationValueSourceSlotsPath:
+        outputContract.summary.runtimeInputGenerationValueSourceSlotsPath,
+      runtimeInputGenerationValueSourceSlotsSourceTier:
+        outputContract.summary.runtimeInputGenerationValueSourceSlotsSourceTier,
+      runtimeInputGenerationValueSourceSlotsStandardOutputPresent:
+        outputContract.summary
+          .runtimeInputGenerationValueSourceSlotsStandardOutputPresent,
       outputConsumerContractSourceKind: outputConsumerContract.sourceKind,
       outputConsumerContractStatus: outputConsumerContract.status,
       outputConsistencyStatus: outputConsistency.status,
@@ -341,6 +353,15 @@ function createThreeValueRuntimeOutputContract({
         summary.runtimeInputGenerationContractValidationPath,
       runtimeInputGenerationAggregateValidationPath:
         summary.runtimeInputGenerationAggregateValidationPath,
+      valueSourceSlotCount: summary.valueSourceSlotCount,
+      runtimeValueSourceSlotCount: summary.runtimeValueSourceSlotCount,
+      replaceableValueSourceSlotCount: summary.replaceableValueSourceSlotCount,
+      runtimeInputGenerationValueSourceSlotsPath:
+        summary.runtimeInputGenerationValueSourceSlotsPath,
+      runtimeInputGenerationValueSourceSlotsSourceTier:
+        summary.runtimeInputGenerationValueSourceSlotsSourceTier,
+      runtimeInputGenerationValueSourceSlotsStandardOutputPresent:
+        summary.runtimeInputGenerationValueSourceSlotsStandardOutputPresent,
       applied: true,
     },
     applied: true,
@@ -453,6 +474,9 @@ function createRuntimeSummaryOutputContract(summary) {
       'resourceCurvePointCount',
       'simLogCount',
       'calculatorCount',
+      'valueSourceSlotCount',
+      'runtimeValueSourceSlotCount',
+      'replaceableValueSourceSlotCount',
     ],
     sourceFields: [
       'runtimeInputSourceKind',
@@ -462,6 +486,8 @@ function createRuntimeSummaryOutputContract(summary) {
       'runtimeGenerationEntryStatus',
       'runtimeGenerationLayerSourceKind',
       'runtimeGenerationLayerStatus',
+      'runtimeInputGenerationValueSourceSlotsPath',
+      'runtimeInputGenerationValueSourceSlotsSourceTier',
     ],
     appliedOnly: summary.appliedOnly,
     applied: true,
@@ -770,6 +796,20 @@ function summarizeThreeValueRuntimeProjection({
     runtimeGenerationLayerSourceKind: runtimeInput.generationLayerSourceKind,
     runtimeGenerationLayerStatus: runtimeInput.generationLayerStatus,
     runtimeInputIgnoredDeltaCount: runtimeInput.ignoredDeltaCount,
+    valueSourceSlotCount: runtimeInput.summary.valueSourceSlotCount ?? 0,
+    runtimeValueSourceSlotCount:
+      runtimeInput.summary.runtimeValueSourceSlotCount ?? 0,
+    replaceableValueSourceSlotCount:
+      runtimeInput.summary.replaceableValueSourceSlotCount ?? 0,
+    runtimeInputGenerationValueSourceSlotsPath:
+      runtimeInput.summary.runtimeInputGenerationValueSourceSlotsPath ?? '',
+    runtimeInputGenerationValueSourceSlotsSourceTier:
+      runtimeInput.summary.runtimeInputGenerationValueSourceSlotsSourceTier ??
+      '',
+    runtimeInputGenerationValueSourceSlotsStandardOutputPresent: Boolean(
+      runtimeInput.summary
+        .runtimeInputGenerationValueSourceSlotsStandardOutputPresent
+    ),
     ...generationReadSummary,
     appliedDeltaCount: appliedDeltas.length,
     enemyHpDelta: sumThreeValueRuntimeDeltas(appliedDeltas, 'hpDelta'),
