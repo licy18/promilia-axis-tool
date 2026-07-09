@@ -22162,3 +22162,64 @@ result.summary.threeValueGenerationOutputsSummary = result.generationOutputs.out
 - `npm run test:e2e`：通过，5 条浏览器级烟测。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `git diff --check`：通过；仅有 LF/CRLF 提示。
+
+## 309. 生成层动作/命中三值聚合：Action / Hit Three Value Delta Aggregate
+
+### 309.1 结构变化
+
+`Action -> Hit -> ThreeValueDelta` 标准合同中的 action 与 hit 节点新增只读聚合字段：
+
+```text
+action.threeValueDeltaAggregate
+hit.threeValueDeltaAggregate
+```
+
+字段结构：
+
+```text
+threeValueDeltaAggregate = {
+  schemaVersion: 1,
+  sourceKind: "azpr-action-hit-three-value-delta-aggregate",
+  status,
+  deltaFields: ["hpDelta", "toughnessDelta", "energyDelta"],
+  deltaCount,
+  layerKeys,
+  trackKeys,
+  layers: {
+    applied?: { layerKey, runtimeApplied, deltaCount, trackKeys, hpDelta, toughnessDelta, energyDelta },
+    candidate?: { ... },
+    sampled?: { ... },
+    placeholder?: { ... }
+  }
+}
+```
+
+`standardContract` 与 `threeValueGenerationLayer.contract` 同步声明：
+
+```text
+aggregateFields = ["hpDelta", "toughnessDelta", "energyDelta"]
+aggregateLayerKeys = ["applied", "candidate", "sampled", "placeholder"]
+```
+
+消费规则：
+
+- 聚合只按当前 action 或 hit 下已有 delta 求和，不生成新的 delta。
+- `layers` 按 `applied / candidate / sampled / placeholder` 分层汇总，避免把候选值、采样值、占位值混入 runtime applied 总值。
+- 三值轨道顺序固定为 HP、韧性、自身能量，便于后续 UI 或 runtime 按槽位直接展示。
+- `runtimeApplied` 仅在 `applied` 层为 `true`；candidate、sampled、placeholder 仍是诊断层。
+
+### 309.2 保存与迁移
+
+不新增项目草稿字段，不改变导入导出 schema，不需要数据迁移。
+
+本阶段不改变 HP、韧性、自身能量计算结果，不改变公式、倍率或证据字段。
+
+### 309.3 验证
+
+- `threeValueGenerationLayer.test.js` 覆盖 action / hit 聚合字段、标准合同聚合字段声明，以及同一 hit 下 applied 与 candidate 分层汇总。
+- `npm run test -- --run src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/threeValueGenerationLayer.test.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，6 个测试文件、24 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、272 条测试。
+- `npm run test:e2e`：通过，12 条浏览器级烟测。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/simulation/generation/threeValueGenerationLayer.js src/__tests__/simulation/threeValueGenerationLayer.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。

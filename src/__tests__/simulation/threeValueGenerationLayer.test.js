@@ -261,6 +261,8 @@ describe('three value generation layer', () => {
         delta: ['id'],
       },
       deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
+      aggregateFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
+      aggregateLayerKeys: ['applied', 'candidate', 'sampled', 'placeholder'],
       runtimeDeltaPolicy: 'runtime consumes only deltas with applied=true',
       summary: {
         actionCount: 1,
@@ -300,6 +302,24 @@ describe('three value generation layer', () => {
         trackKeys: ['enemyHpDamage'],
         layerKeys: ['applied'],
         deltaCount: 1,
+        threeValueDeltaAggregate: expect.objectContaining({
+          sourceKind: 'azpr-action-hit-three-value-delta-aggregate',
+          deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
+          deltaCount: 1,
+          layerKeys: ['applied'],
+          trackKeys: ['enemyHpDamage'],
+          layers: {
+            applied: {
+              layerKey: 'applied',
+              runtimeApplied: true,
+              deltaCount: 1,
+              trackKeys: ['enemyHpDamage'],
+              hpDelta: 1200,
+              toughnessDelta: 0,
+              energyDelta: 0,
+            },
+          },
+        }),
         deltaIds: ['action-001|hit-1|enemyHpDamage|applied|60|0'],
       }),
     ]);
@@ -333,5 +353,172 @@ describe('three value generation layer', () => {
         applied: true,
       }),
     ]);
+  });
+
+  it('summarizes action and hit deltas by layer without mixing candidates into applied totals', () => {
+    const layer = createThreeValueGenerationLayer({
+      scenario: {
+        actions: [
+          {
+            id: 'action-001',
+            type: 'skill',
+            name: '普通攻击',
+            actorId: 'actor-001',
+            actor: { name: '末音' },
+            startMs: 1000,
+          },
+        ],
+      },
+      stateCurves: {
+        tracks: [
+          {
+            trackKey: 'enemyHpDamage',
+            label: '敌人HP伤害',
+            layers: [
+              {
+                key: 'applied',
+                label: '已应用',
+                applied: true,
+                points: [
+                  {
+                    actionId: 'action-001',
+                    actionName: '普通攻击',
+                    hitIndex: 1,
+                    frameIndex: 60,
+                    timeMs: 1000,
+                    delta: 1200,
+                    applied: true,
+                  },
+                ],
+              },
+              {
+                key: 'candidate',
+                label: '候选',
+                applied: false,
+                points: [
+                  {
+                    actionId: 'action-001',
+                    actionName: '普通攻击',
+                    hitIndex: 1,
+                    frameIndex: 60,
+                    timeMs: 1000,
+                    delta: 300,
+                    applied: false,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            trackKey: 'enemyToughnessDamage',
+            label: '敌人韧性伤害',
+            layers: [
+              {
+                key: 'candidate',
+                label: '候选',
+                applied: false,
+                points: [
+                  {
+                    actionId: 'action-001',
+                    actionName: '普通攻击',
+                    hitIndex: 1,
+                    frameIndex: 60,
+                    timeMs: 1000,
+                    delta: 90,
+                    applied: false,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            trackKey: 'selfEnergyChange',
+            label: '自身能量变化',
+            layers: [
+              {
+                key: 'candidate',
+                label: '候选',
+                applied: false,
+                points: [
+                  {
+                    actionId: 'action-001',
+                    actionName: '普通攻击',
+                    hitIndex: 1,
+                    frameIndex: 60,
+                    timeMs: 1000,
+                    delta: 27,
+                    applied: false,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    expect(layer.summary).toMatchObject({
+      actionCount: 1,
+      hitCount: 1,
+      deltaCount: 4,
+      appliedDeltaCount: 1,
+      candidateDeltaCount: 3,
+    });
+    expect(layer.actions[0].threeValueDeltaAggregate).toMatchObject({
+      sourceKind: 'azpr-action-hit-three-value-delta-aggregate',
+      deltaCount: 4,
+      layerKeys: ['applied', 'candidate'],
+      trackKeys: ['enemyHpDamage', 'enemyToughnessDamage', 'selfEnergyChange'],
+      layers: {
+        applied: {
+          runtimeApplied: true,
+          deltaCount: 1,
+          hpDelta: 1200,
+          toughnessDelta: 0,
+          energyDelta: 0,
+        },
+        candidate: {
+          runtimeApplied: false,
+          deltaCount: 3,
+          hpDelta: 300,
+          toughnessDelta: 90,
+          energyDelta: 27,
+        },
+      },
+    });
+    expect(layer.hits).toEqual([
+      expect.objectContaining({
+        actionId: 'action-001',
+        hitKey: 'hit-1',
+        deltaCount: 4,
+        trackKeys: [
+          'enemyHpDamage',
+          'enemyToughnessDamage',
+          'selfEnergyChange',
+        ],
+        layerKeys: ['applied', 'candidate'],
+        threeValueDeltaAggregate: expect.objectContaining({
+          deltaCount: 4,
+          layers: {
+            applied: expect.objectContaining({
+              hpDelta: 1200,
+              toughnessDelta: 0,
+              energyDelta: 0,
+            }),
+            candidate: expect.objectContaining({
+              hpDelta: 300,
+              toughnessDelta: 90,
+              energyDelta: 27,
+            }),
+          },
+        }),
+      }),
+    ]);
+    expect(layer.standardContract.actions[0].threeValueDeltaAggregate).toBe(
+      layer.actions[0].threeValueDeltaAggregate
+    );
+    expect(layer.standardContract.hits[0].threeValueDeltaAggregate).toBe(
+      layer.hits[0].threeValueDeltaAggregate
+    );
   });
 });

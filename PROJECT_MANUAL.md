@@ -11928,6 +11928,36 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议进入生成层能力块：收敛 `Action -> Hit -> ThreeValueDelta` 的统一生成入口，让后续 UI 主流程消费更稳定的三值合同。
 
+### 2026-07-09：生成层能力块 - Action / Hit 三值聚合输出
+
+本阶段属于：生成层。
+
+完成的可用能力：
+
+- `Action -> Hit -> ThreeValueDelta` 标准合同现在在 action 与 hit 节点上直接提供 `threeValueDeltaAggregate`。
+- 聚合按 `applied / candidate / sampled / placeholder` 分层统计 HP、韧性、自身能量 delta，后续 UI 或 runtime 可以直接读取某个动作/命中的三值槽位。
+- 同一 hit 下的候选 HP、韧性、自身能量可以被汇总到同一个 candidate 层，不再要求消费方自己扫描全部 delta。
+- 本阶段不改变任何 HP、韧性、自身能量数值，不改公式、倍率、证据字段、保存数据或导入导出结构。
+
+当前验证事实：
+
+- 新增 generation layer 单元测试：同一动作同一 hit 下同时存在 applied HP 与 candidate HP/韧性/能量时，action/hit 聚合会分层汇总，candidate 不混入 applied。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `309. 生成层动作/命中三值聚合`。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueGenerationLayer.test.js`：通过，1 个测试文件、3 条测试。
+- `npm run test -- --run src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/threeValueGenerationLayer.test.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，6 个测试文件、24 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、272 条测试。
+- `npm run test:e2e`：通过，12 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/simulation/generation/threeValueGenerationLayer.js src/__tests__/simulation/threeValueGenerationLayer.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 建议进入运行时层或 UI 主流程：让贡献拆分、日志详情或资源曲线优先消费 action / hit 的 `threeValueDeltaAggregate`，减少各处重复扫描 delta。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

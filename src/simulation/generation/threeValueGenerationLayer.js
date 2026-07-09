@@ -14,6 +14,12 @@ const THREE_VALUE_GENERATION_TRACK_ORDER = [
   'enemyToughnessDamage',
   'selfEnergyChange',
 ];
+const THREE_VALUE_GENERATION_LAYER_ORDER = [
+  'applied',
+  'candidate',
+  'sampled',
+  'placeholder',
+];
 export const ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME =
   'Action -> Hit -> ThreeValueDelta';
 
@@ -76,6 +82,8 @@ export function createThreeValueGenerationLayer({
       frameRate: AZPR_TIMELINE_FRAME_RATE,
       frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
       deltaFields: THREE_VALUE_DELTA_FIELDS,
+      aggregateFields: THREE_VALUE_DELTA_FIELDS,
+      aggregateLayerKeys: THREE_VALUE_GENERATION_LAYER_ORDER,
       requiredDeltaFields: [
         'actionId',
         'hitKey',
@@ -356,14 +364,20 @@ function createThreeValueGenerationActions({ actionsById, deltas }) {
   return [...actionGroups.values()]
     .map(group => {
       const hits = [...group.hitGroups.values()]
-        .map(hit => ({
-          ...hit,
-          layerKeys: [...hit.layerKeys].sort(),
-          trackKeys: [...hit.trackKeys].sort(),
-          deltaCount: hit.deltas.length,
-          deltas: hit.deltas.sort(compareThreeValueGenerationDeltas),
-        }))
+        .map(hit => {
+          const deltas = hit.deltas.sort(compareThreeValueGenerationDeltas);
+          return {
+            ...hit,
+            layerKeys: sortThreeValueLayerKeys([...hit.layerKeys]),
+            trackKeys: sortThreeValueTrackKeys([...hit.trackKeys]),
+            deltaCount: deltas.length,
+            threeValueDeltaAggregate:
+              createThreeValueGenerationDeltaAggregate(deltas),
+            deltas,
+          };
+        })
         .sort(compareThreeValueGenerationHits);
+      const actionDeltas = hits.flatMap(hit => hit.deltas ?? []);
       return {
         actionId: group.actionId,
         actionName: group.actionName,
@@ -372,7 +386,9 @@ function createThreeValueGenerationActions({ actionsById, deltas }) {
         actorName: group.actorName,
         startMs: group.startMs,
         hitCount: hits.length,
-        deltaCount: hits.reduce((sum, hit) => sum + hit.deltaCount, 0),
+        deltaCount: actionDeltas.length,
+        threeValueDeltaAggregate:
+          createThreeValueGenerationDeltaAggregate(actionDeltas),
         hits,
       };
     })
@@ -397,11 +413,77 @@ function createThreeValueGenerationHits(actions) {
         layerKeys: hit.layerKeys,
         trackKeys: hit.trackKeys,
         deltaCount: hit.deltaCount,
+        threeValueDeltaAggregate: hit.threeValueDeltaAggregate,
         deltaIds: hit.deltas.map(delta => delta.id),
         deltas: hit.deltas,
       }))
     )
     .sort(compareThreeValueGenerationHits);
+}
+
+function createThreeValueGenerationDeltaAggregate(deltas) {
+  const normalizedDeltas = deltas ?? [];
+  const layerGroups = new Map();
+  for (const delta of normalizedDeltas) {
+    const layerKey = delta.layerKey ?? 'unknown';
+    if (!layerGroups.has(layerKey)) {
+      layerGroups.set(layerKey, []);
+    }
+    layerGroups.get(layerKey).push(delta);
+  }
+
+  const layerKeys = sortThreeValueLayerKeys([...layerGroups.keys()]);
+  const layers = Object.fromEntries(
+    layerKeys.map(layerKey => [
+      layerKey,
+      createThreeValueGenerationDeltaAggregateLayer(
+        layerKey,
+        layerGroups.get(layerKey)
+      ),
+    ])
+  );
+
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-action-hit-three-value-delta-aggregate',
+    status:
+      normalizedDeltas.length > 0
+        ? 'three-value-delta-aggregate-ready'
+        : 'three-value-delta-aggregate-empty',
+    deltaFields: THREE_VALUE_DELTA_FIELDS,
+    deltaCount: normalizedDeltas.length,
+    layerKeys,
+    trackKeys: sortThreeValueTrackKeys(
+      uniqueStrings(normalizedDeltas.map(delta => delta.trackKey))
+    ),
+    layers,
+  };
+}
+
+function createThreeValueGenerationDeltaAggregateLayer(layerKey, deltas) {
+  return {
+    layerKey,
+    runtimeApplied: layerKey === 'applied',
+    deltaCount: deltas.length,
+    trackKeys: sortThreeValueTrackKeys(
+      uniqueStrings(deltas.map(delta => delta.trackKey))
+    ),
+    ...Object.fromEntries(
+      THREE_VALUE_DELTA_FIELDS.map(field => [
+        field,
+        sumThreeValueDeltaField(deltas, field),
+      ])
+    ),
+  };
+}
+
+function sumThreeValueDeltaField(deltas, field) {
+  return roundTimelineMs(
+    deltas.reduce((sum, delta) => {
+      const value = numberOrNull(delta[field]);
+      return Number.isFinite(value) ? sum + value : sum;
+    }, 0)
+  );
 }
 
 function createActionHitThreeValueDeltaStandardContract({
@@ -428,6 +510,8 @@ function createActionHitThreeValueDeltaStandardContract({
       delta: ['id'],
     },
     deltaFields: THREE_VALUE_DELTA_FIELDS,
+    aggregateFields: THREE_VALUE_DELTA_FIELDS,
+    aggregateLayerKeys: THREE_VALUE_GENERATION_LAYER_ORDER,
     runtimeDeltaPolicy: 'runtime consumes only deltas with applied=true',
     diagnosticDeltaPolicy:
       'candidate, sampled and placeholder deltas stay in the same contract for traceability but do not change runtime totals',
@@ -492,6 +576,27 @@ function compareThreeValueTrackOrder(leftTrackKey, rightTrackKey) {
 
 function getThreeValueTrackOrder(trackKey) {
   const index = THREE_VALUE_GENERATION_TRACK_ORDER.indexOf(trackKey);
+  return index >= 0 ? index : 99;
+}
+
+function sortThreeValueTrackKeys(trackKeys) {
+  return [...trackKeys].sort(
+    (left, right) =>
+      compareThreeValueTrackOrder(left, right) ||
+      String(left ?? '').localeCompare(String(right ?? ''))
+  );
+}
+
+function sortThreeValueLayerKeys(layerKeys) {
+  return [...layerKeys].sort(
+    (left, right) =>
+      getThreeValueLayerOrder(left) - getThreeValueLayerOrder(right) ||
+      String(left ?? '').localeCompare(String(right ?? ''))
+  );
+}
+
+function getThreeValueLayerOrder(layerKey) {
+  const index = THREE_VALUE_GENERATION_LAYER_ORDER.indexOf(layerKey);
   return index >= 0 ? index : 99;
 }
 
