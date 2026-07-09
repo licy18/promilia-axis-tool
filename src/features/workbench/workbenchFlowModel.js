@@ -1180,6 +1180,11 @@ function createRuntimeReviewFocusActionOperation({
     runtimeActionEditTarget?.statePointId ??
     runtimeReviewSelection?.selectedStatePointId ??
     '';
+  const isRefreshedResult = Boolean(
+    statePointId &&
+    runtimeReviewSelection?.refreshedStatePointId &&
+    runtimeReviewSelection.refreshedStatePointId === statePointId
+  );
   const enabled = Boolean(
     runtimeReviewSelection?.hasSelection &&
     runtimeActionEditTarget?.canFocusAction &&
@@ -1205,6 +1210,7 @@ function createRuntimeReviewFocusActionOperation({
       runtimeActionEditTarget?.trackLabel ??
       runtimeReviewSelection?.trackLabel ??
       '',
+    isRefreshedResult,
     sourceKind:
       runtimeReviewSelection?.sourceView?.sourceKind ??
       runtimeReviewSelection?.sourceKind ??
@@ -1294,6 +1300,9 @@ function formatRuntimeReviewPrimaryOperationLabel(
   target = null
 ) {
   if (operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION) {
+    if (target?.isRefreshedResult) {
+      return '继续修改动作';
+    }
     return '编辑结果动作';
   }
   if (

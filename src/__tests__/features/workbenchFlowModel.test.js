@@ -620,7 +620,7 @@ describe('workbench flow model', () => {
       primaryOperation: {
         kind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
         enabled: true,
-        label: '编辑结果动作',
+        label: '继续修改动作',
         actionId: 'action-0002',
         statePointId: secondPoint.statePointId,
         target: {
@@ -633,6 +633,7 @@ describe('workbench flow model', () => {
         enabled: true,
         actionId: 'action-0002',
         statePointId: secondPoint.statePointId,
+        isRefreshedResult: true,
         frameLabel: '30f',
         trackLabel: '自身能量',
       },

@@ -323,6 +323,83 @@ test('runs the Workbench flow panel edit-result loop end to end @workbench-main-
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps refreshed runtime results editable for another visible loop @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/workbench');
+  const flowPanel = page.getByTestId('workbench-flow-panel');
+  await expect(flowPanel).toHaveAttribute('data-flow-phase', 'action-edit');
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  const openedState = await waitForRuntimeAction(page, 'action-0001');
+  expectRuntimeReviewState(openedState, {
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: false,
+  });
+  expectRuntimeStatePointSynced(openedState, openedState.statePointId);
+  await expectCurveAndLogSelection(page, openedState.statePointId);
+
+  await page.getByTestId('workbench-flow-edit-runtime-action').click();
+  await expectRuntimeFocusInEditor(page);
+  const { returnedState: firstReturnedState } =
+    await editCurrentActionFrameAndReturn(page, {
+      actionId: 'action-0001',
+      frameValue: '36',
+      msValue: '600',
+      originStatePointId: openedState.statePointId,
+      navigationCount: '1',
+      navigationIndex: '0',
+      selected: true,
+    });
+  await expectCurveAndLogSelection(page, firstReturnedState.statePointId);
+
+  const primaryOperation = page.getByTestId(
+    'workbench-runtime-review-primary-operation'
+  );
+  await expect(primaryOperation).toHaveAttribute(
+    'data-operation-kind',
+    'focus-runtime-action'
+  );
+  await expect(primaryOperation).toHaveAttribute(
+    'data-state-point-id',
+    firstReturnedState.statePointId
+  );
+  await expect(primaryOperation).toHaveText('继续修改动作');
+  await primaryOperation.click();
+  await expectRuntimeFocusInEditor(page);
+
+  const { returnedState: secondReturnedState } =
+    await editCurrentActionFrameAndReturn(page, {
+      actionId: 'action-0001',
+      frameValue: '48',
+      msValue: '800',
+      originStatePointId: firstReturnedState.statePointId,
+      navigationCount: '1',
+      navigationIndex: '0',
+      selected: true,
+    });
+  expect(secondReturnedState.statePointId).not.toBe(
+    firstReturnedState.statePointId
+  );
+  await expectCurveAndLogSelection(page, secondReturnedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    )
+  ).toHaveAttribute(
+    'data-selected-state-point-id',
+    secondReturnedState.statePointId
+  );
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps the Workbench flow panel contribution loop usable @workbench-main-flow', async ({
   page,
 }) => {
