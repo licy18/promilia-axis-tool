@@ -19,10 +19,13 @@ import {
   createWorkbenchRuntimeReviewPrimaryOperationCommand,
   createWorkbenchRuntimeReviewPrimaryOperationView,
   createWorkbenchRuntimeResultFlowAction,
+  createWorkbenchRuntimeResultFlowActionFromSurface,
   createWorkbenchRuntimeResultReturnCommand,
   createWorkbenchRuntimeResultReturnFlowAction,
   createWorkbenchRuntimeReviewFlowAction,
+  createWorkbenchRuntimeReviewFlowActionFromSurface,
   createWorkbenchRuntimeStatePointFlowAction,
+  createWorkbenchRuntimeStatePointFlowActionFromSurface,
 } from '../../features/workbench/workbenchMainFlowActions';
 
 describe('workbench main flow actions', () => {
@@ -823,6 +826,152 @@ describe('workbench main flow actions', () => {
       payload: {
         runtimeFocusSource: 'action-contribution',
       },
+      canRun: true,
+    });
+  });
+
+  it('resolves runtime selection actions through the command surface when available', () => {
+    const calls = [];
+    const mainFlowCommandSurface = {
+      createRuntimeReviewFlowAction(options = {}) {
+        calls.push(['review', options]);
+        return {
+          kind: 'select-runtime-state-point',
+          source: options.source,
+          actionId: 'surface-review-action',
+          statePointId: options.statePointId,
+          canRun: true,
+        };
+      },
+      createRuntimeStatePointFlowAction(options = {}) {
+        calls.push(['state-point', options]);
+        return {
+          kind: 'select-runtime-state-point',
+          source: options.source,
+          actionId: 'surface-state-action',
+          statePointId: options.statePointId,
+          canRun: true,
+        };
+      },
+      createRuntimeResultFlowAction(options = {}) {
+        calls.push(['result', options]);
+        return {
+          kind: 'select-runtime-result',
+          source: options.source,
+          actionId: options.actionId,
+          statePointId: options.statePointId,
+          canRun: true,
+        };
+      },
+    };
+
+    expect(
+      createWorkbenchRuntimeReviewFlowActionFromSurface({
+        mainFlowCommandSurface,
+        kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_STATE_POINT,
+        source: 'resource-runtime-curve',
+        statePointId: 'review-point',
+        enabled: true,
+      })
+    ).toMatchObject({
+      actionId: 'surface-review-action',
+      statePointId: 'review-point',
+      canRun: true,
+    });
+    expect(
+      createWorkbenchRuntimeStatePointFlowActionFromSurface({
+        mainFlowCommandSurface,
+        source: 'state-curve-point',
+        statePointId: 'state-point',
+        enabled: true,
+      })
+    ).toMatchObject({
+      actionId: 'surface-state-action',
+      statePointId: 'state-point',
+      canRun: true,
+    });
+    expect(
+      createWorkbenchRuntimeResultFlowActionFromSurface({
+        mainFlowCommandSurface,
+        source: 'analysis-action-result',
+        actionId: 'result-action',
+        statePointId: 'result-point',
+        enabled: true,
+      })
+    ).toMatchObject({
+      kind: 'select-runtime-result',
+      actionId: 'result-action',
+      statePointId: 'result-point',
+      canRun: true,
+    });
+    expect(calls).toEqual([
+      [
+        'review',
+        {
+          kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_STATE_POINT,
+          source: 'resource-runtime-curve',
+          statePointId: 'review-point',
+          enabled: true,
+        },
+      ],
+      [
+        'state-point',
+        {
+          source: 'state-curve-point',
+          statePointId: 'state-point',
+          enabled: true,
+        },
+      ],
+      [
+        'result',
+        {
+          source: 'analysis-action-result',
+          actionId: 'result-action',
+          statePointId: 'result-point',
+          enabled: true,
+        },
+      ],
+    ]);
+  });
+
+  it('falls back to shared runtime selection factories without a command surface', () => {
+    expect(
+      createWorkbenchRuntimeReviewFlowActionFromSurface({
+        kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_STATE_POINT,
+        source: 'event-log-runtime-row',
+        statePointId: 'review-point',
+        enabled: true,
+      })
+    ).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'event-log-runtime-row',
+      statePointId: 'review-point',
+      canRun: true,
+    });
+    expect(
+      createWorkbenchRuntimeStatePointFlowActionFromSurface({
+        source: 'state-curve-point',
+        statePointId: 'state-point',
+        enabled: true,
+      })
+    ).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'state-curve-point',
+      statePointId: 'state-point',
+      canRun: true,
+    });
+    expect(
+      createWorkbenchRuntimeResultFlowActionFromSurface({
+        source: 'analysis-action-result',
+        actionId: 'result-action',
+        statePointId: 'result-point',
+        enabled: true,
+      })
+    ).toMatchObject({
+      kind: 'select-runtime-result',
+      source: 'analysis-action-result',
+      actionId: 'result-action',
+      statePointId: 'result-point',
       canRun: true,
     });
   });

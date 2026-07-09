@@ -9745,6 +9745,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 WorkbenchFlowPanel、TimelineGridPreview、ResourceMonitorPanel、EventLogPanel 中仍直接 fallback 创建 runtime selection action 的位置，优先把运行结果选择入口继续收束到共享 helper / command surface。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Selection Surface Resolvers
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchMainFlowActions` 新增一组 surface-aware resolver，用于统一处理“优先使用页面级 command surface，缺省时走共享 fallback”的 runtime selection action 创建。
+- `TimelineGridPreview`、`ResourceMonitorPanel`、`EventLogPanel` 和 `AnalysisPanel` 的运行结果点选择 fallback 改为使用这些 resolver，减少各组件重复理解 surface / fallback 切换。
+- 运行结果选择、运行曲线点选择、日志行选择、时间轴 marker 选择和分析面板结果定位仍保持原有行为，但入口更集中，继续服务“运行结果查看 -> 详情/日志/曲线联动 -> 回到动作修改”的主流程。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- main flow action 单测覆盖有 command surface 时走 surface、无 command surface 时走共享 fallback 的 runtime selection resolver。
+- TimelineGridPreview 与 Workbench 页面测试确认时间轴 marker、资源曲线、日志和分析面板的运行结果选择路径仍可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/TimelineGridPreview.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、87 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、226 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查运行结果选择后的状态消费边界，优先把曲线、日志、详情三处的 selected runtime context 读取继续向 shared flow model/view model 收束。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

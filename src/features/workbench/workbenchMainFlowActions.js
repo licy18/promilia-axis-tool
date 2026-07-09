@@ -321,6 +321,57 @@ export function createWorkbenchRuntimeResultFlowAction(options = {}) {
   return createRuntimeResultFocusFlowAction(options);
 }
 
+export function createWorkbenchRuntimeReviewFlowActionFromSurface(input = {}) {
+  const { mainFlowCommandSurface, options } =
+    createMainFlowSurfaceActionOptions(input);
+  return (
+    mainFlowCommandSurface?.createRuntimeReviewFlowAction?.(options) ??
+    createWorkbenchRuntimeReviewFlowAction(options)
+  );
+}
+
+export function createWorkbenchRuntimeStatePointFlowActionFromSurface(
+  input = {}
+) {
+  const { mainFlowCommandSurface, options } =
+    createMainFlowSurfaceActionOptions(input);
+  return (
+    mainFlowCommandSurface?.createRuntimeStatePointFlowAction?.(options) ??
+    createWorkbenchRuntimeStatePointFlowAction(options)
+  );
+}
+
+export function createWorkbenchRuntimeResultFlowActionFromSurface(input = {}) {
+  const { mainFlowCommandSurface, options } =
+    createMainFlowSurfaceActionOptions(input);
+  return (
+    mainFlowCommandSurface?.createRuntimeResultFlowAction?.(options) ??
+    createWorkbenchRuntimeResultFlowAction(options)
+  );
+}
+
+export function createWorkbenchFocusEditSourceFlowActionFromSurface(
+  input = {}
+) {
+  const { mainFlowCommandSurface, options } =
+    createMainFlowSurfaceActionOptions(input);
+  return (
+    mainFlowCommandSurface?.createFocusEditSourceFlowAction?.(options) ??
+    createWorkbenchFocusEditSourceFlowAction(options)
+  );
+}
+
+export function createWorkbenchContributionPointFlowActionFromSurface(
+  input = {}
+) {
+  const { mainFlowCommandSurface, options } =
+    createMainFlowSurfaceActionOptions(input);
+  return (
+    mainFlowCommandSurface?.createContributionPointFlowAction?.(options) ??
+    createWorkbenchContributionPointFlowAction(options)
+  );
+}
+
 export function createWorkbenchFocusEditSourceFlowAction(options = {}) {
   return createWorkbenchFlowAction({
     kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_EDIT_SOURCE,
@@ -898,4 +949,12 @@ function isRuntimeReviewPrimaryOperationKind(flowModel = null, actionKind = '') 
     actionKind &&
       flowModel?.runtimeReviewOperations?.primaryOperationKind === actionKind
   );
+}
+
+function createMainFlowSurfaceActionOptions(input = {}) {
+  const { mainFlowCommandSurface = null, ...options } = input ?? {};
+  return {
+    mainFlowCommandSurface,
+    options,
+  };
 }

@@ -939,10 +939,10 @@ import {
 } from './stateCurvePointIdentity';
 import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
 import {
-  createWorkbenchContributionPointFlowAction,
-  createWorkbenchFocusEditSourceFlowAction,
-  createWorkbenchRuntimeResultFlowAction,
-  createWorkbenchRuntimeStatePointFlowAction,
+  createWorkbenchContributionPointFlowActionFromSurface,
+  createWorkbenchFocusEditSourceFlowActionFromSurface,
+  createWorkbenchRuntimeResultFlowActionFromSurface,
+  createWorkbenchRuntimeStatePointFlowActionFromSurface,
 } from './workbenchMainFlowActions';
 
 const CANDIDATE_CHART_COLORS = ['#f2b366', '#79c7b9', '#a6b7ff'];
@@ -2697,33 +2697,31 @@ function selectStateCurvePointFromMainFlow(point, source) {
 }
 
 function createRuntimeResultFlowActionFromSurface(options = {}) {
-  return (
-    props.mainFlowCommandSurface?.createRuntimeResultFlowAction?.(options) ??
-    createWorkbenchRuntimeResultFlowAction(options)
-  );
+  return createWorkbenchRuntimeResultFlowActionFromSurface({
+    mainFlowCommandSurface: props.mainFlowCommandSurface,
+    ...options,
+  });
 }
 
 function createRuntimeStatePointFlowActionFromSurface(options = {}) {
-  return (
-    props.mainFlowCommandSurface?.createRuntimeStatePointFlowAction?.(
-      options
-    ) ?? createWorkbenchRuntimeStatePointFlowAction(options)
-  );
+  return createWorkbenchRuntimeStatePointFlowActionFromSurface({
+    mainFlowCommandSurface: props.mainFlowCommandSurface,
+    ...options,
+  });
 }
 
 function createFocusEditSourceFlowActionFromSurface(options = {}) {
-  return (
-    props.mainFlowCommandSurface?.createFocusEditSourceFlowAction?.(options) ??
-    createWorkbenchFocusEditSourceFlowAction(options)
-  );
+  return createWorkbenchFocusEditSourceFlowActionFromSurface({
+    mainFlowCommandSurface: props.mainFlowCommandSurface,
+    ...options,
+  });
 }
 
 function createContributionPointFlowActionFromSurface(options = {}) {
-  return (
-    props.mainFlowCommandSurface?.createContributionPointFlowAction?.(
-      options
-    ) ?? createWorkbenchContributionPointFlowAction(options)
-  );
+  return createWorkbenchContributionPointFlowActionFromSurface({
+    mainFlowCommandSurface: props.mainFlowCommandSurface,
+    ...options,
+  });
 }
 
 function isRuntimeStateCurvePoint(point) {

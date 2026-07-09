@@ -555,7 +555,7 @@ import {
   createStateCurvePointId,
 } from './stateCurvePointIdentity';
 import {
-  createWorkbenchRuntimeStatePointFlowAction,
+  createWorkbenchRuntimeStatePointFlowActionFromSurface,
 } from './workbenchMainFlowActions';
 
 const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
@@ -1556,7 +1556,8 @@ function selectStateCurveMarker(marker) {
   if (isRuntimeStateCurveMarker(marker)) {
     emit(
       'dispatch-flow-action',
-      createRuntimeStatePointFlowActionFromSurface({
+      createWorkbenchRuntimeStatePointFlowActionFromSurface({
+        mainFlowCommandSurface: props.mainFlowCommandSurface,
         source: 'state-curve-point',
         actionId: marker.actionId,
         statePointId: marker.statePointId,
@@ -1568,14 +1569,6 @@ function selectStateCurveMarker(marker) {
     return;
   }
   emit('select-state-curve-point', marker.statePointId);
-}
-
-function createRuntimeStatePointFlowActionFromSurface(options = {}) {
-  return (
-    props.mainFlowCommandSurface?.createRuntimeStatePointFlowAction?.(
-      options
-    ) ?? createWorkbenchRuntimeStatePointFlowAction(options)
-  );
 }
 
 function isRuntimeStateCurveMarker(marker) {

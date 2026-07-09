@@ -20683,3 +20683,42 @@ createContributionPointFlowAction(options)
 - `npm run test -- --run`：通过，35 个测试文件、224 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `git diff --check`：通过；仅有 Git 换行转换提示。
+
+## 278. UI 主流程能力块：Runtime Selection Surface Resolvers
+
+### 278.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`workbenchMainFlowActions` 新增 surface-aware resolver：
+
+```js
+createWorkbenchRuntimeReviewFlowActionFromSurface(input)
+createWorkbenchRuntimeStatePointFlowActionFromSurface(input)
+createWorkbenchRuntimeResultFlowActionFromSurface(input)
+createWorkbenchFocusEditSourceFlowActionFromSurface(input)
+createWorkbenchContributionPointFlowActionFromSurface(input)
+```
+
+输入结构统一为：
+
+```js
+{
+  mainFlowCommandSurface,
+  ...actionOptions
+}
+```
+
+resolver 会先调用对应的 `mainFlowCommandSurface.create*` 工厂；如果当前组件独立挂载或没有页面级 surface，则回退到 `workbenchMainFlowActions` 内的共享 action helper。
+
+### 278.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程 action 解析边界，不新增持久字段，不需要数据迁移。
+
+### 278.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖有 command surface 时走 surface、无 command surface 时走共享 fallback 的 runtime selection resolver。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/TimelineGridPreview.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、87 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、226 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。

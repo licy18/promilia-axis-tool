@@ -330,7 +330,7 @@ import {
 } from './workbenchFlowModel';
 import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
-  createWorkbenchRuntimeReviewFlowAction,
+  createWorkbenchRuntimeReviewFlowActionFromSurface,
   createWorkbenchRuntimeReviewOperationCommand,
   createWorkbenchRuntimeReviewPanelCommandView,
 } from './workbenchMainFlowActions';
@@ -868,20 +868,14 @@ function createRuntimeReviewPanelCommandViewFromSurface(options = {}) {
 
 function getRuntimeLogRowFlowAction(row) {
   const statePointId = getRuntimeStatePointIdByRow(row);
-  return createRuntimeReviewFlowActionFromSurface({
+  return createWorkbenchRuntimeReviewFlowActionFromSurface({
+    mainFlowCommandSurface: props.mainFlowCommandSurface,
     kind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_STATE_POINT,
     source: 'event-log-runtime-row',
     detail: row,
     statePointId,
     enabled: Boolean(statePointId),
   });
-}
-
-function createRuntimeReviewFlowActionFromSurface(options = {}) {
-  return (
-    props.mainFlowCommandSurface?.createRuntimeReviewFlowAction?.(options) ??
-    createWorkbenchRuntimeReviewFlowAction(options)
-  );
 }
 
 function focusRuntimeLogByStatePoint(statePointId) {
