@@ -11300,6 +11300,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：优先补完整排轴主流程里的“结果定位后继续编辑”的常用操作面，例如从结果详情、日志和贡献拆分回到动作修改后的可见路径是否都足够顺手。
 
+### 2026-07-09：UI 主流程详情继续编辑 - Detail To Edit Loop
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 用户在模拟日志里查看某个三值结果后，可以直接进入对应动作编辑，修改动作后再回到刷新后的结果点。
+- 用户在动作贡献拆分里查看某条 HP/韧性/能量贡献后，可以从贡献详情旁的本地入口进入动作编辑，不需要回到页面顶部找主流程按钮。
+- 刷新回看后，资源曲线、模拟日志、三值详情、动作贡献拆分、动作列表和时间轴都会同步到刷新后的同一动作结果。
+- 本阶段只补齐 UI 主流程可见闭环，不改变三值输出、公式、证据字段或持久数据结构。
+
+当前验证事实：
+
+- 修改 `AnalysisPanel.vue`：动作贡献详情接入现有 runtime review `FOCUS_ACTION` command，新增本地编辑入口。
+- 扩展 `e2e/workbench-continuous-edit.spec.js`：覆盖日志详情 -> 编辑动作 -> 查看刷新结果，以及贡献拆分 -> 编辑动作 -> 查看刷新结果。
+
+验收结果：
+
+- `npm run test:e2e`：通过，1 条浏览器级烟测。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、67 条测试。
+- `npx prettier --check src/features/workbench/AnalysisPanel.vue e2e/workbench-continuous-edit.spec.js PROJECT_MANUAL.md`：通过。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：优先检查完整编辑体验里的连续操作摩擦，例如连续修改多个动作、修改后结果列表的定位稳定性，以及移动端/窄屏下这条主流程是否仍然可用。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

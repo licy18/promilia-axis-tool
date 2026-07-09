@@ -142,9 +142,7 @@
             :data-runtime-state-point-id="
               actionEditFeedback.runtimeStatePointId
             "
-            :data-flow-action-kind="
-              actionEditFeedback.resultFocusAction.kind
-            "
+            :data-flow-action-kind="actionEditFeedback.resultFocusAction.kind"
             :data-flow-action-source="
               actionEditFeedback.resultFocusAction.source
             "
@@ -167,9 +165,7 @@
             :data-flow-action-field="
               actionEditFeedback.focusSourceAction.fieldKey
             "
-            :data-flow-action-kind="
-              actionEditFeedback.focusSourceAction.kind
-            "
+            :data-flow-action-kind="actionEditFeedback.focusSourceAction.kind"
             :data-flow-action-source="
               actionEditFeedback.focusSourceAction.source
             "
@@ -531,6 +527,18 @@
           <div class="action-contribution-detail-heading">
             <span>贡献详情</span>
             <strong>{{ selectedActionContribution.detail.label }}</strong>
+            <button
+              type="button"
+              class="action-contribution-edit-action"
+              :data-action-id="actionContributionEditCommand.actionId"
+              :data-state-point-id="actionContributionEditCommand.statePointId"
+              data-testid="workbench-action-contribution-edit-action"
+              :disabled="!actionContributionEditCommand.enabled"
+              @click="focusActionContributionAction"
+            >
+              <EditPen class="action-contribution-edit-icon" />
+              <span>编辑动作</span>
+            </button>
           </div>
           <div class="action-contribution-detail-list">
             <div
@@ -951,8 +959,12 @@ import {
 import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
 import {
   createWorkbenchMainFlowActionSurface,
+  createWorkbenchRuntimeReviewOperationCommandFromSurface,
 } from './workbenchMainFlowActions';
-import { createWorkbenchRuntimeReviewPanelView } from './workbenchFlowModel';
+import {
+  WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS,
+  createWorkbenchRuntimeReviewPanelView,
+} from './workbenchFlowModel';
 
 const CANDIDATE_CHART_COLORS = ['#f2b366', '#79c7b9', '#a6b7ff'];
 const candidateChartGridLines = [25, 50, 75];
@@ -1299,7 +1311,9 @@ const runtimeTraceByActionId = computed(() => {
   );
 });
 const flowPhase = computed(() => props.flowModel?.phase ?? '');
-const flowSelection = computed(() => props.flowModel?.mainFlowSelection ?? null);
+const flowSelection = computed(
+  () => props.flowModel?.mainFlowSelection ?? null
+);
 const runtimeReviewPanelView = computed(
   () =>
     props.flowModel?.runtimeReviewPanelView ??
@@ -1338,6 +1352,14 @@ const selectedActionContribution = computed(() => {
 });
 const selectedRuntimeResultDetail = computed(
   () => flowRuntimeSelectedDetail.value ?? null
+);
+const actionContributionEditCommand = computed(() =>
+  createWorkbenchRuntimeReviewOperationCommandFromSurface({
+    mainFlowCommandSurface: props.mainFlowCommandSurface,
+    flowModel: props.flowModel,
+    operationKind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+    source: 'analysis-action-contribution-detail',
+  })
 );
 const draftResultStatus = computed(() =>
   createDraftResultStatus(props.draftStatus)
@@ -2075,9 +2097,7 @@ function getActionEditFeedbackResultFlowAction(feedback) {
   return mainFlowActionSurface.value.createRuntimeResultFlowAction({
     source: 'analysis-edit-result',
     detail: feedback,
-    enabled: Boolean(
-      feedback?.runtimeStatePointId && !feedback?.resultFocused
-    ),
+    enabled: Boolean(feedback?.runtimeStatePointId && !feedback?.resultFocused),
     disabledReason: feedback?.resultFocused
       ? 'runtime-result-already-focused'
       : 'missing-runtime-state-point',
@@ -2506,7 +2526,8 @@ function createDraftResultStatus(status) {
 
 function isRuntimeResultCurrentAction(detail) {
   return Boolean(
-    flowSelectedActionId.value && detail?.actionId === flowSelectedActionId.value
+    flowSelectedActionId.value &&
+    detail?.actionId === flowSelectedActionId.value
   );
 }
 
@@ -2593,6 +2614,10 @@ function createCompactRuntimeResultRows(detail) {
 function selectActionContributionRow(row) {
   const action = getActionContributionFlowAction(row);
   dispatchAnalysisFlowAction(action);
+}
+
+function focusActionContributionAction() {
+  dispatchAnalysisFlowAction(actionContributionEditCommand.value.action);
 }
 
 function getActionContributionFlowAction(row) {
@@ -4178,6 +4203,38 @@ h2 {
   overflow-wrap: anywhere;
   color: #ffffff;
   font-size: 12px;
+}
+
+.action-contribution-edit-action {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 4px;
+  min-height: 26px;
+  padding: 4px 8px;
+  border: 1px solid rgba(166, 183, 255, 0.28);
+  border-radius: 4px;
+  background: rgba(166, 183, 255, 0.12);
+  color: #e8edff;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.action-contribution-edit-action:not(:disabled):hover,
+.action-contribution-edit-action:not(:disabled):focus {
+  border-color: rgba(166, 183, 255, 0.5);
+  background: rgba(166, 183, 255, 0.2);
+}
+
+.action-contribution-edit-action:disabled {
+  cursor: not-allowed;
+  opacity: 0.54;
+}
+
+.action-contribution-edit-icon {
+  width: 13px;
+  height: 13px;
 }
 
 .action-contribution-detail-list {

@@ -310,6 +310,136 @@ test('keeps the continuous edit result loop synced in the browser', async ({
     selectedActionEditState.feedbackStatePointId
   );
 
+  const actionTwoEditedStatePointId = editedActionTwoState.statePointId;
+  await page.getByTestId('workbench-runtime-sim-log-action-focus').click();
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+    )
+  ).toHaveAttribute('data-edit-focus-origin', 'runtime-focus');
+  await page.getByTestId('workbench-start-frame-input').fill('132');
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-ready'
+  );
+  const logActionEditState = await readEditState(page);
+  expect(logActionEditState).toMatchObject({
+    actionId: 'action-0002',
+    phase: 'edit-result-ready',
+    resultFocused: 'false',
+    startFrameValue: '132',
+    startMsValue: '2200',
+    returnButtonText: '查看刷新结果',
+    pageOverflowX: 0,
+  });
+  expect(logActionEditState.feedbackOriginStatePointId).toBe(
+    actionTwoEditedStatePointId
+  );
+  expect(logActionEditState.feedbackStatePointId).toContain('action-0002');
+  expect(logActionEditState.feedbackStatePointId).not.toBe(
+    actionTwoEditedStatePointId
+  );
+
+  await page.getByTestId('workbench-flow-return-edit-result').click();
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-review'
+  );
+  const logEditedActionState = await readWorkbenchState(page);
+  expect(logEditedActionState).toMatchObject({
+    phase: 'edit-result-review',
+    actionId: 'action-0002',
+    runtimeDetailActionId: 'action-0002',
+    contributionActionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    hpContributionActive: 'true',
+    selectedActionListId: 'action-0002',
+    selectedTimelineActionId: 'action-0002',
+    pageOverflowX: 0,
+  });
+  expect(logEditedActionState.statePointId).toBe(
+    logActionEditState.feedbackStatePointId
+  );
+  expect(logEditedActionState.curveStatePointId).toBe(
+    logActionEditState.feedbackStatePointId
+  );
+  expect(logEditedActionState.logStatePointId).toBe(
+    logActionEditState.feedbackStatePointId
+  );
+  expect(logEditedActionState.hpContributionStatePointId).toBe(
+    logActionEditState.feedbackStatePointId
+  );
+
+  const contributionEditButton = page.getByTestId(
+    'workbench-action-contribution-edit-action'
+  );
+  await expect(contributionEditButton).toHaveAttribute(
+    'data-state-point-id',
+    logEditedActionState.statePointId
+  );
+  await contributionEditButton.click();
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+    )
+  ).toHaveAttribute('data-edit-focus-origin', 'runtime-focus');
+  await page.getByTestId('workbench-start-frame-input').fill('138');
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-ready'
+  );
+  const contributionActionEditState = await readEditState(page);
+  expect(contributionActionEditState).toMatchObject({
+    actionId: 'action-0002',
+    phase: 'edit-result-ready',
+    resultFocused: 'false',
+    startFrameValue: '138',
+    startMsValue: '2300',
+    returnButtonText: '查看刷新结果',
+    pageOverflowX: 0,
+  });
+  expect(contributionActionEditState.feedbackOriginStatePointId).toBe(
+    logEditedActionState.statePointId
+  );
+  expect(contributionActionEditState.feedbackStatePointId).toContain(
+    'action-0002'
+  );
+  expect(contributionActionEditState.feedbackStatePointId).not.toBe(
+    logEditedActionState.statePointId
+  );
+
+  await page.getByTestId('workbench-flow-return-edit-result').click();
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-review'
+  );
+  const contributionEditedActionState = await readWorkbenchState(page);
+  expect(contributionEditedActionState).toMatchObject({
+    phase: 'edit-result-review',
+    actionId: 'action-0002',
+    runtimeDetailActionId: 'action-0002',
+    contributionActionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    hpContributionActive: 'true',
+    selectedActionListId: 'action-0002',
+    selectedTimelineActionId: 'action-0002',
+    pageOverflowX: 0,
+  });
+  expect(contributionEditedActionState.statePointId).toBe(
+    contributionActionEditState.feedbackStatePointId
+  );
+  expect(contributionEditedActionState.curveStatePointId).toBe(
+    contributionActionEditState.feedbackStatePointId
+  );
+  expect(contributionEditedActionState.logStatePointId).toBe(
+    contributionActionEditState.feedbackStatePointId
+  );
+  expect(contributionEditedActionState.hpContributionStatePointId).toBe(
+    contributionActionEditState.feedbackStatePointId
+  );
+
   expect(browserIssues.filter(issue => !isExpectedBrowserIssue(issue))).toEqual(
     []
   );
