@@ -325,7 +325,7 @@ import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
 import {
   createWorkbenchFlowRuntimeActionEditTarget,
-  createWorkbenchRuntimeReviewContextView,
+  createWorkbenchRuntimeReviewPanelView,
   resolveWorkbenchMainFlowActionEditTarget,
   resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
@@ -400,13 +400,16 @@ const runtimeContextByRow = computed(
 const runtimeSimLogRows = computed(() =>
   runtimeStatePointContexts.value.map(context => context.row)
 );
-const runtimeReviewContextView = computed(
+const runtimeReviewPanelView = computed(
   () =>
-    props.flowModel?.runtimeReviewContextView ??
-    createWorkbenchRuntimeReviewContextView({
+    props.flowModel?.runtimeReviewPanelView ??
+    createWorkbenchRuntimeReviewPanelView({
       flowModel: props.flowModel,
       selectedStateCurvePointId: props.selectedStateCurvePointId,
     })
+);
+const runtimeReviewContextView = computed(
+  () => runtimeReviewPanelView.value.context
 );
 const flowSelectedStatePointId = computed(
   () => runtimeReviewContextView.value.selectedStatePointId
@@ -415,7 +418,7 @@ const flowRuntimeFocusSource = computed(
   () => runtimeReviewContextView.value.source
 );
 const flowRuntimeFocusSourceView = computed(() =>
-  runtimeReviewContextView.value.sourceView ??
+  runtimeReviewPanelView.value.sourceView ??
   createRuntimeFocusSourceView(flowRuntimeFocusSource.value)
 );
 const flowEditResult = computed(

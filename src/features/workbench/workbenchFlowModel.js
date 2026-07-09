@@ -183,6 +183,10 @@ export function createWorkbenchFlowModel({
     runtimeDetail,
     selectedStateCurvePointId,
   });
+  const runtimeReviewPanelView = createWorkbenchRuntimeReviewPanelView({
+    runtimeReviewContextView,
+    runtimeReviewOperations,
+  });
   const mainFlowLoopState = createWorkbenchMainFlowLoopState({
     phase,
     mainFlowState,
@@ -213,6 +217,7 @@ export function createWorkbenchFlowModel({
     runtimeReviewSelection,
     runtimeReviewOperations,
     runtimeReviewContextView,
+    runtimeReviewPanelView,
     runtimeNavigation: {
       points: runtimeNavigationPoints,
       count: runtimeNavigationPoints.length,
@@ -436,6 +441,63 @@ export function createWorkbenchRuntimeReviewContextView({
 
 function pickRuntimeReviewContextValue(...values) {
   return values.find(value => value != null && value !== '');
+}
+
+export function createWorkbenchRuntimeReviewPanelView({
+  flowModel = null,
+  runtimeReviewContextView = null,
+  runtimeReviewOperations = null,
+  runtimeReviewSelection = null,
+  runtimeDetail = null,
+  selectedStateCurvePointId = '',
+} = {}) {
+  const baseContext =
+    runtimeReviewContextView ??
+    flowModel?.runtimeReviewContextView ??
+    createWorkbenchRuntimeReviewContextView({
+      flowModel,
+      runtimeReviewSelection,
+      runtimeDetail,
+      selectedStateCurvePointId,
+    });
+  const sourceView = createRuntimeReviewSourceView({
+    source: baseContext.source,
+    sourceView: baseContext.sourceView,
+  });
+  const context = {
+    ...baseContext,
+    source: sourceView.source,
+    sourceKind: sourceView.sourceKind,
+    sourceView,
+  };
+  const operations =
+    runtimeReviewOperations ?? flowModel?.runtimeReviewOperations ?? {};
+  const focusAction = operations.focusAction ?? {};
+  const returnResult = operations.returnResult ?? {};
+
+  return {
+    context,
+    operations,
+    sourceView,
+    status:
+      context.status ?? WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.EMPTY,
+    selectedActionId: context.selectedActionId ?? '',
+    selectedStatePointId: context.selectedStatePointId ?? '',
+    source: sourceView.source,
+    sourceKind: sourceView.sourceKind,
+    detailSyncedState: context.detailSyncedState ?? '',
+    primaryOperationKind: operations.primaryOperationKind ?? '',
+    primaryOperationEnabled: Boolean(operations.primaryOperationEnabled),
+    primaryOperationEnabledState: operations.primaryOperationEnabled
+      ? 'true'
+      : 'false',
+    focusActionEnabled: Boolean(focusAction.enabled),
+    focusActionEnabledState: focusAction.enabled ? 'true' : 'false',
+    returnResultEnabled: Boolean(returnResult.enabled),
+    returnResultEnabledState: returnResult.enabled ? 'true' : 'false',
+    canRunAnyOperation: Boolean(operations.canRunAnyOperation),
+    canRunAnyOperationState: operations.canRunAnyOperation ? 'true' : 'false',
+  };
 }
 
 function createRuntimeReviewSourceView({

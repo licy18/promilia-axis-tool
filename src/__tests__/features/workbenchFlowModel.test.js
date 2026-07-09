@@ -11,6 +11,7 @@ import {
   createWorkbenchMainFlowStatusView,
   createWorkbenchRuntimeReviewContextView,
   createWorkbenchRuntimeReviewFlowView,
+  createWorkbenchRuntimeReviewPanelView,
   resolveWorkbenchMainFlowActionEditTarget,
   resolveWorkbenchMainFlowResultReturnTarget,
 } from '../../features/workbench/workbenchFlowModel';
@@ -763,6 +764,28 @@ describe('workbench flow model', () => {
       detailSynced: true,
       detailSyncedState: 'true',
     });
+    expect(selectedModel.runtimeReviewPanelView).toMatchObject({
+      status: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.SELECTED,
+      selectedActionId: 'action-0001',
+      selectedStatePointId: firstPoint.statePointId,
+      source: 'resource-runtime-curve',
+      sourceKind: 'curve',
+      sourceView: {
+        source: 'resource-runtime-curve',
+        runtimeLogScope: 'resource-runtime-curve',
+      },
+      context: {
+        selectedStatePointId: firstPoint.statePointId,
+        sourceKind: 'curve',
+      },
+      primaryOperationKind:
+        WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+      primaryOperationEnabled: true,
+      primaryOperationEnabledState: 'true',
+      focusActionEnabledState: 'true',
+      returnResultEnabledState: 'false',
+      canRunAnyOperationState: 'true',
+    });
 
     const contributionModel = createWorkbenchFlowModel({
       runtimeProjection,
@@ -844,6 +867,39 @@ describe('workbench flow model', () => {
       selectedStatePointId: 'standalone-state-point',
       hasSelection: true,
       hasSelectionState: 'true',
+    });
+
+    expect(
+      createWorkbenchRuntimeReviewPanelView({
+        runtimeReviewContextView: {
+          status: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.SELECTED,
+          selectedActionId: 'action-standalone',
+          selectedStatePointId: 'state-point-standalone',
+          source: 'action-contribution',
+        },
+        runtimeReviewOperations: {
+          primaryOperationKind:
+            WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
+          primaryOperationEnabled: true,
+          canRunAnyOperation: true,
+          returnResult: {
+            enabled: true,
+          },
+        },
+      })
+    ).toMatchObject({
+      selectedActionId: 'action-standalone',
+      selectedStatePointId: 'state-point-standalone',
+      sourceKind: 'action-contribution',
+      sourceView: {
+        runtimeLogScope: 'action-contribution',
+        curveSelectionLabel: '贡献拆分定位',
+      },
+      primaryOperationKind:
+        WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
+      primaryOperationEnabledState: 'true',
+      returnResultEnabledState: 'true',
+      canRunAnyOperationState: 'true',
     });
   });
 

@@ -10089,6 +10089,31 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 runtime review context 中的选中点、操作命令和 source view 是否可以进一步合并为面板级 view model，优先服务“选择结果 -> 查看详情 -> 定位动作 -> 修改 -> 回看结果”的完整闭环。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Panel View Model
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchFlowModel` 新增 `runtimeReviewPanelView`，把 runtime review context、source view、operation 状态合成三块运行结果面板可直接消费的 view model。
+- `EventLogPanel`、`ResourceMonitorPanel`、`RuntimeSelectedDetailPanel` 现在统一从 `runtimeReviewPanelView` 读取 context/source/operation，不再各自拼装运行结果 review 状态。
+- 本阶段只收束运行结果面板的主流程 view model，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- flow model 单测覆盖 `runtimeReviewPanelView` 的 selection、source view、primary operation、focus/return operation 状态。
+- Workbench 和三值详情面板测试确认运行结果查看、详情查看、定位动作和返回结果路径保持可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、67 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、246 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 Workbench 页面层和运行面板之间是否还能把 selected runtime detail / result return context 合并到同一 panel view，优先减少“选中结果 -> 详情查看 -> 定位动作 -> 修改 -> 回看结果”的跨组件拼装。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

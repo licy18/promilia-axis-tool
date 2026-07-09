@@ -231,7 +231,7 @@ import { Aim, DataAnalysis, EditPen } from '@element-plus/icons-vue';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import {
   createWorkbenchFlowRuntimeActionEditTarget,
-  createWorkbenchRuntimeReviewContextView,
+  createWorkbenchRuntimeReviewPanelView,
   resolveWorkbenchMainFlowActionEditTarget,
   resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
@@ -274,16 +274,19 @@ const runtimeDetailOriginStatePointId = computed(() =>
 const flowEditResult = computed(
   () => props.flowModel?.editResult ?? props.actionEditResultContext
 );
-const runtimeReviewOperations = computed(
-  () => props.flowModel?.runtimeReviewOperations ?? null
-);
-const runtimeReviewContextView = computed(
+const runtimeReviewPanelView = computed(
   () =>
-    props.flowModel?.runtimeReviewContextView ??
-    createWorkbenchRuntimeReviewContextView({
+    props.flowModel?.runtimeReviewPanelView ??
+    createWorkbenchRuntimeReviewPanelView({
       flowModel: props.flowModel,
       runtimeDetail: props.detail,
     })
+);
+const runtimeReviewOperations = computed(
+  () => runtimeReviewPanelView.value.operations
+);
+const runtimeReviewContextView = computed(
+  () => runtimeReviewPanelView.value.context
 );
 const runtimeReviewSelectedStatePointId = computed(
   () => runtimeReviewContextView.value.selectedStatePointId

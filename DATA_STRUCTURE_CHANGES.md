@@ -21307,3 +21307,53 @@ runtimeReviewFlowView.selection.sourceView
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/runtimeFocusSource.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、68 条测试。
 - `npm run test -- --run`：通过，37 个测试文件、246 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 291. UI 主流程能力块：Runtime Review Panel View Model
+
+### 291.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`workbenchFlowModel` 新增运行结果面板级 view model：
+
+```js
+runtimeReviewPanelView
+```
+
+输出结构：
+
+```js
+{
+  context,
+  operations,
+  sourceView,
+  status,
+  selectedActionId,
+  selectedStatePointId,
+  source,
+  sourceKind,
+  detailSyncedState,
+  primaryOperationKind,
+  primaryOperationEnabled,
+  primaryOperationEnabledState,
+  focusActionEnabled,
+  focusActionEnabledState,
+  returnResultEnabled,
+  returnResultEnabledState,
+  canRunAnyOperation,
+  canRunAnyOperationState,
+}
+```
+
+`context` 复用 `runtimeReviewContextView`，`operations` 复用 `runtimeReviewOperations`，`sourceView` 复用 `createRuntimeFocusSourceView(source)`。`EventLogPanel`、`ResourceMonitorPanel`、`RuntimeSelectedDetailPanel` 改为优先消费 `flowModel.runtimeReviewPanelView`，没有 flow model 时通过 `createWorkbenchRuntimeReviewPanelView()` 生成兼容视图。
+
+### 291.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程 runtime review 的内部 panel view model，不新增持久字段，不需要数据迁移。
+
+### 291.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖 `runtimeReviewPanelView` 的 source view 与 operation 状态。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、67 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、246 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

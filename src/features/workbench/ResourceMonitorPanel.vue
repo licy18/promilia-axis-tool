@@ -363,7 +363,7 @@ import {
 } from './runtimeProjectionPoints';
 import {
   createWorkbenchFlowRuntimeActionEditTarget,
-  createWorkbenchRuntimeReviewContextView,
+  createWorkbenchRuntimeReviewPanelView,
   resolveWorkbenchMainFlowActionEditTarget,
   resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
@@ -460,13 +460,16 @@ const runtimeActorEnergyRows = computed(() =>
   getRuntimeResourceCurveRows(props.runtimeProjection)
 );
 
-const runtimeReviewContextView = computed(
+const runtimeReviewPanelView = computed(
   () =>
-    props.flowModel?.runtimeReviewContextView ??
-    createWorkbenchRuntimeReviewContextView({
+    props.flowModel?.runtimeReviewPanelView ??
+    createWorkbenchRuntimeReviewPanelView({
       flowModel: props.flowModel,
       selectedStateCurvePointId: props.selectedStateCurvePointId,
     })
+);
+const runtimeReviewContextView = computed(
+  () => runtimeReviewPanelView.value.context
 );
 const flowSelectedStatePointId = computed(
   () => runtimeReviewContextView.value.selectedStatePointId
@@ -476,7 +479,7 @@ const flowRuntimeFocusSource = computed(
   () => runtimeReviewContextView.value.source || props.runtimeFocusSource
 );
 const flowRuntimeFocusSourceView = computed(() =>
-  runtimeReviewContextView.value.sourceView ??
+  runtimeReviewPanelView.value.sourceView ??
   createRuntimeFocusSourceView(flowRuntimeFocusSource.value)
 );
 
