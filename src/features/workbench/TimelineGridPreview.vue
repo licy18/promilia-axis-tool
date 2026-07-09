@@ -200,6 +200,7 @@
           :key="lane.id"
           class="lane-label"
           :class="{ system: lane.type === 'system' }"
+          :style="laneRowStyle(lane)"
           :data-lane-id="lane.id"
           data-testid="workbench-timeline-lane-label"
         >
@@ -225,6 +226,7 @@
             }"
             :data-lane-id="lane.id"
             data-testid="workbench-timeline-row"
+            :style="laneRowStyle(lane)"
             :ref="element => setLaneRowRef(element, lane.id)"
           >
             <div
@@ -299,7 +301,7 @@
               :key="`${damage.actionId}-${damage.timeMs}`"
               class="damage-marker"
               :class="{ 'batch-selected': isDamageInSelectedBatch(damage) }"
-              :style="markerStyle(damage)"
+              :style="markerStyle(damage, lane)"
               :title="`${damage.segmentLabel}: ${damage.rawDamage}`"
               :data-action-id="damage.actionId"
               :data-lane-id="lane.id"
@@ -312,6 +314,7 @@
             <div
               v-if="lane.candidateValueCurves.length"
               class="candidate-value-curve-track"
+              :style="timelineDataLayerStyle(lane)"
               data-testid="workbench-timeline-candidate-value-curve-track"
               :data-lane-id="lane.id"
             >
@@ -349,7 +352,7 @@
               :class="{
                 selected: group.id === selectedCandidateFrameGroup?.id,
               }"
-              :style="candidateValueFrameHotspotStyle(group)"
+              :style="candidateValueFrameHotspotStyle(group, lane)"
               :title="group.title"
               :aria-label="group.title"
               :data-action-id="group.actionId"
@@ -377,7 +380,7 @@
                   'track-focused': isCandidateMarkerInStateTrackFocus(marker),
                 },
               ]"
-              :style="candidateValueMarkerStyle(marker)"
+              :style="candidateValueMarkerStyle(marker, lane)"
               :title="formatCandidateValueMarkerTitle(marker)"
               :aria-label="formatCandidateValueMarkerTitle(marker)"
               :data-action-id="marker.actionId"
@@ -411,7 +414,7 @@
                     marker.statePointId === flowSelectedStateCurvePointId,
                 },
               ]"
-              :style="stateCurveMarkerStyle(marker)"
+              :style="stateCurveMarkerStyle(marker, lane)"
               :title="formatStateCurveMarkerTitle(marker)"
               :aria-label="formatStateCurveMarkerTitle(marker)"
               :data-action-id="marker.actionId"
@@ -561,6 +564,11 @@ const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
 const ZOOM_STEP = 0.25;
+const TIMELINE_LANE_MIN_HEIGHT_PX = 110;
+const TIMELINE_ACTION_TOP_PX = 10;
+const TIMELINE_ACTION_HEIGHT_PX = 42;
+const TIMELINE_ACTION_SLOT_GAP_PX = 8;
+const TIMELINE_DATA_GAP_PX = 2;
 const CANDIDATE_VALUE_CURVE_TOP = 68;
 const CANDIDATE_VALUE_CURVE_HEIGHT = 34;
 const STATE_CURVE_TIMELINE_LAYER_KEYS = new Set([
@@ -827,7 +835,9 @@ const candidateActionOptions = computed(() =>
       };
     })
 );
-const flowSelection = computed(() => props.flowModel?.mainFlowSelection ?? null);
+const flowSelection = computed(
+  () => props.flowModel?.mainFlowSelection ?? null
+);
 const runtimeReviewContextView = computed(
   () =>
     props.flowModel?.runtimeReviewContextView ??
@@ -920,6 +930,12 @@ const timelineLanes = computed(() => {
   props.actions.forEach(action => {
     const lane = lanesById.get(resolveActionLaneId(action)) ?? systemLane;
     lane.actions.push(action);
+  });
+
+  [...actorLanes, systemLane].forEach(lane => {
+    const layout = createTimelineActionLayout(lane.actions);
+    lane.actions = layout.actions;
+    lane.actionSlotCount = layout.slotCount;
   });
 
   props.damageTimeline.forEach(damage => {
@@ -1024,18 +1040,20 @@ function getActionEditFocusField(action) {
 }
 
 function getActionEditFocusLabel(action) {
-  return isActionEditFocused(action) ? props.actionEditFocus?.label ?? '' : '';
+  return isActionEditFocused(action)
+    ? (props.actionEditFocus?.label ?? '')
+    : '';
 }
 
 function getActionEditFocusSummary(action) {
   return isActionEditFocused(action)
-    ? props.actionEditFocus?.changeSummary ?? ''
+    ? (props.actionEditFocus?.changeSummary ?? '')
     : '';
 }
 
 function getActionEditFocusSource(action) {
   return isActionEditFocused(action)
-    ? props.actionEditFocus?.focusSource ?? ''
+    ? (props.actionEditFocus?.focusSource ?? '')
     : '';
 }
 
@@ -1060,21 +1078,35 @@ function actionStyle(action) {
   );
   return {
     left: `${left}%`,
+    top: `${getTimelineActionTop(action.timelineSlot)}px`,
     width: `${width}%`,
   };
 }
 
-function markerStyle(damage) {
+function markerStyle(damage, lane) {
   const left = clampPercent((damage.timeMs / props.durationMs) * 100);
   return {
     left: `${left}%`,
+    top: `${getTimelineDataTop(lane)}px`,
   };
 }
 
-function candidateValueMarkerStyle(marker) {
+function timelineDataLayerStyle(lane) {
+  return {
+    top: `${getTimelineCandidateCurveTop(lane)}px`,
+  };
+}
+
+function laneRowStyle(lane) {
+  return {
+    minHeight: `${getTimelineLaneHeight(lane)}px`,
+  };
+}
+
+function candidateValueMarkerStyle(marker, lane) {
   const left = clampPercent((marker.timeMs / props.durationMs) * 100);
   const top =
-    CANDIDATE_VALUE_CURVE_TOP +
+    getTimelineCandidateCurveTop(lane) +
     (clampPercent(marker.yPercent) / 100) * CANDIDATE_VALUE_CURVE_HEIGHT;
   return {
     left: `${left}%`,
@@ -1082,19 +1114,98 @@ function candidateValueMarkerStyle(marker) {
   };
 }
 
-function stateCurveMarkerStyle(marker) {
+function stateCurveMarkerStyle(marker, lane) {
   const left = clampPercent((marker.timeMs / props.durationMs) * 100);
   return {
     left: `${left}%`,
-    top: `${marker.top}px`,
+    top: `${getTimelineStateCurveMarkerTop(marker, lane)}px`,
   };
 }
 
-function candidateValueFrameHotspotStyle(group) {
+function candidateValueFrameHotspotStyle(group, lane) {
   const left = clampPercent((group.timeMs / props.durationMs) * 100);
   return {
     left: `${left}%`,
+    top: `${getTimelineCandidateCurveTop(lane)}px`,
   };
+}
+
+function getTimelineActionTop(slot) {
+  return (
+    TIMELINE_ACTION_TOP_PX +
+    Math.max(0, Number(slot) || 0) *
+      (TIMELINE_ACTION_HEIGHT_PX + TIMELINE_ACTION_SLOT_GAP_PX)
+  );
+}
+
+function getTimelineDataTop(lane) {
+  const slotCount = getTimelineActionSlotCount(lane);
+  return (
+    TIMELINE_ACTION_TOP_PX +
+    slotCount * TIMELINE_ACTION_HEIGHT_PX +
+    Math.max(0, slotCount - 1) * TIMELINE_ACTION_SLOT_GAP_PX +
+    TIMELINE_DATA_GAP_PX
+  );
+}
+
+function getTimelineCandidateCurveTop(lane) {
+  return getTimelineDataTop(lane) + (CANDIDATE_VALUE_CURVE_TOP - 54);
+}
+
+function getTimelineStateCurveMarkerTop(marker, lane) {
+  return getTimelineDataTop(lane) + (marker.top - 54);
+}
+
+function getTimelineLaneHeight(lane) {
+  return Math.max(TIMELINE_LANE_MIN_HEIGHT_PX, getTimelineDataTop(lane) + 62);
+}
+
+function getTimelineActionSlotCount(lane) {
+  return Math.max(1, Number(lane?.actionSlotCount) || 1);
+}
+
+function createTimelineActionLayout(actions) {
+  const slotEndTimes = [];
+  const slotByActionId = new Map();
+  const sortedActions = [...actions].sort(compareTimelineActionStart);
+
+  sortedActions.forEach(action => {
+    const startMs = Number(action.startMs) || 0;
+    const endMs = startMs + getTimelineActionLayoutDurationMs(action);
+    const slotIndex = findAvailableTimelineActionSlot(slotEndTimes, startMs);
+    slotEndTimes[slotIndex] = endMs;
+    slotByActionId.set(action.id, slotIndex);
+  });
+
+  return {
+    actions: actions.map(action => ({
+      ...action,
+      timelineSlot: slotByActionId.get(action.id) ?? 0,
+    })),
+    slotCount: Math.max(1, slotEndTimes.length),
+  };
+}
+
+function getTimelineActionLayoutDurationMs(action) {
+  const displayMinDurationMs = props.durationMs * 0.08;
+  return Math.max(
+    MIN_ACTION_DURATION_MS,
+    displayMinDurationMs,
+    Number(action.durationMs) || DEFAULT_TIMELINE_ACTION_DURATION_MS
+  );
+}
+
+function compareTimelineActionStart(left, right) {
+  return (
+    (Number(left.startMs) || 0) - (Number(right.startMs) || 0) ||
+    (Number(left.durationMs) || 0) - (Number(right.durationMs) || 0) ||
+    String(left.id).localeCompare(String(right.id))
+  );
+}
+
+function findAvailableTimelineActionSlot(slotEndTimes, startMs) {
+  const index = slotEndTimes.findIndex(endMs => startMs >= endMs);
+  return index >= 0 ? index : slotEndTimes.length;
 }
 
 function actionLabel(action) {
@@ -2868,9 +2979,10 @@ h2 {
 .action-block {
   position: absolute;
   top: 10px;
+  box-sizing: border-box;
   height: 42px;
-  min-width: 96px;
-  padding: 7px 54px 7px 10px;
+  min-width: 0;
+  padding: 7px clamp(24px, 18%, 54px) 7px 8px;
   border: 1px solid rgba(121, 199, 185, 0.5);
   border-radius: 6px;
   background: linear-gradient(180deg, #274840 0%, #20352f 100%);

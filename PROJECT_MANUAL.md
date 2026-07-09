@@ -11242,6 +11242,36 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：优先处理时间轴重叠动作的可选中体验，避免长持续时间动作覆盖其他动作中心点击，让排轴编辑更接近 Endaxis 的稳定操作感。
 
+### 2026-07-09：UI 主流程时间轴重叠选择 - Overlap Action Slots
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 时间轴同轨道动作现在会按显示宽度分配垂直槽位，视觉上重叠的动作不再叠在同一点击层。
+- 轨道高度会随动作槽位扩展，伤害投影、候选三值曲线、候选点和状态点会下移到动作槽位下面，避免被动作条遮住。
+- 移除动作块固定 `96px` 最小点击宽度，改为按时间轴比例宽度命中，避免短动作扩大成大遮罩。
+- 浏览器级 e2e 已改回默认中心点击重叠场景里的 `action-0002`，并确认能直接选中、同步到运行结果和 HP 贡献拆分。
+- 本阶段只优化时间轴 UI 操作体验，不改变运行时输出、三值结果、公式、证据字段或持久数据结构。
+
+当前验证事实：
+
+- 修改 `TimelineGridPreview.vue`：同轨动作按显示区间分槽，动作、伤害标记、候选曲线/点、状态点使用同一轨道高度模型。
+- 扩展 `e2e/workbench-continuous-edit.spec.js`：时间轴反向定位从点击 `action-0001` 起点，升级为默认中心点击重叠动作 `action-0002`。
+
+验收结果：
+
+- `npm run test:e2e`：通过，1 条浏览器级烟测。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、67 条测试。
+- `npm run test -- --run src/__tests__/features/TimelineGridPreview.test.js`：通过，1 个测试文件、3 条测试。
+- `npx prettier --check src/features/workbench/TimelineGridPreview.vue e2e/workbench-continuous-edit.spec.js`：通过。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：在时间轴重叠选择稳定后，优先补齐动作编辑区和结果区之间的可见上下文，例如当前动作在结果区中的定位、编辑后结果回看入口和贡献拆分的并列可读性。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

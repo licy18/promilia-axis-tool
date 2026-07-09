@@ -213,27 +213,27 @@ test('keeps the continuous edit result loop synced in the browser', async ({
 
   await page
     .locator(
-      '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
     )
-    .click({ position: { x: 8, y: 10 } });
+    .click();
   await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
     'data-runtime-detail-action-id',
-    'action-0001'
+    'action-0002'
   );
   const timelineJumpState = await readWorkbenchState(page);
   expect(timelineJumpState).toMatchObject({
     phase: 'runtime-result',
-    actionId: 'action-0001',
-    runtimeDetailActionId: 'action-0001',
-    contributionActionId: 'action-0001',
+    actionId: 'action-0002',
+    runtimeDetailActionId: 'action-0002',
+    contributionActionId: 'action-0002',
     navigationCount: '3',
-    navigationIndex: '0',
+    navigationIndex: '1',
     hpContributionActive: 'true',
-    selectedActionListId: 'action-0001',
-    selectedTimelineActionId: 'action-0001',
+    selectedActionListId: 'action-0002',
+    selectedTimelineActionId: 'action-0002',
     pageOverflowX: 0,
   });
-  expect(timelineJumpState.statePointId).toBe(firstActionStatePointId);
+  expect(timelineJumpState.statePointId).toContain('action-0002');
   expect(timelineJumpState.curveStatePointId).toBe(
     timelineJumpState.statePointId
   );
@@ -245,7 +245,7 @@ test('keeps the continuous edit result loop synced in the browser', async ({
   );
   await expect(
     page.locator(
-      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0002"]'
     )
   ).toHaveAttribute(
     'data-selected-state-point-id',
