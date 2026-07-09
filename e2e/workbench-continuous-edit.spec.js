@@ -2276,6 +2276,22 @@ async function expectRuntimeOutputConsistent(page) {
     /runtime-output-consumer-contract-ready/
   );
   await expect(flowPanel).toHaveAttribute(
+    'data-runtime-contract-boundary-status',
+    'workbench-runtime-contract-boundary-standard'
+  );
+  await expect(flowPanel).toHaveAttribute(
+    'data-runtime-contract-boundary-ready',
+    'true'
+  );
+  await expect(flowPanel).toHaveAttribute(
+    'data-runtime-contract-standard-boundary-ready',
+    'true'
+  );
+  await expect(flowPanel).toHaveAttribute(
+    'data-runtime-contract-uses-legacy-fallback',
+    'false'
+  );
+  await expect(flowPanel).toHaveAttribute(
     'data-runtime-output-state-point-context-count',
     /[1-9]\d*/
   );

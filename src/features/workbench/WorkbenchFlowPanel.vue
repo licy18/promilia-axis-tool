@@ -70,6 +70,18 @@
     :data-runtime-output-consumer-contract-status="
       mainFlowStatusView.runtimeOutput.outputConsumerContractStatus
     "
+    :data-runtime-contract-boundary-status="
+      mainFlowStatusView.runtimeOutput.runtimeContractBoundaryStatus
+    "
+    :data-runtime-contract-boundary-ready="
+      mainFlowStatusView.runtimeOutput.runtimeContractBoundaryReadyState
+    "
+    :data-runtime-contract-standard-boundary-ready="
+      mainFlowStatusView.runtimeOutput.runtimeContractStandardBoundaryReadyState
+    "
+    :data-runtime-contract-uses-legacy-fallback="
+      mainFlowStatusView.runtimeOutput.runtimeContractUsesLegacyFallbackState
+    "
     :data-runtime-output-state-point-context-count="
       mainFlowStatusView.runtimeOutput.statePointContextCount
     "

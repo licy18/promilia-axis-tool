@@ -40,6 +40,11 @@ describe('WorkbenchFlowPanel', () => {
       'data-main-flow-loop-recovery-needed': 'false',
       'data-main-flow-loop-next-action-kind': 'focus-runtime-action',
       'data-main-flow-loop-next-target-kind': 'runtime-action-edit',
+      'data-runtime-contract-boundary-status':
+        'workbench-runtime-contract-boundary-standard',
+      'data-runtime-contract-boundary-ready': 'true',
+      'data-runtime-contract-standard-boundary-ready': 'true',
+      'data-runtime-contract-uses-legacy-fallback': 'false',
     });
     expect(button.attributes()).toMatchObject({
       'data-action-id': 'review-action',
@@ -304,6 +309,25 @@ function createFlowModel({ primaryKind, primaryOperation }) {
       runtimeOutput: {
         status: 'ready',
       },
+    },
+    runtimeOutputConsistency: {
+      status: 'runtime-output-consistent',
+      consistentState: 'true',
+      runtimeContractBoundaryStatus:
+        'workbench-runtime-contract-boundary-standard',
+      runtimeContractBoundaryReadyState: 'true',
+      runtimeContractStandardBoundaryReadyState: 'true',
+      runtimeContractUsesLegacyFallbackState: 'false',
+      simLogCount: 1,
+      stateCurvePointCount: 1,
+      stateCurveNavigationSyncedState: 'true',
+      consumerViewSourceKind: 'workbench-runtime-output-consumer-view',
+      consumerViewReadyState: 'true',
+      outputConsumerContractStatus: 'runtime-output-consumer-contract-ready',
+      statePointContextCount: 1,
+      statePointContextSyncedState: 'true',
+      projectionPointCount: 1,
+      projectionPointCountSyncedState: 'true',
     },
     runtimeDetail: {
       actionId: 'detail-action',

@@ -23229,3 +23229,49 @@ runtimeContractUsesLegacyFallbackState
 - `npm run test:e2e:workbench-flow`：通过，5 条浏览器级主流程测试。
 - `npx prettier --check src/features/workbench/workbenchFlowContractContext.js src/features/workbench/workbenchFlowModel.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js PROJECT_MANUAL.md`：通过。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 327. Workbench 主流程合同边界验收：Runtime Contract Boundary E2E Gate
+
+### 327.1 结构变化
+
+`WorkbenchFlowPanel.vue` 根节点新增非可见 data 属性，用于主流程回归验收 runtime contract boundary：
+
+```text
+data-runtime-contract-boundary-status
+data-runtime-contract-boundary-ready
+data-runtime-contract-standard-boundary-ready
+data-runtime-contract-uses-legacy-fallback
+```
+
+这些属性来自 `createWorkbenchMainFlowStatusView().runtimeOutput`，分别映射：
+
+```text
+runtimeContractBoundaryStatus
+runtimeContractBoundaryReadyState
+runtimeContractStandardBoundaryReadyState
+runtimeContractUsesLegacyFallbackState
+```
+
+`e2e/workbench-continuous-edit.spec.js` 的 `expectRuntimeOutputConsistent(page)` 新增 runtime contract boundary 验收：
+
+```text
+data-runtime-contract-boundary-status = workbench-runtime-contract-boundary-standard
+data-runtime-contract-boundary-ready = true
+data-runtime-contract-standard-boundary-ready = true
+data-runtime-contract-uses-legacy-fallback = false
+```
+
+### 327.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只新增 Workbench 主流程非可见验收属性和浏览器级回归断言；三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值和 UI 文案均不改变。
+
+### 327.3 验证
+
+- `WorkbenchFlowPanel.test.js` 覆盖面板根节点暴露 runtime contract boundary 的 data 属性。
+- `workbench-continuous-edit.spec.js` 覆盖核心 Workbench 主流程中 runtime output consistency 与 runtime contract boundary 同时保持标准状态。
+- `npm run test -- --run src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，3 个测试文件、15 条测试。
+- `npm run test:e2e:workbench-flow`：通过，5 条浏览器级主流程测试。
+- `npx prettier --check src/features/workbench/WorkbenchFlowPanel.vue src/__tests__/features/WorkbenchFlowPanel.test.js e2e/workbench-continuous-edit.spec.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。

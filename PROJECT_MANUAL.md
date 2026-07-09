@@ -12849,6 +12849,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续运行时层能力块：把 `runtimeContractBoundary` 接入更完整的 Workbench 主流程验收，再用 `npm run test:e2e:workbench-flow` 守住可见闭环。
 
+### 2026-07-09：运行时层 / UI 主流程交界 - 主流程合同边界验收
+
+本阶段属于：运行时层 / UI 主流程交界。
+
+完成的可用能力：
+
+- Workbench 主流程面板的非可见 data 属性现在会暴露 runtime contract boundary 的状态、ready 状态、标准边界状态和 legacy fallback 状态。
+- `test:e2e:workbench-flow` 的主流程守门函数现在同时验收 runtime output consistency 和 runtime contract boundary，确保“排轴动作编辑 -> 运行模拟 -> 曲线/日志/详情 -> 回到动作修改 -> 刷新结果定位”的可见闭环背后仍走标准合同边界。
+- 本阶段不新增可见 UI 文案、不改变三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值或草稿保存 schema。
+
+当前验证事实：
+
+- 浏览器级主流程每次调用 `expectRuntimeOutputConsistent()` 时，都会确认 `workbench-runtime-contract-boundary-standard`、ready 为 true、standard boundary 为 true、legacy fallback 为 false。
+- 这让后续修改生成层或运行时层时，主流程 e2e 能及时发现标准合同边界回退到 legacy fallback。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，3 个测试文件、15 条测试。
+- `npm run test:e2e:workbench-flow`：通过，5 条浏览器级主流程测试。
+- `npx prettier --check src/features/workbench/WorkbenchFlowPanel.vue src/__tests__/features/WorkbenchFlowPanel.test.js e2e/workbench-continuous-edit.spec.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：围绕 Endaxis 式完整工作流，提升动作编辑到结果复盘的实际可用效率；保持标准合同边界作为回归守门。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
