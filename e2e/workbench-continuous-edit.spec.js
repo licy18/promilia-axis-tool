@@ -610,6 +610,8 @@ test('keeps direct, log, and contribution edit returns synced', async ({
       selected: true,
     });
 
+  await selectHpContributionAndExpectResultFocus(page, logEditedActionState);
+
   const contributionEditButton = page.getByTestId(
     'workbench-action-contribution-edit-action'
   );
@@ -1138,6 +1140,36 @@ async function expectCurveAndLogSelection(page, statePointId) {
   await expect(
     page.getByTestId('workbench-runtime-sim-log-navigation')
   ).toHaveAttribute('data-state-point-id', statePointId);
+}
+
+async function selectHpContributionAndExpectResultFocus(page, state) {
+  const contributionRow = page.locator(
+    '[data-testid="workbench-action-contribution-row"][data-track-key="enemyHpDamage"]'
+  );
+  await expect(contributionRow).toHaveAttribute(
+    'data-flow-action-kind',
+    'select-contribution-point'
+  );
+  await expect(contributionRow).toHaveAttribute(
+    'data-flow-action-state-point-id',
+    state.statePointId
+  );
+
+  await contributionRow.click();
+  await expectCurveAndLogSelection(page, state.statePointId);
+  await expect(
+    page.getByTestId('workbench-runtime-sim-log-filter-summary')
+  ).toContainText('贡献定位');
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail')
+  ).toHaveAttribute('data-runtime-review-source', 'action-contribution');
+  await expect(
+    page
+      .locator(
+        `[data-testid="workbench-runtime-resource-chart-point"][data-state-point-id="${state.statePointId}"]`
+      )
+      .first()
+  ).toHaveAttribute('data-runtime-focus-source', 'action-contribution');
 }
 
 async function expectRuntimeSimLogHitAggregateContributions(page) {

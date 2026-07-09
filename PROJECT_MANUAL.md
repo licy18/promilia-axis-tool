@@ -12045,6 +12045,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议继续 UI 主流程：把贡献拆分面板与日志详情的交互路径进一步统一，让用户能从三值贡献行直接定位到对应动作和刷新后的曲线点。
 
+### 2026-07-09：UI 主流程可见闭环 - 贡献行定位曲线与日志
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 用户现在可以在动作贡献拆分面板点击 HP 贡献行，并让资源曲线点、模拟日志、三值详情同时定位到同一个刷新后的状态点。
+- 该路径接入现有“编辑动作 -> 查看刷新结果”闭环，确认从贡献拆分进入编辑后仍能回到刷新后的结果定位。
+- 本阶段不改变 UI 文案、不改变三值计算结果、公式、倍率、证据字段、保存数据或导入导出结构。
+
+当前验证事实：
+
+- `workbench-continuous-edit.spec.js` 的直接/日志/贡献编辑闭环新增贡献行点击断言：确认贡献行 flow action 为 `select-contribution-point`，状态点为刷新后的 runtime result。
+- 同一浏览器路径确认贡献行点击后，资源曲线、模拟日志、三值详情都以 `action-contribution` 作为定位来源。
+
+验收结果：
+
+- `npm run test:e2e -- --grep "keeps direct, log, and contribution edit returns synced"`：通过，1 条浏览器级主流程测试。
+- `npm run test:e2e`：通过，12 条浏览器级烟测。
+- `npm run test -- --run`：通过，39 个测试文件、273 条测试。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md e2e/workbench-continuous-edit.spec.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 建议继续 UI 主流程：补齐“贡献行定位后切换轨道/筛选/窄屏”下的主流程稳定性，或者转入运行时层梳理 summary 与 stateCurves 的输出一致性。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
