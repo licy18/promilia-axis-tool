@@ -2439,6 +2439,7 @@ describe('Workbench view', () => {
     expect(returnButton.attributes('data-state-point-id')).toBe(
       refreshedStatePointId
     );
+    expect(returnButton.text()).toBe('查看刷新结果');
 
     await returnButton.trigger('click');
     await nextTick();

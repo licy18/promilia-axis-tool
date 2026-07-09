@@ -325,7 +325,7 @@ describe('workbench flow model', () => {
     expect(readyModel.primaryAction).toMatchObject({
       key: WORKBENCH_FLOW_PRIMARY_ACTION_KEYS.RETURN_RUNTIME_RESULT,
       kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
-      label: '回到刷新结果',
+      label: '查看刷新结果',
       actionId: 'action-0002',
       statePointId: secondPoint.statePointId,
       enabled: true,

@@ -181,6 +181,10 @@ export function createWorkbenchMainFlowButtonView({
     return createMainFlowButtonView({
       kind,
       isPrimary,
+      label:
+        flowModel?.runtimeReviewOperations?.primaryOperation?.label ??
+        consumer.target?.label ??
+        '',
       target: consumer.target,
       enabled: consumer.enabled,
       action: consumer.action,
@@ -191,6 +195,7 @@ export function createWorkbenchMainFlowButtonView({
   return createMainFlowButtonView({
     kind,
     isPrimary,
+    label: target?.label ?? (isPrimary ? primaryAction.label : ''),
     target,
     enabled:
       fallbackEnabled ??
@@ -905,6 +910,7 @@ function createWorkbenchMainFlowButtonCommand({
 function createMainFlowButtonView({
   kind = '',
   isPrimary = false,
+  label = '',
   target = null,
   enabled = false,
   action = null,
@@ -914,6 +920,7 @@ function createMainFlowButtonView({
     kind,
     isPrimary: Boolean(isPrimary),
     enabled: Boolean(enabled),
+    label: label || resolvedTarget.label || '',
     actionId: resolvedTarget.actionId ?? '',
     statePointId: resolvedTarget.statePointId ?? '',
     target: resolvedTarget,

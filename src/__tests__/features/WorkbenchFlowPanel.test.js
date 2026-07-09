@@ -100,6 +100,7 @@ describe('WorkbenchFlowPanel', () => {
       'data-primary-action': 'true',
       'data-state-point-id': 'review-state-point',
     });
+    expect(button.text()).toBe('查看刷新结果');
     expect(button.attributes('disabled')).toBeUndefined();
 
     await button.trigger('click');

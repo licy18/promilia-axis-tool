@@ -1250,7 +1250,7 @@ function createWorkbenchFlowPrimaryAction({
     return createPrimaryAction({
       key: WORKBENCH_FLOW_PRIMARY_ACTION_KEYS.RETURN_RUNTIME_RESULT,
       kind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
-      label: '回到刷新结果',
+      label: '查看刷新结果',
       actionId: editResult.actionId,
       statePointId: editResult.statePointId,
       enabled: controls.canReturnRuntimeResult,

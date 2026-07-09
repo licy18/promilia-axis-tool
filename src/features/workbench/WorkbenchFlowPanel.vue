@@ -205,7 +205,7 @@
         @click="returnRuntimeResult"
       >
         <ArrowRight class="flow-button-icon" />
-        <span>回到刷新结果</span>
+        <span>{{ runtimeResultReturnButtonLabel }}</span>
       </button>
     </div>
   </section>
@@ -307,6 +307,9 @@ const runtimeActionEditButtonView = computed(() =>
 const runtimeResultReturnButtonView = computed(() =>
   resolvedMainFlowCommandSurface.value.runtimeResultReturn
 );
+const runtimeResultReturnButtonLabel = computed(() =>
+  formatRuntimeResultReturnButtonLabel(runtimeResultReturnButtonView.value)
+);
 
 function focusRuntimeAction() {
   dispatchFlowAction(
@@ -335,6 +338,18 @@ function dispatchFlowAction(action) {
     return;
   }
   emit('dispatch-flow-action', action);
+}
+
+function formatRuntimeResultReturnButtonLabel(buttonView = null) {
+  const status =
+    buttonView?.target?.status ?? buttonView?.action?.payload?.status ?? '';
+  if (status === 'refreshed-edit-result') {
+    return '查看刷新结果';
+  }
+  if (status === 'origin-result') {
+    return '回到来源结果';
+  }
+  return buttonView?.label || '回到刷新结果';
 }
 
 function getRuntimeNavigationFlowAction(point) {

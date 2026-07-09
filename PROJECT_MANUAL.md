@@ -10655,6 +10655,29 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：转入完整端到端用户闭环的浏览器验证，检查实际渲染下的布局、按钮可见性、曲线/日志/详情同步和编辑后回看路径。
 
+### 2026-07-09：UI 主流程浏览器闭环 - Primary Return Label
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 在真实浏览器页面完成“查看运行结果 -> 编辑结果动作 -> 修改起始帧 -> 查看刷新结果”的主流程验证。
+- 修正顶部主流程按钮的刷新结果回看文案，使它与动作编辑反馈、右侧三值详情、日志详情一致显示“查看刷新结果”。
+- 点击“查看刷新结果”后，资源曲线点、日志行和右侧三值详情会同步定位到刷新后的同一个 state point。
+
+当前验证事实：
+
+- 浏览器实测路径：打开 `/#/workbench`，选择运行结果，进入动作编辑，将起始帧改为 6f，顶部主流程按钮显示“查看刷新结果”，点击后定位到 `enemyHpDamage|applied|action-0001|6|0`。
+- Workbench 测试覆盖顶部主流程返回按钮、曲线点、日志行、三值详情和编辑反馈之间的闭环文案与 state point 同步。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、102 条测试。
+
+下一步：
+
+- 继续 UI 主流程能力块：做真实页面下的结果检查布局和完整编辑体验烟测，优先处理会阻断“排轴动作编辑 -> 运行模拟 -> 资源曲线/日志/详情 -> 回改动作 -> 回看刷新结果”的可见问题。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
