@@ -304,10 +304,14 @@
             data-testid="workbench-runtime-resource-chart-selection-primary"
           >
             <span>{{ selectedRuntimeCurvePointSummary.trackLabel }}</span>
-            <strong data-testid="workbench-runtime-resource-chart-selection-primary-delta">
+            <strong
+              data-testid="workbench-runtime-resource-chart-selection-primary-delta"
+            >
               {{ selectedRuntimeCurvePointSummary.delta }}
             </strong>
-            <small data-testid="workbench-runtime-resource-chart-selection-primary-state">
+            <small
+              data-testid="workbench-runtime-resource-chart-selection-primary-state"
+            >
               {{ selectedRuntimeCurvePointSummary.state }}
             </small>
           </div>
@@ -370,12 +374,7 @@ import {
   EditPen,
   TrendCharts,
 } from '@element-plus/icons-vue';
-import {
-  createRuntimeStatePointContexts,
-  getRuntimeEnemyStateCurve,
-  getRuntimeOutputSummary,
-  getRuntimeResourceCurveRows,
-} from './runtimeProjectionPoints';
+import { createWorkbenchRuntimeOutputConsumerView } from './runtimeProjectionPoints';
 import {
   createWorkbenchFlowRuntimeActionEditTarget,
   createWorkbenchRuntimeReviewPanelView,
@@ -446,6 +445,9 @@ const props = defineProps({
 });
 const emit = defineEmits(['dispatch-flow-action']);
 const runtimeCurveMode = ref('delta');
+const runtimeOutputView = computed(() =>
+  createWorkbenchRuntimeOutputConsumerView(props.runtimeProjection)
+);
 
 const resourceTotals = computed(() => {
   return props.resourceTimeline.reduce((totals, entry) => {
@@ -454,12 +456,10 @@ const resourceTotals = computed(() => {
   }, {});
 });
 
-const runtimeSummary = computed(() =>
-  getRuntimeOutputSummary(props.runtimeProjection)
-);
+const runtimeSummary = computed(() => runtimeOutputView.value.outputSummary);
 
-const runtimeEnemyState = computed(() =>
-  getRuntimeEnemyStateCurve(props.runtimeProjection)
+const runtimeEnemyState = computed(
+  () => runtimeOutputView.value.enemyStateCurve
 );
 
 const runtimeEnemyHpMetric = computed(
@@ -470,8 +470,8 @@ const runtimeEnemyToughnessMetric = computed(
   () => runtimeEnemyState.value.stateMetrics?.toughness ?? null
 );
 
-const runtimeActorEnergyRows = computed(() =>
-  getRuntimeResourceCurveRows(props.runtimeProjection)
+const runtimeActorEnergyRows = computed(
+  () => runtimeOutputView.value.resourceCurveRows
 );
 
 const runtimeReviewPanelView = computed(
@@ -492,41 +492,31 @@ const flowSelectedStatePointId = computed(
 const flowRuntimeFocusSource = computed(
   () => runtimeReviewContextView.value.source || props.runtimeFocusSource
 );
-const flowRuntimeFocusSourceView = computed(() =>
-  runtimeReviewPanelView.value.sourceView ??
-  createRuntimeFocusSourceView(flowRuntimeFocusSource.value)
+const flowRuntimeFocusSourceView = computed(
+  () =>
+    runtimeReviewPanelView.value.sourceView ??
+    createRuntimeFocusSourceView(flowRuntimeFocusSource.value)
 );
 
 const flowEditResult = computed(
   () => props.flowModel?.editResult ?? props.actionEditResultContext
 );
 
-const runtimeStatePointContexts = computed(() =>
-  createRuntimeStatePointContexts(props.runtimeProjection)
+const runtimeStatePointContexts = computed(
+  () => runtimeOutputView.value.statePointContexts
 );
 
 const runtimeStatePointContextByDeltaId = computed(
-  () =>
-    new Map(
-      runtimeStatePointContexts.value
-        .filter(context => context.row?.sourceDeltaId)
-        .map(context => [context.row.sourceDeltaId, context])
-    )
+  () => runtimeOutputView.value.statePointContextByDeltaId
 );
 
 const runtimeStatePointOrderById = computed(
-  () =>
-    new Map(
-      runtimeStatePointContexts.value.map((context, index) => [
-        context.statePointId,
-        index,
-      ])
-    )
+  () => runtimeOutputView.value.statePointOrderById
 );
 
 const runtimeCurveSourceSeries = computed(() =>
   createRuntimeCurveSourceSeries(
-    props.runtimeProjection,
+    runtimeOutputView.value,
     runtimeStatePointContextByDeltaId.value
   )
 );
@@ -601,14 +591,14 @@ const selectedRuntimeCurveResultContext = computed(() =>
     selectedRuntimeCurvePoint.value
   )
 );
-const selectedRuntimeCurveActionEditTarget = computed(() =>
-  selectedRuntimeCurveActionEditCommand.value.target
+const selectedRuntimeCurveActionEditTarget = computed(
+  () => selectedRuntimeCurveActionEditCommand.value.target
 );
 const selectedRuntimeCurveActionEditButtonLabel = computed(
   () => '编辑结果动作'
 );
-const selectedRuntimeCurveActionEditCommand = computed(() =>
-  selectedRuntimeCurveCommandView.value.focus
+const selectedRuntimeCurveActionEditCommand = computed(
+  () => selectedRuntimeCurveCommandView.value.focus
 );
 const selectedRuntimeCurveCommandView = computed(() =>
   createWorkbenchRuntimeReviewPanelCommandViewFromSurface({
@@ -671,14 +661,14 @@ function formatRuntimeActorEnergyState(actor) {
 }
 
 function createRuntimeCurveSourceSeries(
-  runtimeProjection,
+  runtimeOutputView,
   runtimeContextByDeltaId
 ) {
-  if (!runtimeProjection) {
+  if (!runtimeOutputView?.ready) {
     return [];
   }
-  const enemyStateCurve = getRuntimeEnemyStateCurve(runtimeProjection);
-  const resourceCurveRows = getRuntimeResourceCurveRows(runtimeProjection);
+  const enemyStateCurve = runtimeOutputView.enemyStateCurve;
+  const resourceCurveRows = runtimeOutputView.resourceCurveRows;
 
   return [
     createRuntimeEnemyCurveSeries({
@@ -1050,10 +1040,7 @@ function getSelectedRuntimeCurveResultContext(panelView, context, point) {
     return commandContext;
   }
   if (
-    isRuntimeResultReturnContextForPoint(
-      panelView?.resultReturnContext,
-      point
-    )
+    isRuntimeResultReturnContextForPoint(panelView?.resultReturnContext, point)
   ) {
     return panelView.resultReturnContext;
   }
@@ -1179,8 +1166,11 @@ function getRuntimeCurvePointFlowAction(point) {
 }
 
 function compareRuntimeCurveNavigationPoints(left, right, runtimeOrderById) {
-  const runtimeOrder =
-    compareRuntimeCurveRuntimeOrder(left, right, runtimeOrderById);
+  const runtimeOrder = compareRuntimeCurveRuntimeOrder(
+    left,
+    right,
+    runtimeOrderById
+  );
   if (runtimeOrder !== 0) {
     return runtimeOrder;
   }
@@ -1277,7 +1267,11 @@ h2 {
   font-size: 15px;
 }
 
-.resource-monitor-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .panel-title {
+.resource-monitor-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .panel-title {
   padding: 10px 12px;
 }
 
@@ -1308,25 +1302,38 @@ h2 {
   font-size: 15px;
 }
 
-.resource-monitor-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .resource-summary {
+.resource-monitor-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .resource-summary {
   gap: 6px;
   padding: 10px 12px;
 }
 
-.resource-monitor-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review'])
+.resource-monitor-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
   .resource-summary
   div {
   padding: 6px 7px;
 }
 
-.resource-monitor-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review'])
+.resource-monitor-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
   .resource-summary
   span {
   margin-bottom: 2px;
   font-size: 11px;
 }
 
-.resource-monitor-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review'])
+.resource-monitor-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
   .resource-summary
   strong {
   font-size: 13px;
@@ -1342,7 +1349,10 @@ h2 {
   background: rgba(121, 199, 185, 0.07);
 }
 
-.resource-monitor-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review'])
+.resource-monitor-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
   .runtime-resource-monitor {
   gap: 8px;
   margin: 0 12px 12px;
@@ -1443,7 +1453,10 @@ h2 {
   background: rgba(255, 255, 255, 0.04);
 }
 
-.resource-monitor-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review'])
+.resource-monitor-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
   .runtime-curve-panel {
   gap: 6px;
   padding: 7px;
@@ -1492,7 +1505,10 @@ h2 {
   background: #171c22;
 }
 
-.resource-monitor-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review'])
+.resource-monitor-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
   .runtime-curve-chart {
   min-height: 96px;
 }
@@ -1534,7 +1550,10 @@ h2 {
   background: rgba(15, 20, 25, 0.64);
 }
 
-.resource-monitor-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review'])
+.resource-monitor-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
   .runtime-curve-selection {
   gap: 6px;
   padding: 7px;
@@ -1643,7 +1662,10 @@ h2 {
   background: rgba(121, 199, 185, 0.09);
 }
 
-.resource-monitor-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review'])
+.resource-monitor-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
   .runtime-curve-selection-primary {
   padding: 7px 8px;
 }
@@ -1688,7 +1710,10 @@ h2 {
   background: rgba(255, 255, 255, 0.045);
 }
 
-.resource-monitor-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review'])
+.resource-monitor-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
   .runtime-curve-selection-row {
   padding: 5px 6px;
 }

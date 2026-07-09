@@ -1,8 +1,4 @@
-import {
-  createRuntimeStatePointContexts,
-  getRuntimeEnemyStateCurve,
-  getRuntimeResourceCurveRows,
-} from './runtimeProjectionPoints';
+import { createWorkbenchRuntimeOutputConsumerView } from './runtimeProjectionPoints';
 import { createThreeValueCalculatorDisplayRows } from '../../simulation/threeValueCalculatorAdapters';
 
 const RUNTIME_TRACK_META = {
@@ -31,8 +27,9 @@ export function createRuntimeSelectedDetail({
     return null;
   }
 
-  const runtimeStatePointContexts =
-    createRuntimeStatePointContexts(runtimeProjection);
+  const runtimeOutputView =
+    createWorkbenchRuntimeOutputConsumerView(runtimeProjection);
+  const runtimeStatePointContexts = runtimeOutputView.statePointContexts;
   const selectedContext = runtimeStatePointContexts.find(
     context => context.statePointId === selectedStateCurvePointId
   );
@@ -41,7 +38,7 @@ export function createRuntimeSelectedDetail({
   }
 
   const runtimePointRows = createRuntimePointRows(
-    runtimeProjection,
+    runtimeOutputView,
     runtimeStatePointContexts
   );
   const pointRow = runtimePointRows.find(
@@ -141,9 +138,9 @@ export function createRuntimeSelectedDetail({
   };
 }
 
-function createRuntimePointRows(runtimeProjection, runtimeStatePointContexts) {
-  const enemyStateCurve = getRuntimeEnemyStateCurve(runtimeProjection);
-  const resourceCurveRows = getRuntimeResourceCurveRows(runtimeProjection);
+function createRuntimePointRows(runtimeOutputView, runtimeStatePointContexts) {
+  const enemyStateCurve = runtimeOutputView.enemyStateCurve;
+  const resourceCurveRows = runtimeOutputView.resourceCurveRows;
   const contextByDeltaId = createRuntimeContextByDeltaId(
     runtimeStatePointContexts
   );

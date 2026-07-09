@@ -1027,7 +1027,7 @@ import {
   createStateCurveFrameGroupKey,
   createStateCurvePointId,
 } from './stateCurvePointIdentity';
-import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
+import { createWorkbenchRuntimeOutputConsumerView } from './runtimeProjectionPoints';
 import {
   createWorkbenchMainFlowActionSurface,
   createWorkbenchRuntimeReviewOperationCommandFromSurface,
@@ -1354,8 +1354,11 @@ const threeValueCalculatorDiagnosticRows = computed(() =>
     }),
   ].filter(Boolean)
 );
-const runtimeStatePointContexts = computed(() =>
-  createRuntimeStatePointContexts(props.runtimeProjection)
+const runtimeOutputView = computed(() =>
+  createWorkbenchRuntimeOutputConsumerView(props.runtimeProjection)
+);
+const runtimeStatePointContexts = computed(
+  () => runtimeOutputView.value.statePointContexts
 );
 const runtimeStatePointIds = computed(
   () =>

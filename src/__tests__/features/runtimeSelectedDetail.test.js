@@ -161,4 +161,98 @@ describe('runtime selected detail', () => {
       ])
     );
   });
+
+  it('resolves detail from the runtimeOutputs envelope before legacy projection fields', () => {
+    const runtimeOutputs = {
+      simLog: [
+        {
+          sourceDeltaId: 'runtime-output-hp-delta',
+          actionId: 'action-0001',
+          actionName: '普通攻击',
+          frameIndex: 18,
+          sequenceIndex: 0,
+          trackKey: 'enemyHpDamage',
+          layerKey: 'applied',
+          hpDelta: 320,
+        },
+      ],
+      stateCurves: {
+        enemy: {
+          stateMetrics: {
+            hp: {
+              initialValue: 1000,
+              deltaDirection: 'decrease',
+              stateLabel: '剩余',
+              baselineStatus: 'baseline-derived-from-scenario-enemy-max-hp',
+            },
+          },
+          points: [
+            {
+              sourceDeltaId: 'runtime-output-hp-delta',
+              actionId: 'action-0001',
+              actionName: '普通攻击',
+              frameIndex: 18,
+              sequenceIndex: 0,
+              trackKey: 'enemyHpDamage',
+              layerKey: 'applied',
+              delta: 320,
+              hpDelta: 320,
+            },
+          ],
+        },
+      },
+      resourceCurves: {
+        curvesByActor: [],
+      },
+      outputSummary: {
+        simLogCount: 1,
+        enemyHpDelta: 320,
+      },
+    };
+    const runtimeProjection = {
+      runtimeOutputs,
+      simLog: [
+        {
+          sourceDeltaId: 'legacy-hp-delta',
+          actionId: 'legacy-action',
+          actionName: '旧动作',
+          trackKey: 'enemyHpDamage',
+          hpDelta: 999,
+        },
+      ],
+      stateCurves: {
+        enemy: {
+          points: [
+            {
+              sourceDeltaId: 'legacy-hp-delta',
+              actionId: 'legacy-action',
+              trackKey: 'enemyHpDamage',
+              hpDelta: 999,
+            },
+          ],
+        },
+      },
+    };
+
+    const hpStatePointId = createRuntimeStatePointContexts(
+      runtimeProjection
+    ).find(
+      context => context.row.sourceDeltaId === 'runtime-output-hp-delta'
+    )?.statePointId;
+    const detail = createRuntimeSelectedDetail({
+      runtimeProjection,
+      selectedStateCurvePointId: hpStatePointId,
+    });
+
+    expect(detail).toMatchObject({
+      statePointId: hpStatePointId,
+      sourceDeltaId: 'runtime-output-hp-delta',
+      actionId: 'action-0001',
+      actionName: '普通攻击',
+      trackKey: 'enemyHpDamage',
+      delta: 320,
+      cumulative: 320,
+      stateValue: 680,
+    });
+  });
 });

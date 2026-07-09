@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  createWorkbenchRuntimeOutputConsumerView,
   createRuntimePointByDeltaId,
   createRuntimeStatePointContexts,
   findFirstRuntimeStatePointForAction,
@@ -9,7 +10,6 @@ import {
   getRuntimeSimLogCount,
   getRuntimeSimLogRows,
 } from '../../features/workbench/runtimeProjectionPoints';
-import { createThreeValueRuntimeOutputConsumerView } from '../../simulation/runtime/threeValueRuntimeOutputConsumer';
 
 describe('runtime projection points', () => {
   it('prefers runtime state/resource curves and keeps legacy fields as fallback', () => {
@@ -260,10 +260,12 @@ describe('runtime projection points', () => {
     expect(getRuntimeResourceCurveRows(runtimeProjection)).toEqual([
       expect.objectContaining({ actorId: 'actor-001' }),
     ]);
-    expect(
-      createThreeValueRuntimeOutputConsumerView(runtimeProjection)
-    ).toMatchObject({
-      sourceKind: 'azpr-three-value-runtime-output-consumer-view',
+    const workbenchRuntimeOutputView =
+      createWorkbenchRuntimeOutputConsumerView(runtimeProjection);
+    expect(workbenchRuntimeOutputView).toMatchObject({
+      sourceKind: 'workbench-runtime-output-consumer-view',
+      runtimeConsumerSourceKind:
+        'azpr-three-value-runtime-output-consumer-view',
       status: 'runtime-output-consumer-view-ready',
       outputSummary: {
         outputCount: 4,
@@ -279,7 +281,23 @@ describe('runtime projection points', () => {
         ],
       },
       resourceCurveRows: [expect.objectContaining({ actorId: 'actor-001' })],
+      outputPanelSummary: {
+        simLogCount: 1,
+        statePointContextCount: 1,
+        projectionPointCount: 2,
+      },
     });
+    expect([...workbenchRuntimeOutputView.pointByDeltaId.keys()]).toEqual([
+      'runtime-output-hp-delta',
+      'runtime-output-energy-delta',
+    ]);
+    expect(workbenchRuntimeOutputView.statePointContexts).toEqual([
+      expect.objectContaining({
+        row: expect.objectContaining({
+          sourceDeltaId: 'runtime-output-hp-delta',
+        }),
+      }),
+    ]);
     expect(createRuntimeStatePointContexts(runtimeOutputs)).toEqual([
       expect.objectContaining({
         row: expect.objectContaining({

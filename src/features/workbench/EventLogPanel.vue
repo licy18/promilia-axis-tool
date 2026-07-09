@@ -308,7 +308,7 @@ import { computed, nextTick, ref, watch } from 'vue';
 import { Aim, EditPen, Tickets } from '@element-plus/icons-vue';
 import { createRuntimeDetailCalculatorRows } from './runtimeSelectedDetail';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
-import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
+import { createWorkbenchRuntimeOutputConsumerView } from './runtimeProjectionPoints';
 import {
   createWorkbenchFlowRuntimeActionEditTarget,
   createWorkbenchRuntimeReviewPanelView,
@@ -379,8 +379,11 @@ const selectedRuntimeLogIndex = ref(0);
 const runtimeTrackFilter = ref('all');
 const runtimeActorFilter = ref('all');
 const runtimeActionFilter = ref('all');
-const runtimeStatePointContexts = computed(() =>
-  createRuntimeStatePointContexts(props.runtimeProjection)
+const runtimeOutputView = computed(() =>
+  createWorkbenchRuntimeOutputConsumerView(props.runtimeProjection)
+);
+const runtimeStatePointContexts = computed(
+  () => runtimeOutputView.value.statePointContexts
 );
 const runtimeContextByRow = computed(
   () =>

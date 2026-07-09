@@ -12473,6 +12473,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续运行时层能力块：让 runtime summary / state curves / resource curves 的消费合同进一步覆盖 Workbench 主要面板，随后再回到 UI 主流程做更完整的编辑与结果复盘体验。
 
+### 2026-07-09：运行时层 - Workbench runtime output view 覆盖主要面板
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- Workbench 新增统一的 `createWorkbenchRuntimeOutputConsumerView()`，把 runtime consumer view、运行点、delta 索引和导航顺序整理成主要面板可直接消费的视图。
+- 资源监控、模拟日志、分析面板和三值详情解析改为读取同一份 Workbench runtime output view，减少各面板重复理解 `runtimeOutputs` / legacy projection 字段。
+- 三值结果、曲线数值、日志行和 UI 信息量不变；本阶段仍不引入新公式、不补倍率、不做证据考古。
+
+当前验证事实：
+
+- `runtimeProjectionPoints` 现在导出 Workbench-facing consumer view，并继续保留原 getter 作为兼容入口。
+- `ResourceMonitorPanel` 使用同一 view 读取 summary、敌人状态曲线、资源曲线、运行点上下文和运行点排序。
+- `EventLogPanel`、`AnalysisPanel`、`runtimeSelectedDetail` 使用同一 view 读取运行点上下文；详情解析新增回归，确认 `runtimeOutputs` 优先于旧 projection 字段。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/runtimeSelectedDetail.test.js src/__tests__/features/workbenchFlowContractContext.test.js`：通过，3 个测试文件、9 条测试。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、76 条测试。
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/runtimeSelectedDetail.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，5 个测试文件、85 条测试。
+- `npx prettier --check src/features/workbench/runtimeProjectionPoints.js src/features/workbench/ResourceMonitorPanel.vue src/features/workbench/EventLogPanel.vue src/features/workbench/AnalysisPanel.vue src/features/workbench/runtimeSelectedDetail.js src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/runtimeSelectedDetail.test.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续运行时层能力块：把 runtime output view 的 summary/consistency 状态进一步接入主流程调度和端到端验收；稳定后再回到 UI 主流程做结果复盘与编辑效率提升。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

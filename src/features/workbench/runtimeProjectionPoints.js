@@ -10,6 +10,38 @@ import {
   getThreeValueRuntimeSimLogRows,
 } from '../../simulation/runtime/threeValueRuntimeOutputConsumer';
 
+export function createWorkbenchRuntimeOutputConsumerView(runtimeProjection) {
+  const consumerView =
+    createThreeValueRuntimeOutputConsumerView(runtimeProjection);
+  const projectionPoints =
+    createRuntimeProjectionPointsFromConsumerView(consumerView);
+  const pointByDeltaId =
+    createRuntimePointByDeltaIdFromPoints(projectionPoints);
+  const statePointContexts = createRuntimeStatePointContextsFromRows(
+    consumerView.simLog,
+    pointByDeltaId
+  );
+
+  return {
+    ...consumerView,
+    sourceKind: 'workbench-runtime-output-consumer-view',
+    runtimeConsumerSourceKind: consumerView.sourceKind,
+    projectionPoints,
+    pointByDeltaId,
+    statePointContexts,
+    statePointContextByDeltaId:
+      createRuntimeStatePointContextByDeltaId(statePointContexts),
+    statePointContextById:
+      createRuntimeStatePointContextById(statePointContexts),
+    statePointOrderById: createRuntimeStatePointOrderById(statePointContexts),
+    outputPanelSummary: {
+      ...consumerView.summary,
+      statePointContextCount: statePointContexts.length,
+      projectionPointCount: projectionPoints.length,
+    },
+  };
+}
+
 export function getRuntimeOutputContract(runtimeProjection) {
   return getThreeValueRuntimeOutputContract(runtimeProjection);
 }
@@ -42,8 +74,11 @@ export function getRuntimeResourceCurveRows(runtimeProjection) {
 }
 
 export function createRuntimeProjectionPoints(runtimeProjection) {
-  const consumerView =
-    createThreeValueRuntimeOutputConsumerView(runtimeProjection);
+  return createWorkbenchRuntimeOutputConsumerView(runtimeProjection)
+    .projectionPoints;
+}
+
+function createRuntimeProjectionPointsFromConsumerView(consumerView) {
   const enemyStateCurve = consumerView.enemyStateCurve;
   const resourceCurveRows = consumerView.resourceCurveRows;
   return [
@@ -60,8 +95,13 @@ export function createRuntimeProjectionPoints(runtimeProjection) {
 }
 
 export function createRuntimePointByDeltaId(runtimeProjection) {
+  return createWorkbenchRuntimeOutputConsumerView(runtimeProjection)
+    .pointByDeltaId;
+}
+
+function createRuntimePointByDeltaIdFromPoints(points) {
   const byId = new Map();
-  for (const point of createRuntimeProjectionPoints(runtimeProjection)) {
+  for (const point of points) {
     if (point?.sourceDeltaId) {
       byId.set(point.sourceDeltaId, point);
     }
@@ -70,11 +110,40 @@ export function createRuntimePointByDeltaId(runtimeProjection) {
 }
 
 export function createRuntimeStatePointContexts(runtimeProjection) {
-  const pointByDeltaId = createRuntimePointByDeltaId(runtimeProjection);
-  return getRuntimeSimLogRows(runtimeProjection)
+  return createWorkbenchRuntimeOutputConsumerView(runtimeProjection)
+    .statePointContexts;
+}
+
+function createRuntimeStatePointContextsFromRows(rows, pointByDeltaId) {
+  return (rows ?? [])
     .map(row => createRuntimeStatePointContext(row, pointByDeltaId))
     .filter(Boolean)
     .sort((left, right) => compareRuntimeStateRows(left.row, right.row));
+}
+
+function createRuntimeStatePointContextByDeltaId(statePointContexts) {
+  return new Map(
+    (statePointContexts ?? [])
+      .filter(context => context.row?.sourceDeltaId)
+      .map(context => [context.row.sourceDeltaId, context])
+  );
+}
+
+function createRuntimeStatePointContextById(statePointContexts) {
+  return new Map(
+    (statePointContexts ?? [])
+      .filter(context => context.statePointId)
+      .map(context => [context.statePointId, context])
+  );
+}
+
+function createRuntimeStatePointOrderById(statePointContexts) {
+  return new Map(
+    (statePointContexts ?? []).map((context, index) => [
+      context.statePointId,
+      index,
+    ])
+  );
 }
 
 export function findFirstRuntimeStatePointForAction(

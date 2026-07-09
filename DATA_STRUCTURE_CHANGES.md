@@ -22601,3 +22601,69 @@ consumerContractStatus
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/runtimeSelectedDetail.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、77 条测试。
 - `npx prettier --check src/simulation/runtime/threeValueRuntimeOutputConsumer.js src/simulation/runtime/threeValueRuntimeProjection.js src/features/workbench/runtimeProjectionPoints.js src/features/workbench/workbenchFlowContractContext.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/workbenchFlowContractContext.test.js PROJECT_MANUAL.md`：通过。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 316. Workbench 运行输出消费视图：Workbench Runtime Output Consumer View
+
+### 316.1 结构变化
+
+`runtimeProjectionPoints` 新增 Workbench-facing view：
+
+```text
+createWorkbenchRuntimeOutputConsumerView(runtimeProjection)
+```
+
+返回值基于 `createThreeValueRuntimeOutputConsumerView()`，并额外提供：
+
+```text
+sourceKind = workbench-runtime-output-consumer-view
+runtimeConsumerSourceKind
+projectionPoints
+pointByDeltaId
+statePointContexts
+statePointContextByDeltaId
+statePointContextById
+statePointOrderById
+outputPanelSummary
+```
+
+其中：
+
+- `projectionPoints` 是敌人状态曲线点与资源曲线点合并后的运行点列表。
+- `pointByDeltaId` 是按 `sourceDeltaId` 建立的曲线点索引。
+- `statePointContexts` 是模拟日志行与曲线点绑定后的 Workbench 运行点上下文。
+- `statePointContextByDeltaId` / `statePointContextById` / `statePointOrderById` 是面板联动、日志定位和曲线导航使用的索引。
+- `outputPanelSummary` 在 runtime output summary 基础上补充 `statePointContextCount` 和 `projectionPointCount`。
+
+原有导出函数继续保留：
+
+```text
+getRuntimeOutputSummary
+getRuntimeSimLogRows
+getRuntimeSimLogCount
+getRuntimeEnemyStateCurve
+getRuntimeResourceCurveRows
+createRuntimeProjectionPoints
+createRuntimePointByDeltaId
+createRuntimeStatePointContexts
+findFirstRuntimeStatePointForAction
+```
+
+这些函数内部改为复用 `createWorkbenchRuntimeOutputConsumerView()`，作为旧调用方的兼容入口。
+
+### 316.2 保存与迁移
+
+不新增项目草稿字段，不改变导入导出 schema，不需要数据迁移。
+
+本阶段只改变 Workbench 前端读取 runtime outputs 的消费视图；不改变 runtime output 原始数据、三值计算结果、公式、倍率、证据字段、运行日志行或曲线数值。
+
+### 316.3 验证
+
+- `runtimeProjectionPoints.test.js` 覆盖 Workbench runtime output view 的 `projectionPoints`、`pointByDeltaId`、`statePointContexts` 和面板摘要。
+- `runtimeSelectedDetail.test.js` 覆盖三值详情优先从 `runtimeOutputs` envelope 解析，而不是读取旧 projection 字段。
+- `workbenchFlowContractContext.test.js` 继续覆盖主流程合同上下文读取 runtime outputs 状态。
+- `Workbench.test.js` 继续覆盖资源曲线、模拟日志、分析面板、三值详情与主流程联动。
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/runtimeSelectedDetail.test.js src/__tests__/features/workbenchFlowContractContext.test.js`：通过，3 个测试文件、9 条测试。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、76 条测试。
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/runtimeSelectedDetail.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，5 个测试文件、85 条测试。
+- `npx prettier --check src/features/workbench/runtimeProjectionPoints.js src/features/workbench/ResourceMonitorPanel.vue src/features/workbench/EventLogPanel.vue src/features/workbench/AnalysisPanel.vue src/features/workbench/runtimeSelectedDetail.js src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/runtimeSelectedDetail.test.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
