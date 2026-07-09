@@ -1197,6 +1197,84 @@ test('keeps saved draft restore tied to runtime result selection', async ({
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps reset draft usable for a fresh runtime edit loop', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+  await createThreeActionRuntime(page);
+
+  await page.locator('.action-item[data-action-id="action-0002"]').click();
+  await page.getByTestId('workbench-save-draft').click();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已保存草稿'
+  );
+
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '3 action'
+  );
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-action-id',
+    'action-0002'
+  );
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已重置草稿'
+  );
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '1 action'
+  );
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-action-id',
+    'action-0001'
+  );
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'action-edit'
+  );
+  await expect(page.getByTestId('workbench-level-input')).toHaveValue('1');
+  await expect(page.getByTestId('workbench-damage-segment-select')).toHaveValue(
+    '0'
+  );
+  expect(await readStoredWorkbenchDraft(page)).toBeNull();
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  const resetRuntimeState = await waitForRuntimeAction(page, 'action-0001');
+  expectRuntimeReviewState(resetRuntimeState, {
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: false,
+  });
+  expectRuntimeStatePointSynced(
+    resetRuntimeState,
+    resetRuntimeState.statePointId
+  );
+
+  await focusRuntimeDetailAction(page);
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
+    actionId: 'action-0001',
+    frameValue: '12',
+    msValue: '200',
+    originStatePointId: resetRuntimeState.statePointId,
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(returnedState, returnedState.statePointId);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '有未保存改动'
+  );
+  expect(await readStoredWorkbenchDraft(page)).toBeNull();
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps result rows stable across multi-action edits', async ({ page }) => {
   const browserIssues = collectBrowserIssues(page);
   const { copiedState } = await createThreeActionRuntime(page);

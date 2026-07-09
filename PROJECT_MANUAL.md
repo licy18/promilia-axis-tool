@@ -12420,6 +12420,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议继续 UI 主流程：补完整编辑体验中的草稿重置/恢复后再编辑路径，或者转入运行时层，整理 runtime outputs 对 UI 的稳定消费合同。
 
+### 2026-07-09：UI 主流程可见闭环 - 重置后重新编辑
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 浏览器级主流程现在覆盖保存草稿、刷新恢复、重置草稿、重新运行模拟、再次编辑动作并查看刷新结果的完整路径。
+- 用户重置草稿后会回到默认单动作排轴，localStorage 草稿被清空；随后仍可运行模拟、从结果详情进入动作编辑、修改起始帧并回到刷新结果。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、生成层合同、运行时输出、保存 schema 或 DATA_STRUCTURE_CHANGES。
+
+当前验证事实：
+
+- `workbench-continuous-edit.spec.js` 新增重置后再编辑路径：保存 `action-0002` 多动作草稿 -> 页面刷新恢复 -> 重置 -> 运行默认 `action-0001` -> 编辑起始帧 -> 查看刷新结果。
+- 重置后确认 `scenario-action-count = 1 action`、选中 `action-0001`、等级和动作形态回到默认值，localStorage 草稿为空。
+- 再次编辑后确认资源曲线、模拟日志、三值详情和动作结果定位到刷新后的 `action-0001` 状态点，草稿状态为“有未保存改动”。
+
+验收结果：
+
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps reset draft usable for a fresh runtime edit loop"`：通过，1 条浏览器级主流程闭环测试。
+- `npx prettier --check PROJECT_MANUAL.md e2e/workbench-continuous-edit.spec.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 建议转入运行时层：整理 runtime outputs 对 UI 的稳定消费合同，减少 UI 主流程对临时字段和来源结构的耦合。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
