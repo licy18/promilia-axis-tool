@@ -1622,6 +1622,12 @@ describe('first vertical slice simulation', () => {
         standardOutputCount: 5,
         fallbackInputCount: 0,
         usesLegacyGenerationFallback: false,
+        standardGenerationBoundaryReady: true,
+        standardGenerationAggregateBoundaryReady: true,
+        generationEntryAggregateValidationStatus:
+          'generation-entry-aggregate-valid',
+        generationEntryAggregateValidationIssueCount: 0,
+        generationEntryAggregateValidationValid: true,
         inputs: {
           runtimeInputSource: {
             sourcePath:
@@ -1642,6 +1648,10 @@ describe('first vertical slice simulation', () => {
         runtimeInputSourceStatus: 'runtime-input-source-ready',
         generationOutputsSourceKind: 'azpr-three-value-generation-outputs',
         generationOutputsStatus: 'generation-outputs-ready',
+        generationEntryAggregateValidationStatus:
+          'generation-entry-aggregate-valid',
+        generationEntryAggregateValidationIssueCount: 0,
+        generationEntryAggregateValidationValid: true,
         standardContractActionCount: 1,
         standardContractHitCount: 6,
         inputDeltaCount: 16,

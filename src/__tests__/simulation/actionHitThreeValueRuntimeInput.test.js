@@ -189,6 +189,10 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
         'generation-entry-contract-valid',
       generationEntryContractValidationIssueCount: 0,
       generationEntryContractValidationValid: true,
+      generationEntryAggregateValidationStatus:
+        'generation-entry-aggregate-valid',
+      generationEntryAggregateValidationIssueCount: 0,
+      generationEntryAggregateValidationValid: true,
       generationReadSources: {
         sourceKind:
           'azpr-action-hit-three-value-runtime-input-generation-read-sources',
@@ -207,7 +211,12 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
           'generation-entry-contract-valid',
         generationEntryContractValidationIssueCount: 0,
         generationEntryContractValidationValid: true,
+        generationEntryAggregateValidationStatus:
+          'generation-entry-aggregate-valid',
+        generationEntryAggregateValidationIssueCount: 0,
+        generationEntryAggregateValidationValid: true,
         standardGenerationBoundaryReady: true,
+        standardGenerationAggregateBoundaryReady: true,
         inputs: {
           generationEntry: {
             sourceKey: 'outputs.generationEntry',
@@ -263,6 +272,10 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
           'generation-entry-contract-valid',
         generationEntryContractValidationIssueCount: 0,
         generationEntryContractValidationValid: true,
+        generationEntryAggregateValidationStatus:
+          'generation-entry-aggregate-valid',
+        generationEntryAggregateValidationIssueCount: 0,
+        generationEntryAggregateValidationValid: true,
         inputDeltaCount: 3,
         appliedDeltaCount: 1,
         ignoredDeltaCount: 2,
@@ -427,6 +440,10 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
         generationEntryContractValidationStatus:
           'generation-entry-contract-valid',
         generationEntryContractValidationValid: true,
+        generationEntryAggregateValidationStatus:
+          'generation-entry-aggregate-valid',
+        generationEntryAggregateValidationValid: true,
+        standardGenerationAggregateBoundaryReady: true,
         standardGenerationBoundaryReady: true,
         usesLegacyGenerationFallback: false,
       },
@@ -435,6 +452,9 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
         generationEntryContractValidationStatus:
           'generation-entry-contract-valid',
         generationEntryContractValidationValid: true,
+        generationEntryAggregateValidationStatus:
+          'generation-entry-aggregate-valid',
+        generationEntryAggregateValidationValid: true,
         inputDeltaCount: 1,
         appliedDeltaCount: 1,
       },
@@ -501,7 +521,12 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
           'generation-entry-contract-invalid',
         generationEntryContractValidationIssueCount: 1,
         generationEntryContractValidationValid: false,
+        generationEntryAggregateValidationStatus:
+          'generation-entry-aggregate-valid',
+        generationEntryAggregateValidationIssueCount: 0,
+        generationEntryAggregateValidationValid: true,
         standardGenerationBoundaryReady: false,
+        standardGenerationAggregateBoundaryReady: false,
         usesLegacyGenerationFallback: false,
       },
       summary: {
@@ -509,8 +534,78 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
           'generation-entry-contract-invalid',
         generationEntryContractValidationIssueCount: 1,
         generationEntryContractValidationValid: false,
+        generationEntryAggregateValidationStatus:
+          'generation-entry-aggregate-valid',
+        generationEntryAggregateValidationIssueCount: 0,
+        generationEntryAggregateValidationValid: true,
         inputDeltaCount: 1,
         appliedDeltaCount: 1,
+      },
+    });
+  });
+
+  it('marks the runtime input boundary invalid when generation aggregate validation fails', () => {
+    const standardDelta = createRuntimeInputDelta({
+      sourceDeltaId: 'standard-output-delta',
+      actionId: 'action-standard',
+      delta: 420,
+    });
+    const standardContract = createRuntimeInputContract({
+      sourceKind: 'standard-contract-from-outputs',
+      delta: standardDelta,
+    });
+    const generationOutputs = {
+      sourceKind: 'azpr-three-value-generation-outputs',
+      status: 'generation-outputs-ready',
+      outputs: {
+        generationEntry: {
+          sourceKind:
+            'azpr-action-hit-three-value-delta-standard-generation-entry',
+          status:
+            'action-hit-three-value-delta-standard-generation-entry-contract-invalid',
+          contractValidation: createGenerationEntryContractValidation({
+            valid: true,
+            aggregateValid: false,
+            aggregateIssueKeys: ['hit-aggregate-layer-fields'],
+          }),
+          runtimeInputSource: {
+            sourceKind: 'azpr-runtime-input-source-from-generation-builder',
+            status: 'runtime-input-source-ready',
+            standardContract,
+            deltas: [standardDelta],
+          },
+          standardContract,
+          deltas: [standardDelta],
+        },
+      },
+    };
+
+    const runtimeInput = createActionHitThreeValueRuntimeInput({
+      generationOutputs,
+    });
+
+    expect(runtimeInput).toMatchObject({
+      status: 'runtime-input-invalid-generation-entry-contract',
+      generationEntryContractValidationStatus:
+        'generation-entry-contract-invalid',
+      generationEntryContractValidationValid: false,
+      generationEntryAggregateValidationStatus:
+        'generation-entry-aggregate-invalid',
+      generationEntryAggregateValidationIssueCount: 1,
+      generationEntryAggregateValidationValid: false,
+      generationReadSources: {
+        generationEntryAggregateValidationStatus:
+          'generation-entry-aggregate-invalid',
+        generationEntryAggregateValidationIssueCount: 1,
+        generationEntryAggregateValidationValid: false,
+        standardGenerationBoundaryReady: false,
+        standardGenerationAggregateBoundaryReady: false,
+      },
+      summary: {
+        generationEntryAggregateValidationStatus:
+          'generation-entry-aggregate-invalid',
+        generationEntryAggregateValidationIssueCount: 1,
+        generationEntryAggregateValidationValid: false,
       },
     });
   });
@@ -561,18 +656,39 @@ function createRuntimeInputContract({ sourceKind, delta }) {
 function createGenerationEntryContractValidation({
   valid,
   issueKeys = [],
+  aggregateValid = true,
+  aggregateIssueKeys = [],
 } = {}) {
   const normalizedValid = valid !== false;
+  const normalizedAggregateValid = aggregateValid !== false;
+  const allIssueKeys = [
+    ...issueKeys,
+    ...(normalizedAggregateValid ? [] : aggregateIssueKeys),
+  ];
   return {
     schemaVersion: 1,
     sourceKind:
       'azpr-action-hit-three-value-delta-generation-entry-contract-validation',
-    status: normalizedValid
-      ? 'generation-entry-contract-valid'
-      : 'generation-entry-contract-invalid',
-    issueCount: normalizedValid ? 0 : issueKeys.length,
-    issueKeys,
-    valid: normalizedValid,
+    status:
+      normalizedValid && normalizedAggregateValid
+        ? 'generation-entry-contract-valid'
+        : 'generation-entry-contract-invalid',
+    issueCount:
+      normalizedValid && normalizedAggregateValid ? 0 : allIssueKeys.length,
+    issueKeys: normalizedValid && normalizedAggregateValid ? [] : allIssueKeys,
+    aggregateValidation: {
+      schemaVersion: 1,
+      sourceKind:
+        'azpr-action-hit-three-value-delta-generation-entry-aggregate-validation',
+      status: normalizedAggregateValid
+        ? 'generation-entry-aggregate-valid'
+        : 'generation-entry-aggregate-invalid',
+      issueCount: normalizedAggregateValid ? 0 : aggregateIssueKeys.length,
+      issueKeys: normalizedAggregateValid ? [] : aggregateIssueKeys,
+      valid: normalizedAggregateValid,
+      applied: false,
+    },
+    valid: normalizedValid && normalizedAggregateValid,
     applied: false,
   };
 }

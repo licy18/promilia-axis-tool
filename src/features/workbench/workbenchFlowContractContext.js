@@ -96,6 +96,10 @@ export function createWorkbenchFlowContractContext({
       runtimeInputGenerationReadSources.standardGenerationBoundaryReady ??
       runtimeSummary.runtimeInputGenerationStandardBoundaryReady
     ),
+    generationAggregateBoundaryReady: Boolean(
+      runtimeInputGenerationReadSources.standardGenerationAggregateBoundaryReady ??
+      runtimeSummary.runtimeInputGenerationAggregateBoundaryReady
+    ),
     generationEntryContractValidationStatus:
       runtimeInput?.generationEntryContractValidationStatus ??
       runtimeInput?.summary?.generationEntryContractValidationStatus ??
@@ -114,6 +118,24 @@ export function createWorkbenchFlowContractContext({
       runtimeInputGenerationReadSources.generationEntryContractValidationValid ??
       runtimeSummary.runtimeInputGenerationEntryContractValidationValid
     ),
+    generationEntryAggregateValidationStatus:
+      runtimeInput?.generationEntryAggregateValidationStatus ??
+      runtimeInput?.summary?.generationEntryAggregateValidationStatus ??
+      runtimeInputGenerationReadSources.generationEntryAggregateValidationStatus ??
+      runtimeSummary.runtimeInputGenerationEntryAggregateValidationStatus ??
+      '',
+    generationEntryAggregateValidationIssueCount: numberOrZero(
+      runtimeInput?.generationEntryAggregateValidationIssueCount ??
+        runtimeInput?.summary?.generationEntryAggregateValidationIssueCount ??
+        runtimeInputGenerationReadSources.generationEntryAggregateValidationIssueCount ??
+        runtimeSummary.runtimeInputGenerationEntryAggregateValidationIssueCount
+    ),
+    generationEntryAggregateValidationValid: Boolean(
+      runtimeInput?.generationEntryAggregateValidationValid ??
+      runtimeInput?.summary?.generationEntryAggregateValidationValid ??
+      runtimeInputGenerationReadSources.generationEntryAggregateValidationValid ??
+      runtimeSummary.runtimeInputGenerationEntryAggregateValidationValid
+    ),
     generationEntrySourcePath:
       runtimeInputGenerationReadInputs.generationEntry?.sourcePath ?? '',
     generationRuntimeInputSourcePath:
@@ -124,6 +146,10 @@ export function createWorkbenchFlowContractContext({
       runtimeInputGenerationReadInputs.deltas?.sourcePath ?? '',
     generationContractValidationSourcePath:
       runtimeInputGenerationReadInputs.contractValidation?.sourcePath ?? '',
+    generationAggregateValidationSourcePath: runtimeInputGenerationReadInputs
+      .contractValidation?.sourcePath
+      ? `${runtimeInputGenerationReadInputs.contractValidation.sourcePath}.aggregateValidation`
+      : (runtimeSummary.runtimeInputGenerationAggregateValidationPath ?? ''),
     appliedOnly: Boolean(runtimeInput?.appliedOnly ?? true),
     ready: isReadyStatus(runtimeInput?.status),
   };
@@ -272,9 +298,16 @@ function createWorkbenchRuntimeContractBoundary({
     Boolean(runtimeOutput.outputConsumerBoundaryStandardReady) ||
     (runtimeOutput.outputReadStandardOutputCount >= 4 &&
       !runtimeOutput.outputReadUsesLegacyFallback);
+  const generationAggregateReady =
+    Boolean(runtimeInput.generationAggregateBoundaryReady) ||
+    (generationStandardReady &&
+      runtimeInput.generationEntryAggregateValidationValid);
   const ready = Boolean(runtimeInput.ready && runtimeOutput.ready);
   const standardBoundaryReady =
-    ready && generationStandardReady && runtimeOutputStandardReady;
+    ready &&
+    generationStandardReady &&
+    generationAggregateReady &&
+    runtimeOutputStandardReady;
   const usesLegacyFallback = Boolean(
     runtimeInput.generationReadUsesLegacyFallback ||
     runtimeOutput.outputReadUsesLegacyFallback ||
@@ -303,6 +336,8 @@ function createWorkbenchRuntimeContractBoundary({
     standardBoundaryReadyState: standardBoundaryReady ? 'true' : 'false',
     generationStandardReady,
     generationStandardReadyState: generationStandardReady ? 'true' : 'false',
+    generationAggregateReady,
+    generationAggregateReadyState: generationAggregateReady ? 'true' : 'false',
     runtimeOutputStandardReady,
     runtimeOutputStandardReadyState: runtimeOutputStandardReady
       ? 'true'
@@ -356,10 +391,22 @@ function createWorkbenchRuntimeContractBoundary({
     ),
     generationEntryContractValidationValidState:
       runtimeInput.generationEntryContractValidationValid ? 'true' : 'false',
+    generationEntryAggregateValidationStatus:
+      runtimeInput.generationEntryAggregateValidationStatus ?? '',
+    generationEntryAggregateValidationIssueCount: numberOrZero(
+      runtimeInput.generationEntryAggregateValidationIssueCount
+    ),
+    generationEntryAggregateValidationValid: Boolean(
+      runtimeInput.generationEntryAggregateValidationValid
+    ),
+    generationEntryAggregateValidationValidState:
+      runtimeInput.generationEntryAggregateValidationValid ? 'true' : 'false',
     generationEntrySourcePath: runtimeInput.generationEntrySourcePath ?? '',
     generationDeltasSourcePath: runtimeInput.generationDeltasSourcePath ?? '',
     generationContractValidationSourcePath:
       runtimeInput.generationContractValidationSourcePath ?? '',
+    generationAggregateValidationSourcePath:
+      runtimeInput.generationAggregateValidationSourcePath ?? '',
     runtimeSimLogSourcePath: runtimeOutput.outputReadSimLogSourcePath ?? '',
     runtimeSummarySourcePath: runtimeOutput.outputReadSummarySourcePath ?? '',
   };

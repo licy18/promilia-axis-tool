@@ -58,9 +58,13 @@ describe('workbench flow model', () => {
         generationReadFallbackInputCount: 0,
         generationReadUsesLegacyFallback: false,
         generationStandardBoundaryReady: true,
+        generationAggregateBoundaryReady: true,
         generationEntryContractValidationStatus:
           'generation-entry-contract-valid',
         generationEntryContractValidationValid: true,
+        generationEntryAggregateValidationStatus:
+          'generation-entry-aggregate-valid',
+        generationEntryAggregateValidationValid: true,
         ready: true,
       },
       runtimeOutput: {
@@ -80,6 +84,7 @@ describe('workbench flow model', () => {
         ready: true,
         standardBoundaryReady: true,
         generationStandardReady: true,
+        generationAggregateReady: true,
         runtimeOutputStandardReady: true,
         simLogConnectedToAppliedDeltas: true,
         usesLegacyFallback: false,
@@ -100,6 +105,12 @@ describe('workbench flow model', () => {
       runtimeContractBoundaryReadyState: 'true',
       runtimeContractStandardBoundaryReady: true,
       runtimeContractStandardBoundaryReadyState: 'true',
+      runtimeContractGenerationAggregateReady: true,
+      runtimeContractGenerationAggregateReadyState: 'true',
+      runtimeContractGenerationAggregateValidationStatus:
+        'generation-entry-aggregate-valid',
+      runtimeContractGenerationAggregateValidationValid: true,
+      runtimeContractGenerationAggregateValidationValidState: 'true',
       runtimeContractUsesLegacyFallback: false,
       runtimeContractUsesLegacyFallbackState: 'false',
       simLogCount: 2,
@@ -1387,10 +1398,15 @@ function createRuntimeProjectionFixture() {
         fallbackInputCount: 0,
         usesLegacyGenerationFallback: false,
         standardGenerationBoundaryReady: true,
+        standardGenerationAggregateBoundaryReady: true,
         generationEntryContractValidationStatus:
           'generation-entry-contract-valid',
         generationEntryContractValidationIssueCount: 0,
         generationEntryContractValidationValid: true,
+        generationEntryAggregateValidationStatus:
+          'generation-entry-aggregate-valid',
+        generationEntryAggregateValidationIssueCount: 0,
+        generationEntryAggregateValidationValid: true,
         inputs: {
           generationEntry: {
             sourcePath: 'generationOutputs.outputs.generationEntry',

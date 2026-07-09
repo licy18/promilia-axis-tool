@@ -381,6 +381,20 @@ export function createWorkbenchRuntimeOutputConsistencyView({
     ),
     runtimeContractStandardBoundaryReadyState:
       runtimeContractBoundary.standardBoundaryReady ? 'true' : 'false',
+    runtimeContractGenerationAggregateReady: Boolean(
+      runtimeContractBoundary.generationAggregateReady
+    ),
+    runtimeContractGenerationAggregateReadyState:
+      runtimeContractBoundary.generationAggregateReady ? 'true' : 'false',
+    runtimeContractGenerationAggregateValidationStatus:
+      runtimeContractBoundary.generationEntryAggregateValidationStatus ?? '',
+    runtimeContractGenerationAggregateValidationValid: Boolean(
+      runtimeContractBoundary.generationEntryAggregateValidationValid
+    ),
+    runtimeContractGenerationAggregateValidationValidState:
+      runtimeContractBoundary.generationEntryAggregateValidationValid
+        ? 'true'
+        : 'false',
     runtimeContractUsesLegacyFallback: Boolean(
       runtimeContractBoundary.usesLegacyFallback
     ),

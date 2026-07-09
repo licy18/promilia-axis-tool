@@ -82,6 +82,11 @@ describe('workbench flow contract context', () => {
               'generation-entry-contract-valid',
             generationEntryContractValidationIssueCount: 0,
             generationEntryContractValidationValid: true,
+            generationEntryAggregateValidationStatus:
+              'generation-entry-aggregate-valid',
+            generationEntryAggregateValidationIssueCount: 0,
+            generationEntryAggregateValidationValid: true,
+            standardGenerationAggregateBoundaryReady: true,
             inputs: {
               generationEntry: {
                 sourcePath: 'generationOutputs.outputs.generationEntry',
@@ -237,10 +242,15 @@ describe('workbench flow contract context', () => {
         generationReadFallbackInputCount: 0,
         generationReadUsesLegacyFallback: false,
         generationStandardBoundaryReady: true,
+        generationAggregateBoundaryReady: true,
         generationEntryContractValidationStatus:
           'generation-entry-contract-valid',
         generationEntryContractValidationIssueCount: 0,
         generationEntryContractValidationValid: true,
+        generationEntryAggregateValidationStatus:
+          'generation-entry-aggregate-valid',
+        generationEntryAggregateValidationIssueCount: 0,
+        generationEntryAggregateValidationValid: true,
         generationEntrySourcePath: 'generationOutputs.outputs.generationEntry',
         generationRuntimeInputSourcePath:
           'generationOutputs.outputs.generationEntry.runtimeInputSource',
@@ -250,6 +260,8 @@ describe('workbench flow contract context', () => {
           'generationOutputs.outputs.generationEntry.deltas',
         generationContractValidationSourcePath:
           'generationOutputs.outputs.generationEntry.contractValidation',
+        generationAggregateValidationSourcePath:
+          'generationOutputs.outputs.generationEntry.contractValidation.aggregateValidation',
         appliedOnly: true,
         ready: true,
       },
@@ -302,6 +314,8 @@ describe('workbench flow contract context', () => {
         standardBoundaryReadyState: 'true',
         generationStandardReady: true,
         generationStandardReadyState: 'true',
+        generationAggregateReady: true,
+        generationAggregateReadyState: 'true',
         runtimeOutputStandardReady: true,
         runtimeOutputStandardReadyState: 'true',
         simLogConnectedToAppliedDeltas: true,
@@ -329,11 +343,18 @@ describe('workbench flow contract context', () => {
         generationEntryContractValidationIssueCount: 0,
         generationEntryContractValidationValid: true,
         generationEntryContractValidationValidState: 'true',
+        generationEntryAggregateValidationStatus:
+          'generation-entry-aggregate-valid',
+        generationEntryAggregateValidationIssueCount: 0,
+        generationEntryAggregateValidationValid: true,
+        generationEntryAggregateValidationValidState: 'true',
         generationEntrySourcePath: 'generationOutputs.outputs.generationEntry',
         generationDeltasSourcePath:
           'generationOutputs.outputs.generationEntry.deltas',
         generationContractValidationSourcePath:
           'generationOutputs.outputs.generationEntry.contractValidation',
+        generationAggregateValidationSourcePath:
+          'generationOutputs.outputs.generationEntry.contractValidation.aggregateValidation',
         runtimeSimLogSourcePath: 'runtimeOutputs.outputs.simLog',
         runtimeSummarySourcePath:
           'runtimeOutputs.outputConsumerContract.summary',

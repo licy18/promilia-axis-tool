@@ -23736,3 +23736,89 @@ threeValueGenerationBundle.summary.standardGenerationEntryAggregateValidationIss
 - `threeValueGenerationBuilder.test.js` 覆盖篡改 hit aggregate 后，`contractValidation` 在运行时消费前变为 invalid。
 - `actionHitThreeValueRuntimeInput.test.js`、`threeValueRuntimeProjection.test.js` 和 `firstVerticalSliceSimulation.test.js` 覆盖运行时输入、投影和纵切仍保持原三值结果。
 - `npm run test -- --run src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，4 个测试文件、26 条测试。
+
+## 333. 运行时聚合可信边界：Runtime Aggregate Validation Boundary
+
+### 333.1 结构变化
+
+`createActionHitThreeValueRuntimeInput()` 现在会从 `generationEntry.contractValidation.aggregateValidation` 读取聚合校验，并在 runtime input 顶层透出：
+
+```text
+generationEntryAggregateValidation
+generationEntryAggregateValidationSourceKind
+generationEntryAggregateValidationStatus
+generationEntryAggregateValidationIssueCount
+generationEntryAggregateValidationValid
+```
+
+`runtimeInput.generationReadSources` 新增：
+
+```text
+generationEntryAggregateValidationStatus
+generationEntryAggregateValidationIssueCount
+generationEntryAggregateValidationValid
+generationEntryAggregateValidationValidState
+standardGenerationAggregateBoundaryReady
+standardGenerationAggregateBoundaryReadyState
+```
+
+`runtimeInput.summary` 新增：
+
+```text
+generationEntryAggregateValidationSourceKind
+generationEntryAggregateValidationStatus
+generationEntryAggregateValidationIssueCount
+generationEntryAggregateValidationValid
+```
+
+`threeValueRuntimeProjection.summary`、`runtimeProjection.outputContract.summary` 和 `runtimeOutputs.outputSummary` 新增：
+
+```text
+runtimeInputGenerationEntryAggregateValidationStatus
+runtimeInputGenerationEntryAggregateValidationIssueCount
+runtimeInputGenerationEntryAggregateValidationValid
+runtimeInputGenerationAggregateBoundaryReady
+runtimeInputGenerationAggregateValidationPath
+```
+
+`Workbench` runtime contract context 新增：
+
+```text
+runtimeInput.generationAggregateBoundaryReady
+runtimeInput.generationEntryAggregateValidationStatus
+runtimeInput.generationEntryAggregateValidationIssueCount
+runtimeInput.generationEntryAggregateValidationValid
+runtimeInput.generationAggregateValidationSourcePath
+runtimeContractBoundary.generationAggregateReady
+runtimeContractBoundary.generationAggregateReadyState
+runtimeContractBoundary.generationEntryAggregateValidationStatus
+runtimeContractBoundary.generationEntryAggregateValidationIssueCount
+runtimeContractBoundary.generationEntryAggregateValidationValid
+runtimeContractBoundary.generationEntryAggregateValidationValidState
+runtimeContractBoundary.generationAggregateValidationSourcePath
+```
+
+Workbench 标准运行时边界现在要求：
+
+```text
+runtimeInput.generationStandardBoundaryReady = true
+runtimeInput.generationAggregateBoundaryReady = true
+runtimeOutput.outputConsumerBoundaryStandardReady = true
+simLog input source connected to applied deltas
+```
+
+换句话说，“标准入口有效”和“贡献聚合可信”会被分开记录，但都必须通过，Workbench 才会把运行时合同判定为标准边界。
+
+### 333.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只把生成入口聚合校验继续传递到运行时和 Workbench 合同边界；三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值、UI 文案和项目保存结构均不改变。
+
+### 333.3 验证
+
+- `actionHitThreeValueRuntimeInput.test.js` 覆盖 runtime input 从 generation entry 读取 aggregate validation，并在 aggregate invalid 时降级标准边界。
+- `threeValueRuntimeProjection.test.js` 覆盖 runtime projection / output contract / runtime outputs summary 透出 aggregate validation 状态。
+- `firstVerticalSliceSimulation.test.js` 覆盖真实纵切路径的 runtime input 具备 `standardGenerationAggregateBoundaryReady`。
+- `workbenchFlowContractContext.test.js` 和 `workbenchFlowModel.test.js` 覆盖 Workbench runtime contract boundary 将 aggregate validation 纳入标准边界。
+- `npm run test -- --run src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js`：通过，6 个测试文件、39 条测试。

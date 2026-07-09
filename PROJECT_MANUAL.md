@@ -13137,6 +13137,26 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 进入运行时层能力块：把 generation entry 的 aggregate validation 状态纳入 runtime input / runtime output 边界摘要，确保 Workbench 合同边界能明确区分“标准入口有效”和“聚合贡献拆分可信”。
 
+### 2026-07-09：运行时层 - Aggregate Validation 边界接入
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- runtime input 现在会读取 `generationEntry.contractValidation.aggregateValidation`，并把聚合校验状态纳入 generation read sources 和 runtime summary。
+- runtime projection、runtime output contract 与 runtime outputs summary 会继续透出 aggregate validation 状态和来源路径。
+- Workbench runtime contract boundary 现在同时要求标准生成入口有效、聚合贡献拆分可信、runtime outputs 标准、simLog 连接 applied deltas，才会判定为标准边界。
+- 本阶段不改变 UI 可见文案、三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值或草稿保存 schema。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js`：通过，6 个测试文件、39 条测试。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `333. 运行时聚合可信边界：Runtime Aggregate Validation Boundary`。
+
+下一步：
+
+- 进入 UI 主流程能力块：用现有 `@workbench-main-flow` 回归守住 runtime aggregate boundary 后的完整可见闭环；如果主流程仍稳定，再转入生成层继续收束 `Action -> Hit -> ThreeValueDelta` 的可替换数值来源。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

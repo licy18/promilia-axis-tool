@@ -72,6 +72,16 @@ export function createActionHitThreeValueRuntimeInput({
       resolvedSource.generationEntryContractValidationIssueCount,
     generationEntryContractValidationValid:
       resolvedSource.generationEntryContractValidationValid,
+    generationEntryAggregateValidation:
+      resolvedSource.generationEntryAggregateValidation,
+    generationEntryAggregateValidationSourceKind:
+      resolvedSource.generationEntryAggregateValidationSourceKind,
+    generationEntryAggregateValidationStatus:
+      resolvedSource.generationEntryAggregateValidationStatus,
+    generationEntryAggregateValidationIssueCount:
+      resolvedSource.generationEntryAggregateValidationIssueCount,
+    generationEntryAggregateValidationValid:
+      resolvedSource.generationEntryAggregateValidationValid,
     generationLayerSourceKind: resolvedSource.generationLayerSourceKind,
     generationLayerStatus: resolvedSource.generationLayerStatus,
     standardContractSourceKind: standardContract?.sourceKind ?? null,
@@ -116,6 +126,8 @@ function resolveActionHitThreeValueRuntimeInputSource({
     });
   const generationEntryContractValidation =
     generationEntryContractValidationReadSource?.value ?? null;
+  const generationEntryAggregateValidation =
+    generationEntryContractValidation?.aggregateValidation ?? null;
   const generationLayer =
     actionHitThreeValueDeltaGeneration?.threeValueGenerationLayer ??
     threeValueGenerationLayer;
@@ -142,6 +154,7 @@ function resolveActionHitThreeValueRuntimeInputSource({
     deltaReadSource,
     generationEntryContractValidationReadSource,
     generationEntryContractValidation,
+    generationEntryAggregateValidation,
   });
 
   return {
@@ -162,6 +175,16 @@ function resolveActionHitThreeValueRuntimeInputSource({
     ),
     generationEntryContractValidationValid:
       generationEntryContractValidation?.valid === true,
+    generationEntryAggregateValidation,
+    generationEntryAggregateValidationSourceKind:
+      generationEntryAggregateValidation?.sourceKind ?? null,
+    generationEntryAggregateValidationStatus:
+      generationEntryAggregateValidation?.status ?? null,
+    generationEntryAggregateValidationIssueCount: numberOrNull(
+      generationEntryAggregateValidation?.issueCount
+    ),
+    generationEntryAggregateValidationValid:
+      generationEntryAggregateValidation?.valid === true,
     generationEntrySourceKind:
       resolvedRuntimeInputSource?.generationEntrySourceKind ??
       actionHitThreeValueDeltaGeneration?.sourceKind ??
@@ -451,6 +474,7 @@ function createActionHitThreeValueGenerationReadSources({
   deltaReadSource,
   generationEntryContractValidationReadSource,
   generationEntryContractValidation,
+  generationEntryAggregateValidation,
 }) {
   const inputs = {
     generationEntry: createGenerationReadSourceView(
@@ -480,6 +504,8 @@ function createActionHitThreeValueGenerationReadSources({
   );
   const generationEntryContractValidationValid =
     generationEntryContractValidation?.valid === true;
+  const generationEntryAggregateValidationValid =
+    generationEntryAggregateValidation?.valid === true;
   const usesLegacyGenerationFallback = inputNames.some(
     inputName => inputs[inputName].legacyGenerationFallback
   );
@@ -487,6 +513,8 @@ function createActionHitThreeValueGenerationReadSources({
     generationEntryContractValidationValid &&
     standardOutputNames.length === inputNames.length &&
     !usesLegacyGenerationFallback;
+  const standardGenerationAggregateBoundaryReady =
+    standardGenerationBoundaryReady && generationEntryAggregateValidationValid;
 
   return {
     schemaVersion: 1,
@@ -510,10 +538,21 @@ function createActionHitThreeValueGenerationReadSources({
     generationEntryContractValidationValid,
     generationEntryContractValidationValidState:
       generationEntryContractValidationValid ? 'true' : 'false',
+    generationEntryAggregateValidationStatus:
+      generationEntryAggregateValidation?.status ?? '',
+    generationEntryAggregateValidationIssueCount: numberOrZero(
+      generationEntryAggregateValidation?.issueCount
+    ),
+    generationEntryAggregateValidationValid,
+    generationEntryAggregateValidationValidState:
+      generationEntryAggregateValidationValid ? 'true' : 'false',
     standardGenerationBoundaryReady,
     standardGenerationBoundaryReadyState: standardGenerationBoundaryReady
       ? 'true'
       : 'false',
+    standardGenerationAggregateBoundaryReady,
+    standardGenerationAggregateBoundaryReadyState:
+      standardGenerationAggregateBoundaryReady ? 'true' : 'false',
     usesLegacyGenerationFallback,
   };
 }
@@ -600,6 +639,12 @@ function createRuntimeInputStatus({ resolvedSource, appliedDeltas }) {
     !resolvedSource.generationEntryContractValidationValid
   ) {
     return 'runtime-input-invalid-generation-entry-contract';
+  }
+  if (
+    resolvedSource.generationEntryAggregateValidation &&
+    !resolvedSource.generationEntryAggregateValidationValid
+  ) {
+    return 'runtime-input-invalid-generation-entry-aggregate';
   }
   return appliedDeltas.length > 0
     ? 'runtime-input-ready-with-applied-deltas'
@@ -696,6 +741,14 @@ function summarizeActionHitThreeValueRuntimeInput({
       resolvedSource.generationEntryContractValidationIssueCount,
     generationEntryContractValidationValid:
       resolvedSource.generationEntryContractValidationValid,
+    generationEntryAggregateValidationSourceKind:
+      resolvedSource.generationEntryAggregateValidationSourceKind,
+    generationEntryAggregateValidationStatus:
+      resolvedSource.generationEntryAggregateValidationStatus,
+    generationEntryAggregateValidationIssueCount:
+      resolvedSource.generationEntryAggregateValidationIssueCount,
+    generationEntryAggregateValidationValid:
+      resolvedSource.generationEntryAggregateValidationValid,
     generationLayerSourceKind: resolvedSource.generationLayerSourceKind,
     generationLayerStatus: resolvedSource.generationLayerStatus,
     standardContractSourceKind: standardContract?.sourceKind ?? null,

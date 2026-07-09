@@ -174,6 +174,17 @@ function createThreeValueRuntimeOutputs({
       runtimeInputGenerationEntryContractValidationValid:
         outputContract.summary
           .runtimeInputGenerationEntryContractValidationValid,
+      runtimeInputGenerationEntryAggregateValidationStatus:
+        outputContract.summary
+          .runtimeInputGenerationEntryAggregateValidationStatus,
+      runtimeInputGenerationEntryAggregateValidationIssueCount:
+        outputContract.summary
+          .runtimeInputGenerationEntryAggregateValidationIssueCount,
+      runtimeInputGenerationEntryAggregateValidationValid:
+        outputContract.summary
+          .runtimeInputGenerationEntryAggregateValidationValid,
+      runtimeInputGenerationAggregateBoundaryReady:
+        outputContract.summary.runtimeInputGenerationAggregateBoundaryReady,
       runtimeInputGenerationEntryPath:
         outputContract.summary.runtimeInputGenerationEntryPath,
       runtimeInputGenerationRuntimeInputSourcePath:
@@ -184,6 +195,8 @@ function createThreeValueRuntimeOutputs({
         outputContract.summary.runtimeInputGenerationDeltasPath,
       runtimeInputGenerationContractValidationPath:
         outputContract.summary.runtimeInputGenerationContractValidationPath,
+      runtimeInputGenerationAggregateValidationPath:
+        outputContract.summary.runtimeInputGenerationAggregateValidationPath,
       outputConsumerContractSourceKind: outputConsumerContract.sourceKind,
       outputConsumerContractStatus: outputConsumerContract.status,
       outputConsistencyStatus: outputConsistency.status,
@@ -309,6 +322,14 @@ function createThreeValueRuntimeOutputContract({
         summary.runtimeInputGenerationEntryContractValidationIssueCount,
       runtimeInputGenerationEntryContractValidationValid:
         summary.runtimeInputGenerationEntryContractValidationValid,
+      runtimeInputGenerationEntryAggregateValidationStatus:
+        summary.runtimeInputGenerationEntryAggregateValidationStatus,
+      runtimeInputGenerationEntryAggregateValidationIssueCount:
+        summary.runtimeInputGenerationEntryAggregateValidationIssueCount,
+      runtimeInputGenerationEntryAggregateValidationValid:
+        summary.runtimeInputGenerationEntryAggregateValidationValid,
+      runtimeInputGenerationAggregateBoundaryReady:
+        summary.runtimeInputGenerationAggregateBoundaryReady,
       runtimeInputGenerationEntryPath: summary.runtimeInputGenerationEntryPath,
       runtimeInputGenerationRuntimeInputSourcePath:
         summary.runtimeInputGenerationRuntimeInputSourcePath,
@@ -318,6 +339,8 @@ function createThreeValueRuntimeOutputContract({
         summary.runtimeInputGenerationDeltasPath,
       runtimeInputGenerationContractValidationPath:
         summary.runtimeInputGenerationContractValidationPath,
+      runtimeInputGenerationAggregateValidationPath:
+        summary.runtimeInputGenerationAggregateValidationPath,
       applied: true,
     },
     applied: true,
@@ -820,6 +843,21 @@ function summarizeRuntimeInputGenerationReadSources(runtimeInput) {
       runtimeInput?.generationEntryContractValidationValid ??
       generationReadSources.generationEntryContractValidationValid
     ),
+    runtimeInputGenerationEntryAggregateValidationStatus:
+      runtimeInput?.generationEntryAggregateValidationStatus ??
+      generationReadSources.generationEntryAggregateValidationStatus ??
+      '',
+    runtimeInputGenerationEntryAggregateValidationIssueCount: numberOrZero(
+      runtimeInput?.generationEntryAggregateValidationIssueCount ??
+        generationReadSources.generationEntryAggregateValidationIssueCount
+    ),
+    runtimeInputGenerationEntryAggregateValidationValid: Boolean(
+      runtimeInput?.generationEntryAggregateValidationValid ??
+      generationReadSources.generationEntryAggregateValidationValid
+    ),
+    runtimeInputGenerationAggregateBoundaryReady: Boolean(
+      generationReadSources.standardGenerationAggregateBoundaryReady
+    ),
     runtimeInputGenerationEntryPath:
       generationReadInputs.generationEntry?.sourcePath ?? '',
     runtimeInputGenerationRuntimeInputSourcePath:
@@ -830,6 +868,10 @@ function summarizeRuntimeInputGenerationReadSources(runtimeInput) {
       generationReadInputs.deltas?.sourcePath ?? '',
     runtimeInputGenerationContractValidationPath:
       generationReadInputs.contractValidation?.sourcePath ?? '',
+    runtimeInputGenerationAggregateValidationPath: generationReadInputs
+      .contractValidation?.sourcePath
+      ? `${generationReadInputs.contractValidation.sourcePath}.aggregateValidation`
+      : '',
   };
 }
 

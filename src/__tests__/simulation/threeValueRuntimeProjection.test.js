@@ -1080,6 +1080,13 @@ describe('three value runtime projection', () => {
                 'azpr-action-hit-three-value-delta-generation-entry-contract-validation',
               status: 'generation-entry-contract-valid',
               issueCount: 0,
+              aggregateValidation: {
+                sourceKind:
+                  'azpr-action-hit-three-value-delta-generation-entry-aggregate-validation',
+                status: 'generation-entry-aggregate-valid',
+                issueCount: 0,
+                valid: true,
+              },
               valid: true,
             },
             runtimeInputSource: {
@@ -1147,6 +1154,11 @@ describe('three value runtime projection', () => {
         'generation-entry-contract-valid',
       runtimeInputGenerationEntryContractValidationIssueCount: 0,
       runtimeInputGenerationEntryContractValidationValid: true,
+      runtimeInputGenerationEntryAggregateValidationStatus:
+        'generation-entry-aggregate-valid',
+      runtimeInputGenerationEntryAggregateValidationIssueCount: 0,
+      runtimeInputGenerationEntryAggregateValidationValid: true,
+      runtimeInputGenerationAggregateBoundaryReady: true,
       runtimeInputGenerationEntryPath:
         'generationOutputs.outputs.generationEntry',
       runtimeInputGenerationRuntimeInputSourcePath:
@@ -1157,6 +1169,8 @@ describe('three value runtime projection', () => {
         'generationOutputs.outputs.generationEntry.deltas',
       runtimeInputGenerationContractValidationPath:
         'generationOutputs.outputs.generationEntry.contractValidation',
+      runtimeInputGenerationAggregateValidationPath:
+        'generationOutputs.outputs.generationEntry.contractValidation.aggregateValidation',
     });
     expect(runtimeProjection.outputContract.summary).toMatchObject({
       enemyHpDelta: 420,
@@ -1169,6 +1183,10 @@ describe('three value runtime projection', () => {
       runtimeInputGenerationEntryContractValidationStatus:
         'generation-entry-contract-valid',
       runtimeInputGenerationEntryContractValidationValid: true,
+      runtimeInputGenerationEntryAggregateValidationStatus:
+        'generation-entry-aggregate-valid',
+      runtimeInputGenerationEntryAggregateValidationValid: true,
+      runtimeInputGenerationAggregateBoundaryReady: true,
     });
     expect(runtimeProjection.runtimeOutputs.outputSummary).toMatchObject({
       enemyHpDelta: 420,
@@ -1181,6 +1199,10 @@ describe('three value runtime projection', () => {
       runtimeInputGenerationEntryContractValidationStatus:
         'generation-entry-contract-valid',
       runtimeInputGenerationEntryContractValidationValid: true,
+      runtimeInputGenerationEntryAggregateValidationStatus:
+        'generation-entry-aggregate-valid',
+      runtimeInputGenerationEntryAggregateValidationValid: true,
+      runtimeInputGenerationAggregateBoundaryReady: true,
       runtimeInputGenerationEntryPath:
         'generationOutputs.outputs.generationEntry',
       runtimeInputGenerationRuntimeInputSourcePath:
@@ -1191,6 +1213,8 @@ describe('three value runtime projection', () => {
         'generationOutputs.outputs.generationEntry.deltas',
       runtimeInputGenerationContractValidationPath:
         'generationOutputs.outputs.generationEntry.contractValidation',
+      runtimeInputGenerationAggregateValidationPath:
+        'generationOutputs.outputs.generationEntry.contractValidation.aggregateValidation',
     });
   });
 
