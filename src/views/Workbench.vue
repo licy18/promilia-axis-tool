@@ -441,7 +441,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, nextTick, onMounted, ref } from 'vue';
 import {
   Aim,
   ArrowLeft,
@@ -480,6 +480,7 @@ import {
 import {
   createWorkbenchMainFlowWorkspaceView,
   createWorkbenchFlowModel,
+  WORKBENCH_FLOW_ACTION_KINDS,
 } from '../features/workbench/workbenchFlowModel';
 import {
   createWorkbenchMainFlowActionSurface,
@@ -1592,7 +1593,68 @@ function dispatchWorkbenchFlowAction(action = {}) {
     result,
     previousState: workbenchFlowDispatchState.value,
   });
+  scheduleActionEditFocusScroll(result);
   return result;
+}
+
+function scheduleActionEditFocusScroll(result = {}) {
+  if (!shouldScrollActionEditFocusIntoView(result)) {
+    return;
+  }
+  void nextTick().then(() => {
+    scrollActionEditFocusIntoView();
+  });
+}
+
+function shouldScrollActionEditFocusIntoView(result = {}) {
+  if (!result.handled) {
+    return false;
+  }
+  return [
+    WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+    WORKBENCH_FLOW_ACTION_KINDS.FOCUS_EDIT_SOURCE,
+  ].includes(result.kind);
+}
+
+function scrollActionEditFocusIntoView() {
+  if (typeof document === 'undefined') {
+    return;
+  }
+  const target = getActionEditFocusScrollTarget(actionEditFocus.value);
+  target?.scrollIntoView?.({
+    block: 'center',
+    inline: 'nearest',
+  });
+}
+
+function getActionEditFocusScrollTarget(focus = {}) {
+  const fieldKey = normalizeActionEditScrollField(focus.fieldKey);
+  const selectors = [
+    '[data-testid="workbench-action-edit-control"][data-edit-focused="true"]',
+  ];
+  if (fieldKey) {
+    selectors.unshift(
+      `[data-testid="workbench-action-edit-control"][data-edit-field="${fieldKey}"]`
+    );
+  }
+  if (fieldKey === 'startMs' || fieldKey === 'durationMs') {
+    selectors.unshift(
+      `[data-testid="workbench-action-frame-control"][data-edit-field="${fieldKey}"]`
+    );
+  }
+  return selectors
+    .map(selector => document.querySelector(selector))
+    .find(Boolean);
+}
+
+function normalizeActionEditScrollField(fieldKey) {
+  if (fieldKey === 'damageSegmentIndex') {
+    return 'actionVariantIndex';
+  }
+  if (fieldKey === 'laneId') {
+    return 'actorCharacterId';
+  }
+  return fieldKey || '';
 }
 
 function dispatchRuntimeReviewPrimaryOperation() {

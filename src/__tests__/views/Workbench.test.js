@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import workbenchSeed from '../../data/generated/workbench-seed.json';
 import {
   WORKBENCH_DRAFT_STORAGE_KEY,
@@ -21,6 +21,7 @@ import Workbench from '../../views/Workbench.vue';
 
 describe('Workbench view', () => {
   beforeEach(() => {
+    document.body.innerHTML = '';
     window.localStorage.clear();
   });
 
@@ -1818,6 +1819,7 @@ describe('Workbench view', () => {
 
   it('drives the edit-runtime-return loop from the main flow panel', async () => {
     const wrapper = mount(Workbench, {
+      attachTo: document.body,
       global: {
         stubs: {
           RouterLink: {
@@ -1995,8 +1997,28 @@ describe('Workbench view', () => {
       'true'
     );
 
-    await editRuntimeActionButton.trigger('click');
-    await nextTick();
+    const originalScrollIntoView = Element.prototype.scrollIntoView;
+    const scrollIntoView = vi.fn();
+    Element.prototype.scrollIntoView = scrollIntoView;
+
+    try {
+      await editRuntimeActionButton.trigger('click');
+      await nextTick();
+      await nextTick();
+      await Promise.resolve();
+
+      const scrolledElement = scrollIntoView.mock.contexts.at(-1);
+      expect(scrolledElement?.getAttribute('data-testid')).toBe(
+        'workbench-action-frame-control'
+      );
+      expect(scrolledElement?.getAttribute('data-edit-field')).toBe('startMs');
+    } finally {
+      if (originalScrollIntoView) {
+        Element.prototype.scrollIntoView = originalScrollIntoView;
+      } else {
+        delete Element.prototype.scrollIntoView;
+      }
+    }
 
     expect(getLastDispatchedFlowAction(wrapper, WorkbenchFlowPanel)).toMatchObject({
       kind: 'focus-runtime-action',
