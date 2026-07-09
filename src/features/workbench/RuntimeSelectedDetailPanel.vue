@@ -233,7 +233,6 @@ import {
   createWorkbenchFlowRuntimeActionEditTarget,
   createWorkbenchRuntimeReviewPanelView,
   resolveWorkbenchMainFlowActionEditTarget,
-  resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
 import { createWorkbenchRuntimeReviewPanelCommandView } from './workbenchMainFlowActions';
 
@@ -320,14 +319,12 @@ const runtimeDetailActionEditTarget = computed(() =>
   getRuntimeDetailActionEditTarget(props.flowModel, props.detail)
 );
 const runtimeDetailResultReturnContext = computed(() =>
-  resolveWorkbenchMainFlowResultReturnTarget({
-    flowModel: props.flowModel,
-    fallbackTarget: createRuntimeResultReturnContext({
-      actionId: props.detail?.actionId ?? flowEditResult.value?.actionId,
-      focus: props.actionEditFocus,
-      resultContext: flowEditResult.value,
-      originStatePointId: runtimeDetailOriginStatePointId.value,
-    }),
+  runtimeReviewPanelView.value.resultReturnContext ??
+  createRuntimeResultReturnContext({
+    actionId: props.detail?.actionId ?? flowEditResult.value?.actionId,
+    focus: props.actionEditFocus,
+    resultContext: flowEditResult.value,
+    originStatePointId: runtimeDetailOriginStatePointId.value,
   })
 );
 const runtimeDetailResultReturnButtonVisible = computed(() =>

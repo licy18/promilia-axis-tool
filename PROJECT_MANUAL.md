@@ -10114,6 +10114,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 Workbench 页面层和运行面板之间是否还能把 selected runtime detail / result return context 合并到同一 panel view，优先减少“选中结果 -> 详情查看 -> 定位动作 -> 修改 -> 回看结果”的跨组件拼装。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Panel Detail Context
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `runtimeReviewPanelView` 现在直接携带 `runtimeDetail`、`selectedDetail`、`selectedDetailStatePointId`、`resultReturnContext` 和 result-return 状态字段。
+- `EventLogPanel` 优先通过 `runtimeReviewPanelView.selectedDetail` 读取当前运行详情，并通过 `runtimeReviewPanelView.resultReturnContext` 获取回看目标；没有 flow model 时保留原 fallback。
+- `ResourceMonitorPanel` 的曲线点回看 context 优先匹配 `runtimeReviewPanelView.resultReturnContext`，只在状态点一致时复用，避免误把其它结果点显示到当前曲线点上。
+- `RuntimeSelectedDetailPanel` 优先消费 `runtimeReviewPanelView.resultReturnContext`，让待回看刷新结果和详情回看路径共用同一个 view model。
+- 本阶段只收束运行结果面板详情和回看 context，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- flow model 单测覆盖 `runtimeReviewPanelView` 下发 selected detail 和 result return context。
+- Workbench 页面测试确认初始无详情、编辑后待回看详情、运行结果详情、日志/曲线/详情入口保持可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、67 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、246 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查运行结果面板的 command view 是否也可以直接并入 `runtimeReviewPanelView`，让“详情/日志/曲线 -> 定位动作 / 回到结果点”的命令来源进一步统一。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

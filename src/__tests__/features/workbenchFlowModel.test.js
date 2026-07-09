@@ -414,6 +414,23 @@ describe('workbench flow model', () => {
         status: 'refreshed-edit-result',
       },
     });
+    expect(readyModel.runtimeReviewPanelView).toMatchObject({
+      status: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.PENDING_RESULT,
+      selectedStatePointId: '',
+      hasSelectedDetail: false,
+      hasSelectedDetailState: 'false',
+      resultReturnContext: {
+        actionId: 'action-0002',
+        statePointId: secondPoint.statePointId,
+        originStatePointId: firstPoint.statePointId,
+      },
+      resultReturnStatePointId: secondPoint.statePointId,
+      hasResultReturnContext: true,
+      hasResultReturnContextState: 'true',
+      primaryOperationKind:
+        WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
+      returnResultEnabledState: 'true',
+    });
 
     const reviewModel = createWorkbenchFlowModel({
       runtimeProjection,
@@ -774,6 +791,19 @@ describe('workbench flow model', () => {
         source: 'resource-runtime-curve',
         runtimeLogScope: 'resource-runtime-curve',
       },
+      runtimeDetail: {
+        statePointId: firstPoint.statePointId,
+      },
+      selectedDetail: {
+        statePointId: firstPoint.statePointId,
+        trackLabel: '敌人 HP',
+      },
+      selectedDetailStatePointId: firstPoint.statePointId,
+      hasSelectedDetail: true,
+      hasSelectedDetailState: 'true',
+      resultReturnContext: null,
+      resultReturnStatePointId: '',
+      hasResultReturnContextState: 'false',
       context: {
         selectedStatePointId: firstPoint.statePointId,
         sourceKind: 'curve',
@@ -877,6 +907,17 @@ describe('workbench flow model', () => {
           selectedStatePointId: 'state-point-standalone',
           source: 'action-contribution',
         },
+        runtimeDetail: {
+          source: {
+            statePointId: 'state-point-standalone',
+            actionName: 'standalone-detail',
+          },
+          statePointId: 'state-point-standalone',
+        },
+        resultReturnContext: {
+          actionId: 'action-standalone',
+          statePointId: 'state-point-return',
+        },
         runtimeReviewOperations: {
           primaryOperationKind:
             WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
@@ -895,6 +936,14 @@ describe('workbench flow model', () => {
         runtimeLogScope: 'action-contribution',
         curveSelectionLabel: '贡献拆分定位',
       },
+      selectedDetail: {
+        actionName: 'standalone-detail',
+        statePointId: 'state-point-standalone',
+      },
+      selectedDetailStatePointId: 'state-point-standalone',
+      hasSelectedDetailState: 'true',
+      resultReturnStatePointId: 'state-point-return',
+      hasResultReturnContextState: 'true',
       primaryOperationKind:
         WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
       primaryOperationEnabledState: 'true',

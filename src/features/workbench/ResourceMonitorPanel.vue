@@ -365,7 +365,6 @@ import {
   createWorkbenchFlowRuntimeActionEditTarget,
   createWorkbenchRuntimeReviewPanelView,
   resolveWorkbenchMainFlowActionEditTarget,
-  resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
 import {
   createWorkbenchRuntimeReviewPanelCommandView,
@@ -582,7 +581,7 @@ const selectedRuntimeCurvePoint = computed(() => {
 
 const selectedRuntimeCurveResultContext = computed(() =>
   getSelectedRuntimeCurveResultContext(
-    props.flowModel,
+    runtimeReviewPanelView.value,
     flowEditResult.value,
     selectedRuntimeCurvePoint.value
   )
@@ -1033,12 +1032,21 @@ function createSelectedRuntimeCurveResultContext(context, point) {
   };
 }
 
-function getSelectedRuntimeCurveResultContext(flowModel, context, point) {
-  return resolveWorkbenchMainFlowResultReturnTarget({
-    flowModel,
-    fallbackTarget: createSelectedRuntimeCurveResultContext(context, point),
-    statePointId: point?.statePointId ?? '',
-  });
+function getSelectedRuntimeCurveResultContext(panelView, context, point) {
+  if (
+    isRuntimeResultReturnContextForPoint(
+      panelView?.resultReturnContext,
+      point
+    )
+  ) {
+    return panelView.resultReturnContext;
+  }
+  return createSelectedRuntimeCurveResultContext(context, point);
+}
+
+function isRuntimeResultReturnContextForPoint(context, point) {
+  const statePointId = context?.statePointId ?? '';
+  return Boolean(statePointId && point?.statePointId === statePointId);
 }
 
 function formatRuntimeCurveSelectionSource(

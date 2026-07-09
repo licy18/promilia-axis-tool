@@ -186,6 +186,12 @@ export function createWorkbenchFlowModel({
   const runtimeReviewPanelView = createWorkbenchRuntimeReviewPanelView({
     runtimeReviewContextView,
     runtimeReviewOperations,
+    runtimeDetail,
+    resultReturnContext:
+      runtimeResultReturnTarget ??
+      (runtimeReviewContextView.hasPendingResult
+        ? mainFlowState.resultReturnTarget
+        : null),
   });
   const mainFlowLoopState = createWorkbenchMainFlowLoopState({
     phase,
@@ -449,6 +455,7 @@ export function createWorkbenchRuntimeReviewPanelView({
   runtimeReviewOperations = null,
   runtimeReviewSelection = null,
   runtimeDetail = null,
+  resultReturnContext = null,
   selectedStateCurvePointId = '',
 } = {}) {
   const baseContext =
@@ -474,11 +481,34 @@ export function createWorkbenchRuntimeReviewPanelView({
     runtimeReviewOperations ?? flowModel?.runtimeReviewOperations ?? {};
   const focusAction = operations.focusAction ?? {};
   const returnResult = operations.returnResult ?? {};
+  const detailModel = runtimeDetail ?? flowModel?.runtimeDetail ?? {};
+  const selectedDetail = detailModel?.source ?? null;
+  const returnContext =
+    resultReturnContext ??
+    flowModel?.runtimeResultReturnTarget ??
+    (context.hasPendingResult
+      ? flowModel?.mainFlowState?.resultReturnTarget
+      : null) ??
+    null;
 
   return {
     context,
     operations,
     sourceView,
+    runtimeDetail: detailModel ?? null,
+    selectedDetail,
+    selectedDetailStatePointId:
+      selectedDetail?.statePointId ?? detailModel?.statePointId ?? '',
+    hasSelectedDetail: Boolean(selectedDetail ?? detailModel?.statePointId),
+    hasSelectedDetailState:
+      selectedDetail || detailModel?.statePointId ? 'true' : 'false',
+    resultReturnContext: returnContext,
+    resultReturnActionId: returnContext?.actionId ?? '',
+    resultReturnStatePointId: returnContext?.statePointId ?? '',
+    hasResultReturnContext: Boolean(returnContext?.statePointId),
+    hasResultReturnContextState: returnContext?.statePointId
+      ? 'true'
+      : 'false',
     status:
       context.status ?? WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.EMPTY,
     selectedActionId: context.selectedActionId ?? '',

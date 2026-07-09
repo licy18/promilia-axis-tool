@@ -327,7 +327,6 @@ import {
   createWorkbenchFlowRuntimeActionEditTarget,
   createWorkbenchRuntimeReviewPanelView,
   resolveWorkbenchMainFlowActionEditTarget,
-  resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
 import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
@@ -546,14 +545,15 @@ const selectedRuntimeStatePointId = computed(() =>
   getRuntimeStatePointIdByRow(selectedRuntimeLog.value)
 );
 const matchedRuntimeSelectedDetail = computed(() => {
+  const selectedDetail =
+    runtimeReviewPanelView.value.selectedDetail ?? props.runtimeSelectedDetail;
   if (
-    !props.runtimeSelectedDetail?.statePointId ||
-    props.runtimeSelectedDetail.statePointId !==
-      selectedRuntimeStatePointId.value
+    !selectedDetail?.statePointId ||
+    selectedDetail.statePointId !== selectedRuntimeStatePointId.value
   ) {
     return null;
   }
-  return props.runtimeSelectedDetail;
+  return selectedDetail;
 });
 const runtimeLogDetailSource = computed(() =>
   matchedRuntimeSelectedDetail.value
@@ -672,13 +672,11 @@ const runtimeLogResultReturnActionId = computed(
     ''
 );
 const runtimeLogResultReturnContext = computed(() =>
-  resolveWorkbenchMainFlowResultReturnTarget({
-    flowModel: props.flowModel,
-    fallbackTarget: createRuntimeResultReturnContext({
-      actionId: runtimeLogResultReturnActionId.value,
-      focus: props.actionEditFocus,
-      resultContext: flowEditResult.value,
-    }),
+  runtimeReviewPanelView.value.resultReturnContext ??
+  createRuntimeResultReturnContext({
+    actionId: runtimeLogResultReturnActionId.value,
+    focus: props.actionEditFocus,
+    resultContext: flowEditResult.value,
   })
 );
 const runtimeLogResultReturnCommand = computed(

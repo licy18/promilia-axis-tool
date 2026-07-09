@@ -21357,3 +21357,49 @@ runtimeReviewPanelView
 - `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、67 条测试。
 - `npm run test -- --run`：通过，37 个测试文件、246 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 292. UI 主流程能力块：Runtime Review Panel Detail Context
+
+### 292.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`runtimeReviewPanelView` 新增运行结果详情和回看 context 字段：
+
+```js
+{
+  runtimeDetail,
+  selectedDetail,
+  selectedDetailStatePointId,
+  hasSelectedDetail,
+  hasSelectedDetailState,
+  resultReturnContext,
+  resultReturnActionId,
+  resultReturnStatePointId,
+  hasResultReturnContext,
+  hasResultReturnContextState,
+}
+```
+
+字段来源：
+
+- `runtimeDetail` 来自 `workbenchFlowModel.runtimeDetail`。
+- `selectedDetail` 来自 `runtimeDetail.source`，即完整 `runtimeSelectedDetail`。
+- `resultReturnContext` 优先来自 `runtimeResultReturnTarget`；当 review context 处于 `hasPendingResult` 时，可以承接 `mainFlowState.resultReturnTarget`，用于编辑后待回看刷新结果。
+
+消费方变化：
+
+- `EventLogPanel` 优先通过 `runtimeReviewPanelView.selectedDetail` 匹配当前日志行详情，并通过 `runtimeReviewPanelView.resultReturnContext` 获取回看目标。
+- `ResourceMonitorPanel` 优先匹配 `runtimeReviewPanelView.resultReturnContext`，仅当 `statePointId` 与当前曲线点一致时复用。
+- `RuntimeSelectedDetailPanel` 优先消费 `runtimeReviewPanelView.resultReturnContext`，没有 panel view context 时再回退到本地 `createRuntimeResultReturnContext()`。
+
+### 292.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程 runtime review 的内部 panel view model，不新增持久字段，不需要数据迁移。
+
+### 292.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖 `runtimeReviewPanelView` 下发 selected detail 和 result return context。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、67 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、246 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
