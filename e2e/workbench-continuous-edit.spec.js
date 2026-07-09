@@ -1561,6 +1561,84 @@ test('keeps runtime result flow usable after deleting the focused action', async
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps runtime result flow usable after copying a generated action batch', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await seedGeneratedActionBatchDraft(page);
+  await page.goto('/#/workbench');
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'action-edit'
+  );
+  await expect(
+    page.getByTestId('workbench-action-batch-summary-count')
+  ).toHaveText('1');
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  const batchRuntimeState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(batchRuntimeState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expect(batchRuntimeState.statePointId).toContain('action-0002');
+  expectRuntimeStatePointSynced(
+    batchRuntimeState,
+    batchRuntimeState.statePointId
+  );
+
+  await page.getByTestId('workbench-summary-copy-action-batch').click();
+  await expect(
+    page.getByTestId('workbench-action-batch-summary-count')
+  ).toHaveText('2');
+  await expect(
+    page.locator('.action-item[data-action-id="action-0004"]')
+  ).toHaveAttribute('data-batch-id', 'segment-batch-0002');
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-batch-summary"][data-batch-id="segment-batch-0002"]'
+    )
+  ).toHaveAttribute('data-first-action-id', 'action-0004');
+
+  const copiedBatchState = await waitForRuntimeAction(page, 'action-0004');
+  expectRuntimeReviewState(copiedBatchState, {
+    phase: 'runtime-result',
+    actionId: 'action-0004',
+    navigationCount: '5',
+    navigationIndex: '3',
+    selected: true,
+  });
+  expect(copiedBatchState.statePointId).toContain('action-0004');
+  expect(copiedBatchState.statePointId).not.toBe(
+    batchRuntimeState.statePointId
+  );
+  expectRuntimeStatePointSynced(
+    copiedBatchState,
+    copiedBatchState.statePointId
+  );
+  await expectCurveAndLogSelection(page, copiedBatchState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+
+  await focusRuntimeDetailAction(page);
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
+    actionId: 'action-0004',
+    frameValue: '270',
+    msValue: '4500',
+    originStatePointId: copiedBatchState.statePointId,
+    navigationCount: '5',
+    navigationIndex: '3',
+    selected: true,
+  });
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps runtime result flow usable after deleting a generated action batch', async ({
   page,
 }) => {

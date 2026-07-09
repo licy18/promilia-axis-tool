@@ -22866,3 +22866,44 @@ Ctrl/Meta+D -> copyAction(selectedActionId)
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、69 条测试。
 - `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps keyboard edit shortcuts tied to runtime review flow"`：通过，1 条浏览器级闭环测试。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 321. Workbench 批次复制：Generated Batch Copy
+
+### 321.1 结构变化
+
+`ActionLibraryPanel.vue` 的批次管理新增 UI 事件：
+
+```text
+copy-action-batch(batchId)
+```
+
+`Workbench.vue` 新增运行期批次复制入口：
+
+```text
+copyActionBatch(batchId)
+createCopiedGenerationBatch(sourceBatch, actionCount)
+createNextActionIdFromUsedIds(usedActionIds)
+```
+
+复制出的动作继续使用 `generationBatch` 记录批次关系，并新增/约定以下批次元数据：
+
+```text
+generationBatch.source = "batch-copy"
+generationBatch.copiedFromBatchId = 原批次 batchId
+```
+
+复制批次会创建新的 `segment-batch-000N`，保留原动作字段、技能动作形态和组内相对时间，并把运行时选中动作切换到新批次第一条动作。
+
+### 321.2 保存与迁移
+
+不新增草稿顶层字段，不改变 `workbench-draft:v1` schema，不需要迁移。
+
+`generationBatch.copiedFromBatchId` 是可选追溯字段；旧草稿没有该字段时保持兼容。三值计算结果、公式、倍率、证据字段、运行日志行和曲线数值均不改变。
+
+### 321.3 验证
+
+- `Workbench.test.js` 覆盖从 runtime view 复制生成批次后，新批次、选中动作、运行详情、曲线选择、日志选择和结果来源行同步到复制出的第一条动作。
+- `workbench-continuous-edit.spec.js` 覆盖运行模拟 -> 复制生成批次 -> 定位复制批次结果 -> 编辑动作 -> 回到刷新后的结果定位。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、70 条测试。
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps runtime result flow usable after copying a generated action batch"`：通过，1 条浏览器级闭环测试。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。

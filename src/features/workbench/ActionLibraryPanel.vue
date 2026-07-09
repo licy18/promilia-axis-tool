@@ -159,6 +159,14 @@
         </strong>
         <div class="batch-summary-actions">
           <button
+            class="tool-button"
+            data-testid="workbench-summary-copy-action-batch"
+            type="button"
+            @click.stop="$emit('copy-action-batch', batch.batchId)"
+          >
+            复制批次
+          </button>
+          <button
             class="tool-button danger"
             data-testid="workbench-summary-delete-action-batch"
             type="button"
@@ -378,6 +386,7 @@ const emit = defineEmits([
   'add-resource-action',
   'add-enemy-event-action',
   'copy-action',
+  'copy-action-batch',
   'delete-action',
   'delete-action-batch',
   'dispatch-flow-action',
@@ -551,6 +560,9 @@ function formatBatchSource(source) {
   }
   if (source === 'skill-action-variant-split') {
     return '动作形态生成';
+  }
+  if (source === 'batch-copy') {
+    return '批次复制';
   }
   return source || '批次生成';
 }

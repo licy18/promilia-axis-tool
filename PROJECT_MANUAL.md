@@ -12609,6 +12609,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：完善批量编辑/生成批次后的复盘路径，例如批次偏移、撤销和结果定位的连续闭环。
 
+### 2026-07-09：UI 主流程可见闭环 - 批次复制与结果定位
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 批次管理新增“复制批次”，用户可以把生成出的整组动作复制成新的批次，保留组内相对间隔并整体放到原批次之后。
+- 如果用户已经在运行结果页，复制批次后会直接刷新运行结果并定位到新批次第一条动作；曲线、日志、三值详情和贡献拆分会同步到新的运行状态点。
+- 用户现在能完成：生成/载入批次 -> 运行模拟 -> 复制批次 -> 查看复制批次结果 -> 编辑该动作 -> 回到刷新后的结果定位。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、生成层合同、运行时输出或保存 schema。
+
+当前验证事实：
+
+- 复制批次会生成新的 `segment-batch`，并标记为 `batch-copy`，原批次不被修改。
+- 复制后 Workbench 会选中新批次第一条动作；在 runtime review 中会同步到对应曲线点、日志行和三值详情。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、70 条测试。
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps runtime result flow usable after copying a generated action batch"`：通过，1 条浏览器级闭环测试。
+- `npx prettier --check src/views/Workbench.vue src/features/workbench/ActionLibraryPanel.vue src/__tests__/views/Workbench.test.js e2e/workbench-continuous-edit.spec.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：把排轴编辑到运行复盘的主路径整理成更完整的 Workbench 操作流，例如批量插入/复制/删除/撤销之后的结果定位与回到编辑路径统一验收。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

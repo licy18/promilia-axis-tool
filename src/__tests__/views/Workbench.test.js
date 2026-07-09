@@ -4346,6 +4346,145 @@ describe('Workbench view', () => {
     ).toBe(shiftedStatePointId);
   });
 
+  it('copies a generated action batch and focuses the copied runtime result', async () => {
+    const secondaryCharacterId =
+      workbenchSeed.defaults.secondaryCharacterId ??
+      workbenchSeed.gameData.characters.find(
+        character => character.id !== workbenchSeed.defaults.characterId
+      ).id;
+    const generationBatch = {
+      batchId: 'segment-batch-0001',
+      source: 'skill-action-variant-split',
+      skillId: workbenchSeed.defaults.skillId,
+      actorCharacterId: workbenchSeed.defaults.characterId,
+      level: 1,
+      variantCount: 2,
+      segmentCount: 2,
+      createdAt: '2026-07-08T00:00:00.000Z',
+    };
+    const draft = createWorkbenchDraftSnapshot(
+      {
+        selection: {
+          characterId: workbenchSeed.defaults.characterId,
+          secondaryCharacterId,
+          skillId: workbenchSeed.defaults.skillId,
+          enemyId: workbenchSeed.defaults.enemyId,
+        },
+        actionDrafts: [
+          createWorkbenchActionDraft({
+            id: 'action-0001',
+            skillId: workbenchSeed.defaults.skillId,
+            actorCharacterId: workbenchSeed.defaults.characterId,
+            startMs: 0,
+          }),
+          createWorkbenchActionDraft({
+            id: 'action-0002',
+            skillId: workbenchSeed.defaults.skillId,
+            actorCharacterId: workbenchSeed.defaults.characterId,
+            startMs: 1000,
+            generationBatch,
+          }),
+          createWorkbenchActionDraft({
+            id: 'action-0003',
+            skillId: workbenchSeed.defaults.skillId,
+            actorCharacterId: workbenchSeed.defaults.characterId,
+            startMs: 2000,
+            generationBatch,
+          }),
+        ],
+        selectedActionId: 'action-0002',
+      },
+      '2026-07-08T00:00:00.000Z'
+    );
+    window.localStorage.setItem(
+      WORKBENCH_DRAFT_STORAGE_KEY,
+      JSON.stringify(draft)
+    );
+
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await nextTick();
+
+    await wrapper
+      .find('[data-testid="workbench-flow-open-runtime"]')
+      .trigger('click');
+    await nextTick();
+
+    const originalStatePointId = wrapper
+      .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+      .text();
+    expect(originalStatePointId).toContain('action-0002');
+
+    await wrapper
+      .find('[data-testid="workbench-summary-copy-action-batch"]')
+      .trigger('click');
+    await nextTick();
+
+    expect(wrapper.find('[data-testid="scenario-action-count"]').text()).toBe(
+      '5 action'
+    );
+    expect(
+      wrapper
+        .find('[data-testid="workbench-action-batch-summary-count"]')
+        .text()
+    ).toBe('2');
+    const copiedBatch = wrapper.find(
+      '[data-testid="workbench-action-batch-summary"][data-batch-id="segment-batch-0002"]'
+    );
+    expect(copiedBatch.exists()).toBe(true);
+    expect(copiedBatch.attributes('data-selected')).toBe('true');
+    expect(copiedBatch.attributes('data-first-action-id')).toBe('action-0004');
+    expect(
+      wrapper
+        .find('.action-item[data-action-id="action-0004"]')
+        .attributes('data-batch-id')
+    ).toBe('segment-batch-0002');
+    expect(
+      wrapper.find('.action-item[data-action-id="action-0004"]').classes()
+    ).toContain('selected');
+    expect(
+      wrapper.find('[data-testid="workbench-start-input"]').element.value
+    ).toBe('4000');
+
+    const flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-action-id')).toBe('action-0004');
+    expect(flowPanel.attributes('data-runtime-detail-action-id')).toBe(
+      'action-0004'
+    );
+    expect(flowPanel.attributes('data-runtime-navigation-count')).toBe('5');
+    expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('3');
+
+    const copiedStatePointId = wrapper
+      .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+      .text();
+    expect(copiedStatePointId).toContain('action-0004');
+    expect(copiedStatePointId).not.toBe(originalStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-resource-chart-selection"]')
+        .attributes('data-state-point-id')
+    ).toBe(copiedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-navigation"]')
+        .attributes('data-state-point-id')
+    ).toBe(copiedStatePointId);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-result-source-row"][data-action-id="action-0004"]'
+        )
+        .attributes('data-selected-state-point-id')
+    ).toBe(copiedStatePointId);
+  });
+
   it('keeps result detail and contribution split usable after deleting a generated action batch in the runtime view', async () => {
     const secondaryCharacterId =
       workbenchSeed.defaults.secondaryCharacterId ??

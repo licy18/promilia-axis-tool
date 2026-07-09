@@ -180,6 +180,7 @@
         @add-switch-action="addSwitchAction"
         @add-wait-action="addWaitAction"
         @copy-action="copyAction"
+        @copy-action-batch="copyActionBatch"
         @delete-action="deleteAction"
         @delete-action-batch="deleteActionBatch"
         @dispatch-flow-action="dispatchWorkbenchFlowAction"
@@ -1236,6 +1237,79 @@ function copyAction(actionId) {
   markDraftDirty();
 }
 
+function copyActionBatch(batchId) {
+  clearSegmentSplitPreview();
+  if (!batchId) {
+    return;
+  }
+
+  const sourceEntries = actionDrafts.value
+    .map((action, index) => ({ action, index }))
+    .filter(entry => entry.action.generationBatch?.batchId === batchId);
+  if (sourceEntries.length === 0) {
+    return;
+  }
+
+  const sourceActions = sourceEntries.map(entry => entry.action);
+  const sourceMinStartMs = Math.min(
+    ...sourceActions.map(action => Math.max(0, Number(action.startMs) || 0))
+  );
+  const sourceMaxStartMs = Math.max(
+    ...sourceActions.map(action => Math.max(0, Number(action.startMs) || 0))
+  );
+  const sourceMaxEndMs = Math.max(
+    ...sourceActions.map(action => {
+      const startMs = Math.max(0, Number(action.startMs) || 0);
+      return startMs + resolveDraftDurationMs(action);
+    })
+  );
+  const offsetMs = clampNumber(
+    sourceMaxEndMs + NEW_ACTION_INSERT_GAP_MS - sourceMinStartMs,
+    -sourceMinStartMs,
+    project.value.time.durationMs - sourceMaxStartMs
+  );
+  const copiedGenerationBatch = createCopiedGenerationBatch(
+    sourceActions[0].generationBatch,
+    sourceActions.length
+  );
+  const usedActionIds = new Set(actionDrafts.value.map(action => action.id));
+  const copiedActions = sourceActions.map(action =>
+    createWorkbenchActionDraft({
+      ...action,
+      id: createNextActionIdFromUsedIds(usedActionIds),
+      startMs: clampNumber(
+        (Number(action.startMs) || 0) + offsetMs,
+        0,
+        project.value.time.durationMs
+      ),
+      note: stripAutoDelayNote(action.note),
+      insertion: null,
+      generationBatch: copiedGenerationBatch,
+    })
+  );
+  if (copiedActions.length === 0) {
+    return;
+  }
+
+  recordWorkbenchHistorySnapshot();
+  const runtimeReviewState = captureActionMutationRuntimeReviewState();
+  const insertIndex = Math.max(...sourceEntries.map(entry => entry.index)) + 1;
+  actionDrafts.value = [
+    ...actionDrafts.value.slice(0, insertIndex),
+    ...copiedActions,
+    ...actionDrafts.value.slice(insertIndex),
+  ];
+  selectedActionId.value = copiedActions[0].id;
+  syncActionLibraryCharacterIdFromDraft(copiedActions[0]);
+  applyActionMutationRuntimeSyncRequest({
+    actionId: copiedActions[0].id,
+    runtimeReviewState,
+    selectedActionChanged: true,
+    affectedActionIds: copiedActions.map(action => action.id),
+  });
+  markDraftDirty();
+}
+
 function deleteAction(actionId) {
   clearSegmentSplitPreview();
   if (actionDrafts.value.length <= 1) {
@@ -2089,6 +2163,20 @@ function createSegmentGenerationBatch(preview) {
   };
 }
 
+function createCopiedGenerationBatch(sourceBatch, actionCount) {
+  const baseBatch =
+    sourceBatch && typeof sourceBatch === 'object' ? sourceBatch : {};
+  return {
+    ...baseBatch,
+    batchId: createNextSegmentBatchId(),
+    source: 'batch-copy',
+    copiedFromBatchId: String(baseBatch.batchId ?? ''),
+    variantCount: actionCount,
+    segmentCount: actionCount,
+    createdAt: new Date().toISOString(),
+  };
+}
+
 function createNextSegmentBatchId() {
   const maxIndex = actionDrafts.value.reduce((max, action) => {
     const match = String(action.generationBatch?.batchId ?? '').match(
@@ -2100,11 +2188,19 @@ function createNextSegmentBatchId() {
 }
 
 function createNextActionId() {
-  const maxIndex = actionDrafts.value.reduce((max, action) => {
-    const match = String(action.id).match(/^action-(\d+)$/);
+  return createNextActionIdFromUsedIds(
+    new Set(actionDrafts.value.map(action => action.id))
+  );
+}
+
+function createNextActionIdFromUsedIds(usedActionIds) {
+  const maxIndex = [...usedActionIds].reduce((max, actionId) => {
+    const match = String(actionId).match(/^action-(\d+)$/);
     return match ? Math.max(max, Number(match[1])) : max;
   }, 0);
-  return `action-${String(maxIndex + 1).padStart(4, '0')}`;
+  const nextActionId = `action-${String(maxIndex + 1).padStart(4, '0')}`;
+  usedActionIds.add(nextActionId);
+  return nextActionId;
 }
 
 function addInsertedAction(actionPatch, options = {}) {
