@@ -323,6 +323,93 @@ test('runs the Workbench flow panel edit-result loop end to end @workbench-main-
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps the Workbench flow panel contribution loop usable @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/workbench');
+  const flowPanel = page.getByTestId('workbench-flow-panel');
+  await expect(flowPanel).toHaveAttribute('data-flow-phase', 'action-edit');
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  const openedState = await waitForRuntimeAction(page, 'action-0001');
+  expectRuntimeReviewState(openedState, {
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: false,
+  });
+  expectRuntimeStatePointSynced(openedState, openedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+
+  const contributionButton = page.getByTestId(
+    'workbench-flow-open-contribution'
+  );
+  await expect(contributionButton).toBeEnabled();
+  await expect(contributionButton).toHaveAttribute(
+    'data-state-point-id',
+    openedState.statePointId
+  );
+  await contributionButton.click();
+
+  const contributionState = await readWorkbenchState(page);
+  expectRuntimeReviewState(contributionState, {
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(contributionState, openedState.statePointId);
+  await expectCurveAndLogSelection(page, openedState.statePointId);
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail')
+  ).toHaveAttribute('data-runtime-review-source', 'action-contribution');
+  await expect(
+    page.getByTestId('workbench-runtime-sim-log-filter-summary')
+  ).toContainText('贡献定位');
+  await expect(
+    page.getByTestId('workbench-action-contribution-panel')
+  ).toHaveAttribute('data-flow-state-point-id', openedState.statePointId);
+  await expect(
+    page
+      .locator(
+        `[data-testid="workbench-action-contribution-row"][data-state-point-id="${openedState.statePointId}"]`
+      )
+      .first()
+  ).toHaveAttribute('data-active', 'true');
+
+  const contributionEditButton = page.getByTestId(
+    'workbench-action-contribution-edit-action'
+  );
+  await expect(contributionEditButton).toHaveAttribute(
+    'data-state-point-id',
+    openedState.statePointId
+  );
+  await contributionEditButton.click();
+  await expectRuntimeFocusInEditor(page);
+
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
+    actionId: 'action-0001',
+    frameValue: '42',
+    msValue: '700',
+    originStatePointId: openedState.statePointId,
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: true,
+    returnButtonTestId: 'workbench-action-contribution-return-result',
+  });
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+  await expect(
+    page.getByTestId('workbench-action-contribution-panel')
+  ).toHaveAttribute('data-flow-state-point-id', returnedState.statePointId);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps runtime detail navigation tied to edit return', async ({
   page,
 }) => {

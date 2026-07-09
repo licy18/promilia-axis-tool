@@ -161,6 +161,44 @@ describe('WorkbenchFlowPanel', () => {
     });
   });
 
+  it('opens contribution split for the selected runtime result', async () => {
+    const wrapper = mount(WorkbenchFlowPanel, {
+      props: {
+        flowModel: createFlowModel({
+          primaryKind: 'focus-runtime-action',
+          primaryOperation: {
+            kind: 'focus-runtime-action',
+            enabled: true,
+            target: {
+              actionId: 'review-action',
+              statePointId: 'review-state-point',
+            },
+          },
+        }),
+      },
+    });
+
+    const button = wrapper.find(
+      '[data-testid="workbench-flow-open-contribution"]'
+    );
+    expect(button.attributes()).toMatchObject({
+      'data-action-id': 'detail-action',
+      'data-primary-action': 'false',
+      'data-state-point-id': 'detail-state-point',
+    });
+    expect(button.attributes('disabled')).toBeUndefined();
+
+    await button.trigger('click');
+
+    expect(getLastDispatchedFlowAction(wrapper)).toMatchObject({
+      kind: 'select-contribution-point',
+      source: 'workbench-flow-contribution',
+      actionId: 'detail-action',
+      statePointId: 'detail-state-point',
+      canRun: true,
+    });
+  });
+
   it('builds its fallback flow model from runtimeOutputs', () => {
     const runtimeProjection = {
       runtimeInput: {
@@ -434,6 +472,13 @@ function createInjectedMainFlowCommandSurface() {
     statePointId: 'surface-return-state-point',
     canRun: true,
   };
+  const contributionPointAction = {
+    kind: 'select-contribution-point',
+    source: 'shared-surface-test',
+    actionId: 'surface-action',
+    statePointId: 'surface-state-point',
+    canRun: true,
+  };
 
   return {
     openRuntimeResults: {
@@ -472,5 +517,6 @@ function createInjectedMainFlowCommandSurface() {
       runtimeActionEdit: runtimeActionEditAction,
       runtimeResultReturn: runtimeResultReturnAction,
     },
+    createContributionPointFlowAction: () => contributionPointAction,
   };
 }

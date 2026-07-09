@@ -13181,6 +13181,28 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：优先检查真实操作时主流程布局是否足够紧凑、结果定位是否容易发现、贡献拆分是否能自然接入同一复盘路径；如果可见闭环稳定，再转入生成层整理 `Action -> Hit -> ThreeValueDelta` 的统一生成入口。
 
+### 2026-07-10：UI 主流程可见闭环 - 贡献拆分主流程入口
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 主流程面板新增“贡献拆分”入口。用户在打开运行结果后，不必先在分析面板里寻找贡献行，可以直接从主流程面板把当前运行结果切到贡献拆分定位。
+- 新入口复用现有 `select-contribution-point` 主流程动作，进入后曲线、日志、三值详情和动作贡献拆分都指向同一个 runtime state point。
+- 主流程回归新增“主流程面板贡献拆分闭环”：运行模拟 -> 主流程面板进入贡献拆分 -> 在贡献详情编辑动作 -> 查看刷新结果 -> 回到刷新后的曲线、日志和贡献拆分定位。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值、运行期数据结构或草稿保存 schema；`DATA_STRUCTURE_CHANGES.md` 无需追加。
+
+验收结果：
+
+- `npm run test -- --run src\__tests__\features\WorkbenchFlowPanel.test.js`：通过，1 个测试文件、5 条测试。
+- `npm run test -- --run src\__tests__\views\Workbench.test.js`：通过，1 个测试文件、71 条测试。
+- `npm run test:e2e:workbench-flow -- -g "flow panel contribution loop"`：通过，覆盖主流程面板贡献拆分闭环。
+- `npm run test:e2e:workbench-flow`：通过，15 条 `@workbench-main-flow` 主流程回归全部通过。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查主流程面板增加贡献入口后，窄视口和完整 `@workbench-main-flow` 回归是否仍稳定；如果稳定，再评估是否转入生成层整理可替换数值来源。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

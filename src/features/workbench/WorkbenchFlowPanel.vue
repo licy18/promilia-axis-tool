@@ -214,6 +214,27 @@
         type="button"
         :class="[
           'flow-button',
+          'secondary',
+          {
+            primary: runtimeContributionButtonView.isPrimary,
+          },
+        ]"
+        :data-action-id="runtimeContributionButtonView.actionId"
+        :data-primary-action="
+          runtimeContributionButtonView.isPrimary ? 'true' : 'false'
+        "
+        :data-state-point-id="runtimeContributionButtonView.statePointId"
+        data-testid="workbench-flow-open-contribution"
+        :disabled="!runtimeContributionButtonView.enabled"
+        @click="openRuntimeContribution"
+      >
+        <DataAnalysis class="flow-button-icon" />
+        <span>贡献拆分</span>
+      </button>
+      <button
+        type="button"
+        :class="[
+          'flow-button',
           {
             primary: runtimeActionEditButtonView.isPrimary,
           },
@@ -260,6 +281,7 @@ import { computed } from 'vue';
 import {
   ArrowLeft,
   ArrowRight,
+  DataAnalysis,
   EditPen,
   TrendCharts,
 } from '@element-plus/icons-vue';
@@ -267,7 +289,10 @@ import {
   createWorkbenchMainFlowStatusView,
   createWorkbenchFlowModel,
 } from './workbenchFlowModel';
-import { createWorkbenchMainFlowCommandSurface } from './workbenchMainFlowActions';
+import {
+  createWorkbenchContributionPointFlowAction,
+  createWorkbenchMainFlowCommandSurface,
+} from './workbenchMainFlowActions';
 
 const MAIN_FLOW_PANEL_SOURCE = 'workbench-flow-panel';
 const MAIN_FLOW_RECOVERY_SOURCE = 'workbench-flow-recovery';
@@ -360,6 +385,9 @@ const runtimeResultReturnButtonView = computed(
 const runtimeResultReturnButtonLabel = computed(() =>
   formatRuntimeResultReturnButtonLabel(runtimeResultReturnButtonView.value)
 );
+const runtimeContributionButtonView = computed(() =>
+  createRuntimeContributionButtonView(workbenchFlow.value)
+);
 
 function focusRuntimeAction() {
   dispatchFlowAction(
@@ -376,6 +404,22 @@ function returnRuntimeResult() {
 function openRuntimeResults() {
   dispatchFlowAction(
     resolvedMainFlowCommandSurface.value.actions.openRuntimeResults
+  );
+}
+
+function openRuntimeContribution() {
+  const view = runtimeContributionButtonView.value;
+  const createContributionPointFlowAction =
+    resolvedMainFlowCommandSurface.value.createContributionPointFlowAction ??
+    createWorkbenchContributionPointFlowAction;
+  dispatchFlowAction(
+    createContributionPointFlowAction({
+      source: 'workbench-flow-contribution',
+      actionId: view.actionId,
+      statePointId: view.statePointId,
+      enabled: view.enabled,
+      disabledReason: 'missing-runtime-contribution-point',
+    })
   );
 }
 
@@ -400,6 +444,20 @@ function formatRuntimeResultReturnButtonLabel(buttonView = null) {
     return '回到来源结果';
   }
   return buttonView?.label || '回到刷新结果';
+}
+
+function createRuntimeContributionButtonView(flowModel = null) {
+  const runtimeDetail = flowModel?.runtimeDetail ?? {};
+  const statePointId =
+    runtimeDetail.statePointId || flowModel?.selectedStateCurvePointId || '';
+  const actionId = runtimeDetail.actionId || flowModel?.selectedActionId || '';
+  const isPrimary = flowModel?.runtimeFocusSource === 'action-contribution';
+  return {
+    actionId,
+    statePointId,
+    enabled: Boolean(statePointId),
+    isPrimary,
+  };
 }
 
 function getRuntimeNavigationFlowAction(point) {
