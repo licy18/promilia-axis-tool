@@ -697,7 +697,7 @@ test('keeps runtime log navigation tied to result review @workbench-main-flow', 
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
-test('keeps multi-action resource chart navigation tied to middle edit return', async ({
+test('keeps multi-action resource chart navigation tied to middle edit return @workbench-main-flow', async ({
   page,
 }) => {
   const browserIssues = collectBrowserIssues(page);
@@ -782,6 +782,8 @@ test('keeps multi-action resource chart navigation tied to middle edit return', 
     navigationCount: '3',
     navigationIndex: '1',
     selected: true,
+    returnButtonTestId:
+      'workbench-runtime-resource-chart-selection-return-result',
   });
   await expectCurveAndLogSelection(page, returnedState.statePointId);
   await expectRuntimeOutputConsistent(page);
@@ -794,7 +796,7 @@ test('keeps multi-action resource chart navigation tied to middle edit return', 
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
-test('keeps contribution navigation tied to multi-action edit return', async ({
+test('keeps contribution navigation tied to multi-action edit return @workbench-main-flow', async ({
   page,
 }) => {
   const browserIssues = collectBrowserIssues(page);

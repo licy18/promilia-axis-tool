@@ -13386,6 +13386,27 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查贡献拆分、日志详情和资源曲线三条复盘入口在多动作/筛选/窄屏下是否还有同类回跳断点；若主流程稳定，再转入生成层收束 `Action -> Hit -> ThreeValueDelta` 统一生成入口。
 
+### 2026-07-10：UI 主流程可见闭环 - 多动作复盘导航守门
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 将多动作资源曲线横向浏览 -> 中间动作编辑 -> 刷新结果回跳纳入 `@workbench-main-flow` 主流程回归；该路径现在使用资源曲线卡片自身的“查看刷新结果”入口完成返回。
+- 将贡献拆分导航 -> 中间动作编辑 -> 刷新结果回跳纳入 `@workbench-main-flow` 主流程回归，固定贡献拆分在多动作场景中的结果定位和回改体验。
+- 本阶段不改变三值计算结果、公式、倍率、运行期数据结构、草稿保存 schema 或 UI 文案；`DATA_STRUCTURE_CHANGES.md` 无需追加。
+
+验收结果：
+
+- `npm run test:e2e:workbench-flow -- -g "multi-action resource chart navigation"`：通过。
+- `npm run test:e2e:workbench-flow -- -g "contribution navigation tied"`：通过。
+- `npm run test -- --run src\__tests__\views\Workbench.test.js`：通过，1 个测试文件、71 条测试。
+- `npm run test:e2e:workbench-flow`：通过，20 条 `@workbench-main-flow` 主流程回归全部通过。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查日志筛选、窄屏和多动作复盘组合场景是否还有用户可见断点；若主流程守门稳定，再转入生成层整理 `Action -> Hit -> ThreeValueDelta` 统一生成入口。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
