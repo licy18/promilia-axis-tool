@@ -238,6 +238,17 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('.event-area').attributes('data-runtime-review-role')
     ).toBe('overview');
+    const overviewPrimaryOperation = runtimeReviewStack.find(
+      '[data-testid="workbench-runtime-review-primary-operation"]'
+    );
+    expect(overviewPrimaryOperation.exists()).toBe(true);
+    expect(overviewPrimaryOperation.attributes()).toMatchObject({
+      'data-action-id': 'action-0001',
+      'data-operation-kind': 'open-runtime-results',
+      'data-state-point-id': '',
+    });
+    expect(overviewPrimaryOperation.attributes('disabled')).toBeUndefined();
+    expect(overviewPrimaryOperation.text()).toBe('运行模拟');
     const sideInspector = wrapper.find(
       '[data-testid="workbench-side-inspector"]'
     );

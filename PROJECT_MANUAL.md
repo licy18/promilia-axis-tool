@@ -12530,6 +12530,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续运行时层能力块：将同一 runtime output view 的 consistency gate 接入主流程计划/恢复路径，确保运行输出异常时能明确阻止或恢复，而不是让 UI 面板各自兜底。
 
+### 2026-07-09：UI 主流程可见闭环 - 结果区主入口
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 结果区顶部主操作现在在未选中运行结果时也提供“运行模拟”入口，用户不必回到顶部流程条才能进入运行结果。
+- 同一条可见主路径现在覆盖：结果区运行模拟 -> 查看资源曲线 -> 点击曲线点/日志行 -> 查看三值详情 -> 编辑结果动作 -> 回到刷新后的结果定位。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、生成层合同、运行时输出或保存 schema。
+
+当前验证事实：
+
+- `workbench-runtime-review-primary-operation` 在 overview 状态下会使用主流程 `open-runtime-results` 动作；选中结果后仍切换为“编辑结果动作”，编辑后仍切换为“查看刷新结果”。
+- 浏览器端闭环测试已改为从结果区主入口开始，确认后续曲线、日志、详情、编辑返回仍然同步到同一个运行状态点。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、101 条测试。
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "runs the visible curve-log-detail edit loop end to end"`：通过，1 条浏览器级闭环测试。
+- `npx prettier --check src/features/workbench/workbenchMainFlowActions.js src/views/Workbench.vue src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js e2e/workbench-continuous-edit.spec.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：围绕 Endaxis 式主流程补齐更完整的编辑体验与结果复盘入口，但仍避免继续打磨微型状态标签或解释文案。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

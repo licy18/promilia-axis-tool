@@ -118,8 +118,19 @@ test('runs the visible curve-log-detail edit loop end to end', async ({
     'action-edit'
   );
 
-  await page.getByTestId('workbench-flow-open-runtime').click();
+  const reviewEntry = page.getByTestId(
+    'workbench-runtime-review-primary-operation'
+  );
+  await expect(reviewEntry).toHaveAttribute(
+    'data-operation-kind',
+    'open-runtime-results'
+  );
+  await expect(reviewEntry).toHaveText('运行模拟');
+  await reviewEntry.click();
   const openedState = await waitForRuntimeAction(page, 'action-0001');
+  await expect(
+    page.getByTestId('workbench-main-flow-workspace')
+  ).toHaveAttribute('data-main-flow-dispatch-source', 'runtime-review-primary');
   expectRuntimeReviewState(openedState, {
     phase: 'runtime-result',
     actionId: 'action-0001',

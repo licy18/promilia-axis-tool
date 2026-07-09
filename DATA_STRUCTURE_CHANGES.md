@@ -22738,3 +22738,38 @@ data-runtime-output-projection-synced
 - `npx playwright test e2e/workbench-continuous-edit.spec.js -g "runs the visible curve-log-detail edit loop end to end"`：通过，1 条浏览器级闭环测试。
 - `npx prettier --check src/simulation/runtime/threeValueRuntimeOutputConsumer.js src/features/workbench/workbenchFlowModel.js src/features/workbench/WorkbenchFlowPanel.vue src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/features/workbenchFlowContractContext.test.js e2e/workbench-continuous-edit.spec.js PROJECT_MANUAL.md`：通过。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 318. 结果区主入口：Runtime Review Primary Entry
+
+### 318.1 结构变化
+
+`createWorkbenchRuntimeReviewPrimaryOperationView()` 的视图语义扩展：
+
+```text
+isOpenRuntime
+```
+
+当 runtime review 当前没有选中结果、也没有刷新结果待返回时，结果区主操作会复用主流程 `primaryAction` 的 `open-runtime-results` 动作，作为结果区的“运行模拟”入口。
+
+`createWorkbenchRuntimeReviewPrimaryOperationCommand()` 的返回结构不改名、不新增持久字段，但在 overview 状态下其 `operationKind` / `action.kind` 可能为：
+
+```text
+open-runtime-results
+```
+
+选中运行结果时仍使用 `focus-runtime-action`；有刷新结果待返回时仍使用 `return-runtime-result`。
+
+### 318.2 保存与迁移
+
+不新增项目草稿字段，不改变导入导出 schema，不需要数据迁移。
+
+本阶段只改变 Workbench 结果区主操作入口；不改变 runtime output 原始数据、三值计算结果、公式、倍率、证据字段、运行日志行或曲线数值。
+
+### 318.3 验证
+
+- `workbenchMainFlowActions.test.js` 覆盖无结果选中时 runtime review primary operation 复用 `open-runtime-results`。
+- `Workbench.test.js` 覆盖初始 overview 结果区主操作显示“运行模拟”并可作为主入口。
+- `workbench-continuous-edit.spec.js` 的完整曲线-日志-详情-编辑-刷新结果闭环改为从结果区主入口开始。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、101 条测试。
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "runs the visible curve-log-detail edit loop end to end"`：通过，1 条浏览器级闭环测试。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。

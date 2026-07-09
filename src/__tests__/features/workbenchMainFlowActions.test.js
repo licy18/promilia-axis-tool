@@ -830,8 +830,8 @@ describe('workbench main flow actions', () => {
       },
     };
 
-    const focusCommand = createWorkbenchRuntimeReviewOperationCommandFromSurface(
-      {
+    const focusCommand =
+      createWorkbenchRuntimeReviewOperationCommandFromSurface({
         mainFlowCommandSurface,
         flowModel: { ignoredBySurfaceHelper: true },
         operationKind: WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.FOCUS_ACTION,
@@ -841,8 +841,7 @@ describe('workbench main flow actions', () => {
           statePointId: 'fallback-focus-state',
           canFocusAction: true,
         },
-      }
-    );
+      });
     const panelView = createWorkbenchRuntimeReviewPanelCommandViewFromSurface({
       mainFlowCommandSurface,
       flowModel: { ignoredBySurfaceHelper: true },
@@ -1902,6 +1901,65 @@ describe('workbench main flow actions', () => {
         actionId: 'action-0002',
         statePointId: 'state-point-0002',
         canRun: true,
+      },
+    });
+  });
+
+  it('uses the runtime review primary operation as the runtime entry when no result is selected', () => {
+    const view = createWorkbenchRuntimeReviewPrimaryOperationView({
+      source: 'runtime-review-primary',
+      flowModel: {
+        selectedActionId: 'action-0001',
+        runtimeSimLogCount: 1,
+        controls: {
+          canOpenRuntimeResults: true,
+        },
+        mainFlowState: {
+          primaryAction: {
+            kind: 'open-runtime-results',
+            label: '运行模拟',
+            actionId: 'action-0001',
+            enabled: true,
+          },
+        },
+        mainFlowLoopState: {
+          nextActionKind: 'open-runtime-results',
+          canRunNextAction: true,
+          targetActionId: 'action-0001',
+        },
+        runtimeReviewOperations: {
+          canRunAnyOperation: false,
+        },
+      },
+    });
+
+    expect(view).toMatchObject({
+      visible: true,
+      operationKind: 'open-runtime-results',
+      enabled: true,
+      isFocusAction: false,
+      isOpenRuntime: true,
+      actionId: 'action-0001',
+      statePointId: '',
+      label: '运行模拟',
+      target: {
+        actionId: 'action-0001',
+      },
+      buttonView: {
+        kind: 'open-runtime-results',
+        isPrimary: true,
+        enabled: true,
+        actionId: 'action-0001',
+      },
+      action: {
+        kind: 'open-runtime-results',
+        source: 'runtime-review-primary',
+        actionId: 'action-0001',
+        canRun: true,
+        payload: {
+          runtimeSimLogCount: 1,
+          fallbackToFirstRuntimePoint: true,
+        },
       },
     });
   });

@@ -45,8 +45,7 @@ export function createWorkbenchMainFlowNextAction({
 } = {}) {
   const loopState = flowModel?.mainFlowLoopState ?? {};
   const primaryAction = flowModel?.mainFlowState?.primaryAction ?? {};
-  const nextActionKind =
-    loopState.nextActionKind ?? primaryAction.kind ?? '';
+  const nextActionKind = loopState.nextActionKind ?? primaryAction.kind ?? '';
   const canRunNextAction =
     enabled ?? Boolean(loopState.canRunNextAction ?? primaryAction.enabled);
 
@@ -261,12 +260,11 @@ export function createWorkbenchMainFlowCommandSurface({
         target,
       }).action,
   });
-  const runtimeReviewPrimary = createWorkbenchRuntimeReviewPrimaryOperationCommand(
-    {
+  const runtimeReviewPrimary =
+    createWorkbenchRuntimeReviewPrimaryOperationCommand({
       flowModel,
       source: runtimeReviewPrimarySource || source,
-    }
-  );
+    });
   const createRuntimeReviewOperationCommand = (options = {}) =>
     createWorkbenchRuntimeReviewOperationCommand({
       ...options,
@@ -421,11 +419,13 @@ export function createWorkbenchRuntimeReviewPanelCommandViewFromSurface(
 export function createWorkbenchMainFlowActionSurface({
   mainFlowCommandSurface = null,
 } = {}) {
-  const bindSurfaceAction = factory => (options = {}) =>
-    factory({
-      mainFlowCommandSurface,
-      ...options,
-    });
+  const bindSurfaceAction =
+    factory =>
+    (options = {}) =>
+      factory({
+        mainFlowCommandSurface,
+        ...options,
+      });
 
   return {
     mainFlowCommandSurface,
@@ -487,9 +487,7 @@ export function createWorkbenchRuntimeReviewFlowAction({
   enabled,
   disabledReason,
 } = {}) {
-  if (
-    kind === WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_STATE_POINT
-  ) {
+  if (kind === WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS.SELECT_STATE_POINT) {
     return createWorkbenchRuntimeStatePointFlowAction({
       source,
       detail,
@@ -776,12 +774,28 @@ export function createWorkbenchRuntimeReviewPrimaryOperationView({
 } = {}) {
   const resolvedOperations =
     operations ?? flowModel?.runtimeReviewOperations ?? null;
-  const operationKind =
-    consumer?.operationKind ??
-    resolvedOperations?.primaryOperationKind ??
-    '';
+  const primaryAction = flowModel?.mainFlowState?.primaryAction ?? {};
+  const hasReviewOperation = Boolean(resolvedOperations?.canRunAnyOperation);
+  const shouldUseMainFlowEntry =
+    !hasReviewOperation &&
+    primaryAction.kind === WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS;
+  const reviewOperationKind =
+    consumer?.operationKind ?? resolvedOperations?.primaryOperationKind ?? '';
+  const operationKind = shouldUseMainFlowEntry
+    ? primaryAction.kind
+    : reviewOperationKind;
+  const mainFlowEntryCommand = shouldUseMainFlowEntry
+    ? createWorkbenchMainFlowButtonCommand({
+        flowModel,
+        kind: primaryAction.kind,
+        source,
+        fallbackTarget: primaryAction,
+        fallbackEnabled: primaryAction.enabled,
+      })
+    : null;
   const resolvedButtonView =
     buttonView ??
+    mainFlowEntryCommand ??
     createWorkbenchMainFlowButtonView({
       flowModel,
       kind: operationKind,
@@ -793,14 +807,18 @@ export function createWorkbenchRuntimeReviewPrimaryOperationView({
     });
   const target = resolvedButtonView?.target ?? {};
   return {
-    visible: Boolean(resolvedOperations?.canRunAnyOperation),
+    visible: Boolean(hasReviewOperation || mainFlowEntryCommand),
     operationKind,
     enabled: Boolean(resolvedButtonView?.enabled),
     isFocusAction:
       operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+    isOpenRuntime:
+      operationKind === WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
     actionId: resolvedButtonView?.actionId ?? target.actionId ?? '',
     statePointId: resolvedButtonView?.statePointId ?? target.statePointId ?? '',
-    label: resolvedOperations?.primaryOperation?.label ?? '',
+    label: hasReviewOperation
+      ? (resolvedOperations?.primaryOperation?.label ?? '')
+      : (resolvedButtonView?.label ?? ''),
     target,
     action: resolvedButtonView?.action ?? consumer?.action ?? null,
     buttonView: resolvedButtonView ?? null,
@@ -932,9 +950,7 @@ function getRuntimeReviewOperationTarget({
   operations = null,
   operationKind = '',
 } = {}) {
-  if (
-    operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION
-  ) {
+  if (operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION) {
     return operations?.focusAction ?? null;
   }
 
@@ -996,10 +1012,10 @@ function resolveRuntimeReviewOperationEnabled({
   if (operationTarget?.enabled != null) {
     return Boolean(operationTarget.enabled);
   }
-  if (
-    operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION
-  ) {
-    return Boolean(operationTarget?.canFocusAction ?? operationTarget?.actionId);
+  if (operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION) {
+    return Boolean(
+      operationTarget?.canFocusAction ?? operationTarget?.actionId
+    );
   }
   if (
     operationKind === WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT
@@ -1012,11 +1028,11 @@ function resolveRuntimeReviewOperationEnabled({
 function hasRuntimeReviewOperationPayload(target = null) {
   return Boolean(
     target &&
-      (target.actionId ||
-        target.statePointId ||
-        target.originStatePointId ||
-        target.canFocusAction ||
-        target.canReturn)
+    (target.actionId ||
+      target.statePointId ||
+      target.originStatePointId ||
+      target.canFocusAction ||
+      target.canReturn)
   );
 }
 
@@ -1024,10 +1040,13 @@ function hasRuntimeReviewOperationShape(target = null) {
   return Boolean(target && Object.keys(target).length);
 }
 
-function isRuntimeReviewPrimaryOperationKind(flowModel = null, actionKind = '') {
+function isRuntimeReviewPrimaryOperationKind(
+  flowModel = null,
+  actionKind = ''
+) {
   return Boolean(
     actionKind &&
-      flowModel?.runtimeReviewOperations?.primaryOperationKind === actionKind
+    flowModel?.runtimeReviewOperations?.primaryOperationKind === actionKind
   );
 }
 

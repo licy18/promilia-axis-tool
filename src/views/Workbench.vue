@@ -279,6 +279,10 @@
                 v-if="runtimeReviewPrimaryOperationView.isFocusAction"
                 class="runtime-review-primary-action-icon"
               />
+              <TrendCharts
+                v-else-if="runtimeReviewPrimaryOperationView.isOpenRuntime"
+                class="runtime-review-primary-action-icon"
+              />
               <Aim v-else class="runtime-review-primary-action-icon" />
               <span>{{ runtimeReviewPrimaryOperationView.label }}</span>
             </button>
@@ -435,6 +439,7 @@ import {
   Document,
   EditPen,
   Refresh,
+  TrendCharts,
 } from '@element-plus/icons-vue';
 import ActionLibraryPanel from '../features/workbench/ActionLibraryPanel.vue';
 import AnalysisPanel from '../features/workbench/AnalysisPanel.vue';
