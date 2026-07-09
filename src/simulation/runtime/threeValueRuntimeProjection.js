@@ -98,6 +98,13 @@ function createThreeValueRuntimeOutputs({
   resourceCurves,
   summary,
 }) {
+  const outputConsistency = createRuntimeOutputConsistency({
+    outputContract,
+    simLog,
+    stateCurves,
+    resourceCurves,
+    summary,
+  });
   return {
     schemaVersion: 1,
     sourceKind: 'azpr-three-value-runtime-outputs',
@@ -118,6 +125,7 @@ function createThreeValueRuntimeOutputs({
     resourceCurves,
     resources: resourceCurves,
     summary,
+    outputConsistency,
     outputs: {
       simLog,
       stateCurves,
@@ -130,13 +138,69 @@ function createThreeValueRuntimeOutputs({
       appliedDeltaCount: outputContract.summary.appliedDeltaCount,
       simLogCount: outputContract.summary.simLogCount,
       enemyStatePointCount: outputContract.summary.enemyStatePointCount,
+      stateCurvePointCount: outputContract.summary.stateCurvePointCount,
       resourceCurveActorCount: outputContract.summary.resourceCurveActorCount,
       resourceCurvePointCount: outputContract.summary.resourceCurvePointCount,
       enemyHpDelta: outputContract.summary.enemyHpDelta,
       enemyToughnessDelta: outputContract.summary.enemyToughnessDelta,
       selfEnergyDelta: outputContract.summary.selfEnergyDelta,
+      outputConsistencyStatus: outputConsistency.status,
+      outputConsistent: outputConsistency.consistent,
       applied: true,
     },
+    applied: true,
+  };
+}
+
+function createRuntimeOutputConsistency({
+  outputContract,
+  simLog,
+  stateCurves,
+  resourceCurves,
+  summary,
+}) {
+  const simLogCount = simLog.length;
+  const enemyStatePointCount =
+    numberOrNull(stateCurves?.enemy?.pointCount) ?? 0;
+  const resourceCurvePointCount =
+    numberOrNull(resourceCurves?.summary?.pointCount) ?? 0;
+  const stateCurvePointCount = roundCurveValue(
+    enemyStatePointCount + resourceCurvePointCount
+  );
+  const resourceActorPointCount = (resourceCurves?.curvesByActor ?? []).reduce(
+    (sum, actor) => sum + (numberOrNull(actor.pointCount) ?? 0),
+    0
+  );
+  const checks = {
+    summarySimLogCount: summary.simLogCount === simLogCount,
+    summaryEnemyStatePointCount:
+      summary.enemyStatePointCount === enemyStatePointCount,
+    summaryResourceCurvePointCount:
+      summary.resourceCurvePointCount === resourceCurvePointCount,
+    summaryStateCurvePointCount:
+      summary.stateCurvePointCount === stateCurvePointCount,
+    stateCurvesSummaryPointCount:
+      stateCurves?.summary?.stateCurvePointCount === stateCurvePointCount,
+    resourceCurvesSummaryPointCount:
+      resourceCurves?.summary?.pointCount === resourceActorPointCount,
+    outputContractSummarySimLogCount:
+      outputContract.summary.simLogCount === simLogCount,
+    outputContractSummaryStateCurvePointCount:
+      outputContract.summary.stateCurvePointCount === stateCurvePointCount,
+  };
+  const consistent = Object.values(checks).every(Boolean);
+  return {
+    sourceKind: 'azpr-runtime-output-consistency',
+    status: consistent
+      ? 'runtime-output-consistent'
+      : 'runtime-output-inconsistent',
+    simLogCount,
+    enemyStatePointCount,
+    resourceCurvePointCount,
+    stateCurvePointCount,
+    resourceActorPointCount,
+    checks,
+    consistent,
     applied: true,
   };
 }
@@ -181,6 +245,7 @@ function createThreeValueRuntimeOutputContract({
       appliedDeltaCount: appliedDeltas.length,
       simLogCount: simLog.length,
       enemyStatePointCount: enemyStateCurve.pointCount,
+      stateCurvePointCount: stateCurves.summary.stateCurvePointCount,
       resourceCurveActorCount: resourceCurves.summary.actorCount,
       resourceCurvePointCount: resourceCurves.summary.pointCount,
       enemyHpDelta: summary.enemyHpDelta,
@@ -248,6 +313,7 @@ function createRuntimeStateCurvesOutputContract({
       'enemyPointCount',
       'enemyHpDelta',
       'enemyToughnessDelta',
+      'stateCurvePointCount',
       'resourceActorCount',
       'resourcePointCount',
       'selfEnergyDelta',
@@ -291,6 +357,7 @@ function createRuntimeSummaryOutputContract(summary) {
       'inputDeltaCount',
       'appliedDeltaCount',
       'enemyStatePointCount',
+      'stateCurvePointCount',
       'selfEnergyPointCount',
       'resourceCurveActorCount',
       'resourceCurvePointCount',
@@ -541,6 +608,9 @@ function createThreeValueRuntimeStateCurves({
       enemyPointCount: enemyStateCurve.pointCount,
       enemyHpDelta: enemyStateCurve.hpDelta,
       enemyToughnessDelta: enemyStateCurve.toughnessDelta,
+      stateCurvePointCount: roundCurveValue(
+        enemyStateCurve.pointCount + resourceCurves.summary.pointCount
+      ),
       resourceActorCount: resourceCurves.summary.actorCount,
       activeResourceActorCount: resourceCurves.summary.activeActorCount,
       resourcePointCount: resourceCurves.summary.pointCount,
@@ -617,6 +687,9 @@ function summarizeThreeValueRuntimeProjection({
     selfEnergyDelta: sumThreeValueRuntimeDeltas(appliedDeltas, 'energyDelta'),
     selfEnergyActorCount: selfEnergyCurveByActor.length,
     enemyStatePointCount: enemyStateCurve.pointCount,
+    stateCurvePointCount: roundCurveValue(
+      enemyStateCurve.pointCount + resourceCurves.summary.pointCount
+    ),
     selfEnergyPointCount,
     resourceCurveActorCount: resourceCurves.summary.actorCount,
     activeResourceCurveActorCount: resourceCurves.summary.activeActorCount,

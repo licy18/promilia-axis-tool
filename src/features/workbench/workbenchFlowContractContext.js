@@ -22,6 +22,7 @@ export function createWorkbenchFlowContractContext({
     ...(outputContract?.summary ?? {}),
     ...(runtimeOutputSource?.outputSummary ?? {}),
   };
+  const outputConsistency = runtimeOutputSource?.outputConsistency ?? {};
   const simLogOutput = outputContract?.outputs?.simLog ?? null;
   const stateCurvesOutput = outputContract?.outputs?.stateCurves ?? null;
   const resourceCurvesOutput = outputContract?.outputs?.resourceCurves ?? null;
@@ -88,6 +89,23 @@ export function createWorkbenchFlowContractContext({
       outputCount: numberOrZero(outputSummary.outputCount),
       simLogCount: numberOrZero(
         outputSummary.simLogCount ?? runtimeSummary.simLogCount
+      ),
+      enemyStatePointCount: numberOrZero(
+        outputSummary.enemyStatePointCount ??
+          runtimeSummary.enemyStatePointCount
+      ),
+      stateCurvePointCount: numberOrZero(
+        outputSummary.stateCurvePointCount ??
+          runtimeSummary.stateCurvePointCount
+      ),
+      resourceCurvePointCount: numberOrZero(
+        outputSummary.resourceCurvePointCount ??
+          runtimeSummary.resourceCurvePointCount
+      ),
+      outputConsistencyStatus:
+        outputSummary.outputConsistencyStatus ?? outputConsistency.status ?? '',
+      outputConsistent: Boolean(
+        outputSummary.outputConsistent ?? outputConsistency.consistent
       ),
       ready: isReadyStatus(outputContract?.status),
     },

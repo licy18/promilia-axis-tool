@@ -12073,6 +12073,37 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议继续 UI 主流程：补齐“贡献行定位后切换轨道/筛选/窄屏”下的主流程稳定性，或者转入运行时层梳理 summary 与 stateCurves 的输出一致性。
 
+### 2026-07-09：运行时层能力块 - 输出一致性摘要
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- runtime projection 现在在 `summary`、`stateCurves.summary`、`runtimeOutputs.outputSummary` 中统一暴露 `stateCurvePointCount`。
+- `runtimeOutputs.outputConsistency` 会检查 simLog、敌人状态点、资源曲线点、总状态点和 output contract summary 是否一致。
+- Workbench 主流程合同现在能读取 `enemyStatePointCount`、`stateCurvePointCount`、`resourceCurvePointCount`、`outputConsistencyStatus`、`outputConsistent`，后续 UI 可以用同一份 runtime output 合同判断结果是否可靠。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、保存数据或导入导出结构。
+
+当前验证事实：
+
+- `threeValueRuntimeProjection.test.js` 覆盖底层 runtime output consistency。
+- `firstVerticalSliceSimulation.test.js` 覆盖真实纵切结果同步暴露状态点计数和一致性状态。
+- `workbenchFlowContractContext.test.js` 覆盖 Workbench 主流程合同读取一致性字段。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `312. 运行时输出一致性摘要`。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js`：通过，3 个测试文件、19 条测试。
+- `npm run test -- --run`：通过，39 个测试文件、273 条测试。
+- `npm run test:e2e`：通过，12 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/simulation/runtime/threeValueRuntimeProjection.js src/features/workbench/workbenchFlowContractContext.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 建议继续运行时层：把 `outputConsistency` 用到 Workbench 主流程状态或诊断入口中，出现不一致时能明确定位是哪条输出断开；或回到 UI 主流程继续做窄屏/筛选下的结果定位稳定性。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

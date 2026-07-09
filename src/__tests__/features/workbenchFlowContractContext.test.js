@@ -96,6 +96,15 @@ describe('workbench flow contract context', () => {
         outputSummary: {
           outputCount: 4,
           simLogCount: 1,
+          enemyStatePointCount: 1,
+          stateCurvePointCount: 2,
+          resourceCurvePointCount: 1,
+          outputConsistencyStatus: 'runtime-output-consistent',
+          outputConsistent: true,
+        },
+        outputConsistency: {
+          status: 'runtime-output-consistent',
+          consistent: true,
         },
       },
     });
@@ -147,6 +156,11 @@ describe('workbench flow contract context', () => {
           'azpr-runtime-resource-curves-from-standard-deltas',
         outputCount: 4,
         simLogCount: 1,
+        enemyStatePointCount: 1,
+        stateCurvePointCount: 2,
+        resourceCurvePointCount: 1,
+        outputConsistencyStatus: 'runtime-output-consistent',
+        outputConsistent: true,
         ready: true,
       },
     });

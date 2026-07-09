@@ -236,6 +236,7 @@ describe('three value runtime projection', () => {
           appliedDeltaCount: 2,
           simLogCount: 2,
           enemyStatePointCount: 1,
+          stateCurvePointCount: 2,
           resourceCurveActorCount: 1,
           resourceCurvePointCount: 1,
           enemyHpDelta: 1200,
@@ -275,6 +276,7 @@ describe('three value runtime projection', () => {
           sourceKind: 'azpr-runtime-state-curves-from-standard-deltas',
           summary: {
             enemyPointCount: 1,
+            stateCurvePointCount: 2,
             resourcePointCount: 1,
             selfEnergyDelta: -30,
           },
@@ -291,18 +293,43 @@ describe('three value runtime projection', () => {
           enemyHpDelta: 1200,
           enemyToughnessDelta: 0,
           selfEnergyDelta: -30,
+          stateCurvePointCount: 2,
           simLogCount: 2,
+        },
+        outputConsistency: {
+          sourceKind: 'azpr-runtime-output-consistency',
+          status: 'runtime-output-consistent',
+          simLogCount: 2,
+          enemyStatePointCount: 1,
+          resourceCurvePointCount: 1,
+          stateCurvePointCount: 2,
+          resourceActorPointCount: 1,
+          checks: {
+            summarySimLogCount: true,
+            summaryEnemyStatePointCount: true,
+            summaryResourceCurvePointCount: true,
+            summaryStateCurvePointCount: true,
+            stateCurvesSummaryPointCount: true,
+            resourceCurvesSummaryPointCount: true,
+            outputContractSummarySimLogCount: true,
+            outputContractSummaryStateCurvePointCount: true,
+          },
+          consistent: true,
+          applied: true,
         },
         outputSummary: {
           outputCount: 4,
           appliedDeltaCount: 2,
           simLogCount: 2,
           enemyStatePointCount: 1,
+          stateCurvePointCount: 2,
           resourceCurveActorCount: 1,
           resourceCurvePointCount: 1,
           enemyHpDelta: 1200,
           enemyToughnessDelta: 0,
           selfEnergyDelta: -30,
+          outputConsistencyStatus: 'runtime-output-consistent',
+          outputConsistent: true,
           applied: true,
         },
         applied: true,
@@ -320,6 +347,7 @@ describe('three value runtime projection', () => {
           enemyPointCount: 1,
           enemyHpDelta: 1200,
           enemyToughnessDelta: 0,
+          stateCurvePointCount: 2,
           resourceActorCount: 1,
           activeResourceActorCount: 1,
           resourcePointCount: 1,
@@ -364,6 +392,7 @@ describe('three value runtime projection', () => {
         resourceCurveActorCount: 1,
         activeResourceCurveActorCount: 1,
         resourceCurvePointCount: 1,
+        stateCurvePointCount: 2,
         simLogCount: 2,
         calculatorCount: 2,
         calculatorKeys: [
@@ -403,6 +432,16 @@ describe('three value runtime projection', () => {
     expect(runtimeProjection.runtimeOutputs.outputContract).toBe(
       runtimeProjection.outputContract
     );
+    expect(runtimeProjection.runtimeOutputs.outputConsistency.checks).toEqual({
+      summarySimLogCount: true,
+      summaryEnemyStatePointCount: true,
+      summaryResourceCurvePointCount: true,
+      summaryStateCurvePointCount: true,
+      stateCurvesSummaryPointCount: true,
+      resourceCurvesSummaryPointCount: true,
+      outputContractSummarySimLogCount: true,
+      outputContractSummaryStateCurvePointCount: true,
+    });
     expect(runtimeProjection.simLog.map(row => row.sourceDeltaId)).toEqual([
       'action-001|hit-1|enemyHpDamage|applied|60|0',
       'action-002|event-RESOURCE_CHANGE-0|selfEnergyChange|applied|90|0',
@@ -917,7 +956,10 @@ describe('three value runtime projection', () => {
       outputCount: 4,
       appliedDeltaCount: 1,
       simLogCount: 1,
+      stateCurvePointCount: 1,
       enemyHpDelta: 800,
+      outputConsistencyStatus: 'runtime-output-consistent',
+      outputConsistent: true,
     });
   });
 });

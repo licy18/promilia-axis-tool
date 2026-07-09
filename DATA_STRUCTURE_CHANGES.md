@@ -22316,3 +22316,90 @@ data-value
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `npx prettier --check PROJECT_MANUAL.md src/features/workbench/EventLogPanel.vue src/__tests__/features/EventLogPanel.test.js src/__tests__/views/Workbench.test.js`：通过。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 312. 运行时输出一致性摘要：Runtime Output Consistency Summary
+
+### 312.1 结构变化
+
+`threeValueRuntimeProjection.summary` 新增：
+
+```text
+stateCurvePointCount
+```
+
+`threeValueRuntimeProjection.stateCurves.summary` 新增：
+
+```text
+stateCurvePointCount
+```
+
+`threeValueRuntimeProjection.runtimeOutputs` 新增：
+
+```text
+outputConsistency = {
+  sourceKind: "azpr-runtime-output-consistency",
+  status,
+  simLogCount,
+  enemyStatePointCount,
+  resourceCurvePointCount,
+  stateCurvePointCount,
+  resourceActorPointCount,
+  checks,
+  consistent,
+  applied
+}
+```
+
+`runtimeOutputs.outputSummary` 新增：
+
+```text
+stateCurvePointCount
+outputConsistencyStatus
+outputConsistent
+```
+
+`outputContract.summary` 同步新增：
+
+```text
+stateCurvePointCount
+```
+
+`outputContract.outputs.stateCurves.summaryFields` 同步声明：
+
+```text
+stateCurvePointCount
+```
+
+`outputContract.outputs.summary.countFields` 同步声明：
+
+```text
+stateCurvePointCount
+```
+
+`createWorkbenchFlowContractContext().runtimeOutput` 新增：
+
+```text
+enemyStatePointCount
+stateCurvePointCount
+resourceCurvePointCount
+outputConsistencyStatus
+outputConsistent
+```
+
+### 312.2 保存与迁移
+
+不新增项目草稿字段，不改变导入导出 schema，不需要数据迁移。
+
+本阶段不改变 HP、韧性、自身能量计算结果，不改变公式、倍率或证据字段；新增字段只用于 runtime outputs、summary 与 Workbench 主流程合同的同源一致性检查。
+
+### 312.3 验证
+
+- `threeValueRuntimeProjection.test.js` 覆盖 `runtimeOutputs.outputConsistency`、`stateCurvePointCount`、`outputConsistencyStatus`、`outputConsistent`。
+- `firstVerticalSliceSimulation.test.js` 覆盖真实纵切结果中的 `threeValueRuntimeProjectionSummary` 与 `runtimeOutputsSummary` 同步暴露状态点计数和一致性状态。
+- `workbenchFlowContractContext.test.js` 覆盖 Workbench 主流程合同可读取 runtime output 一致性字段。
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js`：通过，3 个测试文件、19 条测试。
+- `npm run test -- --run`：通过，39 个测试文件、273 条测试。
+- `npm run test:e2e`：通过，12 条浏览器级烟测。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/simulation/runtime/threeValueRuntimeProjection.js src/features/workbench/workbenchFlowContractContext.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
