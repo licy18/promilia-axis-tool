@@ -2335,6 +2335,18 @@ describe('Workbench view', () => {
         )
         .attributes('data-selected')
     ).toBe('true');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-runtime-resource-chart-selection-action-focus"]'
+        )
+        .text()
+    ).toBe('编辑结果动作');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-action-focus"]')
+        .text()
+    ).toBe('编辑结果动作');
 
     const runtimeLogRow = wrapper.find(
       `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${openedStatePointId}"]`
@@ -2371,6 +2383,7 @@ describe('Workbench view', () => {
       '[data-testid="workbench-runtime-selected-detail-action-focus"]'
     );
     expect(detailActionFocus.attributes('disabled')).toBeUndefined();
+    expect(detailActionFocus.text()).toBe('编辑结果动作');
 
     await detailActionFocus.trigger('click');
     await nextTick();
@@ -2458,6 +2471,11 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-resource-chart-selection"]')
         .attributes('data-result-context-status')
     ).toBe('refreshed-edit-result');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-return-result"]')
+        .text()
+    ).toBe('查看刷新结果');
   });
 
   it('edits selected action timing with 60fps frame controls', async () => {
@@ -4798,6 +4816,7 @@ describe('Workbench view', () => {
     expect(logResultReturnButton.attributes('data-state-point-id')).toBe(
       refreshedStatePointId
     );
+    expect(logResultReturnButton.text()).toBe('查看刷新结果');
 
     await logResultReturnButton.trigger('click');
     await nextTick();

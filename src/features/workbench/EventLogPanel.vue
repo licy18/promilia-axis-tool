@@ -195,7 +195,7 @@
           @click="focusRuntimeLogAction"
         >
           <EditPen class="runtime-log-action-focus-icon" />
-          <span>定位动作</span>
+          <span>{{ runtimeLogActionFocusButtonLabel }}</span>
         </button>
         <button
           v-if="runtimeLogResultReturnButtonVisible"
@@ -212,7 +212,7 @@
           @click="returnRuntimeLogResult"
         >
           <Aim class="runtime-log-result-return-icon" />
-          <span>回到结果点</span>
+          <span>{{ runtimeLogResultReturnButtonLabel }}</span>
         </button>
         <div
           v-if="runtimeLogEditContext"
@@ -695,6 +695,7 @@ const runtimeLogCommandView = computed(() =>
 const runtimeLogActionFocusCommand = computed(
   () => runtimeLogCommandView.value.focus
 );
+const runtimeLogActionFocusButtonLabel = computed(() => '编辑结果动作');
 const runtimeLogActionFocusCommandTarget = computed(
   () => runtimeLogActionFocusCommand.value.target
 );
@@ -730,6 +731,12 @@ const runtimeLogResultReturnCommand = computed(
 );
 const runtimeLogResultReturnCommandContext = computed(
   () => runtimeLogResultReturnCommand.value.context
+);
+const runtimeLogResultReturnButtonLabel = computed(() =>
+  formatRuntimeLogResultReturnButtonLabel(
+    runtimeLogResultReturnCommandContext.value ??
+      runtimeLogResultReturnContext.value
+  )
 );
 const runtimeLogResultReturnButtonVisible = computed(() =>
   Boolean(
@@ -889,6 +896,16 @@ function dispatchRuntimeLogFlowAction(action) {
     return;
   }
   emit('dispatch-flow-action', action);
+}
+
+function formatRuntimeLogResultReturnButtonLabel(context = null) {
+  if (context?.status === 'refreshed-edit-result') {
+    return '查看刷新结果';
+  }
+  if (context?.status === 'origin-result') {
+    return '回到来源结果';
+  }
+  return '回到结果点';
 }
 
 function getRuntimeLogRowFlowAction(row) {
