@@ -23659,3 +23659,80 @@ runtimeOutput.outputConsumerBoundaryStandardReady
 - `workbenchFlowContractContext.test.js` 覆盖 Workbench runtime contract boundary 优先透出 runtime output consumer boundary 状态。
 - `workbenchFlowModel.test.js`、`WorkbenchFlowPanel.test.js`、`threeValueRuntimeProjection.test.js` 和 `firstVerticalSliceSimulation.test.js` 覆盖主流程、投影和纵切仍保持 standard runtime output 边界。
 - `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，6 个测试文件、39 条测试。
+
+## 332. 生成入口聚合校验：Generation Entry Aggregate Validation
+
+### 332.1 结构变化
+
+`generationEntry.contractValidation` 新增聚合一致性校验：
+
+```text
+aggregateValidation
+```
+
+`aggregateValidation` 结构：
+
+```text
+schemaVersion = 1
+sourceKind = azpr-action-hit-three-value-delta-generation-entry-aggregate-validation
+status = generation-entry-aggregate-valid | generation-entry-aggregate-invalid
+actionCount
+hitCount
+checkCount
+issueCount
+issueKeys
+checks[]
+valid
+applied = false
+```
+
+`generationEntry.contractValidation.checks[]` 新增 4 个检查项：
+
+```text
+action-aggregate-delta-counts
+hit-aggregate-delta-counts
+action-aggregate-layer-fields
+hit-aggregate-layer-fields
+```
+
+这些检查会从标准 `Action -> Hit -> ThreeValueDelta` 合同中的原始 `deltas` 重新计算 action / hit 两层的 `threeValueDeltaAggregate`：
+
+```text
+deltaCount
+layerKeys
+layers[].deltaCount
+layers[].trackKeys
+layers[].hpDelta
+layers[].toughnessDelta
+layers[].energyDelta
+```
+
+若 action 或 hit 聚合与底层 deltas 不一致，`contractValidation.status` 会变为：
+
+```text
+generation-entry-contract-invalid
+```
+
+生成层 summary 新增以下派生字段：
+
+```text
+generationEntry.summary.aggregateValidationStatus
+generationEntry.summary.aggregateValidationIssueCount
+generationOutputs.summary.generationEntryAggregateValidationStatus
+generationOutputs.summary.generationEntryAggregateValidationIssueCount
+threeValueGenerationBundle.summary.standardGenerationEntryAggregateValidationStatus
+threeValueGenerationBundle.summary.standardGenerationEntryAggregateValidationIssueCount
+```
+
+### 332.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只增强生成层标准入口的派生合同校验；三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值、UI 文案和项目保存结构均不改变。
+
+### 332.3 验证
+
+- `threeValueGenerationBuilder.test.js` 覆盖正常生成入口的 `generation-entry-aggregate-valid` 状态。
+- `threeValueGenerationBuilder.test.js` 覆盖篡改 hit aggregate 后，`contractValidation` 在运行时消费前变为 invalid。
+- `actionHitThreeValueRuntimeInput.test.js`、`threeValueRuntimeProjection.test.js` 和 `firstVerticalSliceSimulation.test.js` 覆盖运行时输入、投影和纵切仍保持原三值结果。
+- `npm run test -- --run src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，4 个测试文件、26 条测试。

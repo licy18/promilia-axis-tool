@@ -108,6 +108,9 @@ describe('three value generation builder', () => {
         standardGenerationEntryContractValidationStatus:
           'generation-entry-contract-valid',
         standardGenerationEntryContractValidationIssueCount: 0,
+        standardGenerationEntryAggregateValidationStatus:
+          'generation-entry-aggregate-valid',
+        standardGenerationEntryAggregateValidationIssueCount: 0,
       },
     });
     expect(bundle.actionHitThreeValueDeltaGeneration).toMatchObject({
@@ -173,6 +176,14 @@ describe('three value generation builder', () => {
         status: 'generation-entry-contract-valid',
         issueCount: 0,
         issueKeys: [],
+        aggregateValidation: {
+          sourceKind:
+            'azpr-action-hit-three-value-delta-generation-entry-aggregate-validation',
+          status: 'generation-entry-aggregate-valid',
+          issueCount: 0,
+          issueKeys: [],
+          valid: true,
+        },
         valid: true,
       },
       summary: {
@@ -183,6 +194,8 @@ describe('three value generation builder', () => {
         runtimeDeltaPolicy: 'runtime consumes only deltas with applied=true',
         contractValidationStatus: 'generation-entry-contract-valid',
         contractValidationIssueCount: 0,
+        aggregateValidationStatus: 'generation-entry-aggregate-valid',
+        aggregateValidationIssueCount: 0,
       },
     });
     expect(bundle.generationEntry.contractValidation.checks).toEqual(
@@ -199,6 +212,16 @@ describe('three value generation builder', () => {
         }),
         expect.objectContaining({
           key: 'deltas-listed-by-hits',
+          status: 'valid',
+          valid: true,
+        }),
+        expect.objectContaining({
+          key: 'action-aggregate-layer-fields',
+          status: 'valid',
+          valid: true,
+        }),
+        expect.objectContaining({
+          key: 'hit-aggregate-layer-fields',
           status: 'valid',
           valid: true,
         }),
@@ -248,6 +271,9 @@ describe('three value generation builder', () => {
         generationEntryContractValidationStatus:
           'generation-entry-contract-valid',
         generationEntryContractValidationIssueCount: 0,
+        generationEntryAggregateValidationStatus:
+          'generation-entry-aggregate-valid',
+        generationEntryAggregateValidationIssueCount: 0,
       },
       outputSummary: {
         outputCount: 8,
@@ -282,6 +308,71 @@ describe('three value generation builder', () => {
       bundle.runtimeInputSource
     );
     expect(bundle.generationOutputs.deltas).toBe(bundle.deltas);
+  });
+
+  it('flags aggregate drift before runtime consumes the generation entry', () => {
+    const bundle = createThreeValueGenerationBundle({
+      scenario: {
+        actions: [
+          {
+            id: 'action-001',
+            type: 'skill',
+            name: '普通攻击',
+            actorId: 'actor-001',
+            actor: { name: '末音' },
+            startMs: 1000,
+          },
+        ],
+      },
+      actionResultTimeline: [
+        {
+          actionId: 'action-001',
+          actionName: '普通攻击',
+          actionType: 'skill',
+          actorId: 'actor-001',
+          actorName: '末音',
+          skillId: 10900101,
+          timeMs: 1000,
+          hpDamage: {
+            value: 1200,
+            applied: true,
+            status: 'raw-hp-projection',
+          },
+          toughnessDamage: {
+            value: 30,
+            applied: true,
+            status: 'raw-toughness-projection',
+          },
+          selfEnergyChange: {
+            value: 12,
+            applied: true,
+            status: 'raw-energy-projection',
+          },
+        },
+      ],
+    });
+    bundle.generationEntry.hits[0].threeValueDeltaAggregate.layers.applied.hpDelta = 999;
+
+    const validation = validateStandardGenerationEntryContract(
+      bundle.generationEntry
+    );
+
+    expect(validation).toMatchObject({
+      sourceKind:
+        'azpr-action-hit-three-value-delta-generation-entry-contract-validation',
+      status: 'generation-entry-contract-invalid',
+      valid: false,
+      issueCount: 1,
+      issueKeys: ['hit-aggregate-layer-fields'],
+      aggregateValidation: {
+        sourceKind:
+          'azpr-action-hit-three-value-delta-generation-entry-aggregate-validation',
+        status: 'generation-entry-aggregate-invalid',
+        issueCount: 1,
+        issueKeys: ['hit-aggregate-layer-fields'],
+        valid: false,
+      },
+    });
   });
 
   it('flags generation entry contract drift before runtime consumes it', () => {

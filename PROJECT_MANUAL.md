@@ -13117,6 +13117,26 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查撤销/重做与持久化恢复是否需要组合成更完整的用户可见回归；如果 UI 主流程已足够稳定，则转入生成层整理 `Action -> Hit -> ThreeValueDelta` 的统一生成入口。
 
+### 2026-07-09：生成层 - Generation Entry 聚合一致性
+
+本阶段属于：生成层。
+
+完成的可用能力：
+
+- 标准 `Action -> Hit -> ThreeValueDelta` 生成入口现在会自检 action / hit 两层三值聚合是否由同一批 deltas 重新计算得到。
+- 聚合校验覆盖 `deltaCount`、分层 key、track key，以及 HP / 韧性 / 自身能量三类 delta 合计；若聚合被篡改或漂移，`generationEntry.contractValidation` 会在运行时消费前变为 invalid。
+- 生成层 bundle、generation outputs 和 generation entry summary 都会透出 aggregate validation 状态，方便后续运行时层和 Workbench 合同边界继续消费。
+- 本阶段不改变 UI 可见文案、三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值或草稿保存 schema。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，4 个测试文件、26 条测试。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `332. 生成入口聚合校验：Generation Entry Aggregate Validation`。
+
+下一步：
+
+- 进入运行时层能力块：把 generation entry 的 aggregate validation 状态纳入 runtime input / runtime output 边界摘要，确保 Workbench 合同边界能明确区分“标准入口有效”和“聚合贡献拆分可信”。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -1,5 +1,8 @@
 import { createActionHitThreeValueDeltaGeneration } from './actionHitThreeValueDeltaGeneration';
-import { ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME } from './threeValueGenerationLayer';
+import {
+  ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
+  THREE_VALUE_DELTA_FIELDS,
+} from './threeValueGenerationLayer';
 
 const STANDARD_GENERATION_ENTRY_OUTPUT_NAMES = [
   'generationInput',
@@ -121,6 +124,10 @@ function createThreeValueGenerationOutputs({
       generationEntry.contractValidation?.status ?? '',
     generationEntryContractValidationIssueCount:
       generationEntry.contractValidation?.issueCount ?? 0,
+    generationEntryAggregateValidationStatus:
+      generationEntry.contractValidation?.aggregateValidation?.status ?? '',
+    generationEntryAggregateValidationIssueCount:
+      generationEntry.contractValidation?.aggregateValidation?.issueCount ?? 0,
     generationInputSourceKind: generationInput?.sourceKind ?? '',
     generationInputStatus: generationInput?.status ?? '',
     generationInputPointCount: generationInput?.summary?.pointCount ?? 0,
@@ -232,6 +239,9 @@ function createStandardGenerationEntry({
       runtimeDeltaPolicy: standardContract.runtimeDeltaPolicy,
       contractValidationStatus: contractValidation.status,
       contractValidationIssueCount: contractValidation.issueCount,
+      aggregateValidationStatus: contractValidation.aggregateValidation.status,
+      aggregateValidationIssueCount:
+        contractValidation.aggregateValidation.issueCount,
       applied: false,
     },
     applied: false,
@@ -255,6 +265,10 @@ export function validateStandardGenerationEntryContract(generationEntry = {}) {
       ...(hit.deltas ?? []).map(delta => delta?.id),
     ])
   );
+  const aggregateValidation = validateGenerationEntryAggregates({
+    actions,
+    hits,
+  });
   const checks = [
     createGenerationEntryValidationCheck({
       key: 'contract-name',
@@ -359,6 +373,12 @@ export function validateStandardGenerationEntryContract(generationEntry = {}) {
       key: 'deltas-listed-by-hits',
       valid: (deltas ?? []).every(delta => hitDeltaIds.has(delta?.id)),
     }),
+    ...aggregateValidation.checks.map(check =>
+      createGenerationEntryValidationCheck({
+        key: check.key,
+        valid: check.valid,
+      })
+    ),
   ];
   const failedChecks = checks.filter(check => !check.valid);
 
@@ -383,9 +403,156 @@ export function validateStandardGenerationEntryContract(generationEntry = {}) {
     issueCount: failedChecks.length,
     issueKeys: failedChecks.map(check => check.key),
     checks,
+    aggregateValidation,
     valid: failedChecks.length === 0,
     applied: false,
   };
+}
+
+function validateGenerationEntryAggregates({ actions, hits }) {
+  const checks = [
+    createGenerationEntryValidationCheck({
+      key: 'action-aggregate-delta-counts',
+      valid: (actions ?? []).every(action => {
+        const actionDeltas = getGenerationEntryActionDeltas(action);
+        return (
+          numberOrZero(action?.threeValueDeltaAggregate?.deltaCount) ===
+          actionDeltas.length
+        );
+      }),
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'hit-aggregate-delta-counts',
+      valid: (hits ?? []).every(hit => {
+        const hitDeltas = hit?.deltas ?? [];
+        return (
+          numberOrZero(hit?.threeValueDeltaAggregate?.deltaCount) ===
+          hitDeltas.length
+        );
+      }),
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'action-aggregate-layer-fields',
+      valid: (actions ?? []).every(action =>
+        aggregateMatchesDeltas(
+          action?.threeValueDeltaAggregate,
+          getGenerationEntryActionDeltas(action)
+        )
+      ),
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'hit-aggregate-layer-fields',
+      valid: (hits ?? []).every(hit =>
+        aggregateMatchesDeltas(hit?.threeValueDeltaAggregate, hit?.deltas ?? [])
+      ),
+    }),
+  ];
+  const failedChecks = checks.filter(check => !check.valid);
+
+  return {
+    schemaVersion: 1,
+    sourceKind:
+      'azpr-action-hit-three-value-delta-generation-entry-aggregate-validation',
+    status:
+      failedChecks.length > 0
+        ? 'generation-entry-aggregate-invalid'
+        : 'generation-entry-aggregate-valid',
+    actionCount: actions?.length ?? 0,
+    hitCount: hits?.length ?? 0,
+    checkCount: checks.length,
+    issueCount: failedChecks.length,
+    issueKeys: failedChecks.map(check => check.key),
+    checks,
+    valid: failedChecks.length === 0,
+    applied: false,
+  };
+}
+
+function getGenerationEntryActionDeltas(action) {
+  return (action?.hits ?? []).flatMap(hit => hit?.deltas ?? []);
+}
+
+function aggregateMatchesDeltas(aggregate, deltas) {
+  const normalizedDeltas = deltas ?? [];
+  if (!aggregate) {
+    return normalizedDeltas.length === 0;
+  }
+
+  if (numberOrZero(aggregate.deltaCount) !== normalizedDeltas.length) {
+    return false;
+  }
+
+  const expectedLayerKeys = sortGenerationEntryLayerKeys(
+    uniqueStrings(normalizedDeltas.map(delta => delta?.layerKey ?? 'unknown'))
+  );
+  if (!arraysEqual(aggregate.layerKeys, expectedLayerKeys)) {
+    return false;
+  }
+
+  for (const layerKey of expectedLayerKeys) {
+    const layerDeltas = normalizedDeltas.filter(
+      delta => (delta?.layerKey ?? 'unknown') === layerKey
+    );
+    const aggregateLayer = aggregate.layers?.[layerKey];
+    if (!aggregateLayer) {
+      return false;
+    }
+
+    if (numberOrZero(aggregateLayer.deltaCount) !== layerDeltas.length) {
+      return false;
+    }
+
+    const expectedTrackKeys = uniqueStrings(
+      layerDeltas.map(delta => delta?.trackKey)
+    );
+    if (!setsEqualStrings(aggregateLayer.trackKeys ?? [], expectedTrackKeys)) {
+      return false;
+    }
+
+    for (const field of THREE_VALUE_DELTA_FIELDS) {
+      if (
+        roundGenerationEntryNumber(aggregateLayer[field]) !==
+        sumGenerationEntryDeltaField(layerDeltas, field)
+      ) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+function sumGenerationEntryDeltaField(deltas, field) {
+  return roundGenerationEntryNumber(
+    (deltas ?? []).reduce((sum, delta) => {
+      const value = Number(delta?.[field]);
+      return Number.isFinite(value) ? sum + value : sum;
+    }, 0)
+  );
+}
+
+function sortGenerationEntryLayerKeys(layerKeys) {
+  return [...layerKeys].sort(
+    (left, right) =>
+      getGenerationEntryLayerOrder(left) -
+        getGenerationEntryLayerOrder(right) ||
+      String(left ?? '').localeCompare(String(right ?? ''))
+  );
+}
+
+function getGenerationEntryLayerOrder(layerKey) {
+  const order = ['applied', 'candidate', 'sampled', 'placeholder'];
+  const index = order.indexOf(layerKey);
+  return index >= 0 ? index : 99;
+}
+
+function setsEqualStrings(left, right) {
+  return arraysEqual(uniqueStrings(left), uniqueStrings(right));
+}
+
+function roundGenerationEntryNumber(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? Number(number.toFixed(6)) : 0;
 }
 
 function createGenerationEntryValidationCheck({ key, valid }) {
@@ -431,6 +598,16 @@ function countMatching(items, predicate) {
 function numberOrZero(value) {
   const number = Number(value);
   return Number.isFinite(number) ? number : 0;
+}
+
+function uniqueStrings(values) {
+  return [
+    ...new Set(
+      (values ?? [])
+        .filter(value => value != null && String(value).trim() !== '')
+        .map(value => String(value))
+    ),
+  ].sort();
 }
 
 function createRuntimeInputSource({
@@ -489,6 +666,10 @@ function createThreeValueGenerationBundleSummary({
       generationEntry.contractValidation?.status ?? '',
     standardGenerationEntryContractValidationIssueCount:
       generationEntry.contractValidation?.issueCount ?? 0,
+    standardGenerationEntryAggregateValidationStatus:
+      generationEntry.contractValidation?.aggregateValidation?.status ?? '',
+    standardGenerationEntryAggregateValidationIssueCount:
+      generationEntry.contractValidation?.aggregateValidation?.issueCount ?? 0,
     generationInputSourceKind: generationInput?.sourceKind ?? '',
     generationInputStatus: generationInput?.status ?? '',
     generationInputPointCount: generationInput?.summary?.pointCount ?? 0,
