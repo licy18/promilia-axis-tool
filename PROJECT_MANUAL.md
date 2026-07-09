@@ -12212,6 +12212,30 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议继续 UI 主流程：把这条多动作闭环扩展到结果列表/贡献拆分的横向定位体验；或者进入生成层，把 `Action -> Hit -> ThreeValueDelta` 的统一生成入口整理成后续填入真实数值时可复用的稳定合同。
 
+### 2026-07-09：UI 主流程可见闭环 - 贡献拆分横向定位与中段编辑
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 用户现在可以在多动作排轴运行后，直接在动作贡献拆分面板用上一项/下一项切换不同动作的运行结果。
+- 从第三段动作的贡献拆分切到第二段动作后，可以继续从贡献详情进入动作编辑；修改起始帧后查看刷新结果，曲线、日志、三值详情和贡献拆分会重新定位到刷新后的第二段动作状态点。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、保存数据、导入导出结构。
+
+当前验证事实：
+
+- `AnalysisPanel.vue` 的贡献拆分面板复用现有 runtime result flow action，按 `actionResultTimeline` 中已有 runtime trace 提供前后动作结果导航。
+- `workbench-continuous-edit.spec.js` 新增浏览器路径：多动作排轴 -> 贡献拆分定位第三段 -> 上一项切到第二段 -> 从贡献详情编辑第二段 -> 查看刷新结果。
+- 刷新后确认 runtime output consistency 仍为 consistent，资源曲线与模拟日志选择同一个状态点，贡献拆分面板仍指向第二段动作。
+
+验收结果：
+
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps contribution navigation tied to multi-action edit return"`：通过，1 条浏览器级主流程测试。
+
+下一步：
+
+- 建议继续 UI 主流程：把结果列表、贡献拆分、曲线详情、三值详情这四个结果入口的共同使用路径做一次端到端成品验收；或者进入生成层，整理 `Action -> Hit -> ThreeValueDelta` 的统一生成入口。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

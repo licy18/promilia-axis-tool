@@ -423,6 +423,57 @@
           <small>
             {{ selectedActionContribution.appliedDeltaCount }}条运行结果
           </small>
+          <div
+            v-if="actionContributionNavigation.count > 1"
+            class="action-contribution-navigation"
+            :data-navigation-count="actionContributionNavigation.count"
+            :data-navigation-index="actionContributionNavigation.index"
+            data-testid="workbench-action-contribution-navigation"
+          >
+            <button
+              type="button"
+              :data-action-id="
+                actionContributionNavigation.previous?.actionId ?? ''
+              "
+              :data-state-point-id="
+                actionContributionNavigation.previous?.firstStatePointId ?? ''
+              "
+              data-testid="workbench-action-contribution-nav-prev"
+              :disabled="!actionContributionNavigation.previous"
+              title="上一个动作结果"
+              aria-label="上一个动作结果"
+              @click="
+                selectActionContributionNavigationPoint(
+                  actionContributionNavigation.previous
+                )
+              "
+            >
+              <ArrowLeft class="action-contribution-nav-icon" />
+            </button>
+            <strong data-testid="workbench-action-contribution-nav-index">
+              {{ formatActionContributionNavigationIndex() }}
+            </strong>
+            <button
+              type="button"
+              :data-action-id="
+                actionContributionNavigation.next?.actionId ?? ''
+              "
+              :data-state-point-id="
+                actionContributionNavigation.next?.firstStatePointId ?? ''
+              "
+              data-testid="workbench-action-contribution-nav-next"
+              :disabled="!actionContributionNavigation.next"
+              title="下一个动作结果"
+              aria-label="下一个动作结果"
+              @click="
+                selectActionContributionNavigationPoint(
+                  actionContributionNavigation.next
+                )
+              "
+            >
+              <ArrowRight class="action-contribution-nav-icon" />
+            </button>
+          </div>
         </div>
         <div
           v-if="selectedRuntimeResultDetail"
@@ -1387,6 +1438,9 @@ const selectedActionContribution = computed(() => {
     ) ?? runtimeTraceByActionId.value.get(contributionActionId);
   return trace ? createSelectedActionContribution(trace) : null;
 });
+const actionContributionNavigation = computed(() =>
+  createActionContributionNavigation(selectedActionContribution.value)
+);
 const selectedRuntimeResultDetail = computed(
   () => flowRuntimeSelectedDetail.value ?? null
 );
@@ -2663,6 +2717,11 @@ function selectActionContributionRow(row) {
   dispatchAnalysisFlowAction(action);
 }
 
+function selectActionContributionNavigationPoint(trace) {
+  const action = getActionContributionNavigationFlowAction(trace);
+  dispatchAnalysisFlowAction(action);
+}
+
 function focusActionContributionAction() {
   dispatchAnalysisFlowAction(actionContributionEditCommand.value.action);
 }
@@ -2679,6 +2738,39 @@ function getActionContributionFlowAction(row) {
     enabled: Boolean(row?.firstStatePointId),
     disabledReason: 'missing-contribution-state-point',
   });
+}
+
+function getActionContributionNavigationFlowAction(trace) {
+  return mainFlowActionSurface.value.createRuntimeResultFlowAction({
+    source: 'analysis-action-contribution-nav',
+    actionId: trace?.actionId ?? '',
+    statePointId: trace?.firstStatePointId ?? '',
+    enabled: Boolean(trace?.firstStatePointId),
+    disabledReason: 'missing-contribution-navigation-point',
+  });
+}
+
+function createActionContributionNavigation(contribution) {
+  const traces = props.actionResultTimeline
+    .map(entry => getActionResultRuntimeTrace(entry))
+    .filter(trace => trace?.firstStatePointId);
+  const index = traces.findIndex(
+    trace => trace.actionId === contribution?.actionId
+  );
+  return {
+    count: traces.length,
+    index,
+    previous: index > 0 ? traces[index - 1] : null,
+    next: index >= 0 && index < traces.length - 1 ? traces[index + 1] : null,
+  };
+}
+
+function formatActionContributionNavigationIndex() {
+  const { count, index } = actionContributionNavigation.value;
+  if (!count || index < 0) {
+    return '0/0';
+  }
+  return `${index + 1}/${count}`;
 }
 
 function formatActionResultRuntimeTrace(trace) {
@@ -4080,7 +4172,7 @@ h2 {
 
 .action-contribution-heading {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr) auto;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.1fr) auto auto;
   align-items: center;
   gap: 8px;
   min-width: 0;
@@ -4106,6 +4198,49 @@ h2 {
 .action-contribution-heading small {
   color: #aeb7c2;
   font-size: 11px;
+}
+
+.action-contribution-navigation {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  gap: 4px;
+}
+
+.action-contribution-navigation button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid rgba(166, 183, 255, 0.28);
+  border-radius: 4px;
+  background: rgba(166, 183, 255, 0.12);
+  color: #e8edff;
+  cursor: pointer;
+}
+
+.action-contribution-navigation button:not(:disabled):hover,
+.action-contribution-navigation button:not(:disabled):focus {
+  border-color: rgba(166, 183, 255, 0.5);
+  background: rgba(166, 183, 255, 0.2);
+}
+
+.action-contribution-navigation button:disabled {
+  cursor: not-allowed;
+  opacity: 0.44;
+}
+
+.action-contribution-navigation strong {
+  min-width: 32px;
+  color: #dff9f3;
+  font-size: 11px;
+  text-align: center;
+}
+
+.action-contribution-nav-icon {
+  width: 13px;
+  height: 13px;
 }
 
 .action-contribution-list {
@@ -4557,6 +4692,10 @@ h2 {
   .action-contribution-heading,
   .action-contribution-row {
     grid-template-columns: 1fr;
+  }
+
+  .action-contribution-navigation {
+    justify-self: start;
   }
 
   .action-result-detail-heading small {

@@ -365,6 +365,94 @@ test('keeps multi-action resource chart navigation tied to middle edit return', 
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps contribution navigation tied to multi-action edit return', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+  const { copiedState } = await createThreeActionRuntime(page);
+  expectRuntimeReviewState(copiedState, {
+    phase: 'runtime-result',
+    actionId: 'action-0003',
+    navigationCount: '3',
+    navigationIndex: '2',
+    selected: false,
+  });
+
+  await selectHpContributionAndExpectResultFocus(page, copiedState);
+  await expect(
+    page.getByTestId('workbench-action-contribution-navigation')
+  ).toHaveAttribute('data-navigation-count', '3');
+  await expect(
+    page.getByTestId('workbench-action-contribution-navigation')
+  ).toHaveAttribute('data-navigation-index', '2');
+  await expect(
+    page.getByTestId('workbench-action-contribution-nav-index')
+  ).toHaveText('3/3');
+  await expect(
+    page.getByTestId('workbench-action-contribution-nav-prev')
+  ).toHaveAttribute('data-action-id', 'action-0002');
+  await expect(
+    page.getByTestId('workbench-action-contribution-nav-next')
+  ).toBeDisabled();
+
+  await page.getByTestId('workbench-action-contribution-nav-prev').click();
+  const middleState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(middleState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(middleState, middleState.statePointId);
+  await expectCurveAndLogSelection(page, middleState.statePointId);
+  await expect(
+    page.getByTestId('workbench-action-contribution-panel')
+  ).toHaveAttribute('data-action-id', 'action-0002');
+  await expect(
+    page.getByTestId('workbench-action-contribution-nav-index')
+  ).toHaveText('2/3');
+  await expect(
+    page.getByTestId('workbench-action-contribution-nav-next')
+  ).toHaveAttribute('data-action-id', 'action-0003');
+  await expectRuntimeOutputConsistent(page);
+
+  const contributionEditButton = page.getByTestId(
+    'workbench-action-contribution-edit-action'
+  );
+  await expect(contributionEditButton).toHaveAttribute(
+    'data-action-id',
+    'action-0002'
+  );
+  await expect(contributionEditButton).toHaveAttribute(
+    'data-state-point-id',
+    middleState.statePointId
+  );
+  await contributionEditButton.click();
+  await expectRuntimeFocusInEditor(page);
+
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
+    actionId: 'action-0002',
+    frameValue: '174',
+    msValue: '2900',
+    originStatePointId: middleState.statePointId,
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+    returnButtonTestId: 'workbench-action-contribution-return-result',
+  });
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+  await expect(
+    page.getByTestId('workbench-action-contribution-panel')
+  ).toHaveAttribute('data-action-id', 'action-0002');
+  await expect(
+    page.getByTestId('workbench-action-contribution-nav-index')
+  ).toHaveText('2/3');
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps timeline state curve marker selection tied to edit return', async ({
   page,
 }) => {
