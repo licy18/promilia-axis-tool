@@ -487,6 +487,11 @@ describe('Workbench view', () => {
     ).toBe('full');
     expect(
       wrapper
+        .find('[data-testid="workbench-runtime-sim-log-detail"]')
+        .attributes('data-detail-placement')
+    ).toBe('inline');
+    expect(
+      wrapper
         .find('[data-testid="workbench-runtime-sim-log-detail-handoff"]')
         .exists()
     ).toBe(false);
@@ -5065,6 +5070,11 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-sim-log-detail"]')
         .attributes('data-detail-source')
     ).toBe('runtime-selected-detail');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-detail"]')
+        .attributes('data-detail-placement')
+    ).toBe('selected-first');
     expect(
       wrapper
         .find(

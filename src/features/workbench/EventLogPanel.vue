@@ -168,6 +168,7 @@
         v-if="selectedRuntimeLog"
         class="runtime-log-detail"
         :data-detail-layout="runtimeLogDetailLayout"
+        :data-detail-placement="runtimeLogDetailPlacement"
         :data-detail-source="runtimeLogDetailSource"
         data-testid="workbench-runtime-sim-log-detail"
       >
@@ -558,6 +559,9 @@ const runtimeLogDetailHandoff = computed(() =>
 );
 const runtimeLogDetailLayout = computed(() =>
   runtimeLogDetailHandoff.value ? 'compact' : 'full'
+);
+const runtimeLogDetailPlacement = computed(() =>
+  matchedRuntimeSelectedDetail.value ? 'selected-first' : 'inline'
 );
 const runtimeLogDetailRows = computed(() => {
   const baseRows = [
@@ -1334,6 +1338,55 @@ h2 {
   border: 1px solid rgba(121, 199, 185, 0.18);
   border-radius: 6px;
   background: rgba(121, 199, 185, 0.07);
+}
+
+.event-log-panel[data-runtime-review-role='secondary'] .runtime-log-heading {
+  order: 1;
+}
+
+.event-log-panel[data-runtime-review-role='secondary']
+  .runtime-log-filter-summary {
+  order: 2;
+}
+
+.event-log-panel[data-runtime-review-role='secondary'] .runtime-log-navigation {
+  order: 3;
+}
+
+.event-log-panel[data-runtime-review-role='secondary']
+  .runtime-log-selection-note {
+  order: 4;
+}
+
+.event-log-panel[data-runtime-review-role='secondary'] .runtime-log-detail {
+  order: 8;
+}
+
+.event-log-panel[data-runtime-review-role='secondary']
+  .runtime-log-detail[data-detail-placement='selected-first'] {
+  order: 4;
+}
+
+.event-log-panel[data-runtime-review-role='secondary'] .runtime-log-filters {
+  order: 5;
+}
+
+.event-log-panel[data-runtime-review-role='secondary'] .runtime-log-list {
+  order: 6;
+  max-height: 220px;
+}
+
+.event-log-panel[data-runtime-review-role='secondary'] .runtime-log-empty {
+  order: 7;
+}
+
+.event-log-panel[data-runtime-review-role='secondary']
+  .runtime-contribution-detail,
+.event-log-panel[data-runtime-review-role='secondary']
+  .runtime-source-detail,
+.event-log-panel[data-runtime-review-role='secondary']
+  .runtime-calculator-detail {
+  order: 9;
 }
 
 .runtime-log-heading {
