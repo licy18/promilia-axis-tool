@@ -58,93 +58,93 @@
 
     <div
       class="workbench-grid"
-      :data-flow-phase="workbenchFlowModel.phase"
+      :data-flow-phase="mainFlowWorkspaceView.phase"
       :data-main-flow-current-region="
-        runtimeReviewFlowView.region.currentRegion
+        mainFlowWorkspaceView.region.currentRegion
       "
       :data-main-flow-next-target-kind="
-        runtimeReviewFlowView.region.nextTargetKind
+        mainFlowWorkspaceView.region.nextTargetKind
       "
       :data-main-flow-next-region="
-        runtimeReviewFlowView.region.nextRegion
+        mainFlowWorkspaceView.region.nextRegion
       "
       :data-main-flow-pending-runtime-state-point-id="
-        runtimeReviewFlowView.region.pendingRuntimeStatePointId
+        mainFlowWorkspaceView.region.pendingRuntimeStatePointId
       "
       :data-main-flow-selected-action-id="
-        runtimeReviewFlowView.region.selectedActionId
+        mainFlowWorkspaceView.region.selectedActionId
       "
       :data-main-flow-selected-runtime-state-point-id="
-        runtimeReviewFlowView.region.selectedRuntimeStatePointId
+        mainFlowWorkspaceView.region.selectedRuntimeStatePointId
       "
       :data-main-flow-dispatch-sequence="
-        mainFlowStatusView.dispatch.sequence
+        mainFlowWorkspaceView.dispatch.sequence
       "
       :data-main-flow-dispatch-status="
-        mainFlowStatusView.dispatch.status
+        mainFlowWorkspaceView.dispatch.status
       "
       :data-main-flow-dispatch-handled="
-        mainFlowStatusView.dispatch.handledState
+        mainFlowWorkspaceView.dispatch.handledState
       "
       :data-main-flow-dispatch-has-result="
-        mainFlowStatusView.dispatch.hasResultState
+        mainFlowWorkspaceView.dispatch.hasResultState
       "
-      :data-main-flow-dispatch-kind="mainFlowStatusView.dispatch.kind"
+      :data-main-flow-dispatch-kind="mainFlowWorkspaceView.dispatch.kind"
       :data-main-flow-dispatch-source="
-        mainFlowStatusView.dispatch.source
+        mainFlowWorkspaceView.dispatch.source
       "
       :data-main-flow-dispatch-handler-key="
-        mainFlowStatusView.dispatch.handlerKey
+        mainFlowWorkspaceView.dispatch.handlerKey
       "
       :data-main-flow-dispatch-reason="
-        mainFlowStatusView.dispatch.reason
+        mainFlowWorkspaceView.dispatch.reason
       "
       :data-main-flow-dispatch-action-id="
-        mainFlowStatusView.dispatch.actionId
+        mainFlowWorkspaceView.dispatch.actionId
       "
       :data-main-flow-dispatch-state-point-id="
-        mainFlowStatusView.dispatch.statePointId
+        mainFlowWorkspaceView.dispatch.statePointId
       "
-      :data-main-flow-loop-step="mainFlowStatusView.loop.step"
-      :data-main-flow-loop-status="mainFlowStatusView.loop.status"
+      :data-main-flow-loop-step="mainFlowWorkspaceView.loop.step"
+      :data-main-flow-loop-status="mainFlowWorkspaceView.loop.status"
       :data-main-flow-loop-recovery-needed="
-        mainFlowStatusView.loop.recoveryNeededState
+        mainFlowWorkspaceView.loop.recoveryNeededState
       "
       :data-main-flow-loop-next-action-kind="
-        mainFlowStatusView.loop.nextActionKind
+        mainFlowWorkspaceView.loop.nextActionKind
       "
       :data-main-flow-loop-next-target-kind="
-        mainFlowStatusView.loop.nextTargetKind
+        mainFlowWorkspaceView.loop.nextTargetKind
       "
       :data-main-flow-loop-current-region="
-        mainFlowStatusView.loop.currentRegion
+        mainFlowWorkspaceView.loop.currentRegion
       "
       :data-main-flow-loop-next-region="
-        mainFlowStatusView.loop.nextRegion
+        mainFlowWorkspaceView.loop.nextRegion
       "
       :data-runtime-review-selection-status="
-        runtimeReviewFlowView.selection.status
+        mainFlowWorkspaceView.reviewSelection.status
       "
       :data-runtime-review-selected-action-id="
-        runtimeReviewFlowView.selection.selectedActionId
+        mainFlowWorkspaceView.reviewSelection.selectedActionId
       "
       :data-runtime-review-selected-state-point-id="
-        runtimeReviewFlowView.selection.selectedStatePointId
+        mainFlowWorkspaceView.reviewSelection.selectedStatePointId
       "
       :data-runtime-review-pending-state-point-id="
-        runtimeReviewFlowView.selection.pendingStatePointId
+        mainFlowWorkspaceView.reviewSelection.pendingStatePointId
       "
       :data-runtime-review-source="
-        runtimeReviewFlowView.selection.source
+        mainFlowWorkspaceView.reviewSelection.source
       "
       :data-runtime-review-source-kind="
-        runtimeReviewFlowView.selection.sourceKind
+        mainFlowWorkspaceView.reviewSelection.sourceKind
       "
       :data-runtime-review-last-action-kind="
-        runtimeReviewFlowView.selection.lastActionKind
+        mainFlowWorkspaceView.reviewSelection.lastActionKind
       "
       :data-runtime-review-last-action-source="
-        runtimeReviewFlowView.selection.lastActionSource
+        mainFlowWorkspaceView.reviewSelection.lastActionSource
       "
       data-testid="workbench-main-flow-workspace"
     >
@@ -173,21 +173,21 @@
 
       <div
         class="primary-flow"
-        :data-flow-phase="workbenchFlowModel.phase"
+        :data-flow-phase="mainFlowWorkspaceView.phase"
         :data-main-flow-current-region="
-          runtimeReviewFlowView.region.currentRegion
+          mainFlowWorkspaceView.region.currentRegion
         "
         :data-main-flow-next-target-kind="
-          runtimeReviewFlowView.region.nextTargetKind
+          mainFlowWorkspaceView.region.nextTargetKind
         "
         :data-main-flow-next-region="
-          runtimeReviewFlowView.region.nextRegion
+          mainFlowWorkspaceView.region.nextRegion
         "
         :data-main-flow-pending-runtime-state-point-id="
-          runtimeReviewFlowView.region.pendingRuntimeStatePointId
+          mainFlowWorkspaceView.region.pendingRuntimeStatePointId
         "
         :data-main-flow-selected-runtime-state-point-id="
-          runtimeReviewFlowView.region.selectedRuntimeStatePointId
+          mainFlowWorkspaceView.region.selectedRuntimeStatePointId
         "
         data-testid="workbench-primary-flow"
       >
@@ -226,34 +226,34 @@
         <div
           class="runtime-review-stack"
           :data-main-flow-current-region="
-            runtimeReviewFlowView.region.currentRegion
+            mainFlowWorkspaceView.region.currentRegion
           "
           :data-main-flow-pending-runtime-state-point-id="
-            runtimeReviewFlowView.region.pendingRuntimeStatePointId
+            mainFlowWorkspaceView.region.pendingRuntimeStatePointId
           "
           :data-main-flow-selected-runtime-state-point-id="
-            runtimeReviewFlowView.region.selectedRuntimeStatePointId
+            mainFlowWorkspaceView.region.selectedRuntimeStatePointId
           "
           :data-runtime-review-selection-status="
-            runtimeReviewFlowView.selection.status
+            mainFlowWorkspaceView.reviewSelection.status
           "
           :data-runtime-review-selected-action-id="
-            runtimeReviewFlowView.selection.selectedActionId
+            mainFlowWorkspaceView.reviewSelection.selectedActionId
           "
           :data-runtime-review-selected-state-point-id="
-            runtimeReviewFlowView.selection.selectedStatePointId
+            mainFlowWorkspaceView.reviewSelection.selectedStatePointId
           "
           :data-runtime-review-source="
-            runtimeReviewFlowView.selection.source
+            mainFlowWorkspaceView.reviewSelection.source
           "
           :data-runtime-review-source-kind="
-            runtimeReviewFlowView.selection.sourceKind
+            mainFlowWorkspaceView.reviewSelection.sourceKind
           "
           :data-runtime-review-primary-operation-kind="
-            runtimeReviewFlowView.operations.primaryOperationKind
+            mainFlowWorkspaceView.reviewOperations.primaryOperationKind
           "
           :data-runtime-review-primary-operation-enabled="
-            runtimeReviewFlowView.operations.primaryOperationEnabledState
+            mainFlowWorkspaceView.reviewOperations.primaryOperationEnabledState
           "
           data-testid="workbench-runtime-review-stack"
         >
@@ -328,9 +328,9 @@
 
       <div
         class="side-stack"
-        :data-flow-phase="workbenchFlowModel.phase"
+        :data-flow-phase="mainFlowWorkspaceView.phase"
         :data-main-flow-inspector-mode="
-          runtimeReviewFlowView.region.inspectorMode
+          mainFlowWorkspaceView.inspector.mode
         "
         data-testid="workbench-side-inspector"
       >
@@ -440,8 +440,7 @@ import {
   createWorkbenchActionEditSource,
 } from '../features/workbench/workbenchActionEditSource';
 import {
-  createWorkbenchMainFlowStatusView,
-  createWorkbenchRuntimeReviewFlowView,
+  createWorkbenchMainFlowWorkspaceView,
   createWorkbenchFlowModel,
 } from '../features/workbench/workbenchFlowModel';
 import {
@@ -597,13 +596,8 @@ const workbenchFlowModel = computed(() =>
     flowDispatchState: workbenchFlowDispatchState.value,
   })
 );
-const mainFlowStatusView = computed(() =>
-  createWorkbenchMainFlowStatusView({
-    flowModel: workbenchFlowModel.value,
-  })
-);
-const runtimeReviewFlowView = computed(() =>
-  createWorkbenchRuntimeReviewFlowView({
+const mainFlowWorkspaceView = computed(() =>
+  createWorkbenchMainFlowWorkspaceView({
     flowModel: workbenchFlowModel.value,
   })
 );

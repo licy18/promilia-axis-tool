@@ -21759,3 +21759,73 @@ createWorkbenchActionEditResultContext({
 - `npm run test -- --run src/__tests__/features/workbenchActionEditSource.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、63 条测试。
 - `npm run test -- --run`：通过，38 个测试文件、255 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 299. UI 主流程能力块：Main Flow Workspace View
+
+### 299.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增 Workbench 主工作区视图入口：
+
+```js
+createWorkbenchMainFlowWorkspaceView({
+  flowModel,
+  mainFlowStatusView,
+  runtimeReviewFlowView,
+})
+```
+
+输出结构：
+
+```js
+{
+  phase,
+  region: {
+    currentRegion,
+    nextRegion,
+    nextTargetKind,
+    inspectorMode,
+    selectedActionId,
+    selectedRuntimeStatePointId,
+    pendingRuntimeStatePointId,
+    refreshedRuntimeStatePointId,
+  },
+  dispatch,
+  loop,
+  runtimeReview: {
+    selection,
+    operations,
+  },
+  reviewSelection,
+  reviewOperations,
+  inspector: {
+    mode,
+    currentRegion,
+    nextRegion,
+  },
+}
+```
+
+聚合规则：
+
+- `dispatch` 和 `loop` 复用 `createWorkbenchMainFlowStatusView()` 的既有输出。
+- `region`、`reviewSelection`、`reviewOperations` 复用 `createWorkbenchRuntimeReviewFlowView()` 的既有输出。
+- `runtimeReview.selection` 与 `reviewSelection` 指向同一对象；`runtimeReview.operations` 与 `reviewOperations` 指向同一对象，便于根页面和后续面板按完整主工作区视图消费状态。
+- `inspector.mode` 使用 `region.inspectorMode`，让右侧编辑/详情/回看面板的主流程模式从同一视图读取。
+
+消费方变化：
+
+- `Workbench.vue` 根页面不再直接创建并消费 `mainFlowStatusView` / `runtimeReviewFlowView`。
+- `workbench-main-flow-workspace`、`workbench-primary-flow`、`workbench-runtime-review-stack`、`workbench-side-inspector` 的主流程 data 状态都改为读取 `mainFlowWorkspaceView`。
+
+### 299.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程视图聚合边界，不新增持久字段，不需要数据迁移。
+
+### 299.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖 `mainFlowWorkspaceView` 在 runtime result 和 edit result ready 两个关键闭环状态下的区域、dispatch/loop、runtime review selection/operations 和 inspector mode。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、66 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、256 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

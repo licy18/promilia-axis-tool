@@ -10293,6 +10293,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续按大能力块推进：优先做 Workbench 主流程端到端检查，围绕“排轴动作编辑 -> 运行模拟 -> 资源曲线监控 -> 日志/详情查看 -> 回到动作修改”补主路径缺口；若进入底层，则回到生成层/运行时层的标准合同消费边界，不再拆局部状态提示阶段。
 
+### 2026-07-09：UI 主流程能力块 - Main Flow Workspace View
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchFlowModel` 新增 `createWorkbenchMainFlowWorkspaceView()`，把主工作区需要的 `phase`、区域、dispatch、loop、runtime review selection/operations 和 inspector mode 汇合为一个可复用视图。
+- `Workbench.vue` 根页面不再分别消费 `mainFlowStatusView` 和 `runtimeReviewFlowView`，主工作区、primary flow、runtime review stack 和 side inspector 都改为读取同一份 `mainFlowWorkspaceView`。
+- 新增模型测试覆盖 runtime result 和 edit result ready 两个关键闭环状态，确保“结果查看 -> 定位动作”和“编辑后 -> 回到刷新结果”都能从同一工作区视图读到主流程状态。
+- 本阶段只收束 Workbench 主流程状态读取边界，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- Workbench flow model 单测覆盖 `mainFlowWorkspaceView` 对区域、下一步目标、dispatch/loop、runtime review selection/operations 和 inspector mode 的聚合。
+- Workbench 页面测试继续覆盖“编辑 -> 运行结果 -> 定位动作 -> 修改 -> 回到刷新结果”的端到端循环。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、66 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、256 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：基于 `mainFlowWorkspaceView` 做 Workbench 主流程缺口检查，优先补齐真正影响“资源曲线监控 / 日志详情查看 / 回到动作修改”的入口或状态边界；若转到底层，则回到生成层或运行时层标准合同消费，不拆局部提示阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

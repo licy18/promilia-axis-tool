@@ -382,6 +382,54 @@ export function createWorkbenchRuntimeReviewFlowView({
   };
 }
 
+export function createWorkbenchMainFlowWorkspaceView({
+  flowModel = null,
+  mainFlowStatusView = null,
+  runtimeReviewFlowView = null,
+} = {}) {
+  const statusView =
+    mainFlowStatusView ??
+    createWorkbenchMainFlowStatusView({
+      flowModel,
+    });
+  const reviewView =
+    runtimeReviewFlowView ??
+    createWorkbenchRuntimeReviewFlowView({
+      flowModel,
+    });
+  const region = reviewView.region ?? {};
+  const selection = reviewView.selection ?? {};
+  const operations = reviewView.operations ?? {};
+
+  return {
+    phase: flowModel?.phase ?? '',
+    region: {
+      currentRegion: region.currentRegion ?? '',
+      nextRegion: region.nextRegion ?? '',
+      nextTargetKind: region.nextTargetKind ?? '',
+      inspectorMode: region.inspectorMode ?? '',
+      selectedActionId: region.selectedActionId ?? '',
+      selectedRuntimeStatePointId: region.selectedRuntimeStatePointId ?? '',
+      pendingRuntimeStatePointId: region.pendingRuntimeStatePointId ?? '',
+      refreshedRuntimeStatePointId:
+        region.refreshedRuntimeStatePointId ?? '',
+    },
+    dispatch: statusView.dispatch ?? {},
+    loop: statusView.loop ?? {},
+    runtimeReview: {
+      selection,
+      operations,
+    },
+    reviewSelection: selection,
+    reviewOperations: operations,
+    inspector: {
+      mode: region.inspectorMode ?? '',
+      currentRegion: region.currentRegion ?? '',
+      nextRegion: region.nextRegion ?? '',
+    },
+  };
+}
+
 export function createWorkbenchRuntimeReviewContextView({
   flowModel = null,
   runtimeReviewSelection = null,

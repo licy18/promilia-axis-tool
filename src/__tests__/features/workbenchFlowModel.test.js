@@ -3,12 +3,15 @@ import {
   WORKBENCH_FLOW_ACTION_KINDS,
   WORKBENCH_FLOW_PHASES,
   WORKBENCH_MAIN_FLOW_REGIONS,
+  WORKBENCH_MAIN_FLOW_LOOP_STATUSES,
+  WORKBENCH_MAIN_FLOW_LOOP_STEPS,
   WORKBENCH_FLOW_PRIMARY_ACTION_KEYS,
   WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS,
   WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES,
   createWorkbenchFlowAction,
   createWorkbenchFlowModel,
   createWorkbenchMainFlowStatusView,
+  createWorkbenchMainFlowWorkspaceView,
   createWorkbenchRuntimeReviewContextView,
   createWorkbenchRuntimeReviewFlowView,
   createWorkbenchRuntimeReviewPanelView,
@@ -1102,6 +1105,158 @@ describe('workbench flow model', () => {
         primaryLabel: '回到结果点',
         focusActionEnabledState: 'false',
         returnResultEnabledState: 'true',
+      },
+    });
+  });
+
+  it('creates a main flow workspace view for the edit-runtime-return loop', () => {
+    const runtimeProjection = createRuntimeProjectionFixture();
+    const baseModel = createWorkbenchFlowModel({ runtimeProjection });
+    const firstPoint = baseModel.runtimeNavigation.points[0];
+    const secondPoint = baseModel.runtimeNavigation.points[1];
+
+    const selectedWorkspace = createWorkbenchMainFlowWorkspaceView({
+      flowModel: createWorkbenchFlowModel({
+        selectedAction: { id: 'action-0001', name: '普通攻击' },
+        runtimeProjection,
+        selectedStateCurvePointId: firstPoint.statePointId,
+        runtimeFocusSource: 'action-result',
+        runtimeSelectedDetail: {
+          actionId: 'action-0001',
+          statePointId: firstPoint.statePointId,
+          frameLabel: '12f',
+          trackLabel: '敌人 HP',
+          trackKey: 'enemyHpDamage',
+        },
+        flowDispatchState: {
+          sequence: 4,
+          handled: true,
+          kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+          source: 'resource-runtime-curve',
+          handlerKey: 'selectRuntimeResult',
+          actionId: 'action-0001',
+          statePointId: firstPoint.statePointId,
+        },
+      }),
+    });
+
+    expect(selectedWorkspace).toMatchObject({
+      phase: WORKBENCH_FLOW_PHASES.RUNTIME_RESULT,
+      region: {
+        currentRegion: WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW,
+        nextRegion: WORKBENCH_MAIN_FLOW_REGIONS.ACTION_EDIT,
+        nextTargetKind: 'runtime-action-edit',
+        inspectorMode: 'runtime-detail',
+        selectedActionId: 'action-0001',
+        selectedRuntimeStatePointId: firstPoint.statePointId,
+        pendingRuntimeStatePointId: '',
+      },
+      dispatch: {
+        sequence: 4,
+        status: 'handled',
+        handledState: 'true',
+        hasResultState: 'true',
+        kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+        source: 'resource-runtime-curve',
+        handlerKey: 'selectRuntimeResult',
+        actionId: 'action-0001',
+        statePointId: firstPoint.statePointId,
+      },
+      loop: {
+        step: WORKBENCH_MAIN_FLOW_LOOP_STEPS.RUNTIME_REVIEW,
+        status: WORKBENCH_MAIN_FLOW_LOOP_STATUSES.ADVANCED,
+        recoveryNeededState: 'false',
+        nextActionKind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
+        nextTargetKind: 'runtime-action-edit',
+        currentRegion: WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW,
+        nextRegion: WORKBENCH_MAIN_FLOW_REGIONS.ACTION_EDIT,
+      },
+      runtimeReview: {
+        selection: {
+          status: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.SELECTED,
+          selectedActionId: 'action-0001',
+          selectedStatePointId: firstPoint.statePointId,
+          source: 'action-result',
+          sourceKind: 'action-result',
+        },
+        operations: {
+          primaryOperationKind:
+            WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.FOCUS_ACTION,
+          primaryOperationEnabledState: 'true',
+        },
+      },
+      inspector: {
+        mode: 'runtime-detail',
+        currentRegion: WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW,
+        nextRegion: WORKBENCH_MAIN_FLOW_REGIONS.ACTION_EDIT,
+      },
+    });
+    expect(selectedWorkspace.reviewSelection).toBe(
+      selectedWorkspace.runtimeReview.selection
+    );
+    expect(selectedWorkspace.reviewOperations).toBe(
+      selectedWorkspace.runtimeReview.operations
+    );
+
+    const pendingWorkspace = createWorkbenchMainFlowWorkspaceView({
+      flowModel: createWorkbenchFlowModel({
+        selectedAction: { id: 'action-0002', name: '资源动作' },
+        runtimeProjection,
+        actionEditFocus: {
+          actionId: 'action-0002',
+          fieldKey: 'startMs',
+          editOrigin: 'runtime-focus',
+          originStatePointId: firstPoint.statePointId,
+        },
+        actionEditResultContext: {
+          status: 'refreshed-edit-result',
+          actionId: 'action-0002',
+          runtimeStatePointId: secondPoint.statePointId,
+          originStatePointId: firstPoint.statePointId,
+          label: '开始时间',
+          changeSummary: '0ms -> 1000ms',
+        },
+      }),
+    });
+
+    expect(pendingWorkspace).toMatchObject({
+      phase: WORKBENCH_FLOW_PHASES.EDIT_RESULT_READY,
+      region: {
+        currentRegion: WORKBENCH_MAIN_FLOW_REGIONS.ACTION_EDIT,
+        nextRegion: WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW,
+        nextTargetKind: 'runtime-result-return',
+        inspectorMode: 'edit-result',
+        selectedActionId: 'action-0002',
+        selectedRuntimeStatePointId: '',
+        pendingRuntimeStatePointId: secondPoint.statePointId,
+        refreshedRuntimeStatePointId: secondPoint.statePointId,
+      },
+      loop: {
+        step: WORKBENCH_MAIN_FLOW_LOOP_STEPS.EDIT_RESULT_READY,
+        status: WORKBENCH_MAIN_FLOW_LOOP_STATUSES.READY,
+        nextActionKind: WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+        nextTargetKind: 'runtime-result-return',
+        currentRegion: WORKBENCH_MAIN_FLOW_REGIONS.ACTION_EDIT,
+        nextRegion: WORKBENCH_MAIN_FLOW_REGIONS.RUNTIME_REVIEW,
+      },
+      runtimeReview: {
+        selection: {
+          status: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.PENDING_RESULT,
+          pendingActionId: 'action-0002',
+          pendingStatePointId: secondPoint.statePointId,
+          refreshedStatePointId: secondPoint.statePointId,
+          hasPendingResultState: 'true',
+        },
+        operations: {
+          primaryOperationKind:
+            WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
+          primaryOperationEnabledState: 'true',
+          primaryActionId: 'action-0002',
+          primaryStatePointId: secondPoint.statePointId,
+        },
+      },
+      inspector: {
+        mode: 'edit-result',
       },
     });
   });
