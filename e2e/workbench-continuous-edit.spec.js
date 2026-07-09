@@ -796,6 +796,91 @@ test('keeps multi-action resource chart navigation tied to middle edit return @w
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('recovers filtered multi-action logs before returning edited results @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+  const { copiedState } = await createThreeActionRuntime(page);
+  expectRuntimeReviewState(copiedState, {
+    phase: 'runtime-result',
+    actionId: 'action-0003',
+    navigationCount: '3',
+    navigationIndex: '2',
+    selected: false,
+  });
+  await expectRuntimeOutputConsistent(page);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await readPageOverflowX(page)).toBe(0);
+
+  const previousCurveResult = page.getByTestId(
+    'workbench-runtime-resource-chart-selection-prev'
+  );
+  await expect(previousCurveResult).toHaveAttribute(
+    'data-state-point-id',
+    /action-0002/
+  );
+  await previousCurveResult.click();
+
+  const middleState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(middleState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(middleState, middleState.statePointId);
+  await expectCurveAndLogSelection(page, middleState.statePointId);
+
+  await page
+    .getByTestId('workbench-runtime-sim-log-action-filter')
+    .selectOption('action-0003');
+  await expect(
+    page.getByTestId('workbench-runtime-sim-log-selection-filtered')
+  ).toBeVisible();
+  await expect(
+    page.getByTestId('workbench-runtime-sim-log-navigation')
+  ).toHaveAttribute('data-navigation-status', 'filtered-out');
+  await expect(
+    page.getByTestId('workbench-runtime-sim-log-navigation')
+  ).toHaveAttribute('data-state-point-id', middleState.statePointId);
+
+  await page.getByTestId('workbench-runtime-sim-log-show-selected').click();
+  await expectCurveAndLogSelection(page, middleState.statePointId);
+  await expect(
+    page.getByTestId('workbench-runtime-sim-log-action-filter')
+  ).toHaveValue('action-0002');
+
+  const logEditButton = page.getByTestId(
+    'workbench-runtime-sim-log-action-focus'
+  );
+  await expect(logEditButton).toHaveAttribute('data-action-id', 'action-0002');
+  await expect(logEditButton).toHaveAttribute(
+    'data-state-point-id',
+    middleState.statePointId
+  );
+  await logEditButton.click();
+  await expectRuntimeFocusInEditor(page);
+  expect(await readPageOverflowX(page)).toBe(0);
+
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
+    actionId: 'action-0002',
+    frameValue: '180',
+    msValue: '3000',
+    originStatePointId: middleState.statePointId,
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+    returnButtonTestId: 'workbench-runtime-sim-log-return-result',
+  });
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+  expect(await readPageOverflowX(page)).toBe(0);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps contribution navigation tied to multi-action edit return @workbench-main-flow', async ({
   page,
 }) => {
