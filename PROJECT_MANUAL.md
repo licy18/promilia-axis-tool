@@ -12137,6 +12137,35 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议继续 UI 主流程：在窄屏、筛选、删除/重排动作后继续固定 runtime output consistency 与结果定位；或继续运行时层，把不一致状态接入更明确的诊断定位。
 
+### 2026-07-09：UI 主流程可见闭环 - 删除与窄屏一致性回归
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 删除当前运行结果对应动作后，Workbench 会回落到可用的剩余动作结果，并保持 runtime output consistency、曲线、日志、三值详情同步。
+- 删除生成动作批次后，Workbench 会回落到默认动作结果，并保持 runtime output consistency、曲线、日志、三值详情同步。
+- 窄屏下从贡献拆分进入编辑、查看刷新结果后，曲线与日志选择仍同步，主流程 runtime output consistency 仍为 consistent。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、保存数据、导入导出结构或 UI 文案。
+
+当前验证事实：
+
+- `workbench-continuous-edit.spec.js` 在删除当前动作、删除生成批次、窄屏编辑返回三条浏览器路径里新增 runtime output consistency 断言。
+- 三条路径都确认主流程面板 `data-runtime-output-consistency-status=runtime-output-consistent`、`data-runtime-output-consistent=true`、`data-runtime-output-navigation-synced=true`。
+
+验收结果：
+
+- `npm run test:e2e -- --grep "keeps runtime result flow usable after deleting|keeps the edit result loop usable at a narrow viewport"`：通过，3 条浏览器级主流程测试。
+- `npm run test:e2e`：通过，12 条浏览器级烟测。
+- `npm run test -- --run`：通过，39 个测试文件、273 条测试。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md e2e/workbench-continuous-edit.spec.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 建议继续 UI 主流程：把筛选条件切换后的曲线/日志/贡献定位和 runtime output consistency 也固定住；或进入运行时层，给不一致状态补更明确的诊断定位。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

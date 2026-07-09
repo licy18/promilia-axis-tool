@@ -744,6 +744,7 @@ test('keeps runtime result flow usable after deleting the focused action', async
   expect(fallbackState.statePointId).toContain('action-0002');
   expect(fallbackState.statePointId).not.toBe(copiedState.statePointId);
   expectRuntimeStatePointSynced(fallbackState, fallbackState.statePointId);
+  await expectRuntimeOutputConsistent(page);
   await expect(
     page.locator('.action-item[data-action-id="action-0003"]')
   ).toHaveCount(0);
@@ -759,6 +760,7 @@ test('keeps runtime result flow usable after deleting the focused action', async
     selected: true,
   });
   await expectCurveAndLogSelection(page, returnedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
 
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
@@ -812,6 +814,7 @@ test('keeps runtime result flow usable after deleting a generated action batch',
   expect(fallbackState.statePointId).toContain('action-0001');
   expect(fallbackState.statePointId).not.toBe(batchRuntimeState.statePointId);
   expectRuntimeStatePointSynced(fallbackState, fallbackState.statePointId);
+  await expectRuntimeOutputConsistent(page);
 
   await focusRuntimeDetailAction(page);
   const { returnedState } = await editCurrentActionFrameAndReturn(page, {
@@ -824,6 +827,7 @@ test('keeps runtime result flow usable after deleting a generated action batch',
     selected: true,
   });
   await expectCurveAndLogSelection(page, returnedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
 
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
@@ -848,6 +852,7 @@ test('keeps the edit result loop usable at a narrow viewport', async ({
     actionId: 'action-0001',
     selected: true,
   });
+  await expectRuntimeOutputConsistent(page);
 
   const contributionEditButton = page.getByTestId(
     'workbench-action-contribution-edit-action'
@@ -860,13 +865,15 @@ test('keeps the edit result loop usable at a narrow viewport', async ({
   await expectRuntimeFocusInEditor(page);
   expect(await readPageOverflowX(page)).toBe(0);
 
-  await editCurrentActionFrameAndReturn(page, {
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
     actionId: 'action-0001',
     frameValue: '18',
     msValue: '300',
     originStatePointId: narrowRuntimeState.statePointId,
     selected: true,
   });
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
 
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
