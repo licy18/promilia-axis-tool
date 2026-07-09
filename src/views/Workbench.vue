@@ -16,6 +16,30 @@
             draftStatus
           }}</span>
           <button
+            class="nav-button secondary"
+            :data-history-count="workbenchHistoryView.undoCount"
+            data-testid="workbench-undo-edit"
+            type="button"
+            :disabled="!workbenchHistoryView.canUndo"
+            title="撤销上一步编辑"
+            @click="undoWorkbenchEdit"
+          >
+            <ArrowLeft class="button-icon" />
+            <span>撤销</span>
+          </button>
+          <button
+            class="nav-button secondary"
+            :data-history-count="workbenchHistoryView.redoCount"
+            data-testid="workbench-redo-edit"
+            type="button"
+            :disabled="!workbenchHistoryView.canRedo"
+            title="重做上一步编辑"
+            @click="redoWorkbenchEdit"
+          >
+            <ArrowRight class="button-icon" />
+            <span>重做</span>
+          </button>
+          <button
             class="nav-button"
             data-testid="workbench-save-draft"
             type="button"
@@ -498,6 +522,7 @@ import {
 import { ACTION_TYPES } from '../domain/projectSchema';
 import {
   clearWorkbenchDraft,
+  createWorkbenchDraftSnapshot,
   createDefaultWorkbenchDraftState,
   loadWorkbenchDraft,
   normalizeWorkbenchSegmentSplitOptions,
@@ -510,6 +535,7 @@ import { simulateScenario } from '../simulation/engine/simulateScenario';
 const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
 const NEW_ACTION_INSERT_GAP_MS = frameToMs(60);
+const WORKBENCH_HISTORY_LIMIT = 50;
 const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
   applied: true,
   candidate: true,
@@ -534,6 +560,8 @@ const calculatorDiagnosticFocus = ref({ scope: '', sequence: 0 });
 const runtimeLogFocus = ref({ source: '', statePointId: '', sequence: 0 });
 const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const draftStatus = ref('未保存草稿');
+const undoHistoryStack = ref([]);
+const redoHistoryStack = ref([]);
 const actionEditSource = ref(createEmptyWorkbenchActionEditSource());
 const actionEditFocus = ref(createEmptyWorkbenchActionEditFocus());
 const workbenchFlowDispatchState = ref(createEmptyWorkbenchFlowDispatchState());
@@ -695,6 +723,12 @@ const selectedDraft = computed(() => {
     actionDrafts.value[0]
   );
 });
+const workbenchHistoryView = computed(() => ({
+  canUndo: undoHistoryStack.value.length > 0,
+  canRedo: redoHistoryStack.value.length > 0,
+  undoCount: undoHistoryStack.value.length,
+  redoCount: redoHistoryStack.value.length,
+}));
 
 onMounted(() => {
   const draft = loadWorkbenchDraft(getLocalStorage());
@@ -708,6 +742,7 @@ onMounted(() => {
 
 function updateSelection(patch) {
   clearSegmentSplitPreview();
+  recordWorkbenchHistorySnapshot();
   const previousSelection = selection.value;
   const characterChanged =
     patch.characterId != null &&
@@ -767,6 +802,7 @@ function updateSelection(patch) {
 
 function updateAction(patch) {
   clearSegmentSplitPreview();
+  recordWorkbenchHistorySnapshot();
   const actionId = selectedActionId.value;
   const previousAction = findActionDraftById(actionId);
   const editSourceFocus = captureActionEditSourceFocus(actionId);
@@ -845,6 +881,7 @@ function updateAction(patch) {
 
 function updateEnemyConfig(patch) {
   clearSegmentSplitPreview();
+  recordWorkbenchHistorySnapshot();
   enemyConfig.value = normalizeWorkbenchEnemyConfig({
     ...enemyConfig.value,
     ...patch,
@@ -854,6 +891,7 @@ function updateEnemyConfig(patch) {
 
 function updateSegmentSplitOptions(patch) {
   clearSegmentSplitPreview();
+  recordWorkbenchHistorySnapshot();
   segmentSplitOptions.value = normalizeWorkbenchSegmentSplitOptions({
     ...segmentSplitOptions.value,
     ...patch,
@@ -863,6 +901,7 @@ function updateSegmentSplitOptions(patch) {
 
 function updateActionTime({ actionId, startMs }) {
   clearSegmentSplitPreview();
+  recordWorkbenchHistorySnapshot();
   const previousAction = findActionDraftById(actionId);
   const editSourceFocus = captureActionEditSourceFocus(actionId);
   selectedActionId.value = actionId;
@@ -891,6 +930,7 @@ function updateActionTime({ actionId, startMs }) {
 
 function updateActionDuration({ actionId, durationMs }) {
   clearSegmentSplitPreview();
+  recordWorkbenchHistorySnapshot();
   const previousAction = findActionDraftById(actionId);
   const editSourceFocus = captureActionEditSourceFocus(actionId);
   selectedActionId.value = actionId;
@@ -930,6 +970,7 @@ function updateActionLane({ actionId, laneId }) {
     return;
   }
 
+  recordWorkbenchHistorySnapshot();
   let didUpdate = false;
   selectedActionId.value = actionId;
   actionDrafts.value = actionDrafts.value.map(action => {
@@ -1149,7 +1190,6 @@ function addEnemyEventAction() {
 
 function copyAction(actionId) {
   clearSegmentSplitPreview();
-  const runtimeReviewState = captureActionMutationRuntimeReviewState();
   const sourceIndex = actionDrafts.value.findIndex(
     action => action.id === actionId
   );
@@ -1158,6 +1198,8 @@ function copyAction(actionId) {
     return;
   }
 
+  recordWorkbenchHistorySnapshot();
+  const runtimeReviewState = captureActionMutationRuntimeReviewState();
   const nextAction = createWorkbenchActionDraft({
     ...sourceAction,
     id: createNextActionId(),
@@ -1197,6 +1239,7 @@ function deleteAction(actionId) {
     return;
   }
 
+  recordWorkbenchHistorySnapshot();
   const runtimeReviewState = captureActionMutationRuntimeReviewState();
   const selectedWasRemoved = selectedActionId.value === actionId;
   actionDrafts.value = actionDrafts.value.filter(
@@ -1235,6 +1278,7 @@ function deleteActionBatch(batchId) {
     return;
   }
 
+  recordWorkbenchHistorySnapshot();
   const firstRemovedIndex = actionDrafts.value.findIndex(action =>
     batchActionIds.has(action.id)
   );
@@ -1317,6 +1361,7 @@ function shiftActionBatch({ batchId, offsetMs }) {
     return;
   }
 
+  recordWorkbenchHistorySnapshot();
   actionDrafts.value = actionDrafts.value.map(action => {
     if (action.generationBatch?.batchId !== batchId) {
       return action;
@@ -1354,6 +1399,7 @@ function saveDraft() {
 }
 
 function resetDraft() {
+  recordWorkbenchHistorySnapshot();
   clearWorkbenchDraft(getLocalStorage());
   applyDraftState(createDefaultWorkbenchDraftState());
   clearSegmentSplitPreview();
@@ -1380,6 +1426,144 @@ function applyDraftState(draft) {
 
 function markDraftDirty() {
   draftStatus.value = '有未保存改动';
+}
+
+function recordWorkbenchHistorySnapshot() {
+  const snapshot = createWorkbenchHistorySnapshot();
+  const previousSnapshot =
+    undoHistoryStack.value[undoHistoryStack.value.length - 1] ?? null;
+  if (areWorkbenchHistorySnapshotsEqual(previousSnapshot, snapshot)) {
+    return;
+  }
+  undoHistoryStack.value = [
+    ...undoHistoryStack.value.slice(1 - WORKBENCH_HISTORY_LIMIT),
+    snapshot,
+  ];
+  redoHistoryStack.value = [];
+}
+
+function undoWorkbenchEdit() {
+  if (!undoHistoryStack.value.length) {
+    return;
+  }
+  const currentSnapshot = createWorkbenchHistorySnapshot();
+  const previousSnapshot =
+    undoHistoryStack.value[undoHistoryStack.value.length - 1];
+  undoHistoryStack.value = undoHistoryStack.value.slice(0, -1);
+  redoHistoryStack.value = [
+    ...redoHistoryStack.value.slice(1 - WORKBENCH_HISTORY_LIMIT),
+    currentSnapshot,
+  ];
+  applyWorkbenchHistorySnapshot(previousSnapshot, '已撤销编辑');
+}
+
+function redoWorkbenchEdit() {
+  if (!redoHistoryStack.value.length) {
+    return;
+  }
+  const currentSnapshot = createWorkbenchHistorySnapshot();
+  const nextSnapshot =
+    redoHistoryStack.value[redoHistoryStack.value.length - 1];
+  redoHistoryStack.value = redoHistoryStack.value.slice(0, -1);
+  undoHistoryStack.value = [
+    ...undoHistoryStack.value.slice(1 - WORKBENCH_HISTORY_LIMIT),
+    currentSnapshot,
+  ];
+  applyWorkbenchHistorySnapshot(nextSnapshot, '已重做编辑');
+}
+
+function createWorkbenchHistorySnapshot() {
+  const draftSnapshot = createWorkbenchDraftSnapshot(
+    {
+      selection: selection.value,
+      enemyConfig: enemyConfig.value,
+      segmentSplitOptions: segmentSplitOptions.value,
+      actionDrafts: actionDrafts.value,
+      selectedActionId: selectedActionId.value,
+    },
+    null
+  );
+  return cloneWorkbenchHistoryValue({
+    selection: draftSnapshot.selection,
+    enemyConfig: draftSnapshot.enemyConfig,
+    segmentSplitOptions: draftSnapshot.segmentSplitOptions,
+    actionDrafts: draftSnapshot.actionDrafts,
+    selectedActionId: draftSnapshot.selectedActionId,
+    selectedStateCurvePointId: selectedStateCurvePointId.value,
+    stateCurveFocusMode: stateCurveFocusMode.value,
+    stateCurveLayerFilters: stateCurveLayerFilters.value,
+    stateCurveTrackFilters: stateCurveTrackFilters.value,
+    calculatorDiagnosticScope: calculatorDiagnosticScope.value,
+    runtimeLogFocus: runtimeLogFocus.value,
+    actionLibraryCharacterId: actionLibraryCharacterId.value,
+    actionEditSource: actionEditSource.value,
+    actionEditFocus: actionEditFocus.value,
+    workbenchFlowDispatchState: workbenchFlowDispatchState.value,
+  });
+}
+
+function applyWorkbenchHistorySnapshot(snapshot, status) {
+  if (!snapshot) {
+    return;
+  }
+  selection.value = normalizeWorkbenchSelection(snapshot.selection);
+  enemyConfig.value = normalizeWorkbenchEnemyConfig(snapshot.enemyConfig);
+  segmentSplitOptions.value = normalizeWorkbenchSegmentSplitOptions(
+    snapshot.segmentSplitOptions
+  );
+  actionDrafts.value = normalizeWorkbenchActionDrafts(
+    snapshot.actionDrafts,
+    selection.value
+  );
+  selectedActionId.value = actionDrafts.value.some(
+    action => action.id === snapshot.selectedActionId
+  )
+    ? snapshot.selectedActionId
+    : (actionDrafts.value[0]?.id ?? '');
+  selectedStateCurvePointId.value = snapshot.selectedStateCurvePointId ?? '';
+  stateCurveFocusMode.value = snapshot.stateCurveFocusMode || 'all';
+  stateCurveLayerFilters.value = {
+    ...DEFAULT_STATE_CURVE_LAYER_FILTERS,
+    ...(snapshot.stateCurveLayerFilters ?? {}),
+  };
+  stateCurveTrackFilters.value = { ...(snapshot.stateCurveTrackFilters ?? {}) };
+  calculatorDiagnosticScope.value = snapshot.calculatorDiagnosticScope ?? '';
+  runtimeLogFocus.value = {
+    source: '',
+    statePointId: '',
+    sequence: 0,
+    ...(snapshot.runtimeLogFocus ?? {}),
+  };
+  actionEditSource.value =
+    cloneWorkbenchHistoryValue(snapshot.actionEditSource) ??
+    createEmptyWorkbenchActionEditSource();
+  actionEditFocus.value =
+    cloneWorkbenchHistoryValue(snapshot.actionEditFocus) ??
+    createEmptyWorkbenchActionEditFocus();
+  workbenchFlowDispatchState.value =
+    cloneWorkbenchHistoryValue(snapshot.workbenchFlowDispatchState) ??
+    createEmptyWorkbenchFlowDispatchState();
+  actionLibraryCharacterId.value =
+    snapshot.actionLibraryCharacterId ?? selection.value.characterId;
+  syncActionLibraryCharacterIdFromDraft(
+    actionDrafts.value.find(action => action.id === selectedActionId.value)
+  );
+  clearSegmentSplitPreview();
+  draftStatus.value = status;
+}
+
+function areWorkbenchHistorySnapshotsEqual(left, right) {
+  if (!left || !right) {
+    return false;
+  }
+  return JSON.stringify(left) === JSON.stringify(right);
+}
+
+function cloneWorkbenchHistoryValue(value) {
+  if (value == null) {
+    return value;
+  }
+  return JSON.parse(JSON.stringify(value));
 }
 
 function createEmptyWorkbenchFlowDispatchState(sequence = 0) {
@@ -1873,6 +2057,7 @@ function addInsertedAction(actionPatch, options = {}) {
     note: createInsertionNote(candidateAction.note, placement),
     insertion: createInsertionMetadata(placement),
   });
+  recordWorkbenchHistorySnapshot();
   actionDrafts.value = [
     ...actionDrafts.value.slice(0, placement.insertIndex),
     nextAction,
@@ -2534,6 +2719,12 @@ function getLocalStorage() {
 
 .nav-button:hover {
   filter: brightness(1.16);
+}
+
+.nav-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  filter: none;
 }
 
 .button-icon {

@@ -22773,3 +22773,56 @@ open-runtime-results
 - `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、101 条测试。
 - `npx playwright test e2e/workbench-continuous-edit.spec.js -g "runs the visible curve-log-detail edit loop end to end"`：通过，1 条浏览器级闭环测试。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 319. Workbench 会话级编辑历史：Undo / Redo State
+
+### 319.1 结构变化
+
+`Workbench.vue` 新增运行期历史栈：
+
+```text
+undoHistoryStack
+redoHistoryStack
+workbenchHistoryView
+```
+
+历史快照覆盖当前会话内的编辑上下文：
+
+```text
+selection
+enemyConfig
+segmentSplitOptions
+actionDrafts
+selectedActionId
+selectedStateCurvePointId
+stateCurveFocusMode
+stateCurveLayerFilters
+stateCurveTrackFilters
+calculatorDiagnosticScope
+runtimeLogFocus
+actionLibraryCharacterId
+actionEditSource
+actionEditFocus
+workbenchFlowDispatchState
+```
+
+顶部导航新增 UI 入口：
+
+```text
+workbench-undo-edit
+workbench-redo-edit
+```
+
+### 319.2 保存与迁移
+
+不新增项目草稿字段，不改变导入导出 schema，不需要数据迁移。
+
+撤销/重做历史只存在于当前 Workbench 会话内；保存草稿仍使用 `workbench-draft:v1` 原结构。三值计算结果、公式、倍率、证据字段、运行日志行和曲线数值均不改变。
+
+### 319.3 验证
+
+- `Workbench.test.js` 覆盖导航栏撤销/重做按钮启停，以及技能等级编辑后的撤销/重做恢复。
+- `workbench-continuous-edit.spec.js` 覆盖运行结果 -> 编辑动作 -> 撤销 -> 重做 -> 查看刷新结果的浏览器级闭环。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、68 条测试。
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps undo and redo tied to refreshed runtime results"`：通过，1 条浏览器级闭环测试。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。

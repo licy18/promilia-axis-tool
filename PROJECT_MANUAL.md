@@ -12556,6 +12556,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：围绕 Endaxis 式主流程补齐更完整的编辑体验与结果复盘入口，但仍避免继续打磨微型状态标签或解释文案。
 
+### 2026-07-09：UI 主流程可见闭环 - 动作编辑撤销/重做
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- Workbench 顶部操作区新增会话级“撤销 / 重做”，用户修改动作轴后可以直接回退或恢复上一轮编辑。
+- 撤销/重做会恢复动作轴、选中动作、运行定位、编辑焦点和刷新结果上下文；用户重做后仍可回到刷新后的结果定位。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、生成层合同、运行时输出或保存 schema。
+
+当前验证事实：
+
+- 初始状态撤销/重做不可用；修改技能等级后撤销可用、重做不可用；撤销恢复等级并启用重做；重做恢复等级并再次启用撤销。
+- 浏览器闭环覆盖：运行模拟 -> 结果详情进入动作编辑 -> 开始帧后移 1 帧 -> 撤销回原位 -> 重做 -> 查看刷新结果，曲线、日志、三值详情仍同步到刷新后的状态点。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、68 条测试。
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps undo and redo tied to refreshed runtime results"`：通过，1 条浏览器级闭环测试。
+- `npx prettier --check src/views/Workbench.vue src/__tests__/views/Workbench.test.js e2e/workbench-continuous-edit.spec.js PROJECT_MANUAL.md`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：补 Endaxis 式更高效的动作轴编辑操作，例如更多批量编辑/插入后的复盘路径；仍不进入公式考据或微型状态文案打磨。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

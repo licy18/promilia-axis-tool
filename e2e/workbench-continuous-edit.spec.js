@@ -1074,6 +1074,94 @@ test('keeps action list, timeline nudge, frame step, and result return in one lo
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps undo and redo tied to refreshed runtime results', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/workbench');
+  await expect(page.getByTestId('workbench-undo-edit')).toBeDisabled();
+  await expect(page.getByTestId('workbench-redo-edit')).toBeDisabled();
+
+  await page.getByTestId('workbench-runtime-review-primary-operation').click();
+  const openedState = await waitForRuntimeAction(page, 'action-0001');
+  expectRuntimeReviewState(openedState, {
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: false,
+  });
+
+  await focusRuntimeDetailAction(page);
+  await expectRuntimeFocusInEditor(page);
+  await page
+    .locator(
+      '[data-testid="workbench-start-frame-step"][data-step-direction="increase"]'
+    )
+    .click();
+
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-ready'
+  );
+  await expect(page.getByTestId('workbench-start-frame-input')).toHaveValue(
+    '1'
+  );
+  await expect(page.getByTestId('workbench-undo-edit')).toBeEnabled();
+  await expect(page.getByTestId('workbench-redo-edit')).toBeDisabled();
+  const editedState = await readEditState(
+    page,
+    'workbench-flow-return-edit-result'
+  );
+  expect(editedState.feedbackOriginStatePointId).toBe(openedState.statePointId);
+  expect(editedState.feedbackStatePointId).not.toBe(openedState.statePointId);
+
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已撤销编辑'
+  );
+  await expect(page.getByTestId('workbench-start-frame-input')).toHaveValue(
+    '0'
+  );
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'runtime-result'
+  );
+  await expect(page.getByTestId('workbench-undo-edit')).toBeDisabled();
+  await expect(page.getByTestId('workbench-redo-edit')).toBeEnabled();
+
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已重做编辑'
+  );
+  await expect(page.getByTestId('workbench-start-frame-input')).toHaveValue(
+    '1'
+  );
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-ready'
+  );
+  const redoState = await readEditState(
+    page,
+    'workbench-flow-return-edit-result'
+  );
+  expect(redoState.feedbackStatePointId).toBe(editedState.feedbackStatePointId);
+
+  await page.getByTestId('workbench-flow-return-edit-result').click();
+  const returnedState = await readWorkbenchState(page);
+  expectRuntimeReviewState(returnedState, {
+    phase: 'edit-result-review',
+    actionId: 'action-0001',
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(returnedState, redoState.feedbackStatePointId);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps skill level and action variant edits tied to refreshed results', async ({
   page,
 }) => {

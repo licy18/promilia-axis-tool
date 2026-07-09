@@ -1866,6 +1866,63 @@ describe('Workbench view', () => {
     ).toBe('1');
   });
 
+  it('undoes and redoes action edits from the workbench nav', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    const undoButton = () =>
+      wrapper.find('[data-testid="workbench-undo-edit"]');
+    const redoButton = () =>
+      wrapper.find('[data-testid="workbench-redo-edit"]');
+    const levelInput = () =>
+      wrapper.find('[data-testid="workbench-level-input"]');
+
+    expect(levelInput().element.value).toBe('1');
+    expect(undoButton().attributes('disabled')).toBeDefined();
+    expect(redoButton().attributes('disabled')).toBeDefined();
+    expect(undoButton().attributes('data-history-count')).toBe('0');
+    expect(redoButton().attributes('data-history-count')).toBe('0');
+
+    await levelInput().setValue('2');
+    await nextTick();
+
+    expect(levelInput().element.value).toBe('2');
+    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe(
+      '有未保存改动'
+    );
+    expect(undoButton().attributes('disabled')).toBeUndefined();
+    expect(redoButton().attributes('disabled')).toBeDefined();
+    expect(undoButton().attributes('data-history-count')).toBe('1');
+
+    await undoButton().trigger('click');
+    await nextTick();
+
+    expect(levelInput().element.value).toBe('1');
+    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe(
+      '已撤销编辑'
+    );
+    expect(undoButton().attributes('disabled')).toBeDefined();
+    expect(redoButton().attributes('disabled')).toBeUndefined();
+    expect(redoButton().attributes('data-history-count')).toBe('1');
+
+    await redoButton().trigger('click');
+    await nextTick();
+
+    expect(levelInput().element.value).toBe('2');
+    expect(wrapper.find('[data-testid="workbench-draft-status"]').text()).toBe(
+      '已重做编辑'
+    );
+    expect(undoButton().attributes('disabled')).toBeUndefined();
+    expect(redoButton().attributes('disabled')).toBeDefined();
+  });
+
   it('drives the edit-runtime-return loop from the main flow panel', async () => {
     const wrapper = mount(Workbench, {
       attachTo: document.body,
