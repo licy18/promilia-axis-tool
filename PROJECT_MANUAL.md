@@ -11382,6 +11382,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：优先拆分或整理 Workbench e2e 场景，避免单条烟测过长，同时保持排轴编辑、运行模拟、资源曲线、日志详情、贡献拆分和回到动作修改这些核心闭环都有覆盖。
 
+### 2026-07-09：UI 主流程回归场景整理 - Workbench E2E Scenarios
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- Workbench 浏览器回归从单条过长烟测拆成 4 个独立场景，失败时能直接定位到具体用户流程。
+- 保留并拆清以下核心闭环：三动作排轴生成与结果定位、结果详情/日志/贡献拆分回到动作编辑、连续多动作编辑、390px 窄屏编辑回看。
+- 共享浏览器断言 helper 统一检查曲线、日志、三值详情、贡献拆分、动作列表和时间轴同步，不丢已有主流程保障。
+- 本阶段只整理 UI 主流程回归结构，不改变三值输出、公式、证据字段、持久数据结构或生产 UI 行为。
+
+当前验证事实：
+
+- 重组 `e2e/workbench-continuous-edit.spec.js`：抽出 `createThreeActionRuntime`、`editCurrentActionFrameAndReturn`、`expectRuntimeReviewState` 等共享路径断言。
+- 拆分后的 4 条测试分别覆盖：基础编辑/结果定位、详情入口编辑回看、连续多动作编辑稳定性、窄屏回看。
+
+验收结果：
+
+- `npm run test:e2e`：通过，4 条浏览器级烟测。
+- `npx prettier --check e2e/workbench-continuous-edit.spec.js PROJECT_MANUAL.md`：通过。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：基于拆分后的场景继续补真实编辑体验缺口，优先检查动作列表/时间轴上的连续编辑操作是否还需要更直接的用户入口或更明确的结果定位。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
