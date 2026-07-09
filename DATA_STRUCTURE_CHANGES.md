@@ -22111,3 +22111,54 @@ runtimeOutputs
 - `npm run test:e2e`：通过，5 条浏览器级烟测。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `git diff --check`：通过；仅有 LF/CRLF 提示。
+
+## 308. 生成层标准输出入口：Generation Outputs Envelope
+
+### 308.1 结构变化
+
+`threeValueGenerationBundle` 新增只读输出封套：
+
+```text
+threeValueGenerationBundle.generationOutputs = {
+  standardContract,
+  actions,
+  hits,
+  deltas,
+  runtimeInputSource,
+  runtimeInput,
+  outputs,
+  summary,
+  outputSummary
+}
+```
+
+`projectSimulationResult` 顶层同步暴露：
+
+```text
+result.generationOutputs = result.threeValueGenerationBundle.generationOutputs
+result.summary.threeValueGenerationOutputsSummary = result.generationOutputs.outputSummary
+```
+
+消费规则：
+
+- `generationOutputs.standardContract` 指向既有 `threeValueGenerationBundle.standardContract`。
+- `generationOutputs.actions / hits / deltas` 指向同一份 `Action -> Hit -> ThreeValueDelta` 标准合同内容。
+- `generationOutputs.runtimeInputSource` 和 `generationOutputs.runtimeInput` 都指向既有 `threeValueGenerationBundle.runtimeInputSource`。
+- `createThreeValueRuntimeProjection()` 可以直接接收 `generationOutputs`，并从其中解析运行时输入源。
+- 旧字段全部保留；新增封套只是生成层给运行时和后续 UI 的统一消费入口。
+
+### 308.2 保存与迁移
+
+不新增项目草稿字段，不改变导入导出 schema，不需要数据迁移。
+
+本阶段不改变 HP、韧性、自身能量计算结果，不改变公式、倍率或证据字段。
+
+### 308.3 验证
+
+- `threeValueGenerationBuilder.test.js` 覆盖 `generationOutputs` 的标准合同、动作、命中、delta、runtime input source 同源关系。
+- `actionHitThreeValueRuntimeInput.test.js` 覆盖只传 `generationOutputs` 时仍能生成 applied delta runtime input。
+- `firstVerticalSliceSimulation.test.js` 覆盖真实项目运行后的顶层 `result.generationOutputs`，并确认 runtime input 由该封套接入。
+- `npm run test -- --run`：通过，38 个测试文件、269 条测试。
+- `npm run test:e2e`：通过，5 条浏览器级烟测。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 LF/CRLF 提示。

@@ -6,11 +6,13 @@ import {
 
 export function createThreeValueRuntimeProjection({
   scenario,
+  generationOutputs,
   runtimeInputSource,
   actionHitThreeValueDeltaGeneration,
   threeValueGenerationLayer,
 }) {
   const runtimeInput = createThreeValueRuntimeInput({
+    generationOutputs,
     runtimeInputSource,
     actionHitThreeValueDeltaGeneration,
     threeValueGenerationLayer,

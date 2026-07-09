@@ -7,11 +7,13 @@ export const ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE =
   'threeValueRuntimeInput.appliedDeltas';
 
 export function createActionHitThreeValueRuntimeInput({
+  generationOutputs,
   runtimeInputSource,
   actionHitThreeValueDeltaGeneration,
   threeValueGenerationLayer,
 } = {}) {
   const resolvedSource = resolveActionHitThreeValueRuntimeInputSource({
+    generationOutputs,
     runtimeInputSource,
     actionHitThreeValueDeltaGeneration,
     threeValueGenerationLayer,
@@ -52,6 +54,8 @@ export function createActionHitThreeValueRuntimeInput({
     inputStatus: standardContract?.status ?? null,
     runtimeInputSourceKind: resolvedSource.runtimeInputSourceKind,
     runtimeInputSourceStatus: resolvedSource.runtimeInputSourceStatus,
+    generationOutputsSourceKind: resolvedSource.generationOutputsSourceKind,
+    generationOutputsStatus: resolvedSource.generationOutputsStatus,
     generationEntrySourceKind: resolvedSource.generationEntrySourceKind,
     generationEntryStatus: resolvedSource.generationEntryStatus,
     generationLayerSourceKind: resolvedSource.generationLayerSourceKind,
@@ -68,50 +72,78 @@ export function createActionHitThreeValueRuntimeInput({
 }
 
 function resolveActionHitThreeValueRuntimeInputSource({
+  generationOutputs,
   runtimeInputSource,
   actionHitThreeValueDeltaGeneration,
   threeValueGenerationLayer,
 }) {
+  const generationOutputRuntimeInputSource =
+    generationOutputs?.runtimeInputSource ??
+    generationOutputs?.runtimeInput ??
+    generationOutputs?.outputs?.runtimeInputSource ??
+    generationOutputs?.outputs?.runtimeInput ??
+    null;
+  const resolvedRuntimeInputSource =
+    runtimeInputSource ?? generationOutputRuntimeInputSource;
   const generationLayer =
     actionHitThreeValueDeltaGeneration?.threeValueGenerationLayer ??
     threeValueGenerationLayer;
   const standardContract = resolveActionHitThreeValueDeltaStandardContract({
-    runtimeInputSource,
+    generationOutputs,
+    runtimeInputSource: resolvedRuntimeInputSource,
     actionHitThreeValueDeltaGeneration,
     threeValueGenerationLayer: generationLayer,
   });
 
   return {
-    runtimeInputSourceKind: runtimeInputSource?.sourceKind ?? null,
-    runtimeInputSourceStatus: runtimeInputSource?.status ?? null,
+    runtimeInputSourceKind: resolvedRuntimeInputSource?.sourceKind ?? null,
+    runtimeInputSourceStatus: resolvedRuntimeInputSource?.status ?? null,
+    generationOutputsSourceKind: generationOutputs?.sourceKind ?? null,
+    generationOutputsStatus: generationOutputs?.status ?? null,
     generationEntrySourceKind:
-      runtimeInputSource?.generationEntrySourceKind ??
+      resolvedRuntimeInputSource?.generationEntrySourceKind ??
       actionHitThreeValueDeltaGeneration?.sourceKind ??
       null,
     generationEntryStatus:
-      runtimeInputSource?.generationEntryStatus ??
+      resolvedRuntimeInputSource?.generationEntryStatus ??
       actionHitThreeValueDeltaGeneration?.status ??
       null,
     generationLayerSourceKind:
-      runtimeInputSource?.generationLayerSourceKind ??
+      resolvedRuntimeInputSource?.generationLayerSourceKind ??
       actionHitThreeValueDeltaGeneration?.summary?.generationLayerSourceKind ??
       generationLayer?.sourceKind ??
       'azpr-standard-three-value-generation-layer',
     generationLayerStatus:
-      runtimeInputSource?.generationLayerStatus ??
+      resolvedRuntimeInputSource?.generationLayerStatus ??
       actionHitThreeValueDeltaGeneration?.summary?.generationLayerStatus ??
       generationLayer?.status ??
       null,
     standardContract,
-    deltas: runtimeInputSource?.deltas ?? standardContract?.deltas ?? [],
+    deltas:
+      resolvedRuntimeInputSource?.deltas ??
+      generationOutputs?.deltas ??
+      generationOutputs?.outputs?.deltas ??
+      standardContract?.deltas ??
+      [],
   };
 }
 
-function resolveActionHitThreeValueDeltaStandardContract(
-  { runtimeInputSource, actionHitThreeValueDeltaGeneration, threeValueGenerationLayer } = {}
-) {
+function resolveActionHitThreeValueDeltaStandardContract({
+  generationOutputs,
+  runtimeInputSource,
+  actionHitThreeValueDeltaGeneration,
+  threeValueGenerationLayer,
+} = {}) {
   if (runtimeInputSource?.standardContract) {
     return runtimeInputSource.standardContract;
+  }
+
+  if (generationOutputs?.standardContract) {
+    return generationOutputs.standardContract;
+  }
+
+  if (generationOutputs?.outputs?.standardContract) {
+    return generationOutputs.outputs.standardContract;
   }
 
   if (actionHitThreeValueDeltaGeneration?.standardContract) {
@@ -179,6 +211,8 @@ function summarizeActionHitThreeValueRuntimeInput({
     appliedDeltaSource: ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE,
     runtimeInputSourceKind: resolvedSource.runtimeInputSourceKind,
     runtimeInputSourceStatus: resolvedSource.runtimeInputSourceStatus,
+    generationOutputsSourceKind: resolvedSource.generationOutputsSourceKind,
+    generationOutputsStatus: resolvedSource.generationOutputsStatus,
     generationEntrySourceKind: resolvedSource.generationEntrySourceKind,
     generationEntryStatus: resolvedSource.generationEntryStatus,
     generationLayerSourceKind: resolvedSource.generationLayerSourceKind,

@@ -11607,6 +11607,36 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续运行时层能力块：清理剩余只读消费者对旧 `threeValueRuntimeProjection.*` 字段的直接依赖；若生产读路径已收敛，再转向生成层 `Action -> Hit -> ThreeValueDelta` 标准入口补强。
 
+### 2026-07-09：生成层标准输出入口 - Generation Outputs Envelope
+
+本阶段属于：生成层。
+
+完成的可用能力：
+
+- 生成层现在把 `Action -> Hit -> ThreeValueDelta` 标准合同、动作、命中、三值 delta 和运行时输入源统一暴露为 `generationOutputs`。
+- `projectSimulationResult` 顶层同步暴露 `generationOutputs`，运行时主路径可以直接从该封套解析 applied deltas。
+- 旧的 `threeValueGenerationBundle.standardContract / runtimeInputSource / actions / hits / deltas` 全部保留，现有消费方不需要迁移。
+- 本阶段不改变 HP、韧性、自身能量计算结果，不改变公式、倍率、证据字段、保存数据或导入导出结构。
+
+当前验证事实：
+
+- `threeValueGenerationBuilder.test.js` 固定生成层输出封套与旧字段同源。
+- `actionHitThreeValueRuntimeInput.test.js` 覆盖 runtime 只传 `generationOutputs` 也能生成相同 applied delta 输入。
+- `firstVerticalSliceSimulation.test.js` 覆盖真实项目结果顶层能拿到 `generationOutputs`，并由它接入 runtime input。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，3 个测试文件、16 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、269 条测试。
+- `npm run test:e2e`：通过，5 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/simulation/generation/threeValueGenerationBuilder.js src/simulation/runtime/actionHitThreeValueRuntimeInput.js src/simulation/runtime/threeValueRuntimeProjection.js src/simulation/projection/projectSimulationResult.js src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续运行时层能力块：让 runtime 主入口逐步减少对 generation entry / generation layer fallback 的生产依赖；若输入输出封套稳定，再回到 UI 主流程做结果详情的完整编辑体验补齐。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

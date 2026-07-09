@@ -1478,6 +1478,9 @@ describe('first vertical slice simulation', () => {
         standardContractStatus: 'action-hit-three-value-delta-contract-ready',
         runtimeInputSourceKind:
           'azpr-runtime-input-source-from-generation-builder',
+        generationOutputsSourceKind: 'azpr-three-value-generation-outputs',
+        generationOutputsStatus: 'generation-outputs-ready',
+        generationOutputsOutputCount: 6,
         actionCount: 1,
         hitCount: 6,
         deltaCount: 16,
@@ -1491,8 +1494,53 @@ describe('first vertical slice simulation', () => {
     expect(result.threeValueGenerationBundle.standardContract).toBe(
       result.threeValueGenerationLayer.standardContract
     );
+    expect(result.generationOutputs).toBe(
+      result.threeValueGenerationBundle.generationOutputs
+    );
+    expect(result.generationOutputs).toMatchObject({
+      sourceKind: 'azpr-three-value-generation-outputs',
+      status: 'generation-outputs-ready',
+      contractName: 'Action -> Hit -> ThreeValueDelta',
+      outputNames: [
+        'standardContract',
+        'actions',
+        'hits',
+        'deltas',
+        'runtimeInputSource',
+        'runtimeInput',
+      ],
+      runtimeInputSource: {
+        sourceKind: 'azpr-runtime-input-source-from-generation-builder',
+        status: 'runtime-input-source-ready',
+      },
+      summary: {
+        outputCount: 6,
+        actionCount: 1,
+        hitCount: 6,
+        deltaCount: 16,
+        appliedDeltaCount: 1,
+      },
+    });
+    expect(result.generationOutputs.runtimeInputSource).toBe(
+      result.threeValueGenerationBundle.runtimeInputSource
+    );
+    expect(result.generationOutputs.standardContract).toBe(
+      result.threeValueGenerationLayer.standardContract
+    );
     expect(result.summary.threeValueGenerationBundleSummary).toMatchObject({
       contractName: 'Action -> Hit -> ThreeValueDelta',
+      actionCount: 1,
+      hitCount: 6,
+      deltaCount: 16,
+      appliedDeltaCount: 1,
+      runtimeInputSourceKind:
+        'azpr-runtime-input-source-from-generation-builder',
+      generationOutputsSourceKind: 'azpr-three-value-generation-outputs',
+      generationOutputsStatus: 'generation-outputs-ready',
+      applied: false,
+    });
+    expect(result.summary.threeValueGenerationOutputsSummary).toMatchObject({
+      outputCount: 6,
       actionCount: 1,
       hitCount: 6,
       deltaCount: 16,
@@ -1522,11 +1570,15 @@ describe('first vertical slice simulation', () => {
       runtimeInputSourceKind:
         'azpr-runtime-input-source-from-generation-builder',
       runtimeInputSourceStatus: 'runtime-input-source-ready',
+      generationOutputsSourceKind: 'azpr-three-value-generation-outputs',
+      generationOutputsStatus: 'generation-outputs-ready',
       generationLayerSourceKind: 'azpr-standard-three-value-generation-layer',
       summary: {
         runtimeInputSourceKind:
           'azpr-runtime-input-source-from-generation-builder',
         runtimeInputSourceStatus: 'runtime-input-source-ready',
+        generationOutputsSourceKind: 'azpr-three-value-generation-outputs',
+        generationOutputsStatus: 'generation-outputs-ready',
         standardContractActionCount: 1,
         standardContractHitCount: 6,
         inputDeltaCount: 16,

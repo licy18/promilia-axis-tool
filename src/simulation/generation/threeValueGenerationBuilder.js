@@ -1,6 +1,4 @@
-import {
-  createActionHitThreeValueDeltaGeneration,
-} from './actionHitThreeValueDeltaGeneration';
+import { createActionHitThreeValueDeltaGeneration } from './actionHitThreeValueDeltaGeneration';
 import { ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME } from './threeValueGenerationLayer';
 
 export function createThreeValueGenerationBundle({
@@ -28,11 +26,18 @@ export function createThreeValueGenerationBundle({
     threeValueGenerationLayer,
     actionHitThreeValueDeltaGeneration,
   });
+  const generationOutputs = createThreeValueGenerationOutputs({
+    standardContract,
+    runtimeInputSource,
+    threeValueGenerationLayer,
+    actionHitThreeValueDeltaGeneration,
+  });
   const summary = createThreeValueGenerationBundleSummary({
     standardContract,
     threeValueGenerationLayer,
     actionHitThreeValueDeltaGeneration,
     runtimeInputSource,
+    generationOutputs,
   });
 
   return {
@@ -47,10 +52,71 @@ export function createThreeValueGenerationBundle({
     threeValueGenerationLayer,
     standardContract,
     runtimeInputSource,
+    generationOutputs,
     actions: standardContract.actions,
     hits: standardContract.hits,
     deltas: standardContract.deltas,
     summary,
+    applied: false,
+  };
+}
+
+function createThreeValueGenerationOutputs({
+  standardContract,
+  runtimeInputSource,
+  threeValueGenerationLayer,
+  actionHitThreeValueDeltaGeneration,
+}) {
+  const outputs = {
+    standardContract,
+    actions: standardContract.actions,
+    hits: standardContract.hits,
+    deltas: standardContract.deltas,
+    runtimeInputSource,
+    runtimeInput: runtimeInputSource,
+  };
+  const outputSummary = {
+    outputCount: Object.keys(outputs).length,
+    actionCount: standardContract.summary?.actionCount ?? 0,
+    hitCount: standardContract.summary?.hitCount ?? 0,
+    deltaCount: standardContract.summary?.deltaCount ?? 0,
+    appliedDeltaCount: standardContract.summary?.appliedDeltaCount ?? 0,
+    candidateDeltaCount: standardContract.summary?.candidateDeltaCount ?? 0,
+    sampledDeltaCount: standardContract.summary?.sampledDeltaCount ?? 0,
+    placeholderDeltaCount: standardContract.summary?.placeholderDeltaCount ?? 0,
+    runtimeInputSourceKind: runtimeInputSource.sourceKind,
+    runtimeInputSourceStatus: runtimeInputSource.status,
+    runtimeDeltaPolicy: standardContract.runtimeDeltaPolicy,
+    applied: false,
+  };
+
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-three-value-generation-outputs',
+    status:
+      (standardContract.deltas ?? []).length > 0
+        ? 'generation-outputs-ready'
+        : 'generation-outputs-empty',
+    contractName: standardContract.name,
+    generationEntrySourceKind: actionHitThreeValueDeltaGeneration.sourceKind,
+    generationEntryStatus: actionHitThreeValueDeltaGeneration.status,
+    generationLayerSourceKind: threeValueGenerationLayer.sourceKind,
+    generationLayerStatus: threeValueGenerationLayer.status,
+    standardContractSourceKind: standardContract.sourceKind,
+    standardContractStatus: standardContract.status,
+    outputNames: Object.keys(outputs),
+    outputAliases: {
+      runtimeInput: 'runtimeInputSource',
+    },
+    standardContract,
+    actions: standardContract.actions,
+    hits: standardContract.hits,
+    deltas: standardContract.deltas,
+    runtimeInputSource,
+    runtimeInput: runtimeInputSource,
+    outputs,
+    summary: outputSummary,
+    outputSummary,
     applied: false,
   };
 }
@@ -93,6 +159,7 @@ function createThreeValueGenerationBundleSummary({
   threeValueGenerationLayer,
   actionHitThreeValueDeltaGeneration,
   runtimeInputSource,
+  generationOutputs,
 }) {
   return {
     contractName: standardContract.name,
@@ -104,14 +171,16 @@ function createThreeValueGenerationBundleSummary({
     standardContractSourceKind: standardContract.sourceKind,
     runtimeInputSourceKind: runtimeInputSource.sourceKind,
     runtimeInputSourceStatus: runtimeInputSource.status,
+    generationOutputsSourceKind: generationOutputs.sourceKind,
+    generationOutputsStatus: generationOutputs.status,
+    generationOutputsOutputCount: generationOutputs.outputSummary.outputCount,
     actionCount: standardContract.summary?.actionCount ?? 0,
     hitCount: standardContract.summary?.hitCount ?? 0,
     deltaCount: standardContract.summary?.deltaCount ?? 0,
     appliedDeltaCount: standardContract.summary?.appliedDeltaCount ?? 0,
     candidateDeltaCount: standardContract.summary?.candidateDeltaCount ?? 0,
     sampledDeltaCount: standardContract.summary?.sampledDeltaCount ?? 0,
-    placeholderDeltaCount:
-      standardContract.summary?.placeholderDeltaCount ?? 0,
+    placeholderDeltaCount: standardContract.summary?.placeholderDeltaCount ?? 0,
     calculatorCount: standardContract.summary?.calculatorCount ?? 0,
     applied: false,
   };
