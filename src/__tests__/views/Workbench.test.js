@@ -4304,6 +4304,7 @@ describe('Workbench view', () => {
       appliedStatePointId
     );
     expect(runtimeDetailActionFocus.attributes('disabled')).toBeUndefined();
+    expect(runtimeDetailActionFocus.text()).toBe('编辑结果动作');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-edit-context"]')
@@ -4461,6 +4462,7 @@ describe('Workbench view', () => {
     expect(runtimeDetailReturnButton.attributes('data-state-point-id')).toBe(
       refreshedRuntimeStatePointId
     );
+    expect(runtimeDetailReturnButton.text()).toBe('查看刷新结果');
 
     await refreshedResultReturnButton.trigger('click');
     await nextTick();

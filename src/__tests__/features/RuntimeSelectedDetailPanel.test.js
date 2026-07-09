@@ -33,6 +33,7 @@ describe('RuntimeSelectedDetailPanel', () => {
       'data-state-point-id': 'review-state-point',
     });
     expect(button.attributes('disabled')).toBeUndefined();
+    expect(button.text()).toBe('编辑结果动作');
 
     await button.trigger('click');
 
@@ -78,6 +79,7 @@ describe('RuntimeSelectedDetailPanel', () => {
       'data-state-point-id': 'review-state-point',
     });
     expect(button.attributes('disabled')).toBeUndefined();
+    expect(button.text()).toBe('查看刷新结果');
 
     await button.trigger('click');
 

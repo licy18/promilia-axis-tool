@@ -50,7 +50,7 @@
         @click="focusRuntimeAction"
       >
         <EditPen class="runtime-detail-action-focus-icon" />
-        <span>定位动作</span>
+        <span>{{ runtimeDetailActionEditButtonLabel }}</span>
       </button>
       <button
         v-if="runtimeDetailResultReturnButtonVisible"
@@ -67,7 +67,7 @@
         @click="returnRuntimeResult"
       >
         <Aim class="runtime-detail-result-return-icon" />
-        <span>回到结果点</span>
+        <span>{{ runtimeDetailResultReturnButtonLabel }}</span>
       </button>
     </div>
 
@@ -366,11 +366,18 @@ const runtimeDetailNavigation = computed(() =>
 const runtimeDetailActionEditButtonTarget = computed(() =>
   runtimeDetailActionEditCommand.value.target
 );
+const runtimeDetailActionEditButtonLabel = computed(() => '编辑结果动作');
 const runtimeDetailActionEditCommand = computed(() =>
   runtimeDetailCommandView.value.focus
 );
 const runtimeDetailResultReturnButtonTarget = computed(() =>
   runtimeDetailResultReturnCommand.value.context
+);
+const runtimeDetailResultReturnButtonLabel = computed(() =>
+  formatRuntimeDetailResultReturnButtonLabel(
+    runtimeDetailResultReturnButtonTarget.value ??
+      runtimeDetailResultReturnContext.value
+  )
 );
 const runtimeDetailResultReturnCommand = computed(() =>
   runtimeDetailCommandView.value.returnResult
@@ -438,6 +445,16 @@ function dispatchRuntimeDetailFlowAction(action) {
     return;
   }
   emit('dispatch-flow-action', action);
+}
+
+function formatRuntimeDetailResultReturnButtonLabel(context = null) {
+  if (context?.status === 'refreshed-edit-result') {
+    return '查看刷新结果';
+  }
+  if (context?.status === 'origin-result') {
+    return '回到来源结果';
+  }
+  return '回到结果点';
 }
 
 function formatDetailDelta(detail) {

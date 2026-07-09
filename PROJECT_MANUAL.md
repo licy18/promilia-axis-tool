@@ -10609,6 +10609,30 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：优先检查右侧三值详情按钮与顶部主操作是否还存在重复且主次不清的入口，把结果编辑闭环进一步收敛为一条主路径。
 
+### 2026-07-09：UI 主流程三值详情 - Action Label Alignment
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 右侧三值详情的操作按钮与结果检查区顶部主操作完成语义对齐。
+- 选中运行结果时，右侧详情按钮显示“编辑结果动作”；编辑产生刷新结果后，右侧详情回看按钮显示“查看刷新结果”。
+- 按钮仍复用既有 `focus-runtime-action` / `return-runtime-result` action，不改变运行时输出、三值结果或数据结构。
+
+当前验证事实：
+
+- RuntimeSelectedDetailPanel 组件测试覆盖右侧详情按钮文案与原有 action 派发。
+- Workbench 页面测试覆盖从三值详情进入动作编辑后，右侧详情回看按钮显示“查看刷新结果”。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/RuntimeSelectedDetailPanel.test.js`：通过，1 个测试文件、2 条测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、61 条测试。
+
+下一步：
+
+- 继续 UI 主流程能力块：优先检查资源曲线、日志详情、右侧三值详情三处操作入口是否已经足够一致；如无明显割裂，转入完整端到端用户闭环测试和截图/浏览器验证。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
