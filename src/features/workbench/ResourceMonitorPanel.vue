@@ -236,7 +236,7 @@
             >
               {{
                 formatRuntimeCurveSelectionSource(
-                  flowRuntimeFocusSource,
+                  flowRuntimeFocusSourceView,
                   selectedRuntimeCurveResultContext
                 )
               }}
@@ -474,6 +474,10 @@ const flowSelectedStatePointId = computed(
 
 const flowRuntimeFocusSource = computed(
   () => runtimeReviewContextView.value.source || props.runtimeFocusSource
+);
+const flowRuntimeFocusSourceView = computed(() =>
+  runtimeReviewContextView.value.sourceView ??
+  createRuntimeFocusSourceView(flowRuntimeFocusSource.value)
 );
 
 const flowEditResult = computed(
@@ -1034,11 +1038,18 @@ function getSelectedRuntimeCurveResultContext(flowModel, context, point) {
   });
 }
 
-function formatRuntimeCurveSelectionSource(source, resultContext = null) {
+function formatRuntimeCurveSelectionSource(
+  sourceViewOrSource,
+  resultContext = null
+) {
   if (resultContext?.status === 'refreshed-edit-result') {
     return '刷新后结果';
   }
-  return createRuntimeFocusSourceView(source).curveSelectionLabel;
+  const sourceView =
+    typeof sourceViewOrSource === 'string'
+      ? createRuntimeFocusSourceView(sourceViewOrSource)
+      : sourceViewOrSource;
+  return sourceView?.curveSelectionLabel ?? '手动选择';
 }
 
 function formatRuntimeCurveSelectionIndex() {

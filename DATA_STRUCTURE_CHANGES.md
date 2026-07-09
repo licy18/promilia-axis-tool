@@ -21265,3 +21265,45 @@ normalizeRuntimeLogFocusScope(source)
 - `npm run test -- --run src/__tests__/features/runtimeFocusSource.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、68 条测试。
 - `npm run test -- --run`：通过，37 个测试文件、246 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 290. UI 主流程能力块：Runtime Review Source View Context
+
+### 290.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`workbenchFlowModel` 的 runtime review 派生结构新增共享 `sourceView` 引用：
+
+```js
+runtimeReviewSelection.sourceView
+runtimeReviewContextView.sourceView
+runtimeReviewFlowView.selection.sourceView
+```
+
+`sourceView` 复用 `createRuntimeFocusSourceView(source)` 的结构：
+
+```js
+{
+  source,
+  sourceKind,
+  runtimeLogScope,
+  runtimeLogLabel,
+  curveSelectionLabel,
+  isRuntimeResultFocus,
+  isContributionFocus,
+  isRuntimeLogFocusSource,
+}
+```
+
+`runtimeReviewContextView.sourceKind` 与 `runtimeReviewFlowView.selection.sourceKind` 现在从 `sourceView.sourceKind` 派生。`EventLogPanel` 与 `ResourceMonitorPanel` 优先读取 `runtimeReviewContextView.sourceView`，仅在没有 flow model/context view 时回退到 `createRuntimeFocusSourceView(source)`。
+
+### 290.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程 runtime review 的内部 view model，不新增持久字段，不需要数据迁移。
+
+### 290.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖 selection、context view、runtime review flow view 下发 `sourceView`。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/runtimeFocusSource.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、68 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、246 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

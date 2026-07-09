@@ -415,6 +415,7 @@ const flowRuntimeFocusSource = computed(
   () => runtimeReviewContextView.value.source
 );
 const flowRuntimeFocusSourceView = computed(() =>
+  runtimeReviewContextView.value.sourceView ??
   createRuntimeFocusSourceView(flowRuntimeFocusSource.value)
 );
 const flowEditResult = computed(

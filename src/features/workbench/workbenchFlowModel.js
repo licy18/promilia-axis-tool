@@ -4,7 +4,7 @@ import {
   getRuntimeSimLogCount,
 } from './runtimeProjectionPoints';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
-import { resolveRuntimeFocusSourceKind } from './runtimeFocusSource';
+import { createRuntimeFocusSourceView } from './runtimeFocusSource';
 import { createWorkbenchFlowContractContext } from './workbenchFlowContractContext';
 
 export const WORKBENCH_FLOW_PHASES = Object.freeze({
@@ -307,6 +307,10 @@ export function createWorkbenchRuntimeReviewFlowView({
   const primaryOperation = operations.primaryOperation ?? {};
   const focusAction = operations.focusAction ?? {};
   const returnResult = operations.returnResult ?? {};
+  const sourceView = createRuntimeReviewSourceView({
+    source: reviewSelection.source,
+    sourceView: reviewSelection.sourceView,
+  });
 
   return {
     region: {
@@ -331,8 +335,9 @@ export function createWorkbenchRuntimeReviewFlowView({
       pendingActionId: reviewSelection.pendingActionId ?? '',
       pendingStatePointId: reviewSelection.pendingStatePointId ?? '',
       refreshedStatePointId: reviewSelection.refreshedStatePointId ?? '',
-      source: reviewSelection.source ?? '',
-      sourceKind: reviewSelection.sourceKind ?? 'none',
+      source: sourceView.source,
+      sourceKind: sourceView.sourceKind,
+      sourceView,
       lastActionKind: reviewSelection.lastActionKind ?? '',
       lastActionSource: reviewSelection.lastActionSource ?? '',
       hasSelection: Boolean(reviewSelection.hasSelection),
@@ -395,6 +400,10 @@ export function createWorkbenchRuntimeReviewContextView({
     selection.source,
     mainFlowSelection.runtimeFocusSource
   );
+  const sourceView = createRuntimeReviewSourceView({
+    source,
+    sourceView: selection.sourceView,
+  });
   const selectedActionId =
     pickRuntimeReviewContextValue(
       selection.selectedActionId,
@@ -410,8 +419,9 @@ export function createWorkbenchRuntimeReviewContextView({
     pendingActionId: selection.pendingActionId ?? '',
     pendingStatePointId: selection.pendingStatePointId ?? '',
     refreshedStatePointId: selection.refreshedStatePointId ?? '',
-    source: source ?? '',
-    sourceKind: selection.sourceKind ?? 'none',
+    source: sourceView.source,
+    sourceKind: sourceView.sourceKind,
+    sourceView,
     hasSelection,
     hasSelectionState: hasSelection ? 'true' : 'false',
     hasPendingResult: Boolean(selection.hasPendingResult),
@@ -426,6 +436,17 @@ export function createWorkbenchRuntimeReviewContextView({
 
 function pickRuntimeReviewContextValue(...values) {
   return values.find(value => value != null && value !== '');
+}
+
+function createRuntimeReviewSourceView({
+  source = '',
+  sourceView = null,
+} = {}) {
+  const normalizedSource = source ?? '';
+  if (sourceView?.source === normalizedSource) {
+    return sourceView;
+  }
+  return createRuntimeFocusSourceView(normalizedSource);
 }
 
 export function createWorkbenchMainFlowLoopState({
@@ -477,6 +498,7 @@ export function createWorkbenchRuntimeReviewSelection({
   const lastReviewAction = createRuntimeReviewLastAction(
     mainFlowDispatchResult
   );
+  const sourceView = createRuntimeFocusSourceView(runtimeFocusSource);
   return {
     phase,
     status: resolveRuntimeReviewSelectionStatus({
@@ -489,8 +511,9 @@ export function createWorkbenchRuntimeReviewSelection({
     pendingActionId: pendingStatePointId ? (editResult?.actionId ?? '') : '',
     pendingStatePointId,
     refreshedStatePointId: editResult?.statePointId ?? '',
-    source: runtimeFocusSource ?? '',
-    sourceKind: resolveRuntimeFocusSourceKind(runtimeFocusSource),
+    source: sourceView.source,
+    sourceKind: sourceView.sourceKind,
+    sourceView,
     frameLabel: runtimeDetail?.frameLabel ?? '',
     timeMs: runtimeDetail?.timeMs ?? null,
     trackKey: runtimeDetail?.trackKey ?? '',
@@ -868,7 +891,10 @@ function createRuntimeReviewFocusActionOperation({
       runtimeActionEditTarget?.trackLabel ??
       runtimeReviewSelection?.trackLabel ??
       '',
-    sourceKind: runtimeReviewSelection?.sourceKind ?? '',
+    sourceKind:
+      runtimeReviewSelection?.sourceView?.sourceKind ??
+      runtimeReviewSelection?.sourceKind ??
+      '',
   };
 }
 
@@ -894,7 +920,10 @@ function createRuntimeReviewReturnResultOperation({
     statePointId,
     originStatePointId: runtimeResultReturnTarget?.originStatePointId ?? '',
     status: runtimeResultReturnTarget?.status ?? '',
-    sourceKind: runtimeReviewSelection?.sourceKind ?? '',
+    sourceKind:
+      runtimeReviewSelection?.sourceView?.sourceKind ??
+      runtimeReviewSelection?.sourceKind ??
+      '',
   };
 }
 

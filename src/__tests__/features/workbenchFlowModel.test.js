@@ -218,6 +218,12 @@ describe('workbench flow model', () => {
       pendingStatePointId: '',
       source: 'action-result',
       sourceKind: 'action-result',
+      sourceView: {
+        source: 'action-result',
+        sourceKind: 'action-result',
+        runtimeLogScope: 'action-result',
+        curveSelectionLabel: '动作结果定位',
+      },
       frameLabel: '12f',
       trackKey: 'enemyHpDamage',
       trackLabel: '敌人 HP',
@@ -745,6 +751,12 @@ describe('workbench flow model', () => {
       selectedStatePointId: firstPoint.statePointId,
       source: 'resource-runtime-curve',
       sourceKind: 'curve',
+      sourceView: {
+        source: 'resource-runtime-curve',
+        sourceKind: 'curve',
+        runtimeLogScope: 'resource-runtime-curve',
+        curveSelectionLabel: '手动选择',
+      },
       hasSelection: true,
       hasSelectionState: 'true',
       detailStatePointId: firstPoint.statePointId,
@@ -764,6 +776,12 @@ describe('workbench flow model', () => {
     expect(contributionModel.runtimeReviewContextView).toMatchObject({
       source: 'action-contribution',
       sourceKind: 'action-contribution',
+      sourceView: {
+        source: 'action-contribution',
+        runtimeLogScope: 'action-contribution',
+        runtimeLogLabel: '贡献定位',
+        curveSelectionLabel: '贡献拆分定位',
+      },
     });
 
     expect(
@@ -786,6 +804,10 @@ describe('workbench flow model', () => {
       selectedStatePointId: 'selected-state-point',
       source: 'event-log-runtime-row',
       sourceKind: 'log',
+      sourceView: {
+        source: 'event-log-runtime-row',
+        sourceKind: 'log',
+      },
       detailStatePointId: 'detail-state-point',
       detailSynced: false,
       detailSyncedState: 'false',
@@ -805,6 +827,11 @@ describe('workbench flow model', () => {
       selectedActionId: 'action-from-flow',
       selectedStatePointId: 'state-point-from-flow',
       source: 'workbench-flow-panel',
+      sourceView: {
+        source: 'workbench-flow-panel',
+        sourceKind: 'other',
+        runtimeLogScope: 'action-result',
+      },
       hasSelection: true,
       hasSelectionState: 'true',
     });
@@ -858,6 +885,11 @@ describe('workbench flow model', () => {
         pendingStatePointId: '',
         source: 'action-result',
         sourceKind: 'action-result',
+        sourceView: {
+          source: 'action-result',
+          runtimeLogScope: 'action-result',
+          curveSelectionLabel: '动作结果定位',
+        },
         hasSelection: true,
         hasSelectionState: 'true',
         hasPendingResult: false,

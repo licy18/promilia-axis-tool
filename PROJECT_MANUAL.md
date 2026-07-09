@@ -10064,6 +10064,31 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 runtime review context / panel view 是否可以直接携带 source view，优先减少各面板重复读取 `source` 后再派生分类的步骤。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Source View Context
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchFlowModel` 的 `runtimeReviewSelection`、`runtimeReviewContextView` 和 `runtimeReviewFlowView.selection` 现在直接携带统一 `sourceView`，包括 `sourceKind`、runtime log scope、日志标签和曲线选择来源标签。
+- `EventLogPanel` 和 `ResourceMonitorPanel` 优先消费 `runtimeReviewContextView.sourceView`，不再各自从 `source` 重新派生焦点来源解释。
+- 本阶段只收束 UI 主流程的 runtime review source view 消费边界，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- flow model 单测覆盖 `sourceView` 随 selection、context view、runtime review flow view 下发。
+- Workbench 页面测试确认日志、曲线、运行结果查看和编辑回跳路径保持可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/runtimeFocusSource.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、68 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、246 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 runtime review context 中的选中点、操作命令和 source view 是否可以进一步合并为面板级 view model，优先服务“选择结果 -> 查看详情 -> 定位动作 -> 修改 -> 回看结果”的完整闭环。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
