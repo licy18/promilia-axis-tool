@@ -5339,6 +5339,132 @@ describe('Workbench view', () => {
     ).toBe(refreshedStatePointId);
   });
 
+  it('returns to the refreshed result and contribution split after dragging a runtime-focused action', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    stubTimelineGeometry(wrapper);
+
+    await wrapper
+      .find('[data-testid="workbench-flow-open-runtime"]')
+      .trigger('click');
+    await nextTick();
+
+    const originStatePointId = wrapper
+      .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+      .text();
+    expect(originStatePointId).toContain('action-0001');
+
+    await wrapper
+      .find('[data-testid="workbench-runtime-selected-detail-action-focus"]')
+      .trigger('click');
+    await nextTick();
+
+    await dragTimelineAction(wrapper, 'action-0001', {
+      fromX: 100,
+      toX: 169,
+      fromY: 20,
+      toY: 20,
+    });
+
+    expect(
+      wrapper.find('[data-testid="workbench-start-input"]').element.value
+    ).not.toBe('0');
+
+    let flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-flow-phase')).toBe('edit-result-ready');
+    const dragEditFeedback = wrapper.find(
+      '[data-testid="workbench-action-edit-feedback"]'
+    );
+    expect(dragEditFeedback.attributes('data-edit-origin')).toBe(
+      'runtime-focus'
+    );
+    expect(dragEditFeedback.attributes('data-edit-focus-source')).toBe(
+      'runtime-detail'
+    );
+    expect(dragEditFeedback.attributes('data-origin-state-point-id')).toBe(
+      originStatePointId
+    );
+    expect(dragEditFeedback.attributes('data-result-focused')).toBe('false');
+    const refreshedStatePointId = dragEditFeedback.attributes(
+      'data-runtime-state-point-id'
+    );
+    expect(refreshedStatePointId).toContain('action-0001');
+    expect(refreshedStatePointId).not.toBe(originStatePointId);
+
+    const returnButton = wrapper.find(
+      '[data-testid="workbench-flow-return-edit-result"]'
+    );
+    expect(returnButton.exists()).toBe(true);
+    expect(returnButton.attributes('data-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+
+    await returnButton.trigger('click');
+    await nextTick();
+
+    flowPanel = wrapper.find('[data-testid="workbench-flow-panel"]');
+    expect(flowPanel.attributes('data-flow-phase')).toBe('edit-result-review');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(refreshedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-resource-chart-selection"]')
+        .attributes('data-state-point-id')
+    ).toBe(refreshedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-navigation"]')
+        .attributes('data-state-point-id')
+    ).toBe(refreshedStatePointId);
+
+    const returnedEditFeedback = wrapper.find(
+      '[data-testid="workbench-action-edit-feedback"]'
+    );
+    expect(returnedEditFeedback.attributes('data-runtime-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+    expect(returnedEditFeedback.attributes('data-result-focused')).toBe('true');
+
+    const actionResultRow = wrapper.find(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+    );
+    expect(actionResultRow.attributes('data-selected-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+    expect(actionResultRow.attributes('data-result-location-status')).toBe(
+      'selected-result'
+    );
+    const actionContributionPanel = wrapper.find(
+      '[data-testid="workbench-action-contribution-panel"]'
+    );
+    expect(actionContributionPanel.attributes('data-action-id')).toBe(
+      'action-0001'
+    );
+    const hpContributionRow = wrapper.find(
+      '[data-testid="workbench-action-contribution-row"][data-track-key="enemyHpDamage"]'
+    );
+    expect(hpContributionRow.attributes('data-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+    expect(hpContributionRow.attributes('data-active')).toBe('true');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-action-contribution-detail"]')
+        .attributes('data-state-point-id')
+    ).toBe(refreshedStatePointId);
+  });
+
   it('links runtime resource curve points to the focused state curve point', async () => {
     const wrapper = mount(Workbench, {
       global: {
@@ -8300,14 +8426,18 @@ function stubLaneRow(wrapper, laneId, top, bottom) {
   });
 }
 
-async function dragTimelineAction(wrapper, actionId, { fromY, toY }) {
+async function dragTimelineAction(
+  wrapper,
+  actionId,
+  { fromX = 100, toX = 100, fromY, toY }
+) {
   const action = wrapper.find(
     `[data-testid="workbench-timeline-action"][data-action-id="${actionId}"]`
   ).element;
   const pointerDown = new MouseEvent('pointerdown', {
     bubbles: true,
     button: 0,
-    clientX: 100,
+    clientX: fromX,
     clientY: fromY,
   });
   Object.defineProperty(pointerDown, 'pointerId', {
@@ -8316,11 +8446,11 @@ async function dragTimelineAction(wrapper, actionId, { fromY, toY }) {
   action.dispatchEvent(pointerDown);
   await nextTick();
   window.dispatchEvent(
-    new MouseEvent('pointermove', { clientX: 100, clientY: toY })
+    new MouseEvent('pointermove', { clientX: toX, clientY: toY })
   );
   await nextTick();
   window.dispatchEvent(
-    new MouseEvent('pointerup', { clientX: 100, clientY: toY })
+    new MouseEvent('pointerup', { clientX: toX, clientY: toY })
   );
   await nextTick();
 }

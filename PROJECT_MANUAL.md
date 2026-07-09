@@ -11015,6 +11015,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：推进动作插入/复制/拖拽后的结果定位和贡献拆分闭环，优先覆盖用户会连续编辑动作后需要重新确认结果的路径。
 
+### 2026-07-09：UI 主流程拖拽回看 - Drag Result Return Loop
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 固定 `运行结果详情 -> 编辑结果动作 -> 拖拽时间轴动作 -> 查看刷新结果 -> 贡献拆分继续同步` 的 Workbench 闭环。
+- 用户从三值详情定位到动作后，即使用时间轴拖拽改变动作开始时间，也能得到刷新后的结果点，并通过主流程入口回到新结果。
+- 回到刷新结果后，三值详情、资源曲线选中点、模拟日志导航、动作结果行和 HP 贡献拆分都会同步到拖拽后的 state point。
+- 本阶段只补齐 UI 主流程拖拽编辑后的结果定位回归，不改变运行时输出、三值结果、公式、证据字段或数据结构。
+
+当前验证事实：
+
+- 新增 `returns to the refreshed result and contribution split after dragging a runtime-focused action`。
+- 该用例覆盖：从 `runtime-detail` 编辑动作，横向拖拽 `action-0001`，进入 `edit-result-ready`，点击 `查看刷新结果` 后进入 `edit-result-review`，并确认曲线、日志、动作结果和贡献拆分都选中刷新后的 state point。
+- 测试拖拽辅助支持横向位移，保留原有纵向拖拽换轨用例兼容。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、65 条测试。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：推进动作插入/复制后的连续编辑闭环，优先确认新增动作或复制动作后用户能立刻查看对应结果并回到贡献拆分。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
