@@ -6,7 +6,11 @@ test('keeps setup, edit return, and result selection synced', async ({
   const browserIssues = collectBrowserIssues(page);
   const { copiedState } = await createThreeActionRuntime(page);
 
-  await focusRuntimeDetailAction(page);
+  await page
+    .locator('.action-item[data-action-id="action-0003"]')
+    .getByTestId('workbench-action-list-edit-result-action')
+    .click();
+  await expectRuntimeFocusInEditor(page);
   const { returnedState: refreshedState } =
     await editCurrentActionFrameAndReturn(page, {
       actionId: 'action-0003',

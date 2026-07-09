@@ -10,11 +10,18 @@
         v-for="teamActor in actors"
         :key="teamActor.id"
         class="actor-tab"
-        :class="{ active: Number(teamActor.characterId) === Number(activeActorCharacterId) }"
+        :class="{
+          active:
+            Number(teamActor.characterId) === Number(activeActorCharacterId),
+        }"
         type="button"
         data-testid="workbench-action-library-actor"
         :data-character-id="teamActor.characterId"
-        :data-active="Number(teamActor.characterId) === Number(activeActorCharacterId) ? 'true' : 'false'"
+        :data-active="
+          Number(teamActor.characterId) === Number(activeActorCharacterId)
+            ? 'true'
+            : 'false'
+        "
         @click="$emit('update-active-actor', teamActor.characterId)"
       >
         <span>{{ teamActor.name }}</span>
@@ -23,13 +30,28 @@
     </div>
 
     <div class="toolbox">
-      <button class="icon-button" data-testid="workbench-add-action" type="button" @click="$emit('add-action')">
+      <button
+        class="icon-button"
+        data-testid="workbench-add-action"
+        type="button"
+        @click="$emit('add-action')"
+      >
         + 动作
       </button>
-      <button class="icon-button" data-testid="workbench-add-wait-action" type="button" @click="$emit('add-wait-action')">
+      <button
+        class="icon-button"
+        data-testid="workbench-add-wait-action"
+        type="button"
+        @click="$emit('add-wait-action')"
+      >
         + 等待
       </button>
-      <button class="icon-button" data-testid="workbench-add-switch-action" type="button" @click="$emit('add-switch-action')">
+      <button
+        class="icon-button"
+        data-testid="workbench-add-switch-action"
+        type="button"
+        @click="$emit('add-switch-action')"
+      >
         + 切人
       </button>
       <button
@@ -64,7 +86,11 @@
     </div>
 
     <div v-if="actionEntries.length" class="skill-entry-list">
-      <div v-for="entry in actionEntries" :key="entry.id" class="skill-entry-row">
+      <div
+        v-for="entry in actionEntries"
+        :key="entry.id"
+        class="skill-entry-row"
+      >
         <button
           class="skill-entry"
           type="button"
@@ -75,15 +101,22 @@
           @click="$emit('add-skill-action', entry)"
         >
           <span class="skill-entry-name">{{ entry.label }}</span>
-          <span class="skill-entry-meta">{{ formatActionEntryMeta(entry) }}</span>
+          <span class="skill-entry-meta">{{
+            formatActionEntryMeta(entry)
+          }}</span>
         </button>
       </div>
     </div>
 
-    <section class="batch-summary-panel" data-testid="workbench-action-batch-summary-panel">
+    <section
+      class="batch-summary-panel"
+      data-testid="workbench-action-batch-summary-panel"
+    >
       <div class="batch-summary-heading">
         <span>批次管理</span>
-        <strong data-testid="workbench-action-batch-summary-count">{{ actionBatches.length }}</strong>
+        <strong data-testid="workbench-action-batch-summary-count">{{
+          actionBatches.length
+        }}</strong>
       </div>
       <p
         v-if="actionBatches.length === 0"
@@ -110,10 +143,18 @@
             <span>{{ batch.skillName }}</span>
             <strong>{{ batch.count }} 动作</strong>
           </div>
-          <small>{{ batch.sourceLabel }} / {{ batch.minStartMs }}-{{ batch.maxStartMs }}ms</small>
+          <small
+            >{{ batch.sourceLabel }} / {{ batch.minStartMs }}-{{
+              batch.maxStartMs
+            }}ms</small
+          >
           <small>{{ batch.batchId }}</small>
         </div>
-        <strong v-if="batch.selected" class="batch-selected-badge" data-testid="workbench-action-batch-selected">
+        <strong
+          v-if="batch.selected"
+          class="batch-selected-badge"
+          data-testid="workbench-action-batch-selected"
+        >
           选中
         </strong>
         <div class="batch-summary-actions">
@@ -150,7 +191,9 @@
               :data-batch-id="batch.batchId"
               :value="getBatchShiftOffset(batch.batchId)"
               @click.stop
-              @input.stop="setBatchShiftOffset(batch.batchId, $event.target.value)"
+              @input.stop="
+                setBatchShiftOffset(batch.batchId, $event.target.value)
+              "
             />
           </label>
           <button
@@ -170,7 +213,9 @@
               :data-batch-id="batch.batchId"
               :value="getBatchAlignStart(batch.batchId)"
               @click.stop
-              @input.stop="setBatchAlignStart(batch.batchId, $event.target.value)"
+              @input.stop="
+                setBatchAlignStart(batch.batchId, $event.target.value)
+              "
             />
           </label>
           <button
@@ -196,7 +241,9 @@
         }"
         :data-action-id="action.id"
         :data-batch-id="action.generationBatch?.batchId || ''"
-        :data-batch-highlight="isActionInSelectedBatch(action) ? 'true' : 'false'"
+        :data-batch-highlight="
+          isActionInSelectedBatch(action) ? 'true' : 'false'
+        "
         tabindex="0"
         @click="$emit('select-action', action.id)"
         @keydown.enter="$emit('select-action', action.id)"
@@ -208,6 +255,21 @@
           <span class="action-time">{{ action.startMs }}ms</span>
         </div>
         <div class="action-tools">
+          <button
+            v-if="getActionResultEditCommand(action).actionId === action.id"
+            class="tool-button action-result-edit-button"
+            data-testid="workbench-action-list-edit-result-action"
+            type="button"
+            :data-action-id="getActionResultEditCommand(action).actionId"
+            :data-state-point-id="
+              getActionResultEditCommand(action).statePointId
+            "
+            :disabled="!getActionResultEditCommand(action).enabled"
+            @click.stop="focusActionResult(action)"
+          >
+            <EditPen class="tool-button-icon" />
+            <span>编辑结果</span>
+          </button>
           <button
             class="tool-button"
             data-testid="workbench-copy-action"
@@ -236,7 +298,9 @@
           </div>
           <div>
             <dt>冷却</dt>
-            <dd>{{ action.cooldownMs ? `${action.cooldownMs / 1000}s` : '-' }}</dd>
+            <dd>
+              {{ action.cooldownMs ? `${action.cooldownMs / 1000}s` : '-' }}
+            </dd>
           </div>
           <div>
             <dt>SP</dt>
@@ -270,7 +334,7 @@
 
 <script setup>
 import { computed, reactive } from 'vue';
-import { Collection } from '@element-plus/icons-vue';
+import { Collection, EditPen } from '@element-plus/icons-vue';
 import { getSkillActionCatalog } from '../../domain/workbenchProjectFactory';
 import { formatFrameTime, frameToMs, msToFrame } from '../../domain/timebase';
 const props = defineProps({
@@ -289,6 +353,10 @@ const props = defineProps({
   actions: {
     type: Array,
     required: true,
+  },
+  mainFlowCommandSurface: {
+    type: Object,
+    default: null,
   },
   skills: {
     type: Array,
@@ -312,6 +380,7 @@ const emit = defineEmits([
   'copy-action',
   'delete-action',
   'delete-action-batch',
+  'dispatch-flow-action',
   'align-action-batch',
   'shift-action-batch',
   'update-active-actor',
@@ -324,14 +393,16 @@ const batchShiftStepMs = frameToMs(30);
 const actionEntries = computed(() => getSkillActionCatalog(props.skills, 1));
 
 const selectedBatchId = computed(() => {
-  const selectedAction = props.actions.find((action) => action.id === props.selectedActionId);
+  const selectedAction = props.actions.find(
+    action => action.id === props.selectedActionId
+  );
   return selectedAction?.generationBatch?.batchId ?? null;
 });
 
 const actionBatches = computed(() => {
   const batches = new Map();
 
-  props.actions.forEach((action) => {
+  props.actions.forEach(action => {
     const batch = action.generationBatch;
     if (!batch?.batchId) {
       return;
@@ -347,7 +418,8 @@ const actionBatches = computed(() => {
       }
       existing.minStartMs = Math.min(existing.minStartMs, startMs);
       existing.maxStartMs = Math.max(existing.maxStartMs, startMs);
-      existing.selected = existing.selected || action.id === props.selectedActionId;
+      existing.selected =
+        existing.selected || action.id === props.selectedActionId;
       return;
     }
 
@@ -378,7 +450,26 @@ function selectBatchFirstAction(batch) {
 }
 
 function isActionInSelectedBatch(action) {
-  return Boolean(selectedBatchId.value && action.generationBatch?.batchId === selectedBatchId.value);
+  return Boolean(
+    selectedBatchId.value &&
+    action.generationBatch?.batchId === selectedBatchId.value
+  );
+}
+
+function getActionResultEditCommand(action) {
+  const command = props.mainFlowCommandSurface?.runtimeActionEdit ?? {};
+  if (!action?.id || command.actionId !== action.id) {
+    return {};
+  }
+  return command;
+}
+
+function focusActionResult(action) {
+  const command = getActionResultEditCommand(action);
+  if (!command.enabled || !command.action?.canRun) {
+    return;
+  }
+  emit('dispatch-flow-action', command.action);
 }
 
 function actionTypeLabel(type) {
@@ -450,7 +541,7 @@ function formatActionEntryMeta(entry) {
 
 function resolveBatchSkillName(batch, action) {
   const skillId = Number(batch.skillId ?? action.skillId);
-  const skill = props.skills.find((item) => Number(item.id) === skillId);
+  const skill = props.skills.find(item => Number(item.id) === skillId);
   return skill?.name || action.name || `技能 ${skillId}`;
 }
 
@@ -767,7 +858,21 @@ h2 {
 }
 
 .tool-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   padding: 5px 8px;
+}
+
+.tool-button-icon {
+  width: 13px;
+  height: 13px;
+}
+
+.action-result-edit-button {
+  border-color: rgba(121, 199, 185, 0.4);
+  background: rgba(121, 199, 185, 0.12);
+  color: #dff6f1;
 }
 
 .tool-button.danger {

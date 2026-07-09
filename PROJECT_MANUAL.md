@@ -11409,6 +11409,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：基于拆分后的场景继续补真实编辑体验缺口，优先检查动作列表/时间轴上的连续编辑操作是否还需要更直接的用户入口或更明确的结果定位。
 
+### 2026-07-09：UI 主流程动作列表编辑入口 - Action List Edit Entry
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 用户在动作列表中看到当前运行结果对应动作时，可以直接从该动作条目点击“编辑结果”进入动作编辑。
+- 该入口复用现有 runtime action edit command；不新建流程，不改变三值输出。
+- 点击后仍能通过“查看刷新结果”回到刷新后的结果点，并同步资源曲线、模拟日志、三值详情、贡献拆分、动作列表和时间轴。
+- 本阶段只补齐 UI 主流程的本地入口，不改变公式、证据字段或持久数据结构。
+
+当前验证事实：
+
+- `ActionLibraryPanel.vue` 接入 `mainFlowCommandSurface.runtimeActionEdit`，仅在当前运行结果动作上显示本地编辑入口。
+- `Workbench.vue` 将主流程 command surface 和 flow dispatch 传给动作列表。
+- `e2e/workbench-continuous-edit.spec.js` 现在从动作列表 `action-0003` 的本地入口进入编辑，并完成刷新回看。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、67 条测试。
+- `npm run test:e2e`：通过，4 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：优先检查时间轴上的同类本地编辑入口，或继续补完整编辑体验中的高频入口。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
