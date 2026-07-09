@@ -290,7 +290,7 @@
           >
             <ResourceMonitorPanel
               :resource-timeline="simulationResult.resourceTimeline"
-              :runtime-projection="simulationResult.threeValueRuntimeProjection"
+              :runtime-projection="runtimeOutputs"
               :selected-state-curve-point-id="selectedStateCurvePointId"
               :runtime-focus-source="runtimeFocusSource"
               :action-edit-result-context="actionEditResultContext"
@@ -306,7 +306,7 @@
             class="event-area"
             :data-runtime-review-role="runtimeReviewEventRole"
             :event-log="simulationResult.eventLog"
-            :runtime-projection="simulationResult.threeValueRuntimeProjection"
+            :runtime-projection="runtimeOutputs"
             :runtime-selected-detail="runtimeSelectedDetail"
             :selected-state-curve-point-id="selectedStateCurvePointId"
             :calculator-diagnostic-focus="calculatorDiagnosticFocus"
@@ -394,7 +394,7 @@
             :diagnostics="simulationResult.diagnostics"
             :damage-timeline="simulationResult.damageTimeline"
             :action-result-timeline="simulationResult.actionResultTimeline"
-            :runtime-projection="simulationResult.threeValueRuntimeProjection"
+            :runtime-projection="runtimeOutputs"
             :runtime-selected-detail="runtimeSelectedDetail"
             :candidate-value-series="simulationResult.candidateValueSeries"
             :draft-status="draftStatus"
@@ -548,14 +548,12 @@ const workbenchFlowRuntime = createWorkbenchFlowRuntime({
     calculatorDiagnosticScope.value = scope;
   },
   getFirstRuntimeStatePointId: () =>
-    getFirstRuntimeStatePointId(
-      simulationResult.value.threeValueRuntimeProjection
-    ),
+    getFirstRuntimeStatePointId(runtimeOutputs.value),
   isRuntimeOverviewActive: () => runtimeOverviewActive.value,
   isRuntimeStatePointSelected: () =>
     Boolean(
       findRuntimeStatePointContextById(
-        simulationResult.value.threeValueRuntimeProjection,
+        runtimeOutputs.value,
         selectedStateCurvePointId.value
       )
     ),
@@ -580,9 +578,10 @@ const project = computed(() =>
 );
 const scenario = computed(() => compileProject(project.value, gameData));
 const simulationResult = computed(() => simulateScenario(scenario.value));
+const runtimeOutputs = computed(() => simulationResult.value.runtimeOutputs);
 const runtimeSelectedDetail = computed(() =>
   createRuntimeSelectedDetail({
-    runtimeProjection: simulationResult.value.threeValueRuntimeProjection,
+    runtimeProjection: runtimeOutputs.value,
     selectedStateCurvePointId: selectedStateCurvePointId.value,
   })
 );
@@ -600,7 +599,7 @@ const runtimeOverviewActive = computed(
 const actionEditResultContext = computed(() =>
   createWorkbenchActionEditResultContext({
     source: actionEditSource.value,
-    runtimeProjection: simulationResult.value.threeValueRuntimeProjection,
+    runtimeProjection: runtimeOutputs.value,
   })
 );
 const workbenchFlowModel = computed(() =>
@@ -1552,10 +1551,7 @@ function selectStateCurvePoint(pointId) {
 
 function isRuntimeStatePointId(pointId) {
   return Boolean(
-    findRuntimeStatePointContextById(
-      simulationResult.value.threeValueRuntimeProjection,
-      pointId
-    )
+    findRuntimeStatePointContextById(runtimeOutputs.value, pointId)
   );
 }
 
@@ -1733,7 +1729,7 @@ function getFirstRuntimeStatePointId(runtimeProjection) {
 
 function selectActionFromRuntimeStatePoint(pointId) {
   const context = findRuntimeStatePointContextById(
-    simulationResult.value.threeValueRuntimeProjection,
+    runtimeOutputs.value,
     pointId
   );
   const actionId = context?.row?.actionId;
@@ -1749,7 +1745,7 @@ function shouldSyncRuntimeResultOnActionSelect() {
   }
   return Boolean(
     findRuntimeStatePointContextById(
-      simulationResult.value.threeValueRuntimeProjection,
+      runtimeOutputs.value,
       selectedStateCurvePointId.value
     )
   );
@@ -1758,7 +1754,7 @@ function shouldSyncRuntimeResultOnActionSelect() {
 function getSelectedRuntimeStatePointActionId() {
   return (
     findRuntimeStatePointContextById(
-      simulationResult.value.threeValueRuntimeProjection,
+      runtimeOutputs.value,
       selectedStateCurvePointId.value
     )?.row?.actionId ?? ''
   );

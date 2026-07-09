@@ -1,7 +1,7 @@
 import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
 
 export function getRuntimeOutputContract(runtimeProjection) {
-  return runtimeProjection?.outputContract ?? null;
+  return getRuntimeOutputSource(runtimeProjection)?.outputContract ?? null;
 }
 
 export function getRuntimeOutputContractOutput(runtimeProjection, outputName) {
@@ -11,23 +11,23 @@ export function getRuntimeOutputContractOutput(runtimeProjection, outputName) {
 }
 
 export function getRuntimeOutputSummary(runtimeProjection) {
-  const summary = runtimeProjection?.summary ?? {};
+  const runtimeOutputSource = getRuntimeOutputSource(runtimeProjection);
+  const summary = runtimeOutputSource?.summary ?? {};
   const contractSummary = getRuntimeOutputContract(runtimeProjection)?.summary;
-  if (!contractSummary) {
-    return summary;
-  }
   return {
     ...summary,
-    ...contractSummary,
+    ...(contractSummary ?? {}),
+    ...(runtimeOutputSource?.outputSummary ?? {}),
   };
 }
 
 export function getRuntimeSimLogRows(runtimeProjection) {
+  const runtimeOutputSource = getRuntimeOutputSource(runtimeProjection);
   const simLogOutput = getRuntimeOutputContractOutput(
     runtimeProjection,
     'simLog'
   );
-  const rows = runtimeProjection?.simLog;
+  const rows = runtimeOutputSource?.simLog;
   if (simLogOutput && Array.isArray(rows)) {
     return rows;
   }
@@ -35,6 +35,7 @@ export function getRuntimeSimLogRows(runtimeProjection) {
 }
 
 export function getRuntimeSimLogCount(runtimeProjection) {
+  const runtimeOutputSource = getRuntimeOutputSource(runtimeProjection);
   const simLogOutputCount = numberOrNull(
     getRuntimeOutputContractOutput(runtimeProjection, 'simLog')?.rowCount
   );
@@ -49,7 +50,14 @@ export function getRuntimeSimLogCount(runtimeProjection) {
     return contractSummaryCount;
   }
 
-  const summaryCount = numberOrNull(runtimeProjection?.summary?.simLogCount);
+  const outputSummaryCount = numberOrNull(
+    runtimeOutputSource?.outputSummary?.simLogCount
+  );
+  if (Number.isFinite(outputSummaryCount)) {
+    return outputSummaryCount;
+  }
+
+  const summaryCount = numberOrNull(runtimeOutputSource?.summary?.simLogCount);
   if (Number.isFinite(summaryCount)) {
     return summaryCount;
   }
@@ -58,35 +66,36 @@ export function getRuntimeSimLogCount(runtimeProjection) {
 }
 
 export function getRuntimeEnemyStateCurve(runtimeProjection) {
+  const runtimeOutputSource = getRuntimeOutputSource(runtimeProjection);
   const stateCurvesOutput = getRuntimeOutputContractOutput(
     runtimeProjection,
     'stateCurves'
   );
-  if (stateCurvesOutput && runtimeProjection?.stateCurves?.enemy) {
-    return runtimeProjection.stateCurves.enemy;
+  if (stateCurvesOutput && runtimeOutputSource?.stateCurves?.enemy) {
+    return runtimeOutputSource.stateCurves.enemy;
   }
 
   return (
-    runtimeProjection?.stateCurves?.enemy ??
+    runtimeOutputSource?.stateCurves?.enemy ??
     runtimeProjection?.enemyStateCurve ??
     {}
   );
 }
 
 export function getRuntimeResourceCurveRows(runtimeProjection) {
+  const runtimeOutputSource = getRuntimeOutputSource(runtimeProjection);
   const resourceCurvesOutput = getRuntimeOutputContractOutput(
     runtimeProjection,
     'resourceCurves'
   );
-  if (
-    resourceCurvesOutput &&
-    Array.isArray(runtimeProjection?.resourceCurves?.curvesByActor)
-  ) {
-    return runtimeProjection.resourceCurves.curvesByActor;
+  const resourceCurves =
+    runtimeOutputSource?.resourceCurves ?? runtimeOutputSource?.resources;
+  if (resourceCurvesOutput && Array.isArray(resourceCurves?.curvesByActor)) {
+    return resourceCurves.curvesByActor;
   }
 
   return (
-    runtimeProjection?.resourceCurves?.curvesByActor ??
+    resourceCurves?.curvesByActor ??
     runtimeProjection?.selfEnergyCurveByActor ??
     []
   );
@@ -142,6 +151,10 @@ export function findFirstRuntimeStatePointForAction(
     contexts[0] ??
     null
   );
+}
+
+function getRuntimeOutputSource(runtimeProjection) {
+  return runtimeProjection?.runtimeOutputs ?? runtimeProjection ?? null;
 }
 
 function createRuntimeStatePointContext(row, pointByDeltaId) {

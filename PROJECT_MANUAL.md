@@ -11489,6 +11489,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续运行时层能力块：让 Workbench 主流程逐步消费 `runtimeOutputs`，优先替换只读路径中的 `threeValueRuntimeProjection.simLog/stateCurves/resourceCurves/summary` 分散读取。
 
+### 2026-07-09：运行时层 Workbench 只读消费 - Workbench Runtime Outputs Consumption
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- Workbench 的资源曲线、模拟日志、分析追踪和三值详情现在通过统一 `runtimeOutputs` 读取运行结果。
+- `runtimeProjectionPoints` 会优先消费 `runtimeOutputs`，同时保留旧 projection 字段 fallback。
+- 主流程控制、合同上下文和完整 projection 仍保留原输入，避免丢失 runtime input / output contract 追溯信息。
+- 本阶段不改变三值计算结果、公式、候选证据或 UI 信息量。
+
+当前验证事实：
+
+- `runtimeProjectionPoints.test.js` 覆盖完整 projection 内嵌 `runtimeOutputs`、直接传入 `runtimeOutputs`、以及旧字段 fallback。
+- `Workbench.test.js` 覆盖资源面板、日志面板、分析面板共享同一个 `runtimeOutputs`，而 `WorkbenchFlowPanel` 仍持有完整 projection。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、72 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、267 条测试。
+- `npm run test:e2e`：通过，4 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+
+下一步：
+
+- 继续运行时层能力块：检查 `workbenchFlowModel` / `workbenchFlowContractContext` 是否需要同时暴露完整 projection 和 `runtimeOutputs`，让主流程合同上下文也能清楚区分 input contract 与 output contract。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

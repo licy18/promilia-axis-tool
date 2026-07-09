@@ -161,6 +161,113 @@ describe('runtime projection points', () => {
     ]);
   });
 
+  it('consumes the runtimeOutputs envelope before scattered projection fields', () => {
+    const runtimeOutputs = {
+      outputContract: {
+        outputs: {
+          simLog: {
+            rowCount: 1,
+          },
+          stateCurves: {
+            status: 'runtime-state-curves-ready',
+          },
+          resourceCurves: {
+            status: 'runtime-resource-curves-ready',
+          },
+        },
+        summary: {
+          simLogCount: 1,
+          enemyHpDelta: 320,
+        },
+      },
+      outputSummary: {
+        outputCount: 4,
+        simLogCount: 1,
+        enemyHpDelta: 320,
+      },
+      summary: {
+        simLogCount: 1,
+        enemyHpDelta: 320,
+      },
+      simLog: [
+        {
+          sourceDeltaId: 'runtime-output-hp-delta',
+          actionId: 'action-0001',
+          frameIndex: 10,
+          sequenceIndex: 0,
+          trackKey: 'enemyHpDamage',
+          layerKey: 'applied',
+        },
+      ],
+      stateCurves: {
+        enemy: {
+          points: [
+            {
+              sourceDeltaId: 'runtime-output-hp-delta',
+              actionId: 'action-0001',
+              frameIndex: 10,
+              sequenceIndex: 0,
+              trackKey: 'enemyHpDamage',
+              layerKey: 'applied',
+            },
+          ],
+        },
+      },
+      resources: {
+        curvesByActor: [
+          {
+            actorId: 'actor-001',
+            points: [
+              {
+                sourceDeltaId: 'runtime-output-energy-delta',
+                trackKey: 'selfEnergyChange',
+              },
+            ],
+          },
+        ],
+      },
+    };
+    const runtimeProjection = {
+      runtimeOutputs,
+      simLog: [{ sourceDeltaId: 'legacy-hp-delta' }],
+      stateCurves: {
+        enemy: {
+          points: [{ sourceDeltaId: 'legacy-hp-delta' }],
+        },
+      },
+      resourceCurves: {
+        curvesByActor: [{ actorId: 'legacy-actor', points: [] }],
+      },
+      summary: {
+        simLogCount: 99,
+        enemyHpDelta: 999,
+      },
+    };
+
+    expect(getRuntimeOutputSummary(runtimeProjection)).toMatchObject({
+      outputCount: 4,
+      simLogCount: 1,
+      enemyHpDelta: 320,
+    });
+    expect(getRuntimeSimLogCount(runtimeProjection)).toBe(1);
+    expect(getRuntimeSimLogRows(runtimeProjection)).toEqual([
+      expect.objectContaining({ sourceDeltaId: 'runtime-output-hp-delta' }),
+    ]);
+    expect(getRuntimeEnemyStateCurve(runtimeProjection).points).toEqual([
+      expect.objectContaining({ sourceDeltaId: 'runtime-output-hp-delta' }),
+    ]);
+    expect(getRuntimeResourceCurveRows(runtimeProjection)).toEqual([
+      expect.objectContaining({ actorId: 'actor-001' }),
+    ]);
+    expect(createRuntimeStatePointContexts(runtimeOutputs)).toEqual([
+      expect.objectContaining({
+        row: expect.objectContaining({
+          sourceDeltaId: 'runtime-output-hp-delta',
+        }),
+      }),
+    ]);
+  });
+
   it('creates runtime state point contexts in timeline order', () => {
     const runtimeProjection = {
       simLog: [
@@ -289,22 +396,14 @@ describe('runtime projection points', () => {
         .sourceDeltaId
     ).toBe('hp-delta');
     expect(
-      findFirstRuntimeStatePointForAction(
-        runtimeProjection,
-        'action-0001',
-        {
-          preferredTrackKey: 'selfEnergyChange',
-        }
-      )?.row.sourceDeltaId
+      findFirstRuntimeStatePointForAction(runtimeProjection, 'action-0001', {
+        preferredTrackKey: 'selfEnergyChange',
+      })?.row.sourceDeltaId
     ).toBe('energy-delta');
     expect(
-      findFirstRuntimeStatePointForAction(
-        runtimeProjection,
-        'action-0001',
-        {
-          preferredTrackKey: 'enemyToughnessDamage',
-        }
-      )?.row.sourceDeltaId
+      findFirstRuntimeStatePointForAction(runtimeProjection, 'action-0001', {
+        preferredTrackKey: 'enemyToughnessDamage',
+      })?.row.sourceDeltaId
     ).toBe('hp-delta');
   });
 });
