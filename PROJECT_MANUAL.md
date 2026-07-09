@@ -13025,6 +13025,26 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续运行时层能力块：把 simLog / stateCurves / resourceCurves / summary 的输出合同进一步收敛到同一 runtime output consumer 边界，减少 Workbench 对 projection 临时结构的依赖。
 
+### 2026-07-09：运行时层 - Runtime Output Consumer 标准边界
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- runtime output consumer view 新增 `outputConsumerBoundary`，把 `simLog / stateCurves / resourceCurves / summary` 是否来自标准 runtime outputs envelope、是否通过 consumer contract、是否发生 legacy projection fallback 统一成一个边界对象。
+- Workbench runtime contract boundary 现在优先消费 `outputConsumerBoundary.standardBoundaryReady` 判断 runtime output 标准性，减少对 projection 临时字段和散读计数的依赖。
+- `runtimeProjectionPoints` 的 Workbench 视图会在 `outputPanelSummary` 中透出 consumer boundary 状态，主流程仍能沿用同一套曲线/日志/详情数据。
+- 本阶段不改变 UI 可见文案、三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值或草稿保存 schema。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，6 个测试文件、39 条测试。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `331. 运行时输出消费边界：Runtime Output Consumer Boundary`。
+
+下一步：
+
+- 转入 UI 主流程能力块：在不新增微型状态标签的前提下，继续检查 Workbench 主流程是否还有成品体验缺口，优先补用户可见的完整操作闭环，而不是继续抽内部层。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

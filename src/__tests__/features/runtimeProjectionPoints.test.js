@@ -362,6 +362,28 @@ describe('runtime projection points', () => {
         simLogCount: 1,
         statePointContextCount: 1,
         projectionPointCount: 2,
+        outputConsumerBoundaryStatus:
+          'runtime-output-consumer-boundary-standard',
+        outputConsumerBoundaryStandardReady: true,
+      },
+      outputConsumerBoundary: {
+        sourceKind: 'azpr-three-value-runtime-output-consumer-boundary',
+        status: 'runtime-output-consumer-boundary-standard',
+        ready: true,
+        standardBoundaryReady: true,
+        sourcePath: 'runtimeProjection.runtimeOutputs',
+        sourceTier: 'runtime-outputs-envelope',
+        outputConsumerContractStatus: 'runtime-output-consumer-contract-ready',
+        standardOutputNames: [
+          'simLog',
+          'stateCurves',
+          'resourceCurves',
+          'summary',
+        ],
+        fallbackOutputNames: [],
+        standardOutputCount: 4,
+        fallbackOutputCount: 0,
+        usesLegacyProjectionFallback: false,
       },
       runtimeOutputSourceResolution: {
         sourcePath: 'runtimeProjection.runtimeOutputs',

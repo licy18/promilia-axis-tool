@@ -31,6 +31,8 @@ export function createWorkbenchFlowContractContext({
     runtimeOutputs ?? runtimeProjection?.runtimeOutputs ?? runtimeProjection;
   const runtimeOutputConsumerView =
     createThreeValueRuntimeOutputConsumerView(runtimeOutputSource);
+  const outputConsumerBoundary =
+    runtimeOutputConsumerView.outputConsumerBoundary ?? {};
   const runtimeOutputReadSources =
     runtimeOutputConsumerView.outputReadSources ?? {};
   const runtimeOutputReadOutputs = runtimeOutputReadSources.outputs ?? {};
@@ -146,6 +148,20 @@ export function createWorkbenchFlowContractContext({
     outputReadUsesLegacyFallback: Boolean(
       runtimeOutputReadSources.usesLegacyProjectionFallback
     ),
+    outputConsumerBoundaryStatus: outputConsumerBoundary.status ?? '',
+    outputConsumerBoundaryReady: Boolean(outputConsumerBoundary.ready),
+    outputConsumerBoundaryStandardReady: Boolean(
+      outputConsumerBoundary.standardBoundaryReady
+    ),
+    outputConsumerBoundaryUsesLegacyFallback: Boolean(
+      outputConsumerBoundary.usesLegacyProjectionFallback
+    ),
+    outputConsumerBoundaryStandardOutputCount: numberOrZero(
+      outputConsumerBoundary.standardOutputCount
+    ),
+    outputConsumerBoundaryFallbackOutputCount: numberOrZero(
+      outputConsumerBoundary.fallbackOutputCount
+    ),
     outputReadSimLogSourcePath:
       runtimeOutputReadOutputs.simLog?.sourcePath ?? '',
     outputReadStateCurvesSourcePath:
@@ -253,14 +269,16 @@ function createWorkbenchRuntimeContractBoundary({
       runtimeInput.generationEntryContractValidationValid &&
       !runtimeInput.generationReadUsesLegacyFallback);
   const runtimeOutputStandardReady =
-    runtimeOutput.outputReadStandardOutputCount >= 4 &&
-    !runtimeOutput.outputReadUsesLegacyFallback;
+    Boolean(runtimeOutput.outputConsumerBoundaryStandardReady) ||
+    (runtimeOutput.outputReadStandardOutputCount >= 4 &&
+      !runtimeOutput.outputReadUsesLegacyFallback);
   const ready = Boolean(runtimeInput.ready && runtimeOutput.ready);
   const standardBoundaryReady =
     ready && generationStandardReady && runtimeOutputStandardReady;
   const usesLegacyFallback = Boolean(
     runtimeInput.generationReadUsesLegacyFallback ||
-    runtimeOutput.outputReadUsesLegacyFallback
+    runtimeOutput.outputReadUsesLegacyFallback ||
+    runtimeOutput.outputConsumerBoundaryUsesLegacyFallback
   );
   const fallbackCount =
     numberOrZero(runtimeInput.generationReadFallbackInputCount) +
@@ -298,6 +316,18 @@ function createWorkbenchRuntimeContractBoundary({
     fallbackCount,
     generationReadSourcesStatus: runtimeInput.generationReadSourcesStatus ?? '',
     runtimeOutputReadSourcesStatus: runtimeOutput.outputReadSourcesStatus ?? '',
+    runtimeOutputConsumerBoundaryStatus:
+      runtimeOutput.outputConsumerBoundaryStatus ?? '',
+    runtimeOutputConsumerBoundaryReady: Boolean(
+      runtimeOutput.outputConsumerBoundaryReady
+    ),
+    runtimeOutputConsumerBoundaryReadyState:
+      runtimeOutput.outputConsumerBoundaryReady ? 'true' : 'false',
+    runtimeOutputConsumerBoundaryStandardReady: Boolean(
+      runtimeOutput.outputConsumerBoundaryStandardReady
+    ),
+    runtimeOutputConsumerBoundaryStandardReadyState:
+      runtimeOutput.outputConsumerBoundaryStandardReady ? 'true' : 'false',
     generationReadStandardOutputCount: numberOrZero(
       runtimeInput.generationReadStandardOutputCount
     ),
@@ -309,6 +339,12 @@ function createWorkbenchRuntimeContractBoundary({
     ),
     runtimeOutputReadFallbackOutputCount: numberOrZero(
       runtimeOutput.outputReadFallbackOutputCount
+    ),
+    runtimeOutputConsumerBoundaryStandardOutputCount: numberOrZero(
+      runtimeOutput.outputConsumerBoundaryStandardOutputCount
+    ),
+    runtimeOutputConsumerBoundaryFallbackOutputCount: numberOrZero(
+      runtimeOutput.outputConsumerBoundaryFallbackOutputCount
     ),
     generationEntryContractValidationStatus:
       runtimeInput.generationEntryContractValidationStatus ?? '',

@@ -270,6 +270,13 @@ describe('workbench flow contract context', () => {
         outputReadStandardOutputCount: 4,
         outputReadFallbackOutputCount: 0,
         outputReadUsesLegacyFallback: false,
+        outputConsumerBoundaryStatus:
+          'runtime-output-consumer-boundary-standard',
+        outputConsumerBoundaryReady: true,
+        outputConsumerBoundaryStandardReady: true,
+        outputConsumerBoundaryUsesLegacyFallback: false,
+        outputConsumerBoundaryStandardOutputCount: 4,
+        outputConsumerBoundaryFallbackOutputCount: 0,
         outputReadSimLogSourcePath: 'runtimeOutputs.outputs.simLog',
         outputReadStateCurvesSourcePath: 'runtimeOutputs.outputs.stateCurves',
         outputReadResourceCurvesSourcePath:
@@ -305,10 +312,18 @@ describe('workbench flow contract context', () => {
         generationReadSourcesStatus:
           'runtime-input-generation-read-sources-ready',
         runtimeOutputReadSourcesStatus: 'runtime-output-read-sources-ready',
+        runtimeOutputConsumerBoundaryStatus:
+          'runtime-output-consumer-boundary-standard',
+        runtimeOutputConsumerBoundaryReady: true,
+        runtimeOutputConsumerBoundaryReadyState: 'true',
+        runtimeOutputConsumerBoundaryStandardReady: true,
+        runtimeOutputConsumerBoundaryStandardReadyState: 'true',
         generationReadStandardOutputCount: 5,
         runtimeOutputReadStandardOutputCount: 4,
         generationReadFallbackInputCount: 0,
         runtimeOutputReadFallbackOutputCount: 0,
+        runtimeOutputConsumerBoundaryStandardOutputCount: 4,
+        runtimeOutputConsumerBoundaryFallbackOutputCount: 0,
         generationEntryContractValidationStatus:
           'generation-entry-contract-valid',
         generationEntryContractValidationIssueCount: 0,

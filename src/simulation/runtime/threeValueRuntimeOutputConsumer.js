@@ -177,6 +177,11 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
       summary: outputSummary,
       outputConsistency,
     });
+  const outputConsumerBoundary = createThreeValueRuntimeOutputConsumerBoundary({
+    runtimeOutputSourceResolution,
+    outputReadSources,
+    outputConsumerContract,
+  });
   const enemyStateCurve =
     stateCurves?.enemy ?? runtimeOutputSource?.enemyStateCurve ?? {};
   const resourceCurveRows = Array.isArray(resourceCurves?.curvesByActor)
@@ -194,6 +199,7 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
     outputContract,
     outputConsumerContract,
     consumerContract: outputConsumerContract,
+    outputConsumerBoundary,
     outputConsistency,
     outputSummary,
     simLog,
@@ -216,6 +222,12 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
         outputSummary.resourceCurveActorCount
       ),
       outputConsumerContractStatus: outputConsumerContract?.status ?? '',
+      outputConsumerBoundaryStatus: outputConsumerBoundary.status,
+      outputConsumerBoundaryReady: outputConsumerBoundary.ready,
+      outputConsumerBoundaryStandardReady:
+        outputConsumerBoundary.standardBoundaryReady,
+      outputConsumerBoundaryUsesLegacyFallback:
+        outputConsumerBoundary.usesLegacyProjectionFallback,
       outputConsistencyStatus:
         outputSummary.outputConsistencyStatus ?? outputConsistency.status ?? '',
       outputConsistent: Boolean(
@@ -231,6 +243,60 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
       runtimeOutputSourceResolution
     ),
     outputReadSources,
+  };
+}
+
+export function createThreeValueRuntimeOutputConsumerBoundary({
+  runtimeOutputSourceResolution = {},
+  outputReadSources = {},
+  outputConsumerContract = null,
+} = {}) {
+  const ready = Boolean(
+    runtimeOutputSourceResolution.ready &&
+    isReadyStatus(outputConsumerContract?.status)
+  );
+  const standardOutputCount = numberOrZero(
+    outputReadSources.standardOutputCount
+  );
+  const fallbackOutputCount = numberOrZero(
+    outputReadSources.fallbackOutputCount
+  );
+  const usesLegacyProjectionFallback = Boolean(
+    outputReadSources.usesLegacyProjectionFallback ||
+    runtimeOutputSourceResolution.legacyProjectionFallback
+  );
+  const standardBoundaryReady = Boolean(
+    ready && standardOutputCount >= 4 && !usesLegacyProjectionFallback
+  );
+
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-three-value-runtime-output-consumer-boundary',
+    status: !ready
+      ? 'runtime-output-consumer-boundary-missing'
+      : standardBoundaryReady
+        ? 'runtime-output-consumer-boundary-standard'
+        : 'runtime-output-consumer-boundary-ready-with-fallbacks',
+    ready,
+    readyState: ready ? 'true' : 'false',
+    standardBoundaryReady,
+    standardBoundaryReadyState: standardBoundaryReady ? 'true' : 'false',
+    sourcePath: runtimeOutputSourceResolution.sourcePath ?? '',
+    sourceTier: runtimeOutputSourceResolution.sourceTier ?? '',
+    runtimeOutputsSourceKind: runtimeOutputSourceResolution.sourceKind ?? '',
+    runtimeOutputsStatus: runtimeOutputSourceResolution.status ?? '',
+    outputConsumerContractSourceKind: outputConsumerContract?.sourceKind ?? '',
+    outputConsumerContractStatus: outputConsumerContract?.status ?? '',
+    outputReadSourcesStatus: outputReadSources.status ?? '',
+    standardOutputNames: outputReadSources.standardOutputNames ?? [],
+    fallbackOutputNames: outputReadSources.fallbackOutputNames ?? [],
+    standardOutputCount,
+    fallbackOutputCount,
+    usesLegacyProjectionFallback,
+    usesLegacyProjectionFallbackState: usesLegacyProjectionFallback
+      ? 'true'
+      : 'false',
+    applied: true,
   };
 }
 

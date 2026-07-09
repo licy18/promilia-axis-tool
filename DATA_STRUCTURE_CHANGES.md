@@ -23562,3 +23562,100 @@ generationReadUsesLegacyFallback = false
 - `threeValueRuntimeProjection.test.js` 和 `firstVerticalSliceSimulation.test.js` 覆盖 runtime projection / runtime output summary 继续传递标准生成入口校验状态。
 - `workbenchFlowContractContext.test.js`、`workbenchFlowModel.test.js` 和 `WorkbenchFlowPanel.test.js` 覆盖 Workbench 主流程合同边界仍保持 standard，且标准边界以生成入口校验有效为条件。
 - `npm run test -- --run src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js`：通过，6 个测试文件、38 条测试。
+
+## 331. 运行时输出消费边界：Runtime Output Consumer Boundary
+
+### 331.1 结构变化
+
+`createThreeValueRuntimeOutputConsumerView()` 新增：
+
+```text
+outputConsumerBoundary
+```
+
+结构为：
+
+```text
+schemaVersion = 1
+sourceKind = azpr-three-value-runtime-output-consumer-boundary
+status = runtime-output-consumer-boundary-standard | runtime-output-consumer-boundary-ready-with-fallbacks | runtime-output-consumer-boundary-missing
+ready
+readyState
+standardBoundaryReady
+standardBoundaryReadyState
+sourcePath
+sourceTier
+runtimeOutputsSourceKind
+runtimeOutputsStatus
+outputConsumerContractSourceKind
+outputConsumerContractStatus
+outputReadSourcesStatus
+standardOutputNames
+fallbackOutputNames
+standardOutputCount
+fallbackOutputCount
+usesLegacyProjectionFallback
+usesLegacyProjectionFallbackState
+applied = true
+```
+
+标准 runtime output consumer 边界要求：
+
+```text
+outputConsumerContract.status contains ready
+outputReadSources.standardOutputCount >= 4
+outputReadSources.usesLegacyProjectionFallback = false
+```
+
+`createThreeValueRuntimeOutputConsumerView().summary` 新增：
+
+```text
+outputConsumerBoundaryStatus
+outputConsumerBoundaryReady
+outputConsumerBoundaryStandardReady
+outputConsumerBoundaryUsesLegacyFallback
+```
+
+Workbench runtime output context 新增：
+
+```text
+outputConsumerBoundaryStatus
+outputConsumerBoundaryReady
+outputConsumerBoundaryStandardReady
+outputConsumerBoundaryUsesLegacyFallback
+outputConsumerBoundaryStandardOutputCount
+outputConsumerBoundaryFallbackOutputCount
+```
+
+Workbench runtime contract boundary 新增：
+
+```text
+runtimeOutputConsumerBoundaryStatus
+runtimeOutputConsumerBoundaryReady
+runtimeOutputConsumerBoundaryReadyState
+runtimeOutputConsumerBoundaryStandardReady
+runtimeOutputConsumerBoundaryStandardReadyState
+runtimeOutputConsumerBoundaryStandardOutputCount
+runtimeOutputConsumerBoundaryFallbackOutputCount
+```
+
+Workbench 的 runtime output 标准边界现在优先读取：
+
+```text
+runtimeOutput.outputConsumerBoundaryStandardReady
+```
+
+旧的 `outputReadStandardOutputCount >= 4 && !outputReadUsesLegacyFallback` 保留为兼容后备。
+
+### 331.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只新增运行时输出消费边界和 Workbench 内部合同字段；三值计算结果、公式、倍率、证据字段、运行日志行、曲线数值和 UI 文案均不改变。
+
+### 331.3 验证
+
+- `runtimeProjectionPoints.test.js` 覆盖 Workbench runtime output consumer view 从 runtime outputs envelope 生成 `outputConsumerBoundary`，并确认 4 类标准输出全部来自标准边界。
+- `workbenchFlowContractContext.test.js` 覆盖 Workbench runtime contract boundary 优先透出 runtime output consumer boundary 状态。
+- `workbenchFlowModel.test.js`、`WorkbenchFlowPanel.test.js`、`threeValueRuntimeProjection.test.js` 和 `firstVerticalSliceSimulation.test.js` 覆盖主流程、投影和纵切仍保持 standard runtime output 边界。
+- `npm run test -- --run src/__tests__/features/runtimeProjectionPoints.test.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/WorkbenchFlowPanel.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，6 个测试文件、39 条测试。
