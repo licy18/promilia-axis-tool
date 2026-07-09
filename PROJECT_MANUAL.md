@@ -9984,6 +9984,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 runtime view patch 是否可以继续下沉到 flow runtime / plan request 输出侧，优先让“flow plan -> runtime view patch -> 页面状态”形成更完整的闭环合同，而不是继续扩展局部提示或文案。
 
+### 2026-07-09：UI 主流程能力块 - Flow Runtime View Patch Output
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchFlowRuntime` 新增 `applyRuntimeViewPatch` 与 `getCurrentRuntimeLogFocus` 入口，可以在 flow runtime 内把 runtime point selection、runtime flow view、calculator scope state 直接转换为 runtime view patch。
+- `Workbench` 页面不再接收 `applyCalculatorScopeState`、`applyRuntimePointSelectionState`、`applyRuntimeViewState` 三类中间态回调，只保留统一 `applyRuntimeViewPatch()` 应用页面状态。
+- 旧中间态回调仍保留在 `workbenchFlowRuntime` 兼容路径中，已有测试继续覆盖；新测试覆盖 patch callback 优先路径。
+- 本阶段只把 UI 主流程 runtime view patch 合同下沉到 flow runtime 输出侧，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- flow runtime 单测覆盖 runtime flow plan 和 direct calculator scope 通过 patch callback 输出页面状态 patch。
+- Workbench 页面测试确认主流程 dispatch、runtime view、运行结果查看和编辑回跳路径保持可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/features/workbenchRuntimeViewState.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、78 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、243 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 `workbenchFlowPlanRequests` / `workbenchFlowPlanController` 是否还能把 runtime view patch 的来源字段进一步标准化，优先让“面板 action -> plan request -> flow runtime patch -> 页面状态”的闭环合同更清晰。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

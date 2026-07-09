@@ -199,6 +199,98 @@ describe('workbench flow runtime', () => {
     ]);
   });
 
+  it('emits runtime view patches for runtime flow plans when available', () => {
+    const calls = [];
+    let currentRuntimeLogFocus = {
+      source: '',
+      statePointId: '',
+      sequence: 2,
+    };
+    const runtime = createWorkbenchFlowRuntime({
+      actionExists: actionId => actionId === 'action-0001',
+      applyActionSelectionState: selectionState =>
+        calls.push(['applyActionSelectionState', selectionState]),
+      setCalculatorScope: scope => calls.push(['setCalculatorScope', scope]),
+      getCurrentRuntimeLogFocus: () => currentRuntimeLogFocus,
+      applyRuntimeViewPatch: patch => {
+        calls.push(['applyRuntimeViewPatch', patch]);
+        if (patch.changes.runtimeLogFocus) {
+          currentRuntimeLogFocus = patch.changes.runtimeLogFocus;
+        }
+      },
+    });
+
+    expect(
+      runtime.applyRuntimeFlowPlan({
+        kind: 'runtime-result-return',
+        selectActionId: 'action-0001',
+        calculatorScope: 'runtime',
+        pulseCalculatorFocus: false,
+        selectRuntimeStatePoint: true,
+        statePointId: 'point-001',
+        stateCurveLayerFilters: {
+          applied: true,
+          candidate: false,
+        },
+        stateCurveTrackFilters: {},
+        runtimeLogFocusSource: 'action-result',
+      })
+    ).toMatchObject({
+      applied: true,
+      kind: 'runtime-result-return',
+    });
+
+    expect(calls).toEqual([
+      [
+        'applyActionSelectionState',
+        {
+          requestedActionId: 'action-0001',
+          actionId: 'action-0001',
+          shouldSelectAction: true,
+          syncRuntimeResult: false,
+        },
+      ],
+      ['setCalculatorScope', 'runtime'],
+      [
+        'applyRuntimeViewPatch',
+        {
+          changes: {
+            selectedStatePointId: 'point-001',
+            stateCurveFocusMode: 'selected',
+            runtimeLogFocus: {
+              source: '',
+              statePointId: '',
+              sequence: 2,
+            },
+          },
+          pulseCalculatorFocus: false,
+          selectRuntimeActionStatePointId: 'point-001',
+          selectRuntimeStatePointId: '',
+        },
+      ],
+      [
+        'applyRuntimeViewPatch',
+        {
+          changes: {
+            stateCurveLayerFilters: {
+              applied: true,
+              candidate: false,
+            },
+            stateCurveTrackFilters: {},
+            runtimeLogFocus: {
+              source: 'action-result',
+              statePointId: 'point-001',
+              sequence: 3,
+            },
+          },
+          pulseCalculatorFocus: false,
+          selectRuntimeActionStatePointId: '',
+          selectRuntimeStatePointId: '',
+        },
+      ],
+    ]);
+  });
+
   it('applies direct runtime point selection through the shared selection state', () => {
     const calls = [];
     const runtime = createWorkbenchFlowRuntime({
@@ -227,6 +319,55 @@ describe('workbench flow runtime', () => {
             source: '',
             statePointId: '',
           },
+        },
+      ],
+    ]);
+  });
+
+  it('emits a runtime view patch for direct calculator scope selection', () => {
+    const calls = [];
+    const runtime = createWorkbenchFlowRuntime({
+      getFirstRuntimeStatePointId: () => 'point-first',
+      getCurrentRuntimeLogFocus: () => ({
+        source: '',
+        statePointId: '',
+        sequence: 6,
+      }),
+      applyRuntimeViewPatch: patch =>
+        calls.push(['applyRuntimeViewPatch', patch]),
+    });
+
+    expect(
+      runtime.applyCalculatorScope({
+        scope: 'runtime',
+      })
+    ).toMatchObject({
+      applied: true,
+      kind: 'calculator-scope-selection',
+    });
+
+    expect(calls).toEqual([
+      [
+        'applyRuntimeViewPatch',
+        {
+          changes: {
+            calculatorScope: 'runtime',
+            stateCurveLayerFilters: {
+              applied: true,
+              candidate: false,
+              sampled: false,
+              placeholder: false,
+            },
+            stateCurveTrackFilters: {},
+            runtimeLogFocus: {
+              source: '',
+              statePointId: '',
+              sequence: 6,
+            },
+          },
+          pulseCalculatorFocus: true,
+          selectRuntimeActionStatePointId: '',
+          selectRuntimeStatePointId: 'point-first',
         },
       ],
     ]);

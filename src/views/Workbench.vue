@@ -431,11 +431,6 @@ import {
 } from '../features/workbench/workbenchFlowPlanController';
 import { createWorkbenchFlowRuntime } from '../features/workbench/workbenchFlowRuntime';
 import {
-  createWorkbenchCalculatorScopeViewPatch,
-  createWorkbenchRuntimeFlowViewPatch,
-  createWorkbenchRuntimePointSelectionViewPatch,
-} from '../features/workbench/workbenchRuntimeViewState';
-import {
   createWorkbenchMainFlowStatusView,
   createWorkbenchRuntimeReviewFlowView,
   createWorkbenchFlowModel,
@@ -566,11 +561,8 @@ const workbenchFlowRuntime = createWorkbenchFlowRuntime({
         selectedStateCurvePointId.value
       )
     ),
-  applyCalculatorScopeState: scopeState =>
-    applyCalculatorScopeFlowState(scopeState),
-  applyRuntimePointSelectionState: selectionState =>
-    applyRuntimePointSelectionState(selectionState),
-  applyRuntimeViewState: viewState => applyRuntimeViewState(viewState),
+  getCurrentRuntimeLogFocus: () => runtimeLogFocus.value,
+  applyRuntimeViewPatch: patch => applyRuntimeViewPatch(patch),
 });
 const workbenchFlowController = createWorkbenchFlowController(
   createWorkbenchFlowPlanHandlers({
@@ -1705,22 +1697,6 @@ function selectRuntimeStatePoint(pointId) {
   });
 }
 
-function applyRuntimePointSelectionState(selectionState = {}) {
-  applyRuntimeViewPatch(
-    createWorkbenchRuntimePointSelectionViewPatch(selectionState, {
-      currentRuntimeLogFocus: runtimeLogFocus.value,
-    })
-  );
-}
-
-function applyRuntimeViewState(viewState = {}) {
-  applyRuntimeViewPatch(
-    createWorkbenchRuntimeFlowViewPatch(viewState, {
-      currentRuntimeLogFocus: runtimeLogFocus.value,
-    })
-  );
-}
-
 function applyRuntimeViewPatch(patch = {}) {
   const changes = patch.changes ?? {};
   if (hasRuntimeViewPatchChange(changes, 'selectedStatePointId')) {
@@ -1807,14 +1783,6 @@ function focusThreeValueCalculatorScope(
     scope,
     selectFirstRuntimePoint,
   });
-}
-
-function applyCalculatorScopeFlowState(scopeState = {}) {
-  applyRuntimeViewPatch(
-    createWorkbenchCalculatorScopeViewPatch(scopeState, {
-      currentRuntimeLogFocus: runtimeLogFocus.value,
-    })
-  );
 }
 
 function getFirstRuntimeStatePointId(runtimeProjection) {

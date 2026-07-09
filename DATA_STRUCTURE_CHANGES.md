@@ -21080,3 +21080,60 @@ Calculator scope patch 保持旧行为优先级：当 `selectRuntimeStatePoint` 
 - `npm run test -- --run src/__tests__/features/workbenchRuntimeViewState.test.js src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、76 条测试。
 - `npm run test -- --run`：通过，37 个测试文件、241 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 287. UI 主流程能力块：Flow Runtime View Patch Output
+
+### 287.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`createWorkbenchFlowRuntime()` 新增可选回调：
+
+```js
+getCurrentRuntimeLogFocus()
+applyRuntimeViewPatch(patch)
+```
+
+当调用方提供 `applyRuntimeViewPatch()` 时，flow runtime 会优先把以下中间状态转换为 runtime view patch 后输出：
+
+```js
+createWorkbenchFlowRuntimePointSelectionState(...)
+createRuntimeViewState(...)
+createWorkbenchFlowRuntimeScopeState(...)
+```
+
+对应转换继续复用上一阶段新增的 patch helper：
+
+```js
+createWorkbenchRuntimePointSelectionViewPatch(...)
+createWorkbenchRuntimeFlowViewPatch(...)
+createWorkbenchCalculatorScopeViewPatch(...)
+```
+
+`Workbench.vue` 的 `createWorkbenchFlowRuntime()` 配置改为只提供：
+
+```js
+getCurrentRuntimeLogFocus: () => runtimeLogFocus.value
+applyRuntimeViewPatch: patch => applyRuntimeViewPatch(patch)
+```
+
+页面层不再提供以下三类中间态回调：
+
+```js
+applyCalculatorScopeState
+applyRuntimePointSelectionState
+applyRuntimeViewState
+```
+
+`workbenchFlowRuntime` 仍保留上述旧回调作为兼容回退路径，避免影响现有测试和潜在调用方。
+
+### 287.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程 flow runtime 到页面状态的内部合同，不新增持久字段，不需要数据迁移。
+
+### 287.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowRuntime.test.js`，覆盖 runtime flow plan 与 direct calculator scope 通过 `applyRuntimeViewPatch()` 输出 patch 的优先路径，并保留旧中间态回调兼容测试。
+- `npm run test -- --run src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/features/workbenchRuntimeViewState.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、78 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、243 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

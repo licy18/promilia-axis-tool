@@ -1,5 +1,10 @@
 import { createWorkbenchFlowRuntimePointSelectionState } from './workbenchFlowRuntimePointSelection';
 import { createWorkbenchFlowRuntimeScopeState } from './workbenchFlowRuntimeScope';
+import {
+  createWorkbenchCalculatorScopeViewPatch,
+  createWorkbenchRuntimeFlowViewPatch,
+  createWorkbenchRuntimePointSelectionViewPatch,
+} from './workbenchRuntimeViewState';
 
 export function createWorkbenchFlowRuntime({
   actionExists = () => false,
@@ -12,6 +17,8 @@ export function createWorkbenchFlowRuntime({
   getFirstRuntimeStatePointId = () => '',
   isRuntimeOverviewActive = () => false,
   isRuntimeStatePointSelected = () => false,
+  getCurrentRuntimeLogFocus = () => null,
+  applyRuntimeViewPatch = null,
   applyCalculatorScopeState = null,
   applyRuntimePointSelectionState = null,
   applyRuntimeViewState = null,
@@ -124,6 +131,15 @@ export function createWorkbenchFlowRuntime({
     const selectionState = createWorkbenchFlowRuntimePointSelectionState({
       statePointId,
     });
+    if (typeof applyRuntimeViewPatch === 'function') {
+      applyRuntimeViewPatch(
+        createWorkbenchRuntimePointSelectionViewPatch(
+          selectionState,
+          createRuntimeViewPatchOptions()
+        )
+      );
+      return selectionState;
+    }
     if (typeof applyRuntimePointSelectionState === 'function') {
       applyRuntimePointSelectionState(selectionState);
     } else {
@@ -143,6 +159,15 @@ export function createWorkbenchFlowRuntime({
       scope,
       firstRuntimeStatePointId,
     });
+    if (typeof applyRuntimeViewPatch === 'function') {
+      applyRuntimeViewPatch(
+        createWorkbenchCalculatorScopeViewPatch(
+          scopeState,
+          createRuntimeViewPatchOptions()
+        )
+      );
+      return scopeState;
+    }
     if (typeof applyCalculatorScopeState === 'function') {
       applyCalculatorScopeState(scopeState);
     } else {
@@ -154,6 +179,15 @@ export function createWorkbenchFlowRuntime({
   function applyRuntimeViewStateForPlan(flowPlan = {}) {
     const viewState = createRuntimeViewState(flowPlan);
     if (!hasRuntimeViewStateChanges(viewState)) {
+      return viewState;
+    }
+    if (typeof applyRuntimeViewPatch === 'function') {
+      applyRuntimeViewPatch(
+        createWorkbenchRuntimeFlowViewPatch(
+          viewState,
+          createRuntimeViewPatchOptions()
+        )
+      );
       return viewState;
     }
     if (typeof applyRuntimeViewState === 'function') {
@@ -175,6 +209,12 @@ export function createWorkbenchFlowRuntime({
       focusRuntimeLog({ ...viewState.runtimeLogFocus });
     }
     return viewState;
+  }
+
+  function createRuntimeViewPatchOptions() {
+    return {
+      currentRuntimeLogFocus: getCurrentRuntimeLogFocus(),
+    };
   }
 
   return {
