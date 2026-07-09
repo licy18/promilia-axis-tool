@@ -9825,6 +9825,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 Workbench 主流程中“动作修改后回到结果点”的端到端状态恢复，优先收束 dispatch/result-return/runtime-log focus 的页面级边界，而不是继续扩展提示细节。
 
+### 2026-07-09：UI 主流程能力块 - Runtime View State Apply Boundary
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `workbenchRuntimeViewState`，把运行点选择、运行视图切换、calculator scope 切换时的页面状态应用规则集中为可测试 helper。
+- `Workbench` 页面中的 `selectedStateCurvePointId`、`stateCurveFocusMode`、`stateCurveLayerFilters`、`stateCurveTrackFilters`、`runtimeLogFocus` 更新改为消费共享 apply state。
+- “动作编辑后回到刷新结果点”的 result-return 路径继续保持原有行为，但日志焦点序列、曲线选中状态、运行点状态的应用边界更集中，后续继续做主流程闭环时不用在页面各处复制规则。
+- 本阶段只调整 UI 主流程状态应用边界，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- 新增 runtime view state 单测覆盖运行点选择、运行视图日志 focus、calculator scope、独立 runtime log focus 的状态生成。
+- Workbench 页面测试确认 result-return、runtime flow、事件日志和主流程状态仍保持可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchRuntimeViewState.test.js src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、72 条测试。
+- `npm run test -- --run`：通过，36 个测试文件、231 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 Workbench flow runtime 和 flow controller 的 result-return / focus-action plan 生成边界，优先把“动作编辑 -> 回到结果 -> 再定位动作”的循环合同继续收束为可复用模块。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

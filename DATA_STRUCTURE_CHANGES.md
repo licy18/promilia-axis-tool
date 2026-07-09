@@ -20801,3 +20801,42 @@ mainFlowSelection.runtimeFocusSource
 - `npm run test -- --run`：通过，35 个测试文件、227 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `git diff --check`：通过；仅有 Git 换行转换提示。
+
+## 281. UI 主流程能力块：Runtime View State Apply Boundary
+
+### 281.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增内部 UI 状态 helper：
+
+```js
+createWorkbenchRuntimePointSelectionApplyState(selectionState, context)
+createWorkbenchRuntimeViewApplyState(viewState, context)
+createWorkbenchCalculatorScopeApplyState(scopeState, context)
+createWorkbenchRuntimeLogFocusState(input)
+```
+
+这些 helper 统一生成 Workbench 页面应用运行视图状态时需要的：
+
+```js
+selectedStatePointId
+stateCurveFocusMode
+stateCurveLayerFilters
+stateCurveTrackFilters
+runtimeLogFocus
+```
+
+`Workbench.vue` 的 runtime point selection、runtime view state、calculator scope state 应用逻辑改为消费上述 helper，保持现有 result-return / runtime-log focus 行为不变。
+
+### 281.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程的页面状态应用边界，不新增持久字段，不需要数据迁移。
+
+### 281.3 验证
+
+- 新增 `src/__tests__/features/workbenchRuntimeViewState.test.js`，覆盖运行点选择、运行视图日志 focus、calculator scope、独立 runtime log focus 的状态生成。
+- `npm run test -- --run src/__tests__/features/workbenchRuntimeViewState.test.js src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、72 条测试。
+- `npm run test -- --run`：通过，36 个测试文件、231 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。
