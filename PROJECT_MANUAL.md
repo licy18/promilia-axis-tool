@@ -9879,6 +9879,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 Workbench 主流程 command surface 与 plan request 的连接点，优先收束“按钮/面板动作 -> flow action -> plan request”的端到端合同，而不是继续做局部提示。
 
+### 2026-07-09：UI 主流程能力块 - Flow Action Plan Request Resolver
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchFlowPlanRequests` 新增 `createWorkbenchFlowActionPlanRequest()`，可以把 command surface / 面板产出的完整 flow action 直接解析为 handler key、handler payload 和 plan request。
+- `workbenchFlowController` 的 dispatch 分支改为消费该 resolver，controller 不再维护 open-result、runtime-point、result-return、focus-action 等 action kind 的 payload 拼接逻辑。
+- `createWorkbenchFlowPlanHandlers()` 在 controller dispatch 场景下优先使用 action resolver 生成的 plan request，直连“按钮/面板动作 -> flow action -> plan request -> runtime/action-edit plan”合同；直接调用 handler 时仍保留兼容 fallback。
+- 本阶段只调整 UI 主流程 flow action 到 plan request 的解析边界，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- plan request 单测覆盖 open runtime、return result、focus runtime action 等 flow action 到 request 的解析，以及 disabled/unsupported action 的失败状态。
+- Flow controller、main flow action 和 Workbench 页面测试确认 command surface 产出的按钮/面板 action 仍能进入既有 runtime/action-edit plan 路径。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowPlanRequests.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、92 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、236 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 command surface 暴露给各面板的 action factory，优先减少仍需要面板理解 action kind / fallback payload 的位置，继续服务完整“编辑 -> 运行 -> 查看 -> 回改”闭环。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

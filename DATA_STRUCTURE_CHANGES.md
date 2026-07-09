@@ -20885,3 +20885,54 @@ Plan request 统一携带：
 - `npm run test -- --run`：通过，37 个测试文件、234 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `git diff --check`：通过；仅有 Git 换行转换提示。
+
+## 283. UI 主流程能力块：Flow Action Plan Request Resolver
+
+### 283.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`workbenchFlowPlanRequests` 新增 flow action resolver：
+
+```js
+createWorkbenchFlowActionPlanRequest(action)
+```
+
+该 resolver 把完整 flow action 统一解析为：
+
+```js
+{
+  supported,
+  reason,
+  flowAction,
+  handlerKey,
+  payload,
+  request,
+}
+```
+
+其中 `request` 仍为上一阶段定义的 plan request：
+
+```js
+{
+  applicationKind,
+  methodKey,
+  payload,
+}
+```
+
+`WORKBENCH_FLOW_CONTROLLER_HANDLERS` 移到 `workbenchFlowPlanRequests` 定义并由 `workbenchFlowController` 继续 re-export，保持外部导入兼容。
+
+`workbenchFlowController.dispatch()` 改为调用 `createWorkbenchFlowActionPlanRequest()`，不再直接按 action kind 拼 handler payload。`createWorkbenchFlowPlanHandlers()` 在 controller dispatch 场景下优先消费 resolver 已生成的 `planRequest`，直接调用 handler 时保留原 fallback。
+
+### 283.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程的 flow action -> plan request 解析边界，不新增持久字段，不需要数据迁移。
+
+### 283.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowPlanRequests.test.js`，覆盖 open-runtime-results、return-runtime-result、focus-runtime-action 的 flow action request 解析，以及 disabled / unsupported action 的失败状态。
+- `npm run test -- --run src/__tests__/features/workbenchFlowPlanRequests.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、92 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、236 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。

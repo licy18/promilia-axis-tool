@@ -1,9 +1,10 @@
 import {
-  WORKBENCH_FLOW_ACTION_KINDS,
   createWorkbenchFlowAction,
 } from './workbenchFlowModel';
 import {
+  WORKBENCH_FLOW_CONTROLLER_HANDLERS,
   applyWorkbenchFlowPlanRequest,
+  createWorkbenchFlowActionPlanRequest,
   createWorkbenchContributionPointFocusPlanRequest,
   createWorkbenchEditSourceActionEditPlanRequest,
   createWorkbenchRuntimeActionEditPlanRequest,
@@ -12,15 +13,7 @@ import {
   createWorkbenchRuntimeResultReturnPlanRequest,
 } from './workbenchFlowPlanRequests';
 
-export const WORKBENCH_FLOW_CONTROLLER_HANDLERS = Object.freeze({
-  OPEN_RUNTIME_RESULTS: 'openRuntimeResults',
-  SELECT_RUNTIME_RESULT: 'selectRuntimeResult',
-  SELECT_RUNTIME_STATE_POINT: 'selectRuntimeStatePoint',
-  SELECT_CONTRIBUTION_POINT: 'selectContributionPoint',
-  FOCUS_RUNTIME_ACTION: 'focusRuntimeAction',
-  FOCUS_EDIT_SOURCE: 'focusEditSource',
-  RETURN_RUNTIME_RESULT: 'returnRuntimeResult',
-});
+export { WORKBENCH_FLOW_CONTROLLER_HANDLERS } from './workbenchFlowPlanRequests';
 
 export function createWorkbenchFlowController(handlers = {}) {
   return {
@@ -33,99 +26,22 @@ export function createWorkbenchFlowController(handlers = {}) {
         });
       }
 
-      if (
-        flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS
-      ) {
+      const actionPlanRequest = createWorkbenchFlowActionPlanRequest(
+        flowAction
+      );
+      if (actionPlanRequest.supported) {
         return callWorkbenchFlowHandler({
           handlers,
-          handlerKey: WORKBENCH_FLOW_CONTROLLER_HANDLERS.OPEN_RUNTIME_RESULTS,
+          handlerKey: actionPlanRequest.handlerKey,
           flowAction,
-          payload: {
-            actionId: flowAction.actionId,
-            ...(flowAction.payload ?? {}),
-          },
-        });
-      }
-
-      if (
-        flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT
-      ) {
-        return callWorkbenchFlowHandler({
-          handlers,
-          handlerKey: WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_RESULT,
-          flowAction,
-          payload: {
-            actionId: flowAction.actionId,
-            statePointId: flowAction.statePointId,
-            source: flowAction.source,
-          },
-        });
-      }
-
-      if (
-        flowAction.kind ===
-        WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_STATE_POINT
-      ) {
-        return callWorkbenchFlowHandler({
-          handlers,
-          handlerKey:
-            WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_STATE_POINT,
-          flowAction,
-          payload: createRuntimeStatePointFocusPayload(flowAction),
-        });
-      }
-
-      if (
-        flowAction.kind ===
-        WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT
-      ) {
-        return callWorkbenchFlowHandler({
-          handlers,
-          handlerKey:
-            WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_CONTRIBUTION_POINT,
-          flowAction,
-          payload: createContributionPointFocusPayload(flowAction),
-        });
-      }
-
-      if (
-        flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION
-      ) {
-        return callWorkbenchFlowHandler({
-          handlers,
-          handlerKey: WORKBENCH_FLOW_CONTROLLER_HANDLERS.FOCUS_RUNTIME_ACTION,
-          flowAction,
-          payload: createRuntimeActionFocusPayload(flowAction),
-        });
-      }
-
-      if (flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.FOCUS_EDIT_SOURCE) {
-        return callWorkbenchFlowHandler({
-          handlers,
-          handlerKey: WORKBENCH_FLOW_CONTROLLER_HANDLERS.FOCUS_EDIT_SOURCE,
-          flowAction,
-          payload: flowAction.payload ?? flowAction,
-        });
-      }
-
-      if (
-        flowAction.kind === WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT
-      ) {
-        return callWorkbenchFlowHandler({
-          handlers,
-          handlerKey: WORKBENCH_FLOW_CONTROLLER_HANDLERS.RETURN_RUNTIME_RESULT,
-          flowAction,
-          payload: {
-            actionId: flowAction.actionId,
-            statePointId: flowAction.statePointId,
-            source: flowAction.source,
-          },
+          payload: actionPlanRequest.payload,
+          planRequest: actionPlanRequest.request,
         });
       }
 
       return createWorkbenchFlowControllerResult({
         flowAction,
-        reason: 'unsupported-flow-action-kind',
+        reason: actionPlanRequest.reason || 'unsupported-flow-action-kind',
       });
     },
   };
@@ -145,107 +61,87 @@ export function createWorkbenchFlowPlanHandlers({
     });
 
   return {
-    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.OPEN_RUNTIME_RESULTS]: ({
-      actionId,
-      fallbackToFirstRuntimePoint = false,
-    } = {}) =>
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.OPEN_RUNTIME_RESULTS]: (
+      { actionId, fallbackToFirstRuntimePoint = false } = {},
+      _flowAction = null,
+      planRequest = null
+    ) =>
       applyPlanRequest(
-        createWorkbenchRuntimeEntryPlanRequest({
-          actionId,
-          fallbackToFirstRuntimePoint,
-        })
+        planRequest ??
+          createWorkbenchRuntimeEntryPlanRequest({
+            actionId,
+            fallbackToFirstRuntimePoint,
+          })
       ),
 
-    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_RESULT]: ({
-      actionId,
-      statePointId,
-      source,
-    } = {}) =>
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_RESULT]: (
+      { actionId, statePointId, source } = {},
+      _flowAction = null,
+      planRequest = null
+    ) =>
       applyPlanRequest(
-        createWorkbenchRuntimeResultReturnPlanRequest({
-          actionId,
-          statePointId,
-          source,
-        })
+        planRequest ??
+          createWorkbenchRuntimeResultReturnPlanRequest({
+            actionId,
+            statePointId,
+            source,
+          })
       ),
 
-    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_STATE_POINT]: ({
-      statePointId,
-      source,
-      preserveStateCurveFilters = false,
-    } = {}) =>
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_STATE_POINT]: (
+      { statePointId, source, preserveStateCurveFilters = false } = {},
+      _flowAction = null,
+      planRequest = null
+    ) =>
       applyPlanRequest(
-        createWorkbenchRuntimePointFocusPlanRequest({
-          statePointId,
-          source,
-          preserveStateCurveFilters,
-        })
+        planRequest ??
+          createWorkbenchRuntimePointFocusPlanRequest({
+            statePointId,
+            source,
+            preserveStateCurveFilters,
+          })
       ),
 
-    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_CONTRIBUTION_POINT]: payload =>
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_CONTRIBUTION_POINT]: (
+      payload,
+      _flowAction = null,
+      planRequest = null
+    ) =>
       applyPlanRequest(
-        createWorkbenchContributionPointFocusPlanRequest(payload)
+        planRequest ?? createWorkbenchContributionPointFocusPlanRequest(payload)
       ),
 
-    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.FOCUS_RUNTIME_ACTION]: payload =>
-      applyPlanRequest(createWorkbenchRuntimeActionEditPlanRequest(payload)),
-
-    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.FOCUS_EDIT_SOURCE]: payload =>
-      applyPlanRequest(createWorkbenchEditSourceActionEditPlanRequest(payload)),
-
-    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.RETURN_RUNTIME_RESULT]: ({
-      actionId,
-      statePointId,
-      source,
-    } = {}) =>
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.FOCUS_RUNTIME_ACTION]: (
+      payload,
+      _flowAction = null,
+      planRequest = null
+    ) =>
       applyPlanRequest(
-        createWorkbenchRuntimeResultReturnPlanRequest({
-          actionId,
-          statePointId,
-          source,
-        })
+        planRequest ?? createWorkbenchRuntimeActionEditPlanRequest(payload)
       ),
-  };
-}
 
-function createRuntimeActionFocusPayload(flowAction) {
-  const payload =
-    flowAction?.payload && typeof flowAction.payload === 'object'
-      ? { ...flowAction.payload }
-      : {};
-  return {
-    ...payload,
-    actionId: payload.actionId || flowAction?.actionId || '',
-    statePointId: payload.statePointId || flowAction?.statePointId || '',
-    source: payload.source || flowAction?.source || '',
-  };
-}
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.FOCUS_EDIT_SOURCE]: (
+      payload,
+      _flowAction = null,
+      planRequest = null
+    ) =>
+      applyPlanRequest(
+        planRequest ?? createWorkbenchEditSourceActionEditPlanRequest(payload)
+      ),
 
-function createRuntimeStatePointFocusPayload(flowAction) {
-  const payload =
-    flowAction?.payload && typeof flowAction.payload === 'object'
-      ? { ...flowAction.payload }
-      : {};
-  return {
-    ...payload,
-    actionId: flowAction?.actionId || payload.actionId || '',
-    statePointId: flowAction?.statePointId || payload.statePointId || '',
-    source: flowAction?.source || payload.source || '',
-  };
-}
-
-function createContributionPointFocusPayload(flowAction) {
-  const payload =
-    flowAction?.payload && typeof flowAction.payload === 'object'
-      ? { ...flowAction.payload }
-      : {};
-  return {
-    ...payload,
-    actionId: flowAction?.actionId || payload.actionId || '',
-    statePointId: flowAction?.statePointId || payload.statePointId || '',
-    source: flowAction?.source || payload.source || '',
-    runtimeFocusSource: payload.runtimeFocusSource || 'action-contribution',
-    preserveStateCurveFilters: Boolean(payload.preserveStateCurveFilters),
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.RETURN_RUNTIME_RESULT]: (
+      { actionId, statePointId, source } = {},
+      _flowAction = null,
+      planRequest = null
+    ) =>
+      applyPlanRequest(
+        planRequest ??
+          createWorkbenchRuntimeResultReturnPlanRequest({
+            actionId,
+            statePointId,
+            source,
+          })
+      ),
   };
 }
 
@@ -254,6 +150,7 @@ function callWorkbenchFlowHandler({
   handlerKey,
   flowAction,
   payload,
+  planRequest = null,
 }) {
   const handler = handlers[handlerKey];
   if (typeof handler !== 'function') {
@@ -263,7 +160,7 @@ function callWorkbenchFlowHandler({
       reason: 'missing-flow-handler',
     });
   }
-  handler(payload, flowAction);
+  handler(payload, flowAction, planRequest);
   return createWorkbenchFlowControllerResult({
     flowAction,
     handlerKey,
