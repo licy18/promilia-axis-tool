@@ -1747,6 +1747,87 @@ test('keeps runtime result flow usable after copying a generated action batch @w
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps runtime result flow usable after shifting a generated action batch @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await seedGeneratedActionBatchDraft(page);
+  await page.goto('/#/workbench');
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'action-edit'
+  );
+  await expect(
+    page.getByTestId('workbench-action-batch-summary-count')
+  ).toHaveText('1');
+
+  await page.getByTestId('workbench-summary-view-action-batch-result').click();
+  const batchRuntimeState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(batchRuntimeState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(
+    batchRuntimeState,
+    batchRuntimeState.statePointId
+  );
+  await expectRuntimeOutputConsistent(page);
+
+  await page.getByTestId('workbench-summary-shift-action-batch-later').click();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '有未保存改动'
+  );
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-state-point')
+  ).not.toHaveText(batchRuntimeState.statePointId);
+
+  const shiftedBatchState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(shiftedBatchState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expect(shiftedBatchState.statePointId).toContain('action-0002');
+  expect(shiftedBatchState.statePointId).not.toBe(
+    batchRuntimeState.statePointId
+  );
+  expectRuntimeStatePointSynced(
+    shiftedBatchState,
+    shiftedBatchState.statePointId
+  );
+  await expectCurveAndLogSelection(page, shiftedBatchState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0002"]'
+    )
+  ).toHaveAttribute(
+    'data-selected-state-point-id',
+    shiftedBatchState.statePointId
+  );
+
+  await focusRuntimeDetailAction(page);
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
+    actionId: 'action-0002',
+    frameValue: '120',
+    msValue: '2000',
+    originStatePointId: shiftedBatchState.statePointId,
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps runtime result flow usable after deleting a generated action batch @workbench-main-flow', async ({
   page,
 }) => {
