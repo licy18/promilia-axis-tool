@@ -3092,6 +3092,113 @@ describe('Workbench view', () => {
     expect(flowPanel.attributes('data-runtime-navigation-index')).toBe('1');
   });
 
+  it('navigates runtime result points from the runtime detail panel', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-add-resource-action"]')
+      .trigger('click');
+    await nextTick();
+
+    await wrapper
+      .find('[data-testid="workbench-flow-open-runtime"]')
+      .trigger('click');
+    await nextTick();
+
+    let detailNavigation = wrapper.find(
+      '[data-testid="workbench-runtime-selected-detail-navigation"]'
+    );
+    expect(detailNavigation.attributes()).toMatchObject({
+      'data-navigation-count': '2',
+      'data-navigation-index': '1',
+    });
+    expect(
+      detailNavigation
+        .find(
+          '[data-testid="workbench-runtime-selected-detail-navigation-index"]'
+        )
+        .text()
+    ).toBe('2/2');
+    const previousButton = detailNavigation.find(
+      '[data-testid="workbench-runtime-selected-detail-navigation-prev"]'
+    );
+    const previousStatePointId = previousButton.attributes(
+      'data-state-point-id'
+    );
+    expect(previousButton.attributes('disabled')).toBeUndefined();
+    expect(previousStatePointId).toBeTruthy();
+
+    await previousButton.trigger('click');
+    await nextTick();
+
+    expect(
+      getLastDispatchedFlowAction(wrapper, RuntimeSelectedDetailPanel)
+    ).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'runtime-detail-navigation',
+      statePointId: previousStatePointId,
+      canRun: true,
+    });
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(previousStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-flow-panel"]')
+        .attributes('data-action-id')
+    ).toBe('action-0001');
+
+    detailNavigation = wrapper.find(
+      '[data-testid="workbench-runtime-selected-detail-navigation"]'
+    );
+    expect(detailNavigation.attributes('data-navigation-index')).toBe('0');
+    expect(
+      detailNavigation
+        .find(
+          '[data-testid="workbench-runtime-selected-detail-navigation-prev"]'
+        )
+        .attributes('disabled')
+    ).toBeDefined();
+    const nextButton = detailNavigation.find(
+      '[data-testid="workbench-runtime-selected-detail-navigation-next"]'
+    );
+    const nextStatePointId = nextButton.attributes('data-state-point-id');
+    expect(nextButton.attributes('disabled')).toBeUndefined();
+    expect(nextStatePointId).toBeTruthy();
+
+    await nextButton.trigger('click');
+    await nextTick();
+
+    expect(
+      getLastDispatchedFlowAction(wrapper, RuntimeSelectedDetailPanel)
+    ).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'runtime-detail-navigation',
+      statePointId: nextStatePointId,
+      canRun: true,
+    });
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(nextStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-flow-panel"]')
+        .attributes('data-action-id')
+    ).toBe('action-0002');
+  });
+
   it('syncs runtime detail when selecting another action in the runtime view', async () => {
     const wrapper = mount(Workbench, {
       global: {

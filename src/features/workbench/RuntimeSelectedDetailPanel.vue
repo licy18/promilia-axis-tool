@@ -114,6 +114,46 @@
     </div>
 
     <div
+      v-if="detail && runtimeDetailNavigation.visible"
+      class="runtime-detail-navigation"
+      :data-navigation-count="runtimeDetailNavigation.count"
+      :data-navigation-index="runtimeDetailNavigation.index"
+      :data-previous-state-point-id="runtimeDetailNavigation.previousStatePointId"
+      :data-next-state-point-id="runtimeDetailNavigation.nextStatePointId"
+      data-testid="workbench-runtime-selected-detail-navigation"
+    >
+      <button
+        type="button"
+        class="runtime-detail-navigation-button"
+        :data-state-point-id="runtimeDetailNavigation.previousStatePointId"
+        data-testid="workbench-runtime-selected-detail-navigation-prev"
+        :disabled="!runtimeDetailNavigation.previous"
+        aria-label="上一条运行结果"
+        title="上一条运行结果"
+        @click="
+          selectRuntimeDetailNavigationPoint(runtimeDetailNavigation.previous)
+        "
+      >
+        <ArrowLeft class="runtime-detail-navigation-icon" />
+      </button>
+      <strong data-testid="workbench-runtime-selected-detail-navigation-index">
+        {{ runtimeDetailNavigation.label }}
+      </strong>
+      <button
+        type="button"
+        class="runtime-detail-navigation-button"
+        :data-state-point-id="runtimeDetailNavigation.nextStatePointId"
+        data-testid="workbench-runtime-selected-detail-navigation-next"
+        :disabled="!runtimeDetailNavigation.next"
+        aria-label="下一条运行结果"
+        title="下一条运行结果"
+        @click="selectRuntimeDetailNavigationPoint(runtimeDetailNavigation.next)"
+      >
+        <ArrowRight class="runtime-detail-navigation-icon" />
+      </button>
+    </div>
+
+    <div
       v-if="detail && runtimeDetailEditContext"
       class="runtime-detail-edit-context"
       :data-action-id="runtimeDetailEditContext.actionId"
@@ -245,14 +285,23 @@
 
 <script setup>
 import { computed } from 'vue';
-import { Aim, DataAnalysis, EditPen } from '@element-plus/icons-vue';
+import {
+  Aim,
+  ArrowLeft,
+  ArrowRight,
+  DataAnalysis,
+  EditPen,
+} from '@element-plus/icons-vue';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import {
   createWorkbenchFlowRuntimeActionEditTarget,
   createWorkbenchRuntimeReviewPanelView,
   resolveWorkbenchMainFlowActionEditTarget,
 } from './workbenchFlowModel';
-import { createWorkbenchRuntimeReviewPanelCommandViewFromSurface } from './workbenchMainFlowActions';
+import {
+  createWorkbenchRuntimeReviewPanelCommandViewFromSurface,
+  createWorkbenchRuntimeSelectionFlowActionFromSurface,
+} from './workbenchMainFlowActions';
 
 const props = defineProps({
   detail: {
@@ -310,6 +359,9 @@ const runtimeReviewSelectedStatePointId = computed(
 );
 const runtimeContributionSummary = computed(() =>
   createRuntimeContributionSummary(props.detail)
+);
+const runtimeDetailNavigation = computed(() =>
+  createRuntimeDetailNavigationView(props.flowModel?.runtimeNavigation)
 );
 const runtimeDetailActionEditButtonTarget = computed(() =>
   runtimeDetailActionEditCommand.value.target
@@ -375,6 +427,10 @@ function focusRuntimeAction() {
 
 function returnRuntimeResult() {
   dispatchRuntimeDetailFlowAction(runtimeDetailResultReturnCommand.value.action);
+}
+
+function selectRuntimeDetailNavigationPoint(point) {
+  dispatchRuntimeDetailFlowAction(createRuntimeDetailNavigationAction(point));
 }
 
 function dispatchRuntimeDetailFlowAction(action) {
@@ -449,6 +505,34 @@ function createRuntimeContributionSummary(detail) {
       ? `${primaryRow.label} ${formatContribution(primaryRow)}`
       : '无三值变化',
   };
+}
+
+function createRuntimeDetailNavigationView(navigation = null) {
+  const count = Number(navigation?.count) || 0;
+  const index = Number.isFinite(Number(navigation?.index))
+    ? Number(navigation.index)
+    : -1;
+  return {
+    visible: count > 1,
+    count,
+    index,
+    label:
+      navigation?.label ??
+      (index >= 0 ? `${index + 1}/${count}` : `-/${count}`),
+    previous: navigation?.previous ?? null,
+    next: navigation?.next ?? null,
+    previousStatePointId: navigation?.previous?.statePointId ?? '',
+    nextStatePointId: navigation?.next?.statePointId ?? '',
+  };
+}
+
+function createRuntimeDetailNavigationAction(point) {
+  return createWorkbenchRuntimeSelectionFlowActionFromSurface({
+    mainFlowCommandSurface: props.mainFlowCommandSurface,
+    source: 'runtime-detail-navigation',
+    detail: point,
+    enabled: Boolean(point?.statePointId),
+  });
 }
 
 function formatSigned(value) {
@@ -628,6 +712,52 @@ h2 {
 
 .runtime-detail-summary {
   padding-top: 14px;
+}
+
+.runtime-detail-navigation {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 28px;
+  align-items: center;
+  gap: 6px;
+  margin: 0 14px;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.runtime-detail-navigation strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #dfe5ea;
+  font-size: 12px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.runtime-detail-navigation-button {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 26px;
+  border: 1px solid rgba(121, 199, 185, 0.28);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.1);
+  color: #dff9f3;
+  cursor: pointer;
+}
+
+.runtime-detail-navigation-button:disabled {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: #68737c;
+  cursor: not-allowed;
+}
+
+.runtime-detail-navigation-icon {
+  width: 13px;
+  height: 13px;
 }
 
 .runtime-detail-edit-context {

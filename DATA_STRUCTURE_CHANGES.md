@@ -21985,3 +21985,32 @@ runtimeContributionSummary = first active row from detail.contributionRows
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、60 条测试。
 - `npm run test -- --run`：通过，38 个测试文件、259 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 305. UI 主流程结果详情：Detail Navigation
+
+### 305.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`RuntimeSelectedDetailPanel` 新增前端导航视图：
+
+```text
+runtimeDetailNavigation = flowModel.runtimeNavigation
+```
+
+消费规则：
+
+- 当 `runtimeNavigation.count > 1` 时，三值详情面板显示上一条/下一条运行结果按钮。
+- 点击按钮通过 `createWorkbenchRuntimeSelectionFlowActionFromSurface()` 复用现有 `select-runtime-state-point` 主流程 action。
+- 导航来源标记为 `runtime-detail-navigation`，只用于 UI 主流程追踪。
+
+### 305.2 保存与迁移
+
+不新增持久字段，不需要数据迁移。
+
+### 305.3 验证
+
+- Workbench 页面测试覆盖三值详情面板内的上一条/下一条运行结果导航，并确认主流程选中动作和详情状态点同步更新。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、61 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、260 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
