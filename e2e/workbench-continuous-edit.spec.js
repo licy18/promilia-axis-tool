@@ -1357,7 +1357,7 @@ test('keeps skill level and action variant edits tied to refreshed results', asy
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
-test('keeps saved draft restore tied to runtime result selection', async ({
+test('keeps saved draft restore tied to runtime edit return @workbench-main-flow', async ({
   page,
 }) => {
   const browserIssues = collectBrowserIssues(page);
@@ -1446,6 +1446,22 @@ test('keeps saved draft restore tied to runtime result selection', async ({
     restoredRuntimeState.statePointId
   );
   await expectRuntimeOutputConsistent(page);
+
+  await focusRuntimeDetailAction(page);
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
+    actionId: 'action-0002',
+    frameValue: '48',
+    msValue: '800',
+    originStatePointId: restoredRuntimeState.statePointId,
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(returnedState, returnedState.statePointId);
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '有未保存改动'
+  );
 
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
