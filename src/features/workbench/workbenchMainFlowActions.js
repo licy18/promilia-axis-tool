@@ -279,26 +279,9 @@ export function createWorkbenchMainFlowCommandSurface({
   const createRuntimeResultFlowAction = (options = {}) =>
     createWorkbenchRuntimeResultFlowAction(options);
   const createFocusEditSourceFlowAction = (options = {}) =>
-    createWorkbenchFlowAction({
-      kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_EDIT_SOURCE,
-      source: options.source ?? '',
-      actionId: options.actionId ?? '',
-      fieldKey: options.fieldKey ?? '',
-      payload: options.payload ?? null,
-      enabled: options.enabled,
-      disabledReason: options.disabledReason ?? 'missing-edit-source',
-    });
+    createWorkbenchFocusEditSourceFlowAction(options);
   const createContributionPointFlowAction = (options = {}) =>
-    createWorkbenchFlowAction({
-      kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT,
-      source: options.source ?? '',
-      actionId: options.actionId ?? '',
-      statePointId: options.statePointId ?? '',
-      payload: options.payload ?? null,
-      enabled: options.enabled,
-      disabledReason:
-        options.disabledReason ?? 'missing-contribution-state-point',
-    });
+    createWorkbenchContributionPointFlowAction(options);
 
   return {
     source,
@@ -336,6 +319,31 @@ export function createWorkbenchRuntimeStatePointFlowAction(options = {}) {
 
 export function createWorkbenchRuntimeResultFlowAction(options = {}) {
   return createRuntimeResultFocusFlowAction(options);
+}
+
+export function createWorkbenchFocusEditSourceFlowAction(options = {}) {
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_EDIT_SOURCE,
+    source: options.source ?? '',
+    actionId: options.actionId ?? '',
+    fieldKey: options.fieldKey ?? '',
+    payload: options.payload ?? null,
+    enabled: options.enabled,
+    disabledReason: options.disabledReason ?? 'missing-edit-source',
+  });
+}
+
+export function createWorkbenchContributionPointFlowAction(options = {}) {
+  return createWorkbenchFlowAction({
+    kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT,
+    source: options.source ?? '',
+    actionId: options.actionId ?? '',
+    statePointId: options.statePointId ?? '',
+    payload: options.payload ?? null,
+    enabled: options.enabled,
+    disabledReason:
+      options.disabledReason ?? 'missing-contribution-state-point',
+  });
 }
 
 export function createWorkbenchRuntimeReviewFlowAction({

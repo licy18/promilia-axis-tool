@@ -20649,3 +20649,37 @@ createRuntimeActionEditCommand({
 - `npm run test -- --run`：通过，35 个测试文件、223 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `git diff --check`：通过；仅有 Git 换行转换提示。
+
+## 277. UI 主流程能力块：Analysis Flow Action Factories
+
+### 277.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`workbenchMainFlowActions` 新增共享 action helper：
+
+```js
+createWorkbenchFocusEditSourceFlowAction(options)
+createWorkbenchContributionPointFlowAction(options)
+```
+
+`createWorkbenchMainFlowCommandSurface()` 的以下工厂改为复用共享 helper：
+
+```js
+createFocusEditSourceFlowAction(options)
+createContributionPointFlowAction(options)
+```
+
+`AnalysisPanel` 的独立 fallback 也改为使用这些 helper，不再直接调用 `createWorkbenchFlowAction()` 或读取底层 `WORKBENCH_FLOW_ACTION_KINDS`。
+
+### 277.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程 action 工厂边界，不新增持久字段，不需要数据迁移。
+
+### 277.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖编辑来源回跳和贡献定位两个共享 helper。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、82 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、224 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。

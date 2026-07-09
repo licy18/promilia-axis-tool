@@ -939,10 +939,8 @@ import {
 } from './stateCurvePointIdentity';
 import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
 import {
-  WORKBENCH_FLOW_ACTION_KINDS,
-  createWorkbenchFlowAction,
-} from './workbenchFlowModel';
-import {
+  createWorkbenchContributionPointFlowAction,
+  createWorkbenchFocusEditSourceFlowAction,
   createWorkbenchRuntimeResultFlowAction,
   createWorkbenchRuntimeStatePointFlowAction,
 } from './workbenchMainFlowActions';
@@ -2716,15 +2714,7 @@ function createRuntimeStatePointFlowActionFromSurface(options = {}) {
 function createFocusEditSourceFlowActionFromSurface(options = {}) {
   return (
     props.mainFlowCommandSurface?.createFocusEditSourceFlowAction?.(options) ??
-    createWorkbenchFlowAction({
-      kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_EDIT_SOURCE,
-      source: options.source ?? '',
-      actionId: options.actionId ?? '',
-      fieldKey: options.fieldKey ?? '',
-      payload: options.payload ?? null,
-      enabled: options.enabled,
-      disabledReason: options.disabledReason ?? 'missing-edit-source',
-    })
+    createWorkbenchFocusEditSourceFlowAction(options)
   );
 }
 
@@ -2732,17 +2722,7 @@ function createContributionPointFlowActionFromSurface(options = {}) {
   return (
     props.mainFlowCommandSurface?.createContributionPointFlowAction?.(
       options
-    ) ??
-    createWorkbenchFlowAction({
-      kind: WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT,
-      source: options.source ?? '',
-      actionId: options.actionId ?? '',
-      statePointId: options.statePointId ?? '',
-      payload: options.payload ?? null,
-      enabled: options.enabled,
-      disabledReason:
-        options.disabledReason ?? 'missing-contribution-state-point',
-    })
+    ) ?? createWorkbenchContributionPointFlowAction(options)
   );
 }
 

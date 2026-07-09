@@ -9718,6 +9718,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 Workbench 页面和子面板中剩余直接创建 flow action 的 fallback，优先把仍影响运行结果选择、动作编辑回跳和贡献定位的入口迁到 command surface，而不是扩展局部提示。
 
+### 2026-07-09：UI 主流程能力块 - Analysis Flow Action Factories
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchMainFlowActions` 新增共享的 `createWorkbenchFocusEditSourceFlowAction()` 与 `createWorkbenchContributionPointFlowAction()`，把分析面板的编辑来源回跳和贡献定位 action 也纳入主流程 helper。
+- `createWorkbenchMainFlowCommandSurface()` 的 `createFocusEditSourceFlowAction()`、`createContributionPointFlowAction()` 改为复用这些 helper。
+- `AnalysisPanel` 独立 fallback 不再直接依赖底层 `createWorkbenchFlowAction()` 和 action kind，面板独立挂载和 Workbench 页面级 command surface 会使用同一套 action 合同。
+- 本阶段不新增公式推断、不调整三值结果、不扩展局部状态提示。
+
+当前验证事实：
+
+- main flow action 单测覆盖编辑来源回跳和贡献定位两个共享 helper。
+- Workbench 页面测试确认分析面板的运行结果选择、编辑来源回跳和贡献定位主路径仍可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/views/Workbench.test.js`：通过，2 个测试文件、82 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、224 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 WorkbenchFlowPanel、TimelineGridPreview、ResourceMonitorPanel、EventLogPanel 中仍直接 fallback 创建 runtime selection action 的位置，优先把运行结果选择入口继续收束到共享 helper / command surface。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

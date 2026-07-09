@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
+  createWorkbenchContributionPointFlowAction,
+  createWorkbenchFocusEditSourceFlowAction,
   createWorkbenchMainFlowButtonView,
   createWorkbenchMainFlowCommandSurface,
   createWorkbenchMainFlowLoopAction,
@@ -775,6 +777,52 @@ describe('workbench main flow actions', () => {
       source: 'analysis-action-result',
       actionId: 'action-0001',
       statePointId: 'enemyHpDamage|applied|action-0001|12|0',
+      canRun: true,
+    });
+  });
+
+  it('creates edit-source and contribution actions with shared main flow factories', () => {
+    expect(
+      createWorkbenchFocusEditSourceFlowAction({
+        source: 'analysis-edit-source',
+        actionId: 'edit-action',
+        fieldKey: 'level',
+        payload: {
+          actionId: 'edit-action',
+          fieldKey: 'level',
+        },
+        enabled: true,
+      })
+    ).toMatchObject({
+      kind: 'focus-edit-source',
+      source: 'analysis-edit-source',
+      actionId: 'edit-action',
+      fieldKey: 'level',
+      payload: {
+        actionId: 'edit-action',
+        fieldKey: 'level',
+      },
+      canRun: true,
+    });
+
+    expect(
+      createWorkbenchContributionPointFlowAction({
+        source: 'analysis-action-contribution',
+        actionId: 'contribution-action',
+        statePointId: 'contribution-state',
+        payload: {
+          runtimeFocusSource: 'action-contribution',
+        },
+        enabled: true,
+      })
+    ).toMatchObject({
+      kind: 'select-contribution-point',
+      source: 'analysis-action-contribution',
+      actionId: 'contribution-action',
+      statePointId: 'contribution-state',
+      payload: {
+        runtimeFocusSource: 'action-contribution',
+      },
       canRun: true,
     });
   });
