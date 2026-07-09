@@ -12368,6 +12368,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议继续 UI 主流程：补动作编辑成品体验中仍缺的高频操作，例如动作形态/技能等级变更后刷新结果的可见回跳；或转入运行时层，整理 runtime outputs 对 UI 的稳定消费合同。
 
+### 2026-07-09：UI 主流程可见闭环 - 动作内容变更结果定位
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 浏览器级主流程现在覆盖从运行结果进入动作编辑后，修改技能等级和动作形态，再保持刷新结果定位的完整路径。
+- 对等级/动作形态这类不一定改变状态点 ID 的内容编辑，Workbench 会保持资源曲线、模拟日志、三值详情、动作列表和时间轴选中项同步到当前刷新结果。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、生成层合同、运行时输出、保存 schema 或 DATA_STRUCTURE_CHANGES。
+
+当前验证事实：
+
+- `workbench-continuous-edit.spec.js` 新增内容编辑路径：`action-0002` 结果定位 -> 时间轴“编辑结果” -> 技能等级 `1 -> 2` -> 动作形态切到 `1`。
+- 每次内容编辑后都验证 `workbench-action-edit-feedback` 的编辑字段、原结果点、刷新结果点和最终 `edit-result-review` 同步状态。
+- 刷新后确认资源曲线、模拟日志、三值详情、动作列表选中项和时间轴选中动作仍定位到同一个结果点。
+
+验收结果：
+
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps skill level and action variant edits tied to refreshed results"`：通过，1 条浏览器级主流程闭环测试。
+- `npx prettier --check PROJECT_MANUAL.md e2e/workbench-continuous-edit.spec.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 建议继续 UI 主流程：补完整编辑体验中的保存/恢复和刷新结果定位连续验收；若转入底座，则进入运行时层，整理 runtime outputs 对 UI 的稳定消费合同。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

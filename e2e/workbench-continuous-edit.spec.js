@@ -1063,6 +1063,47 @@ test('keeps action list, timeline nudge, frame step, and result return in one lo
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps skill level and action variant edits tied to refreshed results', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+  await createThreeActionRuntime(page);
+
+  await page.locator('.action-item[data-action-id="action-0002"]').click();
+  const actionListState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(actionListState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+
+  await page
+    .locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+    )
+    .getByTestId('workbench-timeline-edit-result-action')
+    .click();
+  await expectRuntimeFocusInEditor(page);
+
+  await page.getByTestId('workbench-level-input').fill('2');
+  const levelEditState = await ensureActionContentEditResultSynced(page, {
+    actionId: 'action-0002',
+    fieldKey: 'level',
+    originStatePointId: actionListState.statePointId,
+  });
+
+  await page.getByTestId('workbench-damage-segment-select').selectOption('1');
+  await ensureActionContentEditResultSynced(page, {
+    actionId: 'action-0002',
+    fieldKey: 'actionVariantIndex',
+    originStatePointId: levelEditState.feedbackStatePointId,
+  });
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps result rows stable across multi-action edits', async ({ page }) => {
   const browserIssues = collectBrowserIssues(page);
   const { copiedState } = await createThreeActionRuntime(page);
@@ -1467,6 +1508,59 @@ async function nudgeTimelineAction(page, actionId) {
   await expect(action).toBeVisible();
   await action.focus();
   await action.press('ArrowRight');
+}
+
+async function ensureActionContentEditResultSynced(
+  page,
+  { actionId, fieldKey, originStatePointId }
+) {
+  const feedback = page.getByTestId('workbench-action-edit-feedback');
+  await expect(feedback).toHaveAttribute('data-action-id', actionId);
+  await expect(feedback).toHaveAttribute('data-edit-source-field', fieldKey);
+  await expect(feedback).toHaveAttribute(
+    'data-origin-state-point-id',
+    originStatePointId
+  );
+
+  let editState = await readEditState(
+    page,
+    'workbench-flow-return-edit-result'
+  );
+  expect(editState.feedbackStatePointId).toContain(actionId);
+
+  const resultFocusButton = page.getByTestId(
+    'workbench-action-edit-feedback-result-focus'
+  );
+  const resultFocusStatus = await resultFocusButton.getAttribute(
+    'data-result-focus-status'
+  );
+  if (resultFocusStatus === 'available') {
+    await resultFocusButton.click();
+    await expect(resultFocusButton).toHaveAttribute(
+      'data-result-focus-status',
+      'focused'
+    );
+    editState = await readEditState(page, 'workbench-flow-return-edit-result');
+  } else {
+    expect(resultFocusStatus).toBe('focused');
+  }
+
+  const refreshedStatePointId = editState.feedbackStatePointId;
+  const returnedState = await readWorkbenchState(page);
+  expectRuntimeReviewState(returnedState, {
+    phase: 'edit-result-review',
+    actionId,
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(returnedState, refreshedStatePointId);
+  expect(returnedState.selectedActionListId).toBe(actionId);
+  expect(returnedState.selectedTimelineActionId).toBe(actionId);
+  await expect(feedback).toHaveAttribute('data-result-focused', 'true');
+  await expect(feedback).toHaveAttribute('data-result-focus-status', 'focused');
+
+  return editState;
 }
 
 async function editCurrentActionFrameAndReturn(
