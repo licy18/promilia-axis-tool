@@ -13549,6 +13549,30 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 进入运行时层：让 runtime input / runtime summary 消费 `generationEntry.standardEntryBoundary`，把“标准入口本体 ready”纳入运行时边界摘要；仍不追真实公式、真实倍率或测试期数值平衡。
 
+### 2026-07-10：UI 主流程可见闭环 - 完整主路径守门
+
+本阶段属于：UI 主流程可见闭环。
+
+主流程缺口检查：
+
+- Workbench 已具备清晰的运行模拟入口、资源曲线点选、日志/三值详情联动、回到动作编辑、查看刷新结果和继续回改入口。
+- 本阶段按“以上都已有则补端到端 Workbench 测试”的路线收口，不改公式、倍率、运行期数据结构、UI 文案或证据字段。
+
+完成的可用能力：
+
+- 新增真实浏览器主流程守门：排轴动作编辑 -> 运行模拟 -> 资源曲线选点 -> 日志/三值详情 -> 回到动作修改 -> 查看刷新结果 -> 看到曲线/日志/详情同步定位 -> 再次回到动作修改。
+- 该测试确认刷新后的 state point 会同时落到资源曲线、runtime sim log、三值详情和动作结果来源行，并且顶部主流程入口可以继续回改。
+- 本阶段不改变三值计算结果、公式、倍率、运行期数据结构、草稿保存 schema 或 UI 文案；`DATA_STRUCTURE_CHANGES.md` 无需追加。
+
+验收结果：
+
+- `npm run test:e2e:workbench-flow -- --grep "complete visible Workbench loop"`：通过，1 条真实浏览器完整闭环守门。
+- `npm run test:e2e:workbench-flow`：通过，22 条 `@workbench-main-flow` 主流程回归全部通过。
+
+下一步：
+
+- 继续 UI 主流程能力块：优先检查主流程编辑体验是否还有 Endaxis 式高频操作缺口，例如动作插入/调整/结果定位的密度与效率；若主流程守门稳定，再转入生成层收束 `Action -> Hit -> ThreeValueDelta` 的统一生成入口。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
