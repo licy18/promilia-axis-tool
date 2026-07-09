@@ -334,69 +334,101 @@
         "
         data-testid="workbench-side-inspector"
       >
-        <PropertiesPanel
-          :selection="selection"
-          :characters="workbenchSeed.gameData.characters"
-          :actors="scenario.actors"
-          :skills="workbenchSeed.gameData.skills"
-          :enemies="workbenchSeed.gameData.enemies"
-          :selected-action="selectedAction"
-          :duration-ms="scenario.time.durationMs"
-          :action-edit-focus="actionEditFocus"
-          :action-edit-result-context="actionEditResultContext"
-          :flow-model="workbenchFlowModel"
-          :main-flow-command-surface="mainFlowCommandSurface"
-          @update-selection="updateSelection"
-          @update-action="updateAction"
-          @dispatch-flow-action="dispatchWorkbenchFlowAction"
-        />
+        <div
+          class="side-stack-panel"
+          :data-inspector-panel-order="sideInspectorPanelOrders.properties"
+          data-inspector-panel-key="properties"
+          data-testid="workbench-side-inspector-panel"
+          :style="{ order: sideInspectorPanelOrders.properties }"
+        >
+          <PropertiesPanel
+            :selection="selection"
+            :characters="workbenchSeed.gameData.characters"
+            :actors="scenario.actors"
+            :skills="workbenchSeed.gameData.skills"
+            :enemies="workbenchSeed.gameData.enemies"
+            :selected-action="selectedAction"
+            :duration-ms="scenario.time.durationMs"
+            :action-edit-focus="actionEditFocus"
+            :action-edit-result-context="actionEditResultContext"
+            :flow-model="workbenchFlowModel"
+            :main-flow-command-surface="mainFlowCommandSurface"
+            @update-selection="updateSelection"
+            @update-action="updateAction"
+            @dispatch-flow-action="dispatchWorkbenchFlowAction"
+          />
+        </div>
 
-        <EnemyPanel
-          :enemy="scenario.enemy"
-          :enemy-config="enemyConfig"
-          @update-enemy-config="updateEnemyConfig"
-        />
+        <div
+          class="side-stack-panel"
+          :data-inspector-panel-order="sideInspectorPanelOrders.enemy"
+          data-inspector-panel-key="enemy"
+          data-testid="workbench-side-inspector-panel"
+          :style="{ order: sideInspectorPanelOrders.enemy }"
+        >
+          <EnemyPanel
+            :enemy="scenario.enemy"
+            :enemy-config="enemyConfig"
+            @update-enemy-config="updateEnemyConfig"
+          />
+        </div>
 
-        <RuntimeSelectedDetailPanel
-          :detail="runtimeSelectedDetail"
-          :action-edit-focus="actionEditFocus"
-          :action-edit-result-context="actionEditResultContext"
-          :flow-model="workbenchFlowModel"
-          :main-flow-command-surface="mainFlowCommandSurface"
-          @dispatch-flow-action="dispatchWorkbenchFlowAction"
-        />
+        <div
+          class="side-stack-panel"
+          :data-inspector-panel-order="sideInspectorPanelOrders.runtimeDetail"
+          data-inspector-panel-key="runtime-detail"
+          data-testid="workbench-side-inspector-panel"
+          :style="{ order: sideInspectorPanelOrders.runtimeDetail }"
+        >
+          <RuntimeSelectedDetailPanel
+            :detail="runtimeSelectedDetail"
+            :action-edit-focus="actionEditFocus"
+            :action-edit-result-context="actionEditResultContext"
+            :flow-model="workbenchFlowModel"
+            :main-flow-command-surface="mainFlowCommandSurface"
+            @dispatch-flow-action="dispatchWorkbenchFlowAction"
+          />
+        </div>
 
-        <AnalysisPanel
-          :summary="simulationResult.summary"
-          :diagnostics="simulationResult.diagnostics"
-          :damage-timeline="simulationResult.damageTimeline"
-          :action-result-timeline="simulationResult.actionResultTimeline"
-          :runtime-projection="simulationResult.threeValueRuntimeProjection"
-          :runtime-selected-detail="runtimeSelectedDetail"
-          :candidate-value-series="simulationResult.candidateValueSeries"
-          :draft-status="draftStatus"
-          :action-edit-source="actionEditSource"
-          :action-edit-result-context="actionEditResultContext"
-          :flow-model="workbenchFlowModel"
-          :three-value-curve-framework="
-            simulationResult.threeValueCurveFramework
-          "
-          :selected-action-id="selectedActionId"
-          :selected-state-curve-point-id="selectedStateCurvePointId"
-          :state-curve-focus-mode="stateCurveFocusMode"
-          :state-curve-layer-filters="stateCurveLayerFilters"
-          :state-curve-track-filters="stateCurveTrackFilters"
-          :calculator-diagnostic-scope="calculatorDiagnosticScope"
-          :insertion-diagnostics="insertionDiagnostics"
-          :timeline-diagnostics="timelineDiagnostics"
-          :main-flow-command-surface="mainFlowCommandSurface"
-          @select-state-curve-point="selectStateCurvePoint"
-          @update-state-curve-focus-mode="updateStateCurveFocusMode"
-          @update-state-curve-layer-filter="updateStateCurveLayerFilter"
-          @update-state-curve-track-filter="updateStateCurveTrackFilter"
-          @focus-three-value-calculator-scope="focusThreeValueCalculatorScope"
-          @dispatch-flow-action="dispatchWorkbenchFlowAction"
-        />
+        <div
+          class="side-stack-panel"
+          :data-inspector-panel-order="sideInspectorPanelOrders.analysis"
+          data-inspector-panel-key="analysis"
+          data-testid="workbench-side-inspector-panel"
+          :style="{ order: sideInspectorPanelOrders.analysis }"
+        >
+          <AnalysisPanel
+            :summary="simulationResult.summary"
+            :diagnostics="simulationResult.diagnostics"
+            :damage-timeline="simulationResult.damageTimeline"
+            :action-result-timeline="simulationResult.actionResultTimeline"
+            :runtime-projection="simulationResult.threeValueRuntimeProjection"
+            :runtime-selected-detail="runtimeSelectedDetail"
+            :candidate-value-series="simulationResult.candidateValueSeries"
+            :draft-status="draftStatus"
+            :action-edit-source="actionEditSource"
+            :action-edit-result-context="actionEditResultContext"
+            :flow-model="workbenchFlowModel"
+            :three-value-curve-framework="
+              simulationResult.threeValueCurveFramework
+            "
+            :selected-action-id="selectedActionId"
+            :selected-state-curve-point-id="selectedStateCurvePointId"
+            :state-curve-focus-mode="stateCurveFocusMode"
+            :state-curve-layer-filters="stateCurveLayerFilters"
+            :state-curve-track-filters="stateCurveTrackFilters"
+            :calculator-diagnostic-scope="calculatorDiagnosticScope"
+            :insertion-diagnostics="insertionDiagnostics"
+            :timeline-diagnostics="timelineDiagnostics"
+            :main-flow-command-surface="mainFlowCommandSurface"
+            @select-state-curve-point="selectStateCurvePoint"
+            @update-state-curve-focus-mode="updateStateCurveFocusMode"
+            @update-state-curve-layer-filter="updateStateCurveLayerFilter"
+            @update-state-curve-track-filter="updateStateCurveTrackFilter"
+            @focus-three-value-calculator-scope="focusThreeValueCalculatorScope"
+            @dispatch-flow-action="dispatchWorkbenchFlowAction"
+          />
+        </div>
       </div>
     </div>
   </main>
@@ -600,6 +632,9 @@ const mainFlowWorkspaceView = computed(() =>
   createWorkbenchMainFlowWorkspaceView({
     flowModel: workbenchFlowModel.value,
   })
+);
+const sideInspectorPanelOrders = computed(() =>
+  createSideInspectorPanelOrders(mainFlowWorkspaceView.value.inspector.mode)
 );
 const mainFlowCommandSurface = computed(() =>
   createWorkbenchMainFlowCommandSurface({
@@ -2238,6 +2273,24 @@ function clampNumber(value, min, max) {
     return min;
   }
   return Math.min(max, Math.max(min, number));
+}
+
+function createSideInspectorPanelOrders(inspectorMode) {
+  if (inspectorMode === 'runtime-detail') {
+    return {
+      runtimeDetail: 0,
+      properties: 1,
+      enemy: 2,
+      analysis: 3,
+    };
+  }
+
+  return {
+    properties: 0,
+    enemy: 1,
+    runtimeDetail: 2,
+    analysis: 3,
+  };
 }
 
 function getLocalStorage() {

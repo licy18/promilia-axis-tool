@@ -21924,3 +21924,35 @@ createWorkbenchRuntimeReviewPanelView(...)
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、59 条测试。
 - `npm run test -- --run`：通过，38 个测试文件、258 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 303. UI 主流程布局效率：Runtime Detail First Inspector
+
+### 303.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`Workbench.vue` 的右侧检查区为四个既有面板增加外层布局容器：
+
+```text
+properties
+enemy
+runtime-detail
+analysis
+```
+
+消费规则：
+
+- `mainFlowWorkspaceView.inspector.mode === 'runtime-detail'` 时，`runtime-detail` 容器视觉顺序为 `0`，属性面板顺序为 `1`。
+- 其他模式保持属性面板顺序为 `0`，三值详情顺序为 `2`。
+- 该顺序只影响 Workbench 右侧检查区布局，不写入项目草稿。
+
+### 303.2 保存与迁移
+
+不新增持久字段，不需要数据迁移。
+
+### 303.3 验证
+
+- 新增 `src/__tests__/views/Workbench.test.js` 用例覆盖动作编辑态属性优先、运行查看态三值详情优先。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、60 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、259 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

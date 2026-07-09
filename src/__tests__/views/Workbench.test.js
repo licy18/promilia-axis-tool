@@ -1749,6 +1749,54 @@ describe('Workbench view', () => {
     expect(text).toContain('low');
   });
 
+  it('prioritizes runtime detail in the side inspector while reviewing results', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    const sideInspector = wrapper.find(
+      '[data-testid="workbench-side-inspector"]'
+    );
+    expect(sideInspector.attributes('data-main-flow-inspector-mode')).toBe(
+      'action-properties'
+    );
+    expect(
+      sideInspector
+        .find('[data-inspector-panel-key="properties"]')
+        .attributes('data-inspector-panel-order')
+    ).toBe('0');
+    expect(
+      sideInspector
+        .find('[data-inspector-panel-key="runtime-detail"]')
+        .attributes('data-inspector-panel-order')
+    ).toBe('2');
+
+    await wrapper
+      .find('[data-testid="workbench-flow-open-runtime"]')
+      .trigger('click');
+    await nextTick();
+
+    expect(sideInspector.attributes('data-main-flow-inspector-mode')).toBe(
+      'runtime-detail'
+    );
+    expect(
+      sideInspector
+        .find('[data-inspector-panel-key="runtime-detail"]')
+        .attributes('data-inspector-panel-order')
+    ).toBe('0');
+    expect(
+      sideInspector
+        .find('[data-inspector-panel-key="properties"]')
+        .attributes('data-inspector-panel-order')
+    ).toBe('1');
+  });
+
   it('drives the edit-runtime-return loop from the main flow panel', async () => {
     const wrapper = mount(Workbench, {
       global: {
