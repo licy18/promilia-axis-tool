@@ -414,7 +414,7 @@
         class="action-contribution-panel"
         :data-action-id="selectedActionContribution.actionId"
         :data-flow-phase="flowPhase"
-        :data-flow-state-point-id="flowSelectedStatePointId"
+        :data-flow-state-point-id="flowContributionStatePointId"
         data-testid="workbench-action-contribution-panel"
       >
         <div class="action-contribution-heading">
@@ -538,6 +538,26 @@
             >
               <EditPen class="action-contribution-edit-icon" />
               <span>编辑动作</span>
+            </button>
+            <button
+              v-if="actionContributionReturnCommand.enabled"
+              type="button"
+              class="action-contribution-return-result"
+              :data-action-id="actionContributionReturnCommand.actionId"
+              :data-origin-state-point-id="
+                actionContributionReturnCommand.context.originStatePointId
+              "
+              :data-return-status="
+                actionContributionReturnCommand.context.status
+              "
+              :data-state-point-id="
+                actionContributionReturnCommand.statePointId
+              "
+              data-testid="workbench-action-contribution-return-result"
+              @click="returnActionContributionResult"
+            >
+              <Aim class="action-contribution-return-icon" />
+              <span>{{ actionContributionReturnButtonLabel }}</span>
             </button>
           </div>
           <div class="action-contribution-detail-list">
@@ -1341,13 +1361,30 @@ const flowRuntimeSelectedDetail = computed(
 const flowEditResult = computed(
   () => props.flowModel?.editResult ?? props.actionEditResultContext
 );
+const actionEditFeedback = computed(() =>
+  createActionEditFeedback(props.actionEditSource)
+);
+const flowContributionStatePointId = computed(
+  () =>
+    flowSelectedStatePointId.value ||
+    flowEditResult.value?.runtimeStatePointId ||
+    flowEditResult.value?.statePointId ||
+    actionEditFeedback.value?.runtimeStatePointId ||
+    ''
+);
 const selectedActionContribution = computed(() => {
-  if (!flowSelectedStatePointId.value) {
+  const contributionActionId =
+    flowEditResult.value?.actionId ||
+    actionEditFeedback.value?.actionId ||
+    flowSelectedActionId.value ||
+    '';
+  if (!flowContributionStatePointId.value && !contributionActionId) {
     return null;
   }
-  const trace = [...runtimeTraceByActionId.value.values()].find(item =>
-    item.statePointIds.includes(flowSelectedStatePointId.value)
-  );
+  const trace =
+    [...runtimeTraceByActionId.value.values()].find(item =>
+      item.statePointIds.includes(flowContributionStatePointId.value)
+    ) ?? runtimeTraceByActionId.value.get(contributionActionId);
   return trace ? createSelectedActionContribution(trace) : null;
 });
 const selectedRuntimeResultDetail = computed(
@@ -1361,11 +1398,21 @@ const actionContributionEditCommand = computed(() =>
     source: 'analysis-action-contribution-detail',
   })
 );
+const actionContributionReturnCommand = computed(() =>
+  createWorkbenchRuntimeReviewOperationCommandFromSurface({
+    mainFlowCommandSurface: props.mainFlowCommandSurface,
+    flowModel: props.flowModel,
+    operationKind: WORKBENCH_RUNTIME_REVIEW_OPERATION_KINDS.RETURN_RESULT,
+    source: 'analysis-action-contribution-detail',
+  })
+);
+const actionContributionReturnButtonLabel = computed(() =>
+  formatActionContributionReturnButtonLabel(
+    actionContributionReturnCommand.value.context
+  )
+);
 const draftResultStatus = computed(() =>
   createDraftResultStatus(props.draftStatus)
-);
-const actionEditFeedback = computed(() =>
-  createActionEditFeedback(props.actionEditSource)
 );
 const activeStateCurveLayerKeys = computed(() =>
   STATE_CURVE_LAYER_OPTIONS.filter(
@@ -2352,7 +2399,7 @@ function createActionContributionRow(trace, track) {
     matchingRows.map(item => item.row?.sourceDeltaId)
   );
   const active = matchingRows.some(
-    item => item.statePointId === flowSelectedStatePointId.value
+    item => item.statePointId === flowContributionStatePointId.value
   );
   return {
     ...track,
@@ -2369,7 +2416,7 @@ function createActionContributionRow(trace, track) {
 function createActionContributionDetail(row) {
   const item =
     row.detailItems.find(
-      detail => detail.statePointId === flowSelectedStatePointId.value
+      detail => detail.statePointId === flowContributionStatePointId.value
     ) ?? row.detailItems[0];
   if (!item) {
     return null;
@@ -2620,6 +2667,10 @@ function focusActionContributionAction() {
   dispatchAnalysisFlowAction(actionContributionEditCommand.value.action);
 }
 
+function returnActionContributionResult() {
+  dispatchAnalysisFlowAction(actionContributionReturnCommand.value.action);
+}
+
 function getActionContributionFlowAction(row) {
   return mainFlowActionSurface.value.createContributionPointFlowAction({
     source: 'analysis-action-contribution',
@@ -2663,6 +2714,16 @@ function formatActionContributionMeta(row) {
     ? ` · ${row.shortSourceDeltaIds.join(' / ')}`
     : '';
   return `${activeText}${resultText}${sourceText}`;
+}
+
+function formatActionContributionReturnButtonLabel(context = null) {
+  if (context?.status === 'refreshed-edit-result') {
+    return '查看刷新结果';
+  }
+  if (context?.status === 'origin-result') {
+    return '回到来源结果';
+  }
+  return context?.label || '查看刷新结果';
 }
 
 function formatActionContributionSourceSummary(sourceIds) {
@@ -4205,7 +4266,8 @@ h2 {
   font-size: 12px;
 }
 
-.action-contribution-edit-action {
+.action-contribution-edit-action,
+.action-contribution-return-result {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -4222,7 +4284,9 @@ h2 {
 }
 
 .action-contribution-edit-action:not(:disabled):hover,
-.action-contribution-edit-action:not(:disabled):focus {
+.action-contribution-edit-action:not(:disabled):focus,
+.action-contribution-return-result:hover,
+.action-contribution-return-result:focus {
   border-color: rgba(166, 183, 255, 0.5);
   background: rgba(166, 183, 255, 0.2);
 }
@@ -4232,7 +4296,8 @@ h2 {
   opacity: 0.54;
 }
 
-.action-contribution-edit-icon {
+.action-contribution-edit-icon,
+.action-contribution-return-icon {
   width: 13px;
   height: 13px;
 }

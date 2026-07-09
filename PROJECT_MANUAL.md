@@ -11548,6 +11548,36 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：以浏览器场景为准检查完整编辑体验的高频摩擦；若可见闭环稳定，再转向运行时层输出消费收敛。
 
+### 2026-07-09：UI 主流程贡献拆分闭环 - Contribution Return Loop
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 用户从动作贡献拆分进入动作编辑后，可以在贡献详情区域直接点击“查看刷新结果”回到刷新后的运行点。
+- 贡献拆分面板在“刷新结果待查看”阶段会以刷新结果点或当前编辑动作作为锚点，不再只能依赖已经选中的运行点。
+- 回到刷新结果后，资源曲线、模拟日志、三值详情、动作贡献拆分、动作列表和时间轴仍同步到同一个运行点。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、保存数据或导入导出结构。
+
+当前验证事实：
+
+- `AnalysisPanel` 复用现有主流程 return command，不新建流程。
+- `e2e/workbench-continuous-edit.spec.js` 的贡献拆分路径现在从贡献详情自己的返回按钮完成回看。
+
+验收结果：
+
+- `npm run test:e2e -- --grep "direct, log, and contribution"`：通过，1 条浏览器级闭环测试。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、67 条测试。
+- `npm run test:e2e`：通过，5 条浏览器级烟测。
+- `npm run test -- --run`：通过，38 个测试文件、268 条测试。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/features/workbench/AnalysisPanel.vue e2e/workbench-continuous-edit.spec.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查完整编辑体验里还有没有必须跨面板跳转的高频动作；若主路径已足够顺，转向运行时层输出消费收敛。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

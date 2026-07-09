@@ -251,6 +251,7 @@ test('keeps direct, log, and contribution edit returns synced', async ({
     navigationCount: '3',
     navigationIndex: '1',
     selected: true,
+    returnButtonTestId: 'workbench-action-contribution-return-result',
   });
 
   expectNoUnexpectedBrowserIssues(browserIssues);
@@ -463,6 +464,7 @@ async function editCurrentActionFrameAndReturn(
     navigationCount,
     navigationIndex,
     selected = true,
+    returnButtonTestId = 'workbench-flow-return-edit-result',
   }
 ) {
   await page.getByTestId('workbench-start-frame-input').fill(frameValue);
@@ -470,7 +472,7 @@ async function editCurrentActionFrameAndReturn(
     'data-flow-phase',
     'edit-result-ready'
   );
-  const editState = await readEditState(page);
+  const editState = await readEditState(page, returnButtonTestId);
   expect(editState).toMatchObject({
     actionId,
     phase: 'edit-result-ready',
@@ -487,7 +489,7 @@ async function editCurrentActionFrameAndReturn(
     editState.feedbackStatePointId
   );
 
-  await page.getByTestId('workbench-flow-return-edit-result').click();
+  await page.getByTestId(returnButtonTestId).click();
   await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
     'data-flow-phase',
     'edit-result-review'
@@ -645,11 +647,12 @@ async function readWorkbenchState(page) {
   });
 }
 
-async function readEditState(page) {
-  return await page.evaluate(() => {
+async function readEditState(page, returnButtonTestId) {
+  return await page.evaluate(testId => {
     const get = selector => document.querySelector(selector);
     const attr = (selector, name) => get(selector)?.getAttribute(name) ?? '';
     const text = selector => get(selector)?.textContent?.trim() ?? '';
+    const returnButtonSelector = `[data-testid="${testId}"]`;
     return {
       phase: attr('[data-testid="workbench-flow-panel"]', 'data-flow-phase'),
       actionId: attr('[data-testid="workbench-flow-panel"]', 'data-action-id'),
@@ -668,11 +671,9 @@ async function readEditState(page) {
         '[data-testid="workbench-action-edit-feedback"]',
         'data-result-focused'
       ),
-      returnButtonText: text(
-        '[data-testid="workbench-flow-return-edit-result"]'
-      ),
+      returnButtonText: text(returnButtonSelector),
       returnButtonStatePointId: attr(
-        '[data-testid="workbench-flow-return-edit-result"]',
+        returnButtonSelector,
         'data-state-point-id'
       ),
       pageOverflowX: Math.max(
@@ -680,7 +681,7 @@ async function readEditState(page) {
         document.documentElement.scrollWidth - window.innerWidth
       ),
     };
-  });
+  }, returnButtonTestId);
 }
 
 async function readPageOverflowX(page) {
