@@ -12236,6 +12236,29 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议继续 UI 主流程：把结果列表、贡献拆分、曲线详情、三值详情这四个结果入口的共同使用路径做一次端到端成品验收；或者进入生成层，整理 `Action -> Hit -> ThreeValueDelta` 的统一生成入口。
 
+### 2026-07-09：UI 主流程可见闭环 - 四入口共同结果验收
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 用户现在可以在同一条多动作排轴中连续使用结果列表、贡献拆分、资源曲线详情、三值详情四个结果入口，切换不同动作结果后仍保持曲线、日志、三值详情和贡献拆分同步。
+- 用户从四入口联动后的中间动作结果进入编辑，修改起始帧后查看刷新结果，页面会重新定位到刷新后的中间动作状态点。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、保存数据、导入导出结构或 UI 文案。
+
+当前验证事实：
+
+- `workbench-continuous-edit.spec.js` 新增浏览器路径：结果列表选择 `action-0001` -> 贡献拆分下一项切到 `action-0002` -> 曲线详情下一项切到 `action-0003` -> 三值详情上一项回到 `action-0002` -> 编辑并查看刷新结果。
+- 切换每个入口后都确认资源曲线与模拟日志选中同一个状态点，贡献拆分指向对应动作；刷新后 runtime output consistency 仍为 consistent。
+
+验收结果：
+
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps result review entrances interchangeable before edit return"`：通过，1 条浏览器级主流程测试。
+
+下一步：
+
+- 建议进入生成层能力块：整理 `Action -> Hit -> ThreeValueDelta` 的统一生成入口，让后续填真实倍率、削韧、充能数值时直接接入稳定合同；UI 主流程后续只做发现的成品体验缺口。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

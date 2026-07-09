@@ -453,6 +453,125 @@ test('keeps contribution navigation tied to multi-action edit return', async ({
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps result review entrances interchangeable before edit return', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+  await createThreeActionRuntime(page);
+
+  const firstActionResultRow = page.locator(
+    '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
+  );
+  await firstActionResultRow.click();
+  const resultListState = await waitForRuntimeAction(page, 'action-0001');
+  expectRuntimeReviewState(resultListState, {
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    navigationCount: '3',
+    navigationIndex: '0',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(resultListState, resultListState.statePointId);
+  await expectCurveAndLogSelection(page, resultListState.statePointId);
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail')
+  ).toHaveAttribute('data-runtime-review-source', 'analysis-action-result');
+  await expect(
+    page.getByTestId('workbench-action-contribution-panel')
+  ).toHaveAttribute('data-action-id', 'action-0001');
+  await expect(
+    page.getByTestId('workbench-action-contribution-nav-index')
+  ).toHaveText('1/3');
+
+  await page.getByTestId('workbench-action-contribution-nav-next').click();
+  const contributionNavState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(contributionNavState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(
+    contributionNavState,
+    contributionNavState.statePointId
+  );
+  await expectCurveAndLogSelection(page, contributionNavState.statePointId);
+  await expect(
+    page.getByTestId('workbench-action-contribution-panel')
+  ).toHaveAttribute('data-action-id', 'action-0002');
+  await selectHpContributionAndExpectResultFocus(page, contributionNavState);
+
+  await page
+    .getByTestId('workbench-runtime-resource-chart-selection-next')
+    .click();
+  const curveState = await waitForRuntimeAction(page, 'action-0003');
+  expectRuntimeReviewState(curveState, {
+    phase: 'runtime-result',
+    actionId: 'action-0003',
+    navigationCount: '3',
+    navigationIndex: '2',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(curveState, curveState.statePointId);
+  await expectCurveAndLogSelection(page, curveState.statePointId);
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail')
+  ).toHaveAttribute('data-runtime-review-source', 'resource-runtime-curve');
+  await expect(
+    page.getByTestId('workbench-action-contribution-panel')
+  ).toHaveAttribute('data-action-id', 'action-0003');
+
+  await page
+    .getByTestId('workbench-runtime-selected-detail-navigation-prev')
+    .click();
+  const detailState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(detailState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(detailState, detailState.statePointId);
+  await expectCurveAndLogSelection(page, detailState.statePointId);
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail')
+  ).toHaveAttribute('data-runtime-review-source', 'runtime-detail-navigation');
+  await expect(
+    page.getByTestId('workbench-action-contribution-panel')
+  ).toHaveAttribute('data-action-id', 'action-0002');
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0002"]'
+    )
+  ).toHaveAttribute('data-selected-state-point-id', detailState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+
+  await focusRuntimeDetailAction(page);
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
+    actionId: 'action-0002',
+    frameValue: '180',
+    msValue: '3000',
+    originStatePointId: detailState.statePointId,
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+  await expect(
+    page.getByTestId('workbench-action-contribution-panel')
+  ).toHaveAttribute('data-action-id', 'action-0002');
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0002"]'
+    )
+  ).toHaveAttribute('data-selected-state-point-id', returnedState.statePointId);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps timeline state curve marker selection tied to edit return', async ({
   page,
 }) => {
