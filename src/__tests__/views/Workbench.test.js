@@ -253,7 +253,7 @@ describe('Workbench view', () => {
       'Action -> Hit -> ThreeValueDelta'
     );
     expect(flowPanel.attributes('data-generation-entry-status')).toBe(
-      'action-hit-three-value-delta-generation-ready'
+      'generation-outputs-ready'
     );
     expect(flowPanel.attributes('data-runtime-input-source')).toBe(
       'threeValueRuntimeInput.appliedDeltas'

@@ -40,7 +40,7 @@ describe('workbench flow model', () => {
     expect(model.contractContext).toMatchObject({
       contractName: 'Action -> Hit -> ThreeValueDelta',
       generationEntry: {
-        status: 'action-hit-three-value-delta-generation-ready',
+        status: 'generation-outputs-ready',
         ready: true,
       },
       runtimeInput: {
@@ -1418,8 +1418,30 @@ function createRuntimeOutputsFixture(runtimeProjection) {
 }
 
 function createGenerationBundleFixture() {
+  const standardContract = {
+    sourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
+    status: 'action-hit-three-value-delta-contract-ready',
+    name: 'Action -> Hit -> ThreeValueDelta',
+    summary: {
+      actionCount: 2,
+      hitCount: 2,
+      deltaCount: 2,
+      appliedDeltaCount: 2,
+    },
+  };
   return {
     contractName: 'Action -> Hit -> ThreeValueDelta',
+    generationOutputs: {
+      sourceKind: 'azpr-three-value-generation-outputs',
+      status: 'generation-outputs-ready',
+      outputSummary: {
+        actionCount: 2,
+        hitCount: 2,
+        deltaCount: 2,
+        appliedDeltaCount: 2,
+      },
+      standardContract,
+    },
     actionHitThreeValueDeltaGeneration: {
       sourceKind: 'azpr-action-hit-three-value-delta-generation-entry',
       status: 'action-hit-three-value-delta-generation-ready',
@@ -1430,16 +1452,6 @@ function createGenerationBundleFixture() {
         appliedDeltaCount: 2,
       },
     },
-    standardContract: {
-      sourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
-      status: 'action-hit-three-value-delta-contract-ready',
-      name: 'Action -> Hit -> ThreeValueDelta',
-      summary: {
-        actionCount: 2,
-        hitCount: 2,
-        deltaCount: 2,
-        appliedDeltaCount: 2,
-      },
-    },
+    standardContract,
   };
 }

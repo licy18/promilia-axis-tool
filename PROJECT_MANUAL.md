@@ -11725,6 +11725,36 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续运行时层能力块：把 Workbench 合同上下文里仍直接读取 `generationBundle.actionHitThreeValueDeltaGeneration` 的路径改为优先读取 `generationOutputs`，保留旧字段兼容。
 
+### 2026-07-09：运行时层 Workbench 合同上下文收敛 - Workbench Generation Outputs Contract Context
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- Workbench 主流程的合同上下文现在优先从 `generationBundle.generationOutputs` 读取生成层入口状态和标准合同。
+- `contractContext.generationEntry` 对外字段保持不变，但生产来源会优先代表稳定的 `generationOutputs` 封套。
+- 旧的 `generationBundle.actionHitThreeValueDeltaGeneration` 仍作为 fallback，保证旧测试 fixture 或兼容输入不被破坏。
+- 本阶段不改变 HP、韧性、自身能量计算结果，不改变公式、倍率、证据字段、保存数据或导入导出结构。
+
+当前验证事实：
+
+- `workbenchFlowContractContext.test.js` 覆盖 `generationOutputs` 优先和旧 generation entry fallback。
+- `workbenchFlowModel.test.js` 覆盖主流程模型读取 `generationOutputs` 状态。
+- `Workbench.test.js` 覆盖真实 Workbench 页面顶部合同状态来自 `generationOutputs`。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、78 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、271 条测试。
+- `npm run test:e2e`：通过，7 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/features/workbench/workbenchFlowContractContext.js src/__tests__/features/workbenchFlowContractContext.test.js src/__tests__/features/workbenchFlowModel.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续运行时层能力块：检查 Workbench/Analysis 里剩余对 `threeValueGenerationLayerSummary` 的展示依赖，能否在保持兼容字段名的同时优先读取 `threeValueGenerationOutputsSummary`。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

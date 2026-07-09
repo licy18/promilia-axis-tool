@@ -3,11 +3,15 @@ export function createWorkbenchFlowContractContext({
   runtimeProjection = null,
   runtimeOutputs = null,
 } = {}) {
-  const generationEntry =
+  const generationOutputs = generationBundle?.generationOutputs ?? null;
+  const legacyGenerationEntry =
     generationBundle?.actionHitThreeValueDeltaGeneration ?? null;
+  const generationEntry = generationOutputs ?? legacyGenerationEntry;
   const standardContract =
+    generationOutputs?.standardContract ??
+    generationOutputs?.outputs?.standardContract ??
     generationBundle?.standardContract ??
-    generationEntry?.standardContract ??
+    legacyGenerationEntry?.standardContract ??
     null;
   const runtimeInput = runtimeProjection?.runtimeInput ?? null;
   const runtimeOutputSource =
@@ -33,8 +37,13 @@ export function createWorkbenchFlowContractContext({
     generationEntry: createFlowSourceState({
       sourceKind: generationEntry?.sourceKind,
       status: generationEntry?.status,
-      summary: generationEntry?.summary,
-      readyStatus: 'action-hit-three-value-delta-generation-ready',
+      summary:
+        generationOutputs?.summary ??
+        generationOutputs?.outputSummary ??
+        generationEntry?.summary,
+      readyStatus: generationOutputs
+        ? 'generation-outputs-ready'
+        : 'action-hit-three-value-delta-generation-ready',
     }),
     standardContract: createFlowSourceState({
       sourceKind: standardContract?.sourceKind,

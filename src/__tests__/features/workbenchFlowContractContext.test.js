@@ -6,6 +6,27 @@ describe('workbench flow contract context', () => {
     const context = createWorkbenchFlowContractContext({
       generationBundle: {
         contractName: 'Action -> Hit -> ThreeValueDelta',
+        generationOutputs: {
+          sourceKind: 'azpr-three-value-generation-outputs',
+          status: 'generation-outputs-ready',
+          outputSummary: {
+            actionCount: 1,
+            hitCount: 2,
+            deltaCount: 3,
+            appliedDeltaCount: 1,
+          },
+          standardContract: {
+            sourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
+            status: 'action-hit-three-value-delta-contract-ready',
+            name: 'Action -> Hit -> ThreeValueDelta',
+            summary: {
+              actionCount: 1,
+              hitCount: 2,
+              deltaCount: 3,
+              appliedDeltaCount: 1,
+            },
+          },
+        },
         actionHitThreeValueDeltaGeneration: {
           sourceKind: 'azpr-action-hit-three-value-delta-generation-entry',
           status: 'action-hit-three-value-delta-generation-ready',
@@ -82,8 +103,8 @@ describe('workbench flow contract context', () => {
     expect(context).toEqual({
       contractName: 'Action -> Hit -> ThreeValueDelta',
       generationEntry: {
-        sourceKind: 'azpr-action-hit-three-value-delta-generation-entry',
-        status: 'action-hit-three-value-delta-generation-ready',
+        sourceKind: 'azpr-three-value-generation-outputs',
+        status: 'generation-outputs-ready',
         actionCount: 1,
         hitCount: 2,
         deltaCount: 3,
@@ -128,6 +149,34 @@ describe('workbench flow contract context', () => {
         simLogCount: 1,
         ready: true,
       },
+    });
+  });
+
+  it('falls back to the legacy generation entry when generation outputs are absent', () => {
+    const context = createWorkbenchFlowContractContext({
+      generationBundle: {
+        contractName: 'Action -> Hit -> ThreeValueDelta',
+        actionHitThreeValueDeltaGeneration: {
+          sourceKind: 'azpr-action-hit-three-value-delta-generation-entry',
+          status: 'action-hit-three-value-delta-generation-ready',
+          summary: {
+            actionCount: 1,
+            hitCount: 1,
+            deltaCount: 1,
+            appliedDeltaCount: 1,
+          },
+        },
+      },
+    });
+
+    expect(context.generationEntry).toEqual({
+      sourceKind: 'azpr-action-hit-three-value-delta-generation-entry',
+      status: 'action-hit-three-value-delta-generation-ready',
+      actionCount: 1,
+      hitCount: 1,
+      deltaCount: 1,
+      appliedDeltaCount: 1,
+      ready: true,
     });
   });
 });
