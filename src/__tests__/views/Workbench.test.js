@@ -4000,12 +4000,19 @@ describe('Workbench view', () => {
       '[data-testid="workbench-action-edit-feedback-result-focus"]'
     );
     expect(jumpBackButton.attributes()).toMatchObject({
+      'data-primary-action': 'true',
+      'data-result-focus-status': 'available',
       'data-flow-action-kind': 'select-runtime-result',
       'data-flow-action-source': 'analysis-edit-result',
       'data-flow-action-state-point-id': feedbackStatePointId,
     });
     expect(jumpBackButton.attributes('disabled')).toBeUndefined();
-    expect(jumpBackButton.text()).toBe('定位结果');
+    expect(jumpBackButton.text()).toBe('查看刷新结果');
+    expect(
+      unfocusedActionEditFeedback
+        .find('[data-testid="workbench-action-edit-feedback-focus"]')
+        .attributes('data-primary-action')
+    ).toBe('false');
     expect(
       wrapper
         .find(

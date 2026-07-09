@@ -136,24 +136,9 @@
         <div class="action-edit-feedback-actions">
           <button
             type="button"
-            class="action-edit-feedback-focus"
-            :data-flow-action-field="
-              actionEditFeedback.focusSourceAction.fieldKey
-            "
-            :data-flow-action-kind="
-              actionEditFeedback.focusSourceAction.kind
-            "
-            :data-flow-action-source="
-              actionEditFeedback.focusSourceAction.source
-            "
-            data-testid="workbench-action-edit-feedback-focus"
-            @click="focusActionEditFeedback"
-          >
-            定位来源
-          </button>
-          <button
-            type="button"
-            class="action-edit-feedback-focus"
+            class="action-edit-feedback-focus action-edit-feedback-result"
+            :data-primary-action="actionEditFeedback.resultFocusPrimary"
+            :data-result-focus-status="actionEditFeedback.resultFocusStatus"
             :data-runtime-state-point-id="
               actionEditFeedback.runtimeStatePointId
             "
@@ -173,7 +158,27 @@
             data-testid="workbench-action-edit-feedback-result-focus"
             @click="selectActionEditFeedbackResult"
           >
-            {{ actionEditFeedback.resultFocused ? '结果已定位' : '定位结果' }}
+            <Aim class="action-edit-feedback-button-icon" />
+            <span>{{ actionEditFeedback.resultFocusButtonLabel }}</span>
+          </button>
+          <button
+            type="button"
+            class="action-edit-feedback-focus action-edit-feedback-source"
+            :data-flow-action-field="
+              actionEditFeedback.focusSourceAction.fieldKey
+            "
+            :data-flow-action-kind="
+              actionEditFeedback.focusSourceAction.kind
+            "
+            :data-flow-action-source="
+              actionEditFeedback.focusSourceAction.source
+            "
+            :data-primary-action="actionEditFeedback.sourceFocusPrimary"
+            data-testid="workbench-action-edit-feedback-focus"
+            @click="focusActionEditFeedback"
+          >
+            <EditPen class="action-edit-feedback-button-icon" />
+            <span>{{ actionEditFeedback.sourceFocusButtonLabel }}</span>
           </button>
         </div>
       </div>
@@ -926,7 +931,13 @@
 
 <script setup>
 import { computed } from 'vue';
-import { ArrowLeft, ArrowRight, TrendCharts } from '@element-plus/icons-vue';
+import {
+  Aim,
+  ArrowLeft,
+  ArrowRight,
+  EditPen,
+  TrendCharts,
+} from '@element-plus/icons-vue';
 import {
   formatThreeValueCalculationKind,
   formatThreeValueCalculationStatus,
@@ -2128,6 +2139,11 @@ function createActionEditFeedback(source) {
     resultFocusStatus,
     resultFocusLabel:
       formatActionEditFeedbackResultFocusLabel(resultFocusStatus),
+    resultFocusButtonLabel:
+      formatActionEditFeedbackResultFocusButtonLabel(resultFocusStatus),
+    resultFocusPrimary: resultFocusStatus === 'available' ? 'true' : 'false',
+    sourceFocusButtonLabel: '回到动作编辑',
+    sourceFocusPrimary: resultFocusStatus === 'available' ? 'false' : 'true',
     focusSourceAction: getActionEditSourceFlowAction(source),
     resultFocusAction: getActionEditFeedbackResultFlowAction({
       actionId: source.actionId,
@@ -2251,6 +2267,16 @@ function formatActionEditFeedbackResultFocusLabel(status) {
     return '结果未定位';
   }
   return '无结果点';
+}
+
+function formatActionEditFeedbackResultFocusButtonLabel(status) {
+  if (status === 'focused') {
+    return '结果已定位';
+  }
+  if (status === 'available') {
+    return '查看刷新结果';
+  }
+  return '暂无刷新结果';
 }
 
 function createActionResultRuntimeTrace(actionId, rows) {
@@ -3468,6 +3494,11 @@ h2 {
 }
 
 .action-edit-feedback-focus {
+  display: inline-grid;
+  grid-template-columns: 13px minmax(0, auto);
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   min-height: 28px;
   padding: 0 10px;
   border: 1px solid rgba(242, 179, 102, 0.34);
@@ -3477,6 +3508,23 @@ h2 {
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
+}
+
+.action-edit-feedback-button-icon {
+  width: 13px;
+  height: 13px;
+}
+
+.action-edit-feedback-result[data-primary-action='true'] {
+  border-color: rgba(121, 199, 185, 0.44);
+  background: rgba(121, 199, 185, 0.14);
+  color: #dff9f3;
+}
+
+.action-edit-feedback-source[data-primary-action='false'] {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.045);
+  color: #d7dde3;
 }
 
 .action-edit-feedback-focus:disabled {
