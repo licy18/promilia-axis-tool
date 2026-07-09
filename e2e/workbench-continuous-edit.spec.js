@@ -1466,7 +1466,7 @@ test('keeps saved draft restore tied to runtime edit return @workbench-main-flow
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
-test('keeps reset draft usable for a fresh runtime edit loop', async ({
+test('keeps reset draft usable for a fresh runtime edit loop @workbench-main-flow', async ({
   page,
 }) => {
   const browserIssues = collectBrowserIssues(page);
@@ -1536,6 +1536,8 @@ test('keeps reset draft usable for a fresh runtime edit loop', async ({
     selected: true,
   });
   expectRuntimeStatePointSynced(returnedState, returnedState.statePointId);
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
   await expect(page.getByTestId('workbench-draft-status')).toHaveText(
     '有未保存改动'
   );
