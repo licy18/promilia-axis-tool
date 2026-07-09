@@ -391,6 +391,38 @@ export function createWorkbenchContributionPointFlowActionFromSurface(
   );
 }
 
+export function createWorkbenchMainFlowActionSurface({
+  mainFlowCommandSurface = null,
+} = {}) {
+  const bindSurfaceAction = factory => (options = {}) =>
+    factory({
+      mainFlowCommandSurface,
+      ...options,
+    });
+
+  return {
+    mainFlowCommandSurface,
+    createRuntimeReviewFlowAction: bindSurfaceAction(
+      createWorkbenchRuntimeReviewFlowActionFromSurface
+    ),
+    createRuntimeSelectionFlowAction: bindSurfaceAction(
+      createWorkbenchRuntimeSelectionFlowActionFromSurface
+    ),
+    createRuntimeStatePointFlowAction: bindSurfaceAction(
+      createWorkbenchRuntimeStatePointFlowActionFromSurface
+    ),
+    createRuntimeResultFlowAction: bindSurfaceAction(
+      createWorkbenchRuntimeResultFlowActionFromSurface
+    ),
+    createFocusEditSourceFlowAction: bindSurfaceAction(
+      createWorkbenchFocusEditSourceFlowActionFromSurface
+    ),
+    createContributionPointFlowAction: bindSurfaceAction(
+      createWorkbenchContributionPointFlowActionFromSurface
+    ),
+  };
+}
+
 export function createWorkbenchFocusEditSourceFlowAction(options = {}) {
   return createWorkbenchFlowAction({
     kind: WORKBENCH_FLOW_ACTION_KINDS.FOCUS_EDIT_SOURCE,

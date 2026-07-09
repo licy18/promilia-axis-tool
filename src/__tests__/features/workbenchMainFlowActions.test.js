@@ -3,6 +3,7 @@ import {
   WORKBENCH_RUNTIME_REVIEW_FLOW_ACTION_KINDS,
   createWorkbenchContributionPointFlowAction,
   createWorkbenchFocusEditSourceFlowAction,
+  createWorkbenchMainFlowActionSurface,
   createWorkbenchMainFlowButtonView,
   createWorkbenchMainFlowCommandSurface,
   createWorkbenchMainFlowLoopAction,
@@ -1047,6 +1048,138 @@ describe('workbench main flow actions', () => {
       statePointId: 'result-point',
       canRun: true,
     });
+  });
+
+  it('binds panel action factories to the main flow command surface', () => {
+    const calls = [];
+    const mainFlowCommandSurface = {
+      createRuntimeSelectionFlowAction(options = {}) {
+        calls.push(['selection', options]);
+        return {
+          kind: 'select-runtime-state-point',
+          source: options.source,
+          statePointId: options.statePointId,
+          canRun: true,
+        };
+      },
+      createRuntimeResultFlowAction(options = {}) {
+        calls.push(['result', options]);
+        return {
+          kind: 'select-runtime-result',
+          source: options.source,
+          actionId: options.actionId,
+          statePointId: options.statePointId,
+          canRun: true,
+        };
+      },
+      createFocusEditSourceFlowAction(options = {}) {
+        calls.push(['edit-source', options]);
+        return {
+          kind: 'focus-edit-source',
+          source: options.source,
+          actionId: options.actionId,
+          fieldKey: options.fieldKey,
+          canRun: true,
+        };
+      },
+      createContributionPointFlowAction(options = {}) {
+        calls.push(['contribution', options]);
+        return {
+          kind: 'select-contribution-point',
+          source: options.source,
+          actionId: options.actionId,
+          statePointId: options.statePointId,
+          canRun: true,
+        };
+      },
+    };
+    const actionSurface = createWorkbenchMainFlowActionSurface({
+      mainFlowCommandSurface,
+    });
+
+    expect(
+      actionSurface.createRuntimeSelectionFlowAction({
+        source: 'state-curve-point',
+        statePointId: 'runtime-point',
+      })
+    ).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'state-curve-point',
+      statePointId: 'runtime-point',
+      canRun: true,
+    });
+    expect(
+      actionSurface.createRuntimeResultFlowAction({
+        source: 'analysis-action-result',
+        actionId: 'result-action',
+        statePointId: 'result-point',
+      })
+    ).toMatchObject({
+      kind: 'select-runtime-result',
+      source: 'analysis-action-result',
+      actionId: 'result-action',
+      statePointId: 'result-point',
+      canRun: true,
+    });
+    expect(
+      actionSurface.createFocusEditSourceFlowAction({
+        source: 'analysis-edit-source',
+        actionId: 'edit-action',
+        fieldKey: 'level',
+      })
+    ).toMatchObject({
+      kind: 'focus-edit-source',
+      source: 'analysis-edit-source',
+      actionId: 'edit-action',
+      fieldKey: 'level',
+      canRun: true,
+    });
+    expect(
+      actionSurface.createContributionPointFlowAction({
+        source: 'analysis-action-contribution',
+        actionId: 'contribution-action',
+        statePointId: 'contribution-point',
+      })
+    ).toMatchObject({
+      kind: 'select-contribution-point',
+      source: 'analysis-action-contribution',
+      actionId: 'contribution-action',
+      statePointId: 'contribution-point',
+      canRun: true,
+    });
+    expect(calls).toEqual([
+      [
+        'selection',
+        {
+          source: 'state-curve-point',
+          statePointId: 'runtime-point',
+        },
+      ],
+      [
+        'result',
+        {
+          source: 'analysis-action-result',
+          actionId: 'result-action',
+          statePointId: 'result-point',
+        },
+      ],
+      [
+        'edit-source',
+        {
+          source: 'analysis-edit-source',
+          actionId: 'edit-action',
+          fieldKey: 'level',
+        },
+      ],
+      [
+        'contribution',
+        {
+          source: 'analysis-action-contribution',
+          actionId: 'contribution-action',
+          statePointId: 'contribution-point',
+        },
+      ],
+    ]);
   });
 
   it('creates runtime result return commands from the shared review return target', () => {

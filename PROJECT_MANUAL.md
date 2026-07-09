@@ -9932,6 +9932,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 AnalysisPanel / TimelineGridPreview 仍由面板包装的 runtime result、edit-source、contribution point action factory，优先把完整“编辑 -> 运行 -> 查看 -> 回改”闭环的面板动作继续接到 command surface，而不是新增状态标签或提示文案。
 
+### 2026-07-09：UI 主流程能力块 - Panel Action Surface Binding
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchMainFlowActions` 新增 `createWorkbenchMainFlowActionSurface()`，面板可以一次性绑定 `mainFlowCommandSurface`，再从同一入口创建运行点选择、运行结果定位、编辑来源定位和贡献点定位 action。
+- `AnalysisPanel` 改为消费绑定后的 action surface，移除面板内多组 `props.mainFlowCommandSurface + helper` 局部包装；动作结果定位、编辑来源回跳、编辑反馈结果定位、贡献点定位继续输出原 flow action。
+- `TimelineGridPreview` 的运行曲线点选择也改为消费绑定后的 selection factory，继续保持候选点本地选择和 applied runtime 点主流程选择的分流。
+- 本阶段只收束 UI 主流程面板 action factory 消费边界，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- main flow action 单测覆盖 panel action surface 对 runtime selection、runtime result、edit-source、contribution point 四类面板动作的 command surface 注入路径。
+- TimelineGridPreview 与 Workbench 页面测试确认时间轴运行点选择、主流程 dispatch 和运行结果查看路径保持可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/TimelineGridPreview.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、88 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、237 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 Workbench 页面主流程 dispatch 后的详情/日志/贡献区域是否仍有直接消费临时 selection 或 payload 的边界，优先把“结果定位 -> 查看详情 -> 贡献拆分 -> 回到动作编辑”的闭环状态继续收束到共享 runtime view 和 flow plan 层。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

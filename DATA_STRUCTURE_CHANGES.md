@@ -20973,3 +20973,55 @@ createWorkbenchFlowActionPlanRequest(action)
 - `npm run test -- --run`：通过，37 个测试文件、236 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `git diff --check`：通过；仅有 Git 换行转换提示。
+
+## 285. UI 主流程能力块：Panel Action Surface Binding
+
+### 285.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`workbenchMainFlowActions` 新增面板侧 action surface 绑定器：
+
+```js
+createWorkbenchMainFlowActionSurface({
+  mainFlowCommandSurface,
+})
+```
+
+该绑定器返回一组已携带 `mainFlowCommandSurface` 的面板 action factory：
+
+```js
+{
+  createRuntimeReviewFlowAction(options),
+  createRuntimeSelectionFlowAction(options),
+  createRuntimeStatePointFlowAction(options),
+  createRuntimeResultFlowAction(options),
+  createFocusEditSourceFlowAction(options),
+  createContributionPointFlowAction(options),
+}
+```
+
+这些 factory 仍复用既有 `createWorkbench*FromSurface()` 回退规则；本阶段只是把面板内重复的 `mainFlowCommandSurface + helper` 包装集中到共享入口。
+
+`AnalysisPanel` 改为通过绑定后的 action surface 创建：
+
+```js
+analysis-action-result
+analysis-edit-source
+analysis-edit-result
+analysis-action-contribution
+analysis-state-curve / analysis-state-curve-nav / analysis-state-curve-frame-group
+```
+
+`TimelineGridPreview` 的 applied runtime state curve marker 选择也改为通过绑定后的 `createRuntimeSelectionFlowAction()` 创建。输出 flow action 类型保持为既有 runtime selection / result / edit-source / contribution point action。
+
+### 285.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程面板 action factory 消费边界，不新增持久字段，不需要数据迁移。
+
+### 285.3 验证
+
+- 更新 `src/__tests__/features/workbenchMainFlowActions.test.js`，覆盖 panel action surface 对 runtime selection、runtime result、edit-source、contribution point 四类面板动作的 command surface 注入路径。
+- `npm run test -- --run src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/TimelineGridPreview.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、88 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、237 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。

@@ -554,9 +554,7 @@ import {
   createStateCurveFrameGroupKey,
   createStateCurvePointId,
 } from './stateCurvePointIdentity';
-import {
-  createWorkbenchRuntimeStatePointFlowActionFromSurface,
-} from './workbenchMainFlowActions';
+import { createWorkbenchMainFlowActionSurface } from './workbenchMainFlowActions';
 import { createWorkbenchRuntimeReviewContextView } from './workbenchFlowModel';
 
 const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
@@ -744,6 +742,11 @@ const selectedCandidateFrameGroupId = ref(null);
 const candidateDisplayScope = ref('all');
 const candidateActorFilter = ref('all');
 const candidateActionFilter = ref('all');
+const mainFlowActionSurface = computed(() =>
+  createWorkbenchMainFlowActionSurface({
+    mainFlowCommandSurface: props.mainFlowCommandSurface,
+  })
+);
 
 const ticks = computed(() => {
   const durationSeconds = props.durationMs / 1000;
@@ -1563,8 +1566,7 @@ function selectStateCurveMarker(marker) {
   if (isRuntimeStateCurveMarker(marker)) {
     emit(
       'dispatch-flow-action',
-      createWorkbenchRuntimeStatePointFlowActionFromSurface({
-        mainFlowCommandSurface: props.mainFlowCommandSurface,
+      mainFlowActionSurface.value.createRuntimeSelectionFlowAction({
         source: 'state-curve-point',
         actionId: marker.actionId,
         statePointId: marker.statePointId,

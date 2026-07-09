@@ -939,10 +939,7 @@ import {
 } from './stateCurvePointIdentity';
 import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
 import {
-  createWorkbenchContributionPointFlowActionFromSurface,
-  createWorkbenchFocusEditSourceFlowActionFromSurface,
-  createWorkbenchRuntimeResultFlowActionFromSurface,
-  createWorkbenchRuntimeStatePointFlowActionFromSurface,
+  createWorkbenchMainFlowActionSurface,
 } from './workbenchMainFlowActions';
 import { createWorkbenchRuntimeReviewContextView } from './workbenchFlowModel';
 
@@ -1136,6 +1133,11 @@ const autoDelayedCount = computed(
   () =>
     props.insertionDiagnostics?.autoDelayedCount ??
     autoDelayedItems.value.length
+);
+const mainFlowActionSurface = computed(() =>
+  createWorkbenchMainFlowActionSurface({
+    mainFlowCommandSurface: props.mainFlowCommandSurface,
+  })
 );
 const candidateSeriesItems = computed(() =>
   (props.candidateValueSeries?.series ?? []).filter(
@@ -1966,7 +1968,7 @@ function getActionResultRuntimeTrace(entry) {
 
 function getActionResultFlowAction(entry) {
   const trace = getActionResultRuntimeTrace(entry);
-  return createRuntimeResultFlowActionFromSurface({
+  return mainFlowActionSurface.value.createRuntimeResultFlowAction({
     source: 'analysis-action-result',
     actionId: trace?.actionId ?? entry?.actionId ?? '',
     statePointId: trace?.firstStatePointId ?? '',
@@ -2042,7 +2044,7 @@ function selectActionEditFeedbackResult() {
 }
 
 function getActionEditSourceFlowAction(source) {
-  return createFocusEditSourceFlowActionFromSurface({
+  return mainFlowActionSurface.value.createFocusEditSourceFlowAction({
     source: 'analysis-edit-source',
     actionId: source?.actionId ?? '',
     fieldKey: source?.fieldKey ?? '',
@@ -2053,7 +2055,7 @@ function getActionEditSourceFlowAction(source) {
 }
 
 function getActionEditFeedbackResultFlowAction(feedback) {
-  return createRuntimeResultFlowActionFromSurface({
+  return mainFlowActionSurface.value.createRuntimeResultFlowAction({
     source: 'analysis-edit-result',
     detail: feedback,
     enabled: Boolean(
@@ -2562,7 +2564,7 @@ function selectActionContributionRow(row) {
 }
 
 function getActionContributionFlowAction(row) {
-  return createContributionPointFlowActionFromSurface({
+  return mainFlowActionSurface.value.createContributionPointFlowAction({
     source: 'analysis-action-contribution',
     actionId: selectedActionContribution.value?.actionId ?? '',
     statePointId: row?.firstStatePointId ?? '',
@@ -2690,7 +2692,7 @@ function selectStateCurvePointFromMainFlow(point, source) {
   }
   if (isRuntimeStateCurvePoint(point)) {
     dispatchAnalysisFlowAction(
-      createRuntimeStatePointFlowActionFromSurface({
+      mainFlowActionSurface.value.createRuntimeSelectionFlowAction({
         source,
         actionId: point.actionId,
         statePointId: point.statePointId,
@@ -2702,34 +2704,6 @@ function selectStateCurvePointFromMainFlow(point, source) {
     return;
   }
   emit('select-state-curve-point', point.statePointId);
-}
-
-function createRuntimeResultFlowActionFromSurface(options = {}) {
-  return createWorkbenchRuntimeResultFlowActionFromSurface({
-    mainFlowCommandSurface: props.mainFlowCommandSurface,
-    ...options,
-  });
-}
-
-function createRuntimeStatePointFlowActionFromSurface(options = {}) {
-  return createWorkbenchRuntimeStatePointFlowActionFromSurface({
-    mainFlowCommandSurface: props.mainFlowCommandSurface,
-    ...options,
-  });
-}
-
-function createFocusEditSourceFlowActionFromSurface(options = {}) {
-  return createWorkbenchFocusEditSourceFlowActionFromSurface({
-    mainFlowCommandSurface: props.mainFlowCommandSurface,
-    ...options,
-  });
-}
-
-function createContributionPointFlowActionFromSurface(options = {}) {
-  return createWorkbenchContributionPointFlowActionFromSurface({
-    mainFlowCommandSurface: props.mainFlowCommandSurface,
-    ...options,
-  });
 }
 
 function isRuntimeStateCurvePoint(point) {
