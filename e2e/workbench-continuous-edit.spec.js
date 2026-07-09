@@ -2601,6 +2601,36 @@ test('keeps the edit result loop usable at a narrow viewport @workbench-main-flo
   });
   await expectCurveAndLogSelection(page, returnedState.statePointId);
   await expectRuntimeOutputConsistent(page);
+  expect(await readPageOverflowX(page)).toBe(0);
+
+  const flowContinueButton = page
+    .getByTestId('workbench-flow-panel')
+    .getByTestId('workbench-flow-edit-runtime-action');
+  await expect(flowContinueButton).toHaveText('继续修改动作');
+  await expect(flowContinueButton).toHaveAttribute(
+    'data-state-point-id',
+    returnedState.statePointId
+  );
+  await expect(flowContinueButton).toHaveAttribute(
+    'data-primary-action',
+    'true'
+  );
+  await flowContinueButton.click();
+  await expectRuntimeFocusInEditor(page);
+  expect(await readPageOverflowX(page)).toBe(0);
+
+  const { returnedState: secondReturnedState } =
+    await editCurrentActionFrameAndReturn(page, {
+      actionId: 'action-0001',
+      frameValue: '24',
+      msValue: '400',
+      originStatePointId: returnedState.statePointId,
+      selected: true,
+    });
+  expect(secondReturnedState.statePointId).not.toBe(returnedState.statePointId);
+  await expectCurveAndLogSelection(page, secondReturnedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+  expect(await readPageOverflowX(page)).toBe(0);
 
   expectNoUnexpectedBrowserIssues(browserIssues);
 });

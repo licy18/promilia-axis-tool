@@ -13508,6 +13508,26 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：优先补主流程全量 E2E 守门或挑一个尚未覆盖的真实用户路径，例如窄屏下从顶部主流程条完成刷新结果后的再次回改；若主流程守门稳定，再转入生成层收束 `Action -> Hit -> ThreeValueDelta` 的统一生成入口。
 
+### 2026-07-10：UI 主流程可见闭环 - 窄屏顶部回改守门
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 窄屏 Playwright 主流程守门现在覆盖刷新结果后的顶部主流程条：用户在移动宽度下查看刷新结果后，可以从顶部“继续修改动作”入口进入下一轮动作编辑。
+- 该路径继续验证第二次编辑会生成新的刷新结果，并保持资源曲线、日志、三值详情同步；每个关键节点都检查页面没有横向溢出。
+- 本阶段不改变三值计算结果、公式、倍率、运行期数据结构、草稿保存 schema 或 UI 文案；`DATA_STRUCTURE_CHANGES.md` 无需追加。
+
+验收结果：
+
+- `npm run test:e2e:workbench-flow -- --grep "keeps the edit result loop usable at a narrow viewport"`：通过，1 条窄屏真实浏览器主流程回归。
+- `npm run test:e2e:workbench-flow`：通过，21 条 `@workbench-main-flow` 主流程回归全部通过。
+- `git diff --check`：通过，仅出现 Windows 换行提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：如继续补守门，优先覆盖多动作或筛选组合下的顶部主流程条；若主流程守门已经足够稳定，则转入生成层收束 `Action -> Hit -> ThreeValueDelta` 的统一生成入口。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
