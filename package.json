@@ -11,6 +11,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix",
     "format": "prettier --write src/",
     "test": "vitest",
+    "test:e2e": "playwright test",
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
@@ -24,6 +25,7 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/test-utils": "^2.4.6",
     "eslint": "^9.13.0",

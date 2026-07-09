@@ -32,6 +32,10 @@ dist-ssr
 build/
 out/
 
+# Browser test artifacts
+test-results/
+playwright-report/
+
 # Dependency directories
 node_modules/
 jspm_packages/

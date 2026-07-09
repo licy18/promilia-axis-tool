@@ -11155,6 +11155,37 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：若要把真实页面复核自动化，优先评估是否引入 Playwright 依赖和 `test:e2e` 脚本；否则继续补齐 Workbench 成品体验里更大的可见流程，例如动作列表/结果列表之间的快速定位和完整编辑体验。
 
+### 2026-07-09：UI 主流程 e2e 烟测 - Playwright Continuous Edit Smoke
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 把上一阶段的真实页面复核沉淀为项目内可重复命令：`npm run test:e2e`。
+- 新增 Playwright 配置，默认使用本机 Edge 通道并自动启动 Vite，不需要依赖 Codex 内置浏览器或手工页面复核。
+- 新增浏览器级烟测，覆盖 `查看运行结果 -> 新增动作 -> 复制动作 -> 从结果详情回到动作编辑 -> 修改起始帧 -> 查看刷新结果`。
+- e2e 会验证最终 `action-0003` 的三值详情、资源曲线、模拟日志和 HP 贡献拆分都同步到刷新后的 state point，并检查页面无横向溢出。
+- 本阶段只接入主流程浏览器烟测，不改变运行时输出、三值结果、公式、证据字段或数据结构。
+
+当前验证事实：
+
+- 新增 `playwright.config.js`，默认 `PLAYWRIGHT_CHANNEL=msedge`，端口默认 `5182`，可通过 `PROMILIA_E2E_HOST` / `PROMILIA_E2E_PORT` 调整。
+- 新增 `e2e/workbench-continuous-edit.spec.js`，目标用例为 `keeps the continuous edit result loop synced in the browser`。
+- 新增 `@playwright/test` 开发依赖和 `test:e2e` 脚本。
+- `.gitignore` 已忽略 `test-results/` 与 `playwright-report/`。
+
+验收结果：
+
+- `npm run test:e2e`：通过，1 条浏览器级烟测。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js -t "keeps the result loop usable"`：通过，1 条目标组件回归。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+- `npx prettier --check package.json playwright.config.js e2e/workbench-continuous-edit.spec.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：围绕动作列表/结果列表之间的快速定位补完整可见体验，优先确保多动作排轴中从结果列表点回任意动作时，时间轴、曲线、日志、详情和贡献拆分同时定位。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
