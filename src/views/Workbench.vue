@@ -2516,9 +2516,9 @@ function getLocalStorage() {
 }
 
 .runtime-review-stack[data-runtime-review-layout='result-check'] {
-  grid-template-columns: minmax(360px, 1.18fr) minmax(260px, 0.82fr);
+  grid-template-columns: minmax(300px, 1.12fr) minmax(220px, 0.88fr);
   align-items: stretch;
-  gap: 12px;
+  gap: 10px;
 }
 
 .runtime-review-primary-bar {
@@ -2619,6 +2619,10 @@ function getLocalStorage() {
       'mainflow'
       'inspector';
     padding: 10px;
+  }
+
+  .runtime-review-stack[data-runtime-review-layout='result-check'] {
+    grid-template-columns: 1fr;
   }
 }
 </style>

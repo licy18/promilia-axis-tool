@@ -1277,6 +1277,10 @@ h2 {
   font-size: 15px;
 }
 
+.resource-monitor-panel[data-flow-phase='runtime-result'] .panel-title {
+  padding: 10px 12px;
+}
+
 .resource-summary {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1304,6 +1308,30 @@ h2 {
   font-size: 15px;
 }
 
+.resource-monitor-panel[data-flow-phase='runtime-result'] .resource-summary {
+  gap: 6px;
+  padding: 10px 12px;
+}
+
+.resource-monitor-panel[data-flow-phase='runtime-result']
+  .resource-summary
+  div {
+  padding: 6px 7px;
+}
+
+.resource-monitor-panel[data-flow-phase='runtime-result']
+  .resource-summary
+  span {
+  margin-bottom: 2px;
+  font-size: 11px;
+}
+
+.resource-monitor-panel[data-flow-phase='runtime-result']
+  .resource-summary
+  strong {
+  font-size: 13px;
+}
+
 .runtime-resource-monitor {
   display: grid;
   gap: 10px;
@@ -1312,6 +1340,13 @@ h2 {
   border: 1px solid rgba(121, 199, 185, 0.18);
   border-radius: 6px;
   background: rgba(121, 199, 185, 0.07);
+}
+
+.resource-monitor-panel[data-flow-phase='runtime-result']
+  .runtime-resource-monitor {
+  gap: 8px;
+  margin: 0 12px 12px;
+  padding: 10px;
 }
 
 .runtime-heading,
@@ -1408,6 +1443,12 @@ h2 {
   background: rgba(255, 255, 255, 0.04);
 }
 
+.resource-monitor-panel[data-flow-phase='runtime-result']
+  .runtime-curve-panel {
+  gap: 6px;
+  padding: 7px;
+}
+
 .runtime-curve-toolbar {
   display: flex;
   justify-content: flex-end;
@@ -1451,6 +1492,11 @@ h2 {
   background: #171c22;
 }
 
+.resource-monitor-panel[data-flow-phase='runtime-result']
+  .runtime-curve-chart {
+  min-height: 96px;
+}
+
 .runtime-curve-axis {
   stroke: rgba(255, 255, 255, 0.16);
   stroke-width: 1;
@@ -1486,6 +1532,12 @@ h2 {
   border: 1px solid rgba(121, 199, 185, 0.2);
   border-radius: 4px;
   background: rgba(15, 20, 25, 0.64);
+}
+
+.resource-monitor-panel[data-flow-phase='runtime-result']
+  .runtime-curve-selection {
+  gap: 6px;
+  padding: 7px;
 }
 
 .runtime-curve-selection-heading {
@@ -1591,6 +1643,11 @@ h2 {
   background: rgba(121, 199, 185, 0.09);
 }
 
+.resource-monitor-panel[data-flow-phase='runtime-result']
+  .runtime-curve-selection-primary {
+  padding: 7px 8px;
+}
+
 .runtime-curve-selection-primary span,
 .runtime-curve-selection-primary strong,
 .runtime-curve-selection-primary small {
@@ -1629,6 +1686,11 @@ h2 {
   padding: 6px 7px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.045);
+}
+
+.resource-monitor-panel[data-flow-phase='runtime-result']
+  .runtime-curve-selection-row {
+  padding: 5px 6px;
 }
 
 .runtime-curve-selection-row span {

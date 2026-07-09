@@ -1321,6 +1321,10 @@ h2 {
   font-size: 15px;
 }
 
+.event-log-panel[data-flow-phase='runtime-result'] .panel-title {
+  padding: 10px 12px;
+}
+
 .event-list,
 .runtime-log-list {
   display: grid;
@@ -1335,6 +1339,12 @@ h2 {
   padding: 14px;
 }
 
+.event-log-panel[data-flow-phase='runtime-result'] .event-list {
+  gap: 6px;
+  max-height: 88px;
+  padding: 10px 12px;
+}
+
 .event-list > li,
 .runtime-log-row {
   display: grid;
@@ -1347,6 +1357,12 @@ h2 {
   font-size: 12px;
 }
 
+.event-log-panel[data-flow-phase='runtime-result'] .event-list > li {
+  grid-template-columns: 58px minmax(84px, 116px) minmax(0, 1fr);
+  gap: 6px;
+  padding: 6px 8px;
+}
+
 .runtime-sim-log {
   display: grid;
   gap: 10px;
@@ -1355,6 +1371,12 @@ h2 {
   border: 1px solid rgba(121, 199, 185, 0.18);
   border-radius: 6px;
   background: rgba(121, 199, 185, 0.07);
+}
+
+.event-log-panel[data-flow-phase='runtime-result'] .runtime-sim-log {
+  gap: 8px;
+  margin: 0 12px 12px;
+  padding: 10px;
 }
 
 .event-log-panel[data-runtime-review-role='secondary'] .runtime-log-heading {
@@ -1518,15 +1540,27 @@ h2 {
   padding: 0;
 }
 
+.event-log-panel[data-flow-phase='runtime-result'] .runtime-log-list {
+  max-height: 132px;
+}
+
 .runtime-log-filters {
   display: grid;
   gap: 8px;
+}
+
+.event-log-panel[data-flow-phase='runtime-result'] .runtime-log-filters {
+  gap: 6px;
 }
 
 .runtime-track-filters {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 6px;
+}
+
+.event-log-panel[data-flow-phase='runtime-result'] .runtime-track-filters {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .runtime-filter-button {
@@ -1543,6 +1577,10 @@ h2 {
   font: inherit;
   font-size: 12px;
   cursor: pointer;
+}
+
+.event-log-panel[data-flow-phase='runtime-result'] .runtime-filter-button {
+  padding: 5px 7px;
 }
 
 .runtime-filter-button[data-active='true'] {
@@ -1569,6 +1607,11 @@ h2 {
   gap: 8px;
 }
 
+.event-log-panel[data-flow-phase='runtime-result'] .runtime-select-filters {
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
 .runtime-select-filters label {
   display: grid;
   gap: 4px;
@@ -1591,12 +1634,22 @@ h2 {
   font-size: 12px;
 }
 
+.event-log-panel[data-flow-phase='runtime-result'] .runtime-select-filters select {
+  padding: 5px 7px;
+}
+
 .runtime-log-row {
   width: 100%;
   border: 1px solid transparent;
   background: rgba(255, 255, 255, 0.05);
   color: inherit;
   cursor: pointer;
+}
+
+.event-log-panel[data-flow-phase='runtime-result'] .runtime-log-row {
+  grid-template-columns: 52px 46px minmax(0, 1fr);
+  gap: 6px;
+  padding: 6px 8px;
 }
 
 .runtime-log-row[data-selected='true'] {
@@ -1662,6 +1715,13 @@ h2 {
   padding: 8px 9px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.05);
+}
+
+.event-log-panel[data-flow-phase='runtime-result'] .runtime-log-detail-row,
+.event-log-panel[data-flow-phase='runtime-result'] .runtime-contribution-row,
+.event-log-panel[data-flow-phase='runtime-result'] .runtime-calculator-row,
+.event-log-panel[data-flow-phase='runtime-result'] .runtime-source-row {
+  padding: 6px 7px;
 }
 
 .runtime-log-detail-row > span,
@@ -1768,6 +1828,10 @@ h2 {
   font-weight: 700;
 }
 
+.event-log-panel[data-flow-phase='runtime-result'] .runtime-log-action-focus {
+  min-height: 30px;
+}
+
 .runtime-log-result-return {
   display: inline-grid;
   grid-template-columns: 13px auto;
@@ -1784,6 +1848,11 @@ h2 {
   font: inherit;
   font-size: 12px;
   font-weight: 700;
+}
+
+.event-log-panel[data-flow-phase='runtime-result']
+  .runtime-log-result-return {
+  min-height: 30px;
 }
 
 .runtime-log-action-focus:disabled {
