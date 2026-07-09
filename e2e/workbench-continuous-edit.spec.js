@@ -268,6 +268,103 @@ test('keeps runtime detail navigation tied to edit return', async ({
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps multi-action resource chart navigation tied to middle edit return', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+  const { copiedState } = await createThreeActionRuntime(page);
+  expectRuntimeReviewState(copiedState, {
+    phase: 'runtime-result',
+    actionId: 'action-0003',
+    navigationCount: '3',
+    navigationIndex: '2',
+    selected: false,
+  });
+  await expectRuntimeOutputConsistent(page);
+
+  const previousCurveResult = page.getByTestId(
+    'workbench-runtime-resource-chart-selection-prev'
+  );
+  await expect(previousCurveResult).toHaveAttribute(
+    'data-state-point-id',
+    /action-0002/
+  );
+  await previousCurveResult.click();
+
+  const middleState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(middleState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(middleState, middleState.statePointId);
+  await expectCurveAndLogSelection(page, middleState.statePointId);
+
+  const nextCurveResult = page.getByTestId(
+    'workbench-runtime-resource-chart-selection-next'
+  );
+  await expect(nextCurveResult).toHaveAttribute(
+    'data-state-point-id',
+    /action-0003/
+  );
+  await nextCurveResult.click();
+
+  const finalState = await waitForRuntimeAction(page, 'action-0003');
+  expectRuntimeReviewState(finalState, {
+    phase: 'runtime-result',
+    actionId: 'action-0003',
+    navigationCount: '3',
+    navigationIndex: '2',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(finalState, finalState.statePointId);
+  await expectCurveAndLogSelection(page, finalState.statePointId);
+
+  await page
+    .getByTestId('workbench-runtime-resource-chart-selection-prev')
+    .click();
+  const selectedMiddleState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeStatePointSynced(
+    selectedMiddleState,
+    selectedMiddleState.statePointId
+  );
+
+  const curveEditButton = page.getByTestId(
+    'workbench-runtime-resource-chart-selection-action-focus'
+  );
+  await expect(curveEditButton).toHaveAttribute(
+    'data-action-id',
+    'action-0002'
+  );
+  await expect(curveEditButton).toHaveAttribute(
+    'data-state-point-id',
+    selectedMiddleState.statePointId
+  );
+  await curveEditButton.click();
+  await expectRuntimeFocusInEditor(page);
+
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
+    actionId: 'action-0002',
+    frameValue: '168',
+    msValue: '2800',
+    originStatePointId: selectedMiddleState.statePointId,
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0002"]'
+    )
+  ).toHaveAttribute('data-selected-state-point-id', returnedState.statePointId);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps timeline state curve marker selection tied to edit return', async ({
   page,
 }) => {
