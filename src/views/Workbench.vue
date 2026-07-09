@@ -1,5 +1,5 @@
 <template>
-  <main class="workbench">
+  <main ref="workbenchRoot" class="workbench">
     <nav class="top-nav">
       <RouterLink class="back-link" to="/">
         <ArrowLeft class="nav-icon" />
@@ -20,6 +20,7 @@
             :data-history-count="workbenchHistoryView.undoCount"
             data-testid="workbench-undo-edit"
             type="button"
+            aria-keyshortcuts="Control+Z Meta+Z"
             :disabled="!workbenchHistoryView.canUndo"
             title="撤销上一步编辑"
             @click="undoWorkbenchEdit"
@@ -32,6 +33,7 @@
             :data-history-count="workbenchHistoryView.redoCount"
             data-testid="workbench-redo-edit"
             type="button"
+            aria-keyshortcuts="Control+Y Meta+Y Control+Shift+Z Meta+Shift+Z"
             :disabled="!workbenchHistoryView.canRedo"
             title="重做上一步编辑"
             @click="redoWorkbenchEdit"
@@ -456,7 +458,7 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, ref } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 import {
   Aim,
   ArrowLeft,
@@ -562,6 +564,7 @@ const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const draftStatus = ref('未保存草稿');
 const undoHistoryStack = ref([]);
 const redoHistoryStack = ref([]);
+const workbenchRoot = ref(null);
 const actionEditSource = ref(createEmptyWorkbenchActionEditSource());
 const actionEditFocus = ref(createEmptyWorkbenchActionEditFocus());
 const workbenchFlowDispatchState = ref(createEmptyWorkbenchFlowDispatchState());
@@ -731,6 +734,7 @@ const workbenchHistoryView = computed(() => ({
 }));
 
 onMounted(() => {
+  window?.addEventListener?.('keydown', handleWorkbenchKeyboardShortcut);
   const draft = loadWorkbenchDraft(getLocalStorage());
   if (!draft) {
     return;
@@ -738,6 +742,10 @@ onMounted(() => {
 
   applyDraftState(draft);
   draftStatus.value = '已恢复草稿';
+});
+
+onBeforeUnmount(() => {
+  window?.removeEventListener?.('keydown', handleWorkbenchKeyboardShortcut);
 });
 
 function updateSelection(patch) {
@@ -1470,6 +1478,62 @@ function redoWorkbenchEdit() {
     currentSnapshot,
   ];
   applyWorkbenchHistorySnapshot(nextSnapshot, '已重做编辑');
+}
+
+function handleWorkbenchKeyboardShortcut(event) {
+  if (
+    !workbenchRoot.value?.isConnected ||
+    event.defaultPrevented ||
+    isWorkbenchKeyboardShortcutTargetEditable(event.target)
+  ) {
+    return;
+  }
+
+  if (!(event.ctrlKey || event.metaKey) || event.altKey) {
+    return;
+  }
+
+  const key = String(event.key ?? '').toLowerCase();
+  if (key === 'z') {
+    event.preventDefault();
+    if (event.shiftKey) {
+      redoWorkbenchEdit();
+    } else {
+      undoWorkbenchEdit();
+    }
+    return;
+  }
+
+  if (key === 'y') {
+    event.preventDefault();
+    redoWorkbenchEdit();
+    return;
+  }
+
+  if (key === 'd' && !event.shiftKey) {
+    event.preventDefault();
+    copySelectedActionFromShortcut();
+  }
+}
+
+function copySelectedActionFromShortcut() {
+  if (!selectedActionId.value) {
+    return;
+  }
+  copyAction(selectedActionId.value);
+}
+
+function isWorkbenchKeyboardShortcutTargetEditable(target) {
+  const element =
+    target?.nodeType === Node.ELEMENT_NODE
+      ? target
+      : (target?.parentElement ?? null);
+  const tagName = String(element?.tagName ?? '').toLowerCase();
+  return Boolean(
+    ['input', 'textarea', 'select'].includes(tagName) ||
+    element?.isContentEditable ||
+    element?.closest?.('[contenteditable="true"], [role="textbox"]')
+  );
 }
 
 function createWorkbenchHistorySnapshot() {

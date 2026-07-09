@@ -1162,6 +1162,64 @@ test('keeps undo and redo tied to refreshed runtime results', async ({
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps keyboard edit shortcuts tied to runtime review flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/workbench');
+  await expect(page.locator('.action-item')).toHaveCount(1);
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-action-id',
+    'action-0001'
+  );
+
+  await page.keyboard.press('Control+D');
+  await expect(page.locator('.action-item')).toHaveCount(2);
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-action-id',
+    'action-0002'
+  );
+  await expect(page.getByTestId('workbench-undo-edit')).toBeEnabled();
+  await expect(page.getByTestId('workbench-redo-edit')).toBeDisabled();
+
+  await page.keyboard.press('Control+Z');
+  await expect(page.locator('.action-item')).toHaveCount(1);
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-action-id',
+    'action-0001'
+  );
+  await expect(page.getByTestId('workbench-undo-edit')).toBeDisabled();
+  await expect(page.getByTestId('workbench-redo-edit')).toBeEnabled();
+
+  await page.keyboard.press('Control+Y');
+  await expect(page.locator('.action-item')).toHaveCount(2);
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-action-id',
+    'action-0002'
+  );
+
+  await page.getByTestId('workbench-level-input').focus();
+  await page.keyboard.press('Control+D');
+  await expect(page.locator('.action-item')).toHaveCount(2);
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  const copiedRuntimeState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(copiedRuntimeState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '2',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(
+    copiedRuntimeState,
+    copiedRuntimeState.statePointId
+  );
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps skill level and action variant edits tied to refreshed results', async ({
   page,
 }) => {

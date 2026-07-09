@@ -1923,6 +1923,87 @@ describe('Workbench view', () => {
     expect(redoButton().attributes('disabled')).toBeDefined();
   });
 
+  it('uses keyboard shortcuts for action copy and edit history', async () => {
+    const wrapper = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    const actionItems = () => wrapper.findAll('.action-item');
+    const undoButton = () =>
+      wrapper.find('[data-testid="workbench-undo-edit"]');
+    const redoButton = () =>
+      wrapper.find('[data-testid="workbench-redo-edit"]');
+    const flowPanel = () =>
+      wrapper.find('[data-testid="workbench-flow-panel"]');
+
+    expect(actionItems()).toHaveLength(1);
+    expect(flowPanel().attributes('data-action-id')).toBe('action-0001');
+
+    window.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'd',
+        ctrlKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+
+    expect(actionItems()).toHaveLength(2);
+    expect(flowPanel().attributes('data-action-id')).toBe('action-0002');
+    expect(undoButton().attributes('disabled')).toBeUndefined();
+    expect(redoButton().attributes('disabled')).toBeDefined();
+
+    window.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'z',
+        ctrlKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+
+    expect(actionItems()).toHaveLength(1);
+    expect(flowPanel().attributes('data-action-id')).toBe('action-0001');
+    expect(undoButton().attributes('disabled')).toBeDefined();
+    expect(redoButton().attributes('disabled')).toBeUndefined();
+
+    window.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'y',
+        ctrlKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+
+    expect(actionItems()).toHaveLength(2);
+    expect(flowPanel().attributes('data-action-id')).toBe('action-0002');
+    expect(undoButton().attributes('disabled')).toBeUndefined();
+    expect(redoButton().attributes('disabled')).toBeDefined();
+
+    wrapper.find('[data-testid="workbench-level-input"]').element.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'd',
+        ctrlKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    await nextTick();
+
+    expect(actionItems()).toHaveLength(2);
+  });
+
   it('drives the edit-runtime-return loop from the main flow panel', async () => {
     const wrapper = mount(Workbench, {
       attachTo: document.body,

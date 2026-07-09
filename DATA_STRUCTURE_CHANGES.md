@@ -22826,3 +22826,43 @@ workbench-redo-edit
 - `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、68 条测试。
 - `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps undo and redo tied to refreshed runtime results"`：通过，1 条浏览器级闭环测试。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+## 320. Workbench 键盘编辑快捷键：Keyboard Editing Shortcuts
+
+### 320.1 结构变化
+
+`Workbench.vue` 新增根节点引用与键盘事件处理：
+
+```text
+workbenchRoot
+handleWorkbenchKeyboardShortcut
+copySelectedActionFromShortcut
+isWorkbenchKeyboardShortcutTargetEditable
+```
+
+当前快捷键：
+
+```text
+Ctrl/Meta+Z -> undoWorkbenchEdit
+Ctrl/Meta+Y -> redoWorkbenchEdit
+Ctrl/Meta+Shift+Z -> redoWorkbenchEdit
+Ctrl/Meta+D -> copyAction(selectedActionId)
+```
+
+快捷键处理只在当前 Workbench 根节点仍连接到页面时生效，并跳过 `input`、`textarea`、`select`、`contenteditable` 和 `role="textbox"` 目标，避免干扰字段编辑。
+
+顶部撤销/重做按钮补充 `aria-keyshortcuts`，但不新增可见状态字段。
+
+### 320.2 保存与迁移
+
+不新增项目草稿字段，不改变导入导出 schema，不需要数据迁移。
+
+本阶段只新增 Workbench 运行期键盘交互；复制动作仍使用既有 `copyAction()`，撤销/重做仍使用既有会话级历史栈。三值计算结果、公式、倍率、证据字段、运行日志行和曲线数值均不改变。
+
+### 320.3 验证
+
+- `Workbench.test.js` 覆盖 `Ctrl+D -> Ctrl+Z -> Ctrl+Y`，以及输入框内 `Ctrl+D` 不触发动作复制。
+- `workbench-continuous-edit.spec.js` 覆盖键盘复制、撤销、重做后继续运行复制动作并进入运行结果复盘。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、69 条测试。
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "keeps keyboard edit shortcuts tied to runtime review flow"`：通过，1 条浏览器级闭环测试。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
