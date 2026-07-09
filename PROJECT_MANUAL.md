@@ -11755,6 +11755,34 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续运行时层能力块：检查 Workbench/Analysis 里剩余对 `threeValueGenerationLayerSummary` 的展示依赖，能否在保持兼容字段名的同时优先读取 `threeValueGenerationOutputsSummary`。
 
+### 2026-07-09：UI 主流程结果详情定位闭环 - Runtime Detail Focus Loop
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 用户从动作编辑进入运行结果后，点击资源曲线点、日志行、贡献点或刷新后的结果点，Workbench 会在同步曲线、日志和三值详情的同时，把三值详情面板主动定位到视野中。
+- 这条路径补齐了 `排轴动作编辑 -> 运行模拟 -> 查看资源曲线 -> 查看日志/三值详情 -> 回到动作修改 -> 查看刷新后的结果定位` 里的结果详情落点。
+- 本阶段只使用现有 `mainFlowWorkspaceView`、`runtimeReviewPanelView`、`workbenchActionEditSource` 和 runtime sync request，不新增公式、倍率、证据字段、保存数据或导入导出结构。
+
+当前验证事实：
+
+- `Workbench.test.js` 固定资源曲线点选择后，资源曲线、模拟日志、三值详情和动作选择保持同步，并确认三值详情面板会被主动定位。
+- 既有 Playwright 场景继续覆盖完整可见路径：打开运行结果、点击曲线点、点击日志行、查看三值详情、回到动作编辑、再回到刷新后的结果点。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、67 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、271 条测试。
+- `npm run test:e2e`：通过，7 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/views/Workbench.vue src/__tests__/views/Workbench.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：围绕完整编辑体验补齐结果定位、贡献拆分和曲线交互的成品级路径，不再扩展微型状态标签或公式证据考古。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

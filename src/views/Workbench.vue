@@ -1617,6 +1617,7 @@ function dispatchWorkbenchFlowAction(action = {}) {
     previousState: workbenchFlowDispatchState.value,
   });
   scheduleActionEditFocusScroll(result);
+  scheduleRuntimeSelectedDetailScroll(result);
   return result;
 }
 
@@ -1637,6 +1638,40 @@ function shouldScrollActionEditFocusIntoView(result = {}) {
     WORKBENCH_FLOW_ACTION_KINDS.FOCUS_RUNTIME_ACTION,
     WORKBENCH_FLOW_ACTION_KINDS.FOCUS_EDIT_SOURCE,
   ].includes(result.kind);
+}
+
+function scheduleRuntimeSelectedDetailScroll(result = {}) {
+  if (!shouldScrollRuntimeSelectedDetailIntoView(result)) {
+    return;
+  }
+  void nextTick().then(() => {
+    scrollRuntimeSelectedDetailIntoView();
+  });
+}
+
+function shouldScrollRuntimeSelectedDetailIntoView(result = {}) {
+  if (!result.handled) {
+    return false;
+  }
+  return [
+    WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+    WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+    WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_STATE_POINT,
+    WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT,
+    WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+  ].includes(result.kind);
+}
+
+function scrollRuntimeSelectedDetailIntoView() {
+  if (typeof document === 'undefined') {
+    return;
+  }
+  document
+    .querySelector('[data-testid="workbench-runtime-selected-detail"]')
+    ?.scrollIntoView?.({
+      block: 'nearest',
+      inline: 'nearest',
+    });
 }
 
 function scrollActionEditFocusIntoView() {

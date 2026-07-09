@@ -5778,6 +5778,7 @@ describe('Workbench view', () => {
 
   it('links runtime resource curve points to the focused state curve point', async () => {
     const wrapper = mount(Workbench, {
+      attachTo: document.body,
       global: {
         stubs: {
           RouterLink: {
@@ -5941,6 +5942,13 @@ describe('Workbench view', () => {
           element.getAttribute('data-state-point-id') === statePointId
       );
     expect(curveScrolledRuntimeLogRow).toBeTruthy();
+    const curveScrolledRuntimeDetail =
+      runtimeCurveScrollIntoView.mock.contexts.find(
+        element =>
+          element?.getAttribute('data-testid') ===
+          'workbench-runtime-selected-detail'
+      );
+    expect(curveScrolledRuntimeDetail).toBeTruthy();
     expect(
       wrapper
         .find(
