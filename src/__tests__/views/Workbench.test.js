@@ -2207,6 +2207,180 @@ describe('Workbench view', () => {
     ).toBe(refreshedStatePointId);
   });
 
+  it('supports the visible workbench loop across curve, log, detail, edit, and refreshed result', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-flow-open-runtime"]')
+      .trigger('click');
+    await nextTick();
+
+    const openedStatePointId = wrapper
+      .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+      .text();
+    expect(openedStatePointId).toBeTruthy();
+    expect(
+      wrapper
+        .find('[data-testid="workbench-flow-panel"]')
+        .attributes('data-flow-phase')
+    ).toBe('runtime-result');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-resource-chart-selection"]')
+        .attributes('data-state-point-id')
+    ).toBe(openedStatePointId);
+
+    const runtimeCurvePoint = wrapper.find(
+      `[data-testid="workbench-runtime-resource-chart-point"][data-state-point-id="${openedStatePointId}"]`
+    );
+    expect(runtimeCurvePoint.exists()).toBe(true);
+
+    await runtimeCurvePoint.trigger('click');
+    await nextTick();
+
+    expect(
+      getLastDispatchedFlowAction(wrapper, ResourceMonitorPanel)
+    ).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'resource-runtime-curve',
+      statePointId: openedStatePointId,
+      canRun: true,
+    });
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-runtime-resource-chart-point"][data-state-point-id="${openedStatePointId}"]`
+        )
+        .attributes('data-selected')
+    ).toBe('true');
+    expect(
+      wrapper
+        .find(
+          `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${openedStatePointId}"]`
+        )
+        .attributes('data-selected')
+    ).toBe('true');
+
+    const runtimeLogRow = wrapper.find(
+      `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${openedStatePointId}"]`
+    );
+    expect(runtimeLogRow.exists()).toBe(true);
+
+    await runtimeLogRow.trigger('click');
+    await nextTick();
+
+    expect(getLastDispatchedFlowAction(wrapper, EventLogPanel)).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'event-log-runtime-row',
+      statePointId: openedStatePointId,
+      canRun: true,
+    });
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail"]')
+        .attributes()
+    ).toMatchObject({
+      'data-flow-phase': 'runtime-result',
+      'data-runtime-review-selection-status': 'selected',
+      'data-runtime-review-selected-state-point-id': openedStatePointId,
+      'data-runtime-review-source': 'event-log-runtime-row',
+      'data-runtime-review-source-kind': 'log',
+    });
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-action"]')
+        .text()
+    ).toContain('普通攻击');
+
+    const detailActionFocus = wrapper.find(
+      '[data-testid="workbench-runtime-selected-detail-action-focus"]'
+    );
+    expect(detailActionFocus.attributes('disabled')).toBeUndefined();
+
+    await detailActionFocus.trigger('click');
+    await nextTick();
+
+    expect(
+      getLastDispatchedFlowAction(wrapper, RuntimeSelectedDetailPanel)
+    ).toMatchObject({
+      kind: 'focus-runtime-action',
+      source: 'runtime-detail',
+      actionId: 'action-0001',
+      statePointId: openedStatePointId,
+      canRun: true,
+    });
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+        )
+        .attributes('data-edit-focus-origin')
+    ).toBe('runtime-focus');
+
+    await wrapper.find('[data-testid="workbench-start-input"]').setValue('100');
+    await nextTick();
+
+    const editFeedback = wrapper.find(
+      '[data-testid="workbench-action-edit-feedback"]'
+    );
+    const refreshedStatePointId = editFeedback.attributes(
+      'data-runtime-state-point-id'
+    );
+    expect(refreshedStatePointId).toBeTruthy();
+    expect(refreshedStatePointId).not.toBe(openedStatePointId);
+    expect(editFeedback.attributes('data-origin-state-point-id')).toBe(
+      openedStatePointId
+    );
+
+    const returnButton = wrapper.find(
+      '[data-testid="workbench-flow-return-edit-result"]'
+    );
+    expect(returnButton.attributes('disabled')).toBeUndefined();
+    expect(returnButton.attributes('data-state-point-id')).toBe(
+      refreshedStatePointId
+    );
+
+    await returnButton.trigger('click');
+    await nextTick();
+
+    expect(
+      getLastDispatchedFlowAction(wrapper, WorkbenchFlowPanel)
+    ).toMatchObject({
+      kind: 'return-runtime-result',
+      source: 'workbench-flow-panel',
+      actionId: 'action-0001',
+      statePointId: refreshedStatePointId,
+      canRun: true,
+      payload: {
+        originStatePointId: openedStatePointId,
+        status: 'refreshed-edit-result',
+      },
+    });
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
+        .text()
+    ).toBe(refreshedStatePointId);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-flow-panel"]')
+        .attributes('data-flow-phase')
+    ).toBe('edit-result-review');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-resource-chart-selection"]')
+        .attributes('data-result-context-status')
+    ).toBe('refreshed-edit-result');
+  });
+
   it('records failed main flow dispatch results at the workbench layer', async () => {
     const wrapper = mount(Workbench, {
       global: {

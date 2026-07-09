@@ -21865,3 +21865,31 @@ createWorkbenchRuntimeReviewPanelView(...)
 - `npm run test -- --run src/__tests__/views/Workbench.test.js src/__tests__/features/workbenchFlowModel.test.js`：通过，2 个测试文件、66 条测试。
 - `npm run test -- --run`：通过，38 个测试文件、256 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 301. UI 主流程可见闭环：Workbench End-to-End Loop
+
+### 301.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+本阶段只新增 Workbench 可见闭环端到端测试，固定用户路径：
+
+```text
+查看运行结果
+  -> 点击资源曲线运行点
+  -> 点击对应日志行
+  -> 在三值详情中回到动作编辑
+  -> 修改动作开始时间
+  -> 回到刷新后的运行结果
+```
+
+### 301.2 保存与迁移
+
+不新增持久字段，不需要数据迁移。
+
+### 301.3 验证
+
+- 新增 `src/__tests__/views/Workbench.test.js` 用例 `supports the visible workbench loop across curve, log, detail, edit, and refreshed result`。
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、58 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、257 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
