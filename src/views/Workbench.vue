@@ -444,6 +444,9 @@ import {
   findFirstRuntimeStatePointForAction,
 } from '../features/workbench/runtimeProjectionPoints';
 import {
+  applyWorkbenchRuntimeViewPatch,
+} from '../features/workbench/workbenchRuntimeViewState';
+import {
   SYSTEM_TIMELINE_LANE_ID,
   createTimelineDiagnostics,
 } from '../features/workbench/timelineDiagnostics';
@@ -1704,41 +1707,38 @@ function selectRuntimeStatePoint(pointId) {
 }
 
 function applyRuntimeViewPatch(patch = {}) {
-  const changes = patch.changes ?? {};
-  if (hasRuntimeViewPatchChange(changes, 'selectedStatePointId')) {
-    selectedStateCurvePointId.value = changes.selectedStatePointId;
-  }
-  if (hasRuntimeViewPatchChange(changes, 'stateCurveFocusMode')) {
-    stateCurveFocusMode.value = changes.stateCurveFocusMode;
-  }
-  if (hasRuntimeViewPatchChange(changes, 'stateCurveLayerFilters')) {
-    stateCurveLayerFilters.value = { ...changes.stateCurveLayerFilters };
-  }
-  if (hasRuntimeViewPatchChange(changes, 'stateCurveTrackFilters')) {
-    stateCurveTrackFilters.value = { ...changes.stateCurveTrackFilters };
-  }
-  if (hasRuntimeViewPatchChange(changes, 'calculatorScope')) {
-    calculatorDiagnosticScope.value = changes.calculatorScope;
-  }
-  if (patch.pulseCalculatorFocus) {
-    calculatorDiagnosticFocus.value = {
-      scope: calculatorDiagnosticScope.value,
-      sequence: calculatorDiagnosticFocus.value.sequence + 1,
-    };
-  }
-  if (hasRuntimeViewPatchChange(changes, 'runtimeLogFocus')) {
-    runtimeLogFocus.value = changes.runtimeLogFocus;
-  }
-  if (patch.selectRuntimeActionStatePointId) {
-    selectActionFromRuntimeStatePoint(patch.selectRuntimeActionStatePointId);
-  }
-  if (patch.selectRuntimeStatePointId) {
-    selectRuntimeStatePoint(patch.selectRuntimeStatePointId);
-  }
-}
-
-function hasRuntimeViewPatchChange(changes, key) {
-  return Object.prototype.hasOwnProperty.call(changes, key);
+  applyWorkbenchRuntimeViewPatch(patch, {
+    setSelectedStatePointId: statePointId => {
+      selectedStateCurvePointId.value = statePointId;
+    },
+    setStateCurveFocusMode: mode => {
+      stateCurveFocusMode.value = mode;
+    },
+    setStateCurveLayerFilters: filters => {
+      stateCurveLayerFilters.value = filters;
+    },
+    setStateCurveTrackFilters: filters => {
+      stateCurveTrackFilters.value = filters;
+    },
+    setCalculatorScope: scope => {
+      calculatorDiagnosticScope.value = scope;
+    },
+    pulseCalculatorFocus: () => {
+      calculatorDiagnosticFocus.value = {
+        scope: calculatorDiagnosticScope.value,
+        sequence: calculatorDiagnosticFocus.value.sequence + 1,
+      };
+    },
+    setRuntimeLogFocus: focus => {
+      runtimeLogFocus.value = focus;
+    },
+    selectRuntimeActionStatePoint: statePointId => {
+      selectActionFromRuntimeStatePoint(statePointId);
+    },
+    selectRuntimeStatePoint: statePointId => {
+      selectRuntimeStatePoint(statePointId);
+    },
+  });
 }
 
 function dispatchWorkbenchFlowAction(action = {}) {

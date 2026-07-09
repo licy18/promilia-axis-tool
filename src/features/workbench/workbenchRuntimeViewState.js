@@ -144,6 +144,70 @@ export function createWorkbenchRuntimeLogFocusState({
   };
 }
 
+export function applyWorkbenchRuntimeViewPatch(patch = {}, handlers = {}) {
+  const changes = patch?.changes ?? {};
+  const appliedChanges = {};
+  applyPatchChange({
+    changes,
+    appliedChanges,
+    key: 'selectedStatePointId',
+    apply: handlers.setSelectedStatePointId,
+  });
+  applyPatchChange({
+    changes,
+    appliedChanges,
+    key: 'stateCurveFocusMode',
+    apply: handlers.setStateCurveFocusMode,
+  });
+  applyPatchChange({
+    changes,
+    appliedChanges,
+    key: 'stateCurveLayerFilters',
+    cloneObject: true,
+    apply: handlers.setStateCurveLayerFilters,
+  });
+  applyPatchChange({
+    changes,
+    appliedChanges,
+    key: 'stateCurveTrackFilters',
+    cloneObject: true,
+    apply: handlers.setStateCurveTrackFilters,
+  });
+  applyPatchChange({
+    changes,
+    appliedChanges,
+    key: 'calculatorScope',
+    apply: handlers.setCalculatorScope,
+  });
+  if (patch?.pulseCalculatorFocus) {
+    handlers.pulseCalculatorFocus?.();
+  }
+  applyPatchChange({
+    changes,
+    appliedChanges,
+    key: 'runtimeLogFocus',
+    cloneObject: true,
+    apply: handlers.setRuntimeLogFocus,
+  });
+  const selectRuntimeActionStatePointId =
+    patch?.selectRuntimeActionStatePointId ?? '';
+  if (selectRuntimeActionStatePointId) {
+    handlers.selectRuntimeActionStatePoint?.(
+      selectRuntimeActionStatePointId
+    );
+  }
+  const selectRuntimeStatePointId = patch?.selectRuntimeStatePointId ?? '';
+  if (selectRuntimeStatePointId) {
+    handlers.selectRuntimeStatePoint?.(selectRuntimeStatePointId);
+  }
+  return {
+    appliedChanges,
+    pulseCalculatorFocus: Boolean(patch?.pulseCalculatorFocus),
+    selectRuntimeActionStatePointId,
+    selectRuntimeStatePointId,
+  };
+}
+
 function createWorkbenchRuntimeViewPatch({
   selectedStatePointId,
   stateCurveFocusMode,
@@ -178,4 +242,23 @@ function assignPatchChange(changes, key, value) {
     value && typeof value === 'object' && !Array.isArray(value)
       ? { ...value }
       : value;
+}
+
+function applyPatchChange({
+  changes = {},
+  appliedChanges = {},
+  key = '',
+  cloneObject = false,
+  apply,
+} = {}) {
+  if (!Object.prototype.hasOwnProperty.call(changes, key)) {
+    return;
+  }
+  const value = changes[key];
+  const nextValue =
+    cloneObject && value && typeof value === 'object' && !Array.isArray(value)
+      ? { ...value }
+      : value;
+  apply?.(nextValue);
+  appliedChanges[key] = nextValue;
 }

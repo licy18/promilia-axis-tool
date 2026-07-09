@@ -10216,6 +10216,31 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 Workbench 根页面是否还有 dispatch 后的状态应用可以继续收束进 flow runtime，优先减少页面层直接拼接 runtime view state 的位置。
 
+### 2026-07-09：UI 主流程能力块 - Runtime View Patch Applier
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchRuntimeViewState` 新增 `applyWorkbenchRuntimeViewPatch()`，把 runtime view patch 中的选中点、曲线模式、曲线筛选、calculator scope、日志焦点和运行点选择副作用统一解释为 handler 调用。
+- `Workbench.vue` 的 `applyRuntimeViewPatch()` 改为只向共享 applier 提供 setter，不再在页面层逐个判断 patch 字段。
+- 本阶段只收束 Workbench runtime view state 应用边界，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- runtime view state 单测覆盖共享 patch applier 的字段应用顺序、对象拷贝、calculator focus pulse、runtime action selection 和 runtime point selection 出口。
+- flow runtime 和 Workbench 页面测试确认 runtime view patch 仍能驱动运行点选择、日志聚焦、calculator scope 和主流程回看。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchRuntimeViewState.test.js src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、79 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、248 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 Workbench 根页面里动作新增、删除、复制、批量移动后的 runtime sync 是否还能进一步收束为更统一的 mutation -> flow runtime 合同。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

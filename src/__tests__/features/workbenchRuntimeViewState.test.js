@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  applyWorkbenchRuntimeViewPatch,
   createWorkbenchCalculatorScopeApplyState,
   createWorkbenchCalculatorScopeViewPatch,
   createWorkbenchRuntimeLogFocusState,
@@ -285,6 +286,111 @@ describe('workbench runtime view state', () => {
       pulseCalculatorFocus: true,
       selectRuntimeActionStatePointId: '',
       selectRuntimeStatePointId: 'point-003',
+    });
+  });
+
+  it('applies runtime view patches through shared handlers', () => {
+    const calls = [];
+    const layerFilters = {
+      applied: true,
+      candidate: false,
+    };
+    const trackFilters = {
+      enemyHpDamage: true,
+    };
+    const runtimeLogFocus = {
+      source: 'action-result',
+      statePointId: 'point-001',
+      sequence: 5,
+    };
+
+    const result = applyWorkbenchRuntimeViewPatch(
+      {
+        changes: {
+          selectedStatePointId: 'point-001',
+          stateCurveFocusMode: 'selected',
+          stateCurveLayerFilters: layerFilters,
+          stateCurveTrackFilters: trackFilters,
+          calculatorScope: 'runtime',
+          runtimeLogFocus,
+        },
+        pulseCalculatorFocus: true,
+        selectRuntimeActionStatePointId: 'point-001',
+        selectRuntimeStatePointId: 'point-002',
+      },
+      {
+        setSelectedStatePointId: value =>
+          calls.push(['setSelectedStatePointId', value]),
+        setStateCurveFocusMode: value =>
+          calls.push(['setStateCurveFocusMode', value]),
+        setStateCurveLayerFilters: value =>
+          calls.push(['setStateCurveLayerFilters', value]),
+        setStateCurveTrackFilters: value =>
+          calls.push(['setStateCurveTrackFilters', value]),
+        setCalculatorScope: value =>
+          calls.push(['setCalculatorScope', value]),
+        pulseCalculatorFocus: () => calls.push(['pulseCalculatorFocus']),
+        setRuntimeLogFocus: value => calls.push(['setRuntimeLogFocus', value]),
+        selectRuntimeActionStatePoint: value =>
+          calls.push(['selectRuntimeActionStatePoint', value]),
+        selectRuntimeStatePoint: value =>
+          calls.push(['selectRuntimeStatePoint', value]),
+      }
+    );
+
+    expect(calls).toEqual([
+      ['setSelectedStatePointId', 'point-001'],
+      ['setStateCurveFocusMode', 'selected'],
+      [
+        'setStateCurveLayerFilters',
+        {
+          applied: true,
+          candidate: false,
+        },
+      ],
+      [
+        'setStateCurveTrackFilters',
+        {
+          enemyHpDamage: true,
+        },
+      ],
+      ['setCalculatorScope', 'runtime'],
+      ['pulseCalculatorFocus'],
+      [
+        'setRuntimeLogFocus',
+        {
+          source: 'action-result',
+          statePointId: 'point-001',
+          sequence: 5,
+        },
+      ],
+      ['selectRuntimeActionStatePoint', 'point-001'],
+      ['selectRuntimeStatePoint', 'point-002'],
+    ]);
+    expect(calls[2][1]).not.toBe(layerFilters);
+    expect(calls[3][1]).not.toBe(trackFilters);
+    expect(calls[6][1]).not.toBe(runtimeLogFocus);
+    expect(result).toEqual({
+      appliedChanges: {
+        selectedStatePointId: 'point-001',
+        stateCurveFocusMode: 'selected',
+        stateCurveLayerFilters: {
+          applied: true,
+          candidate: false,
+        },
+        stateCurveTrackFilters: {
+          enemyHpDamage: true,
+        },
+        calculatorScope: 'runtime',
+        runtimeLogFocus: {
+          source: 'action-result',
+          statePointId: 'point-001',
+          sequence: 5,
+        },
+      },
+      pulseCalculatorFocus: true,
+      selectRuntimeActionStatePointId: 'point-001',
+      selectRuntimeStatePointId: 'point-002',
     });
   });
 });

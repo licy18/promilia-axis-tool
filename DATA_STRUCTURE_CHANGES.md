@@ -21551,3 +21551,64 @@ mainFlowActionSurface.createRuntimeSelectionFlowAction(...)
 - `npm run test -- --run src/__tests__/views/Workbench.test.js src/__tests__/features/workbenchMainFlowActions.test.js src/__tests__/features/TimelineGridPreview.test.js`：通过，3 个测试文件、89 条测试。
 - `npm run test -- --run`：通过，37 个测试文件、247 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 296. UI 主流程能力块：Runtime View Patch Applier
+
+### 296.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`workbenchRuntimeViewState` 新增 runtime view patch 应用入口：
+
+```js
+applyWorkbenchRuntimeViewPatch(patch, handlers)
+```
+
+`patch` 沿用既有结构：
+
+```js
+{
+  changes,
+  pulseCalculatorFocus,
+  selectRuntimeActionStatePointId,
+  selectRuntimeStatePointId,
+}
+```
+
+`handlers` 由调用方提供页面状态写入能力：
+
+```js
+{
+  setSelectedStatePointId,
+  setStateCurveFocusMode,
+  setStateCurveLayerFilters,
+  setStateCurveTrackFilters,
+  setCalculatorScope,
+  pulseCalculatorFocus,
+  setRuntimeLogFocus,
+  selectRuntimeActionStatePoint,
+  selectRuntimeStatePoint,
+}
+```
+
+应用规则：
+
+- `changes.selectedStatePointId`、`stateCurveFocusMode`、`stateCurveLayerFilters`、`stateCurveTrackFilters`、`calculatorScope`、`runtimeLogFocus` 由 applier 统一识别后调用对应 handler。
+- 对象型 changes 会在传给 handler 前浅拷贝，避免页面状态直接共享 patch 内部对象。
+- `pulseCalculatorFocus`、`selectRuntimeActionStatePointId`、`selectRuntimeStatePointId` 保持原有顺序，在字段 changes 之后触发。
+
+消费方变化：
+
+- `Workbench.vue` 的 `applyRuntimeViewPatch()` 改为委托 `applyWorkbenchRuntimeViewPatch()`。
+- Workbench 页面层不再直接判断 runtime view patch 的每个字段，只保留 Vue ref setter 和 runtime action / state point selection handler。
+
+### 296.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程 runtime view patch 的内部应用边界，不新增持久字段，不需要数据迁移。
+
+### 296.3 验证
+
+- 更新 `src/__tests__/features/workbenchRuntimeViewState.test.js`，覆盖共享 patch applier 的字段应用顺序、对象拷贝和选择副作用出口。
+- `npm run test -- --run src/__tests__/features/workbenchRuntimeViewState.test.js src/__tests__/features/workbenchFlowRuntime.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、79 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、248 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
