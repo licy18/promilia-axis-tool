@@ -3,15 +3,15 @@
     class="panel event-log-panel"
     :data-flow-phase="flowModel?.phase ?? ''"
     :data-flow-state-point-id="flowSelectedStatePointId"
-    :data-runtime-review-selection-status="flowSelection?.status ?? ''"
+    :data-runtime-review-selection-status="runtimeReviewContextView.status"
     :data-runtime-review-selected-action-id="
-      flowSelection?.selectedActionId ?? ''
+      runtimeReviewContextView.selectedActionId
     "
     :data-runtime-review-selected-state-point-id="
-      flowSelection?.selectedStatePointId ?? ''
+      runtimeReviewContextView.selectedStatePointId
     "
-    :data-runtime-review-source="flowSelection?.source ?? ''"
-    :data-runtime-review-source-kind="flowSelection?.sourceKind ?? ''"
+    :data-runtime-review-source="runtimeReviewContextView.source"
+    :data-runtime-review-source-kind="runtimeReviewContextView.sourceKind"
   >
     <div class="panel-title">
       <Tickets class="panel-icon" />
@@ -325,6 +325,7 @@ import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import { createRuntimeStatePointContexts } from './runtimeProjectionPoints';
 import {
   createWorkbenchFlowRuntimeActionEditTarget,
+  createWorkbenchRuntimeReviewContextView,
   resolveWorkbenchMainFlowActionEditTarget,
   resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
@@ -399,16 +400,19 @@ const runtimeContextByRow = computed(
 const runtimeSimLogRows = computed(() =>
   runtimeStatePointContexts.value.map(context => context.row)
 );
-const flowSelection = computed(
-  () => props.flowModel?.runtimeReviewSelection ?? null
+const runtimeReviewContextView = computed(
+  () =>
+    props.flowModel?.runtimeReviewContextView ??
+    createWorkbenchRuntimeReviewContextView({
+      flowModel: props.flowModel,
+      selectedStateCurvePointId: props.selectedStateCurvePointId,
+    })
 );
 const flowSelectedStatePointId = computed(
-  () =>
-    flowSelection.value?.selectedStatePointId ??
-    props.selectedStateCurvePointId
+  () => runtimeReviewContextView.value.selectedStatePointId
 );
 const flowRuntimeFocusSource = computed(
-  () => flowSelection.value?.source ?? ''
+  () => runtimeReviewContextView.value.source
 );
 const flowEditResult = computed(
   () => props.flowModel?.editResult ?? props.actionEditResultContext

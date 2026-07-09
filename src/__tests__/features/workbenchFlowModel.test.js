@@ -9,6 +9,7 @@ import {
   createWorkbenchFlowAction,
   createWorkbenchFlowModel,
   createWorkbenchMainFlowStatusView,
+  createWorkbenchRuntimeReviewContextView,
   createWorkbenchRuntimeReviewFlowView,
   resolveWorkbenchMainFlowActionEditTarget,
   resolveWorkbenchMainFlowResultReturnTarget,
@@ -720,6 +721,60 @@ describe('workbench flow model', () => {
         currentRegion: 'action-edit',
         nextRegion: 'runtime-review',
       },
+    });
+  });
+
+  it('creates a shared runtime review context view', () => {
+    const runtimeProjection = createRuntimeProjectionFixture();
+    const baseModel = createWorkbenchFlowModel({ runtimeProjection });
+    const firstPoint = baseModel.runtimeNavigation.points[0];
+    const selectedModel = createWorkbenchFlowModel({
+      runtimeProjection,
+      selectedStateCurvePointId: firstPoint.statePointId,
+      runtimeFocusSource: 'resource-runtime-curve',
+      runtimeSelectedDetail: {
+        actionId: 'action-0001',
+        statePointId: firstPoint.statePointId,
+        trackLabel: '敌人 HP',
+      },
+    });
+
+    expect(selectedModel.runtimeReviewContextView).toMatchObject({
+      status: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.SELECTED,
+      selectedActionId: 'action-0001',
+      selectedStatePointId: firstPoint.statePointId,
+      source: 'resource-runtime-curve',
+      sourceKind: 'curve',
+      hasSelection: true,
+      hasSelectionState: 'true',
+      detailStatePointId: firstPoint.statePointId,
+      detailSynced: true,
+      detailSyncedState: 'true',
+    });
+
+    expect(
+      createWorkbenchRuntimeReviewContextView({
+        runtimeReviewSelection: {
+          status: WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.SELECTED,
+          selectedActionId: 'action-0001',
+          selectedStatePointId: 'selected-state-point',
+          source: 'event-log-runtime-row',
+          sourceKind: 'log',
+          hasSelection: true,
+        },
+        runtimeDetail: {
+          actionId: 'action-0002',
+          statePointId: 'detail-state-point',
+        },
+      })
+    ).toMatchObject({
+      selectedActionId: 'action-0001',
+      selectedStatePointId: 'selected-state-point',
+      source: 'event-log-runtime-row',
+      sourceKind: 'log',
+      detailStatePointId: 'detail-state-point',
+      detailSynced: false,
+      detailSyncedState: 'false',
     });
   });
 

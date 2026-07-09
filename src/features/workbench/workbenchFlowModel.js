@@ -177,6 +177,11 @@ export function createWorkbenchFlowModel({
     runtimeActionEditTarget,
     runtimeResultReturnTarget: mainFlowState.resultReturnTarget,
   });
+  const runtimeReviewContextView = createWorkbenchRuntimeReviewContextView({
+    runtimeReviewSelection,
+    runtimeDetail,
+    selectedStateCurvePointId,
+  });
   const mainFlowLoopState = createWorkbenchMainFlowLoopState({
     phase,
     mainFlowState,
@@ -206,6 +211,7 @@ export function createWorkbenchFlowModel({
     mainFlowLoopState,
     runtimeReviewSelection,
     runtimeReviewOperations,
+    runtimeReviewContextView,
     runtimeNavigation: {
       points: runtimeNavigationPoints,
       count: runtimeNavigationPoints.length,
@@ -355,6 +361,51 @@ export function createWorkbenchRuntimeReviewFlowView({
       returnResultEnabled: Boolean(returnResult.enabled),
       returnResultEnabledState: returnResult.enabled ? 'true' : 'false',
     },
+  };
+}
+
+export function createWorkbenchRuntimeReviewContextView({
+  flowModel = null,
+  runtimeReviewSelection = null,
+  runtimeDetail = null,
+  selectedStateCurvePointId = '',
+} = {}) {
+  const selection =
+    runtimeReviewSelection ?? flowModel?.runtimeReviewSelection ?? {};
+  const detail = runtimeDetail ?? flowModel?.runtimeDetail ?? null;
+  const detailStatePointId = detail?.statePointId ?? '';
+  const selectedStatePointId =
+    selection.selectedStatePointId ??
+    selectedStateCurvePointId ??
+    flowModel?.selectedStateCurvePointId ??
+    detailStatePointId ??
+    '';
+  const hasSelection = Boolean(selection.hasSelection ?? selectedStatePointId);
+  const detailSynced = Boolean(
+    !detailStatePointId ||
+      !selectedStatePointId ||
+      detailStatePointId === selectedStatePointId
+  );
+
+  return {
+    status:
+      selection.status ?? WORKBENCH_RUNTIME_REVIEW_SELECTION_STATUSES.EMPTY,
+    selectedActionId: selection.selectedActionId ?? detail?.actionId ?? '',
+    selectedStatePointId,
+    pendingActionId: selection.pendingActionId ?? '',
+    pendingStatePointId: selection.pendingStatePointId ?? '',
+    refreshedStatePointId: selection.refreshedStatePointId ?? '',
+    source: selection.source ?? '',
+    sourceKind: selection.sourceKind ?? 'none',
+    hasSelection,
+    hasSelectionState: hasSelection ? 'true' : 'false',
+    hasPendingResult: Boolean(selection.hasPendingResult),
+    hasPendingResultState: selection.hasPendingResult ? 'true' : 'false',
+    overviewActive: Boolean(selection.overviewActive),
+    overviewActiveState: selection.overviewActive ? 'true' : 'false',
+    detailStatePointId,
+    detailSynced,
+    detailSyncedState: detailSynced ? 'true' : 'false',
   };
 }
 

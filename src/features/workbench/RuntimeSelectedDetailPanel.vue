@@ -6,20 +6,20 @@
     :data-flow-edit-result-state-point-id="flowEditResult?.statePointId ?? ''"
     :data-flow-state-point-id="runtimeReviewSelectedStatePointId"
     :data-runtime-review-selection-status="
-      runtimeReviewSelection?.status ?? ''
+      runtimeReviewContextView.status
     "
     :data-runtime-review-selected-action-id="
-      runtimeReviewSelection?.selectedActionId ?? ''
+      runtimeReviewContextView.selectedActionId
     "
     :data-runtime-review-selected-state-point-id="
-      runtimeReviewSelection?.selectedStatePointId ?? ''
+      runtimeReviewContextView.selectedStatePointId
     "
-    :data-runtime-review-source="runtimeReviewSelection?.source ?? ''"
+    :data-runtime-review-source="runtimeReviewContextView.source"
     :data-runtime-review-source-kind="
-      runtimeReviewSelection?.sourceKind ?? ''
+      runtimeReviewContextView.sourceKind
     "
     :data-runtime-review-detail-synced="
-      runtimeReviewDetailSynced ? 'true' : 'false'
+      runtimeReviewContextView.detailSyncedState
     "
     :data-runtime-review-primary-operation-kind="
       runtimeReviewOperations?.primaryOperationKind ?? ''
@@ -231,6 +231,7 @@ import { Aim, DataAnalysis, EditPen } from '@element-plus/icons-vue';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import {
   createWorkbenchFlowRuntimeActionEditTarget,
+  createWorkbenchRuntimeReviewContextView,
   resolveWorkbenchMainFlowActionEditTarget,
   resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
@@ -273,24 +274,19 @@ const runtimeDetailOriginStatePointId = computed(() =>
 const flowEditResult = computed(
   () => props.flowModel?.editResult ?? props.actionEditResultContext
 );
-const runtimeReviewSelection = computed(
-  () => props.flowModel?.runtimeReviewSelection ?? null
-);
 const runtimeReviewOperations = computed(
   () => props.flowModel?.runtimeReviewOperations ?? null
 );
-const runtimeReviewSelectedStatePointId = computed(
+const runtimeReviewContextView = computed(
   () =>
-    runtimeReviewSelection.value?.selectedStatePointId ??
-    props.detail?.statePointId ??
-    ''
+    props.flowModel?.runtimeReviewContextView ??
+    createWorkbenchRuntimeReviewContextView({
+      flowModel: props.flowModel,
+      runtimeDetail: props.detail,
+    })
 );
-const runtimeReviewDetailSynced = computed(
-  () =>
-    !props.detail?.statePointId ||
-    !runtimeReviewSelection.value?.selectedStatePointId ||
-    props.detail.statePointId ===
-      runtimeReviewSelection.value.selectedStatePointId
+const runtimeReviewSelectedStatePointId = computed(
+  () => runtimeReviewContextView.value.selectedStatePointId
 );
 const runtimeDetailActionEditButtonTarget = computed(() =>
   runtimeDetailActionEditCommand.value.target

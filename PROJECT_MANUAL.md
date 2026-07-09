@@ -9772,6 +9772,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查运行结果选择后的状态消费边界，优先把曲线、日志、详情三处的 selected runtime context 读取继续向 shared flow model/view model 收束。
 
+### 2026-07-09：UI 主流程能力块 - Runtime Review Context View
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- `workbenchFlowModel` 新增 `runtimeReviewContextView`，把运行结果查看阶段的选中动作、选中状态点、来源类型、待返回结果和详情同步状态收束为同一个读取入口。
+- `ResourceMonitorPanel`、`EventLogPanel`、`RuntimeSelectedDetailPanel` 改为消费共享 context view，曲线点、日志行和详情面板对同一次运行结果选择的理解保持一致。
+- 本阶段只调整主流程状态消费边界，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- flow model 单测覆盖共享 `runtimeReviewContextView` 的 selected / detail synced 状态。
+- Workbench 页面测试确认日志选择、资源曲线选择和三值详情面板仍能联动到同一状态点。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、67 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、227 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：做 Workbench 端到端主流程闭环检查，围绕“排轴动作编辑 -> 运行模拟 -> 曲线/日志/详情查看 -> 回到动作修改”补齐真正影响完整体验的入口和状态边界，不再拆小标签阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

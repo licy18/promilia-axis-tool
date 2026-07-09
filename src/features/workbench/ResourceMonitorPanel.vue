@@ -3,15 +3,15 @@
     class="panel resource-monitor-panel"
     :data-flow-phase="flowModel?.phase ?? ''"
     :data-flow-state-point-id="flowSelectedStatePointId"
-    :data-runtime-review-selection-status="flowSelection?.status ?? ''"
+    :data-runtime-review-selection-status="runtimeReviewContextView.status"
     :data-runtime-review-selected-action-id="
-      flowSelection?.selectedActionId ?? ''
+      runtimeReviewContextView.selectedActionId
     "
     :data-runtime-review-selected-state-point-id="
-      flowSelection?.selectedStatePointId ?? ''
+      runtimeReviewContextView.selectedStatePointId
     "
-    :data-runtime-review-source="flowSelection?.source ?? ''"
-    :data-runtime-review-source-kind="flowSelection?.sourceKind ?? ''"
+    :data-runtime-review-source="runtimeReviewContextView.source"
+    :data-runtime-review-source-kind="runtimeReviewContextView.sourceKind"
   >
     <div class="panel-title">
       <TrendCharts class="panel-icon" />
@@ -363,6 +363,7 @@ import {
 } from './runtimeProjectionPoints';
 import {
   createWorkbenchFlowRuntimeActionEditTarget,
+  createWorkbenchRuntimeReviewContextView,
   resolveWorkbenchMainFlowActionEditTarget,
   resolveWorkbenchMainFlowResultReturnTarget,
 } from './workbenchFlowModel';
@@ -460,17 +461,20 @@ const runtimeActorEnergyRows = computed(() =>
   getRuntimeResourceCurveRows(props.runtimeProjection)
 );
 
-const flowSelection = computed(
-  () => props.flowModel?.runtimeReviewSelection ?? null
+const runtimeReviewContextView = computed(
+  () =>
+    props.flowModel?.runtimeReviewContextView ??
+    createWorkbenchRuntimeReviewContextView({
+      flowModel: props.flowModel,
+      selectedStateCurvePointId: props.selectedStateCurvePointId,
+    })
 );
 const flowSelectedStatePointId = computed(
-  () =>
-    flowSelection.value?.selectedStatePointId ??
-    props.selectedStateCurvePointId
+  () => runtimeReviewContextView.value.selectedStatePointId
 );
 
 const flowRuntimeFocusSource = computed(
-  () => flowSelection.value?.source ?? props.runtimeFocusSource
+  () => runtimeReviewContextView.value.source || props.runtimeFocusSource
 );
 
 const flowEditResult = computed(

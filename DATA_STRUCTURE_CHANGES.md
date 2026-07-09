@@ -20722,3 +20722,53 @@ resolver 会先调用对应的 `mainFlowCommandSurface.create*` 工厂；如果�
 - `npm run test -- --run`：通过，35 个测试文件、226 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `git diff --check`：通过；仅有 Git 换行转换提示。
+
+## 279. UI 主流程能力块：Runtime Review Context View
+
+### 279.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+`createWorkbenchFlowModel()` 新增内部 UI view：
+
+```js
+runtimeReviewContextView
+```
+
+该 view 统一承载运行结果查看阶段的选择上下文：
+
+```js
+{
+  status,
+  selectedActionId,
+  selectedStatePointId,
+  pendingActionId,
+  pendingStatePointId,
+  refreshedStatePointId,
+  source,
+  sourceKind,
+  hasSelection,
+  hasSelectionState,
+  hasPendingResult,
+  hasPendingResultState,
+  overviewActive,
+  overviewActiveState,
+  detailStatePointId,
+  detailSynced,
+  detailSyncedState,
+}
+```
+
+`ResourceMonitorPanel`、`EventLogPanel`、`RuntimeSelectedDetailPanel` 改为读取该 view，而不是分别读取 `runtimeReviewSelection` 或自行判断详情同步状态。
+
+### 279.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程的运行结果查看上下文读取入口，不新增持久字段，不需要数据迁移。
+
+### 279.3 验证
+
+- 更新 `src/__tests__/features/workbenchFlowModel.test.js`，覆盖共享 runtime review context view 的选中状态和详情同步状态。
+- `npm run test -- --run src/__tests__/features/workbenchFlowModel.test.js src/__tests__/features/RuntimeSelectedDetailPanel.test.js src/__tests__/views/Workbench.test.js`：通过，3 个测试文件、67 条测试。
+- `npm run test -- --run`：通过，35 个测试文件、227 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。
