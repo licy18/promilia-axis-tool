@@ -95,6 +95,81 @@ export function createWorkbenchFlowContractContext({
         runtimeSummary.replaceableValueSourceSlotCount
     ),
     generationReadSourcesStatus: runtimeInputGenerationReadSources.status ?? '',
+    generationOutputBoundaryStatus:
+      runtimeInput?.generationOutputBoundaryStatus ??
+      runtimeInput?.summary?.generationOutputBoundaryStatus ??
+      runtimeInputGenerationReadSources.generationOutputBoundaryStatus ??
+      runtimeSummary.runtimeInputGenerationOutputBoundaryStatus ??
+      '',
+    generationOutputBoundaryReady: Boolean(
+      runtimeInput?.generationOutputBoundaryReady ??
+      runtimeInput?.summary?.generationOutputBoundaryReady ??
+      runtimeInputGenerationReadSources.generationOutputBoundaryReady ??
+      runtimeSummary.runtimeInputGenerationOutputBoundaryReady
+    ),
+    generationOutputBoundaryPath:
+      runtimeInput?.generationOutputBoundaryPath ??
+      runtimeInput?.summary?.generationOutputBoundaryPath ??
+      runtimeInputGenerationReadSources.generationOutputBoundaryPath ??
+      runtimeSummary.runtimeInputGenerationOutputBoundaryPath ??
+      '',
+    generationOutputBoundaryEntryPath:
+      runtimeInput?.generationOutputBoundaryEntryPath ??
+      runtimeInput?.summary?.generationOutputBoundaryEntryPath ??
+      runtimeInputGenerationReadSources.generationOutputBoundaryEntryPath ??
+      runtimeSummary.runtimeInputGenerationOutputBoundaryEntryPath ??
+      '',
+    generationOutputBoundaryRuntimeInputSourcePath:
+      runtimeInput?.generationOutputBoundaryRuntimeInputSourcePath ??
+      runtimeInput?.summary?.generationOutputBoundaryRuntimeInputSourcePath ??
+      runtimeInputGenerationReadSources
+        .generationOutputBoundaryRuntimeInputSourcePath ??
+      runtimeSummary
+        .runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath ??
+      '',
+    generationOutputBoundaryStandardContractPath:
+      runtimeInput?.generationOutputBoundaryStandardContractPath ??
+      runtimeInput?.summary?.generationOutputBoundaryStandardContractPath ??
+      runtimeInputGenerationReadSources
+        .generationOutputBoundaryStandardContractPath ??
+      runtimeSummary
+        .runtimeInputGenerationOutputBoundaryStandardContractPath ??
+      '',
+    generationOutputBoundaryDeltasPath:
+      runtimeInput?.generationOutputBoundaryDeltasPath ??
+      runtimeInput?.summary?.generationOutputBoundaryDeltasPath ??
+      runtimeInputGenerationReadSources.generationOutputBoundaryDeltasPath ??
+      runtimeSummary.runtimeInputGenerationOutputBoundaryDeltasPath ??
+      '',
+    generationOutputBoundaryValueSourceSlotsPath:
+      runtimeInput?.generationOutputBoundaryValueSourceSlotsPath ??
+      runtimeInput?.summary?.generationOutputBoundaryValueSourceSlotsPath ??
+      runtimeInputGenerationReadSources
+        .generationOutputBoundaryValueSourceSlotsPath ??
+      runtimeSummary
+        .runtimeInputGenerationOutputBoundaryValueSourceSlotsPath ??
+      '',
+    generationOutputBoundaryContractValidationPath:
+      runtimeInput?.generationOutputBoundaryContractValidationPath ??
+      runtimeInput?.summary?.generationOutputBoundaryContractValidationPath ??
+      runtimeInputGenerationReadSources
+        .generationOutputBoundaryContractValidationPath ??
+      runtimeSummary
+        .runtimeInputGenerationOutputBoundaryContractValidationPath ??
+      '',
+    generationOutputBoundaryStandardOutputCount: numberOrZero(
+      runtimeInput?.generationOutputBoundaryStandardOutputCount ??
+        runtimeInput?.summary?.generationOutputBoundaryStandardOutputCount ??
+        runtimeInputGenerationReadSources
+          .generationOutputBoundaryStandardOutputCount ??
+        runtimeSummary.runtimeInputGenerationOutputBoundaryStandardOutputCount
+    ),
+    generationOutputBoundaryIssueCount: numberOrZero(
+      runtimeInput?.generationOutputBoundaryIssueCount ??
+        runtimeInput?.summary?.generationOutputBoundaryIssueCount ??
+        runtimeInputGenerationReadSources.generationOutputBoundaryIssueCount ??
+        runtimeSummary.runtimeInputGenerationOutputBoundaryIssueCount
+    ),
     generationReadStandardOutputCount: numberOrZero(
       runtimeInputGenerationReadSources.standardOutputCount
     ),
@@ -262,6 +337,55 @@ export function createWorkbenchFlowContractContext({
       outputSummary.runtimeInputGenerationValueSourceSlotsStandardOutputPresent ??
       runtimeSummary.runtimeInputGenerationValueSourceSlotsStandardOutputPresent
     ),
+    generationOutputBoundaryStatus:
+      outputSummary.runtimeInputGenerationOutputBoundaryStatus ??
+      runtimeSummary.runtimeInputGenerationOutputBoundaryStatus ??
+      '',
+    generationOutputBoundaryReady: Boolean(
+      outputSummary.runtimeInputGenerationOutputBoundaryReady ??
+      runtimeSummary.runtimeInputGenerationOutputBoundaryReady
+    ),
+    generationOutputBoundaryPath:
+      outputSummary.runtimeInputGenerationOutputBoundaryPath ??
+      runtimeSummary.runtimeInputGenerationOutputBoundaryPath ??
+      '',
+    generationOutputBoundaryEntryPath:
+      outputSummary.runtimeInputGenerationOutputBoundaryEntryPath ??
+      runtimeSummary.runtimeInputGenerationOutputBoundaryEntryPath ??
+      '',
+    generationOutputBoundaryRuntimeInputSourcePath:
+      outputSummary
+        .runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath ??
+      runtimeSummary.runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath ??
+      '',
+    generationOutputBoundaryStandardContractPath:
+      outputSummary
+        .runtimeInputGenerationOutputBoundaryStandardContractPath ??
+      runtimeSummary
+        .runtimeInputGenerationOutputBoundaryStandardContractPath ??
+      '',
+    generationOutputBoundaryDeltasPath:
+      outputSummary.runtimeInputGenerationOutputBoundaryDeltasPath ??
+      runtimeSummary.runtimeInputGenerationOutputBoundaryDeltasPath ??
+      '',
+    generationOutputBoundaryValueSourceSlotsPath:
+      outputSummary.runtimeInputGenerationOutputBoundaryValueSourceSlotsPath ??
+      runtimeSummary.runtimeInputGenerationOutputBoundaryValueSourceSlotsPath ??
+      '',
+    generationOutputBoundaryContractValidationPath:
+      outputSummary
+        .runtimeInputGenerationOutputBoundaryContractValidationPath ??
+      runtimeSummary
+        .runtimeInputGenerationOutputBoundaryContractValidationPath ??
+      '',
+    generationOutputBoundaryStandardOutputCount: numberOrZero(
+      outputSummary.runtimeInputGenerationOutputBoundaryStandardOutputCount ??
+        runtimeSummary.runtimeInputGenerationOutputBoundaryStandardOutputCount
+    ),
+    generationOutputBoundaryIssueCount: numberOrZero(
+      outputSummary.runtimeInputGenerationOutputBoundaryIssueCount ??
+        runtimeSummary.runtimeInputGenerationOutputBoundaryIssueCount
+    ),
     outputConsistencyStatus:
       outputSummary.outputConsistencyStatus ?? outputConsistency.status ?? '',
     outputConsistent: Boolean(
@@ -341,11 +465,22 @@ function createWorkbenchRuntimeContractBoundary({
   runtimeInput = {},
   runtimeOutput = {},
 } = {}) {
+  const generationOutputBoundaryKnown = Boolean(
+    runtimeInput.generationOutputBoundaryStatus ||
+      runtimeOutput.generationOutputBoundaryStatus
+  );
+  const generationOutputBoundaryReady = generationOutputBoundaryKnown
+    ? Boolean(
+        runtimeInput.generationOutputBoundaryReady ??
+          runtimeOutput.generationOutputBoundaryReady
+      )
+    : true;
   const generationStandardReady =
-    Boolean(runtimeInput.generationStandardBoundaryReady) ||
-    (runtimeInput.generationReadStandardOutputCount >= 5 &&
-      runtimeInput.generationEntryContractValidationValid &&
-      !runtimeInput.generationReadUsesLegacyFallback);
+    generationOutputBoundaryReady &&
+    (Boolean(runtimeInput.generationStandardBoundaryReady) ||
+      (runtimeInput.generationReadStandardOutputCount >= 5 &&
+        runtimeInput.generationEntryContractValidationValid &&
+        !runtimeInput.generationReadUsesLegacyFallback));
   const runtimeOutputStandardReady =
     Boolean(runtimeOutput.outputConsumerBoundaryStandardReady) ||
     (runtimeOutput.outputReadStandardOutputCount >= 4 &&
@@ -402,6 +537,52 @@ function createWorkbenchRuntimeContractBoundary({
     usesLegacyFallbackState: usesLegacyFallback ? 'true' : 'false',
     fallbackCount,
     generationReadSourcesStatus: runtimeInput.generationReadSourcesStatus ?? '',
+    generationOutputBoundaryStatus:
+      runtimeInput.generationOutputBoundaryStatus ??
+      runtimeOutput.generationOutputBoundaryStatus ??
+      '',
+    generationOutputBoundaryReady:
+      generationOutputBoundaryKnown && generationOutputBoundaryReady,
+    generationOutputBoundaryReadyState:
+      generationOutputBoundaryKnown && generationOutputBoundaryReady
+        ? 'true'
+        : 'false',
+    generationOutputBoundaryPath:
+      runtimeInput.generationOutputBoundaryPath ??
+      runtimeOutput.generationOutputBoundaryPath ??
+      '',
+    generationOutputBoundaryEntryPath:
+      runtimeInput.generationOutputBoundaryEntryPath ??
+      runtimeOutput.generationOutputBoundaryEntryPath ??
+      '',
+    generationOutputBoundaryRuntimeInputSourcePath:
+      runtimeInput.generationOutputBoundaryRuntimeInputSourcePath ??
+      runtimeOutput.generationOutputBoundaryRuntimeInputSourcePath ??
+      '',
+    generationOutputBoundaryStandardContractPath:
+      runtimeInput.generationOutputBoundaryStandardContractPath ??
+      runtimeOutput.generationOutputBoundaryStandardContractPath ??
+      '',
+    generationOutputBoundaryDeltasPath:
+      runtimeInput.generationOutputBoundaryDeltasPath ??
+      runtimeOutput.generationOutputBoundaryDeltasPath ??
+      '',
+    generationOutputBoundaryValueSourceSlotsPath:
+      runtimeInput.generationOutputBoundaryValueSourceSlotsPath ??
+      runtimeOutput.generationOutputBoundaryValueSourceSlotsPath ??
+      '',
+    generationOutputBoundaryContractValidationPath:
+      runtimeInput.generationOutputBoundaryContractValidationPath ??
+      runtimeOutput.generationOutputBoundaryContractValidationPath ??
+      '',
+    generationOutputBoundaryStandardOutputCount: numberOrZero(
+      runtimeInput.generationOutputBoundaryStandardOutputCount ??
+        runtimeOutput.generationOutputBoundaryStandardOutputCount
+    ),
+    generationOutputBoundaryIssueCount: numberOrZero(
+      runtimeInput.generationOutputBoundaryIssueCount ??
+        runtimeOutput.generationOutputBoundaryIssueCount
+    ),
     runtimeOutputReadSourcesStatus: runtimeOutput.outputReadSourcesStatus ?? '',
     runtimeOutputConsumerBoundaryStatus:
       runtimeOutput.outputConsumerBoundaryStatus ?? '',

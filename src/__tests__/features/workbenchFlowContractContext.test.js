@@ -77,6 +77,25 @@ describe('workbench flow contract context', () => {
             standardOutputCount: 6,
             fallbackInputCount: 0,
             usesLegacyGenerationFallback: false,
+            generationOutputBoundaryStatus:
+              'generation-output-boundary-ready',
+            generationOutputBoundaryReady: true,
+            generationOutputBoundaryPath:
+              'generationOutputs.standardOutputBoundary',
+            generationOutputBoundaryEntryPath:
+              'generationOutputs.outputs.generationEntry',
+            generationOutputBoundaryRuntimeInputSourcePath:
+              'generationOutputs.outputs.generationEntry.runtimeInputSource',
+            generationOutputBoundaryStandardContractPath:
+              'generationOutputs.outputs.generationEntry.standardContract',
+            generationOutputBoundaryDeltasPath:
+              'generationOutputs.outputs.generationEntry.deltas',
+            generationOutputBoundaryValueSourceSlotsPath:
+              'generationOutputs.outputs.generationEntry.valueSourceSlots',
+            generationOutputBoundaryContractValidationPath:
+              'generationOutputs.outputs.generationEntry.contractValidation',
+            generationOutputBoundaryStandardOutputCount: 6,
+            generationOutputBoundaryIssueCount: 0,
             standardGenerationBoundaryReady: true,
             generationEntryContractValidationStatus:
               'generation-entry-contract-valid',
@@ -121,6 +140,25 @@ describe('workbench flow contract context', () => {
             valueSourceSlotCount: 12,
             runtimeValueSourceSlotCount: 3,
             replaceableValueSourceSlotCount: 9,
+            generationOutputBoundaryStatus:
+              'generation-output-boundary-ready',
+            generationOutputBoundaryReady: true,
+            generationOutputBoundaryPath:
+              'generationOutputs.standardOutputBoundary',
+            generationOutputBoundaryEntryPath:
+              'generationOutputs.outputs.generationEntry',
+            generationOutputBoundaryRuntimeInputSourcePath:
+              'generationOutputs.outputs.generationEntry.runtimeInputSource',
+            generationOutputBoundaryStandardContractPath:
+              'generationOutputs.outputs.generationEntry.standardContract',
+            generationOutputBoundaryDeltasPath:
+              'generationOutputs.outputs.generationEntry.deltas',
+            generationOutputBoundaryValueSourceSlotsPath:
+              'generationOutputs.outputs.generationEntry.valueSourceSlots',
+            generationOutputBoundaryContractValidationPath:
+              'generationOutputs.outputs.generationEntry.contractValidation',
+            generationOutputBoundaryStandardOutputCount: 6,
+            generationOutputBoundaryIssueCount: 0,
             runtimeInputGenerationValueSourceSlotsPath:
               'generationOutputs.outputs.generationEntry.valueSourceSlots',
             runtimeInputGenerationValueSourceSlotsSourceTier: 'standard-output',
@@ -202,6 +240,25 @@ describe('workbench flow contract context', () => {
           valueSourceSlotCount: 12,
           runtimeValueSourceSlotCount: 3,
           replaceableValueSourceSlotCount: 9,
+          runtimeInputGenerationOutputBoundaryStatus:
+            'generation-output-boundary-ready',
+          runtimeInputGenerationOutputBoundaryReady: true,
+          runtimeInputGenerationOutputBoundaryPath:
+            'generationOutputs.standardOutputBoundary',
+          runtimeInputGenerationOutputBoundaryEntryPath:
+            'generationOutputs.outputs.generationEntry',
+          runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath:
+            'generationOutputs.outputs.generationEntry.runtimeInputSource',
+          runtimeInputGenerationOutputBoundaryStandardContractPath:
+            'generationOutputs.outputs.generationEntry.standardContract',
+          runtimeInputGenerationOutputBoundaryDeltasPath:
+            'generationOutputs.outputs.generationEntry.deltas',
+          runtimeInputGenerationOutputBoundaryValueSourceSlotsPath:
+            'generationOutputs.outputs.generationEntry.valueSourceSlots',
+          runtimeInputGenerationOutputBoundaryContractValidationPath:
+            'generationOutputs.outputs.generationEntry.contractValidation',
+          runtimeInputGenerationOutputBoundaryStandardOutputCount: 6,
+          runtimeInputGenerationOutputBoundaryIssueCount: 0,
           runtimeInputGenerationValueSourceSlotsPath:
             'generationOutputs.outputs.generationEntry.valueSourceSlots',
           runtimeInputGenerationValueSourceSlotsSourceTier: 'standard-output',
@@ -261,6 +318,23 @@ describe('workbench flow contract context', () => {
         replaceableValueSourceSlotCount: 9,
         generationReadSourcesStatus:
           'runtime-input-generation-read-sources-ready',
+        generationOutputBoundaryStatus: 'generation-output-boundary-ready',
+        generationOutputBoundaryReady: true,
+        generationOutputBoundaryPath: 'generationOutputs.standardOutputBoundary',
+        generationOutputBoundaryEntryPath:
+          'generationOutputs.outputs.generationEntry',
+        generationOutputBoundaryRuntimeInputSourcePath:
+          'generationOutputs.outputs.generationEntry.runtimeInputSource',
+        generationOutputBoundaryStandardContractPath:
+          'generationOutputs.outputs.generationEntry.standardContract',
+        generationOutputBoundaryDeltasPath:
+          'generationOutputs.outputs.generationEntry.deltas',
+        generationOutputBoundaryValueSourceSlotsPath:
+          'generationOutputs.outputs.generationEntry.valueSourceSlots',
+        generationOutputBoundaryContractValidationPath:
+          'generationOutputs.outputs.generationEntry.contractValidation',
+        generationOutputBoundaryStandardOutputCount: 6,
+        generationOutputBoundaryIssueCount: 0,
         generationReadStandardOutputCount: 6,
         generationReadFallbackInputCount: 0,
         generationReadUsesLegacyFallback: false,
@@ -334,6 +408,23 @@ describe('workbench flow contract context', () => {
           'generationOutputs.outputs.generationEntry.valueSourceSlots',
         valueSourceSlotsSourceTier: 'standard-output',
         valueSourceSlotsStandardOutputPresent: true,
+        generationOutputBoundaryStatus: 'generation-output-boundary-ready',
+        generationOutputBoundaryReady: true,
+        generationOutputBoundaryPath: 'generationOutputs.standardOutputBoundary',
+        generationOutputBoundaryEntryPath:
+          'generationOutputs.outputs.generationEntry',
+        generationOutputBoundaryRuntimeInputSourcePath:
+          'generationOutputs.outputs.generationEntry.runtimeInputSource',
+        generationOutputBoundaryStandardContractPath:
+          'generationOutputs.outputs.generationEntry.standardContract',
+        generationOutputBoundaryDeltasPath:
+          'generationOutputs.outputs.generationEntry.deltas',
+        generationOutputBoundaryValueSourceSlotsPath:
+          'generationOutputs.outputs.generationEntry.valueSourceSlots',
+        generationOutputBoundaryContractValidationPath:
+          'generationOutputs.outputs.generationEntry.contractValidation',
+        generationOutputBoundaryStandardOutputCount: 6,
+        generationOutputBoundaryIssueCount: 0,
         outputConsistencyStatus: 'runtime-output-consistent',
         outputConsistent: true,
         ready: true,
@@ -359,6 +450,24 @@ describe('workbench flow contract context', () => {
         fallbackCount: 0,
         generationReadSourcesStatus:
           'runtime-input-generation-read-sources-ready',
+        generationOutputBoundaryStatus: 'generation-output-boundary-ready',
+        generationOutputBoundaryReady: true,
+        generationOutputBoundaryReadyState: 'true',
+        generationOutputBoundaryPath: 'generationOutputs.standardOutputBoundary',
+        generationOutputBoundaryEntryPath:
+          'generationOutputs.outputs.generationEntry',
+        generationOutputBoundaryRuntimeInputSourcePath:
+          'generationOutputs.outputs.generationEntry.runtimeInputSource',
+        generationOutputBoundaryStandardContractPath:
+          'generationOutputs.outputs.generationEntry.standardContract',
+        generationOutputBoundaryDeltasPath:
+          'generationOutputs.outputs.generationEntry.deltas',
+        generationOutputBoundaryValueSourceSlotsPath:
+          'generationOutputs.outputs.generationEntry.valueSourceSlots',
+        generationOutputBoundaryContractValidationPath:
+          'generationOutputs.outputs.generationEntry.contractValidation',
+        generationOutputBoundaryStandardOutputCount: 6,
+        generationOutputBoundaryIssueCount: 0,
         runtimeOutputReadSourcesStatus: 'runtime-output-read-sources-ready',
         runtimeOutputConsumerBoundaryStatus:
           'runtime-output-consumer-boundary-standard',

@@ -13446,6 +13446,25 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 进入运行时层：让 runtime output / Workbench contract context 消费新的 generation output boundary 摘要，主流程可直接诊断生成入口是否标准、是否发生旧回退；仍不追真实公式、真实倍率或测试期数值平衡。
 
+### 2026-07-10：运行时层 - 标准生成边界消费
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- runtime outputs 现在正式透出 generation output boundary 摘要，包含边界 ready 状态、标准输出数量、issue 数量以及 generation entry / runtime input source / standard contract / deltas / value source slots 的标准路径。
+- Workbench contract context 和 runtime output consistency view 现在消费同一套边界摘要；主流程可以判断当前是否走标准生成入口，存在 boundary 时也会把 boundary ready 纳入标准边界判断。
+- 本阶段不改变三值计算结果、公式、倍率、applied delta 筛选、运行日志行、曲线数值、UI 文案或草稿保存 schema。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `338. 运行时与 Workbench 标准生成边界消费：Runtime Generation Boundary Consumption`。
+
+验收结果：
+
+- `npm run test -- --run src\__tests__\features\workbenchFlowContractContext.test.js src\__tests__\features\workbenchFlowModel.test.js src\__tests__\simulation\threeValueRuntimeProjection.test.js`：通过，3 个测试文件、17 条测试。
+
+下一步：
+
+- 进入 UI 主流程：把 contract boundary 状态用于 Workbench 主流程的诊断/定位能力，让用户能在运行结果里确认当前标准合同链路是否完整；仍不新增微型状态文案，不追真实公式或真实倍率。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

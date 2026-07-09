@@ -157,6 +157,33 @@ function createThreeValueRuntimeOutputs({
       selfEnergyDelta: outputContract.summary.selfEnergyDelta,
       runtimeInputGenerationReadSourcesStatus:
         outputContract.summary.runtimeInputGenerationReadSourcesStatus,
+      runtimeInputGenerationOutputBoundaryStatus:
+        outputContract.summary.runtimeInputGenerationOutputBoundaryStatus,
+      runtimeInputGenerationOutputBoundaryReady:
+        outputContract.summary.runtimeInputGenerationOutputBoundaryReady,
+      runtimeInputGenerationOutputBoundaryPath:
+        outputContract.summary.runtimeInputGenerationOutputBoundaryPath,
+      runtimeInputGenerationOutputBoundaryEntryPath:
+        outputContract.summary.runtimeInputGenerationOutputBoundaryEntryPath,
+      runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath:
+        outputContract.summary
+          .runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath,
+      runtimeInputGenerationOutputBoundaryStandardContractPath:
+        outputContract.summary
+          .runtimeInputGenerationOutputBoundaryStandardContractPath,
+      runtimeInputGenerationOutputBoundaryDeltasPath:
+        outputContract.summary.runtimeInputGenerationOutputBoundaryDeltasPath,
+      runtimeInputGenerationOutputBoundaryValueSourceSlotsPath:
+        outputContract.summary
+          .runtimeInputGenerationOutputBoundaryValueSourceSlotsPath,
+      runtimeInputGenerationOutputBoundaryContractValidationPath:
+        outputContract.summary
+          .runtimeInputGenerationOutputBoundaryContractValidationPath,
+      runtimeInputGenerationOutputBoundaryStandardOutputCount:
+        outputContract.summary
+          .runtimeInputGenerationOutputBoundaryStandardOutputCount,
+      runtimeInputGenerationOutputBoundaryIssueCount:
+        outputContract.summary.runtimeInputGenerationOutputBoundaryIssueCount,
       runtimeInputGenerationReadStandardOutputCount:
         outputContract.summary.runtimeInputGenerationReadStandardOutputCount,
       runtimeInputGenerationReadFallbackInputCount:
@@ -477,6 +504,8 @@ function createRuntimeSummaryOutputContract(summary) {
       'valueSourceSlotCount',
       'runtimeValueSourceSlotCount',
       'replaceableValueSourceSlotCount',
+      'runtimeInputGenerationOutputBoundaryStandardOutputCount',
+      'runtimeInputGenerationOutputBoundaryIssueCount',
     ],
     sourceFields: [
       'runtimeInputSourceKind',
@@ -486,6 +515,14 @@ function createRuntimeSummaryOutputContract(summary) {
       'runtimeGenerationEntryStatus',
       'runtimeGenerationLayerSourceKind',
       'runtimeGenerationLayerStatus',
+      'runtimeInputGenerationOutputBoundaryStatus',
+      'runtimeInputGenerationOutputBoundaryPath',
+      'runtimeInputGenerationOutputBoundaryEntryPath',
+      'runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath',
+      'runtimeInputGenerationOutputBoundaryStandardContractPath',
+      'runtimeInputGenerationOutputBoundaryDeltasPath',
+      'runtimeInputGenerationOutputBoundaryValueSourceSlotsPath',
+      'runtimeInputGenerationOutputBoundaryContractValidationPath',
       'runtimeInputGenerationValueSourceSlotsPath',
       'runtimeInputGenerationValueSourceSlotsSourceTier',
     ],

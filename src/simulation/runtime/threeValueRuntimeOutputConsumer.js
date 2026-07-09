@@ -141,6 +141,54 @@ export function createThreeValueRuntimeOutputConsumerContract({
       selfEnergyDelta: numberOrZero(
         summary.selfEnergyDelta ?? contractSummary.selfEnergyDelta
       ),
+      runtimeInputGenerationOutputBoundaryStatus:
+        summary.runtimeInputGenerationOutputBoundaryStatus ??
+        contractSummary.runtimeInputGenerationOutputBoundaryStatus ??
+        '',
+      runtimeInputGenerationOutputBoundaryReady: Boolean(
+        summary.runtimeInputGenerationOutputBoundaryReady ??
+          contractSummary.runtimeInputGenerationOutputBoundaryReady
+      ),
+      runtimeInputGenerationOutputBoundaryPath:
+        summary.runtimeInputGenerationOutputBoundaryPath ??
+        contractSummary.runtimeInputGenerationOutputBoundaryPath ??
+        '',
+      runtimeInputGenerationOutputBoundaryEntryPath:
+        summary.runtimeInputGenerationOutputBoundaryEntryPath ??
+        contractSummary.runtimeInputGenerationOutputBoundaryEntryPath ??
+        '',
+      runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath:
+        summary.runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath ??
+        contractSummary
+          .runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath ??
+        '',
+      runtimeInputGenerationOutputBoundaryStandardContractPath:
+        summary.runtimeInputGenerationOutputBoundaryStandardContractPath ??
+        contractSummary
+          .runtimeInputGenerationOutputBoundaryStandardContractPath ??
+        '',
+      runtimeInputGenerationOutputBoundaryDeltasPath:
+        summary.runtimeInputGenerationOutputBoundaryDeltasPath ??
+        contractSummary.runtimeInputGenerationOutputBoundaryDeltasPath ??
+        '',
+      runtimeInputGenerationOutputBoundaryValueSourceSlotsPath:
+        summary.runtimeInputGenerationOutputBoundaryValueSourceSlotsPath ??
+        contractSummary
+          .runtimeInputGenerationOutputBoundaryValueSourceSlotsPath ??
+        '',
+      runtimeInputGenerationOutputBoundaryContractValidationPath:
+        summary.runtimeInputGenerationOutputBoundaryContractValidationPath ??
+        contractSummary
+          .runtimeInputGenerationOutputBoundaryContractValidationPath ??
+        '',
+      runtimeInputGenerationOutputBoundaryStandardOutputCount: numberOrZero(
+        summary.runtimeInputGenerationOutputBoundaryStandardOutputCount ??
+          contractSummary.runtimeInputGenerationOutputBoundaryStandardOutputCount
+      ),
+      runtimeInputGenerationOutputBoundaryIssueCount: numberOrZero(
+        summary.runtimeInputGenerationOutputBoundaryIssueCount ??
+          contractSummary.runtimeInputGenerationOutputBoundaryIssueCount
+      ),
       outputConsistencyStatus,
       outputConsistent: Boolean(
         summary.outputConsistent ?? outputConsistency?.consistent

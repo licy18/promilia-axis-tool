@@ -386,6 +386,37 @@ export function createWorkbenchRuntimeOutputConsistencyView({
     ),
     runtimeContractGenerationAggregateReadyState:
       runtimeContractBoundary.generationAggregateReady ? 'true' : 'false',
+    runtimeContractGenerationOutputBoundaryStatus:
+      runtimeContractBoundary.generationOutputBoundaryStatus ?? '',
+    runtimeContractGenerationOutputBoundaryReady: Boolean(
+      runtimeContractBoundary.generationOutputBoundaryReady
+    ),
+    runtimeContractGenerationOutputBoundaryReadyState:
+      runtimeContractBoundary.generationOutputBoundaryReady ? 'true' : 'false',
+    runtimeContractGenerationOutputBoundaryPath:
+      runtimeContractBoundary.generationOutputBoundaryPath ?? '',
+    runtimeContractGenerationOutputBoundaryEntryPath:
+      runtimeContractBoundary.generationOutputBoundaryEntryPath ?? '',
+    runtimeContractGenerationOutputBoundaryRuntimeInputSourcePath:
+      runtimeContractBoundary.generationOutputBoundaryRuntimeInputSourcePath ??
+      '',
+    runtimeContractGenerationOutputBoundaryStandardContractPath:
+      runtimeContractBoundary.generationOutputBoundaryStandardContractPath ??
+      '',
+    runtimeContractGenerationOutputBoundaryDeltasPath:
+      runtimeContractBoundary.generationOutputBoundaryDeltasPath ?? '',
+    runtimeContractGenerationOutputBoundaryValueSourceSlotsPath:
+      runtimeContractBoundary.generationOutputBoundaryValueSourceSlotsPath ??
+      '',
+    runtimeContractGenerationOutputBoundaryContractValidationPath:
+      runtimeContractBoundary.generationOutputBoundaryContractValidationPath ??
+      '',
+    runtimeContractGenerationOutputBoundaryStandardOutputCount: numberOrZero(
+      runtimeContractBoundary.generationOutputBoundaryStandardOutputCount
+    ),
+    runtimeContractGenerationOutputBoundaryIssueCount: numberOrZero(
+      runtimeContractBoundary.generationOutputBoundaryIssueCount
+    ),
     runtimeContractGenerationAggregateValidationStatus:
       runtimeContractBoundary.generationEntryAggregateValidationStatus ?? '',
     runtimeContractGenerationAggregateValidationValid: Boolean(

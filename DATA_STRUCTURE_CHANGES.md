@@ -24197,3 +24197,93 @@ runtimeInputGenerationOutputBoundaryIssueCount
 - `threeValueRuntimeProjection.test.js` 覆盖 runtime projection 保持标准 generation outputs 消费路径。
 - `firstVerticalSliceSimulation.test.js` 覆盖真实纵切路径中 generation outputs、generation bundle summary 和 runtime summary 均透出标准输出边界。
 - `npm run test -- --run src\__tests__\simulation\threeValueGenerationBuilder.test.js src\__tests__\simulation\actionHitThreeValueRuntimeInput.test.js src\__tests__\simulation\threeValueRuntimeProjection.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过，4 个测试文件、27 条测试。
+
+## 338. 运行时与 Workbench 标准生成边界消费：Runtime Generation Boundary Consumption
+
+### 338.1 字段变化
+
+`runtimeOutputs.outputSummary` 现在直接透出 runtime projection summary 中的生成边界字段：
+
+```text
+runtimeInputGenerationOutputBoundaryStatus
+runtimeInputGenerationOutputBoundaryReady
+runtimeInputGenerationOutputBoundaryPath
+runtimeInputGenerationOutputBoundaryEntryPath
+runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath
+runtimeInputGenerationOutputBoundaryStandardContractPath
+runtimeInputGenerationOutputBoundaryDeltasPath
+runtimeInputGenerationOutputBoundaryValueSourceSlotsPath
+runtimeInputGenerationOutputBoundaryContractValidationPath
+runtimeInputGenerationOutputBoundaryStandardOutputCount
+runtimeInputGenerationOutputBoundaryIssueCount
+```
+
+`runtimeOutputContract.outputs.summary.countFields` 新增：
+
+```text
+runtimeInputGenerationOutputBoundaryStandardOutputCount
+runtimeInputGenerationOutputBoundaryIssueCount
+```
+
+`runtimeOutputContract.outputs.summary.sourceFields` 新增：
+
+```text
+runtimeInputGenerationOutputBoundaryStatus
+runtimeInputGenerationOutputBoundaryPath
+runtimeInputGenerationOutputBoundaryEntryPath
+runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath
+runtimeInputGenerationOutputBoundaryStandardContractPath
+runtimeInputGenerationOutputBoundaryDeltasPath
+runtimeInputGenerationOutputBoundaryValueSourceSlotsPath
+runtimeInputGenerationOutputBoundaryContractValidationPath
+```
+
+`createThreeValueRuntimeOutputConsumerContract().summary` 新增同名字段，用于 runtime output consumer view 的标准输出摘要。
+
+`createWorkbenchFlowContractContext()` 的 `runtimeInput` 新增只读字段：
+
+```text
+generationOutputBoundaryStatus
+generationOutputBoundaryReady
+generationOutputBoundaryPath
+generationOutputBoundaryEntryPath
+generationOutputBoundaryRuntimeInputSourcePath
+generationOutputBoundaryStandardContractPath
+generationOutputBoundaryDeltasPath
+generationOutputBoundaryValueSourceSlotsPath
+generationOutputBoundaryContractValidationPath
+generationOutputBoundaryStandardOutputCount
+generationOutputBoundaryIssueCount
+```
+
+`createWorkbenchFlowContractContext()` 的 `runtimeOutput` 和 `runtimeContractBoundary` 新增同名只读字段。`runtimeContractBoundary.standardBoundaryReady` 在存在 generation output boundary 时会要求该 boundary ready；旧 runtime summary 没有该字段时仍按原兼容逻辑判断。
+
+`createWorkbenchRuntimeOutputConsistencyView()` 新增：
+
+```text
+runtimeContractGenerationOutputBoundaryStatus
+runtimeContractGenerationOutputBoundaryReady
+runtimeContractGenerationOutputBoundaryReadyState
+runtimeContractGenerationOutputBoundaryPath
+runtimeContractGenerationOutputBoundaryEntryPath
+runtimeContractGenerationOutputBoundaryRuntimeInputSourcePath
+runtimeContractGenerationOutputBoundaryStandardContractPath
+runtimeContractGenerationOutputBoundaryDeltasPath
+runtimeContractGenerationOutputBoundaryValueSourceSlotsPath
+runtimeContractGenerationOutputBoundaryContractValidationPath
+runtimeContractGenerationOutputBoundaryStandardOutputCount
+runtimeContractGenerationOutputBoundaryIssueCount
+```
+
+### 338.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只让 runtime output 与 Workbench contract context 消费上一阶段生成的标准输出边界摘要；三值计算结果、公式、倍率、applied delta 筛选、运行日志行、曲线数值和 UI 文案均不改变。
+
+### 338.3 验证
+
+- `workbenchFlowContractContext.test.js` 覆盖 runtime input、runtime output 和 Workbench runtime contract boundary 对 generation output boundary 的消费。
+- `workbenchFlowModel.test.js` 覆盖 runtime output consistency view 继续透出 generation output boundary。
+- `threeValueRuntimeProjection.test.js` 覆盖 runtime projection / runtime outputs 标准摘要仍可正常构建。
+- `npm run test -- --run src\__tests__\features\workbenchFlowContractContext.test.js src\__tests__\features\workbenchFlowModel.test.js src\__tests__\simulation\threeValueRuntimeProjection.test.js`：通过，3 个测试文件、17 条测试。
