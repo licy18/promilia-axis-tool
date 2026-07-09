@@ -7217,8 +7217,27 @@ describe('Workbench view', () => {
     expect(
       wrapper
         .findAll('[data-testid="workbench-runtime-sim-log-contribution-row"]')
-        .map(row => row.text())
-    ).toEqual(['敌人 HP0', '敌人韧性0', `自身能量-${spSkill.spCost}`]);
+        .map(row => [
+          row.attributes('data-contribution-key'),
+          row.attributes('data-contribution-source'),
+          row.attributes('data-value'),
+          row.text(),
+        ])
+    ).toEqual([
+      [
+        'hp',
+        'hit-aggregate',
+        expect.stringMatching(/^\d+$/),
+        expect.stringMatching(/^敌人 HP[1-9][\d,]*$/),
+      ],
+      ['toughness', 'hit-aggregate', '0', '敌人韧性0'],
+      [
+        'energy',
+        'hit-aggregate',
+        `-${spSkill.spCost}`,
+        `自身能量-${spSkill.spCost}`,
+      ],
+    ]);
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-source"]').text()
     ).toContain(String(spSkill.id));

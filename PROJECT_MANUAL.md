@@ -11987,6 +11987,35 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议进入 UI 主流程：让贡献拆分面板或日志详情显式展示 hit 聚合来源，完成“运行结果 -> 日志/贡献 -> 三值详情”的更直观可见闭环。
 
+### 2026-07-09：UI 主流程可见闭环 - 日志详情同命中三值贡献
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 模拟日志详情的三值贡献行现在优先消费当前日志行的 hit applied 聚合。
+- 用户查看能量日志时，也能看到同一命中的 HP / 韧性 / 自身能量贡献槽位；没有 hit 聚合时仍回退旧的单条日志逻辑。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、保存数据或导入导出结构。
+
+当前验证事实：
+
+- 新增 `EventLogPanel` 组件测试，固定一条 HP 日志通过 hit aggregate 显示 HP / 韧性 / 能量。
+- `Workbench` 主流程测试确认星鸣技能量日志的贡献行来自同一 hit aggregate，并显示同一命中的 HP 与能量变化。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `311. UI 主流程日志详情消费 hit 三值聚合`。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/EventLogPanel.test.js src/__tests__/features/runtimeSelectedDetail.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、73 条测试。
+- `npm run test -- --run`：通过，39 个测试文件、273 条测试。
+- `npm run test:e2e`：通过，12 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/features/workbench/EventLogPanel.vue src/__tests__/features/EventLogPanel.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 建议继续 UI 主流程：把“编辑动作 -> 运行模拟 -> 曲线点/日志详情定位 -> 回到动作修改”的端到端路径固定成浏览器级测试，确保主流程体验不再倒退。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

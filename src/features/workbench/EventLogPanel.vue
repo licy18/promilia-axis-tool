@@ -207,7 +207,9 @@
             runtimeLogResultReturnCommandContext.originStatePointId
           "
           :data-return-status="runtimeLogResultReturnCommandContext.status"
-          :data-state-point-id="runtimeLogResultReturnCommandContext.statePointId"
+          :data-state-point-id="
+            runtimeLogResultReturnCommandContext.statePointId
+          "
           data-testid="workbench-runtime-sim-log-return-result"
           :disabled="!runtimeLogResultReturnCommand.enabled"
           @click="returnRuntimeLogResult"
@@ -252,6 +254,9 @@
           v-for="item in selectedRuntimeContributionRows"
           :key="item.key"
           class="runtime-contribution-row"
+          :data-contribution-key="item.key"
+          :data-contribution-source="item.source"
+          :data-value="item.rawValue ?? item.value"
           data-testid="workbench-runtime-sim-log-contribution-row"
         >
           <span>{{ item.label }}</span>
@@ -403,9 +408,10 @@ const flowSelectedStatePointId = computed(
 const flowRuntimeFocusSource = computed(
   () => runtimeReviewContextView.value.source
 );
-const flowRuntimeFocusSourceView = computed(() =>
-  runtimeReviewPanelView.value.sourceView ??
-  createRuntimeFocusSourceView(flowRuntimeFocusSource.value)
+const flowRuntimeFocusSourceView = computed(
+  () =>
+    runtimeReviewPanelView.value.sourceView ??
+    createRuntimeFocusSourceView(flowRuntimeFocusSource.value)
 );
 const flowEditResult = computed(
   () => props.flowModel?.editResult ?? props.actionEditResultContext
@@ -724,14 +730,15 @@ const runtimeLogResultReturnActionId = computed(
     runtimeLogActionFocusSeedTarget.value.actionId ||
     ''
 );
-const runtimeLogResultReturnContext = computed(() =>
-  runtimeReviewPanelView.value.commandView?.returnResult?.context ??
-  runtimeReviewPanelView.value.resultReturnContext ??
-  createRuntimeResultReturnContext({
-    actionId: runtimeLogResultReturnActionId.value,
-    focus: props.actionEditFocus,
-    resultContext: flowEditResult.value,
-  })
+const runtimeLogResultReturnContext = computed(
+  () =>
+    runtimeReviewPanelView.value.commandView?.returnResult?.context ??
+    runtimeReviewPanelView.value.resultReturnContext ??
+    createRuntimeResultReturnContext({
+      actionId: runtimeLogResultReturnActionId.value,
+      focus: props.actionEditFocus,
+      resultContext: flowEditResult.value,
+    })
 );
 const runtimeLogResultReturnCommand = computed(
   () => runtimeLogCommandView.value.returnResult
@@ -748,7 +755,7 @@ const runtimeLogResultReturnButtonLabel = computed(() =>
 const runtimeLogResultReturnButtonVisible = computed(() =>
   Boolean(
     runtimeLogResultReturnCommandContext.value?.statePointId ||
-      runtimeLogResultReturnContext.value
+    runtimeLogResultReturnContext.value
   )
 );
 const selectedRuntimeContributionRows = computed(() =>
@@ -1149,8 +1156,8 @@ function scheduleSelectedRuntimeLogRowScroll(statePointId = '') {
 function shouldScrollRuntimeLogRow(statePointId = '') {
   return Boolean(
     RUNTIME_LOG_SCROLL_FLOW_PHASES.has(props.flowModel?.phase) &&
-      statePointId &&
-      filteredRuntimeSimLogRows.value.length > 0
+    statePointId &&
+    filteredRuntimeSimLogRows.value.length > 0
   );
 }
 
@@ -1161,9 +1168,7 @@ function scrollRuntimeLogRowIntoView(statePointId = '') {
   }
   const target = Array.from(
     panel.querySelectorAll('[data-testid="workbench-runtime-sim-log-row"]')
-  ).find(
-    row => row.getAttribute('data-state-point-id') === statePointId
-  );
+  ).find(row => row.getAttribute('data-state-point-id') === statePointId);
   target?.scrollIntoView?.({
     block: 'nearest',
     inline: 'nearest',
@@ -1221,6 +1226,11 @@ function formatNumber(value) {
   return Math.round(Number(value) || 0).toLocaleString('zh-CN');
 }
 
+function numberOrZero(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : 0;
+}
+
 function formatRuntimeStatus(row) {
   const point = getRuntimePointByRow(row);
   return (
@@ -1275,39 +1285,61 @@ function createRuntimeContributionRows(row) {
   if (!row) {
     return [];
   }
+  const appliedAggregate = row.hitThreeValueDeltaAggregate?.layers?.applied;
+  const source = appliedAggregate ? 'hit-aggregate' : 'runtime-row';
+  const hpDelta =
+    appliedAggregate != null
+      ? numberOrZero(appliedAggregate.hpDelta)
+      : row.trackKey === 'enemyHpDamage'
+        ? numberOrZero(row.hpDelta)
+        : 0;
+  const toughnessDelta =
+    appliedAggregate != null
+      ? numberOrZero(appliedAggregate.toughnessDelta)
+      : row.trackKey === 'enemyToughnessDamage'
+        ? numberOrZero(row.toughnessDelta)
+        : 0;
+  const energyDelta =
+    appliedAggregate != null
+      ? numberOrZero(appliedAggregate.energyDelta)
+      : row.trackKey === 'selfEnergyChange'
+        ? numberOrZero(row.energyDelta)
+        : 0;
   return [
     {
       key: 'hp',
       label: '敌人 HP',
-      value:
-        row.hpDelta == null || row.trackKey !== 'enemyHpDamage'
-          ? '0'
-          : formatNumber(row.hpDelta),
+      value: formatNumber(hpDelta),
+      rawValue: hpDelta,
+      source,
     },
     {
       key: 'toughness',
       label: '敌人韧性',
-      value:
-        row.toughnessDelta == null || row.trackKey !== 'enemyToughnessDamage'
-          ? '0'
-          : formatNumber(row.toughnessDelta),
+      value: formatNumber(toughnessDelta),
+      rawValue: toughnessDelta,
+      source,
     },
     {
       key: 'energy',
       label: '自身能量',
-      value:
-        row.energyDelta == null || row.trackKey !== 'selfEnergyChange'
-          ? '0'
-          : formatSigned(row.energyDelta),
+      value: formatSigned(energyDelta),
+      rawValue: energyDelta,
+      source,
     },
   ];
 }
 
 function createRuntimeContributionRowsFromDetail(detail) {
+  const source = detail.hitThreeValueDeltaAggregate
+    ? 'hit-aggregate'
+    : 'runtime-selected-detail';
   return (detail.contributionRows ?? []).map(row => ({
     key: row.key,
     label: row.label,
     value: row.signed ? formatSigned(row.value) : formatNumber(row.value),
+    rawValue: row.value,
+    source,
   }));
 }
 
@@ -1380,7 +1412,11 @@ h2 {
   font-size: 15px;
 }
 
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .panel-title {
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .panel-title {
   padding: 10px 12px;
 }
 
@@ -1398,7 +1434,11 @@ h2 {
   padding: 14px;
 }
 
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .event-list {
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .event-list {
   gap: 6px;
   max-height: 88px;
   padding: 10px 12px;
@@ -1416,7 +1456,12 @@ h2 {
   font-size: 12px;
 }
 
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .event-list > li {
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .event-list
+  > li {
   grid-template-columns: 58px minmax(84px, 116px) minmax(0, 1fr);
   gap: 6px;
   padding: 6px 8px;
@@ -1432,7 +1477,11 @@ h2 {
   background: rgba(121, 199, 185, 0.07);
 }
 
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-sim-log {
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .runtime-sim-log {
   gap: 8px;
   margin: 0 12px 12px;
   padding: 10px;
@@ -1480,8 +1529,7 @@ h2 {
 
 .event-log-panel[data-runtime-review-role='secondary']
   .runtime-contribution-detail,
-.event-log-panel[data-runtime-review-role='secondary']
-  .runtime-source-detail,
+.event-log-panel[data-runtime-review-role='secondary'] .runtime-source-detail,
 .event-log-panel[data-runtime-review-role='secondary']
   .runtime-calculator-detail {
   order: 9;
@@ -1599,7 +1647,11 @@ h2 {
   padding: 0;
 }
 
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-log-list {
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .runtime-log-list {
   max-height: 132px;
 }
 
@@ -1608,7 +1660,11 @@ h2 {
   gap: 8px;
 }
 
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-log-filters {
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .runtime-log-filters {
   gap: 6px;
 }
 
@@ -1618,7 +1674,11 @@ h2 {
   gap: 6px;
 }
 
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-track-filters {
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .runtime-track-filters {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -1638,7 +1698,11 @@ h2 {
   cursor: pointer;
 }
 
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-filter-button {
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .runtime-filter-button {
   padding: 5px 7px;
 }
 
@@ -1666,7 +1730,11 @@ h2 {
   gap: 8px;
 }
 
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-select-filters {
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .runtime-select-filters {
   grid-template-columns: 1fr;
   gap: 6px;
 }
@@ -1693,7 +1761,12 @@ h2 {
   font-size: 12px;
 }
 
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-select-filters select {
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .runtime-select-filters
+  select {
   padding: 5px 7px;
 }
 
@@ -1705,7 +1778,11 @@ h2 {
   cursor: pointer;
 }
 
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-log-row {
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .runtime-log-row {
   grid-template-columns: 52px 46px minmax(0, 1fr);
   gap: 6px;
   padding: 6px 8px;
@@ -1776,10 +1853,26 @@ h2 {
   background: rgba(255, 255, 255, 0.05);
 }
 
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-log-detail-row,
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-contribution-row,
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-calculator-row,
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-source-row {
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .runtime-log-detail-row,
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .runtime-contribution-row,
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .runtime-calculator-row,
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .runtime-source-row {
   padding: 6px 7px;
 }
 
@@ -1887,7 +1980,11 @@ h2 {
   font-weight: 700;
 }
 
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review']) .runtime-log-action-focus {
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
+  .runtime-log-action-focus {
   min-height: 30px;
 }
 
@@ -1909,7 +2006,10 @@ h2 {
   font-weight: 700;
 }
 
-.event-log-panel:is([data-flow-phase='runtime-result'], [data-flow-phase='edit-result-review'])
+.event-log-panel:is(
+    [data-flow-phase='runtime-result'],
+    [data-flow-phase='edit-result-review']
+  )
   .runtime-log-result-return {
   min-height: 30px;
 }

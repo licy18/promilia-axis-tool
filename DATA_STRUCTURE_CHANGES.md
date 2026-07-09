@@ -22221,6 +22221,7 @@ aggregateLayerKeys = ["applied", "candidate", "sampled", "placeholder"]
 - `npm run test -- --run`：通过，38 个测试文件、272 条测试。
 - `npm run test:e2e`：通过，12 条浏览器级烟测。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
 - `npx prettier --check PROJECT_MANUAL.md src/simulation/runtime/actionHitThreeValueRuntimeInput.js src/simulation/runtime/threeValueRuntimeProjection.js src/features/workbench/runtimeSelectedDetail.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/features/runtimeSelectedDetail.test.js`：通过。
 - `git diff --check`：通过，仅有 LF/CRLF 提示。
 - `npx prettier --check PROJECT_MANUAL.md src/simulation/generation/threeValueGenerationLayer.js src/__tests__/simulation/threeValueGenerationLayer.test.js`：通过。
@@ -22274,3 +22275,44 @@ aggregateFields = [
 - `npm run test -- --run`：通过，38 个测试文件、272 条测试。
 - `npm run test:e2e`：通过，12 条浏览器级烟测。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+
+## 311. UI 主流程日志详情消费 hit 三值聚合：Event Log Hit Aggregate Contributions
+
+### 311.1 结构变化
+
+`EventLogPanel` 的模拟日志贡献行现在优先读取：
+
+```text
+selectedRuntimeLog.hitThreeValueDeltaAggregate.layers.applied
+```
+
+并在每一行贡献上暴露：
+
+```text
+data-contribution-key
+data-contribution-source
+data-value
+```
+
+`data-contribution-source` 取值：
+
+- `hit-aggregate`：来自当前日志行的 hit applied 聚合。
+- `runtime-row`：没有 hit 聚合时，回退到旧的单条 runtime log row。
+- `runtime-selected-detail`：来自右侧三值详情派生结果且没有 hit 聚合。
+
+### 311.2 保存与迁移
+
+不新增项目草稿字段，不改变导入导出 schema，不需要数据迁移。
+
+本阶段不改变 HP、韧性、自身能量计算结果，不改变公式、倍率或证据字段。
+
+### 311.3 验证
+
+- 新增 `EventLogPanel.test.js`，覆盖一条 HP runtime log 通过 hit aggregate 显示同一命中的 HP、韧性、自身能量贡献。
+- `Workbench.test.js` 更新星鸣技能量日志断言，确认能量日志中的贡献行来自 `hit-aggregate`，并显示同一命中的 HP 与能量变化。
+- `npm run test -- --run src/__tests__/features/EventLogPanel.test.js src/__tests__/features/runtimeSelectedDetail.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、73 条测试。
+- `npm run test -- --run`：通过，39 个测试文件、273 条测试。
+- `npm run test:e2e`：通过，12 条浏览器级烟测。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/features/workbench/EventLogPanel.vue src/__tests__/features/EventLogPanel.test.js src/__tests__/views/Workbench.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
