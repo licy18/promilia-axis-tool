@@ -2,7 +2,15 @@ import {
   WORKBENCH_FLOW_ACTION_KINDS,
   createWorkbenchFlowAction,
 } from './workbenchFlowModel';
-import { WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS } from './workbenchFlowPlanController';
+import {
+  applyWorkbenchFlowPlanRequest,
+  createWorkbenchContributionPointFocusPlanRequest,
+  createWorkbenchEditSourceActionEditPlanRequest,
+  createWorkbenchRuntimeActionEditPlanRequest,
+  createWorkbenchRuntimeEntryPlanRequest,
+  createWorkbenchRuntimePointFocusPlanRequest,
+  createWorkbenchRuntimeResultReturnPlanRequest,
+} from './workbenchFlowPlanRequests';
 
 export const WORKBENCH_FLOW_CONTROLLER_HANDLERS = Object.freeze({
   OPEN_RUNTIME_RESULTS: 'openRuntimeResults',
@@ -128,20 +136,24 @@ export function createWorkbenchFlowPlanHandlers({
   applyRuntimeFlowPlan = () => {},
   applyActionEditFlowPlan = () => {},
 } = {}) {
+  const applyPlanRequest = request =>
+    applyWorkbenchFlowPlanRequest({
+      flowPlanController,
+      request,
+      applyRuntimeFlowPlan,
+      applyActionEditFlowPlan,
+    });
+
   return {
     [WORKBENCH_FLOW_CONTROLLER_HANDLERS.OPEN_RUNTIME_RESULTS]: ({
       actionId,
       fallbackToFirstRuntimePoint = false,
     } = {}) =>
-      applyRuntimeFlowPlan(
-        createPlan(
-          flowPlanController,
-          WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_ENTRY,
-          {
-            actionId,
-            fallbackToFirstRuntimePoint,
-          }
-        )
+      applyPlanRequest(
+        createWorkbenchRuntimeEntryPlanRequest({
+          actionId,
+          fallbackToFirstRuntimePoint,
+        })
       ),
 
     [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_RESULT]: ({
@@ -149,16 +161,12 @@ export function createWorkbenchFlowPlanHandlers({
       statePointId,
       source,
     } = {}) =>
-      applyRuntimeFlowPlan(
-        createPlan(
-          flowPlanController,
-          WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_RESULT_RETURN,
-          {
-            actionId,
-            statePointId,
-            source: source || 'action-result',
-          }
-        )
+      applyPlanRequest(
+        createWorkbenchRuntimeResultReturnPlanRequest({
+          actionId,
+          statePointId,
+          source,
+        })
       ),
 
     [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_RUNTIME_STATE_POINT]: ({
@@ -166,79 +174,38 @@ export function createWorkbenchFlowPlanHandlers({
       source,
       preserveStateCurveFilters = false,
     } = {}) =>
-      applyRuntimeFlowPlan(
-        createPlan(
-          flowPlanController,
-          WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_POINT_FOCUS,
-          {
-            statePointId,
-            source: source || 'runtime-state-point',
-            preserveStateCurveFilters,
-          }
-        )
+      applyPlanRequest(
+        createWorkbenchRuntimePointFocusPlanRequest({
+          statePointId,
+          source,
+          preserveStateCurveFilters,
+        })
       ),
 
-    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_CONTRIBUTION_POINT]: payload => {
-      const pointPayload =
-        typeof payload === 'string' ? { statePointId: payload } : payload ?? {};
-      return applyRuntimeFlowPlan(
-        createPlan(
-          flowPlanController,
-          WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_POINT_FOCUS,
-          {
-            statePointId: pointPayload.statePointId ?? '',
-            source: pointPayload.runtimeFocusSource || 'action-contribution',
-            preserveStateCurveFilters: Boolean(
-              pointPayload.preserveStateCurveFilters
-            ),
-          }
-        )
-      );
-    },
+    [WORKBENCH_FLOW_CONTROLLER_HANDLERS.SELECT_CONTRIBUTION_POINT]: payload =>
+      applyPlanRequest(
+        createWorkbenchContributionPointFocusPlanRequest(payload)
+      ),
 
     [WORKBENCH_FLOW_CONTROLLER_HANDLERS.FOCUS_RUNTIME_ACTION]: payload =>
-      applyActionEditFlowPlan(
-        createPlan(
-          flowPlanController,
-          WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_ACTION_EDIT_FOCUS,
-          payload
-        )
-      ),
+      applyPlanRequest(createWorkbenchRuntimeActionEditPlanRequest(payload)),
 
     [WORKBENCH_FLOW_CONTROLLER_HANDLERS.FOCUS_EDIT_SOURCE]: payload =>
-      applyActionEditFlowPlan(
-        createPlan(
-          flowPlanController,
-          WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.EDIT_SOURCE_ACTION_EDIT_FOCUS,
-          payload
-        )
-      ),
+      applyPlanRequest(createWorkbenchEditSourceActionEditPlanRequest(payload)),
 
     [WORKBENCH_FLOW_CONTROLLER_HANDLERS.RETURN_RUNTIME_RESULT]: ({
       actionId,
       statePointId,
       source,
     } = {}) =>
-      applyRuntimeFlowPlan(
-        createPlan(
-          flowPlanController,
-          WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS.RUNTIME_RESULT_RETURN,
-          {
-            actionId,
-            statePointId,
-            source: source || 'action-result',
-          }
-        )
+      applyPlanRequest(
+        createWorkbenchRuntimeResultReturnPlanRequest({
+          actionId,
+          statePointId,
+          source,
+        })
       ),
   };
-}
-
-function createPlan(flowPlanController, methodKey, payload) {
-  const createFlowPlan = flowPlanController?.[methodKey];
-  if (typeof createFlowPlan !== 'function') {
-    return {};
-  }
-  return createFlowPlan(payload);
 }
 
 function createRuntimeActionFocusPayload(flowAction) {

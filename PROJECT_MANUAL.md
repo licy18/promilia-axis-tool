@@ -9852,6 +9852,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：检查 Workbench flow runtime 和 flow controller 的 result-return / focus-action plan 生成边界，优先把“动作编辑 -> 回到结果 -> 再定位动作”的循环合同继续收束为可复用模块。
 
+### 2026-07-09：UI 主流程能力块 - Main Flow Plan Request Boundary
+
+本阶段属于：UI 主流程。
+
+完成的可用能力：
+
+- 新增 `workbenchFlowPlanRequests`，把 runtime entry、runtime point focus、runtime result return、runtime action edit focus、edit-source focus 的 plan request 统一成一层可测试合同。
+- `workbenchFlowController` 不再直接拼 `WORKBENCH_FLOW_PLAN_CONTROLLER_METHODS` 和 plan payload，而是消费共享 plan request；`SELECT_RUNTIME_RESULT` 与 `RETURN_RUNTIME_RESULT` 继续复用同一个 runtime-result-return request。
+- “动作编辑 -> 回到结果 -> 再定位动作”的循环里，controller 层只负责 dispatch 到 request，具体 runtime / action-edit plan 应用由 request 边界统一决定。
+- 本阶段只调整 UI 主流程计划生成边界，不新增公式推断、不调整三值结果、不扩展局部提示或文案状态。
+
+当前验证事实：
+
+- 新增 plan request 单测覆盖 runtime / action-edit request 生成、plan controller 调用和应用分流。
+- Flow controller、flow plan controller 与 Workbench 页面测试确认现有 dispatch、result-return、focus-action 主路径保持可用。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/features/workbenchFlowPlanRequests.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、65 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、234 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查 Workbench 主流程 command surface 与 plan request 的连接点，优先收束“按钮/面板动作 -> flow action -> plan request”的端到端合同，而不是继续做局部提示。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

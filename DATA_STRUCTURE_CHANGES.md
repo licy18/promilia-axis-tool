@@ -20840,3 +20840,48 @@ runtimeLogFocus
 - `npm run test -- --run`：通过，36 个测试文件、231 条测试。
 - `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
 - `git diff --check`：通过；仅有 Git 换行转换提示。
+
+## 282. UI 主流程能力块：Main Flow Plan Request Boundary
+
+### 282.1 结构变化
+
+本阶段不变更保存数据、导入导出 schema、runtime projection 输出结构或三值计算结果。
+
+新增内部 UI 主流程 plan request 模块：
+
+```js
+createWorkbenchRuntimeEntryPlanRequest(input)
+createWorkbenchRuntimeResultReturnPlanRequest(input)
+createWorkbenchRuntimePointFocusPlanRequest(input)
+createWorkbenchContributionPointFocusPlanRequest(input)
+createWorkbenchRuntimeActionEditPlanRequest(input)
+createWorkbenchEditSourceActionEditPlanRequest(input)
+createWorkbenchFlowPlanFromRequest(input)
+applyWorkbenchFlowPlanRequest(input)
+```
+
+Plan request 统一携带：
+
+```js
+{
+  applicationKind,
+  methodKey,
+  payload,
+}
+```
+
+其中 `applicationKind` 决定应用到 runtime flow 还是 action-edit flow；`methodKey` 指向 `createWorkbenchFlowPlanController()` 暴露的 plan 生成方法。
+
+`workbenchFlowController` 的 plan handler 改为消费上述 request helper，不再直接拼 plan controller 方法名和 payload。`SELECT_RUNTIME_RESULT` 与 `RETURN_RUNTIME_RESULT` 均继续生成同一种 runtime-result-return request。
+
+### 282.2 保存与迁移
+
+本阶段只调整 Workbench UI 主流程的 plan request 生成边界，不新增持久字段，不需要数据迁移。
+
+### 282.3 验证
+
+- 新增 `src/__tests__/features/workbenchFlowPlanRequests.test.js`，覆盖 runtime / action-edit request 生成、plan 生成和应用分流。
+- `npm run test -- --run src/__tests__/features/workbenchFlowPlanRequests.test.js src/__tests__/features/workbenchFlowController.test.js src/__tests__/features/workbenchFlowPlanController.test.js src/__tests__/views/Workbench.test.js`：通过，4 个测试文件、65 条测试。
+- `npm run test -- --run`：通过，37 个测试文件、234 条测试。
+- `npm run build`：通过；保留既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `git diff --check`：通过；仅有 Git 换行转换提示。
