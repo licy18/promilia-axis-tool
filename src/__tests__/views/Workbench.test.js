@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -18,6 +19,14 @@ import PropertiesPanel from '../../features/workbench/PropertiesPanel.vue';
 import TimelineGridPreview from '../../features/workbench/TimelineGridPreview.vue';
 import WorkbenchFlowPanel from '../../features/workbench/WorkbenchFlowPanel.vue';
 import Workbench from '../../views/Workbench.vue';
+
+function readTestSource(relativePath) {
+  return readFileSync(new URL(relativePath, import.meta.url), 'utf8');
+}
+
+function compactSource(source) {
+  return source.replace(/\s+/g, '');
+}
 
 describe('Workbench view', () => {
   beforeEach(() => {
@@ -2546,6 +2555,68 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-runtime-selected-detail-return-result"]')
         .text()
     ).toBe('查看刷新结果');
+  });
+
+  it('guards the desktop result loop layout contract', () => {
+    const appSource = compactSource(readTestSource('../../App.vue'));
+    const workbenchSource = compactSource(
+      readTestSource('../../views/Workbench.vue')
+    );
+    const resourcePanelSource = compactSource(
+      readTestSource('../../features/workbench/ResourceMonitorPanel.vue')
+    );
+    const eventPanelSource = compactSource(
+      readTestSource('../../features/workbench/EventLogPanel.vue')
+    );
+    const resultPhaseSelector =
+      ":is([data-flow-phase='runtime-result'],[data-flow-phase='edit-result-review'])";
+
+    expect(appSource).toContain(
+      '.app{width:100%;min-width:0;min-height:100vh;'
+    );
+    expect(appSource).not.toContain('width:100vw');
+    expect(workbenchSource).toContain(
+      'grid-template-columns:minmax(230px,280px)minmax(0,1fr)minmax(260px,340px);'
+    );
+    expect(workbenchSource).toContain(
+      '.primary-flow{display:grid;grid-area:mainflow;align-content:start;gap:14px;min-width:0;}'
+    );
+    expect(workbenchSource).toContain(
+      '.runtime-review-stack{display:grid;grid-template-columns:minmax(280px,0.92fr)minmax(320px,1.08fr);align-items:start;gap:14px;min-width:0;}'
+    );
+    expect(workbenchSource).toContain(
+      `.primary-flow${resultPhaseSelector}.runtime-review-stack{order:-1;}`
+    );
+    expect(workbenchSource).toContain(
+      `.primary-flow${resultPhaseSelector}.timeline-area{order:1;}`
+    );
+    expect(workbenchSource).toContain(
+      ".runtime-review-stack[data-runtime-review-layout='result-check']{grid-template-columns:minmax(300px,1.12fr)minmax(220px,0.88fr);align-items:stretch;gap:10px;}"
+    );
+    expect(workbenchSource).toContain(
+      '.timeline-area,.resource-area,.event-area{min-width:0;}'
+    );
+    expect(resourcePanelSource).toContain(
+      `.resource-monitor-panel${resultPhaseSelector}.runtime-curve-panel{`
+    );
+    expect(resourcePanelSource).toContain(
+      `.resource-monitor-panel${resultPhaseSelector}.runtime-curve-chart{min-height:96px;}`
+    );
+    expect(eventPanelSource).toContain(
+      `.event-log-panel${resultPhaseSelector}.runtime-log-list{max-height:132px;}`
+    );
+    expect(eventPanelSource).toContain(
+      `.event-log-panel${resultPhaseSelector}.runtime-log-row{grid-template-columns:52px46pxminmax(0,1fr);gap:6px;padding:6px8px;}`
+    );
+    expect(workbenchSource).not.toContain(
+      ".primary-flow[data-flow-phase='runtime-result'].runtime-review-stack"
+    );
+    expect(resourcePanelSource).not.toContain(
+      ".resource-monitor-panel[data-flow-phase='runtime-result']"
+    );
+    expect(eventPanelSource).not.toContain(
+      ".event-log-panel[data-flow-phase='runtime-result']"
+    );
   });
 
   it('edits selected action timing with 60fps frame controls', async () => {

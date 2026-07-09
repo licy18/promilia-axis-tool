@@ -10909,6 +10909,32 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：把真实页面复核沉淀成可重复的桌面布局/溢出回归检查，优先固定“动作编辑 -> 查看结果 -> 编辑动作 -> 返回刷新结果”在 1280×720 下的可见布局信号。
 
+### 2026-07-09：UI 主流程桌面布局回归 - Result Loop Layout Guard
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 把上一阶段真实页面复核依赖的关键桌面布局合同沉淀为可重复测试。
+- 回归测试现在会保护根容器不再回到 `100vw`、主流程中列可收缩、结果区在 `runtime-result` 与 `edit-result-review` 都前置、结果检查双列可收缩、资源曲线和模拟日志在两种结果阶段都启用紧凑布局。
+- 这能防止后续 UI 调整重新破坏“动作编辑 -> 查看结果 -> 编辑动作 -> 返回刷新结果”在桌面宽度下无横向溢出、结果区可见的主流程体验。
+- 本阶段只补齐页面布局回归保护，不改变运行时输出、三值结果、公式、证据字段或数据结构。
+
+当前验证事实：
+
+- `supports the visible workbench loop across curve, log, detail, edit, and refreshed result` 继续覆盖完整可操作路径。
+- 新增 `guards the desktop result loop layout contract` 覆盖桌面结果闭环依赖的 CSS 源码合同。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、62 条测试。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：基于已固定的桌面主流程，优先检查移动/窄屏下结果检查区是否仍能完成“查看结果 -> 日志/详情 -> 回改动作 -> 回看刷新结果”的完整操作。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
