@@ -175,6 +175,80 @@ test('runs the visible curve-log-detail edit loop end to end', async ({
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps runtime detail navigation tied to edit return', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+  const { copiedState } = await createThreeActionRuntime(page);
+  expectRuntimeReviewState(copiedState, {
+    phase: 'runtime-result',
+    actionId: 'action-0003',
+    navigationCount: '3',
+    navigationIndex: '2',
+    selected: false,
+  });
+
+  const detailNavigation = page.getByTestId(
+    'workbench-runtime-selected-detail-navigation'
+  );
+  await expect(detailNavigation).toHaveAttribute('data-navigation-count', '3');
+  await expect(detailNavigation).toHaveAttribute('data-navigation-index', '2');
+
+  const previousDetailResult = page.getByTestId(
+    'workbench-runtime-selected-detail-navigation-prev'
+  );
+  await expect(previousDetailResult).toHaveAttribute(
+    'data-state-point-id',
+    /action-0002/
+  );
+  await previousDetailResult.click();
+
+  const previousState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(previousState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '3',
+    navigationIndex: '1',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(previousState, previousState.statePointId);
+  await expectCurveAndLogSelection(page, previousState.statePointId);
+
+  const nextDetailResult = page.getByTestId(
+    'workbench-runtime-selected-detail-navigation-next'
+  );
+  await expect(nextDetailResult).toHaveAttribute(
+    'data-state-point-id',
+    /action-0003/
+  );
+  await nextDetailResult.click();
+
+  const nextState = await waitForRuntimeAction(page, 'action-0003');
+  expectRuntimeReviewState(nextState, {
+    phase: 'runtime-result',
+    actionId: 'action-0003',
+    navigationCount: '3',
+    navigationIndex: '2',
+    selected: true,
+  });
+  expectRuntimeStatePointSynced(nextState, nextState.statePointId);
+  await expectCurveAndLogSelection(page, nextState.statePointId);
+
+  await focusRuntimeDetailAction(page);
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
+    actionId: 'action-0003',
+    frameValue: '192',
+    msValue: '3200',
+    originStatePointId: nextState.statePointId,
+    navigationCount: '3',
+    navigationIndex: '2',
+    selected: true,
+  });
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps direct, log, and contribution edit returns synced', async ({
   page,
 }) => {
