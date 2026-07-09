@@ -74,7 +74,7 @@ describe('workbench flow contract context', () => {
           appliedOnly: true,
           generationReadSources: {
             status: 'runtime-input-generation-read-sources-ready',
-            standardOutputCount: 5,
+            standardOutputCount: 6,
             fallbackInputCount: 0,
             usesLegacyGenerationFallback: false,
             standardGenerationBoundaryReady: true,
@@ -102,6 +102,12 @@ describe('workbench flow contract context', () => {
               deltas: {
                 sourcePath: 'generationOutputs.outputs.generationEntry.deltas',
               },
+              valueSourceSlots: {
+                sourcePath:
+                  'generationOutputs.outputs.generationEntry.valueSourceSlots',
+                sourceTier: 'standard-output',
+                standardOutputPresent: true,
+              },
               contractValidation: {
                 sourcePath:
                   'generationOutputs.outputs.generationEntry.contractValidation',
@@ -112,6 +118,13 @@ describe('workbench flow contract context', () => {
             inputDeltaCount: 3,
             appliedDeltaCount: 1,
             ignoredDeltaCount: 2,
+            valueSourceSlotCount: 12,
+            runtimeValueSourceSlotCount: 3,
+            replaceableValueSourceSlotCount: 9,
+            runtimeInputGenerationValueSourceSlotsPath:
+              'generationOutputs.outputs.generationEntry.valueSourceSlots',
+            runtimeInputGenerationValueSourceSlotsSourceTier: 'standard-output',
+            runtimeInputGenerationValueSourceSlotsStandardOutputPresent: true,
           },
         },
       },
@@ -186,6 +199,13 @@ describe('workbench flow contract context', () => {
           enemyStatePointCount: 1,
           stateCurvePointCount: 2,
           resourceCurvePointCount: 1,
+          valueSourceSlotCount: 12,
+          runtimeValueSourceSlotCount: 3,
+          replaceableValueSourceSlotCount: 9,
+          runtimeInputGenerationValueSourceSlotsPath:
+            'generationOutputs.outputs.generationEntry.valueSourceSlots',
+          runtimeInputGenerationValueSourceSlotsSourceTier: 'standard-output',
+          runtimeInputGenerationValueSourceSlotsStandardOutputPresent: true,
           outputConsistencyStatus: 'runtime-output-consistent',
           outputConsistent: true,
         },
@@ -236,9 +256,12 @@ describe('workbench flow contract context', () => {
         inputDeltaCount: 3,
         appliedDeltaCount: 1,
         ignoredDeltaCount: 2,
+        valueSourceSlotCount: 12,
+        runtimeValueSourceSlotCount: 3,
+        replaceableValueSourceSlotCount: 9,
         generationReadSourcesStatus:
           'runtime-input-generation-read-sources-ready',
-        generationReadStandardOutputCount: 5,
+        generationReadStandardOutputCount: 6,
         generationReadFallbackInputCount: 0,
         generationReadUsesLegacyFallback: false,
         generationStandardBoundaryReady: true,
@@ -258,6 +281,10 @@ describe('workbench flow contract context', () => {
           'generationOutputs.outputs.generationEntry.standardContract',
         generationDeltasSourcePath:
           'generationOutputs.outputs.generationEntry.deltas',
+        generationValueSourceSlotsSourcePath:
+          'generationOutputs.outputs.generationEntry.valueSourceSlots',
+        generationValueSourceSlotsSourceTier: 'standard-output',
+        generationValueSourceSlotsStandardOutputPresent: true,
         generationContractValidationSourcePath:
           'generationOutputs.outputs.generationEntry.contractValidation',
         generationAggregateValidationSourcePath:
@@ -300,6 +327,13 @@ describe('workbench flow contract context', () => {
         enemyStatePointCount: 1,
         stateCurvePointCount: 2,
         resourceCurvePointCount: 1,
+        valueSourceSlotCount: 12,
+        runtimeValueSourceSlotCount: 3,
+        replaceableValueSourceSlotCount: 9,
+        valueSourceSlotsSourcePath:
+          'generationOutputs.outputs.generationEntry.valueSourceSlots',
+        valueSourceSlotsSourceTier: 'standard-output',
+        valueSourceSlotsStandardOutputPresent: true,
         outputConsistencyStatus: 'runtime-output-consistent',
         outputConsistent: true,
         ready: true,
@@ -332,7 +366,7 @@ describe('workbench flow contract context', () => {
         runtimeOutputConsumerBoundaryReadyState: 'true',
         runtimeOutputConsumerBoundaryStandardReady: true,
         runtimeOutputConsumerBoundaryStandardReadyState: 'true',
-        generationReadStandardOutputCount: 5,
+        generationReadStandardOutputCount: 6,
         runtimeOutputReadStandardOutputCount: 4,
         generationReadFallbackInputCount: 0,
         runtimeOutputReadFallbackOutputCount: 0,
@@ -351,10 +385,21 @@ describe('workbench flow contract context', () => {
         generationEntrySourcePath: 'generationOutputs.outputs.generationEntry',
         generationDeltasSourcePath:
           'generationOutputs.outputs.generationEntry.deltas',
+        generationValueSourceSlotsSourcePath:
+          'generationOutputs.outputs.generationEntry.valueSourceSlots',
+        generationValueSourceSlotsSourceTier: 'standard-output',
+        generationValueSourceSlotsStandardOutputPresent: true,
         generationContractValidationSourcePath:
           'generationOutputs.outputs.generationEntry.contractValidation',
         generationAggregateValidationSourcePath:
           'generationOutputs.outputs.generationEntry.contractValidation.aggregateValidation',
+        valueSourceSlotCount: 12,
+        runtimeValueSourceSlotCount: 3,
+        replaceableValueSourceSlotCount: 9,
+        valueSourceSlotsSourcePath:
+          'generationOutputs.outputs.generationEntry.valueSourceSlots',
+        valueSourceSlotsSourceTier: 'standard-output',
+        valueSourceSlotsStandardOutputPresent: true,
         runtimeSimLogSourcePath: 'runtimeOutputs.outputs.simLog',
         runtimeSummarySourcePath:
           'runtimeOutputs.outputConsumerContract.summary',

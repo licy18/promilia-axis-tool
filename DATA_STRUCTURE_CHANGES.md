@@ -24032,3 +24032,47 @@ runtimeInputGenerationValueSourceSlotsSourceTier
 - `threeValueRuntimeProjection.test.js` 覆盖旧式手写 generation outputs 缺少 `valueSourceSlots` 时不会破坏原本的标准运行时边界。
 - `firstVerticalSliceSimulation.test.js` 覆盖真实纵切路径中 runtime input、runtime projection summary、runtime outputs summary 均透出 12 个来源槽位、3 个 runtime eligible 槽位、9 个 replaceable 槽位。
 - `npm run test -- --run src\__tests__\simulation\actionHitThreeValueRuntimeInput.test.js src\__tests__\simulation\threeValueRuntimeProjection.test.js src\__tests__\simulation\firstVerticalSliceSimulation.test.js`：通过，3 个测试文件、24 条测试。
+
+## 336. Workbench 来源槽位摘要消费：Workbench Value Source Slot Summary Context
+
+### 336.1 字段变化
+
+`createWorkbenchFlowContractContext()` 的 `runtimeInput` 新增只读摘要字段：
+
+```text
+valueSourceSlotCount
+runtimeValueSourceSlotCount
+replaceableValueSourceSlotCount
+generationValueSourceSlotsSourcePath
+generationValueSourceSlotsSourceTier
+generationValueSourceSlotsStandardOutputPresent
+```
+
+这些字段优先来自 `runtimeInput.summary` 和 `runtimeInput.generationReadSources.inputs.valueSourceSlots`，并以 `runtimeProjection.summary` 作为兼容回退。
+
+`createWorkbenchFlowContractContext()` 的 `runtimeOutput` 新增只读摘要字段：
+
+```text
+valueSourceSlotCount
+runtimeValueSourceSlotCount
+replaceableValueSourceSlotCount
+valueSourceSlotsSourcePath
+valueSourceSlotsSourceTier
+valueSourceSlotsStandardOutputPresent
+```
+
+这些字段优先来自 `runtimeOutputs.outputSummary`，并以 `runtimeProjection.summary` 作为兼容回退。
+
+`runtimeContractBoundary` 和 `createWorkbenchRuntimeOutputConsistencyView()` 同步透出上述 Workbench 只读字段，供 UI 主流程和诊断视图消费 runtime 边界摘要。
+
+### 336.2 保存与迁移
+
+不新增草稿字段，不改变 `workbench-draft:v1` schema，不需要数据迁移。
+
+本阶段只改变 Workbench 对 runtime summary / output summary 的只读消费边界；三值计算结果、公式、倍率、applied delta 筛选、运行日志行、曲线数值和 UI 文案均不改变。
+
+### 336.3 验证
+
+- `workbenchFlowContractContext.test.js` 覆盖 runtime input、runtime output 和 contract boundary 从 runtime summary / generation read sources 读取来源槽位摘要。
+- `workbenchFlowModel.test.js` 覆盖 runtime output consistency view 继续透出来源槽位摘要，供 Workbench 后续诊断消费。
+- `npm run test -- --run src\__tests__\features\workbenchFlowContractContext.test.js src\__tests__\features\workbenchFlowModel.test.js`：通过，2 个测试文件、11 条测试。

@@ -54,7 +54,7 @@ describe('workbench flow model', () => {
       },
       runtimeInput: {
         appliedDeltaSource: 'threeValueRuntimeInput.appliedDeltas',
-        generationReadStandardOutputCount: 5,
+        generationReadStandardOutputCount: 6,
         generationReadFallbackInputCount: 0,
         generationReadUsesLegacyFallback: false,
         generationStandardBoundaryReady: true,
@@ -65,6 +65,11 @@ describe('workbench flow model', () => {
         generationEntryAggregateValidationStatus:
           'generation-entry-aggregate-valid',
         generationEntryAggregateValidationValid: true,
+        valueSourceSlotCount: 12,
+        runtimeValueSourceSlotCount: 3,
+        replaceableValueSourceSlotCount: 9,
+        generationValueSourceSlotsSourcePath:
+          'generationOutputs.outputs.generationEntry.valueSourceSlots',
         ready: true,
       },
       runtimeOutput: {
@@ -75,6 +80,11 @@ describe('workbench flow model', () => {
         outputReadFallbackOutputCount: 0,
         outputReadUsesLegacyFallback: false,
         stateCurvePointCount: 2,
+        valueSourceSlotCount: 12,
+        runtimeValueSourceSlotCount: 3,
+        replaceableValueSourceSlotCount: 9,
+        valueSourceSlotsSourcePath:
+          'generationOutputs.outputs.generationEntry.valueSourceSlots',
         outputConsistencyStatus: 'runtime-output-consistent',
         outputConsistent: true,
         ready: true,
@@ -111,6 +121,13 @@ describe('workbench flow model', () => {
         'generation-entry-aggregate-valid',
       runtimeContractGenerationAggregateValidationValid: true,
       runtimeContractGenerationAggregateValidationValidState: 'true',
+      valueSourceSlotCount: 12,
+      runtimeValueSourceSlotCount: 3,
+      replaceableValueSourceSlotCount: 9,
+      valueSourceSlotsSourcePath:
+        'generationOutputs.outputs.generationEntry.valueSourceSlots',
+      valueSourceSlotsStandardOutputPresent: true,
+      valueSourceSlotsStandardOutputPresentState: 'true',
       runtimeContractUsesLegacyFallback: false,
       runtimeContractUsesLegacyFallbackState: 'false',
       simLogCount: 2,
@@ -1395,7 +1412,7 @@ function createRuntimeProjectionFixture() {
       appliedDeltaSource: 'threeValueRuntimeInput.appliedDeltas',
       generationReadSources: {
         status: 'runtime-input-generation-read-sources-ready',
-        standardOutputCount: 5,
+        standardOutputCount: 6,
         fallbackInputCount: 0,
         usesLegacyGenerationFallback: false,
         standardGenerationBoundaryReady: true,
@@ -1423,6 +1440,12 @@ function createRuntimeProjectionFixture() {
           deltas: {
             sourcePath: 'generationOutputs.outputs.generationEntry.deltas',
           },
+          valueSourceSlots: {
+            sourcePath:
+              'generationOutputs.outputs.generationEntry.valueSourceSlots',
+            sourceTier: 'standard-output',
+            standardOutputPresent: true,
+          },
           contractValidation: {
             sourcePath:
               'generationOutputs.outputs.generationEntry.contractValidation',
@@ -1432,6 +1455,13 @@ function createRuntimeProjectionFixture() {
       summary: {
         inputDeltaCount: 2,
         appliedDeltaCount: 2,
+        valueSourceSlotCount: 12,
+        runtimeValueSourceSlotCount: 3,
+        replaceableValueSourceSlotCount: 9,
+        runtimeInputGenerationValueSourceSlotsPath:
+          'generationOutputs.outputs.generationEntry.valueSourceSlots',
+        runtimeInputGenerationValueSourceSlotsSourceTier: 'standard-output',
+        runtimeInputGenerationValueSourceSlotsStandardOutputPresent: true,
       },
       appliedOnly: true,
     },
@@ -1523,6 +1553,13 @@ function createRuntimeOutputsFixture(runtimeProjection) {
       enemyStatePointCount: 1,
       stateCurvePointCount: 2,
       resourceCurvePointCount: 1,
+      valueSourceSlotCount: 12,
+      runtimeValueSourceSlotCount: 3,
+      replaceableValueSourceSlotCount: 9,
+      runtimeInputGenerationValueSourceSlotsPath:
+        'generationOutputs.outputs.generationEntry.valueSourceSlots',
+      runtimeInputGenerationValueSourceSlotsSourceTier: 'standard-output',
+      runtimeInputGenerationValueSourceSlotsStandardOutputPresent: true,
       outputConsistencyStatus: 'runtime-output-consistent',
       outputConsistent: true,
     },

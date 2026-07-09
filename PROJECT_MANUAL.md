@@ -13342,6 +13342,26 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续运行时层或转入 UI 主流程：优先让 Workbench 通过 runtime summary 读取 replacement readiness，而不是直接读取 generation 内部字段；仍不追真实公式和真实倍率。
 
+### 2026-07-10：运行时层 / UI 主流程交界 - Workbench 来源槽位摘要消费
+
+本阶段属于：运行时层 / UI 主流程交界。
+
+完成的可用能力：
+
+- Workbench 的 flow contract context 和 runtime output consistency 现在从 runtime summary / runtime output summary 消费 `valueSourceSlots` 的槽位数、runtime eligible 数、replaceable 数和来源路径。
+- 这让工作台后续诊断真实数值来源替换状态时只依赖 runtime 边界，不需要 UI 回读 generation 内部结构。
+- 本阶段不改变三值计算结果、公式、倍率、applied delta 筛选、运行日志行、曲线数值、UI 文案或草稿保存 schema。
+
+验收结果：
+
+- `npm run test -- --run src\__tests__\features\workbenchFlowContractContext.test.js src\__tests__\features\workbenchFlowModel.test.js`：通过，2 个测试文件、11 条测试。
+- `npm run test:e2e:workbench-flow`：通过，18 条 `@workbench-main-flow` 主流程回归全部通过。
+- 结构变化已记录到 `DATA_STRUCTURE_CHANGES.md` 的 `336. Workbench 来源槽位摘要消费：Workbench Value Source Slot Summary Context`。
+
+下一步：
+
+- 可以进入 UI 主流程能力块：检查真实页面里紧凑编辑、结果定位、贡献拆分、曲线交互和日志详情是否还有用户可见缺口；若主流程稳定，则进入生成层继续收束 `Action -> Hit -> ThreeValueDelta` 的统一生成入口。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

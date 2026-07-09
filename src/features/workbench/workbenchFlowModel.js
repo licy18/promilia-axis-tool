@@ -409,6 +409,20 @@ export function createWorkbenchRuntimeOutputConsistencyView({
     resourceCurvePointCount: numberOrZero(
       runtimeOutput.resourceCurvePointCount
     ),
+    valueSourceSlotCount: numberOrZero(runtimeOutput.valueSourceSlotCount),
+    runtimeValueSourceSlotCount: numberOrZero(
+      runtimeOutput.runtimeValueSourceSlotCount
+    ),
+    replaceableValueSourceSlotCount: numberOrZero(
+      runtimeOutput.replaceableValueSourceSlotCount
+    ),
+    valueSourceSlotsSourcePath: runtimeOutput.valueSourceSlotsSourcePath ?? '',
+    valueSourceSlotsSourceTier: runtimeOutput.valueSourceSlotsSourceTier ?? '',
+    valueSourceSlotsStandardOutputPresent: Boolean(
+      runtimeOutput.valueSourceSlotsStandardOutputPresent
+    ),
+    valueSourceSlotsStandardOutputPresentState:
+      runtimeOutput.valueSourceSlotsStandardOutputPresent ? 'true' : 'false',
     runtimeNavigationPointCount: navigationPointCount,
     statePointContextCount,
     statePointContextSynced,

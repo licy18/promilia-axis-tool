@@ -82,6 +82,18 @@ export function createWorkbenchFlowContractContext({
         runtimeInput?.summary?.ignoredDeltaCount ??
         runtimeSummary.runtimeInputIgnoredDeltaCount
     ),
+    valueSourceSlotCount: numberOrZero(
+      runtimeInput?.summary?.valueSourceSlotCount ??
+        runtimeSummary.valueSourceSlotCount
+    ),
+    runtimeValueSourceSlotCount: numberOrZero(
+      runtimeInput?.summary?.runtimeValueSourceSlotCount ??
+        runtimeSummary.runtimeValueSourceSlotCount
+    ),
+    replaceableValueSourceSlotCount: numberOrZero(
+      runtimeInput?.summary?.replaceableValueSourceSlotCount ??
+        runtimeSummary.replaceableValueSourceSlotCount
+    ),
     generationReadSourcesStatus: runtimeInputGenerationReadSources.status ?? '',
     generationReadStandardOutputCount: numberOrZero(
       runtimeInputGenerationReadSources.standardOutputCount
@@ -144,6 +156,23 @@ export function createWorkbenchFlowContractContext({
       runtimeInputGenerationReadInputs.standardContract?.sourcePath ?? '',
     generationDeltasSourcePath:
       runtimeInputGenerationReadInputs.deltas?.sourcePath ?? '',
+    generationValueSourceSlotsSourcePath:
+      runtimeInputGenerationReadInputs.valueSourceSlots?.sourcePath ??
+      runtimeInput?.summary?.runtimeInputGenerationValueSourceSlotsPath ??
+      runtimeSummary.runtimeInputGenerationValueSourceSlotsPath ??
+      '',
+    generationValueSourceSlotsSourceTier:
+      runtimeInputGenerationReadInputs.valueSourceSlots?.sourceTier ??
+      runtimeInput?.summary?.runtimeInputGenerationValueSourceSlotsSourceTier ??
+      runtimeSummary.runtimeInputGenerationValueSourceSlotsSourceTier ??
+      '',
+    generationValueSourceSlotsStandardOutputPresent: Boolean(
+      runtimeInputGenerationReadInputs.valueSourceSlots
+        ?.standardOutputPresent ??
+      runtimeInput?.summary
+        ?.runtimeInputGenerationValueSourceSlotsStandardOutputPresent ??
+      runtimeSummary.runtimeInputGenerationValueSourceSlotsStandardOutputPresent
+    ),
     generationContractValidationSourcePath:
       runtimeInputGenerationReadInputs.contractValidation?.sourcePath ?? '',
     generationAggregateValidationSourcePath: runtimeInputGenerationReadInputs
@@ -209,6 +238,29 @@ export function createWorkbenchFlowContractContext({
     resourceCurvePointCount: numberOrZero(
       outputSummary.resourceCurvePointCount ??
         runtimeSummary.resourceCurvePointCount
+    ),
+    valueSourceSlotCount: numberOrZero(
+      outputSummary.valueSourceSlotCount ?? runtimeSummary.valueSourceSlotCount
+    ),
+    runtimeValueSourceSlotCount: numberOrZero(
+      outputSummary.runtimeValueSourceSlotCount ??
+        runtimeSummary.runtimeValueSourceSlotCount
+    ),
+    replaceableValueSourceSlotCount: numberOrZero(
+      outputSummary.replaceableValueSourceSlotCount ??
+        runtimeSummary.replaceableValueSourceSlotCount
+    ),
+    valueSourceSlotsSourcePath:
+      outputSummary.runtimeInputGenerationValueSourceSlotsPath ??
+      runtimeSummary.runtimeInputGenerationValueSourceSlotsPath ??
+      '',
+    valueSourceSlotsSourceTier:
+      outputSummary.runtimeInputGenerationValueSourceSlotsSourceTier ??
+      runtimeSummary.runtimeInputGenerationValueSourceSlotsSourceTier ??
+      '',
+    valueSourceSlotsStandardOutputPresent: Boolean(
+      outputSummary.runtimeInputGenerationValueSourceSlotsStandardOutputPresent ??
+      runtimeSummary.runtimeInputGenerationValueSourceSlotsStandardOutputPresent
     ),
     outputConsistencyStatus:
       outputSummary.outputConsistencyStatus ?? outputConsistency.status ?? '',
@@ -403,10 +455,36 @@ function createWorkbenchRuntimeContractBoundary({
       runtimeInput.generationEntryAggregateValidationValid ? 'true' : 'false',
     generationEntrySourcePath: runtimeInput.generationEntrySourcePath ?? '',
     generationDeltasSourcePath: runtimeInput.generationDeltasSourcePath ?? '',
+    generationValueSourceSlotsSourcePath:
+      runtimeInput.generationValueSourceSlotsSourcePath ?? '',
+    generationValueSourceSlotsSourceTier:
+      runtimeInput.generationValueSourceSlotsSourceTier ?? '',
+    generationValueSourceSlotsStandardOutputPresent: Boolean(
+      runtimeInput.generationValueSourceSlotsStandardOutputPresent
+    ),
     generationContractValidationSourcePath:
       runtimeInput.generationContractValidationSourcePath ?? '',
     generationAggregateValidationSourcePath:
       runtimeInput.generationAggregateValidationSourcePath ?? '',
+    valueSourceSlotCount: numberOrZero(runtimeOutput.valueSourceSlotCount),
+    runtimeValueSourceSlotCount: numberOrZero(
+      runtimeOutput.runtimeValueSourceSlotCount
+    ),
+    replaceableValueSourceSlotCount: numberOrZero(
+      runtimeOutput.replaceableValueSourceSlotCount
+    ),
+    valueSourceSlotsSourcePath:
+      runtimeOutput.valueSourceSlotsSourcePath ??
+      runtimeInput.generationValueSourceSlotsSourcePath ??
+      '',
+    valueSourceSlotsSourceTier:
+      runtimeOutput.valueSourceSlotsSourceTier ??
+      runtimeInput.generationValueSourceSlotsSourceTier ??
+      '',
+    valueSourceSlotsStandardOutputPresent: Boolean(
+      runtimeOutput.valueSourceSlotsStandardOutputPresent ??
+      runtimeInput.generationValueSourceSlotsStandardOutputPresent
+    ),
     runtimeSimLogSourcePath: runtimeOutput.outputReadSimLogSourcePath ?? '',
     runtimeSummarySourcePath: runtimeOutput.outputReadSummarySourcePath ?? '',
   };
