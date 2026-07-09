@@ -2507,6 +2507,14 @@ function getLocalStorage() {
   min-width: 0;
 }
 
+.primary-flow[data-flow-phase='runtime-result'] .runtime-review-stack {
+  order: -1;
+}
+
+.primary-flow[data-flow-phase='runtime-result'] .timeline-area {
+  order: 1;
+}
+
 .runtime-review-stack[data-runtime-review-layout='result-check'] {
   grid-template-columns: minmax(360px, 1.18fr) minmax(260px, 0.82fr);
   align-items: stretch;

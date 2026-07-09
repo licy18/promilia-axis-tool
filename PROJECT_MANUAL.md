@@ -10726,6 +10726,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：在没有页面横向滚动的基础上，检查结果查看区的空间分配和同屏可读性，优先处理曲线、日志、右侧详情在主流程中需要频繁来回滚动的阻断点。
 
+### 2026-07-09：UI 主流程结果优先 - Runtime Result First View
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- “查看运行结果”阶段会把资源曲线/日志所在的结果查看区提升到主列顶部，时间轴退到下方；动作编辑阶段仍保持时间轴优先。
+- 这样用户从主流程进入结果查看后，能先看到运行结果区和右侧三值详情，再按需要回看时间轴，不必先滚过整段时间轴才能看到曲线和日志。
+- 本阶段只调整 Workbench 结果阶段的布局顺序，不改变运行时输出、三值结果、公式、证据字段或数据结构。
+
+当前验证事实：
+
+- 浏览器 1280x720 修复前实测：“查看运行结果”后时间轴位于主列首屏，`runtime-review-stack` 顶部在 759px，资源曲线/日志区整体落在首屏下方。
+- 代码层已将 `.primary-flow[data-flow-phase='runtime-result'] .runtime-review-stack` 设置为 `order: -1`，并将同阶段 `.timeline-area` 设置为 `order: 1`。
+- 修复后的浏览器二次复核因浏览器连接在导航/标签读取时连续超时，未作为最终验收依据。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、61 条测试。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk 体积提示。
+- 构建产物 CSS 检查：通过，`dist/assets/Workbench-*.css` 包含结果阶段 `runtime-review-stack{order:-1}` 和 `timeline-area{order:1}` 规则。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续 UI 主流程能力块：在结果区已前置的基础上，继续压缩结果查看区内部的纵向距离，优先让资源曲线选中点、日志详情和右侧三值详情在结果检查流程中更少来回滚动。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
