@@ -1425,9 +1425,6 @@ export function projectSimulationResult({
   const threeValueRuntimeProjection = createThreeValueRuntimeProjection({
     scenario,
     generationOutputs,
-    actionHitThreeValueDeltaGeneration:
-      threeValueGenerationBundle.actionHitThreeValueDeltaGeneration,
-    threeValueGenerationLayer,
   });
   const runtimeOutputs = threeValueRuntimeProjection.runtimeOutputs;
   const damageTimeline = damageEvents.map(event => ({

@@ -11695,6 +11695,36 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续运行时层能力块：收敛 runtime 主入口对旧 generation entry / generation layer fallback 的生产依赖，保持 UI 主流程只消费稳定输入输出封套。
 
+### 2026-07-09：运行时层生产入口收敛 - Runtime Generation Outputs Entry
+
+本阶段属于：运行时层。
+
+完成的可用能力：
+
+- `projectSimulationResult` 的 runtime 主路径现在只把 `generationOutputs` 传给 `createThreeValueRuntimeProjection()`。
+- runtime projection 可以直接从 `generationOutputs.runtimeInputSource` 解析 applied deltas，并继续输出 `simLog / stateCurves / resourceCurves / summary`。
+- 旧的 `runtimeInputSource / actionHitThreeValueDeltaGeneration / threeValueGenerationLayer` 参数仍保留为兼容和兜底入口，但生产接线不再依赖它们。
+- 本阶段不改变 HP、韧性、自身能量计算结果，不改变公式、倍率、证据字段、保存数据或导入导出结构。
+
+当前验证事实：
+
+- `threeValueRuntimeProjection.test.js` 新增覆盖：只传 `generationOutputs` 也能生成运行时输入、曲线、日志和 summary。
+- `firstVerticalSliceSimulation.test.js` 覆盖真实项目投影仍能得到同样的三值运行结果。
+- 生产搜索确认 `projectSimulationResult` 调用 `createThreeValueRuntimeProjection()` 时只传稳定生成输出封套。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，2 个测试文件、17 条测试。
+- `npm run test -- --run`：通过，38 个测试文件、270 条测试。
+- `npm run test:e2e`：通过，7 条浏览器级烟测。
+- `npm run build`：通过，仅有既有 Sass `@import` 弃用提示和 chunk size 提示。
+- `npx prettier --check PROJECT_MANUAL.md src/simulation/projection/projectSimulationResult.js src/__tests__/simulation/threeValueRuntimeProjection.test.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 继续运行时层能力块：把 Workbench 合同上下文里仍直接读取 `generationBundle.actionHitThreeValueDeltaGeneration` 的路径改为优先读取 `generationOutputs`，保留旧字段兼容。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
