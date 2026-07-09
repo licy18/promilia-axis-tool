@@ -2513,6 +2513,16 @@ describe('Workbench view', () => {
     ).toBe('runtime-focus');
 
     await wrapper
+      .find(
+        '[data-testid="workbench-start-frame-step"][data-step-direction="increase"]'
+      )
+      .trigger('click');
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-start-frame-input"]').element.value
+    ).toBe('1');
+
+    await wrapper
       .find('[data-testid="workbench-start-frame-input"]')
       .setValue('6');
     await nextTick();
@@ -2738,6 +2748,36 @@ describe('Workbench view', () => {
       wrapper.find('[data-testid="workbench-duration-frame-input"]').element
         .value
     ).toBe('60');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-start-frame-step"][data-step-direction="decrease"]'
+        )
+        .attributes('disabled')
+    ).toBeDefined();
+
+    await wrapper
+      .find(
+        '[data-testid="workbench-start-frame-step"][data-step-direction="increase"]'
+      )
+      .trigger('click');
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-start-frame-input"]').element.value
+    ).toBe('1');
+    expect(
+      wrapper.find('[data-testid="workbench-start-input"]').element.value
+    ).toBe('16.666667');
+
+    await wrapper
+      .find(
+        '[data-testid="workbench-start-frame-step"][data-step-direction="decrease"]'
+      )
+      .trigger('click');
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-start-frame-input"]').element.value
+    ).toBe('0');
 
     await wrapper
       .find('[data-testid="workbench-start-frame-input"]')
@@ -2746,6 +2786,17 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
     ).toBe('500');
+
+    await wrapper
+      .find(
+        '[data-testid="workbench-duration-frame-step"][data-step-direction="decrease"]'
+      )
+      .trigger('click');
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-duration-frame-input"]').element
+        .value
+    ).toBe('59');
 
     await wrapper
       .find('[data-testid="workbench-duration-frame-input"]')

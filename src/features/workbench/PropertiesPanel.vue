@@ -130,15 +130,41 @@
           data-testid="workbench-action-frame-control"
         >
           <span>开始帧</span>
-          <input
-            type="number"
-            data-testid="workbench-start-frame-input"
-            min="0"
-            :max="maxStartFrame"
-            step="1"
-            :value="selectedActionStartFrame"
-            @input="emitFrameActionPatch('startMs', $event.target.value)"
-          />
+          <div class="frame-stepper">
+            <button
+              type="button"
+              class="frame-stepper-button"
+              data-step-direction="decrease"
+              data-testid="workbench-start-frame-step"
+              :disabled="selectedActionStartFrame <= 0"
+              title="开始帧前移 1 帧"
+              aria-label="开始帧前移 1 帧"
+              @click="nudgeFrameActionPatch('startMs', -1)"
+            >
+              <Minus class="frame-stepper-icon" />
+            </button>
+            <input
+              type="number"
+              data-testid="workbench-start-frame-input"
+              min="0"
+              :max="maxStartFrame"
+              step="1"
+              :value="selectedActionStartFrame"
+              @input="emitFrameActionPatch('startMs', $event.target.value)"
+            />
+            <button
+              type="button"
+              class="frame-stepper-button"
+              data-step-direction="increase"
+              data-testid="workbench-start-frame-step"
+              :disabled="selectedActionStartFrame >= maxStartFrame"
+              title="开始帧后移 1 帧"
+              aria-label="开始帧后移 1 帧"
+              @click="nudgeFrameActionPatch('startMs', 1)"
+            >
+              <Plus class="frame-stepper-icon" />
+            </button>
+          </div>
         </label>
 
         <label
@@ -150,15 +176,41 @@
           data-testid="workbench-action-frame-control"
         >
           <span>持续帧</span>
-          <input
-            type="number"
-            data-testid="workbench-duration-frame-input"
-            min="1"
-            :max="maxDurationFrame"
-            step="1"
-            :value="selectedActionDurationFrame"
-            @input="emitFrameActionPatch('durationMs', $event.target.value)"
-          />
+          <div class="frame-stepper">
+            <button
+              type="button"
+              class="frame-stepper-button"
+              data-step-direction="decrease"
+              data-testid="workbench-duration-frame-step"
+              :disabled="selectedActionDurationFrame <= 1"
+              title="持续帧减少 1 帧"
+              aria-label="持续帧减少 1 帧"
+              @click="nudgeFrameActionPatch('durationMs', -1)"
+            >
+              <Minus class="frame-stepper-icon" />
+            </button>
+            <input
+              type="number"
+              data-testid="workbench-duration-frame-input"
+              min="1"
+              :max="maxDurationFrame"
+              step="1"
+              :value="selectedActionDurationFrame"
+              @input="emitFrameActionPatch('durationMs', $event.target.value)"
+            />
+            <button
+              type="button"
+              class="frame-stepper-button"
+              data-step-direction="increase"
+              data-testid="workbench-duration-frame-step"
+              :disabled="selectedActionDurationFrame >= maxDurationFrame"
+              title="持续帧增加 1 帧"
+              aria-label="持续帧增加 1 帧"
+              @click="nudgeFrameActionPatch('durationMs', 1)"
+            >
+              <Plus class="frame-stepper-icon" />
+            </button>
+          </div>
         </label>
       </div>
 
@@ -492,7 +544,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { Aim, Operation } from '@element-plus/icons-vue';
+import { Aim, Minus, Operation, Plus } from '@element-plus/icons-vue';
 import {
   WORKBENCH_FPS,
   WORKBENCH_FRAME_MS,
@@ -922,11 +974,31 @@ function emitFrameActionPatch(key, value) {
     return;
   }
   const frame = Math.round(number);
-  const normalizedFrame =
-    key === 'durationMs' ? Math.max(1, frame) : Math.max(0, frame);
+  const normalizedFrame = clampFrameValue(key, frame);
   emit('update-action', {
     [key]: frameToMs(normalizedFrame),
   });
+}
+
+function nudgeFrameActionPatch(key, deltaFrame) {
+  const currentFrame =
+    key === 'durationMs'
+      ? selectedActionDurationFrame.value
+      : selectedActionStartFrame.value;
+  const nextFrame = clampFrameValue(key, currentFrame + deltaFrame);
+  if (nextFrame === currentFrame) {
+    return;
+  }
+  emit('update-action', {
+    [key]: frameToMs(nextFrame),
+  });
+}
+
+function clampFrameValue(key, frame) {
+  const minimumFrame = key === 'durationMs' ? 1 : 0;
+  const maximumFrame =
+    key === 'durationMs' ? maxDurationFrame.value : maxStartFrame.value;
+  return Math.min(maximumFrame, Math.max(minimumFrame, Math.round(frame)));
 }
 
 function emitTextPatch(key, value) {
@@ -1172,6 +1244,44 @@ h2 {
 
 .frame-edit-control {
   min-width: 0;
+}
+
+.frame-stepper {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 30px;
+  gap: 6px;
+  min-width: 0;
+}
+
+.frame-stepper input {
+  text-align: center;
+}
+
+.frame-stepper-button {
+  display: inline-grid;
+  width: 30px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid rgba(121, 199, 185, 0.24);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.1);
+  color: #dff9f3;
+  cursor: pointer;
+}
+
+.frame-stepper-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+.frame-stepper-button:not(:disabled):hover,
+.frame-stepper-button:not(:disabled):focus {
+  filter: brightness(1.15);
+}
+
+.frame-stepper-icon {
+  width: 13px;
+  height: 13px;
 }
 
 .contextual-controls {

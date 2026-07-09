@@ -12315,6 +12315,33 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 建议继续 UI 主流程：围绕完整编辑体验做用户可见能力，例如结果定位后的动作修改面板更完整、动作列表与时间轴编辑联动更顺滑；若切到能力底座，则进入运行时层，固定 runtime 输出对 UI 的稳定消费合同。
 
+### 2026-07-09：UI 主流程可见闭环 - 结果定位后的 1 帧微调
+
+本阶段属于：UI 主流程可见闭环。
+
+完成的可用能力：
+
+- 用户从运行结果定位到动作后，可以在属性面板用开始帧和持续帧两组步进按钮按 1 帧粒度调整动作，不必只依赖手动输入。
+- 该微调路径接入既有编辑刷新闭环：从曲线/日志/详情进入动作编辑，点击 1 帧步进后会生成刷新结果，再通过“查看刷新结果”回到新的 runtime 状态点。
+- 本阶段不改变三值计算结果、公式、倍率、证据字段、生成层合同、运行时输出、保存 schema 或 DATA_STRUCTURE_CHANGES。
+
+当前验证事实：
+
+- `PropertiesPanel` 的开始帧和持续帧控件新增前后 1 帧步进按钮，仍使用 `WORKBENCH_FPS = 60` 和既有 `frameToMs()` 转换。
+- `Workbench.test.js` 覆盖开始帧前后步进、持续帧减少 1 帧，以及结果详情回到编辑后用步进调帧再刷新结果。
+- `workbench-continuous-edit.spec.js` 的浏览器级闭环会在从结果详情进入编辑后先点击 1 帧步进，再继续修改并回到刷新结果。
+
+验收结果：
+
+- `npm run test -- --run src/__tests__/views/Workbench.test.js`：通过，1 个测试文件、67 条测试。
+- `npx playwright test e2e/workbench-continuous-edit.spec.js -g "runs the visible curve-log-detail edit loop end to end"`：通过，1 条浏览器级主流程闭环测试。
+- `npx prettier --check PROJECT_MANUAL.md src/features/workbench/PropertiesPanel.vue src/__tests__/views/Workbench.test.js e2e/workbench-continuous-edit.spec.js`：通过。
+- `git diff --check`：通过，仅有 LF/CRLF 提示。
+
+下一步：
+
+- 建议继续 UI 主流程：把动作列表选择、时间轴拖拽/微调、属性面板编辑和刷新结果回跳做一次更完整的浏览器级连续验收；如果要切到底座，则进入运行时层，整理 runtime outputs 对 UI 的稳定消费合同。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

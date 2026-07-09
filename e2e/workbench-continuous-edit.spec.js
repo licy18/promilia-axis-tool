@@ -181,6 +181,7 @@ test('runs the visible curve-log-detail edit loop end to end', async ({
     navigationCount: '1',
     navigationIndex: '0',
     selected: true,
+    preNudgeStartFrame: true,
   });
 
   await expectCurveAndLogSelection(page, returnedState.statePointId);
@@ -1362,8 +1363,20 @@ async function editCurrentActionFrameAndReturn(
     navigationIndex,
     selected = true,
     returnButtonTestId = 'workbench-flow-return-edit-result',
+    preNudgeStartFrame = false,
   }
 ) {
+  if (preNudgeStartFrame) {
+    await page
+      .locator(
+        '[data-testid="workbench-start-frame-step"][data-step-direction="increase"]'
+      )
+      .click();
+    await expect(page.getByTestId('workbench-start-frame-input')).toHaveValue(
+      '1'
+    );
+  }
+
   await page.getByTestId('workbench-start-frame-input').fill(frameValue);
   await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
     'data-flow-phase',
