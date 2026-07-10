@@ -24756,3 +24756,91 @@ mechanismContext
 - first vertical slice 测试覆盖角色面板、敌人防御、元素减免、韧性基线和三值所有权。
 - runtime input/projection 测试覆盖上下文从 generation 到 runtime 的无损传递。
 - generation builder 校验保证 calculator 不使用另一份复制或临时上下文。
+
+## 347. 运行时三值状态快照：AzPrThreeValueRuntimeStateSnapshot
+
+### 347.1 快照结构
+
+每个 runtime applied delta 生成一个状态快照：
+
+```text
+stateSnapshot
+  schemaVersion = 1
+  contractName = AzPrThreeValueRuntimeStateSnapshot
+  sourceDeltaId
+  runtimeSequenceIndex
+  actionId
+  hitKey
+  frameIndex
+  timeMs
+  trackKey
+  primaryMetricKey
+  changedMetricKeys[]
+  energyOwnerActorId
+  targetEnemyId
+  mechanismContextStatus
+  baselineConfirmed
+  before
+    enemyHp
+    enemyToughness
+    selfEnergy
+  delta
+    enemyHp
+    enemyToughness
+    selfEnergy
+  after
+    enemyHp
+    enemyToughness
+    selfEnergy
+```
+
+`before` / `after` 的每项状态包含：
+
+```text
+actorId
+initialValue
+maxValue
+currentValue
+rawCurrentValue
+cumulativeDelta
+overrunValue
+baselineConfirmed
+baselineStatus
+```
+
+HP 与韧性按 decrease 方向推进并在 `currentValue` 下限裁剪到 `0`，`rawCurrentValue` / `overrunValue` 保留溢出信息；SP 按 increase 方向推进。该方向只描述已有 delta 如何作用于状态，不改变 delta 的生成公式。
+
+### 347.2 baseline 与所有权
+
+- 敌人 HP baseline 继续来自 `scenario.enemy.stats.maxHp * hpMultiplier`。
+- 敌人韧性 baseline 继续来自 `scenario.enemy.stats.initialToughness` 与 P2-B 韧性配置。
+- 每个角色建立独立 SP state；初始值读取 scenario actor 已有的 `initialSp` / `initialEnergy` / resource state，最大值读取 `MAXSP`。
+- 能量所有者优先读取 `mechanismContext.ownership.energyOwnerActorId`，再兼容旧 delta 的 `actorId`。
+- 初始 SP 缺失时，绝对 `currentValue` 保持 `null`，但 `cumulativeDelta` 继续累计，状态为 pending。
+
+### 347.3 runtime 输出关系
+
+```text
+runtimeProjection.runtimeStateSnapshots
+runtimeOutputs.stateSnapshots
+stateCurves.snapshots
+```
+
+以上三处引用同一快照集合；`runtimeOutputs.stateSnapshots` 是 `stateCurves.snapshots` 的别名，不增加 canonical runtime output 数量。每条 sim log、敌人曲线点和角色资源曲线点的 `stateSnapshot` 都引用对应 `sourceDeltaId` 的同一对象。
+
+summary 新增：
+
+```text
+stateSnapshotCount
+stateSnapshotReadyCount
+stateSnapshotPendingBaselineCount
+```
+
+输出一致性检查会验证日志和曲线没有复制、错配或遗漏快照。
+
+### 347.4 验证
+
+- runtime projection 测试覆盖敌人 HP/韧性逐条推进、两名角色 SP 独立累计与最终 summary。
+- pending SP baseline 测试覆盖 `currentValue = null` 时仍保留累计 delta。
+- output consistency 测试覆盖 sim log、敌人曲线和资源曲线共享同一快照引用。
+- Workbench 全量单元测试、构建和浏览器主流程保持通过，现有三值结果不变。

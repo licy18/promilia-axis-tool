@@ -4,6 +4,12 @@ import {
   createThreeValueRuntimeInput,
 } from './threeValueRuntimeInput';
 import { createThreeValueRuntimeOutputConsumerContract } from './threeValueRuntimeOutputConsumer';
+import {
+  createThreeValueRuntimeEnemyBaseline,
+  createThreeValueRuntimeSelfEnergyBaseline,
+  createThreeValueRuntimeStateMetric,
+  createThreeValueRuntimeStateSnapshots,
+} from './threeValueRuntimeStateSnapshots';
 
 export function createThreeValueRuntimeProjection({
   scenario,
@@ -19,21 +25,39 @@ export function createThreeValueRuntimeProjection({
     threeValueGenerationLayer,
   });
   const appliedDeltas = runtimeInput.appliedDeltas;
+  const runtimeStateSnapshots = createThreeValueRuntimeStateSnapshots({
+    scenario,
+    appliedDeltas,
+  });
+  const stateSnapshotByDeltaId = new Map(
+    runtimeStateSnapshots.snapshots.map(snapshot => [
+      snapshot.sourceDeltaId,
+      snapshot,
+    ])
+  );
   const enemyStateCurve = createThreeValueRuntimeEnemyStateCurve({
     scenario,
     appliedDeltas,
+    runtimeStateSnapshots,
+    stateSnapshotByDeltaId,
   });
   const selfEnergyCurveByActor = createThreeValueRuntimeSelfEnergyCurveByActor({
     scenario,
     appliedDeltas,
+    runtimeStateSnapshots,
+    stateSnapshotByDeltaId,
   });
-  const simLog = createThreeValueRuntimeSimLog(appliedDeltas);
+  const simLog = createThreeValueRuntimeSimLog(
+    appliedDeltas,
+    stateSnapshotByDeltaId
+  );
   const resourceCurves = createThreeValueRuntimeResourceCurves(
     selfEnergyCurveByActor
   );
   const stateCurves = createThreeValueRuntimeStateCurves({
     enemyStateCurve,
     resourceCurves,
+    runtimeStateSnapshots,
   });
   const baseSummary = summarizeThreeValueRuntimeProjection({
     runtimeInput,
@@ -42,6 +66,7 @@ export function createThreeValueRuntimeProjection({
     selfEnergyCurveByActor,
     resourceCurves,
     simLog,
+    runtimeStateSnapshots,
   });
   const outputContract = createThreeValueRuntimeOutputContract({
     runtimeInput,
@@ -64,6 +89,7 @@ export function createThreeValueRuntimeProjection({
     stateCurves,
     resourceCurves,
     summary,
+    runtimeStateSnapshots,
   });
 
   return {
@@ -84,6 +110,7 @@ export function createThreeValueRuntimeProjection({
     runtimeOutputs,
     stateCurves,
     resourceCurves,
+    runtimeStateSnapshots,
     enemyStateCurve,
     selfEnergyCurveByActor,
     simLog,
@@ -98,6 +125,7 @@ function createThreeValueRuntimeOutputs({
   stateCurves,
   resourceCurves,
   summary,
+  runtimeStateSnapshots,
 }) {
   const outputConsistency = createRuntimeOutputConsistency({
     outputContract,
@@ -127,6 +155,7 @@ function createThreeValueRuntimeOutputs({
     outputNames: outputContract.outputNames,
     outputAliases: {
       resources: 'resourceCurves',
+      stateSnapshots: 'stateCurves.snapshots',
     },
     outputContract,
     outputConsumerContract,
@@ -135,6 +164,7 @@ function createThreeValueRuntimeOutputs({
     stateCurves,
     resourceCurves,
     resources: resourceCurves,
+    stateSnapshots: runtimeStateSnapshots,
     summary,
     outputConsistency,
     outputs: {
@@ -148,6 +178,7 @@ function createThreeValueRuntimeOutputs({
       outputCount: outputContract.summary.outputCount,
       appliedDeltaCount: outputContract.summary.appliedDeltaCount,
       simLogCount: outputContract.summary.simLogCount,
+      stateSnapshotCount: outputContract.summary.stateSnapshotCount,
       enemyStatePointCount: outputContract.summary.enemyStatePointCount,
       stateCurvePointCount: outputContract.summary.stateCurvePointCount,
       resourceCurveActorCount: outputContract.summary.resourceCurveActorCount,
@@ -265,6 +296,17 @@ function createRuntimeOutputConsistency({
     (sum, actor) => sum + (numberOrNull(actor.pointCount) ?? 0),
     0
   );
+  const stateSnapshots = stateCurves?.snapshots?.snapshots ?? [];
+  const stateSnapshotCount = stateSnapshots.length;
+  const stateSnapshotByDeltaId = new Map(
+    stateSnapshots.map(snapshot => [snapshot.sourceDeltaId, snapshot])
+  );
+  const curvePoints = [
+    ...(stateCurves?.enemy?.points ?? []),
+    ...(resourceCurves?.curvesByActor ?? []).flatMap(
+      actor => actor.points ?? []
+    ),
+  ];
   const checks = {
     summarySimLogCount: summary.simLogCount === simLogCount,
     summaryEnemyStatePointCount:
@@ -281,6 +323,15 @@ function createRuntimeOutputConsistency({
       outputContract.summary.simLogCount === simLogCount,
     outputContractSummaryStateCurvePointCount:
       outputContract.summary.stateCurvePointCount === stateCurvePointCount,
+    summaryStateSnapshotCount:
+      summary.stateSnapshotCount === stateSnapshotCount,
+    simLogStateSnapshotsShared: simLog.every(
+      row => row.stateSnapshot === stateSnapshotByDeltaId.get(row.sourceDeltaId)
+    ),
+    stateCurveSnapshotsShared: curvePoints.every(
+      point =>
+        point.stateSnapshot === stateSnapshotByDeltaId.get(point.sourceDeltaId)
+    ),
   };
   const consistent = Object.values(checks).every(Boolean);
   return {
@@ -293,6 +344,7 @@ function createRuntimeOutputConsistency({
     resourceCurvePointCount,
     stateCurvePointCount,
     resourceActorPointCount,
+    stateSnapshotCount,
     checks,
     consistent,
     applied: true,
@@ -338,6 +390,7 @@ function createThreeValueRuntimeOutputContract({
       outputCount: Object.keys(outputs).length,
       appliedDeltaCount: appliedDeltas.length,
       simLogCount: simLog.length,
+      stateSnapshotCount: stateCurves.snapshots.summary.snapshotCount,
       enemyStatePointCount: enemyStateCurve.pointCount,
       stateCurvePointCount: stateCurves.summary.stateCurvePointCount,
       resourceCurveActorCount: resourceCurves.summary.actorCount,
@@ -408,6 +461,7 @@ function createRuntimeSimLogOutputContract({ runtimeInput, simLog }) {
     keyFields: ['sourceDeltaId', 'runtimeSequenceIndex'],
     eventType: 'THREE_VALUE_DELTA_APPLIED',
     valueFields: ['delta', 'hpDelta', 'toughnessDelta', 'energyDelta'],
+    stateSnapshotField: 'stateSnapshot',
     aggregateFields: [
       'actionThreeValueDeltaAggregate',
       'hitThreeValueDeltaAggregate',
@@ -431,7 +485,7 @@ function createRuntimeStateCurvesOutputContract({
   return {
     sourceKind: stateCurves.sourceKind,
     status: stateCurves.status,
-    outputFields: ['enemy', 'resources', 'summary'],
+    outputFields: ['enemy', 'resources', 'snapshots', 'summary'],
     enemy: {
       sourceKind: enemyStateCurve.sourceKind,
       status: enemyStateCurve.status,
@@ -447,6 +501,14 @@ function createRuntimeStateCurvesOutputContract({
       resourceKind: resourceCurves.resourceKind,
       valueFields: ['energyDelta'],
     },
+    snapshots: {
+      sourceKind: stateCurves.snapshots.sourceKind,
+      status: stateCurves.snapshots.status,
+      contractName: stateCurves.snapshots.contractName,
+      snapshotCount: stateCurves.snapshots.summary.snapshotCount,
+      keyFields: ['sourceDeltaId', 'runtimeSequenceIndex'],
+      valueFields: ['before', 'delta', 'after'],
+    },
     summaryFields: [
       'enemyPointCount',
       'enemyHpDelta',
@@ -455,6 +517,7 @@ function createRuntimeStateCurvesOutputContract({
       'resourceActorCount',
       'resourcePointCount',
       'selfEnergyDelta',
+      'stateSnapshotCount',
     ],
     applied: true,
   };
@@ -473,6 +536,7 @@ function createRuntimeResourceCurvesOutputContract(resourceCurves) {
     pointKeyFields: ['sourceDeltaId', 'runtimeSequenceIndex'],
     valueFields: ['delta', 'energyDelta'],
     stateMetricField: 'stateMetric',
+    stateSnapshotField: 'stateSnapshot',
     applied: true,
   };
 }
@@ -500,6 +564,7 @@ function createRuntimeSummaryOutputContract(summary) {
       'resourceCurveActorCount',
       'resourceCurvePointCount',
       'simLogCount',
+      'stateSnapshotCount',
       'calculatorCount',
       'valueSourceSlotCount',
       'runtimeValueSourceSlotCount',
@@ -531,15 +596,28 @@ function createRuntimeSummaryOutputContract(summary) {
   };
 }
 
-function createThreeValueRuntimeEnemyStateCurve({ scenario, appliedDeltas }) {
+function createThreeValueRuntimeEnemyStateCurve({
+  scenario,
+  appliedDeltas,
+  runtimeStateSnapshots,
+  stateSnapshotByDeltaId,
+}) {
   const points = appliedDeltas
     .filter(delta =>
       ['enemyHpDamage', 'enemyToughnessDamage'].includes(delta.trackKey)
     )
-    .map((delta, index) => createThreeValueRuntimePoint(delta, index));
+    .map((delta, index) =>
+      createThreeValueRuntimePoint(
+        delta,
+        index,
+        stateSnapshotByDeltaId.get(delta.id ?? delta.sourceDeltaId)
+      )
+    );
   const hpDelta = sumThreeValueRuntimeDeltas(points, 'hpDelta');
   const toughnessDelta = sumThreeValueRuntimeDeltas(points, 'toughnessDelta');
-  const baseline = createThreeValueRuntimeEnemyBaseline(scenario);
+  const baseline =
+    runtimeStateSnapshots?.baseline?.enemy ??
+    createThreeValueRuntimeEnemyBaseline(scenario);
   const stateMetrics = {
     hp: createThreeValueRuntimeStateMetric({
       key: 'hp',
@@ -588,15 +666,25 @@ function createThreeValueRuntimeEnemyStateCurve({ scenario, appliedDeltas }) {
 function createThreeValueRuntimeSelfEnergyCurveByActor({
   scenario,
   appliedDeltas,
+  runtimeStateSnapshots,
+  stateSnapshotByDeltaId,
 }) {
+  const energyBaselineByActor = new Map(
+    (runtimeStateSnapshots?.baseline?.selfEnergyByActor ?? []).map(actor => [
+      actor.actorId,
+      actor.baseline,
+    ])
+  );
   const actorGroups = new Map(
-    scenario.actors.map((actor, index) => [
+    (scenario?.actors ?? []).map((actor, index) => [
       actor.id,
       {
         actorId: actor.id,
         actorName: actor.name,
         resource: 'sp',
-        baseline: createThreeValueRuntimeSelfEnergyBaseline(actor),
+        baseline:
+          energyBaselineByActor.get(actor.id) ??
+          createThreeValueRuntimeSelfEnergyBaseline(actor),
         order: index,
         delta: 0,
         pointCount: 0,
@@ -609,13 +697,19 @@ function createThreeValueRuntimeSelfEnergyCurveByActor({
   );
 
   for (const [index, delta] of selfEnergyDeltas.entries()) {
-    const actorId = delta.actorId ?? 'unknown';
+    const stateSnapshot = stateSnapshotByDeltaId.get(
+      delta.id ?? delta.sourceDeltaId
+    );
+    const actorId =
+      stateSnapshot?.energyOwnerActorId ?? delta.actorId ?? 'unknown';
     if (!actorGroups.has(actorId)) {
       actorGroups.set(actorId, {
         actorId,
         actorName: delta.actorName ?? '未知角色',
         resource: delta.valueUnit ?? 'sp',
-        baseline: createThreeValueRuntimeSelfEnergyBaseline(null),
+        baseline:
+          energyBaselineByActor.get(actorId) ??
+          createThreeValueRuntimeSelfEnergyBaseline(null),
         order: actorGroups.size,
         delta: 0,
         pointCount: 0,
@@ -623,7 +717,7 @@ function createThreeValueRuntimeSelfEnergyCurveByActor({
       });
     }
     const group = actorGroups.get(actorId);
-    const point = createThreeValueRuntimePoint(delta, index);
+    const point = createThreeValueRuntimePoint(delta, index, stateSnapshot);
     group.points.push(point);
     group.pointCount += 1;
     group.delta = roundCurveValue(
@@ -657,11 +751,11 @@ function createThreeValueRuntimeSelfEnergyCurveByActor({
     .map(({ order, ...group }) => group);
 }
 
-function createThreeValueRuntimeSimLog(appliedDeltas) {
+function createThreeValueRuntimeSimLog(appliedDeltas, stateSnapshotByDeltaId) {
   return appliedDeltas.map((delta, index) => ({
     eventType: 'THREE_VALUE_DELTA_APPLIED',
     sequenceIndex: index,
-    sourceDeltaId: delta.id,
+    sourceDeltaId: delta.id ?? delta.sourceDeltaId,
     timeMs: delta.timeMs,
     frameIndex: delta.frameIndex,
     frameLabel: delta.frameLabel,
@@ -695,14 +789,16 @@ function createThreeValueRuntimeSimLog(appliedDeltas) {
     confidence: delta.confidence,
     stateCurveSequenceIndex: delta.stateCurveSequenceIndex,
     runtimeSequenceIndex: delta.runtimeSequenceIndex ?? index,
+    stateSnapshot:
+      stateSnapshotByDeltaId.get(delta.id ?? delta.sourceDeltaId) ?? null,
     applied: true,
   }));
 }
 
-function createThreeValueRuntimePoint(delta, sequenceIndex) {
+function createThreeValueRuntimePoint(delta, sequenceIndex, stateSnapshot) {
   return {
     sourceKind: 'three-value-runtime-input-applied-delta',
-    sourceDeltaId: delta.id,
+    sourceDeltaId: delta.id ?? delta.sourceDeltaId,
     sequenceIndex,
     runtimeSequenceIndex: delta.runtimeSequenceIndex ?? sequenceIndex,
     stateCurveSequenceIndex: delta.stateCurveSequenceIndex,
@@ -744,6 +840,7 @@ function createThreeValueRuntimePoint(delta, sequenceIndex) {
     sourceStatus: delta.sourceStatus,
     resultStatus: delta.resultStatus,
     sourceIds: delta.sourceIds,
+    stateSnapshot: stateSnapshot ?? null,
     applied: true,
   };
 }
@@ -751,12 +848,14 @@ function createThreeValueRuntimePoint(delta, sequenceIndex) {
 function createThreeValueRuntimeStateCurves({
   enemyStateCurve,
   resourceCurves,
+  runtimeStateSnapshots,
 }) {
   return {
     sourceKind: 'azpr-runtime-state-curves-from-standard-deltas',
     status: 'runtime-state-curves-ready-from-standard-deltas',
     enemy: enemyStateCurve,
     resources: resourceCurves,
+    snapshots: runtimeStateSnapshots,
     summary: {
       enemyPointCount: enemyStateCurve.pointCount,
       enemyHpDelta: enemyStateCurve.hpDelta,
@@ -768,6 +867,7 @@ function createThreeValueRuntimeStateCurves({
       activeResourceActorCount: resourceCurves.summary.activeActorCount,
       resourcePointCount: resourceCurves.summary.pointCount,
       selfEnergyDelta: resourceCurves.summary.selfEnergyDelta,
+      stateSnapshotCount: runtimeStateSnapshots.summary.snapshotCount,
       applied: true,
     },
     applied: true,
@@ -812,6 +912,7 @@ function summarizeThreeValueRuntimeProjection({
   selfEnergyCurveByActor,
   resourceCurves,
   simLog,
+  runtimeStateSnapshots,
 }) {
   const selfEnergyPointCount = selfEnergyCurveByActor.reduce(
     (sum, actor) => sum + actor.pointCount,
@@ -864,6 +965,10 @@ function summarizeThreeValueRuntimeProjection({
     resourceCurveActorCount: resourceCurves.summary.actorCount,
     activeResourceCurveActorCount: resourceCurves.summary.activeActorCount,
     resourceCurvePointCount: resourceCurves.summary.pointCount,
+    stateSnapshotCount: runtimeStateSnapshots.summary.snapshotCount,
+    stateSnapshotReadyCount: runtimeStateSnapshots.summary.readySnapshotCount,
+    stateSnapshotPendingBaselineCount:
+      runtimeStateSnapshots.summary.pendingBaselineSnapshotCount,
     enemyHpInitial: enemyStateCurve.stateMetrics?.hp?.initialValue ?? null,
     enemyHpRemaining: enemyStateCurve.stateMetrics?.hp?.currentValue ?? null,
     enemyHpBaselineStatus:
@@ -1010,184 +1115,6 @@ export function createSelfEnergyDeltaSummaryByActor(selfEnergyCurveByActor) {
     currentValue: actor.stateMetric?.currentValue ?? null,
     baselineStatus: actor.stateMetric?.baselineStatus ?? null,
   }));
-}
-
-function createThreeValueRuntimeEnemyBaseline(scenario) {
-  const enemy = scenario?.enemy ?? {};
-  const baseHp = firstRuntimeNumber(
-    enemy.stats?.maxHp,
-    enemy.maxHp,
-    enemy.baseHp,
-    enemy.source?.enemy?.stats?.maxHp,
-    enemy.source?.enemy?.maxHp
-  );
-  const hpMultiplier = firstRuntimeNumber(enemy.hpMultiplier, 1) ?? 1;
-  const hpInitial = Number.isFinite(baseHp)
-    ? roundCurveValue(baseHp * hpMultiplier)
-    : null;
-  const toughnessInitial = firstRuntimeNumber(
-    enemy.stats?.initialToughness,
-    enemy.toughness?.initialValue,
-    enemy.initialToughness
-  );
-  const toughnessMax = firstRuntimeNumber(
-    enemy.stats?.maxToughness,
-    enemy.toughness?.maxValue,
-    enemy.maxToughness
-  );
-  const toughnessBase = firstRuntimeNumber(
-    enemy.toughness?.baseMax,
-    enemy.baseAttributes?.find(item => item.key === 'WEAKNESS_POINT_MAX')?.value
-  );
-  const toughnessMultiplier = firstRuntimeNumber(
-    enemy.toughness?.maxMultiplier,
-    enemy.toughnessMultiplier,
-    1
-  );
-
-  return {
-    hp: {
-      sourceKind: 'scenario-enemy-hp-baseline',
-      sourceStatus:
-        hpInitial == null
-          ? 'baseline-pending-missing-scenario-enemy-max-hp'
-          : 'baseline-derived-from-scenario-enemy-max-hp',
-      sourcePath: 'scenario.enemy.stats.maxHp * scenario.enemy.hpMultiplier',
-      initialValue: hpInitial,
-      baseValue: Number.isFinite(baseHp) ? baseHp : null,
-      multiplier: Number.isFinite(hpMultiplier) ? hpMultiplier : null,
-      valueUnit: 'hp',
-      applied: hpInitial != null,
-    },
-    toughness: {
-      sourceKind: 'scenario-enemy-toughness-baseline',
-      sourceStatus:
-        toughnessInitial == null
-          ? 'baseline-pending-missing-WEAKNESS_POINT_MAX'
-          : 'baseline-derived-from-scenario-enemy-WEAKNESS_POINT_MAX',
-      sourcePath:
-        toughnessInitial == null
-          ? 'scenario.enemy.baseAttributes[WEAKNESS_POINT_MAX] missing'
-          : 'scenario.enemy.stats.initialToughness',
-      initialValue:
-        toughnessInitial == null ? null : roundCurveValue(toughnessInitial),
-      maxValue: toughnessMax == null ? null : roundCurveValue(toughnessMax),
-      baseValue: toughnessBase == null ? null : roundCurveValue(toughnessBase),
-      multiplier:
-        toughnessMultiplier == null
-          ? null
-          : roundCurveValue(toughnessMultiplier),
-      initialRatio: enemy.toughness?.initialRatio ?? null,
-      valueUnit: 'toughness',
-      applied: toughnessInitial != null,
-    },
-  };
-}
-
-function createThreeValueRuntimeSelfEnergyBaseline(actor) {
-  const initialValue = firstRuntimeNumber(
-    actor?.initialSp,
-    actor?.initialEnergy,
-    actor?.resourceState?.sp,
-    actor?.resources?.sp,
-    actor?.stats?.sp
-  );
-  const maxValue = firstRuntimeNumber(
-    actor?.stats?.maxSp,
-    actor?.maxSp,
-    actor?.baseAttributes?.find(item => item.key === 'MAXSP')?.value
-  );
-
-  return {
-    sourceKind: 'scenario-actor-self-energy-baseline',
-    sourceStatus:
-      initialValue == null
-        ? 'baseline-pending-azpr-initial-self-energy'
-        : 'baseline-derived-from-scenario-actor-self-energy',
-    sourcePath:
-      initialValue == null
-        ? 'pending battle start/current SP evidence'
-        : 'scenario.actor.initialSp|initialEnergy|resourceState.sp',
-    initialValue: initialValue == null ? null : roundCurveValue(initialValue),
-    maxValue: maxValue == null ? null : roundCurveValue(maxValue),
-    maxValueSourceStatus:
-      maxValue == null ? 'max-sp-missing' : 'max-sp-derived-from-actor-stats',
-    valueUnit: 'sp',
-    applied: initialValue != null,
-  };
-}
-
-function createThreeValueRuntimeStateMetric({
-  key,
-  label,
-  valueUnit,
-  baseline,
-  delta,
-  deltaDirection,
-  stateLabel,
-}) {
-  const initialValue = strictRuntimeNumberOrNull(baseline?.initialValue);
-  const normalizedDelta = normalizeThreeValueRuntimeNumber(delta) ?? 0;
-  const baselineConfirmed = Number.isFinite(initialValue);
-  const rawCurrentValue = baselineConfirmed
-    ? roundCurveValue(
-        deltaDirection === 'decrease'
-          ? initialValue - normalizedDelta
-          : initialValue + normalizedDelta
-      )
-    : null;
-  const currentValue =
-    rawCurrentValue != null && deltaDirection === 'decrease'
-      ? Math.max(0, rawCurrentValue)
-      : rawCurrentValue;
-
-  return {
-    key,
-    label,
-    stateLabel,
-    valueUnit: baseline?.valueUnit ?? valueUnit,
-    initialValue: baselineConfirmed ? initialValue : null,
-    maxValue: baseline?.maxValue ?? null,
-    delta: normalizedDelta,
-    rawCurrentValue,
-    currentValue,
-    overrunValue:
-      rawCurrentValue != null && deltaDirection === 'decrease'
-        ? Math.max(0, roundCurveValue(-rawCurrentValue))
-        : 0,
-    remainingValue: deltaDirection === 'decrease' ? currentValue : null,
-    deltaDirection,
-    baselineConfirmed,
-    baselineStatus:
-      baseline?.sourceStatus ??
-      (baselineConfirmed ? 'baseline-confirmed' : 'baseline-pending'),
-    stateStatus: baselineConfirmed
-      ? 'state-derived-from-baseline-and-applied-delta'
-      : 'state-baseline-pending',
-    sourceKind: baseline?.sourceKind ?? null,
-    sourcePath: baseline?.sourcePath ?? null,
-    baseValue: baseline?.baseValue ?? null,
-    multiplier: baseline?.multiplier ?? null,
-    applied: baselineConfirmed,
-  };
-}
-
-function firstRuntimeNumber(...values) {
-  for (const value of values) {
-    const number = strictRuntimeNumberOrNull(value);
-    if (Number.isFinite(number)) {
-      return number;
-    }
-  }
-  return null;
-}
-
-function strictRuntimeNumberOrNull(value) {
-  if (value == null || value === '') {
-    return null;
-  }
-  const number = Number(value);
-  return Number.isFinite(number) ? number : null;
 }
 
 function sumThreeValueRuntimeDeltas(items, field) {

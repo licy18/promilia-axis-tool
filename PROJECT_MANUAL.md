@@ -494,6 +494,21 @@ P0 验证结论：当前状态可以作为“Workbench 主流程 demo”给用�
 - `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
 - `npm run test:e2e:workbench-flow`：通过，25 条 Workbench 浏览器主流程。
 
+### P3-B 运行时三值状态快照（2026-07-10）
+
+已完成能力：
+
+- runtime 按标准 delta 顺序推进敌人 HP、敌人韧性和所属角色 SP；每条实际应用 delta 都输出同一合同下的 `before -> delta -> after` 状态快照。
+- 两名队伍角色的 SP 状态分别初始化和累计，能量所有权优先使用 P3-A 的机制上下文；敌人 HP/韧性继续使用项目场景中的真实 baseline。
+- `stateCurves.snapshots` 成为共享运行时事实，sim log、敌人曲线点和角色资源曲线点引用同一快照对象，summary 同步输出快照数量与 baseline 状态。
+- 已确认 baseline 输出绝对前后值；尚未确认的角色初始 SP 保持 `null` 和 pending，同时继续记录累计 delta，不伪造初始能量，也不改变现有三值计算结果。
+
+已完成验证：
+
+- `npm run test -- --run`：通过，41 个测试文件、313 条测试，覆盖逐 delta 状态推进、多角色独立 SP、pending baseline 和日志/曲线共享引用。
+- `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
+- `npm run test:e2e:workbench-flow`：通过，25 条 Workbench 浏览器主流程。
+
 ### 下一阶段优先级
 
 P1：核心导入/导出与分享闭环已完成。
@@ -509,8 +524,9 @@ P2：项目级角色、培养项和敌人配置闭环已完成。
 P3：运行时层真实机制适配。
 
 - P3-A 已完成：标准 Hit 已接入统一来源、目标、所有权与时序上下文，calculator adapter 和 runtime 使用同一合同。
-- 下一阶段 P3-B：建立运行时三值状态快照；每个实际应用的命中记录敌人 HP/韧性和所属角色 SP 的变更前、delta、变更后，让日志、状态曲线、资源曲线和 summary 共享同一运行时事实。
-- P3-B 保持现有 calculator 输出和三值结果不变，先解决状态初始化、逐命中推进与每角色独立能量所有权，不猜测尚未确认的真实倍率、抗性公式或测试期平衡。
+- P3-B 已完成：运行时按 delta 顺序输出三值变更前后状态，日志、曲线和 summary 已共享同一快照合同。
+- 下一阶段 P3-C：建立运行时 calculator invocation 边界，把机制上下文、`stateSnapshot.before` 和现有 calculator result 组合为可替换调用输入；默认 adapter 原样返回当前 delta，确保结果不变。
+- P3-C 只为后续已确认机制提供稳定替换点，不在本阶段引入真实倍率、抗性公式或测试期平衡。
 - calculator 保持可替换；不追测试期最终倍率和平衡。
 - 优先跑通 HP、韧性、自身能量的来源、时序和作用对象。
 

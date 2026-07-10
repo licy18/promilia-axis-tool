@@ -3,6 +3,7 @@ import {
   createSelfEnergyDeltaSummaryByActor,
   createThreeValueRuntimeProjection,
 } from '../../simulation/runtime/threeValueRuntimeProjection';
+import { createThreeValueRuntimeOutputConsumerView } from '../../simulation/runtime/threeValueRuntimeOutputConsumer';
 
 describe('three value runtime projection', () => {
   it('consumes only applied generation deltas and outputs curves, sim log, and summary', () => {
@@ -203,7 +204,7 @@ describe('three value runtime projection', () => {
           stateCurves: {
             sourceKind: 'azpr-runtime-state-curves-from-standard-deltas',
             status: 'runtime-state-curves-ready-from-standard-deltas',
-            outputFields: ['enemy', 'resources', 'summary'],
+            outputFields: ['enemy', 'resources', 'snapshots', 'summary'],
             enemy: {
               pointCount: 1,
               valueFields: ['hpDelta', 'toughnessDelta'],
@@ -500,7 +501,89 @@ describe('three value runtime projection', () => {
       resourceCurvesSummaryPointCount: true,
       outputContractSummarySimLogCount: true,
       outputContractSummaryStateCurvePointCount: true,
+      summaryStateSnapshotCount: true,
+      simLogStateSnapshotsShared: true,
+      stateCurveSnapshotsShared: true,
     });
+    expect(runtimeProjection.runtimeStateSnapshots).toMatchObject({
+      sourceKind: 'azpr-three-value-runtime-state-snapshots',
+      contractName: 'AzPrThreeValueRuntimeStateSnapshot',
+      summary: {
+        snapshotCount: 2,
+        readySnapshotCount: 1,
+        pendingBaselineSnapshotCount: 1,
+        enemyHpInitial: 15000,
+        enemyHpFinal: 13800,
+        selfEnergyActorCount: 1,
+        selfEnergyBaselineReadyActorCount: 0,
+      },
+    });
+    expect(runtimeProjection.stateCurves.snapshots).toBe(
+      runtimeProjection.runtimeStateSnapshots
+    );
+    expect(runtimeProjection.runtimeOutputs.stateSnapshots).toBe(
+      runtimeProjection.runtimeStateSnapshots
+    );
+    const runtimeConsumerView =
+      createThreeValueRuntimeOutputConsumerView(runtimeProjection);
+    expect(runtimeConsumerView.stateSnapshots).toBe(
+      runtimeProjection.runtimeStateSnapshots
+    );
+    expect(runtimeConsumerView.summary.stateSnapshotCount).toBe(2);
+    expect(runtimeProjection.simLog[0].stateSnapshot).toBe(
+      runtimeProjection.runtimeStateSnapshots.snapshots[0]
+    );
+    expect(runtimeProjection.enemyStateCurve.points[0].stateSnapshot).toBe(
+      runtimeProjection.runtimeStateSnapshots.snapshots[0]
+    );
+    expect(
+      runtimeProjection.selfEnergyCurveByActor[0].points[0].stateSnapshot
+    ).toBe(runtimeProjection.runtimeStateSnapshots.snapshots[1]);
+    expect(runtimeProjection.runtimeStateSnapshots.snapshots).toEqual([
+      expect.objectContaining({
+        sourceDeltaId: 'action-001|hit-1|enemyHpDamage|applied|60|0',
+        primaryMetricKey: 'enemyHp',
+        baselineConfirmed: true,
+        before: expect.objectContaining({
+          enemyHp: expect.objectContaining({ currentValue: 15000 }),
+        }),
+        delta: {
+          enemyHp: 1200,
+          enemyToughness: 0,
+          selfEnergy: 0,
+        },
+        after: expect.objectContaining({
+          enemyHp: expect.objectContaining({ currentValue: 13800 }),
+        }),
+      }),
+      expect.objectContaining({
+        sourceDeltaId:
+          'action-002|event-RESOURCE_CHANGE-0|selfEnergyChange|applied|90|0',
+        primaryMetricKey: 'selfEnergy',
+        status: 'runtime-state-snapshot-pending-baseline',
+        baselineConfirmed: false,
+        energyOwnerActorId: 'actor-001',
+        before: expect.objectContaining({
+          selfEnergy: expect.objectContaining({
+            actorId: 'actor-001',
+            currentValue: null,
+            cumulativeDelta: 0,
+          }),
+        }),
+        delta: {
+          enemyHp: 0,
+          enemyToughness: 0,
+          selfEnergy: -30,
+        },
+        after: expect.objectContaining({
+          selfEnergy: expect.objectContaining({
+            actorId: 'actor-001',
+            currentValue: null,
+            cumulativeDelta: -30,
+          }),
+        }),
+      }),
+    ]);
     expect(runtimeProjection.simLog.map(row => row.sourceDeltaId)).toEqual([
       'action-001|hit-1|enemyHpDamage|applied|60|0',
       'action-002|event-RESOURCE_CHANGE-0|selfEnergyChange|applied|90|0',
@@ -1218,6 +1301,177 @@ describe('three value runtime projection', () => {
     });
   });
 
+  it('advances enemy and per-actor energy state snapshots independently', () => {
+    const runtimeProjection = createThreeValueRuntimeProjection({
+      scenario: {
+        enemy: {
+          id: 'enemy-001',
+          stats: {
+            maxHp: 1000,
+            maxToughness: 100,
+            initialToughness: 100,
+          },
+          hpMultiplier: 1,
+          toughness: {
+            baseMax: 100,
+            maxValue: 100,
+            initialValue: 100,
+          },
+        },
+        actors: [
+          {
+            id: 'actor-001',
+            name: '末音',
+            initialSp: 10,
+            stats: { maxSp: 100 },
+          },
+          {
+            id: 'actor-002',
+            name: '寒悠悠',
+            initialSp: 40,
+            stats: { maxSp: 100 },
+          },
+        ],
+      },
+      threeValueGenerationLayer: {
+        contract: { name: 'Action -> Hit -> ThreeValueDelta' },
+        deltas: [
+          createRuntimeStateDelta({
+            id: 'hp-a',
+            actorId: 'actor-001',
+            actorName: '末音',
+            trackKey: 'enemyHpDamage',
+            value: 100,
+            frameIndex: 10,
+          }),
+          createRuntimeStateDelta({
+            id: 'energy-a',
+            actorId: 'actor-001',
+            actorName: '末音',
+            trackKey: 'selfEnergyChange',
+            value: 5,
+            frameIndex: 11,
+          }),
+          createRuntimeStateDelta({
+            id: 'toughness-b',
+            actorId: 'actor-002',
+            actorName: '寒悠悠',
+            trackKey: 'enemyToughnessDamage',
+            value: 20,
+            frameIndex: 20,
+          }),
+          createRuntimeStateDelta({
+            id: 'energy-b',
+            actorId: 'actor-002',
+            actorName: '寒悠悠',
+            trackKey: 'selfEnergyChange',
+            value: -10,
+            frameIndex: 21,
+          }),
+        ],
+      },
+    });
+
+    const snapshots = runtimeProjection.runtimeStateSnapshots.snapshots;
+    expect(snapshots).toHaveLength(4);
+    expect(snapshots[0]).toMatchObject({
+      sourceDeltaId: 'hp-a',
+      energyOwnerActorId: 'actor-001',
+      before: {
+        enemyHp: expect.objectContaining({ currentValue: 1000 }),
+        enemyToughness: expect.objectContaining({ currentValue: 100 }),
+        selfEnergy: expect.objectContaining({
+          actorId: 'actor-001',
+          currentValue: 10,
+        }),
+      },
+      after: {
+        enemyHp: expect.objectContaining({ currentValue: 900 }),
+        enemyToughness: expect.objectContaining({ currentValue: 100 }),
+        selfEnergy: expect.objectContaining({
+          actorId: 'actor-001',
+          currentValue: 10,
+        }),
+      },
+    });
+    expect(snapshots[1]).toMatchObject({
+      sourceDeltaId: 'energy-a',
+      energyOwnerActorId: 'actor-001',
+      before: {
+        selfEnergy: expect.objectContaining({ currentValue: 10 }),
+      },
+      delta: { selfEnergy: 5 },
+      after: {
+        selfEnergy: expect.objectContaining({
+          currentValue: 15,
+          cumulativeDelta: 5,
+        }),
+      },
+    });
+    expect(snapshots[2]).toMatchObject({
+      sourceDeltaId: 'toughness-b',
+      energyOwnerActorId: 'actor-002',
+      before: {
+        enemyToughness: expect.objectContaining({ currentValue: 100 }),
+        selfEnergy: expect.objectContaining({ currentValue: 40 }),
+      },
+      after: {
+        enemyToughness: expect.objectContaining({ currentValue: 80 }),
+        selfEnergy: expect.objectContaining({ currentValue: 40 }),
+      },
+    });
+    expect(snapshots[3]).toMatchObject({
+      sourceDeltaId: 'energy-b',
+      energyOwnerActorId: 'actor-002',
+      before: {
+        selfEnergy: expect.objectContaining({ currentValue: 40 }),
+      },
+      delta: { selfEnergy: -10 },
+      after: {
+        selfEnergy: expect.objectContaining({
+          currentValue: 30,
+          cumulativeDelta: -10,
+        }),
+      },
+    });
+    expect(runtimeProjection.runtimeStateSnapshots.summary).toMatchObject({
+      snapshotCount: 4,
+      readySnapshotCount: 4,
+      pendingBaselineSnapshotCount: 0,
+      enemyHpInitial: 1000,
+      enemyHpFinal: 900,
+      enemyToughnessInitial: 100,
+      enemyToughnessFinal: 80,
+      selfEnergyActorCount: 2,
+      selfEnergyBaselineReadyActorCount: 2,
+      selfEnergyFinalByActor: [
+        expect.objectContaining({
+          actorId: 'actor-001',
+          initialValue: 10,
+          delta: 5,
+          currentValue: 15,
+        }),
+        expect.objectContaining({
+          actorId: 'actor-002',
+          initialValue: 40,
+          delta: -10,
+          currentValue: 30,
+        }),
+      ],
+    });
+    expect(runtimeProjection.simLog.map(row => row.stateSnapshot)).toEqual(
+      snapshots
+    );
+    expect(
+      runtimeProjection.enemyStateCurve.points.map(point => point.stateSnapshot)
+    ).toEqual([snapshots[0], snapshots[2]]);
+    expect(
+      runtimeProjection.selfEnergyCurveByActor.flatMap(actor =>
+        actor.points.map(point => point.stateSnapshot)
+      )
+    ).toEqual([snapshots[1], snapshots[3]]);
+  });
+
   it('derives remaining enemy toughness from the configured scenario baseline', () => {
     const runtimeProjection = createThreeValueRuntimeProjection({
       scenario: {
@@ -1369,6 +1623,44 @@ function createRuntimeProjectionDelta({ sourceDeltaId, actionId, delta }) {
     hpDelta: delta,
     toughnessDelta: 0,
     energyDelta: 0,
+    applied: true,
+  };
+}
+
+function createRuntimeStateDelta({
+  id,
+  actorId,
+  actorName,
+  trackKey,
+  value,
+  frameIndex,
+}) {
+  return {
+    id,
+    actionId: `action-${id}`,
+    actionName: id,
+    actionType: 'skill',
+    actorId,
+    actorName,
+    hitKey: `hit-${id}`,
+    hitIndex: 0,
+    frameIndex,
+    frameLabel: `0s${frameIndex}f`,
+    timeMs: frameIndex * (1000 / 60),
+    sequenceIndex: 0,
+    trackKey,
+    layerKey: 'applied',
+    valueUnit: trackKey === 'selfEnergyChange' ? 'sp' : 'raw-field',
+    delta: value,
+    hpDelta: trackKey === 'enemyHpDamage' ? value : null,
+    toughnessDelta: trackKey === 'enemyToughnessDamage' ? value : null,
+    energyDelta: trackKey === 'selfEnergyChange' ? value : null,
+    mechanismContext: {
+      ownership: {
+        energyOwnerActorId: actorId,
+        targetEnemyId: 'enemy-001',
+      },
+    },
     applied: true,
   };
 }

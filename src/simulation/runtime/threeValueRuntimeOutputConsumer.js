@@ -8,6 +8,7 @@ export function createThreeValueRuntimeOutputConsumerContract({
 } = {}) {
   const simLogRows = Array.isArray(simLog) ? simLog : [];
   const stateCurveSummary = stateCurves?.summary ?? {};
+  const stateSnapshots = stateCurves?.snapshots ?? null;
   const resourceCurveSummary = resourceCurves?.summary ?? {};
   const contractSummary = outputContract?.summary ?? {};
   const contractOutputs = outputContract?.outputs ?? {};
@@ -69,8 +70,13 @@ export function createThreeValueRuntimeOutputConsumerContract({
         outputFields: contractOutputs.stateCurves?.outputFields ?? [
           'enemy',
           'resources',
+          'snapshots',
           'summary',
         ],
+        stateSnapshotCount: numberOrZero(
+          stateSnapshots?.summary?.snapshotCount ??
+            contractSummary.stateSnapshotCount
+        ),
       },
       resourceCurves: {
         outputName: 'resourceCurves',
@@ -111,6 +117,11 @@ export function createThreeValueRuntimeOutputConsumerContract({
       simLogCount: numberOrZero(
         summary.simLogCount ?? contractSummary.simLogCount ?? simLogRows.length
       ),
+      stateSnapshotCount: numberOrZero(
+        stateSnapshots?.summary?.snapshotCount ??
+          summary.stateSnapshotCount ??
+          contractSummary.stateSnapshotCount
+      ),
       enemyStatePointCount: numberOrZero(
         stateCurves?.enemy?.pointCount ??
           stateCurveSummary.enemyPointCount ??
@@ -147,7 +158,7 @@ export function createThreeValueRuntimeOutputConsumerContract({
         '',
       runtimeInputGenerationOutputBoundaryReady: Boolean(
         summary.runtimeInputGenerationOutputBoundaryReady ??
-          contractSummary.runtimeInputGenerationOutputBoundaryReady
+        contractSummary.runtimeInputGenerationOutputBoundaryReady
       ),
       runtimeInputGenerationOutputBoundaryPath:
         summary.runtimeInputGenerationOutputBoundaryPath ??
@@ -159,13 +170,11 @@ export function createThreeValueRuntimeOutputConsumerContract({
         '',
       runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath:
         summary.runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath ??
-        contractSummary
-          .runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath ??
+        contractSummary.runtimeInputGenerationOutputBoundaryRuntimeInputSourcePath ??
         '',
       runtimeInputGenerationOutputBoundaryStandardContractPath:
         summary.runtimeInputGenerationOutputBoundaryStandardContractPath ??
-        contractSummary
-          .runtimeInputGenerationOutputBoundaryStandardContractPath ??
+        contractSummary.runtimeInputGenerationOutputBoundaryStandardContractPath ??
         '',
       runtimeInputGenerationOutputBoundaryDeltasPath:
         summary.runtimeInputGenerationOutputBoundaryDeltasPath ??
@@ -173,13 +182,11 @@ export function createThreeValueRuntimeOutputConsumerContract({
         '',
       runtimeInputGenerationOutputBoundaryValueSourceSlotsPath:
         summary.runtimeInputGenerationOutputBoundaryValueSourceSlotsPath ??
-        contractSummary
-          .runtimeInputGenerationOutputBoundaryValueSourceSlotsPath ??
+        contractSummary.runtimeInputGenerationOutputBoundaryValueSourceSlotsPath ??
         '',
       runtimeInputGenerationOutputBoundaryContractValidationPath:
         summary.runtimeInputGenerationOutputBoundaryContractValidationPath ??
-        contractSummary
-          .runtimeInputGenerationOutputBoundaryContractValidationPath ??
+        contractSummary.runtimeInputGenerationOutputBoundaryContractValidationPath ??
         '',
       runtimeInputGenerationOutputBoundaryStandardOutputCount: numberOrZero(
         summary.runtimeInputGenerationOutputBoundaryStandardOutputCount ??
@@ -211,6 +218,8 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
   const outputSummary = getThreeValueRuntimeOutputSummary(runtimeOutputSource);
   const simLog = getThreeValueRuntimeSimLogRows(runtimeOutputSource);
   const stateCurves = getThreeValueRuntimeStateCurves(runtimeOutputSource);
+  const stateSnapshots =
+    getThreeValueRuntimeStateSnapshots(runtimeOutputSource);
   const resourceCurves =
     getThreeValueRuntimeResourceCurves(runtimeOutputSource);
   const outputConsistency = runtimeOutputSource?.outputConsistency ?? {};
@@ -252,6 +261,7 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
     outputSummary,
     simLog,
     stateCurves,
+    stateSnapshots,
     resourceCurves,
     resources: resourceCurves,
     enemyStateCurve,
@@ -263,6 +273,10 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
         outputSummary.enemyStatePointCount ?? enemyStateCurve?.pointCount
       ),
       stateCurvePointCount: numberOrZero(outputSummary.stateCurvePointCount),
+      stateSnapshotCount: numberOrZero(
+        outputSummary.stateSnapshotCount ??
+          stateSnapshots?.summary?.snapshotCount
+      ),
       resourceCurvePointCount: numberOrZero(
         outputSummary.resourceCurvePointCount
       ),
@@ -459,6 +473,16 @@ export function getThreeValueRuntimeStateCurves(runtimeProjection) {
   return (
     runtimeOutputSource?.outputs?.stateCurves ??
     runtimeOutputSource?.stateCurves ??
+    {}
+  );
+}
+
+export function getThreeValueRuntimeStateSnapshots(runtimeProjection) {
+  const runtimeOutputSource =
+    getThreeValueRuntimeOutputSource(runtimeProjection);
+  return (
+    getThreeValueRuntimeStateCurves(runtimeProjection)?.snapshots ??
+    runtimeOutputSource?.stateSnapshots ??
     {}
   );
 }
