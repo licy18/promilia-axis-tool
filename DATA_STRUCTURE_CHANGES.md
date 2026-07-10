@@ -26103,7 +26103,7 @@ tests[]
 limitations[]
 ```
 
-必需能力固定为 production 路由与哈希资源、诊断动态加载、JSON 项目交换、PNG 项目交换、多动作编辑、动作关系交换、状态效果区间复盘、方案对比和 390px 窄屏主流程。只有 Playwright 整体通过且九项能力全部存在并通过时，报告才输出 `trial-ready`；缺项或失败均输出 `blocked`。该报告只证明本地 `dist` + Vite preview 可试用，不代表远程 CDN/托管、最终蓝原公式或非 fixture 真实采样已验收。
+必需能力固定为 production 路由与哈希资源、诊断动态加载、JSON 项目交换、PNG 项目交换、多动作编辑、动作关系交换、状态效果区间复盘、方案对比、循环区段复盘和 390px 窄屏主流程。只有 Playwright 整体通过且十项能力全部存在并通过时，报告才输出 `trial-ready`；缺项或失败均输出 `blocked`。该报告只证明本地 `dist` + Vite preview 可试用，不代表远程 CDN/托管、最终蓝原公式或非 fixture 真实采样已验收。
 
 ## 372. WorkbenchActionClipboard v1（仅编辑会话）
 
@@ -26121,7 +26121,7 @@ nextPasteStartMs
 
 `actions[]` 是所选动作的深拷贝，`relations[]` 只包含两个端点都在所选组内的关系。粘贴时按 `baseStartMs` 还原相对帧差，按动作组总跨度限制时间轴边界，重建 action、effect command 与 relation ID，并清除旧 `insertion` / `generationBatch`。多选状态由 `selectedActionIds[] + primaryActionId + actionSelectionAnchorId` 表示，历史快照会保存这些字段以恢复撤销/重做。
 
-该合同严格属于 Workbench transient editing state：不会写入 `WorkbenchDraftSnapshot v9`、项目 JSON、分享链接、PNG 元数据或预设。持久化的是项目自身的 `actionRelations[]`，不是剪贴板；导入、重置和项目切换会清理剪贴板，避免跨项目携带失效动作来源。
+该合同严格属于 Workbench transient editing state：不会写入 `WorkbenchDraftSnapshot v10`、项目 JSON、分享链接、PNG 元数据或预设。持久化的是项目自身的 `actionRelations[]`，不是剪贴板；导入、重置和项目切换会清理剪贴板，避免跨项目携带失效动作来源。
 
 ## 373. WorkbenchProjectFile v9 / ActionRelation v1
 
@@ -26207,4 +26207,44 @@ summary
 
 总 HP、韧性和能量直接读取各方案 `runtimeOutputs.summary`；角色能量读取 `resourceCurves.curvesByActor`；动作贡献聚合 `hitTransactions.transactions` 并读取 `effectTimeline.events`；效果覆盖读取各方案的 `AzPrEffectIntervalProjection`。排轴时长只取 Scenario 动作的最晚结束时间。该投影不调用 calculator，也不建立第二套三值公式。
 
-基准可来自 WorkbenchPreset、JSON/PNG 项目或当前草稿快照，但 `comparisonBaselineDraft`、基准来源和投影结果都属于 Workbench transient state，不写入 WorkbenchProjectFile v9、本地草稿、分享链接、PNG 元数据或预设。导入基准只创建第二套 Project/Scenario/simulation，不调用当前项目导入入口，因此不会覆盖当前编辑或历史栈。
+基准可来自 WorkbenchPreset、JSON/PNG 项目或当前草稿快照，但 `comparisonBaselineDraft`、基准来源和投影结果都属于 Workbench transient state，不写入 WorkbenchProjectFile v10、本地草稿、分享链接、PNG 元数据或预设。导入基准只创建第二套 Project/Scenario/simulation，不调用当前项目导入入口，因此不会覆盖当前编辑或历史栈。
+
+## 376. WorkbenchProjectFile v10 / CycleBoundary v1
+
+Workbench 草稿与项目文件从 v9 升级为 v10，新增：
+
+```text
+cycleBoundaries[]
+  id
+  timeMs
+```
+
+`workbenchCycleBoundaries.js` 负责把边界吸附到 60fps，限制在 `(0, project.durationMs)` 内，并清理重复 ID、重复时间和无效值。边界按 `timeMs` 稳定排序，新增时使用递增 `cycle-boundary-NNNN` ID；拖动只提交松手后的最终帧，删除和选中状态进入 Workbench 历史快照。
+
+`cycleBoundaries[]` 与动作和关系一同写入本地草稿、JSON、分享链接、PNG 元数据和预设项目。v1-v9 文件继续由同一解析器接受并迁移为空边界数组。compiler 只把边界复制到 Scenario 供投影读取；execution plan、generation 和 calculator 不读取边界，因此现有三值结果不变。
+
+## 377. CycleSectionProjection v1（仅运行时投影）
+
+`projectCycleSections.js` 从 Scenario 边界和现有 runtime output 生成：
+
+```text
+schemaVersion = 1
+sourceKind = azpr-cycle-section-projection
+contractName = AzPrCycleSectionProjection
+durationMs / frameRate / boundaries[]
+sections[]
+  sectionId / label
+  startMs / endMs / durationMs
+  startBoundaryId / endBoundaryId
+  metrics
+    enemyHpDelta / enemyToughnessDelta / selfEnergyDelta
+    effectCoverageMs
+  actors[]
+  actions[]
+  effects[]
+summary
+  readsRuntimeOutputsOnly = true
+  appliedToCalculators = false
+```
+
+命中 transaction 和 effect lifecycle event 按发生时间进入区段，恰好位于边界的事件进入后一区段；效果覆盖按 interval 与区段的实际重叠时长聚合。动作行只聚合已经存在的 HP、韧性、能量、命中和效果事件，角色行只聚合现有 self-energy transaction。该投影不写入项目文件，不调用 calculator，不复制动作，也不自动推算循环次数。

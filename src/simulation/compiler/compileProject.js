@@ -49,6 +49,9 @@ export function compileProject(project, gameData) {
     actors: [...actorsById.values()],
     enemy,
     actions,
+    cycleBoundaries: (project.cycleBoundaries ?? []).map(boundary => ({
+      ...boundary,
+    })),
     diagnostics: {
       validationWarnings: validation.warnings,
       missingTimingActionIds: actions

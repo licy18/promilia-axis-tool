@@ -13,11 +13,13 @@ import {
 } from './workbenchProjectFactory';
 import { normalizeWorkbenchRuntimeSampleCaptures } from './workbenchRuntimeSampleCapture';
 import { normalizeWorkbenchActionRelations } from './workbenchActionRelations';
+import { normalizeWorkbenchCycleBoundaries } from './workbenchCycleBoundaries';
 
-export const WORKBENCH_DRAFT_SCHEMA_VERSION = 9;
+export const WORKBENCH_DRAFT_SCHEMA_VERSION = 10;
 export const WORKBENCH_DRAFT_STORAGE_KEY =
-  'promilia-axis-tool:workbench-draft:v9';
+  'promilia-axis-tool:workbench-draft:v10';
 export const LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS = Object.freeze([
+  'promilia-axis-tool:workbench-draft:v9',
   'promilia-axis-tool:workbench-draft:v8',
   'promilia-axis-tool:workbench-draft:v7',
   'promilia-axis-tool:workbench-draft:v6',
@@ -51,6 +53,7 @@ export function createDefaultWorkbenchDraftState() {
     segmentSplitOptions: { ...DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS },
     actionDrafts: [createWorkbenchActionDraft()],
     actionRelations: [],
+    cycleBoundaries: [],
     runtimeSampleCaptures: [],
     selectedActionId: DEFAULT_WORKBENCH_ACTION_ID,
     savedAt: null,
@@ -66,6 +69,7 @@ export function createWorkbenchDraftSnapshot(
     segmentSplitOptions,
     actionDrafts,
     actionRelations,
+    cycleBoundaries,
     runtimeSampleCaptures,
     selectedActionId,
   },
@@ -108,6 +112,7 @@ export function createWorkbenchDraftSnapshot(
       actionRelations,
       normalizedActions
     ),
+    cycleBoundaries: normalizeWorkbenchCycleBoundaries(cycleBoundaries),
     runtimeSampleCaptures: normalizeWorkbenchRuntimeSampleCaptures(
       runtimeSampleCaptures
     ),

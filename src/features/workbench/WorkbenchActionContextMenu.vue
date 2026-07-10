@@ -70,9 +70,20 @@
           <span>删除所选动作</span>
           <kbd>Del</kbd>
         </button>
+        <div class="menu-separator" role="separator"></div>
+        <button
+          type="button"
+          role="menuitem"
+          data-testid="workbench-action-context-add-cycle-boundary"
+          :disabled="!canAddCycleBoundary"
+          @click="runCommand('add-cycle-boundary')"
+        >
+          <Flag />
+          <span>添加循环边界</span>
+        </button>
       </template>
       <button
-        v-else
+        v-else-if="mode === 'relation'"
         class="danger"
         type="button"
         role="menuitem"
@@ -81,6 +92,18 @@
       >
         <Delete />
         <span>删除动作关系</span>
+        <kbd>Del</kbd>
+      </button>
+      <button
+        v-else
+        class="danger"
+        type="button"
+        role="menuitem"
+        data-testid="workbench-action-context-delete-cycle-boundary"
+        @click="runCommand('delete-cycle-boundary')"
+      >
+        <Delete />
+        <span>删除循环边界</span>
         <kbd>Del</kbd>
       </button>
     </div>
@@ -94,6 +117,7 @@ import {
   CopyDocument,
   Delete,
   DocumentCopy,
+  Flag,
 } from '@element-plus/icons-vue';
 import {
   computed,
@@ -129,6 +153,10 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
+  canAddCycleBoundary: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits([
@@ -139,6 +167,8 @@ const emit = defineEmits([
   'nudge-right',
   'delete',
   'delete-relation',
+  'add-cycle-boundary',
+  'delete-cycle-boundary',
 ]);
 const menuRef = ref(null);
 const position = ref({ left: 8, top: 8 });

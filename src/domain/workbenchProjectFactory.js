@@ -21,6 +21,10 @@ import { getSkillActionCatalog } from './skillActionCatalog';
 import { normalizeWorkbenchRuntimeSampleCaptures } from './workbenchRuntimeSampleCapture';
 import { normalizeWorkbenchActionRelations } from './workbenchActionRelations';
 import {
+  DEFAULT_WORKBENCH_DURATION_MS,
+  normalizeWorkbenchCycleBoundaries,
+} from './workbenchCycleBoundaries';
+import {
   getSkillActionVariants,
   getSkillDamageSegments,
 } from './skillDamageSegments';
@@ -367,6 +371,11 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     actionPatch.actionRelations,
     actionDrafts
   );
+  const durationMs = actionPatch.durationMs ?? DEFAULT_WORKBENCH_DURATION_MS;
+  const cycleBoundaries = normalizeWorkbenchCycleBoundaries(
+    actionPatch.cycleBoundaries,
+    durationMs
+  );
 
   if (
     !character ||
@@ -420,7 +429,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
   return createProject({
     id: 'workbench-editable-slice',
     name: `工作台：${character.name} / ${titleActionName} / ${enemy.name}`,
-    durationMs: actionPatch.durationMs ?? 30000,
+    durationMs,
     actors,
     teamSlots,
     enemy: enemyInstance,
@@ -433,6 +442,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
       )
     ),
     actionRelations,
+    cycleBoundaries,
     metadata: {
       fixture: false,
       fixturePurpose: 'stage-4-editable-workbench',

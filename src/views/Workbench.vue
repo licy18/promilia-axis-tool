@@ -7,6 +7,9 @@
     :data-selected-action-count="selectedActionIds.length"
     :data-action-relation-count="actionRelations.length"
     :data-selected-action-relation-id="selectedActionRelationId"
+    :data-cycle-boundary-count="cycleBoundaries.length"
+    :data-selected-cycle-boundary-id="selectedCycleBoundaryId"
+    :data-selected-cycle-section-id="selectedCycleSection?.sectionId || ''"
     :data-effect-interval-count="effectIntervalProjection.summary.intervalCount"
     :data-selected-effect-interval-id="selectedEffectIntervalId"
   >
@@ -170,6 +173,7 @@
       :y="actionContextMenu.y"
       :selected-count="selectedActionIds.length"
       :clipboard-count="actionClipboard?.actions?.length ?? 0"
+      :can-add-cycle-boundary="canAddCycleBoundaryAtContextTime"
       @close="closeActionContextMenu"
       @copy="copySelectedActions"
       @paste="
@@ -179,6 +183,8 @@
       @nudge-right="shiftSelectedActions({ offsetMs: frameToMs(1) })"
       @delete="deleteSelectedActions"
       @delete-relation="deleteActionRelation(selectedActionRelationId)"
+      @add-cycle-boundary="addCycleBoundary(actionContextMenu.targetStartMs)"
+      @delete-cycle-boundary="deleteCycleBoundary(selectedCycleBoundaryId)"
     />
 
     <ScenarioHeader
@@ -346,6 +352,9 @@
           :selected-action-ids="selectedActionIds"
           :action-relations="actionRelations"
           :selected-action-relation-id="selectedActionRelationId"
+          :cycle-boundaries="cycleBoundaries"
+          :selected-cycle-boundary-id="selectedCycleBoundaryId"
+          :selected-cycle-section="selectedCycleSection"
           :effect-intervals="effectIntervalProjection.intervals"
           :selected-effect-interval-id="selectedEffectIntervalId"
           :box-selection-mode="boxSelectionMode"
@@ -365,6 +374,9 @@
           @select-effect-interval="selectEffectInterval"
           @open-action-context-menu="openActionContextMenu"
           @open-action-relation-context-menu="openActionRelationContextMenu"
+          @select-cycle-boundary="selectCycleBoundary"
+          @update-cycle-boundary="updateCycleBoundary"
+          @open-cycle-boundary-context-menu="openCycleBoundaryContextMenu"
           @toggle-box-selection-mode="toggleBoxSelectionMode"
           @create-action-relations="createRelationsForSelectedActions"
           @select-state-curve-point="selectStateCurvePoint"
@@ -378,6 +390,15 @@
           @update-action-time="updateActionTime"
           @shift-selected-actions="shiftSelectedActions"
           @delete-selected-actions="deleteSelectedActions"
+        />
+
+        <WorkbenchCycleSectionPanel
+          v-if="cycleBoundaries.length"
+          class="cycle-review-area"
+          :projection="cycleSectionProjection"
+          :selected-section-id="selectedCycleSection?.sectionId || ''"
+          @select-section="selectCycleSection"
+          @locate-action="locateCycleSectionAction"
         />
 
         <div
@@ -690,6 +711,7 @@
         :selected-action-id="selectedActionId"
         :selected-action-ids="selectedActionIds"
         :action-relations="actionRelations"
+        :cycle-boundaries="cycleBoundaries"
         :effect-intervals="effectIntervalProjection.intervals"
         :timeline-diagnostics="timelineDiagnostics"
         :action-readiness-timeline="simulationResult.actionReadinessTimeline"
@@ -800,6 +822,11 @@ import {
   synchronizeWorkbenchActionRelationGaps,
 } from '../domain/workbenchActionRelations';
 import {
+  addWorkbenchCycleBoundary,
+  normalizeWorkbenchCycleBoundaries,
+  updateWorkbenchCycleBoundary,
+} from '../domain/workbenchCycleBoundaries';
+import {
   clearWorkbenchDraft,
   createWorkbenchDraftSnapshot,
   createWorkbenchProjectFileName,
@@ -842,10 +869,14 @@ import {
   installProjectSimulationSkillDiagnostics,
 } from '../simulation/projection/projectSimulationResult';
 import { projectEffectRuntimeIntervals } from '../simulation/projection/projectEffectIntervals';
+import { projectCycleSections } from '../simulation/projection/projectCycleSections';
 import { projectWorkbenchScenarioComparison } from '../simulation/projection/projectScenarioComparison';
 
 const WorkbenchScenarioComparisonDialog = defineAsyncComponent(
   () => import('../features/workbench/WorkbenchScenarioComparisonDialog.vue')
+);
+const WorkbenchCycleSectionPanel = defineAsyncComponent(
+  () => import('../features/workbench/WorkbenchCycleSectionPanel.vue')
 );
 
 const workbenchSeed = getWorkbenchSeed();
@@ -873,6 +904,7 @@ const segmentSplitOptions = ref({ ...initialDraft.segmentSplitOptions });
 const segmentSplitPreview = ref(null);
 const actionDrafts = ref([...initialDraft.actionDrafts]);
 const actionRelations = ref([...initialDraft.actionRelations]);
+const cycleBoundaries = ref([...initialDraft.cycleBoundaries]);
 const runtimeSampleCaptures = ref([...initialDraft.runtimeSampleCaptures]);
 const selectedActionId = ref(initialDraft.selectedActionId);
 const selectedActionIds = ref(
@@ -880,6 +912,8 @@ const selectedActionIds = ref(
 );
 const actionSelectionAnchorId = ref(initialDraft.selectedActionId);
 const selectedActionRelationId = ref('');
+const selectedCycleBoundaryId = ref('');
+const selectedCycleSectionId = ref('');
 const selectedEffectIntervalId = ref('');
 const selectedEffectEventId = ref('');
 const boxSelectionMode = ref(false);
@@ -959,6 +993,7 @@ const project = computed(() =>
     enemyConfig: enemyConfig.value,
     actions: actionDrafts.value,
     actionRelations: actionRelations.value,
+    cycleBoundaries: cycleBoundaries.value,
     runtimeSampleCaptures: runtimeSampleCaptures.value,
   })
 );
@@ -980,6 +1015,31 @@ const effectIntervalProjection = computed(() =>
     frameRate: scenario.value.time.fps,
   })
 );
+const cycleSectionProjection = computed(() =>
+  projectCycleSections({
+    scenario: scenario.value,
+    runtimeOutputs: runtimeOutputs.value,
+    effectIntervals: effectIntervalProjection.value,
+  })
+);
+const selectedCycleSection = computed(
+  () =>
+    cycleSectionProjection.value.sections.find(
+      section => section.sectionId === selectedCycleSectionId.value
+    ) ??
+    cycleSectionProjection.value.sections[0] ??
+    null
+);
+const canAddCycleBoundaryAtContextTime = computed(() => {
+  const timeMs = Number(actionContextMenu.value.targetStartMs);
+  return (
+    actionContextMenu.value.kind === 'actions' &&
+    Number.isFinite(timeMs) &&
+    timeMs > 0 &&
+    timeMs < scenario.value.time.durationMs &&
+    !cycleBoundaries.value.some(boundary => boundary.timeMs === timeMs)
+  );
+});
 const comparisonBaselineProject = computed(() =>
   comparisonBaselineDraft.value
     ? createWorkbenchProjectFromDraft(comparisonBaselineDraft.value)
@@ -2452,6 +2512,7 @@ function createWorkbenchProjectFromDraft(draft) {
     enemyConfig: draft.enemyConfig,
     actions: draft.actionDrafts,
     actionRelations: draft.actionRelations,
+    cycleBoundaries: draft.cycleBoundaries,
     runtimeSampleCaptures: draft.runtimeSampleCaptures,
   });
 }
@@ -2465,6 +2526,7 @@ function getWorkbenchDraftState() {
     segmentSplitOptions: segmentSplitOptions.value,
     actionDrafts: actionDrafts.value,
     actionRelations: actionRelations.value,
+    cycleBoundaries: cycleBoundaries.value,
     runtimeSampleCaptures: runtimeSampleCaptures.value,
     selectedActionId: selectedActionId.value,
   };
@@ -2776,6 +2838,10 @@ function applyDraftState(draft) {
     draft.actionRelations,
     actionDrafts.value
   );
+  cycleBoundaries.value = normalizeWorkbenchCycleBoundaries(
+    draft.cycleBoundaries,
+    project.value.time.durationMs
+  );
   runtimeSampleCaptures.value = normalizeWorkbenchRuntimeSampleCaptures(
     draft.runtimeSampleCaptures
   );
@@ -2801,6 +2867,8 @@ function clearWorkbenchProjectTransientState() {
   runtimeLogFocus.value = { source: '', statePointId: '', sequence: 0 };
   workbenchFlowDispatchState.value = createEmptyWorkbenchFlowDispatchState();
   selectedActionRelationId.value = '';
+  selectedCycleBoundaryId.value = '';
+  selectedCycleSectionId.value = '';
   selectedEffectIntervalId.value = '';
   selectedEffectEventId.value = '';
   boxSelectionMode.value = false;
@@ -2874,7 +2942,9 @@ function handleWorkbenchKeyboardShortcut(event) {
   if (!(event.ctrlKey || event.metaKey) && !event.altKey) {
     if (['delete', 'backspace'].includes(key)) {
       event.preventDefault();
-      if (selectedActionRelationId.value) {
+      if (selectedCycleBoundaryId.value) {
+        deleteCycleBoundary(selectedCycleBoundaryId.value);
+      } else if (selectedActionRelationId.value) {
         deleteActionRelation(selectedActionRelationId.value);
       } else {
         deleteSelectedActions();
@@ -2999,6 +3069,7 @@ function createWorkbenchHistorySnapshot() {
       segmentSplitOptions: segmentSplitOptions.value,
       actionDrafts: actionDrafts.value,
       actionRelations: actionRelations.value,
+      cycleBoundaries: cycleBoundaries.value,
       runtimeSampleCaptures: runtimeSampleCaptures.value,
       selectedActionId: selectedActionId.value,
     },
@@ -3012,11 +3083,14 @@ function createWorkbenchHistorySnapshot() {
     segmentSplitOptions: draftSnapshot.segmentSplitOptions,
     actionDrafts: draftSnapshot.actionDrafts,
     actionRelations: draftSnapshot.actionRelations,
+    cycleBoundaries: draftSnapshot.cycleBoundaries,
     runtimeSampleCaptures: draftSnapshot.runtimeSampleCaptures,
     selectedActionId: draftSnapshot.selectedActionId,
     selectedActionIds: selectedActionIds.value,
     actionSelectionAnchorId: actionSelectionAnchorId.value,
     selectedActionRelationId: selectedActionRelationId.value,
+    selectedCycleBoundaryId: selectedCycleBoundaryId.value,
+    selectedCycleSectionId: selectedCycleSectionId.value,
     boxSelectionMode: boxSelectionMode.value,
     selectedStateCurvePointId: selectedStateCurvePointId.value,
     stateCurveFocusMode: stateCurveFocusMode.value,
@@ -3059,6 +3133,10 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
     snapshot.actionRelations,
     actionDrafts.value
   );
+  cycleBoundaries.value = normalizeWorkbenchCycleBoundaries(
+    snapshot.cycleBoundaries,
+    project.value.time.durationMs
+  );
   runtimeSampleCaptures.value = normalizeWorkbenchRuntimeSampleCaptures(
     snapshot.runtimeSampleCaptures
   );
@@ -3083,6 +3161,16 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
   )
     ? snapshot.selectedActionRelationId
     : '';
+  selectedCycleBoundaryId.value = cycleBoundaries.value.some(
+    boundary => boundary.id === snapshot.selectedCycleBoundaryId
+  )
+    ? snapshot.selectedCycleBoundaryId
+    : '';
+  selectedCycleSectionId.value = cycleSectionProjection.value.sections.some(
+    section => section.sectionId === snapshot.selectedCycleSectionId
+  )
+    ? snapshot.selectedCycleSectionId
+    : (cycleSectionProjection.value.sections[0]?.sectionId ?? '');
   boxSelectionMode.value = Boolean(snapshot.boxSelectionMode);
   selectedStateCurvePointId.value = snapshot.selectedStateCurvePointId ?? '';
   stateCurveFocusMode.value = snapshot.stateCurveFocusMode || 'all';
@@ -3250,6 +3338,7 @@ function findActionDraftById(actionId) {
 function selectAction(actionRequest, { syncRuntimeResult = true } = {}) {
   clearSegmentSplitPreview();
   selectedActionRelationId.value = '';
+  selectedCycleBoundaryId.value = '';
   selectedEffectIntervalId.value = '';
   selectedEffectEventId.value = '';
   const request =
@@ -3345,6 +3434,7 @@ function selectActionRelation(relationRequest) {
   }
 
   selectedActionRelationId.value = relation.id;
+  selectedCycleBoundaryId.value = '';
   selectedEffectIntervalId.value = '';
   selectedEffectEventId.value = '';
   boxSelectionMode.value = false;
@@ -3367,6 +3457,7 @@ function selectEffectInterval({ intervalId = '', eventId = '' } = {}) {
     return false;
   }
   selectedActionRelationId.value = '';
+  selectedCycleBoundaryId.value = '';
   boxSelectionMode.value = false;
   selectedEffectIntervalId.value = interval.intervalId;
   selectedEffectEventId.value = interval.lifecycleEventIds.includes(eventId)
@@ -3386,6 +3477,106 @@ function selectEffectEvent(eventId) {
   selectedEffectIntervalId.value = interval.intervalId;
   selectedEffectEventId.value = eventId;
   selectedActionRelationId.value = '';
+  selectedCycleBoundaryId.value = '';
+  return true;
+}
+
+function addCycleBoundary(timeMs) {
+  const result = addWorkbenchCycleBoundary(
+    cycleBoundaries.value,
+    timeMs,
+    scenario.value.time.durationMs
+  );
+  if (!result.createdBoundary) {
+    return false;
+  }
+  recordWorkbenchHistorySnapshot();
+  cycleBoundaries.value = result.boundaries;
+  selectCycleBoundary(result.createdBoundary.id);
+  markDraftDirty();
+  return true;
+}
+
+function updateCycleBoundary({ boundaryId = '', timeMs = 0 } = {}) {
+  const nextBoundaries = updateWorkbenchCycleBoundary(
+    cycleBoundaries.value,
+    boundaryId,
+    timeMs,
+    scenario.value.time.durationMs
+  );
+  if (
+    JSON.stringify(nextBoundaries) === JSON.stringify(cycleBoundaries.value)
+  ) {
+    return false;
+  }
+  recordWorkbenchHistorySnapshot();
+  cycleBoundaries.value = nextBoundaries;
+  selectCycleBoundary(boundaryId);
+  markDraftDirty();
+  return true;
+}
+
+function deleteCycleBoundary(boundaryId = selectedCycleBoundaryId.value) {
+  if (!cycleBoundaries.value.some(boundary => boundary.id === boundaryId)) {
+    return false;
+  }
+  recordWorkbenchHistorySnapshot();
+  cycleBoundaries.value = cycleBoundaries.value.filter(
+    boundary => boundary.id !== boundaryId
+  );
+  selectedCycleBoundaryId.value = '';
+  selectedCycleSectionId.value =
+    cycleSectionProjection.value.sections[0]?.sectionId ?? '';
+  markDraftDirty();
+  return true;
+}
+
+function selectCycleBoundary(boundaryId) {
+  if (!cycleBoundaries.value.some(boundary => boundary.id === boundaryId)) {
+    return false;
+  }
+  selectedCycleBoundaryId.value = boundaryId;
+  selectedActionRelationId.value = '';
+  selectedEffectIntervalId.value = '';
+  selectedEffectEventId.value = '';
+  boxSelectionMode.value = false;
+  selectedCycleSectionId.value =
+    cycleSectionProjection.value.sections.find(
+      section => section.startBoundaryId === boundaryId
+    )?.sectionId ??
+    cycleSectionProjection.value.sections.find(
+      section => section.endBoundaryId === boundaryId
+    )?.sectionId ??
+    '';
+  return true;
+}
+
+function selectCycleSection(sectionId) {
+  const section = cycleSectionProjection.value.sections.find(
+    item => item.sectionId === sectionId
+  );
+  if (!section) {
+    return false;
+  }
+  selectedCycleSectionId.value = section.sectionId;
+  return true;
+}
+
+function locateCycleSectionAction(actionId) {
+  if (!findActionDraftById(actionId)) {
+    return false;
+  }
+  selectAction(actionId, { syncRuntimeResult: false });
+  actionEditFocus.value = {
+    ...createEmptyWorkbenchActionEditFocus(actionEditFocus.value.sequence + 1),
+    actionId,
+    fieldKey: 'startMs',
+    label: '循环区段',
+    changeSummary: '从区段贡献返回当前动作修改',
+    editOrigin: 'cycle-section',
+    focusSource: 'cycle-section',
+  };
+  void nextTick().then(() => scrollActionEditFocusIntoView());
   return true;
 }
 
@@ -3454,6 +3645,19 @@ function openActionRelationContextMenu({ relationId = '', x = 0, y = 0 } = {}) {
   }
   actionContextMenu.value = {
     kind: 'relation',
+    visible: true,
+    x: Number(x) || 0,
+    y: Number(y) || 0,
+    targetStartMs: undefined,
+  };
+}
+
+function openCycleBoundaryContextMenu({ boundaryId = '', x = 0, y = 0 } = {}) {
+  if (!selectCycleBoundary(boundaryId)) {
+    return;
+  }
+  actionContextMenu.value = {
+    kind: 'cycle-boundary',
     visible: true,
     x: Number(x) || 0,
     y: Number(y) || 0,
@@ -4722,7 +4926,7 @@ function getLocalStorage() {
     [data-flow-phase='runtime-result'],
     [data-flow-phase='edit-result-review']
   )
-  .timeline-area {
+  :is(.timeline-area, .cycle-review-area) {
   order: 1;
 }
 
@@ -4766,6 +4970,7 @@ function getLocalStorage() {
 }
 
 .timeline-area,
+.cycle-review-area,
 .resource-area,
 .event-area,
 .effect-area {

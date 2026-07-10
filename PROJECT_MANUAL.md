@@ -1,6 +1,6 @@
 # promilia-axis-tool 项目手册
 
-最后更新：2026-07-10
+最后更新：2026-07-11
 
 当前策略是以 Endaxis 为架构和交互参考，对 `promilia-axis-tool` 进行从头重构。真实 Workbench 已成为唯一生产排轴入口，旧页面、旧 editor/timeline 组件、旧项目 store 和旧计算工具已经按引用审计退役。完整任务拆解见 `DEVELOPMENT_PLAN.md`，本文件保留最终目标、阶段目标、项目状态和当前事实。
 
@@ -49,13 +49,14 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 - 冷却/执行计划、效果命令和运行时复盘联动。
 - JSON、PNG 元数据、分享链接、runtime capture 和本地预设轴库。
 - 受控 runtime capture manifest、规范化、production audit 和显式 PID host。
+- 动作关系、效果区间、方案 A/B 对比，以及按 60fps 循环边界切分的区间统计与动作回定位。
 
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；51 个测试文件、334 条测试通过。
-- `npm run test:e2e:workbench-flow`：通过；32 条 Workbench 浏览器主流程通过。
-- `npm run test:e2e:production-preview`：通过；5 项真实 `dist` 验收全部通过，报告结论为 `trial-ready`。
+- `npm run test -- --run`：通过；58 个测试文件、361 条测试通过。
+- `npm run test:e2e:workbench-flow`：通过；34 条 Workbench 浏览器主流程通过。
+- `npm run test:e2e:production-preview`：通过；10 项真实 `dist` 验收全部通过，报告结论为 `trial-ready`。
 
 ## 3. 目录速览
 
@@ -74,7 +75,7 @@ src/
 
 - `src/views/Workbench.vue`：生产页面编排和项目交换入口。
 - `src/domain/projectSchema.js`：标准项目、角色、敌人、动作和动作关系模型。
-- `src/domain/workbenchDraftStorage.js`：v9 草稿、项目 JSON 和分享合同。
+- `src/domain/workbenchDraftStorage.js`：v10 草稿、项目 JSON 和分享合同。
 - `src/simulation/`：无 UI 编译、执行、三值生成、机制和结果投影。
 - `src/features/workbench/`：动作轴、配置、曲线、日志、详情和主流程交互。
 - `src/data/azprGenerated.js`：生成数据访问入口。
@@ -930,6 +931,16 @@ Workbench 新增可直接使用的“方案对比”主流程。用户可以从�
 已完成验证：`npm run test -- --run` 通过 55 个测试文件、353 条测试；`npm run test:e2e:workbench-flow` 通过 33 条主流程；`npm run test:e2e:production-preview` 通过 9/9 项能力并输出 `trial-ready`，新增路径覆盖快照基准、当前动作修改、JSON 基准导入、不覆盖当前编辑和差异动作回改。生产引用、生产数据和 bundle 审计通过，Workbench gzip 为 360,000B，全部 JavaScript gzip 为 706,971B；180 动作完整运行 p95 为 54.197ms，120 动作浏览器首屏就绪为 1492ms。1440×1000 与 390×844 实图检查确认核心结果、角色能量和动作贡献无重叠，窄屏可完整滚动查看。
 
 下一阶段目标：阶段 8-E 循环边界与分段统计闭环。对齐 Endaxis 的 cycle boundary 能力，让用户在 60fps 时间轴上添加、移动和删除循环边界，并按边界把同一套 runtime output 切成多个可复盘区段；每段统一统计 HP、韧性、各角色能量、动作贡献和效果覆盖，并能定位区段内动作继续修改。循环边界进入项目交换和撤销/重做，区段统计只切分既有事件与曲线，不复制动作、不自动外推循环次数，也不新增三值公式。
+
+### 阶段 8-E 循环边界与分段统计闭环（2026-07-11）
+
+Workbench 现在可以在 60fps 时间轴空白位置添加循环边界，直接拖动调整帧位，右键删除，并在撤销/重做中恢复。边界写入 `WorkbenchProjectFile v10`，本地草稿、JSON、分享链接、PNG 元数据和预设共用同一 `cycleBoundaries[]`；v1-v9 项目继续导入并迁移为空边界状态。
+
+新增标准 `AzPrCycleSectionProjection`，只按边界切分现有 runtime hit transaction、角色能量、effect lifecycle 和 effect interval，输出每段 HP、韧性、各角色能量、动作贡献与效果覆盖。用户可以在时间轴查看选中区段高亮，在区段统计中切换区段并定位贡献动作继续修改。该投影固定 `readsRuntimeOutputsOnly = true`、`appliedToCalculators = false`，没有复制动作、外推循环轮数或改变既有三值结果。
+
+阶段验收：58 个测试文件、361 条测试，34 条 Workbench 主流程和 10 项 production preview 能力全部通过；180 动作完整运行 p95 为 18.463ms，120 动作浏览器首屏就绪为 1303ms。Workbench 主块 gzip 为 363,626B，仍低于 370,000B 预算；1440×1000 与 390×844 实图检查均无页面横向溢出或控件遮挡。
+
+下一阶段目标：阶段 8-F 多方案工作区闭环。对齐 Endaxis 的方案管理层级，让用户在同一个工作区创建、复制、重命名和切换多条完整排轴方案，每条方案独立保存队伍/敌人配置、动作、关系、效果、循环边界和采样绑定，并可直接选择任意两条方案复用现有 A/B runtime comparison。该阶段应把“预设存档”和“当前编辑方案”组织成清晰的项目级工作流，不继续补单个按钮或状态标签，也不修改三值公式。
 
 ## 10. 文档维护规则
 

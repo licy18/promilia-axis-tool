@@ -75,6 +75,7 @@ export function createProject({
   enemy = null,
   actions = [],
   actionRelations = [],
+  cycleBoundaries = [],
   metadata = {},
 } = {}) {
   const now = new Date().toISOString();
@@ -98,6 +99,9 @@ export function createProject({
     actionRelations: actionRelations.map(relation =>
       createActionRelation(relation)
     ),
+    cycleBoundaries: cycleBoundaries.map(boundary =>
+      createCycleBoundary(boundary)
+    ),
     resources: [],
     buffs: [],
     loadouts: actors.map(actor => actor.loadout).filter(Boolean),
@@ -107,6 +111,13 @@ export function createProject({
       source: 'promilia-axis-tool-domain',
       ...metadata,
     },
+  };
+}
+
+export function createCycleBoundary({ id, timeMs = 0 } = {}) {
+  return {
+    id: id ?? createStableId('cycle-boundary'),
+    timeMs: Number(timeMs) || 0,
   };
 }
 
@@ -478,12 +489,76 @@ export function validateProject(project, gameData = {}) {
   validateEnemy(project.enemy, gameData, errors, warnings);
   validateActions(project.actions, project, gameData, errors, warnings);
   validateActionRelations(project.actionRelations, project.actions, errors);
+  validateCycleBoundaries(project.cycleBoundaries, project.time, errors);
 
   return {
     valid: errors.length === 0,
     errors,
     warnings,
   };
+}
+
+function validateCycleBoundaries(cycleBoundaries, time, errors) {
+  if (cycleBoundaries == null) {
+    return;
+  }
+  if (!Array.isArray(cycleBoundaries)) {
+    errors.push(
+      issue(
+        'cycleBoundaries.invalid',
+        'Project cycleBoundaries must be an array',
+        '$.cycleBoundaries'
+      )
+    );
+    return;
+  }
+
+  const ids = new Set();
+  const times = new Set();
+  cycleBoundaries.forEach((boundary, index) => {
+    const path = `$.cycleBoundaries[${index}]`;
+    if (!isObject(boundary)) {
+      errors.push(
+        issue('cycleBoundary.invalid', 'Cycle boundary must be an object', path)
+      );
+      return;
+    }
+    if (!boundary.id || ids.has(boundary.id)) {
+      errors.push(
+        issue(
+          'cycleBoundary.id.invalid',
+          'Each cycle boundary must have a unique id',
+          `${path}.id`
+        )
+      );
+    } else {
+      ids.add(boundary.id);
+    }
+    const timeMs = Number(boundary.timeMs);
+    if (
+      !Number.isFinite(timeMs) ||
+      timeMs <= 0 ||
+      timeMs >= Number(time?.durationMs)
+    ) {
+      errors.push(
+        issue(
+          'cycleBoundary.timeMs.invalid',
+          'Cycle boundary timeMs must be inside the project duration',
+          `${path}.timeMs`
+        )
+      );
+    } else if (times.has(timeMs)) {
+      errors.push(
+        issue(
+          'cycleBoundary.timeMs.duplicate',
+          'Cycle boundaries cannot share the same timeMs',
+          `${path}.timeMs`
+        )
+      );
+    } else {
+      times.add(timeMs);
+    }
+  });
 }
 
 function validateActionRelations(actionRelations, actions, errors) {

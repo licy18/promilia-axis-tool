@@ -40,8 +40,11 @@ if (!report) {
 }
 
 const initialEntry = report.javaScriptChunks.find(chunk => chunk.isEntry);
-const workbenchChunk = report.javaScriptChunks.find(chunk =>
-  chunk.facadeModuleId?.endsWith('src/views/Workbench.vue')
+const workbenchModuleId = 'src/views/Workbench.vue';
+const workbenchChunk = report.javaScriptChunks.find(
+  chunk =>
+    chunk.facadeModuleId?.endsWith(workbenchModuleId) ||
+    chunk.modules.some(moduleRow => moduleRow.id === workbenchModuleId)
 );
 const workbenchForbiddenModules = [
   'src/data/generated/elements.json',

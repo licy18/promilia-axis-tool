@@ -3212,13 +3212,13 @@ describe('Workbench view', () => {
       `.primary-flow${resultPhaseSelector}.runtime-review-stack{order:-1;}`
     );
     expect(workbenchSource).toContain(
-      `.primary-flow${resultPhaseSelector}.timeline-area{order:1;}`
+      `.primary-flow${resultPhaseSelector}:is(.timeline-area,.cycle-review-area){order:1;}`
     );
     expect(workbenchSource).toContain(
       '.runtime-review-stack[data-runtime-review-layout=\x27result-check\x27]{grid-template-columns:minmax(300px,1.12fr)minmax(220px,0.88fr);align-items:stretch;gap:10px;}'
     );
     expect(workbenchSource).toContain(
-      '.timeline-area,.resource-area,.event-area,.effect-area{min-width:0;}'
+      '.timeline-area,.cycle-review-area,.resource-area,.event-area,.effect-area{min-width:0;}'
     );
     expect(resourcePanelSource).toContain(
       `.resource-monitor-panel${resultPhaseSelector}.runtime-curve-panel{`
@@ -9827,6 +9827,80 @@ describe('Workbench view', () => {
         .attributes('data-edit-focus-source')
     ).toBe('scenario-comparison');
 
+    wrapper.unmount();
+  });
+
+  it('adds a cycle boundary, reviews its section, and returns to a contributing action', async () => {
+    const wrapper = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: { template: '<a><slot /></a>' },
+        },
+      },
+    });
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    const lane = wrapper.get('[data-testid="workbench-timeline-lane"]');
+    lane.element.getBoundingClientRect = () => ({
+      width: 600,
+      height: 240,
+      left: 0,
+      right: 600,
+      top: 0,
+      bottom: 240,
+      x: 0,
+      y: 0,
+      toJSON: () => {},
+    });
+    await lane.trigger('contextmenu', { clientX: 20, clientY: 80 });
+    document
+      .querySelector(
+        '[data-testid="workbench-action-context-add-cycle-boundary"]'
+      )
+      .click();
+    await vi.dynamicImportSettled();
+    await nextTick();
+
+    const workbench = wrapper.get('main.workbench');
+    expect(workbench.attributes()).toMatchObject({
+      'data-cycle-boundary-count': '1',
+      'data-selected-cycle-boundary-id': 'cycle-boundary-0001',
+      'data-selected-cycle-section-id': 'cycle-section-02',
+    });
+    expect(
+      wrapper.findAll('[data-testid="workbench-cycle-section-tab"]')
+    ).toHaveLength(2);
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-cycle-boundary"][data-boundary-id="cycle-boundary-0001"]'
+        )
+        .attributes('data-time-ms')
+    ).toBe('1000');
+
+    const secondActionRow = wrapper.get(
+      '[data-testid="workbench-cycle-section-action-row"][data-action-id="action-0002"]'
+    );
+    await secondActionRow
+      .get('[data-testid="workbench-cycle-section-locate-action"]')
+      .trigger('click');
+    expect(
+      wrapper
+        .get('.action-item[data-action-id="action-0002"]')
+        .attributes('data-selected')
+    ).toBe('true');
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+        )
+        .attributes('data-edit-focus-source')
+    ).toBe('cycle-section');
+
+    await wrapper.find('[data-testid="workbench-undo-edit"]').trigger('click');
+    expect(workbench.attributes('data-cycle-boundary-count')).toBe('0');
+    await wrapper.find('[data-testid="workbench-redo-edit"]').trigger('click');
+    expect(workbench.attributes('data-cycle-boundary-count')).toBe('1');
     wrapper.unmount();
   });
 });

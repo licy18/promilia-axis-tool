@@ -251,7 +251,7 @@ test('edits and reviews an arbitrary action group @workbench-main-flow', async (
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(exportedProject.schemaVersion).toBe(9);
+  expect(exportedProject.schemaVersion).toBe(10);
   expect(exportedProject.actionDrafts).toHaveLength(5);
   expect(exportedProject.actionRelations).toEqual([
     expect.objectContaining({
@@ -2255,7 +2255,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 9,
+    schemaVersion: 10,
     game: 'azur-promilia',
     type: 'workbench-project',
     selectedActionId: 'action-0002',
@@ -2514,7 +2514,7 @@ test('imports a runtime capture and preserves its applied curve through project 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 9,
+    schemaVersion: 10,
     runtimeSampleCaptures: [
       {
         captureSessionId: 'e2e-recover-sp-capture-1',
@@ -3871,6 +3871,100 @@ test('keeps runtime result flow usable after deleting a generated action batch @
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('persists cycle boundaries and reviews section contributions @workbench-main-flow', async ({
+  page,
+}) => {
+  await page.goto('/#/workbench');
+  await page.getByTestId('workbench-add-action').click();
+  await page.locator('.action-item[data-action-id="action-0001"]').click();
+  await page.getByTestId('workbench-effect-add').click();
+  await page.getByTestId('workbench-effect-name-input').fill('跨段星流');
+  await page.getByTestId('workbench-effect-duration-frame-input').fill('120');
+  await page.getByTestId('workbench-effect-duration-frame-input').press('Tab');
+
+  const lane = page.getByTestId('workbench-timeline-lane');
+  const laneBox = await lane.boundingBox();
+  expect(laneBox).toBeTruthy();
+  await lane.evaluate(
+    (element, position) =>
+      element.dispatchEvent(
+        new MouseEvent('contextmenu', {
+          bubbles: true,
+          cancelable: true,
+          clientX: position.clientX,
+          clientY: position.clientY,
+        })
+      ),
+    {
+      clientX: laneBox.x + laneBox.width / 30,
+      clientY: laneBox.y + 80,
+    }
+  );
+  const addCycleBoundary = page.getByTestId(
+    'workbench-action-context-add-cycle-boundary'
+  );
+  await expect(addCycleBoundary).toBeEnabled();
+  await addCycleBoundary.click();
+
+  const workbench = page.locator('main.workbench');
+  await expect(workbench).toHaveAttribute('data-cycle-boundary-count', '1');
+  await expect(workbench).toHaveAttribute(
+    'data-selected-cycle-section-id',
+    'cycle-section-02'
+  );
+  await expect(page.getByTestId('workbench-cycle-section-tab')).toHaveCount(2);
+  const effectCoverageText = await page
+    .getByTestId('workbench-cycle-section-panel')
+    .locator('[data-metric-key="effectCoverageMs"] strong')
+    .textContent();
+  const effectCoverageFrames = Number.parseFloat(effectCoverageText);
+  expect(effectCoverageFrames).toBeGreaterThan(0);
+  expect(effectCoverageFrames).toBeLessThan(120);
+  const secondAction = page.locator(
+    '[data-testid="workbench-cycle-section-action-row"][data-action-id="action-0002"]'
+  );
+  await expect(secondAction).toBeVisible();
+  await secondAction
+    .getByTestId('workbench-cycle-section-locate-action')
+    .click();
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+    )
+  ).toHaveAttribute('data-edit-focus-source', 'cycle-section');
+
+  const boundary = page.getByTestId('workbench-cycle-boundary');
+  const initialBoundaryTimeMs = await boundary.getAttribute('data-time-ms');
+  const boundaryBox = await boundary.boundingBox();
+  expect(boundaryBox).toBeTruthy();
+  await page.mouse.move(boundaryBox.x, boundaryBox.y + 50);
+  await page.mouse.down();
+  await page.mouse.move(boundaryBox.x + laneBox.width / 60, boundaryBox.y + 50);
+  await page.mouse.up();
+  await expect(boundary).not.toHaveAttribute(
+    'data-time-ms',
+    initialBoundaryTimeMs
+  );
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const download = await downloadPromise;
+  const downloadPath = await download.path();
+  const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
+  expect(exportedProject.schemaVersion).toBe(10);
+  expect(exportedProject.cycleBoundaries).toEqual([
+    expect.objectContaining({ id: 'cycle-boundary-0001' }),
+  ]);
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await expect(workbench).toHaveAttribute('data-cycle-boundary-count', '0');
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(downloadPath);
+  await expect(workbench).toHaveAttribute('data-cycle-boundary-count', '1');
+  await expect(page.getByTestId('workbench-cycle-section-panel')).toBeVisible();
+});
+
 test('keeps the edit result loop usable at a narrow viewport @workbench-main-flow', async ({
   page,
 }) => {
@@ -4168,7 +4262,7 @@ async function ensureActionContentEditResultSynced(
 async function readStoredWorkbenchDraft(page) {
   return await page.evaluate(() => {
     const rawDraft =
-      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v9') ??
+      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v10') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v8') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v5') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v4') ??

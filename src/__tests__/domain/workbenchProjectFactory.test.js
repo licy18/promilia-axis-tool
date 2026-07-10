@@ -122,9 +122,8 @@ describe('workbench project actor configuration', () => {
       ],
     });
     const validation = validateProject(project, getWorkbenchGameData());
-    const result = simulateScenario(
-      compileProject(project, getWorkbenchGameData())
-    );
+    const scenario = compileProject(project, getWorkbenchGameData());
+    const result = simulateScenario(scenario);
 
     expect(validation.valid).toBe(true);
     expect(project.actionRelations).toEqual([
@@ -137,6 +136,26 @@ describe('workbench project actor configuration', () => {
     ]);
     expect(result.scenario.actionCount).toBe(2);
     expect(result.actionResultTimeline).toHaveLength(2);
+  });
+
+  it('projects persisted cycle boundaries without changing simulation output', () => {
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      cycleBoundaries: [
+        { id: 'cycle-boundary-0002', timeMs: 2000 },
+        { id: 'cycle-boundary-0001', timeMs: 1000 },
+      ],
+    });
+    const validation = validateProject(project, getWorkbenchGameData());
+    const scenario = compileProject(project, getWorkbenchGameData());
+    const result = simulateScenario(scenario);
+
+    expect(validation.valid).toBe(true);
+    expect(project.cycleBoundaries).toEqual([
+      { id: 'cycle-boundary-0001', timeMs: 1000 },
+      { id: 'cycle-boundary-0002', timeMs: 2000 },
+    ]);
+    expect(scenario.cycleBoundaries).toEqual(project.cycleBoundaries);
+    expect(result.actionResultTimeline).toHaveLength(1);
   });
 
   it('applies a bound RecoverSP capture to the Workbench runtime resource curve', () => {

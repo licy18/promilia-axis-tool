@@ -10,6 +10,7 @@ const REQUIRED_CAPABILITIES = [
   'timeline-relations',
   'effect-interval-review',
   'scenario-comparison',
+  'cycle-sections',
   'narrow-main-flow',
 ];
 

@@ -1,6 +1,6 @@
 # promilia-axis-tool 当前架构
 
-最后更新：2026-07-10
+最后更新：2026-07-11
 
 ## 1. 架构目标
 
@@ -56,10 +56,10 @@ C:\PC2\Codex\AzPr
 
 ### 3.2 领域层
 
-- `projectSchema.js`：`Project`、`Actor`、`Enemy`、`Action` 与 `ActionRelation` 主合同。
+- `projectSchema.js`：`Project`、`Actor`、`Enemy`、`Action`、`ActionRelation` 与 `CycleBoundary` 主合同。
 - `workbenchProjectFactory.js`：把 Workbench 选择、培养配置和动作草稿组装为标准项目。
 - `workbenchActionRelations.js`：动作前后关系的规范化、无环校验、间隔同步与删除清理。
-- `workbenchDraftStorage.js`：v9 草稿、项目 JSON 和分享链接。
+- `workbenchDraftStorage.js`：v10 草稿、项目 JSON 和分享链接。
 - `workbenchPngProject.js`：PNG 项目元数据写入与回读。
 - `workbenchPresetStorage.js`：v1 本地预设库，复用完整 Workbench 项目快照。
 - `workbenchRuntimeSampleCapture.js`：外部 capture 文件解析、绑定、去重和项目持久化。
@@ -102,7 +102,7 @@ Action
 - 生成 `simLog`、`stateCurves`、资源曲线、状态快照和 summary。
 - 保持动作、命中、曲线点和日志之间的稳定身份映射。
 
-`src/simulation/projection/projectSimulationResult.js` 将运行结果组织为 Workbench 可消费的动作结果、贡献、诊断和详情视图；`projectEffectIntervals.js` 将效果事件归并为角色/敌人轨可消费的持续区间。两类投影都不反向参与公式计算。
+`src/simulation/projection/projectSimulationResult.js` 将运行结果组织为 Workbench 可消费的动作结果、贡献、诊断和详情视图；`projectEffectIntervals.js` 将效果事件归并为角色/敌人轨可消费的持续区间；`projectCycleSections.js` 按项目边界切分现有 transaction、能量与效果区间。三类投影都不反向参与公式计算。
 
 ### 3.7 Workbench 层
 
@@ -114,13 +114,14 @@ Action
 - 规则诊断、效果轨道和运行结果返回编辑。
 - 主流程控制器、运行时同步和选中状态映射。
 - 时间轴从 runtime effect interval projection 渲染角色/敌人效果区间，并与生命周期复盘和来源动作编辑共用选择状态。
+- 时间轴渲染可编辑的 60fps 循环边界和选中区段高亮，区段统计可定位贡献动作返回编辑。
 - 项目导入导出、分享和预设库由 `Workbench.vue` 编排，数据格式由 domain 层持有。
 
 ## 4. 关键数据合同
 
-### WorkbenchProjectFile v9
+### WorkbenchProjectFile v10
 
-包含 selection、teamSlots、actorConfigs、enemyConfig、segmentSplitOptions、actionDrafts、actionRelations、runtimeSampleCaptures 和 selectedActionId。JSON、分享链接、PNG 元数据和预设库都复用该合同；v1-v8 项目迁移时补为空关系数组。
+包含 selection、teamSlots、actorConfigs、enemyConfig、segmentSplitOptions、actionDrafts、actionRelations、cycleBoundaries、runtimeSampleCaptures 和 selectedActionId。JSON、分享链接、PNG 元数据和预设库都复用该合同；v1-v8 项目迁移时补为空关系数组，v1-v9 项目迁移时补为空循环边界数组。
 
 ### ActionRelation v1
 
@@ -129,6 +130,10 @@ Action
 ### EffectIntervalProjection v1
 
 从 `AzPrEffectRuntimeTimeline` 的施加、刷新、叠层、移除和到期事件生成稳定区间，保留目标、来源动作、生命周期事件、帧范围和峰值层数。该合同是 transient runtime projection，不写入 WorkbenchProjectFile；固定 `appliedToCalculators = false`。
+
+### CycleSectionProjection v1
+
+从项目时长与 `cycleBoundaries[]` 生成连续区段，并按事件发生时间与效果区间重叠切分现有 runtime output。输出区段 HP、韧性、各角色能量、动作贡献和效果覆盖；固定 `readsRuntimeOutputsOnly = true`、`appliedToCalculators = false`，不重复执行动作或改变 calculator。
 
 ### WorkbenchPresetLibrary v1
 
@@ -144,7 +149,7 @@ Action
 
 ## 5. 持久化边界
 
-- 当前草稿：`promilia-axis-tool:workbench-draft:v9`。
+- 当前草稿：`promilia-axis-tool:workbench-draft:v10`。
 - 本地预设：`promilia-axis-tool:workbench-presets:v1`。
 - 项目交换：JSON、分享 URL、PNG 内嵌元数据。
 - 临时曲线选中、复盘焦点、筛选和诊断面板状态不写入项目文件。
@@ -181,4 +186,4 @@ git diff --check
 - 生产引用审计当前为 0 个无引用模块、0 个意外 test-only 模块；新增代码必须维持该守门。
 - 当前首屏、Workbench 与全部 JavaScript gzip 预算分别为 120KB、370KB、740KB；新增依赖必须通过构建组成审计。
 - Workbench 首轮主包主要由技能核心投影、生产 seed 和模拟/复盘代码构成；候选诊断证据已经移入独立按需包，后续优化应以生产试用和可测量瓶颈为依据。
-- `playwright.production.config.js` 只服务真实 `dist` 的发布验收；`production-preview-reporter.mjs` 将八项必需能力汇总为 `trial-ready` 或 `blocked`，开发服务器 E2E 不替代该结论。
+- `playwright.production.config.js` 只服务真实 `dist` 的发布验收；`production-preview-reporter.mjs` 将十项必需能力汇总为 `trial-ready` 或 `blocked`，开发服务器 E2E 不替代该结论。

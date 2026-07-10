@@ -3,6 +3,8 @@
     class="panel timeline-panel"
     :data-flow-selected-action-id="flowSelectedActionId"
     :data-action-relation-count="actionRelations.length"
+    :data-cycle-boundary-count="cycleBoundaries.length"
+    :data-selected-cycle-boundary-id="selectedCycleBoundaryId"
     :data-effect-interval-count="effectIntervals.length"
     :data-selected-effect-interval-id="selectedEffectIntervalId"
     :data-box-selection-mode="boxSelectionMode ? 'true' : 'false'"
@@ -249,6 +251,31 @@
           @pointerdown="beginBoxSelection"
           @contextmenu.prevent="openTimelineContextMenu"
         >
+          <div
+            v-if="selectedCycleSection"
+            class="cycle-section-highlight"
+            :style="cycleSectionHighlightStyle"
+            :data-section-id="selectedCycleSection.sectionId"
+            data-testid="workbench-cycle-section-highlight"
+          />
+          <button
+            v-for="boundary in cycleBoundaries"
+            :key="boundary.id"
+            class="cycle-boundary"
+            :class="{ selected: boundary.id === selectedCycleBoundaryId }"
+            :style="cycleBoundaryStyle(boundary)"
+            type="button"
+            :data-boundary-id="boundary.id"
+            :data-time-ms="cycleBoundaryTimeMs(boundary)"
+            data-testid="workbench-cycle-boundary"
+            :title="`循环边界 ${formatFrameTime(cycleBoundaryTimeMs(boundary))}`"
+            @pointerdown.stop="beginCycleBoundaryDrag($event, boundary)"
+            @contextmenu.prevent.stop="
+              openCycleBoundaryContextMenu($event, boundary)
+            "
+          >
+            <span>{{ formatFrameTime(cycleBoundaryTimeMs(boundary)) }}</span>
+          </button>
           <svg
             v-if="actionRelationGeometry.length"
             class="action-relation-layer"
@@ -885,6 +912,18 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  cycleBoundaries: {
+    type: Array,
+    default: () => [],
+  },
+  selectedCycleBoundaryId: {
+    type: String,
+    default: '',
+  },
+  selectedCycleSection: {
+    type: Object,
+    default: null,
+  },
   selectedActionRelationId: {
     type: String,
     default: '',
@@ -969,6 +1008,9 @@ const emit = defineEmits([
   'select-action-relation',
   'select-effect-interval',
   'open-action-relation-context-menu',
+  'select-cycle-boundary',
+  'update-cycle-boundary',
+  'open-cycle-boundary-context-menu',
   'toggle-box-selection-mode',
   'create-action-relations',
   'select-state-curve-point',
@@ -982,6 +1024,7 @@ const laneRowRefs = new Map();
 const dragState = ref(null);
 const resizeState = ref(null);
 const boxSelectionState = ref(null);
+const cycleBoundaryDragState = ref(null);
 const suppressClickActionId = ref('');
 const timelineZoom = ref(1);
 const candidateSeriesVisibility = ref({});
@@ -1105,6 +1148,18 @@ const boxSelectionStyle = computed(() => {
         height: `${state.height}px`,
       }
     : {};
+});
+const cycleSectionHighlightStyle = computed(() => {
+  const section = props.selectedCycleSection;
+  if (!section || props.durationMs <= 0) {
+    return {};
+  }
+  const left = clampPercent((section.startMs / props.durationMs) * 100);
+  const right = clampPercent((section.endMs / props.durationMs) * 100);
+  return {
+    left: `${left}%`,
+    width: `${Math.max(0, right - left)}%`,
+  };
 });
 const timelineTrackStyle = computed(() => ({
   width: `${timelineZoom.value * 100}%`,
@@ -3173,6 +3228,87 @@ function openTimelineContextMenu(event) {
   });
 }
 
+function openCycleBoundaryContextMenu(event, boundary) {
+  emit('open-cycle-boundary-context-menu', {
+    boundaryId: boundary.id,
+    x: event.clientX,
+    y: event.clientY,
+  });
+}
+
+function beginCycleBoundaryDrag(event, boundary) {
+  if ((event.button ?? 0) !== 0) {
+    return;
+  }
+  const rect = laneRef.value?.getBoundingClientRect();
+  emit('select-cycle-boundary', boundary.id);
+  if (!rect || rect.width <= 0) {
+    return;
+  }
+  event.preventDefault();
+  event.currentTarget?.setPointerCapture?.(event.pointerId);
+  cycleBoundaryDragState.value = {
+    boundaryId: boundary.id,
+    initialClientX: event.clientX,
+    laneWidth: rect.width,
+    initialTimeMs: boundary.timeMs,
+    currentTimeMs: boundary.timeMs,
+  };
+  window.addEventListener('pointermove', handleCycleBoundaryDragMove);
+  window.addEventListener('pointerup', endCycleBoundaryDrag);
+  window.addEventListener('pointercancel', endCycleBoundaryDrag);
+}
+
+function handleCycleBoundaryDragMove(event) {
+  const state = cycleBoundaryDragState.value;
+  if (!state) {
+    return;
+  }
+  const deltaMs =
+    ((event.clientX - state.initialClientX) / state.laneWidth) *
+    props.durationMs;
+  cycleBoundaryDragState.value = {
+    ...state,
+    currentTimeMs: clampNumber(
+      snapTimeMs(state.initialTimeMs + deltaMs),
+      WORKBENCH_FRAME_MS,
+      props.durationMs - WORKBENCH_FRAME_MS
+    ),
+  };
+}
+
+function endCycleBoundaryDrag(event) {
+  const state = cycleBoundaryDragState.value;
+  if (
+    state &&
+    event?.type === 'pointerup' &&
+    state.currentTimeMs !== state.initialTimeMs
+  ) {
+    emit('update-cycle-boundary', {
+      boundaryId: state.boundaryId,
+      timeMs: state.currentTimeMs,
+    });
+  }
+  cycleBoundaryDragState.value = null;
+  window.removeEventListener('pointermove', handleCycleBoundaryDragMove);
+  window.removeEventListener('pointerup', endCycleBoundaryDrag);
+  window.removeEventListener('pointercancel', endCycleBoundaryDrag);
+}
+
+function cycleBoundaryTimeMs(boundary) {
+  return cycleBoundaryDragState.value?.boundaryId === boundary.id
+    ? cycleBoundaryDragState.value.currentTimeMs
+    : boundary.timeMs;
+}
+
+function cycleBoundaryStyle(boundary) {
+  return {
+    left: `${clampPercent(
+      (cycleBoundaryTimeMs(boundary) / props.durationMs) * 100
+    )}%`,
+  };
+}
+
 function selectActionRelation(relationId) {
   emit('select-action-relation', { relationId });
 }
@@ -3369,6 +3505,7 @@ onBeforeUnmount(() => {
   endDrag();
   endResize();
   cancelBoxSelection();
+  endCycleBoundaryDrag();
 });
 </script>
 
@@ -3788,6 +3925,61 @@ h2 {
   height: 100%;
   overflow: visible;
   pointer-events: none;
+}
+
+.cycle-section-highlight {
+  position: absolute;
+  inset-block: 0;
+  z-index: 0;
+  border-inline: 1px solid rgba(121, 199, 185, 0.24);
+  background: rgba(121, 199, 185, 0.07);
+  pointer-events: none;
+}
+
+.cycle-boundary {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 6;
+  width: 1px;
+  padding: 0;
+  border: 0;
+  border-left: 1px dashed rgba(242, 179, 102, 0.78);
+  background: transparent;
+  color: #f2c781;
+  cursor: ew-resize;
+}
+
+.cycle-boundary::after {
+  position: absolute;
+  inset: 0 -7px;
+  content: '';
+}
+
+.cycle-boundary span {
+  position: absolute;
+  top: 4px;
+  left: 5px;
+  padding: 2px 5px;
+  border: 1px solid rgba(242, 179, 102, 0.44);
+  border-radius: 3px;
+  background: #2a241b;
+  color: #f5d39d;
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.cycle-boundary.selected {
+  border-left-style: solid;
+  border-left-color: #79c7b9;
+  filter: drop-shadow(0 0 3px rgba(121, 199, 185, 0.5));
+}
+
+.cycle-boundary.selected span {
+  border-color: #79c7b9;
+  background: #21423d;
+  color: #e8fffa;
 }
 
 .action-relation-path {

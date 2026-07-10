@@ -94,6 +94,10 @@ describe('workbench draft storage project files', () => {
               gapMs: 200,
             },
           ],
+          cycleBoundaries: [
+            { id: 'cycle-boundary-0001', timeMs: 1000 },
+            { id: 'cycle-boundary-0002', timeMs: 2200 },
+          ],
           runtimeSampleCaptures: [
             {
               schemaVersion: 1,
@@ -167,6 +171,10 @@ describe('workbench draft storage project files', () => {
           gapMs: 200,
         },
       ],
+      cycleBoundaries: [
+        { id: 'cycle-boundary-0001', timeMs: 1000 },
+        { id: 'cycle-boundary-0002', timeMs: 2200 },
+      ],
     });
 
     const imported = parseWorkbenchProjectFile(exported);
@@ -209,6 +217,10 @@ describe('workbench draft storage project files', () => {
           toActionId: 'action-0002',
           gapMs: 200,
         }),
+      ],
+      cycleBoundaries: [
+        { id: 'cycle-boundary-0001', timeMs: 1000 },
+        { id: 'cycle-boundary-0002', timeMs: 2200 },
       ],
     });
     expect(imported.actionDrafts).toHaveLength(2);

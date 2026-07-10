@@ -317,6 +317,73 @@ describe('TimelineGridPreview', () => {
     });
   });
 
+  it('renders, selects, drags, and opens persisted cycle boundaries', async () => {
+    const wrapper = mount(TimelineGridPreview, {
+      attachTo: document.body,
+      props: createTimelineProps({
+        cycleBoundaries: [
+          { id: 'cycle-boundary-0001', timeMs: 1000 },
+          { id: 'cycle-boundary-0002', timeMs: 2000 },
+        ],
+        selectedCycleBoundaryId: 'cycle-boundary-0001',
+        selectedCycleSection: {
+          sectionId: 'cycle-section-02',
+          startMs: 1000,
+          endMs: 2000,
+        },
+      }),
+    });
+    const timeline = wrapper.get(
+      '[data-testid="workbench-timeline-grid-preview"]'
+    );
+    const lane = wrapper.get('[data-testid="workbench-timeline-lane"]');
+    lane.element.getBoundingClientRect = () => createRect(0, 0, 600, 240);
+    expect(timeline.attributes()).toMatchObject({
+      'data-cycle-boundary-count': '2',
+      'data-selected-cycle-boundary-id': 'cycle-boundary-0001',
+    });
+    expect(
+      wrapper
+        .get('[data-testid="workbench-cycle-section-highlight"]')
+        .attributes('data-section-id')
+    ).toBe('cycle-section-02');
+    const boundary = wrapper.get(
+      '[data-testid="workbench-cycle-boundary"][data-boundary-id="cycle-boundary-0001"]'
+    );
+    expect(boundary.classes()).toContain('selected');
+    expect(Number(boundary.attributes('data-time-ms'))).toBe(1000);
+
+    boundary.element.dispatchEvent(
+      new MouseEvent('pointerdown', {
+        bubbles: true,
+        button: 0,
+        clientX: 200,
+      })
+    );
+    window.dispatchEvent(new MouseEvent('pointermove', { clientX: 300 }));
+    await nextTick();
+    expect(Number(boundary.attributes('data-time-ms'))).toBe(1500);
+    window.dispatchEvent(new MouseEvent('pointerup', { clientX: 300 }));
+    await nextTick();
+
+    expect(wrapper.emitted('select-cycle-boundary')?.at(-1)?.[0]).toBe(
+      'cycle-boundary-0001'
+    );
+    expect(wrapper.emitted('update-cycle-boundary')?.at(-1)?.[0]).toEqual({
+      boundaryId: 'cycle-boundary-0001',
+      timeMs: 1500,
+    });
+    await boundary.trigger('contextmenu', { clientX: 120, clientY: 80 });
+    expect(
+      wrapper.emitted('open-cycle-boundary-context-menu')?.at(-1)?.[0]
+    ).toMatchObject({
+      boundaryId: 'cycle-boundary-0001',
+      x: 120,
+      y: 80,
+    });
+    wrapper.unmount();
+  });
+
   it('selects intersecting actions with the frame box tool', async () => {
     const wrapper = mount(TimelineGridPreview, {
       attachTo: document.body,

@@ -63,7 +63,7 @@ insertion / generationBatch
 - `Ctrl/Cmd+Z`、`Ctrl/Cmd+Y` 和 `Ctrl/Cmd+Shift+Z` 撤销/重做。
 - 同轨重叠时可自动推迟，并保留诊断说明。
 
-多选和动作剪贴板只属于编辑会话与撤销历史，项目重置或切换会清除；动作关系进入 v9 项目交换格式。复制动作组时只复制两个端点都位于所选组内的关系。
+多选和动作剪贴板只属于编辑会话与撤销历史，项目重置或切换会清除；动作关系和循环边界进入 v10 项目交换格式。复制动作组时只复制两个端点都位于所选组内的关系。
 
 所有动作变更必须通过 Workbench mutation/runtime sync 路径刷新模拟结果，不能只移动 DOM。
 
@@ -77,10 +77,13 @@ insertion / generationBatch
 - 命中与候选命中 marker。
 - 敌人 HP、敌人韧性和每角色能量的状态曲线 marker。
 - applied、candidate、sampled 和 placeholder 来源层。
+- 可添加、拖动和删除的循环边界，以及当前复盘区段高亮。
 
 状态效果区间只能从 `AzPrEffectRuntimeTimeline` 投影：角色目标进入对应角色轨，敌人目标进入独立敌人效果轨；区间按真实持续帧占位，重叠效果自动分配子轨，并在条内标出刷新/叠层和结束节点。点击区间后，生命周期详情、当前生效快照和来源动作回改必须共享同一 interval/event 选择。
 
 点击曲线点、命中日志、动作结果或贡献行后，必须落到同一个稳定 state point，并能返回对应动作继续编辑。
+
+循环边界严格吸附 60fps 帧网格并位于项目时长内部。边界只把同一份 runtime output 切成连续区段，区段统计可读取 HP、韧性、各角色能量、动作贡献和效果覆盖，但不能复制动作、外推循环次数或参与 calculator。
 
 ## 6. 三值合同
 
@@ -98,7 +101,7 @@ Runtime 消费标准 delta 后输出 `simLog`、`stateCurves`、资源曲线、�
 
 ## 7. 项目交换
 
-动作草稿与关系通过 WorkbenchProjectFile v9 持久化。草稿、JSON、分享链接、PNG 元数据、runtime capture 和预设轴库共享 `actionDrafts[]` 与 `actionRelations[]`；任何新时间轴字段都必须同步考虑这些交换路径及旧版本迁移。
+动作草稿、关系与循环边界通过 WorkbenchProjectFile v10 持久化。草稿、JSON、分享链接、PNG 元数据、runtime capture 和预设轴库共享 `actionDrafts[]`、`actionRelations[]` 与 `cycleBoundaries[]`；任何新时间轴字段都必须同步考虑这些交换路径及旧版本迁移。
 
 ## 8. 长轴验收
 
@@ -116,7 +119,7 @@ npm run benchmark:long-axis:check
 npm run benchmark:long-axis:browser
 ```
 
-默认加载 120 动作 v9 草稿，验证动作列表、时间轴块、动作结果、状态曲线和运行结果导航均可见，首屏完成时间预算为 15 秒。
+默认加载 120 动作 v10 草稿，验证动作列表、时间轴块、动作结果、状态曲线和运行结果导航均可见，首屏完成时间预算为 15 秒。
 
 当前浏览器仍直接渲染全部动作和曲线点；当基准显示真实瓶颈时，再采用虚拟化、分层折叠或按需渲染，不提前引入无证据复杂度。
 
