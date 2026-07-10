@@ -387,6 +387,14 @@
             :main-flow-command-surface="mainFlowCommandSurface"
             @dispatch-flow-action="dispatchWorkbenchFlowAction"
           />
+
+          <div class="effect-area" data-testid="workbench-effect-area">
+            <EffectTimelinePanel
+              :effect-timeline="runtimeOutputs.effectTimeline"
+              :runtime-selected-detail="runtimeSelectedDetail"
+              @edit-source-action="editEffectSourceAction"
+            />
+          </div>
         </div>
       </div>
 
@@ -531,6 +539,7 @@ import {
 import ActionLibraryPanel from '../features/workbench/ActionLibraryPanel.vue';
 import AnalysisPanel from '../features/workbench/AnalysisPanel.vue';
 import EnemyPanel from '../features/workbench/EnemyPanel.vue';
+import EffectTimelinePanel from '../features/workbench/EffectTimelinePanel.vue';
 import EventLogPanel from '../features/workbench/EventLogPanel.vue';
 import PropertiesPanel from '../features/workbench/PropertiesPanel.vue';
 import ResourceMonitorPanel from '../features/workbench/ResourceMonitorPanel.vue';
@@ -2253,6 +2262,18 @@ function selectAction(actionId, { syncRuntimeResult = true } = {}) {
   }
 }
 
+function editEffectSourceAction(actionId) {
+  if (!findActionDraftById(actionId)) {
+    return;
+  }
+  selectAction(actionId, { syncRuntimeResult: false });
+  void nextTick().then(() => {
+    workbenchRoot.value
+      ?.querySelector?.('[data-inspector-panel-key="properties"]')
+      ?.scrollIntoView?.({ block: 'start', behavior: 'smooth' });
+  });
+}
+
 function applyActionSelectionState(selectionState = {}) {
   if (!selectionState.shouldSelectAction) {
     return;
@@ -3430,8 +3451,13 @@ function getLocalStorage() {
 
 .timeline-area,
 .resource-area,
-.event-area {
+.event-area,
+.effect-area {
   min-width: 0;
+}
+
+.effect-area {
+  grid-column: 1 / -1;
 }
 
 .runtime-review-stack[data-runtime-review-layout='result-check']

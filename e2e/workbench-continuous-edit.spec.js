@@ -1961,7 +1961,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 6,
+    schemaVersion: 7,
     game: 'azur-promilia',
     type: 'workbench-project',
     selectedActionId: 'action-0002',
@@ -2164,6 +2164,72 @@ test('shares and imports a Workbench project URL @workbench-main-flow', async ({
   });
   await expectCurveAndLogSelection(page, sharedRuntimeState.statePointId);
   await expectRuntimeOutputConsistent(page);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
+test('configures, reviews, and shares a tracking-only effect @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/workbench');
+  await page.getByTestId('workbench-effect-add').click();
+  await expect(page.getByTestId('workbench-effect-command-row')).toHaveCount(1);
+
+  const effectIdInput = page.getByTestId('workbench-effect-id-input');
+  const effectNameInput = page.getByTestId('workbench-effect-name-input');
+  await effectIdInput.fill('demo-effect');
+  await effectIdInput.press('Tab');
+  await effectNameInput.fill('演示增益');
+  await effectNameInput.press('Tab');
+  await page
+    .getByTestId('workbench-effect-stack-mode-select')
+    .selectOption('stack');
+  await page.getByTestId('workbench-effect-max-stacks-input').fill('3');
+  await page.getByTestId('workbench-effect-max-stacks-input').press('Tab');
+  await page.getByTestId('workbench-effect-duration-frame-input').fill('120');
+  await page.getByTestId('workbench-effect-duration-frame-input').press('Tab');
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  await waitForRuntimeAction(page, 'action-0001');
+  const effectPanel = page.getByTestId('workbench-effect-timeline-panel');
+  await expect(effectPanel).toHaveAttribute('data-effect-event-count', '2');
+  await expect(page.getByTestId('workbench-effect-event-row')).toHaveCount(2);
+  await expect(
+    page.getByTestId('workbench-effect-event-row').first()
+  ).toContainText('演示增益');
+
+  await page.getByTestId('workbench-effect-event-row').first().click();
+  await expect(effectPanel).toHaveAttribute('data-active-effect-count', '1');
+  await expect(page.getByTestId('workbench-effect-active-row')).toContainText(
+    '演示增益'
+  );
+  await expect(page.getByTestId('workbench-effect-active-row')).toContainText(
+    '1/3 层'
+  );
+
+  const shareButton = page.getByTestId('workbench-share-project');
+  await shareButton.click();
+  const shareUrl = await shareButton.getAttribute('data-share-url');
+  expect(shareUrl).toContain('/#/workbench?workbenchProject=');
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await expect(page.getByTestId('workbench-effect-command-row')).toHaveCount(0);
+  await page.goto(shareUrl);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已导入分享项目'
+  );
+  await expect(page.getByTestId('workbench-effect-command-row')).toHaveCount(1);
+  await expect(effectIdInput).toHaveValue('demo-effect');
+  await expect(effectNameInput).toHaveValue('演示增益');
+  await expect(
+    page.getByTestId('workbench-effect-max-stacks-input')
+  ).toHaveValue('3');
+  await expect(
+    page.getByTestId('workbench-effect-duration-frame-input')
+  ).toHaveValue('120');
+  await expect(effectPanel).toHaveAttribute('data-effect-event-count', '2');
 
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
@@ -3371,7 +3437,7 @@ async function ensureActionContentEditResultSynced(
 async function readStoredWorkbenchDraft(page) {
   return await page.evaluate(() => {
     const rawDraft =
-      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v6') ??
+      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v7') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v5') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v4') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v3') ??

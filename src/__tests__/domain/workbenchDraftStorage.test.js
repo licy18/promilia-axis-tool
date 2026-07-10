@@ -330,7 +330,7 @@ describe('workbench draft storage project files', () => {
     });
   });
 
-  it('migrates v5 project files to v6 nullable initial SP configs', () => {
+  it('migrates v5 project files through nullable initial SP configs', () => {
     const v5Project = createWorkbenchProjectFileSnapshot({
       selection: {
         characterId: 109001,
@@ -513,6 +513,67 @@ describe('workbench draft storage project files', () => {
         { characterId: 101003, initialSp: 0.8 },
       ],
     });
+  });
+
+  it('round-trips tracking-only effect commands through JSON and share projects', () => {
+    const state = {
+      selection: {
+        characterId: 109001,
+        secondaryCharacterId: 101003,
+        skillId: 10900101,
+        enemyId: 300032,
+      },
+      actionDrafts: [
+        {
+          id: 'action-0001',
+          type: 'skill',
+          skillId: 10900101,
+          actorCharacterId: 109001,
+          startMs: 0,
+          durationMs: 1000,
+          level: 1,
+          effectCommands: [
+            {
+              id: 'action-0001-effect-01',
+              effectId: 'tracked-effect',
+              effectName: '测试增益',
+              operation: 'apply',
+              targetKind: 'actor',
+              targetId: 'actor-109001',
+              offsetMs: 500,
+              durationMs: 5000,
+              stackMode: 'stack',
+              stackDelta: 1,
+              maxStacks: 3,
+            },
+          ],
+        },
+      ],
+      selectedActionId: 'action-0001',
+    };
+
+    const exported = JSON.parse(
+      serializeWorkbenchProjectFile(state, '2026-07-10T09:00:00.000Z')
+    );
+    const imported = parseWorkbenchProjectFile(exported);
+    const shared = parseWorkbenchProjectShareCode(
+      createWorkbenchProjectShareCode(state, '2026-07-10T09:00:00.000Z')
+    );
+
+    expect(exported.schemaVersion).toBe(7);
+    expect(imported.actionDrafts[0].effectCommands).toEqual([
+      expect.objectContaining({
+        id: 'action-0001-effect-01',
+        effectId: 'tracked-effect',
+        targetId: 'actor-109001',
+        durationMs: 5000,
+        maxStacks: 3,
+        appliedToCalculators: false,
+      }),
+    ]);
+    expect(shared.actionDrafts[0].effectCommands).toEqual(
+      imported.actionDrafts[0].effectCommands
+    );
   });
 
   it('rejects invalid Workbench project share codes', () => {

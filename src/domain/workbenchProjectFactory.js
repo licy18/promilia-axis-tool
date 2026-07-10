@@ -9,11 +9,15 @@ import {
 import { WORKBENCH_FRAME_MS, snapMsToFrame } from './timebase';
 import {
   ACTION_TYPES,
+  EFFECT_OPERATIONS,
+  EFFECT_STACK_MODES,
+  EFFECT_TARGET_KINDS,
   ENEMY_ELEMENT_DEFENSE_DEFINITIONS,
   createActorFromCharacter,
   createAnnotationAction,
   createEnemyFromData,
   createEnemyEventAction,
+  createEffectCommand,
   createProject,
   createResourceAction,
   createSkillAction,
@@ -139,6 +143,7 @@ export function createWorkbenchActionDraft({
   note = '',
   insertion = null,
   generationBatch = null,
+  effectCommands = [],
 } = {}) {
   const normalizedActionVariantIndex = Math.max(
     0,
@@ -168,7 +173,46 @@ export function createWorkbenchActionDraft({
     note,
     insertion: normalizeWorkbenchInsertion(insertion),
     generationBatch: normalizeWorkbenchGenerationBatch(generationBatch),
+    effectCommands: normalizeWorkbenchEffectCommands(effectCommands, id),
   };
+}
+
+export function normalizeWorkbenchEffectCommands(
+  effectCommands = [],
+  actionId = DEFAULT_WORKBENCH_ACTION_ID
+) {
+  const commandIds = new Set();
+  return (Array.isArray(effectCommands) ? effectCommands : []).map(
+    (command, index) => {
+      const fallbackId = `${actionId}-effect-${String(index + 1).padStart(2, '0')}`;
+      const requestedId = String(command?.id ?? '').trim();
+      const id =
+        requestedId && !commandIds.has(requestedId) ? requestedId : fallbackId;
+      commandIds.add(id);
+      return createEffectCommand({
+        ...command,
+        id,
+        effectId:
+          String(command?.effectId ?? '').trim() ||
+          `${actionId}-effect-${index + 1}`,
+        effectName:
+          String(command?.effectName ?? '').trim() || `状态效果 ${index + 1}`,
+        operation: Object.values(EFFECT_OPERATIONS).includes(command?.operation)
+          ? command.operation
+          : EFFECT_OPERATIONS.APPLY,
+        targetKind: Object.values(EFFECT_TARGET_KINDS).includes(
+          command?.targetKind
+        )
+          ? command.targetKind
+          : EFFECT_TARGET_KINDS.ACTOR,
+        stackMode: Object.values(EFFECT_STACK_MODES).includes(
+          command?.stackMode
+        )
+          ? command.stackMode
+          : EFFECT_STACK_MODES.REFRESH,
+      });
+    }
+  );
 }
 
 export function normalizeWorkbenchSelection(selection = {}, teamSlots = null) {
@@ -508,6 +552,7 @@ export function normalizeWorkbenchActionDrafts(
           note: draft.note,
           insertion: draft.insertion,
           generationBatch: draft.generationBatch,
+          effectCommands: draft.effectCommands,
         });
       }
 
@@ -535,6 +580,7 @@ export function normalizeWorkbenchActionDrafts(
         note: draft.note,
         insertion: draft.insertion,
         generationBatch: draft.generationBatch,
+        effectCommands: draft.effectCommands,
       });
     })
     .filter(
@@ -558,6 +604,12 @@ function createProjectActionFromDraft(
     actorsByCharacterId,
     primaryActor
   );
+  const effectCommands = resolveWorkbenchEffectCommandsForProject({
+    effectCommands: draft.effectCommands,
+    actorsByCharacterId,
+    sourceActor,
+    enemyId: targetId,
+  });
 
   if (draft.type === ACTION_TYPES.SWITCH) {
     const targetActor = resolveSwitchTargetActor(
@@ -574,6 +626,7 @@ function createProjectActionFromDraft(
       durationMs: draft.durationMs,
       note: draft.note || `切换至 ${targetActor.name}`,
       insertion: draft.insertion,
+      effectCommands,
     });
   }
 
@@ -584,6 +637,7 @@ function createProjectActionFromDraft(
       durationMs: draft.durationMs,
       note: draft.note || '等待窗口',
       insertion: draft.insertion,
+      effectCommands,
     });
   }
 
@@ -593,6 +647,7 @@ function createProjectActionFromDraft(
       startMs: draft.startMs,
       note: draft.note || '备注',
       insertion: draft.insertion,
+      effectCommands,
     });
   }
 
@@ -606,6 +661,7 @@ function createProjectActionFromDraft(
       reason: draft.reason || 'manual-axis-resource',
       note: draft.note,
       insertion: draft.insertion,
+      effectCommands,
     });
   }
 
@@ -617,6 +673,7 @@ function createProjectActionFromDraft(
       eventType: draft.eventType || 'phase',
       note: draft.note || '敌人阶段标记',
       insertion: draft.insertion,
+      effectCommands,
     });
   }
 
@@ -639,7 +696,29 @@ function createProjectActionFromDraft(
       draft.note || '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
     insertion: draft.insertion,
     generationBatch: draft.generationBatch,
+    effectCommands,
   });
+}
+
+function resolveWorkbenchEffectCommandsForProject({
+  effectCommands,
+  actorsByCharacterId,
+  sourceActor,
+  enemyId,
+}) {
+  const actorIds = new Set(
+    [...actorsByCharacterId.values()].map(actor => String(actor.id))
+  );
+  return normalizeWorkbenchEffectCommands(effectCommands).map(command => ({
+    ...command,
+    targetId:
+      command.targetKind === EFFECT_TARGET_KINDS.ENEMY
+        ? String(enemyId)
+        : actorIds.has(String(command.targetId ?? ''))
+          ? String(command.targetId)
+          : (sourceActor?.id ?? null),
+    appliedToCalculators: false,
+  }));
 }
 
 function actionTypeLabel(type) {

@@ -299,4 +299,63 @@ describe('workbench project actor configuration', () => {
       sourceStatus: 'azpr-enemy-base-attribute',
     });
   });
+
+  it('projects Workbench effect commands into the runtime without applying calculators', () => {
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      actions: [
+        {
+          id: 'action-0001',
+          type: 'skill',
+          skillId: DEFAULT_WORKBENCH_SELECTION.skillId,
+          actorCharacterId: DEFAULT_WORKBENCH_SELECTION.characterId,
+          startMs: 0,
+          durationMs: 1000,
+          level: 1,
+          effectCommands: [
+            {
+              id: 'action-0001-effect-01',
+              effectId: 'enemy-mark',
+              effectName: '敌人标记',
+              operation: 'apply',
+              targetKind: 'enemy',
+              targetId: 'stale-enemy-id',
+              offsetMs: 1000,
+              durationMs: 3000,
+              stackMode: 'stack',
+              stackDelta: 1,
+              maxStacks: 3,
+            },
+          ],
+        },
+      ],
+    });
+    const scenario = compileProject(project, getWorkbenchGameData());
+    const simulation = simulateScenario(scenario);
+
+    expect(validateProject(project, getWorkbenchGameData()).valid).toBe(true);
+    expect(project.actions[0].effectCommands[0]).toMatchObject({
+      effectId: 'enemy-mark',
+      targetKind: 'enemy',
+      targetId: `enemy-${DEFAULT_WORKBENCH_SELECTION.enemyId}`,
+      appliedToCalculators: false,
+    });
+    expect(simulation.runtimeOutputs.effectTimeline).toMatchObject({
+      summary: {
+        commandCount: 1,
+        eventCount: 2,
+        calculatorAppliedEffectCount: 0,
+      },
+      events: [
+        {
+          type: 'EFFECT_APPLIED',
+          effectId: 'enemy-mark',
+          targetId: `enemy-${DEFAULT_WORKBENCH_SELECTION.enemyId}`,
+        },
+        {
+          type: 'EFFECT_EXPIRED',
+          effectId: 'enemy-mark',
+        },
+      ],
+    });
+  });
 });

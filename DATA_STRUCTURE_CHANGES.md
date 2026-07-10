@@ -25262,3 +25262,55 @@ summary
 ```
 
 新增 summary 字段：`effectCommandCount`、`effectEventCount`、各事件类型数量、`activeEffectCount`、`peakActiveEffectCount` 和 `effectCalculatorAppliedCount`。output consistency 校验 timeline 事件/active 数量与 summary、contract 一致，并确保全部 effect event 未接入 calculator。
+
+## 354. Workbench 状态效果配置与复盘
+
+### 354.1 WorkbenchEffectCommandDraft
+
+`actionDrafts[]` 新增持久化字段：
+
+```text
+actionDraft.effectCommands[]
+  id
+  effectId / effectName
+  operation
+  targetKind / targetId
+  offsetMs / durationMs
+  stackMode / stackDelta / maxStacks
+  tags[] / modifiers[]
+  sourceStatus
+  appliedToCalculators = false
+```
+
+Workbench 规范化层补齐稳定 command ID、非空 effect ID/名称、合法操作/目标/叠层枚举和 calculator 隔离字段。生成 project action 时，敌人目标统一解析为当前 enemy instance；角色目标不存在于当前队伍时回退到动作来源角色。
+
+### 354.2 Workbench 草稿 v7
+
+```text
+WORKBENCH_DRAFT_SCHEMA_VERSION = 7
+WORKBENCH_DRAFT_STORAGE_KEY = promilia-axis-tool:workbench-draft:v7
+```
+
+v7 将 `actionDraft.effectCommands[]` 纳入草稿快照，因此本地保存、撤销/重做、JSON 项目和 URL 分享使用同一份效果配置。`v1-v6` 存储键与项目文件继续通过现有规范化入口迁移；旧动作缺少该字段时规范化为 `effectCommands = []`。
+
+### 354.3 RuntimeEffectReview
+
+Workbench 从标准 `EffectRuntimeTimeline` 派生只读复盘模型：
+
+```text
+RuntimeEffectReview
+  status
+  reviewTimeMs
+  selectedEventId
+  selectedEvent
+  events[]
+  activeEffects[]
+  summary
+    eventCount
+    activeEffectCount
+    reviewEventIndex
+    followsRuntimeStatePoint
+    appliedToCalculators = false
+```
+
+复盘器按 `runtimeSequenceIndex` 重放事件：`event.after` 写入 active map，移除/到期事件删除实例。用户选择效果事件时返回该事件后的状态；选择三值状态点时包含该时间点及以前的全部效果事件。效果复盘选择仅为组件本地视图状态，不写入项目、草稿或 runtime output。

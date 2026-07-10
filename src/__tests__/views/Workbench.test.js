@@ -1827,6 +1827,60 @@ describe('Workbench view', () => {
     expect(text).toContain('low');
   });
 
+  it('configures and reviews a tracking-only effect from the Workbench', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    expect(
+      wrapper.find('[data-testid="workbench-effect-timeline-empty"]').exists()
+    ).toBe(true);
+    await wrapper.find('[data-testid="workbench-effect-add"]').trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper.findAll('[data-testid="workbench-effect-command-row"]')
+    ).toHaveLength(1);
+    expect(
+      wrapper.findAll('[data-testid="workbench-effect-event-row"]')
+    ).toHaveLength(2);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-effect-timeline-panel"]')
+        .attributes('data-effect-event-count')
+    ).toBe('2');
+
+    await wrapper
+      .find('[data-testid="workbench-effect-name-input"]')
+      .setValue('测试增益');
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-effect-event-row"]').text()
+    ).toContain('测试增益');
+
+    await wrapper
+      .findAll('[data-testid="workbench-effect-event-row"]')[0]
+      .trigger('click');
+    await nextTick();
+    expect(
+      wrapper.findAll('[data-testid="workbench-effect-active-row"]')
+    ).toHaveLength(1);
+    expect(
+      wrapper.find('[data-testid="workbench-effect-active-row"]').text()
+    ).toContain('测试增益');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-effect-timeline-panel"]')
+        .attributes('data-active-effect-count')
+    ).toBe('1');
+  });
+
   it('prioritizes runtime detail in the side inspector while reviewing results', async () => {
     const wrapper = mount(Workbench, {
       global: {
@@ -2772,7 +2826,7 @@ describe('Workbench view', () => {
       readTestSource('../../features/workbench/EventLogPanel.vue')
     );
     const resultPhaseSelector =
-      ":is([data-flow-phase='runtime-result'],[data-flow-phase='edit-result-review'])";
+      ':is([data-flow-phase=\x27runtime-result\x27],[data-flow-phase=\x27edit-result-review\x27])';
 
     expect(appSource).toContain(
       '.app{width:100%;min-width:0;min-height:100vh;'
@@ -2794,10 +2848,10 @@ describe('Workbench view', () => {
       `.primary-flow${resultPhaseSelector}.timeline-area{order:1;}`
     );
     expect(workbenchSource).toContain(
-      ".runtime-review-stack[data-runtime-review-layout='result-check']{grid-template-columns:minmax(300px,1.12fr)minmax(220px,0.88fr);align-items:stretch;gap:10px;}"
+      '.runtime-review-stack[data-runtime-review-layout=\x27result-check\x27]{grid-template-columns:minmax(300px,1.12fr)minmax(220px,0.88fr);align-items:stretch;gap:10px;}'
     );
     expect(workbenchSource).toContain(
-      '.timeline-area,.resource-area,.event-area{min-width:0;}'
+      '.timeline-area,.resource-area,.event-area,.effect-area{min-width:0;}'
     );
     expect(resourcePanelSource).toContain(
       `.resource-monitor-panel${resultPhaseSelector}.runtime-curve-panel{`
@@ -2812,13 +2866,13 @@ describe('Workbench view', () => {
       `.event-log-panel${resultPhaseSelector}.runtime-log-row{grid-template-columns:52px46pxminmax(0,1fr);gap:6px;padding:6px8px;}`
     );
     expect(workbenchSource).not.toContain(
-      ".primary-flow[data-flow-phase='runtime-result'].runtime-review-stack"
+      '.primary-flow[data-flow-phase=\x27runtime-result\x27].runtime-review-stack'
     );
     expect(resourcePanelSource).not.toContain(
-      ".resource-monitor-panel[data-flow-phase='runtime-result']"
+      '.resource-monitor-panel[data-flow-phase=\x27runtime-result\x27]'
     );
     expect(eventPanelSource).not.toContain(
-      ".event-log-panel[data-flow-phase='runtime-result']"
+      '.event-log-panel[data-flow-phase=\x27runtime-result\x27]'
     );
   });
 
@@ -2837,7 +2891,7 @@ describe('Workbench view', () => {
     );
 
     expect(workbenchSource).toContain(
-      ".runtime-review-stack[data-runtime-review-layout='result-check']{grid-template-columns:1fr;}"
+      '.runtime-review-stack[data-runtime-review-layout=\x27result-check\x27]{grid-template-columns:1fr;}'
     );
     expect(resourcePanelSource).toContain(
       '@media(max-width:760px){.runtime-state-grid,.runtime-curve-selection-primary,.runtime-curve-selection-grid{grid-template-columns:1fr;}'
@@ -2861,7 +2915,7 @@ describe('Workbench view', () => {
       '.runtime-track-filters{grid-template-columns:repeat(2,minmax(0,1fr));}'
     );
     expect(eventPanelSource).toContain(
-      ".runtime-log-filter-summary,.runtime-log-navigation,.runtime-log-detail[data-detail-layout='compact'],.runtime-log-detail.runtime-log-edit-context,.runtime-log-detail.runtime-log-detail-handoff{grid-template-columns:1fr;}"
+      '.runtime-log-filter-summary,.runtime-log-navigation,.runtime-log-detail[data-detail-layout=\x27compact\x27],.runtime-log-detail.runtime-log-edit-context,.runtime-log-detail.runtime-log-detail-handoff{grid-template-columns:1fr;}'
     );
     expect(eventPanelSource).toContain(
       '.runtime-log-selection-note{align-items:stretch;flex-direction:column;}'

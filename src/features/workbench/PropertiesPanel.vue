@@ -324,6 +324,191 @@
     </div>
 
     <div
+      class="effect-editor"
+      :data-effect-command-count="effectCommands.length"
+      data-testid="workbench-effect-editor"
+    >
+      <div class="effect-editor-heading">
+        <span>状态效果</span>
+        <button
+          type="button"
+          title="添加状态效果"
+          aria-label="添加状态效果"
+          data-testid="workbench-effect-add"
+          @click="addEffectCommand"
+        >
+          <Plus class="effect-editor-icon" />
+        </button>
+      </div>
+
+      <div
+        v-for="(command, commandIndex) in effectCommands"
+        :key="command.id"
+        class="effect-command-row"
+        :data-effect-command-id="command.id"
+        data-testid="workbench-effect-command-row"
+      >
+        <div class="effect-command-heading">
+          <strong>{{ command.effectName || command.effectId }}</strong>
+          <button
+            type="button"
+            title="删除状态效果"
+            aria-label="删除状态效果"
+            :data-effect-command-id="command.id"
+            data-testid="workbench-effect-delete"
+            @click="deleteEffectCommand(command.id)"
+          >
+            <Delete class="effect-editor-icon" />
+          </button>
+        </div>
+
+        <div class="effect-command-fields">
+          <label class="effect-field-wide">
+            <span>效果键</span>
+            <input
+              type="text"
+              :value="command.effectId"
+              data-testid="workbench-effect-id-input"
+              @change="
+                updateEffectText(
+                  command.id,
+                  'effectId',
+                  $event.target.value,
+                  `effect-${commandIndex + 1}`
+                )
+              "
+            />
+          </label>
+          <label class="effect-field-wide">
+            <span>显示名称</span>
+            <input
+              type="text"
+              :value="command.effectName"
+              data-testid="workbench-effect-name-input"
+              @change="
+                updateEffectText(
+                  command.id,
+                  'effectName',
+                  $event.target.value,
+                  `状态效果 ${commandIndex + 1}`
+                )
+              "
+            />
+          </label>
+          <label>
+            <span>操作</span>
+            <select
+              :value="command.operation"
+              data-testid="workbench-effect-operation-select"
+              @change="
+                updateEffectCommand(command.id, {
+                  operation: $event.target.value,
+                })
+              "
+            >
+              <option value="apply">施加</option>
+              <option value="refresh">刷新</option>
+              <option value="remove">移除</option>
+            </select>
+          </label>
+          <label>
+            <span>目标</span>
+            <select
+              :value="getEffectTargetValue(command)"
+              data-testid="workbench-effect-target-select"
+              @change="updateEffectTarget(command.id, $event.target.value)"
+            >
+              <option
+                v-for="option in effectTargetOptions"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </option>
+            </select>
+          </label>
+          <label>
+            <span>触发帧偏移</span>
+            <input
+              type="number"
+              min="0"
+              step="1"
+              :value="msToFrame(command.offsetMs ?? 0)"
+              data-testid="workbench-effect-offset-frame-input"
+              @change="
+                updateEffectFrame(command.id, 'offsetMs', $event.target.value)
+              "
+            />
+          </label>
+          <label>
+            <span>持续帧</span>
+            <input
+              type="number"
+              min="0"
+              step="1"
+              placeholder="永久"
+              :value="
+                command.durationMs == null ? '' : msToFrame(command.durationMs)
+              "
+              data-testid="workbench-effect-duration-frame-input"
+              @change="updateEffectDuration(command.id, $event.target.value)"
+            />
+          </label>
+          <label>
+            <span>叠层方式</span>
+            <select
+              :value="command.stackMode"
+              data-testid="workbench-effect-stack-mode-select"
+              @change="
+                updateEffectCommand(command.id, {
+                  stackMode: $event.target.value,
+                })
+              "
+            >
+              <option value="refresh">刷新时长</option>
+              <option value="stack">增加层数</option>
+              <option value="replace">替换层数</option>
+            </select>
+          </label>
+          <label>
+            <span>单次层数</span>
+            <input
+              type="number"
+              min="1"
+              step="1"
+              :value="command.stackDelta"
+              data-testid="workbench-effect-stack-delta-input"
+              @change="
+                updateEffectInteger(
+                  command.id,
+                  'stackDelta',
+                  $event.target.value
+                )
+              "
+            />
+          </label>
+          <label>
+            <span>层数上限</span>
+            <input
+              type="number"
+              min="1"
+              step="1"
+              :value="command.maxStacks"
+              data-testid="workbench-effect-max-stacks-input"
+              @change="
+                updateEffectInteger(
+                  command.id,
+                  'maxStacks',
+                  $event.target.value
+                )
+              "
+            />
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div
       v-if="currentActorAttributePanel"
       class="attribute-panel"
       data-testid="workbench-character-attribute-panel"
@@ -510,7 +695,13 @@
 
 <script setup>
 import { computed } from 'vue';
-import { Aim, Minus, Operation, Plus } from '@element-plus/icons-vue';
+import { Aim, Delete, Minus, Operation, Plus } from '@element-plus/icons-vue';
+import {
+  EFFECT_OPERATIONS,
+  EFFECT_STACK_MODES,
+  EFFECT_TARGET_KINDS,
+  createEffectCommand,
+} from '../../domain/projectSchema';
 import {
   WORKBENCH_FPS,
   WORKBENCH_FRAME_MS,
@@ -577,6 +768,26 @@ const emit = defineEmits([
 
 const frameStepMs = WORKBENCH_FRAME_MS;
 const workbenchFrameRate = WORKBENCH_FPS;
+
+const effectCommands = computed(
+  () => props.selectedAction.effectCommands ?? []
+);
+const effectTargetOptions = computed(() => {
+  const actorOptions = props.actors.map(actor => ({
+    value: `${EFFECT_TARGET_KINDS.ACTOR}|${actor.id}`,
+    label: `角色 · ${actor.name}`,
+  }));
+  const enemy = props.enemies.find(
+    item => Number(item.id) === Number(props.selection.enemyId)
+  );
+  return [
+    ...actorOptions,
+    {
+      value: `${EFFECT_TARGET_KINDS.ENEMY}|enemy-${props.selection.enemyId}`,
+      label: `敌人 · ${enemy?.name ?? props.selection.enemyId}`,
+    },
+  ];
+});
 
 const maxSkillLevel = computed(() =>
   Math.max(
@@ -968,6 +1179,90 @@ function emitTextPatch(key, value) {
   });
 }
 
+function addEffectCommand() {
+  const sequence = effectCommands.value.length + 1;
+  const targetId =
+    currentActor.value?.id ??
+    props.actors[0]?.id ??
+    `actor-${props.selection.characterId}`;
+  const command = createEffectCommand({
+    id: `${props.selectedAction.id}-effect-${Date.now().toString(36)}`,
+    effectId: `${props.selectedAction.id}-effect-${sequence}`,
+    effectName: `状态效果 ${sequence}`,
+    operation: EFFECT_OPERATIONS.APPLY,
+    targetKind: EFFECT_TARGET_KINDS.ACTOR,
+    targetId,
+    durationMs: frameToMs(300),
+    stackMode: EFFECT_STACK_MODES.REFRESH,
+    stackDelta: 1,
+    maxStacks: 1,
+  });
+  emitEffectCommands([...effectCommands.value, command]);
+}
+
+function deleteEffectCommand(commandId) {
+  emitEffectCommands(
+    effectCommands.value.filter(command => command.id !== commandId)
+  );
+}
+
+function updateEffectText(commandId, key, value, fallback) {
+  updateEffectCommand(commandId, {
+    [key]: String(value ?? '').trim() || fallback,
+  });
+}
+
+function updateEffectTarget(commandId, value) {
+  const [targetKind, ...targetIdParts] = String(value).split('|');
+  const targetId = targetIdParts.join('|');
+  if (!targetId || !Object.values(EFFECT_TARGET_KINDS).includes(targetKind)) {
+    return;
+  }
+  updateEffectCommand(commandId, { targetKind, targetId });
+}
+
+function updateEffectFrame(commandId, key, value) {
+  const frame = Math.max(0, Math.round(Number(value) || 0));
+  updateEffectCommand(commandId, { [key]: frameToMs(frame) });
+}
+
+function updateEffectDuration(commandId, value) {
+  const text = String(value ?? '').trim();
+  updateEffectCommand(commandId, {
+    durationMs:
+      text === ''
+        ? null
+        : frameToMs(Math.max(0, Math.round(Number(text) || 0))),
+  });
+}
+
+function updateEffectInteger(commandId, key, value) {
+  updateEffectCommand(commandId, {
+    [key]: Math.max(1, Math.round(Number(value) || 1)),
+  });
+}
+
+function updateEffectCommand(commandId, patch) {
+  emitEffectCommands(
+    effectCommands.value.map(command =>
+      command.id === commandId
+        ? createEffectCommand({ ...command, ...patch, id: command.id })
+        : command
+    )
+  );
+}
+
+function emitEffectCommands(commands) {
+  emit('update-action', { effectCommands: commands });
+}
+
+function getEffectTargetValue(command) {
+  const value = `${command.targetKind}|${command.targetId}`;
+  return effectTargetOptions.value.some(option => option.value === value)
+    ? value
+    : effectTargetOptions.value[0]?.value;
+}
+
 function returnRuntimeResult() {
   const action = runtimeResultReturnCommand.value.action;
   if (!action.canRun) {
@@ -1122,6 +1417,79 @@ h2 {
 .action-controls {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   padding-top: 0;
+}
+
+.effect-editor {
+  display: grid;
+  gap: 0;
+  margin: 0 14px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.effect-editor-heading,
+.effect-command-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.effect-editor-heading {
+  min-height: 42px;
+  color: #d8dee3;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.effect-editor-heading button,
+.effect-command-heading button {
+  display: inline-grid;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgba(121, 199, 185, 0.28);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.1);
+  color: #dff9f3;
+  cursor: pointer;
+}
+
+.effect-command-heading button {
+  border-color: rgba(239, 137, 137, 0.25);
+  background: rgba(239, 137, 137, 0.08);
+  color: #ffc7c7;
+}
+
+.effect-editor-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.effect-command-row {
+  display: grid;
+  gap: 10px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.effect-command-heading strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #f4f7f8;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.effect-command-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.effect-field-wide {
+  grid-column: 1 / -1;
 }
 
 .action-result-return {
