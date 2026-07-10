@@ -160,6 +160,37 @@ describe('RuntimeSelectedDetailPanel', () => {
     expect(rows[2].text()).toContain('待确认');
     expect(rows[2].text()).toContain('+15');
   });
+
+  it('labels transaction detail as one hit instead of one delta track', () => {
+    const wrapper = mount(RuntimeSelectedDetailPanel, {
+      props: {
+        detail: createRuntimeDetail({
+          reviewUnit: 'hit-transaction',
+          transactionId: 'action-001|hit-1|12|200',
+          hitKey: 'hit-1',
+          threeValueStateRows: [createThreeValueStateRow()],
+        }),
+      },
+    });
+
+    const panel = wrapper.get(
+      '[data-testid="workbench-runtime-selected-detail"]'
+    );
+    expect(panel.attributes()).toMatchObject({
+      'data-review-unit': 'hit-transaction',
+      'data-transaction-id': 'action-001|hit-1|12|200',
+    });
+    expect(
+      wrapper
+        .get('[data-testid="workbench-runtime-selected-detail-track"]')
+        .text()
+    ).toBe('hit-1');
+    expect(
+      wrapper
+        .get('[data-testid="workbench-runtime-selected-detail-source-delta"]')
+        .text()
+    ).toBe('action-001|hit-1|12|200');
+  });
 });
 
 function createRuntimeDetail(overrides = {}) {

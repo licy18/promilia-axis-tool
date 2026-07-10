@@ -2,6 +2,7 @@
   <section
     ref="eventLogPanelRef"
     class="panel event-log-panel"
+    data-testid="workbench-event-log-panel"
     :data-flow-phase="flowModel?.phase ?? ''"
     :data-flow-state-point-id="flowSelectedStatePointId"
     :data-runtime-review-selection-status="runtimeReviewContextView.status"
@@ -13,6 +14,7 @@
     "
     :data-runtime-review-source="runtimeReviewContextView.source"
     :data-runtime-review-source-kind="runtimeReviewContextView.sourceKind"
+    :data-runtime-log-review-mode="runtimeReviewModeEffective"
   >
     <div class="panel-title">
       <Tickets class="panel-icon" />
@@ -38,7 +40,27 @@
       data-testid="workbench-runtime-sim-log"
     >
       <div class="runtime-log-heading">
-        <span>模拟日志</span>
+        <span>{{
+          runtimeReviewModeEffective === 'hit' ? '命中复盘' : '模拟明细'
+        }}</span>
+        <div
+          v-if="runtimeHitReviewAvailable"
+          class="runtime-log-mode"
+          data-testid="workbench-runtime-sim-log-mode"
+        >
+          <button
+            v-for="option in runtimeReviewModeOptions"
+            :key="option.key"
+            type="button"
+            :aria-pressed="runtimeReviewModeEffective === option.key"
+            :data-active="runtimeReviewModeEffective === option.key"
+            :data-review-mode="option.key"
+            data-testid="workbench-runtime-sim-log-mode-option"
+            @click="runtimeReviewMode = option.key"
+          >
+            {{ option.label }}
+          </button>
+        </div>
         <strong data-testid="workbench-runtime-sim-log-filter-count">
           {{ filteredRuntimeSimLogRows.length }}/{{ runtimeSimLogRows.length }}
         </strong>
@@ -161,8 +183,11 @@
           v-for="(row, index) in filteredRuntimeSimLogRows"
           :key="row.sourceDeltaId ?? `${row.eventType}-${index}`"
           class="runtime-log-row"
+          :data-review-unit="row.reviewUnit ?? 'delta'"
           :data-selected="isRuntimeLogRowSelected(row, index)"
+          :data-source-delta-count="row.sourceDeltaIds?.length ?? 1"
           :data-state-point-id="getRuntimeStatePointIdByRow(row)"
+          :data-transaction-id="row.transactionId ?? ''"
           data-testid="workbench-runtime-sim-log-row"
           role="button"
           tabindex="0"
@@ -347,6 +372,7 @@ import {
   Tickets,
 } from '@element-plus/icons-vue';
 import { createRuntimeDetailCalculatorRows } from './runtimeSelectedDetail';
+import { createRuntimeHitReviewRows } from './runtimeHitReviewRows';
 import { createRuntimeResultReturnContext } from './runtimeResultReturnContext';
 import { createWorkbenchRuntimeOutputConsumerView } from './runtimeProjectionPoints';
 import {
@@ -369,6 +395,11 @@ const RUNTIME_LOG_SCROLL_FLOW_PHASES = new Set([
   'runtime-result',
   'edit-result-review',
 ]);
+
+const runtimeReviewModeOptions = [
+  { key: 'hit', label: '命中' },
+  { key: 'delta', label: '明细' },
+];
 
 const props = defineProps({
   eventLog: {
@@ -416,6 +447,7 @@ const emit = defineEmits(['dispatch-flow-action']);
 
 const eventLogPanelRef = ref(null);
 const selectedRuntimeLogIndex = ref(0);
+const runtimeReviewMode = ref('hit');
 const runtimeTrackFilter = ref('all');
 const runtimeActorFilter = ref('all');
 const runtimeActionFilter = ref('all');
@@ -431,8 +463,30 @@ const runtimeContextByRow = computed(
       runtimeStatePointContexts.value.map(context => [context.row, context])
     )
 );
-const runtimeSimLogRows = computed(() =>
+const runtimeContextByStatePointId = computed(
+  () => runtimeOutputView.value.statePointContextById
+);
+const runtimeDeltaSimLogRows = computed(() =>
   runtimeStatePointContexts.value.map(context => context.row)
+);
+const runtimeHitReviewRows = computed(() =>
+  createRuntimeHitReviewRows({
+    hitTransactions: runtimeOutputView.value.hitTransactions,
+    statePointContexts: runtimeStatePointContexts.value,
+  })
+);
+const runtimeHitReviewAvailable = computed(
+  () => runtimeHitReviewRows.value.length > 0
+);
+const runtimeReviewModeEffective = computed(() =>
+  runtimeReviewMode.value === 'hit' && runtimeHitReviewAvailable.value
+    ? 'hit'
+    : 'delta'
+);
+const runtimeSimLogRows = computed(() =>
+  runtimeReviewModeEffective.value === 'hit'
+    ? runtimeHitReviewRows.value
+    : runtimeDeltaSimLogRows.value
 );
 const runtimeReviewPanelView = computed(
   () =>
@@ -460,7 +514,7 @@ const flowEditResult = computed(
   () => props.flowModel?.editResult ?? props.actionEditResultContext
 );
 const runtimeTrackFilterOptions = computed(() => {
-  const counts = countRuntimeOptions(runtimeSimLogRows.value, 'trackKey');
+  const counts = countRuntimeTrackOptions(runtimeSimLogRows.value);
   return [
     { key: 'all', label: '全部', count: runtimeSimLogRows.value.length },
     {
@@ -502,7 +556,7 @@ const filteredRuntimeSimLogRows = computed(() =>
   runtimeSimLogRows.value.filter(row => {
     if (
       runtimeTrackFilter.value !== 'all' &&
-      row.trackKey !== runtimeTrackFilter.value
+      !runtimeRowHasTrack(row, runtimeTrackFilter.value)
     ) {
       return false;
     }
@@ -573,14 +627,14 @@ const selectedRuntimeHiddenLogRow = computed(() => {
   if (!flowSelectedStatePointId.value) {
     return null;
   }
-  const row = runtimeSimLogRows.value.find(
-    row => getRuntimeStatePointIdByRow(row) === flowSelectedStatePointId.value
+  const row = runtimeSimLogRows.value.find(row =>
+    runtimeRowHasStatePoint(row, flowSelectedStatePointId.value)
   );
   if (!row) {
     return null;
   }
-  const visible = filteredRuntimeSimLogRows.value.some(
-    row => getRuntimeStatePointIdByRow(row) === flowSelectedStatePointId.value
+  const visible = filteredRuntimeSimLogRows.value.some(row =>
+    runtimeRowHasStatePoint(row, flowSelectedStatePointId.value)
   );
   return visible ? null : row;
 });
@@ -619,8 +673,10 @@ const runtimeLogDetailHandoff = computed(() =>
         statePointId: matchedRuntimeSelectedDetail.value.statePointId,
         label: '三值详情面板',
         detail: [
-          matchedRuntimeSelectedDetail.value.trackLabel ??
-            formatRuntimeTrack(selectedRuntimeLog.value),
+          matchedRuntimeSelectedDetail.value.reviewUnit === 'hit-transaction'
+            ? matchedRuntimeSelectedDetail.value.hitKey || '命中'
+            : (matchedRuntimeSelectedDetail.value.trackLabel ??
+              formatRuntimeTrack(selectedRuntimeLog.value)),
           matchedRuntimeSelectedDetail.value.frameLabel ??
             formatRuntimeTime(selectedRuntimeLog.value),
         ]
@@ -710,7 +766,9 @@ const runtimeLogDetailDelta = computed(() =>
 );
 const runtimeLogDetailTrack = computed(
   () =>
-    matchedRuntimeSelectedDetail.value?.trackLabel ??
+    (matchedRuntimeSelectedDetail.value?.reviewUnit === 'hit-transaction'
+      ? '命中'
+      : matchedRuntimeSelectedDetail.value?.trackLabel) ??
     formatRuntimeTrack(selectedRuntimeLog.value)
 );
 const runtimeLogDetailActor = computed(
@@ -723,12 +781,15 @@ const runtimeLogDetailActor = computed(
 );
 const runtimeLogDetailStatus = computed(
   () =>
+    matchedRuntimeSelectedDetail.value?.reviewStatus ??
     matchedRuntimeSelectedDetail.value?.status ??
     formatRuntimeStatus(selectedRuntimeLog.value)
 );
 const runtimeLogDetailSourceDeltaId = computed(
   () =>
-    matchedRuntimeSelectedDetail.value?.sourceDeltaId ??
+    (matchedRuntimeSelectedDetail.value?.reviewUnit === 'hit-transaction'
+      ? matchedRuntimeSelectedDetail.value.transactionId
+      : matchedRuntimeSelectedDetail.value?.sourceDeltaId) ??
     selectedRuntimeLog.value?.sourceDeltaId ??
     ''
 );
@@ -955,9 +1016,11 @@ function showSelectedRuntimeLog() {
   }
   if (
     runtimeTrackFilter.value !== 'all' &&
-    runtimeTrackFilter.value !== row.trackKey
+    !runtimeRowHasTrack(row, runtimeTrackFilter.value)
   ) {
-    runtimeTrackFilter.value = row.trackKey;
+    runtimeTrackFilter.value = isRuntimeHitReviewRow(row)
+      ? 'all'
+      : (row.trackKey ?? 'all');
   }
 
   const actorKey = createRuntimeActorFilterKey(row);
@@ -1033,8 +1096,8 @@ function focusRuntimeLogByStatePoint(statePointId) {
   runtimeTrackFilter.value = 'all';
   runtimeActorFilter.value = 'all';
   runtimeActionFilter.value = 'all';
-  const index = runtimeSimLogRows.value.findIndex(
-    row => getRuntimeStatePointIdByRow(row) === statePointId
+  const index = runtimeSimLogRows.value.findIndex(row =>
+    runtimeRowHasStatePoint(row, statePointId)
   );
   if (index >= 0) {
     selectedRuntimeLogIndex.value = index;
@@ -1062,8 +1125,13 @@ function getRuntimeLogActionEditTarget({
       frameLabel:
         detail?.frameLabel ?? row?.frameLabel ?? `${row?.timeMs ?? 0}ms`,
       statePointId: statePointId ?? '',
-      trackKey: detail?.trackKey ?? row?.trackKey ?? '',
-      trackLabel: detail?.trackLabel ?? '',
+      trackKey:
+        detail?.trackKey ?? row?.anchorRow?.trackKey ?? row?.trackKey ?? '',
+      trackLabel:
+        detail?.trackLabel ??
+        row?.anchorRow?.trackLabel ??
+        row?.trackLabel ??
+        '',
     }),
     statePointId,
   });
@@ -1145,9 +1213,7 @@ function findRuntimeLogRowIndexByStatePoint(rows, statePointId) {
   if (!statePointId) {
     return -1;
   }
-  return rows.findIndex(
-    row => getRuntimeStatePointIdByRow(row) === statePointId
-  );
+  return rows.findIndex(row => runtimeRowHasStatePoint(row, statePointId));
 }
 
 function createRuntimeLogNavigationTarget(row, index) {
@@ -1189,8 +1255,8 @@ function syncSelectedRuntimeLogIndexFromStatePoint(rows) {
   if (!flowSelectedStatePointId.value) {
     return;
   }
-  const index = rows.findIndex(
-    row => getRuntimeStatePointIdByRow(row) === flowSelectedStatePointId.value
+  const index = rows.findIndex(row =>
+    runtimeRowHasStatePoint(row, flowSelectedStatePointId.value)
   );
   if (index >= 0) {
     selectedRuntimeLogIndex.value = index;
@@ -1219,12 +1285,17 @@ function createRuntimeActionFilterKey(row) {
 
 function isRuntimeLogRowSelected(row, index) {
   if (flowSelectedStatePointId.value) {
-    return getRuntimeStatePointIdByRow(row) === flowSelectedStatePointId.value;
+    return runtimeRowHasStatePoint(row, flowSelectedStatePointId.value);
   }
   return selectedRuntimeLogIndex.value === index;
 }
 
 function getRuntimeStatePointIdByRow(row) {
+  if (isRuntimeHitReviewRow(row)) {
+    return runtimeRowHasStatePoint(row, flowSelectedStatePointId.value)
+      ? flowSelectedStatePointId.value
+      : (row.statePointId ?? '');
+  }
   return runtimeContextByRow.value.get(row)?.statePointId ?? '';
 }
 
@@ -1270,6 +1341,9 @@ function formatRuntimeTime(row) {
 }
 
 function formatRuntimeTrack(row) {
+  if (isRuntimeHitReviewRow(row)) {
+    return '命中';
+  }
   const labels = {
     enemyHpDamage: 'HP',
     enemyToughnessDamage: '韧性',
@@ -1287,6 +1361,9 @@ function formatRuntimeDelta(row) {
   if (!row) {
     return '0';
   }
+  if (isRuntimeHitReviewRow(row)) {
+    return formatRuntimeHitTransactionDelta(row);
+  }
   if (row.trackKey === 'enemyHpDamage') {
     return `HP ${formatNumber(row.hpDelta)}`;
   }
@@ -1299,7 +1376,26 @@ function formatRuntimeDelta(row) {
   return formatSigned(row.delta);
 }
 
+function formatRuntimeHitTransactionDelta(row) {
+  const stateChange = row.stateChange ?? row.hitTransaction?.stateChange ?? {};
+  return [
+    `HP ${formatSignedNumber(stateChange.enemyHp)}`,
+    `韧性 ${formatSignedNumber(stateChange.enemyToughness)}`,
+    `SP ${formatSignedNumber(stateChange.selfEnergy)}`,
+  ].join(' · ');
+}
+
+function formatSignedNumber(value) {
+  const number = Number(value) || 0;
+  return `${number > 0 ? '+' : ''}${formatNumber(number)}`;
+}
+
 function formatRuntimeDetailDelta(detail) {
+  if (detail.reviewUnit === 'hit-transaction') {
+    return formatRuntimeHitTransactionDelta({
+      stateChange: detail.transactionStateChange,
+    });
+  }
   if (detail.trackKey === 'enemyHpDamage') {
     return `HP ${formatNumber(detail.delta)}`;
   }
@@ -1322,6 +1418,9 @@ function numberOrZero(value) {
 }
 
 function formatRuntimeStatus(row) {
+  if (isRuntimeHitReviewRow(row)) {
+    return row.status ?? 'runtime-hit-transaction-ready';
+  }
   const point = getRuntimePointByRow(row);
   return (
     point?.resultStatus ?? point?.sourceStatus ?? row?.confidence ?? 'applied'
@@ -1329,19 +1428,50 @@ function formatRuntimeStatus(row) {
 }
 
 function getRuntimePointByRow(row) {
+  if (isRuntimeHitReviewRow(row)) {
+    return (
+      runtimeContextByStatePointId.value.get(getRuntimeStatePointIdByRow(row))
+        ?.point ??
+      row.anchorPoint ??
+      null
+    );
+  }
   return runtimeContextByRow.value.get(row)?.point ?? null;
 }
 
-function countRuntimeOptions(rows, field) {
+function countRuntimeTrackOptions(rows) {
   const counts = new Map();
   for (const row of rows ?? []) {
-    const key = row?.[field];
-    if (!key) {
-      continue;
+    for (const key of getRuntimeRowTrackKeys(row)) {
+      counts.set(key, (counts.get(key) ?? 0) + 1);
     }
-    counts.set(key, (counts.get(key) ?? 0) + 1);
   }
   return counts;
+}
+
+function runtimeRowHasTrack(row, trackKey) {
+  return getRuntimeRowTrackKeys(row).includes(trackKey);
+}
+
+function getRuntimeRowTrackKeys(row) {
+  if (Array.isArray(row?.trackKeys) && row.trackKeys.length > 0) {
+    return row.trackKeys;
+  }
+  return row?.trackKey ? [row.trackKey] : [];
+}
+
+function runtimeRowHasStatePoint(row, statePointId) {
+  if (!statePointId) {
+    return false;
+  }
+  if (isRuntimeHitReviewRow(row)) {
+    return (row.statePointIds ?? []).includes(statePointId);
+  }
+  return runtimeContextByRow.value.get(row)?.statePointId === statePointId;
+}
+
+function isRuntimeHitReviewRow(row) {
+  return row?.reviewUnit === 'hit-transaction';
 }
 
 function createRuntimeSelectOptions({
@@ -1375,26 +1505,39 @@ function createRuntimeContributionRows(row) {
   if (!row) {
     return [];
   }
+  const transactionDelta = isRuntimeHitReviewRow(row)
+    ? (row.hitTransaction?.delta ?? null)
+    : null;
   const appliedAggregate = row.hitThreeValueDeltaAggregate?.layers?.applied;
-  const source = appliedAggregate ? 'hit-aggregate' : 'runtime-row';
+  const source = transactionDelta
+    ? 'hit-transaction'
+    : appliedAggregate
+      ? 'hit-aggregate'
+      : 'runtime-row';
   const hpDelta =
-    appliedAggregate != null
-      ? numberOrZero(appliedAggregate.hpDelta)
-      : row.trackKey === 'enemyHpDamage'
-        ? numberOrZero(row.hpDelta)
-        : 0;
+    transactionDelta != null
+      ? numberOrZero(transactionDelta.enemyHp)
+      : appliedAggregate != null
+        ? numberOrZero(appliedAggregate.hpDelta)
+        : row.trackKey === 'enemyHpDamage'
+          ? numberOrZero(row.hpDelta)
+          : 0;
   const toughnessDelta =
-    appliedAggregate != null
-      ? numberOrZero(appliedAggregate.toughnessDelta)
-      : row.trackKey === 'enemyToughnessDamage'
-        ? numberOrZero(row.toughnessDelta)
-        : 0;
+    transactionDelta != null
+      ? numberOrZero(transactionDelta.enemyToughness)
+      : appliedAggregate != null
+        ? numberOrZero(appliedAggregate.toughnessDelta)
+        : row.trackKey === 'enemyToughnessDamage'
+          ? numberOrZero(row.toughnessDelta)
+          : 0;
   const energyDelta =
-    appliedAggregate != null
-      ? numberOrZero(appliedAggregate.energyDelta)
-      : row.trackKey === 'selfEnergyChange'
-        ? numberOrZero(row.energyDelta)
-        : 0;
+    transactionDelta != null
+      ? numberOrZero(transactionDelta.selfEnergy)
+      : appliedAggregate != null
+        ? numberOrZero(appliedAggregate.energyDelta)
+        : row.trackKey === 'selfEnergyChange'
+          ? numberOrZero(row.energyDelta)
+          : 0;
   return [
     {
       key: 'hp',
@@ -1421,9 +1564,11 @@ function createRuntimeContributionRows(row) {
 }
 
 function createRuntimeContributionRowsFromDetail(detail) {
-  const source = detail.hitThreeValueDeltaAggregate
-    ? 'hit-aggregate'
-    : 'runtime-selected-detail';
+  const source = detail.hitTransaction
+    ? 'hit-transaction'
+    : detail.hitThreeValueDeltaAggregate
+      ? 'hit-aggregate'
+      : 'runtime-selected-detail';
   return (detail.contributionRows ?? []).map(row => ({
     key: row.key,
     label: row.label,
@@ -1641,6 +1786,36 @@ h2 {
 .runtime-log-heading strong {
   color: #79c7b9;
   font-size: 12px;
+}
+
+.runtime-log-mode {
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(48px, 1fr));
+  gap: 2px;
+  min-width: 104px;
+  margin-left: auto;
+  padding: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.14);
+}
+
+.runtime-log-mode button {
+  min-height: 24px;
+  padding: 0 7px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: #8f9aa3;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.runtime-log-mode button[data-active='true'] {
+  background: rgba(121, 199, 185, 0.18);
+  color: #dff9f3;
 }
 
 .runtime-log-filter-summary {

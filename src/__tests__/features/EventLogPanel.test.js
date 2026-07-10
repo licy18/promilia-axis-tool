@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 import EventLogPanel from '../../features/workbench/EventLogPanel.vue';
+import { createRuntimeStatePointContexts } from '../../features/workbench/runtimeProjectionPoints';
 
 describe('EventLogPanel', () => {
   it('navigates adjacent runtime results from the log panel', async () => {
@@ -119,6 +120,80 @@ describe('EventLogPanel', () => {
       ['energy', 'hit-aggregate', '-10', '自身能量-10'],
     ]);
   });
+
+  it('reviews one hit as one row and keeps per-delta diagnostics available', async () => {
+    const transaction = createRuntimeHitTransaction();
+    const runtimeProjection = {
+      simLog: transaction.sourceDeltaIds.map((sourceDeltaId, index) =>
+        createTransactionRuntimeLogRow({
+          sourceDeltaId,
+          index,
+          transaction,
+        })
+      ),
+      hitTransactions: {
+        transactions: [transaction],
+      },
+    };
+    const selectedStatePointId =
+      createRuntimeStatePointContexts(runtimeProjection)[1].statePointId;
+    const wrapper = mount(EventLogPanel, {
+      props: {
+        eventLog: [],
+        runtimeProjection,
+        selectedStateCurvePointId: selectedStatePointId,
+      },
+    });
+
+    expect(wrapper.attributes('data-runtime-log-review-mode')).toBe('hit');
+    const hitRows = wrapper.findAll(
+      '[data-testid="workbench-runtime-sim-log-row"]'
+    );
+    expect(hitRows).toHaveLength(1);
+    expect(hitRows[0].attributes()).toMatchObject({
+      'data-review-unit': 'hit-transaction',
+      'data-selected': 'true',
+      'data-source-delta-count': '3',
+      'data-state-point-id': selectedStatePointId,
+      'data-transaction-id': transaction.transactionId,
+    });
+    expect(hitRows[0].text()).toContain('普通攻击');
+    expect(hitRows[0].text()).toContain('HP -100');
+    expect(hitRows[0].text()).toContain('韧性 -20');
+    expect(hitRows[0].text()).toContain('SP +15');
+
+    await hitRows[0].trigger('click');
+    expect(getLastDispatchedFlowAction(wrapper)).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'event-log-runtime-row',
+      statePointId: selectedStatePointId,
+      canRun: true,
+      payload: {
+        transactionId: transaction.transactionId,
+        actionId: 'action-001',
+      },
+    });
+
+    await wrapper
+      .find(
+        '[data-testid="workbench-runtime-sim-log-mode-option"][data-review-mode="delta"]'
+      )
+      .trigger('click');
+    expect(wrapper.attributes('data-runtime-log-review-mode')).toBe('delta');
+    expect(
+      wrapper.findAll('[data-testid="workbench-runtime-sim-log-row"]')
+    ).toHaveLength(3);
+
+    await wrapper
+      .find(
+        '[data-testid="workbench-runtime-sim-log-mode-option"][data-review-mode="hit"]'
+      )
+      .trigger('click');
+    expect(wrapper.attributes('data-runtime-log-review-mode')).toBe('hit');
+    expect(
+      wrapper.findAll('[data-testid="workbench-runtime-sim-log-row"]')
+    ).toHaveLength(1);
+  });
 });
 
 function createRuntimeLogRow({
@@ -147,6 +222,70 @@ function createRuntimeLogRow({
     hpDelta: 100,
     toughnessDelta: null,
     energyDelta: null,
+  };
+}
+
+function createRuntimeHitTransaction() {
+  return {
+    transactionId: 'action-001|hit-1|12|200',
+    actionId: 'action-001',
+    actionName: '普通攻击',
+    actionType: 'skill',
+    actorId: 'actor-001',
+    actorName: '末音',
+    energyOwnerActorId: 'actor-001',
+    targetEnemyId: 'enemy-001',
+    hitKey: 'hit-1',
+    hitIndex: 1,
+    frameIndex: 12,
+    frameLabel: '0s12f',
+    timeMs: 200,
+    runtimeSequenceStart: 0,
+    runtimeSequenceEnd: 2,
+    deltaCount: 3,
+    sourceDeltaIds: ['delta-hp', 'delta-toughness', 'delta-energy'],
+    trackKeys: ['enemyHpDamage', 'enemyToughnessDamage', 'selfEnergyChange'],
+    delta: {
+      enemyHp: 100,
+      enemyToughness: 20,
+      selfEnergy: 15,
+    },
+    stateChange: {
+      enemyHp: -100,
+      enemyToughness: -20,
+      selfEnergy: 15,
+    },
+    changedMetricKeys: ['enemyHp', 'enemyToughness', 'selfEnergy'],
+    status: 'runtime-hit-transaction-ready',
+  };
+}
+
+function createTransactionRuntimeLogRow({ sourceDeltaId, index, transaction }) {
+  const trackKeys = transaction.trackKeys;
+  const values = [100, 20, 15];
+  const deltaFields = ['hpDelta', 'toughnessDelta', 'energyDelta'];
+  return {
+    eventType: 'THREE_VALUE_DELTA_APPLIED',
+    sourceDeltaId,
+    actionId: transaction.actionId,
+    actionName: transaction.actionName,
+    actorId: transaction.actorId,
+    actorName: transaction.actorName,
+    hitKey: transaction.hitKey,
+    hitIndex: transaction.hitIndex,
+    frameIndex: transaction.frameIndex,
+    frameLabel: transaction.frameLabel,
+    timeMs: transaction.timeMs,
+    sequenceIndex: index,
+    runtimeSequenceIndex: index,
+    trackKey: trackKeys[index],
+    layerKey: 'applied',
+    delta: values[index],
+    hpDelta: null,
+    toughnessDelta: null,
+    energyDelta: null,
+    [deltaFields[index]]: values[index],
+    hitTransaction: transaction,
   };
 }
 

@@ -78,6 +78,8 @@ export function createRuntimeSelectedDetail({
     null;
   const stateSnapshot =
     pointRow.stateSnapshot ?? simLogRow?.stateSnapshot ?? null;
+  const hitTransaction =
+    pointRow.hitTransaction ?? simLogRow?.hitTransaction ?? null;
 
   return {
     statePointId: selectedStateCurvePointId,
@@ -141,12 +143,28 @@ export function createRuntimeSelectedDetail({
     actionThreeValueDeltaAggregate,
     hitThreeValueDeltaAggregate,
     stateSnapshot,
+    hitTransaction,
+    reviewUnit: hitTransaction ? 'hit-transaction' : 'delta',
+    transactionId: hitTransaction?.transactionId ?? '',
+    transactionDeltaCount: hitTransaction?.deltaCount ?? 1,
+    sourceDeltaIds:
+      hitTransaction?.sourceDeltaIds ??
+      [pointRow.sourceDeltaId ?? simLogRow?.sourceDeltaId].filter(Boolean),
+    transactionDelta: hitTransaction?.delta ?? null,
+    transactionStateChange: hitTransaction?.stateChange ?? null,
     threeValueStateRows: createRuntimeThreeValueStateRows({
       stateSnapshot,
+      hitTransaction,
       actorRows: runtimeOutputView.resourceCurveRows,
       fallbackActorId: pointRow.actorId ?? simLogRow?.actorId ?? '',
       fallbackActorName: pointRow.actorName ?? simLogRow?.actorName ?? '',
     }),
+    reviewStatus:
+      hitTransaction?.status ??
+      pointRow.resultStatus ??
+      pointRow.sourceStatus ??
+      simLogRow?.confidence ??
+      'applied',
     status:
       pointRow.resultStatus ??
       pointRow.sourceStatus ??
@@ -156,7 +174,8 @@ export function createRuntimeSelectedDetail({
     sourceIds,
     contributionRows: createRuntimeDetailContributionRows(
       pointRow,
-      hitThreeValueDeltaAggregate
+      hitThreeValueDeltaAggregate,
+      hitTransaction
     ),
     sourceRows: createRuntimeDetailSourceRows(sourceIds),
     calculatorRows: createRuntimeDetailCalculatorRows(pointRow, simLogRow),
@@ -167,22 +186,24 @@ export function createRuntimeSelectedDetail({
 
 export function createRuntimeThreeValueStateRows({
   stateSnapshot,
+  hitTransaction = null,
   actorRows = [],
   fallbackActorId = '',
   fallbackActorName = '',
 } = {}) {
+  const stateTransition = hitTransaction ?? stateSnapshot;
   if (
-    !stateSnapshot?.before ||
-    !stateSnapshot?.delta ||
-    !stateSnapshot?.after
+    !stateTransition?.before ||
+    !stateTransition?.delta ||
+    !stateTransition?.after
   ) {
     return [];
   }
 
   const energyOwnerActorId =
-    stateSnapshot.energyOwnerActorId ??
-    stateSnapshot.before.selfEnergy?.actorId ??
-    stateSnapshot.after.selfEnergy?.actorId ??
+    stateTransition.energyOwnerActorId ??
+    stateTransition.before.selfEnergy?.actorId ??
+    stateTransition.after.selfEnergy?.actorId ??
     '';
   const energyOwnerActorName = resolveRuntimeActorName({
     actorId: energyOwnerActorId,
@@ -190,21 +211,26 @@ export function createRuntimeThreeValueStateRows({
     fallbackActorId,
     fallbackActorName,
   });
-  const changedMetricKeys = new Set(stateSnapshot.changedMetricKeys ?? []);
+  const changedMetricKeys = new Set(stateTransition.changedMetricKeys ?? []);
 
   return Object.entries(RUNTIME_STATE_METRIC_META).map(
     ([metricKey, metricMeta]) => {
-      const before = stateSnapshot.before[metricKey] ?? null;
-      const after = stateSnapshot.after[metricKey] ?? null;
+      const before = stateTransition.before[metricKey] ?? null;
+      const after = stateTransition.after[metricKey] ?? null;
       const beforeValue = strictNumberOrNull(before?.currentValue);
       const afterValue = strictNumberOrNull(after?.currentValue);
-      const rawDelta = strictNumberOrNull(stateSnapshot.delta[metricKey]);
-      const delta = resolveRuntimeStateImpactDelta({
-        beforeValue,
-        afterValue,
-        rawDelta,
-        deltaDirection: metricMeta.deltaDirection,
-      });
+      const rawDelta = strictNumberOrNull(stateTransition.delta[metricKey]);
+      const providedStateChange = strictNumberOrNull(
+        stateTransition.stateChange?.[metricKey]
+      );
+      const delta =
+        providedStateChange ??
+        resolveRuntimeStateImpactDelta({
+          beforeValue,
+          afterValue,
+          rawDelta,
+          deltaDirection: metricMeta.deltaDirection,
+        });
 
       return {
         key: metricKey,
@@ -222,7 +248,9 @@ export function createRuntimeThreeValueStateRows({
           before?.baselineConfirmed === true &&
           after?.baselineConfirmed === true,
         baselineStatus: after?.baselineStatus ?? before?.baselineStatus ?? null,
-        primary: stateSnapshot.primaryMetricKey === metricKey,
+        primary:
+          stateTransition.primaryMetricKey === metricKey ||
+          Boolean(hitTransaction && changedMetricKeys.has(metricKey)),
         changed:
           changedMetricKeys.has(metricKey) ||
           (rawDelta != null && rawDelta !== 0),
@@ -404,43 +432,61 @@ function createRuntimePointState(stateMetric, cumulative) {
   };
 }
 
-function createRuntimeDetailContributionRows(point, hitAggregate = null) {
+function createRuntimeDetailContributionRows(
+  point,
+  hitAggregate = null,
+  hitTransaction = null
+) {
   const appliedAggregate = hitAggregate?.layers?.applied ?? null;
+  const transactionDelta = hitTransaction?.delta ?? null;
+  const changedMetricKeys = new Set(hitTransaction?.changedMetricKeys ?? []);
   return [
     {
       key: 'hp',
       label: '敌人 HP',
       value:
-        appliedAggregate != null
-          ? numberOrZero(appliedAggregate.hpDelta)
-          : point.trackKey === 'enemyHpDamage'
-            ? numberOrZero(point.delta)
-            : 0,
-      active: point.trackKey === 'enemyHpDamage',
+        transactionDelta != null
+          ? numberOrZero(transactionDelta.enemyHp)
+          : appliedAggregate != null
+            ? numberOrZero(appliedAggregate.hpDelta)
+            : point.trackKey === 'enemyHpDamage'
+              ? numberOrZero(point.delta)
+              : 0,
+      active: hitTransaction
+        ? changedMetricKeys.has('enemyHp')
+        : point.trackKey === 'enemyHpDamage',
       signed: false,
     },
     {
       key: 'toughness',
       label: '敌人韧性',
       value:
-        appliedAggregate != null
-          ? numberOrZero(appliedAggregate.toughnessDelta)
-          : point.trackKey === 'enemyToughnessDamage'
-            ? numberOrZero(point.delta)
-            : 0,
-      active: point.trackKey === 'enemyToughnessDamage',
+        transactionDelta != null
+          ? numberOrZero(transactionDelta.enemyToughness)
+          : appliedAggregate != null
+            ? numberOrZero(appliedAggregate.toughnessDelta)
+            : point.trackKey === 'enemyToughnessDamage'
+              ? numberOrZero(point.delta)
+              : 0,
+      active: hitTransaction
+        ? changedMetricKeys.has('enemyToughness')
+        : point.trackKey === 'enemyToughnessDamage',
       signed: false,
     },
     {
       key: 'energy',
       label: '自身能量',
       value:
-        appliedAggregate != null
-          ? numberOrZero(appliedAggregate.energyDelta)
-          : point.trackKey === 'selfEnergyChange'
-            ? numberOrZero(point.delta)
-            : 0,
-      active: point.trackKey === 'selfEnergyChange',
+        transactionDelta != null
+          ? numberOrZero(transactionDelta.selfEnergy)
+          : appliedAggregate != null
+            ? numberOrZero(appliedAggregate.energyDelta)
+            : point.trackKey === 'selfEnergyChange'
+              ? numberOrZero(point.delta)
+              : 0,
+      active: hitTransaction
+        ? changedMetricKeys.has('selfEnergy')
+        : point.trackKey === 'selfEnergyChange',
       signed: true,
     },
   ];

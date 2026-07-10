@@ -529,7 +529,7 @@ describe('Workbench view', () => {
     ).toHaveLength(1);
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-row"]').text()
-    ).toContain('普通攻击 · HP 12,461');
+    ).toContain('普通攻击 · HP -8,628 · 韧性 0 · SP 0');
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-detail"]').text()
     ).toContain('action-0001|applied-frame-0-point-0');
@@ -5345,9 +5345,9 @@ describe('Workbench view', () => {
           row.text(),
         ])
     ).toEqual([
-      ['hp', 'hit-aggregate', '12461', '敌人 HP12,461'],
-      ['toughness', 'hit-aggregate', '0', '敌人韧性0'],
-      ['energy', 'hit-aggregate', '0', '自身能量0'],
+      ['hp', 'hit-transaction', '12461', '敌人 HP12,461'],
+      ['toughness', 'hit-transaction', '0', '敌人韧性0'],
+      ['energy', 'hit-transaction', '0', '自身能量0'],
     ]);
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-source"]').exists()
@@ -6810,7 +6810,7 @@ describe('Workbench view', () => {
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-track"]')
         .text()
-    ).toContain('HP');
+    ).toContain('applied-frame-0-point-0');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-source-delta"]')
@@ -7828,6 +7828,28 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log"]').text()
     ).toContain(`SP -${spSkill.spCost}`);
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-sim-log-filter-count"]')
+        .text()
+    ).toBe('1/1');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-event-log-panel"]')
+        .attributes('data-runtime-log-review-mode')
+    ).toBe('hit');
+
+    await wrapper
+      .find(
+        '[data-testid="workbench-runtime-sim-log-mode-option"][data-review-mode="delta"]'
+      )
+      .trigger('click');
+
+    expect(
+      wrapper
+        .find('[data-testid="workbench-event-log-panel"]')
+        .attributes('data-runtime-log-review-mode')
+    ).toBe('delta');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-sim-log-filter-count"]')

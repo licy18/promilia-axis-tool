@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createRuntimeSelectedDetail } from '../../features/workbench/runtimeSelectedDetail';
 import { createRuntimeStatePointContexts } from '../../features/workbench/runtimeProjectionPoints';
+import { createThreeValueRuntimeProjection } from '../../simulation/runtime/threeValueRuntimeProjection';
 
 describe('runtime selected detail', () => {
   it('uses runtime state point contexts when resolving the selected detail', () => {
@@ -317,6 +318,111 @@ describe('runtime selected detail', () => {
       stateValue: 680,
     });
   });
+
+  it('resolves any delta state point to the complete hit transaction detail', () => {
+    const runtimeProjection = createThreeValueRuntimeProjection({
+      scenario: {
+        enemy: {
+          id: 'enemy-001',
+          stats: {
+            maxHp: 1000,
+            initialToughness: 100,
+            maxToughness: 100,
+          },
+          hpMultiplier: 1,
+        },
+        actors: [
+          {
+            id: 'actor-001',
+            name: '末音',
+            initialSp: 20,
+            stats: {
+              maxSp: 100,
+            },
+          },
+        ],
+      },
+      threeValueGenerationLayer: {
+        contract: {
+          name: 'Action -> Hit -> ThreeValueDelta',
+        },
+        deltas: [
+          createAppliedDelta('enemyHpDamage', 100, 0),
+          createAppliedDelta('enemyToughnessDamage', 20, 1),
+          createAppliedDelta('selfEnergyChange', 15, 2),
+        ],
+      },
+    });
+    const toughnessStatePointId = createRuntimeStatePointContexts(
+      runtimeProjection
+    ).find(
+      context => context.row.trackKey === 'enemyToughnessDamage'
+    )?.statePointId;
+
+    const detail = createRuntimeSelectedDetail({
+      runtimeProjection,
+      selectedStateCurvePointId: toughnessStatePointId,
+    });
+
+    expect(detail).toMatchObject({
+      reviewUnit: 'hit-transaction',
+      transactionId: 'action-001|hit-1|60|1000',
+      transactionDeltaCount: 3,
+      sourceDeltaIds: [
+        'action-001|hit-1|enemyHpDamage|applied|60|0',
+        'action-001|hit-1|enemyToughnessDamage|applied|60|1',
+        'action-001|hit-1|selfEnergyChange|applied|60|2',
+      ],
+      transactionDelta: {
+        enemyHp: 100,
+        enemyToughness: 20,
+        selfEnergy: 15,
+      },
+      transactionStateChange: {
+        enemyHp: -100,
+        enemyToughness: -20,
+        selfEnergy: 15,
+      },
+      reviewStatus: 'runtime-hit-transaction-ready',
+      status: 'applied',
+    });
+    expect(detail?.threeValueStateRows).toEqual([
+      expect.objectContaining({
+        key: 'enemyHp',
+        beforeValue: 1000,
+        rawDelta: 100,
+        delta: -100,
+        afterValue: 900,
+        primary: true,
+        changed: true,
+      }),
+      expect.objectContaining({
+        key: 'enemyToughness',
+        beforeValue: 100,
+        rawDelta: 20,
+        delta: -20,
+        afterValue: 80,
+        primary: true,
+        changed: true,
+      }),
+      expect.objectContaining({
+        key: 'selfEnergy',
+        actorId: 'actor-001',
+        actorName: '末音',
+        beforeValue: 20,
+        rawDelta: 15,
+        delta: 15,
+        afterValue: 35,
+        primary: true,
+        changed: true,
+      }),
+    ]);
+    expect(detail?.contributionRows).toEqual([
+      expect.objectContaining({ key: 'hp', value: 100, active: true }),
+      expect.objectContaining({ key: 'toughness', value: 20, active: true }),
+      expect.objectContaining({ key: 'energy', value: 15, active: true }),
+    ]);
+  });
 });
 
 function createStateValue(currentValue, { actorId = null } = {}) {
@@ -330,5 +436,35 @@ function createStateValue(currentValue, { actorId = null } = {}) {
     overrunValue: 0,
     baselineConfirmed: true,
     baselineStatus: 'test-baseline',
+  };
+}
+
+function createAppliedDelta(trackKey, value, index) {
+  const deltaFields = {
+    enemyHpDamage: 'hpDelta',
+    enemyToughnessDamage: 'toughnessDelta',
+    selfEnergyChange: 'energyDelta',
+  };
+  return {
+    id: `action-001|hit-1|${trackKey}|applied|60|${index}`,
+    actionId: 'action-001',
+    actionName: '普通攻击',
+    actionType: 'skill',
+    actorId: 'actor-001',
+    actorName: '末音',
+    hitKey: 'hit-1',
+    hitIndex: 1,
+    frameIndex: 60,
+    frameLabel: '1s0f',
+    timeMs: 1000,
+    trackKey,
+    layerKey: 'applied',
+    valueUnit: trackKey === 'selfEnergyChange' ? 'sp' : 'raw',
+    delta: value,
+    hpDelta: null,
+    toughnessDelta: null,
+    energyDelta: null,
+    [deltaFields[trackKey]]: value,
+    applied: true,
   };
 }

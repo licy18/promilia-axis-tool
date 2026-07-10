@@ -25106,3 +25106,65 @@ hitTransactionDeltaTotalsMatch
 ```
 
 事务自身校验 delta 是否连续、快照数量是否匹配、能量所有者和目标敌人是否唯一。校验异常只改变 transaction status，不改写已有 delta、快照、日志或曲线数值。
+
+## 352. Workbench 命中级复盘投影
+
+### 352.1 RuntimeHitReviewRow
+
+Workbench 新增从 P3-E transaction 到日志交互行的派生模型：
+
+```text
+RuntimeHitReviewRow
+  eventType = THREE_VALUE_HIT_TRANSACTION_APPLIED
+  reviewUnit = hit-transaction
+  transactionId
+  sourceDeltaId
+  sourceDeltaIds[]
+  statePointId
+  statePointIds[]
+  actionId / actionName / actionType
+  actorId / actorName
+  energyOwnerActorId
+  targetEnemyId
+  hitKey / hitIndex
+  frameIndex / frameLabel / timeMs
+  trackKey = hitTransaction
+  trackKeys[]
+  deltaCount
+  delta
+  stateChange
+  hpDelta / toughnessDelta / energyDelta
+  hitTransaction
+  anchorRow
+  anchorPoint
+```
+
+`statePointId` 使用事务首条 delta 作为默认选择锚点；当曲线或明细日志已选择事务内其他 delta 时，命中行使用 `statePointIds[]` 保留该状态点，不把选择强制跳回首条 delta。
+
+### 352.2 日志复盘模式
+
+EventLog 新增两个非持久化显示模式：
+
+```text
+hit   -> runtimeHitReviewRows
+delta -> runtimeStatePointContexts[].row
+```
+
+命中模式按 `trackKeys[]` 参与 HP、韧性、能量筛选；明细模式继续按单条 `trackKey` 筛选。模式切换不改变 runtime output、project schema、草稿或选择合同。
+
+### 352.3 RuntimeSelectedDetail 事务字段
+
+详情新增：
+
+```text
+reviewUnit = hit-transaction | delta
+reviewStatus
+hitTransaction
+transactionId
+transactionDeltaCount
+sourceDeltaIds[]
+transactionDelta
+transactionStateChange
+```
+
+存在 `hitTransaction` 时，`threeValueStateRows[]` 使用事务的 `before / delta / stateChange / after`；`status` 继续保留原 delta 的 calculator/result 诊断，`reviewStatus` 单独记录事务状态。旧 projection 没有 transaction 时仍回退到 P3-B 单快照详情。

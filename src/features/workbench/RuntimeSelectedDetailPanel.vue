@@ -29,6 +29,8 @@
     :data-runtime-review-return-result-enabled="
       runtimeReviewOperations?.returnResult?.enabled ? 'true' : 'false'
     "
+    :data-review-unit="detail?.reviewUnit ?? ''"
+    :data-transaction-id="detail?.transactionId ?? ''"
     data-testid="workbench-runtime-selected-detail"
   >
     <div class="panel-title">
@@ -98,15 +100,21 @@
         </strong>
       </div>
       <div>
-        <span>轨道</span>
+        <span>{{
+          detail.reviewUnit === 'hit-transaction' ? '命中' : '轨道'
+        }}</span>
         <strong data-testid="workbench-runtime-selected-detail-track">
-          {{ detail.trackLabel || detail.trackKey }}
+          {{
+            detail.reviewUnit === 'hit-transaction'
+              ? detail.hitKey || '命中'
+              : detail.trackLabel || detail.trackKey
+          }}
         </strong>
       </div>
       <div>
         <span>状态</span>
         <strong data-testid="workbench-runtime-selected-detail-status">
-          {{ detail.status }}
+          {{ detail.reviewStatus || detail.status }}
         </strong>
       </div>
     </div>
@@ -159,6 +167,7 @@
       v-if="detail?.threeValueStateRows?.length"
       class="runtime-detail-three-value-state"
       :data-state-point-id="detail.statePointId"
+      :data-transaction-id="detail.transactionId ?? ''"
       data-testid="workbench-runtime-selected-detail-three-value-state"
     >
       <div class="runtime-detail-three-value-header" aria-hidden="true">
@@ -257,7 +266,9 @@
       :data-primary-contribution-key="runtimeContributionSummary.primaryKey"
       data-testid="workbench-runtime-selected-detail-contribution-summary"
     >
-      <span>本点贡献</span>
+      <span>{{
+        detail.reviewUnit === 'hit-transaction' ? '本次命中' : '本点贡献'
+      }}</span>
       <strong
         data-testid="workbench-runtime-selected-detail-contribution-summary-primary"
       >
@@ -295,9 +306,15 @@
 
     <div v-if="detail" class="runtime-detail-meta">
       <div>
-        <span>来源</span>
+        <span>{{
+          detail.reviewUnit === 'hit-transaction' ? '事务' : '来源'
+        }}</span>
         <strong data-testid="workbench-runtime-selected-detail-source-delta">
-          {{ detail.sourceDeltaId || '无' }}
+          {{
+            detail.reviewUnit === 'hit-transaction'
+              ? detail.transactionId || '无'
+              : detail.sourceDeltaId || '无'
+          }}
         </strong>
       </div>
       <div>

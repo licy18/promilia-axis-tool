@@ -141,6 +141,7 @@ test('runs the visible curve-log-detail edit loop end to end @workbench-main-flo
   });
   expectRuntimeStatePointSynced(openedState, openedState.statePointId);
   await expectRuntimeOutputConsistent(page);
+  await expectRuntimeHitReviewMode(page);
 
   const curvePoint = page
     .locator(
@@ -153,6 +154,30 @@ test('runs the visible curve-log-detail edit loop end to end @workbench-main-flo
   ).toHaveAttribute('data-runtime-review-source', 'resource-runtime-curve');
   await expectCurveAndLogSelection(page, openedState.statePointId);
   await expectRuntimeThreeValueStateDetail(page, openedState.statePointId);
+  await expectRuntimeSelectedHitTransaction(page, openedState.statePointId);
+
+  await page
+    .locator(
+      '[data-testid="workbench-runtime-sim-log-mode-option"][data-review-mode="delta"]'
+    )
+    .click();
+  await expect(page.getByTestId('workbench-event-log-panel')).toHaveAttribute(
+    'data-runtime-log-review-mode',
+    'delta'
+  );
+  await expect(
+    page
+      .locator(
+        `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${openedState.statePointId}"]`
+      )
+      .first()
+  ).toHaveAttribute('data-review-unit', 'delta');
+  await page
+    .locator(
+      '[data-testid="workbench-runtime-sim-log-mode-option"][data-review-mode="hit"]'
+    )
+    .click();
+  await expectRuntimeHitReviewMode(page);
 
   const logRow = page
     .locator(
@@ -169,6 +194,7 @@ test('runs the visible curve-log-detail edit loop end to end @workbench-main-flo
   await expectCurveAndLogSelection(page, openedState.statePointId);
   await expectRuntimeSimLogHitAggregateContributions(page);
   await expectRuntimeThreeValueStateDetail(page, openedState.statePointId);
+  await expectRuntimeSelectedHitTransaction(page, openedState.statePointId);
 
   await page
     .locator(
@@ -203,6 +229,7 @@ test('runs the visible curve-log-detail edit loop end to end @workbench-main-flo
   await expectCurveAndLogSelection(page, returnedState.statePointId);
   await expectRuntimeSimLogHitAggregateContributions(page);
   await expectRuntimeThreeValueStateDetail(page, returnedState.statePointId);
+  await expectRuntimeSelectedHitTransaction(page, returnedState.statePointId);
   await expect(
     page.locator(
       '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
@@ -3594,7 +3621,7 @@ async function expectRuntimeSimLogHitAggregateContributions(page) {
     await expect(row).toHaveAttribute('data-contribution-key', expectedRow.key);
     await expect(row).toHaveAttribute(
       'data-contribution-source',
-      'hit-aggregate'
+      'hit-transaction'
     );
     await expect(row).toContainText(expectedRow.label);
     if (expectedRow.positive) {
@@ -3602,6 +3629,39 @@ async function expectRuntimeSimLogHitAggregateContributions(page) {
       expect(value).toBeGreaterThan(0);
     }
   }
+}
+
+async function expectRuntimeHitReviewMode(page) {
+  const panel = page.getByTestId('workbench-event-log-panel');
+  await expect(panel).toHaveAttribute('data-runtime-log-review-mode', 'hit');
+  await expect(
+    page.locator(
+      '[data-testid="workbench-runtime-sim-log-mode-option"][data-review-mode="hit"]'
+    )
+  ).toHaveAttribute('data-active', 'true');
+  const rows = page.getByTestId('workbench-runtime-sim-log-row');
+  expect(await rows.count()).toBeGreaterThan(0);
+  for (const row of await rows.all()) {
+    await expect(row).toHaveAttribute('data-review-unit', 'hit-transaction');
+    await expect(row).toHaveAttribute('data-transaction-id', /.+/);
+  }
+}
+
+async function expectRuntimeSelectedHitTransaction(page, statePointId) {
+  const detail = page.getByTestId('workbench-runtime-selected-detail');
+  await expect(detail).toHaveAttribute('data-review-unit', 'hit-transaction');
+  const transactionId = await detail.getAttribute('data-transaction-id');
+  expect(transactionId).toBeTruthy();
+  await expect(
+    page
+      .locator(
+        `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${statePointId}"]`
+      )
+      .first()
+  ).toHaveAttribute('data-transaction-id', transactionId);
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-three-value-state')
+  ).toHaveAttribute('data-transaction-id', transactionId);
 }
 
 async function expectRuntimeThreeValueStateDetail(page, statePointId) {
