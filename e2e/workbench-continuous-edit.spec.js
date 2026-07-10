@@ -1744,6 +1744,71 @@ test('keeps inserted action result usable in the runtime edit loop @workbench-ma
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('inserts a follow-up action from the visible main flow bar @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/workbench');
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'action-edit'
+  );
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  const openedState = await waitForRuntimeAction(page, 'action-0001');
+  expectRuntimeReviewState(openedState, {
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: false,
+  });
+
+  const insertButton = page.getByTestId('workbench-flow-insert-next-action');
+  await expect(insertButton).toHaveText('插入后续动作');
+  await expect(insertButton).toHaveAttribute('data-action-id', 'action-0001');
+  await insertButton.click();
+
+  const insertedState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(insertedState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '2',
+    navigationIndex: '1',
+    selected: false,
+  });
+  expect(insertedState.statePointId).toContain('action-0002');
+  expect(insertedState.statePointId).not.toBe(openedState.statePointId);
+  expectRuntimeStatePointSynced(insertedState, insertedState.statePointId);
+  await expectCurveAndLogSelection(page, insertedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+  await expect(insertButton).toHaveAttribute('data-action-id', 'action-0002');
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0002"]'
+    )
+  ).toHaveAttribute('data-selected-state-point-id', insertedState.statePointId);
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+
+  await focusRuntimeDetailAction(page);
+  const { returnedState } = await editCurrentActionFrameAndReturn(page, {
+    actionId: 'action-0002',
+    frameValue: '90',
+    msValue: '1500',
+    originStatePointId: insertedState.statePointId,
+    navigationCount: '2',
+    navigationIndex: '1',
+    selected: true,
+  });
+  await expectCurveAndLogSelection(page, returnedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps undo and redo tied to refreshed runtime results @workbench-main-flow', async ({
   page,
 }) => {

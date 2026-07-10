@@ -81,6 +81,7 @@
       :flow-model="workbenchFlowModel"
       :main-flow-command-surface="mainFlowCommandSurface"
       @dispatch-flow-action="dispatchWorkbenchFlowAction"
+      @insert-next-action="addAction"
     />
 
     <div

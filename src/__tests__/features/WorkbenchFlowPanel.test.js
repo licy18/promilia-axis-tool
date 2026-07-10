@@ -199,6 +199,36 @@ describe('WorkbenchFlowPanel', () => {
     });
   });
 
+  it('emits the visible insert-next action from the main flow bar', async () => {
+    const wrapper = mount(WorkbenchFlowPanel, {
+      props: {
+        flowModel: createFlowModel({
+          primaryKind: 'focus-runtime-action',
+          primaryOperation: {
+            kind: 'focus-runtime-action',
+            enabled: true,
+            target: {
+              actionId: 'review-action',
+              statePointId: 'review-state-point',
+            },
+          },
+        }),
+      },
+    });
+
+    const button = wrapper.find(
+      '[data-testid="workbench-flow-insert-next-action"]'
+    );
+    expect(button.attributes()).toMatchObject({
+      'data-action-id': 'selected-action',
+    });
+    expect(button.attributes('disabled')).toBeUndefined();
+
+    await button.trigger('click');
+
+    expect(wrapper.emitted('insert-next-action')).toHaveLength(1);
+  });
+
   it('builds its fallback flow model from runtimeOutputs', () => {
     const runtimeProjection = {
       runtimeInput: {

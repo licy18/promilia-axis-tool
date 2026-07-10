@@ -13573,6 +13573,31 @@ HP 2,500 raw-param / 韧性 7,000 raw-field / 能量 2,700 raw-field
 
 - 继续 UI 主流程能力块：优先检查主流程编辑体验是否还有 Endaxis 式高频操作缺口，例如动作插入/调整/结果定位的密度与效率；若主流程守门稳定，再转入生成层收束 `Action -> Hit -> ThreeValueDelta` 的统一生成入口。
 
+### 2026-07-10：UI 主流程可见闭环 - 后续动作插入入口
+
+本阶段属于：UI 主流程可见闭环。
+
+主流程缺口检查：
+
+- 动作插入规则和 runtime sync 已经存在：插入动作会按当前选中动作后方放置，并刷新运行结果。
+- 用户可见缺口在主流程条：复核运行结果后，如果想继续排下一段动作，需要绕回左侧通用“+ 动作”，不够像 Endaxis 式连续排轴流程。
+
+完成的可用能力：
+
+- Workbench 顶部主流程条新增“插入后续动作”入口，直接复用现有动作插入与 runtime sync 链路。
+- 用户可以从运行结果复核状态直接插入下一段动作；插入后新动作的曲线、日志、三值详情和动作结果来源行会同步定位，并可继续回到动作编辑刷新结果。
+- 本阶段不改变三值计算结果、公式、倍率、运行期数据结构、草稿保存 schema 或证据字段；`DATA_STRUCTURE_CHANGES.md` 无需追加。
+
+验收结果：
+
+- `npm run test -- src/__tests__/features/WorkbenchFlowPanel.test.js`：通过，1 个测试文件、6 条测试。
+- `npm run test:e2e:workbench-flow -- --grep "visible main flow bar"`：通过，1 条真实浏览器后续动作插入闭环。
+- `npm run test:e2e:workbench-flow`：通过，23 条 `@workbench-main-flow` 主流程回归全部通过。
+
+下一步：
+
+- 继续 UI 主流程能力块：检查动作调整后的连续排轴效率，例如时间轴拖动/键盘微调后，结果复核、继续插入、撤销/重做是否仍保持同一条主流程闭环；若主流程稳定，再转入生成层收束 `Action -> Hit -> ThreeValueDelta` 的统一生成入口。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

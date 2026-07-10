@@ -233,6 +233,17 @@
       </button>
       <button
         type="button"
+        class="flow-button secondary"
+        :data-action-id="workbenchFlow.selectedActionId"
+        data-testid="workbench-flow-insert-next-action"
+        :disabled="!workbenchFlow.selectedActionId"
+        @click="insertNextAction"
+      >
+        <Plus class="flow-button-icon" />
+        <span>插入后续动作</span>
+      </button>
+      <button
+        type="button"
         :class="[
           'flow-button',
           {
@@ -283,6 +294,7 @@ import {
   ArrowRight,
   DataAnalysis,
   EditPen,
+  Plus,
   TrendCharts,
 } from '@element-plus/icons-vue';
 import {
@@ -340,7 +352,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['dispatch-flow-action']);
+const emit = defineEmits(['dispatch-flow-action', 'insert-next-action']);
 
 const workbenchFlow = computed(
   () =>
@@ -424,6 +436,13 @@ function openRuntimeContribution() {
       disabledReason: 'missing-runtime-contribution-point',
     })
   );
+}
+
+function insertNextAction() {
+  if (!workbenchFlow.value.selectedActionId) {
+    return;
+  }
+  emit('insert-next-action');
 }
 
 function selectRuntimeNavigationPoint(point) {
