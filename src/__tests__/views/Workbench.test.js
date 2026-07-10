@@ -210,7 +210,13 @@ describe('Workbench view', () => {
         .props('runtimeProjection') ?? null;
     expect(runtimeOutputs).toMatchObject({
       sourceKind: 'azpr-three-value-runtime-outputs',
-      outputNames: ['simLog', 'stateCurves', 'resourceCurves', 'summary'],
+      outputNames: [
+        'simLog',
+        'hitTransactions',
+        'stateCurves',
+        'resourceCurves',
+        'summary',
+      ],
       outputAliases: {
         resources: 'resourceCurves',
       },

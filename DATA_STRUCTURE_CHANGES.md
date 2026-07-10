@@ -25024,3 +25024,85 @@ RuntimeSelectedDetail
 - 自身能量行通过 `energyOwnerActorId` 和 runtime 角色资源行解析所属角色名称。
 
 本节只新增 Workbench 详情 view model；`AzPrThreeValueRuntimeStateSnapshot`、逐 delta 结果、曲线和计算公式均未改变。
+
+## 351. 运行时命中事务：AzPrThreeValueRuntimeHitTransaction
+
+### 351.1 命中级合同
+
+runtime 新增版本化命中事务：
+
+```text
+AzPrThreeValueRuntimeHitTransaction
+  schemaVersion = 1
+  transactionId
+  actionId / actionName / actionType
+  actorId / actorName
+  hitKey / hitIndex
+  frameIndex / frameLabel / timeMs
+  runtimeSequenceStart / runtimeSequenceEnd
+  sourceDeltaIds[]
+  trackKeys[]
+  affectedMetricKeys[]
+  changedMetricKeys[]
+  energyOwnerActorId / energyOwnerActorIds[]
+  targetEnemyId / targetEnemyIds[]
+  before
+  delta
+    enemyHp
+    enemyToughness
+    selfEnergy
+  stateChange
+    enemyHp
+    enemyToughness
+    selfEnergy
+  after
+  baselineConfirmed
+  baselineConfirmedByMetric
+  stateSnapshots[]
+  runtimeCalculatorInvocations[]
+  actionThreeValueDeltaAggregate
+  hitThreeValueDeltaAggregate
+  validation
+```
+
+事务身份由 `actionId + hitKey + frameIndex + timeMs` 构成。同一事务按 `runtimeSequenceIndex` 排序，`before` 引用首条快照的变更前状态，`after` 引用末条快照的变更后状态；`delta` 保留 runtime 原始应用值，`stateChange` 表示状态实际增减方向。
+
+### 351.2 输出与共享引用
+
+```text
+runtimeProjection.hitTransactions
+runtimeOutputs.hitTransactions
+runtimeOutputs.outputs.hitTransactions
+outputContract.outputs.hitTransactions
+runtime output consumer view.hitTransactions
+```
+
+以上命中事务集合共享同一对象。每条 `simLog[]`、敌人曲线点和角色资源曲线点新增 `hitTransaction`，按 `sourceDeltaId` 引用所属事务；事务内 `stateSnapshots[]` 继续引用 P3-B 的 canonical snapshot。
+
+runtime output contract 与 runtime outputs 升级为 `schemaVersion = 2`，标准输出名变为：
+
+```text
+simLog
+hitTransactions
+stateCurves
+resourceCurves
+summary
+```
+
+consumer 根据 output contract 的 `outputNames` 识别 v1 四输出或 v2 五输出；旧 runtime projection 不需要伪造空事务即可继续读取。
+
+### 351.3 完整性校验
+
+`runtimeOutputs.outputConsistency.checks` 新增：
+
+```text
+summaryHitTransactionCount
+outputContractSummaryHitTransactionCount
+hitTransactionSourceDeltasComplete
+simLogHitTransactionsShared
+stateCurveHitTransactionsShared
+hitTransactionStateSnapshotsShared
+hitTransactionDeltaTotalsMatch
+```
+
+事务自身校验 delta 是否连续、快照数量是否匹配、能量所有者和目标敌人是否唯一。校验异常只改变 transaction status，不改写已有 delta、快照、日志或曲线数值。

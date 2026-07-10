@@ -5,6 +5,10 @@ import {
 } from './threeValueRuntimeInput';
 import { createThreeValueRuntimeOutputConsumerContract } from './threeValueRuntimeOutputConsumer';
 import {
+  createThreeValueRuntimeHitTransactionByDeltaId,
+  createThreeValueRuntimeHitTransactions,
+} from './threeValueRuntimeHitTransactions';
+import {
   createThreeValueRuntimeEnemyBaseline,
   createThreeValueRuntimeSelfEnergyBaseline,
   createThreeValueRuntimeStateMetric,
@@ -38,21 +42,30 @@ export function createThreeValueRuntimeProjection({
       snapshot,
     ])
   );
+  const hitTransactions = createThreeValueRuntimeHitTransactions({
+    appliedDeltas,
+    stateSnapshots: runtimeStateSnapshots,
+  });
+  const hitTransactionByDeltaId =
+    createThreeValueRuntimeHitTransactionByDeltaId(hitTransactions);
   const enemyStateCurve = createThreeValueRuntimeEnemyStateCurve({
     scenario,
     appliedDeltas,
     runtimeStateSnapshots,
     stateSnapshotByDeltaId,
+    hitTransactionByDeltaId,
   });
   const selfEnergyCurveByActor = createThreeValueRuntimeSelfEnergyCurveByActor({
     scenario,
     appliedDeltas,
     runtimeStateSnapshots,
     stateSnapshotByDeltaId,
+    hitTransactionByDeltaId,
   });
   const simLog = createThreeValueRuntimeSimLog(
     appliedDeltas,
-    stateSnapshotByDeltaId
+    stateSnapshotByDeltaId,
+    hitTransactionByDeltaId
   );
   const resourceCurves = createThreeValueRuntimeResourceCurves(
     selfEnergyCurveByActor
@@ -70,6 +83,7 @@ export function createThreeValueRuntimeProjection({
     resourceCurves,
     simLog,
     runtimeStateSnapshots,
+    hitTransactions,
   });
   const outputContract = createThreeValueRuntimeOutputContract({
     runtimeInput,
@@ -77,6 +91,7 @@ export function createThreeValueRuntimeProjection({
     enemyStateCurve,
     resourceCurves,
     stateCurves,
+    hitTransactions,
     simLog,
     summary: baseSummary,
   });
@@ -93,6 +108,7 @@ export function createThreeValueRuntimeProjection({
     resourceCurves,
     summary,
     runtimeStateSnapshots,
+    hitTransactions,
   });
 
   return {
@@ -115,6 +131,7 @@ export function createThreeValueRuntimeProjection({
     stateCurves,
     resourceCurves,
     runtimeStateSnapshots,
+    hitTransactions,
     enemyStateCurve,
     selfEnergyCurveByActor,
     simLog,
@@ -130,12 +147,14 @@ function createThreeValueRuntimeOutputs({
   resourceCurves,
   summary,
   runtimeStateSnapshots,
+  hitTransactions,
 }) {
   const outputConsistency = createRuntimeOutputConsistency({
     outputContract,
     simLog,
     stateCurves,
     resourceCurves,
+    hitTransactions,
     summary,
   });
   const outputConsumerContract = createThreeValueRuntimeOutputConsumerContract({
@@ -143,11 +162,12 @@ function createThreeValueRuntimeOutputs({
     simLog,
     stateCurves,
     resourceCurves,
+    hitTransactions,
     summary,
     outputConsistency,
   });
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     sourceKind: 'azpr-three-value-runtime-outputs',
     status:
       outputContract.status === 'runtime-output-contract-ready'
@@ -169,12 +189,14 @@ function createThreeValueRuntimeOutputs({
     resourceCurves,
     resources: resourceCurves,
     stateSnapshots: runtimeStateSnapshots,
+    hitTransactions,
     summary,
     outputConsistency,
     outputs: {
       simLog,
       stateCurves,
       resourceCurves,
+      hitTransactions,
       resources: resourceCurves,
       summary,
     },
@@ -183,6 +205,7 @@ function createThreeValueRuntimeOutputs({
       appliedDeltaCount: outputContract.summary.appliedDeltaCount,
       simLogCount: outputContract.summary.simLogCount,
       stateSnapshotCount: outputContract.summary.stateSnapshotCount,
+      hitTransactionCount: outputContract.summary.hitTransactionCount,
       runtimeCalculatorInvocationCount:
         outputContract.summary.runtimeCalculatorInvocationCount,
       runtimeCalculatorReplacedInvocationCount:
@@ -292,6 +315,7 @@ function createRuntimeOutputConsistency({
   simLog,
   stateCurves,
   resourceCurves,
+  hitTransactions,
   summary,
 }) {
   const simLogCount = simLog.length;
@@ -313,6 +337,16 @@ function createRuntimeOutputConsistency({
   ).length;
   const stateSnapshotByDeltaId = new Map(
     stateSnapshots.map(snapshot => [snapshot.sourceDeltaId, snapshot])
+  );
+  const runtimeHitTransactions = hitTransactions?.transactions ?? [];
+  const hitTransactionCount = runtimeHitTransactions.length;
+  const hitTransactionByDeltaId = new Map(
+    runtimeHitTransactions.flatMap(transaction =>
+      transaction.sourceDeltaIds.map(sourceDeltaId => [
+        sourceDeltaId,
+        transaction,
+      ])
+    )
   );
   const curvePoints = [
     ...(stateCurves?.enemy?.points ?? []),
@@ -338,6 +372,37 @@ function createRuntimeOutputConsistency({
       outputContract.summary.stateCurvePointCount === stateCurvePointCount,
     summaryStateSnapshotCount:
       summary.stateSnapshotCount === stateSnapshotCount,
+    summaryHitTransactionCount:
+      summary.hitTransactionCount === hitTransactionCount,
+    outputContractSummaryHitTransactionCount:
+      outputContract.summary.hitTransactionCount === hitTransactionCount,
+    hitTransactionSourceDeltasComplete:
+      hitTransactionByDeltaId.size === simLogCount &&
+      simLog.every(row => hitTransactionByDeltaId.has(row.sourceDeltaId)),
+    simLogHitTransactionsShared: simLog.every(
+      row =>
+        row.hitTransaction === hitTransactionByDeltaId.get(row.sourceDeltaId)
+    ),
+    stateCurveHitTransactionsShared: curvePoints.every(
+      point =>
+        point.hitTransaction ===
+        hitTransactionByDeltaId.get(point.sourceDeltaId)
+    ),
+    hitTransactionStateSnapshotsShared: runtimeHitTransactions.every(
+      transaction =>
+        transaction.sourceDeltaIds.length ===
+          transaction.stateSnapshots.length &&
+        transaction.sourceDeltaIds.every(
+          (sourceDeltaId, index) =>
+            transaction.stateSnapshots[index] ===
+            stateSnapshotByDeltaId.get(sourceDeltaId)
+        )
+    ),
+    hitTransactionDeltaTotalsMatch:
+      hitTransactions?.summary?.enemyHpDelta === summary.enemyHpDelta &&
+      hitTransactions?.summary?.enemyToughnessDelta ===
+        summary.enemyToughnessDelta &&
+      hitTransactions?.summary?.selfEnergyDelta === summary.selfEnergyDelta,
     simLogStateSnapshotsShared: simLog.every(
       row => row.stateSnapshot === stateSnapshotByDeltaId.get(row.sourceDeltaId)
     ),
@@ -371,6 +436,7 @@ function createRuntimeOutputConsistency({
     stateCurvePointCount,
     resourceActorPointCount,
     stateSnapshotCount,
+    hitTransactionCount,
     runtimeCalculatorInvocationCount,
     checks,
     consistent,
@@ -384,6 +450,7 @@ function createThreeValueRuntimeOutputContract({
   enemyStateCurve,
   resourceCurves,
   stateCurves,
+  hitTransactions,
   simLog,
   summary,
 }) {
@@ -392,6 +459,8 @@ function createThreeValueRuntimeOutputContract({
       runtimeInput,
       simLog,
     }),
+    hitTransactions:
+      createRuntimeHitTransactionsOutputContract(hitTransactions),
     stateCurves: createRuntimeStateCurvesOutputContract({
       stateCurves,
       enemyStateCurve,
@@ -401,7 +470,7 @@ function createThreeValueRuntimeOutputContract({
     summary: createRuntimeSummaryOutputContract(summary),
   };
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     sourceKind: 'azpr-three-value-runtime-output-contract',
     status:
       appliedDeltas.length > 0
@@ -418,6 +487,7 @@ function createThreeValueRuntimeOutputContract({
       appliedDeltaCount: appliedDeltas.length,
       simLogCount: simLog.length,
       stateSnapshotCount: stateCurves.snapshots.summary.snapshotCount,
+      hitTransactionCount: hitTransactions.summary.transactionCount,
       runtimeCalculatorInvocationCount:
         stateCurves.snapshots.summary.runtimeCalculatorInvocationCount,
       runtimeCalculatorReplacedInvocationCount:
@@ -495,6 +565,7 @@ function createRuntimeSimLogOutputContract({ runtimeInput, simLog }) {
     eventType: 'THREE_VALUE_DELTA_APPLIED',
     valueFields: ['delta', 'hpDelta', 'toughnessDelta', 'energyDelta'],
     stateSnapshotField: 'stateSnapshot',
+    hitTransactionField: 'hitTransaction',
     aggregateFields: [
       'actionThreeValueDeltaAggregate',
       'hitThreeValueDeltaAggregate',
@@ -514,6 +585,23 @@ function createRuntimeSimLogOutputContract({ runtimeInput, simLog }) {
   };
 }
 
+function createRuntimeHitTransactionsOutputContract(hitTransactions) {
+  return {
+    sourceKind: hitTransactions.sourceKind,
+    status: hitTransactions.status,
+    contractName: hitTransactions.contractName,
+    collectionField: 'transactions',
+    transactionCount: hitTransactions.summary.transactionCount,
+    keyFields: ['transactionId'],
+    identityFields: ['actionId', 'hitKey', 'frameIndex', 'timeMs'],
+    ownershipFields: ['actorId', 'energyOwnerActorId', 'targetEnemyId'],
+    valueFields: ['before', 'delta', 'stateChange', 'after'],
+    sourceFields: ['sourceDeltaIds', 'stateSnapshots'],
+    validationField: 'validation',
+    applied: true,
+  };
+}
+
 function createRuntimeStateCurvesOutputContract({
   stateCurves,
   enemyStateCurve,
@@ -529,6 +617,7 @@ function createRuntimeStateCurvesOutputContract({
       pointCount: enemyStateCurve.pointCount,
       valueFields: ['hpDelta', 'toughnessDelta'],
       stateMetricKeys: Object.keys(enemyStateCurve.stateMetrics ?? {}),
+      hitTransactionField: 'hitTransaction',
     },
     resources: {
       sourceKind: resourceCurves.sourceKind,
@@ -537,6 +626,7 @@ function createRuntimeStateCurvesOutputContract({
       pointCount: resourceCurves.summary.pointCount,
       resourceKind: resourceCurves.resourceKind,
       valueFields: ['energyDelta'],
+      hitTransactionField: 'hitTransaction',
     },
     snapshots: {
       sourceKind: stateCurves.snapshots.sourceKind,
@@ -578,6 +668,7 @@ function createRuntimeResourceCurvesOutputContract(resourceCurves) {
     valueFields: ['delta', 'energyDelta'],
     stateMetricField: 'stateMetric',
     stateSnapshotField: 'stateSnapshot',
+    hitTransactionField: 'hitTransaction',
     applied: true,
   };
 }
@@ -606,6 +697,7 @@ function createRuntimeSummaryOutputContract(summary) {
       'resourceCurvePointCount',
       'simLogCount',
       'stateSnapshotCount',
+      'hitTransactionCount',
       'runtimeCalculatorInvocationCount',
       'runtimeCalculatorReplacedInvocationCount',
       'runtimeCalculatorFallbackInvocationCount',
@@ -645,6 +737,7 @@ function createThreeValueRuntimeEnemyStateCurve({
   appliedDeltas,
   runtimeStateSnapshots,
   stateSnapshotByDeltaId,
+  hitTransactionByDeltaId,
 }) {
   const points = appliedDeltas
     .filter(delta =>
@@ -654,7 +747,8 @@ function createThreeValueRuntimeEnemyStateCurve({
       createThreeValueRuntimePoint(
         delta,
         index,
-        stateSnapshotByDeltaId.get(delta.id ?? delta.sourceDeltaId)
+        stateSnapshotByDeltaId.get(delta.id ?? delta.sourceDeltaId),
+        hitTransactionByDeltaId.get(delta.id ?? delta.sourceDeltaId)
       )
     );
   const hpDelta = sumThreeValueRuntimeDeltas(points, 'hpDelta');
@@ -712,6 +806,7 @@ function createThreeValueRuntimeSelfEnergyCurveByActor({
   appliedDeltas,
   runtimeStateSnapshots,
   stateSnapshotByDeltaId,
+  hitTransactionByDeltaId,
 }) {
   const energyBaselineByActor = new Map(
     (runtimeStateSnapshots?.baseline?.selfEnergyByActor ?? []).map(actor => [
@@ -761,7 +856,12 @@ function createThreeValueRuntimeSelfEnergyCurveByActor({
       });
     }
     const group = actorGroups.get(actorId);
-    const point = createThreeValueRuntimePoint(delta, index, stateSnapshot);
+    const point = createThreeValueRuntimePoint(
+      delta,
+      index,
+      stateSnapshot,
+      hitTransactionByDeltaId.get(delta.id ?? delta.sourceDeltaId)
+    );
     group.points.push(point);
     group.pointCount += 1;
     group.delta = roundCurveValue(
@@ -795,7 +895,11 @@ function createThreeValueRuntimeSelfEnergyCurveByActor({
     .map(({ order, ...group }) => group);
 }
 
-function createThreeValueRuntimeSimLog(appliedDeltas, stateSnapshotByDeltaId) {
+function createThreeValueRuntimeSimLog(
+  appliedDeltas,
+  stateSnapshotByDeltaId,
+  hitTransactionByDeltaId
+) {
   return appliedDeltas.map((delta, index) => ({
     eventType: 'THREE_VALUE_DELTA_APPLIED',
     sequenceIndex: index,
@@ -840,11 +944,18 @@ function createThreeValueRuntimeSimLog(appliedDeltas, stateSnapshotByDeltaId) {
     runtimeSequenceIndex: delta.runtimeSequenceIndex ?? index,
     stateSnapshot:
       stateSnapshotByDeltaId.get(delta.id ?? delta.sourceDeltaId) ?? null,
+    hitTransaction:
+      hitTransactionByDeltaId.get(delta.id ?? delta.sourceDeltaId) ?? null,
     applied: true,
   }));
 }
 
-function createThreeValueRuntimePoint(delta, sequenceIndex, stateSnapshot) {
+function createThreeValueRuntimePoint(
+  delta,
+  sequenceIndex,
+  stateSnapshot,
+  hitTransaction
+) {
   return {
     sourceKind: 'three-value-runtime-input-applied-delta',
     sourceDeltaId: delta.id ?? delta.sourceDeltaId,
@@ -895,6 +1006,7 @@ function createThreeValueRuntimePoint(delta, sequenceIndex, stateSnapshot) {
     resultStatus: delta.resultStatus,
     sourceIds: delta.sourceIds,
     stateSnapshot: stateSnapshot ?? null,
+    hitTransaction: hitTransaction ?? null,
     applied: true,
   };
 }
@@ -973,6 +1085,7 @@ function summarizeThreeValueRuntimeProjection({
   resourceCurves,
   simLog,
   runtimeStateSnapshots,
+  hitTransactions,
 }) {
   const selfEnergyPointCount = selfEnergyCurveByActor.reduce(
     (sum, actor) => sum + actor.pointCount,
@@ -1029,6 +1142,15 @@ function summarizeThreeValueRuntimeProjection({
     stateSnapshotReadyCount: runtimeStateSnapshots.summary.readySnapshotCount,
     stateSnapshotPendingBaselineCount:
       runtimeStateSnapshots.summary.pendingBaselineSnapshotCount,
+    hitTransactionCount: hitTransactions.summary.transactionCount,
+    multiDeltaHitTransactionCount:
+      hitTransactions.summary.multiDeltaTransactionCount,
+    hitTransactionBaselineReadyCount:
+      hitTransactions.summary.baselineReadyTransactionCount,
+    hitTransactionPendingBaselineCount:
+      hitTransactions.summary.pendingBaselineTransactionCount,
+    hitTransactionValidationIssueCount:
+      hitTransactions.summary.validationIssueTransactionCount,
     runtimeCalculatorInvocationCount:
       runtimeStateSnapshots.summary.runtimeCalculatorInvocationCount,
     runtimeCalculatorPassthroughInvocationCount:

@@ -191,7 +191,13 @@ describe('three value runtime projection', () => {
         status: 'runtime-output-contract-ready',
         inputContractName: 'Action -> Hit -> ThreeValueDelta',
         inputSourceKind: 'azpr-runtime-input-from-three-value-generation-layer',
-        outputNames: ['simLog', 'stateCurves', 'resourceCurves', 'summary'],
+        outputNames: [
+          'simLog',
+          'hitTransactions',
+          'stateCurves',
+          'resourceCurves',
+          'summary',
+        ],
         outputs: {
           simLog: {
             sourceKind: 'azpr-runtime-sim-log-output',
@@ -233,7 +239,7 @@ describe('three value runtime projection', () => {
           },
         },
         summary: {
-          outputCount: 4,
+          outputCount: 5,
           appliedDeltaCount: 2,
           simLogCount: 2,
           enemyStatePointCount: 1,
@@ -252,7 +258,13 @@ describe('three value runtime projection', () => {
         status: 'runtime-outputs-ready',
         inputContractName: 'Action -> Hit -> ThreeValueDelta',
         inputSourceKind: 'azpr-runtime-input-from-three-value-generation-layer',
-        outputNames: ['simLog', 'stateCurves', 'resourceCurves', 'summary'],
+        outputNames: [
+          'simLog',
+          'hitTransactions',
+          'stateCurves',
+          'resourceCurves',
+          'summary',
+        ],
         outputAliases: {
           resources: 'resourceCurves',
         },
@@ -266,6 +278,7 @@ describe('three value runtime projection', () => {
           contractSourceKind: 'azpr-three-value-runtime-output-contract',
           canonicalOutputNames: [
             'simLog',
+            'hitTransactions',
             'stateCurves',
             'resourceCurves',
             'summary',
@@ -300,7 +313,7 @@ describe('three value runtime projection', () => {
             },
           },
           summary: {
-            outputCount: 4,
+            outputCount: 5,
             appliedDeltaCount: 2,
             simLogCount: 2,
             enemyStatePointCount: 1,
@@ -374,7 +387,7 @@ describe('three value runtime projection', () => {
           applied: true,
         },
         outputSummary: {
-          outputCount: 4,
+          outputCount: 5,
           appliedDeltaCount: 2,
           simLogCount: 2,
           enemyStatePointCount: 1,
@@ -464,7 +477,7 @@ describe('three value runtime projection', () => {
         runtimeOutputContractSourceKind:
           'azpr-three-value-runtime-output-contract',
         runtimeOutputContractStatus: 'runtime-output-contract-ready',
-        runtimeOutputContractOutputCount: 4,
+        runtimeOutputContractOutputCount: 5,
         appliedOnly: true,
         applied: true,
       },
@@ -502,6 +515,13 @@ describe('three value runtime projection', () => {
       outputContractSummarySimLogCount: true,
       outputContractSummaryStateCurvePointCount: true,
       summaryStateSnapshotCount: true,
+      summaryHitTransactionCount: true,
+      outputContractSummaryHitTransactionCount: true,
+      hitTransactionSourceDeltasComplete: true,
+      simLogHitTransactionsShared: true,
+      stateCurveHitTransactionsShared: true,
+      hitTransactionStateSnapshotsShared: true,
+      hitTransactionDeltaTotalsMatch: true,
       simLogStateSnapshotsShared: true,
       stateCurveSnapshotsShared: true,
       summaryRuntimeCalculatorInvocationCount: true,
@@ -882,7 +902,7 @@ describe('three value runtime projection', () => {
         runtimeOutputContractSourceKind:
           'azpr-three-value-runtime-output-contract',
         runtimeOutputContractStatus: 'runtime-output-contract-ready',
-        runtimeOutputContractOutputCount: 4,
+        runtimeOutputContractOutputCount: 5,
         source: 'threeValueRuntimeInput.appliedDeltas',
         simLogCount: 1,
       },
@@ -912,7 +932,7 @@ describe('three value runtime projection', () => {
         },
       },
       summary: {
-        outputCount: 4,
+        outputCount: 5,
         appliedDeltaCount: 1,
         simLogCount: 1,
         enemyHpDelta: 800,
@@ -1131,7 +1151,7 @@ describe('three value runtime projection', () => {
       }),
     });
     expect(runtimeProjection.runtimeOutputs.outputSummary).toMatchObject({
-      outputCount: 4,
+      outputCount: 5,
       appliedDeltaCount: 1,
       simLogCount: 1,
       stateCurvePointCount: 1,

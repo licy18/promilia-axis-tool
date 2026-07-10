@@ -3,6 +3,7 @@ export function createThreeValueRuntimeOutputConsumerContract({
   simLog = [],
   stateCurves = null,
   resourceCurves = null,
+  hitTransactions = null,
   summary = {},
   outputConsistency = null,
 } = {}) {
@@ -10,13 +11,19 @@ export function createThreeValueRuntimeOutputConsumerContract({
   const stateCurveSummary = stateCurves?.summary ?? {};
   const stateSnapshots = stateCurves?.snapshots ?? null;
   const resourceCurveSummary = resourceCurves?.summary ?? {};
+  const hitTransactionRows = Array.isArray(hitTransactions?.transactions)
+    ? hitTransactions.transactions
+    : [];
   const contractSummary = outputContract?.summary ?? {};
   const contractOutputs = outputContract?.outputs ?? {};
   const outputConsistencyStatus =
     outputConsistency?.status ?? summary.outputConsistencyStatus ?? '';
+  const canonicalOutputNames = Array.isArray(outputContract?.outputNames)
+    ? outputContract.outputNames
+    : ['simLog', 'stateCurves', 'resourceCurves', 'summary'];
 
   return {
-    schemaVersion: 1,
+    schemaVersion: canonicalOutputNames.includes('hitTransactions') ? 2 : 1,
     sourceKind: 'azpr-three-value-runtime-output-consumer-contract',
     status:
       outputContract?.status === 'runtime-output-contract-ready'
@@ -24,12 +31,7 @@ export function createThreeValueRuntimeOutputConsumerContract({
         : 'runtime-output-consumer-contract-ready-no-applied-deltas',
     contractSourceKind: outputContract?.sourceKind ?? '',
     contractStatus: outputContract?.status ?? '',
-    canonicalOutputNames: [
-      'simLog',
-      'stateCurves',
-      'resourceCurves',
-      'summary',
-    ],
+    canonicalOutputNames,
     aliases: {
       resources: 'resourceCurves',
     },
@@ -52,6 +54,26 @@ export function createThreeValueRuntimeOutputConsumerContract({
           'hpDelta',
           'toughnessDelta',
           'energyDelta',
+        ],
+      },
+      hitTransactions: {
+        outputName: 'hitTransactions',
+        dataPath: 'runtimeOutputs.hitTransactions',
+        contractPath: 'runtimeOutputs.outputContract.outputs.hitTransactions',
+        sourceKind: contractOutputs.hitTransactions?.sourceKind ?? '',
+        status: contractOutputs.hitTransactions?.status ?? '',
+        contractName: contractOutputs.hitTransactions?.contractName ?? '',
+        transactionCount: hitTransactionRows.length,
+        collectionField:
+          contractOutputs.hitTransactions?.collectionField ?? 'transactions',
+        keyFields: contractOutputs.hitTransactions?.keyFields ?? [
+          'transactionId',
+        ],
+        valueFields: contractOutputs.hitTransactions?.valueFields ?? [
+          'before',
+          'delta',
+          'stateChange',
+          'after',
         ],
       },
       stateCurves: {
@@ -113,7 +135,10 @@ export function createThreeValueRuntimeOutputConsumerContract({
     },
     summary: {
       outputCount: numberOrZero(
-        contractSummary.outputCount ?? summary.outputCount ?? 4
+        contractSummary.outputCount ??
+          summary.outputCount ??
+          outputContract?.outputNames?.length ??
+          4
       ),
       appliedDeltaCount: numberOrZero(
         contractSummary.appliedDeltaCount ?? summary.appliedDeltaCount
@@ -125,6 +150,12 @@ export function createThreeValueRuntimeOutputConsumerContract({
         stateSnapshots?.summary?.snapshotCount ??
           summary.stateSnapshotCount ??
           contractSummary.stateSnapshotCount
+      ),
+      hitTransactionCount: numberOrZero(
+        hitTransactions?.summary?.transactionCount ??
+          summary.hitTransactionCount ??
+          contractSummary.hitTransactionCount ??
+          hitTransactionRows.length
       ),
       runtimeCalculatorInvocationCount: numberOrZero(
         stateSnapshots?.summary?.runtimeCalculatorInvocationCount ??
@@ -239,6 +270,8 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
   const stateCurves = getThreeValueRuntimeStateCurves(runtimeOutputSource);
   const stateSnapshots =
     getThreeValueRuntimeStateSnapshots(runtimeOutputSource);
+  const hitTransactions =
+    getThreeValueRuntimeHitTransactions(runtimeOutputSource);
   const resourceCurves =
     getThreeValueRuntimeResourceCurves(runtimeOutputSource);
   const outputConsistency = runtimeOutputSource?.outputConsistency ?? {};
@@ -250,6 +283,7 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
       simLog,
       stateCurves,
       resourceCurves,
+      hitTransactions,
       summary: outputSummary,
       outputConsistency,
     });
@@ -281,6 +315,7 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
     simLog,
     stateCurves,
     stateSnapshots,
+    hitTransactions,
     resourceCurves,
     resources: resourceCurves,
     enemyStateCurve,
@@ -295,6 +330,10 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
       stateSnapshotCount: numberOrZero(
         outputSummary.stateSnapshotCount ??
           stateSnapshots?.summary?.snapshotCount
+      ),
+      hitTransactionCount: numberOrZero(
+        outputSummary.hitTransactionCount ??
+          hitTransactions?.summary?.transactionCount
       ),
       runtimeCalculatorInvocationCount: numberOrZero(
         outputSummary.runtimeCalculatorInvocationCount ??
@@ -510,6 +549,16 @@ export function getThreeValueRuntimeStateSnapshots(runtimeProjection) {
   );
 }
 
+export function getThreeValueRuntimeHitTransactions(runtimeProjection) {
+  const runtimeOutputSource =
+    getThreeValueRuntimeOutputSource(runtimeProjection);
+  return (
+    runtimeOutputSource?.outputs?.hitTransactions ??
+    runtimeOutputSource?.hitTransactions ??
+    {}
+  );
+}
+
 export function getThreeValueRuntimeEnemyStateCurve(runtimeProjection) {
   const runtimeOutputSource =
     getThreeValueRuntimeOutputSource(runtimeProjection);
@@ -572,6 +621,13 @@ function createThreeValueRuntimeOutputReadSources(
       sourceTier,
       outputName: 'simLog',
       fieldName: 'simLog',
+    }),
+    hitTransactions: resolveRuntimeOutputReadSource({
+      runtimeOutputSource,
+      sourcePath,
+      sourceTier,
+      outputName: 'hitTransactions',
+      fieldName: 'hitTransactions',
     }),
     stateCurves: resolveRuntimeOutputReadSource({
       runtimeOutputSource,

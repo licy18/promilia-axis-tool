@@ -555,6 +555,24 @@ P0 验证结论：当前状态可以作为“Workbench 主流程 demo”给用�
 - `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
 - `npm run test:e2e:workbench-flow`：通过，25 条 Workbench 浏览器主流程；主流程测试覆盖曲线选择、日志选择、三值前后状态、返回动作修改和刷新结果复盘。
 
+### P3-E 运行时命中事务（2026-07-10）
+
+已完成能力：
+
+- runtime 按 `actionId + hitKey + frameIndex + timeMs` 把同一命中的 HP、韧性和自身能量 delta 汇成稳定的 `AzPrThreeValueRuntimeHitTransaction`。
+- 每个事务统一输出命中级 `before -> delta -> stateChange -> after`、来源 delta、状态快照、calculator invocation、来源角色、能量所有者和目标敌人。
+- sim log、敌人状态曲线点和角色资源曲线点引用同一命中事务；逐 delta 日志、曲线和 P3-B 快照继续保留。
+- runtime output contract 升级为 v2，标准输出从 4 类扩展为 5 类；consumer 仍兼容没有 `hitTransactions` 的旧四输出合同。
+- 非连续 delta、快照缺失、多能量所有者或多目标会进入 transaction validation，不会被静默包装成可信命中结果。
+- 本阶段没有改动 generation delta、calculator 或默认三值结果。
+
+已完成验证：
+
+- 命中事务专门测试覆盖三轨合并、首尾状态、所有权、共享引用、JSON 序列化和非连续输入校验。
+- `npm run test -- --run`：通过，43 个测试文件、323 条测试。
+- `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
+- `npm run test:e2e:workbench-flow`：通过，25 条 Workbench 浏览器主流程。
+
 ### 下一阶段优先级
 
 P1：核心导入/导出与分享闭环已完成。
@@ -573,9 +591,10 @@ P3：运行时层真实机制适配。
 - P3-B 已完成：运行时按 delta 顺序输出三值变更前后状态，日志、曲线和 summary 已共享同一快照合同。
 - P3-C 已完成：runtime calculator 已具备状态感知调用合同、默认透传、可替换 adapter 与安全回退，现有结果保持不变。
 - P3-D 已完成：每名角色的初始 SP 已进入项目、持久化和 runtime 绝对状态闭环，未配置状态仍保持 pending。
+- P3-E 已完成：runtime 已建立命中级三值事务，逐 delta 输出与命中级输出可以并存并共享状态事实。
 - UI-A 已完成：曲线点、日志和三值详情已共享 runtime snapshot，用户可以复盘三值前后状态并返回动作修改。
-- 下一阶段进入 P3-E 运行时命中事务：把同一 `Action / Hit` 下的标准三值 delta 汇成稳定的 hit transaction，统一输出命中级 `before -> delta -> after`、所属角色和目标敌人，同时保留现有逐 delta 日志与曲线结果。
-- P3-E 只建立运行时分组与消费合同，不引入新公式、不改变默认数值，也不继续扩展局部 UI 状态。
+- 下一阶段进入 UI-B 命中级复盘：让 Workbench 以 hit transaction 作为运行结果复盘单位，同一命中的三值变化在一条日志与一个详情中完整呈现，曲线点仍可定位到对应命中并返回动作修改。
+- UI-B 保留逐 delta 诊断入口，但不继续增加零散状态标签、按钮或公式说明。
 - calculator 保持可替换；不追测试期最终倍率和平衡。
 - 优先跑通 HP、韧性、自身能量的来源、时序和作用对象。
 

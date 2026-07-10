@@ -1863,7 +1863,13 @@ describe('first vertical slice simulation', () => {
         inputSourceKind: 'azpr-runtime-input-from-generation-builder-source',
         runtimeInputSourceKind:
           'azpr-runtime-input-source-from-generation-builder',
-        outputNames: ['simLog', 'stateCurves', 'resourceCurves', 'summary'],
+        outputNames: [
+          'simLog',
+          'hitTransactions',
+          'stateCurves',
+          'resourceCurves',
+          'summary',
+        ],
         outputs: {
           simLog: {
             sourceKind: 'azpr-runtime-sim-log-output',
@@ -1894,7 +1900,7 @@ describe('first vertical slice simulation', () => {
           },
         },
         summary: {
-          outputCount: 4,
+          outputCount: 5,
           appliedDeltaCount: 1,
           simLogCount: 1,
           enemyStatePointCount: 1,
@@ -2028,7 +2034,7 @@ describe('first vertical slice simulation', () => {
         runtimeOutputContractSourceKind:
           'azpr-three-value-runtime-output-contract',
         runtimeOutputContractStatus: 'runtime-output-contract-ready',
-        runtimeOutputContractOutputCount: 4,
+        runtimeOutputContractOutputCount: 5,
         applied: true,
       },
       applied: true,
@@ -2057,7 +2063,13 @@ describe('first vertical slice simulation', () => {
       inputSourceKind: 'azpr-runtime-input-from-generation-builder-source',
       runtimeInputSourceKind:
         'azpr-runtime-input-source-from-generation-builder',
-      outputNames: ['simLog', 'stateCurves', 'resourceCurves', 'summary'],
+      outputNames: [
+        'simLog',
+        'hitTransactions',
+        'stateCurves',
+        'resourceCurves',
+        'summary',
+      ],
       outputAliases: {
         resources: 'resourceCurves',
       },
@@ -2112,7 +2124,7 @@ describe('first vertical slice simulation', () => {
         consistent: true,
       },
       outputSummary: {
-        outputCount: 4,
+        outputCount: 5,
         appliedDeltaCount: 1,
         simLogCount: 1,
         enemyStatePointCount: 1,
@@ -2216,7 +2228,7 @@ describe('first vertical slice simulation', () => {
       applied: true,
     });
     expect(result.summary.runtimeOutputsSummary).toMatchObject({
-      outputCount: 4,
+      outputCount: 5,
       appliedDeltaCount: 1,
       simLogCount: 1,
       enemyStatePointCount: 1,

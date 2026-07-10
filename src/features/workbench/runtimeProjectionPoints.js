@@ -2,6 +2,7 @@ import { createRuntimeStateCurvePointId } from './stateCurvePointIdentity';
 import {
   createThreeValueRuntimeOutputConsumerView,
   getThreeValueRuntimeEnemyStateCurve,
+  getThreeValueRuntimeHitTransactions,
   getThreeValueRuntimeOutputContract,
   getThreeValueRuntimeOutputContractOutput,
   getThreeValueRuntimeOutputSummary,
@@ -67,6 +68,10 @@ export function getRuntimeSimLogCount(runtimeProjection) {
 
 export function getRuntimeEnemyStateCurve(runtimeProjection) {
   return getThreeValueRuntimeEnemyStateCurve(runtimeProjection);
+}
+
+export function getRuntimeHitTransactions(runtimeProjection) {
+  return getThreeValueRuntimeHitTransactions(runtimeProjection);
 }
 
 export function getRuntimeResourceCurveRows(runtimeProjection) {
