@@ -37,6 +37,19 @@ const DEFAULT_SECONDARY_CHARACTER_ID =
     character => character.id !== workbenchSeed.defaults.characterId
   )?.id ?? workbenchSeed.defaults.characterId;
 
+export const DEFAULT_WORKBENCH_TEAM_SLOTS = Object.freeze([
+  Object.freeze({
+    slotId: 'team-slot-1',
+    position: 0,
+    characterId: workbenchSeed.defaults.characterId,
+  }),
+  Object.freeze({
+    slotId: 'team-slot-2',
+    position: 1,
+    characterId: DEFAULT_SECONDARY_CHARACTER_ID,
+  }),
+]);
+
 const WORKBENCH_EQUIPMENT = getAzprEquipment();
 const WORKBENCH_ENEMIES = getAzprEnemies();
 const WORKBENCH_ELEMENTS = getAzprElements();
@@ -158,25 +171,17 @@ export function createWorkbenchActionDraft({
   };
 }
 
-export function normalizeWorkbenchSelection(selection = {}) {
-  const characterId = Number(
-    selection.characterId ?? DEFAULT_WORKBENCH_SELECTION.characterId
-  );
+export function normalizeWorkbenchSelection(selection = {}, teamSlots = null) {
+  const normalizedTeamSlots = normalizeWorkbenchTeamSlots(teamSlots, selection);
+  const characterId = normalizedTeamSlots[0].characterId;
   const character =
     findById(workbenchSeed.gameData.characters, characterId) ??
     workbenchSeed.gameData.characters[0];
-  const requestedSecondaryCharacter = findById(
-    workbenchSeed.gameData.characters,
-    selection.secondaryCharacterId
-  );
-  const fallbackSecondaryCharacter =
-    workbenchSeed.gameData.characters.find(item => item.id !== character.id) ??
-    character;
   const secondaryCharacter =
-    requestedSecondaryCharacter &&
-    requestedSecondaryCharacter.id !== character.id
-      ? requestedSecondaryCharacter
-      : fallbackSecondaryCharacter;
+    findById(
+      workbenchSeed.gameData.characters,
+      normalizedTeamSlots[1].characterId
+    ) ?? workbenchSeed.gameData.characters[1];
   const characterSkills = getSkillsForCharacter(character.id);
   const requestedSkill = findById(characterSkills, selection.skillId);
   const skill =
@@ -192,6 +197,50 @@ export function normalizeWorkbenchSelection(selection = {}) {
     skillId: skill.id,
     enemyId: enemy.id,
   };
+}
+
+export function createDefaultWorkbenchTeamSlots(selection = {}) {
+  return normalizeWorkbenchTeamSlots([], {
+    ...DEFAULT_WORKBENCH_SELECTION,
+    ...selection,
+  });
+}
+
+export function normalizeWorkbenchTeamSlots(teamSlots = [], selection = {}) {
+  const sourceSlots = Array.isArray(teamSlots) ? teamSlots : [];
+  const legacyCharacterIds = [
+    selection?.characterId ?? DEFAULT_WORKBENCH_SELECTION.characterId,
+    selection?.secondaryCharacterId ??
+      DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId,
+  ];
+  const usedCharacterIds = new Set();
+
+  return DEFAULT_WORKBENCH_TEAM_SLOTS.map((defaultSlot, index) => {
+    const sourceSlot =
+      sourceSlots.find(slot => slot?.slotId === defaultSlot.slotId) ??
+      sourceSlots[index];
+    const requestedCharacterId = Number(
+      sourceSlot?.characterId ?? legacyCharacterIds[index]
+    );
+    const requestedCharacter = findById(
+      workbenchSeed.gameData.characters,
+      requestedCharacterId
+    );
+    const fallbackCharacter = workbenchSeed.gameData.characters.find(
+      character => !usedCharacterIds.has(Number(character.id))
+    );
+    const character =
+      requestedCharacter && !usedCharacterIds.has(Number(requestedCharacter.id))
+        ? requestedCharacter
+        : fallbackCharacter;
+
+    usedCharacterIds.add(Number(character.id));
+    return {
+      slotId: defaultSlot.slotId,
+      position: index,
+      characterId: Number(character.id),
+    };
+  });
 }
 
 export function createDefaultWorkbenchActorConfigs(selection = {}) {
@@ -252,7 +301,11 @@ export function normalizeWorkbenchLoadout(loadout = {}) {
 }
 
 export function createWorkbenchProject(selection = {}, actionPatch = {}) {
-  const normalized = normalizeWorkbenchSelection(selection);
+  const teamSlots = normalizeWorkbenchTeamSlots(
+    actionPatch.teamSlots,
+    selection
+  );
+  const normalized = normalizeWorkbenchSelection(selection, teamSlots);
   const enemyConfig = normalizeWorkbenchEnemyConfig(
     actionPatch.enemyConfig ?? actionPatch
   );
@@ -291,7 +344,9 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
   const skillDrafts = actionDrafts.filter(
     draft => draft.type === ACTION_TYPES.SKILL
   );
-  const teamCharacters = uniqueById([character, secondaryCharacter]);
+  const teamCharacters = teamSlots.map(slot =>
+    findById(workbenchSeed.gameData.characters, slot.characterId)
+  );
   const actors = teamCharacters.map(item => {
     const actorConfig = actorConfigsByCharacterId.get(Number(item.id));
     return createActorFromCharacter(item, {
@@ -328,6 +383,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     name: `工作台：${character.name} / ${titleActionName} / ${enemy.name}`,
     durationMs: actionPatch.durationMs ?? 30000,
     actors,
+    teamSlots,
     enemy: enemyInstance,
     actions: actionDrafts.map(draft =>
       createProjectActionFromDraft(
@@ -344,6 +400,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
       secondaryCharacterId: secondaryCharacter.id,
       sourceSkillIds: skillDrafts.map(draft => draft.skillId),
       sourceEnemyId: enemy.id,
+      teamSlots,
       enemyConfig,
       actorConfigs,
       loadoutCalculationStatus: 'project-config-only',
@@ -723,17 +780,6 @@ function createSkillLevelsForCharacter(skillDrafts, characterId) {
       .filter(([skill]) => skill?.characterId === Number(characterId))
       .map(([skill, level]) => [skill.id, level])
   );
-}
-
-function uniqueById(items) {
-  const seen = new Set();
-  return items.filter(item => {
-    if (seen.has(item.id)) {
-      return false;
-    }
-    seen.add(item.id);
-    return true;
-  });
 }
 
 function clampNumber(value, min, max, fallback) {

@@ -25,6 +25,10 @@ describe('workbench draft storage project files', () => {
             skillId: 10900101,
             enemyId: 300032,
           },
+          teamSlots: [
+            { slotId: 'team-slot-1', position: 0, characterId: 109001 },
+            { slotId: 'team-slot-2', position: 1, characterId: 101003 },
+          ],
           actorConfigs: [
             {
               characterId: 109001,
@@ -90,6 +94,10 @@ describe('workbench draft storage project files', () => {
       type: WORKBENCH_PROJECT_FILE_TYPE,
       exportedAt: '2026-07-10T04:00:00.000Z',
       selectedActionId: 'action-0002',
+      teamSlots: [
+        { slotId: 'team-slot-1', position: 0, characterId: 109001 },
+        { slotId: 'team-slot-2', position: 1, characterId: 101003 },
+      ],
       actorConfigs: [
         {
           characterId: 109001,
@@ -114,6 +122,10 @@ describe('workbench draft storage project files', () => {
       game: 'azur-promilia',
       type: 'workbench-draft',
       savedAt: '2026-07-10T04:00:00.000Z',
+      teamSlots: [
+        { slotId: 'team-slot-1', position: 0, characterId: 109001 },
+        { slotId: 'team-slot-2', position: 1, characterId: 101003 },
+      ],
       enemyConfig: {
         level: 80,
         hpMultiplier: 1.5,
@@ -176,6 +188,10 @@ describe('workbench draft storage project files', () => {
       type: 'workbench-draft',
       selectedActionId: 'action-0001',
       actorConfigs: [{ characterId: 109001 }, { characterId: 101003 }],
+      teamSlots: [
+        { slotId: 'team-slot-1', position: 0, characterId: 109001 },
+        { slotId: 'team-slot-2', position: 1, characterId: 101003 },
+      ],
       enemyConfig: {
         toughnessMultiplier: 1,
         initialToughnessRatio: 1,
@@ -266,6 +282,52 @@ describe('workbench draft storage project files', () => {
     });
   });
 
+  it('migrates v4 project files to v5 project team slots', () => {
+    const v4Project = createWorkbenchProjectFileSnapshot({
+      selection: {
+        characterId: 101007,
+        secondaryCharacterId: 101010,
+        skillId: 10100701,
+        enemyId: 300032,
+      },
+      enemyConfig: {
+        level: 90,
+        hpMultiplier: 1,
+        defenseMultiplier: 1,
+        toughnessMultiplier: 1,
+        initialToughnessRatio: 1,
+        elementDefenseOverrides: {},
+      },
+      actionDrafts: [
+        {
+          id: 'action-0001',
+          type: 'skill',
+          skillId: 10100701,
+          actorCharacterId: 101007,
+          startMs: 0,
+          durationMs: 1000,
+          level: 1,
+        },
+      ],
+      selectedActionId: 'action-0001',
+    });
+    v4Project.schemaVersion = 4;
+    delete v4Project.teamSlots;
+
+    expect(parseWorkbenchProjectFile(v4Project)).toMatchObject({
+      schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
+      selection: {
+        characterId: 101007,
+        secondaryCharacterId: 101010,
+      },
+      teamSlots: [
+        { slotId: 'team-slot-1', position: 0, characterId: 101007 },
+        { slotId: 'team-slot-2', position: 1, characterId: 101010 },
+      ],
+      actorConfigs: [{ characterId: 101007 }, { characterId: 101010 }],
+    });
+  });
+
   it('loads legacy v1 local storage and clears all storage generations', () => {
     const storage = new Map();
     const storageAdapter = {
@@ -316,6 +378,10 @@ describe('workbench draft storage project files', () => {
         initialToughnessRatio: 1,
       },
       actorConfigs: [{ characterId: 109001 }, { characterId: 101003 }],
+      teamSlots: [
+        { slotId: 'team-slot-1', position: 0, characterId: 109001 },
+        { slotId: 'team-slot-2', position: 1, characterId: 101003 },
+      ],
     });
 
     storage.set(WORKBENCH_DRAFT_STORAGE_KEY, '{}');
@@ -386,6 +452,10 @@ describe('workbench draft storage project files', () => {
       type: 'workbench-draft',
       savedAt: '2026-07-10T05:00:00.000Z',
       selectedActionId: 'action-0002',
+      teamSlots: [
+        { slotId: 'team-slot-1', position: 0, characterId: 109001 },
+        { slotId: 'team-slot-2', position: 1, characterId: 101003 },
+      ],
       enemyConfig: {
         level: 92,
         hpMultiplier: 2.5,

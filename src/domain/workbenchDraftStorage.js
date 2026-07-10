@@ -3,17 +3,20 @@ import {
   DEFAULT_WORKBENCH_ENEMY_CONFIG,
   DEFAULT_WORKBENCH_SELECTION,
   createDefaultWorkbenchActorConfigs,
+  createDefaultWorkbenchTeamSlots,
   createWorkbenchActionDraft,
   normalizeWorkbenchActorConfigs,
   normalizeWorkbenchEnemyConfig,
   normalizeWorkbenchActionDrafts,
   normalizeWorkbenchSelection,
+  normalizeWorkbenchTeamSlots,
 } from './workbenchProjectFactory';
 
-export const WORKBENCH_DRAFT_SCHEMA_VERSION = 4;
+export const WORKBENCH_DRAFT_SCHEMA_VERSION = 5;
 export const WORKBENCH_DRAFT_STORAGE_KEY =
-  'promilia-axis-tool:workbench-draft:v4';
+  'promilia-axis-tool:workbench-draft:v5';
 export const LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS = Object.freeze([
+  'promilia-axis-tool:workbench-draft:v4',
   'promilia-axis-tool:workbench-draft:v3',
   'promilia-axis-tool:workbench-draft:v2',
   'promilia-axis-tool:workbench-draft:v1',
@@ -29,11 +32,15 @@ export const DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS = Object.freeze({
 });
 
 export function createDefaultWorkbenchDraftState() {
+  const teamSlots = createDefaultWorkbenchTeamSlots();
+  const selection = normalizeWorkbenchSelection(
+    DEFAULT_WORKBENCH_SELECTION,
+    teamSlots
+  );
   return {
-    selection: { ...DEFAULT_WORKBENCH_SELECTION },
-    actorConfigs: createDefaultWorkbenchActorConfigs(
-      DEFAULT_WORKBENCH_SELECTION
-    ),
+    selection,
+    teamSlots,
+    actorConfigs: createDefaultWorkbenchActorConfigs(selection),
     enemyConfig: { ...DEFAULT_WORKBENCH_ENEMY_CONFIG },
     segmentSplitOptions: { ...DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS },
     actionDrafts: [createWorkbenchActionDraft()],
@@ -45,6 +52,7 @@ export function createDefaultWorkbenchDraftState() {
 export function createWorkbenchDraftSnapshot(
   {
     selection,
+    teamSlots,
     actorConfigs,
     enemyConfig,
     segmentSplitOptions,
@@ -53,7 +61,11 @@ export function createWorkbenchDraftSnapshot(
   },
   savedAt = new Date().toISOString()
 ) {
-  const normalizedSelection = normalizeWorkbenchSelection(selection);
+  const normalizedTeamSlots = normalizeWorkbenchTeamSlots(teamSlots, selection);
+  const normalizedSelection = normalizeWorkbenchSelection(
+    selection,
+    normalizedTeamSlots
+  );
   const normalizedActorConfigs = normalizeWorkbenchActorConfigs(
     actorConfigs,
     normalizedSelection
@@ -77,6 +89,7 @@ export function createWorkbenchDraftSnapshot(
     type: WORKBENCH_DRAFT_FILE_TYPE,
     savedAt,
     selection: normalizedSelection,
+    teamSlots: normalizedTeamSlots,
     actorConfigs: normalizedActorConfigs,
     enemyConfig: normalizedEnemyConfig,
     segmentSplitOptions: normalizedSegmentSplitOptions,

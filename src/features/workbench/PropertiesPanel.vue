@@ -6,40 +6,6 @@
     </div>
 
     <div class="control-grid">
-      <label>
-        <span>主角色</span>
-        <select
-          data-testid="workbench-character-select"
-          :value="selection.characterId"
-          @change="emitSelection('characterId', $event.target.value)"
-        >
-          <option
-            v-for="character in characters"
-            :key="character.id"
-            :value="character.id"
-          >
-            {{ character.name }}
-          </option>
-        </select>
-      </label>
-
-      <label>
-        <span>副角色</span>
-        <select
-          data-testid="workbench-secondary-character-select"
-          :value="selection.secondaryCharacterId"
-          @change="emitSelection('secondaryCharacterId', $event.target.value)"
-        >
-          <option
-            v-for="character in secondaryCharacterOptions"
-            :key="character.id"
-            :value="character.id"
-          >
-            {{ character.name }}
-          </option>
-        </select>
-      </label>
-
       <label
         data-testid="workbench-action-edit-control"
         data-edit-field="skillId"
@@ -646,11 +612,6 @@ const currentActor = computed(() => {
     ) ?? null
   );
 });
-const secondaryCharacterOptions = computed(() =>
-  props.characters.filter(
-    character => Number(character.id) !== Number(props.selection.characterId)
-  )
-);
 const currentActorCharacterId = computed(() => {
   return (
     props.selectedAction.actor?.characterId ??

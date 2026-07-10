@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
   DEFAULT_WORKBENCH_SELECTION,
+  DEFAULT_WORKBENCH_TEAM_SLOTS,
   createWorkbenchProject,
   getWorkbenchGameData,
   normalizeWorkbenchActorConfigs,
+  normalizeWorkbenchTeamSlots,
 } from '../../domain/workbenchProjectFactory';
 import { validateProject } from '../../domain/projectSchema';
 import { compileProject } from '../../simulation/compiler/compileProject';
@@ -84,6 +86,62 @@ describe('workbench project actor configuration', () => {
       },
       soulessenceId: null,
     });
+  });
+
+  it('projects stable team slots into the project and compiled scenario', () => {
+    const teamSlots = [
+      { slotId: 'team-slot-1', position: 0, characterId: 101007 },
+      { slotId: 'team-slot-2', position: 1, characterId: 101010 },
+    ];
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      teamSlots,
+    });
+    const scenario = compileProject(project, getWorkbenchGameData());
+
+    expect(project.team.slots).toEqual(teamSlots);
+    expect(project.actors.map(actor => actor.characterId)).toEqual([
+      101007, 101010,
+    ]);
+    expect(project.actions[0]).toMatchObject({
+      actorId: 'actor-101007',
+      skillId: 10100701,
+    });
+    expect(scenario.team.slots).toEqual([
+      {
+        ...teamSlots[0],
+        actorId: 'actor-101007',
+        actorName: '芃芃',
+      },
+      {
+        ...teamSlots[1],
+        actorId: 'actor-101010',
+        actorName: '涂山小玉',
+      },
+    ]);
+    expect(validateProject(project, getWorkbenchGameData()).valid).toBe(true);
+  });
+
+  it('normalizes duplicate or invalid team members to unique real characters', () => {
+    const normalized = normalizeWorkbenchTeamSlots(
+      [
+        { ...DEFAULT_WORKBENCH_TEAM_SLOTS[0], characterId: 101007 },
+        { ...DEFAULT_WORKBENCH_TEAM_SLOTS[1], characterId: 101007 },
+      ],
+      DEFAULT_WORKBENCH_SELECTION
+    );
+
+    expect(normalized).toHaveLength(2);
+    expect(normalized[0]).toMatchObject({
+      slotId: 'team-slot-1',
+      position: 0,
+      characterId: 101007,
+    });
+    expect(normalized[1].characterId).not.toBe(101007);
+    expect(
+      getWorkbenchGameData().characters.some(
+        character => character.id === normalized[1].characterId
+      )
+    ).toBe(true);
   });
 
   it('rejects an equipment item placed in the wrong project slot', () => {

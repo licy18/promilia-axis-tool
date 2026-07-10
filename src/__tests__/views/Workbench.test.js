@@ -7533,6 +7533,36 @@ describe('Workbench view', () => {
       `工作台：${nextCharacter.name} / ${nextSkill.name}`
     );
     expect(wrapper.text()).toContain('DAMAGE_PROJECTED');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-character-select"]')
+        .attributes('data-team-slot-id')
+    ).toBe('team-slot-1');
+    expect(
+      wrapper.find('[data-testid="workbench-secondary-character-select"]')
+        .element.value
+    ).toBe(String(workbenchSeed.defaults.characterId));
+    expect(
+      wrapper.find('[data-testid="workbench-action-actor-select"]').element
+        .value
+    ).toBe(String(nextCharacter.id));
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(
+      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
+    );
+    expect(savedDraft.teamSlots).toEqual([
+      { slotId: 'team-slot-1', position: 0, characterId: nextCharacter.id },
+      {
+        slotId: 'team-slot-2',
+        position: 1,
+        characterId: workbenchSeed.defaults.characterId,
+      },
+    ]);
+    expect(savedDraft.selection).toMatchObject({
+      characterId: nextCharacter.id,
+      secondaryCharacterId: workbenchSeed.defaults.characterId,
+    });
   });
 
   it('adds, selects, edits, and deletes timeline actions', async () => {

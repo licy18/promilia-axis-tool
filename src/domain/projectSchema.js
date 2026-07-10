@@ -45,6 +45,7 @@ export function createProject({
   durationMs = DEFAULT_PROJECT_DURATION_MS,
   fps = DEFAULT_PROJECT_FPS,
   actors = [],
+  teamSlots = [],
   enemy = null,
   actions = [],
   metadata = {},
@@ -62,6 +63,9 @@ export function createProject({
       fps,
     },
     actors,
+    team: {
+      slots: teamSlots.map(slot => ({ ...slot })),
+    },
     enemy,
     actions,
     resources: [],
@@ -353,6 +357,7 @@ export function validateProject(project, gameData = {}) {
   validateTime(project.time, errors);
   validateUniqueIds(project.actors, '$.actors', errors);
   validateActors(project.actors, gameData, errors, warnings);
+  validateTeam(project.team, project.actors, errors);
   validateEnemy(project.enemy, gameData, errors, warnings);
   validateActions(project.actions, project, gameData, errors, warnings);
 
@@ -361,6 +366,83 @@ export function validateProject(project, gameData = {}) {
     errors,
     warnings,
   };
+}
+
+function validateTeam(team, actors, errors) {
+  const slots = team?.slots;
+  if (slots == null || (Array.isArray(slots) && slots.length === 0)) {
+    return;
+  }
+  if (!Array.isArray(slots)) {
+    errors.push(
+      issue(
+        'team.slots.invalid',
+        'Project team slots must be an array',
+        '$.team.slots'
+      )
+    );
+    return;
+  }
+
+  const slotIds = new Set();
+  const characterIds = new Set();
+  const actorCharacterIds = new Set(
+    (actors ?? []).map(actor => Number(actor.characterId))
+  );
+  slots.forEach((slot, index) => {
+    const path = `$.team.slots[${index}]`;
+    if (Number(slot?.position) !== index) {
+      errors.push(
+        issue(
+          'team.position.invalid',
+          'Team slot position must match its array index',
+          `${path}.position`
+        )
+      );
+    }
+    if (!slot?.slotId || slotIds.has(slot.slotId)) {
+      errors.push(
+        issue(
+          'team.slotId.invalid',
+          'Each team slot must have a unique slotId',
+          `${path}.slotId`
+        )
+      );
+    } else {
+      slotIds.add(slot.slotId);
+    }
+
+    const characterId = Number(slot?.characterId);
+    if (!Number.isFinite(characterId) || characterIds.has(characterId)) {
+      errors.push(
+        issue(
+          'team.characterId.invalid',
+          'Each team slot must reference a unique characterId',
+          `${path}.characterId`
+        )
+      );
+    } else if (!actorCharacterIds.has(characterId)) {
+      errors.push(
+        issue(
+          'team.characterId.actorMissing',
+          `Team slot characterId ${characterId} has no project actor`,
+          `${path}.characterId`
+        )
+      );
+    } else {
+      characterIds.add(characterId);
+    }
+  });
+
+  if (slots.length !== (actors ?? []).length) {
+    errors.push(
+      issue(
+        'team.actorCount.mismatch',
+        'Project team slot count must match actor count',
+        '$.team.slots'
+      )
+    );
+  }
 }
 
 function validateTime(time, errors) {

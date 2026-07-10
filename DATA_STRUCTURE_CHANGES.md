@@ -24613,3 +24613,67 @@ enemy.elementDefenseConfig
 - `workbenchProjectFactory.test.js` 覆盖实际表值、项目覆盖值、有效值和公式未应用边界。
 - `workbenchDraftStorage.test.js` 覆盖 v3 到 v4 迁移以及 JSON/分享 round-trip。
 - `Workbench.test.js` 与 Workbench E2E 覆盖显示、编辑、保存、导出、重置和导入恢复。
+
+## 345. Workbench v5 项目队伍槽位：Project Team Slots
+
+### 345.1 草稿与项目字段
+
+`workbench-draft` / `workbench-project` 升级为 `schemaVersion = 5`，新增：
+
+```text
+teamSlots[]
+  slotId
+  position
+  characterId
+```
+
+当前固定提供两个稳定槽位：
+
+```text
+team-slot-1 / position 0
+team-slot-2 / position 1
+```
+
+`selection.characterId` 和 `selection.secondaryCharacterId` 继续输出，作为旧 Workbench 代码与 v1-v4 快照的兼容镜像；v5 规范化时由 `teamSlots` 决定这两个值，不再把 selection 作为队伍事实标准。
+
+内部项目新增：
+
+```text
+project.team.slots[]
+  slotId
+  position
+  characterId
+```
+
+编译场景新增：
+
+```text
+scenario.team.slots[]
+  slotId
+  position
+  characterId
+  actorId
+  actorName
+```
+
+项目校验要求槽位 ID 唯一、角色 ID 唯一、每个槽位角色存在对应 actor，并且槽位数与 actor 数一致。
+
+### 345.2 编辑行为
+
+- 槽位替换：该槽位原角色的技能、资源和切换动作改绑到新角色，并按新角色技能表规范化；旧角色培养配置不会错误转移给新角色。
+- 槽位互换：选择另一槽位当前角色时交换两个槽位；动作按槽位同步互换角色归属，角色培养配置继续跟随角色本身。
+- 槽位变化进入 Workbench 撤销/重做历史，并随草稿、JSON 项目和分享链接持久化。
+
+### 345.3 迁移
+
+- 当前 localStorage key 为 `promilia-axis-tool:workbench-draft:v5`。
+- v1-v4 快照缺少 `teamSlots` 时，从兼容 selection 的两个角色 ID 生成稳定槽位。
+- 重置草稿同时清理 v5、v4、v3、v2 和 v1 key。
+
+### 345.4 验证
+
+- `projectSchema.test.js` 覆盖槽位角色缺少对应 actor 的拒绝路径。
+- `workbenchProjectFactory.test.js` 覆盖槽位唯一化、项目 team 与编译场景 team 投影。
+- `workbenchDraftStorage.test.js` 覆盖 v4 到 v5 迁移以及 JSON/分享 round-trip。
+- `Workbench.test.js` 覆盖槽位互换、动作重绑定和草稿保存。
+- Workbench E2E 覆盖替换队员、导出、重置、导入恢复和重新运行模拟。

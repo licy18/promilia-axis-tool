@@ -444,9 +444,12 @@
         >
           <TeamLoadoutPanel
             :actors="scenario.actors"
+            :characters="workbenchSeed.gameData.characters"
+            :team-slots="teamSlots"
             :kibos="loadoutOptions.kibos"
             :equipment="loadoutOptions.equipment"
             :soulessences="loadoutOptions.soulessences"
+            @update-team-slot="updateTeamSlot"
             @update-actor-config="updateActorConfig"
           />
         </div>
@@ -581,6 +584,7 @@ import {
   normalizeWorkbenchActionDrafts,
   normalizeWorkbenchEnemyConfig,
   normalizeWorkbenchSelection,
+  normalizeWorkbenchTeamSlots,
 } from '../domain/workbenchProjectFactory';
 import { ACTION_TYPES } from '../domain/projectSchema';
 import {
@@ -618,6 +622,7 @@ const AUTO_DELAY_NOTE_PATTERN =
   /^自动推迟：同轨已有动作占用，已从 \d+(?:\.\d+)?ms 调整到 \d+(?:\.\d+)?ms。$/;
 const initialDraft = createDefaultWorkbenchDraftState();
 const selection = ref({ ...initialDraft.selection });
+const teamSlots = ref(initialDraft.teamSlots.map(slot => ({ ...slot })));
 const actorConfigs = ref([...initialDraft.actorConfigs]);
 const enemyConfig = ref({ ...initialDraft.enemyConfig });
 const segmentSplitOptions = ref({ ...initialDraft.segmentSplitOptions });
@@ -682,6 +687,7 @@ const workbenchFlowController = createWorkbenchFlowController(
 
 const project = computed(() =>
   createWorkbenchProject(selection.value, {
+    teamSlots: teamSlots.value,
     actorConfigs: actorConfigs.value,
     enemyConfig: enemyConfig.value,
     actions: actionDrafts.value,
@@ -835,7 +841,47 @@ function handleWorkbenchHashChange() {
   applySharedProjectFromUrl();
 }
 
-function updateSelection(patch) {
+function updateTeamSlot({ slotId, characterId } = {}) {
+  const slotIndex = teamSlots.value.findIndex(slot => slot.slotId === slotId);
+  const nextCharacterId = Number(characterId);
+  const nextCharacter = workbenchSeed.gameData.characters.find(
+    character => Number(character.id) === nextCharacterId
+  );
+  if (slotIndex < 0 || !nextCharacter) {
+    return;
+  }
+
+  const previousCharacterId = Number(teamSlots.value[slotIndex]?.characterId);
+  if (previousCharacterId === nextCharacterId) {
+    return;
+  }
+
+  const nextTeamSlots = teamSlots.value.map(slot => ({ ...slot }));
+  const occupiedSlotIndex = nextTeamSlots.findIndex(
+    (slot, index) =>
+      index !== slotIndex && Number(slot.characterId) === nextCharacterId
+  );
+  nextTeamSlots[slotIndex].characterId = nextCharacterId;
+  if (occupiedSlotIndex >= 0) {
+    nextTeamSlots[occupiedSlotIndex].characterId = previousCharacterId;
+  }
+  const normalizedTeamSlots = normalizeWorkbenchTeamSlots(
+    nextTeamSlots,
+    selection.value
+  );
+
+  updateSelection(
+    {
+      characterId: normalizedTeamSlots[0].characterId,
+      secondaryCharacterId: normalizedTeamSlots[1].characterId,
+    },
+    {
+      teamSlots: normalizedTeamSlots,
+    }
+  );
+}
+
+function updateSelection(patch, options = {}) {
   clearSegmentSplitPreview();
   recordWorkbenchHistorySnapshot();
   const previousSelection = selection.value;
@@ -846,11 +892,20 @@ function updateSelection(patch) {
     patch.secondaryCharacterId != null &&
     Number(patch.secondaryCharacterId) !==
       Number(selection.value.secondaryCharacterId);
-  const nextSelection = normalizeWorkbenchSelection({
-    ...selection.value,
-    ...patch,
-  });
+  const nextSelection = normalizeWorkbenchSelection(
+    {
+      ...selection.value,
+      ...patch,
+    },
+    options.teamSlots
+  );
   selection.value = nextSelection;
+  if (characterChanged || secondaryCharacterChanged || options.teamSlots) {
+    teamSlots.value = normalizeWorkbenchTeamSlots(
+      options.teamSlots,
+      nextSelection
+    );
+  }
   actorConfigs.value = normalizeWorkbenchActorConfigs(
     actorConfigs.value,
     nextSelection
@@ -864,25 +919,33 @@ function updateSelection(patch) {
   if (characterChanged || secondaryCharacterChanged) {
     const nextActionDrafts = actionDrafts.value.map(action => {
       const nextAction = { ...action };
+      const previousActorCharacterId = Number(action.actorCharacterId);
       if (
         characterChanged &&
-        Number(nextAction.actorCharacterId) ===
-          Number(previousSelection.characterId)
+        previousActorCharacterId === Number(previousSelection.characterId)
       ) {
         nextAction.actorCharacterId = nextSelection.characterId;
-      }
-      if (
+      } else if (
         secondaryCharacterChanged &&
-        Number(nextAction.actorCharacterId) ===
+        previousActorCharacterId ===
           Number(previousSelection.secondaryCharacterId)
       ) {
         nextAction.actorCharacterId = nextSelection.secondaryCharacterId;
       }
-      if (
-        secondaryCharacterChanged &&
-        nextAction.type === ACTION_TYPES.SWITCH
-      ) {
-        nextAction.targetCharacterId = nextSelection.secondaryCharacterId;
+      if (nextAction.type === ACTION_TYPES.SWITCH) {
+        const previousTargetCharacterId = Number(action.targetCharacterId);
+        if (
+          characterChanged &&
+          previousTargetCharacterId === Number(previousSelection.characterId)
+        ) {
+          nextAction.targetCharacterId = nextSelection.characterId;
+        } else if (
+          secondaryCharacterChanged &&
+          previousTargetCharacterId ===
+            Number(previousSelection.secondaryCharacterId)
+        ) {
+          nextAction.targetCharacterId = nextSelection.secondaryCharacterId;
+        }
       }
       return nextAction;
     });
@@ -1602,6 +1665,7 @@ function saveDraft() {
 function getWorkbenchDraftState() {
   return {
     selection: selection.value,
+    teamSlots: teamSlots.value,
     actorConfigs: actorConfigs.value,
     enemyConfig: enemyConfig.value,
     segmentSplitOptions: segmentSplitOptions.value,
@@ -1768,7 +1832,14 @@ function resetDraft() {
 }
 
 function applyDraftState(draft) {
-  selection.value = { ...draft.selection };
+  teamSlots.value = normalizeWorkbenchTeamSlots(
+    draft.teamSlots,
+    draft.selection
+  );
+  selection.value = normalizeWorkbenchSelection(
+    draft.selection,
+    teamSlots.value
+  );
   actorConfigs.value = normalizeWorkbenchActorConfigs(
     draft.actorConfigs,
     selection.value
@@ -1947,6 +2018,7 @@ function createWorkbenchHistorySnapshot() {
   const draftSnapshot = createWorkbenchDraftSnapshot(
     {
       selection: selection.value,
+      teamSlots: teamSlots.value,
       actorConfigs: actorConfigs.value,
       enemyConfig: enemyConfig.value,
       segmentSplitOptions: segmentSplitOptions.value,
@@ -1957,6 +2029,7 @@ function createWorkbenchHistorySnapshot() {
   );
   return cloneWorkbenchHistoryValue({
     selection: draftSnapshot.selection,
+    teamSlots: draftSnapshot.teamSlots,
     actorConfigs: draftSnapshot.actorConfigs,
     enemyConfig: draftSnapshot.enemyConfig,
     segmentSplitOptions: draftSnapshot.segmentSplitOptions,
@@ -1979,7 +2052,14 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
   if (!snapshot) {
     return;
   }
-  selection.value = normalizeWorkbenchSelection(snapshot.selection);
+  teamSlots.value = normalizeWorkbenchTeamSlots(
+    snapshot.teamSlots,
+    snapshot.selection
+  );
+  selection.value = normalizeWorkbenchSelection(
+    snapshot.selection,
+    teamSlots.value
+  );
   actorConfigs.value = normalizeWorkbenchActorConfigs(
     snapshot.actorConfigs,
     selection.value
@@ -2986,16 +3066,17 @@ function normalizeActionLibraryCharacterId(
   nextSelection,
   changes
 ) {
+  const previousActionLibraryCharacterId = Number(
+    actionLibraryCharacterId.value
+  );
   if (
     changes.characterChanged &&
-    Number(actionLibraryCharacterId.value) ===
-      Number(previousSelection.characterId)
+    previousActionLibraryCharacterId === Number(previousSelection.characterId)
   ) {
     actionLibraryCharacterId.value = nextSelection.characterId;
-  }
-  if (
+  } else if (
     changes.secondaryCharacterChanged &&
-    Number(actionLibraryCharacterId.value) ===
+    previousActionLibraryCharacterId ===
       Number(previousSelection.secondaryCharacterId)
   ) {
     actionLibraryCharacterId.value = nextSelection.secondaryCharacterId;

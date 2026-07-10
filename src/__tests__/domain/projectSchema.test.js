@@ -105,4 +105,24 @@ describe('project domain schema', () => {
     expect(codes).toContain('enemy.elementDefenseOverrides.value.invalid');
     expect(codes).toContain('enemy.elementDefenseOverrides.key.invalid');
   });
+
+  it('rejects a team slot that has no matching project actor', () => {
+    const project = createFirstVerticalSliceProject();
+    project.team = {
+      slots: [
+        {
+          slotId: 'team-slot-1',
+          position: 0,
+          characterId: 999999,
+        },
+      ],
+    };
+
+    const result = validateProject(project, getFirstVerticalSliceGameData());
+
+    expect(result.valid).toBe(false);
+    expect(result.errors.map(error => error.code)).toContain(
+      'team.characterId.actorMissing'
+    );
+  });
 });

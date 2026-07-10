@@ -8,6 +8,32 @@
       <h2>参战配置</h2>
     </div>
 
+    <div class="team-slot-grid" data-testid="workbench-team-slot-grid">
+      <label
+        v-for="(slot, index) in teamSlots"
+        :key="slot.slotId"
+        class="team-slot-control"
+        :data-team-slot-id="slot.slotId"
+      >
+        <span>槽位 {{ index + 1 }}</span>
+        <select
+          :data-testid="teamSlotTestId(index)"
+          data-team-slot-select="true"
+          :data-team-slot-id="slot.slotId"
+          :value="slot.characterId"
+          @change="emitTeamSlotPatch(slot.slotId, $event.target.value)"
+        >
+          <option
+            v-for="character in characters"
+            :key="character.id"
+            :value="character.id"
+          >
+            {{ formatCharacterOption(character) }}
+          </option>
+        </select>
+      </label>
+    </div>
+
     <div class="config-scope" data-testid="workbench-config-scope">
       <div data-config-status="simulation-active">
         <span>模拟生效</span>
@@ -24,12 +50,13 @@
       :key="actor.id"
       class="actor-loadout"
       :data-character-id="actor.characterId"
+      :data-team-slot-id="teamSlots[index]?.slotId"
       data-testid="workbench-actor-loadout"
       :open="index === 0"
     >
       <summary>
         <span>{{ actor.name }}</span>
-        <small>Lv.{{ actor.level }} · 参与模拟</small>
+        <small>槽位 {{ index + 1 }} · Lv.{{ actor.level }}</small>
       </summary>
 
       <div class="loadout-controls">
@@ -107,6 +134,14 @@ defineProps({
     type: Array,
     required: true,
   },
+  characters: {
+    type: Array,
+    required: true,
+  },
+  teamSlots: {
+    type: Array,
+    required: true,
+  },
   kibos: {
     type: Array,
     required: true,
@@ -121,7 +156,7 @@ defineProps({
   },
 });
 
-const emit = defineEmits(['update-actor-config']);
+const emit = defineEmits(['update-team-slot', 'update-actor-config']);
 const equipmentSlots = Object.freeze([
   { key: 'weapon', label: '武器' },
   { key: 'top', label: '上装' },
@@ -129,6 +164,25 @@ const equipmentSlots = Object.freeze([
   { key: 'earring', label: '耳环' },
   { key: 'ring', label: '戒指' },
 ]);
+
+function emitTeamSlotPatch(slotId, value) {
+  emit('update-team-slot', {
+    slotId,
+    characterId: Number(value),
+  });
+}
+
+function teamSlotTestId(index) {
+  return index === 0
+    ? 'workbench-character-select'
+    : 'workbench-secondary-character-select';
+}
+
+function formatCharacterOption(character) {
+  return [character.name, character.element?.abbrName, character.position?.name]
+    .filter(Boolean)
+    .join(' · ');
+}
 
 function emitLoadoutPatch(actor, key, value) {
   emit('update-actor-config', {
@@ -201,6 +255,20 @@ h2 {
   gap: 8px;
   padding: 12px 14px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.team-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.team-slot-control {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
 }
 
 .config-scope div {
@@ -295,6 +363,7 @@ select:focus {
 
 @media (max-width: 760px) {
   .config-scope,
+  .team-slot-grid,
   .loadout-controls {
     grid-template-columns: 1fr;
   }

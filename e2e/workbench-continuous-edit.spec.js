@@ -1821,6 +1821,21 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
     'action-edit'
   );
 
+  const secondaryTeamSlotSelect = page.getByTestId(
+    'workbench-secondary-character-select'
+  );
+  const replacementSecondaryCharacterId = await secondaryTeamSlotSelect
+    .locator('option')
+    .nth(1)
+    .getAttribute('value');
+  expect(replacementSecondaryCharacterId).toBeTruthy();
+  await secondaryTeamSlotSelect.selectOption(replacementSecondaryCharacterId);
+  await expect(
+    page.locator(
+      `[data-testid="workbench-actor-loadout"][data-team-slot-id="team-slot-2"][data-character-id="${replacementSecondaryCharacterId}"]`
+    )
+  ).toHaveCount(1);
+
   const enemySelect = page.getByTestId('workbench-enemy-select');
   const importedEnemyId = await enemySelect
     .locator('option')
@@ -1910,10 +1925,18 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 4,
+    schemaVersion: 5,
     game: 'azur-promilia',
     type: 'workbench-project',
     selectedActionId: 'action-0002',
+    teamSlots: [
+      { slotId: 'team-slot-1', position: 0, characterId: 109001 },
+      {
+        slotId: 'team-slot-2',
+        position: 1,
+        characterId: Number(replacementSecondaryCharacterId),
+      },
+    ],
     enemyConfig: {
       level: 91,
       hpMultiplier: 2.5,
@@ -1935,7 +1958,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
         },
       },
       {
-        characterId: 101003,
+        characterId: Number(replacementSecondaryCharacterId),
       },
     ],
   });
@@ -1957,6 +1980,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   await expect(
     page.getByTestId('workbench-enemy-initial-toughness-input')
   ).toHaveValue('100');
+  await expect(secondaryTeamSlotSelect).toHaveValue('101003');
   await expect(
     page.getByTestId('workbench-enemy-element-defense-input-FIRE_DEFENSE')
   ).toHaveValue('');
@@ -1990,6 +2014,9 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   await expect(
     page.getByTestId('workbench-enemy-element-defense-FIRE_DEFENSE')
   ).toHaveAttribute('data-source-status', 'user-override');
+  await expect(secondaryTeamSlotSelect).toHaveValue(
+    replacementSecondaryCharacterId
+  );
   await expect(
     page.getByTestId('workbench-runtime-enemy-toughness-state')
   ).toHaveText('剩余 10,000 / 20,000');
@@ -3305,6 +3332,7 @@ async function ensureActionContentEditResultSynced(
 async function readStoredWorkbenchDraft(page) {
   return await page.evaluate(() => {
     const rawDraft =
+      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v5') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v4') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v3') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v2') ??

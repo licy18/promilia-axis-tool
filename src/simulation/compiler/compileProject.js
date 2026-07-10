@@ -44,6 +44,7 @@ export function compileProject(project, gameData) {
     time: {
       ...project.time,
     },
+    team: compileTeam(project.team, actorsById),
     actors: [...actorsById.values()],
     enemy,
     actions,
@@ -53,6 +54,22 @@ export function compileProject(project, gameData) {
         .filter(action => action.timing?.needsTimingData)
         .map(action => action.id),
     },
+  };
+}
+
+function compileTeam(team, actorsById) {
+  const actorsByCharacterId = new Map(
+    [...actorsById.values()].map(actor => [Number(actor.characterId), actor])
+  );
+  return {
+    slots: (team?.slots ?? []).map(slot => {
+      const actor = actorsByCharacterId.get(Number(slot.characterId));
+      return {
+        ...slot,
+        actorId: actor?.id ?? null,
+        actorName: actor?.name ?? null,
+      };
+    }),
   };
 }
 
