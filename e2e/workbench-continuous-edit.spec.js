@@ -1894,6 +1894,12 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   await kiboSelect.selectOption(kiboId);
   await weaponSelect.selectOption(weaponId);
   await soulessenceSelect.selectOption(soulessenceId);
+  const initialSpInput = page
+    .locator(
+      '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
+    )
+    .first();
+  await initialSpInput.fill('0.5');
 
   await page.getByTestId('workbench-flow-open-runtime').click();
   const openedState = await waitForRuntimeAction(page, 'action-0001');
@@ -1925,7 +1931,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 5,
+    schemaVersion: 6,
     game: 'azur-promilia',
     type: 'workbench-project',
     selectedActionId: 'action-0002',
@@ -1949,6 +1955,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
     actorConfigs: [
       {
         characterId: 109001,
+        initialSp: 0.5,
         loadout: {
           kiboId: Number(kiboId),
           equipment: {
@@ -1987,6 +1994,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   await expect(kiboSelect).toHaveValue('');
   await expect(weaponSelect).toHaveValue('');
   await expect(soulessenceSelect).toHaveValue('');
+  await expect(initialSpInput).toHaveValue('');
 
   await page
     .getByTestId('workbench-import-project-file')
@@ -2023,6 +2031,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   await expect(kiboSelect).toHaveValue(kiboId);
   await expect(weaponSelect).toHaveValue(weaponId);
   await expect(soulessenceSelect).toHaveValue(soulessenceId);
+  await expect(initialSpInput).toHaveValue('0.5');
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '2 action'
   );
@@ -3332,6 +3341,7 @@ async function ensureActionContentEditResultSynced(
 async function readStoredWorkbenchDraft(page) {
   return await page.evaluate(() => {
     const rawDraft =
+      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v6') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v5') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v4') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v3') ??

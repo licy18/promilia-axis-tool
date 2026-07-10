@@ -125,6 +125,7 @@ function createSourceActorContext(actor, teamSlot) {
   if (!actor) {
     return null;
   }
+  const initialSp = numberOrNull(actor.initialSp);
   return {
     actorId: actor.id,
     characterId: numberOrNull(actor.characterId),
@@ -147,9 +148,11 @@ function createSourceActorContext(actor, teamSlot) {
     energy: {
       resource: 'sp',
       maxValue: numberOrNull(actor.stats?.maxSp),
-      initialValue: null,
+      initialValue: initialSp,
       currentValue: null,
-      status: 'initial-current-sp-baseline-pending',
+      status: Number.isFinite(initialSp)
+        ? 'initial-sp-project-configured-runtime-current-pending'
+        : 'initial-current-sp-baseline-pending',
     },
   };
 }

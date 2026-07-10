@@ -97,6 +97,10 @@ export function createActorFromCharacter(character, options = {}) {
     propertyId: character.property?.id ?? null,
     baseAttributes: character.property?.baseAttributes ?? [],
     attributePanel: character.attributePanel ?? null,
+    initialSp:
+      options.initialSp == null || options.initialSp === ''
+        ? null
+        : Number(options.initialSp),
     skillLevels: options.skillLevels ?? {},
     loadout: createLoadout({
       actorId,
@@ -540,8 +544,37 @@ function validateActors(actors, gameData, errors, warnings) {
         )
       );
     }
+    validateActorInitialSp(actor, path, errors);
     validateActorLoadout(actor, path, gameData, errors, warnings);
   });
+}
+
+function validateActorInitialSp(actor, path, errors) {
+  if (actor.initialSp == null || actor.initialSp === '') {
+    return;
+  }
+  if (!Number.isFinite(actor.initialSp) || actor.initialSp < 0) {
+    errors.push(
+      issue(
+        'actor.initialSp.invalid',
+        'Actor initialSp must be a non-negative finite number or null',
+        `${path}.initialSp`
+      )
+    );
+    return;
+  }
+  const maxSp = Number(
+    actor.baseAttributes?.find(attribute => attribute.key === 'MAXSP')?.value
+  );
+  if (Number.isFinite(maxSp) && actor.initialSp > maxSp) {
+    errors.push(
+      issue(
+        'actor.initialSp.outOfRange',
+        `Actor initialSp ${actor.initialSp} exceeds MAXSP ${maxSp}`,
+        `${path}.initialSp`
+      )
+    );
+  }
 }
 
 function validateActorLoadout(actor, path, gameData, errors, warnings) {

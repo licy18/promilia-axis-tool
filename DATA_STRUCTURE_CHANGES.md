@@ -24934,3 +24934,57 @@ P3-C 只建立 runtime 公式调用和替换边界。默认 adapter 不改变 HP
 - 独立 invocation 测试覆盖默认透传、非法输出回退和异常回退。
 - runtime projection 测试覆盖自定义 HP adapter 读取敌人变更前 HP、替换 runtime delta 并保持 generation delta 不变。
 - 日志、状态曲线、资源曲线和 summary 测试覆盖 invocation 引用与数量一致性。
+
+## 349. Workbench v6 角色初始 SP：Actor Initial SP
+
+### 349.1 项目字段
+
+Workbench actor config 新增可空字段：
+
+```text
+actorConfigs[]
+  characterId
+  level
+  initialSp = number | null
+  loadout
+```
+
+该值投影到：
+
+```text
+project.actors[].initialSp
+scenario.actors[].initialSp
+mechanismContext.sourceActor.energy.initialValue
+runtimeStateSnapshots.baseline.selfEnergyByActor[].baseline.initialValue
+```
+
+`initialSp = null` 表示项目没有确认初始 SP；系统不会自动写入 `0`。有限数值按角色 `baseAttributes[MAXSP]` 限制在 `0..MAXSP`，project schema 同时拒绝绕过 Workbench 规范化写入的非法值。
+
+### 349.2 机制上下文与 runtime
+
+已配置时，P3-A energy context 输出：
+
+```text
+initialValue = actor.initialSp
+currentValue = null
+status = initial-sp-project-configured-runtime-current-pending
+```
+
+`currentValue` 不在 generation context 中冒充运行时状态；实际逐命中当前值继续来自 P3-B `stateSnapshot.before/after.selfEnergy`。runtime baseline 状态为 `baseline-derived-from-scenario-actor-self-energy`，并按角色独立推进。
+
+### 349.3 Workbench 与持久化
+
+- `TeamLoadoutPanel` 为每个参战角色提供初始 SP 数值输入，使用 scenario actor 的 `stats.maxSp` 作为上限。
+- 修改进入 Workbench 历史，可撤销/重做。
+- `workbench-draft` / `workbench-project` 升级为 `schemaVersion = 6`。
+- 当前 localStorage key 为 `promilia-axis-tool:workbench-draft:v6`。
+- v1-v5 草稿、JSON 项目和分享快照缺少 `initialSp` 时迁移为 `null`。
+- 重置草稿同时清理 v6 以及 v1-v5 storage keys。
+
+### 349.4 验证
+
+- project factory 测试覆盖两名角色独立初始 SP 进入 project、scenario、机制上下文和 runtime baseline。
+- project schema 测试覆盖 `MAXSP` 越界拒绝。
+- draft storage 测试覆盖 v5 到 v6 迁移、JSON 与分享 round-trip。
+- Workbench 单元测试覆盖输入约束、撤销/重做、保存、恢复和重置。
+- Workbench E2E 覆盖真实浏览器编辑、JSON 导出、重置、导入恢复和继续模拟。

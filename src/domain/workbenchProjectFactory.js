@@ -276,6 +276,7 @@ export function normalizeWorkbenchActorConfigs(
             DEFAULT_WORKBENCH_ACTOR_LEVEL,
             DEFAULT_WORKBENCH_ACTOR_LEVEL
           ),
+      initialSp: normalizeWorkbenchInitialSp(source?.initialSp, character),
       loadout: normalizeWorkbenchLoadout(source?.loadout),
     };
   });
@@ -352,6 +353,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     return createActorFromCharacter(item, {
       actorId: `actor-${item.id}`,
       level: actorConfig?.level ?? DEFAULT_WORKBENCH_ACTOR_LEVEL,
+      initialSp: actorConfig?.initialSp ?? null,
       skillLevels: createSkillLevelsForCharacter(skillDrafts, item.id),
       loadout: actorConfig?.loadout,
     });
@@ -796,6 +798,24 @@ function normalizeCatalogId(value, catalog) {
     return null;
   }
   return catalog.some(item => Number(item.id) === id) ? id : null;
+}
+
+function normalizeWorkbenchInitialSp(value, character) {
+  if (value == null || value === '') {
+    return null;
+  }
+  const initialSp = Number(value);
+  if (!Number.isFinite(initialSp)) {
+    return null;
+  }
+  const maxSp = Number(
+    character?.property?.baseAttributes?.find(item => item.key === 'MAXSP')
+      ?.value
+  );
+  const normalized = Number.isFinite(maxSp)
+    ? Math.min(maxSp, Math.max(0, initialSp))
+    : Math.max(0, initialSp);
+  return Number(normalized.toFixed(6));
 }
 
 function normalizeEquipmentId(value, slotKey) {

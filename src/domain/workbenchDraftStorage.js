@@ -12,10 +12,11 @@ import {
   normalizeWorkbenchTeamSlots,
 } from './workbenchProjectFactory';
 
-export const WORKBENCH_DRAFT_SCHEMA_VERSION = 5;
+export const WORKBENCH_DRAFT_SCHEMA_VERSION = 6;
 export const WORKBENCH_DRAFT_STORAGE_KEY =
-  'promilia-axis-tool:workbench-draft:v5';
+  'promilia-axis-tool:workbench-draft:v6';
 export const LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS = Object.freeze([
+  'promilia-axis-tool:workbench-draft:v5',
   'promilia-axis-tool:workbench-draft:v4',
   'promilia-axis-tool:workbench-draft:v3',
   'promilia-axis-tool:workbench-draft:v2',

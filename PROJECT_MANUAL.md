@@ -524,6 +524,21 @@ P0 验证结论：当前状态可以作为“Workbench 主流程 demo”给用�
 - `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
 - `npm run test:e2e:workbench-flow`：通过，25 条 Workbench 浏览器主流程。
 
+### P3-D 角色独立初始 SP 配置闭环（2026-07-10）
+
+已完成能力：
+
+- Workbench 每个队伍角色都可以独立配置初始 SP；未配置时继续保持 pending，不推断蓝色星原默认值。
+- `actorConfigs[].initialSp` 进入 project actor、compiled scenario、P3-A 机制上下文和 P3-B runtime baseline；配置后运行时可输出角色 SP 的绝对初始值与最终值。
+- 初始 SP 按角色实际 `MAXSP` 规范化和校验；手写项目中的负值、非有限值或越界值会被 project schema 拒绝。
+- 草稿升级为 v6；初始 SP 随草稿、JSON 项目、分享链接、撤销/重做、重置和导入恢复，并兼容迁移 v1-v5。
+
+已完成验证：
+
+- `npm run test -- --run`：通过，42 个测试文件、320 条测试，覆盖规范化、schema 校验、project/scenario/runtime 投影、v5 迁移、分享和 Workbench 历史。
+- `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
+- `npm run test:e2e:workbench-flow`：通过，25 条 Workbench 浏览器主流程；JSON 项目路径覆盖初始 SP 编辑、导出、重置、导入恢复和继续模拟。
+
 ### 下一阶段优先级
 
 P1：核心导入/导出与分享闭环已完成。
@@ -541,8 +556,9 @@ P3：运行时层真实机制适配。
 - P3-A 已完成：标准 Hit 已接入统一来源、目标、所有权与时序上下文，calculator adapter 和 runtime 使用同一合同。
 - P3-B 已完成：运行时按 delta 顺序输出三值变更前后状态，日志、曲线和 summary 已共享同一快照合同。
 - P3-C 已完成：runtime calculator 已具备状态感知调用合同、默认透传、可替换 adapter 与安全回退，现有结果保持不变。
-- 下一阶段 P3-D：完成角色独立初始 SP 项目配置；每个队伍槽位可设置初始 SP，并随草稿、JSON、分享、撤销/重做进入项目闭环，runtime 快照据此输出绝对能量前后值。
-- P3-D 不推断蓝色星原默认初始 SP；未配置时继续保持 pending，配置值按角色 `MAXSP` 校验。
+- P3-D 已完成：每名角色的初始 SP 已进入项目、持久化和 runtime 绝对状态闭环，未配置状态仍保持 pending。
+- 下一阶段转入 UI 主流程能力块：完成三值状态详情可见闭环，让用户从曲线点或日志稳定查看敌人 HP、韧性和所属角色 SP 的 `before -> delta -> after`，并能返回对应动作继续修改。
+- 下一阶段复用 P3-B/P3-C 现有 snapshot 与 invocation，不新增独立提示标签或局部状态文案。
 - calculator 保持可替换；不追测试期最终倍率和平衡。
 - 优先跑通 HP、韧性、自身能量的来源、时序和作用对象。
 

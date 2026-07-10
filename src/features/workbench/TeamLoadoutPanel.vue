@@ -60,6 +60,26 @@
       </summary>
 
       <div class="loadout-controls">
+        <label class="energy-control">
+          <span>
+            初始 SP
+            <small v-if="Number.isFinite(actor.stats?.maxSp)">
+              / {{ formatSpValue(actor.stats.maxSp) }}
+            </small>
+          </span>
+          <input
+            type="number"
+            min="0"
+            :max="actor.stats?.maxSp ?? undefined"
+            :step="energyStep(actor)"
+            :data-character-id="actor.characterId"
+            data-testid="workbench-actor-initial-sp-input"
+            :value="actor.initialSp ?? ''"
+            placeholder="未配置"
+            @change="emitInitialSpPatch(actor, $event.target.value)"
+          />
+        </label>
+
         <label>
           <span>奇波</span>
           <select
@@ -193,6 +213,14 @@ function emitLoadoutPatch(actor, key, value) {
   });
 }
 
+function emitInitialSpPatch(actor, value) {
+  const normalizedValue = String(value ?? '').trim();
+  emit('update-actor-config', {
+    characterId: Number(actor.characterId),
+    initialSp: normalizedValue === '' ? null : Number(normalizedValue),
+  });
+}
+
 function emitEquipmentPatch(actor, slotKey, value) {
   emit('update-actor-config', {
     characterId: Number(actor.characterId),
@@ -207,6 +235,15 @@ function emitEquipmentPatch(actor, slotKey, value) {
 function normalizeOptionalId(value) {
   const id = Number(value);
   return Number.isFinite(id) && id > 0 ? id : null;
+}
+
+function energyStep(actor) {
+  return Number(actor.stats?.maxSp) <= 1 ? 0.01 : 1;
+}
+
+function formatSpValue(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? String(number) : '';
 }
 
 function formatKiboOption(kibo) {
@@ -343,7 +380,13 @@ label span {
   font-size: 11px;
 }
 
-select {
+label span small {
+  color: #8dd8c9;
+  font-size: inherit;
+}
+
+select,
+input {
   width: 100%;
   min-width: 0;
   padding: 7px 8px;
@@ -355,7 +398,8 @@ select {
   font-size: 12px;
 }
 
-select:focus {
+select:focus,
+input:focus {
   outline: none;
   border-color: #79c7b9;
   box-shadow: 0 0 0 2px rgba(121, 199, 185, 0.14);

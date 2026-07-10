@@ -9,6 +9,7 @@ import {
 } from '../../domain/workbenchProjectFactory';
 import { validateProject } from '../../domain/projectSchema';
 import { compileProject } from '../../simulation/compiler/compileProject';
+import { simulateScenario } from '../../simulation/engine/simulateScenario';
 
 describe('workbench project actor configuration', () => {
   it('projects real AzPr loadout selections into actors and project loadouts', () => {
@@ -86,6 +87,78 @@ describe('workbench project actor configuration', () => {
       },
       soulessenceId: null,
     });
+  });
+
+  it('projects independent initial SP into scenario and runtime baselines', () => {
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      actorConfigs: [
+        {
+          characterId: DEFAULT_WORKBENCH_SELECTION.characterId,
+          initialSp: 0.25,
+        },
+        {
+          characterId: DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId,
+          initialSp: 0.75,
+        },
+      ],
+    });
+    const scenario = compileProject(project, getWorkbenchGameData());
+    const simulation = simulateScenario(scenario);
+
+    expect(project.actors.map(actor => actor.initialSp)).toEqual([0.25, 0.75]);
+    expect(scenario.actors.map(actor => actor.initialSp)).toEqual([0.25, 0.75]);
+    expect(
+      simulation.runtimeOutputs.stateSnapshots.summary.selfEnergyFinalByActor
+    ).toEqual([
+      expect.objectContaining({
+        actorId: `actor-${DEFAULT_WORKBENCH_SELECTION.characterId}`,
+        initialValue: 0.25,
+        currentValue: 0.25,
+        baselineStatus: 'baseline-derived-from-scenario-actor-self-energy',
+      }),
+      expect.objectContaining({
+        actorId: `actor-${DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId}`,
+        initialValue: 0.75,
+        currentValue: 0.75,
+        baselineStatus: 'baseline-derived-from-scenario-actor-self-energy',
+      }),
+    ]);
+    expect(
+      simulation.threeValueGenerationLayer.deltas.find(delta => delta.applied)
+        ?.mechanismContext?.sourceActor?.energy
+    ).toMatchObject({
+      initialValue: 0.25,
+      currentValue: null,
+      status: 'initial-sp-project-configured-runtime-current-pending',
+    });
+    expect(simulation.threeValueRuntimeProjection.summary).toMatchObject({
+      selfEnergyBaselineReadyActorCount: 2,
+    });
+  });
+
+  it('normalizes initial SP by MAXSP and rejects out-of-range raw projects', () => {
+    const normalized = normalizeWorkbenchActorConfigs(
+      [
+        {
+          characterId: DEFAULT_WORKBENCH_SELECTION.characterId,
+          initialSp: 9,
+        },
+        {
+          characterId: DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId,
+          initialSp: 'invalid',
+        },
+      ],
+      DEFAULT_WORKBENCH_SELECTION
+    );
+    expect(normalized.map(config => config.initialSp)).toEqual([1, null]);
+
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION);
+    project.actors[0].initialSp = 2;
+    const validation = validateProject(project, getWorkbenchGameData());
+    expect(validation.valid).toBe(false);
+    expect(validation.errors.map(error => error.code)).toContain(
+      'actor.initialSp.outOfRange'
+    );
   });
 
   it('projects stable team slots into the project and compiled scenario', () => {

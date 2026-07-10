@@ -33,6 +33,7 @@ describe('workbench draft storage project files', () => {
             {
               characterId: 109001,
               level: 80,
+              initialSp: 0.25,
               loadout: {
                 kiboId: 500001,
                 equipment: {
@@ -101,6 +102,7 @@ describe('workbench draft storage project files', () => {
       actorConfigs: [
         {
           characterId: 109001,
+          initialSp: 0.25,
           loadout: {
             kiboId: 500001,
             equipment: {
@@ -328,6 +330,43 @@ describe('workbench draft storage project files', () => {
     });
   });
 
+  it('migrates v5 project files to v6 nullable initial SP configs', () => {
+    const v5Project = createWorkbenchProjectFileSnapshot({
+      selection: {
+        characterId: 109001,
+        secondaryCharacterId: 101003,
+        skillId: 10900101,
+        enemyId: 300032,
+      },
+      actorConfigs: [
+        { characterId: 109001, initialSp: 0.4 },
+        { characterId: 101003, initialSp: 0.6 },
+      ],
+      actionDrafts: [
+        {
+          id: 'action-0001',
+          type: 'skill',
+          skillId: 10900101,
+          actorCharacterId: 109001,
+          startMs: 0,
+          durationMs: 1000,
+          level: 1,
+        },
+      ],
+      selectedActionId: 'action-0001',
+    });
+    v5Project.schemaVersion = 5;
+    v5Project.actorConfigs.forEach(config => delete config.initialSp);
+
+    expect(parseWorkbenchProjectFile(v5Project)).toMatchObject({
+      schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
+      actorConfigs: [
+        { characterId: 109001, initialSp: null },
+        { characterId: 101003, initialSp: null },
+      ],
+    });
+  });
+
   it('loads legacy v1 local storage and clears all storage generations', () => {
     const storage = new Map();
     const storageAdapter = {
@@ -422,6 +461,10 @@ describe('workbench draft storage project files', () => {
             WATER_DEFENSE: 0.12,
           },
         },
+        actorConfigs: [
+          { characterId: 109001, initialSp: 0.2 },
+          { characterId: 101003, initialSp: 0.8 },
+        ],
         actionDrafts: [
           {
             id: 'action-0001',
@@ -465,6 +508,10 @@ describe('workbench draft storage project files', () => {
           WATER_DEFENSE: 0.12,
         },
       },
+      actorConfigs: [
+        { characterId: 109001, initialSp: 0.2 },
+        { characterId: 101003, initialSp: 0.8 },
+      ],
     });
   });
 

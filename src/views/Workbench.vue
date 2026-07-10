@@ -1051,7 +1051,8 @@ function updateEnemyConfig(patch) {
   markDraftDirty();
 }
 
-function updateActorConfig({ characterId, loadout = {} } = {}) {
+function updateActorConfig(patch = {}) {
+  const { characterId, loadout = {} } = patch;
   const activeConfig = actorConfigs.value.find(
     config => Number(config.characterId) === Number(characterId)
   );
@@ -1061,6 +1062,7 @@ function updateActorConfig({ characterId, loadout = {} } = {}) {
 
   clearSegmentSplitPreview();
   recordWorkbenchHistorySnapshot();
+  const hasInitialSp = Object.prototype.hasOwnProperty.call(patch, 'initialSp');
   actorConfigs.value = normalizeWorkbenchActorConfigs(
     actorConfigs.value.map(config => {
       if (Number(config.characterId) !== Number(characterId)) {
@@ -1068,6 +1070,7 @@ function updateActorConfig({ characterId, loadout = {} } = {}) {
       }
       return {
         ...config,
+        ...(hasInitialSp ? { initialSp: patch.initialSp } : {}),
         loadout: {
           ...config.loadout,
           ...loadout,

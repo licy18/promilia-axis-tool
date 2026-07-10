@@ -16,6 +16,7 @@ import AnalysisPanel from '../../features/workbench/AnalysisPanel.vue';
 import EventLogPanel from '../../features/workbench/EventLogPanel.vue';
 import ResourceMonitorPanel from '../../features/workbench/ResourceMonitorPanel.vue';
 import RuntimeSelectedDetailPanel from '../../features/workbench/RuntimeSelectedDetailPanel.vue';
+import TeamLoadoutPanel from '../../features/workbench/TeamLoadoutPanel.vue';
 import PropertiesPanel from '../../features/workbench/PropertiesPanel.vue';
 import TimelineGridPreview from '../../features/workbench/TimelineGridPreview.vue';
 import WorkbenchFlowPanel from '../../features/workbench/WorkbenchFlowPanel.vue';
@@ -9172,6 +9173,32 @@ describe('Workbench view', () => {
         '[data-testid="workbench-actor-soulessence-select"][data-character-id="109001"]'
       )
       .setValue('10001');
+    const teamLoadoutPanel = wrapper.findComponent(TeamLoadoutPanel);
+    const initialSpInput = teamLoadoutPanel.find(
+      '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
+    );
+    expect(initialSpInput.attributes()).toMatchObject({
+      min: '0',
+      max: '1',
+      step: '0.01',
+    });
+    teamLoadoutPanel.vm.$emit('update-actor-config', {
+      characterId: 109001,
+      initialSp: 0.5,
+    });
+    await nextTick();
+    await wrapper.find('[data-testid="workbench-undo-edit"]').trigger('click');
+    expect(
+      wrapper.find(
+        '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
+      ).element.value
+    ).toBe('');
+    await wrapper.find('[data-testid="workbench-redo-edit"]').trigger('click');
+    expect(
+      wrapper.find(
+        '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
+      ).element.value
+    ).toBe('0.5');
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
 
     const rawDraft = window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY);
@@ -9188,6 +9215,7 @@ describe('Workbench view', () => {
       actorConfigs: [
         {
           characterId: 109001,
+          initialSp: 0.5,
           loadout: {
             kiboId: 500001,
             equipment: {
@@ -9236,6 +9264,11 @@ describe('Workbench view', () => {
     );
     expect(
       restored.find(
+        '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
+      ).element.value
+    ).toBe('0.5');
+    expect(
+      restored.find(
         '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
       ).element.value
     ).toBe('500001');
@@ -9270,6 +9303,11 @@ describe('Workbench view', () => {
     expect(
       restored.find(
         '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
+      ).element.value
+    ).toBe('');
+    expect(
+      restored.find(
+        '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
       ).element.value
     ).toBe('');
   });
