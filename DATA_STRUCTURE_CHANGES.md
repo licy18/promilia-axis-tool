@@ -25527,3 +25527,75 @@ Runtime projection 保留同一 `actionExecutionPlan` 引用，summary、output 
 `ScenarioHeader` 在 `skippedActionCount > 0` 时显示 `executedActionCount/actionCount`，没有跳过动作时保持原总数显示。动作库和时间轴继续使用 P5-B readiness；分析结果、运行导航、曲线和日志只展示执行计划中实际运行的动作。修正规则会重建整个计划并恢复对应结果。
 
 下一阶段 P6-A 转向 PNG 项目快照与元数据回导，不继续增加规则状态碎片；执行计划后续扩展只在确认新的蓝色星原规则时增加 adapter 或规则来源。
+
+## 358. PNG 项目快照与元数据合同
+
+### 358.1 PNG tEXt chunk
+
+新增通用 `pngMetadata` 工具，接受 `Blob / ArrayBuffer / Uint8Array`，写入标准 PNG `tEXt` chunk：
+
+~~~text
+PNG signature
+IHDR / IDAT / other chunks
+tEXt
+  key = PromiliaAxisToolData
+  separator = 0x00
+  value = Latin-1-safe JSON envelope
+IEND
+~~~
+
+读取和写入均验证 PNG 签名、chunk 长度边界、IEND 位置和每个 chunk 的 CRC32。元数据在 IEND 前插入，不修改已有图像 chunk。`isPngSource()` 允许导入入口在文件名和 MIME 不可靠时通过签名识别。
+
+### 358.2 WorkbenchProjectPngMetadata
+
+~~~text
+WorkbenchProjectPngMetadata
+  schemaVersion = 1
+  game = azur-promilia
+  type = workbench-project-png
+  exportedAt
+  projectSchemaVersion
+  actionCount
+  payloadEncoding = base64url-json
+  payload
+~~~
+
+`payload` 由现有 `createWorkbenchProjectShareCode()` 生成，内部仍是 Workbench v7 project snapshot。PNG 反导入通过 `parseWorkbenchProjectShareCode()` 回到同一规范化入口，不复制角色、敌人、动作、效果或培养配置 schema。
+
+文件命名为：
+
+~~~text
+promilia-workbench-YYYY-MM-DD-{actionCount}actions.png
+~~~
+
+### 358.3 Workbench 快照渲染
+
+新增 `@zumer/snapdom` 作为运行依赖，与 Endaxis 的图片导出技术路线一致。导出时临时渲染固定 1600px 的只读快照面，包含项目摘要和现有 `TimelineGridPreview`；交互控件在快照模式隐藏，原 Workbench DOM 和选中状态不被改写。
+
+生成顺序为：
+
+~~~text
+Workbench draft state
+  -> WorkbenchProjectPngMetadata
+Timeline export surface
+  -> snapdom PNG Blob
+PNG Blob + metadata
+  -> CRC-valid tEXt chunk
+  -> downloadable PNG project
+~~~
+
+### 358.4 导入边界
+
+统一文件入口按 MIME、扩展名或 PNG 签名识别图片。PNG 解析成功后调用现有 `applyImportedProjectDraft()`，因此会：
+
+~~~text
+normalize selection/team/actor/enemy/action/effect
+clear runtime selection and transient filters
+clear undo/redo history
+save normalized draft
+rebuild project/compiler/simulation/runtime
+~~~
+
+无元数据、错误 envelope、损坏 share payload 或 CRC 不匹配时返回 `null`，不会应用部分状态。Workbench draft schema 保持 v7。
+
+下一阶段 P7-A 回到真实机制适配：优先让标准 Hit 的韧性和角色能量 delta 消费可追溯的 AzPr 本地数据或 runtime sample，不继续扩展导出层。

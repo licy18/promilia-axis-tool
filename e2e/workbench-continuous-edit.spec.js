@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { Buffer } from 'node:buffer';
 import { readFile } from 'node:fs/promises';
 
 test('keeps setup, edit return, and result selection synced', async ({
@@ -2083,6 +2084,89 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
     selected: false,
   });
   await expectCurveAndLogSelection(page, importedRuntimeState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
+test('exports a visible PNG project and restores it from embedded metadata @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/workbench');
+  await page.getByTestId('workbench-add-action').click();
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+  await page.getByTestId('workbench-enemy-level-input').fill('93');
+  const initialSpInput = page
+    .locator(
+      '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
+    )
+    .first();
+  await initialSpInput.fill('0.75');
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project-png').click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toMatch(
+    /promilia-workbench-.*-2actions\.png$/
+  );
+  const downloadPath = await download.path();
+  expect(downloadPath).toBeTruthy();
+  const pngBytes = await readFile(downloadPath);
+  expect([...pngBytes.subarray(0, 8)]).toEqual([
+    137, 80, 78, 71, 13, 10, 26, 10,
+  ]);
+  expect(pngBytes.readUInt32BE(16)).toBeGreaterThanOrEqual(1200);
+  expect(pngBytes.readUInt32BE(20)).toBeGreaterThanOrEqual(600);
+  expect(pngBytes.includes(Buffer.from('PromiliaAxisToolData'))).toBe(true);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已导出 PNG 项目'
+  );
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '1 action'
+  );
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '80'
+  );
+  await expect(initialSpInput).toHaveValue('');
+
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(downloadPath);
+
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已从 PNG 导入项目'
+  );
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '93'
+  );
+  await expect(initialSpInput).toHaveValue('0.75');
+  const importedState = await readWorkbenchState(page);
+  expect(importedState).toMatchObject({
+    phase: 'action-edit',
+    actionId: 'action-0002',
+    selectedActionListId: 'action-0002',
+    selectedTimelineActionId: 'action-0002',
+  });
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  const runtimeState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(runtimeState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '2',
+    navigationIndex: '1',
+    selected: false,
+  });
+  await expectCurveAndLogSelection(page, runtimeState.statePointId);
   await expectRuntimeOutputConsistent(page);
 
   expectNoUnexpectedBrowserIssues(browserIssues);

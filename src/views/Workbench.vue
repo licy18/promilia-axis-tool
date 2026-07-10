@@ -61,12 +61,23 @@
           </button>
           <button
             class="nav-button secondary"
+            :data-exporting="pngExporting ? 'true' : 'false'"
+            data-testid="workbench-export-project-png"
+            type="button"
+            :disabled="pngExporting"
+            @click="exportProjectPng"
+          >
+            <Picture class="button-icon" />
+            <span>{{ pngExporting ? '正在导出' : '导出 PNG' }}</span>
+          </button>
+          <button
+            class="nav-button secondary"
             data-testid="workbench-import-project"
             type="button"
             @click="openProjectImport"
           >
             <Upload class="button-icon" />
-            <span>导入 JSON</span>
+            <span>导入项目</span>
           </button>
           <button
             class="nav-button secondary"
@@ -83,7 +94,7 @@
             class="project-import-input"
             data-testid="workbench-import-project-file"
             type="file"
-            accept=".json,.promilia-workbench.json,application/json"
+            accept=".json,.promilia-workbench.json,.png,application/json,image/png"
             @change="importProjectFile"
           />
           <button
@@ -538,11 +549,61 @@
         </div>
       </div>
     </div>
+
+    <section
+      v-if="pngExporting"
+      ref="pngExportSurface"
+      class="png-export-surface"
+      aria-hidden="true"
+      data-testid="workbench-png-export-surface"
+    >
+      <header class="png-export-header">
+        <div>
+          <span>蓝色星原排轴</span>
+          <h2>{{ project.name }}</h2>
+        </div>
+        <dl>
+          <div>
+            <dt>时长</dt>
+            <dd>{{ scenario.time.durationMs / 1000 }}s</dd>
+          </div>
+          <div>
+            <dt>动作</dt>
+            <dd>
+              {{ simulationResult.scenario.executedActionCount }}/{{
+                simulationResult.scenario.actionCount
+              }}
+            </dd>
+          </div>
+          <div>
+            <dt>敌人</dt>
+            <dd>{{ scenario.enemy.name }}</dd>
+          </div>
+          <div>
+            <dt>导出</dt>
+            <dd>{{ pngExportedAt.slice(0, 10) }}</dd>
+          </div>
+        </dl>
+      </header>
+      <TimelineGridPreview
+        class="png-export-timeline"
+        :actors="scenario.actors"
+        :actions="scenario.actions"
+        :damage-timeline="simulationResult.damageTimeline"
+        :candidate-value-chart="simulationResult.candidateValueSeries.chart"
+        :three-value-curve-framework="simulationResult.threeValueCurveFramework"
+        :duration-ms="scenario.time.durationMs"
+        :selected-action-id="selectedActionId"
+        :timeline-diagnostics="timelineDiagnostics"
+        :action-readiness-timeline="simulationResult.actionReadinessTimeline"
+      />
+    </section>
   </main>
 </template>
 
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
+import { snapdom } from '@zumer/snapdom';
 import {
   Aim,
   ArrowLeft,
@@ -550,6 +611,7 @@ import {
   Download,
   EditPen,
   Link as LinkIcon,
+  Picture,
   Refresh,
   TrendCharts,
   Upload,
@@ -629,7 +691,14 @@ import {
   saveWorkbenchDraft,
   WORKBENCH_PROJECT_SHARE_PARAM,
 } from '../domain/workbenchDraftStorage';
+import {
+  createWorkbenchProjectPngFileName,
+  createWorkbenchProjectPngMetadata,
+  embedWorkbenchProjectInPng,
+  parseWorkbenchProjectPng,
+} from '../domain/workbenchPngProject';
 import { frameToMs } from '../domain/timebase';
+import { isPngSource } from '../utils/pngMetadata';
 import { compileProject } from '../simulation/compiler/compileProject';
 import { simulateScenario } from '../simulation/engine/simulateScenario';
 
@@ -671,6 +740,9 @@ const undoHistoryStack = ref([]);
 const redoHistoryStack = ref([]);
 const workbenchRoot = ref(null);
 const projectImportInput = ref(null);
+const pngExportSurface = ref(null);
+const pngExporting = ref(false);
+const pngExportedAt = ref('');
 const actionEditSource = ref(createEmptyWorkbenchActionEditSource());
 const actionEditFocus = ref(createEmptyWorkbenchActionEditFocus());
 const workbenchFlowDispatchState = ref(createEmptyWorkbenchFlowDispatchState());
@@ -1723,15 +1795,61 @@ function exportProjectFile() {
   const blob = new Blob([JSON.stringify(snapshot, null, 2)], {
     type: 'application/json',
   });
+  downloadWorkbenchBlob(blob, createWorkbenchProjectFileName(snapshot));
+  draftStatus.value = '已导出项目';
+}
+
+async function exportProjectPng() {
+  if (
+    pngExporting.value ||
+    typeof document === 'undefined' ||
+    typeof Blob === 'undefined'
+  ) {
+    if (!pngExporting.value) {
+      draftStatus.value = '导出不可用';
+    }
+    return;
+  }
+
+  pngExporting.value = true;
+  pngExportedAt.value = new Date().toISOString();
+  draftStatus.value = '正在导出 PNG';
+  try {
+    await nextTick();
+    await document.fonts?.ready;
+    const surface = pngExportSurface.value;
+    if (!surface) {
+      throw new Error('PNG export surface is unavailable');
+    }
+    const capture = await snapdom(surface, {
+      scale: 1,
+      width: Math.max(1200, Math.ceil(surface.scrollWidth)),
+      height: Math.max(600, Math.ceil(surface.scrollHeight)),
+    });
+    const captureBlob = await capture.toBlob({ type: 'png', dpr: 1 });
+    const metadata = createWorkbenchProjectPngMetadata(
+      getWorkbenchDraftState(),
+      pngExportedAt.value
+    );
+    const pngBlob = await embedWorkbenchProjectInPng(captureBlob, metadata);
+    downloadWorkbenchBlob(pngBlob, createWorkbenchProjectPngFileName(metadata));
+    draftStatus.value = '已导出 PNG 项目';
+  } catch {
+    draftStatus.value = 'PNG 导出失败';
+  } finally {
+    pngExporting.value = false;
+  }
+}
+
+function downloadWorkbenchBlob(blob, fileName) {
   const objectUrl = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = objectUrl;
-  link.download = createWorkbenchProjectFileName(snapshot);
+  link.download = fileName;
   document.body.appendChild(link);
   link.click();
   link.remove();
   window.setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
-  draftStatus.value = '已导出项目';
 }
 
 async function copyProjectShareLink() {
@@ -1834,13 +1952,22 @@ async function importProjectFile(event) {
   }
 
   try {
-    const draft = parseWorkbenchProjectFile(await file.text());
+    const isPng =
+      file.type === 'image/png' ||
+      String(file.name).toLowerCase().endsWith('.png') ||
+      (await isPngSource(file));
+    const draft = isPng
+      ? await parseWorkbenchProjectPng(file)
+      : parseWorkbenchProjectFile(await file.text());
     if (!draft) {
-      draftStatus.value = '导入失败';
+      draftStatus.value = isPng ? 'PNG 中没有有效项目' : '导入失败';
       return;
     }
 
-    applyImportedProjectDraft(draft);
+    applyImportedProjectDraft(
+      draft,
+      isPng ? '已从 PNG 导入项目' : '已导入项目'
+    );
   } catch {
     draftStatus.value = '导入失败';
   } finally {
@@ -3533,6 +3660,72 @@ function getLocalStorage() {
   display: grid;
   align-content: start;
   gap: 14px;
+}
+
+.png-export-surface {
+  position: fixed;
+  top: 0;
+  left: -20000px;
+  z-index: -1000;
+  width: 1600px;
+  padding: 24px;
+  pointer-events: none;
+  color: #ffffff;
+  background: #14181d;
+}
+
+.png-export-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 0 4px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.png-export-header span,
+.png-export-header dt {
+  color: #79c7b9;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.png-export-header h2 {
+  margin: 5px 0 0;
+  font-size: 24px;
+  line-height: 1.25;
+}
+
+.png-export-header dl {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(90px, auto));
+  gap: 18px;
+  margin: 0;
+}
+
+.png-export-header dl div {
+  display: grid;
+  gap: 4px;
+}
+
+.png-export-header dd {
+  margin: 0;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.png-export-timeline {
+  margin-top: 20px;
+}
+
+.png-export-surface :deep(.timeline-tools),
+.png-export-surface :deep(.candidate-toggle-group),
+.png-export-surface :deep(.candidate-scope-group),
+.png-export-surface :deep(.action-result-edit-button),
+.png-export-surface :deep(.timeline-action-result-edit-button),
+.png-export-surface :deep(.resize-handle) {
+  display: none;
 }
 
 @media (max-width: 1320px) {
