@@ -286,6 +286,12 @@ export function formatThreeValueCalculatorKey(calculatorKey, trackKey) {
 }
 
 export function formatThreeValueCalculationKind(kind, trackKey) {
+  if (kind === 'recover-sp-runtime-sample-confirmed') {
+    return '能量实测';
+  }
+  if (kind === 'toughness-runtime-sample-confirmed') {
+    return '削韧实测';
+  }
   if (kind === 'raw-result-preview') {
     return 'HP预览';
   }
@@ -325,6 +331,9 @@ export function formatThreeValueCalculationKind(kind, trackKey) {
 export function formatThreeValueCalculationStatus(status) {
   if (!status) {
     return '待确认';
+  }
+  if (String(status).includes('runtime-final-confirmed')) {
+    return '采样已应用';
   }
   if (String(status).includes('raw-hp-projection')) {
     return '公式未确认';
@@ -377,6 +386,9 @@ function isThreeValueCalculatorOutputReplaceable(status) {
 }
 
 function createThreeValueCalculatorUnresolved(trackKey, status) {
+  if (String(status ?? '').includes('runtime-final-confirmed')) {
+    return [];
+  }
   const common = ['final-azpr-formula-confirmation'];
   if (trackKey === 'enemyHpDamage') {
     return uniqueStrings([

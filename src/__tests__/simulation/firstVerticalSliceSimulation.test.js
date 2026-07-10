@@ -13,6 +13,7 @@ import {
   runSimulation,
 } from '../../simulation';
 import { createRecoverSpRuntimeSampleFixture } from '../../simulation/fixtures/recoverSpRuntimeSampleFixture';
+import { createToughnessRuntimeSampleFixture } from '../../simulation/fixtures/toughnessRuntimeSampleFixture';
 
 describe('first vertical slice simulation', () => {
   it('compiles the real-data fixture into a scenario', () => {
@@ -3178,54 +3179,82 @@ describe('first vertical slice simulation', () => {
     });
     expect(result.threeValueGenerationLayer.summary).toMatchObject({
       deltaCount: 17,
-      appliedDeltaCount: 1,
+      appliedDeltaCount: 2,
       candidateDeltaCount: 15,
-      sampledDeltaCount: 1,
+      sampledDeltaCount: 0,
       placeholderDeltaCount: 0,
-      replaceableDeltaCount: 16,
+      replaceableDeltaCount: 15,
       applied: false,
     });
     expect(result.threeValueRuntimeProjection.summary).toMatchObject({
       inputDeltaCount: 17,
-      appliedDeltaCount: 1,
+      appliedDeltaCount: 2,
       enemyHpDelta: 12461,
-      selfEnergyDelta: 0,
-      selfEnergyPointCount: 0,
-      simLogCount: 1,
-      calculatorCount: 1,
-      calculatorKeys: ['azpr-hp-delta-calculator'],
+      selfEnergyDelta: 0.3375,
+      selfEnergyPointCount: 1,
+      simLogCount: 2,
+      calculatorCount: 2,
+      calculatorKeys: [
+        'azpr-hp-delta-calculator',
+        'azpr-self-energy-delta-calculator',
+      ],
       calculatorReplaceableDeltaCount: 1,
       applied: true,
     });
-    const sampledDelta = result.threeValueGenerationLayer.deltas.find(
-      delta => delta.layerKey === 'sampled'
-    );
-    expect(sampledDelta).toMatchObject({
+    const appliedRuntimeSampleDelta =
+      result.threeValueGenerationLayer.deltas.find(
+        delta => delta.sourceKind === 'azpr-validated-runtime-mechanism-sample'
+      );
+    expect(appliedRuntimeSampleDelta).toMatchObject({
       actionId: 'action-0001',
       hitKey: 'event-recover-sp-applied-4',
       trackKey: 'selfEnergyChange',
-      layerKey: 'sampled',
-      sourceKind: 'runtime-recover-sp-applied-sample',
-      confidence: 'sampled',
+      layerKey: 'applied',
+      sourceKind: 'azpr-validated-runtime-mechanism-sample',
+      confidence: 'runtime-sample-validated',
       frameIndex: 12,
       energyDelta: 0.3375,
       hpDelta: null,
       toughnessDelta: null,
       calculatorKey: 'azpr-self-energy-delta-calculator',
-      calculationKind: 'recover-sp-runtime-sample',
-      calculationStatus: 'recover-sp-runtime-sample-unapplied',
-      calculationReplaceable: true,
+      calculationKind: 'recover-sp-runtime-sample-confirmed',
+      calculationStatus: 'runtime-final-confirmed-recover-sp-sample',
+      calculationReplaceable: false,
+      applied: true,
+      replaceable: false,
       calculator: {
         outputField: 'energyDelta',
         delta: 0.3375,
-        confidence: 'sampled',
-        replaceable: true,
+        confidence: 'runtime-sample-validated',
+        replaceable: false,
+        unresolved: [],
       },
       sourceIds: {
         elementConfigIds: [109001081],
         captureSessionIds: ['fixture-recover-sp-109001081-v1'],
       },
     });
+    expect(
+      result.threeValueRuntimeProjection.selfEnergyCurveByActor[0]
+    ).toMatchObject({
+      actorId: 'actor-109001',
+      delta: 0.3375,
+      pointCount: 1,
+      points: [
+        expect.objectContaining({
+          actionId: 'action-0001',
+          frameIndex: 12,
+          energyDelta: 0.3375,
+          calculationStatus: 'runtime-final-confirmed-recover-sp-sample',
+          applied: true,
+        }),
+      ],
+    });
+    expect(
+      result.threeValueGenerationLayer.deltas.find(
+        delta => delta.layerKey === 'sampled'
+      )
+    ).toBeUndefined();
     expect(matchedSample.runtimeSampleMatch.validationResults).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -3256,6 +3285,83 @@ describe('first vertical slice simulation', () => {
         validationStatus: 'offline-runtime-sample-missing',
         matchedEventCount: 0,
       }),
+    });
+  });
+
+  it('promotes a complete toughness runtime sample into the applied runtime curve', () => {
+    const project = createFirstVerticalSliceProject();
+    project.metadata = {
+      ...project.metadata,
+      runtimeSampleCaptures: [createToughnessRuntimeSampleFixture()],
+    };
+
+    const result = runSimulation(project, getFirstVerticalSliceGameData());
+    const toughnessDelta = result.threeValueGenerationLayer.deltas.find(
+      delta =>
+        delta.trackKey === 'enemyToughnessDamage' && delta.applied === true
+    );
+
+    expect(toughnessDelta).toMatchObject({
+      actionId: 'action-0001',
+      trackKey: 'enemyToughnessDamage',
+      layerKey: 'applied',
+      sourceKind: 'azpr-validated-runtime-mechanism-sample',
+      frameIndex: 12,
+      toughnessDelta: 70,
+      calculationKind: 'toughness-runtime-sample-confirmed',
+      calculationStatus: 'runtime-final-confirmed-toughness-sample',
+      calculationReplaceable: false,
+      applied: true,
+      replaceable: false,
+    });
+    expect(result.threeValueRuntimeProjection.summary).toMatchObject({
+      appliedDeltaCount: 2,
+      enemyHpDelta: 12461,
+      enemyToughnessDelta: 70,
+      enemyStatePointCount: 2,
+      simLogCount: 2,
+    });
+    expect(result.threeValueRuntimeProjection.enemyStateCurve).toMatchObject({
+      toughnessDelta: 70,
+      toughnessInitial: 6667,
+      toughnessRemaining: 6597,
+      pointCount: 2,
+    });
+  });
+
+  it('keeps inconsistent toughness runtime samples out of applied results', () => {
+    const project = createFirstVerticalSliceProject();
+    const capture = createToughnessRuntimeSampleFixture();
+    capture.events[0].toughnessAfter = 6600;
+    project.metadata = {
+      ...project.metadata,
+      runtimeSampleCaptures: [capture],
+    };
+
+    const result = runSimulation(project, getFirstVerticalSliceGameData());
+
+    expect(
+      result.threeValueGenerationLayer.deltas.filter(
+        delta => delta.trackKey === 'enemyToughnessDamage' && delta.applied
+      )
+    ).toHaveLength(0);
+    expect(
+      result.threeValueGenerationLayer.deltas.find(
+        delta =>
+          delta.trackKey === 'enemyToughnessDamage' &&
+          delta.layerKey === 'sampled'
+      )
+    ).toMatchObject({
+      sourceKind: 'runtime-toughness-damage-applied-sample',
+      toughnessDelta: 70,
+      calculationKind: 'toughness-runtime-sample',
+      calculationStatus: 'toughness-runtime-sample-unapplied',
+      applied: false,
+      replaceable: true,
+    });
+    expect(result.threeValueRuntimeProjection.summary).toMatchObject({
+      appliedDeltaCount: 1,
+      enemyToughnessDelta: 0,
     });
   });
 

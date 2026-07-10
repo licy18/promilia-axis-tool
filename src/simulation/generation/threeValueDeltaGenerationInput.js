@@ -1,3 +1,8 @@
+import {
+  createRuntimeSampleEventKey,
+  createThreeValueMechanismSampleAdapterOutput,
+} from '../mechanics/threeValueMechanismSampleAdapter';
+
 export const AZPR_TIMELINE_FRAME_RATE = 60;
 export const AZPR_TIMELINE_FRAME_MS = 1000 / AZPR_TIMELINE_FRAME_RATE;
 
@@ -82,8 +87,9 @@ export function createThreeValueDeltaGenerationInput({
       : STATE_CURVE_FALLBACK_INPUT_SOURCES,
     sourcePriority: [
       'applied action results drive runtime totals',
+      'validated runtime samples are promoted to applied deltas',
       'candidate hit values remain unapplied diagnostics',
-      'runtime samples remain sampled diagnostics until promoted',
+      'unvalidated runtime samples remain sampled diagnostics',
       'placeholder points keep action/track coverage stable',
     ],
     tracks,
@@ -106,9 +112,16 @@ function createStandardGenerationInputTracks({
   );
 
   return THREE_VALUE_DELTA_GENERATION_TRACK_DEFINITIONS.map(definition => {
+    const mechanismSampleAdapterOutput =
+      createThreeValueMechanismSampleAdapterOutput({
+        trackKey: definition.key,
+        actionResultTimeline,
+        runtimeSampleContext,
+      });
     const appliedLayer = createAppliedGenerationInputLayer({
       definition,
       actionResultTimeline,
+      mechanismSampleAdapterOutput,
     });
     const candidateLayer = createCandidateGenerationInputLayer({
       definition,
@@ -118,6 +131,7 @@ function createStandardGenerationInputTracks({
       definition,
       scenario,
       runtimeSampleContext,
+      promotedEventKeys: mechanismSampleAdapterOutput.promotedEventKeys,
     });
     const occupiedActionIds = new Set([
       ...appliedLayer.points.map(point => point.actionId).filter(Boolean),
@@ -148,6 +162,14 @@ function createStandardGenerationInputTracks({
           : 'generation-input-track-waiting-for-points',
       pointCount,
       layers,
+      mechanismSampleAdapter: {
+        key: mechanismSampleAdapterOutput.key,
+        version: mechanismSampleAdapterOutput.version,
+        contractName: mechanismSampleAdapterOutput.contractName,
+        status: mechanismSampleAdapterOutput.status,
+        pointCount: mechanismSampleAdapterOutput.pointCount,
+        promotedEventKeys: mechanismSampleAdapterOutput.promotedEventKeys,
+      },
       applied: false,
     };
   });
@@ -156,8 +178,9 @@ function createStandardGenerationInputTracks({
 function createAppliedGenerationInputLayer({
   definition,
   actionResultTimeline,
+  mechanismSampleAdapterOutput,
 }) {
-  const points = actionResultTimeline
+  const actionResultPoints = actionResultTimeline
     .map((entry, index) => {
       const result = entry[definition.resultField];
       const delta = numberOrNull(result?.value);
@@ -191,11 +214,35 @@ function createAppliedGenerationInputLayer({
       };
     })
     .filter(Boolean);
+  const mechanismSamplePoints = (
+    mechanismSampleAdapterOutput?.points ?? []
+  ).map((point, index) => ({
+    ...point,
+    sequenceIndex:
+      numberOrNull(point.sequenceIndex) ?? actionResultPoints.length + index,
+    timeMs: roundTimelineMs(numberOrNull(point.timeMs) ?? 0),
+    frameIndex:
+      numberOrNull(point.frameIndex) ?? msToTimelineFrame(point.timeMs ?? 0),
+    frameLabel: formatTimelineFrame(
+      numberOrNull(point.frameIndex) ?? msToTimelineFrame(point.timeMs ?? 0)
+    ),
+    elementConfigIds: uniqueNumbers([
+      numberOrNull(point.sourceElementConfigId),
+      numberOrNull(point.elementConfigId),
+    ]),
+    applied: true,
+  }));
+  const points = [...actionResultPoints, ...mechanismSamplePoints].sort(
+    compareGenerationInputPoints
+  );
 
   return createGenerationInputLayer({
     key: 'applied',
     label: '已应用结果',
-    sourceKind: 'action-result-applied-values',
+    sourceKind:
+      mechanismSamplePoints.length > 0
+        ? 'applied-results-and-validated-runtime-samples'
+        : 'action-result-applied-values',
     statusWhenEmpty: 'no-applied-result-points',
     valueUnit: definition.valueUnit,
     points,
@@ -273,6 +320,7 @@ function createSampledGenerationInputLayer({
   definition,
   scenario,
   runtimeSampleContext,
+  promotedEventKeys = [],
 }) {
   const runtimeSampleCount =
     runtimeSampleContext?.captureCount ??
@@ -281,6 +329,7 @@ function createSampledGenerationInputLayer({
   const points = createSampledGenerationInputPoints({
     definition,
     runtimeSampleContext,
+    promotedEventKeys,
   });
 
   return createGenerationInputLayer({
@@ -311,13 +360,67 @@ function createSampledGenerationInputLayer({
 function createSampledGenerationInputPoints({
   definition,
   runtimeSampleContext,
+  promotedEventKeys = [],
 }) {
+  const promotedEventKeySet = new Set(promotedEventKeys);
+
+  if (definition.key === 'enemyToughnessDamage') {
+    return (runtimeSampleContext?.events ?? [])
+      .filter(event => event.eventType === 'toughness-damage-applied')
+      .filter(
+        event => !promotedEventKeySet.has(createRuntimeSampleEventKey(event))
+      )
+      .map((event, index) => {
+        const before = numberOrNull(event.toughnessBefore);
+        const after = numberOrNull(event.toughnessAfter);
+        const delta =
+          numberOrNull(event.toughnessDeltaApplied) ??
+          (before == null || after == null ? null : before - after);
+        if (!Number.isFinite(delta)) {
+          return null;
+        }
+        const frameIndex =
+          numberOrNull(event.frameIndex) ??
+          msToTimelineFrame(event.timeMs ?? 0);
+        const timeMs =
+          numberOrNull(event.timeMs) ??
+          roundTimelineMs(frameIndex * AZPR_TIMELINE_FRAME_MS);
+
+        return {
+          sourceKind: 'runtime-toughness-damage-applied-sample',
+          captureSessionId: event.captureSessionId ?? null,
+          eventIndex: numberOrNull(event.eventIndex) ?? index,
+          eventType: event.eventType,
+          actionId: event.actionId,
+          actorId: event.actorId,
+          targetId: event.targetId,
+          targetEntityId: event.targetEntityId,
+          sourceElementConfigId: numberOrNull(event.sourceElementConfigId),
+          elementConfigId: numberOrNull(event.elementConfigId),
+          pathId: event.pathId ?? null,
+          timeMs: roundTimelineMs(timeMs),
+          frameIndex,
+          frameLabel: formatTimelineFrame(frameIndex),
+          delta,
+          toughnessBefore: before,
+          toughnessAfter: after,
+          calculationKind: 'toughness-runtime-sample',
+          calculationStatus: 'toughness-runtime-sample-unapplied',
+          applied: false,
+        };
+      })
+      .filter(Boolean);
+  }
+
   if (definition.key !== 'selfEnergyChange') {
     return [];
   }
 
   return (runtimeSampleContext?.events ?? [])
     .filter(event => event.eventType === 'recover-sp-applied')
+    .filter(
+      event => !promotedEventKeySet.has(createRuntimeSampleEventKey(event))
+    )
     .map((event, index) => {
       const delta =
         numberOrNull(event.spDeltaApplied) ??

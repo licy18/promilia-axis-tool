@@ -25599,3 +25599,74 @@ rebuild project/compiler/simulation/runtime
 无元数据、错误 envelope、损坏 share payload 或 CRC 不匹配时返回 `null`，不会应用部分状态。Workbench draft schema 保持 v7。
 
 下一阶段 P7-A 回到真实机制适配：优先让标准 Hit 的韧性和角色能量 delta 消费可追溯的 AzPr 本地数据或 runtime sample，不继续扩展导出层。
+
+## 359. P7-A ValidatedRuntimeSample 机制 adapter
+
+### 359.1 标准 adapter 输出
+
+新增 `threeValueMechanismSampleAdapter`：
+
+```text
+ValidatedRuntimeSample -> ThreeValueDelta
+  key = azpr-three-value-mechanism-sample-adapter
+  version = 1
+  trackKey
+  status
+  pointCount
+  promotedEventKeys[]
+  points[]
+```
+
+Generation input 为每条三值轨调用同一 adapter。验证通过的 point 并入既有 `applied` layer，使用 `azpr-validated-runtime-mechanism-sample` 来源；`promotedEventKeys[]` 用于从 `sampled` layer 排除同一事件，避免 runtime 重复计数。
+
+### 359.2 RecoverSP 晋级合同
+
+能量采样必须先由 action result 中既有 `runtimeSamplingProbe` 判定为 `offline-runtime-sample-validated`，再满足：
+
+```text
+eventType = recover-sp-applied
+actionId / actorId 与动作结果一致
+captureSessionId 属于已验证匹配
+elementConfigId 或 pathId 与候选一致
+roleEntityId 与 finalSpCurve 一致
+recoverTagType = 0
+frameIndex 或 timeMs 存在
+spAfter - spBefore = spDeltaApplied = validated finalSpCurve delta
+```
+
+晋级点使用 `recover-sp-runtime-sample-confirmed` 和 `runtime-final-confirmed-recover-sp-sample`；该次采样 delta 固定为不可替换的实测结果，但不会把它反推成其他动作可复用的最终公式。
+
+### 359.3 削韧晋级合同
+
+新增离线事件 `toughness-damage-applied`，字段为：
+
+```text
+actionId
+actorId
+targetId
+targetEntityId
+sourceElementConfigId 或 pathId
+frameIndex / timeMs
+toughnessBefore
+toughnessAfter
+toughnessDeltaApplied
+```
+
+仅当动作、角色、敌人实例、来源和时间完整，且 `toughnessBefore - toughnessAfter = toughnessDeltaApplied > 0` 时晋级。验证失败但含可读 delta 的事件保留为 `runtime-toughness-damage-applied-sample` 诊断点，固定 `applied = false`。
+
+### 359.4 Runtime 消费边界
+
+晋级点继续走现有标准链：
+
+```text
+Generation applied layer
+  -> ThreeValueDelta calculator
+  -> runtime input
+  -> state snapshot
+  -> enemyStateCurve / selfEnergyCurveByActor
+  -> resourceCurves / simLog / summary
+```
+
+静态 `weakBreakDamageRate`、`recoverSP`、未验证 capture 和手工 fixture 不会直接改变默认项目。fixture 只用于验证合同，不能作为蓝色星原真实数值证据。
+
+下一阶段 P7-B 增加独立 capture JSON 导入、合并、项目持久化和动作/实体映射；P7-A adapter 本身保持纯数据入口，不读取 UI 临时状态。

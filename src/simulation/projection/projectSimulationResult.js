@@ -1336,6 +1336,8 @@ function normalizeRecoverSpRuntimeSampleEvent({
     timeMs: numberOrNull(event.timeMs),
     actionId: event.actionId ?? null,
     actorId: event.actorId ?? null,
+    targetId: event.targetId ?? null,
+    targetEntityId: event.targetEntityId ?? null,
     sourceElementConfigId: numberOrNull(event.sourceElementConfigId),
     elementConfigId: numberOrNull(
       event.elementConfigId ?? event.sourceElementConfigId
@@ -1362,6 +1364,9 @@ function normalizeRecoverSpRuntimeSampleEvent({
     spBefore: numberOrNull(event.spBefore),
     spAfter: numberOrNull(event.spAfter),
     spDeltaApplied: numberOrNull(event.spDeltaApplied),
+    toughnessBefore: numberOrNull(event.toughnessBefore),
+    toughnessAfter: numberOrNull(event.toughnessAfter),
+    toughnessDeltaApplied: numberOrNull(event.toughnessDeltaApplied),
     recoverTagType: numberOrNull(event.recoverTagType),
     baseDelta: numberOrNull(event.baseDelta),
     delta: numberOrNull(event.delta),

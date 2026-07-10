@@ -368,7 +368,7 @@ C:\PC2\Codex\AzPr\BWiki\data\local-element-system
 - 结果复核：资源曲线、日志、三值详情、贡献拆分和动作结果来源行可以互相定位。
 - 回改刷新：从结果点回到动作编辑后，修改帧/时间/动作内容可生成刷新结果，并返回新结果定位。
 - 连续排轴：支持插入后续动作、复制/删除动作、批次复制/位移/删除、撤销/重做、键盘快捷操作、窄屏主流程守门。
-- 数据/机制边界：已建立 `Action -> Hit -> ThreeValueDelta` 生成层、运行时层和 Workbench 消费层的标准入口与边界摘要；真实公式、倍率和平衡仍不作为当前主目标。
+- 数据/机制边界：已建立 `Action -> Hit -> ThreeValueDelta` 生成层、运行时层和 Workbench 消费层的标准入口；经完整前后值校验的真实削韧/角色能量采样可以进入 runtime，候选字段和未验证样本仍不参与结果。
 
 P0 验证结论：当前状态可以作为“Workbench 主流程 demo”给用户试用，但仍不是完整 Endaxis 对标版本。主要缺口在项目导入/导出/分享闭环、角色/敌人/装备配置闭环，以及后续 AzPr 真实机制 adapter。
 
@@ -632,7 +632,12 @@ P5：排轴规则与运行诊断闭环。
 P6：项目交换与发布能力。
 
 - P6-A 已完成：Workbench 可以导出包含真实时间轴快照和标准项目载荷的 PNG，并从同一文件恢复完整项目。
-- 下一阶段进入 P7-A 蓝原真实削韧/充能机制 adapter：把已有本地数据和可验证 runtime sample 接入标准 Hit 的韧性与角色能量 delta，不使用测试期猜测值。
+
+P7：蓝原真实机制适配。
+
+- P7-A 已完成：标准生成层会把验证通过的 RecoverSP 与削韧 runtime sample 晋级为已应用 delta，并按真实采样帧进入角色资源曲线、敌人韧性曲线、sim log 和 summary。
+- 仅有 `recoverSP / weakBreakDamageRate` 静态候选、归属缺失或前后值不一致的样本仍保持未应用；默认项目三值结果没有变化。
+- 下一阶段进入 P7-B 实测采样文件导入闭环：让 Workbench 直接导入、合并并保存真实 capture JSON，完成动作/角色/敌人绑定后立即刷新运行结果。
 
 ### P4-A 标准状态效果运行时合同（2026-07-10）
 
@@ -739,6 +744,26 @@ P6：项目交换与发布能力。
 - `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
 - `npm run test:e2e:workbench-flow`：通过，28 条 Workbench 浏览器主流程；新增路径验证 1600×600 以上非空 PNG、元数据关键字、下载文件反导入、配置/动作恢复和运行复盘。
 - 临时导出图已完成视觉检查：标题、摘要、双角色轨、动作块、曲线点和图例均正常，无空白画布、裁切或面板重叠。
+
+### P7-A 蓝原真实削韧/充能机制 adapter（2026-07-10）
+
+已完成能力：
+
+- 新增统一 `ValidatedRuntimeSample -> ThreeValueDelta` adapter；只有身份、来源、时间和最终状态变化都完整的 runtime sample 才能晋级为已应用结果。
+- RecoverSP 复用既有离线验证链，要求 `baseDelta / delta / petDelta / interval / final-sp-curve` 全部通过，并再次核对角色实体、`AttackRecoverySp` tag 和 `spAfter - spBefore = spDeltaApplied`。
+- 削韧采样使用独立 `toughness-damage-applied` 合同，要求动作、角色、敌人实例、DamageElement 或 PathID、真实帧以及 `toughnessBefore - toughnessAfter = toughnessDeltaApplied` 完整一致。
+- 验证通过的采样进入 Generation applied layer，并保留原始帧、元素、capture session、calculator 和状态前后值；runtime 自动生成敌人韧性曲线、每角色能量曲线、状态快照、日志和汇总。
+- 已晋级事件不会在 Generation sampled layer 重复计数；验证失败的削韧事件仍保留为可替换诊断点。静态 `weakBreakDamageRate / recoverSP` 候选不自动晋级，也没有新增猜测公式。
+- 本阶段只打通 runtime 消费能力；真实 capture 目前仍需由项目 metadata 或测试 fixture 提供，Workbench 独立采样文件入口留给 P7-B。
+
+已完成验证：
+
+- 集成测试覆盖 RecoverSP 完整验证后进入角色资源曲线、削韧完整采样进入敌人韧性曲线、错误前后值拒绝应用，以及默认项目结果不变。
+- `npm run test -- --run`：通过，50 个测试文件、350 条测试。
+- `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
+- `npm run test:e2e:workbench-flow`：通过，28 条 Workbench 浏览器主流程。
+
+下一阶段目标：P7-B 实测采样文件导入闭环。Workbench 应能直接导入标准 capture JSON，完成动作、角色和敌人映射，保存到项目交换格式，并在导入后立即看到经 P7-A adapter 验证后的曲线与日志；不扩展真实倍率推断或候选文案。
 
 ## 10. 文档维护规则
 
