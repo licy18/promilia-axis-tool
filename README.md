@@ -47,6 +47,7 @@ npm run build
 npm run test:e2e:workbench-flow
 npm run audit:production-imports:check
 npm run audit:bundle:check
+npm run audit:workbench-data:check
 npm run benchmark:long-axis:check
 npm run benchmark:long-axis:browser
 git diff --check
@@ -75,6 +76,8 @@ npm run data:generate
 生成结果和来源审计位于 `src/data/generated/manifest.json` 与 `src/data/generated/validation-report.json`。不要手工维护生成文件中可由来源表重新产生的字段。
 
 `src/data/generated/workbench-seed.json` 是面向生产主流程的精简目录，保留全部可选择实体及模拟所需字段；完整原始目录继续由 `src/data/azprGenerated.js` 提供给审计和数据测试。
+
+`src/data/generated/workbench-skill-runtime.json` 是技能逻辑、等级校验和运行证据的生产合同。`reports/workbench-production-data-audit.json` 会从完整生成表重新计算两类投影并验证逐字段一致性。
 
 ## 核心目录
 

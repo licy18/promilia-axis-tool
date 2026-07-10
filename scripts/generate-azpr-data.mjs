@@ -3,6 +3,9 @@ import path from 'node:path';
 import { execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
+import {
+  createWorkbenchSkillRuntimeProjection,
+} from './lib/workbench-skill-runtime-projection.mjs';
 
 const repoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -878,6 +881,13 @@ const workbenchSeed = buildWorkbenchSeedData({
   soulessences,
   characterAttributePanelByCharacterId,
 });
+const workbenchSkillRuntime = createWorkbenchSkillRuntimeProjection({
+  generatedAt,
+  skillLogicIndex,
+  skillLevelCrossCheck,
+  valueParamIndex,
+  skillAssetEvidence,
+});
 const validationReport = buildValidationReport({
   characters,
   skills,
@@ -923,6 +933,7 @@ await Promise.all([
   writeJson('character-attribute-panels.json', characterAttributePanels),
   writeJson('first-vertical-slice.json', firstVerticalSlice),
   writeJson('workbench-seed.json', workbenchSeed),
+  writeJson('workbench-skill-runtime.json', workbenchSkillRuntime),
   writeJson('validation-report.json', validationReport),
 ]);
 
@@ -992,6 +1003,7 @@ function buildManifest(validationReport) {
       characterAttributePanels: 'character-attribute-panels.json',
       firstVerticalSlice: 'first-vertical-slice.json',
       workbenchSeed: 'workbench-seed.json',
+      workbenchSkillRuntime: 'workbench-skill-runtime.json',
       validationReport: 'validation-report.json',
     },
     counts: validationReport.counts,

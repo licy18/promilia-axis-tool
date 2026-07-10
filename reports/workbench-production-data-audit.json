@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "kind": "workbench-production-data-audit",
+  "status": {
+    "seedProjectionMatches": true,
+    "skillRuntimeProjectionMatches": true,
+    "manifestMatches": true
+  },
+  "seedAudit": {
+    "checks": {
+      "schemaVersionCurrent": true,
+      "countsMatch": true,
+      "characterIdsMatch": true,
+      "skillIdsMatch": true,
+      "enemiesMatch": true,
+      "elementsMatch": true,
+      "equipmentMatches": true,
+      "kibosMatch": true,
+      "soulessencesMatch": true
+    },
+    "counts": {
+      "characters": 20,
+      "skills": 120,
+      "enemies": 208,
+      "elements": 10,
+      "equipment": 137,
+      "kibos": 122,
+      "soulessences": 62
+    }
+  },
+  "skillRuntimeAudit": {
+    "checks": {
+      "projectionMatchesFullEvidence": true
+    },
+    "counts": {
+      "skillLogicItems": 120,
+      "skillLevelCrossCheckItems": 120,
+      "valueParams": 2,
+      "skillControlEvidenceItems": 120,
+      "damageElementFieldMappingSkills": 15,
+      "externalElementObjectSkills": 18,
+      "summonTargetCount": 2
+    },
+    "size": {
+      "fullBytes": 6391041,
+      "projectionBytes": 4228668,
+      "savedBytes": 2162373,
+      "reductionPercent": 33.83
+    }
+  },
+  "manifestAudit": {
+    "workbenchSeedRegistered": true,
+    "workbenchSkillRuntimeRegistered": true
+  },
+  "gameCatalogSize": {
+    "fullBytes": 4776354,
+    "projectionBytes": 1092986,
+    "savedBytes": 3683368,
+    "reductionPercent": 77.12
+  }
+}

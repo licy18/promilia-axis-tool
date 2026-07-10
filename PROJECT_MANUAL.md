@@ -862,6 +862,16 @@ Workbench 现在是唯一生产排轴入口。根路径和旧 `/editor` 路径�
 
 下一阶段目标：阶段 7-E 技能运行证据生产投影。当前主包剩余最大来源是 `skill-asset-evidence.json`、`skill-logic-index.json` 和 `skill-level-crosscheck.json`；下一阶段由生成器输出 project/runtime 实际消费的技能逻辑、等级交叉校验、DamageElement 映射、外部对象、召唤目标和命中时序精简合同，完整审计文件继续保留但退出主流程。验收必须比较默认、多角色、多动作和长轴模拟结果等价，并继续收紧 bundle 预算；不删除来源追溯、不改公式、不做碎片 UI。
 
+### 阶段 7-E 技能运行证据生产投影（2026-07-10）
+
+新增 `workbench-skill-runtime.json` v1，由 AzPr 生成器把 120 个技能逻辑项、120 个等级交叉校验项、2 个 valueParam、120 个当前技能控制状态、15 个 DamageElement 映射技能、18 个外部对象技能和 2 个召唤目标投影为生产合同。domain 与 projection 层统一消费该文件，四份完整技能审计 JSON 继续保留来源和诊断，但不再进入 Workbench 主包；公式、calculator、三值 delta 和项目 v8 schema 均未变化。
+
+新增 `audit:workbench-data:check`，从完整目录/证据重新计算 v2 目录投影和 v1 技能运行投影并做逐字段深比较，同时核对 manifest。完整游戏目录到 seed 的文件体积减少 77.12%，四份完整技能证据到运行投影减少 33.83%；bundle 守门同步禁止九张完整目录/证据表回流。Workbench 由 483,742B gzip 降至 408,497B，全部 JavaScript 由 763,190B 降至 687,934B，分别下降约 15.6% 和 9.9%；预算收紧为 Workbench 440KB、全部 JavaScript 740KB。
+
+已完成验证：`npm run test -- --run` 通过 50 个测试文件、333 条测试；`npm run build` 通过，1728 个模块；`npm run test:e2e:workbench-flow` 通过 32 条主流程；生产引用、生产数据和 bundle 审计全部通过；180 动作总耗时 p95 为 160.589ms，120 动作浏览器就绪时间为 2464ms。默认、多角色、多动作、项目交换、实测 capture、命中/三值详情和长轴路径均保持既有结果。
+
+下一阶段目标：阶段 7-F 运行核心与诊断证据边界。当前 Workbench 仍有 3.36MB minified chunk，其中技能运行投影约 2.06MB；下一阶段把首轮模拟必需的动作逻辑、已应用 delta、曲线和日志与仅在详情复盘时需要的候选证据拆成稳定合同，让核心模拟先完成、诊断证据按需加载，并以真实交互验证详情打开后信息完整。不得只做 manual chunk 分组隐藏警告，也不得删减来源追溯、修改公式或新增碎片 UI。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

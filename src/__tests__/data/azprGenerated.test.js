@@ -17,6 +17,7 @@ import {
   getAzprValidationReport,
   getAzprValueParamIndex,
   getAzprWorkbenchSeed,
+  getAzprWorkbenchSkillRuntime,
 } from '../../data/azprGenerated';
 
 describe('generated AzPr data', () => {
@@ -49,7 +50,9 @@ describe('generated AzPr data', () => {
   });
 
   it('keeps the Workbench production projection aligned with full catalogs', () => {
+    const manifest = getAzprGeneratedManifest();
     const seed = getAzprWorkbenchSeed();
+    const skillRuntime = getAzprWorkbenchSkillRuntime();
     const enemies = getAzprEnemies();
     const elements = getAzprElements();
     const equipment = getAzprEquipment();
@@ -74,6 +77,22 @@ describe('generated AzPr data', () => {
     ]);
 
     expect(seed.schemaVersion).toBe(2);
+    expect(skillRuntime).toMatchObject({
+      schemaVersion: 1,
+      kind: 'workbench-skill-runtime-projection',
+      counts: {
+        skillLogicItems: 120,
+        skillLevelCrossCheckItems: 120,
+        valueParams: 2,
+        skillControlEvidenceItems: 120,
+        damageElementFieldMappingSkills: 15,
+        externalElementObjectSkills: 18,
+        summonTargetCount: 2,
+      },
+    });
+    expect(manifest.files.workbenchSkillRuntime).toBe(
+      'workbench-skill-runtime.json'
+    );
     expect(seed.counts).toMatchObject({
       enemies: enemies.length,
       elements: elements.length,

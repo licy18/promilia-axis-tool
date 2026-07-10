@@ -11,6 +11,8 @@
     "audit:production-imports:check": "node scripts/audit-production-imports.mjs --assert-clean",
     "audit:bundle": "node scripts/audit-build-bundle.mjs",
     "audit:bundle:check": "node scripts/audit-build-bundle.mjs --assert-budget",
+    "audit:workbench-data": "node scripts/audit-workbench-production-data.mjs",
+    "audit:workbench-data:check": "node scripts/audit-workbench-production-data.mjs --assert-clean",
     "benchmark:long-axis": "node --expose-gc scripts/benchmark-workbench-long-axis.mjs",
     "benchmark:long-axis:check": "node --expose-gc scripts/benchmark-workbench-long-axis.mjs --assert-budget",
     "benchmark:long-axis:browser": "playwright test e2e/workbench-long-axis.spec.js -g @workbench-long-axis",

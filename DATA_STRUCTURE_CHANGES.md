@@ -25962,7 +25962,7 @@ topModules[]
 packageTotals[]
 ```
 
-模块路径统一为仓库相对路径，第三方依赖按 package 聚合。当前默认 gzip 预算为首屏入口 120KB、Workbench 520KB、全部 JavaScript 820KB；`audit:bundle:check` 在入口缺失、任一预算超限或 Workbench 重新引入完整目录表时失败。该报告不改变 Workbench 项目、生成数据或运行时 schema。
+模块路径统一为仓库相对路径，第三方依赖按 package 聚合。当前默认 gzip 预算为首屏入口 120KB、Workbench 440KB、全部 JavaScript 740KB；`audit:bundle:check` 在入口缺失、任一预算超限或 Workbench 重新引入完整目录/技能证据表时失败。该报告不改变 Workbench 项目、生成数据或运行时 schema。
 
 ## 366. WorkbenchProductionDataProjection v2
 
@@ -25988,3 +25988,51 @@ gameData
 投影保持 20 个角色、120 个技能、208 个敌人、10 个元素、137 件装备、122 个奇波和 62 个魂灵与完整生成目录一一对应。敌人只保留身份、元素、图标、HP/攻击/双防、`WEAKNESS_POINT_MAX` 和 10 类元素防御；装备保留 `id/name/type/rarity`，奇波保留 `id/name/element/stage`，魂灵保留 `id/name/rarity`。字段集合覆盖当前选择、项目校验、配置记录、Scenario 编译和三值运行时，不承载图鉴说明或完整诊断证据。
 
 `workbenchProjectFactory.js` 只消费该 v2 合同，完整拆表继续由 `azprGenerated.js` 暴露给数据审计。单元守门会比较投影 ID、数量和关键字段与完整目录；项目保存 schema 仍为 v8，本节不改变 JSON/PNG/分享/预设格式。
+
+## 367. WorkbenchSkillRuntimeProjection v1
+
+`src/data/generated/workbench-skill-runtime.json` 由四份完整审计数据生成：
+
+```text
+schemaVersion = 1
+kind = workbench-skill-runtime-projection
+generatedAt / sourceKind
+sources
+counts
+skillLogicIndex
+  sourceKind / source / summary / items[]
+skillLevelCrossCheck
+  sourceKind / source / summary / items[]
+valueParamIndex
+  sourceKind / source / summary / params[]
+skillAssetEvidence
+  externalElementObjectEvidence
+  summonTargetSkillEvidence
+  damageElementFieldMappingEvidence
+  currentSkillControlEvidence[]
+```
+
+逻辑项保留每级 display/elementValue、子技能 logic 和诊断；等级校验保留每级标签、倍率、语言 ID、匹配状态和来源；valueParam 保留 runtime 描述需要的语义字段。Skill Control 证据只保留 HP lane、行为引用摘要、动作状态/事件桥控制和普通攻击命中链，DamageElement 映射、外部对象与召唤目标关系保持完整。
+
+`skillLogicModel.js`、`skillLevelCrossCheck.js` 和 `projectSimulationResult.js` 统一消费该合同。完整 `skill-logic-index.json`、`skill-level-crosscheck.json`、`value-param-index.json` 和 `skill-asset-evidence.json` 继续用于审计，不再进入 Workbench 生产 chunk；本节不修改 calculator 或三值结果合同。
+
+## 368. WorkbenchProductionDataAudit v1
+
+`reports/workbench-production-data-audit.json` 记录：
+
+```text
+schemaVersion = 1
+kind = workbench-production-data-audit
+status
+  seedProjectionMatches
+  skillRuntimeProjectionMatches
+  manifestMatches
+seedAudit
+  checks / counts
+skillRuntimeAudit
+  checks / counts / size
+manifestAudit
+gameCatalogSize
+```
+
+审计从完整生成 JSON 重建 v2 目录投影和 v1 技能运行投影，并做深度结构比较；同时核对 manifest 注册、完整/投影字节数和缩减比例。当前目录投影相对完整目录减少 77.12%，技能运行投影相对四份完整证据减少 33.83%；`audit:workbench-data:check` 在任一映射不一致时失败。

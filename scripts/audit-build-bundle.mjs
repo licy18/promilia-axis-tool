@@ -17,11 +17,11 @@ const budgets = {
   ),
   workbenchGzipBytes: readPositiveNumberArgument(
     '--workbench-gzip-budget',
-    520_000
+    440_000
   ),
   totalJavaScriptGzipBytes: readPositiveNumberArgument(
     '--total-js-gzip-budget',
-    820_000
+    740_000
   ),
 };
 
@@ -49,6 +49,10 @@ const workbenchForbiddenModules = [
   'src/data/generated/equipment.json',
   'src/data/generated/kibos.json',
   'src/data/generated/soulessences.json',
+  'src/data/generated/skill-asset-evidence.json',
+  'src/data/generated/skill-level-crosscheck.json',
+  'src/data/generated/skill-logic-index.json',
+  'src/data/generated/value-param-index.json',
 ];
 const workbenchDetectedForbiddenModules = workbenchForbiddenModules.filter(
   moduleId =>

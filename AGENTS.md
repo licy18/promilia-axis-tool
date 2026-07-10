@@ -30,6 +30,7 @@ npm run test -- --run
 npm run dev
 npm run audit:production-imports:check
 npm run audit:bundle:check
+npm run audit:workbench-data:check
 npm run benchmark:long-axis:check
 npm run benchmark:long-axis:browser
 ```
@@ -40,6 +41,7 @@ npm run benchmark:long-axis:browser
 
 - 新版 AzPr 数据管线：`scripts/generate-azpr-data.mjs` -> `src/data/generated/`，访问层为 `src/data/azprGenerated.js`。
 - Workbench 生产目录统一消费 `workbench-seed.json` v2 精简投影；完整敌人、装备、奇波、魂灵与证据表保留给数据审计，不得重新从 `workbenchProjectFactory.js` 同步引入生产主包。
+- 技能逻辑、等级校验和 Skill Control/DamageElement 证据统一消费 `workbench-skill-runtime.json`；生成后运行 `npm run audit:workbench-data:check`，完整证据表不得重新进入 Workbench 主路径。
 - 新版项目模型：`src/domain/projectSchema.js`，核心模型是 `Project` / `Actor` / `Enemy` / `Action`。
 - 新版模拟运行时：`src/simulation/`，包含 compiler、engine、mechanics、projection 和 `runSimulation()`。
 - 生产工作台：`src/views/Workbench.vue`，根路径与旧 `/editor` 路径都重定向到 `/workbench`，组件在 `src/features/workbench/`。

@@ -1,6 +1,9 @@
-import skillLogicIndex from '../data/generated/skill-logic-index.json';
-import valueParamIndex from '../data/generated/value-param-index.json';
+import { getAzprWorkbenchSkillRuntime } from '../data/azprGenerated';
 import { parseSkillDamageMultiplier } from './skillDamageSegments';
+
+const workbenchSkillRuntime = getAzprWorkbenchSkillRuntime();
+const skillLogicIndex = workbenchSkillRuntime.skillLogicIndex;
+const valueParamIndex = workbenchSkillRuntime.valueParamIndex;
 
 export const SKILL_LOGIC_SOURCE_KIND = skillLogicIndex.sourceKind ?? 'azpr-newtable-skill-logic-index';
 export const SKILL_LEVEL_DISPLAY_SOURCE_KIND = 'azpr-newtable-skill-level-display';

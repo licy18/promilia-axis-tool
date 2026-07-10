@@ -1,4 +1,7 @@
-import skillLevelCrossCheckData from '../data/generated/skill-level-crosscheck.json';
+import { getAzprWorkbenchSkillRuntime } from '../data/azprGenerated';
+
+const skillLevelCrossCheckData =
+  getAzprWorkbenchSkillRuntime().skillLevelCrossCheck;
 
 export const SKILL_LEVEL_CROSSCHECK_SOURCE_KIND =
   skillLevelCrossCheckData.sourceKind ?? 'azpr-newtable-skill-level-crosscheck';

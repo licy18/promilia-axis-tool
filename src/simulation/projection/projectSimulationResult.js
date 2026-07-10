@@ -1,12 +1,14 @@
-import skillAssetEvidence from '../../data/generated/skill-asset-evidence.json';
+import { getAzprWorkbenchSkillRuntime } from '../../data/azprGenerated';
 import { createThreeValueGenerationBundle } from '../generation/threeValueGenerationBuilder';
 import {
   createSelfEnergyDeltaSummaryByActor,
   createThreeValueRuntimeProjection,
 } from '../runtime/threeValueRuntimeProjection';
 
+const workbenchSkillRuntime = getAzprWorkbenchSkillRuntime();
+const skillAssetEvidence = workbenchSkillRuntime.skillAssetEvidence;
 const SKILL_ASSET_EVIDENCE_PATH =
-  'src/data/generated/skill-asset-evidence.json';
+  workbenchSkillRuntime.sources.skillAssetEvidence;
 const DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE =
   skillAssetEvidence.damageElementFieldMappingEvidence ?? {};
 const DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE_KIND =
