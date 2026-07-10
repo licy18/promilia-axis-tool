@@ -1,0 +1,302 @@
+<template>
+  <section
+    class="panel team-loadout-panel"
+    data-testid="workbench-team-loadout-panel"
+  >
+    <div class="panel-title">
+      <User class="panel-icon" />
+      <h2>参战配置</h2>
+    </div>
+
+    <div class="config-scope" data-testid="workbench-config-scope">
+      <div data-config-status="simulation-active">
+        <span>模拟生效</span>
+        <strong>角色 / 敌人 / 数值面板</strong>
+      </div>
+      <div data-config-status="project-config-only">
+        <span>项目记录</span>
+        <strong>奇波 / 装备 / 魂灵（待接公式）</strong>
+      </div>
+    </div>
+
+    <details
+      v-for="(actor, index) in actors"
+      :key="actor.id"
+      class="actor-loadout"
+      :data-character-id="actor.characterId"
+      data-testid="workbench-actor-loadout"
+      :open="index === 0"
+    >
+      <summary>
+        <span>{{ actor.name }}</span>
+        <small>Lv.{{ actor.level }} · 参与模拟</small>
+      </summary>
+
+      <div class="loadout-controls">
+        <label>
+          <span>奇波</span>
+          <select
+            :data-character-id="actor.characterId"
+            data-loadout-key="kiboId"
+            data-testid="workbench-actor-kibo-select"
+            :value="actor.loadout?.kiboId ?? ''"
+            @change="emitLoadoutPatch(actor, 'kiboId', $event.target.value)"
+          >
+            <option value="">未配置</option>
+            <option v-for="kibo in kibos" :key="kibo.id" :value="kibo.id">
+              {{ formatKiboOption(kibo) }}
+            </option>
+          </select>
+        </label>
+
+        <label
+          v-for="slot in equipmentSlots"
+          :key="slot.key"
+          class="equipment-control"
+        >
+          <span>{{ slot.label }}</span>
+          <select
+            :data-character-id="actor.characterId"
+            :data-loadout-key="slot.key"
+            data-testid="workbench-actor-equipment-select"
+            :value="actor.loadout?.equipment?.[slot.key] ?? ''"
+            @change="emitEquipmentPatch(actor, slot.key, $event.target.value)"
+          >
+            <option value="">未配置</option>
+            <option
+              v-for="item in equipment[slot.key] ?? []"
+              :key="item.id"
+              :value="item.id"
+            >
+              {{ formatEquipmentOption(item) }}
+            </option>
+          </select>
+        </label>
+
+        <label>
+          <span>魂灵</span>
+          <select
+            :data-character-id="actor.characterId"
+            data-loadout-key="soulessenceId"
+            data-testid="workbench-actor-soulessence-select"
+            :value="actor.loadout?.soulessenceId ?? ''"
+            @change="
+              emitLoadoutPatch(actor, 'soulessenceId', $event.target.value)
+            "
+          >
+            <option value="">未配置</option>
+            <option
+              v-for="soulessence in soulessences"
+              :key="soulessence.id"
+              :value="soulessence.id"
+            >
+              {{ formatSoulessenceOption(soulessence) }}
+            </option>
+          </select>
+        </label>
+      </div>
+    </details>
+  </section>
+</template>
+
+<script setup>
+import { User } from '@element-plus/icons-vue';
+
+defineProps({
+  actors: {
+    type: Array,
+    required: true,
+  },
+  kibos: {
+    type: Array,
+    required: true,
+  },
+  equipment: {
+    type: Object,
+    required: true,
+  },
+  soulessences: {
+    type: Array,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['update-actor-config']);
+const equipmentSlots = Object.freeze([
+  { key: 'weapon', label: '武器' },
+  { key: 'top', label: '上装' },
+  { key: 'bottom', label: '下装' },
+  { key: 'earring', label: '耳环' },
+  { key: 'ring', label: '戒指' },
+]);
+
+function emitLoadoutPatch(actor, key, value) {
+  emit('update-actor-config', {
+    characterId: Number(actor.characterId),
+    loadout: {
+      [key]: normalizeOptionalId(value),
+    },
+  });
+}
+
+function emitEquipmentPatch(actor, slotKey, value) {
+  emit('update-actor-config', {
+    characterId: Number(actor.characterId),
+    loadout: {
+      equipment: {
+        [slotKey]: normalizeOptionalId(value),
+      },
+    },
+  });
+}
+
+function normalizeOptionalId(value) {
+  const id = Number(value);
+  return Number.isFinite(id) && id > 0 ? id : null;
+}
+
+function formatKiboOption(kibo) {
+  return [kibo.name, kibo.element, kibo.stage].filter(Boolean).join(' · ');
+}
+
+function formatEquipmentOption(item) {
+  return [item.rarity, item.name].filter(Boolean).join(' · ');
+}
+
+function formatSoulessenceOption(item) {
+  return [item.rarity, item.name].filter(Boolean).join(' · ');
+}
+</script>
+
+<style scoped>
+.panel {
+  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 6px;
+  background: #1c2228;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.panel-icon {
+  width: 17px;
+  height: 17px;
+  color: #79c7b9;
+}
+
+h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.config-scope {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.config-scope div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.config-scope span,
+.config-scope strong {
+  overflow-wrap: anywhere;
+  font-size: 11px;
+}
+
+.config-scope span {
+  color: #8f9aa3;
+}
+
+.config-scope strong {
+  color: #dfe8e5;
+}
+
+.config-scope [data-config-status='simulation-active'] strong {
+  color: #8dd8c9;
+}
+
+.actor-loadout + .actor-loadout {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  list-style-position: inside;
+}
+
+summary span {
+  min-width: 0;
+  overflow: hidden;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+summary small {
+  color: #8dd8c9;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.loadout-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  padding: 0 14px 14px;
+}
+
+label {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+label span {
+  color: #8f9aa3;
+  font-size: 11px;
+}
+
+select {
+  width: 100%;
+  min-width: 0;
+  padding: 7px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  background: #11161b;
+  color: #ffffff;
+  font: inherit;
+  font-size: 12px;
+}
+
+select:focus {
+  outline: none;
+  border-color: #79c7b9;
+  box-shadow: 0 0 0 2px rgba(121, 199, 185, 0.14);
+}
+
+@media (max-width: 760px) {
+  .config-scope,
+  .loadout-controls {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

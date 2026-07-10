@@ -1830,6 +1830,39 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   await enemySelect.selectOption(importedEnemyId);
   await page.getByTestId('workbench-enemy-level-input').fill('91');
   await page.getByTestId('workbench-enemy-hp-multiplier-input').fill('2.5');
+  const kiboSelect = page
+    .locator(
+      '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
+    )
+    .first();
+  const weaponSelect = page
+    .locator(
+      '[data-testid="workbench-actor-equipment-select"][data-character-id="109001"][data-loadout-key="weapon"]'
+    )
+    .first();
+  const soulessenceSelect = page
+    .locator(
+      '[data-testid="workbench-actor-soulessence-select"][data-character-id="109001"]'
+    )
+    .first();
+  const kiboId = await kiboSelect
+    .locator('option')
+    .nth(1)
+    .getAttribute('value');
+  const weaponId = await weaponSelect
+    .locator('option')
+    .nth(1)
+    .getAttribute('value');
+  const soulessenceId = await soulessenceSelect
+    .locator('option')
+    .nth(1)
+    .getAttribute('value');
+  expect(kiboId).toBeTruthy();
+  expect(weaponId).toBeTruthy();
+  expect(soulessenceId).toBeTruthy();
+  await kiboSelect.selectOption(kiboId);
+  await weaponSelect.selectOption(weaponId);
+  await soulessenceSelect.selectOption(soulessenceId);
 
   await page.getByTestId('workbench-flow-open-runtime').click();
   const openedState = await waitForRuntimeAction(page, 'action-0001');
@@ -1861,7 +1894,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 1,
+    schemaVersion: 2,
     game: 'azur-promilia',
     type: 'workbench-project',
     selectedActionId: 'action-0002',
@@ -1869,6 +1902,21 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
       level: 91,
       hpMultiplier: 2.5,
     },
+    actorConfigs: [
+      {
+        characterId: 109001,
+        loadout: {
+          kiboId: Number(kiboId),
+          equipment: {
+            weapon: Number(weaponId),
+          },
+          soulessenceId: Number(soulessenceId),
+        },
+      },
+      {
+        characterId: 101003,
+      },
+    ],
   });
   expect(exportedProject.actionDrafts).toHaveLength(2);
   await expect(page.getByTestId('workbench-draft-status')).toHaveText(
@@ -1882,6 +1930,9 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
     '80'
   );
+  await expect(kiboSelect).toHaveValue('');
+  await expect(weaponSelect).toHaveValue('');
+  await expect(soulessenceSelect).toHaveValue('');
 
   await page
     .getByTestId('workbench-import-project-file')
@@ -1897,6 +1948,9 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   await expect(
     page.getByTestId('workbench-enemy-hp-multiplier-input')
   ).toHaveValue('2.5');
+  await expect(kiboSelect).toHaveValue(kiboId);
+  await expect(weaponSelect).toHaveValue(weaponId);
+  await expect(soulessenceSelect).toHaveValue(soulessenceId);
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '2 action'
   );
@@ -3205,9 +3259,9 @@ async function ensureActionContentEditResultSynced(
 
 async function readStoredWorkbenchDraft(page) {
   return await page.evaluate(() => {
-    const rawDraft = window.localStorage.getItem(
-      'promilia-axis-tool:workbench-draft:v1'
-    );
+    const rawDraft =
+      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v2') ??
+      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v1');
     return rawDraft ? JSON.parse(rawDraft) : null;
   });
 }

@@ -437,6 +437,22 @@
 
         <div
           class="side-stack-panel"
+          :data-inspector-panel-order="sideInspectorPanelOrders.teamLoadout"
+          data-inspector-panel-key="team-loadout"
+          data-testid="workbench-side-inspector-panel"
+          :style="{ order: sideInspectorPanelOrders.teamLoadout }"
+        >
+          <TeamLoadoutPanel
+            :actors="scenario.actors"
+            :kibos="loadoutOptions.kibos"
+            :equipment="loadoutOptions.equipment"
+            :soulessences="loadoutOptions.soulessences"
+            @update-actor-config="updateActorConfig"
+          />
+        </div>
+
+        <div
+          class="side-stack-panel"
           :data-inspector-panel-order="sideInspectorPanelOrders.runtimeDetail"
           data-inspector-panel-key="runtime-detail"
           data-testid="workbench-side-inspector-panel"
@@ -517,6 +533,7 @@ import PropertiesPanel from '../features/workbench/PropertiesPanel.vue';
 import ResourceMonitorPanel from '../features/workbench/ResourceMonitorPanel.vue';
 import RuntimeSelectedDetailPanel from '../features/workbench/RuntimeSelectedDetailPanel.vue';
 import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
+import TeamLoadoutPanel from '../features/workbench/TeamLoadoutPanel.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import WorkbenchFlowPanel from '../features/workbench/WorkbenchFlowPanel.vue';
 import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
@@ -558,7 +575,9 @@ import {
   getSkillActionVariants,
   getSkillsForCharacter,
   getWorkbenchGameData,
+  getWorkbenchLoadoutOptions,
   getWorkbenchSeed,
+  normalizeWorkbenchActorConfigs,
   normalizeWorkbenchActionDrafts,
   normalizeWorkbenchEnemyConfig,
   normalizeWorkbenchSelection,
@@ -584,6 +603,7 @@ import { simulateScenario } from '../simulation/engine/simulateScenario';
 
 const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
+const loadoutOptions = getWorkbenchLoadoutOptions();
 const NEW_ACTION_INSERT_GAP_MS = frameToMs(60);
 const WORKBENCH_HISTORY_LIMIT = 50;
 const WORKBENCH_RUNTIME_NAVIGATION_SHORTCUT_SOURCE =
@@ -598,6 +618,7 @@ const AUTO_DELAY_NOTE_PATTERN =
   /^自动推迟：同轨已有动作占用，已从 \d+(?:\.\d+)?ms 调整到 \d+(?:\.\d+)?ms。$/;
 const initialDraft = createDefaultWorkbenchDraftState();
 const selection = ref({ ...initialDraft.selection });
+const actorConfigs = ref([...initialDraft.actorConfigs]);
 const enemyConfig = ref({ ...initialDraft.enemyConfig });
 const segmentSplitOptions = ref({ ...initialDraft.segmentSplitOptions });
 const segmentSplitPreview = ref(null);
@@ -661,6 +682,7 @@ const workbenchFlowController = createWorkbenchFlowController(
 
 const project = computed(() =>
   createWorkbenchProject(selection.value, {
+    actorConfigs: actorConfigs.value,
     enemyConfig: enemyConfig.value,
     actions: actionDrafts.value,
   })
@@ -829,6 +851,10 @@ function updateSelection(patch) {
     ...patch,
   });
   selection.value = nextSelection;
+  actorConfigs.value = normalizeWorkbenchActorConfigs(
+    actorConfigs.value,
+    nextSelection
+  );
 
   normalizeActionLibraryCharacterId(previousSelection, nextSelection, {
     characterChanged,
@@ -959,6 +985,38 @@ function updateEnemyConfig(patch) {
     ...enemyConfig.value,
     ...patch,
   });
+  markDraftDirty();
+}
+
+function updateActorConfig({ characterId, loadout = {} } = {}) {
+  const activeConfig = actorConfigs.value.find(
+    config => Number(config.characterId) === Number(characterId)
+  );
+  if (!activeConfig) {
+    return;
+  }
+
+  clearSegmentSplitPreview();
+  recordWorkbenchHistorySnapshot();
+  actorConfigs.value = normalizeWorkbenchActorConfigs(
+    actorConfigs.value.map(config => {
+      if (Number(config.characterId) !== Number(characterId)) {
+        return config;
+      }
+      return {
+        ...config,
+        loadout: {
+          ...config.loadout,
+          ...loadout,
+          equipment: {
+            ...config.loadout?.equipment,
+            ...loadout.equipment,
+          },
+        },
+      };
+    }),
+    selection.value
+  );
   markDraftDirty();
 }
 
@@ -1544,6 +1602,7 @@ function saveDraft() {
 function getWorkbenchDraftState() {
   return {
     selection: selection.value,
+    actorConfigs: actorConfigs.value,
     enemyConfig: enemyConfig.value,
     segmentSplitOptions: segmentSplitOptions.value,
     actionDrafts: actionDrafts.value,
@@ -1710,6 +1769,10 @@ function resetDraft() {
 
 function applyDraftState(draft) {
   selection.value = { ...draft.selection };
+  actorConfigs.value = normalizeWorkbenchActorConfigs(
+    draft.actorConfigs,
+    selection.value
+  );
   enemyConfig.value = normalizeWorkbenchEnemyConfig(draft.enemyConfig);
   segmentSplitOptions.value = normalizeWorkbenchSegmentSplitOptions(
     draft.segmentSplitOptions
@@ -1884,6 +1947,7 @@ function createWorkbenchHistorySnapshot() {
   const draftSnapshot = createWorkbenchDraftSnapshot(
     {
       selection: selection.value,
+      actorConfigs: actorConfigs.value,
       enemyConfig: enemyConfig.value,
       segmentSplitOptions: segmentSplitOptions.value,
       actionDrafts: actionDrafts.value,
@@ -1893,6 +1957,7 @@ function createWorkbenchHistorySnapshot() {
   );
   return cloneWorkbenchHistoryValue({
     selection: draftSnapshot.selection,
+    actorConfigs: draftSnapshot.actorConfigs,
     enemyConfig: draftSnapshot.enemyConfig,
     segmentSplitOptions: draftSnapshot.segmentSplitOptions,
     actionDrafts: draftSnapshot.actionDrafts,
@@ -1915,6 +1980,10 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
     return;
   }
   selection.value = normalizeWorkbenchSelection(snapshot.selection);
+  actorConfigs.value = normalizeWorkbenchActorConfigs(
+    snapshot.actorConfigs,
+    selection.value
+  );
   enemyConfig.value = normalizeWorkbenchEnemyConfig(snapshot.enemyConfig);
   segmentSplitOptions.value = normalizeWorkbenchSegmentSplitOptions(
     snapshot.segmentSplitOptions
@@ -3062,7 +3131,8 @@ function createSideInspectorPanelOrders(inspectorMode) {
       runtimeDetail: 0,
       properties: 1,
       enemy: 2,
-      analysis: 3,
+      teamLoadout: 3,
+      analysis: 4,
     };
   }
 
@@ -3070,7 +3140,8 @@ function createSideInspectorPanelOrders(inspectorMode) {
     properties: 0,
     enemy: 1,
     runtimeDetail: 2,
-    analysis: 3,
+    teamLoadout: 3,
+    analysis: 4,
   };
 }
 

@@ -1,4 +1,9 @@
 import workbenchSeed from '../data/generated/workbench-seed.json';
+import {
+  getAzprEquipment,
+  getAzprKibos,
+  getAzprSoulessences,
+} from '../data/azprGenerated';
 import { WORKBENCH_FRAME_MS, snapMsToFrame } from './timebase';
 import {
   ACTION_TYPES,
@@ -13,14 +18,38 @@ import {
   createWaitAction,
 } from './projectSchema';
 import { getSkillActionCatalog } from './skillActionCatalog';
-import { getSkillActionVariants, getSkillDamageSegments } from './skillDamageSegments';
+import {
+  getSkillActionVariants,
+  getSkillDamageSegments,
+} from './skillDamageSegments';
 
 export { getSkillActionCatalog } from './skillActionCatalog';
-export { getSkillActionVariants, getSkillDamageSegments } from './skillDamageSegments';
+export {
+  getSkillActionVariants,
+  getSkillDamageSegments,
+} from './skillDamageSegments';
 
 const DEFAULT_SECONDARY_CHARACTER_ID =
-  workbenchSeed.gameData.characters.find((character) => character.id !== workbenchSeed.defaults.characterId)?.id ??
-  workbenchSeed.defaults.characterId;
+  workbenchSeed.gameData.characters.find(
+    character => character.id !== workbenchSeed.defaults.characterId
+  )?.id ?? workbenchSeed.defaults.characterId;
+
+const WORKBENCH_EQUIPMENT = getAzprEquipment();
+const WORKBENCH_KIBOS = getAzprKibos();
+const WORKBENCH_SOULESSENCES = getAzprSoulessences();
+const WORKBENCH_GAME_DATA = Object.freeze({
+  ...workbenchSeed.gameData,
+  equipment: WORKBENCH_EQUIPMENT,
+  kibos: WORKBENCH_KIBOS,
+  soulessences: WORKBENCH_SOULESSENCES,
+});
+const WORKBENCH_EQUIPMENT_SLOT_TYPES = Object.freeze({
+  weapon: '武器',
+  top: '上装',
+  bottom: '下装',
+  earring: '耳环',
+  ring: '戒指',
+});
 
 export const DEFAULT_WORKBENCH_SELECTION = Object.freeze({
   characterId: workbenchSeed.defaults.characterId,
@@ -35,6 +64,8 @@ export const DEFAULT_WORKBENCH_ENEMY_CONFIG = Object.freeze({
   defenseMultiplier: 1,
 });
 
+export const DEFAULT_WORKBENCH_ACTOR_LEVEL = 80;
+
 export const DEFAULT_WORKBENCH_ACTION_ID = 'action-0001';
 
 export function getWorkbenchSeed() {
@@ -42,11 +73,26 @@ export function getWorkbenchSeed() {
 }
 
 export function getWorkbenchGameData() {
-  return workbenchSeed.gameData;
+  return WORKBENCH_GAME_DATA;
+}
+
+export function getWorkbenchLoadoutOptions() {
+  return {
+    kibos: WORKBENCH_KIBOS,
+    soulessences: WORKBENCH_SOULESSENCES,
+    equipment: Object.fromEntries(
+      Object.entries(WORKBENCH_EQUIPMENT_SLOT_TYPES).map(([slotKey, type]) => [
+        slotKey,
+        WORKBENCH_EQUIPMENT.filter(item => item.type === type),
+      ])
+    ),
+  };
 }
 
 export function getSkillsForCharacter(characterId) {
-  return workbenchSeed.gameData.skills.filter((skill) => skill.characterId === Number(characterId));
+  return workbenchSeed.gameData.skills.filter(
+    skill => skill.characterId === Number(characterId)
+  );
 }
 
 export function createWorkbenchActionDraft({
@@ -68,18 +114,27 @@ export function createWorkbenchActionDraft({
   insertion = null,
   generationBatch = null,
 } = {}) {
-  const normalizedActionVariantIndex = Math.max(0, Number(actionVariantIndex ?? damageSegmentIndex) || 0);
+  const normalizedActionVariantIndex = Math.max(
+    0,
+    Number(actionVariantIndex ?? damageSegmentIndex) || 0
+  );
   return {
     id,
     type,
     skillId: Number(skillId),
-    actorCharacterId: Number(actorCharacterId) || DEFAULT_WORKBENCH_SELECTION.characterId,
+    actorCharacterId:
+      Number(actorCharacterId) || DEFAULT_WORKBENCH_SELECTION.characterId,
     startMs: Math.max(0, snapMsToFrame(Number(startMs) || 0)),
-    durationMs: Math.max(WORKBENCH_FRAME_MS, snapMsToFrame(Number(durationMs) || 1000)),
+    durationMs: Math.max(
+      WORKBENCH_FRAME_MS,
+      snapMsToFrame(Number(durationMs) || 1000)
+    ),
     level: Math.max(1, Number(level) || 1),
     actionVariantIndex: normalizedActionVariantIndex,
     damageSegmentIndex: normalizedActionVariantIndex,
-    targetCharacterId: Number(targetCharacterId) || DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId,
+    targetCharacterId:
+      Number(targetCharacterId) ||
+      DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId,
     resource,
     change: Number(change) || 0,
     reason,
@@ -91,21 +146,34 @@ export function createWorkbenchActionDraft({
 }
 
 export function normalizeWorkbenchSelection(selection = {}) {
-  const characterId = Number(selection.characterId ?? DEFAULT_WORKBENCH_SELECTION.characterId);
-  const character = findById(workbenchSeed.gameData.characters, characterId) ?? workbenchSeed.gameData.characters[0];
-  const requestedSecondaryCharacter = findById(workbenchSeed.gameData.characters, selection.secondaryCharacterId);
+  const characterId = Number(
+    selection.characterId ?? DEFAULT_WORKBENCH_SELECTION.characterId
+  );
+  const character =
+    findById(workbenchSeed.gameData.characters, characterId) ??
+    workbenchSeed.gameData.characters[0];
+  const requestedSecondaryCharacter = findById(
+    workbenchSeed.gameData.characters,
+    selection.secondaryCharacterId
+  );
   const fallbackSecondaryCharacter =
-    workbenchSeed.gameData.characters.find((item) => item.id !== character.id) ?? character;
+    workbenchSeed.gameData.characters.find(item => item.id !== character.id) ??
+    character;
   const secondaryCharacter =
-    requestedSecondaryCharacter && requestedSecondaryCharacter.id !== character.id
+    requestedSecondaryCharacter &&
+    requestedSecondaryCharacter.id !== character.id
       ? requestedSecondaryCharacter
       : fallbackSecondaryCharacter;
   const characterSkills = getSkillsForCharacter(character.id);
   const requestedSkill = findById(characterSkills, selection.skillId);
-  const skill = requestedSkill ?? characterSkills[0] ?? workbenchSeed.gameData.skills[0];
+  const skill =
+    requestedSkill ?? characterSkills[0] ?? workbenchSeed.gameData.skills[0];
   const enemy =
     findById(workbenchSeed.gameData.enemies, selection.enemyId) ??
-    findById(workbenchSeed.gameData.enemies, DEFAULT_WORKBENCH_SELECTION.enemyId) ??
+    findById(
+      workbenchSeed.gameData.enemies,
+      DEFAULT_WORKBENCH_SELECTION.enemyId
+    ) ??
     workbenchSeed.gameData.enemies[0];
 
   return {
@@ -116,28 +184,116 @@ export function normalizeWorkbenchSelection(selection = {}) {
   };
 }
 
+export function createDefaultWorkbenchActorConfigs(selection = {}) {
+  return normalizeWorkbenchActorConfigs([], selection);
+}
+
+export function normalizeWorkbenchActorConfigs(
+  actorConfigs = [],
+  selection = DEFAULT_WORKBENCH_SELECTION
+) {
+  const normalizedSelection = normalizeWorkbenchSelection(selection);
+  const sourceConfigs = Array.isArray(actorConfigs)
+    ? actorConfigs
+    : Object.values(actorConfigs ?? {});
+
+  return [
+    normalizedSelection.characterId,
+    normalizedSelection.secondaryCharacterId,
+  ].map(characterId => {
+    const source = sourceConfigs.find(
+      item => Number(item?.characterId) === Number(characterId)
+    );
+    const character = findById(workbenchSeed.gameData.characters, characterId);
+    const attributeLevel = Number(character?.attributePanel?.level);
+
+    return {
+      characterId: Number(characterId),
+      level: Number.isFinite(attributeLevel)
+        ? attributeLevel
+        : clampNumber(
+            source?.level,
+            1,
+            DEFAULT_WORKBENCH_ACTOR_LEVEL,
+            DEFAULT_WORKBENCH_ACTOR_LEVEL
+          ),
+      loadout: normalizeWorkbenchLoadout(source?.loadout),
+    };
+  });
+}
+
+export function normalizeWorkbenchLoadout(loadout = {}) {
+  const source = loadout ?? {};
+  const equipment = source.equipment ?? {};
+
+  return {
+    kiboId: normalizeCatalogId(source.kiboId, WORKBENCH_KIBOS),
+    equipment: Object.fromEntries(
+      Object.keys(WORKBENCH_EQUIPMENT_SLOT_TYPES).map(slotKey => [
+        slotKey,
+        normalizeEquipmentId(equipment[slotKey], slotKey),
+      ])
+    ),
+    soulessenceId: normalizeCatalogId(
+      source.soulessenceId,
+      WORKBENCH_SOULESSENCES
+    ),
+  };
+}
+
 export function createWorkbenchProject(selection = {}, actionPatch = {}) {
   const normalized = normalizeWorkbenchSelection(selection);
-  const enemyConfig = normalizeWorkbenchEnemyConfig(actionPatch.enemyConfig ?? actionPatch);
-  const character = findById(workbenchSeed.gameData.characters, normalized.characterId);
-  const secondaryCharacter = findById(workbenchSeed.gameData.characters, normalized.secondaryCharacterId);
+  const enemyConfig = normalizeWorkbenchEnemyConfig(
+    actionPatch.enemyConfig ?? actionPatch
+  );
+  const actorConfigs = normalizeWorkbenchActorConfigs(
+    actionPatch.actorConfigs,
+    normalized
+  );
+  const actorConfigsByCharacterId = new Map(
+    actorConfigs.map(config => [Number(config.characterId), config])
+  );
+  const character = findById(
+    workbenchSeed.gameData.characters,
+    normalized.characterId
+  );
+  const secondaryCharacter = findById(
+    workbenchSeed.gameData.characters,
+    normalized.secondaryCharacterId
+  );
   const enemy = findById(workbenchSeed.gameData.enemies, normalized.enemyId);
-  const actionDrafts = normalizeWorkbenchActionDrafts(actionPatch.actions ?? [actionPatch], normalized);
+  const actionDrafts = normalizeWorkbenchActionDrafts(
+    actionPatch.actions ?? [actionPatch],
+    normalized
+  );
 
-  if (!character || !secondaryCharacter || !enemy || actionDrafts.length === 0) {
-    throw new Error('Workbench seed cannot resolve selected character, skill, or enemy');
+  if (
+    !character ||
+    !secondaryCharacter ||
+    !enemy ||
+    actionDrafts.length === 0
+  ) {
+    throw new Error(
+      'Workbench seed cannot resolve selected character, skill, or enemy'
+    );
   }
 
-  const skillDrafts = actionDrafts.filter((draft) => draft.type === ACTION_TYPES.SKILL);
-  const teamCharacters = uniqueById([character, secondaryCharacter]);
-  const actors = teamCharacters.map((item) =>
-    createActorFromCharacter(item, {
-      actorId: `actor-${item.id}`,
-      level: actionPatch.actorLevel ?? 80,
-      skillLevels: createSkillLevelsForCharacter(skillDrafts, item.id),
-    }),
+  const skillDrafts = actionDrafts.filter(
+    draft => draft.type === ACTION_TYPES.SKILL
   );
-  const actorsByCharacterId = new Map(actors.map((actor) => [Number(actor.characterId), actor]));
+  const teamCharacters = uniqueById([character, secondaryCharacter]);
+  const actors = teamCharacters.map(item => {
+    const actorConfig = actorConfigsByCharacterId.get(Number(item.id));
+    return createActorFromCharacter(item, {
+      actorId: `actor-${item.id}`,
+      level: actorConfig?.level ?? DEFAULT_WORKBENCH_ACTOR_LEVEL,
+      skillLevels: createSkillLevelsForCharacter(skillDrafts, item.id),
+      loadout: actorConfig?.loadout,
+    });
+  });
+  const actorsByCharacterId = new Map(
+    actors.map(actor => [Number(actor.characterId), actor])
+  );
   const enemyInstance = createEnemyFromData(enemy, {
     enemyInstanceId: `enemy-${enemy.id}`,
     level: enemyConfig.level,
@@ -145,8 +301,14 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     defenseMultiplier: enemyConfig.defenseMultiplier,
   });
   const titleAction = actionDrafts[0];
-  const firstSkill = findById(workbenchSeed.gameData.skills, titleAction.skillId);
-  const titleActionName = titleAction.type === ACTION_TYPES.SKILL ? firstSkill.name : actionTypeLabel(titleAction.type);
+  const firstSkill = findById(
+    workbenchSeed.gameData.skills,
+    titleAction.skillId
+  );
+  const titleActionName =
+    titleAction.type === ACTION_TYPES.SKILL
+      ? firstSkill.name
+      : actionTypeLabel(titleAction.type);
 
   return createProject({
     id: 'workbench-editable-slice',
@@ -154,17 +316,24 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     durationMs: actionPatch.durationMs ?? 30000,
     actors,
     enemy: enemyInstance,
-    actions: actionDrafts.map((draft) =>
-      createProjectActionFromDraft(draft, actorsByCharacterId, character.id, enemyInstance.id),
+    actions: actionDrafts.map(draft =>
+      createProjectActionFromDraft(
+        draft,
+        actorsByCharacterId,
+        character.id,
+        enemyInstance.id
+      )
     ),
     metadata: {
       fixture: false,
       fixturePurpose: 'stage-4-editable-workbench',
       sourceCharacterId: character.id,
       secondaryCharacterId: secondaryCharacter.id,
-      sourceSkillIds: skillDrafts.map((draft) => draft.skillId),
+      sourceSkillIds: skillDrafts.map(draft => draft.skillId),
       sourceEnemyId: enemy.id,
       enemyConfig,
+      actorConfigs,
+      loadoutCalculationStatus: 'project-config-only',
     },
   });
 }
@@ -172,36 +341,46 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
 export function normalizeWorkbenchEnemyConfig(config = {}) {
   const source = config ?? {};
   return {
-    level: clampNumber(source.level ?? source.enemyLevel, 1, 200, DEFAULT_WORKBENCH_ENEMY_CONFIG.level),
+    level: clampNumber(
+      source.level ?? source.enemyLevel,
+      1,
+      200,
+      DEFAULT_WORKBENCH_ENEMY_CONFIG.level
+    ),
     hpMultiplier: clampNumber(
       source.hpMultiplier ?? DEFAULT_WORKBENCH_ENEMY_CONFIG.hpMultiplier,
       0.1,
       100,
-      DEFAULT_WORKBENCH_ENEMY_CONFIG.hpMultiplier,
+      DEFAULT_WORKBENCH_ENEMY_CONFIG.hpMultiplier
     ),
     defenseMultiplier: clampNumber(
-      source.defenseMultiplier ?? DEFAULT_WORKBENCH_ENEMY_CONFIG.defenseMultiplier,
+      source.defenseMultiplier ??
+        DEFAULT_WORKBENCH_ENEMY_CONFIG.defenseMultiplier,
       0.1,
       100,
-      DEFAULT_WORKBENCH_ENEMY_CONFIG.defenseMultiplier,
+      DEFAULT_WORKBENCH_ENEMY_CONFIG.defenseMultiplier
     ),
   };
 }
 
 export function normalizeWorkbenchActionDrafts(
   actionDrafts = [],
-  selectionOrCharacterId = DEFAULT_WORKBENCH_SELECTION.characterId,
+  selectionOrCharacterId = DEFAULT_WORKBENCH_SELECTION.characterId
 ) {
   const selection =
     typeof selectionOrCharacterId === 'object'
       ? normalizeWorkbenchSelection(selectionOrCharacterId)
       : normalizeWorkbenchSelection({ characterId: selectionOrCharacterId });
   const primarySkills = getSkillsForCharacter(selection.characterId);
-  const primaryFallbackSkill = primarySkills[0] ?? workbenchSeed.gameData.skills[0];
+  const primaryFallbackSkill =
+    primarySkills[0] ?? workbenchSeed.gameData.skills[0];
 
   return actionDrafts
     .map((draft, index) => {
-      const actorCharacterId = normalizeActorCharacterId(draft.actorCharacterId, selection);
+      const actorCharacterId = normalizeActorCharacterId(
+        draft.actorCharacterId,
+        selection
+      );
       const actorSkills = getSkillsForCharacter(actorCharacterId);
       const fallbackSkill = actorSkills[0] ?? primaryFallbackSkill;
 
@@ -216,7 +395,8 @@ export function normalizeWorkbenchActionDrafts(
           level: draft.level,
           damageSegmentIndex: draft.damageSegmentIndex,
           actionVariantIndex: draft.actionVariantIndex,
-          targetCharacterId: draft.targetCharacterId ?? selection.secondaryCharacterId,
+          targetCharacterId:
+            draft.targetCharacterId ?? selection.secondaryCharacterId,
           resource: draft.resource,
           change: draft.change,
           reason: draft.reason,
@@ -240,9 +420,10 @@ export function normalizeWorkbenchActionDrafts(
         actionVariantIndex: clampActionVariantIndex(
           draft.actionVariantIndex ?? draft.damageSegmentIndex,
           skill,
-          draft.level,
+          draft.level
         ),
-        targetCharacterId: draft.targetCharacterId ?? selection.secondaryCharacterId,
+        targetCharacterId:
+          draft.targetCharacterId ?? selection.secondaryCharacterId,
         resource: draft.resource,
         change: draft.change,
         reason: draft.reason,
@@ -252,15 +433,34 @@ export function normalizeWorkbenchActionDrafts(
         generationBatch: draft.generationBatch,
       });
     })
-    .filter((draft) => draft.type !== ACTION_TYPES.SKILL || findById(workbenchSeed.gameData.skills, draft.skillId));
+    .filter(
+      draft =>
+        draft.type !== ACTION_TYPES.SKILL ||
+        findById(workbenchSeed.gameData.skills, draft.skillId)
+    );
 }
 
-function createProjectActionFromDraft(draft, actorsByCharacterId, primaryCharacterId, targetId) {
-  const primaryActor = actorsByCharacterId.get(Number(primaryCharacterId)) ?? [...actorsByCharacterId.values()][0];
-  const sourceActor = resolveActorFromDraft(draft, actorsByCharacterId, primaryActor);
+function createProjectActionFromDraft(
+  draft,
+  actorsByCharacterId,
+  primaryCharacterId,
+  targetId
+) {
+  const primaryActor =
+    actorsByCharacterId.get(Number(primaryCharacterId)) ??
+    [...actorsByCharacterId.values()][0];
+  const sourceActor = resolveActorFromDraft(
+    draft,
+    actorsByCharacterId,
+    primaryActor
+  );
 
   if (draft.type === ACTION_TYPES.SWITCH) {
-    const targetActor = resolveSwitchTargetActor(draft, actorsByCharacterId, sourceActor);
+    const targetActor = resolveSwitchTargetActor(
+      draft,
+      actorsByCharacterId,
+      sourceActor
+    );
     return createSwitchAction({
       id: draft.id,
       actorId: sourceActor.id,
@@ -317,7 +517,10 @@ function createProjectActionFromDraft(draft, actorsByCharacterId, primaryCharact
   }
 
   const skill = findById(workbenchSeed.gameData.skills, draft.skillId);
-  const actor = sourceActor ?? actorsByCharacterId.get(Number(skill.characterId)) ?? primaryActor;
+  const actor =
+    sourceActor ??
+    actorsByCharacterId.get(Number(skill.characterId)) ??
+    primaryActor;
   return createSkillAction({
     id: draft.id,
     actorId: actor.id,
@@ -328,7 +531,8 @@ function createProjectActionFromDraft(draft, actorsByCharacterId, primaryCharact
     level: draft.level,
     actionVariantIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
     damageSegmentIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
-    note: draft.note || '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
+    note:
+      draft.note || '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
     insertion: draft.insertion,
     generationBatch: draft.generationBatch,
   });
@@ -365,23 +569,34 @@ function isNonSkillDraftType(type) {
 
 function normalizeActorCharacterId(actorCharacterId, selection) {
   const id = Number(actorCharacterId);
-  if (id === Number(selection.characterId) || id === Number(selection.secondaryCharacterId)) {
+  if (
+    id === Number(selection.characterId) ||
+    id === Number(selection.secondaryCharacterId)
+  ) {
     return id;
   }
   return selection.characterId;
 }
 
 function resolveActorFromDraft(draft, actorsByCharacterId, fallbackActor) {
-  return actorsByCharacterId.get(Number(draft.actorCharacterId)) ?? fallbackActor;
+  return (
+    actorsByCharacterId.get(Number(draft.actorCharacterId)) ?? fallbackActor
+  );
 }
 
 function resolveSwitchTargetActor(draft, actorsByCharacterId, sourceActor) {
-  const requestedTarget = actorsByCharacterId.get(Number(draft.targetCharacterId));
+  const requestedTarget = actorsByCharacterId.get(
+    Number(draft.targetCharacterId)
+  );
   if (requestedTarget && requestedTarget.id !== sourceActor.id) {
     return requestedTarget;
   }
 
-  return [...actorsByCharacterId.values()].find((actor) => actor.id !== sourceActor.id) ?? sourceActor;
+  return (
+    [...actorsByCharacterId.values()].find(
+      actor => actor.id !== sourceActor.id
+    ) ?? sourceActor
+  );
 }
 
 function clampLevel(level, skill) {
@@ -395,7 +610,10 @@ function clampDamageSegmentIndex(damageSegmentIndex, skill, level) {
 
 function clampActionVariantIndex(actionVariantIndex, skill, level) {
   const segmentCount = Math.max(1, getSkillActionVariants(skill, level).length);
-  return Math.min(segmentCount - 1, Math.max(0, Number(actionVariantIndex) || 0));
+  return Math.min(
+    segmentCount - 1,
+    Math.max(0, Number(actionVariantIndex) || 0)
+  );
 }
 
 function normalizeWorkbenchInsertion(insertion) {
@@ -411,7 +629,7 @@ function normalizeWorkbenchInsertion(insertion) {
     laneId: insertion.laneId ? String(insertion.laneId) : '',
     reason: insertion.reason ? String(insertion.reason) : '',
     conflictActionIds: Array.isArray(insertion.conflictActionIds)
-      ? insertion.conflictActionIds.map((id) => String(id))
+      ? insertion.conflictActionIds.map(id => String(id))
       : [],
   };
 }
@@ -421,35 +639,50 @@ function normalizeWorkbenchGenerationBatch(generationBatch) {
     return null;
   }
 
-  const batchId = generationBatch.batchId ? String(generationBatch.batchId) : '';
+  const batchId = generationBatch.batchId
+    ? String(generationBatch.batchId)
+    : '';
   if (!batchId) {
     return null;
   }
 
   return {
     batchId,
-    source: generationBatch.source ? String(generationBatch.source) : 'skill-action-variant-split',
+    source: generationBatch.source
+      ? String(generationBatch.source)
+      : 'skill-action-variant-split',
     skillId: Number(generationBatch.skillId) || null,
     actorCharacterId: Number(generationBatch.actorCharacterId) || null,
     level: Math.max(1, Number(generationBatch.level) || 1),
-    variantCount: Math.max(1, Number(generationBatch.variantCount ?? generationBatch.segmentCount) || 1),
-    segmentCount: Math.max(1, Number(generationBatch.variantCount ?? generationBatch.segmentCount) || 1),
-    createdAt: generationBatch.createdAt ? String(generationBatch.createdAt) : null,
+    variantCount: Math.max(
+      1,
+      Number(generationBatch.variantCount ?? generationBatch.segmentCount) || 1
+    ),
+    segmentCount: Math.max(
+      1,
+      Number(generationBatch.variantCount ?? generationBatch.segmentCount) || 1
+    ),
+    createdAt: generationBatch.createdAt
+      ? String(generationBatch.createdAt)
+      : null,
   };
 }
 
 function createSkillLevelsForCharacter(skillDrafts, characterId) {
   return Object.fromEntries(
     skillDrafts
-      .map((draft) => [findById(workbenchSeed.gameData.skills, draft.skillId), draft.level])
+      .map(draft => [
+        findById(workbenchSeed.gameData.skills, draft.skillId),
+        draft.level,
+      ])
       .filter(([skill]) => skill?.characterId === Number(characterId))
-      .map(([skill, level]) => [skill.id, level]),
+      .map(([skill, level]) => [skill.id, level])
   );
 }
 
 function uniqueById(items) {
   const seen = new Set();
-  return items.filter((item) => {
+  return items.filter(item => {
     if (seen.has(item.id)) {
       return false;
     }
@@ -466,6 +699,27 @@ function clampNumber(value, min, max, fallback) {
   return Math.min(max, Math.max(min, number));
 }
 
+function normalizeCatalogId(value, catalog) {
+  const id = Number(value);
+  if (!Number.isFinite(id)) {
+    return null;
+  }
+  return catalog.some(item => Number(item.id) === id) ? id : null;
+}
+
+function normalizeEquipmentId(value, slotKey) {
+  const expectedType = WORKBENCH_EQUIPMENT_SLOT_TYPES[slotKey];
+  const id = Number(value);
+  if (!Number.isFinite(id) || !expectedType) {
+    return null;
+  }
+  return WORKBENCH_EQUIPMENT.some(
+    item => Number(item.id) === id && item.type === expectedType
+  )
+    ? id
+    : null;
+}
+
 function findById(items, id) {
-  return items.find((item) => item.id === Number(id)) ?? null;
+  return items.find(item => item.id === Number(id)) ?? null;
 }

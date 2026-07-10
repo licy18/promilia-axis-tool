@@ -4,6 +4,7 @@ import { nextTick } from 'vue';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import workbenchSeed from '../../data/generated/workbench-seed.json';
 import {
+  WORKBENCH_DRAFT_SCHEMA_VERSION,
   WORKBENCH_DRAFT_STORAGE_KEY,
   createWorkbenchDraftSnapshot,
 } from '../../domain/workbenchDraftStorage';
@@ -9030,19 +9031,49 @@ describe('Workbench view', () => {
     await wrapper
       .find('[data-testid="workbench-enemy-level-input"]')
       .setValue('95');
+    await wrapper
+      .find(
+        '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
+      )
+      .setValue('500001');
+    await wrapper
+      .find(
+        '[data-testid="workbench-actor-equipment-select"][data-character-id="109001"][data-loadout-key="weapon"]'
+      )
+      .setValue('1010111');
+    await wrapper
+      .find(
+        '[data-testid="workbench-actor-soulessence-select"][data-character-id="109001"]'
+      )
+      .setValue('10001');
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
 
     const rawDraft = window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY);
     const draft = JSON.parse(rawDraft);
     expect(rawDraft).not.toContain('skillBlocks');
     expect(draft).toMatchObject({
-      schemaVersion: 1,
+      schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
       game: 'azur-promilia',
       type: 'workbench-draft',
       enemyConfig: {
         level: 95,
       },
       selectedActionId: 'action-0002',
+      actorConfigs: [
+        {
+          characterId: 109001,
+          loadout: {
+            kiboId: 500001,
+            equipment: {
+              weapon: 1010111,
+            },
+            soulessenceId: 10001,
+          },
+        },
+        {
+          characterId: 101003,
+        },
+      ],
     });
     expect(draft.actionDrafts).toHaveLength(2);
     expect(draft.actionDrafts[1]).toMatchObject({
@@ -9077,6 +9108,21 @@ describe('Workbench view', () => {
     expect(restored.find('[data-testid="workbench-enemy-level"]').text()).toBe(
       'Lv.95'
     );
+    expect(
+      restored.find(
+        '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
+      ).element.value
+    ).toBe('500001');
+    expect(
+      restored.find(
+        '[data-testid="workbench-actor-equipment-select"][data-character-id="109001"][data-loadout-key="weapon"]'
+      ).element.value
+    ).toBe('1010111');
+    expect(
+      restored.find(
+        '[data-testid="workbench-actor-soulessence-select"][data-character-id="109001"]'
+      ).element.value
+    ).toBe('10001');
 
     await restored
       .find('[data-testid="workbench-reset-draft"]')
@@ -9095,6 +9141,11 @@ describe('Workbench view', () => {
     expect(restored.find('[data-testid="workbench-enemy-level"]').text()).toBe(
       'Lv.80'
     );
+    expect(
+      restored.find(
+        '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
+      ).element.value
+    ).toBe('');
   });
 });
 

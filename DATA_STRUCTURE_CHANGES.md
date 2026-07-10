@@ -24435,3 +24435,43 @@ Workbench 分享 URL 使用 hash route query：
 
 - `workbenchDraftStorage.test.js` 覆盖分享码 round-trip 和非法分享码拒绝。
 - `workbench-continuous-edit.spec.js` 覆盖真实浏览器生成分享链接、重置、从 URL 恢复项目并重新运行模拟。
+
+## 342. Workbench v2 参战角色配置：Actor Config And Loadout
+
+### 342.1 草稿字段
+
+`workbench-draft` / `workbench-project` 从 `schemaVersion = 1` 升级为 `schemaVersion = 2`，新增：
+
+```text
+actorConfigs[]
+  characterId
+  level
+  loadout
+    kiboId
+    equipment.weapon
+    equipment.top
+    equipment.bottom
+    equipment.earring
+    equipment.ring
+    soulessenceId
+```
+
+`actorConfigs` 始终按当前主角色、次角色规范化为两个配置项。培养项 ID 来自本地生成的 `kibos.json`、`equipment.json` 和 `soulessences.json`；装备 ID 同时校验槽位类型。
+
+### 342.2 项目与运行时边界
+
+`createWorkbenchProject()` 把 `actorConfigs` 投影到 `actors[].level`、`actors[].loadout` 和 `project.loadouts`。编译后的 scenario 保留这些字段，但当前三值 calculator 不读取培养项；项目 metadata 使用 `loadoutCalculationStatus = project-config-only` 固定该边界。
+
+角色、敌人和角色数值面板继续参与当前模拟。奇波、装备和魂灵当前属于可保存、可分享、可追溯的项目配置，不改变现有 HP、韧性和自身能量结果。
+
+### 342.3 迁移
+
+- 当前 localStorage key 为 `promilia-axis-tool:workbench-draft:v2`。
+- 读取仍兼容 `promilia-axis-tool:workbench-draft:v1`、v1 JSON 项目和 v1 分享快照；缺少 `actorConfigs` 时按当前两名角色补空 loadout。
+- 重置草稿会同时清理 v2 和旧 v1 key。
+
+### 342.4 验证
+
+- `workbenchProjectFactory.test.js` 覆盖真实 AzPr 培养项投影、双角色规范化和装备槽位错误。
+- `workbenchDraftStorage.test.js` 覆盖 v2 round-trip、v1 文件/本地草稿迁移和双 key 清理。
+- `Workbench.test.js` 与 Workbench E2E 覆盖培养配置保存、导出、重置和导入恢复。

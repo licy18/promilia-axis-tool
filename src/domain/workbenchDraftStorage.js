@@ -2,15 +2,20 @@ import {
   DEFAULT_WORKBENCH_ACTION_ID,
   DEFAULT_WORKBENCH_ENEMY_CONFIG,
   DEFAULT_WORKBENCH_SELECTION,
+  createDefaultWorkbenchActorConfigs,
   createWorkbenchActionDraft,
+  normalizeWorkbenchActorConfigs,
   normalizeWorkbenchEnemyConfig,
   normalizeWorkbenchActionDrafts,
   normalizeWorkbenchSelection,
 } from './workbenchProjectFactory';
 
-export const WORKBENCH_DRAFT_SCHEMA_VERSION = 1;
+export const WORKBENCH_DRAFT_SCHEMA_VERSION = 2;
 export const WORKBENCH_DRAFT_STORAGE_KEY =
-  'promilia-axis-tool:workbench-draft:v1';
+  'promilia-axis-tool:workbench-draft:v2';
+export const LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS = Object.freeze([
+  'promilia-axis-tool:workbench-draft:v1',
+]);
 export const WORKBENCH_DRAFT_FILE_TYPE = 'workbench-draft';
 export const WORKBENCH_PROJECT_FILE_TYPE = 'workbench-project';
 export const WORKBENCH_PROJECT_FILE_EXTENSION = 'promilia-workbench.json';
@@ -24,6 +29,9 @@ export const DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS = Object.freeze({
 export function createDefaultWorkbenchDraftState() {
   return {
     selection: { ...DEFAULT_WORKBENCH_SELECTION },
+    actorConfigs: createDefaultWorkbenchActorConfigs(
+      DEFAULT_WORKBENCH_SELECTION
+    ),
     enemyConfig: { ...DEFAULT_WORKBENCH_ENEMY_CONFIG },
     segmentSplitOptions: { ...DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS },
     actionDrafts: [createWorkbenchActionDraft()],
@@ -35,6 +43,7 @@ export function createDefaultWorkbenchDraftState() {
 export function createWorkbenchDraftSnapshot(
   {
     selection,
+    actorConfigs,
     enemyConfig,
     segmentSplitOptions,
     actionDrafts,
@@ -43,6 +52,10 @@ export function createWorkbenchDraftSnapshot(
   savedAt = new Date().toISOString()
 ) {
   const normalizedSelection = normalizeWorkbenchSelection(selection);
+  const normalizedActorConfigs = normalizeWorkbenchActorConfigs(
+    actorConfigs,
+    normalizedSelection
+  );
   const normalizedEnemyConfig = normalizeWorkbenchEnemyConfig(enemyConfig);
   const normalizedSegmentSplitOptions =
     normalizeWorkbenchSegmentSplitOptions(segmentSplitOptions);
@@ -62,6 +75,7 @@ export function createWorkbenchDraftSnapshot(
     type: WORKBENCH_DRAFT_FILE_TYPE,
     savedAt,
     selection: normalizedSelection,
+    actorConfigs: normalizedActorConfigs,
     enemyConfig: normalizedEnemyConfig,
     segmentSplitOptions: normalizedSegmentSplitOptions,
     actionDrafts: normalizedActions,
@@ -172,7 +186,7 @@ function parseWorkbenchDraftPayload(rawDraft) {
 
 function isWorkbenchDraftPayload(payload) {
   return (
-    payload?.schemaVersion === WORKBENCH_DRAFT_SCHEMA_VERSION &&
+    isSupportedWorkbenchDraftSchema(payload?.schemaVersion) &&
     payload?.game === 'azur-promilia' &&
     payload?.type === WORKBENCH_DRAFT_FILE_TYPE
   );
@@ -180,7 +194,7 @@ function isWorkbenchDraftPayload(payload) {
 
 function isSupportedWorkbenchProjectPayload(payload) {
   return (
-    payload?.schemaVersion === WORKBENCH_DRAFT_SCHEMA_VERSION &&
+    isSupportedWorkbenchDraftSchema(payload?.schemaVersion) &&
     payload?.game === 'azur-promilia' &&
     [WORKBENCH_DRAFT_FILE_TYPE, WORKBENCH_PROJECT_FILE_TYPE].includes(
       payload?.type
@@ -203,11 +217,27 @@ export function loadWorkbenchDraft(storage) {
     return null;
   }
 
-  return parseWorkbenchDraft(storage.getItem(WORKBENCH_DRAFT_STORAGE_KEY));
+  for (const storageKey of [
+    WORKBENCH_DRAFT_STORAGE_KEY,
+    ...LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS,
+  ]) {
+    const draft = parseWorkbenchDraft(storage.getItem(storageKey));
+    if (draft) {
+      return draft;
+    }
+  }
+  return null;
 }
 
 export function clearWorkbenchDraft(storage) {
   storage?.removeItem(WORKBENCH_DRAFT_STORAGE_KEY);
+  LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS.forEach(storageKey =>
+    storage?.removeItem(storageKey)
+  );
+}
+
+function isSupportedWorkbenchDraftSchema(schemaVersion) {
+  return [1, WORKBENCH_DRAFT_SCHEMA_VERSION].includes(Number(schemaVersion));
 }
 
 function ensureActionDrafts(actionDrafts, selection) {

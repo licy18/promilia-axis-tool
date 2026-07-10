@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
+  LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS,
+  WORKBENCH_DRAFT_SCHEMA_VERSION,
   WORKBENCH_PROJECT_FILE_TYPE,
+  clearWorkbenchDraft,
   createWorkbenchProjectFileName,
   createWorkbenchProjectFileSnapshot,
   createWorkbenchProjectShareCode,
+  loadWorkbenchDraft,
   parseWorkbenchProjectFile,
   parseWorkbenchProjectShareCode,
   serializeWorkbenchProjectFile,
@@ -20,6 +24,23 @@ describe('workbench draft storage project files', () => {
             skillId: 10900101,
             enemyId: 300032,
           },
+          actorConfigs: [
+            {
+              characterId: 109001,
+              level: 80,
+              loadout: {
+                kiboId: 500001,
+                equipment: {
+                  weapon: 1010111,
+                  top: 1020111,
+                  bottom: 1030111,
+                  earring: 1040111,
+                  ring: 1050111,
+                },
+                soulessenceId: 10001,
+              },
+            },
+          ],
           enemyConfig: {
             level: 80,
             hpMultiplier: 1.5,
@@ -57,17 +78,32 @@ describe('workbench draft storage project files', () => {
     );
 
     expect(exported).toMatchObject({
-      schemaVersion: 1,
+      schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
       game: 'azur-promilia',
       type: WORKBENCH_PROJECT_FILE_TYPE,
       exportedAt: '2026-07-10T04:00:00.000Z',
       selectedActionId: 'action-0002',
+      actorConfigs: [
+        {
+          characterId: 109001,
+          loadout: {
+            kiboId: 500001,
+            equipment: {
+              weapon: 1010111,
+            },
+            soulessenceId: 10001,
+          },
+        },
+        {
+          characterId: 101003,
+        },
+      ],
     });
 
     const imported = parseWorkbenchProjectFile(exported);
 
     expect(imported).toMatchObject({
-      schemaVersion: 1,
+      schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
       game: 'azur-promilia',
       type: 'workbench-draft',
       savedAt: '2026-07-10T04:00:00.000Z',
@@ -117,13 +153,67 @@ describe('workbench draft storage project files', () => {
     );
     const legacyDraftFile = {
       ...projectFile,
+      schemaVersion: 1,
       type: 'workbench-draft',
+      actorConfigs: undefined,
     };
 
     expect(parseWorkbenchProjectFile(legacyDraftFile)).toMatchObject({
+      schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
       type: 'workbench-draft',
       selectedActionId: 'action-0001',
+      actorConfigs: [{ characterId: 109001 }, { characterId: 101003 }],
     });
+  });
+
+  it('loads legacy v1 local storage and clears both storage generations', () => {
+    const storage = new Map();
+    const storageAdapter = {
+      getItem: key => storage.get(key) ?? null,
+      setItem: (key, value) => storage.set(key, value),
+      removeItem: key => storage.delete(key),
+    };
+    const legacyStorageKey = LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS[0];
+    storage.set(
+      legacyStorageKey,
+      JSON.stringify({
+        schemaVersion: 1,
+        game: 'azur-promilia',
+        type: 'workbench-draft',
+        selection: {
+          characterId: 109001,
+          secondaryCharacterId: 101003,
+          skillId: 10900101,
+          enemyId: 300032,
+        },
+        enemyConfig: {
+          level: 88,
+          hpMultiplier: 1,
+          defenseMultiplier: 1,
+        },
+        actionDrafts: [
+          {
+            id: 'action-0001',
+            type: 'skill',
+            skillId: 10900101,
+            actorCharacterId: 109001,
+            startMs: 0,
+            durationMs: 1000,
+            level: 1,
+          },
+        ],
+        selectedActionId: 'action-0001',
+      })
+    );
+
+    expect(loadWorkbenchDraft(storageAdapter)).toMatchObject({
+      schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
+      enemyConfig: { level: 88 },
+      actorConfigs: [{ characterId: 109001 }, { characterId: 101003 }],
+    });
+
+    clearWorkbenchDraft(storageAdapter);
+    expect(storage.has(legacyStorageKey)).toBe(false);
   });
 
   it('rejects unrelated project files', () => {

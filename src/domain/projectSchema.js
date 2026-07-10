@@ -15,6 +15,13 @@ export const ACTION_TYPES = Object.freeze({
 
 export const DEFAULT_PROJECT_DURATION_MS = 120000;
 export const DEFAULT_PROJECT_FPS = 60;
+const LOADOUT_EQUIPMENT_SLOT_TYPES = Object.freeze({
+  weapon: '武器',
+  top: '上装',
+  bottom: '下装',
+  earring: '耳环',
+  ring: '戒指',
+});
 
 export function createProject({
   id,
@@ -139,10 +146,12 @@ export function createSkillAction({
   const damageModel = createSkillDamageModel(skill, level);
   const selectedActionVariant =
     damageModel.variants?.find(
-      variant => Number(variant.index) === Math.max(0, Number(actionVariantIndex) || 0)
+      variant =>
+        Number(variant.index) === Math.max(0, Number(actionVariantIndex) || 0)
     ) ??
     damageModel.variants?.find(
-      variant => Number(variant.index) === Math.max(0, Number(damageSegmentIndex) || 0)
+      variant =>
+        Number(variant.index) === Math.max(0, Number(damageSegmentIndex) || 0)
     ) ??
     damageModel.variants?.[0] ??
     null;
@@ -163,7 +172,10 @@ export function createSkillAction({
     targetId,
     level,
     actionVariantIndex: Math.max(0, Number(actionVariantIndex) || 0),
-    damageSegmentIndex: Math.max(0, Number(actionVariantIndex ?? damageSegmentIndex) || 0),
+    damageSegmentIndex: Math.max(
+      0,
+      Number(actionVariantIndex ?? damageSegmentIndex) || 0
+    ),
     cooldownMs: skill.cooldownMs,
     spCost: skill.spCost,
     elementId: skill.elementId,
@@ -427,7 +439,120 @@ function validateActors(actors, gameData, errors, warnings) {
         )
       );
     }
+    validateActorLoadout(actor, path, gameData, errors, warnings);
   });
+}
+
+function validateActorLoadout(actor, path, gameData, errors, warnings) {
+  const loadout = actor.loadout;
+  if (!isObject(loadout)) {
+    warnings.push(
+      issue(
+        'actor.loadout.missing',
+        'Actor has no loadout configuration',
+        `${path}.loadout`
+      )
+    );
+    return;
+  }
+
+  if (loadout.actorId !== actor.id) {
+    errors.push(
+      issue(
+        'actor.loadout.actorId.mismatch',
+        'Loadout actorId must match its actor',
+        `${path}.loadout.actorId`
+      )
+    );
+  }
+  if (Number(loadout.characterId) !== Number(actor.characterId)) {
+    errors.push(
+      issue(
+        'actor.loadout.characterId.mismatch',
+        'Loadout characterId must match its actor',
+        `${path}.loadout.characterId`
+      )
+    );
+  }
+
+  validateOptionalCatalogId({
+    value: loadout.kiboId,
+    catalog: gameData.kibos,
+    code: 'actor.loadout.kiboId.unknown',
+    label: 'kiboId',
+    path: `${path}.loadout.kiboId`,
+    errors,
+  });
+  validateOptionalCatalogId({
+    value: loadout.soulessenceId,
+    catalog: gameData.soulessences,
+    code: 'actor.loadout.soulessenceId.unknown',
+    label: 'soulessenceId',
+    path: `${path}.loadout.soulessenceId`,
+    errors,
+  });
+
+  if (!isObject(loadout.equipment)) {
+    errors.push(
+      issue(
+        'actor.loadout.equipment.invalid',
+        'Loadout equipment must be an object',
+        `${path}.loadout.equipment`
+      )
+    );
+    return;
+  }
+
+  const equipmentCatalog = Array.isArray(gameData.equipment)
+    ? gameData.equipment
+    : [];
+  Object.entries(LOADOUT_EQUIPMENT_SLOT_TYPES).forEach(
+    ([slotKey, expectedType]) => {
+      const equipmentId = loadout.equipment[slotKey];
+      if (equipmentId == null || equipmentId === '') {
+        return;
+      }
+      const equipment = equipmentCatalog.find(
+        item => Number(item.id) === Number(equipmentId)
+      );
+      if (equipmentCatalog.length > 0 && !equipment) {
+        errors.push(
+          issue(
+            'actor.loadout.equipmentId.unknown',
+            `Unknown equipment id ${equipmentId}`,
+            `${path}.loadout.equipment.${slotKey}`
+          )
+        );
+      } else if (equipment && equipment.type !== expectedType) {
+        errors.push(
+          issue(
+            'actor.loadout.equipmentType.mismatch',
+            `Equipment ${equipmentId} must be ${expectedType}`,
+            `${path}.loadout.equipment.${slotKey}`
+          )
+        );
+      }
+    }
+  );
+}
+
+function validateOptionalCatalogId({
+  value,
+  catalog,
+  code,
+  label,
+  path,
+  errors,
+}) {
+  if (value == null || value === '' || !Array.isArray(catalog)) {
+    return;
+  }
+  if (
+    catalog.length > 0 &&
+    !catalog.some(item => Number(item.id) === Number(value))
+  ) {
+    errors.push(issue(code, `Unknown ${label} ${value}`, path));
+  }
 }
 
 function validateEnemy(enemy, gameData, errors, warnings) {
