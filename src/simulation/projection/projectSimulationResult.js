@@ -1394,6 +1394,7 @@ export function projectSimulationResult({
   damageEvents,
   resourceEvents,
   effectTimeline,
+  actionRuleDiagnostics,
 }) {
   const runtimeSampleContext = createRecoverSpRuntimeSampleContext(
     scenario.runtimeSampleCaptures
@@ -1502,6 +1503,7 @@ export function projectSimulationResult({
     damageTimeline,
     resourceTimeline,
     effectTimeline: runtimeOutputs.effectTimeline,
+    actionRuleDiagnostics,
     summary: {
       totalRawDamage,
       totalProjectedToughnessDamage,
@@ -1519,6 +1521,7 @@ export function projectSimulationResult({
       threeValueRuntimeProjectionSummary: runtimeOutputs.summary,
       runtimeOutputsSummary: runtimeOutputs.outputSummary,
       effectRuntimeTimelineSummary: runtimeOutputs.effectTimeline.summary,
+      actionRuleDiagnosticsSummary: actionRuleDiagnostics.summary,
       formulaVersion: damageEvents[0]?.payload.formulaVersion ?? null,
       formulaCandidatePatternSummary,
       formulaExecutionMatrixSummary,
@@ -1530,6 +1533,7 @@ export function projectSimulationResult({
     },
     diagnostics: {
       validationWarnings: scenario.diagnostics.validationWarnings,
+      actionRules: actionRuleDiagnostics,
       limitations: [
         'Raw damage projection only; final AzPr formula is not implemented yet.',
         'Every action result tracks HP damage, toughness damage, and self energy delta; toughness and charge formulas remain unmapped until skill/effect nodes are parsed.',

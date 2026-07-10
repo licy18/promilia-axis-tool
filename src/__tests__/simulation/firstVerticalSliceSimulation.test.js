@@ -143,6 +143,21 @@ describe('first vertical slice simulation', () => {
     expect(eventTypes).toContain('TIMING_DATA_MISSING');
     expect(eventTypes).toContain('DAMAGE_PROJECTED');
     expect(eventTypes).toContain('SCENARIO_END');
+    expect(result.actionRuleDiagnostics).toMatchObject({
+      contractName: 'AzPrActionRuleDiagnostics',
+      status: 'action-rules-ready',
+      executable: true,
+      diagnostics: [],
+      summary: {
+        violationCount: 0,
+        unresolvedCount: 0,
+        appliedToSimulationResults: false,
+      },
+    });
+    expect(result.diagnostics.actionRules).toBe(result.actionRuleDiagnostics);
+    expect(result.summary.actionRuleDiagnosticsSummary).toBe(
+      result.actionRuleDiagnostics.summary
+    );
 
     expect(result.damageTimeline).toHaveLength(1);
     expect(result.damageTimeline[0]).toMatchObject({

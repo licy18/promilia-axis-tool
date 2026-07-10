@@ -2234,6 +2234,71 @@ test('configures, reviews, and shares a tracking-only effect @workbench-main-flo
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('locates and fixes a confirmed cooldown rule before runtime review @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/workbench');
+  const rulePanel = page.getByTestId('workbench-action-rule-panel');
+  await expect(rulePanel).toHaveAttribute('data-violation-count', '0');
+
+  const addCooldownSkill = async () => {
+    await page
+      .locator(
+        '[data-testid="workbench-skill-entry"][data-skill-id="10900112"]'
+      )
+      .first()
+      .click();
+  };
+  await addCooldownSkill();
+  await addCooldownSkill();
+  await addCooldownSkill();
+
+  const cooldownRule = page.locator(
+    '[data-testid="workbench-action-rule-row"][data-rule-code="skill-cooldown-active"]'
+  );
+  await expect(rulePanel).toHaveAttribute('data-executable', 'false');
+  await expect(rulePanel).toHaveAttribute('data-violation-count', '1');
+  await expect(cooldownRule).toHaveAttribute('data-action-id', 'action-0004');
+  await expect(cooldownRule).toContainText('技能冷却');
+
+  await page.locator('.action-item[data-action-id="action-0001"]').click();
+  await cooldownRule.getByTestId('workbench-action-rule-locate').click();
+  await expect(
+    page.locator('.action-item[data-action-id="action-0004"]')
+  ).toHaveClass(/selected/);
+
+  const applySuggestedStart = cooldownRule.getByTestId(
+    'workbench-action-rule-apply-start'
+  );
+  const suggestedStartMs = await applySuggestedStart.getAttribute(
+    'data-suggested-start-ms'
+  );
+  expect(suggestedStartMs).toBeTruthy();
+  await applySuggestedStart.click();
+
+  await expect(rulePanel).toHaveAttribute('data-executable', 'true');
+  await expect(rulePanel).toHaveAttribute('data-violation-count', '0');
+  await expect(page.getByTestId('workbench-start-input')).toHaveValue(
+    suggestedStartMs
+  );
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  const runtimeState = await waitForRuntimeAction(page, 'action-0004');
+  expectRuntimeReviewState(runtimeState, {
+    phase: 'edit-result-review',
+    actionId: 'action-0004',
+    navigationCount: '4',
+    navigationIndex: '3',
+    selected: false,
+  });
+  await expectCurveAndLogSelection(page, runtimeState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps undo and redo tied to refreshed runtime results @workbench-main-flow', async ({
   page,
 }) => {

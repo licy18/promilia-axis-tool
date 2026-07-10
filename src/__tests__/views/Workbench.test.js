@@ -1881,6 +1881,54 @@ describe('Workbench view', () => {
     ).toBe('1');
   });
 
+  it('locates and fixes a confirmed skill cooldown rule violation', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    const addCooldownSkill = async () => {
+      await wrapper
+        .find('[data-testid="workbench-skill-entry"][data-skill-id="10900112"]')
+        .trigger('click');
+      await nextTick();
+    };
+    await addCooldownSkill();
+    await addCooldownSkill();
+    await addCooldownSkill();
+
+    const rulePanel = wrapper.find(
+      '[data-testid="workbench-action-rule-panel"]'
+    );
+    const cooldownRule = wrapper.find(
+      '[data-testid="workbench-action-rule-row"][data-rule-code="skill-cooldown-active"]'
+    );
+    expect(rulePanel.attributes('data-violation-count')).toBe('1');
+    expect(cooldownRule.attributes('data-action-id')).toBe('action-0004');
+    expect(cooldownRule.text()).toContain('技能冷却');
+
+    const suggestedStartMs = cooldownRule
+      .find('[data-testid="workbench-action-rule-apply-start"]')
+      .attributes('data-suggested-start-ms');
+    await cooldownRule
+      .find('[data-testid="workbench-action-rule-apply-start"]')
+      .trigger('click');
+    await nextTick();
+
+    expect(rulePanel.attributes('data-violation-count')).toBe('0');
+    expect(
+      wrapper.find('[data-testid="workbench-start-input"]').element.value
+    ).toBe(suggestedStartMs);
+    expect(
+      wrapper.find('[data-testid="workbench-start-frame-input"]').element.value
+    ).toBe(String(Math.round((Number(suggestedStartMs) * 60) / 1000)));
+  });
+
   it('prioritizes runtime detail in the side inspector while reviewing results', async () => {
     const wrapper = mount(Workbench, {
       global: {
@@ -1907,7 +1955,12 @@ describe('Workbench view', () => {
       sideInspector
         .find('[data-inspector-panel-key="runtime-detail"]')
         .attributes('data-inspector-panel-order')
-    ).toBe('2');
+    ).toBe('3');
+    expect(
+      sideInspector
+        .find('[data-inspector-panel-key="action-rules"]')
+        .attributes('data-inspector-panel-order')
+    ).toBe('1');
 
     await wrapper
       .find('[data-testid="workbench-flow-open-runtime"]')
@@ -1925,6 +1978,11 @@ describe('Workbench view', () => {
     expect(
       sideInspector
         .find('[data-inspector-panel-key="properties"]')
+        .attributes('data-inspector-panel-order')
+    ).toBe('2');
+    expect(
+      sideInspector
+        .find('[data-inspector-panel-key="action-rules"]')
         .attributes('data-inspector-panel-order')
     ).toBe('1');
   });

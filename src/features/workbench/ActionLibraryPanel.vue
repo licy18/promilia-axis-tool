@@ -318,12 +318,12 @@
           <div>
             <dt>冷却</dt>
             <dd>
-              {{ action.cooldownMs ? `${action.cooldownMs / 1000}s` : '-' }}
+              {{ formatActionCooldown(action) }}
             </dd>
           </div>
           <div>
             <dt>SP</dt>
-            <dd>{{ action.spCost ?? '-' }}</dd>
+            <dd>{{ getActionSpCost(action) ?? '-' }}</dd>
           </div>
         </dl>
         <p
@@ -590,6 +590,27 @@ function actionDetailValue(action) {
     return action.targetActor?.name ?? action.targetCharacterId ?? '-';
   }
   return `${action.durationMs ?? 0}ms`;
+}
+
+function getActionCooldownMs(action) {
+  return action.logicModel?.logic?.cooldownMs ?? action.cooldownMs ?? null;
+}
+
+function getActionCooldownCount(action) {
+  return Math.max(1, Number(action.logicModel?.logic?.cooldownCount) || 1);
+}
+
+function formatActionCooldown(action) {
+  const cooldownMs = getActionCooldownMs(action);
+  if (!cooldownMs) {
+    return '-';
+  }
+  const chargeCount = getActionCooldownCount(action);
+  return `${cooldownMs / 1000}s${chargeCount > 1 ? ` ×${chargeCount}` : ''}`;
+}
+
+function getActionSpCost(action) {
+  return action.logicModel?.logic?.spCost ?? action.spCost ?? null;
 }
 
 function formatSigned(value) {

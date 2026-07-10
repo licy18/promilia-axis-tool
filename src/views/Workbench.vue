@@ -406,6 +406,21 @@
       >
         <div
           class="side-stack-panel"
+          :data-inspector-panel-order="sideInspectorPanelOrders.actionRules"
+          data-inspector-panel-key="action-rules"
+          data-testid="workbench-side-inspector-panel"
+          :style="{ order: sideInspectorPanelOrders.actionRules }"
+        >
+          <ActionRuleDiagnosticsPanel
+            :diagnostics="simulationResult.actionRuleDiagnostics"
+            :selected-action-id="selectedActionId"
+            @locate-action="locateActionRuleDiagnostic"
+            @apply-suggested-start="applyActionRuleSuggestedStart"
+          />
+        </div>
+
+        <div
+          class="side-stack-panel"
           :data-inspector-panel-order="sideInspectorPanelOrders.properties"
           data-inspector-panel-key="properties"
           data-testid="workbench-side-inspector-panel"
@@ -537,6 +552,7 @@ import {
   Upload,
 } from '@element-plus/icons-vue';
 import ActionLibraryPanel from '../features/workbench/ActionLibraryPanel.vue';
+import ActionRuleDiagnosticsPanel from '../features/workbench/ActionRuleDiagnosticsPanel.vue';
 import AnalysisPanel from '../features/workbench/AnalysisPanel.vue';
 import EnemyPanel from '../features/workbench/EnemyPanel.vue';
 import EffectTimelinePanel from '../features/workbench/EffectTimelinePanel.vue';
@@ -2274,6 +2290,34 @@ function editEffectSourceAction(actionId) {
   });
 }
 
+function locateActionRuleDiagnostic(diagnostic) {
+  const actionId = diagnostic?.actionId;
+  if (!findActionDraftById(actionId)) {
+    return;
+  }
+  selectAction(actionId, { syncRuntimeResult: false });
+  actionEditFocus.value = {
+    ...createEmptyWorkbenchActionEditFocus(actionEditFocus.value.sequence + 1),
+    actionId,
+    fieldKey: diagnostic.editFieldKey || 'startMs',
+    label: '排轴规则',
+    changeSummary: diagnostic.message ?? '',
+    editOrigin: 'rule-diagnostic',
+    focusSource: 'action-rule-diagnostic',
+  };
+  void nextTick().then(() => {
+    scrollActionEditFocusIntoView();
+  });
+}
+
+function applyActionRuleSuggestedStart(diagnostic) {
+  if (!Number.isFinite(Number(diagnostic?.suggestedStartMs))) {
+    return;
+  }
+  locateActionRuleDiagnostic(diagnostic);
+  updateAction({ startMs: Number(diagnostic.suggestedStartMs) });
+}
+
 function applyActionSelectionState(selectionState = {}) {
   if (!selectionState.shouldSelectAction) {
     return;
@@ -3234,19 +3278,21 @@ function createSideInspectorPanelOrders(inspectorMode) {
   if (inspectorMode === 'runtime-detail') {
     return {
       runtimeDetail: 0,
-      properties: 1,
-      enemy: 2,
-      teamLoadout: 3,
-      analysis: 4,
+      actionRules: 1,
+      properties: 2,
+      enemy: 3,
+      teamLoadout: 4,
+      analysis: 5,
     };
   }
 
   return {
     properties: 0,
-    enemy: 1,
-    runtimeDetail: 2,
-    teamLoadout: 3,
-    analysis: 4,
+    actionRules: 1,
+    enemy: 2,
+    runtimeDetail: 3,
+    teamLoadout: 4,
+    analysis: 5,
   };
 }
 

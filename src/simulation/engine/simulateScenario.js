@@ -2,6 +2,7 @@ import { createRawDamageProjection } from '../mechanics/damage';
 import { projectSimulationResult } from '../projection/projectSimulationResult';
 import { ACTION_TYPES } from '../../domain/projectSchema';
 import { createEffectRuntimeTimeline } from '../runtime/effectRuntimeTimeline';
+import { createActionRuleDiagnostics } from '../runtime/actionRuleDiagnostics';
 
 export function simulateScenario(scenario) {
   const eventLog = [
@@ -17,6 +18,7 @@ export function simulateScenario(scenario) {
 
   const damageEvents = [];
   const resourceEvents = [];
+  const actionRuleDiagnostics = createActionRuleDiagnostics({ scenario });
 
   for (const action of scenario.actions) {
     eventLog.push(createActionStartEvent(action));
@@ -63,15 +65,18 @@ export function simulateScenario(scenario) {
       eventLog.push(event);
     }
 
-    if (Number(action.cooldownMs) > 0) {
+    const cooldownMs = resolveActionCooldownMs(action);
+    if (cooldownMs > 0) {
       eventLog.push({
         type: 'COOLDOWN_START',
         timeMs: action.startMs,
         actionId: action.id,
         actorId: action.actorId,
         payload: {
-          cooldownMs: action.cooldownMs,
-          endsAtMs: action.startMs + action.cooldownMs,
+          cooldownMs,
+          endsAtMs: action.startMs + cooldownMs,
+          sourceKind:
+            action.logicModel?.logic?.sourceKind ?? 'skill-display-cooldown',
         },
       });
     }
@@ -114,7 +119,15 @@ export function simulateScenario(scenario) {
     damageEvents,
     resourceEvents,
     effectTimeline,
+    actionRuleDiagnostics,
   });
+}
+
+function resolveActionCooldownMs(action) {
+  const cooldownMs = Number(
+    action.logicModel?.logic?.cooldownMs ?? action.cooldownMs
+  );
+  return Number.isFinite(cooldownMs) && cooldownMs > 0 ? cooldownMs : 0;
 }
 
 function createNonCombatEvent(action) {

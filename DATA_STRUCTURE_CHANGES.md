@@ -25314,3 +25314,59 @@ RuntimeEffectReview
 ```
 
 复盘器按 `runtimeSequenceIndex` 重放事件：`event.after` 写入 active map，移除/到期事件删除实例。用户选择效果事件时返回该事件后的状态；选择三值状态点时包含该时间点及以前的全部效果事件。效果复盘选择仅为组件本地视图状态，不写入项目、草稿或 runtime output。
+
+## 355. 统一排轴规则诊断合同
+
+### 355.1 ActionRuleDiagnostics
+
+模拟引擎在处理动作事件前建立独立规则结果：
+
+```text
+ActionRuleDiagnostics
+  schemaVersion = 1
+  contractName = AzPrActionRuleDiagnostics
+  sourceKind = azpr-scenario-action-rule-diagnostics
+  status
+  executable
+  diagnostics[]
+  summary
+  appliedToSimulationResults = false
+```
+
+`projectSimulationResult` 新增顶层 `actionRuleDiagnostics`，并把同一对象暴露为 `diagnostics.actionRules`；`summary.actionRuleDiagnosticsSummary` 引用其 summary。规则结果不进入三值 canonical runtime outputs，也不改变 event、delta、curve 或 calculator 数值。
+
+### 355.2 ActionRuleDiagnostic
+
+```text
+ActionRuleDiagnostic
+  id
+  code
+  ruleKey
+  status = violated | unresolved
+  severity = error | warning
+  actionId / actionIds[] / actionName
+  actorId / actorName
+  blockingActionId / blockingActionName
+  timeMs
+  message
+  suggestedStartMs = number | null
+  editFieldKey
+  source
+  appliedToSimulationResults = false
+```
+
+当前规则代码：
+
+```text
+action-lane-overlap
+skill-cooldown-active
+skill-sp-precondition-unresolved
+```
+
+`action-lane-overlap` 只检查有角色所有权且会占用动作时间的 `skill / switch`。`skill-cooldown-active` 使用 `action.logicModel.logic.cooldownMs / cooldownCount` 和对应 `skillsub_logic` field path，以可用次数和按时间排序的 recharge queue 推进技能状态；可用次数耗尽时使用最早恢复项生成 `readyAtMs`，违反冷却的动作不进入队列。`skill-sp-precondition-unresolved` 保留原始 `spCost`、角色 `initialSp / maxSp` 和单位缺口，不生成资源不足错误。
+
+### 355.3 Workbench 规则修正入口
+
+Workbench 新增只读 `ActionRuleDiagnosticsPanel`，以 `actionId` 关联动作选择，以 `editFieldKey` 定位属性编辑控件。存在 `suggestedStartMs` 时，面板通过现有 `updateAction({ startMs })` 入口应用修正，因此撤销/重做、草稿脏状态和运行结果同步沿用既有主流程，不引入第二套动作修改协议。
+
+动作库的冷却/SP 展示优先读取 `action.logicModel.logic`，冷却同时显示可用次数；模拟事件 `COOLDOWN_START` 同样优先使用逻辑层冷却。SP 消耗事件仍保持原有应用边界，直到资源单位 adapter 可确认换算关系。
