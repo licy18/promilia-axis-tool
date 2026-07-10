@@ -2090,6 +2090,73 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('saves, finds, copies, and reloads a Workbench preset @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/preset');
+  await expect(page).toHaveURL(/#\/workbench\?presets=1$/);
+  await expect(page.getByTestId('workbench-preset-library')).toBeVisible();
+  await page.getByTestId('workbench-preset-close').click();
+
+  await page.getByTestId('workbench-level-input').fill('2');
+  await page.getByTestId('workbench-level-input').press('Tab');
+  await expect(page.getByTestId('workbench-level-input')).toHaveValue('2');
+
+  await page.getByTestId('workbench-open-presets').click();
+  await page
+    .getByTestId('workbench-preset-name-input')
+    .fill('末音循环可回载预设');
+  await page.getByTestId('workbench-preset-tags-input').fill('末音, 训练');
+  await page
+    .getByTestId('workbench-preset-description-input')
+    .fill('保存当前动作与角色配置');
+  await page.getByTestId('workbench-preset-save').click();
+
+  await expect(page.getByTestId('workbench-preset-count')).toHaveText('1 / 1');
+  await expect(page.getByTestId('workbench-preset-row')).toContainText(
+    '末音循环可回载预设'
+  );
+  await page.getByTestId('workbench-preset-search-input').fill('训练');
+  await page.getByTestId('workbench-preset-tag-filter').selectOption('末音');
+  await expect(page.getByTestId('workbench-preset-count')).toHaveText('1 / 1');
+
+  await page.getByTestId('workbench-preset-duplicate').click();
+  await expect(page.getByTestId('workbench-preset-count')).toHaveText('2 / 2');
+  await expect(page.getByTestId('workbench-preset-library')).toContainText(
+    '末音循环可回载预设 副本'
+  );
+  await page.getByTestId('workbench-preset-close').click();
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await expect(page.getByTestId('workbench-level-input')).toHaveValue('1');
+
+  await page.getByTestId('workbench-open-presets').click();
+  const originalPresetRow = page.getByTestId('workbench-preset-row').filter({
+    has: page.locator('strong').filter({
+      hasText: /^末音循环可回载预设$/,
+    }),
+  });
+  await originalPresetRow.getByTestId('workbench-preset-load').click();
+
+  await expect(page.getByTestId('workbench-preset-library')).toBeHidden();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已加载预设：末音循环可回载预设'
+  );
+  await expect(page.getByTestId('workbench-level-input')).toHaveValue('2');
+  await expectRuntimeOutputConsistent(page);
+
+  await page.getByTestId('workbench-open-presets').click();
+  await page.getByTestId('workbench-preset-search-input').fill('副本');
+  await page.getByTestId('workbench-preset-delete').click();
+  await expect(page.getByTestId('workbench-preset-empty')).toContainText(
+    '没有匹配的预设'
+  );
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('imports a runtime capture and preserves its applied curve through project JSON @workbench-main-flow', async ({
   page,
 }) => {

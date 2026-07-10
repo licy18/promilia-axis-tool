@@ -21,7 +21,10 @@ const router = createRouter({
     {
       path: '/preset',
       name: 'Preset',
-      component: () => import('../views/Preset.vue'),
+      redirect: {
+        name: 'Workbench',
+        query: { presets: '1' },
+      },
     },
     {
       path: '/handbook',

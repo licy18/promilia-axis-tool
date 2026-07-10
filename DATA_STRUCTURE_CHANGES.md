@@ -25862,3 +25862,41 @@ FormulaUtility.WeaknessPointChange stack
 self-test session 使用 `source = controlled-frida-self-test`；production audit 明确拒绝 `self-test` 标记，测试数据不能晋级为真实游戏证据。
 
 当前没有运行中的游戏进程，也没有非 fixture capture；本节证明采集执行端已经就绪，不证明游戏内 hook 已执行。下一阶段仍需人工启动获准客户端并完成第一份真实 capture 验收。
+
+## 363. WorkbenchPresetLibrary v1
+
+### 363.1 本地持久化合同
+
+新增本地键 `promilia-axis-tool:workbench-presets:v1`：
+
+```text
+WorkbenchPresetLibrary
+  schemaVersion = 1
+  game = azur-promilia
+  type = workbench-preset-library
+  updatedAt
+  presets[]
+  summary
+    presetCount / readyCount / migratedCount / incompatibleCount
+    tags[]
+
+WorkbenchPreset
+  schemaVersion = 1
+  id / name / description / tags[]
+  createdAt / updatedAt
+  sourceProjectSchemaVersion
+  compatibilityStatus
+  summary
+    actionCount / characterIds[] / actorNames[]
+    enemyId / enemyName / durationMs
+    effectCommandCount / runtimeSampleCaptureCount
+  projectFile: WorkbenchProjectFile
+```
+
+`projectFile` 始终复用当前 Workbench 项目快照，不复制 selection、team/loadout、enemy、action/effect 或 runtime capture 字段定义。保存预设不会提升 Workbench draft schema；当前仍为 v8。
+
+### 363.2 兼容与迁移
+
+读取时同时识别旧键 `promilia_presets` 的数组结构。能够由 `parseWorkbenchProjectFile` 读取的 v1-v7 项目会重新生成 v8 快照并标记 `migrated-project-schema`；当前 v8 标记 `ready`；无法解析的条目标记 `incompatible-project-schema`，保留名称、标签和摘要，但禁止加载和复制。
+
+新增、复制或删除后只写入 v1 新键，后续读取优先使用新键。预设加载继续调用 Workbench 现有导入恢复入口，因此草稿保存、临时复盘状态清理和运行时重算保持与 JSON、PNG、分享链接一致。

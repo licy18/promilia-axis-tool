@@ -52,6 +52,15 @@
           </button>
           <button
             class="nav-button secondary"
+            data-testid="workbench-open-presets"
+            type="button"
+            @click="openWorkbenchPresetLibrary"
+          >
+            <FolderOpened class="button-icon" />
+            <span>预设库</span>
+          </button>
+          <button
+            class="nav-button secondary"
             data-testid="workbench-export-project"
             type="button"
             @click="exportProjectFile"
@@ -109,6 +118,18 @@
         </div>
       </div>
     </nav>
+
+    <WorkbenchPresetLibraryDialog
+      :visible="presetDialogVisible"
+      :presets="workbenchPresets"
+      :default-name="project.name"
+      :current-summary="currentWorkbenchPresetSummary"
+      @close="closeWorkbenchPresetLibrary"
+      @save-preset="saveCurrentWorkbenchPreset"
+      @load-preset="loadWorkbenchPreset"
+      @duplicate-preset="duplicateWorkbenchPresetEntry"
+      @delete-preset="deleteWorkbenchPresetEntry"
+    />
 
     <ScenarioHeader
       :project="project"
@@ -610,6 +631,7 @@ import {
   Document,
   Download,
   EditPen,
+  FolderOpened,
   Link as LinkIcon,
   Picture,
   Refresh,
@@ -629,6 +651,7 @@ import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TeamLoadoutPanel from '../features/workbench/TeamLoadoutPanel.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import WorkbenchFlowPanel from '../features/workbench/WorkbenchFlowPanel.vue';
+import WorkbenchPresetLibraryDialog from '../features/workbench/WorkbenchPresetLibraryDialog.vue';
 import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
 import {
   createWorkbenchFlowController,
@@ -692,6 +715,14 @@ import {
   WORKBENCH_PROJECT_SHARE_PARAM,
 } from '../domain/workbenchDraftStorage';
 import {
+  addWorkbenchPreset,
+  createWorkbenchDraftFromPreset,
+  createWorkbenchPresetSnapshot,
+  deleteWorkbenchPreset,
+  duplicateWorkbenchPreset,
+  loadWorkbenchPresetLibrary,
+} from '../domain/workbenchPresetStorage';
+import {
   createWorkbenchProjectPngFileName,
   createWorkbenchProjectPngMetadata,
   embedWorkbenchProjectInPng,
@@ -713,6 +744,7 @@ const gameData = getWorkbenchGameData();
 const loadoutOptions = getWorkbenchLoadoutOptions();
 const NEW_ACTION_INSERT_GAP_MS = frameToMs(60);
 const WORKBENCH_HISTORY_LIMIT = 50;
+const WORKBENCH_PRESET_LIBRARY_PARAM = 'presets';
 const WORKBENCH_RUNTIME_NAVIGATION_SHORTCUT_SOURCE =
   'workbench-keyboard-runtime-navigation';
 const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
@@ -743,6 +775,8 @@ const runtimeLogFocus = ref({ source: '', statePointId: '', sequence: 0 });
 const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const draftStatus = ref('未保存草稿');
 const projectShareUrl = ref('');
+const presetDialogVisible = ref(false);
+const workbenchPresets = ref([]);
 const undoHistoryStack = ref([]);
 const redoHistoryStack = ref([]);
 const workbenchRoot = ref(null);
@@ -803,6 +837,11 @@ const project = computed(() =>
 );
 const scenario = computed(() => compileProject(project.value, gameData));
 const simulationResult = computed(() => simulateScenario(scenario.value));
+const currentWorkbenchPresetSummary = computed(() => ({
+  actionCount: actionDrafts.value.length,
+  actorNames: scenario.value.actors.map(actor => actor.name),
+  enemyName: scenario.value.enemy.name,
+}));
 const runtimeOutputs = computed(() => simulationResult.value.runtimeOutputs);
 const runtimeSelectedDetail = computed(() =>
   createRuntimeSelectedDetail({
@@ -935,6 +974,8 @@ const workbenchHistoryView = computed(() => ({
 onMounted(() => {
   window?.addEventListener?.('keydown', handleWorkbenchKeyboardShortcut);
   window?.addEventListener?.('hashchange', handleWorkbenchHashChange);
+  refreshWorkbenchPresetLibrary();
+  openWorkbenchPresetLibraryFromUrl();
   if (applySharedProjectFromUrl()) {
     return;
   }
@@ -954,7 +995,9 @@ onBeforeUnmount(() => {
 });
 
 function handleWorkbenchHashChange() {
-  applySharedProjectFromUrl();
+  if (!applySharedProjectFromUrl()) {
+    openWorkbenchPresetLibraryFromUrl();
+  }
 }
 
 function updateTeamSlot({ slotId, characterId } = {}) {
@@ -1781,6 +1824,82 @@ function saveDraft() {
   draftStatus.value = snapshot ? '已保存草稿' : '草稿不可用';
 }
 
+function openWorkbenchPresetLibrary() {
+  refreshWorkbenchPresetLibrary();
+  presetDialogVisible.value = true;
+}
+
+function closeWorkbenchPresetLibrary() {
+  presetDialogVisible.value = false;
+  clearWorkbenchHashQueryParam(WORKBENCH_PRESET_LIBRARY_PARAM);
+}
+
+function openWorkbenchPresetLibraryFromUrl() {
+  if (getWorkbenchHashQueryParam(WORKBENCH_PRESET_LIBRARY_PARAM) !== '1') {
+    return false;
+  }
+  openWorkbenchPresetLibrary();
+  return true;
+}
+
+function refreshWorkbenchPresetLibrary() {
+  const library = loadWorkbenchPresetLibrary(getLocalStorage());
+  workbenchPresets.value = library.presets;
+  return library;
+}
+
+function saveCurrentWorkbenchPreset(metadata) {
+  const preset = createWorkbenchPresetSnapshot(getWorkbenchDraftState(), {
+    ...metadata,
+    projectName: project.value.name,
+    summary: currentWorkbenchPresetSummary.value,
+  });
+  const library = addWorkbenchPreset(getLocalStorage(), preset);
+  if (!library) {
+    draftStatus.value = '预设存储不可用';
+    return;
+  }
+  workbenchPresets.value = library.presets;
+  draftStatus.value = `已保存预设：${preset.name}`;
+}
+
+function loadWorkbenchPreset(presetId) {
+  const preset = workbenchPresets.value.find(item => item.id === presetId);
+  const draft = createWorkbenchDraftFromPreset(preset);
+  if (!preset || !draft) {
+    draftStatus.value = '预设版本不兼容';
+    return;
+  }
+  applyImportedProjectDraft(draft, `已加载预设：${preset.name}`);
+  closeWorkbenchPresetLibrary();
+}
+
+function duplicateWorkbenchPresetEntry(presetId) {
+  const sourcePreset = workbenchPresets.value.find(
+    item => item.id === presetId
+  );
+  const library = duplicateWorkbenchPreset(getLocalStorage(), presetId);
+  if (!library) {
+    draftStatus.value = '预设复制失败';
+    return;
+  }
+  workbenchPresets.value = library.presets;
+  draftStatus.value = sourcePreset
+    ? `已复制预设：${sourcePreset.name} 副本`
+    : '已复制预设';
+}
+
+function deleteWorkbenchPresetEntry(presetId) {
+  const preset = workbenchPresets.value.find(item => item.id === presetId);
+  const library = deleteWorkbenchPreset(getLocalStorage(), presetId);
+  if (!library) {
+    draftStatus.value = '预设删除失败';
+    return;
+  }
+  workbenchPresets.value = library.presets;
+  draftStatus.value = preset ? `已删除预设：${preset.name}` : '预设不存在';
+}
+
 function getWorkbenchDraftState() {
   return {
     selection: selection.value,
@@ -1925,7 +2044,23 @@ function getWorkbenchProjectShareCodeFromUrl() {
   );
 }
 
+function getWorkbenchHashQueryParam(name) {
+  if (typeof window === 'undefined') {
+    return '';
+  }
+  const hash = window.location.hash ?? '';
+  const queryIndex = hash.indexOf('?');
+  if (queryIndex === -1) {
+    return '';
+  }
+  return new URLSearchParams(hash.slice(queryIndex + 1)).get(name) ?? '';
+}
+
 function clearWorkbenchProjectShareCodeFromUrl() {
+  clearWorkbenchHashQueryParam(WORKBENCH_PROJECT_SHARE_PARAM);
+}
+
+function clearWorkbenchHashQueryParam(name) {
   if (
     typeof window === 'undefined' ||
     typeof window.history?.replaceState !== 'function'
@@ -1942,7 +2077,7 @@ function clearWorkbenchProjectShareCodeFromUrl() {
 
   const routePath = hash.slice(0, queryIndex) || '#/workbench';
   const params = new URLSearchParams(hash.slice(queryIndex + 1));
-  params.delete(WORKBENCH_PROJECT_SHARE_PARAM);
+  params.delete(name);
   url.hash = params.toString()
     ? `${routePath}?${params.toString()}`
     : routePath;
