@@ -83,6 +83,25 @@ describe('workbench draft storage project files', () => {
               level: 2,
             },
           ],
+          runtimeSampleCaptures: [
+            {
+              schemaVersion: 1,
+              captureSessionId: 'draft-runtime-capture-1',
+              events: [
+                {
+                  eventType: 'toughness-damage-applied',
+                  actionId: 'action-0001',
+                  actorId: 'actor-109001',
+                  targetId: 'enemy-300032',
+                  targetEntityId: 'runtime-enemy-300032',
+                  frameIndex: 12,
+                  toughnessBefore: 100,
+                  toughnessAfter: 90,
+                  toughnessDeltaApplied: 10,
+                },
+              ],
+            },
+          ],
           selectedActionId: 'action-0002',
         },
         '2026-07-10T04:00:00.000Z'
@@ -115,6 +134,17 @@ describe('workbench draft storage project files', () => {
           characterId: 101003,
         },
       ],
+      runtimeSampleCaptures: [
+        {
+          captureSessionId: 'draft-runtime-capture-1',
+          events: [
+            expect.objectContaining({
+              eventType: 'toughness-damage-applied',
+              toughnessDeltaApplied: 10,
+            }),
+          ],
+        },
+      ],
     });
 
     const imported = parseWorkbenchProjectFile(exported);
@@ -145,6 +175,11 @@ describe('workbench draft storage project files', () => {
         skipExistingSegments: true,
       },
       selectedActionId: 'action-0002',
+      runtimeSampleCaptures: [
+        expect.objectContaining({
+          captureSessionId: 'draft-runtime-capture-1',
+        }),
+      ],
     });
     expect(imported.actionDrafts).toHaveLength(2);
   });
@@ -485,6 +520,19 @@ describe('workbench draft storage project files', () => {
             level: 2,
           },
         ],
+        runtimeSampleCaptures: [
+          {
+            schemaVersion: 1,
+            captureSessionId: 'share-runtime-capture-1',
+            events: [
+              {
+                eventType: 'recover-sp-applied',
+                actionId: 'action-0001',
+                spDeltaApplied: 0.25,
+              },
+            ],
+          },
+        ],
         selectedActionId: 'action-0002',
       },
       '2026-07-10T05:00:00.000Z'
@@ -511,6 +559,11 @@ describe('workbench draft storage project files', () => {
       actorConfigs: [
         { characterId: 109001, initialSp: 0.2 },
         { characterId: 101003, initialSp: 0.8 },
+      ],
+      runtimeSampleCaptures: [
+        expect.objectContaining({
+          captureSessionId: 'share-runtime-capture-1',
+        }),
       ],
     });
   });
@@ -560,7 +613,7 @@ describe('workbench draft storage project files', () => {
       createWorkbenchProjectShareCode(state, '2026-07-10T09:00:00.000Z')
     );
 
-    expect(exported.schemaVersion).toBe(7);
+    expect(exported.schemaVersion).toBe(8);
     expect(imported.actionDrafts[0].effectCommands).toEqual([
       expect.objectContaining({
         id: 'action-0001-effect-01',

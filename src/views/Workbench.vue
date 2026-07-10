@@ -697,6 +697,12 @@ import {
   embedWorkbenchProjectInPng,
   parseWorkbenchProjectPng,
 } from '../domain/workbenchPngProject';
+import {
+  bindWorkbenchRuntimeSampleCaptures,
+  mergeWorkbenchRuntimeSampleCaptures,
+  normalizeWorkbenchRuntimeSampleCaptures,
+  parseWorkbenchRuntimeSampleCaptureFile,
+} from '../domain/workbenchRuntimeSampleCapture';
 import { frameToMs } from '../domain/timebase';
 import { isPngSource } from '../utils/pngMetadata';
 import { compileProject } from '../simulation/compiler/compileProject';
@@ -725,6 +731,7 @@ const enemyConfig = ref({ ...initialDraft.enemyConfig });
 const segmentSplitOptions = ref({ ...initialDraft.segmentSplitOptions });
 const segmentSplitPreview = ref(null);
 const actionDrafts = ref([...initialDraft.actionDrafts]);
+const runtimeSampleCaptures = ref([...initialDraft.runtimeSampleCaptures]);
 const selectedActionId = ref(initialDraft.selectedActionId);
 const selectedStateCurvePointId = ref('');
 const stateCurveFocusMode = ref('all');
@@ -791,6 +798,7 @@ const project = computed(() =>
     actorConfigs: actorConfigs.value,
     enemyConfig: enemyConfig.value,
     actions: actionDrafts.value,
+    runtimeSampleCaptures: runtimeSampleCaptures.value,
   })
 );
 const scenario = computed(() => compileProject(project.value, gameData));
@@ -1781,6 +1789,7 @@ function getWorkbenchDraftState() {
     enemyConfig: enemyConfig.value,
     segmentSplitOptions: segmentSplitOptions.value,
     actionDrafts: actionDrafts.value,
+    runtimeSampleCaptures: runtimeSampleCaptures.value,
     selectedActionId: selectedActionId.value,
   };
 }
@@ -1956,18 +1965,29 @@ async function importProjectFile(event) {
       file.type === 'image/png' ||
       String(file.name).toLowerCase().endsWith('.png') ||
       (await isPngSource(file));
-    const draft = isPng
-      ? await parseWorkbenchProjectPng(file)
-      : parseWorkbenchProjectFile(await file.text());
-    if (!draft) {
-      draftStatus.value = isPng ? 'PNG 中没有有效项目' : '导入失败';
+    if (isPng) {
+      const draft = await parseWorkbenchProjectPng(file);
+      if (!draft) {
+        draftStatus.value = 'PNG 中没有有效项目';
+        return;
+      }
+      applyImportedProjectDraft(draft, '已从 PNG 导入项目');
       return;
     }
 
-    applyImportedProjectDraft(
-      draft,
-      isPng ? '已从 PNG 导入项目' : '已导入项目'
-    );
+    const rawFile = await file.text();
+    const draft = parseWorkbenchProjectFile(rawFile);
+    if (draft) {
+      applyImportedProjectDraft(draft, '已导入项目');
+      return;
+    }
+
+    const runtimeSampleFile = parseWorkbenchRuntimeSampleCaptureFile(rawFile);
+    if (!runtimeSampleFile) {
+      draftStatus.value = '导入失败';
+      return;
+    }
+    applyImportedRuntimeSampleCaptures(runtimeSampleFile.captures);
   } catch {
     draftStatus.value = '导入失败';
   } finally {
@@ -1975,6 +1995,42 @@ async function importProjectFile(event) {
       input.value = '';
     }
   }
+}
+
+function applyImportedRuntimeSampleCaptures(captures) {
+  const binding = bindWorkbenchRuntimeSampleCaptures({
+    captures,
+    project: project.value,
+    selectedActionId: selectedActionId.value,
+  });
+  if (
+    binding.summary.boundCaptureCount === 0 ||
+    binding.summary.rejectedCaptureCount > 0
+  ) {
+    draftStatus.value = '实测绑定失败';
+    return;
+  }
+
+  const runtimeReviewState = captureActionMutationRuntimeReviewState();
+  recordWorkbenchHistorySnapshot();
+  runtimeSampleCaptures.value = mergeWorkbenchRuntimeSampleCaptures(
+    runtimeSampleCaptures.value,
+    binding.captures
+  );
+  projectShareUrl.value = '';
+  clearWorkbenchProjectTransientState();
+  applyActionMutationRuntimeSyncRequest({
+    fallbackActionId: selectedActionId.value,
+    runtimeReviewState,
+    affectedActionIds: binding.summary.actionIds,
+  });
+
+  const snapshot = saveWorkbenchDraft(
+    getLocalStorage(),
+    getWorkbenchDraftState()
+  );
+  const statusText = `已导入实测 ${binding.summary.boundCaptureCount} 组`;
+  draftStatus.value = snapshot ? statusText : `${statusText}（未持久化）`;
 }
 
 function applyImportedProjectDraft(draft, statusText = '已导入项目') {
@@ -2017,6 +2073,9 @@ function applyDraftState(draft) {
   actionDrafts.value = normalizeWorkbenchActionDrafts(
     draft.actionDrafts,
     selection.value
+  );
+  runtimeSampleCaptures.value = normalizeWorkbenchRuntimeSampleCaptures(
+    draft.runtimeSampleCaptures
   );
   selectedActionId.value = draft.selectedActionId;
   syncActionLibraryCharacterIdFromDraft(
@@ -2189,6 +2248,7 @@ function createWorkbenchHistorySnapshot() {
       enemyConfig: enemyConfig.value,
       segmentSplitOptions: segmentSplitOptions.value,
       actionDrafts: actionDrafts.value,
+      runtimeSampleCaptures: runtimeSampleCaptures.value,
       selectedActionId: selectedActionId.value,
     },
     null
@@ -2200,6 +2260,7 @@ function createWorkbenchHistorySnapshot() {
     enemyConfig: draftSnapshot.enemyConfig,
     segmentSplitOptions: draftSnapshot.segmentSplitOptions,
     actionDrafts: draftSnapshot.actionDrafts,
+    runtimeSampleCaptures: draftSnapshot.runtimeSampleCaptures,
     selectedActionId: draftSnapshot.selectedActionId,
     selectedStateCurvePointId: selectedStateCurvePointId.value,
     stateCurveFocusMode: stateCurveFocusMode.value,
@@ -2237,6 +2298,9 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
   actionDrafts.value = normalizeWorkbenchActionDrafts(
     snapshot.actionDrafts,
     selection.value
+  );
+  runtimeSampleCaptures.value = normalizeWorkbenchRuntimeSampleCaptures(
+    snapshot.runtimeSampleCaptures
   );
   selectedActionId.value = actionDrafts.value.some(
     action => action.id === snapshot.selectedActionId

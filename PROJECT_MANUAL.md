@@ -637,7 +637,8 @@ P7：蓝原真实机制适配。
 
 - P7-A 已完成：标准生成层会把验证通过的 RecoverSP 与削韧 runtime sample 晋级为已应用 delta，并按真实采样帧进入角色资源曲线、敌人韧性曲线、sim log 和 summary。
 - 仅有 `recoverSP / weakBreakDamageRate` 静态候选、归属缺失或前后值不一致的样本仍保持未应用；默认项目三值结果没有变化。
-- 下一阶段进入 P7-B 实测采样文件导入闭环：让 Workbench 直接导入、合并并保存真实 capture JSON，完成动作/角色/敌人绑定后立即刷新运行结果。
+- P7-B 已完成：Workbench 统一导入入口可以识别实测 capture JSON，完成动作/角色/敌人绑定、项目持久化和运行结果刷新；JSON、分享链接与 PNG 都保留采样。
+- 下一阶段进入 P7-C 真实 capture 产出链：把实际 hook 或 AzPr Extractor 导出的 JSON/JSONL 规范化到当前合同，并以非 fixture 样本完成一次端到端验证。
 
 ### P4-A 标准状态效果运行时合同（2026-07-10）
 
@@ -764,6 +765,27 @@ P7：蓝原真实机制适配。
 - `npm run test:e2e:workbench-flow`：通过，28 条 Workbench 浏览器主流程。
 
 下一阶段目标：P7-B 实测采样文件导入闭环。Workbench 应能直接导入标准 capture JSON，完成动作、角色和敌人映射，保存到项目交换格式，并在导入后立即看到经 P7-A adapter 验证后的曲线与日志；不扩展真实倍率推断或候选文案。
+
+### P7-B 实测采样文件导入闭环（2026-07-10）
+
+已完成能力：
+
+- 现有“导入项目”文件入口会依次识别 PNG 项目、Workbench JSON 项目和 runtime capture JSON，没有增加新的顶栏按钮或平行状态系统。
+- 新增标准 `runtime-sample-captures` 文件 envelope，同时兼容单 capture、capture 数组和 `runtimeSampleCaptures[]` 包装；缺少 session、事件或 `eventType` 时整份文件拒绝，不做部分导入。
+- capture 按整体绑定到当前 Workbench 动作；当前项目中已有的 action ID 可直接使用，单个外部 action ID 会映射到所选动作。多个未知 action ID、跨多个 Workbench 动作或技能 ID 不匹配时拒绝绑定。
+- 绑定后的每个事件保留原始 action/actor/target ID，并写入当前动作、角色和敌人实例 ID；重复导入相同 `captureSessionId` 时替换旧 session，不重复累计。
+- Workbench draft schema 升级为 v8，新增 `runtimeSampleCaptures[]`。本地草稿、撤销/重做、JSON、分享链接和 PNG 元数据共享同一字段；v1-v7 项目继续导入并迁移为空采样状态。
+- 导入成功后 simulation 响应式重建，P7-A adapter 立即更新资源曲线、状态快照、命中日志和 summary；实测 SP 小数在摘要、详情和日志中保留最多 6 位精度。
+- 本阶段没有把 runtime sample 反推成通用公式，也没有放宽 P7-A 的验证门槛；测试 fixture 只证明文件与 UI 闭环。
+
+已完成验证：
+
+- 单元测试覆盖 capture 解析、严格拒绝、动作/实体绑定、技能冲突拒绝、session 替换、v8 项目持久化和 Workbench runtime 投影。
+- `npm run test -- --run`：通过，51 个测试文件、357 条测试。
+- `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
+- `npm run test:e2e:workbench-flow`：通过，29 条 Workbench 浏览器主流程；新增路径覆盖外部 capture 导入、`+0.3375 SP` 曲线/日志、JSON 导出、重置和回导恢复。
+
+下一阶段目标：P7-C 真实 capture 产出链。接入实际 hook 或 AzPr Extractor 输出的 JSON/JSONL，保留客户端区域、build、session 和关联键，生成标准 envelope，并至少用一份非 fixture capture 验证导入、adapter、曲线和日志全链路；不继续补零散导入提示或测试期倍率。
 
 ## 10. 文档维护规则
 

@@ -685,7 +685,9 @@ function createRuntimeDetailNavigationAction(point) {
 
 function formatSigned(value) {
   const number = Number(value) || 0;
-  return `${number > 0 ? '+' : ''}${formatNumber(number)}`;
+  return `${number > 0 ? '+' : ''}${number.toLocaleString('zh-CN', {
+    maximumFractionDigits: 6,
+  })}`;
 }
 
 function formatReadinessStatus(readiness) {

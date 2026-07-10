@@ -25670,3 +25670,73 @@ Generation applied layer
 静态 `weakBreakDamageRate`、`recoverSP`、未验证 capture 和手工 fixture 不会直接改变默认项目。fixture 只用于验证合同，不能作为蓝色星原真实数值证据。
 
 下一阶段 P7-B 增加独立 capture JSON 导入、合并、项目持久化和动作/实体映射；P7-A adapter 本身保持纯数据入口，不读取 UI 临时状态。
+
+## 360. P7-B Workbench runtime capture 文件与持久化合同
+
+### 360.1 RuntimeSampleCaptureFile
+
+新增标准 envelope：
+
+```text
+RuntimeSampleCaptureFile
+  schemaVersion = 1
+  game = azur-promilia
+  type = runtime-sample-captures
+  captures[]
+  summary
+    captureCount
+    eventCount
+    captureSessionIds[]
+    eventTypes[]
+```
+
+解析器同时接受单个含 `events[]` 的 capture、capture 数组和 `runtimeSampleCaptures[]` 包装。每个 capture 必须有 `captureSessionId` 和至少一个事件；每个事件必须有 `eventType` 或兼容字段 `type`。任一 capture/事件无效时返回 `null`，不导入可用子集。
+
+### 360.2 Workbench 绑定结构
+
+导入后 capture 增加：
+
+```text
+capture.actionId
+capture.workbenchBinding
+  status = bound-to-workbench-project
+  actionId
+  actorId
+  targetId
+  skillId
+  sourceActionIds[]
+  sourceSkillIds[]
+```
+
+每个事件写入当前项目 `actionId / actorId / targetId`，原值保存在：
+
+```text
+event.sourceWorkbenchBinding
+  actionId
+  actorId
+  targetId
+```
+
+一个 capture 只允许绑定一个 Workbench 动作。精确匹配当前 action ID 时直接绑定；单个外部 action ID 回退到所选动作；多个未知 action ID、多个已知 Workbench 动作或 `args.skillId` 与所选技能不一致时拒绝。
+
+### 360.3 Draft schema v8
+
+Workbench draft 从 v7 升级为 v8：
+
+```text
+WorkbenchDraftV8
+  ...V7 fields
+  runtimeSampleCaptures[]
+```
+
+存储键更新为 `promilia-axis-tool:workbench-draft:v8`，v7 加入 legacy key 列表。`createWorkbenchDraftSnapshot()` 统一规范化采样，因此本地草稿、历史快照、项目 JSON、分享码和 PNG `PromiliaAxisToolData` 继续复用同一项目载荷。v1-v7 缺少字段时规范化为 `[]`。
+
+相同 `captureSessionId` 再次导入会原位替换；新 session 追加。导入绑定若包含任何拒绝 capture，Workbench 不应用整批内容。
+
+### 360.4 Runtime 刷新与数值精度
+
+`createWorkbenchProject()` 把 draft capture 写入 `project.metadata.runtimeSampleCaptures`，编译器和 P7-A adapter 沿用既有入口。导入成功后记录撤销快照、清理 transient runtime selection、重建 simulation，并持久化 v8 草稿。
+
+实测 SP 可能是小数，Workbench runtime 摘要、命中日志和详情的有符号数值改为最多 6 位小数；hit transaction 内部聚合精度也由 3 位提高到 6 位。HP/韧性现有整数展示不变。
+
+下一阶段 P7-C 建立实际 hook/Extractor JSON 或 JSONL 到 `RuntimeSampleCaptureFile` 的产出与规范化链，并用非 fixture 样本验证来源元数据、事件关联和最终曲线。

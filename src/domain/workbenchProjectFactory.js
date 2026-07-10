@@ -25,6 +25,7 @@ import {
   createWaitAction,
 } from './projectSchema';
 import { getSkillActionCatalog } from './skillActionCatalog';
+import { normalizeWorkbenchRuntimeSampleCaptures } from './workbenchRuntimeSampleCapture';
 import {
   getSkillActionVariants,
   getSkillDamageSegments,
@@ -449,6 +450,9 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
       teamSlots,
       enemyConfig,
       actorConfigs,
+      runtimeSampleCaptures: normalizeWorkbenchRuntimeSampleCaptures(
+        actionPatch.runtimeSampleCaptures
+      ),
       loadoutCalculationStatus: 'project-config-only',
     },
   });

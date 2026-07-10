@@ -326,5 +326,5 @@ function strictRuntimeNumberOrNull(value) {
 }
 
 function roundRuntimeTransactionValue(value) {
-  return Math.round((Number(value) || 0) * 1000) / 1000;
+  return Math.round((Number(value) || 0) * 1000000) / 1000000;
 }

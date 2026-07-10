@@ -10,8 +10,80 @@ import {
 import { validateProject } from '../../domain/projectSchema';
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
+import { createToughnessRuntimeSampleFixture } from '../../simulation/fixtures/toughnessRuntimeSampleFixture';
+import { createRecoverSpRuntimeSampleFixture } from '../../simulation/fixtures/recoverSpRuntimeSampleFixture';
+import { bindWorkbenchRuntimeSampleCaptures } from '../../domain/workbenchRuntimeSampleCapture';
 
 describe('workbench project actor configuration', () => {
+  it('projects persisted runtime sample captures into project metadata', () => {
+    const runtimeSampleCapture = createToughnessRuntimeSampleFixture();
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      runtimeSampleCaptures: [runtimeSampleCapture],
+    });
+
+    expect(project.metadata.runtimeSampleCaptures).toEqual([
+      expect.objectContaining({
+        captureSessionId: 'fixture-toughness-109001081-v1',
+        events: [
+          expect.objectContaining({
+            eventType: 'toughness-damage-applied',
+            toughnessDeltaApplied: 70,
+          }),
+        ],
+      }),
+    ]);
+    expect(
+      compileProject(project, getWorkbenchGameData()).runtimeSampleCaptures
+    ).toHaveLength(1);
+  });
+
+  it('applies a bound RecoverSP capture to the Workbench runtime resource curve', () => {
+    const baseProject = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION);
+    const binding = bindWorkbenchRuntimeSampleCaptures({
+      captures: [
+        createRecoverSpRuntimeSampleFixture({
+          actionId: 'captured-action-77',
+          actorId: 'captured-actor-77',
+        }),
+      ],
+      project: baseProject,
+      selectedActionId: 'action-0001',
+    });
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      runtimeSampleCaptures: binding.captures,
+    });
+    const result = simulateScenario(
+      compileProject(project, getWorkbenchGameData())
+    );
+
+    expect(result.actionResultTimeline[0].selfEnergyChange).toMatchObject({
+      value: 0,
+      applied: false,
+      runtimeFormulaProbe: expect.objectContaining({
+        runtimeSamplingProbe: expect.objectContaining({
+          importStatus: 'offline-runtime-samples-validated',
+        }),
+      }),
+    });
+    expect(
+      result.threeValueGenerationLayer.deltas.find(
+        delta =>
+          delta.trackKey === 'selfEnergyChange' && delta.layerKey === 'applied'
+      )
+    ).toEqual(
+      expect.objectContaining({
+        layerKey: 'applied',
+        energyDelta: 0.3375,
+        calculationStatus: 'runtime-final-confirmed-recover-sp-sample',
+      })
+    );
+    expect(result.threeValueRuntimeProjection.summary).toMatchObject({
+      selfEnergyDelta: 0.3375,
+      selfEnergyPointCount: 1,
+      simLogCount: 2,
+    });
+  });
+
   it('projects real AzPr loadout selections into actors and project loadouts', () => {
     const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
       actorConfigs: [

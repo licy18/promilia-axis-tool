@@ -1587,6 +1587,12 @@ function formatNumber(value) {
   return Math.round(Number(value) || 0).toLocaleString('zh-CN');
 }
 
+function formatEnergyNumber(value) {
+  return (Number(value) || 0).toLocaleString('zh-CN', {
+    maximumFractionDigits: 6,
+  });
+}
+
 function formatDamageFormula(damage) {
   const layers = damage.formulaBreakdown?.layers;
   if (!layers) {
@@ -1958,7 +1964,7 @@ function formatThreeValueRuntimeProjectionSummary(summary) {
   if (!summary || summary.appliedDeltaCount <= 0) {
     return '';
   }
-  return `运行投影 HP ${formatNumber(summary.enemyHpDelta)} · 韧性 ${formatNumber(summary.enemyToughnessDelta)} · 能量 ${formatNumber(summary.selfEnergyDelta)} · 日志 ${summary.simLogCount}`;
+  return `运行投影 HP ${formatNumber(summary.enemyHpDelta)} · 韧性 ${formatNumber(summary.enemyToughnessDelta)} · 能量 ${formatEnergyNumber(summary.selfEnergyDelta)} · 日志 ${summary.simLogCount}`;
 }
 
 function createThreeValueCalculatorDiagnosticRow({ scope, label, summary }) {
@@ -3379,10 +3385,9 @@ function formatElementIds(ids = []) {
 }
 
 function formatSignedNumber(value) {
-  const number = Math.round(Number(value) || 0);
-  return number > 0
-    ? `+${number.toLocaleString('zh-CN')}`
-    : number.toLocaleString('zh-CN');
+  const number = Number(value) || 0;
+  const formatted = formatStateCurveNumber(number);
+  return number > 0 ? `+${formatted}` : formatted;
 }
 
 function formatPercent(value) {

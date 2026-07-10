@@ -989,11 +989,6 @@ function formatPayload(event) {
   return event.actionId ?? '';
 }
 
-function formatSigned(value) {
-  const number = Number(value) || 0;
-  return `${number > 0 ? '+' : ''}${number}`;
-}
-
 function selectRuntimeLog(index) {
   selectedRuntimeLogIndex.value = index;
   const row = filteredRuntimeSimLogRows.value[index];
@@ -1386,8 +1381,7 @@ function formatRuntimeHitTransactionDelta(row) {
 }
 
 function formatSignedNumber(value) {
-  const number = Number(value) || 0;
-  return `${number > 0 ? '+' : ''}${formatNumber(number)}`;
+  return formatSigned(value);
 }
 
 function formatRuntimeDetailDelta(detail) {
@@ -1410,6 +1404,13 @@ function formatRuntimeDetailDelta(detail) {
 
 function formatNumber(value) {
   return Math.round(Number(value) || 0).toLocaleString('zh-CN');
+}
+
+function formatSigned(value) {
+  const number = Number(value) || 0;
+  return `${number > 0 ? '+' : ''}${number.toLocaleString('zh-CN', {
+    maximumFractionDigits: 6,
+  })}`;
 }
 
 function numberOrZero(value) {

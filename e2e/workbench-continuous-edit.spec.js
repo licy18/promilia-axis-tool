@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { Buffer } from 'node:buffer';
 import { readFile } from 'node:fs/promises';
+import { createRecoverSpRuntimeSampleFixture } from '../src/simulation/fixtures/recoverSpRuntimeSampleFixture';
 
 test('keeps setup, edit return, and result selection synced', async ({
   page,
@@ -1962,7 +1963,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 7,
+    schemaVersion: 8,
     game: 'azur-promilia',
     type: 'workbench-project',
     selectedActionId: 'action-0002',
@@ -2085,6 +2086,102 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   });
   await expectCurveAndLogSelection(page, importedRuntimeState.statePointId);
   await expectRuntimeOutputConsistent(page);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
+test('imports a runtime capture and preserves its applied curve through project JSON @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+  const capture = createRecoverSpRuntimeSampleFixture({
+    captureSessionId: 'e2e-recover-sp-capture-1',
+    actionId: 'captured-action-77',
+    actorId: 'captured-actor-77',
+  });
+  const captureFile = {
+    schemaVersion: 1,
+    game: 'azur-promilia',
+    type: 'runtime-sample-captures',
+    captures: [capture],
+  };
+
+  await page.goto('/#/workbench');
+  await page.getByTestId('workbench-import-project-file').setInputFiles({
+    name: 'azpr-runtime-capture.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(captureFile)),
+  });
+
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已导入实测 1 组'
+  );
+  await expect(
+    page.getByTestId('workbench-three-value-runtime-projection-summary')
+  ).toContainText('能量 0.3375 · 日志 2');
+  await expect(
+    page.getByTestId('workbench-runtime-energy-actor-row').first()
+  ).toContainText('SP +0.3375');
+  await expect(page.getByTestId('workbench-runtime-sim-log-count')).toHaveText(
+    '2 日志'
+  );
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  await expect(
+    page.getByTestId('workbench-runtime-sim-log-row').filter({
+      hasText: 'SP +0.3375',
+    })
+  ).toHaveCount(1);
+
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(
+    page.getByTestId('workbench-three-value-runtime-projection-summary')
+  ).toContainText('能量 0 · 日志 1');
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(
+    page.getByTestId('workbench-three-value-runtime-projection-summary')
+  ).toContainText('能量 0.3375 · 日志 2');
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const download = await downloadPromise;
+  const downloadPath = await download.path();
+  expect(downloadPath).toBeTruthy();
+  const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
+  expect(exportedProject).toMatchObject({
+    schemaVersion: 8,
+    runtimeSampleCaptures: [
+      {
+        captureSessionId: 'e2e-recover-sp-capture-1',
+        actionId: 'action-0001',
+        workbenchBinding: {
+          status: 'bound-to-workbench-project',
+          actionId: 'action-0001',
+          actorId: 'actor-109001',
+          targetId: 'enemy-300032',
+          sourceActionIds: ['captured-action-77'],
+          sourceSkillIds: [10900101],
+        },
+      },
+    ],
+  });
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await expect(
+    page.getByTestId('workbench-three-value-runtime-projection-summary')
+  ).toContainText('能量 0 · 日志 1');
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(downloadPath);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已导入项目'
+  );
+  await expect(
+    page.getByTestId('workbench-three-value-runtime-projection-summary')
+  ).toContainText('能量 0.3375 · 日志 2');
+  await expect(
+    page.getByTestId('workbench-runtime-energy-actor-row').first()
+  ).toContainText('SP +0.3375');
 
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
@@ -3658,7 +3755,7 @@ async function ensureActionContentEditResultSynced(
 async function readStoredWorkbenchDraft(page) {
   return await page.evaluate(() => {
     const rawDraft =
-      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v7') ??
+      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v8') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v5') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v4') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v3') ??

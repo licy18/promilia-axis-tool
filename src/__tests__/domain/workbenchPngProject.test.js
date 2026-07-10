@@ -44,6 +44,19 @@ describe('Workbench PNG project', () => {
       })
     );
     state.selectedActionId = 'action-0002';
+    state.runtimeSampleCaptures = [
+      {
+        schemaVersion: 1,
+        captureSessionId: 'png-runtime-capture-1',
+        events: [
+          {
+            eventType: 'toughness-damage-applied',
+            actionId: 'action-0001',
+            toughnessDeltaApplied: 10,
+          },
+        ],
+      },
+    ];
     const exportedAt = '2026-07-10T10:30:00.000Z';
     const metadata = createWorkbenchProjectPngMetadata(state, exportedAt);
 
@@ -71,6 +84,11 @@ describe('Workbench PNG project', () => {
       teamSlots: state.teamSlots,
       enemyConfig: state.enemyConfig,
       selectedActionId: 'action-0002',
+      runtimeSampleCaptures: [
+        expect.objectContaining({
+          captureSessionId: 'png-runtime-capture-1',
+        }),
+      ],
     });
     expect(imported.actionDrafts.map(action => action.id)).toEqual([
       'action-0001',
