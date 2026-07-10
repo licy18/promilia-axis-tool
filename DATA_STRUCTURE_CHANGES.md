@@ -26103,7 +26103,7 @@ tests[]
 limitations[]
 ```
 
-必需能力固定为 production 路由与哈希资源、诊断动态加载、JSON 项目交换、PNG 项目交换、多动作编辑、动作关系交换、状态效果区间复盘和 390px 窄屏主流程。只有 Playwright 整体通过且八项能力全部存在并通过时，报告才输出 `trial-ready`；缺项或失败均输出 `blocked`。该报告只证明本地 `dist` + Vite preview 可试用，不代表远程 CDN/托管、最终蓝原公式或非 fixture 真实采样已验收。
+必需能力固定为 production 路由与哈希资源、诊断动态加载、JSON 项目交换、PNG 项目交换、多动作编辑、动作关系交换、状态效果区间复盘、方案对比和 390px 窄屏主流程。只有 Playwright 整体通过且九项能力全部存在并通过时，报告才输出 `trial-ready`；缺项或失败均输出 `blocked`。该报告只证明本地 `dist` + Vite preview 可试用，不代表远程 CDN/托管、最终蓝原公式或非 fixture 真实采样已验收。
 
 ## 372. WorkbenchActionClipboard v1（仅编辑会话）
 
@@ -26168,3 +26168,43 @@ summary
 同一 effect instance 从 `EFFECT_APPLIED` 开始，`EFFECT_REFRESHED` 继续写入当前区间，`EFFECT_REMOVED` 或 `EFFECT_EXPIRED` 结束区间；场景结束仍生效的实例裁切到项目时长并保留 active/persistent 状态。重复施加生成递增但稳定的 `interval-N`，便于动作时间变化后维持 UI 选择。
 
 该合同不写入 WorkbenchProjectFile，也不新增项目迁移。角色目标由时间轴投影到对应角色轨，敌人目标进入独立敌人效果轨；区间、生命周期事件和来源动作只服务可见复盘，现有 effect command、runtime event、active snapshot 和 `appliedToCalculators = false` 边界均未改变。
+
+## 375. WorkbenchScenarioComparison v1（仅编辑会话投影）
+
+`projectScenarioComparison.js` 接收当前与基准两套独立 simulation 结果：
+
+```text
+schemaVersion = 1
+sourceKind = azpr-workbench-scenario-comparison
+contractName = AzPrWorkbenchScenarioComparison
+status = scenario-comparison-awaiting-baseline | scenario-comparison-ready
+current / baseline
+  label / sourceKind / projectId / projectName
+  metrics
+    enemyHpDelta / enemyToughnessDelta / selfEnergyDelta
+    durationMs / effectCoverageMs
+  actors[]
+  actions[]
+  effects[]
+metrics[]
+  key / label / unit
+  current / baseline / delta / changed
+actors[]
+  currentActorId / baselineActorId / name
+  currentValue / baselineValue / delta / changed
+actions[]
+  currentActionId / baselineActionId
+  currentName / baselineName / actorName
+  metrics / changed
+effects[]
+  name / targetName / duration / intervals / changed
+summary
+  metricCount / actorCount / actionCount / changedActionCount
+  effectCount / changedEffectCount
+  readsRuntimeOutputsOnly = true
+  appliedToCalculators = false
+```
+
+总 HP、韧性和能量直接读取各方案 `runtimeOutputs.summary`；角色能量读取 `resourceCurves.curvesByActor`；动作贡献聚合 `hitTransactions.transactions` 并读取 `effectTimeline.events`；效果覆盖读取各方案的 `AzPrEffectIntervalProjection`。排轴时长只取 Scenario 动作的最晚结束时间。该投影不调用 calculator，也不建立第二套三值公式。
+
+基准可来自 WorkbenchPreset、JSON/PNG 项目或当前草稿快照，但 `comparisonBaselineDraft`、基准来源和投影结果都属于 Workbench transient state，不写入 WorkbenchProjectFile v9、本地草稿、分享链接、PNG 元数据或预设。导入基准只创建第二套 Project/Scenario/simulation，不调用当前项目导入入口，因此不会覆盖当前编辑或历史栈。

@@ -9,6 +9,7 @@ const REQUIRED_CAPABILITIES = [
   'multi-action-editing',
   'timeline-relations',
   'effect-interval-review',
+  'scenario-comparison',
   'narrow-main-flow',
 ];
 

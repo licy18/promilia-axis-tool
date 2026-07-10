@@ -287,6 +287,60 @@ test('[effect-interval-review] reviews an effect interval and refreshes it from 
   );
 });
 
+test('[scenario-comparison] compares an edited axis with a snapshot and returns to the changed action', async ({
+  page,
+}) => {
+  await page.goto('/#/workbench');
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const baselineDownload = await downloadPromise;
+  const baselinePath = await baselineDownload.path();
+  expect(baselinePath).toBeTruthy();
+
+  await page.getByTestId('workbench-open-comparison').click();
+  const comparison = page.getByTestId('workbench-scenario-comparison');
+  await expect(comparison).toBeVisible();
+  await page.getByTestId('workbench-comparison-capture-current').click();
+  await expect(
+    page.getByTestId('workbench-comparison-baseline-source')
+  ).toContainText('当前快照');
+  await page.getByTestId('workbench-comparison-close').click();
+
+  await page.getByTestId('workbench-start-frame-input').fill('36');
+  await page.getByTestId('workbench-start-frame-input').press('Tab');
+  await page.getByTestId('workbench-open-comparison').click();
+  const changedAction = page.locator(
+    '[data-testid="workbench-comparison-action-row"][data-current-action-id="action-0001"]'
+  );
+  await expect(changedAction).toHaveAttribute('data-changed', 'true');
+  await expect(
+    page
+      .getByTestId('workbench-comparison-metric')
+      .filter({ hasText: '排轴时长' })
+  ).toContainText('+600 ms');
+  await page
+    .getByTestId('workbench-comparison-import-baseline-file')
+    .setInputFiles(baselinePath);
+  await expect(
+    page.getByTestId('workbench-comparison-baseline-source')
+  ).not.toContainText('当前快照');
+  await expect(page.getByTestId('workbench-start-frame-input')).toHaveValue(
+    '36'
+  );
+  await expect(changedAction).toHaveAttribute('data-changed', 'true');
+
+  await changedAction.getByTestId('workbench-comparison-locate-action').click();
+  await expect(comparison).toBeHidden();
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+    )
+  ).toHaveAttribute('data-edit-focus-source', 'scenario-comparison');
+  await expect(page.getByTestId('workbench-start-frame-input')).toHaveValue(
+    '36'
+  );
+});
+
 test('[narrow-main-flow] completes runtime review, edit, and refresh without overflow', async ({
   page,
 }) => {

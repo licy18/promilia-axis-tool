@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { mount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
 import {
   afterAll,
@@ -9760,6 +9760,74 @@ describe('Workbench view', () => {
         '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
       ).element.value
     ).toBe('');
+  });
+
+  it('compares a current snapshot and returns from an action difference to editing', async () => {
+    const wrapper = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-open-comparison"]')
+      .trigger('click');
+    await vi.dynamicImportSettled();
+    await flushPromises();
+    await nextTick();
+    document
+      .querySelector('[data-testid="workbench-comparison-capture-current"]')
+      .click();
+    await nextTick();
+    expect(
+      document.querySelector(
+        '[data-testid="workbench-comparison-baseline-source"]'
+      ).textContent
+    ).toContain('当前快照');
+
+    document
+      .querySelector('[data-testid="workbench-comparison-close"]')
+      .click();
+    await nextTick();
+    await wrapper
+      .find('[data-testid="workbench-start-frame-input"]')
+      .setValue('36');
+    await wrapper
+      .find('[data-testid="workbench-open-comparison"]')
+      .trigger('click');
+    await flushPromises();
+
+    const actionRow = document.querySelector(
+      '[data-testid="workbench-comparison-action-row"][data-current-action-id="action-0001"]'
+    );
+    expect(actionRow.dataset.changed).toBe('true');
+    actionRow
+      .querySelector('[data-testid="workbench-comparison-locate-action"]')
+      .click();
+    await nextTick();
+
+    expect(
+      document.querySelector('[data-testid="workbench-scenario-comparison"]')
+    ).toBeNull();
+    expect(
+      wrapper
+        .find('.action-item[data-action-id="action-0001"]')
+        .attributes('data-selected')
+    ).toBe('true');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+        )
+        .attributes('data-edit-focus-source')
+    ).toBe('scenario-comparison');
+
+    wrapper.unmount();
   });
 });
 

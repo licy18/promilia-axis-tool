@@ -71,6 +71,15 @@
           </button>
           <button
             class="nav-button secondary"
+            data-testid="workbench-open-comparison"
+            type="button"
+            @click="openScenarioComparison"
+          >
+            <TrendCharts class="button-icon" />
+            <span>方案对比</span>
+          </button>
+          <button
+            class="nav-button secondary"
             data-testid="workbench-export-project"
             type="button"
             @click="exportProjectFile"
@@ -139,6 +148,19 @@
       @load-preset="loadWorkbenchPreset"
       @duplicate-preset="duplicateWorkbenchPresetEntry"
       @delete-preset="deleteWorkbenchPresetEntry"
+    />
+
+    <WorkbenchScenarioComparisonDialog
+      v-if="comparisonDialogVisible"
+      :visible="comparisonDialogVisible"
+      :presets="workbenchPresets"
+      :baseline-source="comparisonBaselineSource"
+      :comparison="scenarioComparison"
+      @close="closeScenarioComparison"
+      @select-preset="selectScenarioComparisonPreset"
+      @capture-current="captureCurrentScenarioComparisonBaseline"
+      @import-baseline="importScenarioComparisonBaseline"
+      @locate-action="locateScenarioComparisonAction"
     />
 
     <WorkbenchActionContextMenu
@@ -679,6 +701,7 @@
 <script setup>
 import {
   computed,
+  defineAsyncComponent,
   nextTick,
   onBeforeUnmount,
   onMounted,
@@ -819,6 +842,11 @@ import {
   installProjectSimulationSkillDiagnostics,
 } from '../simulation/projection/projectSimulationResult';
 import { projectEffectRuntimeIntervals } from '../simulation/projection/projectEffectIntervals';
+import { projectWorkbenchScenarioComparison } from '../simulation/projection/projectScenarioComparison';
+
+const WorkbenchScenarioComparisonDialog = defineAsyncComponent(
+  () => import('../features/workbench/WorkbenchScenarioComparisonDialog.vue')
+);
 
 const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
@@ -869,6 +897,9 @@ const draftStatus = ref('未保存草稿');
 const projectShareUrl = ref('');
 const presetDialogVisible = ref(false);
 const workbenchPresets = ref([]);
+const comparisonDialogVisible = ref(false);
+const comparisonBaselineDraft = ref(null);
+const comparisonBaselineSource = ref(null);
 const undoHistoryStack = ref([]);
 const redoHistoryStack = ref([]);
 const workbenchRoot = ref(null);
@@ -947,6 +978,55 @@ const effectIntervalProjection = computed(() =>
     effectTimeline: runtimeOutputs.value.effectTimeline,
     durationMs: scenario.value.time.durationMs,
     frameRate: scenario.value.time.fps,
+  })
+);
+const comparisonBaselineProject = computed(() =>
+  comparisonBaselineDraft.value
+    ? createWorkbenchProjectFromDraft(comparisonBaselineDraft.value)
+    : null
+);
+const comparisonBaselineScenario = computed(() =>
+  comparisonBaselineProject.value
+    ? compileProject(comparisonBaselineProject.value, gameData)
+    : null
+);
+const comparisonBaselineSimulationResult = computed(() => {
+  void runtimeDiagnosticsRevision.value;
+  return comparisonBaselineScenario.value
+    ? simulateScenario(comparisonBaselineScenario.value)
+    : null;
+});
+const comparisonBaselineEffectIntervals = computed(() => {
+  if (!comparisonBaselineScenario.value) {
+    return null;
+  }
+  return projectEffectRuntimeIntervals({
+    effectTimeline:
+      comparisonBaselineSimulationResult.value.runtimeOutputs.effectTimeline,
+    durationMs: comparisonBaselineScenario.value.time.durationMs,
+    frameRate: comparisonBaselineScenario.value.time.fps,
+  });
+});
+const scenarioComparison = computed(() =>
+  projectWorkbenchScenarioComparison({
+    current: {
+      label: '当前编辑',
+      sourceKind: 'current-workbench-project',
+      scenario: scenario.value,
+      runtimeOutputs: runtimeOutputs.value,
+      effectIntervals: effectIntervalProjection.value,
+    },
+    baseline: comparisonBaselineScenario.value
+      ? {
+          label: comparisonBaselineSource.value?.label ?? '基准方案',
+          sourceKind:
+            comparisonBaselineSource.value?.kind ?? 'comparison-baseline',
+          scenario: comparisonBaselineScenario.value,
+          runtimeOutputs:
+            comparisonBaselineSimulationResult.value.runtimeOutputs,
+          effectIntervals: comparisonBaselineEffectIntervals.value,
+        }
+      : null,
   })
 );
 const selectedEffectInterval = computed(
@@ -2267,6 +2347,113 @@ function deleteWorkbenchPresetEntry(presetId) {
   }
   workbenchPresets.value = library.presets;
   draftStatus.value = preset ? `已删除预设：${preset.name}` : '预设不存在';
+}
+
+function openScenarioComparison() {
+  refreshWorkbenchPresetLibrary();
+  comparisonDialogVisible.value = true;
+}
+
+function closeScenarioComparison() {
+  comparisonDialogVisible.value = false;
+}
+
+function selectScenarioComparisonPreset(presetId) {
+  const preset = workbenchPresets.value.find(item => item.id === presetId);
+  const draft = createWorkbenchDraftFromPreset(preset);
+  if (!preset || !draft) {
+    draftStatus.value = '对比预设版本不兼容';
+    return false;
+  }
+  return setScenarioComparisonBaseline(draft, {
+    kind: 'preset',
+    id: preset.id,
+    label: preset.name,
+  });
+}
+
+function captureCurrentScenarioComparisonBaseline() {
+  return setScenarioComparisonBaseline(
+    createWorkbenchDraftSnapshot(getWorkbenchDraftState()),
+    {
+      kind: 'snapshot',
+      id: `snapshot-${Date.now()}`,
+      label: `${project.value.name}（当前快照）`,
+    }
+  );
+}
+
+async function importScenarioComparisonBaseline(file) {
+  try {
+    const png =
+      file?.type === 'image/png' ||
+      String(file?.name ?? '')
+        .toLowerCase()
+        .endsWith('.png') ||
+      (await isPngSource(file));
+    const draft = png
+      ? await parseWorkbenchProjectPng(file)
+      : parseWorkbenchProjectFile(await file.text());
+    if (!draft) {
+      draftStatus.value = '对比基准项目无效';
+      return false;
+    }
+    return setScenarioComparisonBaseline(draft, {
+      kind: 'import',
+      id: file.name,
+      label: file.name,
+    });
+  } catch {
+    draftStatus.value = '对比基准导入失败';
+    return false;
+  }
+}
+
+function setScenarioComparisonBaseline(draft, source) {
+  if (!draft) {
+    return false;
+  }
+  comparisonBaselineDraft.value = createWorkbenchDraftSnapshot(
+    draft,
+    draft.savedAt ?? null
+  );
+  comparisonBaselineSource.value = { ...source };
+  if (draft.runtimeSampleCaptures?.length) {
+    void ensureRuntimeDiagnosticsLoaded();
+  }
+  return true;
+}
+
+function locateScenarioComparisonAction(actionId) {
+  if (!findActionDraftById(actionId)) {
+    return false;
+  }
+  closeScenarioComparison();
+  selectAction(actionId, { syncRuntimeResult: false });
+  actionEditFocus.value = {
+    ...createEmptyWorkbenchActionEditFocus(actionEditFocus.value.sequence + 1),
+    actionId,
+    fieldKey: 'startMs',
+    label: '方案对比',
+    changeSummary: '从方案差异返回当前动作修改',
+    editOrigin: 'scenario-comparison',
+    focusSource: 'scenario-comparison',
+  };
+  void nextTick().then(() => {
+    scrollActionEditFocusIntoView();
+  });
+  return true;
+}
+
+function createWorkbenchProjectFromDraft(draft) {
+  return createWorkbenchProject(draft.selection, {
+    teamSlots: draft.teamSlots,
+    actorConfigs: draft.actorConfigs,
+    enemyConfig: draft.enemyConfig,
+    actions: draft.actionDrafts,
+    actionRelations: draft.actionRelations,
+    runtimeSampleCaptures: draft.runtimeSampleCaptures,
+  });
 }
 
 function getWorkbenchDraftState() {
