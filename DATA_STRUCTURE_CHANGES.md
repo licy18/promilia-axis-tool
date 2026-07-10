@@ -24402,3 +24402,36 @@ Workbench 导入 JSON 后会复用 `saveWorkbenchDraft()` 写回当前草稿，�
 
 - `workbenchDraftStorage.test.js` 覆盖 `workbench-project` 文件序列化、导入为 draft、旧 `workbench-draft` 文件兼容和文件名生成。
 - `workbench-continuous-edit.spec.js` 覆盖真实浏览器导出 JSON、重置、从文件导入、恢复敌人配置/动作轴/当前选中动作，并重新运行模拟。
+
+## 341. Workbench 项目分享码：Workbench Project Share Code
+
+### 341.1 字段变化
+
+`src/domain/workbenchDraftStorage.js` 新增 Workbench 项目分享 helper：
+
+```text
+WORKBENCH_PROJECT_SHARE_PARAM = workbenchProject
+createWorkbenchProjectShareCode()
+parseWorkbenchProjectShareCode()
+```
+
+分享码内容为 `workbench-project` JSON 文件快照的 base64url 编码结果，不新增独立项目
+schema。
+
+Workbench 分享 URL 使用 hash route query：
+
+```text
+#/workbench?workbenchProject=<base64url workbench-project snapshot>
+```
+
+### 341.2 保存与迁移
+
+不改变 `workbench-draft:v1` localStorage schema，不需要迁移现有草稿。
+
+打开分享链接后会把分享码解析为 `workbench-draft` 快照，并复用
+`saveWorkbenchDraft()` 写回当前草稿；URL 中的 `workbenchProject` 参数会在成功导入后移除。
+
+### 341.3 验证
+
+- `workbenchDraftStorage.test.js` 覆盖分享码 round-trip 和非法分享码拒绝。
+- `workbench-continuous-edit.spec.js` 覆盖真实浏览器生成分享链接、重置、从 URL 恢复项目并重新运行模拟。

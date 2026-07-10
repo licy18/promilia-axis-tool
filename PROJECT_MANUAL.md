@@ -399,12 +399,28 @@ P0 验证结论：当前状态可以作为“Workbench 主流程 demo”给用�
 - `npm run test -- src/__tests__/domain/workbenchDraftStorage.test.js`：通过，4 条测试。
 - `npm run test:e2e:workbench-flow -- --grep "exports and imports"`：通过，真实浏览器导出/导入闭环。
 
+### P1-B 项目分享链接闭环（2026-07-10）
+
+已完成能力：
+
+- Workbench 可以把当前项目生成 URL 分享链接，链接内携带同一份 `workbench-project` 快照。
+- 打开分享链接会恢复选择、敌人配置、动作轴和当前选中动作，并写回当前草稿。
+- 从分享链接恢复后可以继续进入运行模拟，查看曲线、日志、三值详情和 runtime summary。
+
+已完成验证：
+
+- `npm run test -- src/__tests__/domain/workbenchDraftStorage.test.js`：通过，6 条测试，覆盖分享码 round-trip 和非法分享码拒绝。
+- `npm run test:e2e:workbench-flow -- --grep "shares and imports"`：通过，真实浏览器生成分享链接、重置、从 URL 恢复项目并重新运行模拟。
+- `npm run test -- --run`：通过，40 个测试文件、295 条测试。
+- `npm run build`：通过；仅保留 Sass `@import` 弃用警告和大 chunk 警告。
+- `npm run test:e2e:workbench-flow`：通过，25 条 `@workbench-main-flow` 浏览器主流程回归。
+
 ### 下一阶段优先级
 
-P1 后续：项目分享/导出增强。
+P1 后续：项目导入/导出增强。
 
-- JSON 导入/导出第一段已完成。
-- 后续可补旧 `.promilia` 项目兼容、导入失败原因展示、分享码、PNG 导出和 PNG 反导入。
+- JSON 导入/导出和 URL 分享链接第一段已完成。
+- 后续可补旧 `.promilia` 项目兼容、导入失败原因展示、PNG 导出和 PNG 反导入。
 - 这些属于项目级能力，不应退回到 Workbench 小按钮/小标签阶段。
 
 P2：角色/敌人/装备配置闭环。

@@ -1923,6 +1923,86 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('shares and imports a Workbench project URL @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/workbench');
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'action-edit'
+  );
+
+  const enemySelect = page.getByTestId('workbench-enemy-select');
+  const sharedEnemyId = await enemySelect
+    .locator('option')
+    .nth(1)
+    .getAttribute('value');
+  expect(sharedEnemyId).toBeTruthy();
+  await enemySelect.selectOption(sharedEnemyId);
+  await page.getByTestId('workbench-enemy-level-input').fill('92');
+  await page.getByTestId('workbench-enemy-hp-multiplier-input').fill('2.75');
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  await waitForRuntimeAction(page, 'action-0001');
+  await page.getByTestId('workbench-flow-insert-next-action').click();
+  await waitForRuntimeAction(page, 'action-0002');
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+
+  const shareButton = page.getByTestId('workbench-share-project');
+  await shareButton.click();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已生成分享链接'
+  );
+  const shareUrl = await shareButton.getAttribute('data-share-url');
+  expect(shareUrl).toContain('/#/workbench?workbenchProject=');
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '1 action'
+  );
+
+  await page.goto(shareUrl);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已导入分享项目'
+  );
+  await expect(enemySelect).toHaveValue(sharedEnemyId);
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '92'
+  );
+  await expect(
+    page.getByTestId('workbench-enemy-hp-multiplier-input')
+  ).toHaveValue('2.75');
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+
+  const sharedState = await readWorkbenchState(page);
+  expect(sharedState).toMatchObject({
+    phase: 'action-edit',
+    actionId: 'action-0002',
+    selectedActionListId: 'action-0002',
+    selectedTimelineActionId: 'action-0002',
+  });
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  const sharedRuntimeState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(sharedRuntimeState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '2',
+    navigationIndex: '1',
+    selected: false,
+  });
+  await expectCurveAndLogSelection(page, sharedRuntimeState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps undo and redo tied to refreshed runtime results @workbench-main-flow', async ({
   page,
 }) => {

@@ -68,6 +68,16 @@
             <Upload class="button-icon" />
             <span>导入 JSON</span>
           </button>
+          <button
+            class="nav-button secondary"
+            :data-share-url="projectShareUrl"
+            data-testid="workbench-share-project"
+            type="button"
+            @click="copyProjectShareLink"
+          >
+            <LinkIcon class="button-icon" />
+            <span>分享链接</span>
+          </button>
           <input
             ref="projectImportInput"
             class="project-import-input"
@@ -494,6 +504,7 @@ import {
   Document,
   Download,
   EditPen,
+  Link as LinkIcon,
   Refresh,
   TrendCharts,
   Upload,
@@ -558,11 +569,14 @@ import {
   createWorkbenchDraftSnapshot,
   createWorkbenchProjectFileName,
   createWorkbenchProjectFileSnapshot,
+  createWorkbenchProjectShareCode,
   createDefaultWorkbenchDraftState,
   loadWorkbenchDraft,
   normalizeWorkbenchSegmentSplitOptions,
   parseWorkbenchProjectFile,
+  parseWorkbenchProjectShareCode,
   saveWorkbenchDraft,
+  WORKBENCH_PROJECT_SHARE_PARAM,
 } from '../domain/workbenchDraftStorage';
 import { frameToMs } from '../domain/timebase';
 import { compileProject } from '../simulation/compiler/compileProject';
@@ -598,6 +612,7 @@ const calculatorDiagnosticFocus = ref({ scope: '', sequence: 0 });
 const runtimeLogFocus = ref({ source: '', statePointId: '', sequence: 0 });
 const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
 const draftStatus = ref('未保存草稿');
+const projectShareUrl = ref('');
 const undoHistoryStack = ref([]);
 const redoHistoryStack = ref([]);
 const workbenchRoot = ref(null);
@@ -775,6 +790,11 @@ const workbenchHistoryView = computed(() => ({
 
 onMounted(() => {
   window?.addEventListener?.('keydown', handleWorkbenchKeyboardShortcut);
+  window?.addEventListener?.('hashchange', handleWorkbenchHashChange);
+  if (applySharedProjectFromUrl()) {
+    return;
+  }
+
   const draft = loadWorkbenchDraft(getLocalStorage());
   if (!draft) {
     return;
@@ -786,7 +806,12 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window?.removeEventListener?.('keydown', handleWorkbenchKeyboardShortcut);
+  window?.removeEventListener?.('hashchange', handleWorkbenchHashChange);
 });
+
+function handleWorkbenchHashChange() {
+  applySharedProjectFromUrl();
+}
 
 function updateSelection(patch) {
   clearSegmentSplitPreview();
@@ -1547,6 +1572,94 @@ function exportProjectFile() {
   draftStatus.value = '已导出项目';
 }
 
+async function copyProjectShareLink() {
+  try {
+    const shareCode = createWorkbenchProjectShareCode(getWorkbenchDraftState());
+    const shareUrl = createWorkbenchProjectShareLink(shareCode);
+    projectShareUrl.value = shareUrl;
+    try {
+      await globalThis.navigator?.clipboard?.writeText?.(shareUrl);
+    } catch {
+      // The URL is still available on the button for manual copy and tests.
+    }
+    draftStatus.value = '已生成分享链接';
+  } catch {
+    draftStatus.value = '分享链接不可用';
+  }
+}
+
+function createWorkbenchProjectShareLink(shareCode) {
+  if (typeof window === 'undefined') {
+    return '';
+  }
+
+  const url = new URL(window.location.href);
+  const query = new URLSearchParams({
+    [WORKBENCH_PROJECT_SHARE_PARAM]: shareCode,
+  });
+  url.hash = `#/workbench?${query.toString()}`;
+  return url.toString();
+}
+
+function applySharedProjectFromUrl() {
+  const shareCode = getWorkbenchProjectShareCodeFromUrl();
+  if (!shareCode) {
+    return false;
+  }
+
+  const draft = parseWorkbenchProjectShareCode(shareCode);
+  if (!draft) {
+    draftStatus.value = '分享项目无效';
+    return false;
+  }
+
+  applyImportedProjectDraft(draft, '已导入分享项目');
+  clearWorkbenchProjectShareCodeFromUrl();
+  return true;
+}
+
+function getWorkbenchProjectShareCodeFromUrl() {
+  if (typeof window === 'undefined') {
+    return '';
+  }
+
+  const hash = window.location.hash ?? '';
+  const queryIndex = hash.indexOf('?');
+  if (queryIndex === -1) {
+    return '';
+  }
+
+  return (
+    new URLSearchParams(hash.slice(queryIndex + 1)).get(
+      WORKBENCH_PROJECT_SHARE_PARAM
+    ) ?? ''
+  );
+}
+
+function clearWorkbenchProjectShareCodeFromUrl() {
+  if (
+    typeof window === 'undefined' ||
+    typeof window.history?.replaceState !== 'function'
+  ) {
+    return;
+  }
+
+  const url = new URL(window.location.href);
+  const hash = url.hash || '#/workbench';
+  const queryIndex = hash.indexOf('?');
+  if (queryIndex === -1) {
+    return;
+  }
+
+  const routePath = hash.slice(0, queryIndex) || '#/workbench';
+  const params = new URLSearchParams(hash.slice(queryIndex + 1));
+  params.delete(WORKBENCH_PROJECT_SHARE_PARAM);
+  url.hash = params.toString()
+    ? `${routePath}?${params.toString()}`
+    : routePath;
+  window.history.replaceState(window.history.state, '', url.toString());
+}
+
 function openProjectImport() {
   projectImportInput.value?.click?.();
 }
@@ -1575,19 +1688,21 @@ async function importProjectFile(event) {
   }
 }
 
-function applyImportedProjectDraft(draft) {
+function applyImportedProjectDraft(draft, statusText = '已导入项目') {
   clearSegmentSplitPreview();
+  projectShareUrl.value = '';
   applyDraftState(draft);
   clearWorkbenchProjectTransientState();
   undoHistoryStack.value = [];
   redoHistoryStack.value = [];
   const snapshot = saveWorkbenchDraft(getLocalStorage(), draft);
-  draftStatus.value = snapshot ? '已导入项目' : '已导入项目（未持久化）';
+  draftStatus.value = snapshot ? statusText : `${statusText}（未持久化）`;
 }
 
 function resetDraft() {
   recordWorkbenchHistorySnapshot();
   clearWorkbenchDraft(getLocalStorage());
+  projectShareUrl.value = '';
   applyDraftState(createDefaultWorkbenchDraftState());
   clearSegmentSplitPreview();
   draftStatus.value = '已重置草稿';
@@ -1623,6 +1738,7 @@ function clearWorkbenchProjectTransientState() {
 }
 
 function markDraftDirty() {
+  projectShareUrl.value = '';
   draftStatus.value = '有未保存改动';
 }
 
@@ -1841,6 +1957,7 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
     actionDrafts.value.find(action => action.id === selectedActionId.value)
   );
   clearSegmentSplitPreview();
+  projectShareUrl.value = '';
   draftStatus.value = status;
 }
 

@@ -3,7 +3,9 @@ import {
   WORKBENCH_PROJECT_FILE_TYPE,
   createWorkbenchProjectFileName,
   createWorkbenchProjectFileSnapshot,
+  createWorkbenchProjectShareCode,
   parseWorkbenchProjectFile,
+  parseWorkbenchProjectShareCode,
   serializeWorkbenchProjectFile,
 } from '../../domain/workbenchDraftStorage';
 
@@ -132,6 +134,62 @@ describe('workbench draft storage project files', () => {
         type: WORKBENCH_PROJECT_FILE_TYPE,
       })
     ).toBeNull();
+  });
+
+  it('round-trips Workbench project share codes through the project file contract', () => {
+    const code = createWorkbenchProjectShareCode(
+      {
+        selection: {
+          characterId: 109001,
+          secondaryCharacterId: 101003,
+          skillId: 10900101,
+          enemyId: 300032,
+        },
+        enemyConfig: {
+          level: 92,
+          hpMultiplier: 2.5,
+          defenseMultiplier: 1,
+        },
+        actionDrafts: [
+          {
+            id: 'action-0001',
+            type: 'skill',
+            skillId: 10900101,
+            actorCharacterId: 109001,
+            startMs: 0,
+            durationMs: 1000,
+            level: 1,
+          },
+          {
+            id: 'action-0002',
+            type: 'skill',
+            skillId: 10100301,
+            actorCharacterId: 101003,
+            startMs: 1200,
+            durationMs: 900,
+            level: 2,
+          },
+        ],
+        selectedActionId: 'action-0002',
+      },
+      '2026-07-10T05:00:00.000Z'
+    );
+
+    expect(code).toMatch(/^[A-Za-z0-9_-]+$/);
+    expect(parseWorkbenchProjectShareCode(code)).toMatchObject({
+      type: 'workbench-draft',
+      savedAt: '2026-07-10T05:00:00.000Z',
+      selectedActionId: 'action-0002',
+      enemyConfig: {
+        level: 92,
+        hpMultiplier: 2.5,
+      },
+    });
+  });
+
+  it('rejects invalid Workbench project share codes', () => {
+    expect(parseWorkbenchProjectShareCode('not-a-project')).toBeNull();
+    expect(parseWorkbenchProjectShareCode('')).toBeNull();
   });
 
   it('creates stable project file names', () => {
