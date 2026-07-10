@@ -6,6 +6,7 @@ const REQUIRED_CAPABILITIES = [
   'diagnostics-lazy-load',
   'json-project-exchange',
   'png-project-exchange',
+  'multi-action-editing',
   'narrow-main-flow',
 ];
 

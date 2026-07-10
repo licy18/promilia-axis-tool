@@ -215,6 +215,7 @@
           class="timeline-lane"
           :style="timelineTrackStyle"
           data-testid="workbench-timeline-lane"
+          @contextmenu.prevent="openTimelineContextMenu"
         >
           <div
             v-for="lane in timelineLanes"
@@ -249,7 +250,8 @@
               :class="[
                 {
                   selected: action.id === flowSelectedActionId,
-                  dragging: action.id === draggingActionId,
+                  'multi-selected': selectedActionIdSet.has(action.id),
+                  dragging: isDraggingAction(action.id),
                   overlap: overlapActionIds.has(action.id),
                   resizing: action.id === resizingActionId,
                   'auto-delayed': action.insertion?.autoDelayed,
@@ -266,6 +268,10 @@
               ]"
               :style="actionStyle(action)"
               :data-action-id="action.id"
+              :data-start-ms="action.startMs"
+              :data-selected="
+                selectedActionIdSet.has(action.id) ? 'true' : 'false'
+              "
               :data-lane-id="lane.id"
               :data-readiness-status="getActionReadiness(action).status"
               :data-readiness-executable="
@@ -283,12 +289,13 @@
               data-testid="workbench-timeline-action"
               :title="formatTimelineActionTitle(action)"
               tabindex="0"
-              @click="$emit('select-action', action.id)"
-              @keydown.enter="$emit('select-action', action.id)"
+              @click.stop="handleActionClick($event, action)"
+              @contextmenu.prevent.stop="openActionContextMenu($event, action)"
+              @keydown.enter.prevent="handleActionSelect($event, action)"
               @keydown.left.prevent="nudgeAction($event, action, -1)"
               @keydown.right.prevent="nudgeAction($event, action, 1)"
-              @keydown.delete.prevent="$emit('delete-action', action.id)"
-              @keydown.backspace.prevent="$emit('delete-action', action.id)"
+              @keydown.delete.prevent="deleteActionSelection(action)"
+              @keydown.backspace.prevent="deleteActionSelection(action)"
               @pointerdown="beginDrag($event, action)"
             >
               <span>{{ actionLabel(action) }}</span>
@@ -722,6 +729,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  selectedActionIds: {
+    type: Array,
+    default: () => [],
+  },
   flowModel: {
     type: Object,
     default: null,
@@ -783,6 +794,9 @@ const emit = defineEmits([
   'update-action-time',
   'update-action-duration',
   'update-action-lane',
+  'shift-selected-actions',
+  'delete-selected-actions',
+  'open-action-context-menu',
   'select-state-curve-point',
   'dispatch-flow-action',
   'update-state-curve-layer-filter',
@@ -793,6 +807,7 @@ const laneRef = ref(null);
 const laneRowRefs = new Map();
 const dragState = ref(null);
 const resizeState = ref(null);
+const suppressClickActionId = ref('');
 const timelineZoom = ref(1);
 const candidateSeriesVisibility = ref({});
 const selectedCandidateFrameGroupId = ref(null);
@@ -816,12 +831,14 @@ const ticks = computed(() => {
   });
 });
 
-const draggingActionId = computed(() => dragState.value?.actionId ?? null);
 const dragInitialLaneId = computed(
   () => dragState.value?.initialLaneId ?? null
 );
 const dragTargetLaneId = computed(() => dragState.value?.targetLaneId ?? null);
 const resizingActionId = computed(() => resizeState.value?.actionId ?? null);
+const selectedActionIdSet = computed(
+  () => new Set(props.selectedActionIds ?? [])
+);
 const timelineTrackStyle = computed(() => ({
   width: `${timelineZoom.value * 100}%`,
 }));
@@ -1160,7 +1177,12 @@ function normalizeActionEditFocusField(fieldKey) {
 }
 
 function actionStyle(action) {
-  const left = clampPercent((action.startMs / props.durationMs) * 100);
+  const previewOffsetMs = isDraggingAction(action.id)
+    ? (dragState.value?.currentOffsetMs ?? 0)
+    : 0;
+  const left = clampPercent(
+    ((action.startMs + previewOffsetMs) / props.durationMs) * 100
+  );
   const width = clampPercent(
     ((action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS) /
       props.durationMs) *
@@ -2458,32 +2480,52 @@ function clampPercent(value, min = 0, max = 100) {
 }
 
 function beginDrag(event, action) {
-  if ((event.button ?? 0) !== 0) {
+  if (
+    (event.button ?? 0) !== 0 ||
+    event.ctrlKey ||
+    event.metaKey ||
+    event.shiftKey
+  ) {
     return;
   }
 
   const rect = laneRef.value?.getBoundingClientRect();
   if (!rect || rect.width <= 0) {
-    emit('select-action', action.id);
+    emit('select-action', { actionId: action.id, mode: 'replace' });
     return;
   }
 
   event.preventDefault();
   event.currentTarget?.setPointerCapture?.(event.pointerId);
-  emit('select-action', action.id);
+  const actionIds = selectedActionIdSet.value.has(action.id)
+    ? props.actions
+        .filter(item => selectedActionIdSet.value.has(item.id))
+        .map(item => item.id)
+    : [action.id];
+  if (!selectedActionIdSet.value.has(action.id)) {
+    emit('select-action', { actionId: action.id, mode: 'replace' });
+  }
+  const draggedActions = props.actions.filter(item =>
+    actionIds.includes(item.id)
+  );
+  const minStartMs = Math.min(...draggedActions.map(item => item.startMs));
+  const maxEndMs = Math.max(
+    ...draggedActions.map(
+      item =>
+        item.startMs + (item.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS)
+    )
+  );
   dragState.value = {
     actionId: action.id,
-    canChangeLane: canChangeActionLane(action),
+    actionIds,
+    canChangeLane: actionIds.length === 1 && canChangeActionLane(action),
     initialLaneId: resolveActionLaneId(action),
     targetLaneId: null,
     laneWidth: rect.width,
     initialClientX: event.clientX,
-    initialStartMs: action.startMs,
-    maxStartMs: Math.max(
-      0,
-      props.durationMs -
-        (action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS)
-    ),
+    minOffsetMs: -minStartMs,
+    maxOffsetMs: Math.max(-minStartMs, props.durationMs - maxEndMs),
+    currentOffsetMs: 0,
   };
 
   window.addEventListener('pointermove', handleDragMove);
@@ -2523,15 +2565,15 @@ function beginResize(event, action) {
 
 function nudgeAction(event, action, direction) {
   const stepMs = event.shiftKey ? props.snapMs * 4 : props.snapMs;
-  const maxStartMs = Math.max(
-    0,
-    props.durationMs -
-      (action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS)
-  );
-  emit('select-action', action.id);
-  emit('update-action-time', {
-    actionId: action.id,
-    startMs: clampNumber(action.startMs + direction * stepMs, 0, maxStartMs),
+  const actionIds = selectedActionIdSet.value.has(action.id)
+    ? props.selectedActionIds
+    : [action.id];
+  if (!selectedActionIdSet.value.has(action.id)) {
+    emit('select-action', { actionId: action.id, mode: 'replace' });
+  }
+  emit('shift-selected-actions', {
+    actionIds,
+    offsetMs: direction * stepMs,
   });
 }
 
@@ -2573,19 +2615,38 @@ function handleDragMove(event) {
     ((event.clientX - dragState.value.initialClientX) /
       dragState.value.laneWidth) *
     props.durationMs;
-  const nextStartMs = snapTimeMs(dragState.value.initialStartMs + deltaMs);
-  emit('update-action-time', {
-    actionId: dragState.value.actionId,
-    startMs: clampNumber(nextStartMs, 0, dragState.value.maxStartMs),
-  });
+  dragState.value = {
+    ...dragState.value,
+    currentOffsetMs: clampNumber(
+      snapTimeMs(deltaMs),
+      dragState.value.minOffsetMs,
+      dragState.value.maxOffsetMs
+    ),
+  };
 }
 
 function endDrag(event) {
-  if (dragState.value?.canChangeLane && event?.type === 'pointerup') {
+  const completedDrag = dragState.value;
+  if (!completedDrag) {
+    return;
+  }
+  if (completedDrag.currentOffsetMs && event?.type === 'pointerup') {
+    emit('shift-selected-actions', {
+      actionIds: completedDrag.actionIds,
+      offsetMs: completedDrag.currentOffsetMs,
+    });
+    suppressClickActionId.value = completedDrag.actionId;
+    window.setTimeout(() => {
+      if (suppressClickActionId.value === completedDrag.actionId) {
+        suppressClickActionId.value = '';
+      }
+    }, 0);
+  }
+  if (completedDrag.canChangeLane && event?.type === 'pointerup') {
     const targetLaneId = resolveActorLaneAtPoint(event.clientY);
-    if (targetLaneId && targetLaneId !== dragState.value.initialLaneId) {
+    if (targetLaneId && targetLaneId !== completedDrag.initialLaneId) {
       emit('update-action-lane', {
-        actionId: dragState.value.actionId,
+        actionId: completedDrag.actionId,
         laneId: targetLaneId,
       });
     }
@@ -2595,6 +2656,67 @@ function endDrag(event) {
   window.removeEventListener('pointermove', handleDragMove);
   window.removeEventListener('pointerup', endDrag);
   window.removeEventListener('pointercancel', endDrag);
+}
+
+function isDraggingAction(actionId) {
+  return dragState.value?.actionIds?.includes(actionId) ?? false;
+}
+
+function handleActionClick(event, action) {
+  if (suppressClickActionId.value === action.id) {
+    suppressClickActionId.value = '';
+    return;
+  }
+  handleActionSelect(event, action);
+}
+
+function handleActionSelect(event, action) {
+  emit('select-action', {
+    actionId: action.id,
+    mode: event.shiftKey
+      ? 'range'
+      : event.ctrlKey || event.metaKey
+        ? 'toggle'
+        : 'replace',
+  });
+}
+
+function deleteActionSelection(action) {
+  const actionIds = selectedActionIdSet.value.has(action.id)
+    ? props.selectedActionIds
+    : [action.id];
+  if (!selectedActionIdSet.value.has(action.id)) {
+    emit('select-action', { actionId: action.id, mode: 'replace' });
+  }
+  emit('delete-selected-actions', { actionIds });
+}
+
+function openActionContextMenu(event, action) {
+  emit('open-action-context-menu', {
+    actionId: action.id,
+    x: event.clientX,
+    y: event.clientY,
+    targetStartMs: action.startMs,
+  });
+}
+
+function openTimelineContextMenu(event) {
+  const rect = laneRef.value?.getBoundingClientRect();
+  const targetStartMs = rect?.width
+    ? snapTimeMs(
+        clampNumber(
+          ((event.clientX - rect.left) / rect.width) * props.durationMs,
+          0,
+          props.durationMs
+        )
+      )
+    : undefined;
+  emit('open-action-context-menu', {
+    actionId: '',
+    x: event.clientX,
+    y: event.clientY,
+    targetStartMs,
+  });
 }
 
 function endResize() {
@@ -3138,6 +3260,11 @@ h2 {
 .action-block:focus {
   border-color: rgba(255, 255, 255, 0.8);
   outline: none;
+}
+
+.action-block.multi-selected {
+  border-color: rgba(121, 199, 185, 0.72);
+  background: linear-gradient(180deg, #2b5148 0%, #223d37 100%);
 }
 
 .action-block.selected {

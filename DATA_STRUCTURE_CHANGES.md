@@ -26103,4 +26103,21 @@ tests[]
 limitations[]
 ```
 
-必需能力固定为 production 路由与哈希资源、诊断动态加载、JSON 项目交换、PNG 项目交换和 390px 窄屏主流程。只有 Playwright 整体通过且五项能力全部存在并通过时，报告才输出 `trial-ready`；缺项或失败均输出 `blocked`。该报告只证明本地 `dist` + Vite preview 可试用，不代表远程 CDN/托管、最终蓝原公式或非 fixture 真实采样已验收。
+必需能力固定为 production 路由与哈希资源、诊断动态加载、JSON 项目交换、PNG 项目交换、多动作编辑和 390px 窄屏主流程。只有 Playwright 整体通过且六项能力全部存在并通过时，报告才输出 `trial-ready`；缺项或失败均输出 `blocked`。该报告只证明本地 `dist` + Vite preview 可试用，不代表远程 CDN/托管、最终蓝原公式或非 fixture 真实采样已验收。
+
+## 372. WorkbenchActionClipboard v1（仅编辑会话）
+
+`workbenchActionClipboard.js` 定义 Workbench 内存动作剪贴板：
+
+```text
+schemaVersion = 1
+kind = promilia-workbench-action-clipboard
+sourceActionIds[]
+baseStartMs / baseEndMs / durationMs
+actions[]
+nextPasteStartMs
+```
+
+`actions[]` 是所选动作的深拷贝。粘贴时按 `baseStartMs` 还原相对帧差，按动作组总跨度限制时间轴边界，重建 action ID 与 effect command ID，并清除旧 `insertion` / `generationBatch`。多选状态由 `selectedActionIds[] + primaryActionId + actionSelectionAnchorId` 表示，历史快照会保存这些字段以恢复撤销/重做。
+
+该合同严格属于 Workbench transient editing state：不会写入 `WorkbenchDraftSnapshot v8`、项目 JSON、分享链接、PNG 元数据或预设。现有项目 schema 无版本变化；导入、重置和项目切换会清理剪贴板，避免跨项目携带失效动作来源。

@@ -54,6 +54,128 @@ test('keeps every auxiliary route usable without global component registration @
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('edits and reviews an arbitrary action group @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/workbench');
+  await page.getByTestId('workbench-add-action').click();
+  await page.getByTestId('workbench-add-action').click();
+  await page.locator('.action-item[data-action-id="action-0001"]').click();
+  await page
+    .locator('.action-item[data-action-id="action-0003"]')
+    .click({ modifiers: ['Control'] });
+
+  const workbench = page.locator('main.workbench');
+  await expect(workbench).toHaveAttribute('data-selected-action-count', '2');
+  await expect(
+    page.locator('.action-item[data-action-id="action-0001"]')
+  ).toHaveAttribute('data-selected', 'true');
+  await expect(
+    page.locator('.action-item[data-action-id="action-0002"]')
+  ).toHaveAttribute('data-selected', 'false');
+  await expect(
+    page.locator('.action-item[data-action-id="action-0003"]')
+  ).toHaveAttribute('data-selected', 'true');
+
+  const sourceStarts = await Promise.all(
+    ['action-0001', 'action-0003'].map(actionId =>
+      page
+        .locator(
+          `[data-testid="workbench-timeline-action"][data-action-id="${actionId}"]`
+        )
+        .getAttribute('data-start-ms')
+        .then(Number)
+    )
+  );
+  await page.keyboard.press('Control+C');
+  const timelineLane = page.getByTestId('workbench-timeline-lane').first();
+  await timelineLane.scrollIntoViewIfNeeded();
+  const timelineBox = await timelineLane.boundingBox();
+  expect(timelineBox).toBeTruthy();
+  await page.mouse.click(
+    timelineBox.x + timelineBox.width * 0.7,
+    timelineBox.y + 20,
+    { button: 'right' }
+  );
+  await expect(page.getByTestId('workbench-action-context-menu')).toBeVisible();
+  await page.getByTestId('workbench-action-context-paste').click();
+
+  await expect(page.locator('.action-item')).toHaveCount(5);
+  await expect(workbench).toHaveAttribute('data-selected-action-count', '2');
+  await expect(
+    page.locator('.action-item[data-action-id="action-0004"]')
+  ).toHaveAttribute('data-selected', 'true');
+  await expect(
+    page.locator('.action-item[data-action-id="action-0005"]')
+  ).toHaveAttribute('data-selected', 'true');
+  const pastedStarts = await Promise.all(
+    ['action-0004', 'action-0005'].map(actionId =>
+      page
+        .locator(
+          `[data-testid="workbench-timeline-action"][data-action-id="${actionId}"]`
+        )
+        .getAttribute('data-start-ms')
+        .then(Number)
+    )
+  );
+  expect(pastedStarts[0]).toBeGreaterThan(10000);
+  expect(pastedStarts[1] - pastedStarts[0]).toBeCloseTo(
+    sourceStarts[1] - sourceStarts[0],
+    4
+  );
+
+  const draggedAction = page.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
+  );
+  await draggedAction.scrollIntoViewIfNeeded();
+  const draggedActionBox = await draggedAction.boundingBox();
+  expect(draggedActionBox).toBeTruthy();
+  await page.mouse.move(
+    draggedActionBox.x + Math.min(12, draggedActionBox.width / 2),
+    draggedActionBox.y + draggedActionBox.height / 2
+  );
+  await page.mouse.down();
+  await page.mouse.move(
+    draggedActionBox.x + Math.min(12, draggedActionBox.width / 2) + 24,
+    draggedActionBox.y + draggedActionBox.height / 2
+  );
+  await page.mouse.up();
+  const shiftedStarts = await Promise.all(
+    ['action-0004', 'action-0005'].map(actionId =>
+      page
+        .locator(
+          `[data-testid="workbench-timeline-action"][data-action-id="${actionId}"]`
+        )
+        .getAttribute('data-start-ms')
+        .then(Number)
+    )
+  );
+  expect(shiftedStarts[0]).toBeGreaterThan(pastedStarts[0]);
+  expect(shiftedStarts[1] - shiftedStarts[0]).toBeCloseTo(
+    pastedStarts[1] - pastedStarts[0],
+    4
+  );
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-runtime-detail-action-id',
+    'action-0004'
+  );
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-state-point')
+  ).toContainText('action-0004');
+
+  await page.keyboard.press('Delete');
+  await expect(page.locator('.action-item')).toHaveCount(3);
+  await page.keyboard.press('Control+Z');
+  await expect(page.locator('.action-item')).toHaveCount(5);
+  await expect(workbench).toHaveAttribute('data-selected-action-count', '2');
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps setup, edit return, and result selection synced', async ({
   page,
 }) => {

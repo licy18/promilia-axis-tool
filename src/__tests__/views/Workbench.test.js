@@ -21,6 +21,7 @@ import {
   createWorkbenchActionDraft,
   getSkillActionCatalog,
 } from '../../domain/workbenchProjectFactory';
+import { frameToMs } from '../../domain/timebase';
 import AnalysisPanel from '../../features/workbench/AnalysisPanel.vue';
 import EventLogPanel from '../../features/workbench/EventLogPanel.vue';
 import ResourceMonitorPanel from '../../features/workbench/ResourceMonitorPanel.vue';
@@ -2204,6 +2205,134 @@ describe('Workbench view', () => {
     await nextTick();
 
     expect(actionItems()).toHaveLength(2);
+  });
+
+  it('edits an arbitrary action group through clipboard, history, move, and delete', async () => {
+    const wrapper = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await nextTick();
+
+    await wrapper
+      .find('.action-item[data-action-id="action-0001"]')
+      .trigger('click');
+    await wrapper
+      .find('.action-item[data-action-id="action-0003"]')
+      .trigger('click', { ctrlKey: true });
+    await nextTick();
+
+    expect(
+      wrapper.find('main.workbench').attributes('data-selected-action-count')
+    ).toBe('2');
+    expect(
+      wrapper
+        .find('.action-item[data-action-id="action-0001"]')
+        .attributes('data-selected')
+    ).toBe('true');
+    expect(
+      wrapper
+        .find('.action-item[data-action-id="action-0002"]')
+        .attributes('data-selected')
+    ).toBe('false');
+    expect(
+      wrapper
+        .find('.action-item[data-action-id="action-0003"]')
+        .attributes('data-selected')
+    ).toBe('true');
+
+    dispatchWorkbenchKeyboardShortcut('c', { ctrlKey: true });
+    dispatchWorkbenchKeyboardShortcut('v', { ctrlKey: true });
+    await nextTick();
+
+    expect(wrapper.findAll('.action-item')).toHaveLength(5);
+    expect(
+      wrapper.find('main.workbench').attributes('data-selected-action-count')
+    ).toBe('2');
+    expect(
+      wrapper
+        .find('.action-item[data-action-id="action-0004"]')
+        .attributes('data-selected')
+    ).toBe('true');
+    expect(
+      wrapper
+        .find('.action-item[data-action-id="action-0005"]')
+        .attributes('data-selected')
+    ).toBe('true');
+
+    dispatchWorkbenchKeyboardShortcut('z', { ctrlKey: true });
+    await nextTick();
+    expect(wrapper.findAll('.action-item')).toHaveLength(3);
+    expect(
+      wrapper
+        .find('.action-item[data-action-id="action-0001"]')
+        .attributes('data-selected')
+    ).toBe('true');
+    expect(
+      wrapper
+        .find('.action-item[data-action-id="action-0003"]')
+        .attributes('data-selected')
+    ).toBe('true');
+
+    dispatchWorkbenchKeyboardShortcut('y', { ctrlKey: true });
+    await nextTick();
+    expect(wrapper.findAll('.action-item')).toHaveLength(5);
+
+    const pastedStartMs = Number(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
+        )
+        .attributes('data-start-ms')
+    );
+    dispatchWorkbenchKeyboardShortcut('ArrowRight');
+    await nextTick();
+    expect(
+      Number(
+        wrapper
+          .find(
+            '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
+          )
+          .attributes('data-start-ms')
+      )
+    ).toBeCloseTo(pastedStartMs + frameToMs(1), 4);
+
+    dispatchWorkbenchKeyboardShortcut('Delete');
+    await nextTick();
+    expect(wrapper.findAll('.action-item')).toHaveLength(3);
+
+    dispatchWorkbenchKeyboardShortcut('z', { ctrlKey: true });
+    await nextTick();
+    expect(wrapper.findAll('.action-item')).toHaveLength(5);
+    expect(
+      wrapper.find('main.workbench').attributes('data-selected-action-count')
+    ).toBe('2');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(
+      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
+    );
+    expect(savedDraft.actionDrafts).toHaveLength(5);
+    expect(savedDraft).not.toHaveProperty('selectedActionIds');
+    expect(savedDraft).not.toHaveProperty('actionClipboard');
+
+    await wrapper
+      .find('[data-testid="workbench-reset-draft"]')
+      .trigger('click');
+    dispatchWorkbenchKeyboardShortcut('v', { ctrlKey: true });
+    await nextTick();
+    expect(wrapper.findAll('.action-item')).toHaveLength(1);
+
+    wrapper.unmount();
   });
 
   it('drives the edit-runtime-return loop from the main flow panel', async () => {
@@ -9683,6 +9812,17 @@ function stubTimelineGeometry(wrapper) {
   stubLaneRow(wrapper, 'actor-109001', 0, 72);
   stubLaneRow(wrapper, 'actor-101003', 84, 156);
   stubLaneRow(wrapper, 'system', 168, 240);
+}
+
+function dispatchWorkbenchKeyboardShortcut(key, options = {}) {
+  window.dispatchEvent(
+    new KeyboardEvent('keydown', {
+      key,
+      bubbles: true,
+      cancelable: true,
+      ...options,
+    })
+  );
 }
 
 function stubLaneRow(wrapper, laneId, top, bottom) {

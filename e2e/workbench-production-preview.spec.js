@@ -161,6 +161,42 @@ test('[png-project-exchange] restores production PNG metadata and lazy exporter 
   );
 });
 
+test('[multi-action-editing] copies, pastes, and reviews a selected action group', async ({
+  page,
+}) => {
+  await page.goto('/#/workbench');
+  await page.getByTestId('workbench-add-action').click();
+  await page.getByTestId('workbench-add-action').click();
+  await page.locator('.action-item[data-action-id="action-0001"]').click();
+  await page
+    .locator('.action-item[data-action-id="action-0003"]')
+    .click({ modifiers: ['Control'] });
+  await expect(page.locator('main.workbench')).toHaveAttribute(
+    'data-selected-action-count',
+    '2'
+  );
+
+  await page.keyboard.press('Control+C');
+  await page.keyboard.press('Control+V');
+  await expect(page.locator('.action-item')).toHaveCount(5);
+  await expect(
+    page.locator('.action-item[data-action-id="action-0004"]')
+  ).toHaveAttribute('data-selected', 'true');
+  await expect(
+    page.locator('.action-item[data-action-id="action-0005"]')
+  ).toHaveAttribute('data-selected', 'true');
+
+  await page.keyboard.press('ArrowRight');
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-runtime-detail-action-id',
+    'action-0004'
+  );
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-state-point')
+  ).toContainText('action-0004');
+});
+
 test('[narrow-main-flow] completes runtime review, edit, and refresh without overflow', async ({
   page,
 }) => {

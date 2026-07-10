@@ -4,6 +4,7 @@
     class="workbench"
     :data-runtime-diagnostics-status="runtimeDiagnosticsStatus"
     :data-runtime-diagnostics-revision="runtimeDiagnosticsRevision"
+    :data-selected-action-count="selectedActionIds.length"
   >
     <nav class="top-nav">
       <div class="workbench-brand" aria-label="蓝色星原排轴工作台">
@@ -136,6 +137,22 @@
       @delete-preset="deleteWorkbenchPresetEntry"
     />
 
+    <WorkbenchActionContextMenu
+      :visible="actionContextMenu.visible"
+      :x="actionContextMenu.x"
+      :y="actionContextMenu.y"
+      :selected-count="selectedActionIds.length"
+      :clipboard-count="actionClipboard?.actions?.length ?? 0"
+      @close="closeActionContextMenu"
+      @copy="copySelectedActions"
+      @paste="
+        pasteSelectedActions({ targetStartMs: actionContextMenu.targetStartMs })
+      "
+      @nudge-left="shiftSelectedActions({ offsetMs: -frameToMs(1) })"
+      @nudge-right="shiftSelectedActions({ offsetMs: frameToMs(1) })"
+      @delete="deleteSelectedActions"
+    />
+
     <ScenarioHeader
       :project="project"
       :scenario="simulationResult.scenario"
@@ -247,7 +264,10 @@
         :action-readiness-timeline="simulationResult.actionReadinessTimeline"
         :skills="actionLibrarySkills"
         :selected-action-id="selectedActionId"
+        :selected-action-ids="selectedActionIds"
         @select-action="selectAction"
+        @open-action-context-menu="openActionContextMenu"
+        @delete-selected-actions="deleteSelectedActions"
         @add-action="addAction"
         @add-skill-action="addSkillAction"
         @add-annotation-action="addAnnotationAction"
@@ -294,6 +314,7 @@
           "
           :duration-ms="scenario.time.durationMs"
           :selected-action-id="selectedActionId"
+          :selected-action-ids="selectedActionIds"
           :flow-model="workbenchFlowModel"
           :action-edit-focus="actionEditFocus"
           :selected-state-curve-point-id="selectedStateCurvePointId"
@@ -305,6 +326,7 @@
           :action-readiness-timeline="simulationResult.actionReadinessTimeline"
           :main-flow-command-surface="mainFlowCommandSurface"
           @select-action="selectAction"
+          @open-action-context-menu="openActionContextMenu"
           @select-state-curve-point="selectStateCurvePoint"
           @dispatch-flow-action="dispatchWorkbenchFlowAction"
           @update-state-curve-layer-filter="updateStateCurveLayerFilter"
@@ -314,6 +336,8 @@
           @update-action-duration="updateActionDuration"
           @update-action-lane="updateActionLane"
           @update-action-time="updateActionTime"
+          @shift-selected-actions="shiftSelectedActions"
+          @delete-selected-actions="deleteSelectedActions"
         />
 
         <div
@@ -620,6 +644,7 @@
         :three-value-curve-framework="simulationResult.threeValueCurveFramework"
         :duration-ms="scenario.time.durationMs"
         :selected-action-id="selectedActionId"
+        :selected-action-ids="selectedActionIds"
         :timeline-diagnostics="timelineDiagnostics"
         :action-readiness-timeline="simulationResult.actionReadinessTimeline"
       />
@@ -628,7 +653,14 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+} from 'vue';
 import {
   Aim,
   ArrowLeft,
@@ -655,6 +687,7 @@ import RuntimeSelectedDetailPanel from '../features/workbench/RuntimeSelectedDet
 import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TeamLoadoutPanel from '../features/workbench/TeamLoadoutPanel.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
+import WorkbenchActionContextMenu from '../features/workbench/WorkbenchActionContextMenu.vue';
 import WorkbenchFlowPanel from '../features/workbench/WorkbenchFlowPanel.vue';
 import WorkbenchPresetLibraryDialog from '../features/workbench/WorkbenchPresetLibraryDialog.vue';
 import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
@@ -705,6 +738,13 @@ import {
   normalizeWorkbenchTeamSlots,
 } from '../domain/workbenchProjectFactory';
 import { ACTION_TYPES } from '../domain/projectSchema';
+import {
+  createWorkbenchActionClipboard,
+  createWorkbenchActionSelectionRange,
+  normalizeWorkbenchActionSelection,
+  pasteWorkbenchActionClipboard,
+  shiftWorkbenchActionDrafts,
+} from '../domain/workbenchActionClipboard';
 import {
   clearWorkbenchDraft,
   createWorkbenchDraftSnapshot,
@@ -774,6 +814,12 @@ const segmentSplitPreview = ref(null);
 const actionDrafts = ref([...initialDraft.actionDrafts]);
 const runtimeSampleCaptures = ref([...initialDraft.runtimeSampleCaptures]);
 const selectedActionId = ref(initialDraft.selectedActionId);
+const selectedActionIds = ref(
+  initialDraft.selectedActionId ? [initialDraft.selectedActionId] : []
+);
+const actionSelectionAnchorId = ref(initialDraft.selectedActionId);
+const actionClipboard = ref(null);
+const actionContextMenu = ref(createClosedActionContextMenu());
 const selectedStateCurvePointId = ref('');
 const stateCurveFocusMode = ref('all');
 const stateCurveLayerFilters = ref({ ...DEFAULT_STATE_CURVE_LAYER_FILTERS });
@@ -985,6 +1031,34 @@ const workbenchHistoryView = computed(() => ({
   undoCount: undoHistoryStack.value.length,
   redoCount: redoHistoryStack.value.length,
 }));
+
+watch(
+  selectedActionId,
+  actionId => {
+    if (actionId && !selectedActionIds.value.includes(actionId)) {
+      selectedActionIds.value = [actionId];
+      actionSelectionAnchorId.value = actionId;
+    }
+  },
+  { flush: 'sync' }
+);
+
+watch(
+  actionDrafts,
+  actions => {
+    const normalized = normalizeWorkbenchActionSelection(
+      actions,
+      selectedActionIds.value,
+      selectedActionId.value
+    );
+    selectedActionIds.value = normalized.selectedActionIds;
+    selectedActionId.value = normalized.primaryActionId;
+    if (!normalized.selectedActionIds.includes(actionSelectionAnchorId.value)) {
+      actionSelectionAnchorId.value = normalized.primaryActionId;
+    }
+  },
+  { flush: 'sync' }
+);
 
 onMounted(() => {
   window?.addEventListener?.('keydown', handleWorkbenchKeyboardShortcut);
@@ -1602,6 +1676,135 @@ function copyAction(actionId) {
   markDraftDirty();
 }
 
+function copySelectedActions({ actionIds = selectedActionIds.value } = {}) {
+  clearSegmentSplitPreview();
+  const clipboard = createWorkbenchActionClipboard(
+    actionDrafts.value,
+    actionIds
+  );
+  if (!clipboard) {
+    return null;
+  }
+
+  actionClipboard.value = clipboard;
+  return clipboard;
+}
+
+function pasteSelectedActions({ targetStartMs = undefined } = {}) {
+  clearSegmentSplitPreview();
+  const pasteResult = pasteWorkbenchActionClipboard(actionClipboard.value, {
+    existingActions: actionDrafts.value,
+    timelineDurationMs: project.value.time.durationMs,
+    targetStartMs,
+    pasteGapMs: NEW_ACTION_INSERT_GAP_MS,
+    createActionId: usedActionIds =>
+      createNextActionIdFromUsedIds(usedActionIds),
+    normalizeSourceAction: action => ({
+      ...action,
+      note: stripAutoDelayNote(action.note),
+    }),
+  });
+  if (!pasteResult?.pastedActions?.length) {
+    return null;
+  }
+
+  recordWorkbenchHistorySnapshot();
+  const runtimeReviewState = captureActionMutationRuntimeReviewState();
+  actionDrafts.value = [...actionDrafts.value, ...pasteResult.pastedActions];
+  actionClipboard.value = pasteResult.nextClipboard;
+  setWorkbenchActionSelection(
+    pasteResult.selectedActionIds,
+    pasteResult.primaryActionId,
+    { anchorActionId: pasteResult.primaryActionId }
+  );
+  syncActionLibraryCharacterIdFromDraft(
+    findActionDraftById(pasteResult.primaryActionId)
+  );
+  applyActionMutationRuntimeSyncRequest({
+    actionId: pasteResult.primaryActionId,
+    runtimeReviewState,
+    selectedActionChanged: true,
+    affectedActionIds: pasteResult.selectedActionIds,
+  });
+  markDraftDirty();
+  return pasteResult;
+}
+
+function deleteSelectedActions({ actionIds = selectedActionIds.value } = {}) {
+  clearSegmentSplitPreview();
+  const requestedActionIds = new Set(actionIds);
+  const affectedActionIds = actionDrafts.value
+    .filter(action => requestedActionIds.has(action.id))
+    .map(action => action.id);
+  if (
+    affectedActionIds.length === 0 ||
+    affectedActionIds.length >= actionDrafts.value.length
+  ) {
+    return false;
+  }
+
+  recordWorkbenchHistorySnapshot();
+  const runtimeReviewState = captureActionMutationRuntimeReviewState();
+  const firstRemovedIndex = actionDrafts.value.findIndex(action =>
+    requestedActionIds.has(action.id)
+  );
+  actionDrafts.value = actionDrafts.value.filter(
+    action => !requestedActionIds.has(action.id)
+  );
+  const nextIndex = Math.min(firstRemovedIndex, actionDrafts.value.length - 1);
+  const nextActionId = actionDrafts.value[nextIndex]?.id ?? '';
+  setWorkbenchActionSelection([nextActionId], nextActionId, {
+    anchorActionId: nextActionId,
+  });
+  syncActionLibraryCharacterIdFromDraft(findActionDraftById(nextActionId));
+  applyActionMutationRuntimeSyncRequest({
+    actionId: nextActionId,
+    runtimeReviewState,
+    selectedActionChanged: true,
+    affectedActionIds,
+  });
+  markDraftDirty();
+  return true;
+}
+
+function shiftSelectedActions({
+  actionIds = selectedActionIds.value,
+  offsetMs = 0,
+} = {}) {
+  clearSegmentSplitPreview();
+  const editedActionId = actionIds.includes(selectedActionId.value)
+    ? selectedActionId.value
+    : (actionIds[0] ?? '');
+  const previousAction = findActionDraftById(editedActionId);
+  const editSourceFocus = captureActionEditSourceFocus(editedActionId);
+  const shifted = shiftWorkbenchActionDrafts(
+    actionDrafts.value,
+    actionIds,
+    offsetMs,
+    project.value.time.durationMs
+  );
+  if (!shifted.appliedOffsetMs) {
+    return false;
+  }
+
+  recordWorkbenchHistorySnapshot();
+  actionDrafts.value = shifted.actions;
+  const nextAction = findActionDraftById(editedActionId);
+  if (previousAction && nextAction) {
+    recordActionEditSource(
+      editedActionId,
+      { startMs: nextAction.startMs },
+      {
+        previousAction,
+        nextAction,
+        focus: editSourceFocus,
+      }
+    );
+  }
+  markDraftDirty();
+  return true;
+}
+
 function copyActionBatch(batchId) {
   clearSegmentSplitPreview();
   if (!batchId) {
@@ -2207,6 +2410,7 @@ function resetDraft() {
   clearWorkbenchDraft(getLocalStorage());
   projectShareUrl.value = '';
   applyDraftState(createDefaultWorkbenchDraftState());
+  clearWorkbenchProjectTransientState();
   clearSegmentSplitPreview();
   draftStatus.value = '已重置草稿';
 }
@@ -2235,7 +2439,11 @@ function applyDraftState(draft) {
   runtimeSampleCaptures.value = normalizeWorkbenchRuntimeSampleCaptures(
     draft.runtimeSampleCaptures
   );
-  selectedActionId.value = draft.selectedActionId;
+  setWorkbenchActionSelection(
+    [draft.selectedActionId],
+    draft.selectedActionId,
+    { anchorActionId: draft.selectedActionId }
+  );
   syncActionLibraryCharacterIdFromDraft(
     actionDrafts.value.find(action => action.id === draft.selectedActionId)
   );
@@ -2252,6 +2460,8 @@ function clearWorkbenchProjectTransientState() {
   calculatorDiagnosticFocus.value = { scope: '', sequence: 0 };
   runtimeLogFocus.value = { source: '', statePointId: '', sequence: 0 };
   workbenchFlowDispatchState.value = createEmptyWorkbenchFlowDispatchState();
+  actionClipboard.value = null;
+  closeActionContextMenu();
 }
 
 function markDraftDirty() {
@@ -2316,11 +2526,27 @@ function handleWorkbenchKeyboardShortcut(event) {
     return;
   }
 
+  const key = String(event.key ?? '').toLowerCase();
+  if (!(event.ctrlKey || event.metaKey) && !event.altKey) {
+    if (['delete', 'backspace'].includes(key)) {
+      event.preventDefault();
+      deleteSelectedActions();
+      return;
+    }
+    if (['arrowleft', 'arrowright'].includes(key)) {
+      event.preventDefault();
+      shiftSelectedActions({
+        offsetMs:
+          (key === 'arrowleft' ? -1 : 1) * frameToMs(event.shiftKey ? 4 : 1),
+      });
+      return;
+    }
+  }
+
   if (!(event.ctrlKey || event.metaKey) || event.altKey) {
     return;
   }
 
-  const key = String(event.key ?? '').toLowerCase();
   if (key === 'z') {
     event.preventDefault();
     if (event.shiftKey) {
@@ -2334,6 +2560,18 @@ function handleWorkbenchKeyboardShortcut(event) {
   if (key === 'y') {
     event.preventDefault();
     redoWorkbenchEdit();
+    return;
+  }
+
+  if (key === 'c') {
+    event.preventDefault();
+    copySelectedActions();
+    return;
+  }
+
+  if (key === 'v') {
+    event.preventDefault();
+    pasteSelectedActions();
     return;
   }
 
@@ -2420,6 +2658,8 @@ function createWorkbenchHistorySnapshot() {
     actionDrafts: draftSnapshot.actionDrafts,
     runtimeSampleCaptures: draftSnapshot.runtimeSampleCaptures,
     selectedActionId: draftSnapshot.selectedActionId,
+    selectedActionIds: selectedActionIds.value,
+    actionSelectionAnchorId: actionSelectionAnchorId.value,
     selectedStateCurvePointId: selectedStateCurvePointId.value,
     stateCurveFocusMode: stateCurveFocusMode.value,
     stateCurveLayerFilters: stateCurveLayerFilters.value,
@@ -2460,11 +2700,22 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
   runtimeSampleCaptures.value = normalizeWorkbenchRuntimeSampleCaptures(
     snapshot.runtimeSampleCaptures
   );
-  selectedActionId.value = actionDrafts.value.some(
-    action => action.id === snapshot.selectedActionId
-  )
-    ? snapshot.selectedActionId
-    : (actionDrafts.value[0]?.id ?? '');
+  const restoredActionSelection = normalizeWorkbenchActionSelection(
+    actionDrafts.value,
+    snapshot.selectedActionIds ?? [snapshot.selectedActionId],
+    snapshot.selectedActionId
+  );
+  setWorkbenchActionSelection(
+    restoredActionSelection.selectedActionIds,
+    restoredActionSelection.primaryActionId,
+    {
+      anchorActionId: restoredActionSelection.selectedActionIds.includes(
+        snapshot.actionSelectionAnchorId
+      )
+        ? snapshot.actionSelectionAnchorId
+        : restoredActionSelection.primaryActionId,
+    }
+  );
   selectedStateCurvePointId.value = snapshot.selectedStateCurvePointId ?? '';
   stateCurveFocusMode.value = snapshot.stateCurveFocusMode || 'all';
   stateCurveLayerFilters.value = {
@@ -2628,14 +2879,93 @@ function findActionDraftById(actionId) {
   return actionDrafts.value.find(action => action.id === actionId) ?? null;
 }
 
-function selectAction(actionId, { syncRuntimeResult = true } = {}) {
+function selectAction(actionRequest, { syncRuntimeResult = true } = {}) {
   clearSegmentSplitPreview();
-  selectedActionId.value = actionId;
-  const draft = actionDrafts.value.find(action => action.id === actionId);
+  const request =
+    actionRequest && typeof actionRequest === 'object'
+      ? actionRequest
+      : { actionId: actionRequest, mode: 'replace' };
+  const actionId = String(request.actionId ?? '');
+  if (!findActionDraftById(actionId)) {
+    return;
+  }
+
+  const mode = request.mode ?? 'replace';
+  let nextActionIds = [actionId];
+  if (mode === 'range') {
+    nextActionIds = createWorkbenchActionSelectionRange(
+      actionDrafts.value,
+      actionSelectionAnchorId.value,
+      actionId
+    );
+  } else if (mode === 'toggle') {
+    const selectedActionIdSet = new Set(selectedActionIds.value);
+    if (selectedActionIdSet.has(actionId) && selectedActionIdSet.size > 1) {
+      selectedActionIdSet.delete(actionId);
+    } else {
+      selectedActionIdSet.add(actionId);
+    }
+    nextActionIds = [...selectedActionIdSet];
+  }
+
+  const normalized = setWorkbenchActionSelection(nextActionIds, actionId, {
+    anchorActionId: mode === 'range' ? actionSelectionAnchorId.value : actionId,
+  });
+  const draft = findActionDraftById(normalized.primaryActionId);
   syncActionLibraryCharacterIdFromDraft(draft);
   if (syncRuntimeResult && shouldSyncRuntimeResultOnActionSelect()) {
-    syncRuntimeResultForSelectedAction(actionId);
+    syncRuntimeResultForSelectedAction(normalized.primaryActionId);
   }
+}
+
+function setWorkbenchActionSelection(
+  actionIds,
+  primaryActionId,
+  { anchorActionId = primaryActionId } = {}
+) {
+  const normalized = normalizeWorkbenchActionSelection(
+    actionDrafts.value,
+    actionIds,
+    primaryActionId
+  );
+  selectedActionIds.value = normalized.selectedActionIds;
+  selectedActionId.value = normalized.primaryActionId;
+  actionSelectionAnchorId.value = normalized.selectedActionIds.includes(
+    anchorActionId
+  )
+    ? anchorActionId
+    : normalized.primaryActionId;
+  return normalized;
+}
+
+function openActionContextMenu({
+  actionId = '',
+  x = 0,
+  y = 0,
+  targetStartMs = undefined,
+} = {}) {
+  if (actionId && !selectedActionIds.value.includes(actionId)) {
+    selectAction(actionId);
+  }
+  actionContextMenu.value = {
+    visible: true,
+    x: Number(x) || 0,
+    y: Number(y) || 0,
+    targetStartMs,
+  };
+}
+
+function closeActionContextMenu() {
+  actionContextMenu.value = createClosedActionContextMenu();
+}
+
+function createClosedActionContextMenu() {
+  return {
+    visible: false,
+    x: 0,
+    y: 0,
+    targetStartMs: undefined,
+  };
 }
 
 function editEffectSourceAction(actionId) {
@@ -2680,6 +3010,20 @@ function applyActionRuleSuggestedStart(diagnostic) {
 
 function applyActionSelectionState(selectionState = {}) {
   if (!selectionState.shouldSelectAction) {
+    return;
+  }
+  if (selectedActionIds.value.includes(selectionState.actionId)) {
+    setWorkbenchActionSelection(
+      selectedActionIds.value,
+      selectionState.actionId,
+      { anchorActionId: actionSelectionAnchorId.value }
+    );
+    syncActionLibraryCharacterIdFromDraft(
+      findActionDraftById(selectionState.actionId)
+    );
+    if (selectionState.syncRuntimeResult) {
+      syncRuntimeResultForSelectedAction(selectionState.actionId);
+    }
     return;
   }
   selectAction(selectionState.actionId, {
@@ -3002,6 +3346,13 @@ function selectActionFromRuntimeStatePoint(pointId) {
   );
   const actionId = context?.row?.actionId;
   if (!actionId || !findActionDraftById(actionId)) {
+    return;
+  }
+  if (selectedActionIds.value.includes(actionId)) {
+    setWorkbenchActionSelection(selectedActionIds.value, actionId, {
+      anchorActionId: actionSelectionAnchorId.value,
+    });
+    syncActionLibraryCharacterIdFromDraft(findActionDraftById(actionId));
     return;
   }
   selectAction(actionId, { syncRuntimeResult: false });

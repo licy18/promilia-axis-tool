@@ -256,6 +256,7 @@
         class="action-item"
         :class="{
           selected: action.id === selectedActionId,
+          'multi-selected': selectedActionIdSet.has(action.id),
           'batch-selected': isActionInSelectedBatch(action),
           'readiness-blocked': getActionReadiness(action).status === 'blocked',
           'readiness-unresolved':
@@ -263,6 +264,7 @@
             'ready-with-unresolved-conditions',
         }"
         :data-action-id="action.id"
+        :data-selected="selectedActionIdSet.has(action.id) ? 'true' : 'false'"
         :data-readiness-status="getActionReadiness(action).status"
         :data-readiness-executable="
           getActionReadiness(action).executable ? 'true' : 'false'
@@ -272,10 +274,11 @@
           isActionInSelectedBatch(action) ? 'true' : 'false'
         "
         tabindex="0"
-        @click="$emit('select-action', action.id)"
-        @keydown.enter="$emit('select-action', action.id)"
-        @keydown.delete.prevent="$emit('delete-action', action.id)"
-        @keydown.backspace.prevent="$emit('delete-action', action.id)"
+        @click="selectActionFromEvent($event, action.id)"
+        @contextmenu.prevent="openActionContextMenu($event, action.id)"
+        @keydown.enter.prevent="selectActionFromEvent($event, action.id)"
+        @keydown.delete.prevent="deleteActionSelection(action.id)"
+        @keydown.backspace.prevent="deleteActionSelection(action.id)"
       >
         <div class="action-main">
           <span class="action-name">{{ action.name }}</span>
@@ -412,10 +415,16 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  selectedActionIds: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 const emit = defineEmits([
   'select-action',
+  'open-action-context-menu',
+  'delete-selected-actions',
   'add-action',
   'add-skill-action',
   'add-wait-action',
@@ -454,6 +463,9 @@ const selectedBatchId = computed(() => {
   );
   return selectedAction?.generationBatch?.batchId ?? null;
 });
+const selectedActionIdSet = computed(
+  () => new Set(props.selectedActionIds ?? [])
+);
 
 const actionBatches = computed(() => {
   const batches = new Map();
@@ -519,6 +531,37 @@ function selectBatchFirstAction(batch) {
   if (batch?.firstActionId) {
     emit('select-action', batch.firstActionId);
   }
+}
+
+function selectActionFromEvent(event, actionId) {
+  emit('select-action', {
+    actionId,
+    mode: event.shiftKey
+      ? 'range'
+      : event.ctrlKey || event.metaKey
+        ? 'toggle'
+        : 'replace',
+  });
+}
+
+function openActionContextMenu(event, actionId) {
+  emit('open-action-context-menu', {
+    actionId,
+    x: event.clientX,
+    y: event.clientY,
+    targetStartMs:
+      props.actions.find(action => action.id === actionId)?.startMs ?? 0,
+  });
+}
+
+function deleteActionSelection(actionId) {
+  const actionIds = selectedActionIdSet.value.has(actionId)
+    ? props.selectedActionIds
+    : [actionId];
+  if (!selectedActionIdSet.value.has(actionId)) {
+    emit('select-action', { actionId, mode: 'replace' });
+  }
+  emit('delete-selected-actions', { actionIds });
 }
 
 function focusBatchResult(batch) {
@@ -1142,6 +1185,11 @@ h2 {
 .action-item:focus {
   border-color: rgba(121, 199, 185, 0.38);
   outline: none;
+}
+
+.action-item.multi-selected {
+  border-color: rgba(121, 199, 185, 0.52);
+  background: #27363a;
 }
 
 .action-item.selected {
