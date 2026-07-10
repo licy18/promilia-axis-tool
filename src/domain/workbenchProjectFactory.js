@@ -1,6 +1,7 @@
 import workbenchSeed from '../data/generated/workbench-seed.json';
 import {
   getAzprEnemies,
+  getAzprElements,
   getAzprEquipment,
   getAzprKibos,
   getAzprSoulessences,
@@ -8,6 +9,7 @@ import {
 import { WORKBENCH_FRAME_MS, snapMsToFrame } from './timebase';
 import {
   ACTION_TYPES,
+  ENEMY_ELEMENT_DEFENSE_DEFINITIONS,
   createActorFromCharacter,
   createAnnotationAction,
   createEnemyFromData,
@@ -37,11 +39,13 @@ const DEFAULT_SECONDARY_CHARACTER_ID =
 
 const WORKBENCH_EQUIPMENT = getAzprEquipment();
 const WORKBENCH_ENEMIES = getAzprEnemies();
+const WORKBENCH_ELEMENTS = getAzprElements();
 const WORKBENCH_KIBOS = getAzprKibos();
 const WORKBENCH_SOULESSENCES = getAzprSoulessences();
 const WORKBENCH_GAME_DATA = Object.freeze({
   ...workbenchSeed.gameData,
   enemies: WORKBENCH_ENEMIES,
+  elements: WORKBENCH_ELEMENTS,
   equipment: WORKBENCH_EQUIPMENT,
   kibos: WORKBENCH_KIBOS,
   soulessences: WORKBENCH_SOULESSENCES,
@@ -53,6 +57,9 @@ const WORKBENCH_EQUIPMENT_SLOT_TYPES = Object.freeze({
   earring: '耳环',
   ring: '戒指',
 });
+const WORKBENCH_ENEMY_ELEMENT_DEFENSE_KEYS = new Set(
+  ENEMY_ELEMENT_DEFENSE_DEFINITIONS.map(item => item.attributeKey)
+);
 
 export const DEFAULT_WORKBENCH_SELECTION = Object.freeze({
   characterId: workbenchSeed.defaults.characterId,
@@ -67,6 +74,7 @@ export const DEFAULT_WORKBENCH_ENEMY_CONFIG = Object.freeze({
   defenseMultiplier: 1,
   toughnessMultiplier: 1,
   initialToughnessRatio: 1,
+  elementDefenseOverrides: Object.freeze({}),
 });
 
 export const DEFAULT_WORKBENCH_ACTOR_LEVEL = 80;
@@ -303,6 +311,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     defenseMultiplier: enemyConfig.defenseMultiplier,
     toughnessMultiplier: enemyConfig.toughnessMultiplier,
     initialToughnessRatio: enemyConfig.initialToughnessRatio,
+    elementDefenseOverrides: enemyConfig.elementDefenseOverrides,
   });
   const titleAction = actionDrafts[0];
   const firstSkill = findById(
@@ -378,7 +387,25 @@ export function normalizeWorkbenchEnemyConfig(config = {}) {
       1,
       DEFAULT_WORKBENCH_ENEMY_CONFIG.initialToughnessRatio
     ),
+    elementDefenseOverrides: normalizeElementDefenseOverrides(
+      source.elementDefenseOverrides
+    ),
   };
+}
+
+function normalizeElementDefenseOverrides(overrides) {
+  if (!overrides || typeof overrides !== 'object' || Array.isArray(overrides)) {
+    return {};
+  }
+  return Object.fromEntries(
+    Object.entries(overrides)
+      .filter(
+        ([key, value]) =>
+          WORKBENCH_ENEMY_ELEMENT_DEFENSE_KEYS.has(key) &&
+          Number.isFinite(value)
+      )
+      .map(([key, value]) => [key, Number(value)])
+  );
 }
 
 export function normalizeWorkbenchActionDrafts(

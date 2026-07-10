@@ -127,4 +127,45 @@ describe('workbench project actor configuration', () => {
       },
     });
   });
+
+  it('compiles enemy element defense table values and project overrides separately', () => {
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      enemyConfig: {
+        elementDefenseOverrides: {
+          FIRE_DEFENSE: 0.25,
+        },
+      },
+    });
+    const scenario = compileProject(project, getWorkbenchGameData());
+    const fireDefense = scenario.enemy.elementDefenses.find(
+      row => row.attributeKey === 'FIRE_DEFENSE'
+    );
+    const windDefense = scenario.enemy.elementDefenses.find(
+      row => row.attributeKey === 'WIND_DEFENSE'
+    );
+
+    expect(scenario.enemy.elementDefenseConfig).toMatchObject({
+      sourceStatus: 'element-defense-config-derived-from-enemy-base-attributes',
+      overrideCount: 1,
+      formulaStatus: 'project-config-only',
+      appliedToDamage: false,
+    });
+    expect(fireDefense).toMatchObject({
+      elementId: 1,
+      elementAbbrName: '火',
+      baseValue: 0,
+      overrideValue: 0.25,
+      effectiveValue: 0.25,
+      sourceStatus: 'user-override',
+      appliedToDamage: false,
+    });
+    expect(windDefense).toMatchObject({
+      elementId: 2,
+      elementAbbrName: '风',
+      baseValue: 0,
+      overrideValue: null,
+      effectiveValue: 0,
+      sourceStatus: 'azpr-enemy-base-attribute',
+    });
+  });
 });

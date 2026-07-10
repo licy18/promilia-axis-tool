@@ -90,4 +90,19 @@ describe('project domain schema', () => {
     expect(codes).toContain('enemy.toughnessMultiplier.invalid');
     expect(codes).toContain('enemy.initialToughnessRatio.invalid');
   });
+
+  it('validates enemy element defense override keys and values', () => {
+    const project = createFirstVerticalSliceProject();
+    project.enemy.elementDefenseOverrides = {
+      FIRE_DEFENSE: Number.NaN,
+      UNKNOWN_DEFENSE: 0.25,
+    };
+
+    const result = validateProject(project, getFirstVerticalSliceGameData());
+    const codes = result.errors.map(error => error.code);
+
+    expect(result.valid).toBe(false);
+    expect(codes).toContain('enemy.elementDefenseOverrides.value.invalid');
+    expect(codes).toContain('enemy.elementDefenseOverrides.key.invalid');
+  });
 });

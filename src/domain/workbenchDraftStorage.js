@@ -10,10 +10,11 @@ import {
   normalizeWorkbenchSelection,
 } from './workbenchProjectFactory';
 
-export const WORKBENCH_DRAFT_SCHEMA_VERSION = 3;
+export const WORKBENCH_DRAFT_SCHEMA_VERSION = 4;
 export const WORKBENCH_DRAFT_STORAGE_KEY =
-  'promilia-axis-tool:workbench-draft:v3';
+  'promilia-axis-tool:workbench-draft:v4';
 export const LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS = Object.freeze([
+  'promilia-axis-tool:workbench-draft:v3',
   'promilia-axis-tool:workbench-draft:v2',
   'promilia-axis-tool:workbench-draft:v1',
 ]);

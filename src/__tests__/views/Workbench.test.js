@@ -7142,6 +7142,53 @@ describe('Workbench view', () => {
     });
   });
 
+  it('edits and saves enemy element defense overrides without applying a damage formula', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    const editor = wrapper.find(
+      '[data-testid="workbench-enemy-element-defense-editor"]'
+    );
+    const fireRow = () =>
+      wrapper.find(
+        '[data-testid="workbench-enemy-element-defense-FIRE_DEFENSE"]'
+      );
+    const fireInput = () =>
+      wrapper.find(
+        '[data-testid="workbench-enemy-element-defense-input-FIRE_DEFENSE"]'
+      );
+
+    expect(editor.attributes('data-formula-status')).toBe(
+      'project-config-only'
+    );
+    expect(fireRow().text()).toContain('火');
+    expect(fireRow().text()).toContain('0%');
+    expect(fireRow().attributes('data-source-status')).toBe(
+      'azpr-enemy-base-attribute'
+    );
+    expect(fireInput().element.value).toBe('');
+
+    await fireInput().setValue('25');
+    await nextTick();
+
+    expect(fireInput().element.value).toBe('25');
+    expect(fireRow().attributes('data-source-status')).toBe('user-override');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    expect(
+      JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY))
+        .enemyConfig.elementDefenseOverrides
+    ).toEqual({
+      FIRE_DEFENSE: 0.25,
+    });
+  });
+
   it('shows skill logic sources and display-versus-logic timing differences', async () => {
     const wrapper = mount(Workbench, {
       global: {

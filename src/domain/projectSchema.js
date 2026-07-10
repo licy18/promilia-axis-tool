@@ -13,6 +13,22 @@ export const ACTION_TYPES = Object.freeze({
   ANNOTATION: 'annotation',
 });
 
+export const ENEMY_ELEMENT_DEFENSE_DEFINITIONS = Object.freeze([
+  { elementId: 0, attributeKey: 'NORMAL_DEFENSE', fallbackName: '无属性' },
+  { elementId: 1, attributeKey: 'FIRE_DEFENSE', fallbackName: '火属性' },
+  { elementId: 2, attributeKey: 'WIND_DEFENSE', fallbackName: '风属性' },
+  { elementId: 3, attributeKey: 'EARTH_DEFENSE', fallbackName: '地属性' },
+  { elementId: 4, attributeKey: 'WOOD_DEFENSE', fallbackName: '木属性' },
+  { elementId: 5, attributeKey: 'ICE_DEFENSE', fallbackName: '冰属性' },
+  { elementId: 6, attributeKey: 'WATER_DEFENSE', fallbackName: '水属性' },
+  { elementId: 7, attributeKey: 'ELEC_DEFENSE', fallbackName: '雷属性' },
+  { elementId: 8, attributeKey: 'LIGHT_DEFENSE', fallbackName: '光属性' },
+  { elementId: 9, attributeKey: 'DARK_DEFENSE', fallbackName: '暗属性' },
+]);
+const ENEMY_ELEMENT_DEFENSE_KEYS = new Set(
+  ENEMY_ELEMENT_DEFENSE_DEFINITIONS.map(item => item.attributeKey)
+);
+
 export const DEFAULT_PROJECT_DURATION_MS = 120000;
 export const DEFAULT_PROJECT_FPS = 60;
 const LOADOUT_EQUIPMENT_SLOT_TYPES = Object.freeze({
@@ -103,6 +119,7 @@ export function createEnemyFromData(enemy, options = {}) {
     defenseMultiplier: options.defenseMultiplier ?? 1,
     toughnessMultiplier: options.toughnessMultiplier ?? 1,
     initialToughnessRatio: options.initialToughnessRatio ?? 1,
+    elementDefenseOverrides: { ...(options.elementDefenseOverrides ?? {}) },
   };
 }
 
@@ -625,6 +642,38 @@ function validateEnemy(enemy, gameData, errors, warnings) {
         '$.enemy.initialToughnessRatio'
       )
     );
+  }
+  if (
+    enemy.elementDefenseOverrides != null &&
+    !isObject(enemy.elementDefenseOverrides)
+  ) {
+    errors.push(
+      issue(
+        'enemy.elementDefenseOverrides.invalid',
+        'Enemy elementDefenseOverrides must be an object',
+        '$.enemy.elementDefenseOverrides'
+      )
+    );
+  } else if (isObject(enemy.elementDefenseOverrides)) {
+    Object.entries(enemy.elementDefenseOverrides).forEach(([key, value]) => {
+      if (!ENEMY_ELEMENT_DEFENSE_KEYS.has(key)) {
+        errors.push(
+          issue(
+            'enemy.elementDefenseOverrides.key.invalid',
+            `Enemy element defense override key ${key} is not supported`,
+            `$.enemy.elementDefenseOverrides.${key}`
+          )
+        );
+      } else if (!Number.isFinite(value)) {
+        errors.push(
+          issue(
+            'enemy.elementDefenseOverrides.value.invalid',
+            `Enemy element defense override ${key} must be a finite number`,
+            `$.enemy.elementDefenseOverrides.${key}`
+          )
+        );
+      }
+    });
   }
   if (
     Array.isArray(enemy.baseAttributes) &&

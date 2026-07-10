@@ -1,4 +1,8 @@
-import { ACTION_TYPES, validateProject } from '../../domain/projectSchema';
+import {
+  ACTION_TYPES,
+  ENEMY_ELEMENT_DEFENSE_DEFINITIONS,
+  validateProject,
+} from '../../domain/projectSchema';
 import { parseDamageSegments } from '../mechanics/damage';
 
 export class CompileProjectError extends Error {
@@ -18,10 +22,11 @@ export function compileProject(project, gameData) {
   const charactersById = indexById(gameData.characters);
   const skillsById = indexById(gameData.skills);
   const enemiesById = indexById(gameData.enemies);
+  const elementsById = indexById(gameData.elements);
   const actorsById = new Map(
     project.actors.map(actor => [actor.id, compileActor(actor, charactersById)])
   );
-  const enemy = compileEnemy(project.enemy, enemiesById);
+  const enemy = compileEnemy(project.enemy, enemiesById, elementsById);
 
   const actions = project.actions
     .map(action => compileAction(action, actorsById, enemy, skillsById))
@@ -128,8 +133,11 @@ function compileActor(actor, charactersById) {
   };
 }
 
-function compileEnemy(enemy, enemiesById) {
+function compileEnemy(enemy, enemiesById, elementsById) {
   const sourceEnemy = enemiesById.get(Number(enemy.enemyId));
+  const elementDefenses = ENEMY_ELEMENT_DEFENSE_DEFINITIONS.map(definition =>
+    compileEnemyElementDefense(enemy, definition, elementsById)
+  );
   const toughnessBase = getOptionalAttributeValue(
     enemy.baseAttributes,
     'WEAKNESS_POINT_MAX'
@@ -177,6 +185,52 @@ function compileEnemy(enemy, enemiesById) {
       initialValue: initialToughness,
       applied: Number.isFinite(initialToughness),
     },
+    elementDefenses,
+    elementDefenseConfig: {
+      sourceKind: 'azpr-enemy-element-defense-base-attributes',
+      sourceStatus: elementDefenses.every(row => row.baseValue != null)
+        ? 'element-defense-config-derived-from-enemy-base-attributes'
+        : 'element-defense-config-partial-missing-base-attributes',
+      sourcePath: 'project.enemy.baseAttributes[*_DEFENSE]',
+      overrideCount: elementDefenses.filter(row => row.overrideValue != null)
+        .length,
+      formulaStatus: 'project-config-only',
+      appliedToDamage: false,
+    },
+  };
+}
+
+function compileEnemyElementDefense(enemy, definition, elementsById) {
+  const attribute = (enemy.baseAttributes ?? []).find(
+    item => item.key === definition.attributeKey
+  );
+  const element = elementsById.get(definition.elementId);
+  const baseValue = Number.isFinite(attribute?.value) ? attribute.value : null;
+  const configuredOverride =
+    enemy.elementDefenseOverrides?.[definition.attributeKey];
+  const overrideValue = Number.isFinite(configuredOverride)
+    ? configuredOverride
+    : null;
+
+  return {
+    elementId: definition.elementId,
+    elementName: element?.name ?? definition.fallbackName,
+    elementAbbrName: element?.abbrName ?? definition.fallbackName,
+    color: element?.color ?? null,
+    attributeId: attribute?.id ?? null,
+    attributeKey: definition.attributeKey,
+    attributeName: attribute?.name ?? `${definition.fallbackName}伤害减免`,
+    isRatio: attribute?.isRatio ?? true,
+    baseValue,
+    overrideValue,
+    effectiveValue: overrideValue ?? baseValue,
+    sourceStatus:
+      overrideValue != null
+        ? 'user-override'
+        : baseValue != null
+          ? 'azpr-enemy-base-attribute'
+          : 'missing-enemy-base-attribute',
+    appliedToDamage: false,
   };
 }
 

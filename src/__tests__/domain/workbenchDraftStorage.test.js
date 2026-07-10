@@ -48,6 +48,10 @@ describe('workbench draft storage project files', () => {
             defenseMultiplier: 0.8,
             toughnessMultiplier: 2,
             initialToughnessRatio: 0.5,
+            elementDefenseOverrides: {
+              FIRE_DEFENSE: 0.25,
+              ICE_DEFENSE: -0.1,
+            },
           },
           segmentSplitOptions: {
             intervalMs: 1800,
@@ -116,6 +120,10 @@ describe('workbench draft storage project files', () => {
         defenseMultiplier: 0.8,
         toughnessMultiplier: 2,
         initialToughnessRatio: 0.5,
+        elementDefenseOverrides: {
+          FIRE_DEFENSE: 0.25,
+          ICE_DEFENSE: -0.1,
+        },
       },
       segmentSplitOptions: {
         intervalMs: 1800,
@@ -175,7 +183,7 @@ describe('workbench draft storage project files', () => {
     });
   });
 
-  it('migrates v2 project files to v3 enemy toughness defaults', () => {
+  it('migrates v2 project files through enemy toughness and defense defaults', () => {
     const v2Project = createWorkbenchProjectFileSnapshot({
       selection: {
         characterId: 109001,
@@ -211,11 +219,54 @@ describe('workbench draft storage project files', () => {
         level: 90,
         toughnessMultiplier: 1,
         initialToughnessRatio: 1,
+        elementDefenseOverrides: {},
       },
     });
   });
 
-  it('loads legacy v1 local storage and clears both storage generations', () => {
+  it('migrates v3 project files to v4 element defense defaults', () => {
+    const v3Project = createWorkbenchProjectFileSnapshot({
+      selection: {
+        characterId: 109001,
+        secondaryCharacterId: 101003,
+        skillId: 10900101,
+        enemyId: 300032,
+      },
+      enemyConfig: {
+        level: 90,
+        hpMultiplier: 1,
+        defenseMultiplier: 1,
+        toughnessMultiplier: 2,
+        initialToughnessRatio: 0.5,
+      },
+      actionDrafts: [
+        {
+          id: 'action-0001',
+          type: 'skill',
+          skillId: 10900101,
+          actorCharacterId: 109001,
+          startMs: 0,
+          durationMs: 1000,
+          level: 1,
+        },
+      ],
+      selectedActionId: 'action-0001',
+    });
+    v3Project.schemaVersion = 3;
+    delete v3Project.enemyConfig.elementDefenseOverrides;
+
+    expect(parseWorkbenchProjectFile(v3Project)).toMatchObject({
+      schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
+      enemyConfig: {
+        level: 90,
+        toughnessMultiplier: 2,
+        initialToughnessRatio: 0.5,
+        elementDefenseOverrides: {},
+      },
+    });
+  });
+
+  it('loads legacy v1 local storage and clears all storage generations', () => {
     const storage = new Map();
     const storageAdapter = {
       getItem: key => storage.get(key) ?? null,
@@ -301,6 +352,9 @@ describe('workbench draft storage project files', () => {
           defenseMultiplier: 1,
           toughnessMultiplier: 1.5,
           initialToughnessRatio: 0.75,
+          elementDefenseOverrides: {
+            WATER_DEFENSE: 0.12,
+          },
         },
         actionDrafts: [
           {
@@ -337,6 +391,9 @@ describe('workbench draft storage project files', () => {
         hpMultiplier: 2.5,
         toughnessMultiplier: 1.5,
         initialToughnessRatio: 0.75,
+        elementDefenseOverrides: {
+          WATER_DEFENSE: 0.12,
+        },
       },
     });
   });

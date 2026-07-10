@@ -24539,3 +24539,77 @@ initialToughnessRatio
 - `threeValueRuntimeProjection.test.js` 覆盖韧性 delta 扣减后的剩余状态。
 - `workbenchDraftStorage.test.js` 覆盖 v1/v2 到 v3 迁移。
 - `Workbench.test.js` 与 Workbench E2E 覆盖用户编辑、保存、导出、重置和导入恢复。
+
+## 344. Workbench v4 敌人元素伤害减免配置：Enemy Element Defense Config
+
+### 344.1 数据源与映射
+
+Workbench 元素访问层切到完整 `elements.json` 生成表。敌人 `baseAttributes` 中以下 10 项按元素 ID 映射：
+
+```text
+0  NORMAL_DEFENSE
+1  FIRE_DEFENSE
+2  WIND_DEFENSE
+3  EARTH_DEFENSE
+4  WOOD_DEFENSE
+5  ICE_DEFENSE
+6  WATER_DEFENSE
+7  ELEC_DEFENSE
+8  LIGHT_DEFENSE
+9  DARK_DEFENSE
+```
+
+当前 `enemies.json` 的 208 个敌人中，198 个具有完整字段，10 个缺失；当前可见实际表值均为 `0`。字段标记为 `isRatio`，Workbench 以百分比编辑，项目内部继续保存原始比例值。
+
+### 344.2 项目与编译结构
+
+`enemyConfig` 和项目敌人新增：
+
+```text
+elementDefenseOverrides
+  [attributeKey]: ratioValue
+```
+
+未覆盖的 key 不写入对象。编译后的 scenario 新增：
+
+```text
+enemy.elementDefenses[]
+  elementId
+  elementName
+  elementAbbrName
+  color
+  attributeId
+  attributeKey
+  attributeName
+  isRatio
+  baseValue
+  overrideValue
+  effectiveValue
+  sourceStatus
+  appliedToDamage = false
+
+enemy.elementDefenseConfig
+  sourceKind = azpr-enemy-element-defense-base-attributes
+  sourceStatus
+  sourcePath
+  overrideCount
+  formulaStatus = project-config-only
+  appliedToDamage = false
+```
+
+`effectiveValue = overrideValue ?? baseValue`。当前 damage calculator 不读取 `effectiveValue`；元素绑定、抗性公式和计算顺序留给 P3 adapter，P2-C 不改变三值结果。
+
+### 344.3 草稿迁移
+
+`workbench-draft` / `workbench-project` 升级为 `schemaVersion = 4`：
+
+- 当前 localStorage key 为 `promilia-axis-tool:workbench-draft:v4`。
+- 读取兼容 v1、v2、v3 本地草稿、JSON 项目和分享快照；缺少字段时迁移为空对象。
+- 重置草稿同时清理 v4、v3、v2 和 v1 key。
+
+### 344.4 验证
+
+- `projectSchema.test.js` 覆盖非法 key 和非有限值拒绝。
+- `workbenchProjectFactory.test.js` 覆盖实际表值、项目覆盖值、有效值和公式未应用边界。
+- `workbenchDraftStorage.test.js` 覆盖 v3 到 v4 迁移以及 JSON/分享 round-trip。
+- `Workbench.test.js` 与 Workbench E2E 覆盖显示、编辑、保存、导出、重置和导入恢复。

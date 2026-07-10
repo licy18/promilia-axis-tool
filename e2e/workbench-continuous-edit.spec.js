@@ -1834,6 +1834,12 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
     .getByTestId('workbench-enemy-toughness-multiplier-input')
     .fill('2');
   await page.getByTestId('workbench-enemy-initial-toughness-input').fill('50');
+  await page
+    .getByTestId('workbench-enemy-element-defense-input-FIRE_DEFENSE')
+    .fill('25');
+  await expect(
+    page.getByTestId('workbench-enemy-element-defense-FIRE_DEFENSE')
+  ).toHaveAttribute('data-source-status', 'user-override');
   await expect(
     page.getByTestId('workbench-enemy-toughness-stat')
   ).toContainText('10,000 / 20,000');
@@ -1904,7 +1910,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 3,
+    schemaVersion: 4,
     game: 'azur-promilia',
     type: 'workbench-project',
     selectedActionId: 'action-0002',
@@ -1913,6 +1919,9 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
       hpMultiplier: 2.5,
       toughnessMultiplier: 2,
       initialToughnessRatio: 0.5,
+      elementDefenseOverrides: {
+        FIRE_DEFENSE: 0.25,
+      },
     },
     actorConfigs: [
       {
@@ -1948,6 +1957,9 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   await expect(
     page.getByTestId('workbench-enemy-initial-toughness-input')
   ).toHaveValue('100');
+  await expect(
+    page.getByTestId('workbench-enemy-element-defense-input-FIRE_DEFENSE')
+  ).toHaveValue('');
   await expect(kiboSelect).toHaveValue('');
   await expect(weaponSelect).toHaveValue('');
   await expect(soulessenceSelect).toHaveValue('');
@@ -1972,6 +1984,12 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   await expect(
     page.getByTestId('workbench-enemy-initial-toughness-input')
   ).toHaveValue('50');
+  await expect(
+    page.getByTestId('workbench-enemy-element-defense-input-FIRE_DEFENSE')
+  ).toHaveValue('25');
+  await expect(
+    page.getByTestId('workbench-enemy-element-defense-FIRE_DEFENSE')
+  ).toHaveAttribute('data-source-status', 'user-override');
   await expect(
     page.getByTestId('workbench-runtime-enemy-toughness-state')
   ).toHaveText('剩余 10,000 / 20,000');
@@ -3287,6 +3305,7 @@ async function ensureActionContentEditResultSynced(
 async function readStoredWorkbenchDraft(page) {
   return await page.evaluate(() => {
     const rawDraft =
+      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v4') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v3') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v2') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v1');
