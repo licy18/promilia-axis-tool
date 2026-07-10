@@ -50,6 +50,7 @@ C:\PC2\Codex\AzPr
 - `scripts/generate-azpr-data.mjs`：从本地 AzPr 工作区生成标准拆表数据和来源审计。
 - `src/data/generated/`：角色、技能、敌人、属性、装备、奇波、灵子、公式证据和 Workbench seed。
 - `src/data/azprGenerated.js`：组件和领域层使用的访问入口，隔离生成 JSON 的具体结构。
+- `workbench-seed.json` v2：生产 Workbench 的完整可选目录精简投影；领域工厂不再同步引入完整敌人、装备、奇波、魂灵表。
 
 ### 3.2 领域层
 
@@ -164,5 +165,5 @@ git diff --check
 - 首份非 fixture 真实战斗 capture 尚未取得，受控 host 就绪不等于真实游戏机制已验证。
 - 测试期公式与倍率可能变化，未确认层必须保持来源、置信度和可替换状态。
 - 生产引用审计当前为 0 个无引用模块、0 个意外 test-only 模块；新增代码必须维持该守门。
-- 当前首屏、Workbench 与全部 JavaScript gzip 预算分别为 120KB、640KB、950KB；新增依赖必须通过构建组成审计。
-- Workbench 主包仍主要由技能证据、敌人和技能逻辑生成数据构成；后续应建立面向生产模拟的精简数据投影，并把完整诊断证据移出首轮运行路径。
+- 当前首屏、Workbench 与全部 JavaScript gzip 预算分别为 120KB、520KB、820KB；新增依赖必须通过构建组成审计。
+- Workbench 主包仍主要由技能证据、技能逻辑、等级交叉校验和生产 seed 构成；后续应继续建立面向运行时的精简技能证据投影，并把完整诊断记录移出首轮运行路径。

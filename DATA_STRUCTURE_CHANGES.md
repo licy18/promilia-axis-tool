@@ -25944,6 +25944,9 @@ budgets
   workbenchGzipBytes
   totalJavaScriptGzipBytes
 budgetStatus
+projectionGuard
+  workbenchUsesProductionDataProjection
+  forbiddenModules[] / detectedForbiddenModules[]
 summary
   javaScriptChunkCount / assetCount
   totalJavaScriptBytes / totalJavaScriptGzipBytes
@@ -25959,4 +25962,29 @@ topModules[]
 packageTotals[]
 ```
 
-模块路径统一为仓库相对路径，第三方依赖按 package 聚合。当前默认 gzip 预算为首屏入口 120KB、Workbench 640KB、全部 JavaScript 950KB；`audit:bundle:check` 在入口缺失或任一预算超限时失败。该报告不改变 Workbench 项目、生成数据或运行时 schema。
+模块路径统一为仓库相对路径，第三方依赖按 package 聚合。当前默认 gzip 预算为首屏入口 120KB、Workbench 520KB、全部 JavaScript 820KB；`audit:bundle:check` 在入口缺失、任一预算超限或 Workbench 重新引入完整目录表时失败。该报告不改变 Workbench 项目、生成数据或运行时 schema。
+
+## 366. WorkbenchProductionDataProjection v2
+
+`src/data/generated/workbench-seed.json` 从编辑样例 seed 升级为生产目录投影：
+
+```text
+schemaVersion = 2
+purpose = workbench-production-data-projection
+generatedAt / source
+sources
+  characters / skills / enemies / elements
+  equipment / kibos / soulessences
+defaults
+  characterId / skillId / enemyId
+counts
+  characters / skills / enemies / elements
+  equipment / kibos / soulessences
+gameData
+  characters[] / skills[] / enemies[] / elements[]
+  equipment[] / kibos[] / soulessences[]
+```
+
+投影保持 20 个角色、120 个技能、208 个敌人、10 个元素、137 件装备、122 个奇波和 62 个魂灵与完整生成目录一一对应。敌人只保留身份、元素、图标、HP/攻击/双防、`WEAKNESS_POINT_MAX` 和 10 类元素防御；装备保留 `id/name/type/rarity`，奇波保留 `id/name/element/stage`，魂灵保留 `id/name/rarity`。字段集合覆盖当前选择、项目校验、配置记录、Scenario 编译和三值运行时，不承载图鉴说明或完整诊断证据。
+
+`workbenchProjectFactory.js` 只消费该 v2 合同，完整拆表继续由 `azprGenerated.js` 暴露给数据审计。单元守门会比较投影 ID、数量和关键字段与完整目录；项目保存 schema 仍为 v8，本节不改变 JSON/PNG/分享/预设格式。

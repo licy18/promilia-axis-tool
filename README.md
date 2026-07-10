@@ -6,7 +6,7 @@
 
 ## 当前能力
 
-- 真实 AzPr 数据生成管线：角色、技能、敌人、属性、装备、奇波和灵子数据进入 `src/data/generated/`。
+- 真实 AzPr 数据生成管线：角色、技能、敌人、属性、装备、奇波和灵子数据进入 `src/data/generated/`，Workbench 使用可追溯的 v2 生产投影。
 - 60fps 时间轴：动作起始、持续时间、命中候选和状态曲线统一以 1 帧为最小颗粒度。
 - Workbench 编辑闭环：动作库、角色轨、属性编辑、批次操作、撤销重做、草稿恢复和规则诊断。
 - 配置闭环：双角色、敌人、等级、属性覆盖、装备、奇波、灵子和初始角色资源进入项目模型。
@@ -73,6 +73,8 @@ npm run data:generate
 ```
 
 生成结果和来源审计位于 `src/data/generated/manifest.json` 与 `src/data/generated/validation-report.json`。不要手工维护生成文件中可由来源表重新产生的字段。
+
+`src/data/generated/workbench-seed.json` 是面向生产主流程的精简目录，保留全部可选择实体及模拟所需字段；完整原始目录继续由 `src/data/azprGenerated.js` 提供给审计和数据测试。
 
 ## 核心目录
 

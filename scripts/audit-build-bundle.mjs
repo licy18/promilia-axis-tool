@@ -17,11 +17,11 @@ const budgets = {
   ),
   workbenchGzipBytes: readPositiveNumberArgument(
     '--workbench-gzip-budget',
-    640_000
+    520_000
   ),
   totalJavaScriptGzipBytes: readPositiveNumberArgument(
     '--total-js-gzip-budget',
-    950_000
+    820_000
   ),
 };
 
@@ -43,6 +43,23 @@ const initialEntry = report.javaScriptChunks.find(chunk => chunk.isEntry);
 const workbenchChunk = report.javaScriptChunks.find(chunk =>
   chunk.facadeModuleId?.endsWith('src/views/Workbench.vue')
 );
+const workbenchForbiddenModules = [
+  'src/data/generated/elements.json',
+  'src/data/generated/enemies.json',
+  'src/data/generated/equipment.json',
+  'src/data/generated/kibos.json',
+  'src/data/generated/soulessences.json',
+];
+const workbenchDetectedForbiddenModules = workbenchForbiddenModules.filter(
+  moduleId =>
+    workbenchChunk?.modules.some(moduleRow => moduleRow.id === moduleId)
+);
+const projectionGuard = {
+  workbenchUsesProductionDataProjection:
+    Boolean(workbenchChunk) && workbenchDetectedForbiddenModules.length === 0,
+  forbiddenModules: workbenchForbiddenModules,
+  detectedForbiddenModules: workbenchDetectedForbiddenModules,
+};
 const budgetStatus = {
   initialEntryWithinBudget:
     Boolean(initialEntry) &&
@@ -58,6 +75,7 @@ const outputReport = {
   kind: 'bundle-composition-audit',
   budgets,
   budgetStatus,
+  projectionGuard,
   ...report,
 };
 
@@ -74,6 +92,7 @@ console.log(
       output: toRepositoryPath(outputPath),
       budgets,
       budgetStatus,
+      projectionGuard,
       summary: outputReport.summary,
       javaScriptChunks: outputReport.javaScriptChunks.map(chunk => ({
         fileName: chunk.fileName,
@@ -91,7 +110,8 @@ console.log(
 
 if (
   process.argv.includes('--assert-budget') &&
-  Object.values(budgetStatus).some(status => !status)
+  (Object.values(budgetStatus).some(status => !status) ||
+    !projectionGuard.workbenchUsesProductionDataProjection)
 ) {
   process.exitCode = 1;
 }

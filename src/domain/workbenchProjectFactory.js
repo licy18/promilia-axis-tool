@@ -1,11 +1,4 @@
-import workbenchSeed from '../data/generated/workbench-seed.json';
-import {
-  getAzprEnemies,
-  getAzprElements,
-  getAzprEquipment,
-  getAzprKibos,
-  getAzprSoulessences,
-} from '../data/azprGenerated';
+import { getAzprWorkbenchSeed } from '../data/azprGenerated';
 import { WORKBENCH_FRAME_MS, snapMsToFrame } from './timebase';
 import {
   ACTION_TYPES,
@@ -37,6 +30,8 @@ export {
   getSkillDamageSegments,
 } from './skillDamageSegments';
 
+const workbenchSeed = getAzprWorkbenchSeed();
+
 const DEFAULT_SECONDARY_CHARACTER_ID =
   workbenchSeed.gameData.characters.find(
     character => character.id !== workbenchSeed.defaults.characterId
@@ -55,19 +50,11 @@ export const DEFAULT_WORKBENCH_TEAM_SLOTS = Object.freeze([
   }),
 ]);
 
-const WORKBENCH_EQUIPMENT = getAzprEquipment();
-const WORKBENCH_ENEMIES = getAzprEnemies();
-const WORKBENCH_ELEMENTS = getAzprElements();
-const WORKBENCH_KIBOS = getAzprKibos();
-const WORKBENCH_SOULESSENCES = getAzprSoulessences();
-const WORKBENCH_GAME_DATA = Object.freeze({
-  ...workbenchSeed.gameData,
-  enemies: WORKBENCH_ENEMIES,
-  elements: WORKBENCH_ELEMENTS,
-  equipment: WORKBENCH_EQUIPMENT,
-  kibos: WORKBENCH_KIBOS,
-  soulessences: WORKBENCH_SOULESSENCES,
-});
+const WORKBENCH_EQUIPMENT = workbenchSeed.gameData.equipment;
+const WORKBENCH_ENEMIES = workbenchSeed.gameData.enemies;
+const WORKBENCH_KIBOS = workbenchSeed.gameData.kibos;
+const WORKBENCH_SOULESSENCES = workbenchSeed.gameData.soulessences;
+const WORKBENCH_GAME_DATA = Object.freeze(workbenchSeed.gameData);
 const WORKBENCH_EQUIPMENT_SLOT_TYPES = Object.freeze({
   weapon: '武器',
   top: '上装',

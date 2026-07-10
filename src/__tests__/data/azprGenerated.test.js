@@ -16,6 +16,7 @@ import {
   getAzprSoulessences,
   getAzprValidationReport,
   getAzprValueParamIndex,
+  getAzprWorkbenchSeed,
 } from '../../data/azprGenerated';
 
 describe('generated AzPr data', () => {
@@ -44,6 +45,83 @@ describe('generated AzPr data', () => {
     expect(skills.every(skill => skill.needsTimingData)).toBe(true);
     expect(new Set(skills.map(skill => skill.timingSource))).toEqual(
       new Set(['missing-skill-asset-or-runtime-capture'])
+    );
+  });
+
+  it('keeps the Workbench production projection aligned with full catalogs', () => {
+    const seed = getAzprWorkbenchSeed();
+    const enemies = getAzprEnemies();
+    const elements = getAzprElements();
+    const equipment = getAzprEquipment();
+    const kibos = getAzprKibos();
+    const soulessences = getAzprSoulessences();
+    const enemyAttributeKeys = new Set([
+      'ATK',
+      'MAXHP',
+      'DEF',
+      'MDEF',
+      'WEAKNESS_POINT_MAX',
+      'NORMAL_DEFENSE',
+      'FIRE_DEFENSE',
+      'WIND_DEFENSE',
+      'EARTH_DEFENSE',
+      'WOOD_DEFENSE',
+      'ICE_DEFENSE',
+      'WATER_DEFENSE',
+      'ELEC_DEFENSE',
+      'LIGHT_DEFENSE',
+      'DARK_DEFENSE',
+    ]);
+
+    expect(seed.schemaVersion).toBe(2);
+    expect(seed.counts).toMatchObject({
+      enemies: enemies.length,
+      elements: elements.length,
+      equipment: equipment.length,
+      kibos: kibos.length,
+      soulessences: soulessences.length,
+    });
+    expect(seed.gameData.enemies.map(item => item.id)).toEqual(
+      enemies.map(item => item.id)
+    );
+    expect(seed.gameData.elements).toEqual(
+      elements.map(({ id, name, abbrName, color }) => ({
+        id,
+        name,
+        abbrName,
+        color,
+      }))
+    );
+    expect(seed.gameData.equipment).toEqual(
+      equipment.map(({ id, name, type, rarity }) => ({
+        id,
+        name,
+        type,
+        rarity,
+      }))
+    );
+    expect(seed.gameData.kibos).toEqual(
+      kibos.map(({ id, name, element, stage }) => ({
+        id,
+        name,
+        element,
+        stage,
+      }))
+    );
+    expect(seed.gameData.soulessences).toEqual(
+      soulessences.map(({ id, name, rarity }) => ({ id, name, rarity }))
+    );
+
+    const defaultEnemy = enemies.find(
+      enemy => enemy.id === seed.defaults.enemyId
+    );
+    const projectedDefaultEnemy = seed.gameData.enemies.find(
+      enemy => enemy.id === seed.defaults.enemyId
+    );
+    expect(projectedDefaultEnemy.property.baseAttributes).toEqual(
+      defaultEnemy.property.baseAttributes.filter(attribute =>
+        enemyAttributeKeys.has(attribute.key)
+      )
     );
   });
 

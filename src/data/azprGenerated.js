@@ -15,6 +15,7 @@ import skills from './generated/skills.json';
 import soulessences from './generated/soulessences.json';
 import validationReport from './generated/validation-report.json';
 import valueParamIndex from './generated/value-param-index.json';
+import workbenchSeed from './generated/workbench-seed.json';
 
 const generatedTables = {
   attributes,
@@ -37,6 +38,7 @@ export const azprGeneratedData = Object.freeze({
   skillLogicIndex,
   skillLevelCrossCheck,
   valueParamIndex,
+  workbenchSeed,
   tables: generatedTables,
 });
 
@@ -66,6 +68,10 @@ export function getAzprCombatFormulaEvidence() {
 
 export function getAzprSkillAssetEvidence() {
   return skillAssetEvidence;
+}
+
+export function getAzprWorkbenchSeed() {
+  return workbenchSeed;
 }
 
 export function getAzprCharacterAttributePanels() {

@@ -4,6 +4,8 @@ import {
   DEFAULT_WORKBENCH_TEAM_SLOTS,
   createWorkbenchProject,
   getWorkbenchGameData,
+  getWorkbenchLoadoutOptions,
+  getWorkbenchSeed,
   normalizeWorkbenchActorConfigs,
   normalizeWorkbenchTeamSlots,
 } from '../../domain/workbenchProjectFactory';
@@ -15,6 +17,61 @@ import { createRecoverSpRuntimeSampleFixture } from '../../simulation/fixtures/r
 import { bindWorkbenchRuntimeSampleCaptures } from '../../domain/workbenchRuntimeSampleCapture';
 
 describe('workbench project actor configuration', () => {
+  it('consumes the generated Workbench production data projection', () => {
+    const seed = getWorkbenchSeed();
+    const gameData = getWorkbenchGameData();
+    const loadoutOptions = getWorkbenchLoadoutOptions();
+
+    expect(seed).toMatchObject({
+      schemaVersion: 2,
+      purpose: 'workbench-production-data-projection',
+      counts: {
+        characters: 20,
+        skills: 120,
+        enemies: 208,
+        elements: 10,
+        equipment: 137,
+        kibos: 122,
+        soulessences: 62,
+      },
+    });
+    expect(gameData).toBe(seed.gameData);
+    expect(gameData.enemies).toHaveLength(seed.counts.enemies);
+    expect(gameData.elements).toHaveLength(seed.counts.elements);
+    expect(loadoutOptions.kibos).toBe(gameData.kibos);
+    expect(loadoutOptions.soulessences).toBe(gameData.soulessences);
+    expect(
+      gameData.enemies
+        .find(enemy => enemy.id === DEFAULT_WORKBENCH_SELECTION.enemyId)
+        .property.baseAttributes.map(attribute => attribute.key)
+    ).toEqual(
+      expect.arrayContaining([
+        'MAXHP',
+        'DEF',
+        'MDEF',
+        'WEAKNESS_POINT_MAX',
+        'WIND_DEFENSE',
+      ])
+    );
+    expect(Object.keys(gameData.equipment[0]).sort()).toEqual([
+      'id',
+      'name',
+      'rarity',
+      'type',
+    ]);
+    expect(Object.keys(gameData.kibos[0]).sort()).toEqual([
+      'element',
+      'id',
+      'name',
+      'stage',
+    ]);
+    expect(Object.keys(gameData.soulessences[0]).sort()).toEqual([
+      'id',
+      'name',
+      'rarity',
+    ]);
+  });
+
   it('projects persisted runtime sample captures into project metadata', () => {
     const runtimeSampleCapture = createToughnessRuntimeSampleFixture();
     const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {

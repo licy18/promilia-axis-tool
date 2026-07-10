@@ -39,6 +39,7 @@ npm run benchmark:long-axis:browser
 ## 架构锚点
 
 - 新版 AzPr 数据管线：`scripts/generate-azpr-data.mjs` -> `src/data/generated/`，访问层为 `src/data/azprGenerated.js`。
+- Workbench 生产目录统一消费 `workbench-seed.json` v2 精简投影；完整敌人、装备、奇波、魂灵与证据表保留给数据审计，不得重新从 `workbenchProjectFactory.js` 同步引入生产主包。
 - 新版项目模型：`src/domain/projectSchema.js`，核心模型是 `Project` / `Actor` / `Enemy` / `Action`。
 - 新版模拟运行时：`src/simulation/`，包含 compiler、engine、mechanics、projection 和 `runSimulation()`。
 - 生产工作台：`src/views/Workbench.vue`，根路径与旧 `/editor` 路径都重定向到 `/workbench`，组件在 `src/features/workbench/`。

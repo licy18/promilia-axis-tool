@@ -22,7 +22,7 @@ const extractorRoot = path.resolve(
     defaultExtractorRoot
 );
 const outputRoot = path.resolve(getArg('--out') ?? defaultOutputRoot);
-const generatedAt = new Date().toISOString();
+const generatedAt = getArg('--generated-at') ?? new Date().toISOString();
 const extractorSkillListRoot = path.join(
   extractorRoot,
   'ExtractedAssets',
@@ -872,6 +872,10 @@ const workbenchSeed = buildWorkbenchSeedData({
   characters,
   skills,
   enemies,
+  elements,
+  equipment,
+  kibos,
+  soulessences,
   characterAttributePanelByCharacterId,
 });
 const validationReport = buildValidationReport({
@@ -1041,21 +1045,36 @@ function buildWorkbenchSeedData({
   characters,
   skills,
   enemies,
+  elements,
+  equipment,
+  kibos,
+  soulessences,
   characterAttributePanelByCharacterId,
 }) {
   const compactCharacters = characters.map(character =>
     compactCharacter(character, characterAttributePanelByCharacterId)
   );
   const compactSkills = skills.map(compactSkill);
-  const compactEnemies = enemies
-    .filter(enemy => enemy.property?.exists)
-    .map(compactEnemy);
+  const compactEnemies = enemies.map(compactEnemy);
+  const compactElements = elements.map(compactElement);
+  const compactEquipment = equipment.map(compactEquipmentItem);
+  const compactKibos = kibos.map(compactKibo);
+  const compactSoulessences = soulessences.map(compactSoulessence);
 
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     generatedAt,
     source: 'generated-from-local-azpr-data',
-    purpose: 'stage-4-workbench-editing-seed',
+    purpose: 'workbench-production-data-projection',
+    sources: {
+      characters: sourceFiles.heroModules,
+      skills: sourceFiles.heroModules,
+      enemies: sourceFiles.enemies,
+      elements: sourceFiles.elementSystem,
+      equipment: sourceFiles.equipment,
+      kibos: sourceFiles.kibos,
+      soulessences: sourceFiles.soulessences,
+    },
     defaults: {
       characterId: 109001,
       skillId: 10900101,
@@ -1065,11 +1084,19 @@ function buildWorkbenchSeedData({
       characters: compactCharacters.length,
       skills: compactSkills.length,
       enemies: compactEnemies.length,
+      elements: compactElements.length,
+      equipment: compactEquipment.length,
+      kibos: compactKibos.length,
+      soulessences: compactSoulessences.length,
     },
     gameData: {
       characters: compactCharacters,
       skills: compactSkills,
       enemies: compactEnemies,
+      elements: compactElements,
+      equipment: compactEquipment,
+      kibos: compactKibos,
+      soulessences: compactSoulessences,
     },
   };
 }
@@ -1132,9 +1159,44 @@ function compactEnemy(enemy) {
       id: enemy.property.id,
       exists: enemy.property.exists,
       baseAttributeId: enemy.property.baseAttributeId,
-      baseAttributes: compactBaseAttributes(enemy.property.baseAttributes),
+      baseAttributes: compactEnemyBaseAttributes(enemy.property.baseAttributes),
     },
     icon: enemy.icon,
+  };
+}
+
+function compactElement(element) {
+  return {
+    id: element.id,
+    name: element.name,
+    abbrName: element.abbrName,
+    color: element.color,
+  };
+}
+
+function compactEquipmentItem(item) {
+  return {
+    id: item.id,
+    name: item.name,
+    type: item.type,
+    rarity: item.rarity,
+  };
+}
+
+function compactKibo(kibo) {
+  return {
+    id: kibo.id,
+    name: kibo.name,
+    element: kibo.element,
+    stage: kibo.stage,
+  };
+}
+
+function compactSoulessence(soulessence) {
+  return {
+    id: soulessence.id,
+    name: soulessence.name,
+    rarity: soulessence.rarity,
   };
 }
 
@@ -1148,6 +1210,27 @@ function compactBaseAttributes(baseAttributes = []) {
     'CRI_DMG',
     'MAXSP',
     'SPR_SEC',
+  ]);
+  return baseAttributes.filter(attribute => keys.has(attribute.key));
+}
+
+function compactEnemyBaseAttributes(baseAttributes = []) {
+  const keys = new Set([
+    'ATK',
+    'MAXHP',
+    'DEF',
+    'MDEF',
+    'WEAKNESS_POINT_MAX',
+    'NORMAL_DEFENSE',
+    'FIRE_DEFENSE',
+    'WIND_DEFENSE',
+    'EARTH_DEFENSE',
+    'WOOD_DEFENSE',
+    'ICE_DEFENSE',
+    'WATER_DEFENSE',
+    'ELEC_DEFENSE',
+    'LIGHT_DEFENSE',
+    'DARK_DEFENSE',
   ]);
   return baseAttributes.filter(attribute => keys.has(attribute.key));
 }
