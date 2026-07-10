@@ -25740,3 +25740,83 @@ WorkbenchDraftV8
 实测 SP 可能是小数，Workbench runtime 摘要、命中日志和详情的有符号数值改为最多 6 位小数；hit transaction 内部聚合精度也由 3 位提高到 6 位。HP/韧性现有整数展示不变。
 
 下一阶段 P7-C 建立实际 hook/Extractor JSON 或 JSONL 到 `RuntimeSampleCaptureFile` 的产出与规范化链，并用非 fixture 样本验证来源元数据、事件关联和最终曲线。
+
+## 361. P7-C 受控 runtime capture 产出合同
+
+### 361.1 RuntimeCaptureHookManifest
+
+新增生成文件 `src/data/generated/runtime-capture-hook-manifest.json`：
+
+```text
+RuntimeCaptureHookManifest
+  schemaVersion = 1
+  game = azur-promilia
+  kind = runtime-capture-hook-manifest
+  manifestId
+  source
+    path / size / lastWriteTime / sha256
+    clientRegion / clientSnapshot
+    moduleName / imageBase
+  methods[]
+    key / className / methodName
+    hookMoments[] / eventTypes[]
+    rva / offset / va / signature
+  fields[]
+    key / className / fieldName / fieldType / offset / declaration
+  eventContracts[]
+  runtimeRequirements
+```
+
+生成器从 TC `dump.cs` 流式提取 7 个目标方法和 17 个字段，覆盖 RecoverSP 的两个修正属性读取入口、三个充能入口和两个削韧入口，避免把约 97 MB 源文件整体载入内存。属性入口通过 `captureWhen.id = 105/228` 限定为 `SPGETUP / SPGETUP_ATK`。生成时任一目标缺失即失败；manifest 固定源文件 SHA-256，客户端更新后旧地址不得继续使用。
+
+### 361.2 RuntimeCaptureJsonLines
+
+JSONL 接受两类记录：
+
+```text
+CaptureSessionRecord
+  recordType = capture-session
+  captureSessionId
+  clientRegion / clientBuild / source
+  captureTool
+
+CaptureEventRecord
+  recordType = event
+  captureSessionId
+  eventType
+  frameIndex 或 timeMs
+  sourceElementConfigId 或 pathId
+  ...event payload
+```
+
+解析器按首次出现顺序归并 `captureSessionId`，会话元数据合入对应 capture，事件保持文件顺序。重复会话头、未知 `recordType`、无 session ID 或无效 JSON 行会使整份输入失败；成功后转换为既有 `RuntimeSampleCaptureFile`，因此不新增第二套 Workbench 项目结构。
+
+### 361.3 ProductionCaptureAudit
+
+规范化输出新增：
+
+```text
+provenanceAudit
+  schemaVersion = 1
+  status
+  captureCount
+  productionEligibleCaptureCount
+  realCaptureClaimAllowed
+  captureAudits[]
+    source / clientRegion / clientBuild
+    eventTypes[] / requiredEventTypes[] / missingEventTypes[]
+    recoverSpSequenceOrdered
+    checks
+    productionEligible
+  applied = false
+```
+
+生产资格要求来源不是 fixture/synthetic/template/mock/example/manual，且包含客户端区域、build、采集工具版本、hook manifest 标识、事件时间和 DamageElement/PathID 身份。RecoverSP 的五类必需事件必须齐全并保持调用先后顺序；削韧至少包含 `toughness-damage-applied`。审计只声明来源合同是否完整，不会把采样反推为通用公式。
+
+### 361.4 规范化与消费边界
+
+`runtime-capture:normalize` 支持 JSON/JSONL 输入，输出标准 envelope、输入文件路径/大小/SHA-256 和审计结果。`--require-production` 在审计失败时以退出码 2 停止且不写输出。
+
+Workbench 文件入口新增 `.jsonl/.ndjson` MIME/扩展名，解析后继续走 P7-B 绑定、v8 草稿和 P7-A adapter。当前没有非 fixture capture；manifest 的 `realRuntimeCaptureAvailable = false`，P7-C 真实数据验收仍未完成。
+
+下一阶段继续 P7-C：在明确授权、人工控制且不绕过反作弊的客户端环境中产出首份真实 JSONL，并通过 production audit、adapter、三值曲线、日志和项目回导验收。

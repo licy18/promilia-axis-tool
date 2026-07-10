@@ -285,7 +285,8 @@ Endaxis 当前值得对标的模块如下：
 - 已完成：阶段 5-8BB，建立 `metadata.runtimeSampleCaptures` 离线样本入口，`runtimeSamplingProbe` 可消费手动整理的 RecoverSP fixture，按 `recover-sp-args-built`、modifier 读取、`recover-sp-ontransmit-12f`、`recover-sp-applied`、share rebroadcast 事件验证 `baseDelta/delta/petDelta/interval/final-sp-curve`；当前 fixture 覆盖 `109001081`，状态为 `runtime-sampling-offline-samples-partially-validated`，Workbench 在有样本时显示 `样本验证 x/y`。
 - 已完成：P7-A 新增 `ValidatedRuntimeSample -> ThreeValueDelta` 机制 adapter；完整 RecoverSP 与削韧采样可以按原始帧进入 runtime 的角色能量/敌人韧性曲线，错误或不完整样本保持未应用。
 - 已完成：P7-B 建立 Workbench 实测 capture JSON 导入、动作/角色/敌人映射、v8 项目持久化与结果刷新闭环；同 session 重导会替换，冲突绑定整批拒绝。
-- 下一步：P7-C 接入实际 hook 或 AzPr Extractor 导出的 JSON/JSONL，生成标准 `runtime-sample-captures` envelope，并用至少一份非 fixture capture 验证导入、adapter、曲线和日志全链路。
+- 进行中：P7-C 已完成 TC hook manifest、JSONL 会话归并、标准 envelope 规范化、production audit 和 Workbench JSONL 导入；当前没有非 fixture 战斗 capture，不视为真实采集完成。
+- 下一步：在明确授权的受控客户端会话中产出首份真实 JSONL，通过 `--require-production`、P7-A adapter、三值曲线、sim log 和项目回导验收；不自动附加客户端，不扩展碎片 UI 或测试期倍率。
 
 旧原型中的 `skillBlocks`、Boss 事件 action、`ResourceMonitor.vue` 等问题保留为迁移参考；除非它们阻塞数据或运行时垂直切片，不再作为第一优先修补项。
 

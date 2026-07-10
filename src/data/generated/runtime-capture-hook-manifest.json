@@ -1,0 +1,334 @@
+{
+  "schemaVersion": 1,
+  "game": "azur-promilia",
+  "kind": "runtime-capture-hook-manifest",
+  "manifestId": "azpr-tc-20260709-three-value-runtime-capture-v1",
+  "generatedAt": "2026-07-10T11:49:20.054Z",
+  "source": {
+    "kind": "il2cpp-dump-cs",
+    "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+    "size": 97428254,
+    "lastWriteTime": "2026-07-09T14:06:49.319Z",
+    "sha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
+    "clientRegion": "TW",
+    "clientSnapshot": "il2cpp-tc-catch-20260709",
+    "moduleName": "GameAssembly.dll",
+    "imageBase": "0x180000000"
+  },
+  "summary": {
+    "methodCount": 7,
+    "fieldCount": 17,
+    "energyMethodCount": 5,
+    "toughnessMethodCount": 2,
+    "realRuntimeCaptureAvailable": false,
+    "status": "source-backed-hook-targets-ready-awaiting-controlled-capture"
+  },
+  "methods": [
+    {
+      "key": "AliveProperty.GetBattlePropertyCurrentValue",
+      "className": "AliveProperty",
+      "methodName": "GetBattlePropertyCurrentValue",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "recover-sp-modifier-property-read"
+      ],
+      "captureWhen": {
+        "argumentName": "id",
+        "values": [
+          105,
+          228
+        ]
+      },
+      "rva": "0x12A7EE0",
+      "offset": "0x12A66E0",
+      "va": "0x1812A7EE0",
+      "signature": "public MyFloat GetBattlePropertyCurrentValue(int id, bool isRatio = False, List<int> tags) { }"
+    },
+    {
+      "key": "DamageElement.RecoverSP",
+      "className": "DamageElement",
+      "methodName": "RecoverSP",
+      "hookMoments": [
+        "entry"
+      ],
+      "eventTypes": [
+        "recover-sp-source-read"
+      ],
+      "rva": "0x138EEE0",
+      "offset": "0x138D6E0",
+      "va": "0x18138EEE0",
+      "signature": "public void RecoverSP() { }"
+    },
+    {
+      "key": "SPSystem.OnTransmit",
+      "className": "SPSystem",
+      "methodName": "OnTransmit",
+      "hookMoments": [
+        "entry"
+      ],
+      "eventTypes": [
+        "recover-sp-args-built",
+        "recover-sp-ontransmit-12f",
+        "recover-sp-share-rebroadcast"
+      ],
+      "rva": "0x14837F0",
+      "offset": "0x1481FF0",
+      "va": "0x1814837F0",
+      "signature": "public void OnTransmit(ETransmitType type, ITransmitArgs args) { }"
+    },
+    {
+      "key": "SPSystem.RecoverSP",
+      "className": "SPSystem",
+      "methodName": "RecoverSP",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "recover-sp-applied"
+      ],
+      "rva": "0x1483F40",
+      "offset": "0x1482740",
+      "va": "0x181483F40",
+      "signature": "private void RecoverSP(TSpElementParams.ERecoverTagType recoverTagType, float baseDelta, float delta) { }"
+    },
+    {
+      "key": "SnapshotPropertyManager.GetBattlePropertyCurrentValue",
+      "className": "SnapshotPropertyManager",
+      "methodName": "GetBattlePropertyCurrentValue",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "recover-sp-modifier-property-read"
+      ],
+      "captureWhen": {
+        "argumentName": "id",
+        "values": [
+          105,
+          228
+        ]
+      },
+      "rva": "0x181D240",
+      "offset": "0x181BA40",
+      "va": "0x18181D240",
+      "signature": "public MyFloat GetBattlePropertyCurrentValue(int entityId, ulong key, int id, bool isRatio = False, List<int> tags) { }"
+    },
+    {
+      "key": "FormulaUtility.GetOutputWeaknessDamage",
+      "className": "FormulaUtility",
+      "methodName": "GetOutputWeaknessDamage",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-output-calculated"
+      ],
+      "rva": "0x1885FF0",
+      "offset": "0x18847F0",
+      "va": "0x181885FF0",
+      "signature": "private static FormulaUtility.OutputDamageData GetOutputWeaknessDamage(IElement element, EntityHandle attackerHandle, EntityHandle executorHandle, EntityHandle sourceHandle, int skillGroupId) { }"
+    },
+    {
+      "key": "FormulaUtility.WeaknessPointChange",
+      "className": "FormulaUtility",
+      "methodName": "WeaknessPointChange",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-damage-applied"
+      ],
+      "rva": "0x188A6B0",
+      "offset": "0x1888EB0",
+      "va": "0x18188A6B0",
+      "signature": "private static bool WeaknessPointChange(DamageElement damageElement, EntityHandle executor, EntityHandle attacker, int outputType1, int outputType2, MyFloat weaknessSkillDmgUp, ref MyFloat outputDamage, out MyFloat wk) { }"
+    }
+  ],
+  "fields": [
+    {
+      "key": "RecoverSPArgs.id",
+      "className": "RecoverSPArgs",
+      "fieldName": "id",
+      "fieldType": "int",
+      "offset": "0x18",
+      "declaration": "public int id;"
+    },
+    {
+      "key": "RecoverSPArgs.baseDelta",
+      "className": "RecoverSPArgs",
+      "fieldName": "baseDelta",
+      "fieldType": "float",
+      "offset": "0x1C",
+      "declaration": "public float baseDelta;"
+    },
+    {
+      "key": "RecoverSPArgs.delta",
+      "className": "RecoverSPArgs",
+      "fieldName": "delta",
+      "fieldType": "float",
+      "offset": "0x20",
+      "declaration": "public float delta;"
+    },
+    {
+      "key": "RecoverSPArgs.interval",
+      "className": "RecoverSPArgs",
+      "fieldName": "interval",
+      "fieldType": "float",
+      "offset": "0x24",
+      "declaration": "public float interval;"
+    },
+    {
+      "key": "RecoverSPArgs.tagType",
+      "className": "RecoverSPArgs",
+      "fieldName": "tagType",
+      "fieldType": "TSpElementParams.ERecoverTagType",
+      "offset": "0x28",
+      "declaration": "public TSpElementParams.ERecoverTagType tagType;"
+    },
+    {
+      "key": "RecoverSPArgs.skillId",
+      "className": "RecoverSPArgs",
+      "fieldName": "skillId",
+      "fieldType": "int",
+      "offset": "0x2C",
+      "declaration": "public int skillId;"
+    },
+    {
+      "key": "RecoverSPArgs.sharePercent",
+      "className": "RecoverSPArgs",
+      "fieldName": "sharePercent",
+      "fieldType": "float",
+      "offset": "0x30",
+      "declaration": "public float sharePercent;"
+    },
+    {
+      "key": "RecoverSPArgs.petSharePercent",
+      "className": "RecoverSPArgs",
+      "fieldName": "petSharePercent",
+      "fieldType": "float",
+      "offset": "0x34",
+      "declaration": "public float petSharePercent;"
+    },
+    {
+      "key": "RecoverSPArgs.petDelta",
+      "className": "RecoverSPArgs",
+      "fieldName": "petDelta",
+      "fieldType": "float",
+      "offset": "0x38",
+      "declaration": "public float petDelta;"
+    },
+    {
+      "key": "RecoverSPArgs.isAddition",
+      "className": "RecoverSPArgs",
+      "fieldName": "isAddition",
+      "fieldType": "bool",
+      "offset": "0x3C",
+      "declaration": "public bool isAddition;"
+    },
+    {
+      "key": "RecoverSPArgs.additionId",
+      "className": "RecoverSPArgs",
+      "fieldName": "additionId",
+      "fieldType": "int",
+      "offset": "0x40",
+      "declaration": "public int additionId;"
+    },
+    {
+      "key": "RecoverSPArgs.mainPetSharePercent",
+      "className": "RecoverSPArgs",
+      "fieldName": "mainPetSharePercent",
+      "fieldType": "float",
+      "offset": "0x44",
+      "declaration": "public float mainPetSharePercent;"
+    },
+    {
+      "key": "DamageElement.m_recoverSP",
+      "className": "DamageElement",
+      "fieldName": "m_recoverSP",
+      "fieldType": "int",
+      "offset": "0x240",
+      "declaration": "private int m_recoverSP;"
+    },
+    {
+      "key": "DamageElement.m_petRecoverSP",
+      "className": "DamageElement",
+      "fieldName": "m_petRecoverSP",
+      "fieldType": "int",
+      "offset": "0x244",
+      "declaration": "private int m_petRecoverSP;"
+    },
+    {
+      "key": "DamageElement.m_recoverInterval",
+      "className": "DamageElement",
+      "fieldName": "m_recoverInterval",
+      "fieldType": "int",
+      "offset": "0x248",
+      "declaration": "private int m_recoverInterval;"
+    },
+    {
+      "key": "SPSystem.m_entityHandle",
+      "className": "SPSystem",
+      "fieldName": "m_entityHandle",
+      "fieldType": "EntityHandle",
+      "offset": "0x10",
+      "declaration": "private EntityHandle m_entityHandle;"
+    },
+    {
+      "key": "SPSystem.m_recoverTimerMap",
+      "className": "SPSystem",
+      "fieldName": "m_recoverTimerMap",
+      "fieldType": "Dictionary<int, double>",
+      "offset": "0x20",
+      "declaration": "private Dictionary<int, double> m_recoverTimerMap;"
+    }
+  ],
+  "eventContracts": [
+    {
+      "key": "recover-sp-runtime-sequence",
+      "requiredEventTypes": [
+        "recover-sp-args-built",
+        "recover-sp-modifier-property-read",
+        "recover-sp-ontransmit-12f",
+        "recover-sp-applied",
+        "recover-sp-share-rebroadcast"
+      ],
+      "hookTargets": [
+        "AliveProperty.GetBattlePropertyCurrentValue",
+        "SnapshotPropertyManager.GetBattlePropertyCurrentValue",
+        "DamageElement.RecoverSP",
+        "SPSystem.OnTransmit",
+        "SPSystem.RecoverSP"
+      ]
+    },
+    {
+      "key": "toughness-runtime-sequence",
+      "requiredEventTypes": [
+        "toughness-damage-applied"
+      ],
+      "diagnosticEventTypes": [
+        "toughness-output-calculated"
+      ],
+      "hookTargets": [
+        "FormulaUtility.GetOutputWeaknessDamage",
+        "FormulaUtility.WeaknessPointChange"
+      ]
+    }
+  ],
+  "runtimeRequirements": {
+    "attachPolicy": "explicit-controlled-session-only",
+    "automaticLaunchAllowed": false,
+    "automaticAttachAllowed": false,
+    "antiCheatBypassAllowed": false,
+    "sourceGameProcessRequired": true,
+    "captureToolRequired": true,
+    "captureToolStatus": "not-installed-or-configured",
+    "realCaptureAcceptance": "capture must pass production provenance audit and Workbench adapter validation"
+  }
+}

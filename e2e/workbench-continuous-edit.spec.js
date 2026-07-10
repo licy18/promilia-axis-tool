@@ -2099,18 +2099,24 @@ test('imports a runtime capture and preserves its applied curve through project 
     actionId: 'captured-action-77',
     actorId: 'captured-actor-77',
   });
-  const captureFile = {
-    schemaVersion: 1,
-    game: 'azur-promilia',
-    type: 'runtime-sample-captures',
-    captures: [capture],
-  };
+  const captureFile = [
+    JSON.stringify({
+      recordType: 'capture-session',
+      captureSessionId: capture.captureSessionId,
+      clientRegion: 'TW',
+      clientBuild: 'e2e-controlled-build',
+      source: capture.source,
+    }),
+    ...capture.events.map(event =>
+      JSON.stringify({ recordType: 'event', ...event })
+    ),
+  ].join('\n');
 
   await page.goto('/#/workbench');
   await page.getByTestId('workbench-import-project-file').setInputFiles({
-    name: 'azpr-runtime-capture.json',
-    mimeType: 'application/json',
-    buffer: Buffer.from(JSON.stringify(captureFile)),
+    name: 'azpr-runtime-capture.jsonl',
+    mimeType: 'application/x-ndjson',
+    buffer: Buffer.from(captureFile),
   });
 
   await expect(page.getByTestId('workbench-draft-status')).toHaveText(

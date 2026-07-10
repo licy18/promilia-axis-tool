@@ -8,6 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "data:generate": "node scripts/generate-azpr-data.mjs",
+    "data:generate-runtime-capture-manifest": "node scripts/generate-runtime-capture-hook-manifest.mjs",
+    "runtime-capture:normalize": "node scripts/normalize-runtime-capture.mjs",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix",
     "format": "prettier --write src/",
     "test": "vitest",

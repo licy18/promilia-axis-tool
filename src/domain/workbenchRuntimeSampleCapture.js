@@ -6,6 +6,17 @@ const SUPPORTED_RUNTIME_SAMPLE_FILE_TYPES = new Set([
   'runtime-sample-capture',
 ]);
 
+const RECOVER_SP_REQUIRED_EVENT_TYPES = [
+  'recover-sp-args-built',
+  'recover-sp-modifier-property-read',
+  'recover-sp-ontransmit-12f',
+  'recover-sp-applied',
+  'recover-sp-share-rebroadcast',
+];
+const TOUGHNESS_REQUIRED_EVENT_TYPES = ['toughness-damage-applied'];
+const NON_PRODUCTION_SOURCE_PATTERN =
+  /(?:fixture|synthetic|template|mock|example|manual)/iu;
+
 export function parseWorkbenchRuntimeSampleCaptureFile(rawFile) {
   const payload = parseJsonValue(rawFile);
   const captureInputs = extractCaptureInputs(payload);
@@ -138,6 +149,30 @@ export function mergeWorkbenchRuntimeSampleCaptures(
   }
 
   return merged;
+}
+
+export function createRuntimeSampleCaptureProductionAudit(capturesInput = []) {
+  const captures = normalizeWorkbenchRuntimeSampleCaptures(capturesInput);
+  const captureAudits = captures.map(createProductionCaptureAudit);
+  const realCaptureClaimAllowed =
+    captureAudits.length > 0 &&
+    captureAudits.every(capture => capture.productionEligible);
+
+  return {
+    schemaVersion: 1,
+    status: realCaptureClaimAllowed
+      ? 'production-runtime-captures-ready'
+      : captureAudits.length > 0
+        ? 'production-runtime-captures-incomplete'
+        : 'production-runtime-captures-empty',
+    captureCount: captureAudits.length,
+    productionEligibleCaptureCount: captureAudits.filter(
+      capture => capture.productionEligible
+    ).length,
+    realCaptureClaimAllowed,
+    captureAudits,
+    applied: false,
+  };
 }
 
 function extractCaptureInputs(payload) {
@@ -367,8 +402,192 @@ function parseJsonValue(value) {
   try {
     return JSON.parse(value);
   } catch {
+    return parseJsonLinesValue(value);
+  }
+}
+
+function parseJsonLinesValue(value) {
+  const lines = String(value)
+    .split(/\r?\n/u)
+    .map(line => line.trim())
+    .filter(Boolean);
+  if (lines.length === 0) {
     return null;
   }
+
+  const records = [];
+  for (const line of lines) {
+    try {
+      records.push(JSON.parse(line));
+    } catch {
+      return null;
+    }
+  }
+
+  const sessionMetadataById = new Map();
+  const eventsBySessionId = new Map();
+  const sessionOrder = [];
+
+  for (const record of records) {
+    if (!record || typeof record !== 'object' || Array.isArray(record)) {
+      return null;
+    }
+    if (record.recordType === 'capture-session') {
+      const captureSessionId = stringOrNull(
+        record.captureSessionId ?? record.sessionId
+      );
+      if (!captureSessionId || sessionMetadataById.has(captureSessionId)) {
+        return null;
+      }
+      const metadata = { ...record };
+      delete metadata.recordType;
+      delete metadata.events;
+      metadata.captureSessionId = captureSessionId;
+      sessionMetadataById.set(captureSessionId, metadata);
+      if (!eventsBySessionId.has(captureSessionId)) {
+        eventsBySessionId.set(captureSessionId, []);
+        sessionOrder.push(captureSessionId);
+      }
+      continue;
+    }
+    if (record.recordType && record.recordType !== 'event') {
+      return null;
+    }
+
+    const event =
+      record.recordType === 'event' &&
+      record.event &&
+      typeof record.event === 'object'
+        ? { ...record.event }
+        : { ...record };
+    delete event.recordType;
+    delete event.event;
+    const captureSessionId = stringOrNull(
+      event.captureSessionId ?? record.captureSessionId ?? record.sessionId
+    );
+    if (!captureSessionId) {
+      return null;
+    }
+    event.captureSessionId = captureSessionId;
+    if (!eventsBySessionId.has(captureSessionId)) {
+      eventsBySessionId.set(captureSessionId, []);
+      sessionOrder.push(captureSessionId);
+    }
+    eventsBySessionId.get(captureSessionId).push(event);
+  }
+
+  return {
+    schemaVersion: WORKBENCH_RUNTIME_SAMPLE_FILE_SCHEMA_VERSION,
+    game: 'azur-promilia',
+    type: WORKBENCH_RUNTIME_SAMPLE_FILE_TYPE,
+    captures: sessionOrder.map(captureSessionId => ({
+      ...(sessionMetadataById.get(captureSessionId) ?? {}),
+      captureSessionId,
+      events: eventsBySessionId.get(captureSessionId) ?? [],
+    })),
+  };
+}
+
+function createProductionCaptureAudit(capture) {
+  const source = stringOrNull(capture.source ?? capture.captureSource);
+  const clientRegion = stringOrNull(capture.clientRegion);
+  const clientBuild = stringOrNull(capture.clientBuild);
+  const captureTool = capture.captureTool ?? {};
+  const eventTypes = uniqueStrings(
+    capture.events.map(event => event.eventType)
+  );
+  const hasRecoverSpEvents = eventTypes.some(eventType =>
+    eventType.startsWith('recover-sp-')
+  );
+  const hasToughnessEvents = eventTypes.some(eventType =>
+    eventType.startsWith('toughness-')
+  );
+  const requiredEventTypes = [
+    ...(hasRecoverSpEvents ? RECOVER_SP_REQUIRED_EVENT_TYPES : []),
+    ...(hasToughnessEvents ? TOUGHNESS_REQUIRED_EVENT_TYPES : []),
+  ];
+  const missingEventTypes = requiredEventTypes.filter(
+    eventType => !eventTypes.includes(eventType)
+  );
+  const recoverSpSequenceOrdered =
+    !hasRecoverSpEvents ||
+    containsOrderedEventTypes(
+      capture.events.map(event => event.eventType),
+      RECOVER_SP_REQUIRED_EVENT_TYPES
+    );
+  const timingComplete = capture.events.every(
+    event =>
+      numberOrNull(event.frameIndex) != null ||
+      numberOrNull(event.timeMs) != null
+  );
+  const sourceIdentityComplete = capture.events.every(
+    event =>
+      numberOrNull(event.sourceElementConfigId ?? event.elementConfigId) !=
+        null || stringOrNull(event.pathId) != null
+  );
+  const captureToolComplete = Boolean(
+    stringOrNull(captureTool.name) &&
+    stringOrNull(captureTool.version) &&
+    stringOrNull(captureTool.hookManifestId ?? captureTool.hookManifestSha256)
+  );
+  const productionMarkerText = [
+    capture.captureSessionId,
+    source,
+    clientRegion,
+    clientBuild,
+    captureTool.name,
+    captureTool.version,
+  ]
+    .filter(Boolean)
+    .join('|');
+  const sourceLooksNonProduction =
+    !source ||
+    !/(?:runtime|source-game)/iu.test(source) ||
+    NON_PRODUCTION_SOURCE_PATTERN.test(productionMarkerText);
+  const checks = {
+    sourceDeclared: Boolean(source),
+    sourceLooksProduction: !sourceLooksNonProduction,
+    clientRegionDeclared: Boolean(clientRegion),
+    clientBuildDeclared: Boolean(clientBuild),
+    captureToolDeclared: captureToolComplete,
+    eventSequenceComplete:
+      requiredEventTypes.length > 0 &&
+      missingEventTypes.length === 0 &&
+      recoverSpSequenceOrdered,
+    eventTimingComplete: timingComplete,
+    eventSourceIdentityComplete: sourceIdentityComplete,
+  };
+  const productionEligible = Object.values(checks).every(Boolean);
+
+  return {
+    captureSessionId: capture.captureSessionId,
+    status: productionEligible
+      ? 'production-runtime-capture-ready'
+      : 'production-runtime-capture-incomplete',
+    source,
+    clientRegion,
+    clientBuild,
+    eventCount: capture.events.length,
+    eventTypes,
+    requiredEventTypes,
+    missingEventTypes,
+    recoverSpSequenceOrdered,
+    checks,
+    productionEligible,
+  };
+}
+
+function containsOrderedEventTypes(eventTypes, requiredEventTypes) {
+  let requiredIndex = 0;
+  for (const eventType of eventTypes) {
+    if (eventType === requiredEventTypes[requiredIndex]) {
+      requiredIndex += 1;
+    }
+    if (requiredIndex === requiredEventTypes.length) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function arrayOrSingle(value) {

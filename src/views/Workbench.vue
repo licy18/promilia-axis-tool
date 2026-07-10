@@ -94,7 +94,7 @@
             class="project-import-input"
             data-testid="workbench-import-project-file"
             type="file"
-            accept=".json,.promilia-workbench.json,.png,application/json,image/png"
+            accept=".json,.jsonl,.ndjson,.promilia-workbench.json,.png,application/json,application/x-ndjson,image/png"
             @change="importProjectFile"
           />
           <button

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createFirstVerticalSliceProject } from '../../domain/fixtures/firstVerticalSlice';
 import {
   bindWorkbenchRuntimeSampleCaptures,
+  createRuntimeSampleCaptureProductionAudit,
   mergeWorkbenchRuntimeSampleCaptures,
   parseWorkbenchRuntimeSampleCaptureFile,
 } from '../../domain/workbenchRuntimeSampleCapture';
@@ -52,6 +53,115 @@ describe('workbench runtime sample capture', () => {
         captures: [{ captureSessionId: 'broken', events: [{}] }],
       })
     ).toBeNull();
+  });
+
+  it('groups JSONL session and event records into capture envelopes', () => {
+    const capture = createRecoverSpRuntimeSampleFixture();
+    const jsonl = [
+      JSON.stringify({
+        recordType: 'capture-session',
+        captureSessionId: capture.captureSessionId,
+        clientRegion: 'TW',
+        clientBuild: 'controlled-build',
+        source: 'source-game-runtime',
+      }),
+      ...capture.events.map(event =>
+        JSON.stringify({ recordType: 'event', ...event })
+      ),
+    ].join('\n');
+
+    expect(parseWorkbenchRuntimeSampleCaptureFile(jsonl)).toMatchObject({
+      captures: [
+        {
+          captureSessionId: 'fixture-recover-sp-109001081-v1',
+          clientRegion: 'TW',
+          clientBuild: 'controlled-build',
+          source: 'source-game-runtime',
+          events: expect.arrayContaining([
+            expect.objectContaining({ eventType: 'recover-sp-applied' }),
+          ]),
+        },
+      ],
+      summary: {
+        captureCount: 1,
+        eventCount: 6,
+      },
+    });
+    expect(
+      parseWorkbenchRuntimeSampleCaptureFile(
+        `${jsonl}\n{"recordType":"unknown"}`
+      )
+    ).toBeNull();
+  });
+
+  it('does not allow fixture or incomplete captures to claim production provenance', () => {
+    const fixture = createRecoverSpRuntimeSampleFixture();
+    expect(createRuntimeSampleCaptureProductionAudit([fixture])).toMatchObject({
+      status: 'production-runtime-captures-incomplete',
+      productionEligibleCaptureCount: 0,
+      realCaptureClaimAllowed: false,
+    });
+
+    const productionCaptureSessionId = 'controlled-session-20260710-001';
+    const productionCapture = {
+      ...fixture,
+      captureSessionId: productionCaptureSessionId,
+      source: 'source-game-runtime',
+      clientRegion: 'TW',
+      clientBuild: 'controlled-build-20260710',
+      captureTool: {
+        name: 'controlled-il2cpp-capture',
+        version: '1.0.0',
+        hookManifestId: 'azpr-tc-20260709-three-value-runtime-capture-v1',
+      },
+      events: fixture.events.map(event => ({
+        ...event,
+        captureSessionId: productionCaptureSessionId,
+      })),
+    };
+    expect(
+      createRuntimeSampleCaptureProductionAudit([productionCapture])
+    ).toMatchObject({
+      status: 'production-runtime-captures-ready',
+      productionEligibleCaptureCount: 1,
+      realCaptureClaimAllowed: true,
+      captureAudits: [
+        expect.objectContaining({
+          productionEligible: true,
+          missingEventTypes: [],
+          checks: {
+            sourceDeclared: true,
+            sourceLooksProduction: true,
+            clientRegionDeclared: true,
+            clientBuildDeclared: true,
+            captureToolDeclared: true,
+            eventSequenceComplete: true,
+            eventTimingComplete: true,
+            eventSourceIdentityComplete: true,
+          },
+        }),
+      ],
+    });
+
+    const outOfOrderCapture = {
+      ...productionCapture,
+      events: [...productionCapture.events],
+    };
+    [outOfOrderCapture.events[3], outOfOrderCapture.events[4]] = [
+      outOfOrderCapture.events[4],
+      outOfOrderCapture.events[3],
+    ];
+    expect(
+      createRuntimeSampleCaptureProductionAudit([outOfOrderCapture])
+    ).toMatchObject({
+      realCaptureClaimAllowed: false,
+      captureAudits: [
+        {
+          recoverSpSequenceOrdered: false,
+          checks: { eventSequenceComplete: false },
+        },
+      ],
+    });
   });
 
   it('binds a foreign capture to the selected Workbench action and entities', () => {
