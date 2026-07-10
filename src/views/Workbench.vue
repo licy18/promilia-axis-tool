@@ -7,6 +7,8 @@
     :data-selected-action-count="selectedActionIds.length"
     :data-action-relation-count="actionRelations.length"
     :data-selected-action-relation-id="selectedActionRelationId"
+    :data-effect-interval-count="effectIntervalProjection.summary.intervalCount"
+    :data-selected-effect-interval-id="selectedEffectIntervalId"
   >
     <nav class="top-nav">
       <div class="workbench-brand" aria-label="蓝色星原排轴工作台">
@@ -310,6 +312,7 @@
         <TimelineGridPreview
           class="timeline-area"
           :actors="scenario.actors"
+          :enemy="scenario.enemy"
           :actions="scenario.actions"
           :damage-timeline="simulationResult.damageTimeline"
           :candidate-value-chart="simulationResult.candidateValueSeries.chart"
@@ -321,6 +324,8 @@
           :selected-action-ids="selectedActionIds"
           :action-relations="actionRelations"
           :selected-action-relation-id="selectedActionRelationId"
+          :effect-intervals="effectIntervalProjection.intervals"
+          :selected-effect-interval-id="selectedEffectIntervalId"
           :box-selection-mode="boxSelectionMode"
           :flow-model="workbenchFlowModel"
           :action-edit-focus="actionEditFocus"
@@ -335,6 +340,7 @@
           @select-action="selectAction"
           @select-action-group="selectActionGroup"
           @select-action-relation="selectActionRelation"
+          @select-effect-interval="selectEffectInterval"
           @open-action-context-menu="openActionContextMenu"
           @open-action-relation-context-menu="openActionRelationContextMenu"
           @toggle-box-selection-mode="toggleBoxSelectionMode"
@@ -467,6 +473,9 @@
             <EffectTimelinePanel
               :effect-timeline="runtimeOutputs.effectTimeline"
               :runtime-selected-detail="runtimeSelectedDetail"
+              :selected-effect-event-id="selectedEffectEventId"
+              :selected-effect-interval="selectedEffectInterval"
+              @select-effect-event="selectEffectEvent"
               @edit-source-action="editEffectSourceAction"
             />
           </div>
@@ -650,6 +659,7 @@
       <TimelineGridPreview
         class="png-export-timeline"
         :actors="scenario.actors"
+        :enemy="scenario.enemy"
         :actions="scenario.actions"
         :damage-timeline="simulationResult.damageTimeline"
         :candidate-value-chart="simulationResult.candidateValueSeries.chart"
@@ -658,6 +668,7 @@
         :selected-action-id="selectedActionId"
         :selected-action-ids="selectedActionIds"
         :action-relations="actionRelations"
+        :effect-intervals="effectIntervalProjection.intervals"
         :timeline-diagnostics="timelineDiagnostics"
         :action-readiness-timeline="simulationResult.actionReadinessTimeline"
       />
@@ -807,6 +818,7 @@ import {
   getProjectSimulationSkillDiagnosticsStatus,
   installProjectSimulationSkillDiagnostics,
 } from '../simulation/projection/projectSimulationResult';
+import { projectEffectRuntimeIntervals } from '../simulation/projection/projectEffectIntervals';
 
 const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
@@ -840,6 +852,8 @@ const selectedActionIds = ref(
 );
 const actionSelectionAnchorId = ref(initialDraft.selectedActionId);
 const selectedActionRelationId = ref('');
+const selectedEffectIntervalId = ref('');
+const selectedEffectEventId = ref('');
 const boxSelectionMode = ref(false);
 const actionClipboard = ref(null);
 const actionContextMenu = ref(createClosedActionContextMenu());
@@ -928,6 +942,19 @@ const currentWorkbenchPresetSummary = computed(() => ({
   enemyName: scenario.value.enemy.name,
 }));
 const runtimeOutputs = computed(() => simulationResult.value.runtimeOutputs);
+const effectIntervalProjection = computed(() =>
+  projectEffectRuntimeIntervals({
+    effectTimeline: runtimeOutputs.value.effectTimeline,
+    durationMs: scenario.value.time.durationMs,
+    frameRate: scenario.value.time.fps,
+  })
+);
+const selectedEffectInterval = computed(
+  () =>
+    effectIntervalProjection.value.intervals.find(
+      interval => interval.intervalId === selectedEffectIntervalId.value
+    ) ?? null
+);
 const runtimeSelectedDetail = computed(() =>
   createRuntimeSelectedDetail({
     runtimeProjection: runtimeOutputs.value,
@@ -1065,6 +1092,45 @@ watch(
     }
   },
   { flush: 'sync' }
+);
+
+watch(
+  () => effectIntervalProjection.value.intervals,
+  intervals => {
+    if (!selectedEffectIntervalId.value) {
+      if (
+        selectedEffectEventId.value &&
+        !intervals.some(interval =>
+          interval.lifecycleEventIds.includes(selectedEffectEventId.value)
+        )
+      ) {
+        selectedEffectEventId.value = '';
+      }
+      return;
+    }
+    const interval = intervals.find(
+      item => item.intervalId === selectedEffectIntervalId.value
+    );
+    if (!interval) {
+      selectedEffectIntervalId.value = '';
+      selectedEffectEventId.value = '';
+      return;
+    }
+    if (!interval.lifecycleEventIds.includes(selectedEffectEventId.value)) {
+      selectedEffectEventId.value = interval.selectionEventId;
+    }
+  },
+  { flush: 'sync' }
+);
+
+watch(
+  () => runtimeSelectedDetail.value?.statePointId ?? '',
+  (statePointId, previousStatePointId) => {
+    if (statePointId !== previousStatePointId) {
+      selectedEffectIntervalId.value = '';
+      selectedEffectEventId.value = '';
+    }
+  }
 );
 
 watch(
@@ -2548,6 +2614,8 @@ function clearWorkbenchProjectTransientState() {
   runtimeLogFocus.value = { source: '', statePointId: '', sequence: 0 };
   workbenchFlowDispatchState.value = createEmptyWorkbenchFlowDispatchState();
   selectedActionRelationId.value = '';
+  selectedEffectIntervalId.value = '';
+  selectedEffectEventId.value = '';
   boxSelectionMode.value = false;
   actionClipboard.value = null;
   closeActionContextMenu();
@@ -2995,6 +3063,8 @@ function findActionDraftById(actionId) {
 function selectAction(actionRequest, { syncRuntimeResult = true } = {}) {
   clearSegmentSplitPreview();
   selectedActionRelationId.value = '';
+  selectedEffectIntervalId.value = '';
+  selectedEffectEventId.value = '';
   const request =
     actionRequest && typeof actionRequest === 'object'
       ? actionRequest
@@ -3088,6 +3158,8 @@ function selectActionRelation(relationRequest) {
   }
 
   selectedActionRelationId.value = relation.id;
+  selectedEffectIntervalId.value = '';
+  selectedEffectEventId.value = '';
   boxSelectionMode.value = false;
   setWorkbenchActionSelection(
     [relation.fromActionId, relation.toActionId],
@@ -3097,6 +3169,36 @@ function selectActionRelation(relationRequest) {
   syncActionLibraryCharacterIdFromDraft(
     findActionDraftById(relation.toActionId)
   );
+  return true;
+}
+
+function selectEffectInterval({ intervalId = '', eventId = '' } = {}) {
+  const interval = effectIntervalProjection.value.intervals.find(
+    item => item.intervalId === intervalId
+  );
+  if (!interval) {
+    return false;
+  }
+  selectedActionRelationId.value = '';
+  boxSelectionMode.value = false;
+  selectedEffectIntervalId.value = interval.intervalId;
+  selectedEffectEventId.value = interval.lifecycleEventIds.includes(eventId)
+    ? eventId
+    : interval.selectionEventId;
+  return true;
+}
+
+function selectEffectEvent(eventId) {
+  const interval = effectIntervalProjection.value.intervals.find(item =>
+    item.lifecycleEventIds.includes(eventId)
+  );
+  if (!interval) {
+    selectedEffectEventId.value = '';
+    return false;
+  }
+  selectedEffectIntervalId.value = interval.intervalId;
+  selectedEffectEventId.value = eventId;
+  selectedActionRelationId.value = '';
   return true;
 }
 

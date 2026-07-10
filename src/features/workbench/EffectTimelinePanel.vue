@@ -5,11 +5,56 @@
     :data-active-effect-count="effectReview.summary.activeEffectCount"
     :data-effect-event-count="effectReview.summary.eventCount"
     :data-review-time-ms="effectReview.reviewTimeMs"
+    :data-selected-effect-event-id="effectReview.selectedEventId"
+    :data-selected-effect-interval-id="selectedEffectInterval?.intervalId || ''"
   >
     <div class="panel-title">
       <Timer class="panel-icon" />
       <h2>状态效果</h2>
       <strong>{{ effectReview.summary.eventCount }} 事件</strong>
+    </div>
+
+    <div
+      v-if="selectedEffectInterval"
+      class="effect-interval-review"
+      :data-interval-id="selectedEffectInterval.intervalId"
+      data-testid="workbench-effect-selected-interval"
+    >
+      <div class="effect-interval-review-heading">
+        <span>
+          <strong>{{
+            selectedEffectInterval.effectName || selectedEffectInterval.effectId
+          }}</strong>
+          <small>{{
+            selectedEffectInterval.targetName || selectedEffectInterval.targetId
+          }}</small>
+        </span>
+        <span>
+          <strong>{{ formatIntervalFrames(selectedEffectInterval) }}</strong>
+          <small>{{ formatIntervalStacks(selectedEffectInterval) }}</small>
+        </span>
+      </div>
+      <ol class="effect-interval-lifecycle">
+        <li
+          v-for="event in selectedEffectInterval.lifecycleEvents"
+          :key="event.eventId"
+        >
+          <button
+            type="button"
+            :class="{
+              selected: effectReview.selectedEventId === event.eventId,
+            }"
+            :data-effect-event-id="event.eventId"
+            :data-effect-event-type="event.type"
+            data-testid="workbench-effect-interval-lifecycle-event"
+            @click="selectEffectEvent(event.eventId)"
+          >
+            <span>{{ formatEventTime(event) }}</span>
+            <strong>{{ formatEventOperation(event.type) }}</strong>
+            <small>{{ formatLifecycleStack(event) }}</small>
+          </button>
+        </li>
+      </ol>
     </div>
 
     <p
@@ -83,10 +128,10 @@
         </p>
 
         <button
-          v-if="effectReview.selectedEvent?.actionId"
+          v-if="selectedEffectSourceActionId"
           type="button"
           class="effect-source-action"
-          :data-action-id="effectReview.selectedEvent.actionId"
+          :data-action-id="selectedEffectSourceActionId"
           data-testid="workbench-effect-edit-source-action"
           @click="editSelectedSourceAction"
         >
@@ -112,10 +157,23 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  selectedEffectEventId: {
+    type: String,
+    default: null,
+  },
+  selectedEffectInterval: {
+    type: Object,
+    default: null,
+  },
 });
 
-const emit = defineEmits(['edit-source-action']);
-const selectedEffectEventId = ref('');
+const emit = defineEmits(['edit-source-action', 'select-effect-event']);
+const internalSelectedEffectEventId = ref('');
+const effectiveSelectedEffectEventId = computed(() =>
+  props.selectedEffectEventId == null
+    ? internalSelectedEffectEventId.value
+    : props.selectedEffectEventId
+);
 const selectedRuntimeTimeMs = computed(() => {
   if (props.runtimeSelectedDetail?.timeMs == null) {
     return null;
@@ -126,17 +184,23 @@ const selectedRuntimeTimeMs = computed(() => {
 const effectReview = computed(() =>
   createRuntimeEffectReview({
     effectTimeline: props.effectTimeline,
-    selectedTimeMs: selectedEffectEventId.value
+    selectedTimeMs: effectiveSelectedEffectEventId.value
       ? null
       : selectedRuntimeTimeMs.value,
-    selectedEventId: selectedEffectEventId.value,
+    selectedEventId: effectiveSelectedEffectEventId.value,
   })
+);
+const selectedEffectSourceActionId = computed(
+  () =>
+    effectReview.value.selectedEvent?.actionId ||
+    props.selectedEffectInterval?.sourceActionId ||
+    ''
 );
 
 watch(
   () => props.runtimeSelectedDetail?.statePointId,
   () => {
-    selectedEffectEventId.value = '';
+    internalSelectedEffectEventId.value = '';
   }
 );
 
@@ -144,22 +208,23 @@ watch(
   () => props.effectTimeline,
   timeline => {
     if (
-      selectedEffectEventId.value &&
+      internalSelectedEffectEventId.value &&
       !(timeline?.events ?? []).some(
-        event => event.eventId === selectedEffectEventId.value
+        event => event.eventId === internalSelectedEffectEventId.value
       )
     ) {
-      selectedEffectEventId.value = '';
+      internalSelectedEffectEventId.value = '';
     }
   }
 );
 
 function selectEffectEvent(eventId) {
-  selectedEffectEventId.value = eventId;
+  internalSelectedEffectEventId.value = eventId;
+  emit('select-effect-event', eventId);
 }
 
 function editSelectedSourceAction() {
-  const actionId = effectReview.value.selectedEvent?.actionId;
+  const actionId = selectedEffectSourceActionId.value;
   if (actionId) {
     emit('edit-source-action', actionId);
   }
@@ -208,6 +273,33 @@ function formatEffectExpiry(effect) {
     ? '持续生效'
     : `${effect.expiresAtMs}ms 到期`;
 }
+
+function formatIntervalFrames(interval) {
+  return String(interval.startFrame) + 'F-' + String(interval.endFrame) + 'F';
+}
+
+function formatIntervalStacks(interval) {
+  if (interval.maxStacks > 1) {
+    return (
+      '峰值 ' +
+      String(interval.peakStacks) +
+      '/' +
+      String(interval.maxStacks) +
+      ' 层'
+    );
+  }
+  return interval.activeAtScenarioEnd ? '场景结束时仍生效' : '已结束';
+}
+
+function formatLifecycleStack(event) {
+  if (event.stackAfter > 0) {
+    return String(event.stackAfter) + ' 层';
+  }
+  if (event.stackBefore > 0) {
+    return '结束 ' + String(event.stackBefore) + ' 层';
+  }
+  return '无实例';
+}
 </script>
 
 <style scoped>
@@ -249,6 +341,85 @@ function formatEffectExpiry(effect) {
   padding: 14px;
   color: #8f9aa3;
   font-size: 12px;
+}
+
+.effect-interval-review {
+  display: grid;
+  gap: 9px;
+  padding: 11px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #202a31;
+}
+
+.effect-interval-review-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.effect-interval-review-heading > span {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.effect-interval-review-heading > span:last-child {
+  justify-items: end;
+}
+
+.effect-interval-review-heading strong {
+  overflow: hidden;
+  color: #f4f7f8;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.effect-interval-review-heading small {
+  color: #9da9b2;
+  font-size: 11px;
+}
+
+.effect-interval-lifecycle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.effect-interval-lifecycle button {
+  display: grid;
+  min-width: 74px;
+  grid-template-columns: auto auto;
+  gap: 1px 6px;
+  padding: 5px 7px;
+  border: 1px solid rgba(126, 176, 255, 0.32);
+  border-radius: 3px;
+  background: #172028;
+  color: #dcecff;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.effect-interval-lifecycle button.selected {
+  border-color: #f2b366;
+  background: #352d22;
+  color: #ffe2ba;
+}
+
+.effect-interval-lifecycle button span,
+.effect-interval-lifecycle button strong {
+  font-size: 10px;
+}
+
+.effect-interval-lifecycle button small {
+  grid-column: 1 / -1;
+  color: #9da9b2;
+  font-size: 9px;
 }
 
 .effect-review-body {

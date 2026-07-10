@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "production-preview-acceptance",
-  "generatedAt": "2026-07-10T15:26:11.605Z",
+  "generatedAt": "2026-07-10T15:56:31.920Z",
   "environment": {
     "platform": "win32-x64",
     "node": "v24.16.0",
@@ -18,12 +18,12 @@
     "reason": "all-required-production-preview-capabilities-passed"
   },
   "summary": {
-    "requiredCapabilityCount": 7,
-    "passedCapabilityCount": 7,
-    "testCount": 7,
-    "passedTestCount": 7,
+    "requiredCapabilityCount": 8,
+    "passedCapabilityCount": 8,
+    "testCount": 8,
+    "passedTestCount": 8,
     "playwrightStatus": "passed",
-    "durationMs": 8245
+    "durationMs": 8933
   },
   "capabilities": [
     {
@@ -57,6 +57,11 @@
       "testCount": 1
     },
     {
+      "capability": "effect-interval-review",
+      "status": "passed",
+      "testCount": 1
+    },
+    {
       "capability": "narrow-main-flow",
       "status": "passed",
       "testCount": 1
@@ -67,7 +72,7 @@
       "capability": "routes-and-assets",
       "title": "[routes-and-assets] serves production routes and hashed assets",
       "status": "passed",
-      "durationMs": 988,
+      "durationMs": 902,
       "retry": 0,
       "errors": []
     },
@@ -75,7 +80,7 @@
       "capability": "diagnostics-lazy-load",
       "title": "[diagnostics-lazy-load] loads runtime diagnostics from a production chunk",
       "status": "passed",
-      "durationMs": 616,
+      "durationMs": 561,
       "retry": 0,
       "errors": []
     },
@@ -83,7 +88,7 @@
       "capability": "json-project-exchange",
       "title": "[json-project-exchange] restores an exported production JSON project",
       "status": "passed",
-      "durationMs": 774,
+      "durationMs": 786,
       "retry": 0,
       "errors": []
     },
@@ -91,7 +96,7 @@
       "capability": "png-project-exchange",
       "title": "[png-project-exchange] restores production PNG metadata and lazy exporter assets",
       "status": "passed",
-      "durationMs": 1043,
+      "durationMs": 1094,
       "retry": 0,
       "errors": []
     },
@@ -99,7 +104,7 @@
       "capability": "multi-action-editing",
       "title": "[multi-action-editing] copies, pastes, and reviews a selected action group",
       "status": "passed",
-      "durationMs": 889,
+      "durationMs": 878,
       "retry": 0,
       "errors": []
     },
@@ -107,7 +112,15 @@
       "capability": "timeline-relations",
       "title": "[timeline-relations] preserves action relations through project exchange",
       "status": "passed",
-      "durationMs": 1138,
+      "durationMs": 1078,
+      "retry": 0,
+      "errors": []
+    },
+    {
+      "capability": "effect-interval-review",
+      "title": "[effect-interval-review] reviews an effect interval and refreshes it from the source action",
+      "status": "passed",
+      "durationMs": 817,
       "retry": 0,
       "errors": []
     },
@@ -115,7 +128,7 @@
       "capability": "narrow-main-flow",
       "title": "[narrow-main-flow] completes runtime review, edit, and refresh without overflow",
       "status": "passed",
-      "durationMs": 798,
+      "durationMs": 738,
       "retry": 0,
       "errors": []
     }

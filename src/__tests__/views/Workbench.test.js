@@ -1877,6 +1877,17 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-effect-timeline-panel"]')
         .attributes('data-effect-event-count')
     ).toBe('2');
+    expect(
+      wrapper.find('main.workbench').attributes('data-effect-interval-count')
+    ).toBe('1');
+    const timelineEffectInterval = wrapper.get(
+      '[data-testid="workbench-timeline-effect-interval"]'
+    );
+    expect(timelineEffectInterval.attributes()).toMatchObject({
+      'data-target-kind': 'actor',
+      'data-source-action-id': 'action-0001',
+      'data-lifecycle-event-count': '2',
+    });
 
     await wrapper
       .find('[data-testid="workbench-effect-name-input"]')
@@ -1886,8 +1897,23 @@ describe('Workbench view', () => {
       wrapper.find('[data-testid="workbench-effect-event-row"]').text()
     ).toContain('测试增益');
 
+    await timelineEffectInterval.trigger('click');
+    await nextTick();
+    expect(
+      wrapper
+        .find('main.workbench')
+        .attributes('data-selected-effect-interval-id')
+    ).toContain('interval-1');
+    expect(
+      wrapper.find('[data-testid="workbench-effect-selected-interval"]').text()
+    ).toContain('测试增益');
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-effect-interval-lifecycle-event"]'
+      )
+    ).toHaveLength(2);
     await wrapper
-      .findAll('[data-testid="workbench-effect-event-row"]')[0]
+      .findAll('[data-testid="workbench-effect-interval-lifecycle-event"]')[0]
       .trigger('click');
     await nextTick();
     expect(
@@ -1901,6 +1927,32 @@ describe('Workbench view', () => {
         .find('[data-testid="workbench-effect-timeline-panel"]')
         .attributes('data-active-effect-count')
     ).toBe('1');
+
+    await wrapper
+      .find('[data-testid="workbench-effect-edit-source-action"]')
+      .trigger('click');
+    await nextTick();
+    expect(
+      wrapper
+        .find('main.workbench')
+        .attributes('data-selected-effect-interval-id')
+    ).toBe('');
+    await wrapper
+      .find('[data-testid="workbench-effect-duration-frame-input"]')
+      .setValue('180');
+    await nextTick();
+    const refreshedInterval = wrapper.get(
+      '[data-testid="workbench-timeline-effect-interval"]'
+    );
+    expect(Number(refreshedInterval.attributes('data-end-ms'))).toBeCloseTo(
+      frameToMs(180),
+      4
+    );
+    await refreshedInterval.trigger('click');
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-effect-selected-interval"]').text()
+    ).toContain('0F-180F');
   });
 
   it('locates and fixes a confirmed skill cooldown rule violation', async () => {

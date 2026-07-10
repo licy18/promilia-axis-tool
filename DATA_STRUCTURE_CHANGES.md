@@ -26103,7 +26103,7 @@ tests[]
 limitations[]
 ```
 
-必需能力固定为 production 路由与哈希资源、诊断动态加载、JSON 项目交换、PNG 项目交换、多动作编辑、动作关系交换和 390px 窄屏主流程。只有 Playwright 整体通过且七项能力全部存在并通过时，报告才输出 `trial-ready`；缺项或失败均输出 `blocked`。该报告只证明本地 `dist` + Vite preview 可试用，不代表远程 CDN/托管、最终蓝原公式或非 fixture 真实采样已验收。
+必需能力固定为 production 路由与哈希资源、诊断动态加载、JSON 项目交换、PNG 项目交换、多动作编辑、动作关系交换、状态效果区间复盘和 390px 窄屏主流程。只有 Playwright 整体通过且八项能力全部存在并通过时，报告才输出 `trial-ready`；缺项或失败均输出 `blocked`。该报告只证明本地 `dist` + Vite preview 可试用，不代表远程 CDN/托管、最终蓝原公式或非 fixture 真实采样已验收。
 
 ## 372. WorkbenchActionClipboard v1（仅编辑会话）
 
@@ -26140,3 +26140,31 @@ actionRelations[]
 `workbenchActionRelations.js` 负责规范化关系、剔除失效端点和重复边、阻止有向环，并按 `to.startMs - (from.startMs + from.durationMs)` 重新计算帧对齐的 `gapMs`。关系随动作组复制、粘贴、移动、删除、批次复制和撤销/重做保持一致；删除动作时清理所有关联边。
 
 `actionRelations[]` 与 `actionDrafts[]` 一同写入本地草稿、JSON、分享链接、PNG 元数据和预设项目。v1-v8 文件继续由同一解析器接受并迁移为空关系数组。当前关系只表达编辑器中的前后编排语义，simulation 和 `Action -> Hit -> ThreeValueDelta` 不读取该字段，因此三值结果合同没有变化。
+
+## 374. EffectIntervalProjection v1（仅运行时投影）
+
+`projectEffectIntervals.js` 从 `AzPrEffectRuntimeTimeline.events[]` 生成：
+
+```text
+schemaVersion = 1
+sourceKind = azpr-effect-interval-projection
+contractName = AzPrEffectIntervalProjection
+durationMs / frameRate
+intervals[]
+  intervalId / instanceKey
+  effectId / effectName
+  targetKind / targetId / targetName
+  startMs / endMs / durationMs
+  startFrame / endFrame
+  sourceActionId / sourceActionIds[] / sourceActorIds[]
+  lifecycleEventIds[] / lifecycleEvents[] / selectionEventId
+  terminationEventId / terminationType
+  initialStacks / finalStacks / peakStacks / maxStacks / refreshCount
+  activeAtScenarioEnd / persistent
+  appliedToCalculators = false
+summary
+```
+
+同一 effect instance 从 `EFFECT_APPLIED` 开始，`EFFECT_REFRESHED` 继续写入当前区间，`EFFECT_REMOVED` 或 `EFFECT_EXPIRED` 结束区间；场景结束仍生效的实例裁切到项目时长并保留 active/persistent 状态。重复施加生成递增但稳定的 `interval-N`，便于动作时间变化后维持 UI 选择。
+
+该合同不写入 WorkbenchProjectFile，也不新增项目迁移。角色目标由时间轴投影到对应角色轨，敌人目标进入独立敌人效果轨；区间、生命周期事件和来源动作只服务可见复盘，现有 effect command、runtime event、active snapshot 和 `appliedToCalculators = false` 边界均未改变。

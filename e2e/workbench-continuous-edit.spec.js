@@ -2740,13 +2740,43 @@ test('configures, reviews, and shares a tracking-only effect @workbench-main-flo
   await page.getByTestId('workbench-flow-open-runtime').click();
   await waitForRuntimeAction(page, 'action-0001');
   const effectPanel = page.getByTestId('workbench-effect-timeline-panel');
+  const workbench = page.locator('main.workbench');
   await expect(effectPanel).toHaveAttribute('data-effect-event-count', '2');
   await expect(page.getByTestId('workbench-effect-event-row')).toHaveCount(2);
   await expect(
     page.getByTestId('workbench-effect-event-row').first()
   ).toContainText('演示增益');
 
-  await page.getByTestId('workbench-effect-event-row').first().click();
+  const timelineEffectInterval = page.getByTestId(
+    'workbench-timeline-effect-interval'
+  );
+  await expect(timelineEffectInterval).toHaveCount(1);
+  await expect(timelineEffectInterval).toHaveAttribute(
+    'data-target-kind',
+    'actor'
+  );
+  await expect(timelineEffectInterval).toHaveAttribute(
+    'data-lifecycle-event-count',
+    '2'
+  );
+  expect(
+    Number(await timelineEffectInterval.getAttribute('data-end-ms'))
+  ).toBeCloseTo(2000, 4);
+  await timelineEffectInterval.click();
+  await expect(workbench).not.toHaveAttribute(
+    'data-selected-effect-interval-id',
+    ''
+  );
+  await expect(
+    page.getByTestId('workbench-effect-selected-interval')
+  ).toContainText('演示增益');
+  await expect(
+    page.getByTestId('workbench-effect-interval-lifecycle-event')
+  ).toHaveCount(2);
+  await page
+    .getByTestId('workbench-effect-interval-lifecycle-event')
+    .first()
+    .click();
   await expect(effectPanel).toHaveAttribute('data-active-effect-count', '1');
   await expect(page.getByTestId('workbench-effect-active-row')).toContainText(
     '演示增益'
@@ -2754,6 +2784,20 @@ test('configures, reviews, and shares a tracking-only effect @workbench-main-flo
   await expect(page.getByTestId('workbench-effect-active-row')).toContainText(
     '1/3 层'
   );
+  await page.getByTestId('workbench-effect-edit-source-action').click();
+  await expect(workbench).toHaveAttribute(
+    'data-selected-effect-interval-id',
+    ''
+  );
+  await page.getByTestId('workbench-effect-duration-frame-input').fill('180');
+  await page.getByTestId('workbench-effect-duration-frame-input').press('Tab');
+  expect(
+    Number(await timelineEffectInterval.getAttribute('data-end-ms'))
+  ).toBeCloseTo(3000, 4);
+  await timelineEffectInterval.click();
+  await expect(
+    page.getByTestId('workbench-effect-selected-interval')
+  ).toContainText('0F-180F');
 
   const shareButton = page.getByTestId('workbench-share-project');
   await shareButton.click();
@@ -2774,8 +2818,12 @@ test('configures, reviews, and shares a tracking-only effect @workbench-main-flo
   ).toHaveValue('3');
   await expect(
     page.getByTestId('workbench-effect-duration-frame-input')
-  ).toHaveValue('120');
+  ).toHaveValue('180');
   await expect(effectPanel).toHaveAttribute('data-effect-event-count', '2');
+  await expect(timelineEffectInterval).toHaveCount(1);
+  expect(
+    Number(await timelineEffectInterval.getAttribute('data-end-ms'))
+  ).toBeCloseTo(3000, 4);
 
   expectNoUnexpectedBrowserIssues(browserIssues);
 });

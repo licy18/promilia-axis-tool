@@ -78,6 +78,8 @@ insertion / generationBatch
 - 敌人 HP、敌人韧性和每角色能量的状态曲线 marker。
 - applied、candidate、sampled 和 placeholder 来源层。
 
+状态效果区间只能从 `AzPrEffectRuntimeTimeline` 投影：角色目标进入对应角色轨，敌人目标进入独立敌人效果轨；区间按真实持续帧占位，重叠效果自动分配子轨，并在条内标出刷新/叠层和结束节点。点击区间后，生命周期详情、当前生效快照和来源动作回改必须共享同一 interval/event 选择。
+
 点击曲线点、命中日志、动作结果或贡献行后，必须落到同一个稳定 state point，并能返回对应动作继续编辑。
 
 ## 6. 三值合同
@@ -92,7 +94,7 @@ Action
     -> selfEnergyChange
 ```
 
-Runtime 消费标准 delta 后输出 `simLog`、`stateCurves`、资源曲线、状态快照和 summary。时间轴只消费 projection，不读取 evidence 临时结构作为数值事实。
+Runtime 消费标准 delta 后输出 `simLog`、`stateCurves`、资源曲线、状态快照和 summary；效果 runtime 另输出 lifecycle event，`EffectIntervalProjection` 只负责归并可视区间。时间轴只消费 projection，不读取 evidence 临时结构作为数值事实，也不让效果区间直接改写 calculator。
 
 ## 7. 项目交换
 

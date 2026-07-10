@@ -234,6 +234,89 @@ describe('TimelineGridPreview', () => {
     expect(wrapper.emitted('create-action-relations')).toHaveLength(1);
   });
 
+  it('renders selectable actor and enemy effect intervals on dedicated rows', async () => {
+    const actorInterval = createEffectInterval({
+      intervalId: 'actor|actor-a|focus|interval-1',
+      effectId: 'focus',
+      effectName: '专注',
+      targetKind: 'actor',
+      targetId: 'actor-a',
+      targetName: '末音',
+      startMs: 0,
+      endMs: 2000,
+      lifecycleEvents: [
+        { eventId: 'focus-apply', type: 'EFFECT_APPLIED', timeMs: 0 },
+        { eventId: 'focus-refresh', type: 'EFFECT_REFRESHED', timeMs: 1000 },
+        { eventId: 'focus-expire', type: 'EFFECT_EXPIRED', timeMs: 2000 },
+      ],
+      selectionEventId: 'focus-expire',
+      peakStacks: 2,
+      maxStacks: 3,
+    });
+    const enemyInterval = createEffectInterval({
+      intervalId: 'enemy|enemy-a|mark|interval-1',
+      effectId: 'mark',
+      effectName: '标记',
+      targetKind: 'enemy',
+      targetId: 'enemy-a',
+      targetName: '训练假人',
+      startMs: 500,
+      endMs: 2500,
+      lifecycleEvents: [
+        { eventId: 'mark-apply', type: 'EFFECT_APPLIED', timeMs: 500 },
+        { eventId: 'mark-remove', type: 'EFFECT_REMOVED', timeMs: 2500 },
+      ],
+      selectionEventId: 'mark-remove',
+    });
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        enemy: { id: 'enemy-a', name: '训练假人' },
+        effectIntervals: [actorInterval, enemyInterval],
+        selectedEffectIntervalId: actorInterval.intervalId,
+      }),
+    });
+
+    const timeline = wrapper.get(
+      '[data-testid="workbench-timeline-grid-preview"]'
+    );
+    expect(timeline.attributes()).toMatchObject({
+      'data-effect-interval-count': '2',
+      'data-selected-effect-interval-id': actorInterval.intervalId,
+    });
+    const intervals = wrapper.findAll(
+      '[data-testid="workbench-timeline-effect-interval"]'
+    );
+    expect(intervals).toHaveLength(2);
+    expect(intervals[0].classes()).toContain('selected');
+    expect(intervals[0].attributes()).toMatchObject({
+      'data-effect-id': 'focus',
+      'data-target-kind': 'actor',
+      'data-target-id': 'actor-a',
+      'data-lifecycle-event-count': '3',
+    });
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-row"]')
+    ).toHaveLength(3);
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-timeline-row"][data-lane-id="enemy-effects"]'
+        )
+        .find('[data-testid="workbench-timeline-effect-interval"]')
+        .attributes('data-effect-id')
+    ).toBe('mark');
+    expect(wrapper.text()).toContain('训练假人');
+    expect(wrapper.findAll('.effect-lifecycle-marker')).toHaveLength(3);
+
+    await intervals[1].trigger('click');
+    expect(wrapper.emitted('select-effect-interval')?.at(-1)?.[0]).toEqual({
+      intervalId: enemyInterval.intervalId,
+      eventId: 'mark-remove',
+      actionId: 'action-a',
+      timeMs: 2500,
+    });
+  });
+
   it('selects intersecting actions with the frame box tool', async () => {
     const wrapper = mount(TimelineGridPreview, {
       attachTo: document.body,
@@ -357,6 +440,38 @@ function createTimelineProps(overrides = {}) {
       overlaps: [],
       overlapCount: 0,
     },
+    ...overrides,
+  };
+}
+
+function createEffectInterval(overrides) {
+  return {
+    intervalId: 'actor|actor-a|effect|interval-1',
+    instanceKey: 'actor|actor-a|effect',
+    effectId: 'effect',
+    effectName: '状态效果',
+    targetKind: 'actor',
+    targetId: 'actor-a',
+    targetName: '末音',
+    startMs: 0,
+    endMs: 1000,
+    durationMs: 1000,
+    startFrame: 0,
+    endFrame: 60,
+    sourceActionId: 'action-a',
+    sourceActionIds: ['action-a'],
+    lifecycleEventIds: [],
+    lifecycleEvents: [],
+    selectionEventId: '',
+    terminationType: 'EFFECT_EXPIRED',
+    activeAtScenarioEnd: false,
+    persistent: false,
+    initialStacks: 1,
+    finalStacks: 0,
+    peakStacks: 1,
+    maxStacks: 1,
+    refreshCount: 0,
+    appliedToCalculators: false,
     ...overrides,
   };
 }

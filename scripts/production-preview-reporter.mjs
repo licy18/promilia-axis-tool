@@ -8,6 +8,7 @@ const REQUIRED_CAPABILITIES = [
   'png-project-exchange',
   'multi-action-editing',
   'timeline-relations',
+  'effect-interval-review',
   'narrow-main-flow',
 ];
 

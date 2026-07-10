@@ -249,6 +249,44 @@ test('[timeline-relations] preserves action relations through project exchange',
   );
 });
 
+test('[effect-interval-review] reviews an effect interval and refreshes it from the source action', async ({
+  page,
+}) => {
+  await page.goto('/#/workbench');
+  await page.getByTestId('workbench-effect-add').click();
+  await page.getByTestId('workbench-effect-name-input').fill('生产增益');
+  await page.getByTestId('workbench-effect-name-input').press('Tab');
+  await page.getByTestId('workbench-effect-duration-frame-input').fill('120');
+  await page.getByTestId('workbench-effect-duration-frame-input').press('Tab');
+
+  const interval = page.getByTestId('workbench-timeline-effect-interval');
+  await expect(interval).toHaveCount(1);
+  await interval.click();
+  await expect(
+    page.getByTestId('workbench-effect-selected-interval')
+  ).toContainText('生产增益');
+  await expect(
+    page.getByTestId('workbench-effect-interval-lifecycle-event')
+  ).toHaveCount(2);
+
+  await page.getByTestId('workbench-effect-edit-source-action').click();
+  await page.getByTestId('workbench-effect-duration-frame-input').fill('180');
+  await page.getByTestId('workbench-effect-duration-frame-input').press('Tab');
+  expect(Number(await interval.getAttribute('data-end-ms'))).toBeCloseTo(
+    3000,
+    4
+  );
+  await interval.click();
+  await expect(
+    page.getByTestId('workbench-effect-selected-interval')
+  ).toContainText('0F-180F');
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-runtime-detail-action-id',
+    'action-0001'
+  );
+});
+
 test('[narrow-main-flow] completes runtime review, edit, and refresh without overflow', async ({
   page,
 }) => {

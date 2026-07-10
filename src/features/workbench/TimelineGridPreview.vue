@@ -3,6 +3,8 @@
     class="panel timeline-panel"
     :data-flow-selected-action-id="flowSelectedActionId"
     :data-action-relation-count="actionRelations.length"
+    :data-effect-interval-count="effectIntervals.length"
+    :data-selected-effect-interval-id="selectedEffectIntervalId"
     :data-box-selection-mode="boxSelectionMode ? 'true' : 'false'"
     :data-flow-selected-state-curve-point-id="flowSelectedStateCurvePointId"
     :data-flow-runtime-focus-source="flowRuntimeFocusSource"
@@ -224,7 +226,10 @@
           v-for="lane in timelineLanes"
           :key="lane.id"
           class="lane-label"
-          :class="{ system: lane.type === 'system' }"
+          :class="{
+            system: lane.type === 'system',
+            enemy: lane.type === 'enemy',
+          }"
           :style="laneRowStyle(lane)"
           :data-lane-id="lane.id"
           data-testid="workbench-timeline-lane-label"
@@ -419,6 +424,59 @@
                 @pointerdown.stop="beginResize($event, action)"
               />
             </div>
+
+            <button
+              v-for="interval in lane.effectIntervals"
+              :key="interval.intervalId"
+              class="effect-interval"
+              :class="[
+                'target-' + interval.targetKind,
+                {
+                  selected: interval.intervalId === selectedEffectIntervalId,
+                  persistent: interval.persistent,
+                  active: interval.activeAtScenarioEnd,
+                },
+              ]"
+              type="button"
+              :style="effectIntervalStyle(interval, lane)"
+              :title="formatEffectIntervalTitle(interval)"
+              :aria-label="formatEffectIntervalTitle(interval)"
+              :data-interval-id="interval.intervalId"
+              :data-effect-id="interval.effectId"
+              :data-target-kind="interval.targetKind"
+              :data-target-id="interval.targetId"
+              :data-source-action-id="interval.sourceActionId || ''"
+              :data-start-ms="interval.startMs"
+              :data-end-ms="interval.endMs"
+              :data-lifecycle-event-count="interval.lifecycleEvents.length"
+              :data-selected="
+                interval.intervalId === selectedEffectIntervalId
+                  ? 'true'
+                  : 'false'
+              "
+              data-testid="workbench-timeline-effect-interval"
+              @click.stop="selectEffectInterval(interval)"
+              @keydown.enter.prevent="selectEffectInterval(interval)"
+              @keydown.space.prevent="selectEffectInterval(interval)"
+              @pointerdown.stop
+            >
+              <span class="effect-interval-glyph">
+                {{ effectIntervalGlyph(interval) }}
+              </span>
+              <span class="effect-interval-label">
+                {{ interval.effectName || interval.effectId }}
+              </span>
+              <small v-if="interval.maxStacks > 1">
+                {{ interval.peakStacks }}/{{ interval.maxStacks }}
+              </small>
+              <i
+                v-for="event in interval.lifecycleEvents.slice(1)"
+                :key="event.eventId"
+                class="effect-lifecycle-marker"
+                :class="'event-' + String(event.type).toLowerCase()"
+                :style="effectLifecycleMarkerStyle(event, interval)"
+              />
+            </button>
 
             <div
               v-for="damage in lane.damageMarkers"
@@ -657,6 +715,7 @@
       <span><i class="legend-damage" /> 伤害投影</span>
       <span><i class="legend-candidate" /> 候选三值</span>
       <span><i class="legend-state" /> 状态点</span>
+      <span><i class="legend-effect" /> 状态效果</span>
       <span><i class="legend-system" /> 系统轨</span>
       <span><i class="legend-overlap" /> 重叠</span>
       <span><i class="legend-cooldown" /> 冷却窗口</span>
@@ -701,6 +760,9 @@ const TIMELINE_LANE_MIN_HEIGHT_PX = 110;
 const TIMELINE_ACTION_TOP_PX = 10;
 const TIMELINE_ACTION_HEIGHT_PX = 42;
 const TIMELINE_ACTION_SLOT_GAP_PX = 8;
+const TIMELINE_EFFECT_INTERVAL_HEIGHT_PX = 20;
+const TIMELINE_EFFECT_INTERVAL_GAP_PX = 4;
+const TIMELINE_EFFECT_SECTION_GAP_PX = 5;
 const TIMELINE_LANE_GAP_PX = 8;
 const TIMELINE_DATA_GAP_PX = 2;
 const CANDIDATE_VALUE_CURVE_TOP = 68;
@@ -778,6 +840,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  enemy: {
+    type: Object,
+    default: null,
+  },
   actions: {
     type: Array,
     required: true,
@@ -820,6 +886,14 @@ const props = defineProps({
     default: () => [],
   },
   selectedActionRelationId: {
+    type: String,
+    default: '',
+  },
+  effectIntervals: {
+    type: Array,
+    default: () => [],
+  },
+  selectedEffectIntervalId: {
     type: String,
     default: '',
   },
@@ -893,6 +967,7 @@ const emit = defineEmits([
   'open-action-context-menu',
   'select-action-group',
   'select-action-relation',
+  'select-effect-interval',
   'open-action-relation-context-menu',
   'toggle-box-selection-mode',
   'create-action-relations',
@@ -1180,8 +1255,29 @@ const timelineLanes = computed(() => {
     candidateValueFrameGroups: [],
     stateCurveMarkers: [],
     cooldownWindows: [],
+    effectIntervals: [],
   }));
   const lanesById = new Map(actorLanes.map(lane => [lane.id, lane]));
+  const enemyEffectIntervals = props.effectIntervals.filter(
+    interval => interval.targetKind === 'enemy'
+  );
+  const enemyLane =
+    enemyEffectIntervals.length > 0
+      ? {
+          id: 'enemy-effects',
+          type: 'enemy',
+          name: props.enemy?.name || '敌人',
+          detail: '状态效果轨',
+          actions: [],
+          damageMarkers: [],
+          candidateValueMarkers: [],
+          candidateValueCurves: [],
+          candidateValueFrameGroups: [],
+          stateCurveMarkers: [],
+          cooldownWindows: [],
+          effectIntervals: enemyEffectIntervals,
+        }
+      : null;
   const systemLane = {
     id: 'system',
     type: 'system',
@@ -1194,6 +1290,7 @@ const timelineLanes = computed(() => {
     candidateValueFrameGroups: [],
     stateCurveMarkers: [],
     cooldownWindows: [],
+    effectIntervals: [],
   };
 
   props.actions.forEach(action => {
@@ -1201,10 +1298,28 @@ const timelineLanes = computed(() => {
     lane.actions.push(action);
   });
 
-  [...actorLanes, systemLane].forEach(lane => {
+  props.effectIntervals
+    .filter(interval => interval.targetKind !== 'enemy')
+    .forEach(interval => {
+      const lane =
+        interval.targetKind === 'actor'
+          ? lanesById.get(interval.targetId)
+          : null;
+      (lane ?? systemLane).effectIntervals.push(interval);
+    });
+
+  const allLanes = [
+    ...actorLanes,
+    ...(enemyLane ? [enemyLane] : []),
+    systemLane,
+  ];
+  allLanes.forEach(lane => {
     const layout = createTimelineActionLayout(lane.actions);
     lane.actions = layout.actions;
     lane.actionSlotCount = layout.slotCount;
+    const effectLayout = createTimelineEffectLayout(lane.effectIntervals);
+    lane.effectIntervals = effectLayout.intervals;
+    lane.effectSlotCount = effectLayout.slotCount;
   });
 
   (props.actionReadinessTimeline?.cooldownWindows ?? []).forEach(window => {
@@ -1235,7 +1350,7 @@ const timelineLanes = computed(() => {
     lane.stateCurveMarkers.push(marker);
   });
 
-  [...actorLanes, systemLane].forEach(lane => {
+  allLanes.forEach(lane => {
     lane.candidateValueCurves = createCandidateValueTimelineCurves(
       lane.candidateValueMarkers
     );
@@ -1244,12 +1359,14 @@ const timelineLanes = computed(() => {
     );
   });
 
+  const visibleLanes = [...actorLanes, ...(enemyLane ? [enemyLane] : [])];
   return systemLane.actions.length > 0 ||
     systemLane.damageMarkers.length > 0 ||
     systemLane.candidateValueMarkers.length > 0 ||
-    systemLane.stateCurveMarkers.length > 0
-    ? [...actorLanes, systemLane]
-    : actorLanes;
+    systemLane.stateCurveMarkers.length > 0 ||
+    systemLane.effectIntervals.length > 0
+    ? [...visibleLanes, systemLane]
+    : visibleLanes;
 });
 const allCandidateFrameGroups = computed(() =>
   timelineLanes.value.flatMap(lane =>
@@ -1402,6 +1519,98 @@ function cooldownWindowStyle(window) {
   };
 }
 
+function effectIntervalStyle(interval, lane) {
+  const startMs = Math.max(0, Number(interval.startMs) || 0);
+  const endMs = Math.min(
+    props.durationMs,
+    Math.max(startMs, Number(interval.endMs) || startMs)
+  );
+  const top =
+    getTimelineEffectTop(lane) +
+    Math.max(0, Number(interval.timelineSlot) || 0) *
+      (TIMELINE_EFFECT_INTERVAL_HEIGHT_PX + TIMELINE_EFFECT_INTERVAL_GAP_PX);
+  return {
+    left: String(clampPercent((startMs / props.durationMs) * 100)) + '%',
+    top: String(top) + 'px',
+    width:
+      String(
+        clampPercent(((endMs - startMs) / props.durationMs) * 100, 1.5, 100)
+      ) + '%',
+  };
+}
+
+function effectLifecycleMarkerStyle(event, interval) {
+  const durationMs = Math.max(
+    WORKBENCH_FRAME_MS,
+    Number(interval.endMs) - Number(interval.startMs)
+  );
+  const offsetMs = Math.max(
+    0,
+    Math.min(durationMs, Number(event.timeMs) - Number(interval.startMs))
+  );
+  return {
+    left: String(clampPercent((offsetMs / durationMs) * 100)) + '%',
+  };
+}
+
+function effectIntervalGlyph(interval) {
+  return String(interval.effectName || interval.effectId || '+')
+    .trim()
+    .slice(0, 1)
+    .toUpperCase();
+}
+
+function formatEffectIntervalTitle(interval) {
+  const lifecycleText = interval.lifecycleEvents
+    .map(event => formatEffectLifecycleOperation(event.type))
+    .join(' -> ');
+  const stackText =
+    interval.maxStacks > 1
+      ? ' · 峰值 ' +
+        String(interval.peakStacks) +
+        '/' +
+        String(interval.maxStacks) +
+        ' 层'
+      : '';
+  const activeText = interval.activeAtScenarioEnd ? ' · 场景结束时仍生效' : '';
+  return (
+    [
+      interval.effectName || interval.effectId,
+      interval.targetName || interval.targetId,
+      String(interval.startFrame) + 'F-' + String(interval.endFrame) + 'F',
+    ].join(' · ') +
+    stackText +
+    activeText +
+    ' · ' +
+    lifecycleText
+  );
+}
+
+function formatEffectLifecycleOperation(type) {
+  if (type === 'EFFECT_APPLIED') {
+    return '施加';
+  }
+  if (type === 'EFFECT_REFRESHED') {
+    return '刷新';
+  }
+  if (type === 'EFFECT_REMOVED') {
+    return '移除';
+  }
+  if (type === 'EFFECT_EXPIRED') {
+    return '到期';
+  }
+  return type;
+}
+
+function selectEffectInterval(interval) {
+  emit('select-effect-interval', {
+    intervalId: interval.intervalId,
+    eventId: interval.selectionEventId,
+    actionId: interval.sourceActionId ?? '',
+    timeMs: interval.endMs,
+  });
+}
+
 function markerStyle(damage, lane) {
   const left = clampPercent((damage.timeMs / props.durationMs) * 100);
   return {
@@ -1457,12 +1666,28 @@ function getTimelineActionTop(slot) {
   );
 }
 
-function getTimelineDataTop(lane) {
+function getTimelineActionAreaBottom(lane) {
   const slotCount = getTimelineActionSlotCount(lane);
   return (
     TIMELINE_ACTION_TOP_PX +
     slotCount * TIMELINE_ACTION_HEIGHT_PX +
-    Math.max(0, slotCount - 1) * TIMELINE_ACTION_SLOT_GAP_PX +
+    Math.max(0, slotCount - 1) * TIMELINE_ACTION_SLOT_GAP_PX
+  );
+}
+
+function getTimelineEffectTop(lane) {
+  return getTimelineActionAreaBottom(lane) + TIMELINE_EFFECT_SECTION_GAP_PX;
+}
+
+function getTimelineDataTop(lane) {
+  const effectSlotCount = getTimelineEffectSlotCount(lane);
+  if (effectSlotCount === 0) {
+    return getTimelineActionAreaBottom(lane) + TIMELINE_DATA_GAP_PX;
+  }
+  return (
+    getTimelineEffectTop(lane) +
+    effectSlotCount * TIMELINE_EFFECT_INTERVAL_HEIGHT_PX +
+    Math.max(0, effectSlotCount - 1) * TIMELINE_EFFECT_INTERVAL_GAP_PX +
     TIMELINE_DATA_GAP_PX
   );
 }
@@ -1481,6 +1706,10 @@ function getTimelineLaneHeight(lane) {
 
 function getTimelineActionSlotCount(lane) {
   return Math.max(1, Number(lane?.actionSlotCount) || 1);
+}
+
+function getTimelineEffectSlotCount(lane) {
+  return Math.max(0, Number(lane?.effectSlotCount) || 0);
 }
 
 function createTimelineActionLayout(actions) {
@@ -1502,6 +1731,39 @@ function createTimelineActionLayout(actions) {
       timelineSlot: slotByActionId.get(action.id) ?? 0,
     })),
     slotCount: Math.max(1, slotEndTimes.length),
+  };
+}
+
+function createTimelineEffectLayout(intervals) {
+  const slotEndTimes = [];
+  const slotByIntervalId = new Map();
+  const sortedIntervals = [...intervals].sort(
+    (left, right) =>
+      (Number(left.startMs) || 0) - (Number(right.startMs) || 0) ||
+      (Number(left.endMs) || 0) - (Number(right.endMs) || 0) ||
+      String(left.intervalId).localeCompare(String(right.intervalId))
+  );
+
+  sortedIntervals.forEach(interval => {
+    const startMs = Number(interval.startMs) || 0;
+    const endMs =
+      startMs +
+      Math.max(
+        Number(interval.durationMs) || 0,
+        props.durationMs * 0.015,
+        WORKBENCH_FRAME_MS
+      );
+    const slotIndex = findAvailableTimelineActionSlot(slotEndTimes, startMs);
+    slotEndTimes[slotIndex] = endMs;
+    slotByIntervalId.set(interval.intervalId, slotIndex);
+  });
+
+  return {
+    intervals: intervals.map(interval => ({
+      ...interval,
+      timelineSlot: slotByIntervalId.get(interval.intervalId) ?? 0,
+    })),
+    slotCount: slotEndTimes.length,
   };
 }
 
@@ -3595,6 +3857,11 @@ h2 {
   background: #1d1b16;
 }
 
+.lane-label.enemy {
+  border-color: rgba(225, 132, 142, 0.34);
+  background: #21191b;
+}
+
 .lane-row {
   position: relative;
   min-height: 110px;
@@ -3644,6 +3911,98 @@ h2 {
   background: rgba(242, 179, 102, 0.32);
   pointer-events: none;
   z-index: 3;
+}
+
+.effect-interval {
+  position: absolute;
+  z-index: 4;
+  display: grid;
+  box-sizing: border-box;
+  min-width: 14px;
+  height: 20px;
+  grid-template-columns: 15px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 5px 1px 2px;
+  overflow: hidden;
+  border: 1px solid rgba(126, 176, 255, 0.58);
+  border-radius: 3px;
+  background: #263848;
+  color: #edf5ff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 10px;
+  letter-spacing: 0;
+  text-align: left;
+}
+
+.effect-interval.target-enemy {
+  border-color: rgba(225, 132, 142, 0.62);
+  background: #493037;
+  color: #fff0f2;
+}
+
+.effect-interval.active {
+  border-style: dashed;
+}
+
+.effect-interval.persistent {
+  border-right-width: 3px;
+}
+
+.effect-interval:hover,
+.effect-interval:focus {
+  border-color: rgba(255, 255, 255, 0.9);
+  outline: none;
+}
+
+.effect-interval.selected {
+  border-color: #f2b366;
+  box-shadow:
+    0 0 0 2px rgba(242, 179, 102, 0.24),
+    0 4px 12px rgba(0, 0, 0, 0.28);
+}
+
+.effect-interval-glyph {
+  display: inline-grid;
+  width: 14px;
+  height: 14px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 2px;
+  background: rgba(8, 12, 16, 0.42);
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.effect-interval-label {
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.effect-interval small {
+  color: #ffe1a8;
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.effect-lifecycle-marker {
+  position: absolute;
+  bottom: 0;
+  width: 2px;
+  height: 5px;
+  background: #79c7b9;
+  transform: translateX(-1px);
+}
+
+.effect-lifecycle-marker.event-effect_removed,
+.effect-lifecycle-marker.event-effect_expired {
+  background: #ff8792;
 }
 
 .action-block:hover,
@@ -4057,6 +4416,11 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.62);
   background: #dff9f3;
   transform: rotate(45deg) scale(0.82);
+}
+
+.legend-effect {
+  border: 1px solid #7eb0ff;
+  background: #263848;
 }
 
 .legend-system {

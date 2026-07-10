@@ -102,7 +102,7 @@ Action
 - 生成 `simLog`、`stateCurves`、资源曲线、状态快照和 summary。
 - 保持动作、命中、曲线点和日志之间的稳定身份映射。
 
-`src/simulation/projection/projectSimulationResult.js` 将运行结果组织为 Workbench 可消费的动作结果、贡献、诊断和详情视图，不反向参与公式计算。
+`src/simulation/projection/projectSimulationResult.js` 将运行结果组织为 Workbench 可消费的动作结果、贡献、诊断和详情视图；`projectEffectIntervals.js` 将效果事件归并为角色/敌人轨可消费的持续区间。两类投影都不反向参与公式计算。
 
 ### 3.7 Workbench 层
 
@@ -113,6 +113,7 @@ Action
 - 资源曲线、事件日志、三值详情和贡献分析。
 - 规则诊断、效果轨道和运行结果返回编辑。
 - 主流程控制器、运行时同步和选中状态映射。
+- 时间轴从 runtime effect interval projection 渲染角色/敌人效果区间，并与生命周期复盘和来源动作编辑共用选择状态。
 - 项目导入导出、分享和预设库由 `Workbench.vue` 编排，数据格式由 domain 层持有。
 
 ## 4. 关键数据合同
@@ -124,6 +125,10 @@ Action
 ### ActionRelation v1
 
 当前只支持无环的 `sequence` 关系，固定连接前一动作 `end` 与后一动作 `start`，`gapMs` 随动作位置和时长同步。它表达编排关系，不改变动作执行顺序或三值公式。
+
+### EffectIntervalProjection v1
+
+从 `AzPrEffectRuntimeTimeline` 的施加、刷新、叠层、移除和到期事件生成稳定区间，保留目标、来源动作、生命周期事件、帧范围和峰值层数。该合同是 transient runtime projection，不写入 WorkbenchProjectFile；固定 `appliedToCalculators = false`。
 
 ### WorkbenchPresetLibrary v1
 
@@ -176,4 +181,4 @@ git diff --check
 - 生产引用审计当前为 0 个无引用模块、0 个意外 test-only 模块；新增代码必须维持该守门。
 - 当前首屏、Workbench 与全部 JavaScript gzip 预算分别为 120KB、370KB、740KB；新增依赖必须通过构建组成审计。
 - Workbench 首轮主包主要由技能核心投影、生产 seed 和模拟/复盘代码构成；候选诊断证据已经移入独立按需包，后续优化应以生产试用和可测量瓶颈为依据。
-- `playwright.production.config.js` 只服务真实 `dist` 的发布验收；`production-preview-reporter.mjs` 将五项必需能力汇总为 `trial-ready` 或 `blocked`，开发服务器 E2E 不替代该结论。
+- `playwright.production.config.js` 只服务真实 `dist` 的发布验收；`production-preview-reporter.mjs` 将八项必需能力汇总为 `trial-ready` 或 `blocked`，开发服务器 E2E 不替代该结论。
