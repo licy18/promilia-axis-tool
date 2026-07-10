@@ -24359,3 +24359,46 @@ standardGenerationEntryBoundaryIssueCount
 - `threeValueGenerationBuilder.test.js` 覆盖 bundle summary、generation entry summary 和 generation outputs summary 均透出标准入口边界状态。
 - `npm run test -- src/__tests__/simulation/threeValueGenerationBuilder.test.js src/__tests__/simulation/actionHitThreeValueDeltaGeneration.test.js src/__tests__/simulation/actionHitThreeValueRuntimeInput.test.js src/__tests__/simulation/threeValueRuntimeProjection.test.js src/__tests__/simulation/firstVerticalSliceSimulation.test.js`：通过，5 个测试文件、28 条测试。
 - `npx prettier --check src/simulation/generation/threeValueGenerationBuilder.js src/__tests__/simulation/threeValueGenerationBuilder.test.js PROJECT_MANUAL.md`：通过。
+
+## 340. Workbench JSON 项目文件：Workbench Project File
+
+### 340.1 字段变化
+
+`src/domain/workbenchDraftStorage.js` 新增 Workbench 项目文件导出/导入 helper：
+
+```text
+WORKBENCH_PROJECT_FILE_TYPE = workbench-project
+WORKBENCH_PROJECT_FILE_EXTENSION = promilia-workbench.json
+createWorkbenchProjectFileSnapshot()
+serializeWorkbenchProjectFile()
+parseWorkbenchProjectFile()
+createWorkbenchProjectFileName()
+```
+
+Workbench JSON 项目文件复用 `workbench-draft:v1` 的主体结构：
+
+```text
+schemaVersion = 1
+game = azur-promilia
+type = workbench-project
+exportedAt
+savedAt
+selection
+enemyConfig
+segmentSplitOptions
+actionDrafts
+selectedActionId
+```
+
+导入时会把 `workbench-project` 规范化为现有 `workbench-draft` 快照；同时兼容导入旧的 `type = workbench-draft` 文件。
+
+### 340.2 保存与迁移
+
+不改变 `workbench-draft:v1` localStorage schema，不需要迁移现有草稿。
+
+Workbench 导入 JSON 后会复用 `saveWorkbenchDraft()` 写回当前草稿，以保证导入后刷新页面仍能恢复同一项目。
+
+### 340.3 验证
+
+- `workbenchDraftStorage.test.js` 覆盖 `workbench-project` 文件序列化、导入为 draft、旧 `workbench-draft` 文件兼容和文件名生成。
+- `workbench-continuous-edit.spec.js` 覆盖真实浏览器导出 JSON、重置、从文件导入、恢复敌人配置/动作轴/当前选中动作，并重新运行模拟。

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
 
 test('keeps setup, edit return, and result selection synced', async ({
   page,
@@ -1804,6 +1805,119 @@ test('inserts a follow-up action from the visible main flow bar @workbench-main-
     selected: true,
   });
   await expectCurveAndLogSelection(page, returnedState.statePointId);
+  await expectRuntimeOutputConsistent(page);
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
+test('exports and imports a Workbench JSON project @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/workbench');
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'action-edit'
+  );
+
+  const enemySelect = page.getByTestId('workbench-enemy-select');
+  const importedEnemyId = await enemySelect
+    .locator('option')
+    .nth(1)
+    .getAttribute('value');
+  expect(importedEnemyId).toBeTruthy();
+  await enemySelect.selectOption(importedEnemyId);
+  await page.getByTestId('workbench-enemy-level-input').fill('91');
+  await page.getByTestId('workbench-enemy-hp-multiplier-input').fill('2.5');
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  const openedState = await waitForRuntimeAction(page, 'action-0001');
+  expectRuntimeReviewState(openedState, {
+    phase: 'runtime-result',
+    actionId: 'action-0001',
+    navigationCount: '1',
+    navigationIndex: '0',
+    selected: false,
+  });
+  await page.getByTestId('workbench-flow-insert-next-action').click();
+  const insertedState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(insertedState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '2',
+    navigationIndex: '1',
+    selected: false,
+  });
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toMatch(/promilia-workbench-.*\.json$/);
+  const downloadPath = await download.path();
+  expect(downloadPath).toBeTruthy();
+  const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
+  expect(exportedProject).toMatchObject({
+    schemaVersion: 1,
+    game: 'azur-promilia',
+    type: 'workbench-project',
+    selectedActionId: 'action-0002',
+    enemyConfig: {
+      level: 91,
+      hpMultiplier: 2.5,
+    },
+  });
+  expect(exportedProject.actionDrafts).toHaveLength(2);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已导出项目'
+  );
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '1 action'
+  );
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '80'
+  );
+
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(downloadPath);
+
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已导入项目'
+  );
+  await expect(enemySelect).toHaveValue(importedEnemyId);
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '91'
+  );
+  await expect(
+    page.getByTestId('workbench-enemy-hp-multiplier-input')
+  ).toHaveValue('2.5');
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+  const importedState = await readWorkbenchState(page);
+  expect(importedState).toMatchObject({
+    phase: 'action-edit',
+    actionId: 'action-0002',
+    selectedActionListId: 'action-0002',
+    selectedTimelineActionId: 'action-0002',
+  });
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  const importedRuntimeState = await waitForRuntimeAction(page, 'action-0002');
+  expectRuntimeReviewState(importedRuntimeState, {
+    phase: 'runtime-result',
+    actionId: 'action-0002',
+    navigationCount: '2',
+    navigationIndex: '1',
+    selected: false,
+  });
+  await expectCurveAndLogSelection(page, importedRuntimeState.statePointId);
   await expectRuntimeOutputConsistent(page);
 
   expectNoUnexpectedBrowserIssues(browserIssues);

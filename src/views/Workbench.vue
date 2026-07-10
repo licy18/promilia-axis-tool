@@ -52,6 +52,32 @@
           </button>
           <button
             class="nav-button secondary"
+            data-testid="workbench-export-project"
+            type="button"
+            @click="exportProjectFile"
+          >
+            <Download class="button-icon" />
+            <span>导出 JSON</span>
+          </button>
+          <button
+            class="nav-button secondary"
+            data-testid="workbench-import-project"
+            type="button"
+            @click="openProjectImport"
+          >
+            <Upload class="button-icon" />
+            <span>导入 JSON</span>
+          </button>
+          <input
+            ref="projectImportInput"
+            class="project-import-input"
+            data-testid="workbench-import-project-file"
+            type="file"
+            accept=".json,.promilia-workbench.json,application/json"
+            @change="importProjectFile"
+          />
+          <button
+            class="nav-button secondary"
             data-testid="workbench-reset-draft"
             type="button"
             @click="resetDraft"
@@ -466,9 +492,11 @@ import {
   Aim,
   ArrowLeft,
   Document,
+  Download,
   EditPen,
   Refresh,
   TrendCharts,
+  Upload,
 } from '@element-plus/icons-vue';
 import ActionLibraryPanel from '../features/workbench/ActionLibraryPanel.vue';
 import AnalysisPanel from '../features/workbench/AnalysisPanel.vue';
@@ -528,9 +556,12 @@ import { ACTION_TYPES } from '../domain/projectSchema';
 import {
   clearWorkbenchDraft,
   createWorkbenchDraftSnapshot,
+  createWorkbenchProjectFileName,
+  createWorkbenchProjectFileSnapshot,
   createDefaultWorkbenchDraftState,
   loadWorkbenchDraft,
   normalizeWorkbenchSegmentSplitOptions,
+  parseWorkbenchProjectFile,
   saveWorkbenchDraft,
 } from '../domain/workbenchDraftStorage';
 import { frameToMs } from '../domain/timebase';
@@ -570,6 +601,7 @@ const draftStatus = ref('未保存草稿');
 const undoHistoryStack = ref([]);
 const redoHistoryStack = ref([]);
 const workbenchRoot = ref(null);
+const projectImportInput = ref(null);
 const actionEditSource = ref(createEmptyWorkbenchActionEditSource());
 const actionEditFocus = ref(createEmptyWorkbenchActionEditFocus());
 const workbenchFlowDispatchState = ref(createEmptyWorkbenchFlowDispatchState());
@@ -1477,14 +1509,80 @@ function shiftActionBatch({ batchId, offsetMs }) {
 }
 
 function saveDraft() {
-  const snapshot = saveWorkbenchDraft(getLocalStorage(), {
+  const snapshot = saveWorkbenchDraft(
+    getLocalStorage(),
+    getWorkbenchDraftState()
+  );
+  draftStatus.value = snapshot ? '已保存草稿' : '草稿不可用';
+}
+
+function getWorkbenchDraftState() {
+  return {
     selection: selection.value,
     enemyConfig: enemyConfig.value,
     segmentSplitOptions: segmentSplitOptions.value,
     actionDrafts: actionDrafts.value,
     selectedActionId: selectedActionId.value,
+  };
+}
+
+function exportProjectFile() {
+  if (typeof document === 'undefined' || typeof Blob === 'undefined') {
+    draftStatus.value = '导出不可用';
+    return;
+  }
+
+  const snapshot = createWorkbenchProjectFileSnapshot(getWorkbenchDraftState());
+  const blob = new Blob([JSON.stringify(snapshot, null, 2)], {
+    type: 'application/json',
   });
-  draftStatus.value = snapshot ? '已保存草稿' : '草稿不可用';
+  const objectUrl = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = objectUrl;
+  link.download = createWorkbenchProjectFileName(snapshot);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
+  draftStatus.value = '已导出项目';
+}
+
+function openProjectImport() {
+  projectImportInput.value?.click?.();
+}
+
+async function importProjectFile(event) {
+  const input = event?.target;
+  const file = input?.files?.[0] ?? null;
+  if (!file) {
+    return;
+  }
+
+  try {
+    const draft = parseWorkbenchProjectFile(await file.text());
+    if (!draft) {
+      draftStatus.value = '导入失败';
+      return;
+    }
+
+    applyImportedProjectDraft(draft);
+  } catch {
+    draftStatus.value = '导入失败';
+  } finally {
+    if (input) {
+      input.value = '';
+    }
+  }
+}
+
+function applyImportedProjectDraft(draft) {
+  clearSegmentSplitPreview();
+  applyDraftState(draft);
+  clearWorkbenchProjectTransientState();
+  undoHistoryStack.value = [];
+  redoHistoryStack.value = [];
+  const snapshot = saveWorkbenchDraft(getLocalStorage(), draft);
+  draftStatus.value = snapshot ? '已导入项目' : '已导入项目（未持久化）';
 }
 
 function resetDraft() {
@@ -1511,6 +1609,17 @@ function applyDraftState(draft) {
   );
   clearActionEditSource();
   clearActionEditFocus();
+}
+
+function clearWorkbenchProjectTransientState() {
+  selectedStateCurvePointId.value = '';
+  stateCurveFocusMode.value = 'all';
+  stateCurveLayerFilters.value = { ...DEFAULT_STATE_CURVE_LAYER_FILTERS };
+  stateCurveTrackFilters.value = {};
+  calculatorDiagnosticScope.value = '';
+  calculatorDiagnosticFocus.value = { scope: '', sequence: 0 };
+  runtimeLogFocus.value = { source: '', statePointId: '', sequence: 0 };
+  workbenchFlowDispatchState.value = createEmptyWorkbenchFlowDispatchState();
 }
 
 function markDraftDirty() {
@@ -2955,6 +3064,10 @@ function getLocalStorage() {
 .button-icon {
   width: 14px;
   height: 14px;
+}
+
+.project-import-input {
+  display: none;
 }
 
 .workbench-grid {

@@ -385,14 +385,27 @@ P0 验证结论：当前状态可以作为“Workbench 主流程 demo”给用�
 - 不再继续以“补一个 Workbench 小按钮/小状态/小提示”为阶段目标。
 - 下一个产品能力块优先进入 P1：项目级 JSON 导入/导出闭环。
 
+### P1-A JSON 导入/导出闭环（2026-07-10）
+
+已完成能力：
+
+- Workbench 可以把当前排轴项目导出为版本化 JSON 文件，文件类型为 `workbench-project`。
+- 导出的 JSON 复用 `workbench-draft:v1` 主体结构，包含选择、敌人配置、动作轴、当前选中动作和批次/动作字段。
+- Workbench 可以从 JSON 文件导入项目，恢复选择、敌人配置、动作轴和当前选中动作，并写回当前草稿。
+- 导入后可以重新运行模拟，恢复曲线、日志、三值详情和 runtime summary。
+
+已完成验证：
+
+- `npm run test -- src/__tests__/domain/workbenchDraftStorage.test.js`：通过，4 条测试。
+- `npm run test:e2e:workbench-flow -- --grep "exports and imports"`：通过，真实浏览器导出/导入闭环。
+
 ### 下一阶段优先级
 
-P1：项目导入/导出/分享闭环。
+P1 后续：项目分享/导出增强。
 
-- 先做 Workbench 当前排轴项目的 JSON 导出。
-- 支持从 JSON 文件导入并恢复选择、敌人配置、动作轴和当前选中动作。
-- 优先复用现有草稿/项目模型，不新造无关格式。
-- PNG 导出、分享码、PNG 反导入后续再排，不在 P1 第一段一次做完。
+- JSON 导入/导出第一段已完成。
+- 后续可补旧 `.promilia` 项目兼容、导入失败原因展示、分享码、PNG 导出和 PNG 反导入。
+- 这些属于项目级能力，不应退回到 Workbench 小按钮/小标签阶段。
 
 P2：角色/敌人/装备配置闭环。
 

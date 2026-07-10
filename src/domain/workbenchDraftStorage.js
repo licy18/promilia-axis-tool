@@ -9,7 +9,11 @@ import {
 } from './workbenchProjectFactory';
 
 export const WORKBENCH_DRAFT_SCHEMA_VERSION = 1;
-export const WORKBENCH_DRAFT_STORAGE_KEY = 'promilia-axis-tool:workbench-draft:v1';
+export const WORKBENCH_DRAFT_STORAGE_KEY =
+  'promilia-axis-tool:workbench-draft:v1';
+export const WORKBENCH_DRAFT_FILE_TYPE = 'workbench-draft';
+export const WORKBENCH_PROJECT_FILE_TYPE = 'workbench-project';
+export const WORKBENCH_PROJECT_FILE_EXTENSION = 'promilia-workbench.json';
 export const DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS = Object.freeze({
   intervalMs: 2000,
   startAfterSelectedAction: false,
@@ -28,21 +32,33 @@ export function createDefaultWorkbenchDraftState() {
 }
 
 export function createWorkbenchDraftSnapshot(
-  { selection, enemyConfig, segmentSplitOptions, actionDrafts, selectedActionId },
-  savedAt = new Date().toISOString(),
+  {
+    selection,
+    enemyConfig,
+    segmentSplitOptions,
+    actionDrafts,
+    selectedActionId,
+  },
+  savedAt = new Date().toISOString()
 ) {
   const normalizedSelection = normalizeWorkbenchSelection(selection);
   const normalizedEnemyConfig = normalizeWorkbenchEnemyConfig(enemyConfig);
-  const normalizedSegmentSplitOptions = normalizeWorkbenchSegmentSplitOptions(segmentSplitOptions);
-  const normalizedActions = ensureActionDrafts(actionDrafts, normalizedSelection);
-  const normalizedSelectedActionId = normalizedActions.some((action) => action.id === selectedActionId)
+  const normalizedSegmentSplitOptions =
+    normalizeWorkbenchSegmentSplitOptions(segmentSplitOptions);
+  const normalizedActions = ensureActionDrafts(
+    actionDrafts,
+    normalizedSelection
+  );
+  const normalizedSelectedActionId = normalizedActions.some(
+    action => action.id === selectedActionId
+  )
     ? selectedActionId
     : normalizedActions[0].id;
 
   return {
     schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
     game: 'azur-promilia',
-    type: 'workbench-draft',
+    type: WORKBENCH_DRAFT_FILE_TYPE,
     savedAt,
     selection: normalizedSelection,
     enemyConfig: normalizedEnemyConfig,
@@ -52,11 +68,58 @@ export function createWorkbenchDraftSnapshot(
   };
 }
 
+export function createWorkbenchProjectFileSnapshot(
+  state,
+  exportedAt = new Date().toISOString()
+) {
+  const snapshot = createWorkbenchDraftSnapshot(state, exportedAt);
+  return {
+    ...snapshot,
+    type: WORKBENCH_PROJECT_FILE_TYPE,
+    exportedAt,
+  };
+}
+
+export function serializeWorkbenchProjectFile(state, exportedAt) {
+  return JSON.stringify(
+    createWorkbenchProjectFileSnapshot(state, exportedAt),
+    null,
+    2
+  );
+}
+
+export function parseWorkbenchProjectFile(rawProject) {
+  const project = parseWorkbenchDraftPayload(rawProject);
+  if (!project || !isSupportedWorkbenchProjectPayload(project)) {
+    return null;
+  }
+  return createWorkbenchDraftSnapshot(
+    project,
+    project.savedAt ?? project.exportedAt ?? null
+  );
+}
+
+export function createWorkbenchProjectFileName(snapshot, now = new Date()) {
+  const savedAt =
+    snapshot?.exportedAt ?? snapshot?.savedAt ?? now.toISOString();
+  const dateText =
+    String(savedAt).slice(0, 10) || now.toISOString().slice(0, 10);
+  const actionCount = Array.isArray(snapshot?.actionDrafts)
+    ? snapshot.actionDrafts.length
+    : 0;
+  return `promilia-workbench-${dateText}-${actionCount}actions.${WORKBENCH_PROJECT_FILE_EXTENSION}`;
+}
+
 export function normalizeWorkbenchSegmentSplitOptions(options = {}) {
   const source = options ?? {};
 
   return {
-    intervalMs: clampNumber(source.intervalMs, 100, 10000, DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS.intervalMs),
+    intervalMs: clampNumber(
+      source.intervalMs,
+      100,
+      10000,
+      DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS.intervalMs
+    ),
     startAfterSelectedAction:
       source.startAfterSelectedAction == null
         ? DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS.startAfterSelectedAction
@@ -69,20 +132,42 @@ export function normalizeWorkbenchSegmentSplitOptions(options = {}) {
 }
 
 export function parseWorkbenchDraft(rawDraft) {
+  const draft = parseWorkbenchDraftPayload(rawDraft);
+  if (!draft || !isWorkbenchDraftPayload(draft)) {
+    return null;
+  }
+
+  return createWorkbenchDraftSnapshot(draft, draft.savedAt ?? null);
+}
+
+function parseWorkbenchDraftPayload(rawDraft) {
   if (!rawDraft) {
     return null;
   }
 
   try {
-    const draft = typeof rawDraft === 'string' ? JSON.parse(rawDraft) : rawDraft;
-    if (draft.schemaVersion !== WORKBENCH_DRAFT_SCHEMA_VERSION || draft.type !== 'workbench-draft') {
-      return null;
-    }
-
-    return createWorkbenchDraftSnapshot(draft, draft.savedAt ?? null);
+    return typeof rawDraft === 'string' ? JSON.parse(rawDraft) : rawDraft;
   } catch {
     return null;
   }
+}
+
+function isWorkbenchDraftPayload(payload) {
+  return (
+    payload?.schemaVersion === WORKBENCH_DRAFT_SCHEMA_VERSION &&
+    payload?.game === 'azur-promilia' &&
+    payload?.type === WORKBENCH_DRAFT_FILE_TYPE
+  );
+}
+
+function isSupportedWorkbenchProjectPayload(payload) {
+  return (
+    payload?.schemaVersion === WORKBENCH_DRAFT_SCHEMA_VERSION &&
+    payload?.game === 'azur-promilia' &&
+    [WORKBENCH_DRAFT_FILE_TYPE, WORKBENCH_PROJECT_FILE_TYPE].includes(
+      payload?.type
+    )
+  );
 }
 
 export function saveWorkbenchDraft(storage, state) {
@@ -108,7 +193,10 @@ export function clearWorkbenchDraft(storage) {
 }
 
 function ensureActionDrafts(actionDrafts, selection) {
-  const normalizedActions = normalizeWorkbenchActionDrafts(actionDrafts, selection);
+  const normalizedActions = normalizeWorkbenchActionDrafts(
+    actionDrafts,
+    selection
+  );
   if (normalizedActions.length > 0) {
     return normalizedActions;
   }
