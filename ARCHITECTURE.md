@@ -27,7 +27,7 @@
   -> /workbench?presets=1
 ```
 
-未知旧路由也会回到 Workbench。旧 `Home.vue`、`Editor.vue` 和 `Preset.vue` 页面已退出代码库；`src/components/editor/`、`src/components/timeline/`、`src/store/` 仍保留部分可独立测试的遗留模块，等待按引用关系继续清理。
+未知旧路由也会回到 Workbench。旧 `Home.vue`、`Editor.vue`、`Preset.vue`、editor/timeline 组件、旧项目 store 和旧计算工具已经按生产引用审计退出代码库。
 
 ## 3. 分层结构
 
@@ -152,6 +152,9 @@ Action
 npm run test -- --run
 npm run build
 npm run test:e2e:workbench-flow
+npm run audit:production-imports:check
+npm run benchmark:long-axis:check
+npm run benchmark:long-axis:browser
 git diff --check
 ```
 
@@ -159,5 +162,5 @@ git diff --check
 
 - 首份非 fixture 真实战斗 capture 尚未取得，受控 host 就绪不等于真实游戏机制已验证。
 - 测试期公式与倍率可能变化，未确认层必须保持来源、置信度和可替换状态。
-- 旧 store、editor/timeline 组件和工具函数仍有未被生产入口引用的历史模块，需要在引用审计和测试迁移后继续删除。
+- 生产引用审计当前为 0 个无引用模块、0 个意外 test-only 模块；新增代码必须维持该守门。
 - Workbench 生产 chunk 仍偏大，长轴性能、代码拆分和发布体积是后续发布前验收项。

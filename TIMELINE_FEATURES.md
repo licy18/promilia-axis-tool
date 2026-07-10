@@ -1,274 +1,132 @@
-# 时间轴功能详解
+# Workbench 时间轴能力
 
-## 0. 新版 Workbench 时间轴状态
+最后更新：2026-07-10
 
-当前重构主线在 `src/features/workbench/TimelineGridPreview.vue` 中实现新版工作台时间轴，旧 `src/components/timeline/` 仍作为原型参考。
+## 1. 主入口
 
-已完成：
+生产时间轴位于：
 
-- 多动作渲染和选中态。
-- 动作块点击/键盘选择。
-- 动作块水平拖动。
-- `500ms` 网格吸附更新 `startMs`。
-- 拖动后通过 `Workbench.vue` 更新动作草稿，并重新运行 `compileProject()` / `simulateScenario()`。
-- workbench 草稿保存/刷新恢复/重置，草稿只记录新版 `selection`、`actionDrafts` 和 `selectedActionId`。
-- 动作复制。
-- `Delete` / `Backspace` 快捷删除。
-- 左右方向键按 `500ms` 微调，`Shift + 左/右` 按 `2000ms` 微调。
-- 草稿脏状态提示。
-- 动作工具箱雏形：支持新增技能、等待和注释动作。
-- 等待动作在事件日志中输出 `WAIT`，注释动作输出 `ANNOTATION`，二者不产生伤害投射。
-- 敌人面板雏形：敌人等级、生命倍率、防御倍率进入新版项目模型。
-- 资源面板雏形：只展示 `simulationResult.resourceTimeline` 中的资源事件。
-- 资源事件动作：手动资源变化进入 `RESOURCE_CHANGE` 和资源面板。
-- 敌人事件动作：敌人阶段/机制标记进入 `ENEMY_EVENT` 日志。
-- 切人动作：主/副角色 actor 之间生成 `SWITCH` 事件，事件日志显示 `来源角色 -> 目标角色`，不产生伤害投射。
-- 多角色 actor 雏形：工作台默认生成主角色和副角色两个 actor，副角色变化会同步切人目标。
-- 多轨道/角色轨道显示雏形：`TimelineGridPreview` 按 actor 渲染角色轨道，技能动作、切人动作和伤害 marker 进入对应角色轨，无 actor 事件进入系统轨。
-- 时间轴缩放雏形：支持 1x-4x 视图缩放，时间刻度和动作轨同步变宽。
-- 动作持续时间调整雏形：动作块右侧手柄可拖拽调整 `durationMs`，通过 `Workbench.vue` 回写动作草稿并重跑 simulation。
+- `src/features/workbench/TimelineGridPreview.vue`：轨道、动作、命中、冷却、效果和三值 marker 渲染。
+- `src/views/Workbench.vue`：动作草稿、选择状态、编辑历史和运行时同步编排。
+- `src/domain/timebase.js`：60fps 时间换算和吸附。
+- `src/domain/workbenchProjectFactory.js`：action draft 规范化与标准 `Project.actions` 生成。
 
-下一步：
+旧 `src/components/timeline/` 已在阶段 7-B 删除，不再存在平行时间轴实现。
 
-- 轨道内重叠检测。
-- 时间轴诊断提示。
+## 2. 时间基准
 
-## 1. 技能拖放系统
+- 固定帧率：60fps。
+- 最小编辑颗粒度：1 帧。
+- `startMs` 和 `durationMs` 在领域层通过 `snapMsToFrame()` 规范化。
+- UI 可以显示毫秒，但动作移动、持续时间调整、批次偏移和候选帧都必须回到帧网格。
+- 不能确认的命中帧、动作时长和取消窗口必须保留 `needsTimingData` / `timingSource`，不能把文本解析结果标为精确实测。
 
-### 1.1 功能介绍
-技能拖放系统允许用户从技能库中选择技能，并通过拖拽操作将其放置到时间轴的指定位置。
+## 3. 轨道与动作
 
-### 1.2 使用方法
-1. **选择技能**：在左侧角色管理面板中选择一个角色
-2. **开始拖拽**：从技能列表中点击并拖动技能图标
-3. **放置技能**：将技能拖放到时间轴上的目标位置
-4. **调整位置**：技能放置后可以通过拖拽调整其在时间轴上的位置
+角色动作按 actor 轨显示，等待、注释、资源和敌人事件按系统轨显示。技能动作使用蓝色星原固定动作目录：
 
-### 1.3 技术实现
-- 使用 HTML5 原生拖拽 API (`draggable`, `dragstart`, `dragover`, `drop` 事件)
-- 在 `dragstart` 事件中设置技能数据
-- 在 `drop` 事件中计算放置位置并创建技能动作
-- 支持吸附到网格功能，确保技能放置位置对齐到时间网格
-
-## 2. 伤害判定点显示
-
-### 2.1 功能介绍
-伤害判定点系统在时间轴上自动标记并可视化展示技能的伤害触发时刻点，帮助用户精确了解技能的伤害输出时机。
-
-### 2.2 视觉效果
-- **红色方块标记**：技能持续时间内的伤害判定点
-- **悬停效果**：鼠标悬停时判定点会放大并变为金色
-- **详细信息**：悬停时显示伤害判定的时间、倍率和元素类型
-
-### 2.3 技术实现
-- 从技能数据中提取 `damageTicks` 数组
-- 根据每个判定点的 `offset` 计算在技能块中的相对位置
-- 使用绝对定位和百分比布局实现判定点的精确定位
-- 添加交互事件和动画效果增强用户体验
-
-## 3. BUFF状态条系统
-
-### 3.1 功能介绍
-BUFF状态条系统根据技能效果自动在时间轴上方生成对应的BUFF状态条，显示BUFF类型、持续时间和叠加层数。
-
-### 3.2 视觉效果
-- **状态图标**：显示BUFF类型的图标
-- **持续时间条**：显示BUFF的持续时间
-- **叠加层数**：显示BUFF的叠加层数
-- **颜色区分**：不同类型的BUFF使用不同的颜色
-
-### 3.3 技术实现
-- 从技能数据中提取 `physicalAnomaly` 数组
-- 根据异常状态的 `offset` 和 `duration` 计算位置和宽度
-- 支持多层BUFF的显示和管理
-- 实现BUFF条的交互和悬停效果
-
-## 4. CD冷却条展示
-
-### 4.1 功能介绍
-CD冷却条系统为每个使用过的技能在时间轴上生成对应的CD冷却条，准确显示冷却时间进度和剩余时间。
-
-### 4.2 视觉效果
-- **冷却条**：技能下方显示的冷却时间条
-- **时间文本**：显示冷却剩余时间
-- **颜色匹配**：冷却条颜色与技能元素颜色匹配
-
-### 4.3 技术实现
-- 从技能数据中提取 `cooldown` 属性
-- 计算冷却条的宽度和位置
-- 支持连携技能的冷却时间计算
-- 实现冷却条的动画效果
-
-## 5. 时间轴性能优化
-
-### 5.1 优化措施
-- **节流处理**：对滚动和缩放操作使用节流函数，提高响应速度
-- **虚拟滚动**：针对长时间轴实现虚拟滚动，减少DOM节点数量
-- **计算属性缓存**：使用Vue的计算属性缓存，避免重复计算
-- **批量更新**：优化状态更新，减少重渲染次数
-
-### 5.2 性能指标
-- 时间轴缩放操作响应时间 < 16ms
-- 滚动操作流畅度达到60fps
-- 支持100+技能块的同时显示
-
-## 6. 技能类型与视觉区分
-
-### 6.1 技能类型
-- **普通攻击** (attack)：基础攻击技能
-- **技能** (skill)：角色主动技能
-- **连携** (link)：角色之间的连携技能
-- **终极技能** (ultimate)：角色终极技能
-- **闪避** (dodge)：闪避技能
-- **处决** (execution)：处决技能
-
-### 6.2 视觉区分
-- **终极技能**：特殊的径向渐变背景和发光效果
-- **连携技能**：独特的边框和背景样式
-- **普通攻击**：简洁的边框样式
-- **其他技能**：根据元素类型显示不同颜色
-
-## 7. 交互操作
-
-### 7.1 技能块操作
-- **点击选择**：点击技能块选中
-- **双击编辑**：双击技能块打开编辑面板
-- **拖拽移动**：拖动技能块调整位置
-- **调整大小**：拖动技能块边缘调整持续时间
-- **右键菜单**：右键点击打开上下文菜单
-
-### 7.2 时间轴操作
-- **滚轮缩放**：按住Ctrl键并滚动鼠标滚轮缩放时间轴
-- **鼠标拖拽**：拖动时间轴背景平移视图
-- **Shift+滚轮**：水平滚动时间轴
-
-## 8. 数据结构
-
-### 8.1 技能动作数据结构
-```javascript
-{
-  id: "skill-1",
-  instanceId: "instance-1",
-  characterId: "character-1",
-  skillId: "skill-1",
-  name: "测试技能",
-  startTime: 60,        // 开始时间（帧）
-  duration: 120,        // 持续时间（帧）
-  type: "skill",        // 技能类型
-  element: "blaze",     // 元素类型
-  cooldown: 180,        // 冷却时间（帧）
-  damageTicks: [         // 伤害判定点
-    { offset: 30, multiplier: 1.5, element: "blaze" },
-    { offset: 90, multiplier: 2.0, element: "blaze" }
-  ],
-  physicalAnomaly: [     // 异常状态（BUFF）
-    [
-      { type: "burning", offset: 10, duration: 100, stacks: 2, _id: "anomaly-1" }
-    ]
-  ],
-  triggerWindow: 30,     // 触发窗口
-  enhancementTime: 60    // 强化时间
-}
+```text
+普通攻击
+重击
+闪击
+跃击
+星鸣技
+星结合击
+星决技
+星携技
+极限反击
+完美招架
 ```
 
-## 9. 国际化支持
+被动技能不作为时间轴动作。普攻多段命中属于“普通攻击”动作内部 hit，不拆成多个技能动作。
 
-### 9.1 多语言支持
-- 简体中文
-- 英文
+标准动作草稿至少包含：
 
-### 9.2 本地化文件
-- `src/i18n/locales/zh-CN.json`
-- `src/i18n/locales/en-US.json`
+```text
+id / type / actorCharacterId
+skillId / actionVariantIndex / level
+startMs / durationMs
+targetCharacterId
+effectCommands[]
+insertion / generationBatch
+```
 
-## 10. 测试与质量保证
+## 4. 编辑能力
 
-### 10.1 单元测试
-- 技能块组件测试
-- 拖放功能测试
-- 时间轴性能测试
+- 从动作库插入技能、切人、等待、资源、敌人事件和注释。
+- 点击动作列表或时间轴块保持同一 selected action。
+- 拖动或数值输入修改起始帧，按帧调整持续时间。
+- 复制、删除、插入后续动作和批次移动。
+- `Ctrl/Cmd+D` 复制动作，Delete/Backspace 删除，方向键按帧微调。
+- `Ctrl/Cmd+Z`、`Ctrl/Cmd+Y` 和 `Ctrl/Cmd+Shift+Z` 撤销/重做。
+- 同轨重叠时可自动推迟，并保留诊断说明。
 
-### 10.2 测试覆盖率
-- 核心功能测试覆盖率 > 80%
-- 关键路径测试覆盖率 100%
+所有动作变更必须通过 Workbench mutation/runtime sync 路径刷新模拟结果，不能只移动 DOM。
 
-## 11. 未来规划
+## 5. 可见运行层
 
-### 11.1 功能扩展
-- 技能连携可视化
-- 伤害预测图表
-- 团队资源管理
-- 导出/导入排轴方案
+时间轴同时显示或关联以下运行数据：
 
-### 11.2 性能优化
-- Web Workers 处理复杂计算
-- Canvas 渲染大量技能块
-- 更智能的虚拟滚动算法
+- 动作执行状态：正常、条件待确认、确定跳过。
+- 冷却与充能次数窗口。
+- 效果命令的 apply/refresh/remove/expire 区间。
+- 命中与候选命中 marker。
+- 敌人 HP、敌人韧性和每角色能量的状态曲线 marker。
+- applied、candidate、sampled 和 placeholder 来源层。
 
-## 12. 常见问题与解决方案
+点击曲线点、命中日志、动作结果或贡献行后，必须落到同一个稳定 state point，并能返回对应动作继续编辑。
 
-### 12.1 拖放问题
-**问题**：技能无法拖放到时间轴上
-**解决方案**：确保拖放目标区域正确设置了 `dragover` 和 `drop` 事件处理器
+## 6. 三值合同
 
-### 12.2 性能问题
-**问题**：时间轴滚动卡顿
-**解决方案**：检查是否启用了性能优化措施，如节流和虚拟滚动
+时间轴不自行计算伤害或资源。每个动作通过模拟层生成：
 
-### 12.3 显示问题
-**问题**：伤害判定点位置不准确
-**解决方案**：检查技能数据中的 `damageTicks` 配置是否正确
+```text
+Action
+  -> Hit
+    -> hpDamage
+    -> toughnessDamage
+    -> selfEnergyChange
+```
 
-## 13. 开发指南
+Runtime 消费标准 delta 后输出 `simLog`、`stateCurves`、资源曲线、状态快照和 summary。时间轴只消费 projection，不读取 evidence 临时结构作为数值事实。
 
-### 13.1 代码结构
-- `src/components/timeline/SkillBlock.vue`：技能块组件
-- `src/views/Workbench.vue`：生产工作台编排
-- `src/features/workbench/TimelineGridPreview.vue`：60fps 时间轴主视图
-- `src/domain/workbenchDraftStorage.js`：项目草稿与交换状态
+## 7. 项目交换
 
-### 13.2 开发流程
-1. 了解现有代码结构
-2. 熟悉技能数据格式
-3. 按照功能模块进行开发
-4. 编写单元测试
-5. 进行性能测试
-6. 提交代码并创建 Pull Request
+动作草稿通过 WorkbenchProjectFile v8 持久化。草稿、JSON、分享链接、PNG 元数据、runtime capture 和预设轴库共享同一 `actionDrafts[]`；任何新时间轴字段都必须同步考虑这些交换路径及旧版本迁移。
 
-## 14. 贡献者指南
+## 8. 长轴验收
 
-### 14.1 代码规范
-- 遵循 ESLint 和 Prettier 规范
-- 使用 Vue 3 Composition API
-- 保持代码风格一致
+运行时基准：
 
-### 14.2 提交规范
-- 提交信息清晰明了
-- 功能变更需添加测试
-- 文档同步更新
+```powershell
+npm run benchmark:long-axis:check
+```
 
-## 15. Workbench 批次联动补充
+默认构造 180 个真实技能动作，验证 Project、Scenario、ExecutionPlan、ActionResult、HitTransaction、StateCurve 和 SimLog 数量一致，并检查编译与模拟 p95 预算。
 
-### 15.1 批次定位
-- `ActionLibraryPanel` 的批次摘要从同批次动作中派生 `firstActionId`。
-- 点击批次摘要或在摘要上按回车，会选中该批次当前最早的一条动作。
-- 摘要内删除、偏移和对齐控件会阻止冒泡，避免误触发摘要定位。
+浏览器基准：
 
-### 15.2 同批次高亮
-- 动作列表从当前 `selectedActionId` 派生 `selectedBatchId`，并标识同批次动作。
-- `TimelineGridPreview` 使用同样的派生规则高亮同批次时间轴动作块。
-- 与同批次动作关联的伤害标记也会显示同批次高亮。
+```powershell
+npm run benchmark:long-axis:browser
+```
 
-### 15.3 当前边界
-- 批次联动不保存独立的批次选择状态，刷新后由草稿中的 `selectedActionId` 和 `generationBatch` 重新计算。
-- 当前只定位到批次第一条动作，还没有自动滚动到时间轴位置。
+默认加载 120 动作 v8 草稿，验证动作列表、时间轴块、动作结果、状态曲线和运行结果导航均可见，首屏完成时间预算为 15 秒。
 
-### 15.4 60fps 帧网格
-- 新版 Workbench 时间基准为 `60fps`，内部通过 `src/domain/timebase.js` 统一毫秒与帧互转。
-- 时间轴拖动、持续时间手柄、属性面板开始时间/持续时间输入和新增动作默认时长都吸附到 1 帧。
-- UI 显示会补充 `1s30f` 这类帧格式，方便按 Endaxis 习惯读轴。
-- 当前动作默认长度只是排轴交互占位，不代表真实动画帧、命中帧或取消窗口已经确认。
+当前浏览器仍直接渲染全部动作和曲线点；当基准显示真实瓶颈时，再采用虚拟化、分层折叠或按需渲染，不提前引入无证据复杂度。
 
----
+## 9. 回归入口
 
-**享受排轴的乐趣！** 🎮
+```powershell
+npm run test -- --run
+npm run test:e2e:workbench-flow
+npm run audit:production-imports:check
+npm run benchmark:long-axis:check
+npm run benchmark:long-axis:browser
+```
+
+核心测试位置：
+
+- `src/__tests__/features/TimelineGridPreview.test.js`
+- `src/__tests__/views/Workbench.test.js`
+- `e2e/workbench-continuous-edit.spec.js`
+- `e2e/workbench-long-axis.spec.js`

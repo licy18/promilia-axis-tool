@@ -28,6 +28,9 @@ npm run data:generate
 npm run build
 npm run test -- --run
 npm run dev
+npm run audit:production-imports:check
+npm run benchmark:long-axis:check
+npm run benchmark:long-axis:browser
 ```
 
 `npm run lint` 当前带 `--fix`，会自动改文件；运行前先确认是否需要格式修复。
@@ -39,8 +42,8 @@ npm run dev
 - 新版模拟运行时：`src/simulation/`，包含 compiler、engine、mechanics、projection 和 `runSimulation()`。
 - 生产工作台：`src/views/Workbench.vue`，根路径与旧 `/editor` 路径都重定向到 `/workbench`，组件在 `src/features/workbench/`。
 - 旧 `Home.vue`、`Editor.vue`、`Preset.vue` 页面已经退役并删除，不得重新建立平行主编辑器或假数据首页。
-- `src/store/project.js` 及 `src/components/editor/`、`src/components/timeline/` 仍是待引用审计的旧模块；新能力不得依赖它们。
-- 时间轴旧组件：`src/components/timeline/`；新版工作台优先用 `src/features/workbench/TimelineGridPreview.vue`。
+- 旧 `src/components/editor/`、`src/components/timeline/`、project/history/setting store 和旧计算工具已经按引用审计删除，不得重新引入平行实现。
+- 生产时间轴只使用 `src/features/workbench/TimelineGridPreview.vue`；新增源码后运行 `npm run audit:production-imports:check`，不得留下无引用或未允许的 test-only 模块。
 
 ## 当前路线边界
 

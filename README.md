@@ -45,6 +45,9 @@ npm run preview
 npm run test -- --run
 npm run build
 npm run test:e2e:workbench-flow
+npm run audit:production-imports:check
+npm run benchmark:long-axis:check
+npm run benchmark:long-axis:browser
 git diff --check
 ```
 
@@ -90,7 +93,7 @@ runtime-capture/         受控 Frida agent
 e2e/                     Workbench 浏览器主流程
 ```
 
-`src/components/editor/`、`src/components/timeline/`、`src/store/` 和部分 `src/utils/` 仍包含旧原型遗留模块。它们不再作为生产主编辑器入口，新能力应进入 Workbench、domain 或 simulation 分层。
+生产引用审计从 `src/main.js` 和全部测试入口追踪 JS、TS、Vue SFC 的静态/动态 import。当前只保留生产可达模块，以及明确允许的领域/runtime fixture 与无 UI simulation API；旧 editor/timeline 组件、旧 project/history/setting store 和旧计算工具已经删除。
 
 ## 项目文档
 

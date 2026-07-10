@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "kind": "workbench-long-axis-benchmark",
+  "scenario": {
+    "actionCount": 180,
+    "spacingFrames": 9,
+    "durationFrames": 6,
+    "expectedDurationFrames": 1617,
+    "actorCount": 2
+  },
+  "environment": {
+    "platform": "win32-x64",
+    "node": "v24.16.0",
+    "cpu": "AMD Ryzen 7 9700X 8-Core Processor             ",
+    "logicalCpuCount": 16,
+    "totalMemoryGiB": 31.11
+  },
+  "iterations": {
+    "warmup": 1,
+    "measured": 5
+  },
+  "budgets": {
+    "compileP95Ms": 250,
+    "simulationP95Ms": 1500
+  },
+  "budgetStatus": {
+    "compileWithinBudget": true,
+    "simulationWithinBudget": true
+  },
+  "validation": {
+    "expectedActionCount": 180,
+    "projectActionCount": 180,
+    "scenarioActionCount": 180,
+    "executedActionCount": 180,
+    "actionResultCount": 180,
+    "hitTransactionCount": 180,
+    "stateCurvePointCount": 180,
+    "simLogCount": 180,
+    "valid": true
+  },
+  "summary": {
+    "compileMs": {
+      "min": 8.42,
+      "median": 9.474,
+      "p95": 11.217,
+      "max": 11.217
+    },
+    "simulationMs": {
+      "min": 130.008,
+      "median": 133.769,
+      "p95": 170.341,
+      "max": 170.341
+    },
+    "totalMs": {
+      "min": 139.331,
+      "median": 142.824,
+      "p95": 181.558,
+      "max": 181.558
+    },
+    "peakHeapUsedMiB": 202.17
+  },
+  "samples": [
+    {
+      "iteration": 1,
+      "compileMs": 11.217,
+      "simulationMs": 170.341,
+      "totalMs": 181.558,
+      "heapUsedMiB": 200.24
+    },
+    {
+      "iteration": 2,
+      "compileMs": 9.323,
+      "simulationMs": 130.008,
+      "totalMs": 139.331,
+      "heapUsedMiB": 197.35
+    },
+    {
+      "iteration": 3,
+      "compileMs": 8.42,
+      "simulationMs": 133.769,
+      "totalMs": 142.189,
+      "heapUsedMiB": 202.17
+    },
+    {
+      "iteration": 4,
+      "compileMs": 9.474,
+      "simulationMs": 140.864,
+      "totalMs": 150.338,
+      "heapUsedMiB": 199.6
+    },
+    {
+      "iteration": 5,
+      "compileMs": 10.177,
+      "simulationMs": 132.647,
+      "totalMs": 142.824,
+      "heapUsedMiB": 196.78
+    }
+  ],
+  "measurementBoundary": "Vite SSR module startup is excluded. Compile includes Workbench project creation and Project -> Scenario compilation; simulation includes all runtime and projection outputs."
+}

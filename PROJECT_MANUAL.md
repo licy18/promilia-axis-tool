@@ -2,7 +2,7 @@
 
 最后更新：2026-07-10
 
-当前策略是以 Endaxis 为架构和交互参考，对 `promilia-axis-tool` 进行从头重构。真实 Workbench 已成为唯一生产排轴入口，旧页面原型已经退役；尚未清理的旧 store、组件和工具函数只作为迁移参考。完整任务拆解见 `DEVELOPMENT_PLAN.md`，本文件保留最终目标、阶段目标、项目状态和当前事实。
+当前策略是以 Endaxis 为架构和交互参考，对 `promilia-axis-tool` 进行从头重构。真实 Workbench 已成为唯一生产排轴入口，旧页面、旧 editor/timeline 组件、旧项目 store 和旧计算工具已经按引用审计退役。完整任务拆解见 `DEVELOPMENT_PLAN.md`，本文件保留最终目标、阶段目标、项目状态和当前事实。
 
 ## 1. 项目目标
 
@@ -53,7 +53,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；56 个测试文件、368 条测试通过。
+- `npm run test -- --run`：通过；50 个测试文件、331 条测试通过。
 - `npm run test:e2e:workbench-flow`：通过；31 条 Workbench 浏览器主流程通过。
 
 ## 3. 目录速览
@@ -65,8 +65,8 @@ src/
   simulation/            compiler / engine / generation / mechanics / runtime / projection
   features/workbench/    Workbench 功能组件和流程控制器
   views/Workbench.vue    唯一生产排轴工作台
-  components/            待审计的旧原型组件
-  store/                 待审计的旧 Pinia 状态
+  store/gamedata.js      Handbook 仍使用的辅助数据 store
+  utils/pngMetadata.js   PNG 项目元数据工具
 ```
 
 关键文件：
@@ -112,7 +112,7 @@ Workbench draft
   -> simLog / stateCurves / summary
 ```
 
-生产 Workbench 已统一使用 `project.actions`。旧组件和 store 中仍可能读取 `project.skillBlocks`，但它们不再进入生产主编辑器；后续必须按引用关系删除或迁移，不能重新接回主链。
+生产源码已统一使用 `project.actions`，引用审计未发现 `project.skillBlocks` 读取。旧模型只可能存在于历史文档或外部旧项目输入中，不得重新接回主链。
 
 ## 5. Endaxis 对照结论
 
@@ -829,6 +829,18 @@ Workbench 现在是唯一生产排轴入口。根路径和旧 `/editor` 路径�
 已完成验证：`npm run test -- --run` 通过 56 个测试文件、368 条测试；`npm run build` 通过，转换模块由上一阶段的 2333 降为 1727，Home/Editor/Preset 独立 chunk 全部消失；`npm run test:e2e:workbench-flow` 通过 31 条主流程，新增验证根路径、旧编辑器、预设和未知旧路由都进入真实 Workbench，且无浏览器错误。
 
 下一阶段目标：阶段 7-B 遗留引用审计与发布性能验收。建立生产入口引用清单，区分仍被 Handbook/DataEditor/测试使用的模块与真正孤儿代码，分批移除旧 store、editor/timeline 组件和工具函数；同时建立长轴模拟/渲染基准，量化 Workbench 大 chunk、长动作轴和窄屏交互的成本，再按证据做代码拆分或渲染优化。该阶段不新增碎片 UI，也不修改三值公式；P7-C 真实 capture 继续作为需人工客户端会话的并行验收项。
+
+### 阶段 7-B 生产引用清理与长轴性能守门（2026-07-10）
+
+新增可重复的生产 import 审计，从 `src/main.js` 和全部测试/E2E 入口解析 JS、TS、Vue SFC 的静态与字符串动态 import。清理前 110 个源码模块中有 19 个完全无引用、7 个意外仅测试可达旧模块；现已删除 26 个旧 editor/timeline 组件、project/history/setting store、旧计算/迁移工具和 Setting 页面，并删除 6 个只验证这些退役模块的测试文件。
+
+清理后 `reports/production-import-audit.json` 固定为 84 个源码模块：80 个生产可达，4 个允许的领域/runtime fixture 或无 UI API，0 个意外 test-only，0 个无引用。`npm run audit:production-imports:check` 会在后两项重新出现时失败；生产源码也已不存在 `project.skillBlocks` 读取。
+
+新增两层长轴守门。`benchmark:long-axis:check` 使用 180 个真实技能动作验证 Project、Scenario、执行计划、ActionResult、HitTransaction、StateCurve 和 SimLog 均为 180；本机最终 5 次测量的编译 p95 为 11.217ms，完整 runtime/projection p95 为 170.341ms，总 p95 为 181.558ms，峰值 heap 202.17MiB，均低于 250ms/1500ms 预算。`benchmark:long-axis:browser` 加载 120 动作 v8 草稿，验证 120 个动作列表项、时间轴块、动作结果与运行导航，并实际渲染 1920 个曲线点；最终首屏就绪 1905ms，低于 15 秒预算。
+
+已完成验证：`npm run test -- --run` 通过 50 个测试文件、331 条测试；`npm run build` 通过，仍为 1727 个转换模块；`npm run test:e2e:workbench-flow` 通过 31 条主流程；生产引用审计、180 动作运行时基准和 120 动作浏览器基准全部通过。单元测试数量减少只来自退役模块专属测试，Workbench 主流程测试没有减少。
+
+下一阶段目标：阶段 7-C 构建组成审计与按证据拆包。当前长轴模拟和浏览器交互满足预算，但生产构建仍提示大 chunk：Workbench 约 6477kB（gzip 654kB），全局 index 约 1237kB（gzip 399kB）。下一阶段先生成模块级 bundle composition，再针对全局 Element Plus/图标注册、生成数据与重型诊断面板实施可验证的懒加载或 chunk 划分，并保持首屏、项目交换和 31 条主流程不回归；不以隐藏警告或放宽阈值代替优化。
 
 ## 10. 文档维护规则
 

@@ -25900,3 +25900,34 @@ WorkbenchPreset
 读取时同时识别旧键 `promilia_presets` 的数组结构。能够由 `parseWorkbenchProjectFile` 读取的 v1-v7 项目会重新生成 v8 快照并标记 `migrated-project-schema`；当前 v8 标记 `ready`；无法解析的条目标记 `incompatible-project-schema`，保留名称、标签和摘要，但禁止加载和复制。
 
 新增、复制或删除后只写入 v1 新键，后续读取优先使用新键。预设加载继续调用 Workbench 现有导入恢复入口，因此草稿保存、临时复盘状态清理和运行时重算保持与 JSON、PNG、分享链接一致。
+
+## 364. 发布审计报告合同
+
+### 364.1 ProductionImportAudit v1
+
+`reports/production-import-audit.json` 记录：
+
+```text
+schemaVersion = 1
+kind = production-import-audit
+entrypoints
+  production[] / tests[]
+summary
+  sourceCodeFileCount
+  productionReachableCount
+  testOnlyCount / allowedTestOnlyCount / unexpectedTestOnlyCount
+  unreferencedCount
+  *ByArea
+productionReachableFiles[]
+testOnlyFiles[] / allowedTestOnlyFiles[] / unexpectedTestOnlyFiles[]
+unreferencedFiles[]
+limitations[]
+```
+
+审计解析相对路径和 `@/` 别名的静态或字符串动态 import。领域 fixture、runtime sample fixture 与无 UI `src/simulation/index.js` 是明确允许的 test-only 模块；其他 test-only 或无引用源码会使 `audit:production-imports:check` 失败。
+
+### 364.2 WorkbenchLongAxisBenchmark v1
+
+`reports/long-axis-benchmark.json` 记录固定动作规模、环境、迭代次数、预算、数量一致性验证、compile/simulation/total 的 min/median/p95/max、峰值 heap 和每次样本。
+
+编译测量包含 Workbench draft -> Project -> Scenario；模拟测量包含执行计划、generation、calculator runtime、状态曲线、日志和 projection。报告不改变项目或运行时 schema，只作为发布性能守门；`--assert-budget` 在数量不一致或 p95 超预算时失败。
