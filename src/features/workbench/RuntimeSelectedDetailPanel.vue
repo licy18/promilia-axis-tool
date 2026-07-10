@@ -120,6 +120,29 @@
     </div>
 
     <div
+      v-if="detail && actionReadiness"
+      class="runtime-detail-readiness"
+      :data-executable="actionReadiness.executable ? 'true' : 'false'"
+      :data-readiness-status="actionReadiness.status"
+      data-testid="workbench-runtime-selected-detail-readiness"
+    >
+      <div>
+        <span>动作可执行性</span>
+        <strong>{{ formatReadinessStatus(actionReadiness) }}</strong>
+      </div>
+      <div v-if="actionReadiness.cooldown">
+        <span>可用次数</span>
+        <strong>{{ formatCooldownAvailability(actionReadiness) }}</strong>
+      </div>
+      <div v-if="actionReadiness.cooldown?.nextReadyAtMs != null">
+        <span>下次恢复</span>
+        <strong>{{
+          formatReadinessTime(actionReadiness.cooldown.nextReadyAtMs)
+        }}</strong>
+      </div>
+    </div>
+
+    <div
       v-if="detail && runtimeDetailNavigation.visible"
       class="runtime-detail-navigation"
       :data-navigation-count="runtimeDetailNavigation.count"
@@ -371,6 +394,10 @@ import {
 
 const props = defineProps({
   detail: {
+    type: Object,
+    default: null,
+  },
+  actionReadiness: {
     type: Object,
     default: null,
   },
@@ -661,6 +688,27 @@ function formatSigned(value) {
   return `${number > 0 ? '+' : ''}${formatNumber(number)}`;
 }
 
+function formatReadinessStatus(readiness) {
+  if (readiness?.status === 'blocked') {
+    return '不可执行';
+  }
+  if (readiness?.status === 'ready-with-unresolved-conditions') {
+    return '条件待确认';
+  }
+  return '可执行';
+}
+
+function formatCooldownAvailability(readiness) {
+  const cooldown = readiness?.cooldown;
+  return cooldown
+    ? `${cooldown.availableBefore} -> ${cooldown.availableAfter} / ${cooldown.cooldownCount}`
+    : '-';
+}
+
+function formatReadinessTime(timeMs) {
+  return `${Math.round((Number(timeMs) * 60) / 1000)}F · ${timeMs}ms`;
+}
+
 function formatNumber(value) {
   return Math.round(Number(value) || 0).toLocaleString('zh-CN');
 }
@@ -836,6 +884,50 @@ h2 {
   grid-template-columns: repeat(auto-fit, minmax(82px, 1fr));
   gap: 8px;
   padding: 0 14px;
+}
+
+.runtime-detail-readiness {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 8px;
+  margin: 0 14px;
+  padding: 9px;
+  border: 1px solid rgba(121, 199, 185, 0.22);
+  border-radius: 4px;
+  background: rgba(121, 199, 185, 0.06);
+}
+
+.runtime-detail-readiness[data-readiness-status='blocked'] {
+  border-color: rgba(245, 108, 108, 0.34);
+  background: rgba(245, 108, 108, 0.06);
+}
+
+.runtime-detail-readiness[data-readiness-status='ready-with-unresolved-conditions'] {
+  border-color: rgba(242, 179, 102, 0.3);
+  background: rgba(242, 179, 102, 0.06);
+}
+
+.runtime-detail-readiness div {
+  min-width: 0;
+}
+
+.runtime-detail-readiness span,
+.runtime-detail-readiness strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.runtime-detail-readiness span {
+  margin-bottom: 4px;
+  color: #8f9aa3;
+  font-size: 11px;
+}
+
+.runtime-detail-readiness strong {
+  color: #ffffff;
+  font-size: 12px;
 }
 
 .runtime-detail-summary {

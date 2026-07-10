@@ -191,6 +191,36 @@ describe('RuntimeSelectedDetailPanel', () => {
         .text()
     ).toBe('action-001|hit-1|12|200');
   });
+
+  it('renders the selected action readiness and cooldown charge snapshot', () => {
+    const wrapper = mount(RuntimeSelectedDetailPanel, {
+      props: {
+        detail: createRuntimeDetail(),
+        actionReadiness: {
+          status: 'ready',
+          executable: true,
+          cooldown: {
+            cooldownCount: 2,
+            availableBefore: 1,
+            availableAfter: 0,
+            nextReadyAtMs: 17000,
+          },
+        },
+      },
+    });
+
+    const readiness = wrapper.get(
+      '[data-testid="workbench-runtime-selected-detail-readiness"]'
+    );
+    expect(readiness.attributes()).toMatchObject({
+      'data-executable': 'true',
+      'data-readiness-status': 'ready',
+    });
+    expect(readiness.text()).toContain('动作可执行性');
+    expect(readiness.text()).toContain('可执行');
+    expect(readiness.text()).toContain('1 -> 0 / 2');
+    expect(readiness.text()).toContain('1020F · 17000ms');
+  });
 });
 
 function createRuntimeDetail(overrides = {}) {

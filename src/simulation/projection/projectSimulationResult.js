@@ -1504,6 +1504,7 @@ export function projectSimulationResult({
     resourceTimeline,
     effectTimeline: runtimeOutputs.effectTimeline,
     actionRuleDiagnostics,
+    actionReadinessTimeline: actionRuleDiagnostics.readinessTimeline,
     summary: {
       totalRawDamage,
       totalProjectedToughnessDamage,
@@ -1522,6 +1523,8 @@ export function projectSimulationResult({
       runtimeOutputsSummary: runtimeOutputs.outputSummary,
       effectRuntimeTimelineSummary: runtimeOutputs.effectTimeline.summary,
       actionRuleDiagnosticsSummary: actionRuleDiagnostics.summary,
+      actionReadinessTimelineSummary:
+        actionRuleDiagnostics.readinessTimeline.summary,
       formulaVersion: damageEvents[0]?.payload.formulaVersion ?? null,
       formulaCandidatePatternSummary,
       formulaExecutionMatrixSummary,

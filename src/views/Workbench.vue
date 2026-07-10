@@ -207,6 +207,7 @@
         :actions="scenario.actions"
         :main-flow-command-surface="mainFlowCommandSurface"
         :runtime-action-results="runtimeActionResults"
+        :action-readiness-timeline="simulationResult.actionReadinessTimeline"
         :skills="actionLibrarySkills"
         :selected-action-id="selectedActionId"
         @select-action="selectAction"
@@ -264,6 +265,7 @@
           :state-curve-track-filters="stateCurveTrackFilters"
           :runtime-focus-source="runtimeFocusSource"
           :timeline-diagnostics="timelineDiagnostics"
+          :action-readiness-timeline="simulationResult.actionReadinessTimeline"
           :main-flow-command-surface="mainFlowCommandSurface"
           @select-action="selectAction"
           @select-state-curve-point="selectStateCurvePoint"
@@ -486,6 +488,7 @@
         >
           <RuntimeSelectedDetailPanel
             :detail="runtimeSelectedDetail"
+            :action-readiness="runtimeSelectedActionReadiness"
             :action-edit-focus="actionEditFocus"
             :action-edit-result-context="actionEditResultContext"
             :flow-model="workbenchFlowModel"
@@ -747,6 +750,14 @@ const actionEditResultContext = computed(() =>
 const runtimeActionResults = computed(() =>
   createRuntimeActionResultMap(runtimeOutputs.value)
 );
+const runtimeSelectedActionReadiness = computed(() => {
+  const actionId = runtimeSelectedDetail.value?.actionId;
+  return (
+    simulationResult.value.actionReadinessTimeline?.actions?.find(
+      action => action.actionId === actionId
+    ) ?? null
+  );
+});
 const workbenchFlowModel = computed(() =>
   createWorkbenchFlowModel({
     selectedAction: selectedAction.value,

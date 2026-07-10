@@ -626,8 +626,9 @@ P5：排轴规则与运行诊断闭环。
 
 - P5-A 已完成：模拟层输出统一排轴规则合同，覆盖同角色轨动作占用、`skillsub_logic.coolDown` 冷却冲突和 SP 前置条件单位缺口。
 - Workbench 可以从结构化诊断定位来源动作，对有确定最早时间的冲突直接应用建议时间，修正后重新运行并继续曲线/日志/详情复盘。
-- 下一阶段进入 P5-B 动作可执行状态与冷却窗口时间线：把规则结果投影为逐动作 readiness 状态和冷却区间，让动作库、时间轴和运行复盘共享同一可执行事实。
-- P5-B 继续保持 SP 单位 adapter 可替换；在 `skillsub_logic.spCost = 100` 与角色 `MAXSP = 1` 的换算未闭合前，不伪造资源不足结论。
+- P5-B 已完成：逐动作 readiness、充能快照和合法施放冷却窗口已经成为标准合同；动作库、时间轴和运行详情共享同一可执行事实。
+- 下一阶段进入 P5-C 规则驱动执行计划：在不改公式的前提下，把确定阻塞动作与可执行/待确认动作编译成明确执行计划，并让 generation/runtime 统一消费。
+- P5-C 继续保持 SP 单位 adapter 可替换；在 `skillsub_logic.spCost = 100` 与角色 `MAXSP = 1` 的换算未闭合前，待确认动作仍可进入执行计划，不伪造资源不足结论。
 
 ### P4-A 标准状态效果运行时合同（2026-07-10）
 
@@ -681,6 +682,23 @@ P5：排轴规则与运行诊断闭环。
 - `npm run test -- --run`：通过，48 个测试文件、340 条测试。
 - `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
 - `npm run test:e2e:workbench-flow`：通过，27 条 Workbench 浏览器主流程；新增路径覆盖连续排入星鸣技、发现冷却错误、定位动作、应用最早可用帧并进入运行复盘。
+
+### P5-B 动作可执行状态与冷却窗口时间线（2026-07-10）
+
+已完成能力：
+
+- 新增标准 `AzPrActionReadinessTimeline`，逐动作输出 `ready / blocked / ready-with-unresolved-conditions`、可执行性、关联规则和冷却充能快照。
+- 同角色同技能的每次合法施放会占用一个明确 charge slot 并生成冷却窗口；被冷却规则阻塞的施放不会占用次数或生成新窗口。
+- 动作库和时间轴共享 readiness 状态；时间轴直接绘制每次合法施放的冷却区间，并区分确定阻塞和条件待确认动作。
+- 运行详情显示所选动作执行前后的可用次数和下一恢复帧；规则修正后，动作状态、冷却窗口和运行复盘随现有模拟链同步刷新。
+- 本阶段只建立规则时间线和可见复盘，固定 `appliedToSimulationResults = false`；没有修改 generation delta、calculator 或现有三值结果。
+
+已完成验证：
+
+- 单元测试覆盖逐动作状态、双充能技能、非法施放不生成窗口、时间轴冷却区间、运行详情和 Workbench 修正前后同步。
+- `npm run test -- --run`：通过，48 个测试文件、342 条测试。
+- `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
+- `npm run test:e2e:workbench-flow`：通过，27 条 Workbench 浏览器主流程；冷却规则路径新增验证动作库、时间轴、修正后窗口和运行详情使用同一 readiness 事实。
 
 ## 10. 文档维护规则
 

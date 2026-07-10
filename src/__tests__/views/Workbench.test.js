@@ -1902,6 +1902,24 @@ describe('Workbench view', () => {
     await addCooldownSkill();
     await addCooldownSkill();
 
+    const blockedActionItem = wrapper.find(
+      '.action-item[data-action-id="action-0004"]'
+    );
+    const blockedTimelineAction = wrapper.find(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
+    );
+    expect(blockedActionItem.attributes()).toMatchObject({
+      'data-readiness-status': 'blocked',
+      'data-readiness-executable': 'false',
+    });
+    expect(blockedTimelineAction.attributes()).toMatchObject({
+      'data-readiness-status': 'blocked',
+      'data-readiness-executable': 'false',
+    });
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-cooldown-window"]')
+    ).toHaveLength(2);
+
     const rulePanel = wrapper.find(
       '[data-testid="workbench-action-rule-panel"]'
     );
@@ -1927,6 +1945,17 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('[data-testid="workbench-start-frame-input"]').element.value
     ).toBe(String(Math.round((Number(suggestedStartMs) * 60) / 1000)));
+    expect(blockedActionItem.attributes()).toMatchObject({
+      'data-readiness-status': 'ready',
+      'data-readiness-executable': 'true',
+    });
+    expect(blockedTimelineAction.attributes()).toMatchObject({
+      'data-readiness-status': 'ready',
+      'data-readiness-executable': 'true',
+    });
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-cooldown-window"]')
+    ).toHaveLength(3);
   });
 
   it('prioritizes runtime detail in the side inspector while reviewing results', async () => {

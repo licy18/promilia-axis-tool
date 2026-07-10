@@ -2262,6 +2262,27 @@ test('locates and fixes a confirmed cooldown rule before runtime review @workben
   await expect(rulePanel).toHaveAttribute('data-violation-count', '1');
   await expect(cooldownRule).toHaveAttribute('data-action-id', 'action-0004');
   await expect(cooldownRule).toContainText('技能冷却');
+  const blockedAction = page.locator(
+    '.action-item[data-action-id="action-0004"]'
+  );
+  const blockedTimelineAction = page.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
+  );
+  await expect(blockedAction).toHaveAttribute(
+    'data-readiness-status',
+    'blocked'
+  );
+  await expect(blockedAction).toHaveAttribute(
+    'data-readiness-executable',
+    'false'
+  );
+  await expect(blockedTimelineAction).toHaveAttribute(
+    'data-readiness-status',
+    'blocked'
+  );
+  await expect(
+    page.getByTestId('workbench-timeline-cooldown-window')
+  ).toHaveCount(2);
 
   await page.locator('.action-item[data-action-id="action-0001"]').click();
   await cooldownRule.getByTestId('workbench-action-rule-locate').click();
@@ -2283,6 +2304,18 @@ test('locates and fixes a confirmed cooldown rule before runtime review @workben
   await expect(page.getByTestId('workbench-start-input')).toHaveValue(
     suggestedStartMs
   );
+  await expect(blockedAction).toHaveAttribute('data-readiness-status', 'ready');
+  await expect(blockedAction).toHaveAttribute(
+    'data-readiness-executable',
+    'true'
+  );
+  await expect(blockedTimelineAction).toHaveAttribute(
+    'data-readiness-status',
+    'ready'
+  );
+  await expect(
+    page.getByTestId('workbench-timeline-cooldown-window')
+  ).toHaveCount(3);
 
   await page.getByTestId('workbench-flow-open-runtime').click();
   const runtimeState = await waitForRuntimeAction(page, 'action-0004');
@@ -2294,6 +2327,12 @@ test('locates and fixes a confirmed cooldown rule before runtime review @workben
     selected: false,
   });
   await expectCurveAndLogSelection(page, runtimeState.statePointId);
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-readiness')
+  ).toHaveAttribute('data-readiness-status', 'ready');
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-readiness')
+  ).toContainText('1 -> 0 / 2');
   await expectRuntimeOutputConsistent(page);
 
   expectNoUnexpectedBrowserIssues(browserIssues);

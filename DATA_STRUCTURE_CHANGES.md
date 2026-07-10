@@ -25370,3 +25370,80 @@ skill-sp-precondition-unresolved
 Workbench 新增只读 `ActionRuleDiagnosticsPanel`，以 `actionId` 关联动作选择，以 `editFieldKey` 定位属性编辑控件。存在 `suggestedStartMs` 时，面板通过现有 `updateAction({ startMs })` 入口应用修正，因此撤销/重做、草稿脏状态和运行结果同步沿用既有主流程，不引入第二套动作修改协议。
 
 动作库的冷却/SP 展示优先读取 `action.logicModel.logic`，冷却同时显示可用次数；模拟事件 `COOLDOWN_START` 同样优先使用逻辑层冷却。SP 消耗事件仍保持原有应用边界，直到资源单位 adapter 可确认换算关系。
+
+## 356. 动作可执行状态与冷却窗口合同
+
+### 356.1 AzPrActionReadinessTimeline
+
+`ActionRuleDiagnostics` 新增 `readinessTimeline`，`projectSimulationResult` 同时暴露顶层 `actionReadinessTimeline` 和对应 summary：
+
+```text
+ActionReadinessTimeline
+  schemaVersion = 1
+  contractName = AzPrActionReadinessTimeline
+  sourceKind = azpr-action-readiness-timeline
+  status
+  actions[]
+  cooldownWindows[]
+  summary
+  appliedToSimulationResults = false
+```
+
+逐动作状态行结构为：
+
+```text
+ActionReadinessState
+  sourceKind = azpr-action-readiness-state
+  status = ready | blocked | ready-with-unresolved-conditions
+  executable
+  actionId / actionName / actionType / actionIndex
+  actorId / actorName / skillId
+  startMs / frameIndex
+  diagnosticIds[]
+  violationCodes[]
+  unresolvedCodes[]
+  cooldown = ActionCooldownReadiness | null
+  appliedToSimulationResults = false
+```
+
+确定违反规则的动作状态为 `blocked`；仅有 SP 单位等未确认条件时为 `ready-with-unresolved-conditions`，仍保持 `executable = true`。
+
+### 356.2 ActionCooldownReadiness 与 cooldown window
+
+每个带逻辑冷却的技能动作记录施放时的 charge 快照：
+
+```text
+ActionCooldownReadiness
+  sourceKind = azpr-action-cooldown-readiness
+  status = cooldown-charge-consumed | blocked-no-charge-ready
+  cooldownMs / cooldownCount
+  availableBefore / availableAfter
+  consumedChargeIndex
+  nextReadyAtMs
+  chargesBefore[] / chargesAfter[]
+  windowId
+  source
+  appliedToSimulationResults = false
+```
+
+每个 charge slot 独立保存 `chargeIndex / readyAtMs / sourceActionId / sourceActionName`。合法施放选择当前可用的最低 charge index，更新该 slot 并生成：
+
+```text
+SkillCooldownWindow
+  sourceKind = azpr-skill-cooldown-window
+  windowId
+  actionId / actionName
+  actorId / actorName
+  skillId / chargeIndex / cooldownCount
+  startMs / endMs / durationMs
+  source
+  appliedToSimulationResults = false
+```
+
+没有可用 charge 的动作只生成 `blocked-no-charge-ready` 快照和规则诊断，不创建冷却窗口，也不改变任一 slot 的恢复时间。
+
+### 356.3 Workbench 消费边界
+
+动作库按 `actionId` 展示 readiness 和执行前后可用次数；时间轴按 `actorId + actionId` 绘制冷却窗口；运行详情按当前 runtime action 读取同一 readiness 行。三处均为标准合同消费者，不重复计算技能冷却。
+
+P5-B 仍不把规则状态应用到 generation/runtime 数值。下一阶段 P5-C 将新增规则驱动执行计划，明确区分确定阻塞动作和仍允许执行的待确认动作，再由生成层与运行时统一消费。

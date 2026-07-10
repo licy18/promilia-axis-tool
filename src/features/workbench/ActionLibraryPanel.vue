@@ -257,8 +257,16 @@
         :class="{
           selected: action.id === selectedActionId,
           'batch-selected': isActionInSelectedBatch(action),
+          'readiness-blocked': getActionReadiness(action).status === 'blocked',
+          'readiness-unresolved':
+            getActionReadiness(action).status ===
+            'ready-with-unresolved-conditions',
         }"
         :data-action-id="action.id"
+        :data-readiness-status="getActionReadiness(action).status"
+        :data-readiness-executable="
+          getActionReadiness(action).executable ? 'true' : 'false'
+        "
         :data-batch-id="action.generationBatch?.batchId || ''"
         :data-batch-highlight="
           isActionInSelectedBatch(action) ? 'true' : 'false'
@@ -272,6 +280,13 @@
         <div class="action-main">
           <span class="action-name">{{ action.name }}</span>
           <span class="action-time">{{ action.startMs }}ms</span>
+          <span
+            class="action-readiness"
+            :data-readiness-status="getActionReadiness(action).status"
+            data-testid="workbench-action-readiness"
+          >
+            {{ formatActionReadiness(action) }}
+          </span>
         </div>
         <div class="action-tools">
           <button
@@ -324,6 +339,10 @@
           <div>
             <dt>SP</dt>
             <dd>{{ getActionSpCost(action) ?? '-' }}</dd>
+          </div>
+          <div v-if="getActionReadiness(action).cooldown">
+            <dt>可用次数</dt>
+            <dd>{{ formatActionCooldownAvailability(action) }}</dd>
           </div>
         </dl>
         <p
@@ -381,6 +400,10 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
+  actionReadinessTimeline: {
+    type: Object,
+    default: () => ({ actions: [], cooldownWindows: [] }),
+  },
   skills: {
     type: Array,
     required: true,
@@ -413,6 +436,15 @@ const emit = defineEmits([
 const batchAlignStarts = reactive({});
 const batchShiftOffsets = reactive({});
 const batchShiftStepMs = frameToMs(30);
+const readinessByActionId = computed(
+  () =>
+    new Map(
+      (props.actionReadinessTimeline?.actions ?? []).map(action => [
+        action.actionId,
+        action,
+      ])
+    )
+);
 
 const actionEntries = computed(() => getSkillActionCatalog(props.skills, 1));
 
@@ -513,6 +545,39 @@ function focusBatchResult(batch) {
 
 function getActionRuntimeResult(actionId) {
   return props.runtimeActionResults?.[actionId] ?? null;
+}
+
+function getActionReadiness(action) {
+  return (
+    readinessByActionId.value.get(action?.id) ?? {
+      status: 'ready',
+      executable: true,
+      cooldown: null,
+    }
+  );
+}
+
+function formatActionReadiness(action) {
+  const readiness = getActionReadiness(action);
+  if (readiness.status === 'blocked') {
+    return '不可执行';
+  }
+  if (readiness.status === 'ready-with-unresolved-conditions') {
+    return '条件待确认';
+  }
+  return '可执行';
+}
+
+function formatActionCooldownAvailability(action) {
+  const cooldown = getActionReadiness(action).cooldown;
+  if (!cooldown) {
+    return '-';
+  }
+  const suffix =
+    cooldown.nextReadyAtMs == null
+      ? ''
+      : ` / ${msToFrame(cooldown.nextReadyAtMs)}F恢复`;
+  return `${cooldown.availableBefore} -> ${cooldown.availableAfter}${suffix}`;
 }
 
 function isActionInSelectedBatch(action) {
@@ -1089,10 +1154,18 @@ h2 {
   background: #25343a;
 }
 
+.action-item.readiness-blocked {
+  border-color: rgba(245, 108, 108, 0.56);
+}
+
+.action-item.readiness-unresolved {
+  border-color: rgba(242, 179, 102, 0.44);
+}
+
 .action-main {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
   margin-bottom: 10px;
 }
@@ -1107,6 +1180,26 @@ h2 {
 .action-time {
   color: #79c7b9;
   font-size: 12px;
+}
+
+.action-readiness {
+  padding: 2px 5px;
+  border: 1px solid rgba(121, 199, 185, 0.24);
+  border-radius: 3px;
+  color: #9ce0d2;
+  font-size: 10px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.action-readiness[data-readiness-status='blocked'] {
+  border-color: rgba(245, 108, 108, 0.36);
+  color: #ffb4b4;
+}
+
+.action-readiness[data-readiness-status='ready-with-unresolved-conditions'] {
+  border-color: rgba(242, 179, 102, 0.32);
+  color: #ffd19a;
 }
 
 dl {

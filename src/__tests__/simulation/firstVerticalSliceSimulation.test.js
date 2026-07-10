@@ -158,6 +158,29 @@ describe('first vertical slice simulation', () => {
     expect(result.summary.actionRuleDiagnosticsSummary).toBe(
       result.actionRuleDiagnostics.summary
     );
+    expect(result.actionReadinessTimeline).toBe(
+      result.actionRuleDiagnostics.readinessTimeline
+    );
+    expect(result.actionReadinessTimeline).toMatchObject({
+      contractName: 'AzPrActionReadinessTimeline',
+      status: 'action-readiness-timeline-ready',
+      summary: {
+        actionCount: 1,
+        readyActionCount: 1,
+        blockedActionCount: 0,
+        cooldownWindowCount: 0,
+      },
+      actions: [
+        {
+          actionId: 'action-0001',
+          status: 'ready',
+          executable: true,
+        },
+      ],
+    });
+    expect(result.summary.actionReadinessTimelineSummary).toBe(
+      result.actionReadinessTimeline.summary
+    );
 
     expect(result.damageTimeline).toHaveLength(1);
     expect(result.damageTimeline[0]).toMatchObject({

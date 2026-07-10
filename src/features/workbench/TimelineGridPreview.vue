@@ -230,6 +230,19 @@
             :ref="element => setLaneRowRef(element, lane.id)"
           >
             <div
+              v-for="window in lane.cooldownWindows"
+              :key="window.windowId"
+              class="cooldown-window"
+              :style="cooldownWindowStyle(window)"
+              :title="formatCooldownWindowTitle(window)"
+              :data-action-id="window.actionId"
+              :data-charge-index="window.chargeIndex"
+              :data-end-ms="window.endMs"
+              :data-window-id="window.windowId"
+              data-testid="workbench-timeline-cooldown-window"
+            />
+
+            <div
               v-for="action in lane.actions"
               :key="action.id"
               class="action-block"
@@ -243,12 +256,21 @@
                   'batch-selected': isActionInSelectedBatch(action),
                   'edit-focused': isActionEditFocused(action),
                   'has-result-edit': isTimelineActionResultEditVisible(action),
+                  'readiness-blocked':
+                    getActionReadiness(action).status === 'blocked',
+                  'readiness-unresolved':
+                    getActionReadiness(action).status ===
+                    'ready-with-unresolved-conditions',
                 },
                 `type-${action.type}`,
               ]"
               :style="actionStyle(action)"
               :data-action-id="action.id"
               :data-lane-id="lane.id"
+              :data-readiness-status="getActionReadiness(action).status"
+              :data-readiness-executable="
+                getActionReadiness(action).executable ? 'true' : 'false'
+              "
               :data-batch-id="action.generationBatch?.batchId || ''"
               :data-batch-highlight="
                 isActionInSelectedBatch(action) ? 'true' : 'false'
@@ -259,6 +281,7 @@
               :data-edit-focus-source="getActionEditFocusSource(action)"
               :data-edit-focus-summary="getActionEditFocusSummary(action)"
               data-testid="workbench-timeline-action"
+              :title="formatTimelineActionTitle(action)"
               tabindex="0"
               @click="$emit('select-action', action.id)"
               @keydown.enter="$emit('select-action', action.id)"
@@ -555,6 +578,8 @@
       <span><i class="legend-state" /> 状态点</span>
       <span><i class="legend-system" /> 系统轨</span>
       <span><i class="legend-overlap" /> 重叠</span>
+      <span><i class="legend-cooldown" /> 冷却窗口</span>
+      <span><i class="legend-blocked" /> 不可执行</span>
       <span><i class="legend-delay" /> 自动推迟</span>
       <span class="warning">时序为占位数据</span>
     </div>
@@ -742,6 +767,10 @@ const props = defineProps({
       overlapCount: 0,
     }),
   },
+  actionReadinessTimeline: {
+    type: Object,
+    default: () => ({ actions: [], cooldownWindows: [] }),
+  },
   snapMs: {
     type: Number,
     default: WORKBENCH_FRAME_MS,
@@ -817,6 +846,15 @@ const candidateSeriesToggles = computed(() =>
 );
 const actionsById = computed(
   () => new Map(props.actions.map(action => [action.id, action]))
+);
+const readinessByActionId = computed(
+  () =>
+    new Map(
+      (props.actionReadinessTimeline?.actions ?? []).map(action => [
+        action.actionId,
+        action,
+      ])
+    )
 );
 const actorLaneIds = computed(
   () => new Set(props.actors.map(actor => actor.id))
@@ -932,6 +970,7 @@ const timelineLanes = computed(() => {
     candidateValueCurves: [],
     candidateValueFrameGroups: [],
     stateCurveMarkers: [],
+    cooldownWindows: [],
   }));
   const lanesById = new Map(actorLanes.map(lane => [lane.id, lane]));
   const systemLane = {
@@ -945,6 +984,7 @@ const timelineLanes = computed(() => {
     candidateValueCurves: [],
     candidateValueFrameGroups: [],
     stateCurveMarkers: [],
+    cooldownWindows: [],
   };
 
   props.actions.forEach(action => {
@@ -956,6 +996,18 @@ const timelineLanes = computed(() => {
     const layout = createTimelineActionLayout(lane.actions);
     lane.actions = layout.actions;
     lane.actionSlotCount = layout.slotCount;
+  });
+
+  (props.actionReadinessTimeline?.cooldownWindows ?? []).forEach(window => {
+    const lane = lanesById.get(window.actorId);
+    const action = lane?.actions.find(item => item.id === window.actionId);
+    if (!lane || !action) {
+      return;
+    }
+    lane.cooldownWindows.push({
+      ...window,
+      timelineSlot: action.timelineSlot ?? 0,
+    });
   });
 
   props.damageTimeline.forEach(damage => {
@@ -1123,6 +1175,19 @@ function actionStyle(action) {
   };
 }
 
+function cooldownWindowStyle(window) {
+  const startMs = Math.max(0, Number(window.startMs) || 0);
+  const endMs = Math.min(
+    props.durationMs,
+    Math.max(startMs, Number(window.endMs) || startMs)
+  );
+  return {
+    left: `${clampPercent((startMs / props.durationMs) * 100)}%`,
+    top: `${getTimelineActionTop(window.timelineSlot) + TIMELINE_ACTION_HEIGHT_PX - 4}px`,
+    width: `${clampPercent(((endMs - startMs) / props.durationMs) * 100, 0.5, 100)}%`,
+  };
+}
+
 function markerStyle(damage, lane) {
   const left = clampPercent((damage.timeMs / props.durationMs) * 100);
   return {
@@ -1269,6 +1334,30 @@ function actionDetail(action) {
     return formatFrameTime(action.durationMs ?? 0);
   }
   return action.note ?? '';
+}
+
+function getActionReadiness(action) {
+  return (
+    readinessByActionId.value.get(action?.id) ?? {
+      status: 'ready',
+      executable: true,
+    }
+  );
+}
+
+function formatTimelineActionTitle(action) {
+  const readiness = getActionReadiness(action);
+  const status =
+    readiness.status === 'blocked'
+      ? '不可执行'
+      : readiness.status === 'ready-with-unresolved-conditions'
+        ? '条件待确认'
+        : '可执行';
+  return `${action.name ?? action.id} · ${status}`;
+}
+
+function formatCooldownWindowTitle(window) {
+  return `${window.actionName} · CD ${formatFrameTime(window.startMs)}-${formatFrameTime(window.endMs)} · 槽位 ${window.chargeIndex + 1}/${window.cooldownCount}`;
 }
 
 function resolveActionLaneId(action) {
@@ -3030,6 +3119,19 @@ h2 {
   font-weight: 700;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
   cursor: pointer;
+  z-index: 2;
+}
+
+.cooldown-window {
+  position: absolute;
+  box-sizing: border-box;
+  height: 5px;
+  min-width: 2px;
+  border: 1px solid rgba(242, 179, 102, 0.72);
+  border-radius: 2px;
+  background: rgba(242, 179, 102, 0.32);
+  pointer-events: none;
+  z-index: 3;
 }
 
 .action-block:hover,
@@ -3056,6 +3158,16 @@ h2 {
   box-shadow:
     0 0 0 3px rgba(242, 179, 102, 0.22),
     0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+.action-block.readiness-blocked {
+  border-color: rgba(245, 108, 108, 0.92);
+  background: linear-gradient(180deg, #543033 0%, #3f2528 100%);
+}
+
+.action-block.readiness-unresolved {
+  border-color: rgba(242, 179, 102, 0.76);
+  background: linear-gradient(180deg, #4b4231 0%, #393225 100%);
 }
 
 .action-block.dragging {
@@ -3436,6 +3548,16 @@ h2 {
 
 .legend-overlap {
   background: #f56c6c;
+}
+
+.legend-cooldown {
+  height: 5px !important;
+  background: #f2b366;
+}
+
+.legend-blocked {
+  border: 1px solid #f56c6c;
+  background: #543033;
 }
 
 .legend-delay {

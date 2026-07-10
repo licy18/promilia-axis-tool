@@ -2,6 +2,8 @@ import { ACTION_TYPES } from '../../domain/projectSchema';
 
 export const ACTION_RULE_DIAGNOSTICS_CONTRACT_NAME =
   'AzPrActionRuleDiagnostics';
+export const ACTION_READINESS_TIMELINE_CONTRACT_NAME =
+  'AzPrActionReadinessTimeline';
 
 export const ACTION_RULE_CODES = Object.freeze({
   LANE_OVERLAP: 'action-lane-overlap',
@@ -16,9 +18,10 @@ export const ACTION_RULE_STATUSES = Object.freeze({
 
 export function createActionRuleDiagnostics({ scenario = {} } = {}) {
   const actions = [...(scenario.actions ?? [])].sort(compareActions);
+  const cooldownEvaluation = createSkillCooldownEvaluation(actions);
   const diagnostics = [
     ...createLaneOverlapDiagnostics(actions),
-    ...createSkillCooldownDiagnostics(actions),
+    ...cooldownEvaluation.diagnostics,
     ...createSkillSpPreconditionDiagnostics(actions, scenario.actors ?? []),
   ].sort(compareDiagnostics);
   const violationCount = diagnostics.filter(
@@ -30,6 +33,12 @@ export function createActionRuleDiagnostics({ scenario = {} } = {}) {
   const affectedActionIds = uniqueValues(
     diagnostics.flatMap(item => item.actionIds)
   );
+  const readinessTimeline = createActionReadinessTimeline({
+    actions,
+    diagnostics,
+    cooldownEvaluation,
+    fps: scenario.time?.fps,
+  });
 
   return {
     schemaVersion: 1,
@@ -43,6 +52,7 @@ export function createActionRuleDiagnostics({ scenario = {} } = {}) {
           : 'action-rules-ready',
     executable: violationCount === 0,
     diagnostics,
+    readinessTimeline,
     summary: {
       actionCount: actions.length,
       ruleCount: 3,
@@ -63,6 +73,88 @@ export function createActionRuleDiagnostics({ scenario = {} } = {}) {
       unresolvedSpPreconditionCount: diagnostics.filter(
         item => item.code === ACTION_RULE_CODES.SKILL_SP_PRECONDITION_UNRESOLVED
       ).length,
+      readinessStatus: readinessTimeline.status,
+      readinessActionCount: readinessTimeline.summary.actionCount,
+      cooldownWindowCount: readinessTimeline.summary.cooldownWindowCount,
+      appliedToSimulationResults: false,
+    },
+    appliedToSimulationResults: false,
+  };
+}
+
+function createActionReadinessTimeline({
+  actions,
+  diagnostics,
+  cooldownEvaluation,
+  fps = 60,
+}) {
+  const diagnosticsByActionId = groupByKey(
+    diagnostics,
+    diagnostic => diagnostic.actionId
+  );
+  const actionRows = actions.map((action, index) => {
+    const actionDiagnostics = diagnosticsByActionId.get(action.id) ?? [];
+    const violations = actionDiagnostics.filter(
+      item => item.status === ACTION_RULE_STATUSES.VIOLATED
+    );
+    const unresolved = actionDiagnostics.filter(
+      item => item.status === ACTION_RULE_STATUSES.UNRESOLVED
+    );
+    const status =
+      violations.length > 0
+        ? 'blocked'
+        : unresolved.length > 0
+          ? 'ready-with-unresolved-conditions'
+          : 'ready';
+    return {
+      schemaVersion: 1,
+      sourceKind: 'azpr-action-readiness-state',
+      status,
+      executable: violations.length === 0,
+      actionId: action.id,
+      actionName: action.name ?? action.id,
+      actionType: action.type,
+      actionIndex: index,
+      actorId: action.actorId ?? null,
+      actorName: action.actor?.name ?? null,
+      skillId: action.skillId ?? null,
+      startMs: Number(action.startMs) || 0,
+      frameIndex: msToFrame(Number(action.startMs) || 0, fps),
+      diagnosticIds: actionDiagnostics.map(item => item.id),
+      violationCodes: uniqueValues(violations.map(item => item.code)),
+      unresolvedCodes: uniqueValues(unresolved.map(item => item.code)),
+      cooldown: cooldownEvaluation.snapshotsByActionId.get(action.id) ?? null,
+      appliedToSimulationResults: false,
+    };
+  });
+  const blockedActionCount = actionRows.filter(
+    action => !action.executable
+  ).length;
+  const unresolvedActionCount = actionRows.filter(
+    action => action.unresolvedCodes.length > 0
+  ).length;
+
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-action-readiness-timeline',
+    contractName: ACTION_READINESS_TIMELINE_CONTRACT_NAME,
+    status:
+      blockedActionCount > 0
+        ? 'action-readiness-timeline-ready-with-blocked-actions'
+        : unresolvedActionCount > 0
+          ? 'action-readiness-timeline-ready-with-unresolved-conditions'
+          : 'action-readiness-timeline-ready',
+    actions: actionRows,
+    cooldownWindows: cooldownEvaluation.cooldownWindows,
+    summary: {
+      actionCount: actionRows.length,
+      readyActionCount: actionRows.filter(action => action.status === 'ready')
+        .length,
+      blockedActionCount,
+      unresolvedActionCount,
+      cooldownTrackedActionCount: actionRows.filter(action => action.cooldown)
+        .length,
+      cooldownWindowCount: cooldownEvaluation.cooldownWindows.length,
       appliedToSimulationResults: false,
     },
     appliedToSimulationResults: false,
@@ -143,9 +235,11 @@ function createLaneOverlapDiagnostics(actions) {
   return diagnostics;
 }
 
-function createSkillCooldownDiagnostics(actions) {
+function createSkillCooldownEvaluation(actions) {
   const cooldownStateBySkillOwner = new Map();
   const diagnostics = [];
+  const snapshotsByActionId = new Map();
+  const cooldownWindows = [];
   for (const action of actions) {
     if (action.type !== ACTION_TYPES.SKILL || !action.actorId) {
       continue;
@@ -155,31 +249,32 @@ function createSkillCooldownDiagnostics(actions) {
       continue;
     }
     const key = `${action.actorId}|${action.skillId}`;
-    const state = releaseReadyCooldownCharges(
-      cooldownStateBySkillOwner.get(key) ??
-        createSkillCooldownState(cooldown.cooldownCount),
-      action.startMs
-    );
-    const blocking = state.rechargeQueue[0] ?? null;
-    if (state.availableCharges <= 0 && blocking) {
+    const state =
+      cooldownStateBySkillOwner.get(key) ?? createSkillCooldownState(cooldown);
+    const chargesBefore = cloneCooldownCharges(state.charges);
+    const availableCharges = state.charges
+      .filter(charge => charge.readyAtMs <= action.startMs)
+      .sort((left, right) => left.chargeIndex - right.chargeIndex);
+    const blocking = [...state.charges].sort(compareCooldownCharges)[0] ?? null;
+    if (availableCharges.length === 0 && blocking) {
       diagnostics.push({
         schemaVersion: 1,
         id: createDiagnosticId(
           ACTION_RULE_CODES.SKILL_COOLDOWN_ACTIVE,
           action.id,
-          blocking.actionId
+          blocking.sourceActionId
         ),
         code: ACTION_RULE_CODES.SKILL_COOLDOWN_ACTIVE,
         ruleKey: 'skill-logic-cooldown',
         status: ACTION_RULE_STATUSES.VIOLATED,
         severity: 'error',
         actionId: action.id,
-        actionIds: [blocking.actionId, action.id],
+        actionIds: [blocking.sourceActionId, action.id],
         actionName: action.name,
         actorId: action.actorId,
         actorName: action.actor?.name ?? action.actorId,
-        blockingActionId: blocking.actionId,
-        blockingActionName: blocking.actionName,
+        blockingActionId: blocking.sourceActionId,
+        blockingActionName: blocking.sourceActionName,
         timeMs: action.startMs,
         cooldownMs: cooldown.cooldownMs,
         cooldownCount: cooldown.cooldownCount,
@@ -191,48 +286,142 @@ function createSkillCooldownDiagnostics(actions) {
         source: cooldown.source,
         appliedToSimulationResults: false,
       });
+      snapshotsByActionId.set(
+        action.id,
+        createCooldownReadinessSnapshot({
+          action,
+          cooldown,
+          status: 'blocked-no-charge-ready',
+          chargesBefore,
+          chargesAfter: chargesBefore,
+          consumedChargeIndex: null,
+          windowId: null,
+        })
+      );
       cooldownStateBySkillOwner.set(key, state);
       continue;
     }
-    state.availableCharges -= 1;
-    state.rechargeQueue.push({
+
+    const consumedCharge = availableCharges[0];
+    const readyAtMs = action.startMs + cooldown.cooldownMs;
+    state.charges = state.charges.map(charge =>
+      charge.chargeIndex === consumedCharge.chargeIndex
+        ? {
+            ...charge,
+            readyAtMs,
+            sourceActionId: action.id,
+            sourceActionName: action.name,
+          }
+        : charge
+    );
+    const window = {
+      schemaVersion: 1,
+      sourceKind: 'azpr-skill-cooldown-window',
+      status: 'skill-cooldown-window-active',
+      windowId: `${action.id}|cooldown-charge|${consumedCharge.chargeIndex}`,
       actionId: action.id,
       actionName: action.name,
-      readyAtMs: action.startMs + cooldown.cooldownMs,
-    });
-    state.rechargeQueue.sort(
-      (left, right) =>
-        left.readyAtMs - right.readyAtMs ||
-        left.actionId.localeCompare(right.actionId)
+      actorId: action.actorId,
+      actorName: action.actor?.name ?? action.actorId,
+      skillId: action.skillId,
+      chargeIndex: consumedCharge.chargeIndex,
+      cooldownCount: cooldown.cooldownCount,
+      startMs: action.startMs,
+      endMs: readyAtMs,
+      durationMs: cooldown.cooldownMs,
+      source: cooldown.source,
+      appliedToSimulationResults: false,
+    };
+    cooldownWindows.push(window);
+    snapshotsByActionId.set(
+      action.id,
+      createCooldownReadinessSnapshot({
+        action,
+        cooldown,
+        status: 'cooldown-charge-consumed',
+        chargesBefore,
+        chargesAfter: cloneCooldownCharges(state.charges),
+        consumedChargeIndex: consumedCharge.chargeIndex,
+        windowId: window.windowId,
+      })
     );
     cooldownStateBySkillOwner.set(key, state);
   }
-  return diagnostics;
-}
-
-function createSkillCooldownState(cooldownCount) {
   return {
-    maxCharges: cooldownCount,
-    availableCharges: cooldownCount,
-    rechargeQueue: [],
+    diagnostics,
+    snapshotsByActionId,
+    cooldownWindows: cooldownWindows.sort(
+      (left, right) =>
+        left.startMs - right.startMs ||
+        left.endMs - right.endMs ||
+        left.windowId.localeCompare(right.windowId)
+    ),
   };
 }
 
-function releaseReadyCooldownCharges(state, timeMs) {
-  const rechargeQueue = [];
-  let availableCharges = state.availableCharges;
-  for (const charge of state.rechargeQueue) {
-    if (charge.readyAtMs <= timeMs) {
-      availableCharges = Math.min(state.maxCharges, availableCharges + 1);
-    } else {
-      rechargeQueue.push(charge);
-    }
-  }
+function createSkillCooldownState(cooldown) {
   return {
-    ...state,
-    availableCharges,
-    rechargeQueue,
+    maxCharges: cooldown.cooldownCount,
+    charges: Array.from(
+      { length: cooldown.cooldownCount },
+      (_, chargeIndex) => ({
+        chargeIndex,
+        readyAtMs: 0,
+        sourceActionId: null,
+        sourceActionName: null,
+      })
+    ),
   };
+}
+
+function createCooldownReadinessSnapshot({
+  action,
+  cooldown,
+  status,
+  chargesBefore,
+  chargesAfter,
+  consumedChargeIndex,
+  windowId,
+}) {
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-action-cooldown-readiness',
+    status,
+    cooldownMs: cooldown.cooldownMs,
+    cooldownCount: cooldown.cooldownCount,
+    availableBefore: countAvailableCharges(chargesBefore, action.startMs),
+    availableAfter: countAvailableCharges(chargesAfter, action.startMs),
+    consumedChargeIndex,
+    nextReadyAtMs: getNextReadyAtMs(chargesAfter, action.startMs),
+    chargesBefore,
+    chargesAfter,
+    windowId,
+    source: cooldown.source,
+    appliedToSimulationResults: false,
+  };
+}
+
+function countAvailableCharges(charges, timeMs) {
+  return charges.filter(charge => charge.readyAtMs <= timeMs).length;
+}
+
+function getNextReadyAtMs(charges, timeMs) {
+  return (
+    charges
+      .map(charge => charge.readyAtMs)
+      .filter(readyAtMs => readyAtMs > timeMs)
+      .sort((left, right) => left - right)[0] ?? null
+  );
+}
+
+function cloneCooldownCharges(charges) {
+  return charges.map(charge => ({ ...charge }));
+}
+
+function compareCooldownCharges(left, right) {
+  return (
+    left.readyAtMs - right.readyAtMs || left.chargeIndex - right.chargeIndex
+  );
 }
 
 function createSkillSpPreconditionDiagnostics(actions, actors) {
@@ -372,4 +561,20 @@ function finiteNumberOrNull(value) {
 
 function uniqueValues(values) {
   return [...new Set((values ?? []).filter(Boolean))];
+}
+
+function groupByKey(items, getKey) {
+  const groups = new Map();
+  for (const item of items ?? []) {
+    const key = getKey(item);
+    if (!groups.has(key)) {
+      groups.set(key, []);
+    }
+    groups.get(key).push(item);
+  }
+  return groups;
+}
+
+function msToFrame(timeMs, fps) {
+  return Math.round((Number(timeMs) * (Number(fps) || 60)) / 1000);
 }

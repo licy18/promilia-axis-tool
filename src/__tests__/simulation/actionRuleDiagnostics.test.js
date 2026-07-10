@@ -87,6 +87,60 @@ describe('action rule diagnostics', () => {
         }),
       ])
     );
+    expect(result.readinessTimeline).toMatchObject({
+      contractName: 'AzPrActionReadinessTimeline',
+      status: 'action-readiness-timeline-ready-with-blocked-actions',
+      summary: {
+        actionCount: 3,
+        readyActionCount: 1,
+        blockedActionCount: 1,
+        unresolvedActionCount: 1,
+        cooldownTrackedActionCount: 2,
+        cooldownWindowCount: 1,
+        appliedToSimulationResults: false,
+      },
+      cooldownWindows: [
+        {
+          actionId: 'action-1',
+          chargeIndex: 0,
+          startMs: 0,
+          endMs: 5000,
+        },
+      ],
+    });
+    expect(result.readinessTimeline.actions).toEqual([
+      expect.objectContaining({
+        actionId: 'action-1',
+        status: 'ready',
+        executable: true,
+        cooldown: expect.objectContaining({
+          availableBefore: 1,
+          availableAfter: 0,
+          nextReadyAtMs: 5000,
+        }),
+      }),
+      expect.objectContaining({
+        actionId: 'action-2',
+        status: 'blocked',
+        executable: false,
+        violationCodes: expect.arrayContaining([
+          ACTION_RULE_CODES.LANE_OVERLAP,
+          ACTION_RULE_CODES.SKILL_COOLDOWN_ACTIVE,
+        ]),
+        cooldown: expect.objectContaining({
+          status: 'blocked-no-charge-ready',
+          availableBefore: 0,
+          availableAfter: 0,
+          windowId: null,
+        }),
+      }),
+      expect.objectContaining({
+        actionId: 'action-3',
+        status: 'ready-with-unresolved-conditions',
+        executable: true,
+        unresolvedCodes: [ACTION_RULE_CODES.SKILL_SP_PRECONDITION_UNRESOLVED],
+      }),
+    ]);
   });
 
   it('does not let an invalid cooldown cast restart the cooldown window', () => {
@@ -153,9 +207,8 @@ describe('action rule diagnostics', () => {
       ],
     };
 
-    const cooldownRows = createActionRuleDiagnostics({
-      scenario,
-    }).diagnostics.filter(
+    const result = createActionRuleDiagnostics({ scenario });
+    const cooldownRows = result.diagnostics.filter(
       item => item.code === ACTION_RULE_CODES.SKILL_COOLDOWN_ACTIVE
     );
 
@@ -167,6 +220,39 @@ describe('action rule diagnostics', () => {
         readyAtMs: 5000,
       }),
     ]);
+    expect(result.readinessTimeline.cooldownWindows).toEqual([
+      expect.objectContaining({
+        actionId: 'action-1',
+        chargeIndex: 0,
+        startMs: 0,
+        endMs: 5000,
+      }),
+      expect.objectContaining({
+        actionId: 'action-2',
+        chargeIndex: 1,
+        startMs: 1000,
+        endMs: 6000,
+      }),
+      expect.objectContaining({
+        actionId: 'action-4',
+        chargeIndex: 0,
+        startMs: 5000,
+        endMs: 10000,
+      }),
+    ]);
+    expect(
+      result.readinessTimeline.actions.find(
+        action => action.actionId === 'action-3'
+      )
+    ).toMatchObject({
+      status: 'blocked',
+      cooldown: {
+        status: 'blocked-no-charge-ready',
+        availableBefore: 0,
+        availableAfter: 0,
+        nextReadyAtMs: 5000,
+      },
+    });
   });
 
   it('returns an executable ready contract when no checked rule is violated', () => {

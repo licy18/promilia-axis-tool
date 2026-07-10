@@ -131,6 +131,62 @@ describe('TimelineGridPreview', () => {
       },
     });
   });
+
+  it('renders action readiness and legal skill cooldown windows on the timeline', () => {
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        actionReadinessTimeline: {
+          actions: [
+            {
+              actionId: 'action-a',
+              status: 'ready',
+              executable: true,
+              violationCodes: [],
+              unresolvedCodes: [],
+            },
+            {
+              actionId: 'action-b',
+              status: 'blocked',
+              executable: false,
+              violationCodes: ['skill-cooldown-active'],
+              unresolvedCodes: [],
+            },
+          ],
+          cooldownWindows: [
+            {
+              windowId: 'action-a|cooldown-charge|0',
+              actionId: 'action-a',
+              actionName: '普通攻击',
+              actorId: 'actor-a',
+              chargeIndex: 0,
+              startMs: 0,
+              endMs: 1500,
+              durationMs: 1500,
+            },
+          ],
+        },
+      }),
+    });
+
+    const blockedAction = wrapper.get(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-b"]'
+    );
+    expect(blockedAction.classes()).toContain('readiness-blocked');
+    expect(blockedAction.attributes()).toMatchObject({
+      'data-readiness-status': 'blocked',
+      'data-readiness-executable': 'false',
+    });
+
+    const cooldownWindow = wrapper.get(
+      '[data-testid="workbench-timeline-cooldown-window"]'
+    );
+    expect(cooldownWindow.attributes()).toMatchObject({
+      'data-action-id': 'action-a',
+      'data-charge-index': '0',
+      'data-end-ms': '1500',
+      'data-window-id': 'action-a|cooldown-charge|0',
+    });
+  });
 });
 
 function findCandidateMarkers(wrapper) {
@@ -250,11 +306,10 @@ function createInjectedMainFlowCommandSurface() {
         kind: 'select-runtime-state-point',
         source: 'timeline-surface-test',
         actionId: options.actionId ?? options.detail?.actionId ?? '',
-        statePointId: options.statePointId ?? options.detail?.statePointId ?? '',
+        statePointId:
+          options.statePointId ?? options.detail?.statePointId ?? '',
         payload: options.payload ?? null,
-        canRun: Boolean(
-          options.statePointId ?? options.detail?.statePointId
-        ),
+        canRun: Boolean(options.statePointId ?? options.detail?.statePointId),
       };
     },
   };
