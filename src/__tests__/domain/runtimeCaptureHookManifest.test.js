@@ -16,12 +16,17 @@ describe('runtime capture hook manifest', () => {
         clientRegion: 'TW',
         moduleName: 'GameAssembly.dll',
         imageBase: '0x180000000',
+        module: {
+          size: 222485544,
+          sha256:
+            'c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b',
+        },
       },
       summary: {
-        methodCount: 7,
-        fieldCount: 17,
-        energyMethodCount: 5,
-        toughnessMethodCount: 2,
+        methodCount: 9,
+        fieldCount: 27,
+        energyMethodCount: 6,
+        toughnessMethodCount: 3,
         realRuntimeCaptureAvailable: false,
       },
       runtimeRequirements: {
@@ -29,6 +34,8 @@ describe('runtime capture hook manifest', () => {
         automaticLaunchAllowed: false,
         automaticAttachAllowed: false,
         antiCheatBypassAllowed: false,
+        captureToolStatus: 'controlled-frida-host-ready',
+        explicitConfirmationRequired: true,
       },
     });
 
@@ -38,6 +45,8 @@ describe('runtime capture hook manifest', () => {
       )
     ).toEqual({
       'AliveProperty.GetBattlePropertyCurrentValue': '0x12A7EE0',
+      'AliveProperty.SetSp': '0x12AC280',
+      'AliveProperty.SetWeaknessPoint': '0x12AC8A0',
       'SnapshotPropertyManager.GetBattlePropertyCurrentValue': '0x181D240',
       'DamageElement.RecoverSP': '0x138EEE0',
       'SPSystem.OnTransmit': '0x14837F0',
@@ -68,6 +77,11 @@ describe('runtime capture hook manifest', () => {
       'RecoverSPArgs.mainPetSharePercent': '0x44',
       'SPSystem.m_entityHandle': '0x10',
       'SPSystem.m_recoverTimerMap': '0x20',
+      'AliveProperty.m_sp': '0x40',
+      'AliveProperty.m_weaknessPoint': '0x48',
+      'BaseElement.<elementId>k__BackingField': '0x120',
+      'BaseElement.<skillId>k__BackingField': '0x12C',
+      'BaseElement.p_sourceID': '0x38',
     });
   });
 });

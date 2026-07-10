@@ -3,7 +3,7 @@
   "game": "azur-promilia",
   "kind": "runtime-capture-hook-manifest",
   "manifestId": "azpr-tc-20260709-three-value-runtime-capture-v1",
-  "generatedAt": "2026-07-10T11:49:20.054Z",
+  "generatedAt": "2026-07-10T12:07:14.248Z",
   "source": {
     "kind": "il2cpp-dump-cs",
     "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
@@ -13,17 +13,55 @@
     "clientRegion": "TW",
     "clientSnapshot": "il2cpp-tc-catch-20260709",
     "moduleName": "GameAssembly.dll",
-    "imageBase": "0x180000000"
+    "imageBase": "0x180000000",
+    "module": {
+      "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+      "size": 222485544,
+      "lastWriteTime": "2026-06-09T23:30:25.829Z",
+      "sha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b"
+    }
   },
   "summary": {
-    "methodCount": 7,
-    "fieldCount": 17,
-    "energyMethodCount": 5,
-    "toughnessMethodCount": 2,
+    "methodCount": 9,
+    "fieldCount": 27,
+    "energyMethodCount": 6,
+    "toughnessMethodCount": 3,
     "realRuntimeCaptureAvailable": false,
     "status": "source-backed-hook-targets-ready-awaiting-controlled-capture"
   },
   "methods": [
+    {
+      "key": "AliveProperty.SetWeaknessPoint",
+      "className": "AliveProperty",
+      "methodName": "SetWeaknessPoint",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "toughness-damage-applied"
+      ],
+      "rva": "0x12AC8A0",
+      "offset": "0x12AB0A0",
+      "va": "0x1812AC8A0",
+      "signature": "public bool SetWeaknessPoint(MyFloat v, bool force = False) { }"
+    },
+    {
+      "key": "AliveProperty.SetSp",
+      "className": "AliveProperty",
+      "methodName": "SetSp",
+      "hookMoments": [
+        "entry",
+        "exit"
+      ],
+      "eventTypes": [
+        "recover-sp-applied"
+      ],
+      "rva": "0x12AC280",
+      "offset": "0x12AAA80",
+      "va": "0x1812AC280",
+      "signature": "public void SetSp(MyFloat value, bool fromServer = False) { }"
+    },
     {
       "key": "AliveProperty.GetBattlePropertyCurrentValue",
       "className": "AliveProperty",
@@ -249,6 +287,86 @@
       "declaration": "public float mainPetSharePercent;"
     },
     {
+      "key": "AliveProperty.m_sp",
+      "className": "AliveProperty",
+      "fieldName": "m_sp",
+      "fieldType": "MyFloat",
+      "offset": "0x40",
+      "declaration": "private MyFloat m_sp;"
+    },
+    {
+      "key": "AliveProperty.m_weaknessPoint",
+      "className": "AliveProperty",
+      "fieldName": "m_weaknessPoint",
+      "fieldType": "MyFloat",
+      "offset": "0x48",
+      "declaration": "private MyFloat m_weaknessPoint;"
+    },
+    {
+      "key": "BaseElement.p_sourceID",
+      "className": "BaseElement",
+      "fieldName": "p_sourceID",
+      "fieldType": "ulong",
+      "offset": "0x38",
+      "declaration": "protected ulong p_sourceID;"
+    },
+    {
+      "key": "BaseElement.p_attackerEntityID",
+      "className": "BaseElement",
+      "fieldName": "p_attackerEntityID",
+      "fieldType": "int",
+      "offset": "0x40",
+      "declaration": "protected int p_attackerEntityID;"
+    },
+    {
+      "key": "BaseElement.p_executeEntityID",
+      "className": "BaseElement",
+      "fieldName": "p_executeEntityID",
+      "fieldType": "int",
+      "offset": "0x44",
+      "declaration": "protected int p_executeEntityID;"
+    },
+    {
+      "key": "BaseElement.p_sourceEntityID",
+      "className": "BaseElement",
+      "fieldName": "p_sourceEntityID",
+      "fieldType": "int",
+      "offset": "0x48",
+      "declaration": "protected int p_sourceEntityID;"
+    },
+    {
+      "key": "BaseElement.m_uniqueId",
+      "className": "BaseElement",
+      "fieldName": "m_uniqueId",
+      "fieldType": "ulong",
+      "offset": "0xA8",
+      "declaration": "private ulong m_uniqueId;"
+    },
+    {
+      "key": "BaseElement.<elementId>k__BackingField",
+      "className": "BaseElement",
+      "fieldName": "<elementId>k__BackingField",
+      "fieldType": "int",
+      "offset": "0x120",
+      "declaration": "private int <elementId>k__BackingField;"
+    },
+    {
+      "key": "BaseElement.<skillId>k__BackingField",
+      "className": "BaseElement",
+      "fieldName": "<skillId>k__BackingField",
+      "fieldType": "int",
+      "offset": "0x12C",
+      "declaration": "private int <skillId>k__BackingField;"
+    },
+    {
+      "key": "BaseElement.UUID",
+      "className": "BaseElement",
+      "fieldName": "UUID",
+      "fieldType": "uint",
+      "offset": "0x138",
+      "declaration": "public uint UUID;"
+    },
+    {
       "key": "DamageElement.m_recoverSP",
       "className": "DamageElement",
       "fieldName": "m_recoverSP",
@@ -293,8 +411,8 @@
     {
       "key": "recover-sp-runtime-sequence",
       "requiredEventTypes": [
-        "recover-sp-args-built",
         "recover-sp-modifier-property-read",
+        "recover-sp-args-built",
         "recover-sp-ontransmit-12f",
         "recover-sp-applied",
         "recover-sp-share-rebroadcast"
@@ -302,6 +420,7 @@
       "hookTargets": [
         "AliveProperty.GetBattlePropertyCurrentValue",
         "SnapshotPropertyManager.GetBattlePropertyCurrentValue",
+        "AliveProperty.SetSp",
         "DamageElement.RecoverSP",
         "SPSystem.OnTransmit",
         "SPSystem.RecoverSP"
@@ -317,7 +436,8 @@
       ],
       "hookTargets": [
         "FormulaUtility.GetOutputWeaknessDamage",
-        "FormulaUtility.WeaknessPointChange"
+        "FormulaUtility.WeaknessPointChange",
+        "AliveProperty.SetWeaknessPoint"
       ]
     }
   ],
@@ -328,7 +448,9 @@
     "antiCheatBypassAllowed": false,
     "sourceGameProcessRequired": true,
     "captureToolRequired": true,
-    "captureToolStatus": "not-installed-or-configured",
+    "captureToolStatus": "controlled-frida-host-ready",
+    "captureHost": "scripts/capture-azpr-runtime.py",
+    "explicitConfirmationRequired": true,
     "realCaptureAcceptance": "capture must pass production provenance audit and Workbench adapter validation"
   }
 }

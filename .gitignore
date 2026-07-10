@@ -40,6 +40,10 @@ playwright-report/
 node_modules/
 jspm_packages/
 
+# Python bytecode
+__pycache__/
+*.py[cod]
+
 # Optional npm cache directory
 .npm
 

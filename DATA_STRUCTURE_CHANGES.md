@@ -25757,6 +25757,8 @@ RuntimeCaptureHookManifest
     path / size / lastWriteTime / sha256
     clientRegion / clientSnapshot
     moduleName / imageBase
+    module
+      path / size / lastWriteTime / sha256
   methods[]
     key / className / methodName
     hookMoments[] / eventTypes[]
@@ -25767,7 +25769,7 @@ RuntimeCaptureHookManifest
   runtimeRequirements
 ```
 
-生成器从 TC `dump.cs` 流式提取 7 个目标方法和 17 个字段，覆盖 RecoverSP 的两个修正属性读取入口、三个充能入口和两个削韧入口，避免把约 97 MB 源文件整体载入内存。属性入口通过 `captureWhen.id = 105/228` 限定为 `SPGETUP / SPGETUP_ATK`。生成时任一目标缺失即失败；manifest 固定源文件 SHA-256，客户端更新后旧地址不得继续使用。
+生成器从 TC `dump.cs` 流式提取 9 个目标方法和 27 个字段，覆盖 RecoverSP 的两个修正属性读取入口、三个充能入口、两个最终状态写入口和两个削韧入口；字段覆盖 BaseElement 来源 element/skill/entity 身份、RecoverSPArgs、DamageElement、SPSystem 以及 AliveProperty 的 `m_sp/m_weaknessPoint`。属性入口通过 `captureWhen.id = 105/228` 限定为 `SPGETUP / SPGETUP_ATK`。生成时任一目标缺失即失败；manifest 同时固定 `dump.cs` 与实际 `GameAssembly.dll` SHA-256，客户端更新后旧地址不得继续使用。
 
 ### 361.2 RuntimeCaptureJsonLines
 
@@ -25811,7 +25813,7 @@ provenanceAudit
   applied = false
 ```
 
-生产资格要求来源不是 fixture/synthetic/template/mock/example/manual，且包含客户端区域、build、采集工具版本、hook manifest 标识、事件时间和 DamageElement/PathID 身份。RecoverSP 的五类必需事件必须齐全并保持调用先后顺序；削韧至少包含 `toughness-damage-applied`。审计只声明来源合同是否完整，不会把采样反推为通用公式。
+生产资格要求来源不是 fixture/synthetic/template/mock/example/manual/self-test，且包含客户端区域、build、采集工具版本、hook manifest 标识、事件时间和 DamageElement/PathID 身份。RecoverSP 的五类必需事件必须齐全，并按“modifier -> args -> OnTransmit -> applied -> share”保持调用先后顺序；削韧至少包含 `toughness-damage-applied`。审计只声明来源合同是否完整，不会把采样反推为通用公式。
 
 ### 361.4 规范化与消费边界
 
@@ -25820,3 +25822,43 @@ provenanceAudit
 Workbench 文件入口新增 `.jsonl/.ndjson` MIME/扩展名，解析后继续走 P7-B 绑定、v8 草稿和 P7-A adapter。当前没有非 fixture capture；manifest 的 `realRuntimeCaptureAvailable = false`，P7-C 真实数据验收仍未完成。
 
 下一阶段继续 P7-C：在明确授权、人工控制且不绕过反作弊的客户端环境中产出首份真实 JSONL，并通过 production audit、adapter、三值曲线、日志和项目回导验收。
+
+## 362. P7-C 显式受控 Frida capture host
+
+### 362.1 Host 启动合同
+
+新增 `scripts/capture-azpr-runtime.py`，游戏采集必须显式提供：
+
+```text
+--pid
+--output
+--action-id
+--actor-id
+--target-id
+--confirm-controlled-session
+```
+
+缺少确认标志时在调用 `frida.attach()` 前失败。host 不寻找或启动游戏，不提供关闭/绕过反作弊的选项；`--duration 0` 只表示由操作者按 Ctrl+C 结束已确认会话。
+
+附加后 host 先通过 agent RPC 读取进程内 `GameAssembly.dll` 路径，对文件大小和 SHA-256 与 manifest 做严格匹配；验证成功后才安装 Interceptor。session header 自动写入 manifest ID/hash、模块路径/hash、客户端区域/build 和进程 ID，每个 event 写入后立即 flush。
+
+### 362.2 Agent runtime correlation
+
+新增 `runtime-capture/frida/azpr-runtime-capture-agent.js`，按线程维护四类嵌套上下文：
+
+```text
+DamageElement.RecoverSP source stack
+SPSystem.OnTransmit stack
+SPSystem.RecoverSP stack
+FormulaUtility.WeaknessPointChange stack
+```
+
+能量链读取 BaseElement `elementId/skillId/entityId/uniqueId`、DamageElement 三个 recover 字段、两个 modifier 的 MyFloat 返回值、RecoverSPArgs 全字段，并在 `AliveProperty.SetSp` 前后读取 `m_sp`。削韧链在 `WeaknessPointChange` 上下文中拦截 `AliveProperty.SetWeaknessPoint`，读取 `m_weaknessPoint` 前后值。MyFloat 按 IL2CPP `int64 / 65536` 转换，同时保留 raw 值。
+
+### 362.3 受控 transport 自检
+
+`--self-test` 只启动仓库控制的 Python 子进程并拦截 `kernel32!Sleep`，不读取 manifest、不接触游戏。当前自检捕获 4 个 native 调用，证明 PID attach、agent RPC、Interceptor、消息回传和 JSONL flush 可工作。
+
+self-test session 使用 `source = controlled-frida-self-test`；production audit 明确拒绝 `self-test` 标记，测试数据不能晋级为真实游戏证据。
+
+当前没有运行中的游戏进程，也没有非 fixture capture；本节证明采集执行端已经就绪，不证明游戏内 hook 已执行。下一阶段仍需人工启动获准客户端并完成第一份真实 capture 验收。

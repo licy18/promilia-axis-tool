@@ -7,15 +7,15 @@ const SUPPORTED_RUNTIME_SAMPLE_FILE_TYPES = new Set([
 ]);
 
 const RECOVER_SP_REQUIRED_EVENT_TYPES = [
-  'recover-sp-args-built',
   'recover-sp-modifier-property-read',
+  'recover-sp-args-built',
   'recover-sp-ontransmit-12f',
   'recover-sp-applied',
   'recover-sp-share-rebroadcast',
 ];
 const TOUGHNESS_REQUIRED_EVENT_TYPES = ['toughness-damage-applied'];
 const NON_PRODUCTION_SOURCE_PATTERN =
-  /(?:fixture|synthetic|template|mock|example|manual)/iu;
+  /(?:fixture|synthetic|template|mock|example|manual|self[-_ ]?test)/iu;
 
 export function parseWorkbenchRuntimeSampleCaptureFile(rawFile) {
   const payload = parseJsonValue(rawFile);

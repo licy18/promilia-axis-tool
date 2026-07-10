@@ -222,9 +222,13 @@ describe('workbench runtime sample capture', () => {
     const mismatched = createRecoverSpRuntimeSampleFixture({
       actionId: 'source-action-3',
     });
-    mismatched.events[0].args.skillId = 10100301;
+    mismatched.events.find(
+      event => event.eventType === 'recover-sp-args-built'
+    ).args.skillId = 10100301;
     const exactActionMismatch = createRecoverSpRuntimeSampleFixture();
-    exactActionMismatch.events[0].args.skillId = 10100301;
+    exactActionMismatch.events.find(
+      event => event.eventType === 'recover-sp-args-built'
+    ).args.skillId = 10100301;
 
     expect(
       bindWorkbenchRuntimeSampleCaptures({

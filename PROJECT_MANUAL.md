@@ -638,8 +638,8 @@ P7：蓝原真实机制适配。
 - P7-A 已完成：标准生成层会把验证通过的 RecoverSP 与削韧 runtime sample 晋级为已应用 delta，并按真实采样帧进入角色资源曲线、敌人韧性曲线、sim log 和 summary。
 - 仅有 `recoverSP / weakBreakDamageRate` 静态候选、归属缺失或前后值不一致的样本仍保持未应用；默认项目三值结果没有变化。
 - P7-B 已完成：Workbench 统一导入入口可以识别实测 capture JSON，完成动作/角色/敌人绑定、项目持久化和运行结果刷新；JSON、分享链接与 PNG 都保留采样。
-- P7-C 采集工具链已就绪：TC IL2CPP 静态证据可以生成来源锁定的 hook manifest，JSONL 会话可以规范化、审计并通过现有 Workbench 入口导入。
-- P7-C 尚未完成真实数据验收：本机当前没有非 fixture 战斗 capture，仓库不会自动启动、附加或绕过反作弊客户端。
+- P7-C 采集工具链已就绪：TC IL2CPP 静态证据可以生成来源锁定的 hook manifest；显式 Frida host/agent 可以在人工确认后按 PID 采集 JSONL，再由 production audit 和 Workbench 消费。
+- P7-C 尚未完成真实数据验收：本机当前没有运行中的游戏进程或非 fixture 战斗 capture；仓库不会自动启动客户端、不会在缺少确认标志时附加，也不提供反作弊绕过。
 - 下一阶段继续 P7-C：在明确授权的受控客户端会话中产出第一份真实 JSONL，并通过生产来源审计、P7-A adapter、曲线和日志全链路验收。
 
 ### P4-A 标准状态效果运行时合同（2026-07-10）
@@ -793,20 +793,23 @@ P7：蓝原真实机制适配。
 
 已完成能力：
 
-- 新增来源可追溯的 hook manifest 生成器，从 TC `dump.cs` 流式提取 RecoverSP 修正属性读取、SPSystem 和弱点/削韧入口的 7 个方法地址、17 个字段偏移，并固定源文件 SHA-256；客户端更新后必须重新生成。
+- 新增来源可追溯的 hook manifest 生成器，从 TC `dump.cs` 流式提取 RecoverSP 修正属性读取、SP/韧性最终状态应用、SPSystem 和弱点/削韧入口的 9 个方法地址、27 个字段偏移，并同时固定 `dump.cs` 与 `GameAssembly.dll` SHA-256；客户端更新后必须重新生成。
 - 定义 `capture-session + event` JSONL 会话格式；解析器可按 `captureSessionId` 归并多条事件，并继续复用 P7-B 的动作/角色/敌人绑定、项目持久化和 P7-A 三值 adapter。
 - 新增 capture 规范化 CLI，输出标准 `runtime-sample-captures` envelope、输入文件大小/SHA-256 和 production audit。`--require-production` 会拒绝 fixture、synthetic、manual、元数据缺失、来源身份缺失或 RecoverSP 事件错序的输入。
+- 新增显式受控 Frida host/agent：必须传入 PID、动作/角色/敌人绑定和 `--confirm-controlled-session`；安装 hook 前核对进程内 `GameAssembly.dll` 文件哈希，覆盖 BaseElement 来源身份、SPGETUP/SPGETUP_ATK、RecoverSPArgs、SP 前后值和韧性前后值。
+- RecoverSP 顺序按真实调用调整为“修正属性读取 -> args 构造 -> OnTransmit -> SP 应用 -> 分享回传”；旧 fixture 同步迁移，三值结果不变。
 - Workbench 现有“导入项目”入口新增 `.jsonl/.ndjson` 支持，没有增加平行按钮或状态系统；既有 JSON/PNG/分享项目行为不变。
-- 采集说明固定受控边界：不自动启动游戏、不自动附加进程、不关闭或绕过反作弊。当前 manifest 只证明采集目标可追溯，不代表真实战斗 capture 已取得。
+- 采集说明固定受控边界：不自动启动游戏、不在缺少确认时附加进程、不关闭或绕过反作弊。当前 manifest 和 host 只证明采集端可执行，不代表真实战斗 capture 已取得。
 
 已完成验证：
 
-- `npm run data:generate-runtime-capture-manifest`：通过，提取 7 个方法、17 个字段，源 SHA-256 为 `0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a`。
-- `npm run test -- --run`：通过，53 个测试文件、361 条测试；覆盖 manifest、JSONL 归并、生产来源拒绝、事件顺序和规范化 CLI。
+- `npm run data:generate-runtime-capture-manifest`：通过，提取 9 个方法、27 个字段；`dump.cs` SHA-256 为 `0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a`，`GameAssembly.dll` SHA-256 为 `c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b`。
+- `npm run runtime-capture:self-test`：通过；host 显式附加到自行启动的 Python 测试进程，Frida agent 捕获 4 次 native `Sleep` 调用并写入 JSONL，且 self-test 文件被 production audit 拒绝。
+- `npm run test -- --run`：通过，54 个测试文件、363 条测试；覆盖 manifest、JSONL 归并、生产来源拒绝、真实事件顺序、显式确认门、Frida transport 和规范化 CLI。
 - `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
 - `npm run test:e2e:workbench-flow`：通过，29 条 Workbench 浏览器主流程；capture 路径已改为 JSONL，并验证导入、三值曲线、项目 JSON 保存与回导。
 
-当前未完成：仓库和 `C:\Codex\AzPr Extractor\captures` 均没有非 fixture 真实战斗 capture，因此 P7-C 仍处于进行中，不能宣称已经确认新的通用公式或真实动作数值。
+当前未完成：仓库和 `C:\Codex\AzPr Extractor\captures` 均没有非 fixture 真实战斗 capture，当前也没有运行中的蓝色星原进程，因此没有对游戏安装 hook。P7-C 仍处于进行中，不能宣称已经确认新的通用公式或真实动作数值。
 
 下一阶段目标：继续 P7-C 真实会话验收。在明确授权且人工控制的客户端采集环境中按 manifest 产出首份非 fixture JSONL，使其通过 `runtime-capture:normalize --require-production`，再验证 P7-A adapter、Workbench HP/韧性/角色能量曲线、sim log 和项目回导；不扩展碎片 UI 或猜测倍率。
 

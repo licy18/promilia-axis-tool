@@ -53,16 +53,6 @@ export function createRecoverSpRuntimeSampleFixture({
     events: [
       {
         ...common,
-        eventType: 'recover-sp-args-built',
-        recoverSP,
-        petRecoverSP,
-        recoverInterval,
-        spgetup,
-        spgetupAtk,
-        args,
-      },
-      {
-        ...common,
         eventType: 'recover-sp-modifier-property-read',
         ownerEntityId,
         propertyId: 105,
@@ -82,6 +72,16 @@ export function createRecoverSpRuntimeSampleFixture({
         myFloatRaw: spgetupAtk,
         floatValue: spgetupAtk,
         args: { id: argsId },
+      },
+      {
+        ...common,
+        eventType: 'recover-sp-args-built',
+        recoverSP,
+        petRecoverSP,
+        recoverInterval,
+        spgetup,
+        spgetupAtk,
+        args,
       },
       {
         ...common,

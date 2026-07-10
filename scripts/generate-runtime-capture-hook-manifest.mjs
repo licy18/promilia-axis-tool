@@ -9,6 +9,8 @@ const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = resolve(SCRIPT_DIR, '..');
 const DEFAULT_DUMP_CS =
   'C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs';
+const DEFAULT_GAME_ASSEMBLY =
+  'C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll';
 const DEFAULT_OUTPUT = resolve(
   PROJECT_ROOT,
   'src/data/generated/runtime-capture-hook-manifest.json'
@@ -30,6 +32,20 @@ const TARGET_METHODS = [
     hookMoments: ['entry', 'exit'],
     eventTypes: ['recover-sp-modifier-property-read'],
     captureWhen: { argumentName: 'id', values: [105, 228] },
+  },
+  {
+    key: 'AliveProperty.SetSp',
+    className: 'AliveProperty',
+    methodName: 'SetSp',
+    hookMoments: ['entry', 'exit'],
+    eventTypes: ['recover-sp-applied'],
+  },
+  {
+    key: 'AliveProperty.SetWeaknessPoint',
+    className: 'AliveProperty',
+    methodName: 'SetWeaknessPoint',
+    hookMoments: ['entry', 'exit'],
+    eventTypes: ['toughness-damage-applied'],
   },
   {
     key: 'DamageElement.RecoverSP',
@@ -74,6 +90,23 @@ const TARGET_METHODS = [
 
 const TARGET_FIELDS = [
   {
+    className: 'BaseElement',
+    fieldNames: [
+      'p_sourceID',
+      'p_attackerEntityID',
+      'p_executeEntityID',
+      'p_sourceEntityID',
+      'm_uniqueId',
+      '<elementId>k__BackingField',
+      '<skillId>k__BackingField',
+      'UUID',
+    ],
+  },
+  {
+    className: 'AliveProperty',
+    fieldNames: ['m_sp', 'm_weaknessPoint'],
+  },
+  {
     className: 'DamageElement',
     fieldNames: ['m_recoverSP', 'm_petRecoverSP', 'm_recoverInterval'],
   },
@@ -108,16 +141,26 @@ const TARGET_CLASS_NAMES = new Set([
 async function main() {
   const options = parseArguments(process.argv.slice(2));
   const sourcePath = resolve(options.dumpCs ?? DEFAULT_DUMP_CS);
+  const modulePath = resolve(options.gameAssembly ?? DEFAULT_GAME_ASSEMBLY);
   const outputPath = resolve(options.output ?? DEFAULT_OUTPUT);
-  const sourceStat = await stat(sourcePath);
+  const [sourceStat, moduleStat] = await Promise.all([
+    stat(sourcePath),
+    stat(modulePath),
+  ]);
   const extracted = await extractTargets(sourcePath);
   assertCompleteExtraction(extracted);
-  const sourceSha256 = await hashFile(sourcePath);
+  const [sourceSha256, moduleSha256] = await Promise.all([
+    hashFile(sourcePath),
+    hashFile(modulePath),
+  ]);
   const generatedAt = new Date().toISOString();
   const manifest = createManifest({
     sourcePath,
     sourceStat,
     sourceSha256,
+    modulePath,
+    moduleStat,
+    moduleSha256,
     generatedAt,
     extracted,
   });
@@ -130,6 +173,7 @@ async function main() {
       methodCount: manifest.summary.methodCount,
       fieldCount: manifest.summary.fieldCount,
       sourceSha256,
+      moduleSha256,
     })}\n`
   );
 }
@@ -144,7 +188,7 @@ async function extractTargets(sourcePath) {
 
   for await (const line of lines) {
     const classMatch = line.match(
-      /^(?:public|private|internal|protected)\s+(?:static\s+)?class\s+([A-Za-z0-9_]+)/u
+      /^(?:public|private|internal|protected)\s+(?:(?:static|abstract|sealed)\s+)?class\s+([A-Za-z0-9_]+)/u
     );
     if (classMatch) {
       currentClassName = TARGET_CLASS_NAMES.has(classMatch[1])
@@ -212,7 +256,7 @@ function collectTargetField({ line, currentClassName, fields }) {
     }
     const declaration = line.trim().replace(/\s*\/\/.*$/u, '');
     const typeAndName = declaration.match(
-      /^(?:public|private|internal|protected)\s+(?:readonly\s+)?(.+?)\s+([A-Za-z0-9_]+);$/u
+      /^(?:public|private|internal|protected)\s+(?:readonly\s+)?(.+?)\s+([^\s;]+);$/u
     );
     fields.set(`${currentClassName}.${fieldName}`, {
       key: `${currentClassName}.${fieldName}`,
@@ -245,6 +289,9 @@ function createManifest({
   sourcePath,
   sourceStat,
   sourceSha256,
+  modulePath,
+  moduleStat,
+  moduleSha256,
   generatedAt,
   extracted,
 }) {
@@ -264,6 +311,12 @@ function createManifest({
       clientSnapshot: 'il2cpp-tc-catch-20260709',
       moduleName: 'GameAssembly.dll',
       imageBase: '0x180000000',
+      module: {
+        path: normalizePath(modulePath),
+        size: moduleStat.size,
+        lastWriteTime: moduleStat.mtime.toISOString(),
+        sha256: moduleSha256,
+      },
     },
     summary: {
       methodCount: extracted.methods.length,
@@ -283,8 +336,8 @@ function createManifest({
       {
         key: 'recover-sp-runtime-sequence',
         requiredEventTypes: [
-          'recover-sp-args-built',
           'recover-sp-modifier-property-read',
+          'recover-sp-args-built',
           'recover-sp-ontransmit-12f',
           'recover-sp-applied',
           'recover-sp-share-rebroadcast',
@@ -292,6 +345,7 @@ function createManifest({
         hookTargets: [
           'AliveProperty.GetBattlePropertyCurrentValue',
           'SnapshotPropertyManager.GetBattlePropertyCurrentValue',
+          'AliveProperty.SetSp',
           'DamageElement.RecoverSP',
           'SPSystem.OnTransmit',
           'SPSystem.RecoverSP',
@@ -304,6 +358,7 @@ function createManifest({
         hookTargets: [
           'FormulaUtility.GetOutputWeaknessDamage',
           'FormulaUtility.WeaknessPointChange',
+          'AliveProperty.SetWeaknessPoint',
         ],
       },
     ],
@@ -314,7 +369,9 @@ function createManifest({
       antiCheatBypassAllowed: false,
       sourceGameProcessRequired: true,
       captureToolRequired: true,
-      captureToolStatus: 'not-installed-or-configured',
+      captureToolStatus: 'controlled-frida-host-ready',
+      captureHost: 'scripts/capture-azpr-runtime.py',
+      explicitConfirmationRequired: true,
       realCaptureAcceptance:
         'capture must pass production provenance audit and Workbench adapter validation',
     },
@@ -336,12 +393,15 @@ function parseArguments(args) {
     if (argument === '--dump-cs') {
       options.dumpCs = args[index + 1];
       index += 1;
+    } else if (argument === '--game-assembly') {
+      options.gameAssembly = args[index + 1];
+      index += 1;
     } else if (argument === '--output') {
       options.output = args[index + 1];
       index += 1;
     } else if (argument === '--help') {
       process.stdout.write(
-        'Usage: node scripts/generate-runtime-capture-hook-manifest.mjs [--dump-cs PATH] [--output PATH]\n'
+        'Usage: node scripts/generate-runtime-capture-hook-manifest.mjs [--dump-cs PATH] [--game-assembly PATH] [--output PATH]\n'
       );
       process.exit(0);
     } else {
