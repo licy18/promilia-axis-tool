@@ -50,6 +50,7 @@ npm run audit:bundle:check
 npm run audit:workbench-data:check
 npm run benchmark:long-axis:check
 npm run benchmark:long-axis:browser
+npm run test:e2e:production-preview
 git diff --check
 ```
 
@@ -102,6 +103,8 @@ e2e/                     Workbench 浏览器主流程
 生产引用审计从 `src/main.js` 和全部测试入口追踪 JS、TS、Vue SFC 的静态/动态 import。当前只保留生产可达模块，以及明确允许的领域/runtime fixture 与无 UI simulation API；旧 editor/timeline 组件、旧 project/history/setting store 和旧计算工具已经删除。
 
 构建组成审计会生成 `reports/bundle-composition.json`，并守住首屏入口、Workbench 主包和全部 JavaScript 的 gzip 预算，同时检查技能诊断数据必须位于独立按需包。Element Plus 组件由各页面按需引用，PNG 截图库只在实际导出时加载。
+
+`npm run test:e2e:production-preview` 会重新构建 `dist`，用独立端口启动 Vite production preview，并检查路由与哈希资源、诊断动态包、JSON/PNG 项目交换和 390px 窄屏主流程。最终试用判定写入 `reports/production-preview-acceptance.json`。
 
 ## 项目文档
 

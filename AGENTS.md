@@ -33,6 +33,7 @@ npm run audit:bundle:check
 npm run audit:workbench-data:check
 npm run benchmark:long-axis:check
 npm run benchmark:long-axis:browser
+npm run test:e2e:production-preview
 ```
 
 `npm run lint` 当前带 `--fix`，会自动改文件；运行前先确认是否需要格式修复。
@@ -49,6 +50,7 @@ npm run benchmark:long-axis:browser
 - 旧 `src/components/editor/`、`src/components/timeline/`、project/history/setting store 和旧计算工具已经按引用审计删除，不得重新引入平行实现。
 - 生产时间轴只使用 `src/features/workbench/TimelineGridPreview.vue`；新增源码后运行 `npm run audit:production-imports:check`，不得留下无引用或未允许的 test-only 模块。
 - 生产构建使用 `npm run audit:bundle:check` 守住首屏、Workbench 和全部 JavaScript gzip 预算；不得通过放宽预算或隐藏 Vite 警告代替实际依赖边界优化。
+- 发布试用前运行 `npm run test:e2e:production-preview`，必须从真实 `dist` 启动 preview 并生成 `reports/production-preview-acceptance.json`；开发服务器主流程通过不能替代该验收。
 
 ## 当前路线边界
 

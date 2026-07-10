@@ -25,6 +25,7 @@
     "format": "prettier --write src/",
     "test": "vitest",
     "test:e2e": "playwright test",
+    "test:e2e:production-preview": "npm run build && playwright test --config playwright.production.config.js",
     "test:e2e:workbench-flow": "playwright test e2e/workbench-continuous-edit.spec.js -g @workbench-main-flow",
     "test:coverage": "vitest run --coverage"
   },

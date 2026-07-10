@@ -26078,3 +26078,29 @@ status
 ```
 
 审计从四份完整技能证据分别重建核心与诊断投影，逐字段比较两个生成文件，并核对 manifest 的 `workbenchSkillCore` / `workbenchSkillDiagnostics` 注册。`skillRuntimeAudit.size` 额外记录 `coreBytes`、`diagnosticsBytes` 和合计体积；任一映射或注册不一致都会使 `audit:workbench-data:check` 失败。
+
+## 371. ProductionPreviewAcceptance v1
+
+`reports/production-preview-acceptance.json` 由 production Playwright reporter 生成：
+
+```text
+schemaVersion = 1
+kind = production-preview-acceptance
+generatedAt
+environment
+  platform / node / server / source
+commands
+decision
+  status = trial-ready | blocked
+  trialReady / reason
+summary
+  requiredCapabilityCount / passedCapabilityCount
+  testCount / passedTestCount / playwrightStatus / durationMs
+capabilities[]
+  capability / status / testCount
+tests[]
+  capability / title / status / durationMs / retry / errors[]
+limitations[]
+```
+
+必需能力固定为 production 路由与哈希资源、诊断动态加载、JSON 项目交换、PNG 项目交换和 390px 窄屏主流程。只有 Playwright 整体通过且五项能力全部存在并通过时，报告才输出 `trial-ready`；缺项或失败均输出 `blocked`。该报告只证明本地 `dist` + Vite preview 可试用，不代表远程 CDN/托管、最终蓝原公式或非 fixture 真实采样已验收。

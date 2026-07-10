@@ -37,7 +37,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 
 ## 2. 当前项目状态
 
-当前项目已经形成可试用的 Workbench 主流程，但真实公式覆盖、首份真实战斗采样、长轴性能和发布清理仍未完成，不能视为最终版本。
+当前项目已经形成可供本地用户试用的 Workbench production demo；真实公式覆盖、首份真实战斗采样和远程部署仍未完成，不能视为最终版本。
 
 已完成的主线能力：
 
@@ -53,8 +53,9 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；50 个测试文件、331 条测试通过。
-- `npm run test:e2e:workbench-flow`：通过；31 条 Workbench 浏览器主流程通过。
+- `npm run test -- --run`：通过；51 个测试文件、334 条测试通过。
+- `npm run test:e2e:workbench-flow`：通过；32 条 Workbench 浏览器主流程通过。
+- `npm run test:e2e:production-preview`：通过；5 项真实 `dist` 验收全部通过，报告结论为 `trial-ready`。
 
 ## 3. 目录速览
 
@@ -876,11 +877,19 @@ Workbench 现在是唯一生产排轴入口。根路径和旧 `/editor` 路径�
 
 技能生产合同已拆为 `workbench-skill-core.json` 与 `workbench-skill-diagnostics.json`：首轮编辑和模拟只加载 1,745,045B 的核心逻辑/等级/valueParam，2,483,839B 的 Skill Control、DamageElement、外部对象和召唤目标候选证据在首次运行复盘或实测采样恢复时按需加载。原始 JSONL 采样会先取得诊断证据再绑定；包含采样的 JSON、PNG、分享、预设和本地草稿也会在恢复后自动补载。已应用 HP、韧性、角色能量、状态快照和日志数值在诊断安装前后保持一致，本阶段没有修改公式或项目 v8 schema。
 
-生产数据审计升级为 v2，分别深比较核心与诊断投影并核对 manifest；bundle 守门同时要求诊断文件形成独立动态 chunk。Workbench 首轮包由 408,497B gzip 降至 346,066B，诊断按需包为 63,418B gzip，全部 JavaScript 为 688,931B gzip；Workbench 预算收紧为 370KB。
+生产数据审计升级为 v2，分别深比较核心与诊断投影并核对 manifest；bundle 守门同时要求诊断文件形成独立动态 chunk。Workbench 首轮包由 408,497B gzip 降至 346,066B，诊断按需包为 63,418B gzip，全部 JavaScript 为 688,932B gzip；Workbench 预算收紧为 370KB。
 
 已完成验证：`npm run test -- --run` 通过 51 个测试文件、334 条测试；`npm run build` 通过，1730 个模块；生产引用、生产数据和 bundle 审计全部通过；`npm run test:e2e:workbench-flow` 通过 32 条主流程并覆盖诊断从 idle 到 ready 及 runtime capture 导入；180 动作总耗时 p95 为 102.458ms，120 动作浏览器就绪时间为 1365ms。
 
 下一阶段目标：阶段 7-G 生产预览与试用发布验收。基于真实 `vite build` 产物启动本地 production preview，验证根路径、Workbench 直达/刷新、辅助路由、静态资源、诊断动态包、JSON/PNG 项目交换和窄屏主流程均可在生产模式工作；形成短小的试用判定与发布检查报告，并保持现有三值结果和 UI 能力不变。该阶段不继续拆抽象、不新增碎片按钮，也不追真实倍率。
+
+### 阶段 7-G 生产预览与试用发布验收（2026-07-10）
+
+新增独立 production Playwright 配置与统一命令 `npm run test:e2e:production-preview`：命令会先重新构建 `dist`，再用独立端口启动 Vite preview，避免把开发服务器结果当成发布结果。五项必需能力覆盖根路径/Workbench 刷新与辅助路由的哈希资源加载、诊断证据独立动态包、JSON 项目导出回导、PNG 元数据导出回导，以及 390x844 视口中的“运行复盘 -> 回到动作编辑 -> 查看刷新结果”闭环。
+
+新增 `reports/production-preview-acceptance.json` v1；任一必需能力失败或缺失都会输出 `blocked`。本次 5/5 能力、5/5 测试通过，报告结论为 `trial-ready`，因此当前版本已达到“可给用户试用的本地 Workbench production demo”。该结论不包含远程托管/CDN、最终蓝原公式或首份非 fixture 真实 capture。
+
+下一阶段目标：阶段 8-A 用户试用反馈与问题分级。使用当前 production preview 完成一轮真实操作试用，按“阻断主流程 / 数据或结果错误 / 性能与兼容 / 体验增强”归类问题，只对可复现且影响完整任务的问题进入开发；与此同时保留 P7-C 真实客户端采样为需人工启动获准会话的独立验收项。下一阶段不预设新增按钮或继续抽内部层，先以用户实际卡点决定进入 UI 主流程还是 P3 运行时适配。
 
 ## 10. 文档维护规则
 

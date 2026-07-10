@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "kind": "production-preview-acceptance",
+  "generatedAt": "2026-07-10T14:16:17.219Z",
+  "environment": {
+    "platform": "win32-x64",
+    "node": "v24.16.0",
+    "server": "vite-preview",
+    "source": "dist"
+  },
+  "commands": {
+    "build": "npm run build",
+    "acceptance": "npm run test:e2e:production-preview"
+  },
+  "decision": {
+    "status": "trial-ready",
+    "trialReady": true,
+    "reason": "all-required-production-preview-capabilities-passed"
+  },
+  "summary": {
+    "requiredCapabilityCount": 5,
+    "passedCapabilityCount": 5,
+    "testCount": 5,
+    "passedTestCount": 5,
+    "playwrightStatus": "passed",
+    "durationMs": 6867
+  },
+  "capabilities": [
+    {
+      "capability": "routes-and-assets",
+      "status": "passed",
+      "testCount": 1
+    },
+    {
+      "capability": "diagnostics-lazy-load",
+      "status": "passed",
+      "testCount": 1
+    },
+    {
+      "capability": "json-project-exchange",
+      "status": "passed",
+      "testCount": 1
+    },
+    {
+      "capability": "png-project-exchange",
+      "status": "passed",
+      "testCount": 1
+    },
+    {
+      "capability": "narrow-main-flow",
+      "status": "passed",
+      "testCount": 1
+    }
+  ],
+  "tests": [
+    {
+      "capability": "routes-and-assets",
+      "title": "[routes-and-assets] serves production routes and hashed assets",
+      "status": "passed",
+      "durationMs": 1032,
+      "retry": 0,
+      "errors": []
+    },
+    {
+      "capability": "diagnostics-lazy-load",
+      "title": "[diagnostics-lazy-load] loads runtime diagnostics from a production chunk",
+      "status": "passed",
+      "durationMs": 724,
+      "retry": 0,
+      "errors": []
+    },
+    {
+      "capability": "json-project-exchange",
+      "title": "[json-project-exchange] restores an exported production JSON project",
+      "status": "passed",
+      "durationMs": 880,
+      "retry": 0,
+      "errors": []
+    },
+    {
+      "capability": "png-project-exchange",
+      "title": "[png-project-exchange] restores production PNG metadata and lazy exporter assets",
+      "status": "passed",
+      "durationMs": 1196,
+      "retry": 0,
+      "errors": []
+    },
+    {
+      "capability": "narrow-main-flow",
+      "title": "[narrow-main-flow] completes runtime review, edit, and refresh without overflow",
+      "status": "passed",
+      "durationMs": 817,
+      "retry": 0,
+      "errors": []
+    }
+  ],
+  "limitations": [
+    "validates the local production build served by vite preview",
+    "does not validate a remote CDN, public hosting, or cache headers",
+    "does not confirm final AzPr formulas or non-fixture runtime captures"
+  ]
+}
