@@ -408,7 +408,24 @@
 
 <script setup>
 import { ref, onMounted, reactive } from 'vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import {
+  ElButton,
+  ElDatePicker,
+  ElDialog,
+  ElEmpty,
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElInputNumber,
+  ElMessage,
+  ElMessageBox,
+  ElOption,
+  ElSelect,
+  ElTabPane,
+  ElTable,
+  ElTableColumn,
+  ElTabs,
+} from 'element-plus';
 
 // 状态管理
 const activeTab = ref('characters');

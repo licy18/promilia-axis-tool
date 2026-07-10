@@ -153,6 +153,7 @@ npm run test -- --run
 npm run build
 npm run test:e2e:workbench-flow
 npm run audit:production-imports:check
+npm run audit:bundle:check
 npm run benchmark:long-axis:check
 npm run benchmark:long-axis:browser
 git diff --check
@@ -163,4 +164,5 @@ git diff --check
 - 首份非 fixture 真实战斗 capture 尚未取得，受控 host 就绪不等于真实游戏机制已验证。
 - 测试期公式与倍率可能变化，未确认层必须保持来源、置信度和可替换状态。
 - 生产引用审计当前为 0 个无引用模块、0 个意外 test-only 模块；新增代码必须维持该守门。
-- Workbench 生产 chunk 仍偏大，长轴性能、代码拆分和发布体积是后续发布前验收项。
+- 当前首屏、Workbench 与全部 JavaScript gzip 预算分别为 120KB、640KB、950KB；新增依赖必须通过构建组成审计。
+- Workbench 主包仍主要由技能证据、敌人和技能逻辑生成数据构成；后续应建立面向生产模拟的精简数据投影，并把完整诊断证据移出首轮运行路径。

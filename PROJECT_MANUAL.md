@@ -842,6 +842,16 @@ Workbench 现在是唯一生产排轴入口。根路径和旧 `/editor` 路径�
 
 下一阶段目标：阶段 7-C 构建组成审计与按证据拆包。当前长轴模拟和浏览器交互满足预算，但生产构建仍提示大 chunk：Workbench 约 6477kB（gzip 654kB），全局 index 约 1237kB（gzip 399kB）。下一阶段先生成模块级 bundle composition，再针对全局 Element Plus/图标注册、生成数据与重型诊断面板实施可验证的懒加载或 chunk 划分，并保持首屏、项目交换和 31 条主流程不回归；不以隐藏警告或放宽阈值代替优化。
 
+### 阶段 7-C 构建组成审计与首屏依赖拆分（2026-07-10）
+
+新增可重复的 Vite bundle composition 审计，逐 chunk 记录 gzip 体积、模块构成、仓库相对路径和第三方 package 聚合，并建立首屏入口 120KB、Workbench 640KB、全部 JavaScript 950KB 的发布预算。`npm run audit:bundle:check` 在入口缺失或任一预算超限时失败，预算没有通过提高 Vite 警告阈值规避。
+
+应用入口不再全量安装 Element Plus 或注册全部图标；教程、图鉴和数据编辑器只在各自异步页面加载实际使用的组件。PNG 截图库改为点击“导出 PNG”后才加载，项目导出格式和元数据行为不变。相较阶段开始时，首屏入口由 398,998B gzip 降至 92,634B，Workbench 由 653,526B 降至 610,346B，全部 JavaScript 由 1,061,602B gzip 降至 889,795B，分别下降约 76.8%、6.6% 和 16.2%。
+
+已完成验证：`audit:bundle:check` 三项预算通过；`npm run test -- --run` 通过 50 个测试文件、331 条测试；`npm run build` 通过；`npm run test:e2e:workbench-flow` 通过 32 条主流程；生产引用审计保持 0 个意外 test-only 和 0 个孤儿模块；180 动作总耗时 p95 为 130.489ms，120 动作浏览器就绪时间为 2001ms。辅助页面守门同时验证教程菜单、图鉴筛选和数据编辑组件无需全局注册仍可使用，并补齐既有 `dataEditor.validateData` 中英文语言键。
+
+下一阶段目标：阶段 7-D Workbench 生产数据投影。当前 610KB gzip 主包中，`skill-asset-evidence.json`、`enemies.json`、技能逻辑/等级交叉验证和 Workbench seed 是主要来源；下一阶段在生成器中建立面向角色/动作/敌人选择与标准模拟合同的精简投影，让生产主流程不再同步携带完整诊断证据和冗余原始行，同时保持来源追溯、数据编辑器、三值结果、项目交换和长轴行为不变。该阶段不通过手工删生成文件或简单 manual chunk 分组制造表面优化，也不新增公式与碎片 UI。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

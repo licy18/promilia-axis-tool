@@ -213,6 +213,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import { ElEmpty, ElInput, ElOption, ElSelect } from 'element-plus';
 import { useGamedataStore } from '../store/gamedata';
 
 const gamedataStore = useGamedataStore();

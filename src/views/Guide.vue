@@ -156,6 +156,14 @@
 
 <script setup>
 import { ref } from 'vue';
+import {
+  ElCollapse,
+  ElCollapseItem,
+  ElMenu,
+  ElMenuItem,
+  ElTable,
+  ElTableColumn,
+} from 'element-plus';
 
 const activeSection = ref('basic');
 

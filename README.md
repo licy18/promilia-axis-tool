@@ -46,6 +46,7 @@ npm run test -- --run
 npm run build
 npm run test:e2e:workbench-flow
 npm run audit:production-imports:check
+npm run audit:bundle:check
 npm run benchmark:long-axis:check
 npm run benchmark:long-axis:browser
 git diff --check
@@ -94,6 +95,8 @@ e2e/                     Workbench 浏览器主流程
 ```
 
 生产引用审计从 `src/main.js` 和全部测试入口追踪 JS、TS、Vue SFC 的静态/动态 import。当前只保留生产可达模块，以及明确允许的领域/runtime fixture 与无 UI simulation API；旧 editor/timeline 组件、旧 project/history/setting store 和旧计算工具已经删除。
+
+构建组成审计会生成 `reports/bundle-composition.json`，并守住首屏入口、Workbench 主包和全部 JavaScript 的 gzip 预算。Element Plus 组件由各页面按需引用，PNG 截图库只在实际导出时加载。
 
 ## 项目文档
 

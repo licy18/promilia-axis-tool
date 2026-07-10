@@ -27,6 +27,33 @@ test('routes every primary entry to the real Workbench @workbench-main-flow', as
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('keeps every auxiliary route usable without global component registration @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/guide');
+  await expect(
+    page.getByRole('heading', { name: '使用教程', exact: true })
+  ).toBeVisible();
+  await expect(page.locator('.guide-menu.el-menu')).toBeVisible();
+
+  await page.goto('/#/handbook');
+  await expect(
+    page.getByRole('heading', { name: '游戏数据图鉴', exact: true })
+  ).toBeVisible();
+  await expect(page.getByPlaceholder('搜索角色或技能')).toBeVisible();
+
+  await page.goto('/#/data-editor');
+  await expect(
+    page.getByRole('heading', { name: '数据编辑器', exact: true })
+  ).toBeVisible();
+  await expect(page.getByRole('button', { name: '保存更改' })).toBeVisible();
+  await expect(page.locator('.data-editor-tabs .el-tabs')).toBeVisible();
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps setup, edit return, and result selection synced', async ({
   page,
 }) => {

@@ -29,6 +29,7 @@ npm run build
 npm run test -- --run
 npm run dev
 npm run audit:production-imports:check
+npm run audit:bundle:check
 npm run benchmark:long-axis:check
 npm run benchmark:long-axis:browser
 ```
@@ -44,6 +45,7 @@ npm run benchmark:long-axis:browser
 - 旧 `Home.vue`、`Editor.vue`、`Preset.vue` 页面已经退役并删除，不得重新建立平行主编辑器或假数据首页。
 - 旧 `src/components/editor/`、`src/components/timeline/`、project/history/setting store 和旧计算工具已经按引用审计删除，不得重新引入平行实现。
 - 生产时间轴只使用 `src/features/workbench/TimelineGridPreview.vue`；新增源码后运行 `npm run audit:production-imports:check`，不得留下无引用或未允许的 test-only 模块。
+- 生产构建使用 `npm run audit:bundle:check` 守住首屏、Workbench 和全部 JavaScript gzip 预算；不得通过放宽预算或隐藏 Vite 警告代替实际依赖边界优化。
 
 ## 当前路线边界
 

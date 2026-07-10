@@ -25931,3 +25931,32 @@ limitations[]
 `reports/long-axis-benchmark.json` 记录固定动作规模、环境、迭代次数、预算、数量一致性验证、compile/simulation/total 的 min/median/p95/max、峰值 heap 和每次样本。
 
 编译测量包含 Workbench draft -> Project -> Scenario；模拟测量包含执行计划、generation、calculator runtime、状态曲线、日志和 projection。报告不改变项目或运行时 schema，只作为发布性能守门；`--assert-budget` 在数量不一致或 p95 超预算时失败。
+
+## 365. BundleCompositionAudit v1
+
+`reports/bundle-composition.json` 记录一次 Vite 生产构建的模块组成：
+
+```text
+schemaVersion = 1
+kind = bundle-composition-audit
+budgets
+  initialEntryGzipBytes
+  workbenchGzipBytes
+  totalJavaScriptGzipBytes
+budgetStatus
+summary
+  javaScriptChunkCount / assetCount
+  totalJavaScriptBytes / totalJavaScriptGzipBytes
+  totalAssetBytes / totalAssetGzipBytes
+javaScriptChunks[]
+  fileName / name / facadeModuleId
+  isEntry / isDynamicEntry
+  imports[] / dynamicImports[]
+  bytes / gzipBytes / moduleCount
+  modules[]
+assets[]
+topModules[]
+packageTotals[]
+```
+
+模块路径统一为仓库相对路径，第三方依赖按 package 聚合。当前默认 gzip 预算为首屏入口 120KB、Workbench 640KB、全部 JavaScript 950KB；`audit:bundle:check` 在入口缺失或任一预算超限时失败。该报告不改变 Workbench 项目、生成数据或运行时 schema。

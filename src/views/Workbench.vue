@@ -624,10 +624,10 @@
 
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
-import { snapdom } from '@zumer/snapdom';
 import {
   Aim,
   ArrowLeft,
+  ArrowRight,
   Document,
   Download,
   EditPen,
@@ -1949,6 +1949,7 @@ async function exportProjectPng() {
     if (!surface) {
       throw new Error('PNG export surface is unavailable');
     }
+    const { snapdom } = await import('@zumer/snapdom');
     const capture = await snapdom(surface, {
       scale: 1,
       width: Math.max(1200, Math.ceil(surface.scrollWidth)),
