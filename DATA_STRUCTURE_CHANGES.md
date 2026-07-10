@@ -25168,3 +25168,97 @@ transactionStateChange
 ```
 
 存在 `hitTransaction` 时，`threeValueStateRows[]` 使用事务的 `before / delta / stateChange / after`；`status` 继续保留原 delta 的 calculator/result 诊断，`reviewStatus` 单独记录事务状态。旧 projection 没有 transaction 时仍回退到 P3-B 单快照详情。
+
+## 353. 标准状态效果运行时合同
+
+### 353.1 项目动作 effectCommands
+
+项目 action 新增可选字段；空数组不会写入 action，因此旧项目结构保持不变：
+
+```text
+action.effectCommands[]
+  id
+  effectId
+  effectName
+  operation = apply | refresh | remove
+  targetKind = actor | enemy
+  targetId = string | null
+  offsetMs
+  durationMs = number | null
+  stackMode = refresh | stack | replace
+  stackDelta
+  maxStacks
+  tags[]
+  sourceStatus
+  modifiers[]
+  appliedToCalculators = false
+```
+
+`targetId = null` 时，编译器按 `targetKind` 使用动作来源角色或动作目标敌人。编译后 command 新增来源动作/角色、目标名称、绝对 `timeMs` 和 `commandIndex`。
+
+项目 schema 仍为 v1；该字段为向后兼容的可选扩展。校验器检查 effect/command 身份、目标、操作、时序、叠层和 modifiers，并拒绝 `appliedToCalculators = true`。
+
+### 353.2 ActionEffectRuntimeInput
+
+```text
+ActionEffectRuntimeInput
+  schemaVersion = 1
+  contractName = AzPrActionEffectCommand
+  commands[]
+    commandId
+    sourceActionId / sourceActionName
+    sourceActorId / sourceActorName
+    effectId / effectName
+    operation
+    targetKind / targetId / targetName
+    instanceKey
+    timeMs / frameIndex
+    durationMs
+    stackMode / stackDelta / maxStacks
+    tags[] / modifiers[]
+    appliedToCalculators = false
+  validation
+  summary
+```
+
+效果实例身份为 `targetKind + targetId + effectId`。输入按绝对时间、动作顺序和 command 顺序稳定排序；非法 command 留在 validation issues，不进入状态推进。
+
+### 353.3 EffectRuntimeTimeline
+
+```text
+EffectRuntimeTimeline
+  schemaVersion = 1
+  contractName = AzPrEffectRuntimeTimeline
+  input
+  events[]
+    eventId
+    type = EFFECT_APPLIED | EFFECT_REFRESHED | EFFECT_REMOVED | EFFECT_EXPIRED
+    timeMs / frameIndex / runtimeSequenceIndex
+    actionId / actorId
+    targetKind / targetId
+    effectId / effectName / instanceKey
+    stackBefore / stackAfter / stackChange
+    before / after
+    ownership
+    modifiers[]
+    appliedToCalculators = false
+  activeEffects[]
+  summary
+```
+
+刷新可以续时，`stack` 按 `maxStacks` 累加，`replace` 重置层数，`refresh` 保留层数。到期事件在同一时刻的新 command 之前结算；永久效果 `expiresAtMs = null`，场景结束后仍保留在 `activeEffects[]`。
+
+### 353.4 runtime output v3
+
+runtime output contract 升级为 `schemaVersion = 3`，标准输出为：
+
+```text
+simLog
+hitTransactions
+effectTimeline
+stateCurves
+resourceCurves
+summary
+```
+
+新增 summary 字段：`effectCommandCount`、`effectEventCount`、各事件类型数量、`activeEffectCount`、`peakActiveEffectCount` 和 `effectCalculatorAppliedCount`。output consistency 校验 timeline 事件/active 数量与 summary、contract 一致，并确保全部 effect event 未接入 calculator。

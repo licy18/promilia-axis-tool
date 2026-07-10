@@ -1866,6 +1866,7 @@ describe('first vertical slice simulation', () => {
         outputNames: [
           'simLog',
           'hitTransactions',
+          'effectTimeline',
           'stateCurves',
           'resourceCurves',
           'summary',
@@ -1900,7 +1901,7 @@ describe('first vertical slice simulation', () => {
           },
         },
         summary: {
-          outputCount: 5,
+          outputCount: 6,
           appliedDeltaCount: 1,
           simLogCount: 1,
           enemyStatePointCount: 1,
@@ -2034,7 +2035,7 @@ describe('first vertical slice simulation', () => {
         runtimeOutputContractSourceKind:
           'azpr-three-value-runtime-output-contract',
         runtimeOutputContractStatus: 'runtime-output-contract-ready',
-        runtimeOutputContractOutputCount: 5,
+        runtimeOutputContractOutputCount: 6,
         applied: true,
       },
       applied: true,
@@ -2066,6 +2067,7 @@ describe('first vertical slice simulation', () => {
       outputNames: [
         'simLog',
         'hitTransactions',
+        'effectTimeline',
         'stateCurves',
         'resourceCurves',
         'summary',
@@ -2124,7 +2126,7 @@ describe('first vertical slice simulation', () => {
         consistent: true,
       },
       outputSummary: {
-        outputCount: 5,
+        outputCount: 6,
         appliedDeltaCount: 1,
         simLogCount: 1,
         enemyStatePointCount: 1,
@@ -2228,7 +2230,7 @@ describe('first vertical slice simulation', () => {
       applied: true,
     });
     expect(result.summary.runtimeOutputsSummary).toMatchObject({
-      outputCount: 5,
+      outputCount: 6,
       appliedDeltaCount: 1,
       simLogCount: 1,
       enemyStatePointCount: 1,

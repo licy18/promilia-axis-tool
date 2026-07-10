@@ -1393,6 +1393,7 @@ export function projectSimulationResult({
   eventLog,
   damageEvents,
   resourceEvents,
+  effectTimeline,
 }) {
   const runtimeSampleContext = createRecoverSpRuntimeSampleContext(
     scenario.runtimeSampleCaptures
@@ -1425,6 +1426,7 @@ export function projectSimulationResult({
   const threeValueRuntimeProjection = createThreeValueRuntimeProjection({
     scenario,
     generationOutputs,
+    effectTimeline,
   });
   const runtimeOutputs = threeValueRuntimeProjection.runtimeOutputs;
   const damageTimeline = damageEvents.map(event => ({
@@ -1499,6 +1501,7 @@ export function projectSimulationResult({
     runtimeOutputs,
     damageTimeline,
     resourceTimeline,
+    effectTimeline: runtimeOutputs.effectTimeline,
     summary: {
       totalRawDamage,
       totalProjectedToughnessDamage,
@@ -1515,6 +1518,7 @@ export function projectSimulationResult({
       threeValueGenerationOutputsSummary: generationOutputs.outputSummary,
       threeValueRuntimeProjectionSummary: runtimeOutputs.summary,
       runtimeOutputsSummary: runtimeOutputs.outputSummary,
+      effectRuntimeTimelineSummary: runtimeOutputs.effectTimeline.summary,
       formulaVersion: damageEvents[0]?.payload.formulaVersion ?? null,
       formulaCandidatePatternSummary,
       formulaExecutionMatrixSummary,
@@ -1532,6 +1536,7 @@ export function projectSimulationResult({
         'Detailed per-skill frame timing is a later evidence layer; the three-value curve framework can run on candidate, placeholder, or imported runtime sample points first.',
         'Formula breakdown exposes unapplied layers before they are confirmed.',
         'Skill timing is placeholder when timingMissingActionCount is greater than 0.',
+        'Effect runtime tracks ownership, duration, refresh, stacking, and expiry, but effect modifiers do not change three-value calculators until an AzPr effect adapter is configured.',
       ],
     },
   };

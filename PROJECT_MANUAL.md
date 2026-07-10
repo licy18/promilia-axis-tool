@@ -617,9 +617,28 @@ P3：运行时层真实机制适配。
 
 P4：状态效果运行时框架。
 
-- 下一阶段进入 P4-A 标准状态效果合同：让动作可以生成统一的效果施加、刷新和结束事件，runtime 按帧追踪角色/敌人的 active effects，并输出状态时间线和 summary。
-- P4-A 先建立所有权、时序、叠层和持续时间合同；默认效果不修改三值 calculator，不推断未确认的蓝色星原 Buff 或异常数值。
+- P4-A 已完成：动作可以通过标准 effect command 生成施加、刷新、叠层、移除和到期事件，runtime 已输出角色/敌人 active effect 时间线和 summary。
+- 下一阶段进入 P4-B 效果配置与复盘闭环：让 Workbench 可以为动作配置追踪型效果，随草稿、JSON 和分享恢复，并在运行结果中查看状态时间线与当前 active effects。
+- P4-B 只让用户编辑和复盘 effect contract；效果默认仍不修改三值 calculator，不推断未确认的蓝色星原 Buff、异常或数值。
 - 后续确认的增伤、减防、资源修正和异常机制通过可替换 effect adapter 接入，不让 UI 或证据层直接改写 runtime 状态。
+
+### P4-A 标准状态效果运行时合同（2026-07-10）
+
+已完成能力：
+
+- 任意项目动作可以携带可选 `effectCommands[]`，统一描述效果 ID、施加/刷新/移除操作、角色或敌人目标、动作内偏移、持续时间、叠层模式和上限。
+- 编译器解析效果来源动作、来源角色、目标实体和绝对时间；runtime 生成 `EFFECT_APPLIED / EFFECT_REFRESHED / EFFECT_REMOVED / EFFECT_EXPIRED` 标准事件。
+- runtime 会按时间推进 active effects，处理叠层上限、刷新续时、同帧到期优先级、显式移除和场景结束时仍存续的永久效果。
+- `effectTimeline` 成为第六类标准 runtime output，并进入 eventLog、consumer、summary 和 output consistency；v1 四输出和 v2 五输出继续兼容。
+- 效果 command、event 和 active state 都固定 `appliedToCalculators = false`；项目校验拒绝绕过隔离边界直接修改 calculator。
+- 空 `effectCommands` 不改变旧 action 结构；当前 Workbench 草稿无需迁移，现有三值结果保持不变。
+
+已完成验证：
+
+- P4-A 专门测试覆盖施加、叠层、刷新、移除、自动到期、角色/敌人所有权、effect-only 项目和 calculator 隔离拒绝。
+- `npm run test -- --run`：通过，45 个测试文件、330 条测试。
+- `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
+- `npm run test:e2e:workbench-flow`：通过，25 条 Workbench 浏览器主流程。
 
 ## 10. 文档维护规则
 

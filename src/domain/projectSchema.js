@@ -13,6 +13,23 @@ export const ACTION_TYPES = Object.freeze({
   ANNOTATION: 'annotation',
 });
 
+export const EFFECT_OPERATIONS = Object.freeze({
+  APPLY: 'apply',
+  REFRESH: 'refresh',
+  REMOVE: 'remove',
+});
+
+export const EFFECT_TARGET_KINDS = Object.freeze({
+  ACTOR: 'actor',
+  ENEMY: 'enemy',
+});
+
+export const EFFECT_STACK_MODES = Object.freeze({
+  REFRESH: 'refresh',
+  STACK: 'stack',
+  REPLACE: 'replace',
+});
+
 export const ENEMY_ELEMENT_DEFENSE_DEFINITIONS = Object.freeze([
   { elementId: 0, attributeKey: 'NORMAL_DEFENSE', fallbackName: '无属性' },
   { elementId: 1, attributeKey: 'FIRE_DEFENSE', fallbackName: '火属性' },
@@ -166,6 +183,7 @@ export function createSkillAction({
   note = '',
   insertion = null,
   generationBatch = null,
+  effectCommands = [],
 }) {
   if (!skill) {
     throw new Error('createSkillAction requires a skill');
@@ -218,6 +236,7 @@ export function createSkillAction({
     note,
     insertion,
     generationBatch,
+    ...createActionEffectCommandsField(effectCommands),
   };
 }
 
@@ -230,6 +249,7 @@ export function createSwitchAction({
   durationMs = 600,
   note = '',
   insertion = null,
+  effectCommands = [],
 } = {}) {
   return {
     id: id ?? createStableId('action'),
@@ -242,6 +262,7 @@ export function createSwitchAction({
     durationMs,
     note,
     insertion,
+    ...createActionEffectCommandsField(effectCommands),
   };
 }
 
@@ -251,6 +272,7 @@ export function createWaitAction({
   durationMs = 1000,
   note = '等待',
   insertion = null,
+  effectCommands = [],
 } = {}) {
   return {
     id: id ?? createStableId('action'),
@@ -260,6 +282,7 @@ export function createWaitAction({
     durationMs,
     note,
     insertion,
+    ...createActionEffectCommandsField(effectCommands),
   };
 }
 
@@ -268,6 +291,7 @@ export function createAnnotationAction({
   startMs = 0,
   note = '备注',
   insertion = null,
+  effectCommands = [],
 } = {}) {
   return {
     id: id ?? createStableId('action'),
@@ -277,6 +301,7 @@ export function createAnnotationAction({
     durationMs: 600,
     note,
     insertion,
+    ...createActionEffectCommandsField(effectCommands),
   };
 }
 
@@ -289,6 +314,7 @@ export function createResourceAction({
   reason = 'manual-axis-resource',
   note = '',
   insertion = null,
+  effectCommands = [],
 } = {}) {
   return {
     id: id ?? createStableId('action'),
@@ -302,6 +328,7 @@ export function createResourceAction({
     reason,
     note,
     insertion,
+    ...createActionEffectCommandsField(effectCommands),
   };
 }
 
@@ -312,6 +339,7 @@ export function createEnemyEventAction({
   eventType = 'phase',
   note = '敌人阶段标记',
   insertion = null,
+  effectCommands = [],
 } = {}) {
   return {
     id: id ?? createStableId('action'),
@@ -323,6 +351,58 @@ export function createEnemyEventAction({
     eventType,
     note,
     insertion,
+    ...createActionEffectCommandsField(effectCommands),
+  };
+}
+
+export function createEffectCommand({
+  id,
+  effectId,
+  effectName = '',
+  operation = EFFECT_OPERATIONS.APPLY,
+  targetKind = EFFECT_TARGET_KINDS.ACTOR,
+  targetId = null,
+  offsetMs = 0,
+  durationMs = null,
+  stackMode = EFFECT_STACK_MODES.REFRESH,
+  stackDelta = 1,
+  maxStacks = 1,
+  tags = [],
+  sourceStatus = 'project-configured-effect-command',
+  modifiers = [],
+} = {}) {
+  return {
+    id: id ?? createStableId('effect-command'),
+    effectId: String(effectId ?? '').trim(),
+    effectName: String(effectName ?? '').trim(),
+    operation,
+    targetKind,
+    targetId: targetId == null || targetId === '' ? null : String(targetId),
+    offsetMs: Math.max(0, Number(offsetMs) || 0),
+    durationMs:
+      durationMs == null || durationMs === ''
+        ? null
+        : Math.max(0, Number(durationMs) || 0),
+    stackMode,
+    stackDelta: Math.max(1, Math.trunc(Number(stackDelta) || 1)),
+    maxStacks: Math.max(1, Math.trunc(Number(maxStacks) || 1)),
+    tags: Array.isArray(tags)
+      ? [...new Set(tags.map(tag => String(tag).trim()).filter(Boolean))]
+      : [],
+    sourceStatus,
+    modifiers: Array.isArray(modifiers)
+      ? modifiers.map(item => ({ ...item }))
+      : [],
+    appliedToCalculators: false,
+  };
+}
+
+function createActionEffectCommandsField(effectCommands) {
+  if (!Array.isArray(effectCommands) || effectCommands.length === 0) {
+    return {};
+  }
+  return {
+    effectCommands: effectCommands.map(command => createEffectCommand(command)),
   };
 }
 
@@ -855,6 +935,7 @@ function validateActions(actions, project, gameData, errors, warnings) {
         )
       );
     }
+    validateActionEffectCommands(action, path, actorIds, enemyIds, errors);
 
     if (action.type === ACTION_TYPES.SKILL) {
       if (!actorIds.has(action.actorId)) {
@@ -1012,6 +1093,150 @@ function validateActions(actions, project, gameData, errors, warnings) {
           )
         );
       }
+    }
+  });
+}
+
+function validateActionEffectCommands(
+  action,
+  actionPath,
+  actorIds,
+  enemyIds,
+  errors
+) {
+  if (action.effectCommands == null) {
+    return;
+  }
+  if (!Array.isArray(action.effectCommands)) {
+    errors.push(
+      issue(
+        'action.effectCommands.invalid',
+        'Action effectCommands must be an array',
+        `${actionPath}.effectCommands`
+      )
+    );
+    return;
+  }
+
+  const commandIds = new Set();
+  action.effectCommands.forEach((command, index) => {
+    const path = `${actionPath}.effectCommands[${index}]`;
+    if (!command?.id || commandIds.has(command.id)) {
+      errors.push(
+        issue(
+          'action.effectCommand.id.invalid',
+          'Each effect command must have a unique id',
+          `${path}.id`
+        )
+      );
+    } else {
+      commandIds.add(command.id);
+    }
+    if (typeof command?.effectId !== 'string' || !command.effectId.trim()) {
+      errors.push(
+        issue(
+          'action.effectCommand.effectId.invalid',
+          'Effect command effectId must be a non-empty string',
+          `${path}.effectId`
+        )
+      );
+    }
+    if (!Object.values(EFFECT_OPERATIONS).includes(command?.operation)) {
+      errors.push(
+        issue(
+          'action.effectCommand.operation.invalid',
+          `Unsupported effect operation ${command?.operation}`,
+          `${path}.operation`
+        )
+      );
+    }
+    if (!Object.values(EFFECT_TARGET_KINDS).includes(command?.targetKind)) {
+      errors.push(
+        issue(
+          'action.effectCommand.targetKind.invalid',
+          `Unsupported effect target kind ${command?.targetKind}`,
+          `${path}.targetKind`
+        )
+      );
+    }
+    if (command?.targetId) {
+      const targetIds =
+        command.targetKind === EFFECT_TARGET_KINDS.ENEMY ? enemyIds : actorIds;
+      if (!targetIds.has(command.targetId)) {
+        errors.push(
+          issue(
+            'action.effectCommand.targetId.unknown',
+            `Unknown effect targetId ${command.targetId}`,
+            `${path}.targetId`
+          )
+        );
+      }
+    }
+    if (!Number.isFinite(command?.offsetMs) || command.offsetMs < 0) {
+      errors.push(
+        issue(
+          'action.effectCommand.offsetMs.invalid',
+          'Effect command offsetMs must be a non-negative finite number',
+          `${path}.offsetMs`
+        )
+      );
+    }
+    if (
+      command?.durationMs != null &&
+      (!Number.isFinite(command.durationMs) || command.durationMs < 0)
+    ) {
+      errors.push(
+        issue(
+          'action.effectCommand.durationMs.invalid',
+          'Effect command durationMs must be null or a non-negative finite number',
+          `${path}.durationMs`
+        )
+      );
+    }
+    if (!Object.values(EFFECT_STACK_MODES).includes(command?.stackMode)) {
+      errors.push(
+        issue(
+          'action.effectCommand.stackMode.invalid',
+          `Unsupported effect stack mode ${command?.stackMode}`,
+          `${path}.stackMode`
+        )
+      );
+    }
+    if (!Number.isInteger(command?.stackDelta) || command.stackDelta < 1) {
+      errors.push(
+        issue(
+          'action.effectCommand.stackDelta.invalid',
+          'Effect command stackDelta must be a positive integer',
+          `${path}.stackDelta`
+        )
+      );
+    }
+    if (!Number.isInteger(command?.maxStacks) || command.maxStacks < 1) {
+      errors.push(
+        issue(
+          'action.effectCommand.maxStacks.invalid',
+          'Effect command maxStacks must be a positive integer',
+          `${path}.maxStacks`
+        )
+      );
+    }
+    if (!Array.isArray(command?.modifiers)) {
+      errors.push(
+        issue(
+          'action.effectCommand.modifiers.invalid',
+          'Effect command modifiers must be an array',
+          `${path}.modifiers`
+        )
+      );
+    }
+    if (command?.appliedToCalculators === true) {
+      errors.push(
+        issue(
+          'action.effectCommand.calculatorApplication.unsupported',
+          'Effect commands cannot modify calculators before an effect adapter is configured',
+          `${path}.appliedToCalculators`
+        )
+      );
     }
   });
 }

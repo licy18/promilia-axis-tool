@@ -4,6 +4,7 @@ export function createThreeValueRuntimeOutputConsumerContract({
   stateCurves = null,
   resourceCurves = null,
   hitTransactions = null,
+  effectTimeline = null,
   summary = {},
   outputConsistency = null,
 } = {}) {
@@ -14,6 +15,9 @@ export function createThreeValueRuntimeOutputConsumerContract({
   const hitTransactionRows = Array.isArray(hitTransactions?.transactions)
     ? hitTransactions.transactions
     : [];
+  const effectEventRows = Array.isArray(effectTimeline?.events)
+    ? effectTimeline.events
+    : [];
   const contractSummary = outputContract?.summary ?? {};
   const contractOutputs = outputContract?.outputs ?? {};
   const outputConsistencyStatus =
@@ -23,7 +27,11 @@ export function createThreeValueRuntimeOutputConsumerContract({
     : ['simLog', 'stateCurves', 'resourceCurves', 'summary'];
 
   return {
-    schemaVersion: canonicalOutputNames.includes('hitTransactions') ? 2 : 1,
+    schemaVersion: canonicalOutputNames.includes('effectTimeline')
+      ? 3
+      : canonicalOutputNames.includes('hitTransactions')
+        ? 2
+        : 1,
     sourceKind: 'azpr-three-value-runtime-output-consumer-contract',
     status:
       outputContract?.status === 'runtime-output-contract-ready'
@@ -74,6 +82,27 @@ export function createThreeValueRuntimeOutputConsumerContract({
           'delta',
           'stateChange',
           'after',
+        ],
+      },
+      effectTimeline: {
+        outputName: 'effectTimeline',
+        dataPath: 'runtimeOutputs.effectTimeline',
+        contractPath: 'runtimeOutputs.outputContract.outputs.effectTimeline',
+        sourceKind: contractOutputs.effectTimeline?.sourceKind ?? '',
+        status: contractOutputs.effectTimeline?.status ?? '',
+        contractName: contractOutputs.effectTimeline?.contractName ?? '',
+        eventCount: effectEventRows.length,
+        activeEffectCount: numberOrZero(
+          effectTimeline?.summary?.activeEffectCount
+        ),
+        eventCollectionField:
+          contractOutputs.effectTimeline?.eventCollectionField ?? 'events',
+        activeCollectionField:
+          contractOutputs.effectTimeline?.activeCollectionField ??
+          'activeEffects',
+        keyFields: contractOutputs.effectTimeline?.keyFields ?? [
+          'eventId',
+          'runtimeSequenceIndex',
         ],
       },
       stateCurves: {
@@ -156,6 +185,17 @@ export function createThreeValueRuntimeOutputConsumerContract({
           summary.hitTransactionCount ??
           contractSummary.hitTransactionCount ??
           hitTransactionRows.length
+      ),
+      effectEventCount: numberOrZero(
+        effectTimeline?.summary?.eventCount ??
+          summary.effectEventCount ??
+          contractSummary.effectEventCount ??
+          effectEventRows.length
+      ),
+      activeEffectCount: numberOrZero(
+        effectTimeline?.summary?.activeEffectCount ??
+          summary.activeEffectCount ??
+          contractSummary.activeEffectCount
       ),
       runtimeCalculatorInvocationCount: numberOrZero(
         stateSnapshots?.summary?.runtimeCalculatorInvocationCount ??
@@ -272,6 +312,8 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
     getThreeValueRuntimeStateSnapshots(runtimeOutputSource);
   const hitTransactions =
     getThreeValueRuntimeHitTransactions(runtimeOutputSource);
+  const effectTimeline =
+    getThreeValueRuntimeEffectTimeline(runtimeOutputSource);
   const resourceCurves =
     getThreeValueRuntimeResourceCurves(runtimeOutputSource);
   const outputConsistency = runtimeOutputSource?.outputConsistency ?? {};
@@ -284,6 +326,7 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
       stateCurves,
       resourceCurves,
       hitTransactions,
+      effectTimeline,
       summary: outputSummary,
       outputConsistency,
     });
@@ -316,6 +359,7 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
     stateCurves,
     stateSnapshots,
     hitTransactions,
+    effectTimeline,
     resourceCurves,
     resources: resourceCurves,
     enemyStateCurve,
@@ -334,6 +378,13 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
       hitTransactionCount: numberOrZero(
         outputSummary.hitTransactionCount ??
           hitTransactions?.summary?.transactionCount
+      ),
+      effectEventCount: numberOrZero(
+        outputSummary.effectEventCount ?? effectTimeline?.summary?.eventCount
+      ),
+      activeEffectCount: numberOrZero(
+        outputSummary.activeEffectCount ??
+          effectTimeline?.summary?.activeEffectCount
       ),
       runtimeCalculatorInvocationCount: numberOrZero(
         outputSummary.runtimeCalculatorInvocationCount ??
@@ -559,6 +610,16 @@ export function getThreeValueRuntimeHitTransactions(runtimeProjection) {
   );
 }
 
+export function getThreeValueRuntimeEffectTimeline(runtimeProjection) {
+  const runtimeOutputSource =
+    getThreeValueRuntimeOutputSource(runtimeProjection);
+  return (
+    runtimeOutputSource?.outputs?.effectTimeline ??
+    runtimeOutputSource?.effectTimeline ??
+    {}
+  );
+}
+
 export function getThreeValueRuntimeEnemyStateCurve(runtimeProjection) {
   const runtimeOutputSource =
     getThreeValueRuntimeOutputSource(runtimeProjection);
@@ -628,6 +689,13 @@ function createThreeValueRuntimeOutputReadSources(
       sourceTier,
       outputName: 'hitTransactions',
       fieldName: 'hitTransactions',
+    }),
+    effectTimeline: resolveRuntimeOutputReadSource({
+      runtimeOutputSource,
+      sourcePath,
+      sourceTier,
+      outputName: 'effectTimeline',
+      fieldName: 'effectTimeline',
     }),
     stateCurves: resolveRuntimeOutputReadSource({
       runtimeOutputSource,

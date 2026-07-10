@@ -1,5 +1,6 @@
 import {
   ACTION_TYPES,
+  EFFECT_TARGET_KINDS,
   ENEMY_ELEMENT_DEFENSE_DEFINITIONS,
   validateProject,
 } from '../../domain/projectSchema';
@@ -252,9 +253,12 @@ function compileEnemyElementDefense(enemy, definition, elementsById) {
 }
 
 function compileAction(action, actorsById, enemy, skillsById) {
+  const effectCommands = compileActionEffectCommands(action, actorsById, enemy);
+  const effectCommandsField = createCompiledEffectCommandsField(effectCommands);
   if (action.type === ACTION_TYPES.SWITCH) {
     return {
       ...action,
+      ...effectCommandsField,
       actor: actorsById.get(action.actorId) ?? null,
       targetActor: actorsById.get(action.targetActorId) ?? null,
       target: null,
@@ -267,6 +271,7 @@ function compileAction(action, actorsById, enemy, skillsById) {
   if (action.type === ACTION_TYPES.RESOURCE) {
     return {
       ...action,
+      ...effectCommandsField,
       actor: action.actorId ? (actorsById.get(action.actorId) ?? null) : null,
       target: null,
       source: {},
@@ -278,6 +283,7 @@ function compileAction(action, actorsById, enemy, skillsById) {
   if (action.type === ACTION_TYPES.ENEMY_EVENT) {
     return {
       ...action,
+      ...effectCommandsField,
       actor: null,
       target: action.targetId === enemy.id ? enemy : null,
       source: {},
@@ -289,6 +295,7 @@ function compileAction(action, actorsById, enemy, skillsById) {
   if (action.type !== ACTION_TYPES.SKILL) {
     return {
       ...action,
+      ...effectCommandsField,
       actor: null,
       target: action.targetId === enemy.id ? enemy : null,
       source: {},
@@ -312,6 +319,7 @@ function compileAction(action, actorsById, enemy, skillsById) {
 
   return {
     ...action,
+    ...effectCommandsField,
     actionVariantIndex: selectedDamageSegment?.index ?? actionVariantIndex,
     actionVariants: damageSegments,
     selectedActionVariant: selectedDamageSegment,
@@ -323,6 +331,47 @@ function compileAction(action, actorsById, enemy, skillsById) {
     damageSegments,
     selectedDamageSegment,
   };
+}
+
+function compileActionEffectCommands(action, actorsById, enemy) {
+  return (action.effectCommands ?? []).map((command, index) => {
+    const sourceActor = actorsById.get(action.actorId) ?? null;
+    const targetId = resolveEffectCommandTargetId(command, action, enemy);
+    const targetActor = actorsById.get(targetId) ?? null;
+    const targetEnemy = targetId === enemy.id ? enemy : null;
+    return {
+      ...command,
+      schemaVersion: 1,
+      sourceKind: 'azpr-compiled-action-effect-command',
+      status: 'compiled-action-effect-command-ready',
+      commandIndex: index,
+      sourceActionId: action.id,
+      sourceActionName: action.name,
+      sourceActorId: action.actorId ?? null,
+      sourceActorName: sourceActor?.name ?? null,
+      targetId,
+      targetName: targetActor?.name ?? targetEnemy?.name ?? null,
+      timeMs: roundRuntimeConfigValue(
+        (Number(action.startMs) || 0) + (Number(command.offsetMs) || 0)
+      ),
+      modifiers: (command.modifiers ?? []).map(modifier => ({ ...modifier })),
+      appliedToCalculators: false,
+    };
+  });
+}
+
+function resolveEffectCommandTargetId(command, action, enemy) {
+  if (command.targetId) {
+    return command.targetId;
+  }
+  if (command.targetKind === EFFECT_TARGET_KINDS.ENEMY) {
+    return action.targetId ?? enemy.id;
+  }
+  return action.actorId ?? null;
+}
+
+function createCompiledEffectCommandsField(effectCommands) {
+  return effectCommands.length > 0 ? { effectCommands } : {};
 }
 
 function indexById(items = []) {

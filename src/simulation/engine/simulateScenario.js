@@ -1,6 +1,7 @@
 import { createRawDamageProjection } from '../mechanics/damage';
 import { projectSimulationResult } from '../projection/projectSimulationResult';
 import { ACTION_TYPES } from '../../domain/projectSchema';
+import { createEffectRuntimeTimeline } from '../runtime/effectRuntimeTimeline';
 
 export function simulateScenario(scenario) {
   const eventLog = [
@@ -91,6 +92,9 @@ export function simulateScenario(scenario) {
     }
   }
 
+  const effectTimeline = createEffectRuntimeTimeline({ scenario });
+  eventLog.push(...effectTimeline.events);
+
   eventLog.push({
     type: 'SCENARIO_END',
     timeMs: scenario.time.durationMs,
@@ -99,13 +103,17 @@ export function simulateScenario(scenario) {
     },
   });
 
-  eventLog.sort((a, b) => a.timeMs - b.timeMs || eventPriority(a.type) - eventPriority(b.type));
+  eventLog.sort(
+    (a, b) =>
+      a.timeMs - b.timeMs || eventPriority(a.type) - eventPriority(b.type)
+  );
 
   return projectSimulationResult({
     scenario,
     eventLog,
     damageEvents,
     resourceEvents,
+    effectTimeline,
   });
 }
 
@@ -229,7 +237,9 @@ function createDamageEvent(action, enemy) {
     targetId: action.targetId,
     payload: {
       ...projection,
-      timingAccuracy: action.timing?.needsTimingData ? 'placeholder' : 'authoritative',
+      timingAccuracy: action.timing?.needsTimingData
+        ? 'placeholder'
+        : 'authoritative',
     },
   };
 }
@@ -237,16 +247,20 @@ function createDamageEvent(action, enemy) {
 function eventPriority(type) {
   const priorities = {
     SCENARIO_START: 0,
-    ACTION_START: 1,
-    TIMING_DATA_MISSING: 2,
-    RESOURCE_CHANGE: 3,
-    COOLDOWN_START: 4,
-    DAMAGE_PROJECTED: 5,
-    WAIT: 6,
-    SWITCH: 7,
-    ENEMY_EVENT: 8,
-    ANNOTATION: 9,
-    DAMAGE_SKIPPED: 10,
+    EFFECT_EXPIRED: 1,
+    ACTION_START: 2,
+    TIMING_DATA_MISSING: 3,
+    RESOURCE_CHANGE: 4,
+    EFFECT_APPLIED: 5,
+    EFFECT_REFRESHED: 5,
+    EFFECT_REMOVED: 5,
+    COOLDOWN_START: 6,
+    DAMAGE_PROJECTED: 7,
+    WAIT: 8,
+    SWITCH: 9,
+    ENEMY_EVENT: 10,
+    ANNOTATION: 11,
+    DAMAGE_SKIPPED: 12,
     SCENARIO_END: 99,
   };
 

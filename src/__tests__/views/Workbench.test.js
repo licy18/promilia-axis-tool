@@ -213,6 +213,7 @@ describe('Workbench view', () => {
       outputNames: [
         'simLog',
         'hitTransactions',
+        'effectTimeline',
         'stateCurves',
         'resourceCurves',
         'summary',
