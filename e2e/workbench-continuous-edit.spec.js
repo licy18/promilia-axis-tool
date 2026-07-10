@@ -251,7 +251,7 @@ test('edits and reviews an arbitrary action group @workbench-main-flow', async (
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(exportedProject.schemaVersion).toBe(10);
+  expect(exportedProject.schemaVersion).toBe(11);
   expect(exportedProject.actionDrafts).toHaveLength(5);
   expect(exportedProject.actionRelations).toEqual([
     expect.objectContaining({
@@ -2255,7 +2255,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 10,
+    schemaVersion: 11,
     game: 'azur-promilia',
     type: 'workbench-project',
     selectedActionId: 'action-0002',
@@ -2514,7 +2514,7 @@ test('imports a runtime capture and preserves its applied curve through project 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 10,
+    schemaVersion: 11,
     runtimeSampleCaptures: [
       {
         captureSessionId: 'e2e-recover-sp-capture-1',
@@ -3951,7 +3951,7 @@ test('persists cycle boundaries and reviews section contributions @workbench-mai
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(exportedProject.schemaVersion).toBe(10);
+  expect(exportedProject.schemaVersion).toBe(11);
   expect(exportedProject.cycleBoundaries).toEqual([
     expect.objectContaining({ id: 'cycle-boundary-0001' }),
   ]);
@@ -3963,6 +3963,109 @@ test('persists cycle boundaries and reviews section contributions @workbench-mai
     .setInputFiles(downloadPath);
   await expect(workbench).toHaveAttribute('data-cycle-boundary-count', '1');
   await expect(page.getByTestId('workbench-cycle-section-panel')).toBeVisible();
+});
+
+test('manages, compares, and restores multiple workspace scenarios @workbench-main-flow', async ({
+  page,
+}) => {
+  await page.goto('/#/workbench');
+  const workbench = page.locator('main.workbench');
+  await expect(page.getByTestId('workbench-scenario-bar')).toBeVisible();
+  await expect(workbench).toHaveAttribute('data-workspace-scenario-count', '1');
+
+  await page.getByTestId('workbench-add-action').click();
+  await page.getByTestId('workbench-scenario-rename').click();
+  await page.getByTestId('workbench-scenario-rename-input').fill('爆发轴');
+  await page.getByTestId('workbench-scenario-rename-input').press('Enter');
+  await expect(page.getByTestId('workbench-scenario-name')).toHaveText(
+    '爆发轴'
+  );
+
+  await page.getByTestId('workbench-scenario-duplicate').click();
+  await expect(workbench).toHaveAttribute('data-workspace-scenario-count', '2');
+  await expect(workbench).toHaveAttribute(
+    'data-active-workspace-scenario-id',
+    'scenario-0002'
+  );
+  await expect(page.locator('.action-item')).toHaveCount(2);
+  await page.getByTestId('workbench-add-action').click();
+  await expect(page.locator('.action-item')).toHaveCount(3);
+
+  await page
+    .locator(
+      '[data-testid="workbench-scenario-tab"][data-scenario-id="scenario-0001"]'
+    )
+    .click();
+  await expect(page.locator('.action-item')).toHaveCount(2);
+  await page
+    .locator(
+      '[data-testid="workbench-scenario-tab"][data-scenario-id="scenario-0002"]'
+    )
+    .click();
+  await expect(page.locator('.action-item')).toHaveCount(3);
+
+  await page.getByTestId('workbench-open-comparison').click();
+  await page
+    .getByTestId('workbench-comparison-workspace-scenario')
+    .selectOption('scenario-0001');
+  await expect(
+    page.getByTestId('workbench-comparison-baseline-source')
+  ).toContainText('爆发轴');
+  await expect(page.getByTestId('workbench-comparison-action-row')).toHaveCount(
+    3
+  );
+  await page.getByTestId('workbench-comparison-close').click();
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const download = await downloadPromise;
+  const downloadPath = await download.path();
+  const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
+  expect(exportedProject).toMatchObject({
+    schemaVersion: 11,
+    scenarioWorkspace: {
+      activeScenarioId: 'scenario-0002',
+      scenarios: [
+        {
+          id: 'scenario-0001',
+          name: '爆发轴',
+          draft: { actionDrafts: expect.any(Array) },
+        },
+        {
+          id: 'scenario-0002',
+          name: '爆发轴 副本',
+          draft: { actionDrafts: expect.any(Array) },
+        },
+      ],
+    },
+  });
+  expect(
+    exportedProject.scenarioWorkspace.scenarios[0].draft.actionDrafts
+  ).toHaveLength(2);
+  expect(
+    exportedProject.scenarioWorkspace.scenarios[1].draft.actionDrafts
+  ).toHaveLength(3);
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await expect(workbench).toHaveAttribute('data-workspace-scenario-count', '1');
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(downloadPath);
+  await expect(workbench).toHaveAttribute('data-workspace-scenario-count', '2');
+  await expect(workbench).toHaveAttribute(
+    'data-active-workspace-scenario-id',
+    'scenario-0002'
+  );
+  await expect(page.locator('.action-item')).toHaveCount(3);
+
+  page.once('dialog', dialog => dialog.accept());
+  await page.getByTestId('workbench-scenario-delete').click();
+  await expect(workbench).toHaveAttribute('data-workspace-scenario-count', '1');
+  await expect(workbench).toHaveAttribute(
+    'data-active-workspace-scenario-id',
+    'scenario-0001'
+  );
+  await expect(page.locator('.action-item')).toHaveCount(2);
 });
 
 test('keeps the edit result loop usable at a narrow viewport @workbench-main-flow', async ({
@@ -4262,7 +4365,7 @@ async function ensureActionContentEditResultSynced(
 async function readStoredWorkbenchDraft(page) {
   return await page.evaluate(() => {
     const rawDraft =
-      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v10') ??
+      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v11') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v8') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v5') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v4') ??

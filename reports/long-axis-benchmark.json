@@ -40,60 +40,60 @@
   },
   "summary": {
     "compileMs": {
-      "min": 6.557,
-      "median": 7.223,
-      "p95": 7.528,
-      "max": 7.528
+      "min": 6.644,
+      "median": 7.921,
+      "p95": 8.538,
+      "max": 8.538
     },
     "simulationMs": {
-      "min": 14.236,
-      "median": 16.211,
-      "p95": 18.463,
-      "max": 18.463
+      "min": 13.721,
+      "median": 15.13,
+      "p95": 17.462,
+      "max": 17.462
     },
     "totalMs": {
-      "min": 21.224,
-      "median": 23.434,
-      "p95": 25.812,
-      "max": 25.812
+      "min": 20.893,
+      "median": 23.155,
+      "p95": 26,
+      "max": 26
     },
-    "peakHeapUsedMiB": 139.85
+    "peakHeapUsedMiB": 139.82
   },
   "samples": [
     {
       "iteration": 1,
-      "compileMs": 7.349,
-      "simulationMs": 18.463,
-      "totalMs": 25.812,
-      "heapUsedMiB": 138.78
+      "compileMs": 7.921,
+      "simulationMs": 17.363,
+      "totalMs": 25.284,
+      "heapUsedMiB": 139.02
     },
     {
       "iteration": 2,
-      "compileMs": 7.528,
-      "simulationMs": 17.718,
-      "totalMs": 25.246,
-      "heapUsedMiB": 139.85
+      "compileMs": 8.538,
+      "simulationMs": 17.462,
+      "totalMs": 26,
+      "heapUsedMiB": 139.82
     },
     {
       "iteration": 3,
-      "compileMs": 6.989,
-      "simulationMs": 14.236,
-      "totalMs": 21.224,
-      "heapUsedMiB": 138.78
+      "compileMs": 7.172,
+      "simulationMs": 13.721,
+      "totalMs": 20.893,
+      "heapUsedMiB": 139.02
     },
     {
       "iteration": 4,
-      "compileMs": 7.223,
-      "simulationMs": 16.211,
-      "totalMs": 23.434,
-      "heapUsedMiB": 138.9
+      "compileMs": 6.644,
+      "simulationMs": 14.437,
+      "totalMs": 21.081,
+      "heapUsedMiB": 139.15
     },
     {
       "iteration": 5,
-      "compileMs": 6.557,
-      "simulationMs": 15.222,
-      "totalMs": 21.778,
-      "heapUsedMiB": 138.85
+      "compileMs": 8.025,
+      "simulationMs": 15.13,
+      "totalMs": 23.155,
+      "heapUsedMiB": 139.24
     }
   ],
   "measurementBoundary": "Vite SSR module startup is excluded. Compile includes Workbench project creation and Project -> Scenario compilation; simulation includes all runtime and projection outputs."

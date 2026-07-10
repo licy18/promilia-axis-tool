@@ -2,6 +2,7 @@ import { Buffer } from 'node:buffer';
 import { describe, expect, it } from 'vitest';
 import {
   createDefaultWorkbenchDraftState,
+  createWorkbenchScenarioDraftSnapshot,
   WORKBENCH_DRAFT_SCHEMA_VERSION,
 } from '../../domain/workbenchDraftStorage';
 import { createWorkbenchActionDraft } from '../../domain/workbenchProjectFactory';
@@ -57,6 +58,20 @@ describe('Workbench PNG project', () => {
         ],
       },
     ];
+    state.scenarioWorkspace.scenarios.push({
+      id: 'scenario-0002',
+      name: 'PNG 对照方案',
+      draft: createWorkbenchScenarioDraftSnapshot({
+        ...state,
+        actionDrafts: [
+          createWorkbenchActionDraft({
+            id: 'action-png-baseline',
+            startMs: 600,
+          }),
+        ],
+        selectedActionId: 'action-png-baseline',
+      }),
+    });
     const exportedAt = '2026-07-10T10:30:00.000Z';
     const metadata = createWorkbenchProjectPngMetadata(state, exportedAt);
 
@@ -89,6 +104,17 @@ describe('Workbench PNG project', () => {
           captureSessionId: 'png-runtime-capture-1',
         }),
       ],
+      scenarioWorkspace: {
+        activeScenarioId: 'scenario-0001',
+        scenarios: [
+          { id: 'scenario-0001' },
+          {
+            id: 'scenario-0002',
+            name: 'PNG 对照方案',
+            draft: { selectedActionId: 'action-png-baseline' },
+          },
+        ],
+      },
     });
     expect(imported.actionDrafts.map(action => action.id)).toEqual([
       'action-0001',

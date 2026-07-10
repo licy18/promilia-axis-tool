@@ -63,7 +63,7 @@ insertion / generationBatch
 - `Ctrl/Cmd+Z`、`Ctrl/Cmd+Y` 和 `Ctrl/Cmd+Shift+Z` 撤销/重做。
 - 同轨重叠时可自动推迟，并保留诊断说明。
 
-多选和动作剪贴板只属于编辑会话与撤销历史，项目重置或切换会清除；动作关系和循环边界进入 v10 项目交换格式。复制动作组时只复制两个端点都位于所选组内的关系。
+多选和动作剪贴板只属于编辑会话与撤销历史，项目重置或方案切换会清除；动作关系和循环边界随各方案进入 v11 项目交换格式。复制动作组时只复制两个端点都位于所选组内的关系。
 
 所有动作变更必须通过 Workbench mutation/runtime sync 路径刷新模拟结果，不能只移动 DOM。
 
@@ -101,7 +101,7 @@ Runtime 消费标准 delta 后输出 `simLog`、`stateCurves`、资源曲线、�
 
 ## 7. 项目交换
 
-动作草稿、关系与循环边界通过 WorkbenchProjectFile v10 持久化。草稿、JSON、分享链接、PNG 元数据、runtime capture 和预设轴库共享 `actionDrafts[]`、`actionRelations[]` 与 `cycleBoundaries[]`；任何新时间轴字段都必须同步考虑这些交换路径及旧版本迁移。
+动作草稿、关系与循环边界通过 WorkbenchProjectFile v11 的 `scenarioWorkspace.scenarios[].draft` 持久化。根级字段镜像活动方案；草稿、JSON、分享链接、PNG 元数据、runtime capture 和预设轴库共享完整方案工作区。任何新时间轴字段都必须同步考虑每条方案、全部交换路径及旧版本迁移。
 
 ## 8. 长轴验收
 
@@ -119,7 +119,7 @@ npm run benchmark:long-axis:check
 npm run benchmark:long-axis:browser
 ```
 
-默认加载 120 动作 v10 草稿，验证动作列表、时间轴块、动作结果、状态曲线和运行结果导航均可见，首屏完成时间预算为 15 秒。
+默认加载 120 动作 v11 草稿，验证动作列表、时间轴块、动作结果、状态曲线和运行结果导航均可见，首屏完成时间预算为 15 秒。
 
 当前浏览器仍直接渲染全部动作和曲线点；当基准显示真实瓶颈时，再采用虚拟化、分层折叠或按需渲染，不提前引入无证据复杂度。
 

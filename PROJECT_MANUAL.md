@@ -54,9 +54,9 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；58 个测试文件、361 条测试通过。
-- `npm run test:e2e:workbench-flow`：通过；34 条 Workbench 浏览器主流程通过。
-- `npm run test:e2e:production-preview`：通过；10 项真实 `dist` 验收全部通过，报告结论为 `trial-ready`。
+- `npm run test -- --run`：通过；61 个测试文件、370 条测试通过。
+- `npm run test:e2e:workbench-flow`：通过；35 条 Workbench 浏览器主流程通过。
+- `npm run test:e2e:production-preview`：通过；11 项真实 `dist` 验收全部通过，报告结论为 `trial-ready`。
 
 ## 3. 目录速览
 
@@ -75,7 +75,8 @@ src/
 
 - `src/views/Workbench.vue`：生产页面编排和项目交换入口。
 - `src/domain/projectSchema.js`：标准项目、角色、敌人、动作和动作关系模型。
-- `src/domain/workbenchDraftStorage.js`：v10 草稿、项目 JSON 和分享合同。
+- `src/domain/workbenchDraftStorage.js`：v11 草稿、项目 JSON 和分享合同。
+- `src/domain/workbenchScenarioWorkspace.js`：项目内多方案快照、迁移和管理合同。
 - `src/simulation/`：无 UI 编译、执行、三值生成、机制和结果投影。
 - `src/features/workbench/`：动作轴、配置、曲线、日志、详情和主流程交互。
 - `src/data/azprGenerated.js`：生成数据访问入口。
@@ -941,6 +942,18 @@ Workbench 现在可以在 60fps 时间轴空白位置添加循环边界，直接
 阶段验收：58 个测试文件、361 条测试，34 条 Workbench 主流程和 10 项 production preview 能力全部通过；180 动作完整运行 p95 为 18.463ms，120 动作浏览器首屏就绪为 1303ms。Workbench 主块 gzip 为 363,626B，仍低于 370,000B 预算；1440×1000 与 390×844 实图检查均无页面横向溢出或控件遮挡。
 
 下一阶段目标：阶段 8-F 多方案工作区闭环。对齐 Endaxis 的方案管理层级，让用户在同一个工作区创建、复制、重命名和切换多条完整排轴方案，每条方案独立保存队伍/敌人配置、动作、关系、效果、循环边界和采样绑定，并可直接选择任意两条方案复用现有 A/B runtime comparison。该阶段应把“预设存档”和“当前编辑方案”组织成清晰的项目级工作流，不继续补单个按钮或状态标签，也不修改三值公式。
+
+### 阶段 8-F 多方案工作区闭环（2026-07-11）
+
+Workbench 现在提供项目级方案栏，最多保存 14 条完整排轴方案。用户可以新建、复制、重命名、切换和删除方案；切换前会把当前队伍/敌人配置、动作、关系、效果命令、循环边界、runtime capture 和选中动作写回活动方案，进入目标方案后清理跨方案临时焦点与历史栈。方案操作会同步本地草稿，至少保留一条方案。
+
+项目文件升级为 `WorkbenchProjectFile v11`，新增 `scenarioWorkspace`。根级草稿字段始终镜像活动方案，现有 Project、Scenario、generation、runtime 和 UI 投影继续只消费这份活动草稿；完整 `scenarios[].draft` 随本地草稿、JSON、分享链接、PNG 元数据和预设一起交换。v1-v10 项目自动迁移成单一“方案 1”，没有建立第二套模拟器或修改三值计算。
+
+现有方案对比窗口新增工作区方案来源：当前活动方案可以直接选择任一其他方案作为基准，两边仍分别通过标准 Project/Scenario/runtime，再由 `AzPrWorkbenchScenarioComparison` 比较。方案切换、项目导出回导和删除均已通过同一主流程验收。
+
+阶段验收：61 个测试文件、370 条测试，35 条 Workbench 主流程和 11 项 production preview 能力全部通过；180 动作完整运行 p95 为 26.000ms，120 动作浏览器首屏就绪为 1313ms。Workbench 主块 gzip 为 365,188B，全部 JavaScript gzip 为 715,845B，仍在 370,000B/740,000B 预算内；1440×1000 与 390×844 实图检查均无页面横向溢出，窄屏方案标签在方案栏内部滚动。
+
+下一阶段目标：阶段 8-G 循环边界继承方案闭环。对齐 Endaxis 从 cycle boundary 创建继承方案的能力，从选中边界读取现有 runtime 状态快照，生成一条新的后续方案：边界后的动作按帧平移到新轴起点，并继承敌人 HP/韧性、各角色自身能量和仍在生效的效果。该阶段应建立明确的 initial runtime state 合同并继续走标准 runtime，不自动外推循环次数、不猜测未确认机制，也不把继承实现成 UI 临时数值覆盖。
 
 ## 10. 文档维护规则
 

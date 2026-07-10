@@ -59,7 +59,8 @@ C:\PC2\Codex\AzPr
 - `projectSchema.js`：`Project`、`Actor`、`Enemy`、`Action`、`ActionRelation` 与 `CycleBoundary` 主合同。
 - `workbenchProjectFactory.js`：把 Workbench 选择、培养配置和动作草稿组装为标准项目。
 - `workbenchActionRelations.js`：动作前后关系的规范化、无环校验、间隔同步与删除清理。
-- `workbenchDraftStorage.js`：v10 草稿、项目 JSON 和分享链接。
+- `workbenchDraftStorage.js`：v11 草稿、项目 JSON 和分享链接。
+- `workbenchScenarioWorkspace.js`：最多 14 条完整方案快照的规范化、切换和迁移。
 - `workbenchPngProject.js`：PNG 项目元数据写入与回读。
 - `workbenchPresetStorage.js`：v1 本地预设库，复用完整 Workbench 项目快照。
 - `workbenchRuntimeSampleCapture.js`：外部 capture 文件解析、绑定、去重和项目持久化。
@@ -116,12 +117,17 @@ Action
 - 时间轴从 runtime effect interval projection 渲染角色/敌人效果区间，并与生命周期复盘和来源动作编辑共用选择状态。
 - 时间轴渲染可编辑的 60fps 循环边界和选中区段高亮，区段统计可定位贡献动作返回编辑。
 - 项目导入导出、分享和预设库由 `Workbench.vue` 编排，数据格式由 domain 层持有。
+- 顶部方案栏管理项目内完整排轴方案；方案切换只替换活动草稿，标准模拟链仍保持单入口。
 
 ## 4. 关键数据合同
 
-### WorkbenchProjectFile v10
+### WorkbenchProjectFile v11
 
-包含 selection、teamSlots、actorConfigs、enemyConfig、segmentSplitOptions、actionDrafts、actionRelations、cycleBoundaries、runtimeSampleCaptures 和 selectedActionId。JSON、分享链接、PNG 元数据和预设库都复用该合同；v1-v8 项目迁移时补为空关系数组，v1-v9 项目迁移时补为空循环边界数组。
+根级包含活动方案的 selection、teamSlots、actorConfigs、enemyConfig、segmentSplitOptions、actionDrafts、actionRelations、cycleBoundaries、runtimeSampleCaptures 和 selectedActionId，并新增 `scenarioWorkspace`。JSON、分享链接、PNG 元数据和预设库都复用该合同；v1-v10 项目迁移为单方案工作区。
+
+### ScenarioWorkspace v1
+
+包含 `activeScenarioId` 与最多 14 条 `{ id, name, draft }`。每个 draft 是完整 `WorkbenchScenarioDraft`；根级字段始终镜像活动方案，保证 Project、compiler 和 runtime 无需认识工作区。切换方案前同步当前草稿，切换后清理跨方案临时选择和撤销历史。
 
 ### ActionRelation v1
 
@@ -149,7 +155,7 @@ Action
 
 ## 5. 持久化边界
 
-- 当前草稿：`promilia-axis-tool:workbench-draft:v10`。
+- 当前草稿：`promilia-axis-tool:workbench-draft:v11`。
 - 本地预设：`promilia-axis-tool:workbench-presets:v1`。
 - 项目交换：JSON、分享 URL、PNG 内嵌元数据。
 - 临时曲线选中、复盘焦点、筛选和诊断面板状态不写入项目文件。
@@ -186,4 +192,4 @@ git diff --check
 - 生产引用审计当前为 0 个无引用模块、0 个意外 test-only 模块；新增代码必须维持该守门。
 - 当前首屏、Workbench 与全部 JavaScript gzip 预算分别为 120KB、370KB、740KB；新增依赖必须通过构建组成审计。
 - Workbench 首轮主包主要由技能核心投影、生产 seed 和模拟/复盘代码构成；候选诊断证据已经移入独立按需包，后续优化应以生产试用和可测量瓶颈为依据。
-- `playwright.production.config.js` 只服务真实 `dist` 的发布验收；`production-preview-reporter.mjs` 将十项必需能力汇总为 `trial-ready` 或 `blocked`，开发服务器 E2E 不替代该结论。
+- `playwright.production.config.js` 只服务真实 `dist` 的发布验收；`production-preview-reporter.mjs` 将十一项必需能力汇总为 `trial-ready` 或 `blocked`，开发服务器 E2E 不替代该结论。

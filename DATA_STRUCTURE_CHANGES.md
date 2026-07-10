@@ -26103,7 +26103,7 @@ tests[]
 limitations[]
 ```
 
-必需能力固定为 production 路由与哈希资源、诊断动态加载、JSON 项目交换、PNG 项目交换、多动作编辑、动作关系交换、状态效果区间复盘、方案对比、循环区段复盘和 390px 窄屏主流程。只有 Playwright 整体通过且十项能力全部存在并通过时，报告才输出 `trial-ready`；缺项或失败均输出 `blocked`。该报告只证明本地 `dist` + Vite preview 可试用，不代表远程 CDN/托管、最终蓝原公式或非 fixture 真实采样已验收。
+必需能力固定为 production 路由与哈希资源、诊断动态加载、JSON 项目交换、PNG 项目交换、多动作编辑、动作关系交换、状态效果区间复盘、方案对比、循环区段复盘、多方案工作区和 390px 窄屏主流程。只有 Playwright 整体通过且十一项能力全部存在并通过时，报告才输出 `trial-ready`；缺项或失败均输出 `blocked`。该报告只证明本地 `dist` + Vite preview 可试用，不代表远程 CDN/托管、最终蓝原公式或非 fixture 真实采样已验收。
 
 ## 372. WorkbenchActionClipboard v1（仅编辑会话）
 
@@ -26121,7 +26121,7 @@ nextPasteStartMs
 
 `actions[]` 是所选动作的深拷贝，`relations[]` 只包含两个端点都在所选组内的关系。粘贴时按 `baseStartMs` 还原相对帧差，按动作组总跨度限制时间轴边界，重建 action、effect command 与 relation ID，并清除旧 `insertion` / `generationBatch`。多选状态由 `selectedActionIds[] + primaryActionId + actionSelectionAnchorId` 表示，历史快照会保存这些字段以恢复撤销/重做。
 
-该合同严格属于 Workbench transient editing state：不会写入 `WorkbenchDraftSnapshot v10`、项目 JSON、分享链接、PNG 元数据或预设。持久化的是项目自身的 `actionRelations[]`，不是剪贴板；导入、重置和项目切换会清理剪贴板，避免跨项目携带失效动作来源。
+该合同严格属于 Workbench transient editing state：不会写入 `WorkbenchDraftSnapshot v11`、项目 JSON、分享链接、PNG 元数据或预设。持久化的是每条方案自身的 `actionRelations[]`，不是剪贴板；导入、重置和方案切换会清理剪贴板，避免跨方案携带失效动作来源。
 
 ## 373. WorkbenchProjectFile v9 / ActionRelation v1
 
@@ -26207,7 +26207,7 @@ summary
 
 总 HP、韧性和能量直接读取各方案 `runtimeOutputs.summary`；角色能量读取 `resourceCurves.curvesByActor`；动作贡献聚合 `hitTransactions.transactions` 并读取 `effectTimeline.events`；效果覆盖读取各方案的 `AzPrEffectIntervalProjection`。排轴时长只取 Scenario 动作的最晚结束时间。该投影不调用 calculator，也不建立第二套三值公式。
 
-基准可来自 WorkbenchPreset、JSON/PNG 项目或当前草稿快照，但 `comparisonBaselineDraft`、基准来源和投影结果都属于 Workbench transient state，不写入 WorkbenchProjectFile v10、本地草稿、分享链接、PNG 元数据或预设。导入基准只创建第二套 Project/Scenario/simulation，不调用当前项目导入入口，因此不会覆盖当前编辑或历史栈。
+基准可来自其他工作区方案、WorkbenchPreset、JSON/PNG 项目或当前草稿快照，但 `comparisonBaselineDraft`、当前选择的基准来源和投影结果都属于 Workbench transient state，不写入 WorkbenchProjectFile v11、本地草稿、分享链接、PNG 元数据或预设。工作区方案自身作为 `scenarioWorkspace` 持久化；选择它作基准只创建第二套 Project/Scenario/simulation，不覆盖当前编辑或历史栈。
 
 ## 376. WorkbenchProjectFile v10 / CycleBoundary v1
 
@@ -26248,3 +26248,25 @@ summary
 ```
 
 命中 transaction 和 effect lifecycle event 按发生时间进入区段，恰好位于边界的事件进入后一区段；效果覆盖按 interval 与区段的实际重叠时长聚合。动作行只聚合已经存在的 HP、韧性、能量、命中和效果事件，角色行只聚合现有 self-energy transaction。该投影不写入项目文件，不调用 calculator，不复制动作，也不自动推算循环次数。
+
+## 378. WorkbenchProjectFile v11 / ScenarioWorkspace v1
+
+Workbench 草稿与项目文件从 v10 升级为 v11，新增：
+
+```text
+scenarioWorkspace
+  schemaVersion = 1
+  activeScenarioId
+  scenarios[] (max 14)
+    id
+    name
+    draft
+      selection / teamSlots / actorConfigs / enemyConfig
+      segmentSplitOptions
+      actionDrafts / actionRelations / cycleBoundaries
+      runtimeSampleCaptures / selectedActionId
+```
+
+根级 Workbench 草稿字段始终镜像 `activeScenarioId` 指向的方案，继续作为 `createWorkbenchProject()` 和全部 simulation 的唯一输入；inactive scenario 只保存在工作区合同中，不并行运行。`workbenchScenarioWorkspace.js` 负责稳定 ID、48 字符名称、深拷贝、14 方案上限、至少保留一个方案，以及新增、复制、重命名、切换和删除。
+
+切换前把当前活动草稿写回方案，切换后加载目标 draft 并清理跨方案临时焦点、动作剪贴板和撤销/重做栈。完整工作区随本地草稿、JSON、分享链接、PNG 元数据和预设交换；v1-v10 文件迁移为 `scenario-0001 / 方案 1`。工作区结构不进入 Project schema、compiler、generation 或 calculator，因此不改变三值结果。

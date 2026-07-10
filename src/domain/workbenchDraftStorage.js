@@ -14,11 +14,16 @@ import {
 import { normalizeWorkbenchRuntimeSampleCaptures } from './workbenchRuntimeSampleCapture';
 import { normalizeWorkbenchActionRelations } from './workbenchActionRelations';
 import { normalizeWorkbenchCycleBoundaries } from './workbenchCycleBoundaries';
+import {
+  createDefaultWorkbenchScenarioWorkspace,
+  normalizeWorkbenchScenarioWorkspace,
+} from './workbenchScenarioWorkspace';
 
-export const WORKBENCH_DRAFT_SCHEMA_VERSION = 10;
+export const WORKBENCH_DRAFT_SCHEMA_VERSION = 11;
 export const WORKBENCH_DRAFT_STORAGE_KEY =
-  'promilia-axis-tool:workbench-draft:v10';
+  'promilia-axis-tool:workbench-draft:v11';
 export const LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS = Object.freeze([
+  'promilia-axis-tool:workbench-draft:v10',
   'promilia-axis-tool:workbench-draft:v9',
   'promilia-axis-tool:workbench-draft:v8',
   'promilia-axis-tool:workbench-draft:v7',
@@ -45,7 +50,7 @@ export function createDefaultWorkbenchDraftState() {
     DEFAULT_WORKBENCH_SELECTION,
     teamSlots
   );
-  return {
+  const activeDraft = createWorkbenchScenarioDraftSnapshot({
     selection,
     teamSlots,
     actorConfigs: createDefaultWorkbenchActorConfigs(selection),
@@ -56,25 +61,47 @@ export function createDefaultWorkbenchDraftState() {
     cycleBoundaries: [],
     runtimeSampleCaptures: [],
     selectedActionId: DEFAULT_WORKBENCH_ACTION_ID,
+  });
+  return {
+    ...activeDraft,
+    scenarioWorkspace: createDefaultWorkbenchScenarioWorkspace(activeDraft),
     savedAt: null,
   };
 }
 
 export function createWorkbenchDraftSnapshot(
-  {
-    selection,
-    teamSlots,
-    actorConfigs,
-    enemyConfig,
-    segmentSplitOptions,
-    actionDrafts,
-    actionRelations,
-    cycleBoundaries,
-    runtimeSampleCaptures,
-    selectedActionId,
-  },
+  state,
   savedAt = new Date().toISOString()
 ) {
+  const activeDraft = createWorkbenchScenarioDraftSnapshot(state);
+  const scenarioWorkspace = normalizeWorkbenchScenarioWorkspace(
+    state?.scenarioWorkspace,
+    activeDraft,
+    createWorkbenchScenarioDraftSnapshot
+  );
+
+  return {
+    schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
+    game: 'azur-promilia',
+    type: WORKBENCH_DRAFT_FILE_TYPE,
+    savedAt,
+    ...activeDraft,
+    scenarioWorkspace,
+  };
+}
+
+export function createWorkbenchScenarioDraftSnapshot({
+  selection,
+  teamSlots,
+  actorConfigs,
+  enemyConfig,
+  segmentSplitOptions,
+  actionDrafts,
+  actionRelations,
+  cycleBoundaries,
+  runtimeSampleCaptures,
+  selectedActionId,
+} = {}) {
   const normalizedTeamSlots = normalizeWorkbenchTeamSlots(teamSlots, selection);
   const normalizedSelection = normalizeWorkbenchSelection(
     selection,
@@ -98,10 +125,6 @@ export function createWorkbenchDraftSnapshot(
     : normalizedActions[0].id;
 
   return {
-    schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
-    game: 'azur-promilia',
-    type: WORKBENCH_DRAFT_FILE_TYPE,
-    savedAt,
     selection: normalizedSelection,
     teamSlots: normalizedTeamSlots,
     actorConfigs: normalizedActorConfigs,

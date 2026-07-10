@@ -94,7 +94,7 @@ test('[json-project-exchange] restores an exported production JSON project', asy
   expect(download.suggestedFilename()).toMatch(/promilia-workbench-.*\.json$/);
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 10,
+    schemaVersion: 11,
     game: 'azur-promilia',
     type: 'workbench-project',
     enemyConfig: { level: 91 },
@@ -222,7 +222,7 @@ test('[timeline-relations] preserves action relations through project exchange',
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(10);
+  expect(project.schemaVersion).toBe(11);
   expect(project.actionDrafts).toHaveLength(5);
   expect(project.actionRelations).toEqual([
     expect.objectContaining({
@@ -390,7 +390,7 @@ test('[cycle-sections] creates, reviews, and restores a production cycle boundar
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(10);
+  expect(project.schemaVersion).toBe(11);
   expect(project.cycleBoundaries).toEqual([
     expect.objectContaining({
       id: 'cycle-boundary-0001',
@@ -402,6 +402,63 @@ test('[cycle-sections] creates, reviews, and restores a production cycle boundar
     .getByTestId('workbench-import-project-file')
     .setInputFiles(downloadPath);
   await expect(workbench).toHaveAttribute('data-cycle-boundary-count', '1');
+});
+
+test('[workspace-scenarios] switches, compares, and restores independent production scenarios', async ({
+  page,
+}) => {
+  await page.goto('/#/workbench');
+  const workbench = page.locator('main.workbench');
+  await page.getByTestId('workbench-scenario-rename').click();
+  await page.getByTestId('workbench-scenario-rename-input').fill('生产方案');
+  await page.getByTestId('workbench-scenario-rename-input').press('Enter');
+  await page.getByTestId('workbench-scenario-duplicate').click();
+  await page.getByTestId('workbench-add-action').click();
+  await expect(workbench).toHaveAttribute('data-workspace-scenario-count', '2');
+  await expect(page.locator('.action-item')).toHaveCount(2);
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const download = await downloadPromise;
+  const downloadPath = await download.path();
+  const project = JSON.parse(await readFile(downloadPath, 'utf8'));
+  expect(project.schemaVersion).toBe(11);
+  expect(project.scenarioWorkspace).toMatchObject({
+    activeScenarioId: 'scenario-0002',
+    scenarios: [
+      { id: 'scenario-0001', name: '生产方案' },
+      { id: 'scenario-0002', name: '生产方案 副本' },
+    ],
+  });
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(downloadPath);
+  await expect(workbench).toHaveAttribute('data-workspace-scenario-count', '2');
+  await expect(page.locator('.action-item')).toHaveCount(2);
+  await page
+    .locator(
+      '[data-testid="workbench-scenario-tab"][data-scenario-id="scenario-0001"]'
+    )
+    .click();
+  await expect(page.locator('.action-item')).toHaveCount(1);
+
+  await page
+    .locator(
+      '[data-testid="workbench-scenario-tab"][data-scenario-id="scenario-0002"]'
+    )
+    .click();
+  await page.getByTestId('workbench-open-comparison').click();
+  await page
+    .getByTestId('workbench-comparison-workspace-scenario')
+    .selectOption('scenario-0001');
+  await expect(
+    page.getByTestId('workbench-comparison-baseline-source')
+  ).toContainText('生产方案');
+  await expect(page.getByTestId('workbench-comparison-action-row')).toHaveCount(
+    2
+  );
 });
 
 test('[narrow-main-flow] completes runtime review, edit, and refresh without overflow', async ({

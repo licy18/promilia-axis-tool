@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "production-preview-acceptance",
-  "generatedAt": "2026-07-10T16:54:40.017Z",
+  "generatedAt": "2026-07-10T17:19:19.110Z",
   "environment": {
     "platform": "win32-x64",
     "node": "v24.16.0",
@@ -18,12 +18,12 @@
     "reason": "all-required-production-preview-capabilities-passed"
   },
   "summary": {
-    "requiredCapabilityCount": 10,
-    "passedCapabilityCount": 10,
-    "testCount": 10,
-    "passedTestCount": 10,
+    "requiredCapabilityCount": 11,
+    "passedCapabilityCount": 11,
+    "testCount": 11,
+    "passedTestCount": 11,
     "playwrightStatus": "passed",
-    "durationMs": 10445
+    "durationMs": 11878
   },
   "capabilities": [
     {
@@ -72,6 +72,11 @@
       "testCount": 1
     },
     {
+      "capability": "workspace-scenarios",
+      "status": "passed",
+      "testCount": 1
+    },
+    {
       "capability": "narrow-main-flow",
       "status": "passed",
       "testCount": 1
@@ -82,7 +87,7 @@
       "capability": "routes-and-assets",
       "title": "[routes-and-assets] serves production routes and hashed assets",
       "status": "passed",
-      "durationMs": 839,
+      "durationMs": 972,
       "retry": 0,
       "errors": []
     },
@@ -90,7 +95,7 @@
       "capability": "diagnostics-lazy-load",
       "title": "[diagnostics-lazy-load] loads runtime diagnostics from a production chunk",
       "status": "passed",
-      "durationMs": 540,
+      "durationMs": 564,
       "retry": 0,
       "errors": []
     },
@@ -98,7 +103,7 @@
       "capability": "json-project-exchange",
       "title": "[json-project-exchange] restores an exported production JSON project",
       "status": "passed",
-      "durationMs": 764,
+      "durationMs": 763,
       "retry": 0,
       "errors": []
     },
@@ -106,7 +111,7 @@
       "capability": "png-project-exchange",
       "title": "[png-project-exchange] restores production PNG metadata and lazy exporter assets",
       "status": "passed",
-      "durationMs": 1050,
+      "durationMs": 1055,
       "retry": 0,
       "errors": []
     },
@@ -114,7 +119,7 @@
       "capability": "multi-action-editing",
       "title": "[multi-action-editing] copies, pastes, and reviews a selected action group",
       "status": "passed",
-      "durationMs": 802,
+      "durationMs": 804,
       "retry": 0,
       "errors": []
     },
@@ -122,7 +127,7 @@
       "capability": "timeline-relations",
       "title": "[timeline-relations] preserves action relations through project exchange",
       "status": "passed",
-      "durationMs": 1065,
+      "durationMs": 1078,
       "retry": 0,
       "errors": []
     },
@@ -130,7 +135,7 @@
       "capability": "effect-interval-review",
       "title": "[effect-interval-review] reviews an effect interval and refreshes it from the source action",
       "status": "passed",
-      "durationMs": 876,
+      "durationMs": 834,
       "retry": 0,
       "errors": []
     },
@@ -138,7 +143,7 @@
       "capability": "scenario-comparison",
       "title": "[scenario-comparison] compares an edited axis with a snapshot and returns to the changed action",
       "status": "passed",
-      "durationMs": 856,
+      "durationMs": 913,
       "retry": 0,
       "errors": []
     },
@@ -146,7 +151,15 @@
       "capability": "cycle-sections",
       "title": "[cycle-sections] creates, reviews, and restores a production cycle boundary",
       "status": "passed",
-      "durationMs": 819,
+      "durationMs": 828,
+      "retry": 0,
+      "errors": []
+    },
+    {
+      "capability": "workspace-scenarios",
+      "title": "[workspace-scenarios] switches, compares, and restores independent production scenarios",
+      "status": "passed",
+      "durationMs": 1063,
       "retry": 0,
       "errors": []
     },
@@ -154,7 +167,7 @@
       "capability": "narrow-main-flow",
       "title": "[narrow-main-flow] completes runtime review, edit, and refresh without overflow",
       "status": "passed",
-      "durationMs": 760,
+      "durationMs": 807,
       "retry": 0,
       "errors": []
     }

@@ -10,6 +10,8 @@
     :data-cycle-boundary-count="cycleBoundaries.length"
     :data-selected-cycle-boundary-id="selectedCycleBoundaryId"
     :data-selected-cycle-section-id="selectedCycleSection?.sectionId || ''"
+    :data-workspace-scenario-count="scenarioWorkspace.scenarios.length"
+    :data-active-workspace-scenario-id="scenarioWorkspace.activeScenarioId"
     :data-effect-interval-count="effectIntervalProjection.summary.intervalCount"
     :data-selected-effect-interval-id="selectedEffectIntervalId"
   >
@@ -141,6 +143,16 @@
       </div>
     </nav>
 
+    <WorkbenchScenarioBar
+      :workspace="scenarioWorkspace"
+      :max-scenarios="MAX_WORKBENCH_SCENARIOS"
+      @switch="switchWorkspaceScenario"
+      @add="addWorkspaceScenario"
+      @duplicate="duplicateWorkspaceScenario"
+      @rename="renameWorkspaceScenario"
+      @delete="deleteWorkspaceScenario"
+    />
+
     <WorkbenchPresetLibraryDialog
       :visible="presetDialogVisible"
       :presets="workbenchPresets"
@@ -157,9 +169,12 @@
       v-if="comparisonDialogVisible"
       :visible="comparisonDialogVisible"
       :presets="workbenchPresets"
+      :workspace-scenarios="scenarioWorkspace.scenarios"
+      :active-workspace-scenario-id="scenarioWorkspace.activeScenarioId"
       :baseline-source="comparisonBaselineSource"
       :comparison="scenarioComparison"
       @close="closeScenarioComparison"
+      @select-workspace-scenario="selectScenarioComparisonWorkspaceScenario"
       @select-preset="selectScenarioComparisonPreset"
       @capture-current="captureCurrentScenarioComparisonBaseline"
       @import-baseline="importScenarioComparisonBaseline"
@@ -829,6 +844,7 @@ import {
 import {
   clearWorkbenchDraft,
   createWorkbenchDraftSnapshot,
+  createWorkbenchScenarioDraftSnapshot,
   createWorkbenchProjectFileName,
   createWorkbenchProjectFileSnapshot,
   createWorkbenchProjectShareCode,
@@ -840,6 +856,16 @@ import {
   saveWorkbenchDraft,
   WORKBENCH_PROJECT_SHARE_PARAM,
 } from '../domain/workbenchDraftStorage';
+import {
+  MAX_WORKBENCH_SCENARIOS,
+  addWorkbenchScenario,
+  deleteWorkbenchScenario,
+  duplicateWorkbenchScenario,
+  getActiveWorkbenchScenario,
+  renameWorkbenchScenario,
+  switchWorkbenchScenario,
+  synchronizeActiveWorkbenchScenario,
+} from '../domain/workbenchScenarioWorkspace';
 import {
   addWorkbenchPreset,
   createWorkbenchDraftFromPreset,
@@ -875,6 +901,9 @@ import { projectWorkbenchScenarioComparison } from '../simulation/projection/pro
 const WorkbenchScenarioComparisonDialog = defineAsyncComponent(
   () => import('../features/workbench/WorkbenchScenarioComparisonDialog.vue')
 );
+const WorkbenchScenarioBar = defineAsyncComponent(
+  () => import('../features/workbench/WorkbenchScenarioBar.vue')
+);
 const WorkbenchCycleSectionPanel = defineAsyncComponent(
   () => import('../features/workbench/WorkbenchCycleSectionPanel.vue')
 );
@@ -905,6 +934,9 @@ const segmentSplitPreview = ref(null);
 const actionDrafts = ref([...initialDraft.actionDrafts]);
 const actionRelations = ref([...initialDraft.actionRelations]);
 const cycleBoundaries = ref([...initialDraft.cycleBoundaries]);
+const scenarioWorkspace = ref(
+  cloneWorkbenchHistoryValue(initialDraft.scenarioWorkspace)
+);
 const runtimeSampleCaptures = ref([...initialDraft.runtimeSampleCaptures]);
 const selectedActionId = ref(initialDraft.selectedActionId);
 const selectedActionIds = ref(
@@ -1007,6 +1039,9 @@ const currentWorkbenchPresetSummary = computed(() => ({
   actorNames: scenario.value.actors.map(actor => actor.name),
   enemyName: scenario.value.enemy.name,
 }));
+const activeWorkbenchScenario = computed(() =>
+  getActiveWorkbenchScenario(scenarioWorkspace.value)
+);
 const runtimeOutputs = computed(() => simulationResult.value.runtimeOutputs);
 const effectIntervalProjection = computed(() =>
   projectEffectRuntimeIntervals({
@@ -1070,7 +1105,7 @@ const comparisonBaselineEffectIntervals = computed(() => {
 const scenarioComparison = computed(() =>
   projectWorkbenchScenarioComparison({
     current: {
-      label: '当前编辑',
+      label: activeWorkbenchScenario.value?.name ?? '当前编辑',
       sourceKind: 'current-workbench-project',
       scenario: scenario.value,
       runtimeOutputs: runtimeOutputs.value,
@@ -2333,6 +2368,126 @@ function saveDraft() {
   draftStatus.value = snapshot ? '已保存草稿' : '草稿不可用';
 }
 
+function switchWorkspaceScenario(scenarioId) {
+  const result = switchWorkbenchScenario(
+    scenarioWorkspace.value,
+    scenarioId,
+    createWorkbenchScenarioDraftSnapshot(getCurrentWorkbenchScenarioState())
+  );
+  return applyWorkspaceScenarioMutation(result, '已切换方案');
+}
+
+function addWorkspaceScenario() {
+  const emptyDraft = createWorkbenchScenarioDraftSnapshot(
+    createDefaultWorkbenchDraftState()
+  );
+  const result = addWorkbenchScenario(
+    scenarioWorkspace.value,
+    createWorkbenchScenarioDraftSnapshot(getCurrentWorkbenchScenarioState()),
+    emptyDraft
+  );
+  if (!result.changed && result.reason === 'scenario-limit-reached') {
+    draftStatus.value = `方案数量已达上限（${MAX_WORKBENCH_SCENARIOS}）`;
+    return false;
+  }
+  return applyWorkspaceScenarioMutation(result, '已新建方案');
+}
+
+function duplicateWorkspaceScenario(scenarioId) {
+  const result = duplicateWorkbenchScenario(
+    scenarioWorkspace.value,
+    scenarioId,
+    createWorkbenchScenarioDraftSnapshot(getCurrentWorkbenchScenarioState())
+  );
+  if (!result.changed && result.reason === 'scenario-limit-reached') {
+    draftStatus.value = `方案数量已达上限（${MAX_WORKBENCH_SCENARIOS}）`;
+    return false;
+  }
+  return applyWorkspaceScenarioMutation(result, '已复制方案');
+}
+
+function renameWorkspaceScenario({ scenarioId, name } = {}) {
+  const synchronizedWorkspace = synchronizeActiveWorkbenchScenario(
+    scenarioWorkspace.value,
+    createWorkbenchScenarioDraftSnapshot(getCurrentWorkbenchScenarioState())
+  );
+  const result = renameWorkbenchScenario(
+    synchronizedWorkspace,
+    scenarioId,
+    name
+  );
+  if (!result.changed) {
+    return false;
+  }
+  scenarioWorkspace.value = result.workspace;
+  persistWorkspaceScenarioState(`已重命名方案：${result.scenario.name}`);
+  return true;
+}
+
+function deleteWorkspaceScenario(scenarioId) {
+  const scenario = scenarioWorkspace.value.scenarios.find(
+    item => item.id === scenarioId
+  );
+  if (!scenario || scenarioWorkspace.value.scenarios.length <= 1) {
+    return false;
+  }
+  if (
+    typeof globalThis.confirm === 'function' &&
+    !globalThis.confirm(`确定删除方案“${scenario.name}”吗？`)
+  ) {
+    return false;
+  }
+  const result = deleteWorkbenchScenario(
+    scenarioWorkspace.value,
+    scenarioId,
+    createWorkbenchScenarioDraftSnapshot(getCurrentWorkbenchScenarioState())
+  );
+  return applyWorkspaceScenarioMutation(result, '已删除方案');
+}
+
+function applyWorkspaceScenarioMutation(result, statusText) {
+  if (!result?.changed || !result.scenario?.draft) {
+    return false;
+  }
+  scenarioWorkspace.value = result.workspace;
+  applyWorkbenchScenarioDraftState(result.scenario.draft);
+  projectShareUrl.value = '';
+  clearWorkbenchProjectTransientState();
+  clearSegmentSplitPreview();
+  undoHistoryStack.value = [];
+  redoHistoryStack.value = [];
+  reconcileWorkspaceScenarioComparisonBaseline();
+  persistWorkspaceScenarioState(`${statusText}：${result.scenario.name}`);
+  if (result.scenario.draft.runtimeSampleCaptures?.length) {
+    void ensureRuntimeDiagnosticsLoaded();
+  }
+  return true;
+}
+
+function persistWorkspaceScenarioState(statusText) {
+  const snapshot = saveWorkbenchDraft(
+    getLocalStorage(),
+    getWorkbenchDraftState()
+  );
+  draftStatus.value = snapshot ? statusText : `${statusText}（未持久化）`;
+}
+
+function reconcileWorkspaceScenarioComparisonBaseline() {
+  if (comparisonBaselineSource.value?.kind !== 'workspace-scenario') {
+    return;
+  }
+  const baselineScenario = scenarioWorkspace.value.scenarios.find(
+    scenario => scenario.id === comparisonBaselineSource.value.id
+  );
+  if (
+    !baselineScenario ||
+    baselineScenario.id === scenarioWorkspace.value.activeScenarioId
+  ) {
+    comparisonBaselineDraft.value = null;
+    comparisonBaselineSource.value = null;
+  }
+}
+
 function openWorkbenchPresetLibrary() {
   refreshWorkbenchPresetLibrary();
   presetDialogVisible.value = true;
@@ -2416,6 +2571,27 @@ function openScenarioComparison() {
 
 function closeScenarioComparison() {
   comparisonDialogVisible.value = false;
+}
+
+function selectScenarioComparisonWorkspaceScenario(scenarioId) {
+  const synchronizedWorkspace = synchronizeActiveWorkbenchScenario(
+    scenarioWorkspace.value,
+    createWorkbenchScenarioDraftSnapshot(getCurrentWorkbenchScenarioState())
+  );
+  const workspaceScenario = synchronizedWorkspace.scenarios.find(
+    scenario =>
+      scenario.id === scenarioId &&
+      scenario.id !== synchronizedWorkspace.activeScenarioId
+  );
+  if (!workspaceScenario) {
+    draftStatus.value = '工作区对比方案不存在';
+    return false;
+  }
+  return setScenarioComparisonBaseline(workspaceScenario.draft, {
+    kind: 'workspace-scenario',
+    id: workspaceScenario.id,
+    label: workspaceScenario.name,
+  });
 }
 
 function selectScenarioComparisonPreset(presetId) {
@@ -2518,6 +2694,19 @@ function createWorkbenchProjectFromDraft(draft) {
 }
 
 function getWorkbenchDraftState() {
+  const activeDraft = createWorkbenchScenarioDraftSnapshot(
+    getCurrentWorkbenchScenarioState()
+  );
+  return {
+    ...activeDraft,
+    scenarioWorkspace: synchronizeActiveWorkbenchScenario(
+      scenarioWorkspace.value,
+      activeDraft
+    ),
+  };
+}
+
+function getCurrentWorkbenchScenarioState() {
   return {
     selection: selection.value,
     teamSlots: teamSlots.value,
@@ -2796,7 +2985,10 @@ function applyImportedProjectDraft(draft, statusText = '已导入项目') {
   clearWorkbenchProjectTransientState();
   undoHistoryStack.value = [];
   redoHistoryStack.value = [];
-  const snapshot = saveWorkbenchDraft(getLocalStorage(), draft);
+  const snapshot = saveWorkbenchDraft(
+    getLocalStorage(),
+    getWorkbenchDraftState()
+  );
   draftStatus.value = snapshot ? statusText : `${statusText}（未持久化）`;
   if (draft.runtimeSampleCaptures?.length) {
     void ensureRuntimeDiagnosticsLoaded();
@@ -2804,16 +2996,28 @@ function applyImportedProjectDraft(draft, statusText = '已导入项目') {
 }
 
 function resetDraft() {
-  recordWorkbenchHistorySnapshot();
   clearWorkbenchDraft(getLocalStorage());
   projectShareUrl.value = '';
   applyDraftState(createDefaultWorkbenchDraftState());
   clearWorkbenchProjectTransientState();
   clearSegmentSplitPreview();
+  undoHistoryStack.value = [];
+  redoHistoryStack.value = [];
   draftStatus.value = '已重置草稿';
 }
 
 function applyDraftState(draft) {
+  const normalizedDraft = createWorkbenchDraftSnapshot(
+    draft,
+    draft?.savedAt ?? null
+  );
+  scenarioWorkspace.value = cloneWorkbenchHistoryValue(
+    normalizedDraft.scenarioWorkspace
+  );
+  applyWorkbenchScenarioDraftState(normalizedDraft);
+}
+
+function applyWorkbenchScenarioDraftState(draft) {
   teamSlots.value = normalizeWorkbenchTeamSlots(
     draft.teamSlots,
     draft.selection

@@ -30,6 +30,25 @@
 
         <div class="baseline-toolbar">
           <label class="baseline-select">
+            <span>工作区方案</span>
+            <select
+              v-model="selectedWorkspaceScenarioId"
+              data-testid="workbench-comparison-workspace-scenario"
+              :disabled="availableWorkspaceScenarios.length === 0"
+              @change="selectWorkspaceScenario"
+            >
+              <option value="">选择其他工作区方案</option>
+              <option
+                v-for="scenario in availableWorkspaceScenarios"
+                :key="scenario.id"
+                :value="scenario.id"
+              >
+                {{ scenario.name }} ·
+                {{ scenario.draft?.actionDrafts?.length ?? 0 }} 动作
+              </option>
+            </select>
+          </label>
+          <label class="baseline-select">
             <span>基准预设</span>
             <select
               v-model="selectedPresetId"
@@ -89,7 +108,7 @@
           data-testid="workbench-comparison-empty"
         >
           <DataAnalysis />
-          <strong>请选择预设、项目文件或当前快照作为基准</strong>
+          <strong>请选择工作区方案、预设、项目文件或当前快照作为基准</strong>
         </div>
 
         <div v-else class="comparison-content">
@@ -264,6 +283,8 @@ import {
 const props = defineProps({
   visible: { type: Boolean, default: false },
   presets: { type: Array, default: () => [] },
+  workspaceScenarios: { type: Array, default: () => [] },
+  activeWorkspaceScenarioId: { type: String, default: '' },
   baselineSource: { type: Object, default: null },
   comparison: {
     type: Object,
@@ -281,6 +302,7 @@ const props = defineProps({
 
 const emit = defineEmits([
   'close',
+  'select-workspace-scenario',
   'select-preset',
   'capture-current',
   'import-baseline',
@@ -288,10 +310,16 @@ const emit = defineEmits([
 ]);
 
 const selectedPresetId = ref('');
+const selectedWorkspaceScenarioId = ref('');
 const importInput = ref(null);
 const compatiblePresets = computed(() =>
   props.presets.filter(
     preset => preset.compatibilityStatus !== 'incompatible-project-schema'
+  )
+);
+const availableWorkspaceScenarios = computed(() =>
+  props.workspaceScenarios.filter(
+    scenario => scenario.id !== props.activeWorkspaceScenarioId
   )
 );
 
@@ -305,6 +333,10 @@ watch(
       props.baselineSource?.kind === 'preset'
         ? (props.baselineSource.id ?? '')
         : '';
+    selectedWorkspaceScenarioId.value =
+      props.baselineSource?.kind === 'workspace-scenario'
+        ? (props.baselineSource.id ?? '')
+        : '';
   },
   { immediate: true }
 );
@@ -312,6 +344,12 @@ watch(
 function selectPreset() {
   if (selectedPresetId.value) {
     emit('select-preset', selectedPresetId.value);
+  }
+}
+
+function selectWorkspaceScenario() {
+  if (selectedWorkspaceScenarioId.value) {
+    emit('select-workspace-scenario', selectedWorkspaceScenarioId.value);
   }
 }
 
@@ -434,7 +472,9 @@ function deltaClass(value) {
 
 .baseline-toolbar {
   display: grid;
-  grid-template-columns: minmax(230px, 1fr) auto auto minmax(220px, auto);
+  grid-template-columns:
+    minmax(190px, 1fr) minmax(190px, 1fr) auto auto
+    minmax(220px, auto);
   align-items: end;
   gap: 10px;
   padding: 14px 20px;

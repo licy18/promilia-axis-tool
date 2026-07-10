@@ -175,6 +175,17 @@ describe('workbench draft storage project files', () => {
         { id: 'cycle-boundary-0001', timeMs: 1000 },
         { id: 'cycle-boundary-0002', timeMs: 2200 },
       ],
+      scenarioWorkspace: {
+        schemaVersion: 1,
+        activeScenarioId: 'scenario-0001',
+        scenarios: [
+          {
+            id: 'scenario-0001',
+            name: '方案 1',
+            draft: { selectedActionId: 'action-0002' },
+          },
+        ],
+      },
     });
 
     const imported = parseWorkbenchProjectFile(exported);
@@ -226,6 +237,94 @@ describe('workbench draft storage project files', () => {
     expect(imported.actionDrafts).toHaveLength(2);
   });
 
+  it('round-trips every scenario while keeping the active root draft synchronized', () => {
+    const activeAction = {
+      id: 'action-active',
+      type: 'skill',
+      skillId: 10900101,
+      actorCharacterId: 109001,
+      startMs: 600,
+      durationMs: 1000,
+      level: 1,
+    };
+    const baselineAction = {
+      ...activeAction,
+      id: 'action-baseline',
+      startMs: 1200,
+    };
+    const project = createWorkbenchProjectFileSnapshot(
+      {
+        selection: {
+          characterId: 109001,
+          secondaryCharacterId: 101003,
+          skillId: 10900101,
+          enemyId: 300032,
+        },
+        actionDrafts: [activeAction],
+        selectedActionId: activeAction.id,
+        scenarioWorkspace: {
+          activeScenarioId: 'scenario-active',
+          scenarios: [
+            {
+              id: 'scenario-active',
+              name: '当前轴',
+              draft: {
+                actionDrafts: [{ ...activeAction, startMs: 0 }],
+                selectedActionId: activeAction.id,
+              },
+            },
+            {
+              id: 'scenario-baseline',
+              name: '基准轴',
+              draft: {
+                selection: {
+                  characterId: 109001,
+                  secondaryCharacterId: 101003,
+                  skillId: 10900101,
+                  enemyId: 300032,
+                },
+                actionDrafts: [baselineAction],
+                selectedActionId: baselineAction.id,
+              },
+            },
+          ],
+        },
+      },
+      '2026-07-11T01:00:00.000Z'
+    );
+
+    expect(project.schemaVersion).toBe(WORKBENCH_DRAFT_SCHEMA_VERSION);
+    expect(project.scenarioWorkspace).toMatchObject({
+      activeScenarioId: 'scenario-active',
+      scenarios: [
+        {
+          id: 'scenario-active',
+          name: '当前轴',
+          draft: {
+            selectedActionId: 'action-active',
+            actionDrafts: [{ id: 'action-active', startMs: 600 }],
+          },
+        },
+        {
+          id: 'scenario-baseline',
+          name: '基准轴',
+          draft: {
+            selectedActionId: 'action-baseline',
+            actionDrafts: [{ id: 'action-baseline', startMs: 1200 }],
+          },
+        },
+      ],
+    });
+    expect(parseWorkbenchProjectFile(project).scenarioWorkspace).toEqual(
+      project.scenarioWorkspace
+    );
+    expect(
+      parseWorkbenchProjectShareCode(
+        createWorkbenchProjectShareCode(project, '2026-07-11T01:00:00.000Z')
+      ).scenarioWorkspace
+    ).toEqual(project.scenarioWorkspace);
+  });
+
   it('keeps legacy workbench draft files importable', () => {
     const projectFile = createWorkbenchProjectFileSnapshot(
       {
@@ -260,6 +359,7 @@ describe('workbench draft storage project files', () => {
       schemaVersion: 1,
       type: 'workbench-draft',
       actorConfigs: undefined,
+      scenarioWorkspace: undefined,
     };
 
     expect(parseWorkbenchProjectFile(legacyDraftFile)).toMatchObject({
@@ -274,6 +374,16 @@ describe('workbench draft storage project files', () => {
       enemyConfig: {
         toughnessMultiplier: 1,
         initialToughnessRatio: 1,
+      },
+      scenarioWorkspace: {
+        activeScenarioId: 'scenario-0001',
+        scenarios: [
+          {
+            id: 'scenario-0001',
+            name: '方案 1',
+            draft: { selectedActionId: 'action-0001' },
+          },
+        ],
       },
     });
   });

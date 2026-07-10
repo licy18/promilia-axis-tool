@@ -9830,6 +9830,120 @@ describe('Workbench view', () => {
     wrapper.unmount();
   });
 
+  it('manages independent workspace scenarios and compares them without leaving the Workbench', async () => {
+    const confirmSpy = vi.spyOn(globalThis, 'confirm').mockReturnValue(true);
+    const wrapper = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: { template: '<a><slot /></a>' },
+        },
+      },
+    });
+    await vi.dynamicImportSettled();
+    await flushPromises();
+    await nextTick();
+
+    const workbench = wrapper.get('main.workbench');
+    expect(workbench.attributes()).toMatchObject({
+      'data-workspace-scenario-count': '1',
+      'data-active-workspace-scenario-id': 'scenario-0001',
+    });
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+
+    await wrapper
+      .find('[data-testid="workbench-scenario-rename"]')
+      .trigger('click');
+    await nextTick();
+    const renameInput = wrapper.get(
+      '[data-testid="workbench-scenario-rename-input"]'
+    );
+    await renameInput.setValue('爆发轴');
+    await renameInput.trigger('keydown.enter');
+    expect(wrapper.get('[data-testid="workbench-scenario-name"]').text()).toBe(
+      '爆发轴'
+    );
+
+    await wrapper
+      .find('[data-testid="workbench-scenario-duplicate"]')
+      .trigger('click');
+    await nextTick();
+    expect(workbench.attributes()).toMatchObject({
+      'data-workspace-scenario-count': '2',
+      'data-active-workspace-scenario-id': 'scenario-0002',
+    });
+    expect(wrapper.get('[data-testid="scenario-action-count"]').text()).toBe(
+      '2 action'
+    );
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    expect(wrapper.get('[data-testid="scenario-action-count"]').text()).toBe(
+      '3 action'
+    );
+
+    await wrapper.get('[data-scenario-id="scenario-0001"]').trigger('click');
+    await nextTick();
+    expect(wrapper.get('[data-testid="scenario-action-count"]').text()).toBe(
+      '2 action'
+    );
+    await wrapper.get('[data-scenario-id="scenario-0002"]').trigger('click');
+    await nextTick();
+    expect(wrapper.get('[data-testid="scenario-action-count"]').text()).toBe(
+      '3 action'
+    );
+
+    await wrapper
+      .find('[data-testid="workbench-open-comparison"]')
+      .trigger('click');
+    await vi.dynamicImportSettled();
+    await flushPromises();
+    const workspaceBaseline = document.querySelector(
+      '[data-testid="workbench-comparison-workspace-scenario"]'
+    );
+    workspaceBaseline.value = 'scenario-0001';
+    workspaceBaseline.dispatchEvent(new Event('change', { bubbles: true }));
+    await nextTick();
+    expect(
+      document.querySelector(
+        '[data-testid="workbench-comparison-baseline-source"]'
+      ).textContent
+    ).toContain('爆发轴');
+    expect(
+      document.querySelectorAll(
+        '[data-testid="workbench-comparison-action-row"]'
+      ).length
+    ).toBe(3);
+    document
+      .querySelector('[data-testid="workbench-comparison-close"]')
+      .click();
+    await nextTick();
+
+    await wrapper
+      .find('[data-testid="workbench-scenario-delete"]')
+      .trigger('click');
+    await nextTick();
+    expect(confirmSpy).toHaveBeenCalledTimes(1);
+    expect(workbench.attributes()).toMatchObject({
+      'data-workspace-scenario-count': '1',
+      'data-active-workspace-scenario-id': 'scenario-0001',
+    });
+    expect(wrapper.get('[data-testid="scenario-action-count"]').text()).toBe(
+      '2 action'
+    );
+    const saved = JSON.parse(
+      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
+    );
+    expect(saved).toMatchObject({
+      schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
+      scenarioWorkspace: {
+        activeScenarioId: 'scenario-0001',
+        scenarios: [{ id: 'scenario-0001', name: '爆发轴' }],
+      },
+    });
+
+    confirmSpy.mockRestore();
+    wrapper.unmount();
+  });
+
   it('adds a cycle boundary, reviews its section, and returns to a contributing action', async () => {
     const wrapper = mount(Workbench, {
       attachTo: document.body,

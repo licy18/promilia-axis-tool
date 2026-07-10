@@ -3,6 +3,7 @@ import {
   WORKBENCH_DRAFT_SCHEMA_VERSION,
   createDefaultWorkbenchDraftState,
   createWorkbenchProjectFileSnapshot,
+  createWorkbenchScenarioDraftSnapshot,
 } from '../../domain/workbenchDraftStorage';
 import {
   WORKBENCH_PRESET_STORAGE_KEY,
@@ -17,8 +18,23 @@ import {
 } from '../../domain/workbenchPresetStorage';
 
 describe('workbench preset storage', () => {
-  it('stores a complete v8 Workbench project snapshot with searchable metadata', () => {
+  it('stores a complete v11 multi-scenario project snapshot with searchable metadata', () => {
     const draft = createPresetDraft();
+    draft.scenarioWorkspace.scenarios.push({
+      id: 'scenario-0002',
+      name: '预设对照方案',
+      draft: createWorkbenchScenarioDraftSnapshot({
+        ...draft,
+        actionDrafts: [
+          {
+            ...draft.actionDrafts[0],
+            id: 'action-preset-baseline',
+            startMs: 1200,
+          },
+        ],
+        selectedActionId: 'action-preset-baseline',
+      }),
+    });
     const preset = createWorkbenchPresetSnapshot(
       draft,
       {
@@ -55,6 +71,17 @@ describe('workbench preset storage', () => {
         runtimeSampleCaptures: [
           expect.objectContaining({ captureSessionId: 'preset-capture-1' }),
         ],
+        scenarioWorkspace: {
+          activeScenarioId: 'scenario-0001',
+          scenarios: [
+            { id: 'scenario-0001' },
+            {
+              id: 'scenario-0002',
+              name: '预设对照方案',
+              draft: { selectedActionId: 'action-preset-baseline' },
+            },
+          ],
+        },
       },
     });
     expect(
@@ -78,6 +105,10 @@ describe('workbench preset storage', () => {
       runtimeSampleCaptures: [
         expect.objectContaining({ captureSessionId: 'preset-capture-1' }),
       ],
+      scenarioWorkspace: {
+        activeScenarioId: 'scenario-0001',
+        scenarios: [{ id: 'scenario-0001' }, { id: 'scenario-0002' }],
+      },
     });
   });
 
