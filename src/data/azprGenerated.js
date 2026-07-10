@@ -16,7 +16,7 @@ import soulessences from './generated/soulessences.json';
 import validationReport from './generated/validation-report.json';
 import valueParamIndex from './generated/value-param-index.json';
 import workbenchSeed from './generated/workbench-seed.json';
-import workbenchSkillRuntime from './generated/workbench-skill-runtime.json';
+import workbenchSkillCore from './generated/workbench-skill-core.json';
 
 const generatedTables = {
   attributes,
@@ -40,7 +40,7 @@ export const azprGeneratedData = Object.freeze({
   skillLevelCrossCheck,
   valueParamIndex,
   workbenchSeed,
-  workbenchSkillRuntime,
+  workbenchSkillCore,
   tables: generatedTables,
 });
 
@@ -76,8 +76,8 @@ export function getAzprWorkbenchSeed() {
   return workbenchSeed;
 }
 
-export function getAzprWorkbenchSkillRuntime() {
-  return workbenchSkillRuntime;
+export function getAzprWorkbenchSkillCore() {
+  return workbenchSkillCore;
 }
 
 export function getAzprCharacterAttributePanels() {

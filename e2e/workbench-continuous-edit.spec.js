@@ -171,6 +171,10 @@ test('runs the visible curve-log-detail edit loop end to end @workbench-main-flo
     'data-flow-phase',
     'action-edit'
   );
+  await expect(page.locator('main.workbench')).toHaveAttribute(
+    'data-runtime-diagnostics-status',
+    'idle'
+  );
 
   const reviewEntry = page.getByTestId(
     'workbench-runtime-review-primary-operation'
@@ -182,6 +186,14 @@ test('runs the visible curve-log-detail edit loop end to end @workbench-main-flo
   await expect(reviewEntry).toHaveText('运行模拟');
   await reviewEntry.click();
   const openedState = await waitForRuntimeAction(page, 'action-0001');
+  await expect(page.locator('main.workbench')).toHaveAttribute(
+    'data-runtime-diagnostics-status',
+    'ready'
+  );
+  await expect(page.locator('main.workbench')).toHaveAttribute(
+    'data-runtime-diagnostics-revision',
+    '1'
+  );
   await expect(
     page.getByTestId('workbench-main-flow-workspace')
   ).toHaveAttribute('data-main-flow-dispatch-source', 'runtime-review-primary');

@@ -1,32 +1,51 @@
-export function createWorkbenchSkillRuntimeProjection({
+export function createWorkbenchSkillCoreProjection({
   generatedAt,
   skillLogicIndex = {},
   skillLevelCrossCheck = {},
   valueParamIndex = {},
-  skillAssetEvidence = {},
 } = {}) {
   const projectedSkillLogicIndex = projectSkillLogicIndex(skillLogicIndex);
   const projectedSkillLevelCrossCheck =
     projectSkillLevelCrossCheck(skillLevelCrossCheck);
   const projectedValueParamIndex = projectValueParamIndex(valueParamIndex);
-  const projectedSkillAssetEvidence =
-    projectSkillAssetEvidence(skillAssetEvidence);
 
   return {
     schemaVersion: 1,
-    kind: 'workbench-skill-runtime-projection',
+    kind: 'workbench-skill-core-projection',
     generatedAt,
-    sourceKind: 'azpr-workbench-skill-runtime-projection',
+    sourceKind: 'azpr-workbench-skill-core-projection',
     sources: {
       skillLogicIndex: 'src/data/generated/skill-logic-index.json',
       skillLevelCrossCheck: 'src/data/generated/skill-level-crosscheck.json',
       valueParamIndex: 'src/data/generated/value-param-index.json',
-      skillAssetEvidence: 'src/data/generated/skill-asset-evidence.json',
     },
     counts: {
       skillLogicItems: projectedSkillLogicIndex.items.length,
       skillLevelCrossCheckItems: projectedSkillLevelCrossCheck.items.length,
       valueParams: projectedValueParamIndex.params.length,
+    },
+    skillLogicIndex: projectedSkillLogicIndex,
+    skillLevelCrossCheck: projectedSkillLevelCrossCheck,
+    valueParamIndex: projectedValueParamIndex,
+  };
+}
+
+export function createWorkbenchSkillDiagnosticsProjection({
+  generatedAt,
+  skillAssetEvidence = {},
+} = {}) {
+  const projectedSkillAssetEvidence =
+    projectSkillAssetEvidence(skillAssetEvidence);
+
+  return {
+    schemaVersion: 1,
+    kind: 'workbench-skill-diagnostics-projection',
+    generatedAt,
+    sourceKind: 'azpr-workbench-skill-diagnostics-projection',
+    sources: {
+      skillAssetEvidence: 'src/data/generated/skill-asset-evidence.json',
+    },
+    counts: {
       skillControlEvidenceItems:
         projectedSkillAssetEvidence.currentSkillControlEvidence.length,
       damageElementFieldMappingSkills:
@@ -39,10 +58,24 @@ export function createWorkbenchSkillRuntimeProjection({
         projectedSkillAssetEvidence.summonTargetSkillEvidence.targets?.length ??
         0,
     },
-    skillLogicIndex: projectedSkillLogicIndex,
-    skillLevelCrossCheck: projectedSkillLevelCrossCheck,
-    valueParamIndex: projectedValueParamIndex,
     skillAssetEvidence: projectedSkillAssetEvidence,
+  };
+}
+
+export function createWorkbenchSkillRuntimeProjection(options = {}) {
+  const core = createWorkbenchSkillCoreProjection(options);
+  const diagnostics = createWorkbenchSkillDiagnosticsProjection(options);
+  return {
+    schemaVersion: 1,
+    kind: 'workbench-skill-runtime-projection',
+    generatedAt: options.generatedAt,
+    sourceKind: 'azpr-workbench-skill-runtime-projection',
+    sources: { ...core.sources, ...diagnostics.sources },
+    counts: { ...core.counts, ...diagnostics.counts },
+    skillLogicIndex: core.skillLogicIndex,
+    skillLevelCrossCheck: core.skillLevelCrossCheck,
+    valueParamIndex: core.valueParamIndex,
+    skillAssetEvidence: diagnostics.skillAssetEvidence,
   };
 }
 

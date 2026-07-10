@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import workbenchSkillDiagnostics from '../../data/generated/workbench-skill-diagnostics.json';
 import {
   DEFAULT_WORKBENCH_SELECTION,
   DEFAULT_WORKBENCH_TEAM_SLOTS,
@@ -15,6 +16,18 @@ import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import { createToughnessRuntimeSampleFixture } from '../../simulation/fixtures/toughnessRuntimeSampleFixture';
 import { createRecoverSpRuntimeSampleFixture } from '../../simulation/fixtures/recoverSpRuntimeSampleFixture';
 import { bindWorkbenchRuntimeSampleCaptures } from '../../domain/workbenchRuntimeSampleCapture';
+import {
+  installProjectSimulationSkillDiagnostics,
+  resetProjectSimulationSkillDiagnostics,
+} from '../../simulation/projection/projectSimulationResult';
+
+beforeAll(() => {
+  installProjectSimulationSkillDiagnostics(workbenchSkillDiagnostics);
+});
+
+afterAll(() => {
+  resetProjectSimulationSkillDiagnostics();
+});
 
 describe('workbench project actor configuration', () => {
   it('consumes the generated Workbench production data projection', () => {

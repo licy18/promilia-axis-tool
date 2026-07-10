@@ -1,5 +1,10 @@
 <template>
-  <main ref="workbenchRoot" class="workbench">
+  <main
+    ref="workbenchRoot"
+    class="workbench"
+    :data-runtime-diagnostics-status="runtimeDiagnosticsStatus"
+    :data-runtime-diagnostics-revision="runtimeDiagnosticsRevision"
+  >
     <nav class="top-nav">
       <div class="workbench-brand" aria-label="蓝色星原排轴工作台">
         <Aim class="nav-icon" />
@@ -738,6 +743,10 @@ import { frameToMs } from '../domain/timebase';
 import { isPngSource } from '../utils/pngMetadata';
 import { compileProject } from '../simulation/compiler/compileProject';
 import { simulateScenario } from '../simulation/engine/simulateScenario';
+import {
+  getProjectSimulationSkillDiagnosticsStatus,
+  installProjectSimulationSkillDiagnostics,
+} from '../simulation/projection/projectSimulationResult';
 
 const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
@@ -787,6 +796,9 @@ const pngExportedAt = ref('');
 const actionEditSource = ref(createEmptyWorkbenchActionEditSource());
 const actionEditFocus = ref(createEmptyWorkbenchActionEditFocus());
 const workbenchFlowDispatchState = ref(createEmptyWorkbenchFlowDispatchState());
+const runtimeDiagnosticsStatus = ref('idle');
+const runtimeDiagnosticsRevision = ref(0);
+let runtimeDiagnosticsLoadPromise = null;
 const workbenchFlowPlanController = createWorkbenchFlowPlanController({
   getRuntimeProjection: () =>
     simulationResult.value.threeValueRuntimeProjection,
@@ -836,7 +848,10 @@ const project = computed(() =>
   })
 );
 const scenario = computed(() => compileProject(project.value, gameData));
-const simulationResult = computed(() => simulateScenario(scenario.value));
+const simulationResult = computed(() => {
+  void runtimeDiagnosticsRevision.value;
+  return simulateScenario(scenario.value);
+});
 const currentWorkbenchPresetSummary = computed(() => ({
   actionCount: actionDrafts.value.length,
   actorNames: scenario.value.actors.map(actor => actor.name),
@@ -987,6 +1002,9 @@ onMounted(() => {
 
   applyDraftState(draft);
   draftStatus.value = '已恢复草稿';
+  if (draft.runtimeSampleCaptures?.length) {
+    void ensureRuntimeDiagnosticsLoaded();
+  }
 });
 
 onBeforeUnmount(() => {
@@ -2123,6 +2141,7 @@ async function importProjectFile(event) {
       draftStatus.value = '导入失败';
       return;
     }
+    await ensureRuntimeDiagnosticsLoaded();
     applyImportedRuntimeSampleCaptures(runtimeSampleFile.captures);
   } catch {
     draftStatus.value = '导入失败';
@@ -2178,6 +2197,9 @@ function applyImportedProjectDraft(draft, statusText = '已导入项目') {
   redoHistoryStack.value = [];
   const snapshot = saveWorkbenchDraft(getLocalStorage(), draft);
   draftStatus.value = snapshot ? statusText : `${statusText}（未持久化）`;
+  if (draft.runtimeSampleCaptures?.length) {
+    void ensureRuntimeDiagnosticsLoaded();
+  }
 }
 
 function resetDraft() {
@@ -2764,6 +2786,19 @@ function applyRuntimeViewPatch(patch = {}) {
 }
 
 function dispatchWorkbenchFlowAction(action = {}) {
+  if (shouldLoadRuntimeDiagnostics(action)) {
+    const diagnosticsReady = ensureRuntimeDiagnosticsLoaded();
+    if (diagnosticsReady instanceof Promise) {
+      return diagnosticsReady.then(() =>
+        dispatchWorkbenchFlowActionNow(action)
+      );
+    }
+  }
+
+  return dispatchWorkbenchFlowActionNow(action);
+}
+
+function dispatchWorkbenchFlowActionNow(action = {}) {
   const result = workbenchFlowController.dispatch(action);
   workbenchFlowDispatchState.value = createWorkbenchFlowDispatchState({
     result,
@@ -2772,6 +2807,49 @@ function dispatchWorkbenchFlowAction(action = {}) {
   scheduleActionEditFocusScroll(result);
   scheduleRuntimeSelectedDetailScroll(result);
   return result;
+}
+
+function shouldLoadRuntimeDiagnostics(action = {}) {
+  return [
+    WORKBENCH_FLOW_ACTION_KINDS.OPEN_RUNTIME_RESULTS,
+    WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_RESULT,
+    WORKBENCH_FLOW_ACTION_KINDS.SELECT_RUNTIME_STATE_POINT,
+    WORKBENCH_FLOW_ACTION_KINDS.SELECT_CONTRIBUTION_POINT,
+    WORKBENCH_FLOW_ACTION_KINDS.RETURN_RUNTIME_RESULT,
+  ].includes(action.kind);
+}
+
+function ensureRuntimeDiagnosticsLoaded() {
+  if (runtimeDiagnosticsStatus.value === 'ready') {
+    return true;
+  }
+  if (getProjectSimulationSkillDiagnosticsStatus().loaded) {
+    runtimeDiagnosticsStatus.value = 'ready';
+    return true;
+  }
+  if (runtimeDiagnosticsLoadPromise) {
+    return runtimeDiagnosticsLoadPromise;
+  }
+
+  runtimeDiagnosticsStatus.value = 'loading';
+  runtimeDiagnosticsLoadPromise =
+    import('../simulation/projection/workbenchSkillDiagnosticsLoader')
+      .then(({ getWorkbenchSkillDiagnostics }) => {
+        installProjectSimulationSkillDiagnostics(
+          getWorkbenchSkillDiagnostics()
+        );
+        runtimeDiagnosticsStatus.value = 'ready';
+        runtimeDiagnosticsRevision.value += 1;
+        return true;
+      })
+      .catch(() => {
+        runtimeDiagnosticsStatus.value = 'failed';
+        return false;
+      })
+      .finally(() => {
+        runtimeDiagnosticsLoadPromise = null;
+      });
+  return runtimeDiagnosticsLoadPromise;
 }
 
 function scheduleActionEditFocusScroll(result = {}) {

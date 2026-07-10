@@ -1,9 +1,9 @@
-import { getAzprWorkbenchSkillRuntime } from '../data/azprGenerated';
+import { getAzprWorkbenchSkillCore } from '../data/azprGenerated';
 import { parseSkillDamageMultiplier } from './skillDamageSegments';
 
-const workbenchSkillRuntime = getAzprWorkbenchSkillRuntime();
-const skillLogicIndex = workbenchSkillRuntime.skillLogicIndex;
-const valueParamIndex = workbenchSkillRuntime.valueParamIndex;
+const workbenchSkillCore = getAzprWorkbenchSkillCore();
+const skillLogicIndex = workbenchSkillCore.skillLogicIndex;
+const valueParamIndex = workbenchSkillCore.valueParamIndex;
 
 export const SKILL_LOGIC_SOURCE_KIND = skillLogicIndex.sourceKind ?? 'azpr-newtable-skill-logic-index';
 export const SKILL_LEVEL_DISPLAY_SOURCE_KIND = 'azpr-newtable-skill-level-display';

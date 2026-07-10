@@ -872,6 +872,16 @@ Workbench 现在是唯一生产排轴入口。根路径和旧 `/editor` 路径�
 
 下一阶段目标：阶段 7-F 运行核心与诊断证据边界。当前 Workbench 仍有 3.36MB minified chunk，其中技能运行投影约 2.06MB；下一阶段把首轮模拟必需的动作逻辑、已应用 delta、曲线和日志与仅在详情复盘时需要的候选证据拆成稳定合同，让核心模拟先完成、诊断证据按需加载，并以真实交互验证详情打开后信息完整。不得只做 manual chunk 分组隐藏警告，也不得删减来源追溯、修改公式或新增碎片 UI。
 
+### 阶段 7-F 运行核心与诊断证据边界（2026-07-10）
+
+技能生产合同已拆为 `workbench-skill-core.json` 与 `workbench-skill-diagnostics.json`：首轮编辑和模拟只加载 1,745,045B 的核心逻辑/等级/valueParam，2,483,839B 的 Skill Control、DamageElement、外部对象和召唤目标候选证据在首次运行复盘或实测采样恢复时按需加载。原始 JSONL 采样会先取得诊断证据再绑定；包含采样的 JSON、PNG、分享、预设和本地草稿也会在恢复后自动补载。已应用 HP、韧性、角色能量、状态快照和日志数值在诊断安装前后保持一致，本阶段没有修改公式或项目 v8 schema。
+
+生产数据审计升级为 v2，分别深比较核心与诊断投影并核对 manifest；bundle 守门同时要求诊断文件形成独立动态 chunk。Workbench 首轮包由 408,497B gzip 降至 346,066B，诊断按需包为 63,418B gzip，全部 JavaScript 为 688,931B gzip；Workbench 预算收紧为 370KB。
+
+已完成验证：`npm run test -- --run` 通过 51 个测试文件、334 条测试；`npm run build` 通过，1730 个模块；生产引用、生产数据和 bundle 审计全部通过；`npm run test:e2e:workbench-flow` 通过 32 条主流程并覆盖诊断从 idle 到 ready 及 runtime capture 导入；180 动作总耗时 p95 为 102.458ms，120 动作浏览器就绪时间为 1365ms。
+
+下一阶段目标：阶段 7-G 生产预览与试用发布验收。基于真实 `vite build` 产物启动本地 production preview，验证根路径、Workbench 直达/刷新、辅助路由、静态资源、诊断动态包、JSON/PNG 项目交换和窄屏主流程均可在生产模式工作；形成短小的试用判定与发布检查报告，并保持现有三值结果和 UI 能力不变。该阶段不继续拆抽象、不新增碎片按钮，也不追真实倍率。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

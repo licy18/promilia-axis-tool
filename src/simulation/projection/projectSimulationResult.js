@@ -1,42 +1,84 @@
-import { getAzprWorkbenchSkillRuntime } from '../../data/azprGenerated';
 import { createThreeValueGenerationBundle } from '../generation/threeValueGenerationBuilder';
 import {
   createSelfEnergyDeltaSummaryByActor,
   createThreeValueRuntimeProjection,
 } from '../runtime/threeValueRuntimeProjection';
 
-const workbenchSkillRuntime = getAzprWorkbenchSkillRuntime();
-const skillAssetEvidence = workbenchSkillRuntime.skillAssetEvidence;
-const SKILL_ASSET_EVIDENCE_PATH =
-  workbenchSkillRuntime.sources.skillAssetEvidence;
-const DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE =
-  skillAssetEvidence.damageElementFieldMappingEvidence ?? {};
-const DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE_KIND =
-  DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE.sourceKind ??
+const DEFAULT_SKILL_ASSET_EVIDENCE_PATH =
+  'src/data/generated/skill-asset-evidence.json';
+let SKILL_ASSET_EVIDENCE_PATH = DEFAULT_SKILL_ASSET_EVIDENCE_PATH;
+let DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE = {};
+let DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE_KIND =
   'azpr-damage-element-field-mapping-evidence';
-const DAMAGE_ELEMENT_FIELD_MAPPING_BY_SKILL_ID = new Map(
-  (DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE.skills ?? [])
-    .map(skill => [Number(skill.skillId), skill])
-    .filter(([skillId]) => Number.isFinite(skillId))
-);
-const DAMAGE_ELEMENT_FIELD_MAPPING_BY_SKILL_ID_AND_PATH_ID =
-  createDamageElementFieldMappingBySkillIdAndPathId(
-    DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE
+let DAMAGE_ELEMENT_FIELD_MAPPING_BY_SKILL_ID = new Map();
+let DAMAGE_ELEMENT_FIELD_MAPPING_BY_SKILL_ID_AND_PATH_ID = new Map();
+let EXTERNAL_ELEMENT_OBJECT_BY_SKILL_ID_AND_PATH_ID = new Map();
+let CURRENT_SKILL_CONTROL_EVIDENCE_BY_SKILL_ID = new Map();
+let SUMMON_TARGET_BY_UNIT_ID = new Map();
+let projectSimulationSkillDiagnosticsStatus = {
+  loaded: false,
+  sourcePath: DEFAULT_SKILL_ASSET_EVIDENCE_PATH,
+  skillControlCount: 0,
+};
+
+export function installProjectSimulationSkillDiagnostics(projection = {}) {
+  const skillAssetEvidence = projection.skillAssetEvidence ?? projection;
+  SKILL_ASSET_EVIDENCE_PATH =
+    projection.sources?.skillAssetEvidence ?? DEFAULT_SKILL_ASSET_EVIDENCE_PATH;
+  DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE =
+    skillAssetEvidence.damageElementFieldMappingEvidence ?? {};
+  DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE_KIND =
+    DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE.sourceKind ??
+    'azpr-damage-element-field-mapping-evidence';
+  DAMAGE_ELEMENT_FIELD_MAPPING_BY_SKILL_ID = new Map(
+    (DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE.skills ?? [])
+      .map(skill => [Number(skill.skillId), skill])
+      .filter(([skillId]) => Number.isFinite(skillId))
   );
-const EXTERNAL_ELEMENT_OBJECT_BY_SKILL_ID_AND_PATH_ID =
-  createExternalElementObjectBySkillIdAndPathId(
-    skillAssetEvidence.externalElementObjectEvidence
+  DAMAGE_ELEMENT_FIELD_MAPPING_BY_SKILL_ID_AND_PATH_ID =
+    createDamageElementFieldMappingBySkillIdAndPathId(
+      DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE
+    );
+  EXTERNAL_ELEMENT_OBJECT_BY_SKILL_ID_AND_PATH_ID =
+    createExternalElementObjectBySkillIdAndPathId(
+      skillAssetEvidence.externalElementObjectEvidence
+    );
+  CURRENT_SKILL_CONTROL_EVIDENCE_BY_SKILL_ID = new Map(
+    (skillAssetEvidence.currentSkillControlEvidence ?? [])
+      .map(skill => [Number(skill.skillId), skill])
+      .filter(([skillId]) => Number.isFinite(skillId))
   );
-const CURRENT_SKILL_CONTROL_EVIDENCE_BY_SKILL_ID = new Map(
-  (skillAssetEvidence.currentSkillControlEvidence ?? [])
-    .map(skill => [Number(skill.skillId), skill])
-    .filter(([skillId]) => Number.isFinite(skillId))
-);
-const SUMMON_TARGET_SKILL_EVIDENCE =
-  skillAssetEvidence.summonTargetSkillEvidence ?? {};
-const SUMMON_TARGET_BY_UNIT_ID = createSummonTargetLookupByUnitId(
-  SUMMON_TARGET_SKILL_EVIDENCE
-);
+  SUMMON_TARGET_BY_UNIT_ID = createSummonTargetLookupByUnitId(
+    skillAssetEvidence.summonTargetSkillEvidence ?? {}
+  );
+  projectSimulationSkillDiagnosticsStatus = {
+    loaded: true,
+    sourcePath: SKILL_ASSET_EVIDENCE_PATH,
+    skillControlCount: CURRENT_SKILL_CONTROL_EVIDENCE_BY_SKILL_ID.size,
+  };
+  return { ...projectSimulationSkillDiagnosticsStatus };
+}
+
+export function resetProjectSimulationSkillDiagnostics() {
+  SKILL_ASSET_EVIDENCE_PATH = DEFAULT_SKILL_ASSET_EVIDENCE_PATH;
+  DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE = {};
+  DAMAGE_ELEMENT_FIELD_MAPPING_EVIDENCE_KIND =
+    'azpr-damage-element-field-mapping-evidence';
+  DAMAGE_ELEMENT_FIELD_MAPPING_BY_SKILL_ID = new Map();
+  DAMAGE_ELEMENT_FIELD_MAPPING_BY_SKILL_ID_AND_PATH_ID = new Map();
+  EXTERNAL_ELEMENT_OBJECT_BY_SKILL_ID_AND_PATH_ID = new Map();
+  CURRENT_SKILL_CONTROL_EVIDENCE_BY_SKILL_ID = new Map();
+  SUMMON_TARGET_BY_UNIT_ID = new Map();
+  projectSimulationSkillDiagnosticsStatus = {
+    loaded: false,
+    sourcePath: DEFAULT_SKILL_ASSET_EVIDENCE_PATH,
+    skillControlCount: 0,
+  };
+}
+
+export function getProjectSimulationSkillDiagnosticsStatus() {
+  return { ...projectSimulationSkillDiagnosticsStatus };
+}
 const AZPR_TIMELINE_FRAME_RATE = 60;
 const AZPR_TIMELINE_FRAME_MS = 1000 / AZPR_TIMELINE_FRAME_RATE;
 const THREE_VALUE_CURVE_TRACK_DEFINITIONS = [

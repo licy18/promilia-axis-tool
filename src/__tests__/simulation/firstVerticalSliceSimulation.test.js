@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import workbenchSkillDiagnostics from '../../data/generated/workbench-skill-diagnostics.json';
 import {
   createFirstVerticalSliceProject,
   getFirstVerticalSliceGameData,
@@ -14,6 +15,18 @@ import {
 } from '../../simulation';
 import { createRecoverSpRuntimeSampleFixture } from '../../simulation/fixtures/recoverSpRuntimeSampleFixture';
 import { createToughnessRuntimeSampleFixture } from '../../simulation/fixtures/toughnessRuntimeSampleFixture';
+import {
+  installProjectSimulationSkillDiagnostics,
+  resetProjectSimulationSkillDiagnostics,
+} from '../../simulation/projection/projectSimulationResult';
+
+beforeAll(() => {
+  installProjectSimulationSkillDiagnostics(workbenchSkillDiagnostics);
+});
+
+afterAll(() => {
+  resetProjectSimulationSkillDiagnostics();
+});
 
 describe('first vertical slice simulation', () => {
   it('compiles the real-data fixture into a scenario', () => {

@@ -1,7 +1,16 @@
 import { readFileSync } from 'node:fs';
 import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
+import workbenchSkillDiagnostics from '../../data/generated/workbench-skill-diagnostics.json';
 import workbenchSeed from '../../data/generated/workbench-seed.json';
 import {
   WORKBENCH_DRAFT_SCHEMA_VERSION,
@@ -20,7 +29,19 @@ import TeamLoadoutPanel from '../../features/workbench/TeamLoadoutPanel.vue';
 import PropertiesPanel from '../../features/workbench/PropertiesPanel.vue';
 import TimelineGridPreview from '../../features/workbench/TimelineGridPreview.vue';
 import WorkbenchFlowPanel from '../../features/workbench/WorkbenchFlowPanel.vue';
+import {
+  installProjectSimulationSkillDiagnostics,
+  resetProjectSimulationSkillDiagnostics,
+} from '../../simulation/projection/projectSimulationResult';
 import Workbench from '../../views/Workbench.vue';
+
+beforeAll(() => {
+  installProjectSimulationSkillDiagnostics(workbenchSkillDiagnostics);
+});
+
+afterAll(() => {
+  resetProjectSimulationSkillDiagnostics();
+});
 
 function readTestSource(relativePath) {
   return readFileSync(new URL(relativePath, import.meta.url), 'utf8');

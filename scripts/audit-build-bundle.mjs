@@ -17,7 +17,7 @@ const budgets = {
   ),
   workbenchGzipBytes: readPositiveNumberArgument(
     '--workbench-gzip-budget',
-    440_000
+    370_000
   ),
   totalJavaScriptGzipBytes: readPositiveNumberArgument(
     '--total-js-gzip-budget',
@@ -53,16 +53,28 @@ const workbenchForbiddenModules = [
   'src/data/generated/skill-level-crosscheck.json',
   'src/data/generated/skill-logic-index.json',
   'src/data/generated/value-param-index.json',
+  'src/data/generated/workbench-skill-diagnostics.json',
+  'src/data/generated/workbench-skill-runtime.json',
 ];
 const workbenchDetectedForbiddenModules = workbenchForbiddenModules.filter(
   moduleId =>
     workbenchChunk?.modules.some(moduleRow => moduleRow.id === moduleId)
 );
+const skillDiagnosticsChunk = report.javaScriptChunks.find(chunk =>
+  chunk.modules.some(
+    moduleRow =>
+      moduleRow.id === 'src/data/generated/workbench-skill-diagnostics.json'
+  )
+);
 const projectionGuard = {
   workbenchUsesProductionDataProjection:
     Boolean(workbenchChunk) && workbenchDetectedForbiddenModules.length === 0,
+  skillDiagnosticsLazyChunkPresent:
+    Boolean(skillDiagnosticsChunk) &&
+    skillDiagnosticsChunk.fileName !== workbenchChunk?.fileName,
   forbiddenModules: workbenchForbiddenModules,
   detectedForbiddenModules: workbenchDetectedForbiddenModules,
+  skillDiagnosticsChunk: skillDiagnosticsChunk?.fileName ?? null,
 };
 const budgetStatus = {
   initialEntryWithinBudget:
@@ -115,7 +127,8 @@ console.log(
 if (
   process.argv.includes('--assert-budget') &&
   (Object.values(budgetStatus).some(status => !status) ||
-    !projectionGuard.workbenchUsesProductionDataProjection)
+    !projectionGuard.workbenchUsesProductionDataProjection ||
+    !projectionGuard.skillDiagnosticsLazyChunkPresent)
 ) {
   process.exitCode = 1;
 }

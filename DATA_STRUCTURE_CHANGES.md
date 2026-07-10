@@ -25946,7 +25946,9 @@ budgets
 budgetStatus
 projectionGuard
   workbenchUsesProductionDataProjection
+  skillDiagnosticsLazyChunkPresent
   forbiddenModules[] / detectedForbiddenModules[]
+  skillDiagnosticsChunk
 summary
   javaScriptChunkCount / assetCount
   totalJavaScriptBytes / totalJavaScriptGzipBytes
@@ -25962,7 +25964,7 @@ topModules[]
 packageTotals[]
 ```
 
-模块路径统一为仓库相对路径，第三方依赖按 package 聚合。当前默认 gzip 预算为首屏入口 120KB、Workbench 440KB、全部 JavaScript 740KB；`audit:bundle:check` 在入口缺失、任一预算超限或 Workbench 重新引入完整目录/技能证据表时失败。该报告不改变 Workbench 项目、生成数据或运行时 schema。
+模块路径统一为仓库相对路径，第三方依赖按 package 聚合。当前默认 gzip 预算为首屏入口 120KB、Workbench 370KB、全部 JavaScript 740KB；`audit:bundle:check` 在入口缺失、任一预算超限、诊断数据没有形成独立动态 chunk，或 Workbench 重新引入完整目录/技能证据表时失败。该报告不改变 Workbench 项目、生成数据或运行时 schema。
 
 ## 366. WorkbenchProductionDataProjection v2
 
@@ -25991,6 +25993,8 @@ gameData
 
 ## 367. WorkbenchSkillRuntimeProjection v1
 
+本合同已由第 369 节的核心/诊断拆分合同取代；本节保留为从单文件投影迁移的历史记录。
+
 `src/data/generated/workbench-skill-runtime.json` 由四份完整审计数据生成：
 
 ```text
@@ -26018,6 +26022,8 @@ skillAssetEvidence
 
 ## 368. WorkbenchProductionDataAudit v1
 
+本报告合同已升级为第 370 节的 v2；本节保留 v1 字段和迁移来源。
+
 `reports/workbench-production-data-audit.json` 记录：
 
 ```text
@@ -26036,3 +26042,39 @@ gameCatalogSize
 ```
 
 审计从完整生成 JSON 重建 v2 目录投影和 v1 技能运行投影，并做深度结构比较；同时核对 manifest 注册、完整/投影字节数和缩减比例。当前目录投影相对完整目录减少 77.12%，技能运行投影相对四份完整证据减少 33.83%；`audit:workbench-data:check` 在任一映射不一致时失败。
+
+## 369. WorkbenchSkillRuntimeProjection v2
+
+原 `workbench-skill-runtime.json` 拆分为两个生成合同：
+
+```text
+workbench-skill-core.json
+  schemaVersion = 1
+  kind = workbench-skill-core-projection
+  sources / counts
+  skillLogicIndex
+  skillLevelCrossCheck
+  valueParamIndex
+
+workbench-skill-diagnostics.json
+  schemaVersion = 1
+  kind = workbench-skill-diagnostics-projection
+  sources / counts
+  skillAssetEvidence
+```
+
+domain、compiler 和首轮 simulation 只静态消费核心合同。`workbenchSkillDiagnosticsLoader.js` 动态读取诊断合同，`installProjectSimulationSkillDiagnostics()` 将候选证据安装到结果投影；打开运行复盘、导入原始 runtime capture，或恢复包含 capture 的 JSON/PNG/分享/预设/草稿时才触发加载。诊断安装前后，已应用 HP、韧性、角色能量、状态快照和日志数值保持一致；候选层与来源诊断允许由空变为完整。
+
+## 370. WorkbenchProductionDataAudit v2
+
+`reports/workbench-production-data-audit.json` 的 `schemaVersion` 升级为 2，状态拆为：
+
+```text
+status
+  seedProjectionMatches
+  skillCoreProjectionMatches
+  skillDiagnosticsProjectionMatches
+  manifestMatches
+```
+
+审计从四份完整技能证据分别重建核心与诊断投影，逐字段比较两个生成文件，并核对 manifest 的 `workbenchSkillCore` / `workbenchSkillDiagnostics` 注册。`skillRuntimeAudit.size` 额外记录 `coreBytes`、`diagnosticsBytes` 和合计体积；任一映射或注册不一致都会使 `audit:workbench-data:check` 失败。

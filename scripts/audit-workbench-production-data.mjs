@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createWorkbenchSkillRuntimeProjection } from './lib/workbench-skill-runtime-projection.mjs';
+import {
+  createWorkbenchSkillCoreProjection,
+  createWorkbenchSkillDiagnosticsProjection,
+} from './lib/workbench-skill-runtime-projection.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = path.resolve(scriptDirectory, '..');
@@ -43,29 +46,42 @@ const files = await loadGeneratedFiles([
   'soulessences.json',
   'value-param-index.json',
   'workbench-seed.json',
-  'workbench-skill-runtime.json',
+  'workbench-skill-core.json',
+  'workbench-skill-diagnostics.json',
 ]);
 
-const expectedSkillRuntimeProjection = normalizeJsonValue(
-  createWorkbenchSkillRuntimeProjection({
-    generatedAt: files['workbench-skill-runtime.json'].data.generatedAt,
+const expectedSkillCoreProjection = normalizeJsonValue(
+  createWorkbenchSkillCoreProjection({
+    generatedAt: files['workbench-skill-core.json'].data.generatedAt,
     skillLogicIndex: files['skill-logic-index.json'].data,
     skillLevelCrossCheck: files['skill-level-crosscheck.json'].data,
     valueParamIndex: files['value-param-index.json'].data,
+  })
+);
+const expectedSkillDiagnosticsProjection = normalizeJsonValue(
+  createWorkbenchSkillDiagnosticsProjection({
+    generatedAt: files['workbench-skill-diagnostics.json'].data.generatedAt,
     skillAssetEvidence: files['skill-asset-evidence.json'].data,
   })
 );
-const skillRuntimeProjectionMatches = deepEqual(
-  files['workbench-skill-runtime.json'].data,
-  expectedSkillRuntimeProjection
+const skillCoreProjectionMatches = deepEqual(
+  files['workbench-skill-core.json'].data,
+  expectedSkillCoreProjection
+);
+const skillDiagnosticsProjectionMatches = deepEqual(
+  files['workbench-skill-diagnostics.json'].data,
+  expectedSkillDiagnosticsProjection
 );
 const seedAudit = auditWorkbenchSeed(files);
 const manifestAudit = {
   workbenchSeedRegistered:
     files['manifest.json'].data.files?.workbenchSeed === 'workbench-seed.json',
-  workbenchSkillRuntimeRegistered:
-    files['manifest.json'].data.files?.workbenchSkillRuntime ===
-    'workbench-skill-runtime.json',
+  workbenchSkillCoreRegistered:
+    files['manifest.json'].data.files?.workbenchSkillCore ===
+    'workbench-skill-core.json',
+  workbenchSkillDiagnosticsRegistered:
+    files['manifest.json'].data.files?.workbenchSkillDiagnostics ===
+    'workbench-skill-diagnostics.json',
 };
 const fullGameCatalogBytes = sumFileBytes(files, [
   'characters.json',
@@ -84,23 +100,32 @@ const fullSkillRuntimeBytes = sumFileBytes(files, [
 ]);
 const status = {
   seedProjectionMatches: Object.values(seedAudit.checks).every(Boolean),
-  skillRuntimeProjectionMatches,
+  skillCoreProjectionMatches,
+  skillDiagnosticsProjectionMatches,
   manifestMatches: Object.values(manifestAudit).every(Boolean),
 };
 const report = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   kind: 'workbench-production-data-audit',
   status,
   seedAudit,
   skillRuntimeAudit: {
     checks: {
-      projectionMatchesFullEvidence: skillRuntimeProjectionMatches,
+      coreProjectionMatchesFullData: skillCoreProjectionMatches,
+      diagnosticsProjectionMatchesFullEvidence:
+        skillDiagnosticsProjectionMatches,
     },
-    counts: files['workbench-skill-runtime.json'].data.counts,
+    counts: {
+      ...files['workbench-skill-core.json'].data.counts,
+      ...files['workbench-skill-diagnostics.json'].data.counts,
+    },
     size: createSizeSummary(
       fullSkillRuntimeBytes,
-      files['workbench-skill-runtime.json'].bytes
+      files['workbench-skill-core.json'].bytes +
+        files['workbench-skill-diagnostics.json'].bytes
     ),
+    coreBytes: files['workbench-skill-core.json'].bytes,
+    diagnosticsBytes: files['workbench-skill-diagnostics.json'].bytes,
   },
   manifestAudit,
   gameCatalogSize: createSizeSummary(

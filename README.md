@@ -77,7 +77,7 @@ npm run data:generate
 
 `src/data/generated/workbench-seed.json` 是面向生产主流程的精简目录，保留全部可选择实体及模拟所需字段；完整原始目录继续由 `src/data/azprGenerated.js` 提供给审计和数据测试。
 
-`src/data/generated/workbench-skill-runtime.json` 是技能逻辑、等级校验和运行证据的生产合同。`reports/workbench-production-data-audit.json` 会从完整生成表重新计算两类投影并验证逐字段一致性。
+`src/data/generated/workbench-skill-core.json` 是首轮模拟使用的技能逻辑、等级校验和 valueParam 合同；`workbench-skill-diagnostics.json` 保存 Skill Control、DamageElement 和外部对象等候选证据，只在打开运行复盘或恢复实测采样时加载。`reports/workbench-production-data-audit.json` 会从完整生成表重新计算目录、核心和诊断投影并验证逐字段一致性。
 
 ## 核心目录
 
@@ -101,7 +101,7 @@ e2e/                     Workbench 浏览器主流程
 
 生产引用审计从 `src/main.js` 和全部测试入口追踪 JS、TS、Vue SFC 的静态/动态 import。当前只保留生产可达模块，以及明确允许的领域/runtime fixture 与无 UI simulation API；旧 editor/timeline 组件、旧 project/history/setting store 和旧计算工具已经删除。
 
-构建组成审计会生成 `reports/bundle-composition.json`，并守住首屏入口、Workbench 主包和全部 JavaScript 的 gzip 预算。Element Plus 组件由各页面按需引用，PNG 截图库只在实际导出时加载。
+构建组成审计会生成 `reports/bundle-composition.json`，并守住首屏入口、Workbench 主包和全部 JavaScript 的 gzip 预算，同时检查技能诊断数据必须位于独立按需包。Element Plus 组件由各页面按需引用，PNG 截图库只在实际导出时加载。
 
 ## 项目文档
 

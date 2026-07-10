@@ -1,9 +1,10 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "kind": "workbench-production-data-audit",
   "status": {
     "seedProjectionMatches": true,
-    "skillRuntimeProjectionMatches": true,
+    "skillCoreProjectionMatches": true,
+    "skillDiagnosticsProjectionMatches": true,
     "manifestMatches": true
   },
   "seedAudit": {
@@ -30,7 +31,8 @@
   },
   "skillRuntimeAudit": {
     "checks": {
-      "projectionMatchesFullEvidence": true
+      "coreProjectionMatchesFullData": true,
+      "diagnosticsProjectionMatchesFullEvidence": true
     },
     "counts": {
       "skillLogicItems": 120,
@@ -43,14 +45,17 @@
     },
     "size": {
       "fullBytes": 6391041,
-      "projectionBytes": 4228668,
-      "savedBytes": 2162373,
+      "projectionBytes": 4228884,
+      "savedBytes": 2162157,
       "reductionPercent": 33.83
-    }
+    },
+    "coreBytes": 1745045,
+    "diagnosticsBytes": 2483839
   },
   "manifestAudit": {
     "workbenchSeedRegistered": true,
-    "workbenchSkillRuntimeRegistered": true
+    "workbenchSkillCoreRegistered": true,
+    "workbenchSkillDiagnosticsRegistered": true
   },
   "gameCatalogSize": {
     "fullBytes": 4776354,
