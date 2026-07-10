@@ -2250,11 +2250,27 @@ describe('Workbench view', () => {
         .attributes('data-selected')
     ).toBe('true');
 
+    await wrapper
+      .find('[data-testid="workbench-timeline-create-relations"]')
+      .trigger('click');
+    await nextTick();
+    expect(
+      wrapper.find('main.workbench').attributes('data-action-relation-count')
+    ).toBe('1');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-action-relation"]')
+        .attributes('data-relation-id')
+    ).toBe('relation-0001');
+
     dispatchWorkbenchKeyboardShortcut('c', { ctrlKey: true });
     dispatchWorkbenchKeyboardShortcut('v', { ctrlKey: true });
     await nextTick();
 
     expect(wrapper.findAll('.action-item')).toHaveLength(5);
+    expect(
+      wrapper.find('main.workbench').attributes('data-action-relation-count')
+    ).toBe('2');
     expect(
       wrapper.find('main.workbench').attributes('data-selected-action-count')
     ).toBe('2');
@@ -2273,6 +2289,9 @@ describe('Workbench view', () => {
     await nextTick();
     expect(wrapper.findAll('.action-item')).toHaveLength(3);
     expect(
+      wrapper.find('main.workbench').attributes('data-action-relation-count')
+    ).toBe('1');
+    expect(
       wrapper
         .find('.action-item[data-action-id="action-0001"]')
         .attributes('data-selected')
@@ -2286,6 +2305,9 @@ describe('Workbench view', () => {
     dispatchWorkbenchKeyboardShortcut('y', { ctrlKey: true });
     await nextTick();
     expect(wrapper.findAll('.action-item')).toHaveLength(5);
+    expect(
+      wrapper.find('main.workbench').attributes('data-action-relation-count')
+    ).toBe('2');
 
     const pastedStartMs = Number(
       wrapper
@@ -2309,6 +2331,9 @@ describe('Workbench view', () => {
     dispatchWorkbenchKeyboardShortcut('Delete');
     await nextTick();
     expect(wrapper.findAll('.action-item')).toHaveLength(3);
+    expect(
+      wrapper.find('main.workbench').attributes('data-action-relation-count')
+    ).toBe('1');
 
     dispatchWorkbenchKeyboardShortcut('z', { ctrlKey: true });
     await nextTick();
@@ -2316,12 +2341,34 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('main.workbench').attributes('data-selected-action-count')
     ).toBe('2');
+    expect(
+      wrapper.find('main.workbench').attributes('data-action-relation-count')
+    ).toBe('2');
+
+    await wrapper
+      .find(
+        '[data-testid="workbench-action-relation"][data-relation-id="relation-0002"]'
+      )
+      .trigger('click');
+    dispatchWorkbenchKeyboardShortcut('Delete');
+    await nextTick();
+    expect(wrapper.findAll('.action-item')).toHaveLength(5);
+    expect(
+      wrapper.find('main.workbench').attributes('data-action-relation-count')
+    ).toBe('1');
+    dispatchWorkbenchKeyboardShortcut('z', { ctrlKey: true });
+    await nextTick();
+    expect(
+      wrapper.find('main.workbench').attributes('data-action-relation-count')
+    ).toBe('2');
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     const savedDraft = JSON.parse(
       window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
     );
     expect(savedDraft.actionDrafts).toHaveLength(5);
+    expect(savedDraft.schemaVersion).toBe(WORKBENCH_DRAFT_SCHEMA_VERSION);
+    expect(savedDraft.actionRelations).toHaveLength(2);
     expect(savedDraft).not.toHaveProperty('selectedActionIds');
     expect(savedDraft).not.toHaveProperty('actionClipboard');
 

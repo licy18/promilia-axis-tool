@@ -5,67 +5,82 @@
       ref="menuRef"
       class="action-context-menu"
       :style="menuStyle"
+      :data-menu-kind="mode"
       data-testid="workbench-action-context-menu"
       role="menu"
       @pointerdown.stop
       @contextmenu.prevent
     >
+      <template v-if="mode === 'actions'">
+        <button
+          type="button"
+          role="menuitem"
+          data-testid="workbench-action-context-copy"
+          :disabled="selectedCount === 0"
+          @click="runCommand('copy')"
+        >
+          <CopyDocument />
+          <span>复制</span>
+          <kbd>Ctrl+C</kbd>
+        </button>
+        <button
+          type="button"
+          role="menuitem"
+          data-testid="workbench-action-context-paste"
+          :disabled="clipboardCount === 0"
+          @click="runCommand('paste')"
+        >
+          <DocumentCopy />
+          <span>粘贴到此处</span>
+          <kbd>Ctrl+V</kbd>
+        </button>
+        <div class="menu-separator" role="separator"></div>
+        <button
+          type="button"
+          role="menuitem"
+          data-testid="workbench-action-context-nudge-left"
+          :disabled="selectedCount === 0"
+          @click="runCommand('nudge-left')"
+        >
+          <ArrowLeft />
+          <span>前移 1 帧</span>
+          <kbd>←</kbd>
+        </button>
+        <button
+          type="button"
+          role="menuitem"
+          data-testid="workbench-action-context-nudge-right"
+          :disabled="selectedCount === 0"
+          @click="runCommand('nudge-right')"
+        >
+          <ArrowRight />
+          <span>后移 1 帧</span>
+          <kbd>→</kbd>
+        </button>
+        <div class="menu-separator" role="separator"></div>
+        <button
+          class="danger"
+          type="button"
+          role="menuitem"
+          data-testid="workbench-action-context-delete"
+          :disabled="selectedCount === 0"
+          @click="runCommand('delete')"
+        >
+          <Delete />
+          <span>删除所选动作</span>
+          <kbd>Del</kbd>
+        </button>
+      </template>
       <button
-        type="button"
-        role="menuitem"
-        data-testid="workbench-action-context-copy"
-        :disabled="selectedCount === 0"
-        @click="runCommand('copy')"
-      >
-        <CopyDocument />
-        <span>复制</span>
-        <kbd>Ctrl+C</kbd>
-      </button>
-      <button
-        type="button"
-        role="menuitem"
-        data-testid="workbench-action-context-paste"
-        :disabled="clipboardCount === 0"
-        @click="runCommand('paste')"
-      >
-        <DocumentCopy />
-        <span>粘贴到此处</span>
-        <kbd>Ctrl+V</kbd>
-      </button>
-      <div class="menu-separator" role="separator"></div>
-      <button
-        type="button"
-        role="menuitem"
-        data-testid="workbench-action-context-nudge-left"
-        :disabled="selectedCount === 0"
-        @click="runCommand('nudge-left')"
-      >
-        <ArrowLeft />
-        <span>前移 1 帧</span>
-        <kbd>←</kbd>
-      </button>
-      <button
-        type="button"
-        role="menuitem"
-        data-testid="workbench-action-context-nudge-right"
-        :disabled="selectedCount === 0"
-        @click="runCommand('nudge-right')"
-      >
-        <ArrowRight />
-        <span>后移 1 帧</span>
-        <kbd>→</kbd>
-      </button>
-      <div class="menu-separator" role="separator"></div>
-      <button
+        v-else
         class="danger"
         type="button"
         role="menuitem"
-        data-testid="workbench-action-context-delete"
-        :disabled="selectedCount === 0"
-        @click="runCommand('delete')"
+        data-testid="workbench-action-context-delete-relation"
+        @click="runCommand('delete-relation')"
       >
         <Delete />
-        <span>删除所选动作</span>
+        <span>删除动作关系</span>
         <kbd>Del</kbd>
       </button>
     </div>
@@ -90,6 +105,10 @@ import {
 } from 'vue';
 
 const props = defineProps({
+  mode: {
+    type: String,
+    default: 'actions',
+  },
   visible: {
     type: Boolean,
     default: false,
@@ -119,6 +138,7 @@ const emit = defineEmits([
   'nudge-left',
   'nudge-right',
   'delete',
+  'delete-relation',
 ]);
 const menuRef = ref(null);
 const position = ref({ left: 8, top: 8 });

@@ -2,6 +2,8 @@
   <section
     class="panel timeline-panel"
     :data-flow-selected-action-id="flowSelectedActionId"
+    :data-action-relation-count="actionRelations.length"
+    :data-box-selection-mode="boxSelectionMode ? 'true' : 'false'"
     :data-flow-selected-state-curve-point-id="flowSelectedStateCurvePointId"
     :data-flow-runtime-focus-source="flowRuntimeFocusSource"
     data-testid="workbench-timeline-grid-preview"
@@ -10,6 +12,29 @@
       <Clock class="panel-icon" />
       <h2>时间轴</h2>
       <div class="timeline-tools">
+        <button
+          class="icon-control"
+          :class="{ active: boxSelectionMode }"
+          type="button"
+          data-testid="workbench-timeline-box-select-toggle"
+          aria-label="框选动作"
+          aria-keyshortcuts="Control+B Meta+B"
+          title="框选动作"
+          @click="$emit('toggle-box-selection-mode')"
+        >
+          <Crop class="control-icon" />
+        </button>
+        <button
+          class="icon-control"
+          type="button"
+          data-testid="workbench-timeline-create-relations"
+          aria-label="连接所选动作"
+          title="按时间顺序连接所选动作"
+          :disabled="selectedActionIds.length < 2"
+          @click="$emit('create-action-relations')"
+        >
+          <Connection class="control-icon" />
+        </button>
         <button
           class="icon-control"
           type="button"
@@ -214,9 +239,58 @@
           ref="laneRef"
           class="timeline-lane"
           :style="timelineTrackStyle"
+          :class="{ 'box-selection-active': boxSelectionMode }"
           data-testid="workbench-timeline-lane"
+          @pointerdown="beginBoxSelection"
           @contextmenu.prevent="openTimelineContextMenu"
         >
+          <svg
+            v-if="actionRelationGeometry.length"
+            class="action-relation-layer"
+            :viewBox="actionRelationViewBox"
+            preserveAspectRatio="none"
+            data-testid="workbench-action-relation-layer"
+          >
+            <g
+              v-for="relation in actionRelationGeometry"
+              :key="relation.id"
+              class="action-relation"
+              :class="{ selected: relation.id === selectedActionRelationId }"
+            >
+              <path
+                class="action-relation-path"
+                :d="relation.path"
+                vector-effect="non-scaling-stroke"
+              />
+              <circle
+                class="action-relation-endpoint"
+                :cx="relation.targetX"
+                :cy="relation.targetY"
+                r="0.7"
+                vector-effect="non-scaling-stroke"
+              />
+              <path
+                class="action-relation-hit"
+                :d="relation.path"
+                vector-effect="non-scaling-stroke"
+                :data-relation-id="relation.id"
+                data-testid="workbench-action-relation"
+                @pointerdown.stop
+                @click.stop="selectActionRelation(relation.id)"
+                @contextmenu.prevent.stop="
+                  openActionRelationContextMenu($event, relation.id)
+                "
+              >
+                <title>{{ relation.title }}</title>
+              </path>
+            </g>
+          </svg>
+          <div
+            v-if="boxSelectionState"
+            class="box-selection-overlay"
+            :style="boxSelectionStyle"
+            data-testid="workbench-timeline-box-selection"
+          ></div>
           <div
             v-for="lane in timelineLanes"
             :key="lane.id"
@@ -296,7 +370,7 @@
               @keydown.right.prevent="nudgeAction($event, action, 1)"
               @keydown.delete.prevent="deleteActionSelection(action)"
               @keydown.backspace.prevent="deleteActionSelection(action)"
-              @pointerdown="beginDrag($event, action)"
+              @pointerdown.stop="beginDrag($event, action)"
             >
               <span>{{ actionLabel(action) }}</span>
               <small v-if="actionDetail(action)">{{
@@ -595,7 +669,14 @@
 
 <script setup>
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
-import { Clock, EditPen, Minus, Plus } from '@element-plus/icons-vue';
+import {
+  Clock,
+  Connection,
+  Crop,
+  EditPen,
+  Minus,
+  Plus,
+} from '@element-plus/icons-vue';
 import {
   DEFAULT_TIMELINE_ACTION_DURATION_MS,
   resolveTimelineActionLaneId,
@@ -620,6 +701,7 @@ const TIMELINE_LANE_MIN_HEIGHT_PX = 110;
 const TIMELINE_ACTION_TOP_PX = 10;
 const TIMELINE_ACTION_HEIGHT_PX = 42;
 const TIMELINE_ACTION_SLOT_GAP_PX = 8;
+const TIMELINE_LANE_GAP_PX = 8;
 const TIMELINE_DATA_GAP_PX = 2;
 const CANDIDATE_VALUE_CURVE_TOP = 68;
 const CANDIDATE_VALUE_CURVE_HEIGHT = 34;
@@ -733,6 +815,18 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  actionRelations: {
+    type: Array,
+    default: () => [],
+  },
+  selectedActionRelationId: {
+    type: String,
+    default: '',
+  },
+  boxSelectionMode: {
+    type: Boolean,
+    default: false,
+  },
   flowModel: {
     type: Object,
     default: null,
@@ -797,6 +891,11 @@ const emit = defineEmits([
   'shift-selected-actions',
   'delete-selected-actions',
   'open-action-context-menu',
+  'select-action-group',
+  'select-action-relation',
+  'open-action-relation-context-menu',
+  'toggle-box-selection-mode',
+  'create-action-relations',
   'select-state-curve-point',
   'dispatch-flow-action',
   'update-state-curve-layer-filter',
@@ -807,6 +906,7 @@ const laneRef = ref(null);
 const laneRowRefs = new Map();
 const dragState = ref(null);
 const resizeState = ref(null);
+const boxSelectionState = ref(null);
 const suppressClickActionId = ref('');
 const timelineZoom = ref(1);
 const candidateSeriesVisibility = ref({});
@@ -839,6 +939,98 @@ const resizingActionId = computed(() => resizeState.value?.actionId ?? null);
 const selectedActionIdSet = computed(
   () => new Set(props.selectedActionIds ?? [])
 );
+const actionRelationLayoutByActionId = computed(() => {
+  const layoutByActionId = new Map();
+  let laneTop = 0;
+  for (const lane of timelineLanes.value) {
+    for (const action of lane.actions) {
+      const previewOffsetMs = isDraggingAction(action.id)
+        ? (dragState.value?.currentOffsetMs ?? 0)
+        : 0;
+      const startPercent = clampPercent(
+        ((action.startMs + previewOffsetMs) / props.durationMs) * 100
+      );
+      const widthPercent = clampPercent(
+        ((action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS) /
+          props.durationMs) *
+          100,
+        8,
+        100
+      );
+      layoutByActionId.set(action.id, {
+        startX: startPercent,
+        endX: clampPercent(startPercent + widthPercent),
+        y:
+          laneTop +
+          getTimelineActionTop(action.timelineSlot) +
+          TIMELINE_ACTION_HEIGHT_PX / 2,
+      });
+    }
+    laneTop += getTimelineLaneHeight(lane) + TIMELINE_LANE_GAP_PX;
+  }
+  return layoutByActionId;
+});
+const actionRelationLayerHeight = computed(() =>
+  Math.max(
+    1,
+    timelineLanes.value.reduce(
+      (height, lane, index) =>
+        height +
+        getTimelineLaneHeight(lane) +
+        (index > 0 ? TIMELINE_LANE_GAP_PX : 0),
+      0
+    )
+  )
+);
+const actionRelationViewBox = computed(
+  () => `0 0 100 ${actionRelationLayerHeight.value}`
+);
+const actionRelationGeometry = computed(() =>
+  props.actionRelations.flatMap(relation => {
+    const source = actionRelationLayoutByActionId.value.get(
+      relation.fromActionId
+    );
+    const target = actionRelationLayoutByActionId.value.get(
+      relation.toActionId
+    );
+    if (!source || !target) {
+      return [];
+    }
+    const sourceX = source.endX;
+    const sourceY = source.y;
+    const targetX = target.startX;
+    const targetY = target.y;
+    const horizontalDistance = Math.abs(targetX - sourceX);
+    const controlDistance = Math.max(4, horizontalDistance * 0.45);
+    const direction = targetX >= sourceX ? 1 : -1;
+    const path = [
+      `M ${sourceX} ${sourceY}`,
+      `C ${sourceX + controlDistance * direction} ${sourceY}`,
+      `${targetX - controlDistance * direction} ${targetY}`,
+      `${targetX} ${targetY}`,
+    ].join(' ');
+    return [
+      {
+        ...relation,
+        path,
+        targetX,
+        targetY,
+        title: `后续关系 · ${formatSignedFrameGap(relation.gapMs)}`,
+      },
+    ];
+  })
+);
+const boxSelectionStyle = computed(() => {
+  const state = boxSelectionState.value;
+  return state
+    ? {
+        left: `${state.left}px`,
+        top: `${state.top}px`,
+        width: `${state.width}px`,
+        height: `${state.height}px`,
+      }
+    : {};
+});
 const timelineTrackStyle = computed(() => ({
   width: `${timelineZoom.value * 100}%`,
 }));
@@ -2719,6 +2911,124 @@ function openTimelineContextMenu(event) {
   });
 }
 
+function selectActionRelation(relationId) {
+  emit('select-action-relation', { relationId });
+}
+
+function openActionRelationContextMenu(event, relationId) {
+  emit('open-action-relation-context-menu', {
+    relationId,
+    x: event.clientX,
+    y: event.clientY,
+  });
+}
+
+function beginBoxSelection(event) {
+  if (
+    !props.boxSelectionMode ||
+    (event.button ?? 0) !== 0 ||
+    event.target?.closest?.('.action-block, .action-relation-hit')
+  ) {
+    return;
+  }
+  const rect = laneRef.value?.getBoundingClientRect();
+  if (!rect || rect.width <= 0 || rect.height <= 0) {
+    return;
+  }
+
+  event.preventDefault();
+  const startX = clampNumber(event.clientX - rect.left, 0, rect.width);
+  const startY = clampNumber(event.clientY - rect.top, 0, rect.height);
+  boxSelectionState.value = {
+    startX,
+    startY,
+    left: startX,
+    top: startY,
+    width: 0,
+    height: 0,
+    append: Boolean(event.ctrlKey || event.metaKey),
+  };
+  window.addEventListener('pointermove', handleBoxSelectionMove);
+  window.addEventListener('pointerup', endBoxSelection);
+  window.addEventListener('pointercancel', cancelBoxSelection);
+}
+
+function handleBoxSelectionMove(event) {
+  const state = boxSelectionState.value;
+  const rect = laneRef.value?.getBoundingClientRect();
+  if (!state || !rect) {
+    return;
+  }
+  const currentX = clampNumber(event.clientX - rect.left, 0, rect.width);
+  const currentY = clampNumber(event.clientY - rect.top, 0, rect.height);
+  boxSelectionState.value = {
+    ...state,
+    left: Math.min(state.startX, currentX),
+    top: Math.min(state.startY, currentY),
+    width: Math.abs(currentX - state.startX),
+    height: Math.abs(currentY - state.startY),
+  };
+}
+
+function endBoxSelection() {
+  const state = boxSelectionState.value;
+  const lane = laneRef.value;
+  const laneRect = lane?.getBoundingClientRect();
+  if (state && laneRect && state.width >= 3 && state.height >= 3) {
+    const selectionRect = {
+      left: laneRect.left + state.left,
+      top: laneRect.top + state.top,
+      right: laneRect.left + state.left + state.width,
+      bottom: laneRect.top + state.top + state.height,
+    };
+    const foundActionIds = new Set(
+      [...lane.querySelectorAll('[data-testid="workbench-timeline-action"]')]
+        .filter(element =>
+          rectanglesIntersect(selectionRect, element.getBoundingClientRect())
+        )
+        .map(element => element.dataset.actionId)
+        .filter(Boolean)
+    );
+    const actionIds = props.actions
+      .map(action => action.id)
+      .filter(actionId => foundActionIds.has(actionId));
+    if (actionIds.length > 0) {
+      emit('select-action-group', {
+        actionIds,
+        primaryActionId: actionIds[actionIds.length - 1],
+        mode: state.append ? 'append' : 'replace',
+      });
+    }
+  }
+  clearBoxSelectionListeners();
+  boxSelectionState.value = null;
+}
+
+function cancelBoxSelection() {
+  clearBoxSelectionListeners();
+  boxSelectionState.value = null;
+}
+
+function clearBoxSelectionListeners() {
+  window.removeEventListener('pointermove', handleBoxSelectionMove);
+  window.removeEventListener('pointerup', endBoxSelection);
+  window.removeEventListener('pointercancel', cancelBoxSelection);
+}
+
+function rectanglesIntersect(left, right) {
+  return (
+    left.left < right.right &&
+    left.right > right.left &&
+    left.top < right.bottom &&
+    left.bottom > right.top
+  );
+}
+
+function formatSignedFrameGap(gapMs) {
+  const frameCount = Math.round((Number(gapMs) || 0) / WORKBENCH_FRAME_MS);
+  return `${frameCount > 0 ? '+' : ''}${frameCount}f`;
+}
+
 function endResize() {
   resizeState.value = null;
   window.removeEventListener('pointermove', handleResizeMove);
@@ -2729,6 +3039,15 @@ function endResize() {
 function setTimelineZoom(value) {
   timelineZoom.value = clampNumber(Number(value), MIN_ZOOM, MAX_ZOOM);
 }
+
+watch(
+  () => props.boxSelectionMode,
+  enabled => {
+    if (!enabled) {
+      cancelBoxSelection();
+    }
+  }
+);
 
 function setLaneRowRef(element, laneId) {
   if (element) {
@@ -2787,6 +3106,7 @@ function clampNumber(value, min, max) {
 onBeforeUnmount(() => {
   endDrag();
   endResize();
+  cancelBoxSelection();
 });
 </script>
 
@@ -2984,6 +3304,18 @@ h2 {
   filter: brightness(1.16);
 }
 
+.icon-control.active {
+  border-color: rgba(121, 199, 185, 0.86);
+  background: rgba(121, 199, 185, 0.24);
+  box-shadow: inset 0 0 0 1px rgba(121, 199, 185, 0.2);
+}
+
+.icon-control:disabled {
+  opacity: 0.38;
+  cursor: default;
+  filter: none;
+}
+
 .control-icon {
   width: 14px;
   height: 14px;
@@ -3175,6 +3507,64 @@ h2 {
   display: grid;
   gap: 8px;
   min-width: 100%;
+}
+
+.timeline-lane {
+  position: relative;
+}
+
+.timeline-lane.box-selection-active {
+  cursor: crosshair;
+  user-select: none;
+}
+
+.action-relation-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.action-relation-path {
+  fill: none;
+  stroke: rgba(121, 199, 185, 0.64);
+  stroke-width: 1.5;
+}
+
+.action-relation-endpoint {
+  fill: #79c7b9;
+  stroke: #14191e;
+  stroke-width: 1;
+}
+
+.action-relation-hit {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 10;
+  pointer-events: stroke;
+  cursor: pointer;
+}
+
+.action-relation.selected .action-relation-path {
+  stroke: #f2b366;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 3px rgba(242, 179, 102, 0.55));
+}
+
+.action-relation.selected .action-relation-endpoint {
+  fill: #f2b366;
+}
+
+.box-selection-overlay {
+  position: absolute;
+  z-index: 5;
+  border: 1px solid rgba(121, 199, 185, 0.9);
+  background: rgba(121, 199, 185, 0.13);
+  box-shadow: inset 0 0 0 1px rgba(121, 199, 185, 0.12);
+  pointer-events: none;
 }
 
 .lane-label {

@@ -83,6 +83,17 @@ describe('workbench draft storage project files', () => {
               level: 2,
             },
           ],
+          actionRelations: [
+            {
+              id: 'relation-0001',
+              kind: 'sequence',
+              fromActionId: 'action-0001',
+              toActionId: 'action-0002',
+              sourceAnchor: 'end',
+              targetAnchor: 'start',
+              gapMs: 200,
+            },
+          ],
           runtimeSampleCaptures: [
             {
               schemaVersion: 1,
@@ -145,6 +156,17 @@ describe('workbench draft storage project files', () => {
           ],
         },
       ],
+      actionRelations: [
+        {
+          id: 'relation-0001',
+          kind: 'sequence',
+          fromActionId: 'action-0001',
+          toActionId: 'action-0002',
+          sourceAnchor: 'end',
+          targetAnchor: 'start',
+          gapMs: 200,
+        },
+      ],
     });
 
     const imported = parseWorkbenchProjectFile(exported);
@@ -178,6 +200,14 @@ describe('workbench draft storage project files', () => {
       runtimeSampleCaptures: [
         expect.objectContaining({
           captureSessionId: 'draft-runtime-capture-1',
+        }),
+      ],
+      actionRelations: [
+        expect.objectContaining({
+          id: 'relation-0001',
+          fromActionId: 'action-0001',
+          toActionId: 'action-0002',
+          gapMs: 200,
         }),
       ],
     });
@@ -613,7 +643,7 @@ describe('workbench draft storage project files', () => {
       createWorkbenchProjectShareCode(state, '2026-07-10T09:00:00.000Z')
     );
 
-    expect(exported.schemaVersion).toBe(8);
+    expect(exported.schemaVersion).toBe(WORKBENCH_DRAFT_SCHEMA_VERSION);
     expect(imported.actionDrafts[0].effectCommands).toEqual([
       expect.objectContaining({
         id: 'action-0001-effect-01',

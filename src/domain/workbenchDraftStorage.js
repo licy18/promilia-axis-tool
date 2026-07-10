@@ -12,11 +12,13 @@ import {
   normalizeWorkbenchTeamSlots,
 } from './workbenchProjectFactory';
 import { normalizeWorkbenchRuntimeSampleCaptures } from './workbenchRuntimeSampleCapture';
+import { normalizeWorkbenchActionRelations } from './workbenchActionRelations';
 
-export const WORKBENCH_DRAFT_SCHEMA_VERSION = 8;
+export const WORKBENCH_DRAFT_SCHEMA_VERSION = 9;
 export const WORKBENCH_DRAFT_STORAGE_KEY =
-  'promilia-axis-tool:workbench-draft:v8';
+  'promilia-axis-tool:workbench-draft:v9';
 export const LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS = Object.freeze([
+  'promilia-axis-tool:workbench-draft:v8',
   'promilia-axis-tool:workbench-draft:v7',
   'promilia-axis-tool:workbench-draft:v6',
   'promilia-axis-tool:workbench-draft:v5',
@@ -48,6 +50,7 @@ export function createDefaultWorkbenchDraftState() {
     enemyConfig: { ...DEFAULT_WORKBENCH_ENEMY_CONFIG },
     segmentSplitOptions: { ...DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS },
     actionDrafts: [createWorkbenchActionDraft()],
+    actionRelations: [],
     runtimeSampleCaptures: [],
     selectedActionId: DEFAULT_WORKBENCH_ACTION_ID,
     savedAt: null,
@@ -62,6 +65,7 @@ export function createWorkbenchDraftSnapshot(
     enemyConfig,
     segmentSplitOptions,
     actionDrafts,
+    actionRelations,
     runtimeSampleCaptures,
     selectedActionId,
   },
@@ -100,6 +104,10 @@ export function createWorkbenchDraftSnapshot(
     enemyConfig: normalizedEnemyConfig,
     segmentSplitOptions: normalizedSegmentSplitOptions,
     actionDrafts: normalizedActions,
+    actionRelations: normalizeWorkbenchActionRelations(
+      actionRelations,
+      normalizedActions
+    ),
     runtimeSampleCaptures: normalizeWorkbenchRuntimeSampleCaptures(
       runtimeSampleCaptures
     ),

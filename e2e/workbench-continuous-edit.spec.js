@@ -62,25 +62,76 @@ test('edits and reviews an arbitrary action group @workbench-main-flow', async (
   await page.goto('/#/workbench');
   await page.getByTestId('workbench-add-action').click();
   await page.getByTestId('workbench-add-action').click();
-  await page.locator('.action-item[data-action-id="action-0001"]').click();
-  await page
-    .locator('.action-item[data-action-id="action-0003"]')
-    .click({ modifiers: ['Control'] });
+  await page.locator('.action-item[data-action-id="action-0003"]').click();
+  await page.getByTestId('workbench-start-frame-input').fill('1800');
 
   const workbench = page.locator('main.workbench');
+  const timelineLane = page.getByTestId('workbench-timeline-lane').first();
+  const firstTimelineAction = page.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+  );
+  const secondTimelineAction = page.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+  );
+  await firstTimelineAction.scrollIntoViewIfNeeded();
+  await page.getByTestId('workbench-timeline-box-select-toggle').click();
+  await expect(
+    page.getByTestId('workbench-timeline-grid-preview')
+  ).toHaveAttribute('data-box-selection-mode', 'true');
+  const timelineBox = await timelineLane.boundingBox();
+  const firstActionBox = await firstTimelineAction.boundingBox();
+  const secondActionBox = await secondTimelineAction.boundingBox();
+  expect(timelineBox).toBeTruthy();
+  expect(firstActionBox).toBeTruthy();
+  expect(secondActionBox).toBeTruthy();
+  const selectionStartX = Math.max(
+    timelineBox.x + 1,
+    Math.min(firstActionBox.x, secondActionBox.x) - 4
+  );
+  const selectionStartY = Math.max(
+    timelineBox.y + 1,
+    Math.min(firstActionBox.y, secondActionBox.y) - 6
+  );
+  const selectionEndX = Math.min(
+    timelineBox.x + timelineBox.width - 1,
+    Math.max(
+      firstActionBox.x + firstActionBox.width,
+      secondActionBox.x + secondActionBox.width
+    ) + 4
+  );
+  const selectionEndY = Math.min(
+    timelineBox.y + timelineBox.height - 1,
+    Math.max(
+      firstActionBox.y + firstActionBox.height,
+      secondActionBox.y + secondActionBox.height
+    ) + 4
+  );
+  await page.mouse.move(selectionStartX, selectionStartY);
+  await page.mouse.down();
+  await page.mouse.move(selectionEndX, selectionEndY);
+  await page.mouse.up();
+
   await expect(workbench).toHaveAttribute('data-selected-action-count', '2');
   await expect(
     page.locator('.action-item[data-action-id="action-0001"]')
   ).toHaveAttribute('data-selected', 'true');
   await expect(
     page.locator('.action-item[data-action-id="action-0002"]')
-  ).toHaveAttribute('data-selected', 'false');
+  ).toHaveAttribute('data-selected', 'true');
   await expect(
     page.locator('.action-item[data-action-id="action-0003"]')
-  ).toHaveAttribute('data-selected', 'true');
+  ).toHaveAttribute('data-selected', 'false');
+  await page.getByTestId('workbench-timeline-box-select-toggle').click();
+  await page.getByTestId('workbench-timeline-create-relations').click();
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '1');
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-relation"][data-relation-id="relation-0001"]'
+    )
+  ).toBeVisible();
 
   const sourceStarts = await Promise.all(
-    ['action-0001', 'action-0003'].map(actionId =>
+    ['action-0001', 'action-0002'].map(actionId =>
       page
         .locator(
           `[data-testid="workbench-timeline-action"][data-action-id="${actionId}"]`
@@ -90,10 +141,7 @@ test('edits and reviews an arbitrary action group @workbench-main-flow', async (
     )
   );
   await page.keyboard.press('Control+C');
-  const timelineLane = page.getByTestId('workbench-timeline-lane').first();
   await timelineLane.scrollIntoViewIfNeeded();
-  const timelineBox = await timelineLane.boundingBox();
-  expect(timelineBox).toBeTruthy();
   await page.mouse.click(
     timelineBox.x + timelineBox.width * 0.7,
     timelineBox.y + 20,
@@ -104,6 +152,7 @@ test('edits and reviews an arbitrary action group @workbench-main-flow', async (
 
   await expect(page.locator('.action-item')).toHaveCount(5);
   await expect(workbench).toHaveAttribute('data-selected-action-count', '2');
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '2');
   await expect(
     page.locator('.action-item[data-action-id="action-0004"]')
   ).toHaveAttribute('data-selected', 'true');
@@ -157,6 +206,27 @@ test('edits and reviews an arbitrary action group @workbench-main-flow', async (
     pastedStarts[1] - pastedStarts[0],
     4
   );
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '2');
+
+  const pastedRelation = page.locator(
+    '[data-testid="workbench-action-relation"][data-relation-id="relation-0002"]'
+  );
+  await pastedRelation.dispatchEvent('contextmenu', {
+    clientX: timelineBox.x + 240,
+    clientY: timelineBox.y + 80,
+  });
+  await expect(page.getByTestId('workbench-action-context-menu')).toBeVisible();
+  await page.getByTestId('workbench-action-context-delete-relation').click();
+  await expect(page.locator('.action-item')).toHaveCount(5);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '1');
+  await page.keyboard.press('Control+Z');
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '2');
+
+  await page.locator('.action-item[data-action-id="action-0005"]').click();
+  await page
+    .locator('.action-item[data-action-id="action-0004"]')
+    .click({ modifiers: ['Control'] });
+  await expect(workbench).toHaveAttribute('data-selected-action-count', '2');
 
   await page.getByTestId('workbench-flow-open-runtime').click();
   await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
@@ -169,9 +239,46 @@ test('edits and reviews an arbitrary action group @workbench-main-flow', async (
 
   await page.keyboard.press('Delete');
   await expect(page.locator('.action-item')).toHaveCount(3);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '1');
   await page.keyboard.press('Control+Z');
   await expect(page.locator('.action-item')).toHaveCount(5);
   await expect(workbench).toHaveAttribute('data-selected-action-count', '2');
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '2');
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const download = await downloadPromise;
+  const downloadPath = await download.path();
+  expect(downloadPath).toBeTruthy();
+  const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
+  expect(exportedProject.schemaVersion).toBe(9);
+  expect(exportedProject.actionDrafts).toHaveLength(5);
+  expect(exportedProject.actionRelations).toEqual([
+    expect.objectContaining({
+      id: 'relation-0001',
+      fromActionId: 'action-0001',
+      toActionId: 'action-0002',
+    }),
+    expect.objectContaining({
+      id: 'relation-0002',
+      fromActionId: 'action-0004',
+      toActionId: 'action-0005',
+    }),
+  ]);
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await expect(page.locator('.action-item')).toHaveCount(1);
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(downloadPath);
+  await expect(page.locator('.action-item')).toHaveCount(5);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '2');
+  await page.locator('.action-item[data-action-id="action-0004"]').click();
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-runtime-detail-action-id',
+    'action-0004'
+  );
 
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
@@ -2148,7 +2255,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 8,
+    schemaVersion: 9,
     game: 'azur-promilia',
     type: 'workbench-project',
     selectedActionId: 'action-0002',
@@ -2407,7 +2514,7 @@ test('imports a runtime capture and preserves its applied curve through project 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 8,
+    schemaVersion: 9,
     runtimeSampleCaptures: [
       {
         captureSessionId: 'e2e-recover-sp-capture-1',
@@ -4013,6 +4120,7 @@ async function ensureActionContentEditResultSynced(
 async function readStoredWorkbenchDraft(page) {
   return await page.evaluate(() => {
     const rawDraft =
+      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v9') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v8') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v5') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v4') ??

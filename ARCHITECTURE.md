@@ -56,9 +56,10 @@ C:\PC2\Codex\AzPr
 
 ### 3.2 领域层
 
-- `projectSchema.js`：`Project`、`Actor`、`Enemy`、`Action` 主合同。
+- `projectSchema.js`：`Project`、`Actor`、`Enemy`、`Action` 与 `ActionRelation` 主合同。
 - `workbenchProjectFactory.js`：把 Workbench 选择、培养配置和动作草稿组装为标准项目。
-- `workbenchDraftStorage.js`：v8 草稿、项目 JSON 和分享链接。
+- `workbenchActionRelations.js`：动作前后关系的规范化、无环校验、间隔同步与删除清理。
+- `workbenchDraftStorage.js`：v9 草稿、项目 JSON 和分享链接。
 - `workbenchPngProject.js`：PNG 项目元数据写入与回读。
 - `workbenchPresetStorage.js`：v1 本地预设库，复用完整 Workbench 项目快照。
 - `workbenchRuntimeSampleCapture.js`：外部 capture 文件解析、绑定、去重和项目持久化。
@@ -116,9 +117,13 @@ Action
 
 ## 4. 关键数据合同
 
-### WorkbenchProjectFile v8
+### WorkbenchProjectFile v9
 
-包含 selection、teamSlots、actorConfigs、enemyConfig、segmentSplitOptions、actionDrafts、runtimeSampleCaptures 和 selectedActionId。JSON、分享链接、PNG 元数据和预设库都复用该合同。
+包含 selection、teamSlots、actorConfigs、enemyConfig、segmentSplitOptions、actionDrafts、actionRelations、runtimeSampleCaptures 和 selectedActionId。JSON、分享链接、PNG 元数据和预设库都复用该合同；v1-v8 项目迁移时补为空关系数组。
+
+### ActionRelation v1
+
+当前只支持无环的 `sequence` 关系，固定连接前一动作 `end` 与后一动作 `start`，`gapMs` 随动作位置和时长同步。它表达编排关系，不改变动作执行顺序或三值公式。
 
 ### WorkbenchPresetLibrary v1
 
@@ -134,7 +139,7 @@ Action
 
 ## 5. 持久化边界
 
-- 当前草稿：`promilia-axis-tool:workbench-draft:v8`。
+- 当前草稿：`promilia-axis-tool:workbench-draft:v9`。
 - 本地预设：`promilia-axis-tool:workbench-presets:v1`。
 - 项目交换：JSON、分享 URL、PNG 内嵌元数据。
 - 临时曲线选中、复盘焦点、筛选和诊断面板状态不写入项目文件。

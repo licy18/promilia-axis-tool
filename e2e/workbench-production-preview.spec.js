@@ -94,7 +94,7 @@ test('[json-project-exchange] restores an exported production JSON project', asy
   expect(download.suggestedFilename()).toMatch(/promilia-workbench-.*\.json$/);
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 8,
+    schemaVersion: 9,
     game: 'azur-promilia',
     type: 'workbench-project',
     enemyConfig: { level: 91 },
@@ -195,6 +195,58 @@ test('[multi-action-editing] copies, pastes, and reviews a selected action group
   await expect(
     page.getByTestId('workbench-runtime-selected-detail-state-point')
   ).toContainText('action-0004');
+});
+
+test('[timeline-relations] preserves action relations through project exchange', async ({
+  page,
+}) => {
+  await page.goto('/#/workbench');
+  await page.getByTestId('workbench-add-action').click();
+  await page.getByTestId('workbench-add-action').click();
+  await page.locator('.action-item[data-action-id="action-0001"]').click();
+  await page
+    .locator('.action-item[data-action-id="action-0002"]')
+    .click({ modifiers: ['Control'] });
+  await page.getByTestId('workbench-timeline-create-relations').click();
+
+  const workbench = page.locator('main.workbench');
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '1');
+  await page.keyboard.press('Control+C');
+  await page.keyboard.press('Control+V');
+  await expect(page.locator('.action-item')).toHaveCount(5);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '2');
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const download = await downloadPromise;
+  const downloadPath = await download.path();
+  expect(downloadPath).toBeTruthy();
+  const project = JSON.parse(await readFile(downloadPath, 'utf8'));
+  expect(project.schemaVersion).toBe(9);
+  expect(project.actionDrafts).toHaveLength(5);
+  expect(project.actionRelations).toEqual([
+    expect.objectContaining({
+      fromActionId: 'action-0001',
+      toActionId: 'action-0002',
+    }),
+    expect.objectContaining({
+      fromActionId: 'action-0004',
+      toActionId: 'action-0005',
+    }),
+  ]);
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(downloadPath);
+  await expect(page.locator('.action-item')).toHaveCount(5);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '2');
+  await page.locator('.action-item[data-action-id="action-0004"]').click();
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-runtime-detail-action-id',
+    'action-0004'
+  );
 });
 
 test('[narrow-main-flow] completes runtime review, edit, and refresh without overflow', async ({

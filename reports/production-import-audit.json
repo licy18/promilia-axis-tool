@@ -15,6 +15,7 @@
       "src/__tests__/domain/skillDamageSegments.test.js",
       "src/__tests__/domain/skillLogicModel.test.js",
       "src/__tests__/domain/workbenchActionClipboard.test.js",
+      "src/__tests__/domain/workbenchActionRelations.test.js",
       "src/__tests__/domain/workbenchDraftStorage.test.js",
       "src/__tests__/domain/workbenchPngProject.test.js",
       "src/__tests__/domain/workbenchPresetStorage.test.js",
@@ -64,8 +65,8 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 87,
-    "productionReachableCount": 83,
+    "sourceCodeFileCount": 88,
+    "productionReachableCount": 84,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
@@ -73,7 +74,7 @@
     "productionReachableByArea": {
       "src": 2,
       "src/data": 1,
-      "src/domain": 12,
+      "src/domain": 13,
       "src/features/workbench": 38,
       "src/i18n": 1,
       "src/router": 1,
@@ -105,6 +106,7 @@
     "src/domain/skillLogicModel.js",
     "src/domain/timebase.js",
     "src/domain/workbenchActionClipboard.js",
+    "src/domain/workbenchActionRelations.js",
     "src/domain/workbenchDraftStorage.js",
     "src/domain/workbenchPngProject.js",
     "src/domain/workbenchPresetStorage.js",

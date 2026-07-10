@@ -5,6 +5,8 @@
     :data-runtime-diagnostics-status="runtimeDiagnosticsStatus"
     :data-runtime-diagnostics-revision="runtimeDiagnosticsRevision"
     :data-selected-action-count="selectedActionIds.length"
+    :data-action-relation-count="actionRelations.length"
+    :data-selected-action-relation-id="selectedActionRelationId"
   >
     <nav class="top-nav">
       <div class="workbench-brand" aria-label="蓝色星原排轴工作台">
@@ -138,6 +140,7 @@
     />
 
     <WorkbenchActionContextMenu
+      :mode="actionContextMenu.kind"
       :visible="actionContextMenu.visible"
       :x="actionContextMenu.x"
       :y="actionContextMenu.y"
@@ -151,6 +154,7 @@
       @nudge-left="shiftSelectedActions({ offsetMs: -frameToMs(1) })"
       @nudge-right="shiftSelectedActions({ offsetMs: frameToMs(1) })"
       @delete="deleteSelectedActions"
+      @delete-relation="deleteActionRelation(selectedActionRelationId)"
     />
 
     <ScenarioHeader
@@ -315,6 +319,9 @@
           :duration-ms="scenario.time.durationMs"
           :selected-action-id="selectedActionId"
           :selected-action-ids="selectedActionIds"
+          :action-relations="actionRelations"
+          :selected-action-relation-id="selectedActionRelationId"
+          :box-selection-mode="boxSelectionMode"
           :flow-model="workbenchFlowModel"
           :action-edit-focus="actionEditFocus"
           :selected-state-curve-point-id="selectedStateCurvePointId"
@@ -326,7 +333,12 @@
           :action-readiness-timeline="simulationResult.actionReadinessTimeline"
           :main-flow-command-surface="mainFlowCommandSurface"
           @select-action="selectAction"
+          @select-action-group="selectActionGroup"
+          @select-action-relation="selectActionRelation"
           @open-action-context-menu="openActionContextMenu"
+          @open-action-relation-context-menu="openActionRelationContextMenu"
+          @toggle-box-selection-mode="toggleBoxSelectionMode"
+          @create-action-relations="createRelationsForSelectedActions"
           @select-state-curve-point="selectStateCurvePoint"
           @dispatch-flow-action="dispatchWorkbenchFlowAction"
           @update-state-curve-layer-filter="updateStateCurveLayerFilter"
@@ -645,6 +657,7 @@
         :duration-ms="scenario.time.durationMs"
         :selected-action-id="selectedActionId"
         :selected-action-ids="selectedActionIds"
+        :action-relations="actionRelations"
         :timeline-diagnostics="timelineDiagnostics"
         :action-readiness-timeline="simulationResult.actionReadinessTimeline"
       />
@@ -746,6 +759,13 @@ import {
   shiftWorkbenchActionDrafts,
 } from '../domain/workbenchActionClipboard';
 import {
+  createNextWorkbenchActionRelationIdFromUsedIds,
+  createWorkbenchActionRelationChain,
+  normalizeWorkbenchActionRelations,
+  removeWorkbenchActionRelationsForActions,
+  synchronizeWorkbenchActionRelationGaps,
+} from '../domain/workbenchActionRelations';
+import {
   clearWorkbenchDraft,
   createWorkbenchDraftSnapshot,
   createWorkbenchProjectFileName,
@@ -812,12 +832,15 @@ const enemyConfig = ref({ ...initialDraft.enemyConfig });
 const segmentSplitOptions = ref({ ...initialDraft.segmentSplitOptions });
 const segmentSplitPreview = ref(null);
 const actionDrafts = ref([...initialDraft.actionDrafts]);
+const actionRelations = ref([...initialDraft.actionRelations]);
 const runtimeSampleCaptures = ref([...initialDraft.runtimeSampleCaptures]);
 const selectedActionId = ref(initialDraft.selectedActionId);
 const selectedActionIds = ref(
   initialDraft.selectedActionId ? [initialDraft.selectedActionId] : []
 );
 const actionSelectionAnchorId = ref(initialDraft.selectedActionId);
+const selectedActionRelationId = ref('');
+const boxSelectionMode = ref(false);
 const actionClipboard = ref(null);
 const actionContextMenu = ref(createClosedActionContextMenu());
 const selectedStateCurvePointId = ref('');
@@ -890,6 +913,7 @@ const project = computed(() =>
     actorConfigs: actorConfigs.value,
     enemyConfig: enemyConfig.value,
     actions: actionDrafts.value,
+    actionRelations: actionRelations.value,
     runtimeSampleCaptures: runtimeSampleCaptures.value,
   })
 );
@@ -1055,6 +1079,24 @@ watch(
     selectedActionId.value = normalized.primaryActionId;
     if (!normalized.selectedActionIds.includes(actionSelectionAnchorId.value)) {
       actionSelectionAnchorId.value = normalized.primaryActionId;
+    }
+    const synchronizedRelations = synchronizeWorkbenchActionRelationGaps(
+      actionRelations.value,
+      actions
+    );
+    if (
+      JSON.stringify(synchronizedRelations) !==
+      JSON.stringify(actionRelations.value)
+    ) {
+      actionRelations.value = synchronizedRelations;
+    }
+    if (
+      selectedActionRelationId.value &&
+      !synchronizedRelations.some(
+        relation => relation.id === selectedActionRelationId.value
+      )
+    ) {
+      selectedActionRelationId.value = '';
     }
   },
   { flush: 'sync' }
@@ -1680,7 +1722,8 @@ function copySelectedActions({ actionIds = selectedActionIds.value } = {}) {
   clearSegmentSplitPreview();
   const clipboard = createWorkbenchActionClipboard(
     actionDrafts.value,
-    actionIds
+    actionIds,
+    actionRelations.value
   );
   if (!clipboard) {
     return null;
@@ -1694,11 +1737,14 @@ function pasteSelectedActions({ targetStartMs = undefined } = {}) {
   clearSegmentSplitPreview();
   const pasteResult = pasteWorkbenchActionClipboard(actionClipboard.value, {
     existingActions: actionDrafts.value,
+    existingRelations: actionRelations.value,
     timelineDurationMs: project.value.time.durationMs,
     targetStartMs,
     pasteGapMs: NEW_ACTION_INSERT_GAP_MS,
     createActionId: usedActionIds =>
       createNextActionIdFromUsedIds(usedActionIds),
+    createRelationId: usedRelationIds =>
+      createNextWorkbenchActionRelationIdFromUsedIds(usedRelationIds),
     normalizeSourceAction: action => ({
       ...action,
       note: stripAutoDelayNote(action.note),
@@ -1711,12 +1757,17 @@ function pasteSelectedActions({ targetStartMs = undefined } = {}) {
   recordWorkbenchHistorySnapshot();
   const runtimeReviewState = captureActionMutationRuntimeReviewState();
   actionDrafts.value = [...actionDrafts.value, ...pasteResult.pastedActions];
+  actionRelations.value = normalizeWorkbenchActionRelations(
+    [...actionRelations.value, ...pasteResult.pastedRelations],
+    actionDrafts.value
+  );
   actionClipboard.value = pasteResult.nextClipboard;
   setWorkbenchActionSelection(
     pasteResult.selectedActionIds,
     pasteResult.primaryActionId,
     { anchorActionId: pasteResult.primaryActionId }
   );
+  selectedActionRelationId.value = '';
   syncActionLibraryCharacterIdFromDraft(
     findActionDraftById(pasteResult.primaryActionId)
   );
@@ -1748,6 +1799,11 @@ function deleteSelectedActions({ actionIds = selectedActionIds.value } = {}) {
   const firstRemovedIndex = actionDrafts.value.findIndex(action =>
     requestedActionIds.has(action.id)
   );
+  actionRelations.value = removeWorkbenchActionRelationsForActions(
+    actionRelations.value,
+    affectedActionIds
+  );
+  selectedActionRelationId.value = '';
   actionDrafts.value = actionDrafts.value.filter(
     action => !requestedActionIds.has(action.id)
   );
@@ -1858,6 +1914,28 @@ function copyActionBatch(batchId) {
   if (copiedActions.length === 0) {
     return;
   }
+  const copiedActionIdBySourceId = new Map(
+    sourceActions.map((action, index) => [action.id, copiedActions[index].id])
+  );
+  const sourceActionIdSet = new Set(sourceActions.map(action => action.id));
+  const usedRelationIds = new Set(
+    actionRelations.value.map(relation => relation.id)
+  );
+  const copiedRelations = normalizeWorkbenchActionRelations(
+    actionRelations.value
+      .filter(
+        relation =>
+          sourceActionIdSet.has(relation.fromActionId) &&
+          sourceActionIdSet.has(relation.toActionId)
+      )
+      .map(relation => ({
+        ...relation,
+        id: createNextWorkbenchActionRelationIdFromUsedIds(usedRelationIds),
+        fromActionId: copiedActionIdBySourceId.get(relation.fromActionId),
+        toActionId: copiedActionIdBySourceId.get(relation.toActionId),
+      })),
+    copiedActions
+  );
 
   recordWorkbenchHistorySnapshot();
   const runtimeReviewState = captureActionMutationRuntimeReviewState();
@@ -1867,6 +1945,10 @@ function copyActionBatch(batchId) {
     ...copiedActions,
     ...actionDrafts.value.slice(insertIndex),
   ];
+  actionRelations.value = normalizeWorkbenchActionRelations(
+    [...actionRelations.value, ...copiedRelations],
+    actionDrafts.value
+  );
   selectedActionId.value = copiedActions[0].id;
   syncActionLibraryCharacterIdFromDraft(copiedActions[0]);
   applyActionMutationRuntimeSyncRequest({
@@ -2129,6 +2211,7 @@ function getWorkbenchDraftState() {
     enemyConfig: enemyConfig.value,
     segmentSplitOptions: segmentSplitOptions.value,
     actionDrafts: actionDrafts.value,
+    actionRelations: actionRelations.value,
     runtimeSampleCaptures: runtimeSampleCaptures.value,
     selectedActionId: selectedActionId.value,
   };
@@ -2436,6 +2519,10 @@ function applyDraftState(draft) {
     draft.actionDrafts,
     selection.value
   );
+  actionRelations.value = normalizeWorkbenchActionRelations(
+    draft.actionRelations,
+    actionDrafts.value
+  );
   runtimeSampleCaptures.value = normalizeWorkbenchRuntimeSampleCaptures(
     draft.runtimeSampleCaptures
   );
@@ -2460,6 +2547,8 @@ function clearWorkbenchProjectTransientState() {
   calculatorDiagnosticFocus.value = { scope: '', sequence: 0 };
   runtimeLogFocus.value = { source: '', statePointId: '', sequence: 0 };
   workbenchFlowDispatchState.value = createEmptyWorkbenchFlowDispatchState();
+  selectedActionRelationId.value = '';
+  boxSelectionMode.value = false;
   actionClipboard.value = null;
   closeActionContextMenu();
 }
@@ -2530,7 +2619,11 @@ function handleWorkbenchKeyboardShortcut(event) {
   if (!(event.ctrlKey || event.metaKey) && !event.altKey) {
     if (['delete', 'backspace'].includes(key)) {
       event.preventDefault();
-      deleteSelectedActions();
+      if (selectedActionRelationId.value) {
+        deleteActionRelation(selectedActionRelationId.value);
+      } else {
+        deleteSelectedActions();
+      }
       return;
     }
     if (['arrowleft', 'arrowright'].includes(key)) {
@@ -2560,6 +2653,12 @@ function handleWorkbenchKeyboardShortcut(event) {
   if (key === 'y') {
     event.preventDefault();
     redoWorkbenchEdit();
+    return;
+  }
+
+  if (key === 'b' && !event.shiftKey) {
+    event.preventDefault();
+    toggleBoxSelectionMode();
     return;
   }
 
@@ -2644,6 +2743,7 @@ function createWorkbenchHistorySnapshot() {
       enemyConfig: enemyConfig.value,
       segmentSplitOptions: segmentSplitOptions.value,
       actionDrafts: actionDrafts.value,
+      actionRelations: actionRelations.value,
       runtimeSampleCaptures: runtimeSampleCaptures.value,
       selectedActionId: selectedActionId.value,
     },
@@ -2656,10 +2756,13 @@ function createWorkbenchHistorySnapshot() {
     enemyConfig: draftSnapshot.enemyConfig,
     segmentSplitOptions: draftSnapshot.segmentSplitOptions,
     actionDrafts: draftSnapshot.actionDrafts,
+    actionRelations: draftSnapshot.actionRelations,
     runtimeSampleCaptures: draftSnapshot.runtimeSampleCaptures,
     selectedActionId: draftSnapshot.selectedActionId,
     selectedActionIds: selectedActionIds.value,
     actionSelectionAnchorId: actionSelectionAnchorId.value,
+    selectedActionRelationId: selectedActionRelationId.value,
+    boxSelectionMode: boxSelectionMode.value,
     selectedStateCurvePointId: selectedStateCurvePointId.value,
     stateCurveFocusMode: stateCurveFocusMode.value,
     stateCurveLayerFilters: stateCurveLayerFilters.value,
@@ -2697,6 +2800,10 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
     snapshot.actionDrafts,
     selection.value
   );
+  actionRelations.value = normalizeWorkbenchActionRelations(
+    snapshot.actionRelations,
+    actionDrafts.value
+  );
   runtimeSampleCaptures.value = normalizeWorkbenchRuntimeSampleCaptures(
     snapshot.runtimeSampleCaptures
   );
@@ -2716,6 +2823,12 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
         : restoredActionSelection.primaryActionId,
     }
   );
+  selectedActionRelationId.value = actionRelations.value.some(
+    relation => relation.id === snapshot.selectedActionRelationId
+  )
+    ? snapshot.selectedActionRelationId
+    : '';
+  boxSelectionMode.value = Boolean(snapshot.boxSelectionMode);
   selectedStateCurvePointId.value = snapshot.selectedStateCurvePointId ?? '';
   stateCurveFocusMode.value = snapshot.stateCurveFocusMode || 'all';
   stateCurveLayerFilters.value = {
@@ -2881,6 +2994,7 @@ function findActionDraftById(actionId) {
 
 function selectAction(actionRequest, { syncRuntimeResult = true } = {}) {
   clearSegmentSplitPreview();
+  selectedActionRelationId.value = '';
   const request =
     actionRequest && typeof actionRequest === 'object'
       ? actionRequest
@@ -2918,6 +3032,95 @@ function selectAction(actionRequest, { syncRuntimeResult = true } = {}) {
   }
 }
 
+function selectActionGroup({
+  actionIds = [],
+  primaryActionId = actionIds[actionIds.length - 1] ?? '',
+  mode = 'replace',
+} = {}) {
+  const requestedActionIds =
+    mode === 'append'
+      ? [...new Set([...selectedActionIds.value, ...actionIds])]
+      : actionIds;
+  const normalized = setWorkbenchActionSelection(
+    requestedActionIds,
+    primaryActionId,
+    { anchorActionId: primaryActionId }
+  );
+  selectedActionRelationId.value = '';
+  const draft = findActionDraftById(normalized.primaryActionId);
+  syncActionLibraryCharacterIdFromDraft(draft);
+  if (shouldSyncRuntimeResultOnActionSelect()) {
+    syncRuntimeResultForSelectedAction(normalized.primaryActionId);
+  }
+  return normalized;
+}
+
+function createRelationsForSelectedActions({
+  actionIds = selectedActionIds.value,
+} = {}) {
+  const result = createWorkbenchActionRelationChain(
+    actionRelations.value,
+    actionDrafts.value,
+    actionIds,
+    usedRelationIds =>
+      createNextWorkbenchActionRelationIdFromUsedIds(usedRelationIds)
+  );
+  if (result.createdRelations.length === 0) {
+    return false;
+  }
+
+  recordWorkbenchHistorySnapshot();
+  actionRelations.value = result.relations;
+  selectedActionRelationId.value =
+    result.createdRelations[result.createdRelations.length - 1].id;
+  markDraftDirty();
+  return true;
+}
+
+function selectActionRelation(relationRequest) {
+  const relationId =
+    typeof relationRequest === 'object'
+      ? relationRequest?.relationId
+      : relationRequest;
+  const relation = actionRelations.value.find(item => item.id === relationId);
+  if (!relation) {
+    return false;
+  }
+
+  selectedActionRelationId.value = relation.id;
+  boxSelectionMode.value = false;
+  setWorkbenchActionSelection(
+    [relation.fromActionId, relation.toActionId],
+    relation.toActionId,
+    { anchorActionId: relation.fromActionId }
+  );
+  syncActionLibraryCharacterIdFromDraft(
+    findActionDraftById(relation.toActionId)
+  );
+  return true;
+}
+
+function deleteActionRelation(relationId = selectedActionRelationId.value) {
+  if (!actionRelations.value.some(relation => relation.id === relationId)) {
+    return false;
+  }
+  recordWorkbenchHistorySnapshot();
+  actionRelations.value = actionRelations.value.filter(
+    relation => relation.id !== relationId
+  );
+  selectedActionRelationId.value = '';
+  markDraftDirty();
+  return true;
+}
+
+function toggleBoxSelectionMode() {
+  boxSelectionMode.value = !boxSelectionMode.value;
+  if (boxSelectionMode.value) {
+    selectedActionRelationId.value = '';
+    closeActionContextMenu();
+  }
+}
+
 function setWorkbenchActionSelection(
   actionIds,
   primaryActionId,
@@ -2948,10 +3151,24 @@ function openActionContextMenu({
     selectAction(actionId);
   }
   actionContextMenu.value = {
+    kind: 'actions',
     visible: true,
     x: Number(x) || 0,
     y: Number(y) || 0,
     targetStartMs,
+  };
+}
+
+function openActionRelationContextMenu({ relationId = '', x = 0, y = 0 } = {}) {
+  if (!selectActionRelation(relationId)) {
+    return;
+  }
+  actionContextMenu.value = {
+    kind: 'relation',
+    visible: true,
+    x: Number(x) || 0,
+    y: Number(y) || 0,
+    targetStartMs: undefined,
   };
 }
 
@@ -2961,6 +3178,7 @@ function closeActionContextMenu() {
 
 function createClosedActionContextMenu() {
   return {
+    kind: 'actions',
     visible: false,
     x: 0,
     y: 0,

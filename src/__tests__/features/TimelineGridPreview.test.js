@@ -187,6 +187,97 @@ describe('TimelineGridPreview', () => {
       'data-window-id': 'action-a|cooldown-charge|0',
     });
   });
+
+  it('renders, selects, and creates persisted action relations', async () => {
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        selectedActionIds: ['action-a', 'action-b'],
+        selectedActionRelationId: 'relation-0001',
+        actionRelations: [
+          {
+            id: 'relation-0001',
+            kind: 'sequence',
+            fromActionId: 'action-a',
+            toActionId: 'action-b',
+            sourceAnchor: 'end',
+            targetAnchor: 'start',
+            gapMs: 100,
+          },
+        ],
+      }),
+    });
+
+    const relation = wrapper.get(
+      '[data-testid="workbench-action-relation"][data-relation-id="relation-0001"]'
+    );
+    expect(
+      wrapper.get('[data-testid="workbench-action-relation-layer"]').exists()
+    ).toBe(true);
+    expect(relation.element.parentElement.classList).toContain('selected');
+
+    await relation.trigger('click');
+    expect(wrapper.emitted('select-action-relation')?.at(-1)?.[0]).toEqual({
+      relationId: 'relation-0001',
+    });
+    await relation.trigger('contextmenu', { clientX: 120, clientY: 80 });
+    expect(
+      wrapper.emitted('open-action-relation-context-menu')?.at(-1)?.[0]
+    ).toMatchObject({
+      relationId: 'relation-0001',
+      x: 120,
+      y: 80,
+    });
+
+    await wrapper
+      .get('[data-testid="workbench-timeline-create-relations"]')
+      .trigger('click');
+    expect(wrapper.emitted('create-action-relations')).toHaveLength(1);
+  });
+
+  it('selects intersecting actions with the frame box tool', async () => {
+    const wrapper = mount(TimelineGridPreview, {
+      attachTo: document.body,
+      props: createTimelineProps({
+        boxSelectionMode: true,
+      }),
+    });
+    const lane = wrapper.get('[data-testid="workbench-timeline-lane"]');
+    lane.element.getBoundingClientRect = () => createRect(0, 0, 600, 240);
+    const [firstAction, secondAction] = wrapper.findAll(
+      '[data-testid="workbench-timeline-action"]'
+    );
+    firstAction.element.getBoundingClientRect = () =>
+      createRect(20, 15, 120, 42);
+    secondAction.element.getBoundingClientRect = () =>
+      createRect(220, 125, 120, 42);
+
+    lane.element.dispatchEvent(
+      new MouseEvent('pointerdown', {
+        bubbles: true,
+        button: 0,
+        clientX: 5,
+        clientY: 5,
+      })
+    );
+    window.dispatchEvent(
+      new MouseEvent('pointermove', { clientX: 160, clientY: 90 })
+    );
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-timeline-box-selection"]').exists()
+    ).toBe(true);
+    window.dispatchEvent(
+      new MouseEvent('pointerup', { clientX: 160, clientY: 90 })
+    );
+    await nextTick();
+
+    expect(wrapper.emitted('select-action-group')?.at(-1)?.[0]).toEqual({
+      actionIds: ['action-a'],
+      primaryActionId: 'action-a',
+      mode: 'replace',
+    });
+    wrapper.unmount();
+  });
 });
 
 function findCandidateMarkers(wrapper) {
@@ -404,5 +495,19 @@ function createCandidatePoint({
     sourceStatus: 'fixture',
     timeAdjustmentStatus: 'fixture',
     applied: false,
+  };
+}
+
+function createRect(left, top, width, height) {
+  return {
+    left,
+    top,
+    right: left + width,
+    bottom: top + height,
+    width,
+    height,
+    x: left,
+    y: top,
+    toJSON: () => ({}),
   };
 }

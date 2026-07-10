@@ -13,6 +13,15 @@ export const ACTION_TYPES = Object.freeze({
   ANNOTATION: 'annotation',
 });
 
+export const ACTION_RELATION_KINDS = Object.freeze({
+  SEQUENCE: 'sequence',
+});
+
+export const ACTION_RELATION_ANCHORS = Object.freeze({
+  SOURCE_END: 'end',
+  TARGET_START: 'start',
+});
+
 export const EFFECT_OPERATIONS = Object.freeze({
   APPLY: 'apply',
   REFRESH: 'refresh',
@@ -65,6 +74,7 @@ export function createProject({
   teamSlots = [],
   enemy = null,
   actions = [],
+  actionRelations = [],
   metadata = {},
 } = {}) {
   const now = new Date().toISOString();
@@ -85,6 +95,9 @@ export function createProject({
     },
     enemy,
     actions,
+    actionRelations: actionRelations.map(relation =>
+      createActionRelation(relation)
+    ),
     resources: [],
     buffs: [],
     loadouts: actors.map(actor => actor.loadout).filter(Boolean),
@@ -94,6 +107,26 @@ export function createProject({
       source: 'promilia-axis-tool-domain',
       ...metadata,
     },
+  };
+}
+
+export function createActionRelation({
+  id,
+  kind = ACTION_RELATION_KINDS.SEQUENCE,
+  fromActionId,
+  toActionId,
+  sourceAnchor = ACTION_RELATION_ANCHORS.SOURCE_END,
+  targetAnchor = ACTION_RELATION_ANCHORS.TARGET_START,
+  gapMs = 0,
+} = {}) {
+  return {
+    id: id ?? createStableId('action-relation'),
+    kind,
+    fromActionId: String(fromActionId ?? '').trim(),
+    toActionId: String(toActionId ?? '').trim(),
+    sourceAnchor,
+    targetAnchor,
+    gapMs: Number(gapMs) || 0,
   };
 }
 
@@ -444,12 +477,182 @@ export function validateProject(project, gameData = {}) {
   validateTeam(project.team, project.actors, errors);
   validateEnemy(project.enemy, gameData, errors, warnings);
   validateActions(project.actions, project, gameData, errors, warnings);
+  validateActionRelations(project.actionRelations, project.actions, errors);
 
   return {
     valid: errors.length === 0,
     errors,
     warnings,
   };
+}
+
+function validateActionRelations(actionRelations, actions, errors) {
+  if (actionRelations == null) {
+    return;
+  }
+  if (!Array.isArray(actionRelations)) {
+    errors.push(
+      issue(
+        'actionRelations.invalid',
+        'Project actionRelations must be an array',
+        '$.actionRelations'
+      )
+    );
+    return;
+  }
+
+  const actionIds = new Set((actions ?? []).map(action => action.id));
+  const relationIds = new Set();
+  const relationEdges = new Set();
+  const graph = new Map();
+
+  actionRelations.forEach((relation, index) => {
+    const path = `$.actionRelations[${index}]`;
+    if (!isObject(relation)) {
+      errors.push(
+        issue(
+          'actionRelation.invalid',
+          'Action relation must be an object',
+          path
+        )
+      );
+      return;
+    }
+
+    if (!relation.id || relationIds.has(relation.id)) {
+      errors.push(
+        issue(
+          'actionRelation.id.invalid',
+          'Each action relation must have a unique id',
+          `${path}.id`
+        )
+      );
+    } else {
+      relationIds.add(relation.id);
+    }
+    if (!Object.values(ACTION_RELATION_KINDS).includes(relation.kind)) {
+      errors.push(
+        issue(
+          'actionRelation.kind.invalid',
+          `Unsupported action relation kind ${relation.kind}`,
+          `${path}.kind`
+        )
+      );
+    }
+
+    const fromActionId = String(relation.fromActionId ?? '');
+    const toActionId = String(relation.toActionId ?? '');
+    if (!actionIds.has(fromActionId)) {
+      errors.push(
+        issue(
+          'actionRelation.fromActionId.unknown',
+          `Action relation source ${fromActionId} does not exist`,
+          `${path}.fromActionId`
+        )
+      );
+    }
+    if (!actionIds.has(toActionId)) {
+      errors.push(
+        issue(
+          'actionRelation.toActionId.unknown',
+          `Action relation target ${toActionId} does not exist`,
+          `${path}.toActionId`
+        )
+      );
+    }
+    if (fromActionId && fromActionId === toActionId) {
+      errors.push(
+        issue(
+          'actionRelation.self.invalid',
+          'Action relation cannot connect an action to itself',
+          path
+        )
+      );
+    }
+    if (relation.sourceAnchor !== ACTION_RELATION_ANCHORS.SOURCE_END) {
+      errors.push(
+        issue(
+          'actionRelation.sourceAnchor.invalid',
+          'Sequence relation sourceAnchor must be end',
+          `${path}.sourceAnchor`
+        )
+      );
+    }
+    if (relation.targetAnchor !== ACTION_RELATION_ANCHORS.TARGET_START) {
+      errors.push(
+        issue(
+          'actionRelation.targetAnchor.invalid',
+          'Sequence relation targetAnchor must be start',
+          `${path}.targetAnchor`
+        )
+      );
+    }
+    if (!Number.isFinite(Number(relation.gapMs))) {
+      errors.push(
+        issue(
+          'actionRelation.gapMs.invalid',
+          'Action relation gapMs must be finite',
+          `${path}.gapMs`
+        )
+      );
+    }
+
+    const edgeKey = `${fromActionId}->${toActionId}`;
+    if (relationEdges.has(edgeKey)) {
+      errors.push(
+        issue(
+          'actionRelation.duplicate',
+          `Duplicate action relation ${edgeKey}`,
+          path
+        )
+      );
+    } else if (
+      actionIds.has(fromActionId) &&
+      actionIds.has(toActionId) &&
+      fromActionId !== toActionId
+    ) {
+      relationEdges.add(edgeKey);
+      if (!graph.has(fromActionId)) {
+        graph.set(fromActionId, new Set());
+      }
+      graph.get(fromActionId).add(toActionId);
+    }
+  });
+
+  if (hasDirectedCycle(graph)) {
+    errors.push(
+      issue(
+        'actionRelations.cycle.invalid',
+        'Action relations must not contain a directed cycle',
+        '$.actionRelations'
+      )
+    );
+  }
+}
+
+function hasDirectedCycle(graph) {
+  const visiting = new Set();
+  const visited = new Set();
+
+  function visit(nodeId) {
+    if (visiting.has(nodeId)) {
+      return true;
+    }
+    if (visited.has(nodeId)) {
+      return false;
+    }
+    visiting.add(nodeId);
+    for (const targetId of graph.get(nodeId) ?? []) {
+      if (visit(targetId)) {
+        return true;
+      }
+    }
+    visiting.delete(nodeId);
+    visited.add(nodeId);
+    return false;
+  }
+
+  return [...graph.keys()].some(visit);
 }
 
 function validateTeam(team, actors, errors) {

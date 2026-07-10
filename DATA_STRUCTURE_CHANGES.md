@@ -26103,7 +26103,7 @@ tests[]
 limitations[]
 ```
 
-必需能力固定为 production 路由与哈希资源、诊断动态加载、JSON 项目交换、PNG 项目交换、多动作编辑和 390px 窄屏主流程。只有 Playwright 整体通过且六项能力全部存在并通过时，报告才输出 `trial-ready`；缺项或失败均输出 `blocked`。该报告只证明本地 `dist` + Vite preview 可试用，不代表远程 CDN/托管、最终蓝原公式或非 fixture 真实采样已验收。
+必需能力固定为 production 路由与哈希资源、诊断动态加载、JSON 项目交换、PNG 项目交换、多动作编辑、动作关系交换和 390px 窄屏主流程。只有 Playwright 整体通过且七项能力全部存在并通过时，报告才输出 `trial-ready`；缺项或失败均输出 `blocked`。该报告只证明本地 `dist` + Vite preview 可试用，不代表远程 CDN/托管、最终蓝原公式或非 fixture 真实采样已验收。
 
 ## 372. WorkbenchActionClipboard v1（仅编辑会话）
 
@@ -26115,9 +26115,28 @@ kind = promilia-workbench-action-clipboard
 sourceActionIds[]
 baseStartMs / baseEndMs / durationMs
 actions[]
+relations[]
 nextPasteStartMs
 ```
 
-`actions[]` 是所选动作的深拷贝。粘贴时按 `baseStartMs` 还原相对帧差，按动作组总跨度限制时间轴边界，重建 action ID 与 effect command ID，并清除旧 `insertion` / `generationBatch`。多选状态由 `selectedActionIds[] + primaryActionId + actionSelectionAnchorId` 表示，历史快照会保存这些字段以恢复撤销/重做。
+`actions[]` 是所选动作的深拷贝，`relations[]` 只包含两个端点都在所选组内的关系。粘贴时按 `baseStartMs` 还原相对帧差，按动作组总跨度限制时间轴边界，重建 action、effect command 与 relation ID，并清除旧 `insertion` / `generationBatch`。多选状态由 `selectedActionIds[] + primaryActionId + actionSelectionAnchorId` 表示，历史快照会保存这些字段以恢复撤销/重做。
 
-该合同严格属于 Workbench transient editing state：不会写入 `WorkbenchDraftSnapshot v8`、项目 JSON、分享链接、PNG 元数据或预设。现有项目 schema 无版本变化；导入、重置和项目切换会清理剪贴板，避免跨项目携带失效动作来源。
+该合同严格属于 Workbench transient editing state：不会写入 `WorkbenchDraftSnapshot v9`、项目 JSON、分享链接、PNG 元数据或预设。持久化的是项目自身的 `actionRelations[]`，不是剪贴板；导入、重置和项目切换会清理剪贴板，避免跨项目携带失效动作来源。
+
+## 373. WorkbenchProjectFile v9 / ActionRelation v1
+
+Workbench 草稿与项目文件从 v8 升级为 v9，新增：
+
+```text
+actionRelations[]
+  id
+  kind = sequence
+  fromActionId / toActionId
+  sourceAnchor = end
+  targetAnchor = start
+  gapMs
+```
+
+`workbenchActionRelations.js` 负责规范化关系、剔除失效端点和重复边、阻止有向环，并按 `to.startMs - (from.startMs + from.durationMs)` 重新计算帧对齐的 `gapMs`。关系随动作组复制、粘贴、移动、删除、批次复制和撤销/重做保持一致；删除动作时清理所有关联边。
+
+`actionRelations[]` 与 `actionDrafts[]` 一同写入本地草稿、JSON、分享链接、PNG 元数据和预设项目。v1-v8 文件继续由同一解析器接受并迁移为空关系数组。当前关系只表达编辑器中的前后编排语义，simulation 和 `Action -> Hit -> ThreeValueDelta` 不读取该字段，因此三值结果合同没有变化。

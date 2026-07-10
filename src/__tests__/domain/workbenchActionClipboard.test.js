@@ -66,13 +66,21 @@ describe('workbench action clipboard', () => {
 
   it('pastes arbitrary actions with relative timing and actor lanes intact', () => {
     const actions = createActions();
-    const clipboard = createWorkbenchActionClipboard(actions, [
-      'action-0001',
-      'action-0003',
-    ]);
+    const clipboard = createWorkbenchActionClipboard(
+      actions,
+      ['action-0001', 'action-0003'],
+      [
+        {
+          id: 'relation-0001',
+          fromActionId: 'action-0001',
+          toActionId: 'action-0003',
+        },
+      ]
+    );
     let nextId = 4;
     const result = pasteWorkbenchActionClipboard(clipboard, {
       existingActions: actions,
+      existingRelations: clipboard.relations,
       timelineDurationMs: frameToMs(300),
       targetStartMs: frameToMs(180),
       createActionId: usedActionIds => {
@@ -85,6 +93,13 @@ describe('workbench action clipboard', () => {
     });
 
     expect(result.selectedActionIds).toEqual(['action-0004', 'action-0005']);
+    expect(result.pastedRelations).toEqual([
+      expect.objectContaining({
+        id: 'relation-0002',
+        fromActionId: 'action-0004',
+        toActionId: 'action-0005',
+      }),
+    ]);
     expect(result.pastedActions.map(action => action.startMs)).toEqual([
       frameToMs(150),
       frameToMs(300 - 30),

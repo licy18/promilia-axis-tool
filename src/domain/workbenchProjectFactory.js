@@ -19,6 +19,7 @@ import {
 } from './projectSchema';
 import { getSkillActionCatalog } from './skillActionCatalog';
 import { normalizeWorkbenchRuntimeSampleCaptures } from './workbenchRuntimeSampleCapture';
+import { normalizeWorkbenchActionRelations } from './workbenchActionRelations';
 import {
   getSkillActionVariants,
   getSkillDamageSegments,
@@ -362,6 +363,10 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     actionPatch.actions ?? [actionPatch],
     normalized
   );
+  const actionRelations = normalizeWorkbenchActionRelations(
+    actionPatch.actionRelations,
+    actionDrafts
+  );
 
   if (
     !character ||
@@ -427,6 +432,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
         enemyInstance.id
       )
     ),
+    actionRelations,
     metadata: {
       fixture: false,
       fixturePurpose: 'stage-4-editable-workbench',

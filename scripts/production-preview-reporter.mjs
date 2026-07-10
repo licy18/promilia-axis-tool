@@ -7,6 +7,7 @@ const REQUIRED_CAPABILITIES = [
   'json-project-exchange',
   'png-project-exchange',
   'multi-action-editing',
+  'timeline-relations',
   'narrow-main-flow',
 ];
 

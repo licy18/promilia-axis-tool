@@ -62,6 +62,42 @@ describe('project domain schema', () => {
     );
   });
 
+  it('validates acyclic action sequence relations', () => {
+    const project = createFirstVerticalSliceProject();
+    project.actions.push({
+      ...project.actions[0],
+      id: 'action-followup',
+      startMs: 2000,
+    });
+    project.actionRelations = [
+      {
+        id: 'relation-0001',
+        kind: 'sequence',
+        fromActionId: project.actions[0].id,
+        toActionId: 'action-followup',
+        sourceAnchor: 'end',
+        targetAnchor: 'start',
+        gapMs: 1000,
+      },
+    ];
+
+    expect(
+      validateProject(project, getFirstVerticalSliceGameData()).valid
+    ).toBe(true);
+
+    project.actionRelations.push({
+      ...project.actionRelations[0],
+      id: 'relation-0002',
+      fromActionId: 'action-followup',
+      toActionId: project.actions[0].id,
+    });
+    const invalid = validateProject(project, getFirstVerticalSliceGameData());
+    expect(invalid.valid).toBe(false);
+    expect(invalid.errors.map(error => error.code)).toContain(
+      'actionRelations.cycle.invalid'
+    );
+  });
+
   it('rejects unknown actor and skill references', () => {
     const project = createFirstVerticalSliceProject();
     project.actions[0] = {

@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 const LONG_AXIS_ACTION_COUNT = 120;
 const BROWSER_READY_BUDGET_MS = 15_000;
-const WORKBENCH_DRAFT_STORAGE_KEY = 'promilia-axis-tool:workbench-draft:v8';
+const WORKBENCH_DRAFT_STORAGE_KEY = 'promilia-axis-tool:workbench-draft:v9';
 
 test('loads and reviews a 120-action Workbench project @workbench-long-axis', async ({
   page,
@@ -90,7 +90,7 @@ function createLongAxisSnapshot() {
     })
   );
   return {
-    schemaVersion: 8,
+    schemaVersion: 9,
     game: 'azur-promilia',
     type: 'workbench-draft',
     savedAt: '2026-07-10T00:00:00.000Z',
@@ -119,6 +119,7 @@ function createLongAxisSnapshot() {
       skipExistingSegments: false,
     },
     actionDrafts,
+    actionRelations: [],
     runtimeSampleCaptures: [],
     selectedActionId: actionDrafts.at(-1).id,
   };

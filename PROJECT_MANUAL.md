@@ -73,8 +73,8 @@ src/
 关键文件：
 
 - `src/views/Workbench.vue`：生产页面编排和项目交换入口。
-- `src/domain/projectSchema.js`：标准项目、角色、敌人和动作模型。
-- `src/domain/workbenchDraftStorage.js`：v8 草稿、项目 JSON 和分享合同。
+- `src/domain/projectSchema.js`：标准项目、角色、敌人、动作和动作关系模型。
+- `src/domain/workbenchDraftStorage.js`：v9 草稿、项目 JSON 和分享合同。
 - `src/simulation/`：无 UI 编译、执行、三值生成、机制和结果投影。
 - `src/features/workbench/`：动作轴、配置、曲线、日志、详情和主流程交互。
 - `src/data/azprGenerated.js`：生成数据访问入口。
@@ -900,6 +900,16 @@ Workbench 现在是唯一生产排轴入口。根路径和旧 `/editor` 路径�
 已完成验证：`npm run test -- --run` 通过 52 个测试文件、339 条测试；`npm run test:e2e:workbench-flow` 通过 33 条主流程，新增路径覆盖非连续多选、右键定帧粘贴、整组拖拽、运行复盘、批量删除和撤销恢复；`npm run test:e2e:production-preview` 通过 6/6 项能力，报告继续为 `trial-ready`。生产引用、生产数据和 bundle 审计全部通过；Workbench gzip 为 349,876B，全部 JavaScript gzip 为 692,836B，未突破 370KB/740KB 预算。180 动作完整运行 p95 为 28.780ms，120 动作浏览器首屏就绪为 1325ms，长轴两层预算均通过。
 
 下一阶段目标：阶段 8-B 长轴编排效率与动作关系闭环。对齐 Endaxis 的框选和动作连接能力，使用户能在密集多轨时间轴上框选一组动作、建立可视化前后关系，并让关系随复制、粘贴、移动、删除、撤销/重做和项目交换保持一致；先定义关系对排轴时序的最小语义，不把连线直接解释成未经确认的蓝原伤害或资源公式。该阶段是编辑器大能力块，不拆成新增单个按钮、提示或标签的小阶段。
+
+### 阶段 8-B 长轴编排效率与动作关系闭环（2026-07-10）
+
+Workbench 时间轴新增可切换框选模式，用户可以跨轨拖出选择区域，并让选中动作继续进入既有复制、粘贴、整组移动、删除、撤销/重做和运行结果定位主流程。两个或更多动作可以按时间顺序建立 `source.end -> target.start` 前后关系；关系会直接绘制在时间轴上，可以单独选中或删除，并禁止自连、重复边和有向环。
+
+动作关系已经进入标准 Project 与 WorkbenchProjectFile v9。移动动作或修改时长会重新计算帧对齐间隔，删除端点会清理关联边，动作组复制只携带组内完整关系；本地草稿、JSON、分享链接、PNG 元数据、预设和撤销/重做共享同一 `actionRelations[]`。v1-v8 文件继续导入并迁移为空关系状态。关系只表达编辑器编排语义，不改变 execution plan、generation、calculator 或现有 HP/韧性/角色能量结果。
+
+已完成验证：`npm run test -- --run` 通过 53 个测试文件、346 条测试；`npm run test:e2e:workbench-flow` 通过 33 条主流程，覆盖框选、建立关系、组内关系复制、整组移动、单独删除关系、端点删除、撤销恢复、JSON 导出回导和继续运行复盘；`npm run test:e2e:production-preview` 通过 7/7 项能力并输出 `trial-ready`。生产引用和数据投影审计通过，Workbench gzip 为 353,989B，全部 JavaScript gzip 为 697,202B；180 动作完整运行 p95 为 33.172ms，120 动作浏览器首屏就绪为 1465ms。桌面和 390px 窄屏已检查关系层、动作层和工具区，没有发现横向溢出或内容遮挡。
+
+下一阶段目标：阶段 8-C 状态效果时间线与运行复盘闭环。对齐 Endaxis 的效果区间可视化能力，把现有 effect command、runtime lifecycle 和 active effect snapshot 投影为角色/敌人轨上的可见区间；用户应能从区间查看施加、刷新、叠层、移除和到期过程，定位来源动作，修改后返回刷新结果。继续复用现有 P4 合同与 Workbench 主流程，不增加平行效果模型，不让尚未确认的 Buff/异常数值进入三值 calculator，也不把该阶段拆成零散按钮或状态提示。
 
 ## 10. 文档维护规则
 

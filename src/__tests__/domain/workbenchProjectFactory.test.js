@@ -107,6 +107,38 @@ describe('workbench project actor configuration', () => {
     ).toHaveLength(1);
   });
 
+  it('projects persisted action relations without changing simulation output', () => {
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      actions: [
+        { id: 'action-0001', startMs: 0, durationMs: 1000 },
+        { id: 'action-0002', startMs: 2000, durationMs: 1000 },
+      ],
+      actionRelations: [
+        {
+          id: 'relation-0001',
+          fromActionId: 'action-0001',
+          toActionId: 'action-0002',
+        },
+      ],
+    });
+    const validation = validateProject(project, getWorkbenchGameData());
+    const result = simulateScenario(
+      compileProject(project, getWorkbenchGameData())
+    );
+
+    expect(validation.valid).toBe(true);
+    expect(project.actionRelations).toEqual([
+      expect.objectContaining({
+        id: 'relation-0001',
+        fromActionId: 'action-0001',
+        toActionId: 'action-0002',
+        gapMs: 1000,
+      }),
+    ]);
+    expect(result.scenario.actionCount).toBe(2);
+    expect(result.actionResultTimeline).toHaveLength(2);
+  });
+
   it('applies a bound RecoverSP capture to the Workbench runtime resource curve', () => {
     const baseProject = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION);
     const binding = bindWorkbenchRuntimeSampleCaptures({

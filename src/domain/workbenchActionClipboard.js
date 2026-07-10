@@ -1,5 +1,9 @@
 import { WORKBENCH_FRAME_MS, snapMsToFrame } from './timebase';
 import { createWorkbenchActionDraft } from './workbenchProjectFactory';
+import {
+  createNextWorkbenchActionRelationIdFromUsedIds,
+  normalizeWorkbenchActionRelations,
+} from './workbenchActionRelations';
 
 export const WORKBENCH_ACTION_CLIPBOARD_KIND =
   'promilia-workbench-action-clipboard';
@@ -59,7 +63,8 @@ export function createWorkbenchActionSelectionRange(
 
 export function createWorkbenchActionClipboard(
   actions = [],
-  selectedActionIds = []
+  selectedActionIds = [],
+  actionRelations = []
 ) {
   const selectedActionIdSet = new Set(selectedActionIds);
   const selectedActions = actions.filter(action =>
@@ -77,6 +82,14 @@ export function createWorkbenchActionClipboard(
       action => normalizeStartMs(action.startMs) + resolveDurationMs(action)
     )
   );
+  const copiedRelations = normalizeWorkbenchActionRelations(
+    actionRelations,
+    actions
+  ).filter(
+    relation =>
+      selectedActionIdSet.has(relation.fromActionId) &&
+      selectedActionIdSet.has(relation.toActionId)
+  );
 
   return {
     schemaVersion: 1,
@@ -86,6 +99,7 @@ export function createWorkbenchActionClipboard(
     baseEndMs,
     durationMs: Math.max(WORKBENCH_FRAME_MS, baseEndMs - baseStartMs),
     actions: cloneValue(selectedActions),
+    relations: cloneValue(copiedRelations),
     nextPasteStartMs: baseEndMs + WORKBENCH_FRAME_MS,
   };
 }
@@ -94,9 +108,11 @@ export function pasteWorkbenchActionClipboard(
   clipboard,
   {
     existingActions = [],
+    existingRelations = [],
     timelineDurationMs = 0,
     targetStartMs = null,
     createActionId,
+    createRelationId = createNextWorkbenchActionRelationIdFromUsedIds,
     pasteGapMs = WORKBENCH_FRAME_MS,
     normalizeSourceAction = action => action,
   } = {}
@@ -132,9 +148,11 @@ export function pasteWorkbenchActionClipboard(
     maxPasteStartMs
   );
   const usedActionIds = new Set(existingActions.map(action => action.id));
+  const actionIdMap = new Map();
   const pastedActions = clipboard.actions.map(sourceAction => {
     const id = createActionId(usedActionIds);
     usedActionIds.add(id);
+    actionIdMap.set(sourceAction.id, id);
     const relativeStartMs =
       normalizeStartMs(sourceAction.startMs) - Number(clipboard.baseStartMs);
     const normalizedSourceAction = normalizeSourceAction(
@@ -149,6 +167,18 @@ export function pasteWorkbenchActionClipboard(
       effectCommands: remapEffectCommands(sourceAction.effectCommands, id),
     });
   });
+  const usedRelationIds = new Set(
+    existingRelations.map(relation => relation.id)
+  );
+  const pastedRelations = normalizeWorkbenchActionRelations(
+    (clipboard.relations ?? []).map(sourceRelation => ({
+      ...sourceRelation,
+      id: createRelationId(usedRelationIds),
+      fromActionId: actionIdMap.get(sourceRelation.fromActionId),
+      toActionId: actionIdMap.get(sourceRelation.toActionId),
+    })),
+    pastedActions
+  );
   const pastedActionIds = pastedActions.map(action => action.id);
   const nextPasteStartMs = clampNumber(
     snapMsToFrame(pasteStartMs + clipboardSpanMs + Number(pasteGapMs || 0)),
@@ -158,6 +188,7 @@ export function pasteWorkbenchActionClipboard(
 
   return {
     pastedActions,
+    pastedRelations,
     selectedActionIds: pastedActionIds,
     primaryActionId: pastedActionIds[0] ?? '',
     pasteStartMs,
