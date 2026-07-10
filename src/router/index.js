@@ -5,13 +5,11 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: () => import('../views/Home.vue'),
+      redirect: { name: 'Workbench' },
     },
     {
       path: '/editor',
-      name: 'Editor',
-      component: () => import('../views/Editor.vue'),
+      redirect: { name: 'Workbench' },
     },
     {
       path: '/workbench',
@@ -40,6 +38,10 @@ const router = createRouter({
       path: '/data-editor',
       name: 'DataEditor',
       component: () => import('../views/DataEditor.vue'),
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/workbench',
     },
   ],
 });

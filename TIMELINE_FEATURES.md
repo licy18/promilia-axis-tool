@@ -223,8 +223,9 @@ CD冷却条系统为每个使用过的技能在时间轴上生成对应的CD冷�
 
 ### 13.1 代码结构
 - `src/components/timeline/SkillBlock.vue`：技能块组件
-- `src/views/Editor.vue`：时间轴主编辑器
-- `src/store/project.js`：项目状态管理
+- `src/views/Workbench.vue`：生产工作台编排
+- `src/features/workbench/TimelineGridPreview.vue`：60fps 时间轴主视图
+- `src/domain/workbenchDraftStorage.js`：项目草稿与交换状态
 
 ### 13.2 开发流程
 1. 了解现有代码结构

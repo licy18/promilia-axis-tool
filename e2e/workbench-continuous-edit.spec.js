@@ -3,6 +3,30 @@ import { Buffer } from 'node:buffer';
 import { readFile } from 'node:fs/promises';
 import { createRecoverSpRuntimeSampleFixture } from '../src/simulation/fixtures/recoverSpRuntimeSampleFixture';
 
+test('routes every primary entry to the real Workbench @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/');
+  await expect(page).toHaveURL(/\/#\/workbench$/);
+  await expect(page.getByTestId('workbench-flow-panel')).toBeVisible();
+
+  await page.goto('/#/editor');
+  await expect(page).toHaveURL(/\/#\/workbench$/);
+  await expect(page.getByTestId('workbench-flow-panel')).toBeVisible();
+
+  await page.goto('/#/preset');
+  await expect(page).toHaveURL(/\/#\/workbench\?presets=1$/);
+  await expect(page.getByTestId('workbench-preset-library')).toBeVisible();
+
+  await page.goto('/#/unknown-legacy-route');
+  await expect(page).toHaveURL(/\/#\/workbench$/);
+  await expect(page.getByTestId('workbench-flow-panel')).toBeVisible();
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('keeps setup, edit return, and result selection synced', async ({
   page,
 }) => {

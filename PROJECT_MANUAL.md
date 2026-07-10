@@ -2,7 +2,7 @@
 
 最后更新：2026-07-10
 
-当前策略是以 Endaxis 为架构和交互参考，对 `promilia-axis-tool` 进行从头重构；旧实现只保留为功能原型和迁移参考。完整任务拆解见 `DEVELOPMENT_PLAN.md`，本文件保留最终目标、阶段目标、项目状态和当前事实。
+当前策略是以 Endaxis 为架构和交互参考，对 `promilia-axis-tool` 进行从头重构。真实 Workbench 已成为唯一生产排轴入口，旧页面原型已经退役；尚未清理的旧 store、组件和工具函数只作为迁移参考。完整任务拆解见 `DEVELOPMENT_PLAN.md`，本文件保留最终目标、阶段目标、项目状态和当前事实。
 
 ## 1. 项目目标
 
@@ -31,91 +31,88 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 
 重构原则：
 
-- 旧版 `Editor.vue`、store、工具函数和 `gamedata.json` 只作为功能清单、交互样例和迁移来源，不作为新架构的硬约束。
+- 已退役页面不得恢复为平行入口；旧 store、组件、工具函数和 `gamedata.json` 只作为迁移来源，不作为新架构的硬约束。
 - 先完成真实数据管线和核心运行时最小闭环，再扩展复杂 UI。
 - 每个阶段都要留下可验证产物，避免只做大范围代码搬迁。
 
 ## 2. 当前项目状态
 
-当前项目已经是一个可运行的 Vue 3 前端原型，但代码质量和数据真实性不足以作为最终版本的地基。后续按“新架构重构”为主线推进，旧实现保留为可参考的功能样本。
+当前项目已经形成可试用的 Workbench 主流程，但真实公式覆盖、首份真实战斗采样、长轴性能和发布清理仍未完成，不能视为最终版本。
 
-已完成或已有雏形：
+已完成的主线能力：
 
-- 首页项目创建与项目列表。
-- 主编辑器时间轴。
-- 角色技能库与技能拖拽。
-- 技能块、伤害判定点、异常/Buff 显示、CD 显示。
-- 资源曲线与资源监控组件雏形。
-- 项目保存、导入、导出。
-- 数据图鉴和内置数据编辑器。
-- 基础伤害计算、统计面板和验证面板。
-- 中英文 i18n 文件。
-- Vitest 测试框架。
+- 根路径、旧编辑器路径和预设路径统一进入真实 Workbench。
+- 真实 AzPr 生成数据、版本化项目模型和无 UI 模拟运行时。
+- 60fps 多角色动作轴、动作属性编辑、批次操作、撤销重做和草稿恢复。
+- 队伍、敌人、装备、奇波、灵子和初始资源配置。
+- `Action -> Hit -> ThreeValueDelta` 生成合同，以及 HP、韧性、每角色能量曲线、日志、详情和贡献分析。
+- 冷却/执行计划、效果命令和运行时复盘联动。
+- JSON、PNG 元数据、分享链接、runtime capture 和本地预设轴库。
+- 受控 runtime capture manifest、规范化、production audit 和显式 PID host。
 
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；41 个测试文件、312 条测试通过。
-- `npm run test:e2e:workbench-flow`：通过；25 条 Workbench 浏览器主流程通过。
+- `npm run test -- --run`：通过；56 个测试文件、368 条测试通过。
+- `npm run test:e2e:workbench-flow`：通过；31 条 Workbench 浏览器主流程通过。
 
 ## 3. 目录速览
 
 ```text
 src/
-  components/
-    editor/       编辑器侧栏、统计、校验、引导等组件
-    timeline/     时间轴技能块、Buff块、资源块、曲线等组件
-  i18n/           多语言配置
-  router/         页面路由
-  store/          Pinia 状态
-  styles/         全局样式
-  utils/          伤害、统计、验证、迁移、通用工具
-  views/          页面级组件
-public/
-  gamedata/       当前游戏数据入口
+  data/                  AzPr 生成数据和访问层
+  domain/                项目、草稿、预设和采样合同
+  simulation/            compiler / engine / generation / mechanics / runtime / projection
+  features/workbench/    Workbench 功能组件和流程控制器
+  views/Workbench.vue    唯一生产排轴工作台
+  components/            待审计的旧原型组件
+  store/                 待审计的旧 Pinia 状态
 ```
 
 关键文件：
 
-- `src/views/Editor.vue`：当前主编辑器中枢。
-- `src/store/project.js`：项目数据和排轴动作状态。
-- `src/store/gamedata.js`：游戏数据加载与维护。
-- `src/utils/damageCalc.js`：伤害计算。
-- `src/utils/statCalc.js`：统计计算。
-- `src/utils/validate.js`：排轴验证。
-- `public/gamedata/gamedata.json`：当前游戏数据主文件。
+- `src/views/Workbench.vue`：生产页面编排和项目交换入口。
+- `src/domain/projectSchema.js`：标准项目、角色、敌人和动作模型。
+- `src/domain/workbenchDraftStorage.js`：v8 草稿、项目 JSON 和分享合同。
+- `src/simulation/`：无 UI 编译、执行、三值生成、机制和结果投影。
+- `src/features/workbench/`：动作轴、配置、曲线、日志、详情和主流程交互。
+- `src/data/azprGenerated.js`：生成数据访问入口。
 
 ## 4. 当前数据流
 
 游戏数据：
 
 ```text
-public/gamedata/gamedata.json
-  -> src/store/gamedata.js
-  -> Home / Editor / Handbook / DataEditor / 计算与验证工具
+C:\PC2\Codex\AzPr
+  -> scripts/generate-azpr-data.mjs
+  -> src/data/generated/
+  -> src/data/azprGenerated.js
+  -> domain / simulation / Workbench
 ```
 
 项目数据：
 
 ```text
-Home.vue 创建项目
-  -> projectStore.createProject()
-  -> localStorage
-  -> Editor.vue 加载和编辑
-  -> projectStore 保存 / 导入 / 导出
+Workbench draft
+  -> createWorkbenchProject()
+  -> Project v1
+  -> compileProject()
+  -> simulateScenario()
+  -> runtimeOutputs / Workbench 投影
 ```
 
 排轴动作：
 
 ```text
-技能库拖拽或编辑器操作
-  -> Editor.vue 组装动作
-  -> projectStore 写入 project.actions
-  -> 时间轴组件渲染
-  -> 统计 / 验证 / 伤害计算读取
+动作库或属性编辑
+  -> actionDrafts
+  -> Project.actions
+  -> ActionExecutionPlan
+  -> Action / Hit / ThreeValueDelta
+  -> simLog / stateCurves / summary
 ```
 
-当前最大问题是旧代码仍有不少地方读取 `project.skillBlocks`，而新项目模型已经偏向 `project.actions`。后续需要先做模型统一，否则统计、验证、资源曲线和编辑器状态会持续分叉。
+生产 Workbench 已统一使用 `project.actions`。旧组件和 store 中仍可能读取 `project.skillBlocks`，但它们不再进入生产主编辑器；后续必须按引用关系删除或迁移，不能重新接回主链。
 
 ## 5. Endaxis 对照结论
 
@@ -822,6 +819,16 @@ P7：蓝原真实机制适配。
 已完成验证：`npm run test -- --run` 通过 56 个测试文件、368 条测试；`npm run build` 通过；`npm run test:e2e:workbench-flow` 通过 30 条主流程，覆盖入口、保存、搜索、标签筛选、复制、重置、回载、运行时一致性和删除。预设库另在 1440×960 与 390×844 视口完成可见性检查，没有发现遮挡或横向溢出。
 
 下一阶段目标：阶段 7-A 旧原型退役与发布前验收。盘点并收束 Home、Editor、Preset 等旧演示入口，使真实 Workbench 成为统一用户主线；移除不再可达的假数据和无效交互，更新用户文档，并完成长轴、构建体积、性能和基础移动端试用检查。P7-C 首份真实战斗 capture 仍作为需要人工启动获准客户端后完成的并行验收项，不以等待采集阻塞产品收口。
+
+### 阶段 7-A 生产入口统一与旧页面退役（2026-07-10）
+
+Workbench 现在是唯一生产排轴入口。根路径和旧 `/editor` 路径统一重定向到 `/workbench`，旧 `/preset` 路径直接打开 Workbench 预设轴库，未知旧路由也安全回到 Workbench。旧 `Home.vue`、`Editor.vue`、`Preset.vue` 页面已删除，首页假预设、旧项目列表和旧编辑器不再进入生产构建；Workbench 顶栏同步移除无效“返回首页”入口。
+
+旧页面删除后同步移除了无源码引用的 `vuedraggable` 依赖。README 与 ARCHITECTURE 已重写为当前数据、domain、simulation、Workbench 和项目交换主链；AGENTS 只新增“不得恢复平行旧编辑器”的长期边界。旧 store、editor/timeline 组件和工具函数仍按引用边界保留，没有在本阶段盲目删除。
+
+已完成验证：`npm run test -- --run` 通过 56 个测试文件、368 条测试；`npm run build` 通过，转换模块由上一阶段的 2333 降为 1727，Home/Editor/Preset 独立 chunk 全部消失；`npm run test:e2e:workbench-flow` 通过 31 条主流程，新增验证根路径、旧编辑器、预设和未知旧路由都进入真实 Workbench，且无浏览器错误。
+
+下一阶段目标：阶段 7-B 遗留引用审计与发布性能验收。建立生产入口引用清单，区分仍被 Handbook/DataEditor/测试使用的模块与真正孤儿代码，分批移除旧 store、editor/timeline 组件和工具函数；同时建立长轴模拟/渲染基准，量化 Workbench 大 chunk、长动作轴和窄屏交互的成本，再按证据做代码拆分或渲染优化。该阶段不新增碎片 UI，也不修改三值公式；P7-C 真实 capture 继续作为需人工客户端会话的并行验收项。
 
 ## 10. 文档维护规则
 

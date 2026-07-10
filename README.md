@@ -1,134 +1,106 @@
-# 蓝色星原战斗排轴编辑器
+# 蓝色星原排轴工具
 
-## 项目介绍
+`promilia-axis-tool` 是面向《蓝色星原》的战斗排轴、模拟与复盘工具。项目以 Endaxis 的成熟架构和操作流程为参考，但游戏数据、动作命名和战斗机制均使用蓝色星原自己的模型。
 
-蓝色星原战斗排轴编辑器（Promilia Battle Axis Editor）是一个为《蓝色星原：旅谣》游戏打造的专业战斗排轴工具，旨在帮助玩家优化战斗策略，提高游戏体验。
+当前生产入口是 Workbench。访问站点根路径、旧 `/editor` 路径或未知旧路径都会进入 `/#/workbench`；旧 `/preset` 路径会直接打开 Workbench 内的真实预设轴库。
 
-## 技术栈
+## 当前能力
 
-- **核心框架**：Vue 3 (Composition API)
-- **构建工具**：Vite
-- **状态管理**：Pinia
-- **UI组件库**：Element Plus
-- **拖拽核心库**：Vue.Draggable (vuedraggable@next)
-- **国际化**：vue-i18n
-- **图表库**：ECharts
-- **代码规范**：ESLint + Prettier
-- **包管理器**：npm
+- 真实 AzPr 数据生成管线：角色、技能、敌人、属性、装备、奇波和灵子数据进入 `src/data/generated/`。
+- 60fps 时间轴：动作起始、持续时间、命中候选和状态曲线统一以 1 帧为最小颗粒度。
+- Workbench 编辑闭环：动作库、角色轨、属性编辑、批次操作、撤销重做、草稿恢复和规则诊断。
+- 配置闭环：双角色、敌人、等级、属性覆盖、装备、奇波、灵子和初始角色资源进入项目模型。
+- 三值运行时：每个动作追踪敌人 HP、敌人韧性和每名角色自身能量，输出曲线、日志、状态快照和统计摘要。
+- 规则与效果：冷却、执行计划、效果命令和运行时复盘共享同一模拟结果。
+- 项目交换：版本化 JSON、带项目元数据的 PNG、分享链接和本地预设轴库。
+- 受控采样工具链：runtime capture manifest、JSONL 规范化、production audit 和显式 PID Frida host。
 
-## 本地启动步骤
+## 精度边界
 
-1. **克隆项目**
-   ```bash
-   git clone <repository-url> promilia-axis-tool
-   cd promilia-axis-tool
-   ```
+蓝色星原仍处于测试阶段。项目会区分已应用结果、候选数据、实测采样和待确认占位；没有来源或真实运行时证据的数值不会被冒充为最终公式。
 
-2. **安装依赖**
-   ```bash
-   npm install
-   ```
+当前受控采样工具链已经通过仓库自检，但尚未取得首份非 fixture 真实战斗 capture。真实游戏采集必须由操作者明确启动获准客户端并确认受控会话；工具不会自动启动游戏或绕过反作弊。
 
-3. **启动开发服务器**
-   ```bash
-   npm run dev
-   ```
+## 本地运行
 
-4. **构建生产版本**
-   ```bash
-   npm run build
-   ```
+环境要求：Node.js 20 或更高版本，npm 10 或更高版本。
 
-5. **预览生产构建**
-   ```bash
-   npm run preview
-   ```
-
-## 目录结构
-
-```
-Promilia-axis-tool/
-├── public/                          # 静态资源目录（不可编译资源）
-│   ├── gamedata/                    # 游戏数据目录
-│   │   └── gamedata.json            # 核心游戏数据主文件
-│   ├── assets/                       # 静态资源
-│   │   ├── images/                   # 图片、图标、角色立绘占位
-│   │   └── styles/                   # 全局静态样式
-│   └── favicon.ico                   # 项目图标
-├── src/                              # 项目源码主目录
-│   ├── components/                   # 公共组件目录
-│   │   ├── common/                   # 通用UI组件（按钮、弹窗、卡片等）
-│   │   ├── layout/                   # 全局布局组件
-│   │   ├── editor/                   # 排轴编辑器核心组件（预留占位）
-│   │   ├── timeline/                 # 时间轴核心组件（预留占位）
-│   │   └── datamanage/               # 数据管理组件（预留占位）
-│   ├── i18n/                         # 国际化配置目录
-│   │   ├── index.js                  # i18n入口配置文件
-│   │   └── locales/                  # 翻译文件目录
-│   │       ├── zh-CN.json            # 简体中文翻译文件
-│   │       └── en-US.json            # 英文翻译文件（预留占位）
-│   ├── router/                       # 路由配置目录
-│   │   └── index.js                  # 全局路由配置文件
-│   ├── store/                        # Pinia状态管理目录
-│   │   ├── project.js                # 排轴项目状态store
-│   │   ├── gamedata.js               # 游戏数据状态store
-│   │   └── setting.js                # 全局设置状态store
-│   ├── utils/                        # 工具函数目录
-│   │   ├── common.js                 # 通用工具函数
-│   │   ├── validate.js               # 校验工具函数（预留占位）
-│   │   └── damageCalc.js             # 伤害计算引擎（预留占位）
-│   ├── views/                        # 页面组件目录
-│   │   ├── Home.vue                  # 首页
-│   │   ├── Editor.vue                # 排轴编辑器核心页
-│   │   ├── Preset.vue                # 预设轴库页
-│   │   ├── Handbook.vue              # 游戏数据图鉴页
-│   │   ├── Guide.vue                 # 使用教程页
-│   │   └── DataEditor.vue            # 内置数据编辑器页
-│   ├── styles/                       # 全局样式目录
-│   │   ├── index.scss                # 全局样式入口
-│   │   ├── theme.scss                # 主题定制样式
-│   │   └── reset.scss                # 样式重置文件
-│   ├── App.vue                       # 项目根组件
-│   └── main.js                       # 项目入口文件
-├── .gitignore                        # Git忽略配置文件
-├── .eslintrc.cjs                     # ESLint配置文件
-├── .prettierrc                       # Prettier配置文件
-├── jsconfig.json                     # JS配置文件
-├── vite.config.js                    # Vite配置文件
-├── package.json                      # 项目依赖配置文件
-├── README.md                         # 项目说明文档
-└── LICENSE                           # 开源协议文件（MIT协议）
+```powershell
+npm install
+npm run dev
 ```
 
-## 核心功能
+Vite 启动后打开终端显示的本地地址，根路径会直接进入 Workbench。
 
-1. **排轴编辑器**：直观的时间轴编辑界面，支持拖拽操作，轻松编排角色技能释放顺序
-2. **预设轴库**：灵活的预设轴管理，支持保存、加载、分享排轴方案
-3. **游戏数据图鉴**：内置丰富的游戏数据，包括角色技能、敌人属性、奇波效果等
-4. **伤害计算**：详细的伤害计算，帮助你优化输出循环，最大化队伍伤害
-5. **数据编辑器**：内置数据编辑器，方便用户自定义游戏数据
-6. **国际化支持**：支持简体中文和英文，语言配置持久化
-7. **主题定制**：支持深色和浅色主题，适配不同使用场景
+生产构建：
 
-## 开源协议
+```powershell
+npm run build
+npm run preview
+```
 
-本项目采用 MIT 开源协议，详见 [LICENSE](LICENSE) 文件。
+## 验证
 
-## 注意事项
+```powershell
+npm run test -- --run
+npm run build
+npm run test:e2e:workbench-flow
+git diff --check
+```
 
-- 本项目为非盈利粉丝向开源工具，无任何商业用途
-- 本项目无账号/付费/后端接口依赖，纯前端实现
-- 项目数据基于《蓝色星原：旅谣》游戏，如有变动请及时更新游戏数据
-- 如有问题或建议，欢迎提交 Issue 或 Pull Request
+运行时采集端自检：
 
-## 贡献指南
+```powershell
+npm run runtime-capture:self-test
+```
 
-1. Fork 本仓库
-2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 打开 Pull Request
+## 数据更新
 
----
+生成器默认从本机 AzPr 数据工作区读取来源文件：
 
-**享受排轴的乐趣！** 🎮
+```text
+C:\PC2\Codex\AzPr
+```
+
+重新生成提交到仓库的访问层数据：
+
+```powershell
+npm run data:generate
+```
+
+生成结果和来源审计位于 `src/data/generated/manifest.json` 与 `src/data/generated/validation-report.json`。不要手工维护生成文件中可由来源表重新产生的字段。
+
+## 核心目录
+
+```text
+src/
+  data/                  AzPr 生成数据与访问层
+  domain/                项目、动作、草稿、预设和采样合同
+  simulation/
+    compiler/            Project -> Scenario
+    engine/              Scenario -> 事件与执行计划
+    generation/          Action -> Hit -> ThreeValueDelta
+    mechanics/           可替换的蓝原机制 adapter
+    runtime/             三值状态、曲线、日志与摘要
+    projection/          面向 UI 的模拟结果投影
+  features/workbench/    Workbench 功能组件和交互控制器
+  views/Workbench.vue    唯一生产排轴工作台
+scripts/                 数据生成、采样与规范化工具
+runtime-capture/         受控 Frida agent
+e2e/                     Workbench 浏览器主流程
+```
+
+`src/components/editor/`、`src/components/timeline/`、`src/store/` 和部分 `src/utils/` 仍包含旧原型遗留模块。它们不再作为生产主编辑器入口，新能力应进入 Workbench、domain 或 simulation 分层。
+
+## 项目文档
+
+- `AGENTS.md`：长期协作规则和架构边界。
+- `PROJECT_MANUAL.md`：当前能力、阶段进度和下一阶段目标。
+- `DEVELOPMENT_PLAN.md`：对标 Endaxis 的完整目标和验收标准。
+- `ARCHITECTURE.md`：当前生产架构和数据流。
+- `DATA_STRUCTURE_CHANGES.md`：版本化结构与迁移记录。
+- `TIMELINE_FEATURES.md`：时间轴能力和交互约定。
+
+## 许可
+
+项目使用 MIT License。游戏数据与资源的使用应遵循相应授权和项目约定。

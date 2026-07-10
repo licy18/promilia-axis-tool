@@ -200,7 +200,7 @@
 ### 4.1 组件更新
 
 - **SkillBlock.vue**：更新以支持新的 `damageTicks` 和 `buffs` 数据结构
-- **Editor.vue**：确保拖放系统能够正确处理新的数据结构
+- **旧 Editor.vue（已移除）**：历史上曾负责拖放兼容；当前生产 Workbench 通过标准 action draft 和项目规范化处理数据结构
 
 ### 4.2 工具函数
 

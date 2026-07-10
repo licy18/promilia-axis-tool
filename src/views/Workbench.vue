@@ -1,10 +1,10 @@
 <template>
   <main ref="workbenchRoot" class="workbench">
     <nav class="top-nav">
-      <RouterLink class="back-link" to="/">
-        <ArrowLeft class="nav-icon" />
-        <span>首页</span>
-      </RouterLink>
+      <div class="workbench-brand" aria-label="蓝色星原排轴工作台">
+        <Aim class="nav-icon" />
+        <span>蓝色星原排轴</span>
+      </div>
       <div class="nav-side">
         <div class="nav-status">
           <span>真实数据</span>
@@ -3656,16 +3656,12 @@ function getLocalStorage() {
   background: #101419;
 }
 
-.back-link {
+.workbench-brand {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   color: #d9dee3;
   font-weight: 700;
-}
-
-.back-link:hover {
-  color: #79c7b9;
 }
 
 .nav-icon {

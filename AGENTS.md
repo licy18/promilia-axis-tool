@@ -37,9 +37,9 @@ npm run dev
 - 新版 AzPr 数据管线：`scripts/generate-azpr-data.mjs` -> `src/data/generated/`，访问层为 `src/data/azprGenerated.js`。
 - 新版项目模型：`src/domain/projectSchema.js`，核心模型是 `Project` / `Actor` / `Enemy` / `Action`。
 - 新版模拟运行时：`src/simulation/`，包含 compiler、engine、mechanics、projection 和 `runSimulation()`。
-- 新版工作台：`src/views/Workbench.vue`，路由 `/workbench`，组件在 `src/features/workbench/`。
-- 旧主编辑器：`src/views/Editor.vue` 仍是历史债务来源，不要继续把复杂新逻辑堆进去。
-- 项目状态旧入口：`src/store/project.js`；修旧功能时注意它仍可能读取旧模型。
+- 生产工作台：`src/views/Workbench.vue`，根路径与旧 `/editor` 路径都重定向到 `/workbench`，组件在 `src/features/workbench/`。
+- 旧 `Home.vue`、`Editor.vue`、`Preset.vue` 页面已经退役并删除，不得重新建立平行主编辑器或假数据首页。
+- `src/store/project.js` 及 `src/components/editor/`、`src/components/timeline/` 仍是待引用审计的旧模块；新能力不得依赖它们。
 - 时间轴旧组件：`src/components/timeline/`；新版工作台优先用 `src/features/workbench/TimelineGridPreview.vue`。
 
 ## 当前路线边界

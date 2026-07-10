@@ -10,6 +10,8 @@
 
 2026-07-08 策略收束：蓝色星原仍在测试阶段，平衡数值和公式细节可能继续调整；当前不再把最终数值考据作为主线阻塞项。后续优先把已解析的 evidence、candidate 和 runtime sample 折叠为可替换的标准生成层，再由运行时层和 UI 层稳定消费。
 
+2026-07-10 入口收束：Workbench 已成为唯一生产排轴入口，旧 Home/Editor/Preset 页面已删除；后续发布清理以引用审计、长轴性能和构建体积为主，不再修补旧页面原型。
+
 对标不等于照搬：
 
 - 不复制 Endaxis 的《明日方舟：终末地》数据。
@@ -50,7 +52,7 @@ Endaxis 当前值得对标的模块如下：
 | 能力         | Endaxis 位置                                             | promilia 对标方向                           |
 | ------------ | -------------------------------------------------------- | ------------------------------------------- |
 | 数据访问层   | `src/data/`、`src/data/timeline.ts`、`src/data/index.ts` | 从单一 `gamedata.json` 逐步过渡到数据访问层 |
-| 编辑器主界面 | `src/views/TimelineEditor.vue`                           | 拆薄 `src/views/Editor.vue`                 |
+| 编辑器主界面 | `src/views/TimelineEditor.vue`                           | `src/views/Workbench.vue` + `features/workbench/` |
 | 动作库       | `src/components/ActionLibrary.vue`、`ActionItem.vue`     | 重构技能库/动作库，支持技能、切人、敌方事件 |
 | 时间轴网格   | `src/components/TimelineGrid.vue`                        | 强化拖拽、吸附、选择、缩放和多轨交互        |
 | 属性面板     | `src/components/PropertiesPanel.vue`                     | 收敛当前编辑面板能力                        |
@@ -61,18 +63,18 @@ Endaxis 当前值得对标的模块如下：
 | 结果投影     | `src/simulation/projection/`                             | 输出图表、时间线状态条和统计面板数据        |
 | 测试体系     | `src/simulation/*.test.ts`、`runtimeCoverage.test.ts`    | 建立蓝色星原机制 golden tests               |
 
-## 4. 当前差距
+## 4. 初始差距（历史基线）
 
 ### P0 稳定性差距
 
 - `npm run test -- --run` 未通过，原因是 `SkillBlock.test.js` 使用 `jest.mock`。
 - `project.actions` 与旧 `project.skillBlocks` 并存，统计和验证读取旧模型。
-- `Editor.vue` 调用 `projectStore.addBossEvent/updateBossEvent/removeBossEvent`，但 store 中没有对应 action。
+- 已删除的旧 `Editor.vue` 曾调用 store 中不存在的 Boss event action；生产 Workbench 不再经过该路径。
 - `ResourceMonitor.vue` 把 `project.characters` 当完整角色对象数组使用，但当前项目里它是角色 ID 数组。
 
 ### P1 架构差距
 
-- `Editor.vue` 过重，UI、交互、业务协调、导出、事件处理混在一起。
+- 旧 `Editor.vue` 过重问题已通过退役页面和建立 Workbench 分层解决；遗留组件仍待引用审计。
 - 缺少稳定的数据访问层，组件和工具函数直接读 `gamedata.json` 结构。
 - 伤害、统计、验证逻辑分散，尚未形成独立运行时。
 - 导入导出缺少清晰版本化适配层。
