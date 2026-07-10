@@ -3,6 +3,7 @@ import {
   ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
   THREE_VALUE_DELTA_FIELDS,
 } from './threeValueGenerationLayer';
+import { THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME } from '../mechanics/threeValueMechanismContext';
 
 const STANDARD_GENERATION_ENTRY_OUTPUT_NAMES = [
   'generationInput',
@@ -668,6 +669,15 @@ export function validateStandardGenerationEntryContract(generationEntry = {}) {
         ['id', 'hitKey', 'frameIndex', 'timeMs', 'trackKey', 'layerKey'].every(
           field => delta?.[field] !== null && delta?.[field] !== undefined
         )
+      ),
+    }),
+    createGenerationEntryValidationCheck({
+      key: 'delta-mechanism-context-contract',
+      valid: (deltas ?? []).every(
+        delta =>
+          delta?.mechanismContext?.contractName ===
+            THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME &&
+          delta?.calculator?.mechanismContext === delta.mechanismContext
       ),
     }),
     createGenerationEntryValidationCheck({

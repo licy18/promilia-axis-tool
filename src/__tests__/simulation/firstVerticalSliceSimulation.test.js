@@ -1380,18 +1380,20 @@ describe('first vertical slice simulation', () => {
       status: 'standard-three-value-generation-layer-ready',
       contract: {
         name: 'Action -> Hit -> ThreeValueDelta',
-        version: 1,
+        version: 2,
         frameRate: 60,
         deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
         calculatorContract: {
           name: 'ThreeValueDeltaCalculator',
-          version: 1,
+          version: 2,
+          requiredInputs: ['trackKey', 'delta', 'mechanismContext'],
           requiredOutputs: [
             'delta',
             'status',
             'sourceIds',
             'confidence',
             'replaceable',
+            'mechanismContextStatus',
           ],
           calculatorKeys: [
             'azpr-hp-delta-calculator',
@@ -1420,8 +1422,12 @@ describe('first vertical slice simulation', () => {
           'azpr-self-energy-delta-calculator',
         ],
         calculatorReplaceableDeltaCount: 16,
+        mechanismContextReadyDeltaCount: 16,
+        mechanismContextMissingDeltaCount: 0,
         calculatorSummary: expect.objectContaining({
           outputCount: 16,
+          mechanismContextReadyCount: 16,
+          mechanismContextMissingCount: 0,
           calculatorKeyCounts: expect.arrayContaining([
             expect.objectContaining({
               key: 'azpr-hp-delta-calculator',
@@ -1470,6 +1476,8 @@ describe('first vertical slice simulation', () => {
       appliedDeltaCount: 1,
       calculatorCount: 3,
       calculatorReplaceableDeltaCount: 16,
+      mechanismContextReadyDeltaCount: 16,
+      mechanismContextMissingDeltaCount: 0,
       valueSourceSlotCount: 12,
       runtimeValueSourceSlotCount: 3,
       replaceableValueSourceSlotCount: 9,
@@ -1736,6 +1744,8 @@ describe('first vertical slice simulation', () => {
         runtimeInputGenerationValueSourceSlotsStandardOutputPresent: true,
         inputDeltaCount: 16,
         appliedDeltaCount: 1,
+        mechanismContextReadyDeltaCount: 1,
+        mechanismContextMissingDeltaCount: 0,
       },
     });
     const appliedGenerationDelta = result.threeValueGenerationLayer.deltas.find(
@@ -1748,18 +1758,99 @@ describe('first vertical slice simulation', () => {
       calculationKind: 'raw-result-preview',
       calculationStatus: 'raw-hp-projection',
       calculationReplaceable: true,
-      calculator: {
+      mechanismContextStatus: 'mechanism-context-ready',
+      mechanismContextReady: true,
+      mechanismContext: expect.objectContaining({
+        contractName: 'AzPrThreeValueMechanismContext',
+        status: 'mechanism-context-ready',
+        ready: true,
+        formulaStatus: 'context-ready-formula-unconfirmed',
+        action: expect.objectContaining({
+          actionId: 'action-0001',
+          actorId: 'actor-109001',
+          targetId: 'enemy-300032',
+        }),
+        timing: expect.objectContaining({
+          needsTimingData: true,
+          accuracy: 'placeholder',
+        }),
+        sourceActor: expect.objectContaining({
+          actorId: 'actor-109001',
+          characterId: 109001,
+          stats: expect.objectContaining({
+            attack: 1920,
+            maxSp: 1,
+          }),
+          energy: expect.objectContaining({
+            resource: 'sp',
+            maxValue: 1,
+            status: 'initial-current-sp-baseline-pending',
+          }),
+        }),
+        targetEnemy: expect.objectContaining({
+          targetId: 'enemy-300032',
+          enemyId: 300032,
+          stats: expect.objectContaining({
+            physicalDefense: 9000,
+            magicalDefense: 9000,
+            maxToughness: 6667,
+            initialToughness: 6667,
+          }),
+          toughness: expect.objectContaining({
+            baseMax: 6667,
+            maxValue: 6667,
+            initialValue: 6667,
+          }),
+          elementDefenses: expect.arrayContaining([
+            expect.objectContaining({
+              attributeKey: 'FIRE_DEFENSE',
+              baseValue: 0,
+              effectiveValue: 0,
+              appliedToDamage: false,
+            }),
+          ]),
+        }),
+        ownership: {
+          valueTargetKind: 'target-enemy',
+          valueTargetId: 'enemy-300032',
+          energyOwnerActorId: 'actor-109001',
+          targetEnemyId: 'enemy-300032',
+        },
+      }),
+      calculator: expect.objectContaining({
         key: 'azpr-hp-delta-calculator',
+        version: 2,
         outputField: 'hpDelta',
         delta: 12461,
-        sourceIds: {
+        sourceIds: expect.objectContaining({
           skillIds: [10900101],
           elementConfigIds: [109001081, 109001306],
-        },
+        }),
         confidence: 'low',
+        mechanismContextStatus: 'mechanism-context-ready',
+        mechanismContextReady: true,
         replaceable: true,
         appliedToRuntime: true,
-      },
+      }),
+    });
+    expect(appliedGenerationDelta.calculator.mechanismContext).toBe(
+      appliedGenerationDelta.mechanismContext
+    );
+    const toughnessContextDelta = result.threeValueGenerationLayer.deltas.find(
+      delta => delta.trackKey === 'enemyToughnessDamage'
+    );
+    const energyContextDelta = result.threeValueGenerationLayer.deltas.find(
+      delta => delta.trackKey === 'selfEnergyChange'
+    );
+    expect(toughnessContextDelta.mechanismContext.ownership).toMatchObject({
+      valueTargetKind: 'target-enemy',
+      valueTargetId: 'enemy-300032',
+      energyOwnerActorId: 'actor-109001',
+    });
+    expect(energyContextDelta.mechanismContext.ownership).toMatchObject({
+      valueTargetKind: 'source-actor',
+      valueTargetId: 'actor-109001',
+      energyOwnerActorId: 'actor-109001',
     });
     expect(result.threeValueRuntimeProjection).toMatchObject({
       sourceKind: 'azpr-runtime-projection-from-runtime-input-source',
@@ -1916,9 +2007,15 @@ describe('first vertical slice simulation', () => {
         calculatorKeys: ['azpr-hp-delta-calculator'],
         calculatorReplaceableDeltaCount: 1,
         calculatorStatuses: ['raw-hp-projection'],
+        mechanismContextReadyDeltaCount: 1,
+        mechanismContextMissingDeltaCount: 0,
+        mechanismContextStatuses: ['mechanism-context-ready'],
         calculatorSummary: {
           contractName: 'ThreeValueDeltaCalculator',
+          contractVersion: 2,
           outputCount: 1,
+          mechanismContextReadyCount: 1,
+          mechanismContextMissingCount: 0,
           unresolvedItemCounts: expect.arrayContaining([
             expect.objectContaining({
               item: 'final-azpr-formula-confirmation',

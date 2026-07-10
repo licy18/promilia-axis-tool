@@ -62,8 +62,7 @@ export function createActionHitThreeValueRuntimeInput({
       resolvedSource.generationOutputBoundarySourceKind,
     generationOutputBoundaryStatus:
       resolvedSource.generationOutputBoundaryStatus,
-    generationOutputBoundaryReady:
-      resolvedSource.generationOutputBoundaryReady,
+    generationOutputBoundaryReady: resolvedSource.generationOutputBoundaryReady,
     generationOutputBoundaryPath: resolvedSource.generationOutputBoundaryPath,
     generationOutputBoundaryEntryPath:
       resolvedSource.generationOutputBoundaryEntryPath,
@@ -210,7 +209,8 @@ function resolveActionHitThreeValueRuntimeInputSource({
     generationOutputBoundaryReady: generationOutputBoundary?.ready === true,
     generationOutputBoundaryPath:
       generationOutputBoundaryReadSource?.path ?? '',
-    generationOutputBoundaryEntryPath: generationOutputBoundary?.entryPath ?? '',
+    generationOutputBoundaryEntryPath:
+      generationOutputBoundary?.entryPath ?? '',
     generationOutputBoundaryRuntimeInputSourcePath:
       generationOutputBoundary?.runtimeInputSourcePath ?? '',
     generationOutputBoundaryStandardContractPath:
@@ -303,9 +303,7 @@ function resolveGenerationEntryReadSource({
   ]);
 }
 
-function resolveGenerationOutputBoundaryReadSource({
-  generationOutputs,
-} = {}) {
+function resolveGenerationOutputBoundaryReadSource({ generationOutputs } = {}) {
   return selectGenerationReadSourceCandidate([
     createGenerationReadSourceCandidate({
       key: 'standardOutputBoundary',
@@ -704,7 +702,8 @@ function createActionHitThreeValueGenerationReadSources({
       generationOutputBoundary?.ready === true ? 'true' : 'false',
     generationOutputBoundaryPath:
       generationOutputBoundaryReadSource?.path ?? '',
-    generationOutputBoundaryEntryPath: generationOutputBoundary?.entryPath ?? '',
+    generationOutputBoundaryEntryPath:
+      generationOutputBoundary?.entryPath ?? '',
     generationOutputBoundaryRuntimeInputSourcePath:
       generationOutputBoundary?.runtimeInputSourcePath ?? '',
     generationOutputBoundaryStandardContractPath:
@@ -959,8 +958,7 @@ function summarizeActionHitThreeValueRuntimeInput({
       resolvedSource.generationOutputBoundarySourceKind,
     generationOutputBoundaryStatus:
       resolvedSource.generationOutputBoundaryStatus,
-    generationOutputBoundaryReady:
-      resolvedSource.generationOutputBoundaryReady,
+    generationOutputBoundaryReady: resolvedSource.generationOutputBoundaryReady,
     generationOutputBoundaryPath: resolvedSource.generationOutputBoundaryPath,
     generationOutputBoundaryEntryPath:
       resolvedSource.generationOutputBoundaryEntryPath,
@@ -984,6 +982,15 @@ function summarizeActionHitThreeValueRuntimeInput({
     ignoredDeltaCount: ignoredDeltas.length,
     appliedTrackKeys: uniqueStrings(appliedDeltas.map(delta => delta.trackKey)),
     appliedLayerKeys: uniqueStrings(appliedDeltas.map(delta => delta.layerKey)),
+    mechanismContextReadyDeltaCount: appliedDeltas.filter(
+      delta => delta.mechanismContextReady
+    ).length,
+    mechanismContextMissingDeltaCount: appliedDeltas.filter(
+      delta => !delta.mechanismContextReady
+    ).length,
+    mechanismContextStatuses: uniqueStrings(
+      appliedDeltas.map(delta => delta.mechanismContextStatus)
+    ),
     ignoredLayerCounts,
     appliedOnly: true,
     applied: true,

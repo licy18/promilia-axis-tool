@@ -233,12 +233,18 @@ describe('three value generation layer', () => {
     expect(layer.sourceKind).toBe('azpr-standard-three-value-generation-layer');
     expect(layer.contract).toMatchObject({
       name: 'Action -> Hit -> ThreeValueDelta',
-      version: 1,
+      version: 2,
       frameRate: 60,
       deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
       calculatorContract: {
         name: 'ThreeValueDeltaCalculator',
+        version: 2,
+        requiredInputs: ['trackKey', 'delta', 'mechanismContext'],
         outputFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
+      },
+      mechanismContextContract: {
+        name: 'AzPrThreeValueMechanismContext',
+        version: 1,
       },
     });
     expect(layer.summary).toMatchObject({
@@ -249,6 +255,8 @@ describe('three value generation layer', () => {
       appliedDeltaCount: 1,
       calculatorCount: 1,
       calculatorKeys: ['azpr-hp-delta-calculator'],
+      mechanismContextReadyDeltaCount: 0,
+      mechanismContextMissingDeltaCount: 1,
     });
     expect(layer.standardContract).toMatchObject({
       sourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
@@ -350,6 +358,22 @@ describe('three value generation layer', () => {
         calculationKind: 'raw-result-preview',
         calculationStatus: 'raw-hp-projection',
         calculationReplaceable: true,
+        mechanismContextStatus: 'mechanism-context-missing-target-enemy',
+        mechanismContextReady: false,
+        mechanismContext: expect.objectContaining({
+          contractName: 'AzPrThreeValueMechanismContext',
+          status: 'mechanism-context-missing-target-enemy',
+          ready: false,
+          formulaStatus: 'context-missing-formula-not-invocable',
+          timing: expect.objectContaining({
+            accuracy: 'authoritative',
+          }),
+        }),
+        calculator: expect.objectContaining({
+          version: 2,
+          mechanismContextStatus: 'mechanism-context-missing-target-enemy',
+          mechanismContextReady: false,
+        }),
         applied: true,
       }),
     ]);

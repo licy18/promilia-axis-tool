@@ -24677,3 +24677,82 @@ scenario.team.slots[]
 - `workbenchDraftStorage.test.js` 覆盖 v4 到 v5 迁移以及 JSON/分享 round-trip。
 - `Workbench.test.js` 覆盖槽位互换、动作重绑定和草稿保存。
 - Workbench E2E 覆盖替换队员、导出、重置、导入恢复和重新运行模拟。
+
+## 346. 标准三值机制上下文：AzPrThreeValueMechanismContext
+
+### 346.1 合同结构
+
+`ThreeValueDelta` 与 calculator result 新增同一份 `mechanismContext`：
+
+```text
+mechanismContext
+  schemaVersion = 1
+  contractName = AzPrThreeValueMechanismContext
+  sourceKind
+  status
+  ready
+  formulaStatus
+  action
+    actionId
+    actionType
+    skillId
+    actorId
+    targetId
+  hit
+    hitKey
+    hitIndex
+    hitSkillId
+    frameIndex
+    timeMs
+    elementConfigIds[]
+  timing
+    source
+    needsTimingData
+    accuracy
+    animationTimeMs
+    pointFrameSource
+  sourceActor
+    actorId
+    characterId
+    teamSlotId
+    teamPosition
+    level
+    stats
+    statsSource
+    energy
+  targetEnemy
+    targetId
+    enemyId
+    level
+    stats
+    toughness
+    elementDefenses[]
+    elementDefenseFormulaStatus
+  ownership
+    valueTargetKind
+    valueTargetId
+    energyOwnerActorId
+    targetEnemyId
+  sourcePaths
+```
+
+`sourceActor.stats` 只投影 calculator 需要的角色面板字段；`targetEnemy.stats`、`toughness` 和 `elementDefenses` 来自编译后的 scenario。角色当前/初始 SP 在 P3-A 保持 `null`，状态为 `initial-current-sp-baseline-pending`，由后续运行时状态阶段补齐。
+
+### 346.2 生成与运行时传递
+
+- 标准生成合同与 calculator 合同升级为 v2。
+- generation layer 为每个 delta 创建机制上下文，并把同一对象传给 calculator adapter。
+- generation builder 新增 `delta-mechanism-context-contract` 校验，要求合同名正确，且 delta 与 calculator 引用同一上下文对象。
+- runtime input 和 runtime projection 原样携带上下文，并在 summary 统计 ready/missing 数量与状态。
+- 缺少来源角色或目标敌人时输出缺失状态，不伪造机制输入。
+
+### 346.3 计算边界
+
+本结构只统一公式输入来源、作用对象与时序元数据。P3-A 不改变现有 HP、韧性、自身能量 delta，也不应用敌人元素减免或未确认的防御公式；calculator 继续标记为可替换。
+
+### 346.4 验证
+
+- generation layer 测试覆盖完整/缺失机制上下文与合同 v2 摘要。
+- first vertical slice 测试覆盖角色面板、敌人防御、元素减免、韧性基线和三值所有权。
+- runtime input/projection 测试覆盖上下文从 generation 到 runtime 的无损传递。
+- generation builder 校验保证 calculator 不使用另一份复制或临时上下文。

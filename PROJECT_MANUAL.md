@@ -478,6 +478,22 @@ P0 验证结论：当前状态可以作为“Workbench 主流程 demo”给用�
 - `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
 - `npm run test:e2e:workbench-flow`：通过，25 条 Workbench 浏览器主流程；JSON 项目路径覆盖替换队员、导出、重置、导入恢复和继续模拟。
 
+### P3-A 标准 Hit 机制上下文合同（2026-07-10）
+
+已完成能力：
+
+- 每个标准 `ThreeValueDelta` 都通过统一 `AzPrThreeValueMechanismContext` 接收来源角色、目标敌人、队伍归属、命中时点和时序来源，不再要求 calculator 回读 UI 或证据临时结构。
+- 来源角色上下文包含实际数值面板与独立 SP 所有权；目标敌人上下文包含物理/魔法防御、10 项元素减免配置和真实韧性基线。
+- 同一份机制上下文沿 `generation -> calculator adapter -> runtime input -> runtime projection` 传递；标准合同升级为 v2，并校验 delta 与 calculator 消费的是同一上下文对象。
+- 本阶段没有改动 HP、韧性或自身能量 delta 的计算公式与结果；未确认公式继续标记为可替换预览。
+
+已完成验证：
+
+- P3-A 定向测试：通过，6 个测试文件、32 条测试，覆盖完整/缺失上下文、合同校验、所有权和 runtime 传递。
+- `npm run test -- --run`：通过，41 个测试文件、312 条测试。
+- `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
+- `npm run test:e2e:workbench-flow`：通过，25 条 Workbench 浏览器主流程。
+
 ### 下一阶段优先级
 
 P1：核心导入/导出与分享闭环已完成。
@@ -492,8 +508,9 @@ P2：项目级角色、培养项和敌人配置闭环已完成。
 
 P3：运行时层真实机制适配。
 
-- 下一阶段 P3-A：为每个标准 Hit 建立统一机制上下文，接入来源 actor 数值、目标敌人防御/元素减免/韧性基线、所属角色能量状态和时序来源，让 calculator adapter 不再回读 UI 或证据临时结构。
-- P3-A 只打通来源、目标和状态合同，不猜测尚未确认的真实倍率、抗性公式或测试期平衡。
+- P3-A 已完成：标准 Hit 已接入统一来源、目标、所有权与时序上下文，calculator adapter 和 runtime 使用同一合同。
+- 下一阶段 P3-B：建立运行时三值状态快照；每个实际应用的命中记录敌人 HP/韧性和所属角色 SP 的变更前、delta、变更后，让日志、状态曲线、资源曲线和 summary 共享同一运行时事实。
+- P3-B 保持现有 calculator 输出和三值结果不变，先解决状态初始化、逐命中推进与每角色独立能量所有权，不猜测尚未确认的真实倍率、抗性公式或测试期平衡。
 - calculator 保持可替换；不追测试期最终倍率和平衡。
 - 优先跑通 HP、韧性、自身能量的来源、时序和作用对象。
 

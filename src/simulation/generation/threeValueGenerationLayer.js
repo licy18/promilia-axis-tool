@@ -8,6 +8,10 @@ import {
   AZPR_TIMELINE_FRAME_RATE,
   createThreeValueDeltaGenerationInput,
 } from './threeValueDeltaGenerationInput';
+import {
+  THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME,
+  createThreeValueMechanismContext,
+} from '../mechanics/threeValueMechanismContext';
 
 const THREE_VALUE_GENERATION_TRACK_ORDER = [
   'enemyHpDamage',
@@ -53,6 +57,7 @@ export function createThreeValueGenerationLayer({
     stateCurves,
   });
   const deltas = createThreeValueGenerationDeltas({
+    scenario,
     actionsById,
     tracks: generationInput.tracks,
   });
@@ -88,7 +93,7 @@ export function createThreeValueGenerationLayer({
         : 'standard-three-value-generation-layer-empty',
     contract: {
       name: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
-      version: 1,
+      version: 2,
       frameRate: AZPR_TIMELINE_FRAME_RATE,
       frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
       deltaFields: THREE_VALUE_DELTA_FIELDS,
@@ -105,10 +110,12 @@ export function createThreeValueGenerationLayer({
         'sourceKind',
         'sourceIds',
         'confidence',
+        'mechanismContext',
       ],
       calculatorContract: {
         name: 'ThreeValueDeltaCalculator',
-        version: 1,
+        version: 2,
+        requiredInputs: ['trackKey', 'delta', 'mechanismContext'],
         outputFields: THREE_VALUE_DELTA_FIELDS,
         requiredOutputs: [
           'delta',
@@ -116,10 +123,25 @@ export function createThreeValueGenerationLayer({
           'sourceIds',
           'confidence',
           'replaceable',
+          'mechanismContextStatus',
         ],
         calculatorKeys: getThreeValueCalculatorKeys(),
         policy:
           'current HP/toughness/self-energy formulas are adapter outputs and remain replaceable until final AzPr formulas are confirmed',
+      },
+      mechanismContextContract: {
+        name: THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME,
+        version: 1,
+        requiredSections: [
+          'action',
+          'hit',
+          'timing',
+          'sourceActor',
+          'targetEnemy',
+          'ownership',
+        ],
+        policy:
+          'mechanism context provides stable sources, targets and state baselines without applying unconfirmed formulas',
       },
       valueSourceSlotContract: {
         name: 'ThreeValueReplaceableSourceSlot',
@@ -147,12 +169,13 @@ export function createThreeValueGenerationLayer({
   };
 }
 
-function createThreeValueGenerationDeltas({ actionsById, tracks }) {
+function createThreeValueGenerationDeltas({ scenario, actionsById, tracks }) {
   const deltas = [];
   for (const track of tracks ?? []) {
     for (const layer of track.layers ?? []) {
       for (const [pointIndex, point] of (layer.points ?? []).entries()) {
         const delta = createThreeValueGenerationDelta({
+          scenario,
           actionsById,
           track,
           layer,
@@ -169,6 +192,7 @@ function createThreeValueGenerationDeltas({ actionsById, tracks }) {
 }
 
 function createThreeValueGenerationDelta({
+  scenario,
   actionsById,
   track,
   layer,
@@ -199,6 +223,23 @@ function createThreeValueGenerationDelta({
   const sourceStatus = point.sourceStatus ?? point.resultStatus ?? null;
   const resultStatus = point.resultStatus ?? null;
   const applied = Boolean(point.applied && layer.applied);
+  const hitIndex = numberOrNull(point.hitIndex);
+  const hitKey = createThreeValueGenerationHitKey({
+    point,
+    layerKey,
+    frameIndex,
+    pointIndex,
+  });
+  const mechanismContext = createThreeValueMechanismContext({
+    scenario,
+    action,
+    point,
+    trackKey,
+    hitKey,
+    frameIndex,
+    timeMs,
+    sourceIds,
+  });
   const calculator = createThreeValueCalculatorResult({
     trackKey,
     layerKey,
@@ -212,13 +253,7 @@ function createThreeValueGenerationDelta({
     sourceStatus,
     resultStatus,
     applied,
-  });
-  const hitIndex = numberOrNull(point.hitIndex);
-  const hitKey = createThreeValueGenerationHitKey({
-    point,
-    layerKey,
-    frameIndex,
-    pointIndex,
+    mechanismContext,
   });
   const valueSource = createThreeValueGenerationDeltaValueSource({
     trackKey,
@@ -232,6 +267,7 @@ function createThreeValueGenerationDelta({
     resultStatus,
     sourceIds,
     confidence,
+    mechanismContext,
     calculator,
     applied,
   });
@@ -269,6 +305,9 @@ function createThreeValueGenerationDelta({
     confidence,
     sourceStatus,
     resultStatus,
+    mechanismContext,
+    mechanismContextStatus: mechanismContext.status,
+    mechanismContextReady: mechanismContext.ready,
     calculator,
     calculatorKey: calculator.key,
     calculatorVersion: calculator.version,
@@ -297,6 +336,7 @@ function createThreeValueGenerationDeltaValueSource({
   resultStatus,
   sourceIds,
   confidence,
+  mechanismContext,
   calculator,
   applied,
 }) {
@@ -318,6 +358,8 @@ function createThreeValueGenerationDeltaValueSource({
     valueSourceStatus: sourceStatus ?? resultStatus ?? '',
     sourceIds,
     confidence: confidence ?? '',
+    mechanismContextStatus: mechanismContext?.status ?? '',
+    mechanismContextReady: mechanismContext?.ready === true,
     calculatorKey: calculator?.key ?? '',
     calculationStatus: calculator?.status ?? '',
     runtimeEligible: Boolean(applied),
@@ -649,7 +691,7 @@ function createActionHitThreeValueDeltaStandardContract({
         ? 'action-hit-three-value-delta-contract-ready'
         : 'action-hit-three-value-delta-contract-empty',
     name: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
-    version: 1,
+    version: 2,
     topology: ['Action', 'Hit', 'ThreeValueDelta'],
     frameRate: AZPR_TIMELINE_FRAME_RATE,
     frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
@@ -661,6 +703,11 @@ function createActionHitThreeValueDeltaStandardContract({
     deltaFields: THREE_VALUE_DELTA_FIELDS,
     aggregateFields: THREE_VALUE_DELTA_FIELDS,
     aggregateLayerKeys: THREE_VALUE_GENERATION_LAYER_ORDER,
+    mechanismContextContract: {
+      name: THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME,
+      version: 1,
+      required: true,
+    },
     runtimeDeltaPolicy: 'runtime consumes only deltas with applied=true',
     diagnosticDeltaPolicy:
       'candidate, sampled and placeholder deltas stay in the same contract for traceability but do not change runtime totals',
@@ -681,6 +728,9 @@ function createActionHitThreeValueDeltaStandardContract({
       runtimeValueSourceSlotCount: summary.runtimeValueSourceSlotCount,
       replaceableValueSourceSlotCount: summary.replaceableValueSourceSlotCount,
       calculatorCount: summary.calculatorCount,
+      mechanismContextReadyDeltaCount: summary.mechanismContextReadyDeltaCount,
+      mechanismContextMissingDeltaCount:
+        summary.mechanismContextMissingDeltaCount,
       applied: false,
     },
     applied: false,
@@ -791,6 +841,15 @@ function summarizeThreeValueGenerationLayer({
       calculatorSummary.calculatorReplaceableDeltaCount,
     calculatorStatuses: calculatorSummary.statuses,
     calculatorSummary,
+    mechanismContextReadyDeltaCount: deltas.filter(
+      delta => delta.mechanismContextReady
+    ).length,
+    mechanismContextMissingDeltaCount: deltas.filter(
+      delta => !delta.mechanismContextReady
+    ).length,
+    mechanismContextStatuses: uniqueStrings(
+      deltas.map(delta => delta.mechanismContextStatus)
+    ),
     frameMin: minNumber(deltas.map(delta => delta.frameIndex)),
     frameMax: maxNumber(deltas.map(delta => delta.frameIndex)),
     applied: false,

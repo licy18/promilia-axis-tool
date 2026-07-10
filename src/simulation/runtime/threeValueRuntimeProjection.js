@@ -883,6 +883,11 @@ function summarizeThreeValueRuntimeProjection({
     calculatorReplaceableDeltaCount:
       calculatorSummary.calculatorReplaceableDeltaCount,
     calculatorStatuses: calculatorSummary.statuses,
+    mechanismContextReadyDeltaCount:
+      calculatorSummary.mechanismContextReadyCount,
+    mechanismContextMissingDeltaCount:
+      calculatorSummary.mechanismContextMissingCount,
+    mechanismContextStatuses: calculatorSummary.mechanismContextStatuses,
     calculatorSummary,
     source: ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE,
     runtimeInputSource: ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE,

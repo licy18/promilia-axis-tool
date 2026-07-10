@@ -78,6 +78,9 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
         ignoredDeltaCount: 2,
         appliedTrackKeys: ['enemyHpDamage'],
         appliedLayerKeys: ['applied'],
+        mechanismContextReadyDeltaCount: 0,
+        mechanismContextMissingDeltaCount: 1,
+        mechanismContextStatuses: ['mechanism-context-missing-target-enemy'],
         ignoredLayerCounts: [{ key: 'placeholder', count: 2 }],
         appliedOnly: true,
       },
@@ -92,6 +95,12 @@ describe('Action -> Hit -> ThreeValueDelta runtime input', () => {
         hpDelta: 1200,
         toughnessDelta: null,
         energyDelta: null,
+        mechanismContextStatus: 'mechanism-context-missing-target-enemy',
+        mechanismContextReady: false,
+        mechanismContext: expect.objectContaining({
+          contractName: 'AzPrThreeValueMechanismContext',
+          status: 'mechanism-context-missing-target-enemy',
+        }),
         actionThreeValueDeltaAggregate: expect.objectContaining({
           sourceKind: 'azpr-action-hit-three-value-delta-aggregate',
           deltaCount: 3,

@@ -84,6 +84,10 @@ function createActionHitThreeValueDeltaGenerationSummary({
       standardContract.summary?.runtimeValueSourceSlotCount ?? 0,
     replaceableValueSourceSlotCount:
       standardContract.summary?.replaceableValueSourceSlotCount ?? 0,
+    mechanismContextReadyDeltaCount:
+      standardContract.summary?.mechanismContextReadyDeltaCount ?? 0,
+    mechanismContextMissingDeltaCount:
+      standardContract.summary?.mechanismContextMissingDeltaCount ?? 0,
     applied: false,
   };
 }
