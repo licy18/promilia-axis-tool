@@ -4,6 +4,27 @@ import { createRuntimeStatePointContexts } from '../../features/workbench/runtim
 
 describe('runtime selected detail', () => {
   it('uses runtime state point contexts when resolving the selected detail', () => {
+    const stateSnapshot = {
+      sourceDeltaId: 'hp-delta',
+      primaryMetricKey: 'enemyHp',
+      changedMetricKeys: ['enemyHp', 'enemyToughness', 'selfEnergy'],
+      energyOwnerActorId: 'actor-001',
+      before: {
+        enemyHp: createStateValue(100),
+        enemyToughness: createStateValue(50),
+        selfEnergy: createStateValue(20, { actorId: 'actor-001' }),
+      },
+      delta: {
+        enemyHp: 10,
+        enemyToughness: 3,
+        selfEnergy: -5,
+      },
+      after: {
+        enemyHp: createStateValue(90),
+        enemyToughness: createStateValue(47),
+        selfEnergy: createStateValue(15, { actorId: 'actor-001' }),
+      },
+    };
     const runtimeProjection = {
       simLog: [
         {
@@ -21,6 +42,8 @@ describe('runtime selected detail', () => {
           sourceDeltaId: 'hp-delta',
           actionId: 'action-0001',
           actionName: '普通攻击',
+          actorId: 'actor-001',
+          actorName: '末音',
           frameIndex: 12,
           sequenceIndex: 0,
           stateCurveSequenceIndex: 0,
@@ -49,6 +72,7 @@ describe('runtime selected detail', () => {
               },
             },
           },
+          stateSnapshot,
         },
       ],
       stateCurves: {
@@ -66,6 +90,8 @@ describe('runtime selected detail', () => {
               sourceDeltaId: 'hp-delta',
               actionId: 'action-0001',
               actionName: '普通攻击',
+              actorId: 'actor-001',
+              actorName: '末音',
               frameIndex: 12,
               sequenceIndex: 0,
               stateCurveSequenceIndex: 0,
@@ -76,6 +102,7 @@ describe('runtime selected detail', () => {
               sourceIds: {
                 skillIds: [10900101],
               },
+              stateSnapshot,
             },
           ],
         },
@@ -132,8 +159,43 @@ describe('runtime selected detail', () => {
         hitThreeValueDeltaAggregate: expect.objectContaining({
           deltaCount: 3,
         }),
+        stateSnapshot,
       })
     );
+    expect(detail?.threeValueStateRows).toEqual([
+      expect.objectContaining({
+        key: 'enemyHp',
+        label: '敌人 HP',
+        beforeValue: 100,
+        rawDelta: 10,
+        delta: -10,
+        afterValue: 90,
+        primary: true,
+        changed: true,
+      }),
+      expect.objectContaining({
+        key: 'enemyToughness',
+        label: '敌人韧性',
+        beforeValue: 50,
+        rawDelta: 3,
+        delta: -3,
+        afterValue: 47,
+        primary: false,
+        changed: true,
+      }),
+      expect.objectContaining({
+        key: 'selfEnergy',
+        label: '自身能量',
+        actorId: 'actor-001',
+        actorName: '末音',
+        beforeValue: 20,
+        rawDelta: -5,
+        delta: -5,
+        afterValue: 15,
+        primary: false,
+        changed: true,
+      }),
+    ]);
     expect(detail?.contributionRows).toEqual([
       expect.objectContaining({
         key: 'hp',
@@ -256,3 +318,17 @@ describe('runtime selected detail', () => {
     });
   });
 });
+
+function createStateValue(currentValue, { actorId = null } = {}) {
+  return {
+    actorId,
+    initialValue: currentValue,
+    maxValue: 100,
+    currentValue,
+    rawCurrentValue: currentValue,
+    cumulativeDelta: 0,
+    overrunValue: 0,
+    baselineConfirmed: true,
+    baselineStatus: 'test-baseline',
+  };
+}

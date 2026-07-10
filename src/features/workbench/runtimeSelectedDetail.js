@@ -19,6 +19,24 @@ const RUNTIME_TRACK_META = {
   },
 };
 
+const RUNTIME_STATE_METRIC_META = {
+  enemyHp: {
+    label: '敌人 HP',
+    unit: 'hp',
+    deltaDirection: 'decrease',
+  },
+  enemyToughness: {
+    label: '敌人韧性',
+    unit: 'toughness',
+    deltaDirection: 'decrease',
+  },
+  selfEnergy: {
+    label: '自身能量',
+    unit: 'sp',
+    deltaDirection: 'increase',
+  },
+};
+
 export function createRuntimeSelectedDetail({
   runtimeProjection,
   selectedStateCurvePointId,
@@ -58,6 +76,8 @@ export function createRuntimeSelectedDetail({
     pointRow.hitThreeValueDeltaAggregate ??
     simLogRow?.hitThreeValueDeltaAggregate ??
     null;
+  const stateSnapshot =
+    pointRow.stateSnapshot ?? simLogRow?.stateSnapshot ?? null;
 
   return {
     statePointId: selectedStateCurvePointId,
@@ -120,6 +140,13 @@ export function createRuntimeSelectedDetail({
     energyDelta: numberOrZero(pointRow.energyDelta ?? simLogRow?.energyDelta),
     actionThreeValueDeltaAggregate,
     hitThreeValueDeltaAggregate,
+    stateSnapshot,
+    threeValueStateRows: createRuntimeThreeValueStateRows({
+      stateSnapshot,
+      actorRows: runtimeOutputView.resourceCurveRows,
+      fallbackActorId: pointRow.actorId ?? simLogRow?.actorId ?? '',
+      fallbackActorName: pointRow.actorName ?? simLogRow?.actorName ?? '',
+    }),
     status:
       pointRow.resultStatus ??
       pointRow.sourceStatus ??
@@ -136,6 +163,107 @@ export function createRuntimeSelectedDetail({
     simLogRow,
     point: pointRow,
   };
+}
+
+export function createRuntimeThreeValueStateRows({
+  stateSnapshot,
+  actorRows = [],
+  fallbackActorId = '',
+  fallbackActorName = '',
+} = {}) {
+  if (
+    !stateSnapshot?.before ||
+    !stateSnapshot?.delta ||
+    !stateSnapshot?.after
+  ) {
+    return [];
+  }
+
+  const energyOwnerActorId =
+    stateSnapshot.energyOwnerActorId ??
+    stateSnapshot.before.selfEnergy?.actorId ??
+    stateSnapshot.after.selfEnergy?.actorId ??
+    '';
+  const energyOwnerActorName = resolveRuntimeActorName({
+    actorId: energyOwnerActorId,
+    actorRows,
+    fallbackActorId,
+    fallbackActorName,
+  });
+  const changedMetricKeys = new Set(stateSnapshot.changedMetricKeys ?? []);
+
+  return Object.entries(RUNTIME_STATE_METRIC_META).map(
+    ([metricKey, metricMeta]) => {
+      const before = stateSnapshot.before[metricKey] ?? null;
+      const after = stateSnapshot.after[metricKey] ?? null;
+      const beforeValue = strictNumberOrNull(before?.currentValue);
+      const afterValue = strictNumberOrNull(after?.currentValue);
+      const rawDelta = strictNumberOrNull(stateSnapshot.delta[metricKey]);
+      const delta = resolveRuntimeStateImpactDelta({
+        beforeValue,
+        afterValue,
+        rawDelta,
+        deltaDirection: metricMeta.deltaDirection,
+      });
+
+      return {
+        key: metricKey,
+        label: metricMeta.label,
+        unit: metricMeta.unit,
+        actorId: metricKey === 'selfEnergy' ? energyOwnerActorId : '',
+        actorName: metricKey === 'selfEnergy' ? energyOwnerActorName : '',
+        beforeValue,
+        rawDelta,
+        delta,
+        afterValue,
+        initialValue: strictNumberOrNull(before?.initialValue),
+        maxValue: strictNumberOrNull(after?.maxValue ?? before?.maxValue),
+        baselineConfirmed:
+          before?.baselineConfirmed === true &&
+          after?.baselineConfirmed === true,
+        baselineStatus: after?.baselineStatus ?? before?.baselineStatus ?? null,
+        primary: stateSnapshot.primaryMetricKey === metricKey,
+        changed:
+          changedMetricKeys.has(metricKey) ||
+          (rawDelta != null && rawDelta !== 0),
+        before,
+        after,
+      };
+    }
+  );
+}
+
+function resolveRuntimeStateImpactDelta({
+  beforeValue,
+  afterValue,
+  rawDelta,
+  deltaDirection,
+}) {
+  if (beforeValue != null && afterValue != null) {
+    return roundRuntimeValue(afterValue - beforeValue);
+  }
+  if (rawDelta == null) {
+    return null;
+  }
+  return roundRuntimeValue(
+    deltaDirection === 'decrease' ? -rawDelta : rawDelta
+  );
+}
+
+function resolveRuntimeActorName({
+  actorId,
+  actorRows,
+  fallbackActorId,
+  fallbackActorName,
+}) {
+  if (!actorId) {
+    return fallbackActorName || '';
+  }
+  const actor = (actorRows ?? []).find(row => row.actorId === actorId);
+  if (actor?.actorName) {
+    return actor.actorName;
+  }
+  return fallbackActorId === actorId ? fallbackActorName || '' : '';
 }
 
 function createRuntimePointRows(runtimeOutputView, runtimeStatePointContexts) {

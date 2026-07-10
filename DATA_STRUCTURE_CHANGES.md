@@ -24988,3 +24988,39 @@ status = initial-sp-project-configured-runtime-current-pending
 - draft storage 测试覆盖 v5 到 v6 迁移、JSON 与分享 round-trip。
 - Workbench 单元测试覆盖输入约束、撤销/重做、保存、恢复和重置。
 - Workbench E2E 覆盖真实浏览器编辑、JSON 导出、重置、导入恢复和继续模拟。
+
+## 350. RuntimeSelectedDetail 三值状态投影
+
+### 350.1 详情来源
+
+Workbench 选中曲线点或日志行后，`createRuntimeSelectedDetail` 直接读取该结果点共享的 `stateSnapshot`，不再从累计曲线临时推导完整三值状态。详情新增：
+
+```text
+RuntimeSelectedDetail
+  stateSnapshot
+  threeValueStateRows[]
+    key = enemyHp | enemyToughness | selfEnergy
+    label
+    unit
+    actorId
+    actorName
+    beforeValue
+    rawDelta
+    delta
+    afterValue
+    initialValue
+    maxValue
+    baselineConfirmed
+    baselineStatus
+    primary
+    changed
+```
+
+### 350.2 显示语义
+
+- `rawDelta` 保留 runtime 合同中的原始应用值。
+- `delta` 是状态变化方向：HP 与韧性用 `after - before` 显示为减少，自身能量保留实际增减方向。
+- baseline 已确认时优先由 snapshot 的 `before.currentValue` / `after.currentValue` 得到变化；baseline 未确认时按该状态既有的 increase/decrease 方向投影，不把空值转为 `0`。
+- 自身能量行通过 `energyOwnerActorId` 和 runtime 角色资源行解析所属角色名称。
+
+本节只新增 Workbench 详情 view model；`AzPrThreeValueRuntimeStateSnapshot`、逐 delta 结果、曲线和计算公式均未改变。

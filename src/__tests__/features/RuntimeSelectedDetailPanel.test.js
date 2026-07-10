@@ -95,9 +95,74 @@ describe('RuntimeSelectedDetailPanel', () => {
       },
     });
   });
+
+  it('renders the selected snapshot as a three-value before and after table', () => {
+    const wrapper = mount(RuntimeSelectedDetailPanel, {
+      props: {
+        detail: createRuntimeDetail({
+          threeValueStateRows: [
+            createThreeValueStateRow({
+              key: 'enemyHp',
+              label: '敌人 HP',
+              beforeValue: 1000,
+              rawDelta: 125.5,
+              delta: -125.5,
+              afterValue: 874.5,
+              primary: true,
+              changed: true,
+            }),
+            createThreeValueStateRow({
+              key: 'enemyToughness',
+              label: '敌人韧性',
+              beforeValue: 80,
+              rawDelta: 0,
+              delta: 0,
+              afterValue: 80,
+            }),
+            createThreeValueStateRow({
+              key: 'selfEnergy',
+              label: '自身能量',
+              actorId: 'actor-001',
+              actorName: '末音',
+              beforeValue: null,
+              rawDelta: 15,
+              delta: 15,
+              afterValue: null,
+              changed: true,
+            }),
+          ],
+        }),
+      },
+    });
+
+    const table = wrapper.get(
+      '[data-testid="workbench-runtime-selected-detail-three-value-state"]'
+    );
+    expect(table.attributes('data-state-point-id')).toBe(
+      'fallback-state-point'
+    );
+    const rows = wrapper.findAll(
+      '[data-testid="workbench-runtime-selected-detail-three-value-row"]'
+    );
+    expect(rows).toHaveLength(3);
+    expect(rows[0].attributes()).toMatchObject({
+      'data-metric-key': 'enemyHp',
+      'data-primary': 'true',
+      'data-raw-delta': '125.5',
+      'data-state-delta': '-125.5',
+    });
+    expect(rows[0].text()).toContain('敌人 HP');
+    expect(rows[0].text()).toContain('1,000');
+    expect(rows[0].text()).toContain('-125.5');
+    expect(rows[0].text()).toContain('874.5');
+    expect(rows[2].text()).toContain('自身能量');
+    expect(rows[2].text()).toContain('末音');
+    expect(rows[2].text()).toContain('待确认');
+    expect(rows[2].text()).toContain('+15');
+  });
 });
 
-function createRuntimeDetail() {
+function createRuntimeDetail(overrides = {}) {
   return {
     actionId: 'fallback-action',
     actionName: '普通攻击',
@@ -112,6 +177,25 @@ function createRuntimeDetail() {
     contributionRows: [],
     calculatorRows: [],
     sourceRows: [],
+    threeValueStateRows: [],
+    ...overrides,
+  };
+}
+
+function createThreeValueStateRow(overrides = {}) {
+  return {
+    key: 'enemyHp',
+    label: '敌人 HP',
+    actorId: '',
+    actorName: '',
+    beforeValue: 0,
+    rawDelta: 0,
+    delta: 0,
+    afterValue: 0,
+    primary: false,
+    changed: false,
+    baselineStatus: 'test-baseline',
+    ...overrides,
   };
 }
 

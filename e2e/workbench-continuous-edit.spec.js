@@ -152,6 +152,7 @@ test('runs the visible curve-log-detail edit loop end to end @workbench-main-flo
     page.getByTestId('workbench-runtime-selected-detail')
   ).toHaveAttribute('data-runtime-review-source', 'resource-runtime-curve');
   await expectCurveAndLogSelection(page, openedState.statePointId);
+  await expectRuntimeThreeValueStateDetail(page, openedState.statePointId);
 
   const logRow = page
     .locator(
@@ -167,6 +168,7 @@ test('runs the visible curve-log-detail edit loop end to end @workbench-main-flo
   ).toHaveAttribute('data-runtime-review-source-kind', 'log');
   await expectCurveAndLogSelection(page, openedState.statePointId);
   await expectRuntimeSimLogHitAggregateContributions(page);
+  await expectRuntimeThreeValueStateDetail(page, openedState.statePointId);
 
   await page
     .locator(
@@ -200,6 +202,7 @@ test('runs the visible curve-log-detail edit loop end to end @workbench-main-flo
 
   await expectCurveAndLogSelection(page, returnedState.statePointId);
   await expectRuntimeSimLogHitAggregateContributions(page);
+  await expectRuntimeThreeValueStateDetail(page, returnedState.statePointId);
   await expect(
     page.locator(
       '[data-testid="workbench-action-result-source-row"][data-action-id="action-0001"]'
@@ -3599,6 +3602,34 @@ async function expectRuntimeSimLogHitAggregateContributions(page) {
       expect(value).toBeGreaterThan(0);
     }
   }
+}
+
+async function expectRuntimeThreeValueStateDetail(page, statePointId) {
+  const stateTable = page.getByTestId(
+    'workbench-runtime-selected-detail-three-value-state'
+  );
+  await expect(stateTable).toBeVisible();
+  await expect(stateTable).toHaveAttribute('data-state-point-id', statePointId);
+
+  const rows = stateTable.getByTestId(
+    'workbench-runtime-selected-detail-three-value-row'
+  );
+  await expect(rows).toHaveCount(3);
+  const expectedMetricKeys = ['enemyHp', 'enemyToughness', 'selfEnergy'];
+  for (const [index, metricKey] of expectedMetricKeys.entries()) {
+    await expect(rows.nth(index)).toHaveAttribute('data-metric-key', metricKey);
+  }
+
+  const hpRow = rows.nth(0);
+  await expect(hpRow).toHaveAttribute('data-primary', 'true');
+  const beforeValue = Number(await hpRow.getAttribute('data-before-value'));
+  const stateDelta = Number(await hpRow.getAttribute('data-state-delta'));
+  const afterValue = Number(await hpRow.getAttribute('data-after-value'));
+  expect(beforeValue).toBeGreaterThan(0);
+  expect(stateDelta).toBeLessThan(0);
+  expect(afterValue).toBeCloseTo(beforeValue + stateDelta, 3);
+
+  await expect(rows.nth(2)).toHaveAttribute('data-actor-id', /.+/);
 }
 
 function expectNoUnexpectedBrowserIssues(browserIssues) {

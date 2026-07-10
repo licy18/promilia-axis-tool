@@ -156,6 +156,55 @@
     </div>
 
     <div
+      v-if="detail?.threeValueStateRows?.length"
+      class="runtime-detail-three-value-state"
+      :data-state-point-id="detail.statePointId"
+      data-testid="workbench-runtime-selected-detail-three-value-state"
+    >
+      <div class="runtime-detail-three-value-header" aria-hidden="true">
+        <span>状态</span>
+        <span>变更前</span>
+        <span>变化</span>
+        <span>变更后</span>
+      </div>
+      <div
+        v-for="row in detail.threeValueStateRows"
+        :key="row.key"
+        class="runtime-detail-three-value-row"
+        :data-actor-id="row.actorId"
+        :data-after-value="row.afterValue ?? ''"
+        :data-before-value="row.beforeValue ?? ''"
+        :data-changed="row.changed ? 'true' : 'false'"
+        :data-metric-key="row.key"
+        :data-primary="row.primary ? 'true' : 'false'"
+        :data-raw-delta="row.rawDelta ?? ''"
+        :data-state-delta="row.delta ?? ''"
+        :title="row.baselineStatus || ''"
+        data-testid="workbench-runtime-selected-detail-three-value-row"
+      >
+        <div class="runtime-detail-three-value-metric">
+          <strong>{{ row.label }}</strong>
+          <small v-if="row.actorName">{{ row.actorName }}</small>
+        </div>
+        <span
+          data-testid="workbench-runtime-selected-detail-three-value-before"
+        >
+          {{ formatRuntimeStateValue(row.beforeValue) }}
+        </span>
+        <span
+          class="runtime-detail-three-value-delta"
+          :data-delta-sign="getRuntimeStateDeltaSign(row.delta)"
+          data-testid="workbench-runtime-selected-detail-three-value-delta"
+        >
+          {{ formatRuntimeStateDelta(row.delta) }}
+        </span>
+        <span data-testid="workbench-runtime-selected-detail-three-value-after">
+          {{ formatRuntimeStateValue(row.afterValue) }}
+        </span>
+      </div>
+    </div>
+
+    <div
       v-if="detail && runtimeDetailEditContext"
       class="runtime-detail-edit-context"
       :data-action-id="runtimeDetailEditContext.actionId"
@@ -487,6 +536,33 @@ function formatDetailStateValue(detail) {
   return formatNumber(value);
 }
 
+function formatRuntimeStateValue(value) {
+  const number = strictNumberOrNull(value);
+  return number == null ? '待确认' : formatRuntimeStateNumber(number);
+}
+
+function formatRuntimeStateDelta(value) {
+  const number = strictNumberOrNull(value);
+  if (number == null) {
+    return '待确认';
+  }
+  return `${number > 0 ? '+' : ''}${formatRuntimeStateNumber(number)}`;
+}
+
+function getRuntimeStateDeltaSign(value) {
+  const number = strictNumberOrNull(value);
+  if (number == null || number === 0) {
+    return 'neutral';
+  }
+  return number > 0 ? 'positive' : 'negative';
+}
+
+function formatRuntimeStateNumber(value) {
+  return Number(value).toLocaleString('zh-CN', {
+    maximumFractionDigits: 3,
+  });
+}
+
 function hasOverrun(detail) {
   return Number(detail.overrunValue) > 0;
 }
@@ -574,6 +650,14 @@ function formatNumber(value) {
 
 function formatSourceValues(values) {
   return values?.length ? values.join(', ') : '无';
+}
+
+function strictNumberOrNull(value) {
+  if (value == null || value === '') {
+    return null;
+  }
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
 }
 
 function createRuntimeDetailEditContext(detail, focus) {
@@ -751,6 +835,86 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.04);
+}
+
+.runtime-detail-three-value-state {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  margin: 0 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.runtime-detail-three-value-header,
+.runtime-detail-three-value-row {
+  display: grid;
+  grid-template-columns: minmax(84px, 1.2fr) repeat(3, minmax(52px, 0.8fr));
+  align-items: center;
+  min-width: 0;
+}
+
+.runtime-detail-three-value-header {
+  color: #8f9aa3;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.runtime-detail-three-value-header span,
+.runtime-detail-three-value-row > span,
+.runtime-detail-three-value-metric {
+  min-width: 0;
+  padding: 7px 8px;
+}
+
+.runtime-detail-three-value-header span:not(:first-child),
+.runtime-detail-three-value-row > span {
+  text-align: right;
+}
+
+.runtime-detail-three-value-row {
+  background: rgba(255, 255, 255, 0.025);
+  color: #e9edf0;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.runtime-detail-three-value-row[data-primary='true'] {
+  background: rgba(121, 199, 185, 0.1);
+}
+
+.runtime-detail-three-value-row + .runtime-detail-three-value-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.runtime-detail-three-value-metric {
+  display: grid;
+  gap: 2px;
+}
+
+.runtime-detail-three-value-metric strong {
+  overflow-wrap: anywhere;
+  color: #ffffff;
+  font-size: 11px;
+}
+
+.runtime-detail-three-value-metric small {
+  overflow: hidden;
+  color: #8f9aa3;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.runtime-detail-three-value-delta[data-delta-sign='negative'] {
+  color: #ff9f9f;
+}
+
+.runtime-detail-three-value-delta[data-delta-sign='positive'] {
+  color: #8de0c6;
 }
 
 .runtime-detail-navigation strong {
