@@ -17,6 +17,7 @@ export function createThreeValueRuntimeProjection({
   runtimeInputSource,
   actionHitThreeValueDeltaGeneration,
   threeValueGenerationLayer,
+  runtimeCalculatorAdapters,
 }) {
   const runtimeInput = createThreeValueRuntimeInput({
     generationOutputs,
@@ -24,11 +25,13 @@ export function createThreeValueRuntimeProjection({
     actionHitThreeValueDeltaGeneration,
     threeValueGenerationLayer,
   });
-  const appliedDeltas = runtimeInput.appliedDeltas;
+  const generationAppliedDeltas = runtimeInput.appliedDeltas;
   const runtimeStateSnapshots = createThreeValueRuntimeStateSnapshots({
     scenario,
-    appliedDeltas,
+    appliedDeltas: generationAppliedDeltas,
+    runtimeCalculatorAdapters,
   });
+  const appliedDeltas = runtimeStateSnapshots.runtimeDeltas;
   const stateSnapshotByDeltaId = new Map(
     runtimeStateSnapshots.snapshots.map(snapshot => [
       snapshot.sourceDeltaId,
@@ -105,6 +108,7 @@ export function createThreeValueRuntimeProjection({
         : 'runtime-projection-ready-no-applied-deltas',
     inputContractName: runtimeInput.contractName,
     runtimeInput,
+    runtimeAppliedDeltas: appliedDeltas,
     appliedOnly: true,
     outputContract,
     runtimeOutputs,
@@ -179,6 +183,12 @@ function createThreeValueRuntimeOutputs({
       appliedDeltaCount: outputContract.summary.appliedDeltaCount,
       simLogCount: outputContract.summary.simLogCount,
       stateSnapshotCount: outputContract.summary.stateSnapshotCount,
+      runtimeCalculatorInvocationCount:
+        outputContract.summary.runtimeCalculatorInvocationCount,
+      runtimeCalculatorReplacedInvocationCount:
+        outputContract.summary.runtimeCalculatorReplacedInvocationCount,
+      runtimeCalculatorFallbackInvocationCount:
+        outputContract.summary.runtimeCalculatorFallbackInvocationCount,
       enemyStatePointCount: outputContract.summary.enemyStatePointCount,
       stateCurvePointCount: outputContract.summary.stateCurvePointCount,
       resourceCurveActorCount: outputContract.summary.resourceCurveActorCount,
@@ -298,6 +308,9 @@ function createRuntimeOutputConsistency({
   );
   const stateSnapshots = stateCurves?.snapshots?.snapshots ?? [];
   const stateSnapshotCount = stateSnapshots.length;
+  const runtimeCalculatorInvocationCount = stateSnapshots.filter(
+    snapshot => snapshot.runtimeCalculatorInvocation
+  ).length;
   const stateSnapshotByDeltaId = new Map(
     stateSnapshots.map(snapshot => [snapshot.sourceDeltaId, snapshot])
   );
@@ -332,6 +345,19 @@ function createRuntimeOutputConsistency({
       point =>
         point.stateSnapshot === stateSnapshotByDeltaId.get(point.sourceDeltaId)
     ),
+    summaryRuntimeCalculatorInvocationCount:
+      summary.runtimeCalculatorInvocationCount ===
+      runtimeCalculatorInvocationCount,
+    simLogCalculatorInvocationsShared: simLog.every(
+      row =>
+        row.runtimeCalculatorInvocation ===
+        row.stateSnapshot?.runtimeCalculatorInvocation
+    ),
+    stateCurveCalculatorInvocationsShared: curvePoints.every(
+      point =>
+        point.runtimeCalculatorInvocation ===
+        point.stateSnapshot?.runtimeCalculatorInvocation
+    ),
   };
   const consistent = Object.values(checks).every(Boolean);
   return {
@@ -345,6 +371,7 @@ function createRuntimeOutputConsistency({
     stateCurvePointCount,
     resourceActorPointCount,
     stateSnapshotCount,
+    runtimeCalculatorInvocationCount,
     checks,
     consistent,
     applied: true,
@@ -391,6 +418,12 @@ function createThreeValueRuntimeOutputContract({
       appliedDeltaCount: appliedDeltas.length,
       simLogCount: simLog.length,
       stateSnapshotCount: stateCurves.snapshots.summary.snapshotCount,
+      runtimeCalculatorInvocationCount:
+        stateCurves.snapshots.summary.runtimeCalculatorInvocationCount,
+      runtimeCalculatorReplacedInvocationCount:
+        stateCurves.snapshots.summary.runtimeCalculatorReplacedInvocationCount,
+      runtimeCalculatorFallbackInvocationCount:
+        stateCurves.snapshots.summary.runtimeCalculatorFallbackInvocationCount,
       enemyStatePointCount: enemyStateCurve.pointCount,
       stateCurvePointCount: stateCurves.summary.stateCurvePointCount,
       resourceCurveActorCount: resourceCurves.summary.actorCount,
@@ -472,6 +505,10 @@ function createRuntimeSimLogOutputContract({ runtimeInput, simLog }) {
       'calculationKind',
       'calculationStatus',
       'calculationReplaceable',
+      'runtimeCalculatorInvocation',
+      'runtimeCalculatorAdapterKey',
+      'runtimeCalculatorInvocationStatus',
+      'runtimeCalculationChanged',
     ],
     applied: true,
   };
@@ -506,8 +543,11 @@ function createRuntimeStateCurvesOutputContract({
       status: stateCurves.snapshots.status,
       contractName: stateCurves.snapshots.contractName,
       snapshotCount: stateCurves.snapshots.summary.snapshotCount,
+      runtimeCalculatorInvocationCount:
+        stateCurves.snapshots.summary.runtimeCalculatorInvocationCount,
       keyFields: ['sourceDeltaId', 'runtimeSequenceIndex'],
       valueFields: ['before', 'delta', 'after'],
+      calculatorInvocationField: 'runtimeCalculatorInvocation',
     },
     summaryFields: [
       'enemyPointCount',
@@ -518,6 +558,7 @@ function createRuntimeStateCurvesOutputContract({
       'resourcePointCount',
       'selfEnergyDelta',
       'stateSnapshotCount',
+      'runtimeCalculatorInvocationCount',
     ],
     applied: true,
   };
@@ -565,6 +606,9 @@ function createRuntimeSummaryOutputContract(summary) {
       'resourceCurvePointCount',
       'simLogCount',
       'stateSnapshotCount',
+      'runtimeCalculatorInvocationCount',
+      'runtimeCalculatorReplacedInvocationCount',
+      'runtimeCalculatorFallbackInvocationCount',
       'calculatorCount',
       'valueSourceSlotCount',
       'runtimeValueSourceSlotCount',
@@ -786,6 +830,11 @@ function createThreeValueRuntimeSimLog(appliedDeltas, stateSnapshotByDeltaId) {
       typeof delta.calculationReplaceable === 'boolean'
         ? delta.calculationReplaceable
         : (delta.calculator?.replaceable ?? null),
+    runtimeCalculatorInvocation: delta.runtimeCalculatorInvocation ?? null,
+    runtimeCalculatorAdapterKey: delta.runtimeCalculatorAdapterKey ?? null,
+    runtimeCalculatorInvocationStatus:
+      delta.runtimeCalculatorInvocationStatus ?? null,
+    runtimeCalculationChanged: Boolean(delta.runtimeCalculationChanged),
     confidence: delta.confidence,
     stateCurveSequenceIndex: delta.stateCurveSequenceIndex,
     runtimeSequenceIndex: delta.runtimeSequenceIndex ?? index,
@@ -836,6 +885,11 @@ function createThreeValueRuntimePoint(delta, sequenceIndex, stateSnapshot) {
       typeof delta.calculationReplaceable === 'boolean'
         ? delta.calculationReplaceable
         : (delta.calculator?.replaceable ?? null),
+    runtimeCalculatorInvocation: delta.runtimeCalculatorInvocation ?? null,
+    runtimeCalculatorAdapterKey: delta.runtimeCalculatorAdapterKey ?? null,
+    runtimeCalculatorInvocationStatus:
+      delta.runtimeCalculatorInvocationStatus ?? null,
+    runtimeCalculationChanged: Boolean(delta.runtimeCalculationChanged),
     confidence: delta.confidence,
     sourceStatus: delta.sourceStatus,
     resultStatus: delta.resultStatus,
@@ -868,6 +922,12 @@ function createThreeValueRuntimeStateCurves({
       resourcePointCount: resourceCurves.summary.pointCount,
       selfEnergyDelta: resourceCurves.summary.selfEnergyDelta,
       stateSnapshotCount: runtimeStateSnapshots.summary.snapshotCount,
+      runtimeCalculatorInvocationCount:
+        runtimeStateSnapshots.summary.runtimeCalculatorInvocationCount,
+      runtimeCalculatorReplacedInvocationCount:
+        runtimeStateSnapshots.summary.runtimeCalculatorReplacedInvocationCount,
+      runtimeCalculatorFallbackInvocationCount:
+        runtimeStateSnapshots.summary.runtimeCalculatorFallbackInvocationCount,
       applied: true,
     },
     applied: true,
@@ -969,6 +1029,21 @@ function summarizeThreeValueRuntimeProjection({
     stateSnapshotReadyCount: runtimeStateSnapshots.summary.readySnapshotCount,
     stateSnapshotPendingBaselineCount:
       runtimeStateSnapshots.summary.pendingBaselineSnapshotCount,
+    runtimeCalculatorInvocationCount:
+      runtimeStateSnapshots.summary.runtimeCalculatorInvocationCount,
+    runtimeCalculatorPassthroughInvocationCount:
+      runtimeStateSnapshots.summary.runtimeCalculatorPassthroughInvocationCount,
+    runtimeCalculatorReplacedInvocationCount:
+      runtimeStateSnapshots.summary.runtimeCalculatorReplacedInvocationCount,
+    runtimeCalculatorFallbackInvocationCount:
+      runtimeStateSnapshots.summary.runtimeCalculatorFallbackInvocationCount,
+    runtimeCalculatorCustomAdapterInvocationCount:
+      runtimeStateSnapshots.summary
+        .runtimeCalculatorCustomAdapterInvocationCount,
+    runtimeCalculatorAdapterKeys:
+      runtimeStateSnapshots.summary.runtimeCalculatorAdapterKeys,
+    runtimeCalculatorInvocationStatuses:
+      runtimeStateSnapshots.summary.runtimeCalculatorInvocationStatuses,
     enemyHpInitial: enemyStateCurve.stateMetrics?.hp?.initialValue ?? null,
     enemyHpRemaining: enemyStateCurve.stateMetrics?.hp?.currentValue ?? null,
     enemyHpBaselineStatus:

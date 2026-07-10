@@ -504,6 +504,9 @@ describe('three value runtime projection', () => {
       summaryStateSnapshotCount: true,
       simLogStateSnapshotsShared: true,
       stateCurveSnapshotsShared: true,
+      summaryRuntimeCalculatorInvocationCount: true,
+      simLogCalculatorInvocationsShared: true,
+      stateCurveCalculatorInvocationsShared: true,
     });
     expect(runtimeProjection.runtimeStateSnapshots).toMatchObject({
       sourceKind: 'azpr-three-value-runtime-state-snapshots',
@@ -516,6 +519,10 @@ describe('three value runtime projection', () => {
         enemyHpFinal: 13800,
         selfEnergyActorCount: 1,
         selfEnergyBaselineReadyActorCount: 0,
+        runtimeCalculatorInvocationCount: 2,
+        runtimeCalculatorPassthroughInvocationCount: 2,
+        runtimeCalculatorReplacedInvocationCount: 0,
+        runtimeCalculatorFallbackInvocationCount: 0,
       },
     });
     expect(runtimeProjection.stateCurves.snapshots).toBe(
@@ -532,6 +539,35 @@ describe('three value runtime projection', () => {
     expect(runtimeConsumerView.summary.stateSnapshotCount).toBe(2);
     expect(runtimeProjection.simLog[0].stateSnapshot).toBe(
       runtimeProjection.runtimeStateSnapshots.snapshots[0]
+    );
+    expect(runtimeProjection.runtimeAppliedDeltas).toEqual([
+      expect.objectContaining({
+        sourceDeltaId: 'action-001|hit-1|enemyHpDamage|applied|60|0',
+        delta: 1200,
+        hpDelta: 1200,
+        runtimeCalculationChanged: false,
+      }),
+      expect.objectContaining({
+        sourceDeltaId:
+          'action-002|event-RESOURCE_CHANGE-0|selfEnergyChange|applied|90|0',
+        delta: -30,
+        energyDelta: -30,
+        runtimeCalculationChanged: false,
+      }),
+    ]);
+    expect(
+      runtimeProjection.runtimeAppliedDeltas[0].runtimeCalculatorInvocation
+    ).toBe(
+      runtimeProjection.runtimeStateSnapshots.snapshots[0]
+        .runtimeCalculatorInvocation
+    );
+    expect(
+      runtimeProjection.runtimeStateSnapshots.snapshots[0]
+        .runtimeCalculatorInvocation.input.stateBefore
+    ).toBe(runtimeProjection.runtimeStateSnapshots.snapshots[0].before);
+    expect(runtimeProjection.simLog[0].runtimeCalculatorInvocation).toBe(
+      runtimeProjection.runtimeStateSnapshots.snapshots[0]
+        .runtimeCalculatorInvocation
     );
     expect(runtimeProjection.enemyStateCurve.points[0].stateSnapshot).toBe(
       runtimeProjection.runtimeStateSnapshots.snapshots[0]
@@ -1470,6 +1506,111 @@ describe('three value runtime projection', () => {
         actor.points.map(point => point.stateSnapshot)
       )
     ).toEqual([snapshots[1], snapshots[3]]);
+  });
+
+  it('replaces only runtime delta output through a state-aware calculator adapter', () => {
+    const generationDelta = createRuntimeStateDelta({
+      id: 'hp-replace',
+      actorId: 'actor-001',
+      actorName: '末音',
+      trackKey: 'enemyHpDamage',
+      value: 100,
+      frameIndex: 10,
+    });
+    const runtimeProjection = createThreeValueRuntimeProjection({
+      scenario: {
+        enemy: {
+          id: 'enemy-001',
+          stats: { maxHp: 1000 },
+          hpMultiplier: 1,
+        },
+        actors: [
+          {
+            id: 'actor-001',
+            name: '末音',
+            initialSp: 0,
+            stats: { maxSp: 100 },
+          },
+        ],
+      },
+      threeValueGenerationLayer: {
+        contract: { name: 'Action -> Hit -> ThreeValueDelta' },
+        deltas: [generationDelta],
+      },
+      runtimeCalculatorAdapters: {
+        enemyHpDamage: {
+          key: 'unit-test-state-aware-hp-adapter',
+          version: 7,
+          calculate(input) {
+            return {
+              delta:
+                input.stateBefore.enemyHp.currentValue === 1000
+                  ? input.generatedDelta.delta * 2
+                  : input.generatedDelta.delta,
+              status: 'unit-test-runtime-hp-replaced',
+            };
+          },
+        },
+      },
+    });
+
+    expect(runtimeProjection.runtimeInput.appliedDeltas[0]).toMatchObject({
+      delta: 100,
+      hpDelta: 100,
+    });
+    expect(runtimeProjection.runtimeAppliedDeltas[0]).toMatchObject({
+      delta: 200,
+      hpDelta: 200,
+      runtimeCalculatorAdapterKey: 'unit-test-state-aware-hp-adapter',
+      runtimeCalculatorInvocationStatus:
+        'runtime-calculator-invocation-ready-replaced',
+      runtimeCalculationChanged: true,
+    });
+    const snapshot = runtimeProjection.runtimeStateSnapshots.snapshots[0];
+    expect(snapshot).toMatchObject({
+      before: {
+        enemyHp: expect.objectContaining({ currentValue: 1000 }),
+      },
+      delta: { enemyHp: 200 },
+      after: {
+        enemyHp: expect.objectContaining({ currentValue: 800 }),
+      },
+      runtimeCalculatorAdapterKey: 'unit-test-state-aware-hp-adapter',
+      runtimeCalculationChanged: true,
+    });
+    expect(snapshot.runtimeCalculatorInvocation).toMatchObject({
+      contractName: 'ThreeValueRuntimeCalculatorInvocation',
+      status: 'runtime-calculator-invocation-ready-replaced',
+      adapter: {
+        key: 'unit-test-state-aware-hp-adapter',
+        version: 7,
+        custom: true,
+        replaceable: true,
+      },
+      output: {
+        delta: 200,
+        hpDelta: 200,
+        status: 'unit-test-runtime-hp-replaced',
+      },
+      changed: true,
+      preservesGeneratedDelta: false,
+    });
+    expect(snapshot.runtimeCalculatorInvocation.input.stateBefore).toBe(
+      snapshot.before
+    );
+    expect(snapshot.runtimeCalculatorInvocation.input.sourceDelta).toBe(
+      runtimeProjection.runtimeInput.appliedDeltas[0]
+    );
+    expect(generationDelta).toMatchObject({ delta: 100, hpDelta: 100 });
+    expect(runtimeProjection.summary).toMatchObject({
+      enemyHpDelta: 200,
+      enemyHpRemaining: 800,
+      runtimeCalculatorInvocationCount: 1,
+      runtimeCalculatorPassthroughInvocationCount: 0,
+      runtimeCalculatorReplacedInvocationCount: 1,
+      runtimeCalculatorFallbackInvocationCount: 0,
+      runtimeCalculatorCustomAdapterInvocationCount: 1,
+    });
   });
 
   it('derives remaining enemy toughness from the configured scenario baseline', () => {

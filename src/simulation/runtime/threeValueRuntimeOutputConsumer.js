@@ -77,6 +77,10 @@ export function createThreeValueRuntimeOutputConsumerContract({
           stateSnapshots?.summary?.snapshotCount ??
             contractSummary.stateSnapshotCount
         ),
+        runtimeCalculatorInvocationCount: numberOrZero(
+          stateSnapshots?.summary?.runtimeCalculatorInvocationCount ??
+            contractSummary.runtimeCalculatorInvocationCount
+        ),
       },
       resourceCurves: {
         outputName: 'resourceCurves',
@@ -121,6 +125,21 @@ export function createThreeValueRuntimeOutputConsumerContract({
         stateSnapshots?.summary?.snapshotCount ??
           summary.stateSnapshotCount ??
           contractSummary.stateSnapshotCount
+      ),
+      runtimeCalculatorInvocationCount: numberOrZero(
+        stateSnapshots?.summary?.runtimeCalculatorInvocationCount ??
+          summary.runtimeCalculatorInvocationCount ??
+          contractSummary.runtimeCalculatorInvocationCount
+      ),
+      runtimeCalculatorReplacedInvocationCount: numberOrZero(
+        stateSnapshots?.summary?.runtimeCalculatorReplacedInvocationCount ??
+          summary.runtimeCalculatorReplacedInvocationCount ??
+          contractSummary.runtimeCalculatorReplacedInvocationCount
+      ),
+      runtimeCalculatorFallbackInvocationCount: numberOrZero(
+        stateSnapshots?.summary?.runtimeCalculatorFallbackInvocationCount ??
+          summary.runtimeCalculatorFallbackInvocationCount ??
+          contractSummary.runtimeCalculatorFallbackInvocationCount
       ),
       enemyStatePointCount: numberOrZero(
         stateCurves?.enemy?.pointCount ??
@@ -276,6 +295,10 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
       stateSnapshotCount: numberOrZero(
         outputSummary.stateSnapshotCount ??
           stateSnapshots?.summary?.snapshotCount
+      ),
+      runtimeCalculatorInvocationCount: numberOrZero(
+        outputSummary.runtimeCalculatorInvocationCount ??
+          stateSnapshots?.summary?.runtimeCalculatorInvocationCount
       ),
       resourceCurvePointCount: numberOrZero(
         outputSummary.resourceCurvePointCount

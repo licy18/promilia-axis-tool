@@ -1,3 +1,9 @@
+import {
+  createRuntimeAppliedDeltaFromInvocation,
+  createThreeValueRuntimeCalculatorInvocation,
+  summarizeThreeValueRuntimeCalculatorInvocations,
+} from './threeValueRuntimeCalculatorInvocation';
+
 export const THREE_VALUE_RUNTIME_STATE_SNAPSHOT_CONTRACT_NAME =
   'AzPrThreeValueRuntimeStateSnapshot';
 
@@ -10,6 +16,7 @@ const RUNTIME_STATE_METRIC_BY_TRACK_KEY = {
 export function createThreeValueRuntimeStateSnapshots({
   scenario = {},
   appliedDeltas = [],
+  runtimeCalculatorAdapters = {},
 } = {}) {
   const enemyBaseline = createThreeValueRuntimeEnemyBaseline(scenario);
   const actorRecords = new Map(
@@ -35,6 +42,8 @@ export function createThreeValueRuntimeStateSnapshots({
     );
   }
 
+  const runtimeDeltas = [];
+  const calculatorInvocations = [];
   const snapshots = appliedDeltas.map((delta, index) => {
     const energyOwnerActorId = resolveRuntimeEnergyOwnerActorId(delta);
     const energyActorState = ensureRuntimeSelfEnergyActorState({
@@ -50,7 +59,19 @@ export function createThreeValueRuntimeStateSnapshots({
       enemyToughnessState,
       energyActorState,
     });
-    const deltaValues = createRuntimeStateSnapshotDeltaValues(delta);
+    const runtimeCalculatorInvocation =
+      createThreeValueRuntimeCalculatorInvocation({
+        delta,
+        stateBefore: before,
+        runtimeCalculatorAdapters,
+      });
+    const runtimeDelta = createRuntimeAppliedDeltaFromInvocation(
+      delta,
+      runtimeCalculatorInvocation
+    );
+    runtimeDeltas.push(runtimeDelta);
+    calculatorInvocations.push(runtimeCalculatorInvocation);
+    const deltaValues = createRuntimeStateSnapshotDeltaValues(runtimeDelta);
 
     applyRuntimeStateDelta(enemyHpState, deltaValues.enemyHp);
     applyRuntimeStateDelta(enemyToughnessState, deltaValues.enemyToughness);
@@ -91,6 +112,9 @@ export function createThreeValueRuntimeStateSnapshots({
         null,
       mechanismContextStatus:
         delta.mechanismContextStatus ?? delta.mechanismContext?.status ?? null,
+      runtimeCalculatorInvocation,
+      runtimeCalculatorAdapterKey: runtimeCalculatorInvocation.adapter.key,
+      runtimeCalculationChanged: runtimeCalculatorInvocation.changed,
       baselineConfirmed,
       before,
       delta: deltaValues,
@@ -116,6 +140,8 @@ export function createThreeValueRuntimeStateSnapshots({
   const readySnapshotCount = snapshots.filter(
     snapshot => snapshot.baselineConfirmed
   ).length;
+  const calculatorInvocationSummary =
+    summarizeThreeValueRuntimeCalculatorInvocations(calculatorInvocations);
 
   return {
     schemaVersion: 1,
@@ -130,6 +156,9 @@ export function createThreeValueRuntimeStateSnapshots({
       selfEnergyByActor,
     },
     snapshots,
+    runtimeDeltas,
+    calculatorInvocations,
+    calculatorInvocationSummary,
     summary: {
       snapshotCount: snapshots.length,
       readySnapshotCount,
@@ -150,6 +179,18 @@ export function createThreeValueRuntimeStateSnapshots({
         currentValue: actor.finalState.currentValue,
         baselineStatus: actor.finalState.baselineStatus,
       })),
+      runtimeCalculatorInvocationCount:
+        calculatorInvocationSummary.invocationCount,
+      runtimeCalculatorPassthroughInvocationCount:
+        calculatorInvocationSummary.passthroughInvocationCount,
+      runtimeCalculatorReplacedInvocationCount:
+        calculatorInvocationSummary.replacedInvocationCount,
+      runtimeCalculatorFallbackInvocationCount:
+        calculatorInvocationSummary.fallbackInvocationCount,
+      runtimeCalculatorCustomAdapterInvocationCount:
+        calculatorInvocationSummary.customAdapterInvocationCount,
+      runtimeCalculatorAdapterKeys: calculatorInvocationSummary.adapterKeys,
+      runtimeCalculatorInvocationStatuses: calculatorInvocationSummary.statuses,
       applied: true,
     },
     applied: true,

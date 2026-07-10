@@ -24844,3 +24844,93 @@ stateSnapshotPendingBaselineCount
 - pending SP baseline 测试覆盖 `currentValue = null` 时仍保留累计 delta。
 - output consistency 测试覆盖 sim log、敌人曲线和资源曲线共享同一快照引用。
 - Workbench 全量单元测试、构建和浏览器主流程保持通过，现有三值结果不变。
+
+## 348. 运行时 calculator 调用：ThreeValueRuntimeCalculatorInvocation
+
+### 348.1 调用合同
+
+每个 runtime applied delta 在状态推进前新增一次调用：
+
+```text
+runtimeCalculatorInvocation
+  schemaVersion = 1
+  contractName = ThreeValueRuntimeCalculatorInvocation
+  status
+  sourceDeltaId
+  trackKey
+  outputField
+  adapter
+    key
+    version
+    sourceKind
+    custom
+    replaceable
+  input
+    sourceDeltaId
+    trackKey
+    outputField
+    generatedDelta
+      delta
+      hpDelta
+      toughnessDelta
+      energyDelta
+    mechanismContext
+    stateBefore
+    sourceCalculatorResult
+    sourceDelta
+  output
+    delta
+    hpDelta
+    toughnessDelta
+    energyDelta
+    status
+    sourceKind
+    sourceCalculationStatus
+    fallbackReason
+  validation
+  changed
+  preservesGeneratedDelta
+  fallbackReason
+```
+
+`input.mechanismContext` 与 generation delta 的 P3-A 上下文保持同一引用；`input.stateBefore` 与对应 P3-B snapshot 的 `before` 保持同一引用。adapter 因此可以在不读取 UI 的情况下获得来源、目标和当前运行时状态。
+
+### 348.2 默认与替换行为
+
+- 默认 adapter 按 track 使用透传模式，output 与 generation delta 相同。
+- `createThreeValueRuntimeProjection` 可通过 `runtimeCalculatorAdapters[trackKey]` 注入函数或带 `calculate` 的 adapter 定义。
+- adapter 只能替换当前 track 对应的 delta 字段；generation input 保持不变。
+- 非有限输出或 adapter 异常会回退到 generation delta，并记录 `runtime-calculator-invocation-ready-with-fallback`。
+
+runtime 新增：
+
+```text
+runtimeProjection.runtimeAppliedDeltas[]
+  runtimeCalculatorInvocation
+  runtimeCalculatorAdapterKey
+  runtimeCalculatorInvocationStatus
+  runtimeCalculationChanged
+```
+
+### 348.3 输出传递与摘要
+
+同一 invocation 引用进入：
+
+```text
+stateSnapshot.runtimeCalculatorInvocation
+simLog[].runtimeCalculatorInvocation
+enemyStateCurve.points[].runtimeCalculatorInvocation
+resourceCurves.curvesByActor[].points[].runtimeCalculatorInvocation
+```
+
+summary 新增 invocation 总数、透传数、替换数、fallback 数、自定义 adapter 调用数、adapter keys 和状态集合。output consistency 验证日志、曲线点与快照没有复制或错配 invocation。
+
+### 348.4 计算边界
+
+P3-C 只建立 runtime 公式调用和替换边界。默认 adapter 不改变 HP、韧性或自身能量值；测试 adapter 仅用于证明状态感知替换能力，不进入生产默认配置。
+
+### 348.5 验证
+
+- 独立 invocation 测试覆盖默认透传、非法输出回退和异常回退。
+- runtime projection 测试覆盖自定义 HP adapter 读取敌人变更前 HP、替换 runtime delta 并保持 generation delta 不变。
+- 日志、状态曲线、资源曲线和 summary 测试覆盖 invocation 引用与数量一致性。

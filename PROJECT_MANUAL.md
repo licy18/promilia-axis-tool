@@ -509,6 +509,21 @@ P0 验证结论：当前状态可以作为“Workbench 主流程 demo”给用�
 - `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
 - `npm run test:e2e:workbench-flow`：通过，25 条 Workbench 浏览器主流程。
 
+### P3-C 运行时 calculator invocation 边界（2026-07-10）
+
+已完成能力：
+
+- 每条 generation applied delta 在改变运行时状态前都会建立 `ThreeValueRuntimeCalculatorInvocation`，统一输入 generation delta、P3-A 机制上下文、P3-B `stateSnapshot.before` 和原 calculator result。
+- 默认 runtime adapter 原样透传 generation calculator 的三值结果；runtime 使用独立 `runtimeAppliedDeltas` 推进状态，不回写或污染 generation 合同。
+- 可按 HP、韧性、自身能量 track 注入状态感知 adapter；替换后的结果会统一进入状态快照、日志、曲线和 summary。
+- adapter 抛错或返回非法数值时自动回退到 generation delta，并在 invocation 与 summary 中记录 fallback；默认项目数值结果保持不变。
+
+已完成验证：
+
+- `npm run test -- --run`：通过，42 个测试文件、317 条测试，覆盖默认透传、状态感知替换、非法输出回退和异常回退。
+- `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
+- `npm run test:e2e:workbench-flow`：通过，25 条 Workbench 浏览器主流程。
+
 ### 下一阶段优先级
 
 P1：核心导入/导出与分享闭环已完成。
@@ -525,8 +540,9 @@ P3：运行时层真实机制适配。
 
 - P3-A 已完成：标准 Hit 已接入统一来源、目标、所有权与时序上下文，calculator adapter 和 runtime 使用同一合同。
 - P3-B 已完成：运行时按 delta 顺序输出三值变更前后状态，日志、曲线和 summary 已共享同一快照合同。
-- 下一阶段 P3-C：建立运行时 calculator invocation 边界，把机制上下文、`stateSnapshot.before` 和现有 calculator result 组合为可替换调用输入；默认 adapter 原样返回当前 delta，确保结果不变。
-- P3-C 只为后续已确认机制提供稳定替换点，不在本阶段引入真实倍率、抗性公式或测试期平衡。
+- P3-C 已完成：runtime calculator 已具备状态感知调用合同、默认透传、可替换 adapter 与安全回退，现有结果保持不变。
+- 下一阶段 P3-D：完成角色独立初始 SP 项目配置；每个队伍槽位可设置初始 SP，并随草稿、JSON、分享、撤销/重做进入项目闭环，runtime 快照据此输出绝对能量前后值。
+- P3-D 不推断蓝色星原默认初始 SP；未配置时继续保持 pending，配置值按角色 `MAXSP` 校验。
 - calculator 保持可替换；不追测试期最终倍率和平衡。
 - 优先跑通 HP、韧性、自身能量的来源、时序和作用对象。
 
