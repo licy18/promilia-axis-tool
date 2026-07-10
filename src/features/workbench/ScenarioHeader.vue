@@ -9,7 +9,16 @@
       <div class="meta-row">
         <span>{{ scenario.durationMs / 1000 }}s</span>
         <span>{{ scenario.actorCount }} actor</span>
-        <span data-testid="scenario-action-count">{{ scenario.actionCount }} action</span>
+        <span
+          :data-executed-action-count="scenario.executedActionCount"
+          :data-skipped-action-count="scenario.skippedActionCount"
+          data-testid="scenario-action-count"
+        >
+          <template v-if="scenario.skippedActionCount > 0">
+            {{ scenario.executedActionCount }}/{{ scenario.actionCount }} action
+          </template>
+          <template v-else>{{ scenario.actionCount }} action</template>
+        </span>
         <span>{{ scenario.enemyName }}</span>
       </div>
     </div>
@@ -21,7 +30,9 @@
       </div>
       <div class="summary-item">
         <span class="label">Hits</span>
-        <strong data-testid="scenario-hit-count">{{ summary.projectedHitCount }}</strong>
+        <strong data-testid="scenario-hit-count">{{
+          summary.projectedHitCount
+        }}</strong>
       </div>
       <div class="summary-item warning">
         <span class="label">Timing Gaps</span>

@@ -627,8 +627,8 @@ P5：排轴规则与运行诊断闭环。
 - P5-A 已完成：模拟层输出统一排轴规则合同，覆盖同角色轨动作占用、`skillsub_logic.coolDown` 冷却冲突和 SP 前置条件单位缺口。
 - Workbench 可以从结构化诊断定位来源动作，对有确定最早时间的冲突直接应用建议时间，修正后重新运行并继续曲线/日志/详情复盘。
 - P5-B 已完成：逐动作 readiness、充能快照和合法施放冷却窗口已经成为标准合同；动作库、时间轴和运行详情共享同一可执行事实。
-- 下一阶段进入 P5-C 规则驱动执行计划：在不改公式的前提下，把确定阻塞动作与可执行/待确认动作编译成明确执行计划，并让 generation/runtime 统一消费。
-- P5-C 继续保持 SP 单位 adapter 可替换；在 `skillsub_logic.spCost = 100` 与角色 `MAXSP = 1` 的换算未闭合前，待确认动作仍可进入执行计划，不伪造资源不足结论。
+- P5-C 已完成：确定阻塞动作会从动作事件、效果命令、ActionResult、Generation 和 Runtime 中统一排除；待确认动作仍进入执行计划。
+- 下一阶段进入 P6-A PNG 项目快照与元数据回导：在现有 JSON/分享链接之上补齐可预览、可交换、可反导入的项目文件闭环，继续对齐 Endaxis 发布能力。
 
 ### P4-A 标准状态效果运行时合同（2026-07-10）
 
@@ -699,6 +699,24 @@ P5：排轴规则与运行诊断闭环。
 - `npm run test -- --run`：通过，48 个测试文件、342 条测试。
 - `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
 - `npm run test:e2e:workbench-flow`：通过，27 条 Workbench 浏览器主流程；冷却规则路径新增验证动作库、时间轴、修正后窗口和运行详情使用同一 readiness 事实。
+
+### P5-C 规则驱动执行计划（2026-07-10）
+
+已完成能力：
+
+- 新增标准 `AzPrActionExecutionPlan`，把每个动作编译为正常执行、带待确认条件执行或因确定规则违反而跳过，并保留诊断、顺序和跳过原因。
+- 模拟引擎只为计划允许的动作生成 `ACTION_START`、资源、冷却、伤害和效果事件；跳过动作生成结构化 `ACTION_SKIPPED` 记录。
+- ActionResult、候选曲线输入、`Action -> Hit -> ThreeValueDelta` 生成层、calculator runtime、状态曲线和资源曲线统一消费执行计划，不再由各层重复判断规则。
+- 被阻塞动作携带的 effect command 也会被隔离，并在 effect input summary 中记录；不会留下独立 Buff/异常事件。
+- Workbench 在存在阻塞时显示“已执行/总动作”，动作结果区只包含实际进入模拟的动作；修正规则后结果、曲线、日志和导航恢复。
+- SP 单位等 unresolved 条件继续允许执行；本阶段没有新增公式或修改单个动作的三值计算结果，只改变非法动作是否进入模拟。
+
+已完成验证：
+
+- 集成测试覆盖执行计划状态、待确认动作继续执行、非法双充能施放从事件/效果/Generation/Runtime 全链路隔离和 output consistency。
+- `npm run test -- --run`：通过，49 个测试文件、344 条测试。
+- `npm run build`：通过；仅保留既有 Sass `@import` 弃用警告和大 chunk 警告。
+- `npm run test:e2e:workbench-flow`：通过，27 条 Workbench 浏览器主流程；冷却规则路径验证 `3/4` 动作实际执行、无非法动作结果、修正后恢复 `4` 个结果，并复验既有多动作和批次编辑流程。
 
 ## 10. 文档维护规则
 

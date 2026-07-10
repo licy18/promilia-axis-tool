@@ -45,19 +45,27 @@ export function createThreeValueGenerationLayer({
   candidateValueSeries,
   runtimeSampleContext,
   stateCurves,
+  actionExecutionPlan,
 }) {
-  const actionsById = new Map(
-    (scenario?.actions ?? []).map(action => [action.id, action])
-  );
-  const generationInput = createThreeValueDeltaGenerationInput({
+  const executionScope = createGenerationExecutionScope({
     scenario,
     actionResultTimeline,
     candidateValueSeries,
-    runtimeSampleContext,
     stateCurves,
+    actionExecutionPlan,
+  });
+  const actionsById = new Map(
+    (executionScope.scenario?.actions ?? []).map(action => [action.id, action])
+  );
+  const generationInput = createThreeValueDeltaGenerationInput({
+    scenario: executionScope.scenario,
+    actionResultTimeline: executionScope.actionResultTimeline,
+    candidateValueSeries: executionScope.candidateValueSeries,
+    runtimeSampleContext,
+    stateCurves: executionScope.stateCurves,
   });
   const deltas = createThreeValueGenerationDeltas({
-    scenario,
+    scenario: executionScope.scenario,
     actionsById,
     tracks: generationInput.tracks,
   });
@@ -70,12 +78,18 @@ export function createThreeValueGenerationLayer({
     deltas,
   });
   const hits = createThreeValueGenerationHits(actions);
-  const summary = summarizeThreeValueGenerationLayer({
-    actions,
-    hits,
-    deltas,
-    valueSourceSlots,
-  });
+  const summary = {
+    ...summarizeThreeValueGenerationLayer({
+      actions,
+      hits,
+      deltas,
+      valueSourceSlots,
+    }),
+    executionPlanActionCount: executionScope.summary.actionCount,
+    executionPlanExecutedActionCount:
+      executionScope.summary.executedActionCount,
+    executionPlanSkippedActionCount: executionScope.summary.skippedActionCount,
+  };
   const standardContract = createActionHitThreeValueDeltaStandardContract({
     actions,
     hits,
@@ -143,6 +157,12 @@ export function createThreeValueGenerationLayer({
         policy:
           'mechanism context provides stable sources, targets and state baselines without applying unconfirmed formulas',
       },
+      executionPlanContract: {
+        name: actionExecutionPlan?.contractName ?? 'none',
+        version: actionExecutionPlan?.schemaVersion ?? 0,
+        policy:
+          'confirmed blocked actions are excluded; unresolved conditions remain executable',
+      },
       valueSourceSlotContract: {
         name: 'ThreeValueReplaceableSourceSlot',
         version: 1,
@@ -154,6 +174,8 @@ export function createThreeValueGenerationLayer({
       },
     },
     generationInput,
+    actionExecutionPlan,
+    executionScope: executionScope.summary,
     inputSources: generationInput.inputSources,
     inputSourceKind: generationInput.sourceKind,
     inputStatus: generationInput.status,
@@ -166,6 +188,85 @@ export function createThreeValueGenerationLayer({
     deltas,
     summary,
     applied: false,
+  };
+}
+
+function createGenerationExecutionScope({
+  scenario,
+  actionResultTimeline,
+  candidateValueSeries,
+  stateCurves,
+  actionExecutionPlan,
+}) {
+  if (!actionExecutionPlan) {
+    const actionCount = scenario?.actions?.length ?? 0;
+    return {
+      scenario,
+      actionResultTimeline,
+      candidateValueSeries,
+      stateCurves,
+      summary: {
+        actionCount,
+        executedActionCount: actionCount,
+        skippedActionCount: 0,
+      },
+    };
+  }
+
+  const executableActionIds = new Set(
+    actionExecutionPlan.executedActionIds ?? []
+  );
+  const includePoint = point =>
+    !point?.actionId || executableActionIds.has(point.actionId);
+  const filterSeries = series => ({
+    ...series,
+    points: (series?.points ?? []).filter(includePoint),
+  });
+  const scopedCandidateValueSeries = candidateValueSeries
+    ? {
+        ...candidateValueSeries,
+        series: (candidateValueSeries.series ?? []).map(filterSeries),
+        chart: candidateValueSeries.chart
+          ? {
+              ...candidateValueSeries.chart,
+              series: (candidateValueSeries.chart.series ?? []).map(
+                filterSeries
+              ),
+            }
+          : candidateValueSeries.chart,
+      }
+    : candidateValueSeries;
+  const scopedStateCurves = stateCurves
+    ? {
+        ...stateCurves,
+        tracks: (stateCurves.tracks ?? []).map(track => ({
+          ...track,
+          layers: (track.layers ?? []).map(layer => ({
+            ...layer,
+            points: (layer.points ?? []).filter(includePoint),
+          })),
+        })),
+      }
+    : stateCurves;
+
+  return {
+    scenario: {
+      ...scenario,
+      actions: (scenario?.actions ?? []).filter(action =>
+        executableActionIds.has(action.id)
+      ),
+    },
+    actionResultTimeline: (actionResultTimeline ?? []).filter(entry =>
+      executableActionIds.has(entry.actionId)
+    ),
+    candidateValueSeries: scopedCandidateValueSeries,
+    stateCurves: scopedStateCurves,
+    summary: {
+      actionCount: actionExecutionPlan.summary?.actionCount ?? 0,
+      executedActionCount:
+        actionExecutionPlan.summary?.executedActionCount ?? 0,
+      skippedActionCount: actionExecutionPlan.summary?.skippedActionCount ?? 0,
+    },
   };
 }
 

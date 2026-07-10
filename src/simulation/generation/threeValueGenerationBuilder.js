@@ -22,6 +22,7 @@ export function createThreeValueGenerationBundle({
   candidateValueSeries,
   runtimeSampleContext,
   stateCurves,
+  actionExecutionPlan,
 }) {
   const actionHitThreeValueDeltaGeneration =
     createActionHitThreeValueDeltaGeneration({
@@ -30,6 +31,7 @@ export function createThreeValueGenerationBundle({
       candidateValueSeries,
       runtimeSampleContext,
       stateCurves,
+      actionExecutionPlan,
     });
   const threeValueGenerationLayer =
     actionHitThreeValueDeltaGeneration.threeValueGenerationLayer;
@@ -68,6 +70,7 @@ export function createThreeValueGenerationBundle({
     generationInput,
     runtimeInputSource,
     generationOutputs,
+    actionExecutionPlan,
   });
 
   return {
@@ -85,9 +88,11 @@ export function createThreeValueGenerationBundle({
     standardContract,
     runtimeInputSource,
     generationOutputs,
+    actionExecutionPlan,
     actions: standardContract.actions,
     hits: standardContract.hits,
     deltas: standardContract.deltas,
+    actionExecutionPlan,
     summary,
     applied: false,
   };
@@ -981,6 +986,7 @@ function createThreeValueGenerationBundleSummary({
   generationInput,
   runtimeInputSource,
   generationOutputs,
+  actionExecutionPlan,
 }) {
   return {
     contractName: standardContract.name,
@@ -1033,6 +1039,19 @@ function createThreeValueGenerationBundleSummary({
     replaceableValueSourceSlotCount:
       standardContract.summary?.replaceableValueSourceSlotCount ?? 0,
     calculatorCount: standardContract.summary?.calculatorCount ?? 0,
+    executionPlanContractName: actionExecutionPlan?.contractName ?? '',
+    executionPlanActionCount:
+      actionExecutionPlan?.summary?.actionCount ??
+      standardContract.summary?.executionPlanActionCount ??
+      0,
+    executionPlanExecutedActionCount:
+      actionExecutionPlan?.summary?.executedActionCount ??
+      standardContract.summary?.executionPlanExecutedActionCount ??
+      0,
+    executionPlanSkippedActionCount:
+      actionExecutionPlan?.summary?.skippedActionCount ??
+      standardContract.summary?.executionPlanSkippedActionCount ??
+      0,
     applied: false,
   };
 }

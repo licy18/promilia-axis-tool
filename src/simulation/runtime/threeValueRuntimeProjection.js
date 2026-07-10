@@ -24,6 +24,7 @@ export function createThreeValueRuntimeProjection({
   threeValueGenerationLayer,
   runtimeCalculatorAdapters,
   effectTimeline,
+  actionExecutionPlan,
 }) {
   const runtimeInput = createThreeValueRuntimeInput({
     generationOutputs,
@@ -51,7 +52,8 @@ export function createThreeValueRuntimeProjection({
   const hitTransactionByDeltaId =
     createThreeValueRuntimeHitTransactionByDeltaId(hitTransactions);
   const runtimeEffectTimeline =
-    effectTimeline ?? createEffectRuntimeTimeline({ scenario });
+    effectTimeline ??
+    createEffectRuntimeTimeline({ scenario, actionExecutionPlan });
   const enemyStateCurve = createThreeValueRuntimeEnemyStateCurve({
     scenario,
     appliedDeltas,
@@ -89,6 +91,7 @@ export function createThreeValueRuntimeProjection({
     runtimeStateSnapshots,
     hitTransactions,
     effectTimeline: runtimeEffectTimeline,
+    actionExecutionPlan,
   });
   const outputContract = createThreeValueRuntimeOutputContract({
     runtimeInput,
@@ -116,6 +119,7 @@ export function createThreeValueRuntimeProjection({
     runtimeStateSnapshots,
     hitTransactions,
     effectTimeline: runtimeEffectTimeline,
+    actionExecutionPlan,
   });
 
   return {
@@ -142,6 +146,7 @@ export function createThreeValueRuntimeProjection({
     runtimeStateSnapshots,
     hitTransactions,
     effectTimeline: runtimeEffectTimeline,
+    actionExecutionPlan,
     enemyStateCurve,
     selfEnergyCurveByActor,
     simLog,
@@ -159,6 +164,7 @@ function createThreeValueRuntimeOutputs({
   runtimeStateSnapshots,
   hitTransactions,
   effectTimeline,
+  actionExecutionPlan,
 }) {
   const outputConsistency = createRuntimeOutputConsistency({
     outputContract,
@@ -167,6 +173,7 @@ function createThreeValueRuntimeOutputs({
     resourceCurves,
     hitTransactions,
     effectTimeline,
+    actionExecutionPlan,
     summary,
   });
   const outputConsumerContract = createThreeValueRuntimeOutputConsumerContract({
@@ -204,6 +211,7 @@ function createThreeValueRuntimeOutputs({
     stateSnapshots: runtimeStateSnapshots,
     hitTransactions,
     effectTimeline,
+    actionExecutionPlan,
     summary,
     outputConsistency,
     outputs: {
@@ -223,6 +231,11 @@ function createThreeValueRuntimeOutputs({
       hitTransactionCount: outputContract.summary.hitTransactionCount,
       effectEventCount: outputContract.summary.effectEventCount,
       activeEffectCount: outputContract.summary.activeEffectCount,
+      executionPlanActionCount: outputContract.summary.executionPlanActionCount,
+      executionPlanExecutedActionCount:
+        outputContract.summary.executionPlanExecutedActionCount,
+      executionPlanSkippedActionCount:
+        outputContract.summary.executionPlanSkippedActionCount,
       runtimeCalculatorInvocationCount:
         outputContract.summary.runtimeCalculatorInvocationCount,
       runtimeCalculatorReplacedInvocationCount:
@@ -334,6 +347,7 @@ function createRuntimeOutputConsistency({
   resourceCurves,
   hitTransactions,
   effectTimeline,
+  actionExecutionPlan,
   summary,
 }) {
   const simLogCount = simLog.length;
@@ -368,6 +382,12 @@ function createRuntimeOutputConsistency({
   );
   const effectEventCount = effectTimeline?.events?.length ?? 0;
   const activeEffectCount = effectTimeline?.activeEffects?.length ?? 0;
+  const executionPlanActionCount =
+    actionExecutionPlan?.summary?.actionCount ?? 0;
+  const executionPlanExecutedActionCount =
+    actionExecutionPlan?.summary?.executedActionCount ?? 0;
+  const executionPlanSkippedActionCount =
+    actionExecutionPlan?.summary?.skippedActionCount ?? 0;
   const curvePoints = [
     ...(stateCurves?.enemy?.points ?? []),
     ...(resourceCurves?.curvesByActor ?? []).flatMap(
@@ -411,6 +431,19 @@ function createRuntimeOutputConsistency({
       (effectTimeline?.events ?? []).every(
         event => event.appliedToCalculators === false
       ),
+    summaryExecutionPlanCounts:
+      summary.executionPlanActionCount === executionPlanActionCount &&
+      summary.executionPlanExecutedActionCount ===
+        executionPlanExecutedActionCount &&
+      summary.executionPlanSkippedActionCount ===
+        executionPlanSkippedActionCount,
+    outputContractExecutionPlanCounts:
+      outputContract.summary.executionPlanActionCount ===
+        executionPlanActionCount &&
+      outputContract.summary.executionPlanExecutedActionCount ===
+        executionPlanExecutedActionCount &&
+      outputContract.summary.executionPlanSkippedActionCount ===
+        executionPlanSkippedActionCount,
     hitTransactionSourceDeltasComplete:
       hitTransactionByDeltaId.size === simLogCount &&
       simLog.every(row => hitTransactionByDeltaId.has(row.sourceDeltaId)),
@@ -474,6 +507,9 @@ function createRuntimeOutputConsistency({
     hitTransactionCount,
     effectEventCount,
     activeEffectCount,
+    executionPlanActionCount,
+    executionPlanExecutedActionCount,
+    executionPlanSkippedActionCount,
     runtimeCalculatorInvocationCount,
     checks,
     consistent,
@@ -529,6 +565,12 @@ function createThreeValueRuntimeOutputContract({
       hitTransactionCount: hitTransactions.summary.transactionCount,
       effectEventCount: effectTimeline.summary.eventCount,
       activeEffectCount: effectTimeline.summary.activeEffectCount,
+      executionPlanActionCount: summary.executionPlanActionCount,
+      executionPlanExecutedActionCount:
+        summary.executionPlanExecutedActionCount,
+      executionPlanSkippedActionCount: summary.executionPlanSkippedActionCount,
+      executionPlanUnresolvedExecutedActionCount:
+        summary.executionPlanUnresolvedExecutedActionCount,
       runtimeCalculatorInvocationCount:
         stateCurves.snapshots.summary.runtimeCalculatorInvocationCount,
       runtimeCalculatorReplacedInvocationCount:
@@ -1150,6 +1192,7 @@ function summarizeThreeValueRuntimeProjection({
   runtimeStateSnapshots,
   hitTransactions,
   effectTimeline,
+  actionExecutionPlan,
 }) {
   const selfEnergyPointCount = selfEnergyCurveByActor.reduce(
     (sum, actor) => sum + actor.pointCount,
@@ -1225,6 +1268,14 @@ function summarizeThreeValueRuntimeProjection({
     peakActiveEffectCount: effectTimeline.summary.peakActiveEffectCount,
     effectCalculatorAppliedCount:
       effectTimeline.summary.calculatorAppliedEffectCount,
+    executionPlanContractName: actionExecutionPlan?.contractName ?? '',
+    executionPlanActionCount: actionExecutionPlan?.summary?.actionCount ?? 0,
+    executionPlanExecutedActionCount:
+      actionExecutionPlan?.summary?.executedActionCount ?? 0,
+    executionPlanSkippedActionCount:
+      actionExecutionPlan?.summary?.skippedActionCount ?? 0,
+    executionPlanUnresolvedExecutedActionCount:
+      actionExecutionPlan?.summary?.unresolvedExecutedActionCount ?? 0,
     runtimeCalculatorInvocationCount:
       runtimeStateSnapshots.summary.runtimeCalculatorInvocationCount,
     runtimeCalculatorPassthroughInvocationCount:

@@ -9,6 +9,7 @@ export function createActionHitThreeValueDeltaGeneration({
   candidateValueSeries,
   runtimeSampleContext,
   stateCurves,
+  actionExecutionPlan,
 } = {}) {
   const threeValueGenerationLayer = createThreeValueGenerationLayer({
     scenario,
@@ -16,6 +17,7 @@ export function createActionHitThreeValueDeltaGeneration({
     candidateValueSeries,
     runtimeSampleContext,
     stateCurves,
+    actionExecutionPlan,
   });
   const generationInput = threeValueGenerationLayer.generationInput ?? null;
   const standardContract =
@@ -38,6 +40,7 @@ export function createActionHitThreeValueDeltaGeneration({
     inputSourceKind: threeValueGenerationLayer.inputSourceKind,
     inputStatus: threeValueGenerationLayer.inputStatus,
     inputSources: threeValueGenerationLayer.inputSources ?? [],
+    actionExecutionPlan,
     generationInput,
     threeValueGenerationLayer,
     standardContract,
@@ -88,6 +91,12 @@ function createActionHitThreeValueDeltaGenerationSummary({
       standardContract.summary?.mechanismContextReadyDeltaCount ?? 0,
     mechanismContextMissingDeltaCount:
       standardContract.summary?.mechanismContextMissingDeltaCount ?? 0,
+    executionPlanActionCount:
+      standardContract.summary?.executionPlanActionCount ?? 0,
+    executionPlanExecutedActionCount:
+      standardContract.summary?.executionPlanExecutedActionCount ?? 0,
+    executionPlanSkippedActionCount:
+      standardContract.summary?.executionPlanSkippedActionCount ?? 0,
     applied: false,
   };
 }

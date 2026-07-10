@@ -1919,6 +1919,25 @@ describe('Workbench view', () => {
     expect(
       wrapper.findAll('[data-testid="workbench-timeline-cooldown-window"]')
     ).toHaveLength(2);
+    expect(
+      wrapper.find('[data-testid="scenario-action-count"]').attributes()
+    ).toMatchObject({
+      'data-executed-action-count': '3',
+      'data-skipped-action-count': '1',
+    });
+    expect(
+      wrapper.find('[data-testid="scenario-action-count"]').text()
+    ).toContain('3/4 action');
+    expect(
+      wrapper.findAll('[data-testid="workbench-action-result-source-row"]')
+    ).toHaveLength(3);
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-result-source-row"][data-action-id="action-0004"]'
+        )
+        .exists()
+    ).toBe(false);
 
     const rulePanel = wrapper.find(
       '[data-testid="workbench-action-rule-panel"]'
@@ -1956,6 +1975,18 @@ describe('Workbench view', () => {
     expect(
       wrapper.findAll('[data-testid="workbench-timeline-cooldown-window"]')
     ).toHaveLength(3);
+    expect(
+      wrapper.find('[data-testid="scenario-action-count"]').attributes()
+    ).toMatchObject({
+      'data-executed-action-count': '4',
+      'data-skipped-action-count': '0',
+    });
+    expect(
+      wrapper.find('[data-testid="scenario-action-count"]').text()
+    ).toContain('4 action');
+    expect(
+      wrapper.findAll('[data-testid="workbench-action-result-source-row"]')
+    ).toHaveLength(4);
   });
 
   it('prioritizes runtime detail in the side inspector while reviewing results', async () => {

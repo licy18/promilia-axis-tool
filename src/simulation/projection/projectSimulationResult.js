@@ -1395,6 +1395,7 @@ export function projectSimulationResult({
   resourceEvents,
   effectTimeline,
   actionRuleDiagnostics,
+  actionExecutionPlan,
 }) {
   const runtimeSampleContext = createRecoverSpRuntimeSampleContext(
     scenario.runtimeSampleCaptures
@@ -1404,6 +1405,7 @@ export function projectSimulationResult({
     damageEvents,
     resourceEvents,
     runtimeSampleContext,
+    actionExecutionPlan,
   });
   const candidateValueSeries = buildCandidateValueSeries(
     actionResultTimeline,
@@ -1420,6 +1422,7 @@ export function projectSimulationResult({
     actionResultTimeline,
     candidateValueSeries,
     runtimeSampleContext,
+    actionExecutionPlan,
   });
   const threeValueGenerationLayer =
     threeValueGenerationBundle.threeValueGenerationLayer;
@@ -1428,6 +1431,7 @@ export function projectSimulationResult({
     scenario,
     generationOutputs,
     effectTimeline,
+    actionExecutionPlan,
   });
   const runtimeOutputs = threeValueRuntimeProjection.runtimeOutputs;
   const damageTimeline = damageEvents.map(event => ({
@@ -1485,6 +1489,8 @@ export function projectSimulationResult({
       durationMs: scenario.time.durationMs,
       actorCount: scenario.actors.length,
       actionCount: scenario.actions.length,
+      executedActionCount: actionExecutionPlan.summary.executedActionCount,
+      skippedActionCount: actionExecutionPlan.summary.skippedActionCount,
       enemyId: scenario.enemy.id,
       enemyName: scenario.enemy.name,
       enemyLevel: scenario.enemy.level,
@@ -1505,6 +1511,7 @@ export function projectSimulationResult({
     effectTimeline: runtimeOutputs.effectTimeline,
     actionRuleDiagnostics,
     actionReadinessTimeline: actionRuleDiagnostics.readinessTimeline,
+    actionExecutionPlan,
     summary: {
       totalRawDamage,
       totalProjectedToughnessDamage,
@@ -1514,6 +1521,10 @@ export function projectSimulationResult({
       resourceEventCount: resourceTimeline.length,
       actionResultCount: actionResultTimeline.length,
       actionCount: scenario.actions.length,
+      executedActionCount: actionExecutionPlan.summary.executedActionCount,
+      skippedActionCount: actionExecutionPlan.summary.skippedActionCount,
+      unresolvedExecutedActionCount:
+        actionExecutionPlan.summary.unresolvedExecutedActionCount,
       candidateValueSeriesSummary: candidateValueSeries.summary,
       threeValueCurveFrameworkSummary: threeValueCurveFramework.summary,
       threeValueGenerationBundleSummary: threeValueGenerationBundle.summary,
@@ -1525,6 +1536,7 @@ export function projectSimulationResult({
       actionRuleDiagnosticsSummary: actionRuleDiagnostics.summary,
       actionReadinessTimelineSummary:
         actionRuleDiagnostics.readinessTimeline.summary,
+      actionExecutionPlanSummary: actionExecutionPlan.summary,
       formulaVersion: damageEvents[0]?.payload.formulaVersion ?? null,
       formulaCandidatePatternSummary,
       formulaExecutionMatrixSummary,
@@ -1544,6 +1556,7 @@ export function projectSimulationResult({
         'Formula breakdown exposes unapplied layers before they are confirmed.',
         'Skill timing is placeholder when timingMissingActionCount is greater than 0.',
         'Effect runtime tracks ownership, duration, refresh, stacking, and expiry, but effect modifiers do not change three-value calculators until an AzPr effect adapter is configured.',
+        'Confirmed rule-blocked actions are excluded from action results, effect commands, generation deltas, and runtime outputs; unresolved conditions remain executable.',
       ],
     },
   };
@@ -6144,60 +6157,70 @@ function buildActionResultTimeline({
   damageEvents,
   resourceEvents,
   runtimeSampleContext = null,
+  actionExecutionPlan = null,
 }) {
   const damageByActionId = groupEventsByActionId(damageEvents);
   const resourcesByActionId = groupEventsByActionId(resourceEvents);
+  const executionByActionId = new Map(
+    (actionExecutionPlan?.actions ?? []).map(entry => [entry.actionId, entry])
+  );
 
-  return scenario.actions.map(action => {
-    const actionDamageEvents = damageByActionId.get(action.id) ?? [];
-    const actionResourceEvents = resourcesByActionId.get(action.id) ?? [];
-    const primaryDamageEvent = actionDamageEvents[0] ?? null;
-    const damageElementSource = createActionDamageElementSource(action);
-    const hitCandidateResult = createActionHitCandidateResult({
-      action,
-      damageElementSource,
-    });
-    const hitCandidates = hitCandidateResult.hitCandidates;
-    const hpDamage = attachFormulaExecutionEvidenceMatrix(
-      createHpDamageResult(action, primaryDamageEvent, damageElementSource),
-      action,
-      hitCandidates
-    );
-
-    return {
-      actionId: action.id,
-      actionType: action.type,
-      actionName: action.name,
-      timeMs: action.startMs,
-      durationMs: action.durationMs,
-      actorId: action.actorId ?? null,
-      actorName: action.actor?.name ?? null,
-      targetId: action.targetId ?? null,
-      targetName: action.target?.name ?? null,
-      skillId: action.skillId ?? null,
-      hpDamage,
-      toughnessDamage: createToughnessDamageResult(
+  return scenario.actions
+    .filter(action => executionByActionId.get(action.id)?.execute !== false)
+    .map(action => {
+      const executionEntry = executionByActionId.get(action.id) ?? null;
+      const actionDamageEvents = damageByActionId.get(action.id) ?? [];
+      const actionResourceEvents = resourcesByActionId.get(action.id) ?? [];
+      const primaryDamageEvent = actionDamageEvents[0] ?? null;
+      const damageElementSource = createActionDamageElementSource(action);
+      const hitCandidateResult = createActionHitCandidateResult({
         action,
-        primaryDamageEvent,
-        damageElementSource
-      ),
-      selfEnergyChange: createSelfEnergyChangeResult(
-        action,
-        actionResourceEvents,
         damageElementSource,
-        runtimeSampleContext
-      ),
-      hitCandidateSummary: summarizeActionHitCandidates(
+      });
+      const hitCandidates = hitCandidateResult.hitCandidates;
+      const hpDamage = attachFormulaExecutionEvidenceMatrix(
+        createHpDamageResult(action, primaryDamageEvent, damageElementSource),
+        action,
+        hitCandidates
+      );
+
+      return {
+        actionId: action.id,
+        actionType: action.type,
+        actionName: action.name,
+        timeMs: action.startMs,
+        durationMs: action.durationMs,
+        actorId: action.actorId ?? null,
+        actorName: action.actor?.name ?? null,
+        targetId: action.targetId ?? null,
+        targetName: action.target?.name ?? null,
+        skillId: action.skillId ?? null,
+        executionStatus: executionEntry?.status ?? 'scheduled',
+        readinessStatus: executionEntry?.readinessStatus ?? 'ready',
+        executionPlanEntry: executionEntry,
+        hpDamage,
+        toughnessDamage: createToughnessDamageResult(
+          action,
+          primaryDamageEvent,
+          damageElementSource
+        ),
+        selfEnergyChange: createSelfEnergyChangeResult(
+          action,
+          actionResourceEvents,
+          damageElementSource,
+          runtimeSampleContext
+        ),
+        hitCandidateSummary: summarizeActionHitCandidates(
+          hitCandidates,
+          hitCandidateResult.sequenceTimingEvidence
+        ),
         hitCandidates,
-        hitCandidateResult.sequenceTimingEvidence
-      ),
-      hitCandidates,
-      sourceEventTypes: [
-        ...actionDamageEvents.map(event => event.type),
-        ...actionResourceEvents.map(event => event.type),
-      ],
-    };
-  });
+        sourceEventTypes: [
+          ...actionDamageEvents.map(event => event.type),
+          ...actionResourceEvents.map(event => event.type),
+        ],
+      };
+    });
 }
 
 function createActionHitCandidateResult({ action, damageElementSource }) {

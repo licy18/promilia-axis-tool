@@ -527,6 +527,8 @@ describe('three value runtime projection', () => {
       effectTimelineSummaryEventCount: true,
       effectTimelineSummaryActiveCount: true,
       effectTimelineCalculatorIsolation: true,
+      summaryExecutionPlanCounts: true,
+      outputContractExecutionPlanCounts: true,
       hitTransactionSourceDeltasComplete: true,
       simLogHitTransactionsShared: true,
       stateCurveHitTransactionsShared: true,

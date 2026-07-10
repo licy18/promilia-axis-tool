@@ -15,8 +15,14 @@ export const EFFECT_RUNTIME_EVENT_TYPES = Object.freeze({
   EXPIRED: 'EFFECT_EXPIRED',
 });
 
-export function createActionEffectRuntimeInput({ scenario = {} } = {}) {
+export function createActionEffectRuntimeInput({
+  scenario = {},
+  actionExecutionPlan = null,
+} = {}) {
   const validationIssues = [];
+  const executionPlanByActionId = new Map(
+    (actionExecutionPlan?.actions ?? []).map(entry => [entry.actionId, entry])
+  );
   const inputCommands = (scenario.actions ?? []).flatMap(
     (action, actionIndex) =>
       (action.effectCommands ?? []).map((command, commandIndex) => ({
@@ -24,9 +30,15 @@ export function createActionEffectRuntimeInput({ scenario = {} } = {}) {
         actionIndex,
         command,
         commandIndex,
+        executionEntry: executionPlanByActionId.get(action.id) ?? null,
       }))
   );
-  const commands = inputCommands
+  const executableInputCommands = inputCommands.filter(
+    entry => entry.executionEntry?.execute !== false
+  );
+  const blockedCommandCount =
+    inputCommands.length - executableInputCommands.length;
+  const commands = executableInputCommands
     .map(entry =>
       normalizeEffectRuntimeCommand(entry, validationIssues, scenario)
     )
@@ -55,6 +67,8 @@ export function createActionEffectRuntimeInput({ scenario = {} } = {}) {
     },
     summary: {
       inputCommandCount: inputCommands.length,
+      executableInputCommandCount: executableInputCommands.length,
+      blockedCommandCount,
       commandCount: commands.length,
       ignoredCommandCount: inputCommands.length - commands.length,
       actionCount: uniqueValues(commands.map(command => command.sourceActionId))
@@ -83,8 +97,11 @@ export function createActionEffectRuntimeInput({ scenario = {} } = {}) {
 export function createEffectRuntimeTimeline({
   scenario = {},
   effectInput = null,
+  actionExecutionPlan = null,
 } = {}) {
-  const input = effectInput ?? createActionEffectRuntimeInput({ scenario });
+  const input =
+    effectInput ??
+    createActionEffectRuntimeInput({ scenario, actionExecutionPlan });
   const activeByInstanceKey = new Map();
   const events = [];
   let peakActiveEffectCount = 0;
@@ -139,6 +156,10 @@ export function createEffectRuntimeTimeline({
     events,
     activeEffects,
     summary: {
+      inputCommandCount: input.summary.inputCommandCount,
+      executableInputCommandCount:
+        input.summary.executableInputCommandCount ?? input.summary.commandCount,
+      blockedCommandCount: input.summary.blockedCommandCount ?? 0,
       commandCount: input.summary.commandCount,
       eventCount: events.length,
       appliedEventCount:
@@ -175,7 +196,7 @@ export function createEffectRuntimeTimeline({
 }
 
 function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
-  const { action, actionIndex, command, commandIndex } = entry;
+  const { action, actionIndex, command, commandIndex, executionEntry } = entry;
   const commandPath = `scenario.actions[${actionIndex}].effectCommands[${commandIndex}]`;
   const effectId = String(command?.effectId ?? '').trim();
   const targetId = String(command?.targetId ?? '').trim();
@@ -264,6 +285,7 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
     sourceCommand: command,
     sourceActionIndex: actionIndex,
     sourceCommandIndex: commandIndex,
+    executionPlanStatus: executionEntry?.status ?? 'scheduled',
     applied: true,
   };
 }

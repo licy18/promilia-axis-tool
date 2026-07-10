@@ -911,8 +911,8 @@ test('keeps multi-action resource chart navigation tied to middle edit return @w
 
   const { returnedState } = await editCurrentActionFrameAndReturn(page, {
     actionId: 'action-0002',
-    frameValue: '168',
-    msValue: '2800',
+    frameValue: '108',
+    msValue: '1800',
     originStatePointId: selectedMiddleState.statePointId,
     navigationCount: '3',
     navigationIndex: '1',
@@ -1001,8 +1001,8 @@ test('recovers filtered multi-action logs before returning edited results @workb
 
   const { returnedState } = await editCurrentActionFrameAndReturn(page, {
     actionId: 'action-0002',
-    frameValue: '180',
-    msValue: '3000',
+    frameValue: '108',
+    msValue: '1800',
     originStatePointId: middleState.statePointId,
     navigationCount: '3',
     navigationIndex: '1',
@@ -1084,8 +1084,8 @@ test('keeps contribution navigation tied to multi-action edit return @workbench-
 
   const { returnedState } = await editCurrentActionFrameAndReturn(page, {
     actionId: 'action-0002',
-    frameValue: '174',
-    msValue: '2900',
+    frameValue: '114',
+    msValue: '1900',
     originStatePointId: middleState.statePointId,
     navigationCount: '3',
     navigationIndex: '1',
@@ -1202,8 +1202,8 @@ test('keeps result review entrances interchangeable before edit return @workbenc
   await focusRuntimeDetailAction(page);
   const { returnedState } = await editCurrentActionFrameAndReturn(page, {
     actionId: 'action-0002',
-    frameValue: '180',
-    msValue: '3000',
+    frameValue: '108',
+    msValue: '1800',
     originStatePointId: detailState.statePointId,
     navigationCount: '3',
     navigationIndex: '1',
@@ -1660,7 +1660,7 @@ test('keeps action list, timeline nudge, frame step, and result return in one lo
 
   await page
     .locator(
-      '[data-testid="workbench-start-frame-step"][data-step-direction="increase"]'
+      '[data-testid="workbench-start-frame-step"][data-step-direction="decrease"]'
     )
     .click();
   const steppedEditState = await readEditState(
@@ -1675,7 +1675,7 @@ test('keeps action list, timeline nudge, frame step, and result return in one lo
     returnButtonText: '查看刷新结果',
   });
   expect(Number(steppedEditState.startFrameValue)).toBe(
-    Number(timelineNudgeEditState.startFrameValue) + 1
+    Number(timelineNudgeEditState.startFrameValue) - 1
   );
   expect(steppedEditState.feedbackStatePointId).toContain('action-0002');
   expect(steppedEditState.feedbackStatePointId).not.toBe(
@@ -2283,6 +2283,25 @@ test('locates and fixes a confirmed cooldown rule before runtime review @workben
   await expect(
     page.getByTestId('workbench-timeline-cooldown-window')
   ).toHaveCount(2);
+  await expect(page.getByTestId('scenario-action-count')).toHaveAttribute(
+    'data-executed-action-count',
+    '3'
+  );
+  await expect(page.getByTestId('scenario-action-count')).toHaveAttribute(
+    'data-skipped-action-count',
+    '1'
+  );
+  await expect(page.getByTestId('scenario-action-count')).toContainText(
+    '3/4 action'
+  );
+  await expect(
+    page.getByTestId('workbench-action-result-source-row')
+  ).toHaveCount(3);
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-result-source-row"][data-action-id="action-0004"]'
+    )
+  ).toHaveCount(0);
 
   await page.locator('.action-item[data-action-id="action-0001"]').click();
   await cooldownRule.getByTestId('workbench-action-rule-locate').click();
@@ -2316,6 +2335,20 @@ test('locates and fixes a confirmed cooldown rule before runtime review @workben
   await expect(
     page.getByTestId('workbench-timeline-cooldown-window')
   ).toHaveCount(3);
+  await expect(page.getByTestId('scenario-action-count')).toHaveAttribute(
+    'data-executed-action-count',
+    '4'
+  );
+  await expect(page.getByTestId('scenario-action-count')).toHaveAttribute(
+    'data-skipped-action-count',
+    '0'
+  );
+  await expect(page.getByTestId('scenario-action-count')).toContainText(
+    '4 action'
+  );
+  await expect(
+    page.getByTestId('workbench-action-result-source-row')
+  ).toHaveCount(4);
 
   await page.getByTestId('workbench-flow-open-runtime').click();
   const runtimeState = await waitForRuntimeAction(page, 'action-0004');
@@ -2652,8 +2685,8 @@ test('keeps saved draft restore tied to runtime edit return @workbench-main-flow
   await focusRuntimeDetailAction(page);
   const { returnedState } = await editCurrentActionFrameAndReturn(page, {
     actionId: 'action-0002',
-    frameValue: '48',
-    msValue: '800',
+    frameValue: '72',
+    msValue: '1200',
     originStatePointId: restoredRuntimeState.statePointId,
     navigationCount: '3',
     navigationIndex: '1',
@@ -3014,8 +3047,8 @@ test('keeps runtime result flow usable after copying a generated action batch @w
   await focusRuntimeDetailAction(page);
   const { returnedState } = await editCurrentActionFrameAndReturn(page, {
     actionId: 'action-0004',
-    frameValue: '270',
-    msValue: '4500',
+    frameValue: '210',
+    msValue: '3500',
     originStatePointId: redoneCopiedBatchState.statePointId,
     navigationCount: '5',
     navigationIndex: '3',
@@ -3095,8 +3128,8 @@ test('keeps runtime result flow usable after shifting a generated action batch @
   await focusRuntimeDetailAction(page);
   const { returnedState } = await editCurrentActionFrameAndReturn(page, {
     actionId: 'action-0002',
-    frameValue: '120',
-    msValue: '2000',
+    frameValue: '84',
+    msValue: '1400',
     originStatePointId: shiftedBatchState.statePointId,
     navigationCount: '3',
     navigationIndex: '1',
@@ -3482,7 +3515,7 @@ async function nudgeTimelineAction(page, actionId) {
     .first();
   await expect(action).toBeVisible();
   await action.focus();
-  await action.press('ArrowRight');
+  await action.press('ArrowLeft');
 }
 
 async function ensureActionContentEditResultSynced(

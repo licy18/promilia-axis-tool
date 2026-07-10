@@ -3,6 +3,10 @@ import { projectSimulationResult } from '../projection/projectSimulationResult';
 import { ACTION_TYPES } from '../../domain/projectSchema';
 import { createEffectRuntimeTimeline } from '../runtime/effectRuntimeTimeline';
 import { createActionRuleDiagnostics } from '../runtime/actionRuleDiagnostics';
+import {
+  createActionExecutionPlan,
+  createActionExecutionPlanIndex,
+} from './actionExecutionPlan';
 
 export function simulateScenario(scenario) {
   const eventLog = [
@@ -19,8 +23,19 @@ export function simulateScenario(scenario) {
   const damageEvents = [];
   const resourceEvents = [];
   const actionRuleDiagnostics = createActionRuleDiagnostics({ scenario });
+  const actionExecutionPlan = createActionExecutionPlan({
+    scenario,
+    actionRuleDiagnostics,
+  });
+  const executionPlanByActionId =
+    createActionExecutionPlanIndex(actionExecutionPlan);
 
   for (const action of scenario.actions) {
+    const executionEntry = executionPlanByActionId.get(action.id);
+    if (executionEntry?.execute === false) {
+      eventLog.push(createActionSkippedEvent(action, executionEntry));
+      continue;
+    }
     eventLog.push(createActionStartEvent(action));
 
     const resourceActionEvent = createResourceActionEvent(action);
@@ -97,7 +112,10 @@ export function simulateScenario(scenario) {
     }
   }
 
-  const effectTimeline = createEffectRuntimeTimeline({ scenario });
+  const effectTimeline = createEffectRuntimeTimeline({
+    scenario,
+    actionExecutionPlan,
+  });
   eventLog.push(...effectTimeline.events);
 
   eventLog.push({
@@ -120,6 +138,7 @@ export function simulateScenario(scenario) {
     resourceEvents,
     effectTimeline,
     actionRuleDiagnostics,
+    actionExecutionPlan,
   });
 }
 
@@ -229,6 +248,24 @@ function createActionStartEvent(action) {
   };
 }
 
+function createActionSkippedEvent(action, executionEntry) {
+  return {
+    type: 'ACTION_SKIPPED',
+    timeMs: action.startMs,
+    actionId: action.id,
+    actorId: action.actorId,
+    payload: {
+      actionName: action.name,
+      actionType: action.type,
+      reason: executionEntry.skipReason,
+      executionStatus: executionEntry.status,
+      readinessStatus: executionEntry.readinessStatus,
+      diagnosticIds: executionEntry.diagnosticIds,
+      violationCodes: executionEntry.violationCodes,
+    },
+  };
+}
+
 function createDamageEvent(action, enemy) {
   const segment = action.selectedDamageSegment;
   if (!segment || !action.actor || !action.target) {
@@ -261,6 +298,7 @@ function eventPriority(type) {
   const priorities = {
     SCENARIO_START: 0,
     EFFECT_EXPIRED: 1,
+    ACTION_SKIPPED: 2,
     ACTION_START: 2,
     TIMING_DATA_MISSING: 3,
     RESOURCE_CHANGE: 4,

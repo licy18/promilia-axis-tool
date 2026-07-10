@@ -4,6 +4,11 @@ import { simulateScenario } from './engine/simulateScenario';
 export { compileProject, CompileProjectError } from './compiler/compileProject';
 export { simulateScenario } from './engine/simulateScenario';
 export {
+  ACTION_EXECUTION_PLAN_CONTRACT_NAME,
+  ACTION_EXECUTION_STATUSES,
+  createActionExecutionPlan,
+} from './engine/actionExecutionPlan';
+export {
   DAMAGE_FORMULA_VERSION,
   parsePercentMultiplier,
   parseDamageSegments,

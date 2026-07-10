@@ -25447,3 +25447,83 @@ SkillCooldownWindow
 动作库按 `actionId` 展示 readiness 和执行前后可用次数；时间轴按 `actorId + actionId` 绘制冷却窗口；运行详情按当前 runtime action 读取同一 readiness 行。三处均为标准合同消费者，不重复计算技能冷却。
 
 P5-B 仍不把规则状态应用到 generation/runtime 数值。下一阶段 P5-C 将新增规则驱动执行计划，明确区分确定阻塞动作和仍允许执行的待确认动作，再由生成层与运行时统一消费。
+
+## 357. 规则驱动动作执行计划
+
+### 357.1 AzPrActionExecutionPlan
+
+模拟引擎在规则诊断和 readiness 时间线之后生成：
+
+```text
+ActionExecutionPlan
+  schemaVersion = 1
+  contractName = AzPrActionExecutionPlan
+  sourceKind = azpr-action-execution-plan
+  status
+  actions[]
+  executedActionIds[]
+  skippedActionIds[]
+  unresolvedExecutedActionIds[]
+  summary
+  appliedToSimulationResults = true
+```
+
+动作条目结构为：
+
+```text
+ActionExecutionPlanEntry
+  sourceKind = azpr-action-execution-plan-entry
+  status = scheduled
+         | scheduled-with-unresolved-conditions
+         | skipped-rule-blocked
+  execute
+  actionId / actionName / actionType
+  actionIndex / executionIndex
+  actorId / actorName / skillId
+  startMs / durationMs
+  readinessStatus
+  diagnosticIds[]
+  violationCodes[]
+  unresolvedCodes[]
+  skipReason = confirmed-action-rule-violation | null
+  readiness
+  appliedToSimulationResults = true
+```
+
+`executionIndex` 只对实际执行动作连续编号。`blocked` readiness 变成 `skipped-rule-blocked`；`ready-with-unresolved-conditions` 保持 `execute = true`，避免在 SP 单位未闭合时伪造资源不足。
+
+### 357.2 引擎与效果边界
+
+模拟引擎对跳过动作只生成：
+
+```text
+ACTION_SKIPPED
+  actionId / actorId / timeMs
+  payload.reason
+  payload.executionStatus
+  payload.readinessStatus
+  payload.diagnosticIds[]
+  payload.violationCodes[]
+```
+
+跳过动作不生成 `ACTION_START`、`RESOURCE_CHANGE`、`COOLDOWN_START`、`DAMAGE_PROJECTED` 或 `DAMAGE_SKIPPED`。`ActionEffectRuntimeInput` 先按执行计划过滤 command，并新增 `executableInputCommandCount / blockedCommandCount`；被阻塞 command 不进入效果状态机。
+
+### 357.3 Generation 与 Runtime 消费
+
+`buildActionResultTimeline` 只为 `execute = true` 的动作创建结果，并为结果附加：
+
+```text
+executionStatus
+readinessStatus
+executionPlanEntry
+```
+
+Generation layer 再次按 `executedActionIds[]` 约束 scenario action、ActionResult、候选点和 fallback state point，作为标准入口的防御性边界。生成 summary 新增执行计划总数、执行数和跳过数。
+
+Runtime projection 保留同一 `actionExecutionPlan` 引用，summary、output contract summary 和 output consistency 同步检查执行总数。由于被阻塞动作没有 Generation delta，其 sim log、hit transaction、状态曲线和资源曲线自然不存在对应点，不需要 UI 二次过滤。
+
+### 357.4 Workbench 可见语义
+
+`ScenarioHeader` 在 `skippedActionCount > 0` 时显示 `executedActionCount/actionCount`，没有跳过动作时保持原总数显示。动作库和时间轴继续使用 P5-B readiness；分析结果、运行导航、曲线和日志只展示执行计划中实际运行的动作。修正规则会重建整个计划并恢复对应结果。
+
+下一阶段 P6-A 转向 PNG 项目快照与元数据回导，不继续增加规则状态碎片；执行计划后续扩展只在确认新的蓝色星原规则时增加 adapter 或规则来源。
