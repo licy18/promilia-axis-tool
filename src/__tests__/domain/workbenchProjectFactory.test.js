@@ -6,6 +6,7 @@ import {
   normalizeWorkbenchActorConfigs,
 } from '../../domain/workbenchProjectFactory';
 import { validateProject } from '../../domain/projectSchema';
+import { compileProject } from '../../simulation/compiler/compileProject';
 
 describe('workbench project actor configuration', () => {
   it('projects real AzPr loadout selections into actors and project loadouts', () => {
@@ -96,5 +97,34 @@ describe('workbench project actor configuration', () => {
     expect(result.errors.map(error => error.code)).toContain(
       'actor.loadout.equipmentType.mismatch'
     );
+  });
+
+  it('compiles enemy WEAKNESS_POINT_MAX with project toughness settings', () => {
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      enemyConfig: {
+        toughnessMultiplier: 2,
+        initialToughnessRatio: 0.25,
+      },
+    });
+    const scenario = compileProject(project, getWorkbenchGameData());
+
+    expect(scenario.enemy).toMatchObject({
+      toughnessMultiplier: 2,
+      initialToughnessRatio: 0.25,
+      stats: {
+        maxToughness: 13334,
+        initialToughness: 3333.5,
+      },
+      toughness: {
+        sourceKind: 'azpr-enemy-WEAKNESS_POINT_MAX',
+        sourceStatus: 'toughness-config-derived-from-enemy-base-attribute',
+        baseMax: 6667,
+        maxMultiplier: 2,
+        initialRatio: 0.25,
+        maxValue: 13334,
+        initialValue: 3333.5,
+        applied: true,
+      },
+    });
   });
 });

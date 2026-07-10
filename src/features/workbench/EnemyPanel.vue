@@ -12,7 +12,9 @@
       </div>
       <div>
         <span>等级</span>
-        <strong data-testid="workbench-enemy-level">Lv.{{ enemy.level }}</strong>
+        <strong data-testid="workbench-enemy-level"
+          >Lv.{{ enemy.level }}</strong
+        >
       </div>
     </div>
 
@@ -29,9 +31,18 @@
         <span>魔防</span>
         <strong>{{ formatNumber(enemy.stats?.magicalDefense) }}</strong>
       </div>
+      <div
+        :data-toughness-source-status="enemy.toughness?.sourceStatus"
+        data-testid="workbench-enemy-toughness-stat"
+      >
+        <span>韧性 初始 / 上限</span>
+        <strong>{{ formatToughnessState(enemy.stats) }}</strong>
+      </div>
       <div>
         <span>倍率</span>
-        <strong>{{ enemy.hpMultiplier }}x / {{ enemy.defenseMultiplier }}x</strong>
+        <strong
+          >{{ enemy.hpMultiplier }}x / {{ enemy.defenseMultiplier }}x</strong
+        >
       </div>
     </div>
 
@@ -71,6 +82,32 @@
           @input="emitNumberPatch('defenseMultiplier', $event.target.value)"
         />
       </label>
+      <label>
+        <span>韧性倍率</span>
+        <input
+          type="number"
+          data-testid="workbench-enemy-toughness-multiplier-input"
+          min="0.1"
+          max="100"
+          step="0.1"
+          :value="enemyConfig.toughnessMultiplier"
+          @input="emitNumberPatch('toughnessMultiplier', $event.target.value)"
+        />
+      </label>
+      <label>
+        <span>初始韧性 %</span>
+        <input
+          type="number"
+          data-testid="workbench-enemy-initial-toughness-input"
+          min="0"
+          max="100"
+          step="1"
+          :value="Math.round(enemyConfig.initialToughnessRatio * 100)"
+          @input="
+            emitPercentPatch('initialToughnessRatio', $event.target.value)
+          "
+        />
+      </label>
     </div>
   </section>
 </template>
@@ -101,8 +138,30 @@ function emitNumberPatch(key, value) {
   });
 }
 
+function emitPercentPatch(key, value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return;
+  }
+  emit('update-enemy-config', {
+    [key]: number / 100,
+  });
+}
+
 function formatNumber(value) {
   return Math.round(Number(value) || 0).toLocaleString('zh-CN');
+}
+
+function formatToughnessState(stats = {}) {
+  if (stats.initialToughness == null || stats.maxToughness == null) {
+    return '暂无表值';
+  }
+  const initial = Number(stats.initialToughness);
+  const maximum = Number(stats.maxToughness);
+  if (!Number.isFinite(initial) || !Number.isFinite(maximum)) {
+    return '暂无表值';
+  }
+  return `${formatNumber(initial)} / ${formatNumber(maximum)}`;
 }
 </script>
 

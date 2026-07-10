@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS,
+  WORKBENCH_DRAFT_STORAGE_KEY,
   WORKBENCH_DRAFT_SCHEMA_VERSION,
   WORKBENCH_PROJECT_FILE_TYPE,
   clearWorkbenchDraft,
@@ -45,6 +46,8 @@ describe('workbench draft storage project files', () => {
             level: 80,
             hpMultiplier: 1.5,
             defenseMultiplier: 0.8,
+            toughnessMultiplier: 2,
+            initialToughnessRatio: 0.5,
           },
           segmentSplitOptions: {
             intervalMs: 1800,
@@ -111,6 +114,8 @@ describe('workbench draft storage project files', () => {
         level: 80,
         hpMultiplier: 1.5,
         defenseMultiplier: 0.8,
+        toughnessMultiplier: 2,
+        initialToughnessRatio: 0.5,
       },
       segmentSplitOptions: {
         intervalMs: 1800,
@@ -163,6 +168,50 @@ describe('workbench draft storage project files', () => {
       type: 'workbench-draft',
       selectedActionId: 'action-0001',
       actorConfigs: [{ characterId: 109001 }, { characterId: 101003 }],
+      enemyConfig: {
+        toughnessMultiplier: 1,
+        initialToughnessRatio: 1,
+      },
+    });
+  });
+
+  it('migrates v2 project files to v3 enemy toughness defaults', () => {
+    const v2Project = createWorkbenchProjectFileSnapshot({
+      selection: {
+        characterId: 109001,
+        secondaryCharacterId: 101003,
+        skillId: 10900101,
+        enemyId: 300032,
+      },
+      enemyConfig: {
+        level: 90,
+        hpMultiplier: 1,
+        defenseMultiplier: 1,
+      },
+      actionDrafts: [
+        {
+          id: 'action-0001',
+          type: 'skill',
+          skillId: 10900101,
+          actorCharacterId: 109001,
+          startMs: 0,
+          durationMs: 1000,
+          level: 1,
+        },
+      ],
+      selectedActionId: 'action-0001',
+    });
+    v2Project.schemaVersion = 2;
+    delete v2Project.enemyConfig.toughnessMultiplier;
+    delete v2Project.enemyConfig.initialToughnessRatio;
+
+    expect(parseWorkbenchProjectFile(v2Project)).toMatchObject({
+      schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
+      enemyConfig: {
+        level: 90,
+        toughnessMultiplier: 1,
+        initialToughnessRatio: 1,
+      },
     });
   });
 
@@ -173,7 +222,9 @@ describe('workbench draft storage project files', () => {
       setItem: (key, value) => storage.set(key, value),
       removeItem: key => storage.delete(key),
     };
-    const legacyStorageKey = LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS[0];
+    const legacyStorageKey = LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS.find(key =>
+      key.endsWith(':v1')
+    );
     storage.set(
       legacyStorageKey,
       JSON.stringify({
@@ -208,12 +259,21 @@ describe('workbench draft storage project files', () => {
 
     expect(loadWorkbenchDraft(storageAdapter)).toMatchObject({
       schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
-      enemyConfig: { level: 88 },
+      enemyConfig: {
+        level: 88,
+        toughnessMultiplier: 1,
+        initialToughnessRatio: 1,
+      },
       actorConfigs: [{ characterId: 109001 }, { characterId: 101003 }],
     });
 
+    storage.set(WORKBENCH_DRAFT_STORAGE_KEY, '{}');
+    LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS.forEach(key => storage.set(key, '{}'));
     clearWorkbenchDraft(storageAdapter);
-    expect(storage.has(legacyStorageKey)).toBe(false);
+    expect(storage.has(WORKBENCH_DRAFT_STORAGE_KEY)).toBe(false);
+    LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS.forEach(key =>
+      expect(storage.has(key)).toBe(false)
+    );
   });
 
   it('rejects unrelated project files', () => {
@@ -239,6 +299,8 @@ describe('workbench draft storage project files', () => {
           level: 92,
           hpMultiplier: 2.5,
           defenseMultiplier: 1,
+          toughnessMultiplier: 1.5,
+          initialToughnessRatio: 0.75,
         },
         actionDrafts: [
           {
@@ -273,6 +335,8 @@ describe('workbench draft storage project files', () => {
       enemyConfig: {
         level: 92,
         hpMultiplier: 2.5,
+        toughnessMultiplier: 1.5,
+        initialToughnessRatio: 0.75,
       },
     });
   });

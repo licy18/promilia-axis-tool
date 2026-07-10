@@ -1830,6 +1830,16 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   await enemySelect.selectOption(importedEnemyId);
   await page.getByTestId('workbench-enemy-level-input').fill('91');
   await page.getByTestId('workbench-enemy-hp-multiplier-input').fill('2.5');
+  await page
+    .getByTestId('workbench-enemy-toughness-multiplier-input')
+    .fill('2');
+  await page.getByTestId('workbench-enemy-initial-toughness-input').fill('50');
+  await expect(
+    page.getByTestId('workbench-enemy-toughness-stat')
+  ).toContainText('10,000 / 20,000');
+  await expect(
+    page.getByTestId('workbench-runtime-enemy-toughness-state')
+  ).toHaveText('剩余 10,000 / 20,000');
   const kiboSelect = page
     .locator(
       '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
@@ -1894,13 +1904,15 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 2,
+    schemaVersion: 3,
     game: 'azur-promilia',
     type: 'workbench-project',
     selectedActionId: 'action-0002',
     enemyConfig: {
       level: 91,
       hpMultiplier: 2.5,
+      toughnessMultiplier: 2,
+      initialToughnessRatio: 0.5,
     },
     actorConfigs: [
       {
@@ -1930,6 +1942,12 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
     '80'
   );
+  await expect(
+    page.getByTestId('workbench-enemy-toughness-multiplier-input')
+  ).toHaveValue('1');
+  await expect(
+    page.getByTestId('workbench-enemy-initial-toughness-input')
+  ).toHaveValue('100');
   await expect(kiboSelect).toHaveValue('');
   await expect(weaponSelect).toHaveValue('');
   await expect(soulessenceSelect).toHaveValue('');
@@ -1948,6 +1966,15 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   await expect(
     page.getByTestId('workbench-enemy-hp-multiplier-input')
   ).toHaveValue('2.5');
+  await expect(
+    page.getByTestId('workbench-enemy-toughness-multiplier-input')
+  ).toHaveValue('2');
+  await expect(
+    page.getByTestId('workbench-enemy-initial-toughness-input')
+  ).toHaveValue('50');
+  await expect(
+    page.getByTestId('workbench-runtime-enemy-toughness-state')
+  ).toHaveText('剩余 10,000 / 20,000');
   await expect(kiboSelect).toHaveValue(kiboId);
   await expect(weaponSelect).toHaveValue(weaponId);
   await expect(soulessenceSelect).toHaveValue(soulessenceId);
@@ -3260,6 +3287,7 @@ async function ensureActionContentEditResultSynced(
 async function readStoredWorkbenchDraft(page) {
   return await page.evaluate(() => {
     const rawDraft =
+      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v3') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v2') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v1');
     return rawDraft ? JSON.parse(rawDraft) : null;

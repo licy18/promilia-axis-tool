@@ -389,7 +389,7 @@ describe('Workbench view', () => {
       wrapper
         .find('[data-testid="workbench-runtime-enemy-toughness-state"]')
         .text()
-    ).toBe('剩余待确认');
+    ).toBe('剩余 6,667 / 6,667');
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-count"]').text()
     ).toBe('1 日志');
@@ -7091,6 +7091,55 @@ describe('Workbench view', () => {
       .find('[data-testid="workbench-enemy-select"]')
       .setValue(String(secondEnemy.id));
     expect(wrapper.text()).toContain(secondEnemy.name);
+  });
+
+  it('applies real enemy toughness configuration to the runtime state curve', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    const toughnessStat = wrapper.find(
+      '[data-testid="workbench-enemy-toughness-stat"]'
+    );
+    expect(toughnessStat.text()).toContain('6,667 / 6,667');
+    expect(toughnessStat.attributes('data-toughness-source-status')).toBe(
+      'toughness-config-derived-from-enemy-base-attribute'
+    );
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-enemy-toughness-state"]')
+        .text()
+    ).toBe('剩余 6,667 / 6,667');
+
+    await wrapper
+      .find('[data-testid="workbench-enemy-toughness-multiplier-input"]')
+      .setValue('2');
+    await wrapper
+      .find('[data-testid="workbench-enemy-initial-toughness-input"]')
+      .setValue('50');
+    await nextTick();
+
+    expect(toughnessStat.text()).toContain('6,667 / 13,334');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-runtime-enemy-toughness-state"]')
+        .text()
+    ).toBe('剩余 6,667 / 13,334');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    expect(
+      JSON.parse(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY))
+        .enemyConfig
+    ).toMatchObject({
+      toughnessMultiplier: 2,
+      initialToughnessRatio: 0.5,
+    });
   });
 
   it('shows skill logic sources and display-versus-logic timing differences', async () => {

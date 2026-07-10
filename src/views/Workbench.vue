@@ -408,7 +408,7 @@
             :characters="workbenchSeed.gameData.characters"
             :actors="scenario.actors"
             :skills="workbenchSeed.gameData.skills"
-            :enemies="workbenchSeed.gameData.enemies"
+            :enemies="gameData.enemies"
             :selected-action="selectedAction"
             :duration-ms="scenario.time.durationMs"
             :action-edit-focus="actionEditFocus"

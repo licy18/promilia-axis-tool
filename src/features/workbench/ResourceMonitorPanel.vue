@@ -700,7 +700,10 @@ function formatRuntimeStateMetric(metric) {
   const stateLabel = metric?.stateLabel ?? '当前';
   const value = strictNumberOrNull(metric?.currentValue);
   if (Number.isFinite(value)) {
-    return `${stateLabel} ${formatNumber(value)}`;
+    const maxValue = strictNumberOrNull(metric?.maxValue);
+    return Number.isFinite(maxValue)
+      ? `${stateLabel} ${formatNumber(value)} / ${formatNumber(maxValue)}`
+      : `${stateLabel} ${formatNumber(value)}`;
   }
   return `${stateLabel}待确认`;
 }
@@ -1198,6 +1201,9 @@ function formatBaselineStatus(status) {
   if (status === 'baseline-derived-from-scenario-actor-self-energy') {
     return '基线:角色状态';
   }
+  if (status === 'baseline-derived-from-scenario-enemy-WEAKNESS_POINT_MAX') {
+    return '基线:敌人弱点值';
+  }
   if (
     status === 'baseline-pending-azpr-enemy-toughness-state' ||
     status === 'baseline-pending-azpr-initial-self-energy'
@@ -1206,6 +1212,9 @@ function formatBaselineStatus(status) {
   }
   if (status === 'baseline-pending-missing-scenario-enemy-max-hp') {
     return 'HP基线缺失';
+  }
+  if (status === 'baseline-pending-missing-WEAKNESS_POINT_MAX') {
+    return '韧性基线缺失';
   }
   return status ?? '';
 }

@@ -10,10 +10,11 @@ import {
   normalizeWorkbenchSelection,
 } from './workbenchProjectFactory';
 
-export const WORKBENCH_DRAFT_SCHEMA_VERSION = 2;
+export const WORKBENCH_DRAFT_SCHEMA_VERSION = 3;
 export const WORKBENCH_DRAFT_STORAGE_KEY =
-  'promilia-axis-tool:workbench-draft:v2';
+  'promilia-axis-tool:workbench-draft:v3';
 export const LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS = Object.freeze([
+  'promilia-axis-tool:workbench-draft:v2',
   'promilia-axis-tool:workbench-draft:v1',
 ]);
 export const WORKBENCH_DRAFT_FILE_TYPE = 'workbench-draft';
@@ -237,7 +238,12 @@ export function clearWorkbenchDraft(storage) {
 }
 
 function isSupportedWorkbenchDraftSchema(schemaVersion) {
-  return [1, WORKBENCH_DRAFT_SCHEMA_VERSION].includes(Number(schemaVersion));
+  const version = Number(schemaVersion);
+  return (
+    Number.isInteger(version) &&
+    version >= 1 &&
+    version <= WORKBENCH_DRAFT_SCHEMA_VERSION
+  );
 }
 
 function ensureActionDrafts(actionDrafts, selection) {

@@ -902,7 +902,7 @@ function summarizeRuntimeInputGenerationReadSources(runtimeInput) {
       '',
     runtimeInputGenerationOutputBoundaryReady: Boolean(
       runtimeInput?.generationOutputBoundaryReady ??
-        generationReadSources.generationOutputBoundaryReady
+      generationReadSources.generationOutputBoundaryReady
     ),
     runtimeInputGenerationOutputBoundaryPath:
       runtimeInput?.generationOutputBoundaryPath ??
@@ -1020,6 +1020,25 @@ function createThreeValueRuntimeEnemyBaseline(scenario) {
   const hpInitial = Number.isFinite(baseHp)
     ? roundCurveValue(baseHp * hpMultiplier)
     : null;
+  const toughnessInitial = firstRuntimeNumber(
+    enemy.stats?.initialToughness,
+    enemy.toughness?.initialValue,
+    enemy.initialToughness
+  );
+  const toughnessMax = firstRuntimeNumber(
+    enemy.stats?.maxToughness,
+    enemy.toughness?.maxValue,
+    enemy.maxToughness
+  );
+  const toughnessBase = firstRuntimeNumber(
+    enemy.toughness?.baseMax,
+    enemy.baseAttributes?.find(item => item.key === 'WEAKNESS_POINT_MAX')?.value
+  );
+  const toughnessMultiplier = firstRuntimeNumber(
+    enemy.toughness?.maxMultiplier,
+    enemy.toughnessMultiplier,
+    1
+  );
 
   return {
     hp: {
@@ -1037,13 +1056,25 @@ function createThreeValueRuntimeEnemyBaseline(scenario) {
     },
     toughness: {
       sourceKind: 'scenario-enemy-toughness-baseline',
-      sourceStatus: 'baseline-pending-azpr-enemy-toughness-state',
-      sourcePath: 'pending enemy weak-break/toughness state evidence',
-      initialValue: null,
-      baseValue: null,
-      multiplier: null,
+      sourceStatus:
+        toughnessInitial == null
+          ? 'baseline-pending-missing-WEAKNESS_POINT_MAX'
+          : 'baseline-derived-from-scenario-enemy-WEAKNESS_POINT_MAX',
+      sourcePath:
+        toughnessInitial == null
+          ? 'scenario.enemy.baseAttributes[WEAKNESS_POINT_MAX] missing'
+          : 'scenario.enemy.stats.initialToughness',
+      initialValue:
+        toughnessInitial == null ? null : roundCurveValue(toughnessInitial),
+      maxValue: toughnessMax == null ? null : roundCurveValue(toughnessMax),
+      baseValue: toughnessBase == null ? null : roundCurveValue(toughnessBase),
+      multiplier:
+        toughnessMultiplier == null
+          ? null
+          : roundCurveValue(toughnessMultiplier),
+      initialRatio: enemy.toughness?.initialRatio ?? null,
       valueUnit: 'toughness',
-      applied: false,
+      applied: toughnessInitial != null,
     },
   };
 }

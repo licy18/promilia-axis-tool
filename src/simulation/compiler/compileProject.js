@@ -130,6 +130,26 @@ function compileActor(actor, charactersById) {
 
 function compileEnemy(enemy, enemiesById) {
   const sourceEnemy = enemiesById.get(Number(enemy.enemyId));
+  const toughnessBase = getOptionalAttributeValue(
+    enemy.baseAttributes,
+    'WEAKNESS_POINT_MAX'
+  );
+  const toughnessMultiplier = positiveNumberOrDefault(
+    enemy.toughnessMultiplier,
+    1
+  );
+  const initialToughnessRatio = clampNumber(
+    enemy.initialToughnessRatio,
+    0,
+    1,
+    1
+  );
+  const maxToughness = Number.isFinite(toughnessBase)
+    ? roundRuntimeConfigValue(toughnessBase * toughnessMultiplier)
+    : null;
+  const initialToughness = Number.isFinite(maxToughness)
+    ? roundRuntimeConfigValue(maxToughness * initialToughnessRatio)
+    : null;
 
   return {
     ...enemy,
@@ -141,6 +161,21 @@ function compileEnemy(enemy, enemiesById) {
       maxHp: getAttributeValue(enemy.baseAttributes, 'MAXHP'),
       physicalDefense: getAttributeValue(enemy.baseAttributes, 'DEF'),
       magicalDefense: getAttributeValue(enemy.baseAttributes, 'MDEF'),
+      maxToughness,
+      initialToughness,
+    },
+    toughness: {
+      sourceKind: 'azpr-enemy-WEAKNESS_POINT_MAX',
+      sourceStatus: Number.isFinite(toughnessBase)
+        ? 'toughness-config-derived-from-enemy-base-attribute'
+        : 'toughness-config-pending-missing-WEAKNESS_POINT_MAX',
+      sourcePath: 'project.enemy.baseAttributes[WEAKNESS_POINT_MAX]',
+      baseMax: toughnessBase,
+      maxMultiplier: toughnessMultiplier,
+      initialRatio: initialToughnessRatio,
+      maxValue: maxToughness,
+      initialValue: initialToughness,
+      applied: Number.isFinite(initialToughness),
     },
   };
 }
@@ -226,6 +261,28 @@ function indexById(items = []) {
 function getAttributeValue(baseAttributes, key) {
   const attribute = (baseAttributes ?? []).find(item => item.key === key);
   return Number.isFinite(attribute?.value) ? attribute.value : 0;
+}
+
+function getOptionalAttributeValue(baseAttributes, key) {
+  const attribute = (baseAttributes ?? []).find(item => item.key === key);
+  return Number.isFinite(attribute?.value) ? attribute.value : null;
+}
+
+function positiveNumberOrDefault(value, fallback) {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : fallback;
+}
+
+function clampNumber(value, min, max, fallback) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return fallback;
+  }
+  return Math.min(max, Math.max(min, number));
+}
+
+function roundRuntimeConfigValue(value) {
+  return Math.round(Number(value) * 1e6) / 1e6;
 }
 
 function getPanelCoreValue(attributePanel, key, fallback = 0) {

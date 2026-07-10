@@ -1,5 +1,6 @@
 import workbenchSeed from '../data/generated/workbench-seed.json';
 import {
+  getAzprEnemies,
   getAzprEquipment,
   getAzprKibos,
   getAzprSoulessences,
@@ -35,10 +36,12 @@ const DEFAULT_SECONDARY_CHARACTER_ID =
   )?.id ?? workbenchSeed.defaults.characterId;
 
 const WORKBENCH_EQUIPMENT = getAzprEquipment();
+const WORKBENCH_ENEMIES = getAzprEnemies();
 const WORKBENCH_KIBOS = getAzprKibos();
 const WORKBENCH_SOULESSENCES = getAzprSoulessences();
 const WORKBENCH_GAME_DATA = Object.freeze({
   ...workbenchSeed.gameData,
+  enemies: WORKBENCH_ENEMIES,
   equipment: WORKBENCH_EQUIPMENT,
   kibos: WORKBENCH_KIBOS,
   soulessences: WORKBENCH_SOULESSENCES,
@@ -62,6 +65,8 @@ export const DEFAULT_WORKBENCH_ENEMY_CONFIG = Object.freeze({
   level: 80,
   hpMultiplier: 1,
   defenseMultiplier: 1,
+  toughnessMultiplier: 1,
+  initialToughnessRatio: 1,
 });
 
 export const DEFAULT_WORKBENCH_ACTOR_LEVEL = 80;
@@ -169,12 +174,9 @@ export function normalizeWorkbenchSelection(selection = {}) {
   const skill =
     requestedSkill ?? characterSkills[0] ?? workbenchSeed.gameData.skills[0];
   const enemy =
-    findById(workbenchSeed.gameData.enemies, selection.enemyId) ??
-    findById(
-      workbenchSeed.gameData.enemies,
-      DEFAULT_WORKBENCH_SELECTION.enemyId
-    ) ??
-    workbenchSeed.gameData.enemies[0];
+    findById(WORKBENCH_ENEMIES, selection.enemyId) ??
+    findById(WORKBENCH_ENEMIES, DEFAULT_WORKBENCH_SELECTION.enemyId) ??
+    WORKBENCH_ENEMIES[0];
 
   return {
     characterId: character.id,
@@ -261,7 +263,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     workbenchSeed.gameData.characters,
     normalized.secondaryCharacterId
   );
-  const enemy = findById(workbenchSeed.gameData.enemies, normalized.enemyId);
+  const enemy = findById(WORKBENCH_ENEMIES, normalized.enemyId);
   const actionDrafts = normalizeWorkbenchActionDrafts(
     actionPatch.actions ?? [actionPatch],
     normalized
@@ -299,6 +301,8 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     level: enemyConfig.level,
     hpMultiplier: enemyConfig.hpMultiplier,
     defenseMultiplier: enemyConfig.defenseMultiplier,
+    toughnessMultiplier: enemyConfig.toughnessMultiplier,
+    initialToughnessRatio: enemyConfig.initialToughnessRatio,
   });
   const titleAction = actionDrafts[0];
   const firstSkill = findById(
@@ -359,6 +363,20 @@ export function normalizeWorkbenchEnemyConfig(config = {}) {
       0.1,
       100,
       DEFAULT_WORKBENCH_ENEMY_CONFIG.defenseMultiplier
+    ),
+    toughnessMultiplier: clampNumber(
+      source.toughnessMultiplier ??
+        DEFAULT_WORKBENCH_ENEMY_CONFIG.toughnessMultiplier,
+      0.1,
+      100,
+      DEFAULT_WORKBENCH_ENEMY_CONFIG.toughnessMultiplier
+    ),
+    initialToughnessRatio: clampNumber(
+      source.initialToughnessRatio ??
+        DEFAULT_WORKBENCH_ENEMY_CONFIG.initialToughnessRatio,
+      0,
+      1,
+      DEFAULT_WORKBENCH_ENEMY_CONFIG.initialToughnessRatio
     ),
   };
 }

@@ -101,6 +101,8 @@ export function createEnemyFromData(enemy, options = {}) {
     baseAttributes: enemy.property?.baseAttributes ?? [],
     hpMultiplier: options.hpMultiplier ?? 1,
     defenseMultiplier: options.defenseMultiplier ?? 1,
+    toughnessMultiplier: options.toughnessMultiplier ?? 1,
+    initialToughnessRatio: options.initialToughnessRatio ?? 1,
   };
 }
 
@@ -594,6 +596,48 @@ function validateEnemy(enemy, gameData, errors, warnings) {
       issue(
         'enemy.attributes.empty',
         'Enemy has no base attributes',
+        '$.enemy.baseAttributes'
+      )
+    );
+  }
+  if (
+    enemy.toughnessMultiplier != null &&
+    !isPositiveNumber(enemy.toughnessMultiplier)
+  ) {
+    errors.push(
+      issue(
+        'enemy.toughnessMultiplier.invalid',
+        'Enemy toughnessMultiplier must be a positive number',
+        '$.enemy.toughnessMultiplier'
+      )
+    );
+  }
+  if (
+    enemy.initialToughnessRatio != null &&
+    (!Number.isFinite(enemy.initialToughnessRatio) ||
+      enemy.initialToughnessRatio < 0 ||
+      enemy.initialToughnessRatio > 1)
+  ) {
+    errors.push(
+      issue(
+        'enemy.initialToughnessRatio.invalid',
+        'Enemy initialToughnessRatio must be between 0 and 1',
+        '$.enemy.initialToughnessRatio'
+      )
+    );
+  }
+  if (
+    Array.isArray(enemy.baseAttributes) &&
+    !enemy.baseAttributes.some(
+      attribute =>
+        attribute.key === 'WEAKNESS_POINT_MAX' &&
+        Number.isFinite(attribute.value)
+    )
+  ) {
+    warnings.push(
+      issue(
+        'enemy.toughnessBase.missing',
+        'Enemy has no WEAKNESS_POINT_MAX base attribute',
         '$.enemy.baseAttributes'
       )
     );

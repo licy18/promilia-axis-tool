@@ -498,6 +498,9 @@ function formatBaselineStatus(status) {
   if (status === 'baseline-derived-from-scenario-actor-self-energy') {
     return '角色状态';
   }
+  if (status === 'baseline-derived-from-scenario-enemy-WEAKNESS_POINT_MAX') {
+    return '敌人弱点值';
+  }
   if (
     status === 'baseline-pending-azpr-enemy-toughness-state' ||
     status === 'baseline-pending-azpr-initial-self-energy'
@@ -506,6 +509,9 @@ function formatBaselineStatus(status) {
   }
   if (status === 'baseline-pending-missing-scenario-enemy-max-hp') {
     return 'HP缺失';
+  }
+  if (status === 'baseline-pending-missing-WEAKNESS_POINT_MAX') {
+    return '韧性缺失';
   }
   return status ?? '无';
 }

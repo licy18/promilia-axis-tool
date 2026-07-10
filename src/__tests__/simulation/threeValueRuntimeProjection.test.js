@@ -1218,6 +1218,85 @@ describe('three value runtime projection', () => {
     });
   });
 
+  it('derives remaining enemy toughness from the configured scenario baseline', () => {
+    const runtimeProjection = createThreeValueRuntimeProjection({
+      scenario: {
+        enemy: {
+          stats: {
+            maxHp: 10000,
+            maxToughness: 13334,
+            initialToughness: 3333.5,
+          },
+          toughness: {
+            baseMax: 6667,
+            maxMultiplier: 2,
+            initialRatio: 0.25,
+            maxValue: 13334,
+            initialValue: 3333.5,
+          },
+        },
+        actors: [],
+      },
+      threeValueGenerationLayer: {
+        contract: {
+          name: 'Action -> Hit -> ThreeValueDelta',
+        },
+        deltas: [
+          {
+            id: 'action-001|hit-1|enemyToughnessDamage|applied|60|0',
+            actionId: 'action-001',
+            actionName: '重击',
+            actionType: 'skill',
+            actorId: 'actor-001',
+            actorName: '末音',
+            hitKey: 'hit-1',
+            hitIndex: 1,
+            frameIndex: 60,
+            frameLabel: '1s0f',
+            timeMs: 1000,
+            trackKey: 'enemyToughnessDamage',
+            trackLabel: '敌人韧性削减',
+            layerKey: 'applied',
+            valueUnit: 'raw-field',
+            delta: 500,
+            hpDelta: null,
+            toughnessDelta: 500,
+            energyDelta: null,
+            applied: true,
+          },
+        ],
+      },
+    });
+
+    expect(runtimeProjection.enemyStateCurve).toMatchObject({
+      toughnessDelta: 500,
+      toughnessInitial: 3333.5,
+      toughnessRemaining: 2833.5,
+      toughnessBaselineStatus:
+        'baseline-derived-from-scenario-enemy-WEAKNESS_POINT_MAX',
+      baseline: {
+        toughness: {
+          initialValue: 3333.5,
+          maxValue: 13334,
+          baseValue: 6667,
+          multiplier: 2,
+          initialRatio: 0.25,
+          applied: true,
+        },
+      },
+      stateMetrics: {
+        toughness: {
+          initialValue: 3333.5,
+          maxValue: 13334,
+          delta: 500,
+          currentValue: 2833.5,
+          baselineConfirmed: true,
+          applied: true,
+        },
+      },
+    });
+  });
+
   it('keeps no-applied-delta status in the output consumer contract', () => {
     const runtimeProjection = createThreeValueRuntimeProjection({
       scenario: {

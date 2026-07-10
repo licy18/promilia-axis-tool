@@ -24475,3 +24475,67 @@ actorConfigs[]
 - `workbenchProjectFactory.test.js` 覆盖真实 AzPr 培养项投影、双角色规范化和装备槽位错误。
 - `workbenchDraftStorage.test.js` 覆盖 v2 round-trip、v1 文件/本地草稿迁移和双 key 清理。
 - `Workbench.test.js` 与 Workbench E2E 覆盖培养配置保存、导出、重置和导入恢复。
+
+## 343. Workbench v3 敌人韧性基线：Enemy Toughness Baseline
+
+### 343.1 数据源与项目字段
+
+Workbench 敌人访问层从早期 `workbench-seed.json` 裁剪列表切到完整 `enemies.json` 生成表。当前生成表 208 个敌人中，198 个存在有效 `WEAKNESS_POINT_MAX`，其余敌人保持缺失状态。
+
+`createEnemyFromData()` 新增项目配置字段：
+
+```text
+enemy.toughnessMultiplier
+enemy.initialToughnessRatio
+```
+
+编译后的 scenario 新增：
+
+```text
+enemy.stats.maxToughness
+enemy.stats.initialToughness
+enemy.toughness
+  sourceKind = azpr-enemy-WEAKNESS_POINT_MAX
+  sourceStatus
+  sourcePath
+  baseMax
+  maxMultiplier
+  initialRatio
+  maxValue
+  initialValue
+  applied
+```
+
+计算关系仅用于状态基线：
+
+```text
+maxToughness = WEAKNESS_POINT_MAX * toughnessMultiplier
+initialToughness = maxToughness * initialToughnessRatio
+remainingToughness = max(0, initialToughness - appliedToughnessDelta)
+```
+
+这不确认或改变 `appliedToughnessDelta` 的生成公式。
+
+### 343.2 草稿迁移
+
+`workbench-draft` / `workbench-project` 升级为 `schemaVersion = 3`，`enemyConfig` 新增：
+
+```text
+toughnessMultiplier
+initialToughnessRatio
+```
+
+- 当前 localStorage key 为 `promilia-axis-tool:workbench-draft:v3`。
+- 读取兼容 v1、v2 本地草稿、JSON 项目和分享快照；旧快照缺少字段时迁移为 `1` 和 `1`。
+- 重置草稿同时清理 v3、v2 和 v1 key。
+
+### 343.3 运行时状态
+
+有真实表值时，韧性 baseline status 为 `baseline-derived-from-scenario-enemy-WEAKNESS_POINT_MAX`，runtime state metric 输出 `initialValue`、`maxValue`、`currentValue` 和 `remainingValue`。缺少表值时使用 `baseline-pending-missing-WEAKNESS_POINT_MAX`，状态值保持 `null`。
+
+### 343.4 验证
+
+- `workbenchProjectFactory.test.js` 覆盖真实表值与项目配置编译。
+- `threeValueRuntimeProjection.test.js` 覆盖韧性 delta 扣减后的剩余状态。
+- `workbenchDraftStorage.test.js` 覆盖 v1/v2 到 v3 迁移。
+- `Workbench.test.js` 与 Workbench E2E 覆盖用户编辑、保存、导出、重置和导入恢复。
