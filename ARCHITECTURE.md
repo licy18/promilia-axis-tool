@@ -60,7 +60,8 @@ C:\PC2\Codex\AzPr
 - `initialRuntimeState.js`：循环边界继承的敌人三值、角色能量和活动效果起始状态合同。
 - `workbenchProjectFactory.js`：把 Workbench 选择、培养配置和动作草稿组装为标准项目。
 - `workbenchActionRelations.js`：动作前后关系的规范化、无环校验、间隔同步与删除清理。
-- `workbenchDraftStorage.js`：v12 草稿、项目 JSON 和分享链接。
+- `workbenchDraftStorage.js`：v13 草稿、项目 JSON 和分享链接。
+- `workbenchConfigurationLibrary.js`：角色/敌人配置实例库、方案选择、旧项目迁移和活动配置解析。
 - `workbenchScenarioWorkspace.js`：最多 14 条完整方案快照的规范化、切换和迁移。
 - `workbenchPngProject.js`：PNG 项目元数据写入与回读。
 - `workbenchPresetStorage.js`：v1 本地预设库，复用完整 Workbench 项目快照。
@@ -119,14 +120,19 @@ Action
 - 时间轴渲染可编辑的 60fps 循环边界和选中区段高亮，区段统计可定位贡献动作返回编辑。
 - 项目导入导出、分享和预设库由 `Workbench.vue` 编排，数据格式由 domain 层持有。
 - 顶部方案栏管理项目内完整排轴方案；方案切换只替换活动草稿，标准模拟链仍保持单入口。
+- `WorkbenchConfigurationLibraryPanel.vue` 管理可命名、复制和删除的角色/敌人配置实例；方案只保存实例选择，活动方案解析后的 `actorConfigs` / `enemyConfig` 继续作为标准模拟输入。
 - `WorkbenchLayoutBar.vue` 与按需加载的 `workbenchLayout.js` 管理桌面面板折叠、宽度、专注模式和本地恢复；布局偏好不进入项目合同。
 - `WorkbenchProjectDropOverlay.vue` 与按需加载的 `workbenchProjectFileReceiver.js` 统一接收文件选择、方案基准和窗口拖放，再把合法项目或 capture 交还既有恢复入口。
 
 ## 4. 关键数据合同
 
-### WorkbenchProjectFile v12
+### WorkbenchProjectFile v13
 
-根级包含活动方案的 selection、teamSlots、actorConfigs、enemyConfig、segmentSplitOptions、actionDrafts、actionRelations、cycleBoundaries、initialRuntimeState、runtimeSampleCaptures 和 selectedActionId，并包含 `scenarioWorkspace`。JSON、分享链接、PNG 元数据和预设库都复用该合同；v1-v11 项目迁移为 `initialRuntimeState = null` 的单方案或既有工作区。
+根级包含活动方案的 selection、teamSlots、actorConfigs、enemyConfig、configurationSelection、segmentSplitOptions、actionDrafts、actionRelations、cycleBoundaries、initialRuntimeState、runtimeSampleCaptures 和 selectedActionId，并包含共享 `configurationLibrary` 与 `scenarioWorkspace`。JSON、分享链接、PNG 元数据和预设库都复用该合同；v1-v12 项目从各方案已有 `actorConfigs` / `enemyConfig` 生成配置实例并保留原模拟输入。
+
+### ConfigurationLibrary / ConfigurationSelection v1
+
+`configurationLibrary` 在项目根级保存角色和敌人配置实例；角色实例继续复用既有 `actorConfig`，敌人实例继续复用既有 `enemyConfig`。每条方案的 `configurationSelection` 只绑定当前角色和敌人所选实例 ID。切换方案或选择实例时，domain 层把实例解析回活动草稿的 `actorConfigs` / `enemyConfig`，Project、compiler、generation、runtime 和 calculator 不读取配置库结构，也没有第二套培养或计算模型。
 
 ### ScenarioWorkspace v1
 
@@ -170,7 +176,7 @@ Action
 
 ## 5. 持久化边界
 
-- 当前草稿：`promilia-axis-tool:workbench-draft:v12`。
+- 当前草稿：`promilia-axis-tool:workbench-draft:v13`。
 - 本地预设：`promilia-axis-tool:workbench-presets:v1`。
 - 工作区布局：`promilia-axis-tool:workbench-layout:v1`，独立于项目和草稿。
 - 项目交换：JSON、分享 URL、PNG 内嵌元数据。
@@ -208,4 +214,4 @@ git diff --check
 - 生产引用审计当前为 0 个无引用模块、0 个意外 test-only 模块；新增代码必须维持该守门。
 - 当前首屏、Workbench 与全部 JavaScript gzip 预算分别为 120KB、370KB、740KB；新增依赖必须通过构建组成审计。
 - Workbench 首轮主包主要由技能核心投影、生产 seed 和模拟/复盘代码构成；候选诊断证据已经移入独立按需包，后续优化应以生产试用和可测量瓶颈为依据。
-- `playwright.production.config.js` 只服务真实 `dist` 的发布验收；`production-preview-reporter.mjs` 将十四项必需能力汇总为 `trial-ready` 或 `blocked`，开发服务器 E2E 不替代该结论。
+- `playwright.production.config.js` 只服务真实 `dist` 的发布验收；`production-preview-reporter.mjs` 将十五项必需能力汇总为 `trial-ready` 或 `blocked`，开发服务器 E2E 不替代该结论。

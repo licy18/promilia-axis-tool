@@ -614,6 +614,23 @@
 
         <div
           class="side-stack-panel"
+          :data-inspector-panel-order="sideInspectorPanelOrders.configuration"
+          data-inspector-panel-key="configuration"
+          data-testid="workbench-side-inspector-panel"
+          :style="{ order: sideInspectorPanelOrders.configuration }"
+        >
+          <WorkbenchConfigurationLibraryPanel
+            :library="configurationLibrary"
+            :selection="configurationSelection"
+            :actors="scenario.actors"
+            :enemy="scenario.enemy"
+            :enemy-id="selection.enemyId"
+            @command="applyWorkbenchConfigurationCommand"
+          />
+        </div>
+
+        <div
+          class="side-stack-panel"
           :data-inspector-panel-order="sideInspectorPanelOrders.properties"
           data-inspector-panel-key="properties"
           data-testid="workbench-side-inspector-panel"
@@ -815,14 +832,12 @@ import {
 import ActionLibraryPanel from '../features/workbench/ActionLibraryPanel.vue';
 import ActionRuleDiagnosticsPanel from '../features/workbench/ActionRuleDiagnosticsPanel.vue';
 import AnalysisPanel from '../features/workbench/AnalysisPanel.vue';
-import EnemyPanel from '../features/workbench/EnemyPanel.vue';
 import EffectTimelinePanel from '../features/workbench/EffectTimelinePanel.vue';
 import EventLogPanel from '../features/workbench/EventLogPanel.vue';
 import PropertiesPanel from '../features/workbench/PropertiesPanel.vue';
 import ResourceMonitorPanel from '../features/workbench/ResourceMonitorPanel.vue';
 import RuntimeSelectedDetailPanel from '../features/workbench/RuntimeSelectedDetailPanel.vue';
 import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
-import TeamLoadoutPanel from '../features/workbench/TeamLoadoutPanel.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import WorkbenchActionContextMenu from '../features/workbench/WorkbenchActionContextMenu.vue';
 import WorkbenchFlowPanel from '../features/workbench/WorkbenchFlowPanel.vue';
@@ -895,6 +910,11 @@ import {
   updateWorkbenchCycleBoundary,
 } from '../domain/workbenchCycleBoundaries';
 import {
+  applyWorkbenchConfigurationInstanceCommand,
+  reconcileWorkbenchConfigurationState,
+  updateSelectedWorkbenchConfigurationInstance,
+} from '../domain/workbenchConfigurationLibrary';
+import {
   clearWorkbenchDraft,
   createWorkbenchDraftSnapshot,
   createWorkbenchScenarioDraftSnapshot,
@@ -964,6 +984,15 @@ const WorkbenchLayoutBar = defineAsyncComponent(
 const WorkbenchProjectDropOverlay = defineAsyncComponent(
   () => import('../features/workbench/WorkbenchProjectDropOverlay.vue')
 );
+const WorkbenchConfigurationLibraryPanel = defineAsyncComponent(
+  () => import('../features/workbench/WorkbenchConfigurationLibraryPanel.vue')
+);
+const EnemyPanel = defineAsyncComponent(
+  () => import('../features/workbench/EnemyPanel.vue')
+);
+const TeamLoadoutPanel = defineAsyncComponent(
+  () => import('../features/workbench/TeamLoadoutPanel.vue')
+);
 
 const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
@@ -988,6 +1017,12 @@ const selection = ref({ ...initialDraft.selection });
 const teamSlots = ref(initialDraft.teamSlots.map(slot => ({ ...slot })));
 const actorConfigs = ref([...initialDraft.actorConfigs]);
 const enemyConfig = ref({ ...initialDraft.enemyConfig });
+const configurationLibrary = ref(
+  cloneWorkbenchHistoryValue(initialDraft.configurationLibrary)
+);
+const configurationSelection = ref(
+  cloneWorkbenchHistoryValue(initialDraft.configurationSelection)
+);
 const segmentSplitOptions = ref({ ...initialDraft.segmentSplitOptions });
 const segmentSplitPreview = ref(null);
 const actionDrafts = ref([...initialDraft.actionDrafts]);
@@ -1579,7 +1614,8 @@ async function handleWorkbenchLayoutResizeKey(panel, event) {
 
 onMounted(() => {
   void getWorkbenchLayoutApi().then(layoutApi => {
-    workbenchLayout.value = layoutApi.loadWorkbenchLayoutState(getLocalStorage());
+    workbenchLayout.value =
+      layoutApi.loadWorkbenchLayoutState(getLocalStorage());
   });
   window?.addEventListener?.('keydown', handleWorkbenchKeyboardShortcut);
   window?.addEventListener?.('hashchange', handleWorkbenchHashChange);
@@ -1681,6 +1717,16 @@ function updateSelection(patch, options = {}) {
   actorConfigs.value = normalizeWorkbenchActorConfigs(
     actorConfigs.value,
     nextSelection
+  );
+  applyWorkbenchConfigurationState(
+    reconcileWorkbenchConfigurationState({
+      configurationLibrary: configurationLibrary.value,
+      configurationSelection: configurationSelection.value,
+      selection: nextSelection,
+      actorConfigs: actorConfigs.value,
+      enemyConfig: enemyConfig.value,
+      syncSelectedValues: false,
+    })
   );
 
   normalizeActionLibraryCharacterId(previousSelection, nextSelection, {
@@ -1816,10 +1862,26 @@ function updateAction(patch) {
 function updateEnemyConfig(patch) {
   clearSegmentSplitPreview();
   recordWorkbenchHistorySnapshot();
-  enemyConfig.value = normalizeWorkbenchEnemyConfig({
+  const nextEnemyConfig = normalizeWorkbenchEnemyConfig({
     ...enemyConfig.value,
     ...patch,
   });
+  applyWorkbenchConfigurationState(
+    updateSelectedWorkbenchConfigurationInstance(
+      {
+        configurationLibrary: configurationLibrary.value,
+        configurationSelection: configurationSelection.value,
+        selection: selection.value,
+        actorConfigs: actorConfigs.value,
+        enemyConfig: enemyConfig.value,
+      },
+      {
+        kind: 'enemy',
+        enemyId: selection.value.enemyId,
+        config: nextEnemyConfig,
+      }
+    )
+  );
   markDraftDirty();
 }
 
@@ -1835,7 +1897,7 @@ function updateActorConfig(patch = {}) {
   clearSegmentSplitPreview();
   recordWorkbenchHistorySnapshot();
   const hasInitialSp = Object.prototype.hasOwnProperty.call(patch, 'initialSp');
-  actorConfigs.value = normalizeWorkbenchActorConfigs(
+  const nextActorConfigs = normalizeWorkbenchActorConfigs(
     actorConfigs.value.map(config => {
       if (Number(config.characterId) !== Number(characterId)) {
         return config;
@@ -1855,7 +1917,46 @@ function updateActorConfig(patch = {}) {
     }),
     selection.value
   );
+  applyWorkbenchConfigurationState(
+    updateSelectedWorkbenchConfigurationInstance(
+      {
+        configurationLibrary: configurationLibrary.value,
+        configurationSelection: configurationSelection.value,
+        selection: selection.value,
+        actorConfigs: actorConfigs.value,
+        enemyConfig: enemyConfig.value,
+      },
+      {
+        kind: 'actor',
+        characterId: Number(characterId),
+        config: nextActorConfigs.find(
+          config => Number(config.characterId) === Number(characterId)
+        ),
+      }
+    )
+  );
   markDraftDirty();
+}
+
+function applyWorkbenchConfigurationCommand(command = {}) {
+  const result = applyWorkbenchConfigurationInstanceCommand(
+    {
+      configurationLibrary: configurationLibrary.value,
+      configurationSelection: configurationSelection.value,
+      selection: selection.value,
+      actorConfigs: actorConfigs.value,
+      enemyConfig: enemyConfig.value,
+    },
+    command
+  );
+  if (!result.changed) {
+    return false;
+  }
+  clearSegmentSplitPreview();
+  recordWorkbenchHistorySnapshot();
+  applyWorkbenchConfigurationState(result);
+  markDraftDirty();
+  return true;
 }
 
 function updateSegmentSplitOptions(patch) {
@@ -2616,9 +2717,10 @@ function switchWorkspaceScenario(scenarioId) {
 }
 
 function addWorkspaceScenario() {
-  const emptyDraft = createWorkbenchScenarioDraftSnapshot(
-    createDefaultWorkbenchDraftState()
-  );
+  const emptyDraft = createWorkbenchScenarioDraftSnapshot({
+    ...createDefaultWorkbenchDraftState(),
+    configurationSelection: null,
+  });
   const result = addWorkbenchScenario(
     scenarioWorkspace.value,
     createWorkbenchScenarioDraftSnapshot(getCurrentWorkbenchScenarioState()),
@@ -2973,6 +3075,7 @@ function getWorkbenchDraftState() {
   );
   return {
     ...activeDraft,
+    configurationLibrary: configurationLibrary.value,
     scenarioWorkspace: synchronizeActiveWorkbenchScenario(
       scenarioWorkspace.value,
       activeDraft
@@ -2986,6 +3089,7 @@ function getCurrentWorkbenchScenarioState() {
     teamSlots: teamSlots.value,
     actorConfigs: actorConfigs.value,
     enemyConfig: enemyConfig.value,
+    configurationSelection: configurationSelection.value,
     segmentSplitOptions: segmentSplitOptions.value,
     actionDrafts: actionDrafts.value,
     actionRelations: actionRelations.value,
@@ -3276,6 +3380,9 @@ function applyDraftState(draft) {
     draft,
     draft?.savedAt ?? null
   );
+  configurationLibrary.value = cloneWorkbenchHistoryValue(
+    normalizedDraft.configurationLibrary
+  );
   scenarioWorkspace.value = cloneWorkbenchHistoryValue(
     normalizedDraft.scenarioWorkspace
   );
@@ -3291,11 +3398,16 @@ function applyWorkbenchScenarioDraftState(draft) {
     draft.selection,
     teamSlots.value
   );
-  actorConfigs.value = normalizeWorkbenchActorConfigs(
-    draft.actorConfigs,
-    selection.value
+  applyWorkbenchConfigurationState(
+    reconcileWorkbenchConfigurationState({
+      configurationLibrary: configurationLibrary.value,
+      configurationSelection: draft.configurationSelection,
+      selection: selection.value,
+      actorConfigs: draft.actorConfigs,
+      enemyConfig: draft.enemyConfig,
+      syncSelectedValues: false,
+    })
   );
-  enemyConfig.value = normalizeWorkbenchEnemyConfig(draft.enemyConfig);
   segmentSplitOptions.value = normalizeWorkbenchSegmentSplitOptions(
     draft.segmentSplitOptions
   );
@@ -3327,6 +3439,20 @@ function applyWorkbenchScenarioDraftState(draft) {
   );
   clearActionEditSource();
   clearActionEditFocus();
+}
+
+function applyWorkbenchConfigurationState(state) {
+  configurationLibrary.value = cloneWorkbenchHistoryValue(
+    state.configurationLibrary
+  );
+  configurationSelection.value = cloneWorkbenchHistoryValue(
+    state.configurationSelection
+  );
+  actorConfigs.value = normalizeWorkbenchActorConfigs(
+    state.actorConfigs,
+    selection.value
+  );
+  enemyConfig.value = normalizeWorkbenchEnemyConfig(state.enemyConfig);
 }
 
 function clearWorkbenchProjectTransientState() {
@@ -3538,6 +3664,8 @@ function createWorkbenchHistorySnapshot() {
       teamSlots: teamSlots.value,
       actorConfigs: actorConfigs.value,
       enemyConfig: enemyConfig.value,
+      configurationLibrary: configurationLibrary.value,
+      configurationSelection: configurationSelection.value,
       segmentSplitOptions: segmentSplitOptions.value,
       actionDrafts: actionDrafts.value,
       actionRelations: actionRelations.value,
@@ -3553,6 +3681,8 @@ function createWorkbenchHistorySnapshot() {
     teamSlots: draftSnapshot.teamSlots,
     actorConfigs: draftSnapshot.actorConfigs,
     enemyConfig: draftSnapshot.enemyConfig,
+    configurationLibrary: draftSnapshot.configurationLibrary,
+    configurationSelection: draftSnapshot.configurationSelection,
     segmentSplitOptions: draftSnapshot.segmentSplitOptions,
     actionDrafts: draftSnapshot.actionDrafts,
     actionRelations: draftSnapshot.actionRelations,
@@ -3591,11 +3721,16 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
     snapshot.selection,
     teamSlots.value
   );
-  actorConfigs.value = normalizeWorkbenchActorConfigs(
-    snapshot.actorConfigs,
-    selection.value
+  applyWorkbenchConfigurationState(
+    reconcileWorkbenchConfigurationState({
+      configurationLibrary: snapshot.configurationLibrary,
+      configurationSelection: snapshot.configurationSelection,
+      selection: selection.value,
+      actorConfigs: snapshot.actorConfigs,
+      enemyConfig: snapshot.enemyConfig,
+      syncSelectedValues: false,
+    })
   );
-  enemyConfig.value = normalizeWorkbenchEnemyConfig(snapshot.enemyConfig);
   segmentSplitOptions.value = normalizeWorkbenchSegmentSplitOptions(
     snapshot.segmentSplitOptions
   );
@@ -5235,19 +5370,21 @@ function createSideInspectorPanelOrders(inspectorMode) {
       runtimeDetail: 0,
       actionRules: 1,
       properties: 2,
-      enemy: 3,
-      teamLoadout: 4,
-      analysis: 5,
+      configuration: 3,
+      enemy: 4,
+      teamLoadout: 5,
+      analysis: 6,
     };
   }
 
   return {
     properties: 0,
     actionRules: 1,
-    enemy: 2,
-    runtimeDetail: 3,
-    teamLoadout: 4,
-    analysis: 5,
+    configuration: 2,
+    enemy: 3,
+    runtimeDetail: 4,
+    teamLoadout: 5,
+    analysis: 6,
   };
 }
 

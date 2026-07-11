@@ -14,16 +14,18 @@ import {
 import { normalizeWorkbenchRuntimeSampleCaptures } from './workbenchRuntimeSampleCapture';
 import { normalizeWorkbenchActionRelations } from './workbenchActionRelations';
 import { normalizeWorkbenchCycleBoundaries } from './workbenchCycleBoundaries';
-import {
-  createDefaultWorkbenchScenarioWorkspace,
-  normalizeWorkbenchScenarioWorkspace,
-} from './workbenchScenarioWorkspace';
+import { normalizeWorkbenchScenarioWorkspace } from './workbenchScenarioWorkspace';
 import { normalizeInitialRuntimeState } from './initialRuntimeState';
+import {
+  normalizeWorkbenchConfigurationSelection,
+  normalizeWorkbenchConfigurationWorkspace,
+} from './workbenchConfigurationLibrary';
 
-export const WORKBENCH_DRAFT_SCHEMA_VERSION = 12;
+export const WORKBENCH_DRAFT_SCHEMA_VERSION = 13;
 export const WORKBENCH_DRAFT_STORAGE_KEY =
-  'promilia-axis-tool:workbench-draft:v12';
+  'promilia-axis-tool:workbench-draft:v13';
 export const LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS = Object.freeze([
+  'promilia-axis-tool:workbench-draft:v12',
   'promilia-axis-tool:workbench-draft:v11',
   'promilia-axis-tool:workbench-draft:v10',
   'promilia-axis-tool:workbench-draft:v9',
@@ -52,24 +54,22 @@ export function createDefaultWorkbenchDraftState() {
     DEFAULT_WORKBENCH_SELECTION,
     teamSlots
   );
-  const activeDraft = createWorkbenchScenarioDraftSnapshot({
-    selection,
-    teamSlots,
-    actorConfigs: createDefaultWorkbenchActorConfigs(selection),
-    enemyConfig: { ...DEFAULT_WORKBENCH_ENEMY_CONFIG },
-    segmentSplitOptions: { ...DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS },
-    actionDrafts: [createWorkbenchActionDraft()],
-    actionRelations: [],
-    cycleBoundaries: [],
-    initialRuntimeState: null,
-    runtimeSampleCaptures: [],
-    selectedActionId: DEFAULT_WORKBENCH_ACTION_ID,
-  });
-  return {
-    ...activeDraft,
-    scenarioWorkspace: createDefaultWorkbenchScenarioWorkspace(activeDraft),
-    savedAt: null,
-  };
+  return createWorkbenchDraftSnapshot(
+    {
+      selection,
+      teamSlots,
+      actorConfigs: createDefaultWorkbenchActorConfigs(selection),
+      enemyConfig: { ...DEFAULT_WORKBENCH_ENEMY_CONFIG },
+      segmentSplitOptions: { ...DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS },
+      actionDrafts: [createWorkbenchActionDraft()],
+      actionRelations: [],
+      cycleBoundaries: [],
+      initialRuntimeState: null,
+      runtimeSampleCaptures: [],
+      selectedActionId: DEFAULT_WORKBENCH_ACTION_ID,
+    },
+    null
+  );
 }
 
 export function createWorkbenchDraftSnapshot(
@@ -82,14 +82,20 @@ export function createWorkbenchDraftSnapshot(
     activeDraft,
     createWorkbenchScenarioDraftSnapshot
   );
+  const configurationWorkspace = normalizeWorkbenchConfigurationWorkspace({
+    configurationLibrary: state?.configurationLibrary,
+    scenarioWorkspace,
+    activeDraft,
+  });
 
   return {
     schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
     game: 'azur-promilia',
     type: WORKBENCH_DRAFT_FILE_TYPE,
     savedAt,
-    ...activeDraft,
-    scenarioWorkspace,
+    ...configurationWorkspace.activeDraft,
+    configurationLibrary: configurationWorkspace.configurationLibrary,
+    scenarioWorkspace: configurationWorkspace.scenarioWorkspace,
   };
 }
 
@@ -98,6 +104,7 @@ export function createWorkbenchScenarioDraftSnapshot({
   teamSlots,
   actorConfigs,
   enemyConfig,
+  configurationSelection,
   segmentSplitOptions,
   actionDrafts,
   actionRelations,
@@ -133,6 +140,9 @@ export function createWorkbenchScenarioDraftSnapshot({
     teamSlots: normalizedTeamSlots,
     actorConfigs: normalizedActorConfigs,
     enemyConfig: normalizedEnemyConfig,
+    configurationSelection: normalizeWorkbenchConfigurationSelection(
+      configurationSelection
+    ),
     segmentSplitOptions: normalizedSegmentSplitOptions,
     actionDrafts: normalizedActions,
     actionRelations: normalizeWorkbenchActionRelations(

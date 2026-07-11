@@ -44,7 +44,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 - 根路径、旧编辑器路径和预设路径统一进入真实 Workbench。
 - 真实 AzPr 生成数据、版本化项目模型和无 UI 模拟运行时。
 - 60fps 多角色动作轴、动作属性编辑、批次操作、撤销重做和草稿恢复。
-- 队伍、敌人、装备、奇波、灵子和初始资源配置。
+- 队伍、敌人、装备、奇波、灵子和初始资源配置，以及按方案绑定的可复用配置实例。
 - `Action -> Hit -> ThreeValueDelta` 生成合同，以及 HP、韧性、每角色能量曲线、日志、详情和贡献分析。
 - 冷却/执行计划、效果命令和运行时复盘联动。
 - JSON、PNG 元数据、分享链接、runtime capture 和本地预设轴库。
@@ -54,9 +54,9 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；61 个测试文件、370 条测试通过。
-- `npm run test:e2e:workbench-flow`：通过；35 条 Workbench 浏览器主流程通过。
-- `npm run test:e2e:production-preview`：通过；11 项真实 `dist` 验收全部通过，报告结论为 `trial-ready`。
+- `npm run test -- --run`：通过；69 个测试文件、395 条测试通过。
+- `npm run test:e2e:workbench-flow`：通过；39 条 Workbench 浏览器主流程通过。
+- `npm run test:e2e:production-preview`：通过；15 项真实 `dist` 验收全部通过，报告结论为 `trial-ready`。
 
 ## 3. 目录速览
 
@@ -75,7 +75,8 @@ src/
 
 - `src/views/Workbench.vue`：生产页面编排和项目交换入口。
 - `src/domain/projectSchema.js`：标准项目、角色、敌人、动作和动作关系模型。
-- `src/domain/workbenchDraftStorage.js`：v12 草稿、项目 JSON 和分享合同。
+- `src/domain/workbenchDraftStorage.js`：v13 草稿、项目 JSON 和分享合同。
+- `src/domain/workbenchConfigurationLibrary.js`：角色/敌人配置实例与方案绑定合同。
 - `src/domain/workbenchScenarioWorkspace.js`：项目内多方案快照、迁移和管理合同。
 - `src/simulation/`：无 UI 编译、执行、三值生成、机制和结果投影。
 - `src/features/workbench/`：动作轴、配置、曲线、日志、详情和主流程交互。
@@ -984,6 +985,16 @@ Workbench 现在可以在页面任意位置接收外部文件拖放。外部文�
 阶段验收：390 条单元/组件测试、38 条 Workbench 主流程和 14 项 production preview 能力全部通过，生产报告结论为 `trial-ready`。生产引用与数据投影审计无异常；Workbench 主块 gzip 为 369,695B，全部 JavaScript gzip 为 724,656B，仍低于 370,000B/740,000B 预算。180 动作编译 p95 为 11.495ms、完整 simulation p95 为 29.330ms，120 动作浏览器首屏就绪为 2125ms；1440×1000 实图检查确认拖放遮罩无重叠。
 
 下一阶段目标：阶段 8-J 角色/敌人/培养配置实例闭环。进入 P2 配置能力块，对齐 Endaxis armory/team loadout 的项目层级，把现有角色等级、初始能量、奇波、装备、魂灵和敌人等级、HP/韧性倍率、元素防御整理为可复用、可命名、可复制的配置实例，并让每条工作区方案明确选择实际参与模拟的配置。继续复用现有 `actorConfigs`、`enemyConfig` 和 AzPr 生成数据，不建立平行培养模型，不把资料展示项误接入未确认公式，也不把阶段拆成单个选择框或状态标签。
+
+### 阶段 8-J 角色/敌人/培养配置实例闭环（2026-07-11）
+
+Workbench 现在可以把角色等级、初始能量、奇波、装备、灵子以及敌人等级、HP/防御/韧性倍率、初始韧性和元素防御保存为可命名、复制、选择和删除的配置实例。每条工作区方案独立绑定实际参与模拟的角色与敌人实例；切换方案或实例后，现有队伍/敌人编辑器和运行结果立即使用对应配置。配置操作进入撤销/重做，至少保留每个实体的一条实例。
+
+项目文件升级为 `WorkbenchProjectFile v13`。根级 `configurationLibrary` 保存共享角色/敌人实例，每条方案的 `configurationSelection` 保存绑定；活动实例继续解析为既有 `actorConfigs` / `enemyConfig`，因此 Project、Scenario、generation、runtime 和 calculator 结果链没有分叉。v1-v12 项目从各方案已有配置自动迁移；本地草稿、JSON、分享链接、PNG 元数据和预设继续交换完整工作区。本阶段没有新增真实倍率、培养效果推断或第二套配置模型。
+
+阶段验收：69 个测试文件、395 条单元/组件测试通过；39 条 Workbench 浏览器主流程全部覆盖，其中配置实例路径完成复制、命名、方案分流、JSON 导出、重置和回导恢复；15 项 production preview 能力全部通过，报告结论为 `trial-ready`。生产引用与数据投影审计无异常；Workbench 主块为 369,408B gzip，全部 JavaScript 为 729,603B gzip，均在 370,000B/740,000B 预算内。180 动作编译 p95 为 10.985ms、完整 simulation p95 为 28.659ms；120 动作浏览器首屏就绪为 1951ms。
+
+下一阶段目标：阶段 8-K / P3 运行时真实机制适配。把 v13 已选角色/敌人配置解析成标准 `ThreeValueMechanismContext` 的明确来源输入，并让 `Action -> Hit -> ThreeValueDelta` 的 HP、韧性和每角色能量 delta 统一经过可替换 AzPr mechanics adapter。优先确认配置来源、作用对象和时序，不追测试期最终倍率，不继续增加配置小控件，也不恢复证据考古；未确认的装备、奇波和灵子效果继续保持项目配置与来源字段，不自动参与 calculator。
 
 ## 10. 文档维护规则
 

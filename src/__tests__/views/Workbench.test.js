@@ -53,6 +53,12 @@ function compactSource(source) {
   return source.replace(/\s+/g, '');
 }
 
+async function settleWorkbenchAsyncPanels() {
+  await vi.dynamicImportSettled();
+  await flushPromises();
+  await nextTick();
+}
+
 describe('Workbench view', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
@@ -2090,7 +2096,7 @@ describe('Workbench view', () => {
       sideInspector
         .find('[data-inspector-panel-key="runtime-detail"]')
         .attributes('data-inspector-panel-order')
-    ).toBe('3');
+    ).toBe('4');
     expect(
       sideInspector
         .find('[data-inspector-panel-key="action-rules"]')
@@ -7370,6 +7376,7 @@ describe('Workbench view', () => {
         },
       },
     });
+    await settleWorkbenchAsyncPanels();
 
     await wrapper
       .find('[data-testid="workbench-character-select"]')
@@ -7441,6 +7448,7 @@ describe('Workbench view', () => {
         },
       },
     });
+    await settleWorkbenchAsyncPanels();
 
     expect(
       wrapper
@@ -7533,6 +7541,7 @@ describe('Workbench view', () => {
         },
       },
     });
+    await settleWorkbenchAsyncPanels();
 
     const toughnessStat = wrapper.find(
       '[data-testid="workbench-enemy-toughness-stat"]'
@@ -7582,6 +7591,7 @@ describe('Workbench view', () => {
         },
       },
     });
+    await settleWorkbenchAsyncPanels();
     const editor = wrapper.find(
       '[data-testid="workbench-enemy-element-defense-editor"]'
     );
@@ -7629,6 +7639,7 @@ describe('Workbench view', () => {
         },
       },
     });
+    await settleWorkbenchAsyncPanels();
 
     expect(
       wrapper
@@ -7732,7 +7743,7 @@ describe('Workbench view', () => {
         },
       },
     });
-    await nextTick();
+    await settleWorkbenchAsyncPanels();
 
     expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe(
       '已恢复草稿'
@@ -7948,6 +7959,7 @@ describe('Workbench view', () => {
         },
       },
     });
+    await settleWorkbenchAsyncPanels();
     const nextCharacter = workbenchSeed.gameData.characters.find(
       character => character.id !== workbenchSeed.defaults.characterId
     );
@@ -8180,6 +8192,7 @@ describe('Workbench view', () => {
         },
       },
     });
+    await settleWorkbenchAsyncPanels();
     const spSkill = workbenchSeed.gameData.skills.find(
       skill => Number(skill.spCost) > 0
     );
@@ -8516,6 +8529,7 @@ describe('Workbench view', () => {
         },
       },
     });
+    await settleWorkbenchAsyncPanels();
 
     expect(wrapper.text()).toContain('2 actor');
     expect(
@@ -9601,6 +9615,7 @@ describe('Workbench view', () => {
         },
       },
     });
+    await settleWorkbenchAsyncPanels();
 
     await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
     await wrapper
@@ -9699,7 +9714,7 @@ describe('Workbench view', () => {
         },
       },
     });
-    await nextTick();
+    await settleWorkbenchAsyncPanels();
 
     expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe(
       '已恢复草稿'
@@ -9761,6 +9776,137 @@ describe('Workbench view', () => {
         '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
       ).element.value
     ).toBe('');
+  });
+
+  it('binds reusable actor and enemy configurations to independent scenarios', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: { template: '<a><slot /></a>' },
+        },
+      },
+    });
+    await settleWorkbenchAsyncPanels();
+
+    const actorSelect = () =>
+      wrapper.get(
+        '[data-testid="workbench-actor-configuration-select"][data-character-id="109001"]'
+      );
+    const actorName = () =>
+      wrapper.get(
+        '[data-testid="workbench-actor-configuration-name"][data-character-id="109001"]'
+      );
+    const initialSpInput = () =>
+      wrapper.get(
+        '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
+      );
+    const enemySelect = () =>
+      wrapper.get('[data-testid="workbench-enemy-configuration-select"]');
+    const originalActorInstanceId = actorSelect().element.value;
+    const originalEnemyInstanceId = enemySelect().element.value;
+
+    await wrapper
+      .get(
+        '[data-testid="workbench-actor-configuration-duplicate"][data-character-id="109001"]'
+      )
+      .trigger('click');
+    await nextTick();
+    const burstActorInstanceId = actorSelect().element.value;
+    expect(burstActorInstanceId).not.toBe(originalActorInstanceId);
+    expect(actorSelect().findAll('option')).toHaveLength(2);
+
+    await wrapper.get('[data-testid="workbench-undo-edit"]').trigger('click');
+    await nextTick();
+    expect(actorSelect().element.value).toBe(originalActorInstanceId);
+    expect(actorSelect().findAll('option')).toHaveLength(1);
+    await wrapper.get('[data-testid="workbench-redo-edit"]').trigger('click');
+    await nextTick();
+    expect(actorSelect().element.value).toBe(burstActorInstanceId);
+
+    await actorName().setValue('末音爆发配置');
+    await initialSpInput().setValue('0.75');
+    await wrapper
+      .get('[data-testid="workbench-enemy-configuration-duplicate"]')
+      .trigger('click');
+    await nextTick();
+    const challengeEnemyInstanceId = enemySelect().element.value;
+    expect(challengeEnemyInstanceId).not.toBe(originalEnemyInstanceId);
+    await wrapper
+      .get('[data-testid="workbench-enemy-configuration-name"]')
+      .setValue('高压敌人配置');
+    await wrapper
+      .get('[data-testid="workbench-enemy-level-input"]')
+      .setValue('95');
+
+    await wrapper
+      .get('[data-testid="workbench-scenario-duplicate"]')
+      .trigger('click');
+    await nextTick();
+    expect(wrapper.get('main.workbench').attributes()).toMatchObject({
+      'data-workspace-scenario-count': '2',
+      'data-active-workspace-scenario-id': 'scenario-0002',
+    });
+
+    await actorSelect().setValue(originalActorInstanceId);
+    await enemySelect().setValue(originalEnemyInstanceId);
+    await nextTick();
+    expect(initialSpInput().element.value).toBe('');
+    expect(wrapper.get('[data-testid="workbench-enemy-level"]').text()).toBe(
+      'Lv.80'
+    );
+
+    await wrapper.get('[data-scenario-id="scenario-0001"]').trigger('click');
+    await nextTick();
+    expect(actorSelect().element.value).toBe(burstActorInstanceId);
+    expect(enemySelect().element.value).toBe(challengeEnemyInstanceId);
+    expect(initialSpInput().element.value).toBe('0.75');
+    expect(wrapper.get('[data-testid="workbench-enemy-level"]').text()).toBe(
+      'Lv.95'
+    );
+
+    await wrapper.get('[data-testid="workbench-save-draft"]').trigger('click');
+    const saved = JSON.parse(
+      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
+    );
+    expect(saved.schemaVersion).toBe(13);
+    expect(saved.configurationLibrary.schemaVersion).toBe(1);
+    expect(
+      saved.configurationLibrary.actorInstances.find(
+        instance => instance.id === burstActorInstanceId
+      )
+    ).toMatchObject({
+      name: '末音爆发配置',
+      characterId: 109001,
+      actorConfig: { initialSp: 0.75 },
+    });
+    expect(
+      saved.configurationLibrary.enemyInstances.find(
+        instance => instance.id === challengeEnemyInstanceId
+      )
+    ).toMatchObject({
+      name: '高压敌人配置',
+      enemyConfig: { level: 95 },
+    });
+    expect(saved.scenarioWorkspace.activeScenarioId).toBe('scenario-0001');
+    const savedScenarioOne = saved.scenarioWorkspace.scenarios.find(
+      scenario => scenario.id === 'scenario-0001'
+    );
+    const savedScenarioTwo = saved.scenarioWorkspace.scenarios.find(
+      scenario => scenario.id === 'scenario-0002'
+    );
+    expect(savedScenarioOne.draft.configurationSelection).toMatchObject({
+      actorInstanceIds: expect.arrayContaining([
+        { characterId: 109001, instanceId: burstActorInstanceId },
+      ]),
+      enemyInstanceId: challengeEnemyInstanceId,
+    });
+    expect(savedScenarioTwo.draft.configurationSelection).toMatchObject({
+      actorInstanceIds: expect.arrayContaining([
+        { characterId: 109001, instanceId: originalActorInstanceId },
+      ]),
+      enemyInstanceId: originalEnemyInstanceId,
+    });
+    wrapper.unmount();
   });
 
   it('compares a current snapshot and returns from an action difference to editing', async () => {

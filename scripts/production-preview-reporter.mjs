@@ -7,6 +7,7 @@ const REQUIRED_CAPABILITIES = [
   'json-project-exchange',
   'png-project-exchange',
   'project-drop-recovery',
+  'configuration-instances',
   'multi-action-editing',
   'timeline-relations',
   'effect-interval-review',

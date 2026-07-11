@@ -251,7 +251,7 @@ test('edits and reviews an arbitrary action group @workbench-main-flow', async (
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(exportedProject.schemaVersion).toBe(12);
+  expect(exportedProject.schemaVersion).toBe(13);
   expect(exportedProject.actionDrafts).toHaveLength(5);
   expect(exportedProject.actionRelations).toEqual([
     expect.objectContaining({
@@ -2255,7 +2255,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 12,
+    schemaVersion: 13,
     game: 'azur-promilia',
     type: 'workbench-project',
     selectedActionId: 'action-0002',
@@ -2514,7 +2514,7 @@ test('imports a runtime capture and preserves its applied curve through project 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 12,
+    schemaVersion: 13,
     runtimeSampleCaptures: [
       {
         captureSessionId: 'e2e-recover-sp-capture-1',
@@ -4031,7 +4031,7 @@ test('persists cycle boundaries and reviews section contributions @workbench-mai
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(exportedProject.schemaVersion).toBe(12);
+  expect(exportedProject.schemaVersion).toBe(13);
   expect(exportedProject.cycleBoundaries).toEqual([
     expect.objectContaining({ id: 'cycle-boundary-0001' }),
   ]);
@@ -4113,7 +4113,7 @@ test('creates an inherited scenario with continued runtime state @workbench-main
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 12,
+    schemaVersion: 13,
     initialRuntimeState: {
       source: {
         sourceScenarioId: 'scenario-0001',
@@ -4191,7 +4191,7 @@ test('manages, compares, and restores multiple workspace scenarios @workbench-ma
   const downloadPath = await download.path();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 12,
+    schemaVersion: 13,
     scenarioWorkspace: {
       activeScenarioId: 'scenario-0002',
       scenarios: [
@@ -4235,6 +4235,101 @@ test('manages, compares, and restores multiple workspace scenarios @workbench-ma
     'scenario-0001'
   );
   await expect(page.locator('.action-item')).toHaveCount(2);
+});
+
+test('reuses named actor and enemy configurations across workspace scenarios @workbench-main-flow', async ({
+  page,
+}) => {
+  await page.goto('/#/workbench');
+  const actorSelect = page.locator(
+    '[data-testid="workbench-actor-configuration-select"][data-character-id="109001"]'
+  );
+  const actorName = page.locator(
+    '[data-testid="workbench-actor-configuration-name"][data-character-id="109001"]'
+  );
+  const initialSpInput = page.locator(
+    '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
+  );
+  const enemySelect = page.getByTestId('workbench-enemy-configuration-select');
+  const originalActorInstanceId = await actorSelect.inputValue();
+  const originalEnemyInstanceId = await enemySelect.inputValue();
+
+  await page
+    .locator(
+      '[data-testid="workbench-actor-configuration-duplicate"][data-character-id="109001"]'
+    )
+    .click();
+  const burstActorInstanceId = await actorSelect.inputValue();
+  expect(burstActorInstanceId).not.toBe(originalActorInstanceId);
+  await actorName.fill('末音爆发配置');
+  await initialSpInput.fill('0.75');
+
+  await page.getByTestId('workbench-enemy-configuration-duplicate').click();
+  const challengeEnemyInstanceId = await enemySelect.inputValue();
+  expect(challengeEnemyInstanceId).not.toBe(originalEnemyInstanceId);
+  await page
+    .getByTestId('workbench-enemy-configuration-name')
+    .fill('高压敌人配置');
+  await page.getByTestId('workbench-enemy-level-input').fill('95');
+
+  await page.getByTestId('workbench-scenario-duplicate').click();
+  await actorSelect.selectOption(originalActorInstanceId);
+  await enemySelect.selectOption(originalEnemyInstanceId);
+  await expect(initialSpInput).toHaveValue('');
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '80'
+  );
+
+  await page
+    .locator(
+      '[data-testid="workbench-scenario-tab"][data-scenario-id="scenario-0001"]'
+    )
+    .click();
+  await expect(actorSelect).toHaveValue(burstActorInstanceId);
+  await expect(actorName).toHaveValue('末音爆发配置');
+  await expect(initialSpInput).toHaveValue('0.75');
+  await expect(enemySelect).toHaveValue(challengeEnemyInstanceId);
+  await expect(
+    page.getByTestId('workbench-enemy-configuration-name')
+  ).toHaveValue('高压敌人配置');
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '95'
+  );
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const download = await downloadPromise;
+  const downloadPath = await download.path();
+  const project = JSON.parse(await readFile(downloadPath, 'utf8'));
+  expect(project.schemaVersion).toBe(13);
+  expect(
+    project.configurationLibrary.actorInstances.find(
+      instance => instance.id === burstActorInstanceId
+    )
+  ).toMatchObject({
+    name: '末音爆发配置',
+    actorConfig: { initialSp: 0.75 },
+  });
+  expect(
+    project.configurationLibrary.enemyInstances.find(
+      instance => instance.id === challengeEnemyInstanceId
+    )
+  ).toMatchObject({
+    name: '高压敌人配置',
+    enemyConfig: { level: 95 },
+  });
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(downloadPath);
+  await expect(actorSelect).toHaveValue(burstActorInstanceId);
+  await expect(actorName).toHaveValue('末音爆发配置');
+  await expect(initialSpInput).toHaveValue('0.75');
+  await expect(enemySelect).toHaveValue(challengeEnemyInstanceId);
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '95'
+  );
 });
 
 test('persists resizable editing and review workspace layouts @workbench-main-flow', async ({
@@ -4618,6 +4713,7 @@ async function ensureActionContentEditResultSynced(
 async function readStoredWorkbenchDraft(page) {
   return await page.evaluate(() => {
     const rawDraft =
+      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v13') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v12') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v8') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v5') ??
@@ -5079,7 +5175,9 @@ async function dragWorkbenchFile(page, { name, mimeType, buffer }) {
       })
     );
   }, payload);
-  await expect(page.getByTestId('workbench-project-drop-overlay')).toBeVisible();
+  await expect(
+    page.getByTestId('workbench-project-drop-overlay')
+  ).toBeVisible();
   await page.evaluate(filePayload => {
     const bytes = Uint8Array.from(atob(filePayload.base64), character =>
       character.charCodeAt(0)

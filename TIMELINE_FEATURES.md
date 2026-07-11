@@ -63,7 +63,7 @@ insertion / generationBatch
 - `Ctrl/Cmd+Z`、`Ctrl/Cmd+Y` 和 `Ctrl/Cmd+Shift+Z` 撤销/重做。
 - 同轨重叠时可自动推迟，并保留诊断说明。
 
-多选和动作剪贴板只属于编辑会话与撤销历史，项目重置或方案切换会清除；动作关系、循环边界和初始运行状态随各方案进入 v12 项目交换格式。复制动作组时只复制两个端点都位于所选组内的关系。
+多选和动作剪贴板只属于编辑会话与撤销历史，项目重置或方案切换会清除；动作关系、循环边界、初始运行状态和配置实例选择随各方案进入 v13 项目交换格式。复制动作组时只复制两个端点都位于所选组内的关系。
 
 所有动作变更必须通过 Workbench mutation/runtime sync 路径刷新模拟结果，不能只移动 DOM。
 
@@ -112,7 +112,7 @@ Runtime 消费标准 delta 后输出 `simLog`、`stateCurves`、资源曲线、�
 
 ## 7. 项目交换
 
-动作草稿、关系、循环边界与初始运行状态通过 WorkbenchProjectFile v12 的 `scenarioWorkspace.scenarios[].draft` 持久化。根级字段镜像活动方案；草稿、JSON、分享链接、PNG 元数据、runtime capture 和预设轴库共享完整方案工作区。任何新时间轴字段都必须同步考虑每条方案、全部交换路径及旧版本迁移。
+动作草稿、关系、循环边界、初始运行状态与配置实例选择通过 WorkbenchProjectFile v13 的 `scenarioWorkspace.scenarios[].draft` 持久化。共享角色/敌人配置实例位于根级 `configurationLibrary`，活动方案解析后的 `actorConfigs` / `enemyConfig` 仍是时间轴和模拟的唯一配置输入；草稿、JSON、分享链接、PNG 元数据、runtime capture 和预设轴库共享完整方案工作区。任何新时间轴字段都必须同步考虑每条方案、全部交换路径及旧版本迁移。
 
 JSON 项目、带项目元数据的 PNG 和 runtime capture 可以通过文件选择或窗口级拖放进入同一 `WorkbenchProjectFileReceiveResult`。外部文件进入窗口时显示释放遮罩；只接受单个文件。合法项目统一调用 `applyImportedProjectDraft()`，无效、损坏、多文件或无元数据 PNG 不得修改当前方案。拖放状态和接收结果不进入项目交换格式。
 
@@ -132,7 +132,7 @@ npm run benchmark:long-axis:check
 npm run benchmark:long-axis:browser
 ```
 
-默认加载 120 动作 v12 草稿，验证动作列表、时间轴块、动作结果、状态曲线和运行结果导航均可见，首屏完成时间预算为 15 秒。
+默认加载 120 动作 v13 草稿，验证动作列表、时间轴块、动作结果、状态曲线和运行结果导航均可见，首屏完成时间预算为 15 秒。
 
 当前浏览器仍直接渲染全部动作和曲线点；当基准显示真实瓶颈时，再采用虚拟化、分层折叠或按需渲染，不提前引入无证据复杂度。
 

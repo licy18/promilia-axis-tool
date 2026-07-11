@@ -94,7 +94,7 @@ test('[json-project-exchange] restores an exported production JSON project', asy
   expect(download.suggestedFilename()).toMatch(/promilia-workbench-.*\.json$/);
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 12,
+    schemaVersion: 13,
     game: 'azur-promilia',
     type: 'workbench-project',
     enemyConfig: { level: 91 },
@@ -116,6 +116,82 @@ test('[json-project-exchange] restores an exported production JSON project', asy
   );
   await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
     '91'
+  );
+});
+
+test('[configuration-instances] binds reusable simulation configs to scenarios and JSON', async ({
+  page,
+}) => {
+  await page.goto('/#/workbench');
+  await expect(
+    page.getByTestId('workbench-configuration-library-panel')
+  ).toBeVisible();
+  const actorSelect = page.locator(
+    '[data-testid="workbench-actor-configuration-select"][data-character-id="109001"]'
+  );
+  const enemySelect = page.getByTestId('workbench-enemy-configuration-select');
+  const originalActorInstanceId = await actorSelect.inputValue();
+  const originalEnemyInstanceId = await enemySelect.inputValue();
+
+  await page
+    .locator(
+      '[data-testid="workbench-actor-configuration-duplicate"][data-character-id="109001"]'
+    )
+    .click();
+  const burstActorInstanceId = await actorSelect.inputValue();
+  await page
+    .locator(
+      '[data-testid="workbench-actor-configuration-name"][data-character-id="109001"]'
+    )
+    .fill('生产爆发配置');
+  await page
+    .locator(
+      '[data-testid="workbench-actor-initial-sp-input"][data-character-id="109001"]'
+    )
+    .fill('0.5');
+  await page.getByTestId('workbench-enemy-configuration-duplicate').click();
+  const challengeEnemyInstanceId = await enemySelect.inputValue();
+  await page.getByTestId('workbench-enemy-level-input').fill('95');
+
+  await page.getByTestId('workbench-scenario-duplicate').click();
+  await actorSelect.selectOption(originalActorInstanceId);
+  await enemySelect.selectOption(originalEnemyInstanceId);
+  await page
+    .locator(
+      '[data-testid="workbench-scenario-tab"][data-scenario-id="scenario-0001"]'
+    )
+    .click();
+  await expect(actorSelect).toHaveValue(burstActorInstanceId);
+  await expect(enemySelect).toHaveValue(challengeEnemyInstanceId);
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '95'
+  );
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const download = await downloadPromise;
+  const project = JSON.parse(await readFile(await download.path(), 'utf8'));
+  expect(project).toMatchObject({
+    schemaVersion: 13,
+    configurationLibrary: {
+      schemaVersion: 1,
+      actorInstances: expect.any(Array),
+      enemyInstances: expect.any(Array),
+    },
+    scenarioWorkspace: {
+      activeScenarioId: 'scenario-0001',
+      scenarios: [{ id: 'scenario-0001' }, { id: 'scenario-0002' }],
+    },
+  });
+  expect(project.configurationLibrary.actorInstances).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({ id: burstActorInstanceId }),
+    ])
+  );
+  expect(project.configurationLibrary.enemyInstances).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({ id: challengeEnemyInstanceId }),
+    ])
   );
 });
 
@@ -269,7 +345,7 @@ test('[timeline-relations] preserves action relations through project exchange',
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(12);
+  expect(project.schemaVersion).toBe(13);
   expect(project.actionDrafts).toHaveLength(5);
   expect(project.actionRelations).toEqual([
     expect.objectContaining({
@@ -437,7 +513,7 @@ test('[cycle-sections] creates, reviews, and restores a production cycle boundar
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(12);
+  expect(project.schemaVersion).toBe(13);
   expect(project.cycleBoundaries).toEqual([
     expect.objectContaining({
       id: 'cycle-boundary-0001',
@@ -507,7 +583,7 @@ test('[cycle-inheritance] creates and restores a production scenario from a runt
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 12,
+    schemaVersion: 13,
     initialRuntimeState: {
       contractName: 'AzPrInitialRuntimeState',
       source: {
@@ -566,7 +642,7 @@ test('[workspace-scenarios] switches, compares, and restores independent product
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(12);
+  expect(project.schemaVersion).toBe(13);
   expect(project.scenarioWorkspace).toMatchObject({
     activeScenarioId: 'scenario-0002',
     scenarios: [
@@ -751,7 +827,9 @@ async function dragWorkbenchFile(page, { name, mimeType, buffer }) {
       })
     );
   }, payload);
-  await expect(page.getByTestId('workbench-project-drop-overlay')).toBeVisible();
+  await expect(
+    page.getByTestId('workbench-project-drop-overlay')
+  ).toBeVisible();
   await page.evaluate(filePayload => {
     const bytes = Uint8Array.from(atob(filePayload.base64), character =>
       character.charCodeAt(0)

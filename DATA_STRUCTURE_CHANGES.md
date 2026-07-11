@@ -26332,3 +26332,32 @@ reason? / statusText
 `workbenchProjectFileReceiver.js` 先按 PNG MIME、扩展名或文件签名识别 PNG，并复用 `parseWorkbenchProjectPng()` 校验 `PromiliaAxisToolData`；文本文件复用 `parseWorkbenchProjectFile()`，必要时再尝试 `parseWorkbenchRuntimeSampleCaptureFile()`。文件选择入口允许对浏览器临时无扩展名文件做内容解析回退，外部拖放严格限制 JSON/JSONL/NDJSON 或 PNG。窗口拖放控制器只在 `dataTransfer.types` 含 `Files` 时接管事件，并向 Workbench 提交一次文件列表。
 
 合法项目仍由 `applyImportedProjectDraft()` 负责规范化、历史清理、草稿保存和 runtime 刷新；runtime capture 仍走既有绑定与 adapter。无效结果、多文件和解析异常只更新导入状态，不应用 draft。该合同不改变 WorkbenchProjectFile v12、Project、Scenario、generation、runtime 或 calculator。
+
+## 382. WorkbenchProjectFile v13 / ConfigurationLibrary v1 / ConfigurationSelection v1
+
+Workbench 草稿与项目文件从 v12 升级为 v13。项目根级新增共享配置库：
+
+```text
+configurationLibrary
+  schemaVersion = 1
+  actorInstances[] (max 48)
+    id / name / characterId
+    actorConfig
+  enemyInstances[] (max 24)
+    id / name / enemyId
+    enemyConfig
+```
+
+根级活动草稿与每条 `scenarioWorkspace.scenarios[].draft` 新增：
+
+```text
+configurationSelection
+  schemaVersion = 1
+  actorInstanceIds[]
+    characterId / instanceId
+  enemyInstanceId
+```
+
+`workbenchConfigurationLibrary.js` 负责实例 ID、名称、上限、复制、重命名、选择、删除和方案解析。角色实例直接保存既有 `normalizeWorkbenchActorConfig()` 结果，敌人实例直接保存既有 `normalizeWorkbenchEnemyConfig()` 结果；选择配置或切换方案后，所选实例解析回活动草稿的 `actorConfigs` / `enemyConfig`。Project、Scenario、generation、runtime 和 calculator 仍只消费解析后的既有配置字段，不读取实例库，也没有新增公式或平行培养模型。
+
+v1-v12 项目继续由统一解析器接收。迁移时从活动方案及各非活动方案现有 `actorConfigs` / `enemyConfig` 建立或复用配置实例，并为每条方案写入对应选择；相同实体和配置内容共用实例，不同内容保留为独立实例。v13 配置库与选择随本地草稿、JSON、分享链接、PNG 元数据、预设和撤销/重做交换。

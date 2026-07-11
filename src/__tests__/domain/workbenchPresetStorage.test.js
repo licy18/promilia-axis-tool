@@ -18,7 +18,7 @@ import {
 } from '../../domain/workbenchPresetStorage';
 
 describe('workbench preset storage', () => {
-  it('stores a complete v12 multi-scenario project snapshot with searchable metadata', () => {
+  it('stores a complete v13 multi-scenario project snapshot with searchable metadata', () => {
     const draft = createPresetDraft();
     draft.scenarioWorkspace.scenarios.push({
       id: 'scenario-0002',

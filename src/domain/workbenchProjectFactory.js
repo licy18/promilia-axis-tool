@@ -300,23 +300,34 @@ export function normalizeWorkbenchActorConfigs(
     const source = sourceConfigs.find(
       item => Number(item?.characterId) === Number(characterId)
     );
-    const character = findById(workbenchSeed.gameData.characters, characterId);
-    const attributeLevel = Number(character?.attributePanel?.level);
-
-    return {
-      characterId: Number(characterId),
-      level: Number.isFinite(attributeLevel)
-        ? attributeLevel
-        : clampNumber(
-            source?.level,
-            1,
-            DEFAULT_WORKBENCH_ACTOR_LEVEL,
-            DEFAULT_WORKBENCH_ACTOR_LEVEL
-          ),
-      initialSp: normalizeWorkbenchInitialSp(source?.initialSp, character),
-      loadout: normalizeWorkbenchLoadout(source?.loadout),
-    };
+    return normalizeWorkbenchActorConfig(source, characterId);
   });
+}
+
+export function normalizeWorkbenchActorConfig(
+  actorConfig = {},
+  characterId = actorConfig?.characterId
+) {
+  const normalizedCharacterId = Number(characterId);
+  const character = findById(
+    workbenchSeed.gameData.characters,
+    normalizedCharacterId
+  );
+  const attributeLevel = Number(character?.attributePanel?.level);
+
+  return {
+    characterId: normalizedCharacterId,
+    level: Number.isFinite(attributeLevel)
+      ? attributeLevel
+      : clampNumber(
+          actorConfig?.level,
+          1,
+          DEFAULT_WORKBENCH_ACTOR_LEVEL,
+          DEFAULT_WORKBENCH_ACTOR_LEVEL
+        ),
+    initialSp: normalizeWorkbenchInitialSp(actorConfig?.initialSp, character),
+    loadout: normalizeWorkbenchLoadout(actorConfig?.loadout),
+  };
 }
 
 export function normalizeWorkbenchLoadout(loadout = {}) {
