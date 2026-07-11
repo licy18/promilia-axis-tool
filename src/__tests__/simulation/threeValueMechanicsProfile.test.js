@@ -124,12 +124,50 @@ describe('three value mechanics profile', () => {
     expect(runtimeDelta.runtimeCalculatorInvocation.validation).toMatchObject({
       mechanicsLayerInputsAppliedReady: true,
     });
+    expect(runtimeDelta.runtimeCalculatorInvocation.mechanicsEvaluation).toMatchObject({
+      contractName: 'AzPrThreeValueMechanicsEvaluation',
+      contractVersion: 1,
+      operation: 'round-clamped-product',
+      requiredLayerKeys: ['baseAttack', 'actionMultiplier'],
+      usedLayers: [
+        {
+          layerKey: 'baseAttack',
+          inputKey: 'actorStats',
+          source: 'actor',
+          ready: true,
+        },
+        {
+          layerKey: 'actionMultiplier',
+          inputKey: 'actionMultiplier',
+          source: 'operands',
+          ready: true,
+        },
+      ],
+      intermediate: {
+        baseAttack: generatedDelta.mechanismContext.sourceActor.stats.attack,
+        actionMultiplier:
+          generatedDelta.mechanicsAdapterRequest.mechanicsLayerInputs.inputs
+            .actionMultiplier.value,
+        minimum: 0,
+      },
+      delta: generatedDelta.delta,
+      matchesExpected: true,
+      ready: true,
+    });
     expect(result.threeValueRuntimeProjection.summary).toMatchObject({
       mechanicsProfileIds: ['azpr-three-value-preview-v1'],
       mechanicsProfileVersions: [1],
       mechanicsProfileFallbackInvocationCount: 0,
       mechanicsProfileCapabilityReadyInvocationCount: 1,
       mechanicsProfileCapabilityMissingInvocationCount: 0,
+    });
+    expect(
+      result.threeValueRuntimeProjection.runtimeStateSnapshots
+        .calculatorInvocationSummary
+    ).toMatchObject({
+      mechanicsEvaluationReadyInvocationCount: 1,
+      mechanicsEvaluationMissingInvocationCount: 0,
+      mechanicsEvaluationOperations: ['round-clamped-product'],
     });
   });
 
@@ -168,19 +206,14 @@ describe('three value mechanics profile', () => {
     expect(invocation).toMatchObject({
       status: 'runtime-calculator-invocation-ready-with-fallback',
       fallbackReason: 'runtime-calculator-output-invalid',
-      operandsCalculation: {
+      mechanicsEvaluation: {
+        contractName: 'AzPrThreeValueMechanicsEvaluation',
+        contractVersion: 1,
         ready: false,
         profileId: 'unit-test-no-hp-profile',
         profileVersion: 2,
         capabilityStatus: 'mechanics-profile-capability-unsupported',
         capabilityFallbackReason: 'mechanics-profile-operand-kind-unsupported',
-      },
-      output: {
-        mechanicsProfileId: 'unit-test-no-hp-profile',
-        mechanicsProfileVersion: 2,
-        mechanicsProfileFallback: false,
-        mechanicsProfileCapabilityStatus:
-          'mechanics-profile-capability-unsupported',
       },
     });
     expect(result.threeValueRuntimeProjection.summary).toMatchObject({
@@ -189,6 +222,13 @@ describe('three value mechanics profile', () => {
       mechanicsProfileFallbackInvocationCount: 0,
       mechanicsProfileCapabilityReadyInvocationCount: 0,
       mechanicsProfileCapabilityMissingInvocationCount: 1,
+    });
+    expect(
+      result.threeValueRuntimeProjection.runtimeStateSnapshots
+        .calculatorInvocationSummary
+    ).toMatchObject({
+      mechanicsEvaluationReadyInvocationCount: 0,
+      mechanicsEvaluationMissingInvocationCount: 1,
     });
   });
 });

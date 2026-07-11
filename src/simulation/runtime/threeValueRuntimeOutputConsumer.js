@@ -214,26 +214,6 @@ export function createThreeValueRuntimeOutputConsumerContract({
         stateSnapshots?.summary?.mechanicsAdapterRegistrationKeys ??
         summary.mechanicsAdapterRegistrationKeys ??
         [],
-      mechanicsOperandsReadyInvocationCount: numberOrZero(
-        stateSnapshots?.summary?.mechanicsOperandsReadyInvocationCount ??
-          summary.mechanicsOperandsReadyInvocationCount
-      ),
-      mechanicsOperandsMissingInvocationCount: numberOrZero(
-        stateSnapshots?.summary?.mechanicsOperandsMissingInvocationCount ??
-          summary.mechanicsOperandsMissingInvocationCount
-      ),
-      mechanicsOperandsMismatchInvocationCount: numberOrZero(
-        stateSnapshots?.summary?.mechanicsOperandsMismatchInvocationCount ??
-          summary.mechanicsOperandsMismatchInvocationCount
-      ),
-      mechanicsOperandsCalculatedInvocationCount: numberOrZero(
-        stateSnapshots?.summary?.mechanicsOperandsCalculatedInvocationCount ??
-          summary.mechanicsOperandsCalculatedInvocationCount
-      ),
-      mechanicsOperandsKinds:
-        stateSnapshots?.summary?.mechanicsOperandsKinds ??
-        summary.mechanicsOperandsKinds ??
-        [],
       mechanicsProfileIds:
         stateSnapshots?.summary?.mechanicsProfileIds ??
         summary.mechanicsProfileIds ??

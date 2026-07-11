@@ -4,6 +4,7 @@ import {
   createThreeValueRuntimeCalculatorInvocation,
   summarizeThreeValueRuntimeCalculatorInvocations,
 } from '../../simulation/runtime/threeValueRuntimeCalculatorInvocation';
+import { createThreeValueMechanicsAdapterRegistry } from '../../simulation/mechanics/threeValueMechanicsAdapter';
 
 describe('three value runtime calculator invocation', () => {
   it('passes the generation calculator result through by default', () => {
@@ -15,7 +16,7 @@ describe('three value runtime calculator invocation', () => {
     });
 
     expect(invocation).toMatchObject({
-      schemaVersion: 6,
+      schemaVersion: 7,
       contractName: 'ThreeValueRuntimeCalculatorInvocation',
       status: 'runtime-calculator-invocation-ready-passthrough',
       sourceDeltaId: 'hp-delta-001',
@@ -27,19 +28,18 @@ describe('three value runtime calculator invocation', () => {
         custom: false,
         replaceable: true,
         contractName: 'AzPrThreeValueMechanicsAdapter',
-        contractVersion: 4,
+        contractVersion: 5,
         registrationKey: 'built-in',
+        evaluationContractName: 'AzPrThreeValueMechanicsEvaluation',
+        evaluationContractVersion: 1,
       },
       output: {
         delta: 120,
         hpDelta: 120,
         toughnessDelta: null,
         energyDelta: null,
-        status: 'runtime-mechanics-operands-calculated',
-        operandsKind: 'source-value-identity',
-        operandsStatus: 'three-value-mechanics-operands-calculated',
-        calculatedFromOperands: true,
-        operandsMatchSource: true,
+        status: 'runtime-mechanics-evaluation-ready',
+        calculatedFromLayerInputs: true,
       },
       validation: {
         outputFieldKnown: true,
@@ -50,9 +50,7 @@ describe('three value runtime calculator invocation', () => {
         actionInputPresent: true,
         hitInputPresent: true,
         sourceValueFinite: true,
-        operandsPresent: true,
-        operandsReady: true,
-        operandsMatchSource: true,
+        mechanicsEvaluationReady: true,
         stateBeforePresent: true,
         adapterOutputAccepted: true,
         valid: true,
@@ -84,6 +82,18 @@ describe('three value runtime calculator invocation', () => {
         },
       },
     });
+    expect(invocation.mechanicsEvaluation).toMatchObject({
+      contractName: 'AzPrThreeValueMechanicsEvaluation',
+      contractVersion: 1,
+      status: 'three-value-mechanics-evaluation-ready',
+      operation: 'identity',
+      requiredLayerKeys: [],
+      usedLayers: [],
+      intermediate: { value: 120 },
+      delta: 120,
+      matchesExpected: true,
+      ready: true,
+    });
 
     const runtimeDelta = createRuntimeAppliedDeltaFromInvocation(
       delta,
@@ -102,7 +112,7 @@ describe('three value runtime calculator invocation', () => {
     const invocation = createThreeValueRuntimeCalculatorInvocation({
       delta: createHpDelta(),
       stateBefore: createStateBefore(),
-      runtimeCalculatorAdapters: {
+      threeValueMechanicsAdapterRegistry: createThreeValueMechanicsAdapterRegistry({
         enemyHpDamage: {
           key: 'invalid-output-adapter',
           calculate() {
@@ -113,7 +123,7 @@ describe('three value runtime calculator invocation', () => {
             };
           },
         },
-      },
+      }),
     });
 
     expect(invocation).toMatchObject({
@@ -154,11 +164,11 @@ describe('three value runtime calculator invocation', () => {
     const invocation = createThreeValueRuntimeCalculatorInvocation({
       delta: createHpDelta(),
       stateBefore: createStateBefore(),
-      runtimeCalculatorAdapters: {
+      threeValueMechanicsAdapterRegistry: createThreeValueMechanicsAdapterRegistry({
         enemyHpDamage() {
           throw new Error('unit-test-adapter-failure');
         },
-      },
+      }),
     });
 
     expect(invocation).toMatchObject({

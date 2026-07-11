@@ -1432,7 +1432,7 @@ describe('first vertical slice simulation', () => {
       status: 'standard-three-value-generation-layer-ready',
       contract: {
         name: 'Action -> Hit -> ThreeValueDelta',
-        version: 7,
+        version: 8,
         frameRate: 60,
         deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
         calculatorContract: {
@@ -3262,12 +3262,15 @@ describe('first vertical slice simulation', () => {
     expect(
       result.threeValueRuntimeProjection.runtimeAppliedDeltas.find(
         delta => delta.sourceDeltaId === appliedRuntimeSampleDelta.id
-      ).runtimeCalculatorInvocation.output
+      ).runtimeCalculatorInvocation
     ).toMatchObject({
-      delta: 0.3375,
-      operandsKind: 'validated-self-energy-before-after',
-      calculatedFromOperands: true,
-      operandsMatchSource: true,
+      output: { delta: 0.3375, calculatedFromLayerInputs: true },
+      mechanicsEvaluation: {
+        operandsKind: 'validated-self-energy-before-after',
+        operation: 'after-minus-before',
+        matchesExpected: true,
+        ready: true,
+      },
     });
     expect(
       result.threeValueRuntimeProjection.selfEnergyCurveByActor[0]
@@ -3363,12 +3366,15 @@ describe('first vertical slice simulation', () => {
     expect(
       result.threeValueRuntimeProjection.runtimeAppliedDeltas.find(
         delta => delta.sourceDeltaId === toughnessDelta.id
-      ).runtimeCalculatorInvocation.output
+      ).runtimeCalculatorInvocation
     ).toMatchObject({
-      delta: 70,
-      operandsKind: 'validated-toughness-before-after',
-      calculatedFromOperands: true,
-      operandsMatchSource: true,
+      output: { delta: 70, calculatedFromLayerInputs: true },
+      mechanicsEvaluation: {
+        operandsKind: 'validated-toughness-before-after',
+        operation: 'before-minus-after',
+        matchesExpected: true,
+        ready: true,
+      },
     });
     expect(result.threeValueRuntimeProjection.summary).toMatchObject({
       appliedDeltaCount: 2,
@@ -4692,14 +4698,6 @@ describe('first vertical slice simulation', () => {
         contractName: 'ThreeValueDeltaCalculator',
         appliedToRuntimeCount: 2,
       }),
-      mechanicsOperandsReadyInvocationCount: 2,
-      mechanicsOperandsMissingInvocationCount: 0,
-      mechanicsOperandsMismatchInvocationCount: 0,
-      mechanicsOperandsCalculatedInvocationCount: 2,
-      mechanicsOperandsKinds: expect.arrayContaining([
-        'hp-raw-preview-product',
-        'explicit-self-energy-event-sum',
-      ]),
       applied: true,
     });
     const appliedHpDelta = result.threeValueGenerationLayer.deltas.find(
@@ -4729,19 +4727,23 @@ describe('first vertical slice simulation', () => {
     });
     expect(
       result.threeValueRuntimeProjection.runtimeAppliedDeltas.map(
-        delta => delta.runtimeCalculatorInvocation.output
+        delta => delta.runtimeCalculatorInvocation
       )
     ).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          operandsKind: 'hp-raw-preview-product',
-          calculatedFromOperands: true,
-          operandsMatchSource: true,
+          output: expect.objectContaining({ calculatedFromLayerInputs: true }),
+          mechanicsEvaluation: expect.objectContaining({
+            operandsKind: 'hp-raw-preview-product',
+            matchesExpected: true,
+          }),
         }),
         expect.objectContaining({
-          operandsKind: 'explicit-self-energy-event-sum',
-          calculatedFromOperands: true,
-          operandsMatchSource: true,
+          output: expect.objectContaining({ calculatedFromLayerInputs: true }),
+          mechanicsEvaluation: expect.objectContaining({
+            operandsKind: 'explicit-self-energy-event-sum',
+            matchesExpected: true,
+          }),
         }),
       ])
     );

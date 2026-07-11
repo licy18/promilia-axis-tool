@@ -54,7 +54,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；72 个测试文件、402 条测试通过。
+- `npm run test -- --run`：通过；72 个测试文件、403 条测试通过。
 - `npm run test:e2e:workbench-flow`：通过；39 条 Workbench 浏览器主流程通过。
 - `npm run test:e2e:production-preview`：通过；15 项真实 `dist` 验收全部通过，报告结论为 `trial-ready`。
 
@@ -1045,6 +1045,16 @@ Workbench 现在可以把角色等级、初始能量、奇波、装备、灵子�
 阶段验收：72 个测试文件、402 条单元/组件测试，39 条 Workbench 主流程和 15 项 production preview 全部通过，生产报告结论为 `trial-ready`。生产引用审计为 108 个源码、104 个生产可达、4 个允许 test-only、0 个孤儿；数据投影审计全部一致。Workbench 主块为 368,687B gzip，全部 JavaScript 为 739,932B gzip，均在 370,000B/740,000B 预算内。180 动作编译 p95 为 14.818ms、完整 simulation p95 为 28.209ms；120 动作浏览器首屏就绪为 1843ms。
 
 下一阶段目标：阶段 8-P / P3 layer input 驱动计算结果边界。新增版本化 mechanics evaluation，让内置 adapter 从 `mechanicsLayerInputs` 的 required applied 输入执行当前已确认 operation，输出实际使用层、输入 readiness、中间结果和最终 delta；operands 保留为来源与失败回退，不再成为平行主计算入口。开始前先通过证据化代码收束为总 JS 留出可靠余量，不提高预算；仍不启用未确认公式，也不新增 Workbench 小控件。
+
+### 阶段 8-P P3 layer input 驱动计算结果边界（2026-07-11）
+
+新增 `AzPrThreeValueMechanicsEvaluation v1`。内置 adapter 现在只从 `mechanicsLayerInputs` 的 required applied 层和共享输入表执行 profile operation，并输出实际使用层、输入键、来源、readiness、intermediate、operation 和最终 delta。HP 使用角色面板 attack 与动作倍率层；显式能量、已验证削韧/能量样本和兼容 identity 均通过同一 evaluation 边界。required 输入缺失或 capability 不支持时，evaluation 明确无效并回退 generation delta。
+
+`Action -> Hit -> ThreeValueDelta` 升级为 v8，`AzPrThreeValueMechanicsAdapter` 升级为 v5，`ThreeValueRuntimeCalculatorInvocation` 升级为 v7。runtime 删除 `operandsCalculation`、`calculatedFromOperands` 及其跨层汇总，operands 只保留 generation 来源和 fallback；旧 `runtimeCalculatorAdapters` 参数也已退役，替换 adapter 统一使用 `threeValueMechanicsAdapterRegistry`。默认 HP、韧性、角色能量、曲线、日志和 summary 数值不变，未确认机制层仍不计算。
+
+阶段验收：72 个测试文件、403 条单元/组件测试，39 条 Workbench 主流程和 15 项 production preview 全部通过，生产报告结论为 `trial-ready`。生产引用审计为 108 个源码、104 个生产可达、4 个允许 test-only、0 个孤儿；数据投影审计全部一致。Workbench 主块为 368,267B gzip，全部 JavaScript 为 739,699B gzip，均在 370,000B/740,000B 预算内。180 动作编译 p95 为 18.438ms、完整 simulation p95 为 33.194ms；120 动作浏览器首屏就绪为 1960ms。
+
+下一阶段目标：阶段 8-Q / P3 profile 机制步骤执行链。把 evaluation 的单个 operation 扩展为 profile 声明的有序 step 合同，并提供无 UI operation handler registry；当前已确认 base attack、动作倍率、显式资源和 validated sample 迁入内置 steps，未来确认的防御、元素防御或培养层可以新增 step 而不改 runtime 主链。该阶段必须继续保持默认三值等价、缺口回退和 bundle 守门，不启用任何未确认公式。
 
 ## 10. 文档维护规则
 

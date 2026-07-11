@@ -23,7 +23,6 @@ export function createThreeValueRuntimeProjection({
   actionHitThreeValueDeltaGeneration,
   threeValueGenerationLayer,
   threeValueMechanicsAdapterRegistry,
-  runtimeCalculatorAdapters,
   effectTimeline,
   actionExecutionPlan,
 }) {
@@ -38,7 +37,6 @@ export function createThreeValueRuntimeProjection({
     scenario,
     appliedDeltas: generationAppliedDeltas,
     threeValueMechanicsAdapterRegistry,
-    runtimeCalculatorAdapters,
   });
   const appliedDeltas = runtimeStateSnapshots.runtimeDeltas;
   const stateSnapshotByDeltaId = new Map(
@@ -581,17 +579,6 @@ function createThreeValueRuntimeOutputContract({
         stateCurves.snapshots.summary.mechanicsAdapterContractVersion,
       mechanicsAdapterRegistrationKeys:
         stateCurves.snapshots.summary.mechanicsAdapterRegistrationKeys,
-      mechanicsOperandsReadyInvocationCount:
-        stateCurves.snapshots.summary.mechanicsOperandsReadyInvocationCount,
-      mechanicsOperandsMissingInvocationCount:
-        stateCurves.snapshots.summary.mechanicsOperandsMissingInvocationCount,
-      mechanicsOperandsMismatchInvocationCount:
-        stateCurves.snapshots.summary.mechanicsOperandsMismatchInvocationCount,
-      mechanicsOperandsCalculatedInvocationCount:
-        stateCurves.snapshots.summary
-          .mechanicsOperandsCalculatedInvocationCount,
-      mechanicsOperandsKinds:
-        stateCurves.snapshots.summary.mechanicsOperandsKinds,
       mechanicsProfileIds: stateCurves.snapshots.summary.mechanicsProfileIds,
       mechanicsProfileVersions:
         stateCurves.snapshots.summary.mechanicsProfileVersions,
@@ -840,10 +827,6 @@ function createRuntimeSummaryOutputContract(summary) {
       'runtimeCalculatorFallbackInvocationCount',
       'mechanicsAdapterRequestCount',
       'mechanicsAdapterRequestMissingCount',
-      'mechanicsOperandsReadyInvocationCount',
-      'mechanicsOperandsMissingInvocationCount',
-      'mechanicsOperandsMismatchInvocationCount',
-      'mechanicsOperandsCalculatedInvocationCount',
       'mechanicsProfileFallbackInvocationCount',
       'mechanicsProfileCapabilityReadyInvocationCount',
       'mechanicsProfileCapabilityMissingInvocationCount',
@@ -1345,16 +1328,6 @@ function summarizeThreeValueRuntimeProjection({
       runtimeStateSnapshots.summary.mechanicsAdapterContractVersion,
     mechanicsAdapterRegistrationKeys:
       runtimeStateSnapshots.summary.mechanicsAdapterRegistrationKeys,
-    mechanicsOperandsReadyInvocationCount:
-      runtimeStateSnapshots.summary.mechanicsOperandsReadyInvocationCount,
-    mechanicsOperandsMissingInvocationCount:
-      runtimeStateSnapshots.summary.mechanicsOperandsMissingInvocationCount,
-    mechanicsOperandsMismatchInvocationCount:
-      runtimeStateSnapshots.summary.mechanicsOperandsMismatchInvocationCount,
-    mechanicsOperandsCalculatedInvocationCount:
-      runtimeStateSnapshots.summary.mechanicsOperandsCalculatedInvocationCount,
-    mechanicsOperandsKinds:
-      runtimeStateSnapshots.summary.mechanicsOperandsKinds,
     mechanicsProfileIds: runtimeStateSnapshots.summary.mechanicsProfileIds,
     mechanicsProfileVersions:
       runtimeStateSnapshots.summary.mechanicsProfileVersions,

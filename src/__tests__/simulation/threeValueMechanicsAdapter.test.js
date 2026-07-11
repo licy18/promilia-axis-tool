@@ -64,12 +64,12 @@ describe('three value mechanics adapter', () => {
     expect(invocations).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          schemaVersion: 6,
+          schemaVersion: 7,
           adapter: expect.objectContaining({
             key: 'unit-test-three-track-mechanics-adapter',
             version: 7,
             contractName: 'AzPrThreeValueMechanicsAdapter',
-            contractVersion: 4,
+            contractVersion: 5,
             registrationKey: 'default',
             custom: true,
           }),
@@ -113,13 +113,13 @@ describe('three value mechanics adapter', () => {
       passthroughInvocationCount: 3,
       customAdapterInvocationCount: 3,
       mechanicsAdapterContractName: 'AzPrThreeValueMechanicsAdapter',
-      mechanicsAdapterContractVersion: 4,
+      mechanicsAdapterContractVersion: 5,
       registrationKeys: ['default'],
       adapterKeys: ['unit-test-three-track-mechanics-adapter'],
     });
   });
 
-  it('recalculates current applied values from versioned operands', () => {
+  it('evaluates current applied values from versioned layer inputs', () => {
     const stateBefore = createStateBefore();
     const cases = [
       {
@@ -196,14 +196,18 @@ describe('three value mechanics adapter', () => {
       expect.arrayContaining([
         expect.objectContaining({
           output: expect.objectContaining({
-            status: 'runtime-mechanics-operands-calculated',
-            calculatedFromOperands: true,
-            operandsMatchSource: true,
+            status: 'runtime-mechanics-evaluation-ready',
+            calculatedFromLayerInputs: true,
+          }),
+          mechanicsEvaluation: expect.objectContaining({
+            contractName: 'AzPrThreeValueMechanicsEvaluation',
+            contractVersion: 1,
+            ready: true,
+            allRequiredInputsReady: true,
+            matchesExpected: true,
           }),
           validation: expect.objectContaining({
-            operandsPresent: true,
-            operandsReady: true,
-            operandsMatchSource: true,
+            mechanicsEvaluationReady: true,
             valid: true,
           }),
         }),
@@ -213,16 +217,70 @@ describe('three value mechanics adapter', () => {
       summarizeThreeValueRuntimeCalculatorInvocations(invocations)
     ).toMatchObject({
       invocationCount: 4,
-      operandsReadyInvocationCount: 4,
-      operandsMissingInvocationCount: 0,
-      operandsMismatchInvocationCount: 0,
-      operandsCalculatedInvocationCount: 4,
-      operandsKinds: expect.arrayContaining([
-        'hp-raw-preview-product',
-        'explicit-self-energy-event-sum',
-        'validated-toughness-before-after',
-        'validated-self-energy-before-after',
+      mechanicsEvaluationReadyInvocationCount: 4,
+      mechanicsEvaluationMissingInvocationCount: 0,
+      mechanicsEvaluationOperations: expect.arrayContaining([
+        'round-clamped-product',
+        'sum',
+        'before-minus-after',
+        'after-minus-before',
       ]),
+    });
+  });
+
+  it('falls back when a required applied layer input is missing', () => {
+    const operands = createThreeValueMechanicsOperands({
+      trackKey: 'enemyHpDamage',
+      sourceKind: 'action-result-applied-value',
+      value: 120,
+      formulaBreakdown: {
+        layers: {
+          baseAttack: { value: 1000 },
+          actionMultiplier: { value: 0.12 },
+        },
+      },
+    });
+    const delta = createDelta({
+      trackKey: 'enemyHpDamage',
+      outputField: 'hpDelta',
+      value: 120,
+      operands,
+    });
+    delta.mechanismContext.sourceActor.stats.attack = null;
+
+    const invocation = createThreeValueRuntimeCalculatorInvocation({
+      delta,
+      stateBefore: createStateBefore(),
+    });
+
+    expect(invocation).toMatchObject({
+      status: 'runtime-calculator-invocation-ready-with-fallback',
+      fallbackReason: 'runtime-calculator-output-invalid',
+      mechanicsEvaluation: {
+        status: 'three-value-mechanics-evaluation-invalid',
+        operation: 'round-clamped-product',
+        allRequiredInputsReady: false,
+        usedLayers: expect.arrayContaining([
+          expect.objectContaining({
+            layerKey: 'baseAttack',
+            inputKey: 'actorStats',
+            ready: false,
+          }),
+        ]),
+        delta: null,
+        ready: false,
+      },
+      output: {
+        delta: 120,
+        hpDelta: 120,
+        status: 'runtime-calculator-fallback-generation-result',
+      },
+      validation: {
+        mechanicsLayerInputsAppliedReady: false,
+        mechanicsEvaluationReady: false,
+        adapterOutputAccepted: false,
+        valid: false,
+      },
     });
   });
 });
@@ -251,6 +309,24 @@ function createDelta({ trackKey, value, outputField, operands }) {
     toughnessDelta: trackKey === 'enemyToughnessDamage' ? value : null,
     energyDelta: trackKey === 'selfEnergyChange' ? value : null,
   };
+  const mechanismContext = {
+    action,
+    hit,
+    sourceActor: {
+      stats: { attack: 1000 },
+      energy: { initialValue: 0 },
+    },
+    targetEnemy: {
+      level: 1,
+      stats: { physicalDefense: 0, magicalDefense: 0 },
+      elementDefenses: [],
+    },
+    configuration: mechanismConfiguration,
+    ownership: {
+      energyOwnerActorId: 'actor-001',
+      targetEnemyId: 'enemy-001',
+    },
+  };
   const mechanicsAdapterRequest = createThreeValueMechanicsAdapterRequest({
     trackKey,
     outputField,
@@ -274,15 +350,7 @@ function createDelta({ trackKey, value, outputField, operands }) {
     delta: value,
     ...fields,
     mechanicsAdapterRequest,
-    mechanismContext: {
-      action,
-      hit,
-      configuration: mechanismConfiguration,
-      ownership: {
-        energyOwnerActorId: 'actor-001',
-        targetEnemyId: 'enemy-001',
-      },
-    },
+    mechanismContext,
     calculator: {
       status: 'unit-test-calculator-result',
     },

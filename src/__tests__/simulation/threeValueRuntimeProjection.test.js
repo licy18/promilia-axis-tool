@@ -5,6 +5,7 @@ import {
 } from '../../simulation/runtime/threeValueRuntimeProjection';
 import { createThreeValueRuntimeOutputConsumerView } from '../../simulation/runtime/threeValueRuntimeOutputConsumer';
 import { createThreeValueRuntimeStateSnapshots } from '../../simulation/runtime/threeValueRuntimeStateSnapshots';
+import { createThreeValueMechanicsAdapterRegistry } from '../../simulation/mechanics/threeValueMechanicsAdapter';
 
 describe('three value runtime projection', () => {
   it('uses inherited HP, toughness, and per-actor energy as runtime baselines', () => {
@@ -1626,7 +1627,7 @@ describe('three value runtime projection', () => {
         contract: { name: 'Action -> Hit -> ThreeValueDelta' },
         deltas: [generationDelta],
       },
-      runtimeCalculatorAdapters: {
+      threeValueMechanicsAdapterRegistry: createThreeValueMechanicsAdapterRegistry({
         enemyHpDamage: {
           key: 'unit-test-state-aware-hp-adapter',
           version: 7,
@@ -1640,7 +1641,7 @@ describe('three value runtime projection', () => {
             };
           },
         },
-      },
+      }),
     });
 
     expect(runtimeProjection.runtimeInput.appliedDeltas[0]).toMatchObject({

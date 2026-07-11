@@ -26528,3 +26528,26 @@ inputs
 generation 绑定除 `stateBefore` 外的全部实际值与来源；runtime 以同一合同副本绑定当前 snapshot 的 `stateBefore`。`required[]` 只包含当前 operand capability 真正使用的 applied 层，其他 profile applied 层保持非本次必需，unapplied 层只追踪输入、不参与计算。runtime invocation 校验 `missingRequiredCount === 0`，但默认 adapter 仍按既有 profile operation 与 operands 计算。
 
 `AzPrThreeValueMechanicsAdapter` 从 v3 升级为 v4，`Action -> Hit -> ThreeValueDelta` 从 v6 升级为 v7，`ThreeValueRuntimeCalculatorInvocation` 从 v5 升级为 v6。默认 HP、韧性、角色能量、曲线、日志和 summary 数值不变；本阶段没有启用防御、元素防御、暴击、培养或等级公式。
+
+## 388. MechanicsEvaluation v1 / Adapter v5 / Action-Hit-Delta v8
+
+阶段 8-P 新增 runtime 主计算结果：
+
+```text
+runtimeCalculatorInvocation.mechanicsEvaluation
+  contractName = AzPrThreeValueMechanicsEvaluation
+  contractVersion = 1
+  status / ready
+  operandsKind / operation
+  requiredLayerKeys[]
+  usedLayers[]
+    layerKey / inputKey / source / ready
+  allRequiredInputsReady
+  intermediate
+  delta / expectedDelta / matchesExpected
+  profileId / profileVersion / capabilityStatus
+```
+
+内置 adapter 不再调用独立 operands calculator，而是从 `mechanicsLayerInputs` 解析 required 层并执行当前 profile operation。operands 仍保存在 generation source value 和 layer inputs 的来源槽中，用于来源追溯、expected delta 比较及 evaluation 失败时的 generation fallback；runtime 不再保存 `operandsCalculation`、`calculatedFromOperands` 或 operands ready/mismatch/calculated 汇总。
+
+`AzPrThreeValueMechanicsAdapter` 从 v4 升级为 v5，`Action -> Hit -> ThreeValueDelta` 从 v7 升级为 v8，`ThreeValueRuntimeCalculatorInvocation` 从 v6 升级为 v7。旧 `runtimeCalculatorAdapters` 参数从 projection、state snapshot、invocation 和 adapter resolver 删除，替换调用只接受 `threeValueMechanicsAdapterRegistry`。默认三值结果不变，缺失 required layer、unsupported capability 和 adapter 无效输出继续回退 generation delta。

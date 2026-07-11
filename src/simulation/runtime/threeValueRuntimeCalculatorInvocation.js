@@ -1,7 +1,8 @@
 import {
   THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME,
   THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION,
-  calculateThreeValueMechanicsOperands,
+  THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_NAME,
+  THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_VERSION,
   createThreeValueMechanicsAdapterInput,
   resolveThreeValueMechanicsAdapter,
 } from '../mechanics/threeValueMechanicsAdapter';
@@ -13,27 +14,20 @@ export function createThreeValueRuntimeCalculatorInvocation({
   delta = {},
   stateBefore = null,
   threeValueMechanicsAdapterRegistry = null,
-  runtimeCalculatorAdapters = {},
 } = {}) {
   const input = createThreeValueMechanicsAdapterInput({ delta, stateBefore });
   const resolved = resolveThreeValueMechanicsAdapter({
     registry: threeValueMechanicsAdapterRegistry,
     trackKey: delta.trackKey,
-    legacyAdapters: runtimeCalculatorAdapters,
   });
   const resolvedAdapter = resolved.adapter;
   const outputField = input.outputField;
-  const operandsCalculation = calculateThreeValueMechanicsOperands(
-    input.sourceValue?.operands,
-    input.mechanicsProfile
-  );
   const calculation = invokeRuntimeCalculatorAdapter(resolvedAdapter, input);
   const output = createRuntimeCalculatorOutput({
     delta,
     input,
     outputField,
     calculation,
-    operandsCalculation,
   });
   const changed = output.delta !== input.generatedDelta.delta;
   const fallbackReason = output.fallbackReason;
@@ -60,16 +54,15 @@ export function createThreeValueRuntimeCalculatorInvocation({
     actionInputPresent: Boolean(input.action),
     hitInputPresent: Boolean(input.hit),
     sourceValueFinite: Number.isFinite(input.sourceValue?.value),
-    operandsPresent: Boolean(input.sourceValue?.operands),
-    operandsReady: operandsCalculation.ready,
-    operandsMatchSource: operandsCalculation.matchesExpected !== false,
+    mechanicsEvaluationReady:
+      resolvedAdapter.custom || output.mechanicsEvaluation?.ready === true,
     stateBeforePresent: Boolean(stateBefore),
     adapterOutputAccepted: !fallbackReason,
   };
   const valid = Object.values(validation).every(Boolean);
 
   return {
-    schemaVersion: 6,
+    schemaVersion: 7,
     sourceKind: 'azpr-three-value-runtime-calculator-invocation',
     contractName: THREE_VALUE_RUNTIME_CALCULATOR_INVOCATION_CONTRACT_NAME,
     status: fallbackReason
@@ -89,9 +82,12 @@ export function createThreeValueRuntimeCalculatorInvocation({
       contractName: THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME,
       contractVersion: THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION,
       registrationKey: resolved.registrationKey,
+      evaluationContractName: THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_NAME,
+      evaluationContractVersion:
+        THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_VERSION,
     },
     input,
-    operandsCalculation,
+    mechanicsEvaluation: output.mechanicsEvaluation,
     output,
     validation: {
       ...validation,
@@ -144,41 +140,47 @@ export function summarizeThreeValueRuntimeCalculatorInvocations(
     registrationKeys: uniqueStrings(
       invocations.map(invocation => invocation.adapter.registrationKey)
     ),
-    operandsReadyInvocationCount: invocations.filter(
-      invocation => invocation.validation.operandsReady
+    mechanicsEvaluationReadyInvocationCount: invocations.filter(
+      invocation => invocation.mechanicsEvaluation?.ready === true
     ).length,
-    operandsMissingInvocationCount: invocations.filter(
-      invocation => !invocation.validation.operandsReady
+    mechanicsEvaluationMissingInvocationCount: invocations.filter(
+      invocation => !invocation.mechanicsEvaluation?.ready
     ).length,
-    operandsMismatchInvocationCount: invocations.filter(
-      invocation => !invocation.validation.operandsMatchSource
-    ).length,
-    operandsCalculatedInvocationCount: invocations.filter(
-      invocation => invocation.output.calculatedFromOperands
-    ).length,
-    operandsKinds: uniqueStrings(
-      invocations.map(invocation => invocation.output.operandsKind)
+    mechanicsEvaluationOperations: uniqueStrings(
+      invocations.map(invocation => invocation.mechanicsEvaluation?.operation)
     ),
     mechanicsProfileIds: uniqueStrings(
-      invocations.map(invocation => invocation.output.mechanicsProfileId)
+      invocations.map(
+        invocation =>
+          invocation.mechanicsEvaluation?.profileId ??
+          invocation.input.mechanicsProfile?.profileId
+      )
     ),
     mechanicsProfileVersions: uniqueNumbers(
-      invocations.map(invocation => invocation.output.mechanicsProfileVersion)
+      invocations.map(
+        invocation =>
+          invocation.mechanicsEvaluation?.profileVersion ??
+          invocation.input.mechanicsProfile?.profileVersion
+      )
     ),
     mechanicsProfileStatuses: uniqueStrings(
-      invocations.map(invocation => invocation.output.mechanicsProfileStatus)
+      invocations.map(
+        invocation =>
+          invocation.mechanicsEvaluation?.profileStatus ??
+          invocation.input.mechanicsProfile?.status
+      )
     ),
     mechanicsProfileFallbackInvocationCount: invocations.filter(
-      invocation => invocation.output.mechanicsProfileFallback
+      invocation => invocation.mechanicsEvaluation?.profileFallback
     ).length,
     mechanicsProfileCapabilityReadyInvocationCount: invocations.filter(
       invocation =>
-        invocation.output.mechanicsProfileCapabilityStatus ===
+        invocation.mechanicsEvaluation?.capabilityStatus ===
         'mechanics-profile-capability-ready'
     ).length,
     mechanicsProfileCapabilityMissingInvocationCount: invocations.filter(
       invocation =>
-        invocation.output.mechanicsProfileCapabilityStatus !==
+        invocation.mechanicsEvaluation?.capabilityStatus !==
         'mechanics-profile-capability-ready'
     ).length,
     adapterKeys: uniqueStrings(
@@ -227,7 +229,6 @@ function createRuntimeCalculatorOutput({
   input,
   outputField,
   calculation,
-  operandsCalculation,
 }) {
   const result = calculation.result;
   const candidateValue =
@@ -243,6 +244,7 @@ function createRuntimeCalculatorOutput({
   const outputDelta = Number.isFinite(normalizedCandidate)
     ? normalizedCandidate
     : input.generatedDelta.delta;
+  const mechanicsEvaluation = result?.mechanicsEvaluation ?? null;
   const output = {
     delta: outputDelta,
     hpDelta: input.generatedDelta.hpDelta,
@@ -256,39 +258,9 @@ function createRuntimeCalculatorOutput({
       : (result?.sourceKind ?? 'runtime-calculator-adapter-result'),
     sourceCalculationStatus:
       delta.calculationStatus ?? delta.calculator?.status ?? null,
-    operandsKind:
-      result?.operandsKind ?? input.sourceValue?.operands?.kind ?? null,
-    operandsStatus:
-      result?.operandsStatus ?? input.sourceValue?.operands?.status ?? null,
-    calculatedFromOperands: result?.calculatedFromOperands === true,
-    operandsMatchSource:
-      typeof result?.operandsMatchSource === 'boolean'
-        ? result.operandsMatchSource
-        : null,
-    mechanicsProfileId:
-      result?.mechanicsProfileId ?? input.mechanicsProfile?.profileId ?? null,
-    mechanicsProfileVersion:
-      result?.mechanicsProfileVersion ??
-      input.mechanicsProfile?.profileVersion ??
-      null,
-    mechanicsProfileStatus:
-      result?.mechanicsProfileStatus ?? input.mechanicsProfile?.status ?? null,
-    mechanicsProfileFallback:
-      typeof result?.mechanicsProfileFallback === 'boolean'
-        ? result.mechanicsProfileFallback
-        : operandsCalculation.profileFallback,
-    mechanicsProfileCapabilityStatus:
-      result?.mechanicsProfileCapabilityStatus ??
-      operandsCalculation.capabilityStatus ??
-      null,
-    mechanicsProfileCapabilityApplied:
-      typeof result?.mechanicsProfileCapabilityApplied === 'boolean'
-        ? result.mechanicsProfileCapabilityApplied
-        : operandsCalculation.capabilityApplied,
-    mechanicsProfileCapabilityFallbackReason:
-      result?.mechanicsProfileCapabilityFallbackReason ??
-      operandsCalculation.capabilityFallbackReason ??
-      null,
+    calculatedFromLayerInputs:
+      result?.calculatedFromLayerInputs === true,
+    mechanicsEvaluation,
     fallbackReason,
   };
   if (outputField !== 'delta') {

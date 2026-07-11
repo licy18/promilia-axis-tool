@@ -17,7 +17,6 @@ export function createThreeValueRuntimeStateSnapshots({
   scenario = {},
   appliedDeltas = [],
   threeValueMechanicsAdapterRegistry = null,
-  runtimeCalculatorAdapters = {},
 } = {}) {
   const enemyBaseline = createThreeValueRuntimeEnemyBaseline(scenario);
   const actorRecords = new Map(
@@ -66,7 +65,6 @@ export function createThreeValueRuntimeStateSnapshots({
         delta,
         stateBefore: before,
         threeValueMechanicsAdapterRegistry,
-        runtimeCalculatorAdapters,
       });
     const runtimeDelta = createRuntimeAppliedDeltaFromInvocation(
       delta,
@@ -198,15 +196,6 @@ export function createThreeValueRuntimeStateSnapshots({
         calculatorInvocationSummary.mechanicsAdapterContractVersion,
       mechanicsAdapterRegistrationKeys:
         calculatorInvocationSummary.registrationKeys,
-      mechanicsOperandsReadyInvocationCount:
-        calculatorInvocationSummary.operandsReadyInvocationCount,
-      mechanicsOperandsMissingInvocationCount:
-        calculatorInvocationSummary.operandsMissingInvocationCount,
-      mechanicsOperandsMismatchInvocationCount:
-        calculatorInvocationSummary.operandsMismatchInvocationCount,
-      mechanicsOperandsCalculatedInvocationCount:
-        calculatorInvocationSummary.operandsCalculatedInvocationCount,
-      mechanicsOperandsKinds: calculatorInvocationSummary.operandsKinds,
       mechanicsProfileIds: calculatorInvocationSummary.mechanicsProfileIds,
       mechanicsProfileVersions:
         calculatorInvocationSummary.mechanicsProfileVersions,

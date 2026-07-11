@@ -15,6 +15,8 @@ import {
 import {
   THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME,
   THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION,
+  THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_NAME,
+  THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_VERSION,
   THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME,
   THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_VERSION,
   createThreeValueMechanicsAdapterRequest,
@@ -24,9 +26,7 @@ import {
   THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME,
   THREE_VALUE_MECHANICS_PROFILE_CONTRACT_VERSION,
 } from '../mechanics/threeValueMechanicsProfile';
-import {
-  createThreeValueMechanicsLayerInputs,
-} from '../mechanics/threeValueMechanicsLayerInputs';
+import { createThreeValueMechanicsLayerInputs } from '../mechanics/threeValueMechanicsLayerInputs';
 
 const THREE_VALUE_GENERATION_TRACK_ORDER = [
   'enemyHpDamage',
@@ -122,7 +122,7 @@ export function createThreeValueGenerationLayer({
         : 'standard-three-value-generation-layer-empty',
     contract: {
       name: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
-      version: 7,
+      version: 8,
       frameRate: AZPR_TIMELINE_FRAME_RATE,
       frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
       deltaFields: THREE_VALUE_DELTA_FIELDS,
@@ -179,6 +179,11 @@ export function createThreeValueGenerationLayer({
           name: THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME,
           version: THREE_VALUE_MECHANICS_PROFILE_CONTRACT_VERSION,
           selectionPath: 'scenario.mechanicsProfile',
+        },
+        evaluationContract: {
+          name: THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_NAME,
+          version: THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_VERSION,
+          input: 'mechanicsLayerInputs',
         },
         policy:
           'all applied HP, toughness and self-energy deltas use the same registrable mechanics adapter invocation contract',

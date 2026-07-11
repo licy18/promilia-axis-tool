@@ -1,7 +1,12 @@
 export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME =
   'AzPrThreeValueMechanicsAdapter';
 
-export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION = 4;
+export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION = 5;
+
+export const THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_NAME =
+  'AzPrThreeValueMechanicsEvaluation';
+
+export const THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_VERSION = 1;
 
 export const THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME =
   'AzPrThreeValueMechanicsOperands';
@@ -160,11 +165,8 @@ export function createThreeValueMechanicsAdapterInput({
 export function resolveThreeValueMechanicsAdapter({
   registry,
   trackKey,
-  legacyAdapters = {},
 } = {}) {
-  const normalizedRegistry = createThreeValueMechanicsAdapterRegistry(
-    registry ?? legacyAdapters
-  );
+  const normalizedRegistry = createThreeValueMechanicsAdapterRegistry(registry);
   const registration =
     normalizedRegistry.adaptersByTrack[trackKey] ??
     normalizedRegistry.adaptersByTrack.default;
@@ -279,52 +281,98 @@ export function createThreeValueMechanicsOperands({
   };
 }
 
-export function calculateThreeValueMechanicsOperands(
-  operands = {},
-  mechanicsProfile
-) {
+export function createThreeValueMechanicsEvaluation(input = {}) {
+  const operands = input.sourceValue?.operands ?? {};
   const capabilityResolution = resolveThreeValueMechanicsProfileCapability({
-    profile: mechanicsProfile,
+    profile: input.mechanicsProfile,
     operands,
   });
   const operation = capabilityResolution.capability?.operation ?? null;
+  const layerInputs = input.mechanicsLayerInputs ?? {};
+  const requiredLayerKeys = capabilityResolution.capability?.layerKeys ?? [];
+  const usedLayers = requiredLayerKeys.map(layerKey => {
+    const inputKey = layerInputs.layers?.inputKeys?.[layerKey] ?? null;
+    const layerInput = layerInputs.inputs?.[inputKey] ?? null;
+    return {
+      layerKey,
+      inputKey,
+      source: layerInput?.source ?? null,
+      ready: layerInput?.ready === true,
+    };
+  });
+  const allRequiredInputsReady = usedLayers.every(layer => layer.ready);
+  const sharedOperands = layerInputs.inputs?.operands?.value ?? {};
+  let intermediate = null;
   let value = null;
-  if (capabilityResolution.ready && operation === 'round-clamped-product') {
-    const baseAttack = normalizeMechanicsNumber(operands.inputs?.baseAttack);
-    const actionMultiplier = normalizeMechanicsNumber(
-      operands.inputs?.actionMultiplier
+  if (
+    capabilityResolution.ready &&
+    allRequiredInputsReady &&
+    operation === 'round-clamped-product'
+  ) {
+    const baseAttack = normalizeMechanicsNumber(
+      getLayerInputValue(layerInputs, 'baseAttack')?.attack
     );
-    const minimum = normalizeMechanicsNumber(operands.inputs?.minimum) ?? 0;
+    const actionMultiplier = normalizeMechanicsNumber(
+      getLayerInputValue(layerInputs, 'actionMultiplier')
+    );
+    const minimum = normalizeMechanicsNumber(sharedOperands.minimum) ?? 0;
+    intermediate = { baseAttack, actionMultiplier, minimum };
     if (baseAttack != null && actionMultiplier != null) {
       value = Math.max(minimum, Math.round(baseAttack * actionMultiplier));
     }
-  } else if (capabilityResolution.ready && operation === 'sum') {
-    const eventDeltas = (operands.inputs?.eventDeltas ?? [])
+  } else if (
+    capabilityResolution.ready &&
+    allRequiredInputsReady &&
+    operation === 'sum'
+  ) {
+    const eventDeltas = (sharedOperands.eventDeltas ?? [])
       .map(normalizeMechanicsNumber)
       .filter(item => item != null);
+    intermediate = { eventDeltas };
     if (eventDeltas.length > 0) {
       value = normalizeMechanicsNumber(
         eventDeltas.reduce((sum, item) => sum + item, 0)
       );
     }
-  } else if (capabilityResolution.ready && operation === 'before-minus-after') {
-    value = calculateBeforeAfterDelta(operands, 'decrease');
-  } else if (capabilityResolution.ready && operation === 'after-minus-before') {
-    value = calculateBeforeAfterDelta(operands, 'increase');
-  } else if (capabilityResolution.ready && operation === 'identity') {
-    value = normalizeMechanicsNumber(operands.inputs?.value);
+  } else if (
+    capabilityResolution.ready &&
+    allRequiredInputsReady &&
+    (operation === 'before-minus-after' || operation === 'after-minus-before')
+  ) {
+    intermediate = {
+      before: normalizeMechanicsNumber(sharedOperands.before),
+      after: normalizeMechanicsNumber(sharedOperands.after),
+      reportedDelta: normalizeMechanicsNumber(sharedOperands.reportedDelta),
+    };
+    value = calculateBeforeAfterDelta(
+      intermediate,
+      operation === 'before-minus-after' ? 'decrease' : 'increase'
+    );
+  } else if (
+    capabilityResolution.ready &&
+    allRequiredInputsReady &&
+    operation === 'identity'
+  ) {
+    intermediate = { value: normalizeMechanicsNumber(sharedOperands.value) };
+    value = intermediate.value;
   }
 
   const expectedDelta = normalizeMechanicsNumber(operands.expectedDelta);
   const ready = Number.isFinite(value);
   return {
-    value,
+    contractName: THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_NAME,
+    contractVersion: THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_VERSION,
+    delta: value,
     ready,
     status: ready
-      ? 'three-value-mechanics-operands-calculated'
-      : 'three-value-mechanics-operands-invalid',
+      ? 'three-value-mechanics-evaluation-ready'
+      : 'three-value-mechanics-evaluation-invalid',
     operandsKind: operands.kind ?? null,
     operation,
+    requiredLayerKeys,
+    usedLayers,
+    allRequiredInputsReady,
+    intermediate,
     profileId: capabilityResolution.profile.profileId,
     profileVersion: capabilityResolution.profile.profileVersion,
     profileStatus: capabilityResolution.profile.status,
@@ -382,28 +430,15 @@ function createDefaultThreeValueMechanicsAdapter({ trackKey, outputField }) {
 }
 
 function calculateDefaultThreeValueMechanicsResult(input) {
-  const calculation = calculateThreeValueMechanicsOperands(
-    input.sourceValue?.operands,
-    input.mechanicsProfile
-  );
+  const evaluation = createThreeValueMechanicsEvaluation(input);
   return {
-    delta: calculation.value,
-    status: calculation.ready
-      ? 'runtime-mechanics-operands-calculated'
-      : 'runtime-mechanics-operands-invalid',
-    sourceKind: 'three-value-mechanics-operands',
-    operandsKind: calculation.operandsKind,
-    operandsStatus: calculation.status,
-    calculatedFromOperands: calculation.ready,
-    operandsMatchSource: calculation.matchesExpected,
-    mechanicsProfileId: calculation.profileId,
-    mechanicsProfileVersion: calculation.profileVersion,
-    mechanicsProfileStatus: calculation.profileStatus,
-    mechanicsProfileFallback: calculation.profileFallback,
-    mechanicsProfileCapabilityStatus: calculation.capabilityStatus,
-    mechanicsProfileCapabilityApplied: calculation.capabilityApplied,
-    mechanicsProfileCapabilityFallbackReason:
-      calculation.capabilityFallbackReason,
+    delta: evaluation.delta,
+    status: evaluation.ready
+      ? 'runtime-mechanics-evaluation-ready'
+      : 'runtime-mechanics-evaluation-invalid',
+    sourceKind: 'three-value-mechanics-evaluation',
+    mechanicsEvaluation: evaluation,
+    calculatedFromLayerInputs: evaluation.ready,
   };
 }
 
@@ -426,14 +461,19 @@ function normalizeMechanicsSourceValue({ trackKey, sourceValue }) {
 }
 
 function calculateBeforeAfterDelta(operands, direction) {
-  const before = normalizeMechanicsNumber(operands.inputs?.before);
-  const after = normalizeMechanicsNumber(operands.inputs?.after);
+  const before = normalizeMechanicsNumber(operands.before);
+  const after = normalizeMechanicsNumber(operands.after);
   if (before == null || after == null) {
     return null;
   }
   return normalizeMechanicsNumber(
     direction === 'decrease' ? before - after : after - before
   );
+}
+
+function getLayerInputValue(layerInputs, layerKey) {
+  const inputKey = layerInputs.layers?.inputKeys?.[layerKey];
+  return layerInputs.inputs?.[inputKey]?.value;
 }
 
 function createFallbackActionInput({ delta, mechanismContext }) {
