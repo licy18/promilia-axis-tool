@@ -20,30 +20,35 @@ export function createDefaultThreeValueMechanicsProfile() {
     'hp-raw-preview-product': {
       operation: 'round-clamped-product',
       trackKeys: ['enemyHpDamage'],
+      layerKeys: ['baseAttack', 'actionMultiplier'],
       status: 'applied-preview-formula-partial',
       applied: true,
     },
     'explicit-self-energy-event-sum': {
       operation: 'sum',
       trackKeys: ['selfEnergyChange'],
+      layerKeys: ['explicitResourceDelta'],
       status: 'applied-explicit-resource-events',
       applied: true,
     },
     'validated-toughness-before-after': {
       operation: 'before-minus-after',
       trackKeys: ['enemyToughnessDamage'],
+      layerKeys: ['validatedRuntimeSample'],
       status: 'applied-validated-runtime-sample',
       applied: true,
     },
     'validated-self-energy-before-after': {
       operation: 'after-minus-before',
       trackKeys: ['selfEnergyChange'],
+      layerKeys: ['validatedRuntimeSample'],
       status: 'applied-validated-runtime-sample',
       applied: true,
     },
     'source-value-identity': {
       operation: 'identity',
       trackKeys: TRACK_KEYS,
+      layerKeys: [],
       status: 'compatibility-and-diagnostic-fallback',
       applied: false,
     },
@@ -154,6 +159,9 @@ export function validateThreeValueMechanicsProfile(profile) {
     }
     if (!Array.isArray(capability?.trackKeys)) {
       issues.push(`operand-kind-track-keys-missing:${kind || 'unknown'}`);
+    }
+    if (!Array.isArray(capability?.layerKeys)) {
+      issues.push(`operand-kind-layer-keys-missing:${kind || 'unknown'}`);
     }
   }
   return {

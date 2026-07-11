@@ -64,12 +64,12 @@ describe('three value mechanics adapter', () => {
     expect(invocations).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          schemaVersion: 5,
+          schemaVersion: 6,
           adapter: expect.objectContaining({
             key: 'unit-test-three-track-mechanics-adapter',
             version: 7,
             contractName: 'AzPrThreeValueMechanicsAdapter',
-            contractVersion: 3,
+            contractVersion: 4,
             registrationKey: 'default',
             custom: true,
           }),
@@ -113,7 +113,7 @@ describe('three value mechanics adapter', () => {
       passthroughInvocationCount: 3,
       customAdapterInvocationCount: 3,
       mechanicsAdapterContractName: 'AzPrThreeValueMechanicsAdapter',
-      mechanicsAdapterContractVersion: 3,
+      mechanicsAdapterContractVersion: 4,
       registrationKeys: ['default'],
       adapterKeys: ['unit-test-three-track-mechanics-adapter'],
     });

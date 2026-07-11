@@ -24,6 +24,9 @@ import {
   THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME,
   THREE_VALUE_MECHANICS_PROFILE_CONTRACT_VERSION,
 } from '../mechanics/threeValueMechanicsProfile';
+import {
+  createThreeValueMechanicsLayerInputs,
+} from '../mechanics/threeValueMechanicsLayerInputs';
 
 const THREE_VALUE_GENERATION_TRACK_ORDER = [
   'enemyHpDamage',
@@ -119,7 +122,7 @@ export function createThreeValueGenerationLayer({
         : 'standard-three-value-generation-layer-empty',
     contract: {
       name: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
-      version: 6,
+      version: 7,
       frameRate: AZPR_TIMELINE_FRAME_RATE,
       frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
       deltaFields: THREE_VALUE_DELTA_FIELDS,
@@ -147,6 +150,7 @@ export function createThreeValueGenerationLayer({
           'hit',
           'mechanismConfiguration',
           'mechanicsProfile',
+          'mechanicsLayerInputs',
           'sourceValue',
           'stateBefore',
         ],
@@ -155,6 +159,7 @@ export function createThreeValueGenerationLayer({
           'hit',
           'mechanismConfiguration',
           'mechanicsProfile',
+          'mechanicsLayerInputs',
           'sourceValue',
         ],
         runtimeBoundInputs: ['stateBefore'],
@@ -410,6 +415,21 @@ function createThreeValueGenerationDelta({
     applied,
     mechanismContext,
   });
+  const sourceValue = {
+    value: deltaValue,
+    ...deltaFields,
+    sourceKind,
+    sourceIds,
+    confidence,
+    status: calculator.status,
+    operands:
+      point.mechanicsOperands ??
+      createThreeValueMechanicsOperands({
+        trackKey,
+        sourceKind,
+        value: deltaValue,
+      }),
+  };
   const mechanicsAdapterRequest = createThreeValueMechanicsAdapterRequest({
     trackKey,
     outputField: valueField,
@@ -417,21 +437,13 @@ function createThreeValueGenerationDelta({
     hit: mechanismContext.hit,
     mechanismConfiguration: mechanismContext.configuration,
     mechanicsProfile: mechanismContext.mechanicsProfile,
-    sourceValue: {
-      value: deltaValue,
-      ...deltaFields,
-      sourceKind,
-      sourceIds,
-      confidence,
-      status: calculator.status,
-      operands:
-        point.mechanicsOperands ??
-        createThreeValueMechanicsOperands({
-          trackKey,
-          sourceKind,
-          value: deltaValue,
-        }),
-    },
+    mechanicsLayerInputs: createThreeValueMechanicsLayerInputs({
+      trackKey,
+      mechanicsProfile: mechanismContext.mechanicsProfile,
+      mechanismContext,
+      sourceValue,
+    }),
+    sourceValue,
   });
   const valueSource = createThreeValueGenerationDeltaValueSource({
     trackKey,

@@ -1,7 +1,7 @@
 export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME =
   'AzPrThreeValueMechanicsAdapter';
 
-export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION = 3;
+export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION = 4;
 
 export const THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME =
   'AzPrThreeValueMechanicsOperands';
@@ -19,24 +19,6 @@ export const THREE_VALUE_MECHANICS_TRACK_DEFINITIONS = {
     outputField: 'energyDelta',
   },
 };
-
-const DEFAULT_THREE_VALUE_MECHANICS_ADAPTERS = Object.fromEntries(
-  Object.entries(THREE_VALUE_MECHANICS_TRACK_DEFINITIONS).map(
-    ([trackKey, definition]) => [
-      trackKey,
-      {
-        key: `azpr-${trackKey}-runtime-passthrough-adapter`,
-        version: 1,
-        outputField: definition.outputField,
-        sourceKind: 'default-runtime-passthrough-adapter',
-        custom: false,
-        calculate(input) {
-          return calculateDefaultThreeValueMechanicsResult(input);
-        },
-      },
-    ]
-  )
-);
 
 export function createThreeValueMechanicsAdapterRegistry(adaptersByTrack = {}) {
   const registrations =
@@ -73,6 +55,7 @@ export function createThreeValueMechanicsAdapterRequest({
   hit,
   mechanismConfiguration,
   mechanicsProfile,
+  mechanicsLayerInputs,
   sourceValue,
 } = {}) {
   const normalizedSourceValue = normalizeMechanicsSourceValue({
@@ -92,6 +75,7 @@ export function createThreeValueMechanicsAdapterRequest({
     hit: hit ?? null,
     mechanismConfiguration: mechanismConfiguration ?? null,
     mechanicsProfile: mechanicsProfile ?? DEFAULT_THREE_VALUE_MECHANICS_PROFILE,
+    mechanicsLayerInputs: mechanicsLayerInputs ?? null,
     sourceValue: normalizedSourceValue,
     stateBefore: null,
     bindingStatus: 'generation-inputs-bound-runtime-state-pending',
@@ -124,6 +108,16 @@ export function createThreeValueMechanicsAdapterInput({
       status: delta.calculationStatus ?? delta.calculator?.status ?? null,
     },
   });
+  const mechanicsLayerInputs = bindThreeValueMechanicsLayerInputsState(
+    request?.mechanicsLayerInputs ??
+      createThreeValueMechanicsLayerInputs({
+        trackKey,
+        mechanicsProfile,
+        mechanismContext,
+        sourceValue,
+      }),
+    stateBefore
+  );
 
   return {
     schemaVersion: 1,
@@ -140,6 +134,7 @@ export function createThreeValueMechanicsAdapterInput({
       mechanismContext?.configuration ??
       null,
     mechanicsProfile,
+    mechanicsLayerInputs,
     sourceValue,
     stateBefore,
     bindingStatus: 'mechanics-adapter-input-ready',
@@ -185,8 +180,7 @@ export function resolveThreeValueMechanicsAdapter({
     registry: normalizedRegistry,
     adapter:
       customAdapter ??
-      DEFAULT_THREE_VALUE_MECHANICS_ADAPTERS[trackKey] ??
-      createFallbackThreeValueMechanicsAdapter({ trackKey, outputField }),
+      createDefaultThreeValueMechanicsAdapter({ trackKey, outputField }),
     registrationKey: registration
       ? normalizedRegistry.adaptersByTrack[trackKey]
         ? trackKey
@@ -309,7 +303,7 @@ export function calculateThreeValueMechanicsOperands(
       .map(normalizeMechanicsNumber)
       .filter(item => item != null);
     if (eventDeltas.length > 0) {
-      value = roundMechanicsNumber(
+      value = normalizeMechanicsNumber(
         eventDeltas.reduce((sum, item) => sum + item, 0)
       );
     }
@@ -372,12 +366,14 @@ function normalizeCustomAdapter({ adapter, trackKey, outputField }) {
   };
 }
 
-function createFallbackThreeValueMechanicsAdapter({ trackKey, outputField }) {
+function createDefaultThreeValueMechanicsAdapter({ trackKey, outputField }) {
   return {
     key: `azpr-${trackKey ?? 'unknown'}-runtime-passthrough-adapter`,
     version: 1,
     outputField,
-    sourceKind: 'fallback-runtime-passthrough-adapter',
+    sourceKind: THREE_VALUE_MECHANICS_TRACK_DEFINITIONS[trackKey]
+      ? 'default-runtime-passthrough-adapter'
+      : 'fallback-runtime-passthrough-adapter',
     custom: false,
     calculate(input) {
       return calculateDefaultThreeValueMechanicsResult(input);
@@ -435,7 +431,7 @@ function calculateBeforeAfterDelta(operands, direction) {
   if (before == null || after == null) {
     return null;
   }
-  return roundMechanicsNumber(
+  return normalizeMechanicsNumber(
     direction === 'decrease' ? before - after : after - before
   );
 }
@@ -476,11 +472,6 @@ function normalizeMechanicsNumber(value) {
   return Number.isFinite(number) ? Number(number.toFixed(6)) : null;
 }
 
-function roundMechanicsNumber(value) {
-  const number = Number(value);
-  return Number.isFinite(number) ? Number(number.toFixed(6)) : null;
-}
-
 function numbersMatch(left, right) {
   return Math.abs(left - right) <= 0.000001;
 }
@@ -505,3 +496,7 @@ import {
   DEFAULT_THREE_VALUE_MECHANICS_PROFILE,
   resolveThreeValueMechanicsProfileCapability,
 } from './threeValueMechanicsProfile';
+import {
+  bindThreeValueMechanicsLayerInputsState,
+  createThreeValueMechanicsLayerInputs,
+} from './threeValueMechanicsLayerInputs';

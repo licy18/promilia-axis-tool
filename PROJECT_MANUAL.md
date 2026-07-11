@@ -1036,6 +1036,16 @@ Workbench 现在可以把角色等级、初始能量、奇波、装备、灵子�
 
 下一阶段目标：阶段 8-O / P3 profile 机制层输入闭环。把 profile 的 `appliedLayers / unappliedLayers` 映射为每次 invocation 的版本化 layer inputs，统一携带角色面板、动作倍率、敌人防御与元素防御、状态前值、初始能量和培养配置的实际值、来源及 readiness；runtime 校验 applied 层具备输入，unapplied 层继续只追踪不计算。该阶段不启用未确认公式，也不新增 Workbench 小控件。
 
+### 阶段 8-O P3 profile 机制层输入闭环（2026-07-11）
+
+新增 `AzPrThreeValueMechanicsLayerInputs v1`。profile 的每个 operand capability 现在声明本次真正需要的 `layerKeys`；generation 把 applied/unapplied/required 层映射到共享输入表，统一携带角色面板、动作倍率、敌人双防与元素防御、初始能量、培养配置和 operands 的实际值、来源及 readiness。runtime 在同一合同上绑定当前 `stateBefore`，并校验 required applied 层无输入缺口；unapplied 层仍只追踪、不计算。
+
+`Action -> Hit -> ThreeValueDelta` 升级为 v7，`AzPrThreeValueMechanicsAdapter` 升级为 v4，`ThreeValueRuntimeCalculatorInvocation` 升级为 v6。默认 adapter 仍按既有 profile operation 与 operands 计算，缺失 capability 继续回退 generation delta；HP、韧性、角色能量、曲线、日志和 summary 数值不变，没有启用敌人防御、元素防御、暴击、培养或等级公式。同步机制包继续作为 `azpr-mechanics-runtime` chunk。
+
+阶段验收：72 个测试文件、402 条单元/组件测试，39 条 Workbench 主流程和 15 项 production preview 全部通过，生产报告结论为 `trial-ready`。生产引用审计为 108 个源码、104 个生产可达、4 个允许 test-only、0 个孤儿；数据投影审计全部一致。Workbench 主块为 368,687B gzip，全部 JavaScript 为 739,932B gzip，均在 370,000B/740,000B 预算内。180 动作编译 p95 为 14.818ms、完整 simulation p95 为 28.209ms；120 动作浏览器首屏就绪为 1843ms。
+
+下一阶段目标：阶段 8-P / P3 layer input 驱动计算结果边界。新增版本化 mechanics evaluation，让内置 adapter 从 `mechanicsLayerInputs` 的 required applied 输入执行当前已确认 operation，输出实际使用层、输入 readiness、中间结果和最终 delta；operands 保留为来源与失败回退，不再成为平行主计算入口。开始前先通过证据化代码收束为总 JS 留出可靠余量，不提高预算；仍不启用未确认公式，也不新增 Workbench 小控件。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

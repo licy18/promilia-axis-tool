@@ -64,6 +64,66 @@ describe('three value mechanics profile', () => {
     expect(
       runtimeDelta.runtimeCalculatorInvocation.input.mechanicsProfile
     ).toBe(scenario.mechanicsProfile);
+    expect(
+      generatedDelta.mechanicsAdapterRequest.mechanicsLayerInputs
+    ).toMatchObject({
+      contractName: 'AzPrThreeValueMechanicsLayerInputs',
+      contractVersion: 1,
+      inputs: {
+        stateBefore: { ready: false },
+        initialEnergy: { ready: false },
+        cultivationConfiguration: { ready: true },
+      },
+      missingRequiredCount: 0,
+    });
+    expect(
+      generatedDelta.mechanicsAdapterRequest.mechanicsLayerInputs
+    ).toMatchObject({
+      layers: {
+        applied: ['baseAttack', 'actionMultiplier'],
+        required: ['baseAttack', 'actionMultiplier'],
+        unapplied: expect.arrayContaining(['enemyDefense', 'loadout']),
+        inputKeys: expect.objectContaining({
+          baseAttack: 'actorStats',
+          actionMultiplier: 'actionMultiplier',
+          enemyDefense: 'enemyDefense',
+          enemyResistance: 'enemyElementDefense',
+          loadout: 'cultivationConfiguration',
+        }),
+      },
+      inputs: {
+        actorStats: expect.objectContaining({
+          ready: true,
+          value: expect.objectContaining({
+            attack: generatedDelta.mechanismContext.sourceActor.stats.attack,
+          }),
+        }),
+        actionMultiplier: expect.objectContaining({
+          ready: true,
+        }),
+        enemyDefense: expect.objectContaining({
+          ready: true,
+        }),
+        cultivationConfiguration: expect.objectContaining({
+          ready: true,
+        }),
+      },
+    });
+    expect(
+      runtimeDelta.runtimeCalculatorInvocation.input.mechanicsLayerInputs
+    ).toMatchObject({
+      contractName: 'AzPrThreeValueMechanicsLayerInputs',
+      inputs: {
+        stateBefore: {
+          ready: true,
+          value: runtimeDelta.runtimeCalculatorInvocation.input.stateBefore,
+        },
+      },
+      missingRequiredCount: 0,
+    });
+    expect(runtimeDelta.runtimeCalculatorInvocation.validation).toMatchObject({
+      mechanicsLayerInputsAppliedReady: true,
+    });
     expect(result.threeValueRuntimeProjection.summary).toMatchObject({
       mechanicsProfileIds: ['azpr-three-value-preview-v1'],
       mechanicsProfileVersions: [1],

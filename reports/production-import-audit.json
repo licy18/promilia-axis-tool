@@ -84,8 +84,8 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 107,
-    "productionReachableCount": 103,
+    "sourceCodeFileCount": 108,
+    "productionReachableCount": 104,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
@@ -101,7 +101,7 @@
       "src/simulation/compiler": 1,
       "src/simulation/engine": 2,
       "src/simulation/generation": 4,
-      "src/simulation/mechanics": 6,
+      "src/simulation/mechanics": 7,
       "src/simulation/projection": 6,
       "src/simulation/runtime": 9,
       "src/store": 1,
@@ -193,6 +193,7 @@
     "src/simulation/generation/threeValueGenerationLayer.js",
     "src/simulation/mechanics/damage.js",
     "src/simulation/mechanics/threeValueMechanicsAdapter.js",
+    "src/simulation/mechanics/threeValueMechanicsLayerInputs.js",
     "src/simulation/mechanics/threeValueMechanicsProfile.js",
     "src/simulation/mechanics/threeValueMechanismConfiguration.js",
     "src/simulation/mechanics/threeValueMechanismContext.js",

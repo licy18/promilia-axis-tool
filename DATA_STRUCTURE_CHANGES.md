@@ -26499,3 +26499,32 @@ scenario.mechanicsProfileSelection
 `compileProject(project, gameData, { threeValueMechanicsProfile })` 可以绑定其他合法 profile。`AzPrThreeValueMechanismContext` 从 v2 升级为 v3，generation request 与 runtime input 保持同一 profile 引用；`AzPrThreeValueMechanicsAdapter` 从 v2 升级为 v3，operands evaluator 通过 profile capability 的 operation 分派计算，不再按 operand kind 写死计算分支。unsupported kind、轨道或 operation 会记录 capability fallback 并使用 generation delta。
 
 `Action -> Hit -> ThreeValueDelta` 从 v5 升级为 v6，`ThreeValueRuntimeCalculatorInvocation` 从 v4 升级为 v5。runtime state、projection 和 consumer summary 新增 profile IDs、versions、statuses、profile fallback 数和 capability ready/missing 数。默认 profile 与上一阶段三值结果完全一致，本阶段没有启用任何未确认机制层。
+
+## 387. MechanicsLayerInputs v1 / Adapter v4 / Action-Hit-Delta v7
+
+阶段 8-O 为每种 profile operand capability 增加 `layerKeys[]`，并在 generation request 新增版本化 `AzPrThreeValueMechanicsLayerInputs v1`：
+
+```text
+mechanicsAdapterRequest.mechanicsLayerInputs
+  contractName / contractVersion
+  layers
+    applied[] / unapplied[] / required[]
+    inputKeys[layerKey] -> inputs key
+  inputs[inputKey]
+    value / source / ready
+  missingRequiredCount
+
+inputs
+  actorStats
+  actionMultiplier
+  enemyDefense
+  enemyElementDefense
+  cultivationConfiguration
+  operands
+  initialEnergy
+  stateBefore
+```
+
+generation 绑定除 `stateBefore` 外的全部实际值与来源；runtime 以同一合同副本绑定当前 snapshot 的 `stateBefore`。`required[]` 只包含当前 operand capability 真正使用的 applied 层，其他 profile applied 层保持非本次必需，unapplied 层只追踪输入、不参与计算。runtime invocation 校验 `missingRequiredCount === 0`，但默认 adapter 仍按既有 profile operation 与 operands 计算。
+
+`AzPrThreeValueMechanicsAdapter` 从 v3 升级为 v4，`Action -> Hit -> ThreeValueDelta` 从 v6 升级为 v7，`ThreeValueRuntimeCalculatorInvocation` 从 v5 升级为 v6。默认 HP、韧性、角色能量、曲线、日志和 summary 数值不变；本阶段没有启用防御、元素防御、暴击、培养或等级公式。

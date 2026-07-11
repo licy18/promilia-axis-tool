@@ -16,7 +16,8 @@ export default defineConfig({
         manualChunks(id) {
           if (
             id.endsWith('/threeValueMechanicsProfile.js') ||
-            id.endsWith('/threeValueMechanicsAdapter.js')
+            id.endsWith('/threeValueMechanicsAdapter.js') ||
+            id.endsWith('/threeValueMechanicsLayerInputs.js')
           ) {
             return 'azpr-mechanics-runtime';
           }

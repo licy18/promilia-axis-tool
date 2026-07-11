@@ -53,6 +53,8 @@ export function createThreeValueRuntimeCalculatorInvocation({
         delta.mechanismContext?.mechanicsProfile ??
         input.mechanicsProfile),
     mechanicsProfilePresent: Boolean(input.mechanicsProfile?.profileId),
+    mechanicsLayerInputsAppliedReady:
+      input.mechanicsLayerInputs?.missingRequiredCount === 0,
     generationRequestPreserved:
       input.generationRequest === (delta.mechanicsAdapterRequest ?? null),
     actionInputPresent: Boolean(input.action),
@@ -67,7 +69,7 @@ export function createThreeValueRuntimeCalculatorInvocation({
   const valid = Object.values(validation).every(Boolean);
 
   return {
-    schemaVersion: 5,
+    schemaVersion: 6,
     sourceKind: 'azpr-three-value-runtime-calculator-invocation',
     contractName: THREE_VALUE_RUNTIME_CALCULATOR_INVOCATION_CONTRACT_NAME,
     status: fallbackReason
