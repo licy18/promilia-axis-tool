@@ -52,6 +52,9 @@ export function compileProject(project, gameData) {
     cycleBoundaries: (project.cycleBoundaries ?? []).map(boundary => ({
       ...boundary,
     })),
+    initialRuntimeState: project.initialRuntimeState
+      ? JSON.parse(JSON.stringify(project.initialRuntimeState))
+      : null,
     diagnostics: {
       validationWarnings: validation.warnings,
       missingTimingActionIds: actions

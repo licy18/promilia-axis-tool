@@ -16,6 +16,57 @@ import {
 import { createThreeValueRuntimeOutputConsumerView } from '../../simulation/runtime/threeValueRuntimeOutputConsumer';
 
 describe('effect runtime timeline', () => {
+  it('starts from inherited active effects and expires them by remaining duration', () => {
+    const timeline = createEffectRuntimeTimeline({
+      scenario: {
+        time: { durationMs: 2000, fps: 60 },
+        actors: [{ id: 'actor-001' }],
+        actions: [],
+        initialRuntimeState: {
+          activeEffects: [
+            {
+              instanceKey: 'actor|actor-001|effect-focus',
+              effectId: 'effect-focus',
+              effectName: '专注',
+              sourceActorId: 'actor-001',
+              targetKind: 'actor',
+              targetId: 'actor-001',
+              remainingDurationMs: 750,
+              stacks: 2,
+              maxStacks: 3,
+              refreshCount: 1,
+              revision: 2,
+              tags: ['buff'],
+              modifiers: [],
+            },
+          ],
+        },
+      },
+    });
+
+    expect(timeline.events.map(event => [event.type, event.timeMs])).toEqual([
+      ['EFFECT_INHERITED', 0],
+      ['EFFECT_EXPIRED', 750],
+    ]);
+    expect(timeline.events[0]).toMatchObject({
+      status: 'effect-runtime-inherited',
+      operation: 'inherit',
+      after: {
+        appliedAtMs: 0,
+        expiresAtMs: 750,
+        stacks: 2,
+        sourceStatus: 'effect-inherited-from-cycle-boundary',
+      },
+    });
+    expect(timeline.summary).toMatchObject({
+      inheritedEventCount: 1,
+      expiredEventCount: 1,
+      activeEffectCount: 0,
+      peakActiveEffectCount: 1,
+      calculatorAppliedEffectCount: 0,
+    });
+  });
+
   it('tracks apply, stack, refresh, remove, and expiry with stable ownership', () => {
     const scenario = createEffectScenario();
     const input = createActionEffectRuntimeInput({ scenario });

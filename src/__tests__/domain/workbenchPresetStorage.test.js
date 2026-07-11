@@ -18,7 +18,7 @@ import {
 } from '../../domain/workbenchPresetStorage';
 
 describe('workbench preset storage', () => {
-  it('stores a complete v11 multi-scenario project snapshot with searchable metadata', () => {
+  it('stores a complete v12 multi-scenario project snapshot with searchable metadata', () => {
     const draft = createPresetDraft();
     draft.scenarioWorkspace.scenarios.push({
       id: 'scenario-0002',
@@ -66,6 +66,10 @@ describe('workbench preset storage', () => {
       },
       projectFile: {
         schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
+        initialRuntimeState: {
+          source: { sourceScenarioId: 'scenario-preset-source' },
+          enemy: { hp: { currentValue: 780 } },
+        },
         actorConfigs: expect.any(Array),
         enemyConfig: expect.any(Object),
         runtimeSampleCaptures: [
@@ -105,6 +109,9 @@ describe('workbench preset storage', () => {
       runtimeSampleCaptures: [
         expect.objectContaining({ captureSessionId: 'preset-capture-1' }),
       ],
+      initialRuntimeState: {
+        source: { sourceScenarioId: 'scenario-preset-source' },
+      },
       scenarioWorkspace: {
         activeScenarioId: 'scenario-0001',
         scenarios: [{ id: 'scenario-0001' }, { id: 'scenario-0002' }],
@@ -237,6 +244,18 @@ function createPresetDraft() {
       ],
     },
   ];
+  draft.initialRuntimeState = {
+    source: {
+      sourceScenarioId: 'scenario-preset-source',
+      boundaryId: 'boundary-preset-source',
+      boundaryTimeMs: 1600,
+    },
+    enemy: {
+      enemyId: 'enemy-300032',
+      hp: { currentValue: 780, maxValue: 1000 },
+      toughness: { currentValue: 45, maxValue: 100 },
+    },
+  };
   return draft;
 }
 

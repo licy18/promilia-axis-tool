@@ -11,6 +11,7 @@ const REQUIRED_CAPABILITIES = [
   'effect-interval-review',
   'scenario-comparison',
   'cycle-sections',
+  'cycle-inheritance',
   'workspace-scenarios',
   'narrow-main-flow',
 ];

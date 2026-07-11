@@ -45,6 +45,7 @@ describe('Workbench PNG project', () => {
       })
     );
     state.selectedActionId = 'action-0002';
+    state.initialRuntimeState = createPngInheritedState();
     state.runtimeSampleCaptures = [
       {
         schemaVersion: 1,
@@ -99,6 +100,10 @@ describe('Workbench PNG project', () => {
       teamSlots: state.teamSlots,
       enemyConfig: state.enemyConfig,
       selectedActionId: 'action-0002',
+      initialRuntimeState: {
+        source: { sourceScenarioId: 'scenario-png-source' },
+        enemy: { hp: { currentValue: 800 } },
+      },
       runtimeSampleCaptures: [
         expect.objectContaining({
           captureSessionId: 'png-runtime-capture-1',
@@ -158,4 +163,19 @@ describe('Workbench PNG project', () => {
 
 function createOnePixelPng() {
   return new Uint8Array(Buffer.from(ONE_PIXEL_PNG_BASE64, 'base64'));
+}
+
+function createPngInheritedState() {
+  return {
+    source: {
+      sourceScenarioId: 'scenario-png-source',
+      boundaryId: 'boundary-png-source',
+      boundaryTimeMs: 1200,
+    },
+    enemy: {
+      enemyId: 'enemy-300032',
+      hp: { currentValue: 800, maxValue: 1000 },
+      toughness: { currentValue: 50, maxValue: 100 },
+    },
+  };
 }

@@ -57,9 +57,10 @@ C:\PC2\Codex\AzPr
 ### 3.2 领域层
 
 - `projectSchema.js`：`Project`、`Actor`、`Enemy`、`Action`、`ActionRelation` 与 `CycleBoundary` 主合同。
+- `initialRuntimeState.js`：循环边界继承的敌人三值、角色能量和活动效果起始状态合同。
 - `workbenchProjectFactory.js`：把 Workbench 选择、培养配置和动作草稿组装为标准项目。
 - `workbenchActionRelations.js`：动作前后关系的规范化、无环校验、间隔同步与删除清理。
-- `workbenchDraftStorage.js`：v11 草稿、项目 JSON 和分享链接。
+- `workbenchDraftStorage.js`：v12 草稿、项目 JSON 和分享链接。
 - `workbenchScenarioWorkspace.js`：最多 14 条完整方案快照的规范化、切换和迁移。
 - `workbenchPngProject.js`：PNG 项目元数据写入与回读。
 - `workbenchPresetStorage.js`：v1 本地预设库，复用完整 Workbench 项目快照。
@@ -71,7 +72,7 @@ C:\PC2\Codex\AzPr
 - `actionExecutionPlan.js`：统一决定动作正常执行、条件待确认或确定跳过。
 - `simulateScenario.js`：构建事件、执行计划和模拟输出。
 - `actionRuleDiagnostics.js`：冷却、充能次数和动作可执行性诊断。
-- `effectRuntimeTimeline.js`：效果命令、持续时间、层数和目标的运行时轨道。
+- `effectRuntimeTimeline.js`：效果命令、继承效果、持续时间、层数和目标的运行时轨道。
 
 ### 3.4 三值生成层
 
@@ -103,7 +104,7 @@ Action
 - 生成 `simLog`、`stateCurves`、资源曲线、状态快照和 summary。
 - 保持动作、命中、曲线点和日志之间的稳定身份映射。
 
-`src/simulation/projection/projectSimulationResult.js` 将运行结果组织为 Workbench 可消费的动作结果、贡献、诊断和详情视图；`projectEffectIntervals.js` 将效果事件归并为角色/敌人轨可消费的持续区间；`projectCycleSections.js` 按项目边界切分现有 transaction、能量与效果区间。三类投影都不反向参与公式计算。
+`src/simulation/projection/projectSimulationResult.js` 将运行结果组织为 Workbench 可消费的动作结果、贡献、诊断和详情视图；`projectEffectIntervals.js` 将效果事件归并为角色/敌人轨可消费的持续区间；`projectCycleSections.js` 按项目边界切分现有 transaction、能量与效果区间；`projectCycleBoundaryInheritance.js` 把边界前已结算状态投影为新方案初始状态并平移边界后草稿。投影层不反向参与公式计算。
 
 ### 3.7 Workbench 层
 
@@ -121,9 +122,9 @@ Action
 
 ## 4. 关键数据合同
 
-### WorkbenchProjectFile v11
+### WorkbenchProjectFile v12
 
-根级包含活动方案的 selection、teamSlots、actorConfigs、enemyConfig、segmentSplitOptions、actionDrafts、actionRelations、cycleBoundaries、runtimeSampleCaptures 和 selectedActionId，并新增 `scenarioWorkspace`。JSON、分享链接、PNG 元数据和预设库都复用该合同；v1-v10 项目迁移为单方案工作区。
+根级包含活动方案的 selection、teamSlots、actorConfigs、enemyConfig、segmentSplitOptions、actionDrafts、actionRelations、cycleBoundaries、initialRuntimeState、runtimeSampleCaptures 和 selectedActionId，并包含 `scenarioWorkspace`。JSON、分享链接、PNG 元数据和预设库都复用该合同；v1-v11 项目迁移为 `initialRuntimeState = null` 的单方案或既有工作区。
 
 ### ScenarioWorkspace v1
 
@@ -141,6 +142,10 @@ Action
 
 从项目时长与 `cycleBoundaries[]` 生成连续区段，并按事件发生时间与效果区间重叠切分现有 runtime output。输出区段 HP、韧性、各角色能量、动作贡献和效果覆盖；固定 `readsRuntimeOutputsOnly = true`、`appliedToCalculators = false`，不重复执行动作或改变 calculator。
 
+### InitialRuntimeState / CycleBoundaryInheritanceProjection v1
+
+`AzPrInitialRuntimeState` 保存来源边界、敌人当前 HP/韧性、各角色当前自身能量和活动效果剩余时长。继承投影只读取标准 runtime snapshot/effect event，把边界后动作、关系与后续边界平移到新轴；边界当帧事件由新方案结算。Project 与 Scenario 显式携带初始状态，runtime 仍走同一状态快照和效果时间线入口。
+
 ### WorkbenchPresetLibrary v1
 
 每个预设包含可搜索元数据、兼容状态、摘要和完整 `WorkbenchProjectFile`。旧项目可解析时迁移到当前快照，不兼容条目保留但禁止加载。
@@ -155,7 +160,7 @@ Action
 
 ## 5. 持久化边界
 
-- 当前草稿：`promilia-axis-tool:workbench-draft:v11`。
+- 当前草稿：`promilia-axis-tool:workbench-draft:v12`。
 - 本地预设：`promilia-axis-tool:workbench-presets:v1`。
 - 项目交换：JSON、分享 URL、PNG 内嵌元数据。
 - 临时曲线选中、复盘焦点、筛选和诊断面板状态不写入项目文件。

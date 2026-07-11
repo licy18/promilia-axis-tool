@@ -75,7 +75,7 @@ src/
 
 - `src/views/Workbench.vue`：生产页面编排和项目交换入口。
 - `src/domain/projectSchema.js`：标准项目、角色、敌人、动作和动作关系模型。
-- `src/domain/workbenchDraftStorage.js`：v11 草稿、项目 JSON 和分享合同。
+- `src/domain/workbenchDraftStorage.js`：v12 草稿、项目 JSON 和分享合同。
 - `src/domain/workbenchScenarioWorkspace.js`：项目内多方案快照、迁移和管理合同。
 - `src/simulation/`：无 UI 编译、执行、三值生成、机制和结果投影。
 - `src/features/workbench/`：动作轴、配置、曲线、日志、详情和主流程交互。
@@ -954,6 +954,16 @@ Workbench 现在提供项目级方案栏，最多保存 14 条完整排轴方案
 阶段验收：61 个测试文件、370 条测试，35 条 Workbench 主流程和 11 项 production preview 能力全部通过；180 动作完整运行 p95 为 26.000ms，120 动作浏览器首屏就绪为 1313ms。Workbench 主块 gzip 为 365,188B，全部 JavaScript gzip 为 715,845B，仍在 370,000B/740,000B 预算内；1440×1000 与 390×844 实图检查均无页面横向溢出，窄屏方案标签在方案栏内部滚动。
 
 下一阶段目标：阶段 8-G 循环边界继承方案闭环。对齐 Endaxis 从 cycle boundary 创建继承方案的能力，从选中边界读取现有 runtime 状态快照，生成一条新的后续方案：边界后的动作按帧平移到新轴起点，并继承敌人 HP/韧性、各角色自身能量和仍在生效的效果。该阶段应建立明确的 initial runtime state 合同并继续走标准 runtime，不自动外推循环次数、不猜测未确认机制，也不把继承实现成 UI 临时数值覆盖。
+
+### 阶段 8-G 循环边界继承方案闭环（2026-07-11）
+
+Workbench 循环复盘现在可以从所选区段的起始边界创建一条独立后续方案。边界之后的动作统一减去边界时间，动作间留白、组内关系和后续循环边界保持相对位置；边界之前的动作和跨边界关系不进入新方案，原方案不被改写。恰好位于边界帧的动作与三值事件留在新方案结算，runtime capture 不会在缺少绝对帧重映射时被静默复用。
+
+项目文件升级为 `WorkbenchProjectFile v12`，每条方案新增标准 `AzPrInitialRuntimeState`。该合同保存来源方案/边界、敌人当前 HP/韧性、各角色当前自身能量和仍生效效果的剩余时长；Project、Scenario、三值状态快照与效果 runtime 统一消费它。继承效果从新轴 0 帧发出 `EFFECT_INHERITED`，继续进入效果区间、生命周期复盘和时间轴显示；没有新增公式、倍率或 UI 临时数值覆盖。JSON、分享链接、PNG 元数据和预设均可完整交换 v12 继承方案，v1-v11 自动迁移为 `initialRuntimeState = null`。
+
+阶段验收：63 个测试文件、379 条测试，36 条 Workbench 主流程和 12 项 production preview 能力全部通过，生产报告结论为 `trial-ready`。生产引用与数据投影审计均无异常；Workbench 主块 gzip 为 368,529B，全部 JavaScript gzip 为 719,362B，仍低于 370,000B/740,000B 预算。180 动作编译 p95 为 147.146ms、完整 simulation p95 为 283.843ms，均低于既有预算。
+
+下一阶段目标：阶段 8-H Endaxis 式工作区布局闭环。把当前固定 Workbench 整理为可折叠、可调整尺寸并本地持久化的动作库、主时间轴/运行复盘和侧边检查区，提供清晰的专注编辑与专注复盘布局，并保证桌面、窄屏和 PNG 导出不受布局状态污染。该阶段只改变工作区组织和操作效率，不新增公式、项目战斗字段或零散状态标签。
 
 ## 10. 文档维护规则
 

@@ -412,8 +412,10 @@
           class="cycle-review-area"
           :projection="cycleSectionProjection"
           :selected-section-id="selectedCycleSection?.sectionId || ''"
+          :can-create-inherited-scenario="canCreateInheritedScenario"
           @select-section="selectCycleSection"
           @locate-action="locateCycleSectionAction"
+          @create-inherited-scenario="createInheritedScenarioFromBoundary"
         />
 
         <div
@@ -859,6 +861,7 @@ import {
 import {
   MAX_WORKBENCH_SCENARIOS,
   addWorkbenchScenario,
+  addWorkbenchScenarioFromDraft,
   deleteWorkbenchScenario,
   duplicateWorkbenchScenario,
   getActiveWorkbenchScenario,
@@ -886,7 +889,7 @@ import {
   normalizeWorkbenchRuntimeSampleCaptures,
   parseWorkbenchRuntimeSampleCaptureFile,
 } from '../domain/workbenchRuntimeSampleCapture';
-import { frameToMs } from '../domain/timebase';
+import { formatFrameTime, frameToMs } from '../domain/timebase';
 import { isPngSource } from '../utils/pngMetadata';
 import { compileProject } from '../simulation/compiler/compileProject';
 import { simulateScenario } from '../simulation/engine/simulateScenario';
@@ -896,6 +899,7 @@ import {
 } from '../simulation/projection/projectSimulationResult';
 import { projectEffectRuntimeIntervals } from '../simulation/projection/projectEffectIntervals';
 import { projectCycleSections } from '../simulation/projection/projectCycleSections';
+import { projectCycleBoundaryInheritance } from '../simulation/projection/projectCycleBoundaryInheritance';
 import { projectWorkbenchScenarioComparison } from '../simulation/projection/projectScenarioComparison';
 
 const WorkbenchScenarioComparisonDialog = defineAsyncComponent(
@@ -934,6 +938,9 @@ const segmentSplitPreview = ref(null);
 const actionDrafts = ref([...initialDraft.actionDrafts]);
 const actionRelations = ref([...initialDraft.actionRelations]);
 const cycleBoundaries = ref([...initialDraft.cycleBoundaries]);
+const initialRuntimeState = ref(
+  cloneWorkbenchHistoryValue(initialDraft.initialRuntimeState)
+);
 const scenarioWorkspace = ref(
   cloneWorkbenchHistoryValue(initialDraft.scenarioWorkspace)
 );
@@ -1026,6 +1033,7 @@ const project = computed(() =>
     actions: actionDrafts.value,
     actionRelations: actionRelations.value,
     cycleBoundaries: cycleBoundaries.value,
+    initialRuntimeState: initialRuntimeState.value,
     runtimeSampleCaptures: runtimeSampleCaptures.value,
   })
 );
@@ -1065,6 +1073,21 @@ const selectedCycleSection = computed(
     cycleSectionProjection.value.sections[0] ??
     null
 );
+const selectedCycleInheritanceBoundary = computed(() =>
+  cycleBoundaries.value.find(
+    boundary => boundary.id === selectedCycleSection.value?.startBoundaryId
+  )
+);
+const canCreateInheritedScenario = computed(() => {
+  const boundary = selectedCycleInheritanceBoundary.value;
+  return Boolean(
+    boundary &&
+    scenarioWorkspace.value.scenarios.length < MAX_WORKBENCH_SCENARIOS &&
+    actionDrafts.value.some(
+      action => Number(action.startMs) >= Number(boundary.timeMs)
+    )
+  );
+});
 const canAddCycleBoundaryAtContextTime = computed(() => {
   const timeMs = Number(actionContextMenu.value.targetStartMs);
   return (
@@ -2406,6 +2429,46 @@ function duplicateWorkspaceScenario(scenarioId) {
   return applyWorkspaceScenarioMutation(result, '已复制方案');
 }
 
+function createInheritedScenarioFromBoundary(boundaryId) {
+  const currentDraft = createWorkbenchScenarioDraftSnapshot(
+    getCurrentWorkbenchScenarioState()
+  );
+  const sourceScenario = activeWorkbenchScenario.value;
+  const projection = projectCycleBoundaryInheritance({
+    draft: currentDraft,
+    scenario: scenario.value,
+    runtimeOutputs: runtimeOutputs.value,
+    boundaryId,
+    sourceScenarioId: sourceScenario?.id ?? '',
+    sourceScenarioName: sourceScenario?.name ?? '',
+  });
+  if (
+    projection.status === 'cycle-boundary-inheritance-no-downstream-actions'
+  ) {
+    draftStatus.value = '该边界之后没有可继承动作';
+    return false;
+  }
+  if (!projection.applied || !projection.draft) {
+    draftStatus.value = '循环边界继承不可用';
+    return false;
+  }
+
+  const scenarioName = `${sourceScenario?.name ?? '方案'} 继承 ${formatFrameTime(
+    projection.boundary.timeMs
+  )}`;
+  const result = addWorkbenchScenarioFromDraft(
+    scenarioWorkspace.value,
+    currentDraft,
+    createWorkbenchScenarioDraftSnapshot(projection.draft),
+    scenarioName
+  );
+  if (!result.changed && result.reason === 'scenario-limit-reached') {
+    draftStatus.value = `方案数量已达上限（${MAX_WORKBENCH_SCENARIOS}）`;
+    return false;
+  }
+  return applyWorkspaceScenarioMutation(result, '已从循环边界创建继承方案');
+}
+
 function renameWorkspaceScenario({ scenarioId, name } = {}) {
   const synchronizedWorkspace = synchronizeActiveWorkbenchScenario(
     scenarioWorkspace.value,
@@ -2689,6 +2752,7 @@ function createWorkbenchProjectFromDraft(draft) {
     actions: draft.actionDrafts,
     actionRelations: draft.actionRelations,
     cycleBoundaries: draft.cycleBoundaries,
+    initialRuntimeState: draft.initialRuntimeState,
     runtimeSampleCaptures: draft.runtimeSampleCaptures,
   });
 }
@@ -2716,6 +2780,7 @@ function getCurrentWorkbenchScenarioState() {
     actionDrafts: actionDrafts.value,
     actionRelations: actionRelations.value,
     cycleBoundaries: cycleBoundaries.value,
+    initialRuntimeState: initialRuntimeState.value,
     runtimeSampleCaptures: runtimeSampleCaptures.value,
     selectedActionId: selectedActionId.value,
   };
@@ -3046,6 +3111,9 @@ function applyWorkbenchScenarioDraftState(draft) {
     draft.cycleBoundaries,
     project.value.time.durationMs
   );
+  initialRuntimeState.value = cloneWorkbenchHistoryValue(
+    draft.initialRuntimeState
+  );
   runtimeSampleCaptures.value = normalizeWorkbenchRuntimeSampleCaptures(
     draft.runtimeSampleCaptures
   );
@@ -3274,6 +3342,7 @@ function createWorkbenchHistorySnapshot() {
       actionDrafts: actionDrafts.value,
       actionRelations: actionRelations.value,
       cycleBoundaries: cycleBoundaries.value,
+      initialRuntimeState: initialRuntimeState.value,
       runtimeSampleCaptures: runtimeSampleCaptures.value,
       selectedActionId: selectedActionId.value,
     },
@@ -3288,6 +3357,7 @@ function createWorkbenchHistorySnapshot() {
     actionDrafts: draftSnapshot.actionDrafts,
     actionRelations: draftSnapshot.actionRelations,
     cycleBoundaries: draftSnapshot.cycleBoundaries,
+    initialRuntimeState: draftSnapshot.initialRuntimeState,
     runtimeSampleCaptures: draftSnapshot.runtimeSampleCaptures,
     selectedActionId: draftSnapshot.selectedActionId,
     selectedActionIds: selectedActionIds.value,
@@ -3340,6 +3410,9 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
   cycleBoundaries.value = normalizeWorkbenchCycleBoundaries(
     snapshot.cycleBoundaries,
     project.value.time.durationMs
+  );
+  initialRuntimeState.value = cloneWorkbenchHistoryValue(
+    snapshot.initialRuntimeState
   );
   runtimeSampleCaptures.value = normalizeWorkbenchRuntimeSampleCaptures(
     snapshot.runtimeSampleCaptures

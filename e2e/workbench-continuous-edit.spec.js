@@ -251,7 +251,7 @@ test('edits and reviews an arbitrary action group @workbench-main-flow', async (
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(exportedProject.schemaVersion).toBe(11);
+  expect(exportedProject.schemaVersion).toBe(12);
   expect(exportedProject.actionDrafts).toHaveLength(5);
   expect(exportedProject.actionRelations).toEqual([
     expect.objectContaining({
@@ -2255,7 +2255,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 11,
+    schemaVersion: 12,
     game: 'azur-promilia',
     type: 'workbench-project',
     selectedActionId: 'action-0002',
@@ -2514,7 +2514,7 @@ test('imports a runtime capture and preserves its applied curve through project 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 11,
+    schemaVersion: 12,
     runtimeSampleCaptures: [
       {
         captureSessionId: 'e2e-recover-sp-capture-1',
@@ -3951,7 +3951,7 @@ test('persists cycle boundaries and reviews section contributions @workbench-mai
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(exportedProject.schemaVersion).toBe(11);
+  expect(exportedProject.schemaVersion).toBe(12);
   expect(exportedProject.cycleBoundaries).toEqual([
     expect.objectContaining({ id: 'cycle-boundary-0001' }),
   ]);
@@ -3963,6 +3963,95 @@ test('persists cycle boundaries and reviews section contributions @workbench-mai
     .setInputFiles(downloadPath);
   await expect(workbench).toHaveAttribute('data-cycle-boundary-count', '1');
   await expect(page.getByTestId('workbench-cycle-section-panel')).toBeVisible();
+});
+
+test('creates an inherited scenario with continued runtime state @workbench-main-flow', async ({
+  page,
+}) => {
+  await page.goto('/#/workbench');
+  const workbench = page.locator('main.workbench');
+  await page.getByTestId('workbench-add-action').click();
+  await page.locator('.action-item[data-action-id="action-0001"]').click();
+  await page.getByTestId('workbench-effect-add').click();
+  await page.getByTestId('workbench-effect-name-input').fill('继承星流');
+  await page.getByTestId('workbench-effect-duration-frame-input').fill('120');
+  await page.getByTestId('workbench-effect-duration-frame-input').press('Tab');
+
+  const downstreamAction = page.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+  );
+  const originalStartMs = Number(
+    await downstreamAction.getAttribute('data-start-ms')
+  );
+  const lane = page.getByTestId('workbench-timeline-lane');
+  const laneBox = await lane.boundingBox();
+  expect(laneBox).toBeTruthy();
+  await lane.evaluate(
+    (element, position) =>
+      element.dispatchEvent(
+        new MouseEvent('contextmenu', {
+          bubbles: true,
+          cancelable: true,
+          clientX: position.clientX,
+          clientY: position.clientY,
+        })
+      ),
+    {
+      clientX: laneBox.x + laneBox.width / 30,
+      clientY: laneBox.y + 80,
+    }
+  );
+  await page.getByTestId('workbench-action-context-add-cycle-boundary').click();
+  const boundaryTimeMs = Number(
+    await page
+      .getByTestId('workbench-cycle-boundary')
+      .getAttribute('data-time-ms')
+  );
+  await page.getByTestId('workbench-create-inherited-scenario').click();
+
+  await expect(workbench).toHaveAttribute('data-workspace-scenario-count', '2');
+  await expect(workbench).toHaveAttribute(
+    'data-active-workspace-scenario-id',
+    'scenario-0002'
+  );
+  await expect(workbench).toHaveAttribute('data-cycle-boundary-count', '0');
+  await expect(page.locator('.action-item')).toHaveCount(1);
+  await expect(downstreamAction).toHaveAttribute(
+    'data-start-ms',
+    String(originalStartMs - boundaryTimeMs)
+  );
+  await expect(
+    page.locator('[data-effect-event-type="EFFECT_INHERITED"]')
+  ).toBeVisible();
+  await expect(page.getByTestId('workbench-draft-status')).toContainText(
+    '已从循环边界创建继承方案'
+  );
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const download = await downloadPromise;
+  const downloadPath = await download.path();
+  const project = JSON.parse(await readFile(downloadPath, 'utf8'));
+  expect(project).toMatchObject({
+    schemaVersion: 12,
+    initialRuntimeState: {
+      source: {
+        sourceScenarioId: 'scenario-0001',
+        boundaryId: 'cycle-boundary-0001',
+        boundaryTimeMs,
+      },
+      enemy: {
+        hp: { currentValue: expect.any(Number) },
+        toughness: { currentValue: expect.any(Number) },
+      },
+      activeEffects: [
+        {
+          effectName: '继承星流',
+          remainingDurationMs: expect.any(Number),
+        },
+      ],
+    },
+  });
 });
 
 test('manages, compares, and restores multiple workspace scenarios @workbench-main-flow', async ({
@@ -4022,7 +4111,7 @@ test('manages, compares, and restores multiple workspace scenarios @workbench-ma
   const downloadPath = await download.path();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 11,
+    schemaVersion: 12,
     scenarioWorkspace: {
       activeScenarioId: 'scenario-0002',
       scenarios: [
@@ -4365,7 +4454,7 @@ async function ensureActionContentEditResultSynced(
 async function readStoredWorkbenchDraft(page) {
   return await page.evaluate(() => {
     const rawDraft =
-      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v11') ??
+      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v12') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v8') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v5') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v4') ??

@@ -2,6 +2,53 @@ import { describe, expect, it } from 'vitest';
 import { projectEffectRuntimeIntervals } from '../../simulation/projection/projectEffectIntervals';
 
 describe('effect interval projection', () => {
+  it('projects inherited effects from the new scenario origin', () => {
+    const projection = projectEffectRuntimeIntervals({
+      effectTimeline: {
+        events: [
+          createEvent({
+            eventId: 'focus-inherited',
+            type: 'EFFECT_INHERITED',
+            timeMs: 0,
+            instanceKey: 'actor|actor-001|focus',
+            effectId: 'focus',
+            effectName: '专注',
+            targetKind: 'actor',
+            targetId: 'actor-001',
+            stackAfter: 2,
+            after: createState({ stacks: 2, maxStacks: 3, expiresAtMs: 750 }),
+          }),
+          createEvent({
+            eventId: 'focus-expired',
+            type: 'EFFECT_EXPIRED',
+            timeMs: 750,
+            instanceKey: 'actor|actor-001|focus',
+            effectId: 'focus',
+            targetKind: 'actor',
+            targetId: 'actor-001',
+            stackBefore: 2,
+            before: createState({ stacks: 2, maxStacks: 3, expiresAtMs: 750 }),
+          }),
+        ],
+      },
+      durationMs: 2000,
+      frameRate: 60,
+    });
+
+    expect(projection.intervals).toEqual([
+      expect.objectContaining({
+        intervalId: 'actor|actor-001|focus|interval-1',
+        startMs: 0,
+        endMs: 750,
+        startFrame: 0,
+        endFrame: 45,
+        lifecycleEventIds: ['focus-inherited', 'focus-expired'],
+        terminationType: 'EFFECT_EXPIRED',
+        initialStacks: 2,
+      }),
+    ]);
+  });
+
   it('groups apply, refresh, stack, remove, and expiry events into target intervals', () => {
     const projection = projectEffectRuntimeIntervals({
       effectTimeline: {

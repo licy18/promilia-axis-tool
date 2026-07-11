@@ -38,7 +38,7 @@ export function createThreeValueRuntimeStateSnapshots({
   for (const { actor, order } of actorRecords.values()) {
     selfEnergyStateByActor.set(
       actor.id,
-      createRuntimeSelfEnergyActorState({ actor, order })
+      createRuntimeSelfEnergyActorState({ actor, order, scenario })
     );
   }
 
@@ -51,6 +51,7 @@ export function createThreeValueRuntimeStateSnapshots({
       energyOwnerActorId,
       actorRecords,
       selfEnergyStateByActor,
+      scenario,
     });
     const primaryMetricKey =
       RUNTIME_STATE_METRIC_BY_TRACK_KEY[delta.trackKey] ?? 'unknown';
@@ -199,6 +200,18 @@ export function createThreeValueRuntimeStateSnapshots({
 
 export function createThreeValueRuntimeEnemyBaseline(scenario) {
   const enemy = scenario?.enemy ?? {};
+  const inheritedEnemyCandidate = scenario?.initialRuntimeState?.enemy ?? null;
+  const inheritedEnemy =
+    !inheritedEnemyCandidate?.enemyId ||
+    inheritedEnemyCandidate.enemyId === enemy.id
+      ? inheritedEnemyCandidate
+      : null;
+  const inheritedHp = strictRuntimeNumberOrNull(
+    inheritedEnemy?.hp?.currentValue
+  );
+  const inheritedToughness = strictRuntimeNumberOrNull(
+    inheritedEnemy?.toughness?.currentValue
+  );
   const baseHp = firstRuntimeNumber(
     enemy.stats?.maxHp,
     enemy.maxHp,
@@ -207,14 +220,16 @@ export function createThreeValueRuntimeEnemyBaseline(scenario) {
     enemy.source?.enemy?.maxHp
   );
   const hpMultiplier = firstRuntimeNumber(enemy.hpMultiplier, 1) ?? 1;
-  const hpInitial = Number.isFinite(baseHp)
+  const defaultHpInitial = Number.isFinite(baseHp)
     ? roundRuntimeStateValue(baseHp * hpMultiplier)
     : null;
-  const toughnessInitial = firstRuntimeNumber(
+  const hpInitial = inheritedHp ?? defaultHpInitial;
+  const defaultToughnessInitial = firstRuntimeNumber(
     enemy.stats?.initialToughness,
     enemy.toughness?.initialValue,
     enemy.initialToughness
   );
+  const toughnessInitial = inheritedToughness ?? defaultToughnessInitial;
   const toughnessMax = firstRuntimeNumber(
     enemy.stats?.maxToughness,
     enemy.toughness?.maxValue,
@@ -232,34 +247,55 @@ export function createThreeValueRuntimeEnemyBaseline(scenario) {
 
   return {
     hp: {
-      sourceKind: 'scenario-enemy-hp-baseline',
+      sourceKind:
+        inheritedHp == null
+          ? 'scenario-enemy-hp-baseline'
+          : 'inherited-runtime-enemy-hp-baseline',
       sourceStatus:
-        hpInitial == null
-          ? 'baseline-pending-missing-scenario-enemy-max-hp'
-          : 'baseline-derived-from-scenario-enemy-max-hp',
-      sourcePath: 'scenario.enemy.stats.maxHp * scenario.enemy.hpMultiplier',
+        inheritedHp != null
+          ? 'baseline-inherited-from-cycle-boundary'
+          : hpInitial == null
+            ? 'baseline-pending-missing-scenario-enemy-max-hp'
+            : 'baseline-derived-from-scenario-enemy-max-hp',
+      sourcePath:
+        inheritedHp == null
+          ? 'scenario.enemy.stats.maxHp * scenario.enemy.hpMultiplier'
+          : 'scenario.initialRuntimeState.enemy.hp.currentValue',
       initialValue: hpInitial,
+      maxValue:
+        inheritedHp == null
+          ? null
+          : (strictRuntimeNumberOrNull(inheritedEnemy?.hp?.maxValue) ??
+            defaultHpInitial),
       baseValue: Number.isFinite(baseHp) ? baseHp : null,
       multiplier: Number.isFinite(hpMultiplier) ? hpMultiplier : null,
       valueUnit: 'hp',
       applied: hpInitial != null,
     },
     toughness: {
-      sourceKind: 'scenario-enemy-toughness-baseline',
+      sourceKind:
+        inheritedToughness == null
+          ? 'scenario-enemy-toughness-baseline'
+          : 'inherited-runtime-enemy-toughness-baseline',
       sourceStatus:
-        toughnessInitial == null
-          ? 'baseline-pending-missing-WEAKNESS_POINT_MAX'
-          : 'baseline-derived-from-scenario-enemy-WEAKNESS_POINT_MAX',
+        inheritedToughness != null
+          ? 'baseline-inherited-from-cycle-boundary'
+          : toughnessInitial == null
+            ? 'baseline-pending-missing-WEAKNESS_POINT_MAX'
+            : 'baseline-derived-from-scenario-enemy-WEAKNESS_POINT_MAX',
       sourcePath:
-        toughnessInitial == null
-          ? 'scenario.enemy.baseAttributes[WEAKNESS_POINT_MAX] missing'
-          : 'scenario.enemy.stats.initialToughness',
+        inheritedToughness != null
+          ? 'scenario.initialRuntimeState.enemy.toughness.currentValue'
+          : toughnessInitial == null
+            ? 'scenario.enemy.baseAttributes[WEAKNESS_POINT_MAX] missing'
+            : 'scenario.enemy.stats.initialToughness',
       initialValue:
         toughnessInitial == null
           ? null
           : roundRuntimeStateValue(toughnessInitial),
       maxValue:
-        toughnessMax == null ? null : roundRuntimeStateValue(toughnessMax),
+        strictRuntimeNumberOrNull(inheritedEnemy?.toughness?.maxValue) ??
+        (toughnessMax == null ? null : roundRuntimeStateValue(toughnessMax)),
       baseValue:
         toughnessBase == null ? null : roundRuntimeStateValue(toughnessBase),
       multiplier:
@@ -273,28 +309,38 @@ export function createThreeValueRuntimeEnemyBaseline(scenario) {
   };
 }
 
-export function createThreeValueRuntimeSelfEnergyBaseline(actor) {
-  const initialValue = firstRuntimeNumber(
+export function createThreeValueRuntimeSelfEnergyBaseline(actor, scenario) {
+  const inheritedEnergy = findInheritedSelfEnergyState(actor, scenario);
+  const defaultInitialValue = firstRuntimeNumber(
     actor?.initialSp,
     actor?.initialEnergy,
     actor?.resourceState?.sp,
     actor?.resources?.sp,
     actor?.stats?.sp
   );
-  const maxValue = firstRuntimeNumber(
+  const initialValue =
+    strictRuntimeNumberOrNull(inheritedEnergy?.currentValue) ??
+    defaultInitialValue;
+  const defaultMaxValue = firstRuntimeNumber(
     actor?.stats?.maxSp,
     actor?.maxSp,
     actor?.baseAttributes?.find(item => item.key === 'MAXSP')?.value
   );
+  const maxValue =
+    strictRuntimeNumberOrNull(inheritedEnergy?.maxValue) ?? defaultMaxValue;
 
   return {
-    sourceKind: 'scenario-actor-self-energy-baseline',
-    sourceStatus:
-      initialValue == null
+    sourceKind: inheritedEnergy
+      ? 'inherited-runtime-actor-self-energy-baseline'
+      : 'scenario-actor-self-energy-baseline',
+    sourceStatus: inheritedEnergy
+      ? 'baseline-inherited-from-cycle-boundary'
+      : initialValue == null
         ? 'baseline-pending-azpr-initial-self-energy'
         : 'baseline-derived-from-scenario-actor-self-energy',
-    sourcePath:
-      initialValue == null
+    sourcePath: inheritedEnergy
+      ? 'scenario.initialRuntimeState.selfEnergyByActor.currentValue'
+      : initialValue == null
         ? 'pending battle start/current SP evidence'
         : 'scenario.actor.initialSp|initialEnergy|resourceState.sp',
     initialValue:
@@ -362,8 +408,8 @@ export function createThreeValueRuntimeStateMetric({
   };
 }
 
-function createRuntimeSelfEnergyActorState({ actor, order }) {
-  const baseline = createThreeValueRuntimeSelfEnergyBaseline(actor);
+function createRuntimeSelfEnergyActorState({ actor, order, scenario }) {
+  const baseline = createThreeValueRuntimeSelfEnergyBaseline(actor, scenario);
   return {
     actorId: actor?.id ?? null,
     actorName: actor?.name ?? '未知角色',
@@ -381,6 +427,7 @@ function ensureRuntimeSelfEnergyActorState({
   energyOwnerActorId,
   actorRecords,
   selfEnergyStateByActor,
+  scenario,
 }) {
   if (!energyOwnerActorId) {
     return null;
@@ -395,9 +442,26 @@ function ensureRuntimeSelfEnergyActorState({
   const actorState = createRuntimeSelfEnergyActorState({
     actor,
     order: selfEnergyStateByActor.size,
+    scenario,
   });
   selfEnergyStateByActor.set(energyOwnerActorId, actorState);
   return actorState;
+}
+
+function findInheritedSelfEnergyState(actor, scenario) {
+  const actorId = String(actor?.id ?? '').trim();
+  const characterId = Number(actor?.characterId);
+  return (
+    scenario?.initialRuntimeState?.selfEnergyByActor?.find(state => {
+      if (actorId && state.actorId === actorId) {
+        return true;
+      }
+      return (
+        Number.isFinite(characterId) &&
+        Number(state.characterId) === characterId
+      );
+    }) ?? null
+  );
 }
 
 function createRuntimeActorFromMechanismContext(delta, actorId) {

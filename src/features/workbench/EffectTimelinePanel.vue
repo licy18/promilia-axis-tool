@@ -253,6 +253,9 @@ function formatEventDetail(event) {
 }
 
 function formatEventOperation(type) {
+  if (type === 'EFFECT_INHERITED') {
+    return '继承';
+  }
   if (type === 'EFFECT_APPLIED') {
     return '施加';
   }

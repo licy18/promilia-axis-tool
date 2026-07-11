@@ -8,6 +8,7 @@ describe('WorkbenchCycleSectionPanel', () => {
       props: {
         projection: createProjection(),
         selectedSectionId: 'cycle-section-02',
+        canCreateInheritedScenario: true,
       },
     });
 
@@ -33,6 +34,14 @@ describe('WorkbenchCycleSectionPanel', () => {
       .get('[data-testid="workbench-cycle-section-locate-action"]')
       .trigger('click');
     expect(wrapper.emitted('locate-action')?.at(-1)?.[0]).toBe('action-2');
+
+    await wrapper.setProps({ selectedSectionId: 'cycle-section-02' });
+    await wrapper
+      .get('[data-testid="workbench-create-inherited-scenario"]')
+      .trigger('click');
+    expect(wrapper.emitted('create-inherited-scenario')?.at(-1)?.[0]).toBe(
+      'boundary-1'
+    );
   });
 });
 
@@ -61,6 +70,7 @@ function createProjection() {
         label: '循环 2',
         startMs: 1000,
         endMs: 3000,
+        startBoundaryId: 'boundary-1',
         durationMs: 2000,
         metrics: {
           enemyHpDelta: 600,

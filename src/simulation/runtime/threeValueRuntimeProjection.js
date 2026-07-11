@@ -928,7 +928,7 @@ function createThreeValueRuntimeSelfEnergyCurveByActor({
         resource: 'sp',
         baseline:
           energyBaselineByActor.get(actor.id) ??
-          createThreeValueRuntimeSelfEnergyBaseline(actor),
+          createThreeValueRuntimeSelfEnergyBaseline(actor, scenario),
         order: index,
         delta: 0,
         pointCount: 0,
@@ -953,7 +953,7 @@ function createThreeValueRuntimeSelfEnergyCurveByActor({
         resource: delta.valueUnit ?? 'sp',
         baseline:
           energyBaselineByActor.get(actorId) ??
-          createThreeValueRuntimeSelfEnergyBaseline(null),
+          createThreeValueRuntimeSelfEnergyBaseline({ id: actorId }, scenario),
         order: actorGroups.size,
         delta: 0,
         pointCount: 0,

@@ -9,6 +9,7 @@ export const EFFECT_RUNTIME_TIMELINE_CONTRACT_NAME =
   'AzPrEffectRuntimeTimeline';
 
 export const EFFECT_RUNTIME_EVENT_TYPES = Object.freeze({
+  INHERITED: 'EFFECT_INHERITED',
   APPLIED: 'EFFECT_APPLIED',
   REFRESHED: 'EFFECT_REFRESHED',
   REMOVED: 'EFFECT_REMOVED',
@@ -120,6 +121,26 @@ export function createEffectRuntimeTimeline({
     );
   };
 
+  for (const inheritedEffect of scenario?.initialRuntimeState?.activeEffects ??
+    []) {
+    if (!isInheritedEffectTargetAvailable(inheritedEffect, scenario)) {
+      continue;
+    }
+    const effect = createInheritedRuntimeEffectState(inheritedEffect);
+    activeByInstanceKey.set(effect.instanceKey, effect);
+    emitEvent(
+      createEffectRuntimeEvent({
+        type: EFFECT_RUNTIME_EVENT_TYPES.INHERITED,
+        command: null,
+        before: null,
+        after: effect,
+        scenario,
+        timeMs: 0,
+        status: 'effect-runtime-inherited',
+      })
+    );
+  }
+
   for (const command of input.commands) {
     expireRuntimeEffects({
       activeByInstanceKey,
@@ -162,6 +183,8 @@ export function createEffectRuntimeTimeline({
       blockedCommandCount: input.summary.blockedCommandCount ?? 0,
       commandCount: input.summary.commandCount,
       eventCount: events.length,
+      inheritedEventCount:
+        eventTypeCounts.get(EFFECT_RUNTIME_EVENT_TYPES.INHERITED) ?? 0,
       appliedEventCount:
         eventTypeCounts.get(EFFECT_RUNTIME_EVENT_TYPES.APPLIED) ?? 0,
       refreshedEventCount:
@@ -192,6 +215,48 @@ export function createEffectRuntimeTimeline({
       applied: true,
     },
     applied: true,
+  };
+}
+
+function isInheritedEffectTargetAvailable(effect, scenario) {
+  if (effect.targetKind === EFFECT_TARGET_KINDS.ENEMY) {
+    return effect.targetId === scenario?.enemy?.id;
+  }
+  if (effect.targetKind === EFFECT_TARGET_KINDS.ACTOR) {
+    return (scenario?.actors ?? []).some(actor => actor.id === effect.targetId);
+  }
+  return false;
+}
+
+function createInheritedRuntimeEffectState(effect) {
+  const remainingDurationMs = strictNumberOrNull(effect.remainingDurationMs);
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-runtime-active-effect',
+    instanceKey: effect.instanceKey,
+    effectId: effect.effectId,
+    effectName: effect.effectName,
+    sourceActionId: effect.sourceActionId ?? null,
+    sourceActorId: effect.sourceActorId ?? null,
+    sourceActorName: effect.sourceActorName ?? null,
+    targetKind: effect.targetKind ?? null,
+    targetId: effect.targetId,
+    targetName: effect.targetName ?? null,
+    appliedAtMs: 0,
+    updatedAtMs: 0,
+    durationMs: remainingDurationMs,
+    expiresAtMs: remainingDurationMs,
+    stacks: positiveIntegerOrDefault(effect.stacks, 1),
+    maxStacks: positiveIntegerOrDefault(effect.maxStacks, 1),
+    refreshCount: Math.max(0, Number(effect.refreshCount) || 0),
+    revision: positiveIntegerOrDefault(effect.revision, 1),
+    tags: uniqueValues(effect.tags),
+    modifiers: Array.isArray(effect.modifiers)
+      ? effect.modifiers.map(modifier => ({ ...modifier }))
+      : [],
+    sourceStatus: 'effect-inherited-from-cycle-boundary',
+    appliedToCalculators: false,
+    active: true,
   };
 }
 
@@ -491,7 +556,9 @@ function createEffectRuntimeEvent({
     effectName: state?.effectName ?? command?.effectName ?? null,
     instanceKey,
     commandId: command?.commandId ?? null,
-    operation: command?.operation ?? 'expire',
+    operation:
+      command?.operation ??
+      (type === EFFECT_RUNTIME_EVENT_TYPES.INHERITED ? 'inherit' : 'expire'),
     stackMode: command?.stackMode ?? null,
     stackBefore,
     stackAfter,

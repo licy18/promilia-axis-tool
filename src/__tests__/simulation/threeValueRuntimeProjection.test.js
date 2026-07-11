@@ -4,8 +4,65 @@ import {
   createThreeValueRuntimeProjection,
 } from '../../simulation/runtime/threeValueRuntimeProjection';
 import { createThreeValueRuntimeOutputConsumerView } from '../../simulation/runtime/threeValueRuntimeOutputConsumer';
+import { createThreeValueRuntimeStateSnapshots } from '../../simulation/runtime/threeValueRuntimeStateSnapshots';
 
 describe('three value runtime projection', () => {
+  it('uses inherited HP, toughness, and per-actor energy as runtime baselines', () => {
+    const snapshots = createThreeValueRuntimeStateSnapshots({
+      scenario: {
+        enemy: {
+          id: 'enemy-1',
+          stats: { maxHp: 1000, initialToughness: 100, maxToughness: 100 },
+          hpMultiplier: 1,
+        },
+        actors: [
+          {
+            id: 'actor-1',
+            characterId: 101,
+            name: '末音',
+            initialSp: 0,
+            stats: { maxSp: 100 },
+          },
+        ],
+        initialRuntimeState: {
+          enemy: {
+            hp: { currentValue: 720, maxValue: 1000 },
+            toughness: { currentValue: 55, maxValue: 100 },
+          },
+          selfEnergyByActor: [
+            {
+              actorId: 'actor-1',
+              characterId: 101,
+              currentValue: 38,
+              maxValue: 100,
+            },
+          ],
+        },
+      },
+    });
+
+    expect(snapshots.baseline.enemy).toMatchObject({
+      hp: {
+        initialValue: 720,
+        maxValue: 1000,
+        sourceStatus: 'baseline-inherited-from-cycle-boundary',
+      },
+      toughness: {
+        initialValue: 55,
+        maxValue: 100,
+        sourceStatus: 'baseline-inherited-from-cycle-boundary',
+      },
+    });
+    expect(snapshots.baseline.selfEnergyByActor[0]).toMatchObject({
+      actorId: 'actor-1',
+      baseline: {
+        initialValue: 38,
+        maxValue: 100,
+        sourceStatus: 'baseline-inherited-from-cycle-boundary',
+      },
+    });
+  });
+
   it('consumes only applied generation deltas and outputs curves, sim log, and summary', () => {
     const runtimeProjection = createThreeValueRuntimeProjection({
       scenario: {

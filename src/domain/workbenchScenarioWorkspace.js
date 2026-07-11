@@ -134,6 +134,43 @@ export function addWorkbenchScenario(workspace, currentDraft, emptyDraft) {
   );
 }
 
+export function addWorkbenchScenarioFromDraft(
+  workspace,
+  currentDraft,
+  nextDraft,
+  name
+) {
+  const synchronized = synchronizeActiveWorkbenchScenario(
+    workspace,
+    currentDraft
+  );
+  if (synchronized.scenarios.length >= MAX_WORKBENCH_SCENARIOS) {
+    return createWorkspaceMutationResult(
+      synchronized,
+      null,
+      false,
+      'scenario-limit-reached'
+    );
+  }
+  const usedIds = new Set(synchronized.scenarios.map(scenario => scenario.id));
+  const scenario = createWorkbenchScenarioRecord({
+    id: createNextWorkbenchScenarioId(usedIds),
+    name:
+      normalizeWorkbenchScenarioName(name) ??
+      `方案 ${synchronized.scenarios.length + 1}`,
+    draft: nextDraft,
+  });
+  return createWorkspaceMutationResult(
+    {
+      ...synchronized,
+      activeScenarioId: scenario.id,
+      scenarios: [...synchronized.scenarios, scenario],
+    },
+    scenario,
+    true
+  );
+}
+
 export function duplicateWorkbenchScenario(
   workspace,
   sourceScenarioId,

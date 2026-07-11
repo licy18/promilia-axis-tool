@@ -9850,7 +9850,6 @@ describe('Workbench view', () => {
       'data-active-workspace-scenario-id': 'scenario-0001',
     });
     await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
-
     await wrapper
       .find('[data-testid="workbench-scenario-rename"]')
       .trigger('click');
@@ -10015,6 +10014,118 @@ describe('Workbench view', () => {
     expect(workbench.attributes('data-cycle-boundary-count')).toBe('0');
     await wrapper.find('[data-testid="workbench-redo-edit"]').trigger('click');
     expect(workbench.attributes('data-cycle-boundary-count')).toBe('1');
+    wrapper.unmount();
+  });
+
+  it('creates a downstream scenario from a cycle boundary with inherited runtime state', async () => {
+    const wrapper = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: { template: '<a><slot /></a>' },
+        },
+      },
+    });
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    const originalSecondActionStartMs = Number(
+      wrapper
+        .get(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+        )
+        .attributes('data-start-ms')
+    );
+    const lane = wrapper.get('[data-testid="workbench-timeline-lane"]');
+    lane.element.getBoundingClientRect = () => ({
+      width: 600,
+      height: 240,
+      left: 0,
+      right: 600,
+      top: 0,
+      bottom: 240,
+      x: 0,
+      y: 0,
+      toJSON: () => {},
+    });
+    await lane.trigger('contextmenu', { clientX: 20, clientY: 80 });
+    document
+      .querySelector(
+        '[data-testid="workbench-action-context-add-cycle-boundary"]'
+      )
+      .click();
+    await vi.dynamicImportSettled();
+    await nextTick();
+
+    await wrapper
+      .get('[data-testid="workbench-create-inherited-scenario"]')
+      .trigger('click');
+    await vi.dynamicImportSettled();
+    await nextTick();
+    await nextTick();
+
+    const workbench = wrapper.get('main.workbench');
+    expect(workbench.attributes()).toMatchObject({
+      'data-workspace-scenario-count': '2',
+      'data-active-workspace-scenario-id': 'scenario-0002',
+      'data-cycle-boundary-count': '0',
+    });
+    expect(wrapper.findAll('.action-item')).toHaveLength(1);
+    const saved = JSON.parse(
+      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
+    );
+    expect(saved.actionDrafts).toEqual([
+      expect.objectContaining({
+        id: 'action-0002',
+        startMs: originalSecondActionStartMs - 1000,
+      }),
+    ]);
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+        )
+        .attributes('data-start-ms')
+    ).toBe(String(originalSecondActionStartMs - 1000));
+    expect(
+      wrapper.get('[data-testid="workbench-draft-status"]').text()
+    ).toContain('已从循环边界创建继承方案');
+
+    expect(saved).toMatchObject({
+      schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
+      initialRuntimeState: {
+        source: {
+          sourceScenarioId: 'scenario-0001',
+          boundaryId: 'cycle-boundary-0001',
+          boundaryTimeMs: 1000,
+        },
+        enemy: {
+          hp: { baselineStatus: 'baseline-inherited-from-cycle-boundary' },
+          toughness: {
+            baselineStatus: 'baseline-inherited-from-cycle-boundary',
+          },
+        },
+      },
+      scenarioWorkspace: {
+        activeScenarioId: 'scenario-0002',
+        scenarios: [
+          { id: 'scenario-0001' },
+          {
+            id: 'scenario-0002',
+            name: expect.stringContaining('继承'),
+            draft: {
+              actionDrafts: [
+                {
+                  id: 'action-0002',
+                  startMs: originalSecondActionStartMs - 1000,
+                },
+              ],
+              initialRuntimeState: {
+                source: { boundaryId: 'cycle-boundary-0001' },
+              },
+            },
+          },
+        ],
+      },
+    });
     wrapper.unmount();
   });
 });

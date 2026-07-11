@@ -20,7 +20,10 @@ export function projectEffectRuntimeIntervals({
       continue;
     }
 
-    if (event.type === EFFECT_RUNTIME_EVENT_TYPES.APPLIED) {
+    if (
+      event.type === EFFECT_RUNTIME_EVENT_TYPES.INHERITED ||
+      event.type === EFFECT_RUNTIME_EVENT_TYPES.APPLIED
+    ) {
       const existing = activeIntervals.get(instanceKey);
       if (existing) {
         intervals.push(

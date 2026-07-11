@@ -26270,3 +26270,34 @@ scenarioWorkspace
 根级 Workbench 草稿字段始终镜像 `activeScenarioId` 指向的方案，继续作为 `createWorkbenchProject()` 和全部 simulation 的唯一输入；inactive scenario 只保存在工作区合同中，不并行运行。`workbenchScenarioWorkspace.js` 负责稳定 ID、48 字符名称、深拷贝、14 方案上限、至少保留一个方案，以及新增、复制、重命名、切换和删除。
 
 切换前把当前活动草稿写回方案，切换后加载目标 draft 并清理跨方案临时焦点、动作剪贴板和撤销/重做栈。完整工作区随本地草稿、JSON、分享链接、PNG 元数据和预设交换；v1-v10 文件迁移为 `scenario-0001 / 方案 1`。工作区结构不进入 Project schema、compiler、generation 或 calculator，因此不改变三值结果。
+
+## 379. WorkbenchProjectFile v12 / InitialRuntimeState v1 / CycleBoundaryInheritanceProjection v1
+
+Workbench 草稿与项目文件从 v11 升级为 v12；根级活动草稿与每条 `scenarioWorkspace.scenarios[].draft` 新增：
+
+```text
+initialRuntimeState
+  schemaVersion = 1
+  sourceKind = azpr-initial-runtime-state
+  contractName = AzPrInitialRuntimeState
+  source
+    sourceScenarioId / sourceScenarioName
+    boundaryId / boundaryTimeMs
+  enemy
+    enemyId
+    hp.currentValue / maxValue
+    toughness.currentValue / maxValue
+  selfEnergyByActor[]
+    actorId / characterId / actorName
+    currentValue / maxValue
+  activeEffects[]
+    instanceKey / effectId / targetKind / targetId
+    remainingDurationMs / stacks / maxStacks
+    tags[] / modifiers[]
+```
+
+`Project` 和编译后的 `Scenario` 显式携带规范化初始状态。三值 runtime 仅在敌人实例、角色身份匹配时使用继承 HP、韧性和自身能量作为 baseline；效果 runtime 把合法目标的继承效果转换为 0 帧 `EFFECT_INHERITED`，按剩余时长继续刷新、移除或到期。`EffectIntervalProjection` 将继承事件视为新区间起点，calculator 仍不读取效果修正。
+
+`AzPrCycleBoundaryInheritanceProjection` 读取 `runtimeOutputs.stateSnapshots` 与 `effectTimeline.events`。只有 `timeMs < boundaryTimeMs` 的三值快照进入继承状态；恰好在边界发生的 apply/refresh 与动作留给新方案，恰好在边界到期或移除的效果不继承。边界后动作整体平移，只有两端均保留的关系进入新方案，后续边界同步平移，runtime sample capture 清空以避免绝对帧误用。
+
+v1-v11 项目继续由统一解析器接收并迁移为 `initialRuntimeState = null`。v12 状态随本地草稿、JSON、分享链接、PNG 元数据和预设交换；没有新增倍率、伤害/削韧/充能公式或自动循环外推。

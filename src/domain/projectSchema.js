@@ -1,5 +1,6 @@
 import { createSkillDamageModel } from './skillDamageSegments';
 import { createSkillLogicModel } from './skillLogicModel';
+import { normalizeInitialRuntimeState } from './initialRuntimeState';
 
 export const PROJECT_SCHEMA_VERSION = 1;
 export const PROJECT_TIME_UNIT = 'ms';
@@ -76,6 +77,7 @@ export function createProject({
   actions = [],
   actionRelations = [],
   cycleBoundaries = [],
+  initialRuntimeState = null,
   metadata = {},
 } = {}) {
   const now = new Date().toISOString();
@@ -102,6 +104,7 @@ export function createProject({
     cycleBoundaries: cycleBoundaries.map(boundary =>
       createCycleBoundary(boundary)
     ),
+    initialRuntimeState: normalizeInitialRuntimeState(initialRuntimeState),
     resources: [],
     buffs: [],
     loadouts: actors.map(actor => actor.loadout).filter(Boolean),

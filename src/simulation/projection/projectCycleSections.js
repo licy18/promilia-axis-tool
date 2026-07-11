@@ -126,7 +126,11 @@ function analyzeCycleSection({
       .map(action => action.id)
   );
   transactions.forEach(transaction => actionIds.add(transaction.actionId));
-  effectEvents.forEach(event => actionIds.add(event.actionId));
+  effectEvents.forEach(event => {
+    if (actionsById.has(event.actionId)) {
+      actionIds.add(event.actionId);
+    }
+  });
 
   const actionOrder = new Map(
     (scenario?.actions ?? []).map((action, actionIndex) => [

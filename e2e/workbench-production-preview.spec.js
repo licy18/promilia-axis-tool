@@ -94,7 +94,7 @@ test('[json-project-exchange] restores an exported production JSON project', asy
   expect(download.suggestedFilename()).toMatch(/promilia-workbench-.*\.json$/);
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 11,
+    schemaVersion: 12,
     game: 'azur-promilia',
     type: 'workbench-project',
     enemyConfig: { level: 91 },
@@ -222,7 +222,7 @@ test('[timeline-relations] preserves action relations through project exchange',
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(11);
+  expect(project.schemaVersion).toBe(12);
   expect(project.actionDrafts).toHaveLength(5);
   expect(project.actionRelations).toEqual([
     expect.objectContaining({
@@ -390,7 +390,7 @@ test('[cycle-sections] creates, reviews, and restores a production cycle boundar
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(11);
+  expect(project.schemaVersion).toBe(12);
   expect(project.cycleBoundaries).toEqual([
     expect.objectContaining({
       id: 'cycle-boundary-0001',
@@ -402,6 +402,103 @@ test('[cycle-sections] creates, reviews, and restores a production cycle boundar
     .getByTestId('workbench-import-project-file')
     .setInputFiles(downloadPath);
   await expect(workbench).toHaveAttribute('data-cycle-boundary-count', '1');
+});
+
+test('[cycle-inheritance] creates and restores a production scenario from a runtime boundary', async ({
+  page,
+}) => {
+  await page.goto('/#/workbench');
+  const workbench = page.locator('main.workbench');
+  await page.getByTestId('workbench-add-action').click();
+  const downstreamAction = page.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+  );
+  const originalStartMs = Number(
+    await downstreamAction.getAttribute('data-start-ms')
+  );
+  const lane = page.getByTestId('workbench-timeline-lane');
+  const laneBox = await lane.boundingBox();
+  expect(laneBox).toBeTruthy();
+  await lane.evaluate(
+    (element, position) =>
+      element.dispatchEvent(
+        new MouseEvent('contextmenu', {
+          bubbles: true,
+          cancelable: true,
+          clientX: position.clientX,
+          clientY: position.clientY,
+        })
+      ),
+    {
+      clientX: laneBox.x + laneBox.width / 30,
+      clientY: laneBox.y + 80,
+    }
+  );
+  await page.getByTestId('workbench-action-context-add-cycle-boundary').click();
+  const boundaryTimeMs = Number(
+    await page
+      .getByTestId('workbench-cycle-boundary')
+      .getAttribute('data-time-ms')
+  );
+  await page.getByTestId('workbench-create-inherited-scenario').click();
+
+  await expect(workbench).toHaveAttribute('data-workspace-scenario-count', '2');
+  await expect(workbench).toHaveAttribute(
+    'data-active-workspace-scenario-id',
+    'scenario-0002'
+  );
+  await expect(workbench).toHaveAttribute('data-cycle-boundary-count', '0');
+  await expect(page.locator('.action-item')).toHaveCount(1);
+  await expect(downstreamAction).toHaveAttribute(
+    'data-start-ms',
+    String(originalStartMs - boundaryTimeMs)
+  );
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const download = await downloadPromise;
+  const downloadPath = await download.path();
+  const project = JSON.parse(await readFile(downloadPath, 'utf8'));
+  expect(project).toMatchObject({
+    schemaVersion: 12,
+    initialRuntimeState: {
+      contractName: 'AzPrInitialRuntimeState',
+      source: {
+        sourceScenarioId: 'scenario-0001',
+        boundaryId: 'cycle-boundary-0001',
+        boundaryTimeMs,
+      },
+      enemy: {
+        hp: { currentValue: expect.any(Number) },
+        toughness: { currentValue: expect.any(Number) },
+      },
+    },
+    scenarioWorkspace: {
+      activeScenarioId: 'scenario-0002',
+      scenarios: [
+        { id: 'scenario-0001' },
+        {
+          id: 'scenario-0002',
+          draft: {
+            initialRuntimeState: {
+              source: { boundaryId: 'cycle-boundary-0001' },
+            },
+          },
+        },
+      ],
+    },
+  });
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(downloadPath);
+  await expect(workbench).toHaveAttribute('data-workspace-scenario-count', '2');
+  await expect(workbench).toHaveAttribute(
+    'data-active-workspace-scenario-id',
+    'scenario-0002'
+  );
+  await expect(page.locator('.action-item')).toHaveCount(1);
 });
 
 test('[workspace-scenarios] switches, compares, and restores independent production scenarios', async ({
@@ -422,7 +519,7 @@ test('[workspace-scenarios] switches, compares, and restores independent product
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(11);
+  expect(project.schemaVersion).toBe(12);
   expect(project.scenarioWorkspace).toMatchObject({
     activeScenarioId: 'scenario-0002',
     scenarios: [

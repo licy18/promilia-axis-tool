@@ -18,11 +18,13 @@ import {
   createDefaultWorkbenchScenarioWorkspace,
   normalizeWorkbenchScenarioWorkspace,
 } from './workbenchScenarioWorkspace';
+import { normalizeInitialRuntimeState } from './initialRuntimeState';
 
-export const WORKBENCH_DRAFT_SCHEMA_VERSION = 11;
+export const WORKBENCH_DRAFT_SCHEMA_VERSION = 12;
 export const WORKBENCH_DRAFT_STORAGE_KEY =
-  'promilia-axis-tool:workbench-draft:v11';
+  'promilia-axis-tool:workbench-draft:v12';
 export const LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS = Object.freeze([
+  'promilia-axis-tool:workbench-draft:v11',
   'promilia-axis-tool:workbench-draft:v10',
   'promilia-axis-tool:workbench-draft:v9',
   'promilia-axis-tool:workbench-draft:v8',
@@ -59,6 +61,7 @@ export function createDefaultWorkbenchDraftState() {
     actionDrafts: [createWorkbenchActionDraft()],
     actionRelations: [],
     cycleBoundaries: [],
+    initialRuntimeState: null,
     runtimeSampleCaptures: [],
     selectedActionId: DEFAULT_WORKBENCH_ACTION_ID,
   });
@@ -99,6 +102,7 @@ export function createWorkbenchScenarioDraftSnapshot({
   actionDrafts,
   actionRelations,
   cycleBoundaries,
+  initialRuntimeState,
   runtimeSampleCaptures,
   selectedActionId,
 } = {}) {
@@ -136,6 +140,7 @@ export function createWorkbenchScenarioDraftSnapshot({
       normalizedActions
     ),
     cycleBoundaries: normalizeWorkbenchCycleBoundaries(cycleBoundaries),
+    initialRuntimeState: normalizeInitialRuntimeState(initialRuntimeState),
     runtimeSampleCaptures: normalizeWorkbenchRuntimeSampleCaptures(
       runtimeSampleCaptures
     ),

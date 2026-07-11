@@ -443,6 +443,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     ),
     actionRelations,
     cycleBoundaries,
+    initialRuntimeState: actionPatch.initialRuntimeState,
     metadata: {
       fixture: false,
       fixturePurpose: 'stage-4-editable-workbench',

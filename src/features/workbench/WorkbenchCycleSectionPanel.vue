@@ -32,6 +32,22 @@
     </div>
 
     <template v-if="selectedSection">
+      <div v-if="selectedSection.startBoundaryId" class="section-command-row">
+        <button
+          class="inherit-button"
+          type="button"
+          :disabled="!canCreateInheritedScenario"
+          :data-boundary-id="selectedSection.startBoundaryId"
+          data-testid="workbench-create-inherited-scenario"
+          @click="
+            emit('create-inherited-scenario', selectedSection.startBoundaryId)
+          "
+        >
+          <CopyDocument />
+          <span>从此边界创建方案</span>
+        </button>
+      </div>
+
       <div class="metric-grid">
         <div data-metric-key="durationMs">
           <span>区段时长</span
@@ -153,14 +169,19 @@
 
 <script setup>
 import { computed } from 'vue';
-import { EditPen } from '@element-plus/icons-vue';
+import { CopyDocument, EditPen } from '@element-plus/icons-vue';
 import { formatFrameTime, msToFrame } from '../../domain/timebase';
 
 const props = defineProps({
   projection: { type: Object, required: true },
   selectedSectionId: { type: String, default: '' },
+  canCreateInheritedScenario: { type: Boolean, default: false },
 });
-const emit = defineEmits(['select-section', 'locate-action']);
+const emit = defineEmits([
+  'select-section',
+  'locate-action',
+  'create-inherited-scenario',
+]);
 const selectedSection = computed(
   () =>
     props.projection.sections.find(
@@ -249,6 +270,37 @@ function deltaClass(value) {
 .section-tab span {
   color: #8d9aa2;
   font-size: 10px;
+}
+.section-command-row {
+  display: flex;
+  justify-content: flex-end;
+  padding: 9px 15px;
+  border-bottom: 1px solid #2e373e;
+  background: #151a1f;
+}
+.inherit-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 30px;
+  padding: 0 11px;
+  border: 1px solid #4b8178;
+  border-radius: 4px;
+  background: #1f3c37;
+  color: #e9fffb;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.inherit-button svg {
+  width: 14px;
+  height: 14px;
+}
+.inherit-button:disabled {
+  border-color: #374148;
+  background: #20262b;
+  color: #707d84;
+  cursor: not-allowed;
 }
 .metric-grid {
   display: grid;

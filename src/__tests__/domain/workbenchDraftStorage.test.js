@@ -98,6 +98,7 @@ describe('workbench draft storage project files', () => {
             { id: 'cycle-boundary-0001', timeMs: 1000 },
             { id: 'cycle-boundary-0002', timeMs: 2200 },
           ],
+          initialRuntimeState: createInheritedState(),
           runtimeSampleCaptures: [
             {
               schemaVersion: 1,
@@ -175,6 +176,17 @@ describe('workbench draft storage project files', () => {
         { id: 'cycle-boundary-0001', timeMs: 1000 },
         { id: 'cycle-boundary-0002', timeMs: 2200 },
       ],
+      initialRuntimeState: {
+        contractName: 'AzPrInitialRuntimeState',
+        source: {
+          sourceScenarioId: 'scenario-source',
+          boundaryId: 'cycle-boundary-source',
+          boundaryTimeMs: 1000,
+        },
+        enemy: { hp: { currentValue: 850 } },
+        selfEnergyByActor: [{ actorId: 'actor-109001', currentValue: 35 }],
+        activeEffects: [{ effectId: 'focus', remainingDurationMs: 750 }],
+      },
       scenarioWorkspace: {
         schemaVersion: 1,
         activeScenarioId: 'scenario-0001',
@@ -189,6 +201,9 @@ describe('workbench draft storage project files', () => {
     });
 
     const imported = parseWorkbenchProjectFile(exported);
+    const shared = parseWorkbenchProjectShareCode(
+      createWorkbenchProjectShareCode(exported, '2026-07-10T04:00:00.000Z')
+    );
 
     expect(imported).toMatchObject({
       schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
@@ -221,6 +236,11 @@ describe('workbench draft storage project files', () => {
           captureSessionId: 'draft-runtime-capture-1',
         }),
       ],
+      initialRuntimeState: {
+        source: { sourceScenarioId: 'scenario-source' },
+        enemy: { toughness: { currentValue: 60 } },
+        activeEffects: [{ effectId: 'focus' }],
+      },
       actionRelations: [
         expect.objectContaining({
           id: 'relation-0001',
@@ -234,6 +254,7 @@ describe('workbench draft storage project files', () => {
         { id: 'cycle-boundary-0002', timeMs: 2200 },
       ],
     });
+    expect(shared.initialRuntimeState).toEqual(imported.initialRuntimeState);
     expect(imported.actionDrafts).toHaveLength(2);
   });
 
@@ -795,3 +816,36 @@ describe('workbench draft storage project files', () => {
     ).toBe('promilia-workbench-2026-07-10-2actions.promilia-workbench.json');
   });
 });
+
+function createInheritedState() {
+  return {
+    source: {
+      sourceScenarioId: 'scenario-source',
+      sourceScenarioName: '来源方案',
+      boundaryId: 'cycle-boundary-source',
+      boundaryTimeMs: 1000,
+    },
+    enemy: {
+      enemyId: 'enemy-300032',
+      hp: { currentValue: 850, maxValue: 1000 },
+      toughness: { currentValue: 60, maxValue: 100 },
+    },
+    selfEnergyByActor: [
+      {
+        actorId: 'actor-109001',
+        characterId: 109001,
+        currentValue: 35,
+        maxValue: 100,
+      },
+    ],
+    activeEffects: [
+      {
+        instanceKey: 'actor|actor-109001|focus',
+        effectId: 'focus',
+        targetKind: 'actor',
+        targetId: 'actor-109001',
+        remainingDurationMs: 750,
+      },
+    ],
+  };
+}
