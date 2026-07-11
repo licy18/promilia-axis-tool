@@ -1432,7 +1432,7 @@ describe('first vertical slice simulation', () => {
       status: 'standard-three-value-generation-layer-ready',
       contract: {
         name: 'Action -> Hit -> ThreeValueDelta',
-        version: 3,
+        version: 4,
         frameRate: 60,
         deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
         calculatorContract: {

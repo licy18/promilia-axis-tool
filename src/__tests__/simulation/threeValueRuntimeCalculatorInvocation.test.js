@@ -15,7 +15,7 @@ describe('three value runtime calculator invocation', () => {
     });
 
     expect(invocation).toMatchObject({
-      schemaVersion: 2,
+      schemaVersion: 3,
       contractName: 'ThreeValueRuntimeCalculatorInvocation',
       status: 'runtime-calculator-invocation-ready-passthrough',
       sourceDeltaId: 'hp-delta-001',
@@ -26,6 +26,9 @@ describe('three value runtime calculator invocation', () => {
         sourceKind: 'default-runtime-passthrough-adapter',
         custom: false,
         replaceable: true,
+        contractName: 'AzPrThreeValueMechanicsAdapter',
+        contractVersion: 1,
+        registrationKey: 'built-in',
       },
       output: {
         delta: 120,
@@ -39,6 +42,10 @@ describe('three value runtime calculator invocation', () => {
         outputFinite: true,
         mechanismContextPreserved: true,
         mechanismConfigurationPreserved: true,
+        generationRequestPreserved: true,
+        actionInputPresent: true,
+        hitInputPresent: true,
+        sourceValueFinite: true,
         stateBeforePresent: true,
         adapterOutputAccepted: true,
         valid: true,
@@ -53,6 +60,17 @@ describe('three value runtime calculator invocation', () => {
     expect(invocation.input.mechanismConfiguration).toBe(
       delta.mechanismContext.configuration
     );
+    expect(invocation.input).toMatchObject({
+      contractName: 'AzPrThreeValueMechanicsAdapter',
+      action: { actionId: 'action-001', actorId: 'actor-001' },
+      hit: { hitKey: 'action-001:hit:0', frameIndex: 12 },
+      sourceValue: {
+        value: 120,
+        hpDelta: 120,
+        toughnessDelta: null,
+        energyDelta: null,
+      },
+    });
 
     const runtimeDelta = createRuntimeAppliedDeltaFromInvocation(
       delta,
@@ -154,6 +172,16 @@ function createHpDelta() {
     energyDelta: null,
     mechanismContext: {
       contractName: 'AzPrThreeValueMechanismContext',
+      action: {
+        actionId: 'action-001',
+        actorId: 'actor-001',
+        targetId: 'enemy-001',
+      },
+      hit: {
+        hitKey: 'action-001:hit:0',
+        frameIndex: 12,
+        timeMs: 200,
+      },
       configuration: {
         status: 'mechanism-configuration-context-ready',
         ready: true,

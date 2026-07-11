@@ -1445,6 +1445,7 @@ export function projectSimulationResult({
   effectTimeline,
   actionRuleDiagnostics,
   actionExecutionPlan,
+  threeValueMechanicsAdapterRegistry = null,
 }) {
   const runtimeSampleContext = createRecoverSpRuntimeSampleContext(
     scenario.runtimeSampleCaptures
@@ -1479,6 +1480,7 @@ export function projectSimulationResult({
   const threeValueRuntimeProjection = createThreeValueRuntimeProjection({
     scenario,
     generationOutputs,
+    threeValueMechanicsAdapterRegistry,
     effectTimeline,
     actionExecutionPlan,
   });

@@ -16,6 +16,7 @@ const RUNTIME_STATE_METRIC_BY_TRACK_KEY = {
 export function createThreeValueRuntimeStateSnapshots({
   scenario = {},
   appliedDeltas = [],
+  threeValueMechanicsAdapterRegistry = null,
   runtimeCalculatorAdapters = {},
 } = {}) {
   const enemyBaseline = createThreeValueRuntimeEnemyBaseline(scenario);
@@ -64,6 +65,7 @@ export function createThreeValueRuntimeStateSnapshots({
       createThreeValueRuntimeCalculatorInvocation({
         delta,
         stateBefore: before,
+        threeValueMechanicsAdapterRegistry,
         runtimeCalculatorAdapters,
       });
     const runtimeDelta = createRuntimeAppliedDeltaFromInvocation(
@@ -190,6 +192,12 @@ export function createThreeValueRuntimeStateSnapshots({
         calculatorInvocationSummary.fallbackInvocationCount,
       runtimeCalculatorCustomAdapterInvocationCount:
         calculatorInvocationSummary.customAdapterInvocationCount,
+      mechanicsAdapterContractName:
+        calculatorInvocationSummary.mechanicsAdapterContractName,
+      mechanicsAdapterContractVersion:
+        calculatorInvocationSummary.mechanicsAdapterContractVersion,
+      mechanicsAdapterRegistrationKeys:
+        calculatorInvocationSummary.registrationKeys,
       runtimeCalculatorAdapterKeys: calculatorInvocationSummary.adapterKeys,
       runtimeCalculatorInvocationStatuses: calculatorInvocationSummary.statuses,
       runtimeMechanismConfigurationReadyInvocationCount:

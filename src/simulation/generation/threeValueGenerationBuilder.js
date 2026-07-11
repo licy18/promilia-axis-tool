@@ -4,6 +4,7 @@ import {
   THREE_VALUE_DELTA_FIELDS,
 } from './threeValueGenerationLayer';
 import { THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME } from '../mechanics/threeValueMechanismContext';
+import { THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME } from '../mechanics/threeValueMechanicsAdapter';
 
 const STANDARD_GENERATION_ENTRY_OUTPUT_NAMES = [
   'generationInput',
@@ -686,6 +687,20 @@ export function validateStandardGenerationEntryContract(generationEntry = {}) {
       ),
     }),
     createGenerationEntryValidationCheck({
+      key: 'delta-mechanics-adapter-request-contract',
+      valid: (deltas ?? []).every(
+        delta =>
+          delta?.mechanicsAdapterRequest?.contractName ===
+            THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME &&
+          delta.mechanicsAdapterRequest.action ===
+            delta.mechanismContext?.action &&
+          delta.mechanicsAdapterRequest.hit === delta.mechanismContext?.hit &&
+          delta.mechanicsAdapterRequest.mechanismConfiguration ===
+            delta.mechanismContext?.configuration &&
+          delta.mechanicsAdapterRequest.sourceValue?.value === delta.delta
+      ),
+    }),
+    createGenerationEntryValidationCheck({
       key: 'deltas-linked-to-actions',
       valid: (deltas ?? []).every(delta =>
         actionKeys.has(createGenerationEntryActionKey(delta))
@@ -1038,6 +1053,10 @@ function createThreeValueGenerationBundleSummary({
       standardContract.summary?.runtimeValueSourceSlotCount ?? 0,
     replaceableValueSourceSlotCount:
       standardContract.summary?.replaceableValueSourceSlotCount ?? 0,
+    mechanicsAdapterRequestCount:
+      standardContract.summary?.mechanicsAdapterRequestCount ?? 0,
+    appliedMechanicsAdapterRequestCount:
+      standardContract.summary?.appliedMechanicsAdapterRequestCount ?? 0,
     calculatorCount: standardContract.summary?.calculatorCount ?? 0,
     executionPlanContractName: actionExecutionPlan?.contractName ?? '',
     executionPlanActionCount:

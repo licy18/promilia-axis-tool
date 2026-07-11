@@ -6,6 +6,10 @@ import {
 } from '../../domain/workbenchProjectFactory';
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
+import {
+  createThreeValueMechanicsAdapterRegistry,
+  registerThreeValueMechanicsAdapter,
+} from '../../simulation/mechanics/threeValueMechanicsAdapter';
 
 describe('three value mechanism configuration', () => {
   it('compiles selected Workbench instances into explicit mechanism sources', () => {
@@ -165,7 +169,7 @@ describe('three value mechanism configuration', () => {
       },
     });
     expect(runtimeDelta.runtimeCalculatorInvocation).toMatchObject({
-      schemaVersion: 2,
+      schemaVersion: 3,
       input: {
         mechanismConfiguration: {
           sourceActor: {
@@ -189,6 +193,58 @@ describe('three value mechanism configuration', () => {
         actorInstanceBackedCount: 0,
         enemyInstanceBacked: false,
       },
+    });
+  });
+
+  it('accepts a registered mechanics adapter at the simulation boundary', () => {
+    const scenario = compileProject(
+      createConfiguredProject({ includeInstanceSelection: true }),
+      getWorkbenchGameData()
+    );
+    const baseline = simulateScenario(scenario);
+    const calls = [];
+    const registry = registerThreeValueMechanicsAdapter(
+      createThreeValueMechanicsAdapterRegistry(),
+      'default',
+      {
+        key: 'unit-test-simulation-mechanics-adapter',
+        calculate(input) {
+          calls.push(input);
+          return input.trackKey === 'enemyHpDamage'
+            ? input.sourceValue.value + 5
+            : input.sourceValue.value;
+        },
+      }
+    );
+    const adapted = simulateScenario(scenario, {
+      threeValueMechanicsAdapterRegistry: registry,
+    });
+    const hpInvocationCount = calls.filter(
+      input => input.trackKey === 'enemyHpDamage'
+    ).length;
+
+    expect(hpInvocationCount).toBeGreaterThan(0);
+    expect(adapted.threeValueRuntimeProjection.summary.enemyHpDelta).toBe(
+      baseline.threeValueRuntimeProjection.summary.enemyHpDelta +
+        hpInvocationCount * 5
+    );
+    expect(adapted.threeValueRuntimeProjection.summary).toMatchObject({
+      mechanicsAdapterContractName: 'AzPrThreeValueMechanicsAdapter',
+      mechanicsAdapterContractVersion: 1,
+      mechanicsAdapterRegistrationKeys: ['default'],
+      runtimeCalculatorCustomAdapterInvocationCount: calls.length,
+      mechanicsAdapterRequestCount: calls.length,
+      mechanicsAdapterRequestMissingCount: 0,
+    });
+    expect(calls[0]).toMatchObject({
+      action: { actionId: expect.any(String) },
+      hit: { hitKey: expect.any(String) },
+      mechanismConfiguration: {
+        status: 'mechanism-configuration-context-ready',
+        ready: true,
+      },
+      sourceValue: { value: expect.any(Number) },
+      stateBefore: expect.any(Object),
     });
   });
 });

@@ -26391,3 +26391,37 @@ Workbench Project metadata 新增规范化 `configurationSelection` 镜像，只
 `AzPrThreeValueMechanismContext` 从 v1 升级为 v2，新增 `configuration`、`configurationReady` 和 `configurationStatus`。`Action -> Hit -> ThreeValueDelta` 及 `ThreeValueDeltaCalculator` 从 v2 升级为 v3；delta/calculator summary 新增配置 readiness、状态、来源类型和实例 ID。`ThreeValueRuntimeCalculatorInvocation` 从 v1 升级为 v2，新增显式 `input.mechanismConfiguration` 及引用保持校验，runtime state/projection summary 同步汇总调用次数和实例 ID。
 
 这些字段只声明来源身份和当前应用策略。已有 HP、韧性、能量 delta、baseline、曲线和日志保持不变；loadout 效果、敌人等级公式和元素防御公式仍标记为 unconfirmed/unapplied。该合同不写回 WorkbenchProjectFile v13，也不新增项目迁移。
+
+## 384. ThreeValueMechanicsAdapter v1 / Action-Hit-Delta v4 / RuntimeInvocation v3
+
+阶段 8-L 新增统一三轨机制调用合同：
+
+```text
+mechanicsAdapterRequest
+  schemaVersion = 1
+  contractName = AzPrThreeValueMechanicsAdapter
+  contractVersion = 1
+  trackKey / outputField
+  action
+  hit
+  mechanismConfiguration
+  sourceValue
+    value
+    hpDelta / toughnessDelta / energyDelta
+    sourceKind / sourceIds / confidence / status
+  stateBefore = null
+  bindingStatus = generation-inputs-bound-runtime-state-pending
+
+runtimeCalculatorInvocation.input
+  contractName = AzPrThreeValueMechanicsAdapter
+  action / hit
+  mechanismConfiguration
+  sourceValue
+  stateBefore
+  generationRequest
+  mechanismContext / sourceDelta
+```
+
+`Action -> Hit -> ThreeValueDelta` 从 v3 升级为 v4，并把 `mechanicsAdapterRequest` 加入必需 delta 字段；generation entry validation 校验 action、hit、配置引用和 source value 与原 delta 一致。`ThreeValueRuntimeCalculatorInvocation` 从 v2 升级为 v3，统一由 mechanics registry 解析三轨或 `default` 注册项，再注入 runtime snapshot 的前状态。
+
+`createThreeValueMechanicsAdapterRegistry()` 和 `registerThreeValueMechanicsAdapter()` 返回无 UI 注册表；`simulateScenario(scenario, { threeValueMechanicsAdapterRegistry })` 是顶层注入边界。旧 `runtimeCalculatorAdapters` 参数继续作为兼容来源。默认 adapter、异常回退、HP/韧性/能量 delta、曲线、日志和 summary 数值保持不变；本阶段没有新增真实公式或启用未确认培养效果。

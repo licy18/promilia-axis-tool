@@ -202,6 +202,18 @@ export function createThreeValueRuntimeOutputConsumerContract({
           summary.runtimeCalculatorInvocationCount ??
           contractSummary.runtimeCalculatorInvocationCount
       ),
+      mechanicsAdapterContractName:
+        stateSnapshots?.summary?.mechanicsAdapterContractName ??
+        summary.mechanicsAdapterContractName ??
+        '',
+      mechanicsAdapterContractVersion: numberOrZero(
+        stateSnapshots?.summary?.mechanicsAdapterContractVersion ??
+          summary.mechanicsAdapterContractVersion
+      ),
+      mechanicsAdapterRegistrationKeys:
+        stateSnapshots?.summary?.mechanicsAdapterRegistrationKeys ??
+        summary.mechanicsAdapterRegistrationKeys ??
+        [],
       runtimeCalculatorReplacedInvocationCount: numberOrZero(
         stateSnapshots?.summary?.runtimeCalculatorReplacedInvocationCount ??
           summary.runtimeCalculatorReplacedInvocationCount ??
@@ -211,6 +223,14 @@ export function createThreeValueRuntimeOutputConsumerContract({
         stateSnapshots?.summary?.runtimeCalculatorFallbackInvocationCount ??
           summary.runtimeCalculatorFallbackInvocationCount ??
           contractSummary.runtimeCalculatorFallbackInvocationCount
+      ),
+      mechanicsAdapterRequestCount: numberOrZero(
+        summary.mechanicsAdapterRequestCount ??
+          contractSummary.mechanicsAdapterRequestCount
+      ),
+      mechanicsAdapterRequestMissingCount: numberOrZero(
+        summary.mechanicsAdapterRequestMissingCount ??
+          contractSummary.mechanicsAdapterRequestMissingCount
       ),
       enemyStatePointCount: numberOrZero(
         stateCurves?.enemy?.pointCount ??

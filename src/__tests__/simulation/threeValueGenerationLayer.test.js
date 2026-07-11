@@ -233,7 +233,7 @@ describe('three value generation layer', () => {
     expect(layer.sourceKind).toBe('azpr-standard-three-value-generation-layer');
     expect(layer.contract).toMatchObject({
       name: 'Action -> Hit -> ThreeValueDelta',
-      version: 3,
+      version: 4,
       frameRate: 60,
       deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
       calculatorContract: {
@@ -245,6 +245,18 @@ describe('three value generation layer', () => {
       mechanismContextContract: {
         name: 'AzPrThreeValueMechanismContext',
         version: 2,
+      },
+      mechanicsAdapterContract: {
+        name: 'AzPrThreeValueMechanicsAdapter',
+        version: 1,
+        requiredInputs: [
+          'action',
+          'hit',
+          'mechanismConfiguration',
+          'sourceValue',
+          'stateBefore',
+        ],
+        runtimeBoundInputs: ['stateBefore'],
       },
     });
     expect(layer.summary).toMatchObject({
@@ -259,6 +271,8 @@ describe('three value generation layer', () => {
       mechanismContextMissingDeltaCount: 1,
       mechanismConfigurationReadyDeltaCount: 0,
       mechanismConfigurationMissingDeltaCount: 1,
+      mechanicsAdapterRequestCount: 1,
+      appliedMechanicsAdapterRequestCount: 1,
     });
     expect(layer.standardContract).toMatchObject({
       sourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
@@ -370,6 +384,20 @@ describe('three value generation layer', () => {
           timing: expect.objectContaining({
             accuracy: 'authoritative',
           }),
+        }),
+        mechanicsAdapterRequest: expect.objectContaining({
+          contractName: 'AzPrThreeValueMechanicsAdapter',
+          contractVersion: 1,
+          trackKey: 'enemyHpDamage',
+          outputField: 'hpDelta',
+          sourceValue: expect.objectContaining({
+            value: 1200,
+            hpDelta: 1200,
+            toughnessDelta: null,
+            energyDelta: null,
+          }),
+          stateBefore: null,
+          bindingStatus: 'generation-inputs-bound-runtime-state-pending',
         }),
         calculator: expect.objectContaining({
           version: 3,

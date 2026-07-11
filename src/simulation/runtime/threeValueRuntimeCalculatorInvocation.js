@@ -1,61 +1,27 @@
+import {
+  THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME,
+  THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION,
+  createThreeValueMechanicsAdapterInput,
+  resolveThreeValueMechanicsAdapter,
+} from '../mechanics/threeValueMechanicsAdapter';
+
 export const THREE_VALUE_RUNTIME_CALCULATOR_INVOCATION_CONTRACT_NAME =
   'ThreeValueRuntimeCalculatorInvocation';
-
-const DELTA_FIELD_BY_TRACK_KEY = {
-  enemyHpDamage: 'hpDelta',
-  enemyToughnessDamage: 'toughnessDelta',
-  selfEnergyChange: 'energyDelta',
-};
-
-const DEFAULT_RUNTIME_CALCULATOR_ADAPTERS = Object.fromEntries(
-  Object.entries(DELTA_FIELD_BY_TRACK_KEY).map(([trackKey, outputField]) => [
-    trackKey,
-    {
-      key: `azpr-${trackKey}-runtime-passthrough-adapter`,
-      version: 1,
-      outputField,
-      sourceKind: 'default-runtime-passthrough-adapter',
-      custom: false,
-      calculate(input) {
-        return {
-          delta: input.generatedDelta.delta,
-          status: 'runtime-calculator-passthrough-generation-result',
-          sourceKind: 'generation-calculator-result',
-        };
-      },
-    },
-  ])
-);
 
 export function createThreeValueRuntimeCalculatorInvocation({
   delta = {},
   stateBefore = null,
+  threeValueMechanicsAdapterRegistry = null,
   runtimeCalculatorAdapters = {},
 } = {}) {
-  const outputField = DELTA_FIELD_BY_TRACK_KEY[delta.trackKey] ?? 'delta';
-  const resolvedAdapter = resolveRuntimeCalculatorAdapter({
+  const input = createThreeValueMechanicsAdapterInput({ delta, stateBefore });
+  const resolved = resolveThreeValueMechanicsAdapter({
+    registry: threeValueMechanicsAdapterRegistry,
     trackKey: delta.trackKey,
-    outputField,
-    runtimeCalculatorAdapters,
+    legacyAdapters: runtimeCalculatorAdapters,
   });
-  const input = {
-    sourceDeltaId: delta.id ?? delta.sourceDeltaId ?? null,
-    trackKey: delta.trackKey ?? null,
-    outputField,
-    generatedDelta: {
-      delta: normalizeRuntimeCalculatorNumber(delta.delta) ?? 0,
-      hpDelta: normalizeNullableRuntimeCalculatorNumber(delta.hpDelta),
-      toughnessDelta: normalizeNullableRuntimeCalculatorNumber(
-        delta.toughnessDelta
-      ),
-      energyDelta: normalizeNullableRuntimeCalculatorNumber(delta.energyDelta),
-    },
-    mechanismContext: delta.mechanismContext ?? null,
-    mechanismConfiguration: delta.mechanismContext?.configuration ?? null,
-    stateBefore,
-    sourceCalculatorResult: delta.calculator ?? null,
-    sourceDelta: delta,
-  };
+  const resolvedAdapter = resolved.adapter;
+  const outputField = input.outputField;
   const calculation = invokeRuntimeCalculatorAdapter(resolvedAdapter, input);
   const output = createRuntimeCalculatorOutput({
     delta,
@@ -72,14 +38,21 @@ export function createThreeValueRuntimeCalculatorInvocation({
       input.mechanismContext === (delta.mechanismContext ?? null),
     mechanismConfigurationPreserved:
       input.mechanismConfiguration ===
-      (delta.mechanismContext?.configuration ?? null),
+      (delta.mechanicsAdapterRequest?.mechanismConfiguration ??
+        delta.mechanismContext?.configuration ??
+        null),
+    generationRequestPreserved:
+      input.generationRequest === (delta.mechanicsAdapterRequest ?? null),
+    actionInputPresent: Boolean(input.action),
+    hitInputPresent: Boolean(input.hit),
+    sourceValueFinite: Number.isFinite(input.sourceValue?.value),
     stateBeforePresent: Boolean(stateBefore),
     adapterOutputAccepted: !fallbackReason,
   };
   const valid = Object.values(validation).every(Boolean);
 
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     sourceKind: 'azpr-three-value-runtime-calculator-invocation',
     contractName: THREE_VALUE_RUNTIME_CALCULATOR_INVOCATION_CONTRACT_NAME,
     status: fallbackReason
@@ -96,6 +69,9 @@ export function createThreeValueRuntimeCalculatorInvocation({
       sourceKind: resolvedAdapter.sourceKind,
       custom: resolvedAdapter.custom,
       replaceable: true,
+      contractName: THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME,
+      contractVersion: THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION,
+      registrationKey: resolved.registrationKey,
     },
     input,
     output,
@@ -144,6 +120,12 @@ export function summarizeThreeValueRuntimeCalculatorInvocations(
     customAdapterInvocationCount: invocations.filter(
       invocation => invocation.adapter.custom
     ).length,
+    mechanicsAdapterContractName: THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME,
+    mechanicsAdapterContractVersion:
+      THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION,
+    registrationKeys: uniqueStrings(
+      invocations.map(invocation => invocation.adapter.registrationKey)
+    ),
     adapterKeys: uniqueStrings(
       invocations.map(invocation => invocation.adapter.key)
     ),
@@ -169,52 +151,6 @@ export function summarizeThreeValueRuntimeCalculatorInvocations(
     statuses: uniqueStrings(invocations.map(invocation => invocation.status)),
     applied: true,
   };
-}
-
-function resolveRuntimeCalculatorAdapter({
-  trackKey,
-  outputField,
-  runtimeCalculatorAdapters,
-}) {
-  const customAdapter = runtimeCalculatorAdapters?.[trackKey];
-  if (typeof customAdapter === 'function') {
-    return {
-      key: `custom-${trackKey ?? 'unknown'}-runtime-calculator-adapter`,
-      version: 1,
-      outputField,
-      sourceKind: 'custom-runtime-calculator-adapter',
-      calculate: customAdapter,
-      custom: true,
-    };
-  }
-  if (customAdapter?.calculate instanceof Function) {
-    return {
-      key:
-        customAdapter.key ??
-        `custom-${trackKey ?? 'unknown'}-runtime-calculator-adapter`,
-      version: normalizeRuntimeCalculatorNumber(customAdapter.version) ?? 1,
-      outputField,
-      sourceKind:
-        customAdapter.sourceKind ?? 'custom-runtime-calculator-adapter',
-      calculate: customAdapter.calculate,
-      custom: true,
-    };
-  }
-  return (
-    DEFAULT_RUNTIME_CALCULATOR_ADAPTERS[trackKey] ?? {
-      key: `azpr-${trackKey ?? 'unknown'}-runtime-passthrough-adapter`,
-      version: 1,
-      outputField,
-      sourceKind: 'fallback-runtime-passthrough-adapter',
-      custom: false,
-      calculate(input) {
-        return {
-          delta: input.generatedDelta.delta,
-          status: 'runtime-calculator-passthrough-generation-result',
-        };
-      },
-    }
-  );
 }
 
 function invokeRuntimeCalculatorAdapter(adapter, input) {
@@ -270,13 +206,6 @@ function createRuntimeCalculatorOutput({
     output[outputField] = outputDelta;
   }
   return output;
-}
-
-function normalizeNullableRuntimeCalculatorNumber(value) {
-  if (value == null || value === '') {
-    return null;
-  }
-  return normalizeRuntimeCalculatorNumber(value);
 }
 
 function normalizeRuntimeCalculatorNumber(value) {

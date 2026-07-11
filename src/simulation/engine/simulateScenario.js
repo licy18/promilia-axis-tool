@@ -8,7 +8,10 @@ import {
   createActionExecutionPlanIndex,
 } from './actionExecutionPlan';
 
-export function simulateScenario(scenario) {
+export function simulateScenario(
+  scenario,
+  { threeValueMechanicsAdapterRegistry = null } = {}
+) {
   const eventLog = [
     {
       type: 'SCENARIO_START',
@@ -139,6 +142,7 @@ export function simulateScenario(scenario) {
     effectTimeline,
     actionRuleDiagnostics,
     actionExecutionPlan,
+    threeValueMechanicsAdapterRegistry,
   });
 }
 

@@ -45,7 +45,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 - 真实 AzPr 生成数据、版本化项目模型和无 UI 模拟运行时。
 - 60fps 多角色动作轴、动作属性编辑、批次操作、撤销重做和草稿恢复。
 - 队伍、敌人、装备、奇波、灵子和初始资源配置，以及按方案绑定的可复用配置实例。
-- `Action -> Hit -> ThreeValueDelta` 生成合同，以及 HP、韧性、每角色能量曲线、日志、详情和贡献分析。
+- `Action -> Hit -> ThreeValueDelta` 生成合同、统一可注册 mechanics adapter，以及 HP、韧性、每角色能量曲线、日志、详情和贡献分析。
 - 冷却/执行计划、效果命令和运行时复盘联动。
 - JSON、PNG 元数据、分享链接、runtime capture 和本地预设轴库。
 - 受控 runtime capture manifest、规范化、production audit 和显式 PID host。
@@ -54,7 +54,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；70 个测试文件、397 条测试通过。
+- `npm run test -- --run`：通过；71 个测试文件、399 条测试通过。
 - `npm run test:e2e:workbench-flow`：通过；39 条 Workbench 浏览器主流程通过。
 - `npm run test:e2e:production-preview`：通过；15 项真实 `dist` 验收全部通过，报告结论为 `trial-ready`。
 
@@ -1005,6 +1005,16 @@ Workbench 现在可以把角色等级、初始能量、奇波、装备、灵子�
 为守住既有发布预算，排轴规则和状态效果面板改为按需加载；面板位置、操作和项目合同不变。阶段验收：70 个测试文件、397 条单元/组件测试，39 条 Workbench 主流程和 15 项 production preview 全部通过，报告结论为 `trial-ready`。生产引用与数据投影审计无异常；Workbench 主块为 368,272B gzip，全部 JavaScript 为 732,808B gzip，仍在 370,000B/740,000B 预算内。180 动作编译 p95 为 9.579ms、完整 simulation p95 为 22.027ms；120 动作浏览器首屏就绪为 1874ms。
 
 下一阶段目标：阶段 8-L / P3 三轨 mechanics adapter 统一调用。把 HP、韧性和每角色能量三类现有 applied delta 的生成入口收束为同一可注册 adapter 合同，让 adapter 显式消费 action、hit、mechanism configuration、来源值和状态前值，并保持当前输出完全一致；为后续替换真实 AzPr 机制提供单一调用点。该阶段不新增真实倍率、不让未确认培养项参与计算，也不增加 Workbench 提示控件。
+
+### 阶段 8-L P3 三轨 mechanics adapter 统一调用（2026-07-11）
+
+新增 `AzPrThreeValueMechanicsAdapter v1` 与纯注册表 API。`Action -> Hit -> ThreeValueDelta` 升级为 v4：每条 delta 在 generation 绑定 action、hit、mechanism configuration 和完整 source value；runtime state snapshot 再绑定该时点的 `stateBefore`，HP、韧性和每角色能量统一经过同一 invocation 合同。注册表既支持按轨替换，也支持一个 `default` adapter 覆盖三轨；`simulateScenario()` 已提供顶层无 UI 注入入口，旧 `runtimeCalculatorAdapters` 保持兼容。
+
+`ThreeValueRuntimeCalculatorInvocation` 升级为 v3，记录注册键、合同版本、显式输入和引用校验。默认 adapter 仍原样透传 generation delta，自定义 adapter 的无效结果或异常仍安全回退；对照和引擎边界测试证明默认 HP、韧性、角色能量、曲线与日志结果不变。未确认的装备、奇波、灵子、敌人等级与元素防御效果没有进入 calculator，Workbench 也没有新增提示或控件。
+
+阶段验收：71 个测试文件、399 条单元/组件测试，39 条 Workbench 主流程和 15 项 production preview 全部通过，报告结论为 `trial-ready`。生产引用与数据投影审计无异常；Workbench 主块为 369,888B gzip，全部 JavaScript 为 734,423B gzip，仍在 370,000B/740,000B 预算内。180 动作编译 p95 为 10.652ms、完整 simulation p95 为 27.816ms；120 动作浏览器首屏就绪为 1721ms。
+
+下一阶段目标：阶段 8-M / P3 机制 operands 与内置 adapter 迁移。为三轨 source value 增加可计算的结构化 operands，并把当前已经应用的 HP raw preview、显式角色能量变化和已验证 runtime sample 取值迁入内置 mechanics adapter，实现从来源操作数到 delta 的单一计算边界，同时保持现有结果完全一致。韧性在没有已验证来源时继续保持当前结果；该阶段不新增或猜测真实倍率，不启用未确认培养效果，也不增加碎片 UI。
 
 ## 10. 文档维护规则
 

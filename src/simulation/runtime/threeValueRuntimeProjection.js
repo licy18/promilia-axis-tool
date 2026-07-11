@@ -22,6 +22,7 @@ export function createThreeValueRuntimeProjection({
   runtimeInputSource,
   actionHitThreeValueDeltaGeneration,
   threeValueGenerationLayer,
+  threeValueMechanicsAdapterRegistry,
   runtimeCalculatorAdapters,
   effectTimeline,
   actionExecutionPlan,
@@ -36,6 +37,7 @@ export function createThreeValueRuntimeProjection({
   const runtimeStateSnapshots = createThreeValueRuntimeStateSnapshots({
     scenario,
     appliedDeltas: generationAppliedDeltas,
+    threeValueMechanicsAdapterRegistry,
     runtimeCalculatorAdapters,
   });
   const appliedDeltas = runtimeStateSnapshots.runtimeDeltas;
@@ -573,6 +575,12 @@ function createThreeValueRuntimeOutputContract({
         summary.executionPlanUnresolvedExecutedActionCount,
       runtimeCalculatorInvocationCount:
         stateCurves.snapshots.summary.runtimeCalculatorInvocationCount,
+      mechanicsAdapterContractName:
+        stateCurves.snapshots.summary.mechanicsAdapterContractName,
+      mechanicsAdapterContractVersion:
+        stateCurves.snapshots.summary.mechanicsAdapterContractVersion,
+      mechanicsAdapterRegistrationKeys:
+        stateCurves.snapshots.summary.mechanicsAdapterRegistrationKeys,
       runtimeCalculatorReplacedInvocationCount:
         stateCurves.snapshots.summary.runtimeCalculatorReplacedInvocationCount,
       runtimeCalculatorFallbackInvocationCount:
@@ -806,6 +814,8 @@ function createRuntimeSummaryOutputContract(summary) {
       'runtimeCalculatorInvocationCount',
       'runtimeCalculatorReplacedInvocationCount',
       'runtimeCalculatorFallbackInvocationCount',
+      'mechanicsAdapterRequestCount',
+      'mechanicsAdapterRequestMissingCount',
       'calculatorCount',
       'valueSourceSlotCount',
       'runtimeValueSourceSlotCount',
@@ -831,6 +841,9 @@ function createRuntimeSummaryOutputContract(summary) {
       'runtimeInputGenerationOutputBoundaryContractValidationPath',
       'runtimeInputGenerationValueSourceSlotsPath',
       'runtimeInputGenerationValueSourceSlotsSourceTier',
+      'mechanicsAdapterContractName',
+      'mechanicsAdapterContractVersion',
+      'mechanicsAdapterRegistrationKeys',
     ],
     appliedOnly: summary.appliedOnly,
     applied: true,
@@ -1230,6 +1243,10 @@ function summarizeThreeValueRuntimeProjection({
     ),
     ...generationReadSummary,
     appliedDeltaCount: appliedDeltas.length,
+    mechanicsAdapterRequestCount:
+      runtimeInput.summary.mechanicsAdapterRequestCount ?? 0,
+    mechanicsAdapterRequestMissingCount:
+      runtimeInput.summary.mechanicsAdapterRequestMissingCount ?? 0,
     enemyHpDelta: sumThreeValueRuntimeDeltas(appliedDeltas, 'hpDelta'),
     enemyToughnessDelta: sumThreeValueRuntimeDeltas(
       appliedDeltas,
@@ -1287,6 +1304,12 @@ function summarizeThreeValueRuntimeProjection({
     runtimeCalculatorCustomAdapterInvocationCount:
       runtimeStateSnapshots.summary
         .runtimeCalculatorCustomAdapterInvocationCount,
+    mechanicsAdapterContractName:
+      runtimeStateSnapshots.summary.mechanicsAdapterContractName,
+    mechanicsAdapterContractVersion:
+      runtimeStateSnapshots.summary.mechanicsAdapterContractVersion,
+    mechanicsAdapterRegistrationKeys:
+      runtimeStateSnapshots.summary.mechanicsAdapterRegistrationKeys,
     runtimeCalculatorAdapterKeys:
       runtimeStateSnapshots.summary.runtimeCalculatorAdapterKeys,
     runtimeCalculatorInvocationStatuses:

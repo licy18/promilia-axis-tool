@@ -2,6 +2,7 @@ import {
   ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
   compareThreeValueGenerationDeltas,
 } from '../generation/threeValueGenerationLayer';
+import { THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME } from '../mechanics/threeValueMechanicsAdapter';
 
 export const ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE =
   'threeValueRuntimeInput.appliedDeltas';
@@ -1005,6 +1006,16 @@ function summarizeActionHitThreeValueRuntimeInput({
         delta => delta.calculator?.configurationInstanceIds ?? []
       )
     ),
+    mechanicsAdapterRequestCount: appliedDeltas.filter(
+      delta =>
+        delta.mechanicsAdapterRequest?.contractName ===
+        THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME
+    ).length,
+    mechanicsAdapterRequestMissingCount: appliedDeltas.filter(
+      delta =>
+        delta.mechanicsAdapterRequest?.contractName !==
+        THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME
+    ).length,
     ignoredLayerCounts,
     appliedOnly: true,
     applied: true,
