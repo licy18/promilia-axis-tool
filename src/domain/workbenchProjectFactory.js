@@ -28,6 +28,7 @@ import {
   getSkillActionVariants,
   getSkillDamageSegments,
 } from './skillDamageSegments';
+import { createWorkbenchConfigurationSourceContract } from './workbenchConfigurationSourceContract';
 
 export { getSkillActionCatalog } from './skillActionCatalog';
 export {
@@ -387,6 +388,21 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     actionPatch.cycleBoundaries,
     durationMs
   );
+  const configurationSelection = createProjectConfigurationSelection(
+    actionPatch.configurationSelection,
+    actorConfigs,
+    normalized.enemyId
+  );
+  const configurationSourceContract =
+    createWorkbenchConfigurationSourceContract({
+      configurationLibrary: normalizeProjectConfigurationLibraryForSource(
+        actionPatch.configurationLibrary
+      ),
+      configurationSelection,
+      actorConfigs,
+      enemyConfig,
+      enemyId: normalized.enemyId,
+    });
 
   if (
     !character ||
@@ -465,17 +481,32 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
       teamSlots,
       enemyConfig,
       actorConfigs,
-      configurationSelection: createProjectConfigurationSelection(
-        actionPatch.configurationSelection,
-        actorConfigs,
-        enemy.id
-      ),
+      configurationSelection,
+      configurationSourceContract,
       runtimeSampleCaptures: normalizeWorkbenchRuntimeSampleCaptures(
         actionPatch.runtimeSampleCaptures
       ),
       loadoutCalculationStatus: 'project-config-only',
     },
   });
+}
+
+function normalizeProjectConfigurationLibraryForSource(library = {}) {
+  return {
+    actorInstances: (library?.actorInstances ?? []).map(instance => ({
+      ...instance,
+      actorConfig: normalizeWorkbenchActorConfig(
+        instance?.actorConfig ?? instance?.config,
+        instance?.characterId
+      ),
+    })),
+    enemyInstances: (library?.enemyInstances ?? []).map(instance => ({
+      ...instance,
+      enemyConfig: normalizeWorkbenchEnemyConfig(
+        instance?.enemyConfig ?? instance?.config
+      ),
+    })),
+  };
 }
 
 function createProjectConfigurationSelection(selection, actorConfigs, enemyId) {

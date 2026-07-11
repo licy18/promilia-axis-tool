@@ -19,8 +19,8 @@ describe('three value mechanism configuration', () => {
     );
 
     expect(scenario.mechanismConfiguration).toMatchObject({
-      schemaVersion: 1,
-      sourceKind: 'workbench-v13-configuration-instances',
+      schemaVersion: 2,
+      sourceKind: 'workbench-v13-configuration-instance-sources',
       contractName: 'AzPrThreeValueMechanismConfiguration',
       status: 'mechanism-configuration-ready',
       ready: true,
@@ -29,7 +29,9 @@ describe('three value mechanism configuration', () => {
           actorId: 'actor-109001',
           characterId: 109001,
           configurationInstanceId: 'actor-config-burst',
-          sourceStatus: 'workbench-actor-configuration-instance-resolved',
+          sourceStatus: 'configuration-instance-source-verified',
+          selectionVerified: true,
+          sourceFingerprint: expect.stringMatching(/^cfg-v1-/),
           initialSp: 0.5,
           loadout: expect.objectContaining({
             kiboId: 500001,
@@ -84,12 +86,44 @@ describe('three value mechanism configuration', () => {
         unconfirmedCultivationEffectsApplied: false,
         calculatorReadsConfigurationLibrary: false,
       },
+      sourceContract: {
+        schemaVersion: 1,
+        contractName: 'AzPrWorkbenchConfigurationSource',
+        status: 'configuration-source-contract-ready',
+        ready: true,
+        replayIdentity: expect.stringMatching(/^azpr-config-v1-/),
+        selectionIntegrity: {
+          ready: true,
+          requestedInstanceCount: 3,
+          verifiedInstanceCount: 3,
+          issueCount: 0,
+        },
+      },
+      runtimeBinding: {
+        schemaVersion: 1,
+        contractName: 'AzPrThreeValueConfigurationRuntimeBinding',
+        status: 'configuration-runtime-binding-ready',
+        ready: true,
+        configurationSource: {
+          contractName: 'AzPrWorkbenchConfigurationSource',
+          replayIdentity: expect.stringMatching(/^azpr-config-v1-/),
+          replaceable: true,
+        },
+        mechanicsProfile: {
+          profileId: 'azpr-three-value-preview-v1',
+          profileVersion: 1,
+          replaceable: true,
+        },
+      },
       summary: {
         actorConfigurationCount: 2,
         actorInstanceBackedCount: 2,
         enemyInstanceBacked: true,
         unappliedLoadoutSelectionCount: 3,
         elementDefenseOverrideCount: 1,
+        sourceContractReady: true,
+        selectionIntegrityReady: true,
+        configurationReplayIdentity: expect.stringMatching(/^azpr-config-v1-/),
       },
     });
   });
@@ -131,6 +165,11 @@ describe('three value mechanism configuration', () => {
         'actor-config-burst',
         'enemy-config-challenge',
       ],
+      runtimeConfigurationReplayIdentities: [
+        configuredScenario.mechanismConfiguration.configurationReplayIdentity,
+      ],
+      configurationRuntimeBindingReadyInvocationCount: 1,
+      configurationRuntimeBindingMissingInvocationCount: 0,
     });
     expect(
       configured.threeValueRuntimeProjection.runtimeInput.summary
@@ -149,7 +188,10 @@ describe('three value mechanism configuration', () => {
       mechanismContext: {
         schemaVersion: 3,
         configuration: {
-          sourceKind: 'workbench-v13-configuration-instances',
+          sourceKind: 'workbench-v13-configuration-instance-sources',
+          configurationReplayIdentity:
+            configuredScenario.mechanismConfiguration
+              .configurationReplayIdentity,
           sourceActor: {
             configurationInstanceId: 'actor-config-burst',
           },
@@ -187,7 +229,7 @@ describe('three value mechanism configuration', () => {
       },
     });
     expect(directScenario.mechanismConfiguration).toMatchObject({
-      sourceKind: 'project-resolved-mechanism-configuration',
+      sourceKind: 'project-resolved-configuration-sources',
       ready: true,
       summary: {
         actorInstanceBackedCount: 0,
@@ -247,39 +289,98 @@ describe('three value mechanism configuration', () => {
       stateBefore: expect.any(Object),
     });
   });
+
+  it('does not treat an unverified selection id as an instance-backed source', () => {
+    const project = createConfiguredProject({ includeInstanceSelection: true });
+    project.metadata.configurationSourceContract.actors[0] = {
+      ...project.metadata.configurationSourceContract.actors[0],
+      configurationInstanceId: null,
+      selectionVerified: false,
+      sourceStatus: 'configuration-instance-values-mismatch',
+    };
+    project.metadata.configurationSourceContract.ready = false;
+    project.metadata.configurationSourceContract.selectionIntegrity.ready = false;
+    const scenario = compileProject(project, getWorkbenchGameData());
+
+    expect(scenario.mechanismConfiguration).toMatchObject({
+      ready: false,
+      status: 'mechanism-configuration-incomplete',
+      actors: expect.arrayContaining([
+        expect.objectContaining({
+          actorId: 'actor-109001',
+          requestedConfigurationInstanceId: 'actor-config-burst',
+          configurationInstanceId: null,
+          selectionVerified: false,
+          sourceStatus: 'configuration-instance-values-mismatch',
+        }),
+      ]),
+      summary: {
+        actorInstanceBackedCount: 1,
+        enemyInstanceBacked: true,
+        sourceContractReady: false,
+        selectionIntegrityReady: false,
+      },
+    });
+  });
 });
 
 function createConfiguredProject({ includeInstanceSelection }) {
-  return createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
-    actorConfigs: [
-      {
-        characterId: 109001,
-        initialSp: 0.5,
-        loadout: {
-          kiboId: 500001,
-          equipment: { weapon: 1010111 },
-          soulessenceId: 10001,
-        },
+  const actorConfigs = [
+    {
+      characterId: 109001,
+      initialSp: 0.5,
+      loadout: {
+        kiboId: 500001,
+        equipment: { weapon: 1010111 },
+        soulessenceId: 10001,
       },
-      { characterId: 101003 },
-    ],
-    enemyConfig: {
-      level: 95,
-      hpMultiplier: 2,
-      defenseMultiplier: 1.5,
-      toughnessMultiplier: 2,
-      initialToughnessRatio: 0.5,
-      elementDefenseOverrides: { FIRE_DEFENSE: 0.25 },
     },
-    configurationSelection: includeInstanceSelection
+    { characterId: 101003 },
+  ];
+  const enemyConfig = {
+    level: 95,
+    hpMultiplier: 2,
+    defenseMultiplier: 1.5,
+    toughnessMultiplier: 2,
+    initialToughnessRatio: 0.5,
+    elementDefenseOverrides: { FIRE_DEFENSE: 0.25 },
+  };
+  const configurationSelection = includeInstanceSelection
+    ? {
+        schemaVersion: 1,
+        actorInstanceIds: [
+          { characterId: 109001, instanceId: 'actor-config-burst' },
+          { characterId: 101003, instanceId: 'actor-config-support' },
+        ],
+        enemyInstanceId: 'enemy-config-challenge',
+      }
+    : null;
+  return createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+    actorConfigs,
+    enemyConfig,
+    configurationLibrary: includeInstanceSelection
       ? {
-          schemaVersion: 1,
-          actorInstanceIds: [
-            { characterId: 109001, instanceId: 'actor-config-burst' },
-            { characterId: 101003, instanceId: 'actor-config-support' },
+          actorInstances: [
+            {
+              id: 'actor-config-burst',
+              characterId: 109001,
+              actorConfig: actorConfigs[0],
+            },
+            {
+              id: 'actor-config-support',
+              characterId: 101003,
+              actorConfig: actorConfigs[1],
+            },
           ],
-          enemyInstanceId: 'enemy-config-challenge',
+          enemyInstances: [
+            {
+              id: 'enemy-config-challenge',
+              enemyId: 300032,
+              enemyConfig,
+            },
+          ],
         }
       : null,
+    configurationSelection,
   });
 }

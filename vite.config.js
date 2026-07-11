@@ -18,7 +18,9 @@ export default defineConfig({
           if (
             id.endsWith('/threeValueMechanicsProfile.js') ||
             id.endsWith('/threeValueMechanicsAdapter.js') ||
-            id.endsWith('/threeValueMechanicsLayerInputs.js')
+            id.endsWith('/threeValueMechanicsLayerInputs.js') ||
+            id.endsWith('/threeValueMechanismConfiguration.js') ||
+            id.endsWith('/workbenchConfigurationSourceContract.js')
           ) {
             return 'azpr-mechanics-runtime';
           }

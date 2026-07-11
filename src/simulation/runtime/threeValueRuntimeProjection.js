@@ -592,6 +592,14 @@ function createThreeValueRuntimeOutputContract({
       mechanicsProfileCapabilityMissingInvocationCount:
         stateCurves.snapshots.summary
           .mechanicsProfileCapabilityMissingInvocationCount,
+      runtimeConfigurationReplayIdentities:
+        stateCurves.snapshots.summary.runtimeConfigurationReplayIdentities,
+      configurationRuntimeBindingReadyInvocationCount:
+        stateCurves.snapshots.summary
+          .configurationRuntimeBindingReadyInvocationCount,
+      configurationRuntimeBindingMissingInvocationCount:
+        stateCurves.snapshots.summary
+          .configurationRuntimeBindingMissingInvocationCount,
       runtimeCalculatorReplacedInvocationCount:
         stateCurves.snapshots.summary.runtimeCalculatorReplacedInvocationCount,
       runtimeCalculatorFallbackInvocationCount:
@@ -1361,6 +1369,14 @@ function summarizeThreeValueRuntimeProjection({
         .runtimeMechanismConfigurationMissingInvocationCount,
     runtimeConfigurationInstanceIds:
       runtimeStateSnapshots.summary.runtimeConfigurationInstanceIds,
+    runtimeConfigurationReplayIdentities:
+      runtimeStateSnapshots.summary.runtimeConfigurationReplayIdentities,
+    configurationRuntimeBindingReadyInvocationCount:
+      runtimeStateSnapshots.summary
+        .configurationRuntimeBindingReadyInvocationCount,
+    configurationRuntimeBindingMissingInvocationCount:
+      runtimeStateSnapshots.summary
+        .configurationRuntimeBindingMissingInvocationCount,
     enemyHpInitial: enemyStateCurve.stateMetrics?.hp?.initialValue ?? null,
     enemyHpRemaining: enemyStateCurve.stateMetrics?.hp?.currentValue ?? null,
     enemyHpBaselineStatus:

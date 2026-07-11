@@ -176,7 +176,9 @@ export function summarizeThreeValueRuntimeCalculatorInvocations(
       invocation => invocation.stateEffectProposal?.ready !== true
     ).length,
     mechanicsProfileIds: uniqueStrings(
-      invocations.map(invocation => invocation.input.mechanicsProfile?.profileId)
+      invocations.map(
+        invocation => invocation.input.mechanicsProfile?.profileId
+      )
     ),
     mechanicsProfileVersions: uniqueNumbers(
       invocations.map(
@@ -184,10 +186,7 @@ export function summarizeThreeValueRuntimeCalculatorInvocations(
       )
     ),
     mechanicsProfileStatuses: uniqueStrings(
-      invocations.map(
-        invocation =>
-          invocation.input.mechanicsProfile?.status
-      )
+      invocations.map(invocation => invocation.input.mechanicsProfile?.status)
     ),
     mechanicsProfileFallbackInvocationCount: invocations.filter(
       invocation =>
@@ -222,6 +221,20 @@ export function summarizeThreeValueRuntimeCalculatorInvocations(
           ?.configurationInstanceId,
       ])
     ),
+    configurationReplayIdentities: uniqueStrings(
+      invocations.map(
+        invocation =>
+          invocation.input.mechanismConfiguration?.configurationReplayIdentity
+      )
+    ),
+    configurationRuntimeBindingReadyInvocationCount: invocations.filter(
+      invocation =>
+        invocation.input.mechanismConfiguration?.runtimeBinding?.ready === true
+    ).length,
+    configurationRuntimeBindingMissingInvocationCount: invocations.filter(
+      invocation =>
+        invocation.input.mechanismConfiguration?.runtimeBinding?.ready !== true
+    ).length,
     statuses: uniqueStrings(invocations.map(invocation => invocation.status)),
     applied: true,
   };
@@ -256,7 +269,9 @@ export function createThreeValueStateEffectProposal({
   return {
     contractName: THREE_VALUE_STATE_EFFECT_PROPOSAL_CONTRACT_NAME,
     contractVersion: THREE_VALUE_STATE_EFFECT_PROPOSAL_CONTRACT_VERSION,
-    status: ready ? 'state-effect-proposal-ready' : 'state-effect-proposal-invalid',
+    status: ready
+      ? 'state-effect-proposal-ready'
+      : 'state-effect-proposal-invalid',
     ready,
     failureReason,
     sourceStepKey: output?.mechanicsEvaluation?.stateEffectStepKey ?? null,
@@ -320,8 +335,7 @@ function createRuntimeCalculatorOutput({
       : (result?.sourceKind ?? 'runtime-calculator-adapter-result'),
     sourceCalculationStatus:
       delta.calculationStatus ?? delta.calculator?.status ?? null,
-    calculatedFromLayerInputs:
-      result?.calculatedFromLayerInputs === true,
+    calculatedFromLayerInputs: result?.calculatedFromLayerInputs === true,
     mechanicsEvaluation,
     fallbackReason,
   };

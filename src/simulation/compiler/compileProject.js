@@ -38,15 +38,16 @@ export function compileProject(
   );
   const enemy = compileEnemy(project.enemy, enemiesById, elementsById);
   const actors = [...actorsById.values()];
-  const mechanismConfiguration = createThreeValueMechanismConfiguration({
-    project,
-    actors,
-    enemy,
-  });
   const mechanicsProfileResolution = resolveThreeValueMechanicsProfile(
     threeValueMechanicsProfile
   );
   const mechanicsProfile = mechanicsProfileResolution.profile;
+  const mechanismConfiguration = createThreeValueMechanismConfiguration({
+    project,
+    actors,
+    enemy,
+    mechanicsProfile,
+  });
 
   const actions = project.actions
     .map(action => compileAction(action, actorsById, enemy, skillsById))

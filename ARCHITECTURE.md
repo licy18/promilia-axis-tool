@@ -92,6 +92,7 @@ Action
 ### 3.5 机制 adapter
 
 - `threeValueCalculatorAdapters.js`：projection 与 runtime 共用的 calculator 入口。
+- `workbenchConfigurationSourceContract.js`：把活动方案的实例选择与解析配置校验为稳定、可回放的配置来源身份。
 - `threeValueMechanismContext.js`：角色、动作、敌人和来源上下文。
 - `threeValueMechanismConfiguration.js`：把 Project 已解析配置与 v13 实例身份编译为 mechanics configuration，声明字段应用边界。
 - `threeValueMechanicsAdapter.js`：三轨统一 adapter 注册表、结构化 operands、generation request 与 runtime invocation input。
@@ -138,9 +139,11 @@ Action
 
 `configurationLibrary` 在项目根级保存角色和敌人配置实例；角色实例继续复用既有 `actorConfig`，敌人实例继续复用既有 `enemyConfig`。每条方案的 `configurationSelection` 只绑定当前角色和敌人所选实例 ID。切换方案或选择实例时，domain 层把实例解析回活动草稿的 `actorConfigs` / `enemyConfig`，Project、compiler、generation、runtime 和 calculator 不读取配置库结构，也没有第二套培养或计算模型。
 
-### ThreeValueMechanismConfiguration v1
+### ConfigurationSource v1 / ThreeValueMechanismConfiguration v2
 
-Project metadata 只携带活动方案的配置实例 ID 和已经解析的 `actorConfigs` / `enemyConfig`；compiler 将它们与 Scenario actor/enemy 合成为 `AzPrThreeValueMechanismConfiguration`。角色来源区分面板 stats、初始 SP 和 loadout，敌人来源区分 HP baseline、伤害预览防御倍率、韧性 baseline、等级和元素防御。当前确认可用的 baseline/预览字段显式标记应用位置；奇波、装备、灵子效果、敌人等级公式和元素防御公式固定为未应用。
+Project 构建时以活动方案的 `configurationSelection`、共享 `configurationLibrary` 和解析后的 `actorConfigs` / `enemyConfig` 生成 `AzPrWorkbenchConfigurationSource v1`。只有实例 ID、实体 ID 和实例值均与解析值一致时，来源才标记为 instance-backed；缺失或错配的 ID 保留 requested identity，但不会冒充已验证实例。合同以实际模拟配置生成稳定 `replayIdentity`，不把显示名称纳入身份。
+
+compiler 将该来源合同、Scenario actor/enemy 与实际 `mechanicsProfile` 合成为 `AzPrThreeValueMechanismConfiguration v2` 和 `AzPrThreeValueConfigurationRuntimeBinding v1`。角色来源区分面板 stats、初始 SP 和 loadout，敌人来源区分 HP baseline、伤害预览防御倍率、韧性 baseline、等级和元素防御；runtime summary 汇总同一 replay identity 与 binding readiness。当前确认可用的 baseline/预览字段显式标记应用位置；奇波、装备、灵子效果、敌人等级公式和元素防御公式固定为未应用。
 
 `AzPrThreeValueMechanismContext` 为 v3，`ThreeValueDeltaCalculator` 为 v3。阶段 8-R 后 `Action -> Hit -> ThreeValueDelta` 为 v10，`AzPrThreeValueMechanicsAdapter` 为 v7，`ThreeValueRuntimeCalculatorInvocation` 为 v9，runtime state snapshot 为 v2；每条 delta、generation calculator result 和 runtime invocation 都保留配置、profile、机制层输入、evaluation、状态作用 proposal、来源状态及实例 ID。
 
@@ -156,7 +159,7 @@ compiler 默认把 `azpr-three-value-preview-v1` 作为 `AzPrMechanicsProfile` �
 
 注册表支持 HP、韧性、能量轨专用 adapter、一个 `default` adapter 覆盖三轨，以及纯函数 operation handler；`simulateScenario(scenario, { threeValueMechanicsAdapterRegistry })` 是唯一无 UI 顶层注入入口。默认 profile 的 product、sum、before/after 与 identity 均已迁入内置 steps；runtime calculator invocation summary 汇总实际 operation 和 proposal ready/missing 数。
 
-生产构建把 profile、adapter 与 layer inputs 固定为单个 `azpr-mechanics-runtime` chunk；同步出现的辅助 Workbench 面板合并为 `workbench-secondary-ui`，仅减少重复 chunk 开销，不改变组件和加载条件。总 JavaScript 体积仍由独立预算限制。
+生产构建把配置来源、mechanism configuration、profile、adapter 与 layer inputs 固定为单个 `azpr-mechanics-runtime` chunk；同步出现的辅助 Workbench 面板合并为 `workbench-secondary-ui`，仅调整同步模块的构建归组，不改变调用或加载条件。总 JavaScript 体积仍由独立预算限制。
 
 ### ScenarioWorkspace v1
 

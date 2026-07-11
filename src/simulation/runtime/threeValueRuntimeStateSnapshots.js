@@ -73,9 +73,8 @@ export function createThreeValueRuntimeStateSnapshots({
     const primaryMetricKey = stateEffectProposal.ready
       ? stateEffectProposal.writeMetric
       : 'unknown';
-    const deltaValues = createRuntimeStateSnapshotDeltaValues(
-      stateEffectProposal
-    );
+    const deltaValues =
+      createRuntimeStateSnapshotDeltaValues(stateEffectProposal);
 
     applyRuntimeStateDelta(enemyHpState, deltaValues.enemyHp);
     applyRuntimeStateDelta(enemyToughnessState, deltaValues.enemyToughness);
@@ -222,6 +221,12 @@ export function createThreeValueRuntimeStateSnapshots({
         calculatorInvocationSummary.mechanismConfigurationStatuses,
       runtimeConfigurationInstanceIds:
         calculatorInvocationSummary.configurationInstanceIds,
+      runtimeConfigurationReplayIdentities:
+        calculatorInvocationSummary.configurationReplayIdentities,
+      configurationRuntimeBindingReadyInvocationCount:
+        calculatorInvocationSummary.configurationRuntimeBindingReadyInvocationCount,
+      configurationRuntimeBindingMissingInvocationCount:
+        calculatorInvocationSummary.configurationRuntimeBindingMissingInvocationCount,
       applied: true,
     },
     applied: true,

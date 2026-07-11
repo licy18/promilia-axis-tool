@@ -26603,3 +26603,43 @@ runtimeCalculatorInvocation.stateEffectProposal
 `AzPrThreeValueMechanicsEvaluation v3` 输出实际负责 state effect 的 step key。runtime invocation 用受信任的 track 定义校验目标、读取状态和最终 delta；`AzPrThreeValueRuntimeStateSnapshot v2` 只把 ready proposal 写入对应 accumulator。HP/韧性固定作用于目标敌人，能量固定作用于 energy owner；无目标或未知轨道不会修改状态。
 
 `AzPrMechanicsProfile` 从 v1 升级为 v2，`AzPrThreeValueMechanicsAdapter` 从 v6 升级为 v7，`Action -> Hit -> ThreeValueDelta` 从 v9 升级为 v10，`ThreeValueRuntimeCalculatorInvocation` 从 v8 升级为 v9。旧三值字段继续供曲线、日志与兼容消费，默认三值结果不变；本阶段没有新增伤害、防御、抗性或培养公式。
+
+## 391. ConfigurationSource v1 / MechanismConfiguration v2 / RuntimeBinding v1
+
+阶段 8-S 在 Workbench Project 构建边界新增派生合同：
+
+```text
+project.metadata.configurationSourceContract
+  contractName = AzPrWorkbenchConfigurationSource
+  schemaVersion = 1
+  status / ready / sourceKind
+  replayIdentity
+  actors[] / enemy
+    entityKind / entityId
+    requestedInstanceId / configurationInstanceId
+    sourceStatus / ready / selectionVerified
+    resolvedConfig
+    resolvedConfigFingerprint / instanceConfigFingerprint
+  selectionIntegrity
+    ready
+    requestedInstanceCount / verifiedInstanceCount / issueCount
+  policy / summary
+```
+
+来源合同同时读取活动方案选择、共享配置库和已解析模拟配置。实例必须匹配实体且实例配置 fingerprint 与 resolved config fingerprint 一致，才能写入正式 `configurationInstanceId`；缺失或错配只保留 requested ID 和诊断状态。`replayIdentity` 由选中实例身份与实际模拟配置稳定生成，排除配置显示名称和导出时间，因此本地草稿、JSON、分享码与 PNG 可以独立重建并比较。
+
+`AzPrThreeValueMechanismConfiguration` 从 v1 升级为 v2，新增 `sourceContract / configurationReplayIdentity / runtimeBinding`：
+
+```text
+scenario.mechanismConfiguration.runtimeBinding
+  contractName = AzPrThreeValueConfigurationRuntimeBinding
+  schemaVersion = 1
+  status / ready
+  configurationSource
+    contractName / schemaVersion / replayIdentity / replaceable
+  mechanicsProfile
+    profileId / profileVersion / replaceable
+  runtimeConsumer = ThreeValueRuntimeCalculatorInvocation
+```
+
+runtime context、invocation summary、snapshot summary 和 projection summary 均传播 replay identity 与 binding ready/missing 数。四载体集成测试会对重新 compile/simulate 后的来源合同、binding、state effect proposals 及完整 `runtimeOutputs` 做等价比较。本阶段不改变 WorkbenchProjectFile v13，不新增公式，也不让未确认培养字段参与计算。

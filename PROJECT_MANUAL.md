@@ -1084,6 +1084,16 @@ Workbench 现在可以把角色等级、初始能量、奇波、装备、灵子�
 
 下一阶段目标：阶段 8-S / P2-P3 配置来源合同与项目回放一致性。盘点 v13 配置实例到 `AzPrThreeValueMechanismConfiguration` / profile / runtime 的字段覆盖，建立可替换来源合同，并验证同一项目经本地草稿、JSON、分享链接和 PNG 回导后产生一致的配置选择、proposal、三值曲线与日志。该阶段先补配置来源和回放边界，不接入新的公式层，也不增加碎片 UI。
 
+### 阶段 8-S P2-P3 配置来源合同与项目回放一致性（2026-07-11）
+
+新增 `AzPrWorkbenchConfigurationSource v1`。Workbench 构建 Project 时会把活动方案选择与共享配置库实例逐项核对，并比较实例配置和实际解析配置 fingerprint；只有实体、实例 ID 和配置值一致的来源才成为正式 instance-backed 输入。合同用实际参与模拟的配置生成稳定 `replayIdentity`，配置名称和导出时间不影响身份，缺失或错配实例只保留诊断状态。
+
+`AzPrThreeValueMechanismConfiguration` 升级为 v2，并新增 `AzPrThreeValueConfigurationRuntimeBinding v1`，把来源合同、replay identity、实际 mechanics profile 和 runtime consumer 固定在同一可替换边界。runtime summary 传播 identity 与 binding readiness。本地草稿、JSON、分享链接和 PNG 四条独立回导路径已通过同一项目的 compile/simulate 等价测试，配置选择、profile binding、三值 proposal、完整曲线与日志一致；本阶段没有新增公式或 UI。
+
+阶段验收：73 个测试文件、408 条单元/组件测试通过；39 条 Workbench 主流程和 15 项 production preview 全部通过，生产报告结论为 `trial-ready`。生产引用审计为 109 个源码、105 个生产可达、4 个允许 test-only、0 个孤儿；数据投影审计全部一致。Workbench 主块为 367,774B gzip，全部 JavaScript 为 739,605B gzip，均在 370,000B/740,000B 预算内。180 动作编译 p95 为 9.622ms、完整 simulation p95 为 28.330ms；120 动作浏览器首屏就绪为 1353ms。
+
+下一阶段目标：阶段 8-T / P2-P3 可回放 mechanics profile 选择合同。开始前先从既有构建归组或重复代码中收出稳定包体余量，不提高预算；随后把当前仅由 `compileProject()` 参数选择的 profile 改为每条方案可持久化的纯数据 ID/版本选择，并通过受控 registry 解析。默认 profile 和三值结果保持不变，项目本地草稿、JSON、分享链接、PNG 与多方案回放必须恢复同一 profile binding。该阶段只建立未来真实机制 profile 的项目边界，不接入新公式，也不增加碎片 UI。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

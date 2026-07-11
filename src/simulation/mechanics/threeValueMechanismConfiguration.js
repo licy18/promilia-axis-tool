@@ -1,5 +1,7 @@
 export const THREE_VALUE_MECHANISM_CONFIGURATION_CONTRACT_NAME =
   'AzPrThreeValueMechanismConfiguration';
+export const THREE_VALUE_CONFIGURATION_RUNTIME_BINDING_CONTRACT_NAME =
+  'AzPrThreeValueConfigurationRuntimeBinding';
 
 const LOADOUT_KEYS = ['kiboId', 'soulessenceId'];
 const EQUIPMENT_KEYS = ['weapon', 'top', 'bottom', 'earring', 'ring'];
@@ -8,32 +10,30 @@ export function createThreeValueMechanismConfiguration({
   project,
   actors = [],
   enemy,
+  mechanicsProfile,
 } = {}) {
   const metadata = project?.metadata ?? {};
-  const selection = metadata.configurationSelection ?? {};
+  const sourceContract = metadata.configurationSourceContract ?? null;
   const actorConfigs = new Map(
     (metadata.actorConfigs ?? []).map(config => [
       Number(config.characterId),
       config,
     ])
   );
-  const actorSelections = new Map(
-    (selection.actorInstanceIds ?? []).map(item => [
-      Number(item.characterId),
-      item.instanceId,
-    ])
+  const actorSourceContracts = new Map(
+    (sourceContract?.actors ?? []).map(item => [Number(item.entityId), item])
   );
   const actorSources = actors.map(actor =>
     createActorConfigurationSource({
       actor,
       actorConfig: actorConfigs.get(Number(actor.characterId)),
-      instanceId: actorSelections.get(Number(actor.characterId)),
+      sourceContract: actorSourceContracts.get(Number(actor.characterId)),
     })
   );
   const enemySource = createEnemyConfigurationSource({
     enemy,
     enemyConfig: metadata.enemyConfig,
-    instanceId: selection.enemyInstanceId,
+    sourceContract: sourceContract?.enemy,
   });
   const instanceBacked = Boolean(
     actorSources.some(source => source.configurationInstanceId) ||
@@ -42,18 +42,31 @@ export function createThreeValueMechanismConfiguration({
   const ready =
     actorSources.length > 0 &&
     actorSources.every(source => source.ready) &&
-    enemySource?.ready === true;
+    enemySource?.ready === true &&
+    sourceContract?.ready !== false;
+  const configurationReplayIdentity = sourceContract?.replayIdentity ?? null;
+  const runtimeBinding = createConfigurationRuntimeBinding({
+    ready,
+    sourceContract,
+    mechanicsProfile,
+    configurationReplayIdentity,
+  });
 
   return {
-    schemaVersion: 1,
-    sourceKind: instanceBacked
-      ? 'workbench-v13-configuration-instances'
-      : 'project-resolved-mechanism-configuration',
+    schemaVersion: 2,
+    sourceKind:
+      sourceContract?.sourceKind ??
+      (instanceBacked
+        ? 'workbench-v13-configuration-instances'
+        : 'project-resolved-mechanism-configuration'),
     contractName: THREE_VALUE_MECHANISM_CONFIGURATION_CONTRACT_NAME,
     status: ready
       ? 'mechanism-configuration-ready'
       : 'mechanism-configuration-incomplete',
     ready,
+    configurationReplayIdentity,
+    sourceContract,
+    runtimeBinding,
     actors: actorSources,
     enemy: enemySource,
     policy: {
@@ -73,6 +86,10 @@ export function createThreeValueMechanismConfiguration({
       ),
       elementDefenseOverrideCount:
         enemySource?.elementDefense.overrideCount ?? 0,
+      sourceContractReady: sourceContract?.ready ?? null,
+      selectionIntegrityReady:
+        sourceContract?.selectionIntegrity?.ready ?? null,
+      configurationReplayIdentity,
     },
   };
 }
@@ -108,12 +125,21 @@ export function createThreeValueMechanismConfigurationContext({
     ready,
     sourceActor: actorSource ?? null,
     targetEnemy: enemySource,
+    configurationReplayIdentity: contract?.configurationReplayIdentity ?? null,
+    sourceContract: contract?.sourceContract ?? null,
+    runtimeBinding: contract?.runtimeBinding ?? null,
     policy: contract?.policy ?? null,
   };
 }
 
-function createActorConfigurationSource({ actor, actorConfig, instanceId }) {
-  const resolvedConfig = actorConfig ?? actor ?? {};
+function createActorConfigurationSource({
+  actor,
+  actorConfig,
+  sourceContract,
+}) {
+  const resolvedConfig =
+    sourceContract?.resolvedConfig ?? actorConfig ?? actor ?? {};
+  const instanceId = sourceContract?.configurationInstanceId;
   const initialSp = numberOrNull(actor?.initialSp ?? resolvedConfig.initialSp);
   const loadout = createLoadoutSource(actor?.loadout ?? resolvedConfig.loadout);
   const ready = Boolean(
@@ -123,9 +149,15 @@ function createActorConfigurationSource({ actor, actorConfig, instanceId }) {
     actorId: actor?.id ?? null,
     characterId: numberOrNull(actor?.characterId),
     configurationInstanceId: textOrNull(instanceId),
-    sourceStatus: instanceId
-      ? 'workbench-actor-configuration-instance-resolved'
-      : 'project-actor-configuration-resolved',
+    requestedConfigurationInstanceId:
+      sourceContract?.requestedInstanceId ?? null,
+    sourceStatus:
+      sourceContract?.sourceStatus ??
+      (instanceId
+        ? 'workbench-actor-configuration-instance-resolved'
+        : 'project-actor-configuration-resolved'),
+    sourceFingerprint: sourceContract?.resolvedConfigFingerprint ?? null,
+    selectionVerified: sourceContract?.selectionVerified ?? null,
     sourcePaths: {
       instance: instanceId
         ? 'project.metadata.configurationSelection.actorInstanceIds'
@@ -156,9 +188,14 @@ function createActorConfigurationSource({ actor, actorConfig, instanceId }) {
   };
 }
 
-function createEnemyConfigurationSource({ enemy, enemyConfig, instanceId }) {
+function createEnemyConfigurationSource({
+  enemy,
+  enemyConfig,
+  sourceContract,
+}) {
   if (!enemy) return null;
-  const resolvedConfig = enemyConfig ?? enemy;
+  const resolvedConfig = sourceContract?.resolvedConfig ?? enemyConfig ?? enemy;
+  const instanceId = sourceContract?.configurationInstanceId;
   const elementDefenseOverrides =
     resolvedConfig.elementDefenseOverrides ??
     enemy.elementDefenseOverrides ??
@@ -167,9 +204,15 @@ function createEnemyConfigurationSource({ enemy, enemyConfig, instanceId }) {
     targetId: enemy.id ?? null,
     enemyId: numberOrNull(enemy.enemyId),
     configurationInstanceId: textOrNull(instanceId),
-    sourceStatus: instanceId
-      ? 'workbench-enemy-configuration-instance-resolved'
-      : 'project-enemy-configuration-resolved',
+    requestedConfigurationInstanceId:
+      sourceContract?.requestedInstanceId ?? null,
+    sourceStatus:
+      sourceContract?.sourceStatus ??
+      (instanceId
+        ? 'workbench-enemy-configuration-instance-resolved'
+        : 'project-enemy-configuration-resolved'),
+    sourceFingerprint: sourceContract?.resolvedConfigFingerprint ?? null,
+    selectionVerified: sourceContract?.selectionVerified ?? null,
     sourcePaths: {
       instance: instanceId
         ? 'project.metadata.configurationSelection.enemyInstanceId'
@@ -223,6 +266,36 @@ function createEnemyConfigurationSource({ enemy, enemyConfig, instanceId }) {
         appliedToCalculators: false,
       },
     },
+  };
+}
+
+function createConfigurationRuntimeBinding({
+  ready,
+  sourceContract,
+  mechanicsProfile,
+  configurationReplayIdentity,
+}) {
+  const profileReady = Boolean(mechanicsProfile?.ready);
+  const bindingReady = Boolean(ready && profileReady);
+  return {
+    schemaVersion: 1,
+    contractName: THREE_VALUE_CONFIGURATION_RUNTIME_BINDING_CONTRACT_NAME,
+    status: bindingReady
+      ? 'configuration-runtime-binding-ready'
+      : 'configuration-runtime-binding-incomplete',
+    ready: bindingReady,
+    configurationSource: {
+      contractName: sourceContract?.contractName ?? null,
+      schemaVersion: sourceContract?.schemaVersion ?? null,
+      replayIdentity: configurationReplayIdentity,
+      replaceable: true,
+    },
+    mechanicsProfile: {
+      profileId: mechanicsProfile?.profileId ?? null,
+      profileVersion: mechanicsProfile?.profileVersion ?? null,
+      replaceable: true,
+    },
+    runtimeConsumer: 'ThreeValueRuntimeCalculatorInvocation',
   };
 }
 
