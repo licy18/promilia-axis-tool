@@ -4,7 +4,9 @@ import {
   createThreeValueMechanicsAdapterRequest,
   createThreeValueMechanicsOperands,
   registerThreeValueMechanicsAdapter,
+  registerThreeValueMechanicsOperationHandler,
 } from '../../simulation/mechanics/threeValueMechanicsAdapter';
+import { DEFAULT_THREE_VALUE_MECHANICS_PROFILE } from '../../simulation/mechanics/threeValueMechanicsProfile';
 import {
   createThreeValueRuntimeCalculatorInvocation,
   summarizeThreeValueRuntimeCalculatorInvocations,
@@ -64,12 +66,12 @@ describe('three value mechanics adapter', () => {
     expect(invocations).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          schemaVersion: 7,
+          schemaVersion: 8,
           adapter: expect.objectContaining({
             key: 'unit-test-three-track-mechanics-adapter',
             version: 7,
             contractName: 'AzPrThreeValueMechanicsAdapter',
-            contractVersion: 5,
+            contractVersion: 6,
             registrationKey: 'default',
             custom: true,
           }),
@@ -113,7 +115,7 @@ describe('three value mechanics adapter', () => {
       passthroughInvocationCount: 3,
       customAdapterInvocationCount: 3,
       mechanicsAdapterContractName: 'AzPrThreeValueMechanicsAdapter',
-      mechanicsAdapterContractVersion: 5,
+      mechanicsAdapterContractVersion: 6,
       registrationKeys: ['default'],
       adapterKeys: ['unit-test-three-track-mechanics-adapter'],
     });
@@ -201,10 +203,9 @@ describe('three value mechanics adapter', () => {
           }),
           mechanicsEvaluation: expect.objectContaining({
             contractName: 'AzPrThreeValueMechanicsEvaluation',
-            contractVersion: 1,
+            contractVersion: 2,
             ready: true,
-            allRequiredInputsReady: true,
-            matchesExpected: true,
+            stepResults: [expect.objectContaining({ ready: true })],
           }),
           validation: expect.objectContaining({
             mechanicsEvaluationReady: true,
@@ -258,15 +259,20 @@ describe('three value mechanics adapter', () => {
       fallbackReason: 'runtime-calculator-output-invalid',
       mechanicsEvaluation: {
         status: 'three-value-mechanics-evaluation-invalid',
-        operation: 'round-clamped-product',
-        allRequiredInputsReady: false,
-        usedLayers: expect.arrayContaining([
+        stepResults: [
           expect.objectContaining({
-            layerKey: 'baseAttack',
-            inputKey: 'actorStats',
+            key: 'raw-product',
+            usedLayers: expect.arrayContaining([
+              expect.objectContaining({
+                layerKey: 'baseAttack',
+                inputKey: 'actorStats',
+                ready: false,
+              }),
+            ]),
+            status: 'step-input-missing',
             ready: false,
           }),
-        ]),
+        ],
         delta: null,
         ready: false,
       },
@@ -283,9 +289,105 @@ describe('three value mechanics adapter', () => {
       },
     });
   });
+
+  it('executes a registered follow-up profile step without changing runtime', () => {
+    const profile = JSON.parse(
+      JSON.stringify(DEFAULT_THREE_VALUE_MECHANICS_PROFILE)
+    );
+    profile.profileId = 'unit-test-two-step-profile';
+    profile.profileVersion = 2;
+    profile.operandKinds['hp-raw-preview-product'].steps.push({
+      key: 'unit-test-add-five',
+      operation: 'unit-test-add',
+      layerKeys: [],
+    });
+    const operands = createThreeValueMechanicsOperands({
+      trackKey: 'enemyHpDamage',
+      sourceKind: 'action-result-applied-value',
+      value: 120,
+      formulaBreakdown: {
+        layers: {
+          baseAttack: { value: 1000 },
+          actionMultiplier: { value: 0.12 },
+        },
+      },
+    });
+    const delta = createDelta({
+      trackKey: 'enemyHpDamage',
+      outputField: 'hpDelta',
+      value: 120,
+      operands,
+      mechanicsProfile: profile,
+    });
+    const missingHandlerInvocation =
+      createThreeValueRuntimeCalculatorInvocation({
+        delta,
+        stateBefore: createStateBefore(),
+      });
+    const registry = registerThreeValueMechanicsOperationHandler(
+      createThreeValueMechanicsAdapterRegistry(),
+      'unit-test-add',
+      ({ previousDelta }) => previousDelta + 5
+    );
+    const invocation = createThreeValueRuntimeCalculatorInvocation({
+      delta,
+      stateBefore: createStateBefore(),
+      threeValueMechanicsAdapterRegistry: registry,
+    });
+
+    expect(missingHandlerInvocation).toMatchObject({
+      status: 'runtime-calculator-invocation-ready-with-fallback',
+      fallbackReason: 'runtime-calculator-output-invalid',
+      output: { delta: 120, hpDelta: 120 },
+      mechanicsEvaluation: {
+        stepResults: [
+          expect.objectContaining({ key: 'raw-product', ready: true }),
+          expect.objectContaining({
+            key: 'unit-test-add-five',
+            status: 'step-handler-missing',
+            ready: false,
+          }),
+        ],
+        ready: false,
+      },
+    });
+    expect(registry.operationHandlers).toHaveProperty('unit-test-add');
+    expect(invocation).toMatchObject({
+      status: 'runtime-calculator-invocation-ready-replaced',
+      output: {
+        delta: 125,
+        hpDelta: 125,
+        calculatedFromLayerInputs: true,
+      },
+      mechanicsEvaluation: {
+        stepResults: [
+          expect.objectContaining({
+            key: 'raw-product',
+            delta: 120,
+            ready: true,
+          }),
+          expect.objectContaining({
+            key: 'unit-test-add-five',
+            delta: 125,
+            ready: true,
+          }),
+        ],
+        delta: 125,
+        ready: true,
+      },
+      changed: true,
+      fallbackReason: null,
+    });
+  });
 });
 
-function createDelta({ trackKey, value, outputField, operands }) {
+function createDelta({
+  trackKey,
+  value,
+  outputField,
+  operands,
+  mechanicsProfile,
+}) {
   const action = {
     actionId: 'action-001',
     actionType: 'skill',
@@ -322,6 +424,7 @@ function createDelta({ trackKey, value, outputField, operands }) {
       elementDefenses: [],
     },
     configuration: mechanismConfiguration,
+    mechanicsProfile,
     ownership: {
       energyOwnerActorId: 'actor-001',
       targetEnemyId: 'enemy-001',
@@ -333,6 +436,7 @@ function createDelta({ trackKey, value, outputField, operands }) {
     action,
     hit,
     mechanismConfiguration,
+    mechanicsProfile,
     sourceValue: {
       value,
       ...fields,

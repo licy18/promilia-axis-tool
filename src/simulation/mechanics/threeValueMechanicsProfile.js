@@ -18,37 +18,62 @@ export const DEFAULT_THREE_VALUE_MECHANICS_PROFILE =
 export function createDefaultThreeValueMechanicsProfile() {
   const operandKinds = {
     'hp-raw-preview-product': {
-      operation: 'round-clamped-product',
       trackKeys: ['enemyHpDamage'],
-      layerKeys: ['baseAttack', 'actionMultiplier'],
+      steps: [
+        {
+          key: 'raw-product',
+          operation: 'round-clamped-product',
+          layerKeys: ['baseAttack', 'actionMultiplier'],
+        },
+      ],
       status: 'applied-preview-formula-partial',
       applied: true,
     },
     'explicit-self-energy-event-sum': {
-      operation: 'sum',
       trackKeys: ['selfEnergyChange'],
-      layerKeys: ['explicitResourceDelta'],
+      steps: [
+        {
+          key: 'explicit-resource-sum',
+          operation: 'sum',
+          layerKeys: ['explicitResourceDelta'],
+        },
+      ],
       status: 'applied-explicit-resource-events',
       applied: true,
     },
     'validated-toughness-before-after': {
-      operation: 'before-minus-after',
       trackKeys: ['enemyToughnessDamage'],
-      layerKeys: ['validatedRuntimeSample'],
+      steps: [
+        {
+          key: 'validated-before-after',
+          operation: 'before-minus-after',
+          layerKeys: ['validatedRuntimeSample'],
+        },
+      ],
       status: 'applied-validated-runtime-sample',
       applied: true,
     },
     'validated-self-energy-before-after': {
-      operation: 'after-minus-before',
       trackKeys: ['selfEnergyChange'],
-      layerKeys: ['validatedRuntimeSample'],
+      steps: [
+        {
+          key: 'validated-after-before',
+          operation: 'after-minus-before',
+          layerKeys: ['validatedRuntimeSample'],
+        },
+      ],
       status: 'applied-validated-runtime-sample',
       applied: true,
     },
     'source-value-identity': {
-      operation: 'identity',
       trackKeys: TRACK_KEYS,
-      layerKeys: [],
+      steps: [
+        {
+          key: 'source-identity',
+          operation: 'identity',
+          layerKeys: [],
+        },
+      ],
       status: 'compatibility-and-diagnostic-fallback',
       applied: false,
     },
@@ -154,14 +179,26 @@ export function validateThreeValueMechanicsProfile(profile) {
   for (const [kind, capability] of Object.entries(
     profile?.operandKinds ?? {}
   )) {
-    if (!kind || !String(capability?.operation ?? '').trim()) {
-      issues.push(`operand-kind-operation-missing:${kind || 'unknown'}`);
-    }
     if (!Array.isArray(capability?.trackKeys)) {
       issues.push(`operand-kind-track-keys-missing:${kind || 'unknown'}`);
     }
-    if (!Array.isArray(capability?.layerKeys)) {
-      issues.push(`operand-kind-layer-keys-missing:${kind || 'unknown'}`);
+    if (!Array.isArray(capability?.steps) || capability.steps.length === 0) {
+      issues.push(`operand-kind-steps-missing:${kind || 'unknown'}`);
+    }
+    for (const [index, step] of (capability?.steps ?? []).entries()) {
+      if (!String(step?.key ?? '').trim()) {
+        issues.push(`operand-step-key-missing:${kind || 'unknown'}:${index}`);
+      }
+      if (!String(step?.operation ?? '').trim()) {
+        issues.push(
+          `operand-step-operation-missing:${kind || 'unknown'}:${index}`
+        );
+      }
+      if (!Array.isArray(step?.layerKeys)) {
+        issues.push(
+          `operand-step-layer-keys-missing:${kind || 'unknown'}:${index}`
+        );
+      }
     }
   }
   return {
@@ -184,10 +221,16 @@ export function resolveThreeValueMechanicsProfileCapability({
   const trackSupported = Boolean(
     capability?.trackKeys?.includes(operands?.trackKey)
   );
-  const operationMatches = Boolean(
-    capability?.operation && capability.operation === operands?.operation
+  const stepsReady = Boolean(
+    capability?.steps?.length > 0 &&
+      capability.steps.every(
+        step =>
+          String(step?.key ?? '').trim() &&
+          String(step?.operation ?? '').trim() &&
+          Array.isArray(step?.layerKeys)
+      )
   );
-  const ready = Boolean(capability && trackSupported && operationMatches);
+  const ready = Boolean(capability && trackSupported && stepsReady);
 
   return {
     profile: resolvedProfile,
@@ -204,7 +247,7 @@ export function resolveThreeValueMechanicsProfileCapability({
       : capability
         ? !trackSupported
           ? 'mechanics-profile-track-unsupported'
-          : 'mechanics-profile-operation-mismatch'
+          : 'mechanics-profile-steps-invalid'
         : 'mechanics-profile-operand-kind-unsupported',
   };
 }

@@ -9,9 +9,13 @@ export function createThreeValueMechanicsLayerInputs({
 } = {}) {
   const track = mechanicsProfile?.tracks?.[trackKey] ?? {};
   const operands = sourceValue?.operands?.inputs ?? {};
-  const required =
-    mechanicsProfile?.operandKinds?.[sourceValue?.operands?.kind]?.layerKeys ??
-    [];
+  const required = [
+    ...new Set(
+      mechanicsProfile?.operandKinds?.[
+        sourceValue?.operands?.kind
+      ]?.steps?.flatMap(step => step.layerKeys ?? []) ?? []
+    ),
+  ];
   const actor = context?.sourceActor ?? {};
   const enemy = context?.targetEnemy ?? {};
   const configuration = context?.configuration ?? {};

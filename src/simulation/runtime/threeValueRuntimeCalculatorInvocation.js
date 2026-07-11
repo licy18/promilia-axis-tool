@@ -62,7 +62,7 @@ export function createThreeValueRuntimeCalculatorInvocation({
   const valid = Object.values(validation).every(Boolean);
 
   return {
-    schemaVersion: 7,
+    schemaVersion: 8,
     sourceKind: 'azpr-three-value-runtime-calculator-invocation',
     contractName: THREE_VALUE_RUNTIME_CALCULATOR_INVOCATION_CONTRACT_NAME,
     status: fallbackReason
@@ -147,41 +147,37 @@ export function summarizeThreeValueRuntimeCalculatorInvocations(
       invocation => !invocation.mechanicsEvaluation?.ready
     ).length,
     mechanicsEvaluationOperations: uniqueStrings(
-      invocations.map(invocation => invocation.mechanicsEvaluation?.operation)
+      invocations.flatMap(
+        invocation =>
+          invocation.mechanicsEvaluation?.stepResults?.map(
+            step => step.operation
+          ) ?? []
+      )
     ),
     mechanicsProfileIds: uniqueStrings(
-      invocations.map(
-        invocation =>
-          invocation.mechanicsEvaluation?.profileId ??
-          invocation.input.mechanicsProfile?.profileId
-      )
+      invocations.map(invocation => invocation.input.mechanicsProfile?.profileId)
     ),
     mechanicsProfileVersions: uniqueNumbers(
       invocations.map(
-        invocation =>
-          invocation.mechanicsEvaluation?.profileVersion ??
-          invocation.input.mechanicsProfile?.profileVersion
+        invocation => invocation.input.mechanicsProfile?.profileVersion
       )
     ),
     mechanicsProfileStatuses: uniqueStrings(
       invocations.map(
         invocation =>
-          invocation.mechanicsEvaluation?.profileStatus ??
           invocation.input.mechanicsProfile?.status
       )
     ),
     mechanicsProfileFallbackInvocationCount: invocations.filter(
-      invocation => invocation.mechanicsEvaluation?.profileFallback
+      invocation =>
+        invocation.input.mechanismContext?.mechanicsProfileSelection
+          ?.fallback === true
     ).length,
     mechanicsProfileCapabilityReadyInvocationCount: invocations.filter(
-      invocation =>
-        invocation.mechanicsEvaluation?.capabilityStatus ===
-        'mechanics-profile-capability-ready'
+      invocation => invocation.mechanicsEvaluation?.capabilityReady === true
     ).length,
     mechanicsProfileCapabilityMissingInvocationCount: invocations.filter(
-      invocation =>
-        invocation.mechanicsEvaluation?.capabilityStatus !==
-        'mechanics-profile-capability-ready'
+      invocation => invocation.mechanicsEvaluation?.capabilityReady !== true
     ).length,
     adapterKeys: uniqueStrings(
       invocations.map(invocation => invocation.adapter.key)

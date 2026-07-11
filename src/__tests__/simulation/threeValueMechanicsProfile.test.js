@@ -126,32 +126,30 @@ describe('three value mechanics profile', () => {
     });
     expect(runtimeDelta.runtimeCalculatorInvocation.mechanicsEvaluation).toMatchObject({
       contractName: 'AzPrThreeValueMechanicsEvaluation',
-      contractVersion: 1,
-      operation: 'round-clamped-product',
-      requiredLayerKeys: ['baseAttack', 'actionMultiplier'],
-      usedLayers: [
-        {
-          layerKey: 'baseAttack',
-          inputKey: 'actorStats',
-          source: 'actor',
+      contractVersion: 2,
+      stepResults: [
+        expect.objectContaining({
+          key: 'raw-product',
+          operation: 'round-clamped-product',
+          usedLayers: [
+            {
+              layerKey: 'baseAttack',
+              inputKey: 'actorStats',
+              source: 'actor',
+              ready: true,
+            },
+            {
+              layerKey: 'actionMultiplier',
+              inputKey: 'actionMultiplier',
+              source: 'operands',
+              ready: true,
+            },
+          ],
+          delta: generatedDelta.delta,
           ready: true,
-        },
-        {
-          layerKey: 'actionMultiplier',
-          inputKey: 'actionMultiplier',
-          source: 'operands',
-          ready: true,
-        },
+        }),
       ],
-      intermediate: {
-        baseAttack: generatedDelta.mechanismContext.sourceActor.stats.attack,
-        actionMultiplier:
-          generatedDelta.mechanicsAdapterRequest.mechanicsLayerInputs.inputs
-            .actionMultiplier.value,
-        minimum: 0,
-      },
       delta: generatedDelta.delta,
-      matchesExpected: true,
       ready: true,
     });
     expect(result.threeValueRuntimeProjection.summary).toMatchObject({
@@ -208,12 +206,9 @@ describe('three value mechanics profile', () => {
       fallbackReason: 'runtime-calculator-output-invalid',
       mechanicsEvaluation: {
         contractName: 'AzPrThreeValueMechanicsEvaluation',
-        contractVersion: 1,
+        contractVersion: 2,
         ready: false,
-        profileId: 'unit-test-no-hp-profile',
-        profileVersion: 2,
-        capabilityStatus: 'mechanics-profile-capability-unsupported',
-        capabilityFallbackReason: 'mechanics-profile-operand-kind-unsupported',
+        capabilityReady: false,
       },
     });
     expect(result.threeValueRuntimeProjection.summary).toMatchObject({

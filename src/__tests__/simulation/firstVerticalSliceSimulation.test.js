@@ -1432,7 +1432,7 @@ describe('first vertical slice simulation', () => {
       status: 'standard-three-value-generation-layer-ready',
       contract: {
         name: 'Action -> Hit -> ThreeValueDelta',
-        version: 8,
+        version: 9,
         frameRate: 60,
         deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
         calculatorContract: {
@@ -3252,7 +3252,6 @@ describe('first vertical slice simulation', () => {
           operands: expect.objectContaining({
             contractName: 'AzPrThreeValueMechanicsOperands',
             kind: 'validated-self-energy-before-after',
-            operation: 'after-minus-before',
             expectedDelta: 0.3375,
             ready: true,
           }),
@@ -3265,10 +3264,15 @@ describe('first vertical slice simulation', () => {
       ).runtimeCalculatorInvocation
     ).toMatchObject({
       output: { delta: 0.3375, calculatedFromLayerInputs: true },
+      input: {
+        sourceValue: {
+          operands: { kind: 'validated-self-energy-before-after' },
+        },
+      },
       mechanicsEvaluation: {
-        operandsKind: 'validated-self-energy-before-after',
-        operation: 'after-minus-before',
-        matchesExpected: true,
+        stepResults: [
+          expect.objectContaining({ operation: 'after-minus-before' }),
+        ],
         ready: true,
       },
     });
@@ -3356,7 +3360,6 @@ describe('first vertical slice simulation', () => {
           operands: expect.objectContaining({
             contractName: 'AzPrThreeValueMechanicsOperands',
             kind: 'validated-toughness-before-after',
-            operation: 'before-minus-after',
             expectedDelta: 70,
             ready: true,
           }),
@@ -3369,10 +3372,15 @@ describe('first vertical slice simulation', () => {
       ).runtimeCalculatorInvocation
     ).toMatchObject({
       output: { delta: 70, calculatedFromLayerInputs: true },
+      input: {
+        sourceValue: {
+          operands: { kind: 'validated-toughness-before-after' },
+        },
+      },
       mechanicsEvaluation: {
-        operandsKind: 'validated-toughness-before-after',
-        operation: 'before-minus-after',
-        matchesExpected: true,
+        stepResults: [
+          expect.objectContaining({ operation: 'before-minus-after' }),
+        ],
         ready: true,
       },
     });
@@ -4711,7 +4719,6 @@ describe('first vertical slice simulation', () => {
     ).toMatchObject({
       contractName: 'AzPrThreeValueMechanicsOperands',
       kind: 'hp-raw-preview-product',
-      operation: 'round-clamped-product',
       expectedDelta: result.summary.totalRawDamage,
       ready: true,
     });
@@ -4720,7 +4727,6 @@ describe('first vertical slice simulation', () => {
     ).toMatchObject({
       contractName: 'AzPrThreeValueMechanicsOperands',
       kind: 'explicit-self-energy-event-sum',
-      operation: 'sum',
       expectedDelta: -Number(spSkill.spCost),
       inputs: { eventDeltas: [-Number(spSkill.spCost)] },
       ready: true,
@@ -4733,17 +4739,25 @@ describe('first vertical slice simulation', () => {
       expect.arrayContaining([
         expect.objectContaining({
           output: expect.objectContaining({ calculatedFromLayerInputs: true }),
-          mechanicsEvaluation: expect.objectContaining({
-            operandsKind: 'hp-raw-preview-product',
-            matchesExpected: true,
+          input: expect.objectContaining({
+            sourceValue: expect.objectContaining({
+              operands: expect.objectContaining({
+                kind: 'hp-raw-preview-product',
+              }),
+            }),
           }),
+          mechanicsEvaluation: expect.objectContaining({ ready: true }),
         }),
         expect.objectContaining({
           output: expect.objectContaining({ calculatedFromLayerInputs: true }),
-          mechanicsEvaluation: expect.objectContaining({
-            operandsKind: 'explicit-self-energy-event-sum',
-            matchesExpected: true,
+          input: expect.objectContaining({
+            sourceValue: expect.objectContaining({
+              operands: expect.objectContaining({
+                kind: 'explicit-self-energy-event-sum',
+              }),
+            }),
           }),
+          mechanicsEvaluation: expect.objectContaining({ ready: true }),
         }),
       ])
     );

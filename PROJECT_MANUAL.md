@@ -1056,6 +1056,16 @@ Workbench 现在可以把角色等级、初始能量、奇波、装备、灵子�
 
 下一阶段目标：阶段 8-Q / P3 profile 机制步骤执行链。把 evaluation 的单个 operation 扩展为 profile 声明的有序 step 合同，并提供无 UI operation handler registry；当前已确认 base attack、动作倍率、显式资源和 validated sample 迁入内置 steps，未来确认的防御、元素防御或培养层可以新增 step 而不改 runtime 主链。该阶段必须继续保持默认三值等价、缺口回退和 bundle 守门，不启用任何未确认公式。
 
+### 阶段 8-Q P3 profile 机制步骤执行链（2026-07-11）
+
+`AzPrMechanicsProfile` 的 capability 已从单 operation 改为有序 `steps[]`。`AzPrThreeValueMechanicsEvaluation v2` 逐步执行 operation handler，记录每步 key、operation、使用层、delta 和状态，并把前一步 delta 传给后续步骤；默认 product、sum、before/after 和 identity 五种操作均已迁入内置步骤。自定义 profile 可以注册后续纯函数 step，handler 缺失、异常或 required layer 缺口会停止步骤链并回退 generation delta。
+
+`Action -> Hit -> ThreeValueDelta` 升级为 v9，`AzPrThreeValueMechanicsAdapter` 升级为 v6，`ThreeValueRuntimeCalculatorInvocation` 升级为 v8。operands 不再重复声明 operation，runtime summary 从实际 step results 汇总操作；默认 HP、韧性、角色能量、曲线和日志结果保持不变，没有启用敌人防御、元素防御、培养或其他未确认公式。
+
+阶段验收：72 个测试文件、404 条单元/组件测试，39 条 Workbench 主流程和 15 项 production preview 全部通过，生产报告结论为 `trial-ready`。生产引用审计为 108 个源码、104 个生产可达、4 个允许 test-only、0 个孤儿；数据投影审计全部一致。Workbench 主块为 368,271B gzip，全部 JavaScript 为 739,930B gzip，均在 370,000B/740,000B 预算内。180 动作编译 p95 为 9.693ms、完整 simulation p95 为 32.666ms；120 动作浏览器首屏就绪为 1742ms。
+
+下一阶段目标：阶段 8-R / P3 机制步骤状态作用合同。让 profile step 在纯计算 delta 之外声明明确的读取状态、作用对象和写入轨道，由 runtime 只应用通过验证的标准 state effect proposal；优先打通 HP、韧性和每角色能量的统一目标/时序边界，为后续确认机制增加步骤提供稳定入口。该阶段仍不追最终倍率，不启用未确认培养效果，也不增加碎片 UI。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

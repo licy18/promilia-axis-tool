@@ -16,7 +16,7 @@ describe('three value runtime calculator invocation', () => {
     });
 
     expect(invocation).toMatchObject({
-      schemaVersion: 7,
+      schemaVersion: 8,
       contractName: 'ThreeValueRuntimeCalculatorInvocation',
       status: 'runtime-calculator-invocation-ready-passthrough',
       sourceDeltaId: 'hp-delta-001',
@@ -28,10 +28,10 @@ describe('three value runtime calculator invocation', () => {
         custom: false,
         replaceable: true,
         contractName: 'AzPrThreeValueMechanicsAdapter',
-        contractVersion: 5,
+        contractVersion: 6,
         registrationKey: 'built-in',
         evaluationContractName: 'AzPrThreeValueMechanicsEvaluation',
-        evaluationContractVersion: 1,
+        evaluationContractVersion: 2,
       },
       output: {
         delta: 120,
@@ -77,21 +77,24 @@ describe('three value runtime calculator invocation', () => {
         operands: {
           contractName: 'AzPrThreeValueMechanicsOperands',
           kind: 'source-value-identity',
-          operation: 'identity',
           expectedDelta: 120,
         },
       },
     });
     expect(invocation.mechanicsEvaluation).toMatchObject({
       contractName: 'AzPrThreeValueMechanicsEvaluation',
-      contractVersion: 1,
+      contractVersion: 2,
       status: 'three-value-mechanics-evaluation-ready',
-      operation: 'identity',
-      requiredLayerKeys: [],
-      usedLayers: [],
-      intermediate: { value: 120 },
+      stepResults: [
+        expect.objectContaining({
+          key: 'source-identity',
+          operation: 'identity',
+          usedLayers: [],
+          delta: 120,
+          ready: true,
+        }),
+      ],
       delta: 120,
-      matchesExpected: true,
       ready: true,
     });
 

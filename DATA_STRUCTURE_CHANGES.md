@@ -26551,3 +26551,28 @@ runtimeCalculatorInvocation.mechanicsEvaluation
 内置 adapter 不再调用独立 operands calculator，而是从 `mechanicsLayerInputs` 解析 required 层并执行当前 profile operation。operands 仍保存在 generation source value 和 layer inputs 的来源槽中，用于来源追溯、expected delta 比较及 evaluation 失败时的 generation fallback；runtime 不再保存 `operandsCalculation`、`calculatedFromOperands` 或 operands ready/mismatch/calculated 汇总。
 
 `AzPrThreeValueMechanicsAdapter` 从 v4 升级为 v5，`Action -> Hit -> ThreeValueDelta` 从 v7 升级为 v8，`ThreeValueRuntimeCalculatorInvocation` 从 v6 升级为 v7。旧 `runtimeCalculatorAdapters` 参数从 projection、state snapshot、invocation 和 adapter resolver 删除，替换调用只接受 `threeValueMechanicsAdapterRegistry`。默认三值结果不变，缺失 required layer、unsupported capability 和 adapter 无效输出继续回退 generation delta。
+
+## 389. MechanicsEvaluation v2 / Adapter v6 / Action-Hit-Delta v9
+
+阶段 8-Q 把 profile capability 的单个 `operation / layerKeys` 改为有序步骤：
+
+```text
+mechanicsProfile.operandKinds[kind].steps[]
+  key
+  operation
+  layerKeys[]
+
+runtimeCalculatorInvocation.mechanicsEvaluation
+  contractName = AzPrThreeValueMechanicsEvaluation
+  contractVersion = 2
+  status / ready / capabilityReady / delta
+  stepResults[]
+    key / operation
+    usedLayers[]
+      layerKey / inputKey / source / ready
+    delta / ready / status
+```
+
+`AzPrThreeValueMechanicsAdapterRegistry` 新增纯函数 `operationHandlers` 注册入口。evaluation 按 profile 顺序执行 step，向后续 handler 提供 `previousDelta`；默认 product、sum、before-minus-after、after-minus-before 与 identity 已全部迁入内置 handler。handler 缺失、异常或 layer input 不完整时停止步骤链，并继续使用 generation delta 回退。
+
+operands v1 不再携带重复的 operation；operation 只由 profile step 决定。`AzPrThreeValueMechanicsAdapter` 从 v5 升级为 v6，`Action -> Hit -> ThreeValueDelta` 从 v8 升级为 v9，`ThreeValueRuntimeCalculatorInvocation` 从 v7 升级为 v8。默认 HP、韧性、角色能量、曲线和日志结果不变，本阶段没有启用未确认机制层。

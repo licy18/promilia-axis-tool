@@ -233,7 +233,7 @@ describe('three value generation layer', () => {
     expect(layer.sourceKind).toBe('azpr-standard-three-value-generation-layer');
     expect(layer.contract).toMatchObject({
       name: 'Action -> Hit -> ThreeValueDelta',
-      version: 8,
+      version: 9,
       frameRate: 60,
       deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
       calculatorContract: {
@@ -248,7 +248,7 @@ describe('three value generation layer', () => {
       },
       mechanicsAdapterContract: {
         name: 'AzPrThreeValueMechanicsAdapter',
-        version: 5,
+        version: 6,
         requiredInputs: [
           'action',
           'hit',
@@ -265,7 +265,7 @@ describe('three value generation layer', () => {
         },
         evaluationContract: {
           name: 'AzPrThreeValueMechanicsEvaluation',
-          version: 1,
+          version: 2,
           input: 'mechanicsLayerInputs',
         },
       },
@@ -401,7 +401,7 @@ describe('three value generation layer', () => {
         }),
         mechanicsAdapterRequest: expect.objectContaining({
           contractName: 'AzPrThreeValueMechanicsAdapter',
-          contractVersion: 5,
+          contractVersion: 6,
           trackKey: 'enemyHpDamage',
           outputField: 'hpDelta',
           sourceValue: expect.objectContaining({
@@ -413,7 +413,6 @@ describe('three value generation layer', () => {
               contractName: 'AzPrThreeValueMechanicsOperands',
               contractVersion: 1,
               kind: 'source-value-identity',
-              operation: 'identity',
               expectedDelta: 1200,
               ready: true,
             }),
