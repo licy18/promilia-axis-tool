@@ -63,15 +63,37 @@ describe('three value mechanics adapter', () => {
     expect(invocations.map(invocation => invocation.output.delta)).toEqual([
       120, 18, -25,
     ]);
+    expect(
+      invocations.map(invocation => invocation.stateEffectProposal)
+    ).toEqual([
+      expect.objectContaining({
+        writeMetric: 'enemyHp',
+        targetKind: 'enemy',
+        targetId: 'enemy-001',
+        ready: true,
+      }),
+      expect.objectContaining({
+        writeMetric: 'enemyToughness',
+        targetKind: 'enemy',
+        targetId: 'enemy-001',
+        ready: true,
+      }),
+      expect.objectContaining({
+        writeMetric: 'selfEnergy',
+        targetKind: 'actor',
+        targetId: 'actor-001',
+        ready: true,
+      }),
+    ]);
     expect(invocations).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          schemaVersion: 8,
+          schemaVersion: 9,
           adapter: expect.objectContaining({
             key: 'unit-test-three-track-mechanics-adapter',
             version: 7,
             contractName: 'AzPrThreeValueMechanicsAdapter',
-            contractVersion: 6,
+            contractVersion: 7,
             registrationKey: 'default',
             custom: true,
           }),
@@ -115,9 +137,11 @@ describe('three value mechanics adapter', () => {
       passthroughInvocationCount: 3,
       customAdapterInvocationCount: 3,
       mechanicsAdapterContractName: 'AzPrThreeValueMechanicsAdapter',
-      mechanicsAdapterContractVersion: 6,
+      mechanicsAdapterContractVersion: 7,
       registrationKeys: ['default'],
       adapterKeys: ['unit-test-three-track-mechanics-adapter'],
+      stateEffectProposalReadyInvocationCount: 3,
+      stateEffectProposalMissingInvocationCount: 0,
     });
   });
 
@@ -203,7 +227,7 @@ describe('three value mechanics adapter', () => {
           }),
           mechanicsEvaluation: expect.objectContaining({
             contractName: 'AzPrThreeValueMechanicsEvaluation',
-            contractVersion: 2,
+            contractVersion: 3,
             ready: true,
             stepResults: [expect.objectContaining({ ready: true })],
           }),

@@ -6,13 +6,20 @@ import {
   createThreeValueMechanicsAdapterInput,
   resolveThreeValueMechanicsAdapter,
 } from '../mechanics/threeValueMechanicsAdapter';
+import { THREE_VALUE_STATE_EFFECT_BY_TRACK_KEY } from '../mechanics/threeValueMechanicsProfile';
 
 export const THREE_VALUE_RUNTIME_CALCULATOR_INVOCATION_CONTRACT_NAME =
   'ThreeValueRuntimeCalculatorInvocation';
 
+export const THREE_VALUE_STATE_EFFECT_PROPOSAL_CONTRACT_NAME =
+  'AzPrThreeValueStateEffectProposal';
+
+export const THREE_VALUE_STATE_EFFECT_PROPOSAL_CONTRACT_VERSION = 1;
+
 export function createThreeValueRuntimeCalculatorInvocation({
   delta = {},
   stateBefore = null,
+  runtimeOwnership = null,
   threeValueMechanicsAdapterRegistry = null,
 } = {}) {
   const input = createThreeValueMechanicsAdapterInput({ delta, stateBefore });
@@ -28,6 +35,11 @@ export function createThreeValueRuntimeCalculatorInvocation({
     input,
     outputField,
     calculation,
+  });
+  const stateEffectProposal = createThreeValueStateEffectProposal({
+    input,
+    output,
+    runtimeOwnership,
   });
   const changed = output.delta !== input.generatedDelta.delta;
   const fallbackReason = output.fallbackReason;
@@ -58,11 +70,12 @@ export function createThreeValueRuntimeCalculatorInvocation({
       resolvedAdapter.custom || output.mechanicsEvaluation?.ready === true,
     stateBeforePresent: Boolean(stateBefore),
     adapterOutputAccepted: !fallbackReason,
+    stateEffectProposalReady: stateEffectProposal.ready,
   };
   const valid = Object.values(validation).every(Boolean);
 
   return {
-    schemaVersion: 8,
+    schemaVersion: 9,
     sourceKind: 'azpr-three-value-runtime-calculator-invocation',
     contractName: THREE_VALUE_RUNTIME_CALCULATOR_INVOCATION_CONTRACT_NAME,
     status: fallbackReason
@@ -88,6 +101,7 @@ export function createThreeValueRuntimeCalculatorInvocation({
     },
     input,
     mechanicsEvaluation: output.mechanicsEvaluation,
+    stateEffectProposal,
     output,
     validation: {
       ...validation,
@@ -112,6 +126,7 @@ export function createRuntimeAppliedDeltaFromInvocation(delta, invocation) {
     runtimeCalculatorAdapterKey: invocation.adapter.key,
     runtimeCalculatorInvocationStatus: invocation.status,
     runtimeCalculationChanged: invocation.changed,
+    stateEffectProposal: invocation.stateEffectProposal,
     applied: true,
   };
 }
@@ -154,6 +169,12 @@ export function summarizeThreeValueRuntimeCalculatorInvocations(
           ) ?? []
       )
     ),
+    stateEffectProposalReadyInvocationCount: invocations.filter(
+      invocation => invocation.stateEffectProposal?.ready === true
+    ).length,
+    stateEffectProposalMissingInvocationCount: invocations.filter(
+      invocation => invocation.stateEffectProposal?.ready !== true
+    ).length,
     mechanicsProfileIds: uniqueStrings(
       invocations.map(invocation => invocation.input.mechanicsProfile?.profileId)
     ),
@@ -203,6 +224,51 @@ export function summarizeThreeValueRuntimeCalculatorInvocations(
     ),
     statuses: uniqueStrings(invocations.map(invocation => invocation.status)),
     applied: true,
+  };
+}
+
+export function createThreeValueStateEffectProposal({
+  input,
+  output,
+  runtimeOwnership,
+} = {}) {
+  const expected = THREE_VALUE_STATE_EFFECT_BY_TRACK_KEY[input?.trackKey];
+  const targetId =
+    expected?.target === 'energyOwner'
+      ? (input?.mechanismContext?.ownership?.energyOwnerActorId ??
+        runtimeOwnership?.energyOwnerActorId ??
+        input?.action?.actorId ??
+        null)
+      : (input?.mechanismContext?.ownership?.targetEnemyId ??
+        runtimeOwnership?.targetEnemyId ??
+        input?.action?.targetId ??
+        null);
+  const failureReason = !expected
+    ? 'track-unknown'
+    : !targetId
+      ? 'target-missing'
+      : !input?.stateBefore?.[expected.readMetric]
+        ? 'read-state-missing'
+        : !Number.isFinite(output?.delta)
+          ? 'delta-invalid'
+          : null;
+  const ready = !failureReason;
+  return {
+    contractName: THREE_VALUE_STATE_EFFECT_PROPOSAL_CONTRACT_NAME,
+    contractVersion: THREE_VALUE_STATE_EFFECT_PROPOSAL_CONTRACT_VERSION,
+    status: ready ? 'state-effect-proposal-ready' : 'state-effect-proposal-invalid',
+    ready,
+    failureReason,
+    sourceStepKey: output?.mechanicsEvaluation?.stateEffectStepKey ?? null,
+    trackKey: input?.trackKey ?? null,
+    readMetric: expected?.readMetric ?? null,
+    writeMetric: expected?.writeMetric ?? null,
+    targetKind: expected?.target === 'energyOwner' ? 'actor' : 'enemy',
+    targetId,
+    applyMode: expected?.applyMode ?? null,
+    delta: normalizeRuntimeCalculatorNumber(output?.delta),
+    hitKey: input?.hit?.hitKey ?? null,
+    frameIndex: normalizeRuntimeCalculatorNumber(input?.hit?.frameIndex),
   };
 }
 

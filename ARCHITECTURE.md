@@ -142,19 +142,21 @@ Action
 
 Project metadata 只携带活动方案的配置实例 ID 和已经解析的 `actorConfigs` / `enemyConfig`；compiler 将它们与 Scenario actor/enemy 合成为 `AzPrThreeValueMechanismConfiguration`。角色来源区分面板 stats、初始 SP 和 loadout，敌人来源区分 HP baseline、伤害预览防御倍率、韧性 baseline、等级和元素防御。当前确认可用的 baseline/预览字段显式标记应用位置；奇波、装备、灵子效果、敌人等级公式和元素防御公式固定为未应用。
 
-`AzPrThreeValueMechanismContext` 为 v3，`ThreeValueDeltaCalculator` 为 v3。阶段 8-Q 后 `Action -> Hit -> ThreeValueDelta` 为 v9，`AzPrThreeValueMechanicsAdapter` 为 v6，`ThreeValueRuntimeCalculatorInvocation` 为 v8；每条 delta、generation calculator result 和 runtime invocation 都保留配置、profile、机制层输入、evaluation、来源状态及实例 ID。
+`AzPrThreeValueMechanismContext` 为 v3，`ThreeValueDeltaCalculator` 为 v3。阶段 8-R 后 `Action -> Hit -> ThreeValueDelta` 为 v10，`AzPrThreeValueMechanicsAdapter` 为 v7，`ThreeValueRuntimeCalculatorInvocation` 为 v9，runtime state snapshot 为 v2；每条 delta、generation calculator result 和 runtime invocation 都保留配置、profile、机制层输入、evaluation、状态作用 proposal、来源状态及实例 ID。
 
-### MechanicsProfile v1 / Adapter v6 / LayerInputs v1 / Evaluation v2
+### MechanicsProfile v2 / Adapter v7 / LayerInputs v1 / Evaluation v3
 
 compiler 默认把 `azpr-three-value-preview-v1` 作为 `AzPrMechanicsProfile` 绑定到 Scenario，并保留 requested/resolved profile 与 fallback 状态。profile 是纯数据，声明支持的 operand kinds、对应 operation、可用轨道，以及 HP、韧性、能量各层的 applied/unapplied 状态。`compileProject(..., { threeValueMechanicsProfile })` 可选择其他合法 profile。
 
-`Action -> Hit -> ThreeValueDelta v9` 的每条 delta 都携带 `mechanicsAdapterRequest`。generation 固定 `action / hit / mechanismConfiguration / mechanicsProfile / mechanicsLayerInputs / sourceValue.operands`；layer inputs 把 profile 各 step 的 layer keys 合并为 required 层，保存角色面板、动作倍率、敌人双防/元素防御、初始能量、培养配置和 operands 的实际值、来源与 readiness。runtime 再绑定该次 invocation 的 `stateBefore`，并校验 required applied 输入没有缺口。
+`Action -> Hit -> ThreeValueDelta v10` 的每条 delta 都携带 `mechanicsAdapterRequest`。generation 固定 `action / hit / mechanismConfiguration / mechanicsProfile / mechanicsLayerInputs / sourceValue.operands`；layer inputs 把 profile 各 step 的 layer keys 合并为 required 层，保存角色面板、动作倍率、敌人双防/元素防御、初始能量、培养配置和 operands 的实际值、来源与 readiness。runtime 再绑定该次 invocation 的 `stateBefore`，并校验 required applied 输入没有缺口。
 
-`AzPrThreeValueMechanicsEvaluation v2` 是内置 adapter 的唯一主计算结果。它按 profile capability 顺序执行 `steps[]`，每步通过 operation handler 读取声明的 layer inputs，并输出 step key、operation、used layers、delta、ready 与 status；前一步 delta 作为下一步 `previousDelta`。operands 只保留 generation 来源和 fallback 值。profile 不支持 capability、required 输入缺失、handler 缺失或 handler 异常时，invocation 明确记录失败步骤并回退 generation delta。
+`AzPrThreeValueMechanicsEvaluation v3` 是内置 adapter 的唯一主计算结果。它按 profile capability 顺序执行 `steps[]`，每步通过 operation handler 读取声明的 layer inputs，并输出 step key、operation、used layers、delta、ready 与 status；前一步 delta 作为下一步 `previousDelta`。profile v2 的 track 定义保存标准 state effect，step 通过 `stateEffectTrackKeys[]` 声明自己负责的三值轨道。
 
-注册表支持 HP、韧性、能量轨专用 adapter、一个 `default` adapter 覆盖三轨，以及纯函数 operation handler；`simulateScenario(scenario, { threeValueMechanicsAdapterRegistry })` 是唯一无 UI 顶层注入入口。默认 profile 的 product、sum、before/after 与 identity 均已迁入内置 steps；runtime calculator invocation summary 从实际 step results 汇总 operation。
+`AzPrThreeValueStateEffectProposal v1` 把 evaluation 或自定义 adapter 的最终 delta 收束为 `readMetric / writeMetric / targetKind / targetId / applyMode / frameIndex`。HP 和韧性只允许写目标敌人对应状态，能量只允许写 energy owner 角色；未知轨道、缺失目标、缺失读取状态或无效 delta 的 proposal 不会修改 runtime state。旧 `hpDelta / toughnessDelta / energyDelta` 继续服务日志、曲线和兼容消费，但不再直接驱动 snapshot mutation。
 
-生产构建把 profile、adapter 与 layer inputs 固定为单个 `azpr-mechanics-runtime` chunk；这是同步机制包的缓存边界，不改变源码 import、测试挂载或 runtime 调用语义，总 JavaScript 体积仍由独立预算限制。
+注册表支持 HP、韧性、能量轨专用 adapter、一个 `default` adapter 覆盖三轨，以及纯函数 operation handler；`simulateScenario(scenario, { threeValueMechanicsAdapterRegistry })` 是唯一无 UI 顶层注入入口。默认 profile 的 product、sum、before/after 与 identity 均已迁入内置 steps；runtime calculator invocation summary 汇总实际 operation 和 proposal ready/missing 数。
+
+生产构建把 profile、adapter 与 layer inputs 固定为单个 `azpr-mechanics-runtime` chunk；同步出现的辅助 Workbench 面板合并为 `workbench-secondary-ui`，仅减少重复 chunk 开销，不改变组件和加载条件。总 JavaScript 体积仍由独立预算限制。
 
 ### ScenarioWorkspace v1
 

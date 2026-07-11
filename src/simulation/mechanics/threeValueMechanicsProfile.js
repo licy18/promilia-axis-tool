@@ -1,7 +1,7 @@
 export const THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME =
   'AzPrMechanicsProfile';
 
-export const THREE_VALUE_MECHANICS_PROFILE_CONTRACT_VERSION = 1;
+export const THREE_VALUE_MECHANICS_PROFILE_CONTRACT_VERSION = 2;
 
 export const DEFAULT_THREE_VALUE_MECHANICS_PROFILE_ID =
   'azpr-three-value-preview-v1';
@@ -11,6 +11,27 @@ const TRACK_KEYS = [
   'enemyToughnessDamage',
   'selfEnergyChange',
 ];
+
+export const THREE_VALUE_STATE_EFFECT_BY_TRACK_KEY = {
+  enemyHpDamage: {
+    readMetric: 'enemyHp',
+    writeMetric: 'enemyHp',
+    target: 'targetEnemy',
+    applyMode: 'decrease',
+  },
+  enemyToughnessDamage: {
+    readMetric: 'enemyToughness',
+    writeMetric: 'enemyToughness',
+    target: 'targetEnemy',
+    applyMode: 'decrease',
+  },
+  selfEnergyChange: {
+    readMetric: 'selfEnergy',
+    writeMetric: 'selfEnergy',
+    target: 'energyOwner',
+    applyMode: 'increase',
+  },
+};
 
 export const DEFAULT_THREE_VALUE_MECHANICS_PROFILE =
   createDefaultThreeValueMechanicsProfile();
@@ -24,6 +45,7 @@ export function createDefaultThreeValueMechanicsProfile() {
           key: 'raw-product',
           operation: 'round-clamped-product',
           layerKeys: ['baseAttack', 'actionMultiplier'],
+          stateEffectTrackKeys: ['enemyHpDamage'],
         },
       ],
       status: 'applied-preview-formula-partial',
@@ -36,6 +58,7 @@ export function createDefaultThreeValueMechanicsProfile() {
           key: 'explicit-resource-sum',
           operation: 'sum',
           layerKeys: ['explicitResourceDelta'],
+          stateEffectTrackKeys: ['selfEnergyChange'],
         },
       ],
       status: 'applied-explicit-resource-events',
@@ -48,6 +71,7 @@ export function createDefaultThreeValueMechanicsProfile() {
           key: 'validated-before-after',
           operation: 'before-minus-after',
           layerKeys: ['validatedRuntimeSample'],
+          stateEffectTrackKeys: ['enemyToughnessDamage'],
         },
       ],
       status: 'applied-validated-runtime-sample',
@@ -60,6 +84,7 @@ export function createDefaultThreeValueMechanicsProfile() {
           key: 'validated-after-before',
           operation: 'after-minus-before',
           layerKeys: ['validatedRuntimeSample'],
+          stateEffectTrackKeys: ['selfEnergyChange'],
         },
       ],
       status: 'applied-validated-runtime-sample',
@@ -72,6 +97,7 @@ export function createDefaultThreeValueMechanicsProfile() {
           key: 'source-identity',
           operation: 'identity',
           layerKeys: [],
+          stateEffectTrackKeys: TRACK_KEYS,
         },
       ],
       status: 'compatibility-and-diagnostic-fallback',
@@ -93,6 +119,7 @@ export function createDefaultThreeValueMechanicsProfile() {
     tracks: {
       enemyHpDamage: {
         outputField: 'hpDelta',
+        stateEffect: THREE_VALUE_STATE_EFFECT_BY_TRACK_KEY.enemyHpDamage,
         appliedLayers: ['baseAttack', 'actionMultiplier'],
         unappliedLayers: [
           'enemyDefense',
@@ -105,6 +132,8 @@ export function createDefaultThreeValueMechanicsProfile() {
       },
       enemyToughnessDamage: {
         outputField: 'toughnessDelta',
+        stateEffect:
+          THREE_VALUE_STATE_EFFECT_BY_TRACK_KEY.enemyToughnessDamage,
         appliedLayers: ['validatedRuntimeSample'],
         unappliedLayers: [
           'actionToughnessValue',
@@ -115,6 +144,7 @@ export function createDefaultThreeValueMechanicsProfile() {
       },
       selfEnergyChange: {
         outputField: 'energyDelta',
+        stateEffect: THREE_VALUE_STATE_EFFECT_BY_TRACK_KEY.selfEnergyChange,
         appliedLayers: ['explicitResourceDelta', 'validatedRuntimeSample'],
         unappliedLayers: [
           'actionChargeGain',
@@ -167,6 +197,12 @@ export function validateThreeValueMechanicsProfile(profile) {
   if (profile?.contractName !== THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME) {
     issues.push('contract-name-invalid');
   }
+  if (
+    Number(profile?.contractVersion) !==
+    THREE_VALUE_MECHANICS_PROFILE_CONTRACT_VERSION
+  ) {
+    issues.push('contract-version-invalid');
+  }
   if (!String(profile?.profileId ?? '').trim()) {
     issues.push('profile-id-missing');
   }
@@ -200,6 +236,19 @@ export function validateThreeValueMechanicsProfile(profile) {
         );
       }
     }
+    for (const trackKey of capability?.trackKeys ?? []) {
+      if (
+        !resolveThreeValueStateEffectDeclaration(
+          profile,
+          capability,
+          trackKey
+        ).ready
+      ) {
+        issues.push(
+          `operand-state-effect-invalid:${kind || 'unknown'}:${trackKey}`
+        );
+      }
+    }
   }
   return {
     valid: issues.length === 0,
@@ -208,6 +257,27 @@ export function validateThreeValueMechanicsProfile(profile) {
         ? 'mechanics-profile-valid'
         : 'mechanics-profile-invalid',
     issues,
+  };
+}
+
+export function resolveThreeValueStateEffectDeclaration(
+  profile,
+  capability,
+  trackKey
+) {
+  const expected = THREE_VALUE_STATE_EFFECT_BY_TRACK_KEY[trackKey] ?? null;
+  const step = [...(capability?.steps ?? [])]
+    .reverse()
+    .find(item => item?.stateEffectTrackKeys?.includes(trackKey));
+  const declaration = profile?.tracks?.[trackKey]?.stateEffect ?? null;
+  const ready = Boolean(
+    expected &&
+      declaration &&
+      Object.keys(expected).every(key => declaration[key] === expected[key])
+  );
+  return {
+    ready,
+    stepKey: step?.key ?? null,
   };
 }
 

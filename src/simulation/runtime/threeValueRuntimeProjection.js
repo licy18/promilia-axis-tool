@@ -758,7 +758,7 @@ function createRuntimeStateCurvesOutputContract({
       runtimeCalculatorInvocationCount:
         stateCurves.snapshots.summary.runtimeCalculatorInvocationCount,
       keyFields: ['sourceDeltaId', 'runtimeSequenceIndex'],
-      valueFields: ['before', 'delta', 'after'],
+      valueFields: ['before', 'stateEffectProposal', 'delta', 'after'],
       calculatorInvocationField: 'runtimeCalculatorInvocation',
     },
     summaryFields: [
@@ -1172,6 +1172,10 @@ function createThreeValueRuntimeStateCurves({
       stateSnapshotCount: runtimeStateSnapshots.summary.snapshotCount,
       runtimeCalculatorInvocationCount:
         runtimeStateSnapshots.summary.runtimeCalculatorInvocationCount,
+      stateEffectProposalReadyInvocationCount:
+        runtimeStateSnapshots.summary.stateEffectProposalReadyInvocationCount,
+      stateEffectProposalMissingInvocationCount:
+        runtimeStateSnapshots.summary.stateEffectProposalMissingInvocationCount,
       runtimeCalculatorReplacedInvocationCount:
         runtimeStateSnapshots.summary.runtimeCalculatorReplacedInvocationCount,
       runtimeCalculatorFallbackInvocationCount:
@@ -1341,6 +1345,10 @@ function summarizeThreeValueRuntimeProjection({
     mechanicsProfileCapabilityMissingInvocationCount:
       runtimeStateSnapshots.summary
         .mechanicsProfileCapabilityMissingInvocationCount,
+    stateEffectProposalReadyInvocationCount:
+      runtimeStateSnapshots.summary.stateEffectProposalReadyInvocationCount,
+    stateEffectProposalMissingInvocationCount:
+      runtimeStateSnapshots.summary.stateEffectProposalMissingInvocationCount,
     runtimeCalculatorAdapterKeys:
       runtimeStateSnapshots.summary.runtimeCalculatorAdapterKeys,
     runtimeCalculatorInvocationStatuses:

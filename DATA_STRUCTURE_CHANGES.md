@@ -26576,3 +26576,30 @@ runtimeCalculatorInvocation.mechanicsEvaluation
 `AzPrThreeValueMechanicsAdapterRegistry` 新增纯函数 `operationHandlers` 注册入口。evaluation 按 profile 顺序执行 step，向后续 handler 提供 `previousDelta`；默认 product、sum、before-minus-after、after-minus-before 与 identity 已全部迁入内置 handler。handler 缺失、异常或 layer input 不完整时停止步骤链，并继续使用 generation delta 回退。
 
 operands v1 不再携带重复的 operation；operation 只由 profile step 决定。`AzPrThreeValueMechanicsAdapter` 从 v5 升级为 v6，`Action -> Hit -> ThreeValueDelta` 从 v8 升级为 v9，`ThreeValueRuntimeCalculatorInvocation` 从 v7 升级为 v8。默认 HP、韧性、角色能量、曲线和日志结果不变，本阶段没有启用未确认机制层。
+
+## 390. StateEffectProposal v1 / MechanicsProfile v2 / RuntimeSnapshot v2
+
+阶段 8-R 为 profile track 增加标准状态作用描述，step 只声明负责的轨道：
+
+```text
+mechanicsProfile.tracks[trackKey].stateEffect
+  readMetric / writeMetric
+  target = targetEnemy | energyOwner
+  applyMode = decrease | increase
+
+mechanicsProfile.operandKinds[kind].steps[].stateEffectTrackKeys[]
+
+runtimeCalculatorInvocation.stateEffectProposal
+  contractName = AzPrThreeValueStateEffectProposal
+  contractVersion = 1
+  status / ready / failureReason
+  sourceStepKey / trackKey
+  readMetric / writeMetric
+  targetKind / targetId
+  applyMode / delta
+  hitKey / frameIndex
+```
+
+`AzPrThreeValueMechanicsEvaluation v3` 输出实际负责 state effect 的 step key。runtime invocation 用受信任的 track 定义校验目标、读取状态和最终 delta；`AzPrThreeValueRuntimeStateSnapshot v2` 只把 ready proposal 写入对应 accumulator。HP/韧性固定作用于目标敌人，能量固定作用于 energy owner；无目标或未知轨道不会修改状态。
+
+`AzPrMechanicsProfile` 从 v1 升级为 v2，`AzPrThreeValueMechanicsAdapter` 从 v6 升级为 v7，`Action -> Hit -> ThreeValueDelta` 从 v9 升级为 v10，`ThreeValueRuntimeCalculatorInvocation` 从 v8 升级为 v9。旧三值字段继续供曲线、日志与兼容消费，默认三值结果不变；本阶段没有新增伤害、防御、抗性或培养公式。

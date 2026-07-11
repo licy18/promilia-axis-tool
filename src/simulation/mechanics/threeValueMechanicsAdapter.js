@@ -1,12 +1,12 @@
 export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME =
   'AzPrThreeValueMechanicsAdapter';
 
-export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION = 6;
+export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION = 7;
 
 export const THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_NAME =
   'AzPrThreeValueMechanicsEvaluation';
 
-export const THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_VERSION = 2;
+export const THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_VERSION = 3;
 
 export const THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME =
   'AzPrThreeValueMechanicsOperands';
@@ -319,6 +319,11 @@ export function createThreeValueMechanicsEvaluation(
     operands,
   });
   const steps = capabilityResolution.capability?.steps ?? [];
+  const stateEffectResolution = resolveThreeValueStateEffectDeclaration(
+    capabilityResolution.profile,
+    capabilityResolution.capability,
+    input.trackKey
+  );
   const layerInputs = input.mechanicsLayerInputs ?? {};
   const sharedOperands = layerInputs.inputs?.operands?.value ?? {};
   const stepResults = [];
@@ -373,6 +378,9 @@ export function createThreeValueMechanicsEvaluation(
       : 'three-value-mechanics-evaluation-invalid',
     stepResults,
     capabilityReady: capabilityResolution.ready,
+    stateEffectStepKey: stateEffectResolution.ready
+      ? stateEffectResolution.stepKey
+      : null,
   };
 }
 
@@ -619,6 +627,7 @@ function uniqueStrings(values) {
 import {
   DEFAULT_THREE_VALUE_MECHANICS_PROFILE,
   resolveThreeValueMechanicsProfileCapability,
+  resolveThreeValueStateEffectDeclaration,
 } from './threeValueMechanicsProfile';
 import {
   bindThreeValueMechanicsLayerInputsState,

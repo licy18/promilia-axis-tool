@@ -169,7 +169,7 @@ describe('three value mechanism configuration', () => {
       },
     });
     expect(runtimeDelta.runtimeCalculatorInvocation).toMatchObject({
-      schemaVersion: 8,
+      schemaVersion: 9,
       input: {
         mechanismConfiguration: {
           sourceActor: {
@@ -230,7 +230,7 @@ describe('three value mechanism configuration', () => {
     );
     expect(adapted.threeValueRuntimeProjection.summary).toMatchObject({
       mechanicsAdapterContractName: 'AzPrThreeValueMechanicsAdapter',
-      mechanicsAdapterContractVersion: 6,
+      mechanicsAdapterContractVersion: 7,
       mechanicsAdapterRegistrationKeys: ['default'],
       runtimeCalculatorCustomAdapterInvocationCount: calls.length,
       mechanicsAdapterRequestCount: calls.length,

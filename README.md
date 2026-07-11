@@ -107,7 +107,7 @@ e2e/                     Workbench 浏览器主流程
 
 `npm run test:e2e:production-preview` 会重新构建 `dist`，用独立端口启动 Vite production preview，并检查路由与哈希资源、诊断动态包、JSON/PNG 项目交换、拖放恢复、配置实例、多动作与关系编辑、状态效果区间复盘和 390px 窄屏主流程。最终十五项能力的试用判定写入 `reports/production-preview-acceptance.json`。
 
-三值运行时统一通过 `AzPrThreeValueMechanicsAdapter v6` 调用 HP、韧性和角色能量 adapter；compiler 为 Scenario 绑定 `AzPrMechanicsProfile v1`，generation 以 operands 和 `AzPrThreeValueMechanicsLayerInputs v1` 固定来源，runtime 绑定 `stateBefore` 后由 `AzPrThreeValueMechanicsEvaluation v2` 按 profile 的有序 `steps` 产生最终 delta。内置 operation handler 覆盖当前五种已确认操作，自定义 handler 可通过同一无 UI 注册表扩展；operands 只保留 generation 来源和失败回退。
+三值运行时统一通过 `AzPrThreeValueMechanicsAdapter v7` 调用 HP、韧性和角色能量 adapter；compiler 为 Scenario 绑定 `AzPrMechanicsProfile v2`，generation 以 operands 和 `AzPrThreeValueMechanicsLayerInputs v1` 固定来源，runtime 绑定 `stateBefore` 后由 `AzPrThreeValueMechanicsEvaluation v3` 按有序 `steps` 产生 delta。每条结果再生成 `AzPrThreeValueStateEffectProposal v1`，明确读取状态、作用对象、写入指标和帧位；runtime snapshot 只应用验证通过的 proposal，未确认机制仍不参与计算。
 
 ## 项目文档
 

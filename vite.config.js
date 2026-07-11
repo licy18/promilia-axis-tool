@@ -13,6 +13,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
+        onlyExplicitManualChunks: true,
         manualChunks(id) {
           if (
             id.endsWith('/threeValueMechanicsProfile.js') ||
@@ -20,6 +21,20 @@ export default defineConfig({
             id.endsWith('/threeValueMechanicsLayerInputs.js')
           ) {
             return 'azpr-mechanics-runtime';
+          }
+          if (
+            [
+              'ActionRuleDiagnosticsPanel.vue',
+              'EffectTimelinePanel.vue',
+              'EnemyPanel.vue',
+              'TeamLoadoutPanel.vue',
+              'WorkbenchCycleSectionPanel.vue',
+              'WorkbenchLayoutBar.vue',
+              'WorkbenchProjectDropOverlay.vue',
+              'WorkbenchScenarioBar.vue',
+            ].some(fileName => id.includes(`/features/workbench/${fileName}`))
+          ) {
+            return 'workbench-secondary-ui';
           }
         },
       },

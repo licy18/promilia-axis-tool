@@ -7,12 +7,6 @@ import {
 export const THREE_VALUE_RUNTIME_STATE_SNAPSHOT_CONTRACT_NAME =
   'AzPrThreeValueRuntimeStateSnapshot';
 
-const RUNTIME_STATE_METRIC_BY_TRACK_KEY = {
-  enemyHpDamage: 'enemyHp',
-  enemyToughnessDamage: 'enemyToughness',
-  selfEnergyChange: 'selfEnergy',
-};
-
 export function createThreeValueRuntimeStateSnapshots({
   scenario = {},
   appliedDeltas = [],
@@ -53,17 +47,20 @@ export function createThreeValueRuntimeStateSnapshots({
       selfEnergyStateByActor,
       scenario,
     });
-    const primaryMetricKey =
-      RUNTIME_STATE_METRIC_BY_TRACK_KEY[delta.trackKey] ?? 'unknown';
     const before = createRuntimeStateSnapshotValues({
       enemyHpState,
       enemyToughnessState,
       energyActorState,
     });
+    const targetEnemyId =
+      delta.mechanismContext?.ownership?.targetEnemyId ??
+      (scenario?.enemy ? (scenario.enemy.id ?? 'scenario-enemy') : null) ??
+      null;
     const runtimeCalculatorInvocation =
       createThreeValueRuntimeCalculatorInvocation({
         delta,
         stateBefore: before,
+        runtimeOwnership: { energyOwnerActorId, targetEnemyId },
         threeValueMechanicsAdapterRegistry,
       });
     const runtimeDelta = createRuntimeAppliedDeltaFromInvocation(
@@ -72,7 +69,13 @@ export function createThreeValueRuntimeStateSnapshots({
     );
     runtimeDeltas.push(runtimeDelta);
     calculatorInvocations.push(runtimeCalculatorInvocation);
-    const deltaValues = createRuntimeStateSnapshotDeltaValues(runtimeDelta);
+    const stateEffectProposal = runtimeCalculatorInvocation.stateEffectProposal;
+    const primaryMetricKey = stateEffectProposal.ready
+      ? stateEffectProposal.writeMetric
+      : 'unknown';
+    const deltaValues = createRuntimeStateSnapshotDeltaValues(
+      stateEffectProposal
+    );
 
     applyRuntimeStateDelta(enemyHpState, deltaValues.enemyHp);
     applyRuntimeStateDelta(enemyToughnessState, deltaValues.enemyToughness);
@@ -89,7 +92,7 @@ export function createThreeValueRuntimeStateSnapshots({
     const baselineConfirmed = primaryState?.baselineConfirmed === true;
 
     return {
-      schemaVersion: 1,
+      schemaVersion: 2,
       sourceKind: 'azpr-three-value-runtime-state-snapshot',
       contractName: THREE_VALUE_RUNTIME_STATE_SNAPSHOT_CONTRACT_NAME,
       status: baselineConfirmed
@@ -107,20 +110,18 @@ export function createThreeValueRuntimeStateSnapshots({
         metricKey => metricKey !== 'unknown'
       ),
       energyOwnerActorId,
-      targetEnemyId:
-        delta.mechanismContext?.ownership?.targetEnemyId ??
-        scenario?.enemy?.id ??
-        null,
+      targetEnemyId,
       mechanismContextStatus:
         delta.mechanismContextStatus ?? delta.mechanismContext?.status ?? null,
       runtimeCalculatorInvocation,
+      stateEffectProposal,
       runtimeCalculatorAdapterKey: runtimeCalculatorInvocation.adapter.key,
       runtimeCalculationChanged: runtimeCalculatorInvocation.changed,
       baselineConfirmed,
       before,
       delta: deltaValues,
       after,
-      applied: true,
+      applied: stateEffectProposal.ready,
     };
   });
 
@@ -145,7 +146,7 @@ export function createThreeValueRuntimeStateSnapshots({
     summarizeThreeValueRuntimeCalculatorInvocations(calculatorInvocations);
 
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     sourceKind: 'azpr-three-value-runtime-state-snapshots',
     contractName: THREE_VALUE_RUNTIME_STATE_SNAPSHOT_CONTRACT_NAME,
     status:
@@ -207,6 +208,10 @@ export function createThreeValueRuntimeStateSnapshots({
         calculatorInvocationSummary.mechanicsProfileCapabilityReadyInvocationCount,
       mechanicsProfileCapabilityMissingInvocationCount:
         calculatorInvocationSummary.mechanicsProfileCapabilityMissingInvocationCount,
+      stateEffectProposalReadyInvocationCount:
+        calculatorInvocationSummary.stateEffectProposalReadyInvocationCount,
+      stateEffectProposalMissingInvocationCount:
+        calculatorInvocationSummary.stateEffectProposalMissingInvocationCount,
       runtimeCalculatorAdapterKeys: calculatorInvocationSummary.adapterKeys,
       runtimeCalculatorInvocationStatuses: calculatorInvocationSummary.statuses,
       runtimeMechanismConfigurationReadyInvocationCount:
@@ -568,12 +573,13 @@ function createMissingRuntimeSelfEnergySnapshotValue() {
   };
 }
 
-function createRuntimeStateSnapshotDeltaValues(delta) {
-  return {
-    enemyHp: normalizeRuntimeStateNumber(delta.hpDelta) ?? 0,
-    enemyToughness: normalizeRuntimeStateNumber(delta.toughnessDelta) ?? 0,
-    selfEnergy: normalizeRuntimeStateNumber(delta.energyDelta) ?? 0,
-  };
+function createRuntimeStateSnapshotDeltaValues(proposal) {
+  const values = { enemyHp: 0, enemyToughness: 0, selfEnergy: 0 };
+  if (proposal?.ready && proposal.writeMetric in values) {
+    values[proposal.writeMetric] =
+      normalizeRuntimeStateNumber(proposal.delta) ?? 0;
+  }
+  return values;
 }
 
 function applyRuntimeStateDelta(state, delta) {

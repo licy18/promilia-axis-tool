@@ -1503,6 +1503,16 @@ describe('three value runtime projection', () => {
     expect(snapshots[0]).toMatchObject({
       sourceDeltaId: 'hp-a',
       energyOwnerActorId: 'actor-001',
+      primaryMetricKey: 'enemyHp',
+      changedMetricKeys: ['enemyHp'],
+      stateEffectProposal: {
+        contractName: 'AzPrThreeValueStateEffectProposal',
+        ready: true,
+        writeMetric: 'enemyHp',
+        targetKind: 'enemy',
+        targetId: 'enemy-001',
+        applyMode: 'decrease',
+      },
       before: {
         enemyHp: expect.objectContaining({ currentValue: 1000 }),
         enemyToughness: expect.objectContaining({ currentValue: 100 }),
@@ -1523,6 +1533,15 @@ describe('three value runtime projection', () => {
     expect(snapshots[1]).toMatchObject({
       sourceDeltaId: 'energy-a',
       energyOwnerActorId: 'actor-001',
+      primaryMetricKey: 'selfEnergy',
+      changedMetricKeys: ['selfEnergy'],
+      stateEffectProposal: {
+        ready: true,
+        writeMetric: 'selfEnergy',
+        targetKind: 'actor',
+        targetId: 'actor-001',
+        applyMode: 'increase',
+      },
       before: {
         selfEnergy: expect.objectContaining({ currentValue: 10 }),
       },
@@ -1570,6 +1589,8 @@ describe('three value runtime projection', () => {
       enemyToughnessFinal: 80,
       selfEnergyActorCount: 2,
       selfEnergyBaselineReadyActorCount: 2,
+      stateEffectProposalReadyInvocationCount: 4,
+      stateEffectProposalMissingInvocationCount: 0,
       selfEnergyFinalByActor: [
         expect.objectContaining({
           actorId: 'actor-001',
@@ -1596,6 +1617,57 @@ describe('three value runtime projection', () => {
         actor.points.map(point => point.stateSnapshot)
       )
     ).toEqual([snapshots[1], snapshots[3]]);
+  });
+
+  it('does not mutate runtime state without a validated effect target', () => {
+    const delta = createRuntimeStateDelta({
+      id: 'hp-missing-target',
+      actorId: 'actor-001',
+      actorName: '末音',
+      trackKey: 'enemyHpDamage',
+      value: 100,
+      frameIndex: 10,
+    });
+    delta.mechanismContext.ownership.targetEnemyId = null;
+    const stateSnapshots = createThreeValueRuntimeStateSnapshots({
+      scenario: {
+        enemy: null,
+        initialRuntimeState: {
+          enemy: { hp: { currentValue: 1000, maxValue: 1000 } },
+        },
+        actors: [
+          {
+            id: 'actor-001',
+            name: '末音',
+            initialSp: 0,
+            stats: { maxSp: 100 },
+          },
+        ],
+      },
+      appliedDeltas: [delta],
+    });
+
+    expect(stateSnapshots.snapshots[0]).toMatchObject({
+      primaryMetricKey: 'unknown',
+      changedMetricKeys: [],
+      applied: false,
+      delta: { enemyHp: 0, enemyToughness: 0, selfEnergy: 0 },
+      before: { enemyHp: expect.objectContaining({ currentValue: 1000 }) },
+      after: { enemyHp: expect.objectContaining({ currentValue: 1000 }) },
+      stateEffectProposal: {
+        status: 'state-effect-proposal-invalid',
+        ready: false,
+        writeMetric: 'enemyHp',
+        targetId: null,
+        failureReason: 'target-missing',
+      },
+    });
+    expect(stateSnapshots.summary).toMatchObject({
+      enemyHpInitial: 1000,
+      enemyHpFinal: 1000,
+      stateEffectProposalReadyInvocationCount: 0,
+      stateEffectProposalMissingInvocationCount: 1,
+    });
   });
 
   it('replaces only runtime delta output through a state-aware calculator adapter', () => {

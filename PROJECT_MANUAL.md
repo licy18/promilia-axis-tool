@@ -1066,6 +1066,24 @@ Workbench 现在可以把角色等级、初始能量、奇波、装备、灵子�
 
 下一阶段目标：阶段 8-R / P3 机制步骤状态作用合同。让 profile step 在纯计算 delta 之外声明明确的读取状态、作用对象和写入轨道，由 runtime 只应用通过验证的标准 state effect proposal；优先打通 HP、韧性和每角色能量的统一目标/时序边界，为后续确认机制增加步骤提供稳定入口。该阶段仍不追最终倍率，不启用未确认培养效果，也不增加碎片 UI。
 
+### 阶段 8-R P3 机制步骤状态作用合同（2026-07-11）
+
+`AzPrMechanicsProfile v2` 现在为三轨声明标准状态读写：HP 与韧性读取并写入目标敌人状态，角色能量读取并写入 energy owner；每个 step 通过 `stateEffectTrackKeys[]` 声明负责的轨道。`AzPrThreeValueMechanicsEvaluation v3` 继续只计算 delta，同时给出实际负责状态作用的 step key。
+
+新增 `AzPrThreeValueStateEffectProposal v1`。runtime invocation v9 把最终 delta、目标 ID、读写指标、作用模式和命中帧收束成 proposal；runtime state snapshot v2 不再直接按三个旧 delta 字段改状态，只应用验证通过的 proposal。未知轨道、缺失目标、缺失读取状态或无效 delta 会保留审计结果但不修改状态。默认 HP、韧性、各角色能量、曲线和日志结果不变，本阶段没有新增真实公式或 UI。
+
+阶段验收：72 个测试文件、406 条单元/组件测试，39 条 Workbench 主流程和 15 项 production preview 全部通过，生产报告结论为 `trial-ready`。生产引用审计为 108 个源码、104 个生产可达、4 个允许 test-only、0 个孤儿；数据投影审计全部一致。Workbench 主块为 368,729B gzip，全部 JavaScript 为 737,874B gzip，均在 370,000B/740,000B 预算内。180 动作编译 p95 为 9.427ms、完整 simulation p95 为 25.120ms；120 动作浏览器首屏就绪为 1435ms。
+
+### P3 机制能力盘点 / P2-P3 桥接检查点
+
+- 正式计算输入：HP raw preview 的角色 attack 与动作倍率；显式角色能量事件 delta；已验证 runtime sample 的韧性/能量 before-after；每次 invocation 的 action、hit、stateBefore、目标敌人与 energy owner。
+- 正式状态基线：已选角色配置的初始能量、敌人 HP/韧性配置和继承方案的 initial runtime state；这些进入 runtime accumulator，但不等同于新增倍率公式。
+- 仅追踪/来源字段：敌人双防、元素防御、角色培养配置、装备、奇波、灵子、暴击、增伤、敌人等级、候选动作削韧和候选充能字段；它们可随 mechanism configuration/layer inputs 追溯，但当前 calculator 不读取。
+- 证据依赖：敌人防御/等级换算、元素防御或抗性、动作真实削韧、命中充能、被动资源修正及培养项效果，必须取得稳定 AzPr 数据源或可复现实战证据后才能逐层接入。
+- 暂不处理：测试期最终倍率、未确认防御/抗性/装备/奇波/灵子效果，以及平衡性数值细抠。
+
+下一阶段目标：阶段 8-S / P2-P3 配置来源合同与项目回放一致性。盘点 v13 配置实例到 `AzPrThreeValueMechanismConfiguration` / profile / runtime 的字段覆盖，建立可替换来源合同，并验证同一项目经本地草稿、JSON、分享链接和 PNG 回导后产生一致的配置选择、proposal、三值曲线与日志。该阶段先补配置来源和回放边界，不接入新的公式层，也不增加碎片 UI。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

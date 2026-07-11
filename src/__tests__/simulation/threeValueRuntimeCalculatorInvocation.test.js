@@ -16,7 +16,7 @@ describe('three value runtime calculator invocation', () => {
     });
 
     expect(invocation).toMatchObject({
-      schemaVersion: 8,
+      schemaVersion: 9,
       contractName: 'ThreeValueRuntimeCalculatorInvocation',
       status: 'runtime-calculator-invocation-ready-passthrough',
       sourceDeltaId: 'hp-delta-001',
@@ -28,10 +28,10 @@ describe('three value runtime calculator invocation', () => {
         custom: false,
         replaceable: true,
         contractName: 'AzPrThreeValueMechanicsAdapter',
-        contractVersion: 6,
+        contractVersion: 7,
         registrationKey: 'built-in',
         evaluationContractName: 'AzPrThreeValueMechanicsEvaluation',
-        evaluationContractVersion: 2,
+        evaluationContractVersion: 3,
       },
       output: {
         delta: 120,
@@ -51,6 +51,7 @@ describe('three value runtime calculator invocation', () => {
         hitInputPresent: true,
         sourceValueFinite: true,
         mechanicsEvaluationReady: true,
+        stateEffectProposalReady: true,
         stateBeforePresent: true,
         adapterOutputAccepted: true,
         valid: true,
@@ -58,6 +59,22 @@ describe('three value runtime calculator invocation', () => {
       changed: false,
       preservesGeneratedDelta: true,
       fallbackReason: null,
+    });
+    expect(invocation.stateEffectProposal).toMatchObject({
+      contractName: 'AzPrThreeValueStateEffectProposal',
+      contractVersion: 1,
+      status: 'state-effect-proposal-ready',
+      ready: true,
+      sourceStepKey: 'source-identity',
+      trackKey: 'enemyHpDamage',
+      readMetric: 'enemyHp',
+      writeMetric: 'enemyHp',
+      targetKind: 'enemy',
+      targetId: 'enemy-001',
+      applyMode: 'decrease',
+      delta: 120,
+      hitKey: 'action-001:hit:0',
+      frameIndex: 12,
     });
     expect(invocation.input.sourceDelta).toBe(delta);
     expect(invocation.input.stateBefore).toBe(stateBefore);
@@ -83,7 +100,7 @@ describe('three value runtime calculator invocation', () => {
     });
     expect(invocation.mechanicsEvaluation).toMatchObject({
       contractName: 'AzPrThreeValueMechanicsEvaluation',
-      contractVersion: 2,
+      contractVersion: 3,
       status: 'three-value-mechanics-evaluation-ready',
       stepResults: [
         expect.objectContaining({
@@ -109,6 +126,9 @@ describe('three value runtime calculator invocation', () => {
       runtimeCalculationChanged: false,
     });
     expect(runtimeDelta.runtimeCalculatorInvocation).toBe(invocation);
+    expect(runtimeDelta.stateEffectProposal).toBe(
+      invocation.stateEffectProposal
+    );
   });
 
   it('falls back to the generation delta when a custom adapter returns an invalid value', () => {
@@ -156,6 +176,8 @@ describe('three value runtime calculator invocation', () => {
       replacedInvocationCount: 0,
       fallbackInvocationCount: 1,
       customAdapterInvocationCount: 1,
+      stateEffectProposalReadyInvocationCount: 1,
+      stateEffectProposalMissingInvocationCount: 0,
       mechanismConfigurationReadyInvocationCount: 1,
       mechanismConfigurationMissingInvocationCount: 0,
       mechanismConfigurationStatuses: ['mechanism-configuration-context-ready'],

@@ -12,6 +12,21 @@ import {
 } from '../../simulation/mechanics/threeValueMechanicsProfile';
 
 describe('three value mechanics profile', () => {
+  it('rejects a profile that reroutes a track to another state metric', () => {
+    const profile = JSON.parse(
+      JSON.stringify(DEFAULT_THREE_VALUE_MECHANICS_PROFILE)
+    );
+    profile.tracks.enemyHpDamage.stateEffect.writeMetric = 'selfEnergy';
+
+    expect(validateThreeValueMechanicsProfile(profile)).toMatchObject({
+      valid: false,
+      status: 'mechanics-profile-invalid',
+      issues: expect.arrayContaining([
+        'operand-state-effect-invalid:hp-raw-preview-product:enemyHpDamage',
+      ]),
+    });
+  });
+
   it('binds the default versioned profile from Scenario through runtime', () => {
     const scenario = compileProject(
       createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION),
@@ -35,7 +50,7 @@ describe('three value mechanics profile', () => {
     });
     expect(scenario.mechanicsProfile).toMatchObject({
       contractName: 'AzPrMechanicsProfile',
-      contractVersion: 1,
+      contractVersion: 2,
       profileId: 'azpr-three-value-preview-v1',
       profileVersion: 1,
       ready: true,
@@ -45,6 +60,25 @@ describe('three value mechanics profile', () => {
         'validated-toughness-before-after',
         'validated-self-energy-before-after',
       ]),
+      operandKinds: {
+        'hp-raw-preview-product': expect.objectContaining({
+          steps: [
+            expect.objectContaining({
+              stateEffectTrackKeys: ['enemyHpDamage'],
+            }),
+          ],
+        }),
+      },
+      tracks: {
+        enemyHpDamage: expect.objectContaining({
+          stateEffect: {
+            readMetric: 'enemyHp',
+            writeMetric: 'enemyHp',
+            target: 'targetEnemy',
+            applyMode: 'decrease',
+          },
+        }),
+      },
       policy: {
         unconfirmedFormulaLayersApplied: false,
         unconfirmedCultivationEffectsApplied: false,
@@ -126,7 +160,7 @@ describe('three value mechanics profile', () => {
     });
     expect(runtimeDelta.runtimeCalculatorInvocation.mechanicsEvaluation).toMatchObject({
       contractName: 'AzPrThreeValueMechanicsEvaluation',
-      contractVersion: 2,
+      contractVersion: 3,
       stepResults: [
         expect.objectContaining({
           key: 'raw-product',
@@ -150,6 +184,7 @@ describe('three value mechanics profile', () => {
         }),
       ],
       delta: generatedDelta.delta,
+      stateEffectStepKey: 'raw-product',
       ready: true,
     });
     expect(result.threeValueRuntimeProjection.summary).toMatchObject({
@@ -166,6 +201,8 @@ describe('three value mechanics profile', () => {
       mechanicsEvaluationReadyInvocationCount: 1,
       mechanicsEvaluationMissingInvocationCount: 0,
       mechanicsEvaluationOperations: ['round-clamped-product'],
+      stateEffectProposalReadyInvocationCount: 1,
+      stateEffectProposalMissingInvocationCount: 0,
     });
   });
 
@@ -206,7 +243,7 @@ describe('three value mechanics profile', () => {
       fallbackReason: 'runtime-calculator-output-invalid',
       mechanicsEvaluation: {
         contractName: 'AzPrThreeValueMechanicsEvaluation',
-        contractVersion: 2,
+        contractVersion: 3,
         ready: false,
         capabilityReady: false,
       },

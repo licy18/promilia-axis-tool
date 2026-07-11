@@ -122,7 +122,7 @@ export function createThreeValueGenerationLayer({
         : 'standard-three-value-generation-layer-empty',
     contract: {
       name: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
-      version: 9,
+      version: 10,
       frameRate: AZPR_TIMELINE_FRAME_RATE,
       frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
       deltaFields: THREE_VALUE_DELTA_FIELDS,
