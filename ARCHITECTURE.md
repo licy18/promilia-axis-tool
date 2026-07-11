@@ -120,6 +120,7 @@ Action
 - 项目导入导出、分享和预设库由 `Workbench.vue` 编排，数据格式由 domain 层持有。
 - 顶部方案栏管理项目内完整排轴方案；方案切换只替换活动草稿，标准模拟链仍保持单入口。
 - `WorkbenchLayoutBar.vue` 与按需加载的 `workbenchLayout.js` 管理桌面面板折叠、宽度、专注模式和本地恢复；布局偏好不进入项目合同。
+- `WorkbenchProjectDropOverlay.vue` 与按需加载的 `workbenchProjectFileReceiver.js` 统一接收文件选择、方案基准和窗口拖放，再把合法项目或 capture 交还既有恢复入口。
 
 ## 4. 关键数据合同
 
@@ -150,6 +151,10 @@ Action
 ### WorkbenchLayout v1
 
 保存均衡、专注编辑、专注复盘或自定义模式，以及动作库/检查区宽度和折叠状态。该合同只属于浏览器工作区偏好，由 `src/domain/workbenchLayout.js` 规范化并写入独立 localStorage key；Project、Scenario、runtime、项目交换与 PNG 导出均不消费它。
+
+### WorkbenchProjectFileReceiveResult v1
+
+按文件签名、扩展名与 MIME 区分 JSON 项目、PNG 项目和 runtime capture，输出完整 draft、captures 或无效原因。窗口拖放控制器只处理外部 `Files` 事件、拖放深度和单次文件列表；解析成功后仍由 `applyImportedProjectDraft()` 或 capture binding 应用。该结果是 transient import contract，不写入项目或本地草稿。
 
 ### WorkbenchPresetLibrary v1
 
@@ -203,4 +208,4 @@ git diff --check
 - 生产引用审计当前为 0 个无引用模块、0 个意外 test-only 模块；新增代码必须维持该守门。
 - 当前首屏、Workbench 与全部 JavaScript gzip 预算分别为 120KB、370KB、740KB；新增依赖必须通过构建组成审计。
 - Workbench 首轮主包主要由技能核心投影、生产 seed 和模拟/复盘代码构成；候选诊断证据已经移入独立按需包，后续优化应以生产试用和可测量瓶颈为依据。
-- `playwright.production.config.js` 只服务真实 `dist` 的发布验收；`production-preview-reporter.mjs` 将十三项必需能力汇总为 `trial-ready` 或 `blocked`，开发服务器 E2E 不替代该结论。
+- `playwright.production.config.js` 只服务真实 `dist` 的发布验收；`production-preview-reporter.mjs` 将十四项必需能力汇总为 `trial-ready` 或 `blocked`，开发服务器 E2E 不替代该结论。

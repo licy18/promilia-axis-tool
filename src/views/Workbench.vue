@@ -730,6 +730,8 @@
       </div>
     </div>
 
+    <WorkbenchProjectDropOverlay @files="receiveDroppedWorkbenchProjectFiles" />
+
     <section
       v-if="pngExporting"
       ref="pngExportSurface"
@@ -902,7 +904,6 @@ import {
   createDefaultWorkbenchDraftState,
   loadWorkbenchDraft,
   normalizeWorkbenchSegmentSplitOptions,
-  parseWorkbenchProjectFile,
   parseWorkbenchProjectShareCode,
   saveWorkbenchDraft,
   WORKBENCH_PROJECT_SHARE_PARAM,
@@ -930,16 +931,13 @@ import {
   createWorkbenchProjectPngFileName,
   createWorkbenchProjectPngMetadata,
   embedWorkbenchProjectInPng,
-  parseWorkbenchProjectPng,
 } from '../domain/workbenchPngProject';
 import {
   bindWorkbenchRuntimeSampleCaptures,
   mergeWorkbenchRuntimeSampleCaptures,
   normalizeWorkbenchRuntimeSampleCaptures,
-  parseWorkbenchRuntimeSampleCaptureFile,
 } from '../domain/workbenchRuntimeSampleCapture';
 import { formatFrameTime, frameToMs } from '../domain/timebase';
-import { isPngSource } from '../utils/pngMetadata';
 import { compileProject } from '../simulation/compiler/compileProject';
 import { simulateScenario } from '../simulation/engine/simulateScenario';
 import {
@@ -962,6 +960,9 @@ const WorkbenchCycleSectionPanel = defineAsyncComponent(
 );
 const WorkbenchLayoutBar = defineAsyncComponent(
   () => import('../features/workbench/WorkbenchLayoutBar.vue')
+);
+const WorkbenchProjectDropOverlay = defineAsyncComponent(
+  () => import('../features/workbench/WorkbenchProjectDropOverlay.vue')
 );
 
 const workbenchSeed = getWorkbenchSeed();
@@ -2898,20 +2899,15 @@ function captureCurrentScenarioComparisonBaseline() {
 
 async function importScenarioComparisonBaseline(file) {
   try {
-    const png =
-      file?.type === 'image/png' ||
-      String(file?.name ?? '')
-        .toLowerCase()
-        .endsWith('.png') ||
-      (await isPngSource(file));
-    const draft = png
-      ? await parseWorkbenchProjectPng(file)
-      : parseWorkbenchProjectFile(await file.text());
-    if (!draft) {
+    const receiver = await import('../domain/workbenchProjectFileReceiver');
+    const result = await receiver.receiveWorkbenchProjectFile(file, {
+      allowRuntimeCapture: false,
+    });
+    if (result.kind !== 'project') {
       draftStatus.value = '对比基准项目无效';
       return false;
     }
-    return setScenarioComparisonBaseline(draft, {
+    return setScenarioComparisonBaseline(result.draft, {
       kind: 'import',
       id: file.name,
       label: file.name,
@@ -3184,41 +3180,31 @@ async function importProjectFile(event) {
   }
 
   try {
-    const isPng =
-      file.type === 'image/png' ||
-      String(file.name).toLowerCase().endsWith('.png') ||
-      (await isPngSource(file));
-    if (isPng) {
-      const draft = await parseWorkbenchProjectPng(file);
-      if (!draft) {
-        draftStatus.value = 'PNG 中没有有效项目';
-        return;
-      }
-      applyImportedProjectDraft(draft, '已从 PNG 导入项目');
-      return;
-    }
-
-    const rawFile = await file.text();
-    const draft = parseWorkbenchProjectFile(rawFile);
-    if (draft) {
-      applyImportedProjectDraft(draft, '已导入项目');
-      return;
-    }
-
-    const runtimeSampleFile = parseWorkbenchRuntimeSampleCaptureFile(rawFile);
-    if (!runtimeSampleFile) {
-      draftStatus.value = '导入失败';
-      return;
-    }
-    await ensureRuntimeDiagnosticsLoaded();
-    applyImportedRuntimeSampleCaptures(runtimeSampleFile.captures);
-  } catch {
-    draftStatus.value = '导入失败';
+    await receiveWorkbenchProjectFile(file);
   } finally {
-    if (input) {
-      input.value = '';
-    }
+    input.value = '';
   }
+}
+
+async function receiveWorkbenchProjectFile(file, source = 'picker') {
+  const receiver = await import('../domain/workbenchProjectFileReceiver');
+  await receiver.processWorkbenchProjectFile(file, {
+    source,
+    onProject: applyImportedProjectDraft,
+    onRuntimeCapture: async captures => {
+      await ensureRuntimeDiagnosticsLoaded();
+      applyImportedRuntimeSampleCaptures(captures);
+    },
+    onStatus: statusText => (draftStatus.value = statusText),
+  });
+}
+
+function receiveDroppedWorkbenchProjectFiles(files) {
+  if (files.length !== 1) {
+    draftStatus.value = '一次只能导入一个项目文件';
+    return;
+  }
+  void receiveWorkbenchProjectFile(files[0], 'drop');
 }
 
 function applyImportedRuntimeSampleCaptures(captures) {
@@ -3257,7 +3243,7 @@ function applyImportedRuntimeSampleCaptures(captures) {
   draftStatus.value = snapshot ? statusText : `${statusText}（未持久化）`;
 }
 
-function applyImportedProjectDraft(draft, statusText = '已导入项目') {
+function applyImportedProjectDraft(draft, statusText) {
   clearSegmentSplitPreview();
   projectShareUrl.value = '';
   applyDraftState(draft);

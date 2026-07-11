@@ -6,6 +6,7 @@ const REQUIRED_CAPABILITIES = [
   'diagnostics-lazy-load',
   'json-project-exchange',
   'png-project-exchange',
+  'project-drop-recovery',
   'multi-action-editing',
   'timeline-relations',
   'effect-interval-review',

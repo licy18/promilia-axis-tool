@@ -12,7 +12,7 @@
 - 配置闭环：双角色、敌人、等级、属性覆盖、装备、奇波、灵子和初始角色资源进入项目模型。
 - 三值运行时：每个动作追踪敌人 HP、敌人韧性和每名角色自身能量，输出曲线、日志、状态快照和统计摘要。
 - 规则与效果：冷却、执行计划、效果命令和运行时复盘共享同一模拟结果。
-- 项目交换：版本化 JSON、带项目元数据的 PNG、分享链接和本地预设轴库。
+- 项目交换：版本化 JSON、带项目元数据的 PNG、窗口拖放恢复、分享链接和本地预设轴库。
 - 受控采样工具链：runtime capture manifest、JSONL 规范化、production audit 和显式 PID Frida host。
 
 ## 精度边界
@@ -104,7 +104,7 @@ e2e/                     Workbench 浏览器主流程
 
 构建组成审计会生成 `reports/bundle-composition.json`，并守住首屏入口、Workbench 主包和全部 JavaScript 的 gzip 预算，同时检查技能诊断数据必须位于独立按需包。Element Plus 组件由各页面按需引用，PNG 截图库只在实际导出时加载。
 
-`npm run test:e2e:production-preview` 会重新构建 `dist`，用独立端口启动 Vite production preview，并检查路由与哈希资源、诊断动态包、JSON/PNG 项目交换、多动作与关系编辑、状态效果区间复盘和 390px 窄屏主流程。最终试用判定写入 `reports/production-preview-acceptance.json`。
+`npm run test:e2e:production-preview` 会重新构建 `dist`，用独立端口启动 Vite production preview，并检查路由与哈希资源、诊断动态包、JSON/PNG 项目交换、拖放恢复、多动作与关系编辑、状态效果区间复盘和 390px 窄屏主流程。最终十四项能力的试用判定写入 `reports/production-preview-acceptance.json`。
 
 ## 项目文档
 

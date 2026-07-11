@@ -161,6 +161,53 @@ test('[png-project-exchange] restores production PNG metadata and lazy exporter 
   );
 });
 
+test('[project-drop-recovery] restores a production project without replacing it on invalid drop', async ({
+  page,
+}) => {
+  await page.goto('/#/workbench');
+  await expect(page.getByTestId('workbench-project-drop-host')).toHaveCount(1);
+  await page.getByTestId('workbench-add-action').click();
+  await page.getByTestId('workbench-enemy-level-input').fill('95');
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const download = await downloadPromise;
+  const downloadPath = await download.path();
+  expect(downloadPath).toBeTruthy();
+  const projectBuffer = await readFile(downloadPath);
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await dragWorkbenchFile(page, {
+    name: 'production-axis.promilia-workbench.json',
+    mimeType: 'application/json',
+    buffer: projectBuffer,
+  });
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已从拖放恢复 JSON 项目'
+  );
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '95'
+  );
+
+  await dragWorkbenchFile(page, {
+    name: 'invalid.txt',
+    mimeType: 'text/plain',
+    buffer: Buffer.from('invalid project'),
+  });
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '仅支持 JSON 或 PNG 项目文件'
+  );
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '95'
+  );
+});
+
 test('[multi-action-editing] copies, pastes, and reviews a selected action group', async ({
   page,
 }) => {
@@ -680,4 +727,48 @@ async function expectPageWithoutHorizontalOverflow(page) {
       )
     )
     .toBe(0);
+}
+
+async function dragWorkbenchFile(page, { name, mimeType, buffer }) {
+  const payload = {
+    name,
+    mimeType,
+    base64: Buffer.from(buffer).toString('base64'),
+  };
+  await page.evaluate(filePayload => {
+    const bytes = Uint8Array.from(atob(filePayload.base64), character =>
+      character.charCodeAt(0)
+    );
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(
+      new File([bytes], filePayload.name, { type: filePayload.mimeType })
+    );
+    window.dispatchEvent(
+      new DragEvent('dragenter', {
+        bubbles: true,
+        cancelable: true,
+        dataTransfer,
+      })
+    );
+  }, payload);
+  await expect(page.getByTestId('workbench-project-drop-overlay')).toBeVisible();
+  await page.evaluate(filePayload => {
+    const bytes = Uint8Array.from(atob(filePayload.base64), character =>
+      character.charCodeAt(0)
+    );
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(
+      new File([bytes], filePayload.name, { type: filePayload.mimeType })
+    );
+    window.dispatchEvent(
+      new DragEvent('drop', {
+        bubbles: true,
+        cancelable: true,
+        dataTransfer,
+      })
+    );
+  }, payload);
+  await expect(page.getByTestId('workbench-project-drop-overlay')).toHaveCount(
+    0
+  );
 }

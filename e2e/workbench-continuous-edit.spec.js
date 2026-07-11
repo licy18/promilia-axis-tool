@@ -2634,6 +2634,86 @@ test('exports a visible PNG project and restores it from embedded metadata @work
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('drags JSON and PNG projects into a recoverable Workbench @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+
+  await page.goto('/#/workbench');
+  await expect(page.getByTestId('workbench-project-drop-host')).toHaveCount(1);
+  await page.getByTestId('workbench-add-action').click();
+  await page.getByTestId('workbench-enemy-level-input').fill('94');
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+
+  const jsonDownloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const jsonDownload = await jsonDownloadPromise;
+  const jsonPath = await jsonDownload.path();
+  expect(jsonPath).toBeTruthy();
+  const jsonBuffer = await readFile(jsonPath);
+
+  const pngDownloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project-png').click();
+  const pngDownload = await pngDownloadPromise;
+  const pngPath = await pngDownload.path();
+  expect(pngPath).toBeTruthy();
+  const pngBuffer = await readFile(pngPath);
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await dragWorkbenchFile(page, {
+    name: 'dragged-axis.promilia-workbench.json',
+    mimeType: 'application/json',
+    buffer: jsonBuffer,
+  });
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已从拖放恢复 JSON 项目'
+  );
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '94'
+  );
+
+  await page.getByTestId('workbench-reset-draft').click();
+  await dragWorkbenchFile(page, {
+    name: 'dragged-axis.png',
+    mimeType: 'image/png',
+    buffer: pngBuffer,
+  });
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已从拖放恢复 PNG 项目'
+  );
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '94'
+  );
+
+  await dragWorkbenchFile(page, {
+    name: 'not-a-project.txt',
+    mimeType: 'text/plain',
+    buffer: Buffer.from('not a Workbench project'),
+  });
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '仅支持 JSON 或 PNG 项目文件'
+  );
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '94'
+  );
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  await waitForRuntimeAction(page, 'action-0002');
+  await expectRuntimeOutputConsistent(page);
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('shares and imports a Workbench project URL @workbench-main-flow', async ({
   page,
 }) => {
@@ -4974,5 +5054,49 @@ async function readEditState(page, returnButtonTestId) {
 async function readPageOverflowX(page) {
   return await page.evaluate(() =>
     Math.max(0, document.documentElement.scrollWidth - window.innerWidth)
+  );
+}
+
+async function dragWorkbenchFile(page, { name, mimeType, buffer }) {
+  const payload = {
+    name,
+    mimeType,
+    base64: Buffer.from(buffer).toString('base64'),
+  };
+  await page.evaluate(filePayload => {
+    const bytes = Uint8Array.from(atob(filePayload.base64), character =>
+      character.charCodeAt(0)
+    );
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(
+      new File([bytes], filePayload.name, { type: filePayload.mimeType })
+    );
+    window.dispatchEvent(
+      new DragEvent('dragenter', {
+        bubbles: true,
+        cancelable: true,
+        dataTransfer,
+      })
+    );
+  }, payload);
+  await expect(page.getByTestId('workbench-project-drop-overlay')).toBeVisible();
+  await page.evaluate(filePayload => {
+    const bytes = Uint8Array.from(atob(filePayload.base64), character =>
+      character.charCodeAt(0)
+    );
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(
+      new File([bytes], filePayload.name, { type: filePayload.mimeType })
+    );
+    window.dispatchEvent(
+      new DragEvent('drop', {
+        bubbles: true,
+        cancelable: true,
+        dataTransfer,
+      })
+    );
+  }, payload);
+  await expect(page.getByTestId('workbench-project-drop-overlay')).toHaveCount(
+    0
   );
 }

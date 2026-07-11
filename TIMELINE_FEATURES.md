@@ -114,6 +114,8 @@ Runtime 消费标准 delta 后输出 `simLog`、`stateCurves`、资源曲线、�
 
 动作草稿、关系、循环边界与初始运行状态通过 WorkbenchProjectFile v12 的 `scenarioWorkspace.scenarios[].draft` 持久化。根级字段镜像活动方案；草稿、JSON、分享链接、PNG 元数据、runtime capture 和预设轴库共享完整方案工作区。任何新时间轴字段都必须同步考虑每条方案、全部交换路径及旧版本迁移。
 
+JSON 项目、带项目元数据的 PNG 和 runtime capture 可以通过文件选择或窗口级拖放进入同一 `WorkbenchProjectFileReceiveResult`。外部文件进入窗口时显示释放遮罩；只接受单个文件。合法项目统一调用 `applyImportedProjectDraft()`，无效、损坏、多文件或无元数据 PNG 不得修改当前方案。拖放状态和接收结果不进入项目交换格式。
+
 ## 8. 长轴验收
 
 运行时基准：

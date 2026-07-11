@@ -26316,3 +26316,19 @@ leftPanelCollapsed / rightPanelCollapsed
 `src/domain/workbenchLayout.js` 负责默认值、边界约束、模式切换、折叠、指针拖动、键盘步进和 localStorage 读写；`WorkbenchLayoutBar.vue` 只发送布局命令，`Workbench.vue` 将结果映射为 CSS grid 轨道。持久化 key 为 `promilia-axis-tool:workbench-layout:v1`。
 
 该合同不属于 WorkbenchProjectFile v12，也不写入当前草稿、方案工作区、JSON、分享链接、PNG 元数据、预设或撤销历史。Project、Scenario、generation、runtime 和 calculator 均不读取布局状态，因此项目交换与三值结果保持不变。760px 以下由 CSS 强制显示全部面板，避免桌面折叠偏好造成窄屏内容缺失。
+
+## 381. WorkbenchProjectFileReceiveResult v1（临时导入合同）
+
+阶段 8-I 新增统一文件接收结果：
+
+```text
+kind = project | runtime-capture | invalid
+sourceKind = json | png
+fileName
+draft? / captures?
+reason? / statusText
+```
+
+`workbenchProjectFileReceiver.js` 先按 PNG MIME、扩展名或文件签名识别 PNG，并复用 `parseWorkbenchProjectPng()` 校验 `PromiliaAxisToolData`；文本文件复用 `parseWorkbenchProjectFile()`，必要时再尝试 `parseWorkbenchRuntimeSampleCaptureFile()`。文件选择入口允许对浏览器临时无扩展名文件做内容解析回退，外部拖放严格限制 JSON/JSONL/NDJSON 或 PNG。窗口拖放控制器只在 `dataTransfer.types` 含 `Files` 时接管事件，并向 Workbench 提交一次文件列表。
+
+合法项目仍由 `applyImportedProjectDraft()` 负责规范化、历史清理、草稿保存和 runtime 刷新；runtime capture 仍走既有绑定与 adapter。无效结果、多文件和解析异常只更新导入状态，不应用 draft。该合同不改变 WorkbenchProjectFile v12、Project、Scenario、generation、runtime 或 calculator。
