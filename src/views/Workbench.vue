@@ -12,6 +12,15 @@
     :data-selected-cycle-section-id="selectedCycleSection?.sectionId || ''"
     :data-workspace-scenario-count="scenarioWorkspace.scenarios.length"
     :data-active-workspace-scenario-id="scenarioWorkspace.activeScenarioId"
+    :data-workbench-layout-mode="workbenchLayout.mode"
+    :data-workbench-left-panel-width="workbenchLayout.leftPanelWidth"
+    :data-workbench-right-panel-width="workbenchLayout.rightPanelWidth"
+    :data-workbench-left-panel-collapsed="
+      workbenchLayout.leftPanelCollapsed ? 'true' : 'false'
+    "
+    :data-workbench-right-panel-collapsed="
+      workbenchLayout.rightPanelCollapsed ? 'true' : 'false'
+    "
     :data-effect-interval-count="effectIntervalProjection.summary.intervalCount"
     :data-selected-effect-interval-id="selectedEffectIntervalId"
   >
@@ -223,8 +232,18 @@
       @insert-next-action="addAction"
     />
 
+    <WorkbenchLayoutBar
+      :layout="workbenchLayout"
+      @set-mode="setWorkbenchLayoutMode"
+      @toggle-panel="toggleWorkbenchLayoutSide"
+      @reset="resetWorkbenchLayout"
+    />
+
     <div
+      ref="workbenchGrid"
       class="workbench-grid"
+      :class="workbenchLayoutClasses"
+      :style="workbenchLayoutStyle"
       :data-flow-phase="mainFlowWorkspaceView.phase"
       :data-main-flow-current-region="
         mainFlowWorkspaceView.region.currentRegion
@@ -333,6 +352,21 @@
         @shift-action-batch="shiftActionBatch"
         @update-active-actor="setActionLibraryCharacterId"
       />
+
+      <div
+        class="workspace-resizer workspace-resizer-left"
+        :class="{
+          active: activeWorkbenchLayoutResize === 'left',
+        }"
+        role="separator"
+        aria-label="调整动作库宽度"
+        aria-orientation="vertical"
+        tabindex="0"
+        data-testid="workbench-left-resizer"
+        @pointerdown="beginWorkbenchLayoutResize('left', $event)"
+        @dblclick="resetWorkbenchLayoutPanel('left')"
+        @keydown.stop="handleWorkbenchLayoutResizeKey('left', $event)"
+      ></div>
 
       <div
         class="primary-flow"
@@ -541,6 +575,21 @@
           </div>
         </div>
       </div>
+
+      <div
+        class="workspace-resizer workspace-resizer-right"
+        :class="{
+          active: activeWorkbenchLayoutResize === 'right',
+        }"
+        role="separator"
+        aria-label="调整检查区宽度"
+        aria-orientation="vertical"
+        tabindex="0"
+        data-testid="workbench-right-resizer"
+        @pointerdown="beginWorkbenchLayoutResize('right', $event)"
+        @dblclick="resetWorkbenchLayoutPanel('right')"
+        @keydown.stop="handleWorkbenchLayoutResizeKey('right', $event)"
+      ></div>
 
       <div
         class="side-stack"
@@ -911,12 +960,17 @@ const WorkbenchScenarioBar = defineAsyncComponent(
 const WorkbenchCycleSectionPanel = defineAsyncComponent(
   () => import('../features/workbench/WorkbenchCycleSectionPanel.vue')
 );
+const WorkbenchLayoutBar = defineAsyncComponent(
+  () => import('../features/workbench/WorkbenchLayoutBar.vue')
+);
 
 const workbenchSeed = getWorkbenchSeed();
 const gameData = getWorkbenchGameData();
 const loadoutOptions = getWorkbenchLoadoutOptions();
 const NEW_ACTION_INSERT_GAP_MS = frameToMs(60);
 const WORKBENCH_HISTORY_LIMIT = 50;
+const DEFAULT_WORKBENCH_LEFT_PANEL_WIDTH = 260;
+const DEFAULT_WORKBENCH_RIGHT_PANEL_WIDTH = 300;
 const WORKBENCH_PRESET_LIBRARY_PARAM = 'presets';
 const WORKBENCH_RUNTIME_NAVIGATION_SHORTCUT_SOURCE =
   'workbench-keyboard-runtime-navigation';
@@ -976,6 +1030,9 @@ const comparisonBaselineSource = ref(null);
 const undoHistoryStack = ref([]);
 const redoHistoryStack = ref([]);
 const workbenchRoot = ref(null);
+const workbenchGrid = ref(null);
+const workbenchLayout = ref(createInitialWorkbenchLayoutState());
+const activeWorkbenchLayoutResize = ref('');
 const projectImportInput = ref(null);
 const pngExportSurface = ref(null);
 const pngExporting = ref(false);
@@ -986,6 +1043,9 @@ const workbenchFlowDispatchState = ref(createEmptyWorkbenchFlowDispatchState());
 const runtimeDiagnosticsStatus = ref('idle');
 const runtimeDiagnosticsRevision = ref(0);
 let runtimeDiagnosticsLoadPromise = null;
+let workbenchLayoutResizeState = null;
+let workbenchLayoutApi = null;
+let workbenchLayoutApiPromise = null;
 const workbenchFlowPlanController = createWorkbenchFlowPlanController({
   getRuntimeProjection: () =>
     simulationResult.value.threeValueRuntimeProjection,
@@ -1280,6 +1340,14 @@ const workbenchHistoryView = computed(() => ({
   undoCount: undoHistoryStack.value.length,
   redoCount: redoHistoryStack.value.length,
 }));
+const workbenchLayoutClasses = computed(() => ({
+  'layout-left-collapsed': workbenchLayout.value.leftPanelCollapsed,
+  'layout-right-collapsed': workbenchLayout.value.rightPanelCollapsed,
+}));
+const workbenchLayoutStyle = computed(() => ({
+  '--workbench-left-panel-width': `${workbenchLayout.value.leftPanelWidth}px`,
+  '--workbench-right-panel-width': `${workbenchLayout.value.rightPanelWidth}px`,
+}));
 
 watch(
   selectedActionId,
@@ -1366,7 +1434,152 @@ watch(
   { flush: 'sync' }
 );
 
+function createInitialWorkbenchLayoutState() {
+  return {
+    mode: 'balanced',
+    leftPanelWidth: DEFAULT_WORKBENCH_LEFT_PANEL_WIDTH,
+    rightPanelWidth: DEFAULT_WORKBENCH_RIGHT_PANEL_WIDTH,
+    leftPanelCollapsed: false,
+    rightPanelCollapsed: false,
+  };
+}
+
+function getWorkbenchLayoutApi() {
+  if (!workbenchLayoutApiPromise) {
+    workbenchLayoutApiPromise = import('../domain/workbenchLayout').then(
+      api => {
+        workbenchLayoutApi = api;
+        return api;
+      }
+    );
+  }
+  return workbenchLayoutApiPromise;
+}
+
+async function persistWorkbenchLayout() {
+  const api = await getWorkbenchLayoutApi();
+  api.saveWorkbenchLayoutState(getLocalStorage(), workbenchLayout.value);
+}
+
+async function setWorkbenchLayoutMode(mode) {
+  const api = await getWorkbenchLayoutApi();
+  endWorkbenchLayoutResize();
+  workbenchLayout.value = api.applyWorkbenchLayoutMode(
+    workbenchLayout.value,
+    mode
+  );
+  await persistWorkbenchLayout();
+}
+
+async function toggleWorkbenchLayoutSide(panel) {
+  const api = await getWorkbenchLayoutApi();
+  endWorkbenchLayoutResize();
+  workbenchLayout.value = api.toggleWorkbenchLayoutPanel(
+    workbenchLayout.value,
+    panel
+  );
+  await persistWorkbenchLayout();
+}
+
+async function resetWorkbenchLayout() {
+  const api = await getWorkbenchLayoutApi();
+  endWorkbenchLayoutResize();
+  workbenchLayout.value = api.createDefaultWorkbenchLayoutState();
+  await persistWorkbenchLayout();
+}
+
+async function resetWorkbenchLayoutPanel(panel) {
+  const api = await getWorkbenchLayoutApi();
+  const width =
+    panel === 'left'
+      ? DEFAULT_WORKBENCH_LEFT_PANEL_WIDTH
+      : DEFAULT_WORKBENCH_RIGHT_PANEL_WIDTH;
+  workbenchLayout.value = api.resizeWorkbenchLayoutPanel(
+    workbenchLayout.value,
+    panel,
+    width
+  );
+  await persistWorkbenchLayout();
+}
+
+function beginWorkbenchLayoutResize(panel, event) {
+  if ((event?.button != null && event.button !== 0) || !workbenchLayoutApi) {
+    return;
+  }
+  event?.preventDefault?.();
+  activeWorkbenchLayoutResize.value = panel;
+  workbenchLayoutResizeState = {
+    panel,
+    startX: Number(event?.clientX) || 0,
+    startWidth:
+      panel === 'left'
+        ? workbenchLayout.value.leftPanelWidth
+        : workbenchLayout.value.rightPanelWidth,
+  };
+  if (typeof document !== 'undefined') {
+    document.body.style.cursor = 'ew-resize';
+    document.body.style.userSelect = 'none';
+  }
+  window?.addEventListener?.('pointermove', applyWorkbenchLayoutResize);
+  window?.addEventListener?.('pointerup', endWorkbenchLayoutResize);
+}
+
+function applyWorkbenchLayoutResize(event) {
+  if (!workbenchLayoutResizeState) {
+    return;
+  }
+  const { panel, startX, startWidth } = workbenchLayoutResizeState;
+  const deltaX = (Number(event?.clientX) || 0) - startX;
+  workbenchLayout.value =
+    workbenchLayoutApi.resizeWorkbenchLayoutPanelFromPointer(
+      workbenchLayout.value,
+      {
+        panel,
+        startWidth,
+        deltaX,
+        containerWidth: workbenchGrid.value?.getBoundingClientRect?.().width,
+      }
+    );
+}
+
+function endWorkbenchLayoutResize() {
+  if (!workbenchLayoutResizeState && !activeWorkbenchLayoutResize.value) {
+    return;
+  }
+  workbenchLayoutResizeState = null;
+  activeWorkbenchLayoutResize.value = '';
+  if (typeof document !== 'undefined') {
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  }
+  window?.removeEventListener?.('pointermove', applyWorkbenchLayoutResize);
+  window?.removeEventListener?.('pointerup', endWorkbenchLayoutResize);
+  void persistWorkbenchLayout();
+}
+
+async function handleWorkbenchLayoutResizeKey(panel, event) {
+  if (!['ArrowLeft', 'ArrowRight', 'Home'].includes(event?.key)) {
+    return;
+  }
+  event.preventDefault();
+  if (event.key === 'Home') {
+    await resetWorkbenchLayoutPanel(panel);
+    return;
+  }
+  const api = await getWorkbenchLayoutApi();
+  const direction = event.key === 'ArrowRight' ? 1 : -1;
+  workbenchLayout.value = api.nudgeWorkbenchLayoutPanel(workbenchLayout.value, {
+    panel,
+    direction,
+    containerWidth: workbenchGrid.value?.getBoundingClientRect?.().width,
+  });
+  await persistWorkbenchLayout();
+}
+
 onMounted(() => {
+  void getWorkbenchLayoutApi().then(layoutApi => {
+    workbenchLayout.value = layoutApi.loadWorkbenchLayoutState(getLocalStorage());
+  });
   window?.addEventListener?.('keydown', handleWorkbenchKeyboardShortcut);
   window?.addEventListener?.('hashchange', handleWorkbenchHashChange);
   refreshWorkbenchPresetLibrary();
@@ -1388,6 +1601,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  endWorkbenchLayoutResize();
   window?.removeEventListener?.('keydown', handleWorkbenchKeyboardShortcut);
   window?.removeEventListener?.('hashchange', handleWorkbenchHashChange);
 });
@@ -5162,17 +5376,21 @@ function getLocalStorage() {
 
 .workbench-grid {
   display: grid;
-  grid-template-columns: minmax(230px, 280px) minmax(0, 1fr) minmax(
-      260px,
-      340px
-    );
-  grid-template-areas: 'actions mainflow inspector';
-  gap: 14px;
+  grid-template-columns:
+    minmax(0, var(--workbench-left-panel-width, 260px))
+    14px
+    minmax(0, 1fr)
+    14px
+    minmax(0, var(--workbench-right-panel-width, 300px));
+  grid-template-areas: 'actions left-resizer mainflow right-resizer inspector';
+  gap: 14px 0;
   padding: 14px;
 }
 
 .action-library {
   grid-area: actions;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .primary-flow {
@@ -5274,6 +5492,84 @@ function getLocalStorage() {
   display: grid;
   align-content: start;
   gap: 14px;
+  min-width: 0;
+}
+
+.workspace-resizer {
+  position: relative;
+  min-width: 0;
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.workspace-resizer-left {
+  grid-area: left-resizer;
+}
+
+.workspace-resizer-right {
+  grid-area: right-resizer;
+}
+
+.workspace-resizer::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  content: '';
+  background: #323d44;
+  transform: translateX(-50%);
+}
+
+.workspace-resizer::after {
+  position: absolute;
+  inset: 0 3px;
+  content: '';
+}
+
+.workspace-resizer:hover::before,
+.workspace-resizer:focus-visible::before,
+.workspace-resizer.active::before {
+  width: 2px;
+  background: #79c7b9;
+}
+
+.workspace-resizer:focus-visible {
+  outline: 1px solid #79c7b9;
+  outline-offset: -4px;
+}
+
+.workbench-grid.layout-left-collapsed {
+  grid-template-columns:
+    0
+    0
+    minmax(0, 1fr)
+    14px
+    minmax(0, var(--workbench-right-panel-width, 300px));
+}
+
+.workbench-grid.layout-right-collapsed {
+  grid-template-columns:
+    minmax(0, var(--workbench-left-panel-width, 260px))
+    14px
+    minmax(0, 1fr)
+    0
+    0;
+}
+
+.workbench-grid.layout-left-collapsed.layout-right-collapsed {
+  grid-template-columns: 0 0 minmax(0, 1fr) 0 0;
+}
+
+.workbench-grid.layout-left-collapsed .action-library,
+.workbench-grid.layout-right-collapsed .side-stack {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.workbench-grid.layout-left-collapsed .workspace-resizer-left,
+.workbench-grid.layout-right-collapsed .workspace-resizer-right {
+  display: none;
 }
 
 .png-export-surface {
@@ -5348,12 +5644,28 @@ function getLocalStorage() {
   }
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1180px) {
   .workbench-grid {
-    grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+    grid-template-columns:
+      minmax(220px, var(--workbench-left-panel-width, 260px))
+      minmax(0, 1fr);
     grid-template-areas:
       'actions mainflow'
       'actions inspector';
+    column-gap: 14px;
+  }
+
+  .workbench-grid.layout-left-collapsed,
+  .workbench-grid.layout-left-collapsed.layout-right-collapsed {
+    grid-template-columns: 0 minmax(0, 1fr);
+  }
+
+  .workbench-grid.layout-right-collapsed {
+    grid-template-areas: 'actions mainflow';
+  }
+
+  .workspace-resizer {
+    display: none;
   }
 }
 
@@ -5376,13 +5688,22 @@ function getLocalStorage() {
     justify-content: flex-start;
   }
 
-  .workbench-grid {
+  .workbench-grid,
+  .workbench-grid.layout-left-collapsed,
+  .workbench-grid.layout-right-collapsed,
+  .workbench-grid.layout-left-collapsed.layout-right-collapsed {
     grid-template-columns: 1fr;
     grid-template-areas:
       'actions'
       'mainflow'
       'inspector';
     padding: 10px;
+  }
+
+  .workbench-grid.layout-left-collapsed .action-library,
+  .workbench-grid.layout-right-collapsed .side-stack {
+    visibility: visible;
+    pointer-events: auto;
   }
 
   .runtime-review-stack[data-runtime-review-layout='result-check'] {

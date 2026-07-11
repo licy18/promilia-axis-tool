@@ -119,6 +119,7 @@ Action
 - 时间轴渲染可编辑的 60fps 循环边界和选中区段高亮，区段统计可定位贡献动作返回编辑。
 - 项目导入导出、分享和预设库由 `Workbench.vue` 编排，数据格式由 domain 层持有。
 - 顶部方案栏管理项目内完整排轴方案；方案切换只替换活动草稿，标准模拟链仍保持单入口。
+- `WorkbenchLayoutBar.vue` 与按需加载的 `workbenchLayout.js` 管理桌面面板折叠、宽度、专注模式和本地恢复；布局偏好不进入项目合同。
 
 ## 4. 关键数据合同
 
@@ -146,6 +147,10 @@ Action
 
 `AzPrInitialRuntimeState` 保存来源边界、敌人当前 HP/韧性、各角色当前自身能量和活动效果剩余时长。继承投影只读取标准 runtime snapshot/effect event，把边界后动作、关系与后续边界平移到新轴；边界当帧事件由新方案结算。Project 与 Scenario 显式携带初始状态，runtime 仍走同一状态快照和效果时间线入口。
 
+### WorkbenchLayout v1
+
+保存均衡、专注编辑、专注复盘或自定义模式，以及动作库/检查区宽度和折叠状态。该合同只属于浏览器工作区偏好，由 `src/domain/workbenchLayout.js` 规范化并写入独立 localStorage key；Project、Scenario、runtime、项目交换与 PNG 导出均不消费它。
+
 ### WorkbenchPresetLibrary v1
 
 每个预设包含可搜索元数据、兼容状态、摘要和完整 `WorkbenchProjectFile`。旧项目可解析时迁移到当前快照，不兼容条目保留但禁止加载。
@@ -162,6 +167,7 @@ Action
 
 - 当前草稿：`promilia-axis-tool:workbench-draft:v12`。
 - 本地预设：`promilia-axis-tool:workbench-presets:v1`。
+- 工作区布局：`promilia-axis-tool:workbench-layout:v1`，独立于项目和草稿。
 - 项目交换：JSON、分享 URL、PNG 内嵌元数据。
 - 临时曲线选中、复盘焦点、筛选和诊断面板状态不写入项目文件。
 
@@ -197,4 +203,4 @@ git diff --check
 - 生产引用审计当前为 0 个无引用模块、0 个意外 test-only 模块；新增代码必须维持该守门。
 - 当前首屏、Workbench 与全部 JavaScript gzip 预算分别为 120KB、370KB、740KB；新增依赖必须通过构建组成审计。
 - Workbench 首轮主包主要由技能核心投影、生产 seed 和模拟/复盘代码构成；候选诊断证据已经移入独立按需包，后续优化应以生产试用和可测量瓶颈为依据。
-- `playwright.production.config.js` 只服务真实 `dist` 的发布验收；`production-preview-reporter.mjs` 将十一项必需能力汇总为 `trial-ready` 或 `blocked`，开发服务器 E2E 不替代该结论。
+- `playwright.production.config.js` 只服务真实 `dist` 的发布验收；`production-preview-reporter.mjs` 将十三项必需能力汇总为 `trial-ready` 或 `blocked`，开发服务器 E2E 不替代该结论。

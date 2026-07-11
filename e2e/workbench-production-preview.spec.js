@@ -558,6 +558,54 @@ test('[workspace-scenarios] switches, compares, and restores independent product
   );
 });
 
+test('[workspace-layout] restores desktop focus modes and keeps narrow content available', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/#/workbench');
+  const workbench = page.locator('main.workbench');
+  const actionLibrary = page.locator('.action-library');
+  const inspector = page.getByTestId('workbench-side-inspector');
+  await expect(page.getByTestId('workbench-layout-bar')).toBeVisible();
+
+  await page
+    .locator('[data-testid="workbench-layout-mode"][data-layout-mode="review"]')
+    .click();
+  await expect(workbench).toHaveAttribute(
+    'data-workbench-layout-mode',
+    'review'
+  );
+  await expect(actionLibrary).toBeHidden();
+  await expect(inspector).toBeVisible();
+
+  await page.getByTestId('workbench-reset-layout').click();
+  const resizer = page.getByTestId('workbench-left-resizer');
+  const box = await resizer.boundingBox();
+  expect(box).toBeTruthy();
+  await page.mouse.move(box.x + box.width / 2, box.y + 80);
+  await page.mouse.down();
+  await page.mouse.move(box.x + box.width / 2 + 48, box.y + 80);
+  await page.mouse.up();
+  await expect(workbench).toHaveAttribute(
+    'data-workbench-left-panel-width',
+    '308'
+  );
+
+  await page.reload();
+  await expect(workbench).toHaveAttribute(
+    'data-workbench-left-panel-width',
+    '308'
+  );
+  await page
+    .locator('[data-testid="workbench-layout-mode"][data-layout-mode="review"]')
+    .click();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.getByTestId('workbench-layout-bar')).toBeHidden();
+  await expect(actionLibrary).toBeVisible();
+  await expect(inspector).toBeVisible();
+  await expectPageWithoutHorizontalOverflow(page);
+});
+
 test('[narrow-main-flow] completes runtime review, edit, and refresh without overflow', async ({
   page,
 }) => {

@@ -13,6 +13,7 @@ const REQUIRED_CAPABILITIES = [
   'cycle-sections',
   'cycle-inheritance',
   'workspace-scenarios',
+  'workspace-layout',
   'narrow-main-flow',
 ];
 

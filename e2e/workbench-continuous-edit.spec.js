@@ -4157,6 +4157,90 @@ test('manages, compares, and restores multiple workspace scenarios @workbench-ma
   await expect(page.locator('.action-item')).toHaveCount(2);
 });
 
+test('persists resizable editing and review workspace layouts @workbench-main-flow', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/#/workbench');
+  const workbench = page.locator('main.workbench');
+  const actionLibrary = page.locator('.action-library');
+  const inspector = page.getByTestId('workbench-side-inspector');
+  await expect(page.getByTestId('workbench-layout-bar')).toBeVisible();
+
+  await page
+    .locator('[data-testid="workbench-layout-mode"][data-layout-mode="edit"]')
+    .click();
+  await expect(workbench).toHaveAttribute('data-workbench-layout-mode', 'edit');
+  await expect(workbench).toHaveAttribute(
+    'data-workbench-right-panel-collapsed',
+    'true'
+  );
+  await expect(actionLibrary).toBeVisible();
+  await expect(inspector).toBeHidden();
+
+  await page
+    .locator('[data-testid="workbench-layout-mode"][data-layout-mode="review"]')
+    .click();
+  await expect(workbench).toHaveAttribute(
+    'data-workbench-layout-mode',
+    'review'
+  );
+  await expect(actionLibrary).toBeHidden();
+  await expect(inspector).toBeVisible();
+
+  await page.getByTestId('workbench-reset-layout').click();
+  const leftResizer = page.getByTestId('workbench-left-resizer');
+  const leftResizerBox = await leftResizer.boundingBox();
+  expect(leftResizerBox).toBeTruthy();
+  await page.mouse.move(
+    leftResizerBox.x + leftResizerBox.width / 2,
+    leftResizerBox.y + 100
+  );
+  await page.mouse.down();
+  await page.mouse.move(
+    leftResizerBox.x + leftResizerBox.width / 2 + 64,
+    leftResizerBox.y + 100
+  );
+  await page.mouse.up();
+  await expect(workbench).toHaveAttribute(
+    'data-workbench-left-panel-width',
+    '324'
+  );
+
+  await page.reload();
+  await expect(workbench).toHaveAttribute(
+    'data-workbench-left-panel-width',
+    '324'
+  );
+  const storedLayout = await page.evaluate(() =>
+    JSON.parse(
+      window.localStorage.getItem('promilia-axis-tool:workbench-layout:v1')
+    )
+  );
+  expect(storedLayout).toMatchObject({
+    schemaVersion: 1,
+    mode: 'balanced',
+    leftPanelWidth: 324,
+    rightPanelWidth: 300,
+  });
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const download = await downloadPromise;
+  const project = JSON.parse(await readFile(await download.path(), 'utf8'));
+  expect(project.workbenchLayout).toBeUndefined();
+  expect(project.workspaceLayout).toBeUndefined();
+
+  await page
+    .locator('[data-testid="workbench-layout-mode"][data-layout-mode="review"]')
+    .click();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.getByTestId('workbench-layout-bar')).toBeHidden();
+  await expect(actionLibrary).toBeVisible();
+  await expect(inspector).toBeVisible();
+  expect(await readPageOverflowX(page)).toBe(0);
+});
+
 test('keeps the edit result loop usable at a narrow viewport @workbench-main-flow', async ({
   page,
 }) => {

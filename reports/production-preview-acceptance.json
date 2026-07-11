@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "production-preview-acceptance",
-  "generatedAt": "2026-07-11T10:27:48.040Z",
+  "generatedAt": "2026-07-11T10:58:02.011Z",
   "environment": {
     "platform": "win32-x64",
     "node": "v24.16.0",
@@ -18,12 +18,12 @@
     "reason": "all-required-production-preview-capabilities-passed"
   },
   "summary": {
-    "requiredCapabilityCount": 12,
-    "passedCapabilityCount": 12,
-    "testCount": 12,
-    "passedTestCount": 12,
+    "requiredCapabilityCount": 13,
+    "passedCapabilityCount": 13,
+    "testCount": 13,
+    "passedTestCount": 13,
     "playwrightStatus": "passed",
-    "durationMs": 15874
+    "durationMs": 14312
   },
   "capabilities": [
     {
@@ -82,6 +82,11 @@
       "testCount": 1
     },
     {
+      "capability": "workspace-layout",
+      "status": "passed",
+      "testCount": 1
+    },
+    {
       "capability": "narrow-main-flow",
       "status": "passed",
       "testCount": 1
@@ -92,7 +97,7 @@
       "capability": "routes-and-assets",
       "title": "[routes-and-assets] serves production routes and hashed assets",
       "status": "passed",
-      "durationMs": 1248,
+      "durationMs": 1096,
       "retry": 0,
       "errors": []
     },
@@ -100,7 +105,7 @@
       "capability": "diagnostics-lazy-load",
       "title": "[diagnostics-lazy-load] loads runtime diagnostics from a production chunk",
       "status": "passed",
-      "durationMs": 882,
+      "durationMs": 725,
       "retry": 0,
       "errors": []
     },
@@ -108,7 +113,7 @@
       "capability": "json-project-exchange",
       "title": "[json-project-exchange] restores an exported production JSON project",
       "status": "passed",
-      "durationMs": 1156,
+      "durationMs": 794,
       "retry": 0,
       "errors": []
     },
@@ -116,7 +121,7 @@
       "capability": "png-project-exchange",
       "title": "[png-project-exchange] restores production PNG metadata and lazy exporter assets",
       "status": "passed",
-      "durationMs": 1426,
+      "durationMs": 1224,
       "retry": 0,
       "errors": []
     },
@@ -124,7 +129,7 @@
       "capability": "multi-action-editing",
       "title": "[multi-action-editing] copies, pastes, and reviews a selected action group",
       "status": "passed",
-      "durationMs": 993,
+      "durationMs": 842,
       "retry": 0,
       "errors": []
     },
@@ -132,7 +137,7 @@
       "capability": "timeline-relations",
       "title": "[timeline-relations] preserves action relations through project exchange",
       "status": "passed",
-      "durationMs": 1270,
+      "durationMs": 1051,
       "retry": 0,
       "errors": []
     },
@@ -140,7 +145,7 @@
       "capability": "effect-interval-review",
       "title": "[effect-interval-review] reviews an effect interval and refreshes it from the source action",
       "status": "passed",
-      "durationMs": 1096,
+      "durationMs": 880,
       "retry": 0,
       "errors": []
     },
@@ -148,7 +153,7 @@
       "capability": "scenario-comparison",
       "title": "[scenario-comparison] compares an edited axis with a snapshot and returns to the changed action",
       "status": "passed",
-      "durationMs": 1025,
+      "durationMs": 849,
       "retry": 0,
       "errors": []
     },
@@ -156,7 +161,7 @@
       "capability": "cycle-sections",
       "title": "[cycle-sections] creates, reviews, and restores a production cycle boundary",
       "status": "passed",
-      "durationMs": 951,
+      "durationMs": 772,
       "retry": 0,
       "errors": []
     },
@@ -164,7 +169,7 @@
       "capability": "cycle-inheritance",
       "title": "[cycle-inheritance] creates and restores a production scenario from a runtime boundary",
       "status": "passed",
-      "durationMs": 1109,
+      "durationMs": 862,
       "retry": 0,
       "errors": []
     },
@@ -172,7 +177,15 @@
       "capability": "workspace-scenarios",
       "title": "[workspace-scenarios] switches, compares, and restores independent production scenarios",
       "status": "passed",
-      "durationMs": 1098,
+      "durationMs": 1030,
+      "retry": 0,
+      "errors": []
+    },
+    {
+      "capability": "workspace-layout",
+      "title": "[workspace-layout] restores desktop focus modes and keeps narrow content available",
+      "status": "passed",
+      "durationMs": 1018,
       "retry": 0,
       "errors": []
     },
@@ -180,7 +193,7 @@
       "capability": "narrow-main-flow",
       "title": "[narrow-main-flow] completes runtime review, edit, and refresh without overflow",
       "status": "passed",
-      "durationMs": 989,
+      "durationMs": 767,
       "retry": 0,
       "errors": []
     }

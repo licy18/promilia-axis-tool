@@ -26301,3 +26301,18 @@ initialRuntimeState
 `AzPrCycleBoundaryInheritanceProjection` 读取 `runtimeOutputs.stateSnapshots` 与 `effectTimeline.events`。只有 `timeMs < boundaryTimeMs` 的三值快照进入继承状态；恰好在边界发生的 apply/refresh 与动作留给新方案，恰好在边界到期或移除的效果不继承。边界后动作整体平移，只有两端均保留的关系进入新方案，后续边界同步平移，runtime sample capture 清空以避免绝对帧误用。
 
 v1-v11 项目继续由统一解析器接收并迁移为 `initialRuntimeState = null`。v12 状态随本地草稿、JSON、分享链接、PNG 元数据和预设交换；没有新增倍率、伤害/削韧/充能公式或自动循环外推。
+
+## 380. WorkbenchLayout v1（独立浏览器偏好）
+
+阶段 8-H 新增独立工作区布局合同：
+
+```text
+schemaVersion = 1
+mode = balanced | edit | review | custom
+leftPanelWidth / rightPanelWidth
+leftPanelCollapsed / rightPanelCollapsed
+```
+
+`src/domain/workbenchLayout.js` 负责默认值、边界约束、模式切换、折叠、指针拖动、键盘步进和 localStorage 读写；`WorkbenchLayoutBar.vue` 只发送布局命令，`Workbench.vue` 将结果映射为 CSS grid 轨道。持久化 key 为 `promilia-axis-tool:workbench-layout:v1`。
+
+该合同不属于 WorkbenchProjectFile v12，也不写入当前草稿、方案工作区、JSON、分享链接、PNG 元数据、预设或撤销历史。Project、Scenario、generation、runtime 和 calculator 均不读取布局状态，因此项目交换与三值结果保持不变。760px 以下由 CSS 强制显示全部面板，避免桌面折叠偏好造成窄屏内容缺失。

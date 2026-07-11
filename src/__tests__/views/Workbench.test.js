@@ -21,6 +21,7 @@ import {
   createWorkbenchActionDraft,
   getSkillActionCatalog,
 } from '../../domain/workbenchProjectFactory';
+import { WORKBENCH_LAYOUT_STORAGE_KEY } from '../../domain/workbenchLayout';
 import { frameToMs } from '../../domain/timebase';
 import AnalysisPanel from '../../features/workbench/AnalysisPanel.vue';
 import EventLogPanel from '../../features/workbench/EventLogPanel.vue';
@@ -3200,7 +3201,7 @@ describe('Workbench view', () => {
     );
     expect(appSource).not.toContain('width:100vw');
     expect(workbenchSource).toContain(
-      'grid-template-columns:minmax(230px,280px)minmax(0,1fr)minmax(260px,340px);'
+      'grid-template-columns:minmax(0,var(--workbench-left-panel-width,260px))14pxminmax(0,1fr)14pxminmax(0,var(--workbench-right-panel-width,300px));'
     );
     expect(workbenchSource).toContain(
       '.primary-flow{display:grid;grid-area:mainflow;align-content:start;gap:14px;min-width:0;}'
@@ -10127,6 +10128,113 @@ describe('Workbench view', () => {
       },
     });
     wrapper.unmount();
+  });
+
+  it('switches, resizes, resets, and restores the independent Workbench layout', async () => {
+    const wrapper = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: { template: '<a><slot /></a>' },
+        },
+      },
+    });
+    await vi.dynamicImportSettled();
+    await flushPromises();
+    await nextTick();
+
+    const workbench = wrapper.get('main.workbench');
+    expect(workbench.attributes()).toMatchObject({
+      'data-workbench-layout-mode': 'balanced',
+      'data-workbench-left-panel-width': '260',
+      'data-workbench-right-panel-width': '300',
+      'data-workbench-left-panel-collapsed': 'false',
+      'data-workbench-right-panel-collapsed': 'false',
+    });
+
+    await wrapper
+      .get('[data-testid="workbench-layout-mode"][data-layout-mode="edit"]')
+      .trigger('click');
+    await flushPromises();
+    expect(workbench.attributes()).toMatchObject({
+      'data-workbench-layout-mode': 'edit',
+      'data-workbench-left-panel-collapsed': 'false',
+      'data-workbench-right-panel-collapsed': 'true',
+    });
+
+    await wrapper
+      .get('[data-testid="workbench-layout-mode"][data-layout-mode="review"]')
+      .trigger('click');
+    await flushPromises();
+    expect(workbench.attributes()).toMatchObject({
+      'data-workbench-layout-mode': 'review',
+      'data-workbench-left-panel-collapsed': 'true',
+      'data-workbench-right-panel-collapsed': 'false',
+    });
+
+    await wrapper
+      .get('[data-testid="workbench-reset-layout"]')
+      .trigger('click');
+    await flushPromises();
+    const grid = wrapper.get('[data-testid="workbench-main-flow-workspace"]');
+    grid.element.getBoundingClientRect = () => ({
+      width: 1440,
+      height: 900,
+      left: 0,
+      right: 1440,
+      top: 0,
+      bottom: 900,
+      x: 0,
+      y: 0,
+      toJSON: () => {},
+    });
+    wrapper.get('[data-testid="workbench-left-resizer"]').element.dispatchEvent(
+      new MouseEvent('pointerdown', {
+        bubbles: true,
+        button: 0,
+        clientX: 260,
+      })
+    );
+    window.dispatchEvent(
+      new MouseEvent('pointermove', { bubbles: true, clientX: 324 })
+    );
+    window.dispatchEvent(
+      new MouseEvent('pointerup', { bubbles: true, clientX: 324 })
+    );
+    await flushPromises();
+
+    expect(workbench.attributes()).toMatchObject({
+      'data-workbench-layout-mode': 'balanced',
+      'data-workbench-left-panel-width': '324',
+      'data-workbench-right-panel-width': '300',
+    });
+    expect(
+      JSON.parse(window.localStorage.getItem(WORKBENCH_LAYOUT_STORAGE_KEY))
+    ).toMatchObject({
+      schemaVersion: 1,
+      leftPanelWidth: 324,
+      rightPanelWidth: 300,
+    });
+    expect(window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)).toBeNull();
+    wrapper.unmount();
+
+    const restored = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: { template: '<a><slot /></a>' },
+        },
+      },
+    });
+    await vi.dynamicImportSettled();
+    await flushPromises();
+    await nextTick();
+    expect(restored.get('main.workbench').attributes()).toMatchObject({
+      'data-workbench-layout-mode': 'balanced',
+      'data-workbench-left-panel-width': '324',
+      'data-workbench-right-panel-width': '300',
+    });
+    restored.unmount();
   });
 });
 
