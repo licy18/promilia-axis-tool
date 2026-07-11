@@ -1,4 +1,5 @@
 import { createThreeValueMechanismConfigurationContext } from './threeValueMechanismConfiguration';
+import { resolveThreeValueMechanicsProfile } from './threeValueMechanicsProfile';
 
 export const THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME =
   'AzPrThreeValueMechanismContext';
@@ -31,9 +32,13 @@ export function createThreeValueMechanismContext({
     targetEnemy,
     valueTargetKind,
   });
+  const mechanicsProfileResolution = resolveThreeValueMechanicsProfile(
+    scenario?.mechanicsProfile
+  );
+  const mechanicsProfile = mechanicsProfileResolution.profile;
 
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     sourceKind: 'azpr-three-value-mechanism-context',
     contractName: THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME,
     status: createMechanismContextStatus({
@@ -66,6 +71,20 @@ export function createThreeValueMechanismContext({
     configuration,
     configurationReady: configuration.ready,
     configurationStatus: configuration.status,
+    mechanicsProfile,
+    mechanicsProfileReady: mechanicsProfileResolution.validation.valid,
+    mechanicsProfileStatus: mechanicsProfile.status,
+    mechanicsProfileSelection: scenario?.mechanicsProfileSelection ?? {
+      sourceKind: 'mechanics-context-default-profile-selection',
+      status: mechanicsProfileResolution.fallback
+        ? 'mechanics-profile-selection-ready-with-fallback'
+        : 'mechanics-profile-selection-ready',
+      requestedProfileId: scenario?.mechanicsProfile?.profileId ?? null,
+      resolvedProfileId: mechanicsProfile.profileId,
+      resolvedProfileVersion: mechanicsProfile.profileVersion,
+      fallback: mechanicsProfileResolution.fallback,
+      fallbackReason: mechanicsProfileResolution.fallbackReason,
+    },
     ownership: {
       valueTargetKind,
       valueTargetId:
@@ -84,6 +103,7 @@ export function createThreeValueMechanismContext({
       targetEnemyElementDefenses: 'scenario.enemy.elementDefenses',
       targetEnemyToughness: 'scenario.enemy.toughness',
       mechanismConfiguration: 'scenario.mechanismConfiguration',
+      mechanicsProfile: 'scenario.mechanicsProfile',
       timing: 'scenario.actions[].timing',
     },
   };

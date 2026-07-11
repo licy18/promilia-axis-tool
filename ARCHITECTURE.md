@@ -95,6 +95,7 @@ Action
 - `threeValueMechanismContext.js`：角色、动作、敌人和来源上下文。
 - `threeValueMechanismConfiguration.js`：把 Project 已解析配置与 v13 实例身份编译为 mechanics configuration，声明字段应用边界。
 - `threeValueMechanicsAdapter.js`：三轨统一 adapter 注册表、结构化 operands、generation request 与 runtime invocation input。
+- `threeValueMechanicsProfile.js`：Scenario 绑定的版本化 operand capability 与机制层应用策略。
 - `threeValueMechanismSampleAdapter.js`：把通过验证的 runtime sample 晋级为可应用 delta。
 - `damage.js`：当前已确认的伤害计算片段；测试期未知机制保持可替换。
 
@@ -106,7 +107,7 @@ Action
 - 更新敌人 HP、敌人韧性和各角色能量状态。
 - 生成 `simLog`、`stateCurves`、资源曲线、状态快照和 summary。
 - 保持动作、命中、曲线点和日志之间的稳定身份映射。
-- 每条 generation delta 先生成 `AzPrThreeValueMechanicsAdapter` request，绑定 action、hit、同一份 `mechanismConfiguration` 和来源值；runtime state snapshot 再绑定当时的 `stateBefore` 后统一调用注册 adapter。adapter 不读取 Workbench 配置库或 UI 状态。
+- 每条 generation delta 先生成 `AzPrThreeValueMechanicsAdapter` request，绑定 action、hit、同一份 `mechanismConfiguration`、Scenario `mechanicsProfile` 和来源值；runtime state snapshot 再绑定当时的 `stateBefore` 后统一调用注册 adapter。adapter 不读取 Workbench 配置库或 UI 状态。
 
 `src/simulation/projection/projectSimulationResult.js` 将运行结果组织为 Workbench 可消费的动作结果、贡献、诊断和详情视图；`projectEffectIntervals.js` 将效果事件归并为角色/敌人轨可消费的持续区间；`projectCycleSections.js` 按项目边界切分现有 transaction、能量与效果区间；`projectCycleBoundaryInheritance.js` 把边界前已结算状态投影为新方案初始状态并平移边界后草稿。投影层不反向参与公式计算。
 
@@ -141,13 +142,17 @@ Action
 
 Project metadata 只携带活动方案的配置实例 ID 和已经解析的 `actorConfigs` / `enemyConfig`；compiler 将它们与 Scenario actor/enemy 合成为 `AzPrThreeValueMechanismConfiguration`。角色来源区分面板 stats、初始 SP 和 loadout，敌人来源区分 HP baseline、伤害预览防御倍率、韧性 baseline、等级和元素防御。当前确认可用的 baseline/预览字段显式标记应用位置；奇波、装备、灵子效果、敌人等级公式和元素防御公式固定为未应用。
 
-`AzPrThreeValueMechanismContext` 为 v2，`ThreeValueDeltaCalculator` 为 v3。阶段 8-M 后 `Action -> Hit -> ThreeValueDelta` 为 v5，`AzPrThreeValueMechanicsAdapter` 为 v2，`ThreeValueRuntimeCalculatorInvocation` 为 v4；每条 delta、generation calculator result、runtime invocation 和 runtime summary 都保留配置 readiness、来源状态及实例 ID。
+`AzPrThreeValueMechanismContext` 为 v3，`ThreeValueDeltaCalculator` 为 v3。阶段 8-N 后 `Action -> Hit -> ThreeValueDelta` 为 v6，`AzPrThreeValueMechanicsAdapter` 为 v3，`ThreeValueRuntimeCalculatorInvocation` 为 v5；每条 delta、generation calculator result、runtime invocation 和 runtime summary 都保留配置、profile、来源状态及实例 ID。
 
-### ThreeValueMechanicsAdapter v2 / MechanicsOperands v1
+### MechanicsProfile v1 / Adapter v3 / MechanicsOperands v1
 
-`Action -> Hit -> ThreeValueDelta v5` 的每条 delta 都携带 `mechanicsAdapterRequest`。generation 固定 `action / hit / mechanismConfiguration / sourceValue.operands`，runtime 固定 `stateBefore` 并生成完整 adapter input。当前 operands 支持 HP 的 `round(attack * multiplier)`、显式角色能量事件求和、已验证削韧采样 `before - after`、已验证能量采样 `after - before` 和兼容 identity。内置 adapter 从 operands 重算并校验是否与来源 delta 一致；异常、无效或缺失 operands 继续回退 generation 值。
+compiler 默认把 `azpr-three-value-preview-v1` 作为 `AzPrMechanicsProfile` 绑定到 Scenario，并保留 requested/resolved profile 与 fallback 状态。profile 是纯数据，声明支持的 operand kinds、对应 operation、可用轨道，以及 HP、韧性、能量各层的 applied/unapplied 状态。`compileProject(..., { threeValueMechanicsProfile })` 可选择其他合法 profile。
+
+`Action -> Hit -> ThreeValueDelta v6` 的每条 delta 都携带 `mechanicsAdapterRequest`。generation 固定 `action / hit / mechanismConfiguration / mechanicsProfile / sourceValue.operands`，runtime 固定 `stateBefore` 并生成完整 adapter input。operands evaluator 先按 profile 解析 capability，再按 operation 计算；profile 不支持 kind、轨道或 operation 时明确返回 capability 缺口并回退 generation 值。
 
 注册表支持 HP、韧性、能量轨专用注册或一个 `default` 注册覆盖三轨；`simulateScenario(scenario, { threeValueMechanicsAdapterRegistry })` 是无 UI 顶层注入入口，旧 `runtimeCalculatorAdapters` 仍兼容。runtime state、projection 和 consumer summary 统一输出 operands readiness、重算数、失配数与 operand kinds。
+
+生产构建把 `threeValueMechanicsProfile.js` 与 `threeValueMechanicsAdapter.js` 固定为单个 `azpr-mechanics-runtime` chunk；这是同步机制包的缓存边界，不改变源码 import、测试挂载或 runtime 调用语义，总 JavaScript 体积仍由独立预算限制。
 
 ### ScenarioWorkspace v1
 

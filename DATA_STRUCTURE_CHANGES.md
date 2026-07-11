@@ -26464,3 +26464,38 @@ kind = source-value-identity
 `AzPrThreeValueMechanicsAdapter` 从 v1 升级为 v2，内置 adapter 不再默认返回 `sourceValue.value`，而是调用 `calculateThreeValueMechanicsOperands()`。runtime invocation 同时保存 `operandsCalculation`，校验 operands 是否存在、可算并与 `expectedDelta` 一致；runtime state、projection 和 consumer summary 汇总 ready、missing、mismatch、calculated 数量及 kinds。无效计算仍回退 generation delta。
 
 `Action -> Hit -> ThreeValueDelta` 从 v4 升级为 v5，generation entry validation 要求每条 source value 携带 operands 合同且 `expectedDelta` 与 delta 一致；`ThreeValueRuntimeCalculatorInvocation` 从 v3 升级为 v4。HP raw preview、显式能量变化和已验证削韧/能量样本现在由内置 adapter 从原操作数重算；本阶段没有新增公式、启用候选值或改变三值结果。
+
+## 386. AzPrMechanicsProfile v1 / Adapter v3 / Action-Hit-Delta v6
+
+阶段 8-N 在编译后的 Scenario 新增 profile 选择：
+
+```text
+scenario.mechanicsProfile
+  schemaVersion = 1
+  contractName = AzPrMechanicsProfile
+  contractVersion = 1
+  profileId / profileVersion
+  sourceKind / status / ready
+  operandKinds[kind]
+    operation
+    trackKeys[]
+    status / applied
+  supportedOperandKinds[]
+  tracks[trackKey]
+    outputField
+    appliedLayers[]
+    unappliedLayers[]
+  policy
+  summary
+
+scenario.mechanicsProfileSelection
+  requestedProfileId
+  resolvedProfileId / resolvedProfileVersion
+  fallback / fallbackReason
+```
+
+默认 profile ID 为 `azpr-three-value-preview-v1`，支持 HP raw product、显式能量求和、已验证削韧/能量前后值和兼容 identity。它只把当前已有层标记 applied；敌人防御、抗性、暴击、增伤、动作削韧、充能、培养项和等级机制继续列为 unapplied。
+
+`compileProject(project, gameData, { threeValueMechanicsProfile })` 可以绑定其他合法 profile。`AzPrThreeValueMechanismContext` 从 v2 升级为 v3，generation request 与 runtime input 保持同一 profile 引用；`AzPrThreeValueMechanicsAdapter` 从 v2 升级为 v3，operands evaluator 通过 profile capability 的 operation 分派计算，不再按 operand kind 写死计算分支。unsupported kind、轨道或 operation 会记录 capability fallback 并使用 generation delta。
+
+`Action -> Hit -> ThreeValueDelta` 从 v5 升级为 v6，`ThreeValueRuntimeCalculatorInvocation` 从 v4 升级为 v5。runtime state、projection 和 consumer summary 新增 profile IDs、versions、statuses、profile fallback 数和 capability ready/missing 数。默认 profile 与上一阶段三值结果完全一致，本阶段没有启用任何未确认机制层。

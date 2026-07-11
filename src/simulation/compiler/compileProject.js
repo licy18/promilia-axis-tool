@@ -6,6 +6,10 @@ import {
 } from '../../domain/projectSchema';
 import { parseDamageSegments } from '../mechanics/damage';
 import { createThreeValueMechanismConfiguration } from '../mechanics/threeValueMechanismConfiguration';
+import {
+  DEFAULT_THREE_VALUE_MECHANICS_PROFILE,
+  resolveThreeValueMechanicsProfile,
+} from '../mechanics/threeValueMechanicsProfile';
 
 export class CompileProjectError extends Error {
   constructor(issues) {
@@ -15,7 +19,11 @@ export class CompileProjectError extends Error {
   }
 }
 
-export function compileProject(project, gameData) {
+export function compileProject(
+  project,
+  gameData,
+  { threeValueMechanicsProfile = DEFAULT_THREE_VALUE_MECHANICS_PROFILE } = {}
+) {
   const validation = validateProject(project, gameData);
   if (!validation.valid) {
     throw new CompileProjectError(validation.errors);
@@ -35,6 +43,10 @@ export function compileProject(project, gameData) {
     actors,
     enemy,
   });
+  const mechanicsProfileResolution = resolveThreeValueMechanicsProfile(
+    threeValueMechanicsProfile
+  );
+  const mechanicsProfile = mechanicsProfileResolution.profile;
 
   const actions = project.actions
     .map(action => compileAction(action, actorsById, enemy, skillsById))
@@ -56,6 +68,18 @@ export function compileProject(project, gameData) {
     actors,
     enemy,
     mechanismConfiguration,
+    mechanicsProfile,
+    mechanicsProfileSelection: {
+      sourceKind: 'compiled-scenario-mechanics-profile-selection',
+      status: mechanicsProfileResolution.fallback
+        ? 'mechanics-profile-selection-ready-with-fallback'
+        : 'mechanics-profile-selection-ready',
+      requestedProfileId: threeValueMechanicsProfile?.profileId ?? null,
+      resolvedProfileId: mechanicsProfile.profileId,
+      resolvedProfileVersion: mechanicsProfile.profileVersion,
+      fallback: mechanicsProfileResolution.fallback,
+      fallbackReason: mechanicsProfileResolution.fallbackReason,
+    },
     actions,
     cycleBoundaries: (project.cycleBoundaries ?? []).map(boundary => ({
       ...boundary,

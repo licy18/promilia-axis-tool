@@ -6,6 +6,7 @@ import {
   THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME,
   THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME,
 } from '../mechanics/threeValueMechanicsAdapter';
+import { THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME } from '../mechanics/threeValueMechanicsProfile';
 
 export const ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE =
   'threeValueRuntimeInput.appliedDeltas';
@@ -1034,6 +1035,23 @@ function summarizeActionHitThreeValueRuntimeInput({
     mechanicsOperandsKinds: uniqueStrings(
       appliedDeltas.map(
         delta => delta.mechanicsAdapterRequest?.sourceValue?.operands?.kind
+      )
+    ),
+    mechanicsProfileReadyDeltaCount: appliedDeltas.filter(
+      delta =>
+        delta.mechanicsAdapterRequest?.mechanicsProfile?.contractName ===
+          THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME &&
+        delta.mechanicsAdapterRequest.mechanicsProfile.ready
+    ).length,
+    mechanicsProfileMissingDeltaCount: appliedDeltas.filter(
+      delta =>
+        delta.mechanicsAdapterRequest?.mechanicsProfile?.contractName !==
+          THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME ||
+        !delta.mechanicsAdapterRequest.mechanicsProfile.ready
+    ).length,
+    mechanicsProfileIds: uniqueStrings(
+      appliedDeltas.map(
+        delta => delta.mechanicsAdapterRequest?.mechanicsProfile?.profileId
       )
     ),
     ignoredLayerCounts,

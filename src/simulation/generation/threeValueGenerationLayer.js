@@ -20,6 +20,10 @@ import {
   createThreeValueMechanicsAdapterRequest,
   createThreeValueMechanicsOperands,
 } from '../mechanics/threeValueMechanicsAdapter';
+import {
+  THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME,
+  THREE_VALUE_MECHANICS_PROFILE_CONTRACT_VERSION,
+} from '../mechanics/threeValueMechanicsProfile';
 
 const THREE_VALUE_GENERATION_TRACK_ORDER = [
   'enemyHpDamage',
@@ -115,7 +119,7 @@ export function createThreeValueGenerationLayer({
         : 'standard-three-value-generation-layer-empty',
     contract: {
       name: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
-      version: 5,
+      version: 6,
       frameRate: AZPR_TIMELINE_FRAME_RATE,
       frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
       deltaFields: THREE_VALUE_DELTA_FIELDS,
@@ -142,6 +146,7 @@ export function createThreeValueGenerationLayer({
           'action',
           'hit',
           'mechanismConfiguration',
+          'mechanicsProfile',
           'sourceValue',
           'stateBefore',
         ],
@@ -149,6 +154,7 @@ export function createThreeValueGenerationLayer({
           'action',
           'hit',
           'mechanismConfiguration',
+          'mechanicsProfile',
           'sourceValue',
         ],
         runtimeBoundInputs: ['stateBefore'],
@@ -163,6 +169,11 @@ export function createThreeValueGenerationLayer({
             'inputs',
             'expectedDelta',
           ],
+        },
+        mechanicsProfileContract: {
+          name: THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME,
+          version: THREE_VALUE_MECHANICS_PROFILE_CONTRACT_VERSION,
+          selectionPath: 'scenario.mechanicsProfile',
         },
         policy:
           'all applied HP, toughness and self-energy deltas use the same registrable mechanics adapter invocation contract',
@@ -187,7 +198,7 @@ export function createThreeValueGenerationLayer({
       },
       mechanismContextContract: {
         name: THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME,
-        version: 2,
+        version: 3,
         requiredSections: [
           'action',
           'hit',
@@ -405,6 +416,7 @@ function createThreeValueGenerationDelta({
     action: mechanismContext.action,
     hit: mechanismContext.hit,
     mechanismConfiguration: mechanismContext.configuration,
+    mechanicsProfile: mechanismContext.mechanicsProfile,
     sourceValue: {
       value: deltaValue,
       ...deltaFields,
@@ -860,7 +872,7 @@ function createActionHitThreeValueDeltaStandardContract({
         ? 'action-hit-three-value-delta-contract-ready'
         : 'action-hit-three-value-delta-contract-empty',
     name: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
-    version: 5,
+    version: 6,
     topology: ['Action', 'Hit', 'ThreeValueDelta'],
     frameRate: AZPR_TIMELINE_FRAME_RATE,
     frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
@@ -874,7 +886,7 @@ function createActionHitThreeValueDeltaStandardContract({
     aggregateLayerKeys: THREE_VALUE_GENERATION_LAYER_ORDER,
     mechanismContextContract: {
       name: THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME,
-      version: 2,
+      version: 3,
       required: true,
     },
     mechanicsAdapterContract: {
@@ -884,6 +896,7 @@ function createActionHitThreeValueDeltaStandardContract({
         'action',
         'hit',
         'mechanismConfiguration',
+        'mechanicsProfile',
         'sourceValue',
         'stateBefore',
       ],
@@ -891,6 +904,7 @@ function createActionHitThreeValueDeltaStandardContract({
         'action',
         'hit',
         'mechanismConfiguration',
+        'mechanicsProfile',
         'sourceValue',
       ],
       runtimeBoundInputs: ['stateBefore'],
@@ -905,6 +919,11 @@ function createActionHitThreeValueDeltaStandardContract({
           'inputs',
           'expectedDelta',
         ],
+      },
+      mechanicsProfileContract: {
+        name: THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME,
+        version: THREE_VALUE_MECHANICS_PROFILE_CONTRACT_VERSION,
+        selectionPath: 'scenario.mechanicsProfile',
       },
     },
     runtimeDeltaPolicy: 'runtime consumes only deltas with applied=true',
@@ -942,6 +961,10 @@ function createActionHitThreeValueDeltaStandardContract({
       appliedMechanicsOperandsReadyDeltaCount:
         summary.appliedMechanicsOperandsReadyDeltaCount,
       mechanicsOperandsKinds: summary.mechanicsOperandsKinds,
+      mechanicsProfileReadyDeltaCount: summary.mechanicsProfileReadyDeltaCount,
+      mechanicsProfileMissingDeltaCount:
+        summary.mechanicsProfileMissingDeltaCount,
+      mechanicsProfileIds: summary.mechanicsProfileIds,
       applied: false,
     },
     applied: false,
@@ -1092,6 +1115,17 @@ function summarizeThreeValueGenerationLayer({
     mechanicsOperandsKinds: uniqueStrings(
       deltas.map(
         delta => delta.mechanicsAdapterRequest?.sourceValue?.operands?.kind
+      )
+    ),
+    mechanicsProfileReadyDeltaCount: deltas.filter(
+      delta => delta.mechanismContext?.mechanicsProfileReady
+    ).length,
+    mechanicsProfileMissingDeltaCount: deltas.filter(
+      delta => !delta.mechanismContext?.mechanicsProfileReady
+    ).length,
+    mechanicsProfileIds: uniqueStrings(
+      deltas.map(
+        delta => delta.mechanicsAdapterRequest?.mechanicsProfile?.profileId
       )
     ),
     frameMin: minNumber(deltas.map(delta => delta.frameIndex)),

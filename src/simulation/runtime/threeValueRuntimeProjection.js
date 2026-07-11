@@ -592,6 +592,19 @@ function createThreeValueRuntimeOutputContract({
           .mechanicsOperandsCalculatedInvocationCount,
       mechanicsOperandsKinds:
         stateCurves.snapshots.summary.mechanicsOperandsKinds,
+      mechanicsProfileIds: stateCurves.snapshots.summary.mechanicsProfileIds,
+      mechanicsProfileVersions:
+        stateCurves.snapshots.summary.mechanicsProfileVersions,
+      mechanicsProfileStatuses:
+        stateCurves.snapshots.summary.mechanicsProfileStatuses,
+      mechanicsProfileFallbackInvocationCount:
+        stateCurves.snapshots.summary.mechanicsProfileFallbackInvocationCount,
+      mechanicsProfileCapabilityReadyInvocationCount:
+        stateCurves.snapshots.summary
+          .mechanicsProfileCapabilityReadyInvocationCount,
+      mechanicsProfileCapabilityMissingInvocationCount:
+        stateCurves.snapshots.summary
+          .mechanicsProfileCapabilityMissingInvocationCount,
       runtimeCalculatorReplacedInvocationCount:
         stateCurves.snapshots.summary.runtimeCalculatorReplacedInvocationCount,
       runtimeCalculatorFallbackInvocationCount:
@@ -831,6 +844,9 @@ function createRuntimeSummaryOutputContract(summary) {
       'mechanicsOperandsMissingInvocationCount',
       'mechanicsOperandsMismatchInvocationCount',
       'mechanicsOperandsCalculatedInvocationCount',
+      'mechanicsProfileFallbackInvocationCount',
+      'mechanicsProfileCapabilityReadyInvocationCount',
+      'mechanicsProfileCapabilityMissingInvocationCount',
       'calculatorCount',
       'valueSourceSlotCount',
       'runtimeValueSourceSlotCount',
@@ -860,6 +876,9 @@ function createRuntimeSummaryOutputContract(summary) {
       'mechanicsAdapterContractVersion',
       'mechanicsAdapterRegistrationKeys',
       'mechanicsOperandsKinds',
+      'mechanicsProfileIds',
+      'mechanicsProfileVersions',
+      'mechanicsProfileStatuses',
     ],
     appliedOnly: summary.appliedOnly,
     applied: true,
@@ -1336,6 +1355,19 @@ function summarizeThreeValueRuntimeProjection({
       runtimeStateSnapshots.summary.mechanicsOperandsCalculatedInvocationCount,
     mechanicsOperandsKinds:
       runtimeStateSnapshots.summary.mechanicsOperandsKinds,
+    mechanicsProfileIds: runtimeStateSnapshots.summary.mechanicsProfileIds,
+    mechanicsProfileVersions:
+      runtimeStateSnapshots.summary.mechanicsProfileVersions,
+    mechanicsProfileStatuses:
+      runtimeStateSnapshots.summary.mechanicsProfileStatuses,
+    mechanicsProfileFallbackInvocationCount:
+      runtimeStateSnapshots.summary.mechanicsProfileFallbackInvocationCount,
+    mechanicsProfileCapabilityReadyInvocationCount:
+      runtimeStateSnapshots.summary
+        .mechanicsProfileCapabilityReadyInvocationCount,
+    mechanicsProfileCapabilityMissingInvocationCount:
+      runtimeStateSnapshots.summary
+        .mechanicsProfileCapabilityMissingInvocationCount,
     runtimeCalculatorAdapterKeys:
       runtimeStateSnapshots.summary.runtimeCalculatorAdapterKeys,
     runtimeCalculatorInvocationStatuses:

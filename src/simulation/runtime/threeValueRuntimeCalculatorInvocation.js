@@ -24,7 +24,8 @@ export function createThreeValueRuntimeCalculatorInvocation({
   const resolvedAdapter = resolved.adapter;
   const outputField = input.outputField;
   const operandsCalculation = calculateThreeValueMechanicsOperands(
-    input.sourceValue?.operands
+    input.sourceValue?.operands,
+    input.mechanicsProfile
   );
   const calculation = invokeRuntimeCalculatorAdapter(resolvedAdapter, input);
   const output = createRuntimeCalculatorOutput({
@@ -32,6 +33,7 @@ export function createThreeValueRuntimeCalculatorInvocation({
     input,
     outputField,
     calculation,
+    operandsCalculation,
   });
   const changed = output.delta !== input.generatedDelta.delta;
   const fallbackReason = output.fallbackReason;
@@ -45,6 +47,12 @@ export function createThreeValueRuntimeCalculatorInvocation({
       (delta.mechanicsAdapterRequest?.mechanismConfiguration ??
         delta.mechanismContext?.configuration ??
         null),
+    mechanicsProfilePreserved:
+      input.mechanicsProfile ===
+      (delta.mechanicsAdapterRequest?.mechanicsProfile ??
+        delta.mechanismContext?.mechanicsProfile ??
+        input.mechanicsProfile),
+    mechanicsProfilePresent: Boolean(input.mechanicsProfile?.profileId),
     generationRequestPreserved:
       input.generationRequest === (delta.mechanicsAdapterRequest ?? null),
     actionInputPresent: Boolean(input.action),
@@ -59,7 +67,7 @@ export function createThreeValueRuntimeCalculatorInvocation({
   const valid = Object.values(validation).every(Boolean);
 
   return {
-    schemaVersion: 4,
+    schemaVersion: 5,
     sourceKind: 'azpr-three-value-runtime-calculator-invocation',
     contractName: THREE_VALUE_RUNTIME_CALCULATOR_INVOCATION_CONTRACT_NAME,
     status: fallbackReason
@@ -149,6 +157,28 @@ export function summarizeThreeValueRuntimeCalculatorInvocations(
     operandsKinds: uniqueStrings(
       invocations.map(invocation => invocation.output.operandsKind)
     ),
+    mechanicsProfileIds: uniqueStrings(
+      invocations.map(invocation => invocation.output.mechanicsProfileId)
+    ),
+    mechanicsProfileVersions: uniqueNumbers(
+      invocations.map(invocation => invocation.output.mechanicsProfileVersion)
+    ),
+    mechanicsProfileStatuses: uniqueStrings(
+      invocations.map(invocation => invocation.output.mechanicsProfileStatus)
+    ),
+    mechanicsProfileFallbackInvocationCount: invocations.filter(
+      invocation => invocation.output.mechanicsProfileFallback
+    ).length,
+    mechanicsProfileCapabilityReadyInvocationCount: invocations.filter(
+      invocation =>
+        invocation.output.mechanicsProfileCapabilityStatus ===
+        'mechanics-profile-capability-ready'
+    ).length,
+    mechanicsProfileCapabilityMissingInvocationCount: invocations.filter(
+      invocation =>
+        invocation.output.mechanicsProfileCapabilityStatus !==
+        'mechanics-profile-capability-ready'
+    ).length,
     adapterKeys: uniqueStrings(
       invocations.map(invocation => invocation.adapter.key)
     ),
@@ -195,6 +225,7 @@ function createRuntimeCalculatorOutput({
   input,
   outputField,
   calculation,
+  operandsCalculation,
 }) {
   const result = calculation.result;
   const candidateValue =
@@ -232,6 +263,30 @@ function createRuntimeCalculatorOutput({
       typeof result?.operandsMatchSource === 'boolean'
         ? result.operandsMatchSource
         : null,
+    mechanicsProfileId:
+      result?.mechanicsProfileId ?? input.mechanicsProfile?.profileId ?? null,
+    mechanicsProfileVersion:
+      result?.mechanicsProfileVersion ??
+      input.mechanicsProfile?.profileVersion ??
+      null,
+    mechanicsProfileStatus:
+      result?.mechanicsProfileStatus ?? input.mechanicsProfile?.status ?? null,
+    mechanicsProfileFallback:
+      typeof result?.mechanicsProfileFallback === 'boolean'
+        ? result.mechanicsProfileFallback
+        : operandsCalculation.profileFallback,
+    mechanicsProfileCapabilityStatus:
+      result?.mechanicsProfileCapabilityStatus ??
+      operandsCalculation.capabilityStatus ??
+      null,
+    mechanicsProfileCapabilityApplied:
+      typeof result?.mechanicsProfileCapabilityApplied === 'boolean'
+        ? result.mechanicsProfileCapabilityApplied
+        : operandsCalculation.capabilityApplied,
+    mechanicsProfileCapabilityFallbackReason:
+      result?.mechanicsProfileCapabilityFallbackReason ??
+      operandsCalculation.capabilityFallbackReason ??
+      null,
     fallbackReason,
   };
   if (outputField !== 'delta') {
@@ -253,4 +308,10 @@ function uniqueStrings(values) {
         .map(value => String(value))
     ),
   ].sort();
+}
+
+function uniqueNumbers(values) {
+  return [
+    ...new Set(values.map(value => Number(value)).filter(Number.isFinite)),
+  ].sort((left, right) => left - right);
 }

@@ -1,7 +1,7 @@
 export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME =
   'AzPrThreeValueMechanicsAdapter';
 
-export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION = 2;
+export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION = 3;
 
 export const THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME =
   'AzPrThreeValueMechanicsOperands';
@@ -72,6 +72,7 @@ export function createThreeValueMechanicsAdapterRequest({
   action,
   hit,
   mechanismConfiguration,
+  mechanicsProfile,
   sourceValue,
 } = {}) {
   const normalizedSourceValue = normalizeMechanicsSourceValue({
@@ -90,6 +91,7 @@ export function createThreeValueMechanicsAdapterRequest({
     action: action ?? null,
     hit: hit ?? null,
     mechanismConfiguration: mechanismConfiguration ?? null,
+    mechanicsProfile: mechanicsProfile ?? DEFAULT_THREE_VALUE_MECHANICS_PROFILE,
     sourceValue: normalizedSourceValue,
     stateBefore: null,
     bindingStatus: 'generation-inputs-bound-runtime-state-pending',
@@ -105,6 +107,10 @@ export function createThreeValueMechanicsAdapterInput({
     THREE_VALUE_MECHANICS_TRACK_DEFINITIONS[trackKey]?.outputField ?? 'delta';
   const request = delta.mechanicsAdapterRequest ?? null;
   const mechanismContext = delta.mechanismContext ?? null;
+  const mechanicsProfile =
+    request?.mechanicsProfile ??
+    mechanismContext?.mechanicsProfile ??
+    DEFAULT_THREE_VALUE_MECHANICS_PROFILE;
   const sourceValue = normalizeMechanicsSourceValue({
     trackKey,
     sourceValue: request?.sourceValue ?? {
@@ -133,6 +139,7 @@ export function createThreeValueMechanicsAdapterInput({
       request?.mechanismConfiguration ??
       mechanismContext?.configuration ??
       null,
+    mechanicsProfile,
     sourceValue,
     stateBefore,
     bindingStatus: 'mechanics-adapter-input-ready',
@@ -278,9 +285,17 @@ export function createThreeValueMechanicsOperands({
   };
 }
 
-export function calculateThreeValueMechanicsOperands(operands = {}) {
+export function calculateThreeValueMechanicsOperands(
+  operands = {},
+  mechanicsProfile
+) {
+  const capabilityResolution = resolveThreeValueMechanicsProfileCapability({
+    profile: mechanicsProfile,
+    operands,
+  });
+  const operation = capabilityResolution.capability?.operation ?? null;
   let value = null;
-  if (operands.kind === 'hp-raw-preview-product') {
+  if (capabilityResolution.ready && operation === 'round-clamped-product') {
     const baseAttack = normalizeMechanicsNumber(operands.inputs?.baseAttack);
     const actionMultiplier = normalizeMechanicsNumber(
       operands.inputs?.actionMultiplier
@@ -289,7 +304,7 @@ export function calculateThreeValueMechanicsOperands(operands = {}) {
     if (baseAttack != null && actionMultiplier != null) {
       value = Math.max(minimum, Math.round(baseAttack * actionMultiplier));
     }
-  } else if (operands.kind === 'explicit-self-energy-event-sum') {
+  } else if (capabilityResolution.ready && operation === 'sum') {
     const eventDeltas = (operands.inputs?.eventDeltas ?? [])
       .map(normalizeMechanicsNumber)
       .filter(item => item != null);
@@ -298,11 +313,11 @@ export function calculateThreeValueMechanicsOperands(operands = {}) {
         eventDeltas.reduce((sum, item) => sum + item, 0)
       );
     }
-  } else if (operands.kind === 'validated-toughness-before-after') {
+  } else if (capabilityResolution.ready && operation === 'before-minus-after') {
     value = calculateBeforeAfterDelta(operands, 'decrease');
-  } else if (operands.kind === 'validated-self-energy-before-after') {
+  } else if (capabilityResolution.ready && operation === 'after-minus-before') {
     value = calculateBeforeAfterDelta(operands, 'increase');
-  } else if (operands.kind === 'source-value-identity') {
+  } else if (capabilityResolution.ready && operation === 'identity') {
     value = normalizeMechanicsNumber(operands.inputs?.value);
   }
 
@@ -315,6 +330,14 @@ export function calculateThreeValueMechanicsOperands(operands = {}) {
       ? 'three-value-mechanics-operands-calculated'
       : 'three-value-mechanics-operands-invalid',
     operandsKind: operands.kind ?? null,
+    operation,
+    profileId: capabilityResolution.profile.profileId,
+    profileVersion: capabilityResolution.profile.profileVersion,
+    profileStatus: capabilityResolution.profile.status,
+    profileFallback: capabilityResolution.profileResolution.fallback,
+    capabilityStatus: capabilityResolution.status,
+    capabilityApplied: capabilityResolution.capability?.applied === true,
+    capabilityFallbackReason: capabilityResolution.fallbackReason,
     expectedDelta,
     matchesExpected:
       ready && expectedDelta != null
@@ -364,7 +387,8 @@ function createFallbackThreeValueMechanicsAdapter({ trackKey, outputField }) {
 
 function calculateDefaultThreeValueMechanicsResult(input) {
   const calculation = calculateThreeValueMechanicsOperands(
-    input.sourceValue?.operands
+    input.sourceValue?.operands,
+    input.mechanicsProfile
   );
   return {
     delta: calculation.value,
@@ -376,6 +400,14 @@ function calculateDefaultThreeValueMechanicsResult(input) {
     operandsStatus: calculation.status,
     calculatedFromOperands: calculation.ready,
     operandsMatchSource: calculation.matchesExpected,
+    mechanicsProfileId: calculation.profileId,
+    mechanicsProfileVersion: calculation.profileVersion,
+    mechanicsProfileStatus: calculation.profileStatus,
+    mechanicsProfileFallback: calculation.profileFallback,
+    mechanicsProfileCapabilityStatus: calculation.capabilityStatus,
+    mechanicsProfileCapabilityApplied: calculation.capabilityApplied,
+    mechanicsProfileCapabilityFallbackReason:
+      calculation.capabilityFallbackReason,
   };
 }
 
@@ -469,3 +501,7 @@ function uniqueStrings(values) {
     ),
   ].sort();
 }
+import {
+  DEFAULT_THREE_VALUE_MECHANICS_PROFILE,
+  resolveThreeValueMechanicsProfileCapability,
+} from './threeValueMechanicsProfile';

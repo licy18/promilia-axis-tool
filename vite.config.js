@@ -10,6 +10,20 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (
+            id.endsWith('/threeValueMechanicsProfile.js') ||
+            id.endsWith('/threeValueMechanicsAdapter.js')
+          ) {
+            return 'azpr-mechanics-runtime';
+          }
+        },
+      },
+    },
+  },
   test: {
     include: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'],
     globals: true,

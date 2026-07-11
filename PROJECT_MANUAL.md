@@ -54,7 +54,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；71 个测试文件、400 条测试通过。
+- `npm run test -- --run`：通过；72 个测试文件、402 条测试通过。
 - `npm run test:e2e:workbench-flow`：通过；39 条 Workbench 浏览器主流程通过。
 - `npm run test:e2e:production-preview`：通过；15 项真实 `dist` 验收全部通过，报告结论为 `trial-ready`。
 
@@ -1025,6 +1025,16 @@ Workbench 现在可以把角色等级、初始能量、奇波、装备、灵子�
 为保持发布预算，非首屏的预设库对话框改为按需加载；保存、搜索、复制和回载预设的完整浏览器路径通过。阶段验收：71 个测试文件、400 条单元/组件测试，39 条 Workbench 主流程和 15 项 production preview 全部通过，报告结论为 `trial-ready`。生产引用与数据投影审计无异常；Workbench 主块为 369,379B gzip，全部 JavaScript 为 736,287B gzip，仍在 370,000B/740,000B 预算内。180 动作编译 p95 为 8.704ms、完整 simulation p95 为 22.002ms；120 动作浏览器首屏就绪为 1492ms。
 
 下一阶段目标：阶段 8-N / P3 版本化 mechanics profile。把当前内置 adapter 中对 operand kind 的硬编码分派整理为可选择、可追踪的 `AzPrMechanicsProfile`，由 Scenario 明确绑定 profile ID、版本、支持的 operand kinds 和各机制层 applied/unapplied 状态，并让 runtime summary 记录实际 profile。当前 profile 继续保持现有结果；后续已确认的防御、抗性或培养机制通过新增 profile 层接入，不修改 Workbench，也不猜测尚未确认公式。
+
+### 阶段 8-N P3 版本化 mechanics profile（2026-07-11）
+
+新增纯数据 `AzPrMechanicsProfile v1`。compiler 默认把 `azpr-three-value-preview-v1` 绑定到 Scenario，并记录 requested/resolved profile、版本和 fallback；profile 明确列出五种 operand kind 的 operation/可用轨道，以及 HP、韧性、角色能量各机制层的 applied/unapplied 状态。`compileProject()` 支持选择其他合法 profile，不需要修改 Workbench 或把函数写进项目文件。
+
+`AzPrThreeValueMechanismContext` 升级为 v3，`Action -> Hit -> ThreeValueDelta` 升级为 v6，`AzPrThreeValueMechanicsAdapter` 升级为 v3，`ThreeValueRuntimeCalculatorInvocation` 升级为 v5。generation request 与 runtime input 保持同一 profile 引用；operands evaluator 先解析 profile capability，再按 operation 计算。自定义 profile 缺少 HP capability 的测试证明 runtime 会记录 unsupported、回退 generation delta 并保持结果，不会偷偷套用默认 profile。
+
+为保持发布预算，纯同步的 profile 与 adapter 固定为单个 `azpr-mechanics-runtime` 构建 chunk；源码、测试和 runtime 调用语义不异步化，总 JavaScript 预算继续守门。阶段验收：72 个测试文件、402 条单元/组件测试，39 条 Workbench 主流程和 15 项 production preview 全部通过，报告结论为 `trial-ready`。生产引用与数据投影审计无异常；Workbench 主块为 368,608B gzip，全部 JavaScript 为 739,259B gzip，仍在 370,000B/740,000B 预算内。180 动作编译 p95 为 9.016ms、完整 simulation p95 为 26.970ms；120 动作浏览器首屏就绪为 1611ms。
+
+下一阶段目标：阶段 8-O / P3 profile 机制层输入闭环。把 profile 的 `appliedLayers / unappliedLayers` 映射为每次 invocation 的版本化 layer inputs，统一携带角色面板、动作倍率、敌人防御与元素防御、状态前值、初始能量和培养配置的实际值、来源及 readiness；runtime 校验 applied 层具备输入，unapplied 层继续只追踪不计算。该阶段不启用未确认公式，也不新增 Workbench 小控件。
 
 ## 10. 文档维护规则
 

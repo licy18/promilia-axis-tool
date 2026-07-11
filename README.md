@@ -107,7 +107,7 @@ e2e/                     Workbench 浏览器主流程
 
 `npm run test:e2e:production-preview` 会重新构建 `dist`，用独立端口启动 Vite production preview，并检查路由与哈希资源、诊断动态包、JSON/PNG 项目交换、拖放恢复、配置实例、多动作与关系编辑、状态效果区间复盘和 390px 窄屏主流程。最终十五项能力的试用判定写入 `reports/production-preview-acceptance.json`。
 
-三值运行时统一通过 `AzPrThreeValueMechanicsAdapter v2` 调用 HP、韧性和角色能量 adapter；generation 以 `AzPrThreeValueMechanicsOperands v1` 绑定 HP 攻击/倍率、显式能量事件或已验证采样前后值，runtime 绑定实际前状态。内置 adapter 从 operands 重算现有 delta，`simulateScenario()` 仍可注入替换注册表。
+三值运行时统一通过 `AzPrThreeValueMechanicsAdapter v3` 调用 HP、韧性和角色能量 adapter；compiler 为 Scenario 绑定版本化 `AzPrMechanicsProfile v1`，generation 以 `AzPrThreeValueMechanicsOperands v1` 绑定操作数，runtime 按 profile capability 执行并汇总。内置 profile 保持现有结果，`simulateScenario()` 仍可注入替换注册表。
 
 ## 项目文档
 

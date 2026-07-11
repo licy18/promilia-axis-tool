@@ -8,6 +8,7 @@ import {
   THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME,
   THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME,
 } from '../mechanics/threeValueMechanicsAdapter';
+import { THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME } from '../mechanics/threeValueMechanicsProfile';
 
 const STANDARD_GENERATION_ENTRY_OUTPUT_NAMES = [
   'generationInput',
@@ -700,6 +701,10 @@ export function validateStandardGenerationEntryContract(generationEntry = {}) {
           delta.mechanicsAdapterRequest.hit === delta.mechanismContext?.hit &&
           delta.mechanicsAdapterRequest.mechanismConfiguration ===
             delta.mechanismContext?.configuration &&
+          delta.mechanicsAdapterRequest.mechanicsProfile ===
+            delta.mechanismContext?.mechanicsProfile &&
+          delta.mechanicsAdapterRequest.mechanicsProfile?.contractName ===
+            THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME &&
           delta.mechanicsAdapterRequest.sourceValue?.value === delta.delta &&
           delta.mechanicsAdapterRequest.sourceValue?.operands?.contractName ===
             THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME &&
@@ -1070,6 +1075,11 @@ function createThreeValueGenerationBundleSummary({
       standardContract.summary?.appliedMechanicsOperandsReadyDeltaCount ?? 0,
     mechanicsOperandsKinds:
       standardContract.summary?.mechanicsOperandsKinds ?? [],
+    mechanicsProfileReadyDeltaCount:
+      standardContract.summary?.mechanicsProfileReadyDeltaCount ?? 0,
+    mechanicsProfileMissingDeltaCount:
+      standardContract.summary?.mechanicsProfileMissingDeltaCount ?? 0,
+    mechanicsProfileIds: standardContract.summary?.mechanicsProfileIds ?? [],
     calculatorCount: standardContract.summary?.calculatorCount ?? 0,
     executionPlanContractName: actionExecutionPlan?.contractName ?? '',
     executionPlanActionCount:
