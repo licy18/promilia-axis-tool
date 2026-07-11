@@ -830,9 +830,7 @@ import {
   Upload,
 } from '@element-plus/icons-vue';
 import ActionLibraryPanel from '../features/workbench/ActionLibraryPanel.vue';
-import ActionRuleDiagnosticsPanel from '../features/workbench/ActionRuleDiagnosticsPanel.vue';
 import AnalysisPanel from '../features/workbench/AnalysisPanel.vue';
-import EffectTimelinePanel from '../features/workbench/EffectTimelinePanel.vue';
 import EventLogPanel from '../features/workbench/EventLogPanel.vue';
 import PropertiesPanel from '../features/workbench/PropertiesPanel.vue';
 import ResourceMonitorPanel from '../features/workbench/ResourceMonitorPanel.vue';
@@ -987,6 +985,12 @@ const WorkbenchProjectDropOverlay = defineAsyncComponent(
 const WorkbenchConfigurationLibraryPanel = defineAsyncComponent(
   () => import('../features/workbench/WorkbenchConfigurationLibraryPanel.vue')
 );
+const ActionRuleDiagnosticsPanel = defineAsyncComponent(
+  () => import('../features/workbench/ActionRuleDiagnosticsPanel.vue')
+);
+const EffectTimelinePanel = defineAsyncComponent(
+  () => import('../features/workbench/EffectTimelinePanel.vue')
+);
 const EnemyPanel = defineAsyncComponent(
   () => import('../features/workbench/EnemyPanel.vue')
 );
@@ -1126,6 +1130,7 @@ const project = computed(() =>
     teamSlots: teamSlots.value,
     actorConfigs: actorConfigs.value,
     enemyConfig: enemyConfig.value,
+    configurationSelection: configurationSelection.value,
     actions: actionDrafts.value,
     actionRelations: actionRelations.value,
     cycleBoundaries: cycleBoundaries.value,
@@ -3061,6 +3066,7 @@ function createWorkbenchProjectFromDraft(draft) {
     teamSlots: draft.teamSlots,
     actorConfigs: draft.actorConfigs,
     enemyConfig: draft.enemyConfig,
+    configurationSelection: draft.configurationSelection,
     actions: draft.actionDrafts,
     actionRelations: draft.actionRelations,
     cycleBoundaries: draft.cycleBoundaries,

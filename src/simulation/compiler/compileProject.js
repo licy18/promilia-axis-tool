@@ -5,6 +5,7 @@ import {
   validateProject,
 } from '../../domain/projectSchema';
 import { parseDamageSegments } from '../mechanics/damage';
+import { createThreeValueMechanismConfiguration } from '../mechanics/threeValueMechanismConfiguration';
 
 export class CompileProjectError extends Error {
   constructor(issues) {
@@ -28,6 +29,12 @@ export function compileProject(project, gameData) {
     project.actors.map(actor => [actor.id, compileActor(actor, charactersById)])
   );
   const enemy = compileEnemy(project.enemy, enemiesById, elementsById);
+  const actors = [...actorsById.values()];
+  const mechanismConfiguration = createThreeValueMechanismConfiguration({
+    project,
+    actors,
+    enemy,
+  });
 
   const actions = project.actions
     .map(action => compileAction(action, actorsById, enemy, skillsById))
@@ -46,8 +53,9 @@ export function compileProject(project, gameData) {
       ...project.time,
     },
     team: compileTeam(project.team, actorsById),
-    actors: [...actorsById.values()],
+    actors,
     enemy,
+    mechanismConfiguration,
     actions,
     cycleBoundaries: (project.cycleBoundaries ?? []).map(boundary => ({
       ...boundary,

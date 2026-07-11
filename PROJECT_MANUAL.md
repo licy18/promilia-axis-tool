@@ -54,7 +54,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；69 个测试文件、395 条测试通过。
+- `npm run test -- --run`：通过；70 个测试文件、397 条测试通过。
 - `npm run test:e2e:workbench-flow`：通过；39 条 Workbench 浏览器主流程通过。
 - `npm run test:e2e:production-preview`：通过；15 项真实 `dist` 验收全部通过，报告结论为 `trial-ready`。
 
@@ -995,6 +995,16 @@ Workbench 现在可以把角色等级、初始能量、奇波、装备、灵子�
 阶段验收：69 个测试文件、395 条单元/组件测试通过；39 条 Workbench 浏览器主流程全部覆盖，其中配置实例路径完成复制、命名、方案分流、JSON 导出、重置和回导恢复；15 项 production preview 能力全部通过，报告结论为 `trial-ready`。生产引用与数据投影审计无异常；Workbench 主块为 369,408B gzip，全部 JavaScript 为 729,603B gzip，均在 370,000B/740,000B 预算内。180 动作编译 p95 为 10.985ms、完整 simulation p95 为 28.659ms；120 动作浏览器首屏就绪为 1951ms。
 
 下一阶段目标：阶段 8-K / P3 运行时真实机制适配。把 v13 已选角色/敌人配置解析成标准 `ThreeValueMechanismContext` 的明确来源输入，并让 `Action -> Hit -> ThreeValueDelta` 的 HP、韧性和每角色能量 delta 统一经过可替换 AzPr mechanics adapter。优先确认配置来源、作用对象和时序，不追测试期最终倍率，不继续增加配置小控件，也不恢复证据考古；未确认的装备、奇波和灵子效果继续保持项目配置与来源字段，不自动参与 calculator。
+
+### 阶段 8-K P3 运行时机制配置来源闭环（2026-07-11）
+
+活动方案的 v13 `configurationSelection` 现在会随解析后的 `actorConfigs` / `enemyConfig` 进入 Project metadata；compiler 新增 `AzPrThreeValueMechanismConfiguration`，按 actor/enemy 固定配置实例 ID、来源路径、实际解析值和应用策略。角色面板 stats 与初始 SP、敌人 HP/防御/韧性配置分别标记当前应用位置；奇波、装备、灵子效果、敌人等级公式和元素防御公式明确保持未应用，calculator 不读取配置库或 UI。
+
+`AzPrThreeValueMechanismContext` 升级为 v2，标准 `Action -> Hit -> ThreeValueDelta` 与 `ThreeValueDeltaCalculator` 升级为 v3。每条 generation delta 和 calculator result 都携带配置 readiness、状态和实例 ID；`ThreeValueRuntimeCalculatorInvocation` 升级为 v2，向 runtime adapter 显式提供同一 `mechanismConfiguration` 引用，并在 state snapshot/runtime summary 汇总配置来源。对照测试证明加入或移除实例身份不会改变相同解析配置下的 HP、韧性和自身能量 delta。
+
+为守住既有发布预算，排轴规则和状态效果面板改为按需加载；面板位置、操作和项目合同不变。阶段验收：70 个测试文件、397 条单元/组件测试，39 条 Workbench 主流程和 15 项 production preview 全部通过，报告结论为 `trial-ready`。生产引用与数据投影审计无异常；Workbench 主块为 368,272B gzip，全部 JavaScript 为 732,808B gzip，仍在 370,000B/740,000B 预算内。180 动作编译 p95 为 9.579ms、完整 simulation p95 为 22.027ms；120 动作浏览器首屏就绪为 1874ms。
+
+下一阶段目标：阶段 8-L / P3 三轨 mechanics adapter 统一调用。把 HP、韧性和每角色能量三类现有 applied delta 的生成入口收束为同一可注册 adapter 合同，让 adapter 显式消费 action、hit、mechanism configuration、来源值和状态前值，并保持当前输出完全一致；为后续替换真实 AzPr 机制提供单一调用点。该阶段不新增真实倍率、不让未确认培养项参与计算，也不增加 Workbench 提示控件。
 
 ## 10. 文档维护规则
 

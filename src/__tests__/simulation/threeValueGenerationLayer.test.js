@@ -233,18 +233,18 @@ describe('three value generation layer', () => {
     expect(layer.sourceKind).toBe('azpr-standard-three-value-generation-layer');
     expect(layer.contract).toMatchObject({
       name: 'Action -> Hit -> ThreeValueDelta',
-      version: 2,
+      version: 3,
       frameRate: 60,
       deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
       calculatorContract: {
         name: 'ThreeValueDeltaCalculator',
-        version: 2,
+        version: 3,
         requiredInputs: ['trackKey', 'delta', 'mechanismContext'],
         outputFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
       },
       mechanismContextContract: {
         name: 'AzPrThreeValueMechanismContext',
-        version: 1,
+        version: 2,
       },
     });
     expect(layer.summary).toMatchObject({
@@ -257,6 +257,8 @@ describe('three value generation layer', () => {
       calculatorKeys: ['azpr-hp-delta-calculator'],
       mechanismContextReadyDeltaCount: 0,
       mechanismContextMissingDeltaCount: 1,
+      mechanismConfigurationReadyDeltaCount: 0,
+      mechanismConfigurationMissingDeltaCount: 1,
     });
     expect(layer.standardContract).toMatchObject({
       sourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
@@ -370,7 +372,7 @@ describe('three value generation layer', () => {
           }),
         }),
         calculator: expect.objectContaining({
-          version: 2,
+          version: 3,
           mechanismContextStatus: 'mechanism-context-missing-target-enemy',
           mechanismContextReady: false,
         }),

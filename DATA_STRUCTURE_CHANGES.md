@@ -26361,3 +26361,33 @@ configurationSelection
 `workbenchConfigurationLibrary.js` 负责实例 ID、名称、上限、复制、重命名、选择、删除和方案解析。角色实例直接保存既有 `normalizeWorkbenchActorConfig()` 结果，敌人实例直接保存既有 `normalizeWorkbenchEnemyConfig()` 结果；选择配置或切换方案后，所选实例解析回活动草稿的 `actorConfigs` / `enemyConfig`。Project、Scenario、generation、runtime 和 calculator 仍只消费解析后的既有配置字段，不读取实例库，也没有新增公式或平行培养模型。
 
 v1-v12 项目继续由统一解析器接收。迁移时从活动方案及各非活动方案现有 `actorConfigs` / `enemyConfig` 建立或复用配置实例，并为每条方案写入对应选择；相同实体和配置内容共用实例，不同内容保留为独立实例。v13 配置库与选择随本地草稿、JSON、分享链接、PNG 元数据、预设和撤销/重做交换。
+
+## 383. ThreeValueMechanismConfiguration v1 / MechanismContext v2 / Calculator v3
+
+阶段 8-K 在编译后的 Scenario 新增运行时来源合同：
+
+```text
+mechanismConfiguration
+  schemaVersion = 1
+  sourceKind / contractName / status / ready
+  actors[]
+    actorId / characterId / configurationInstanceId
+    sourceStatus / sourcePaths / ready
+    level / initialSp / loadout
+    application.stats / initialEnergy / loadout
+  enemy
+    targetId / enemyId / configurationInstanceId
+    sourceStatus / sourcePaths / ready
+    level / hpMultiplier / defenseMultiplier
+    toughnessMultiplier / initialToughnessRatio
+    elementDefense.overrides
+    application.hpBaseline / defensePreview / toughnessBaseline
+    application.level / elementDefense
+  policy / summary
+```
+
+Workbench Project metadata 新增规范化 `configurationSelection` 镜像，只包含活动方案的 actor/enemy 实例 ID；它不是第二份配置值，也不会携带整个 `configurationLibrary`。compiler 继续以 Project actor/enemy 和 metadata 中已解析的 `actorConfigs` / `enemyConfig` 为数值输入，实例 ID 只用于来源追踪。
+
+`AzPrThreeValueMechanismContext` 从 v1 升级为 v2，新增 `configuration`、`configurationReady` 和 `configurationStatus`。`Action -> Hit -> ThreeValueDelta` 及 `ThreeValueDeltaCalculator` 从 v2 升级为 v3；delta/calculator summary 新增配置 readiness、状态、来源类型和实例 ID。`ThreeValueRuntimeCalculatorInvocation` 从 v1 升级为 v2，新增显式 `input.mechanismConfiguration` 及引用保持校验，runtime state/projection summary 同步汇总调用次数和实例 ID。
+
+这些字段只声明来源身份和当前应用策略。已有 HP、韧性、能量 delta、baseline、曲线和日志保持不变；loadout 效果、敌人等级公式和元素防御公式仍标记为 unconfirmed/unapplied。该合同不写回 WorkbenchProjectFile v13，也不新增项目迁移。

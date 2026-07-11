@@ -7,7 +7,7 @@ const THREE_VALUE_DELTA_FIELD_BY_TRACK_KEY = {
 export const THREE_VALUE_CALCULATOR_DEFINITIONS = {
   enemyHpDamage: {
     key: 'azpr-hp-delta-calculator',
-    version: 2,
+    version: 3,
     outputField: 'hpDelta',
     valueUnit: 'raw-damage',
     contractStatus: 'raw-preview-until-final-hp-formula-confirmed',
@@ -26,7 +26,7 @@ export const THREE_VALUE_CALCULATOR_DEFINITIONS = {
   },
   enemyToughnessDamage: {
     key: 'azpr-toughness-delta-calculator',
-    version: 2,
+    version: 3,
     outputField: 'toughnessDelta',
     valueUnit: 'raw-field',
     contractStatus:
@@ -46,7 +46,7 @@ export const THREE_VALUE_CALCULATOR_DEFINITIONS = {
   },
   selfEnergyChange: {
     key: 'azpr-self-energy-delta-calculator',
-    version: 2,
+    version: 3,
     outputField: 'energyDelta',
     valueUnit: 'sp',
     contractStatus:
@@ -117,6 +117,16 @@ export function createThreeValueCalculatorResult({
     mechanismContext,
     mechanismContextStatus: mechanismContext?.status ?? null,
     mechanismContextReady: mechanismContext?.ready === true,
+    mechanismConfigurationStatus:
+      mechanismContext?.configuration?.status ?? null,
+    mechanismConfigurationReady:
+      mechanismContext?.configuration?.ready === true,
+    mechanismConfigurationSourceKind:
+      mechanismContext?.configuration?.sourceKind ?? null,
+    configurationInstanceIds: uniqueStrings([
+      mechanismContext?.configuration?.sourceActor?.configurationInstanceId,
+      mechanismContext?.configuration?.targetEnemy?.configurationInstanceId,
+    ]),
     replaceable: isThreeValueCalculatorOutputReplaceable(status),
     appliedToRuntime: applied,
     unresolved: createThreeValueCalculatorUnresolved(trackKey, status),
@@ -134,7 +144,7 @@ export function summarizeThreeValueCalculators(deltas) {
   const calculatorKeys = uniqueStrings(calculators.map(item => item.key));
   return {
     contractName: 'ThreeValueDeltaCalculator',
-    contractVersion: 2,
+    contractVersion: 3,
     outputCount: records.length,
     calculatorCount: calculatorKeys.length,
     calculatorKeys,
@@ -154,6 +164,21 @@ export function summarizeThreeValueCalculators(deltas) {
     ).length,
     mechanismContextStatuses: uniqueStrings(
       calculators.map(item => item.mechanismContextStatus)
+    ),
+    mechanismConfigurationReadyCount: calculators.filter(
+      item => item.mechanismConfigurationReady
+    ).length,
+    mechanismConfigurationMissingCount: calculators.filter(
+      item => !item.mechanismConfigurationReady
+    ).length,
+    mechanismConfigurationStatuses: uniqueStrings(
+      calculators.map(item => item.mechanismConfigurationStatus)
+    ),
+    mechanismConfigurationSourceKinds: uniqueStrings(
+      calculators.map(item => item.mechanismConfigurationSourceKind)
+    ),
+    configurationInstanceIds: uniqueStrings(
+      calculators.flatMap(item => item.configurationInstanceIds ?? [])
     ),
     calculatorKeyCounts: countCalculatorRecordsBy(records, {
       keyField: 'key',

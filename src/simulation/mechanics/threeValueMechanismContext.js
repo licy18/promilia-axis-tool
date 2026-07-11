@@ -1,3 +1,5 @@
+import { createThreeValueMechanismConfigurationContext } from './threeValueMechanismConfiguration';
+
 export const THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME =
   'AzPrThreeValueMechanismContext';
 
@@ -23,9 +25,15 @@ export function createThreeValueMechanismContext({
       ? Boolean(sourceActor)
       : Boolean(targetEnemy);
   const ready = Boolean(sourceActor) && valueTargetReady;
+  const configuration = createThreeValueMechanismConfigurationContext({
+    scenario,
+    sourceActor,
+    targetEnemy,
+    valueTargetKind,
+  });
 
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     sourceKind: 'azpr-three-value-mechanism-context',
     contractName: THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME,
     status: createMechanismContextStatus({
@@ -55,6 +63,9 @@ export function createThreeValueMechanismContext({
     timing: createMechanismTimingContext(action, point),
     sourceActor: createSourceActorContext(sourceActor, teamSlot),
     targetEnemy: createTargetEnemyContext(targetEnemy),
+    configuration,
+    configurationReady: configuration.ready,
+    configurationStatus: configuration.status,
     ownership: {
       valueTargetKind,
       valueTargetId:
@@ -72,6 +83,7 @@ export function createThreeValueMechanismContext({
       targetEnemyStats: 'scenario.enemy.stats',
       targetEnemyElementDefenses: 'scenario.enemy.elementDefenses',
       targetEnemyToughness: 'scenario.enemy.toughness',
+      mechanismConfiguration: 'scenario.mechanismConfiguration',
       timing: 'scenario.actions[].timing',
     },
   };

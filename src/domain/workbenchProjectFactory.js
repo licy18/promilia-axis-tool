@@ -465,12 +465,37 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
       teamSlots,
       enemyConfig,
       actorConfigs,
+      configurationSelection: createProjectConfigurationSelection(
+        actionPatch.configurationSelection,
+        actorConfigs,
+        enemy.id
+      ),
       runtimeSampleCaptures: normalizeWorkbenchRuntimeSampleCaptures(
         actionPatch.runtimeSampleCaptures
       ),
       loadoutCalculationStatus: 'project-config-only',
     },
   });
+}
+
+function createProjectConfigurationSelection(selection, actorConfigs, enemyId) {
+  const actorSelections = new Map(
+    (selection?.actorInstanceIds ?? []).map(item => [
+      Number(item.characterId),
+      String(item.instanceId ?? '').trim(),
+    ])
+  );
+  return {
+    schemaVersion: 1,
+    actorInstanceIds: actorConfigs
+      .map(config => ({
+        characterId: Number(config.characterId),
+        instanceId: actorSelections.get(Number(config.characterId)) ?? '',
+      }))
+      .filter(item => item.instanceId),
+    enemyId: Number(enemyId),
+    enemyInstanceId: String(selection?.enemyInstanceId ?? '').trim() || null,
+  };
 }
 
 export function normalizeWorkbenchEnemyConfig(config = {}) {

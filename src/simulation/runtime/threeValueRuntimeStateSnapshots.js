@@ -192,6 +192,14 @@ export function createThreeValueRuntimeStateSnapshots({
         calculatorInvocationSummary.customAdapterInvocationCount,
       runtimeCalculatorAdapterKeys: calculatorInvocationSummary.adapterKeys,
       runtimeCalculatorInvocationStatuses: calculatorInvocationSummary.statuses,
+      runtimeMechanismConfigurationReadyInvocationCount:
+        calculatorInvocationSummary.mechanismConfigurationReadyInvocationCount,
+      runtimeMechanismConfigurationMissingInvocationCount:
+        calculatorInvocationSummary.mechanismConfigurationMissingInvocationCount,
+      runtimeMechanismConfigurationStatuses:
+        calculatorInvocationSummary.mechanismConfigurationStatuses,
+      runtimeConfigurationInstanceIds:
+        calculatorInvocationSummary.configurationInstanceIds,
       applied: true,
     },
     applied: true,

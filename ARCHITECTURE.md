@@ -93,6 +93,7 @@ Action
 
 - `threeValueCalculatorAdapters.js`：projection 与 runtime 共用的 calculator 入口。
 - `threeValueMechanismContext.js`：角色、动作、敌人和来源上下文。
+- `threeValueMechanismConfiguration.js`：把 Project 已解析配置与 v13 实例身份编译为 mechanics configuration，声明字段应用边界。
 - `threeValueMechanismSampleAdapter.js`：把通过验证的 runtime sample 晋级为可应用 delta。
 - `damage.js`：当前已确认的伤害计算片段；测试期未知机制保持可替换。
 
@@ -104,6 +105,7 @@ Action
 - 更新敌人 HP、敌人韧性和各角色能量状态。
 - 生成 `simLog`、`stateCurves`、资源曲线、状态快照和 summary。
 - 保持动作、命中、曲线点和日志之间的稳定身份映射。
+- 每次 runtime calculator invocation 显式接收与 generation delta 同一份 `mechanismConfiguration`，adapter 不读取 Workbench 配置库或 UI 状态。
 
 `src/simulation/projection/projectSimulationResult.js` 将运行结果组织为 Workbench 可消费的动作结果、贡献、诊断和详情视图；`projectEffectIntervals.js` 将效果事件归并为角色/敌人轨可消费的持续区间；`projectCycleSections.js` 按项目边界切分现有 transaction、能量与效果区间；`projectCycleBoundaryInheritance.js` 把边界前已结算状态投影为新方案初始状态并平移边界后草稿。投影层不反向参与公式计算。
 
@@ -133,6 +135,12 @@ Action
 ### ConfigurationLibrary / ConfigurationSelection v1
 
 `configurationLibrary` 在项目根级保存角色和敌人配置实例；角色实例继续复用既有 `actorConfig`，敌人实例继续复用既有 `enemyConfig`。每条方案的 `configurationSelection` 只绑定当前角色和敌人所选实例 ID。切换方案或选择实例时，domain 层把实例解析回活动草稿的 `actorConfigs` / `enemyConfig`，Project、compiler、generation、runtime 和 calculator 不读取配置库结构，也没有第二套培养或计算模型。
+
+### ThreeValueMechanismConfiguration v1
+
+Project metadata 只携带活动方案的配置实例 ID 和已经解析的 `actorConfigs` / `enemyConfig`；compiler 将它们与 Scenario actor/enemy 合成为 `AzPrThreeValueMechanismConfiguration`。角色来源区分面板 stats、初始 SP 和 loadout，敌人来源区分 HP baseline、伤害预览防御倍率、韧性 baseline、等级和元素防御。当前确认可用的 baseline/预览字段显式标记应用位置；奇波、装备、灵子效果、敌人等级公式和元素防御公式固定为未应用。
+
+`AzPrThreeValueMechanismContext` 升级为 v2，`Action -> Hit -> ThreeValueDelta` 与 `ThreeValueDeltaCalculator` 升级为 v3，`ThreeValueRuntimeCalculatorInvocation` 升级为 v2。每条 delta、generation calculator result、runtime invocation 和 runtime summary 都保留配置 readiness、来源状态及实例 ID；仅增加来源合同，不改变现有三值 delta。
 
 ### ScenarioWorkspace v1
 

@@ -107,7 +107,7 @@ export function createThreeValueGenerationLayer({
         : 'standard-three-value-generation-layer-empty',
     contract: {
       name: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
-      version: 2,
+      version: 3,
       frameRate: AZPR_TIMELINE_FRAME_RATE,
       frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
       deltaFields: THREE_VALUE_DELTA_FIELDS,
@@ -128,7 +128,7 @@ export function createThreeValueGenerationLayer({
       ],
       calculatorContract: {
         name: 'ThreeValueDeltaCalculator',
-        version: 2,
+        version: 3,
         requiredInputs: ['trackKey', 'delta', 'mechanismContext'],
         outputFields: THREE_VALUE_DELTA_FIELDS,
         requiredOutputs: [
@@ -138,6 +138,7 @@ export function createThreeValueGenerationLayer({
           'confidence',
           'replaceable',
           'mechanismContextStatus',
+          'mechanismConfigurationStatus',
         ],
         calculatorKeys: getThreeValueCalculatorKeys(),
         policy:
@@ -145,13 +146,14 @@ export function createThreeValueGenerationLayer({
       },
       mechanismContextContract: {
         name: THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME,
-        version: 1,
+        version: 2,
         requiredSections: [
           'action',
           'hit',
           'timing',
           'sourceActor',
           'targetEnemy',
+          'configuration',
           'ownership',
         ],
         policy:
@@ -409,6 +411,8 @@ function createThreeValueGenerationDelta({
     mechanismContext,
     mechanismContextStatus: mechanismContext.status,
     mechanismContextReady: mechanismContext.ready,
+    mechanismConfigurationStatus: mechanismContext.configurationStatus,
+    mechanismConfigurationReady: mechanismContext.configurationReady,
     calculator,
     calculatorKey: calculator.key,
     calculatorVersion: calculator.version,
@@ -792,7 +796,7 @@ function createActionHitThreeValueDeltaStandardContract({
         ? 'action-hit-three-value-delta-contract-ready'
         : 'action-hit-three-value-delta-contract-empty',
     name: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
-    version: 2,
+    version: 3,
     topology: ['Action', 'Hit', 'ThreeValueDelta'],
     frameRate: AZPR_TIMELINE_FRAME_RATE,
     frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
@@ -806,7 +810,7 @@ function createActionHitThreeValueDeltaStandardContract({
     aggregateLayerKeys: THREE_VALUE_GENERATION_LAYER_ORDER,
     mechanismContextContract: {
       name: THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME,
-      version: 1,
+      version: 2,
       required: true,
     },
     runtimeDeltaPolicy: 'runtime consumes only deltas with applied=true',
@@ -832,6 +836,10 @@ function createActionHitThreeValueDeltaStandardContract({
       mechanismContextReadyDeltaCount: summary.mechanismContextReadyDeltaCount,
       mechanismContextMissingDeltaCount:
         summary.mechanismContextMissingDeltaCount,
+      mechanismConfigurationReadyDeltaCount:
+        summary.mechanismConfigurationReadyDeltaCount,
+      mechanismConfigurationMissingDeltaCount:
+        summary.mechanismConfigurationMissingDeltaCount,
       applied: false,
     },
     applied: false,
@@ -950,6 +958,15 @@ function summarizeThreeValueGenerationLayer({
     ).length,
     mechanismContextStatuses: uniqueStrings(
       deltas.map(delta => delta.mechanismContextStatus)
+    ),
+    mechanismConfigurationReadyDeltaCount: deltas.filter(
+      delta => delta.mechanismConfigurationReady
+    ).length,
+    mechanismConfigurationMissingDeltaCount: deltas.filter(
+      delta => !delta.mechanismConfigurationReady
+    ).length,
+    mechanismConfigurationStatuses: uniqueStrings(
+      deltas.map(delta => delta.mechanismConfigurationStatus)
     ),
     frameMin: minNumber(deltas.map(delta => delta.frameIndex)),
     frameMax: maxNumber(deltas.map(delta => delta.frameIndex)),

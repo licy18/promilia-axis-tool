@@ -991,6 +991,20 @@ function summarizeActionHitThreeValueRuntimeInput({
     mechanismContextStatuses: uniqueStrings(
       appliedDeltas.map(delta => delta.mechanismContextStatus)
     ),
+    mechanismConfigurationReadyDeltaCount: appliedDeltas.filter(
+      delta => delta.mechanismConfigurationReady
+    ).length,
+    mechanismConfigurationMissingDeltaCount: appliedDeltas.filter(
+      delta => !delta.mechanismConfigurationReady
+    ).length,
+    mechanismConfigurationStatuses: uniqueStrings(
+      appliedDeltas.map(delta => delta.mechanismConfigurationStatus)
+    ),
+    configurationInstanceIds: uniqueStrings(
+      appliedDeltas.flatMap(
+        delta => delta.calculator?.configurationInstanceIds ?? []
+      )
+    ),
     ignoredLayerCounts,
     appliedOnly: true,
     applied: true,

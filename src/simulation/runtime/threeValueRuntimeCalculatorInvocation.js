@@ -51,6 +51,7 @@ export function createThreeValueRuntimeCalculatorInvocation({
       energyDelta: normalizeNullableRuntimeCalculatorNumber(delta.energyDelta),
     },
     mechanismContext: delta.mechanismContext ?? null,
+    mechanismConfiguration: delta.mechanismContext?.configuration ?? null,
     stateBefore,
     sourceCalculatorResult: delta.calculator ?? null,
     sourceDelta: delta,
@@ -69,13 +70,16 @@ export function createThreeValueRuntimeCalculatorInvocation({
     outputFinite: Number.isFinite(output.delta),
     mechanismContextPreserved:
       input.mechanismContext === (delta.mechanismContext ?? null),
+    mechanismConfigurationPreserved:
+      input.mechanismConfiguration ===
+      (delta.mechanismContext?.configuration ?? null),
     stateBeforePresent: Boolean(stateBefore),
     adapterOutputAccepted: !fallbackReason,
   };
   const valid = Object.values(validation).every(Boolean);
 
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     sourceKind: 'azpr-three-value-runtime-calculator-invocation',
     contractName: THREE_VALUE_RUNTIME_CALCULATOR_INVOCATION_CONTRACT_NAME,
     status: fallbackReason
@@ -142,6 +146,25 @@ export function summarizeThreeValueRuntimeCalculatorInvocations(
     ).length,
     adapterKeys: uniqueStrings(
       invocations.map(invocation => invocation.adapter.key)
+    ),
+    mechanismConfigurationReadyInvocationCount: invocations.filter(
+      invocation => invocation.input.mechanismConfiguration?.ready === true
+    ).length,
+    mechanismConfigurationMissingInvocationCount: invocations.filter(
+      invocation => invocation.input.mechanismConfiguration?.ready !== true
+    ).length,
+    mechanismConfigurationStatuses: uniqueStrings(
+      invocations.map(
+        invocation => invocation.input.mechanismConfiguration?.status
+      )
+    ),
+    configurationInstanceIds: uniqueStrings(
+      invocations.flatMap(invocation => [
+        invocation.input.mechanismConfiguration?.sourceActor
+          ?.configurationInstanceId,
+        invocation.input.mechanismConfiguration?.targetEnemy
+          ?.configurationInstanceId,
+      ])
     ),
     statuses: uniqueStrings(invocations.map(invocation => invocation.status)),
     applied: true,

@@ -91,6 +91,10 @@ function createActionHitThreeValueDeltaGenerationSummary({
       standardContract.summary?.mechanismContextReadyDeltaCount ?? 0,
     mechanismContextMissingDeltaCount:
       standardContract.summary?.mechanismContextMissingDeltaCount ?? 0,
+    mechanismConfigurationReadyDeltaCount:
+      standardContract.summary?.mechanismConfigurationReadyDeltaCount ?? 0,
+    mechanismConfigurationMissingDeltaCount:
+      standardContract.summary?.mechanismConfigurationMissingDeltaCount ?? 0,
     executionPlanActionCount:
       standardContract.summary?.executionPlanActionCount ?? 0,
     executionPlanExecutedActionCount:

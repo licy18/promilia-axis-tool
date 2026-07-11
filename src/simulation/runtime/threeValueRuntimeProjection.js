@@ -1291,6 +1291,14 @@ function summarizeThreeValueRuntimeProjection({
       runtimeStateSnapshots.summary.runtimeCalculatorAdapterKeys,
     runtimeCalculatorInvocationStatuses:
       runtimeStateSnapshots.summary.runtimeCalculatorInvocationStatuses,
+    runtimeMechanismConfigurationReadyInvocationCount:
+      runtimeStateSnapshots.summary
+        .runtimeMechanismConfigurationReadyInvocationCount,
+    runtimeMechanismConfigurationMissingInvocationCount:
+      runtimeStateSnapshots.summary
+        .runtimeMechanismConfigurationMissingInvocationCount,
+    runtimeConfigurationInstanceIds:
+      runtimeStateSnapshots.summary.runtimeConfigurationInstanceIds,
     enemyHpInitial: enemyStateCurve.stateMetrics?.hp?.initialValue ?? null,
     enemyHpRemaining: enemyStateCurve.stateMetrics?.hp?.currentValue ?? null,
     enemyHpBaselineStatus:
@@ -1315,6 +1323,13 @@ function summarizeThreeValueRuntimeProjection({
     mechanismContextMissingDeltaCount:
       calculatorSummary.mechanismContextMissingCount,
     mechanismContextStatuses: calculatorSummary.mechanismContextStatuses,
+    mechanismConfigurationReadyDeltaCount:
+      calculatorSummary.mechanismConfigurationReadyCount,
+    mechanismConfigurationMissingDeltaCount:
+      calculatorSummary.mechanismConfigurationMissingCount,
+    mechanismConfigurationStatuses:
+      calculatorSummary.mechanismConfigurationStatuses,
+    configurationInstanceIds: calculatorSummary.configurationInstanceIds,
     calculatorSummary,
     source: ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE,
     runtimeInputSource: ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE,

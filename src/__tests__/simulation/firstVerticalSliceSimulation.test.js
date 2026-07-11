@@ -1432,12 +1432,12 @@ describe('first vertical slice simulation', () => {
       status: 'standard-three-value-generation-layer-ready',
       contract: {
         name: 'Action -> Hit -> ThreeValueDelta',
-        version: 2,
+        version: 3,
         frameRate: 60,
         deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
         calculatorContract: {
           name: 'ThreeValueDeltaCalculator',
-          version: 2,
+          version: 3,
           requiredInputs: ['trackKey', 'delta', 'mechanismContext'],
           requiredOutputs: [
             'delta',
@@ -1446,6 +1446,7 @@ describe('first vertical slice simulation', () => {
             'confidence',
             'replaceable',
             'mechanismContextStatus',
+            'mechanismConfigurationStatus',
           ],
           calculatorKeys: [
             'azpr-hp-delta-calculator',
@@ -1871,7 +1872,7 @@ describe('first vertical slice simulation', () => {
       }),
       calculator: expect.objectContaining({
         key: 'azpr-hp-delta-calculator',
-        version: 2,
+        version: 3,
         outputField: 'hpDelta',
         delta: 12461,
         sourceIds: expect.objectContaining({
@@ -2071,7 +2072,7 @@ describe('first vertical slice simulation', () => {
         mechanismContextStatuses: ['mechanism-context-ready'],
         calculatorSummary: {
           contractName: 'ThreeValueDeltaCalculator',
-          contractVersion: 2,
+          contractVersion: 3,
           outputCount: 1,
           mechanismContextReadyCount: 1,
           mechanismContextMissingCount: 0,

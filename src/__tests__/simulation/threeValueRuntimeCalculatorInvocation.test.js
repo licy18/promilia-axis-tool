@@ -15,6 +15,7 @@ describe('three value runtime calculator invocation', () => {
     });
 
     expect(invocation).toMatchObject({
+      schemaVersion: 2,
       contractName: 'ThreeValueRuntimeCalculatorInvocation',
       status: 'runtime-calculator-invocation-ready-passthrough',
       sourceDeltaId: 'hp-delta-001',
@@ -37,6 +38,7 @@ describe('three value runtime calculator invocation', () => {
         outputFieldKnown: true,
         outputFinite: true,
         mechanismContextPreserved: true,
+        mechanismConfigurationPreserved: true,
         stateBeforePresent: true,
         adapterOutputAccepted: true,
         valid: true,
@@ -48,6 +50,9 @@ describe('three value runtime calculator invocation', () => {
     expect(invocation.input.sourceDelta).toBe(delta);
     expect(invocation.input.stateBefore).toBe(stateBefore);
     expect(invocation.input.mechanismContext).toBe(delta.mechanismContext);
+    expect(invocation.input.mechanismConfiguration).toBe(
+      delta.mechanismContext.configuration
+    );
 
     const runtimeDelta = createRuntimeAppliedDeltaFromInvocation(
       delta,
@@ -107,6 +112,10 @@ describe('three value runtime calculator invocation', () => {
       replacedInvocationCount: 0,
       fallbackInvocationCount: 1,
       customAdapterInvocationCount: 1,
+      mechanismConfigurationReadyInvocationCount: 1,
+      mechanismConfigurationMissingInvocationCount: 0,
+      mechanismConfigurationStatuses: ['mechanism-configuration-context-ready'],
+      configurationInstanceIds: ['actor-config-001', 'enemy-config-001'],
     });
   });
 
@@ -145,6 +154,12 @@ function createHpDelta() {
     energyDelta: null,
     mechanismContext: {
       contractName: 'AzPrThreeValueMechanismContext',
+      configuration: {
+        status: 'mechanism-configuration-context-ready',
+        ready: true,
+        sourceActor: { configurationInstanceId: 'actor-config-001' },
+        targetEnemy: { configurationInstanceId: 'enemy-config-001' },
+      },
       ownership: {
         energyOwnerActorId: 'actor-001',
         targetEnemyId: 'enemy-001',

@@ -1866,6 +1866,7 @@ describe('Workbench view', () => {
         },
       },
     });
+    await settleWorkbenchAsyncPanels();
 
     expect(
       wrapper.find('[data-testid="workbench-effect-timeline-empty"]').exists()
@@ -1972,6 +1973,7 @@ describe('Workbench view', () => {
         },
       },
     });
+    await settleWorkbenchAsyncPanels();
 
     const addCooldownSkill = async () => {
       await wrapper
