@@ -581,6 +581,17 @@ function createThreeValueRuntimeOutputContract({
         stateCurves.snapshots.summary.mechanicsAdapterContractVersion,
       mechanicsAdapterRegistrationKeys:
         stateCurves.snapshots.summary.mechanicsAdapterRegistrationKeys,
+      mechanicsOperandsReadyInvocationCount:
+        stateCurves.snapshots.summary.mechanicsOperandsReadyInvocationCount,
+      mechanicsOperandsMissingInvocationCount:
+        stateCurves.snapshots.summary.mechanicsOperandsMissingInvocationCount,
+      mechanicsOperandsMismatchInvocationCount:
+        stateCurves.snapshots.summary.mechanicsOperandsMismatchInvocationCount,
+      mechanicsOperandsCalculatedInvocationCount:
+        stateCurves.snapshots.summary
+          .mechanicsOperandsCalculatedInvocationCount,
+      mechanicsOperandsKinds:
+        stateCurves.snapshots.summary.mechanicsOperandsKinds,
       runtimeCalculatorReplacedInvocationCount:
         stateCurves.snapshots.summary.runtimeCalculatorReplacedInvocationCount,
       runtimeCalculatorFallbackInvocationCount:
@@ -816,6 +827,10 @@ function createRuntimeSummaryOutputContract(summary) {
       'runtimeCalculatorFallbackInvocationCount',
       'mechanicsAdapterRequestCount',
       'mechanicsAdapterRequestMissingCount',
+      'mechanicsOperandsReadyInvocationCount',
+      'mechanicsOperandsMissingInvocationCount',
+      'mechanicsOperandsMismatchInvocationCount',
+      'mechanicsOperandsCalculatedInvocationCount',
       'calculatorCount',
       'valueSourceSlotCount',
       'runtimeValueSourceSlotCount',
@@ -844,6 +859,7 @@ function createRuntimeSummaryOutputContract(summary) {
       'mechanicsAdapterContractName',
       'mechanicsAdapterContractVersion',
       'mechanicsAdapterRegistrationKeys',
+      'mechanicsOperandsKinds',
     ],
     appliedOnly: summary.appliedOnly,
     applied: true,
@@ -1310,6 +1326,16 @@ function summarizeThreeValueRuntimeProjection({
       runtimeStateSnapshots.summary.mechanicsAdapterContractVersion,
     mechanicsAdapterRegistrationKeys:
       runtimeStateSnapshots.summary.mechanicsAdapterRegistrationKeys,
+    mechanicsOperandsReadyInvocationCount:
+      runtimeStateSnapshots.summary.mechanicsOperandsReadyInvocationCount,
+    mechanicsOperandsMissingInvocationCount:
+      runtimeStateSnapshots.summary.mechanicsOperandsMissingInvocationCount,
+    mechanicsOperandsMismatchInvocationCount:
+      runtimeStateSnapshots.summary.mechanicsOperandsMismatchInvocationCount,
+    mechanicsOperandsCalculatedInvocationCount:
+      runtimeStateSnapshots.summary.mechanicsOperandsCalculatedInvocationCount,
+    mechanicsOperandsKinds:
+      runtimeStateSnapshots.summary.mechanicsOperandsKinds,
     runtimeCalculatorAdapterKeys:
       runtimeStateSnapshots.summary.runtimeCalculatorAdapterKeys,
     runtimeCalculatorInvocationStatuses:

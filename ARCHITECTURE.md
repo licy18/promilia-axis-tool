@@ -94,7 +94,7 @@ Action
 - `threeValueCalculatorAdapters.js`：projection 与 runtime 共用的 calculator 入口。
 - `threeValueMechanismContext.js`：角色、动作、敌人和来源上下文。
 - `threeValueMechanismConfiguration.js`：把 Project 已解析配置与 v13 实例身份编译为 mechanics configuration，声明字段应用边界。
-- `threeValueMechanicsAdapter.js`：三轨统一 adapter 注册表、generation request 与 runtime invocation input。
+- `threeValueMechanicsAdapter.js`：三轨统一 adapter 注册表、结构化 operands、generation request 与 runtime invocation input。
 - `threeValueMechanismSampleAdapter.js`：把通过验证的 runtime sample 晋级为可应用 delta。
 - `damage.js`：当前已确认的伤害计算片段；测试期未知机制保持可替换。
 
@@ -141,11 +141,13 @@ Action
 
 Project metadata 只携带活动方案的配置实例 ID 和已经解析的 `actorConfigs` / `enemyConfig`；compiler 将它们与 Scenario actor/enemy 合成为 `AzPrThreeValueMechanismConfiguration`。角色来源区分面板 stats、初始 SP 和 loadout，敌人来源区分 HP baseline、伤害预览防御倍率、韧性 baseline、等级和元素防御。当前确认可用的 baseline/预览字段显式标记应用位置；奇波、装备、灵子效果、敌人等级公式和元素防御公式固定为未应用。
 
-`AzPrThreeValueMechanismContext` 为 v2，`ThreeValueDeltaCalculator` 为 v3。阶段 8-L 后 `Action -> Hit -> ThreeValueDelta` 为 v4，`ThreeValueRuntimeCalculatorInvocation` 为 v3；每条 delta、generation calculator result、runtime invocation 和 runtime summary 都保留配置 readiness、来源状态及实例 ID。
+`AzPrThreeValueMechanismContext` 为 v2，`ThreeValueDeltaCalculator` 为 v3。阶段 8-M 后 `Action -> Hit -> ThreeValueDelta` 为 v5，`AzPrThreeValueMechanicsAdapter` 为 v2，`ThreeValueRuntimeCalculatorInvocation` 为 v4；每条 delta、generation calculator result、runtime invocation 和 runtime summary 都保留配置 readiness、来源状态及实例 ID。
 
-### ThreeValueMechanicsAdapter v1
+### ThreeValueMechanicsAdapter v2 / MechanicsOperands v1
 
-`Action -> Hit -> ThreeValueDelta v4` 的每条 delta 都携带 `mechanicsAdapterRequest`。generation 固定 `action / hit / mechanismConfiguration / sourceValue`，runtime 固定 `stateBefore` 并生成完整 adapter input。注册表支持 HP、韧性、能量轨专用注册或一个 `default` 注册覆盖三轨；`simulateScenario(scenario, { threeValueMechanicsAdapterRegistry })` 是无 UI 顶层注入入口。默认实现与旧 `runtimeCalculatorAdapters` 兼容并原样透传现有 delta，异常或无效输出继续回退到 generation 值。
+`Action -> Hit -> ThreeValueDelta v5` 的每条 delta 都携带 `mechanicsAdapterRequest`。generation 固定 `action / hit / mechanismConfiguration / sourceValue.operands`，runtime 固定 `stateBefore` 并生成完整 adapter input。当前 operands 支持 HP 的 `round(attack * multiplier)`、显式角色能量事件求和、已验证削韧采样 `before - after`、已验证能量采样 `after - before` 和兼容 identity。内置 adapter 从 operands 重算并校验是否与来源 delta 一致；异常、无效或缺失 operands 继续回退 generation 值。
+
+注册表支持 HP、韧性、能量轨专用注册或一个 `default` 注册覆盖三轨；`simulateScenario(scenario, { threeValueMechanicsAdapterRegistry })` 是无 UI 顶层注入入口，旧 `runtimeCalculatorAdapters` 仍兼容。runtime state、projection 和 consumer summary 统一输出 operands readiness、重算数、失配数与 operand kinds。
 
 ### ScenarioWorkspace v1
 

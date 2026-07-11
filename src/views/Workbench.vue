@@ -839,7 +839,6 @@ import ScenarioHeader from '../features/workbench/ScenarioHeader.vue';
 import TimelineGridPreview from '../features/workbench/TimelineGridPreview.vue';
 import WorkbenchActionContextMenu from '../features/workbench/WorkbenchActionContextMenu.vue';
 import WorkbenchFlowPanel from '../features/workbench/WorkbenchFlowPanel.vue';
-import WorkbenchPresetLibraryDialog from '../features/workbench/WorkbenchPresetLibraryDialog.vue';
 import { createRuntimeSelectedDetail } from '../features/workbench/runtimeSelectedDetail';
 import {
   createWorkbenchFlowController,
@@ -969,6 +968,9 @@ import { projectWorkbenchScenarioComparison } from '../simulation/projection/pro
 
 const WorkbenchScenarioComparisonDialog = defineAsyncComponent(
   () => import('../features/workbench/WorkbenchScenarioComparisonDialog.vue')
+);
+const WorkbenchPresetLibraryDialog = defineAsyncComponent(
+  () => import('../features/workbench/WorkbenchPresetLibraryDialog.vue')
 );
 const WorkbenchScenarioBar = defineAsyncComponent(
   () => import('../features/workbench/WorkbenchScenarioBar.vue')

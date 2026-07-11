@@ -26425,3 +26425,42 @@ runtimeCalculatorInvocation.input
 `Action -> Hit -> ThreeValueDelta` 从 v3 升级为 v4，并把 `mechanicsAdapterRequest` 加入必需 delta 字段；generation entry validation 校验 action、hit、配置引用和 source value 与原 delta 一致。`ThreeValueRuntimeCalculatorInvocation` 从 v2 升级为 v3，统一由 mechanics registry 解析三轨或 `default` 注册项，再注入 runtime snapshot 的前状态。
 
 `createThreeValueMechanicsAdapterRegistry()` 和 `registerThreeValueMechanicsAdapter()` 返回无 UI 注册表；`simulateScenario(scenario, { threeValueMechanicsAdapterRegistry })` 是顶层注入边界。旧 `runtimeCalculatorAdapters` 参数继续作为兼容来源。默认 adapter、异常回退、HP/韧性/能量 delta、曲线、日志和 summary 数值保持不变；本阶段没有新增真实公式或启用未确认培养效果。
+
+## 385. ThreeValueMechanicsOperands v1 / Adapter v2 / Action-Hit-Delta v5
+
+阶段 8-M 在 `mechanicsAdapterRequest.sourceValue` 下新增可计算 operands：
+
+```text
+sourceValue.operands
+  schemaVersion = 1
+  contractName = AzPrThreeValueMechanicsOperands
+  contractVersion = 1
+  trackKey / sourceKind
+  kind / operation / status / ready
+  expectedDelta
+  inputs
+
+kind = hp-raw-preview-product
+  operation = round-clamped-product
+  inputs.baseAttack / actionMultiplier / minimum
+
+kind = explicit-self-energy-event-sum
+  operation = sum
+  inputs.eventDeltas[]
+
+kind = validated-toughness-before-after
+  operation = before-minus-after
+  inputs.before / after / reportedDelta
+
+kind = validated-self-energy-before-after
+  operation = after-minus-before
+  inputs.before / after / reportedDelta
+
+kind = source-value-identity
+  operation = identity
+  inputs.value
+```
+
+`AzPrThreeValueMechanicsAdapter` 从 v1 升级为 v2，内置 adapter 不再默认返回 `sourceValue.value`，而是调用 `calculateThreeValueMechanicsOperands()`。runtime invocation 同时保存 `operandsCalculation`，校验 operands 是否存在、可算并与 `expectedDelta` 一致；runtime state、projection 和 consumer summary 汇总 ready、missing、mismatch、calculated 数量及 kinds。无效计算仍回退 generation delta。
+
+`Action -> Hit -> ThreeValueDelta` 从 v4 升级为 v5，generation entry validation 要求每条 source value 携带 operands 合同且 `expectedDelta` 与 delta 一致；`ThreeValueRuntimeCalculatorInvocation` 从 v3 升级为 v4。HP raw preview、显式能量变化和已验证削韧/能量样本现在由内置 adapter 从原操作数重算；本阶段没有新增公式、启用候选值或改变三值结果。

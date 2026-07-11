@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   createThreeValueMechanicsAdapterRegistry,
   createThreeValueMechanicsAdapterRequest,
+  createThreeValueMechanicsOperands,
   registerThreeValueMechanicsAdapter,
 } from '../../simulation/mechanics/threeValueMechanicsAdapter';
 import {
@@ -63,12 +64,12 @@ describe('three value mechanics adapter', () => {
     expect(invocations).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          schemaVersion: 3,
+          schemaVersion: 4,
           adapter: expect.objectContaining({
             key: 'unit-test-three-track-mechanics-adapter',
             version: 7,
             contractName: 'AzPrThreeValueMechanicsAdapter',
-            contractVersion: 1,
+            contractVersion: 2,
             registrationKey: 'default',
             custom: true,
           }),
@@ -112,14 +113,121 @@ describe('three value mechanics adapter', () => {
       passthroughInvocationCount: 3,
       customAdapterInvocationCount: 3,
       mechanicsAdapterContractName: 'AzPrThreeValueMechanicsAdapter',
-      mechanicsAdapterContractVersion: 1,
+      mechanicsAdapterContractVersion: 2,
       registrationKeys: ['default'],
       adapterKeys: ['unit-test-three-track-mechanics-adapter'],
     });
   });
+
+  it('recalculates current applied values from versioned operands', () => {
+    const stateBefore = createStateBefore();
+    const cases = [
+      {
+        trackKey: 'enemyHpDamage',
+        outputField: 'hpDelta',
+        value: 120,
+        operands: createThreeValueMechanicsOperands({
+          trackKey: 'enemyHpDamage',
+          sourceKind: 'action-result-applied-value',
+          value: 120,
+          formulaBreakdown: {
+            layers: {
+              baseAttack: { value: 1000 },
+              actionMultiplier: { value: 0.12 },
+            },
+          },
+        }),
+      },
+      {
+        trackKey: 'selfEnergyChange',
+        outputField: 'energyDelta',
+        value: -20,
+        operands: createThreeValueMechanicsOperands({
+          trackKey: 'selfEnergyChange',
+          sourceKind: 'action-result-applied-value',
+          value: -20,
+          formulaBreakdown: {
+            layers: {
+              explicitResourceDelta: {
+                events: [{ change: -25 }, { change: 5 }],
+              },
+            },
+          },
+        }),
+      },
+      {
+        trackKey: 'enemyToughnessDamage',
+        outputField: 'toughnessDelta',
+        value: 18,
+        operands: createThreeValueMechanicsOperands({
+          trackKey: 'enemyToughnessDamage',
+          sourceKind: 'azpr-validated-runtime-mechanism-sample',
+          value: 18,
+          sampleValidation: { before: 100, after: 82, delta: 18 },
+        }),
+      },
+      {
+        trackKey: 'selfEnergyChange',
+        outputField: 'energyDelta',
+        value: 0.3375,
+        operands: createThreeValueMechanicsOperands({
+          trackKey: 'selfEnergyChange',
+          sourceKind: 'azpr-validated-runtime-mechanism-sample',
+          value: 0.3375,
+          sampleValidation: {
+            before: 10,
+            after: 10.3375,
+            delta: 0.3375,
+          },
+        }),
+      },
+    ];
+    const invocations = cases.map(item =>
+      createThreeValueRuntimeCalculatorInvocation({
+        delta: createDelta(item),
+        stateBefore,
+      })
+    );
+
+    expect(invocations.map(invocation => invocation.output.delta)).toEqual([
+      120, -20, 18, 0.3375,
+    ]);
+    expect(invocations).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          output: expect.objectContaining({
+            status: 'runtime-mechanics-operands-calculated',
+            calculatedFromOperands: true,
+            operandsMatchSource: true,
+          }),
+          validation: expect.objectContaining({
+            operandsPresent: true,
+            operandsReady: true,
+            operandsMatchSource: true,
+            valid: true,
+          }),
+        }),
+      ])
+    );
+    expect(
+      summarizeThreeValueRuntimeCalculatorInvocations(invocations)
+    ).toMatchObject({
+      invocationCount: 4,
+      operandsReadyInvocationCount: 4,
+      operandsMissingInvocationCount: 0,
+      operandsMismatchInvocationCount: 0,
+      operandsCalculatedInvocationCount: 4,
+      operandsKinds: expect.arrayContaining([
+        'hp-raw-preview-product',
+        'explicit-self-energy-event-sum',
+        'validated-toughness-before-after',
+        'validated-self-energy-before-after',
+      ]),
+    });
+  });
 });
 
-function createDelta({ trackKey, value, outputField }) {
+function createDelta({ trackKey, value, outputField, operands }) {
   const action = {
     actionId: 'action-001',
     actionType: 'skill',
@@ -154,6 +262,7 @@ function createDelta({ trackKey, value, outputField }) {
       ...fields,
       sourceKind: 'unit-test-source-value',
       status: 'unit-test-source-value-ready',
+      operands,
     },
   });
 

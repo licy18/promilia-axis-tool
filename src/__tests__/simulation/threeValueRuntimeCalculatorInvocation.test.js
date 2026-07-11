@@ -15,7 +15,7 @@ describe('three value runtime calculator invocation', () => {
     });
 
     expect(invocation).toMatchObject({
-      schemaVersion: 3,
+      schemaVersion: 4,
       contractName: 'ThreeValueRuntimeCalculatorInvocation',
       status: 'runtime-calculator-invocation-ready-passthrough',
       sourceDeltaId: 'hp-delta-001',
@@ -27,7 +27,7 @@ describe('three value runtime calculator invocation', () => {
         custom: false,
         replaceable: true,
         contractName: 'AzPrThreeValueMechanicsAdapter',
-        contractVersion: 1,
+        contractVersion: 2,
         registrationKey: 'built-in',
       },
       output: {
@@ -35,7 +35,11 @@ describe('three value runtime calculator invocation', () => {
         hpDelta: 120,
         toughnessDelta: null,
         energyDelta: null,
-        status: 'runtime-calculator-passthrough-generation-result',
+        status: 'runtime-mechanics-operands-calculated',
+        operandsKind: 'source-value-identity',
+        operandsStatus: 'three-value-mechanics-operands-calculated',
+        calculatedFromOperands: true,
+        operandsMatchSource: true,
       },
       validation: {
         outputFieldKnown: true,
@@ -46,6 +50,9 @@ describe('three value runtime calculator invocation', () => {
         actionInputPresent: true,
         hitInputPresent: true,
         sourceValueFinite: true,
+        operandsPresent: true,
+        operandsReady: true,
+        operandsMatchSource: true,
         stateBeforePresent: true,
         adapterOutputAccepted: true,
         valid: true,
@@ -69,6 +76,12 @@ describe('three value runtime calculator invocation', () => {
         hpDelta: 120,
         toughnessDelta: null,
         energyDelta: null,
+        operands: {
+          contractName: 'AzPrThreeValueMechanicsOperands',
+          kind: 'source-value-identity',
+          operation: 'identity',
+          expectedDelta: 120,
+        },
       },
     });
 

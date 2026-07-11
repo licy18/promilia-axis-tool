@@ -2,7 +2,10 @@ import {
   ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
   compareThreeValueGenerationDeltas,
 } from '../generation/threeValueGenerationLayer';
-import { THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME } from '../mechanics/threeValueMechanicsAdapter';
+import {
+  THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME,
+  THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME,
+} from '../mechanics/threeValueMechanicsAdapter';
 
 export const ACTION_HIT_THREE_VALUE_RUNTIME_INPUT_SOURCE =
   'threeValueRuntimeInput.appliedDeltas';
@@ -1016,6 +1019,23 @@ function summarizeActionHitThreeValueRuntimeInput({
         delta.mechanicsAdapterRequest?.contractName !==
         THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME
     ).length,
+    mechanicsOperandsReadyDeltaCount: appliedDeltas.filter(
+      delta =>
+        delta.mechanicsAdapterRequest?.sourceValue?.operands?.contractName ===
+          THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME &&
+        delta.mechanicsAdapterRequest.sourceValue.operands.ready
+    ).length,
+    mechanicsOperandsMissingDeltaCount: appliedDeltas.filter(
+      delta =>
+        delta.mechanicsAdapterRequest?.sourceValue?.operands?.contractName !==
+          THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME ||
+        !delta.mechanicsAdapterRequest.sourceValue.operands.ready
+    ).length,
+    mechanicsOperandsKinds: uniqueStrings(
+      appliedDeltas.map(
+        delta => delta.mechanicsAdapterRequest?.sourceValue?.operands?.kind
+      )
+    ),
     ignoredLayerCounts,
     appliedOnly: true,
     applied: true,

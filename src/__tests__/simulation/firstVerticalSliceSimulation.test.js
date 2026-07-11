@@ -1432,7 +1432,7 @@ describe('first vertical slice simulation', () => {
       status: 'standard-three-value-generation-layer-ready',
       contract: {
         name: 'Action -> Hit -> ThreeValueDelta',
-        version: 4,
+        version: 5,
         frameRate: 60,
         deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
         calculatorContract: {
@@ -3247,6 +3247,27 @@ describe('first vertical slice simulation', () => {
         elementConfigIds: [109001081],
         captureSessionIds: ['fixture-recover-sp-109001081-v1'],
       },
+      mechanicsAdapterRequest: {
+        sourceValue: {
+          operands: expect.objectContaining({
+            contractName: 'AzPrThreeValueMechanicsOperands',
+            kind: 'validated-self-energy-before-after',
+            operation: 'after-minus-before',
+            expectedDelta: 0.3375,
+            ready: true,
+          }),
+        },
+      },
+    });
+    expect(
+      result.threeValueRuntimeProjection.runtimeAppliedDeltas.find(
+        delta => delta.sourceDeltaId === appliedRuntimeSampleDelta.id
+      ).runtimeCalculatorInvocation.output
+    ).toMatchObject({
+      delta: 0.3375,
+      operandsKind: 'validated-self-energy-before-after',
+      calculatedFromOperands: true,
+      operandsMatchSource: true,
     });
     expect(
       result.threeValueRuntimeProjection.selfEnergyCurveByActor[0]
@@ -3327,6 +3348,27 @@ describe('first vertical slice simulation', () => {
       calculationReplaceable: false,
       applied: true,
       replaceable: false,
+      mechanicsAdapterRequest: {
+        sourceValue: {
+          operands: expect.objectContaining({
+            contractName: 'AzPrThreeValueMechanicsOperands',
+            kind: 'validated-toughness-before-after',
+            operation: 'before-minus-after',
+            expectedDelta: 70,
+            ready: true,
+          }),
+        },
+      },
+    });
+    expect(
+      result.threeValueRuntimeProjection.runtimeAppliedDeltas.find(
+        delta => delta.sourceDeltaId === toughnessDelta.id
+      ).runtimeCalculatorInvocation.output
+    ).toMatchObject({
+      delta: 70,
+      operandsKind: 'validated-toughness-before-after',
+      calculatedFromOperands: true,
+      operandsMatchSource: true,
     });
     expect(result.threeValueRuntimeProjection.summary).toMatchObject({
       appliedDeltaCount: 2,
@@ -4650,8 +4692,59 @@ describe('first vertical slice simulation', () => {
         contractName: 'ThreeValueDeltaCalculator',
         appliedToRuntimeCount: 2,
       }),
+      mechanicsOperandsReadyInvocationCount: 2,
+      mechanicsOperandsMissingInvocationCount: 0,
+      mechanicsOperandsMismatchInvocationCount: 0,
+      mechanicsOperandsCalculatedInvocationCount: 2,
+      mechanicsOperandsKinds: expect.arrayContaining([
+        'hp-raw-preview-product',
+        'explicit-self-energy-event-sum',
+      ]),
       applied: true,
     });
+    const appliedHpDelta = result.threeValueGenerationLayer.deltas.find(
+      delta => delta.trackKey === 'enemyHpDamage' && delta.applied
+    );
+    const appliedEnergyDelta = result.threeValueGenerationLayer.deltas.find(
+      delta => delta.trackKey === 'selfEnergyChange' && delta.applied
+    );
+    expect(
+      appliedHpDelta.mechanicsAdapterRequest.sourceValue.operands
+    ).toMatchObject({
+      contractName: 'AzPrThreeValueMechanicsOperands',
+      kind: 'hp-raw-preview-product',
+      operation: 'round-clamped-product',
+      expectedDelta: result.summary.totalRawDamage,
+      ready: true,
+    });
+    expect(
+      appliedEnergyDelta.mechanicsAdapterRequest.sourceValue.operands
+    ).toMatchObject({
+      contractName: 'AzPrThreeValueMechanicsOperands',
+      kind: 'explicit-self-energy-event-sum',
+      operation: 'sum',
+      expectedDelta: -Number(spSkill.spCost),
+      inputs: { eventDeltas: [-Number(spSkill.spCost)] },
+      ready: true,
+    });
+    expect(
+      result.threeValueRuntimeProjection.runtimeAppliedDeltas.map(
+        delta => delta.runtimeCalculatorInvocation.output
+      )
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          operandsKind: 'hp-raw-preview-product',
+          calculatedFromOperands: true,
+          operandsMatchSource: true,
+        }),
+        expect.objectContaining({
+          operandsKind: 'explicit-self-energy-event-sum',
+          calculatedFromOperands: true,
+          operandsMatchSource: true,
+        }),
+      ])
+    );
     expect(result.threeValueRuntimeProjection.selfEnergyCurveByActor).toEqual(
       expect.arrayContaining([
         expect.objectContaining({

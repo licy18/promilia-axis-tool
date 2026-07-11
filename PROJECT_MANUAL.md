@@ -54,7 +54,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 当前验证基线：
 
 - `npm run build`：通过。
-- `npm run test -- --run`：通过；71 个测试文件、399 条测试通过。
+- `npm run test -- --run`：通过；71 个测试文件、400 条测试通过。
 - `npm run test:e2e:workbench-flow`：通过；39 条 Workbench 浏览器主流程通过。
 - `npm run test:e2e:production-preview`：通过；15 项真实 `dist` 验收全部通过，报告结论为 `trial-ready`。
 
@@ -1015,6 +1015,16 @@ Workbench 现在可以把角色等级、初始能量、奇波、装备、灵子�
 阶段验收：71 个测试文件、399 条单元/组件测试，39 条 Workbench 主流程和 15 项 production preview 全部通过，报告结论为 `trial-ready`。生产引用与数据投影审计无异常；Workbench 主块为 369,888B gzip，全部 JavaScript 为 734,423B gzip，仍在 370,000B/740,000B 预算内。180 动作编译 p95 为 10.652ms、完整 simulation p95 为 27.816ms；120 动作浏览器首屏就绪为 1721ms。
 
 下一阶段目标：阶段 8-M / P3 机制 operands 与内置 adapter 迁移。为三轨 source value 增加可计算的结构化 operands，并把当前已经应用的 HP raw preview、显式角色能量变化和已验证 runtime sample 取值迁入内置 mechanics adapter，实现从来源操作数到 delta 的单一计算边界，同时保持现有结果完全一致。韧性在没有已验证来源时继续保持当前结果；该阶段不新增或猜测真实倍率，不启用未确认培养效果，也不增加碎片 UI。
+
+### 阶段 8-M P3 机制 operands 与内置 adapter 迁移（2026-07-11）
+
+新增 `AzPrThreeValueMechanicsOperands v1`，把现有已应用值拆回可计算来源：HP raw preview 保存角色攻击与动作倍率，显式角色能量保存资源事件 delta 列表，已验证削韧和能量采样保存 before/after/reported delta。`Action -> Hit -> ThreeValueDelta` 升级为 v5，每条 source value 都携带 operands、期望 delta 和来源状态；identity 仅保留给兼容及非应用诊断层。
+
+`AzPrThreeValueMechanicsAdapter` 升级为 v2，内置 adapter 现在从 operands 重算 HP、显式能量和已验证采样，不再直接返回 generation 的最终值；`ThreeValueRuntimeCalculatorInvocation` 升级为 v4，记录重算值、ready、missing、mismatch 和 operand kind。generation delta 仍作为来源审计与失败回退，对照测试证明曲线、日志、命中事务和 summary 数值不变。未验证削韧、能量候选、装备、奇波、灵子、敌人等级和元素防御仍不参与计算。
+
+为保持发布预算，非首屏的预设库对话框改为按需加载；保存、搜索、复制和回载预设的完整浏览器路径通过。阶段验收：71 个测试文件、400 条单元/组件测试，39 条 Workbench 主流程和 15 项 production preview 全部通过，报告结论为 `trial-ready`。生产引用与数据投影审计无异常；Workbench 主块为 369,379B gzip，全部 JavaScript 为 736,287B gzip，仍在 370,000B/740,000B 预算内。180 动作编译 p95 为 8.704ms、完整 simulation p95 为 22.002ms；120 动作浏览器首屏就绪为 1492ms。
+
+下一阶段目标：阶段 8-N / P3 版本化 mechanics profile。把当前内置 adapter 中对 operand kind 的硬编码分派整理为可选择、可追踪的 `AzPrMechanicsProfile`，由 Scenario 明确绑定 profile ID、版本、支持的 operand kinds 和各机制层 applied/unapplied 状态，并让 runtime summary 记录实际 profile。当前 profile 继续保持现有结果；后续已确认的防御、抗性或培养机制通过新增 profile 层接入，不修改 Workbench，也不猜测尚未确认公式。
 
 ## 10. 文档维护规则
 

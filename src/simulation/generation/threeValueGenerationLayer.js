@@ -15,7 +15,10 @@ import {
 import {
   THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME,
   THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION,
+  THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME,
+  THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_VERSION,
   createThreeValueMechanicsAdapterRequest,
+  createThreeValueMechanicsOperands,
 } from '../mechanics/threeValueMechanicsAdapter';
 
 const THREE_VALUE_GENERATION_TRACK_ORDER = [
@@ -112,7 +115,7 @@ export function createThreeValueGenerationLayer({
         : 'standard-three-value-generation-layer-empty',
     contract: {
       name: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
-      version: 4,
+      version: 5,
       frameRate: AZPR_TIMELINE_FRAME_RATE,
       frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
       deltaFields: THREE_VALUE_DELTA_FIELDS,
@@ -150,6 +153,17 @@ export function createThreeValueGenerationLayer({
         ],
         runtimeBoundInputs: ['stateBefore'],
         registrationKeys: THREE_VALUE_GENERATION_TRACK_ORDER,
+        sourceOperandsContract: {
+          name: THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME,
+          version: THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_VERSION,
+          requiredFields: [
+            'trackKey',
+            'kind',
+            'operation',
+            'inputs',
+            'expectedDelta',
+          ],
+        },
         policy:
           'all applied HP, toughness and self-energy deltas use the same registrable mechanics adapter invocation contract',
       },
@@ -398,6 +412,13 @@ function createThreeValueGenerationDelta({
       sourceIds,
       confidence,
       status: calculator.status,
+      operands:
+        point.mechanicsOperands ??
+        createThreeValueMechanicsOperands({
+          trackKey,
+          sourceKind,
+          value: deltaValue,
+        }),
     },
   });
   const valueSource = createThreeValueGenerationDeltaValueSource({
@@ -839,7 +860,7 @@ function createActionHitThreeValueDeltaStandardContract({
         ? 'action-hit-three-value-delta-contract-ready'
         : 'action-hit-three-value-delta-contract-empty',
     name: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
-    version: 4,
+    version: 5,
     topology: ['Action', 'Hit', 'ThreeValueDelta'],
     frameRate: AZPR_TIMELINE_FRAME_RATE,
     frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
@@ -874,6 +895,17 @@ function createActionHitThreeValueDeltaStandardContract({
       ],
       runtimeBoundInputs: ['stateBefore'],
       registrationKeys: THREE_VALUE_GENERATION_TRACK_ORDER,
+      sourceOperandsContract: {
+        name: THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME,
+        version: THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_VERSION,
+        requiredFields: [
+          'trackKey',
+          'kind',
+          'operation',
+          'inputs',
+          'expectedDelta',
+        ],
+      },
     },
     runtimeDeltaPolicy: 'runtime consumes only deltas with applied=true',
     diagnosticDeltaPolicy:
@@ -905,6 +937,11 @@ function createActionHitThreeValueDeltaStandardContract({
       mechanicsAdapterRequestCount: summary.mechanicsAdapterRequestCount,
       appliedMechanicsAdapterRequestCount:
         summary.appliedMechanicsAdapterRequestCount,
+      mechanicsOperandsReadyDeltaCount:
+        summary.mechanicsOperandsReadyDeltaCount,
+      appliedMechanicsOperandsReadyDeltaCount:
+        summary.appliedMechanicsOperandsReadyDeltaCount,
+      mechanicsOperandsKinds: summary.mechanicsOperandsKinds,
       applied: false,
     },
     applied: false,
@@ -1044,6 +1081,19 @@ function summarizeThreeValueGenerationLayer({
         delta.mechanicsAdapterRequest?.contractName ===
           THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME
     ).length,
+    mechanicsOperandsReadyDeltaCount: deltas.filter(
+      delta => delta.mechanicsAdapterRequest?.sourceValue?.operands?.ready
+    ).length,
+    appliedMechanicsOperandsReadyDeltaCount: deltas.filter(
+      delta =>
+        delta.applied &&
+        delta.mechanicsAdapterRequest?.sourceValue?.operands?.ready
+    ).length,
+    mechanicsOperandsKinds: uniqueStrings(
+      deltas.map(
+        delta => delta.mechanicsAdapterRequest?.sourceValue?.operands?.kind
+      )
+    ),
     frameMin: minNumber(deltas.map(delta => delta.frameIndex)),
     frameMax: maxNumber(deltas.map(delta => delta.frameIndex)),
     applied: false,

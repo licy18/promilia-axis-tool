@@ -2,6 +2,7 @@ import {
   createRuntimeSampleEventKey,
   createThreeValueMechanismSampleAdapterOutput,
 } from '../mechanics/threeValueMechanismSampleAdapter';
+import { createThreeValueMechanicsOperands } from '../mechanics/threeValueMechanicsAdapter';
 
 export const AZPR_TIMELINE_FRAME_RATE = 60;
 export const AZPR_TIMELINE_FRAME_MS = 1000 / AZPR_TIMELINE_FRAME_RATE;
@@ -205,6 +206,12 @@ function createAppliedGenerationInputLayer({
         frameIndex,
         frameLabel: formatTimelineFrame(frameIndex),
         delta,
+        mechanicsOperands: createThreeValueMechanicsOperands({
+          trackKey: definition.key,
+          sourceKind: 'action-result-applied-value',
+          value: delta,
+          formulaBreakdown: result.formulaBreakdown,
+        }),
         elementConfigIds: createAppliedGenerationInputElementConfigIds(result),
         resultStatus: result.status ?? null,
         sourceStatus: result.sourceEvidence?.status ?? null,
@@ -230,6 +237,12 @@ function createAppliedGenerationInputLayer({
       numberOrNull(point.sourceElementConfigId),
       numberOrNull(point.elementConfigId),
     ]),
+    mechanicsOperands: createThreeValueMechanicsOperands({
+      trackKey: definition.key,
+      sourceKind: point.sourceKind,
+      value: point.delta,
+      sampleValidation: point.validation,
+    }),
     applied: true,
   }));
   const points = [...actionResultPoints, ...mechanismSamplePoints].sort(

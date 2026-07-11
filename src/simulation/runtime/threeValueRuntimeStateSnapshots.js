@@ -198,6 +198,15 @@ export function createThreeValueRuntimeStateSnapshots({
         calculatorInvocationSummary.mechanicsAdapterContractVersion,
       mechanicsAdapterRegistrationKeys:
         calculatorInvocationSummary.registrationKeys,
+      mechanicsOperandsReadyInvocationCount:
+        calculatorInvocationSummary.operandsReadyInvocationCount,
+      mechanicsOperandsMissingInvocationCount:
+        calculatorInvocationSummary.operandsMissingInvocationCount,
+      mechanicsOperandsMismatchInvocationCount:
+        calculatorInvocationSummary.operandsMismatchInvocationCount,
+      mechanicsOperandsCalculatedInvocationCount:
+        calculatorInvocationSummary.operandsCalculatedInvocationCount,
+      mechanicsOperandsKinds: calculatorInvocationSummary.operandsKinds,
       runtimeCalculatorAdapterKeys: calculatorInvocationSummary.adapterKeys,
       runtimeCalculatorInvocationStatuses: calculatorInvocationSummary.statuses,
       runtimeMechanismConfigurationReadyInvocationCount:

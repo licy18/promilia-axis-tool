@@ -4,7 +4,10 @@ import {
   THREE_VALUE_DELTA_FIELDS,
 } from './threeValueGenerationLayer';
 import { THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME } from '../mechanics/threeValueMechanismContext';
-import { THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME } from '../mechanics/threeValueMechanicsAdapter';
+import {
+  THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME,
+  THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME,
+} from '../mechanics/threeValueMechanicsAdapter';
 
 const STANDARD_GENERATION_ENTRY_OUTPUT_NAMES = [
   'generationInput',
@@ -697,7 +700,11 @@ export function validateStandardGenerationEntryContract(generationEntry = {}) {
           delta.mechanicsAdapterRequest.hit === delta.mechanismContext?.hit &&
           delta.mechanicsAdapterRequest.mechanismConfiguration ===
             delta.mechanismContext?.configuration &&
-          delta.mechanicsAdapterRequest.sourceValue?.value === delta.delta
+          delta.mechanicsAdapterRequest.sourceValue?.value === delta.delta &&
+          delta.mechanicsAdapterRequest.sourceValue?.operands?.contractName ===
+            THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME &&
+          delta.mechanicsAdapterRequest.sourceValue.operands.expectedDelta ===
+            delta.delta
       ),
     }),
     createGenerationEntryValidationCheck({
@@ -1057,6 +1064,12 @@ function createThreeValueGenerationBundleSummary({
       standardContract.summary?.mechanicsAdapterRequestCount ?? 0,
     appliedMechanicsAdapterRequestCount:
       standardContract.summary?.appliedMechanicsAdapterRequestCount ?? 0,
+    mechanicsOperandsReadyDeltaCount:
+      standardContract.summary?.mechanicsOperandsReadyDeltaCount ?? 0,
+    appliedMechanicsOperandsReadyDeltaCount:
+      standardContract.summary?.appliedMechanicsOperandsReadyDeltaCount ?? 0,
+    mechanicsOperandsKinds:
+      standardContract.summary?.mechanicsOperandsKinds ?? [],
     calculatorCount: standardContract.summary?.calculatorCount ?? 0,
     executionPlanContractName: actionExecutionPlan?.contractName ?? '',
     executionPlanActionCount:

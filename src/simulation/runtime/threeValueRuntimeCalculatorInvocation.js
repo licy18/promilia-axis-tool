@@ -1,6 +1,7 @@
 import {
   THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME,
   THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION,
+  calculateThreeValueMechanicsOperands,
   createThreeValueMechanicsAdapterInput,
   resolveThreeValueMechanicsAdapter,
 } from '../mechanics/threeValueMechanicsAdapter';
@@ -22,6 +23,9 @@ export function createThreeValueRuntimeCalculatorInvocation({
   });
   const resolvedAdapter = resolved.adapter;
   const outputField = input.outputField;
+  const operandsCalculation = calculateThreeValueMechanicsOperands(
+    input.sourceValue?.operands
+  );
   const calculation = invokeRuntimeCalculatorAdapter(resolvedAdapter, input);
   const output = createRuntimeCalculatorOutput({
     delta,
@@ -46,13 +50,16 @@ export function createThreeValueRuntimeCalculatorInvocation({
     actionInputPresent: Boolean(input.action),
     hitInputPresent: Boolean(input.hit),
     sourceValueFinite: Number.isFinite(input.sourceValue?.value),
+    operandsPresent: Boolean(input.sourceValue?.operands),
+    operandsReady: operandsCalculation.ready,
+    operandsMatchSource: operandsCalculation.matchesExpected !== false,
     stateBeforePresent: Boolean(stateBefore),
     adapterOutputAccepted: !fallbackReason,
   };
   const valid = Object.values(validation).every(Boolean);
 
   return {
-    schemaVersion: 3,
+    schemaVersion: 4,
     sourceKind: 'azpr-three-value-runtime-calculator-invocation',
     contractName: THREE_VALUE_RUNTIME_CALCULATOR_INVOCATION_CONTRACT_NAME,
     status: fallbackReason
@@ -74,6 +81,7 @@ export function createThreeValueRuntimeCalculatorInvocation({
       registrationKey: resolved.registrationKey,
     },
     input,
+    operandsCalculation,
     output,
     validation: {
       ...validation,
@@ -125,6 +133,21 @@ export function summarizeThreeValueRuntimeCalculatorInvocations(
       THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION,
     registrationKeys: uniqueStrings(
       invocations.map(invocation => invocation.adapter.registrationKey)
+    ),
+    operandsReadyInvocationCount: invocations.filter(
+      invocation => invocation.validation.operandsReady
+    ).length,
+    operandsMissingInvocationCount: invocations.filter(
+      invocation => !invocation.validation.operandsReady
+    ).length,
+    operandsMismatchInvocationCount: invocations.filter(
+      invocation => !invocation.validation.operandsMatchSource
+    ).length,
+    operandsCalculatedInvocationCount: invocations.filter(
+      invocation => invocation.output.calculatedFromOperands
+    ).length,
+    operandsKinds: uniqueStrings(
+      invocations.map(invocation => invocation.output.operandsKind)
     ),
     adapterKeys: uniqueStrings(
       invocations.map(invocation => invocation.adapter.key)
@@ -200,6 +223,15 @@ function createRuntimeCalculatorOutput({
       : (result?.sourceKind ?? 'runtime-calculator-adapter-result'),
     sourceCalculationStatus:
       delta.calculationStatus ?? delta.calculator?.status ?? null,
+    operandsKind:
+      result?.operandsKind ?? input.sourceValue?.operands?.kind ?? null,
+    operandsStatus:
+      result?.operandsStatus ?? input.sourceValue?.operands?.status ?? null,
+    calculatedFromOperands: result?.calculatedFromOperands === true,
+    operandsMatchSource:
+      typeof result?.operandsMatchSource === 'boolean'
+        ? result.operandsMatchSource
+        : null,
     fallbackReason,
   };
   if (outputField !== 'delta') {

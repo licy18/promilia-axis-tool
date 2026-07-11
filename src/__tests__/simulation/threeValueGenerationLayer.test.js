@@ -233,7 +233,7 @@ describe('three value generation layer', () => {
     expect(layer.sourceKind).toBe('azpr-standard-three-value-generation-layer');
     expect(layer.contract).toMatchObject({
       name: 'Action -> Hit -> ThreeValueDelta',
-      version: 4,
+      version: 5,
       frameRate: 60,
       deltaFields: ['hpDelta', 'toughnessDelta', 'energyDelta'],
       calculatorContract: {
@@ -248,7 +248,7 @@ describe('three value generation layer', () => {
       },
       mechanicsAdapterContract: {
         name: 'AzPrThreeValueMechanicsAdapter',
-        version: 1,
+        version: 2,
         requiredInputs: [
           'action',
           'hit',
@@ -257,6 +257,10 @@ describe('three value generation layer', () => {
           'stateBefore',
         ],
         runtimeBoundInputs: ['stateBefore'],
+        sourceOperandsContract: {
+          name: 'AzPrThreeValueMechanicsOperands',
+          version: 1,
+        },
       },
     });
     expect(layer.summary).toMatchObject({
@@ -273,6 +277,9 @@ describe('three value generation layer', () => {
       mechanismConfigurationMissingDeltaCount: 1,
       mechanicsAdapterRequestCount: 1,
       appliedMechanicsAdapterRequestCount: 1,
+      mechanicsOperandsReadyDeltaCount: 1,
+      appliedMechanicsOperandsReadyDeltaCount: 1,
+      mechanicsOperandsKinds: ['source-value-identity'],
     });
     expect(layer.standardContract).toMatchObject({
       sourceKind: 'azpr-action-hit-three-value-delta-standard-contract',
@@ -387,7 +394,7 @@ describe('three value generation layer', () => {
         }),
         mechanicsAdapterRequest: expect.objectContaining({
           contractName: 'AzPrThreeValueMechanicsAdapter',
-          contractVersion: 1,
+          contractVersion: 2,
           trackKey: 'enemyHpDamage',
           outputField: 'hpDelta',
           sourceValue: expect.objectContaining({
@@ -395,6 +402,14 @@ describe('three value generation layer', () => {
             hpDelta: 1200,
             toughnessDelta: null,
             energyDelta: null,
+            operands: expect.objectContaining({
+              contractName: 'AzPrThreeValueMechanicsOperands',
+              contractVersion: 1,
+              kind: 'source-value-identity',
+              operation: 'identity',
+              expectedDelta: 1200,
+              ready: true,
+            }),
           }),
           stateBefore: null,
           bindingStatus: 'generation-inputs-bound-runtime-state-pending',
