@@ -1152,7 +1152,25 @@ WorkbenchProjectFile 升级为 v15；本地草稿、JSON、分享链接、PNG、
 
 阶段验收：75 个测试文件、426 条单元/组件测试通过；39 条 Workbench 主流程和 18 项 production preview 必需能力全部通过，生产报告结论为 `trial-ready`。生产引用审计为 114 个源码、110 个生产可达、4 个允许 test-only、0 个孤儿；数据投影审计全部一致。Workbench 主块为 361,270B gzip，全部 JavaScript 为 737,474B gzip，仍在 370,000B/740,000B 预算内。180 动作编译 p95 为 13.433ms、完整 simulation p95 为 32.756ms；120 动作浏览器首屏就绪为 1694ms。
 
-下一阶段目标：阶段 8-Z / P0-P3 机制合同生产守门与包体余量恢复。把默认 Workbench 的 applied source binding 完整性纳入 production preview 或独立合同审计，要求正式项目无 `bound-drift` 且可解释全部 compatible-unbound；同时合并来源 binding 中重复的 identity、数值规范化和诊断实现，在不提高预算、不改变三值结果的前提下把全部 JavaScript gzip 恢复到不高于 733,000B，为后续 P2/P3 能力保留可靠余量。该阶段不新增 UI、公式或测试期数值推断。
+### 8-M 至 8-Y P2/P3 基线检查点（2026-07-12）
+
+结论：8-M 至 8-Y 已形成可作为下一轮开发基线的运行时与项目回放链，但该基线表示合同稳定和来源可审计，不表示蓝色星原真实战斗机制已经完整复刻。mechanics profile、layer inputs、evaluation、有序 steps、state effect proposal、配置来源合同、profile catalog、game data catalog、技能/动作引用、HP operand binding 和三轨 applied source binding 已贯通 generation、runtime 与项目载体。
+
+- 正式计算输入：角色面板 attack、已选动作倍率、显式角色能量事件、已验证韧性/能量 before-after sample；runtime 还正式读取 `stateBefore`、目标敌人和 energy owner，并只写入通过 proposal 验证的 HP、韧性和角色能量轨道。
+- 来源/追踪/兼容诊断：配置和游戏数据 identity、profile 选择与 fallback、`bound-ready / compatible-unbound / bound-drift`、`source-value-identity` 兼容回退及 evidence/candidate 字段只负责追溯、门禁或旧项目兼容，不构成新公式输入。
+- 明确未应用：敌人防御与抗性、等级换算、暴击与增伤、装备、奇波、灵子及其他培养效果、未验证动作削韧/命中充能和被动资源修正；这些层继续保持 `unapplied` 或 `appliedToCalculators = false`，取得稳定 AzPr 数据或可复现实战证据前不得接入。
+
+与 Endaxis 的功能层级相比，当前项目已经具备多方案工作区、本地草稿、JSON、分享链接、PNG 四载体交换、回放一致性门禁，以及曲线、日志、三值详情、区段和方案对比。主要差距不在项目载体，而在配置与机制广度及复盘成熟度：Endaxis 已把角色、武器、装备、敌人和队伍配置连接到更完整的状态/效果模拟，并提供更成熟的伤害分析、命中详情、资源监控和战斗日志；本项目目前仍以三轨 preview 合同和未应用培养配置为主。
+
+风险检查：四载体集成测试仍比较相同的配置/数据/profile identity、proposal、三轨来源 binding、曲线和日志，回放链可作为基线；未应用机制边界也由 profile policy、game data reference policy 和测试共同守住。当前高风险是全部 JavaScript gzip 为 737,474B，距离 740,000B 预算仅余 2,526B；同时 HP/applied source binding 及 catalog 周边已出现重复的 hash、number/text normalization、identity 和 diagnostics 组装，继续叠加合同会放大漂移与包体风险。
+
+下一阶段候选按优先级排序：
+
+1. **8-Z / P0-P3 生产守门与余量恢复**：先审计默认 Workbench 的 applied source binding，要求无 `bound-drift` 且全部 `compatible-unbound` 可解释；合并重复 identity/normalization/diagnostics，在不提高预算、不改变三值结果的前提下把全部 JavaScript gzip 恢复到不高于 733,000B。8-Z 只做守门和工程收口，不开发新机制。
+2. **P2 配置完整性与项目工作流**：继续完善可复用的角色、敌人、装备、奇波和灵子配置实例及方案交换，但未确认效果仍不参与 calculator。
+3. **P3 单项已确认机制接入**：仅在 8-Z 完成后，从具备稳定来源的一项机制开始新增 profile step；不恢复测试期倍率考古，也不并行铺开防御、抗性和培养公式。
+
+本检查点停在 8-Z 实现之前；下一轮默认先执行候选 1，完成生产守门和包体余量恢复后再重新选择 P2 或 P3。
 
 ## 10. 文档维护规则
 
