@@ -6,7 +6,9 @@
       "src/main.js"
     ],
     "tests": [
+      "e2e/helpers/workbench-long-axis-fixture.js",
       "e2e/workbench-continuous-edit.spec.js",
+      "e2e/workbench-long-axis-comparison.spec.js",
       "e2e/workbench-long-axis.spec.js",
       "e2e/workbench-production-preview.spec.js",
       "src/__tests__/data/azprGenerated.test.js",

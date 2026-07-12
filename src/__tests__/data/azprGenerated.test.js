@@ -78,7 +78,7 @@ describe('generated AzPr data', () => {
 
     expect(seed.schemaVersion).toBe(2);
     expect(skillCore).toMatchObject({
-      schemaVersion: 2,
+      schemaVersion: 3,
       kind: 'workbench-skill-core-projection',
       counts: {
         skillLogicItems: 120,
@@ -106,6 +106,18 @@ describe('generated AzPr data', () => {
     expect(
       crossCheckLevels.filter(level => Object.hasOwn(level, 'matches'))
     ).toHaveLength(2);
+    expect(
+      skillCore.skillLevelCrossCheck.items.filter(item => item.labelIdSeries)
+    ).toHaveLength(80);
+    expect(
+      skillCore.skillLevelCrossCheck.items.filter(item => item.valueIdSeries)
+    ).toHaveLength(80);
+    expect(
+      crossCheckLevels.filter(level => Object.hasOwn(level, 'labelIdRange'))
+    ).toHaveLength(40);
+    expect(
+      crossCheckLevels.filter(level => Object.hasOwn(level, 'valueIdRange'))
+    ).toHaveLength(40);
     expect(manifest.files.workbenchSkillCore).toBe('workbench-skill-core.json');
     expect(manifest.files.workbenchSkillDiagnostics).toBe(
       'workbench-skill-diagnostics.json'

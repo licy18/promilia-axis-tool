@@ -83,15 +83,32 @@ export function resolveSkillLevelCrossCheck(skill, level = 1) {
     expectedValues: skill.level?.values?.[resolvedLevelIndex] ?? [],
     labelIds: expandSequentialIds(
       levelResult.labelIds,
-      levelResult.labelIdRange
+      resolveLevelIdRange(levelResult, item, resolvedLevelIndex, 'label')
     ),
     valueIds: expandSequentialIds(
       levelResult.valueIds,
-      levelResult.valueIdRange
+      resolveLevelIdRange(levelResult, item, resolvedLevelIndex, 'value')
     ),
     matches: levelResult.matches ?? { labels: true, values: true },
     diagnostics: cloneDiagnostics(levelResult.diagnostics),
   };
+}
+
+function resolveLevelIdRange(levelResult, item, levelIndex, prefix) {
+  const directRange = levelResult[`${prefix}IdRange`];
+  if (Array.isArray(directRange)) return directRange;
+  const series = item[`${prefix}IdSeries`];
+  if (!Array.isArray(series) || series.length < 2) return null;
+  const count = levelResult[`${prefix}IdCount`] ?? series[2];
+  if (!Number.isFinite(Number(count))) return null;
+  try {
+    return [
+      (BigInt(series[0]) + BigInt(series[1]) * BigInt(levelIndex)).toString(),
+      Number(count),
+    ];
+  } catch {
+    return null;
+  }
 }
 
 export function createSkillLevelCrossCheckSegmentSource(crossCheck, index) {

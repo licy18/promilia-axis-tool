@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "kind": "workbench-long-axis-comparison-browser-benchmark",
+  "generatedAt": "2026-07-12T11:10:51.530Z",
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.7827.55 Safari/537.36",
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "metrics": {
+    "actionCountPerScenario": 120,
+    "scenarioCount": 2,
+    "initialReadyMs": 2142,
+    "comparisonOpenMs": 418,
+    "fullAxisActionRowCount": 120,
+    "cycleWindowActionRowCount": 60,
+    "windowSwitchMs": 246,
+    "baselineLocateMs": 2093,
+    "budgets": {
+      "initialReadyMs": 15000,
+      "comparisonOpenMs": 8000,
+      "windowSwitchMs": 3000,
+      "baselineLocateMs": 3000
+    }
+  },
+  "status": {
+    "initialReadyWithinBudget": true,
+    "comparisonOpenWithinBudget": true,
+    "windowSwitchWithinBudget": true,
+    "baselineLocateWithinBudget": true,
+    "cleanedUp": true
+  }
+}

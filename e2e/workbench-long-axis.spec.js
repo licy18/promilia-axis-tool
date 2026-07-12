@@ -1,10 +1,13 @@
 import { expect, test } from '@playwright/test';
 import { writeFile } from 'node:fs/promises';
+import {
+  LONG_AXIS_ACTION_COUNT,
+  WORKBENCH_DRAFT_STORAGE_KEY,
+  createLongAxisSnapshot,
+} from './helpers/workbench-long-axis-fixture';
 
-const LONG_AXIS_ACTION_COUNT = 120;
 const BROWSER_READY_BUDGET_MS = 15_000;
 const PLAYBACK_ADVANCE_BUDGET_MS = 3_000;
-const WORKBENCH_DRAFT_STORAGE_KEY = 'promilia-axis-tool:workbench-draft:v16';
 
 test('loads and reviews a 120-action Workbench project @workbench-long-axis', async ({
   page,
@@ -220,84 +223,4 @@ test('loads and reviews a 120-action Workbench project @workbench-long-axis', as
 
 async function readTimelinePlaybackRafAudit(page) {
   return page.evaluate(() => ({ ...window.__timelinePlaybackRafAudit }));
-}
-
-function createLongAxisSnapshot() {
-  const frameMs = 1000 / 60;
-  const actionDrafts = Array.from(
-    { length: LONG_AXIS_ACTION_COUNT },
-    (_, index) => ({
-      id: `browser-long-axis-action-${String(index + 1).padStart(4, '0')}`,
-      type: 'skill',
-      skillId: 10900101,
-      actorCharacterId: 109001,
-      startMs: index * 9 * frameMs,
-      durationMs: 6 * frameMs,
-      level: 1,
-      actionVariantIndex: 0,
-      damageSegmentIndex: 0,
-      targetCharacterId: 101003,
-      resource: 'sp',
-      change: 50,
-      reason: 'manual-axis-resource',
-      eventType: 'phase',
-      note: '',
-      insertion: null,
-      generationBatch: null,
-      effectCommands: [],
-    })
-  );
-  return {
-    schemaVersion: 16,
-    game: 'azur-promilia',
-    type: 'workbench-draft',
-    savedAt: '2026-07-10T00:00:00.000Z',
-    selection: {
-      characterId: 109001,
-      secondaryCharacterId: 101003,
-      skillId: 10900101,
-      enemyId: 300032,
-    },
-    teamSlots: [
-      { slotId: 'team-slot-1', position: 0, characterId: 109001 },
-      { slotId: 'team-slot-2', position: 1, characterId: 101003 },
-    ],
-    actorConfigs: [createActorConfig(109001), createActorConfig(101003)],
-    enemyConfig: {
-      level: 80,
-      hpMultiplier: 100,
-      defenseMultiplier: 1,
-      toughnessMultiplier: 1,
-      initialToughnessRatio: 1,
-      elementDefenseOverrides: {},
-    },
-    segmentSplitOptions: {
-      intervalMs: 2000,
-      startAfterSelectedAction: false,
-      skipExistingSegments: false,
-    },
-    actionDrafts,
-    actionRelations: [],
-    runtimeSampleCaptures: [],
-    selectedActionId: actionDrafts.at(-1).id,
-  };
-}
-
-function createActorConfig(characterId) {
-  return {
-    characterId,
-    level: 80,
-    initialSp: null,
-    loadout: {
-      kiboId: null,
-      equipment: {
-        weapon: null,
-        top: null,
-        bottom: null,
-        earring: null,
-        ring: null,
-      },
-      soulessenceId: null,
-    },
-  };
 }

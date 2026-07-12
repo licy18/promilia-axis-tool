@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "production-preview-acceptance",
-  "generatedAt": "2026-07-12T10:52:36.761Z",
+  "generatedAt": "2026-07-12T11:10:10.568Z",
   "environment": {
     "platform": "win32-x64",
     "node": "v24.16.0",
@@ -23,7 +23,7 @@
     "testCount": 28,
     "passedTestCount": 28,
     "playwrightStatus": "passed",
-    "durationMs": 40444
+    "durationMs": 50708
   },
   "capabilities": [
     {
@@ -172,7 +172,7 @@
       "capability": "applied-source-binding-guard",
       "title": "[applied-source-binding-guard] accepts the production three-track source audit",
       "status": "passed",
-      "durationMs": 5,
+      "durationMs": 6,
       "retry": 0,
       "errors": []
     },
@@ -180,7 +180,7 @@
       "capability": "routes-and-assets",
       "title": "[routes-and-assets] serves production routes and hashed assets",
       "status": "passed",
-      "durationMs": 1126,
+      "durationMs": 1295,
       "retry": 0,
       "errors": []
     },
@@ -188,7 +188,7 @@
       "capability": "stage-9a-timeline-topology",
       "title": "[stage-9a-timeline-topology] renders three actor groups and five state curves on desktop and narrow screens",
       "status": "passed",
-      "durationMs": 956,
+      "durationMs": 899,
       "retry": 0,
       "errors": []
     },
@@ -196,7 +196,7 @@
       "capability": "stage-9b-runtime-step-curves",
       "title": "[stage-9b-runtime-step-curves] keeps actor resources and enemy states aligned through edit operations",
       "status": "passed",
-      "durationMs": 1589,
+      "durationMs": 1699,
       "retry": 0,
       "errors": []
     },
@@ -204,7 +204,7 @@
       "capability": "stage-9c-timeline-first-workspace",
       "title": "[stage-9c-timeline-first-workspace] keeps the complete timeline topology in the primary workspace",
       "status": "passed",
-      "durationMs": 895,
+      "durationMs": 1178,
       "retry": 0,
       "errors": []
     },
@@ -212,7 +212,7 @@
       "capability": "stage-10a-multitrack-editing",
       "title": "[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enemy entries on legal lanes",
       "status": "passed",
-      "durationMs": 1931,
+      "durationMs": 2478,
       "retry": 0,
       "errors": []
     },
@@ -220,7 +220,7 @@
       "capability": "stage-10b-cross-lane-batch-editing",
       "title": "[stage-10b-cross-lane-batch-editing] box-selects, rebinds, copies, and restores a mixed timeline group",
       "status": "passed",
-      "durationMs": 2751,
+      "durationMs": 3394,
       "retry": 0,
       "errors": []
     },
@@ -228,7 +228,7 @@
       "capability": "stage-10c-frame-cursor-review",
       "title": "[stage-10c-frame-cursor-review] links timeline frames, five curve states, actions, and runtime logs",
       "status": "passed",
-      "durationMs": 2310,
+      "durationMs": 2932,
       "retry": 0,
       "errors": []
     },
@@ -236,7 +236,7 @@
       "capability": "stage-10d-timeline-playback",
       "title": "[stage-10d-timeline-playback] plays the full axis and loops a selected cycle section",
       "status": "passed",
-      "durationMs": 2000,
+      "durationMs": 2320,
       "retry": 0,
       "errors": []
     },
@@ -244,7 +244,7 @@
       "capability": "stage-11a-contribution-windows",
       "title": "[stage-11a-contribution-windows] aggregates three tracks and returns to the exact runtime point",
       "status": "passed",
-      "durationMs": 1507,
+      "durationMs": 2569,
       "retry": 0,
       "errors": []
     },
@@ -252,7 +252,7 @@
       "capability": "stage-11b-window-comparison",
       "title": "[stage-11b-window-comparison] compares one cycle and opens the baseline contribution",
       "status": "passed",
-      "durationMs": 2218,
+      "durationMs": 3217,
       "retry": 0,
       "errors": []
     },
@@ -260,7 +260,7 @@
       "capability": "diagnostics-lazy-load",
       "title": "[diagnostics-lazy-load] loads runtime diagnostics from a production chunk",
       "status": "passed",
-      "durationMs": 676,
+      "durationMs": 893,
       "retry": 0,
       "errors": []
     },
@@ -268,7 +268,7 @@
       "capability": "json-project-exchange",
       "title": "[json-project-exchange] restores an exported production JSON project",
       "status": "passed",
-      "durationMs": 901,
+      "durationMs": 1405,
       "retry": 0,
       "errors": []
     },
@@ -276,7 +276,7 @@
       "capability": "profile-compatibility-gate",
       "title": "[profile-compatibility-gate] rejects an unavailable profile without replacing the current project",
       "status": "passed",
-      "durationMs": 881,
+      "durationMs": 1172,
       "retry": 0,
       "errors": []
     },
@@ -284,7 +284,7 @@
       "capability": "game-data-compatibility-gate",
       "title": "[game-data-compatibility-gate] rejects an unavailable AzPr config reference without replacing the current project",
       "status": "passed",
-      "durationMs": 951,
+      "durationMs": 1073,
       "retry": 0,
       "errors": []
     },
@@ -292,7 +292,7 @@
       "capability": "action-skill-compatibility-gate",
       "title": "[action-skill-compatibility-gate] rejects an unavailable skill before action fallback without replacing the current project",
       "status": "passed",
-      "durationMs": 1044,
+      "durationMs": 1017,
       "retry": 0,
       "errors": []
     },
@@ -300,7 +300,7 @@
       "capability": "configuration-instances",
       "title": "[configuration-instances] binds reusable simulation configs to scenarios and JSON",
       "status": "passed",
-      "durationMs": 1621,
+      "durationMs": 1414,
       "retry": 0,
       "errors": []
     },
@@ -316,7 +316,7 @@
       "capability": "project-drop-recovery",
       "title": "[project-drop-recovery] restores a production project without replacing it on invalid drop",
       "status": "passed",
-      "durationMs": 1163,
+      "durationMs": 1459,
       "retry": 0,
       "errors": []
     },
@@ -324,7 +324,7 @@
       "capability": "multi-action-editing",
       "title": "[multi-action-editing] copies, pastes, and reviews a selected action group",
       "status": "passed",
-      "durationMs": 1162,
+      "durationMs": 1489,
       "retry": 0,
       "errors": []
     },
@@ -332,7 +332,7 @@
       "capability": "timeline-relations",
       "title": "[timeline-relations] preserves action relations through project exchange",
       "status": "passed",
-      "durationMs": 1511,
+      "durationMs": 1790,
       "retry": 0,
       "errors": []
     },
@@ -340,7 +340,7 @@
       "capability": "effect-interval-review",
       "title": "[effect-interval-review] reviews an effect interval and refreshes it from the source action",
       "status": "passed",
-      "durationMs": 1200,
+      "durationMs": 1450,
       "retry": 0,
       "errors": []
     },
@@ -348,7 +348,7 @@
       "capability": "scenario-comparison",
       "title": "[scenario-comparison] compares an edited axis with a snapshot and returns to the changed action",
       "status": "passed",
-      "durationMs": 1344,
+      "durationMs": 1716,
       "retry": 0,
       "errors": []
     },
@@ -356,7 +356,7 @@
       "capability": "cycle-sections",
       "title": "[cycle-sections] creates, reviews, and restores a production cycle boundary",
       "status": "passed",
-      "durationMs": 1552,
+      "durationMs": 1952,
       "retry": 0,
       "errors": []
     },
@@ -364,7 +364,7 @@
       "capability": "cycle-inheritance",
       "title": "[cycle-inheritance] creates and restores a production scenario from a runtime boundary",
       "status": "passed",
-      "durationMs": 1361,
+      "durationMs": 1842,
       "retry": 0,
       "errors": []
     },
@@ -372,7 +372,7 @@
       "capability": "workspace-scenarios",
       "title": "[workspace-scenarios] switches, compares, and restores independent production scenarios",
       "status": "passed",
-      "durationMs": 1373,
+      "durationMs": 2248,
       "retry": 0,
       "errors": []
     },
@@ -380,7 +380,7 @@
       "capability": "workspace-layout",
       "title": "[workspace-layout] restores desktop focus modes and keeps narrow content available",
       "status": "passed",
-      "durationMs": 1203,
+      "durationMs": 1615,
       "retry": 0,
       "errors": []
     },
@@ -388,7 +388,7 @@
       "capability": "narrow-main-flow",
       "title": "[narrow-main-flow] completes runtime review, edit, and refresh without overflow",
       "status": "passed",
-      "durationMs": 1063,
+      "durationMs": 1506,
       "retry": 0,
       "errors": []
     }

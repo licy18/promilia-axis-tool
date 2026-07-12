@@ -10,7 +10,7 @@ export function createWorkbenchSkillCoreProjection({
   const projectedValueParamIndex = projectValueParamIndex(valueParamIndex);
 
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     kind: 'workbench-skill-core-projection',
     generatedAt,
     sourceKind: 'azpr-workbench-skill-core-projection',
@@ -121,41 +121,112 @@ function projectSkillLevelCrossCheck(source) {
     sourceKind: source.sourceKind,
     source: source.source,
     summary: source.summary,
-    items: (source.items ?? []).map(item => ({
-      skillId: item.skillId,
-      characterId: item.characterId,
-      levels: (item.levels ?? []).map((level, index) => ({
-        ...(level.level === index + 1 ? {} : { level: level.level }),
-        ...(level.levelIndex === index ? {} : { levelIndex: level.levelIndex }),
-        rowId: level.rowId,
-        ...(level.status === 'matched' ? {} : { status: level.status }),
-        ...(level.matches?.labels ? {} : { labels: level.labels }),
-        ...(level.matches?.values ? {} : { values: level.values }),
-        ...compactSequentialIds('labelIds', 'labelIdRange', level.labelIds),
-        ...compactSequentialIds('valueIds', 'valueIdRange', level.valueIds),
-        ...(level.matches?.labels && level.matches?.values
-          ? {}
-          : { matches: level.matches }),
-        ...nonEmptyArrayField('diagnostics', level.diagnostics),
-      })),
-    })),
+    items: (source.items ?? []).map(item => {
+      const levels = item.levels ?? [];
+      const labelIdSeries = createInterLevelIdSeries(levels, 'labelIds');
+      const valueIdSeries = createInterLevelIdSeries(levels, 'valueIds');
+      return {
+        skillId: item.skillId,
+        characterId: item.characterId,
+        ...(labelIdSeries ? { labelIdSeries } : {}),
+        ...(valueIdSeries ? { valueIdSeries } : {}),
+        levels: levels.map((level, index) => ({
+          ...(level.level === index + 1 ? {} : { level: level.level }),
+          ...(level.levelIndex === index
+            ? {}
+            : { levelIndex: level.levelIndex }),
+          rowId: level.rowId,
+          ...(level.status === 'matched' ? {} : { status: level.status }),
+          ...(level.matches?.labels ? {} : { labels: level.labels }),
+          ...(level.matches?.values ? {} : { values: level.values }),
+          ...projectLevelIds(
+            'labelIds',
+            'labelIdRange',
+            'labelIdCount',
+            level.labelIds,
+            labelIdSeries,
+            index
+          ),
+          ...projectLevelIds(
+            'valueIds',
+            'valueIdRange',
+            'valueIdCount',
+            level.valueIds,
+            valueIdSeries,
+            index
+          ),
+          ...(level.matches?.labels && level.matches?.values
+            ? {}
+            : { matches: level.matches }),
+          ...nonEmptyArrayField('diagnostics', level.diagnostics),
+        })),
+      };
+    }),
   };
 }
 
-function compactSequentialIds(arrayKey, rangeKey, values) {
-  if (!Array.isArray(values) || values.length === 0) {
-    return { [arrayKey]: values };
+function createInterLevelIdSeries(levels, arrayKey) {
+  if (levels.length < 2) return null;
+  const ranges = levels.map(level => createSequentialIdRange(level[arrayKey]));
+  if (ranges.some(range => !range)) return null;
+  try {
+    const base = BigInt(ranges[0][0]);
+    const stride = BigInt(ranges[1][0]) - base;
+    const arithmetic = ranges.every(
+      (range, index) => BigInt(range[0]) === base + stride * BigInt(index)
+    );
+    if (!arithmetic) return null;
+    const counts = new Set(ranges.map(range => range[1]));
+    return [
+      base.toString(),
+      stride.toString(),
+      ...(counts.size === 1 ? [ranges[0][1]] : []),
+    ];
+  } catch {
+    return null;
+  }
+}
+
+function projectLevelIds(
+  arrayKey,
+  rangeKey,
+  countKey,
+  values,
+  series,
+  levelIndex
+) {
+  const range = createSequentialIdRange(values);
+  if (!range || !series) {
+    return compactSequentialIds(arrayKey, rangeKey, values);
   }
   try {
-    const first = BigInt(values[0]);
-    const sequential = values.every(
-      (value, index) => BigInt(value) === first + BigInt(index)
-    );
-    return sequential
-      ? { [rangeKey]: [first.toString(), values.length] }
-      : { [arrayKey]: values };
+    const expectedStart =
+      BigInt(series[0]) + BigInt(series[1]) * BigInt(levelIndex);
+    if (BigInt(range[0]) !== expectedStart) {
+      return { [rangeKey]: range };
+    }
+    return series[2] === range[1] ? {} : { [countKey]: range[1] };
   } catch {
-    return { [arrayKey]: values };
+    return { [rangeKey]: range };
+  }
+}
+
+function compactSequentialIds(arrayKey, rangeKey, values) {
+  const range = createSequentialIdRange(values);
+  return range ? { [rangeKey]: range } : { [arrayKey]: values };
+}
+
+function createSequentialIdRange(values) {
+  if (!Array.isArray(values) || values.length === 0) return null;
+  try {
+    const first = BigInt(values[0]);
+    return values.every(
+      (value, index) => BigInt(value) === first + BigInt(index)
+    )
+      ? [first.toString(), values.length]
+      : null;
+  } catch {
+    return null;
   }
 }
 

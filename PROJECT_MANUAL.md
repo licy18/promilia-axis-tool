@@ -1272,6 +1272,14 @@ core 文件从 1,355,407B 降至 1,080,871B，Workbench 主块从 362,328B gzip 
 
 下一阶段目标：Stage 11-C / 多维复盘生产余量与长轴比较收口。把总 JS gzip 恢复到约 733,000B，并为双 120 动作方案的窗口切换、贡献聚合和来源定位建立浏览器性能守门；优先收束重复投影字段和按需计算边界，不放宽预算、不新增公式或碎片 UI。
 
+### Stage 11-C 多维复盘生产余量与长轴比较收口（2026-07-12）
+
+生产 `workbench-skill-core.json` 升级为内部 schema v3：80 个 12 级技能的 label/value ID 等差范围改由技能级序列描述，等级行只保留例外计数；读取层仍恢复与完整 `skill-level-crosscheck.json` 一致的每级 ID 和交叉校验结果。core 文件从 1,080,871B 降至 921,175B，总 JavaScript gzip 从 734,625B 降至 721,642B，在 735,000B 硬门槛下恢复 13,358B 余量。项目仍为 v16，runtime、calculator、三值结果和用户交互均未改变。
+
+新增双 120 动作方案浏览器守门：初次就绪 2142ms、打开比较 418ms、全轴 120 条和 cycle 60 条动作贡献、窗口切换 246ms、基准动作来源定位 2093ms，全部满足既定预算；离开 Workbench 后比较与对话框均清理。阶段验收为 77 个测试文件、447 条单元/组件测试，39 条 Workbench 主流程和 28 项 production preview 全部通过；180 动作 compile/simulation p95 为 16.901ms/40.680ms。生产数据、生产引用、bundle 和 applied source 审计全部通过，applied source 保持 3 条 bound-ready、0 drift、0 compatible-unbound。
+
+下一阶段目标：Stage 12-A / 分析快照与报告导出闭环。把当前或 A/B 贡献窗口输出为版本化 JSON 分析快照，保留项目、方案、窗口、动作、角色、三值指标与 applied source identity，并支持回读校验和来源定位；不建立第二套计算、不接入未应用机制，也不继续补碎片 UI。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -27040,3 +27040,19 @@ AzPrWorkbenchScenarioComparison v2
 可选窗口取两侧窗口 identity 的并集，只有双方都存在时 `comparable=true`；请求不可比较窗口时回退到双方共有的全轴。无 cycle boundary 的 `AzPrContributionWindowProjection.windows` 现在只包含 `full-axis`，内部 `sections[0]` 仍保留供 cycle playback 兼容，但不再暴露为重复的“循环 1”分析窗口。
 
 当前侧定位继续使用活动项目；工作区基准侧通过既有 scenario switch 恢复其持久化 draft，快照/预设/导入基准则通过 `addWorkbenchScenarioFromDraft` 形成独立方案。切换后 state point identity 和 frame 由目标方案自己的标准 runtime 重建，不把比较结果写回项目，也不把 candidate/unapplied 数据升级为 applied 输入。
+
+## 409. Workbench skill core projection v3 / inter-level ID series
+
+Stage 11-C 只升级生产内部 `workbench-skill-core.json`。Workbench 项目继续使用 v16，runtime output、三值 calculator、完整 `skill-level-crosscheck.json` 与诊断证据均不改变。对于跨等级呈稳定等差变化的 ID 范围，core v3 在技能项上保存序列定义：
+
+```text
+skillLevelCrossCheck.items[]
+  labelIdSeries = [baseId, stride, defaultCount?]
+  valueIdSeries = [baseId, stride, defaultCount?]
+
+skillLevelCrossCheck.items[].levels[]
+  labelIdCount?  # 仅当该级数量偏离序列默认值
+  valueIdCount?  # 仅当该级数量偏离序列默认值
+```
+
+读取层按等级位置恢复 `labelIdRange/valueIdRange`；单等级技能和不能由等差序列表达的范围继续保留直接 range。v2 的直接 `labelIdRange/valueIdRange` 仍可读取，生成审计从完整源重新投影并深比较等级 1、等级 12 与 mismatch 结果。该压缩不进入本地草稿、JSON、分享链接、PNG 或预设，也不改变任何 applied delta、状态曲线或来源绑定。
