@@ -16,6 +16,7 @@ const REQUIRED_CAPABILITIES = [
   'stage-10b-cross-lane-batch-editing',
   'stage-10c-frame-cursor-review',
   'stage-10d-timeline-playback',
+  'stage-11a-contribution-windows',
   'png-project-exchange',
   'project-drop-recovery',
   'configuration-instances',

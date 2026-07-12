@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "workbench-long-axis-browser-benchmark",
-  "generatedAt": "2026-07-12T09:57:36.749Z",
+  "generatedAt": "2026-07-12T10:25:19.000Z",
   "environment": {
     "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.7827.55 Safari/537.36",
     "viewport": {
@@ -12,19 +12,19 @@
   "metrics": {
     "actionCount": 120,
     "stateCurvePointCount": 120,
-    "readyMs": 1769,
+    "readyMs": 1867,
     "budgetMs": 15000,
     "playback": {
       "startFrame": 711,
-      "endFrame": 811,
-      "advancedFrames": 100,
+      "endFrame": 824,
+      "advancedFrames": 113,
       "startScrollLeft": 1585,
-      "endScrollLeft": 1783,
-      "scrollDelta": 198,
+      "endScrollLeft": 1912,
+      "scrollDelta": 327,
       "rate": 2,
       "advanceBudgetMs": 3000,
       "raf": {
-        "requested": 83,
+        "requested": 82,
         "canceled": 2,
         "active": 0
       }

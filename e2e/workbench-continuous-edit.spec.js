@@ -3996,7 +3996,31 @@ test('persists cycle boundaries and reviews section contributions @workbench-mai
     'data-selected-cycle-section-id',
     'cycle-section-02'
   );
+  const contributionPanel = page.getByTestId(
+    'workbench-cycle-section-panel'
+  );
+  await expect(contributionPanel).toHaveAttribute(
+    'data-selected-window-id',
+    'cycle-section-02'
+  );
   await expect(page.getByTestId('workbench-cycle-section-tab')).toHaveCount(2);
+  await page.getByTestId('workbench-contribution-window-axis').click();
+  await expect(contributionPanel).toHaveAttribute(
+    'data-selected-window-id',
+    'full-axis'
+  );
+  await expect(
+    contributionPanel.getByTestId('workbench-cycle-section-actor-row')
+  ).toHaveCount(3);
+  await page
+    .locator(
+      '[data-testid="workbench-cycle-section-tab"][data-section-id="cycle-section-02"]'
+    )
+    .click();
+  await expect(contributionPanel).toHaveAttribute(
+    'data-selected-window-id',
+    'cycle-section-02'
+  );
   const effectCoverageText = await page
     .getByTestId('workbench-cycle-section-panel')
     .locator('[data-metric-key="effectCoverageMs"] strong')
@@ -4008,14 +4032,25 @@ test('persists cycle boundaries and reviews section contributions @workbench-mai
     '[data-testid="workbench-cycle-section-action-row"][data-action-id="action-0002"]'
   );
   await expect(secondAction).toBeVisible();
-  await secondAction
-    .getByTestId('workbench-cycle-section-locate-action')
-    .click();
+  const locateContribution = secondAction.getByTestId(
+    'workbench-cycle-section-locate-action'
+  );
+  const expectedStatePointId = await locateContribution.getAttribute(
+    'data-state-point-id'
+  );
+  expect(expectedStatePointId).toBeTruthy();
+  await locateContribution.click();
   await expect(
     page.locator(
       '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
     )
-  ).toHaveAttribute('data-edit-focus-source', 'cycle-section');
+  ).toHaveAttribute('data-edit-focus-source', 'contribution-window');
+  await expect
+    .poll(async () => (await readWorkbenchState(page)).statePointId)
+    .toBe(expectedStatePointId);
+  const contributionState = await readWorkbenchState(page);
+  expect(contributionState.selectedTimelineActionId).toBe('action-0002');
+  expect(contributionState.selectedActionListId).toBe('action-0002');
 
   const boundary = page.getByTestId('workbench-cycle-boundary');
   const initialBoundaryTimeMs = await boundary.getAttribute('data-time-ms');

@@ -50,10 +50,18 @@ describe('projectCycleSections', () => {
           },
         ],
       },
+      statePointContexts: [
+        {
+          statePointId: 'point-action-2-1000',
+          row: { sourceDeltaId: 'delta-action-2-1000' },
+        },
+      ],
     });
 
     expect(projection).toMatchObject({
+      schemaVersion: 2,
       contractName: 'AzPrCycleSectionProjection',
+      contributionWindowContractName: 'AzPrContributionWindowProjection',
       status: 'cycle-section-projection-ready',
       appliedToCalculators: false,
       summary: {
@@ -68,6 +76,17 @@ describe('projectCycleSections', () => {
         appliedToCalculators: false,
       },
     });
+    expect(projection.fullAxis).toMatchObject({
+      windowId: 'full-axis',
+      kind: 'axis',
+      label: '全轴',
+      metrics: {
+        enemyHpDelta: 650,
+        enemyToughnessDelta: 65,
+        selfEnergyDelta: 16,
+      },
+    });
+    expect(projection.windows).toHaveLength(4);
     expect(projection.sections[0]).toMatchObject({
       sectionId: 'cycle-section-01',
       startMs: 0,
@@ -80,8 +99,20 @@ describe('projectCycleSections', () => {
         effectCoverageMs: 500,
       },
       actors: [
-        expect.objectContaining({ actorId: 'actor-1', selfEnergyDelta: 4 }),
-        expect.objectContaining({ actorId: 'actor-2', selfEnergyDelta: 0 }),
+        expect.objectContaining({
+          actorId: 'actor-1',
+          enemyHpDelta: 100,
+          enemyToughnessDelta: 10,
+          selfEnergyDelta: 4,
+          actionCount: 1,
+        }),
+        expect.objectContaining({
+          actorId: 'actor-2',
+          enemyHpDelta: 0,
+          enemyToughnessDelta: 0,
+          selfEnergyDelta: 0,
+          actionCount: 0,
+        }),
       ],
     });
     expect(projection.sections[1]).toMatchObject({
@@ -102,6 +133,8 @@ describe('projectCycleSections', () => {
         selfEnergyDelta: 4,
         hitCount: 2,
         effectEventCount: 1,
+        statePointId: 'point-action-2-1000',
+        frameIndex: 60,
       }),
     ]);
     expect(projection.sections[2]).toMatchObject({
@@ -163,9 +196,11 @@ function createTransaction(
 ) {
   return {
     transactionId: `${actionId}-${timeMs}`,
+    sourceDeltaIds: [`delta-${actionId}-${timeMs}`],
     actionId,
     actorId,
     energyOwnerActorId: actorId,
+    frameIndex: Math.round((timeMs / 1000) * 60),
     timeMs,
     delta: { enemyHp, enemyToughness, selfEnergy },
   };

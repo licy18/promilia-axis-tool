@@ -1252,6 +1252,16 @@ core 文件从 1,355,407B 降至 1,080,871B，Workbench 主块从 362,328B gzip 
 
 下一阶段目标：Stage 11-A / 时间窗口与角色贡献分析闭环。基于全轴或当前 cycle 区段的 applied runtime transactions，按角色、动作和 HP/韧性/能量聚合，并允许从贡献项定位动作/事件回到编辑；不建立第二套公式，不混入候选值或未应用培养效果，也不把阶段拆成统计标签小修补。
 
+### Stage 11-A 时间窗口与角色贡献分析闭环（2026-07-12）
+
+循环复盘已升级为始终可用的时间窗口贡献分析。无 cycle boundary 时可直接查看全轴；存在边界时可在全轴和各循环区段之间切换。同一批 `runtimeOutputs.hitTransactions.transactions` 按角色与动作聚合敌人 HP、韧性和各角色独立能量，角色归属遵循动作 actor 与 energy owner，不重新计算 delta，也不读取 candidate、装备、奇波或灵子等未应用来源。
+
+每个动作贡献保留首个 applied transaction 的 state point 与帧锚点。点击定位会同步选中时间轴动作、runtime 曲线点和日志，将统一帧游标移动到准确事件帧，并把属性区聚焦到该动作继续修改。桌面时间轴仍是首屏主舞台；390px 窄屏下角色五列表无裁切，动作明细使用局部横向滚动。视觉证据为 `reports/stage-11a-contribution-desktop.png` 与 `reports/stage-11a-contribution-narrow.png`。
+
+阶段验收：77 个测试文件、443 条单元/组件测试，39 条 Workbench 主流程和 27 项 production preview 全部通过，生产报告为 `trial-ready`。120 动作浏览器首屏为 1867ms，2x 播放推进 113F、自动滚动 327px，卸载后活动 rAF 为 0；180 动作 compile/simulation p95 分别为 24.542ms/50.65ms。applied source 审计保持 3 条 bound-ready、0 drift、0 compatible-unbound；总 JavaScript 为 733,513B gzip，低于 735,000B 硬门槛。
+
+下一阶段目标：Stage 11-B / 时间窗口方案对比与差异定位。复用现有双方案 runtime outputs 和 Stage 11-A 窗口聚合，在全轴或同一 cycle 区段比较角色、动作及三值贡献，并从差异项定位回当前或基准方案来源；不建立第二套公式，不接入未确认机制，也不拆成碎片统计 UI。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

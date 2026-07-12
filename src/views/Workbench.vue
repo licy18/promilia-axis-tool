@@ -460,12 +460,11 @@
         />
 
         <WorkbenchCycleSectionPanel
-          v-if="cycleBoundaries.length"
           class="cycle-review-area"
           :projection="cycleSectionProjection"
-          :selected-section-id="selectedCycleSection?.sectionId || ''"
+          :selected-window-id="selectedCycleSectionId || 'full-axis'"
           :can-create-inherited-scenario="canCreateInheritedScenario"
-          @select-section="selectCycleSection"
+          @select-window="selectContributionWindow"
           @locate-action="locateCycleSectionAction"
           @create-inherited-scenario="createInheritedScenarioFromBoundary"
         />
@@ -1247,6 +1246,7 @@ const cycleSectionProjection = computed(() =>
     scenario: scenario.value,
     runtimeOutputs: runtimeOutputs.value,
     effectIntervals: effectIntervalProjection.value,
+    statePointContexts: runtimeStatePointContexts.value,
   })
 );
 const selectedCycleSection = computed(
@@ -4546,19 +4546,39 @@ function selectCycleSection(sectionId) {
   return true;
 }
 
-function locateCycleSectionAction(actionId) {
+function selectContributionWindow(windowId) {
+  if (windowId === 'full-axis') {
+    selectedCycleSectionId.value = '';
+    return true;
+  }
+  return selectCycleSection(windowId);
+}
+
+function locateCycleSectionAction(request) {
+  const actionId =
+    typeof request === 'object' ? String(request?.actionId ?? '') : request;
   if (!findActionDraftById(actionId)) {
     return false;
   }
   selectAction(actionId, { syncRuntimeResult: false });
+  if (request?.statePointId) {
+    selectStateCurvePoint(request.statePointId);
+  }
+  if (Number.isFinite(Number(request?.frameIndex))) {
+    selectTimelineFrame({
+      frameIndex: Number(request.frameIndex),
+      statePointId: request.statePointId ?? '',
+      source: 'contribution-analysis',
+    });
+  }
   actionEditFocus.value = {
     ...createEmptyWorkbenchActionEditFocus(actionEditFocus.value.sequence + 1),
     actionId,
     fieldKey: 'startMs',
-    label: '循环区段',
-    changeSummary: '从区段贡献返回当前动作修改',
-    editOrigin: 'cycle-section',
-    focusSource: 'cycle-section',
+    label: '贡献分析',
+    changeSummary: '从时间窗口贡献返回当前动作修改',
+    editOrigin: 'contribution-window',
+    focusSource: 'contribution-window',
   };
   void nextTick().then(() => scrollActionEditFocusIntoView());
   return true;

@@ -1,46 +1,64 @@
 <template>
   <section
-    v-if="projection.summary.boundaryCount > 0"
     class="panel cycle-section-panel"
-    :data-selected-section-id="selectedSection?.sectionId || ''"
+    :data-selected-section-id="selectedWindow?.sectionId || ''"
+    :data-selected-window-id="selectedWindow?.windowId || ''"
     data-testid="workbench-cycle-section-panel"
   >
     <header class="panel-header">
       <div>
-        <span>循环复盘</span>
-        <h2>区段统计</h2>
+        <span>运行复盘</span>
+        <h2>时间窗口贡献</h2>
       </div>
-      <small>{{ projection.summary.boundaryCount }} 个边界</small>
+      <small>{{ projection.summary.hitTransactionCount }} 次命中</small>
     </header>
 
-    <div class="section-tabs" role="tablist" aria-label="循环区段">
+    <div
+      class="section-tabs"
+      role="tablist"
+      aria-label="贡献分析时间窗口"
+      data-testid="workbench-contribution-window-tabs"
+    >
+      <button
+        class="section-tab"
+        :class="{ active: selectedWindow?.kind === 'axis' }"
+        type="button"
+        role="tab"
+        :aria-selected="selectedWindow?.kind === 'axis'"
+        data-section-id="full-axis"
+        data-testid="workbench-contribution-window-axis"
+        @click="emit('select-window', 'full-axis')"
+      >
+        <strong>全轴</strong>
+        <span>{{ formatRange(projection.fullAxis) }}</span>
+      </button>
       <button
         v-for="section in projection.sections"
         :key="section.sectionId"
         class="section-tab"
-        :class="{ active: section.sectionId === selectedSection?.sectionId }"
+        :class="{ active: section.sectionId === selectedWindow?.sectionId }"
         type="button"
         role="tab"
-        :aria-selected="section.sectionId === selectedSection?.sectionId"
+        :aria-selected="section.sectionId === selectedWindow?.sectionId"
         :data-section-id="section.sectionId"
         data-testid="workbench-cycle-section-tab"
-        @click="emit('select-section', section.sectionId)"
+        @click="emit('select-window', section.sectionId)"
       >
         <strong>{{ section.label }}</strong>
         <span>{{ formatRange(section) }}</span>
       </button>
     </div>
 
-    <template v-if="selectedSection">
-      <div v-if="selectedSection.startBoundaryId" class="section-command-row">
+    <template v-if="selectedWindow">
+      <div v-if="selectedWindow.startBoundaryId" class="section-command-row">
         <button
           class="inherit-button"
           type="button"
           :disabled="!canCreateInheritedScenario"
-          :data-boundary-id="selectedSection.startBoundaryId"
+          :data-boundary-id="selectedWindow.startBoundaryId"
           data-testid="workbench-create-inherited-scenario"
           @click="
-            emit('create-inherited-scenario', selectedSection.startBoundaryId)
+            emit('create-inherited-scenario', selectedWindow.startBoundaryId)
           "
         >
           <CopyDocument />
@@ -51,64 +69,74 @@
       <div class="metric-grid">
         <div data-metric-key="durationMs">
           <span>区段时长</span
-          ><strong>{{ formatFrames(selectedSection.durationMs) }}</strong>
+          ><strong>{{ formatFrames(selectedWindow.durationMs) }}</strong>
         </div>
         <div data-metric-key="enemyHpDelta">
           <span>敌人 HP 伤害</span
           ><strong>{{
-            formatNumber(selectedSection.metrics.enemyHpDelta)
+            formatNumber(selectedWindow.metrics.enemyHpDelta)
           }}</strong>
         </div>
         <div data-metric-key="enemyToughnessDelta">
           <span>敌人韧性削减</span
           ><strong>{{
-            formatNumber(selectedSection.metrics.enemyToughnessDelta)
+            formatNumber(selectedWindow.metrics.enemyToughnessDelta)
           }}</strong>
         </div>
         <div data-metric-key="selfEnergyDelta">
           <span>自身能量变化</span
           ><strong>{{
-            formatSigned(selectedSection.metrics.selfEnergyDelta)
+            formatSigned(selectedWindow.metrics.selfEnergyDelta)
           }}</strong>
         </div>
         <div data-metric-key="effectCoverageMs">
           <span>效果覆盖</span
           ><strong>{{
-            formatFrames(selectedSection.metrics.effectCoverageMs)
+            formatFrames(selectedWindow.metrics.effectCoverageMs)
           }}</strong>
         </div>
       </div>
 
       <div class="analysis-grid">
         <section class="analysis-block">
-          <h3>角色能量</h3>
-          <div class="compact-table">
+          <h3>角色贡献</h3>
+          <div
+            class="compact-table"
+            data-testid="workbench-contribution-actor-table"
+          >
             <div class="table-head actor-columns">
-              <span>角色</span><span>变化</span><span>事务</span>
+              <span>角色</span><span>HP</span><span>韧性</span><span>能量</span
+              ><span>动作</span>
             </div>
             <div
-              v-for="actor in selectedSection.actors"
+              v-for="actor in selectedWindow.actors"
               :key="actor.actorId"
               class="table-row actor-columns"
+              :data-actor-id="actor.actorId"
+              :data-enemy-hp-delta="actor.enemyHpDelta"
+              :data-enemy-toughness-delta="actor.enemyToughnessDelta"
+              :data-self-energy-delta="actor.selfEnergyDelta"
               data-testid="workbench-cycle-section-actor-row"
             >
               <strong>{{ actor.name }}</strong>
+              <span>{{ formatNumber(actor.enemyHpDelta) }}</span>
+              <span>{{ formatNumber(actor.enemyToughnessDelta) }}</span>
               <span :class="deltaClass(actor.selfEnergyDelta)">{{
                 formatSigned(actor.selfEnergyDelta)
               }}</span>
-              <span>{{ actor.transactionCount }}</span>
+              <span>{{ actor.actionCount }}</span>
             </div>
           </div>
         </section>
 
         <section class="analysis-block">
           <h3>效果覆盖</h3>
-          <div v-if="selectedSection.effects.length" class="compact-table">
+          <div v-if="selectedWindow.effects.length" class="compact-table">
             <div class="table-head effect-columns">
               <span>效果</span><span>目标</span><span>覆盖</span>
             </div>
             <div
-              v-for="effect in selectedSection.effects"
+              v-for="effect in selectedWindow.effects"
               :key="effect.key"
               class="table-row effect-columns"
               data-testid="workbench-cycle-section-effect-row"
@@ -124,14 +152,14 @@
 
       <section class="analysis-block">
         <h3>动作贡献</h3>
-        <div v-if="selectedSection.actions.length" class="action-table-scroll">
+        <div v-if="selectedWindow.actions.length" class="action-table-scroll">
           <div class="compact-table action-table">
             <div class="table-head action-columns">
               <span>动作</span><span>HP</span><span>韧性</span><span>能量</span
               ><span>命中</span><span>效果</span><span></span>
             </div>
             <div
-              v-for="action in selectedSection.actions"
+              v-for="action in selectedWindow.actions"
               :key="action.actionId"
               class="table-row action-columns"
               :data-action-id="action.actionId"
@@ -153,8 +181,16 @@
                 type="button"
                 title="回到动作修改"
                 :data-action-id="action.actionId"
+                :data-state-point-id="action.statePointId"
+                :data-frame-index="action.frameIndex"
                 data-testid="workbench-cycle-section-locate-action"
-                @click="emit('locate-action', action.actionId)"
+                @click="
+                  emit('locate-action', {
+                    actionId: action.actionId,
+                    statePointId: action.statePointId,
+                    frameIndex: action.frameIndex,
+                  })
+                "
               >
                 <EditPen />
               </button>
@@ -174,20 +210,20 @@ import { formatFrameTime, msToFrame } from '../../domain/timebase';
 
 const props = defineProps({
   projection: { type: Object, required: true },
-  selectedSectionId: { type: String, default: '' },
+  selectedWindowId: { type: String, default: 'full-axis' },
   canCreateInheritedScenario: { type: Boolean, default: false },
 });
 const emit = defineEmits([
-  'select-section',
+  'select-window',
   'locate-action',
   'create-inherited-scenario',
 ]);
-const selectedSection = computed(
+const selectedWindow = computed(
   () =>
-    props.projection.sections.find(
-      section => section.sectionId === props.selectedSectionId
+    props.projection.windows?.find(
+      window => window.windowId === props.selectedWindowId
     ) ??
-    props.projection.sections[0] ??
+    props.projection.fullAxis ??
     null
 );
 
@@ -366,7 +402,9 @@ function deltaClass(value) {
   font-size: 11px;
   font-variant-numeric: tabular-nums;
 }
-.actor-columns,
+.actor-columns {
+  grid-template-columns: minmax(72px, 1fr) repeat(4, minmax(42px, 0.55fr));
+}
 .effect-columns {
   grid-template-columns: minmax(100px, 1fr) repeat(2, minmax(64px, 0.55fr));
 }

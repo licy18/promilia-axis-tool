@@ -10458,7 +10458,7 @@ describe('Workbench view', () => {
           '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
         )
         .attributes('data-edit-focus-source')
-    ).toBe('cycle-section');
+    ).toBe('contribution-window');
 
     await wrapper.find('[data-testid="workbench-undo-edit"]').trigger('click');
     expect(workbench.attributes('data-cycle-boundary-count')).toBe('0');

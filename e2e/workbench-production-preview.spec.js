@@ -999,6 +999,101 @@ test('[stage-10d-timeline-playback] plays the full axis and loops a selected cyc
   await page.screenshot({ path: 'reports/stage-10d-playback-narrow.png' });
 });
 
+test('[stage-11a-contribution-windows] aggregates three tracks and returns to the exact runtime point', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/#/workbench');
+
+  await page.getByTestId('workbench-add-resource-action').click();
+  await page
+    .getByTestId('workbench-action-actor-select')
+    .selectOption('101003');
+
+  const panel = page.getByTestId('workbench-cycle-section-panel');
+  await expect(panel).toBeVisible();
+  await expect(panel).toHaveAttribute('data-selected-window-id', 'full-axis');
+  await expect(
+    panel.getByTestId('workbench-cycle-section-actor-row')
+  ).toHaveCount(3);
+  const actorOne = panel.locator(
+    '[data-testid="workbench-cycle-section-actor-row"][data-actor-id="actor-109001"]'
+  );
+  const actorTwo = panel.locator(
+    '[data-testid="workbench-cycle-section-actor-row"][data-actor-id="actor-101003"]'
+  );
+  expect(Number(await actorOne.getAttribute('data-enemy-hp-delta'))).toBeGreaterThan(
+    0
+  );
+  expect(Number(await actorTwo.getAttribute('data-self-energy-delta'))).not.toBe(
+    0
+  );
+
+  const lane = page.getByTestId('workbench-timeline-lane');
+  const laneBox = await lane.boundingBox();
+  expect(laneBox).toBeTruthy();
+  await lane.evaluate(
+    (element, position) =>
+      element.dispatchEvent(
+        new MouseEvent('contextmenu', {
+          bubbles: true,
+          cancelable: true,
+          clientX: position.clientX,
+          clientY: position.clientY,
+        })
+      ),
+    {
+      clientX: laneBox.x + laneBox.width / 30,
+      clientY: laneBox.y + 80,
+    }
+  );
+  await page.getByTestId('workbench-action-context-add-cycle-boundary').click();
+  await expect(panel).toHaveAttribute(
+    'data-selected-window-id',
+    'cycle-section-02'
+  );
+  await page.getByTestId('workbench-contribution-window-axis').click();
+  await expect(panel).toHaveAttribute('data-selected-window-id', 'full-axis');
+  await panel.screenshot({ path: 'reports/stage-11a-contribution-desktop.png' });
+
+  await page
+    .locator(
+      '[data-testid="workbench-cycle-section-tab"][data-section-id="cycle-section-02"]'
+    )
+    .click();
+  const actionTwo = panel.locator(
+    '[data-testid="workbench-cycle-section-action-row"][data-action-id="action-0002"]'
+  );
+  const locate = actionTwo.getByTestId(
+    'workbench-cycle-section-locate-action'
+  );
+  const statePointId = await locate.getAttribute('data-state-point-id');
+  const frameIndex = await locate.getAttribute('data-frame-index');
+  expect(statePointId).toBeTruthy();
+  expect(frameIndex).toBeTruthy();
+  await locate.click();
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-state-point')
+  ).toHaveText(statePointId);
+  await expect(page.locator('main.workbench')).toHaveAttribute(
+    'data-timeline-cursor-frame-index',
+    frameIndex
+  );
+  await expect(
+    page.locator('.action-item[data-action-id="action-0002"]')
+  ).toHaveClass(/selected/);
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.getByTestId('workbench-contribution-window-axis').click();
+  await expectPageWithoutHorizontalOverflow(page);
+  expect(
+    await panel.getByTestId('workbench-contribution-actor-table').evaluate(
+      element => element.scrollWidth - element.clientWidth
+    )
+  ).toBe(0);
+  await panel.screenshot({ path: 'reports/stage-11a-contribution-narrow.png' });
+});
+
 test('[diagnostics-lazy-load] loads runtime diagnostics from a production chunk', async ({
   page,
 }) => {
@@ -1575,7 +1670,7 @@ test('[cycle-sections] creates, reviews, and restores a production cycle boundar
     page.locator(
       '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
     )
-  ).toHaveAttribute('data-edit-focus-source', 'cycle-section');
+  ).toHaveAttribute('data-edit-focus-source', 'contribution-window');
 
   const downloadPromise = page.waitForEvent('download');
   await page.getByTestId('workbench-export-project').click();

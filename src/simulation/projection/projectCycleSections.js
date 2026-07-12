@@ -1,12 +1,20 @@
 export const CYCLE_SECTION_PROJECTION_CONTRACT_NAME =
   'AzPrCycleSectionProjection';
+export const CONTRIBUTION_WINDOW_PROJECTION_CONTRACT_NAME =
+  'AzPrContributionWindowProjection';
 
 export function projectCycleSections({
   scenario = null,
   runtimeOutputs = null,
   effectIntervals = null,
+  statePointContexts = [],
 } = {}) {
   const durationMs = Math.max(0, numberOrZero(scenario?.time?.durationMs));
+  const statePointContextByDeltaId = new Map(
+    (statePointContexts ?? [])
+      .filter(context => context?.row?.sourceDeltaId)
+      .map(context => [context.row.sourceDeltaId, context])
+  );
   const boundaries = [...(scenario?.cycleBoundaries ?? [])]
     .filter(
       boundary =>
@@ -17,29 +25,51 @@ export function projectCycleSections({
         Number(left.timeMs) - Number(right.timeMs) ||
         String(left.id).localeCompare(String(right.id))
     );
+  const analysisInput = {
+    scenario,
+    runtimeOutputs,
+    effectIntervals,
+    statePointContextByDeltaId,
+  };
+  const fullAxis = analyzeCycleSection({
+    range: {
+      sectionId: 'full-axis',
+      kind: 'axis',
+      label: '全轴',
+      startMs: 0,
+      endMs: durationMs,
+      startBoundaryId: null,
+      endBoundaryId: null,
+    },
+    index: -1,
+    isLast: true,
+    ...analysisInput,
+  });
   const sections = createSectionRanges(boundaries, durationMs).map(
     (range, index, ranges) =>
       analyzeCycleSection({
         range,
         index,
         isLast: index === ranges.length - 1,
-        scenario,
-        runtimeOutputs,
-        effectIntervals,
+        ...analysisInput,
       })
   );
 
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     sourceKind: 'azpr-cycle-section-projection',
     contractName: CYCLE_SECTION_PROJECTION_CONTRACT_NAME,
+    contributionWindowContractName:
+      CONTRIBUTION_WINDOW_PROJECTION_CONTRACT_NAME,
     status: boundaries.length
       ? 'cycle-section-projection-ready'
       : 'cycle-section-projection-ready-no-boundaries',
     durationMs,
     frameRate: numberOrZero(scenario?.time?.fps) || 60,
     boundaries,
+    fullAxis,
     sections,
+    windows: [fullAxis, ...sections],
     summary: {
       boundaryCount: boundaries.length,
       sectionCount: sections.length,
@@ -91,6 +121,8 @@ function createSectionRanges(boundaries, durationMs) {
   ];
   return points.slice(0, -1).map((point, index) => ({
     sectionId: `cycle-section-${String(index + 1).padStart(2, '0')}`,
+    kind: 'section',
+    label: `循环 ${index + 1}`,
     startMs: point.timeMs,
     endMs: points[index + 1].timeMs,
     startBoundaryId: point.boundaryId,
@@ -105,6 +137,7 @@ function analyzeCycleSection({
   scenario,
   runtimeOutputs,
   effectIntervals,
+  statePointContextByDeltaId,
 }) {
   const actionsById = new Map(
     (scenario?.actions ?? []).map(action => [action.id, action])
@@ -148,6 +181,7 @@ function analyzeCycleSection({
           transaction => transaction.actionId === actionId
         ),
         effectEvents: effectEvents.filter(event => event.actionId === actionId),
+        statePointContextByDeltaId,
       })
     )
     .sort(
@@ -156,38 +190,48 @@ function analyzeCycleSection({
         (actionOrder.get(left.actionId) ?? Number.MAX_SAFE_INTEGER) -
           (actionOrder.get(right.actionId) ?? Number.MAX_SAFE_INTEGER) ||
         left.actionId.localeCompare(right.actionId)
-    );
+  );
   const actors = (scenario?.actors ?? []).map(actor => {
-    const energyDelta = roundValue(
-      transactions.reduce(
-        (sum, transaction) =>
-          transaction.energyOwnerActorId === actor.id ||
-          (!transaction.energyOwnerActorId && transaction.actorId === actor.id)
-            ? sum + numberOrZero(transaction.delta?.selfEnergy)
-            : sum,
-        0
-      )
+    const actorTransactions = transactions.filter(
+      transaction => transaction.actorId === actor.id
     );
+    const energyTransactions = transactions.filter(transaction =>
+      isEnergyTransactionForActor(transaction, actor.id)
+    );
+    const actorActionCount = actions.filter(
+      action => action.actorId === actor.id
+    ).length;
     return {
       actorId: actor.id,
       characterId: actor.characterId ?? null,
       name: actor.name,
-      selfEnergyDelta: energyDelta,
-      transactionCount: transactions.filter(
-        transaction =>
-          transaction.energyOwnerActorId === actor.id ||
-          (!transaction.energyOwnerActorId && transaction.actorId === actor.id)
-      ).length,
+      enemyHpDelta: sumTransactions(actorTransactions, 'enemyHp'),
+      enemyToughnessDelta: sumTransactions(
+        actorTransactions,
+        'enemyToughness'
+      ),
+      selfEnergyDelta: sumTransactions(energyTransactions, 'selfEnergy'),
+      transactionCount: new Set(
+        [...actorTransactions, ...energyTransactions].map(
+          transaction => transaction.transactionId
+        )
+      ).size,
+      actionCount: actorActionCount,
     };
   });
   const effects = groupEffectOverlaps(overlappingEffects);
 
   return {
-    schemaVersion: 1,
-    sourceKind: 'azpr-cycle-section-analysis',
+    schemaVersion: 2,
+    sourceKind:
+      range.kind === 'axis'
+        ? 'azpr-full-axis-contribution-analysis'
+        : 'azpr-cycle-section-analysis',
     sectionId: range.sectionId,
+    windowId: range.sectionId,
+    kind: range.kind,
     index,
-    label: `循环 ${index + 1}`,
+    label: range.label,
     startMs: range.startMs,
     endMs: range.endMs,
     durationMs: roundValue(range.endMs - range.startMs),
@@ -226,7 +270,16 @@ function createSectionActionAnalysis({
   actionId,
   transactions,
   effectEvents,
+  statePointContextByDeltaId,
 }) {
+  const anchorTransaction = transactions.find(transaction =>
+    (transaction.sourceDeltaIds ?? []).some(sourceDeltaId =>
+      statePointContextByDeltaId.has(sourceDeltaId)
+    )
+  );
+  const statePointId = (anchorTransaction?.sourceDeltaIds ?? [])
+    .map(sourceDeltaId => statePointContextByDeltaId.get(sourceDeltaId))
+    .find(Boolean)?.statePointId;
   return {
     actionId,
     name: action?.name ?? actionId,
@@ -239,7 +292,17 @@ function createSectionActionAnalysis({
     selfEnergyDelta: sumTransactions(transactions, 'selfEnergy'),
     hitCount: transactions.length,
     effectEventCount: effectEvents.length,
+    statePointId: statePointId ?? '',
+    frameIndex: anchorTransaction?.frameIndex ?? null,
+    timeMs: anchorTransaction?.timeMs ?? null,
   };
+}
+
+function isEnergyTransactionForActor(transaction, actorId) {
+  return (
+    transaction.energyOwnerActorId === actorId ||
+    (!transaction.energyOwnerActorId && transaction.actorId === actorId)
+  );
 }
 
 function createEffectOverlap(interval, range) {

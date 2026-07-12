@@ -26983,3 +26983,31 @@ skillLevelCrossCheck.items[].levels[index]
 非规范 level/index、多 subSkill 映射、非 matched 状态和任一 false match 继续显式写入。`skillLogicModel` 与 `skillLevelCrossCheck` 是唯一默认恢复入口；下游仍获得原有 `level/levelIndex/subSkillId/status/matches`，字段路径、倍率、HP operands、诊断和 runtime outputs 不变。数据投影审计从完整源文件重新生成 v2 并要求深度一致，bundle audit 的总 JS gzip 硬门槛从 740,000B 收紧到 735,000B。
 
 长轴浏览器报告新增播放守门字段：`playback.startFrame/endFrame/advancedFrames`、滚动起止与差值、速度、推进预算，以及 rAF requested/canceled/active。它们是测试报告，不进入任何项目或运行时合同。
+
+## 407. Contribution window projection v2 / runtime point anchors
+
+Stage 11-A 将内部 `AzPrCycleSectionProjection` 升级为 schema v2，并声明共享的 `AzPrContributionWindowProjection`。项目 schema、runtime output 和三值 calculator 合同不变；窗口分析只筛选和分组现有 applied hit transactions。
+
+```text
+AzPrCycleSectionProjection v2
+  fullAxis
+  sections[]
+  windows = [fullAxis, ...sections]
+
+ContributionWindow
+  windowId / kind = axis | section
+  startMs / endMs / durationMs
+  metrics
+    enemyHpDelta / enemyToughnessDelta / selfEnergyDelta
+  actors[]
+    actorId / characterId
+    enemyHpDelta / enemyToughnessDelta / selfEnergyDelta
+    transactionCount / actionCount
+  actions[]
+    actionId / actorId
+    enemyHpDelta / enemyToughnessDelta / selfEnergyDelta
+    hitCount / effectEventCount
+    statePointId / frameIndex / timeMs
+```
+
+HP 与韧性贡献归属 transaction actor；能量贡献归属 `energyOwnerActorId`，缺失时回退到 transaction actor。动作的 `statePointId` 由 transaction `sourceDeltaIds` 与既有 runtime state point contexts 关联，用于统一帧游标、曲线、日志和动作编辑定位。这些窗口、聚合与锚点均为响应式派生视图，不写入本地草稿、JSON、分享链接、PNG 或预设；回放后由同一项目与 runtime outputs 重建。
