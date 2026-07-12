@@ -2,6 +2,7 @@ import { Buffer } from 'node:buffer';
 import { describe, expect, it } from 'vitest';
 import {
   createDefaultWorkbenchDraftState,
+  createWorkbenchScenarioDraftSnapshot,
   createWorkbenchProjectShareCode,
   loadWorkbenchDraft,
   parseWorkbenchProjectFile,
@@ -21,10 +22,17 @@ import {
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import { createToughnessRuntimeSampleFixture } from '../../simulation/fixtures/toughnessRuntimeSampleFixture';
+import { DEFAULT_THREE_VALUE_MECHANICS_PROFILE } from '../../simulation/mechanics/threeValueMechanicsProfile';
 
 const ONE_PIXEL_PNG_BASE64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
 const EXPORTED_AT = '2026-07-11T15:00:00.000Z';
+const REPLAY_PROFILE = {
+  ...JSON.parse(JSON.stringify(DEFAULT_THREE_VALUE_MECHANICS_PROFILE)),
+  profileId: 'azpr-replay-equivalent-v1',
+  profileVersion: 3,
+  sourceKind: 'integration-replay-equivalent-profile',
+};
 
 describe('Workbench project replay consistency', () => {
   it('replays the same configuration binding and runtime outputs from every project carrier', async () => {
@@ -73,8 +81,8 @@ describe('Workbench project replay consistency', () => {
         replaceable: true,
       },
       mechanicsProfile: {
-        profileId: 'azpr-three-value-preview-v1',
-        profileVersion: 1,
+        profileId: 'azpr-replay-equivalent-v1',
+        profileVersion: 3,
         replaceable: true,
       },
     });
@@ -88,6 +96,32 @@ describe('Workbench project replay consistency', () => {
       enemyToughnessDelta: 70,
       selfEnergyDelta: 0.25,
     });
+    expect(baseline.mechanicsProfileSelection).toMatchObject({
+      sourceKind: 'project-persisted-mechanics-profile-selection',
+      requestedProfileId: 'azpr-replay-equivalent-v1',
+      requestedProfileVersion: 3,
+      resolvedProfileId: 'azpr-replay-equivalent-v1',
+      resolvedProfileVersion: 3,
+      fallback: false,
+    });
+    expect(
+      baseline.workspaceScenarios.map(item => [
+        item.scenarioId,
+        item.requestedProfileId,
+        item.resolvedProfileId,
+      ])
+    ).toEqual([
+      [
+        'scenario-0001',
+        'azpr-replay-equivalent-v1',
+        'azpr-replay-equivalent-v1',
+      ],
+      [
+        'scenario-0002',
+        'azpr-three-value-preview-v1',
+        'azpr-three-value-preview-v1',
+      ],
+    ]);
     for (const replay of replays.slice(1)) {
       expect(replay).toEqual(baseline);
     }
@@ -124,23 +158,63 @@ function createReplaySourceState() {
       toughnessDeltaApplied: 70,
     }),
   ];
+  state.mechanicsProfileSelection = {
+    schemaVersion: 1,
+    contractName: 'AzPrWorkbenchMechanicsProfileSelection',
+    profileId: REPLAY_PROFILE.profileId,
+    profileVersion: REPLAY_PROFILE.profileVersion,
+  };
+  state.scenarioWorkspace.scenarios.push({
+    id: 'scenario-0002',
+    name: '默认机制方案',
+    draft: createWorkbenchScenarioDraftSnapshot({
+      ...state,
+      mechanicsProfileSelection: null,
+    }),
+  });
   return state;
 }
 
 function createReplaySignature(draft) {
+  const active = createScenarioReplaySignature(
+    draft,
+    draft.configurationLibrary
+  );
+  return {
+    ...active,
+    workspaceScenarios: draft.scenarioWorkspace.scenarios.map(scenario => {
+      const replay = createScenarioReplaySignature(
+        scenario.draft,
+        draft.configurationLibrary
+      );
+      return {
+        scenarioId: scenario.id,
+        requestedProfileId: replay.mechanicsProfileSelection.requestedProfileId,
+        resolvedProfileId: replay.mechanicsProfileSelection.resolvedProfileId,
+        runtimeBinding: replay.runtimeBinding,
+        runtimeOutputs: replay.runtimeOutputs,
+      };
+    }),
+  };
+}
+
+function createScenarioReplaySignature(draft, configurationLibrary) {
   const project = createWorkbenchProject(draft.selection, {
     teamSlots: draft.teamSlots,
     actorConfigs: draft.actorConfigs,
     enemyConfig: draft.enemyConfig,
-    configurationLibrary: draft.configurationLibrary,
+    configurationLibrary,
     configurationSelection: draft.configurationSelection,
+    mechanicsProfileSelection: draft.mechanicsProfileSelection,
     actions: draft.actionDrafts,
     actionRelations: draft.actionRelations,
     cycleBoundaries: draft.cycleBoundaries,
     initialRuntimeState: draft.initialRuntimeState,
     runtimeSampleCaptures: draft.runtimeSampleCaptures,
   });
-  const scenario = compileProject(project, getWorkbenchGameData());
+  const scenario = compileProject(project, getWorkbenchGameData(), {
+    threeValueMechanicsProfiles: [REPLAY_PROFILE],
+  });
   const result = simulateScenario(scenario);
   const runtimeProjection = result.threeValueRuntimeProjection;
   return {
@@ -149,6 +223,7 @@ function createReplaySignature(draft) {
     mechanismConfiguration: scenario.mechanismConfiguration,
     runtimeBinding: scenario.mechanismConfiguration.runtimeBinding,
     mechanicsProfile: scenario.mechanicsProfile,
+    mechanicsProfileSelection: scenario.mechanicsProfileSelection,
     stateEffectProposals: runtimeProjection.runtimeAppliedDeltas.map(
       delta => delta.stateEffectProposal
     ),

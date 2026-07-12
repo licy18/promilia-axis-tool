@@ -11,6 +11,7 @@ export function createThreeValueMechanismConfiguration({
   actors = [],
   enemy,
   mechanicsProfile,
+  mechanicsProfileSelection,
 } = {}) {
   const metadata = project?.metadata ?? {};
   const sourceContract = metadata.configurationSourceContract ?? null;
@@ -49,6 +50,7 @@ export function createThreeValueMechanismConfiguration({
     ready,
     sourceContract,
     mechanicsProfile,
+    mechanicsProfileSelection,
     configurationReplayIdentity,
   });
 
@@ -273,6 +275,7 @@ function createConfigurationRuntimeBinding({
   ready,
   sourceContract,
   mechanicsProfile,
+  mechanicsProfileSelection,
   configurationReplayIdentity,
 }) {
   const profileReady = Boolean(mechanicsProfile?.ready);
@@ -291,8 +294,14 @@ function createConfigurationRuntimeBinding({
       replaceable: true,
     },
     mechanicsProfile: {
+      selectionSourceKind: mechanicsProfileSelection?.sourceKind ?? null,
+      requestedProfileId: mechanicsProfileSelection?.requestedProfileId ?? null,
+      requestedProfileVersion:
+        mechanicsProfileSelection?.requestedProfileVersion ?? null,
       profileId: mechanicsProfile?.profileId ?? null,
       profileVersion: mechanicsProfile?.profileVersion ?? null,
+      fallback: mechanicsProfileSelection?.fallback ?? false,
+      fallbackReason: mechanicsProfileSelection?.fallbackReason ?? null,
       replaceable: true,
     },
     runtimeConsumer: 'ThreeValueRuntimeCalculatorInvocation',

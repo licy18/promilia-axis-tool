@@ -251,7 +251,7 @@ test('edits and reviews an arbitrary action group @workbench-main-flow', async (
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(exportedProject.schemaVersion).toBe(13);
+  expect(exportedProject.schemaVersion).toBe(14);
   expect(exportedProject.actionDrafts).toHaveLength(5);
   expect(exportedProject.actionRelations).toEqual([
     expect.objectContaining({
@@ -2255,7 +2255,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 13,
+    schemaVersion: 14,
     game: 'azur-promilia',
     type: 'workbench-project',
     selectedActionId: 'action-0002',
@@ -2514,7 +2514,7 @@ test('imports a runtime capture and preserves its applied curve through project 
   expect(downloadPath).toBeTruthy();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 13,
+    schemaVersion: 14,
     runtimeSampleCaptures: [
       {
         captureSessionId: 'e2e-recover-sp-capture-1',
@@ -4031,7 +4031,7 @@ test('persists cycle boundaries and reviews section contributions @workbench-mai
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(exportedProject.schemaVersion).toBe(13);
+  expect(exportedProject.schemaVersion).toBe(14);
   expect(exportedProject.cycleBoundaries).toEqual([
     expect.objectContaining({ id: 'cycle-boundary-0001' }),
   ]);
@@ -4113,7 +4113,7 @@ test('creates an inherited scenario with continued runtime state @workbench-main
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 13,
+    schemaVersion: 14,
     initialRuntimeState: {
       source: {
         sourceScenarioId: 'scenario-0001',
@@ -4191,7 +4191,7 @@ test('manages, compares, and restores multiple workspace scenarios @workbench-ma
   const downloadPath = await download.path();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(exportedProject).toMatchObject({
-    schemaVersion: 13,
+    schemaVersion: 14,
     scenarioWorkspace: {
       activeScenarioId: 'scenario-0002',
       scenarios: [
@@ -4301,7 +4301,7 @@ test('reuses named actor and enemy configurations across workspace scenarios @wo
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(13);
+  expect(project.schemaVersion).toBe(14);
   expect(
     project.configurationLibrary.actorInstances.find(
       instance => instance.id === burstActorInstanceId
@@ -4713,7 +4713,7 @@ async function ensureActionContentEditResultSynced(
 async function readStoredWorkbenchDraft(page) {
   return await page.evaluate(() => {
     const rawDraft =
-      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v13') ??
+      window.localStorage.getItem('promilia-axis-tool:workbench-draft:v14') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v12') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v8') ??
       window.localStorage.getItem('promilia-axis-tool:workbench-draft:v5') ??

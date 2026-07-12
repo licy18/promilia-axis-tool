@@ -150,6 +150,12 @@ describe('workbench draft storage project files', () => {
           characterId: 101003,
         },
       ],
+      mechanicsProfileSelection: {
+        schemaVersion: 1,
+        contractName: 'AzPrWorkbenchMechanicsProfileSelection',
+        profileId: 'azpr-three-value-preview-v1',
+        profileVersion: 1,
+      },
       runtimeSampleCaptures: [
         {
           captureSessionId: 'draft-runtime-capture-1',
@@ -572,6 +578,51 @@ describe('workbench draft storage project files', () => {
         { characterId: 109001, initialSp: null },
         { characterId: 101003, initialSp: null },
       ],
+    });
+  });
+
+  it('migrates v13 projects and every scenario to the default profile selection', () => {
+    const project = createWorkbenchProjectFileSnapshot({
+      selection: {
+        characterId: 109001,
+        secondaryCharacterId: 101003,
+        skillId: 10900101,
+        enemyId: 300032,
+      },
+      actionDrafts: [
+        {
+          id: 'action-0001',
+          type: 'skill',
+          skillId: 10900101,
+          actorCharacterId: 109001,
+          startMs: 0,
+          durationMs: 1000,
+          level: 1,
+        },
+      ],
+      selectedActionId: 'action-0001',
+    });
+    project.schemaVersion = 13;
+    delete project.mechanicsProfileSelection;
+    project.scenarioWorkspace.scenarios.forEach(scenario => {
+      delete scenario.draft.mechanicsProfileSelection;
+    });
+
+    const migrated = parseWorkbenchProjectFile(project);
+    const expectedSelection = {
+      schemaVersion: 1,
+      contractName: 'AzPrWorkbenchMechanicsProfileSelection',
+      profileId: 'azpr-three-value-preview-v1',
+      profileVersion: 1,
+    };
+    expect(migrated).toMatchObject({
+      schemaVersion: 14,
+      mechanicsProfileSelection: expectedSelection,
+      scenarioWorkspace: {
+        scenarios: [
+          { draft: { mechanicsProfileSelection: expectedSelection } },
+        ],
+      },
     });
   });
 

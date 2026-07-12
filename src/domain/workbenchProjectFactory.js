@@ -29,6 +29,7 @@ import {
   getSkillDamageSegments,
 } from './skillDamageSegments';
 import { createWorkbenchConfigurationSourceContract } from './workbenchConfigurationSourceContract';
+import { normalizeWorkbenchMechanicsProfileSelection } from './workbenchMechanicsProfileSelection';
 
 export { getSkillActionCatalog } from './skillActionCatalog';
 export {
@@ -483,6 +484,9 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
       actorConfigs,
       configurationSelection,
       configurationSourceContract,
+      mechanicsProfileSelection: normalizeWorkbenchMechanicsProfileSelection(
+        actionPatch.mechanicsProfileSelection
+      ),
       runtimeSampleCaptures: normalizeWorkbenchRuntimeSampleCaptures(
         actionPatch.runtimeSampleCaptures
       ),

@@ -20,11 +20,13 @@ import {
   normalizeWorkbenchConfigurationSelection,
   normalizeWorkbenchConfigurationWorkspace,
 } from './workbenchConfigurationLibrary';
+import { normalizeWorkbenchMechanicsProfileSelection } from './workbenchMechanicsProfileSelection';
 
-export const WORKBENCH_DRAFT_SCHEMA_VERSION = 13;
+export const WORKBENCH_DRAFT_SCHEMA_VERSION = 14;
 export const WORKBENCH_DRAFT_STORAGE_KEY =
-  'promilia-axis-tool:workbench-draft:v13';
+  'promilia-axis-tool:workbench-draft:v14';
 export const LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS = Object.freeze([
+  'promilia-axis-tool:workbench-draft:v13',
   'promilia-axis-tool:workbench-draft:v12',
   'promilia-axis-tool:workbench-draft:v11',
   'promilia-axis-tool:workbench-draft:v10',
@@ -60,6 +62,7 @@ export function createDefaultWorkbenchDraftState() {
       teamSlots,
       actorConfigs: createDefaultWorkbenchActorConfigs(selection),
       enemyConfig: { ...DEFAULT_WORKBENCH_ENEMY_CONFIG },
+      mechanicsProfileSelection: normalizeWorkbenchMechanicsProfileSelection(),
       segmentSplitOptions: { ...DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS },
       actionDrafts: [createWorkbenchActionDraft()],
       actionRelations: [],
@@ -105,6 +108,7 @@ export function createWorkbenchScenarioDraftSnapshot({
   actorConfigs,
   enemyConfig,
   configurationSelection,
+  mechanicsProfileSelection,
   segmentSplitOptions,
   actionDrafts,
   actionRelations,
@@ -142,6 +146,9 @@ export function createWorkbenchScenarioDraftSnapshot({
     enemyConfig: normalizedEnemyConfig,
     configurationSelection: normalizeWorkbenchConfigurationSelection(
       configurationSelection
+    ),
+    mechanicsProfileSelection: normalizeWorkbenchMechanicsProfileSelection(
+      mechanicsProfileSelection
     ),
     segmentSplitOptions: normalizedSegmentSplitOptions,
     actionDrafts: normalizedActions,

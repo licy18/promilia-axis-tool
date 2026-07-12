@@ -7,8 +7,8 @@ import {
 import { parseDamageSegments } from '../mechanics/damage';
 import { createThreeValueMechanismConfiguration } from '../mechanics/threeValueMechanismConfiguration';
 import {
-  DEFAULT_THREE_VALUE_MECHANICS_PROFILE,
   resolveThreeValueMechanicsProfile,
+  resolveThreeValueMechanicsProfileSelection,
 } from '../mechanics/threeValueMechanicsProfile';
 
 export class CompileProjectError extends Error {
@@ -22,7 +22,7 @@ export class CompileProjectError extends Error {
 export function compileProject(
   project,
   gameData,
-  { threeValueMechanicsProfile = DEFAULT_THREE_VALUE_MECHANICS_PROFILE } = {}
+  { threeValueMechanicsProfile = null, threeValueMechanicsProfiles = [] } = {}
 ) {
   const validation = validateProject(project, gameData);
   if (!validation.valid) {
@@ -38,15 +38,45 @@ export function compileProject(
   );
   const enemy = compileEnemy(project.enemy, enemiesById, elementsById);
   const actors = [...actorsById.values()];
-  const mechanicsProfileResolution = resolveThreeValueMechanicsProfile(
-    threeValueMechanicsProfile
-  );
+  const mechanicsProfileResolution = threeValueMechanicsProfile
+    ? {
+        ...resolveThreeValueMechanicsProfile(threeValueMechanicsProfile),
+        selection: {
+          schemaVersion: 1,
+          contractName: 'AzPrWorkbenchMechanicsProfileSelection',
+          profileId: threeValueMechanicsProfile?.profileId ?? null,
+          profileVersion:
+            Number(threeValueMechanicsProfile?.profileVersion) || null,
+        },
+      }
+    : resolveThreeValueMechanicsProfileSelection(
+        project?.metadata?.mechanicsProfileSelection,
+        threeValueMechanicsProfiles
+      );
   const mechanicsProfile = mechanicsProfileResolution.profile;
+  const persistedProfileSelection = mechanicsProfileResolution.selection;
+  const compiledMechanicsProfileSelection = {
+    schemaVersion: 1,
+    contractName: 'AzPrScenarioMechanicsProfileSelection',
+    sourceKind: threeValueMechanicsProfile
+      ? 'compile-option-mechanics-profile-selection'
+      : 'project-persisted-mechanics-profile-selection',
+    status: mechanicsProfileResolution.fallback
+      ? 'mechanics-profile-selection-ready-with-fallback'
+      : 'mechanics-profile-selection-ready',
+    requestedProfileId: persistedProfileSelection?.profileId ?? null,
+    requestedProfileVersion: persistedProfileSelection?.profileVersion ?? null,
+    resolvedProfileId: mechanicsProfile.profileId,
+    resolvedProfileVersion: mechanicsProfile.profileVersion,
+    fallback: mechanicsProfileResolution.fallback,
+    fallbackReason: mechanicsProfileResolution.fallbackReason,
+  };
   const mechanismConfiguration = createThreeValueMechanismConfiguration({
     project,
     actors,
     enemy,
     mechanicsProfile,
+    mechanicsProfileSelection: compiledMechanicsProfileSelection,
   });
 
   const actions = project.actions
@@ -70,17 +100,7 @@ export function compileProject(
     enemy,
     mechanismConfiguration,
     mechanicsProfile,
-    mechanicsProfileSelection: {
-      sourceKind: 'compiled-scenario-mechanics-profile-selection',
-      status: mechanicsProfileResolution.fallback
-        ? 'mechanics-profile-selection-ready-with-fallback'
-        : 'mechanics-profile-selection-ready',
-      requestedProfileId: threeValueMechanicsProfile?.profileId ?? null,
-      resolvedProfileId: mechanicsProfile.profileId,
-      resolvedProfileVersion: mechanicsProfile.profileVersion,
-      fallback: mechanicsProfileResolution.fallback,
-      fallbackReason: mechanicsProfileResolution.fallbackReason,
-    },
+    mechanicsProfileSelection: compiledMechanicsProfileSelection,
     actions,
     cycleBoundaries: (project.cycleBoundaries ?? []).map(boundary => ({
       ...boundary,

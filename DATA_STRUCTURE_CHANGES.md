@@ -26643,3 +26643,30 @@ scenario.mechanismConfiguration.runtimeBinding
 ```
 
 runtime context、invocation summary、snapshot summary 和 projection summary 均传播 replay identity 与 binding ready/missing 数。四载体集成测试会对重新 compile/simulate 后的来源合同、binding、state effect proposals 及完整 `runtimeOutputs` 做等价比较。本阶段不改变 WorkbenchProjectFile v13，不新增公式，也不让未确认培养字段参与计算。
+
+## 392. WorkbenchProjectFile v14 / MechanicsProfileSelection v1
+
+阶段 8-T 将 Workbench 草稿与项目文件从 v13 升级为 v14，每条 `WorkbenchScenarioDraft` 新增：
+
+```text
+mechanicsProfileSelection
+  contractName = AzPrWorkbenchMechanicsProfileSelection
+  schemaVersion = 1
+  profileId
+  profileVersion
+```
+
+根级字段继续镜像活动方案；本地草稿、JSON、分享码、PNG、预设、方案复制与撤销/重做均通过统一 draft snapshot 交换。v1-v13 项目或缺失该字段的方案自动迁移到 `azpr-three-value-preview-v1@1`，当前本地 storage key 更新为 `promilia-axis-tool:workbench-draft:v14`，v13 key 进入兼容读取列表。
+
+compiler 新增 `threeValueMechanicsProfiles` 受控 registry 输入，按持久化 ID 与版本精确匹配 profile。Scenario 的 `AzPrScenarioMechanicsProfileSelection v1` 和 `AzPrThreeValueConfigurationRuntimeBinding v1` 同时记录：
+
+```text
+selectionSourceKind
+requestedProfileId / requestedProfileVersion
+resolvedProfileId / resolvedProfileVersion
+fallback / fallbackReason
+```
+
+未注册或无效 profile 不会从项目载荷执行任意逻辑，而是回退内置默认 profile；合法注册 profile 继续是纯数据，operation 只能通过既有受控 handler registry 执行。四种项目载体的集成测试同时重放两个选择不同 profile 的方案，并比较 binding、proposal、曲线与日志。
+
+为恢复发布余量，skill core 生产投影对 `matches.labels/values = true` 的交叉校验行省略重复 labels/values，读取端从角色技能表恢复同值；不匹配行仍保留原值与 diagnostics。空 diagnostics 不再落盘。该变化由 projection audit 守门，不改变技能逻辑或三值结果。

@@ -92,7 +92,7 @@ function projectSkillLogicIndex(source) {
         logic: subSkill.logic,
         displayPairs: subSkill.displayPairs,
         displayMatchesLogic: subSkill.displayMatchesLogic,
-        diagnostics: subSkill.diagnostics,
+        ...nonEmptyArrayField('diagnostics', subSkill.diagnostics),
       })),
       levels: (item.levels ?? []).map(level => ({
         level: level.level,
@@ -101,7 +101,7 @@ function projectSkillLogicIndex(source) {
         subSkillId: level.subSkillId,
         display: level.display,
         elementValues: level.elementValues,
-        diagnostics: level.diagnostics,
+        ...nonEmptyArrayField('diagnostics', level.diagnostics),
       })),
     })),
   };
@@ -120,15 +120,19 @@ function projectSkillLevelCrossCheck(source) {
         levelIndex: level.levelIndex,
         rowId: level.rowId,
         status: level.status,
-        labels: level.labels,
-        values: level.values,
+        ...(level.matches?.labels ? {} : { labels: level.labels }),
+        ...(level.matches?.values ? {} : { values: level.values }),
         labelIds: level.labelIds,
         valueIds: level.valueIds,
         matches: level.matches,
-        diagnostics: level.diagnostics,
+        ...nonEmptyArrayField('diagnostics', level.diagnostics),
       })),
     })),
   };
+}
+
+function nonEmptyArrayField(key, value) {
+  return Array.isArray(value) && value.length > 0 ? { [key]: value } : {};
 }
 
 function projectValueParamIndex(source) {

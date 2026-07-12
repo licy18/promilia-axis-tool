@@ -85,8 +85,8 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 109,
-    "productionReachableCount": 105,
+    "sourceCodeFileCount": 110,
+    "productionReachableCount": 106,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
@@ -94,7 +94,7 @@
     "productionReachableByArea": {
       "src": 2,
       "src/data": 1,
-      "src/domain": 20,
+      "src/domain": 21,
       "src/features/workbench": 44,
       "src/i18n": 1,
       "src/router": 1,
@@ -133,6 +133,7 @@
     "src/domain/workbenchCycleBoundaries.js",
     "src/domain/workbenchDraftStorage.js",
     "src/domain/workbenchLayout.js",
+    "src/domain/workbenchMechanicsProfileSelection.js",
     "src/domain/workbenchPngProject.js",
     "src/domain/workbenchPresetStorage.js",
     "src/domain/workbenchProjectFactory.js",

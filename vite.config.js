@@ -20,7 +20,8 @@ export default defineConfig({
             id.endsWith('/threeValueMechanicsAdapter.js') ||
             id.endsWith('/threeValueMechanicsLayerInputs.js') ||
             id.endsWith('/threeValueMechanismConfiguration.js') ||
-            id.endsWith('/workbenchConfigurationSourceContract.js')
+            id.endsWith('/workbenchConfigurationSourceContract.js') ||
+            id.endsWith('/workbenchMechanicsProfileSelection.js')
           ) {
             return 'azpr-mechanics-runtime';
           }
@@ -34,7 +35,14 @@ export default defineConfig({
               'WorkbenchLayoutBar.vue',
               'WorkbenchProjectDropOverlay.vue',
               'WorkbenchScenarioBar.vue',
-            ].some(fileName => id.includes(`/features/workbench/${fileName}`))
+            ].some(fileName =>
+              id.includes(`/features/workbench/${fileName}`)
+            ) ||
+            [
+              '/domain/workbenchLayout.js',
+              '/domain/workbenchProjectFileReceiver.js',
+              '/features/workbench/runtimeEffectReview.js',
+            ].some(modulePath => id.endsWith(modulePath))
           ) {
             return 'workbench-secondary-ui';
           }

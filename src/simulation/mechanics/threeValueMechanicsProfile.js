@@ -1,10 +1,15 @@
+import {
+  DEFAULT_WORKBENCH_MECHANICS_PROFILE_ID,
+  normalizeWorkbenchMechanicsProfileSelection,
+} from '../../domain/workbenchMechanicsProfileSelection';
+
 export const THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME =
   'AzPrMechanicsProfile';
 
 export const THREE_VALUE_MECHANICS_PROFILE_CONTRACT_VERSION = 2;
 
 export const DEFAULT_THREE_VALUE_MECHANICS_PROFILE_ID =
-  'azpr-three-value-preview-v1';
+  DEFAULT_WORKBENCH_MECHANICS_PROFILE_ID;
 
 const TRACK_KEYS = [
   'enemyHpDamage',
@@ -132,8 +137,7 @@ export function createDefaultThreeValueMechanicsProfile() {
       },
       enemyToughnessDamage: {
         outputField: 'toughnessDelta',
-        stateEffect:
-          THREE_VALUE_STATE_EFFECT_BY_TRACK_KEY.enemyToughnessDamage,
+        stateEffect: THREE_VALUE_STATE_EFFECT_BY_TRACK_KEY.enemyToughnessDamage,
         appliedLayers: ['validatedRuntimeSample'],
         unappliedLayers: [
           'actionToughnessValue',
@@ -192,6 +196,44 @@ export function resolveThreeValueMechanicsProfile(profile) {
   };
 }
 
+export function resolveThreeValueMechanicsProfileSelection(
+  selection,
+  registeredProfiles = []
+) {
+  const normalizedSelection =
+    normalizeWorkbenchMechanicsProfileSelection(selection);
+  const profiles = [
+    DEFAULT_THREE_VALUE_MECHANICS_PROFILE,
+    ...normalizeRegisteredProfiles(registeredProfiles),
+  ];
+  const selectedProfile = profiles.find(
+    profile =>
+      profile?.profileId === normalizedSelection.profileId &&
+      Number(profile?.profileVersion) === normalizedSelection.profileVersion
+  );
+  const resolution = resolveThreeValueMechanicsProfile(selectedProfile);
+  return {
+    ...resolution,
+    selection: normalizedSelection,
+    fallback: selectedProfile ? resolution.fallback : true,
+    fallbackReason: selectedProfile
+      ? resolution.fallbackReason
+      : 'mechanics-profile-not-registered',
+  };
+}
+
+function normalizeRegisteredProfiles(registeredProfiles) {
+  if (registeredProfiles instanceof Map) {
+    return [...registeredProfiles.values()];
+  }
+  if (Array.isArray(registeredProfiles)) {
+    return registeredProfiles;
+  }
+  return registeredProfiles && typeof registeredProfiles === 'object'
+    ? Object.values(registeredProfiles)
+    : [];
+}
+
 export function validateThreeValueMechanicsProfile(profile) {
   const issues = [];
   if (profile?.contractName !== THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME) {
@@ -238,11 +280,8 @@ export function validateThreeValueMechanicsProfile(profile) {
     }
     for (const trackKey of capability?.trackKeys ?? []) {
       if (
-        !resolveThreeValueStateEffectDeclaration(
-          profile,
-          capability,
-          trackKey
-        ).ready
+        !resolveThreeValueStateEffectDeclaration(profile, capability, trackKey)
+          .ready
       ) {
         issues.push(
           `operand-state-effect-invalid:${kind || 'unknown'}:${trackKey}`
@@ -272,8 +311,8 @@ export function resolveThreeValueStateEffectDeclaration(
   const declaration = profile?.tracks?.[trackKey]?.stateEffect ?? null;
   const ready = Boolean(
     expected &&
-      declaration &&
-      Object.keys(expected).every(key => declaration[key] === expected[key])
+    declaration &&
+    Object.keys(expected).every(key => declaration[key] === expected[key])
   );
   return {
     ready,
@@ -293,12 +332,12 @@ export function resolveThreeValueMechanicsProfileCapability({
   );
   const stepsReady = Boolean(
     capability?.steps?.length > 0 &&
-      capability.steps.every(
-        step =>
-          String(step?.key ?? '').trim() &&
-          String(step?.operation ?? '').trim() &&
-          Array.isArray(step?.layerKeys)
-      )
+    capability.steps.every(
+      step =>
+        String(step?.key ?? '').trim() &&
+        String(step?.operation ?? '').trim() &&
+        Array.isArray(step?.layerKeys)
+    )
   );
   const ready = Boolean(capability && trackSupported && stepsReady);
 

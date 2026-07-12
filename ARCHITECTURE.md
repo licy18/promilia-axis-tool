@@ -60,7 +60,7 @@ C:\PC2\Codex\AzPr
 - `initialRuntimeState.js`：循环边界继承的敌人三值、角色能量和活动效果起始状态合同。
 - `workbenchProjectFactory.js`：把 Workbench 选择、培养配置和动作草稿组装为标准项目。
 - `workbenchActionRelations.js`：动作前后关系的规范化、无环校验、间隔同步与删除清理。
-- `workbenchDraftStorage.js`：v13 草稿、项目 JSON 和分享链接。
+- `workbenchDraftStorage.js`：v14 草稿、项目 JSON 和分享链接。
 - `workbenchConfigurationLibrary.js`：角色/敌人配置实例库、方案选择、旧项目迁移和活动配置解析。
 - `workbenchScenarioWorkspace.js`：最多 14 条完整方案快照的规范化、切换和迁移。
 - `workbenchPngProject.js`：PNG 项目元数据写入与回读。
@@ -94,7 +94,7 @@ Action
 - `threeValueCalculatorAdapters.js`：projection 与 runtime 共用的 calculator 入口。
 - `workbenchConfigurationSourceContract.js`：把活动方案的实例选择与解析配置校验为稳定、可回放的配置来源身份。
 - `threeValueMechanismContext.js`：角色、动作、敌人和来源上下文。
-- `threeValueMechanismConfiguration.js`：把 Project 已解析配置与 v13 实例身份编译为 mechanics configuration，声明字段应用边界。
+- `threeValueMechanismConfiguration.js`：把 Project 已解析配置、实例身份和 profile 选择编译为 mechanics configuration，声明字段应用边界。
 - `threeValueMechanicsAdapter.js`：三轨统一 adapter 注册表、结构化 operands、generation request 与 runtime invocation input。
 - `threeValueMechanicsProfile.js`：Scenario 绑定的版本化 operand capability 与机制层应用策略。
 - `threeValueMechanismSampleAdapter.js`：把通过验证的 runtime sample 晋级为可应用 delta。
@@ -131,9 +131,9 @@ Action
 
 ## 4. 关键数据合同
 
-### WorkbenchProjectFile v13
+### WorkbenchProjectFile v14
 
-根级包含活动方案的 selection、teamSlots、actorConfigs、enemyConfig、configurationSelection、segmentSplitOptions、actionDrafts、actionRelations、cycleBoundaries、initialRuntimeState、runtimeSampleCaptures 和 selectedActionId，并包含共享 `configurationLibrary` 与 `scenarioWorkspace`。JSON、分享链接、PNG 元数据和预设库都复用该合同；v1-v12 项目从各方案已有 `actorConfigs` / `enemyConfig` 生成配置实例并保留原模拟输入。
+根级包含活动方案的 selection、teamSlots、actorConfigs、enemyConfig、configurationSelection、mechanicsProfileSelection、segmentSplitOptions、actionDrafts、actionRelations、cycleBoundaries、initialRuntimeState、runtimeSampleCaptures 和 selectedActionId，并包含共享 `configurationLibrary` 与 `scenarioWorkspace`。每条方案持久化纯数据 `{ profileId, profileVersion }`；JSON、分享链接、PNG 元数据和预设库都复用该合同。v1-v12 项目继续迁移配置实例，v1-v13 项目和缺失字段的方案自动绑定默认 preview profile。
 
 ### ConfigurationLibrary / ConfigurationSelection v1
 
@@ -149,7 +149,7 @@ compiler 将该来源合同、Scenario actor/enemy 与实际 `mechanicsProfile` 
 
 ### MechanicsProfile v2 / Adapter v7 / LayerInputs v1 / Evaluation v3
 
-compiler 默认把 `azpr-three-value-preview-v1` 作为 `AzPrMechanicsProfile` 绑定到 Scenario，并保留 requested/resolved profile 与 fallback 状态。profile 是纯数据，声明支持的 operand kinds、对应 operation、可用轨道，以及 HP、韧性、能量各层的 applied/unapplied 状态。`compileProject(..., { threeValueMechanicsProfile })` 可选择其他合法 profile。
+compiler 从 Project metadata 的 `AzPrWorkbenchMechanicsProfileSelection v1` 读取 profile ID/版本，并通过受控 `threeValueMechanicsProfiles` registry 精确解析；未注册或无效版本显式回退默认 `azpr-three-value-preview-v1`，Scenario 与 runtime binding 同时保留 requested/resolved profile、选择来源和 fallback 原因。profile 是纯数据，声明支持的 operand kinds、对应 operation、可用轨道，以及 HP、韧性、能量各层的 applied/unapplied 状态；`threeValueMechanicsProfile` 直接对象参数仅保留为兼容注入入口。
 
 `Action -> Hit -> ThreeValueDelta v10` 的每条 delta 都携带 `mechanicsAdapterRequest`。generation 固定 `action / hit / mechanismConfiguration / mechanicsProfile / mechanicsLayerInputs / sourceValue.operands`；layer inputs 把 profile 各 step 的 layer keys 合并为 required 层，保存角色面板、动作倍率、敌人双防/元素防御、初始能量、培养配置和 operands 的实际值、来源与 readiness。runtime 再绑定该次 invocation 的 `stateBefore`，并校验 required applied 输入没有缺口。
 
@@ -159,7 +159,7 @@ compiler 默认把 `azpr-three-value-preview-v1` 作为 `AzPrMechanicsProfile` �
 
 注册表支持 HP、韧性、能量轨专用 adapter、一个 `default` adapter 覆盖三轨，以及纯函数 operation handler；`simulateScenario(scenario, { threeValueMechanicsAdapterRegistry })` 是唯一无 UI 顶层注入入口。默认 profile 的 product、sum、before/after 与 identity 均已迁入内置 steps；runtime calculator invocation summary 汇总实际 operation 和 proposal ready/missing 数。
 
-生产构建把配置来源、mechanism configuration、profile、adapter 与 layer inputs 固定为单个 `azpr-mechanics-runtime` chunk；同步出现的辅助 Workbench 面板合并为 `workbench-secondary-ui`，仅调整同步模块的构建归组，不改变调用或加载条件。总 JavaScript 体积仍由独立预算限制。
+生产构建把配置来源、profile 选择、mechanism configuration、profile、adapter 与 layer inputs 固定为单个 `azpr-mechanics-runtime` chunk；同步出现的辅助 Workbench 面板及其布局、文件接收和效果复盘依赖合并为 `workbench-secondary-ui`。skill core 投影对已匹配的交叉校验不再重复保存与角色技能表相同的 labels/values，只在不匹配时保留差异证据。以上调整不改变运行结果，总 JavaScript 体积仍由独立预算限制。
 
 ### ScenarioWorkspace v1
 
@@ -203,7 +203,7 @@ compiler 默认把 `azpr-three-value-preview-v1` 作为 `AzPrMechanicsProfile` �
 
 ## 5. 持久化边界
 
-- 当前草稿：`promilia-axis-tool:workbench-draft:v13`。
+- 当前草稿：`promilia-axis-tool:workbench-draft:v14`。
 - 本地预设：`promilia-axis-tool:workbench-presets:v1`。
 - 工作区布局：`promilia-axis-tool:workbench-layout:v1`，独立于项目和草稿。
 - 项目交换：JSON、分享 URL、PNG 内嵌元数据。

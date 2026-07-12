@@ -9870,7 +9870,7 @@ describe('Workbench view', () => {
     const saved = JSON.parse(
       window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
     );
-    expect(saved.schemaVersion).toBe(13);
+    expect(saved.schemaVersion).toBe(WORKBENCH_DRAFT_SCHEMA_VERSION);
     expect(saved.configurationLibrary.schemaVersion).toBe(1);
     expect(
       saved.configurationLibrary.actorInstances.find(

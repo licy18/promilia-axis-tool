@@ -911,6 +911,7 @@ import {
   reconcileWorkbenchConfigurationState,
   updateSelectedWorkbenchConfigurationInstance,
 } from '../domain/workbenchConfigurationLibrary';
+import { normalizeWorkbenchMechanicsProfileSelection } from '../domain/workbenchMechanicsProfileSelection';
 import {
   clearWorkbenchDraft,
   createWorkbenchDraftSnapshot,
@@ -1029,6 +1030,9 @@ const configurationLibrary = ref(
 const configurationSelection = ref(
   cloneWorkbenchHistoryValue(initialDraft.configurationSelection)
 );
+const mechanicsProfileSelection = ref(
+  cloneWorkbenchHistoryValue(initialDraft.mechanicsProfileSelection)
+);
 const segmentSplitOptions = ref({ ...initialDraft.segmentSplitOptions });
 const segmentSplitPreview = ref(null);
 const actionDrafts = ref([...initialDraft.actionDrafts]);
@@ -1134,6 +1138,7 @@ const project = computed(() =>
     enemyConfig: enemyConfig.value,
     configurationLibrary: configurationLibrary.value,
     configurationSelection: configurationSelection.value,
+    mechanicsProfileSelection: mechanicsProfileSelection.value,
     actions: actionDrafts.value,
     actionRelations: actionRelations.value,
     cycleBoundaries: cycleBoundaries.value,
@@ -3071,6 +3076,7 @@ function createWorkbenchProjectFromDraft(draft) {
     enemyConfig: draft.enemyConfig,
     configurationLibrary: configurationLibrary.value,
     configurationSelection: draft.configurationSelection,
+    mechanicsProfileSelection: draft.mechanicsProfileSelection,
     actions: draft.actionDrafts,
     actionRelations: draft.actionRelations,
     cycleBoundaries: draft.cycleBoundaries,
@@ -3100,6 +3106,7 @@ function getCurrentWorkbenchScenarioState() {
     actorConfigs: actorConfigs.value,
     enemyConfig: enemyConfig.value,
     configurationSelection: configurationSelection.value,
+    mechanicsProfileSelection: mechanicsProfileSelection.value,
     segmentSplitOptions: segmentSplitOptions.value,
     actionDrafts: actionDrafts.value,
     actionRelations: actionRelations.value,
@@ -3418,6 +3425,9 @@ function applyWorkbenchScenarioDraftState(draft) {
       syncSelectedValues: false,
     })
   );
+  mechanicsProfileSelection.value = normalizeWorkbenchMechanicsProfileSelection(
+    draft.mechanicsProfileSelection
+  );
   segmentSplitOptions.value = normalizeWorkbenchSegmentSplitOptions(
     draft.segmentSplitOptions
   );
@@ -3676,6 +3686,7 @@ function createWorkbenchHistorySnapshot() {
       enemyConfig: enemyConfig.value,
       configurationLibrary: configurationLibrary.value,
       configurationSelection: configurationSelection.value,
+      mechanicsProfileSelection: mechanicsProfileSelection.value,
       segmentSplitOptions: segmentSplitOptions.value,
       actionDrafts: actionDrafts.value,
       actionRelations: actionRelations.value,
@@ -3693,6 +3704,7 @@ function createWorkbenchHistorySnapshot() {
     enemyConfig: draftSnapshot.enemyConfig,
     configurationLibrary: draftSnapshot.configurationLibrary,
     configurationSelection: draftSnapshot.configurationSelection,
+    mechanicsProfileSelection: draftSnapshot.mechanicsProfileSelection,
     segmentSplitOptions: draftSnapshot.segmentSplitOptions,
     actionDrafts: draftSnapshot.actionDrafts,
     actionRelations: draftSnapshot.actionRelations,
@@ -3740,6 +3752,9 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
       enemyConfig: snapshot.enemyConfig,
       syncSelectedValues: false,
     })
+  );
+  mechanicsProfileSelection.value = normalizeWorkbenchMechanicsProfileSelection(
+    snapshot.mechanicsProfileSelection
   );
   segmentSplitOptions.value = normalizeWorkbenchSegmentSplitOptions(
     snapshot.segmentSplitOptions

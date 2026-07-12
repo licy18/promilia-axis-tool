@@ -94,7 +94,7 @@ test('[json-project-exchange] restores an exported production JSON project', asy
   expect(download.suggestedFilename()).toMatch(/promilia-workbench-.*\.json$/);
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 13,
+    schemaVersion: 14,
     game: 'azur-promilia',
     type: 'workbench-project',
     enemyConfig: { level: 91 },
@@ -172,7 +172,7 @@ test('[configuration-instances] binds reusable simulation configs to scenarios a
   const download = await downloadPromise;
   const project = JSON.parse(await readFile(await download.path(), 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 13,
+    schemaVersion: 14,
     configurationLibrary: {
       schemaVersion: 1,
       actorInstances: expect.any(Array),
@@ -345,7 +345,7 @@ test('[timeline-relations] preserves action relations through project exchange',
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(13);
+  expect(project.schemaVersion).toBe(14);
   expect(project.actionDrafts).toHaveLength(5);
   expect(project.actionRelations).toEqual([
     expect.objectContaining({
@@ -513,7 +513,7 @@ test('[cycle-sections] creates, reviews, and restores a production cycle boundar
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(13);
+  expect(project.schemaVersion).toBe(14);
   expect(project.cycleBoundaries).toEqual([
     expect.objectContaining({
       id: 'cycle-boundary-0001',
@@ -583,7 +583,7 @@ test('[cycle-inheritance] creates and restores a production scenario from a runt
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 13,
+    schemaVersion: 14,
     initialRuntimeState: {
       contractName: 'AzPrInitialRuntimeState',
       source: {
@@ -642,7 +642,7 @@ test('[workspace-scenarios] switches, compares, and restores independent product
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(13);
+  expect(project.schemaVersion).toBe(14);
   expect(project.scenarioWorkspace).toMatchObject({
     activeScenarioId: 'scenario-0002',
     scenarios: [

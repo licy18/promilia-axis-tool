@@ -75,7 +75,7 @@ src/
 
 - `src/views/Workbench.vue`：生产页面编排和项目交换入口。
 - `src/domain/projectSchema.js`：标准项目、角色、敌人、动作和动作关系模型。
-- `src/domain/workbenchDraftStorage.js`：v13 草稿、项目 JSON 和分享合同。
+- `src/domain/workbenchDraftStorage.js`：v14 草稿、项目 JSON 和分享合同。
 - `src/domain/workbenchConfigurationLibrary.js`：角色/敌人配置实例与方案绑定合同。
 - `src/domain/workbenchScenarioWorkspace.js`：项目内多方案快照、迁移和管理合同。
 - `src/simulation/`：无 UI 编译、执行、三值生成、机制和结果投影。
@@ -1093,6 +1093,16 @@ Workbench 现在可以把角色等级、初始能量、奇波、装备、灵子�
 阶段验收：73 个测试文件、408 条单元/组件测试通过；39 条 Workbench 主流程和 15 项 production preview 全部通过，生产报告结论为 `trial-ready`。生产引用审计为 109 个源码、105 个生产可达、4 个允许 test-only、0 个孤儿；数据投影审计全部一致。Workbench 主块为 367,774B gzip，全部 JavaScript 为 739,605B gzip，均在 370,000B/740,000B 预算内。180 动作编译 p95 为 9.622ms、完整 simulation p95 为 28.330ms；120 动作浏览器首屏就绪为 1353ms。
 
 下一阶段目标：阶段 8-T / P2-P3 可回放 mechanics profile 选择合同。开始前先从既有构建归组或重复代码中收出稳定包体余量，不提高预算；随后把当前仅由 `compileProject()` 参数选择的 profile 改为每条方案可持久化的纯数据 ID/版本选择，并通过受控 registry 解析。默认 profile 和三值结果保持不变，项目本地草稿、JSON、分享链接、PNG 与多方案回放必须恢复同一 profile binding。该阶段只建立未来真实机制 profile 的项目边界，不接入新公式，也不增加碎片 UI。
+
+### 阶段 8-T P2-P3 可回放 mechanics profile 选择合同（2026-07-12）
+
+WorkbenchProjectFile 升级为 v14，每条方案新增 `AzPrWorkbenchMechanicsProfileSelection v1`，以纯数据保存 profile ID/版本。根级活动方案、本地草稿、JSON、分享链接、PNG、预设、方案复制与撤销/重做共用同一字段；v1-v13 项目和旧方案自动迁移到默认 preview profile。compiler 通过受控 `threeValueMechanicsProfiles` registry 精确解析，项目不能携带可执行 profile 逻辑。
+
+Scenario 与 `AzPrThreeValueConfigurationRuntimeBinding v1` 现在同时记录 requested/resolved ID/版本、选择来源、fallback 和原因。未注册版本明确回退默认 profile；合法注册 profile 继续通过既有 operation handler 执行。集成测试让活动方案使用注册的等价 profile、第二方案使用默认 profile，并证明本地草稿、JSON、分享链接和 PNG 回导后，两条方案各自的 binding、三值 proposal、完整曲线与日志一致。本阶段没有接入新公式或 UI。
+
+为恢复发布余量，skill core 生产投影不再为已匹配的 1200 个等级重复保存 labels/values，读取端从现有角色技能表恢复同值；不匹配行仍保留差异和 diagnostics。辅助 Workbench 同步依赖也归回已有 secondary chunk。阶段验收：73 个测试文件、410 条单元/组件测试通过；39 条 Workbench 主流程和 15 项 production preview 全部通过，生产报告结论为 `trial-ready`。生产引用审计为 110 个源码、106 个生产可达、4 个允许 test-only、0 个孤儿；数据投影审计全部一致。Workbench 主块为 354,940B gzip，全部 JavaScript 为 726,388B gzip，均在 370,000B/740,000B 预算内。180 动作编译 p95 为 11.350ms、完整 simulation p95 为 28.531ms；120 动作浏览器首屏就绪为 1779ms。
+
+下一阶段目标：阶段 8-U / P3 生产 profile catalog 与项目兼容性门禁。把 Workbench、批量方案回放和导入校验统一接到一个只包含受信任 profile 的生产 catalog，输出项目级 compatibility report，区分 exact、fallback、missing 和 invalid；导入项目不能静默改变 profile binding。默认 profile 与三值结果继续不变，不接入未确认公式，也不增加碎片 UI。
 
 ## 10. 文档维护规则
 

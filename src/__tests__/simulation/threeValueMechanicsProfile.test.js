@@ -87,8 +87,10 @@ describe('three value mechanics profile', () => {
       },
     });
     expect(scenario.mechanicsProfileSelection).toMatchObject({
+      sourceKind: 'project-persisted-mechanics-profile-selection',
       status: 'mechanics-profile-selection-ready',
       requestedProfileId: 'azpr-three-value-preview-v1',
+      requestedProfileVersion: 1,
       resolvedProfileId: 'azpr-three-value-preview-v1',
       fallback: false,
     });
@@ -158,7 +160,9 @@ describe('three value mechanics profile', () => {
     expect(runtimeDelta.runtimeCalculatorInvocation.validation).toMatchObject({
       mechanicsLayerInputsAppliedReady: true,
     });
-    expect(runtimeDelta.runtimeCalculatorInvocation.mechanicsEvaluation).toMatchObject({
+    expect(
+      runtimeDelta.runtimeCalculatorInvocation.mechanicsEvaluation
+    ).toMatchObject({
       contractName: 'AzPrThreeValueMechanicsEvaluation',
       contractVersion: 3,
       stepResults: [
@@ -216,11 +220,16 @@ describe('three value mechanics profile', () => {
     unsupportedProfile.supportedOperandKinds = Object.keys(
       unsupportedProfile.operandKinds
     );
-    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION);
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      mechanicsProfileSelection: {
+        profileId: unsupportedProfile.profileId,
+        profileVersion: unsupportedProfile.profileVersion,
+      },
+    });
     const gameData = getWorkbenchGameData();
     const baseline = simulateScenario(compileProject(project, gameData));
     const scenario = compileProject(project, gameData, {
-      threeValueMechanicsProfile: unsupportedProfile,
+      threeValueMechanicsProfiles: [unsupportedProfile],
     });
     const result = simulateScenario(scenario);
     const invocation =
@@ -229,6 +238,7 @@ describe('three value mechanics profile', () => {
 
     expect(scenario.mechanicsProfile).toBe(unsupportedProfile);
     expect(scenario.mechanicsProfileSelection).toMatchObject({
+      sourceKind: 'project-persisted-mechanics-profile-selection',
       status: 'mechanics-profile-selection-ready',
       requestedProfileId: 'unit-test-no-hp-profile',
       resolvedProfileId: 'unit-test-no-hp-profile',
@@ -261,6 +271,30 @@ describe('three value mechanics profile', () => {
     ).toMatchObject({
       mechanicsEvaluationReadyInvocationCount: 0,
       mechanicsEvaluationMissingInvocationCount: 1,
+    });
+  });
+
+  it('falls back explicitly when a persisted profile version is not registered', () => {
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      mechanicsProfileSelection: {
+        profileId: 'azpr-unregistered-profile',
+        profileVersion: 9,
+      },
+    });
+    const scenario = compileProject(project, getWorkbenchGameData());
+
+    expect(scenario.mechanicsProfile).toBe(
+      DEFAULT_THREE_VALUE_MECHANICS_PROFILE
+    );
+    expect(scenario.mechanicsProfileSelection).toMatchObject({
+      sourceKind: 'project-persisted-mechanics-profile-selection',
+      status: 'mechanics-profile-selection-ready-with-fallback',
+      requestedProfileId: 'azpr-unregistered-profile',
+      requestedProfileVersion: 9,
+      resolvedProfileId: 'azpr-three-value-preview-v1',
+      resolvedProfileVersion: 1,
+      fallback: true,
+      fallbackReason: 'mechanics-profile-not-registered',
     });
   });
 });

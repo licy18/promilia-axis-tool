@@ -7,7 +7,10 @@ export const SKILL_LEVEL_CROSSCHECK_SOURCE_KIND =
   skillLevelCrossCheckData.sourceKind ?? 'azpr-newtable-skill-level-crosscheck';
 
 const crossCheckBySkillId = new Map(
-  (skillLevelCrossCheckData.items ?? []).map((item) => [Number(item.skillId), item]),
+  (skillLevelCrossCheckData.items ?? []).map(item => [
+    Number(item.skillId),
+    item,
+  ])
 );
 
 export function getSkillLevelCrossCheckSummary() {
@@ -42,7 +45,7 @@ export function resolveSkillLevelCrossCheck(skill, level = 1) {
 
   const requestedLevel = Math.max(1, Number(level) || 1);
   const levelResult =
-    item.levels.find((candidate) => Number(candidate.level) === requestedLevel) ??
+    item.levels.find(candidate => Number(candidate.level) === requestedLevel) ??
     item.levels[item.levels.length - 1] ??
     null;
 
@@ -64,9 +67,14 @@ export function resolveSkillLevelCrossCheck(skill, level = 1) {
     level: levelResult.level,
     levelIndex: levelResult.levelIndex,
     rowId: levelResult.rowId,
-    fieldPaths: createSkillLevelCrossCheckFieldPaths(skillId, levelResult.level, levelResult.rowId),
-    labels: levelResult.labels,
-    values: levelResult.values,
+    fieldPaths: createSkillLevelCrossCheckFieldPaths(
+      skillId,
+      levelResult.level,
+      levelResult.rowId
+    ),
+    labels: levelResult.labels ?? skill.level?.labels ?? [],
+    values:
+      levelResult.values ?? skill.level?.values?.[levelResult.levelIndex] ?? [],
     expectedLabels: skill.level?.labels ?? [],
     expectedValues: skill.level?.values?.[levelResult.levelIndex] ?? [],
     labelIds: levelResult.labelIds,
@@ -125,7 +133,10 @@ function createMissingCrossCheck(source, diagnostic) {
 }
 
 function createSkillLevelCrossCheckFieldPaths(skillId, level, rowId) {
-  const rowSelector = rowId == null ? `rows[skillId=${skillId},level=${level}]` : `rows[id=${rowId}]`;
+  const rowSelector =
+    rowId == null
+      ? `rows[skillId=${skillId},level=${level}]`
+      : `rows[id=${rowId}]`;
   return {
     row: `skill_level.${rowSelector}`,
     labels: `skill_level.${rowSelector}.name -> lang_skill_level`,
@@ -135,5 +146,5 @@ function createSkillLevelCrossCheckFieldPaths(skillId, level, rowId) {
 }
 
 function cloneDiagnostics(diagnostics = []) {
-  return diagnostics.map((diagnostic) => ({ ...diagnostic }));
+  return diagnostics.map(diagnostic => ({ ...diagnostic }));
 }
