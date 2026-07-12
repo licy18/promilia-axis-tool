@@ -26793,3 +26793,30 @@ AzPrHpOperandSourceBinding v1
 `AzPrThreeValueMechanicsOperands` 从 v1 升级为 v2。`hp-raw-preview-product` 保存 `sourceBindingRequired / sourceBindingReady / sourceBindingStatus / sourceBinding / sourceBindingValidation`；generation delta 和 runtime summary 汇总 ready/invalid 数。adapter evaluation 从 v3 升级为 v4，adapter 从 v7 升级为 v8，runtime invocation 从 v9 升级为 v10，标准 generation contract 从 v7 升级为 v8。
 
 正常 binding 仍执行原 `round(baseAttack * actionMultiplier)` 并保持同一 HP delta。skill/variant identity、角色、倍率、来源字段、layer input 或 expected delta 漂移时，evaluation 保留明确 issue code，invocation validation 标记无效，但不会静默改用另一技能或倍率来源。项目 schema 继续为 v15，未接入防御、抗性、暴击、装备、奇波或灵子公式。
+
+## 397. ThreeValueAppliedSourceBinding v1 / MechanicsOperands v3
+
+阶段 8-Y 新增 `AzPrThreeValueAppliedSourceBinding v1`，用于 HP 之外的已应用来源：
+
+```text
+AzPrThreeValueAppliedSourceBinding v1
+  kind = explicit-self-energy-events | validated-runtime-sample
+  trackKey / sourceKind / identity / expectedDelta
+  sources
+    events[]
+      eventIndex / eventType / actionId / actorId / timeMs
+      resource / change / reason / confidence
+    sample
+      runtimeSampleEventKey / captureSessionId / eventIndex / eventType
+      actionId / actorId / targetId
+      roleEntityId / targetEntityId
+      sourceElementConfigId / elementConfigId / pathId
+      frameIndex / timeMs / before / after / delta
+  ready / status / issueCodes / issues
+```
+
+`RESOURCE_CHANGE` 投影保留动作、角色、时间和事件序号；validated sample binding 直接来自已经通过 `threeValueMechanismSampleAdapter` 的 point。`AzPrThreeValueMechanicsOperands` 从 v2 升级为 v3，四类已应用 operand kind 共用 `sourceBindingRequired / Ready / Status / Kind / Identity / Validation`。
+
+generation delta 新增 `appliedSourceBindingState`，取值为 `bound-ready / compatible-unbound / bound-drift`，并在 generation、runtime invocation、state snapshot 和 projection summary 汇总 ready、invalid、compatible-unbound 与 binding kinds。正式 binding 的事件、capture、作用实体、Element/path、帧位、before/after 或 delta 漂移会留下 issue code；旧 fixture 没有新身份时明确进入兼容未绑定，不误报为正式 binding 漂移。
+
+`AzPrThreeValueMechanicsAdapter` 从 v8 升级为 v9，evaluation 从 v4 升级为 v5，runtime invocation 从 v10 升级为 v11，标准 generation contract 从 v8 升级为 v9。项目 schema 继续为 v15，现有 HP、韧性、角色能量、曲线和日志结果不变；没有新增倍率、公式或培养效果。

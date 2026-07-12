@@ -3198,6 +3198,14 @@ describe('first vertical slice simulation', () => {
       sampledDeltaCount: 0,
       placeholderDeltaCount: 0,
       replaceableDeltaCount: 15,
+      appliedSourceBindingRequiredDeltaCount: 1,
+      appliedSourceBindingReadyDeltaCount: 1,
+      appliedSourceBindingInvalidDeltaCount: 0,
+      appliedSourceBindingCompatibleUnboundDeltaCount: 1,
+      appliedSourceBindingKinds: expect.arrayContaining([
+        'hp-skill-variant-operands',
+        'validated-runtime-sample',
+      ]),
       applied: false,
     });
     expect(result.threeValueRuntimeProjection.summary).toMatchObject({
@@ -3234,6 +3242,11 @@ describe('first vertical slice simulation', () => {
       calculationKind: 'recover-sp-runtime-sample-confirmed',
       calculationStatus: 'runtime-final-confirmed-recover-sp-sample',
       calculationReplaceable: false,
+      appliedSourceBindingState: 'bound-ready',
+      appliedSourceBindingKind: 'validated-runtime-sample',
+      appliedSourceBindingIdentity: expect.stringMatching(
+        /^azpr-applied-source-v1-/u
+      ),
       applied: true,
       replaceable: false,
       calculator: {
@@ -3251,8 +3264,20 @@ describe('first vertical slice simulation', () => {
         sourceValue: {
           operands: expect.objectContaining({
             contractName: 'AzPrThreeValueMechanicsOperands',
+            contractVersion: 3,
             kind: 'validated-self-energy-before-after',
             expectedDelta: 0.3375,
+            sourceBindingRequired: true,
+            sourceBindingReady: true,
+            sourceBindingKind: 'validated-runtime-sample',
+            sourceBindingIdentity: expect.stringMatching(
+              /^azpr-applied-source-v1-/u
+            ),
+            sourceBinding: expect.objectContaining({
+              contractName: 'AzPrThreeValueAppliedSourceBinding',
+              kind: 'validated-runtime-sample',
+              ready: true,
+            }),
             ready: true,
           }),
         },
@@ -3270,6 +3295,10 @@ describe('first vertical slice simulation', () => {
         },
       },
       mechanicsEvaluation: {
+        contractVersion: 5,
+        operandSourceBindingState: 'bound-ready',
+        operandSourceBindingRequired: true,
+        operandSourceBindingReady: true,
         stepResults: [
           expect.objectContaining({ operation: 'after-minus-before' }),
         ],
@@ -3353,14 +3382,28 @@ describe('first vertical slice simulation', () => {
       calculationKind: 'toughness-runtime-sample-confirmed',
       calculationStatus: 'runtime-final-confirmed-toughness-sample',
       calculationReplaceable: false,
+      appliedSourceBindingState: 'bound-ready',
+      appliedSourceBindingKind: 'validated-runtime-sample',
+      appliedSourceBindingIdentity: expect.stringMatching(
+        /^azpr-applied-source-v1-/u
+      ),
       applied: true,
       replaceable: false,
       mechanicsAdapterRequest: {
         sourceValue: {
           operands: expect.objectContaining({
             contractName: 'AzPrThreeValueMechanicsOperands',
+            contractVersion: 3,
             kind: 'validated-toughness-before-after',
             expectedDelta: 70,
+            sourceBindingRequired: true,
+            sourceBindingReady: true,
+            sourceBindingKind: 'validated-runtime-sample',
+            sourceBinding: expect.objectContaining({
+              contractName: 'AzPrThreeValueAppliedSourceBinding',
+              kind: 'validated-runtime-sample',
+              ready: true,
+            }),
             ready: true,
           }),
         },
@@ -3378,6 +3421,10 @@ describe('first vertical slice simulation', () => {
         },
       },
       mechanicsEvaluation: {
+        contractVersion: 5,
+        operandSourceBindingState: 'bound-ready',
+        operandSourceBindingRequired: true,
+        operandSourceBindingReady: true,
         stepResults: [
           expect.objectContaining({ operation: 'before-minus-after' }),
         ],
@@ -3390,6 +3437,10 @@ describe('first vertical slice simulation', () => {
       enemyToughnessDelta: 70,
       enemyStatePointCount: 2,
       simLogCount: 2,
+      operandSourceBindingRequiredInvocationCount: 1,
+      operandSourceBindingReadyInvocationCount: 1,
+      operandSourceBindingInvalidInvocationCount: 0,
+      operandSourceBindingCompatibleUnboundInvocationCount: 1,
     });
     expect(result.threeValueRuntimeProjection.enemyStateCurve).toMatchObject({
       toughnessDelta: 70,
@@ -4698,6 +4749,10 @@ describe('first vertical slice simulation', () => {
         'azpr-self-energy-delta-calculator',
       ]),
       calculatorReplaceableDeltaCount: 2,
+      operandSourceBindingRequiredInvocationCount: 2,
+      operandSourceBindingReadyInvocationCount: 2,
+      operandSourceBindingInvalidInvocationCount: 0,
+      operandSourceBindingCompatibleUnboundInvocationCount: 0,
       calculatorStatuses: expect.arrayContaining([
         'raw-hp-projection',
         'explicit-cost-applied-charge-formula-unmapped',
@@ -4718,7 +4773,7 @@ describe('first vertical slice simulation', () => {
       appliedHpDelta.mechanicsAdapterRequest.sourceValue.operands
     ).toMatchObject({
       contractName: 'AzPrThreeValueMechanicsOperands',
-      contractVersion: 2,
+      contractVersion: 3,
       kind: 'hp-raw-preview-product',
       expectedDelta: result.summary.totalRawDamage,
       sourceBindingRequired: true,
@@ -4733,10 +4788,28 @@ describe('first vertical slice simulation', () => {
       appliedEnergyDelta.mechanicsAdapterRequest.sourceValue.operands
     ).toMatchObject({
       contractName: 'AzPrThreeValueMechanicsOperands',
+      contractVersion: 3,
       kind: 'explicit-self-energy-event-sum',
       expectedDelta: -Number(spSkill.spCost),
       inputs: { eventDeltas: [-Number(spSkill.spCost)] },
+      sourceBindingRequired: true,
+      sourceBindingReady: true,
+      sourceBindingStatus: 'applied-source-binding-valid',
+      sourceBindingKind: 'explicit-self-energy-events',
+      sourceBindingIdentity: expect.stringMatching(/^azpr-applied-source-v1-/u),
+      sourceBinding: expect.objectContaining({
+        contractName: 'AzPrThreeValueAppliedSourceBinding',
+        kind: 'explicit-self-energy-events',
+        ready: true,
+      }),
       ready: true,
+    });
+    expect(appliedEnergyDelta).toMatchObject({
+      appliedSourceBindingState: 'bound-ready',
+      appliedSourceBindingKind: 'explicit-self-energy-events',
+      appliedSourceBindingIdentity: expect.stringMatching(
+        /^azpr-applied-source-v1-/u
+      ),
     });
     expect(
       result.threeValueRuntimeProjection.runtimeAppliedDeltas.map(
@@ -4754,7 +4827,7 @@ describe('first vertical slice simulation', () => {
             }),
           }),
           mechanicsEvaluation: expect.objectContaining({
-            contractVersion: 4,
+            contractVersion: 5,
             ready: true,
             operandSourceBindingRequired: true,
             operandSourceBindingReady: true,
@@ -4769,7 +4842,13 @@ describe('first vertical slice simulation', () => {
               }),
             }),
           }),
-          mechanicsEvaluation: expect.objectContaining({ ready: true }),
+          mechanicsEvaluation: expect.objectContaining({
+            contractVersion: 5,
+            ready: true,
+            operandSourceBindingState: 'bound-ready',
+            operandSourceBindingRequired: true,
+            operandSourceBindingReady: true,
+          }),
         }),
       ])
     );

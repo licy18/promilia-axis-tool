@@ -173,6 +173,13 @@ export function createThreeValueGenerationLayer({
             'sourceBinding',
             'sourceBindingValidation',
           ],
+          appliedSourceBindingFields: [
+            'sourceBindingRequired',
+            'sourceBindingReady',
+            'sourceBindingStatus',
+            'sourceBindingKind',
+            'sourceBindingIdentity',
+          ],
         },
         mechanicsProfileContract: {
           name: THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME,
@@ -511,6 +518,24 @@ function createThreeValueGenerationDelta({
     mechanismConfigurationStatus: mechanismContext.configurationStatus,
     mechanismConfigurationReady: mechanismContext.configurationReady,
     mechanicsAdapterRequest,
+    appliedSourceBindingState: !applied
+      ? null
+      : sourceValue.operands?.sourceBindingRequired === true
+        ? sourceValue.operands?.sourceBindingReady === true
+          ? 'bound-ready'
+          : 'bound-drift'
+        : 'compatible-unbound',
+    appliedSourceBindingKind: sourceValue.operands?.sourceBindingKind ?? null,
+    appliedSourceBindingIdentity:
+      sourceValue.operands?.sourceBindingIdentity ?? null,
+    appliedSourceBindingRequired:
+      applied && sourceValue.operands?.sourceBindingRequired === true,
+    appliedSourceBindingReady:
+      applied && sourceValue.operands?.sourceBindingRequired === true
+        ? sourceValue.operands?.sourceBindingReady === true
+        : null,
+    appliedSourceBindingStatus:
+      sourceValue.operands?.sourceBindingStatus ?? null,
     hpOperandSourceBindingRequired:
       sourceValue.operands?.sourceBindingRequired === true,
     hpOperandSourceBindingReady:
@@ -914,7 +939,7 @@ function createActionHitThreeValueDeltaStandardContract({
         ? 'action-hit-three-value-delta-contract-ready'
         : 'action-hit-three-value-delta-contract-empty',
     name: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
-    version: 8,
+    version: 9,
     topology: ['Action', 'Hit', 'ThreeValueDelta'],
     frameRate: AZPR_TIMELINE_FRAME_RATE,
     frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
@@ -964,6 +989,13 @@ function createActionHitThreeValueDeltaStandardContract({
         hpRawPreviewRequiredFields: [
           'sourceBinding',
           'sourceBindingValidation',
+        ],
+        appliedSourceBindingFields: [
+          'sourceBindingRequired',
+          'sourceBindingReady',
+          'sourceBindingStatus',
+          'sourceBindingKind',
+          'sourceBindingIdentity',
         ],
       },
       mechanicsProfileContract: {
@@ -1021,6 +1053,15 @@ function createActionHitThreeValueDeltaStandardContract({
         summary.hpOperandSourceBindingReadyDeltaCount,
       hpOperandSourceBindingInvalidDeltaCount:
         summary.hpOperandSourceBindingInvalidDeltaCount,
+      appliedSourceBindingRequiredDeltaCount:
+        summary.appliedSourceBindingRequiredDeltaCount,
+      appliedSourceBindingReadyDeltaCount:
+        summary.appliedSourceBindingReadyDeltaCount,
+      appliedSourceBindingInvalidDeltaCount:
+        summary.appliedSourceBindingInvalidDeltaCount,
+      appliedSourceBindingCompatibleUnboundDeltaCount:
+        summary.appliedSourceBindingCompatibleUnboundDeltaCount,
+      appliedSourceBindingKinds: summary.appliedSourceBindingKinds,
       applied: false,
     },
     applied: false,
@@ -1129,6 +1170,23 @@ function summarizeThreeValueGenerationLayer({
         delta.hpOperandSourceBindingRequired &&
         !delta.hpOperandSourceBindingReady
     ).length,
+    appliedSourceBindingRequiredDeltaCount: deltas.filter(
+      delta => delta.appliedSourceBindingRequired
+    ).length,
+    appliedSourceBindingReadyDeltaCount: deltas.filter(
+      delta =>
+        delta.appliedSourceBindingRequired && delta.appliedSourceBindingReady
+    ).length,
+    appliedSourceBindingInvalidDeltaCount: deltas.filter(
+      delta =>
+        delta.appliedSourceBindingRequired && !delta.appliedSourceBindingReady
+    ).length,
+    appliedSourceBindingCompatibleUnboundDeltaCount: deltas.filter(
+      delta => delta.appliedSourceBindingState === 'compatible-unbound'
+    ).length,
+    appliedSourceBindingKinds: uniqueStrings(
+      deltas.map(delta => delta.appliedSourceBindingKind)
+    ),
     hitCount: hits.length,
     deltaCount: deltas.length,
     trackCount: new Set(deltas.map(delta => delta.trackKey)).size,

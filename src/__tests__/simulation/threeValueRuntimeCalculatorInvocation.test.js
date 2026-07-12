@@ -16,7 +16,7 @@ describe('three value runtime calculator invocation', () => {
     });
 
     expect(invocation).toMatchObject({
-      schemaVersion: 10,
+      schemaVersion: 11,
       contractName: 'ThreeValueRuntimeCalculatorInvocation',
       status: 'runtime-calculator-invocation-ready-passthrough',
       sourceDeltaId: 'hp-delta-001',
@@ -28,10 +28,10 @@ describe('three value runtime calculator invocation', () => {
         custom: false,
         replaceable: true,
         contractName: 'AzPrThreeValueMechanicsAdapter',
-        contractVersion: 8,
+        contractVersion: 9,
         registrationKey: 'built-in',
         evaluationContractName: 'AzPrThreeValueMechanicsEvaluation',
-        evaluationContractVersion: 4,
+        evaluationContractVersion: 5,
       },
       output: {
         delta: 120,
@@ -100,7 +100,7 @@ describe('three value runtime calculator invocation', () => {
     });
     expect(invocation.mechanicsEvaluation).toMatchObject({
       contractName: 'AzPrThreeValueMechanicsEvaluation',
-      contractVersion: 4,
+      contractVersion: 5,
       status: 'three-value-mechanics-evaluation-ready',
       stepResults: [
         expect.objectContaining({

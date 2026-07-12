@@ -1,17 +1,17 @@
 export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME =
   'AzPrThreeValueMechanicsAdapter';
 
-export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION = 8;
+export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION = 9;
 
 export const THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_NAME =
   'AzPrThreeValueMechanicsEvaluation';
 
-export const THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_VERSION = 4;
+export const THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_VERSION = 5;
 
 export const THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME =
   'AzPrThreeValueMechanicsOperands';
 
-export const THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_VERSION = 2;
+export const THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_VERSION = 3;
 
 export const THREE_VALUE_MECHANICS_TRACK_DEFINITIONS = {
   enemyHpDamage: {
@@ -229,6 +229,7 @@ export function createThreeValueMechanicsOperands({
   value,
   formulaBreakdown,
   sampleValidation,
+  sourceBinding = null,
 } = {}) {
   const expectedDelta = normalizeMechanicsNumber(value);
   const hpOperandSourceBinding =
@@ -263,13 +264,12 @@ export function createThreeValueMechanicsOperands({
         kind: 'hp-raw-preview-product',
         status: 'hp-raw-preview-operands-ready',
         ready: true,
-        sourceBindingRequired: Boolean(hpOperandSourceBinding),
-        sourceBindingReady: hpOperandSourceBinding
-          ? sourceBindingValidation.ready
-          : null,
-        sourceBindingStatus: sourceBindingValidation.status,
-        sourceBinding: hpOperandSourceBinding,
-        sourceBindingValidation,
+        ...(hpOperandSourceBinding?.ready
+          ? createSourceBindingFields(
+              hpOperandSourceBinding,
+              sourceBindingValidation
+            )
+          : createCompatibleUnboundSourceBindingFields(hpOperandSourceBinding)),
         inputs: {
           baseAttack,
           actionMultiplier,
@@ -286,11 +286,31 @@ export function createThreeValueMechanicsOperands({
       .map(event => normalizeMechanicsNumber(event.change))
       .filter(value => value != null);
     if (eventDeltas.length > 0) {
+      const explicitSourceBinding =
+        sourceBinding ??
+        createExplicitSelfEnergySourceBinding({
+          sourceKind,
+          events: formulaBreakdown?.layers?.explicitResourceDelta?.events,
+          expectedDelta,
+        });
+      const sourceBindingValidation = validateThreeValueAppliedSourceBinding({
+        binding: explicitSourceBinding,
+        trackKey,
+        sourceKind,
+        expectedDelta,
+        eventDeltas,
+      });
       return {
         ...base,
         kind: 'explicit-self-energy-event-sum',
         status: 'explicit-self-energy-operands-ready',
         ready: true,
+        ...(sourceBinding || explicitSourceBinding.ready
+          ? createSourceBindingFields(
+              explicitSourceBinding,
+              sourceBindingValidation
+            )
+          : createCompatibleUnboundSourceBindingFields(explicitSourceBinding)),
         inputs: { eventDeltas },
       };
     }
@@ -300,6 +320,15 @@ export function createThreeValueMechanicsOperands({
   const after = normalizeMechanicsNumber(sampleValidation?.after);
   if (before != null && after != null) {
     const decrease = trackKey === 'enemyToughnessDamage';
+    const sourceBindingValidation = validateThreeValueAppliedSourceBinding({
+      binding: sourceBinding,
+      trackKey,
+      sourceKind,
+      expectedDelta,
+      before,
+      after,
+      reportedDelta: sampleValidation?.delta,
+    });
     return {
       ...base,
       kind: decrease
@@ -307,6 +336,7 @@ export function createThreeValueMechanicsOperands({
         : 'validated-self-energy-before-after',
       status: 'validated-runtime-sample-operands-ready',
       ready: true,
+      ...createSourceBindingFields(sourceBinding, sourceBindingValidation),
       inputs: {
         before,
         after,
@@ -343,23 +373,18 @@ export function createThreeValueMechanicsEvaluation(
   );
   const layerInputs = input.mechanicsLayerInputs ?? {};
   const sharedOperands = layerInputs.inputs?.operands?.value ?? {};
-  const operandSourceBindingValidation =
-    operands.kind === 'hp-raw-preview-product'
-      ? validateThreeValueHpOperandSourceBinding({
-          binding: operands.sourceBinding,
-          action: input.action,
-          baseAttack: layerInputs.inputs?.actorStats?.value?.attack,
-          actionMultiplier: layerInputs.inputs?.actionMultiplier?.value,
-          expectedDelta: operands.expectedDelta,
-        })
-      : {
-          required: false,
-          ready: false,
-          status: 'hp-operand-source-binding-not-applicable',
-          issueCodes: [],
-          issues: [],
-        };
+  const operandSourceBindingValidation = validateMechanicsOperandSourceBinding({
+    operands,
+    input,
+    layerInputs,
+  });
   const operandSourceBindingRequired = operands.sourceBindingRequired === true;
+  const operandSourceBindingApplicable = [
+    'hp-raw-preview-product',
+    'explicit-self-energy-event-sum',
+    'validated-toughness-before-after',
+    'validated-self-energy-before-after',
+  ].includes(operands.kind);
   const stepResults = [];
   let previousDelta = null;
   for (const step of steps) {
@@ -414,6 +439,15 @@ export function createThreeValueMechanicsEvaluation(
     stepResults,
     capabilityReady: capabilityResolution.ready,
     operandSourceBindingRequired,
+    operandSourceBindingState: !operandSourceBindingApplicable
+      ? 'not-applicable'
+      : operandSourceBindingRequired
+        ? operandSourceBindingValidation.ready
+          ? 'bound-ready'
+          : 'bound-drift'
+        : 'compatible-unbound',
+    operandSourceBindingKind: operands.sourceBindingKind ?? null,
+    operandSourceBindingIdentity: operands.sourceBindingIdentity ?? null,
     operandSourceBindingReady: operandSourceBindingRequired
       ? operandSourceBindingValidation.ready
       : null,
@@ -422,6 +456,88 @@ export function createThreeValueMechanicsEvaluation(
     stateEffectStepKey: stateEffectResolution.ready
       ? stateEffectResolution.stepKey
       : null,
+  };
+}
+
+function validateMechanicsOperandSourceBinding({
+  operands,
+  input,
+  layerInputs,
+}) {
+  if (operands.kind === 'hp-raw-preview-product') {
+    return validateThreeValueHpOperandSourceBinding({
+      binding: operands.sourceBinding,
+      action: input.action,
+      baseAttack: layerInputs.inputs?.actorStats?.value?.attack,
+      actionMultiplier: layerInputs.inputs?.actionMultiplier?.value,
+      expectedDelta: operands.expectedDelta,
+    });
+  }
+  if (
+    operands.kind === 'explicit-self-energy-event-sum' ||
+    operands.kind === 'validated-toughness-before-after' ||
+    operands.kind === 'validated-self-energy-before-after'
+  ) {
+    return validateThreeValueAppliedSourceBinding({
+      binding: operands.sourceBinding,
+      trackKey: input.trackKey,
+      sourceKind: operands.sourceKind,
+      expectedDelta: operands.expectedDelta,
+      eventDeltas: operands.inputs?.eventDeltas ?? null,
+      before: operands.inputs?.before,
+      after: operands.inputs?.after,
+      reportedDelta: operands.inputs?.reportedDelta,
+      sourceIds: input.sourceValue?.sourceIds,
+      action: input.action,
+      hit: input.hit,
+    });
+  }
+  return {
+    required: false,
+    ready: false,
+    status: 'applied-source-binding-not-applicable',
+    kind: null,
+    identity: null,
+    issueCodes: [],
+    issues: [],
+  };
+}
+
+function createSourceBindingFields(binding, validation) {
+  return {
+    sourceBindingRequired: Boolean(binding),
+    sourceBindingReady: binding ? validation.ready : null,
+    sourceBindingStatus: validation.status,
+    sourceBindingKind:
+      binding?.kind ??
+      (binding?.skillVariantReference ? 'hp-skill-variant-operands' : null),
+    sourceBindingIdentity:
+      binding?.identity ?? binding?.skillVariantReference?.identity ?? null,
+    sourceBinding: binding,
+    sourceBindingValidation: validation,
+  };
+}
+
+function createCompatibleUnboundSourceBindingFields(candidate) {
+  return {
+    sourceBindingRequired: false,
+    sourceBindingReady: null,
+    sourceBindingStatus: 'applied-source-binding-compatible-unbound',
+    sourceBindingKind:
+      candidate?.kind ??
+      (candidate?.skillVariantReference ? 'hp-skill-variant-operands' : null),
+    sourceBindingIdentity: null,
+    sourceBinding: null,
+    sourceBindingCandidate: candidate ?? null,
+    sourceBindingValidation: {
+      required: false,
+      ready: false,
+      status: 'applied-source-binding-compatible-unbound',
+      kind: candidate?.kind ?? null,
+      identity: null,
+      issueCodes: candidate?.issueCodes ?? [],
+      issues: candidate?.issues ?? [],
+    },
   };
 }
 
@@ -678,3 +794,7 @@ import {
   createThreeValueMechanicsLayerInputs,
 } from './threeValueMechanicsLayerInputs';
 import { validateThreeValueHpOperandSourceBinding } from './threeValueHpOperandSourceBinding';
+import {
+  createExplicitSelfEnergySourceBinding,
+  validateThreeValueAppliedSourceBinding,
+} from './threeValueAppliedSourceBinding';

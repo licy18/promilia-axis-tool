@@ -144,13 +144,43 @@ describe('Workbench project replay consistency', () => {
       ],
       configurationRuntimeBindingReadyInvocationCount: 3,
       configurationRuntimeBindingMissingInvocationCount: 0,
-      operandSourceBindingRequiredInvocationCount: 1,
-      operandSourceBindingReadyInvocationCount: 1,
+      operandSourceBindingRequiredInvocationCount: 3,
+      operandSourceBindingReadyInvocationCount: 3,
       operandSourceBindingInvalidInvocationCount: 0,
+      operandSourceBindingCompatibleUnboundInvocationCount: 0,
+      operandSourceBindingStates: ['bound-ready'],
+      operandSourceBindingKinds: [
+        'explicit-self-energy-events',
+        'hp-skill-variant-operands',
+        'validated-runtime-sample',
+      ],
       enemyHpDelta: expect.any(Number),
       enemyToughnessDelta: 70,
       selfEnergyDelta: 0.25,
     });
+    expect(baseline.appliedSourceBindings).toHaveLength(3);
+    expect(baseline.appliedSourceBindings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          trackKey: 'enemyHpDamage',
+          state: 'bound-ready',
+          kind: 'hp-skill-variant-operands',
+          identity: expect.stringMatching(/^azpr-skill-variant-v1-/u),
+        }),
+        expect.objectContaining({
+          trackKey: 'enemyToughnessDamage',
+          state: 'bound-ready',
+          kind: 'validated-runtime-sample',
+          identity: expect.stringMatching(/^azpr-applied-source-v1-/u),
+        }),
+        expect.objectContaining({
+          trackKey: 'selfEnergyChange',
+          state: 'bound-ready',
+          kind: 'explicit-self-energy-events',
+          identity: expect.stringMatching(/^azpr-applied-source-v1-/u),
+        }),
+      ])
+    );
     expect(baseline.mechanicsProfileSelection).toMatchObject({
       sourceKind: 'project-persisted-mechanics-profile-selection',
       requestedProfileId: 'azpr-replay-equivalent-v1',
@@ -287,6 +317,16 @@ function createScenarioReplaySignature(draft, configurationLibrary) {
     stateEffectProposals: runtimeProjection.runtimeAppliedDeltas.map(
       delta => delta.stateEffectProposal
     ),
+    appliedSourceBindings: result.threeValueGenerationLayer.deltas
+      .filter(delta => delta.applied)
+      .map(delta => ({
+        sourceDeltaId: delta.id,
+        trackKey: delta.trackKey,
+        state: delta.appliedSourceBindingState,
+        kind: delta.appliedSourceBindingKind,
+        identity: delta.appliedSourceBindingIdentity,
+        status: delta.appliedSourceBindingStatus,
+      })),
     runtimeSummary: runtimeProjection.summary,
     runtimeOutputs: result.runtimeOutputs,
   };

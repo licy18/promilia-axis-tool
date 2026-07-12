@@ -97,6 +97,7 @@ Action
 - `threeValueMechanismContext.js`：角色、动作、敌人和来源上下文。
 - `threeValueMechanismConfiguration.js`：把 Project 已解析配置、实例身份和 profile 选择编译为 mechanics configuration，声明字段应用边界。
 - `threeValueMechanicsAdapter.js`：三轨统一 adapter 注册表、结构化 operands、generation request 与 runtime invocation input。
+- `threeValueAppliedSourceBinding.js`：显式能量事件与 validated runtime sample 的稳定来源身份、完整性检查和漂移诊断。
 - `threeValueHpOperandSourceBinding.js`：把 HP 预览使用的角色攻击和动作倍率绑定到受信任 skill/variant identity，并在 compiler、generation 与 adapter 间复核来源一致性。
 - `threeValueMechanicsProfile.js`：Scenario 绑定的版本化 operand capability 与机制层应用策略。
 - `threeValueMechanicsProfileCatalog.js`：受信任生产 profile 清单、精确解析与多方案项目兼容性报告。
@@ -154,9 +155,9 @@ Project 构建时以活动方案的 `configurationSelection`、共享 `configura
 
 compiler 将配置来源、游戏数据引用、Scenario actor/enemy 与实际 `mechanicsProfile` 合成为 `AzPrThreeValueMechanismConfiguration v3` 和 `AzPrThreeValueConfigurationRuntimeBinding v2`。角色与敌人来源携带已解析 catalog 记录，runtime binding 同时固定 configuration replay identity 与 game data reference identity。当前确认可用的 baseline/预览字段显式标记应用位置；奇波、装备、灵子效果、敌人等级公式和元素防御公式固定为未应用。
 
-`AzPrThreeValueMechanismContext` 为 v4，`ThreeValueDeltaCalculator` 为 v3。外层 `Action -> Hit -> ThreeValueDelta` 为 v10，标准 generation contract 为 v8，`AzPrThreeValueMechanicsAdapter` 为 v8，`AzPrThreeValueMechanicsOperands` 为 v2，`ThreeValueRuntimeCalculatorInvocation` 为 v10，runtime state snapshot 为 v2；每条 delta、generation calculator result 和 runtime invocation 都保留配置、profile、机制层输入、动作技能引用、operand 来源绑定、evaluation、状态作用 proposal、来源状态及实例 ID。
+`AzPrThreeValueMechanismContext` 为 v4，`ThreeValueDeltaCalculator` 为 v3。外层 `Action -> Hit -> ThreeValueDelta` 为 v10，标准 generation contract 为 v9，`AzPrThreeValueMechanicsAdapter` 为 v9，`AzPrThreeValueMechanicsOperands` 为 v3，`ThreeValueRuntimeCalculatorInvocation` 为 v11，runtime state snapshot 为 v2；每条 delta、generation calculator result 和 runtime invocation 都保留配置、profile、机制层输入、动作技能引用、applied source binding、evaluation、状态作用 proposal、来源状态及实例 ID。
 
-### MechanicsProfile v2 / Adapter v8 / Operands v2 / LayerInputs v1 / Evaluation v4
+### MechanicsProfile v2 / Adapter v9 / Operands v3 / LayerInputs v1 / Evaluation v5
 
 compiler 从 Project metadata 的 `AzPrWorkbenchMechanicsProfileSelection v1` 读取 profile ID/版本，并通过受控 `threeValueMechanicsProfiles` registry 精确解析；未注册或无效版本显式回退默认 `azpr-three-value-preview-v1`，Scenario 与 runtime binding 同时保留 requested/resolved profile、选择来源和 fallback 原因。profile 是纯数据，声明支持的 operand kinds、对应 operation、可用轨道，以及 HP、韧性、能量各层的 applied/unapplied 状态；`threeValueMechanicsProfile` 直接对象参数仅保留为兼容注入入口。
 
@@ -166,13 +167,15 @@ compiler 从 Project metadata 的 `AzPrWorkbenchMechanicsProfileSelection v1` �
 
 HP 的 `hp-raw-preview-product` operands 必须携带 `AzPrHpOperandSourceBinding v1`。compiler 记录角色面板攻击、已选动作倍率及 action/skill/variant identity；generation 校验相同倍率、来源字段和乘积结果；adapter evaluation 再与运行时 action reference 和 layer inputs 复核。正常路径继续得到原 HP delta；身份或来源漂移时 calculation 不静默改用另一来源，而是在 evaluation、invocation validation 和 summary 中保留 issue code。
 
-`AzPrThreeValueMechanicsEvaluation v4` 是内置 adapter 的唯一主计算结果。它按 profile capability 顺序执行 `steps[]`，每步通过 operation handler 读取声明的 layer inputs，并输出 step key、operation、used layers、delta、ready 与 status；前一步 delta 作为下一步 `previousDelta`。profile v2 的 track 定义保存标准 state effect，step 通过 `stateEffectTrackKeys[]` 声明自己负责的三值轨道。
+显式 `RESOURCE_CHANGE` 通过 `AzPrThreeValueAppliedSourceBinding v1` 固定动作、角色、时间、资源、变化值和原因；validated runtime sample 固定 capture session、event、作用实体、Element/path、帧位和 before/after。generation 与 runtime 对每条 applied delta 统一输出 `bound-ready / compatible-unbound / bound-drift`；旧 fixture 没有新身份时保留数值并标记兼容未绑定，正式 binding 后发生漂移则让 invocation validation 失败并保留 issue code。
+
+`AzPrThreeValueMechanicsEvaluation v5` 是内置 adapter 的唯一主计算结果。它按 profile capability 顺序执行 `steps[]`，每步通过 operation handler 读取声明的 layer inputs，并输出 step key、operation、used layers、delta、ready 与 status；前一步 delta 作为下一步 `previousDelta`。profile v2 的 track 定义保存标准 state effect，step 通过 `stateEffectTrackKeys[]` 声明自己负责的三值轨道。
 
 `AzPrThreeValueStateEffectProposal v1` 把 evaluation 或自定义 adapter 的最终 delta 收束为 `readMetric / writeMetric / targetKind / targetId / applyMode / frameIndex`。HP 和韧性只允许写目标敌人对应状态，能量只允许写 energy owner 角色；未知轨道、缺失目标、缺失读取状态或无效 delta 的 proposal 不会修改 runtime state。旧 `hpDelta / toughnessDelta / energyDelta` 继续服务日志、曲线和兼容消费，但不再直接驱动 snapshot mutation。
 
 注册表支持 HP、韧性、能量轨专用 adapter、一个 `default` adapter 覆盖三轨，以及纯函数 operation handler；`simulateScenario(scenario, { threeValueMechanicsAdapterRegistry })` 是唯一无 UI 顶层注入入口。默认 profile 的 product、sum、before/after 与 identity 均已迁入内置 steps；runtime calculator invocation summary 汇总实际 operation 和 proposal ready/missing 数。
 
-生产构建把配置来源、profile 选择/catalog、mechanism configuration、profile、adapter、HP operand 来源绑定与 layer inputs 固定为单个 `azpr-mechanics-runtime` chunk；同步出现的辅助 Workbench 面板及其布局、文件接收和效果复盘依赖合并为 `workbench-secondary-ui`。skill core 投影对已匹配的交叉校验不再重复保存与角色技能表相同的 labels/values，只在不匹配时保留差异证据。以上调整不改变运行结果，总 JavaScript 体积仍由独立预算限制。
+生产构建把配置来源、profile 选择/catalog、mechanism configuration、profile、adapter、三轨 applied source binding 与 layer inputs 固定为单个 `azpr-mechanics-runtime` chunk；同步出现的辅助 Workbench 面板及其布局、文件接收和效果复盘依赖合并为 `workbench-secondary-ui`。skill core 投影对已匹配的交叉校验不再重复保存与角色技能表相同的 labels/values，只在不匹配时保留差异证据。以上调整不改变运行结果，总 JavaScript 体积仍由独立预算限制。
 
 ### ScenarioWorkspace v1
 

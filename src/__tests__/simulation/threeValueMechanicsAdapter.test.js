@@ -8,6 +8,7 @@ import {
 } from '../../simulation/mechanics/threeValueMechanicsAdapter';
 import { DEFAULT_THREE_VALUE_MECHANICS_PROFILE } from '../../simulation/mechanics/threeValueMechanicsProfile';
 import { createThreeValueHpOperandSourceBinding } from '../../simulation/mechanics/threeValueHpOperandSourceBinding';
+import { createValidatedRuntimeSampleSourceBinding } from '../../simulation/mechanics/threeValueAppliedSourceBinding';
 import {
   createThreeValueRuntimeCalculatorInvocation,
   summarizeThreeValueRuntimeCalculatorInvocations,
@@ -89,12 +90,12 @@ describe('three value mechanics adapter', () => {
     expect(invocations).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          schemaVersion: 10,
+          schemaVersion: 11,
           adapter: expect.objectContaining({
             key: 'unit-test-three-track-mechanics-adapter',
             version: 7,
             contractName: 'AzPrThreeValueMechanicsAdapter',
-            contractVersion: 8,
+            contractVersion: 9,
             registrationKey: 'default',
             custom: true,
           }),
@@ -138,7 +139,7 @@ describe('three value mechanics adapter', () => {
       passthroughInvocationCount: 3,
       customAdapterInvocationCount: 3,
       mechanicsAdapterContractName: 'AzPrThreeValueMechanicsAdapter',
-      mechanicsAdapterContractVersion: 8,
+      mechanicsAdapterContractVersion: 9,
       registrationKeys: ['default'],
       adapterKeys: ['unit-test-three-track-mechanics-adapter'],
       stateEffectProposalReadyInvocationCount: 3,
@@ -228,7 +229,7 @@ describe('three value mechanics adapter', () => {
           }),
           mechanicsEvaluation: expect.objectContaining({
             contractName: 'AzPrThreeValueMechanicsEvaluation',
-            contractVersion: 4,
+            contractVersion: 5,
             ready: true,
             stepResults: [expect.objectContaining({ ready: true })],
           }),
@@ -494,7 +495,7 @@ describe('three value mechanics adapter', () => {
       ready: true,
     });
     expect(operands).toMatchObject({
-      contractVersion: 2,
+      contractVersion: 3,
       sourceBindingRequired: true,
       sourceBindingReady: true,
     });
@@ -506,7 +507,7 @@ describe('three value mechanics adapter', () => {
           'runtime-mechanics-evaluation-ready-with-operand-source-diagnostics',
       },
       mechanicsEvaluation: {
-        contractVersion: 4,
+        contractVersion: 5,
         ready: true,
         operandSourceBindingRequired: true,
         operandSourceBindingReady: false,
@@ -533,6 +534,118 @@ describe('three value mechanics adapter', () => {
       ],
     });
   });
+
+  it('preserves a validated sample delta while exposing capture source drift', () => {
+    const point = {
+      sourceKind: 'azpr-validated-runtime-mechanism-sample',
+      runtimeSampleEventKey: 'capture-001:0:toughness-damage-applied',
+      captureSessionId: 'capture-001',
+      eventIndex: 0,
+      eventType: 'toughness-damage-applied',
+      actionId: 'action-001',
+      actorId: 'actor-001',
+      targetId: 'enemy-001',
+      targetEntityId: 'runtime-enemy-001',
+      sourceElementConfigId: 101001081,
+      pathId: 'unit-test-path',
+      frameIndex: 12,
+      timeMs: 200,
+      delta: 18,
+      validation: {
+        valid: true,
+        before: 100,
+        after: 82,
+        delta: 18,
+      },
+    };
+    const sourceBinding = createValidatedRuntimeSampleSourceBinding({
+      trackKey: 'enemyToughnessDamage',
+      sourceKind: point.sourceKind,
+      point,
+    });
+    const operands = createThreeValueMechanicsOperands({
+      trackKey: 'enemyToughnessDamage',
+      sourceKind: point.sourceKind,
+      value: 18,
+      sampleValidation: point.validation,
+      sourceBinding,
+    });
+    const driftedDelta = structuredClone(
+      createDelta({
+        trackKey: 'enemyToughnessDamage',
+        outputField: 'toughnessDelta',
+        value: 18,
+        operands,
+        sourceIds: {
+          skillIds: [],
+          elementConfigIds: [101001081],
+          captureSessionIds: ['capture-001'],
+          pathIds: ['unit-test-path'],
+        },
+      })
+    );
+    driftedDelta.mechanicsAdapterRequest.sourceValue.operands.sourceBinding.sources.sample.captureSessionId =
+      'capture-drifted';
+    const invocation = createThreeValueRuntimeCalculatorInvocation({
+      delta: driftedDelta,
+      stateBefore: createStateBefore(),
+    });
+
+    expect(sourceBinding).toMatchObject({
+      contractName: 'AzPrThreeValueAppliedSourceBinding',
+      kind: 'validated-runtime-sample',
+      status: 'applied-source-binding-ready',
+      ready: true,
+    });
+    expect(operands).toMatchObject({
+      contractVersion: 3,
+      sourceBindingRequired: true,
+      sourceBindingReady: true,
+      sourceBindingKind: 'validated-runtime-sample',
+    });
+    expect(invocation).toMatchObject({
+      output: {
+        delta: 18,
+        toughnessDelta: 18,
+        status:
+          'runtime-mechanics-evaluation-ready-with-operand-source-diagnostics',
+      },
+      mechanicsEvaluation: {
+        contractVersion: 5,
+        ready: true,
+        operandSourceBindingState: 'bound-drift',
+        operandSourceBindingRequired: true,
+        operandSourceBindingReady: false,
+        operandSourceBindingValidation: {
+          status: 'applied-source-binding-drift-detected',
+          issueCodes: expect.arrayContaining([
+            'applied-source-binding-identity-content-mismatch',
+            'sample-capture-session-mismatch',
+          ]),
+        },
+      },
+      validation: {
+        operandSourceBindingReady: false,
+        valid: false,
+      },
+      changed: false,
+      preservesGeneratedDelta: true,
+    });
+    expect(
+      summarizeThreeValueRuntimeCalculatorInvocations([invocation])
+    ).toMatchObject({
+      operandSourceBindingRequiredInvocationCount: 1,
+      operandSourceBindingReadyInvocationCount: 0,
+      operandSourceBindingInvalidInvocationCount: 1,
+      operandSourceBindingCompatibleUnboundInvocationCount: 0,
+      operandSourceBindingStates: ['bound-drift'],
+      operandSourceBindingKinds: ['validated-runtime-sample'],
+      operandSourceBindingIssueCodes: [
+        'applied-source-binding-identity-content-mismatch',
+        'sample-capture-session-mismatch',
+      ],
+    });
+  });
 });
 
 function createDelta({
@@ -542,6 +655,7 @@ function createDelta({
   operands,
   mechanicsProfile,
   gameDataReference = null,
+  sourceIds = null,
 }) {
   const action = {
     actionId: 'action-001',
@@ -599,6 +713,7 @@ function createDelta({
       value,
       ...fields,
       sourceKind: 'unit-test-source-value',
+      sourceIds,
       status: 'unit-test-source-value-ready',
       operands,
     },

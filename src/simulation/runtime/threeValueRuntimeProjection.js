@@ -1359,6 +1359,13 @@ function summarizeThreeValueRuntimeProjection({
       runtimeStateSnapshots.summary.operandSourceBindingReadyInvocationCount,
     operandSourceBindingInvalidInvocationCount:
       runtimeStateSnapshots.summary.operandSourceBindingInvalidInvocationCount,
+    operandSourceBindingCompatibleUnboundInvocationCount:
+      runtimeStateSnapshots.summary
+        .operandSourceBindingCompatibleUnboundInvocationCount,
+    operandSourceBindingStates:
+      runtimeStateSnapshots.summary.operandSourceBindingStates,
+    operandSourceBindingKinds:
+      runtimeStateSnapshots.summary.operandSourceBindingKinds,
     operandSourceBindingIssueCodes:
       runtimeStateSnapshots.summary.operandSourceBindingIssueCodes,
     stateEffectProposalReadyInvocationCount:

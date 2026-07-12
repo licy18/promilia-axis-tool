@@ -18,6 +18,7 @@ export default defineConfig({
           if (
             id.endsWith('/threeValueMechanicsProfile.js') ||
             id.endsWith('/threeValueMechanicsAdapter.js') ||
+            id.endsWith('/threeValueAppliedSourceBinding.js') ||
             id.endsWith('/threeValueHpOperandSourceBinding.js') ||
             id.endsWith('/threeValueMechanicsLayerInputs.js') ||
             id.endsWith('/threeValueMechanismConfiguration.js') ||

@@ -3,6 +3,7 @@ import {
   createThreeValueMechanismSampleAdapterOutput,
 } from '../mechanics/threeValueMechanismSampleAdapter';
 import { createThreeValueMechanicsOperands } from '../mechanics/threeValueMechanicsAdapter';
+import { createValidatedRuntimeSampleSourceBinding } from '../mechanics/threeValueAppliedSourceBinding';
 
 export const AZPR_TIMELINE_FRAME_RATE = 60;
 export const AZPR_TIMELINE_FRAME_MS = 1000 / AZPR_TIMELINE_FRAME_RATE;
@@ -223,28 +224,37 @@ function createAppliedGenerationInputLayer({
     .filter(Boolean);
   const mechanismSamplePoints = (
     mechanismSampleAdapterOutput?.points ?? []
-  ).map((point, index) => ({
-    ...point,
-    sequenceIndex:
-      numberOrNull(point.sequenceIndex) ?? actionResultPoints.length + index,
-    timeMs: roundTimelineMs(numberOrNull(point.timeMs) ?? 0),
-    frameIndex:
-      numberOrNull(point.frameIndex) ?? msToTimelineFrame(point.timeMs ?? 0),
-    frameLabel: formatTimelineFrame(
-      numberOrNull(point.frameIndex) ?? msToTimelineFrame(point.timeMs ?? 0)
-    ),
-    elementConfigIds: uniqueNumbers([
-      numberOrNull(point.sourceElementConfigId),
-      numberOrNull(point.elementConfigId),
-    ]),
-    mechanicsOperands: createThreeValueMechanicsOperands({
+  ).map((point, index) => {
+    const sourceBinding = createValidatedRuntimeSampleSourceBinding({
       trackKey: definition.key,
       sourceKind: point.sourceKind,
-      value: point.delta,
+      point,
       sampleValidation: point.validation,
-    }),
-    applied: true,
-  }));
+    });
+    return {
+      ...point,
+      sequenceIndex:
+        numberOrNull(point.sequenceIndex) ?? actionResultPoints.length + index,
+      timeMs: roundTimelineMs(numberOrNull(point.timeMs) ?? 0),
+      frameIndex:
+        numberOrNull(point.frameIndex) ?? msToTimelineFrame(point.timeMs ?? 0),
+      frameLabel: formatTimelineFrame(
+        numberOrNull(point.frameIndex) ?? msToTimelineFrame(point.timeMs ?? 0)
+      ),
+      elementConfigIds: uniqueNumbers([
+        numberOrNull(point.sourceElementConfigId),
+        numberOrNull(point.elementConfigId),
+      ]),
+      mechanicsOperands: createThreeValueMechanicsOperands({
+        trackKey: definition.key,
+        sourceKind: point.sourceKind,
+        value: point.delta,
+        sampleValidation: point.validation,
+        sourceBinding,
+      }),
+      applied: true,
+    };
+  });
   const points = [...actionResultPoints, ...mechanismSamplePoints].sort(
     compareGenerationInputPoints
   );

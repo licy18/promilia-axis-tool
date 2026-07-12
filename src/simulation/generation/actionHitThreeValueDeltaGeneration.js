@@ -122,6 +122,17 @@ function createActionHitThreeValueDeltaGenerationSummary({
       standardContract.summary?.hpOperandSourceBindingReadyDeltaCount ?? 0,
     hpOperandSourceBindingInvalidDeltaCount:
       standardContract.summary?.hpOperandSourceBindingInvalidDeltaCount ?? 0,
+    appliedSourceBindingRequiredDeltaCount:
+      standardContract.summary?.appliedSourceBindingRequiredDeltaCount ?? 0,
+    appliedSourceBindingReadyDeltaCount:
+      standardContract.summary?.appliedSourceBindingReadyDeltaCount ?? 0,
+    appliedSourceBindingInvalidDeltaCount:
+      standardContract.summary?.appliedSourceBindingInvalidDeltaCount ?? 0,
+    appliedSourceBindingCompatibleUnboundDeltaCount:
+      standardContract.summary
+        ?.appliedSourceBindingCompatibleUnboundDeltaCount ?? 0,
+    appliedSourceBindingKinds:
+      standardContract.summary?.appliedSourceBindingKinds ?? [],
     executionPlanActionCount:
       standardContract.summary?.executionPlanActionCount ?? 0,
     executionPlanExecutedActionCount:

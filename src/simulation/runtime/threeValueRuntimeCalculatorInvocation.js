@@ -79,7 +79,7 @@ export function createThreeValueRuntimeCalculatorInvocation({
   const valid = Object.values(validation).every(Boolean);
 
   return {
-    schemaVersion: 10,
+    schemaVersion: 11,
     sourceKind: 'azpr-three-value-runtime-calculator-invocation',
     contractName: THREE_VALUE_RUNTIME_CALCULATOR_INVOCATION_CONTRACT_NAME,
     status: fallbackReason
@@ -179,6 +179,21 @@ export function summarizeThreeValueRuntimeCalculatorInvocations(
         invocation.mechanicsEvaluation?.operandSourceBindingRequired === true &&
         invocation.mechanicsEvaluation?.operandSourceBindingReady !== true
     ).length,
+    operandSourceBindingCompatibleUnboundInvocationCount: invocations.filter(
+      invocation =>
+        invocation.mechanicsEvaluation?.operandSourceBindingState ===
+        'compatible-unbound'
+    ).length,
+    operandSourceBindingStates: uniqueStrings(
+      invocations.map(
+        invocation => invocation.mechanicsEvaluation?.operandSourceBindingState
+      )
+    ),
+    operandSourceBindingKinds: uniqueStrings(
+      invocations.map(
+        invocation => invocation.mechanicsEvaluation?.operandSourceBindingKind
+      )
+    ),
     operandSourceBindingIssueCodes: uniqueStrings(
       invocations.flatMap(
         invocation =>

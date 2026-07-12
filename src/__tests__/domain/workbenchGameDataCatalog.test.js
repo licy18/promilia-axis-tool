@@ -423,7 +423,7 @@ describe('Workbench game data catalog', () => {
       mechanicsAdapterRequest: {
         sourceValue: {
           operands: {
-            contractVersion: 2,
+            contractVersion: 3,
             sourceBindingRequired: true,
             sourceBindingReady: true,
             sourceBinding: compiledSkillAction.hpOperandSourceBinding,
@@ -436,9 +436,9 @@ describe('Workbench game data catalog', () => {
       },
     });
     expect(runtimeHpDelta.runtimeCalculatorInvocation).toMatchObject({
-      schemaVersion: 10,
+      schemaVersion: 11,
       mechanicsEvaluation: {
-        contractVersion: 4,
+        contractVersion: 5,
         operandSourceBindingRequired: true,
         operandSourceBindingReady: true,
         operandSourceBindingValidation: {

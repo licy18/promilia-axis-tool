@@ -8585,7 +8585,12 @@ function createSelfEnergyChangeResult(
           label: '显式资源变化',
           value: explicitDelta,
           applied: hasExplicitDelta,
-          events: energyEvents.map(event => ({
+          events: energyEvents.map((event, eventIndex) => ({
+            eventIndex,
+            eventType: event.type,
+            actionId: event.actionId,
+            actorId: event.actorId,
+            timeMs: event.timeMs,
             resource: event.payload.resource,
             change: event.payload.change,
             reason: event.payload.reason,

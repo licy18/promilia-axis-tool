@@ -164,7 +164,7 @@ describe('three value mechanics profile', () => {
       runtimeDelta.runtimeCalculatorInvocation.mechanicsEvaluation
     ).toMatchObject({
       contractName: 'AzPrThreeValueMechanicsEvaluation',
-      contractVersion: 4,
+      contractVersion: 5,
       stepResults: [
         expect.objectContaining({
           key: 'raw-product',
@@ -253,7 +253,7 @@ describe('three value mechanics profile', () => {
       fallbackReason: 'runtime-calculator-output-invalid',
       mechanicsEvaluation: {
         contractName: 'AzPrThreeValueMechanicsEvaluation',
-        contractVersion: 4,
+        contractVersion: 5,
         ready: false,
         capabilityReady: false,
       },

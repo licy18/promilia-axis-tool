@@ -1144,6 +1144,16 @@ WorkbenchProjectFile 升级为 v15；本地草稿、JSON、分享链接、PNG、
 
 下一阶段目标：阶段 8-Y / P3 三轨 applied source identity 统一闭环。把 HP 已建立的可信来源模式扩展到当前已应用的显式角色能量事件和 validated toughness/self-energy sample，使每条 applied delta 都能区分正式来源绑定、兼容未绑定和来源漂移，并在 generation、runtime 与项目回放中保持一致。该阶段只绑定现有事件、capture 和 before/after 证据，不新增公式、不追测试期倍率，也不启用未确认培养效果。
 
+### 阶段 8-Y P3 三轨 applied source identity 统一闭环（2026-07-12）
+
+新增 `AzPrThreeValueAppliedSourceBinding v1`。显式角色能量变化现在固定动作、角色、时间、资源、变化值与原因；validated 韧性/能量 sample 固定 capture session、event、作用实体、Element/path、帧位和 before/after。它与 8-X 的 HP skill/variant binding 共用 `AzPrThreeValueMechanicsOperands v3` 来源字段，并贯通 generation、adapter evaluation、runtime invocation、state snapshot 和 projection summary。
+
+每条 applied delta 现在明确分类为 `bound-ready / compatible-unbound / bound-drift`。正式 binding 的事件、capture、作用对象或数值发生漂移时，runtime 保留原 generation delta 并输出 issue code，不静默换来源；旧 first-vertical fixture 没有 8-W 身份时归入兼容未绑定，不冒充正式 binding，也不误报数据漂移。同一 Workbench 项目经本地草稿、JSON、分享链接和 PNG 回导后，三类来源 identity、proposal、三值曲线和日志保持一致。本阶段没有新增倍率、战斗公式、培养效果或 UI。
+
+阶段验收：75 个测试文件、426 条单元/组件测试通过；39 条 Workbench 主流程和 18 项 production preview 必需能力全部通过，生产报告结论为 `trial-ready`。生产引用审计为 114 个源码、110 个生产可达、4 个允许 test-only、0 个孤儿；数据投影审计全部一致。Workbench 主块为 361,270B gzip，全部 JavaScript 为 737,474B gzip，仍在 370,000B/740,000B 预算内。180 动作编译 p95 为 13.433ms、完整 simulation p95 为 32.756ms；120 动作浏览器首屏就绪为 1694ms。
+
+下一阶段目标：阶段 8-Z / P0-P3 机制合同生产守门与包体余量恢复。把默认 Workbench 的 applied source binding 完整性纳入 production preview 或独立合同审计，要求正式项目无 `bound-drift` 且可解释全部 compatible-unbound；同时合并来源 binding 中重复的 identity、数值规范化和诊断实现，在不提高预算、不改变三值结果的前提下把全部 JavaScript gzip 恢复到不高于 733,000B，为后续 P2/P3 能力保留可靠余量。该阶段不新增 UI、公式或测试期数值推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

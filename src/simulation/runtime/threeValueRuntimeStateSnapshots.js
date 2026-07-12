@@ -213,6 +213,12 @@ export function createThreeValueRuntimeStateSnapshots({
         calculatorInvocationSummary.operandSourceBindingReadyInvocationCount,
       operandSourceBindingInvalidInvocationCount:
         calculatorInvocationSummary.operandSourceBindingInvalidInvocationCount,
+      operandSourceBindingCompatibleUnboundInvocationCount:
+        calculatorInvocationSummary.operandSourceBindingCompatibleUnboundInvocationCount,
+      operandSourceBindingStates:
+        calculatorInvocationSummary.operandSourceBindingStates,
+      operandSourceBindingKinds:
+        calculatorInvocationSummary.operandSourceBindingKinds,
       operandSourceBindingIssueCodes:
         calculatorInvocationSummary.operandSourceBindingIssueCodes,
       stateEffectProposalReadyInvocationCount:
