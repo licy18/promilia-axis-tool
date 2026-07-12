@@ -26765,3 +26765,31 @@ AzPrWorkbenchGameDataReference.actions[]
 导入前按原始 action draft 区分 `skill-not-found`、`skill-actor-character-missing`、`skill-actor-character-not-in-team`、`skill-actor-character-mismatch` 和 `skill-action-variant-invalid`。这些问题不会先经 `normalizeWorkbenchActionDrafts()` 回退为默认技能或合法索引；兼容性报告保留原始 requested 值并禁止替换当前 Workbench。
 
 compiler 把引用绑定到 `scenario.actions[].gameDataReference`，并用引用中的技能 record 构造 action source。`AzPrThreeValueMechanismContext` 从 v3 升级为 v4，标准 `Action -> Hit -> ThreeValueDelta` generation contract 从 v6 升级为 v7；generation Action、Hit、Delta 与 adapter request 传播相同引用，并汇总 skill reference ready/missing action 数。项目 schema 继续为 v15，现有倍率、动作时长、命中帧和三值结果不变。
+
+## 396. GameDataReference v2 / HpOperandSourceBinding v1 / MechanicsOperands v2
+
+阶段 8-X 为每个已解析技能动作增加两个稳定身份：`referenceIdentity` 标识动作实例与施放角色，`skillVariantReferenceIdentity` 标识 catalog、数据版本、技能、动作变体、倍率原始值和来源字段。`AzPrWorkbenchGameDataReference` 从 v1 升级为 v2，动作 variant 现在保留 `rawValue / multiplier / source`。
+
+compiler 为可计算技能动作生成：
+
+```text
+AzPrHpOperandSourceBinding v1
+  action
+    actionId / skillId / actorId / actorCharacterId / actionVariantIndex
+  skillVariantReference
+    identity / actionReferenceIdentity / ready
+    catalogId / catalogVersion / dataVersion
+    skillId / characterId / actionVariantIndex
+    rawValue / multiplier / sourceIdentity
+  operands
+    baseAttack
+      value / source / actorId / characterId
+    actionMultiplier
+      value / rawValue / actionVariantIndex / sourceIdentity
+  validation
+    ready / status / issueCodes / issues
+```
+
+`AzPrThreeValueMechanicsOperands` 从 v1 升级为 v2。`hp-raw-preview-product` 保存 `sourceBindingRequired / sourceBindingReady / sourceBindingStatus / sourceBinding / sourceBindingValidation`；generation delta 和 runtime summary 汇总 ready/invalid 数。adapter evaluation 从 v3 升级为 v4，adapter 从 v7 升级为 v8，runtime invocation 从 v9 升级为 v10，标准 generation contract 从 v7 升级为 v8。
+
+正常 binding 仍执行原 `round(baseAttack * actionMultiplier)` 并保持同一 HP delta。skill/variant identity、角色、倍率、来源字段、layer input 或 expected delta 漂移时，evaluation 保留明确 issue code，invocation validation 标记无效，但不会静默改用另一技能或倍率来源。项目 schema 继续为 v15，未接入防御、抗性、暴击、装备、奇波或灵子公式。

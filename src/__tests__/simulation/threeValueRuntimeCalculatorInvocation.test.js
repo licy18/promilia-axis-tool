@@ -16,7 +16,7 @@ describe('three value runtime calculator invocation', () => {
     });
 
     expect(invocation).toMatchObject({
-      schemaVersion: 9,
+      schemaVersion: 10,
       contractName: 'ThreeValueRuntimeCalculatorInvocation',
       status: 'runtime-calculator-invocation-ready-passthrough',
       sourceDeltaId: 'hp-delta-001',
@@ -28,10 +28,10 @@ describe('three value runtime calculator invocation', () => {
         custom: false,
         replaceable: true,
         contractName: 'AzPrThreeValueMechanicsAdapter',
-        contractVersion: 7,
+        contractVersion: 8,
         registrationKey: 'built-in',
         evaluationContractName: 'AzPrThreeValueMechanicsEvaluation',
-        evaluationContractVersion: 3,
+        evaluationContractVersion: 4,
       },
       output: {
         delta: 120,
@@ -100,7 +100,7 @@ describe('three value runtime calculator invocation', () => {
     });
     expect(invocation.mechanicsEvaluation).toMatchObject({
       contractName: 'AzPrThreeValueMechanicsEvaluation',
-      contractVersion: 3,
+      contractVersion: 4,
       status: 'three-value-mechanics-evaluation-ready',
       stepResults: [
         expect.objectContaining({
@@ -135,18 +135,19 @@ describe('three value runtime calculator invocation', () => {
     const invocation = createThreeValueRuntimeCalculatorInvocation({
       delta: createHpDelta(),
       stateBefore: createStateBefore(),
-      threeValueMechanicsAdapterRegistry: createThreeValueMechanicsAdapterRegistry({
-        enemyHpDamage: {
-          key: 'invalid-output-adapter',
-          calculate() {
-            return {
-              delta: Number.NaN,
-              status: 'invalid-adapter-claimed-success',
-              sourceKind: 'invalid-adapter-result',
-            };
+      threeValueMechanicsAdapterRegistry:
+        createThreeValueMechanicsAdapterRegistry({
+          enemyHpDamage: {
+            key: 'invalid-output-adapter',
+            calculate() {
+              return {
+                delta: Number.NaN,
+                status: 'invalid-adapter-claimed-success',
+                sourceKind: 'invalid-adapter-result',
+              };
+            },
           },
-        },
-      }),
+        }),
     });
 
     expect(invocation).toMatchObject({
@@ -189,11 +190,12 @@ describe('three value runtime calculator invocation', () => {
     const invocation = createThreeValueRuntimeCalculatorInvocation({
       delta: createHpDelta(),
       stateBefore: createStateBefore(),
-      threeValueMechanicsAdapterRegistry: createThreeValueMechanicsAdapterRegistry({
-        enemyHpDamage() {
-          throw new Error('unit-test-adapter-failure');
-        },
-      }),
+      threeValueMechanicsAdapterRegistry:
+        createThreeValueMechanicsAdapterRegistry({
+          enemyHpDamage() {
+            throw new Error('unit-test-adapter-failure');
+          },
+        }),
     });
 
     expect(invocation).toMatchObject({

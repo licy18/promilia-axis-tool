@@ -64,7 +64,9 @@ describe('Workbench game data catalog', () => {
       summary: { missingCount: 0, invalidCount: 0 },
     });
     expect(reference).toMatchObject({
+      schemaVersion: 2,
       contractName: 'AzPrWorkbenchGameDataReference',
+      contractVersion: 2,
       status: 'workbench-game-data-reference-ready',
       ready: true,
       referenceIdentity: expect.stringMatching(/^azpr-game-data-v1-/u),
@@ -104,6 +106,10 @@ describe('Workbench game data catalog', () => {
           skillId: state.actionDrafts[0].skillId,
           actorCharacterId: state.actionDrafts[0].actorCharacterId,
           actionVariantIndex: state.actionDrafts[0].actionVariantIndex,
+          referenceIdentity: expect.stringMatching(/^azpr-action-skill-v1-/u),
+          skillVariantReferenceIdentity: expect.stringMatching(
+            /^azpr-skill-variant-v1-/u
+          ),
           ready: true,
           skill: expect.objectContaining({
             status: 'exact',
@@ -115,6 +121,8 @@ describe('Workbench game data catalog', () => {
             variant: expect.objectContaining({
               index: state.actionDrafts[0].actionVariantIndex,
               label: expect.any(String),
+              rawValue: expect.any(String),
+              multiplier: expect.any(Number),
             }),
           }),
         }),
@@ -309,6 +317,16 @@ describe('Workbench game data catalog', () => {
       simulation.threeValueGenerationLayer.actions.find(
         action => action.actionId === compiledSkillAction.id
       );
+    const generatedHpDelta = simulation.threeValueGenerationLayer.deltas.find(
+      delta =>
+        delta.actionId === compiledSkillAction.id &&
+        delta.trackKey === 'enemyHpDamage' &&
+        delta.applied
+    );
+    const runtimeHpDelta =
+      simulation.threeValueRuntimeProjection.runtimeAppliedDeltas.find(
+        delta => delta.sourceDeltaId === generatedHpDelta.id
+      );
 
     expect(scenario).toMatchObject({
       gameDataCatalog: {
@@ -353,13 +371,29 @@ describe('Workbench game data catalog', () => {
     expect(compiledSkillAction).toMatchObject({
       gameDataReference: {
         ready: true,
+        referenceIdentity: expect.stringMatching(/^azpr-action-skill-v1-/u),
+        skillVariantReferenceIdentity: expect.stringMatching(
+          /^azpr-skill-variant-v1-/u
+        ),
         skill: {
           status: 'exact',
           record: { id: compiledSkillAction.skillId },
           variant: {
             index: compiledSkillAction.actionVariantIndex,
             label: expect.any(String),
+            multiplier: compiledSkillAction.selectedDamageSegment.multiplier,
           },
+        },
+      },
+      hpOperandSourceBinding: {
+        contractName: 'AzPrHpOperandSourceBinding',
+        contractVersion: 1,
+        status: 'hp-operand-source-binding-ready',
+        ready: true,
+        skillVariantReference: {
+          identity:
+            compiledSkillAction.gameDataReference.skillVariantReferenceIdentity,
+          multiplier: compiledSkillAction.selectedDamageSegment.multiplier,
         },
       },
       source: {
@@ -371,13 +405,12 @@ describe('Workbench game data catalog', () => {
       skillReferenceReady: true,
       gameDataReference: compiledSkillAction.gameDataReference,
     });
-    expect(
-      simulation.threeValueGenerationLayer.deltas.find(
-        delta => delta.actionId === compiledSkillAction.id
-      )
-    ).toMatchObject({
+    expect(generatedHpDelta).toMatchObject({
       skillReferenceRequired: true,
       skillReferenceReady: true,
+      hpOperandSourceBindingRequired: true,
+      hpOperandSourceBindingReady: true,
+      hpOperandSourceBindingStatus: 'hp-operand-source-binding-valid',
       gameDataReference: compiledSkillAction.gameDataReference,
       mechanismContext: {
         schemaVersion: 4,
@@ -387,11 +420,44 @@ describe('Workbench game data catalog', () => {
           gameDataReference: compiledSkillAction.gameDataReference,
         },
       },
+      mechanicsAdapterRequest: {
+        sourceValue: {
+          operands: {
+            contractVersion: 2,
+            sourceBindingRequired: true,
+            sourceBindingReady: true,
+            sourceBinding: compiledSkillAction.hpOperandSourceBinding,
+            sourceBindingValidation: {
+              ready: true,
+              issueCodes: [],
+            },
+          },
+        },
+      },
+    });
+    expect(runtimeHpDelta.runtimeCalculatorInvocation).toMatchObject({
+      schemaVersion: 10,
+      mechanicsEvaluation: {
+        contractVersion: 4,
+        operandSourceBindingRequired: true,
+        operandSourceBindingReady: true,
+        operandSourceBindingValidation: {
+          ready: true,
+          issueCodes: [],
+        },
+      },
+      validation: {
+        operandSourceBindingReady: true,
+        valid: true,
+      },
     });
     expect(simulation.threeValueGenerationLayer.summary).toMatchObject({
       skillReferenceActionCount: 1,
       skillReferenceReadyActionCount: 1,
       skillReferenceMissingActionCount: 0,
+      hpOperandSourceBindingRequiredDeltaCount: 1,
+      hpOperandSourceBindingReadyDeltaCount: 1,
+      hpOperandSourceBindingInvalidDeltaCount: 0,
     });
   });
 });

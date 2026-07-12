@@ -96,7 +96,9 @@ describe('Workbench project replay consistency', () => {
       },
     });
     expect(baseline.gameDataReferenceContract).toMatchObject({
+      schemaVersion: 2,
       contractName: 'AzPrWorkbenchGameDataReference',
+      contractVersion: 2,
       status: 'workbench-game-data-reference-ready',
       ready: true,
       referenceIdentity: expect.stringMatching(/^azpr-game-data-v1-/u),
@@ -113,6 +115,10 @@ describe('Workbench project replay consistency', () => {
       actions: expect.arrayContaining([
         expect.objectContaining({
           actionId: sourceState.actionDrafts[0].id,
+          referenceIdentity: expect.stringMatching(/^azpr-action-skill-v1-/u),
+          skillVariantReferenceIdentity: expect.stringMatching(
+            /^azpr-skill-variant-v1-/u
+          ),
           ready: true,
           skill: expect.objectContaining({
             status: 'exact',
@@ -121,6 +127,7 @@ describe('Workbench project replay consistency', () => {
             }),
             variant: expect.objectContaining({
               index: sourceState.actionDrafts[0].actionVariantIndex,
+              multiplier: expect.any(Number),
             }),
           }),
         }),
@@ -137,6 +144,9 @@ describe('Workbench project replay consistency', () => {
       ],
       configurationRuntimeBindingReadyInvocationCount: 3,
       configurationRuntimeBindingMissingInvocationCount: 0,
+      operandSourceBindingRequiredInvocationCount: 1,
+      operandSourceBindingReadyInvocationCount: 1,
+      operandSourceBindingInvalidInvocationCount: 0,
       enemyHpDelta: expect.any(Number),
       enemyToughnessDelta: 70,
       selfEnergyDelta: 0.25,

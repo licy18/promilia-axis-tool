@@ -1,17 +1,17 @@
 export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME =
   'AzPrThreeValueMechanicsAdapter';
 
-export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION = 7;
+export const THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_VERSION = 8;
 
 export const THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_NAME =
   'AzPrThreeValueMechanicsEvaluation';
 
-export const THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_VERSION = 3;
+export const THREE_VALUE_MECHANICS_EVALUATION_CONTRACT_VERSION = 4;
 
 export const THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME =
   'AzPrThreeValueMechanicsOperands';
 
-export const THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_VERSION = 1;
+export const THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_VERSION = 2;
 
 export const THREE_VALUE_MECHANICS_TRACK_DEFINITIONS = {
   enemyHpDamage: {
@@ -39,7 +39,7 @@ export function createThreeValueMechanicsAdapterRegistry(
 ) {
   const existingRegistry =
     adaptersByTrack?.contractName ===
-      THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME;
+    THREE_VALUE_MECHANICS_ADAPTER_CONTRACT_NAME;
   const registrations = existingRegistry
     ? (adaptersByTrack.adaptersByTrack ?? {})
     : (adaptersByTrack ?? {});
@@ -63,10 +63,13 @@ export function registerThreeValueMechanicsAdapter(
   adapter
 ) {
   const current = createThreeValueMechanicsAdapterRegistry(registry);
-  return createThreeValueMechanicsAdapterRegistry({
-    ...current.adaptersByTrack,
-    [trackKey]: adapter,
-  }, current.operationHandlers);
+  return createThreeValueMechanicsAdapterRegistry(
+    {
+      ...current.adaptersByTrack,
+      [trackKey]: adapter,
+    },
+    current.operationHandlers
+  );
 }
 
 export function registerThreeValueMechanicsOperationHandler(
@@ -190,10 +193,7 @@ export function createThreeValueMechanicsAdapterInput({
   };
 }
 
-export function resolveThreeValueMechanicsAdapter({
-  registry,
-  trackKey,
-} = {}) {
+export function resolveThreeValueMechanicsAdapter({ registry, trackKey } = {}) {
   const normalizedRegistry = createThreeValueMechanicsAdapterRegistry(registry);
   const registration =
     normalizedRegistry.adaptersByTrack[trackKey] ??
@@ -231,8 +231,12 @@ export function createThreeValueMechanicsOperands({
   sampleValidation,
 } = {}) {
   const expectedDelta = normalizeMechanicsNumber(value);
+  const hpOperandSourceBinding =
+    trackKey === 'enemyHpDamage'
+      ? (formulaBreakdown?.operandSourceBinding ?? null)
+      : null;
   const base = {
-    schemaVersion: 1,
+    schemaVersion: THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_VERSION,
     contractName: THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME,
     contractVersion: THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_VERSION,
     trackKey: trackKey ?? null,
@@ -247,12 +251,25 @@ export function createThreeValueMechanicsOperands({
     const actionMultiplier = normalizeMechanicsNumber(
       formulaBreakdown?.layers?.actionMultiplier?.value
     );
+    const sourceBindingValidation = validateThreeValueHpOperandSourceBinding({
+      binding: hpOperandSourceBinding,
+      baseAttack,
+      actionMultiplier,
+      expectedDelta,
+    });
     if (baseAttack != null && actionMultiplier != null) {
       return {
         ...base,
         kind: 'hp-raw-preview-product',
         status: 'hp-raw-preview-operands-ready',
         ready: true,
+        sourceBindingRequired: Boolean(hpOperandSourceBinding),
+        sourceBindingReady: hpOperandSourceBinding
+          ? sourceBindingValidation.ready
+          : null,
+        sourceBindingStatus: sourceBindingValidation.status,
+        sourceBinding: hpOperandSourceBinding,
+        sourceBindingValidation,
         inputs: {
           baseAttack,
           actionMultiplier,
@@ -326,6 +343,23 @@ export function createThreeValueMechanicsEvaluation(
   );
   const layerInputs = input.mechanicsLayerInputs ?? {};
   const sharedOperands = layerInputs.inputs?.operands?.value ?? {};
+  const operandSourceBindingValidation =
+    operands.kind === 'hp-raw-preview-product'
+      ? validateThreeValueHpOperandSourceBinding({
+          binding: operands.sourceBinding,
+          action: input.action,
+          baseAttack: layerInputs.inputs?.actorStats?.value?.attack,
+          actionMultiplier: layerInputs.inputs?.actionMultiplier?.value,
+          expectedDelta: operands.expectedDelta,
+        })
+      : {
+          required: false,
+          ready: false,
+          status: 'hp-operand-source-binding-not-applicable',
+          issueCodes: [],
+          issues: [],
+        };
+  const operandSourceBindingRequired = operands.sourceBindingRequired === true;
   const stepResults = [];
   let previousDelta = null;
   for (const step of steps) {
@@ -342,8 +376,7 @@ export function createThreeValueMechanicsEvaluation(
         layerInputs,
         sharedOperands,
         previousDelta,
-        getLayerValue: layerKey =>
-          getLayerInputValue(layerInputs, layerKey),
+        getLayerValue: layerKey => getLayerInputValue(layerInputs, layerKey),
       },
       !capabilityResolution.ready
         ? 'step-capability-missing'
@@ -363,9 +396,9 @@ export function createThreeValueMechanicsEvaluation(
 
   const ready = Boolean(
     capabilityResolution.ready &&
-      stepResults.length === steps.length &&
-      stepResults.every(step => step.ready) &&
-      Number.isFinite(previousDelta)
+    stepResults.length === steps.length &&
+    stepResults.every(step => step.ready) &&
+    Number.isFinite(previousDelta)
   );
   const value = ready ? previousDelta : null;
   return {
@@ -374,10 +407,18 @@ export function createThreeValueMechanicsEvaluation(
     delta: value,
     ready,
     status: ready
-      ? 'three-value-mechanics-evaluation-ready'
+      ? operandSourceBindingRequired && !operandSourceBindingValidation.ready
+        ? 'three-value-mechanics-evaluation-ready-with-operand-source-diagnostics'
+        : 'three-value-mechanics-evaluation-ready'
       : 'three-value-mechanics-evaluation-invalid',
     stepResults,
     capabilityReady: capabilityResolution.ready,
+    operandSourceBindingRequired,
+    operandSourceBindingReady: operandSourceBindingRequired
+      ? operandSourceBindingValidation.ready
+      : null,
+    operandSourceBindingStatus: operandSourceBindingValidation.status,
+    operandSourceBindingValidation,
     stateEffectStepKey: stateEffectResolution.ready
       ? stateEffectResolution.stepKey
       : null,
@@ -530,7 +571,10 @@ function calculateDefaultThreeValueMechanicsResult(input, operationHandlers) {
   return {
     delta: evaluation.delta,
     status: evaluation.ready
-      ? 'runtime-mechanics-evaluation-ready'
+      ? evaluation.operandSourceBindingRequired &&
+        !evaluation.operandSourceBindingReady
+        ? 'runtime-mechanics-evaluation-ready-with-operand-source-diagnostics'
+        : 'runtime-mechanics-evaluation-ready'
       : 'runtime-mechanics-evaluation-invalid',
     sourceKind: 'three-value-mechanics-evaluation',
     mechanicsEvaluation: evaluation,
@@ -633,3 +677,4 @@ import {
   bindThreeValueMechanicsLayerInputsState,
   createThreeValueMechanicsLayerInputs,
 } from './threeValueMechanicsLayerInputs';
+import { validateThreeValueHpOperandSourceBinding } from './threeValueHpOperandSourceBinding';

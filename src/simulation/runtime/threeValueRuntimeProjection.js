@@ -1353,6 +1353,14 @@ function summarizeThreeValueRuntimeProjection({
     mechanicsProfileCapabilityMissingInvocationCount:
       runtimeStateSnapshots.summary
         .mechanicsProfileCapabilityMissingInvocationCount,
+    operandSourceBindingRequiredInvocationCount:
+      runtimeStateSnapshots.summary.operandSourceBindingRequiredInvocationCount,
+    operandSourceBindingReadyInvocationCount:
+      runtimeStateSnapshots.summary.operandSourceBindingReadyInvocationCount,
+    operandSourceBindingInvalidInvocationCount:
+      runtimeStateSnapshots.summary.operandSourceBindingInvalidInvocationCount,
+    operandSourceBindingIssueCodes:
+      runtimeStateSnapshots.summary.operandSourceBindingIssueCodes,
     stateEffectProposalReadyInvocationCount:
       runtimeStateSnapshots.summary.stateEffectProposalReadyInvocationCount,
     stateEffectProposalMissingInvocationCount:

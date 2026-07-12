@@ -1134,6 +1134,16 @@ WorkbenchProjectFile 升级为 v15；本地草稿、JSON、分享链接、PNG、
 
 下一阶段目标：阶段 8-X / P3 技能变体到 HP operands 的可信来源闭环。让当前已应用的角色攻击与动作倍率 operands 显式绑定 8-W 的 skill/variant reference identity，并在 compiler、generation 与 adapter evaluation 之间校验倍率值和来源路径一致；不一致时保留诊断而不能静默换来源。该阶段保持现有 HP 计算结果不变，不接入防御、抗性、暴击、装备或培养公式，也不补动作帧细节。
 
+### 阶段 8-X P3 技能变体到 HP operands 的可信来源闭环（2026-07-12）
+
+`AzPrWorkbenchGameDataReference v2` 为每个技能动作生成独立 action reference identity 和 skill/variant reference identity，并在 variant 中固定倍率原始值、解析倍率与来源字段。compiler 使用同一动作引用生成 `AzPrHpOperandSourceBinding v1`，绑定角色面板攻击、已选动作倍率、角色/技能/变体身份和来源路径；generation 的 `AzPrThreeValueMechanicsOperands v2` 与 adapter evaluation v4 逐层复核 identity、倍率、来源和乘积结果。
+
+正常项目继续使用原 `round(baseAttack * actionMultiplier)`，HP、韧性和角色能量结果均未改变。人为篡改 skill/variant identity 时，runtime 仍保留原 generation delta，但 evaluation、invocation validation 和 summary 会明确记录 drift issue，不会静默切换到另一技能或倍率来源。本地草稿、JSON、分享链接和 PNG 四种载体继续恢复同一游戏数据引用与运行结果。本阶段没有接入防御、抗性、暴击、装备、奇波、灵子或动作帧公式。
+
+阶段验收：75 个测试文件、425 条单元/组件测试通过；39 条 Workbench 主流程和 18 项 production preview 必需能力全部通过，生产报告结论为 `trial-ready`。生产引用审计为 113 个源码、109 个生产可达、4 个允许 test-only、0 个孤儿；数据投影审计全部一致。Workbench 主块为 360,769B gzip，全部 JavaScript 为 735,101B gzip，均在 370,000B/740,000B 预算内。180 动作编译 p95 为 18.063ms、完整 simulation p95 为 37.912ms；120 动作浏览器首屏就绪为 1872ms。
+
+下一阶段目标：阶段 8-Y / P3 三轨 applied source identity 统一闭环。把 HP 已建立的可信来源模式扩展到当前已应用的显式角色能量事件和 validated toughness/self-energy sample，使每条 applied delta 都能区分正式来源绑定、兼容未绑定和来源漂移，并在 generation、runtime 与项目回放中保持一致。该阶段只绑定现有事件、capture 和 before/after 证据，不新增公式、不追测试期倍率，也不启用未确认培养效果。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

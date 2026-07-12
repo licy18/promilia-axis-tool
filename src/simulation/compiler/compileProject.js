@@ -5,6 +5,7 @@ import {
   validateProject,
 } from '../../domain/projectSchema';
 import { parseDamageSegments } from '../mechanics/damage';
+import { createThreeValueHpOperandSourceBinding } from '../mechanics/threeValueHpOperandSourceBinding';
 import { createThreeValueMechanismConfiguration } from '../mechanics/threeValueMechanismConfiguration';
 import { resolveThreeValueMechanicsProfile } from '../mechanics/threeValueMechanicsProfile';
 import {
@@ -418,6 +419,7 @@ function compileAction(
       target: null,
       source: {},
       gameDataReference,
+      hpOperandSourceBinding: null,
       damageSegments: [],
       selectedDamageSegment: null,
     };
@@ -431,6 +433,7 @@ function compileAction(
       target: null,
       source: {},
       gameDataReference,
+      hpOperandSourceBinding: null,
       damageSegments: [],
       selectedDamageSegment: null,
     };
@@ -444,6 +447,7 @@ function compileAction(
       target: action.targetId === enemy.id ? enemy : null,
       source: {},
       gameDataReference,
+      hpOperandSourceBinding: null,
       damageSegments: [],
       selectedDamageSegment: null,
     };
@@ -457,6 +461,7 @@ function compileAction(
       target: action.targetId === enemy.id ? enemy : null,
       source: {},
       gameDataReference,
+      hpOperandSourceBinding: null,
       damageSegments: [],
       selectedDamageSegment: null,
     };
@@ -475,6 +480,14 @@ function compileAction(
     ) ??
     damageSegments[0] ??
     null;
+  const hpOperandSourceBinding = selectedDamageSegment
+    ? createThreeValueHpOperandSourceBinding({
+        action,
+        actor,
+        segment: selectedDamageSegment,
+        gameDataReference,
+      })
+    : null;
 
   return {
     ...action,
@@ -485,9 +498,11 @@ function compileAction(
     actor,
     target: action.targetId === enemy.id ? enemy : null,
     gameDataReference,
+    hpOperandSourceBinding,
     source: {
       skill,
       gameDataReference,
+      hpOperandSourceBinding,
     },
     damageSegments,
     selectedDamageSegment,

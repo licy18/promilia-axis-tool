@@ -207,6 +207,14 @@ export function createThreeValueRuntimeStateSnapshots({
         calculatorInvocationSummary.mechanicsProfileCapabilityReadyInvocationCount,
       mechanicsProfileCapabilityMissingInvocationCount:
         calculatorInvocationSummary.mechanicsProfileCapabilityMissingInvocationCount,
+      operandSourceBindingRequiredInvocationCount:
+        calculatorInvocationSummary.operandSourceBindingRequiredInvocationCount,
+      operandSourceBindingReadyInvocationCount:
+        calculatorInvocationSummary.operandSourceBindingReadyInvocationCount,
+      operandSourceBindingInvalidInvocationCount:
+        calculatorInvocationSummary.operandSourceBindingInvalidInvocationCount,
+      operandSourceBindingIssueCodes:
+        calculatorInvocationSummary.operandSourceBindingIssueCodes,
       stateEffectProposalReadyInvocationCount:
         calculatorInvocationSummary.stateEffectProposalReadyInvocationCount,
       stateEffectProposalMissingInvocationCount:

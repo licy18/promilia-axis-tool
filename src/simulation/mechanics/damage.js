@@ -1,9 +1,9 @@
 import { createSkillLevelCrossCheckSegmentSource } from '../../domain/skillLevelCrossCheck';
 import { parseSkillDamageMultiplier } from '../../domain/skillDamageSegments';
 import combatFormulaEvidence from '../../data/generated/combat-formula-evidence.json';
+import { validateThreeValueHpOperandSourceBinding } from './threeValueHpOperandSourceBinding';
 
-export const DAMAGE_FORMULA_VERSION =
-  'stage5-damage-layer-breakdown-v1';
+export const DAMAGE_FORMULA_VERSION = 'stage5-damage-layer-breakdown-v1';
 const COMBAT_FORMULA_EVIDENCE_PATH =
   'src/data/generated/combat-formula-evidence.json';
 const COMBAT_FORMULA_EVIDENCE_KIND =
@@ -14,8 +14,11 @@ export function parsePercentMultiplier(value) {
 }
 
 export function parseDamageSegments(action) {
-  if (Array.isArray(action.damageModel?.variants) && action.damageModel.variants.length > 0) {
-    return action.damageModel.variants.map((variant) => ({
+  if (
+    Array.isArray(action.damageModel?.variants) &&
+    action.damageModel.variants.length > 0
+  ) {
+    return action.damageModel.variants.map(variant => ({
       ...variant,
       index: Number(variant.index),
       actionVariantIndex: Number(variant.actionVariantIndex ?? variant.index),
@@ -54,7 +57,12 @@ export function parseDamageSegments(action) {
     .filter(Boolean);
 }
 
-function createDamageSegmentSource(damageModel = {}, index, logicModel = null, variantSource = null) {
+function createDamageSegmentSource(
+  damageModel = {},
+  index,
+  logicModel = null,
+  variantSource = null
+) {
   if (variantSource) {
     return {
       ...variantSource,
@@ -127,15 +135,32 @@ export function createRawDamageProjection({ actor, enemy, action, segment }) {
   };
 }
 
-export function createDamageFormulaBreakdown({ actor, enemy, action, segment, attack }) {
+export function createDamageFormulaBreakdown({
+  actor,
+  enemy,
+  action,
+  segment,
+  attack,
+}) {
   const multiplier = Number(segment.multiplier) || 0;
   const result = Math.max(0, Math.round(attack * multiplier));
+  const operandSourceBinding = action.hpOperandSourceBinding ?? null;
+  const operandSourceBindingValidation =
+    validateThreeValueHpOperandSourceBinding({
+      binding: operandSourceBinding,
+      action,
+      baseAttack: attack,
+      actionMultiplier: multiplier,
+      expectedDelta: result,
+    });
 
   return {
     version: DAMAGE_FORMULA_VERSION,
     status: 'partial',
     expression: 'round(baseAttack.value * actionMultiplier.value)',
     result,
+    operandSourceBinding,
+    operandSourceBindingValidation,
     appliedLayerKeys: ['baseAttack', 'actionMultiplier'],
     unappliedLayerKeys: [
       'enemyDefense',
@@ -154,7 +179,9 @@ export function createDamageFormulaBreakdown({ actor, enemy, action, segment, at
         label: '动作形态倍率',
         value: multiplier,
         rawValue: segment.rawValue,
-        actionVariantIndex: Number(segment.actionVariantIndex ?? segment.index ?? 0),
+        actionVariantIndex: Number(
+          segment.actionVariantIndex ?? segment.index ?? 0
+        ),
         hitModel: segment.hitModel ?? null,
         applied: true,
       },
@@ -212,8 +239,7 @@ function createEnemyDefenseEvidenceSource(enemy) {
     file: COMBAT_FORMULA_EVIDENCE_PATH,
     status: evidence.status ?? 'unknown',
     formulaStatus: combatFormulaEvidence.formulaEvidence?.status ?? 'unknown',
-    relationStatus:
-      combatFormulaEvidence.summary?.relationStatus ?? 'unknown',
+    relationStatus: combatFormulaEvidence.summary?.relationStatus ?? 'unknown',
     sourceChain: evidence.sourceChain ?? null,
     propertyId: enemy.propertyId ?? null,
     baseAttributeId: enemy.source?.enemy?.property?.baseAttributeId ?? null,
@@ -221,8 +247,7 @@ function createEnemyDefenseEvidenceSource(enemy) {
       enemy,
       evidence.baseDefenseAttributes ?? []
     ),
-    note:
-      'Enemy DEF/MDEF source fields are mapped, but defense formula application is still unconfirmed.',
+    note: 'Enemy DEF/MDEF source fields are mapped, but defense formula application is still unconfirmed.',
   };
 }
 
@@ -234,8 +259,7 @@ function createEnemyResistanceEvidenceSource(enemy, action) {
     file: COMBAT_FORMULA_EVIDENCE_PATH,
     status: evidence.status ?? 'unknown',
     formulaStatus: combatFormulaEvidence.formulaEvidence?.status ?? 'unknown',
-    relationStatus:
-      combatFormulaEvidence.summary?.relationStatus ?? 'unknown',
+    relationStatus: combatFormulaEvidence.summary?.relationStatus ?? 'unknown',
     elementValueStatus:
       combatFormulaEvidence.elementValueEvidence?.status ?? 'unknown',
     sourceChain: evidence.sourceChain ?? null,
@@ -246,8 +270,7 @@ function createEnemyResistanceEvidenceSource(enemy, action) {
       enemy,
       evidence.elementDefenseAttributes ?? []
     ),
-    note:
-      'Enemy element defense fields are mapped, but elementId/formula application remains unconfirmed.',
+    note: 'Enemy element defense fields are mapped, but elementId/formula application remains unconfirmed.',
   };
 }
 

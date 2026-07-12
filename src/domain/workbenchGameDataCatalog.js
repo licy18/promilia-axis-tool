@@ -11,6 +11,7 @@ export const WORKBENCH_GAME_DATA_COMPATIBILITY_REPORT_CONTRACT_NAME =
   'AzPrWorkbenchGameDataCompatibilityReport';
 export const WORKBENCH_GAME_DATA_REFERENCE_CONTRACT_NAME =
   'AzPrWorkbenchGameDataReference';
+export const WORKBENCH_GAME_DATA_REFERENCE_CONTRACT_VERSION = 2;
 
 const TABLE_DEFINITIONS = Object.freeze({
   characters: Object.freeze({ kind: 'character' }),
@@ -377,11 +378,13 @@ export function createWorkbenchGameDataReferenceContract(
       reference.expectedType,
       reference.expectedCharacterId,
       reference.actionVariantIndex,
+      reference.skillVariantReferenceIdentity,
     ]),
   });
   return {
-    schemaVersion: 1,
+    schemaVersion: WORKBENCH_GAME_DATA_REFERENCE_CONTRACT_VERSION,
     contractName: WORKBENCH_GAME_DATA_REFERENCE_CONTRACT_NAME,
+    contractVersion: WORKBENCH_GAME_DATA_REFERENCE_CONTRACT_VERSION,
     status: ready
       ? 'workbench-game-data-reference-ready'
       : 'workbench-game-data-reference-incomplete',
@@ -425,6 +428,13 @@ function createActionSkillReference(
     actionId: action?.id,
     path: `${path}.skillId`,
   });
+  const referenceIdentity = `azpr-action-skill-v1-${stableHash(
+    JSON.stringify([
+      textOrNull(action?.id),
+      positiveIntegerOrNull(action?.actorCharacterId),
+      skill.skillVariantReferenceIdentity,
+    ])
+  )}`;
   return {
     actionId: textOrNull(action?.id),
     skillId: positiveIntegerOrNull(action?.skillId),
@@ -435,6 +445,8 @@ function createActionSkillReference(
     ready: skill.compatible,
     status: skill.status,
     failureReason: skill.failureReason,
+    referenceIdentity,
+    skillVariantReferenceIdentity: skill.skillVariantReferenceIdentity,
     skill,
     variant: skill.variant,
   };
@@ -641,6 +653,33 @@ function resolveCatalogReference(
   const variant = skillVariantResolution?.variants?.find(
     item => Number(item.index) === requestedVariantIndex
   );
+  const normalizedVariant = variant
+    ? {
+        index: Number(variant.index),
+        kind: variant.kind ?? null,
+        label: variant.label ?? null,
+        displayLabel: variant.displayLabel ?? null,
+        rawValue: variant.rawValue ?? null,
+        multiplier: finiteNumberOrNull(variant.multiplier),
+        source: variant.source ?? null,
+      }
+    : null;
+  const skillVariantReferenceIdentity =
+    tableName === 'skills' && entry && normalizedVariant
+      ? `azpr-skill-variant-v1-${stableHash(
+          JSON.stringify([
+            catalog?.catalogId ?? null,
+            catalog?.catalogVersion ?? null,
+            catalog?.dataVersion ?? null,
+            normalizedId,
+            resolvedCharacterId,
+            requestedVariantIndex,
+            normalizedVariant.rawValue,
+            normalizedVariant.multiplier,
+            createSkillVariantSourceIdentity(normalizedVariant.source),
+          ])
+        )}`
+      : null;
   const characterMismatch = Boolean(
     tableName === 'skills' &&
     entry &&
@@ -701,15 +740,8 @@ function resolveCatalogReference(
     actionId: textOrNull(actionId),
     actionVariantIndex: requestedVariantIndex,
     variantCount: skillVariantResolution?.variants?.length ?? null,
-    variant: variant
-      ? {
-          index: Number(variant.index),
-          kind: variant.kind ?? null,
-          label: variant.label ?? null,
-          displayLabel: variant.displayLabel ?? null,
-          source: variant.source ?? null,
-        }
-      : null,
+    variant: normalizedVariant,
+    skillVariantReferenceIdentity,
     status,
     compatible: status === 'exact',
     failureReason,
@@ -742,6 +774,7 @@ function toCompatibilityReference(reference) {
     actionVariantIndex: reference.actionVariantIndex,
     variantCount: reference.variantCount,
     variant: reference.variant,
+    skillVariantReferenceIdentity: reference.skillVariantReferenceIdentity,
     name: textOrNull(reference.record?.name),
     status: reference.status,
     compatible: reference.compatible,
@@ -836,6 +869,22 @@ function resolveTeamCharacterIds(draft = {}) {
   return [...new Set(values.map(positiveIntegerOrNull).filter(Boolean))];
 }
 
+function createSkillVariantSourceIdentity(source = {}) {
+  const values = [
+    textOrNull(source?.kind),
+    textOrNull(source?.path),
+    positiveIntegerOrNull(source?.skillId),
+    positiveIntegerOrNull(source?.characterId),
+    positiveIntegerOrNull(source?.level),
+    nonNegativeIntegerOrNull(source?.levelIndex),
+    textOrNull(source?.labelField),
+    textOrNull(source?.valueField),
+  ];
+  return values.some(value => value != null)
+    ? `azpr-skill-variant-source-v1-${stableHash(JSON.stringify(values))}`
+    : null;
+}
+
 function stableHash(value) {
   let hash = 0x811c9dc5;
   for (const character of String(value)) {
@@ -853,6 +902,12 @@ function positiveIntegerOrNull(value) {
 function nonNegativeIntegerOrNull(value) {
   const number = Number(value);
   return Number.isInteger(number) && number >= 0 ? number : null;
+}
+
+function finiteNumberOrNull(value) {
+  if (value == null || value === '') return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
 }
 
 function textOrNull(value) {

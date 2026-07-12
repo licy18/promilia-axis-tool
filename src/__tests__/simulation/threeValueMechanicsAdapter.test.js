@@ -7,6 +7,7 @@ import {
   registerThreeValueMechanicsOperationHandler,
 } from '../../simulation/mechanics/threeValueMechanicsAdapter';
 import { DEFAULT_THREE_VALUE_MECHANICS_PROFILE } from '../../simulation/mechanics/threeValueMechanicsProfile';
+import { createThreeValueHpOperandSourceBinding } from '../../simulation/mechanics/threeValueHpOperandSourceBinding';
 import {
   createThreeValueRuntimeCalculatorInvocation,
   summarizeThreeValueRuntimeCalculatorInvocations,
@@ -88,12 +89,12 @@ describe('three value mechanics adapter', () => {
     expect(invocations).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          schemaVersion: 9,
+          schemaVersion: 10,
           adapter: expect.objectContaining({
             key: 'unit-test-three-track-mechanics-adapter',
             version: 7,
             contractName: 'AzPrThreeValueMechanicsAdapter',
-            contractVersion: 7,
+            contractVersion: 8,
             registrationKey: 'default',
             custom: true,
           }),
@@ -137,7 +138,7 @@ describe('three value mechanics adapter', () => {
       passthroughInvocationCount: 3,
       customAdapterInvocationCount: 3,
       mechanicsAdapterContractName: 'AzPrThreeValueMechanicsAdapter',
-      mechanicsAdapterContractVersion: 7,
+      mechanicsAdapterContractVersion: 8,
       registrationKeys: ['default'],
       adapterKeys: ['unit-test-three-track-mechanics-adapter'],
       stateEffectProposalReadyInvocationCount: 3,
@@ -227,7 +228,7 @@ describe('three value mechanics adapter', () => {
           }),
           mechanicsEvaluation: expect.objectContaining({
             contractName: 'AzPrThreeValueMechanicsEvaluation',
-            contractVersion: 3,
+            contractVersion: 4,
             ready: true,
             stepResults: [expect.objectContaining({ ready: true })],
           }),
@@ -403,6 +404,135 @@ describe('three value mechanics adapter', () => {
       fallbackReason: null,
     });
   });
+
+  it('preserves the HP result while exposing skill variant source drift', () => {
+    const variantSource = {
+      kind: 'azpr-local-hero-module-skill-level-action-variant',
+      path: 'unit-test/skill.json',
+      skillId: 10100101,
+      characterId: 101001,
+      level: 1,
+      levelIndex: 0,
+      labelField: 'level.labels[0]',
+      valueField: 'level.values[0][0]',
+    };
+    const variant = {
+      index: 0,
+      rawValue: '12%',
+      multiplier: 0.12,
+      source: variantSource,
+    };
+    const gameDataReference = {
+      ready: true,
+      referenceIdentity: 'azpr-action-skill-v1-unit-test',
+      skillVariantReferenceIdentity: 'azpr-skill-variant-v1-unit-test',
+      variant,
+      skill: {
+        compatible: true,
+        id: 10100101,
+        resolvedCharacterId: 101001,
+        catalogId: 'azpr-workbench-game-data',
+        catalogVersion: 1,
+        dataVersion: 'unit-test-data',
+        skillVariantReferenceIdentity: 'azpr-skill-variant-v1-unit-test',
+        variant,
+      },
+    };
+    const sourceBinding = createThreeValueHpOperandSourceBinding({
+      action: {
+        id: 'action-001',
+        type: 'skill',
+        skillId: 10100101,
+        actorId: 'actor-001',
+        actionVariantIndex: 0,
+        gameDataReference,
+      },
+      actor: {
+        id: 'actor-001',
+        characterId: 101001,
+        stats: { attack: 1000, source: 'unit-test-actor-panel' },
+      },
+      segment: {
+        index: 0,
+        actionVariantIndex: 0,
+        rawValue: '12%',
+        multiplier: 0.12,
+        source: variantSource,
+      },
+      gameDataReference,
+    });
+    const operands = createThreeValueMechanicsOperands({
+      trackKey: 'enemyHpDamage',
+      sourceKind: 'action-result-applied-value',
+      value: 120,
+      formulaBreakdown: {
+        operandSourceBinding: sourceBinding,
+        layers: {
+          baseAttack: { value: 1000 },
+          actionMultiplier: { value: 0.12 },
+        },
+      },
+    });
+    const driftedDelta = structuredClone(
+      createDelta({
+        trackKey: 'enemyHpDamage',
+        outputField: 'hpDelta',
+        value: 120,
+        operands,
+        gameDataReference,
+      })
+    );
+    driftedDelta.mechanicsAdapterRequest.sourceValue.operands.sourceBinding.skillVariantReference.identity =
+      'azpr-skill-variant-v1-drifted';
+    const invocation = createThreeValueRuntimeCalculatorInvocation({
+      delta: driftedDelta,
+      stateBefore: createStateBefore(),
+    });
+
+    expect(sourceBinding).toMatchObject({
+      status: 'hp-operand-source-binding-ready',
+      ready: true,
+    });
+    expect(operands).toMatchObject({
+      contractVersion: 2,
+      sourceBindingRequired: true,
+      sourceBindingReady: true,
+    });
+    expect(invocation).toMatchObject({
+      output: {
+        delta: 120,
+        hpDelta: 120,
+        status:
+          'runtime-mechanics-evaluation-ready-with-operand-source-diagnostics',
+      },
+      mechanicsEvaluation: {
+        contractVersion: 4,
+        ready: true,
+        operandSourceBindingRequired: true,
+        operandSourceBindingReady: false,
+        operandSourceBindingValidation: {
+          status: 'hp-operand-source-binding-drift-detected',
+          issueCodes: ['skill-variant-reference-identity-mismatch'],
+        },
+      },
+      validation: {
+        operandSourceBindingReady: false,
+        valid: false,
+      },
+      changed: false,
+      preservesGeneratedDelta: true,
+    });
+    expect(
+      summarizeThreeValueRuntimeCalculatorInvocations([invocation])
+    ).toMatchObject({
+      operandSourceBindingRequiredInvocationCount: 1,
+      operandSourceBindingReadyInvocationCount: 0,
+      operandSourceBindingInvalidInvocationCount: 1,
+      operandSourceBindingIssueCodes: [
+        'skill-variant-reference-identity-mismatch',
+      ],
+    });
+  });
 });
 
 function createDelta({
@@ -411,12 +541,16 @@ function createDelta({
   outputField,
   operands,
   mechanicsProfile,
+  gameDataReference = null,
 }) {
   const action = {
     actionId: 'action-001',
     actionType: 'skill',
     actorId: 'actor-001',
     targetId: 'enemy-001',
+    skillId: gameDataReference?.skill?.id ?? null,
+    actionVariantIndex: gameDataReference?.variant?.index ?? null,
+    gameDataReference,
   };
   const hit = {
     hitKey: 'action-001:hit:0',

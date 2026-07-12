@@ -4718,8 +4718,15 @@ describe('first vertical slice simulation', () => {
       appliedHpDelta.mechanicsAdapterRequest.sourceValue.operands
     ).toMatchObject({
       contractName: 'AzPrThreeValueMechanicsOperands',
+      contractVersion: 2,
       kind: 'hp-raw-preview-product',
       expectedDelta: result.summary.totalRawDamage,
+      sourceBindingRequired: true,
+      sourceBindingReady: true,
+      sourceBindingValidation: {
+        ready: true,
+        issueCodes: [],
+      },
       ready: true,
     });
     expect(
@@ -4746,7 +4753,12 @@ describe('first vertical slice simulation', () => {
               }),
             }),
           }),
-          mechanicsEvaluation: expect.objectContaining({ ready: true }),
+          mechanicsEvaluation: expect.objectContaining({
+            contractVersion: 4,
+            ready: true,
+            operandSourceBindingRequired: true,
+            operandSourceBindingReady: true,
+          }),
         }),
         expect.objectContaining({
           output: expect.objectContaining({ calculatedFromLayerInputs: true }),

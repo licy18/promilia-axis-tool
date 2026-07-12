@@ -68,6 +68,10 @@ export function createThreeValueRuntimeCalculatorInvocation({
     sourceValueFinite: Number.isFinite(input.sourceValue?.value),
     mechanicsEvaluationReady:
       resolvedAdapter.custom || output.mechanicsEvaluation?.ready === true,
+    operandSourceBindingReady:
+      resolvedAdapter.custom ||
+      output.mechanicsEvaluation?.operandSourceBindingRequired !== true ||
+      output.mechanicsEvaluation?.operandSourceBindingReady === true,
     stateBeforePresent: Boolean(stateBefore),
     adapterOutputAccepted: !fallbackReason,
     stateEffectProposalReady: stateEffectProposal.ready,
@@ -75,7 +79,7 @@ export function createThreeValueRuntimeCalculatorInvocation({
   const valid = Object.values(validation).every(Boolean);
 
   return {
-    schemaVersion: 9,
+    schemaVersion: 10,
     sourceKind: 'azpr-three-value-runtime-calculator-invocation',
     contractName: THREE_VALUE_RUNTIME_CALCULATOR_INVOCATION_CONTRACT_NAME,
     status: fallbackReason
@@ -161,6 +165,27 @@ export function summarizeThreeValueRuntimeCalculatorInvocations(
     mechanicsEvaluationMissingInvocationCount: invocations.filter(
       invocation => !invocation.mechanicsEvaluation?.ready
     ).length,
+    operandSourceBindingRequiredInvocationCount: invocations.filter(
+      invocation =>
+        invocation.mechanicsEvaluation?.operandSourceBindingRequired === true
+    ).length,
+    operandSourceBindingReadyInvocationCount: invocations.filter(
+      invocation =>
+        invocation.mechanicsEvaluation?.operandSourceBindingRequired === true &&
+        invocation.mechanicsEvaluation?.operandSourceBindingReady === true
+    ).length,
+    operandSourceBindingInvalidInvocationCount: invocations.filter(
+      invocation =>
+        invocation.mechanicsEvaluation?.operandSourceBindingRequired === true &&
+        invocation.mechanicsEvaluation?.operandSourceBindingReady !== true
+    ).length,
+    operandSourceBindingIssueCodes: uniqueStrings(
+      invocations.flatMap(
+        invocation =>
+          invocation.mechanicsEvaluation?.operandSourceBindingValidation
+            ?.issueCodes ?? []
+      )
+    ),
     mechanicsEvaluationOperations: uniqueStrings(
       invocations.flatMap(
         invocation =>

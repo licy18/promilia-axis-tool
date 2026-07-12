@@ -169,6 +169,10 @@ export function createThreeValueGenerationLayer({
           name: THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME,
           version: THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_VERSION,
           requiredFields: ['trackKey', 'kind', 'inputs', 'expectedDelta'],
+          hpRawPreviewRequiredFields: [
+            'sourceBinding',
+            'sourceBindingValidation',
+          ],
         },
         mechanicsProfileContract: {
           name: THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME,
@@ -507,6 +511,14 @@ function createThreeValueGenerationDelta({
     mechanismConfigurationStatus: mechanismContext.configurationStatus,
     mechanismConfigurationReady: mechanismContext.configurationReady,
     mechanicsAdapterRequest,
+    hpOperandSourceBindingRequired:
+      sourceValue.operands?.sourceBindingRequired === true,
+    hpOperandSourceBindingReady:
+      sourceValue.operands?.sourceBindingRequired === true
+        ? sourceValue.operands?.sourceBindingReady === true
+        : null,
+    hpOperandSourceBindingStatus:
+      sourceValue.operands?.sourceBindingStatus ?? null,
     calculator,
     calculatorKey: calculator.key,
     calculatorVersion: calculator.version,
@@ -902,7 +914,7 @@ function createActionHitThreeValueDeltaStandardContract({
         ? 'action-hit-three-value-delta-contract-ready'
         : 'action-hit-three-value-delta-contract-empty',
     name: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
-    version: 7,
+    version: 8,
     topology: ['Action', 'Hit', 'ThreeValueDelta'],
     frameRate: AZPR_TIMELINE_FRAME_RATE,
     frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
@@ -948,6 +960,10 @@ function createActionHitThreeValueDeltaStandardContract({
           'operation',
           'inputs',
           'expectedDelta',
+        ],
+        hpRawPreviewRequiredFields: [
+          'sourceBinding',
+          'sourceBindingValidation',
         ],
       },
       mechanicsProfileContract: {
@@ -999,6 +1015,12 @@ function createActionHitThreeValueDeltaStandardContract({
       skillReferenceReadyActionCount: summary.skillReferenceReadyActionCount,
       skillReferenceMissingActionCount:
         summary.skillReferenceMissingActionCount,
+      hpOperandSourceBindingRequiredDeltaCount:
+        summary.hpOperandSourceBindingRequiredDeltaCount,
+      hpOperandSourceBindingReadyDeltaCount:
+        summary.hpOperandSourceBindingReadyDeltaCount,
+      hpOperandSourceBindingInvalidDeltaCount:
+        summary.hpOperandSourceBindingInvalidDeltaCount,
       applied: false,
     },
     applied: false,
@@ -1093,6 +1115,19 @@ function summarizeThreeValueGenerationLayer({
     ).length,
     skillReferenceMissingActionCount: actions.filter(
       action => action.skillReferenceRequired && !action.skillReferenceReady
+    ).length,
+    hpOperandSourceBindingRequiredDeltaCount: deltas.filter(
+      delta => delta.hpOperandSourceBindingRequired
+    ).length,
+    hpOperandSourceBindingReadyDeltaCount: deltas.filter(
+      delta =>
+        delta.hpOperandSourceBindingRequired &&
+        delta.hpOperandSourceBindingReady
+    ).length,
+    hpOperandSourceBindingInvalidDeltaCount: deltas.filter(
+      delta =>
+        delta.hpOperandSourceBindingRequired &&
+        !delta.hpOperandSourceBindingReady
     ).length,
     hitCount: hits.length,
     deltaCount: deltas.length,
