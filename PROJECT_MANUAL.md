@@ -1280,6 +1280,16 @@ core 文件从 1,355,407B 降至 1,080,871B，Workbench 主块从 362,328B gzip 
 
 下一阶段目标：Stage 12-A / 分析快照与报告导出闭环。把当前或 A/B 贡献窗口输出为版本化 JSON 分析快照，保留项目、方案、窗口、动作、角色、三值指标与 applied source identity，并支持回读校验和来源定位；不建立第二套计算、不接入未应用机制，也不继续补碎片 UI。
 
+### Stage 12-A 分析快照与报告导出闭环（2026-07-12）
+
+时间窗口贡献与 A/B 方案比较现可导出 `workbench-analysis-report` v1 JSON。报告冻结当前 `AzPrContributionWindowProjection` 或 `AzPrWorkbenchScenarioComparison`，同时记录项目/方案/窗口 identity、动作 `statePointId/frameIndex`，以及每条 applied hit transaction 的 `transactionId/actionId/sourceDeltaIds` 和三值 delta；对应方案草稿随来源一起保存。报告明确声明只读取 applied runtime outputs，不进入 calculator，candidate 与 unapplied 来源不会被提升为分析输入。
+
+统一导入/拖放入口会在项目与 runtime capture 分流之外识别分析报告，验证 schema、计算边界、来源草稿、动作引用和 applied source binding 后打开独立报告视图，不覆盖当前工作区。用户可查看冻结指标与动作差异，也可把当前或基准来源恢复为新的独立方案，并定位到报告记录的动作、runtime state point 和帧。桌面与 390px 窄屏证据为 `reports/stage-12a-analysis-report-desktop.png` 和 `reports/stage-12a-analysis-report-narrow.png`。
+
+阶段验收为 79 个测试文件、452 条单元/组件测试，39 条 Workbench 主流程和 29/29 项必需 production preview 能力全部通过，报告继续为 `trial-ready`。生产引用审计为 119 个源码、115 个生产可达、4 个允许 test-only、0 个孤儿；applied source 保持 3 条 bound-ready、0 drift、0 compatible-unbound。总 JavaScript 为 727,325B gzip，报告视图独立异步 chunk 为 2,705B gzip；180 动作 compile/simulation p95 为 15.229ms/36.416ms，120 动作首屏 1765ms，双 120 动作比较打开 543ms、窗口切换 352ms、来源定位 2481ms，均在既定预算内。
+
+下一阶段目标：Stage 12-B / 分析报告 PNG 与元数据回导闭环。把同一版本化报告渲染为可交付 PNG 并嵌入元数据，支持从 PNG 回读、验证和来源定位；复用 Stage 12-A 与既有 PNG 工具，不新增计算、不改变项目 v16 或三值边界。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

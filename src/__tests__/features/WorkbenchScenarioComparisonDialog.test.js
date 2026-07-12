@@ -97,6 +97,10 @@ describe('WorkbenchScenarioComparisonDialog', () => {
       statePointId: 'baseline-point',
       frameIndex: 12,
     });
+    await wrapper
+      .get('[data-testid="workbench-export-comparison-report"]')
+      .trigger('click');
+    expect(wrapper.emitted('export-report')).toHaveLength(1);
 
     wrapper.unmount();
   });

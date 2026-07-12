@@ -1,10 +1,12 @@
 import { parseWorkbenchProjectFile } from './workbenchDraftStorage';
 import { parseWorkbenchProjectPng } from './workbenchPngProject';
 import { parseWorkbenchRuntimeSampleCaptureFile } from './workbenchRuntimeSampleCapture';
+import { validateWorkbenchAnalysisReport } from './workbenchAnalysisReport';
 import { isPngSource } from '../utils/pngMetadata';
 
 export const WORKBENCH_PROJECT_FILE_RESULT_KINDS = Object.freeze({
   PROJECT: 'project',
+  ANALYSIS_REPORT: 'analysis-report',
   RUNTIME_CAPTURE: 'runtime-capture',
   INVALID: 'invalid',
 });
@@ -54,6 +56,17 @@ export async function receiveWorkbenchProjectFile(
     };
   }
 
+  const analysisReport = validateWorkbenchAnalysisReport(rawFile);
+  if (analysisReport) {
+    return {
+      kind: WORKBENCH_PROJECT_FILE_RESULT_KINDS.ANALYSIS_REPORT,
+      sourceKind: WORKBENCH_PROJECT_FILE_SOURCE_KINDS.JSON,
+      fileName,
+      ...analysisReport,
+      statusText: source === 'drop' ? '已从拖放打开分析报告' : '已打开分析报告',
+    };
+  }
+
   if (allowRuntimeCapture) {
     const runtimeSampleFile = parseWorkbenchRuntimeSampleCaptureFile(rawFile);
     if (runtimeSampleFile) {
@@ -74,6 +87,7 @@ export async function processWorkbenchProjectFile(
   {
     source = 'picker',
     onProject = () => {},
+    onAnalysisReport = () => {},
     onRuntimeCapture = () => {},
     onStatus = () => {},
   } = {}
@@ -82,6 +96,14 @@ export async function processWorkbenchProjectFile(
     const result = await receiveWorkbenchProjectFile(file, { source });
     if (result.kind === WORKBENCH_PROJECT_FILE_RESULT_KINDS.PROJECT) {
       const accepted = await onProject(result.draft, result.statusText);
+      return accepted !== false;
+    }
+    if (result.kind === WORKBENCH_PROJECT_FILE_RESULT_KINDS.ANALYSIS_REPORT) {
+      const accepted = await onAnalysisReport(
+        result.report,
+        result.validation,
+        result.statusText
+      );
       return accepted !== false;
     }
     if (result.kind === WORKBENCH_PROJECT_FILE_RESULT_KINDS.RUNTIME_CAPTURE) {
@@ -200,7 +222,7 @@ function createInvalidResult(reason, fileName = '') {
       reason === 'png-metadata-missing'
         ? 'PNG 中没有有效项目'
         : reason === 'unsupported-file'
-          ? '仅支持 JSON 或 PNG 项目文件'
+          ? '仅支持 JSON 分析/项目文件或 PNG 项目'
           : '导入失败',
   };
 }

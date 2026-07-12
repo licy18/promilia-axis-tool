@@ -50,6 +50,12 @@ describe('WorkbenchCycleSectionPanel', () => {
     expect(wrapper.emitted('create-inherited-scenario')?.at(-1)?.[0]).toBe(
       'boundary-1'
     );
+    await wrapper
+      .get('[data-testid="workbench-export-contribution-report"]')
+      .trigger('click');
+    expect(wrapper.emitted('export-report')?.at(-1)?.[0]).toBe(
+      'cycle-section-02'
+    );
   });
 });
 

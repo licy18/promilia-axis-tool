@@ -3,6 +3,7 @@ import {
   createDefaultWorkbenchDraftState,
   createWorkbenchProjectFileSnapshot,
 } from '../../domain/workbenchDraftStorage';
+import { createWorkbenchContributionAnalysisReport } from '../../domain/workbenchAnalysisReport';
 import {
   createWorkbenchProjectPngMetadata,
   embedWorkbenchProjectInPng,
@@ -100,6 +101,82 @@ describe('Workbench project file receiver', () => {
       WORKBENCH_PROJECT_FILE_RESULT_KINDS.RUNTIME_CAPTURE
     );
     expect(result.captures).toHaveLength(1);
+  });
+
+  it('routes a validated analysis report without replacing the project', async () => {
+    const draft = createDefaultWorkbenchDraftState();
+    const actionId = draft.actionDrafts[0].id;
+    const report = createWorkbenchContributionAnalysisReport({
+      project: {
+        schemaVersion: 1,
+        id: 'project-file-receiver-report',
+        name: '报告来源轴',
+        time: { fps: 60, durationMs: 1000 },
+      },
+      source: {
+        label: '当前方案',
+        sourceKind: 'workspace-scenario',
+        sourceId: 'scenario-0001',
+        draft,
+      },
+      contributionProjection: {
+        fullAxis: {
+          windowId: 'full-axis',
+          kind: 'axis',
+          label: '全轴',
+          startMs: 0,
+          endMs: 1000,
+          durationMs: 1000,
+          metrics: {},
+          actors: [],
+          actions: [
+            {
+              actionId,
+              name: '普通攻击',
+              statePointId: 'state-point-1',
+              frameIndex: 0,
+            },
+          ],
+          effects: [],
+          summary: { hitTransactionCount: 1 },
+        },
+      },
+      runtimeOutputs: {
+        hitTransactions: {
+          transactions: [
+            {
+              transactionId: 'transaction-1',
+              actionId,
+              frameIndex: 0,
+              timeMs: 0,
+              sourceDeltaIds: ['delta-1'],
+              delta: { enemyHp: 100 },
+            },
+          ],
+        },
+      },
+    });
+    const file = new File([JSON.stringify(report)], 'review.json', {
+      type: 'application/json',
+    });
+    const result = await receiveWorkbenchProjectFile(file);
+    const calls = [];
+    const accepted = await processWorkbenchProjectFile(file, {
+      onProject: () => calls.push('project'),
+      onAnalysisReport: (receivedReport, validation) => {
+        calls.push({ receivedReport, validation });
+      },
+    });
+
+    expect(result).toMatchObject({
+      kind: WORKBENCH_PROJECT_FILE_RESULT_KINDS.ANALYSIS_REPORT,
+      sourceKind: 'json',
+      report: { title: '当前方案 · 全轴' },
+      validation: { status: 'valid', appliedTransactionCount: 1 },
+    });
+    expect(accepted).toBe(true);
+    expect(calls).toHaveLength(1);
+    expect(calls[0].receivedReport.type).toBe('workbench-analysis-report');
   });
 
   it('rejects unsupported or invalid files without producing a draft', async () => {

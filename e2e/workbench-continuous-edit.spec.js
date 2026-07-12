@@ -142,9 +142,11 @@ test('edits and reviews an arbitrary action group @workbench-main-flow', async (
   );
   await page.keyboard.press('Control+C');
   await timelineLane.scrollIntoViewIfNeeded();
+  const pasteTimelineBox = await timelineLane.boundingBox();
+  expect(pasteTimelineBox).toBeTruthy();
   await page.mouse.click(
-    timelineBox.x + timelineBox.width * 0.7,
-    timelineBox.y + 20,
+    pasteTimelineBox.x + pasteTimelineBox.width * 0.7,
+    pasteTimelineBox.y + 20,
     { button: 'right' }
   );
   await expect(page.getByTestId('workbench-action-context-menu')).toBeVisible();
@@ -2703,7 +2705,7 @@ test('drags JSON and PNG projects into a recoverable Workbench @workbench-main-f
     buffer: Buffer.from('not a Workbench project'),
   });
   await expect(page.getByTestId('workbench-draft-status')).toHaveText(
-    '仅支持 JSON 或 PNG 项目文件'
+    '仅支持 JSON 分析/项目文件或 PNG 项目'
   );
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '2 action'

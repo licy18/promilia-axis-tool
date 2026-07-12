@@ -10,7 +10,20 @@
         <span>运行复盘</span>
         <h2>时间窗口贡献</h2>
       </div>
-      <small>{{ projection.summary.hitTransactionCount }} 次命中</small>
+      <div class="panel-header-actions">
+        <small>{{ projection.summary.hitTransactionCount }} 次命中</small>
+        <button
+          class="report-button"
+          type="button"
+          data-testid="workbench-export-contribution-report"
+          @click="
+            emit('export-report', selectedWindow?.windowId || 'full-axis')
+          "
+        >
+          <Download />
+          <span>导出报告</span>
+        </button>
+      </div>
     </header>
 
     <div
@@ -207,7 +220,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { CopyDocument, EditPen } from '@element-plus/icons-vue';
+import { CopyDocument, Download, EditPen } from '@element-plus/icons-vue';
 import { formatFrameTime, msToFrame } from '../../domain/timebase';
 
 const props = defineProps({
@@ -219,6 +232,7 @@ const emit = defineEmits([
   'select-window',
   'locate-action',
   'create-inherited-scenario',
+  'export-report',
 ]);
 const selectedWindow = computed(
   () =>
@@ -278,6 +292,30 @@ function deltaClass(value) {
   margin: 2px 0 0;
   font-size: 15px;
   letter-spacing: 0;
+}
+.panel-header-actions,
+.report-button {
+  display: flex;
+  align-items: center;
+}
+.panel-header-actions {
+  gap: 10px;
+}
+.report-button {
+  gap: 6px;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid #4b8178;
+  border-radius: 4px;
+  background: #1f3c37;
+  color: #e9fffb;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.report-button svg {
+  width: 14px;
+  height: 14px;
 }
 .section-tabs {
   display: flex;

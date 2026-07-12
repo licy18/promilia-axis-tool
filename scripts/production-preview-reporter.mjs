@@ -18,6 +18,7 @@ const REQUIRED_CAPABILITIES = [
   'stage-10d-timeline-playback',
   'stage-11a-contribution-windows',
   'stage-11b-window-comparison',
+  'stage-12a-analysis-report',
   'png-project-exchange',
   'project-drop-recovery',
   'configuration-instances',

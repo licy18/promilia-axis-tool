@@ -195,6 +195,16 @@
       @import-baseline="importScenarioComparisonBaseline"
       @select-window="selectScenarioComparisonWindow"
       @locate-action="locateScenarioComparisonAction"
+      @export-report="exportScenarioComparisonAnalysisReport"
+    />
+
+    <WorkbenchAnalysisReportDialog
+      v-if="analysisReportDialogVisible"
+      :visible="analysisReportDialogVisible"
+      :report="importedAnalysisReport"
+      :validation="importedAnalysisReportValidation"
+      @close="closeAnalysisReport"
+      @locate-source="locateImportedAnalysisReportSource"
     />
 
     <WorkbenchActionContextMenu
@@ -468,6 +478,7 @@
           @select-window="selectContributionWindow"
           @locate-action="locateCycleSectionAction"
           @create-inherited-scenario="createInheritedScenarioFromBoundary"
+          @export-report="exportContributionAnalysisReport"
         />
       </div>
 
@@ -955,6 +966,11 @@ import {
 } from '../domain/workbenchGameDataCatalog';
 import { normalizeWorkbenchMechanicsProfileSelection } from '../domain/workbenchMechanicsProfileSelection';
 import {
+  createWorkbenchAnalysisReportFileName,
+  createWorkbenchContributionAnalysisReport,
+  createWorkbenchScenarioComparisonAnalysisReport,
+} from '../domain/workbenchAnalysisReport';
+import {
   clearWorkbenchDraft,
   createWorkbenchDraftSnapshot,
   createWorkbenchScenarioDraftSnapshot,
@@ -1015,6 +1031,9 @@ import { projectWorkbenchScenarioComparison } from '../simulation/projection/pro
 
 const WorkbenchScenarioComparisonDialog = defineAsyncComponent(
   () => import('../features/workbench/WorkbenchScenarioComparisonDialog.vue')
+);
+const WorkbenchAnalysisReportDialog = defineAsyncComponent(
+  () => import('../features/workbench/WorkbenchAnalysisReportDialog.vue')
 );
 const WorkbenchPresetLibraryDialog = defineAsyncComponent(
   () => import('../features/workbench/WorkbenchPresetLibraryDialog.vue')
@@ -1131,6 +1150,9 @@ const comparisonDialogVisible = ref(false);
 const comparisonBaselineDraft = ref(null);
 const comparisonBaselineSource = ref(null);
 const comparisonWindowId = ref('full-axis');
+const analysisReportDialogVisible = ref(false);
+const importedAnalysisReport = ref(null);
+const importedAnalysisReportValidation = ref(null);
 const undoHistoryStack = ref([]);
 const redoHistoryStack = ref([]);
 const workbenchRoot = ref(null);
@@ -3432,7 +3454,7 @@ function locateScenarioComparisonBaselineAction(payload) {
 
 function focusScenarioComparisonAction(
   { actionId, statePointId = '', frameIndex = null } = {},
-  { focusSource, changeSummary }
+  { focusSource, changeSummary, label = '方案对比' }
 ) {
   if (!findActionDraftById(actionId)) {
     return false;
@@ -3457,7 +3479,7 @@ function focusScenarioComparisonAction(
     ...createEmptyWorkbenchActionEditFocus(actionEditFocus.value.sequence + 1),
     actionId,
     fieldKey: 'startMs',
-    label: '方案对比',
+    label,
     changeSummary,
     editOrigin: focusSource,
     focusSource,
@@ -3535,6 +3557,73 @@ function exportProjectFile() {
   });
   downloadWorkbenchBlob(blob, createWorkbenchProjectFileName(snapshot));
   draftStatus.value = '已导出项目';
+}
+
+function exportContributionAnalysisReport(windowId = 'full-axis') {
+  try {
+    const report = createWorkbenchContributionAnalysisReport({
+      project: project.value,
+      source: {
+        label: activeWorkbenchScenario.value?.name ?? '当前方案',
+        sourceKind: 'workspace-scenario',
+        sourceId: scenarioWorkspace.value.activeScenarioId,
+        draft: createWorkbenchScenarioDraftSnapshot(
+          getCurrentWorkbenchScenarioState()
+        ),
+      },
+      contributionProjection: cycleSectionProjection.value,
+      runtimeOutputs: runtimeOutputs.value,
+      windowId,
+    });
+    downloadWorkbenchAnalysisReport(report, '已导出贡献分析报告');
+  } catch {
+    draftStatus.value = '贡献分析报告导出失败';
+  }
+}
+
+function exportScenarioComparisonAnalysisReport() {
+  try {
+    const comparison = scenarioComparison.value;
+    const report = createWorkbenchScenarioComparisonAnalysisReport({
+      project: project.value,
+      comparison,
+      currentSource: {
+        label: comparison.current.label,
+        sourceKind: comparison.current.sourceKind,
+        sourceId: comparison.current.sourceId,
+        projectId: comparison.current.projectId,
+        projectName: comparison.current.projectName,
+        draft: createWorkbenchScenarioDraftSnapshot(
+          getCurrentWorkbenchScenarioState()
+        ),
+      },
+      baselineSource: {
+        label: comparison.baseline?.label,
+        sourceKind: comparison.baseline?.sourceKind,
+        sourceId: comparison.baseline?.sourceId,
+        projectId: comparison.baseline?.projectId,
+        projectName: comparison.baseline?.projectName,
+        draft: comparisonBaselineDraft.value,
+      },
+      currentRuntimeOutputs: runtimeOutputs.value,
+      baselineRuntimeOutputs:
+        comparisonBaselineSimulationResult.value?.runtimeOutputs,
+    });
+    downloadWorkbenchAnalysisReport(report, '已导出方案对比分析报告');
+  } catch {
+    draftStatus.value = '方案对比分析报告导出失败';
+  }
+}
+
+function downloadWorkbenchAnalysisReport(report, statusText) {
+  if (typeof document === 'undefined' || typeof Blob === 'undefined') {
+    throw new Error('Analysis report export is unavailable');
+  }
+  const blob = new Blob([JSON.stringify(report, null, 2)], {
+    type: 'application/json',
+  });
+  downloadWorkbenchBlob(blob, createWorkbenchAnalysisReportFileName(report));
+  draftStatus.value = statusText;
 }
 
 async function exportProjectPng() {
@@ -3721,12 +3810,63 @@ async function receiveWorkbenchProjectFile(file, source = 'picker') {
   await receiver.processWorkbenchProjectFile(file, {
     source,
     onProject: applyImportedProjectDraft,
+    onAnalysisReport: (report, validation, statusText) => {
+      importedAnalysisReport.value = report;
+      importedAnalysisReportValidation.value = validation;
+      analysisReportDialogVisible.value = true;
+      draftStatus.value = statusText;
+      return true;
+    },
     onRuntimeCapture: async captures => {
       await ensureRuntimeDiagnosticsLoaded();
       applyImportedRuntimeSampleCaptures(captures);
     },
     onStatus: statusText => (draftStatus.value = statusText),
   });
+}
+
+function closeAnalysisReport() {
+  analysisReportDialogVisible.value = false;
+}
+
+function locateImportedAnalysisReportSource({
+  role = 'current',
+  actionId = '',
+  statePointId = '',
+  frameIndex = null,
+} = {}) {
+  const source = importedAnalysisReport.value?.sources?.find(
+    item => item.role === role
+  );
+  if (!source?.scenarioDraft) {
+    draftStatus.value = '分析报告来源不可用';
+    return false;
+  }
+  const result = addWorkbenchScenarioFromDraft(
+    scenarioWorkspace.value,
+    createWorkbenchScenarioDraftSnapshot(getCurrentWorkbenchScenarioState()),
+    source.scenarioDraft,
+    `报告：${source.label}`
+  );
+  if (!result.changed && result.reason === 'scenario-limit-reached') {
+    draftStatus.value = `方案数量已达上限（${MAX_WORKBENCH_SCENARIOS}）`;
+    return false;
+  }
+  if (!applyWorkspaceScenarioMutation(result, '已从分析报告恢复来源')) {
+    return false;
+  }
+  closeAnalysisReport();
+  if (!actionId) {
+    return true;
+  }
+  return focusScenarioComparisonAction(
+    { actionId, statePointId, frameIndex },
+    {
+      focusSource: 'analysis-report',
+      changeSummary: '已从分析报告恢复来源并定位动作',
+      label: '分析报告',
+    }
+  );
 }
 
 function receiveDroppedWorkbenchProjectFiles(files) {

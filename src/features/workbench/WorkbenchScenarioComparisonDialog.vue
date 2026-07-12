@@ -17,15 +17,27 @@
             <span class="comparison-eyebrow">排轴分析</span>
             <h2 id="workbench-scenario-comparison-title">方案对比</h2>
           </div>
-          <button
-            class="icon-button"
-            type="button"
-            title="关闭方案对比"
-            data-testid="workbench-comparison-close"
-            @click="emit('close')"
-          >
-            <Close />
-          </button>
+          <div class="comparison-header-actions">
+            <button
+              class="command-button"
+              type="button"
+              :disabled="comparison.status !== 'scenario-comparison-ready'"
+              data-testid="workbench-export-comparison-report"
+              @click="emit('export-report')"
+            >
+              <Download />
+              <span>导出报告</span>
+            </button>
+            <button
+              class="icon-button"
+              type="button"
+              title="关闭方案对比"
+              data-testid="workbench-comparison-close"
+              @click="emit('close')"
+            >
+              <Close />
+            </button>
+          </div>
         </header>
 
         <div class="baseline-toolbar">
@@ -351,6 +363,7 @@ import {
   Close,
   DataAnalysis,
   DocumentCopy,
+  Download,
   EditPen,
   UploadFilled,
 } from '@element-plus/icons-vue';
@@ -385,6 +398,7 @@ const emit = defineEmits([
   'import-baseline',
   'select-window',
   'locate-action',
+  'export-report',
 ]);
 
 const selectedPresetId = ref('');
@@ -534,6 +548,11 @@ function deltaClass(value) {
   font-size: 20px;
   letter-spacing: 0;
 }
+.comparison-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
 .icon-button,
 .command-button,
@@ -551,6 +570,10 @@ function deltaClass(value) {
 .icon-button {
   width: 34px;
   height: 34px;
+}
+.command-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .icon-button svg,

@@ -250,7 +250,11 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 #### Stage 12-A：分析快照与报告导出闭环
 
-下一阶段把当前或 A/B 方案的贡献窗口导出为可移植分析快照：保留项目、方案、窗口、动作、角色、三值指标和 applied source identity，使用户可以从报告复核来源并回到项目定位。先完成版本化 JSON 报告与回读校验，后续再评估可打印图片；不复制 runtime 计算、不混入 candidate/unapplied 数据，也不拆成零碎导出按钮或状态提示。
+状态：已完成。时间窗口贡献与 A/B 方案比较均可导出版本化 JSON 分析报告；报告冻结现有 applied runtime 结果、动作/state point/frame、transaction/source delta identity，并嵌入对应方案草稿。统一文件入口会先验证 schema、边界、来源草稿和动作/transaction 引用，再打开独立复盘视图；用户可从任一来源或动作恢复独立工作区方案并由标准 runtime 重建定位，当前排轴不会被导入动作直接覆盖。
+
+#### Stage 12-B：分析报告 PNG 与元数据回导闭环
+
+下一阶段把已验证的 JSON 分析报告渲染为适合交付和归档的 PNG，并把同一版本化报告作为 PNG 元数据嵌入；用户应能从 PNG 反向打开报告、验证来源并恢复方案/动作定位。复用现有 PNG metadata 工具和 Stage 12-A 合同，不截图当前页面临时状态、不复制计算，也不改变项目 v16、三值公式或 applied/unapplied 边界。
 
 ## 6. 推荐里程碑
 

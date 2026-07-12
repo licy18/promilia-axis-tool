@@ -27056,3 +27056,40 @@ skillLevelCrossCheck.items[].levels[]
 ```
 
 读取层按等级位置恢复 `labelIdRange/valueIdRange`；单等级技能和不能由等差序列表达的范围继续保留直接 range。v2 的直接 `labelIdRange/valueIdRange` 仍可读取，生成审计从完整源重新投影并深比较等级 1、等级 12 与 mismatch 结果。该压缩不进入本地草稿、JSON、分享链接、PNG 或预设，也不改变任何 applied delta、状态曲线或来源绑定。
+
+## 410. Workbench analysis report v1 / frozen applied runtime snapshot
+
+Stage 12-A 新增独立交换合同 `workbench-analysis-report` v1。它不是 Workbench 项目 schema，也不会写入本地草稿、分享链接、项目 PNG 或 runtime output；报告通过统一文件接收器单独分流。
+
+```text
+WorkbenchAnalysisReport v1
+  game = azur-promilia
+  type = workbench-analysis-report
+  analysisKind = contribution-window | scenario-comparison
+  exportedAt / title
+  project
+    schemaVersion / id / name / fps / durationMs
+  calculationBoundary
+    sourceKind = applied-runtime-outputs
+    readsRuntimeOutputsOnly = true
+    appliedToCalculators = false
+    excludedSourceKinds = [candidate, unapplied]
+  sources[]
+    role = current | baseline
+    label / sourceKind / sourceId
+    projectId / projectName / windowId
+    scenarioDraft
+  appliedSourceBindings[]
+    role
+    transactions[]
+      transactionId / actionId / hitId
+      actorId / energyOwnerActorId
+      frameIndex / timeMs
+      sourceDeltaIds[]
+      delta.enemyHp / enemyToughness / selfEnergy
+  analysis
+    window | comparison
+  summary
+```
+
+创建器只复制既有贡献窗口、方案比较和 applied hit transactions，不重新聚合或计算三值。解析器要求角色来源唯一且完整，规范化嵌入的 `scenarioDraft`，并验证分析动作与每条 transaction 的 `actionId` 均存在于对应来源草稿、`sourceDeltaIds` 非空且 transaction/source-delta identity 不重复；任一引用漂移都会拒绝整个报告。合法报告的来源通过 `addWorkbenchScenarioFromDraft` 加入当前工作区，再由标准 compiler/runtime 重建 state point 与曲线，冻结报告本身不作为 calculator 输入。

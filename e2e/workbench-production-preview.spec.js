@@ -1197,6 +1197,139 @@ test('[stage-11b-window-comparison] compares one cycle and opens the baseline co
   ).toHaveText(baselineStatePointId);
 });
 
+test('[stage-12a-analysis-report] exports, validates, and reopens frozen analysis sources', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/#/workbench');
+
+  await page.getByTestId('workbench-add-resource-action').click();
+  await page
+    .getByTestId('workbench-action-actor-select')
+    .selectOption('101003');
+  await page.getByTestId('workbench-start-frame-input').fill('120');
+  await page.getByTestId('workbench-start-frame-input').press('Tab');
+  await page.getByTestId('workbench-resource-change-input').fill('50');
+  await page.getByTestId('workbench-resource-change-input').press('Tab');
+  await page.getByTestId('workbench-scenario-duplicate').click();
+  await page.locator('.action-item[data-action-id="action-0002"]').click();
+  await page.getByTestId('workbench-resource-change-input').fill('80');
+  await page.getByTestId('workbench-resource-change-input').press('Tab');
+
+  await page.getByTestId('workbench-open-comparison').click();
+  await page
+    .getByTestId('workbench-comparison-workspace-scenario')
+    .selectOption('scenario-0001');
+  const comparison = page.getByTestId('workbench-scenario-comparison');
+  await expect(
+    comparison.getByTestId('workbench-comparison-action-row')
+  ).toHaveCount(2);
+  const comparisonDownloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-comparison-report').click();
+  const comparisonDownload = await comparisonDownloadPromise;
+  const comparisonDownloadPath = await comparisonDownload.path();
+  expect(comparisonDownloadPath).toBeTruthy();
+  expect(comparisonDownload.suggestedFilename()).toMatch(
+    /promilia-analysis-comparison-.*\.promilia-analysis\.json$/
+  );
+  const comparisonReport = JSON.parse(
+    await readFile(comparisonDownloadPath, 'utf8')
+  );
+  expect(comparisonReport).toMatchObject({
+    schemaVersion: 1,
+    game: 'azur-promilia',
+    type: 'workbench-analysis-report',
+    analysisKind: 'scenario-comparison',
+    calculationBoundary: {
+      sourceKind: 'applied-runtime-outputs',
+      readsRuntimeOutputsOnly: true,
+      appliedToCalculators: false,
+    },
+    summary: {
+      sourceCount: 2,
+      actionReferenceCount: 4,
+    },
+  });
+  expect(comparisonReport.sources).toHaveLength(2);
+  expect(
+    comparisonReport.appliedSourceBindings.every(binding =>
+      binding.transactions.every(
+        transaction => transaction.sourceDeltaIds.length > 0
+      )
+    )
+  ).toBe(true);
+
+  await page.getByTestId('workbench-comparison-close').click();
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(comparisonDownloadPath);
+  const reportDialog = page.getByTestId('workbench-analysis-report');
+  await expect(reportDialog).toBeVisible();
+  await expect(
+    reportDialog.getByTestId('workbench-analysis-report-validation')
+  ).toHaveAttribute('data-validation-status', 'valid');
+  await expect(
+    reportDialog.getByTestId('workbench-analysis-report-source')
+  ).toHaveCount(2);
+  await expect(
+    reportDialog.getByTestId('workbench-analysis-report-action')
+  ).toHaveCount(2);
+  await reportDialog.locator('.report-dialog').screenshot({
+    path: 'reports/stage-12a-analysis-report-desktop.png',
+  });
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.screenshot({
+    path: 'reports/stage-12a-analysis-report-narrow.png',
+  });
+
+  const reportAction = reportDialog.locator(
+    '[data-testid="workbench-analysis-report-action"][data-baseline-action-id="action-0002"]'
+  );
+  const locateBaseline = reportAction.getByTestId(
+    'workbench-analysis-report-locate-baseline'
+  );
+  const baselineStatePointId =
+    comparisonReport.analysis.comparison.actions.find(
+      action => action.baselineActionId === 'action-0002'
+    ).baselineStatePointId;
+  await locateBaseline.click();
+  await expect(reportDialog).toBeHidden();
+  const workbench = page.locator('main.workbench');
+  await expect(workbench).toHaveAttribute('data-workspace-scenario-count', '3');
+  await expect(workbench).toHaveAttribute(
+    'data-active-workspace-scenario-id',
+    'scenario-0003'
+  );
+  await expect(
+    page.locator('.action-item[data-action-id="action-0002"]')
+  ).toHaveClass(/selected/);
+  await expect(page.getByTestId('workbench-resource-change-input')).toHaveValue(
+    '50'
+  );
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-state-point')
+  ).toHaveText(baselineStatePointId);
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+    )
+  ).toHaveAttribute('data-edit-focus-source', 'analysis-report');
+
+  const contributionDownloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-contribution-report').click();
+  const contributionDownload = await contributionDownloadPromise;
+  const contributionReport = JSON.parse(
+    await readFile(await contributionDownload.path(), 'utf8')
+  );
+  expect(contributionReport).toMatchObject({
+    type: 'workbench-analysis-report',
+    analysisKind: 'contribution-window',
+    summary: { sourceCount: 1 },
+  });
+});
+
 test('[diagnostics-lazy-load] loads runtime diagnostics from a production chunk', async ({
   page,
 }) => {
@@ -1541,7 +1674,7 @@ test('[project-drop-recovery] restores a production project without replacing it
     buffer: Buffer.from('invalid project'),
   });
   await expect(page.getByTestId('workbench-draft-status')).toHaveText(
-    '仅支持 JSON 或 PNG 项目文件'
+    '仅支持 JSON 分析/项目文件或 PNG 项目'
   );
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '2 action'
