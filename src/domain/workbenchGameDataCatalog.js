@@ -1,4 +1,12 @@
 import { getAzprWorkbenchSeed } from '../data/azprGenerated';
+import {
+  createSkillVariantSourceIdentity,
+  nonNegativeIntegerOrNull,
+  numberOrNull as finiteNumberOrNull,
+  positiveIntegerOrNull,
+  stableHash,
+  textOrNull,
+} from './contractValues';
 import { resolveSkillActionVariants } from './skillDamageSegments';
 
 export const WORKBENCH_GAME_DATA_CATALOG_CONTRACT_NAME =
@@ -867,50 +875,4 @@ function resolveTeamCharacterIds(draft = {}) {
       ? teamSlots.map(slot => slot?.characterId)
       : [draft?.selection?.characterId, draft?.selection?.secondaryCharacterId];
   return [...new Set(values.map(positiveIntegerOrNull).filter(Boolean))];
-}
-
-function createSkillVariantSourceIdentity(source = {}) {
-  const values = [
-    textOrNull(source?.kind),
-    textOrNull(source?.path),
-    positiveIntegerOrNull(source?.skillId),
-    positiveIntegerOrNull(source?.characterId),
-    positiveIntegerOrNull(source?.level),
-    nonNegativeIntegerOrNull(source?.levelIndex),
-    textOrNull(source?.labelField),
-    textOrNull(source?.valueField),
-  ];
-  return values.some(value => value != null)
-    ? `azpr-skill-variant-source-v1-${stableHash(JSON.stringify(values))}`
-    : null;
-}
-
-function stableHash(value) {
-  let hash = 0x811c9dc5;
-  for (const character of String(value)) {
-    hash ^= character.codePointAt(0);
-    hash = Math.imul(hash, 0x01000193);
-  }
-  return (hash >>> 0).toString(16).padStart(8, '0');
-}
-
-function positiveIntegerOrNull(value) {
-  const number = Number(value);
-  return Number.isInteger(number) && number > 0 ? number : null;
-}
-
-function nonNegativeIntegerOrNull(value) {
-  const number = Number(value);
-  return Number.isInteger(number) && number >= 0 ? number : null;
-}
-
-function finiteNumberOrNull(value) {
-  if (value == null || value === '') return null;
-  const number = Number(value);
-  return Number.isFinite(number) ? number : null;
-}
-
-function textOrNull(value) {
-  const text = String(value ?? '').trim();
-  return text || null;
 }

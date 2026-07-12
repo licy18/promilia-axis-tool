@@ -45,7 +45,9 @@ export function createThreeValueHpOperandSourceBinding({
       actionVariantIndex: nonNegativeIntegerOrNull(referenceVariant?.index),
       rawValue: referenceVariant?.rawValue ?? null,
       multiplier: numberOrNull(referenceVariant?.multiplier),
-      sourceIdentity: createVariantSourceIdentity(referenceVariant?.source),
+      sourceIdentity: createSkillVariantSourceIdentity(
+        referenceVariant?.source
+      ),
     },
     operands: {
       baseAttack: {
@@ -60,7 +62,7 @@ export function createThreeValueHpOperandSourceBinding({
         actionVariantIndex: nonNegativeIntegerOrNull(
           segment?.actionVariantIndex ?? segment?.index
         ),
-        sourceIdentity: createVariantSourceIdentity(segment?.source),
+        sourceIdentity: createSkillVariantSourceIdentity(segment?.source),
       },
     },
   };
@@ -250,22 +252,6 @@ export function validateThreeValueHpOperandSourceBinding({
   };
 }
 
-function createVariantSourceIdentity(source = {}) {
-  const values = [
-    textOrNull(source?.kind),
-    textOrNull(source?.path),
-    numberOrNull(source?.skillId),
-    numberOrNull(source?.characterId),
-    numberOrNull(source?.level),
-    numberOrNull(source?.levelIndex),
-    textOrNull(source?.labelField),
-    textOrNull(source?.valueField),
-  ];
-  return values.some(value => value != null)
-    ? `azpr-skill-variant-source-v1-${stableHash(JSON.stringify(values))}`
-    : null;
-}
-
 function calculateHpPreviewDelta(baseAttack, actionMultiplier) {
   const attack = numberOrNull(baseAttack);
   const multiplier = numberOrNull(actionMultiplier);
@@ -274,38 +260,10 @@ function calculateHpPreviewDelta(baseAttack, actionMultiplier) {
     : Math.max(0, Math.round(attack * multiplier));
 }
 
-function numbersMatch(left, right) {
-  const leftNumber = numberOrNull(left);
-  const rightNumber = numberOrNull(right);
-  return (
-    leftNumber != null &&
-    rightNumber != null &&
-    Math.abs(leftNumber - rightNumber) <= 1e-9
-  );
-}
-
-function stableHash(value) {
-  let hash = 0x811c9dc5;
-  for (const character of String(value)) {
-    hash ^= character.charCodeAt(0);
-    hash = Math.imul(hash, 0x01000193);
-  }
-  return (hash >>> 0).toString(16).padStart(8, '0');
-}
-
-function nonNegativeIntegerOrNull(value) {
-  if (value == null || value === '') return null;
-  const number = Number(value);
-  return Number.isInteger(number) && number >= 0 ? number : null;
-}
-
-function numberOrNull(value) {
-  if (value == null || value === '') return null;
-  const number = Number(value);
-  return Number.isFinite(number) ? number : null;
-}
-
-function textOrNull(value) {
-  const text = String(value ?? '').trim();
-  return text || null;
-}
+import {
+  createSkillVariantSourceIdentity,
+  nonNegativeIntegerOrNull,
+  numberOrNull,
+  numbersMatch,
+  textOrNull,
+} from '../../domain/contractValues';

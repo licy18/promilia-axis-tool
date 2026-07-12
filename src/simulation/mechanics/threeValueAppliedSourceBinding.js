@@ -1,3 +1,13 @@
+import {
+  createCodeDiagnostics,
+  nonNegativeIntegerOrNull,
+  numberOrNull,
+  numbersMatch,
+  positiveIntegerOrNull,
+  stableHash,
+  textOrNull,
+} from '../../domain/contractValues';
+
 export const THREE_VALUE_APPLIED_SOURCE_BINDING_CONTRACT_NAME =
   'AzPrThreeValueAppliedSourceBinding';
 
@@ -39,7 +49,7 @@ export function createExplicitSelfEnergySourceBinding({
   const calculatedDelta = roundNumber(
     normalizedEvents.reduce((sum, event) => sum + (event.change ?? 0), 0)
   );
-  if (!numbersMatch(calculatedDelta, expectedDelta)) {
+  if (!numbersMatch(calculatedDelta, expectedDelta, 0.000001)) {
     issues.push('explicit-energy-event-sum-mismatch');
   }
 
@@ -106,7 +116,7 @@ export function createValidatedRuntimeSampleSourceBinding({
   if (trackKey === 'enemyToughnessDamage' && !sample.targetEntityId) {
     issues.push('validated-runtime-sample-toughness-target-missing');
   }
-  if (!numbersMatch(sample.delta, point.delta)) {
+  if (!numbersMatch(sample.delta, point.delta, 0.000001)) {
     issues.push('validated-runtime-sample-delta-mismatch');
   }
 
@@ -172,7 +182,7 @@ export function validateThreeValueAppliedSourceBinding({
   if (sourceKind && binding.sourceKind !== sourceKind) {
     add('applied-source-binding-source-kind-mismatch');
   }
-  if (!numbersMatch(binding.expectedDelta, expectedDelta)) {
+  if (!numbersMatch(binding.expectedDelta, expectedDelta, 0.000001)) {
     add('applied-source-binding-expected-delta-mismatch');
   }
 
@@ -196,9 +206,11 @@ export function validateThreeValueAppliedSourceBinding({
     }
   } else if (binding.kind === 'validated-runtime-sample') {
     const sample = binding.sources?.sample ?? {};
-    if (!numbersMatch(sample.before, before)) add('sample-before-mismatch');
-    if (!numbersMatch(sample.after, after)) add('sample-after-mismatch');
-    if (!numbersMatch(sample.delta, reportedDelta ?? expectedDelta)) {
+    if (!numbersMatch(sample.before, before, 0.000001))
+      add('sample-before-mismatch');
+    if (!numbersMatch(sample.after, after, 0.000001))
+      add('sample-after-mismatch');
+    if (!numbersMatch(sample.delta, reportedDelta ?? expectedDelta, 0.000001)) {
       add('sample-reported-delta-mismatch');
     }
     if (
@@ -246,8 +258,7 @@ export function validateThreeValueAppliedSourceBinding({
       : 'applied-source-binding-drift-detected',
     kind: binding.kind ?? null,
     identity: binding.identity ?? null,
-    issueCodes: issues,
-    issues: issues.map(code => ({ code })),
+    ...createCodeDiagnostics(issues),
   };
 }
 
@@ -278,8 +289,7 @@ function finalizeBinding({
       ? 'applied-source-binding-ready'
       : 'applied-source-binding-invalid',
     ready,
-    issueCodes: [...issues],
-    issues: issues.map(code => ({ code })),
+    ...createCodeDiagnostics(issues),
   };
 }
 
@@ -304,50 +314,10 @@ function notProvidedValidation() {
 function numberArraysMatch(left, right) {
   return (
     left.length === right.length &&
-    left.every((value, index) => numbersMatch(value, right[index]))
+    left.every((value, index) => numbersMatch(value, right[index], 0.000001))
   );
-}
-
-function numbersMatch(left, right) {
-  const leftNumber = numberOrNull(left);
-  const rightNumber = numberOrNull(right);
-  return (
-    leftNumber != null &&
-    rightNumber != null &&
-    Math.abs(leftNumber - rightNumber) <= 0.000001
-  );
-}
-
-function stableHash(value) {
-  let hash = 0x811c9dc5;
-  for (const character of String(value)) {
-    hash ^= character.charCodeAt(0);
-    hash = Math.imul(hash, 0x01000193);
-  }
-  return (hash >>> 0).toString(16).padStart(8, '0');
 }
 
 function roundNumber(value) {
   return Number(Number(value).toFixed(6));
-}
-
-function positiveIntegerOrNull(value) {
-  const number = numberOrNull(value);
-  return Number.isInteger(number) && number > 0 ? number : null;
-}
-
-function nonNegativeIntegerOrNull(value) {
-  const number = numberOrNull(value);
-  return Number.isInteger(number) && number >= 0 ? number : null;
-}
-
-function numberOrNull(value) {
-  if (value == null || value === '') return null;
-  const number = Number(value);
-  return Number.isFinite(number) ? number : null;
-}
-
-function textOrNull(value) {
-  const text = String(value ?? '').trim();
-  return text || null;
 }

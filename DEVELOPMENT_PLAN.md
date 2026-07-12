@@ -1,6 +1,6 @@
 # promilia-axis-tool 对标 Endaxis 开发计划
 
-最后更新：2026-07-08
+最后更新：2026-07-12
 
 ## 1. 目标定义
 
@@ -11,6 +11,8 @@
 2026-07-08 策略收束：蓝色星原仍在测试阶段，平衡数值和公式细节可能继续调整；当前不再把最终数值考据作为主线阻塞项。后续优先把已解析的 evidence、candidate 和 runtime sample 折叠为可替换的标准生成层，再由运行时层和 UI 层稳定消费。
 
 2026-07-10 入口收束：Workbench 已成为唯一生产排轴入口，旧 Home/Editor/Preset 页面已删除；后续发布清理以引用审计、长轴性能和构建体积为主，不再修补旧页面原型。
+
+2026-07-12 路线更新：8-Z 限定为 production guard、applied source binding 审计、重复合同合并和包体余量恢复；完成后直接进入 Stage 9，以 Endaxis 的时间轴优先信息架构重构 3 角色、3 奇波和敌人多轨工作台。Stage 9 不接入未确认公式，也不把零碎标签、提示或按钮样式作为独立阶段。
 
 对标不等于照搬：
 
@@ -49,19 +51,19 @@ C:\Codex\AzPr Axis\promilia-axis-tool
 
 Endaxis 当前值得对标的模块如下：
 
-| 能力         | Endaxis 位置                                             | promilia 对标方向                           |
-| ------------ | -------------------------------------------------------- | ------------------------------------------- |
-| 数据访问层   | `src/data/`、`src/data/timeline.ts`、`src/data/index.ts` | 从单一 `gamedata.json` 逐步过渡到数据访问层 |
+| 能力         | Endaxis 位置                                             | promilia 对标方向                                 |
+| ------------ | -------------------------------------------------------- | ------------------------------------------------- |
+| 数据访问层   | `src/data/`、`src/data/timeline.ts`、`src/data/index.ts` | 从单一 `gamedata.json` 逐步过渡到数据访问层       |
 | 编辑器主界面 | `src/views/TimelineEditor.vue`                           | `src/views/Workbench.vue` + `features/workbench/` |
-| 动作库       | `src/components/ActionLibrary.vue`、`ActionItem.vue`     | 重构技能库/动作库，支持技能、切人、敌方事件 |
-| 时间轴网格   | `src/components/TimelineGrid.vue`                        | 强化拖拽、吸附、选择、缩放和多轨交互        |
-| 属性面板     | `src/components/PropertiesPanel.vue`                     | 收敛当前编辑面板能力                        |
-| 资源监控     | `src/components/ResourceMonitor.vue`                     | 修复现有资源监控并接入运行时投影            |
-| 敌人设置     | `src/components/EnemySettingsPanel.vue`                  | 蓝色星原敌人/Boss 机制面板                  |
-| 运行时编译   | `src/simulation/compiler/`                               | 项目模型 -> 模拟场景                        |
-| 模拟引擎     | `src/simulation/engine/`、`simulator.ts`                 | 事件队列、角色/敌人状态、命中、Buff、资源   |
-| 结果投影     | `src/simulation/projection/`                             | 输出图表、时间线状态条和统计面板数据        |
-| 测试体系     | `src/simulation/*.test.ts`、`runtimeCoverage.test.ts`    | 建立蓝色星原机制 golden tests               |
+| 动作库       | `src/components/ActionLibrary.vue`、`ActionItem.vue`     | 重构技能库/动作库，支持技能、切人、敌方事件       |
+| 时间轴网格   | `src/components/TimelineGrid.vue`                        | 强化拖拽、吸附、选择、缩放和多轨交互              |
+| 属性面板     | `src/components/PropertiesPanel.vue`                     | 收敛当前编辑面板能力                              |
+| 资源监控     | `src/components/ResourceMonitor.vue`                     | 修复现有资源监控并接入运行时投影                  |
+| 敌人设置     | `src/components/EnemySettingsPanel.vue`                  | 蓝色星原敌人/Boss 机制面板                        |
+| 运行时编译   | `src/simulation/compiler/`                               | 项目模型 -> 模拟场景                              |
+| 模拟引擎     | `src/simulation/engine/`、`simulator.ts`                 | 事件队列、角色/敌人状态、命中、Buff、资源         |
+| 结果投影     | `src/simulation/projection/`                             | 输出图表、时间线状态条和统计面板数据              |
+| 测试体系     | `src/simulation/*.test.ts`、`runtimeCoverage.test.ts`    | 建立蓝色星原机制 golden tests                     |
 
 ## 4. 初始差距（历史基线）
 
@@ -176,16 +178,42 @@ Endaxis 当前值得对标的模块如下：
 3. 构建、测试、性能、长轴和基础移动端查看检查。
 4. README、架构文档、数据说明和用户向说明同步。
 
+### 阶段 8-Z：生产守门与余量恢复
+
+目标：在不改变三值结果的前提下，为 Stage 9 恢复可靠发布余量。
+
+关键产出：
+
+1. 默认 Workbench applied source binding 审计进入生产守门：不得出现 `bound-drift`，全部 `compatible-unbound` 必须有明确兼容原因。
+2. 合并重复 identity/hash/number/text normalization/diagnostics 实现，不新增机制合同。
+3. 全部 JavaScript gzip 不高于 733,000B，尽量接近 728,000B；不提高预算，也不为体积长期停滞。
+
+### Stage 9：Endaxis 风格多轨时间轴与团队拓扑
+
+#### Stage 9-A：时间轴数据与布局骨架
+
+固定 3 个角色槽位。每个角色包含动作主轴、关联奇波子轴和独立能量曲线；敌人组包含事件/状态轴、HP 曲线和韧性曲线。首个整块交付必须同时呈现 3 个角色主轴、3 个奇波子轴、1 个敌人轴和 5 条独立状态曲线。奇波只进入可编辑轨道与配置边界，效果继续 `unapplied`。
+
+#### Stage 9-B：曲线与动作统一时间坐标
+
+动作块、命中节点和五条阶跃曲线共用同一时间刻度、缩放与横向滚动。空轴从 0 到轴末显示初始水平线；曲线只在对应 runtime event 节点变化，角色能量不得串线，移动、复制和删除动作必须同步更新节点。
+
+#### Stage 9-C：时间轴优先的整页结构
+
+首屏优先呈现方案栏、多轨时间轴和完整曲线，固定轨道标签与紧凑工具栏；配置和复盘详情进入侧栏或可切换检查区。桌面与窄屏均需浏览器验收，窄屏允许横向滚动或折叠，但不得重叠、丢轨或破坏时间对齐。
+
+Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 PNG 回放后，3 角色/3 奇波/敌人拓扑及曲线结果一致；现有测试、production preview 和未应用机制隔离继续通过。
+
 ## 6. 推荐里程碑
 
-| 里程碑        | 目标                 | 主要产出                                   |
-| ------------- | -------------------- | ------------------------------------------ |
-| M1 数据真实   | 新版脱离占位数据     | AzPr 数据生成器、拆表数据、校验报告        |
-| M2 模型稳定   | 项目结构可长期维护   | 版本化项目模型、schema、迁移层             |
-| M3 运行时闭环 | 可无 UI 模拟一条轴   | compiler、engine、projection、golden tests |
-| M4 编辑器成型 | 操作体验接近 Endaxis | 工作台组件、真实数据拖拽、运行时投影       |
+| 里程碑          | 目标                   | 主要产出                                    |
+| --------------- | ---------------------- | ------------------------------------------- |
+| M1 数据真实     | 新版脱离占位数据       | AzPr 数据生成器、拆表数据、校验报告         |
+| M2 模型稳定     | 项目结构可长期维护     | 版本化项目模型、schema、迁移层              |
+| M3 运行时闭环   | 可无 UI 模拟一条轴     | compiler、engine、projection、golden tests  |
+| M4 编辑器成型   | 操作体验接近 Endaxis   | 工作台组件、真实数据拖拽、运行时投影        |
 | M5 机制结构可信 | 能稳定复盘代表队伍框架 | 标准生成合同、运行时投影、UI 详情和覆盖测试 |
-| M6 分享发布   | 可稳定交付用户       | 导入导出、预设、性能、发布文档             |
+| M6 分享发布     | 可稳定交付用户         | 导入导出、预设、性能、发布文档              |
 
 ## 7. 立即执行清单
 

@@ -87,8 +87,8 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 114,
-    "productionReachableCount": 110,
+    "sourceCodeFileCount": 115,
+    "productionReachableCount": 111,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
@@ -96,7 +96,7 @@
     "productionReachableByArea": {
       "src": 2,
       "src/data": 1,
-      "src/domain": 22,
+      "src/domain": 23,
       "src/features/workbench": 44,
       "src/i18n": 1,
       "src/router": 1,
@@ -121,6 +121,7 @@
   "productionReachableFiles": [
     "src/App.vue",
     "src/data/azprGenerated.js",
+    "src/domain/contractValues.js",
     "src/domain/initialRuntimeState.js",
     "src/domain/projectSchema.js",
     "src/domain/skillActionCatalog.js",

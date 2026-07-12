@@ -1164,13 +1164,19 @@ WorkbenchProjectFile 升级为 v15；本地草稿、JSON、分享链接、PNG、
 
 风险检查：四载体集成测试仍比较相同的配置/数据/profile identity、proposal、三轨来源 binding、曲线和日志，回放链可作为基线；未应用机制边界也由 profile policy、game data reference policy 和测试共同守住。当前高风险是全部 JavaScript gzip 为 737,474B，距离 740,000B 预算仅余 2,526B；同时 HP/applied source binding 及 catalog 周边已出现重复的 hash、number/text normalization、identity 和 diagnostics 组装，继续叠加合同会放大漂移与包体风险。
 
-下一阶段候选按优先级排序：
+后续路线已调整：先用一个限时 8-Z 完成 production guard、applied source binding 审计、重复 identity/normalization/diagnostics 合并，并把全部 JavaScript gzip 恢复到不高于 733,000B；随后不插入其他 P2/P3 小阶段，直接进入 Stage 9 的 Endaxis 风格多轨时间轴与团队拓扑重构。
 
-1. **8-Z / P0-P3 生产守门与余量恢复**：先审计默认 Workbench 的 applied source binding，要求无 `bound-drift` 且全部 `compatible-unbound` 可解释；合并重复 identity/normalization/diagnostics，在不提高预算、不改变三值结果的前提下把全部 JavaScript gzip 恢复到不高于 733,000B。8-Z 只做守门和工程收口，不开发新机制。
-2. **P2 配置完整性与项目工作流**：继续完善可复用的角色、敌人、装备、奇波和灵子配置实例及方案交换，但未确认效果仍不参与 calculator。
-3. **P3 单项已确认机制接入**：仅在 8-Z 完成后，从具备稳定来源的一项机制开始新增 profile step；不恢复测试期倍率考古，也不并行铺开防御、抗性和培养公式。
+Stage 9 分为三个整块交付：9-A 固定 3 角色槽位，建立每角色动作主轴、奇波子轴、独立能量曲线和敌人事件/HP/韧性组；9-B 让动作、命中节点和 5 条状态曲线共用同一时间坐标、缩放与横向滚动；9-C 收束为时间轴优先的紧凑工作台，配置和复盘进入侧栏。奇波及其他未确认培养效果继续 `unapplied`，Stage 9 不恢复公式考古或测试期倍率研究。
 
-本检查点停在 8-Z 实现之前；下一轮默认先执行候选 1，完成生产守门和包体余量恢复后再重新选择 P2 或 P3。
+### 阶段 8-Z P0-P3 生产守门与余量恢复（2026-07-12）
+
+新增独立 applied source binding 审计，并把它接入 production preview 前置守门与必需能力清单。审计构造同时覆盖 HP、韧性和角色能量的生产场景，要求三轨完整、`bound-drift = 0`，且所有 `compatible-unbound` 都具备明确兼容状态或诊断；当前结果为 3 条 `bound-ready`、0 条 drift、0 条 compatible-unbound。
+
+共享 `contractValues` 收束来源合同重复的稳定 hash/serialize、数字与文本 normalization、skill variant source identity 和 code diagnostics。skill core 生产投影把连续的 label/value 来源 ID 数组无损压缩为起始 ID 与数量，读取端恢复原数组，完整来源文件和运行时 source identity 不变。三值公式、delta、曲线、日志和未应用机制边界均未修改。
+
+阶段验收：75 个测试文件、426 条单元/组件测试，39 条 Workbench 主流程和 19 项 production preview 必需能力全部通过，生产报告继续为 `trial-ready`。生产引用审计为 115 个源码、111 个生产可达、4 个允许 test-only、0 个孤儿；数据投影审计全部一致。Workbench 主块为 352,439B gzip，全部 JavaScript 为 728,258B gzip，较 8-Y 减少 9,216B，达到 Stage 9 的预留目标。
+
+下一阶段目标：Stage 9-A / Endaxis 风格时间轴数据与布局骨架。固定 3 个角色槽位，为每个角色建立动作主轴、关联奇波子轴和独立能量曲线，另建敌人事件/状态轴、HP 曲线与韧性曲线；先交付 3 角色主轴 + 3 奇波子轴 + 1 敌人轴和 5 条完整状态曲线的可见骨架，奇波效果继续 `unapplied`。
 
 ## 10. 文档维护规则
 

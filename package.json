@@ -11,6 +11,8 @@
     "audit:production-imports:check": "node scripts/audit-production-imports.mjs --assert-clean",
     "audit:bundle": "node scripts/audit-build-bundle.mjs",
     "audit:bundle:check": "node scripts/audit-build-bundle.mjs --assert-budget",
+    "audit:applied-source-bindings": "node scripts/audit-applied-source-bindings.mjs",
+    "audit:applied-source-bindings:check": "node scripts/audit-applied-source-bindings.mjs --assert-clean",
     "audit:workbench-data": "node scripts/audit-workbench-production-data.mjs",
     "audit:workbench-data:check": "node scripts/audit-workbench-production-data.mjs --assert-clean",
     "benchmark:long-axis": "node --expose-gc scripts/benchmark-workbench-long-axis.mjs",
@@ -25,7 +27,7 @@
     "format": "prettier --write src/",
     "test": "vitest",
     "test:e2e": "playwright test",
-    "test:e2e:production-preview": "npm run build && playwright test --config playwright.production.config.js",
+    "test:e2e:production-preview": "npm run audit:applied-source-bindings:check && npm run build && playwright test --config playwright.production.config.js",
     "test:e2e:workbench-flow": "playwright test e2e/workbench-continuous-edit.spec.js -g @workbench-main-flow",
     "test:coverage": "vitest run --coverage"
   },

@@ -1,3 +1,4 @@
+import { numberOrNull } from '../../domain/contractValues';
 import { createThreeValueMechanismConfigurationContext } from './threeValueMechanismConfiguration';
 import { resolveThreeValueMechanicsProfile } from './threeValueMechanicsProfile';
 
@@ -234,14 +235,6 @@ function copyFiniteFields(source, fields) {
   return Object.fromEntries(
     fields.map(field => [field, numberOrNull(source?.[field])])
   );
-}
-
-function numberOrNull(value) {
-  if (value == null || value === '') {
-    return null;
-  }
-  const number = Number(value);
-  return Number.isFinite(number) ? number : null;
 }
 
 function uniqueNumbers(values = []) {

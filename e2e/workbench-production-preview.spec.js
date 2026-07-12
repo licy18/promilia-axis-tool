@@ -2,6 +2,18 @@ import { Buffer } from 'node:buffer';
 import { readFile, writeFile } from 'node:fs/promises';
 import { expect, test } from '@playwright/test';
 
+test('[applied-source-binding-guard] accepts the production three-track source audit', async () => {
+  const report = JSON.parse(
+    await readFile('reports/applied-source-binding-audit.json', 'utf8')
+  );
+  expect(report.decision).toMatchObject({ status: 'passed', passed: true });
+  expect(report.summary).toMatchObject({
+    boundDriftCount: 0,
+    unexplainedCompatibleUnboundCount: 0,
+    missingTrackCount: 0,
+  });
+});
+
 test('[routes-and-assets] serves production routes and hashed assets', async ({
   page,
 }) => {

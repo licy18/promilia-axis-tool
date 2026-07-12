@@ -26820,3 +26820,16 @@ AzPrThreeValueAppliedSourceBinding v1
 generation delta 新增 `appliedSourceBindingState`，取值为 `bound-ready / compatible-unbound / bound-drift`，并在 generation、runtime invocation、state snapshot 和 projection summary 汇总 ready、invalid、compatible-unbound 与 binding kinds。正式 binding 的事件、capture、作用实体、Element/path、帧位、before/after 或 delta 漂移会留下 issue code；旧 fixture 没有新身份时明确进入兼容未绑定，不误报为正式 binding 漂移。
 
 `AzPrThreeValueMechanicsAdapter` 从 v8 升级为 v9，evaluation 从 v4 升级为 v5，runtime invocation 从 v10 升级为 v11，标准 generation contract 从 v8 升级为 v9。项目 schema 继续为 v15，现有 HP、韧性、角色能量、曲线和日志结果不变；没有新增倍率、公式或培养效果。
+
+## 398. Applied source production guard / compact source ID ranges
+
+阶段 8-Z 没有升级项目 schema 或三值合同版本。新增 `applied-source-binding-audit` 报告，按 applied delta 记录 `trackKey / state / kind / identity / status / issueCodes`，并把三轨缺失、`bound-drift` 和无法解释的 `compatible-unbound` 作为生产阻断条件。
+
+`workbench-skill-core.json` 中连续的 `labelIds[] / valueIds[]` 改为紧凑投影：
+
+```text
+labelIdRange = [firstId, count]
+valueIdRange = [firstId, count]
+```
+
+`resolveSkillLevelCrossCheck()` 在领域访问层恢复原字符串 ID 数组；非连续或旧投影仍兼容原数组字段。完整 `skill-level-crosscheck.json` 不变，动作倍率来源、skill variant source identity 和运行结果不变。

@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "kind": "applied-source-binding-audit",
+  "generatedAt": "2026-07-12T04:41:07.751Z",
+  "decision": {
+    "status": "passed",
+    "passed": true,
+    "reason": "all-applied-deltas-have-a-valid-or-explained-source-binding"
+  },
+  "summary": {
+    "appliedDeltaCount": 3,
+    "boundReadyCount": 3,
+    "boundDriftCount": 0,
+    "compatibleUnboundCount": 0,
+    "unexplainedCompatibleUnboundCount": 0,
+    "missingTrackCount": 0
+  },
+  "requiredTracks": [
+    "enemyHpDamage",
+    "enemyToughnessDamage",
+    "selfEnergyChange"
+  ],
+  "missingTracks": [],
+  "deltas": [
+    {
+      "actionId": "action-0001",
+      "trackKey": "enemyHpDamage",
+      "state": "bound-ready",
+      "kind": "hp-skill-variant-operands",
+      "identity": "azpr-skill-variant-v1-16fccaec",
+      "status": "hp-operand-source-binding-valid",
+      "issueCodes": []
+    },
+    {
+      "actionId": "action-0001",
+      "trackKey": "enemyToughnessDamage",
+      "state": "bound-ready",
+      "kind": "validated-runtime-sample",
+      "identity": "azpr-applied-source-v1-609d7e1e",
+      "status": "applied-source-binding-valid",
+      "issueCodes": []
+    },
+    {
+      "actionId": "audit-resource-action",
+      "trackKey": "selfEnergyChange",
+      "state": "bound-ready",
+      "kind": "explicit-self-energy-events",
+      "identity": "azpr-applied-source-v1-7a53101e",
+      "status": "applied-source-binding-valid",
+      "issueCodes": []
+    }
+  ]
+}

@@ -181,46 +181,20 @@ function createReplayIdentity({ actors, enemy }) {
         }
       : null,
   };
-  return `azpr-config-v1-${hashText(stableSerialize(replayPayload))}`;
+  return `azpr-config-v1-${stableHash(stableSerialize(replayPayload))}`;
 }
 
 function createConfigurationFingerprint(value) {
   if (!value || typeof value !== 'object') return null;
-  return `cfg-v1-${hashText(stableSerialize(value))}`;
-}
-
-function stableSerialize(value) {
-  if (Array.isArray(value)) {
-    return `[${value.map(stableSerialize).join(',')}]`;
-  }
-  if (value && typeof value === 'object') {
-    return `{${Object.keys(value)
-      .sort()
-      .map(key => `${JSON.stringify(key)}:${stableSerialize(value[key])}`)
-      .join(',')}}`;
-  }
-  return JSON.stringify(value ?? null);
-}
-
-function hashText(text) {
-  let hash = 0x811c9dc5;
-  for (let index = 0; index < text.length; index += 1) {
-    hash ^= text.charCodeAt(index);
-    hash = Math.imul(hash, 0x01000193);
-  }
-  return (hash >>> 0).toString(16).padStart(8, '0');
-}
-
-function positiveIntegerOrNull(value) {
-  const number = Number(value);
-  return Number.isInteger(number) && number > 0 ? number : null;
-}
-
-function textOrNull(value) {
-  const text = String(value ?? '').trim();
-  return text || null;
+  return `cfg-v1-${stableHash(stableSerialize(value))}`;
 }
 
 function clone(value) {
   return value == null ? value : JSON.parse(JSON.stringify(value));
 }
+import {
+  positiveIntegerOrNull,
+  stableHash,
+  stableSerialize,
+  textOrNull,
+} from './contractValues';

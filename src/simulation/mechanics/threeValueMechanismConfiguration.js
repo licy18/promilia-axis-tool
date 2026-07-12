@@ -375,13 +375,4 @@ function createLoadoutSource(loadout = {}, gameDataLoadout = {}) {
   };
 }
 
-function numberOrNull(value) {
-  if (value == null || value === '') return null;
-  const number = Number(value);
-  return Number.isFinite(number) ? number : null;
-}
-
-function textOrNull(value) {
-  const text = String(value ?? '').trim();
-  return text || null;
-}
+import { numberOrNull, textOrNull } from '../../domain/contractValues';

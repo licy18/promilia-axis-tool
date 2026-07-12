@@ -122,13 +122,30 @@ function projectSkillLevelCrossCheck(source) {
         status: level.status,
         ...(level.matches?.labels ? {} : { labels: level.labels }),
         ...(level.matches?.values ? {} : { values: level.values }),
-        labelIds: level.labelIds,
-        valueIds: level.valueIds,
+        ...compactSequentialIds('labelIds', 'labelIdRange', level.labelIds),
+        ...compactSequentialIds('valueIds', 'valueIdRange', level.valueIds),
         matches: level.matches,
         ...nonEmptyArrayField('diagnostics', level.diagnostics),
       })),
     })),
   };
+}
+
+function compactSequentialIds(arrayKey, rangeKey, values) {
+  if (!Array.isArray(values) || values.length === 0) {
+    return { [arrayKey]: values };
+  }
+  try {
+    const first = BigInt(values[0]);
+    const sequential = values.every(
+      (value, index) => BigInt(value) === first + BigInt(index)
+    );
+    return sequential
+      ? { [rangeKey]: [first.toString(), values.length] }
+      : { [arrayKey]: values };
+  } catch {
+    return { [arrayKey]: values };
+  }
 }
 
 function nonEmptyArrayField(key, value) {

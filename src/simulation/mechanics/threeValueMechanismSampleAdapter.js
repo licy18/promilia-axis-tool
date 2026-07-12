@@ -183,8 +183,8 @@ function validateSelfEnergyAppliedEvent(event, match) {
 
   const observedDelta = roundRuntimeSampleNumber(after - before);
   if (
-    !numbersMatch(observedDelta, delta) ||
-    !numbersMatch(expectedDelta, delta)
+    !numbersMatch(observedDelta, delta, RUNTIME_SAMPLE_VALIDATION_TOLERANCE) ||
+    !numbersMatch(expectedDelta, delta, RUNTIME_SAMPLE_VALIDATION_TOLERANCE)
   ) {
     return createInvalidValidation('recover-sp-final-values-mismatch', {
       before,
@@ -287,7 +287,9 @@ function validateToughnessAppliedEvent(event, entry) {
   }
 
   const observedDelta = roundRuntimeSampleNumber(before - after);
-  if (!numbersMatch(observedDelta, delta)) {
+  if (
+    !numbersMatch(observedDelta, delta, RUNTIME_SAMPLE_VALIDATION_TOLERANCE)
+  ) {
     return createInvalidValidation('toughness-final-values-mismatch', {
       before,
       after,
@@ -325,18 +327,7 @@ function createInvalidValidation(reason, values = {}) {
   };
 }
 
-function numbersMatch(left, right) {
-  return Math.abs(left - right) <= RUNTIME_SAMPLE_VALIDATION_TOLERANCE;
-}
-
-function numberOrNull(value) {
-  if (value == null || value === '') {
-    return null;
-  }
-  const numeric = Number(value);
-  return Number.isFinite(numeric) ? numeric : null;
-}
-
 function roundRuntimeSampleNumber(value) {
   return Number(Number(value).toFixed(6));
 }
+import { numberOrNull, numbersMatch } from '../../domain/contractValues';

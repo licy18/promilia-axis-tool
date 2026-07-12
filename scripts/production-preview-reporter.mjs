@@ -8,6 +8,7 @@ const REQUIRED_CAPABILITIES = [
   'profile-compatibility-gate',
   'game-data-compatibility-gate',
   'action-skill-compatibility-gate',
+  'applied-source-binding-guard',
   'png-project-exchange',
   'project-drop-recovery',
   'configuration-instances',
