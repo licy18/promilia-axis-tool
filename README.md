@@ -13,7 +13,7 @@
 - 机制配置来源：当前方案所选实例会先校验实例值与解析值，生成稳定回放身份，再绑定标准 mechanics configuration、profile 与 runtime adapter；本地草稿、JSON、分享链接和 PNG 回导保持同一三值结果，未确认培养效果仍不可应用。
 - 三值运行时：每个动作追踪敌人 HP、敌人韧性和每名角色自身能量，输出曲线、日志、状态快照和统计摘要。
 - 规则与效果：冷却、执行计划、效果命令和运行时复盘共享同一模拟结果。
-- 项目交换：v15 JSON、带项目元数据的 PNG、窗口拖放恢复、分享链接和本地预设轴库；mechanics profile 以及角色、敌人、装备、奇波、灵子引用都由带版本和来源的生产 catalog 校验，不兼容项目会在替换当前工作区之前被拒绝。
+- 项目交换：v15 JSON、带项目元数据的 PNG、窗口拖放恢复、分享链接和本地预设轴库；mechanics profile、角色/敌人/培养配置以及动作的技能 ID、施放角色和变体索引都由带版本和来源的生产 catalog 校验，不兼容项目会在替换当前工作区之前被拒绝。
 - 受控采样工具链：runtime capture manifest、JSONL 规范化、production audit 和显式 PID Frida host。
 
 ## 精度边界
@@ -105,7 +105,7 @@ e2e/                     Workbench 浏览器主流程
 
 构建组成审计会生成 `reports/bundle-composition.json`，并守住首屏入口、Workbench 主包和全部 JavaScript 的 gzip 预算，同时检查技能诊断数据必须位于独立按需包。Element Plus 组件由各页面按需引用，PNG 截图库只在实际导出时加载。
 
-`npm run test:e2e:production-preview` 会重新构建 `dist`，用独立端口启动 Vite production preview，并检查路由与哈希资源、诊断动态包、JSON/PNG 项目交换、拖放恢复、配置实例、多动作与关系编辑、状态效果区间复盘和 390px 窄屏主流程。最终十五项能力的试用判定写入 `reports/production-preview-acceptance.json`。
+`npm run test:e2e:production-preview` 会重新构建 `dist`，用独立端口启动 Vite production preview，并检查路由与哈希资源、诊断动态包、项目交换与兼容性门禁、配置实例、多动作与关系编辑、状态效果区间复盘和 390px 窄屏主流程。最终十八项能力的试用判定写入 `reports/production-preview-acceptance.json`。
 
 三值运行时统一通过 `AzPrThreeValueMechanicsAdapter v7` 调用 HP、韧性和角色能量 adapter；compiler 为 Scenario 绑定 `AzPrMechanicsProfile v2`，generation 以 operands 和 `AzPrThreeValueMechanicsLayerInputs v1` 固定来源，runtime 绑定 `stateBefore` 后由 `AzPrThreeValueMechanicsEvaluation v3` 按有序 `steps` 产生 delta。每条结果再生成 `AzPrThreeValueStateEffectProposal v1`，明确读取状态、作用对象、写入指标和帧位；runtime snapshot 只应用验证通过的 proposal，未确认机制仍不参与计算。
 

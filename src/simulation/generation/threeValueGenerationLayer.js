@@ -10,6 +10,7 @@ import {
 } from './threeValueDeltaGenerationInput';
 import {
   THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME,
+  THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_VERSION,
   createThreeValueMechanismContext,
 } from '../mechanics/threeValueMechanismContext';
 import {
@@ -167,12 +168,7 @@ export function createThreeValueGenerationLayer({
         sourceOperandsContract: {
           name: THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_NAME,
           version: THREE_VALUE_MECHANICS_OPERANDS_CONTRACT_VERSION,
-          requiredFields: [
-            'trackKey',
-            'kind',
-            'inputs',
-            'expectedDelta',
-          ],
+          requiredFields: ['trackKey', 'kind', 'inputs', 'expectedDelta'],
         },
         mechanicsProfileContract: {
           name: THREE_VALUE_MECHANICS_PROFILE_CONTRACT_NAME,
@@ -207,7 +203,7 @@ export function createThreeValueGenerationLayer({
       },
       mechanismContextContract: {
         name: THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME,
-        version: 3,
+        version: THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_VERSION,
         requiredSections: [
           'action',
           'hit',
@@ -478,6 +474,12 @@ function createThreeValueGenerationDelta({
     actionId: point.actionId ?? null,
     actionName: point.actionName ?? action?.name ?? null,
     actionType: action?.type ?? null,
+    gameDataReference: action?.gameDataReference ?? null,
+    skillReferenceRequired: action?.type === 'skill',
+    skillReferenceReady:
+      action?.type === 'skill'
+        ? action?.gameDataReference?.ready === true
+        : null,
     actorId: point.actorId ?? action?.actorId ?? null,
     actorName: point.actorName ?? action?.actor?.name ?? null,
     hitKey,
@@ -724,6 +726,12 @@ function createThreeValueGenerationActions({ actionsById, deltas }) {
         actorId: delta.actorId ?? action?.actorId ?? null,
         actorName: delta.actorName ?? action?.actor?.name ?? null,
         startMs: numberOrNull(action?.startMs),
+        gameDataReference: action?.gameDataReference ?? null,
+        skillReferenceRequired: action?.type === 'skill',
+        skillReferenceReady:
+          action?.type === 'skill'
+            ? action?.gameDataReference?.ready === true
+            : null,
         hitGroups: new Map(),
       });
     }
@@ -772,6 +780,9 @@ function createThreeValueGenerationActions({ actionsById, deltas }) {
         actorId: group.actorId,
         actorName: group.actorName,
         startMs: group.startMs,
+        gameDataReference: group.gameDataReference,
+        skillReferenceRequired: group.skillReferenceRequired,
+        skillReferenceReady: group.skillReferenceReady,
         hitCount: hits.length,
         deltaCount: actionDeltas.length,
         threeValueDeltaAggregate:
@@ -791,6 +802,9 @@ function createThreeValueGenerationHits(actions) {
         actionType: action.actionType,
         actorId: action.actorId,
         actorName: action.actorName,
+        gameDataReference: action.gameDataReference,
+        skillReferenceRequired: action.skillReferenceRequired,
+        skillReferenceReady: action.skillReferenceReady,
         hitKey: hit.hitKey,
         hitIndex: hit.hitIndex,
         hitSkillId: hit.hitSkillId,
@@ -888,7 +902,7 @@ function createActionHitThreeValueDeltaStandardContract({
         ? 'action-hit-three-value-delta-contract-ready'
         : 'action-hit-three-value-delta-contract-empty',
     name: ACTION_HIT_THREE_VALUE_DELTA_CONTRACT_NAME,
-    version: 6,
+    version: 7,
     topology: ['Action', 'Hit', 'ThreeValueDelta'],
     frameRate: AZPR_TIMELINE_FRAME_RATE,
     frameMs: roundTimelineMs(AZPR_TIMELINE_FRAME_MS),
@@ -902,7 +916,7 @@ function createActionHitThreeValueDeltaStandardContract({
     aggregateLayerKeys: THREE_VALUE_GENERATION_LAYER_ORDER,
     mechanismContextContract: {
       name: THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME,
-      version: 3,
+      version: THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_VERSION,
       required: true,
     },
     mechanicsAdapterContract: {
@@ -981,6 +995,10 @@ function createActionHitThreeValueDeltaStandardContract({
       mechanicsProfileMissingDeltaCount:
         summary.mechanicsProfileMissingDeltaCount,
       mechanicsProfileIds: summary.mechanicsProfileIds,
+      skillReferenceActionCount: summary.skillReferenceActionCount,
+      skillReferenceReadyActionCount: summary.skillReferenceReadyActionCount,
+      skillReferenceMissingActionCount:
+        summary.skillReferenceMissingActionCount,
       applied: false,
     },
     applied: false,
@@ -1067,6 +1085,15 @@ function summarizeThreeValueGenerationLayer({
     actionCount: actions.length,
     actionWithDeltaCount: actions.filter(action => action.deltaCount > 0)
       .length,
+    skillReferenceActionCount: actions.filter(
+      action => action.skillReferenceRequired
+    ).length,
+    skillReferenceReadyActionCount: actions.filter(
+      action => action.skillReferenceRequired && action.skillReferenceReady
+    ).length,
+    skillReferenceMissingActionCount: actions.filter(
+      action => action.skillReferenceRequired && !action.skillReferenceReady
+    ).length,
     hitCount: hits.length,
     deltaCount: deltas.length,
     trackCount: new Set(deltas.map(delta => delta.trackKey)).size,

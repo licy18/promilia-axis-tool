@@ -26743,3 +26743,25 @@ AzPrWorkbenchGameDataCompatibilityReport v1
 解析器在 draft normalizer 之前生成报告，避免未知 ID 被回退或置空后丢失诊断。当前 binding 必须精确匹配；无 binding 的 v1-v14 项目在所有引用可解析时以 `legacy` 状态迁移；stale、missing 或 invalid 项目不能替换当前 Workbench。本地草稿、JSON、分享码、PNG、预设和对比基准共用该规则。
 
 活动配置另生成 `AzPrWorkbenchGameDataReference v1`，角色、敌人和 loadout 引用包含实际 catalog `record`、来源、版本与稳定 `referenceIdentity`。`AzPrThreeValueMechanismConfiguration` 从 v2 升级为 v3，`AzPrThreeValueConfigurationRuntimeBinding` 从 v1 升级为 v2，并新增 `gameData` binding。已解析的装备、奇波和灵子记录仅用于来源追溯，`loadoutEffectsAppliedToCalculators=false`，不改变现有三值结果。
+
+## 395. ActionSkillReference / MechanismContext v4 / GenerationContract v7
+
+阶段 8-W 将 skills 加入 `AzPrWorkbenchGameDataCatalog v1`。每条 skill action 在兼容性报告和活动引用合同中新增：
+
+```text
+AzPrWorkbenchGameDataReference.actions[]
+  actionId
+  skillId / actorCharacterId / actionVariantIndex
+  status / ready / failureReason
+  skill
+    record
+    source / catalogId / catalogVersion / dataVersion
+    expectedCharacterId / allowedCharacterIds / resolvedCharacterId
+    variantCount
+    variant
+      index / kind / label / displayLabel / source
+```
+
+导入前按原始 action draft 区分 `skill-not-found`、`skill-actor-character-missing`、`skill-actor-character-not-in-team`、`skill-actor-character-mismatch` 和 `skill-action-variant-invalid`。这些问题不会先经 `normalizeWorkbenchActionDrafts()` 回退为默认技能或合法索引；兼容性报告保留原始 requested 值并禁止替换当前 Workbench。
+
+compiler 把引用绑定到 `scenario.actions[].gameDataReference`，并用引用中的技能 record 构造 action source。`AzPrThreeValueMechanismContext` 从 v3 升级为 v4，标准 `Action -> Hit -> ThreeValueDelta` generation contract 从 v6 升级为 v7；generation Action、Hit、Delta 与 adapter request 传播相同引用，并汇总 skill reference ready/missing action 数。项目 schema 继续为 v15，现有倍率、动作时长、命中帧和三值结果不变。

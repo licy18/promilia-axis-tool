@@ -149,9 +149,23 @@ export function compileProject(
           project.metadata.gameDataCompatibilityReport.importAllowed === true,
       }
     : null;
+  const actionGameDataReferences = new Map(
+    (gameDataReferenceContract?.actions ?? []).map(reference => [
+      reference.actionId,
+      reference,
+    ])
+  );
 
   const actions = project.actions
-    .map(action => compileAction(action, actorsById, enemy, skillsById))
+    .map(action =>
+      compileAction(
+        action,
+        actorsById,
+        enemy,
+        skillsById,
+        actionGameDataReferences.get(action.id) ?? null
+      )
+    )
     .sort((a, b) => a.startMs - b.startMs || a.id.localeCompare(b.id));
 
   return {
@@ -386,7 +400,13 @@ function compileEnemyElementDefense(enemy, definition, elementsById) {
   };
 }
 
-function compileAction(action, actorsById, enemy, skillsById) {
+function compileAction(
+  action,
+  actorsById,
+  enemy,
+  skillsById,
+  gameDataReference = null
+) {
   const effectCommands = compileActionEffectCommands(action, actorsById, enemy);
   const effectCommandsField = createCompiledEffectCommandsField(effectCommands);
   if (action.type === ACTION_TYPES.SWITCH) {
@@ -397,6 +417,7 @@ function compileAction(action, actorsById, enemy, skillsById) {
       targetActor: actorsById.get(action.targetActorId) ?? null,
       target: null,
       source: {},
+      gameDataReference,
       damageSegments: [],
       selectedDamageSegment: null,
     };
@@ -409,6 +430,7 @@ function compileAction(action, actorsById, enemy, skillsById) {
       actor: action.actorId ? (actorsById.get(action.actorId) ?? null) : null,
       target: null,
       source: {},
+      gameDataReference,
       damageSegments: [],
       selectedDamageSegment: null,
     };
@@ -421,6 +443,7 @@ function compileAction(action, actorsById, enemy, skillsById) {
       actor: null,
       target: action.targetId === enemy.id ? enemy : null,
       source: {},
+      gameDataReference,
       damageSegments: [],
       selectedDamageSegment: null,
     };
@@ -433,13 +456,15 @@ function compileAction(action, actorsById, enemy, skillsById) {
       actor: null,
       target: action.targetId === enemy.id ? enemy : null,
       source: {},
+      gameDataReference,
       damageSegments: [],
       selectedDamageSegment: null,
     };
   }
 
   const actor = actorsById.get(action.actorId);
-  const skill = skillsById.get(Number(action.skillId));
+  const skill =
+    gameDataReference?.skill?.record ?? skillsById.get(Number(action.skillId));
   const damageSegments = parseDamageSegments(action);
   const actionVariantIndex = Number(
     action.actionVariantIndex ?? action.damageSegmentIndex
@@ -459,8 +484,10 @@ function compileAction(action, actorsById, enemy, skillsById) {
     selectedActionVariant: selectedDamageSegment,
     actor,
     target: action.targetId === enemy.id ? enemy : null,
+    gameDataReference,
     source: {
       skill,
+      gameDataReference,
     },
     damageSegments,
     selectedDamageSegment,

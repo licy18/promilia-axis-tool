@@ -16,6 +16,7 @@ import {
   getWorkbenchLoadoutOptions,
 } from '../../domain/workbenchProjectFactory';
 import { compileProject } from '../../simulation/compiler/compileProject';
+import { simulateScenario } from '../../simulation/engine/simulateScenario';
 
 describe('Workbench game data catalog', () => {
   it('exposes the generated AzPr tables as one trusted versioned catalog', () => {
@@ -28,9 +29,10 @@ describe('Workbench game data catalog', () => {
       status: 'workbench-game-data-catalog-ready',
       ready: true,
       summary: {
-        recordCount: 549,
+        recordCount: 669,
         counts: {
           characters: 20,
+          skills: 120,
           enemies: 208,
           equipment: 137,
           kibos: 122,
@@ -40,6 +42,9 @@ describe('Workbench game data catalog', () => {
       },
     });
     expect(DEFAULT_WORKBENCH_GAME_DATA_CATALOG.sources.characters).toContain(
+      'hero-modules'
+    );
+    expect(DEFAULT_WORKBENCH_GAME_DATA_CATALOG.sources.skills).toContain(
       'hero-modules'
     );
     expect(DEFAULT_WORKBENCH_GAME_DATA_CATALOG.sources.enemies).toContain(
@@ -89,6 +94,27 @@ describe('Workbench game data catalog', () => {
                 status: 'exact',
                 record: expect.objectContaining({ rarity: expect.any(String) }),
               }),
+            }),
+          }),
+        }),
+      ]),
+      actions: expect.arrayContaining([
+        expect.objectContaining({
+          actionId: state.actionDrafts[0].id,
+          skillId: state.actionDrafts[0].skillId,
+          actorCharacterId: state.actionDrafts[0].actorCharacterId,
+          actionVariantIndex: state.actionDrafts[0].actionVariantIndex,
+          ready: true,
+          skill: expect.objectContaining({
+            status: 'exact',
+            failureReason: null,
+            record: expect.objectContaining({
+              id: state.actionDrafts[0].skillId,
+              characterId: state.actionDrafts[0].actorCharacterId,
+            }),
+            variant: expect.objectContaining({
+              index: state.actionDrafts[0].actionVariantIndex,
+              label: expect.any(String),
             }),
           }),
         }),
@@ -176,6 +202,57 @@ describe('Workbench game data catalog', () => {
     });
   });
 
+  it('rejects missing skills, actor ownership mismatches, and invalid action variants', () => {
+    const missing = createDefaultWorkbenchDraftState();
+    missing.actionDrafts[0].skillId = 999999999;
+    const mismatched = createDefaultWorkbenchDraftState();
+    mismatched.actionDrafts[0].actorCharacterId =
+      mismatched.selection.secondaryCharacterId;
+    const invalidVariant = createDefaultWorkbenchDraftState();
+    invalidVariant.actionDrafts[0].actionVariantIndex = 999;
+    invalidVariant.actionDrafts[0].damageSegmentIndex = 999;
+    const outsideTeam = createDefaultWorkbenchDraftState();
+    const teamIds = new Set(
+      outsideTeam.teamSlots.map(slot => Number(slot.characterId))
+    );
+    const outsideCharacter = getWorkbenchGameData().characters.find(
+      character => !teamIds.has(Number(character.id))
+    );
+    const outsideSkill = getWorkbenchGameData().skills.find(
+      skill => Number(skill.characterId) === Number(outsideCharacter.id)
+    );
+    outsideTeam.actionDrafts[0].actorCharacterId = outsideCharacter.id;
+    outsideTeam.actionDrafts[0].skillId = outsideSkill.id;
+    const missingActor = createDefaultWorkbenchDraftState();
+    missingActor.actionDrafts[0].actorCharacterId = null;
+
+    expectActionSkillIssue(
+      createWorkbenchGameDataCompatibilityReport(missing),
+      'missing',
+      'skill-not-found'
+    );
+    expectActionSkillIssue(
+      createWorkbenchGameDataCompatibilityReport(mismatched),
+      'invalid',
+      'skill-actor-character-mismatch'
+    );
+    expectActionSkillIssue(
+      createWorkbenchGameDataCompatibilityReport(invalidVariant),
+      'invalid',
+      'skill-action-variant-invalid'
+    );
+    expectActionSkillIssue(
+      createWorkbenchGameDataCompatibilityReport(outsideTeam),
+      'invalid',
+      'skill-actor-character-not-in-team'
+    );
+    expectActionSkillIssue(
+      createWorkbenchGameDataCompatibilityReport(missingActor),
+      'invalid',
+      'skill-actor-character-missing'
+    );
+  });
+
   it('retains raw import incompatibility after normalizers remove an unknown loadout id', () => {
     const raw = JSON.parse(JSON.stringify(createDefaultWorkbenchDraftState()));
     raw.actorConfigs[0].loadout.kiboId = 999999999;
@@ -200,6 +277,20 @@ describe('Workbench game data catalog', () => {
     );
   });
 
+  it('retains an unavailable raw skill before action normalization falls back', () => {
+    const raw = JSON.parse(JSON.stringify(createDefaultWorkbenchDraftState()));
+    const originalSkillId = raw.actionDrafts[0].skillId;
+    raw.actionDrafts[0].skillId = 999999999;
+    const parsed = parseWorkbenchProjectFile(raw);
+
+    expect(parsed.actionDrafts[0].skillId).toBe(originalSkillId);
+    expectActionSkillIssue(
+      getWorkbenchGameDataCompatibilityReport(parsed),
+      'missing',
+      'skill-not-found'
+    );
+  });
+
   it('carries resolved records into compiler and runtime binding without applying loadout effects', () => {
     const state = createConfiguredState();
     const compatibility = createWorkbenchGameDataCompatibilityReport(state);
@@ -210,6 +301,14 @@ describe('Workbench game data catalog', () => {
     });
     const scenario = compileProject(project, getWorkbenchGameData());
     const actorSource = scenario.mechanismConfiguration.actors[0];
+    const compiledSkillAction = scenario.actions.find(
+      action => action.type === 'skill'
+    );
+    const simulation = simulateScenario(scenario);
+    const generatedSkillAction =
+      simulation.threeValueGenerationLayer.actions.find(
+        action => action.actionId === compiledSkillAction.id
+      );
 
     expect(scenario).toMatchObject({
       gameDataCatalog: {
@@ -251,8 +350,64 @@ describe('Workbench game data catalog', () => {
     expect(
       scenario.mechanismConfiguration.enemy.gameDataReference.record.id
     ).toBe(state.selection.enemyId);
+    expect(compiledSkillAction).toMatchObject({
+      gameDataReference: {
+        ready: true,
+        skill: {
+          status: 'exact',
+          record: { id: compiledSkillAction.skillId },
+          variant: {
+            index: compiledSkillAction.actionVariantIndex,
+            label: expect.any(String),
+          },
+        },
+      },
+      source: {
+        skill: { id: compiledSkillAction.skillId },
+      },
+    });
+    expect(generatedSkillAction).toMatchObject({
+      skillReferenceRequired: true,
+      skillReferenceReady: true,
+      gameDataReference: compiledSkillAction.gameDataReference,
+    });
+    expect(
+      simulation.threeValueGenerationLayer.deltas.find(
+        delta => delta.actionId === compiledSkillAction.id
+      )
+    ).toMatchObject({
+      skillReferenceRequired: true,
+      skillReferenceReady: true,
+      gameDataReference: compiledSkillAction.gameDataReference,
+      mechanismContext: {
+        schemaVersion: 4,
+        gameDataReference: compiledSkillAction.gameDataReference,
+        action: {
+          skillReferenceReady: true,
+          gameDataReference: compiledSkillAction.gameDataReference,
+        },
+      },
+    });
+    expect(simulation.threeValueGenerationLayer.summary).toMatchObject({
+      skillReferenceActionCount: 1,
+      skillReferenceReadyActionCount: 1,
+      skillReferenceMissingActionCount: 0,
+    });
   });
 });
+
+function expectActionSkillIssue(report, status, failureReason) {
+  expect(report.importAllowed).toBe(false);
+  expect(report.scenarios[0].references).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        tableName: 'skills',
+        status,
+        failureReason,
+      }),
+    ])
+  );
+}
 
 function createConfiguredState() {
   const state = createDefaultWorkbenchDraftState();

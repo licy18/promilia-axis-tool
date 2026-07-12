@@ -244,7 +244,7 @@ describe('three value generation layer', () => {
       },
       mechanismContextContract: {
         name: 'AzPrThreeValueMechanismContext',
-        version: 3,
+        version: 4,
       },
       mechanicsAdapterContract: {
         name: 'AzPrThreeValueMechanicsAdapter',

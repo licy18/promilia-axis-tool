@@ -7,6 +7,7 @@ const REQUIRED_CAPABILITIES = [
   'json-project-exchange',
   'profile-compatibility-gate',
   'game-data-compatibility-gate',
+  'action-skill-compatibility-gate',
   'png-project-exchange',
   'project-drop-recovery',
   'configuration-instances',

@@ -1124,6 +1124,16 @@ WorkbenchProjectFile 升级为 v15；本地草稿、JSON、分享链接、PNG、
 
 下一阶段目标：阶段 8-W / P2-P3 动作与技能数据引用兼容性闭环。把动作草稿中的 skill ID、角色归属和动作变体索引接入同一版本化数据门禁，并让 generation 合同消费已解析技能记录；项目数据更新后不能静默换技能、回退动作或丢失分段选择。该阶段保持现有倍率、动作时长和命中帧不变，不做技能证据考古，也不增加碎片 UI。
 
+### 阶段 8-W P2-P3 动作与技能数据引用兼容性闭环（2026-07-12）
+
+`AzPrWorkbenchGameDataCatalog v1` 现在同时收录 120 条生产技能记录。项目兼容性报告在 action normalizer 之前逐方案校验每条技能动作的 skill ID、施放角色、队伍成员身份和动作变体索引；技能缺失、技能与角色错配、角色不在队伍或变体越界都会拒绝导入，避免项目看似恢复成功却已自动换成默认技能或第一个动作。生产浏览器验收已用根级原始 skill ID 缺口证明当前动作轴和敌人配置不会被覆盖。
+
+活动 Project 的 `AzPrWorkbenchGameDataReference v1` 新增 actions 引用，记录实际技能 record、具体 variant、来源和 failure reason，并把动作引用纳入稳定 reference identity。compiler 使用同一 record 生成 Scenario action；`AzPrThreeValueMechanismContext` 升级为 v4，标准 generation contract 升级为 v7，Action、Hit、ThreeValueDelta 和 mechanics adapter request 都传播相同技能/变体引用。现有三值结果、倍率、动作时长和命中帧未改变。
+
+阶段验收：75 个测试文件、424 条单元/组件测试通过；39 条 Workbench 主流程和 18 项 production preview 必需能力全部通过，生产报告结论为 `trial-ready`。生产引用审计为 112 个源码、108 个生产可达、4 个允许 test-only、0 个孤儿；数据投影审计全部一致。Workbench 主块为 360,059B gzip，全部 JavaScript 为 732,809B gzip，均在 370,000B/740,000B 预算内。180 动作编译 p95 为 12.393ms、完整 simulation p95 为 27.843ms；120 动作浏览器首屏就绪为 1841ms。
+
+下一阶段目标：阶段 8-X / P3 技能变体到 HP operands 的可信来源闭环。让当前已应用的角色攻击与动作倍率 operands 显式绑定 8-W 的 skill/variant reference identity，并在 compiler、generation 与 adapter evaluation 之间校验倍率值和来源路径一致；不一致时保留诊断而不能静默换来源。该阶段保持现有 HP 计算结果不变，不接入防御、抗性、暴击、装备或培养公式，也不补动作帧细节。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

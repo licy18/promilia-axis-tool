@@ -3,6 +3,7 @@ import { resolveThreeValueMechanicsProfile } from './threeValueMechanicsProfile'
 
 export const THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME =
   'AzPrThreeValueMechanismContext';
+export const THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_VERSION = 4;
 
 export function createThreeValueMechanismContext({
   scenario,
@@ -38,7 +39,7 @@ export function createThreeValueMechanismContext({
   const mechanicsProfile = mechanicsProfileResolution.profile;
 
   return {
-    schemaVersion: 3,
+    schemaVersion: THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_VERSION,
     sourceKind: 'azpr-three-value-mechanism-context',
     contractName: THREE_VALUE_MECHANISM_CONTEXT_CONTRACT_NAME,
     status: createMechanismContextStatus({
@@ -54,6 +55,8 @@ export function createThreeValueMechanismContext({
       actionId: point?.actionId ?? action?.id ?? null,
       actionType: action?.type ?? point?.actionType ?? null,
       skillId: numberOrNull(point?.skillId ?? action?.skillId),
+      gameDataReference: action?.gameDataReference ?? null,
+      skillReferenceReady: action?.gameDataReference?.ready ?? null,
       actorId: sourceActor?.id ?? point?.actorId ?? action?.actorId ?? null,
       targetId: targetEnemy?.id ?? point?.targetId ?? action?.targetId ?? null,
     },
@@ -85,6 +88,7 @@ export function createThreeValueMechanismContext({
       fallback: mechanicsProfileResolution.fallback,
       fallbackReason: mechanicsProfileResolution.fallbackReason,
     },
+    gameDataReference: action?.gameDataReference ?? null,
     ownership: {
       valueTargetKind,
       valueTargetId:
@@ -104,6 +108,7 @@ export function createThreeValueMechanismContext({
       targetEnemyToughness: 'scenario.enemy.toughness',
       mechanismConfiguration: 'scenario.mechanismConfiguration',
       mechanicsProfile: 'scenario.mechanicsProfile',
+      actionSkillReference: 'scenario.actions[].gameDataReference',
       timing: 'scenario.actions[].timing',
     },
   };

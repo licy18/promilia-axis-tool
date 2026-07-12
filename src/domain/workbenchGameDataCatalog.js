@@ -1,4 +1,5 @@
 import { getAzprWorkbenchSeed } from '../data/azprGenerated';
+import { resolveSkillActionVariants } from './skillDamageSegments';
 
 export const WORKBENCH_GAME_DATA_CATALOG_CONTRACT_NAME =
   'AzPrWorkbenchGameDataCatalog';
@@ -13,6 +14,7 @@ export const WORKBENCH_GAME_DATA_REFERENCE_CONTRACT_NAME =
 
 const TABLE_DEFINITIONS = Object.freeze({
   characters: Object.freeze({ kind: 'character' }),
+  skills: Object.freeze({ kind: 'skill' }),
   enemies: Object.freeze({ kind: 'enemy' }),
   equipment: Object.freeze({ kind: 'equipment' }),
   kibos: Object.freeze({ kind: 'kibo' }),
@@ -341,12 +343,24 @@ export function createWorkbenchGameDataReferenceContract(
     id: draft?.selection?.enemyId,
     path: 'selection.enemyId',
   });
+  const teamCharacterIds = resolveTeamCharacterIds(draft);
+  const actions = (Array.isArray(draft?.actionDrafts) ? draft.actionDrafts : [])
+    .map((action, index) =>
+      createActionSkillReference(
+        catalog,
+        action,
+        `actionDrafts[${index}]`,
+        teamCharacterIds
+      )
+    )
+    .filter(Boolean);
   const references = [
     ...actors.flatMap(actor => [
       actor.character,
       ...Object.values(actor.loadout.references).filter(Boolean),
     ]),
     enemy,
+    ...actions.map(action => action.skill),
   ];
   const ready = Boolean(
     catalog?.ready &&
@@ -361,6 +375,8 @@ export function createWorkbenchGameDataReferenceContract(
       reference.tableName,
       reference.id,
       reference.expectedType,
+      reference.expectedCharacterId,
+      reference.actionVariantIndex,
     ]),
   });
   return {
@@ -381,11 +397,46 @@ export function createWorkbenchGameDataReferenceContract(
     },
     actors,
     enemy,
+    actions,
     summary: summarizeReferences(references),
     policy: {
       resolvedCatalogRecordsOnly: true,
       loadoutEffectsAppliedToCalculators: false,
+      actionSkillReferencesRequired: true,
     },
+  };
+}
+
+function createActionSkillReference(
+  catalog,
+  action = {},
+  path,
+  allowedCharacterIds = []
+) {
+  if (action?.type !== 'skill') return null;
+  const skill = resolveCatalogReference(catalog, {
+    tableName: 'skills',
+    id: action?.skillId,
+    expectedCharacterId: action?.actorCharacterId,
+    allowedCharacterIds,
+    actionVariantIndex:
+      action?.actionVariantIndex ?? action?.damageSegmentIndex ?? 0,
+    level: action?.level,
+    actionId: action?.id,
+    path: `${path}.skillId`,
+  });
+  return {
+    actionId: textOrNull(action?.id),
+    skillId: positiveIntegerOrNull(action?.skillId),
+    actorCharacterId: positiveIntegerOrNull(action?.actorCharacterId),
+    actionVariantIndex: nonNegativeIntegerOrNull(
+      action?.actionVariantIndex ?? action?.damageSegmentIndex ?? 0
+    ),
+    ready: skill.compatible,
+    status: skill.status,
+    failureReason: skill.failureReason,
+    skill,
+    variant: skill.variant,
   };
 }
 
@@ -422,6 +473,7 @@ function createResolvedLoadoutReferences(catalog, loadout = {}, path) {
 function collectScenarioReferenceRequests(draft = {}) {
   const requests = [];
   const teamSlots = Array.isArray(draft?.teamSlots) ? draft.teamSlots : [];
+  const teamCharacterIds = resolveTeamCharacterIds(draft);
   if (teamSlots.length > 0) {
     teamSlots.forEach((slot, index) =>
       requests.push({
@@ -465,6 +517,19 @@ function collectScenarioReferenceRequests(draft = {}) {
   );
   (Array.isArray(draft?.actionDrafts) ? draft.actionDrafts : []).forEach(
     (action, index) => {
+      if (action?.type === 'skill') {
+        requests.push({
+          tableName: 'skills',
+          id: action?.skillId,
+          expectedCharacterId: action?.actorCharacterId,
+          allowedCharacterIds: teamCharacterIds,
+          actionVariantIndex:
+            action?.actionVariantIndex ?? action?.damageSegmentIndex ?? 0,
+          level: action?.level,
+          actionId: action?.id,
+          path: `actionDrafts[${index}].skillId`,
+        });
+      }
       if (action?.actorCharacterId != null) {
         requests.push({
           tableName: 'characters',
@@ -542,11 +607,59 @@ function collectLoadoutReferenceRequests(loadout = {}, path, requests) {
 
 function resolveCatalogReference(
   catalog,
-  { tableName, id, expectedType = null, path = '' } = {}
+  {
+    tableName,
+    id,
+    expectedType = null,
+    expectedCharacterId = null,
+    allowedCharacterIds = [],
+    actionVariantIndex = null,
+    level = 1,
+    actionId = null,
+    path = '',
+  } = {}
 ) {
   const table = catalog?.tables?.[tableName];
   const normalizedId = positiveIntegerOrNull(id);
   const entry = table?.entries?.find(item => item.id === normalizedId) ?? null;
+  const resolvedCharacterId = positiveIntegerOrNull(entry?.record?.characterId);
+  const normalizedExpectedCharacterId =
+    positiveIntegerOrNull(expectedCharacterId);
+  const normalizedAllowedCharacterIds = (
+    Array.isArray(allowedCharacterIds) ? allowedCharacterIds : []
+  )
+    .map(positiveIntegerOrNull)
+    .filter(value => value != null);
+  const requestedVariantIndex =
+    tableName === 'skills'
+      ? nonNegativeIntegerOrNull(actionVariantIndex ?? 0)
+      : null;
+  const skillVariantResolution =
+    tableName === 'skills' && entry
+      ? resolveSkillActionVariants(entry.record, level)
+      : null;
+  const variant = skillVariantResolution?.variants?.find(
+    item => Number(item.index) === requestedVariantIndex
+  );
+  const characterMismatch = Boolean(
+    tableName === 'skills' &&
+    entry &&
+    normalizedExpectedCharacterId != null &&
+    resolvedCharacterId !== normalizedExpectedCharacterId
+  );
+  const actorCharacterMissing = Boolean(
+    tableName === 'skills' && normalizedExpectedCharacterId == null
+  );
+  const actorNotInTeam = Boolean(
+    tableName === 'skills' &&
+    normalizedExpectedCharacterId != null &&
+    !normalizedAllowedCharacterIds.includes(normalizedExpectedCharacterId)
+  );
+  const variantInvalid = Boolean(
+    tableName === 'skills' &&
+    entry &&
+    (requestedVariantIndex == null || !variant)
+  );
   const status =
     !table || normalizedId == null
       ? 'invalid'
@@ -554,15 +667,52 @@ function resolveCatalogReference(
         ? 'missing'
         : expectedType && entry.record?.type !== expectedType
           ? 'invalid'
-          : 'exact';
+          : actorCharacterMissing ||
+              actorNotInTeam ||
+              characterMismatch ||
+              variantInvalid
+            ? 'invalid'
+            : 'exact';
+  const failureReason =
+    status === 'missing'
+      ? `${table?.kind ?? tableName}-not-found`
+      : normalizedId == null
+        ? `${table?.kind ?? tableName}-id-invalid`
+        : actorCharacterMissing
+          ? 'skill-actor-character-missing'
+          : actorNotInTeam
+            ? 'skill-actor-character-not-in-team'
+            : characterMismatch
+              ? 'skill-actor-character-mismatch'
+              : variantInvalid
+                ? 'skill-action-variant-invalid'
+                : expectedType && entry?.record?.type !== expectedType
+                  ? 'equipment-slot-type-mismatch'
+                  : null;
   return {
     tableName,
     kind: table?.kind ?? TABLE_DEFINITIONS[tableName]?.kind ?? null,
     id: normalizedId,
     requestedId: id ?? null,
     expectedType,
+    expectedCharacterId: normalizedExpectedCharacterId,
+    allowedCharacterIds: normalizedAllowedCharacterIds,
+    resolvedCharacterId,
+    actionId: textOrNull(actionId),
+    actionVariantIndex: requestedVariantIndex,
+    variantCount: skillVariantResolution?.variants?.length ?? null,
+    variant: variant
+      ? {
+          index: Number(variant.index),
+          kind: variant.kind ?? null,
+          label: variant.label ?? null,
+          displayLabel: variant.displayLabel ?? null,
+          source: variant.source ?? null,
+        }
+      : null,
     status,
     compatible: status === 'exact',
+    failureReason,
     path,
     source: table?.source ?? null,
     catalogId: catalog?.catalogId ?? null,
@@ -585,9 +735,17 @@ function toCompatibilityReference(reference) {
     requestedId: reference.requestedId,
     expectedType: reference.expectedType,
     resolvedType: reference.record?.type ?? null,
+    expectedCharacterId: reference.expectedCharacterId,
+    allowedCharacterIds: reference.allowedCharacterIds,
+    resolvedCharacterId: reference.resolvedCharacterId,
+    actionId: reference.actionId,
+    actionVariantIndex: reference.actionVariantIndex,
+    variantCount: reference.variantCount,
+    variant: reference.variant,
     name: textOrNull(reference.record?.name),
     status: reference.status,
     compatible: reference.compatible,
+    failureReason: reference.failureReason,
     path: reference.path,
     source: reference.source,
     catalogId: reference.catalogId,
@@ -645,6 +803,10 @@ function createCompatibilityInputFingerprint(draft = {}) {
             request.tableName,
             request.id,
             request.expectedType ?? null,
+            request.expectedCharacterId ?? null,
+            request.allowedCharacterIds ?? [],
+            request.actionVariantIndex ?? null,
+            request.level ?? null,
             request.path,
           ]
         ),
@@ -655,10 +817,23 @@ function createCompatibilityInputFingerprint(draft = {}) {
         request.tableName,
         request.id,
         request.expectedType ?? null,
+        request.expectedCharacterId ?? null,
+        request.allowedCharacterIds ?? [],
+        request.actionVariantIndex ?? null,
+        request.level ?? null,
         request.path,
       ]),
     })
   );
+}
+
+function resolveTeamCharacterIds(draft = {}) {
+  const teamSlots = Array.isArray(draft?.teamSlots) ? draft.teamSlots : [];
+  const values =
+    teamSlots.length > 0
+      ? teamSlots.map(slot => slot?.characterId)
+      : [draft?.selection?.characterId, draft?.selection?.secondaryCharacterId];
+  return [...new Set(values.map(positiveIntegerOrNull).filter(Boolean))];
 }
 
 function stableHash(value) {
@@ -673,6 +848,11 @@ function stableHash(value) {
 function positiveIntegerOrNull(value) {
   const number = Number(value);
   return Number.isInteger(number) && number > 0 ? number : null;
+}
+
+function nonNegativeIntegerOrNull(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number >= 0 ? number : null;
 }
 
 function textOrNull(value) {

@@ -108,7 +108,23 @@ describe('Workbench project replay consistency', () => {
       policy: {
         resolvedCatalogRecordsOnly: true,
         loadoutEffectsAppliedToCalculators: false,
+        actionSkillReferencesRequired: true,
       },
+      actions: expect.arrayContaining([
+        expect.objectContaining({
+          actionId: sourceState.actionDrafts[0].id,
+          ready: true,
+          skill: expect.objectContaining({
+            status: 'exact',
+            record: expect.objectContaining({
+              id: sourceState.actionDrafts[0].skillId,
+            }),
+            variant: expect.objectContaining({
+              index: sourceState.actionDrafts[0].actionVariantIndex,
+            }),
+          }),
+        }),
+      ]),
     });
     expect(baseline.gameDataCompatibility).toMatchObject({
       status: 'workbench-game-data-compatibility-exact',

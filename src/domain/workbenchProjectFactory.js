@@ -417,6 +417,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     teamSlots,
     actorConfigs,
     enemyConfig,
+    actionDrafts,
     configurationLibrary: actionPatch.configurationLibrary,
   });
 

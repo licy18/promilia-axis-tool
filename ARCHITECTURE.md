@@ -62,7 +62,7 @@ C:\PC2\Codex\AzPr
 - `workbenchActionRelations.js`：动作前后关系的规范化、无环校验、间隔同步与删除清理。
 - `workbenchDraftStorage.js`：v15 草稿、项目 JSON 和分享链接。
 - `workbenchConfigurationLibrary.js`：角色/敌人配置实例库、方案选择、旧项目迁移和活动配置解析。
-- `workbenchGameDataCatalog.js`：角色、敌人、装备、奇波和灵子的受信任目录、项目数据版本绑定、引用解析与兼容性报告。
+- `workbenchGameDataCatalog.js`：角色、技能、敌人、装备、奇波和灵子的受信任目录、项目数据版本绑定、引用解析与兼容性报告。
 - `workbenchScenarioWorkspace.js`：最多 14 条完整方案快照的规范化、切换和迁移。
 - `workbenchPngProject.js`：PNG 项目元数据写入与回读。
 - `workbenchPresetStorage.js`：v1 本地预设库，复用完整 Workbench 项目快照。
@@ -143,9 +143,9 @@ Action
 
 ### GameDataCatalog / GameDataBinding / GameDataReference v1
 
-`AzPrWorkbenchGameDataCatalog v1` 从 `workbench-seed.json` 建立五类可信目录，记录每类本地来源和统一 `dataVersion`。`AzPrWorkbenchGameDataCompatibilityReport v1` 在任何规范化或状态替换之前扫描全部方案和共享配置实例；缺失 ID、错误装备槽位、catalog 身份变化或数据版本漂移都会禁止导入。无版本的 v1-v14 项目仅在全部引用仍可精确解析时允许一次迁移。
+`AzPrWorkbenchGameDataCatalog v1` 从 `workbench-seed.json` 建立角色、技能、敌人、装备、奇波和灵子六类可信目录，记录每类本地来源和统一 `dataVersion`。`AzPrWorkbenchGameDataCompatibilityReport v1` 在任何规范化或状态替换之前扫描全部方案和共享配置实例；除配置引用外，还校验每条技能动作的 skill ID、施放角色归属、队伍成员身份和变体索引。缺失、错配、catalog 身份变化或数据版本漂移都会禁止导入，不能先由 normalizer 回退再冒充兼容。
 
-Project 构建活动配置的 `AzPrWorkbenchGameDataReference v1`，把角色、敌人和已选 loadout ID 解析为实际 catalog 记录、来源、版本与稳定 `referenceIdentity`。compiler、Scenario 和 runtime binding 传播同一身份；装备、奇波和灵子记录可追溯但其效果继续固定为未应用。
+Project 构建活动配置的 `AzPrWorkbenchGameDataReference v1`，把角色、敌人、已选 loadout 以及动作技能/变体解析为实际 catalog 记录、来源、版本与稳定 `referenceIdentity`。compiler 使用该技能记录构造 compiled action；`AzPrThreeValueMechanismContext v4`、adapter request 和 generation 的 Action/Hit/Delta 传播同一动作引用。装备、奇波和灵子记录可追溯但其效果继续固定为未应用。
 
 ### ConfigurationSource v1 / ThreeValueMechanismConfiguration v3
 
@@ -153,7 +153,7 @@ Project 构建时以活动方案的 `configurationSelection`、共享 `configura
 
 compiler 将配置来源、游戏数据引用、Scenario actor/enemy 与实际 `mechanicsProfile` 合成为 `AzPrThreeValueMechanismConfiguration v3` 和 `AzPrThreeValueConfigurationRuntimeBinding v2`。角色与敌人来源携带已解析 catalog 记录，runtime binding 同时固定 configuration replay identity 与 game data reference identity。当前确认可用的 baseline/预览字段显式标记应用位置；奇波、装备、灵子效果、敌人等级公式和元素防御公式固定为未应用。
 
-`AzPrThreeValueMechanismContext` 为 v3，`ThreeValueDeltaCalculator` 为 v3。阶段 8-R 后 `Action -> Hit -> ThreeValueDelta` 为 v10，`AzPrThreeValueMechanicsAdapter` 为 v7，`ThreeValueRuntimeCalculatorInvocation` 为 v9，runtime state snapshot 为 v2；每条 delta、generation calculator result 和 runtime invocation 都保留配置、profile、机制层输入、evaluation、状态作用 proposal、来源状态及实例 ID。
+`AzPrThreeValueMechanismContext` 为 v4，`ThreeValueDeltaCalculator` 为 v3。阶段 8-R 后外层 `Action -> Hit -> ThreeValueDelta` 为 v10，标准 generation contract 为 v7，`AzPrThreeValueMechanicsAdapter` 为 v7，`ThreeValueRuntimeCalculatorInvocation` 为 v9，runtime state snapshot 为 v2；每条 delta、generation calculator result 和 runtime invocation 都保留配置、profile、机制层输入、动作技能引用、evaluation、状态作用 proposal、来源状态及实例 ID。
 
 ### MechanicsProfile v2 / Adapter v7 / LayerInputs v1 / Evaluation v3
 
@@ -161,7 +161,7 @@ compiler 从 Project metadata 的 `AzPrWorkbenchMechanicsProfileSelection v1` �
 
 生产入口固定使用 `AzPrThreeValueMechanicsProfileCatalog v1`。catalog 只暴露通过 profile 校验的纯数据项，项目文件只保存 ID/版本，不能注册 operation 或携带函数。`AzPrWorkbenchProfileCompatibilityReport v1` 扫描工作区全部方案，分别记录 `exact / missing / invalid` 兼容状态与 `exact / fallback` 实际解析；只有所有方案 exact 且 catalog ready 时 `importAllowed=true`。Workbench 的本地草稿、分享链接、JSON/PNG、预设和对比基准在替换当前状态前共用该门禁；Scenario、Project metadata 和 runtime binding 保留同一 catalog/compatibility 结论。
 
-`Action -> Hit -> ThreeValueDelta v10` 的每条 delta 都携带 `mechanicsAdapterRequest`。generation 固定 `action / hit / mechanismConfiguration / mechanicsProfile / mechanicsLayerInputs / sourceValue.operands`；layer inputs 把 profile 各 step 的 layer keys 合并为 required 层，保存角色面板、动作倍率、敌人双防/元素防御、初始能量、培养配置和 operands 的实际值、来源与 readiness。runtime 再绑定该次 invocation 的 `stateBefore`，并校验 required applied 输入没有缺口。
+`Action -> Hit -> ThreeValueDelta v10` 的每条 delta 都携带 `mechanicsAdapterRequest`。generation 固定 `action / hit / mechanismConfiguration / mechanicsProfile / mechanicsLayerInputs / sourceValue.operands`，其中 skill action 同时携带精确解析的技能和动作变体引用；layer inputs 保存角色面板、动作倍率、敌人双防/元素防御、初始能量、培养配置和 operands 的实际值、来源与 readiness。runtime 再绑定该次 invocation 的 `stateBefore`，并校验 required applied 输入没有缺口。
 
 `AzPrThreeValueMechanicsEvaluation v3` 是内置 adapter 的唯一主计算结果。它按 profile capability 顺序执行 `steps[]`，每步通过 operation handler 读取声明的 layer inputs，并输出 step key、operation、used layers、delta、ready 与 status；前一步 delta 作为下一步 `previousDelta`。profile v2 的 track 定义保存标准 state effect，step 通过 `stateEffectTrackKeys[]` 声明自己负责的三值轨道。
 

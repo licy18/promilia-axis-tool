@@ -110,6 +110,12 @@ function createActionHitThreeValueDeltaGenerationSummary({
     mechanicsProfileMissingDeltaCount:
       standardContract.summary?.mechanicsProfileMissingDeltaCount ?? 0,
     mechanicsProfileIds: standardContract.summary?.mechanicsProfileIds ?? [],
+    skillReferenceActionCount:
+      standardContract.summary?.skillReferenceActionCount ?? 0,
+    skillReferenceReadyActionCount:
+      standardContract.summary?.skillReferenceReadyActionCount ?? 0,
+    skillReferenceMissingActionCount:
+      standardContract.summary?.skillReferenceMissingActionCount ?? 0,
     executionPlanActionCount:
       standardContract.summary?.executionPlanActionCount ?? 0,
     executionPlanExecutedActionCount:

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "production-preview-acceptance",
-  "generatedAt": "2026-07-12T02:08:29.557Z",
+  "generatedAt": "2026-07-12T02:32:01.411Z",
   "environment": {
     "platform": "win32-x64",
     "node": "v24.16.0",
@@ -18,12 +18,12 @@
     "reason": "all-required-production-preview-capabilities-passed"
   },
   "summary": {
-    "requiredCapabilityCount": 17,
-    "passedCapabilityCount": 17,
-    "testCount": 17,
-    "passedTestCount": 17,
+    "requiredCapabilityCount": 18,
+    "passedCapabilityCount": 18,
+    "testCount": 18,
+    "passedTestCount": 18,
     "playwrightStatus": "passed",
-    "durationMs": 29060
+    "durationMs": 22365
   },
   "capabilities": [
     {
@@ -48,6 +48,11 @@
     },
     {
       "capability": "game-data-compatibility-gate",
+      "status": "passed",
+      "testCount": 1
+    },
+    {
+      "capability": "action-skill-compatibility-gate",
       "status": "passed",
       "testCount": 1
     },
@@ -117,7 +122,7 @@
       "capability": "routes-and-assets",
       "title": "[routes-and-assets] serves production routes and hashed assets",
       "status": "passed",
-      "durationMs": 1225,
+      "durationMs": 1101,
       "retry": 0,
       "errors": []
     },
@@ -125,7 +130,7 @@
       "capability": "diagnostics-lazy-load",
       "title": "[diagnostics-lazy-load] loads runtime diagnostics from a production chunk",
       "status": "passed",
-      "durationMs": 958,
+      "durationMs": 865,
       "retry": 0,
       "errors": []
     },
@@ -133,7 +138,7 @@
       "capability": "json-project-exchange",
       "title": "[json-project-exchange] restores an exported production JSON project",
       "status": "passed",
-      "durationMs": 1277,
+      "durationMs": 1188,
       "retry": 0,
       "errors": []
     },
@@ -141,7 +146,7 @@
       "capability": "profile-compatibility-gate",
       "title": "[profile-compatibility-gate] rejects an unavailable profile without replacing the current project",
       "status": "passed",
-      "durationMs": 975,
+      "durationMs": 799,
       "retry": 0,
       "errors": []
     },
@@ -149,7 +154,15 @@
       "capability": "game-data-compatibility-gate",
       "title": "[game-data-compatibility-gate] rejects an unavailable AzPr config reference without replacing the current project",
       "status": "passed",
-      "durationMs": 985,
+      "durationMs": 905,
+      "retry": 0,
+      "errors": []
+    },
+    {
+      "capability": "action-skill-compatibility-gate",
+      "title": "[action-skill-compatibility-gate] rejects an unavailable skill before action fallback without replacing the current project",
+      "status": "passed",
+      "durationMs": 812,
       "retry": 0,
       "errors": []
     },
@@ -157,7 +170,7 @@
       "capability": "configuration-instances",
       "title": "[configuration-instances] binds reusable simulation configs to scenarios and JSON",
       "status": "passed",
-      "durationMs": 1333,
+      "durationMs": 1163,
       "retry": 0,
       "errors": []
     },
@@ -165,7 +178,7 @@
       "capability": "png-project-exchange",
       "title": "[png-project-exchange] restores production PNG metadata and lazy exporter assets",
       "status": "passed",
-      "durationMs": 1712,
+      "durationMs": 1309,
       "retry": 0,
       "errors": []
     },
@@ -173,7 +186,7 @@
       "capability": "project-drop-recovery",
       "title": "[project-drop-recovery] restores a production project without replacing it on invalid drop",
       "status": "passed",
-      "durationMs": 1233,
+      "durationMs": 1077,
       "retry": 0,
       "errors": []
     },
@@ -181,7 +194,7 @@
       "capability": "multi-action-editing",
       "title": "[multi-action-editing] copies, pastes, and reviews a selected action group",
       "status": "passed",
-      "durationMs": 1310,
+      "durationMs": 1012,
       "retry": 0,
       "errors": []
     },
@@ -189,7 +202,7 @@
       "capability": "timeline-relations",
       "title": "[timeline-relations] preserves action relations through project exchange",
       "status": "passed",
-      "durationMs": 1625,
+      "durationMs": 1380,
       "retry": 0,
       "errors": []
     },
@@ -197,7 +210,7 @@
       "capability": "effect-interval-review",
       "title": "[effect-interval-review] reviews an effect interval and refreshes it from the source action",
       "status": "passed",
-      "durationMs": 1742,
+      "durationMs": 1059,
       "retry": 0,
       "errors": []
     },
@@ -205,7 +218,7 @@
       "capability": "scenario-comparison",
       "title": "[scenario-comparison] compares an edited axis with a snapshot and returns to the changed action",
       "status": "passed",
-      "durationMs": 1834,
+      "durationMs": 1137,
       "retry": 0,
       "errors": []
     },
@@ -213,7 +226,7 @@
       "capability": "cycle-sections",
       "title": "[cycle-sections] creates, reviews, and restores a production cycle boundary",
       "status": "passed",
-      "durationMs": 1536,
+      "durationMs": 1027,
       "retry": 0,
       "errors": []
     },
@@ -221,7 +234,7 @@
       "capability": "cycle-inheritance",
       "title": "[cycle-inheritance] creates and restores a production scenario from a runtime boundary",
       "status": "passed",
-      "durationMs": 1666,
+      "durationMs": 1279,
       "retry": 0,
       "errors": []
     },
@@ -229,7 +242,7 @@
       "capability": "workspace-scenarios",
       "title": "[workspace-scenarios] switches, compares, and restores independent production scenarios",
       "status": "passed",
-      "durationMs": 1989,
+      "durationMs": 1326,
       "retry": 0,
       "errors": []
     },
@@ -237,7 +250,7 @@
       "capability": "workspace-layout",
       "title": "[workspace-layout] restores desktop focus modes and keeps narrow content available",
       "status": "passed",
-      "durationMs": 1759,
+      "durationMs": 1114,
       "retry": 0,
       "errors": []
     },
@@ -245,7 +258,7 @@
       "capability": "narrow-main-flow",
       "title": "[narrow-main-flow] completes runtime review, edit, and refresh without overflow",
       "status": "passed",
-      "durationMs": 1579,
+      "durationMs": 972,
       "retry": 0,
       "errors": []
     }

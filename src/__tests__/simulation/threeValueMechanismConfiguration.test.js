@@ -186,7 +186,7 @@ describe('three value mechanism configuration', () => {
       mechanismConfigurationReady: true,
       mechanismConfigurationStatus: 'mechanism-configuration-context-ready',
       mechanismContext: {
-        schemaVersion: 3,
+        schemaVersion: 4,
         configuration: {
           sourceKind: 'workbench-v13-configuration-instance-sources',
           configurationReplayIdentity:

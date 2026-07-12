@@ -194,6 +194,36 @@ test('[game-data-compatibility-gate] rejects an unavailable AzPr config referenc
   );
 });
 
+test('[action-skill-compatibility-gate] rejects an unavailable skill before action fallback without replacing the current project', async ({
+  page,
+}, testInfo) => {
+  await page.goto('/#/workbench');
+  await page.getByTestId('workbench-add-action').click();
+  await page.getByTestId('workbench-enemy-level-input').fill('91');
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const download = await downloadPromise;
+  const project = JSON.parse(await readFile(await download.path(), 'utf8'));
+  project.actionDrafts[0].skillId = 999999999;
+  const incompatiblePath = testInfo.outputPath(
+    'incompatible-action-skill.promilia-workbench.json'
+  );
+  await writeFile(incompatiblePath, JSON.stringify(project));
+
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(incompatiblePath);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '项目游戏数据不兼容'
+  );
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '91'
+  );
+});
+
 test('[configuration-instances] binds reusable simulation configs to scenarios and JSON', async ({
   page,
 }) => {
