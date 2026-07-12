@@ -11,6 +11,7 @@ const REQUIRED_CAPABILITIES = [
   'applied-source-binding-guard',
   'stage-9a-timeline-topology',
   'stage-9b-runtime-step-curves',
+  'stage-9c-timeline-first-workspace',
   'png-project-exchange',
   'project-drop-recovery',
   'configuration-instances',

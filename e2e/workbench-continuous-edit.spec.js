@@ -4019,6 +4019,9 @@ test('persists cycle boundaries and reviews section contributions @workbench-mai
 
   const boundary = page.getByTestId('workbench-cycle-boundary');
   const initialBoundaryTimeMs = await boundary.getAttribute('data-time-ms');
+  await boundary.evaluate(element =>
+    element.scrollIntoView({ block: 'center', inline: 'nearest' })
+  );
   const boundaryBox = await boundary.boundingBox();
   expect(boundaryBox).toBeTruthy();
   await page.mouse.move(boundaryBox.x, boundaryBox.y + 50);
@@ -4369,6 +4372,9 @@ test('persists resizable editing and review workspace layouts @workbench-main-fl
 
   await page.getByTestId('workbench-reset-layout').click();
   const leftResizer = page.getByTestId('workbench-left-resizer');
+  await leftResizer.evaluate(element =>
+    element.scrollIntoView({ block: 'start', inline: 'nearest' })
+  );
   const leftResizerBox = await leftResizer.boundingBox();
   expect(leftResizerBox).toBeTruthy();
   await page.mouse.move(

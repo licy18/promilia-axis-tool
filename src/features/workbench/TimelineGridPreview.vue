@@ -841,17 +841,17 @@ const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
 const ZOOM_STEP = 0.25;
-const TIMELINE_LANE_MIN_HEIGHT_PX = 110;
-const TIMELINE_ACTION_TOP_PX = 10;
-const TIMELINE_ACTION_HEIGHT_PX = 42;
-const TIMELINE_ACTION_SLOT_GAP_PX = 8;
-const TIMELINE_EFFECT_INTERVAL_HEIGHT_PX = 20;
-const TIMELINE_EFFECT_INTERVAL_GAP_PX = 4;
-const TIMELINE_EFFECT_SECTION_GAP_PX = 5;
-const TIMELINE_LANE_GAP_PX = 8;
+const TIMELINE_LANE_MIN_HEIGHT_PX = 64;
+const TIMELINE_ACTION_TOP_PX = 5;
+const TIMELINE_ACTION_HEIGHT_PX = 36;
+const TIMELINE_ACTION_SLOT_GAP_PX = 4;
+const TIMELINE_EFFECT_INTERVAL_HEIGHT_PX = 16;
+const TIMELINE_EFFECT_INTERVAL_GAP_PX = 3;
+const TIMELINE_EFFECT_SECTION_GAP_PX = 3;
+const TIMELINE_LANE_GAP_PX = 4;
 const TIMELINE_DATA_GAP_PX = 2;
-const CANDIDATE_VALUE_CURVE_TOP = 68;
-const CANDIDATE_VALUE_CURVE_HEIGHT = 34;
+const CANDIDATE_VALUE_CURVE_TOP = 52;
+const CANDIDATE_VALUE_CURVE_HEIGHT = 26;
 const STATE_CURVE_TIMELINE_LAYER_KEYS = new Set([
   'applied',
   'sampled',
@@ -2076,8 +2076,16 @@ function getTimelineStateCurveMarkerTop(marker, lane) {
 }
 
 function getTimelineLaneHeight(lane) {
-  if (lane.type === 'curve' || lane.type === 'kibo') return 52;
-  return Math.max(TIMELINE_LANE_MIN_HEIGHT_PX, getTimelineDataTop(lane) + 62);
+  if (lane.type === 'curve') return 40;
+  if (lane.type === 'kibo') return 36;
+  const hasCandidateData =
+    lane.candidateValueMarkers.length > 0 ||
+    lane.candidateValueCurves.length > 0 ||
+    lane.candidateValueFrameGroups.length > 0;
+  return Math.max(
+    TIMELINE_LANE_MIN_HEIGHT_PX,
+    getTimelineDataTop(lane) + (hasCandidateData ? 48 : 18)
+  );
 }
 
 function getTimelineActionSlotCount(lane) {
@@ -3859,8 +3867,8 @@ onBeforeUnmount(() => {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
-  padding: 14px 16px;
+  gap: 6px;
+  padding: 8px 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -3872,13 +3880,13 @@ onBeforeUnmount(() => {
 
 h2 {
   margin: 0;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .timeline-tools {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   margin-left: auto;
 }
 
@@ -3932,10 +3940,10 @@ h2 {
 .state-layer-toggle,
 .state-track-toggle {
   display: inline-flex;
-  min-height: 26px;
+  min-height: 22px;
   align-items: center;
   gap: 5px;
-  padding: 0 8px;
+  padding: 0 6px;
   border: 1px solid rgba(223, 249, 243, 0.18);
   border-radius: 4px;
   background: #151b20;
@@ -4027,8 +4035,8 @@ h2 {
 
 .icon-control {
   display: inline-grid;
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   place-items: center;
   border: 1px solid rgba(121, 199, 185, 0.32);
   border-radius: 4px;
@@ -4072,9 +4080,9 @@ h2 {
 
 .timeline-scale {
   display: grid;
-  grid-template-columns: 112px minmax(0, 1fr);
-  gap: 10px;
-  padding: 12px 18px 0;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: 8px;
+  padding: 8px 12px 0;
   color: #8f9aa3;
   font-size: 12px;
 }
@@ -4110,9 +4118,9 @@ h2 {
 
 .timeline-shell {
   display: grid;
-  grid-template-columns: 112px minmax(0, 1fr);
-  gap: 10px;
-  margin: 12px 18px;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: 8px;
+  margin: 8px 12px;
 }
 
 .candidate-frame-summary {
@@ -4242,7 +4250,7 @@ h2 {
 .lane-labels,
 .timeline-lane {
   display: grid;
-  gap: 8px;
+  gap: 4px;
   min-width: 100%;
 }
 
@@ -4362,8 +4370,8 @@ h2 {
 .lane-label {
   display: grid;
   align-content: center;
-  min-height: 110px;
-  padding: 8px 10px;
+  min-height: 64px;
+  padding: 5px 8px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 6px;
   background: #151b20;
@@ -4399,7 +4407,7 @@ h2 {
 
 .lane-label.kibo,
 .lane-label.curve {
-  padding-block: 4px;
+  padding-block: 2px;
   overflow: hidden;
 }
 
@@ -4495,11 +4503,11 @@ h2 {
 
 .action-block {
   position: absolute;
-  top: 10px;
+  top: 5px;
   box-sizing: border-box;
-  height: 42px;
+  height: 36px;
   min-width: 0;
-  padding: 7px clamp(24px, 18%, 54px) 7px 8px;
+  padding: 4px clamp(24px, 18%, 54px) 4px 7px;
   border: 1px solid rgba(121, 199, 185, 0.5);
   border-radius: 6px;
   background: linear-gradient(180deg, #274840 0%, #20352f 100%);
@@ -4528,7 +4536,7 @@ h2 {
   display: grid;
   box-sizing: border-box;
   min-width: 14px;
-  height: 20px;
+  height: 16px;
   grid-template-columns: 15px minmax(0, 1fr) auto;
   align-items: center;
   gap: 4px;

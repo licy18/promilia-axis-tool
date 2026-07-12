@@ -211,12 +211,6 @@
       @delete-cycle-boundary="deleteCycleBoundary(selectedCycleBoundaryId)"
     />
 
-    <ScenarioHeader
-      :project="project"
-      :scenario="simulationResult.scenario"
-      :summary="simulationResult.summary"
-    />
-
     <WorkbenchFlowPanel
       :selected-action="selectedAction"
       :generation-bundle="simulationResult.threeValueGenerationBundle"
@@ -453,6 +447,14 @@
           @select-section="selectCycleSection"
           @locate-action="locateCycleSectionAction"
           @create-inherited-scenario="createInheritedScenarioFromBoundary"
+        />
+      </div>
+
+      <div class="review-workspace" data-testid="workbench-review-workspace">
+        <ScenarioHeader
+          :project="project"
+          :scenario="simulationResult.scenario"
+          :summary="simulationResult.summary"
         />
 
         <div
@@ -5619,7 +5621,9 @@ function getLocalStorage() {
     minmax(0, 1fr)
     14px
     minmax(0, var(--workbench-right-panel-width, 300px));
-  grid-template-areas: 'actions left-resizer mainflow right-resizer inspector';
+  grid-template-areas:
+    'mainflow mainflow mainflow mainflow mainflow'
+    'actions left-resizer review right-resizer inspector';
   gap: 14px 0;
   padding: 14px;
 }
@@ -5638,28 +5642,20 @@ function getLocalStorage() {
   min-width: 0;
 }
 
+.review-workspace {
+  display: grid;
+  grid-area: review;
+  align-content: start;
+  gap: 14px;
+  min-width: 0;
+}
+
 .runtime-review-stack {
   display: grid;
   grid-template-columns: minmax(280px, 0.92fr) minmax(320px, 1.08fr);
   align-items: start;
   gap: 14px;
   min-width: 0;
-}
-
-.primary-flow:is(
-    [data-flow-phase='runtime-result'],
-    [data-flow-phase='edit-result-review']
-  )
-  .runtime-review-stack {
-  order: -1;
-}
-
-.primary-flow:is(
-    [data-flow-phase='runtime-result'],
-    [data-flow-phase='edit-result-review']
-  )
-  :is(.timeline-area, .cycle-review-area) {
-  order: 1;
 }
 
 .runtime-review-stack[data-runtime-review-layout='result-check'] {
@@ -5887,7 +5883,8 @@ function getLocalStorage() {
       minmax(220px, var(--workbench-left-panel-width, 260px))
       minmax(0, 1fr);
     grid-template-areas:
-      'actions mainflow'
+      'mainflow mainflow'
+      'review review'
       'actions inspector';
     column-gap: 14px;
   }
@@ -5898,7 +5895,10 @@ function getLocalStorage() {
   }
 
   .workbench-grid.layout-right-collapsed {
-    grid-template-areas: 'actions mainflow';
+    grid-template-areas:
+      'mainflow mainflow'
+      'review review'
+      'actions actions';
   }
 
   .workspace-resizer {
@@ -5931,8 +5931,9 @@ function getLocalStorage() {
   .workbench-grid.layout-left-collapsed.layout-right-collapsed {
     grid-template-columns: 1fr;
     grid-template-areas:
-      'actions'
       'mainflow'
+      'review'
+      'actions'
       'inspector';
     padding: 10px;
   }

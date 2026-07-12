@@ -3212,15 +3212,21 @@ describe('Workbench view', () => {
       'grid-template-columns:minmax(0,var(--workbench-left-panel-width,260px))14pxminmax(0,1fr)14pxminmax(0,var(--workbench-right-panel-width,300px));'
     );
     expect(workbenchSource).toContain(
+      'grid-template-areas:\x27mainflowmainflowmainflowmainflowmainflow\x27\x27actionsleft-resizerreviewright-resizerinspector\x27;'
+    );
+    expect(workbenchSource).toContain(
       '.primary-flow{display:grid;grid-area:mainflow;align-content:start;gap:14px;min-width:0;}'
+    );
+    expect(workbenchSource).toContain(
+      '.review-workspace{display:grid;grid-area:review;align-content:start;gap:14px;min-width:0;}'
     );
     expect(workbenchSource).toContain(
       '.runtime-review-stack{display:grid;grid-template-columns:minmax(280px,0.92fr)minmax(320px,1.08fr);align-items:start;gap:14px;min-width:0;}'
     );
-    expect(workbenchSource).toContain(
+    expect(workbenchSource).not.toContain(
       `.primary-flow${resultPhaseSelector}.runtime-review-stack{order:-1;}`
     );
-    expect(workbenchSource).toContain(
+    expect(workbenchSource).not.toContain(
       `.primary-flow${resultPhaseSelector}:is(.timeline-area,.cycle-review-area){order:1;}`
     );
     expect(workbenchSource).toContain(

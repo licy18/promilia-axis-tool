@@ -188,6 +188,66 @@ test('[stage-9b-runtime-step-curves] keeps actor resources and enemy states alig
   ).toHaveAttribute('points', '0,100 100,100');
 });
 
+test('[stage-9c-timeline-first-workspace] keeps the complete timeline topology in the primary workspace', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/#/workbench');
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const reviewWorkspace = page.getByTestId('workbench-review-workspace');
+  const actionLibrary = page.locator('.action-library');
+  const inspector = page.getByTestId('workbench-side-inspector');
+  await expect(timeline).toBeVisible();
+  await expect(reviewWorkspace).toBeVisible();
+
+  const desktopLayout = await readTimelineFirstLayout(page);
+  expect(desktopLayout.laneCount).toBe(12);
+  expect(desktopLayout.timeline.width).toBeGreaterThanOrEqual(1390);
+  expect(desktopLayout.timeline.bottom).toBeLessThanOrEqual(1000);
+  expect(desktopLayout.lastLane.bottom).toBeLessThanOrEqual(1000);
+  expect(desktopLayout.review.top).toBeGreaterThanOrEqual(
+    desktopLayout.timeline.bottom
+  );
+  expect(desktopLayout.actions.top).toBeGreaterThanOrEqual(
+    desktopLayout.timeline.bottom
+  );
+  expect(desktopLayout.inspector.top).toBeGreaterThanOrEqual(
+    desktopLayout.timeline.bottom
+  );
+  await expectTimelineRowsAligned(timeline);
+  await page.screenshot({ path: 'reports/stage-9c-workbench-desktop.png' });
+
+  await page.getByTestId('workbench-flow-open-runtime').click();
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'runtime-result'
+  );
+  const reviewLayout = await readTimelineFirstLayout(page);
+  expect(reviewLayout.timeline.top).toBeLessThan(reviewLayout.review.top);
+
+  await page.setViewportSize({ width: 760, height: 1280 });
+  await expect(timeline).toBeVisible();
+  await expect(actionLibrary).toBeVisible();
+  await expect(inspector).toBeVisible();
+  const narrowLayout = await readTimelineFirstLayout(page);
+  expect(narrowLayout.laneCount).toBe(12);
+  expect(narrowLayout.lastLane.bottom).toBeLessThanOrEqual(
+    narrowLayout.timeline.bottom
+  );
+  expect(narrowLayout.sections).toEqual([
+    'primary-flow',
+    'review-workspace',
+    'action-library',
+    'side-stack',
+  ]);
+  expect(narrowLayout.sectionsSeparated).toBe(true);
+  await expectTimelineRowsAligned(timeline);
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/stage-9c-workbench-narrow.png' });
+});
+
 test('[diagnostics-lazy-load] loads runtime diagnostics from a production chunk', async ({
   page,
 }) => {
@@ -961,6 +1021,9 @@ test('[workspace-layout] restores desktop focus modes and keeps narrow content a
 
   await page.getByTestId('workbench-reset-layout').click();
   const resizer = page.getByTestId('workbench-left-resizer');
+  await resizer.evaluate(element =>
+    element.scrollIntoView({ block: 'start', inline: 'nearest' })
+  );
   const box = await resizer.boundingBox();
   expect(box).toBeTruthy();
   await page.mouse.move(box.x + box.width / 2, box.y + 80);
@@ -1078,6 +1141,56 @@ async function expectTimelineRowsAligned(timeline) {
     labelCount: 12,
     rowsSeparated: true,
     labelsAligned: true,
+  });
+}
+
+async function readTimelineFirstLayout(page) {
+  return page.evaluate(() => {
+    const readRect = selector => {
+      const element = document.querySelector(selector);
+      if (!element) return null;
+      const rect = element.getBoundingClientRect();
+      return {
+        top: Math.round(rect.top),
+        bottom: Math.round(rect.bottom),
+        width: Math.round(rect.width),
+      };
+    };
+    const lanes = [
+      ...document.querySelectorAll('[data-testid="workbench-timeline-row"]'),
+    ];
+    const sectionSelectors = [
+      ['primary-flow', '.primary-flow'],
+      ['review-workspace', '[data-testid="workbench-review-workspace"]'],
+      ['action-library', '.action-library'],
+      ['side-stack', '.side-stack'],
+    ];
+    const sectionRects = sectionSelectors.map(([name, selector]) => ({
+      name,
+      rect: readRect(selector),
+    }));
+    return {
+      timeline: readRect('[data-testid="workbench-timeline-grid-preview"]'),
+      review: readRect('[data-testid="workbench-review-workspace"]'),
+      actions: readRect('.action-library'),
+      inspector: readRect('.side-stack'),
+      laneCount: lanes.length,
+      lastLane: lanes.length
+        ? (() => {
+            const rect = lanes[lanes.length - 1].getBoundingClientRect();
+            return {
+              top: Math.round(rect.top),
+              bottom: Math.round(rect.bottom),
+              width: Math.round(rect.width),
+            };
+          })()
+        : null,
+      sections: sectionRects.map(section => section.name),
+      sectionsSeparated: sectionRects.every(
+        (section, index) =>
+          index === 0 || section.rect.top >= sectionRects[index - 1].rect.bottom
+      ),
+    };
   });
 }
 

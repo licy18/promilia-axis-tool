@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "production-preview-acceptance",
-  "generatedAt": "2026-07-12T05:27:14.184Z",
+  "generatedAt": "2026-07-12T05:46:53.958Z",
   "environment": {
     "platform": "win32-x64",
     "node": "v24.16.0",
@@ -18,12 +18,12 @@
     "reason": "all-required-production-preview-capabilities-passed"
   },
   "summary": {
-    "requiredCapabilityCount": 21,
-    "passedCapabilityCount": 21,
-    "testCount": 21,
-    "passedTestCount": 21,
+    "requiredCapabilityCount": 22,
+    "passedCapabilityCount": 22,
+    "testCount": 22,
+    "passedTestCount": 22,
     "playwrightStatus": "passed",
-    "durationMs": 24663
+    "durationMs": 26597
   },
   "capabilities": [
     {
@@ -68,6 +68,11 @@
     },
     {
       "capability": "stage-9b-runtime-step-curves",
+      "status": "passed",
+      "testCount": 1
+    },
+    {
+      "capability": "stage-9c-timeline-first-workspace",
       "status": "passed",
       "testCount": 1
     },
@@ -137,7 +142,7 @@
       "capability": "applied-source-binding-guard",
       "title": "[applied-source-binding-guard] accepts the production three-track source audit",
       "status": "passed",
-      "durationMs": 5,
+      "durationMs": 4,
       "retry": 0,
       "errors": []
     },
@@ -145,7 +150,7 @@
       "capability": "routes-and-assets",
       "title": "[routes-and-assets] serves production routes and hashed assets",
       "status": "passed",
-      "durationMs": 1192,
+      "durationMs": 1132,
       "retry": 0,
       "errors": []
     },
@@ -153,7 +158,7 @@
       "capability": "stage-9a-timeline-topology",
       "title": "[stage-9a-timeline-topology] renders three actor groups and five state curves on desktop and narrow screens",
       "status": "passed",
-      "durationMs": 1138,
+      "durationMs": 949,
       "retry": 0,
       "errors": []
     },
@@ -161,7 +166,15 @@
       "capability": "stage-9b-runtime-step-curves",
       "title": "[stage-9b-runtime-step-curves] keeps actor resources and enemy states aligned through edit operations",
       "status": "passed",
-      "durationMs": 1599,
+      "durationMs": 1437,
+      "retry": 0,
+      "errors": []
+    },
+    {
+      "capability": "stage-9c-timeline-first-workspace",
+      "title": "[stage-9c-timeline-first-workspace] keeps the complete timeline topology in the primary workspace",
+      "status": "passed",
+      "durationMs": 1050,
       "retry": 0,
       "errors": []
     },
@@ -169,7 +182,7 @@
       "capability": "diagnostics-lazy-load",
       "title": "[diagnostics-lazy-load] loads runtime diagnostics from a production chunk",
       "status": "passed",
-      "durationMs": 665,
+      "durationMs": 625,
       "retry": 0,
       "errors": []
     },
@@ -177,7 +190,7 @@
       "capability": "json-project-exchange",
       "title": "[json-project-exchange] restores an exported production JSON project",
       "status": "passed",
-      "durationMs": 967,
+      "durationMs": 949,
       "retry": 0,
       "errors": []
     },
@@ -185,7 +198,7 @@
       "capability": "profile-compatibility-gate",
       "title": "[profile-compatibility-gate] rejects an unavailable profile without replacing the current project",
       "status": "passed",
-      "durationMs": 802,
+      "durationMs": 818,
       "retry": 0,
       "errors": []
     },
@@ -193,7 +206,7 @@
       "capability": "game-data-compatibility-gate",
       "title": "[game-data-compatibility-gate] rejects an unavailable AzPr config reference without replacing the current project",
       "status": "passed",
-      "durationMs": 946,
+      "durationMs": 842,
       "retry": 0,
       "errors": []
     },
@@ -201,7 +214,7 @@
       "capability": "action-skill-compatibility-gate",
       "title": "[action-skill-compatibility-gate] rejects an unavailable skill before action fallback without replacing the current project",
       "status": "passed",
-      "durationMs": 796,
+      "durationMs": 720,
       "retry": 0,
       "errors": []
     },
@@ -209,7 +222,7 @@
       "capability": "configuration-instances",
       "title": "[configuration-instances] binds reusable simulation configs to scenarios and JSON",
       "status": "passed",
-      "durationMs": 1210,
+      "durationMs": 1113,
       "retry": 0,
       "errors": []
     },
@@ -217,7 +230,7 @@
       "capability": "png-project-exchange",
       "title": "[png-project-exchange] restores production PNG metadata and lazy exporter assets",
       "status": "passed",
-      "durationMs": 1304,
+      "durationMs": 1141,
       "retry": 0,
       "errors": []
     },
@@ -225,7 +238,7 @@
       "capability": "project-drop-recovery",
       "title": "[project-drop-recovery] restores a production project without replacing it on invalid drop",
       "status": "passed",
-      "durationMs": 1142,
+      "durationMs": 1024,
       "retry": 0,
       "errors": []
     },
@@ -233,7 +246,7 @@
       "capability": "multi-action-editing",
       "title": "[multi-action-editing] copies, pastes, and reviews a selected action group",
       "status": "passed",
-      "durationMs": 1122,
+      "durationMs": 1139,
       "retry": 0,
       "errors": []
     },
@@ -241,7 +254,7 @@
       "capability": "timeline-relations",
       "title": "[timeline-relations] preserves action relations through project exchange",
       "status": "passed",
-      "durationMs": 1405,
+      "durationMs": 1559,
       "retry": 0,
       "errors": []
     },
@@ -249,7 +262,7 @@
       "capability": "effect-interval-review",
       "title": "[effect-interval-review] reviews an effect interval and refreshes it from the source action",
       "status": "passed",
-      "durationMs": 1062,
+      "durationMs": 1252,
       "retry": 0,
       "errors": []
     },
@@ -257,7 +270,7 @@
       "capability": "scenario-comparison",
       "title": "[scenario-comparison] compares an edited axis with a snapshot and returns to the changed action",
       "status": "passed",
-      "durationMs": 1102,
+      "durationMs": 1185,
       "retry": 0,
       "errors": []
     },
@@ -265,7 +278,7 @@
       "capability": "cycle-sections",
       "title": "[cycle-sections] creates, reviews, and restores a production cycle boundary",
       "status": "passed",
-      "durationMs": 994,
+      "durationMs": 1584,
       "retry": 0,
       "errors": []
     },
@@ -273,7 +286,7 @@
       "capability": "cycle-inheritance",
       "title": "[cycle-inheritance] creates and restores a production scenario from a runtime boundary",
       "status": "passed",
-      "durationMs": 1244,
+      "durationMs": 1350,
       "retry": 0,
       "errors": []
     },
@@ -281,7 +294,7 @@
       "capability": "workspace-scenarios",
       "title": "[workspace-scenarios] switches, compares, and restores independent production scenarios",
       "status": "passed",
-      "durationMs": 1353,
+      "durationMs": 1374,
       "retry": 0,
       "errors": []
     },
@@ -289,7 +302,7 @@
       "capability": "workspace-layout",
       "title": "[workspace-layout] restores desktop focus modes and keeps narrow content available",
       "status": "passed",
-      "durationMs": 1159,
+      "durationMs": 1223,
       "retry": 0,
       "errors": []
     },
@@ -297,7 +310,7 @@
       "capability": "narrow-main-flow",
       "title": "[narrow-main-flow] completes runtime review, edit, and refresh without overflow",
       "status": "passed",
-      "durationMs": 992,
+      "durationMs": 1314,
       "retry": 0,
       "errors": []
     }
