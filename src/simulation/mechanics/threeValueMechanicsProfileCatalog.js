@@ -193,10 +193,12 @@ export function createWorkbenchProfileCompatibilityReport(
 function resolveWorkbenchProfileScenarios(draft = {}) {
   const workspaceScenarios = draft?.scenarioWorkspace?.scenarios;
   if (Array.isArray(workspaceScenarios) && workspaceScenarios.length > 0) {
+    const activeScenarioId = draft?.scenarioWorkspace?.activeScenarioId;
     return workspaceScenarios.map((scenario, index) => ({
       id: scenario?.id ?? `scenario-${index + 1}`,
       name: scenario?.name ?? `方案 ${index + 1}`,
-      draft: scenario?.draft ?? {},
+      draft:
+        scenario?.id === activeScenarioId ? draft : (scenario?.draft ?? {}),
     }));
   }
   return [{ id: 'scenario-0001', name: '方案 1', draft }];

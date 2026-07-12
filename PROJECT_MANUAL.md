@@ -75,7 +75,7 @@ src/
 
 - `src/views/Workbench.vue`：生产页面编排和项目交换入口。
 - `src/domain/projectSchema.js`：标准项目、角色、敌人、动作和动作关系模型。
-- `src/domain/workbenchDraftStorage.js`：v14 草稿、项目 JSON 和分享合同。
+- `src/domain/workbenchDraftStorage.js`：v15 草稿、项目 JSON 和分享合同。
 - `src/domain/workbenchConfigurationLibrary.js`：角色/敌人配置实例与方案绑定合同。
 - `src/domain/workbenchScenarioWorkspace.js`：项目内多方案快照、迁移和管理合同。
 - `src/simulation/`：无 UI 编译、执行、三值生成、机制和结果投影。
@@ -1113,6 +1113,16 @@ Scenario 与 `AzPrThreeValueConfigurationRuntimeBinding v1` 现在同时记录 r
 阶段验收：74 个测试文件、416 条单元/组件测试通过；39 条 Workbench 主流程和 16 项 production preview 必需能力全部通过，生产报告结论为 `trial-ready`。生产引用审计为 111 个源码、107 个生产可达、4 个允许 test-only、0 个孤儿；数据投影审计全部一致。Workbench 主块为 355,356B gzip，全部 JavaScript 为 727,845B gzip，均在 370,000B/740,000B 预算内。180 动作编译 p95 为 14.934ms、完整 simulation p95 为 45.352ms；120 动作浏览器首屏就绪为 1517ms。
 
 下一阶段目标：阶段 8-V / P2-P3 游戏数据引用与配置兼容性闭环。把角色、敌人、装备、奇波和灵子 ID 统一解析为带数据版本与来源的受信任 catalog 引用，扩展项目 compatibility report，防止游戏数据更新后导入项目静默丢失或替换配置；mechanism configuration 获取实际记录但培养效果继续 unapplied。该阶段不猜装备/培养公式，也不增加碎片 UI。
+
+### 阶段 8-V P2-P3 游戏数据引用与配置兼容性闭环（2026-07-12）
+
+新增 `AzPrWorkbenchGameDataCatalog v1`、`AzPrWorkbenchGameDataBinding v1`、`AzPrWorkbenchGameDataCompatibilityReport v1` 与 `AzPrWorkbenchGameDataReference v1`。角色、敌人、装备、奇波和灵子现在由同一生产 catalog 按 ID 精确解析，并携带 catalog ID/版本、生成数据版本和本地来源。兼容性检查覆盖全部方案与共享配置实例，在既有 normalizer 丢弃未知 ID 之前保留原始缺口；缺失引用、错误装备槽位、catalog 身份变化或数据版本漂移都会拒绝替换当前工作区。v1-v14 项目仅在全部引用仍可解析时迁移。
+
+WorkbenchProjectFile 升级为 v15；本地草稿、JSON、分享链接、PNG、预设和对比基准共用数据门禁。`AzPrThreeValueMechanismConfiguration v3` 与 `AzPrThreeValueConfigurationRuntimeBinding v2` 获取活动角色、敌人和 loadout 的实际 catalog 记录及稳定 reference identity，四种项目载体回放保持同一数据 binding、配置 binding 和三值输出。装备、奇波和灵子效果仍明确不参与 calculator，本阶段没有新增倍率、时序或培养公式。
+
+阶段验收：75 个测试文件、422 条单元/组件测试通过；39 条 Workbench 主流程和 17 项 production preview 必需能力全部通过，生产报告结论为 `trial-ready`。生产引用审计为 112 个源码、108 个生产可达、4 个允许 test-only、0 个孤儿；数据投影审计全部一致。Workbench 主块为 358,889B gzip，全部 JavaScript 为 731,634B gzip，均在 370,000B/740,000B 预算内。180 动作编译 p95 为 11.017ms、完整 simulation p95 为 27.286ms；120 动作浏览器首屏就绪为 2022ms。
+
+下一阶段目标：阶段 8-W / P2-P3 动作与技能数据引用兼容性闭环。把动作草稿中的 skill ID、角色归属和动作变体索引接入同一版本化数据门禁，并让 generation 合同消费已解析技能记录；项目数据更新后不能静默换技能、回退动作或丢失分段选择。该阶段保持现有倍率、动作时长和命中帧不变，不做技能证据考古，也不增加碎片 UI。
 
 ## 10. 文档维护规则
 

@@ -13,7 +13,7 @@
 - 机制配置来源：当前方案所选实例会先校验实例值与解析值，生成稳定回放身份，再绑定标准 mechanics configuration、profile 与 runtime adapter；本地草稿、JSON、分享链接和 PNG 回导保持同一三值结果，未确认培养效果仍不可应用。
 - 三值运行时：每个动作追踪敌人 HP、敌人韧性和每名角色自身能量，输出曲线、日志、状态快照和统计摘要。
 - 规则与效果：冷却、执行计划、效果命令和运行时复盘共享同一模拟结果。
-- 项目交换：v14 JSON、带项目元数据的 PNG、窗口拖放恢复、分享链接和本地预设轴库；每条方案的 mechanics profile ID/版本由生产 catalog 精确解析，缺失或无效 profile 会在替换当前项目之前被兼容性门禁拒绝。
+- 项目交换：v15 JSON、带项目元数据的 PNG、窗口拖放恢复、分享链接和本地预设轴库；mechanics profile 以及角色、敌人、装备、奇波、灵子引用都由带版本和来源的生产 catalog 校验，不兼容项目会在替换当前工作区之前被拒绝。
 - 受控采样工具链：runtime capture manifest、JSONL 规范化、production audit 和显式 PID Frida host。
 
 ## 精度边界

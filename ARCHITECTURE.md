@@ -60,8 +60,9 @@ C:\PC2\Codex\AzPr
 - `initialRuntimeState.js`：循环边界继承的敌人三值、角色能量和活动效果起始状态合同。
 - `workbenchProjectFactory.js`：把 Workbench 选择、培养配置和动作草稿组装为标准项目。
 - `workbenchActionRelations.js`：动作前后关系的规范化、无环校验、间隔同步与删除清理。
-- `workbenchDraftStorage.js`：v14 草稿、项目 JSON 和分享链接。
+- `workbenchDraftStorage.js`：v15 草稿、项目 JSON 和分享链接。
 - `workbenchConfigurationLibrary.js`：角色/敌人配置实例库、方案选择、旧项目迁移和活动配置解析。
+- `workbenchGameDataCatalog.js`：角色、敌人、装备、奇波和灵子的受信任目录、项目数据版本绑定、引用解析与兼容性报告。
 - `workbenchScenarioWorkspace.js`：最多 14 条完整方案快照的规范化、切换和迁移。
 - `workbenchPngProject.js`：PNG 项目元数据写入与回读。
 - `workbenchPresetStorage.js`：v1 本地预设库，复用完整 Workbench 项目快照。
@@ -132,19 +133,25 @@ Action
 
 ## 4. 关键数据合同
 
-### WorkbenchProjectFile v14
+### WorkbenchProjectFile v15
 
-根级包含活动方案的 selection、teamSlots、actorConfigs、enemyConfig、configurationSelection、mechanicsProfileSelection、segmentSplitOptions、actionDrafts、actionRelations、cycleBoundaries、initialRuntimeState、runtimeSampleCaptures 和 selectedActionId，并包含共享 `configurationLibrary` 与 `scenarioWorkspace`。每条方案持久化纯数据 `{ profileId, profileVersion }`；JSON、分享链接、PNG 元数据和预设库都复用该合同。v1-v12 项目继续迁移配置实例，v1-v13 项目和缺失字段的方案自动绑定默认 preview profile。
+根级包含活动方案的 selection、teamSlots、actorConfigs、enemyConfig、configurationSelection、mechanicsProfileSelection、segmentSplitOptions、actionDrafts、actionRelations、cycleBoundaries、initialRuntimeState、runtimeSampleCaptures 和 selectedActionId，并包含共享 `configurationLibrary`、`scenarioWorkspace` 与 `gameDataBinding`。每条方案持久化纯数据 mechanics profile 选择，根级绑定 AzPr catalog ID、catalog 版本和生成数据版本；JSON、分享链接、PNG 元数据和预设库复用同一合同。v1-v14 项目在引用仍可解析时迁移到当前数据绑定。
 
 ### ConfigurationLibrary / ConfigurationSelection v1
 
 `configurationLibrary` 在项目根级保存角色和敌人配置实例；角色实例继续复用既有 `actorConfig`，敌人实例继续复用既有 `enemyConfig`。每条方案的 `configurationSelection` 只绑定当前角色和敌人所选实例 ID。切换方案或选择实例时，domain 层把实例解析回活动草稿的 `actorConfigs` / `enemyConfig`，Project、compiler、generation、runtime 和 calculator 不读取配置库结构，也没有第二套培养或计算模型。
 
-### ConfigurationSource v1 / ThreeValueMechanismConfiguration v2
+### GameDataCatalog / GameDataBinding / GameDataReference v1
+
+`AzPrWorkbenchGameDataCatalog v1` 从 `workbench-seed.json` 建立五类可信目录，记录每类本地来源和统一 `dataVersion`。`AzPrWorkbenchGameDataCompatibilityReport v1` 在任何规范化或状态替换之前扫描全部方案和共享配置实例；缺失 ID、错误装备槽位、catalog 身份变化或数据版本漂移都会禁止导入。无版本的 v1-v14 项目仅在全部引用仍可精确解析时允许一次迁移。
+
+Project 构建活动配置的 `AzPrWorkbenchGameDataReference v1`，把角色、敌人和已选 loadout ID 解析为实际 catalog 记录、来源、版本与稳定 `referenceIdentity`。compiler、Scenario 和 runtime binding 传播同一身份；装备、奇波和灵子记录可追溯但其效果继续固定为未应用。
+
+### ConfigurationSource v1 / ThreeValueMechanismConfiguration v3
 
 Project 构建时以活动方案的 `configurationSelection`、共享 `configurationLibrary` 和解析后的 `actorConfigs` / `enemyConfig` 生成 `AzPrWorkbenchConfigurationSource v1`。只有实例 ID、实体 ID 和实例值均与解析值一致时，来源才标记为 instance-backed；缺失或错配的 ID 保留 requested identity，但不会冒充已验证实例。合同以实际模拟配置生成稳定 `replayIdentity`，不把显示名称纳入身份。
 
-compiler 将该来源合同、Scenario actor/enemy 与实际 `mechanicsProfile` 合成为 `AzPrThreeValueMechanismConfiguration v2` 和 `AzPrThreeValueConfigurationRuntimeBinding v1`。角色来源区分面板 stats、初始 SP 和 loadout，敌人来源区分 HP baseline、伤害预览防御倍率、韧性 baseline、等级和元素防御；runtime summary 汇总同一 replay identity 与 binding readiness。当前确认可用的 baseline/预览字段显式标记应用位置；奇波、装备、灵子效果、敌人等级公式和元素防御公式固定为未应用。
+compiler 将配置来源、游戏数据引用、Scenario actor/enemy 与实际 `mechanicsProfile` 合成为 `AzPrThreeValueMechanismConfiguration v3` 和 `AzPrThreeValueConfigurationRuntimeBinding v2`。角色与敌人来源携带已解析 catalog 记录，runtime binding 同时固定 configuration replay identity 与 game data reference identity。当前确认可用的 baseline/预览字段显式标记应用位置；奇波、装备、灵子效果、敌人等级公式和元素防御公式固定为未应用。
 
 `AzPrThreeValueMechanismContext` 为 v3，`ThreeValueDeltaCalculator` 为 v3。阶段 8-R 后 `Action -> Hit -> ThreeValueDelta` 为 v10，`AzPrThreeValueMechanicsAdapter` 为 v7，`ThreeValueRuntimeCalculatorInvocation` 为 v9，runtime state snapshot 为 v2；每条 delta、generation calculator result 和 runtime invocation 都保留配置、profile、机制层输入、evaluation、状态作用 proposal、来源状态及实例 ID。
 
@@ -206,13 +213,13 @@ compiler 从 Project metadata 的 `AzPrWorkbenchMechanicsProfileSelection v1` �
 
 ## 5. 持久化边界
 
-- 当前草稿：`promilia-axis-tool:workbench-draft:v14`。
+- 当前草稿：`promilia-axis-tool:workbench-draft:v15`。
 - 本地预设：`promilia-axis-tool:workbench-presets:v1`。
 - 工作区布局：`promilia-axis-tool:workbench-layout:v1`，独立于项目和草稿。
 - 项目交换：JSON、分享 URL、PNG 内嵌元数据。
 - 临时曲线选中、复盘焦点、筛选和诊断面板状态不写入项目文件。
 
-导入项目或加载预设必须统一经过 `applyImportedProjectDraft()`，以完成规范化、草稿保存、历史清空、临时状态清理和运行时重算。
+导入项目或加载预设必须先通过 mechanics profile 与游戏数据兼容性门禁，再统一经过 `applyImportedProjectDraft()` 完成规范化、草稿保存、历史清空、临时状态清理和运行时重算。
 
 ## 6. 验证体系
 

@@ -3,6 +3,7 @@ import {
   createWorkbenchProjectFileSnapshot,
   parseWorkbenchProjectFile,
 } from './workbenchDraftStorage';
+import { getWorkbenchGameDataCompatibilityReport } from './workbenchGameDataCatalog';
 
 export const WORKBENCH_PRESET_LIBRARY_SCHEMA_VERSION = 1;
 export const WORKBENCH_PRESET_LIBRARY_TYPE = 'workbench-preset-library';
@@ -243,19 +244,24 @@ function normalizeWorkbenchPreset(preset, index) {
     projectPayload?.schemaVersion ?? preset.sourceProjectSchemaVersion
   );
   const parsedDraft = parseWorkbenchProjectFile(projectPayload);
+  const gameDataCompatibility = parsedDraft
+    ? getWorkbenchGameDataCompatibilityReport(parsedDraft)
+    : null;
   const createdAt =
     normalizeIsoDate(preset.createdAt) ??
     normalizeIsoDate(preset.updatedAt) ??
     new Date(0).toISOString();
   const updatedAt = normalizeIsoDate(preset.updatedAt) ?? createdAt;
-  const compatibilityStatus = parsedDraft
-    ? sourceProjectSchemaVersion === WORKBENCH_DRAFT_SCHEMA_VERSION
-      ? PRESET_COMPATIBILITY_READY
-      : PRESET_COMPATIBILITY_MIGRATED
-    : PRESET_COMPATIBILITY_INCOMPATIBLE;
-  const normalizedProjectFile = parsedDraft
-    ? createWorkbenchProjectFileSnapshot(parsedDraft, updatedAt)
-    : projectPayload;
+  const compatibilityStatus =
+    parsedDraft && gameDataCompatibility?.importAllowed
+      ? sourceProjectSchemaVersion === WORKBENCH_DRAFT_SCHEMA_VERSION
+        ? PRESET_COMPATIBILITY_READY
+        : PRESET_COMPATIBILITY_MIGRATED
+      : PRESET_COMPATIBILITY_INCOMPATIBLE;
+  const normalizedProjectFile =
+    parsedDraft && gameDataCompatibility?.importAllowed
+      ? createWorkbenchProjectFileSnapshot(parsedDraft, updatedAt)
+      : projectPayload;
 
   return {
     schemaVersion: WORKBENCH_PRESET_LIBRARY_SCHEMA_VERSION,

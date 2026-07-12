@@ -14,6 +14,7 @@ import {
   createWorkbenchProject,
   getWorkbenchGameData,
 } from '../../domain/workbenchProjectFactory';
+import { getWorkbenchGameDataCompatibilityReport } from '../../domain/workbenchGameDataCatalog';
 import {
   createWorkbenchProjectPngMetadata,
   embedWorkbenchProjectInPng,
@@ -85,6 +86,34 @@ describe('Workbench project replay consistency', () => {
         profileVersion: 3,
         replaceable: true,
       },
+      gameData: {
+        catalogId: 'azpr-workbench-game-data',
+        catalogVersion: 1,
+        dataVersion: sourceState.gameDataBinding.dataVersion,
+        referenceIdentity: baseline.gameDataReferenceContract.referenceIdentity,
+        ready: true,
+        replaceable: true,
+      },
+    });
+    expect(baseline.gameDataReferenceContract).toMatchObject({
+      contractName: 'AzPrWorkbenchGameDataReference',
+      status: 'workbench-game-data-reference-ready',
+      ready: true,
+      referenceIdentity: expect.stringMatching(/^azpr-game-data-v1-/u),
+      catalog: {
+        catalogId: 'azpr-workbench-game-data',
+        catalogVersion: 1,
+        dataVersion: sourceState.gameDataBinding.dataVersion,
+      },
+      policy: {
+        resolvedCatalogRecordsOnly: true,
+        loadoutEffectsAppliedToCalculators: false,
+      },
+    });
+    expect(baseline.gameDataCompatibility).toMatchObject({
+      status: 'workbench-game-data-compatibility-exact',
+      compatible: true,
+      importAllowed: true,
     });
     expect(baseline.runtimeSummary).toMatchObject({
       runtimeConfigurationReplayIdentities: [
@@ -205,6 +234,8 @@ function createScenarioReplaySignature(draft, configurationLibrary) {
     enemyConfig: draft.enemyConfig,
     configurationLibrary,
     configurationSelection: draft.configurationSelection,
+    gameDataBinding: draft.gameDataBinding,
+    gameDataCompatibilityReport: getWorkbenchGameDataCompatibilityReport(draft),
     mechanicsProfileSelection: draft.mechanicsProfileSelection,
     actions: draft.actionDrafts,
     actionRelations: draft.actionRelations,
@@ -220,6 +251,9 @@ function createScenarioReplaySignature(draft, configurationLibrary) {
   return {
     configurationSourceContract:
       scenario.sourceProject.metadata.configurationSourceContract,
+    gameDataReferenceContract:
+      scenario.sourceProject.metadata.gameDataReferenceContract,
+    gameDataCompatibility: scenario.gameDataCompatibility,
     mechanismConfiguration: scenario.mechanismConfiguration,
     runtimeBinding: scenario.mechanismConfiguration.runtimeBinding,
     mechanicsProfile: scenario.mechanicsProfile,

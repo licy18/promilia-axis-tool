@@ -29,6 +29,10 @@ import {
   getSkillDamageSegments,
 } from './skillDamageSegments';
 import { createWorkbenchConfigurationSourceContract } from './workbenchConfigurationSourceContract';
+import {
+  createWorkbenchGameDataReferenceContract,
+  normalizeWorkbenchGameDataBinding,
+} from './workbenchGameDataCatalog';
 import { normalizeWorkbenchMechanicsProfileSelection } from './workbenchMechanicsProfileSelection';
 
 export { getSkillActionCatalog } from './skillActionCatalog';
@@ -404,6 +408,17 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
       enemyConfig,
       enemyId: normalized.enemyId,
     });
+  const gameDataBinding = normalizeWorkbenchGameDataBinding(
+    actionPatch.gameDataBinding
+  );
+  const gameDataReferenceContract = createWorkbenchGameDataReferenceContract({
+    gameDataBinding,
+    selection: normalized,
+    teamSlots,
+    actorConfigs,
+    enemyConfig,
+    configurationLibrary: actionPatch.configurationLibrary,
+  });
 
   if (
     !character ||
@@ -484,6 +499,10 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
       actorConfigs,
       configurationSelection,
       configurationSourceContract,
+      gameDataBinding,
+      gameDataReferenceContract,
+      gameDataCompatibilityReport:
+        actionPatch.gameDataCompatibilityReport ?? null,
       mechanicsProfileSelection: normalizeWorkbenchMechanicsProfileSelection(
         actionPatch.mechanicsProfileSelection
       ),

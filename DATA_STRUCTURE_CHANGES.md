@@ -26709,3 +26709,37 @@ AzPrWorkbenchProfileCompatibilityReport v1
 ```
 
 所有方案都 exact 且 catalog ready 时才允许导入。Workbench 本地恢复、分享链接、JSON/PNG、预设和对比基准在修改当前状态前执行同一门禁；不兼容导入保留当前项目。Scenario 顶层输出 catalog 与 compatibility 摘要，`AzPrThreeValueConfigurationRuntimeBinding` 同步记录 catalog ID/版本和兼容性状态。production preview 将 `profile-compatibility-gate` 列为必需能力。本阶段不新增 profile 公式或 UI 控件。
+
+## 394. WorkbenchProjectFile v15 / GameDataCatalog 与 GameDataReference v1
+
+阶段 8-V 将 Workbench 草稿和项目文件从 v14 升级到 v15，根级新增：
+
+```text
+gameDataBinding
+  contractName = AzPrWorkbenchGameDataBinding
+  schemaVersion = 1
+  catalogId / catalogVersion
+  dataVersion
+  sourceKind
+```
+
+`AzPrWorkbenchGameDataCatalog v1` 以 `workbench-seed.json` 为生产来源，统一索引 characters、enemies、equipment、kibos 和 soulessences，并为每张表保留本地 source、记录数与同一生成数据版本。项目兼容性报告覆盖工作区全部方案及共享配置库：
+
+```text
+AzPrWorkbenchGameDataCompatibilityReport v1
+  status / compatible / importAllowed
+  catalog / binding
+  scenarios[]
+    status = exact | missing | invalid
+    references[]
+      tableName / kind / requestedId / id
+      expectedType / resolvedType
+      status / compatible / path / source
+      catalogId / catalogVersion / dataVersion
+  configurationLibrary
+  summary
+```
+
+解析器在 draft normalizer 之前生成报告，避免未知 ID 被回退或置空后丢失诊断。当前 binding 必须精确匹配；无 binding 的 v1-v14 项目在所有引用可解析时以 `legacy` 状态迁移；stale、missing 或 invalid 项目不能替换当前 Workbench。本地草稿、JSON、分享码、PNG、预设和对比基准共用该规则。
+
+活动配置另生成 `AzPrWorkbenchGameDataReference v1`，角色、敌人和 loadout 引用包含实际 catalog `record`、来源、版本与稳定 `referenceIdentity`。`AzPrThreeValueMechanismConfiguration` 从 v2 升级为 v3，`AzPrThreeValueConfigurationRuntimeBinding` 从 v1 升级为 v2，并新增 `gameData` binding。已解析的装备、奇波和灵子记录仅用于来源追溯，`loadoutEffectsAppliedToCalculators=false`，不改变现有三值结果。

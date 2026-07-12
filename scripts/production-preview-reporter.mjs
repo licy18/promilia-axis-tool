@@ -6,6 +6,7 @@ const REQUIRED_CAPABILITIES = [
   'diagnostics-lazy-load',
   'json-project-exchange',
   'profile-compatibility-gate',
+  'game-data-compatibility-gate',
   'png-project-exchange',
   'project-drop-recovery',
   'configuration-instances',

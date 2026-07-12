@@ -19,7 +19,7 @@ describe('three value mechanism configuration', () => {
     );
 
     expect(scenario.mechanismConfiguration).toMatchObject({
-      schemaVersion: 2,
+      schemaVersion: 3,
       sourceKind: 'workbench-v13-configuration-instance-sources',
       contractName: 'AzPrThreeValueMechanismConfiguration',
       status: 'mechanism-configuration-ready',
@@ -100,7 +100,7 @@ describe('three value mechanism configuration', () => {
         },
       },
       runtimeBinding: {
-        schemaVersion: 1,
+        schemaVersion: 2,
         contractName: 'AzPrThreeValueConfigurationRuntimeBinding',
         status: 'configuration-runtime-binding-ready',
         ready: true,

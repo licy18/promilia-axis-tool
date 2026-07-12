@@ -20,6 +20,7 @@
       "src/__tests__/domain/workbenchConfigurationLibrary.test.js",
       "src/__tests__/domain/workbenchCycleBoundaries.test.js",
       "src/__tests__/domain/workbenchDraftStorage.test.js",
+      "src/__tests__/domain/workbenchGameDataCatalog.test.js",
       "src/__tests__/domain/workbenchLayout.test.js",
       "src/__tests__/domain/workbenchPngProject.test.js",
       "src/__tests__/domain/workbenchPresetStorage.test.js",
@@ -86,8 +87,8 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 111,
-    "productionReachableCount": 107,
+    "sourceCodeFileCount": 112,
+    "productionReachableCount": 108,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
@@ -95,7 +96,7 @@
     "productionReachableByArea": {
       "src": 2,
       "src/data": 1,
-      "src/domain": 21,
+      "src/domain": 22,
       "src/features/workbench": 44,
       "src/i18n": 1,
       "src/router": 1,
@@ -133,6 +134,7 @@
     "src/domain/workbenchConfigurationSourceContract.js",
     "src/domain/workbenchCycleBoundaries.js",
     "src/domain/workbenchDraftStorage.js",
+    "src/domain/workbenchGameDataCatalog.js",
     "src/domain/workbenchLayout.js",
     "src/domain/workbenchMechanicsProfileSelection.js",
     "src/domain/workbenchPngProject.js",

@@ -21,11 +21,17 @@ import {
   normalizeWorkbenchConfigurationWorkspace,
 } from './workbenchConfigurationLibrary';
 import { normalizeWorkbenchMechanicsProfileSelection } from './workbenchMechanicsProfileSelection';
+import {
+  createWorkbenchGameDataCompatibilityReport,
+  normalizeWorkbenchGameDataBinding,
+  rememberWorkbenchGameDataCompatibilityReport,
+} from './workbenchGameDataCatalog';
 
-export const WORKBENCH_DRAFT_SCHEMA_VERSION = 14;
+export const WORKBENCH_DRAFT_SCHEMA_VERSION = 15;
 export const WORKBENCH_DRAFT_STORAGE_KEY =
-  'promilia-axis-tool:workbench-draft:v14';
+  'promilia-axis-tool:workbench-draft:v15';
 export const LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS = Object.freeze([
+  'promilia-axis-tool:workbench-draft:v14',
   'promilia-axis-tool:workbench-draft:v13',
   'promilia-axis-tool:workbench-draft:v12',
   'promilia-axis-tool:workbench-draft:v11',
@@ -62,6 +68,7 @@ export function createDefaultWorkbenchDraftState() {
       teamSlots,
       actorConfigs: createDefaultWorkbenchActorConfigs(selection),
       enemyConfig: { ...DEFAULT_WORKBENCH_ENEMY_CONFIG },
+      gameDataBinding: normalizeWorkbenchGameDataBinding(),
       mechanicsProfileSelection: normalizeWorkbenchMechanicsProfileSelection(),
       segmentSplitOptions: { ...DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS },
       actionDrafts: [createWorkbenchActionDraft()],
@@ -79,6 +86,8 @@ export function createWorkbenchDraftSnapshot(
   state,
   savedAt = new Date().toISOString()
 ) {
+  const gameDataCompatibilityReport =
+    createWorkbenchGameDataCompatibilityReport(state);
   const activeDraft = createWorkbenchScenarioDraftSnapshot(state);
   const scenarioWorkspace = normalizeWorkbenchScenarioWorkspace(
     state?.scenarioWorkspace,
@@ -91,15 +100,20 @@ export function createWorkbenchDraftSnapshot(
     activeDraft,
   });
 
-  return {
+  const snapshot = {
     schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
     game: 'azur-promilia',
     type: WORKBENCH_DRAFT_FILE_TYPE,
     savedAt,
+    gameDataBinding: normalizeWorkbenchGameDataBinding(state?.gameDataBinding),
     ...configurationWorkspace.activeDraft,
     configurationLibrary: configurationWorkspace.configurationLibrary,
     scenarioWorkspace: configurationWorkspace.scenarioWorkspace,
   };
+  return rememberWorkbenchGameDataCompatibilityReport(
+    snapshot,
+    gameDataCompatibilityReport
+  );
 }
 
 export function createWorkbenchScenarioDraftSnapshot({

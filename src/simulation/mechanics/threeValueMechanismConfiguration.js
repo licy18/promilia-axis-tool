@@ -15,6 +15,7 @@ export function createThreeValueMechanismConfiguration({
 } = {}) {
   const metadata = project?.metadata ?? {};
   const sourceContract = metadata.configurationSourceContract ?? null;
+  const gameDataReferenceContract = metadata.gameDataReferenceContract ?? null;
   const actorConfigs = new Map(
     (metadata.actorConfigs ?? []).map(config => [
       Number(config.characterId),
@@ -24,17 +25,25 @@ export function createThreeValueMechanismConfiguration({
   const actorSourceContracts = new Map(
     (sourceContract?.actors ?? []).map(item => [Number(item.entityId), item])
   );
+  const actorGameDataReferences = new Map(
+    (gameDataReferenceContract?.actors ?? []).map(item => [
+      Number(item.characterId),
+      item,
+    ])
+  );
   const actorSources = actors.map(actor =>
     createActorConfigurationSource({
       actor,
       actorConfig: actorConfigs.get(Number(actor.characterId)),
       sourceContract: actorSourceContracts.get(Number(actor.characterId)),
+      gameDataReference: actorGameDataReferences.get(Number(actor.characterId)),
     })
   );
   const enemySource = createEnemyConfigurationSource({
     enemy,
     enemyConfig: metadata.enemyConfig,
     sourceContract: sourceContract?.enemy,
+    gameDataReference: gameDataReferenceContract?.enemy,
   });
   const instanceBacked = Boolean(
     actorSources.some(source => source.configurationInstanceId) ||
@@ -44,7 +53,8 @@ export function createThreeValueMechanismConfiguration({
     actorSources.length > 0 &&
     actorSources.every(source => source.ready) &&
     enemySource?.ready === true &&
-    sourceContract?.ready !== false;
+    sourceContract?.ready !== false &&
+    gameDataReferenceContract?.ready !== false;
   const configurationReplayIdentity = sourceContract?.replayIdentity ?? null;
   const runtimeBinding = createConfigurationRuntimeBinding({
     ready,
@@ -52,10 +62,11 @@ export function createThreeValueMechanismConfiguration({
     mechanicsProfile,
     mechanicsProfileSelection,
     configurationReplayIdentity,
+    gameDataReferenceContract,
   });
 
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     sourceKind:
       sourceContract?.sourceKind ??
       (instanceBacked
@@ -68,6 +79,7 @@ export function createThreeValueMechanismConfiguration({
     ready,
     configurationReplayIdentity,
     sourceContract,
+    gameDataReferenceContract,
     runtimeBinding,
     actors: actorSources,
     enemy: enemySource,
@@ -75,6 +87,7 @@ export function createThreeValueMechanismConfiguration({
       resolvedProjectValuesOnly: true,
       unconfirmedCultivationEffectsApplied: false,
       calculatorReadsConfigurationLibrary: false,
+      calculatorReadsUnconfirmedLoadoutEffects: false,
     },
     summary: {
       actorConfigurationCount: actorSources.length,
@@ -92,6 +105,9 @@ export function createThreeValueMechanismConfiguration({
       selectionIntegrityReady:
         sourceContract?.selectionIntegrity?.ready ?? null,
       configurationReplayIdentity,
+      gameDataReferenceReady: gameDataReferenceContract?.ready ?? null,
+      gameDataReferenceIdentity:
+        gameDataReferenceContract?.referenceIdentity ?? null,
     },
   };
 }
@@ -129,6 +145,7 @@ export function createThreeValueMechanismConfigurationContext({
     targetEnemy: enemySource,
     configurationReplayIdentity: contract?.configurationReplayIdentity ?? null,
     sourceContract: contract?.sourceContract ?? null,
+    gameDataReferenceContract: contract?.gameDataReferenceContract ?? null,
     runtimeBinding: contract?.runtimeBinding ?? null,
     policy: contract?.policy ?? null,
   };
@@ -138,14 +155,20 @@ function createActorConfigurationSource({
   actor,
   actorConfig,
   sourceContract,
+  gameDataReference,
 }) {
   const resolvedConfig =
     sourceContract?.resolvedConfig ?? actorConfig ?? actor ?? {};
   const instanceId = sourceContract?.configurationInstanceId;
   const initialSp = numberOrNull(actor?.initialSp ?? resolvedConfig.initialSp);
-  const loadout = createLoadoutSource(actor?.loadout ?? resolvedConfig.loadout);
+  const loadout = createLoadoutSource(
+    actor?.loadout ?? resolvedConfig.loadout,
+    gameDataReference?.loadout
+  );
   const ready = Boolean(
-    actor?.id && Number.isFinite(Number(actor?.characterId))
+    actor?.id &&
+    Number.isFinite(Number(actor?.characterId)) &&
+    gameDataReference?.character?.compatible !== false
   );
   return {
     actorId: actor?.id ?? null,
@@ -160,6 +183,7 @@ function createActorConfigurationSource({
         : 'project-actor-configuration-resolved'),
     sourceFingerprint: sourceContract?.resolvedConfigFingerprint ?? null,
     selectionVerified: sourceContract?.selectionVerified ?? null,
+    gameDataReference: gameDataReference?.character ?? null,
     sourcePaths: {
       instance: instanceId
         ? 'project.metadata.configurationSelection.actorInstanceIds'
@@ -194,6 +218,7 @@ function createEnemyConfigurationSource({
   enemy,
   enemyConfig,
   sourceContract,
+  gameDataReference,
 }) {
   if (!enemy) return null;
   const resolvedConfig = sourceContract?.resolvedConfig ?? enemyConfig ?? enemy;
@@ -215,6 +240,7 @@ function createEnemyConfigurationSource({
         : 'project-enemy-configuration-resolved'),
     sourceFingerprint: sourceContract?.resolvedConfigFingerprint ?? null,
     selectionVerified: sourceContract?.selectionVerified ?? null,
+    gameDataReference: gameDataReference ?? null,
     sourcePaths: {
       instance: instanceId
         ? 'project.metadata.configurationSelection.enemyInstanceId'
@@ -222,7 +248,11 @@ function createEnemyConfigurationSource({
       resolvedConfig: 'project.metadata.enemyConfig',
       runtimeEnemy: 'scenario.enemy',
     },
-    ready: Boolean(enemy.id && Number.isFinite(Number(enemy.enemyId))),
+    ready: Boolean(
+      enemy.id &&
+      Number.isFinite(Number(enemy.enemyId)) &&
+      gameDataReference?.compatible !== false
+    ),
     level: numberOrNull(enemy.level ?? resolvedConfig.level),
     hpMultiplier: numberOrNull(
       enemy.hpMultiplier ?? resolvedConfig.hpMultiplier
@@ -277,11 +307,12 @@ function createConfigurationRuntimeBinding({
   mechanicsProfile,
   mechanicsProfileSelection,
   configurationReplayIdentity,
+  gameDataReferenceContract,
 }) {
   const profileReady = Boolean(mechanicsProfile?.ready);
   const bindingReady = Boolean(ready && profileReady);
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     contractName: THREE_VALUE_CONFIGURATION_RUNTIME_BINDING_CONTRACT_NAME,
     status: bindingReady
       ? 'configuration-runtime-binding-ready'
@@ -291,6 +322,17 @@ function createConfigurationRuntimeBinding({
       contractName: sourceContract?.contractName ?? null,
       schemaVersion: sourceContract?.schemaVersion ?? null,
       replayIdentity: configurationReplayIdentity,
+      replaceable: true,
+    },
+    gameData: {
+      contractName: gameDataReferenceContract?.contractName ?? null,
+      schemaVersion: gameDataReferenceContract?.schemaVersion ?? null,
+      catalogId: gameDataReferenceContract?.catalog?.catalogId ?? null,
+      catalogVersion:
+        gameDataReferenceContract?.catalog?.catalogVersion ?? null,
+      dataVersion: gameDataReferenceContract?.catalog?.dataVersion ?? null,
+      referenceIdentity: gameDataReferenceContract?.referenceIdentity ?? null,
+      ready: gameDataReferenceContract?.ready ?? null,
       replaceable: true,
     },
     mechanicsProfile: {
@@ -313,7 +355,7 @@ function createConfigurationRuntimeBinding({
   };
 }
 
-function createLoadoutSource(loadout = {}) {
+function createLoadoutSource(loadout = {}, gameDataLoadout = {}) {
   const equipment = Object.fromEntries(
     EQUIPMENT_KEYS.map(key => [key, numberOrNull(loadout?.equipment?.[key])])
   );
@@ -328,6 +370,8 @@ function createLoadoutSource(loadout = {}) {
       LOADOUT_KEYS.filter(key => source[key] != null).length +
       EQUIPMENT_KEYS.filter(key => equipment[key] != null).length,
     appliedToCalculators: false,
+    gameDataReferences: gameDataLoadout?.references ?? null,
+    gameDataReady: gameDataLoadout?.ready ?? null,
   };
 }
 

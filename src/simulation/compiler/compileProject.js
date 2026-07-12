@@ -129,6 +129,26 @@ export function compileProject(
         issueKind: catalogResolution.issueKind,
         compatible: catalogResolution.compatible,
       };
+  const gameDataReferenceContract =
+    project?.metadata?.gameDataReferenceContract ?? null;
+  const gameDataCatalog = gameDataReferenceContract
+    ? {
+        ...gameDataReferenceContract.catalog,
+        status: gameDataReferenceContract.ready
+          ? 'workbench-game-data-reference-ready'
+          : 'workbench-game-data-reference-incomplete',
+        referenceIdentity: gameDataReferenceContract.referenceIdentity,
+      }
+    : null;
+  const gameDataCompatibility = project?.metadata?.gameDataCompatibilityReport
+    ? {
+        status: project.metadata.gameDataCompatibilityReport.status,
+        compatible:
+          project.metadata.gameDataCompatibilityReport.compatible === true,
+        importAllowed:
+          project.metadata.gameDataCompatibilityReport.importAllowed === true,
+      }
+    : null;
 
   const actions = project.actions
     .map(action => compileAction(action, actorsById, enemy, skillsById))
@@ -154,6 +174,8 @@ export function compileProject(
     mechanicsProfileSelection: compiledMechanicsProfileSelection,
     mechanicsProfileCatalog,
     mechanicsProfileCompatibility,
+    gameDataCatalog,
+    gameDataCompatibility,
     actions,
     cycleBoundaries: (project.cycleBoundaries ?? []).map(boundary => ({
       ...boundary,

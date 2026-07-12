@@ -616,7 +616,7 @@ describe('workbench draft storage project files', () => {
       profileVersion: 1,
     };
     expect(migrated).toMatchObject({
-      schemaVersion: 14,
+      schemaVersion: 15,
       mechanicsProfileSelection: expectedSelection,
       scenarioWorkspace: {
         scenarios: [

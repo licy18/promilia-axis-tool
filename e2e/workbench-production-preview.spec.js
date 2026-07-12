@@ -94,9 +94,15 @@ test('[json-project-exchange] restores an exported production JSON project', asy
   expect(download.suggestedFilename()).toMatch(/promilia-workbench-.*\.json$/);
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 14,
+    schemaVersion: 15,
     game: 'azur-promilia',
     type: 'workbench-project',
+    gameDataBinding: {
+      contractName: 'AzPrWorkbenchGameDataBinding',
+      catalogId: 'azpr-workbench-game-data',
+      catalogVersion: 1,
+      dataVersion: expect.stringMatching(/^\d{4}-\d{2}-\d{2}T/u),
+    },
     enemyConfig: { level: 91 },
   });
   expect(project.actionDrafts).toHaveLength(2);
@@ -149,6 +155,36 @@ test('[profile-compatibility-gate] rejects an unavailable profile without replac
     .setInputFiles(incompatiblePath);
   await expect(page.getByTestId('workbench-draft-status')).toHaveText(
     '项目机制配置不兼容'
+  );
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '91'
+  );
+});
+
+test('[game-data-compatibility-gate] rejects an unavailable AzPr config reference without replacing the current project', async ({
+  page,
+}, testInfo) => {
+  await page.goto('/#/workbench');
+  await page.getByTestId('workbench-add-action').click();
+  await page.getByTestId('workbench-enemy-level-input').fill('91');
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const download = await downloadPromise;
+  const project = JSON.parse(await readFile(await download.path(), 'utf8'));
+  project.actorConfigs[0].loadout.kiboId = 999999999;
+  const incompatiblePath = testInfo.outputPath(
+    'incompatible-game-data.promilia-workbench.json'
+  );
+  await writeFile(incompatiblePath, JSON.stringify(project));
+
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(incompatiblePath);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '项目游戏数据不兼容'
   );
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '2 action'
@@ -211,7 +247,7 @@ test('[configuration-instances] binds reusable simulation configs to scenarios a
   const download = await downloadPromise;
   const project = JSON.parse(await readFile(await download.path(), 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 14,
+    schemaVersion: 15,
     configurationLibrary: {
       schemaVersion: 1,
       actorInstances: expect.any(Array),
@@ -384,7 +420,7 @@ test('[timeline-relations] preserves action relations through project exchange',
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(14);
+  expect(project.schemaVersion).toBe(15);
   expect(project.actionDrafts).toHaveLength(5);
   expect(project.actionRelations).toEqual([
     expect.objectContaining({
@@ -552,7 +588,7 @@ test('[cycle-sections] creates, reviews, and restores a production cycle boundar
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(14);
+  expect(project.schemaVersion).toBe(15);
   expect(project.cycleBoundaries).toEqual([
     expect.objectContaining({
       id: 'cycle-boundary-0001',
@@ -622,7 +658,7 @@ test('[cycle-inheritance] creates and restores a production scenario from a runt
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 14,
+    schemaVersion: 15,
     initialRuntimeState: {
       contractName: 'AzPrInitialRuntimeState',
       source: {
@@ -681,7 +717,7 @@ test('[workspace-scenarios] switches, compares, and restores independent product
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(14);
+  expect(project.schemaVersion).toBe(15);
   expect(project.scenarioWorkspace).toMatchObject({
     activeScenarioId: 'scenario-0002',
     scenarios: [

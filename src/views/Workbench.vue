@@ -911,6 +911,11 @@ import {
   reconcileWorkbenchConfigurationState,
   updateSelectedWorkbenchConfigurationInstance,
 } from '../domain/workbenchConfigurationLibrary';
+import {
+  createWorkbenchGameDataCompatibilityReport,
+  getWorkbenchGameDataCompatibilityReport,
+  normalizeWorkbenchGameDataBinding,
+} from '../domain/workbenchGameDataCatalog';
 import { normalizeWorkbenchMechanicsProfileSelection } from '../domain/workbenchMechanicsProfileSelection';
 import {
   clearWorkbenchDraft,
@@ -1028,6 +1033,9 @@ const selection = ref({ ...initialDraft.selection });
 const teamSlots = ref(initialDraft.teamSlots.map(slot => ({ ...slot })));
 const actorConfigs = ref([...initialDraft.actorConfigs]);
 const enemyConfig = ref({ ...initialDraft.enemyConfig });
+const gameDataBinding = ref(
+  cloneWorkbenchHistoryValue(initialDraft.gameDataBinding)
+);
 const configurationLibrary = ref(
   cloneWorkbenchHistoryValue(initialDraft.configurationLibrary)
 );
@@ -1138,6 +1146,9 @@ const workbenchFlowController = createWorkbenchFlowController(
 const mechanicsProfileCompatibilityReport = computed(() =>
   createWorkbenchProfileCompatibilityReport(getWorkbenchDraftState())
 );
+const gameDataCompatibilityReport = computed(() =>
+  createWorkbenchGameDataCompatibilityReport(getWorkbenchDraftState())
+);
 const project = computed(() =>
   createWorkbenchProject(selection.value, {
     teamSlots: teamSlots.value,
@@ -1145,6 +1156,8 @@ const project = computed(() =>
     enemyConfig: enemyConfig.value,
     configurationLibrary: configurationLibrary.value,
     configurationSelection: configurationSelection.value,
+    gameDataBinding: gameDataBinding.value,
+    gameDataCompatibilityReport: gameDataCompatibilityReport.value,
     mechanicsProfileSelection: mechanicsProfileSelection.value,
     mechanicsProfileCompatibilityReport:
       mechanicsProfileCompatibilityReport.value,
@@ -1662,6 +1675,11 @@ onMounted(() => {
   const compatibility = createWorkbenchProfileCompatibilityReport(draft);
   if (!compatibility.importAllowed) {
     draftStatus.value = '本地草稿机制配置不兼容';
+    return;
+  }
+  const gameDataCompatibility = getWorkbenchGameDataCompatibilityReport(draft);
+  if (!gameDataCompatibility.importAllowed) {
+    draftStatus.value = '本地草稿游戏数据不兼容';
     return;
   }
 
@@ -3064,6 +3082,11 @@ function setScenarioComparisonBaseline(draft, source) {
     draftStatus.value = '对比项目机制配置不兼容';
     return false;
   }
+  const gameDataCompatibility = getWorkbenchGameDataCompatibilityReport(draft);
+  if (!gameDataCompatibility.importAllowed) {
+    draftStatus.value = '对比项目游戏数据不兼容';
+    return false;
+  }
   comparisonBaselineDraft.value = createWorkbenchDraftSnapshot(
     draft,
     draft.savedAt ?? null
@@ -3098,12 +3121,16 @@ function locateScenarioComparisonAction(actionId) {
 
 function createWorkbenchProjectFromDraft(draft) {
   const compatibility = createWorkbenchProfileCompatibilityReport(draft);
+  const gameDataCompatibility = getWorkbenchGameDataCompatibilityReport(draft);
   return createWorkbenchProject(draft.selection, {
     teamSlots: draft.teamSlots,
     actorConfigs: draft.actorConfigs,
     enemyConfig: draft.enemyConfig,
-    configurationLibrary: configurationLibrary.value,
+    configurationLibrary:
+      draft.configurationLibrary ?? configurationLibrary.value,
     configurationSelection: draft.configurationSelection,
+    gameDataBinding: draft.gameDataBinding ?? gameDataBinding.value,
+    gameDataCompatibilityReport: gameDataCompatibility,
     mechanicsProfileSelection: draft.mechanicsProfileSelection,
     mechanicsProfileCompatibilityReport: compatibility,
     actions: draft.actionDrafts,
@@ -3120,6 +3147,7 @@ function getWorkbenchDraftState() {
   );
   return {
     ...activeDraft,
+    gameDataBinding: gameDataBinding.value,
     configurationLibrary: configurationLibrary.value,
     scenarioWorkspace: synchronizeActiveWorkbenchScenario(
       scenarioWorkspace.value,
@@ -3402,6 +3430,11 @@ function applyImportedProjectDraft(draft, statusText) {
     draftStatus.value = '项目机制配置不兼容';
     return false;
   }
+  const gameDataCompatibility = getWorkbenchGameDataCompatibilityReport(draft);
+  if (!gameDataCompatibility.importAllowed) {
+    draftStatus.value = '项目游戏数据不兼容';
+    return false;
+  }
   clearSegmentSplitPreview();
   projectShareUrl.value = '';
   applyDraftState(draft);
@@ -3434,6 +3467,9 @@ function applyDraftState(draft) {
   const normalizedDraft = createWorkbenchDraftSnapshot(
     draft,
     draft?.savedAt ?? null
+  );
+  gameDataBinding.value = normalizeWorkbenchGameDataBinding(
+    normalizedDraft.gameDataBinding
   );
   configurationLibrary.value = cloneWorkbenchHistoryValue(
     normalizedDraft.configurationLibrary
