@@ -20,6 +20,7 @@ export default defineConfig({
             id.endsWith('/threeValueMechanicsAdapter.js') ||
             id.endsWith('/threeValueMechanicsLayerInputs.js') ||
             id.endsWith('/threeValueMechanismConfiguration.js') ||
+            id.endsWith('/threeValueMechanicsProfileCatalog.js') ||
             id.endsWith('/workbenchConfigurationSourceContract.js') ||
             id.endsWith('/workbenchMechanicsProfileSelection.js')
           ) {

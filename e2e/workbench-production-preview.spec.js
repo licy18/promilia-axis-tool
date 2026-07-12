@@ -1,5 +1,5 @@
 import { Buffer } from 'node:buffer';
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { expect, test } from '@playwright/test';
 
 test('[routes-and-assets] serves production routes and hashed assets', async ({
@@ -110,6 +110,45 @@ test('[json-project-exchange] restores an exported production JSON project', asy
     .setInputFiles(downloadPath);
   await expect(page.getByTestId('workbench-draft-status')).toHaveText(
     '已导入项目'
+  );
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+  await expect(page.getByTestId('workbench-enemy-level-input')).toHaveValue(
+    '91'
+  );
+});
+
+test('[profile-compatibility-gate] rejects an unavailable profile without replacing the current project', async ({
+  page,
+}, testInfo) => {
+  await page.goto('/#/workbench');
+  await page.getByTestId('workbench-add-action').click();
+  await page.getByTestId('workbench-enemy-level-input').fill('91');
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const download = await downloadPromise;
+  const project = JSON.parse(await readFile(await download.path(), 'utf8'));
+  const unavailableSelection = {
+    schemaVersion: 1,
+    contractName: 'AzPrWorkbenchMechanicsProfileSelection',
+    profileId: 'unavailable-production-profile',
+    profileVersion: 7,
+  };
+  project.mechanicsProfileSelection = unavailableSelection;
+  project.scenarioWorkspace.scenarios.forEach(scenario => {
+    scenario.draft.mechanicsProfileSelection = unavailableSelection;
+  });
+  const incompatiblePath = testInfo.outputPath(
+    'incompatible-profile.promilia-workbench.json'
+  );
+  await writeFile(incompatiblePath, JSON.stringify(project));
+
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(incompatiblePath);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '项目机制配置不兼容'
   );
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '2 action'

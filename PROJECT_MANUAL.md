@@ -1104,6 +1104,16 @@ Scenario 与 `AzPrThreeValueConfigurationRuntimeBinding v1` 现在同时记录 r
 
 下一阶段目标：阶段 8-U / P3 生产 profile catalog 与项目兼容性门禁。把 Workbench、批量方案回放和导入校验统一接到一个只包含受信任 profile 的生产 catalog，输出项目级 compatibility report，区分 exact、fallback、missing 和 invalid；导入项目不能静默改变 profile binding。默认 profile 与三值结果继续不变，不接入未确认公式，也不增加碎片 UI。
 
+### 阶段 8-U P3 生产 profile catalog 与项目兼容性门禁（2026-07-12）
+
+新增 `AzPrThreeValueMechanicsProfileCatalog v1`。生产 catalog 只收录通过既有 profile 校验的纯数据项，重复、无效或缺失默认项会让 catalog 失效；项目文件仍只引用 ID/版本，不能注入 profile 对象、operation handler 或函数。compiler、Scenario 和 runtime binding 使用同一 catalog，并记录 catalog ID/版本、requested/resolved profile、exact/fallback 与兼容性状态。
+
+新增 `AzPrWorkbenchProfileCompatibilityReport v1`，逐方案区分 exact、missing、invalid 以及实际 exact/fallback 解析。只有所有方案 exact 且 catalog ready 时才允许导入。本地草稿恢复、分享链接、JSON/PNG、预设和对比基准都在替换当前工作区前执行该门禁；生产浏览器测试证明引用未知 profile 的项目会被拒绝，当前动作轴和敌人配置保持不变。该门禁已加入 production preview 必需能力清单。
+
+阶段验收：74 个测试文件、416 条单元/组件测试通过；39 条 Workbench 主流程和 16 项 production preview 必需能力全部通过，生产报告结论为 `trial-ready`。生产引用审计为 111 个源码、107 个生产可达、4 个允许 test-only、0 个孤儿；数据投影审计全部一致。Workbench 主块为 355,356B gzip，全部 JavaScript 为 727,845B gzip，均在 370,000B/740,000B 预算内。180 动作编译 p95 为 14.934ms、完整 simulation p95 为 45.352ms；120 动作浏览器首屏就绪为 1517ms。
+
+下一阶段目标：阶段 8-V / P2-P3 游戏数据引用与配置兼容性闭环。把角色、敌人、装备、奇波和灵子 ID 统一解析为带数据版本与来源的受信任 catalog 引用，扩展项目 compatibility report，防止游戏数据更新后导入项目静默丢失或替换配置；mechanism configuration 获取实际记录但培养效果继续 unapplied。该阶段不猜装备/培养公式，也不增加碎片 UI。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

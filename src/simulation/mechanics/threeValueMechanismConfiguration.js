@@ -302,6 +302,11 @@ function createConfigurationRuntimeBinding({
       profileVersion: mechanicsProfile?.profileVersion ?? null,
       fallback: mechanicsProfileSelection?.fallback ?? false,
       fallbackReason: mechanicsProfileSelection?.fallbackReason ?? null,
+      compatibilityStatus:
+        mechanicsProfileSelection?.compatibilityStatus ?? null,
+      resolutionStatus: mechanicsProfileSelection?.resolutionStatus ?? null,
+      catalogId: mechanicsProfileSelection?.catalogId ?? null,
+      catalogVersion: mechanicsProfileSelection?.catalogVersion ?? null,
       replaceable: true,
     },
     runtimeConsumer: 'ThreeValueRuntimeCalculatorInvocation',

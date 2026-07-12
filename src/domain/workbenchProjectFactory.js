@@ -487,6 +487,8 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
       mechanicsProfileSelection: normalizeWorkbenchMechanicsProfileSelection(
         actionPatch.mechanicsProfileSelection
       ),
+      mechanicsProfileCompatibilityReport:
+        actionPatch.mechanicsProfileCompatibilityReport ?? null,
       runtimeSampleCaptures: normalizeWorkbenchRuntimeSampleCaptures(
         actionPatch.runtimeSampleCaptures
       ),

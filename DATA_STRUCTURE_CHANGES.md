@@ -26670,3 +26670,42 @@ fallback / fallbackReason
 未注册或无效 profile 不会从项目载荷执行任意逻辑，而是回退内置默认 profile；合法注册 profile 继续是纯数据，operation 只能通过既有受控 handler registry 执行。四种项目载体的集成测试同时重放两个选择不同 profile 的方案，并比较 binding、proposal、曲线与日志。
 
 为恢复发布余量，skill core 生产投影对 `matches.labels/values = true` 的交叉校验行省略重复 labels/values，读取端从角色技能表恢复同值；不匹配行仍保留原值与 diagnostics。空 diagnostics 不再落盘。该变化由 projection audit 守门，不改变技能逻辑或三值结果。
+
+## 393. MechanicsProfileCatalog v1 / ProfileCompatibilityReport v1
+
+阶段 8-U 新增只包含受信任 profile 的生产 catalog：
+
+```text
+AzPrThreeValueMechanicsProfileCatalog v1
+  catalogId / catalogVersion
+  status / ready / issues[]
+  defaultSelection
+  entries[]
+    profileId / profileVersion / sourceKind
+    valid / validationStatus / validationIssues[]
+  profiles[]
+  summary
+```
+
+只有 `validateThreeValueMechanicsProfile()` 通过的 profile 会进入可解析 `profiles[]`；重复键、无效 profile 或默认 profile 缺失会使 catalog invalid。项目载荷只提供 `mechanicsProfileSelection`，不能把 profile 对象、operation handler 或函数注入生产 catalog。compiler 默认消费生产 catalog，兼容的 `threeValueMechanicsProfiles` 参数会先构造受校验的临时 catalog。
+
+项目级报告覆盖工作区全部方案：
+
+```text
+AzPrWorkbenchProfileCompatibilityReport v1
+  status / compatible / importAllowed
+  catalog
+    catalogId / catalogVersion / ready
+  scenarios[]
+    scenarioId / scenarioName
+    status = exact | missing | invalid
+    resolutionStatus = exact | fallback
+    requestedProfileId / requestedProfileVersion
+    resolvedProfileId / resolvedProfileVersion
+    fallback / fallbackReason
+  summary
+    scenarioCount / exactCount / fallbackCount
+    missingCount / invalidCount
+```
+
+所有方案都 exact 且 catalog ready 时才允许导入。Workbench 本地恢复、分享链接、JSON/PNG、预设和对比基准在修改当前状态前执行同一门禁；不兼容导入保留当前项目。Scenario 顶层输出 catalog 与 compatibility 摘要，`AzPrThreeValueConfigurationRuntimeBinding` 同步记录 catalog ID/版本和兼容性状态。production preview 将 `profile-compatibility-gate` 列为必需能力。本阶段不新增 profile 公式或 UI 控件。

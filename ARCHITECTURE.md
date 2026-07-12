@@ -97,6 +97,7 @@ Action
 - `threeValueMechanismConfiguration.js`：把 Project 已解析配置、实例身份和 profile 选择编译为 mechanics configuration，声明字段应用边界。
 - `threeValueMechanicsAdapter.js`：三轨统一 adapter 注册表、结构化 operands、generation request 与 runtime invocation input。
 - `threeValueMechanicsProfile.js`：Scenario 绑定的版本化 operand capability 与机制层应用策略。
+- `threeValueMechanicsProfileCatalog.js`：受信任生产 profile 清单、精确解析与多方案项目兼容性报告。
 - `threeValueMechanismSampleAdapter.js`：把通过验证的 runtime sample 晋级为可应用 delta。
 - `damage.js`：当前已确认的伤害计算片段；测试期未知机制保持可替换。
 
@@ -151,6 +152,8 @@ compiler 将该来源合同、Scenario actor/enemy 与实际 `mechanicsProfile` 
 
 compiler 从 Project metadata 的 `AzPrWorkbenchMechanicsProfileSelection v1` 读取 profile ID/版本，并通过受控 `threeValueMechanicsProfiles` registry 精确解析；未注册或无效版本显式回退默认 `azpr-three-value-preview-v1`，Scenario 与 runtime binding 同时保留 requested/resolved profile、选择来源和 fallback 原因。profile 是纯数据，声明支持的 operand kinds、对应 operation、可用轨道，以及 HP、韧性、能量各层的 applied/unapplied 状态；`threeValueMechanicsProfile` 直接对象参数仅保留为兼容注入入口。
 
+生产入口固定使用 `AzPrThreeValueMechanicsProfileCatalog v1`。catalog 只暴露通过 profile 校验的纯数据项，项目文件只保存 ID/版本，不能注册 operation 或携带函数。`AzPrWorkbenchProfileCompatibilityReport v1` 扫描工作区全部方案，分别记录 `exact / missing / invalid` 兼容状态与 `exact / fallback` 实际解析；只有所有方案 exact 且 catalog ready 时 `importAllowed=true`。Workbench 的本地草稿、分享链接、JSON/PNG、预设和对比基准在替换当前状态前共用该门禁；Scenario、Project metadata 和 runtime binding 保留同一 catalog/compatibility 结论。
+
 `Action -> Hit -> ThreeValueDelta v10` 的每条 delta 都携带 `mechanicsAdapterRequest`。generation 固定 `action / hit / mechanismConfiguration / mechanicsProfile / mechanicsLayerInputs / sourceValue.operands`；layer inputs 把 profile 各 step 的 layer keys 合并为 required 层，保存角色面板、动作倍率、敌人双防/元素防御、初始能量、培养配置和 operands 的实际值、来源与 readiness。runtime 再绑定该次 invocation 的 `stateBefore`，并校验 required applied 输入没有缺口。
 
 `AzPrThreeValueMechanicsEvaluation v3` 是内置 adapter 的唯一主计算结果。它按 profile capability 顺序执行 `steps[]`，每步通过 operation handler 读取声明的 layer inputs，并输出 step key、operation、used layers、delta、ready 与 status；前一步 delta 作为下一步 `previousDelta`。profile v2 的 track 定义保存标准 state effect，step 通过 `stateEffectTrackKeys[]` 声明自己负责的三值轨道。
@@ -159,7 +162,7 @@ compiler 从 Project metadata 的 `AzPrWorkbenchMechanicsProfileSelection v1` �
 
 注册表支持 HP、韧性、能量轨专用 adapter、一个 `default` adapter 覆盖三轨，以及纯函数 operation handler；`simulateScenario(scenario, { threeValueMechanicsAdapterRegistry })` 是唯一无 UI 顶层注入入口。默认 profile 的 product、sum、before/after 与 identity 均已迁入内置 steps；runtime calculator invocation summary 汇总实际 operation 和 proposal ready/missing 数。
 
-生产构建把配置来源、profile 选择、mechanism configuration、profile、adapter 与 layer inputs 固定为单个 `azpr-mechanics-runtime` chunk；同步出现的辅助 Workbench 面板及其布局、文件接收和效果复盘依赖合并为 `workbench-secondary-ui`。skill core 投影对已匹配的交叉校验不再重复保存与角色技能表相同的 labels/values，只在不匹配时保留差异证据。以上调整不改变运行结果，总 JavaScript 体积仍由独立预算限制。
+生产构建把配置来源、profile 选择/catalog、mechanism configuration、profile、adapter 与 layer inputs 固定为单个 `azpr-mechanics-runtime` chunk；同步出现的辅助 Workbench 面板及其布局、文件接收和效果复盘依赖合并为 `workbench-secondary-ui`。skill core 投影对已匹配的交叉校验不再重复保存与角色技能表相同的 labels/values，只在不匹配时保留差异证据。以上调整不改变运行结果，总 JavaScript 体积仍由独立预算限制。
 
 ### ScenarioWorkspace v1
 

@@ -10,6 +10,7 @@ import {
 import {
   WORKBENCH_PROJECT_FILE_RESULT_KINDS,
   createWorkbenchProjectDropController,
+  processWorkbenchProjectFile,
   receiveWorkbenchProjectFile,
 } from '../../domain/workbenchProjectFileReceiver';
 import { createRecoverSpRuntimeSampleFixture } from '../../simulation/fixtures/recoverSpRuntimeSampleFixture';
@@ -61,6 +62,21 @@ describe('Workbench project file receiver', () => {
       sourceKind: 'png',
       draft: { enemyConfig: { level: 93 } },
     });
+  });
+
+  it('does not report success when the project compatibility gate rejects a draft', async () => {
+    const snapshot = createWorkbenchProjectFileSnapshot(
+      createDefaultWorkbenchDraftState(),
+      '2026-07-12T00:00:00.000Z'
+    );
+    const accepted = await processWorkbenchProjectFile(
+      new File([JSON.stringify(snapshot)], 'incompatible.json', {
+        type: 'application/json',
+      }),
+      { onProject: () => false }
+    );
+
+    expect(accepted).toBe(false);
   });
 
   it('keeps runtime capture JSONL available through the same receiver', async () => {
@@ -116,7 +132,11 @@ describe('Workbench project file receiver', () => {
       onActiveChange: active => activeStates.push(active),
       onFiles: files => drops.push(files),
     });
-    const dataTransfer = { types: ['Files'], files: [file], dropEffect: 'none' };
+    const dataTransfer = {
+      types: ['Files'],
+      files: [file],
+      dropEffect: 'none',
+    };
 
     controller.mount();
     target.dispatch('dragenter', createDragEvent(dataTransfer));

@@ -959,6 +959,10 @@ import { formatFrameTime, frameToMs } from '../domain/timebase';
 import { compileProject } from '../simulation/compiler/compileProject';
 import { simulateScenario } from '../simulation/engine/simulateScenario';
 import {
+  DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
+  createWorkbenchProfileCompatibilityReport,
+} from '../simulation/mechanics/threeValueMechanicsProfileCatalog';
+import {
   getProjectSimulationSkillDiagnosticsStatus,
   installProjectSimulationSkillDiagnostics,
 } from '../simulation/projection/projectSimulationResult';
@@ -1131,6 +1135,9 @@ const workbenchFlowController = createWorkbenchFlowController(
   })
 );
 
+const mechanicsProfileCompatibilityReport = computed(() =>
+  createWorkbenchProfileCompatibilityReport(getWorkbenchDraftState())
+);
 const project = computed(() =>
   createWorkbenchProject(selection.value, {
     teamSlots: teamSlots.value,
@@ -1139,6 +1146,8 @@ const project = computed(() =>
     configurationLibrary: configurationLibrary.value,
     configurationSelection: configurationSelection.value,
     mechanicsProfileSelection: mechanicsProfileSelection.value,
+    mechanicsProfileCompatibilityReport:
+      mechanicsProfileCompatibilityReport.value,
     actions: actionDrafts.value,
     actionRelations: actionRelations.value,
     cycleBoundaries: cycleBoundaries.value,
@@ -1146,7 +1155,12 @@ const project = computed(() =>
     runtimeSampleCaptures: runtimeSampleCaptures.value,
   })
 );
-const scenario = computed(() => compileProject(project.value, gameData));
+const scenario = computed(() =>
+  compileProject(project.value, gameData, {
+    threeValueMechanicsProfileCatalog:
+      DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
+  })
+);
 const simulationResult = computed(() => {
   void runtimeDiagnosticsRevision.value;
   return simulateScenario(scenario.value);
@@ -1214,7 +1228,10 @@ const comparisonBaselineProject = computed(() =>
 );
 const comparisonBaselineScenario = computed(() =>
   comparisonBaselineProject.value
-    ? compileProject(comparisonBaselineProject.value, gameData)
+    ? compileProject(comparisonBaselineProject.value, gameData, {
+        threeValueMechanicsProfileCatalog:
+          DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
+      })
     : null
 );
 const comparisonBaselineSimulationResult = computed(() => {
@@ -1640,6 +1657,11 @@ onMounted(() => {
 
   const draft = loadWorkbenchDraft(getLocalStorage());
   if (!draft) {
+    return;
+  }
+  const compatibility = createWorkbenchProfileCompatibilityReport(draft);
+  if (!compatibility.importAllowed) {
+    draftStatus.value = '本地草稿机制配置不兼容';
     return;
   }
 
@@ -3037,6 +3059,11 @@ function setScenarioComparisonBaseline(draft, source) {
   if (!draft) {
     return false;
   }
+  const compatibility = createWorkbenchProfileCompatibilityReport(draft);
+  if (!compatibility.importAllowed) {
+    draftStatus.value = '对比项目机制配置不兼容';
+    return false;
+  }
   comparisonBaselineDraft.value = createWorkbenchDraftSnapshot(
     draft,
     draft.savedAt ?? null
@@ -3070,6 +3097,7 @@ function locateScenarioComparisonAction(actionId) {
 }
 
 function createWorkbenchProjectFromDraft(draft) {
+  const compatibility = createWorkbenchProfileCompatibilityReport(draft);
   return createWorkbenchProject(draft.selection, {
     teamSlots: draft.teamSlots,
     actorConfigs: draft.actorConfigs,
@@ -3077,6 +3105,7 @@ function createWorkbenchProjectFromDraft(draft) {
     configurationLibrary: configurationLibrary.value,
     configurationSelection: draft.configurationSelection,
     mechanicsProfileSelection: draft.mechanicsProfileSelection,
+    mechanicsProfileCompatibilityReport: compatibility,
     actions: draft.actionDrafts,
     actionRelations: draft.actionRelations,
     cycleBoundaries: draft.cycleBoundaries,
@@ -3226,7 +3255,10 @@ function applySharedProjectFromUrl() {
     return false;
   }
 
-  applyImportedProjectDraft(draft, '已导入分享项目');
+  if (!applyImportedProjectDraft(draft, '已导入分享项目')) {
+    clearWorkbenchProjectShareCodeFromUrl();
+    return true;
+  }
   clearWorkbenchProjectShareCodeFromUrl();
   return true;
 }
@@ -3365,6 +3397,11 @@ function applyImportedRuntimeSampleCaptures(captures) {
 }
 
 function applyImportedProjectDraft(draft, statusText) {
+  const compatibility = createWorkbenchProfileCompatibilityReport(draft);
+  if (!compatibility.importAllowed) {
+    draftStatus.value = '项目机制配置不兼容';
+    return false;
+  }
   clearSegmentSplitPreview();
   projectShareUrl.value = '';
   applyDraftState(draft);
@@ -3379,6 +3416,7 @@ function applyImportedProjectDraft(draft, statusText) {
   if (draft.runtimeSampleCaptures?.length) {
     void ensureRuntimeDiagnosticsLoaded();
   }
+  return true;
 }
 
 function resetDraft() {

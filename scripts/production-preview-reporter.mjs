@@ -5,6 +5,7 @@ const REQUIRED_CAPABILITIES = [
   'routes-and-assets',
   'diagnostics-lazy-load',
   'json-project-exchange',
+  'profile-compatibility-gate',
   'png-project-exchange',
   'project-drop-recovery',
   'configuration-instances',

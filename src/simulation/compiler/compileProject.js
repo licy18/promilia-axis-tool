@@ -6,10 +6,12 @@ import {
 } from '../../domain/projectSchema';
 import { parseDamageSegments } from '../mechanics/damage';
 import { createThreeValueMechanismConfiguration } from '../mechanics/threeValueMechanismConfiguration';
+import { resolveThreeValueMechanicsProfile } from '../mechanics/threeValueMechanicsProfile';
 import {
-  resolveThreeValueMechanicsProfile,
-  resolveThreeValueMechanicsProfileSelection,
-} from '../mechanics/threeValueMechanicsProfile';
+  DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
+  createThreeValueMechanicsProfileCatalog,
+  resolveThreeValueMechanicsProfileCatalogSelection,
+} from '../mechanics/threeValueMechanicsProfileCatalog';
 
 export class CompileProjectError extends Error {
   constructor(issues) {
@@ -22,7 +24,11 @@ export class CompileProjectError extends Error {
 export function compileProject(
   project,
   gameData,
-  { threeValueMechanicsProfile = null, threeValueMechanicsProfiles = [] } = {}
+  {
+    threeValueMechanicsProfile = null,
+    threeValueMechanicsProfiles = [],
+    threeValueMechanicsProfileCatalog = DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG,
+  } = {}
 ) {
   const validation = validateProject(project, gameData);
   if (!validation.valid) {
@@ -38,6 +44,27 @@ export function compileProject(
   );
   const enemy = compileEnemy(project.enemy, enemiesById, elementsById);
   const actors = [...actorsById.values()];
+  const baseProfileCatalog =
+    threeValueMechanicsProfileCatalog ??
+    DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG;
+  const activeProfileCatalog =
+    Array.isArray(threeValueMechanicsProfiles) &&
+    threeValueMechanicsProfiles.length > 0
+      ? createThreeValueMechanicsProfileCatalog({
+          catalogId: 'compile-option-profile-catalog',
+          profiles: [
+            ...baseProfileCatalog.profiles,
+            ...threeValueMechanicsProfiles,
+          ],
+          defaultSelection: baseProfileCatalog.defaultSelection,
+        })
+      : baseProfileCatalog;
+  const catalogResolution = threeValueMechanicsProfile
+    ? null
+    : resolveThreeValueMechanicsProfileCatalogSelection(
+        activeProfileCatalog,
+        project?.metadata?.mechanicsProfileSelection
+      );
   const mechanicsProfileResolution = threeValueMechanicsProfile
     ? {
         ...resolveThreeValueMechanicsProfile(threeValueMechanicsProfile),
@@ -49,10 +76,7 @@ export function compileProject(
             Number(threeValueMechanicsProfile?.profileVersion) || null,
         },
       }
-    : resolveThreeValueMechanicsProfileSelection(
-        project?.metadata?.mechanicsProfileSelection,
-        threeValueMechanicsProfiles
-      );
+    : catalogResolution.profileResolution;
   const mechanicsProfile = mechanicsProfileResolution.profile;
   const persistedProfileSelection = mechanicsProfileResolution.selection;
   const compiledMechanicsProfileSelection = {
@@ -70,6 +94,16 @@ export function compileProject(
     resolvedProfileVersion: mechanicsProfile.profileVersion,
     fallback: mechanicsProfileResolution.fallback,
     fallbackReason: mechanicsProfileResolution.fallbackReason,
+    compatibilityStatus: threeValueMechanicsProfile
+      ? mechanicsProfileResolution.fallback
+        ? 'invalid'
+        : 'exact'
+      : catalogResolution.status,
+    resolutionStatus: mechanicsProfileResolution.fallback
+      ? 'fallback'
+      : 'exact',
+    catalogId: activeProfileCatalog.catalogId,
+    catalogVersion: activeProfileCatalog.catalogVersion,
   };
   const mechanismConfiguration = createThreeValueMechanismConfiguration({
     project,
@@ -78,6 +112,23 @@ export function compileProject(
     mechanicsProfile,
     mechanicsProfileSelection: compiledMechanicsProfileSelection,
   });
+  const mechanicsProfileCatalog = {
+    contractName: activeProfileCatalog.contractName,
+    contractVersion: activeProfileCatalog.contractVersion,
+    catalogId: activeProfileCatalog.catalogId,
+    catalogVersion: activeProfileCatalog.catalogVersion,
+    status: activeProfileCatalog.status,
+    ready: activeProfileCatalog.ready,
+    profileCount: activeProfileCatalog.summary.profileCount,
+  };
+  const mechanicsProfileCompatibility = threeValueMechanicsProfile
+    ? null
+    : {
+        status: catalogResolution.status,
+        resolutionStatus: catalogResolution.resolutionStatus,
+        issueKind: catalogResolution.issueKind,
+        compatible: catalogResolution.compatible,
+      };
 
   const actions = project.actions
     .map(action => compileAction(action, actorsById, enemy, skillsById))
@@ -101,6 +152,8 @@ export function compileProject(
     mechanismConfiguration,
     mechanicsProfile,
     mechanicsProfileSelection: compiledMechanicsProfileSelection,
+    mechanicsProfileCatalog,
+    mechanicsProfileCompatibility,
     actions,
     cycleBoundaries: (project.cycleBoundaries ?? []).map(boundary => ({
       ...boundary,

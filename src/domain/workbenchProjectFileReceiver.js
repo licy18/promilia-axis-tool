@@ -33,9 +33,7 @@ export async function receiveWorkbenchProjectFile(
           fileName,
           draft,
           statusText:
-            source === 'drop'
-              ? '已从拖放恢复 PNG 项目'
-              : '已从 PNG 导入项目',
+            source === 'drop' ? '已从拖放恢复 PNG 项目' : '已从 PNG 导入项目',
         }
       : createInvalidResult('png-metadata-missing', fileName);
   }
@@ -52,8 +50,7 @@ export async function receiveWorkbenchProjectFile(
       sourceKind: WORKBENCH_PROJECT_FILE_SOURCE_KINDS.JSON,
       fileName,
       draft,
-      statusText:
-        source === 'drop' ? '已从拖放恢复 JSON 项目' : '已导入项目',
+      statusText: source === 'drop' ? '已从拖放恢复 JSON 项目' : '已导入项目',
     };
   }
 
@@ -84,8 +81,8 @@ export async function processWorkbenchProjectFile(
   try {
     const result = await receiveWorkbenchProjectFile(file, { source });
     if (result.kind === WORKBENCH_PROJECT_FILE_RESULT_KINDS.PROJECT) {
-      await onProject(result.draft, result.statusText);
-      return true;
+      const accepted = await onProject(result.draft, result.statusText);
+      return accepted !== false;
     }
     if (result.kind === WORKBENCH_PROJECT_FILE_RESULT_KINDS.RUNTIME_CAPTURE) {
       await onRuntimeCapture(result.captures);
