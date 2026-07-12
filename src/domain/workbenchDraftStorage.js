@@ -138,14 +138,16 @@ export function createWorkbenchScenarioDraftSnapshot({
   );
   const normalizedActorConfigs = normalizeWorkbenchActorConfigs(
     actorConfigs,
-    normalizedSelection
+    normalizedSelection,
+    normalizedTeamSlots
   );
   const normalizedEnemyConfig = normalizeWorkbenchEnemyConfig(enemyConfig);
   const normalizedSegmentSplitOptions =
     normalizeWorkbenchSegmentSplitOptions(segmentSplitOptions);
   const normalizedActions = ensureActionDrafts(
     actionDrafts,
-    normalizedSelection
+    normalizedSelection,
+    normalizedTeamSlots
   );
   const normalizedSelectedActionId = normalizedActions.some(
     action => action.id === selectedActionId
@@ -341,10 +343,11 @@ function isSupportedWorkbenchDraftSchema(schemaVersion) {
   );
 }
 
-function ensureActionDrafts(actionDrafts, selection) {
+function ensureActionDrafts(actionDrafts, selection, teamSlots) {
   const normalizedActions = normalizeWorkbenchActionDrafts(
     actionDrafts,
-    selection
+    selection,
+    teamSlots
   );
   if (normalizedActions.length > 0) {
     return normalizedActions;

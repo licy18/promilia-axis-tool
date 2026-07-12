@@ -34,6 +34,10 @@ import {
   normalizeWorkbenchGameDataBinding,
 } from './workbenchGameDataCatalog';
 import { normalizeWorkbenchMechanicsProfileSelection } from './workbenchMechanicsProfileSelection';
+import {
+  WORKBENCH_TEAM_SLOT_COUNT,
+  createWorkbenchTimelineTopology,
+} from './workbenchTimelineTopology';
 
 export { getSkillActionCatalog } from './skillActionCatalog';
 export {
@@ -48,6 +52,13 @@ const DEFAULT_SECONDARY_CHARACTER_ID =
     character => character.id !== workbenchSeed.defaults.characterId
   )?.id ?? workbenchSeed.defaults.characterId;
 
+const DEFAULT_TERTIARY_CHARACTER_ID =
+  workbenchSeed.gameData.characters.find(
+    character =>
+      character.id !== workbenchSeed.defaults.characterId &&
+      character.id !== DEFAULT_SECONDARY_CHARACTER_ID
+  )?.id ?? workbenchSeed.defaults.characterId;
+
 export const DEFAULT_WORKBENCH_TEAM_SLOTS = Object.freeze([
   Object.freeze({
     slotId: 'team-slot-1',
@@ -58,6 +69,11 @@ export const DEFAULT_WORKBENCH_TEAM_SLOTS = Object.freeze([
     slotId: 'team-slot-2',
     position: 1,
     characterId: DEFAULT_SECONDARY_CHARACTER_ID,
+  }),
+  Object.freeze({
+    slotId: 'team-slot-3',
+    position: 2,
+    characterId: DEFAULT_TERTIARY_CHARACTER_ID,
   }),
 ]);
 
@@ -255,6 +271,7 @@ export function normalizeWorkbenchTeamSlots(teamSlots = [], selection = {}) {
     selection?.characterId ?? DEFAULT_WORKBENCH_SELECTION.characterId,
     selection?.secondaryCharacterId ??
       DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId,
+    DEFAULT_TERTIARY_CHARACTER_ID,
   ];
   const usedCharacterIds = new Set();
 
@@ -292,17 +309,25 @@ export function createDefaultWorkbenchActorConfigs(selection = {}) {
 
 export function normalizeWorkbenchActorConfigs(
   actorConfigs = [],
-  selection = DEFAULT_WORKBENCH_SELECTION
+  selection = DEFAULT_WORKBENCH_SELECTION,
+  teamSlots = null
 ) {
-  const normalizedSelection = normalizeWorkbenchSelection(selection);
   const sourceConfigs = Array.isArray(actorConfigs)
     ? actorConfigs
     : Object.values(actorConfigs ?? {});
+  const inferredTeamSlots = sourceConfigs
+    .slice(0, WORKBENCH_TEAM_SLOT_COUNT)
+    .map((config, index) => ({
+      slotId: DEFAULT_WORKBENCH_TEAM_SLOTS[index]?.slotId,
+      position: index,
+      characterId: config?.characterId,
+    }));
+  const normalizedTeamSlots = normalizeWorkbenchTeamSlots(
+    teamSlots ?? inferredTeamSlots,
+    selection
+  );
 
-  return [
-    normalizedSelection.characterId,
-    normalizedSelection.secondaryCharacterId,
-  ].map(characterId => {
+  return normalizedTeamSlots.map(({ characterId }) => {
     const source = sourceConfigs.find(
       item => Number(item?.characterId) === Number(characterId)
     );
@@ -366,7 +391,8 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
   );
   const actorConfigs = normalizeWorkbenchActorConfigs(
     actionPatch.actorConfigs,
-    normalized
+    normalized,
+    teamSlots
   );
   const actorConfigsByCharacterId = new Map(
     actorConfigs.map(config => [Number(config.characterId), config])
@@ -382,7 +408,8 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
   const enemy = findById(WORKBENCH_ENEMIES, normalized.enemyId);
   const actionDrafts = normalizeWorkbenchActionDrafts(
     actionPatch.actions ?? [actionPatch],
-    normalized
+    normalized,
+    teamSlots
   );
   const actionRelations = normalizeWorkbenchActionRelations(
     actionPatch.actionRelations,
@@ -419,6 +446,11 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     enemyConfig,
     actionDrafts,
     configurationLibrary: actionPatch.configurationLibrary,
+  });
+  const timelineTopology = createWorkbenchTimelineTopology({
+    teamSlots,
+    actorConfigs,
+    enemyId: normalized.enemyId,
   });
 
   if (
@@ -496,6 +528,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
       sourceSkillIds: skillDrafts.map(draft => draft.skillId),
       sourceEnemyId: enemy.id,
       teamSlots,
+      timelineTopology,
       enemyConfig,
       actorConfigs,
       configurationSelection,
@@ -614,7 +647,8 @@ function normalizeElementDefenseOverrides(overrides) {
 
 export function normalizeWorkbenchActionDrafts(
   actionDrafts = [],
-  selectionOrCharacterId = DEFAULT_WORKBENCH_SELECTION.characterId
+  selectionOrCharacterId = DEFAULT_WORKBENCH_SELECTION.characterId,
+  teamSlots = null
 ) {
   const selection =
     typeof selectionOrCharacterId === 'object'
@@ -628,7 +662,8 @@ export function normalizeWorkbenchActionDrafts(
     .map((draft, index) => {
       const actorCharacterId = normalizeActorCharacterId(
         draft.actorCharacterId,
-        selection
+        selection,
+        teamSlots
       );
       const actorSkills = getSkillsForCharacter(actorCharacterId);
       const fallbackSkill = actorSkills[0] ?? primaryFallbackSkill;
@@ -851,12 +886,14 @@ function isNonSkillDraftType(type) {
   ].includes(type);
 }
 
-function normalizeActorCharacterId(actorCharacterId, selection) {
+function normalizeActorCharacterId(actorCharacterId, selection, teamSlots) {
   const id = Number(actorCharacterId);
-  if (
-    id === Number(selection.characterId) ||
-    id === Number(selection.secondaryCharacterId)
-  ) {
+  const teamCharacterIds = new Set(
+    normalizeWorkbenchTeamSlots(teamSlots, selection).map(slot =>
+      Number(slot.characterId)
+    )
+  );
+  if (teamCharacterIds.has(id)) {
     return id;
   }
   return selection.characterId;

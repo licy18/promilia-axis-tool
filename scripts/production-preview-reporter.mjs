@@ -9,6 +9,7 @@ const REQUIRED_CAPABILITIES = [
   'game-data-compatibility-gate',
   'action-skill-compatibility-gate',
   'applied-source-binding-guard',
+  'stage-9a-timeline-topology',
   'png-project-exchange',
   'project-drop-recovery',
   'configuration-instances',

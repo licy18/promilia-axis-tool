@@ -68,8 +68,8 @@ describe('Workbench project replay consistency', () => {
       replayIdentity: expect.stringMatching(/^azpr-config-v1-/),
       selectionIntegrity: {
         ready: true,
-        requestedInstanceCount: 3,
-        verifiedInstanceCount: 3,
+        requestedInstanceCount: 4,
+        verifiedInstanceCount: 4,
         issueCount: 0,
       },
     });
@@ -305,6 +305,7 @@ function createScenarioReplaySignature(draft, configurationLibrary) {
   const result = simulateScenario(scenario);
   const runtimeProjection = result.threeValueRuntimeProjection;
   return {
+    timelineTopology: scenario.sourceProject.metadata.timelineTopology,
     configurationSourceContract:
       scenario.sourceProject.metadata.configurationSourceContract,
     gameDataReferenceContract:

@@ -272,6 +272,7 @@ describe('workbench project actor configuration', () => {
     expect(normalized.map(config => config.characterId)).toEqual([
       DEFAULT_WORKBENCH_SELECTION.characterId,
       DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId,
+      DEFAULT_WORKBENCH_TEAM_SLOTS[2].characterId,
     ]);
     expect(normalized[0].loadout).toMatchObject({
       kiboId: null,
@@ -298,8 +299,16 @@ describe('workbench project actor configuration', () => {
     const scenario = compileProject(project, getWorkbenchGameData());
     const simulation = simulateScenario(scenario);
 
-    expect(project.actors.map(actor => actor.initialSp)).toEqual([0.25, 0.75]);
-    expect(scenario.actors.map(actor => actor.initialSp)).toEqual([0.25, 0.75]);
+    expect(project.actors.map(actor => actor.initialSp)).toEqual([
+      0.25,
+      0.75,
+      null,
+    ]);
+    expect(scenario.actors.map(actor => actor.initialSp)).toEqual([
+      0.25,
+      0.75,
+      null,
+    ]);
     expect(
       simulation.runtimeOutputs.stateSnapshots.summary.selfEnergyFinalByActor
     ).toEqual([
@@ -314,6 +323,12 @@ describe('workbench project actor configuration', () => {
         initialValue: 0.75,
         currentValue: 0.75,
         baselineStatus: 'baseline-derived-from-scenario-actor-self-energy',
+      }),
+      expect.objectContaining({
+        actorId: `actor-${DEFAULT_WORKBENCH_TEAM_SLOTS[2].characterId}`,
+        initialValue: null,
+        currentValue: null,
+        baselineStatus: 'baseline-pending-azpr-initial-self-energy',
       }),
     ]);
     expect(
@@ -343,7 +358,7 @@ describe('workbench project actor configuration', () => {
       ],
       DEFAULT_WORKBENCH_SELECTION
     );
-    expect(normalized.map(config => config.initialSp)).toEqual([1, null]);
+    expect(normalized.map(config => config.initialSp)).toEqual([1, null, null]);
 
     const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION);
     project.actors[0].initialSp = 2;
@@ -358,6 +373,7 @@ describe('workbench project actor configuration', () => {
     const teamSlots = [
       { slotId: 'team-slot-1', position: 0, characterId: 101007 },
       { slotId: 'team-slot-2', position: 1, characterId: 101010 },
+      { slotId: 'team-slot-3', position: 2, characterId: 101003 },
     ];
     const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
       teamSlots,
@@ -366,7 +382,7 @@ describe('workbench project actor configuration', () => {
 
     expect(project.team.slots).toEqual(teamSlots);
     expect(project.actors.map(actor => actor.characterId)).toEqual([
-      101007, 101010,
+      101007, 101010, 101003,
     ]);
     expect(project.actions[0]).toMatchObject({
       actorId: 'actor-101007',
@@ -383,6 +399,11 @@ describe('workbench project actor configuration', () => {
         actorId: 'actor-101010',
         actorName: '涂山小玉',
       },
+      {
+        ...teamSlots[2],
+        actorId: 'actor-101003',
+        actorName: '寒悠悠',
+      },
     ]);
     expect(validateProject(project, getWorkbenchGameData()).valid).toBe(true);
   });
@@ -396,7 +417,7 @@ describe('workbench project actor configuration', () => {
       DEFAULT_WORKBENCH_SELECTION
     );
 
-    expect(normalized).toHaveLength(2);
+    expect(normalized).toHaveLength(3);
     expect(normalized[0]).toMatchObject({
       slotId: 'team-slot-1',
       position: 0,
@@ -408,6 +429,7 @@ describe('workbench project actor configuration', () => {
         character => character.id === normalized[1].characterId
       )
     ).toBe(true);
+    expect(new Set(normalized.map(slot => slot.characterId)).size).toBe(3);
   });
 
   it('rejects an equipment item placed in the wrong project slot', () => {

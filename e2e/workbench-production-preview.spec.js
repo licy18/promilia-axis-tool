@@ -47,6 +47,59 @@ test('[routes-and-assets] serves production routes and hashed assets', async ({
   expect(productionAssets.filter(asset => !asset.ok)).toEqual([]);
 });
 
+test('[stage-9a-timeline-topology] renders three actor groups and five state curves on desktop and narrow screens', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/#/workbench');
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  await expect(timeline).toBeVisible();
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="actor-action"]'
+    )
+  ).toHaveCount(3);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="actor-kibo"]'
+    )
+  ).toHaveCount(3);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="enemy-event"]'
+    )
+  ).toHaveCount(1);
+  await expect(
+    timeline.getByTestId('workbench-timeline-state-curve')
+  ).toHaveCount(5);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-state-curve"] line[x1="0"][x2="100"]'
+    )
+  ).toHaveCount(5);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="actor-101007"]'
+    )
+  ).toBeVisible();
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="enemy-toughness-curve"]'
+    )
+  ).toBeVisible();
+  await expectTimelineRowsAligned(timeline);
+  await timeline.screenshot({ path: 'reports/stage-9a-timeline-desktop.png' });
+
+  await page.setViewportSize({ width: 760, height: 900 });
+  await expect(timeline).toBeVisible();
+  await expectTimelineRowsAligned(timeline);
+  await expect(
+    timeline.getByTestId('workbench-timeline-state-curve')
+  ).toHaveCount(5);
+  await timeline.screenshot({ path: 'reports/stage-9a-timeline-narrow.png' });
+});
+
 test('[diagnostics-lazy-load] loads runtime diagnostics from a production chunk', async ({
   page,
 }) => {
@@ -906,6 +959,38 @@ function collectProductionAssetResponses(page) {
     });
   });
   return assets;
+}
+
+async function expectTimelineRowsAligned(timeline) {
+  const alignment = await timeline.evaluate(element => {
+    const rows = [
+      ...element.querySelectorAll('[data-testid="workbench-timeline-row"]'),
+    ];
+    const labels = [
+      ...element.querySelectorAll(
+        '[data-testid="workbench-timeline-lane-label"]'
+      ),
+    ];
+    const rowRects = rows.map(row => row.getBoundingClientRect());
+    const labelRects = labels.map(label => label.getBoundingClientRect());
+    return {
+      rowCount: rows.length,
+      labelCount: labels.length,
+      rowsSeparated: rowRects.every(
+        (rect, index) =>
+          index === 0 || rect.top >= rowRects[index - 1].bottom - 0.5
+      ),
+      labelsAligned: rowRects.every(
+        (rect, index) => Math.abs(rect.top - labelRects[index]?.top) <= 0.5
+      ),
+    };
+  });
+  expect(alignment).toEqual({
+    rowCount: 12,
+    labelCount: 12,
+    rowsSeparated: true,
+    labelsAligned: true,
+  });
 }
 
 async function expectPageWithoutHorizontalOverflow(page) {

@@ -5122,9 +5122,9 @@ describe('first vertical slice simulation', () => {
     const switchEvent = result.eventLog.find(event => event.type === 'SWITCH');
 
     expect(project.actors.map(actor => actor.characterId)).toEqual([
-      109001, 101003,
+      109001, 101003, 101007,
     ]);
-    expect(scenario.actors).toHaveLength(2);
+    expect(scenario.actors).toHaveLength(3);
     expect(
       scenario.actions.find(action => action.id === 'action-switch')
     ).toMatchObject({

@@ -193,9 +193,11 @@ function emitTeamSlotPatch(slotId, value) {
 }
 
 function teamSlotTestId(index) {
-  return index === 0
-    ? 'workbench-character-select'
-    : 'workbench-secondary-character-select';
+  return [
+    'workbench-character-select',
+    'workbench-secondary-character-select',
+    'workbench-tertiary-character-select',
+  ][index];
 }
 
 function formatCharacterOption(character) {

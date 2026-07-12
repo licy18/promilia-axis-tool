@@ -782,7 +782,7 @@ describe('Workbench view', () => {
     );
     expect(stateTimelineMarkers[0].attributes('data-frame-label')).toBe('0s0f');
     expect(stateTimelineMarkers[0].attributes('data-lane-id')).toBe(
-      'actor-109001'
+      'enemy-hp-curve'
     );
     expect(stateTimelineMarkers[0].attributes('data-marker-title')).toContain(
       '状态点 敌人HP伤害 已用 0s0f: Δ12,461 Σ12,461'
@@ -8002,6 +8002,7 @@ describe('Workbench view', () => {
         position: 1,
         characterId: workbenchSeed.defaults.characterId,
       },
+      { slotId: 'team-slot-3', position: 2, characterId: 101007 },
     ]);
     expect(savedDraft.selection).toMatchObject({
       characterId: nextCharacter.id,
@@ -8533,7 +8534,7 @@ describe('Workbench view', () => {
     });
     await settleWorkbenchAsyncPanels();
 
-    expect(wrapper.text()).toContain('2 actor');
+    expect(wrapper.text()).toContain('3 actor');
     expect(
       wrapper.find('[data-testid="workbench-secondary-character-select"]')
         .element.value
@@ -8574,7 +8575,7 @@ describe('Workbench view', () => {
     expect(wrapper.text()).toContain(`末音 -> ${nextSecondary.name}`);
   });
 
-  it('renders actor lanes and keeps system events on a system lane', async () => {
+  it('renders the fixed team topology and keeps annotations on a system lane', async () => {
     const wrapper = mount(Workbench, {
       global: {
         stubs: {
@@ -8586,10 +8587,27 @@ describe('Workbench view', () => {
     });
 
     expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-row"][data-lane-kind="actor-action"]'
+      )
+    ).toHaveLength(3);
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-row"][data-lane-kind="actor-kibo"]'
+      )
+    ).toHaveLength(3);
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-row"][data-lane-kind$="curve"]'
+      )
+    ).toHaveLength(5);
+    expect(
       wrapper
-        .findAll('[data-testid="workbench-timeline-lane-label"]')
-        .map(lane => lane.text())
-    ).toEqual(['末音猛攻', '寒悠悠增幅']);
+        .find(
+          '[data-testid="workbench-timeline-row"][data-lane-id="actor-101007"]'
+        )
+        .exists()
+    ).toBe(true);
     expect(
       wrapper
         .find(
@@ -8648,9 +8666,9 @@ describe('Workbench view', () => {
     ).toBe('system');
     expect(
       wrapper
-        .findAll('[data-testid="workbench-timeline-lane-label"]')
-        .map(lane => lane.text())
-    ).toContain('系统事件轨');
+        .find('[data-testid="workbench-timeline-row"][data-lane-id="system"]')
+        .exists()
+    ).toBe(true);
   });
 
   it('flags overlapping actions on the same timeline lane', async () => {
@@ -9182,7 +9200,7 @@ describe('Workbench view', () => {
     });
   });
 
-  it('pushes system events to the next system-lane slot', async () => {
+  it('keeps annotations and enemy events on separate timeline lanes', async () => {
     const wrapper = mount(Workbench, {
       global: {
         stubs: {
@@ -9209,29 +9227,17 @@ describe('Workbench view', () => {
 
     expect(
       wrapper.find('[data-testid="workbench-start-input"]').element.value
-    ).toBe('3600');
-    expect(
-      wrapper.find('[data-testid="workbench-note-input"]').element.value
-    ).toContain('自动推迟：同轨已有动作占用，已从 2000ms 调整到 3600ms。');
+    ).toBe('2000');
     expect(
       wrapper
         .find(
           '[data-testid="workbench-timeline-action"][data-action-id="action-0003"]'
         )
         .attributes('data-lane-id')
-    ).toBe('system');
+    ).toBe('enemy-events');
     expect(
       wrapper.find('[data-testid="workbench-insert-delay-count"]').text()
-    ).toBe('1');
-    expect(
-      wrapper.find('[data-testid="workbench-insert-delay-item"]').text()
-    ).toContain('系统');
-    expect(
-      wrapper.find('[data-testid="workbench-insert-delay-item"]').text()
-    ).toContain('敌人事件');
-    expect(
-      wrapper.find('[data-testid="workbench-insert-delay-item"]').text()
-    ).toContain('2000ms -> 3600ms');
+    ).toBe('0');
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     const savedDraft = JSON.parse(
@@ -9239,27 +9245,19 @@ describe('Workbench view', () => {
     );
     expect(savedDraft.actionDrafts.map(action => action.id)).toEqual([
       'action-0001',
-      'action-0002',
       'action-0003',
+      'action-0002',
     ]);
     expect(savedDraft.actionDrafts[1]).toMatchObject({
+      id: 'action-0003',
+      type: 'enemyEvent',
+      startMs: 2000,
+      insertion: null,
+    });
+    expect(savedDraft.actionDrafts[2]).toMatchObject({
       id: 'action-0002',
       type: 'annotation',
       startMs: 2000,
-    });
-    expect(savedDraft.actionDrafts[2]).toMatchObject({
-      id: 'action-0003',
-      type: 'enemyEvent',
-      startMs: 3600,
-      insertion: {
-        autoDelayed: true,
-        requestedStartMs: 2000,
-        resolvedStartMs: 3600,
-        delayedByMs: 1600,
-        laneId: 'system',
-        reason: 'same-lane-conflict',
-        conflictActionIds: ['action-0002'],
-      },
     });
   });
 
@@ -9694,6 +9692,9 @@ describe('Workbench view', () => {
         },
         {
           characterId: 101003,
+        },
+        {
+          characterId: 101007,
         },
       ],
     });

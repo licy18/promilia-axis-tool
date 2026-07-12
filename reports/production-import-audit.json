@@ -28,6 +28,7 @@
       "src/__tests__/domain/workbenchProjectFileReceiver.test.js",
       "src/__tests__/domain/workbenchRuntimeSampleCapture.test.js",
       "src/__tests__/domain/workbenchScenarioWorkspace.test.js",
+      "src/__tests__/domain/workbenchTimelineTopology.test.js",
       "src/__tests__/features/ActionRuleDiagnosticsPanel.test.js",
       "src/__tests__/features/EventLogPanel.test.js",
       "src/__tests__/features/RuntimeSelectedDetailPanel.test.js",
@@ -87,8 +88,8 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 115,
-    "productionReachableCount": 111,
+    "sourceCodeFileCount": 116,
+    "productionReachableCount": 112,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
@@ -96,7 +97,7 @@
     "productionReachableByArea": {
       "src": 2,
       "src/data": 1,
-      "src/domain": 23,
+      "src/domain": 24,
       "src/features/workbench": 44,
       "src/i18n": 1,
       "src/router": 1,
@@ -144,6 +145,7 @@
     "src/domain/workbenchProjectFileReceiver.js",
     "src/domain/workbenchRuntimeSampleCapture.js",
     "src/domain/workbenchScenarioWorkspace.js",
+    "src/domain/workbenchTimelineTopology.js",
     "src/features/workbench/ActionLibraryPanel.vue",
     "src/features/workbench/ActionRuleDiagnosticsPanel.vue",
     "src/features/workbench/AnalysisPanel.vue",

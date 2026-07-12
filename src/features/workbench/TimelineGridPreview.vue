@@ -231,9 +231,13 @@
           :class="{
             system: lane.type === 'system',
             enemy: lane.type === 'enemy',
+            kibo: lane.type === 'kibo',
+            curve: lane.type === 'curve',
           }"
           :style="laneRowStyle(lane)"
           :data-lane-id="lane.id"
+          :data-lane-kind="lane.kind"
+          :data-actor-id="lane.actorId || ''"
           data-testid="workbench-timeline-lane-label"
         >
           <span>{{ lane.name }}</span>
@@ -332,10 +336,29 @@
                 lane.id === dragTargetLaneId && lane.id !== dragInitialLaneId,
             }"
             :data-lane-id="lane.id"
+            :data-lane-kind="lane.kind"
+            :data-actor-id="lane.actorId || ''"
+            :data-editable="lane.editable ? 'true' : 'false'"
             data-testid="workbench-timeline-row"
             :style="laneRowStyle(lane)"
             :ref="element => setLaneRowRef(element, lane.id)"
           >
+            <div
+              v-if="lane.curve"
+              class="timeline-state-curve"
+              :class="`curve-${lane.curve.trackKey}`"
+              :data-track-key="lane.curve.trackKey"
+              :data-actor-id="lane.curve.actorId || ''"
+              :data-initial-value="lane.curve.initialValue"
+              :data-max-value="lane.curve.maxValue ?? ''"
+              data-testid="workbench-timeline-state-curve"
+            >
+              <svg viewBox="0 0 100 24" preserveAspectRatio="none">
+                <line x1="0" x2="100" y1="12" y2="12" />
+                <circle cx="0.8" cy="12" r="1.3" />
+              </svg>
+              <span>{{ formatTopologyCurveValue(lane.curve) }}</span>
+            </div>
             <div
               v-for="window in lane.cooldownWindows"
               :key="window.windowId"
@@ -871,6 +894,14 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  timelineTopology: {
+    type: Object,
+    default: null,
+  },
+  kibos: {
+    type: Array,
+    default: () => [],
+  },
   actions: {
     type: Array,
     required: true,
@@ -1298,58 +1329,40 @@ const selectedBatchId = computed(() => {
   return selectedAction?.generationBatch?.batchId ?? null;
 });
 const timelineLanes = computed(() => {
-  const actorLanes = props.actors.map(actor => ({
-    id: actor.id,
-    type: 'actor',
-    name: actor.name,
-    detail: actor.role || '角色轨',
-    actions: [],
-    damageMarkers: [],
-    candidateValueMarkers: [],
-    candidateValueCurves: [],
-    candidateValueFrameGroups: [],
-    stateCurveMarkers: [],
-    cooldownWindows: [],
-    effectIntervals: [],
-  }));
+  const actorGroups = createTimelineActorGroups();
+  const actorLanes = actorGroups.map(group => group.actionLane);
   const lanesById = new Map(actorLanes.map(lane => [lane.id, lane]));
   const enemyEffectIntervals = props.effectIntervals.filter(
     interval => interval.targetKind === 'enemy'
   );
-  const enemyLane =
-    enemyEffectIntervals.length > 0
-      ? {
-          id: 'enemy-effects',
-          type: 'enemy',
-          name: props.enemy?.name || '敌人',
-          detail: '状态效果轨',
-          actions: [],
-          damageMarkers: [],
-          candidateValueMarkers: [],
-          candidateValueCurves: [],
-          candidateValueFrameGroups: [],
-          stateCurveMarkers: [],
-          cooldownWindows: [],
-          effectIntervals: enemyEffectIntervals,
-        }
-      : null;
-  const systemLane = {
+  const enemyGroup = createTimelineEnemyGroup(enemyEffectIntervals);
+  const enemyLane = enemyGroup.eventLane;
+  const systemLane = createEmptyTimelineLane({
     id: 'system',
+    kind: 'system-event',
     type: 'system',
     name: '系统',
-    detail: '事件轨',
-    actions: [],
-    damageMarkers: [],
-    candidateValueMarkers: [],
-    candidateValueCurves: [],
-    candidateValueFrameGroups: [],
-    stateCurveMarkers: [],
-    cooldownWindows: [],
-    effectIntervals: [],
-  };
+    detail: '系统事件',
+    editable: false,
+  });
+  const allLanes = [
+    ...actorGroups.flatMap(group => [
+      group.actionLane,
+      group.kiboLane,
+      group.energyCurveLane,
+    ]),
+    enemyGroup.eventLane,
+    enemyGroup.hpCurveLane,
+    enemyGroup.toughnessCurveLane,
+    systemLane,
+  ];
+  const allLanesById = new Map(allLanes.map(lane => [lane.id, lane]));
 
   props.actions.forEach(action => {
-    const lane = lanesById.get(resolveActionLaneId(action)) ?? systemLane;
+    const lane =
+      action.type === 'enemyEvent'
+        ? enemyLane
+        : (lanesById.get(resolveActionLaneId(action)) ?? systemLane);
     lane.actions.push(action);
   });
 
@@ -1363,11 +1376,6 @@ const timelineLanes = computed(() => {
       (lane ?? systemLane).effectIntervals.push(interval);
     });
 
-  const allLanes = [
-    ...actorLanes,
-    ...(enemyLane ? [enemyLane] : []),
-    systemLane,
-  ];
   allLanes.forEach(lane => {
     const layout = createTimelineActionLayout(lane.actions);
     lane.actions = layout.actions;
@@ -1401,7 +1409,9 @@ const timelineLanes = computed(() => {
   });
 
   createStateCurveTimelineMarkers().forEach(marker => {
-    const lane = lanesById.get(resolveStateCurveLaneId(marker)) ?? systemLane;
+    const lane =
+      allLanesById.get(resolveStateCurveLaneId(marker, actorGroups)) ??
+      systemLane;
     lane.stateCurveMarkers.push(marker);
   });
 
@@ -1414,7 +1424,7 @@ const timelineLanes = computed(() => {
     );
   });
 
-  const visibleLanes = [...actorLanes, ...(enemyLane ? [enemyLane] : [])];
+  const visibleLanes = allLanes.filter(lane => lane !== systemLane);
   return systemLane.actions.length > 0 ||
     systemLane.damageMarkers.length > 0 ||
     systemLane.candidateValueMarkers.length > 0 ||
@@ -1423,6 +1433,160 @@ const timelineLanes = computed(() => {
     ? [...visibleLanes, systemLane]
     : visibleLanes;
 });
+
+function createTimelineActorGroups() {
+  const topologyGroups = props.timelineTopology?.actorGroups ?? [];
+  return props.actors.map((actor, index) => {
+    const topology = topologyGroups.find(group => group.actorId === actor.id) ??
+      topologyGroups[index] ?? {
+        actionLane: { laneId: actor.id },
+        kiboLane: { laneId: `kibo-fallback-${index + 1}`, kiboId: null },
+        energyCurve: { laneId: `energy-${actor.id}`, actorId: actor.id },
+      };
+    const kibo = props.kibos.find(
+      item => Number(item.id) === Number(topology.kiboLane?.kiboId)
+    );
+    return {
+      actionLane: createEmptyTimelineLane({
+        id: topology.actionLane?.laneId ?? actor.id,
+        kind: 'actor-action',
+        type: 'actor',
+        actorId: actor.id,
+        name: actor.name,
+        detail: '角色动作',
+        editable: true,
+      }),
+      kiboLane: createEmptyTimelineLane({
+        id: topology.kiboLane?.laneId ?? `kibo-fallback-${index + 1}`,
+        kind: 'actor-kibo',
+        type: 'kibo',
+        actorId: actor.id,
+        name: '奇波',
+        detail: kibo?.name ?? '未配置',
+        editable: true,
+      }),
+      energyCurveLane: createEmptyTimelineLane({
+        id: topology.energyCurve?.laneId ?? `energy-${actor.id}`,
+        kind: 'actor-energy-curve',
+        type: 'curve',
+        actorId: actor.id,
+        name: '能量',
+        detail: actor.name,
+        editable: false,
+        curve: {
+          trackKey: 'selfEnergyChange',
+          actorId: actor.id,
+          initialValue: numberOrZero(
+            actor.initialSp ?? actor.stats?.initialSp ?? 0
+          ),
+          maxValue: strictNumberOrNull(actor.stats?.maxSp),
+        },
+      }),
+    };
+  });
+}
+
+function createTimelineEnemyGroup(effectIntervals) {
+  const topology = props.timelineTopology?.enemyGroup ?? {};
+  const maxHp = numberOrZero(props.enemy?.stats?.maxHp);
+  const maxToughness = numberOrZero(
+    props.enemy?.toughness?.maxValue ?? props.enemy?.stats?.maxToughness
+  );
+  const initialToughness = numberOrZero(
+    props.enemy?.toughness?.initialValue ??
+      props.enemy?.stats?.initialToughness ??
+      maxToughness
+  );
+  return {
+    eventLane: createEmptyTimelineLane({
+      id: topology.eventLane?.laneId ?? 'enemy-events',
+      kind: 'enemy-event',
+      type: 'enemy',
+      name: props.enemy?.name || '敌人',
+      detail: '事件 / 状态',
+      editable: true,
+      effectIntervals,
+    }),
+    hpCurveLane: createEmptyTimelineLane({
+      id: topology.hpCurve?.laneId ?? 'enemy-hp-curve',
+      kind: 'enemy-hp-curve',
+      type: 'curve',
+      name: 'HP',
+      detail: props.enemy?.name || '敌人',
+      editable: false,
+      curve: {
+        trackKey: 'enemyHpDamage',
+        initialValue: maxHp,
+        maxValue: maxHp || null,
+      },
+    }),
+    toughnessCurveLane: createEmptyTimelineLane({
+      id: topology.toughnessCurve?.laneId ?? 'enemy-toughness-curve',
+      kind: 'enemy-toughness-curve',
+      type: 'curve',
+      name: '韧性',
+      detail: props.enemy?.name || '敌人',
+      editable: false,
+      curve: {
+        trackKey: 'enemyToughnessDamage',
+        initialValue: initialToughness,
+        maxValue: maxToughness || null,
+      },
+    }),
+  };
+}
+
+function createEmptyTimelineLane({
+  id,
+  kind,
+  type,
+  actorId = '',
+  name,
+  detail,
+  editable,
+  curve = null,
+  effectIntervals = [],
+}) {
+  return {
+    id,
+    kind,
+    type,
+    actorId,
+    name,
+    detail,
+    editable,
+    curve,
+    actions: [],
+    damageMarkers: [],
+    candidateValueMarkers: [],
+    candidateValueCurves: [],
+    candidateValueFrameGroups: [],
+    stateCurveMarkers: [],
+    cooldownWindows: [],
+    effectIntervals: [...effectIntervals],
+  };
+}
+
+function formatTopologyCurveValue(curve) {
+  const current = formatCompactNumber(curve.initialValue);
+  const max = strictNumberOrNull(curve.maxValue);
+  return max == null ? current : `${current} / ${formatCompactNumber(max)}`;
+}
+
+function formatCompactNumber(value) {
+  return Number(numberOrZero(value).toFixed(2)).toLocaleString('zh-CN');
+}
+
+function numberOrZero(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : 0;
+}
+
+function strictNumberOrNull(value) {
+  if (value == null || value === '') return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
 const allCandidateFrameGroups = computed(() =>
   timelineLanes.value.flatMap(lane =>
     lane.candidateValueFrameGroups.map(group => ({
@@ -1684,8 +1848,10 @@ function timelineDataLayerStyle(lane) {
 }
 
 function laneRowStyle(lane) {
+  const height = getTimelineLaneHeight(lane);
   return {
-    minHeight: `${getTimelineLaneHeight(lane)}px`,
+    height: `${height}px`,
+    minHeight: `${height}px`,
   };
 }
 
@@ -1755,10 +1921,12 @@ function getTimelineCandidateCurveTop(lane) {
 }
 
 function getTimelineStateCurveMarkerTop(marker, lane) {
+  if (lane.type === 'curve') return 22;
   return getTimelineDataTop(lane) + (marker.top - 54);
 }
 
 function getTimelineLaneHeight(lane) {
+  if (lane.type === 'curve' || lane.type === 'kibo') return 52;
   return Math.max(TIMELINE_LANE_MIN_HEIGHT_PX, getTimelineDataTop(lane) + 62);
 }
 
@@ -1912,13 +2080,16 @@ function resolveCandidateValueLaneId(marker) {
   return action ? resolveActionLaneId(action) : 'system';
 }
 
-function resolveStateCurveLaneId(marker) {
-  const action = actionsById.value.get(marker.actionId);
-  if (action) {
-    return resolveActionLaneId(action);
+function resolveStateCurveLaneId(marker, actorGroups = []) {
+  if (marker.trackKey === 'enemyHpDamage') return 'enemy-hp-curve';
+  if (marker.trackKey === 'enemyToughnessDamage') {
+    return 'enemy-toughness-curve';
   }
-  if (marker.actorId && actorLaneIds.value.has(marker.actorId)) {
-    return marker.actorId;
+  const action = actionsById.value.get(marker.actionId);
+  const actorId = marker.actorId ?? (action ? resolveActionLaneId(action) : '');
+  if (marker.trackKey === 'selfEnergyChange' && actorId) {
+    return actorGroups.find(group => group.actionLane.id === actorId)
+      ?.energyCurveLane.id;
   }
   return 'system';
 }
@@ -4057,6 +4228,27 @@ h2 {
   background: #21191b;
 }
 
+.lane-label.kibo {
+  border-color: rgba(130, 182, 136, 0.28);
+  background: #17201b;
+}
+
+.lane-label.kibo,
+.lane-label.curve {
+  padding-block: 4px;
+  overflow: hidden;
+}
+
+.lane-label.kibo small,
+.lane-label.curve small {
+  margin-top: 1px;
+}
+
+.lane-label.curve {
+  border-color: rgba(118, 149, 177, 0.28);
+  background: #161d24;
+}
+
 .lane-row {
   position: relative;
   min-height: 110px;
@@ -4077,6 +4269,74 @@ h2 {
 .lane-row.drop-target {
   border-color: rgba(121, 199, 185, 0.78);
   box-shadow: inset 0 0 0 1px rgba(121, 199, 185, 0.28);
+}
+
+.lane-row[data-lane-kind='actor-kibo'] {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(130, 182, 136, 0.05) 0,
+      rgba(130, 182, 136, 0.05) 1px,
+      transparent 1px,
+      transparent 10%
+    ),
+    #111916;
+}
+
+.lane-row[data-lane-kind$='curve'] {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(118, 149, 177, 0.06) 0,
+      rgba(118, 149, 177, 0.06) 1px,
+      transparent 1px,
+      transparent 10%
+    ),
+    #11171d;
+}
+
+.timeline-state-curve {
+  position: absolute;
+  inset: 8px 10px;
+  color: #a6b7ff;
+}
+
+.timeline-state-curve svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.timeline-state-curve line {
+  stroke: currentColor;
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+}
+
+.timeline-state-curve circle {
+  fill: currentColor;
+  vector-effect: non-scaling-stroke;
+}
+
+.timeline-state-curve span {
+  position: absolute;
+  top: 1px;
+  left: 8px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(17, 23, 29, 0.88);
+  color: #d9e3ec;
+  font-size: 10px;
+}
+
+.timeline-state-curve.curve-enemyHpDamage {
+  color: #ef767a;
+}
+
+.timeline-state-curve.curve-enemyToughnessDamage {
+  color: #e8c36a;
 }
 
 .action-block {

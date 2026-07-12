@@ -390,6 +390,8 @@
           class="timeline-area"
           :actors="scenario.actors"
           :enemy="scenario.enemy"
+          :timeline-topology="project.metadata.timelineTopology"
+          :kibos="loadoutOptions.kibos"
           :actions="scenario.actions"
           :damage-timeline="simulationResult.damageTimeline"
           :candidate-value-chart="simulationResult.candidateValueSeries.chart"
@@ -788,6 +790,8 @@
         class="png-export-timeline"
         :actors="scenario.actors"
         :enemy="scenario.enemy"
+        :timeline-topology="project.metadata.timelineTopology"
+        :kibos="loadoutOptions.kibos"
         :actions="scenario.actions"
         :damage-timeline="simulationResult.damageTimeline"
         :candidate-value-chart="simulationResult.candidateValueSeries.chart"
@@ -867,6 +871,7 @@ import {
 import { createRuntimeStatePointContexts } from '../features/workbench/runtimeProjectionPoints';
 import { applyWorkbenchRuntimeViewPatch } from '../features/workbench/workbenchRuntimeViewState';
 import {
+  ENEMY_TIMELINE_LANE_ID,
   SYSTEM_TIMELINE_LANE_ID,
   createTimelineDiagnostics,
 } from '../features/workbench/timelineDiagnostics';
@@ -1769,7 +1774,8 @@ function updateSelection(patch, options = {}) {
   }
   actorConfigs.value = normalizeWorkbenchActorConfigs(
     actorConfigs.value,
-    nextSelection
+    nextSelection,
+    teamSlots.value
   );
   applyWorkbenchConfigurationState(
     reconcileWorkbenchConfigurationState({
@@ -1968,7 +1974,8 @@ function updateActorConfig(patch = {}) {
         },
       };
     }),
-    selection.value
+    selection.value,
+    teamSlots.value
   );
   applyWorkbenchConfigurationState(
     updateSelectedWorkbenchConfigurationInstance(
@@ -3507,7 +3514,8 @@ function applyWorkbenchScenarioDraftState(draft) {
   );
   actionDrafts.value = normalizeWorkbenchActionDrafts(
     draft.actionDrafts,
-    selection.value
+    selection.value,
+    teamSlots.value
   );
   actionRelations.value = normalizeWorkbenchActionRelations(
     draft.actionRelations,
@@ -3544,7 +3552,8 @@ function applyWorkbenchConfigurationState(state) {
   );
   actorConfigs.value = normalizeWorkbenchActorConfigs(
     state.actorConfigs,
-    selection.value
+    selection.value,
+    teamSlots.value
   );
   enemyConfig.value = normalizeWorkbenchEnemyConfig(state.enemyConfig);
 }
@@ -3835,7 +3844,8 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
   );
   actionDrafts.value = normalizeWorkbenchActionDrafts(
     snapshot.actionDrafts,
-    selection.value
+    selection.value,
+    teamSlots.value
   );
   actionRelations.value = normalizeWorkbenchActionRelations(
     snapshot.actionRelations,
@@ -5182,6 +5192,9 @@ function createDraftTimelineRange(action, index) {
 }
 
 function resolveDraftLaneId(action) {
+  if (action?.type === ACTION_TYPES.ENEMY_EVENT) {
+    return ENEMY_TIMELINE_LANE_ID;
+  }
   if (canAssignActionLane(action)) {
     const actor = scenario.value.actors.find(
       item => Number(item.characterId) === Number(action.actorCharacterId)

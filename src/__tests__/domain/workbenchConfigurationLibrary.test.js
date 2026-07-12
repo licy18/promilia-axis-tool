@@ -7,6 +7,7 @@ import {
 } from '../../domain/workbenchConfigurationLibrary';
 import {
   DEFAULT_WORKBENCH_SELECTION,
+  DEFAULT_WORKBENCH_TEAM_SLOTS,
   createDefaultWorkbenchActorConfigs,
 } from '../../domain/workbenchProjectFactory';
 
@@ -25,6 +26,10 @@ describe('Workbench configuration library', () => {
         {
           id: 'actor-config-0002',
           characterId: DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId,
+        },
+        {
+          id: 'actor-config-0003',
+          characterId: DEFAULT_WORKBENCH_TEAM_SLOTS[2].characterId,
         },
       ],
       enemyInstances: [
@@ -45,6 +50,10 @@ describe('Workbench configuration library', () => {
           characterId: DEFAULT_WORKBENCH_SELECTION.secondaryCharacterId,
           instanceId: 'actor-config-0002',
         },
+        {
+          characterId: DEFAULT_WORKBENCH_TEAM_SLOTS[2].characterId,
+          instanceId: 'actor-config-0003',
+        },
       ],
       enemyInstanceId: 'enemy-config-0001',
     });
@@ -61,13 +70,13 @@ describe('Workbench configuration library', () => {
     expect(duplicated).toMatchObject({
       changed: true,
       instance: {
-        id: 'actor-config-0003',
+        id: 'actor-config-0004',
         name: '角色配置 1 副本',
         characterId,
       },
       configurationSelection: {
         actorInstanceIds: expect.arrayContaining([
-          { characterId, instanceId: 'actor-config-0003' },
+          { characterId, instanceId: 'actor-config-0004' },
         ]),
       },
     });
@@ -90,7 +99,7 @@ describe('Workbench configuration library', () => {
     });
     expect(
       updated.configurationLibrary.actorInstances.find(
-        item => item.id === 'actor-config-0003'
+        item => item.id === 'actor-config-0004'
       ).actorConfig.initialSp
     ).toBe(0.75);
     expect(
@@ -127,7 +136,7 @@ describe('Workbench configuration library', () => {
       deleted.configurationSelection.actorInstanceIds.find(
         item => item.characterId === characterId
       ).instanceId
-    ).toBe('actor-config-0003');
+    ).toBe('actor-config-0004');
   });
 
   it('migrates scenario-local configs into one shared project library', () => {

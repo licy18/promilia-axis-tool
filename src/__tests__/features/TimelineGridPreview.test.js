@@ -296,11 +296,11 @@ describe('TimelineGridPreview', () => {
     });
     expect(
       wrapper.findAll('[data-testid="workbench-timeline-row"]')
-    ).toHaveLength(3);
+    ).toHaveLength(9);
     expect(
       wrapper
         .get(
-          '[data-testid="workbench-timeline-row"][data-lane-id="enemy-effects"]'
+          '[data-testid="workbench-timeline-row"][data-lane-id="enemy-events"]'
         )
         .find('[data-testid="workbench-timeline-effect-interval"]')
         .attributes('data-effect-id')
@@ -315,6 +315,66 @@ describe('TimelineGridPreview', () => {
       actionId: 'action-a',
       timeMs: 2500,
     });
+  });
+
+  it('renders the fixed three-actor topology and five full-length state curves', () => {
+    const actors = [
+      { id: 'actor-a', name: '末音', initialSp: 0.1 },
+      { id: 'actor-b', name: '寒悠悠', initialSp: 0.2 },
+      { id: 'actor-c', name: '芃芃', initialSp: 0.3 },
+    ];
+    const actorGroups = actors.map((actor, index) => ({
+      actorId: actor.id,
+      actionLane: { laneId: actor.id },
+      kiboLane: {
+        laneId: `kibo-team-slot-${index + 1}`,
+        kiboId: index === 0 ? 500001 : null,
+      },
+      energyCurve: { laneId: `energy-${actor.id}`, actorId: actor.id },
+    }));
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        actors,
+        enemy: {
+          id: 'enemy-a',
+          name: '训练假人',
+          stats: { maxHp: 1000, maxToughness: 100 },
+        },
+        kibos: [{ id: 500001, name: '测试奇波' }],
+        timelineTopology: {
+          actorGroups,
+          enemyGroup: {
+            eventLane: { laneId: 'enemy-events' },
+            hpCurve: { laneId: 'enemy-hp-curve' },
+            toughnessCurve: { laneId: 'enemy-toughness-curve' },
+          },
+        },
+      }),
+    });
+
+    expect(wrapper.findAll('[data-lane-kind="actor-action"]')).toHaveLength(6);
+    expect(wrapper.findAll('[data-lane-kind="actor-kibo"]')).toHaveLength(6);
+    expect(
+      wrapper.findAll('[data-lane-kind="actor-energy-curve"]')
+    ).toHaveLength(6);
+    expect(wrapper.findAll('[data-lane-kind="enemy-event"]')).toHaveLength(2);
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-state-curve"]')
+    ).toHaveLength(5);
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-timeline-lane-label"][data-lane-id="kibo-team-slot-1"]'
+        )
+        .text()
+    ).toContain('测试奇波');
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-timeline-row"][data-lane-id="energy-actor-c"]'
+        )
+        .attributes('data-editable')
+    ).toBe('false');
   });
 
   it('renders, selects, drags, and opens persisted cycle boundaries', async () => {

@@ -2266,6 +2266,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
         position: 1,
         characterId: Number(replacementSecondaryCharacterId),
       },
+      { slotId: 'team-slot-3', position: 2, characterId: 101003 },
     ],
     enemyConfig: {
       level: 91,
@@ -2290,6 +2291,9 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
       },
       {
         characterId: Number(replacementSecondaryCharacterId),
+      },
+      {
+        characterId: 101003,
       },
     ],
   });

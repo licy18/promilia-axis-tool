@@ -1,18 +1,25 @@
 export const DEFAULT_TIMELINE_ACTION_DURATION_MS = 1800;
 export const SYSTEM_TIMELINE_LANE_ID = 'system';
 export const SYSTEM_TIMELINE_LANE_NAME = '系统';
+export const ENEMY_TIMELINE_LANE_ID = 'enemy-events';
+export const ENEMY_TIMELINE_LANE_NAME = '敌人';
 
 export function createTimelineDiagnostics({ actors = [], actions = [] } = {}) {
-  const actorLaneIds = new Set(actors.map((actor) => actor.id));
+  const actorLaneIds = new Set(actors.map(actor => actor.id));
   const laneNameById = new Map([
-    ...actors.map((actor) => [actor.id, actor.name]),
+    ...actors.map(actor => [actor.id, actor.name]),
     [SYSTEM_TIMELINE_LANE_ID, SYSTEM_TIMELINE_LANE_NAME],
+    [ENEMY_TIMELINE_LANE_ID, ENEMY_TIMELINE_LANE_NAME],
   ]);
   const rangesByLane = new Map();
 
-  actions.forEach((action) => {
+  actions.forEach(action => {
     const laneId = resolveTimelineActionLaneId(action, actorLaneIds);
-    const range = createActionRange(action, laneId, laneNameById.get(laneId) ?? SYSTEM_TIMELINE_LANE_NAME);
+    const range = createActionRange(
+      action,
+      laneId,
+      laneNameById.get(laneId) ?? SYSTEM_TIMELINE_LANE_NAME
+    );
     if (!rangesByLane.has(laneId)) {
       rangesByLane.set(laneId, []);
     }
@@ -20,11 +27,15 @@ export function createTimelineDiagnostics({ actors = [], actions = [] } = {}) {
   });
 
   const overlaps = [];
-  rangesByLane.forEach((ranges) => {
+  rangesByLane.forEach(ranges => {
     const sortedRanges = [...ranges].sort(compareActionRanges);
     for (let index = 0; index < sortedRanges.length; index += 1) {
       const current = sortedRanges[index];
-      for (let nextIndex = index + 1; nextIndex < sortedRanges.length; nextIndex += 1) {
+      for (
+        let nextIndex = index + 1;
+        nextIndex < sortedRanges.length;
+        nextIndex += 1
+      ) {
         const next = sortedRanges[nextIndex];
         if (next.startMs >= current.endMs) {
           break;
@@ -50,7 +61,9 @@ export function createTimelineDiagnostics({ actors = [], actions = [] } = {}) {
     }
   });
 
-  const overlapActionIds = [...new Set(overlaps.flatMap((overlap) => overlap.actionIds))].sort();
+  const overlapActionIds = [
+    ...new Set(overlaps.flatMap(overlap => overlap.actionIds)),
+  ].sort();
 
   return {
     overlapCount: overlaps.length,
@@ -60,6 +73,9 @@ export function createTimelineDiagnostics({ actors = [], actions = [] } = {}) {
 }
 
 export function resolveTimelineActionLaneId(action, actorLaneIds = new Set()) {
+  if (action?.type === 'enemyEvent') {
+    return ENEMY_TIMELINE_LANE_ID;
+  }
   if (action?.actor?.id && actorLaneIds.has(action.actor.id)) {
     return action.actor.id;
   }
@@ -73,7 +89,8 @@ function createActionRange(action, laneId, laneName) {
   const startMs = Math.max(0, Number(action.startMs) || 0);
   const durationMs = Math.max(
     1,
-    Number(action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS) || DEFAULT_TIMELINE_ACTION_DURATION_MS,
+    Number(action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS) ||
+      DEFAULT_TIMELINE_ACTION_DURATION_MS
   );
 
   return {
@@ -95,7 +112,11 @@ function createActionName(action) {
 }
 
 function compareActionRanges(left, right) {
-  return left.startMs - right.startMs || left.endMs - right.endMs || left.actionId.localeCompare(right.actionId);
+  return (
+    left.startMs - right.startMs ||
+    left.endMs - right.endMs ||
+    left.actionId.localeCompare(right.actionId)
+  );
 }
 
 function compareOverlaps(left, right) {

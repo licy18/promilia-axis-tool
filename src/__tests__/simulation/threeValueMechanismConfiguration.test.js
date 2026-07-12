@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   DEFAULT_WORKBENCH_SELECTION,
+  DEFAULT_WORKBENCH_TEAM_SLOTS,
   createWorkbenchProject,
   getWorkbenchGameData,
 } from '../../domain/workbenchProjectFactory';
@@ -94,8 +95,8 @@ describe('three value mechanism configuration', () => {
         replayIdentity: expect.stringMatching(/^azpr-config-v1-/),
         selectionIntegrity: {
           ready: true,
-          requestedInstanceCount: 3,
-          verifiedInstanceCount: 3,
+          requestedInstanceCount: 4,
+          verifiedInstanceCount: 4,
           issueCount: 0,
         },
       },
@@ -116,8 +117,8 @@ describe('three value mechanism configuration', () => {
         },
       },
       summary: {
-        actorConfigurationCount: 2,
-        actorInstanceBackedCount: 2,
+        actorConfigurationCount: 3,
+        actorInstanceBackedCount: 3,
         enemyInstanceBacked: true,
         unappliedLoadoutSelectionCount: 3,
         elementDefenseOverrideCount: 1,
@@ -315,7 +316,7 @@ describe('three value mechanism configuration', () => {
         }),
       ]),
       summary: {
-        actorInstanceBackedCount: 1,
+        actorInstanceBackedCount: 2,
         enemyInstanceBacked: true,
         sourceContractReady: false,
         selectionIntegrityReady: false,
@@ -336,6 +337,7 @@ function createConfiguredProject({ includeInstanceSelection }) {
       },
     },
     { characterId: 101003 },
+    { characterId: DEFAULT_WORKBENCH_TEAM_SLOTS[2].characterId },
   ];
   const enemyConfig = {
     level: 95,
@@ -351,6 +353,10 @@ function createConfiguredProject({ includeInstanceSelection }) {
         actorInstanceIds: [
           { characterId: 109001, instanceId: 'actor-config-burst' },
           { characterId: 101003, instanceId: 'actor-config-support' },
+          {
+            characterId: DEFAULT_WORKBENCH_TEAM_SLOTS[2].characterId,
+            instanceId: 'actor-config-tertiary',
+          },
         ],
         enemyInstanceId: 'enemy-config-challenge',
       }
@@ -370,6 +376,11 @@ function createConfiguredProject({ includeInstanceSelection }) {
               id: 'actor-config-support',
               characterId: 101003,
               actorConfig: actorConfigs[1],
+            },
+            {
+              id: 'actor-config-tertiary',
+              characterId: DEFAULT_WORKBENCH_TEAM_SLOTS[2].characterId,
+              actorConfig: actorConfigs[2],
             },
           ],
           enemyInstances: [

@@ -26833,3 +26833,23 @@ valueIdRange = [firstId, count]
 ```
 
 `resolveSkillLevelCrossCheck()` 在领域访问层恢复原字符串 ID 数组；非连续或旧投影仍兼容原数组字段。完整 `skill-level-crosscheck.json` 不变，动作倍率来源、skill variant source identity 和运行结果不变。
+
+## 399. WorkbenchTimelineTopology v1 / fixed three-slot team
+
+Stage 9-A 新增派生合同 `AzPrWorkbenchTimelineTopology v1`。项目 schema 继续为 v15，拓扑存放在运行时 Project 的 `metadata.timelineTopology`，无需为持久化文件复制一份可漂移结构；本地草稿、JSON、分享链接和 PNG 仍持久化 `teamSlots / actorConfigs / enemyConfig`，回导后重新生成并比较同一拓扑。
+
+```text
+timelineTopology
+  actorGroups[3]
+    slotId / position / characterId / actorId
+    actionLane { laneId, kind = actor-action, editable }
+    kiboLane { laneId, kind = actor-kibo, kiboId, appliedToCalculators = false }
+    energyCurve { laneId, kind = actor-energy-curve, trackKey, actorId }
+  enemyGroup
+    eventLane { laneId = enemy-events, kind = enemy-event }
+    hpCurve { laneId = enemy-hp-curve, trackKey = enemyHpDamage }
+    toughnessCurve { laneId = enemy-toughness-curve, trackKey = enemyToughnessDamage }
+  policy / summary
+```
+
+`normalizeWorkbenchTeamSlots()` 与 `normalizeWorkbenchActorConfigs()` 现在固定输出 3 个唯一、可解析角色；旧双角色项目在导入时补齐第三槽和对应空配置实例，现有主副角色 selection 字段继续兼容。敌人事件的冲突轨道从 `system` 改为 `enemy-events`，annotation 仍保留在 `system`。奇波配置只决定关联轨的显示与来源边界，未确认效果仍不参与三值计算。

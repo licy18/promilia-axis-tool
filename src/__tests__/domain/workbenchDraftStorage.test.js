@@ -133,6 +133,7 @@ describe('workbench draft storage project files', () => {
       teamSlots: [
         { slotId: 'team-slot-1', position: 0, characterId: 109001 },
         { slotId: 'team-slot-2', position: 1, characterId: 101003 },
+        { slotId: 'team-slot-3', position: 2, characterId: 101007 },
       ],
       actorConfigs: [
         {
@@ -148,6 +149,9 @@ describe('workbench draft storage project files', () => {
         },
         {
           characterId: 101003,
+        },
+        {
+          characterId: 101007,
         },
       ],
       mechanicsProfileSelection: {
@@ -219,6 +223,7 @@ describe('workbench draft storage project files', () => {
       teamSlots: [
         { slotId: 'team-slot-1', position: 0, characterId: 109001 },
         { slotId: 'team-slot-2', position: 1, characterId: 101003 },
+        { slotId: 'team-slot-3', position: 2, characterId: 101007 },
       ],
       enemyConfig: {
         level: 80,
@@ -393,10 +398,15 @@ describe('workbench draft storage project files', () => {
       schemaVersion: WORKBENCH_DRAFT_SCHEMA_VERSION,
       type: 'workbench-draft',
       selectedActionId: 'action-0001',
-      actorConfigs: [{ characterId: 109001 }, { characterId: 101003 }],
+      actorConfigs: [
+        { characterId: 109001 },
+        { characterId: 101003 },
+        { characterId: 101007 },
+      ],
       teamSlots: [
         { slotId: 'team-slot-1', position: 0, characterId: 109001 },
         { slotId: 'team-slot-2', position: 1, characterId: 101003 },
+        { slotId: 'team-slot-3', position: 2, characterId: 101007 },
       ],
       enemyConfig: {
         toughnessMultiplier: 1,
@@ -539,8 +549,13 @@ describe('workbench draft storage project files', () => {
       teamSlots: [
         { slotId: 'team-slot-1', position: 0, characterId: 101007 },
         { slotId: 'team-slot-2', position: 1, characterId: 101010 },
+        { slotId: 'team-slot-3', position: 2, characterId: 101003 },
       ],
-      actorConfigs: [{ characterId: 101007 }, { characterId: 101010 }],
+      actorConfigs: [
+        { characterId: 101007 },
+        { characterId: 101010 },
+        { characterId: 101003 },
+      ],
     });
   });
 
@@ -577,6 +592,7 @@ describe('workbench draft storage project files', () => {
       actorConfigs: [
         { characterId: 109001, initialSp: null },
         { characterId: 101003, initialSp: null },
+        { characterId: 101007, initialSp: null },
       ],
     });
   });
@@ -675,10 +691,15 @@ describe('workbench draft storage project files', () => {
         toughnessMultiplier: 1,
         initialToughnessRatio: 1,
       },
-      actorConfigs: [{ characterId: 109001 }, { characterId: 101003 }],
+      actorConfigs: [
+        { characterId: 109001 },
+        { characterId: 101003 },
+        { characterId: 101007 },
+      ],
       teamSlots: [
         { slotId: 'team-slot-1', position: 0, characterId: 109001 },
         { slotId: 'team-slot-2', position: 1, characterId: 101003 },
+        { slotId: 'team-slot-3', position: 2, characterId: 101007 },
       ],
     });
 
@@ -770,6 +791,7 @@ describe('workbench draft storage project files', () => {
       teamSlots: [
         { slotId: 'team-slot-1', position: 0, characterId: 109001 },
         { slotId: 'team-slot-2', position: 1, characterId: 101003 },
+        { slotId: 'team-slot-3', position: 2, characterId: 101007 },
       ],
       enemyConfig: {
         level: 92,
@@ -783,6 +805,7 @@ describe('workbench draft storage project files', () => {
       actorConfigs: [
         { characterId: 109001, initialSp: 0.2 },
         { characterId: 101003, initialSp: 0.8 },
+        { characterId: 101007, initialSp: null },
       ],
       runtimeSampleCaptures: [
         expect.objectContaining({
