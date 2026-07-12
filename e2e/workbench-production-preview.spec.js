@@ -1022,12 +1022,12 @@ test('[stage-11a-contribution-windows] aggregates three tracks and returns to th
   const actorTwo = panel.locator(
     '[data-testid="workbench-cycle-section-actor-row"][data-actor-id="actor-101003"]'
   );
-  expect(Number(await actorOne.getAttribute('data-enemy-hp-delta'))).toBeGreaterThan(
-    0
-  );
-  expect(Number(await actorTwo.getAttribute('data-self-energy-delta'))).not.toBe(
-    0
-  );
+  expect(
+    Number(await actorOne.getAttribute('data-enemy-hp-delta'))
+  ).toBeGreaterThan(0);
+  expect(
+    Number(await actorTwo.getAttribute('data-self-energy-delta'))
+  ).not.toBe(0);
 
   const lane = page.getByTestId('workbench-timeline-lane');
   const laneBox = await lane.boundingBox();
@@ -1054,7 +1054,9 @@ test('[stage-11a-contribution-windows] aggregates three tracks and returns to th
   );
   await page.getByTestId('workbench-contribution-window-axis').click();
   await expect(panel).toHaveAttribute('data-selected-window-id', 'full-axis');
-  await panel.screenshot({ path: 'reports/stage-11a-contribution-desktop.png' });
+  await panel.screenshot({
+    path: 'reports/stage-11a-contribution-desktop.png',
+  });
 
   await page
     .locator(
@@ -1064,9 +1066,7 @@ test('[stage-11a-contribution-windows] aggregates three tracks and returns to th
   const actionTwo = panel.locator(
     '[data-testid="workbench-cycle-section-action-row"][data-action-id="action-0002"]'
   );
-  const locate = actionTwo.getByTestId(
-    'workbench-cycle-section-locate-action'
-  );
+  const locate = actionTwo.getByTestId('workbench-cycle-section-locate-action');
   const statePointId = await locate.getAttribute('data-state-point-id');
   const frameIndex = await locate.getAttribute('data-frame-index');
   expect(statePointId).toBeTruthy();
@@ -1087,11 +1087,114 @@ test('[stage-11a-contribution-windows] aggregates three tracks and returns to th
   await page.getByTestId('workbench-contribution-window-axis').click();
   await expectPageWithoutHorizontalOverflow(page);
   expect(
-    await panel.getByTestId('workbench-contribution-actor-table').evaluate(
-      element => element.scrollWidth - element.clientWidth
-    )
+    await panel
+      .getByTestId('workbench-contribution-actor-table')
+      .evaluate(element => element.scrollWidth - element.clientWidth)
   ).toBe(0);
   await panel.screenshot({ path: 'reports/stage-11a-contribution-narrow.png' });
+});
+
+test('[stage-11b-window-comparison] compares one cycle and opens the baseline contribution', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/#/workbench');
+
+  await page.getByTestId('workbench-add-resource-action').click();
+  await page
+    .getByTestId('workbench-action-actor-select')
+    .selectOption('101003');
+  await page.getByTestId('workbench-start-frame-input').fill('120');
+  await page.getByTestId('workbench-start-frame-input').press('Tab');
+  await page.getByTestId('workbench-resource-change-input').fill('50');
+  await page.getByTestId('workbench-resource-change-input').press('Tab');
+
+  const lane = page.getByTestId('workbench-timeline-lane');
+  const laneBox = await lane.boundingBox();
+  expect(laneBox).toBeTruthy();
+  await lane.evaluate(
+    (element, position) =>
+      element.dispatchEvent(
+        new MouseEvent('contextmenu', {
+          bubbles: true,
+          cancelable: true,
+          clientX: position.clientX,
+          clientY: position.clientY,
+        })
+      ),
+    {
+      clientX: laneBox.x + laneBox.width / 30,
+      clientY: laneBox.y + 80,
+    }
+  );
+  await page.getByTestId('workbench-action-context-add-cycle-boundary').click();
+  await page.getByTestId('workbench-scenario-duplicate').click();
+  await page.locator('.action-item[data-action-id="action-0002"]').click();
+  await page.getByTestId('workbench-resource-change-input').fill('80');
+  await page.getByTestId('workbench-resource-change-input').press('Tab');
+
+  await page.getByTestId('workbench-open-comparison').click();
+  await page
+    .getByTestId('workbench-comparison-workspace-scenario')
+    .selectOption('scenario-0001');
+  const comparison = page.getByTestId('workbench-scenario-comparison');
+  await expect(
+    comparison.getByTestId('workbench-comparison-window')
+  ).toHaveCount(3);
+  await comparison
+    .locator(
+      '[data-testid="workbench-comparison-window"][data-window-id="cycle-section-02"]'
+    )
+    .click();
+  const actorTwo = comparison.locator(
+    '[data-testid="workbench-comparison-actor-row"][data-current-actor-id="actor-101003"]'
+  );
+  await expect(actorTwo).toHaveAttribute('data-energy-delta', '30');
+  const actionTwo = comparison.locator(
+    '[data-testid="workbench-comparison-action-row"][data-current-action-id="action-0002"]'
+  );
+  await expect(actionTwo).toHaveAttribute(
+    'data-baseline-action-id',
+    'action-0002'
+  );
+  await comparison
+    .locator('.comparison-dialog')
+    .screenshot({ path: 'reports/stage-11b-comparison-desktop.png' });
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await expectPageWithoutHorizontalOverflow(page);
+  await comparison.locator('.comparison-content').evaluate(element => {
+    element.scrollTop = 0;
+  });
+  await page.screenshot({ path: 'reports/stage-11b-comparison-narrow.png' });
+
+  const locateBaseline = actionTwo.getByTestId(
+    'workbench-comparison-locate-baseline-action'
+  );
+  const baselineStatePointId = await locateBaseline.getAttribute(
+    'data-state-point-id'
+  );
+  await locateBaseline.click();
+  await expect(comparison).toBeHidden();
+  const workbench = page.locator('main.workbench');
+  await expect(workbench).toHaveAttribute(
+    'data-active-workspace-scenario-id',
+    'scenario-0001'
+  );
+  await expect(
+    page.locator('.action-item[data-action-id="action-0002"]')
+  ).toHaveClass(/selected/);
+  await expect(page.getByTestId('workbench-resource-change-input')).toHaveValue(
+    '50'
+  );
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+    )
+  ).toHaveAttribute('data-edit-focus-source', 'scenario-comparison-baseline');
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-state-point')
+  ).toHaveText(baselineStatePointId);
 });
 
 test('[diagnostics-lazy-load] loads runtime diagnostics from a production chunk', async ({

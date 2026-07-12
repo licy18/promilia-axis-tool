@@ -27011,3 +27011,32 @@ ContributionWindow
 ```
 
 HP 与韧性贡献归属 transaction actor；能量贡献归属 `energyOwnerActorId`，缺失时回退到 transaction actor。动作的 `statePointId` 由 transaction `sourceDeltaIds` 与既有 runtime state point contexts 关联，用于统一帧游标、曲线、日志和动作编辑定位。这些窗口、聚合与锚点均为响应式派生视图，不写入本地草稿、JSON、分享链接、PNG 或预设；回放后由同一项目与 runtime outputs 重建。
+
+## 408. Scenario comparison v2 / paired contribution windows
+
+Stage 11-B 将内部 `AzPrWorkbenchScenarioComparison` 升级为 schema v2。Workbench 项目仍为 v16，runtime outputs、三值 calculator、本地草稿和交换载体均不升级；比较结果由两份 `AzPrContributionWindowProjection` 派生。
+
+```text
+AzPrWorkbenchScenarioComparison v2
+  requestedWindowId / windowId
+  windows[]
+    windowId / kind / label
+    currentAvailable / baselineAvailable / comparable
+    currentRange / baselineRange
+  current / baseline
+    sourceKind / sourceId
+    window
+    metrics / actors / actions / effects
+  actors[].metrics
+    enemyHpDelta / enemyToughnessDelta / selfEnergyDelta
+      current / baseline / delta / changed
+  actions[]
+    currentActionId / baselineActionId
+    currentStatePointId / baselineStatePointId
+    currentFrameIndex / baselineFrameIndex
+    metrics
+```
+
+可选窗口取两侧窗口 identity 的并集，只有双方都存在时 `comparable=true`；请求不可比较窗口时回退到双方共有的全轴。无 cycle boundary 的 `AzPrContributionWindowProjection.windows` 现在只包含 `full-axis`，内部 `sections[0]` 仍保留供 cycle playback 兼容，但不再暴露为重复的“循环 1”分析窗口。
+
+当前侧定位继续使用活动项目；工作区基准侧通过既有 scenario switch 恢复其持久化 draft，快照/预设/导入基准则通过 `addWorkbenchScenarioFromDraft` 形成独立方案。切换后 state point identity 和 frame 由目标方案自己的标准 runtime 重建，不把比较结果写回项目，也不把 candidate/unapplied 数据升级为 applied 输入。

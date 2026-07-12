@@ -28,9 +28,11 @@ describe('projectWorkbenchScenarioComparison', () => {
     });
 
     expect(comparison).toMatchObject({
+      schemaVersion: 2,
       sourceKind: 'azpr-workbench-scenario-comparison',
       contractName: 'AzPrWorkbenchScenarioComparison',
       status: 'scenario-comparison-ready',
+      windowId: 'full-axis',
       appliedToCalculators: false,
       summary: {
         metricCount: 5,
@@ -39,6 +41,7 @@ describe('projectWorkbenchScenarioComparison', () => {
         changedActionCount: 2,
         effectCount: 1,
         changedEffectCount: 1,
+        comparableWindowCount: 1,
         readsRuntimeOutputsOnly: true,
         appliedToCalculators: false,
       },
@@ -69,22 +72,52 @@ describe('projectWorkbenchScenarioComparison', () => {
       expect.objectContaining({
         currentActorId: 'actor-1',
         name: '末音',
-        currentValue: 10,
-        baselineValue: 0,
-        delta: 10,
+        metrics: expect.objectContaining({
+          enemyHpDelta: expect.objectContaining({
+            current: 100,
+            baseline: 100,
+            delta: 0,
+          }),
+          enemyToughnessDelta: expect.objectContaining({
+            current: 42,
+            baseline: 32,
+            delta: 10,
+          }),
+          selfEnergyDelta: expect.objectContaining({
+            current: 10,
+            baseline: 0,
+            delta: 10,
+          }),
+        }),
       }),
       expect.objectContaining({
         currentActorId: 'actor-2',
         name: '寒悠悠',
-        currentValue: 5,
-        baselineValue: 5,
-        delta: 0,
+        metrics: expect.objectContaining({
+          enemyHpDelta: expect.objectContaining({
+            current: 80,
+            baseline: 40,
+            delta: 40,
+          }),
+          enemyToughnessDelta: expect.objectContaining({
+            current: 0,
+            baseline: 0,
+            delta: 0,
+          }),
+          selfEnergyDelta: expect.objectContaining({
+            current: 5,
+            baseline: 5,
+            delta: 0,
+          }),
+        }),
       }),
     ]);
     expect(comparison.actions[1]).toMatchObject({
       currentActionId: 'action-2',
       baselineActionId: 'action-2',
       currentName: '星鸣技',
+      currentStatePointId: 'point-action-2',
+      baselineStatePointId: 'point-action-2',
       changed: true,
       metrics: {
         enemyHpDelta: { current: 80, baseline: 40, delta: 40 },
@@ -98,6 +131,50 @@ describe('projectWorkbenchScenarioComparison', () => {
       duration: { current: 1800, baseline: 1200, delta: 600 },
       changed: true,
     });
+  });
+
+  it('compares the same cycle window from both applied runtime outputs', () => {
+    const current = createCandidate({
+      hp: 180,
+      secondHp: 80,
+      secondStartMs: 1200,
+      cycleBoundaryMs: 1000,
+    });
+    const baseline = createCandidate({
+      hp: 140,
+      secondHp: 40,
+      secondStartMs: 1000,
+      cycleBoundaryMs: 1000,
+    });
+
+    const comparison = projectWorkbenchScenarioComparison({
+      current,
+      baseline,
+      windowId: 'cycle-section-02',
+    });
+
+    expect(comparison).toMatchObject({
+      windowId: 'cycle-section-02',
+      summary: { comparableWindowCount: 3 },
+      current: { window: { startMs: 1000, endMs: 3000 } },
+      baseline: { window: { startMs: 1000, endMs: 3000 } },
+    });
+    expect(comparison.metrics).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          key: 'enemyHpDelta',
+          current: 80,
+          baseline: 40,
+          delta: 40,
+        }),
+      ])
+    );
+    expect(comparison.actions).toEqual([
+      expect.objectContaining({
+        currentActionId: 'action-2',
+        baselineActionId: 'action-2',
+      }),
+    ]);
   });
 
   it('keeps unmatched actions visible and locatable by current action id', () => {
@@ -145,12 +222,18 @@ function createCandidate({
   secondStartMs = 1000,
   secondHp = 0,
   effectDurationMs = 1200,
+  cycleBoundaryMs = null,
 } = {}) {
   return {
     label,
     sourceKind: 'test-candidate',
     scenario: {
       sourceProject: { id: 'project-1', name: label },
+      time: { durationMs: 3000, fps: 60 },
+      cycleBoundaries:
+        cycleBoundaryMs == null
+          ? []
+          : [{ id: 'cycle-boundary-0001', timeMs: cycleBoundaryMs }],
       actors: [
         { id: 'actor-1', characterId: 1001, name: '末音' },
         { id: 'actor-2', characterId: 1002, name: '寒悠悠' },
@@ -189,7 +272,13 @@ function createCandidate({
       hitTransactions: {
         transactions: [
           {
+            transactionId: 'transaction-action-1',
+            sourceDeltaIds: ['delta-action-1'],
             actionId: 'action-1',
+            actorId: 'actor-1',
+            energyOwnerActorId: 'actor-1',
+            timeMs: 300,
+            frameIndex: 18,
             delta: {
               enemyHp: hp - secondHp,
               enemyToughness: toughness,
@@ -197,7 +286,13 @@ function createCandidate({
             },
           },
           {
+            transactionId: 'transaction-action-2',
+            sourceDeltaIds: ['delta-action-2'],
             actionId: 'action-2',
+            actorId: 'actor-2',
+            energyOwnerActorId: 'actor-2',
+            timeMs: secondStartMs + 100,
+            frameIndex: Math.round(((secondStartMs + 100) / 1000) * 60),
             delta: {
               enemyHp: secondHp,
               enemyToughness: 0,
@@ -207,9 +302,19 @@ function createCandidate({
         ],
       },
       effectTimeline: {
-        events: [{ actionId: 'action-2' }],
+        events: [{ actionId: 'action-2', timeMs: secondStartMs }],
       },
     },
+    statePointContexts: [
+      {
+        statePointId: 'point-action-1',
+        row: { sourceDeltaId: 'delta-action-1' },
+      },
+      {
+        statePointId: 'point-action-2',
+        row: { sourceDeltaId: 'delta-action-2' },
+      },
+    ],
     effectIntervals: {
       intervals: [
         {
@@ -219,6 +324,8 @@ function createCandidate({
           targetId: 'enemy-1',
           targetName: '迅狼',
           durationMs: effectDurationMs,
+          startMs: 0,
+          endMs: effectDurationMs,
         },
       ],
     },

@@ -17,6 +17,7 @@ const REQUIRED_CAPABILITIES = [
   'stage-10c-frame-cursor-review',
   'stage-10d-timeline-playback',
   'stage-11a-contribution-windows',
+  'stage-11b-window-comparison',
   'png-project-exchange',
   'project-drop-recovery',
   'configuration-instances',

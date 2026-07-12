@@ -112,6 +112,28 @@
         </div>
 
         <div v-else class="comparison-content">
+          <nav
+            class="comparison-windows"
+            aria-label="方案对比时间窗口"
+            data-testid="workbench-comparison-windows"
+          >
+            <button
+              v-for="window in comparison.windows"
+              :key="window.windowId"
+              class="window-button"
+              :class="{ active: comparison.windowId === window.windowId }"
+              type="button"
+              :disabled="!window.comparable"
+              :data-window-id="window.windowId"
+              :data-comparable="window.comparable ? 'true' : 'false'"
+              data-testid="workbench-comparison-window"
+              @click="emit('select-window', window.windowId)"
+            >
+              <strong>{{ window.label }}</strong>
+              <span>{{ formatWindowRange(window) }}</span>
+            </button>
+          </nav>
+
           <section class="comparison-section metric-section">
             <header>
               <h3>核心结果</h3>
@@ -151,25 +173,47 @@
 
           <section class="comparison-section actor-section">
             <header>
-              <h3>角色能量</h3>
+              <h3>角色三值贡献</h3>
             </header>
             <div class="compact-table">
               <div class="table-head actor-columns">
-                <span>角色</span><span>当前</span><span>基准</span
-                ><span>差值</span>
+                <span>角色</span><span>HP 当前 / 基准</span
+                ><span>韧性 当前 / 基准</span><span>能量 当前 / 基准</span>
               </div>
               <div
                 v-for="actor in comparison.actors"
                 :key="actor.key"
                 class="table-row actor-columns"
+                :data-current-actor-id="actor.currentActorId || ''"
+                :data-baseline-actor-id="actor.baselineActorId || ''"
+                :data-hp-delta="actor.metrics.enemyHpDelta.delta"
+                :data-toughness-delta="actor.metrics.enemyToughnessDelta.delta"
+                :data-energy-delta="actor.metrics.selfEnergyDelta.delta"
                 data-testid="workbench-comparison-actor-row"
               >
                 <strong>{{ actor.name }}</strong>
-                <span>{{ formatNumber(actor.currentValue) }}</span>
-                <span>{{ formatNumber(actor.baselineValue) }}</span>
-                <span :class="deltaClass(actor.delta)">{{
-                  formatDelta(actor.delta)
-                }}</span>
+                <span class="actor-metric">
+                  {{ formatPair(actor.metrics.enemyHpDelta) }}
+                  <small :class="deltaClass(actor.metrics.enemyHpDelta.delta)">
+                    {{ formatDelta(actor.metrics.enemyHpDelta.delta) }}
+                  </small>
+                </span>
+                <span class="actor-metric">
+                  {{ formatPair(actor.metrics.enemyToughnessDelta) }}
+                  <small
+                    :class="deltaClass(actor.metrics.enemyToughnessDelta.delta)"
+                  >
+                    {{ formatDelta(actor.metrics.enemyToughnessDelta.delta) }}
+                  </small>
+                </span>
+                <span class="actor-metric">
+                  {{ formatPair(actor.metrics.selfEnergyDelta) }}
+                  <small
+                    :class="deltaClass(actor.metrics.selfEnergyDelta.delta)"
+                  >
+                    {{ formatDelta(actor.metrics.selfEnergyDelta.delta) }}
+                  </small>
+                </span>
               </div>
             </div>
           </section>
@@ -197,6 +241,7 @@
                   :key="action.key"
                   class="table-row action-columns"
                   :data-current-action-id="action.currentActionId || ''"
+                  :data-baseline-action-id="action.baselineActionId || ''"
                   :data-changed="action.changed ? 'true' : 'false'"
                   data-testid="workbench-comparison-action-row"
                 >
@@ -223,16 +268,46 @@
                     {{ formatDelta(action.metrics.startMs.delta, 'ms') }}
                   </span>
                   <span>{{ formatPair(action.metrics.effectEventCount) }}</span>
-                  <button
-                    class="locate-button"
-                    type="button"
-                    title="回到当前动作修改"
-                    data-testid="workbench-comparison-locate-action"
-                    :disabled="!action.currentActionId"
-                    @click="emit('locate-action', action.currentActionId)"
-                  >
-                    <EditPen />
-                  </button>
+                  <div class="action-locate-buttons">
+                    <button
+                      class="locate-button"
+                      type="button"
+                      title="定位当前方案动作"
+                      data-testid="workbench-comparison-locate-action"
+                      :data-state-point-id="action.currentStatePointId"
+                      :data-frame-index="action.currentFrameIndex"
+                      :disabled="!action.currentActionId"
+                      @click="
+                        emit('locate-action', {
+                          role: 'current',
+                          actionId: action.currentActionId,
+                          statePointId: action.currentStatePointId,
+                          frameIndex: action.currentFrameIndex,
+                        })
+                      "
+                    >
+                      <EditPen />
+                    </button>
+                    <button
+                      class="locate-button"
+                      type="button"
+                      title="打开并定位基准方案动作"
+                      data-testid="workbench-comparison-locate-baseline-action"
+                      :data-state-point-id="action.baselineStatePointId"
+                      :data-frame-index="action.baselineFrameIndex"
+                      :disabled="!action.baselineActionId"
+                      @click="
+                        emit('locate-action', {
+                          role: 'baseline',
+                          actionId: action.baselineActionId,
+                          statePointId: action.baselineStatePointId,
+                          frameIndex: action.baselineFrameIndex,
+                        })
+                      "
+                    >
+                      <DocumentCopy />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -295,6 +370,8 @@ const props = defineProps({
       actors: [],
       actions: [],
       effects: [],
+      windows: [],
+      windowId: 'full-axis',
       summary: { changedActionCount: 0 },
     }),
   },
@@ -306,6 +383,7 @@ const emit = defineEmits([
   'select-preset',
   'capture-current',
   'import-baseline',
+  'select-window',
   'locate-action',
 ]);
 
@@ -366,6 +444,19 @@ function importBaseline(event) {
 
 function formatPair(metric) {
   return `${formatNumber(metric.current)} / ${formatNumber(metric.baseline)}`;
+}
+
+function formatWindowRange(window) {
+  const current = formatRange(window.currentRange);
+  const baseline = formatRange(window.baselineRange);
+  return current === baseline ? current : `${current} / ${baseline}`;
+}
+
+function formatRange(range) {
+  if (!range) {
+    return '不可用';
+  }
+  return `${formatNumber(range.startMs)}-${formatNumber(range.endMs)} ms`;
 }
 
 function formatMetric(value, unit) {
@@ -544,6 +635,45 @@ function deltaClass(value) {
   overflow: auto;
 }
 
+.comparison-windows {
+  display: flex;
+  gap: 6px;
+  padding: 10px 20px;
+  overflow-x: auto;
+  border-bottom: 1px solid #2e373e;
+  background: #101519;
+}
+
+.window-button {
+  display: grid;
+  flex: 0 0 auto;
+  gap: 2px;
+  min-width: 128px;
+  padding: 7px 10px;
+  border: 1px solid #37424a;
+  border-radius: 4px;
+  background: #1b2227;
+  color: #d5dee2;
+  text-align: left;
+  cursor: pointer;
+}
+
+.window-button.active {
+  border-color: #79c7b9;
+  background: #21423d;
+  color: #f1fffc;
+}
+
+.window-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.window-button span {
+  color: #8d9aa2;
+  font-size: 10px;
+}
+
 .comparison-section {
   padding: 15px 20px 18px;
 }
@@ -664,10 +794,19 @@ function deltaClass(value) {
   grid-template-columns: minmax(150px, 1fr) repeat(3, minmax(90px, 0.5fr));
 }
 
+.actor-metric {
+  display: grid;
+  gap: 2px;
+}
+
+.actor-metric small {
+  font-size: 9px;
+}
+
 .action-columns {
   grid-template-columns:
     minmax(180px, 1.3fr) repeat(3, minmax(120px, 1fr))
-    90px 90px 36px;
+    90px 90px 70px;
 }
 
 .effect-columns {
@@ -697,6 +836,11 @@ function deltaClass(value) {
 .locate-button {
   width: 30px;
   height: 30px;
+}
+
+.action-locate-buttons {
+  display: flex;
+  gap: 4px;
 }
 
 .locate-button:disabled {
@@ -761,6 +905,29 @@ function deltaClass(value) {
 
   .compact-table {
     overflow-x: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .comparison-windows {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  .window-button {
+    min-width: 105px;
+    padding-right: 7px;
+    padding-left: 7px;
+  }
+
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metric-row,
+  .metric-row:last-child {
+    grid-column: auto;
+    border-right: 0;
   }
 }
 </style>

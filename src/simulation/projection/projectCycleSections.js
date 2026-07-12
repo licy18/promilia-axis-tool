@@ -69,7 +69,7 @@ export function projectCycleSections({
     boundaries,
     fullAxis,
     sections,
-    windows: [fullAxis, ...sections],
+    windows: boundaries.length ? [fullAxis, ...sections] : [fullAxis],
     summary: {
       boundaryCount: boundaries.length,
       sectionCount: sections.length,
@@ -190,7 +190,7 @@ function analyzeCycleSection({
         (actionOrder.get(left.actionId) ?? Number.MAX_SAFE_INTEGER) -
           (actionOrder.get(right.actionId) ?? Number.MAX_SAFE_INTEGER) ||
         left.actionId.localeCompare(right.actionId)
-  );
+    );
   const actors = (scenario?.actors ?? []).map(actor => {
     const actorTransactions = transactions.filter(
       transaction => transaction.actorId === actor.id
@@ -206,10 +206,7 @@ function analyzeCycleSection({
       characterId: actor.characterId ?? null,
       name: actor.name,
       enemyHpDelta: sumTransactions(actorTransactions, 'enemyHp'),
-      enemyToughnessDelta: sumTransactions(
-        actorTransactions,
-        'enemyToughness'
-      ),
+      enemyToughnessDelta: sumTransactions(actorTransactions, 'enemyToughness'),
       selfEnergyDelta: sumTransactions(energyTransactions, 'selfEnergy'),
       transactionCount: new Set(
         [...actorTransactions, ...energyTransactions].map(

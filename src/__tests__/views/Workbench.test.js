@@ -10280,6 +10280,63 @@ describe('Workbench view', () => {
     wrapper.unmount();
   });
 
+  it('opens a snapshot baseline as an editable workspace scenario', async () => {
+    const wrapper = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: { template: '<a><slot /></a>' },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-open-comparison"]')
+      .trigger('click');
+    await vi.dynamicImportSettled();
+    await flushPromises();
+    document
+      .querySelector('[data-testid="workbench-comparison-capture-current"]')
+      .click();
+    document
+      .querySelector('[data-testid="workbench-comparison-close"]')
+      .click();
+    await wrapper
+      .find('[data-testid="workbench-start-frame-input"]')
+      .setValue('36');
+    await wrapper
+      .find('[data-testid="workbench-open-comparison"]')
+      .trigger('click');
+    await flushPromises();
+
+    const actionRow = document.querySelector(
+      '[data-testid="workbench-comparison-action-row"][data-baseline-action-id="action-0001"]'
+    );
+    actionRow
+      .querySelector(
+        '[data-testid="workbench-comparison-locate-baseline-action"]'
+      )
+      .click();
+    await nextTick();
+
+    expect(wrapper.get('main.workbench').attributes()).toMatchObject({
+      'data-workspace-scenario-count': '2',
+      'data-active-workspace-scenario-id': 'scenario-0002',
+    });
+    expect(
+      wrapper.get('[data-testid="workbench-start-frame-input"]').element.value
+    ).toBe('0');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+        )
+        .attributes('data-edit-focus-source')
+    ).toBe('scenario-comparison-baseline');
+
+    wrapper.unmount();
+  });
+
   it('manages independent workspace scenarios and compares them without leaving the Workbench', async () => {
     const confirmSpy = vi.spyOn(globalThis, 'confirm').mockReturnValue(true);
     const wrapper = mount(Workbench, {
@@ -10390,6 +10447,66 @@ describe('Workbench view', () => {
     });
 
     confirmSpy.mockRestore();
+    wrapper.unmount();
+  });
+
+  it('switches to a workspace baseline and locates its runtime contribution', async () => {
+    const wrapper = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: { template: '<a><slot /></a>' },
+        },
+      },
+    });
+    await vi.dynamicImportSettled();
+    await flushPromises();
+    await nextTick();
+    await wrapper
+      .find('[data-testid="workbench-scenario-duplicate"]')
+      .trigger('click');
+    await wrapper.find('[data-testid="workbench-add-action"]').trigger('click');
+    await wrapper
+      .find('[data-testid="workbench-open-comparison"]')
+      .trigger('click');
+    await vi.dynamicImportSettled();
+    await flushPromises();
+
+    const baselineSelect = document.querySelector(
+      '[data-testid="workbench-comparison-workspace-scenario"]'
+    );
+    baselineSelect.value = 'scenario-0001';
+    baselineSelect.dispatchEvent(new Event('change', { bubbles: true }));
+    await nextTick();
+    const baselineAction = document.querySelector(
+      '[data-testid="workbench-comparison-action-row"][data-baseline-action-id="action-0001"]'
+    );
+    baselineAction
+      .querySelector(
+        '[data-testid="workbench-comparison-locate-baseline-action"]'
+      )
+      .click();
+    await nextTick();
+
+    expect(
+      document.querySelector('[data-testid="workbench-scenario-comparison"]')
+    ).toBeNull();
+    expect(wrapper.get('main.workbench').attributes()).toMatchObject({
+      'data-active-workspace-scenario-id': 'scenario-0001',
+    });
+    expect(
+      wrapper
+        .find('.action-item[data-action-id="action-0001"]')
+        .attributes('data-selected')
+    ).toBe('true');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-action-edit-control"][data-edit-field="startMs"]'
+        )
+        .attributes('data-edit-focus-source')
+    ).toBe('scenario-comparison-baseline');
+
     wrapper.unmount();
   });
 

@@ -163,6 +163,7 @@ describe('projectCycleSections', () => {
     expect(projection).toMatchObject({
       status: 'cycle-section-projection-ready-no-boundaries',
       summary: { boundaryCount: 0, sectionCount: 1 },
+      windows: [{ windowId: 'full-axis', kind: 'axis' }],
       sections: [
         {
           sectionId: 'cycle-section-01',

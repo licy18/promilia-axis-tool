@@ -1,3 +1,5 @@
+import { projectCycleSections } from './projectCycleSections';
+
 export const WORKBENCH_SCENARIO_COMPARISON_CONTRACT_NAME =
   'AzPrWorkbenchScenarioComparison';
 
@@ -9,39 +11,51 @@ const METRIC_DEFINITIONS = [
   { key: 'effectCoverageMs', label: '效果覆盖', unit: 'ms' },
 ];
 
+const ACTOR_METRIC_KEYS = [
+  'enemyHpDelta',
+  'enemyToughnessDelta',
+  'selfEnergyDelta',
+];
+
 export function projectWorkbenchScenarioComparison({
   current = null,
   baseline = null,
+  windowId = 'full-axis',
 } = {}) {
-  const currentAnalysis = analyzeScenarioCandidate(current, 'current');
-  const baselineAnalysis = baseline
-    ? analyzeScenarioCandidate(baseline, 'baseline')
+  const currentProjection = resolveContributionProjection(current);
+  const baselineProjection = baseline
+    ? resolveContributionProjection(baseline)
+    : null;
+  const windows = createComparisonWindows(
+    currentProjection,
+    baselineProjection
+  );
+  const resolvedWindowId = resolveComparisonWindowId(windows, windowId, {
+    requireComparable: Boolean(baselineProjection),
+  });
+  const currentAnalysis = analyzeScenarioCandidate(
+    current,
+    currentProjection,
+    resolvedWindowId,
+    'current'
+  );
+  const baselineAnalysis = baselineProjection
+    ? analyzeScenarioCandidate(
+        baseline,
+        baselineProjection,
+        resolvedWindowId,
+        'baseline'
+      )
     : null;
 
   if (!baselineAnalysis) {
-    return {
-      schemaVersion: 1,
-      sourceKind: 'azpr-workbench-scenario-comparison',
-      contractName: WORKBENCH_SCENARIO_COMPARISON_CONTRACT_NAME,
+    return createComparisonEnvelope({
       status: 'scenario-comparison-awaiting-baseline',
+      requestedWindowId: windowId,
+      windowId: resolvedWindowId,
+      windows,
       current: currentAnalysis,
-      baseline: null,
-      metrics: [],
-      actors: [],
-      actions: [],
-      effects: [],
-      summary: {
-        metricCount: 0,
-        actorCount: 0,
-        actionCount: 0,
-        changedActionCount: 0,
-        effectCount: 0,
-        changedEffectCount: 0,
-        readsRuntimeOutputsOnly: true,
-        appliedToCalculators: false,
-      },
-      appliedToCalculators: false,
-    };
+    });
   }
 
   const metrics = METRIC_DEFINITIONS.map(definition =>
@@ -61,13 +75,42 @@ export function projectWorkbenchScenarioComparison({
     baselineAnalysis.effects
   );
 
-  return {
-    schemaVersion: 1,
-    sourceKind: 'azpr-workbench-scenario-comparison',
-    contractName: WORKBENCH_SCENARIO_COMPARISON_CONTRACT_NAME,
+  return createComparisonEnvelope({
     status: 'scenario-comparison-ready',
+    requestedWindowId: windowId,
+    windowId: resolvedWindowId,
+    windows,
     current: currentAnalysis,
     baseline: baselineAnalysis,
+    metrics,
+    actors,
+    actions,
+    effects,
+  });
+}
+
+function createComparisonEnvelope({
+  status,
+  requestedWindowId,
+  windowId,
+  windows,
+  current,
+  baseline = null,
+  metrics = [],
+  actors = [],
+  actions = [],
+  effects = [],
+}) {
+  return {
+    schemaVersion: 2,
+    sourceKind: 'azpr-workbench-scenario-comparison',
+    contractName: WORKBENCH_SCENARIO_COMPARISON_CONTRACT_NAME,
+    status,
+    requestedWindowId,
+    windowId,
+    windows,
+    current,
+    baseline,
     metrics,
     actors,
     actions,
@@ -79,6 +122,7 @@ export function projectWorkbenchScenarioComparison({
       changedActionCount: actions.filter(action => action.changed).length,
       effectCount: effects.length,
       changedEffectCount: effects.filter(effect => effect.changed).length,
+      comparableWindowCount: windows.filter(window => window.comparable).length,
       readsRuntimeOutputsOnly: true,
       appliedToCalculators: false,
     },
@@ -86,171 +130,177 @@ export function projectWorkbenchScenarioComparison({
   };
 }
 
-function analyzeScenarioCandidate(candidate, role) {
-  const scenario = candidate?.scenario ?? {};
-  const runtimeOutputs = candidate?.runtimeOutputs ?? {};
-  const effectIntervals = candidate?.effectIntervals?.intervals ?? [];
-  const summary = runtimeOutputs.summary ?? {};
-  const actions = createActionAnalyses(scenario, runtimeOutputs);
-  const effects = createEffectAnalyses(effectIntervals);
+function resolveContributionProjection(candidate) {
+  if (Array.isArray(candidate?.contributionProjection?.windows)) {
+    return candidate.contributionProjection;
+  }
+  return projectCycleSections({
+    scenario: candidate?.scenario,
+    runtimeOutputs: candidate?.runtimeOutputs,
+    effectIntervals: candidate?.effectIntervals,
+    statePointContexts: candidate?.statePointContexts,
+  });
+}
 
+function createComparisonWindows(currentProjection, baselineProjection) {
+  const currentById = createWindowById(currentProjection);
+  const baselineById = createWindowById(baselineProjection);
+  const ids = [...currentById.keys()];
+  for (const id of baselineById.keys()) {
+    if (!currentById.has(id)) {
+      ids.push(id);
+    }
+  }
+  return ids.map((id, index) => {
+    const current = currentById.get(id) ?? null;
+    const baseline = baselineById.get(id) ?? null;
+    return {
+      windowId: id,
+      kind: current?.kind ?? baseline?.kind ?? 'section',
+      label: current?.label ?? baseline?.label ?? `窗口 ${index + 1}`,
+      currentAvailable: Boolean(current),
+      baselineAvailable: Boolean(baseline),
+      comparable: Boolean(current && baseline),
+      currentRange: createWindowRange(current),
+      baselineRange: createWindowRange(baseline),
+    };
+  });
+}
+
+function createWindowById(projection) {
+  return new Map(
+    (projection?.windows ?? [])
+      .map(window => [
+        normalizeText(window?.windowId ?? window?.sectionId),
+        window,
+      ])
+      .filter(([id]) => id)
+  );
+}
+
+function createWindowRange(window) {
+  return window
+    ? {
+        startMs: numberOrZero(window.startMs),
+        endMs: numberOrZero(window.endMs),
+        durationMs: numberOrZero(window.durationMs),
+      }
+    : null;
+}
+
+function resolveComparisonWindowId(
+  windows,
+  requestedWindowId,
+  { requireComparable = true } = {}
+) {
+  const isAvailable = window =>
+    requireComparable ? window.comparable : window.currentAvailable;
+  const requested = windows.find(
+    window => window.windowId === requestedWindowId && isAvailable(window)
+  );
+  return (
+    requested?.windowId ??
+    windows.find(
+      window => window.windowId === 'full-axis' && isAvailable(window)
+    )?.windowId ??
+    windows.find(isAvailable)?.windowId ??
+    'full-axis'
+  );
+}
+
+function analyzeScenarioCandidate(
+  candidate,
+  contributionProjection,
+  windowId,
+  role
+) {
+  const scenario = candidate?.scenario ?? {};
+  const window =
+    contributionProjection?.windows?.find(item => item.windowId === windowId) ??
+    contributionProjection?.fullAxis ??
+    null;
+  const actions = window?.actions ?? [];
+  const effects = window?.effects ?? [];
   return {
     role,
     label:
       normalizeText(candidate?.label) ??
       (role === 'current' ? '当前方案' : '基准方案'),
     sourceKind: normalizeText(candidate?.sourceKind) ?? role,
+    sourceId: normalizeText(candidate?.sourceId),
     projectId: scenario?.sourceProject?.id ?? null,
     projectName: scenario?.sourceProject?.name ?? null,
+    window: window
+      ? {
+          windowId: window.windowId,
+          kind: window.kind,
+          label: window.label,
+          startMs: window.startMs,
+          endMs: window.endMs,
+          durationMs: window.durationMs,
+        }
+      : null,
     metrics: {
-      enemyHpDelta: numberOrZero(summary.enemyHpDelta),
-      enemyToughnessDelta: numberOrZero(summary.enemyToughnessDelta),
-      selfEnergyDelta: numberOrZero(summary.selfEnergyDelta),
-      durationMs: createScenarioDurationMs(scenario.actions),
-      effectCoverageMs: roundValue(
-        effects.reduce((total, effect) => total + effect.durationMs, 0)
-      ),
+      enemyHpDelta: numberOrZero(window?.metrics?.enemyHpDelta),
+      enemyToughnessDelta: numberOrZero(window?.metrics?.enemyToughnessDelta),
+      selfEnergyDelta: numberOrZero(window?.metrics?.selfEnergyDelta),
+      durationMs: createWindowActionDurationMs(window),
+      effectCoverageMs: numberOrZero(window?.metrics?.effectCoverageMs),
     },
-    actors: createActorAnalyses(scenario, runtimeOutputs),
+    actors: window?.actors ?? [],
     actions,
     effects,
     summary: {
-      actorCount: scenario?.actors?.length ?? 0,
+      actorCount: window?.actors?.length ?? 0,
       actionCount: actions.length,
-      hitTransactionCount:
-        runtimeOutputs?.hitTransactions?.transactions?.length ?? 0,
-      effectIntervalCount: effectIntervals.length,
+      hitTransactionCount: window?.summary?.hitTransactionCount ?? 0,
+      effectCount: effects.length,
     },
   };
 }
 
-function createActorAnalyses(scenario, runtimeOutputs) {
-  const resourceCurveByActor = new Map(
-    (runtimeOutputs?.resourceCurves?.curvesByActor ?? []).map(curve => [
-      curve.actorId,
-      curve,
-    ])
+function createWindowActionDurationMs(window) {
+  const startMs = numberOrZero(window?.startMs);
+  const endMs = numberOrZero(window?.endMs);
+  return roundValue(
+    (window?.actions ?? []).reduce((latestEndMs, action) => {
+      const actionEndMs = Math.min(
+        endMs,
+        numberOrZero(action.startMs) + numberOrZero(action.durationMs)
+      );
+      return Math.max(latestEndMs, actionEndMs - startMs);
+    }, 0)
   );
-  return (scenario?.actors ?? []).map((actor, index) => {
-    const resourceCurve = resourceCurveByActor.get(actor.id);
-    return {
-      key: actor.id ?? `actor-${index}`,
-      actorId: actor.id ?? null,
-      characterId: actor.characterId ?? null,
-      name: actor.name ?? `角色 ${index + 1}`,
-      order: index,
-      selfEnergyDelta: numberOrZero(resourceCurve?.delta),
-      pointCount: resourceCurve?.pointCount ?? 0,
-    };
-  });
-}
-
-function createActionAnalyses(scenario, runtimeOutputs) {
-  const transactionTotals = new Map();
-  for (const transaction of runtimeOutputs?.hitTransactions?.transactions ??
-    []) {
-    const actionId = transaction.actionId;
-    if (!actionId) {
-      continue;
-    }
-    const totals = transactionTotals.get(actionId) ?? createEmptyDeltaTotals();
-    totals.enemyHpDelta += numberOrZero(transaction.delta?.enemyHp);
-    totals.enemyToughnessDelta += numberOrZero(
-      transaction.delta?.enemyToughness
-    );
-    totals.selfEnergyDelta += numberOrZero(transaction.delta?.selfEnergy);
-    totals.hitCount += 1;
-    transactionTotals.set(actionId, totals);
-  }
-
-  const effectEventCountByAction = new Map();
-  for (const event of runtimeOutputs?.effectTimeline?.events ?? []) {
-    if (!event.actionId) {
-      continue;
-    }
-    effectEventCountByAction.set(
-      event.actionId,
-      (effectEventCountByAction.get(event.actionId) ?? 0) + 1
-    );
-  }
-
-  return (scenario?.actions ?? []).map((action, index) => {
-    const totals = transactionTotals.get(action.id) ?? createEmptyDeltaTotals();
-    return {
-      key: action.id ?? `action-${index}`,
-      actionId: action.id ?? null,
-      name: action.name ?? `动作 ${index + 1}`,
-      actorId: action.actorId ?? action.actor?.id ?? null,
-      actorName: action.actor?.name ?? null,
-      order: index,
-      startMs: numberOrZero(action.startMs),
-      durationMs: numberOrZero(action.durationMs),
-      enemyHpDelta: roundValue(totals.enemyHpDelta),
-      enemyToughnessDelta: roundValue(totals.enemyToughnessDelta),
-      selfEnergyDelta: roundValue(totals.selfEnergyDelta),
-      hitCount: totals.hitCount,
-      effectEventCount: effectEventCountByAction.get(action.id) ?? 0,
-    };
-  });
-}
-
-function createEffectAnalyses(effectIntervals) {
-  const grouped = new Map();
-  for (const interval of effectIntervals ?? []) {
-    const key = [
-      interval.targetKind ?? 'target',
-      interval.targetId ?? 'unknown',
-      interval.effectId ??
-        interval.effectKey ??
-        interval.effectName ??
-        'effect',
-    ].join('|');
-    const current = grouped.get(key) ?? {
-      key,
-      effectId: interval.effectId ?? interval.effectKey ?? null,
-      name: interval.effectName ?? interval.effectId ?? '效果',
-      targetKind: interval.targetKind ?? null,
-      targetId: interval.targetId ?? null,
-      targetName: interval.targetName ?? interval.targetId ?? null,
-      durationMs: 0,
-      intervalCount: 0,
-    };
-    current.durationMs += numberOrZero(interval.durationMs);
-    current.intervalCount += 1;
-    grouped.set(key, current);
-  }
-  return [...grouped.values()].map(effect => ({
-    ...effect,
-    durationMs: roundValue(effect.durationMs),
-  }));
 }
 
 function compareActors(currentActors, baselineActors) {
-  const rows = alignRows(currentActors, baselineActors, createActorMatchKey);
-  return rows.map(({ current, baseline, key }, index) => {
-    const currentValue = numberOrZero(current?.selfEnergyDelta);
-    const baselineValue = numberOrZero(baseline?.selfEnergyDelta);
-    return {
-      key,
-      order: index,
-      currentActorId: current?.actorId ?? null,
-      baselineActorId: baseline?.actorId ?? null,
-      name: current?.name ?? baseline?.name ?? `角色 ${index + 1}`,
-      currentValue,
-      baselineValue,
-      delta: roundValue(currentValue - baselineValue),
-      changed: currentValue !== baselineValue,
-    };
-  });
+  return alignRows(currentActors, baselineActors, createActorMatchKey).map(
+    ({ current, baseline, key }, index) => {
+      const metrics = Object.fromEntries(
+        ACTOR_METRIC_KEYS.map(metricKey => [
+          metricKey,
+          createValueComparison(current?.[metricKey], baseline?.[metricKey]),
+        ])
+      );
+      return {
+        key,
+        order: index,
+        currentActorId: current?.actorId ?? null,
+        baselineActorId: baseline?.actorId ?? null,
+        name: current?.name ?? baseline?.name ?? `角色 ${index + 1}`,
+        metrics,
+        changed: Object.values(metrics).some(metric => metric.changed),
+      };
+    }
+  );
 }
 
 function compareActions(currentActions, baselineActions) {
-  const rows = alignRows(
+  return alignRows(
     currentActions,
     baselineActions,
     action => action.actionId
-  );
-  return rows.map(({ current, baseline, key }, index) => {
+  ).map(({ current, baseline, key }, index) => {
     const metrics = Object.fromEntries(
       [
         'enemyHpDelta',
@@ -273,6 +323,10 @@ function compareActions(currentActions, baselineActions) {
       currentName: current?.name ?? null,
       baselineName: baseline?.name ?? null,
       actorName: current?.actorName ?? baseline?.actorName ?? null,
+      currentStatePointId: current?.statePointId ?? '',
+      baselineStatePointId: baseline?.statePointId ?? '',
+      currentFrameIndex: current?.frameIndex ?? null,
+      baselineFrameIndex: baseline?.frameIndex ?? null,
       metrics,
       changed:
         !current ||
@@ -287,8 +341,8 @@ function compareEffects(currentEffects, baselineEffects) {
   return alignRows(currentEffects, baselineEffects, effect => effect.key).map(
     ({ current, baseline, key }, index) => {
       const duration = createValueComparison(
-        current?.durationMs,
-        baseline?.durationMs
+        current?.coverageMs,
+        baseline?.coverageMs
       );
       const intervals = createValueComparison(
         current?.intervalCount,
@@ -350,28 +404,6 @@ function createValueComparison(currentValue, baselineValue) {
     baseline,
     delta: roundValue(current - baseline),
     changed: current !== baseline,
-  };
-}
-
-function createScenarioDurationMs(actions = []) {
-  return roundValue(
-    actions.reduce(
-      (endMs, action) =>
-        Math.max(
-          endMs,
-          numberOrZero(action.startMs) + numberOrZero(action.durationMs)
-        ),
-      0
-    )
-  );
-}
-
-function createEmptyDeltaTotals() {
-  return {
-    enemyHpDelta: 0,
-    enemyToughnessDelta: 0,
-    selfEnergyDelta: 0,
-    hitCount: 0,
   };
 }
 

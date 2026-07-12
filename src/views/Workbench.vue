@@ -193,6 +193,7 @@
       @select-preset="selectScenarioComparisonPreset"
       @capture-current="captureCurrentScenarioComparisonBaseline"
       @import-baseline="importScenarioComparisonBaseline"
+      @select-window="selectScenarioComparisonWindow"
       @locate-action="locateScenarioComparisonAction"
     />
 
@@ -1129,6 +1130,7 @@ const workbenchPresets = ref([]);
 const comparisonDialogVisible = ref(false);
 const comparisonBaselineDraft = ref(null);
 const comparisonBaselineSource = ref(null);
+const comparisonWindowId = ref('full-axis');
 const undoHistoryStack = ref([]);
 const redoHistoryStack = ref([]);
 const workbenchRoot = ref(null);
@@ -1344,24 +1346,47 @@ const comparisonBaselineEffectIntervals = computed(() => {
     frameRate: comparisonBaselineScenario.value.time.fps,
   });
 });
+const comparisonBaselineRuntimeStatePointContexts = computed(() =>
+  comparisonBaselineSimulationResult.value
+    ? createRuntimeStatePointContexts(
+        comparisonBaselineSimulationResult.value.runtimeOutputs
+      )
+    : []
+);
+const comparisonBaselineContributionProjection = computed(() =>
+  comparisonBaselineScenario.value
+    ? projectCycleSections({
+        scenario: comparisonBaselineScenario.value,
+        runtimeOutputs: comparisonBaselineSimulationResult.value.runtimeOutputs,
+        effectIntervals: comparisonBaselineEffectIntervals.value,
+        statePointContexts: comparisonBaselineRuntimeStatePointContexts.value,
+      })
+    : null
+);
 const scenarioComparison = computed(() =>
   projectWorkbenchScenarioComparison({
+    windowId: comparisonWindowId.value,
     current: {
       label: activeWorkbenchScenario.value?.name ?? '当前编辑',
       sourceKind: 'current-workbench-project',
+      sourceId: scenarioWorkspace.value.activeScenarioId,
       scenario: scenario.value,
       runtimeOutputs: runtimeOutputs.value,
       effectIntervals: effectIntervalProjection.value,
+      contributionProjection: cycleSectionProjection.value,
     },
     baseline: comparisonBaselineScenario.value
       ? {
           label: comparisonBaselineSource.value?.label ?? '基准方案',
           sourceKind:
             comparisonBaselineSource.value?.kind ?? 'comparison-baseline',
+          sourceId: comparisonBaselineSource.value?.id ?? null,
           scenario: comparisonBaselineScenario.value,
           runtimeOutputs:
             comparisonBaselineSimulationResult.value.runtimeOutputs,
           effectIntervals: comparisonBaselineEffectIntervals.value,
+          contributionProjection:
+            comparisonBaselineContributionProjection.value,
         }
       : null,
   })
@@ -3254,6 +3279,17 @@ function closeScenarioComparison() {
   comparisonDialogVisible.value = false;
 }
 
+function selectScenarioComparisonWindow(windowId) {
+  const window = scenarioComparison.value.windows.find(
+    item => item.windowId === windowId && item.comparable
+  );
+  if (!window) {
+    return false;
+  }
+  comparisonWindowId.value = window.windowId;
+  return true;
+}
+
 function selectScenarioComparisonWorkspaceScenario(scenarioId) {
   const synchronizedWorkspace = synchronizeActiveWorkbenchScenario(
     scenarioWorkspace.value,
@@ -3340,26 +3376,91 @@ function setScenarioComparisonBaseline(draft, source) {
     draft.savedAt ?? null
   );
   comparisonBaselineSource.value = { ...source };
+  comparisonWindowId.value = 'full-axis';
   if (draft.runtimeSampleCaptures?.length) {
     void ensureRuntimeDiagnosticsLoaded();
   }
   return true;
 }
 
-function locateScenarioComparisonAction(actionId) {
+function locateScenarioComparisonAction(request) {
+  const payload =
+    request && typeof request === 'object'
+      ? request
+      : { role: 'current', actionId: request };
+  return payload.role === 'baseline'
+    ? locateScenarioComparisonBaselineAction(payload)
+    : focusScenarioComparisonAction(payload, {
+        focusSource: 'scenario-comparison',
+        changeSummary: '从方案差异返回当前动作修改',
+      });
+}
+
+function locateScenarioComparisonBaselineAction(payload) {
+  const baselineDraft = comparisonBaselineDraft.value;
+  const baselineSource = comparisonBaselineSource.value;
+  if (!baselineDraft || !baselineSource) {
+    return false;
+  }
+  closeScenarioComparison();
+  let activated = false;
+  if (baselineSource.kind === 'workspace-scenario') {
+    activated = switchWorkspaceScenario(baselineSource.id);
+  } else {
+    const result = addWorkbenchScenarioFromDraft(
+      scenarioWorkspace.value,
+      createWorkbenchScenarioDraftSnapshot(getCurrentWorkbenchScenarioState()),
+      createWorkbenchScenarioDraftSnapshot(baselineDraft),
+      `基准：${baselineSource.label ?? '方案'}`
+    );
+    if (!result.changed && result.reason === 'scenario-limit-reached') {
+      draftStatus.value = `方案数量已达上限（${MAX_WORKBENCH_SCENARIOS}）`;
+      return false;
+    }
+    activated = applyWorkspaceScenarioMutation(result, '已打开对比基准');
+    comparisonBaselineDraft.value = null;
+    comparisonBaselineSource.value = null;
+  }
+  if (!activated) {
+    return false;
+  }
+  return focusScenarioComparisonAction(payload, {
+    focusSource: 'scenario-comparison-baseline',
+    changeSummary: '已切换到基准方案并定位贡献动作',
+  });
+}
+
+function focusScenarioComparisonAction(
+  { actionId, statePointId = '', frameIndex = null } = {},
+  { focusSource, changeSummary }
+) {
   if (!findActionDraftById(actionId)) {
     return false;
   }
   closeScenarioComparison();
   selectAction(actionId, { syncRuntimeResult: false });
+  if (statePointId) {
+    selectStateCurvePoint(statePointId);
+  }
+  if (
+    frameIndex != null &&
+    frameIndex !== '' &&
+    Number.isFinite(Number(frameIndex))
+  ) {
+    selectTimelineFrame({
+      frameIndex: Number(frameIndex),
+      statePointId,
+      source: focusSource,
+    });
+  }
   actionEditFocus.value = {
     ...createEmptyWorkbenchActionEditFocus(actionEditFocus.value.sequence + 1),
     actionId,
     fieldKey: 'startMs',
     label: '方案对比',
-    changeSummary: '从方案差异返回当前动作修改',
-    editOrigin: 'scenario-comparison',
-    focusSource: 'scenario-comparison',
+    changeSummary,
+    editOrigin: focusSource,
+    focusSource,
   };
   void nextTick().then(() => {
     scrollActionEditFocusIntoView();
@@ -4564,7 +4665,11 @@ function locateCycleSectionAction(request) {
   if (request?.statePointId) {
     selectStateCurvePoint(request.statePointId);
   }
-  if (Number.isFinite(Number(request?.frameIndex))) {
+  if (
+    request?.frameIndex != null &&
+    request.frameIndex !== '' &&
+    Number.isFinite(Number(request.frameIndex))
+  ) {
     selectTimelineFrame({
       frameIndex: Number(request.frameIndex),
       statePointId: request.statePointId ?? '',

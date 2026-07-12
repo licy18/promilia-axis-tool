@@ -33,7 +33,9 @@
         <span>{{ formatRange(projection.fullAxis) }}</span>
       </button>
       <button
-        v-for="section in projection.sections"
+        v-for="section in projection.summary.boundaryCount
+          ? projection.sections
+          : []"
         :key="section.sectionId"
         class="section-tab"
         :class="{ active: section.sectionId === selectedWindow?.sectionId }"

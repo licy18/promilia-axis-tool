@@ -1262,6 +1262,16 @@ core 文件从 1,355,407B 降至 1,080,871B，Workbench 主块从 362,328B gzip 
 
 下一阶段目标：Stage 11-B / 时间窗口方案对比与差异定位。复用现有双方案 runtime outputs 和 Stage 11-A 窗口聚合，在全轴或同一 cycle 区段比较角色、动作及三值贡献，并从差异项定位回当前或基准方案来源；不建立第二套公式，不接入未确认机制，也不拆成碎片统计 UI。
 
+### Stage 11-B 时间窗口方案对比与差异定位（2026-07-12）
+
+方案对比已改为直接消费当前与基准两侧的 `AzPrContributionWindowProjection`。用户可在全轴或双方共有的同序 cycle 区段切换，比较总体指标、三角色 HP/韧性/独立能量贡献、动作贡献和效果覆盖。比较层不再维护一套平行的动作/角色统计；所有差值均由两份 applied runtime window 结果相减，窗口只筛选交易，不重新生成 delta。无 boundary 时只显示全轴；任一侧缺失的区段会标记为不可比较，不会回退后伪装成目标区段。
+
+动作差异同时携带两侧的 state point 与 frame。当前侧可直接关闭对话框并定位原轴的动作、曲线、日志和属性编辑；工作区基准侧会切换到对应方案后定位。快照、预设或导入项目基准没有活动工作区时，会以独立方案加入当前工作区再定位，原方案不被覆盖。桌面和 390px 窄屏视觉证据为 `reports/stage-11b-comparison-desktop.png` 与 `reports/stage-11b-comparison-narrow.png`；窄屏窗口栏完整同屏，长指标改为单列且无文本重叠，动作表保留局部横向滚动。
+
+阶段验收：77 个测试文件、447 条单元/组件测试，39 条 Workbench 主流程和 28 项 production preview 全部通过，生产报告为 `trial-ready`。120 动作浏览器首屏为 2127ms，2x 播放推进 106F、自动滚动 332px，卸载后活动 rAF 为 0；180 动作 compile/simulation p95 分别为 18.663ms/39.441ms。生产引用审计仍为 117 个源码、113 个生产可达、4 个允许 test-only、0 个孤儿；applied source 审计保持 3 条 bound-ready、0 drift、0 compatible-unbound。总 JavaScript 为 734,625B gzip，低于 735,000B 硬门槛，但仅余 375B。
+
+下一阶段目标：Stage 11-C / 多维复盘生产余量与长轴比较收口。把总 JS gzip 恢复到约 733,000B，并为双 120 动作方案的窗口切换、贡献聚合和来源定位建立浏览器性能守门；优先收束重复投影字段和按需计算边界，不放宽预算、不新增公式或碎片 UI。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
