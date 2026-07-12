@@ -5,6 +5,10 @@ import {
 } from '../../domain/workbenchDraftStorage';
 import { createWorkbenchContributionAnalysisReport } from '../../domain/workbenchAnalysisReport';
 import {
+  createWorkbenchAnalysisReportPngMetadata,
+  embedWorkbenchAnalysisReportInPng,
+} from '../../domain/workbenchAnalysisReportPng';
+import {
   createWorkbenchProjectPngMetadata,
   embedWorkbenchProjectInPng,
 } from '../../domain/workbenchPngProject';
@@ -65,6 +69,27 @@ describe('Workbench project file receiver', () => {
     });
   });
 
+  it('routes a PNG analysis report without replacing the project', async () => {
+    const report = createReceiverAnalysisReport();
+    const png = await embedWorkbenchAnalysisReportInPng(
+      createOnePixelPng(),
+      createWorkbenchAnalysisReportPngMetadata(report)
+    );
+    const result = await receiveWorkbenchProjectFile(
+      new File([png], 'analysis.png', { type: 'image/png' })
+    );
+
+    expect(result).toMatchObject({
+      kind: WORKBENCH_PROJECT_FILE_RESULT_KINDS.ANALYSIS_REPORT,
+      sourceKind: 'png',
+      fileName: 'analysis.png',
+      report: { title: '当前方案 · 全轴' },
+      validation: { status: 'valid', appliedTransactionCount: 1 },
+      metadata: { type: 'workbench-analysis-report-png' },
+      statusText: '已打开 PNG 分析报告',
+    });
+  });
+
   it('does not report success when the project compatibility gate rejects a draft', async () => {
     const snapshot = createWorkbenchProjectFileSnapshot(
       createDefaultWorkbenchDraftState(),
@@ -104,58 +129,7 @@ describe('Workbench project file receiver', () => {
   });
 
   it('routes a validated analysis report without replacing the project', async () => {
-    const draft = createDefaultWorkbenchDraftState();
-    const actionId = draft.actionDrafts[0].id;
-    const report = createWorkbenchContributionAnalysisReport({
-      project: {
-        schemaVersion: 1,
-        id: 'project-file-receiver-report',
-        name: '报告来源轴',
-        time: { fps: 60, durationMs: 1000 },
-      },
-      source: {
-        label: '当前方案',
-        sourceKind: 'workspace-scenario',
-        sourceId: 'scenario-0001',
-        draft,
-      },
-      contributionProjection: {
-        fullAxis: {
-          windowId: 'full-axis',
-          kind: 'axis',
-          label: '全轴',
-          startMs: 0,
-          endMs: 1000,
-          durationMs: 1000,
-          metrics: {},
-          actors: [],
-          actions: [
-            {
-              actionId,
-              name: '普通攻击',
-              statePointId: 'state-point-1',
-              frameIndex: 0,
-            },
-          ],
-          effects: [],
-          summary: { hitTransactionCount: 1 },
-        },
-      },
-      runtimeOutputs: {
-        hitTransactions: {
-          transactions: [
-            {
-              transactionId: 'transaction-1',
-              actionId,
-              frameIndex: 0,
-              timeMs: 0,
-              sourceDeltaIds: ['delta-1'],
-              delta: { enemyHp: 100 },
-            },
-          ],
-        },
-      },
-    });
+    const report = createReceiverAnalysisReport();
     const file = new File([JSON.stringify(report)], 'review.json', {
       type: 'application/json',
     });
@@ -233,6 +207,60 @@ describe('Workbench project file receiver', () => {
 
 function createOnePixelPng() {
   return new Uint8Array(Buffer.from(ONE_PIXEL_PNG_BASE64, 'base64'));
+}
+
+function createReceiverAnalysisReport() {
+  const draft = createDefaultWorkbenchDraftState();
+  const actionId = draft.actionDrafts[0].id;
+  const window = {
+    windowId: 'full-axis',
+    kind: 'axis',
+    label: '全轴',
+    startMs: 0,
+    endMs: 1000,
+    durationMs: 1000,
+    metrics: {},
+    actors: [],
+    actions: [
+      {
+        actionId,
+        name: '普通攻击',
+        statePointId: 'state-point-1',
+        frameIndex: 0,
+      },
+    ],
+    effects: [],
+    summary: { hitTransactionCount: 1 },
+  };
+  return createWorkbenchContributionAnalysisReport({
+    project: {
+      schemaVersion: 1,
+      id: 'project-file-receiver-report',
+      name: '报告来源轴',
+      time: { fps: 60, durationMs: 1000 },
+    },
+    source: {
+      label: '当前方案',
+      sourceKind: 'workspace-scenario',
+      sourceId: 'scenario-0001',
+      draft,
+    },
+    contributionProjection: { fullAxis: window, windows: [window] },
+    runtimeOutputs: {
+      hitTransactions: {
+        transactions: [
+          {
+            transactionId: 'transaction-1',
+            actionId,
+            frameIndex: 0,
+            timeMs: 0,
+            sourceDeltaIds: ['delta-1'],
+            delta: { enemyHp: 100 },
+          },
+        ],
+      },
+    },
+  });
 }
 
 function createEventTarget() {

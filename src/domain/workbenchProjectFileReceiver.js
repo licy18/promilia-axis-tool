@@ -2,6 +2,7 @@ import { parseWorkbenchProjectFile } from './workbenchDraftStorage';
 import { parseWorkbenchProjectPng } from './workbenchPngProject';
 import { parseWorkbenchRuntimeSampleCaptureFile } from './workbenchRuntimeSampleCapture';
 import { validateWorkbenchAnalysisReport } from './workbenchAnalysisReport';
+import { parseWorkbenchAnalysisReportPng } from './workbenchAnalysisReportPng';
 import { isPngSource } from '../utils/pngMetadata';
 
 export const WORKBENCH_PROJECT_FILE_RESULT_KINDS = Object.freeze({
@@ -28,16 +29,30 @@ export async function receiveWorkbenchProjectFile(
   const png = await isWorkbenchProjectPngFile(file);
   if (png) {
     const draft = await parseWorkbenchProjectPng(file);
-    return draft
-      ? {
-          kind: WORKBENCH_PROJECT_FILE_RESULT_KINDS.PROJECT,
-          sourceKind: WORKBENCH_PROJECT_FILE_SOURCE_KINDS.PNG,
-          fileName,
-          draft,
-          statusText:
-            source === 'drop' ? '已从拖放恢复 PNG 项目' : '已从 PNG 导入项目',
-        }
-      : createInvalidResult('png-metadata-missing', fileName);
+    if (draft) {
+      return {
+        kind: WORKBENCH_PROJECT_FILE_RESULT_KINDS.PROJECT,
+        sourceKind: WORKBENCH_PROJECT_FILE_SOURCE_KINDS.PNG,
+        fileName,
+        draft,
+        statusText:
+          source === 'drop' ? '已从拖放恢复 PNG 项目' : '已从 PNG 导入项目',
+      };
+    }
+    const analysisReport = await parseWorkbenchAnalysisReportPng(file);
+    if (analysisReport) {
+      return {
+        kind: WORKBENCH_PROJECT_FILE_RESULT_KINDS.ANALYSIS_REPORT,
+        sourceKind: WORKBENCH_PROJECT_FILE_SOURCE_KINDS.PNG,
+        fileName,
+        ...analysisReport,
+        statusText:
+          source === 'drop'
+            ? '已从拖放打开 PNG 分析报告'
+            : '已打开 PNG 分析报告',
+      };
+    }
+    return createInvalidResult('png-metadata-missing', fileName);
   }
 
   if (source !== 'picker' && !isWorkbenchProjectTextFile(file)) {
@@ -220,7 +235,7 @@ function createInvalidResult(reason, fileName = '') {
     fileName,
     statusText:
       reason === 'png-metadata-missing'
-        ? 'PNG 中没有有效项目'
+        ? 'PNG 中没有有效项目或分析报告'
         : reason === 'unsupported-file'
           ? '仅支持 JSON 分析/项目文件或 PNG 项目'
           : '导入失败',

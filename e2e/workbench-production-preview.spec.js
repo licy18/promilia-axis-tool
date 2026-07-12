@@ -1,5 +1,6 @@
 import { Buffer } from 'node:buffer';
 import { readFile, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import { expect, test } from '@playwright/test';
 
 test('[applied-source-binding-guard] accepts the production three-track source audit', async () => {
@@ -1224,8 +1225,12 @@ test('[stage-12a-analysis-report] exports, validates, and reopens frozen analysi
   await expect(
     comparison.getByTestId('workbench-comparison-action-row')
   ).toHaveCount(2);
-  const comparisonDownloadPromise = page.waitForEvent('download');
   await page.getByTestId('workbench-export-comparison-report').click();
+  const reportDialog = page.getByTestId('workbench-analysis-report');
+  await expect(comparison).toBeHidden();
+  await expect(reportDialog).toBeVisible();
+  const comparisonDownloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-analysis-report-export-json').click();
   const comparisonDownload = await comparisonDownloadPromise;
   const comparisonDownloadPath = await comparisonDownload.path();
   expect(comparisonDownloadPath).toBeTruthy();
@@ -1259,11 +1264,10 @@ test('[stage-12a-analysis-report] exports, validates, and reopens frozen analysi
     )
   ).toBe(true);
 
-  await page.getByTestId('workbench-comparison-close').click();
+  await page.getByTestId('workbench-analysis-report-close').click();
   await page
     .getByTestId('workbench-import-project-file')
     .setInputFiles(comparisonDownloadPath);
-  const reportDialog = page.getByTestId('workbench-analysis-report');
   await expect(reportDialog).toBeVisible();
   await expect(
     reportDialog.getByTestId('workbench-analysis-report-validation')
@@ -1317,8 +1321,10 @@ test('[stage-12a-analysis-report] exports, validates, and reopens frozen analysi
     )
   ).toHaveAttribute('data-edit-focus-source', 'analysis-report');
 
-  const contributionDownloadPromise = page.waitForEvent('download');
   await page.getByTestId('workbench-export-contribution-report').click();
+  await expect(reportDialog).toBeVisible();
+  const contributionDownloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-analysis-report-export-json').click();
   const contributionDownload = await contributionDownloadPromise;
   const contributionReport = JSON.parse(
     await readFile(await contributionDownload.path(), 'utf8')
@@ -1328,6 +1334,78 @@ test('[stage-12a-analysis-report] exports, validates, and reopens frozen analysi
     analysisKind: 'contribution-window',
     summary: { sourceCount: 1 },
   });
+});
+
+test('[stage-12b-analysis-report-png] exports and reopens a visual report with embedded metadata', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/#/workbench');
+
+  await page.getByTestId('workbench-export-contribution-report').click();
+  const reportDialog = page.getByTestId('workbench-analysis-report');
+  await expect(reportDialog).toBeVisible();
+  await expect(reportDialog).toHaveAttribute(
+    'data-report-kind',
+    'contribution-window'
+  );
+  const pngDownloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-analysis-report-export-png').click();
+  const pngDownload = await pngDownloadPromise;
+  const pngDownloadPath = await pngDownload.path();
+  expect(pngDownloadPath).toBeTruthy();
+  expect(pngDownload.suggestedFilename()).toMatch(
+    /promilia-analysis-contribution-.*\.png$/
+  );
+  const reportPngPath = resolve('reports/stage-12b-analysis-report.png');
+  await pngDownload.saveAs(reportPngPath);
+  const pngBytes = await readFile(reportPngPath);
+  expect([...pngBytes.subarray(0, 8)]).toEqual([
+    137, 80, 78, 71, 13, 10, 26, 10,
+  ]);
+  expect(pngBytes.length).toBeGreaterThan(20_000);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已导出分析报告 PNG'
+  );
+
+  await page.getByTestId('workbench-analysis-report-close').click();
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(reportPngPath);
+  await expect(reportDialog).toBeVisible();
+  await expect(
+    reportDialog.getByTestId('workbench-analysis-report-validation')
+  ).toHaveAttribute('data-validation-status', 'valid');
+  await expect(
+    reportDialog.getByTestId('workbench-analysis-report-source')
+  ).toHaveCount(1);
+  await expect(
+    reportDialog.getByTestId('workbench-analysis-report-action')
+  ).toHaveCount(1);
+  await reportDialog.locator('.report-dialog').screenshot({
+    path: 'reports/stage-12b-analysis-report-dialog-desktop.png',
+  });
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.screenshot({
+    path: 'reports/stage-12b-analysis-report-dialog-narrow.png',
+  });
+
+  const locate = reportDialog.getByTestId(
+    'workbench-analysis-report-locate-current'
+  );
+  const statePointId = await locate.getAttribute('data-state-point-id');
+  await locate.click();
+  await expect(reportDialog).toBeHidden();
+  const workbench = page.locator('main.workbench');
+  await expect(workbench).toHaveAttribute('data-workspace-scenario-count', '2');
+  await expect(
+    page.locator('.action-item[data-action-id="action-0001"]')
+  ).toHaveClass(/selected/);
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-state-point')
+  ).toHaveText(statePointId);
 });
 
 test('[diagnostics-lazy-load] loads runtime diagnostics from a production chunk', async ({

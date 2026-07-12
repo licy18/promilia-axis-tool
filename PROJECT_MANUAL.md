@@ -1290,6 +1290,16 @@ core 文件从 1,355,407B 降至 1,080,871B，Workbench 主块从 362,328B gzip 
 
 下一阶段目标：Stage 12-B / 分析报告 PNG 与元数据回导闭环。把同一版本化报告渲染为可交付 PNG 并嵌入元数据，支持从 PNG 回读、验证和来源定位；复用 Stage 12-A 与既有 PNG 工具，不新增计算、不改变项目 v16 或三值边界。
 
+### Stage 12-B 分析报告 PNG 与元数据回导闭环（2026-07-12）
+
+分析报告现使用统一查看与导出面板：当前贡献窗口或 A/B 比较先生成并验证同一份 `workbench-analysis-report` v1，再由用户选择 JSON 或 PNG。PNG 导出复用 `snapdom` 懒加载和既有 PNG tEXt/CRC 工具，捕获完整报告元素而非当前视口；导出模式固定 1120px 内容宽度并隐藏 JSON/PNG、关闭、打开来源和动作定位控件，因此成品只保留标题、验证摘要、来源、窗口指标与动作数据。
+
+新增 `workbench-analysis-report-png` v1 元数据。完整报告经共享 UTF-8 base64url 编码写入独立 `PromiliaAxisAnalysisReport` tEXt chunk；统一文件接收器会先识别项目 PNG，再识别报告 PNG，二者不会互相误导入。报告 PNG 回读后再次执行 Stage 12-A 的 schema、来源、动作和 applied source identity 校验，再打开报告并允许恢复来源方案和 runtime 定位。视觉证据为 `reports/stage-12b-analysis-report.png`、`reports/stage-12b-analysis-report-dialog-desktop.png` 与 `reports/stage-12b-analysis-report-dialog-narrow.png`。
+
+阶段验收为 80 个测试文件、455 条单元/组件测试，39 条 Workbench 主流程和 30/30 项必需 production preview 能力全部通过，报告继续为 `trial-ready`。生产引用审计为 121 个源码、117 个生产可达、4 个允许 test-only、0 个孤儿；applied source 保持 3 条 bound-ready、0 drift、0 compatible-unbound。总 JavaScript 为 728,193B gzip，报告视图异步 chunk 为 2,999B gzip；180 动作 compile/simulation p95 为 20.028ms/40.299ms，120 动作首屏 2040ms，双 120 动作比较打开 548ms、窗口切换 326ms、来源定位 2403ms，均满足预算。
+
+下一阶段目标：Stage 12-C / 分析报告可复现性审计。使用当前游戏数据、profile 和标准 runtime 重放报告来源，对冻结窗口或比较输出给出 exact、drift、incompatible 结论及最小差异定位；不覆盖原报告、不新增公式，也不把审计结果当作 calculator 输入。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

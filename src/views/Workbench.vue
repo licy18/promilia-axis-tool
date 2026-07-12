@@ -200,11 +200,15 @@
 
     <WorkbenchAnalysisReportDialog
       v-if="analysisReportDialogVisible"
+      ref="analysisReportDialog"
       :visible="analysisReportDialogVisible"
       :report="importedAnalysisReport"
       :validation="importedAnalysisReportValidation"
+      :exporting-png="analysisReportPngExporting"
       @close="closeAnalysisReport"
       @locate-source="locateImportedAnalysisReportSource"
+      @export-json="exportImportedAnalysisReportJson"
+      @export-png="exportImportedAnalysisReportPng"
     />
 
     <WorkbenchActionContextMenu
@@ -969,7 +973,13 @@ import {
   createWorkbenchAnalysisReportFileName,
   createWorkbenchContributionAnalysisReport,
   createWorkbenchScenarioComparisonAnalysisReport,
+  validateWorkbenchAnalysisReport,
 } from '../domain/workbenchAnalysisReport';
+import {
+  createWorkbenchAnalysisReportPngFileName,
+  createWorkbenchAnalysisReportPngMetadata,
+  embedWorkbenchAnalysisReportInPng,
+} from '../domain/workbenchAnalysisReportPng';
 import {
   clearWorkbenchDraft,
   createWorkbenchDraftSnapshot,
@@ -1153,6 +1163,8 @@ const comparisonWindowId = ref('full-axis');
 const analysisReportDialogVisible = ref(false);
 const importedAnalysisReport = ref(null);
 const importedAnalysisReportValidation = ref(null);
+const analysisReportDialog = ref(null);
+const analysisReportPngExporting = ref(false);
 const undoHistoryStack = ref([]);
 const redoHistoryStack = ref([]);
 const workbenchRoot = ref(null);
@@ -3575,7 +3587,7 @@ function exportContributionAnalysisReport(windowId = 'full-axis') {
       runtimeOutputs: runtimeOutputs.value,
       windowId,
     });
-    downloadWorkbenchAnalysisReport(report, '已导出贡献分析报告');
+    openWorkbenchAnalysisReport(report, '已生成贡献分析报告');
   } catch {
     draftStatus.value = '贡献分析报告导出失败';
   }
@@ -3609,21 +3621,85 @@ function exportScenarioComparisonAnalysisReport() {
       baselineRuntimeOutputs:
         comparisonBaselineSimulationResult.value?.runtimeOutputs,
     });
-    downloadWorkbenchAnalysisReport(report, '已导出方案对比分析报告');
+    closeScenarioComparison();
+    openWorkbenchAnalysisReport(report, '已生成方案对比分析报告');
   } catch {
     draftStatus.value = '方案对比分析报告导出失败';
   }
 }
 
-function downloadWorkbenchAnalysisReport(report, statusText) {
+function openWorkbenchAnalysisReport(report, statusText) {
+  const validated = validateWorkbenchAnalysisReport(report);
+  if (!validated) {
+    throw new Error('Analysis report validation failed');
+  }
+  importedAnalysisReport.value = validated.report;
+  importedAnalysisReportValidation.value = validated.validation;
+  analysisReportDialogVisible.value = true;
+  draftStatus.value = statusText;
+}
+
+function exportImportedAnalysisReportJson() {
+  const report = importedAnalysisReport.value;
+  if (!report) {
+    draftStatus.value = '分析报告不可用';
+    return false;
+  }
   if (typeof document === 'undefined' || typeof Blob === 'undefined') {
-    throw new Error('Analysis report export is unavailable');
+    draftStatus.value = '分析报告导出不可用';
+    return false;
   }
   const blob = new Blob([JSON.stringify(report, null, 2)], {
     type: 'application/json',
   });
   downloadWorkbenchBlob(blob, createWorkbenchAnalysisReportFileName(report));
-  draftStatus.value = statusText;
+  draftStatus.value = '已导出分析报告 JSON';
+  return true;
+}
+
+async function exportImportedAnalysisReportPng() {
+  if (
+    analysisReportPngExporting.value ||
+    !importedAnalysisReport.value ||
+    typeof document === 'undefined' ||
+    typeof Blob === 'undefined'
+  ) {
+    if (!analysisReportPngExporting.value) {
+      draftStatus.value = '分析报告 PNG 导出不可用';
+    }
+    return false;
+  }
+  analysisReportPngExporting.value = true;
+  draftStatus.value = '正在生成分析报告 PNG';
+  try {
+    await nextTick();
+    await document.fonts?.ready;
+    const surface = analysisReportDialog.value?.getExportSurface?.();
+    if (!surface) {
+      throw new Error('Analysis report export surface is unavailable');
+    }
+    const { snapdom } = await import('@zumer/snapdom');
+    const capture = await snapdom(surface, { scale: 1 });
+    const captureBlob = await capture.toBlob({ type: 'png', dpr: 1 });
+    const metadata = createWorkbenchAnalysisReportPngMetadata(
+      importedAnalysisReport.value
+    );
+    const pngBlob = await embedWorkbenchAnalysisReportInPng(
+      captureBlob,
+      metadata
+    );
+    downloadWorkbenchBlob(
+      pngBlob,
+      createWorkbenchAnalysisReportPngFileName(metadata)
+    );
+    draftStatus.value = '已导出分析报告 PNG';
+    return true;
+  } catch {
+    draftStatus.value = '分析报告 PNG 导出失败';
+    return false;
+  } finally {
+    analysisReportPngExporting.value = false;
+  }
 }
 
 async function exportProjectPng() {
@@ -3811,10 +3887,8 @@ async function receiveWorkbenchProjectFile(file, source = 'picker') {
     source,
     onProject: applyImportedProjectDraft,
     onAnalysisReport: (report, validation, statusText) => {
-      importedAnalysisReport.value = report;
+      openWorkbenchAnalysisReport(report, statusText);
       importedAnalysisReportValidation.value = validation;
-      analysisReportDialogVisible.value = true;
-      draftStatus.value = statusText;
       return true;
     },
     onRuntimeCapture: async captures => {
@@ -3826,7 +3900,11 @@ async function receiveWorkbenchProjectFile(file, source = 'picker') {
 }
 
 function closeAnalysisReport() {
+  if (analysisReportPngExporting.value) {
+    return false;
+  }
   analysisReportDialogVisible.value = false;
+  return true;
 }
 
 function locateImportedAnalysisReportSource({

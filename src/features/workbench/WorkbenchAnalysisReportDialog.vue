@@ -8,7 +8,9 @@
       @click.self="emit('close')"
     >
       <section
+        ref="reportSurface"
         class="report-dialog"
+        :class="{ exporting: exportingPng }"
         role="dialog"
         aria-modal="true"
         aria-labelledby="workbench-analysis-report-title"
@@ -18,15 +20,38 @@
             <span>{{ kindLabel }}</span>
             <h2 id="workbench-analysis-report-title">{{ report.title }}</h2>
           </div>
-          <button
-            class="icon-button"
-            type="button"
-            title="关闭分析报告"
-            data-testid="workbench-analysis-report-close"
-            @click="emit('close')"
-          >
-            <Close />
-          </button>
+          <div class="report-header-actions">
+            <button
+              class="command-button"
+              type="button"
+              data-testid="workbench-analysis-report-export-json"
+              :disabled="exportingPng"
+              @click="emit('export-json')"
+            >
+              <Download />
+              <span>JSON</span>
+            </button>
+            <button
+              class="command-button"
+              type="button"
+              data-testid="workbench-analysis-report-export-png"
+              :disabled="exportingPng"
+              @click="emit('export-png')"
+            >
+              <Picture />
+              <span>{{ exportingPng ? '生成中' : 'PNG' }}</span>
+            </button>
+            <button
+              class="icon-button"
+              type="button"
+              title="关闭分析报告"
+              data-testid="workbench-analysis-report-close"
+              :disabled="exportingPng"
+              @click="emit('close')"
+            >
+              <Close />
+            </button>
+          </div>
         </header>
 
         <div
@@ -152,6 +177,8 @@
                       type="button"
                       title="打开当前来源并定位动作"
                       :disabled="!action.currentActionId"
+                      :data-state-point-id="action.currentStatePointId || ''"
+                      :data-frame-index="action.currentFrameIndex ?? ''"
                       data-testid="workbench-analysis-report-locate-current"
                       @click="emitLocate(action, 'current')"
                     >
@@ -163,6 +190,8 @@
                       type="button"
                       title="打开基准来源并定位动作"
                       :disabled="!action.baselineActionId"
+                      :data-state-point-id="action.baselineStatePointId || ''"
+                      :data-frame-index="action.baselineFrameIndex ?? ''"
                       data-testid="workbench-analysis-report-locate-baseline"
                       @click="emitLocate(action, 'baseline')"
                     >
@@ -181,13 +210,15 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import {
   CircleCheck,
   Close,
   DocumentCopy,
+  Download,
   EditPen,
   FolderOpened,
+  Picture,
 } from '@element-plus/icons-vue';
 import { WORKBENCH_ANALYSIS_KINDS } from '../../domain/workbenchAnalysisReport';
 import { msToFrame } from '../../domain/timebase';
@@ -196,8 +227,16 @@ const props = defineProps({
   visible: { type: Boolean, default: false },
   report: { type: Object, default: null },
   validation: { type: Object, default: null },
+  exportingPng: { type: Boolean, default: false },
 });
-const emit = defineEmits(['close', 'locate-source']);
+const emit = defineEmits([
+  'close',
+  'locate-source',
+  'export-json',
+  'export-png',
+]);
+const reportSurface = ref(null);
+defineExpose({ getExportSurface: () => reportSurface.value });
 const isComparison = computed(
   () =>
     props.report?.analysisKind === WORKBENCH_ANALYSIS_KINDS.SCENARIO_COMPARISON
@@ -377,6 +416,39 @@ function formatExportedAt(value) {
   font-size: 17px;
   letter-spacing: 0;
 }
+.report-header-actions,
+.command-button {
+  display: flex;
+  align-items: center;
+}
+.report-header-actions {
+  gap: 7px;
+}
+.command-button {
+  justify-content: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 0 9px;
+  border: 1px solid #3a474f;
+  border-radius: 4px;
+  background: #20272c;
+  color: #dce5e8;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.command-button svg {
+  width: 14px;
+  height: 14px;
+}
+.command-button:hover:not(:disabled) {
+  border-color: #79c7b9;
+  color: #a9e6db;
+}
+.command-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
 .validation-strip {
   justify-content: flex-start;
   min-height: 38px;
@@ -485,10 +557,9 @@ function formatExportedAt(value) {
 .action-head,
 .action-row {
   display: grid;
-  grid-template-columns: minmax(170px, 1.5fr) minmax(100px, 0.8fr) repeat(
-      3,
-      minmax(72px, 0.6fr)
-    ) 76px;
+  grid-template-columns:
+    minmax(170px, 1.5fr) minmax(100px, 0.8fr) repeat(3, minmax(72px, 0.6fr))
+    76px;
   align-items: center;
   gap: 10px;
   min-height: 38px;
@@ -550,6 +621,29 @@ function formatExportedAt(value) {
   color: #7f8c94;
   font-size: 11px;
 }
+.report-dialog.exporting {
+  width: 1120px;
+  max-height: none;
+  overflow: visible;
+  box-shadow: none;
+}
+.report-dialog.exporting .report-content {
+  overflow: visible;
+}
+.report-dialog.exporting .report-header-actions {
+  display: none;
+}
+.report-dialog.exporting .source-button,
+.report-dialog.exporting .locate-actions,
+.report-dialog.exporting .action-head > span:last-child {
+  display: none;
+}
+.report-dialog.exporting .action-head,
+.report-dialog.exporting .action-row {
+  grid-template-columns:
+    minmax(170px, 1.5fr) minmax(100px, 0.8fr)
+    repeat(3, minmax(72px, 0.6fr));
+}
 @media (max-width: 720px) {
   .report-overlay {
     align-items: stretch;
@@ -563,6 +657,10 @@ function formatExportedAt(value) {
   }
   .report-header h2 {
     font-size: 14px;
+  }
+  .report-header-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
   .source-list {
     grid-template-columns: 1fr;

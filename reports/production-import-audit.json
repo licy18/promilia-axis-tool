@@ -20,6 +20,7 @@
       "src/__tests__/domain/workbenchActionClipboard.test.js",
       "src/__tests__/domain/workbenchActionRelations.test.js",
       "src/__tests__/domain/workbenchAnalysisReport.test.js",
+      "src/__tests__/domain/workbenchAnalysisReportPng.test.js",
       "src/__tests__/domain/workbenchConfigurationLibrary.test.js",
       "src/__tests__/domain/workbenchCycleBoundaries.test.js",
       "src/__tests__/domain/workbenchDraftStorage.test.js",
@@ -93,8 +94,8 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 119,
-    "productionReachableCount": 115,
+    "sourceCodeFileCount": 121,
+    "productionReachableCount": 117,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
@@ -102,7 +103,7 @@
     "productionReachableByArea": {
       "src": 2,
       "src/data": 1,
-      "src/domain": 26,
+      "src/domain": 27,
       "src/features/workbench": 45,
       "src/i18n": 1,
       "src/router": 1,
@@ -114,7 +115,7 @@
       "src/simulation/projection": 6,
       "src/simulation/runtime": 9,
       "src/store": 1,
-      "src/utils": 1,
+      "src/utils": 2,
       "src/views": 4
     },
     "testOnlyByArea": {
@@ -138,6 +139,7 @@
     "src/domain/workbenchActionClipboard.js",
     "src/domain/workbenchActionRelations.js",
     "src/domain/workbenchAnalysisReport.js",
+    "src/domain/workbenchAnalysisReportPng.js",
     "src/domain/workbenchConfigurationLibrary.js",
     "src/domain/workbenchConfigurationSourceContract.js",
     "src/domain/workbenchCycleBoundaries.js",
@@ -235,6 +237,7 @@
     "src/simulation/runtime/threeValueRuntimeStateSnapshots.js",
     "src/simulation/threeValueCalculatorAdapters.js",
     "src/store/gamedata.js",
+    "src/utils/base64Url.js",
     "src/utils/pngMetadata.js",
     "src/views/DataEditor.vue",
     "src/views/Guide.vue",

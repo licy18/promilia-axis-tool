@@ -55,6 +55,15 @@ describe('WorkbenchAnalysisReportDialog', () => {
     expect(wrapper.emitted('locate-source')?.at(-1)?.[0]).toEqual({
       role: 'baseline',
     });
+    await wrapper
+      .get('[data-testid="workbench-analysis-report-export-json"]')
+      .trigger('click');
+    await wrapper
+      .get('[data-testid="workbench-analysis-report-export-png"]')
+      .trigger('click');
+    expect(wrapper.emitted('export-json')).toHaveLength(1);
+    expect(wrapper.emitted('export-png')).toHaveLength(1);
+    expect(wrapper.vm.getExportSurface()).toBeTruthy();
 
     wrapper.unmount();
   });

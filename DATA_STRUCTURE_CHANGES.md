@@ -27093,3 +27093,22 @@ WorkbenchAnalysisReport v1
 ```
 
 创建器只复制既有贡献窗口、方案比较和 applied hit transactions，不重新聚合或计算三值。解析器要求角色来源唯一且完整，规范化嵌入的 `scenarioDraft`，并验证分析动作与每条 transaction 的 `actionId` 均存在于对应来源草稿、`sourceDeltaIds` 非空且 transaction/source-delta identity 不重复；任一引用漂移都会拒绝整个报告。合法报告的来源通过 `addWorkbenchScenarioFromDraft` 加入当前工作区，再由标准 compiler/runtime 重建 state point 与曲线，冻结报告本身不作为 calculator 输入。
+
+## 411. Workbench analysis report PNG metadata v1
+
+Stage 12-B 新增独立 PNG 元数据类型 `workbench-analysis-report-png` v1，使用 tEXt key `PromiliaAxisAnalysisReport`。它与项目 PNG 的 `PromiliaAxisToolData` 并存但不共享类型判定；统一文件接收器先尝试项目元数据，再尝试分析报告元数据。
+
+```text
+WorkbenchAnalysisReportPngMetadata v1
+  game = azur-promilia
+  type = workbench-analysis-report-png
+  exportedAt
+  reportSchemaVersion = 1
+  reportType = workbench-analysis-report
+  analysisKind = contribution-window | scenario-comparison
+  sourceCount / actionReferenceCount
+  payloadEncoding = base64url-json
+  payload
+```
+
+`payload` 是经 UTF-8 base64url 编码的完整、已规范化 `WorkbenchAnalysisReport` v1。读取 PNG 时先验证 PNG signature、chunk 边界和 CRC，再验证元数据 envelope，解码 payload 后重新调用 `validateWorkbenchAnalysisReport`；任一环节失败都返回无效文件，不恢复部分来源。项目分享码与报告 PNG 现共用 `src/utils/base64Url.js` 的 UTF-8 编解码实现，但各自 schema、metadata key 和解析入口保持独立。PNG 画面只是报告的可视交付层，不进入项目、runtime 或 calculator 合同。
