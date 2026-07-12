@@ -1188,6 +1188,16 @@ Workbench 项目现固定为 3 个唯一角色槽位，并从同一项目元数�
 
 下一阶段目标：Stage 9-B / 曲线与动作统一时间坐标。把五条轨内基线升级为消费 runtime state curve points 的阶跃折线，动作、命中、状态点和折线共享同一缩放与横向滚动坐标；移动、复制或删除动作时只更新对应角色能量或敌人 HP/韧性断点，并用 30 秒长轴验证像素对齐。奇波效果继续 `unapplied`，不新增公式或恢复数值考古。
 
+### Stage 9-B 曲线与动作统一时间坐标（2026-07-12）
+
+五条轨内状态曲线现在直接消费标准 `runtimeOutputs.stateCurves`，不再用候选值或 UI 临时汇总重算状态。每条曲线从 runtime baseline 开始，按 applied delta 的 `timeMs / frameIndex` 和 state snapshot after 值生成水平保持、事件点垂直变化的阶跃折线；三条能量曲线按 `actorId` 独立读取，敌人 HP 与韧性按 `trackKey` 分轨，未命中的轨道保持到轴末的完整水平线。固定轨道标签持续显示当前值与最大值，不随横向滚动离开视口。
+
+动作块、伤害/状态点、阶跃断点和时间网格共用同一个百分比坐标及 track width。时间刻度栏与轨道 viewport 已双向同步 `scrollLeft`；在 30 秒轴和 2x 缩放下，资源动作从角色 1 切到角色 2 时只迁移角色 2 能量点，修改到 600F 后断点与动作起点保持 1px 内对齐，复制增加对应断点，删除后断点消失并恢复全长水平线。桌面与 760px 窄屏截图保存在 `reports/stage-9b-step-curves-desktop.png` 和 `reports/stage-9b-step-curves-narrow.png`。
+
+阶段验收：76 个测试文件、430 条单元/组件测试及 39 条 Workbench 主流程全部通过；production preview 新增 9-B 的角色隔离、HP/韧性分轨、移动/复制/删除、缩放滚动和像素对齐场景。applied source 审计仍为 3 条 bound-ready、0 drift、0 compatible-unbound；生产引用审计 116 个源码、112 个生产可达、4 个允许 test-only、0 个孤儿，数据投影一致。Workbench 主块为 355,379B gzip，全部 JavaScript 为 731,219B gzip，继续低于 733,000B 目标线。
+
+下一阶段目标：Stage 9-C / 时间轴优先的整页结构。以 Endaxis 的紧凑工作台信息层级为参照，让方案栏、三角色/奇波/敌人多轨时间轴和五条曲线成为桌面首屏主舞台；属性、配置、日志和复盘详情进入可切换侧栏或检查区，减少纵向卡片堆叠和重复摘要。该阶段先完成整页结构与响应式布局，再统一视觉细节，不新增公式或拆成碎片 UI 阶段。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

@@ -377,6 +377,115 @@ describe('TimelineGridPreview', () => {
     ).toBe('false');
   });
 
+  it('draws independent runtime step curves on the shared timeline coordinate', async () => {
+    const actors = [
+      { id: 'actor-a', name: '末音', initialSp: 0, stats: { maxSp: 1 } },
+      { id: 'actor-b', name: '寒悠悠', initialSp: 0, stats: { maxSp: 1 } },
+      { id: 'actor-c', name: '芃芃', initialSp: 0, stats: { maxSp: 1 } },
+    ];
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        actors,
+        durationMs: 3000,
+        enemy: {
+          id: 'enemy-a',
+          name: '训练假人',
+          stats: { maxHp: 1000, maxToughness: 100 },
+        },
+        runtimeStateCurves: createRuntimeTimelineStateCurves(),
+      }),
+    });
+
+    const curve = laneId =>
+      wrapper.get(
+        `[data-testid="workbench-timeline-row"][data-lane-id="${laneId}"] [data-testid="workbench-timeline-state-curve"]`
+      );
+    const breakpoints = laneId =>
+      curve(laneId).findAll(
+        '[data-testid="workbench-timeline-state-curve-breakpoint"]'
+      );
+
+    expect(curve('energy-actor-a').attributes('data-point-count')).toBe('0');
+    expect(curve('energy-actor-b').attributes()).toMatchObject({
+      'data-initial-value': '0',
+      'data-current-value': '0.5',
+      'data-point-count': '1',
+    });
+    expect(breakpoints('energy-actor-b')[0].attributes()).toMatchObject({
+      'data-action-id': 'action-b',
+      'data-time-ms': '1000',
+      'data-frame-index': '60',
+      'data-current-value': '0.5',
+    });
+    expect(
+      curve('energy-actor-b')
+        .get('[data-testid="workbench-timeline-state-curve-line"]')
+        .attributes('points')
+    ).toBe('0,100 33.33333333333333,100 33.33333333333333,50 100,50');
+    expect(breakpoints('enemy-hp-curve')[0].attributes()).toMatchObject({
+      'data-action-id': 'action-a',
+      'data-time-ms': '1200',
+      'data-current-value': '900',
+    });
+    expect(breakpoints('enemy-toughness-curve')[0].attributes()).toMatchObject({
+      'data-action-id': 'action-a',
+      'data-time-ms': '1800',
+      'data-current-value': '80',
+    });
+
+    const movedRuntimeStateCurves = createRuntimeTimelineStateCurves();
+    movedRuntimeStateCurves.resources.curvesByActor[1].points[0].timeMs = 1500;
+    movedRuntimeStateCurves.resources.curvesByActor[1].points[0].frameIndex = 90;
+    movedRuntimeStateCurves.resources.curvesByActor[1].points.push({
+      ...movedRuntimeStateCurves.resources.curvesByActor[1].points[0],
+      sourceDeltaId: 'energy-copy',
+      actionId: 'action-c',
+      timeMs: 2400,
+      frameIndex: 144,
+      energyDelta: -0.25,
+      stateSnapshot: {
+        after: { selfEnergy: { currentValue: 0.25 } },
+      },
+    });
+    await wrapper.setProps({ runtimeStateCurves: movedRuntimeStateCurves });
+    expect(breakpoints('energy-actor-b')).toHaveLength(2);
+    expect(
+      breakpoints('energy-actor-b').map(point =>
+        point.attributes('data-time-ms')
+      )
+    ).toEqual(['1500', '2400']);
+
+    movedRuntimeStateCurves.resources.curvesByActor[1].points = [];
+    movedRuntimeStateCurves.resources.curvesByActor[1].stateMetric.currentValue = 0;
+    await wrapper.setProps({
+      runtimeStateCurves: JSON.parse(JSON.stringify(movedRuntimeStateCurves)),
+    });
+    expect(breakpoints('energy-actor-b')).toHaveLength(0);
+    expect(
+      curve('energy-actor-b')
+        .get('[data-testid="workbench-timeline-state-curve-line"]')
+        .attributes('points')
+    ).toBe('0,100 100,100');
+  });
+
+  it('keeps the scale and timeline horizontal scroll positions synchronized', async () => {
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps(),
+    });
+    const scale = wrapper.get(
+      '[data-testid="workbench-timeline-scale-viewport"]'
+    );
+    const timeline = wrapper.get('[data-testid="workbench-timeline-viewport"]');
+
+    timeline.element.scrollLeft = 160;
+    await timeline.trigger('scroll');
+    expect(scale.element.scrollLeft).toBe(160);
+
+    scale.element.scrollLeft = 75;
+    await scale.trigger('scroll');
+    expect(timeline.element.scrollLeft).toBe(75);
+  });
+
   it('renders, selects, drags, and opens persisted cycle boundaries', async () => {
     const wrapper = mount(TimelineGridPreview, {
       attachTo: document.body,
@@ -627,6 +736,67 @@ function createRuntimeStateCurveFramework() {
             },
           ],
         },
+      ],
+    },
+  };
+}
+
+function createRuntimeTimelineStateCurves() {
+  const actorCurve = (actorId, points = [], currentValue = 0) => ({
+    actorId,
+    stateMetric: { initialValue: 0, currentValue, maxValue: 1 },
+    points,
+  });
+  return {
+    enemy: {
+      stateMetrics: {
+        hp: { initialValue: 1000, currentValue: 900, maxValue: 1000 },
+        toughness: { initialValue: 100, currentValue: 80, maxValue: 100 },
+      },
+      points: [
+        {
+          sourceDeltaId: 'hp-a',
+          actionId: 'action-a',
+          trackKey: 'enemyHpDamage',
+          timeMs: 1200,
+          frameIndex: 72,
+          hpDelta: 100,
+          stateSnapshot: { after: { enemyHp: { currentValue: 900 } } },
+        },
+        {
+          sourceDeltaId: 'toughness-a',
+          actionId: 'action-a',
+          trackKey: 'enemyToughnessDamage',
+          timeMs: 1800,
+          frameIndex: 108,
+          toughnessDelta: 20,
+          stateSnapshot: {
+            after: { enemyToughness: { currentValue: 80 } },
+          },
+        },
+      ],
+    },
+    resources: {
+      curvesByActor: [
+        actorCurve('actor-a'),
+        actorCurve(
+          'actor-b',
+          [
+            {
+              sourceDeltaId: 'energy-b',
+              actionId: 'action-b',
+              trackKey: 'selfEnergyChange',
+              timeMs: 1000,
+              frameIndex: 60,
+              energyDelta: 0.5,
+              stateSnapshot: {
+                after: { selfEnergy: { currentValue: 0.5 } },
+              },
+            },
+          ],
+          0.5
+        ),
+        actorCurve('actor-c'),
       ],
     },
   };

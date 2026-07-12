@@ -10,6 +10,7 @@ const REQUIRED_CAPABILITIES = [
   'action-skill-compatibility-gate',
   'applied-source-binding-guard',
   'stage-9a-timeline-topology',
+  'stage-9b-runtime-step-curves',
   'png-project-exchange',
   'project-drop-recovery',
   'configuration-instances',

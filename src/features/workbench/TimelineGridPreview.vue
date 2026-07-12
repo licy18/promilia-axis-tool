@@ -211,7 +211,12 @@
 
     <div class="timeline-scale">
       <span class="scale-spacer" />
-      <div class="scale-viewport">
+      <div
+        ref="scaleViewportRef"
+        class="scale-viewport"
+        data-testid="workbench-timeline-scale-viewport"
+        @scroll="synchronizeTimelineScroll('scale')"
+      >
         <div
           class="scale-track"
           :style="timelineTrackStyle"
@@ -238,14 +243,26 @@
           :data-lane-id="lane.id"
           :data-lane-kind="lane.kind"
           :data-actor-id="lane.actorId || ''"
+          :title="
+            lane.curve
+              ? `${lane.detail} · ${formatTopologyCurveValue(lane.curve)}`
+              : ''
+          "
           data-testid="workbench-timeline-lane-label"
         >
           <span>{{ lane.name }}</span>
-          <small>{{ lane.detail }}</small>
+          <small>{{
+            lane.curve ? formatTopologyCurveValue(lane.curve) : lane.detail
+          }}</small>
         </div>
       </div>
 
-      <div class="timeline-viewport" data-testid="workbench-timeline-viewport">
+      <div
+        ref="timelineViewportRef"
+        class="timeline-viewport"
+        data-testid="workbench-timeline-viewport"
+        @scroll="synchronizeTimelineScroll('timeline')"
+      >
         <div
           ref="laneRef"
           class="timeline-lane"
@@ -350,14 +367,32 @@
               :data-track-key="lane.curve.trackKey"
               :data-actor-id="lane.curve.actorId || ''"
               :data-initial-value="lane.curve.initialValue"
+              :data-current-value="lane.curve.currentValue"
               :data-max-value="lane.curve.maxValue ?? ''"
+              :data-point-count="lane.curve.pointCount"
               data-testid="workbench-timeline-state-curve"
             >
-              <svg viewBox="0 0 100 24" preserveAspectRatio="none">
-                <line x1="0" x2="100" y1="12" y2="12" />
-                <circle cx="0.8" cy="12" r="1.3" />
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                <polyline
+                  :points="lane.curve.stepPoints"
+                  :data-lane-id="lane.id"
+                  :data-track-key="lane.curve.trackKey"
+                  :data-point-count="lane.curve.pointCount"
+                  data-testid="workbench-timeline-state-curve-line"
+                />
+                <circle
+                  v-for="point in lane.curve.breakpoints"
+                  :key="point.id"
+                  :cx="point.xPercent"
+                  :cy="point.yPercent"
+                  r="1.8"
+                  :data-action-id="point.actionId"
+                  :data-time-ms="point.timeMs"
+                  :data-frame-index="point.frameIndex"
+                  :data-current-value="point.currentValue"
+                  data-testid="workbench-timeline-state-curve-breakpoint"
+                />
               </svg>
-              <span>{{ formatTopologyCurveValue(lane.curve) }}</span>
             </div>
             <div
               v-for="window in lane.cooldownWindows"
@@ -927,6 +962,13 @@ const props = defineProps({
       },
     }),
   },
+  runtimeStateCurves: {
+    type: Object,
+    default: () => ({
+      enemy: { points: [] },
+      resources: { curvesByActor: [] },
+    }),
+  },
   durationMs: {
     type: Number,
     required: true,
@@ -1051,6 +1093,8 @@ const emit = defineEmits([
   'update-state-curve-focus-mode',
 ]);
 const laneRef = ref(null);
+const scaleViewportRef = ref(null);
+const timelineViewportRef = ref(null);
 const laneRowRefs = new Map();
 const dragState = ref(null);
 const resizeState = ref(null);
@@ -1473,14 +1517,12 @@ function createTimelineActorGroups() {
         name: '能量',
         detail: actor.name,
         editable: false,
-        curve: {
+        curve: createTimelineStateCurve({
           trackKey: 'selfEnergyChange',
           actorId: actor.id,
-          initialValue: numberOrZero(
-            actor.initialSp ?? actor.stats?.initialSp ?? 0
-          ),
-          maxValue: strictNumberOrNull(actor.stats?.maxSp),
-        },
+          fallbackInitialValue: actor.initialSp ?? actor.stats?.initialSp ?? 0,
+          fallbackMaxValue: actor.stats?.maxSp,
+        }),
       }),
     };
   });
@@ -1514,11 +1556,11 @@ function createTimelineEnemyGroup(effectIntervals) {
       name: 'HP',
       detail: props.enemy?.name || '敌人',
       editable: false,
-      curve: {
+      curve: createTimelineStateCurve({
         trackKey: 'enemyHpDamage',
-        initialValue: maxHp,
-        maxValue: maxHp || null,
-      },
+        fallbackInitialValue: maxHp,
+        fallbackMaxValue: maxHp || null,
+      }),
     }),
     toughnessCurveLane: createEmptyTimelineLane({
       id: topology.toughnessCurve?.laneId ?? 'enemy-toughness-curve',
@@ -1527,11 +1569,11 @@ function createTimelineEnemyGroup(effectIntervals) {
       name: '韧性',
       detail: props.enemy?.name || '敌人',
       editable: false,
-      curve: {
+      curve: createTimelineStateCurve({
         trackKey: 'enemyToughnessDamage',
-        initialValue: initialToughness,
-        maxValue: maxToughness || null,
-      },
+        fallbackInitialValue: initialToughness,
+        fallbackMaxValue: maxToughness || null,
+      }),
     }),
   };
 }
@@ -1568,9 +1610,117 @@ function createEmptyTimelineLane({
 }
 
 function formatTopologyCurveValue(curve) {
-  const current = formatCompactNumber(curve.initialValue);
+  const current = formatCompactNumber(curve.currentValue);
   const max = strictNumberOrNull(curve.maxValue);
   return max == null ? current : `${current} / ${formatCompactNumber(max)}`;
+}
+
+function createTimelineStateCurve({
+  trackKey,
+  actorId = '',
+  fallbackInitialValue = 0,
+  fallbackMaxValue = null,
+}) {
+  const runtimeCurve = resolveRuntimeStateCurve(trackKey, actorId);
+  const stateMetric = runtimeCurve?.stateMetric ?? null;
+  const initialValue = numberOrZero(
+    stateMetric?.initialValue ?? fallbackInitialValue
+  );
+  const maxValue = strictNumberOrNull(
+    stateMetric?.maxValue ?? fallbackMaxValue
+  );
+  const direction = trackKey === 'selfEnergyChange' ? 'increase' : 'decrease';
+  let currentValue = initialValue;
+  const values = [initialValue];
+  const breakpoints = [...(runtimeCurve?.points ?? [])]
+    .filter(point => point.trackKey === trackKey)
+    .sort(compareRuntimeCurvePoints)
+    .map((point, index) => {
+      const metricKey = getRuntimeCurveMetricKey(trackKey);
+      const snapshotValue = strictNumberOrNull(
+        point.stateSnapshot?.after?.[metricKey]?.currentValue
+      );
+      const delta = numberOrZero(getRuntimeCurvePointDelta(point, trackKey));
+      currentValue =
+        snapshotValue ??
+        (direction === 'decrease'
+          ? Math.max(0, currentValue - delta)
+          : currentValue + delta);
+      values.push(currentValue);
+      return {
+        id: point.sourceDeltaId ?? `${trackKey}-${actorId}-${index}`,
+        actionId: point.actionId ?? '',
+        timeMs: numberOrZero(point.timeMs),
+        frameIndex: numberOrZero(point.frameIndex),
+        currentValue,
+      };
+    });
+  const minimum = Math.min(0, ...values);
+  const maximum = Math.max(1, maxValue ?? 0, ...values);
+  const range = maximum - minimum || 1;
+  let previousY = curveValueToY(initialValue, minimum, range);
+  const stepCoordinates = [`0,${previousY}`];
+
+  breakpoints.forEach(point => {
+    point.xPercent = clampPercent((point.timeMs / props.durationMs) * 100);
+    point.yPercent = curveValueToY(point.currentValue, minimum, range);
+    stepCoordinates.push(
+      `${point.xPercent},${previousY}`,
+      `${point.xPercent},${point.yPercent}`
+    );
+    previousY = point.yPercent;
+  });
+  stepCoordinates.push(`100,${previousY}`);
+
+  return {
+    trackKey,
+    actorId,
+    initialValue,
+    currentValue,
+    maxValue,
+    pointCount: breakpoints.length,
+    breakpoints,
+    stepPoints: stepCoordinates.join(' '),
+  };
+}
+
+function resolveRuntimeStateCurve(trackKey, actorId) {
+  if (trackKey === 'selfEnergyChange') {
+    return (
+      props.runtimeStateCurves?.resources?.curvesByActor?.find(
+        curve => curve.actorId === actorId
+      ) ?? null
+    );
+  }
+  const metricKey = trackKey === 'enemyHpDamage' ? 'hp' : 'toughness';
+  return {
+    stateMetric: props.runtimeStateCurves?.enemy?.stateMetrics?.[metricKey],
+    points: props.runtimeStateCurves?.enemy?.points ?? [],
+  };
+}
+
+function getRuntimeCurveMetricKey(trackKey) {
+  if (trackKey === 'enemyHpDamage') return 'enemyHp';
+  if (trackKey === 'enemyToughnessDamage') return 'enemyToughness';
+  return 'selfEnergy';
+}
+
+function getRuntimeCurvePointDelta(point, trackKey) {
+  if (trackKey === 'enemyHpDamage') return point.hpDelta;
+  if (trackKey === 'enemyToughnessDamage') return point.toughnessDelta;
+  return point.energyDelta;
+}
+
+function compareRuntimeCurvePoints(left, right) {
+  return (
+    numberOrZero(left.timeMs) - numberOrZero(right.timeMs) ||
+    numberOrZero(left.runtimeSequenceIndex) -
+      numberOrZero(right.runtimeSequenceIndex)
+  );
+}
+
+function curveValueToY(value, minimum, range) {
+  return Number((100 - ((value - minimum) / range) * 100).toFixed(4));
 }
 
 function formatCompactNumber(value) {
@@ -3612,6 +3762,20 @@ function setTimelineZoom(value) {
   timelineZoom.value = clampNumber(Number(value), MIN_ZOOM, MAX_ZOOM);
 }
 
+function synchronizeTimelineScroll(source) {
+  const sourceElement =
+    source === 'scale' ? scaleViewportRef.value : timelineViewportRef.value;
+  const targetElement =
+    source === 'scale' ? timelineViewportRef.value : scaleViewportRef.value;
+  if (
+    sourceElement &&
+    targetElement &&
+    targetElement.scrollLeft !== sourceElement.scrollLeft
+  ) {
+    targetElement.scrollLeft = sourceElement.scrollLeft;
+  }
+}
+
 watch(
   () => props.boxSelectionMode,
   enabled => {
@@ -4297,7 +4461,7 @@ h2 {
 
 .timeline-state-curve {
   position: absolute;
-  inset: 8px 10px;
+  inset: 8px 0;
   color: #a6b7ff;
 }
 
@@ -4309,7 +4473,8 @@ h2 {
   overflow: visible;
 }
 
-.timeline-state-curve line {
+.timeline-state-curve polyline {
+  fill: none;
   stroke: currentColor;
   stroke-width: 1.4;
   vector-effect: non-scaling-stroke;
@@ -4318,17 +4483,6 @@ h2 {
 .timeline-state-curve circle {
   fill: currentColor;
   vector-effect: non-scaling-stroke;
-}
-
-.timeline-state-curve span {
-  position: absolute;
-  top: 1px;
-  left: 8px;
-  padding: 1px 5px;
-  border-radius: 3px;
-  background: rgba(17, 23, 29, 0.88);
-  color: #d9e3ec;
-  font-size: 10px;
 }
 
 .timeline-state-curve.curve-enemyHpDamage {

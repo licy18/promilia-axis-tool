@@ -74,9 +74,7 @@ test('[stage-9a-timeline-topology] renders three actor groups and five state cur
     timeline.getByTestId('workbench-timeline-state-curve')
   ).toHaveCount(5);
   await expect(
-    timeline.locator(
-      '[data-testid="workbench-timeline-state-curve"] line[x1="0"][x2="100"]'
-    )
+    timeline.locator('[data-testid="workbench-timeline-state-curve-line"]')
   ).toHaveCount(5);
   await expect(
     timeline.locator(
@@ -98,6 +96,96 @@ test('[stage-9a-timeline-topology] renders three actor groups and five state cur
     timeline.getByTestId('workbench-timeline-state-curve')
   ).toHaveCount(5);
   await timeline.screenshot({ path: 'reports/stage-9a-timeline-narrow.png' });
+});
+
+test('[stage-9b-runtime-step-curves] keeps actor resources and enemy states aligned through edit operations', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/#/workbench');
+
+  const curve = laneId =>
+    page.locator(
+      `[data-testid="workbench-timeline-row"][data-lane-id="${laneId}"] [data-testid="workbench-timeline-state-curve"]`
+    );
+  const breakpoints = laneId =>
+    curve(laneId).getByTestId('workbench-timeline-state-curve-breakpoint');
+  await expect(breakpoints('enemy-hp-curve')).toHaveCount(1);
+  await expect(breakpoints('enemy-toughness-curve')).toHaveCount(0);
+
+  await page.getByTestId('workbench-add-resource-action').click();
+  await expect(breakpoints('energy-actor-109001')).toHaveCount(1);
+  await expect(breakpoints('energy-actor-101003')).toHaveCount(0);
+  await page
+    .getByTestId('workbench-action-actor-select')
+    .selectOption('101003');
+  await expect(breakpoints('energy-actor-109001')).toHaveCount(0);
+  await expect(breakpoints('energy-actor-101003')).toHaveCount(1);
+
+  await page.getByTestId('workbench-start-frame-input').fill('600');
+  const movedPoint = breakpoints('energy-actor-101003').first();
+  await expect(movedPoint).toHaveAttribute('data-time-ms', '10000');
+  await expectActionAndCurvePointAligned(page, 'action-0002', movedPoint);
+
+  await page.getByTestId('workbench-timeline-zoom-input').fill('2');
+  await expect(page.getByTestId('workbench-timeline-zoom-value')).toHaveText(
+    '2x'
+  );
+  const timelineViewport = page.getByTestId('workbench-timeline-viewport');
+  await timelineViewport.evaluate(element => {
+    element.scrollLeft = 240;
+    element.dispatchEvent(new Event('scroll'));
+  });
+  await expect
+    .poll(async () =>
+      page
+        .getByTestId('workbench-timeline-scale-viewport')
+        .evaluate(element => element.scrollLeft)
+    )
+    .toBe(240);
+  await expectActionAndCurvePointAligned(page, 'action-0002', movedPoint);
+
+  await page
+    .locator('.action-item[data-action-id="action-0002"]')
+    .getByTestId('workbench-copy-action')
+    .click();
+  await expect(breakpoints('energy-actor-101003')).toHaveCount(2);
+  await expect
+    .poll(() =>
+      breakpoints('energy-actor-101003').evaluateAll(points =>
+        points.map(point => point.getAttribute('data-action-id'))
+      )
+    )
+    .toEqual(['action-0002', 'action-0003']);
+  await page
+    .getByTestId('workbench-timeline-grid-preview')
+    .screenshot({ path: 'reports/stage-9b-step-curves-desktop.png' });
+
+  await page.setViewportSize({ width: 760, height: 900 });
+  await expectActionAndCurvePointAligned(page, 'action-0002', movedPoint);
+  await page
+    .getByTestId('workbench-timeline-grid-preview')
+    .screenshot({ path: 'reports/stage-9b-step-curves-narrow.png' });
+
+  await page
+    .locator('.action-item[data-action-id="action-0003"]')
+    .getByTestId('workbench-delete-action')
+    .click();
+  await expect(breakpoints('energy-actor-101003')).toHaveCount(1);
+  await page
+    .locator('.action-item[data-action-id="action-0002"]')
+    .getByTestId('workbench-delete-action')
+    .click();
+  await expect(breakpoints('energy-actor-101003')).toHaveCount(0);
+  await expect(curve('energy-actor-101003')).toHaveAttribute(
+    'data-point-count',
+    '0'
+  );
+  await expect(
+    curve('energy-actor-101003').getByTestId(
+      'workbench-timeline-state-curve-line'
+    )
+  ).toHaveAttribute('points', '0,100 100,100');
 });
 
 test('[diagnostics-lazy-load] loads runtime diagnostics from a production chunk', async ({
@@ -991,6 +1079,22 @@ async function expectTimelineRowsAligned(timeline) {
     rowsSeparated: true,
     labelsAligned: true,
   });
+}
+
+async function expectActionAndCurvePointAligned(page, actionId, point) {
+  const action = page.locator(
+    `[data-testid="workbench-timeline-action"][data-action-id="${actionId}"]`
+  );
+  await expect
+    .poll(async () => {
+      const [actionBox, pointBox] = await Promise.all([
+        action.boundingBox(),
+        point.boundingBox(),
+      ]);
+      if (!actionBox || !pointBox) return Number.POSITIVE_INFINITY;
+      return Math.abs(actionBox.x - (pointBox.x + pointBox.width / 2));
+    })
+    .toBeLessThanOrEqual(1);
 }
 
 async function expectPageWithoutHorizontalOverflow(page) {

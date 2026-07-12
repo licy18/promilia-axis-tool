@@ -26853,3 +26853,24 @@ timelineTopology
 ```
 
 `normalizeWorkbenchTeamSlots()` 与 `normalizeWorkbenchActorConfigs()` 现在固定输出 3 个唯一、可解析角色；旧双角色项目在导入时补齐第三槽和对应空配置实例，现有主副角色 selection 字段继续兼容。敌人事件的冲突轨道从 `system` 改为 `enemy-events`，annotation 仍保留在 `system`。奇波配置只决定关联轨的显示与来源边界，未确认效果仍不参与三值计算。
+
+## 400. Runtime state curves to timeline step geometry
+
+Stage 9-B 不升级项目 schema 或 runtime 合同。`TimelineGridPreview` 新增只读 `runtimeStateCurves` 输入，Workbench 和 PNG 导出都传入既有 `simulationResult.runtimeOutputs.stateCurves`；曲线几何是运行时派生视图，不进入本地草稿、JSON、分享链接或 PNG 元数据，因此项目载体仍只保存动作和配置来源，回放后由标准 runtime 重建同一结果。
+
+```text
+runtimeStateCurves
+  enemy
+    stateMetrics.hp / stateMetrics.toughness
+    points[] { trackKey, timeMs, frameIndex, stateSnapshot.after }
+  resources.curvesByActor[]
+    actorId / stateMetric
+    points[] { trackKey, timeMs, frameIndex, stateSnapshot.after.selfEnergy }
+
+timeline curve view
+  initialValue / currentValue / maxValue
+  breakpoints[] { actionId, timeMs, frameIndex, currentValue, xPercent, yPercent }
+  stepPoints = 0 -> event horizontal -> event vertical -> ... -> 100
+```
+
+只有 runtime 的 applied points 参与阶跃线；候选、采样诊断和 placeholder marker 继续使用原有独立图层，不改变实际状态。HP/韧性使用 runtime 已有的零值下限，角色能量保留 runtime 当前值；三者不新增公式。刻度 viewport 与轨道 viewport 共享 zoom width 并同步 `scrollLeft`，所以动作、命中、断点和网格使用同一横向坐标。
