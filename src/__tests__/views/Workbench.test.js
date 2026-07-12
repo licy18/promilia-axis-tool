@@ -9323,6 +9323,128 @@ describe('Workbench view', () => {
     });
   });
 
+  it('moves one actor action and kibo group as an atomic cross-lane edit', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-add-kibo-event-action"]')
+      .trigger('click');
+    await wrapper
+      .find('.action-item[data-action-id="action-0001"]')
+      .trigger('click');
+    await wrapper
+      .find('.action-item[data-action-id="action-0002"]')
+      .trigger('click', { ctrlKey: true });
+    await wrapper
+      .find('[data-testid="workbench-timeline-create-relations"]')
+      .trigger('click');
+    await nextTick();
+
+    const firstStartMs = Number(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+        )
+        .attributes('data-start-ms')
+    );
+    wrapper
+      .findComponent(TimelineGridPreview)
+      .vm.$emit('move-selected-actions', {
+        actionIds: ['action-0001', 'action-0002'],
+        primaryActionId: 'action-0001',
+        offsetMs: frameToMs(12),
+        targetLaneId: 'actor-101003',
+      });
+    await nextTick();
+
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+        )
+        .attributes()
+    ).toMatchObject({
+      'data-lane-id': 'actor-101003',
+      'data-selected': 'true',
+    });
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+        )
+        .attributes()
+    ).toMatchObject({
+      'data-lane-id': 'kibo-team-slot-2',
+      'data-selected': 'true',
+    });
+    expect(
+      Number(
+        wrapper
+          .find(
+            '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+          )
+          .attributes('data-start-ms')
+      )
+    ).toBeCloseTo(firstStartMs + frameToMs(12), 4);
+    expect(
+      wrapper.find('main.workbench').attributes('data-action-relation-count')
+    ).toBe('1');
+
+    await wrapper.find('[data-testid="workbench-undo-edit"]').trigger('click');
+    await nextTick();
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+        )
+        .attributes('data-lane-id')
+    ).toBe('actor-109001');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+        )
+        .attributes('data-lane-id')
+    ).toBe('kibo-team-slot-1');
+    expect(
+      Number(
+        wrapper
+          .find(
+            '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+          )
+          .attributes('data-start-ms')
+      )
+    ).toBe(firstStartMs);
+
+    await wrapper.find('[data-testid="workbench-redo-edit"]').trigger('click');
+    await nextTick();
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+        )
+        .attributes('data-lane-id')
+    ).toBe('actor-101003');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+        )
+        .attributes('data-lane-id')
+    ).toBe('kibo-team-slot-2');
+    expect(
+      wrapper.find('main.workbench').attributes('data-action-relation-count')
+    ).toBe('1');
+  });
+
   it('cleans the auto-delay note line when the note is edited manually', async () => {
     const wrapper = mount(Workbench, {
       global: {

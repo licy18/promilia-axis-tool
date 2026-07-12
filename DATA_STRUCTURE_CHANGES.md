@@ -26902,3 +26902,24 @@ WorkbenchTimelineEntry v1
 ```
 
 `workbenchTimelineEntry` 是时间轴编排源和合法落轨判断的统一领域入口。角色动作只可在角色动作轨之间重绑，奇波事件只可在奇波轨之间重绑并随目标角色解析当前 `kiboId`，敌人事件只进入敌人事件轨。compiler 和 runtime 会保留奇波事件的角色、奇波和来源身份，并输出 `KIBO_EVENT` 日志；该事件不生成 Hit 或 `ThreeValueDelta`，所以不会改变角色能量、敌人 HP 或敌人韧性。五种项目载体仍以持久化动作和配置重建 `timelineTopology` 与 runtime curves，不持久化 UI 拖放状态。
+
+## 403. WorkbenchTimelineBatchLaneMovePlan / atomic multi-track edits
+
+Stage 10-B 不升级项目 schema、runtime 或三值合同。`workbenchTimelineEntry` 新增派生的批量换轨计划：
+
+```text
+WorkbenchTimelineBatchLaneMovePlan
+  actionIds / primaryActionId
+  sourceOwnerId / targetOwnerId / changesOwner
+  targetLaneId / targetLaneKind
+  entries[]
+    actionId / laneKind / sourceOwnerId
+
+move-selected-actions request
+  actionIds / primaryActionId
+  offsetMs / targetLaneId
+```
+
+换轨计划要求所有选中动作都属于同一个角色，且每项都为 `actor-action` 或 `actor-kibo`；目标轨种类必须匹配主拖动动作。这样角色动作和奇波事件可一起迁移到目标角色的配对轨道，而敌人事件、多来源角色选择和 system 动作不会被误重绑。水平偏移和角色重绑在 Workbench 中一次提交并只生成一个历史快照；动作关系由现有 gap synchronizer 在提交后重建相同相对间隔。
+
+批量计划与框选状态均为 UI/领域派生状态，不进入持久化格式。剪贴板继续保存选中动作和组内关系，方案复制、本地草稿、JSON、分享链接和 PNG 回放从 v16 动作与配置重建同一拓扑、关系和 runtime outputs。奇波事件仍为 tracking-only，批量换轨不会使装备、奇波、灵子或其他未确认效果进入 calculator。

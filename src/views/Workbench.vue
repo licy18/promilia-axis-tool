@@ -435,7 +435,7 @@
           @update-state-curve-focus-mode="updateStateCurveFocusMode"
           @delete-action="deleteAction"
           @update-action-duration="updateActionDuration"
-          @update-action-lane="updateActionLane"
+          @move-selected-actions="moveSelectedActions"
           @update-action-time="updateActionTime"
           @shift-selected-actions="shiftSelectedActions"
           @delete-selected-actions="deleteSelectedActions"
@@ -901,6 +901,7 @@ import {
 } from '../domain/workbenchProjectFactory';
 import { ACTION_TYPES } from '../domain/projectSchema';
 import {
+  createWorkbenchTimelineBatchLaneMovePlan,
   createWorkbenchTimelineEntry,
   isWorkbenchTimelineEntryAllowedInLane,
   WORKBENCH_TIMELINE_LANE_KINDS,
@@ -2136,78 +2137,41 @@ function updateActionDuration({ actionId, durationMs }) {
   markDraftDirty();
 }
 
-function updateActionLane({ actionId, laneId }) {
-  clearSegmentSplitPreview();
-  const previousAction = findActionDraftById(actionId);
-  const editSourceFocus = captureActionEditSourceFocus(actionId);
-  const targetLane = resolveWorkbenchTimelineLaneTarget(laneId);
+function rebindTimelineActionDraftToCharacter(action, targetCharacterId) {
   if (
-    !previousAction ||
-    !targetLane ||
-    !isWorkbenchTimelineEntryAllowedInLane(previousAction, targetLane.kind)
+    !Number.isInteger(targetCharacterId) ||
+    Number(action.actorCharacterId) === targetCharacterId
   ) {
-    return;
+    return action;
   }
 
-  recordWorkbenchHistorySnapshot();
-  let didUpdate = false;
-  selectedActionId.value = actionId;
-  actionDrafts.value = actionDrafts.value.map(action => {
-    if (action.id !== actionId || targetLane.characterId == null) {
-      return action;
-    }
-
-    const targetCharacterId = Number(targetLane.characterId);
-    if (Number(action.actorCharacterId) === targetCharacterId) {
-      return action;
-    }
-
-    const patch = {
-      actorCharacterId: targetCharacterId,
-    };
-
-    if (action.type === ACTION_TYPES.SKILL) {
-      const currentSkill = findSkillById(action.skillId);
-      if (Number(currentSkill?.characterId) !== targetCharacterId) {
-        const nextSkill = findFirstSkillForCharacter(targetCharacterId);
-        if (nextSkill) {
-          patch.skillId = nextSkill.id;
-          patch.level = 1;
-          patch.actionVariantIndex = 0;
-          patch.damageSegmentIndex = 0;
-        }
+  const patch = { actorCharacterId: targetCharacterId };
+  if (action.type === ACTION_TYPES.SKILL) {
+    const currentSkill = findSkillById(action.skillId);
+    if (Number(currentSkill?.characterId) !== targetCharacterId) {
+      const nextSkill = findFirstSkillForCharacter(targetCharacterId);
+      if (nextSkill) {
+        patch.skillId = nextSkill.id;
+        patch.level = 1;
+        patch.actionVariantIndex = 0;
+        patch.damageSegmentIndex = 0;
       }
     }
+  }
 
-    if (
-      action.type === ACTION_TYPES.SWITCH &&
-      Number(action.targetCharacterId) === targetCharacterId
-    ) {
-      patch.targetCharacterId =
-        resolveAlternateActorCharacterId(targetCharacterId);
-    }
+  if (
+    action.type === ACTION_TYPES.SWITCH &&
+    Number(action.targetCharacterId) === targetCharacterId
+  ) {
+    patch.targetCharacterId =
+      resolveAlternateActorCharacterId(targetCharacterId);
+  }
 
-    didUpdate = true;
-    actionLibraryCharacterId.value = targetCharacterId;
-    return createWorkbenchActionDraft({
-      ...action,
-      ...patch,
-      ...clearInsertionForManualEdit(action),
-    });
+  return createWorkbenchActionDraft({
+    ...action,
+    ...patch,
+    ...clearInsertionForManualEdit(action),
   });
-
-  if (didUpdate) {
-    recordActionEditSource(
-      actionId,
-      { laneId },
-      {
-        previousAction,
-        nextAction: findActionDraftById(actionId),
-        focus: editSourceFocus,
-      }
-    );
-    markDraftDirty();
-  }
 }
 
 function addAction() {
@@ -2594,35 +2558,99 @@ function shiftSelectedActions({
   actionIds = selectedActionIds.value,
   offsetMs = 0,
 } = {}) {
+  return moveSelectedActions({ actionIds, offsetMs });
+}
+
+function moveSelectedActions({
+  actionIds = selectedActionIds.value,
+  primaryActionId = selectedActionId.value,
+  offsetMs = 0,
+  targetLaneId = null,
+} = {}) {
   clearSegmentSplitPreview();
-  const editedActionId = actionIds.includes(selectedActionId.value)
-    ? selectedActionId.value
-    : (actionIds[0] ?? '');
+  const availableActionIds = new Set(
+    actionDrafts.value.map(action => action.id)
+  );
+  const affectedActionIds = [...new Set(actionIds)].filter(actionId =>
+    availableActionIds.has(actionId)
+  );
+  const editedActionId = affectedActionIds.includes(primaryActionId)
+    ? primaryActionId
+    : affectedActionIds.includes(selectedActionId.value)
+      ? selectedActionId.value
+      : (affectedActionIds[0] ?? '');
+  if (!editedActionId) {
+    return false;
+  }
+
   const previousAction = findActionDraftById(editedActionId);
   const editSourceFocus = captureActionEditSourceFocus(editedActionId);
   const shifted = shiftWorkbenchActionDrafts(
     actionDrafts.value,
-    actionIds,
+    affectedActionIds,
     offsetMs,
     project.value.time.durationMs
   );
-  if (!shifted.appliedOffsetMs) {
+  let nextActions = shifted.actions;
+  const targetLane = targetLaneId
+    ? resolveWorkbenchTimelineLaneTarget(targetLaneId)
+    : null;
+  const laneMovePlan = targetLane
+    ? createWorkbenchTimelineBatchLaneMovePlan({
+        actions: actionDrafts.value,
+        actionIds: affectedActionIds,
+        primaryActionId: editedActionId,
+        targetLane,
+        getActionOwnerId: action => action.actorCharacterId,
+        getLaneOwnerId: lane => lane.characterId,
+      })
+    : null;
+  if (laneMovePlan?.changesOwner) {
+    nextActions = nextActions.map(action =>
+      affectedActionIds.includes(action.id)
+        ? rebindTimelineActionDraftToCharacter(
+            action,
+            Number(targetLane.characterId)
+          )
+        : action
+    );
+  }
+
+  const nextActionsById = new Map(
+    nextActions.map(action => [action.id, action])
+  );
+  const changedActionIds = affectedActionIds.filter(actionId => {
+    const previous = findActionDraftById(actionId);
+    const next = nextActionsById.get(actionId);
+    return JSON.stringify(previous) !== JSON.stringify(next);
+  });
+  if (changedActionIds.length === 0) {
     return false;
   }
 
   recordWorkbenchHistorySnapshot();
-  actionDrafts.value = shifted.actions;
+  actionDrafts.value = nextActions;
+  setWorkbenchActionSelection(affectedActionIds, editedActionId, {
+    anchorActionId: editedActionId,
+  });
   const nextAction = findActionDraftById(editedActionId);
   if (previousAction && nextAction) {
-    recordActionEditSource(
-      editedActionId,
-      { startMs: nextAction.startMs },
-      {
-        previousAction,
-        nextAction,
-        focus: editSourceFocus,
-      }
-    );
+    const editPatch = {};
+    if (shifted.appliedOffsetMs) {
+      editPatch.startMs = nextAction.startMs;
+    }
+    if (laneMovePlan?.changesOwner) {
+      editPatch.laneId = targetLaneId;
+      editPatch.actorCharacterId = Number(targetLane.characterId);
+    }
+    recordActionEditSource(editedActionId, editPatch, {
+      previousAction,
+      nextAction,
+      focus: editSourceFocus,
+    });
+  }
+  if (laneMovePlan?.changesOwner) {
+    actionLibraryCharacterId.value = Number(targetLane.characterId);
   }
   markDraftDirty();
   return true;

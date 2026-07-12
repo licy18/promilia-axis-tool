@@ -399,6 +399,241 @@ test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enem
   await page.screenshot({ path: 'reports/stage-10a-multitrack-narrow.png' });
 });
 
+test('[stage-10b-cross-lane-batch-editing] box-selects, rebinds, copies, and restores a mixed timeline group', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/#/workbench');
+
+  await page
+    .locator(
+      '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
+    )
+    .selectOption('500001');
+  const palette = page.getByTestId('workbench-timeline-entry-palette');
+  const paletteToggle = page.getByTestId(
+    'workbench-timeline-entry-palette-toggle'
+  );
+  const openPalette = async () => {
+    if (!(await palette.isVisible())) {
+      await paletteToggle.click();
+    }
+  };
+  await openPalette();
+  await page
+    .locator(
+      '[data-testid="workbench-timeline-entry-source"][data-entry-type="kiboEvent"]'
+    )
+    .dragTo(
+      page.locator(
+        '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-1"]'
+      ),
+      { targetPosition: { x: 560, y: 18 } }
+    );
+
+  const workbench = page.locator('main.workbench');
+  const firstAction = page.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0001"]'
+  );
+  const kiboAction = page.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+  );
+  await boxSelectTimelineActions(page, ['action-0001', 'action-0002']);
+  await expect(workbench).toHaveAttribute('data-selected-action-count', '2');
+  await page.getByTestId('workbench-timeline-create-relations').click();
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '1');
+
+  const originalStarts = await readTimelineActionStarts(page, [
+    'action-0001',
+    'action-0002',
+  ]);
+  await firstAction.dragTo(
+    page.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
+    ),
+    { targetPosition: { x: 560, y: 24 } }
+  );
+  await expect(firstAction).toHaveAttribute('data-lane-id', 'actor-101003');
+  await expect(kiboAction).toHaveAttribute('data-lane-id', 'kibo-team-slot-2');
+  await expect(
+    page.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="energy-actor-101003"] [data-testid="workbench-timeline-state-curve"]'
+    )
+  ).toHaveAttribute('data-point-count', '0');
+  const enemyHpCurve = page.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="enemy-hp-curve"] [data-testid="workbench-timeline-state-curve"]'
+  );
+  const baseHpPointCount = Number(
+    await enemyHpCurve.getAttribute('data-point-count')
+  );
+  const movedStarts = await readTimelineActionStarts(page, [
+    'action-0001',
+    'action-0002',
+  ]);
+  expect(movedStarts['action-0001']).toBeGreaterThan(
+    originalStarts['action-0001']
+  );
+  expect(
+    movedStarts['action-0001'] - originalStarts['action-0001']
+  ).toBeCloseTo(movedStarts['action-0002'] - originalStarts['action-0002'], 4);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '1');
+
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(firstAction).toHaveAttribute('data-lane-id', 'actor-109001');
+  await expect(kiboAction).toHaveAttribute('data-lane-id', 'kibo-team-slot-1');
+  expect(
+    await readTimelineActionStarts(page, ['action-0001', 'action-0002'])
+  ).toEqual(originalStarts);
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(firstAction).toHaveAttribute('data-lane-id', 'actor-101003');
+  await expect(kiboAction).toHaveAttribute('data-lane-id', 'kibo-team-slot-2');
+
+  await openPalette();
+  await page
+    .locator(
+      '[data-testid="workbench-timeline-entry-source"][data-entry-type="enemyEvent"]'
+    )
+    .dragTo(
+      page.locator(
+        '[data-testid="workbench-timeline-row"][data-lane-id="enemy-events"]'
+      ),
+      { targetPosition: { x: 920, y: 24 } }
+    );
+  await boxSelectTimelineActions(page, [
+    'action-0001',
+    'action-0002',
+    'action-0003',
+  ]);
+  await expect(workbench).toHaveAttribute('data-selected-action-count', '3');
+  await page.keyboard.press('Control+C');
+  await page.keyboard.press('Control+V');
+  await expect(page.getByTestId('workbench-timeline-action')).toHaveCount(6);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '2');
+  const pastedTopology = await page.evaluate(() =>
+    ['action-0004', 'action-0005', 'action-0006'].map(actionId => {
+      const action = document.querySelector(
+        `[data-testid="workbench-timeline-action"][data-action-id="${actionId}"]`
+      );
+      return {
+        type: action?.getAttribute('data-action-type'),
+        laneId: action?.getAttribute('data-lane-id'),
+      };
+    })
+  );
+  expect(pastedTopology).toEqual(
+    expect.arrayContaining([
+      { type: 'skill', laneId: 'actor-101003' },
+      { type: 'kiboEvent', laneId: 'kibo-team-slot-2' },
+      { type: 'enemyEvent', laneId: 'enemy-events' },
+    ])
+  );
+  await expect
+    .poll(async () =>
+      Number(await enemyHpCurve.getAttribute('data-point-count'))
+    )
+    .toBeGreaterThan(baseHpPointCount);
+
+  await page.keyboard.press('Delete');
+  await expect(page.getByTestId('workbench-timeline-action')).toHaveCount(3);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '1');
+  await expect(enemyHpCurve).toHaveAttribute(
+    'data-point-count',
+    String(baseHpPointCount)
+  );
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(page.getByTestId('workbench-timeline-action')).toHaveCount(6);
+  await expect(workbench).toHaveAttribute('data-action-relation-count', '2');
+  await expect
+    .poll(async () =>
+      Number(await enemyHpCurve.getAttribute('data-point-count'))
+    )
+    .toBeGreaterThan(baseHpPointCount);
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(page.getByTestId('workbench-timeline-action')).toHaveCount(3);
+  await expect(enemyHpCurve).toHaveAttribute(
+    'data-point-count',
+    String(baseHpPointCount)
+  );
+
+  const zoomInput = page.getByTestId('workbench-timeline-zoom-input');
+  await zoomInput.evaluate(element => {
+    element.value = '4';
+    element.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await expect(page.getByTestId('workbench-timeline-zoom-value')).toHaveText(
+    '4x'
+  );
+  const timelineViewport = page.getByTestId('workbench-timeline-viewport');
+  const scaleViewport = page.getByTestId('workbench-timeline-scale-viewport');
+  await timelineViewport.evaluate(element => {
+    element.scrollLeft = Math.min(
+      900,
+      element.scrollWidth - element.clientWidth
+    );
+    element.dispatchEvent(new Event('scroll', { bubbles: true }));
+  });
+  await expect
+    .poll(async () => {
+      const [timelineScroll, scaleScroll] = await Promise.all([
+        timelineViewport.evaluate(element => element.scrollLeft),
+        scaleViewport.evaluate(element => element.scrollLeft),
+      ]);
+      return Math.abs(timelineScroll - scaleScroll);
+    })
+    .toBeLessThanOrEqual(1);
+  await expectTimelineRowsAligned(
+    page.getByTestId('workbench-timeline-grid-preview')
+  );
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const exported = JSON.parse(
+    await readFile(await (await downloadPromise).path(), 'utf8')
+  );
+  expect(exported.actionDrafts).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        id: 'action-0001',
+        actorCharacterId: 101003,
+      }),
+      expect.objectContaining({
+        id: 'action-0002',
+        type: 'kiboEvent',
+        actorCharacterId: 101003,
+      }),
+      expect.objectContaining({ id: 'action-0003', type: 'enemyEvent' }),
+    ])
+  );
+  expect(exported.actionRelations).toHaveLength(1);
+
+  await zoomInput.evaluate(element => {
+    element.value = '1';
+    element.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await timelineViewport.evaluate(element => {
+    element.scrollLeft = 0;
+    element.dispatchEvent(new Event('scroll', { bubbles: true }));
+  });
+  if (await palette.isVisible()) {
+    await paletteToggle.click();
+  }
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.evaluate(
+    () =>
+      new Promise(resolve =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve))
+      )
+  );
+  await page.screenshot({ path: 'reports/stage-10b-batch-desktop.png' });
+  await page.setViewportSize({ width: 760, height: 1280 });
+  await expectTimelineRowsAligned(
+    page.getByTestId('workbench-timeline-grid-preview')
+  );
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/stage-10b-batch-narrow.png' });
+});
+
 test('[diagnostics-lazy-load] loads runtime diagnostics from a production chunk', async ({
   page,
 }) => {
@@ -1373,6 +1608,65 @@ async function expectPageWithoutHorizontalOverflow(page) {
       )
     )
     .toBe(0);
+}
+
+async function boxSelectTimelineActions(page, actionIds) {
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  if ((await timeline.getAttribute('data-box-selection-mode')) !== 'true') {
+    await page.getByTestId('workbench-timeline-box-select-toggle').click();
+  }
+  const geometry = await page.evaluate(ids => {
+    const lane = document.querySelector(
+      '[data-testid="workbench-timeline-lane"]'
+    );
+    const laneRect = lane?.getBoundingClientRect();
+    const rects = ids
+      .map(id =>
+        document
+          .querySelector(
+            `[data-testid="workbench-timeline-action"][data-action-id="${id}"]`
+          )
+          ?.getBoundingClientRect()
+      )
+      .filter(Boolean);
+    if (!laneRect || rects.length !== ids.length) return null;
+    return {
+      startX: Math.min(
+        laneRect.right - 2,
+        Math.max(...rects.map(rect => rect.right)) + 6
+      ),
+      startY: Math.max(
+        laneRect.top + 2,
+        Math.min(...rects.map(rect => rect.top)) - 3
+      ),
+      endX: Math.max(
+        laneRect.left + 2,
+        Math.min(...rects.map(rect => rect.left)) - 6
+      ),
+      endY: Math.min(
+        laneRect.bottom - 2,
+        Math.max(...rects.map(rect => rect.bottom)) + 3
+      ),
+    };
+  }, actionIds);
+  expect(geometry).toBeTruthy();
+  await page.mouse.move(geometry.startX, geometry.startY);
+  await page.mouse.down();
+  await page.mouse.move(geometry.endX, geometry.endY, { steps: 4 });
+  await page.mouse.up();
+}
+
+async function readTimelineActionStarts(page, actionIds) {
+  return page.evaluate(ids => {
+    return Object.fromEntries(
+      ids.map(id => {
+        const action = document.querySelector(
+          `[data-testid="workbench-timeline-action"][data-action-id="${id}"]`
+        );
+        return [id, Number(action?.getAttribute('data-start-ms'))];
+      })
+    );
+  }, actionIds);
 }
 
 async function dragWorkbenchFile(page, { name, mimeType, buffer }) {

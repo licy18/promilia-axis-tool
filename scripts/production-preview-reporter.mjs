@@ -13,6 +13,7 @@ const REQUIRED_CAPABILITIES = [
   'stage-9b-runtime-step-curves',
   'stage-9c-timeline-first-workspace',
   'stage-10a-multitrack-editing',
+  'stage-10b-cross-lane-batch-editing',
   'png-project-exchange',
   'project-drop-recovery',
   'configuration-instances',

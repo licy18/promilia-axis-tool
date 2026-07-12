@@ -181,6 +181,13 @@ describe('Workbench project replay consistency', () => {
         }),
       ])
     );
+    expect(baseline.actionRelations).toEqual([
+      expect.objectContaining({
+        id: 'relation-0001',
+        fromActionId: sourceState.actionDrafts[0].id,
+        toActionId: 'action-kibo',
+      }),
+    ]);
     expect(baseline.mechanicsProfileSelection).toMatchObject({
       sourceKind: 'project-persisted-mechanics-profile-selection',
       requestedProfileId: 'azpr-replay-equivalent-v1',
@@ -246,6 +253,13 @@ function createReplaySourceState() {
     eventType: 'activation',
     note: 'replay-kibo-event',
   });
+  state.actionRelations = [
+    {
+      id: 'relation-0001',
+      fromActionId: state.actionDrafts[0].id,
+      toActionId: 'action-kibo',
+    },
+  ];
   state.runtimeSampleCaptures = [
     createToughnessRuntimeSampleFixture({
       actionId: state.actionDrafts[0].id,
@@ -315,6 +329,15 @@ function createScenarioReplaySignature(draft, configurationLibrary) {
   const runtimeProjection = result.threeValueRuntimeProjection;
   return {
     timelineTopology: scenario.sourceProject.metadata.timelineTopology,
+    actionTopology: scenario.actions.map(action => ({
+      actionId: action.id,
+      type: action.type,
+      actorId: action.actorId ?? null,
+      kiboId: action.kiboId ?? null,
+      startMs: action.startMs,
+      durationMs: action.durationMs,
+    })),
+    actionRelations: project.actionRelations,
     kiboEvents: scenario.actions
       .filter(action => action.type === 'kiboEvent')
       .map(action => ({

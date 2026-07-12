@@ -873,6 +873,7 @@ import { createWorkbenchMainFlowActionSurface } from './workbenchMainFlowActions
 import { createWorkbenchRuntimeReviewContextView } from './workbenchFlowModel';
 import {
   WORKBENCH_TIMELINE_ENTRY_MIME,
+  createWorkbenchTimelineBatchLaneMovePlan,
   createWorkbenchTimelineEntry,
   isWorkbenchTimelineEntryAllowedInLane,
   parseWorkbenchTimelineEntry,
@@ -1124,7 +1125,7 @@ const emit = defineEmits([
   'delete-action',
   'update-action-time',
   'update-action-duration',
-  'update-action-lane',
+  'move-selected-actions',
   'shift-selected-actions',
   'delete-selected-actions',
   'open-action-context-menu',
@@ -3429,7 +3430,7 @@ function beginDrag(event, action) {
   dragState.value = {
     actionId: action.id,
     actionIds,
-    canChangeLane: actionIds.length === 1 && canChangeActionLane(action),
+    canChangeLane: canChangeActionBatchLane(draggedActions, action),
     initialLaneId: resolveActionLaneId(action),
     targetLaneId: null,
     laneWidth: rect.width,
@@ -3516,10 +3517,12 @@ function handleDragMove(event) {
   }
 
   if (dragState.value.canChangeLane) {
+    const draggedActions = resolveDraggedActions(dragState.value);
     dragState.value = {
       ...dragState.value,
-      targetLaneId: resolveLegalLaneAtPoint(
+      targetLaneId: resolveLegalBatchLaneAtPoint(
         event.clientY,
+        draggedActions,
         actionsById.value.get(dragState.value.actionId)
       ),
     };
@@ -3544,29 +3547,36 @@ function endDrag(event) {
   if (!completedDrag) {
     return;
   }
-  if (completedDrag.currentOffsetMs && event?.type === 'pointerup') {
-    emit('shift-selected-actions', {
-      actionIds: completedDrag.actionIds,
-      offsetMs: completedDrag.currentOffsetMs,
-    });
+  let completedMove = false;
+  if (event?.type === 'pointerup') {
+    const draggedActions = resolveDraggedActions(completedDrag);
+    const targetLaneId = completedDrag.canChangeLane
+      ? resolveLegalBatchLaneAtPoint(
+          event.clientY,
+          draggedActions,
+          actionsById.value.get(completedDrag.actionId)
+        )
+      : null;
+    const laneChanged = Boolean(
+      targetLaneId && targetLaneId !== completedDrag.initialLaneId
+    );
+    completedMove = Boolean(completedDrag.currentOffsetMs || laneChanged);
+    if (completedMove) {
+      emit('move-selected-actions', {
+        actionIds: completedDrag.actionIds,
+        primaryActionId: completedDrag.actionId,
+        offsetMs: completedDrag.currentOffsetMs,
+        targetLaneId: laneChanged ? targetLaneId : null,
+      });
+    }
+  }
+  if (completedMove) {
     suppressClickActionId.value = completedDrag.actionId;
     window.setTimeout(() => {
       if (suppressClickActionId.value === completedDrag.actionId) {
         suppressClickActionId.value = '';
       }
     }, 0);
-  }
-  if (completedDrag.canChangeLane && event?.type === 'pointerup') {
-    const targetLaneId = resolveLegalLaneAtPoint(
-      event.clientY,
-      actionsById.value.get(completedDrag.actionId)
-    );
-    if (targetLaneId && targetLaneId !== completedDrag.initialLaneId) {
-      emit('update-action-lane', {
-        actionId: completedDrag.actionId,
-        laneId: targetLaneId,
-      });
-    }
   }
 
   dragState.value = null;
@@ -3877,26 +3887,39 @@ function setLaneRowRef(element, laneId) {
   }
 }
 
-function canChangeActionLane(action) {
-  const expectedLaneKind = resolveWorkbenchTimelineLaneKind(action);
-  return (
-    expectedLaneKind != null &&
-    timelineLanes.value.filter(
-      lane => lane.editable && lane.kind === expectedLaneKind
-    ).length > 1
-  );
+function resolveDraggedActions(state = dragState.value) {
+  const actionIdSet = new Set(state?.actionIds ?? []);
+  return props.actions.filter(action => actionIdSet.has(action.id));
 }
 
-function resolveLegalLaneAtPoint(clientY, entryOrAction) {
+function canChangeActionBatchLane(actions, primaryAction) {
+  return timelineLanes.value.some(lane => {
+    const plan = createWorkbenchTimelineBatchLaneMovePlan({
+      actions,
+      actionIds: actions.map(action => action.id),
+      primaryActionId: primaryAction?.id,
+      targetLane: lane,
+    });
+    return plan?.changesOwner;
+  });
+}
+
+function resolveLegalBatchLaneAtPoint(clientY, actions, primaryAction) {
   if (!Number.isFinite(clientY)) {
     return null;
   }
 
   for (const lane of timelineLanes.value) {
-    if (
-      !lane.editable ||
-      !isWorkbenchTimelineEntryAllowedInLane(entryOrAction, lane)
-    ) {
+    if (!lane.editable) {
+      continue;
+    }
+    const plan = createWorkbenchTimelineBatchLaneMovePlan({
+      actions,
+      actionIds: actions.map(action => action.id),
+      primaryActionId: primaryAction?.id,
+      targetLane: lane,
+    });
+    if (!plan) {
       continue;
     }
     const element = laneRowRefs.get(lane.id);
