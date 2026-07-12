@@ -26941,3 +26941,24 @@ timeline cursor view
 `TimelineGridPreview` 消费既有 `runtimeStateCurves` 和 state point context，将每条曲线的 initial value 与 `frameIndex <= cursorFrameIndex` 的最后一个 applied point 合成为该帧状态。动作选择定位动作起始帧，曲线断点和 runtime 日志通过 state point identity 定位准确事件帧；空白网格和游标拖动只改变瞬态帧位置，并清除不再匹配的 runtime point 选中状态。编辑动作后 runtime outputs 更新，帧游标位置不变，五条曲线按新的事件位置重新求值。
 
 游标、动作块、命中/状态点、曲线断点和时间网格继续使用同一个 track width 与帧百分比坐标。缩放和横向滚动只改变派生视图，未改变动作、状态点或项目载体内容；候选值、未应用奇波效果及其他诊断层不参与该帧状态计算。
+
+## 405. Timeline playback view state / cycle range
+
+Stage 10-D 不升级项目 schema、runtime 或三值合同。Workbench 在既有 `timelineCursorFrameIndex` 上增加纯瞬态播放状态：
+
+```text
+timeline playback view
+  running
+  rate = 0.5 | 1 | 2
+  rangeMode = axis | section
+  range
+    startFrame
+    endFrame
+    lastFrame
+    loop
+    sectionId
+```
+
+全轴范围为 `0..durationFrame`，抵达 `durationFrame` 后暂停。区段范围由既有 `AzPrCycleSectionProjection` 的 `startMs/endMs` 转换为 `[startFrame, endFrame)`，逐帧和连续播放使用同一正模运算回绕。时钟通过 `requestAnimationFrame` 按 `elapsedMs * scenario.fps * rate` 累计完整帧，并保留不足一帧的余数；任何手动游标定位都会暂停播放。
+
+`EventLogPanel` 仅按 `cursorFrameIndex` 派生 `data-cursor-current`，不会改写 runtime 选中点或 sim log。播放状态在项目应用、重置与组件卸载时清除，不进入本地草稿、JSON、分享链接、PNG 或预设；cycle boundaries 仍是唯一持久化范围来源，五条状态曲线继续只消费 applied runtime outputs。

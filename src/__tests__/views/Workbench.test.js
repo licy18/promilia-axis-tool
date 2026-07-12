@@ -9517,6 +9517,50 @@ describe('Workbench view', () => {
     wrapper.unmount();
   });
 
+  it('plays, pauses, and steps the controlled 60fps timeline cursor', async () => {
+    const wrapper = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    const workbench = wrapper.get('main.workbench');
+    const stepForward = wrapper.get(
+      '[data-testid="workbench-timeline-step-forward"]'
+    );
+    const stepBackward = wrapper.get(
+      '[data-testid="workbench-timeline-step-backward"]'
+    );
+    const playbackToggle = wrapper.get(
+      '[data-testid="workbench-timeline-playback-toggle"]'
+    );
+
+    await stepForward.trigger('click');
+    expect(workbench.attributes('data-timeline-cursor-frame-index')).toBe('1');
+    await stepBackward.trigger('click');
+    expect(workbench.attributes('data-timeline-cursor-frame-index')).toBe('0');
+
+    await wrapper
+      .get('[data-testid="workbench-timeline-playback-rate"]')
+      .setValue('2');
+    expect(workbench.attributes('data-timeline-playback-rate')).toBe('2');
+
+    await playbackToggle.trigger('click');
+    expect(workbench.attributes('data-timeline-playback-running')).toBe('true');
+    await playbackToggle.trigger('click');
+    expect(workbench.attributes('data-timeline-playback-running')).toBe(
+      'false'
+    );
+    expect(wrapper.findComponent(EventLogPanel).props('cursorFrameIndex')).toBe(
+      0
+    );
+    wrapper.unmount();
+  });
+
   it('cleans the auto-delay note line when the note is edited manually', async () => {
     const wrapper = mount(Workbench, {
       global: {

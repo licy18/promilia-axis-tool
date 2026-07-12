@@ -674,6 +674,70 @@ describe('TimelineGridPreview', () => {
     expect(timeline.element.scrollLeft).toBe(75);
   });
 
+  it('exposes frame playback, speed, and cycle-section controls', async () => {
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        playbackRunning: true,
+        playbackRate: 2,
+        playbackRangeMode: 'section',
+        playbackRange: {
+          startFrame: 60,
+          endFrame: 120,
+        },
+        cycleBoundaries: [{ id: 'cycle-boundary-0001', timeMs: 1000 }],
+        selectedCycleSection: {
+          sectionId: 'cycle-section-02',
+          startMs: 1000,
+          endMs: 2000,
+        },
+      }),
+    });
+
+    expect(
+      wrapper
+        .get('[data-testid="workbench-timeline-grid-preview"]')
+        .attributes()
+    ).toMatchObject({
+      'data-playback-running': 'true',
+      'data-playback-rate': '2',
+      'data-playback-range-mode': 'section',
+    });
+    expect(
+      wrapper
+        .get('[data-testid="workbench-timeline-playback-controls"]')
+        .attributes()
+    ).toMatchObject({
+      'data-running': 'true',
+      'data-range-start-frame': '60',
+      'data-range-end-frame': '120',
+    });
+
+    await wrapper
+      .get('[data-testid="workbench-timeline-playback-toggle"]')
+      .trigger('click');
+    await wrapper
+      .get('[data-testid="workbench-timeline-step-backward"]')
+      .trigger('click');
+    await wrapper
+      .get('[data-testid="workbench-timeline-step-forward"]')
+      .trigger('click');
+    await wrapper
+      .get('[data-testid="workbench-timeline-playback-rate"]')
+      .setValue('0.5');
+    await wrapper
+      .get(
+        '[data-testid="workbench-timeline-playback-range-mode"][data-range-mode="axis"]'
+      )
+      .trigger('click');
+
+    expect(wrapper.emitted('toggle-timeline-playback')).toHaveLength(1);
+    expect(wrapper.emitted('step-timeline-frame')).toEqual([[-1], [1]]);
+    expect(wrapper.emitted('update-playback-rate')?.at(-1)?.[0]).toBe('0.5');
+    expect(wrapper.emitted('update-playback-range-mode')?.at(-1)?.[0]).toBe(
+      'axis'
+    );
+  });
+
   it('renders, selects, drags, and opens persisted cycle boundaries', async () => {
     const wrapper = mount(TimelineGridPreview, {
       attachTo: document.body,

@@ -12,6 +12,9 @@
     :data-flow-runtime-focus-source="flowRuntimeFocusSource"
     :data-cursor-frame-index="timelineCursor.frameIndex"
     :data-cursor-time-ms="timelineCursor.timeMs"
+    :data-playback-running="playbackRunning ? 'true' : 'false'"
+    :data-playback-rate="playbackRate"
+    :data-playback-range-mode="playbackRangeMode"
     data-testid="workbench-timeline-grid-preview"
   >
     <div class="panel-title">
@@ -69,6 +72,79 @@
         >
           <Connection class="control-icon" />
         </button>
+        <div
+          class="timeline-playback-controls"
+          :data-running="playbackRunning ? 'true' : 'false'"
+          :data-range-mode="playbackRangeMode"
+          :data-range-start-frame="playbackRange.startFrame"
+          :data-range-end-frame="playbackRange.endFrame"
+          data-testid="workbench-timeline-playback-controls"
+        >
+          <button
+            class="icon-control"
+            type="button"
+            data-testid="workbench-timeline-step-backward"
+            aria-label="后退一帧"
+            title="后退一帧"
+            @click="$emit('step-timeline-frame', -1)"
+          >
+            <ArrowLeft class="control-icon" />
+          </button>
+          <button
+            class="icon-control playback-toggle"
+            :class="{ active: playbackRunning }"
+            type="button"
+            :aria-label="playbackRunning ? '暂停' : '播放'"
+            :title="playbackRunning ? '暂停' : '播放'"
+            :data-running="playbackRunning ? 'true' : 'false'"
+            data-testid="workbench-timeline-playback-toggle"
+            @click="$emit('toggle-timeline-playback')"
+          >
+            <VideoPause v-if="playbackRunning" class="control-icon" />
+            <VideoPlay v-else class="control-icon" />
+          </button>
+          <button
+            class="icon-control"
+            type="button"
+            data-testid="workbench-timeline-step-forward"
+            aria-label="前进一帧"
+            title="前进一帧"
+            @click="$emit('step-timeline-frame', 1)"
+          >
+            <ArrowRight class="control-icon" />
+          </button>
+          <select
+            class="playback-rate-select"
+            :value="playbackRate"
+            data-testid="workbench-timeline-playback-rate"
+            aria-label="播放速度"
+            title="播放速度"
+            @change="$emit('update-playback-rate', $event.target.value)"
+          >
+            <option :value="0.5">0.5x</option>
+            <option :value="1">1x</option>
+            <option :value="2">2x</option>
+          </select>
+          <div
+            v-if="cycleBoundaries.length"
+            class="playback-range-mode"
+            role="group"
+            aria-label="播放范围"
+          >
+            <button
+              v-for="option in playbackRangeModeOptions"
+              :key="option.key"
+              type="button"
+              :class="{ active: playbackRangeMode === option.key }"
+              :aria-pressed="playbackRangeMode === option.key"
+              :data-range-mode="option.key"
+              data-testid="workbench-timeline-playback-range-mode"
+              @click="$emit('update-playback-range-mode', option.key)"
+            >
+              {{ option.label }}
+            </button>
+          </div>
+        </div>
         <output
           class="timeline-cursor-readout"
           :data-frame-index="timelineCursor.frameIndex"
@@ -785,6 +861,7 @@
               :data-lane-id="lane.id"
               :data-track-key="marker.trackKey"
               :data-layer-key="marker.layerKey"
+              :data-frame-index="marker.frameIndex"
               :data-frame-label="marker.frameLabel"
               :data-delta="marker.delta"
               :data-cumulative="marker.cumulative"
@@ -911,12 +988,16 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import {
+  ArrowLeft,
+  ArrowRight,
   Clock,
   Connection,
   Crop,
   EditPen,
   Minus,
   Plus,
+  VideoPause,
+  VideoPlay,
 } from '@element-plus/icons-vue';
 import {
   DEFAULT_TIMELINE_ACTION_DURATION_MS,
@@ -985,6 +1066,10 @@ const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
   sampled: false,
   placeholder: false,
 };
+const playbackRangeModeOptions = [
+  { key: 'axis', label: '全轴' },
+  { key: 'section', label: '区段' },
+];
 const STATE_CURVE_TRACK_MARKER_TOP = {
   enemyHpDamage: 92,
   enemyToughnessDamage: 99,
@@ -1096,6 +1181,22 @@ const props = defineProps({
   cursorFrameIndex: {
     type: Number,
     default: 0,
+  },
+  playbackRunning: {
+    type: Boolean,
+    default: false,
+  },
+  playbackRate: {
+    type: Number,
+    default: 1,
+  },
+  playbackRangeMode: {
+    type: String,
+    default: 'axis',
+  },
+  playbackRange: {
+    type: Object,
+    default: () => ({ startFrame: 0, endFrame: 0 }),
   },
   selectedActionId: {
     type: String,
@@ -1212,6 +1313,10 @@ const emit = defineEmits([
   'create-action-relations',
   'select-state-curve-point',
   'select-timeline-frame',
+  'toggle-timeline-playback',
+  'step-timeline-frame',
+  'update-playback-rate',
+  'update-playback-range-mode',
   'dispatch-flow-action',
   'update-state-curve-layer-filter',
   'update-state-curve-track-filter',
@@ -4386,6 +4491,46 @@ h2 {
   font-variant-numeric: tabular-nums;
   text-align: center;
   white-space: nowrap;
+}
+
+.timeline-playback-controls,
+.playback-range-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.playback-rate-select {
+  min-height: 26px;
+  padding: 0 5px;
+  border: 1px solid #3a454e;
+  border-radius: 3px;
+  color: #dfe5ea;
+  background: #171d22;
+  font-size: 11px;
+}
+
+.playback-range-mode {
+  padding: 2px;
+  border: 1px solid #344048;
+  border-radius: 4px;
+  background: #171d22;
+}
+
+.playback-range-mode button {
+  min-height: 20px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 2px;
+  color: #8f9aa3;
+  background: transparent;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.playback-range-mode button.active {
+  color: #e8f8f4;
+  background: #275047;
 }
 
 .timeline-entry-palette {

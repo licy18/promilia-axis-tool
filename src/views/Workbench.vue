@@ -3,6 +3,11 @@
     ref="workbenchRoot"
     class="workbench"
     :data-timeline-cursor-frame-index="timelineCursorFrameIndex"
+    :data-timeline-playback-running="timelinePlaybackRunning ? 'true' : 'false'"
+    :data-timeline-playback-rate="timelinePlaybackRate"
+    :data-timeline-playback-range-mode="timelinePlaybackRange.mode"
+    :data-timeline-playback-range-start-frame="timelinePlaybackRange.startFrame"
+    :data-timeline-playback-range-end-frame="timelinePlaybackRange.endFrame"
     :data-runtime-diagnostics-status="runtimeDiagnosticsStatus"
     :data-runtime-diagnostics-revision="runtimeDiagnosticsRevision"
     :data-selected-action-count="selectedActionIds.length"
@@ -400,6 +405,10 @@
           :runtime-state-point-contexts="runtimeStatePointContexts"
           :duration-ms="scenario.time.durationMs"
           :cursor-frame-index="timelineCursorFrameIndex"
+          :playback-running="timelinePlaybackRunning"
+          :playback-rate="timelinePlaybackRate"
+          :playback-range-mode="timelinePlaybackRangeMode"
+          :playback-range="timelinePlaybackRange"
           :selected-action-id="selectedActionId"
           :selected-action-ids="selectedActionIds"
           :action-relations="actionRelations"
@@ -433,6 +442,10 @@
           @create-action-relations="createRelationsForSelectedActions"
           @select-state-curve-point="selectStateCurvePoint"
           @select-timeline-frame="selectTimelineFrame"
+          @toggle-timeline-playback="toggleTimelinePlayback"
+          @step-timeline-frame="stepTimelinePlaybackFrame"
+          @update-playback-rate="updateTimelinePlaybackRate"
+          @update-playback-range-mode="updateTimelinePlaybackRangeMode"
           @dispatch-flow-action="dispatchWorkbenchFlowAction"
           @update-state-curve-layer-filter="updateStateCurveLayerFilter"
           @update-state-curve-track-filter="updateStateCurveTrackFilter"
@@ -567,6 +580,7 @@
             :runtime-projection="runtimeOutputs"
             :runtime-selected-detail="runtimeSelectedDetail"
             :selected-state-curve-point-id="selectedStateCurvePointId"
+            :cursor-frame-index="timelineCursorFrameIndex"
             :calculator-diagnostic-focus="calculatorDiagnosticFocus"
             :runtime-log-focus="runtimeLogFocus"
             :action-edit-focus="actionEditFocus"
@@ -1043,6 +1057,7 @@ const DEFAULT_WORKBENCH_RIGHT_PANEL_WIDTH = 300;
 const WORKBENCH_PRESET_LIBRARY_PARAM = 'presets';
 const WORKBENCH_RUNTIME_NAVIGATION_SHORTCUT_SOURCE =
   'workbench-keyboard-runtime-navigation';
+const TIMELINE_PLAYBACK_RATES = new Set([0.5, 1, 2]);
 const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
   applied: true,
   candidate: true,
@@ -1095,6 +1110,12 @@ const actionClipboard = ref(null);
 const actionContextMenu = ref(createClosedActionContextMenu());
 const selectedStateCurvePointId = ref('');
 const timelineCursorFrameIndex = ref(0);
+const timelinePlaybackRunning = ref(false);
+const timelinePlaybackRate = ref(1);
+const timelinePlaybackRangeMode = ref('axis');
+let timelinePlaybackAnimationFrameId = null;
+let timelinePlaybackLastTimestamp = null;
+let timelinePlaybackFrameRemainder = 0;
 const stateCurveFocusMode = ref('all');
 const stateCurveLayerFilters = ref({ ...DEFAULT_STATE_CURVE_LAYER_FILTERS });
 const stateCurveTrackFilters = ref({});
@@ -1236,6 +1257,38 @@ const selectedCycleSection = computed(
     cycleSectionProjection.value.sections[0] ??
     null
 );
+const timelinePlaybackRange = computed(() => {
+  const axisEndFrame = Math.max(0, msToFrame(scenario.value.time.durationMs));
+  const section = selectedCycleSection.value;
+  if (
+    timelinePlaybackRangeMode.value === 'section' &&
+    cycleBoundaries.value.length &&
+    section
+  ) {
+    const startFrame = clampNumber(msToFrame(section.startMs), 0, axisEndFrame);
+    const endFrame = clampNumber(
+      msToFrame(section.endMs),
+      startFrame + 1,
+      Math.max(startFrame + 1, axisEndFrame)
+    );
+    return {
+      mode: 'section',
+      startFrame,
+      endFrame,
+      lastFrame: Math.max(startFrame, endFrame - 1),
+      loop: true,
+      sectionId: section.sectionId,
+    };
+  }
+  return {
+    mode: 'axis',
+    startFrame: 0,
+    endFrame: axisEndFrame,
+    lastFrame: axisEndFrame,
+    loop: false,
+    sectionId: '',
+  };
+});
 const selectedCycleInheritanceBoundary = computed(() =>
   cycleBoundaries.value.find(
     boundary => boundary.id === selectedCycleSection.value?.startBoundaryId
@@ -1543,6 +1596,7 @@ watch(
     if (!statePointId) {
       return;
     }
+    pauseTimelinePlayback();
     const context = contexts.find(item => item.statePointId === statePointId);
     const frameIndex = Number(
       context?.row?.frameIndex ??
@@ -1773,6 +1827,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  pauseTimelinePlayback();
   endWorkbenchLayoutResize();
   window?.removeEventListener?.('keydown', handleWorkbenchKeyboardShortcut);
   window?.removeEventListener?.('hashchange', handleWorkbenchHashChange);
@@ -3745,8 +3800,11 @@ function applyWorkbenchConfigurationState(state) {
 }
 
 function clearWorkbenchProjectTransientState() {
+  pauseTimelinePlayback();
   selectedStateCurvePointId.value = '';
   timelineCursorFrameIndex.value = 0;
+  timelinePlaybackRate.value = 1;
+  timelinePlaybackRangeMode.value = 'axis';
   stateCurveFocusMode.value = 'all';
   stateCurveLayerFilters.value = { ...DEFAULT_STATE_CURVE_LAYER_FILTERS };
   stateCurveTrackFilters.value = {};
@@ -4440,6 +4498,9 @@ function deleteCycleBoundary(boundaryId = selectedCycleBoundaryId.value) {
   cycleBoundaries.value = cycleBoundaries.value.filter(
     boundary => boundary.id !== boundaryId
   );
+  if (!cycleBoundaries.value.length) {
+    updateTimelinePlaybackRangeMode('axis');
+  }
   selectedCycleBoundaryId.value = '';
   selectedCycleSectionId.value =
     cycleSectionProjection.value.sections[0]?.sectionId ?? '';
@@ -4475,6 +4536,13 @@ function selectCycleSection(sectionId) {
     return false;
   }
   selectedCycleSectionId.value = section.sectionId;
+  if (timelinePlaybackRangeMode.value === 'section') {
+    pauseTimelinePlayback();
+    selectTimelineFrame({
+      frameIndex: msToFrame(section.startMs),
+      source: 'timeline-playback-range',
+    });
+  }
   return true;
 }
 
@@ -4703,6 +4771,9 @@ function selectTimelineFrame({
   statePointId = '',
   source = 'timeline-grid',
 } = {}) {
+  if (source !== 'timeline-playback') {
+    pauseTimelinePlayback();
+  }
   const hasFrameIndex =
     frameIndex !== null && frameIndex !== undefined && frameIndex !== '';
   const requestedFrame = hasFrameIndex ? Number(frameIndex) : msToFrame(timeMs);
@@ -4714,6 +4785,177 @@ function selectTimelineFrame({
   if (!statePointId && ['timeline-grid', 'timeline-cursor'].includes(source)) {
     workbenchFlowRuntime.applyRuntimePointSelection({ statePointId: '' });
   }
+}
+
+function toggleTimelinePlayback() {
+  return timelinePlaybackRunning.value
+    ? pauseTimelinePlayback()
+    : startTimelinePlayback();
+}
+
+function startTimelinePlayback() {
+  if (timelinePlaybackRunning.value) {
+    return true;
+  }
+  const range = timelinePlaybackRange.value;
+  const cursorOutsideRange =
+    timelineCursorFrameIndex.value < range.startFrame ||
+    timelineCursorFrameIndex.value > range.lastFrame;
+  const axisFinished =
+    !range.loop && timelineCursorFrameIndex.value >= range.endFrame;
+  if (cursorOutsideRange || axisFinished) {
+    selectTimelineFrame({
+      frameIndex: range.startFrame,
+      source: 'timeline-playback',
+    });
+  }
+  timelinePlaybackRunning.value = true;
+  timelinePlaybackLastTimestamp = null;
+  timelinePlaybackFrameRemainder = 0;
+  scheduleTimelinePlaybackFrame();
+  return true;
+}
+
+function pauseTimelinePlayback() {
+  const wasRunning = timelinePlaybackRunning.value;
+  timelinePlaybackRunning.value = false;
+  timelinePlaybackLastTimestamp = null;
+  timelinePlaybackFrameRemainder = 0;
+  if (
+    timelinePlaybackAnimationFrameId !== null &&
+    typeof window !== 'undefined'
+  ) {
+    window.cancelAnimationFrame?.(timelinePlaybackAnimationFrameId);
+  }
+  timelinePlaybackAnimationFrameId = null;
+  return wasRunning;
+}
+
+function scheduleTimelinePlaybackFrame() {
+  if (
+    !timelinePlaybackRunning.value ||
+    typeof window === 'undefined' ||
+    typeof window.requestAnimationFrame !== 'function'
+  ) {
+    return;
+  }
+  timelinePlaybackAnimationFrameId = window.requestAnimationFrame(
+    advanceTimelinePlaybackClock
+  );
+}
+
+function advanceTimelinePlaybackClock(timestamp) {
+  timelinePlaybackAnimationFrameId = null;
+  if (!timelinePlaybackRunning.value) {
+    return;
+  }
+  if (timelinePlaybackLastTimestamp === null) {
+    timelinePlaybackLastTimestamp = timestamp;
+    scheduleTimelinePlaybackFrame();
+    return;
+  }
+  const elapsedMs = Math.max(0, timestamp - timelinePlaybackLastTimestamp);
+  timelinePlaybackLastTimestamp = timestamp;
+  const frameRate = Math.max(1, Number(scenario.value.time.fps) || 60);
+  const frameProgress =
+    timelinePlaybackFrameRemainder +
+    (elapsedMs * frameRate * timelinePlaybackRate.value) / 1000;
+  const frameDelta = Math.floor(frameProgress);
+  timelinePlaybackFrameRemainder = frameProgress - frameDelta;
+  if (frameDelta > 0) {
+    advanceTimelinePlaybackFrames(frameDelta);
+  }
+  scheduleTimelinePlaybackFrame();
+}
+
+function advanceTimelinePlaybackFrames(frameDelta) {
+  const range = timelinePlaybackRange.value;
+  if (range.loop) {
+    const span = Math.max(1, range.endFrame - range.startFrame);
+    const current =
+      timelineCursorFrameIndex.value >= range.startFrame &&
+      timelineCursorFrameIndex.value < range.endFrame
+        ? timelineCursorFrameIndex.value
+        : range.startFrame;
+    selectTimelineFrame({
+      frameIndex:
+        range.startFrame +
+        positiveModulo(current - range.startFrame + frameDelta, span),
+      source: 'timeline-playback',
+    });
+    return;
+  }
+  const nextFrame = Math.min(
+    range.endFrame,
+    timelineCursorFrameIndex.value + frameDelta
+  );
+  selectTimelineFrame({
+    frameIndex: nextFrame,
+    source: 'timeline-playback',
+  });
+  if (nextFrame >= range.endFrame) {
+    pauseTimelinePlayback();
+  }
+}
+
+function stepTimelinePlaybackFrame(direction) {
+  pauseTimelinePlayback();
+  const range = timelinePlaybackRange.value;
+  const step = Number(direction) < 0 ? -1 : 1;
+  if (range.loop) {
+    const span = Math.max(1, range.endFrame - range.startFrame);
+    const current =
+      timelineCursorFrameIndex.value >= range.startFrame &&
+      timelineCursorFrameIndex.value < range.endFrame
+        ? timelineCursorFrameIndex.value
+        : range.startFrame;
+    selectTimelineFrame({
+      frameIndex:
+        range.startFrame +
+        positiveModulo(current - range.startFrame + step, span),
+      source: 'timeline-playback-step',
+    });
+    return;
+  }
+  selectTimelineFrame({
+    frameIndex: clampNumber(
+      timelineCursorFrameIndex.value + step,
+      range.startFrame,
+      range.endFrame
+    ),
+    source: 'timeline-playback-step',
+  });
+}
+
+function updateTimelinePlaybackRate(value) {
+  const rate = Number(value);
+  if (!TIMELINE_PLAYBACK_RATES.has(rate)) {
+    return false;
+  }
+  timelinePlaybackRate.value = rate;
+  timelinePlaybackLastTimestamp = null;
+  timelinePlaybackFrameRemainder = 0;
+  return true;
+}
+
+function updateTimelinePlaybackRangeMode(mode) {
+  const nextMode = mode === 'section' ? 'section' : 'axis';
+  if (nextMode === 'section' && !cycleBoundaries.value.length) {
+    return false;
+  }
+  pauseTimelinePlayback();
+  timelinePlaybackRangeMode.value = nextMode;
+  if (nextMode === 'section') {
+    selectTimelineFrame({
+      frameIndex: timelinePlaybackRange.value.startFrame,
+      source: 'timeline-playback-range',
+    });
+  }
+  return true;
+}
+
+function positiveModulo(value, divisor) {
+  return ((value % divisor) + divisor) % divisor;
 }
 
 function isRuntimeStatePointId(pointId) {

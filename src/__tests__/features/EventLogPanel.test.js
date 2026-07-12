@@ -194,6 +194,58 @@ describe('EventLogPanel', () => {
       wrapper.findAll('[data-testid="workbench-runtime-sim-log-row"]')
     ).toHaveLength(1);
   });
+
+  it('marks event and runtime rows that match the playback cursor frame', async () => {
+    const wrapper = mount(EventLogPanel, {
+      props: {
+        cursorFrameIndex: 12,
+        eventLog: [
+          {
+            type: 'ACTION_START',
+            timeMs: 200,
+            actionId: 'action-001',
+            payload: {
+              actorName: '末音',
+              actionName: '普通攻击',
+            },
+          },
+        ],
+        runtimeProjection: {
+          simLog: [
+            createRuntimeLogRow({
+              sourceDeltaId: 'delta-001',
+              actionId: 'action-001',
+              actionName: '普通攻击',
+              frameIndex: 12,
+              sequenceIndex: 0,
+            }),
+          ],
+        },
+      },
+    });
+
+    expect(wrapper.attributes('data-cursor-frame-index')).toBe('12');
+    expect(wrapper.get('.event-list > li').attributes()).toMatchObject({
+      'data-frame-index': '12',
+      'data-cursor-current': 'true',
+    });
+    expect(
+      wrapper.get('[data-testid="workbench-runtime-sim-log-row"]').attributes()
+    ).toMatchObject({
+      'data-frame-index': '12',
+      'data-cursor-current': 'true',
+    });
+
+    await wrapper.setProps({ cursorFrameIndex: 13 });
+    expect(
+      wrapper.get('.event-list > li').attributes('data-cursor-current')
+    ).toBe('false');
+    expect(
+      wrapper
+        .get('[data-testid="workbench-runtime-sim-log-row"]')
+        .attributes('data-cursor-current')
+    ).toBe('false');
+  });
 });
 
 function createRuntimeLogRow({

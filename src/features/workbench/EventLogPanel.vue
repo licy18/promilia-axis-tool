@@ -15,6 +15,7 @@
     :data-runtime-review-source="runtimeReviewContextView.source"
     :data-runtime-review-source-kind="runtimeReviewContextView.sourceKind"
     :data-runtime-log-review-mode="runtimeReviewModeEffective"
+    :data-cursor-frame-index="cursorFrameIndex"
   >
     <div class="panel-title">
       <Tickets class="panel-icon" />
@@ -25,6 +26,9 @@
       <li
         v-for="event in eventLog"
         :key="`${event.type}-${event.timeMs}-${event.actionId ?? 'scenario'}`"
+        :class="{ 'cursor-current': isEventAtCursor(event) }"
+        :data-cursor-current="isEventAtCursor(event) ? 'true' : 'false'"
+        :data-frame-index="msToFrame(event.timeMs)"
       >
         <span class="time">{{ event.timeMs }}ms</span>
         <span class="type" :class="event.type.toLowerCase()">{{
@@ -183,11 +187,14 @@
           v-for="(row, index) in filteredRuntimeSimLogRows"
           :key="row.sourceDeltaId ?? `${row.eventType}-${index}`"
           class="runtime-log-row"
+          :class="{ 'cursor-current': isRuntimeLogRowAtCursor(row) }"
           :data-review-unit="row.reviewUnit ?? 'delta'"
           :data-selected="isRuntimeLogRowSelected(row, index)"
           :data-source-delta-count="row.sourceDeltaIds?.length ?? 1"
           :data-state-point-id="getRuntimeStatePointIdByRow(row)"
           :data-transaction-id="row.transactionId ?? ''"
+          :data-frame-index="getRuntimeLogRowFrameIndex(row)"
+          :data-cursor-current="isRuntimeLogRowAtCursor(row) ? 'true' : 'false'"
           data-testid="workbench-runtime-sim-log-row"
           role="button"
           tabindex="0"
@@ -390,6 +397,7 @@ import {
   createRuntimeFocusSourceView,
   isRuntimeLogFocusSource,
 } from './runtimeFocusSource';
+import { msToFrame } from '../../domain/timebase';
 
 const RUNTIME_LOG_SCROLL_FLOW_PHASES = new Set([
   'runtime-result',
@@ -413,6 +421,10 @@ const props = defineProps({
   selectedStateCurvePointId: {
     type: String,
     default: '',
+  },
+  cursorFrameIndex: {
+    type: Number,
+    default: 0,
   },
   runtimeSelectedDetail: {
     type: Object,
@@ -1288,6 +1300,21 @@ function isRuntimeLogRowSelected(row, index) {
   return selectedRuntimeLogIndex.value === index;
 }
 
+function isEventAtCursor(event) {
+  return msToFrame(event?.timeMs) === props.cursorFrameIndex;
+}
+
+function getRuntimeLogRowFrameIndex(row) {
+  const frameIndex = Number(row?.frameIndex);
+  return Number.isFinite(frameIndex)
+    ? Math.round(frameIndex)
+    : msToFrame(row?.timeMs);
+}
+
+function isRuntimeLogRowAtCursor(row) {
+  return getRuntimeLogRowFrameIndex(row) === props.cursorFrameIndex;
+}
+
 function getRuntimeStatePointIdByRow(row) {
   if (isRuntimeHitReviewRow(row)) {
     return runtimeRowHasStatePoint(row, flowSelectedStatePointId.value)
@@ -2090,6 +2117,11 @@ h2 {
 .runtime-log-row[data-selected='true'] {
   border-color: rgba(121, 199, 185, 0.45);
   background: rgba(121, 199, 185, 0.14);
+}
+
+.event-list > li.cursor-current,
+.runtime-log-row.cursor-current {
+  box-shadow: inset 3px 0 0 #79c7b9;
 }
 
 .runtime-track {

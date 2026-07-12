@@ -839,6 +839,166 @@ test('[stage-10c-frame-cursor-review] links timeline frames, five curve states, 
   await page.screenshot({ path: 'reports/stage-10c-cursor-narrow.png' });
 });
 
+test('[stage-10d-timeline-playback] plays the full axis and loops a selected cycle section', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/#/workbench');
+
+  const workbench = page.locator('main.workbench');
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const playback = page.getByTestId('workbench-timeline-playback-controls');
+  const toggle = page.getByTestId('workbench-timeline-playback-toggle');
+  const stepForward = page.getByTestId('workbench-timeline-step-forward');
+  const stepBackward = page.getByTestId('workbench-timeline-step-backward');
+  const rate = page.getByTestId('workbench-timeline-playback-rate');
+
+  await expect(playback).toHaveAttribute('data-range-mode', 'axis');
+  await stepForward.click();
+  await expect(workbench).toHaveAttribute(
+    'data-timeline-cursor-frame-index',
+    '1'
+  );
+  await stepBackward.click();
+  await expect(workbench).toHaveAttribute(
+    'data-timeline-cursor-frame-index',
+    '0'
+  );
+  await rate.selectOption('2');
+  await expect(workbench).toHaveAttribute('data-timeline-playback-rate', '2');
+
+  await toggle.click();
+  await expect(workbench).toHaveAttribute(
+    'data-timeline-playback-running',
+    'true'
+  );
+  await expect
+    .poll(async () =>
+      Number(await workbench.getAttribute('data-timeline-cursor-frame-index'))
+    )
+    .toBeGreaterThan(0);
+  await toggle.click();
+  await expect(workbench).toHaveAttribute(
+    'data-timeline-playback-running',
+    'false'
+  );
+  const pausedFrame = await workbench.getAttribute(
+    'data-timeline-cursor-frame-index'
+  );
+  await page.waitForTimeout(120);
+  await expect(workbench).toHaveAttribute(
+    'data-timeline-cursor-frame-index',
+    pausedFrame
+  );
+
+  const hpMarker = page
+    .locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="enemy-hp-curve"] [data-testid="workbench-timeline-state-curve-marker"]'
+    )
+    .first();
+  await hpMarker.click();
+  const hpFrame = await hpMarker.getAttribute('data-frame-index');
+  await expect(workbench).toHaveAttribute(
+    'data-timeline-cursor-frame-index',
+    hpFrame
+  );
+  await expect(
+    page
+      .locator(
+        `[data-testid="workbench-runtime-sim-log-row"][data-frame-index="${hpFrame}"][data-cursor-current="true"]`
+      )
+      .first()
+  ).toBeVisible();
+
+  const lane = page.getByTestId('workbench-timeline-lane');
+  const laneBox = await lane.boundingBox();
+  expect(laneBox).toBeTruthy();
+  await lane.evaluate(
+    (element, position) =>
+      element.dispatchEvent(
+        new MouseEvent('contextmenu', {
+          bubbles: true,
+          cancelable: true,
+          clientX: position.clientX,
+          clientY: position.clientY,
+        })
+      ),
+    {
+      clientX: laneBox.x + laneBox.width / 30,
+      clientY: laneBox.y + 80,
+    }
+  );
+  await page.getByTestId('workbench-action-context-add-cycle-boundary').click();
+  await page
+    .locator(
+      '[data-testid="workbench-cycle-section-tab"][data-section-id="cycle-section-01"]'
+    )
+    .click();
+  await page
+    .locator(
+      '[data-testid="workbench-timeline-playback-range-mode"][data-range-mode="section"]'
+    )
+    .click();
+
+  await expect(workbench).toHaveAttribute(
+    'data-timeline-playback-range-mode',
+    'section'
+  );
+  const sectionStart = Number(
+    await workbench.getAttribute('data-timeline-playback-range-start-frame')
+  );
+  const sectionEnd = Number(
+    await workbench.getAttribute('data-timeline-playback-range-end-frame')
+  );
+  expect(sectionStart).toBe(0);
+  expect(sectionEnd).toBeGreaterThan(sectionStart + 1);
+  await expect(workbench).toHaveAttribute(
+    'data-timeline-cursor-frame-index',
+    String(sectionStart)
+  );
+
+  await stepBackward.click();
+  await expect(workbench).toHaveAttribute(
+    'data-timeline-cursor-frame-index',
+    String(sectionEnd - 1)
+  );
+  await stepForward.click();
+  await expect(workbench).toHaveAttribute(
+    'data-timeline-cursor-frame-index',
+    String(sectionStart)
+  );
+  await expect(
+    page.locator('.event-list > li[data-cursor-current="true"]').first()
+  ).toBeVisible();
+
+  await stepBackward.click();
+  await toggle.click();
+  await expect(workbench).toHaveAttribute(
+    'data-timeline-playback-running',
+    'true'
+  );
+  await expect
+    .poll(async () =>
+      Number(await workbench.getAttribute('data-timeline-cursor-frame-index'))
+    )
+    .toBeLessThan(sectionEnd - 1);
+  await toggle.click();
+  await expect(workbench).toHaveAttribute(
+    'data-timeline-playback-running',
+    'false'
+  );
+  await expect(timeline).toHaveAttribute('data-playback-range-mode', 'section');
+
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/stage-10d-playback-desktop.png' });
+  await page.setViewportSize({ width: 760, height: 1280 });
+  await expectTimelineRowsAligned(timeline);
+  await expectPageWithoutHorizontalOverflow(page);
+  await expect(playback).toBeVisible();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/stage-10d-playback-narrow.png' });
+});
+
 test('[diagnostics-lazy-load] loads runtime diagnostics from a production chunk', async ({
   page,
 }) => {
