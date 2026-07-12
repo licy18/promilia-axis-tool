@@ -10,6 +10,8 @@
     :data-box-selection-mode="boxSelectionMode ? 'true' : 'false'"
     :data-flow-selected-state-curve-point-id="flowSelectedStateCurvePointId"
     :data-flow-runtime-focus-source="flowRuntimeFocusSource"
+    :data-cursor-frame-index="timelineCursor.frameIndex"
+    :data-cursor-time-ms="timelineCursor.timeMs"
     data-testid="workbench-timeline-grid-preview"
   >
     <div class="panel-title">
@@ -67,6 +69,15 @@
         >
           <Connection class="control-icon" />
         </button>
+        <output
+          class="timeline-cursor-readout"
+          :data-frame-index="timelineCursor.frameIndex"
+          :data-time-ms="timelineCursor.timeMs"
+          data-testid="workbench-timeline-cursor-readout"
+        >
+          {{ timelineCursor.frameIndex }}F ·
+          {{ formatFrameTime(timelineCursor.timeMs) }}
+        </output>
         <button
           class="icon-control"
           type="button"
@@ -251,6 +262,11 @@
           data-testid="workbench-timeline-scale-track"
         >
           <span v-for="tick in ticks" :key="tick.timeMs">{{ tick.label }}</span>
+          <i
+            class="timeline-scale-cursor"
+            :style="timelineCursorStyle"
+            data-testid="workbench-timeline-scale-cursor"
+          />
         </div>
       </div>
     </div>
@@ -273,14 +289,16 @@
           :data-actor-id="lane.actorId || ''"
           :title="
             lane.curve
-              ? `${lane.detail} · ${formatTopologyCurveValue(lane.curve)}`
+              ? `${lane.detail} · ${formatTopologyCurveCursorValue(lane.curve)}`
               : ''
           "
           data-testid="workbench-timeline-lane-label"
         >
           <span>{{ lane.name }}</span>
           <small>{{
-            lane.curve ? formatTopologyCurveValue(lane.curve) : lane.detail
+            lane.curve
+              ? formatTopologyCurveCursorValue(lane.curve)
+              : lane.detail
           }}</small>
         </div>
       </div>
@@ -298,6 +316,7 @@
           :class="{ 'box-selection-active': boxSelectionMode }"
           data-testid="workbench-timeline-lane"
           @pointerdown="beginBoxSelection"
+          @click="selectTimelineFrameFromPointer"
           @contextmenu.prevent="openTimelineContextMenu"
         >
           <div
@@ -373,6 +392,28 @@
             data-testid="workbench-timeline-box-selection"
           ></div>
           <div
+            class="timeline-frame-cursor"
+            :style="timelineCursorStyle"
+            :data-frame-index="timelineCursor.frameIndex"
+            :data-time-ms="timelineCursor.timeMs"
+            data-testid="workbench-timeline-frame-cursor"
+          >
+            <div
+              class="timeline-frame-cursor-handle"
+              data-testid="workbench-timeline-frame-cursor-handle"
+              role="slider"
+              tabindex="0"
+              :aria-valuemin="0"
+              :aria-valuemax="timelineCursor.maxFrameIndex"
+              :aria-valuenow="timelineCursor.frameIndex"
+              aria-label="时间轴帧游标"
+              @pointerdown.stop="beginTimelineCursorDrag"
+              @click.stop
+              @keydown.left.prevent="nudgeTimelineCursor($event, -1)"
+              @keydown.right.prevent="nudgeTimelineCursor($event, 1)"
+            />
+          </div>
+          <div
             v-for="lane in timelineLanes"
             :key="lane.id"
             class="lane-row"
@@ -402,6 +443,8 @@
               :data-actor-id="lane.curve.actorId || ''"
               :data-initial-value="lane.curve.initialValue"
               :data-current-value="lane.curve.currentValue"
+              :data-cursor-value="lane.curve.cursorValue"
+              :data-cursor-frame-index="timelineCursor.frameIndex"
               :data-max-value="lane.curve.maxValue ?? ''"
               :data-point-count="lane.curve.pointCount"
               data-testid="workbench-timeline-state-curve"
@@ -421,10 +464,25 @@
                   :cy="point.yPercent"
                   r="1.8"
                   :data-action-id="point.actionId"
+                  :data-state-point-id="point.statePointId"
                   :data-time-ms="point.timeMs"
                   :data-frame-index="point.frameIndex"
                   :data-current-value="point.currentValue"
                   data-testid="workbench-timeline-state-curve-breakpoint"
+                  role="button"
+                  tabindex="0"
+                  @click.stop="selectRuntimeCurveBreakpoint(point)"
+                  @keydown.enter.prevent="selectRuntimeCurveBreakpoint(point)"
+                  @keydown.space.prevent="selectRuntimeCurveBreakpoint(point)"
+                />
+                <circle
+                  class="timeline-state-curve-cursor"
+                  :cx="timelineCursor.xPercent"
+                  :cy="lane.curve.cursorYPercent"
+                  r="2.2"
+                  :data-current-value="lane.curve.cursorValue"
+                  :data-frame-index="timelineCursor.frameIndex"
+                  data-testid="workbench-timeline-state-curve-cursor"
                 />
               </svg>
             </div>
@@ -456,6 +514,7 @@
                   'batch-selected': isActionInSelectedBatch(action),
                   'edit-focused': isActionEditFocused(action),
                   'has-result-edit': isTimelineActionResultEditVisible(action),
+                  'cursor-active': isActionActiveAtTimelineCursor(action),
                   'readiness-blocked':
                     getActionReadiness(action).status === 'blocked',
                   'readiness-unresolved':
@@ -468,6 +527,9 @@
               :data-action-id="action.id"
               :data-action-type="action.type"
               :data-start-ms="action.startMs"
+              :data-cursor-active="
+                isActionActiveAtTimelineCursor(action) ? 'true' : 'false'
+              "
               :data-selected="
                 selectedActionIdSet.has(action.id) ? 'true' : 'false'
               "
@@ -847,7 +909,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import {
   Clock,
   Connection,
@@ -862,7 +924,9 @@ import {
 } from './timelineDiagnostics';
 import {
   WORKBENCH_FRAME_MS,
+  frameToMs,
   formatFrameTime,
+  msToFrame,
   snapMsToFrame,
 } from '../../domain/timebase';
 import {
@@ -1021,9 +1085,17 @@ const props = defineProps({
       resources: { curvesByActor: [] },
     }),
   },
+  runtimeStatePointContexts: {
+    type: Array,
+    default: () => [],
+  },
   durationMs: {
     type: Number,
     required: true,
+  },
+  cursorFrameIndex: {
+    type: Number,
+    default: 0,
   },
   selectedActionId: {
     type: String,
@@ -1139,6 +1211,7 @@ const emit = defineEmits([
   'toggle-box-selection-mode',
   'create-action-relations',
   'select-state-curve-point',
+  'select-timeline-frame',
   'dispatch-flow-action',
   'update-state-curve-layer-filter',
   'update-state-curve-track-filter',
@@ -1155,6 +1228,7 @@ const timelineShelfEntryDrag = ref(null);
 const resizeState = ref(null);
 const boxSelectionState = ref(null);
 const cycleBoundaryDragState = ref(null);
+const timelineCursorDragState = ref(null);
 const suppressClickActionId = ref('');
 const timelineZoom = ref(1);
 const candidateSeriesVisibility = ref({});
@@ -1178,6 +1252,24 @@ const ticks = computed(() => {
     };
   });
 });
+const timelineCursor = computed(() => {
+  const maxFrameIndex = Math.max(0, msToFrame(props.durationMs));
+  const frameIndex = clampNumber(
+    Math.round(Number(props.cursorFrameIndex) || 0),
+    0,
+    maxFrameIndex
+  );
+  const timeMs = frameToMs(frameIndex);
+  return {
+    frameIndex,
+    maxFrameIndex,
+    timeMs,
+    xPercent: clampPercent((timeMs / props.durationMs) * 100),
+  };
+});
+const timelineCursorStyle = computed(() => ({
+  left: `${timelineCursor.value.xPercent}%`,
+}));
 
 const dragInitialLaneId = computed(
   () => dragState.value?.initialLaneId ?? null
@@ -1315,6 +1407,14 @@ const candidateSeriesToggles = computed(() =>
 );
 const actionsById = computed(
   () => new Map(props.actions.map(action => [action.id, action]))
+);
+const runtimeStatePointContextByDeltaId = computed(
+  () =>
+    new Map(
+      props.runtimeStatePointContexts
+        .filter(context => context?.row?.sourceDeltaId)
+        .map(context => [context.row.sourceDeltaId, context])
+    )
 );
 const readinessByActionId = computed(
   () =>
@@ -1673,8 +1773,8 @@ function createEmptyTimelineLane({
   };
 }
 
-function formatTopologyCurveValue(curve) {
-  const current = formatCompactNumber(curve.currentValue);
+function formatTopologyCurveCursorValue(curve) {
+  const current = formatCompactNumber(curve.cursorValue);
   const max = strictNumberOrNull(curve.maxValue);
   return max == null ? current : `${current} / ${formatCompactNumber(max)}`;
 }
@@ -1713,6 +1813,10 @@ function createTimelineStateCurve({
       values.push(currentValue);
       return {
         id: point.sourceDeltaId ?? `${trackKey}-${actorId}-${index}`,
+        sourceDeltaId: point.sourceDeltaId ?? '',
+        statePointId:
+          runtimeStatePointContextByDeltaId.value.get(point.sourceDeltaId)
+            ?.statePointId ?? '',
         actionId: point.actionId ?? '',
         timeMs: numberOrZero(point.timeMs),
         frameIndex: numberOrZero(point.frameIndex),
@@ -1722,6 +1826,13 @@ function createTimelineStateCurve({
   const minimum = Math.min(0, ...values);
   const maximum = Math.max(1, maxValue ?? 0, ...values);
   const range = maximum - minimum || 1;
+  let cursorValue = initialValue;
+  for (const point of breakpoints) {
+    if (point.frameIndex > timelineCursor.value.frameIndex) {
+      break;
+    }
+    cursorValue = point.currentValue;
+  }
   let previousY = curveValueToY(initialValue, minimum, range);
   const stepCoordinates = [`0,${previousY}`];
 
@@ -1741,6 +1852,8 @@ function createTimelineStateCurve({
     actorId,
     initialValue,
     currentValue,
+    cursorValue,
+    cursorYPercent: curveValueToY(cursorValue, minimum, range),
     maxValue,
     pointCount: breakpoints.length,
     breakpoints,
@@ -2725,6 +2838,11 @@ function selectCandidateFrameGroup(group) {
   if (isStateCurveSelectedFocusActive.value) {
     candidateDisplayScope.value = 'selected-frame';
   }
+  emitTimelineFrame({
+    frameIndex: group.displayFrameIndex ?? group.sourceFrameIndex,
+    timeMs: group.timeMs,
+    source: 'timeline-candidate-frame',
+  });
   selectStateCurvePointForCandidateFrame(group);
 }
 
@@ -2733,10 +2851,21 @@ function selectCandidateFrameGroupByMarker(marker) {
   if (isStateCurveSelectedFocusActive.value) {
     candidateDisplayScope.value = 'selected-frame';
   }
+  emitTimelineFrame({
+    frameIndex: marker.displayFrameIndex ?? marker.sourceFrameIndex,
+    timeMs: marker.timeMs,
+    source: 'timeline-candidate-frame',
+  });
   selectStateCurvePointForCandidateFrame(marker);
 }
 
 function selectStateCurveMarker(marker) {
+  emitTimelineFrame({
+    frameIndex: marker.frameIndex,
+    timeMs: marker.timeMs,
+    statePointId: marker.statePointId,
+    source: 'timeline-state-point',
+  });
   if (isRuntimeStateCurveMarker(marker)) {
     emit(
       'dispatch-flow-action',
@@ -2752,6 +2881,29 @@ function selectStateCurveMarker(marker) {
     return;
   }
   emit('select-state-curve-point', marker.statePointId);
+}
+
+function selectRuntimeCurveBreakpoint(point) {
+  emitTimelineFrame({
+    frameIndex: point.frameIndex,
+    timeMs: point.timeMs,
+    statePointId: point.statePointId,
+    source: 'timeline-runtime-curve',
+  });
+  if (!point.statePointId) {
+    return;
+  }
+  emit(
+    'dispatch-flow-action',
+    mainFlowActionSurface.value.createRuntimeSelectionFlowAction({
+      source: 'timeline-runtime-curve',
+      actionId: point.actionId,
+      statePointId: point.statePointId,
+      payload: {
+        preserveStateCurveFilters: true,
+      },
+    })
+  );
 }
 
 function isRuntimeStateCurveMarker(marker) {
@@ -3598,6 +3750,10 @@ function handleActionClick(event, action) {
 }
 
 function handleActionSelect(event, action) {
+  emitTimelineFrame({
+    timeMs: action.startMs,
+    source: 'timeline-action',
+  });
   emit('select-action', {
     actionId: action.id,
     mode: event.shiftKey
@@ -3606,6 +3762,105 @@ function handleActionSelect(event, action) {
         ? 'toggle'
         : 'replace',
   });
+}
+
+function selectTimelineFrameFromPointer(event) {
+  if (
+    props.boxSelectionMode ||
+    event.target?.closest?.(
+      '.action-block, .action-relation-hit, .cycle-boundary, .effect-interval, .candidate-value-marker, .candidate-value-frame-hotspot, .state-curve-marker, .timeline-frame-cursor, [data-testid="workbench-timeline-state-curve-breakpoint"]'
+    )
+  ) {
+    return;
+  }
+  emitTimelineFrameFromClientX(event.clientX, 'timeline-grid');
+}
+
+function beginTimelineCursorDrag(event) {
+  if ((event.button ?? 0) !== 0) {
+    return;
+  }
+  event.preventDefault();
+  try {
+    event.currentTarget?.setPointerCapture?.(event.pointerId);
+  } catch {
+    // Synthetic and assistive pointers may not have an active capture target.
+  }
+  timelineCursorDragState.value = { pointerId: event.pointerId };
+  emitTimelineFrameFromClientX(event.clientX, 'timeline-cursor');
+  window.addEventListener('pointermove', handleTimelineCursorDragMove);
+  window.addEventListener('pointerup', endTimelineCursorDrag);
+  window.addEventListener('pointercancel', endTimelineCursorDrag);
+}
+
+function handleTimelineCursorDragMove(event) {
+  if (!timelineCursorDragState.value) {
+    return;
+  }
+  emitTimelineFrameFromClientX(event.clientX, 'timeline-cursor');
+}
+
+function endTimelineCursorDrag(event) {
+  if (timelineCursorDragState.value && event?.type === 'pointerup') {
+    emitTimelineFrameFromClientX(event.clientX, 'timeline-cursor');
+  }
+  timelineCursorDragState.value = null;
+  window.removeEventListener('pointermove', handleTimelineCursorDragMove);
+  window.removeEventListener('pointerup', endTimelineCursorDrag);
+  window.removeEventListener('pointercancel', endTimelineCursorDrag);
+}
+
+function nudgeTimelineCursor(event, direction) {
+  emitTimelineFrame({
+    frameIndex:
+      timelineCursor.value.frameIndex + direction * (event.shiftKey ? 4 : 1),
+    source: 'timeline-cursor',
+  });
+}
+
+function emitTimelineFrameFromClientX(clientX, source) {
+  const rect = laneRef.value?.getBoundingClientRect();
+  if (!rect || rect.width <= 0 || !Number.isFinite(clientX)) {
+    return;
+  }
+  const ratio = clampNumber((clientX - rect.left) / rect.width, 0, 1);
+  emitTimelineFrame({
+    frameIndex: Math.round(ratio * timelineCursor.value.maxFrameIndex),
+    source,
+  });
+}
+
+function emitTimelineFrame({
+  frameIndex = null,
+  timeMs = null,
+  statePointId = '',
+  source = 'timeline-grid',
+} = {}) {
+  const hasFrameIndex =
+    frameIndex !== null && frameIndex !== undefined && frameIndex !== '';
+  const normalizedFrameIndex = clampNumber(
+    Math.round(hasFrameIndex ? Number(frameIndex) : msToFrame(timeMs)),
+    0,
+    timelineCursor.value.maxFrameIndex
+  );
+  emit('select-timeline-frame', {
+    frameIndex: normalizedFrameIndex,
+    timeMs: frameToMs(normalizedFrameIndex),
+    statePointId,
+    source,
+  });
+}
+
+function isActionActiveAtTimelineCursor(action) {
+  const startMs = numberOrZero(action?.startMs);
+  const durationMs = Math.max(
+    WORKBENCH_FRAME_MS,
+    numberOrZero(action?.durationMs)
+  );
+  return (
+    timelineCursor.value.timeMs >= startMs &&
+    timelineCursor.value.timeMs < startMs + durationMs
+  );
 }
 
 function deleteActionSelection(action) {
@@ -3870,6 +4125,28 @@ function synchronizeTimelineScroll(source) {
   }
 }
 
+async function ensureTimelineCursorVisible() {
+  await nextTick();
+  const viewport = timelineViewportRef.value;
+  const track = laneRef.value;
+  if (!viewport || !track || viewport.clientWidth <= 0) {
+    return;
+  }
+  const cursorX =
+    (timelineCursor.value.xPercent / 100) * track.getBoundingClientRect().width;
+  const margin = Math.min(48, viewport.clientWidth * 0.12);
+  const visibleLeft = viewport.scrollLeft + margin;
+  const visibleRight = viewport.scrollLeft + viewport.clientWidth - margin;
+  if (cursorX < visibleLeft) {
+    viewport.scrollLeft = Math.max(0, cursorX - margin);
+  } else if (cursorX > visibleRight) {
+    viewport.scrollLeft = Math.max(0, cursorX - viewport.clientWidth + margin);
+  } else {
+    return;
+  }
+  synchronizeTimelineScroll('timeline');
+}
+
 watch(
   () => props.boxSelectionMode,
   enabled => {
@@ -3878,6 +4155,10 @@ watch(
     }
   }
 );
+
+watch([() => props.cursorFrameIndex, timelineZoom], () => {
+  void ensureTimelineCursorVisible();
+});
 
 function setLaneRowRef(element, laneId) {
   if (element) {
@@ -4059,6 +4340,7 @@ onBeforeUnmount(() => {
   endResize();
   cancelBoxSelection();
   endCycleBoundaryDrag();
+  endTimelineCursorDrag();
 });
 </script>
 
@@ -4095,6 +4377,15 @@ h2 {
   align-items: center;
   gap: 6px;
   margin-left: auto;
+}
+
+.timeline-cursor-readout {
+  min-width: 92px;
+  color: #dff6f1;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .timeline-entry-palette {
@@ -4400,9 +4691,21 @@ h2 {
 }
 
 .scale-track {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   min-width: 100%;
+}
+
+.timeline-scale-cursor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #79c7b9;
+  box-shadow: 0 0 5px rgba(121, 199, 185, 0.72);
+  pointer-events: none;
+  transform: translateX(-0.5px);
 }
 
 .scale-track span {
@@ -4664,6 +4967,38 @@ h2 {
   pointer-events: none;
 }
 
+.timeline-frame-cursor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 7;
+  width: 1px;
+  background: #79c7b9;
+  box-shadow: 0 0 7px rgba(121, 199, 185, 0.48);
+  pointer-events: none;
+  transform: translateX(-0.5px);
+}
+
+.timeline-frame-cursor-handle {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 12px;
+  height: 14px;
+  border: 1px solid rgba(121, 199, 185, 0.8);
+  border-radius: 3px;
+  background: #21423d;
+  cursor: ew-resize;
+  outline: none;
+  pointer-events: auto;
+  transform: translateX(-50%);
+}
+
+.timeline-frame-cursor-handle:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.88);
+  outline-offset: 2px;
+}
+
 .lane-label {
   display: grid;
   align-content: center;
@@ -4790,6 +5125,26 @@ h2 {
   vector-effect: non-scaling-stroke;
 }
 
+.timeline-state-curve
+  [data-testid='workbench-timeline-state-curve-breakpoint'] {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.timeline-state-curve
+  [data-testid='workbench-timeline-state-curve-breakpoint']:focus {
+  outline: none;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+}
+
+.timeline-state-curve .timeline-state-curve-cursor {
+  fill: #ffffff;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  pointer-events: none;
+}
+
 .timeline-state-curve.curve-enemyHpDamage {
   color: #ef767a;
 }
@@ -4813,6 +5168,13 @@ h2 {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
   cursor: pointer;
   z-index: 2;
+}
+
+.action-block.cursor-active {
+  border-color: rgba(255, 255, 255, 0.92);
+  box-shadow:
+    0 0 0 2px rgba(121, 199, 185, 0.28),
+    0 12px 30px rgba(0, 0, 0, 0.28);
 }
 
 .cooldown-window {
@@ -5376,6 +5738,7 @@ h2 {
 
   .timeline-tools {
     width: 100%;
+    flex-wrap: wrap;
     margin-left: 0;
   }
 

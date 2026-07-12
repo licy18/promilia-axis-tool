@@ -547,6 +547,115 @@ describe('TimelineGridPreview', () => {
     ).toBe('0,100 100,100');
   });
 
+  it('scrubs one 60fps cursor through actions, five curves, and runtime points', async () => {
+    const runtimeStateCurves = createRuntimeTimelineStateCurves();
+    const wrapper = mount(TimelineGridPreview, {
+      attachTo: document.body,
+      props: createTimelineProps({
+        actors: [
+          { id: 'actor-a', name: '末音', initialSp: 0, stats: { maxSp: 1 } },
+          {
+            id: 'actor-b',
+            name: '寒悠悠',
+            initialSp: 0,
+            stats: { maxSp: 1 },
+          },
+          { id: 'actor-c', name: '芃芃', initialSp: 0, stats: { maxSp: 1 } },
+        ],
+        durationMs: 3000,
+        cursorFrameIndex: 0,
+        enemy: {
+          id: 'enemy-a',
+          name: '训练假人',
+          stats: { maxHp: 1000, maxToughness: 100 },
+        },
+        runtimeStateCurves,
+        runtimeStatePointContexts: [
+          {
+            statePointId: 'runtime-energy-b',
+            row: { sourceDeltaId: 'energy-b' },
+          },
+          { statePointId: 'runtime-hp-a', row: { sourceDeltaId: 'hp-a' } },
+          {
+            statePointId: 'runtime-toughness-a',
+            row: { sourceDeltaId: 'toughness-a' },
+          },
+        ],
+        mainFlowCommandSurface: createInjectedMainFlowCommandSurface(),
+      }),
+    });
+    const curve = laneId =>
+      wrapper.get(
+        `[data-testid="workbench-timeline-row"][data-lane-id="${laneId}"] [data-testid="workbench-timeline-state-curve"]`
+      );
+
+    expect(curve('energy-actor-b').attributes('data-cursor-value')).toBe('0');
+    expect(curve('enemy-hp-curve').attributes('data-cursor-value')).toBe(
+      '1000'
+    );
+    expect(curve('enemy-toughness-curve').attributes('data-cursor-value')).toBe(
+      '100'
+    );
+
+    await wrapper.setProps({ cursorFrameIndex: 90 });
+    expect(
+      wrapper
+        .get('[data-testid="workbench-timeline-frame-cursor"]')
+        .attributes()
+    ).toMatchObject({
+      'data-frame-index': '90',
+      'data-time-ms': '1500',
+      style: 'left: 50%;',
+    });
+    expect(
+      wrapper
+        .get('[data-testid="workbench-timeline-scale-cursor"]')
+        .attributes('style')
+    ).toBe('left: 50%;');
+    expect(curve('energy-actor-b').attributes('data-cursor-value')).toBe('0.5');
+    expect(curve('enemy-hp-curve').attributes('data-cursor-value')).toBe('900');
+    expect(curve('enemy-toughness-curve').attributes('data-cursor-value')).toBe(
+      '100'
+    );
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-b"]'
+        )
+        .attributes('data-cursor-active')
+    ).toBe('true');
+
+    await curve('enemy-hp-curve')
+      .get('[data-testid="workbench-timeline-state-curve-breakpoint"]')
+      .trigger('click');
+    expect(wrapper.emitted('select-timeline-frame')?.at(-1)?.[0]).toEqual({
+      frameIndex: 72,
+      timeMs: 1200,
+      statePointId: 'runtime-hp-a',
+      source: 'timeline-runtime-curve',
+    });
+    expect(getLastDispatchedFlowAction(wrapper)).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'timeline-surface-test',
+      actionId: 'action-a',
+      statePointId: 'runtime-hp-a',
+      canRun: true,
+    });
+
+    const lane = wrapper.get('[data-testid="workbench-timeline-lane"]');
+    lane.element.getBoundingClientRect = () => createRect(0, 0, 600, 240);
+    lane.element.dispatchEvent(
+      new MouseEvent('click', { bubbles: true, clientX: 450, clientY: 120 })
+    );
+    expect(wrapper.emitted('select-timeline-frame')?.at(-1)?.[0]).toEqual({
+      frameIndex: 135,
+      timeMs: 2250,
+      statePointId: '',
+      source: 'timeline-grid',
+    });
+    wrapper.unmount();
+  });
+
   it('keeps the scale and timeline horizontal scroll positions synchronized', async () => {
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps(),

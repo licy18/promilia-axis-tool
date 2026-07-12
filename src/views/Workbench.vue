@@ -2,6 +2,7 @@
   <main
     ref="workbenchRoot"
     class="workbench"
+    :data-timeline-cursor-frame-index="timelineCursorFrameIndex"
     :data-runtime-diagnostics-status="runtimeDiagnosticsStatus"
     :data-runtime-diagnostics-revision="runtimeDiagnosticsRevision"
     :data-selected-action-count="selectedActionIds.length"
@@ -396,7 +397,9 @@
             simulationResult.threeValueCurveFramework
           "
           :runtime-state-curves="simulationResult.runtimeOutputs.stateCurves"
+          :runtime-state-point-contexts="runtimeStatePointContexts"
           :duration-ms="scenario.time.durationMs"
+          :cursor-frame-index="timelineCursorFrameIndex"
           :selected-action-id="selectedActionId"
           :selected-action-ids="selectedActionIds"
           :action-relations="actionRelations"
@@ -429,6 +432,7 @@
           @toggle-box-selection-mode="toggleBoxSelectionMode"
           @create-action-relations="createRelationsForSelectedActions"
           @select-state-curve-point="selectStateCurvePoint"
+          @select-timeline-frame="selectTimelineFrame"
           @dispatch-flow-action="dispatchWorkbenchFlowAction"
           @update-state-curve-layer-filter="updateStateCurveLayerFilter"
           @update-state-curve-track-filter="updateStateCurveTrackFilter"
@@ -979,7 +983,7 @@ import {
   mergeWorkbenchRuntimeSampleCaptures,
   normalizeWorkbenchRuntimeSampleCaptures,
 } from '../domain/workbenchRuntimeSampleCapture';
-import { formatFrameTime, frameToMs } from '../domain/timebase';
+import { formatFrameTime, frameToMs, msToFrame } from '../domain/timebase';
 import { compileProject } from '../simulation/compiler/compileProject';
 import { simulateScenario } from '../simulation/engine/simulateScenario';
 import {
@@ -1090,6 +1094,7 @@ const boxSelectionMode = ref(false);
 const actionClipboard = ref(null);
 const actionContextMenu = ref(createClosedActionContextMenu());
 const selectedStateCurvePointId = ref('');
+const timelineCursorFrameIndex = ref(0);
 const stateCurveFocusMode = ref('all');
 const stateCurveLayerFilters = ref({ ...DEFAULT_STATE_CURVE_LAYER_FILTERS });
 const stateCurveTrackFilters = ref({});
@@ -1206,6 +1211,9 @@ const activeWorkbenchScenario = computed(() =>
   getActiveWorkbenchScenario(scenarioWorkspace.value)
 );
 const runtimeOutputs = computed(() => simulationResult.value.runtimeOutputs);
+const runtimeStatePointContexts = computed(() =>
+  createRuntimeStatePointContexts(runtimeOutputs.value)
+);
 const effectIntervalProjection = computed(() =>
   projectEffectRuntimeIntervals({
     effectTimeline: runtimeOutputs.value.effectTimeline,
@@ -1527,6 +1535,29 @@ watch(
       selectedEffectEventId.value = '';
     }
   }
+);
+
+watch(
+  [selectedStateCurvePointId, runtimeStatePointContexts],
+  ([statePointId, contexts]) => {
+    if (!statePointId) {
+      return;
+    }
+    const context = contexts.find(item => item.statePointId === statePointId);
+    const frameIndex = Number(
+      context?.row?.frameIndex ??
+        context?.point?.frameIndex ??
+        msToFrame(context?.row?.timeMs ?? context?.point?.timeMs)
+    );
+    if (Number.isFinite(frameIndex)) {
+      timelineCursorFrameIndex.value = clampNumber(
+        Math.round(frameIndex),
+        0,
+        msToFrame(scenario.value.time.durationMs)
+      );
+    }
+  },
+  { flush: 'sync' }
 );
 
 watch(
@@ -3715,6 +3746,7 @@ function applyWorkbenchConfigurationState(state) {
 
 function clearWorkbenchProjectTransientState() {
   selectedStateCurvePointId.value = '';
+  timelineCursorFrameIndex.value = 0;
   stateCurveFocusMode.value = 'all';
   stateCurveLayerFilters.value = { ...DEFAULT_STATE_CURVE_LAYER_FILTERS };
   stateCurveTrackFilters.value = {};
@@ -4248,6 +4280,10 @@ function selectAction(actionRequest, { syncRuntimeResult = true } = {}) {
     anchorActionId: mode === 'range' ? actionSelectionAnchorId.value : actionId,
   });
   const draft = findActionDraftById(normalized.primaryActionId);
+  selectTimelineFrame({
+    timeMs: draft?.startMs,
+    source: 'action-selection',
+  });
   syncActionLibraryCharacterIdFromDraft(draft);
   if (syncRuntimeResult && shouldSyncRuntimeResultOnActionSelect()) {
     syncRuntimeResultForSelectedAction(normalized.primaryActionId);
@@ -4270,6 +4306,10 @@ function selectActionGroup({
   );
   selectedActionRelationId.value = '';
   const draft = findActionDraftById(normalized.primaryActionId);
+  selectTimelineFrame({
+    timeMs: draft?.startMs,
+    source: 'action-group-selection',
+  });
   syncActionLibraryCharacterIdFromDraft(draft);
   if (shouldSyncRuntimeResultOnActionSelect()) {
     syncRuntimeResultForSelectedAction(normalized.primaryActionId);
@@ -4655,6 +4695,25 @@ function selectStateCurvePoint(pointId) {
     return;
   }
   selectedStateCurvePointId.value = statePointId;
+}
+
+function selectTimelineFrame({
+  frameIndex = null,
+  timeMs = null,
+  statePointId = '',
+  source = 'timeline-grid',
+} = {}) {
+  const hasFrameIndex =
+    frameIndex !== null && frameIndex !== undefined && frameIndex !== '';
+  const requestedFrame = hasFrameIndex ? Number(frameIndex) : msToFrame(timeMs);
+  timelineCursorFrameIndex.value = clampNumber(
+    Math.round(requestedFrame),
+    0,
+    msToFrame(scenario.value.time.durationMs)
+  );
+  if (!statePointId && ['timeline-grid', 'timeline-cursor'].includes(source)) {
+    workbenchFlowRuntime.applyRuntimePointSelection({ statePointId: '' });
+  }
 }
 
 function isRuntimeStatePointId(pointId) {

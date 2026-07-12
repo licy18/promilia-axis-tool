@@ -634,6 +634,211 @@ test('[stage-10b-cross-lane-batch-editing] box-selects, rebinds, copies, and res
   await page.screenshot({ path: 'reports/stage-10b-batch-narrow.png' });
 });
 
+test('[stage-10c-frame-cursor-review] links timeline frames, five curve states, actions, and runtime logs', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/#/workbench');
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const cursor = page.getByTestId('workbench-timeline-frame-cursor');
+  const cursorHandle = page.getByTestId(
+    'workbench-timeline-frame-cursor-handle'
+  );
+  await expect(timeline).toHaveAttribute('data-cursor-frame-index', '0');
+  await expect(
+    page.getByTestId('workbench-timeline-state-curve-cursor')
+  ).toHaveCount(5);
+  await expect(
+    page.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="energy-actor-101003"] [data-testid="workbench-timeline-state-curve"]'
+    )
+  ).toHaveAttribute('data-cursor-value', '0');
+
+  const palette = page.getByTestId('workbench-timeline-entry-palette');
+  const paletteToggle = page.getByTestId(
+    'workbench-timeline-entry-palette-toggle'
+  );
+  await paletteToggle.click();
+  await page
+    .locator(
+      '[data-testid="workbench-timeline-entry-source"][data-entry-type="resource"]'
+    )
+    .dragTo(
+      page.locator(
+        '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
+      ),
+      { targetPosition: { x: 420, y: 26 } }
+    );
+
+  const actorEnergyCurve = page.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="energy-actor-101003"] [data-testid="workbench-timeline-state-curve"]'
+  );
+  let energyBreakpoint = actorEnergyCurve.getByTestId(
+    'workbench-timeline-state-curve-breakpoint'
+  );
+  const originalResourceFrame = Number(
+    await energyBreakpoint.getAttribute('data-frame-index')
+  );
+  await energyBreakpoint.click();
+  await expect(timeline).toHaveAttribute(
+    'data-cursor-frame-index',
+    String(originalResourceFrame)
+  );
+  await expect(actorEnergyCurve).toHaveAttribute('data-cursor-value', '50');
+  await expect(
+    page.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="energy-actor-109001"] [data-testid="workbench-timeline-state-curve"]'
+    )
+  ).toHaveAttribute('data-cursor-value', '0');
+  await expectTimelineCursorAligned(cursor, energyBreakpoint);
+
+  const resourceAction = page.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+  );
+  await resourceAction.click();
+  await selectTimelineFrameAtRatio(page, 0.4);
+  const reviewFrame = Number(
+    await timeline.getAttribute('data-cursor-frame-index')
+  );
+  expect(reviewFrame).toBeGreaterThanOrEqual(719);
+  expect(reviewFrame).toBeLessThanOrEqual(720);
+  await expect(actorEnergyCurve).toHaveAttribute('data-cursor-value', '50');
+  await page.getByTestId('workbench-start-frame-input').fill('900');
+  await expect(timeline).toHaveAttribute(
+    'data-cursor-frame-index',
+    String(reviewFrame)
+  );
+  await expect(actorEnergyCurve).toHaveAttribute('data-cursor-value', '0');
+  energyBreakpoint = actorEnergyCurve.getByTestId(
+    'workbench-timeline-state-curve-breakpoint'
+  );
+  await expect(energyBreakpoint).toHaveAttribute('data-frame-index', '900');
+
+  await energyBreakpoint.click();
+  await expect(timeline).toHaveAttribute('data-cursor-frame-index', '900');
+  await expect(actorEnergyCurve).toHaveAttribute('data-cursor-value', '50');
+  const resourceStatePointId = await energyBreakpoint.getAttribute(
+    'data-state-point-id'
+  );
+  await page
+    .locator(
+      '[data-testid="workbench-runtime-sim-log-mode-option"][data-review-mode="delta"]'
+    )
+    .click();
+  const resourceLogRow = page.locator(
+    `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${resourceStatePointId}"]`
+  );
+  await expect(resourceLogRow).toBeVisible();
+  await selectTimelineFrameAtRatio(page, 0.1);
+  await expect
+    .poll(async () =>
+      Number(await timeline.getAttribute('data-cursor-frame-index'))
+    )
+    .toBeGreaterThanOrEqual(179);
+  expect(
+    Number(await timeline.getAttribute('data-cursor-frame-index'))
+  ).toBeLessThanOrEqual(180);
+  await resourceLogRow.click();
+  await expect(timeline).toHaveAttribute('data-cursor-frame-index', '900');
+  await expect(resourceLogRow).toHaveAttribute('data-selected', 'true');
+
+  const hpCurve = page.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="enemy-hp-curve"] [data-testid="workbench-timeline-state-curve"]'
+  );
+  const hpBreakpoint = hpCurve
+    .getByTestId('workbench-timeline-state-curve-breakpoint')
+    .first();
+  await hpBreakpoint.click();
+  const hpFrame = await hpBreakpoint.getAttribute('data-frame-index');
+  await expect(timeline).toHaveAttribute('data-cursor-frame-index', hpFrame);
+  await expect(hpCurve).toHaveAttribute(
+    'data-cursor-value',
+    await hpBreakpoint.getAttribute('data-current-value')
+  );
+  await expectTimelineCursorAligned(cursor, hpBreakpoint);
+
+  await cursorHandle.evaluate(element => {
+    const lane = document.querySelector(
+      '[data-testid="workbench-timeline-lane"]'
+    );
+    const laneRect = lane?.getBoundingClientRect();
+    const cursorRect = element.getBoundingClientRect();
+    if (!laneRect) return;
+    const pointerId = 7;
+    const startX = cursorRect.left + cursorRect.width / 2;
+    const clientY = cursorRect.top + 8;
+    const endX = laneRect.left + laneRect.width * 0.6;
+    element.dispatchEvent(
+      new PointerEvent('pointerdown', {
+        bubbles: true,
+        button: 0,
+        pointerId,
+        clientX: startX,
+        clientY,
+      })
+    );
+    window.dispatchEvent(
+      new PointerEvent('pointermove', {
+        bubbles: true,
+        pointerId,
+        clientX: endX,
+        clientY,
+      })
+    );
+    window.dispatchEvent(
+      new PointerEvent('pointerup', {
+        bubbles: true,
+        pointerId,
+        clientX: endX,
+        clientY,
+      })
+    );
+  });
+  const draggedFrame = Number(
+    await timeline.getAttribute('data-cursor-frame-index')
+  );
+  expect(draggedFrame).toBeGreaterThanOrEqual(1079);
+  expect(draggedFrame).toBeLessThanOrEqual(1080);
+
+  const zoomInput = page.getByTestId('workbench-timeline-zoom-input');
+  await zoomInput.evaluate(element => {
+    element.value = '4';
+    element.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await energyBreakpoint.click();
+  await expect(timeline).toHaveAttribute('data-cursor-frame-index', '900');
+  await expectTimelineCursorAligned(cursor, energyBreakpoint);
+  const timelineViewport = page.getByTestId('workbench-timeline-viewport');
+  const scaleViewport = page.getByTestId('workbench-timeline-scale-viewport');
+  await expect
+    .poll(async () => {
+      const [timelineScroll, scaleScroll] = await Promise.all([
+        timelineViewport.evaluate(element => element.scrollLeft),
+        scaleViewport.evaluate(element => element.scrollLeft),
+      ]);
+      return Math.abs(timelineScroll - scaleScroll);
+    })
+    .toBeLessThanOrEqual(1);
+
+  await zoomInput.evaluate(element => {
+    element.value = '1';
+    element.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  if (await palette.isVisible()) {
+    await paletteToggle.click();
+  }
+  await energyBreakpoint.click();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/stage-10c-cursor-desktop.png' });
+  await page.setViewportSize({ width: 760, height: 1280 });
+  await expectTimelineRowsAligned(timeline);
+  await expectPageWithoutHorizontalOverflow(page);
+  await expectTimelineCursorAligned(cursor, energyBreakpoint);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/stage-10c-cursor-narrow.png' });
+});
+
 test('[diagnostics-lazy-load] loads runtime diagnostics from a production chunk', async ({
   page,
 }) => {
@@ -1594,6 +1799,38 @@ async function expectActionAndCurvePointAligned(page, actionId, point) {
       return Math.abs(actionBox.x - (pointBox.x + pointBox.width / 2));
     })
     .toBeLessThanOrEqual(1);
+}
+
+async function expectTimelineCursorAligned(cursor, target) {
+  await expect
+    .poll(async () => {
+      const [cursorBox, targetBox] = await Promise.all([
+        cursor.boundingBox(),
+        target.boundingBox(),
+      ]);
+      if (!cursorBox || !targetBox) return Number.POSITIVE_INFINITY;
+      return Math.abs(
+        cursorBox.x + cursorBox.width / 2 - (targetBox.x + targetBox.width / 2)
+      );
+    })
+    .toBeLessThanOrEqual(1.5);
+}
+
+async function selectTimelineFrameAtRatio(page, ratio) {
+  await page.evaluate(value => {
+    const lane = document.querySelector(
+      '[data-testid="workbench-timeline-lane"]'
+    );
+    const rect = lane?.getBoundingClientRect();
+    if (!lane || !rect) return;
+    lane.dispatchEvent(
+      new MouseEvent('click', {
+        bubbles: true,
+        clientX: rect.left + rect.width * value,
+        clientY: rect.top + rect.height / 2,
+      })
+    );
+  }, ratio);
 }
 
 async function expectPageWithoutHorizontalOverflow(page) {

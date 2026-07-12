@@ -9445,6 +9445,78 @@ describe('Workbench view', () => {
     ).toBe('1');
   });
 
+  it('keeps the timeline frame cursor synchronized with runtime curves and logs', async () => {
+    const wrapper = mount(Workbench, {
+      attachTo: document.body,
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    const hpBreakpoint = wrapper.get(
+      '[data-testid="workbench-timeline-row"][data-lane-id="enemy-hp-curve"] [data-testid="workbench-timeline-state-curve-breakpoint"]'
+    );
+    const runtimeStatePointId = hpBreakpoint.attributes('data-state-point-id');
+    const runtimeFrameIndex = hpBreakpoint.attributes('data-frame-index');
+    expect(runtimeStatePointId).toBeTruthy();
+
+    await hpBreakpoint.trigger('click');
+    await nextTick();
+    expect(wrapper.get('main.workbench').attributes()).toMatchObject({
+      'data-timeline-cursor-frame-index': runtimeFrameIndex,
+    });
+    expect(
+      wrapper
+        .get('[data-testid="workbench-timeline-grid-preview"]')
+        .attributes('data-flow-selected-state-curve-point-id')
+    ).toBe(runtimeStatePointId);
+
+    const timelineLane = wrapper.get('[data-testid="workbench-timeline-lane"]');
+    timelineLane.element.getBoundingClientRect = () => ({
+      x: 0,
+      y: 0,
+      left: 0,
+      top: 0,
+      right: 600,
+      bottom: 600,
+      width: 600,
+      height: 600,
+      toJSON: () => ({}),
+    });
+    timelineLane.element.dispatchEvent(
+      new MouseEvent('click', {
+        bubbles: true,
+        clientX: 300,
+        clientY: 300,
+      })
+    );
+    await nextTick();
+    expect(
+      wrapper
+        .get('main.workbench')
+        .attributes('data-timeline-cursor-frame-index')
+    ).toBe('900');
+    expect(
+      wrapper
+        .get('[data-testid="workbench-timeline-grid-preview"]')
+        .attributes('data-flow-selected-state-curve-point-id')
+    ).toBe('');
+
+    const runtimeLogRow = wrapper.find(
+      `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${runtimeStatePointId}"]`
+    );
+    expect(runtimeLogRow.exists()).toBe(true);
+    await runtimeLogRow.trigger('click');
+    await nextTick();
+    expect(wrapper.get('main.workbench').attributes()).toMatchObject({
+      'data-timeline-cursor-frame-index': runtimeFrameIndex,
+    });
+    wrapper.unmount();
+  });
+
   it('cleans the auto-delay note line when the note is edited manually', async () => {
     const wrapper = mount(Workbench, {
       global: {

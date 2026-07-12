@@ -14,6 +14,7 @@ const REQUIRED_CAPABILITIES = [
   'stage-9c-timeline-first-workspace',
   'stage-10a-multitrack-editing',
   'stage-10b-cross-lane-batch-editing',
+  'stage-10c-frame-cursor-review',
   'png-project-exchange',
   'project-drop-recovery',
   'configuration-instances',

@@ -26923,3 +26923,21 @@ move-selected-actions request
 换轨计划要求所有选中动作都属于同一个角色，且每项都为 `actor-action` 或 `actor-kibo`；目标轨种类必须匹配主拖动动作。这样角色动作和奇波事件可一起迁移到目标角色的配对轨道，而敌人事件、多来源角色选择和 system 动作不会被误重绑。水平偏移和角色重绑在 Workbench 中一次提交并只生成一个历史快照；动作关系由现有 gap synchronizer 在提交后重建相同相对间隔。
 
 批量计划与框选状态均为 UI/领域派生状态，不进入持久化格式。剪贴板继续保存选中动作和组内关系，方案复制、本地草稿、JSON、分享链接和 PNG 回放从 v16 动作与配置重建同一拓扑、关系和 runtime outputs。奇波事件仍为 tracking-only，批量换轨不会使装备、奇波、灵子或其他未确认效果进入 calculator。
+
+## 404. Timeline frame cursor / runtime point review
+
+Stage 10-C 不升级项目 schema、runtime 或三值合同。Workbench 新增受控的瞬态 `timelineCursorFrameIndex`，并由 60fps 帧索引派生 `timeMs`。该状态不写入本地草稿、JSON、分享链接或 PNG 元数据，项目回放仍由持久化动作、配置和标准 runtime outputs 重建。
+
+```text
+timeline cursor view
+  frameIndex / timeMs
+  source = grid | cursor | action | state-point | runtime-log
+  stateAtFrame
+    actorEnergy[3]
+    enemyHp
+    enemyToughness
+```
+
+`TimelineGridPreview` 消费既有 `runtimeStateCurves` 和 state point context，将每条曲线的 initial value 与 `frameIndex <= cursorFrameIndex` 的最后一个 applied point 合成为该帧状态。动作选择定位动作起始帧，曲线断点和 runtime 日志通过 state point identity 定位准确事件帧；空白网格和游标拖动只改变瞬态帧位置，并清除不再匹配的 runtime point 选中状态。编辑动作后 runtime outputs 更新，帧游标位置不变，五条曲线按新的事件位置重新求值。
+
+游标、动作块、命中/状态点、曲线断点和时间网格继续使用同一个 track width 与帧百分比坐标。缩放和横向滚动只改变派生视图，未改变动作、状态点或项目载体内容；候选值、未应用奇波效果及其他诊断层不参与该帧状态计算。
