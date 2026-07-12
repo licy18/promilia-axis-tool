@@ -252,6 +252,58 @@ describe('workbench project actor configuration', () => {
     expect(validateProject(project, getWorkbenchGameData()).valid).toBe(true);
   });
 
+  it('tracks configured kibo events without applying them to calculators', () => {
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      actorConfigs: [
+        {
+          characterId: DEFAULT_WORKBENCH_SELECTION.characterId,
+          loadout: { kiboId: 500001 },
+        },
+      ],
+      actions: [
+        {
+          id: 'action-kibo-0001',
+          type: 'kiboEvent',
+          actorCharacterId: DEFAULT_WORKBENCH_SELECTION.characterId,
+          startMs: 1200,
+          durationMs: 600,
+          eventType: 'activation',
+          note: '奇波入轴',
+        },
+      ],
+    });
+    const scenario = compileProject(project, getWorkbenchGameData());
+    const result = simulateScenario(scenario);
+    const kiboEvent = result.eventLog.find(
+      event => event.type === 'KIBO_EVENT'
+    );
+
+    expect(validateProject(project, getWorkbenchGameData()).valid).toBe(true);
+    expect(scenario.actions[0]).toMatchObject({
+      id: 'action-kibo-0001',
+      type: 'kiboEvent',
+      actorId: `actor-${DEFAULT_WORKBENCH_SELECTION.characterId}`,
+      kiboId: 500001,
+      appliedToCalculators: false,
+      source: {
+        kind: 'configured-kibo-tracking-event',
+        kiboId: 500001,
+        appliedToCalculators: false,
+      },
+    });
+    expect(kiboEvent).toMatchObject({
+      timeMs: 1200,
+      actorId: `actor-${DEFAULT_WORKBENCH_SELECTION.characterId}`,
+      payload: {
+        kiboId: 500001,
+        eventType: 'activation',
+        appliedToCalculators: false,
+      },
+    });
+    expect(result.damageTimeline).toHaveLength(0);
+    expect(result.resourceTimeline).toHaveLength(0);
+  });
+
   it('keeps one normalized actor configuration for each selected team member', () => {
     const normalized = normalizeWorkbenchActorConfigs(
       [

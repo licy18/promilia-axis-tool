@@ -72,6 +72,14 @@
       </button>
       <button
         class="icon-button"
+        data-testid="workbench-add-kibo-event-action"
+        type="button"
+        @click="$emit('add-kibo-event-action')"
+      >
+        + 奇波
+      </button>
+      <button
+        class="icon-button"
         data-testid="workbench-add-enemy-event-action"
         type="button"
         @click="$emit('add-enemy-event-action')"
@@ -431,6 +439,7 @@ const emit = defineEmits([
   'add-switch-action',
   'add-annotation-action',
   'add-resource-action',
+  'add-kibo-event-action',
   'add-enemy-event-action',
   'copy-action',
   'copy-action-batch',
@@ -659,6 +668,9 @@ function actionTypeLabel(type) {
   if (type === 'enemyEvent') {
     return '敌人';
   }
+  if (type === 'kiboEvent') {
+    return '奇波';
+  }
   if (type === 'switch') {
     return '切人';
   }
@@ -673,6 +685,9 @@ function actionDetailLabel(action) {
     return '变化';
   }
   if (action.type === 'enemyEvent') {
+    return '事件';
+  }
+  if (action.type === 'kiboEvent') {
     return '事件';
   }
   if (action.type === 'switch') {
@@ -693,6 +708,10 @@ function actionDetailValue(action) {
   }
   if (action.type === 'enemyEvent') {
     return action.eventType ?? 'phase';
+  }
+  if (action.type === 'kiboEvent') {
+    const kibo = action.kiboId ? `奇波 ${action.kiboId}` : '未配置奇波';
+    return `${kibo} / ${action.eventType ?? 'activation'}`;
   }
   if (action.type === 'switch') {
     return action.targetActor?.name ?? action.targetCharacterId ?? '-';

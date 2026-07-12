@@ -9,6 +9,7 @@ export const ACTION_TYPES = Object.freeze({
   SKILL: 'skill',
   SWITCH: 'switch',
   WAIT: 'wait',
+  KIBO_EVENT: 'kiboEvent',
   ENEMY_EVENT: 'enemyEvent',
   RESOURCE: 'resource',
   ANNOTATION: 'annotation',
@@ -398,6 +399,33 @@ export function createEnemyEventAction({
     eventType,
     note,
     insertion,
+    ...createActionEffectCommandsField(effectCommands),
+  };
+}
+
+export function createKiboEventAction({
+  id,
+  actorId = null,
+  kiboId = null,
+  startMs = 0,
+  durationMs = 600,
+  eventType = 'activation',
+  note = '奇波事件标记',
+  insertion = null,
+  effectCommands = [],
+} = {}) {
+  return {
+    id: id ?? createStableId('action'),
+    type: ACTION_TYPES.KIBO_EVENT,
+    actorId,
+    kiboId,
+    name: '奇波事件',
+    startMs,
+    durationMs,
+    eventType,
+    note,
+    insertion,
+    appliedToCalculators: false,
     ...createActionEffectCommandsField(effectCommands),
   };
 }
@@ -1349,6 +1377,37 @@ function validateActions(actions, project, gameData, errors, warnings) {
             'action.reason.invalid',
             'Resource action reason must be a string',
             `${path}.reason`
+          )
+        );
+      }
+    } else if (action.type === ACTION_TYPES.KIBO_EVENT) {
+      if (!action.actorId || !actorIds.has(action.actorId)) {
+        errors.push(
+          issue(
+            'action.actorId.unknown',
+            `Unknown actorId ${action.actorId}`,
+            `${path}.actorId`
+          )
+        );
+      }
+      if (
+        typeof action.eventType !== 'string' ||
+        action.eventType.trim() === ''
+      ) {
+        errors.push(
+          issue(
+            'action.eventType.invalid',
+            'Kibo event action eventType must be a non-empty string',
+            `${path}.eventType`
+          )
+        );
+      }
+      if (typeof action.note !== 'string') {
+        errors.push(
+          issue(
+            'action.note.invalid',
+            'Kibo event action note must be a string',
+            `${path}.note`
           )
         );
       }

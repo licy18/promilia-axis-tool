@@ -211,6 +211,23 @@ function createNonCombatEvent(action) {
     };
   }
 
+  if (action.type === ACTION_TYPES.KIBO_EVENT) {
+    return {
+      type: 'KIBO_EVENT',
+      timeMs: action.startMs,
+      actionId: action.id,
+      actorId: action.actorId,
+      payload: {
+        actionName: action.name,
+        actorName: action.actor?.name,
+        kiboId: action.kiboId ?? action.actor?.loadout?.kiboId ?? null,
+        eventType: action.eventType,
+        note: action.note,
+        appliedToCalculators: false,
+      },
+    };
+  }
+
   return null;
 }
 
@@ -314,9 +331,10 @@ function eventPriority(type) {
     DAMAGE_PROJECTED: 7,
     WAIT: 8,
     SWITCH: 9,
-    ENEMY_EVENT: 10,
-    ANNOTATION: 11,
-    DAMAGE_SKIPPED: 12,
+    KIBO_EVENT: 10,
+    ENEMY_EVENT: 11,
+    ANNOTATION: 12,
+    DAMAGE_SKIPPED: 13,
     SCENARIO_END: 99,
   };
 

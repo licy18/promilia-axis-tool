@@ -237,6 +237,15 @@ function createReplaySourceState() {
     change: 0.25,
     reason: 'replay-consistency',
   });
+  state.actionDrafts.push({
+    id: 'action-kibo',
+    type: 'kiboEvent',
+    actorCharacterId: state.selection.characterId,
+    startMs: 1800,
+    durationMs: 600,
+    eventType: 'activation',
+    note: 'replay-kibo-event',
+  });
   state.runtimeSampleCaptures = [
     createToughnessRuntimeSampleFixture({
       actionId: state.actionDrafts[0].id,
@@ -306,6 +315,23 @@ function createScenarioReplaySignature(draft, configurationLibrary) {
   const runtimeProjection = result.threeValueRuntimeProjection;
   return {
     timelineTopology: scenario.sourceProject.metadata.timelineTopology,
+    kiboEvents: scenario.actions
+      .filter(action => action.type === 'kiboEvent')
+      .map(action => ({
+        actionId: action.id,
+        actorId: action.actorId,
+        kiboId: action.kiboId,
+        eventType: action.eventType,
+        appliedToCalculators: action.appliedToCalculators,
+      })),
+    kiboSimLog: result.eventLog
+      .filter(event => event.type === 'KIBO_EVENT')
+      .map(event => ({
+        actionId: event.actionId,
+        actorId: event.actorId,
+        timeMs: event.timeMs,
+        payload: event.payload,
+      })),
     configurationSourceContract:
       scenario.sourceProject.metadata.configurationSourceContract,
     gameDataReferenceContract:

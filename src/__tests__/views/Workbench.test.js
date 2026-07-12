@@ -9267,6 +9267,62 @@ describe('Workbench view', () => {
     });
   });
 
+  it('adds, rebinds, logs, and persists tracking-only kibo events', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+
+    await wrapper
+      .find('[data-testid="workbench-add-kibo-event-action"]')
+      .trigger('click');
+    expect(
+      wrapper.find('[data-testid="workbench-action-type"]').element.value
+    ).toBe('奇波事件');
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+        )
+        .attributes('data-lane-id')
+    ).toBe('kibo-team-slot-1');
+
+    await wrapper
+      .find('[data-testid="workbench-enemy-event-type-input"]')
+      .setValue('awakening');
+    await wrapper
+      .find('[data-testid="workbench-action-actor-select"]')
+      .setValue('101003');
+    await nextTick();
+    expect(
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+        )
+        .attributes('data-lane-id')
+    ).toBe('kibo-team-slot-2');
+    expect(wrapper.text()).toContain('KIBO_EVENT');
+    expect(wrapper.text()).toContain('awakening');
+
+    await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
+    const savedDraft = JSON.parse(
+      window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
+    );
+    expect(savedDraft).toMatchObject({ schemaVersion: 16 });
+    expect(
+      savedDraft.actionDrafts.find(action => action.id === 'action-0002')
+    ).toMatchObject({
+      type: 'kiboEvent',
+      actorCharacterId: 101003,
+      eventType: 'awakening',
+    });
+  });
+
   it('cleans the auto-delay note line when the note is edited manually', async () => {
     const wrapper = mount(Workbench, {
       global: {

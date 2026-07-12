@@ -980,6 +980,9 @@ function formatPayload(event) {
   if (event.type === 'ENEMY_EVENT') {
     return `${event.payload.eventType} / ${event.payload.note}`;
   }
+  if (event.type === 'KIBO_EVENT') {
+    return `${event.payload.actorName ?? event.actorId} / ${event.payload.kiboId ?? '未配置'} / ${event.payload.eventType}`;
+  }
   if (event.type === 'SCENARIO_START') {
     return event.payload.projectName;
   }

@@ -16,6 +16,34 @@
       <Clock class="panel-icon" />
       <h2>时间轴</h2>
       <div class="timeline-tools">
+        <details class="timeline-entry-palette">
+          <summary
+            data-testid="workbench-timeline-entry-palette-toggle"
+            title="编排素材"
+          >
+            <Plus class="control-icon" />
+            <span>编排</span>
+          </summary>
+          <div
+            class="timeline-entry-palette-menu"
+            data-testid="workbench-timeline-entry-palette"
+          >
+            <button
+              v-for="entry in timelineEntryCatalog"
+              :key="`${entry.type}-${entry.skillId ?? entry.eventType ?? 'entry'}`"
+              type="button"
+              draggable="true"
+              :data-entry-type="entry.type"
+              data-testid="workbench-timeline-entry-source"
+              @dragstart="beginTimelineShelfEntryDrag($event, entry)"
+              @dragend="endTimelineShelfEntryDrag"
+              @click="insertTimelineShelfEntry(entry)"
+            >
+              <i :class="`type-${entry.type}`" />
+              <span>{{ entry.label }}</span>
+            </button>
+          </div>
+        </details>
         <button
           class="icon-control"
           :class="{ active: boxSelectionMode }"
@@ -350,7 +378,9 @@
             class="lane-row"
             :class="{
               'drop-target':
-                lane.id === dragTargetLaneId && lane.id !== dragInitialLaneId,
+                (lane.id === dragTargetLaneId &&
+                  lane.id !== dragInitialLaneId) ||
+                lane.id === externalDropTargetLaneId,
             }"
             :data-lane-id="lane.id"
             :data-lane-kind="lane.kind"
@@ -359,6 +389,10 @@
             data-testid="workbench-timeline-row"
             :style="laneRowStyle(lane)"
             :ref="element => setLaneRowRef(element, lane.id)"
+            @dragenter="handleTimelineEntryDragOver($event, lane)"
+            @dragover="handleTimelineEntryDragOver($event, lane)"
+            @dragleave="handleTimelineEntryDragLeave($event, lane)"
+            @drop="handleTimelineEntryDrop($event, lane)"
           >
             <div
               v-if="lane.curve"
@@ -432,6 +466,7 @@
               ]"
               :style="actionStyle(action)"
               :data-action-id="action.id"
+              :data-action-type="action.type"
               :data-start-ms="action.startMs"
               :data-selected="
                 selectedActionIdSet.has(action.id) ? 'true' : 'false'
@@ -836,6 +871,14 @@ import {
 } from './stateCurvePointIdentity';
 import { createWorkbenchMainFlowActionSurface } from './workbenchMainFlowActions';
 import { createWorkbenchRuntimeReviewContextView } from './workbenchFlowModel';
+import {
+  WORKBENCH_TIMELINE_ENTRY_MIME,
+  createWorkbenchTimelineEntry,
+  isWorkbenchTimelineEntryAllowedInLane,
+  parseWorkbenchTimelineEntry,
+  resolveWorkbenchTimelineLaneKind,
+  serializeWorkbenchTimelineEntry,
+} from '../../domain/workbenchTimelineEntry';
 
 const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
@@ -940,6 +983,14 @@ const props = defineProps({
   actions: {
     type: Array,
     required: true,
+  },
+  timelineEntryCatalog: {
+    type: Array,
+    default: () => [],
+  },
+  timelineEntryDefaultActorId: {
+    type: String,
+    default: '',
   },
   damageTimeline: {
     type: Array,
@@ -1091,12 +1142,15 @@ const emit = defineEmits([
   'update-state-curve-layer-filter',
   'update-state-curve-track-filter',
   'update-state-curve-focus-mode',
+  'insert-timeline-entry',
 ]);
 const laneRef = ref(null);
 const scaleViewportRef = ref(null);
 const timelineViewportRef = ref(null);
 const laneRowRefs = new Map();
 const dragState = ref(null);
+const externalDropTargetLaneId = ref('');
+const timelineShelfEntryDrag = ref(null);
 const resizeState = ref(null);
 const boxSelectionState = ref(null);
 const cycleBoundaryDragState = ref(null);
@@ -1273,6 +1327,15 @@ const readinessByActionId = computed(
 const actorLaneIds = computed(
   () => new Set(props.actors.map(actor => actor.id))
 );
+const kiboLaneIdByActorId = computed(
+  () =>
+    new Map(
+      (props.timelineTopology?.actorGroups ?? []).map(group => [
+        group.actorId,
+        group.kiboLane?.laneId,
+      ])
+    )
+);
 const candidateActionIds = computed(
   () =>
     new Set(
@@ -1406,7 +1469,7 @@ const timelineLanes = computed(() => {
     const lane =
       action.type === 'enemyEvent'
         ? enemyLane
-        : (lanesById.get(resolveActionLaneId(action)) ?? systemLane);
+        : (allLanesById.get(resolveActionLaneId(action)) ?? systemLane);
     lane.actions.push(action);
   });
 
@@ -2077,7 +2140,7 @@ function getTimelineStateCurveMarkerTop(marker, lane) {
 
 function getTimelineLaneHeight(lane) {
   if (lane.type === 'curve') return 40;
-  if (lane.type === 'kibo') return 36;
+  if (lane.type === 'kibo' && lane.actions.length === 0) return 36;
   const hasCandidateData =
     lane.candidateValueMarkers.length > 0 ||
     lane.candidateValueCurves.length > 0 ||
@@ -2190,6 +2253,9 @@ function actionDetail(action) {
   if (action.type === 'enemyEvent') {
     return action.eventType ?? '';
   }
+  if (action.type === 'kiboEvent') {
+    return `${action.eventType ?? 'activation'} / ${action.kiboId ?? '未配置'}`;
+  }
   if (action.type === 'switch') {
     return formatFrameTime(action.durationMs ?? 0);
   }
@@ -2221,7 +2287,11 @@ function formatCooldownWindowTitle(window) {
 }
 
 function resolveActionLaneId(action) {
-  return resolveTimelineActionLaneId(action, actorLaneIds.value);
+  return resolveTimelineActionLaneId(
+    action,
+    actorLaneIds.value,
+    kiboLaneIdByActorId.value
+  );
 }
 
 function resolveDamageLaneId(damage) {
@@ -3448,7 +3518,10 @@ function handleDragMove(event) {
   if (dragState.value.canChangeLane) {
     dragState.value = {
       ...dragState.value,
-      targetLaneId: resolveActorLaneAtPoint(event.clientY),
+      targetLaneId: resolveLegalLaneAtPoint(
+        event.clientY,
+        actionsById.value.get(dragState.value.actionId)
+      ),
     };
   }
 
@@ -3484,7 +3557,10 @@ function endDrag(event) {
     }, 0);
   }
   if (completedDrag.canChangeLane && event?.type === 'pointerup') {
-    const targetLaneId = resolveActorLaneAtPoint(event.clientY);
+    const targetLaneId = resolveLegalLaneAtPoint(
+      event.clientY,
+      actionsById.value.get(completedDrag.actionId)
+    );
     if (targetLaneId && targetLaneId !== completedDrag.initialLaneId) {
       emit('update-action-lane', {
         actionId: completedDrag.actionId,
@@ -3802,16 +3878,25 @@ function setLaneRowRef(element, laneId) {
 }
 
 function canChangeActionLane(action) {
-  return resolveActionLaneId(action) !== 'system';
+  const expectedLaneKind = resolveWorkbenchTimelineLaneKind(action);
+  return (
+    expectedLaneKind != null &&
+    timelineLanes.value.filter(
+      lane => lane.editable && lane.kind === expectedLaneKind
+    ).length > 1
+  );
 }
 
-function resolveActorLaneAtPoint(clientY) {
+function resolveLegalLaneAtPoint(clientY, entryOrAction) {
   if (!Number.isFinite(clientY)) {
     return null;
   }
 
   for (const lane of timelineLanes.value) {
-    if (lane.type !== 'actor') {
+    if (
+      !lane.editable ||
+      !isWorkbenchTimelineEntryAllowedInLane(entryOrAction, lane)
+    ) {
       continue;
     }
     const element = laneRowRefs.get(lane.id);
@@ -3825,6 +3910,105 @@ function resolveActorLaneAtPoint(clientY) {
   }
 
   return null;
+}
+
+function handleTimelineEntryDragOver(event, lane) {
+  const entry = resolveTimelineEntryDrag(event);
+  if (!isWorkbenchTimelineEntryAllowedInLane(entry, lane)) {
+    return;
+  }
+  event.preventDefault();
+  if (event.dataTransfer) {
+    event.dataTransfer.dropEffect = 'copy';
+  }
+  externalDropTargetLaneId.value = lane.id;
+}
+
+function handleTimelineEntryDragLeave(event, lane) {
+  if (
+    externalDropTargetLaneId.value === lane.id &&
+    !event.currentTarget?.contains?.(event.relatedTarget)
+  ) {
+    externalDropTargetLaneId.value = '';
+  }
+}
+
+function handleTimelineEntryDrop(event, lane) {
+  const entry = resolveTimelineEntryDrag(event);
+  if (!isWorkbenchTimelineEntryAllowedInLane(entry, lane)) {
+    return;
+  }
+  event.preventDefault();
+  const rect = laneRowRefs.get(lane.id)?.getBoundingClientRect?.();
+  const startMs = rect?.width
+    ? clampNumber(
+        snapTimeMs(
+          ((event.clientX - rect.left) / rect.width) * props.durationMs
+        ),
+        0,
+        props.durationMs - WORKBENCH_FRAME_MS
+      )
+    : 0;
+  emit('insert-timeline-entry', {
+    entry,
+    laneId: lane.id,
+    laneKind: lane.kind,
+    actorId: lane.actorId ?? null,
+    startMs,
+  });
+  externalDropTargetLaneId.value = '';
+}
+
+function resolveTimelineEntryDrag(event) {
+  return (
+    timelineShelfEntryDrag.value ??
+    parseWorkbenchTimelineEntry(
+      event?.dataTransfer?.getData?.(WORKBENCH_TIMELINE_ENTRY_MIME)
+    )
+  );
+}
+
+function beginTimelineShelfEntryDrag(event, source) {
+  const entry = createWorkbenchTimelineEntry(source);
+  if (!entry) {
+    event.preventDefault();
+    return;
+  }
+  timelineShelfEntryDrag.value = entry;
+  if (event.dataTransfer) {
+    event.dataTransfer.effectAllowed = 'copy';
+    event.dataTransfer.setData(
+      WORKBENCH_TIMELINE_ENTRY_MIME,
+      serializeWorkbenchTimelineEntry(entry)
+    );
+    event.dataTransfer.setData('text/plain', entry.label ?? entry.type);
+  }
+}
+
+function endTimelineShelfEntryDrag() {
+  timelineShelfEntryDrag.value = null;
+  externalDropTargetLaneId.value = '';
+}
+
+function insertTimelineShelfEntry(entry) {
+  const laneKind = resolveWorkbenchTimelineLaneKind(entry);
+  const lane = timelineLanes.value.find(
+    item =>
+      item.editable &&
+      item.kind === laneKind &&
+      (laneKind === 'enemy-event' ||
+        item.actorId === props.timelineEntryDefaultActorId)
+  );
+  if (!lane) {
+    return;
+  }
+  emit('insert-timeline-entry', {
+    entry,
+    laneId: lane.id,
+    laneKind: lane.kind,
+    actorId: lane.actorId ?? null,
+    startMs: 0,
+  });
 }
 
 function formatZoom(value) {
@@ -3888,6 +4072,96 @@ h2 {
   align-items: center;
   gap: 6px;
   margin-left: auto;
+}
+
+.timeline-entry-palette {
+  position: relative;
+  z-index: 30;
+}
+
+.timeline-entry-palette summary {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  gap: 4px;
+  padding: 0 7px;
+  border: 1px solid rgba(121, 199, 185, 0.34);
+  border-radius: 4px;
+  background: #18221f;
+  color: #dff6f1;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.timeline-entry-palette summary::-webkit-details-marker {
+  display: none;
+}
+
+.timeline-entry-palette[open] summary {
+  border-color: #79c7b9;
+  background: #20352f;
+}
+
+.timeline-entry-palette-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  display: grid;
+  width: 190px;
+  gap: 4px;
+  padding: 6px;
+  border: 1px solid rgba(121, 199, 185, 0.34);
+  border-radius: 4px;
+  background: #11171b;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.42);
+}
+
+.timeline-entry-palette-menu button {
+  display: grid;
+  min-height: 28px;
+  grid-template-columns: 9px minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+  padding: 0 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  background: #182026;
+  color: #e5edf2;
+  font: inherit;
+  font-size: 11px;
+  text-align: left;
+  cursor: grab;
+}
+
+.timeline-entry-palette-menu button:hover,
+.timeline-entry-palette-menu button:focus-visible {
+  border-color: rgba(121, 199, 185, 0.58);
+  background: #21302d;
+}
+
+.timeline-entry-palette-menu i {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: #79c7b9;
+}
+
+.timeline-entry-palette-menu i.type-resource {
+  background: #9bc478;
+}
+
+.timeline-entry-palette-menu i.type-kiboEvent {
+  background: #82b688;
+}
+
+.timeline-entry-palette-menu i.type-enemyEvent {
+  background: #e1848e;
+}
+
+.timeline-entry-palette-menu i.type-switch {
+  background: #a6b7ff;
 }
 
 .candidate-toggle-group {
@@ -4778,6 +5052,11 @@ h2 {
   background: linear-gradient(180deg, #354d2e 0%, #273923 100%);
 }
 
+.action-block.type-kiboEvent {
+  border-color: rgba(130, 182, 136, 0.62);
+  background: linear-gradient(180deg, #294535 0%, #20362b 100%);
+}
+
 .action-block.type-enemyEvent,
 .action-block.type-annotation,
 .action-block.type-wait {
@@ -5075,6 +5354,12 @@ h2 {
   .timeline-tools {
     width: 100%;
     margin-left: 0;
+  }
+
+  .timeline-entry-palette-menu {
+    right: auto;
+    left: 0;
+    width: min(190px, calc(100vw - 44px));
   }
 
   .zoom-slider {

@@ -248,6 +248,157 @@ test('[stage-9c-timeline-first-workspace] keeps the complete timeline topology i
   await page.screenshot({ path: 'reports/stage-9c-workbench-narrow.png' });
 });
 
+test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enemy entries on legal lanes', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/#/workbench');
+
+  await page
+    .locator(
+      '[data-testid="workbench-actor-kibo-select"][data-character-id="109001"]'
+    )
+    .selectOption('500001');
+  const palette = page.getByTestId('workbench-timeline-entry-palette');
+  const paletteToggle = page.getByTestId(
+    'workbench-timeline-entry-palette-toggle'
+  );
+  const openPalette = async () => {
+    if (!(await palette.isVisible())) {
+      await paletteToggle.click();
+    }
+  };
+  await openPalette();
+  const kiboSource = page.locator(
+    '[data-testid="workbench-timeline-entry-source"][data-entry-type="kiboEvent"]'
+  );
+  const firstKiboLane = page.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-1"]'
+  );
+  await kiboSource.dragTo(firstKiboLane, {
+    targetPosition: { x: 950, y: 18 },
+  });
+
+  const kiboAction = page.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+  );
+  await expect(kiboAction).toHaveAttribute('data-lane-id', 'kibo-team-slot-1');
+  await expect(kiboAction).toHaveAttribute('data-action-type', 'kiboEvent');
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '2 action'
+  );
+  await expect(
+    page.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="energy-actor-109001"] [data-testid="workbench-timeline-state-curve"]'
+    )
+  ).toHaveAttribute('data-point-count', '0');
+
+  await openPalette();
+  const enemySource = page.locator(
+    '[data-testid="workbench-timeline-entry-source"][data-entry-type="enemyEvent"]'
+  );
+  const enemyLane = page.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="enemy-events"]'
+  );
+  await enemySource.dragTo(enemyLane, {
+    targetPosition: { x: 1000, y: 24 },
+  });
+  await expect(
+    page.locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0003"]'
+    )
+  ).toHaveAttribute('data-lane-id', 'enemy-events');
+
+  await openPalette();
+  const skillSource = page.locator(
+    '[data-testid="workbench-timeline-entry-source"][data-entry-type="skill"]'
+  );
+  const secondActorLane = page.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
+  );
+  await skillSource.dragTo(secondActorLane, {
+    targetPosition: { x: 900, y: 28 },
+  });
+  await expect(
+    page.locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
+    )
+  ).toHaveAttribute('data-lane-id', 'actor-101003');
+
+  const secondKiboLane = page.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-2"]'
+  );
+  await kiboAction.dragTo(secondKiboLane, {
+    targetPosition: { x: 360, y: 18 },
+  });
+  await expect(kiboAction).toHaveAttribute('data-lane-id', 'kibo-team-slot-2');
+
+  await page
+    .locator('.action-item[data-action-id="action-0002"]')
+    .getByTestId('workbench-copy-action')
+    .click();
+  const copiedKiboAction = page.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0005"]'
+  );
+  await expect(copiedKiboAction).toHaveAttribute(
+    'data-lane-id',
+    'kibo-team-slot-2'
+  );
+  await page
+    .locator('.action-item[data-action-id="action-0005"]')
+    .getByTestId('workbench-delete-action')
+    .click();
+  await expect(copiedKiboAction).toHaveCount(0);
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(copiedKiboAction).toHaveCount(1);
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(copiedKiboAction).toHaveCount(0);
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-export-project').click();
+  const exported = JSON.parse(
+    await readFile(await (await downloadPromise).path(), 'utf8')
+  );
+  expect(exported).toMatchObject({ schemaVersion: 16 });
+  expect(
+    exported.actionDrafts.find(action => action.id === 'action-0002')
+  ).toMatchObject({
+    type: 'kiboEvent',
+    actorCharacterId: 101003,
+    eventType: 'activation',
+  });
+  expect(
+    exported.actionDrafts.find(action => action.id === 'action-0003')
+  ).toMatchObject({ type: 'enemyEvent' });
+
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/stage-10a-multitrack-desktop.png' });
+  if (await palette.isVisible()) {
+    await paletteToggle.click();
+  }
+  await page.setViewportSize({ width: 760, height: 1280 });
+  await expectTimelineRowsAligned(
+    page.getByTestId('workbench-timeline-grid-preview')
+  );
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.evaluate(
+    () =>
+      new Promise(resolve =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve))
+      )
+  );
+  await openPalette();
+  await expect(palette).toBeVisible();
+  await page.evaluate(
+    () =>
+      new Promise(resolve =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve))
+      )
+  );
+  await page.screenshot({ path: 'reports/stage-10a-multitrack-narrow.png' });
+});
+
 test('[diagnostics-lazy-load] loads runtime diagnostics from a production chunk', async ({
   page,
 }) => {
@@ -307,7 +458,7 @@ test('[json-project-exchange] restores an exported production JSON project', asy
   expect(download.suggestedFilename()).toMatch(/promilia-workbench-.*\.json$/);
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 15,
+    schemaVersion: 16,
     game: 'azur-promilia',
     type: 'workbench-project',
     gameDataBinding: {
@@ -490,7 +641,7 @@ test('[configuration-instances] binds reusable simulation configs to scenarios a
   const download = await downloadPromise;
   const project = JSON.parse(await readFile(await download.path(), 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 15,
+    schemaVersion: 16,
     configurationLibrary: {
       schemaVersion: 1,
       actorInstances: expect.any(Array),
@@ -663,7 +814,7 @@ test('[timeline-relations] preserves action relations through project exchange',
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(15);
+  expect(project.schemaVersion).toBe(16);
   expect(project.actionDrafts).toHaveLength(5);
   expect(project.actionRelations).toEqual([
     expect.objectContaining({
@@ -831,7 +982,7 @@ test('[cycle-sections] creates, reviews, and restores a production cycle boundar
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(15);
+  expect(project.schemaVersion).toBe(16);
   expect(project.cycleBoundaries).toEqual([
     expect.objectContaining({
       id: 'cycle-boundary-0001',
@@ -901,7 +1052,7 @@ test('[cycle-inheritance] creates and restores a production scenario from a runt
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
   expect(project).toMatchObject({
-    schemaVersion: 15,
+    schemaVersion: 16,
     initialRuntimeState: {
       contractName: 'AzPrInitialRuntimeState',
       source: {
@@ -960,7 +1111,7 @@ test('[workspace-scenarios] switches, compares, and restores independent product
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
-  expect(project.schemaVersion).toBe(15);
+  expect(project.schemaVersion).toBe(16);
   expect(project.scenarioWorkspace).toMatchObject({
     activeScenarioId: 'scenario-0002',
     scenarios: [

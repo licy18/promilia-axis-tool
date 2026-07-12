@@ -27,10 +27,11 @@ import {
   rememberWorkbenchGameDataCompatibilityReport,
 } from './workbenchGameDataCatalog';
 
-export const WORKBENCH_DRAFT_SCHEMA_VERSION = 15;
+export const WORKBENCH_DRAFT_SCHEMA_VERSION = 16;
 export const WORKBENCH_DRAFT_STORAGE_KEY =
-  'promilia-axis-tool:workbench-draft:v15';
+  'promilia-axis-tool:workbench-draft:v16';
 export const LEGACY_WORKBENCH_DRAFT_STORAGE_KEYS = Object.freeze([
+  'promilia-axis-tool:workbench-draft:v15',
   'promilia-axis-tool:workbench-draft:v14',
   'promilia-axis-tool:workbench-draft:v13',
   'promilia-axis-tool:workbench-draft:v12',

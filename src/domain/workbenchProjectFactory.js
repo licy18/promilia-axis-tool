@@ -10,6 +10,7 @@ import {
   createAnnotationAction,
   createEnemyFromData,
   createEnemyEventAction,
+  createKiboEventAction,
   createEffectCommand,
   createProject,
   createResourceAction,
@@ -813,6 +814,21 @@ function createProjectActionFromDraft(
     });
   }
 
+  if (draft.type === ACTION_TYPES.KIBO_EVENT) {
+    const kiboId = positiveIntegerOrNull(sourceActor?.loadout?.kiboId);
+    return createKiboEventAction({
+      id: draft.id,
+      actorId: sourceActor.id,
+      kiboId,
+      startMs: draft.startMs,
+      durationMs: draft.durationMs,
+      eventType: draft.eventType || 'activation',
+      note: draft.note || '奇波事件标记',
+      insertion: draft.insertion,
+      effectCommands,
+    });
+  }
+
   const skill = findById(workbenchSeed.gameData.skills, draft.skillId);
   const actor =
     sourceActor ??
@@ -870,6 +886,9 @@ function actionTypeLabel(type) {
   if (type === ACTION_TYPES.ENEMY_EVENT) {
     return '敌人事件';
   }
+  if (type === ACTION_TYPES.KIBO_EVENT) {
+    return '奇波事件';
+  }
   if (type === ACTION_TYPES.SWITCH) {
     return '切人';
   }
@@ -882,8 +901,14 @@ function isNonSkillDraftType(type) {
     ACTION_TYPES.SWITCH,
     ACTION_TYPES.ANNOTATION,
     ACTION_TYPES.RESOURCE,
+    ACTION_TYPES.KIBO_EVENT,
     ACTION_TYPES.ENEMY_EVENT,
   ].includes(type);
+}
+
+function positiveIntegerOrNull(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number > 0 ? number : null;
 }
 
 function normalizeActorCharacterId(actorCharacterId, selection, teamSlots) {

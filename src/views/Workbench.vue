@@ -333,6 +333,7 @@
         @add-action="addAction"
         @add-skill-action="addSkillAction"
         @add-annotation-action="addAnnotationAction"
+        @add-kibo-event-action="addKiboEventAction"
         @add-enemy-event-action="addEnemyEventAction"
         @add-resource-action="addResourceAction"
         @add-switch-action="addSwitchAction"
@@ -387,6 +388,8 @@
           :timeline-topology="project.metadata.timelineTopology"
           :kibos="loadoutOptions.kibos"
           :actions="scenario.actions"
+          :timeline-entry-catalog="timelineEntryCatalog"
+          :timeline-entry-default-actor-id="actionLibraryActor.id"
           :damage-timeline="simulationResult.damageTimeline"
           :candidate-value-chart="simulationResult.candidateValueSeries.chart"
           :three-value-curve-framework="
@@ -436,6 +439,7 @@
           @update-action-time="updateActionTime"
           @shift-selected-actions="shiftSelectedActions"
           @delete-selected-actions="deleteSelectedActions"
+          @insert-timeline-entry="insertTimelineEntry"
         />
 
         <WorkbenchCycleSectionPanel
@@ -896,6 +900,11 @@ import {
   normalizeWorkbenchTeamSlots,
 } from '../domain/workbenchProjectFactory';
 import { ACTION_TYPES } from '../domain/projectSchema';
+import {
+  createWorkbenchTimelineEntry,
+  isWorkbenchTimelineEntryAllowedInLane,
+  WORKBENCH_TIMELINE_LANE_KINDS,
+} from '../domain/workbenchTimelineEntry';
 import {
   createWorkbenchActionClipboard,
   createWorkbenchActionSelectionRange,
@@ -1393,6 +1402,7 @@ const timelineDiagnostics = computed(() =>
   createTimelineDiagnostics({
     actors: scenario.value.actors,
     actions: scenario.value.actions,
+    timelineTopology: project.value.metadata.timelineTopology,
   })
 );
 const insertionDiagnostics = computed(() =>
@@ -1409,6 +1419,37 @@ const actionLibraryActor = computed(() => {
 const actionLibrarySkills = computed(() =>
   getSkillsForCharacter(actionLibraryActor.value?.characterId)
 );
+const timelineEntryCatalog = computed(() => {
+  const defaultSkillEntry = getSkillActionCatalog(
+    actionLibrarySkills.value,
+    1
+  )[0];
+  return [
+    createWorkbenchTimelineEntry({
+      ...defaultSkillEntry,
+      type: ACTION_TYPES.SKILL,
+      label: defaultSkillEntry?.label ?? '角色动作',
+    }),
+    createWorkbenchTimelineEntry({
+      type: ACTION_TYPES.SWITCH,
+      label: '切人',
+    }),
+    createWorkbenchTimelineEntry({
+      type: ACTION_TYPES.RESOURCE,
+      label: '资源',
+    }),
+    createWorkbenchTimelineEntry({
+      type: ACTION_TYPES.KIBO_EVENT,
+      eventType: 'activation',
+      label: '奇波事件',
+    }),
+    createWorkbenchTimelineEntry({
+      type: ACTION_TYPES.ENEMY_EVENT,
+      eventType: 'phase',
+      label: '敌人事件',
+    }),
+  ].filter(Boolean);
+});
 const selectedAction = computed(() => {
   return (
     scenario.value.actions.find(
@@ -2099,8 +2140,12 @@ function updateActionLane({ actionId, laneId }) {
   clearSegmentSplitPreview();
   const previousAction = findActionDraftById(actionId);
   const editSourceFocus = captureActionEditSourceFocus(actionId);
-  const targetActor = scenario.value.actors.find(actor => actor.id === laneId);
-  if (!targetActor) {
+  const targetLane = resolveWorkbenchTimelineLaneTarget(laneId);
+  if (
+    !previousAction ||
+    !targetLane ||
+    !isWorkbenchTimelineEntryAllowedInLane(previousAction, targetLane.kind)
+  ) {
     return;
   }
 
@@ -2108,11 +2153,11 @@ function updateActionLane({ actionId, laneId }) {
   let didUpdate = false;
   selectedActionId.value = actionId;
   actionDrafts.value = actionDrafts.value.map(action => {
-    if (action.id !== actionId || !canAssignActionLane(action)) {
+    if (action.id !== actionId || targetLane.characterId == null) {
       return action;
     }
 
-    const targetCharacterId = Number(targetActor.characterId);
+    const targetCharacterId = Number(targetLane.characterId);
     if (Number(action.actorCharacterId) === targetCharacterId) {
       return action;
     }
@@ -2183,10 +2228,11 @@ function addAction() {
   });
 }
 
-function addSkillAction(actionEntryOrSkillId) {
+function addSkillAction(actionEntryOrSkillId, insertOptions = {}) {
   clearSegmentSplitPreview();
   const actorCharacterId = Number(
-    actionLibraryActor.value?.characterId ??
+    insertOptions.actorCharacterId ??
+      actionLibraryActor.value?.characterId ??
       selectedDraft.value.actorCharacterId
   );
   const actionEntry = normalizeActionEntryInput(
@@ -2195,18 +2241,21 @@ function addSkillAction(actionEntryOrSkillId) {
   );
   const skill = resolveContextSkill(actorCharacterId, actionEntry.skillId);
   const level = resolveSkillInsertLevel(actorCharacterId, skill);
-  addInsertedAction({
-    id: createNextActionId(),
-    skillId: skill.id,
-    actorCharacterId,
-    level,
-    actionVariantIndex: actionEntry.actionVariantIndex ?? 0,
-    damageSegmentIndex: actionEntry.actionVariantIndex ?? 0,
-    durationMs: actionEntry.durationMs,
-    note:
-      actionEntry.note ??
-      `${actionEntry.label ?? '动作'}：${actionEntry.rawValue ?? '倍率待补'}；真实动作帧等待 asset 或运行时捕获补充。`,
-  });
+  addInsertedAction(
+    {
+      id: createNextActionId(),
+      skillId: skill.id,
+      actorCharacterId,
+      level,
+      actionVariantIndex: actionEntry.actionVariantIndex ?? 0,
+      damageSegmentIndex: actionEntry.actionVariantIndex ?? 0,
+      durationMs: actionEntry.durationMs,
+      note:
+        actionEntry.note ??
+        `${actionEntry.label ?? '动作'}：${actionEntry.rawValue ?? '倍率待补'}；真实动作帧等待 asset 或运行时捕获补充。`,
+    },
+    { requestedStartMs: insertOptions.requestedStartMs }
+  );
 }
 
 function previewSkillSegmentActions(skillId) {
@@ -2308,6 +2357,20 @@ function addResourceAction() {
   });
 }
 
+function addKiboEventAction() {
+  clearSegmentSplitPreview();
+  addInsertedAction({
+    id: createNextActionId(),
+    type: ACTION_TYPES.KIBO_EVENT,
+    skillId: selectedDraft.value.skillId,
+    actorCharacterId: actionLibraryCharacterId.value,
+    durationMs: 600,
+    level: selectedDraft.value.level,
+    eventType: 'activation',
+    note: '奇波事件标记；效果未接入 calculator。',
+  });
+}
+
 function addEnemyEventAction() {
   clearSegmentSplitPreview();
   addInsertedAction({
@@ -2320,6 +2383,66 @@ function addEnemyEventAction() {
     eventType: 'phase',
     note: '敌人阶段标记',
   });
+}
+
+function insertTimelineEntry({ entry, laneId, startMs }) {
+  const targetLane = resolveWorkbenchTimelineLaneTarget(laneId);
+  if (
+    !targetLane ||
+    !isWorkbenchTimelineEntryAllowedInLane(entry, targetLane.kind)
+  ) {
+    return;
+  }
+
+  const actorCharacterId = Number(
+    targetLane.characterId ?? actionLibraryCharacterId.value
+  );
+  const requestedStartMs = clampNumber(
+    startMs,
+    0,
+    project.value.time.durationMs
+  );
+  if (targetLane.characterId != null) {
+    actionLibraryCharacterId.value = actorCharacterId;
+  }
+
+  if (entry.type === ACTION_TYPES.SKILL) {
+    addSkillAction(entry, { actorCharacterId, requestedStartMs });
+    return;
+  }
+
+  const commonDraft = {
+    id: createNextActionId(),
+    type: entry.type,
+    skillId: selectedDraft.value.skillId,
+    actorCharacterId,
+    durationMs: entry.durationMs ?? 600,
+    level: selectedDraft.value.level,
+  };
+  if (entry.type === ACTION_TYPES.SWITCH) {
+    Object.assign(commonDraft, {
+      targetCharacterId: resolveAlternateActorCharacterId(actorCharacterId),
+      note: '切换至其他角色',
+    });
+  } else if (entry.type === ACTION_TYPES.RESOURCE) {
+    Object.assign(commonDraft, {
+      resource: 'sp',
+      change: 50,
+      reason: 'manual-axis-resource',
+      note: '手动资源变化',
+    });
+  } else if (entry.type === ACTION_TYPES.KIBO_EVENT) {
+    Object.assign(commonDraft, {
+      eventType: entry.eventType ?? 'activation',
+      note: '奇波事件标记；效果未接入 calculator。',
+    });
+  } else if (entry.type === ACTION_TYPES.ENEMY_EVENT) {
+    Object.assign(commonDraft, {
+      eventType: entry.eventType ?? 'phase',
+      note: '敌人阶段标记',
+    });
+  }
+  addInsertedAction(commonDraft, { requestedStartMs });
 }
 
 function copyAction(actionId) {
@@ -5195,9 +5318,47 @@ function createDraftTimelineRange(action, index) {
   };
 }
 
+function resolveWorkbenchTimelineLaneTarget(laneId) {
+  const topology = project.value.metadata.timelineTopology;
+  for (const group of topology?.actorGroups ?? []) {
+    if (group.actionLane?.laneId === laneId) {
+      return {
+        laneId,
+        kind: WORKBENCH_TIMELINE_LANE_KINDS.ACTOR_ACTION,
+        actorId: group.actorId,
+        characterId: group.characterId,
+      };
+    }
+    if (group.kiboLane?.laneId === laneId) {
+      return {
+        laneId,
+        kind: WORKBENCH_TIMELINE_LANE_KINDS.ACTOR_KIBO,
+        actorId: group.actorId,
+        characterId: group.characterId,
+      };
+    }
+  }
+  if (topology?.enemyGroup?.eventLane?.laneId === laneId) {
+    return {
+      laneId,
+      kind: WORKBENCH_TIMELINE_LANE_KINDS.ENEMY_EVENT,
+      actorId: null,
+      characterId: null,
+    };
+  }
+  return null;
+}
+
 function resolveDraftLaneId(action) {
   if (action?.type === ACTION_TYPES.ENEMY_EVENT) {
     return ENEMY_TIMELINE_LANE_ID;
+  }
+  if (action?.type === ACTION_TYPES.KIBO_EVENT) {
+    return (
+      project.value.metadata.timelineTopology?.actorGroups?.find(
+        group => Number(group.characterId) === Number(action.actorCharacterId)
+      )?.kiboLane?.laneId ?? SYSTEM_TIMELINE_LANE_ID
+    );
   }
   if (canAssignActionLane(action)) {
     const actor = scenario.value.actors.find(
@@ -5321,6 +5482,7 @@ function canAssignActionLane(action) {
     ACTION_TYPES.SKILL,
     ACTION_TYPES.SWITCH,
     ACTION_TYPES.RESOURCE,
+    ACTION_TYPES.KIBO_EVENT,
   ].includes(action.type);
 }
 

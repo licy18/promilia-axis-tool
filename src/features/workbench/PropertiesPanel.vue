@@ -240,7 +240,7 @@
           @input="emitActionPatch('change', $event.target.value)"
         />
         <input
-          v-else-if="isEnemyEventAction"
+          v-else-if="isEnemyEventAction || isKiboEventAction"
           type="text"
           data-testid="workbench-enemy-event-type-input"
           :value="selectedAction.eventType"
@@ -272,7 +272,7 @@
         :data-edit-focus-summary="getEditFocusSummary('actorCharacterId')"
         :class="{ 'edit-focused': isEditFocusField('actorCharacterId') }"
       >
-        <span>动作归属</span>
+        <span>轨道归属</span>
         <select
           v-if="canAssignActor"
           data-testid="workbench-action-actor-select"
@@ -808,9 +808,14 @@ const isResourceAction = computed(
 const isEnemyEventAction = computed(
   () => props.selectedAction.type === 'enemyEvent'
 );
+const isKiboEventAction = computed(
+  () => props.selectedAction.type === 'kiboEvent'
+);
 const isSwitchAction = computed(() => props.selectedAction.type === 'switch');
 const canAssignActor = computed(() =>
-  ['skill', 'switch', 'resource'].includes(props.selectedAction.type)
+  ['skill', 'switch', 'resource', 'kiboEvent'].includes(
+    props.selectedAction.type
+  )
 );
 const currentActor = computed(() => {
   if (props.selectedAction.actor) {
@@ -1057,6 +1062,9 @@ const actionTypeLabel = computed(() => {
   if (props.selectedAction.type === 'enemyEvent') {
     return '敌人事件';
   }
+  if (props.selectedAction.type === 'kiboEvent') {
+    return '奇波事件';
+  }
   if (props.selectedAction.type === 'switch') {
     return '切人动作';
   }
@@ -1069,7 +1077,7 @@ const secondaryControlLabel = computed(() => {
   if (isResourceAction.value) {
     return '资源变化';
   }
-  if (isEnemyEventAction.value) {
+  if (isEnemyEventAction.value || isKiboEventAction.value) {
     return '事件类型';
   }
   if (isSwitchAction.value) {
@@ -1084,7 +1092,7 @@ const secondaryEditFieldKey = computed(() => {
   if (isResourceAction.value) {
     return 'change';
   }
-  if (isEnemyEventAction.value) {
+  if (isEnemyEventAction.value || isKiboEventAction.value) {
     return 'eventType';
   }
   if (isSwitchAction.value) {
@@ -1110,6 +1118,9 @@ const selectedActionSummary = computed(() => {
   }
   if (isEnemyEventAction.value) {
     return props.selectedAction.eventType || 'phase';
+  }
+  if (isKiboEventAction.value) {
+    return props.selectedAction.eventType || 'activation';
   }
   if (isSwitchAction.value) {
     return (

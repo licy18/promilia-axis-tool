@@ -377,6 +377,85 @@ describe('TimelineGridPreview', () => {
     ).toBe('false');
   });
 
+  it('routes kibo events to their associated lane and quick insert target', async () => {
+    const actors = [
+      { id: 'actor-a', name: '末音' },
+      { id: 'actor-b', name: '寒悠悠' },
+      { id: 'actor-c', name: '芃芃' },
+    ];
+    const actorGroups = actors.map((actor, index) => ({
+      actorId: actor.id,
+      actionLane: { laneId: actor.id },
+      kiboLane: { laneId: `kibo-team-slot-${index + 1}` },
+      energyCurve: { laneId: `energy-${actor.id}`, actorId: actor.id },
+    }));
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        actors,
+        actions: [
+          {
+            id: 'kibo-action-1',
+            type: 'kiboEvent',
+            actorId: 'actor-b',
+            name: '奇波事件',
+            startMs: 1000,
+            durationMs: 600,
+            eventType: 'activation',
+          },
+        ],
+        timelineEntryCatalog: [
+          {
+            type: 'kiboEvent',
+            eventType: 'activation',
+            label: '奇波事件',
+          },
+        ],
+        timelineEntryDefaultActorId: 'actor-c',
+        timelineTopology: {
+          actorGroups,
+          enemyGroup: {
+            eventLane: { laneId: 'enemy-events' },
+            hpCurve: { laneId: 'enemy-hp-curve' },
+            toughnessCurve: { laneId: 'enemy-toughness-curve' },
+          },
+        },
+      }),
+    });
+
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-timeline-action"][data-action-id="kibo-action-1"]'
+        )
+        .attributes('data-lane-id')
+    ).toBe('kibo-team-slot-2');
+    expect(
+      Number(
+        wrapper
+          .get(
+            '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-2"]'
+          )
+          .attributes('style')
+          .match(/height:\s*(\d+)px/u)?.[1]
+      )
+    ).toBeGreaterThan(36);
+
+    await wrapper
+      .get(
+        '[data-testid="workbench-timeline-entry-source"][data-entry-type="kiboEvent"]'
+      )
+      .trigger('click');
+    expect(wrapper.emitted('insert-timeline-entry')?.at(-1)?.[0]).toMatchObject(
+      {
+        entry: { type: 'kiboEvent', eventType: 'activation' },
+        laneId: 'kibo-team-slot-3',
+        laneKind: 'actor-kibo',
+        actorId: 'actor-c',
+        startMs: 0,
+      }
+    );
+  });
+
   it('draws independent runtime step curves on the shared timeline coordinate', async () => {
     const actors = [
       { id: 'actor-a', name: '末音', initialSp: 0, stats: { maxSp: 1 } },

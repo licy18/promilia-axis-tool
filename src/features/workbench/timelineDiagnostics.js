@@ -4,17 +4,36 @@ export const SYSTEM_TIMELINE_LANE_NAME = '系统';
 export const ENEMY_TIMELINE_LANE_ID = 'enemy-events';
 export const ENEMY_TIMELINE_LANE_NAME = '敌人';
 
-export function createTimelineDiagnostics({ actors = [], actions = [] } = {}) {
+export function createTimelineDiagnostics({
+  actors = [],
+  actions = [],
+  timelineTopology = null,
+} = {}) {
   const actorLaneIds = new Set(actors.map(actor => actor.id));
+  const actorNameById = new Map(actors.map(actor => [actor.id, actor.name]));
+  const kiboLaneIdByActorId = new Map(
+    (timelineTopology?.actorGroups ?? []).map(group => [
+      group.actorId,
+      group.kiboLane?.laneId,
+    ])
+  );
   const laneNameById = new Map([
     ...actors.map(actor => [actor.id, actor.name]),
+    ...[...kiboLaneIdByActorId].map(([actorId, laneId]) => [
+      laneId,
+      `奇波 · ${actorNameById.get(actorId) ?? actorId}`,
+    ]),
     [SYSTEM_TIMELINE_LANE_ID, SYSTEM_TIMELINE_LANE_NAME],
     [ENEMY_TIMELINE_LANE_ID, ENEMY_TIMELINE_LANE_NAME],
   ]);
   const rangesByLane = new Map();
 
   actions.forEach(action => {
-    const laneId = resolveTimelineActionLaneId(action, actorLaneIds);
+    const laneId = resolveTimelineActionLaneId(
+      action,
+      actorLaneIds,
+      kiboLaneIdByActorId
+    );
     const range = createActionRange(
       action,
       laneId,
@@ -72,9 +91,19 @@ export function createTimelineDiagnostics({ actors = [], actions = [] } = {}) {
   };
 }
 
-export function resolveTimelineActionLaneId(action, actorLaneIds = new Set()) {
+export function resolveTimelineActionLaneId(
+  action,
+  actorLaneIds = new Set(),
+  kiboLaneIdByActorId = new Map()
+) {
   if (action?.type === 'enemyEvent') {
     return ENEMY_TIMELINE_LANE_ID;
+  }
+  if (action?.type === 'kiboEvent') {
+    return (
+      kiboLaneIdByActorId.get(action?.actor?.id ?? action?.actorId) ??
+      SYSTEM_TIMELINE_LANE_ID
+    );
   }
   if (action?.actor?.id && actorLaneIds.has(action.actor.id)) {
     return action.actor.id;

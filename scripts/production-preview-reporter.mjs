@@ -12,6 +12,7 @@ const REQUIRED_CAPABILITIES = [
   'stage-9a-timeline-topology',
   'stage-9b-runtime-step-curves',
   'stage-9c-timeline-first-workspace',
+  'stage-10a-multitrack-editing',
   'png-project-exchange',
   'project-drop-recovery',
   'configuration-instances',

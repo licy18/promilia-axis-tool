@@ -453,6 +453,27 @@ function compileAction(
     };
   }
 
+  if (action.type === ACTION_TYPES.KIBO_EVENT) {
+    const actor = action.actorId
+      ? (actorsById.get(action.actorId) ?? null)
+      : null;
+    return {
+      ...action,
+      ...effectCommandsField,
+      actor,
+      target: null,
+      source: {
+        kind: 'configured-kibo-tracking-event',
+        kiboId: action.kiboId ?? actor?.loadout?.kiboId ?? null,
+        appliedToCalculators: false,
+      },
+      gameDataReference,
+      hpOperandSourceBinding: null,
+      damageSegments: [],
+      selectedDamageSegment: null,
+    };
+  }
+
   if (action.type !== ACTION_TYPES.SKILL) {
     return {
       ...action,

@@ -26880,3 +26880,25 @@ timeline curve view
 Stage 9-C 不升级项目 schema、timeline topology 或 runtime 合同。Workbench 的可见布局改为两层：`primary-flow` 独占全宽首行并持续承载 `TimelineGridPreview`，`review-workspace` 与动作库、检查区位于第二行；运行结果阶段不再改变时间轴与复盘区的先后顺序。1180px 以下切为两列，760px 以下依次展开 `primary-flow -> review-workspace -> action-library -> side-stack`。
 
 轨道高度仍是派生视图状态：角色动作轨默认 64px，奇波轨 36px，状态曲线 40px，轨间距 4px；动作重叠槽、效果区间和候选诊断会通过现有 lane layout 计算增加高度。该密度信息不写入本地草稿、JSON、分享链接或 PNG 元数据，因此不同载体仍由同一动作、配置、`timelineTopology` 和 `runtimeStateCurves` 重建布局与结果。
+
+## 402. Project schema v16 / WorkbenchTimelineEntry v1 / KiboEvent
+
+Stage 10-A 将 Workbench 项目 schema 从 v15 升级为 v16，并新增 tracking-only `kiboEvent` 动作。旧 v15 本地草稿继续作为迁移输入读取，新草稿使用 `promilia-axis-tool:workbench-draft:v16`；JSON、分享链接和 PNG 元数据统一输出 v16。
+
+```text
+kiboEvent action
+  type = kiboEvent
+  actorCharacterId / actorId
+  kiboId
+  eventType / note
+  appliedToCalculators = false
+
+WorkbenchTimelineEntry v1
+  actionType / label / source
+  legalLaneKind
+    skill | switch | resource -> actor-action
+    kiboEvent -> actor-kibo
+    enemyEvent -> enemy-event
+```
+
+`workbenchTimelineEntry` 是时间轴编排源和合法落轨判断的统一领域入口。角色动作只可在角色动作轨之间重绑，奇波事件只可在奇波轨之间重绑并随目标角色解析当前 `kiboId`，敌人事件只进入敌人事件轨。compiler 和 runtime 会保留奇波事件的角色、奇波和来源身份，并输出 `KIBO_EVENT` 日志；该事件不生成 Hit 或 `ThreeValueDelta`，所以不会改变角色能量、敌人 HP 或敌人韧性。五种项目载体仍以持久化动作和配置重建 `timelineTopology` 与 runtime curves，不持久化 UI 拖放状态。
