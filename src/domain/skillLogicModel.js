@@ -58,7 +58,13 @@ export function resolveSkillLogic(skill, level = 1, options = {}) {
     });
   }
 
-  const subSkill = item.subSkills.find((candidate) => Number(candidate.subSkillId) === Number(levelRow.subSkillId));
+  const resolvedLevelIndex = Math.max(0, item.levels.indexOf(levelRow));
+  const resolvedSubSkillId =
+    levelRow.subSkillId ??
+    (item.subSkills.length === 1 ? item.subSkills[0].subSkillId : null);
+  const subSkill = item.subSkills.find(
+    (candidate) => Number(candidate.subSkillId) === Number(resolvedSubSkillId)
+  );
   const elementValues = createElementValueModels(levelRow);
   const damageParameterLinks = createDamageParameterLinks(options.damageModel, elementValues);
   const diagnostics = [
@@ -75,9 +81,9 @@ export function resolveSkillLogic(skill, level = 1, options = {}) {
     status: statusFromLogicDiagnostics(diagnostics),
     skillId,
     characterId: Number(item.characterId) || null,
-    level: levelRow.level,
-    levelIndex: levelRow.levelIndex,
-    subSkillId: levelRow.subSkillId,
+    level: levelRow.level ?? resolvedLevelIndex + 1,
+    levelIndex: levelRow.levelIndex ?? resolvedLevelIndex,
+    subSkillId: resolvedSubSkillId,
     skillLevelRowId: levelRow.skillLevelRowId,
     display: createDisplayTimingModel(levelRow),
     logic: createSubSkillLogicModel(subSkill),

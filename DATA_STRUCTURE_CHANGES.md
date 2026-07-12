@@ -26962,3 +26962,24 @@ timeline playback view
 全轴范围为 `0..durationFrame`，抵达 `durationFrame` 后暂停。区段范围由既有 `AzPrCycleSectionProjection` 的 `startMs/endMs` 转换为 `[startFrame, endFrame)`，逐帧和连续播放使用同一正模运算回绕。时钟通过 `requestAnimationFrame` 按 `elapsedMs * scenario.fps * rate` 累计完整帧，并保留不足一帧的余数；任何手动游标定位都会暂停播放。
 
 `EventLogPanel` 仅按 `cursorFrameIndex` 派生 `data-cursor-current`，不会改写 runtime 选中点或 sim log。播放状态在项目应用、重置与组件卸载时清除，不进入本地草稿、JSON、分享链接、PNG 或预设；cycle boundaries 仍是唯一持久化范围来源，五条状态曲线继续只消费 applied runtime outputs。
+
+## 406. Workbench skill core projection v2 / implied defaults
+
+Stage 10-E 只升级生产内部 `workbench-skill-core.json` 为 schema v2，不改变 Workbench 项目、runtime 或三值合同。完整生成源表保持原结构；core 投影对规范等级行省略可无歧义恢复的默认字段：
+
+```text
+skillLogicIndex.items[].levels[index]
+  level       := index + 1
+  levelIndex  := index
+  subSkillId  := items[].subSkills[0].subSkillId when exactly one exists
+
+skillLevelCrossCheck.items[].levels[index]
+  level       := index + 1
+  levelIndex  := index
+  status      := matched
+  matches     := { labels: true, values: true }
+```
+
+非规范 level/index、多 subSkill 映射、非 matched 状态和任一 false match 继续显式写入。`skillLogicModel` 与 `skillLevelCrossCheck` 是唯一默认恢复入口；下游仍获得原有 `level/levelIndex/subSkillId/status/matches`，字段路径、倍率、HP operands、诊断和 runtime outputs 不变。数据投影审计从完整源文件重新生成 v2 并要求深度一致，bundle audit 的总 JS gzip 硬门槛从 740,000B 收紧到 735,000B。
+
+长轴浏览器报告新增播放守门字段：`playback.startFrame/endFrame/advancedFrames`、滚动起止与差值、速度、推进预算，以及 rAF requested/canceled/active。它们是测试报告，不进入任何项目或运行时合同。

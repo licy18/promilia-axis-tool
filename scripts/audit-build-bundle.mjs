@@ -21,7 +21,7 @@ const budgets = {
   ),
   totalJavaScriptGzipBytes: readPositiveNumberArgument(
     '--total-js-gzip-budget',
-    740_000
+    735_000
   ),
 };
 

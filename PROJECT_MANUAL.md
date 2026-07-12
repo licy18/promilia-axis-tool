@@ -1240,6 +1240,18 @@ Workbench 现以时间轴为全宽首行，方案与主流程命令保持在其�
 
 下一阶段目标：Stage 10-E / 生产余量与长轴播放性能收口。优先把总 JS gzip 恢复到 735,000B 以下，并为长轴连续播放、缩放滚动、暂停和卸载清理补性能守门；不新增公式、机制或碎片 UI，完成后再进入下一块 Endaxis 功能差距。
 
+### Stage 10-E 生产余量与长轴播放性能收口（2026-07-12）
+
+生产 `workbench-skill-core.json` 升级为内部 schema v2。生成投影不再为 1,000 个规范等级行重复保存 `level/levelIndex`，单一 subSkill 技能不再逐等级重复 `subSkillId`；交叉校验默认 `matched + labels/values true` 由读取层恢复，只有 2 条真实 mismatch 继续显式保存。完整 `skill-logic-index.json`、`skill-level-crosscheck.json` 和来源证据均未删减，数据投影审计继续逐字段比较生成结果，等级 1/12、逻辑差异和 mismatch 测试证明解析结果不变。
+
+core 文件从 1,355,407B 降至 1,080,871B，Workbench 主块从 362,328B gzip 降至 356,816B，总 JavaScript 从 738,352B 降至 732,840B，恢复 7,160B 余量。生产硬门槛同步从 740,000B 收紧为 735,000B，后续不能重新吃掉本阶段余量。
+
+长轴守门现同时覆盖运行时和浏览器。180 动作本机 5 次测量的 compile p95 为 14.484ms、simulation p95 为 32.007ms、总 p95 为 44.779ms，峰值 heap 158.26MiB。120 动作浏览器首屏为 1769ms；在 4x 缩放、2x 速度下游标从 711F 推进到 811F，轨道自动滚动 198px，刻度保持同步；暂停后帧位稳定，离开 Workbench 后 rAF 审计为 requested 83、canceled 2、active 0。报告为 `reports/long-axis-benchmark.json`、`reports/long-axis-browser-benchmark.json` 和 `reports/bundle-composition.json`。
+
+阶段验收为 77 个测试文件、443 条单元/组件测试、39 条 Workbench 主流程和 26 项 production preview 全部通过；applied source 审计保持 3 条 bound-ready、0 drift、0 compatible-unbound，生产数据投影、生产引用与新 735KB 包体门禁全部通过。本阶段没有改项目 schema、三值公式、曲线结果或用户可见机制。
+
+下一阶段目标：Stage 11-A / 时间窗口与角色贡献分析闭环。基于全轴或当前 cycle 区段的 applied runtime transactions，按角色、动作和 HP/韧性/能量聚合，并允许从贡献项定位动作/事件回到编辑；不建立第二套公式，不混入候选值或未应用培养效果，也不把阶段拆成统计标签小修补。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

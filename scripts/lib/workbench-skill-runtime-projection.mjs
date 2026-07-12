@@ -10,7 +10,7 @@ export function createWorkbenchSkillCoreProjection({
   const projectedValueParamIndex = projectValueParamIndex(valueParamIndex);
 
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     kind: 'workbench-skill-core-projection',
     generatedAt,
     sourceKind: 'azpr-workbench-skill-core-projection',
@@ -84,26 +84,35 @@ function projectSkillLogicIndex(source) {
     sourceKind: source.sourceKind,
     source: source.source,
     summary: source.summary,
-    items: (source.items ?? []).map(item => ({
-      skillId: item.skillId,
-      characterId: item.characterId,
-      subSkills: (item.subSkills ?? []).map(subSkill => ({
+    items: (source.items ?? []).map(item => {
+      const subSkills = (item.subSkills ?? []).map(subSkill => ({
         subSkillId: subSkill.subSkillId,
         logic: subSkill.logic,
         displayPairs: subSkill.displayPairs,
         displayMatchesLogic: subSkill.displayMatchesLogic,
         ...nonEmptyArrayField('diagnostics', subSkill.diagnostics),
-      })),
-      levels: (item.levels ?? []).map(level => ({
-        level: level.level,
-        levelIndex: level.levelIndex,
-        skillLevelRowId: level.skillLevelRowId,
-        subSkillId: level.subSkillId,
-        display: level.display,
-        elementValues: level.elementValues,
-        ...nonEmptyArrayField('diagnostics', level.diagnostics),
-      })),
-    })),
+      }));
+      const implicitSubSkillId =
+        subSkills.length === 1 ? subSkills[0].subSkillId : null;
+      return {
+        skillId: item.skillId,
+        characterId: item.characterId,
+        subSkills,
+        levels: (item.levels ?? []).map((level, index) => ({
+          ...(level.level === index + 1 ? {} : { level: level.level }),
+          ...(level.levelIndex === index
+            ? {}
+            : { levelIndex: level.levelIndex }),
+          skillLevelRowId: level.skillLevelRowId,
+          ...(level.subSkillId === implicitSubSkillId
+            ? {}
+            : { subSkillId: level.subSkillId }),
+          display: level.display,
+          elementValues: level.elementValues,
+          ...nonEmptyArrayField('diagnostics', level.diagnostics),
+        })),
+      };
+    }),
   };
 }
 
@@ -115,16 +124,18 @@ function projectSkillLevelCrossCheck(source) {
     items: (source.items ?? []).map(item => ({
       skillId: item.skillId,
       characterId: item.characterId,
-      levels: (item.levels ?? []).map(level => ({
-        level: level.level,
-        levelIndex: level.levelIndex,
+      levels: (item.levels ?? []).map((level, index) => ({
+        ...(level.level === index + 1 ? {} : { level: level.level }),
+        ...(level.levelIndex === index ? {} : { levelIndex: level.levelIndex }),
         rowId: level.rowId,
-        status: level.status,
+        ...(level.status === 'matched' ? {} : { status: level.status }),
         ...(level.matches?.labels ? {} : { labels: level.labels }),
         ...(level.matches?.values ? {} : { values: level.values }),
         ...compactSequentialIds('labelIds', 'labelIdRange', level.labelIds),
         ...compactSequentialIds('valueIds', 'valueIdRange', level.valueIds),
-        matches: level.matches,
+        ...(level.matches?.labels && level.matches?.values
+          ? {}
+          : { matches: level.matches }),
         ...nonEmptyArrayField('diagnostics', level.diagnostics),
       })),
     })),

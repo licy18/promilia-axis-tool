@@ -44,10 +44,14 @@ export function resolveSkillLevelCrossCheck(skill, level = 1) {
   }
 
   const requestedLevel = Math.max(1, Number(level) || 1);
-  const levelResult =
-    item.levels.find(candidate => Number(candidate.level) === requestedLevel) ??
-    item.levels[item.levels.length - 1] ??
-    null;
+  let resolvedLevelIndex = item.levels.findIndex(
+    (candidate, index) =>
+      Number(candidate.level ?? index + 1) === requestedLevel
+  );
+  if (resolvedLevelIndex < 0) {
+    resolvedLevelIndex = item.levels.length - 1;
+  }
+  const levelResult = item.levels[resolvedLevelIndex] ?? null;
 
   if (!levelResult) {
     return createMissingCrossCheck(source, {
@@ -61,22 +65,22 @@ export function resolveSkillLevelCrossCheck(skill, level = 1) {
 
   return {
     ...source,
-    status: levelResult.status,
+    status: levelResult.status ?? 'matched',
     skillId,
     characterId: Number(item.characterId) || null,
-    level: levelResult.level,
-    levelIndex: levelResult.levelIndex,
+    level: levelResult.level ?? resolvedLevelIndex + 1,
+    levelIndex: levelResult.levelIndex ?? resolvedLevelIndex,
     rowId: levelResult.rowId,
     fieldPaths: createSkillLevelCrossCheckFieldPaths(
       skillId,
-      levelResult.level,
+      levelResult.level ?? resolvedLevelIndex + 1,
       levelResult.rowId
     ),
     labels: levelResult.labels ?? skill.level?.labels ?? [],
     values:
-      levelResult.values ?? skill.level?.values?.[levelResult.levelIndex] ?? [],
+      levelResult.values ?? skill.level?.values?.[resolvedLevelIndex] ?? [],
     expectedLabels: skill.level?.labels ?? [],
-    expectedValues: skill.level?.values?.[levelResult.levelIndex] ?? [],
+    expectedValues: skill.level?.values?.[resolvedLevelIndex] ?? [],
     labelIds: expandSequentialIds(
       levelResult.labelIds,
       levelResult.labelIdRange
@@ -85,7 +89,7 @@ export function resolveSkillLevelCrossCheck(skill, level = 1) {
       levelResult.valueIds,
       levelResult.valueIdRange
     ),
-    matches: levelResult.matches,
+    matches: levelResult.matches ?? { labels: true, values: true },
     diagnostics: cloneDiagnostics(levelResult.diagnostics),
   };
 }
