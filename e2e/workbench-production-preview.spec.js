@@ -807,6 +807,135 @@ test('[m1d-demo-milestone] replays the visible three-person demo through every p
     .screenshot({ path: 'reports/m1d-demo-narrow-timeline.png' });
 });
 
+test('[m1-trial-release-workflow] keeps a populated slot through configuration, review, edit, and project recovery', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const actorEnergyRows = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-kind="actor-energy-curve"]'
+  );
+  const kiboEnergyRows = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"]'
+  );
+  await expect(actorEnergyRows).toHaveCount(3);
+  await expect(kiboEnergyRows).toHaveCount(3);
+
+  await timeline
+    .locator(
+      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="101007"]'
+    )
+    .click();
+  await page
+    .getByTestId('workbench-tertiary-character-select')
+    .selectOption('101010');
+
+  const replacementLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="actor-101010"]'
+  );
+  const migratedAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="demo-actor-3-skill"]'
+  );
+  await expect(replacementLane).toBeVisible();
+  await expect(migratedAction).toHaveAttribute('data-lane-id', 'actor-101010');
+  await expect(
+    page.locator(
+      '[data-testid="workbench-action-library-actor"][data-character-id="101010"]'
+    )
+  ).toHaveAttribute('data-active', 'true');
+
+  await timeline
+    .locator(
+      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="101010"]'
+    )
+    .click();
+  await page
+    .locator(
+      '[data-testid="workbench-actor-kibo-select"][data-character-id="101010"]'
+    )
+    .selectOption('500004');
+  await expect(page.getByTestId('workbench-action-library-kibo')).toHaveText(
+    '奇波 · 汐灵偶'
+  );
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-lane-label"][data-lane-id="kibo-energy-team-slot-3"]'
+    )
+  ).toContainText('汐灵偶');
+
+  await closeInspectorIfVisible(page);
+  await dragLocatorTo(
+    page,
+    page.getByTestId('workbench-skill-entry').first(),
+    replacementLane,
+    { targetPosition: { x: 760, y: 26 } }
+  );
+  const insertedAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+  );
+  await expect(insertedAction).toHaveAttribute('data-lane-id', 'actor-101010');
+
+  const reviewedEvent = timeline.getByRole('button', {
+    name: '普通攻击 · 命中 · 0F',
+  });
+  await reviewedEvent.click();
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail')
+  ).toBeVisible();
+  await page
+    .getByTestId('workbench-runtime-selected-detail-action-focus')
+    .click();
+  await page.getByTestId('workbench-start-frame-input').fill('24');
+  const refreshedReviewedEvent = timeline.getByRole('button', {
+    name: '普通攻击 · 命中 · 24F',
+  });
+  await expect(refreshedReviewedEvent).toBeVisible();
+  await page
+    .getByTestId('workbench-runtime-selected-detail-return-result')
+    .click();
+  await expect(timeline).toHaveAttribute('data-cursor-frame-index', '24');
+
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expect(actorEnergyRows).toHaveCount(3);
+  await expect(kiboEnergyRows).toHaveCount(3);
+  await expect(migratedAction).toHaveAttribute('data-lane-id', 'actor-101010');
+  await expect(insertedAction).toHaveAttribute('data-lane-id', 'actor-101010');
+  await expect(refreshedReviewedEvent).toBeVisible();
+
+  const downloadPromise = page.waitForEvent('download');
+  await clickProjectMenuCommand(page, 'workbench-export-project');
+  const downloadPath = await (await downloadPromise).path();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(downloadPath);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已导入项目'
+  );
+  await expect(actorEnergyRows).toHaveCount(3);
+  await expect(kiboEnergyRows).toHaveCount(3);
+  await expect(migratedAction).toHaveAttribute('data-lane-id', 'actor-101010');
+  await expect(insertedAction).toHaveAttribute('data-lane-id', 'actor-101010');
+  await expect(refreshedReviewedEvent).toBeVisible();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/m1-trial-release-desktop.png' });
+
+  await closeInspectorIfVisible(page);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await expectTimelineRowsAligned(timeline);
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/m1-trial-release-narrow.png' });
+});
+
 test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enemy entries on legal lanes', async ({
   page,
 }) => {

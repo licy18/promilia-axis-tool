@@ -2204,6 +2204,10 @@ function updateSelection(patch, options = {}) {
   clearSegmentSplitPreview();
   recordWorkbenchHistorySnapshot();
   const previousSelection = selection.value;
+  const previousTeamSlots = normalizeWorkbenchTeamSlots(
+    teamSlots.value,
+    previousSelection
+  );
   const characterChanged =
     patch.characterId != null &&
     Number(patch.characterId) !== Number(selection.value.characterId);
@@ -2225,6 +2229,10 @@ function updateSelection(patch, options = {}) {
       nextSelection
     );
   }
+  const teamSlotCharacterRemap = createTeamSlotCharacterRemap(
+    previousTeamSlots,
+    teamSlots.value
+  );
   actorConfigs.value = normalizeWorkbenchActorConfigs(
     actorConfigs.value,
     nextSelection,
@@ -2241,47 +2249,31 @@ function updateSelection(patch, options = {}) {
     })
   );
 
-  normalizeActionLibraryCharacterId(previousSelection, nextSelection, {
-    characterChanged,
-    secondaryCharacterChanged,
-  });
+  normalizeActionLibraryCharacterId(teamSlots.value, teamSlotCharacterRemap);
 
-  if (characterChanged || secondaryCharacterChanged) {
+  if (teamSlotCharacterRemap.size > 0) {
     const nextActionDrafts = actionDrafts.value.map(action => {
       const nextAction = { ...action };
-      const previousActorCharacterId = Number(action.actorCharacterId);
-      if (
-        characterChanged &&
-        previousActorCharacterId === Number(previousSelection.characterId)
-      ) {
-        nextAction.actorCharacterId = nextSelection.characterId;
-      } else if (
-        secondaryCharacterChanged &&
-        previousActorCharacterId ===
-          Number(previousSelection.secondaryCharacterId)
-      ) {
-        nextAction.actorCharacterId = nextSelection.secondaryCharacterId;
+      const nextActorCharacterId = teamSlotCharacterRemap.get(
+        Number(action.actorCharacterId)
+      );
+      if (nextActorCharacterId != null) {
+        nextAction.actorCharacterId = nextActorCharacterId;
       }
       if (nextAction.type === ACTION_TYPES.SWITCH) {
-        const previousTargetCharacterId = Number(action.targetCharacterId);
-        if (
-          characterChanged &&
-          previousTargetCharacterId === Number(previousSelection.characterId)
-        ) {
-          nextAction.targetCharacterId = nextSelection.characterId;
-        } else if (
-          secondaryCharacterChanged &&
-          previousTargetCharacterId ===
-            Number(previousSelection.secondaryCharacterId)
-        ) {
-          nextAction.targetCharacterId = nextSelection.secondaryCharacterId;
+        const nextTargetCharacterId = teamSlotCharacterRemap.get(
+          Number(action.targetCharacterId)
+        );
+        if (nextTargetCharacterId != null) {
+          nextAction.targetCharacterId = nextTargetCharacterId;
         }
       }
       return nextAction;
     });
     actionDrafts.value = normalizeWorkbenchActionDrafts(
       nextActionDrafts,
-      nextSelection
+      nextSelection,
+      teamSlots.value
     );
   }
 
@@ -6485,35 +6477,30 @@ function setActionLibraryCharacterId(characterId) {
   actionLibraryCharacterId.value = Number(actor.characterId);
 }
 
-function normalizeActionLibraryCharacterId(
-  previousSelection,
-  nextSelection,
-  changes
-) {
-  const previousActionLibraryCharacterId = Number(
-    actionLibraryCharacterId.value
-  );
+function normalizeActionLibraryCharacterId(nextTeamSlots, characterRemap) {
+  actionLibraryCharacterId.value =
+    characterRemap.get(Number(actionLibraryCharacterId.value)) ??
+    actionLibraryCharacterId.value;
   if (
-    changes.characterChanged &&
-    previousActionLibraryCharacterId === Number(previousSelection.characterId)
+    !nextTeamSlots.some(
+      slot =>
+        Number(slot.characterId) === Number(actionLibraryCharacterId.value)
+    )
   ) {
-    actionLibraryCharacterId.value = nextSelection.characterId;
-  } else if (
-    changes.secondaryCharacterChanged &&
-    previousActionLibraryCharacterId ===
-      Number(previousSelection.secondaryCharacterId)
-  ) {
-    actionLibraryCharacterId.value = nextSelection.secondaryCharacterId;
+    actionLibraryCharacterId.value = nextTeamSlots[0].characterId;
   }
+}
 
-  if (
-    Number(actionLibraryCharacterId.value) !==
-      Number(nextSelection.characterId) &&
-    Number(actionLibraryCharacterId.value) !==
-      Number(nextSelection.secondaryCharacterId)
-  ) {
-    actionLibraryCharacterId.value = nextSelection.characterId;
-  }
+function createTeamSlotCharacterRemap(previousTeamSlots, nextTeamSlots) {
+  const remap = new Map();
+  previousTeamSlots.forEach((slot, index) => {
+    const previousCharacterId = Number(slot.characterId);
+    const nextCharacterId = Number(nextTeamSlots[index]?.characterId);
+    if (previousCharacterId !== nextCharacterId) {
+      remap.set(previousCharacterId, nextCharacterId);
+    }
+  });
+  return remap;
 }
 
 function syncActionLibraryCharacterIdFromDraft(draft) {

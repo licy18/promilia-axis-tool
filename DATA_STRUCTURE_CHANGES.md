@@ -27327,3 +27327,15 @@ RuntimeTimelineEventMarker (derived, not persisted)
 本阶段没有修改 Workbench v16、runtime output、选择状态或项目交换 schema。`EventLogPanel` 在同步选中日志时只调整 `.runtime-log-list.scrollTop`；Workbench 侧边检查器只调整自身滚动位置。动作编辑仍复用既有 `workbenchActionEditSource` 与 runtime sync request，但定位编辑控件后恢复文档原滚动坐标，避免复盘流程离开时间轴主视口。
 
 该变化只约束 UI 容器的滚动所有权，不改变 `statePointId`、`frameIndex`、日志顺序、曲线断点、五载体回放或 6 条能量轴。
+
+## 423. Fixed-slot character identity migration
+
+本阶段没有升级 Workbench v16 或新增持久化字段。`teamSlots[]` 继续以 `slotId = team-slot-1/2/3` 作为稳定位置身份；用户替换或交换角色时，Workbench 从变更前后槽位建立瞬态 `oldCharacterId -> newCharacterId` 映射，并统一迁移：
+
+```text
+actionDraft.actorCharacterId
+switchAction.targetCharacterId
+actionLibraryCharacterId
+```
+
+迁移后的动作继续进入既有 `normalizeWorkbenchActionDrafts(actionDrafts, selection, teamSlots)`，因此技能、轨道与 runtime 均按新角色合法化。映射不写入项目文件；本地草稿、JSON、分享链接和 PNG 仍只保存现有 `teamSlots` 与 action draft。3 条角色能量轴和 3 条奇波能量轴继续从槽位拓扑派生，总数与所有者合同不变。

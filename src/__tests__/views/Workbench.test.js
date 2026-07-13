@@ -8043,6 +8043,63 @@ describe('Workbench view', () => {
     });
   });
 
+  it('keeps populated tertiary-slot actions with the slot when its character changes', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
+    await settleWorkbenchAsyncPanels();
+
+    await wrapper
+      .find('[data-testid="workbench-add-resource-action"]')
+      .trigger('click');
+    await wrapper
+      .find('[data-testid="workbench-action-actor-select"]')
+      .setValue('101007');
+    await nextTick();
+    expect(
+      wrapper
+        .find('.action-block[data-action-id="action-0002"]')
+        .attributes('data-lane-id')
+    ).toBe('actor-101007');
+    await wrapper
+      .find(
+        '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="101007"]'
+      )
+      .trigger('click');
+    await nextTick();
+    await wrapper
+      .find('[data-testid="workbench-tertiary-character-select"]')
+      .setValue('101010');
+    await nextTick();
+
+    const migratedAction = wrapper.find(
+      '.action-block[data-action-id="action-0002"]'
+    );
+    expect(migratedAction.attributes('data-lane-id')).toBe('actor-101010');
+    await migratedAction.trigger('click');
+    await nextTick();
+    expect(
+      wrapper.find('[data-testid="workbench-action-actor-select"]').element
+        .value
+    ).toBe('101010');
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-row"][data-lane-kind="actor-energy-curve"]'
+      )
+    ).toHaveLength(3);
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"]'
+      )
+    ).toHaveLength(3);
+  });
+
   it('adds, selects, edits, and deletes timeline actions', async () => {
     const wrapper = mount(Workbench, {
       global: {
