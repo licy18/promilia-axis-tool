@@ -125,6 +125,21 @@ recover-sp-share-rebroadcast
 npm run runtime-capture:normalize -- --input C:\path\capture.jsonl --output C:\path\capture.normalized.json
 ```
 
+可重复传入 `--input`，把三个角色与三个奇波的独立会话打包为一次可导入的批次文件：
+
+```powershell
+npm run runtime-capture:normalize -- `
+  --input C:\path\role-1.jsonl `
+  --input C:\path\role-2.jsonl `
+  --input C:\path\role-3.jsonl `
+  --input C:\path\kibo-1.jsonl `
+  --input C:\path\kibo-2.jsonl `
+  --input C:\path\kibo-3.jsonl `
+  --output C:\path\six-resource-captures.json
+```
+
+批次按输入顺序保留 capture；跨文件出现重复 `captureSessionId` 时会拒绝生成，避免静默覆盖。`--require-production` 会对批次内全部 capture 一起守门。
+
 要求生产来源时：
 
 ```powershell

@@ -61,6 +61,7 @@ export function bindWorkbenchRuntimeSampleCaptures({
   for (const capture of normalizedCaptures) {
     const binding = resolveCaptureActionBinding({
       capture,
+      actions,
       actionsById,
       selectedAction,
     });
@@ -70,6 +71,8 @@ export function bindWorkbenchRuntimeSampleCaptures({
         reason: binding.reason,
         sourceActionIds: binding.sourceActionIds,
         sourceSkillIds: binding.sourceSkillIds,
+        resourceOwnerActorIds: binding.resourceOwnerActorIds,
+        candidateActionIds: binding.candidateActionIds,
       });
       continue;
     }
@@ -108,6 +111,7 @@ export function bindWorkbenchRuntimeSampleCaptures({
         targetId,
         sourceActionIds: binding.sourceActionIds,
         sourceSkillIds: binding.sourceSkillIds,
+        resolutionKind: binding.resolutionKind,
       })
     );
   }
@@ -139,6 +143,9 @@ export function bindWorkbenchRuntimeSampleCaptures({
       ),
       targetIds: uniqueStrings(
         boundCaptures.map(capture => capture.workbenchBinding?.targetId)
+      ),
+      bindingKinds: uniqueStrings(
+        boundCaptures.map(capture => capture.workbenchBinding?.resolutionKind)
       ),
     },
   };
@@ -329,7 +336,12 @@ function normalizeRuntimeSampleEvent(event) {
   };
 }
 
-function resolveCaptureActionBinding({ capture, actionsById, selectedAction }) {
+function resolveCaptureActionBinding({
+  capture,
+  actions,
+  actionsById,
+  selectedAction,
+}) {
   const persistedSourceActionIds = uniqueStrings(
     capture.workbenchBinding?.sourceActionIds ?? []
   );
@@ -388,6 +400,7 @@ function resolveCaptureActionBinding({ capture, actionsById, selectedAction }) {
       reason: null,
       sourceActionIds,
       sourceSkillIds,
+      resolutionKind: 'source-action-id',
     };
   }
   if (sourceActionIds.length > 1) {
@@ -398,6 +411,25 @@ function resolveCaptureActionBinding({ capture, actionsById, selectedAction }) {
       sourceSkillIds,
     };
   }
+
+  const ownerBinding = resolveCaptureResourceOwnerActionBinding({
+    capture,
+    actions,
+    selectedAction,
+    sourceSkillIds,
+  });
+  if (ownerBinding.handled) {
+    return {
+      action: ownerBinding.action,
+      reason: ownerBinding.reason,
+      sourceActionIds,
+      sourceSkillIds,
+      resourceOwnerActorIds: ownerBinding.resourceOwnerActorIds,
+      candidateActionIds: ownerBinding.candidateActionIds,
+      resolutionKind: ownerBinding.action ? 'resource-owner-action' : null,
+    };
+  }
+
   if (!selectedAction) {
     return {
       action: null,
@@ -420,6 +452,111 @@ function resolveCaptureActionBinding({ capture, actionsById, selectedAction }) {
     reason: null,
     sourceActionIds,
     sourceSkillIds,
+    resolutionKind: 'selected-action-fallback',
+  };
+}
+
+function resolveCaptureResourceOwnerActionBinding({
+  capture,
+  actions,
+  selectedAction,
+  sourceSkillIds,
+}) {
+  const persistedActorId = stringOrNull(capture.workbenchBinding?.actorId);
+  const resourceOwnerActorIds = persistedActorId
+    ? [persistedActorId]
+    : uniqueStrings(capture.events.map(event => event.actorId));
+  if (resourceOwnerActorIds.length > 1) {
+    return {
+      handled: true,
+      action: null,
+      reason: 'capture-spans-multiple-resource-owners',
+      resourceOwnerActorIds,
+      candidateActionIds: [],
+    };
+  }
+
+  const actorId = resourceOwnerActorIds[0];
+  const actorActions = actorId
+    ? actions.filter(action => action.actorId === actorId)
+    : [];
+  if (!actorId || actorActions.length === 0) {
+    return {
+      handled: false,
+      action: null,
+      reason: null,
+      resourceOwnerActorIds,
+      candidateActionIds: [],
+    };
+  }
+
+  const hasRecoverSpEvents = capture.events.some(event =>
+    event.eventType.startsWith('recover-sp-')
+  );
+  const kiboObservationIds = uniqueNumbers(
+    capture.events
+      .filter(event => event.eventType === 'pet-ultimate-cooldown-observed')
+      .map(event => event.kiboId)
+  );
+  let candidates = actorActions;
+  if (sourceSkillIds.length > 0) {
+    candidates = candidates.filter(action =>
+      isCaptureSkillCompatible(action, sourceSkillIds)
+    );
+  } else if (kiboObservationIds.length > 0 && !hasRecoverSpEvents) {
+    const kiboActions = candidates.filter(
+      action => action.type === 'kiboEvent'
+    );
+    const exactKiboActions = kiboActions.filter(action =>
+      kiboObservationIds.includes(Number(action.kiboId))
+    );
+    candidates = exactKiboActions.length > 0 ? exactKiboActions : kiboActions;
+  }
+
+  const candidateActionIds = candidates.map(action => action.id);
+  if (candidates.length === 0) {
+    return {
+      handled: true,
+      action: null,
+      reason:
+        sourceSkillIds.length > 0
+          ? selectedAction?.actorId === actorId
+            ? 'selected-workbench-action-skill-mismatch'
+            : 'resource-owner-action-skill-mismatch'
+          : 'resource-owner-action-missing',
+      resourceOwnerActorIds,
+      candidateActionIds,
+    };
+  }
+
+  const selectedCandidate = candidates.find(
+    action => action.id === selectedAction?.id
+  );
+  if (selectedCandidate) {
+    return {
+      handled: true,
+      action: selectedCandidate,
+      reason: null,
+      resourceOwnerActorIds,
+      candidateActionIds,
+    };
+  }
+  if (candidates.length === 1) {
+    return {
+      handled: true,
+      action: candidates[0],
+      reason: null,
+      resourceOwnerActorIds,
+      candidateActionIds,
+    };
+  }
+
+  return {
+    handled: true,
+    action: null,
+    reason: 'resource-owner-action-ambiguous',
+    resourceOwnerActorIds,
+    candidateActionIds,
   };
 }
 
@@ -429,6 +566,7 @@ function createBoundRuntimeSampleCapture({
   targetId,
   sourceActionIds,
   sourceSkillIds,
+  resolutionKind,
 }) {
   const events = capture.events.map(event => ({
     ...event,
@@ -454,6 +592,7 @@ function createBoundRuntimeSampleCapture({
       skillId: numberOrNull(action.skillId),
       sourceActionIds,
       sourceSkillIds,
+      resolutionKind,
     },
   };
 }

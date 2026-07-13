@@ -63,4 +63,72 @@ describe('runtime capture normalize CLI', () => {
       'production-runtime-captures-incomplete'
     );
   });
+
+  it('packs repeated inputs into one capture batch and rejects session collisions', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'promilia-capture-batch-'));
+    temporaryDirectories.push(directory);
+    const firstInputPath = join(directory, 'role-capture.json');
+    const secondInputPath = join(directory, 'kibo-capture.json');
+    const outputPath = join(directory, 'six-resource-batch.json');
+    const firstCapture = createRecoverSpRuntimeSampleFixture({
+      captureSessionId: 'batch-role-capture-1',
+    });
+    const secondCapture = createRecoverSpRuntimeSampleFixture({
+      captureSessionId: 'batch-role-capture-2',
+      actorId: 'actor-101003',
+      roleEntityId: 'runtime-role-101003',
+    });
+    await writeFile(firstInputPath, JSON.stringify(firstCapture), 'utf8');
+    await writeFile(secondInputPath, JSON.stringify(secondCapture), 'utf8');
+
+    const scriptPath = resolve('scripts/normalize-runtime-capture.mjs');
+    const batchRun = spawnSync(
+      process.execPath,
+      [
+        scriptPath,
+        '--input',
+        firstInputPath,
+        '--input',
+        secondInputPath,
+        '--output',
+        outputPath,
+      ],
+      { encoding: 'utf8' }
+    );
+    expect(batchRun.status).toBe(0);
+    expect(JSON.parse(batchRun.stdout)).toMatchObject({
+      inputFileCount: 2,
+      captureCount: 2,
+      eventCount: 12,
+    });
+    const output = JSON.parse(await readFile(outputPath, 'utf8'));
+    expect(output).toMatchObject({
+      type: 'runtime-sample-captures',
+      normalizedBy: 'promilia-axis-tool/runtime-capture-normalizer-v2',
+      summary: {
+        captureCount: 2,
+        eventCount: 12,
+        captureSessionIds: ['batch-role-capture-1', 'batch-role-capture-2'],
+      },
+      sourceFiles: [
+        expect.objectContaining({
+          path: expect.stringContaining('role-capture.json'),
+        }),
+        expect.objectContaining({
+          path: expect.stringContaining('kibo-capture.json'),
+        }),
+      ],
+    });
+    expect(output.sourceFile).toBeUndefined();
+
+    const collisionRun = spawnSync(
+      process.execPath,
+      [scriptPath, '--input', firstInputPath, '--input', firstInputPath],
+      { encoding: 'utf8' }
+    );
+    expect(collisionRun.status).toBe(1);
+    expect(collisionRun.stderr).toContain(
+      'Duplicate captureSessionId across inputs: batch-role-capture-1'
+    );
+  });
 });

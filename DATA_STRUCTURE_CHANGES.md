@@ -27435,3 +27435,9 @@ cdTime / totalTime / ready
 `bindWorkbenchRuntimeSampleCaptures()` 的持久化输入格式不变。包含 `pet-ultimate-cooldown-observed` 的 capture 在动作身份重绑定前，必须与 `project.metadata.timelineTopology.actorGroups[]` 的 `slotId / actorId / kiboId` 完全一致，且绑定动作必须属于同一角色。
 
 拒绝结果可新增 `reason = runtime-sample-resource-owner-mismatch | runtime-sample-resource-owner-topology-missing` 与 `resourceOwnerIssues[]`，用于指出 `slot-not-found / actor-mismatch / kibo-mismatch / action-owner-mismatch / timeline-topology-missing`。这些字段只属于导入结果，不写入项目载体；没有奇波观测的旧角色 SP capture 继续沿用原兼容绑定行为。
+
+## 429. Six-resource capture batch binding
+
+已绑定 capture 的 `workbenchBinding` 可新增 `resolutionKind = source-action-id | resource-owner-action | selected-action-fallback`。旧 capture 缺少该字段时继续兼容；项目 schema 与 `runtime-sample-captures` schemaVersion 不升级。绑定汇总可新增 `bindingKinds[]`，拒绝项可新增 `resourceOwnerActorIds[] / candidateActionIds[]`，用于区分唯一 owner 绑定与动作歧义。
+
+`runtime-capture:normalize` 标识升级为 `promilia-axis-tool/runtime-capture-normalizer-v2`。重复 `--input` 时，输出按输入顺序合并 `captures[]` 并新增 `sourceFiles[]`；单输入同时保留旧 `sourceFile`。任何重复 `captureSessionId` 都会拒绝生成，不执行覆盖或去重。以上来源字段不参与 runtime 计算。

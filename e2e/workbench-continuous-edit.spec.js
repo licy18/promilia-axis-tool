@@ -2571,6 +2571,164 @@ test('imports a runtime capture and preserves its applied curve through project 
   expectNoUnexpectedBrowserIssues(browserIssues);
 });
 
+test('imports a six-resource capture batch by owner and replays it through project JSON @workbench-main-flow', async ({
+  page,
+}) => {
+  const browserIssues = collectBrowserIssues(page);
+  const draft = createBasicWorkbenchDraftFixture();
+  const actorCharacterIds = [109001, 101003, 101007];
+  const actorIds = actorCharacterIds.map(characterId => `actor-${characterId}`);
+  const skillIds = [10900101, 10100301, 10100701];
+  const kiboIds = [500001, 500002, 500003];
+  draft.actorConfigs = actorCharacterIds.map((characterId, index) => ({
+    characterId,
+    level: 80,
+    initialSp: 0,
+    loadout: {
+      kiboId: kiboIds[index],
+      soulessenceId: null,
+      equipment: {},
+    },
+  }));
+  draft.actionDrafts = actorCharacterIds.flatMap((characterId, index) => [
+    {
+      id: `role-action-${index + 1}`,
+      type: 'skill',
+      skillId: skillIds[index],
+      actorCharacterId: characterId,
+      startMs: index * 2000,
+      durationMs: 1000,
+      level: 1,
+      actionVariantIndex: 0,
+      damageSegmentIndex: 0,
+      targetCharacterId: actorCharacterIds[(index + 1) % 3],
+    },
+    {
+      id: `kibo-action-${index + 1}`,
+      type: 'kiboEvent',
+      actorCharacterId: characterId,
+      startMs: 8000 + index * 2000,
+      durationMs: 600,
+      eventType: 'activation',
+      name: `奇波观测 ${index + 1}`,
+    },
+  ]);
+  draft.selectedActionId = 'role-action-1';
+  await page.evaluate(
+    ({ storageKey, draftState }) => {
+      window.localStorage.setItem(storageKey, JSON.stringify(draftState));
+    },
+    { storageKey: BASIC_WORKBENCH_DRAFT_STORAGE_KEY, draftState: draft }
+  );
+  await page.reload();
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '6 action'
+  );
+
+  const captures = [
+    ...actorIds.map((actorId, index) => ({
+      captureSessionId: `e2e-role-capture-${index + 1}`,
+      events: [
+        {
+          eventType: 'recover-sp-applied',
+          actionId: `source-role-action-${index + 1}`,
+          actorId,
+          roleEntityId: `e2e-role-entity-${index + 1}`,
+          frameIndex: 30 + index * 60,
+          timeMs: 500 + index * 1000,
+          sourceElementConfigId: 900001 + index,
+          spBefore: 10,
+          spAfter: 11,
+          spDeltaApplied: 1,
+          args: { skillId: skillIds[index], delta: 1 },
+        },
+      ],
+    })),
+    ...actorIds.map((actorId, index) => ({
+      captureSessionId: `e2e-kibo-capture-${index + 1}`,
+      events: [
+        {
+          eventType: 'pet-ultimate-cooldown-observed',
+          actionId: `source-kibo-action-${index + 1}`,
+          actorId,
+          slotId: `team-slot-${index + 1}`,
+          kiboId: kiboIds[index],
+          petEntityId: 71001 + index,
+          petEntityPointer: `0x${(0x22345678 + index).toString(16)}`,
+          api: 'PetUltimateCdTime',
+          frameIndex: index * 60,
+          timeMs: index * 1000,
+          cdTime: 20 - index * 10,
+          totalTime: 20,
+          ready: index === 2,
+        },
+      ],
+    })),
+  ];
+  await page.getByTestId('workbench-import-project-file').setInputFiles({
+    name: 'azpr-six-resource-captures.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(
+      JSON.stringify({
+        schemaVersion: 1,
+        game: 'azur-promilia',
+        type: 'runtime-sample-captures',
+        captures,
+      })
+    ),
+  });
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已导入实测 6 组'
+  );
+
+  for (const actorId of actorIds) {
+    await expect(
+      page.locator(
+        `[data-testid="workbench-timeline-state-curve"][data-track-key="kiboEnergyChange"][data-actor-id="${actorId}"]`
+      )
+    ).toHaveAttribute('data-point-count', '1');
+  }
+
+  const downloadPromise = page.waitForEvent('download');
+  await clickProjectMenuCommand(page, 'workbench-export-project');
+  const download = await downloadPromise;
+  const downloadPath = await download.path();
+  expect(downloadPath).toBeTruthy();
+  const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
+  expect(exportedProject.runtimeSampleCaptures).toHaveLength(6);
+  expect(
+    exportedProject.runtimeSampleCaptures.map(capture => [
+      capture.workbenchBinding.actionId,
+      capture.workbenchBinding.actorId,
+      capture.workbenchBinding.resolutionKind,
+    ])
+  ).toEqual([
+    ['role-action-1', actorIds[0], 'resource-owner-action'],
+    ['role-action-2', actorIds[1], 'resource-owner-action'],
+    ['role-action-3', actorIds[2], 'resource-owner-action'],
+    ['kibo-action-1', actorIds[0], 'resource-owner-action'],
+    ['kibo-action-2', actorIds[1], 'resource-owner-action'],
+    ['kibo-action-3', actorIds[2], 'resource-owner-action'],
+  ]);
+
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(downloadPath);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已导入项目'
+  );
+  for (const actorId of actorIds) {
+    await expect(
+      page.locator(
+        `[data-testid="workbench-timeline-state-curve"][data-track-key="kiboEnergyChange"][data-actor-id="${actorId}"]`
+      )
+    ).toHaveAttribute('data-point-count', '1');
+  }
+
+  expectNoUnexpectedBrowserIssues(browserIssues);
+});
+
 test('exports a visible PNG project and restores it from embedded metadata @workbench-main-flow', async ({
   page,
 }) => {

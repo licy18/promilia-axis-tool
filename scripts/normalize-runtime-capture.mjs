@@ -8,32 +8,60 @@ import {
 
 async function main() {
   const options = parseArguments(process.argv.slice(2));
-  if (!options.input) {
-    throw new Error('--input is required');
+  if (options.inputs.length === 0) {
+    throw new Error('At least one --input is required');
   }
-  const inputPath = resolve(options.input);
+  const inputPaths = options.inputs.map(input => resolve(input));
   const outputPath = resolve(
-    options.output ?? `${inputPath}.promilia-runtime-capture.json`
+    options.output ??
+      `${inputPaths[0]}.${
+        inputPaths.length === 1
+          ? 'promilia-runtime-capture'
+          : 'promilia-runtime-capture-batch'
+      }.json`
   );
-  const sourceText = await readFile(inputPath, 'utf8');
-  const parsed = parseWorkbenchRuntimeSampleCaptureFile(sourceText);
-  if (!parsed) {
-    throw new Error('Runtime capture input is invalid');
+  const parsedInputs = [];
+  const sourceFiles = [];
+  for (const inputPath of inputPaths) {
+    const sourceText = await readFile(inputPath, 'utf8');
+    const parsed = parseWorkbenchRuntimeSampleCaptureFile(sourceText);
+    if (!parsed) {
+      throw new Error(`Runtime capture input is invalid: ${inputPath}`);
+    }
+    const inputStat = await stat(inputPath);
+    parsedInputs.push(parsed);
+    sourceFiles.push({
+      path: normalizePath(inputPath),
+      size: inputStat.size,
+      sha256: createHash('sha256').update(sourceText).digest('hex'),
+    });
   }
 
-  const inputStat = await stat(inputPath);
+  const captureSessionIds = new Set();
+  const captures = parsedInputs.flatMap(parsed => parsed.captures);
+  for (const capture of captures) {
+    if (captureSessionIds.has(capture.captureSessionId)) {
+      throw new Error(
+        `Duplicate captureSessionId across inputs: ${capture.captureSessionId}`
+      );
+    }
+    captureSessionIds.add(capture.captureSessionId);
+  }
+  const parsed = parseWorkbenchRuntimeSampleCaptureFile({
+    schemaVersion: 1,
+    game: 'azur-promilia',
+    type: 'runtime-sample-captures',
+    captures,
+  });
   const provenanceAudit = createRuntimeSampleCaptureProductionAudit(
     parsed.captures
   );
   const normalized = {
     ...parsed,
     normalizedAt: new Date().toISOString(),
-    normalizedBy: 'promilia-axis-tool/runtime-capture-normalizer-v1',
-    sourceFile: {
-      path: normalizePath(inputPath),
-      size: inputStat.size,
-      sha256: createHash('sha256').update(sourceText).digest('hex'),
-    },
+    normalizedBy: 'promilia-axis-tool/runtime-capture-normalizer-v2',
+    ...(sourceFiles.length === 1 ? { sourceFile: sourceFiles[0] } : {}),
+    sourceFiles,
     provenanceAudit,
   };
 
@@ -51,6 +79,7 @@ async function main() {
   process.stdout.write(
     `${JSON.stringify({
       outputPath,
+      inputFileCount: inputPaths.length,
       captureCount: parsed.summary.captureCount,
       eventCount: parsed.summary.eventCount,
       realCaptureClaimAllowed: provenanceAudit.realCaptureClaimAllowed,
@@ -60,12 +89,13 @@ async function main() {
 
 function parseArguments(args) {
   const options = {
+    inputs: [],
     requireProduction: false,
   };
   for (let index = 0; index < args.length; index += 1) {
     const argument = args[index];
     if (argument === '--input') {
-      options.input = args[index + 1];
+      options.inputs.push(args[index + 1]);
       index += 1;
     } else if (argument === '--output') {
       options.output = args[index + 1];
@@ -74,7 +104,7 @@ function parseArguments(args) {
       options.requireProduction = true;
     } else if (argument === '--help') {
       process.stdout.write(
-        'Usage: node scripts/normalize-runtime-capture.mjs --input PATH [--output PATH] [--require-production]\n'
+        'Usage: node scripts/normalize-runtime-capture.mjs --input PATH [--input PATH ...] [--output PATH] [--require-production]\n'
       );
       process.exit(0);
     } else {

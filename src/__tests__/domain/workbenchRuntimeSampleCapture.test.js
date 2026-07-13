@@ -285,6 +285,15 @@ describe('workbench runtime sample capture', () => {
     const action = baseProject.actions[0];
     const project = {
       ...baseProject,
+      actions: [
+        ...baseProject.actions,
+        {
+          id: 'kibo-action-1',
+          type: 'kiboEvent',
+          actorId: action.actorId,
+          kiboId: 500001,
+        },
+      ],
       metadata: {
         ...baseProject.metadata,
         timelineTopology: {
@@ -327,10 +336,16 @@ describe('workbench runtime sample capture', () => {
     });
     expect(exact).toMatchObject({
       status: 'runtime-sample-binding-ready',
-      summary: { boundCaptureCount: 1, rejectedCaptureCount: 0 },
+      summary: {
+        boundCaptureCount: 1,
+        rejectedCaptureCount: 0,
+        actionIds: ['kibo-action-1'],
+        bindingKinds: ['resource-owner-action'],
+      },
       rejectedCaptures: [],
     });
     expect(exact.captures[0].events[0]).toMatchObject({
+      actionId: 'kibo-action-1',
       actorId: action.actorId,
       slotId: 'team-slot-1',
       kiboId: 500001,
@@ -338,6 +353,10 @@ describe('workbench runtime sample capture', () => {
         actionId: 'source-kibo-action',
         actorId: action.actorId,
       },
+    });
+    expect(exact.captures[0].workbenchBinding).toMatchObject({
+      actionId: 'kibo-action-1',
+      resolutionKind: 'resource-owner-action',
     });
 
     const drifted = [
@@ -380,6 +399,169 @@ describe('workbench runtime sample capture', () => {
       rejectedCaptures: [
         expect.objectContaining({
           reason: 'runtime-sample-resource-owner-topology-missing',
+        }),
+      ],
+    });
+  });
+
+  it('binds a six-resource capture batch to each unique owner action', () => {
+    const actorIds = ['actor-1', 'actor-2', 'actor-3'];
+    const skillIds = [1001, 1002, 1003];
+    const kiboIds = [500001, 500002, 500003];
+    const project = {
+      actions: actorIds.flatMap((actorId, index) => [
+        {
+          id: `role-action-${index + 1}`,
+          type: 'skill',
+          actorId,
+          skillId: skillIds[index],
+        },
+        {
+          id: `kibo-action-${index + 1}`,
+          type: 'kiboEvent',
+          actorId,
+          kiboId: kiboIds[index],
+        },
+      ]),
+      enemy: { id: 'enemy-1' },
+      metadata: {
+        timelineTopology: {
+          actorGroups: actorIds.map((actorId, index) => ({
+            slotId: `team-slot-${index + 1}`,
+            actorId,
+            kiboEnergyCurve: { kiboId: kiboIds[index] },
+          })),
+        },
+      },
+    };
+    const captures = [
+      ...actorIds.map((actorId, index) => ({
+        captureSessionId: `role-capture-${index + 1}`,
+        events: [
+          {
+            eventType: 'recover-sp-applied',
+            actionId: `source-role-action-${index + 1}`,
+            actorId,
+            roleEntityId: `role-entity-${index + 1}`,
+            frameIndex: 60 * (index + 1),
+            sourceElementConfigId: 900001 + index,
+            spBefore: 10,
+            spAfter: 11,
+            spDeltaApplied: 1,
+            args: { skillId: skillIds[index], delta: 1 },
+          },
+        ],
+      })),
+      ...actorIds.map((actorId, index) => ({
+        captureSessionId: `kibo-capture-${index + 1}`,
+        events: [
+          {
+            eventType: 'pet-ultimate-cooldown-observed',
+            actionId: `source-kibo-action-${index + 1}`,
+            actorId,
+            slotId: `team-slot-${index + 1}`,
+            kiboId: kiboIds[index],
+            petEntityId: 70001 + index,
+            petEntityPointer: `0x${(0x12345678 + index).toString(16)}`,
+            api: 'PetUltimateCdTime',
+            frameIndex: 180 * index,
+            cdTime: 10 - index * 5,
+            totalTime: 20,
+            ready: index === 2,
+          },
+        ],
+      })),
+    ];
+
+    const binding = bindWorkbenchRuntimeSampleCaptures({
+      captures,
+      project,
+      selectedActionId: 'role-action-1',
+    });
+
+    expect(binding).toMatchObject({
+      status: 'runtime-sample-binding-ready',
+      rejectedCaptures: [],
+      summary: {
+        inputCaptureCount: 6,
+        boundCaptureCount: 6,
+        rejectedCaptureCount: 0,
+        actorIds,
+        bindingKinds: ['resource-owner-action'],
+      },
+    });
+    expect(binding.summary.actionIds).toEqual([
+      'role-action-1',
+      'role-action-2',
+      'role-action-3',
+      'kibo-action-1',
+      'kibo-action-2',
+      'kibo-action-3',
+    ]);
+    expect(
+      binding.captures.map(capture => [
+        capture.captureSessionId,
+        capture.workbenchBinding.actionId,
+        capture.workbenchBinding.actorId,
+        capture.workbenchBinding.resolutionKind,
+      ])
+    ).toEqual([
+      ['role-capture-1', 'role-action-1', 'actor-1', 'resource-owner-action'],
+      ['role-capture-2', 'role-action-2', 'actor-2', 'resource-owner-action'],
+      ['role-capture-3', 'role-action-3', 'actor-3', 'resource-owner-action'],
+      ['kibo-capture-1', 'kibo-action-1', 'actor-1', 'resource-owner-action'],
+      ['kibo-capture-2', 'kibo-action-2', 'actor-2', 'resource-owner-action'],
+      ['kibo-capture-3', 'kibo-action-3', 'actor-3', 'resource-owner-action'],
+    ]);
+
+    const drifted = structuredClone(captures);
+    drifted[5].events[0].actorId = 'actor-owner-drift';
+    expect(
+      bindWorkbenchRuntimeSampleCaptures({
+        captures: drifted,
+        project,
+        selectedActionId: 'role-action-1',
+      })
+    ).toMatchObject({
+      status: 'runtime-sample-binding-partial',
+      summary: {
+        inputCaptureCount: 6,
+        boundCaptureCount: 5,
+        rejectedCaptureCount: 1,
+      },
+      rejectedCaptures: [
+        expect.objectContaining({
+          captureSessionId: 'kibo-capture-3',
+          reason: 'runtime-sample-resource-owner-mismatch',
+        }),
+      ],
+    });
+
+    const ambiguousProject = {
+      ...project,
+      actions: [
+        ...project.actions,
+        {
+          id: 'role-action-2-duplicate',
+          type: 'skill',
+          actorId: 'actor-2',
+          skillId: 1002,
+        },
+      ],
+    };
+    expect(
+      bindWorkbenchRuntimeSampleCaptures({
+        captures: [captures[1]],
+        project: ambiguousProject,
+        selectedActionId: 'role-action-1',
+      })
+    ).toMatchObject({
+      status: 'runtime-sample-binding-rejected',
+      rejectedCaptures: [
+        expect.objectContaining({
+          reason: 'resource-owner-action-ambiguous',
+          resourceOwnerActorIds: ['actor-2'],
+          candidateActionIds: ['role-action-2', 'role-action-2-duplicate'],
         }),
       ],
     });
