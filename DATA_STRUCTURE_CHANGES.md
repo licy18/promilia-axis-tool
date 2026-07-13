@@ -27205,3 +27205,21 @@ DefaultWorkbenchDemoDraft (Workbench v16)
 ```
 
 示例资源动作只写入所属角色的既有 `selfEnergyChange`；3 条奇波能量轴继续来自 `curvesByKibo` 的 tracking-only 零值基线。内置韧性事件的来源明确包含 `example/preview`，因此不能通过 production capture 真实性门禁，也不会成为新的机制证据。方案复制、本地草稿、JSON、分享链接和 PNG 直接序列化现有字段，无新增迁移或兼容分支。
+
+## 416. Six-energy runtime point accounting
+
+M1 后置一致性收口没有升级项目或运行时 schema，只为既有可选 summary 增加角色/奇波事件点数拆分：
+
+```text
+runtimeOutputs.resourceCurves.summary
+  actorPointCount
+  kiboPointCount
+  pointCount = actorPointCount + kiboPointCount
+
+runtimeOutputs.summary / outputContract.summary / consumer.summary
+  resourceCurveActorPointCount
+  resourceCurveKiboPointCount
+  resourceCurvePointCount
+```
+
+`outputConsistency` 现在分别核对角色与奇波点数，并把 `curvesByKibo[].points` 纳入统一状态点引用审计。旧载体没有这些拆分字段时仍由 consumer 从两组曲线计算，不需要迁移；当前 tracking-only 奇波曲线的 `kiboPointCount` 为 0。

@@ -252,6 +252,10 @@ function createThreeValueRuntimeOutputs({
       resourceCurveActorCount: outputContract.summary.resourceCurveActorCount,
       resourceCurveKiboCount: outputContract.summary.resourceCurveKiboCount,
       resourceEnergyCurveCount: outputContract.summary.resourceEnergyCurveCount,
+      resourceCurveActorPointCount:
+        outputContract.summary.resourceCurveActorPointCount,
+      resourceCurveKiboPointCount:
+        outputContract.summary.resourceCurveKiboPointCount,
       resourceCurvePointCount: outputContract.summary.resourceCurvePointCount,
       enemyHpDelta: outputContract.summary.enemyHpDelta,
       enemyToughnessDelta: outputContract.summary.enemyToughnessDelta,
@@ -369,6 +373,10 @@ function createRuntimeOutputConsistency({
     (sum, actor) => sum + (numberOrNull(actor.pointCount) ?? 0),
     0
   );
+  const resourceKiboPointCount = (resourceCurves?.curvesByKibo ?? []).reduce(
+    (sum, kibo) => sum + (numberOrNull(kibo.pointCount) ?? 0),
+    0
+  );
   const stateSnapshots = stateCurves?.snapshots?.snapshots ?? [];
   const stateSnapshotCount = stateSnapshots.length;
   const runtimeCalculatorInvocationCount = stateSnapshots.filter(
@@ -400,6 +408,9 @@ function createRuntimeOutputConsistency({
     ...(resourceCurves?.curvesByActor ?? []).flatMap(
       actor => actor.points ?? []
     ),
+    ...(resourceCurves?.curvesByKibo ?? []).flatMap(
+      kibo => kibo.points ?? []
+    ),
   ];
   const checks = {
     summarySimLogCount: summary.simLogCount === simLogCount,
@@ -412,11 +423,22 @@ function createRuntimeOutputConsistency({
     stateCurvesSummaryPointCount:
       stateCurves?.summary?.stateCurvePointCount === stateCurvePointCount,
     resourceCurvesSummaryPointCount:
-      resourceCurves?.summary?.pointCount === resourceActorPointCount,
+      resourceCurves?.summary?.pointCount ===
+      resourceActorPointCount + resourceKiboPointCount,
+    summaryResourceCurveActorPointCount:
+      summary.resourceCurveActorPointCount === resourceActorPointCount,
+    summaryResourceCurveKiboPointCount:
+      summary.resourceCurveKiboPointCount === resourceKiboPointCount,
     outputContractSummarySimLogCount:
       outputContract.summary.simLogCount === simLogCount,
     outputContractSummaryStateCurvePointCount:
       outputContract.summary.stateCurvePointCount === stateCurvePointCount,
+    outputContractSummaryResourceCurveActorPointCount:
+      outputContract.summary.resourceCurveActorPointCount ===
+      resourceActorPointCount,
+    outputContractSummaryResourceCurveKiboPointCount:
+      outputContract.summary.resourceCurveKiboPointCount ===
+      resourceKiboPointCount,
     summaryStateSnapshotCount:
       summary.stateSnapshotCount === stateSnapshotCount,
     summaryHitTransactionCount:
@@ -510,6 +532,7 @@ function createRuntimeOutputConsistency({
     resourceCurvePointCount,
     stateCurvePointCount,
     resourceActorPointCount,
+    resourceKiboPointCount,
     stateSnapshotCount,
     hitTransactionCount,
     effectEventCount,
@@ -616,6 +639,8 @@ function createThreeValueRuntimeOutputContract({
       resourceCurveActorCount: resourceCurves.summary.actorCount,
       resourceCurveKiboCount: resourceCurves.summary.kiboCount,
       resourceEnergyCurveCount: resourceCurves.summary.energyCurveCount,
+      resourceCurveActorPointCount: resourceCurves.summary.actorPointCount,
+      resourceCurveKiboPointCount: resourceCurves.summary.kiboPointCount,
       resourceCurvePointCount: resourceCurves.summary.pointCount,
       enemyHpDelta: summary.enemyHpDelta,
       enemyToughnessDelta: summary.enemyToughnessDelta,
@@ -764,6 +789,8 @@ function createRuntimeStateCurvesOutputContract({
       actorCount: resourceCurves.summary.actorCount,
       kiboCount: resourceCurves.summary.kiboCount,
       energyCurveCount: resourceCurves.summary.energyCurveCount,
+      actorPointCount: resourceCurves.summary.actorPointCount,
+      kiboPointCount: resourceCurves.summary.kiboPointCount,
       pointCount: resourceCurves.summary.pointCount,
       resourceKind: resourceCurves.resourceKind,
       valueFields: ['energyDelta'],
@@ -786,6 +813,10 @@ function createRuntimeStateCurvesOutputContract({
       'enemyToughnessDelta',
       'stateCurvePointCount',
       'resourceActorCount',
+      'resourceKiboCount',
+      'resourceEnergyCurveCount',
+      'resourceActorPointCount',
+      'resourceKiboPointCount',
       'resourcePointCount',
       'selfEnergyDelta',
       'stateSnapshotCount',
@@ -807,6 +838,8 @@ function createRuntimeResourceCurvesOutputContract(resourceCurves) {
     energyCurveCount: resourceCurves.summary.energyCurveCount,
     activeActorCount: resourceCurves.summary.activeActorCount,
     activeKiboCount: resourceCurves.summary.activeKiboCount,
+    actorPointCount: resourceCurves.summary.actorPointCount,
+    kiboPointCount: resourceCurves.summary.kiboPointCount,
     pointCount: resourceCurves.summary.pointCount,
     curveKeyFields: ['actorId', 'slotId', 'kiboId'],
     pointKeyFields: ['sourceDeltaId', 'runtimeSequenceIndex'],
@@ -841,6 +874,8 @@ function createRuntimeSummaryOutputContract(summary) {
       'resourceCurveActorCount',
       'resourceCurveKiboCount',
       'resourceEnergyCurveCount',
+      'resourceCurveActorPointCount',
+      'resourceCurveKiboPointCount',
       'resourceCurvePointCount',
       'simLogCount',
       'stateSnapshotCount',
@@ -1193,6 +1228,8 @@ function createThreeValueRuntimeStateCurves({
       resourceActorCount: resourceCurves.summary.actorCount,
       resourceKiboCount: resourceCurves.summary.kiboCount,
       resourceEnergyCurveCount: resourceCurves.summary.energyCurveCount,
+      resourceActorPointCount: resourceCurves.summary.actorPointCount,
+      resourceKiboPointCount: resourceCurves.summary.kiboPointCount,
       activeResourceActorCount: resourceCurves.summary.activeActorCount,
       activeResourceKiboCount: resourceCurves.summary.activeKiboCount,
       resourcePointCount: resourceCurves.summary.pointCount,
@@ -1328,6 +1365,8 @@ function summarizeThreeValueRuntimeProjection({
     resourceCurveActorCount: resourceCurves.summary.actorCount,
     resourceCurveKiboCount: resourceCurves.summary.kiboCount,
     resourceEnergyCurveCount: resourceCurves.summary.energyCurveCount,
+    resourceCurveActorPointCount: resourceCurves.summary.actorPointCount,
+    resourceCurveKiboPointCount: resourceCurves.summary.kiboPointCount,
     activeResourceCurveActorCount: resourceCurves.summary.activeActorCount,
     activeResourceCurveKiboCount: resourceCurves.summary.activeKiboCount,
     resourceCurvePointCount: resourceCurves.summary.pointCount,

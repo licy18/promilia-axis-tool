@@ -573,8 +573,12 @@ describe('three value runtime projection', () => {
       summaryStateCurvePointCount: true,
       stateCurvesSummaryPointCount: true,
       resourceCurvesSummaryPointCount: true,
+      summaryResourceCurveActorPointCount: true,
+      summaryResourceCurveKiboPointCount: true,
       outputContractSummarySimLogCount: true,
       outputContractSummaryStateCurvePointCount: true,
+      outputContractSummaryResourceCurveActorPointCount: true,
+      outputContractSummaryResourceCurveKiboPointCount: true,
       summaryStateSnapshotCount: true,
       summaryHitTransactionCount: true,
       outputContractSummaryHitTransactionCount: true,
@@ -763,7 +767,40 @@ describe('three value runtime projection', () => {
       kiboCount: 1,
       energyCurveCount: 2,
       activeKiboCount: 0,
+      actorPointCount: 1,
       kiboPointCount: 0,
+      pointCount: 1,
+    });
+    expect(runtimeProjection.summary).toMatchObject({
+      resourceCurveActorPointCount: 1,
+      resourceCurveKiboPointCount: 0,
+      resourceCurvePointCount: 1,
+    });
+    expect(runtimeProjection.runtimeOutputs.outputConsistency).toMatchObject({
+      resourceActorPointCount: 1,
+      resourceKiboPointCount: 0,
+      checks: expect.objectContaining({
+        summaryResourceCurveActorPointCount: true,
+        summaryResourceCurveKiboPointCount: true,
+        outputContractSummaryResourceCurveActorPointCount: true,
+        outputContractSummaryResourceCurveKiboPointCount: true,
+      }),
+      consistent: true,
+    });
+    expect(
+      runtimeConsumerView.outputConsumerContract.outputs.resourceCurves
+    ).toMatchObject({
+      actorCount: 1,
+      kiboCount: 1,
+      energyCurveCount: 2,
+      actorPointCount: 1,
+      kiboPointCount: 0,
+      pointCount: 1,
+    });
+    expect(runtimeConsumerView.summary).toMatchObject({
+      resourceCurveActorPointCount: 1,
+      resourceCurveKiboPointCount: 0,
+      resourceCurvePointCount: 1,
     });
     expect(
       createSelfEnergyDeltaSummaryByActor(

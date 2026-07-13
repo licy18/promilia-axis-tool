@@ -152,6 +152,14 @@ export function createThreeValueRuntimeOutputConsumerContract({
           resourceCurveSummary.energyCurveCount ??
             contractSummary.resourceEnergyCurveCount
         ),
+        actorPointCount: numberOrZero(
+          resourceCurveSummary.actorPointCount ??
+            contractSummary.resourceCurveActorPointCount
+        ),
+        kiboPointCount: numberOrZero(
+          resourceCurveSummary.kiboPointCount ??
+            contractSummary.resourceCurveKiboPointCount
+        ),
         pointCount: numberOrZero(
           resourceCurveSummary.pointCount ??
             contractSummary.resourceCurvePointCount
@@ -293,6 +301,16 @@ export function createThreeValueRuntimeOutputConsumerContract({
         resourceCurveSummary.energyCurveCount ??
           contractSummary.resourceEnergyCurveCount ??
           summary.resourceEnergyCurveCount
+      ),
+      resourceCurveActorPointCount: numberOrZero(
+        resourceCurveSummary.actorPointCount ??
+          contractSummary.resourceCurveActorPointCount ??
+          summary.resourceCurveActorPointCount
+      ),
+      resourceCurveKiboPointCount: numberOrZero(
+        resourceCurveSummary.kiboPointCount ??
+          contractSummary.resourceCurveKiboPointCount ??
+          summary.resourceCurveKiboPointCount
       ),
       resourceCurvePointCount: numberOrZero(
         resourceCurveSummary.pointCount ??
@@ -468,6 +486,20 @@ export function createThreeValueRuntimeOutputConsumerView(runtimeProjection) {
       ),
       resourceCurveKiboCount: numberOrZero(
         outputSummary.resourceCurveKiboCount ?? kiboResourceCurveRows.length
+      ),
+      resourceCurveActorPointCount: numberOrZero(
+        outputSummary.resourceCurveActorPointCount ??
+          resourceCurveRows.reduce(
+            (sum, curve) => sum + numberOrZero(curve?.pointCount),
+            0
+          )
+      ),
+      resourceCurveKiboPointCount: numberOrZero(
+        outputSummary.resourceCurveKiboPointCount ??
+          kiboResourceCurveRows.reduce(
+            (sum, curve) => sum + numberOrZero(curve?.pointCount),
+            0
+          )
       ),
       resourceEnergyCurveCount: numberOrZero(
         outputSummary.resourceEnergyCurveCount ??
