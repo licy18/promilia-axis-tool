@@ -280,6 +280,111 @@ describe('workbench runtime sample capture', () => {
     });
   });
 
+  it('owner-locks kibo observations instead of rewriting drifted identities', () => {
+    const baseProject = createFirstVerticalSliceProject();
+    const action = baseProject.actions[0];
+    const project = {
+      ...baseProject,
+      metadata: {
+        ...baseProject.metadata,
+        timelineTopology: {
+          actorGroups: [
+            {
+              slotId: 'team-slot-1',
+              actorId: action.actorId,
+              kiboLane: { kiboId: 500001 },
+              kiboEnergyCurve: { kiboId: 500001 },
+            },
+          ],
+        },
+      },
+    };
+    const createCapture = (eventPatch = {}) => ({
+      captureSessionId: 'controlled-kibo-binding-session',
+      events: [
+        {
+          eventType: 'pet-ultimate-cooldown-observed',
+          actionId: 'source-kibo-action',
+          actorId: action.actorId,
+          slotId: 'team-slot-1',
+          kiboId: 500001,
+          petEntityId: 70001,
+          petEntityPointer: '0x12345678',
+          api: 'PetUltimateCdTime',
+          frameIndex: 30,
+          cdTime: 10,
+          totalTime: 20,
+          ready: false,
+          ...eventPatch,
+        },
+      ],
+    });
+
+    const exact = bindWorkbenchRuntimeSampleCaptures({
+      captures: [createCapture()],
+      project,
+      selectedActionId: action.id,
+    });
+    expect(exact).toMatchObject({
+      status: 'runtime-sample-binding-ready',
+      summary: { boundCaptureCount: 1, rejectedCaptureCount: 0 },
+      rejectedCaptures: [],
+    });
+    expect(exact.captures[0].events[0]).toMatchObject({
+      actorId: action.actorId,
+      slotId: 'team-slot-1',
+      kiboId: 500001,
+      sourceWorkbenchBinding: {
+        actionId: 'source-kibo-action',
+        actorId: action.actorId,
+      },
+    });
+
+    const drifted = [
+      createCapture({ actorId: 'actor-owner-drift' }),
+      createCapture({ slotId: 'team-slot-2' }),
+      createCapture({ kiboId: 500002 }),
+    ];
+    for (const capture of drifted) {
+      expect(
+        bindWorkbenchRuntimeSampleCaptures({
+          captures: [capture],
+          project,
+          selectedActionId: action.id,
+        })
+      ).toMatchObject({
+        status: 'runtime-sample-binding-rejected',
+        summary: { boundCaptureCount: 0, rejectedCaptureCount: 1 },
+        rejectedCaptures: [
+          expect.objectContaining({
+            reason: 'runtime-sample-resource-owner-mismatch',
+            resourceOwnerIssues: [
+              expect.objectContaining({ reason: expect.any(String) }),
+            ],
+          }),
+        ],
+      });
+    }
+
+    expect(
+      bindWorkbenchRuntimeSampleCaptures({
+        captures: [createCapture()],
+        project: {
+          ...project,
+          metadata: { ...project.metadata, timelineTopology: null },
+        },
+        selectedActionId: action.id,
+      })
+    ).toMatchObject({
+      status: 'runtime-sample-binding-rejected',
+      rejectedCaptures: [
+        expect.objectContaining({
+          reason: 'runtime-sample-resource-owner-topology-missing',
+        }),
+      ],
+    });
+  });
+
   it('rejects ambiguous or skill-mismatched capture binding', () => {
     const project = createFirstVerticalSliceProject();
     const ambiguous = createRecoverSpRuntimeSampleFixture({

@@ -85,6 +85,22 @@ export function bindWorkbenchRuntimeSampleCaptures({
       continue;
     }
 
+    const resourceOwnerBinding = validateCaptureResourceOwnerBinding({
+      capture,
+      project,
+      action: binding.action,
+    });
+    if (!resourceOwnerBinding.valid) {
+      rejectedCaptures.push({
+        captureSessionId: capture.captureSessionId,
+        reason: resourceOwnerBinding.reason,
+        sourceActionIds: binding.sourceActionIds,
+        sourceSkillIds: binding.sourceSkillIds,
+        resourceOwnerIssues: resourceOwnerBinding.issues,
+      });
+      continue;
+    }
+
     boundCaptures.push(
       createBoundRuntimeSampleCapture({
         capture,
@@ -125,6 +141,76 @@ export function bindWorkbenchRuntimeSampleCaptures({
         boundCaptures.map(capture => capture.workbenchBinding?.targetId)
       ),
     },
+  };
+}
+
+function validateCaptureResourceOwnerBinding({ capture, project, action }) {
+  const observations = capture.events.filter(
+    event => event.eventType === 'pet-ultimate-cooldown-observed'
+  );
+  if (observations.length === 0) {
+    return { valid: true, reason: null, issues: [] };
+  }
+
+  const actorGroups = project?.metadata?.timelineTopology?.actorGroups;
+  if (!Array.isArray(actorGroups) || actorGroups.length === 0) {
+    return {
+      valid: false,
+      reason: 'runtime-sample-resource-owner-topology-missing',
+      issues: observations.map(event =>
+        createKiboObservationOwnerIssue(event, 'timeline-topology-missing')
+      ),
+    };
+  }
+
+  const issues = observations.flatMap(event => {
+    const group = actorGroups.find(
+      candidate => candidate?.slotId === event.slotId
+    );
+    const expectedKiboId = positiveIntegerOrNull(
+      group?.kiboEnergyCurve?.kiboId ?? group?.kiboLane?.kiboId
+    );
+    const observedKiboId = positiveIntegerOrNull(event.kiboId);
+    const mismatches = [];
+    if (!group) {
+      mismatches.push('slot-not-found');
+    } else {
+      if (event.actorId !== group.actorId) {
+        mismatches.push('actor-mismatch');
+      }
+      if (observedKiboId == null || observedKiboId !== expectedKiboId) {
+        mismatches.push('kibo-mismatch');
+      }
+      if (action.actorId !== group.actorId) {
+        mismatches.push('action-owner-mismatch');
+      }
+    }
+    return mismatches.map(reason =>
+      createKiboObservationOwnerIssue(event, reason, {
+        expectedActorId: group?.actorId ?? null,
+        expectedKiboId,
+        actionActorId: action.actorId,
+      })
+    );
+  });
+
+  return issues.length > 0
+    ? {
+        valid: false,
+        reason: 'runtime-sample-resource-owner-mismatch',
+        issues,
+      }
+    : { valid: true, reason: null, issues: [] };
+}
+
+function createKiboObservationOwnerIssue(event, reason, expected = {}) {
+  return {
+    eventType: event.eventType,
+    reason,
+    slotId: stringOrNull(event.slotId),
+    actorId: stringOrNull(event.actorId),
+    kiboId: positiveIntegerOrNull(event.kiboId),
+    ...expected,
   };
 }
 

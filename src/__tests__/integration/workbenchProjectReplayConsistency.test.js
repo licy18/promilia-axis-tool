@@ -2,6 +2,7 @@ import { Buffer } from 'node:buffer';
 import { describe, expect, it } from 'vitest';
 import {
   createDefaultWorkbenchDraftState,
+  createWorkbenchDraftSnapshot,
   createWorkbenchScenarioDraftSnapshot,
   createWorkbenchProjectShareCode,
   loadWorkbenchDraft,
@@ -14,6 +15,7 @@ import {
   createWorkbenchProject,
   getWorkbenchGameData,
 } from '../../domain/workbenchProjectFactory';
+import { duplicateWorkbenchScenario } from '../../domain/workbenchScenarioWorkspace';
 import { getWorkbenchGameDataCompatibilityReport } from '../../domain/workbenchGameDataCatalog';
 import {
   createWorkbenchProjectPngMetadata,
@@ -22,6 +24,7 @@ import {
 } from '../../domain/workbenchPngProject';
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
+import { createRecoverSpRuntimeSampleFixture } from '../../simulation/fixtures/recoverSpRuntimeSampleFixture';
 import { createToughnessRuntimeSampleFixture } from '../../simulation/fixtures/toughnessRuntimeSampleFixture';
 import { DEFAULT_THREE_VALUE_MECHANICS_PROFILE } from '../../simulation/mechanics/threeValueMechanicsProfile';
 
@@ -37,7 +40,16 @@ const REPLAY_PROFILE = {
 
 describe('Workbench project replay consistency', () => {
   it('replays the same configuration binding and runtime outputs from every project carrier', async () => {
-    const sourceState = createReplaySourceState();
+    const sourceState = createWorkbenchDraftSnapshot(
+      createReplaySourceState(),
+      EXPORTED_AT
+    );
+    const duplicated = duplicateWorkbenchScenario(
+      sourceState.scenarioWorkspace,
+      sourceState.scenarioWorkspace.activeScenarioId,
+      sourceState
+    );
+    expect(duplicated.changed).toBe(true);
     const storage = createMemoryStorage();
     saveWorkbenchDraft(storage, sourceState);
     const localDraft = loadWorkbenchDraft(storage);
@@ -60,6 +72,14 @@ describe('Workbench project replay consistency', () => {
       createReplaySignature
     );
     const baseline = replays[0];
+    const duplicatedScenarioReplay = createScenarioReplaySignature(
+      duplicated.scenario.draft,
+      sourceState.configurationLibrary
+    );
+    const activeScenarioReplay = createScenarioReplaySignature(
+      localDraft,
+      localDraft.configurationLibrary
+    );
 
     expect(baseline.configurationSourceContract).toMatchObject({
       contractName: 'AzPrWorkbenchConfigurationSource',
@@ -142,10 +162,10 @@ describe('Workbench project replay consistency', () => {
       runtimeConfigurationReplayIdentities: [
         baseline.configurationSourceContract.replayIdentity,
       ],
-      configurationRuntimeBindingReadyInvocationCount: 3,
+      configurationRuntimeBindingReadyInvocationCount: 5,
       configurationRuntimeBindingMissingInvocationCount: 0,
-      operandSourceBindingRequiredInvocationCount: 3,
-      operandSourceBindingReadyInvocationCount: 3,
+      operandSourceBindingRequiredInvocationCount: 5,
+      operandSourceBindingReadyInvocationCount: 5,
       operandSourceBindingInvalidInvocationCount: 0,
       operandSourceBindingCompatibleUnboundInvocationCount: 0,
       operandSourceBindingStates: ['bound-ready'],
@@ -156,9 +176,9 @@ describe('Workbench project replay consistency', () => {
       ],
       enemyHpDelta: expect.any(Number),
       enemyToughnessDelta: 70,
-      selfEnergyDelta: 0.25,
+      selfEnergyDelta: 1.5,
     });
-    expect(baseline.appliedSourceBindings).toHaveLength(3);
+    expect(baseline.appliedSourceBindings).toHaveLength(5);
     expect(baseline.appliedSourceBindings).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -229,25 +249,71 @@ describe('Workbench project replay consistency', () => {
       expect.objectContaining({
         slotId: 'team-slot-1',
         kiboId: 500001,
-        pointCount: 0,
+        pointCount: 1,
         trackingOnly: true,
         appliedToCalculators: false,
+        stateMetric: expect.objectContaining({
+          initialValue: 0,
+          currentValue: 0,
+          maxValue: 20,
+        }),
       }),
       expect.objectContaining({
         slotId: 'team-slot-2',
         kiboId: 500002,
-        pointCount: 0,
+        pointCount: 1,
         trackingOnly: true,
         appliedToCalculators: false,
+        stateMetric: expect.objectContaining({
+          initialValue: 0,
+          currentValue: 9,
+          maxValue: 18,
+        }),
       }),
       expect.objectContaining({
         slotId: 'team-slot-3',
         kiboId: 500003,
-        pointCount: 0,
+        pointCount: 1,
         trackingOnly: true,
         appliedToCalculators: false,
+        stateMetric: expect.objectContaining({
+          initialValue: 0,
+          currentValue: 16,
+          maxValue: 16,
+        }),
       }),
     ]);
+    expect(baseline.runtimeOutputs.resources.curvesByActor).toEqual(
+      sourceState.teamSlots.map((slot, index) =>
+        expect.objectContaining({
+          actorId: `actor-${slot.characterId}`,
+          pointCount: 1,
+          delta: [0.25, 0.5, 0.75][index],
+        })
+      )
+    );
+    expect(baseline.runtimeObservationSignature).toHaveLength(6);
+    expect(baseline.runtimeObservationSignature).toEqual(
+      expect.arrayContaining([
+        ...sourceState.teamSlots.map((slot, index) =>
+          expect.objectContaining({
+            eventType: 'recover-sp-applied',
+            actorId: `actor-${slot.characterId}`,
+            roleEntityId: `runtime-role-${slot.characterId}`,
+            frameIndex: 60 * (index + 1),
+          })
+        ),
+        ...sourceState.teamSlots.map((slot, index) =>
+          expect.objectContaining({
+            eventType: 'pet-ultimate-cooldown-observed',
+            actorId: `actor-${slot.characterId}`,
+            slotId: slot.slotId,
+            kiboId: 500001 + index,
+            frameIndex: 180 * index,
+          })
+        ),
+      ])
+    );
     expect(baseline.runtimeOutputs.controlledActorTimeline).toMatchObject({
       initialActor: {
         characterId: sourceState.teamSlots[0].characterId,
@@ -290,7 +356,8 @@ describe('Workbench project replay consistency', () => {
     for (const replay of replays.slice(1)) {
       expect(replay).toEqual(baseline);
     }
-  });
+    expect(duplicatedScenarioReplay).toEqual(activeScenarioReplay);
+  }, 15000);
 });
 
 function createReplaySourceState() {
@@ -336,6 +403,26 @@ function createReplaySourceState() {
     reason: 'replay-consistency',
   });
   state.actionDrafts.push({
+    id: 'action-resource-actor-2',
+    type: 'resource',
+    actorCharacterId: state.teamSlots[1].characterId,
+    startMs: 1400,
+    durationMs: 1,
+    resource: 'sp',
+    change: 0.5,
+    reason: 'replay-consistency',
+  });
+  state.actionDrafts.push({
+    id: 'action-resource-actor-3',
+    type: 'resource',
+    actorCharacterId: state.teamSlots[2].characterId,
+    startMs: 1600,
+    durationMs: 1,
+    resource: 'sp',
+    change: 0.75,
+    reason: 'replay-consistency',
+  });
+  state.actionDrafts.push({
     id: 'action-kibo',
     type: 'kiboEvent',
     skillId: 50000102,
@@ -372,6 +459,10 @@ function createReplaySourceState() {
     durationMs: 600,
     note: 'replay-controlled-actor-switch',
   });
+  state.actionDrafts.push(
+    createReplayKiboAction(state, 1, 3600),
+    createReplayKiboAction(state, 2, 5400)
+  );
   state.actionRelations = [
     {
       id: 'relation-0001',
@@ -384,6 +475,27 @@ function createReplaySourceState() {
       actionId: state.actionDrafts[0].id,
       toughnessDeltaApplied: 70,
     }),
+    ...state.teamSlots.map((slot, index) =>
+      createRecoverSpRuntimeSampleFixture({
+        captureSessionId: `replay-role-sp-${index + 1}`,
+        actionId: `capture-only-role-${index + 1}`,
+        actorId: `actor-${slot.characterId}`,
+        ownerEntityId: `runtime-owner-${slot.characterId}`,
+        roleEntityId: `runtime-role-${slot.characterId}`,
+        frameIndex: 60 * (index + 1),
+        timeMs: 1000 * (index + 1),
+        spBefore: 10 * (index + 1),
+      })
+    ),
+    ...state.teamSlots.map((slot, index) =>
+      createReplayKiboObservationCapture({
+        slot,
+        index,
+        actorId: `actor-${slot.characterId}`,
+        kiboId: 500001 + index,
+        actionId: index === 0 ? 'action-kibo' : `action-kibo-${index + 1}`,
+      })
+    ),
   ];
   state.mechanicsProfileSelection = {
     schemaVersion: 1,
@@ -400,6 +512,59 @@ function createReplaySourceState() {
     }),
   });
   return state;
+}
+
+function createReplayKiboAction(state, slotIndex, startMs) {
+  return {
+    id: `action-kibo-${slotIndex + 1}`,
+    type: 'kiboEvent',
+    actorCharacterId: state.teamSlots[slotIndex].characterId,
+    startMs,
+    durationMs: 600,
+    eventType: 'activation',
+    name: `奇波 ${slotIndex + 1} 观测`,
+    timingSource: null,
+    needsTimingData: true,
+    note: 'replay-kibo-observation',
+  };
+}
+
+function createReplayKiboObservationCapture({
+  slot,
+  index,
+  actorId,
+  kiboId,
+  actionId,
+}) {
+  const captureSessionId = `replay-kibo-energy-${index + 1}`;
+  const frameIndex = 180 * index;
+  const totalTime = 20 - index * 2;
+  const cdTime = [20, 9, 0][index];
+  return {
+    schemaVersion: 1,
+    captureSessionId,
+    clientRegion: 'manual-fixture',
+    clientBuild: 'p3-replay-consistency',
+    source: 'manual-kibo-runtime-sample-fixture',
+    events: [
+      {
+        captureSessionId,
+        eventType: 'pet-ultimate-cooldown-observed',
+        actionId,
+        actorId,
+        slotId: slot.slotId,
+        kiboId,
+        petEntityId: 70001 + index,
+        petEntityPointer: `0x${(0x12345678 + index).toString(16)}`,
+        api: 'PetUltimateCdTime',
+        frameIndex,
+        timeMs: frameIndex * (1000 / 60),
+        cdTime,
+        totalTime,
+        ready: cdTime <= 0,
+      },
+    ],
+  };
 }
 
 function createReplaySignature(draft) {
@@ -500,9 +665,39 @@ function createScenarioReplaySignature(draft, configurationLibrary) {
         identity: delta.appliedSourceBindingIdentity,
         status: delta.appliedSourceBindingStatus,
       })),
+    runtimeObservationSignature: createRuntimeObservationSignature(
+      draft.runtimeSampleCaptures
+    ),
     runtimeSummary: runtimeProjection.summary,
     runtimeOutputs: result.runtimeOutputs,
   };
+}
+
+function createRuntimeObservationSignature(captures = []) {
+  return captures.flatMap(capture =>
+    capture.events
+      .filter(event =>
+        ['recover-sp-applied', 'pet-ultimate-cooldown-observed'].includes(
+          event.eventType
+        )
+      )
+      .map(event => ({
+        captureSessionId: capture.captureSessionId,
+        eventType: event.eventType,
+        actionId: event.actionId ?? null,
+        actorId: event.actorId ?? null,
+        slotId: event.slotId ?? null,
+        kiboId: event.kiboId ?? null,
+        roleEntityId: event.roleEntityId ?? null,
+        petEntityId: event.petEntityId ?? null,
+        frameIndex: event.frameIndex ?? null,
+        timeMs: event.timeMs ?? null,
+        spDeltaApplied: event.spDeltaApplied ?? null,
+        cdTime: event.cdTime ?? null,
+        totalTime: event.totalTime ?? null,
+        ready: event.ready ?? null,
+      }))
+  );
 }
 
 function createMemoryStorage() {

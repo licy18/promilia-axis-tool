@@ -27429,3 +27429,9 @@ cdTime / totalTime / ready
 运行时只接受与当前 `timelineTopology.actorGroups[]` 完全匹配、具有实际 PetEntity 身份且冷却值自洽的事件；同一帧保留最后一次观测。曲线点使用 `trackKey = kiboEnergyChange`，保存原始冷却，并通过 `stateSnapshot.after.kiboEnergy.currentValue = totalTime - clamp(cdTime, 0, totalTime)` 给时间轴提供绝对状态。观测只应用于 tracking 曲线，`appliedToCalculators = false`；`RecoverSPArgs.petDelta` 不会被转换为奇波曲线点。
 
 受控 hook manifest 从 v1 升级为 v2，新增 `PetEntity.PetUltimateCdTime`、`PetEntity.data`、`BaseData.configId/entityId`。旧 runtime capture 仍可导入；没有新事件时三条奇波曲线保持原有零值 tracking baseline。
+
+## 428. Resource-owner locked runtime sample binding
+
+`bindWorkbenchRuntimeSampleCaptures()` 的持久化输入格式不变。包含 `pet-ultimate-cooldown-observed` 的 capture 在动作身份重绑定前，必须与 `project.metadata.timelineTopology.actorGroups[]` 的 `slotId / actorId / kiboId` 完全一致，且绑定动作必须属于同一角色。
+
+拒绝结果可新增 `reason = runtime-sample-resource-owner-mismatch | runtime-sample-resource-owner-topology-missing` 与 `resourceOwnerIssues[]`，用于指出 `slot-not-found / actor-mismatch / kibo-mismatch / action-owner-mismatch / timeline-topology-missing`。这些字段只属于导入结果，不写入项目载体；没有奇波观测的旧角色 SP capture 继续沿用原兼容绑定行为。
