@@ -6,6 +6,7 @@
       "src/main.js"
     ],
     "tests": [
+      "e2e/helpers/basic-workbench-draft.js",
       "e2e/helpers/workbench-long-axis-fixture.js",
       "e2e/workbench-continuous-edit.spec.js",
       "e2e/workbench-long-axis-comparison.spec.js",
@@ -69,6 +70,7 @@
       "src/__tests__/features/workbenchMainFlowActions.test.js",
       "src/__tests__/features/workbenchRuntimeFlowPlan.test.js",
       "src/__tests__/features/workbenchRuntimeViewState.test.js",
+      "src/__tests__/integration/workbenchDefaultDemo.test.js",
       "src/__tests__/integration/workbenchProjectReplayConsistency.test.js",
       "src/__tests__/scripts/runtimeCaptureFridaHost.test.js",
       "src/__tests__/scripts/runtimeCaptureNormalizeCli.test.js",

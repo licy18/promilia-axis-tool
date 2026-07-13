@@ -37,6 +37,15 @@ import {
 } from '../../simulation/projection/projectSimulationResult';
 import Workbench from '../../views/Workbench.vue';
 
+vi.mock('../../domain/workbenchDraftStorage', async importOriginal => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    createDefaultWorkbenchDemoDraftState:
+      actual.createDefaultWorkbenchDraftState,
+  };
+});
+
 beforeAll(() => {
   installProjectSimulationSkillDiagnostics(workbenchSkillDiagnostics);
 });

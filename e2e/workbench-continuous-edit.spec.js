@@ -1,7 +1,15 @@
 import { expect, test } from '@playwright/test';
 import { Buffer } from 'node:buffer';
 import { readFile } from 'node:fs/promises';
+import {
+  BASIC_WORKBENCH_DRAFT_STORAGE_KEY,
+  createBasicWorkbenchDraftFixture,
+} from './helpers/basic-workbench-draft';
 import { createRecoverSpRuntimeSampleFixture } from '../src/simulation/fixtures/recoverSpRuntimeSampleFixture';
+
+test.beforeEach(async ({ page }) => {
+  await prepareBasicWorkbenchScenario(page);
+});
 
 test('routes every primary entry to the real Workbench @workbench-main-flow', async ({
   page,
@@ -248,7 +256,7 @@ test('edits and reviews an arbitrary action group @workbench-main-flow', async (
   await expect(workbench).toHaveAttribute('data-action-relation-count', '2');
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
@@ -268,7 +276,7 @@ test('edits and reviews an arbitrary action group @workbench-main-flow', async (
     }),
   ]);
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
   await expect(page.locator('.action-item')).toHaveCount(1);
   await page
     .getByTestId('workbench-import-project-file')
@@ -480,7 +488,7 @@ test('runs the visible curve-log-detail edit loop end to end @workbench-main-flo
       `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${openedState.statePointId}"]`
     )
     .first();
-  await logRow.click();
+  await clickRuntimeLogRow(page, logRow);
   await expect(
     page.getByTestId('workbench-runtime-selected-detail')
   ).toHaveAttribute('data-runtime-review-source', 'event-log-runtime-row');
@@ -561,7 +569,7 @@ test('returns refreshed results from the runtime detail panel @workbench-main-fl
     )
     .first();
   await expect(logRow).toBeVisible();
-  await logRow.click();
+  await clickRuntimeLogRow(page, logRow);
   await expect(
     page.getByTestId('workbench-runtime-selected-detail')
   ).toHaveAttribute('data-runtime-review-source', 'event-log-runtime-row');
@@ -640,7 +648,7 @@ test('runs the Workbench flow panel edit-result loop end to end @workbench-main-
     )
     .first();
   await expect(logRow).toBeVisible();
-  await logRow.click();
+  await clickRuntimeLogRow(page, logRow);
   await expect(
     page.getByTestId('workbench-runtime-selected-detail')
   ).toHaveAttribute('data-runtime-review-source', 'event-log-runtime-row');
@@ -746,12 +754,14 @@ test('keeps the complete visible Workbench loop demonstrable @workbench-main-flo
   ).toHaveAttribute('data-runtime-review-source', 'resource-runtime-curve');
   await expectCurveAndLogSelection(page, openedState.statePointId);
 
-  await page
-    .locator(
-      `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${openedState.statePointId}"]`
-    )
-    .first()
-    .click();
+  await clickRuntimeLogRow(
+    page,
+    page
+      .locator(
+        `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${openedState.statePointId}"]`
+      )
+      .first()
+  );
   await expect(
     page.getByTestId('workbench-runtime-selected-detail')
   ).toHaveAttribute('data-runtime-review-source', 'event-log-runtime-row');
@@ -2146,6 +2156,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
     'data-flow-phase',
     'action-edit'
   );
+  await openSelectedActionInspector(page);
 
   const secondaryTeamSlotSelect = page.getByTestId(
     'workbench-secondary-character-select'
@@ -2250,7 +2261,7 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
   );
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toMatch(/promilia-workbench-.*\.json$/);
   const downloadPath = await download.path();
@@ -2304,7 +2315,8 @@ test('exports and imports a Workbench JSON project @workbench-main-flow', async 
     '已导出项目'
   );
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
+  await openSelectedActionInspector(page);
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '1 action'
   );
@@ -2398,11 +2410,12 @@ test('saves, finds, copies, and reloads a Workbench preset @workbench-main-flow'
   await expect(page.getByTestId('workbench-preset-library')).toBeVisible();
   await page.getByTestId('workbench-preset-close').click();
 
+  await openSelectedActionInspector(page);
   await page.getByTestId('workbench-level-input').fill('2');
   await page.getByTestId('workbench-level-input').press('Tab');
   await expect(page.getByTestId('workbench-level-input')).toHaveValue('2');
 
-  await page.getByTestId('workbench-open-presets').click();
+  await clickProjectMenuCommand(page, 'workbench-open-presets');
   await page
     .getByTestId('workbench-preset-name-input')
     .fill('末音循环可回载预设');
@@ -2427,10 +2440,11 @@ test('saves, finds, copies, and reloads a Workbench preset @workbench-main-flow'
   );
   await page.getByTestId('workbench-preset-close').click();
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
+  await openSelectedActionInspector(page);
   await expect(page.getByTestId('workbench-level-input')).toHaveValue('1');
 
-  await page.getByTestId('workbench-open-presets').click();
+  await clickProjectMenuCommand(page, 'workbench-open-presets');
   const originalPresetRow = page.getByTestId('workbench-preset-row').filter({
     has: page.locator('strong').filter({
       hasText: /^末音循环可回载预设$/,
@@ -2445,7 +2459,7 @@ test('saves, finds, copies, and reloads a Workbench preset @workbench-main-flow'
   await expect(page.getByTestId('workbench-level-input')).toHaveValue('2');
   await expectRuntimeOutputConsistent(page);
 
-  await page.getByTestId('workbench-open-presets').click();
+  await clickProjectMenuCommand(page, 'workbench-open-presets');
   await page.getByTestId('workbench-preset-search-input').fill('副本');
   await page.getByTestId('workbench-preset-delete').click();
   await expect(page.getByTestId('workbench-preset-empty')).toContainText(
@@ -2514,7 +2528,7 @@ test('imports a runtime capture and preserves its applied curve through project 
   ).toContainText('能量 0.3375 · 日志 2');
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const downloadPath = await download.path();
   expect(downloadPath).toBeTruthy();
@@ -2537,7 +2551,7 @@ test('imports a runtime capture and preserves its applied curve through project 
     ],
   });
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
   await expect(
     page.getByTestId('workbench-three-value-runtime-projection-summary')
   ).toContainText('能量 0 · 日志 1');
@@ -2576,7 +2590,7 @@ test('exports a visible PNG project and restores it from embedded metadata @work
   await initialSpInput.fill('0.75');
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project-png').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project-png');
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toMatch(
     /promilia-workbench-.*-2actions\.png$/
@@ -2594,7 +2608,8 @@ test('exports a visible PNG project and restores it from embedded metadata @work
     '已导出 PNG 项目'
   );
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
+  await openSelectedActionInspector(page);
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '1 action'
   );
@@ -2654,20 +2669,20 @@ test('drags JSON and PNG projects into a recoverable Workbench @workbench-main-f
   );
 
   const jsonDownloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const jsonDownload = await jsonDownloadPromise;
   const jsonPath = await jsonDownload.path();
   expect(jsonPath).toBeTruthy();
   const jsonBuffer = await readFile(jsonPath);
 
   const pngDownloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project-png').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project-png');
   const pngDownload = await pngDownloadPromise;
   const pngPath = await pngDownload.path();
   expect(pngPath).toBeTruthy();
   const pngBuffer = await readFile(pngPath);
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
   await dragWorkbenchFile(page, {
     name: 'dragged-axis.promilia-workbench.json',
     mimeType: 'application/json',
@@ -2683,7 +2698,7 @@ test('drags JSON and PNG projects into a recoverable Workbench @workbench-main-f
     '94'
   );
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
   await dragWorkbenchFile(page, {
     name: 'dragged-axis.png',
     mimeType: 'image/png',
@@ -2730,6 +2745,7 @@ test('shares and imports a Workbench project URL @workbench-main-flow', async ({
     'data-flow-phase',
     'action-edit'
   );
+  await openSelectedActionInspector(page);
 
   const enemySelect = page.getByTestId('workbench-enemy-select');
   const sharedEnemyId = await enemySelect
@@ -2750,14 +2766,14 @@ test('shares and imports a Workbench project URL @workbench-main-flow', async ({
   );
 
   const shareButton = page.getByTestId('workbench-share-project');
-  await shareButton.click();
+  await clickProjectMenuCommand(page, 'workbench-share-project');
   await expect(page.getByTestId('workbench-draft-status')).toHaveText(
     '已生成分享链接'
   );
   const shareUrl = await shareButton.getAttribute('data-share-url');
   expect(shareUrl).toContain('/#/workbench?workbenchProject=');
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
   await expect(page.getByTestId('scenario-action-count')).toHaveText(
     '1 action'
   );
@@ -2806,6 +2822,7 @@ test('configures, reviews, and shares a tracking-only effect @workbench-main-flo
   const browserIssues = collectBrowserIssues(page);
 
   await page.goto('/#/workbench');
+  await openSelectedActionInspector(page);
   await page.getByTestId('workbench-effect-add').click();
   await expect(page.getByTestId('workbench-effect-command-row')).toHaveCount(1);
 
@@ -2886,11 +2903,11 @@ test('configures, reviews, and shares a tracking-only effect @workbench-main-flo
   ).toContainText('0F-180F');
 
   const shareButton = page.getByTestId('workbench-share-project');
-  await shareButton.click();
+  await clickProjectMenuCommand(page, 'workbench-share-project');
   const shareUrl = await shareButton.getAttribute('data-share-url');
   expect(shareUrl).toContain('/#/workbench?workbenchProject=');
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
   await expect(page.getByTestId('workbench-effect-command-row')).toHaveCount(0);
   await page.goto(shareUrl);
   await expect(page.getByTestId('workbench-draft-status')).toHaveText(
@@ -3405,7 +3422,8 @@ test('keeps reset draft usable for a fresh runtime edit loop @workbench-main-flo
     'action-0002'
   );
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
+  await openSelectedActionInspector(page);
   await expect(page.getByTestId('workbench-draft-status')).toHaveText(
     '已重置草稿'
   );
@@ -4071,7 +4089,7 @@ test('persists cycle boundaries and reviews section contributions @workbench-mai
   );
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
@@ -4080,7 +4098,7 @@ test('persists cycle boundaries and reviews section contributions @workbench-mai
     expect.objectContaining({ id: 'cycle-boundary-0001' }),
   ]);
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
   await expect(workbench).toHaveAttribute('data-cycle-boundary-count', '0');
   await page
     .getByTestId('workbench-import-project-file')
@@ -4152,7 +4170,7 @@ test('creates an inherited scenario with continued runtime state @workbench-main
   );
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
@@ -4217,7 +4235,7 @@ test('manages, compares, and restores multiple workspace scenarios @workbench-ma
     .click();
   await expect(page.locator('.action-item')).toHaveCount(3);
 
-  await page.getByTestId('workbench-open-comparison').click();
+  await clickProjectMenuCommand(page, 'workbench-open-comparison');
   await page
     .getByTestId('workbench-comparison-workspace-scenario')
     .selectOption('scenario-0001');
@@ -4230,7 +4248,7 @@ test('manages, compares, and restores multiple workspace scenarios @workbench-ma
   await page.getByTestId('workbench-comparison-close').click();
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const exportedProject = JSON.parse(await readFile(downloadPath, 'utf8'));
@@ -4259,7 +4277,7 @@ test('manages, compares, and restores multiple workspace scenarios @workbench-ma
     exportedProject.scenarioWorkspace.scenarios[1].draft.actionDrafts
   ).toHaveLength(3);
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
   await expect(workbench).toHaveAttribute('data-workspace-scenario-count', '1');
   await page
     .getByTestId('workbench-import-project-file')
@@ -4285,6 +4303,7 @@ test('reuses named actor and enemy configurations across workspace scenarios @wo
   page,
 }) => {
   await page.goto('/#/workbench');
+  await openSelectedActionInspector(page);
   const actorSelect = page.locator(
     '[data-testid="workbench-actor-configuration-select"][data-character-id="109001"]'
   );
@@ -4341,7 +4360,7 @@ test('reuses named actor and enemy configurations across workspace scenarios @wo
   );
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const downloadPath = await download.path();
   const project = JSON.parse(await readFile(downloadPath, 'utf8'));
@@ -4363,7 +4382,8 @@ test('reuses named actor and enemy configurations across workspace scenarios @wo
     enemyConfig: { level: 95 },
   });
 
-  await page.getByTestId('workbench-reset-draft').click();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
+  await openSelectedActionInspector(page);
   await page
     .getByTestId('workbench-import-project-file')
     .setInputFiles(downloadPath);
@@ -4447,7 +4467,7 @@ test('persists resizable editing and review workspace layouts @workbench-main-fl
   });
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByTestId('workbench-export-project').click();
+  await clickProjectMenuCommand(page, 'workbench-export-project');
   const download = await downloadPromise;
   const project = JSON.parse(await readFile(await download.path(), 'utf8'));
   expect(project.workbenchLayout).toBeUndefined();
@@ -4612,6 +4632,9 @@ async function seedGeneratedActionBatchDraft(page) {
       segmentCount: 2,
       createdAt: '2026-07-09T00:00:00.000Z',
     };
+    window.localStorage.removeItem(
+      'promilia-axis-tool:workbench-draft:v16'
+    );
     window.localStorage.setItem(
       'promilia-axis-tool:workbench-draft:v1',
       JSON.stringify({
@@ -4676,6 +4699,7 @@ async function seedGeneratedActionBatchDraft(page) {
       })
     );
   });
+  await page.reload();
 }
 
 async function focusRuntimeDetailAction(page) {
@@ -4904,6 +4928,46 @@ async function expectCurveAndLogSelection(page, statePointId) {
   ).toHaveAttribute('data-state-point-id', statePointId);
 }
 
+async function clickRuntimeLogRow(page, logRow) {
+  const box = await logRow.boundingBox();
+  expect(box).toBeTruthy();
+  await logRow.click({
+    position: {
+      x: Math.min(12, box.width / 2),
+      y: box.height / 2,
+    },
+  });
+}
+
+async function openSelectedActionInspector(page) {
+  const inspector = page.getByTestId('workbench-side-inspector');
+  if (await inspector.isVisible()) {
+    return;
+  }
+  const selectedActionId =
+    (await page
+      .getByTestId('workbench-flow-panel')
+      .getAttribute('data-action-id')) || 'action-0001';
+  await page
+    .locator(`.action-item[data-action-id="${selectedActionId}"]`)
+    .click();
+  await expect(inspector).toBeVisible();
+}
+
+async function clickProjectMenuCommand(page, testId) {
+  const menu = page.getByTestId('workbench-project-menu');
+  if ((await menu.getAttribute('open')) == null) {
+    await menu.locator('summary').click();
+  }
+  const command = page.getByTestId(testId);
+  await expect(command).toBeVisible();
+  await command.click();
+  if ((await menu.getAttribute('open')) != null) {
+    await menu.evaluate(element => element.removeAttribute('open'));
+  }
+  return command;
+}
+
 async function expectRuntimeOutputConsistent(page) {
   const flowPanel = page.getByTestId('workbench-flow-panel');
   await expect(flowPanel).toHaveAttribute(
@@ -5096,6 +5160,32 @@ function isExpectedBrowserIssue(issue) {
     issue.includes(
       'Failed to load resource: the server responded with a status of 404'
     )
+  );
+}
+
+async function prepareBasicWorkbenchScenario(page) {
+  const draft = createBasicWorkbenchDraftFixture();
+  await page.addInitScript(
+    ({ storageKey, draftState }) => {
+      const markerKey = 'promilia-axis-tool:e2e-basic-draft-seeded';
+      if (window.sessionStorage.getItem(markerKey) === '1') {
+        return;
+      }
+      window.localStorage.setItem(storageKey, JSON.stringify(draftState));
+      window.sessionStorage.setItem(markerKey, '1');
+    },
+    {
+      storageKey: BASIC_WORKBENCH_DRAFT_STORAGE_KEY,
+      draftState: draft,
+    }
+  );
+  await page.goto('/#/workbench');
+  const scenarioBar = page.getByTestId('workbench-scenario-bar');
+  await expect(scenarioBar).toBeVisible();
+  await expect(scenarioBar).toHaveAttribute('data-scenario-count', '1');
+  await expect(page.getByTestId('workbench-scenario-tab')).toHaveAttribute(
+    'data-scenario-id',
+    'scenario-0001'
   );
 }
 

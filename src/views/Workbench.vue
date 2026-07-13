@@ -1059,6 +1059,7 @@ import {
   createWorkbenchProjectFileName,
   createWorkbenchProjectFileSnapshot,
   createWorkbenchProjectShareCode,
+  createDefaultWorkbenchDemoDraftState,
   createDefaultWorkbenchDraftState,
   loadWorkbenchDraft,
   normalizeWorkbenchSegmentSplitOptions,
@@ -1172,7 +1173,7 @@ const DEFAULT_STATE_CURVE_LAYER_FILTERS = {
 };
 const AUTO_DELAY_NOTE_PATTERN =
   /^自动推迟：同轨已有动作占用，已从 \d+(?:\.\d+)?ms 调整到 \d+(?:\.\d+)?ms。$/;
-const initialDraft = createDefaultWorkbenchDraftState();
+const initialDraft = createDefaultWorkbenchDemoDraftState();
 const selection = ref({ ...initialDraft.selection });
 const teamSlots = ref(initialDraft.teamSlots.map(slot => ({ ...slot })));
 const actorConfigs = ref([...initialDraft.actorConfigs]);

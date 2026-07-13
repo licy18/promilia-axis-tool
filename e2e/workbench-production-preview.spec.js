@@ -2,6 +2,17 @@ import { Buffer } from 'node:buffer';
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { expect, test } from '@playwright/test';
+import {
+  BASIC_WORKBENCH_DRAFT_STORAGE_KEY,
+  createBasicWorkbenchDraftFixture,
+} from './helpers/basic-workbench-draft';
+
+test.beforeEach(async ({ page }, testInfo) => {
+  if (testInfo.title.includes('[m1d-demo-milestone]')) {
+    return;
+  }
+  await prepareBasicWorkbenchScenario(page);
+});
 
 test('[applied-source-binding-guard] accepts the production three-track source audit', async () => {
   const report = JSON.parse(
@@ -645,6 +656,116 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
   await expectPageWithoutHorizontalOverflow(page);
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: 'reports/m1c-library-runtime-narrow.png' });
+});
+
+test('[m1d-demo-milestone] replays the visible three-person demo through every project carrier', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
+
+  await expect(page.getByTestId('workbench-scenario-name')).toHaveText(
+    '示例方案 · 预览数据'
+  );
+  await expectDemoMilestoneState(page, { resourceFrameIndex: 288 });
+  await expect(page.locator('.action-item')).toHaveCount(6);
+  await expect(
+    page.locator('.action-item[data-action-id="demo-kibo-2-event"]')
+  ).toBeVisible();
+  await expect(
+    page.locator('.action-item[data-action-id="demo-enemy-event"]')
+  ).toBeVisible();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/m1d-demo-desktop.png' });
+
+  await page
+    .locator('.action-item[data-action-id="demo-actor-2-energy"]')
+    .click();
+  await page.getByTestId('workbench-start-frame-input').fill('360');
+  await expectDemoMilestoneState(page, { resourceFrameIndex: 360 });
+  await closeInspectorIfVisible(page);
+  await page
+    .locator('.action-item[data-action-id="demo-actor-2-energy"]')
+    .getByTestId('workbench-copy-action')
+    .click();
+  await expect(
+    page.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="energy-actor-101003"] [data-testid="workbench-timeline-state-curve"]'
+    )
+  ).toHaveAttribute('data-point-count', '2');
+  await closeInspectorIfVisible(page);
+  await page
+    .locator('.action-item[data-action-id="action-0002"]')
+    .getByTestId('workbench-delete-action')
+    .click();
+  await expectDemoMilestoneState(page, { resourceFrameIndex: 360 });
+
+  await page.getByTestId('workbench-scenario-duplicate').click();
+  await expect(page.getByTestId('workbench-scenario-bar')).toHaveAttribute(
+    'data-scenario-count',
+    '2'
+  );
+  await expectDemoMilestoneState(page, { resourceFrameIndex: 360 });
+
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expectDemoMilestoneState(page, { resourceFrameIndex: 360 });
+
+  const shareButton = page.getByTestId('workbench-share-project');
+  await clickProjectMenuCommand(page, 'workbench-share-project');
+  const shareUrl = await shareButton.getAttribute('data-share-url');
+  expect(shareUrl).toContain('/#/workbench?workbenchProject=');
+
+  const jsonDownloadPromise = page.waitForEvent('download');
+  await clickProjectMenuCommand(page, 'workbench-export-project');
+  const jsonDownload = await jsonDownloadPromise;
+  const jsonPath = await jsonDownload.path();
+
+  const pngDownloadPromise = page.waitForEvent('download');
+  await clickProjectMenuCommand(page, 'workbench-export-project-png');
+  const pngDownload = await pngDownloadPromise;
+  const pngPath = await pngDownload.path();
+
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(jsonPath);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已导入项目'
+  );
+  await expectDemoMilestoneState(page, { resourceFrameIndex: 360 });
+
+  await page.goto(shareUrl);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已导入分享项目'
+  );
+  await expectDemoMilestoneState(page, { resourceFrameIndex: 360 });
+
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(pngPath);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已从 PNG 导入项目'
+  );
+  await expectDemoMilestoneState(page, { resourceFrameIndex: 360 });
+
+  await closeInspectorIfVisible(page);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await expectTimelineRowsAligned(
+    page.getByTestId('workbench-timeline-grid-preview')
+  );
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/m1d-demo-narrow.png' });
+  await page
+    .getByTestId('workbench-timeline-grid-preview')
+    .screenshot({ path: 'reports/m1d-demo-narrow-timeline.png' });
 });
 
 test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enemy entries on legal lanes', async ({
@@ -2847,6 +2968,104 @@ async function closeInspectorIfVisible(page) {
   if (await inspector.isVisible()) {
     await page.getByTestId('workbench-close-side-inspector').click();
   }
+}
+
+async function prepareBasicWorkbenchScenario(page) {
+  const draft = createBasicWorkbenchDraftFixture();
+  await page.addInitScript(
+    ({ storageKey, draftState }) => {
+      const markerKey = 'promilia-axis-tool:e2e-basic-draft-seeded';
+      if (window.sessionStorage.getItem(markerKey) === '1') {
+        return;
+      }
+      window.localStorage.setItem(storageKey, JSON.stringify(draftState));
+      window.sessionStorage.setItem(markerKey, '1');
+    },
+    {
+      storageKey: BASIC_WORKBENCH_DRAFT_STORAGE_KEY,
+      draftState: draft,
+    }
+  );
+  await page.goto('/#/workbench');
+  const scenarioBar = page.getByTestId('workbench-scenario-bar');
+  await expect(scenarioBar).toBeVisible();
+  await expect(scenarioBar).toHaveAttribute('data-scenario-count', '1');
+  await expect(page.getByTestId('workbench-scenario-tab')).toHaveAttribute(
+    'data-scenario-id',
+    'scenario-0001'
+  );
+}
+
+async function expectDemoMilestoneState(page, { resourceFrameIndex }) {
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const actorEnergyCurve = characterId =>
+    timeline.locator(
+      `[data-testid="workbench-timeline-row"][data-lane-id="energy-actor-${characterId}"] [data-testid="workbench-timeline-state-curve"]`
+    );
+  const kiboEnergyCurves = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"] [data-testid="workbench-timeline-state-curve"]'
+  );
+  const resourceBreakpoint = actorEnergyCurve(101003).locator(
+    '[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id="demo-actor-2-energy"]'
+  );
+
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="actor-action"]'
+    )
+  ).toHaveCount(3);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="actor-kibo"]'
+    )
+  ).toHaveCount(3);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="actor-energy-curve"]'
+    )
+  ).toHaveCount(3);
+  await expect(kiboEnergyCurves).toHaveCount(3);
+  await expect(
+    timeline.getByTestId('workbench-timeline-state-curve')
+  ).toHaveCount(8);
+  await expect(actorEnergyCurve(109001)).toHaveAttribute(
+    'data-point-count',
+    '0'
+  );
+  await expect(actorEnergyCurve(101003)).toHaveAttribute(
+    'data-point-count',
+    '1'
+  );
+  await expect(actorEnergyCurve(101007)).toHaveAttribute(
+    'data-point-count',
+    '0'
+  );
+  await expect(kiboEnergyCurves.nth(0)).toHaveAttribute(
+    'data-point-count',
+    '0'
+  );
+  await expect(kiboEnergyCurves.nth(1)).toHaveAttribute(
+    'data-point-count',
+    '0'
+  );
+  await expect(kiboEnergyCurves.nth(2)).toHaveAttribute(
+    'data-point-count',
+    '0'
+  );
+  await expect(resourceBreakpoint).toHaveAttribute(
+    'data-frame-index',
+    String(resourceFrameIndex)
+  );
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="enemy-hp-curve"] [data-testid="workbench-timeline-state-curve"]'
+    )
+  ).toHaveAttribute('data-point-count', '3');
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="enemy-toughness-curve"] [data-testid="workbench-timeline-state-curve"]'
+    )
+  ).toHaveAttribute('data-point-count', '1');
 }
 
 async function readTimelineFirstLayout(page) {

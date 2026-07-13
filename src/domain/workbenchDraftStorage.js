@@ -5,6 +5,8 @@ import {
   createDefaultWorkbenchActorConfigs,
   createDefaultWorkbenchTeamSlots,
   createWorkbenchActionDraft,
+  getSkillsForCharacter,
+  getWorkbenchLoadoutOptions,
   normalizeWorkbenchActorConfigs,
   normalizeWorkbenchEnemyConfig,
   normalizeWorkbenchActionDrafts,
@@ -58,6 +60,50 @@ export const DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS = Object.freeze({
   skipExistingSegments: false,
 });
 
+export const DEFAULT_WORKBENCH_DEMO_SCENARIO_NAME = '示例方案 · 预览数据';
+
+function resolveDemoSkillId(slot, fallbackSkillId = null) {
+  return (
+    getSkillsForCharacter(slot?.characterId)[0]?.id ??
+    fallbackSkillId ??
+    DEFAULT_WORKBENCH_SELECTION.skillId
+  );
+}
+
+function createDefaultWorkbenchDemoToughnessCapture({
+  actionId,
+  actorCharacterId,
+}) {
+  const captureSessionId = 'built-in-m1-demo-toughness-preview-v1';
+  const toughnessBefore = 6667;
+  const toughnessDeltaApplied = 70;
+
+  return {
+    schemaVersion: 1,
+    captureSessionId,
+    clientRegion: 'built-in-preview',
+    clientBuild: 'm1-demo',
+    source: 'built-in-m1-example-preview-not-game-capture',
+    events: [
+      {
+        captureSessionId,
+        eventType: 'toughness-damage-applied',
+        actionId,
+        actorId: `actor-${actorCharacterId}`,
+        targetId: `enemy-${DEFAULT_WORKBENCH_SELECTION.enemyId}`,
+        targetEntityId: `demo-enemy-${DEFAULT_WORKBENCH_SELECTION.enemyId}`,
+        sourceElementConfigId: 109001081,
+        pathId: '3476557355496561381',
+        frameIndex: 36,
+        timeMs: 600,
+        toughnessBefore,
+        toughnessAfter: toughnessBefore - toughnessDeltaApplied,
+        toughnessDeltaApplied,
+      },
+    ],
+  };
+}
+
 export function createDefaultWorkbenchDraftState() {
   const teamSlots = createDefaultWorkbenchTeamSlots();
   const selection = normalizeWorkbenchSelection(
@@ -82,6 +128,107 @@ export function createDefaultWorkbenchDraftState() {
     },
     null
   );
+}
+
+export function createDefaultWorkbenchDemoDraftState() {
+  const teamSlots = createDefaultWorkbenchTeamSlots();
+  const selection = normalizeWorkbenchSelection(
+    DEFAULT_WORKBENCH_SELECTION,
+    teamSlots
+  );
+  const actorConfigs = createDefaultWorkbenchActorConfigs(selection).map(
+    (config, index) => ({
+      ...config,
+      loadout: {
+        ...config.loadout,
+        kiboId: getWorkbenchLoadoutOptions().kibos[index]?.id ?? null,
+      },
+    })
+  );
+  const [firstSlot, secondSlot, thirdSlot] = teamSlots;
+  const firstSkillId = resolveDemoSkillId(firstSlot, selection.skillId);
+  const secondSkillId = resolveDemoSkillId(secondSlot);
+  const thirdSkillId = resolveDemoSkillId(thirdSlot);
+  const actionDrafts = [
+    createWorkbenchActionDraft({
+      id: DEFAULT_WORKBENCH_ACTION_ID,
+      type: 'skill',
+      skillId: firstSkillId,
+      actorCharacterId: firstSlot.characterId,
+      startMs: 0,
+      note: '示例预览：HP 使用当前 raw preview，不代表最终伤害。',
+    }),
+    createWorkbenchActionDraft({
+      id: 'demo-actor-2-skill',
+      type: 'skill',
+      skillId: secondSkillId,
+      actorCharacterId: secondSlot.characterId,
+      startMs: 3000,
+      note: '示例预览：角色 2 动作。',
+    }),
+    createWorkbenchActionDraft({
+      id: 'demo-actor-2-energy',
+      type: 'resource',
+      actorCharacterId: secondSlot.characterId,
+      startMs: 4800,
+      durationMs: 1,
+      change: 50,
+      reason: 'built-in-demo-preview-energy',
+      note: '示例预览：显式资源事件，只改变角色 2 能量。',
+    }),
+    createWorkbenchActionDraft({
+      id: 'demo-kibo-2-event',
+      type: 'kiboEvent',
+      actorCharacterId: secondSlot.characterId,
+      startMs: 6500,
+      durationMs: 600,
+      eventType: 'activation',
+      note: '示例预览：奇波事件可编排，未确认能量效果保持 unapplied。',
+    }),
+    createWorkbenchActionDraft({
+      id: 'demo-actor-3-skill',
+      type: 'skill',
+      skillId: thirdSkillId,
+      actorCharacterId: thirdSlot.characterId,
+      startMs: 8500,
+      note: '示例预览：角色 3 动作。',
+    }),
+    createWorkbenchActionDraft({
+      id: 'demo-enemy-event',
+      type: 'enemyEvent',
+      actorCharacterId: firstSlot.characterId,
+      startMs: 11000,
+      durationMs: 900,
+      eventType: 'phase',
+      note: '示例预览：敌人事件不自动推断 HP 或韧性变化。',
+    }),
+  ];
+  const draft = createWorkbenchDraftSnapshot(
+    {
+      selection,
+      teamSlots,
+      actorConfigs,
+      enemyConfig: { ...DEFAULT_WORKBENCH_ENEMY_CONFIG },
+      gameDataBinding: normalizeWorkbenchGameDataBinding(),
+      mechanicsProfileSelection: normalizeWorkbenchMechanicsProfileSelection(),
+      segmentSplitOptions: { ...DEFAULT_WORKBENCH_SEGMENT_SPLIT_OPTIONS },
+      actionDrafts,
+      actionRelations: [],
+      cycleBoundaries: [],
+      initialRuntimeState: null,
+      runtimeSampleCaptures: [
+        createDefaultWorkbenchDemoToughnessCapture({
+          actionId: DEFAULT_WORKBENCH_ACTION_ID,
+          actorCharacterId: firstSlot.characterId,
+        }),
+      ],
+      selectedActionId: DEFAULT_WORKBENCH_ACTION_ID,
+    },
+    null
+  );
+  draft.scenarioWorkspace.scenarios[0].name =
+    DEFAULT_WORKBENCH_DEMO_SCENARIO_NAME;
+  return draft;
 }
 
 export function createWorkbenchDraftSnapshot(

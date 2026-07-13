@@ -14,6 +14,7 @@ const REQUIRED_CAPABILITIES = [
   'm1a-timeline-identity',
   'm1b-team-kibo-energy',
   'm1c-library-to-runtime',
+  'm1d-demo-milestone',
   'stage-10a-multitrack-editing',
   'stage-10b-cross-lane-batch-editing',
   'stage-10c-frame-cursor-review',

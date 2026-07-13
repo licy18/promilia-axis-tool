@@ -27186,3 +27186,22 @@ ActionLibraryPointerDrag (transient only)
 ```
 
 落点继续由 `resolveWorkbenchTimelineLaneTarget` 和 `isWorkbenchTimelineEntryAllowedInLane` 校验，再调用既有 `insertTimelineEntry({ entry, laneId, startMs })`。`startMs` 使用 60fps 帧吸附；后续动作草稿、runtime outputs、六条能量轴、敌人 HP/韧性、日志和项目交换均沿用原合同。因此本阶段不需要 schema migration，指针状态也不会进入本地草稿、JSON、分享链接或 PNG。
+
+## 415. Built-in M1 demo / existing Workbench v16 contracts
+
+M1-D 没有升级 Workbench 项目 schema。`createDefaultWorkbenchDemoDraftState()` 使用现有 v16 草稿、方案工作区、动作、角色配置和 runtime sample capture 合同生成首次打开时的示例；重置或新建方案仍使用基础草稿，不会重复注入示例。
+
+```text
+DefaultWorkbenchDemoDraft (Workbench v16)
+  scenario name = 示例方案 · 预览数据
+  actorConfigs[3].loadout.kiboId
+  actionDrafts
+    actor skill actions
+    explicit actor resource action
+    kibo event
+    enemy event
+  runtimeSampleCaptures
+    built-in preview toughness event
+```
+
+示例资源动作只写入所属角色的既有 `selfEnergyChange`；3 条奇波能量轴继续来自 `curvesByKibo` 的 tracking-only 零值基线。内置韧性事件的来源明确包含 `example/preview`，因此不能通过 production capture 真实性门禁，也不会成为新的机制证据。方案复制、本地草稿、JSON、分享链接和 PNG 直接序列化现有字段，无新增迁移或兼容分支。
