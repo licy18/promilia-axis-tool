@@ -36,17 +36,12 @@
         <span>蓝色星原排轴</span>
       </div>
       <div class="nav-side">
-        <div class="nav-status">
-          <span>真实数据</span>
-          <span>Schema v{{ project.schemaVersion }}</span>
-          <span>{{ simulationResult.summary.formulaVersion }}</span>
-        </div>
+        <span class="draft-status" data-testid="workbench-draft-status">{{
+          draftStatus
+        }}</span>
         <div class="nav-actions">
-          <span class="draft-status" data-testid="workbench-draft-status">{{
-            draftStatus
-          }}</span>
           <button
-            class="nav-button secondary"
+            class="nav-button icon-only secondary"
             :data-history-count="workbenchHistoryView.undoCount"
             data-testid="workbench-undo-edit"
             type="button"
@@ -56,10 +51,9 @@
             @click="undoWorkbenchEdit"
           >
             <ArrowLeft class="button-icon" />
-            <span>撤销</span>
           </button>
           <button
-            class="nav-button secondary"
+            class="nav-button icon-only secondary"
             :data-history-count="workbenchHistoryView.redoCount"
             data-testid="workbench-redo-edit"
             type="button"
@@ -69,7 +63,6 @@
             @click="redoWorkbenchEdit"
           >
             <ArrowRight class="button-icon" />
-            <span>重做</span>
           </button>
           <button
             class="nav-button"
@@ -78,65 +71,107 @@
             @click="saveDraft"
           >
             <Document class="button-icon" />
-            <span>保存草稿</span>
+            <span>保存</span>
           </button>
           <button
-            class="nav-button secondary"
-            data-testid="workbench-open-presets"
+            class="nav-button run-command"
+            data-testid="workbench-open-runtime"
             type="button"
-            @click="openWorkbenchPresetLibrary"
-          >
-            <FolderOpened class="button-icon" />
-            <span>预设库</span>
-          </button>
-          <button
-            class="nav-button secondary"
-            data-testid="workbench-open-comparison"
-            type="button"
-            @click="openScenarioComparison"
+            :disabled="!mainFlowCommandSurface.openRuntimeResults.view.enabled"
+            @click="
+              dispatchWorkbenchFlowAction(
+                mainFlowCommandSurface.openRuntimeResults.action
+              )
+            "
           >
             <TrendCharts class="button-icon" />
-            <span>方案对比</span>
+            <span>运行</span>
           </button>
           <button
-            class="nav-button secondary"
-            data-testid="workbench-export-project"
+            class="nav-button icon-only secondary"
+            :class="{ active: timelinePlaybackRunning }"
+            data-testid="workbench-top-playback-toggle"
             type="button"
-            @click="exportProjectFile"
+            :title="timelinePlaybackRunning ? '暂停时间轴' : '播放时间轴'"
+            :aria-label="timelinePlaybackRunning ? '暂停时间轴' : '播放时间轴'"
+            @click="toggleTimelinePlayback"
           >
-            <Download class="button-icon" />
-            <span>导出 JSON</span>
+            <VideoPause v-if="timelinePlaybackRunning" class="button-icon" />
+            <VideoPlay v-else class="button-icon" />
           </button>
-          <button
-            class="nav-button secondary"
-            :data-exporting="pngExporting ? 'true' : 'false'"
-            data-testid="workbench-export-project-png"
-            type="button"
-            :disabled="pngExporting"
-            @click="exportProjectPng"
-          >
-            <Picture class="button-icon" />
-            <span>{{ pngExporting ? '正在导出' : '导出 PNG' }}</span>
-          </button>
-          <button
-            class="nav-button secondary"
-            data-testid="workbench-import-project"
-            type="button"
-            @click="openProjectImport"
-          >
-            <Upload class="button-icon" />
-            <span>导入项目</span>
-          </button>
-          <button
-            class="nav-button secondary"
-            :data-share-url="projectShareUrl"
-            data-testid="workbench-share-project"
-            type="button"
-            @click="copyProjectShareLink"
-          >
-            <LinkIcon class="button-icon" />
-            <span>分享链接</span>
-          </button>
+          <details class="project-menu" data-testid="workbench-project-menu">
+            <summary title="项目与高级功能">
+              <FolderOpened class="button-icon" />
+              <span>项目</span>
+              <ArrowDown class="menu-chevron" />
+            </summary>
+            <div class="project-menu-panel">
+              <button
+                data-testid="workbench-open-presets"
+                type="button"
+                @click="openWorkbenchPresetLibrary"
+              >
+                <FolderOpened class="button-icon" />
+                <span>预设库</span>
+              </button>
+              <button
+                data-testid="workbench-open-comparison"
+                type="button"
+                @click="openScenarioComparison"
+              >
+                <TrendCharts class="button-icon" />
+                <span>方案对比</span>
+              </button>
+              <button
+                data-testid="workbench-export-project"
+                type="button"
+                @click="exportProjectFile"
+              >
+                <Download class="button-icon" />
+                <span>导出 JSON</span>
+              </button>
+              <button
+                :data-exporting="pngExporting ? 'true' : 'false'"
+                data-testid="workbench-export-project-png"
+                type="button"
+                :disabled="pngExporting"
+                @click="exportProjectPng"
+              >
+                <Picture class="button-icon" />
+                <span>{{ pngExporting ? '正在导出' : '导出 PNG' }}</span>
+              </button>
+              <button
+                data-testid="workbench-import-project"
+                type="button"
+                @click="openProjectImport"
+              >
+                <Upload class="button-icon" />
+                <span>导入项目</span>
+              </button>
+              <button
+                :data-share-url="projectShareUrl"
+                data-testid="workbench-share-project"
+                type="button"
+                @click="copyProjectShareLink"
+              >
+                <LinkIcon class="button-icon" />
+                <span>分享链接</span>
+              </button>
+              <button
+                data-testid="workbench-reset-draft"
+                type="button"
+                @click="resetDraft"
+              >
+                <Refresh class="button-icon" />
+                <span>重置方案</span>
+              </button>
+              <div class="project-menu-status">
+                <span>真实数据</span>
+                <span>Schema v{{ project.schemaVersion }}</span>
+                <span>{{ simulationResult.summary.formulaVersion }}</span>
+              </div>
+            </div>
+          </details>
           <input
             ref="projectImportInput"
             class="project-import-input"
@@ -145,15 +180,6 @@
             accept=".json,.jsonl,.ndjson,.promilia-workbench.json,.png,application/json,application/x-ndjson,image/png"
             @change="importProjectFile"
           />
-          <button
-            class="nav-button secondary"
-            data-testid="workbench-reset-draft"
-            type="button"
-            @click="resetDraft"
-          >
-            <Refresh class="button-icon" />
-            <span>重置</span>
-          </button>
         </div>
       </div>
     </nav>
@@ -231,28 +257,6 @@
       @delete-relation="deleteActionRelation(selectedActionRelationId)"
       @add-cycle-boundary="addCycleBoundary(actionContextMenu.targetStartMs)"
       @delete-cycle-boundary="deleteCycleBoundary(selectedCycleBoundaryId)"
-    />
-
-    <WorkbenchFlowPanel
-      :selected-action="selectedAction"
-      :generation-bundle="simulationResult.threeValueGenerationBundle"
-      :runtime-projection="simulationResult.threeValueRuntimeProjection"
-      :runtime-outputs="runtimeOutputs"
-      :runtime-selected-detail="runtimeSelectedDetail"
-      :selected-state-curve-point-id="selectedStateCurvePointId"
-      :runtime-overview-active="runtimeOverviewActive"
-      :action-edit-result-context="actionEditResultContext"
-      :flow-model="workbenchFlowModel"
-      :main-flow-command-surface="mainFlowCommandSurface"
-      @dispatch-flow-action="dispatchWorkbenchFlowAction"
-      @insert-next-action="addAction"
-    />
-
-    <WorkbenchLayoutBar
-      :layout="workbenchLayout"
-      @set-mode="setWorkbenchLayoutMode"
-      @toggle-panel="toggleWorkbenchLayoutSide"
-      @reset="resetWorkbenchLayout"
     />
 
     <div
@@ -406,12 +410,14 @@
         <TimelineGridPreview
           class="timeline-area"
           :actors="scenario.actors"
+          :characters="workbenchSeed.gameData.characters"
           :enemy="scenario.enemy"
           :timeline-topology="project.metadata.timelineTopology"
           :kibos="loadoutOptions.kibos"
           :actions="scenario.actions"
           :timeline-entry-catalog="timelineEntryCatalog"
           :timeline-entry-default-actor-id="actionLibraryActor.id"
+          :active-actor-character-id="actionLibraryCharacterId"
           :damage-timeline="simulationResult.damageTimeline"
           :candidate-value-chart="simulationResult.candidateValueSeries.chart"
           :three-value-curve-framework="
@@ -446,6 +452,7 @@
           :action-readiness-timeline="simulationResult.actionReadinessTimeline"
           :main-flow-command-surface="mainFlowCommandSurface"
           @select-action="selectAction"
+          @select-identity="selectTimelineIdentity"
           @select-action-group="selectActionGroup"
           @select-action-relation="selectActionRelation"
           @select-effect-interval="selectEffectInterval"
@@ -493,6 +500,30 @@
           :scenario="simulationResult.scenario"
           :summary="simulationResult.summary"
         />
+
+        <div class="secondary-workspace-tools">
+          <WorkbenchFlowPanel
+            :selected-action="selectedAction"
+            :generation-bundle="simulationResult.threeValueGenerationBundle"
+            :runtime-projection="simulationResult.threeValueRuntimeProjection"
+            :runtime-outputs="runtimeOutputs"
+            :runtime-selected-detail="runtimeSelectedDetail"
+            :selected-state-curve-point-id="selectedStateCurvePointId"
+            :runtime-overview-active="runtimeOverviewActive"
+            :action-edit-result-context="actionEditResultContext"
+            :flow-model="workbenchFlowModel"
+            :main-flow-command-surface="mainFlowCommandSurface"
+            @dispatch-flow-action="dispatchWorkbenchFlowAction"
+            @insert-next-action="addAction"
+          />
+
+          <WorkbenchLayoutBar
+            :layout="workbenchLayout"
+            @set-mode="setWorkbenchLayoutMode"
+            @toggle-panel="toggleWorkbenchLayoutSide"
+            @reset="resetWorkbenchLayout"
+          />
+        </div>
 
         <div
           class="runtime-review-stack"
@@ -636,10 +667,27 @@
 
       <div
         class="side-stack"
+        v-show="sideInspectorVisible"
         :data-flow-phase="mainFlowWorkspaceView.phase"
         :data-main-flow-inspector-mode="mainFlowWorkspaceView.inspector.mode"
+        :data-inspector-selection-key="sideInspectorSelectionKey"
         data-testid="workbench-side-inspector"
       >
+        <header class="side-stack-header">
+          <div>
+            <span>检查器</span>
+            <strong>{{ sideInspectorTitle }}</strong>
+          </div>
+          <button
+            type="button"
+            title="收起检查器"
+            aria-label="收起检查器"
+            data-testid="workbench-close-side-inspector"
+            @click="dismissSideInspector"
+          >
+            <CloseBold />
+          </button>
+        </header>
         <div
           class="side-stack-panel"
           :data-inspector-panel-order="sideInspectorPanelOrders.actionRules"
@@ -830,6 +878,7 @@
       <TimelineGridPreview
         class="png-export-timeline"
         :actors="scenario.actors"
+        :characters="workbenchSeed.gameData.characters"
         :enemy="scenario.enemy"
         :timeline-topology="project.metadata.timelineTopology"
         :kibos="loadoutOptions.kibos"
@@ -863,8 +912,10 @@ import {
 } from 'vue';
 import {
   Aim,
+  ArrowDown,
   ArrowLeft,
   ArrowRight,
+  CloseBold,
   Document,
   Download,
   EditPen,
@@ -874,6 +925,8 @@ import {
   Refresh,
   TrendCharts,
   Upload,
+  VideoPause,
+  VideoPlay,
 } from '@element-plus/icons-vue';
 import ActionLibraryPanel from '../features/workbench/ActionLibraryPanel.vue';
 import AnalysisPanel from '../features/workbench/AnalysisPanel.vue';
@@ -1154,6 +1207,10 @@ const calculatorDiagnosticScope = ref('');
 const calculatorDiagnosticFocus = ref({ scope: '', sequence: 0 });
 const runtimeLogFocus = ref({ source: '', statePointId: '', sequence: 0 });
 const actionLibraryCharacterId = ref(initialDraft.selection.characterId);
+const selectedTimelineIdentity = ref(null);
+const dismissedSideInspectorKey = ref(
+  initialDraft.selectedActionId ? `action:${initialDraft.selectedActionId}` : ''
+);
 const draftStatus = ref('未保存草稿');
 const projectShareUrl = ref('');
 const presetDialogVisible = ref(false);
@@ -1587,6 +1644,25 @@ const selectedDraft = computed(() => {
     actionDrafts.value[0]
   );
 });
+const sideInspectorSelectionKey = computed(() => {
+  if (selectedActionId.value) return `action:${selectedActionId.value}`;
+  if (selectedStateCurvePointId.value) {
+    return `runtime:${selectedStateCurvePointId.value}`;
+  }
+  return selectedTimelineIdentity.value?.key ?? '';
+});
+const sideInspectorTitle = computed(() => {
+  if (selectedActionId.value) {
+    return selectedAction.value?.name ?? '动作详情';
+  }
+  if (selectedStateCurvePointId.value) return '运行结果';
+  return selectedTimelineIdentity.value?.label ?? '队伍配置';
+});
+const sideInspectorVisible = computed(
+  () =>
+    Boolean(sideInspectorSelectionKey.value) &&
+    dismissedSideInspectorKey.value !== sideInspectorSelectionKey.value
+);
 const workbenchHistoryView = computed(() => ({
   canUndo: undoHistoryStack.value.length > 0,
   canRedo: redoHistoryStack.value.length > 0,
@@ -1605,6 +1681,7 @@ const workbenchLayoutStyle = computed(() => ({
 watch(
   selectedActionId,
   actionId => {
+    if (actionId) selectedTimelineIdentity.value = null;
     if (actionId && !selectedActionIds.value.includes(actionId)) {
       selectedActionIds.value = [actionId];
       actionSelectionAnchorId.value = actionId;
@@ -1612,6 +1689,10 @@ watch(
   },
   { flush: 'sync' }
 );
+
+watch(sideInspectorSelectionKey, (nextKey, previousKey) => {
+  if (nextKey !== previousKey) dismissedSideInspectorKey.value = '';
+});
 
 watch(
   () => effectIntervalProjection.value.intervals,
@@ -4628,6 +4709,7 @@ function findActionDraftById(actionId) {
 
 function selectAction(actionRequest, { syncRuntimeResult = true } = {}) {
   clearSegmentSplitPreview();
+  dismissedSideInspectorKey.value = '';
   selectedActionRelationId.value = '';
   selectedCycleBoundaryId.value = '';
   selectedEffectIntervalId.value = '';
@@ -6164,6 +6246,33 @@ function canAssignActionLane(action) {
   ].includes(action.type);
 }
 
+function selectTimelineIdentity(identity = {}) {
+  const kind = identity.kind === 'enemy' ? 'enemy' : 'actor';
+  selectedActionId.value = '';
+  selectedActionIds.value = [];
+  actionSelectionAnchorId.value = '';
+  selectedStateCurvePointId.value = '';
+  selectedTimelineIdentity.value = {
+    kind,
+    key:
+      kind === 'enemy'
+        ? `enemy:${scenario.value.enemy.id}`
+        : `actor:${Number(identity.characterId)}`,
+    label:
+      identity.label ??
+      (kind === 'enemy'
+        ? scenario.value.enemy.name
+        : resolveActionEditCharacterName(identity.characterId)),
+  };
+  if (kind === 'actor') {
+    setActionLibraryCharacterId(identity.characterId);
+  }
+}
+
+function dismissSideInspector() {
+  dismissedSideInspectorKey.value = sideInspectorSelectionKey.value;
+}
+
 function setActionLibraryCharacterId(characterId) {
   clearSegmentSplitPreview();
   const actor = scenario.value.actors.find(
@@ -6360,9 +6469,9 @@ function getLocalStorage() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 18px;
-  min-height: 48px;
-  padding: 0 24px;
+  gap: 14px;
+  min-height: 46px;
+  padding: 0 14px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   background: #101419;
 }
@@ -6380,33 +6489,20 @@ function getLocalStorage() {
   height: 16px;
 }
 
-.nav-status {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.nav-status span {
-  padding: 3px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 4px;
-  color: #b8c0c7;
-  font-size: 12px;
-}
-
 .nav-side {
-  display: grid;
-  justify-items: end;
-  gap: 8px;
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .nav-actions {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 5px;
 }
 
 .draft-status {
@@ -6418,7 +6514,8 @@ function getLocalStorage() {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 5px 9px;
+  min-height: 28px;
+  padding: 4px 8px;
   border: 1px solid rgba(121, 199, 185, 0.38);
   border-radius: 4px;
   background: rgba(121, 199, 185, 0.12);
@@ -6426,6 +6523,18 @@ function getLocalStorage() {
   cursor: pointer;
   font: inherit;
   font-size: 12px;
+}
+
+.nav-button.icon-only {
+  width: 28px;
+  padding: 0;
+  justify-content: center;
+}
+
+.nav-button.active,
+.nav-button.run-command {
+  border-color: rgba(121, 199, 185, 0.72);
+  background: rgba(121, 199, 185, 0.2);
 }
 
 .nav-button.secondary {
@@ -6449,6 +6558,102 @@ function getLocalStorage() {
   height: 14px;
 }
 
+.project-menu {
+  position: relative;
+  z-index: 90;
+}
+
+.project-menu summary {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  gap: 5px;
+  padding: 0 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #d9dee3;
+  font-size: 12px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.project-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.project-menu[open] summary {
+  border-color: rgba(121, 199, 185, 0.68);
+  background: rgba(121, 199, 185, 0.14);
+}
+
+.menu-chevron {
+  width: 11px;
+  height: 11px;
+  transition: transform 140ms ease;
+}
+
+.project-menu[open] .menu-chevron {
+  transform: rotate(180deg);
+}
+
+.project-menu-panel {
+  position: absolute;
+  top: calc(100% + 7px);
+  right: 0;
+  display: grid;
+  width: 210px;
+  gap: 4px;
+  padding: 7px;
+  border: 1px solid rgba(121, 199, 185, 0.34);
+  border-radius: 4px;
+  background: #10161b;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.52);
+}
+
+.project-menu-panel button {
+  display: grid;
+  min-height: 31px;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  color: #dbe3e7;
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.project-menu-panel button:hover,
+.project-menu-panel button:focus-visible {
+  border-color: rgba(121, 199, 185, 0.34);
+  background: #1d2a28;
+  outline: none;
+}
+
+.project-menu-panel button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.project-menu-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 7px 5px 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.project-menu-status span {
+  color: #73818a;
+  font-size: 9px;
+}
+
 .project-import-input {
   display: none;
 }
@@ -6457,15 +6662,13 @@ function getLocalStorage() {
   display: grid;
   grid-template-columns:
     minmax(0, var(--workbench-left-panel-width, 260px))
-    14px
-    minmax(0, 1fr)
-    14px
-    minmax(0, var(--workbench-right-panel-width, 300px));
+    10px
+    minmax(0, 1fr);
   grid-template-areas:
-    'mainflow mainflow mainflow mainflow mainflow'
-    'actions left-resizer review right-resizer inspector';
-  gap: 14px 0;
-  padding: 14px;
+    'mainflow mainflow mainflow'
+    'actions left-resizer review';
+  gap: 12px 0;
+  padding: 10px;
 }
 
 .action-library {
@@ -6488,6 +6691,11 @@ function getLocalStorage() {
   align-content: start;
   gap: 14px;
   min-width: 0;
+}
+
+.secondary-workspace-tools {
+  display: grid;
+  gap: 8px;
 }
 
 .runtime-review-stack {
@@ -6561,11 +6769,75 @@ function getLocalStorage() {
 }
 
 .side-stack {
-  grid-area: inspector;
+  position: fixed;
+  top: 108px;
+  right: 10px;
+  bottom: 10px;
+  z-index: 70;
   display: grid;
   align-content: start;
-  gap: 14px;
+  width: min(var(--workbench-right-panel-width, 340px), calc(100vw - 24px));
+  min-width: 280px;
+  gap: 10px;
+  padding: 0 8px 10px;
+  overflow-y: auto;
+  border: 1px solid rgba(121, 199, 185, 0.28);
+  border-radius: 4px;
+  background: rgba(15, 21, 26, 0.98);
+  box-shadow: -18px 20px 50px rgba(0, 0, 0, 0.46);
+}
+
+.side-stack-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  background: #0f151a;
+}
+
+.side-stack-header > div {
+  display: grid;
   min-width: 0;
+  gap: 2px;
+}
+
+.side-stack-header span {
+  color: #6f7e87;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.side-stack-header strong {
+  overflow: hidden;
+  color: #eef7f5;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.side-stack-header button {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  background: #1b2329;
+  color: #cbd5da;
+  cursor: pointer;
+}
+
+.side-stack-header svg {
+  width: 13px;
+  height: 13px;
 }
 
 .workspace-resizer {
@@ -6581,6 +6853,7 @@ function getLocalStorage() {
 
 .workspace-resizer-right {
   grid-area: right-resizer;
+  display: none;
 }
 
 .workspace-resizer::before {
@@ -6616,32 +6889,19 @@ function getLocalStorage() {
   grid-template-columns:
     0
     0
-    minmax(0, 1fr)
-    14px
-    minmax(0, var(--workbench-right-panel-width, 300px));
-}
-
-.workbench-grid.layout-right-collapsed {
-  grid-template-columns:
-    minmax(0, var(--workbench-left-panel-width, 260px))
-    14px
-    minmax(0, 1fr)
-    0
-    0;
+    minmax(0, 1fr);
 }
 
 .workbench-grid.layout-left-collapsed.layout-right-collapsed {
-  grid-template-columns: 0 0 minmax(0, 1fr) 0 0;
+  grid-template-columns: 0 0 minmax(0, 1fr);
 }
 
-.workbench-grid.layout-left-collapsed .action-library,
-.workbench-grid.layout-right-collapsed .side-stack {
+.workbench-grid.layout-left-collapsed .action-library {
   visibility: hidden;
   pointer-events: none;
 }
 
-.workbench-grid.layout-left-collapsed .workspace-resizer-left,
-.workbench-grid.layout-right-collapsed .workspace-resizer-right {
+.workbench-grid.layout-left-collapsed .workspace-resizer-left {
   display: none;
 }
 
@@ -6724,9 +6984,8 @@ function getLocalStorage() {
       minmax(0, 1fr);
     grid-template-areas:
       'mainflow mainflow'
-      'review review'
-      'actions inspector';
-    column-gap: 14px;
+      'actions review';
+    column-gap: 10px;
   }
 
   .workbench-grid.layout-left-collapsed,
@@ -6737,8 +6996,7 @@ function getLocalStorage() {
   .workbench-grid.layout-right-collapsed {
     grid-template-areas:
       'mainflow mainflow'
-      'review review'
-      'actions actions';
+      'actions review';
   }
 
   .workspace-resizer {
@@ -6748,21 +7006,31 @@ function getLocalStorage() {
 
 @media (max-width: 760px) {
   .top-nav {
-    align-items: flex-start;
-    flex-direction: column;
-    padding: 12px 16px;
-  }
-
-  .nav-status {
-    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    padding: 7px 8px;
+    overflow: hidden;
   }
 
   .nav-side {
-    justify-items: start;
+    flex: 1;
+    justify-content: flex-end;
+    overflow-x: auto;
   }
 
   .nav-actions {
-    justify-content: flex-start;
+    justify-content: flex-end;
+  }
+
+  .workbench-brand span,
+  .draft-status {
+    display: none;
+  }
+
+  .project-menu-panel {
+    position: fixed;
+    top: 48px;
+    right: 8px;
   }
 
   .workbench-grid,
@@ -6773,15 +7041,23 @@ function getLocalStorage() {
     grid-template-areas:
       'mainflow'
       'review'
-      'actions'
-      'inspector';
-    padding: 10px;
+      'actions';
+    padding: 6px;
   }
 
-  .workbench-grid.layout-left-collapsed .action-library,
-  .workbench-grid.layout-right-collapsed .side-stack {
+  .workbench-grid.layout-left-collapsed .action-library {
     visibility: visible;
     pointer-events: auto;
+  }
+
+  .side-stack {
+    top: auto;
+    right: 6px;
+    bottom: 6px;
+    left: 6px;
+    width: auto;
+    min-width: 0;
+    max-height: 72vh;
   }
 
   .runtime-review-stack[data-runtime-review-layout='result-check'] {

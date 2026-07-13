@@ -187,141 +187,155 @@
           formatZoom(timelineZoom)
         }}</span>
       </div>
-      <div
-        v-if="candidateSeriesToggles.length"
-        class="candidate-toggle-group"
-        data-testid="workbench-candidate-value-toggle-group"
-      >
-        <label
-          v-for="toggle in candidateSeriesToggles"
-          :key="toggle.key"
-          class="candidate-toggle"
-          :data-series-key="toggle.key"
+      <details class="timeline-view-options">
+        <summary
+          title="曲线与诊断显示"
+          data-testid="workbench-timeline-view-options-toggle"
         >
-          <input
-            type="checkbox"
-            :checked="isCandidateSeriesVisible(toggle.key)"
-            :data-series-key="toggle.key"
-            data-testid="workbench-candidate-value-toggle"
-            @change="
-              setCandidateSeriesVisible(toggle.key, $event.target.checked)
-            "
-          />
-          <i :style="{ background: toggle.color }" />
-          <span>{{ toggle.shortLabel }}</span>
-        </label>
-      </div>
-      <div
-        v-if="candidateSeriesToggles.length"
-        class="candidate-scope-group"
-        data-testid="workbench-candidate-value-scope-group"
-      >
-        <button
-          v-for="scope in CANDIDATE_DISPLAY_SCOPE_OPTIONS"
-          :key="scope.key"
-          class="candidate-scope"
-          :class="{ active: candidateDisplayScope === scope.key }"
-          type="button"
-          :disabled="
-            scope.key === 'selected-frame' && !selectedCandidateFrameGroupId
-          "
-          :data-scope-key="scope.key"
-          data-testid="workbench-candidate-value-scope-option"
-          @click="setCandidateDisplayScope(scope.key)"
-        >
-          {{ scope.label }}
-        </button>
-      </div>
-      <div
-        v-if="candidateSeriesToggles.length"
-        class="candidate-filter-group"
-        data-testid="workbench-candidate-value-filter-group"
-      >
-        <label class="candidate-filter">
-          <span>角色</span>
-          <select
-            :value="candidateActorFilter"
-            data-testid="workbench-candidate-value-actor-filter"
-            @change="setCandidateActorFilter($event.target.value)"
+          <Operation class="control-icon" />
+          <span>显示</span>
+        </summary>
+        <div class="timeline-view-options-menu">
+          <div
+            v-if="candidateSeriesToggles.length"
+            class="candidate-toggle-group"
+            data-testid="workbench-candidate-value-toggle-group"
           >
-            <option value="all">全部</option>
-            <option
-              v-for="actor in candidateActorOptions"
-              :key="actor.id"
-              :value="actor.id"
+            <label
+              v-for="toggle in candidateSeriesToggles"
+              :key="toggle.key"
+              class="candidate-toggle"
+              :data-series-key="toggle.key"
             >
-              {{ actor.label }}
-            </option>
-          </select>
-        </label>
-        <label class="candidate-filter">
-          <span>动作</span>
-          <select
-            :value="candidateActionFilter"
-            data-testid="workbench-candidate-value-action-filter"
-            @change="setCandidateActionFilter($event.target.value)"
+              <input
+                type="checkbox"
+                :checked="isCandidateSeriesVisible(toggle.key)"
+                :data-series-key="toggle.key"
+                data-testid="workbench-candidate-value-toggle"
+                @change="
+                  setCandidateSeriesVisible(toggle.key, $event.target.checked)
+                "
+              />
+              <i :style="{ background: toggle.color }" />
+              <span>{{ toggle.shortLabel }}</span>
+            </label>
+          </div>
+          <div
+            v-if="candidateSeriesToggles.length"
+            class="candidate-scope-group"
+            data-testid="workbench-candidate-value-scope-group"
           >
-            <option value="all">全部</option>
-            <option
-              v-for="action in candidateActionOptions"
-              :key="action.id"
-              :value="action.id"
+            <button
+              v-for="scope in CANDIDATE_DISPLAY_SCOPE_OPTIONS"
+              :key="scope.key"
+              class="candidate-scope"
+              :class="{ active: candidateDisplayScope === scope.key }"
+              type="button"
+              :disabled="
+                scope.key === 'selected-frame' && !selectedCandidateFrameGroupId
+              "
+              :data-scope-key="scope.key"
+              data-testid="workbench-candidate-value-scope-option"
+              @click="setCandidateDisplayScope(scope.key)"
             >
-              {{ action.label }}
-            </option>
-          </select>
-        </label>
-      </div>
-      <div
-        v-if="stateCurveTimelineLayerOptions.length"
-        class="state-layer-toggle-group"
-        data-testid="workbench-timeline-state-layer-toggle-group"
-      >
-        <label
-          v-for="layer in stateCurveTimelineLayerOptions"
-          :key="layer.key"
-          class="state-layer-toggle"
-          :class="{ 'has-points': layer.pointCount > 0 }"
-          :data-layer-key="layer.key"
-        >
-          <input
-            type="checkbox"
-            :checked="isStateCurveTimelineLayerVisible(layer.key)"
-            :data-layer-key="layer.key"
-            :data-point-count="layer.pointCount"
-            data-testid="workbench-timeline-state-layer-toggle"
-            @change="
-              setStateCurveLayerVisible(layer.key, $event.target.checked)
-            "
-          />
-          <span>{{ layer.label }} {{ layer.pointCount }}</span>
-        </label>
-      </div>
-      <div
-        v-if="stateCurveTimelineTrackOptions.length"
-        class="state-track-toggle-group"
-        data-testid="workbench-timeline-state-track-toggle-group"
-      >
-        <label
-          v-for="track in stateCurveTimelineTrackOptions"
-          :key="track.trackKey"
-          class="state-track-toggle"
-          :class="{ 'has-points': track.pointCount > 0 }"
-          :data-track-key="track.trackKey"
-        >
-          <input
-            type="checkbox"
-            :checked="isStateCurveTrackVisible(track.trackKey)"
-            :data-track-key="track.trackKey"
-            :data-point-count="track.pointCount"
-            data-testid="workbench-timeline-state-track-toggle"
-            @change="
-              setStateCurveTrackVisible(track.trackKey, $event.target.checked)
-            "
-          />
-          <span>{{ track.label }} {{ track.pointCount }}</span>
-        </label>
-      </div>
+              {{ scope.label }}
+            </button>
+          </div>
+          <div
+            v-if="candidateSeriesToggles.length"
+            class="candidate-filter-group"
+            data-testid="workbench-candidate-value-filter-group"
+          >
+            <label class="candidate-filter">
+              <span>角色</span>
+              <select
+                :value="candidateActorFilter"
+                data-testid="workbench-candidate-value-actor-filter"
+                @change="setCandidateActorFilter($event.target.value)"
+              >
+                <option value="all">全部</option>
+                <option
+                  v-for="actor in candidateActorOptions"
+                  :key="actor.id"
+                  :value="actor.id"
+                >
+                  {{ actor.label }}
+                </option>
+              </select>
+            </label>
+            <label class="candidate-filter">
+              <span>动作</span>
+              <select
+                :value="candidateActionFilter"
+                data-testid="workbench-candidate-value-action-filter"
+                @change="setCandidateActionFilter($event.target.value)"
+              >
+                <option value="all">全部</option>
+                <option
+                  v-for="action in candidateActionOptions"
+                  :key="action.id"
+                  :value="action.id"
+                >
+                  {{ action.label }}
+                </option>
+              </select>
+            </label>
+          </div>
+          <div
+            v-if="stateCurveTimelineLayerOptions.length"
+            class="state-layer-toggle-group"
+            data-testid="workbench-timeline-state-layer-toggle-group"
+          >
+            <label
+              v-for="layer in stateCurveTimelineLayerOptions"
+              :key="layer.key"
+              class="state-layer-toggle"
+              :class="{ 'has-points': layer.pointCount > 0 }"
+              :data-layer-key="layer.key"
+            >
+              <input
+                type="checkbox"
+                :checked="isStateCurveTimelineLayerVisible(layer.key)"
+                :data-layer-key="layer.key"
+                :data-point-count="layer.pointCount"
+                data-testid="workbench-timeline-state-layer-toggle"
+                @change="
+                  setStateCurveLayerVisible(layer.key, $event.target.checked)
+                "
+              />
+              <span>{{ layer.label }} {{ layer.pointCount }}</span>
+            </label>
+          </div>
+          <div
+            v-if="stateCurveTimelineTrackOptions.length"
+            class="state-track-toggle-group"
+            data-testid="workbench-timeline-state-track-toggle-group"
+          >
+            <label
+              v-for="track in stateCurveTimelineTrackOptions"
+              :key="track.trackKey"
+              class="state-track-toggle"
+              :class="{ 'has-points': track.pointCount > 0 }"
+              :data-track-key="track.trackKey"
+            >
+              <input
+                type="checkbox"
+                :checked="isStateCurveTrackVisible(track.trackKey)"
+                :data-track-key="track.trackKey"
+                :data-point-count="track.pointCount"
+                data-testid="workbench-timeline-state-track-toggle"
+                @change="
+                  setStateCurveTrackVisible(
+                    track.trackKey,
+                    $event.target.checked
+                  )
+                "
+              />
+              <span>{{ track.label }} {{ track.pointCount }}</span>
+            </label>
+          </div>
+        </div>
+      </details>
     </div>
 
     <div class="timeline-scale">
@@ -358,24 +372,69 @@
             enemy: lane.type === 'enemy',
             kibo: lane.type === 'kibo',
             curve: lane.type === 'curve',
+            identity: isIdentityLane(lane),
+            active: isActiveIdentityLane(lane),
           }"
-          :style="laneRowStyle(lane)"
+          :style="[laneRowStyle(lane), laneIdentityStyle(lane)]"
           :data-lane-id="lane.id"
           :data-lane-kind="lane.kind"
           :data-actor-id="lane.actorId || ''"
+          :data-character-id="lane.identity?.characterId || ''"
+          :role="isIdentityLane(lane) ? 'button' : undefined"
+          :tabindex="isIdentityLane(lane) ? 0 : undefined"
           :title="
             lane.curve
               ? `${lane.detail} · ${formatTopologyCurveCursorValue(lane.curve)}`
               : ''
           "
           data-testid="workbench-timeline-lane-label"
+          @click="selectTimelineLaneIdentity(lane)"
+          @keydown.enter.prevent="selectTimelineLaneIdentity(lane)"
+          @keydown.space.prevent="selectTimelineLaneIdentity(lane)"
         >
-          <span>{{ lane.name }}</span>
-          <small>{{
-            lane.curve
-              ? formatTopologyCurveCursorValue(lane.curve)
-              : lane.detail
-          }}</small>
+          <template v-if="lane.kind === 'actor-action'">
+            <span class="lane-avatar" aria-hidden="true">
+              <span>{{ lane.identity.initial }}</span>
+              <img
+                v-if="lane.identity.avatarUrl"
+                :src="lane.identity.avatarUrl"
+                :alt="lane.name"
+                @error="$event.currentTarget.classList.add('missing')"
+              />
+            </span>
+            <span class="lane-identity-copy">
+              <strong>{{ lane.name }}</strong>
+              <small>
+                {{ lane.identity.role }} · {{ lane.identity.elementName }}
+              </small>
+            </span>
+            <i class="lane-slot-index">{{ lane.identity.slotLabel }}</i>
+          </template>
+          <template v-else-if="lane.kind === 'enemy-event'">
+            <span class="lane-avatar enemy-avatar" aria-hidden="true">敌</span>
+            <span class="lane-identity-copy">
+              <strong>{{ lane.name }}</strong>
+              <small>{{ lane.detail }}</small>
+            </span>
+          </template>
+          <template v-else-if="lane.kind === 'actor-kibo'">
+            <i class="lane-kibo-mark" aria-hidden="true" />
+            <span class="lane-subtrack-copy">
+              <strong>奇波</strong>
+              <small>{{ lane.detail }}</small>
+            </span>
+          </template>
+          <template v-else-if="lane.curve">
+            <i class="lane-curve-mark" aria-hidden="true" />
+            <span class="lane-subtrack-copy">
+              <strong>{{ lane.name }}</strong>
+              <small>{{ formatTopologyCurveCursorValue(lane.curve) }}</small>
+            </span>
+          </template>
+          <template v-else>
+            <span>{{ lane.name }}</span>
+            <small>{{ lane.detail }}</small>
+          </template>
         </div>
       </div>
 
@@ -635,10 +694,17 @@
               @keydown.backspace.prevent="deleteActionSelection(action)"
               @pointerdown.stop="beginDrag($event, action)"
             >
-              <span>{{ actionLabel(action) }}</span>
-              <small v-if="actionDetail(action)">{{
-                actionDetail(action)
-              }}</small>
+              <component
+                :is="actionIconComponent(action)"
+                class="action-kind-icon"
+                aria-hidden="true"
+              />
+              <span class="action-block-copy">
+                <strong>{{ actionLabel(action) }}</strong>
+                <small v-if="actionDetail(action)">{{
+                  actionDetail(action)
+                }}</small>
+              </span>
               <button
                 v-if="isTimelineActionResultEditVisible(action)"
                 class="timeline-action-result-edit-button"
@@ -990,14 +1056,22 @@ import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import {
   ArrowLeft,
   ArrowRight,
+  ChatLineSquare,
   Clock,
   Connection,
   Crop,
   EditPen,
+  Histogram,
+  Lightning,
   Minus,
+  Operation,
   Plus,
+  StarFilled,
+  Switch,
+  Timer,
   VideoPause,
   VideoPlay,
+  WarningFilled,
 } from '@element-plus/icons-vue';
 import {
   DEFAULT_TIMELINE_ACTION_DURATION_MS,
@@ -1030,9 +1104,9 @@ const MIN_ACTION_DURATION_MS = WORKBENCH_FRAME_MS;
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
 const ZOOM_STEP = 0.25;
-const TIMELINE_LANE_MIN_HEIGHT_PX = 64;
+const TIMELINE_LANE_MIN_HEIGHT_PX = 68;
 const TIMELINE_ACTION_TOP_PX = 5;
-const TIMELINE_ACTION_HEIGHT_PX = 36;
+const TIMELINE_ACTION_HEIGHT_PX = 40;
 const TIMELINE_ACTION_SLOT_GAP_PX = 4;
 const TIMELINE_EFFECT_INTERVAL_HEIGHT_PX = 16;
 const TIMELINE_EFFECT_INTERVAL_GAP_PX = 3;
@@ -1041,6 +1115,15 @@ const TIMELINE_LANE_GAP_PX = 4;
 const TIMELINE_DATA_GAP_PX = 2;
 const CANDIDATE_VALUE_CURVE_TOP = 52;
 const CANDIDATE_VALUE_CURVE_HEIGHT = 26;
+const ACTION_ICON_COMPONENTS = Object.freeze({
+  skill: Lightning,
+  kiboEvent: StarFilled,
+  enemyEvent: WarningFilled,
+  resource: Histogram,
+  switch: Switch,
+  wait: Timer,
+  annotation: ChatLineSquare,
+});
 const STATE_CURVE_TIMELINE_LAYER_KEYS = new Set([
   'applied',
   'sampled',
@@ -1118,6 +1201,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  characters: {
+    type: Array,
+    default: () => [],
+  },
   enemy: {
     type: Object,
     default: null,
@@ -1140,6 +1227,10 @@ const props = defineProps({
   },
   timelineEntryDefaultActorId: {
     type: String,
+    default: '',
+  },
+  activeActorCharacterId: {
+    type: [Number, String],
     default: '',
   },
   damageTimeline: {
@@ -1295,6 +1386,7 @@ const props = defineProps({
 
 const emit = defineEmits([
   'select-action',
+  'select-identity',
   'delete-action',
   'update-action-time',
   'update-action-duration',
@@ -1490,6 +1582,7 @@ const cycleSectionHighlightStyle = computed(() => {
 });
 const timelineTrackStyle = computed(() => ({
   width: `${timelineZoom.value * 100}%`,
+  '--timeline-mobile-min-width': `${900 * timelineZoom.value}px`,
 }));
 const candidateSeriesToggles = computed(() =>
   (props.candidateValueChart?.series ?? [])
@@ -1750,6 +1843,10 @@ const timelineLanes = computed(() => {
 function createTimelineActorGroups() {
   const topologyGroups = props.timelineTopology?.actorGroups ?? [];
   return props.actors.map((actor, index) => {
+    const character = props.characters.find(
+      item => Number(item.id) === Number(actor.characterId)
+    );
+    const identity = createActorLaneIdentity(actor, character, index);
     const topology = topologyGroups.find(group => group.actorId === actor.id) ??
       topologyGroups[index] ?? {
         actionLane: { laneId: actor.id },
@@ -1768,6 +1865,7 @@ function createTimelineActorGroups() {
         name: actor.name,
         detail: '角色动作',
         editable: true,
+        identity,
       }),
       kiboLane: createEmptyTimelineLane({
         id: topology.kiboLane?.laneId ?? `kibo-fallback-${index + 1}`,
@@ -1777,6 +1875,11 @@ function createTimelineActorGroups() {
         name: '奇波',
         detail: kibo?.name ?? '未配置',
         editable: true,
+        identity: {
+          ...identity,
+          kiboId: kibo?.id ?? null,
+          kiboName: kibo?.name ?? '待绑定奇波',
+        },
       }),
       energyCurveLane: createEmptyTimelineLane({
         id: topology.energyCurve?.laneId ?? `energy-${actor.id}`,
@@ -1786,6 +1889,7 @@ function createTimelineActorGroups() {
         name: '能量',
         detail: actor.name,
         editable: false,
+        identity,
         curve: createTimelineStateCurve({
           trackKey: 'selfEnergyChange',
           actorId: actor.id,
@@ -1794,6 +1898,57 @@ function createTimelineActorGroups() {
         }),
       }),
     };
+  });
+}
+
+function createActorLaneIdentity(actor, character, index) {
+  const label = actor?.name || character?.name || '角色';
+  return {
+    kind: 'actor',
+    actorId: actor?.id ?? '',
+    characterId: Number(actor?.characterId ?? character?.id),
+    label,
+    initial: Array.from(label)[0] ?? '角',
+    slotLabel: String(index + 1).padStart(2, '0'),
+    role: character?.position?.name ?? actor?.role ?? '战斗',
+    elementName: character?.element?.name ?? '属性待确认',
+    accentColor: character?.element?.color ?? '#79c7b9',
+    avatarUrl: resolveCharacterAvatarUrl(actor?.characterId ?? character?.id),
+  };
+}
+
+function resolveCharacterAvatarUrl(characterId) {
+  const normalizedId = Number(characterId);
+  return Number.isFinite(normalizedId)
+    ? `/assets/characters/${normalizedId}.png`
+    : '';
+}
+
+function isIdentityLane(lane) {
+  return lane?.kind === 'actor-action' || lane?.kind === 'enemy-event';
+}
+
+function isActiveIdentityLane(lane) {
+  return (
+    lane?.kind === 'actor-action' &&
+    Number(lane.identity?.characterId) === Number(props.activeActorCharacterId)
+  );
+}
+
+function laneIdentityStyle(lane) {
+  return {
+    '--lane-accent': lane?.identity?.accentColor ?? '#79c7b9',
+  };
+}
+
+function selectTimelineLaneIdentity(lane) {
+  if (!isIdentityLane(lane)) return;
+  emit('select-identity', {
+    kind: lane.kind === 'enemy-event' ? 'enemy' : 'actor',
+    actorId: lane.identity?.actorId ?? lane.actorId ?? '',
+    characterId: lane.identity?.characterId ?? '',
+    enemyId: lane.identity?.enemyId ?? '',
+    label: lane.identity?.label ?? lane.name,
   });
 }
 
@@ -1816,6 +1971,12 @@ function createTimelineEnemyGroup(effectIntervals) {
       name: props.enemy?.name || '敌人',
       detail: '事件 / 状态',
       editable: true,
+      identity: {
+        kind: 'enemy',
+        enemyId: props.enemy?.enemyId ?? props.enemy?.id ?? '',
+        label: props.enemy?.name || '敌人',
+        accentColor: '#e1848e',
+      },
       effectIntervals,
     }),
     hpCurveLane: createEmptyTimelineLane({
@@ -1825,6 +1986,11 @@ function createTimelineEnemyGroup(effectIntervals) {
       name: 'HP',
       detail: props.enemy?.name || '敌人',
       editable: false,
+      identity: {
+        kind: 'enemy',
+        label: props.enemy?.name || '敌人',
+        accentColor: '#ef767a',
+      },
       curve: createTimelineStateCurve({
         trackKey: 'enemyHpDamage',
         fallbackInitialValue: maxHp,
@@ -1838,6 +2004,11 @@ function createTimelineEnemyGroup(effectIntervals) {
       name: '韧性',
       detail: props.enemy?.name || '敌人',
       editable: false,
+      identity: {
+        kind: 'enemy',
+        label: props.enemy?.name || '敌人',
+        accentColor: '#e8c36a',
+      },
       curve: createTimelineStateCurve({
         trackKey: 'enemyToughnessDamage',
         fallbackInitialValue: initialToughness,
@@ -1855,6 +2026,7 @@ function createEmptyTimelineLane({
   name,
   detail,
   editable,
+  identity = null,
   curve = null,
   effectIntervals = [],
 }) {
@@ -1866,6 +2038,7 @@ function createEmptyTimelineLane({
     name,
     detail,
     editable,
+    identity,
     curve,
     actions: [],
     damageMarkers: [],
@@ -2358,8 +2531,8 @@ function getTimelineStateCurveMarkerTop(marker, lane) {
 }
 
 function getTimelineLaneHeight(lane) {
-  if (lane.type === 'curve') return 40;
-  if (lane.type === 'kibo' && lane.actions.length === 0) return 36;
+  if (lane.type === 'curve') return 44;
+  if (lane.type === 'kibo' && lane.actions.length === 0) return 38;
   const hasCandidateData =
     lane.candidateValueMarkers.length > 0 ||
     lane.candidateValueCurves.length > 0 ||
@@ -2455,6 +2628,10 @@ function findAvailableTimelineActionSlot(slotEndTimes, startMs) {
   return index >= 0 ? index : slotEndTimes.length;
 }
 
+function actionIconComponent(action) {
+  return ACTION_ICON_COMPONENTS[action?.type] ?? Lightning;
+}
+
 function actionLabel(action) {
   if (action.type === 'switch') {
     return `${action.name} -> ${action.targetActor?.name ?? '目标'}`;
@@ -2464,16 +2641,16 @@ function actionLabel(action) {
 
 function actionDetail(action) {
   if (action.type === 'skill') {
-    return `${action.actor?.name ?? ''} / ${formatFrameTime(action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS)}`;
+    return `角色动作 · ${formatFrameTime(action.durationMs ?? DEFAULT_TIMELINE_ACTION_DURATION_MS)}`;
   }
   if (action.type === 'resource') {
     return `${String(action.resource ?? 'sp').toUpperCase()} ${formatSigned(action.change)}`;
   }
   if (action.type === 'enemyEvent') {
-    return action.eventType ?? '';
+    return `${action.eventType ?? '事件'} · ${formatFrameTime(action.durationMs ?? 0)}`;
   }
   if (action.type === 'kiboEvent') {
-    return `${action.eventType ?? 'activation'} / ${action.kiboId ?? '未配置'}`;
+    return `奇波 · ${formatFrameTime(action.durationMs ?? 0)}`;
   }
   if (action.type === 'switch') {
     return formatFrameTime(action.durationMs ?? 0);
@@ -4453,16 +4630,18 @@ onBeforeUnmount(() => {
 .panel {
   min-width: 0;
   border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 6px;
+  border-radius: 4px;
   background: #1c2228;
 }
 
 .panel-title {
+  position: relative;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 6px;
-  padding: 8px 12px;
+  min-height: 42px;
+  padding: 6px 10px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -4482,6 +4661,50 @@ h2 {
   align-items: center;
   gap: 6px;
   margin-left: auto;
+}
+
+.timeline-view-options {
+  position: relative;
+  z-index: 32;
+}
+
+.timeline-view-options summary {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  gap: 4px;
+  padding: 0 7px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  background: #171d22;
+  color: #cbd4d9;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.timeline-view-options summary::-webkit-details-marker {
+  display: none;
+}
+
+.timeline-view-options[open] summary {
+  border-color: #79c7b9;
+  color: #edfffb;
+}
+
+.timeline-view-options-menu {
+  position: absolute;
+  top: calc(100% + 7px);
+  right: 0;
+  display: grid;
+  width: min(560px, calc(100vw - 32px));
+  gap: 9px;
+  padding: 10px;
+  border: 1px solid rgba(121, 199, 185, 0.34);
+  border-radius: 4px;
+  background: #10161b;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
 }
 
 .timeline-cursor-readout {
@@ -4813,9 +5036,9 @@ h2 {
 
 .timeline-scale {
   display: grid;
-  grid-template-columns: 104px minmax(0, 1fr);
-  gap: 8px;
-  padding: 8px 12px 0;
+  grid-template-columns: 188px minmax(0, 1fr);
+  gap: 0;
+  padding: 7px 10px 0;
   color: #8f9aa3;
   font-size: 12px;
 }
@@ -4863,9 +5086,9 @@ h2 {
 
 .timeline-shell {
   display: grid;
-  grid-template-columns: 104px minmax(0, 1fr);
-  gap: 8px;
-  margin: 8px 12px;
+  grid-template-columns: 188px minmax(0, 1fr);
+  gap: 0;
+  margin: 7px 10px 10px;
 }
 
 .candidate-frame-summary {
@@ -5145,16 +5368,20 @@ h2 {
 }
 
 .lane-label {
-  display: grid;
-  align-content: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
   min-height: 64px;
-  padding: 5px 8px;
+  padding: 5px 10px;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
+  border-right-color: rgba(255, 255, 255, 0.14);
+  border-radius: 4px 0 0 4px;
   background: #151b20;
 }
 
-.lane-label span {
+.lane-label > span:not(.lane-avatar) {
   overflow: hidden;
   font-weight: 700;
   text-overflow: ellipsis;
@@ -5162,9 +5389,107 @@ h2 {
 }
 
 .lane-label small {
-  margin-top: 4px;
   color: #8f9aa3;
   font-size: 11px;
+}
+
+.lane-label.identity {
+  border-left: 3px solid var(--lane-accent);
+  cursor: pointer;
+}
+
+.lane-label.identity:hover,
+.lane-label.identity:focus-visible,
+.lane-label.identity.active {
+  border-color: color-mix(in srgb, var(--lane-accent) 72%, white 28%);
+  background: color-mix(in srgb, var(--lane-accent) 12%, #151b20 88%);
+  outline: none;
+}
+
+.lane-avatar {
+  position: relative;
+  display: grid;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--lane-accent) 64%, #ffffff 36%);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--lane-accent) 22%, #10151a 78%);
+  color: #f4fbff;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.lane-avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lane-avatar img.missing {
+  display: none;
+}
+
+.enemy-avatar {
+  border-radius: 50%;
+  color: #ffe5e8;
+}
+
+.lane-identity-copy,
+.lane-subtrack-copy {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.lane-identity-copy strong,
+.lane-subtrack-copy strong {
+  overflow: hidden;
+  color: #f3f7f8;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lane-identity-copy small,
+.lane-subtrack-copy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lane-slot-index {
+  position: absolute;
+  top: 5px;
+  right: 7px;
+  color: color-mix(in srgb, var(--lane-accent) 62%, #7f8991 38%);
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.lane-kibo-mark,
+.lane-curve-mark {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 9px;
+  border: 1px solid color-mix(in srgb, var(--lane-accent) 72%, white 28%);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--lane-accent) 64%, #142019 36%);
+  box-shadow: 0 0 7px color-mix(in srgb, var(--lane-accent) 38%, transparent);
+}
+
+.lane-curve-mark {
+  height: 3px;
+  border: 0;
+  border-radius: 2px;
+  background: currentColor;
+  box-shadow: none;
 }
 
 .lane-label.system {
@@ -5184,25 +5509,20 @@ h2 {
 
 .lane-label.kibo,
 .lane-label.curve {
-  padding-block: 2px;
-  overflow: hidden;
-}
-
-.lane-label.kibo small,
-.lane-label.curve small {
-  margin-top: 1px;
+  padding: 2px 10px 2px 18px;
 }
 
 .lane-label.curve {
   border-color: rgba(118, 149, 177, 0.28);
   background: #161d24;
+  color: #a6b7ff;
 }
 
 .lane-row {
   position: relative;
   min-height: 110px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
+  border-radius: 0 4px 4px 0;
   background:
     repeating-linear-gradient(
       90deg,
@@ -5246,7 +5566,7 @@ h2 {
 
 .timeline-state-curve {
   position: absolute;
-  inset: 8px 0;
+  inset: 7px 0;
   color: #a6b7ff;
 }
 
@@ -5261,8 +5581,9 @@ h2 {
 .timeline-state-curve polyline {
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.4;
+  stroke-width: 2.2;
   vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 2px currentColor);
 }
 
 .timeline-state-curve circle {
@@ -5301,9 +5622,13 @@ h2 {
 .action-block {
   position: absolute;
   top: 5px;
+  display: grid;
   box-sizing: border-box;
-  height: 36px;
+  height: 40px;
   min-width: 0;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
   padding: 4px clamp(24px, 18%, 54px) 4px 7px;
   border: 1px solid rgba(121, 199, 185, 0.5);
   border-radius: 6px;
@@ -5479,7 +5804,19 @@ h2 {
   padding-right: clamp(46px, 24%, 76px);
 }
 
-.action-block span,
+.action-kind-icon {
+  width: 16px;
+  height: 16px;
+  color: #baf1e6;
+}
+
+.action-block-copy {
+  display: grid;
+  min-width: 0;
+  gap: 1px;
+}
+
+.action-block-copy strong,
 .action-block small {
   display: block;
   overflow: hidden;
@@ -5487,10 +5824,13 @@ h2 {
   white-space: nowrap;
 }
 
+.action-block-copy strong {
+  font-size: 11px;
+}
+
 .action-block small {
-  margin-top: 3px;
   color: #b8d8d2;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 500;
 }
 
@@ -5883,8 +6223,10 @@ h2 {
 
   .timeline-tools {
     width: 100%;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     margin-left: 0;
+    padding-bottom: 2px;
+    overflow-x: auto;
   }
 
   .timeline-entry-palette-menu {
@@ -5899,11 +6241,16 @@ h2 {
   }
 
   .timeline-scale {
-    grid-template-columns: 84px minmax(0, 1fr);
+    grid-template-columns: 132px minmax(0, 1fr);
   }
 
   .timeline-shell {
-    grid-template-columns: 84px minmax(0, 1fr);
+    grid-template-columns: 132px minmax(0, 1fr);
+  }
+
+  .scale-track,
+  .timeline-lane {
+    min-width: var(--timeline-mobile-min-width);
   }
 
   .candidate-frame-summary {
@@ -5945,7 +6292,27 @@ h2 {
   }
 
   .lane-label {
-    padding: 8px;
+    gap: 6px;
+    padding: 5px 7px;
+  }
+
+  .lane-avatar {
+    width: 34px;
+    height: 34px;
+    flex-basis: 34px;
+  }
+
+  .lane-identity-copy strong {
+    font-size: 11px;
+  }
+
+  .lane-identity-copy small,
+  .lane-subtrack-copy small {
+    font-size: 9px;
+  }
+
+  .lane-slot-index {
+    display: none;
   }
 }
 </style>

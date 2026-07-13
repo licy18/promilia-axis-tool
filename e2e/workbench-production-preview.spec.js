@@ -189,64 +189,82 @@ test('[stage-9b-runtime-step-curves] keeps actor resources and enemy states alig
   ).toHaveAttribute('points', '0,100 100,100');
 });
 
-test('[stage-9c-timeline-first-workspace] keeps the complete timeline topology in the primary workspace', async ({
+test('[m1a-timeline-identity] keeps the complete team topology in the timeline-first workspace', async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/#/workbench');
 
   const timeline = page.getByTestId('workbench-timeline-grid-preview');
   const reviewWorkspace = page.getByTestId('workbench-review-workspace');
   const actionLibrary = page.locator('.action-library');
   const inspector = page.getByTestId('workbench-side-inspector');
+  const actorIdentities = page.locator(
+    '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"]'
+  );
   await expect(timeline).toBeVisible();
   await expect(reviewWorkspace).toBeVisible();
+  await expect(inspector).toBeHidden();
+  await expect(actorIdentities).toHaveCount(3);
+  await expect(actorIdentities.nth(0)).toContainText('末音');
+  await expect(actorIdentities.nth(1)).toContainText('寒悠悠');
+  await expect(actorIdentities.nth(2)).toContainText('芃芃');
+  await expect(actorIdentities.locator('img')).toHaveCount(3);
 
   const desktopLayout = await readTimelineFirstLayout(page);
   expect(desktopLayout.laneCount).toBe(12);
   expect(desktopLayout.timeline.width).toBeGreaterThanOrEqual(1390);
-  expect(desktopLayout.timeline.bottom).toBeLessThanOrEqual(1000);
-  expect(desktopLayout.lastLane.bottom).toBeLessThanOrEqual(1000);
+  expect(desktopLayout.timeline.bottom).toBeLessThanOrEqual(900);
+  expect(desktopLayout.lastLane.bottom).toBeLessThanOrEqual(900);
   expect(desktopLayout.review.top).toBeGreaterThanOrEqual(
     desktopLayout.timeline.bottom
   );
   expect(desktopLayout.actions.top).toBeGreaterThanOrEqual(
     desktopLayout.timeline.bottom
   );
-  expect(desktopLayout.inspector.top).toBeGreaterThanOrEqual(
-    desktopLayout.timeline.bottom
-  );
   await expectTimelineRowsAligned(timeline);
-  await page.screenshot({ path: 'reports/stage-9c-workbench-desktop.png' });
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.screenshot({ path: 'reports/m1a-workbench-desktop.png' });
 
-  await page.getByTestId('workbench-flow-open-runtime').click();
-  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
-    'data-flow-phase',
-    'runtime-result'
+  const timelineBoxBeforeInspector = await timeline.boundingBox();
+  await actorIdentities.nth(0).click();
+  await expect(inspector).toBeVisible();
+  await expect(inspector).toContainText('末音');
+  const timelineBoxWithInspector = await timeline.boundingBox();
+  expect(timelineBoxWithInspector?.width).toBe(
+    timelineBoxBeforeInspector?.width
   );
-  const reviewLayout = await readTimelineFirstLayout(page);
-  expect(reviewLayout.timeline.top).toBeLessThan(reviewLayout.review.top);
+  await page.getByTestId('workbench-close-side-inspector').click();
+  await expect(inspector).toBeHidden();
 
-  await page.setViewportSize({ width: 760, height: 1280 });
+  const projectMenu = page.getByTestId('workbench-project-menu');
+  await projectMenu.locator('summary').click();
+  await expect(page.getByTestId('workbench-export-project')).toBeVisible();
+  await expect(page.getByTestId('workbench-export-project-png')).toBeVisible();
+  await expect(page.getByTestId('workbench-import-project')).toBeVisible();
+  await expect(page.getByTestId('workbench-share-project')).toBeVisible();
+  await projectMenu.locator('summary').click();
+
+  await page.setViewportSize({ width: 390, height: 900 });
   await expect(timeline).toBeVisible();
   await expect(actionLibrary).toBeVisible();
-  await expect(inspector).toBeVisible();
-  const narrowLayout = await readTimelineFirstLayout(page);
-  expect(narrowLayout.laneCount).toBe(12);
-  expect(narrowLayout.lastLane.bottom).toBeLessThanOrEqual(
-    narrowLayout.timeline.bottom
+  await expect(inspector).toBeHidden();
+  const narrowLayout = await readM1ANarrowLayout(page);
+  expect(narrowLayout).toMatchObject({
+    laneCount: 12,
+    actorIdentityCount: 3,
+    rowsSeparated: true,
+    labelsAligned: true,
+  });
+  expect(narrowLayout.timelineWidth).toBeLessThanOrEqual(390);
+  expect(narrowLayout.labelWidths).toEqual(Array(12).fill(132));
+  expect(narrowLayout.timelineScrollWidth).toBeGreaterThan(
+    narrowLayout.timelineClientWidth
   );
-  expect(narrowLayout.sections).toEqual([
-    'primary-flow',
-    'review-workspace',
-    'action-library',
-    'side-stack',
-  ]);
-  expect(narrowLayout.sectionsSeparated).toBe(true);
   await expectTimelineRowsAligned(timeline);
   await expectPageWithoutHorizontalOverflow(page);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.screenshot({ path: 'reports/stage-9c-workbench-narrow.png' });
+  await page.screenshot({ path: 'reports/m1a-workbench-narrow.png' });
 });
 
 test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enemy entries on legal lanes', async ({
@@ -2440,6 +2458,44 @@ async function readTimelineFirstLayout(page) {
       sectionsSeparated: sectionRects.every(
         (section, index) =>
           index === 0 || section.rect.top >= sectionRects[index - 1].rect.bottom
+      ),
+    };
+  });
+}
+
+async function readM1ANarrowLayout(page) {
+  return page.evaluate(() => {
+    const timeline = document.querySelector(
+      '[data-testid="workbench-timeline-grid-preview"]'
+    );
+    const viewport = document.querySelector(
+      '[data-testid="workbench-timeline-viewport"]'
+    );
+    const rows = [
+      ...document.querySelectorAll('[data-testid="workbench-timeline-row"]'),
+    ];
+    const labels = [
+      ...document.querySelectorAll(
+        '[data-testid="workbench-timeline-lane-label"]'
+      ),
+    ];
+    const rowRects = rows.map(row => row.getBoundingClientRect());
+    const labelRects = labels.map(label => label.getBoundingClientRect());
+    return {
+      laneCount: rows.length,
+      actorIdentityCount: document.querySelectorAll(
+        '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"]'
+      ).length,
+      timelineWidth: Math.round(timeline?.getBoundingClientRect().width ?? 0),
+      timelineClientWidth: viewport?.clientWidth ?? 0,
+      timelineScrollWidth: viewport?.scrollWidth ?? 0,
+      labelWidths: labelRects.map(rect => Math.round(rect.width)),
+      rowsSeparated: rowRects.every(
+        (rect, index) =>
+          index === 0 || rect.top >= rowRects[index - 1].bottom - 0.5
+      ),
+      labelsAligned: rowRects.every(
+        (rect, index) => Math.abs(rect.top - labelRects[index]?.top) <= 0.5
       ),
     };
   });

@@ -1308,7 +1308,13 @@ core 文件从 1,355,407B 降至 1,080,871B，Workbench 主块从 362,328B gzip 
 
 桌面与 390px 窄屏视觉证据为 `reports/stage-12c-analysis-reproducibility-desktop.png` 和 `reports/stage-12c-analysis-reproducibility-narrow.png`。阶段验收为 81 个测试文件、459 条单元/组件测试，39 条 Workbench 主流程和 31/31 项必需 production preview 能力全部通过，报告继续为 `trial-ready`。生产引用审计为 122 个源码、118 个生产可达、4 个允许 test-only、0 个孤儿；applied source 保持 3 条 bound-ready、0 drift、0 compatible-unbound。总 JavaScript 为 731,359B gzip，低于 733,000B 阶段硬目标；180 动作 compile/simulation p95 为 20.028ms/40.299ms，120 动作首屏 2040ms，双 120 动作比较打开 548ms、窗口切换 326ms、来源定位 2403ms，均满足预算。
 
-下一阶段目标：Stage 13-A / 实测样本与模拟差异校准闭环。把 runtime sample capture 与标准动作、命中、帧和三值 delta 对齐，提供实测值、当前模拟值、差异与来源绑定的完整校准流程；不自动反推公式，不启用未确认装备、奇波、灵子或培养效果。
+原定 Stage 13-A 实测校准不再继续；其当前 WIP 已完整封存在本地分支 `deferred/stage-13a-calibration`（提交 `db50c52`），M1 完成前不合并。主线改为 **M1 / Endaxis 级核心排轴体验**：首先完成 M1-A 时间轴信息架构与视觉身份，随后完成 3 人/奇波/敌人配置、拖入动作到五曲线变化、可展示默认方案与完整回放验收。Stage 11/12 分析、比较和报告保留为二级高级能力，不再占用首屏主路径；M1 不新增公式、数值考古、校准或报告合同。
+
+### M1-A 时间轴信息架构与视觉身份（2026-07-13）
+
+Workbench 首屏现以同轴多轨时间轴为主：顶栏只保留高频命令，项目交换与高级能力进入二级菜单；3 个角色身份、3 条奇波子轨、3 条能量曲线及敌人事件/HP/韧性在 1440x900 内完整可读，检查器默认收起并以覆盖层打开。390x900 下身份列保持固定，30 秒时间内容在时间轴内部滚动，页面本身无横向溢出。Promilia 与 Endaxis 对照图保存在 `reports/m1a-workbench-desktop.png`、`reports/m1a-workbench-narrow.png` 和 `reports/m1a-endaxis-reference.png`。阶段验证为 81 个测试文件、460 条测试、M1-A 桌面/窄屏 Playwright、生产构建与引用审计全部通过；Workbench 主块 352,377B gzip，总 JavaScript 734,033B gzip，低于 735,000B 预警线和 740,000B 硬门槛。
+
+下一阶段目标：M1-B / 3 人队与奇波配置闭环。让三个唯一角色槽、各自奇波和敌人选择真正驱动头像、动作库、轨道身份、初始 HP/韧性及配置实例，并保持方案复制、本地草稿、JSON、分享链接和 PNG 回放一致；未确认效果继续 `unapplied`，不研究测试期最终倍率。
 
 ## 10. 文档维护规则
 

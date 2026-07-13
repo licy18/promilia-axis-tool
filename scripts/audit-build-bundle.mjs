@@ -21,6 +21,12 @@ const budgets = {
   ),
   totalJavaScriptGzipBytes: readPositiveNumberArgument(
     '--total-js-gzip-budget',
+    740_000
+  ),
+};
+const warningThresholds = {
+  totalJavaScriptGzipBytes: readPositiveNumberArgument(
+    '--total-js-gzip-warning',
     735_000
   ),
 };
@@ -89,11 +95,18 @@ const budgetStatus = {
   totalJavaScriptWithinBudget:
     report.summary.totalJavaScriptGzipBytes <= budgets.totalJavaScriptGzipBytes,
 };
+const warningStatus = {
+  totalJavaScriptWithinWarning:
+    report.summary.totalJavaScriptGzipBytes <=
+    warningThresholds.totalJavaScriptGzipBytes,
+};
 const outputReport = {
   schemaVersion: 1,
   kind: 'bundle-composition-audit',
   budgets,
   budgetStatus,
+  warningThresholds,
+  warningStatus,
   projectionGuard,
   ...report,
 };
@@ -111,6 +124,8 @@ console.log(
       output: toRepositoryPath(outputPath),
       budgets,
       budgetStatus,
+      warningThresholds,
+      warningStatus,
       projectionGuard,
       summary: outputReport.summary,
       javaScriptChunks: outputReport.javaScriptChunks.map(chunk => ({

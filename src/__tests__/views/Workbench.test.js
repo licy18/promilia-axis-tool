@@ -295,6 +295,7 @@ describe('Workbench view', () => {
     expect(sideInspector.attributes('data-main-flow-inspector-mode')).toBe(
       'action-properties'
     );
+    expect(sideInspector.attributes('style')).toContain('display: none');
     expect(sideInspector.findComponent(PropertiesPanel).exists()).toBe(true);
     expect(sideInspector.find('.analysis-panel').exists()).toBe(true);
     expect(flowPanel.attributes('data-runtime-sim-log-count')).toBe('1');
@@ -3209,10 +3210,13 @@ describe('Workbench view', () => {
     );
     expect(appSource).not.toContain('width:100vw');
     expect(workbenchSource).toContain(
-      'grid-template-columns:minmax(0,var(--workbench-left-panel-width,260px))14pxminmax(0,1fr)14pxminmax(0,var(--workbench-right-panel-width,300px));'
+      'grid-template-columns:minmax(0,var(--workbench-left-panel-width,260px))10pxminmax(0,1fr);'
     );
     expect(workbenchSource).toContain(
-      'grid-template-areas:\x27mainflowmainflowmainflowmainflowmainflow\x27\x27actionsleft-resizerreviewright-resizerinspector\x27;'
+      'grid-template-areas:\x27mainflowmainflowmainflow\x27\x27actionsleft-resizerreview\x27;'
+    );
+    expect(workbenchSource).toContain(
+      '.side-stack{position:fixed;top:108px;right:10px;bottom:10px;z-index:70;'
     );
     expect(workbenchSource).toContain(
       '.primary-flow{display:grid;grid-area:mainflow;align-content:start;gap:14px;min-width:0;}'

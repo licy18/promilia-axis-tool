@@ -377,6 +377,69 @@ describe('TimelineGridPreview', () => {
     ).toBe('false');
   });
 
+  it('renders character identity on actor lanes and opens the matching inspector', async () => {
+    const actors = [
+      {
+        id: 'actor-a',
+        characterId: 109001,
+        name: '末音',
+        role: '主输出',
+      },
+    ];
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        actors,
+        characters: [
+          {
+            id: 109001,
+            name: '末音',
+            position: { name: '星运者' },
+            element: { name: '光', color: '#f4c85a' },
+          },
+        ],
+        activeActorCharacterId: 109001,
+        timelineTopology: {
+          actorGroups: [
+            {
+              actorId: 'actor-a',
+              actionLane: { laneId: 'actor-a' },
+              kiboLane: { laneId: 'kibo-team-slot-1' },
+              energyCurve: {
+                laneId: 'energy-actor-a',
+                actorId: 'actor-a',
+              },
+            },
+          ],
+          enemyGroup: {
+            eventLane: { laneId: 'enemy-events' },
+            hpCurve: { laneId: 'enemy-hp-curve' },
+            toughnessCurve: { laneId: 'enemy-toughness-curve' },
+          },
+        },
+      }),
+    });
+
+    const identity = wrapper.get(
+      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"]'
+    );
+    expect(identity.classes()).toContain('active');
+    expect(identity.attributes('data-character-id')).toBe('109001');
+    expect(identity.text()).toContain('末音');
+    expect(identity.text()).toContain('星运者 · 光');
+    expect(identity.get('img').attributes('src')).toBe(
+      '/assets/characters/109001.png'
+    );
+
+    await identity.trigger('click');
+    expect(wrapper.emitted('select-identity')?.at(-1)?.[0]).toEqual({
+      kind: 'actor',
+      actorId: 'actor-a',
+      characterId: 109001,
+      enemyId: '',
+      label: '末音',
+    });
+  });
+
   it('routes kibo events to their associated lane and quick insert target', async () => {
     const actors = [
       { id: 'actor-a', name: '末音' },
