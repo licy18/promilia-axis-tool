@@ -18,7 +18,7 @@
 
 ## M1 试用候选
 
-当前 Workbench 已同时守住“默认示例直接复盘”和“空方案从零编排”两条主流程。完整试用步骤、已知数值边界和问题反馈材料见 [`TRIAL_RELEASE.md`](./TRIAL_RELEASE.md)。
+当前 Workbench 已同时守住“默认示例直接复盘”“空方案从零编排”和“六资源采样批次导入回放”三条主流程。完整试用步骤、已知数值边界和问题反馈材料见 [`TRIAL_RELEASE.md`](./TRIAL_RELEASE.md)。
 
 候选发布的单命令守门：
 
@@ -125,7 +125,7 @@ e2e/                     Workbench 浏览器主流程
 
 构建组成审计会生成 `reports/bundle-composition.json`，并守住首屏入口、Workbench 主包和全部 JavaScript 的 gzip 预算，同时检查技能诊断数据必须位于独立按需包。Element Plus 组件由各页面按需引用，PNG 截图库只在实际导出时加载。
 
-`npm run test:e2e:production-preview` 会重新构建 `dist`，用独立端口启动 Vite production preview，并检查路由与哈希资源、6 条能量轴、默认示例、空方案从零编排、项目交换与兼容性门禁、多轨编辑、运行时复盘、方案比较、分析报告和 390px 窄屏主流程。当前 37 项必需能力的试用判定写入 `reports/production-preview-acceptance.json`。
+`npm run test:e2e:production-preview` 会重新构建 `dist`，用独立端口启动 Vite production preview，并检查路由与哈希资源、6 条能量轴、默认示例、空方案从零编排、六文件采样打包与六 owner 回放、项目交换与兼容性门禁、多轨编辑、运行时复盘、方案比较、分析报告和 390px 窄屏主流程。当前 40 项必需能力的试用判定写入 `reports/production-preview-acceptance.json`。
 
 三值运行时统一通过 `AzPrThreeValueMechanicsAdapter v9` 调用 HP、韧性和角色能量 adapter；compiler 为 Scenario 绑定 `AzPrMechanicsProfile v2`，generation 以 `AzPrThreeValueMechanicsOperands v3` 和 `AzPrThreeValueMechanicsLayerInputs v1` 固定来源。HP 预览使用 `AzPrHpOperandSourceBinding v1` 校验角色攻击、动作倍率与 skill/variant identity；显式角色能量事件及 validated 韧性/能量 sample 使用 `AzPrThreeValueAppliedSourceBinding v1` 校验事件或 capture、作用实体、Element/path、帧位和 before/after。runtime 绑定 `stateBefore` 后由 `AzPrThreeValueMechanicsEvaluation v5` 按有序 `steps` 产生 delta；来源统一标记为正式绑定、兼容未绑定或漂移，异常不会静默换值。每条结果再生成 `AzPrThreeValueStateEffectProposal v1`，runtime snapshot 只应用验证通过的 proposal，未确认机制仍不参与计算。
 

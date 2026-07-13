@@ -1494,6 +1494,16 @@ Workbench 现在可以从一个 `runtime-sample-captures` 文件一次导入 6 �
 
 下一阶段目标：P0/P3 六资源生产试用检查点。把六资源批次打包、一次导入和 JSON 回放列入候选发布必需能力，运行完整 `test:trial-release`，更新试用手册，并重新确认真实生产样本与未应用机制边界；不新增公式、倍率或碎片 UI。
 
+### P0/P3 六资源生产试用检查点（2026-07-14）
+
+候选发布新增 `six-resource-capture-import` 必需能力，并与开发态主流程共享同一套三角色、三奇波和六 capture 夹具。production preview 会实际调用 `runtime-capture-normalizer-v2` 把六个独立 JSON 输入打成批次，再通过 Workbench 一次导入、核对 6 个 `resource-owner-action` 绑定、导出项目 JSON、重置并回载，确认三条奇波观测曲线和六轴 owner 身份保持一致。该流程没有新增 UI、公式或数据合同。
+
+真实样本盘点覆盖当前仓库和 `C:\PC2\Codex\AzPr`：只发现 runtime capture hook manifest、Frida host/agent、normalizer 与 fixture，没有非 fixture 战斗 JSON/JSONL，也没有可通过 `--require-production` 的完整六资源批次。因此 production capability 只证明采样文件工作流、owner 隔离和项目回放；只有既有 validated 角色 SP source binding 可进入 applied 角色曲线，奇波 `PetUltimateCdTime` 仍为 tracking-only，未知装备、奇波、灵子、防御、抗性、等级与培养效果继续 unapplied。
+
+阶段验收为 89 个测试文件、491 条测试和 40/40 项 production preview 全部通过，acceptance 判定为 `trial-ready`；生产引用为 123 个可达源码、4 个允许 test-only、0 个孤儿，Workbench 数据投影和 3 条 applied source binding 审计均通过。Workbench 主块为 334,371B gzip，总 JavaScript 为 739,228B gzip，低于 370,000B/740,000B 发布硬门槛，但已进入 735,000B 预警区。
+
+下一阶段目标：P3 首份非 fixture 六资源受控采样验收。由操作者明确启动获准客户端，先取得至少一份角色 SP 与一份奇波就绪会话并通过 `--require-production`、owner 绑定和 JSON 回放，再扩展到完整 3+3；真实证据到位前不新增公式、倍率或奇波能量推断。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

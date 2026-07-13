@@ -1,11 +1,16 @@
 import { Buffer } from 'node:buffer';
-import { readFile, writeFile } from 'node:fs/promises';
+import { execFile } from 'node:child_process';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { promisify } from 'node:util';
 import { expect, test } from '@playwright/test';
 import {
   BASIC_WORKBENCH_DRAFT_STORAGE_KEY,
   createBasicWorkbenchDraftFixture,
 } from './helpers/basic-workbench-draft';
+import { createSixResourceCaptureBatchFixture } from './helpers/six-resource-capture-fixture';
+
+const execFileAsync = promisify(execFile);
 
 test.beforeEach(async ({ page }, testInfo) => {
   if (testInfo.title.includes('[m1d-demo-milestone]')) {
@@ -790,6 +795,128 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
   await expectPageWithoutHorizontalOverflow(page);
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: 'reports/m1c-library-runtime-narrow.png' });
+});
+
+test('[six-resource-capture-import] packages, imports, and replays six owner-specific resource captures', async ({
+  page,
+}, testInfo) => {
+  const { draft, actorIds, captures } = createSixResourceCaptureBatchFixture({
+    captureSessionPrefix: 'production-preview-six-resource',
+  });
+  await page.evaluate(
+    ({ storageKey, draftState }) => {
+      window.localStorage.setItem(storageKey, JSON.stringify(draftState));
+    },
+    { storageKey: BASIC_WORKBENCH_DRAFT_STORAGE_KEY, draftState: draft }
+  );
+  await page.reload();
+  await expect(page.getByTestId('scenario-action-count')).toHaveText(
+    '6 action'
+  );
+
+  const captureDirectory = testInfo.outputPath('six-resource-captures');
+  await mkdir(captureDirectory, { recursive: true });
+  const inputPaths = await Promise.all(
+    captures.map(async (capture, index) => {
+      const inputPath = resolve(captureDirectory, `capture-${index + 1}.json`);
+      await writeFile(inputPath, `${JSON.stringify(capture, null, 2)}\n`);
+      return inputPath;
+    })
+  );
+  const normalizedPath = resolve(
+    captureDirectory,
+    'six-resource-captures.normalized.json'
+  );
+  const normalizeArguments = inputPaths.flatMap(inputPath => [
+    '--input',
+    inputPath,
+  ]);
+  const { stdout } = await execFileAsync(
+    process.execPath,
+    [
+      'scripts/normalize-runtime-capture.mjs',
+      ...normalizeArguments,
+      '--output',
+      normalizedPath,
+    ],
+    { cwd: process.cwd() }
+  );
+  expect(JSON.parse(stdout)).toMatchObject({
+    inputFileCount: 6,
+    captureCount: 6,
+    eventCount: 6,
+  });
+  const normalizedEnvelope = JSON.parse(await readFile(normalizedPath, 'utf8'));
+  expect(normalizedEnvelope).toMatchObject({
+    normalizedBy: 'promilia-axis-tool/runtime-capture-normalizer-v2',
+    sourceFiles: expect.arrayContaining(
+      inputPaths.map(path =>
+        expect.objectContaining({ path: path.replaceAll('\\', '/') })
+      )
+    ),
+  });
+  expect(normalizedEnvelope.captures).toHaveLength(6);
+
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(normalizedPath);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已导入实测 6 组'
+  );
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="actor-energy-curve"]'
+    )
+  ).toHaveCount(3);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"]'
+    )
+  ).toHaveCount(3);
+  for (const actorId of actorIds) {
+    await expect(
+      timeline.locator(
+        `[data-testid="workbench-timeline-state-curve"][data-track-key="kiboEnergyChange"][data-actor-id="${actorId}"]`
+      )
+    ).toHaveAttribute('data-point-count', '1');
+  }
+
+  const downloadPromise = page.waitForEvent('download');
+  await clickProjectMenuCommand(page, 'workbench-export-project');
+  const download = await downloadPromise;
+  const projectPath = await download.path();
+  expect(projectPath).toBeTruthy();
+  const exportedProject = JSON.parse(await readFile(projectPath, 'utf8'));
+  expect(
+    exportedProject.runtimeSampleCaptures.map(capture => [
+      capture.workbenchBinding.actionId,
+      capture.workbenchBinding.actorId,
+      capture.workbenchBinding.resolutionKind,
+    ])
+  ).toEqual([
+    ['role-action-1', actorIds[0], 'resource-owner-action'],
+    ['role-action-2', actorIds[1], 'resource-owner-action'],
+    ['role-action-3', actorIds[2], 'resource-owner-action'],
+    ['kibo-action-1', actorIds[0], 'resource-owner-action'],
+    ['kibo-action-2', actorIds[1], 'resource-owner-action'],
+    ['kibo-action-3', actorIds[2], 'resource-owner-action'],
+  ]);
+
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(projectPath);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已导入项目'
+  );
+  for (const actorId of actorIds) {
+    await expect(
+      timeline.locator(
+        `[data-testid="workbench-timeline-state-curve"][data-track-key="kiboEnergyChange"][data-actor-id="${actorId}"]`
+      )
+    ).toHaveAttribute('data-point-count', '1');
+  }
 });
 
 async function expectImageLoaded(locator) {

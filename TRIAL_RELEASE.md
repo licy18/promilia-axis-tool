@@ -40,12 +40,35 @@ npm run preview -- --host 127.0.0.1 --port 4173
 5. 移动、复制或删除动作，确认节点和曲线同步；删除全部动作后应回到初始平线。
 6. 保存并重载，再导出/导入 JSON，确认队伍、奇波、敌人、轨道和曲线恢复一致。
 
+### 3. 六资源采样批次导入与回放
+
+1. 准备 3 个角色 SP 会话和 3 个奇波 `PetUltimateCdTime` 观测会话；每份文件必须使用不同的 `captureSessionId`。
+2. 使用同一条命令把六份 JSON/JSONL 按顺序打包：
+
+```powershell
+npm run runtime-capture:normalize -- `
+  --input C:\path\role-1.jsonl `
+  --input C:\path\role-2.jsonl `
+  --input C:\path\role-3.jsonl `
+  --input C:\path\kibo-1.jsonl `
+  --input C:\path\kibo-2.jsonl `
+  --input C:\path\kibo-3.jsonl `
+  --output C:\path\six-resource-captures.json
+```
+
+3. 在 Workbench 配置与采样一致的 3 个角色、各自奇波和六个来源动作，再从“项目/更多”导入批次文件。
+4. 确认状态显示“已导入实测 6 组”，六份 capture 分别绑定到正确角色或奇波 owner；任一 owner 漂移或动作歧义都应拒绝整批导入。
+5. 导出项目 JSON，重置后回载，确认 3 条角色能量轴、3 条奇波能量轴及各自采样身份没有串线。
+
+`test:trial-release` 会用确定性夹具自动执行“六文件打包 -> production preview 导入 -> 六 owner 绑定 -> JSON 回放”。仓库目前不内置非 fixture 游戏会话，因此该自动验收证明工作流与隔离合同，不证明已经取得真实战斗数值。
+
 ## 当前边界
 
 - 技能、HP、韧性和角色能量只展示当前已绑定 `applied` 或明确标记为 preview 的结果，不代表测试期最终平衡数值。
 - 奇波动作名称、图标和已确认时长可编排；未确认效果与奇波能量变化继续为 `tracking-only / unapplied`。
 - 装备、奇波、灵子、防御、抗性、等级和培养效果中未确认的部分只保留配置与来源身份，不进入 calculator。
-- 受控采样链尚未取得首份非 fixture 真实战斗 capture；当前候选发布不声称已精确复刻最终战斗公式。
+- 受控采样链尚未取得首份非 fixture 真实战斗 capture；仓库与 `C:\PC2\Codex\AzPr` 当前只有 hook manifest、采样工具和 fixture，没有可通过 `--require-production` 的六资源实战批次。
+- 六资源 production preview 使用确定性夹具验证打包、owner 绑定和回放；只有已通过 applied source binding 的角色 SP 样本才能改变角色曲线，奇波就绪观测继续是 `tracking-only`，两者都不等同于最终游戏公式。
 - 验收覆盖本地 Vite production preview，不覆盖远程 CDN、公网部署、缓存头或服务端可用性。
 
 ## 反馈清单
