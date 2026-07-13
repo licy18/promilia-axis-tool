@@ -27223,3 +27223,30 @@ runtimeOutputs.summary / outputContract.summary / consumer.summary
 ```
 
 `outputConsistency` 现在分别核对角色与奇波点数，并把 `curvesByKibo[].points` 纳入统一状态点引用审计。旧载体没有这些拆分字段时仍由 consumer 从两组曲线计算，不需要迁移；当前 tracking-only 奇波曲线的 `kiboPointCount` 为 0。
+
+## 417. Kibo energy runtime semantics v2
+
+`AzPrKiboEnergyRuntimeCurves` 从 v1 升级为 v2，但项目仍为 Workbench v16，数值与曲线点不变。每条奇波曲线新增只读来源语义：
+
+```text
+curvesByKibo[]
+  resource = kibo-energy
+  semanticResource = pet-ultimate-readiness
+  sourceSemantics
+    sourceKind = azpr-pet-ultimate-cooldown-observation
+    status = observable-contract-confirmed-values-unresolved
+    observation
+      api = PetUltimateCdTime
+      remainingValue = cdTime
+      totalValue = totalTime
+      readyWhen = cdTime <= 0
+      uiFillExpression = cdTime / totalTime
+      valueUnit = seconds
+    initialValueSourceStatus = unresolved
+    totalValueSourceStatus = unresolved
+    eventValueSourceStatus = unresolved
+    trackingOnly = true
+    appliedToCalculators = false
+```
+
+时间轴拓扑的 `kiboEnergyCurve` 同步记录 `semanticResource` 与 `valueSourceStatus`，但不持久化新的战斗数值。旧项目重建拓扑和 runtime 时会自动获得这些字段，无需迁移；在真实 `totalTime` 与事件来源接入前，奇波轴仍保持 0 基线、0 点和平线。

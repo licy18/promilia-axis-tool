@@ -1,6 +1,32 @@
 export const KIBO_ENERGY_RUNTIME_CURVES_CONTRACT_NAME =
   'AzPrKiboEnergyRuntimeCurves';
-export const KIBO_ENERGY_RUNTIME_CURVES_CONTRACT_VERSION = 1;
+export const KIBO_ENERGY_RUNTIME_CURVES_CONTRACT_VERSION = 2;
+
+function createKiboEnergySourceSemantics() {
+  return {
+    sourceKind: 'azpr-pet-ultimate-cooldown-observation',
+    semanticResource: 'pet-ultimate-readiness',
+    presentationResource: 'kibo-energy',
+    status: 'observable-contract-confirmed-values-unresolved',
+    observation: {
+      api: 'PetUltimateCdTime',
+      remainingValue: 'cdTime',
+      totalValue: 'totalTime',
+      readyWhen: 'cdTime <= 0',
+      uiFillExpression: 'cdTime / totalTime',
+      valueUnit: 'seconds',
+    },
+    evidenceRefs: [
+      'ResourcesAssets/Lua/64/src/ui/pages/battle/moduleBattlePetSkill.lua',
+      'ResourcesAssets/Lua/64/src/ui/pages/battle/moduleBattleControl.lua',
+    ],
+    initialValueSourceStatus: 'unresolved',
+    totalValueSourceStatus: 'unresolved',
+    eventValueSourceStatus: 'unresolved',
+    trackingOnly: true,
+    appliedToCalculators: false,
+  };
+}
 
 export function createKiboEnergyRuntimeCurves({ scenario } = {}) {
   const topologyGroups =
@@ -32,8 +58,9 @@ export function createKiboEnergyRuntimeCurves({ scenario } = {}) {
       group.kiboLane?.kiboName ??
       (kiboId ? `奇波 ${kiboId}` : '未绑定奇波');
     const baselineStatus = kiboId
-      ? 'tracking-default-zero-unconfirmed'
+      ? 'tracking-zero-source-semantics-confirmed-value-unresolved'
       : 'tracking-slot-unconfigured';
+    const sourceSemantics = createKiboEnergySourceSemantics();
     const baseline = {
       sourceKind: 'workbench-kibo-energy-tracking-baseline',
       status: baselineStatus,
@@ -56,11 +83,15 @@ export function createKiboEnergyRuntimeCurves({ scenario } = {}) {
       kiboId,
       kiboName,
       resource: 'kibo-energy',
+      semanticResource: sourceSemantics.semanticResource,
+      sourceSemantics,
       baseline,
       stateMetric: {
         key: 'kiboEnergy',
         label: '奇波能量',
         valueUnit: 'kibo-energy',
+        semanticResource: sourceSemantics.semanticResource,
+        observedSourceValueUnit: sourceSemantics.observation.valueUnit,
         initialValue: 0,
         currentValue: 0,
         maxValue: null,

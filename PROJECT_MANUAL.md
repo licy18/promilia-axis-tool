@@ -1352,6 +1352,16 @@ Workbench 桌面现把动作库与多轨时间轴并排显示。用户可从当�
 
 下一阶段目标保持不变：停在 M1 产品决策点；后续主线需在真实蓝原机制接入、动作/时序内容完整性或试用发布之间明确选择，不自动恢复校准或公式考古。
 
+### M1 六能量轴资源语义收口（2026-07-13）
+
+3 条角色能量轴继续跟踪各角色自身 SP；3 条奇波能量轴现明确跟踪各自绑定奇波的终极技能就绪进度，六个资源所有者互不合并。AzPr Lua 战斗界面通过 `PetUltimateCdTime()` 读取 `cdTime / totalTime`，并在 `cdTime <= 0` 时判定奇波技能可用；定向导出的 `skill_control_500001*` 和 `Element/Pet/500001` 证明动作与 Element 资源可完整读取，但尚未提供可稳定映射到每只奇波的 `totalTime` 来源。
+
+`AzPrKiboEnergyRuntimeCurves` 升级为 v2，在既有曲线上记录 `pet-ultimate-readiness` 语义、观测 API、字段单位和来源状态。当前 0 基线与平线结果完全不变，仍为 `tracking-only / unapplied`，不会进入三值 calculator。Extractor 证据报告位于 `C:\Codex\AzPr Extractor\outputs\axis-pet-500001-skill-control-export-report.json` 与 `axis-pet-500001-element-export-report.json`。
+
+阶段验收：83 个测试文件、464 条单元/组件测试一次通过，34/34 项 production preview 通过；生产引用、数据投影与 applied source 审计均通过，applied source 仍为 3 条、0 drift、0 compatible-unbound。Workbench 主块为 356,481B gzip，总 JavaScript 为 738,311B gzip，低于 370,000B/740,000B 硬门槛但仍高于 735,000B 预警线。
+
+下一阶段目标：优先补齐奇波动作库的数据完整性，把 `pet.json` 的 signature/break/fixed skill 与已导出的 Skill Control 时长、行为节点稳定映射到可编排动作；奇波资源变化只有在找到可复现的 `totalTime` 或正式 runtime 输入后才接入，继续禁止猜测冷却数值。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

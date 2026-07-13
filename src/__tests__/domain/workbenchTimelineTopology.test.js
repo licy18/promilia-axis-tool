@@ -31,6 +31,9 @@ describe('workbench timeline topology', () => {
         kiboEffectsAppliedToCalculators: false,
         actorEnergyCurvesIndependent: true,
         kiboEnergyCurvesIndependent: true,
+        kiboEnergySemanticResource: 'pet-ultimate-readiness',
+        kiboEnergyValueSourceStatus:
+          'observable-contract-confirmed-values-unresolved',
         kiboEnergyChangesAppliedToCalculators: false,
         enemyStateCurvesIndependent: true,
       },
@@ -60,6 +63,9 @@ describe('workbench timeline topology', () => {
         kiboId: 500001,
         kiboName: '奇波一',
         trackKey: 'kiboEnergyChange',
+        semanticResource: 'pet-ultimate-readiness',
+        valueSourceStatus:
+          'observable-contract-confirmed-values-unresolved',
         trackingOnly: true,
         appliedToCalculators: false,
       }),

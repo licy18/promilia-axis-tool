@@ -51,6 +51,9 @@ export function createWorkbenchTimelineTopology({
           characterId,
           kiboId,
           kiboName: kibo?.name ?? null,
+          semanticResource: 'pet-ultimate-readiness',
+          valueSourceStatus:
+            'observable-contract-confirmed-values-unresolved',
           appliedToCalculators: false,
           trackingOnly: true,
         },
@@ -92,6 +95,9 @@ export function createWorkbenchTimelineTopology({
       kiboEffectsAppliedToCalculators: false,
       actorEnergyCurvesIndependent: true,
       kiboEnergyCurvesIndependent: true,
+      kiboEnergySemanticResource: 'pet-ultimate-readiness',
+      kiboEnergyValueSourceStatus:
+        'observable-contract-confirmed-values-unresolved',
       kiboEnergyChangesAppliedToCalculators: false,
       enemyStateCurvesIndependent: true,
     },
