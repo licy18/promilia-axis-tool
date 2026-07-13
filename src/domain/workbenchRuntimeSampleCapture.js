@@ -15,6 +15,7 @@ const RECOVER_SP_REQUIRED_EVENT_TYPES = [
 ];
 const TOUGHNESS_REQUIRED_EVENT_TYPES = ['toughness-damage-applied'];
 const KIBO_ENERGY_REQUIRED_EVENT_TYPES = ['pet-ultimate-cooldown-observed'];
+const ISOLATED_CAPTURE_KINDS = new Set(['role-sp', 'kibo-energy', 'toughness']);
 const NON_PRODUCTION_SOURCE_PATTERN =
   /(?:fixture|synthetic|template|mock|example|manual|self[-_ ]?test)/iu;
 
@@ -718,6 +719,8 @@ function createProductionCaptureAudit(capture) {
   const source = stringOrNull(capture.source ?? capture.captureSource);
   const clientRegion = stringOrNull(capture.clientRegion);
   const clientBuild = stringOrNull(capture.clientBuild);
+  const captureKind = stringOrNull(capture.captureKind);
+  const captureBinding = capture.binding ?? {};
   const captureTool = capture.captureTool ?? {};
   const eventTypes = uniqueStrings(
     capture.events.map(event => event.eventType)
@@ -786,6 +789,23 @@ function createProductionCaptureAudit(capture) {
     stringOrNull(captureTool.version) &&
     stringOrNull(captureTool.hookManifestId ?? captureTool.hookManifestSha256)
   );
+  const captureScopeDeclared = ISOLATED_CAPTURE_KINDS.has(captureKind);
+  const captureScopeMatchesEvents =
+    captureKind === 'role-sp'
+      ? hasRecoverSpEvents && !hasToughnessEvents && !hasKiboEnergyEvents
+      : captureKind === 'kibo-energy'
+        ? hasKiboEnergyEvents && !hasRecoverSpEvents && !hasToughnessEvents
+        : captureKind === 'toughness'
+          ? hasToughnessEvents && !hasRecoverSpEvents && !hasKiboEnergyEvents
+          : false;
+  const captureBindingComplete = Boolean(
+    stringOrNull(captureBinding.actionId) &&
+    stringOrNull(captureBinding.actorId) &&
+    stringOrNull(captureBinding.targetId) &&
+    (captureKind !== 'kibo-energy' ||
+      (stringOrNull(captureBinding.slotId) &&
+        positiveIntegerOrNull(captureBinding.kiboId)))
+  );
   const productionMarkerText = [
     capture.captureSessionId,
     source,
@@ -806,6 +826,9 @@ function createProductionCaptureAudit(capture) {
     clientRegionDeclared: Boolean(clientRegion),
     clientBuildDeclared: Boolean(clientBuild),
     captureToolDeclared: captureToolComplete,
+    captureScopeDeclared,
+    captureScopeMatchesEvents,
+    captureBindingComplete,
     eventSequenceComplete:
       requiredEventTypes.length > 0 &&
       missingEventTypes.length === 0 &&
@@ -824,6 +847,7 @@ function createProductionCaptureAudit(capture) {
     source,
     clientRegion,
     clientBuild,
+    captureKind,
     eventCount: capture.events.length,
     eventTypes,
     requiredEventTypes,

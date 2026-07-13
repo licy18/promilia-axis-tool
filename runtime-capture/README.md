@@ -47,7 +47,22 @@ npm run runtime-capture:self-test -- --output C:\path\frida-self-test.jsonl
 npm run runtime-capture:capture -- `
   --pid 12345 `
   --output C:\path\azpr-runtime.jsonl `
+  --capture-kind role-sp `
   --action-id action-0001 `
+  --actor-id actor-109001 `
+  --target-id enemy-300032 `
+  --duration 30 `
+  --confirm-controlled-session
+```
+
+奇波就绪应单独采集，避免同一会话混入角色 SP 或削韧事件：
+
+```powershell
+npm run runtime-capture:capture -- `
+  --pid 12345 `
+  --output C:\path\azpr-kibo-1.jsonl `
+  --capture-kind kibo-energy `
+  --action-id kibo-action-1 `
   --actor-id actor-109001 `
   --target-id enemy-300032 `
   --slot-id team-slot-1 `
@@ -57,6 +72,8 @@ npm run runtime-capture:capture -- `
 ```
 
 采集端不会寻找、启动或修改客户端，也没有反作弊绕过参数。它在附加后先读取进程内 `GameAssembly.dll` 路径并核对 manifest 的文件大小和 SHA-256；不一致时不会安装 hook。`--duration 0` 表示由操作者按 Ctrl+C 结束，输出每条事件后立即刷新到磁盘。
+
+`--capture-kind` 可选 `role-sp / kibo-energy / toughness / all`，默认 `all` 只用于旧流程兼容。六资源正式采样应为每个角色或奇波分别选择单一范围；`kibo-energy` 强制要求 `--slot-id` 与正整数 `--kibo-id`，`role-sp` 和 `toughness` 会拒绝奇波参数。这样每份会话只有一个预期资源类型，避免无关战斗事件改变动作绑定语义。
 
 当前 agent 覆盖：
 
@@ -80,6 +97,15 @@ npm run runtime-capture:capture -- `
   "clientRegion": "TW",
   "clientBuild": "build-id",
   "source": "source-game-runtime",
+  "captureKind": "kibo-energy",
+  "binding": {
+    "actionId": "kibo-action-1",
+    "actorId": "actor-109001",
+    "targetId": "enemy-300032",
+    "slotId": "team-slot-1",
+    "kiboId": 500001,
+    "sourceElementConfigId": null
+  },
   "captureTool": {
     "name": "controlled-il2cpp-capture",
     "version": "1.0.0",
@@ -151,6 +177,9 @@ production audit 要求：
 - 非 fixture/synthetic/template/manual/self-test 的 runtime 来源。
 - `clientRegion`、`clientBuild` 与采集工具元数据完整。
 - hook manifest 标识存在。
+- `captureKind` 必须是单一的 `role-sp / kibo-energy / toughness`，不能使用旧 `all` 声明生产证据。
+- 会话 `binding` 必须包含动作、角色和目标；奇波会话还必须包含槽位与奇波 ID。
+- 实际事件族必须与 `captureKind` 一致，混入其他资源事件会拒绝整份会话。
 - 所需事件序列完整，RecoverSP 事件保持调用先后顺序。
 - 每个事件有帧或毫秒时间以及 DamageElement/PathID 来源。
 
@@ -158,4 +187,4 @@ production audit 要求：
 
 ## 下一步
 
-在获准的受控客户端会话中按 manifest 实施采集，生成第一份包含角色 SP、奇波就绪或韧性的非 fixture JSONL。只有该文件通过 `--require-production`、所有者核对和 Workbench 曲线/日志验证后，生产采样闭环才算完成。
+在获准的受控客户端会话中按单一 `captureKind` 实施采集，生成第一份角色 SP 和第一份奇波就绪非 fixture JSONL。只有文件分别通过 `--require-production`、所有者核对和 Workbench 曲线/日志验证，再扩展为完整 3+3 批次后，生产采样闭环才算完成。

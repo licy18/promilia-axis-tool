@@ -29,6 +29,15 @@ describe('runtime capture normalize CLI', () => {
         clientRegion: 'TW',
         clientBuild: 'fixture-build',
         source: capture.source,
+        captureKind: 'role-sp',
+        binding: {
+          actionId: 'action-0001',
+          actorId: 'actor-109001',
+          targetId: 'enemy-300032',
+          slotId: null,
+          kiboId: null,
+          sourceElementConfigId: 109001081,
+        },
       }),
       ...capture.events.map(event =>
         JSON.stringify({ recordType: 'event', ...event })
@@ -51,6 +60,16 @@ describe('runtime capture normalize CLI', () => {
         status: 'production-runtime-captures-incomplete',
         realCaptureClaimAllowed: false,
       },
+      captures: [
+        expect.objectContaining({
+          captureKind: 'role-sp',
+          binding: expect.objectContaining({
+            actionId: 'action-0001',
+            actorId: 'actor-109001',
+            sourceElementConfigId: 109001081,
+          }),
+        }),
+      ],
     });
 
     const productionRun = spawnSync(
@@ -129,6 +148,86 @@ describe('runtime capture normalize CLI', () => {
     expect(collisionRun.status).toBe(1);
     expect(collisionRun.stderr).toContain(
       'Duplicate captureSessionId across inputs: batch-role-capture-1'
+    );
+  });
+
+  it('requires an isolated scope and complete binding for production output', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'promilia-capture-scope-'));
+    temporaryDirectories.push(directory);
+    const inputPath = join(directory, 'kibo-capture.json');
+    const outputPath = join(directory, 'kibo-capture.normalized.json');
+    const capture = {
+      schemaVersion: 1,
+      captureSessionId: 'controlled-kibo-scope-1',
+      source: 'source-game-runtime-frida-controlled-session',
+      clientRegion: 'TW',
+      clientBuild: 'controlled-build-20260714',
+      captureKind: 'kibo-energy',
+      binding: {
+        actionId: 'kibo-action-1',
+        actorId: 'actor-109001',
+        targetId: 'enemy-300032',
+        slotId: 'team-slot-1',
+        kiboId: 500001,
+        sourceElementConfigId: null,
+      },
+      captureTool: {
+        name: 'promilia-axis-controlled-frida-capture',
+        version: '1.1.0',
+        hookManifestId: 'azpr-tc-20260709-three-value-runtime-capture-v2',
+      },
+      events: [
+        {
+          captureSessionId: 'controlled-kibo-scope-1',
+          eventType: 'pet-ultimate-cooldown-observed',
+          timeMs: 100,
+          actionId: 'kibo-action-1',
+          actorId: 'actor-109001',
+          targetId: 'enemy-300032',
+          slotId: 'team-slot-1',
+          kiboId: 500001,
+          petEntityId: 70001,
+          petEntityPointer: '0x12345678',
+          api: 'PetUltimateCdTime',
+          cdTime: 12,
+          totalTime: 20,
+          ready: false,
+        },
+      ],
+    };
+    await writeFile(inputPath, JSON.stringify(capture), 'utf8');
+
+    const scriptPath = resolve('scripts/normalize-runtime-capture.mjs');
+    const productionRun = spawnSync(
+      process.execPath,
+      [
+        scriptPath,
+        '--input',
+        inputPath,
+        '--output',
+        outputPath,
+        '--require-production',
+      ],
+      { encoding: 'utf8' }
+    );
+    expect(productionRun.status).toBe(0);
+    expect(JSON.parse(productionRun.stdout)).toMatchObject({
+      realCaptureClaimAllowed: true,
+    });
+
+    await writeFile(
+      inputPath,
+      JSON.stringify({ ...capture, captureKind: 'all' }),
+      'utf8'
+    );
+    const legacyAllRun = spawnSync(
+      process.execPath,
+      [scriptPath, '--input', inputPath, '--require-production'],
+      { encoding: 'utf8' }
+    );
+    expect(legacyAllRun.status).toBe(2);
+    expect(legacyAllRun.stderr).toContain(
+      'production-runtime-captures-incomplete'
     );
   });
 });

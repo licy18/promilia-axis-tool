@@ -27441,3 +27441,11 @@ cdTime / totalTime / ready
 已绑定 capture 的 `workbenchBinding` 可新增 `resolutionKind = source-action-id | resource-owner-action | selected-action-fallback`。旧 capture 缺少该字段时继续兼容；项目 schema 与 `runtime-sample-captures` schemaVersion 不升级。绑定汇总可新增 `bindingKinds[]`，拒绝项可新增 `resourceOwnerActorIds[] / candidateActionIds[]`，用于区分唯一 owner 绑定与动作歧义。
 
 `runtime-capture:normalize` 标识升级为 `promilia-axis-tool/runtime-capture-normalizer-v2`。重复 `--input` 时，输出按输入顺序合并 `captures[]` 并新增 `sourceFiles[]`；单输入同时保留旧 `sourceFile`。任何重复 `captureSessionId` 都会拒绝生成，不执行覆盖或去重。以上来源字段不参与 runtime 计算。
+
+## 430. Controlled runtime capture scope
+
+`capture-session` 元数据可新增 `captureKind = all | role-sp | kibo-energy | toughness` 与 `binding`。`binding` 保存采集时显式传入的 `actionId / actorId / targetId / slotId / kiboId / sourceElementConfigId`，只用于来源追溯和 owner 核对，不直接写入三值。旧 JSONL 缺少两字段时继续按 `all` 兼容导入，但不能通过新版 `--require-production`。
+
+Frida agent 的 `startcapture` 配置同步新增 `captureKind`。`role-sp` 只安装 RecoverSP 链，`kibo-energy` 只安装 `PetEntity.PetUltimateCdTime`，`toughness` 只安装 WeaknessPoint 链；`all` 保留旧行为。该变化不升级 `runtime-sample-captures` 或 Workbench 项目 schema，也不改变已导入 capture 的数值计算。
+
+Production provenance audit 新增 `captureScopeDeclared / captureScopeMatchesEvents / captureBindingComplete`。生产声明必须使用单一范围、完整 owner binding，并且事件只能来自对应资源族；`all`、范围缺失或跨资源污染均保持可查看但不可声明为真实生产采样。

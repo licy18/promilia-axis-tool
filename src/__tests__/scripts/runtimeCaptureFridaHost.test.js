@@ -37,7 +37,7 @@ describe('controlled Frida runtime capture host', () => {
       source: 'controlled-frida-self-test',
       captureTool: {
         name: 'promilia-axis-controlled-frida-capture',
-        version: '1.0.0',
+        version: '1.1.0',
         fridaVersion: expect.any(String),
       },
     });
@@ -82,6 +82,52 @@ describe('controlled Frida runtime capture host', () => {
     expect(captureRun.status).not.toBe(0);
     expect(captureRun.stderr).toContain(
       'Refusing to attach without --confirm-controlled-session'
+    );
+  });
+
+  it('validates isolated capture scopes before attempting an attach', () => {
+    const hostScript = resolve('scripts/capture-azpr-runtime.py');
+    const requiredArguments = [
+      hostScript,
+      '--pid',
+      String(process.pid),
+      '--output',
+      join(tmpdir(), 'must-not-be-created.jsonl'),
+      '--action-id',
+      'action-0001',
+      '--actor-id',
+      'actor-109001',
+      '--target-id',
+      'enemy-300032',
+      '--confirm-controlled-session',
+    ];
+
+    const missingKiboOwner = spawnSync(
+      'python',
+      [...requiredArguments, '--capture-kind', 'kibo-energy'],
+      { encoding: 'utf8', timeout: 10_000 }
+    );
+    expect(missingKiboOwner.status).not.toBe(0);
+    expect(missingKiboOwner.stderr).toContain(
+      '--capture-kind kibo-energy requires --slot-id and --kibo-id'
+    );
+
+    const mixedRoleScope = spawnSync(
+      'python',
+      [
+        ...requiredArguments,
+        '--capture-kind',
+        'role-sp',
+        '--slot-id',
+        'team-slot-1',
+        '--kibo-id',
+        '500001',
+      ],
+      { encoding: 'utf8', timeout: 10_000 }
+    );
+    expect(mixedRoleScope.status).not.toBe(0);
+    expect(mixedRoleScope.stderr).toContain(
+      '--slot-id and --kibo-id are not valid for --capture-kind role-sp'
     );
   });
 });

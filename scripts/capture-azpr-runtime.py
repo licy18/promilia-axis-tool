@@ -30,7 +30,8 @@ AGENT_PATH = (
     / "runtime-capture/frida/azpr-runtime-capture-agent.js"
 )
 CAPTURE_TOOL_NAME = "promilia-axis-controlled-frida-capture"
-CAPTURE_TOOL_VERSION = "1.0.0"
+CAPTURE_TOOL_VERSION = "1.1.0"
+CAPTURE_KINDS = ("all", "role-sp", "kibo-energy", "toughness")
 
 
 class JsonLinesWriter:
@@ -71,6 +72,7 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument("--slot-id")
     parser.add_argument("--kibo-id", type=int)
     parser.add_argument("--source-element-config-id", type=int)
+    parser.add_argument("--capture-kind", choices=CAPTURE_KINDS, default="all")
     parser.add_argument("--duration", type=float, default=30.0)
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument("--confirm-controlled-session", action="store_true")
@@ -101,6 +103,20 @@ def validate_capture_options(options: argparse.Namespace) -> None:
         raise SystemExit(f"Missing required capture arguments: {', '.join(missing)}")
     if options.duration < 0:
         raise SystemExit("--duration must be zero or positive")
+    has_slot_id = bool(options.slot_id)
+    has_kibo_id = options.kibo_id is not None
+    if has_slot_id != has_kibo_id:
+        raise SystemExit("--slot-id and --kibo-id must be provided together")
+    if has_kibo_id and options.kibo_id <= 0:
+        raise SystemExit("--kibo-id must be a positive integer")
+    if options.capture_kind == "kibo-energy" and not has_slot_id:
+        raise SystemExit(
+            "--capture-kind kibo-energy requires --slot-id and --kibo-id"
+        )
+    if options.capture_kind in ("role-sp", "toughness") and has_slot_id:
+        raise SystemExit(
+            f"--slot-id and --kibo-id are not valid for --capture-kind {options.capture_kind}"
+        )
 
 
 def run_game_capture(options: argparse.Namespace) -> int:
@@ -134,6 +150,8 @@ def run_game_capture(options: argparse.Namespace) -> int:
                 manifest_sha256=manifest_sha256,
                 module_info=verified_module,
                 process_id=options.pid,
+                capture_kind=options.capture_kind,
+                binding=create_capture_binding(options),
             )
         )
         start_result = script.exports_sync.startcapture(
@@ -146,6 +164,7 @@ def run_game_capture(options: argparse.Namespace) -> int:
                 "slotId": options.slot_id,
                 "kiboId": options.kibo_id,
                 "sourceElementConfigId": options.source_element_config_id,
+                "captureKind": options.capture_kind,
             }
         )
         print(json.dumps(start_result, ensure_ascii=False), file=sys.stderr)
@@ -177,6 +196,7 @@ def run_game_capture(options: argparse.Namespace) -> int:
             {
                 "outputPath": str(output_path),
                 "captureSessionId": session_id,
+                "captureKind": options.capture_kind,
                 "eventCount": writer.event_count if writer is not None else 0,
             },
             ensure_ascii=False,
@@ -300,6 +320,8 @@ def create_session_record(
     manifest_sha256: str,
     module_info: dict[str, Any],
     process_id: int,
+    capture_kind: str,
+    binding: dict[str, Any],
 ) -> dict[str, Any]:
     module_sha256 = module_info["sha256"]
     return {
@@ -311,6 +333,8 @@ def create_session_record(
             f"{manifest['source']['clientSnapshot']}:{module_sha256[:12]}"
         ),
         "source": source,
+        "captureKind": capture_kind,
+        "binding": binding,
         "captureTool": {
             "name": CAPTURE_TOOL_NAME,
             "version": CAPTURE_TOOL_VERSION,
@@ -321,6 +345,17 @@ def create_session_record(
         "processId": process_id,
         "module": module_info,
         "startedAt": datetime.now(UTC).isoformat(),
+    }
+
+
+def create_capture_binding(options: argparse.Namespace) -> dict[str, Any]:
+    return {
+        "actionId": options.action_id,
+        "actorId": options.actor_id,
+        "targetId": options.target_id,
+        "slotId": options.slot_id,
+        "kiboId": options.kibo_id,
+        "sourceElementConfigId": options.source_element_config_id,
     }
 
 

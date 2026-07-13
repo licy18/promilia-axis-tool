@@ -29,7 +29,16 @@ rpc.exports = {
         `Unsupported runtime ${Process.platform}/${Process.arch}; expected windows/x64`
       );
     }
-    captureConfig = config;
+    const captureKind = normalizeCaptureKind(config.captureKind);
+    if (
+      captureKind === 'kibo-energy' &&
+      (!config.slotId || !(Number(config.kiboId) > 0))
+    ) {
+      throw new Error(
+        'kibo-energy capture requires slotId and a positive kiboId'
+      );
+    }
+    captureConfig = { ...config, captureKind };
     captureModule = Process.getModuleByName(config.manifest.source.moduleName);
     methodByKey = new Map(
       config.manifest.methods.map(method => [method.key, method])
@@ -40,18 +49,28 @@ rpc.exports = {
     captureStartedAt = Date.now();
     emittedEventCount = 0;
 
-    installRecoverSpHooks();
-    if (captureConfig.slotId && Number(captureConfig.kiboId) > 0) {
+    if (captureKind === 'all' || captureKind === 'role-sp') {
+      installRecoverSpHooks();
+    }
+    if (
+      (captureKind === 'all' || captureKind === 'kibo-energy') &&
+      captureConfig.slotId &&
+      Number(captureConfig.kiboId) > 0
+    ) {
       installKiboEnergyHooks();
     }
-    installToughnessHooks();
+    if (captureKind === 'all' || captureKind === 'toughness') {
+      installToughnessHooks();
+    }
     sendStatus('capture-agent-started', {
+      captureKind,
       moduleName: captureModule.name,
       moduleBase: captureModule.base.toString(),
       installedHookCount: listeners.length,
     });
     return {
       status: 'capture-agent-started',
+      captureKind,
       installedHookCount: listeners.length,
       moduleName: captureModule.name,
       moduleBase: captureModule.base.toString(),
@@ -701,4 +720,17 @@ function roundNumber(value) {
 
 function parseHex(value) {
   return Number.parseInt(String(value), 16);
+}
+
+function normalizeCaptureKind(value) {
+  const captureKind = value || 'all';
+  if (
+    captureKind !== 'all' &&
+    captureKind !== 'role-sp' &&
+    captureKind !== 'kibo-energy' &&
+    captureKind !== 'toughness'
+  ) {
+    throw new Error(`Unsupported capture kind: ${captureKind}`);
+  }
+  return captureKind;
 }

@@ -55,7 +55,7 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 
 - `npm run test:trial-release`：候选发布完整守门一次通过。
 - `npm run test -- --run`：85 个测试文件、476 条测试通过。
-- `npm run test:e2e:production-preview`：37/37 项必需能力通过，报告结论为 `trial-ready`。
+- `npm run test:e2e:production-preview`：40/40 项必需能力通过，报告结论为 `trial-ready`。
 - 生产引用、生产数据、applied source 和包体审计通过；总 JavaScript 为 739,969B gzip，低于 740,000B 发布硬门槛。
 
 ## 3. 目录速览
@@ -1503,6 +1503,16 @@ Workbench 现在可以从一个 `runtime-sample-captures` 文件一次导入 6 �
 阶段验收为 89 个测试文件、491 条测试和 40/40 项 production preview 全部通过，acceptance 判定为 `trial-ready`；生产引用为 123 个可达源码、4 个允许 test-only、0 个孤儿，Workbench 数据投影和 3 条 applied source binding 审计均通过。Workbench 主块为 334,371B gzip，总 JavaScript 为 739,228B gzip，低于 370,000B/740,000B 发布硬门槛，但已进入 735,000B 预警区。
 
 下一阶段目标：P3 首份非 fixture 六资源受控采样验收。由操作者明确启动获准客户端，先取得至少一份角色 SP 与一份奇波就绪会话并通过 `--require-production`、owner 绑定和 JSON 回放，再扩展到完整 3+3；真实证据到位前不新增公式、倍率或奇波能量推断。
+
+### P3 六资源受控采样范围隔离（2026-07-14）
+
+受控 Frida host 现要求每份正式资源会话显式选择 `--capture-kind role-sp | kibo-energy | toughness`；旧调用继续默认 `all`。agent 会分别只安装 6 个 RecoverSP hooks、1 个 `PetUltimateCdTime` hook 或 2 个 WeaknessPoint hooks，不再让奇波采样因同场触发 SP/韧性事件而改变动作绑定语义。`kibo-energy` 必须同时给出 `slotId / kiboId`，其他单一范围会拒绝奇波参数，所有错误均在 attach 前终止。
+
+JSONL 会话首行新增可选 `captureKind` 与 `binding` 来源字段，完整记录采集时的动作、角色、目标、槽位、奇波和 Element 身份；normalizer 与旧 capture 继续兼容，这些字段只做追溯，不进入 calculator。新版 `--require-production` 会额外要求单一范围、完整 binding 与事件族一致，旧 `all`、范围缺失或跨资源污染只能导入查看，不能声明为真实生产证据。采集工具版本升级为 `1.1.0`，仍保留显式 PID、`--confirm-controlled-session`、GameAssembly 哈希核对、不自动启动客户端和不绕过反作弊的边界。
+
+阶段验收为 90 个测试文件、498 条测试和 40/40 项 production preview 全部通过，覆盖 host 参数门、agent 四种范围安装数、production scope audit 和 normalizer 来源字段兼容；真实 Frida self-test transport 捕获 4 个探针事件。Workbench 主块保持 334,371B gzip，总 JavaScript 保持 739,228B gzip。静态 TC 客户端 `GameAssembly.dll` 仍为 222,485,544B，SHA-256 `c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b`，与 hook manifest 完全一致。当前没有蓝色星原客户端进程，因此本阶段没有附加游戏，也没有生成或声称首份真实战斗 capture。
+
+下一阶段目标：P3 首份非 fixture 六资源受控采样验收。由操作者明确启动获准客户端后，分别以 `role-sp` 和 `kibo-energy` 取得首份真实会话，通过 `--require-production`、owner 绑定和项目回放，再扩展到完整 3+3；不提前推断公式。
 
 ## 10. 文档维护规则
 

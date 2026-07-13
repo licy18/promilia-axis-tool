@@ -109,9 +109,18 @@ describe('workbench runtime sample capture', () => {
       source: 'source-game-runtime',
       clientRegion: 'TW',
       clientBuild: 'controlled-build-20260710',
+      captureKind: 'role-sp',
+      binding: {
+        actionId: 'action-0001',
+        actorId: 'actor-109001',
+        targetId: 'enemy-300032',
+        slotId: null,
+        kiboId: null,
+        sourceElementConfigId: 109001081,
+      },
       captureTool: {
         name: 'controlled-il2cpp-capture',
-        version: '1.0.0',
+        version: '1.1.0',
         hookManifestId: 'azpr-tc-20260709-three-value-runtime-capture-v2',
       },
       events: fixture.events.map(event => ({
@@ -135,6 +144,9 @@ describe('workbench runtime sample capture', () => {
             clientRegionDeclared: true,
             clientBuildDeclared: true,
             captureToolDeclared: true,
+            captureScopeDeclared: true,
+            captureScopeMatchesEvents: true,
+            captureBindingComplete: true,
             eventSequenceComplete: true,
             eventTimingComplete: true,
             eventSourceIdentityComplete: true,
@@ -163,6 +175,23 @@ describe('workbench runtime sample capture', () => {
         },
       ],
     });
+
+    expect(
+      createRuntimeSampleCaptureProductionAudit([
+        { ...productionCapture, captureKind: 'all' },
+      ])
+    ).toMatchObject({
+      realCaptureClaimAllowed: false,
+      captureAudits: [
+        expect.objectContaining({
+          captureKind: 'all',
+          checks: expect.objectContaining({
+            captureScopeDeclared: false,
+            captureScopeMatchesEvents: false,
+          }),
+        }),
+      ],
+    });
   });
 
   it('accepts an exactly owned kibo readiness observation as a production capture', () => {
@@ -172,9 +201,18 @@ describe('workbench runtime sample capture', () => {
       source: 'source-game-runtime-frida-controlled-session',
       clientRegion: 'TW',
       clientBuild: 'controlled-build-20260714',
+      captureKind: 'kibo-energy',
+      binding: {
+        actionId: 'kibo-action-1',
+        actorId: 'actor-109001',
+        targetId: 'enemy-300032',
+        slotId: 'team-slot-1',
+        kiboId: 500001,
+        sourceElementConfigId: null,
+      },
       captureTool: {
         name: 'promilia-axis-controlled-frida-capture',
-        version: '1.0.0',
+        version: '1.1.0',
         hookManifestId: 'azpr-tc-20260709-three-value-runtime-capture-v2',
       },
       events: [

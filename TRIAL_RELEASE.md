@@ -42,7 +42,7 @@ npm run preview -- --host 127.0.0.1 --port 4173
 
 ### 3. 六资源采样批次导入与回放
 
-1. 准备 3 个角色 SP 会话和 3 个奇波 `PetUltimateCdTime` 观测会话；每份文件必须使用不同的 `captureSessionId`。
+1. 准备 3 个 `--capture-kind role-sp` 角色 SP 会话和 3 个 `--capture-kind kibo-energy` 奇波 `PetUltimateCdTime` 观测会话；每份文件必须使用不同的 `captureSessionId`，不要使用旧 `all` 范围采集正式六资源批次。
 2. 使用同一条命令把六份 JSON/JSONL 按顺序打包：
 
 ```powershell
