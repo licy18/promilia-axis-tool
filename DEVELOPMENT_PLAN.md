@@ -258,7 +258,13 @@ Stage 9 的共同验收：方案复制、本地草稿、JSON、分享链接和 P
 
 #### Stage 12-C：分析报告可复现性审计
 
-下一阶段对报告内嵌来源草稿执行当前版本的标准 compile/runtime，并把重建的同一贡献窗口或 A/B 比较与冻结报告逐字段核对，给出 exact、drift 或 incompatible 结论及最小差异定位。审计不覆盖原报告、不自动迁移数值，也不建立第二套计算；它用于识别游戏数据、profile、runtime 或来源绑定更新后旧报告是否仍可复现。
+状态：已完成。打开 JSON 或 PNG 分析报告时，系统会用内嵌方案草稿重新执行当前生产 `createWorkbenchProject -> compileProject -> simulateScenario` 链，并重建同一贡献窗口或 A/B 比较。冻结 `analysis`、applied source bindings 与 summary 逐字段核对后给出 exact、drift 或 incompatible；drift 提供最多 12 条最小字段路径和冻结/重放值，不兼容会指出 profile、游戏数据、来源或窗口门禁。审计只读，不覆盖报告、不替换项目、不迁移数值，也不进入 calculator。
+
+### Stage 13：真实机制样本校准
+
+#### Stage 13-A：实测样本与模拟差异校准闭环
+
+下一阶段把已支持导入的 runtime sample capture 与标准 `Action -> Hit -> ThreeValueDelta` 输出按动作、命中、帧和三值轨道对齐，形成可见的“实测值 / 当前模拟值 / 差异 / 来源绑定”校准工作流。用户应能导入一组真实采样、识别未匹配事件、查看 HP/韧性/角色能量逐动作偏差，并把校准结果随方案交换和分析报告保留；只使用已有采样合同和 applied/unapplied 边界，不自动反推公式、不启用未确认装备或培养效果。
 
 ## 6. 推荐里程碑
 

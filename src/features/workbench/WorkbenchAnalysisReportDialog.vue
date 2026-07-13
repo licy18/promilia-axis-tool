@@ -5,6 +5,7 @@
       class="report-overlay"
       data-testid="workbench-analysis-report"
       :data-report-kind="report.analysisKind"
+      :data-reproducibility-status="reproducibilityAudit?.status || ''"
       @click.self="emit('close')"
     >
       <section
@@ -72,7 +73,54 @@
           >
         </div>
 
+        <div
+          v-if="reproducibilityAudit"
+          class="reproducibility-strip"
+          :class="`status-${reproducibilityAudit.status}`"
+          :data-reproducibility-status="reproducibilityAudit.status"
+          data-testid="workbench-analysis-report-reproducibility"
+        >
+          <CircleCheck v-if="reproducibilityAudit.status === 'exact'" />
+          <Warning v-else-if="reproducibilityAudit.status === 'drift'" />
+          <CircleClose v-else />
+          <strong>{{ reproducibilityLabel }}</strong>
+          <span>{{ reproducibilityAudit.reason }}</span>
+          <span v-if="reproducibilityAudit.status !== 'incompatible'">
+            {{ reproducibilityAudit.summary.sourceCount }} 个来源 ·
+            {{ reproducibilityAudit.summary.replayedAppliedTransactionCount }}
+            条重放 transaction
+          </span>
+        </div>
+
         <div class="report-content">
+          <section
+            v-if="reproducibilityAudit?.differences?.length"
+            class="report-section reproducibility-section"
+          >
+            <header>
+              <h3>复现差异</h3>
+              <span>
+                显示
+                {{ reproducibilityAudit.summary.reportedDifferenceCount }} /
+                {{ reproducibilityAudit.summary.differenceCount }}
+              </span>
+            </header>
+            <div class="difference-list">
+              <div
+                v-for="difference in reproducibilityAudit.differences"
+                :key="`${difference.path}:${difference.kind}`"
+                class="difference-row"
+                :data-difference-path="difference.path"
+                data-testid="workbench-analysis-report-difference"
+              >
+                <code>{{ difference.path }}</code>
+                <span>{{ formatDiffValue(difference.expected) }}</span>
+                <strong>→</strong>
+                <span>{{ formatDiffValue(difference.actual) }}</span>
+              </div>
+            </div>
+          </section>
+
           <section class="report-section source-section">
             <header>
               <h3>来源方案</h3>
@@ -213,12 +261,14 @@
 import { computed, ref } from 'vue';
 import {
   CircleCheck,
+  CircleClose,
   Close,
   DocumentCopy,
   Download,
   EditPen,
   FolderOpened,
   Picture,
+  Warning,
 } from '@element-plus/icons-vue';
 import { WORKBENCH_ANALYSIS_KINDS } from '../../domain/workbenchAnalysisReport';
 import { msToFrame } from '../../domain/timebase';
@@ -227,6 +277,7 @@ const props = defineProps({
   visible: { type: Boolean, default: false },
   report: { type: Object, default: null },
   validation: { type: Object, default: null },
+  reproducibilityAudit: { type: Object, default: null },
   exportingPng: { type: Boolean, default: false },
 });
 const emit = defineEmits([
@@ -244,6 +295,14 @@ const isComparison = computed(
 const kindLabel = computed(() =>
   isComparison.value ? '方案对比分析报告' : '时间窗口贡献报告'
 );
+const reproducibilityLabel = computed(() => {
+  const status = props.reproducibilityAudit?.status;
+  return status === 'exact'
+    ? '当前版本可精确复现'
+    : status === 'drift'
+      ? '当前版本存在输出漂移'
+      : '当前版本无法兼容重放';
+});
 const comparison = computed(() => props.report?.analysis?.comparison ?? null);
 const contributionWindow = computed(
   () => props.report?.analysis?.window ?? null
@@ -365,6 +424,15 @@ function formatExportedAt(value) {
         minute: '2-digit',
       }).format(date);
 }
+
+function formatDiffValue(value) {
+  if (value && typeof value === 'object') {
+    if (value.kind === 'absent') return '不存在';
+    if (value.kind === 'array') return `数组(${value.length})`;
+    if (value.kind === 'object') return `对象(${value.keys.length})`;
+  }
+  return JSON.stringify(value);
+}
 </script>
 
 <style scoped>
@@ -379,7 +447,7 @@ function formatExportedAt(value) {
 }
 .report-dialog {
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-rows: auto auto auto minmax(0, 1fr);
   width: min(1120px, 100%);
   max-height: min(880px, calc(100vh - 48px));
   overflow: hidden;
@@ -464,9 +532,74 @@ function formatExportedAt(value) {
   width: 15px;
   color: #79c7b9;
 }
+.reproducibility-strip {
+  display: flex;
+  align-items: center;
+  min-height: 38px;
+  gap: 10px;
+  padding: 0 16px;
+  overflow-x: auto;
+  border-bottom: 1px solid #30413d;
+  background: #18221f;
+  color: #c7d3d0;
+  font-size: 10px;
+  white-space: nowrap;
+}
+.reproducibility-strip svg {
+  width: 15px;
+  flex: 0 0 auto;
+}
+.reproducibility-strip span {
+  color: #8f9d99;
+}
+.reproducibility-strip.status-exact svg {
+  color: #79c7b9;
+}
+.reproducibility-strip.status-drift {
+  border-bottom-color: #65542e;
+  background: #292316;
+}
+.reproducibility-strip.status-drift svg {
+  color: #e0ba61;
+}
+.reproducibility-strip.status-incompatible {
+  border-bottom-color: #6a3936;
+  background: #2a1b1b;
+}
+.reproducibility-strip.status-incompatible svg {
+  color: #ee9a91;
+}
 .report-content {
   min-height: 0;
   overflow: auto;
+}
+.difference-list {
+  display: grid;
+}
+.difference-row {
+  display: grid;
+  grid-template-columns: minmax(260px, 1.4fr) minmax(120px, 0.8fr) 18px minmax(
+      120px,
+      0.8fr
+    );
+  align-items: center;
+  gap: 10px;
+  min-width: 720px;
+  min-height: 34px;
+  padding: 0 16px;
+  border-top: 1px solid #293239;
+  color: #b9c3c7;
+  font-size: 10px;
+}
+.difference-row code {
+  overflow: hidden;
+  color: #e0ba61;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.difference-row strong {
+  color: #67747a;
+  text-align: center;
 }
 .report-section {
   border-bottom: 1px solid #303940;

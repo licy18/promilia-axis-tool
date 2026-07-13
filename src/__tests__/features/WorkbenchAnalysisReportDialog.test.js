@@ -10,6 +10,7 @@ describe('WorkbenchAnalysisReportDialog', () => {
         visible: true,
         report: createReport(),
         validation: { status: 'valid' },
+        reproducibilityAudit: createReproducibilityAudit(),
       },
       global: { stubs: { teleport: true } },
     });
@@ -29,6 +30,14 @@ describe('WorkbenchAnalysisReportDialog', () => {
     ).toHaveLength(2);
     expect(
       wrapper.findAll('[data-testid="workbench-analysis-report-action"]')
+    ).toHaveLength(1);
+    expect(
+      wrapper
+        .get('[data-testid="workbench-analysis-report-reproducibility"]')
+        .attributes('data-reproducibility-status')
+    ).toBe('drift');
+    expect(
+      wrapper.findAll('[data-testid="workbench-analysis-report-difference"]')
     ).toHaveLength(1);
 
     await wrapper
@@ -68,6 +77,27 @@ describe('WorkbenchAnalysisReportDialog', () => {
     wrapper.unmount();
   });
 });
+
+function createReproducibilityAudit() {
+  return {
+    status: 'drift',
+    reason: '当前数据与运行时产生 1 处冻结输出差异',
+    summary: {
+      sourceCount: 2,
+      differenceCount: 1,
+      reportedDifferenceCount: 1,
+      replayedAppliedTransactionCount: 2,
+    },
+    differences: [
+      {
+        path: '$.analysis.comparison.metrics[0].current',
+        kind: 'value-changed',
+        expected: 100,
+        actual: 99,
+      },
+    ],
+  };
+}
 
 function createReport() {
   const metric = (current, baseline) => ({

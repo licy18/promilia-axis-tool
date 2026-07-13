@@ -20,6 +20,7 @@ const REQUIRED_CAPABILITIES = [
   'stage-11b-window-comparison',
   'stage-12a-analysis-report',
   'stage-12b-analysis-report-png',
+  'stage-12c-analysis-report-reproducibility',
   'png-project-exchange',
   'project-drop-recovery',
   'configuration-instances',

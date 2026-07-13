@@ -27112,3 +27112,35 @@ WorkbenchAnalysisReportPngMetadata v1
 ```
 
 `payload` 是经 UTF-8 base64url 编码的完整、已规范化 `WorkbenchAnalysisReport` v1。读取 PNG 时先验证 PNG signature、chunk 边界和 CRC，再验证元数据 envelope，解码 payload 后重新调用 `validateWorkbenchAnalysisReport`；任一环节失败都返回无效文件，不恢复部分来源。项目分享码与报告 PNG 现共用 `src/utils/base64Url.js` 的 UTF-8 编解码实现，但各自 schema、metadata key 和解析入口保持独立。PNG 画面只是报告的可视交付层，不进入项目、runtime 或 calculator 合同。
+
+## 412. Workbench analysis report reproducibility audit v1
+
+Stage 12-C 新增只读 `AzPrWorkbenchAnalysisReportReproducibilityAudit v1`。它不是报告 schema 的新版本，也不写回 JSON/PNG 元数据；每次打开报告时由当前生产游戏数据、profile catalog、compiler、runtime 和窗口投影即时生成。
+
+```text
+AzPrWorkbenchAnalysisReportReproducibilityAudit v1
+  status = exact | drift | incompatible
+  analysisKind / reportSchemaVersion
+  reasonCode / reason / failedRole
+  sources[]
+    role / sourceId / windowId
+    requestedProfileId / resolvedProfileId
+    profileStatus / gameDataStatus
+    actionCount / appliedTransactionCount
+  differences[]
+    path
+    kind = value-changed | type-changed | missing-current | unexpected-current
+    expected / actual
+  summary
+    sourceCount
+    differenceCount / reportedDifferenceCount / omittedDifferenceCount
+    frozenAppliedTransactionCount / replayedAppliedTransactionCount
+  calculationBoundary
+    readsEmbeddedSourceDrafts = true
+    readsCurrentRuntimeOutputs = true
+    writesProjectState = false
+    overwritesFrozenReport = false
+    appliedToCalculators = false
+```
+
+审计先重新验证 `WorkbenchAnalysisReport v1`，再对每个来源执行 profile/game-data exact 门禁和标准 compile/runtime。贡献报告重建相同 `windowId` 的 `ContributionWindow`；方案比较重建双方同一比较窗口。仅比较冻结 `analysis`、`appliedSourceBindings` 与派生 `summary`，完全一致为 `exact`；可重放但字段不同为 `drift`，记录完整差异计数并最多返回 12 条最小路径；来源、profile、游戏数据或窗口无法精确解析时为 `incompatible`，不接受 fallback 结果。审计对象不进入项目载体、runtime state 或 calculator 输入。

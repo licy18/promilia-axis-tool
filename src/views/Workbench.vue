@@ -204,6 +204,7 @@
       :visible="analysisReportDialogVisible"
       :report="importedAnalysisReport"
       :validation="importedAnalysisReportValidation"
+      :reproducibility-audit="analysisReportReproducibilityAudit"
       :exporting-png="analysisReportPngExporting"
       @close="closeAnalysisReport"
       @locate-source="locateImportedAnalysisReportSource"
@@ -910,6 +911,7 @@ import {
   createWorkbenchMainFlowCommandSurface,
 } from '../features/workbench/workbenchMainFlowActions';
 import { createRuntimeStatePointContexts } from '../features/workbench/runtimeProjectionPoints';
+import { auditWorkbenchAnalysisReportReproducibility } from '../features/workbench/workbenchAnalysisReportReproducibility';
 import { applyWorkbenchRuntimeViewPatch } from '../features/workbench/workbenchRuntimeViewState';
 import {
   ENEMY_TIMELINE_LANE_ID,
@@ -1163,6 +1165,7 @@ const comparisonWindowId = ref('full-axis');
 const analysisReportDialogVisible = ref(false);
 const importedAnalysisReport = ref(null);
 const importedAnalysisReportValidation = ref(null);
+const analysisReportReproducibilityAudit = ref(null);
 const analysisReportDialog = ref(null);
 const analysisReportPngExporting = ref(false);
 const undoHistoryStack = ref([]);
@@ -3635,6 +3638,8 @@ function openWorkbenchAnalysisReport(report, statusText) {
   }
   importedAnalysisReport.value = validated.report;
   importedAnalysisReportValidation.value = validated.validation;
+  analysisReportReproducibilityAudit.value =
+    auditWorkbenchAnalysisReportReproducibility(validated.report);
   analysisReportDialogVisible.value = true;
   draftStatus.value = statusText;
 }
@@ -3904,6 +3909,7 @@ function closeAnalysisReport() {
     return false;
   }
   analysisReportDialogVisible.value = false;
+  analysisReportReproducibilityAudit.value = null;
   return true;
 }
 

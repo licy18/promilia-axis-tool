@@ -1300,6 +1300,16 @@ core 文件从 1,355,407B 降至 1,080,871B，Workbench 主块从 362,328B gzip 
 
 下一阶段目标：Stage 12-C / 分析报告可复现性审计。使用当前游戏数据、profile 和标准 runtime 重放报告来源，对冻结窗口或比较输出给出 exact、drift、incompatible 结论及最小差异定位；不覆盖原报告、不新增公式，也不把审计结果当作 calculator 输入。
 
+### Stage 12-C 分析报告可复现性审计（2026-07-13）
+
+分析报告现在会自动执行只读可复现性审计。审计从已验证报告内取出每个 `scenarioDraft`，经当前生产 `createWorkbenchProject -> compileProject -> simulateScenario` 链重放，再复用 `projectCycleSections` 或 `projectWorkbenchScenarioComparison` 重建报告指定窗口；没有平行模拟器或报告专用公式。profile 与游戏数据兼容性、来源数量和窗口可用性先作为门禁，失败时返回 `incompatible`，不会使用 fallback 结果伪装可比较。
+
+新增 `AzPrWorkbenchAnalysisReportReproducibilityAudit v1`。审计逐字段比较冻结 `analysis`、`appliedSourceBindings` 与 `summary`：完全一致为 `exact`；可重放但输出变化为 `drift`，并返回总差异数及最多 12 条字段路径、冻结值和当前值；无法精确解析来源则为 `incompatible` 并记录原因和失败角色。报告查看器直接展示结论与差异，但审计声明 `writesProjectState: false`、`overwritesFrozenReport: false`、`appliedToCalculators: false`，导入报告不会替换当前工作区。
+
+桌面与 390px 窄屏视觉证据为 `reports/stage-12c-analysis-reproducibility-desktop.png` 和 `reports/stage-12c-analysis-reproducibility-narrow.png`。阶段验收为 81 个测试文件、459 条单元/组件测试，39 条 Workbench 主流程和 31/31 项必需 production preview 能力全部通过，报告继续为 `trial-ready`。生产引用审计为 122 个源码、118 个生产可达、4 个允许 test-only、0 个孤儿；applied source 保持 3 条 bound-ready、0 drift、0 compatible-unbound。总 JavaScript 为 731,359B gzip，低于 733,000B 阶段硬目标；180 动作 compile/simulation p95 为 20.028ms/40.299ms，120 动作首屏 2040ms，双 120 动作比较打开 548ms、窗口切换 326ms、来源定位 2403ms，均满足预算。
+
+下一阶段目标：Stage 13-A / 实测样本与模拟差异校准闭环。把 runtime sample capture 与标准动作、命中、帧和三值 delta 对齐，提供实测值、当前模拟值、差异与来源绑定的完整校准流程；不自动反推公式，不启用未确认装备、奇波、灵子或培养效果。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

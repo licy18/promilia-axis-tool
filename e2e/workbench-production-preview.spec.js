@@ -1408,6 +1408,97 @@ test('[stage-12b-analysis-report-png] exports and reopens a visual report with e
   ).toHaveText(statePointId);
 });
 
+test('[stage-12c-analysis-report-reproducibility] audits exact, drifted, and incompatible frozen outputs', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/#/workbench');
+
+  await page.getByTestId('workbench-export-contribution-report').click();
+  const reportDialog = page.getByTestId('workbench-analysis-report');
+  const reproducibility = page.getByTestId(
+    'workbench-analysis-report-reproducibility'
+  );
+  await expect(reportDialog).toHaveAttribute(
+    'data-reproducibility-status',
+    'exact'
+  );
+  await expect(reproducibility).toHaveAttribute(
+    'data-reproducibility-status',
+    'exact'
+  );
+
+  const jsonDownloadPromise = page.waitForEvent('download');
+  await page.getByTestId('workbench-analysis-report-export-json').click();
+  const jsonDownload = await jsonDownloadPromise;
+  const originalReport = JSON.parse(
+    await readFile(await jsonDownload.path(), 'utf8')
+  );
+  await page.getByTestId('workbench-analysis-report-close').click();
+
+  const driftedReport = structuredClone(originalReport);
+  driftedReport.analysis.window.metrics.enemyHpDelta += 1;
+  await page.getByTestId('workbench-import-project-file').setInputFiles({
+    name: 'drifted.promilia-analysis.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(driftedReport)),
+  });
+  await expect(reportDialog).toHaveAttribute(
+    'data-reproducibility-status',
+    'drift'
+  );
+  await expect(reproducibility).toHaveAttribute(
+    'data-reproducibility-status',
+    'drift'
+  );
+  const difference = page.getByTestId('workbench-analysis-report-difference');
+  await expect(difference).toHaveCount(1);
+  await expect(difference).toHaveAttribute(
+    'data-difference-path',
+    '$.analysis.window.metrics.enemyHpDelta'
+  );
+  await reportDialog.locator('.report-dialog').screenshot({
+    path: 'reports/stage-12c-analysis-reproducibility-desktop.png',
+  });
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.screenshot({
+    path: 'reports/stage-12c-analysis-reproducibility-narrow.png',
+  });
+  await expect(page.locator('main.workbench')).toHaveAttribute(
+    'data-workspace-scenario-count',
+    '1'
+  );
+  await page.getByTestId('workbench-analysis-report-close').click();
+
+  const incompatibleReport = structuredClone(originalReport);
+  incompatibleReport.sources[0].scenarioDraft.mechanicsProfileSelection = {
+    schemaVersion: 1,
+    contractName: 'AzPrWorkbenchMechanicsProfileSelection',
+    profileId: 'removed-profile',
+    profileVersion: 99,
+  };
+  await page.getByTestId('workbench-import-project-file').setInputFiles({
+    name: 'incompatible.promilia-analysis.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(incompatibleReport)),
+  });
+  await expect(reportDialog).toHaveAttribute(
+    'data-reproducibility-status',
+    'incompatible'
+  );
+  await expect(reproducibility).toHaveAttribute(
+    'data-reproducibility-status',
+    'incompatible'
+  );
+  await expect(reproducibility).toContainText('机制 profile 已无法精确解析');
+  await expect(page.locator('main.workbench')).toHaveAttribute(
+    'data-workspace-scenario-count',
+    '1'
+  );
+});
+
 test('[diagnostics-lazy-load] loads runtime diagnostics from a production chunk', async ({
   page,
 }) => {
