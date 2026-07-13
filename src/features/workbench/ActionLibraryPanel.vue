@@ -34,6 +34,9 @@
         class="icon-button"
         data-testid="workbench-add-action"
         type="button"
+        :data-drag-enabled="Boolean(defaultTimelineSkillEntry)"
+        data-entry-type="skill"
+        @pointerdown="beginDefaultSkillDrag"
         @click="$emit('add-action')"
       >
         + 动作
@@ -50,6 +53,9 @@
         class="icon-button"
         data-testid="workbench-add-switch-action"
         type="button"
+        data-drag-enabled="true"
+        data-entry-type="switch"
+        @pointerdown="beginQuickTimelineEntryDrag($event, ACTION_TYPES.SWITCH)"
         @click="$emit('add-switch-action')"
       >
         + 切人
@@ -66,6 +72,11 @@
         class="icon-button"
         data-testid="workbench-add-resource-action"
         type="button"
+        data-drag-enabled="true"
+        data-entry-type="resource"
+        @pointerdown="
+          beginQuickTimelineEntryDrag($event, ACTION_TYPES.RESOURCE)
+        "
         @click="$emit('add-resource-action')"
       >
         + 资源
@@ -74,6 +85,11 @@
         class="icon-button"
         data-testid="workbench-add-kibo-event-action"
         type="button"
+        :data-drag-enabled="Boolean(activeKibo)"
+        data-entry-type="kiboEvent"
+        @pointerdown="
+          beginQuickTimelineEntryDrag($event, ACTION_TYPES.KIBO_EVENT)
+        "
         @click="$emit('add-kibo-event-action')"
       >
         + {{ activeKibo?.name ?? '奇波' }}
@@ -82,6 +98,11 @@
         class="icon-button"
         data-testid="workbench-add-enemy-event-action"
         type="button"
+        data-drag-enabled="true"
+        data-entry-type="enemyEvent"
+        @pointerdown="
+          beginQuickTimelineEntryDrag($event, ACTION_TYPES.ENEMY_EVENT)
+        "
         @click="$emit('add-enemy-event-action')"
       >
         + 敌人
@@ -114,6 +135,9 @@
           :data-skill-id="entry.skillId"
           :data-action-kind="entry.kind"
           :data-action-variant-index="entry.actionVariantIndex"
+          data-entry-type="skill"
+          data-drag-enabled="true"
+          @pointerdown="beginSkillTimelineEntryDrag($event, entry)"
           @click="$emit('add-skill-action', entry)"
         >
           <span class="skill-entry-name">{{ entry.label }}</span>
@@ -392,7 +416,9 @@
 <script setup>
 import { computed, reactive } from 'vue';
 import { Collection, EditPen } from '@element-plus/icons-vue';
+import { ACTION_TYPES } from '../../domain/projectSchema';
 import { getSkillActionCatalog } from '../../domain/workbenchProjectFactory';
+import { createWorkbenchTimelineEntry } from '../../domain/workbenchTimelineEntry';
 import { formatFrameTime, frameToMs, msToFrame } from '../../domain/timebase';
 const props = defineProps({
   actor: {
@@ -461,6 +487,7 @@ const emit = defineEmits([
   'align-action-batch',
   'shift-action-batch',
   'update-active-actor',
+  'begin-timeline-entry-drag',
 ]);
 
 const batchAlignStarts = reactive({});
@@ -482,6 +509,62 @@ const activeKibo = computed(() =>
 );
 
 const actionEntries = computed(() => getSkillActionCatalog(props.skills, 1));
+const defaultTimelineSkillEntry = computed(
+  () => actionEntries.value[0] ?? null
+);
+
+function beginDefaultSkillDrag(event) {
+  beginSkillTimelineEntryDrag(event, defaultTimelineSkillEntry.value);
+}
+
+function beginSkillTimelineEntryDrag(event, actionEntry) {
+  beginActionLibraryTimelineEntryDrag(event, {
+    ...actionEntry,
+    type: ACTION_TYPES.SKILL,
+  });
+}
+
+function beginQuickTimelineEntryDrag(event, type) {
+  const quickEntryByType = {
+    [ACTION_TYPES.SWITCH]: {
+      type,
+      label: '切人',
+    },
+    [ACTION_TYPES.RESOURCE]: {
+      type,
+      label: '资源',
+    },
+    [ACTION_TYPES.KIBO_EVENT]: activeKibo.value
+      ? {
+          type,
+          eventType: 'activation',
+          label: activeKibo.value.name,
+        }
+      : null,
+    [ACTION_TYPES.ENEMY_EVENT]: {
+      type,
+      eventType: 'phase',
+      label: '敌人事件',
+    },
+  };
+  beginActionLibraryTimelineEntryDrag(event, quickEntryByType[type]);
+}
+
+function beginActionLibraryTimelineEntryDrag(event, source) {
+  if (!source || event.button !== 0) {
+    return;
+  }
+  const entry = createWorkbenchTimelineEntry(source);
+  if (!entry) {
+    return;
+  }
+  emit('begin-timeline-entry-drag', {
+    entry,
+    pointerId: event.pointerId,
+    clientX: event.clientX,
+    clientY: event.clientY,
+  });
+}
 
 const selectedBatchId = computed(() => {
   const selectedAction = props.actions.find(
@@ -1184,6 +1267,21 @@ h2 {
   cursor: pointer;
   font: inherit;
   text-align: left;
+}
+
+.icon-button[data-drag-enabled='true'],
+.skill-entry[data-drag-enabled='true'] {
+  cursor: grab;
+  user-select: none;
+}
+
+.icon-button[data-drag-enabled='true']:active,
+.skill-entry[data-drag-enabled='true']:active {
+  cursor: grabbing;
+}
+
+.skill-entry[data-drag-enabled='true'] > * {
+  pointer-events: none;
 }
 
 .skill-entry:hover,

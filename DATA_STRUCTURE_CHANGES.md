@@ -27173,3 +27173,16 @@ runtimeOutputs.resources
 ```
 
 `curvesByKibo` 当前由 `AzPrKiboEnergyRuntimeCurves v1` 生成独立零值基线。未确认奇波机制不会生成 applied point，也不会进入三值 calculator、state snapshot 或 sim log；时间轴仍绘制从 0 到轴末的完整平线。敌人 HP 与韧性沿用既有独立曲线，因此 Workbench 当前总状态曲线数为 8。五载体回放测试比较同一 topology、奇波所有者和 runtime resource curves。
+
+## 414. Action library pointer drag / existing timeline entry contract
+
+M1-C 没有升级 Workbench 项目 v16，也没有新增持久化或 calculator 字段。动作库拖拽先把技能、资源、奇波事件或敌人事件规范化为既有 `WorkbenchTimelineEntry`，Workbench 仅在一次指针操作期间保存临时拖拽状态：
+
+```text
+ActionLibraryPointerDrag (transient only)
+  entry: WorkbenchTimelineEntry
+  pointerId / startX / startY
+  active / targetLaneId
+```
+
+落点继续由 `resolveWorkbenchTimelineLaneTarget` 和 `isWorkbenchTimelineEntryAllowedInLane` 校验，再调用既有 `insertTimelineEntry({ entry, laneId, startMs })`。`startMs` 使用 60fps 帧吸附；后续动作草稿、runtime outputs、六条能量轴、敌人 HP/韧性、日志和项目交换均沿用原合同。因此本阶段不需要 schema migration，指针状态也不会进入本地草稿、JSON、分享链接或 PNG。

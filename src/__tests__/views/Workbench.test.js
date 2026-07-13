@@ -3213,7 +3213,10 @@ describe('Workbench view', () => {
       'grid-template-columns:minmax(0,var(--workbench-left-panel-width,260px))10pxminmax(0,1fr);'
     );
     expect(workbenchSource).toContain(
-      'grid-template-areas:\x27mainflowmainflowmainflow\x27\x27actionsleft-resizerreview\x27;'
+      'grid-template-areas:\x27actionsleft-resizermainflow\x27\x27actionsleft-resizerreview\x27;'
+    );
+    expect(workbenchSource).toContain(
+      '.action-library{position:sticky;top:58px;grid-area:actions;min-width:0;max-height:calc(100vh-70px);'
     );
     expect(workbenchSource).toContain(
       '.side-stack{position:fixed;top:108px;right:10px;bottom:10px;z-index:70;'

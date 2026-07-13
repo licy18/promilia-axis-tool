@@ -1,8 +1,41 @@
 import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
 import TimelineGridPreview from '../../features/workbench/TimelineGridPreview.vue';
+import { serializeWorkbenchTimelineEntry } from '../../domain/workbenchTimelineEntry';
 
 describe('TimelineGridPreview', () => {
+  it('accepts action-library entries from the standard text drag payload', async () => {
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps(),
+    });
+    const serializedEntry = serializeWorkbenchTimelineEntry({
+      type: 'resource',
+      label: '资源',
+    });
+    const dataTransfer = {
+      dropEffect: 'none',
+      getData(type) {
+        return type === 'text/plain' ? serializedEntry : '';
+      },
+    };
+    const actorLane = wrapper.find(
+      '[data-testid="workbench-timeline-row"][data-lane-id="actor-a"]'
+    );
+
+    await actorLane.trigger('dragover', { dataTransfer, clientX: 0 });
+    expect(dataTransfer.dropEffect).toBe('copy');
+    await actorLane.trigger('drop', { dataTransfer, clientX: 0 });
+    expect(wrapper.emitted('insert-timeline-entry')?.at(-1)?.[0]).toMatchObject(
+      {
+        entry: { type: 'resource', label: '资源' },
+        laneId: 'actor-a',
+        laneKind: 'actor-action',
+        actorId: 'actor-a',
+        startMs: 0,
+      }
+    );
+  });
+
   it('prefers main flow selection over legacy selection props', () => {
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps({

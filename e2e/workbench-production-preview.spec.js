@@ -215,14 +215,17 @@ test('[m1a-timeline-identity] keeps the complete team topology in the timeline-f
 
   const desktopLayout = await readTimelineFirstLayout(page);
   expect(desktopLayout.laneCount).toBe(15);
-  expect(desktopLayout.timeline.width).toBeGreaterThanOrEqual(1390);
+  expect(desktopLayout.timeline.width).toBeGreaterThanOrEqual(1100);
   expect(desktopLayout.timeline.bottom).toBeLessThanOrEqual(900);
   expect(desktopLayout.lastLane.bottom).toBeLessThanOrEqual(900);
   expect(desktopLayout.review.top).toBeGreaterThanOrEqual(
     desktopLayout.timeline.bottom
   );
-  expect(desktopLayout.actions.top).toBeGreaterThanOrEqual(
-    desktopLayout.timeline.bottom
+  expect(desktopLayout.actions.top).toBeLessThanOrEqual(
+    desktopLayout.timeline.top + 1
+  );
+  expect(desktopLayout.actions.right).toBeLessThanOrEqual(
+    desktopLayout.timeline.left
   );
   await expectTimelineRowsAligned(timeline);
   await expectPageWithoutHorizontalOverflow(page);
@@ -371,6 +374,279 @@ test('[m1b-team-kibo-energy] keeps three actor and three kibo energy owners sync
   await page.screenshot({ path: 'reports/m1b-six-energy-narrow.png' });
 });
 
+test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-isolated runtime curves', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/#/workbench');
+
+  await openActorInspector(page, 101003);
+  await page
+    .locator(
+      '[data-testid="workbench-actor-kibo-select"][data-character-id="101003"]'
+    )
+    .selectOption('500002');
+  await expect(page.getByTestId('workbench-action-library-kibo')).toHaveText(
+    '奇波 · 水灵仔'
+  );
+  await closeInspectorIfVisible(page);
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const actorTwoLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
+  );
+  const actorThreeLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="actor-101007"]'
+  );
+  const actorEnergyCurve = characterId =>
+    timeline.locator(
+      `[data-testid="workbench-timeline-row"][data-lane-id="energy-actor-${characterId}"] [data-testid="workbench-timeline-state-curve"]`
+    );
+  const kiboEnergyCurve = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="kibo-energy-team-slot-2"] [data-testid="workbench-timeline-state-curve"]'
+  );
+  const hpCurve = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="enemy-hp-curve"] [data-testid="workbench-timeline-state-curve"]'
+  );
+  const toughnessCurve = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="enemy-toughness-curve"] [data-testid="workbench-timeline-state-curve"]'
+  );
+  const hpPointCountBefore = Number(
+    await hpCurve.getAttribute('data-point-count')
+  );
+
+  const directSkillSource = page.getByTestId('workbench-skill-entry').first();
+  await dragLocatorTo(page, directSkillSource, actorTwoLane, {
+    targetPosition: { x: 280, y: 26 },
+  });
+  const skillAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+  );
+  await expect(skillAction).toHaveAttribute('data-lane-id', 'actor-101003');
+  await expect
+    .poll(async () => Number(await hpCurve.getAttribute('data-point-count')))
+    .toBeGreaterThan(hpPointCountBefore);
+  const hpPointCountAfterSkill = Number(
+    await hpCurve.getAttribute('data-point-count')
+  );
+  const skillHpBreakpoint = hpCurve.locator(
+    '[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id="action-0002"]'
+  );
+  await expect(skillHpBreakpoint).toHaveCount(1);
+  await expectActionAndCurvePointAligned(
+    page,
+    'action-0002',
+    skillHpBreakpoint
+  );
+  await closeInspectorIfVisible(page);
+
+  await dragLocatorTo(
+    page,
+    page.getByTestId('workbench-add-resource-action'),
+    actorTwoLane,
+    { targetPosition: { x: 500, y: 26 } }
+  );
+  const resourceAction = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0003"]'
+  );
+  await expect(resourceAction).toHaveAttribute('data-lane-id', 'actor-101003');
+  await expect(actorEnergyCurve(109001)).toHaveAttribute(
+    'data-point-count',
+    '0'
+  );
+  await expect(actorEnergyCurve(101003)).toHaveAttribute(
+    'data-point-count',
+    '1'
+  );
+  await expect(actorEnergyCurve(101007)).toHaveAttribute(
+    'data-point-count',
+    '0'
+  );
+  let resourceBreakpoint = actorEnergyCurve(101003).locator(
+    '[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id="action-0003"]'
+  );
+  await expectActionAndCurvePointAligned(
+    page,
+    'action-0003',
+    resourceBreakpoint
+  );
+  await closeInspectorIfVisible(page);
+
+  await dragLocatorTo(
+    page,
+    page.getByTestId('workbench-add-kibo-event-action'),
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-2"]'
+    ),
+    { targetPosition: { x: 680, y: 18 } }
+  );
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
+    )
+  ).toHaveAttribute('data-lane-id', 'kibo-team-slot-2');
+  await expect(kiboEnergyCurve).toHaveAttribute('data-point-count', '0');
+  await expect(
+    kiboEnergyCurve.getByTestId('workbench-timeline-state-curve-line')
+  ).toHaveAttribute('points', '0,100 100,100');
+  await closeInspectorIfVisible(page);
+
+  await dragLocatorTo(
+    page,
+    page.getByTestId('workbench-add-enemy-event-action'),
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="enemy-events"]'
+    ),
+    { targetPosition: { x: 780, y: 24 } }
+  );
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0005"]'
+    )
+  ).toHaveAttribute('data-lane-id', 'enemy-events');
+  await expect(hpCurve).toHaveAttribute(
+    'data-point-count',
+    String(hpPointCountAfterSkill)
+  );
+  await expect(toughnessCurve).toHaveAttribute('data-point-count', '0');
+  await closeInspectorIfVisible(page);
+
+  await resourceAction.dragTo(actorThreeLane, {
+    targetPosition: { x: 560, y: 26 },
+  });
+  await expect(resourceAction).toHaveAttribute('data-lane-id', 'actor-101007');
+  await expect(actorEnergyCurve(101003)).toHaveAttribute(
+    'data-point-count',
+    '0'
+  );
+  await expect(actorEnergyCurve(101007)).toHaveAttribute(
+    'data-point-count',
+    '1'
+  );
+  resourceBreakpoint = actorEnergyCurve(101007).locator(
+    '[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id="action-0003"]'
+  );
+  await expectActionAndCurvePointAligned(
+    page,
+    'action-0003',
+    resourceBreakpoint
+  );
+
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(actorEnergyCurve(101003)).toHaveAttribute(
+    'data-point-count',
+    '1'
+  );
+  await expect(actorEnergyCurve(101007)).toHaveAttribute(
+    'data-point-count',
+    '0'
+  );
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(actorEnergyCurve(101003)).toHaveAttribute(
+    'data-point-count',
+    '0'
+  );
+  await expect(actorEnergyCurve(101007)).toHaveAttribute(
+    'data-point-count',
+    '1'
+  );
+
+  await closeInspectorIfVisible(page);
+  await page
+    .locator('.action-item[data-action-id="action-0003"]')
+    .getByTestId('workbench-copy-action')
+    .click();
+  await expect(actorEnergyCurve(101007)).toHaveAttribute(
+    'data-point-count',
+    '2'
+  );
+  await closeInspectorIfVisible(page);
+  await page
+    .locator('.action-item[data-action-id="action-0006"]')
+    .getByTestId('workbench-delete-action')
+    .click();
+  await expect(actorEnergyCurve(101007)).toHaveAttribute(
+    'data-point-count',
+    '1'
+  );
+  await page.getByTestId('workbench-undo-edit').click();
+  await expect(actorEnergyCurve(101007)).toHaveAttribute(
+    'data-point-count',
+    '2'
+  );
+  await page.getByTestId('workbench-redo-edit').click();
+  await expect(actorEnergyCurve(101007)).toHaveAttribute(
+    'data-point-count',
+    '1'
+  );
+
+  await closeInspectorIfVisible(page);
+  await resourceAction.dragTo(actorTwoLane, {
+    targetPosition: { x: 520, y: 26 },
+  });
+  await expect(actorEnergyCurve(101003)).toHaveAttribute(
+    'data-point-count',
+    '1'
+  );
+  await expect(actorEnergyCurve(101007)).toHaveAttribute(
+    'data-point-count',
+    '0'
+  );
+  resourceBreakpoint = actorEnergyCurve(101003).locator(
+    '[data-testid="workbench-timeline-state-curve-breakpoint"][data-action-id="action-0003"]'
+  );
+  await resourceBreakpoint.click();
+  const resourceStatePointId = await resourceBreakpoint.getAttribute(
+    'data-state-point-id'
+  );
+  await page
+    .locator(
+      '[data-testid="workbench-runtime-sim-log-mode-option"][data-review-mode="delta"]'
+    )
+    .click();
+  const resourceLogRow = page.locator(
+    `[data-testid="workbench-runtime-sim-log-row"][data-state-point-id="${resourceStatePointId}"]`
+  );
+  await expect(resourceLogRow).toBeVisible();
+  await expect(resourceLogRow).toHaveAttribute(
+    'data-frame-index',
+    await resourceBreakpoint.getAttribute('data-frame-index')
+  );
+  await closeInspectorIfVisible(page);
+
+  await expectTimelineRowsAligned(timeline);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/m1c-library-runtime-desktop.png' });
+
+  const downloadPromise = page.waitForEvent('download');
+  await clickProjectMenuCommand(page, 'workbench-export-project');
+  const download = await downloadPromise;
+  const downloadPath = await download.path();
+  await clickProjectMenuCommand(page, 'workbench-reset-draft');
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(downloadPath);
+  await expect(resourceAction).toHaveAttribute('data-lane-id', 'actor-101003');
+  await expect(actorEnergyCurve(101003)).toHaveAttribute(
+    'data-point-count',
+    '1'
+  );
+  await expect(skillHpBreakpoint).toHaveCount(1);
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
+    )
+  ).toHaveAttribute('data-lane-id', 'kibo-team-slot-2');
+  await expect(kiboEnergyCurve).toHaveAttribute('data-point-count', '0');
+
+  await closeInspectorIfVisible(page);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await expectTimelineRowsAligned(timeline);
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/m1c-library-runtime-narrow.png' });
+});
+
 test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enemy entries on legal lanes', async ({
   page,
 }) => {
@@ -397,12 +673,7 @@ test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enem
   const kiboSource = page.locator(
     '[data-testid="workbench-timeline-entry-source"][data-entry-type="kiboEvent"]'
   );
-  const firstKiboLane = page.locator(
-    '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-1"]'
-  );
-  await kiboSource.dragTo(firstKiboLane, {
-    targetPosition: { x: 260, y: 18 },
-  });
+  await kiboSource.click();
   if (await palette.isVisible()) {
     await paletteToggle.click();
   }
@@ -425,12 +696,7 @@ test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enem
   const enemySource = page.locator(
     '[data-testid="workbench-timeline-entry-source"][data-entry-type="enemyEvent"]'
   );
-  const enemyLane = page.locator(
-    '[data-testid="workbench-timeline-row"][data-lane-id="enemy-events"]'
-  );
-  await enemySource.dragTo(enemyLane, {
-    targetPosition: { x: 300, y: 24 },
-  });
+  await enemySource.click();
   if (await palette.isVisible()) {
     await paletteToggle.click();
   }
@@ -447,17 +713,20 @@ test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enem
   const secondActorLane = page.locator(
     '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
   );
-  await skillSource.dragTo(secondActorLane, {
-    targetPosition: { x: 340, y: 28 },
+  await skillSource.click();
+  const insertedSkillAction = page.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
+  );
+  await insertedSkillAction.dragTo(secondActorLane, {
+    targetPosition: { x: 760, y: 28 },
   });
   if (await palette.isVisible()) {
     await paletteToggle.click();
   }
-  await expect(
-    page.locator(
-      '[data-testid="workbench-timeline-action"][data-action-id="action-0004"]'
-    )
-  ).toHaveAttribute('data-lane-id', 'actor-101003');
+  await expect(insertedSkillAction).toHaveAttribute(
+    'data-lane-id',
+    'actor-101003'
+  );
 
   const secondKiboLane = page.locator(
     '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-2"]'
@@ -560,12 +829,7 @@ test('[stage-10b-cross-lane-batch-editing] box-selects, rebinds, copies, and res
     .locator(
       '[data-testid="workbench-timeline-entry-source"][data-entry-type="kiboEvent"]'
     )
-    .dragTo(
-      page.locator(
-        '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-1"]'
-      ),
-      { targetPosition: { x: 260, y: 18 } }
-    );
+    .click();
   if (await palette.isVisible()) {
     await paletteToggle.click();
   }
@@ -632,12 +896,7 @@ test('[stage-10b-cross-lane-batch-editing] box-selects, rebinds, copies, and res
     .locator(
       '[data-testid="workbench-timeline-entry-source"][data-entry-type="enemyEvent"]'
     )
-    .dragTo(
-      page.locator(
-        '[data-testid="workbench-timeline-row"][data-lane-id="enemy-events"]'
-      ),
-      { targetPosition: { x: 300, y: 24 } }
-    );
+    .click();
   if (await palette.isVisible()) {
     await paletteToggle.click();
   }
@@ -806,12 +1065,22 @@ test('[stage-10c-frame-cursor-review] links timeline frames, eight curve states,
     .locator(
       '[data-testid="workbench-timeline-entry-source"][data-entry-type="resource"]'
     )
-    .dragTo(
-      page.locator(
-        '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
-      ),
-      { targetPosition: { x: 420, y: 26 } }
-    );
+    .click();
+  if (await palette.isVisible()) {
+    await paletteToggle.click();
+  }
+  const resourceAction = page.locator(
+    '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
+  );
+  await resourceAction.dragTo(
+    page.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
+    ),
+    { targetPosition: { x: 420, y: 26 } }
+  );
+  await expect(resourceAction).toHaveAttribute('data-lane-id', 'actor-101003');
+  await resourceAction.click();
+  await page.getByTestId('workbench-start-frame-input').fill('600');
 
   const actorEnergyCurve = page.locator(
     '[data-testid="workbench-timeline-row"][data-lane-id="energy-actor-101003"] [data-testid="workbench-timeline-state-curve"]'
@@ -822,6 +1091,7 @@ test('[stage-10c-frame-cursor-review] links timeline frames, eight curve states,
   const originalResourceFrame = Number(
     await energyBreakpoint.getAttribute('data-frame-index')
   );
+  expect(originalResourceFrame).toBe(600);
   await energyBreakpoint.click();
   await expect(timeline).toHaveAttribute(
     'data-cursor-frame-index',
@@ -835,9 +1105,6 @@ test('[stage-10c-frame-cursor-review] links timeline frames, eight curve states,
   ).toHaveAttribute('data-cursor-value', '0');
   await expectTimelineCursorAligned(cursor, energyBreakpoint);
 
-  const resourceAction = page.locator(
-    '[data-testid="workbench-timeline-action"][data-action-id="action-0002"]'
-  );
   await resourceAction.click();
   await selectTimelineFrameAtRatio(page, 0.4);
   const reviewFrame = Number(
@@ -2591,6 +2858,8 @@ async function readTimelineFirstLayout(page) {
       return {
         top: Math.round(rect.top),
         bottom: Math.round(rect.bottom),
+        left: Math.round(rect.left),
+        right: Math.round(rect.right),
         width: Math.round(rect.width),
       };
     };
@@ -2789,6 +3058,34 @@ async function readTimelineActionStarts(page, actionIds) {
       })
     );
   }, actionIds);
+}
+
+async function dragLocatorTo(
+  page,
+  source,
+  target,
+  { sourcePosition = null, targetPosition = null } = {}
+) {
+  await source.scrollIntoViewIfNeeded();
+  await target.scrollIntoViewIfNeeded();
+  const sourceBox = await source.boundingBox();
+  const targetBox = await target.boundingBox();
+  if (!sourceBox || !targetBox) {
+    throw new Error('Drag source and target must both be visible');
+  }
+  const from = {
+    x: sourceBox.x + (sourcePosition?.x ?? sourceBox.width / 2),
+    y: sourceBox.y + (sourcePosition?.y ?? sourceBox.height / 2),
+  };
+  const to = {
+    x: targetBox.x + (targetPosition?.x ?? targetBox.width / 2),
+    y: targetBox.y + (targetPosition?.y ?? targetBox.height / 2),
+  };
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  await page.mouse.move(from.x + 8, from.y + 2, { steps: 3 });
+  await page.mouse.move(to.x, to.y, { steps: 16 });
+  await page.mouse.up();
 }
 
 async function dragWorkbenchFile(page, { name, mimeType, buffer }) {

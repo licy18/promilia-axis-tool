@@ -559,12 +559,18 @@
               'drop-target':
                 (lane.id === dragTargetLaneId &&
                   lane.id !== dragInitialLaneId) ||
-                lane.id === externalDropTargetLaneId,
+                lane.id === externalDropTargetLaneId ||
+                lane.id === externalTimelineEntryDrag?.targetLaneId,
             }"
             :data-lane-id="lane.id"
             :data-lane-kind="lane.kind"
             :data-actor-id="lane.actorId || ''"
             :data-editable="lane.editable ? 'true' : 'false'"
+            :data-library-drop-target="
+              lane.id === externalTimelineEntryDrag?.targetLaneId
+                ? 'true'
+                : 'false'
+            "
             data-testid="workbench-timeline-row"
             :style="laneRowStyle(lane)"
             :ref="element => setLaneRowRef(element, lane.id)"
@@ -1231,6 +1237,10 @@ const props = defineProps({
   timelineEntryDefaultActorId: {
     type: String,
     default: '',
+  },
+  externalTimelineEntryDrag: {
+    type: Object,
+    default: null,
   },
   activeActorCharacterId: {
     type: [Number, String],
@@ -4619,10 +4629,12 @@ function handleTimelineEntryDrop(event, lane) {
 }
 
 function resolveTimelineEntryDrag(event) {
+  const dataTransfer = event?.dataTransfer;
   return (
     timelineShelfEntryDrag.value ??
     parseWorkbenchTimelineEntry(
-      event?.dataTransfer?.getData?.(WORKBENCH_TIMELINE_ENTRY_MIME)
+      dataTransfer?.getData?.(WORKBENCH_TIMELINE_ENTRY_MIME) ||
+        dataTransfer?.getData?.('text/plain')
     )
   );
 }

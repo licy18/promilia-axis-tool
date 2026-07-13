@@ -29,6 +29,12 @@
     "
     :data-effect-interval-count="effectIntervalProjection.summary.intervalCount"
     :data-selected-effect-interval-id="selectedEffectIntervalId"
+    :data-library-entry-drag-active="
+      actionLibraryTimelineEntryDrag?.active ? 'true' : 'false'
+    "
+    :data-library-entry-drag-target-lane-id="
+      actionLibraryTimelineEntryDrag?.targetLaneId ?? ''
+    "
   >
     <nav class="top-nav">
       <div class="workbench-brand" aria-label="蓝色星原排轴工作台">
@@ -373,6 +379,7 @@
         @align-action-batch="alignActionBatch"
         @shift-action-batch="shiftActionBatch"
         @update-active-actor="setActionLibraryCharacterId"
+        @begin-timeline-entry-drag="beginActionLibraryEntryPointerDrag"
       />
 
       <div
@@ -452,6 +459,7 @@
           :timeline-diagnostics="timelineDiagnostics"
           :action-readiness-timeline="simulationResult.actionReadinessTimeline"
           :main-flow-command-surface="mainFlowCommandSurface"
+          :external-timeline-entry-drag="actionLibraryTimelineEntryDrag"
           @select-action="selectAction"
           @select-identity="selectTimelineIdentity"
           @select-action-group="selectActionGroup"
@@ -1087,7 +1095,12 @@ import {
   mergeWorkbenchRuntimeSampleCaptures,
   normalizeWorkbenchRuntimeSampleCaptures,
 } from '../domain/workbenchRuntimeSampleCapture';
-import { formatFrameTime, frameToMs, msToFrame } from '../domain/timebase';
+import {
+  formatFrameTime,
+  frameToMs,
+  msToFrame,
+  snapMsToFrame,
+} from '../domain/timebase';
 import { compileProject } from '../simulation/compiler/compileProject';
 import { simulateScenario } from '../simulation/engine/simulateScenario';
 import {
@@ -1240,6 +1253,7 @@ const workbenchRoot = ref(null);
 const workbenchGrid = ref(null);
 const workbenchLayout = ref(createInitialWorkbenchLayoutState());
 const activeWorkbenchLayoutResize = ref('');
+const actionLibraryTimelineEntryDrag = ref(null);
 const projectImportInput = ref(null);
 const pngExportSurface = ref(null);
 const pngExporting = ref(false);
@@ -1251,6 +1265,7 @@ const runtimeDiagnosticsStatus = ref('idle');
 const runtimeDiagnosticsRevision = ref(0);
 let runtimeDiagnosticsLoadPromise = null;
 let workbenchLayoutResizeState = null;
+let actionLibraryEntryPointerState = null;
 let workbenchLayoutApi = null;
 let workbenchLayoutApiPromise = null;
 const workbenchFlowPlanController = createWorkbenchFlowPlanController({
@@ -1948,6 +1963,141 @@ async function handleWorkbenchLayoutResizeKey(panel, event) {
   await persistWorkbenchLayout();
 }
 
+function beginActionLibraryEntryPointerDrag(payload = {}) {
+  const entry = createWorkbenchTimelineEntry(payload.entry);
+  if (!entry) {
+    return;
+  }
+  cancelActionLibraryEntryPointerDrag();
+  actionLibraryEntryPointerState = {
+    entry,
+    pointerId: Number(payload.pointerId),
+    startX: Number(payload.clientX) || 0,
+    startY: Number(payload.clientY) || 0,
+    active: false,
+    targetLaneId: '',
+  };
+  actionLibraryTimelineEntryDrag.value = {
+    entry,
+    active: false,
+    targetLaneId: '',
+  };
+  window?.addEventListener?.(
+    'pointermove',
+    handleActionLibraryEntryPointerMove,
+    { passive: false }
+  );
+  window?.addEventListener?.(
+    'pointerup',
+    completeActionLibraryEntryPointerDrag
+  );
+  window?.addEventListener?.(
+    'pointercancel',
+    cancelActionLibraryEntryPointerDrag
+  );
+}
+
+function handleActionLibraryEntryPointerMove(event) {
+  const state = actionLibraryEntryPointerState;
+  if (!state || Number(event.pointerId) !== state.pointerId) {
+    return;
+  }
+  if (!state.active) {
+    const distance = Math.hypot(
+      Number(event.clientX) - state.startX,
+      Number(event.clientY) - state.startY
+    );
+    if (distance < 6) {
+      return;
+    }
+    state.active = true;
+  }
+  event.preventDefault();
+  state.targetLaneId = resolveActionLibraryEntryDropLaneId(
+    event.clientX,
+    event.clientY,
+    state.entry
+  );
+  actionLibraryTimelineEntryDrag.value = {
+    entry: state.entry,
+    active: true,
+    targetLaneId: state.targetLaneId,
+  };
+}
+
+function completeActionLibraryEntryPointerDrag(event) {
+  const state = actionLibraryEntryPointerState;
+  if (!state || Number(event.pointerId) !== state.pointerId) {
+    return;
+  }
+  const targetLaneId = state.active
+    ? resolveActionLibraryEntryDropLaneId(
+        event.clientX,
+        event.clientY,
+        state.entry
+      ) || state.targetLaneId
+    : '';
+  const entry = state.entry;
+  const startMs = targetLaneId
+    ? resolveActionLibraryEntryDropTime(targetLaneId, event.clientX)
+    : 0;
+  if (state.active) {
+    event.preventDefault();
+  }
+  cancelActionLibraryEntryPointerDrag();
+  if (targetLaneId) {
+    insertTimelineEntry({ entry, laneId: targetLaneId, startMs });
+  }
+}
+
+function cancelActionLibraryEntryPointerDrag() {
+  actionLibraryEntryPointerState = null;
+  actionLibraryTimelineEntryDrag.value = null;
+  window?.removeEventListener?.(
+    'pointermove',
+    handleActionLibraryEntryPointerMove
+  );
+  window?.removeEventListener?.(
+    'pointerup',
+    completeActionLibraryEntryPointerDrag
+  );
+  window?.removeEventListener?.(
+    'pointercancel',
+    cancelActionLibraryEntryPointerDrag
+  );
+}
+
+function resolveActionLibraryEntryDropLaneId(clientX, clientY, entry) {
+  if (typeof document === 'undefined') {
+    return '';
+  }
+  const laneElement = document
+    .elementFromPoint(Number(clientX) || 0, Number(clientY) || 0)
+    ?.closest?.('[data-testid="workbench-timeline-row"]');
+  const laneId = laneElement?.getAttribute?.('data-lane-id') ?? '';
+  const lane = resolveWorkbenchTimelineLaneTarget(laneId);
+  return lane && isWorkbenchTimelineEntryAllowedInLane(entry, lane.kind)
+    ? laneId
+    : '';
+}
+
+function resolveActionLibraryEntryDropTime(laneId, clientX) {
+  const laneElement = workbenchRoot.value?.querySelector?.(
+    `[data-testid="workbench-timeline-row"][data-lane-id="${laneId}"]`
+  );
+  const rect = laneElement?.getBoundingClientRect?.();
+  if (!rect?.width) {
+    return 0;
+  }
+  const ratio = clampNumber((Number(clientX) - rect.left) / rect.width, 0, 1);
+  const durationMs = Number(project.value.time.durationMs) || 0;
+  return clampNumber(
+    snapMsToFrame(ratio * durationMs),
+    0,
+    Math.max(0, durationMs - frameToMs(1))
+  );
+}
+
 onMounted(() => {
   void getWorkbenchLayoutApi().then(layoutApi => {
     workbenchLayout.value =
@@ -1986,6 +2136,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   pauseTimelinePlayback();
   endWorkbenchLayoutResize();
+  cancelActionLibraryEntryPointerDrag();
   window?.removeEventListener?.('keydown', handleWorkbenchKeyboardShortcut);
   window?.removeEventListener?.('hashchange', handleWorkbenchHashChange);
 });
@@ -6706,16 +6857,20 @@ function getLocalStorage() {
     10px
     minmax(0, 1fr);
   grid-template-areas:
-    'mainflow mainflow mainflow'
+    'actions left-resizer mainflow'
     'actions left-resizer review';
   gap: 12px 0;
   padding: 10px;
 }
 
 .action-library {
+  position: sticky;
+  top: 58px;
   grid-area: actions;
   min-width: 0;
-  overflow: hidden;
+  max-height: calc(100vh - 70px);
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .primary-flow {
@@ -7089,6 +7244,12 @@ function getLocalStorage() {
   .workbench-grid.layout-left-collapsed .action-library {
     visibility: visible;
     pointer-events: auto;
+  }
+
+  .action-library {
+    position: static;
+    max-height: none;
+    overflow: visible;
   }
 
   .side-stack {
