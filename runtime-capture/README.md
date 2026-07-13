@@ -75,6 +75,36 @@ npm run runtime-capture:capture -- `
 
 `--capture-kind` 可选 `role-sp / kibo-energy / toughness / all`，默认 `all` 只用于旧流程兼容。六资源正式采样应为每个角色或奇波分别选择单一范围；`kibo-energy` 强制要求 `--slot-id` 与正整数 `--kibo-id`，`role-sp` 和 `toughness` 会拒绝奇波参数。这样每份会话只有一个预期资源类型，避免无关战斗事件改变动作绑定语义。
 
+## 六资源采样计划与预检
+
+不要手写六组容易串 owner 的命令。先复制 `runtime-capture/six-resource-plan.example.json`，把 `template` 改为 `false`，并按当前 Workbench 方案填写敌人、三个槽位的角色/奇波、来源动作和输出目录。计划必须同时包含：
+
+- `team-slot-1/2/3` 各一份 `role-sp`；
+- 同三个槽位各一份 `kibo-energy`；
+- 同槽角色与奇波会话使用相同 `actorId`；
+- 六个会话 ID、动作 ID、输出文件唯一，三个 `kiboId` 唯一。
+
+客户端未启动时也可以离线预检并生成六条独立采集命令：
+
+```powershell
+npm run runtime-capture:plan -- `
+  --plan C:\path\six-resource-plan.json `
+  --pid 12345
+```
+
+工具不会启动客户端、附加进程或执行这些命令。输出中的 `commands[]` 只包含尚未完成的会话；操作者仍需逐条明确执行。已有输出会被解析并通过 production audit、会话身份和 owner binding 核对：错误文件会令计划进入 `six-resource-capture-plan-invalid`，不会被覆盖或静默跳过。
+
+六份文件全部通过后，可用同一计划完成带 `--require-production` 的批次规范化：
+
+```powershell
+npm run runtime-capture:plan -- `
+  --plan C:\path\six-resource-plan.json `
+  --normalize `
+  --output C:\path\six-resource-captures.json
+```
+
+示例文件带有 `template: true`，只能查看拓扑，不会生成可执行采集命令；必须复制并替换所有 `replace-*` 身份后才能用于真实受控会话。
+
 当前 agent 覆盖：
 
 - `DamageElement.RecoverSP` 与 BaseElement 来源身份。

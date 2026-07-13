@@ -42,17 +42,13 @@ npm run preview -- --host 127.0.0.1 --port 4173
 
 ### 3. 六资源采样批次导入与回放
 
-1. 准备 3 个 `--capture-kind role-sp` 角色 SP 会话和 3 个 `--capture-kind kibo-energy` 奇波 `PetUltimateCdTime` 观测会话；每份文件必须使用不同的 `captureSessionId`，不要使用旧 `all` 范围采集正式六资源批次。
+1. 复制 `runtime-capture/six-resource-plan.example.json`，替换当前三人队、奇波、敌人、来源动作和输出身份；使用 `npm run runtime-capture:plan -- --plan <PATH> --pid <PID>` 预检 3 个角色 SP owner 与 3 个奇波能量 owner，并逐条执行输出的受控命令。不要使用旧 `all` 范围采集正式六资源批次。
 2. 使用同一条命令把六份 JSON/JSONL 按顺序打包：
 
 ```powershell
-npm run runtime-capture:normalize -- `
-  --input C:\path\role-1.jsonl `
-  --input C:\path\role-2.jsonl `
-  --input C:\path\role-3.jsonl `
-  --input C:\path\kibo-1.jsonl `
-  --input C:\path\kibo-2.jsonl `
-  --input C:\path\kibo-3.jsonl `
+npm run runtime-capture:plan -- `
+  --plan C:\path\six-resource-plan.json `
+  --normalize `
   --output C:\path\six-resource-captures.json
 ```
 

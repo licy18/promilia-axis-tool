@@ -23,6 +23,7 @@
     "data:sync-action-icons": "node scripts/sync-workbench-action-icons.mjs",
     "data:generate-runtime-capture-manifest": "node scripts/generate-runtime-capture-hook-manifest.mjs",
     "runtime-capture:capture": "python scripts/capture-azpr-runtime.py",
+    "runtime-capture:plan": "node scripts/prepare-runtime-capture-plan.mjs",
     "runtime-capture:normalize": "node scripts/normalize-runtime-capture.mjs",
     "runtime-capture:self-test": "python scripts/capture-azpr-runtime.py --self-test",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix",

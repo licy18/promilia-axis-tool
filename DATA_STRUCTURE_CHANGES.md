@@ -27449,3 +27449,23 @@ cdTime / totalTime / ready
 Frida agent 的 `startcapture` 配置同步新增 `captureKind`。`role-sp` 只安装 RecoverSP 链，`kibo-energy` 只安装 `PetEntity.PetUltimateCdTime`，`toughness` 只安装 WeaknessPoint 链；`all` 保留旧行为。该变化不升级 `runtime-sample-captures` 或 Workbench 项目 schema，也不改变已导入 capture 的数值计算。
 
 Production provenance audit 新增 `captureScopeDeclared / captureScopeMatchesEvents / captureBindingComplete`。生产声明必须使用单一范围、完整 owner binding，并且事件只能来自对应资源族；`all`、范围缺失或跨资源污染均保持可查看但不可声明为真实生产采样。
+
+## 431. Six-resource runtime capture plan v1
+
+新增独立于 Workbench 项目 schema 的离线编排文件：
+
+```text
+six-resource-runtime-capture-plan v1
+  planId / targetId / durationSeconds / outputDirectory
+  template
+  sessions[6]
+    captureSessionId
+    captureKind = role-sp | kibo-energy
+    slotId = team-slot-1 | team-slot-2 | team-slot-3
+    actionId / actorId / outputFile
+    kiboId? / sourceElementConfigId? / durationSeconds?
+```
+
+计划固定每个槽位恰好一份 `role-sp` 与一份 `kibo-energy`，同槽双方必须使用同一 `actorId`；会话、动作、输出文件和奇波身份不得重复。`outputFile` 只能是单层 `.jsonl` 文件名，防止计划越过指定输出目录。计划只生成命令并检查已有 capture，不持久化到项目、不进入 runtime/calculator，也不改变六条能量轴结果。
+
+已有文件只有在单会话解析、production provenance、`captureKind` 以及 `binding.actionId / actorId / targetId / slotId / kiboId / sourceElementConfigId` 全部匹配时才标记为完成。六份完成后，计划 CLI 调用既有 normalizer v2 与 `--require-production` 生成批次；任一 owner drift 或来源缺口都会阻断，不覆盖原采样文件。

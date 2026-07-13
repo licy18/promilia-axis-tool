@@ -1514,6 +1514,14 @@ JSONL 会话首行新增可选 `captureKind` 与 `binding` 来源字段，完整
 
 下一阶段目标：P3 首份非 fixture 六资源受控采样验收。由操作者明确启动获准客户端后，分别以 `role-sp` 和 `kibo-energy` 取得首份真实会话，通过 `--require-production`、owner 绑定和项目回放，再扩展到完整 3+3；不提前推断公式。
 
+### P3 六资源采样计划与离线预检（2026-07-14）
+
+新增 `six-resource-runtime-capture-plan` v1 与 `runtime-capture:plan`：一个计划固定 3 个角色 SP owner 和同槽 3 个奇波能量 owner，共 6 条独立能量轴的来源会话。预检强制同槽角色一致、三个奇波唯一、六个会话/动作/输出唯一，并在客户端未运行时生成六条待执行受控命令；已有文件必须同时通过 production audit 与计划 binding 才计为完成，owner 漂移会阻断整批规范化。该工具不启动或附加客户端，也不新增公式。
+
+验收覆盖空计划命令生成、owner/kibo 重复拒绝、错误已有文件拒绝，以及六份 production 会话从同一计划通过 `--require-production` 规范化。全量 91 个测试文件、501 条测试通过；生产构建、引用/数据/applied source/包体审计和 Frida self-test 均通过，self-test 捕获 4 个事件。Workbench 主块仍为 334,371B gzip，总 JavaScript 仍为 739,228B gzip。六轴 UI、runtime 与 calculator 结果未改变。
+
+下一阶段目标：P3 首份非 fixture 六资源受控采样验收。操作者启动获准客户端后，先采集同一槽位的一份角色 SP 与一份奇波就绪会话，完成 production audit、owner binding 和 Workbench 回放；通过后再按同一计划扩展到完整 3+3，不推断未知公式或倍率。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。

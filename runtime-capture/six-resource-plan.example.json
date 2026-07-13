@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "game": "azur-promilia",
+  "type": "six-resource-runtime-capture-plan",
+  "template": true,
+  "planId": "replace-six-resource-plan-id",
+  "targetId": "replace-enemy-target-id",
+  "durationSeconds": 30,
+  "outputDirectory": "./captures/replace-six-resource-plan-id",
+  "sessions": [
+    {
+      "captureSessionId": "replace-role-slot-1-session",
+      "captureKind": "role-sp",
+      "slotId": "team-slot-1",
+      "actionId": "replace-role-slot-1-action",
+      "actorId": "replace-role-slot-1-actor",
+      "sourceElementConfigId": 109001081,
+      "outputFile": "role-slot-1.jsonl"
+    },
+    {
+      "captureSessionId": "replace-role-slot-2-session",
+      "captureKind": "role-sp",
+      "slotId": "team-slot-2",
+      "actionId": "replace-role-slot-2-action",
+      "actorId": "replace-role-slot-2-actor",
+      "sourceElementConfigId": 101003081,
+      "outputFile": "role-slot-2.jsonl"
+    },
+    {
+      "captureSessionId": "replace-role-slot-3-session",
+      "captureKind": "role-sp",
+      "slotId": "team-slot-3",
+      "actionId": "replace-role-slot-3-action",
+      "actorId": "replace-role-slot-3-actor",
+      "sourceElementConfigId": 101007081,
+      "outputFile": "role-slot-3.jsonl"
+    },
+    {
+      "captureSessionId": "replace-kibo-slot-1-session",
+      "captureKind": "kibo-energy",
+      "slotId": "team-slot-1",
+      "actionId": "replace-kibo-slot-1-action",
+      "actorId": "replace-role-slot-1-actor",
+      "kiboId": 500001,
+      "outputFile": "kibo-slot-1.jsonl"
+    },
+    {
+      "captureSessionId": "replace-kibo-slot-2-session",
+      "captureKind": "kibo-energy",
+      "slotId": "team-slot-2",
+      "actionId": "replace-kibo-slot-2-action",
+      "actorId": "replace-role-slot-2-actor",
+      "kiboId": 500002,
+      "outputFile": "kibo-slot-2.jsonl"
+    },
+    {
+      "captureSessionId": "replace-kibo-slot-3-session",
+      "captureKind": "kibo-energy",
+      "slotId": "team-slot-3",
+      "actionId": "replace-kibo-slot-3-action",
+      "actorId": "replace-role-slot-3-actor",
+      "kiboId": 500003,
+      "outputFile": "kibo-slot-3.jsonl"
+    }
+  ]
+}
