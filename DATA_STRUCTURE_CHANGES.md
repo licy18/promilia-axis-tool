@@ -27339,3 +27339,17 @@ actionLibraryCharacterId
 ```
 
 迁移后的动作继续进入既有 `normalizeWorkbenchActionDrafts(actionDrafts, selection, teamSlots)`，因此技能、轨道与 runtime 均按新角色合法化。映射不写入项目文件；本地草稿、JSON、分享链接和 PNG 仍只保存现有 `teamSlots` 与 action draft。3 条角色能量轴和 3 条奇波能量轴继续从槽位拓扑派生，总数与所有者合同不变。
+
+## 424. Explicit empty action list
+
+Workbench v16 项目 schema 未升级，但草稿归一化现在区分“显式空列表”与“旧数据缺失字段”：
+
+```text
+actionDrafts = []              # 合法空方案，原样保留
+actionDrafts = missing/non-array # 兼容旧草稿，生成一个默认动作
+selectedActionId = ""          # 空方案无选中动作
+```
+
+`createWorkbenchProject()` 接受 `actions: []`，compiler 与 runtime 输出零动作、零事件以及完整初始状态曲线。删除单个动作、多选动作或整个生成批次都可以产生空列表；无选中动作时，新增入口从当前动作库角色与方案选择推导首个动作的默认上下文。
+
+本地草稿、JSON、分享链接和 PNG 继续使用现有字段，因此无需迁移。3 条角色能量轴、3 条奇波能量轴与敌人 HP/韧性在空方案中均保持全长初始平线；奇波能量仍为 `tracking-only / unapplied`。

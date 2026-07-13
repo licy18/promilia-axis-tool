@@ -30,6 +30,21 @@ afterAll(() => {
 });
 
 describe('workbench project actor configuration', () => {
+  it('compiles and simulates an explicit empty action list', () => {
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      actions: [],
+    });
+    const validation = validateProject(project, getWorkbenchGameData());
+    const scenario = compileProject(project, getWorkbenchGameData());
+    const result = simulateScenario(scenario);
+
+    expect(project.name).toContain('空方案');
+    expect(project.actions).toEqual([]);
+    expect(validation.valid).toBe(true);
+    expect(result.scenario.actionCount).toBe(0);
+    expect(result.actionResultTimeline).toEqual([]);
+  });
+
   it('consumes the generated Workbench production data projection', () => {
     const seed = getWorkbenchSeed();
     const gameData = getWorkbenchGameData();

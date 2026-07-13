@@ -302,7 +302,7 @@ export function createWorkbenchScenarioDraftSnapshot({
     action => action.id === selectedActionId
   )
     ? selectedActionId
-    : normalizedActions[0].id;
+    : (normalizedActions[0]?.id ?? '');
 
   return {
     selection: normalizedSelection,
@@ -498,7 +498,7 @@ function ensureActionDrafts(actionDrafts, selection, teamSlots) {
     selection,
     teamSlots
   );
-  if (normalizedActions.length > 0) {
+  if (normalizedActions.length > 0 || Array.isArray(actionDrafts)) {
     return normalizedActions;
   }
 

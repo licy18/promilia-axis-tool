@@ -936,6 +936,215 @@ test('[m1-trial-release-workflow] keeps a populated slot through configuration, 
   await page.screenshot({ path: 'reports/m1-trial-release-narrow.png' });
 });
 
+test('[m1-empty-scenario-workflow] builds and restores a six-energy-axis project from zero actions', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
+  await page.getByTestId('workbench-scenario-add').click();
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const timelineActions = timeline.getByTestId('workbench-timeline-action');
+  const actorEnergyRows = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-kind="actor-energy-curve"]'
+  );
+  const kiboEnergyRows = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"]'
+  );
+  const stateCurves = timeline.getByTestId('workbench-timeline-state-curve');
+  const expectEmptyTimeline = async () => {
+    await expect(timelineActions).toHaveCount(0);
+    await expect(
+      timeline.getByTestId('workbench-timeline-runtime-event-marker')
+    ).toHaveCount(0);
+    await expect(actorEnergyRows).toHaveCount(3);
+    await expect(kiboEnergyRows).toHaveCount(3);
+    await expect(stateCurves).toHaveCount(8);
+    await expect
+      .poll(() =>
+        stateCurves.evaluateAll(curves =>
+          curves.every(curve => curve.getAttribute('data-point-count') === '0')
+        )
+      )
+      .toBe(true);
+    expect(
+      await timeline
+        .getByTestId('workbench-timeline-state-curve-line')
+        .evaluateAll(lines =>
+          lines.every(line => {
+            const points = line
+              .getAttribute('points')
+              .split(' ')
+              .map(point => point.split(',').map(Number));
+            return points.length === 2 && points[0][1] === points[1][1];
+          })
+        )
+    ).toBe(true);
+  };
+  const actorLaneLabel = characterId =>
+    timeline.locator(
+      `[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="${characterId}"]`
+    );
+  const curve = laneId =>
+    timeline.locator(
+      `[data-testid="workbench-timeline-row"][data-lane-id="${laneId}"] [data-testid="workbench-timeline-state-curve"]`
+    );
+
+  await expect(page.locator('main.workbench')).toHaveAttribute(
+    'data-active-workspace-scenario-id',
+    'scenario-0002'
+  );
+  await expectEmptyTimeline();
+
+  await actorLaneLabel(101007).click();
+  await page
+    .getByTestId('workbench-tertiary-character-select')
+    .selectOption('101010');
+  const kiboBindings = [
+    { characterId: 109001, kiboId: '500001', name: '迅狼' },
+    { characterId: 101003, kiboId: '500002', name: '水灵仔' },
+    { characterId: 101010, kiboId: '500004', name: '汐灵偶' },
+  ];
+  for (const binding of kiboBindings) {
+    await actorLaneLabel(binding.characterId).click();
+    await page
+      .locator(
+        `[data-testid="workbench-actor-kibo-select"][data-character-id="${binding.characterId}"]`
+      )
+      .selectOption(binding.kiboId);
+  }
+  await timeline
+    .locator(
+      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="enemy-event"]'
+    )
+    .click();
+  await page
+    .getByTestId('workbench-enemy-config-select')
+    .selectOption('300071');
+  await expectEmptyTimeline();
+
+  await actorLaneLabel(101003).click();
+  await closeInspectorIfVisible(page);
+  const actorTwoLane = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-id="actor-101003"]'
+  );
+  await dragLocatorTo(
+    page,
+    page.getByTestId('workbench-skill-entry').first(),
+    actorTwoLane,
+    { targetPosition: { x: 300, y: 26 } }
+  );
+  await closeInspectorIfVisible(page);
+  await dragLocatorTo(
+    page,
+    page.getByTestId('workbench-add-resource-action'),
+    actorTwoLane,
+    { targetPosition: { x: 500, y: 26 } }
+  );
+  await closeInspectorIfVisible(page);
+  await dragLocatorTo(
+    page,
+    page.getByTestId('workbench-kibo-action-entry').first(),
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="kibo-team-slot-2"]'
+    ),
+    { targetPosition: { x: 680, y: 18 } }
+  );
+  await closeInspectorIfVisible(page);
+  await dragLocatorTo(
+    page,
+    page.getByTestId('workbench-add-enemy-event-action'),
+    timeline.locator(
+      '[data-testid="workbench-timeline-row"][data-lane-id="enemy-events"]'
+    ),
+    { targetPosition: { x: 780, y: 24 } }
+  );
+  await closeInspectorIfVisible(page);
+
+  await expect(timelineActions).toHaveCount(4);
+  await expect(curve('energy-actor-109001')).toHaveAttribute(
+    'data-point-count',
+    '0'
+  );
+  await expect(curve('energy-actor-101003')).toHaveAttribute(
+    'data-point-count',
+    '1'
+  );
+  await expect(curve('energy-actor-101010')).toHaveAttribute(
+    'data-point-count',
+    '0'
+  );
+  for (let slotIndex = 1; slotIndex <= 3; slotIndex += 1) {
+    await expect(curve(`kibo-energy-team-slot-${slotIndex}`)).toHaveAttribute(
+      'data-point-count',
+      '0'
+    );
+  }
+  await expect
+    .poll(async () =>
+      Number(await curve('enemy-hp-curve').getAttribute('data-point-count'))
+    )
+    .toBeGreaterThan(0);
+  await expect(curve('enemy-toughness-curve')).toHaveAttribute(
+    'data-point-count',
+    '0'
+  );
+
+  await page.getByTestId('workbench-save-draft').click();
+  await page.reload();
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已恢复草稿'
+  );
+  await expect(timelineActions).toHaveCount(4);
+  await expect(actorEnergyRows).toHaveCount(3);
+  await expect(kiboEnergyRows).toHaveCount(3);
+  await expect(actorLaneLabel(101010)).toBeVisible();
+  for (const [index, binding] of kiboBindings.entries()) {
+    await expect(
+      timeline.locator(
+        `[data-testid="workbench-timeline-lane-label"][data-lane-id="kibo-energy-team-slot-${index + 1}"]`
+      )
+    ).toContainText(binding.name);
+  }
+  await expect(
+    timeline.locator(
+      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="enemy-event"]'
+    )
+  ).toContainText('菜鸡');
+
+  const downloadPromise = page.waitForEvent('download');
+  await clickProjectMenuCommand(page, 'workbench-export-project');
+  const downloadPath = await (await downloadPromise).path();
+  const deleteButtons = page.getByTestId('workbench-delete-action');
+  while ((await deleteButtons.count()) > 0) {
+    await deleteButtons.first().click();
+  }
+  await expectEmptyTimeline();
+
+  await page
+    .getByTestId('workbench-import-project-file')
+    .setInputFiles(downloadPath);
+  await expect(page.getByTestId('workbench-draft-status')).toHaveText(
+    '已导入项目'
+  );
+  await expect(timelineActions).toHaveCount(4);
+  await expect(actorEnergyRows).toHaveCount(3);
+  await expect(kiboEnergyRows).toHaveCount(3);
+  await expect(actorLaneLabel(101010)).toBeVisible();
+  await expectTimelineRowsAligned(timeline);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/m1-empty-scenario-desktop.png' });
+
+  await closeInspectorIfVisible(page);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await expectTimelineRowsAligned(timeline);
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: 'reports/m1-empty-scenario-narrow.png' });
+});
+
 test('[stage-10a-multitrack-editing] schedules and rebinds actor, kibo, and enemy entries on legal lanes', async ({
   page,
 }) => {

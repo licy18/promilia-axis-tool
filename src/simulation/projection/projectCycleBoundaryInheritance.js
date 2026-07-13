@@ -68,7 +68,7 @@ export function projectCycleBoundaryInheritance({
     cycleBoundaries,
     initialRuntimeState,
     runtimeSampleCaptures: [],
-    selectedActionId: actionDrafts[0].id,
+    selectedActionId: actionDrafts[0]?.id ?? '',
   };
 
   return createProjectionResult({

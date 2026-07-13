@@ -729,6 +729,7 @@
         </div>
 
         <div
+          v-if="selectedAction"
           class="side-stack-panel"
           :data-inspector-panel-order="sideInspectorPanelOrders.properties"
           data-inspector-panel-key="properties"
@@ -1674,7 +1675,11 @@ const selectedAction = computed(() => {
 const selectedDraft = computed(() => {
   return (
     actionDrafts.value.find(action => action.id === selectedActionId.value) ??
-    actionDrafts.value[0]
+    actionDrafts.value[0] ?? {
+      actorCharacterId: actionLibraryCharacterId.value,
+      skillId: selection.value.skillId,
+      level: 1,
+    }
   );
 });
 const sideInspectorSelectionKey = computed(() => {
@@ -2278,7 +2283,7 @@ function updateSelection(patch, options = {}) {
   }
 
   if (characterChanged) {
-    selectedActionId.value = actionDrafts.value[0].id;
+    selectedActionId.value = actionDrafts.value[0]?.id ?? '';
   }
 
   markDraftDirty();
@@ -2925,10 +2930,7 @@ function deleteSelectedActions({ actionIds = selectedActionIds.value } = {}) {
   const affectedActionIds = actionDrafts.value
     .filter(action => requestedActionIds.has(action.id))
     .map(action => action.id);
-  if (
-    affectedActionIds.length === 0 ||
-    affectedActionIds.length >= actionDrafts.value.length
-  ) {
+  if (affectedActionIds.length === 0) {
     return false;
   }
 
@@ -3164,10 +3166,6 @@ function copyActionBatch(batchId) {
 
 function deleteAction(actionId) {
   clearSegmentSplitPreview();
-  if (actionDrafts.value.length <= 1) {
-    return;
-  }
-
   const index = actionDrafts.value.findIndex(action => action.id === actionId);
   if (index < 0) {
     return;
@@ -3182,8 +3180,9 @@ function deleteAction(actionId) {
 
   if (selectedWasRemoved) {
     const nextIndex = Math.min(index, actionDrafts.value.length - 1);
-    selectedActionId.value = actionDrafts.value[nextIndex].id;
-    syncActionLibraryCharacterIdFromDraft(actionDrafts.value[nextIndex]);
+    const nextAction = actionDrafts.value[nextIndex];
+    selectedActionId.value = nextAction?.id ?? '';
+    syncActionLibraryCharacterIdFromDraft(nextAction);
   }
   applyActionMutationRuntimeSyncRequest({
     actionId: selectedActionId.value,
@@ -3205,10 +3204,7 @@ function deleteActionBatch(batchId) {
       .filter(action => action.generationBatch?.batchId === batchId)
       .map(action => action.id)
   );
-  if (
-    batchActionIds.size === 0 ||
-    batchActionIds.size >= actionDrafts.value.length
-  ) {
+  if (batchActionIds.size === 0) {
     return;
   }
 
@@ -3227,8 +3223,9 @@ function deleteActionBatch(batchId) {
       Math.max(0, firstRemovedIndex),
       actionDrafts.value.length - 1
     );
-    selectedActionId.value = actionDrafts.value[nextIndex].id;
-    syncActionLibraryCharacterIdFromDraft(actionDrafts.value[nextIndex]);
+    const nextAction = actionDrafts.value[nextIndex];
+    selectedActionId.value = nextAction?.id ?? '';
+    syncActionLibraryCharacterIdFromDraft(nextAction);
   }
   applyActionMutationRuntimeSyncRequest({
     actionId: selectedActionId.value,
@@ -3339,10 +3336,7 @@ function switchWorkspaceScenario(scenarioId) {
 }
 
 function addWorkspaceScenario() {
-  const emptyDraft = createWorkbenchScenarioDraftSnapshot({
-    ...createDefaultWorkbenchDraftState(),
-    configurationSelection: null,
-  });
+  const emptyDraft = createWorkbenchScenarioDraftSnapshot({ actionDrafts: [] });
   const result = addWorkbenchScenario(
     scenarioWorkspace.value,
     createWorkbenchScenarioDraftSnapshot(getCurrentWorkbenchScenarioState()),

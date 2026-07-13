@@ -8,6 +8,7 @@ import {
   createWorkbenchProjectFileName,
   createWorkbenchProjectFileSnapshot,
   createWorkbenchProjectShareCode,
+  createWorkbenchScenarioDraftSnapshot,
   loadWorkbenchDraft,
   parseWorkbenchProjectFile,
   parseWorkbenchProjectShareCode,
@@ -15,6 +16,19 @@ import {
 } from '../../domain/workbenchDraftStorage';
 
 describe('workbench draft storage project files', () => {
+  it('preserves an explicit empty action list while retaining legacy fallback', () => {
+    const emptyDraft = createWorkbenchScenarioDraftSnapshot({
+      actionDrafts: [],
+      selectedActionId: 'action-missing',
+    });
+    const legacyDraft = createWorkbenchScenarioDraftSnapshot();
+
+    expect(emptyDraft.actionDrafts).toEqual([]);
+    expect(emptyDraft.selectedActionId).toBe('');
+    expect(legacyDraft.actionDrafts).toHaveLength(1);
+    expect(legacyDraft.selectedActionId).toBe(legacyDraft.actionDrafts[0].id);
+  });
+
   it('serializes a versioned Workbench project file and imports it as a draft', () => {
     const exported = JSON.parse(
       serializeWorkbenchProjectFile(

@@ -467,12 +467,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     enemyId: normalized.enemyId,
   });
 
-  if (
-    !character ||
-    !secondaryCharacter ||
-    !enemy ||
-    actionDrafts.length === 0
-  ) {
+  if (!character || !secondaryCharacter || !enemy) {
     throw new Error(
       'Workbench seed cannot resolve selected character, skill, or enemy'
     );
@@ -507,12 +502,12 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     elementDefenseOverrides: enemyConfig.elementDefenseOverrides,
   });
   const titleAction = actionDrafts[0];
-  const firstSkill = findById(
-    workbenchSeed.gameData.skills,
-    titleAction.skillId
-  );
-  const titleActionName =
-    titleAction.type === ACTION_TYPES.SKILL
+  const firstSkill = titleAction
+    ? findById(workbenchSeed.gameData.skills, titleAction.skillId)
+    : null;
+  const titleActionName = !titleAction
+    ? '空方案'
+    : titleAction.type === ACTION_TYPES.SKILL
       ? firstSkill.name
       : actionTypeLabel(titleAction.type);
 

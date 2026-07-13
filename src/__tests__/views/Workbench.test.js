@@ -10547,6 +10547,108 @@ describe('Workbench view', () => {
     wrapper.unmount();
   });
 
+  it('creates a truly empty scenario with all six energy axes intact', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: { template: '<a><slot /></a>' },
+        },
+      },
+    });
+    await settleWorkbenchAsyncPanels();
+
+    await wrapper
+      .get('[data-testid="workbench-scenario-add"]')
+      .trigger('click');
+    await nextTick();
+
+    expect(wrapper.get('main.workbench').attributes()).toMatchObject({
+      'data-workspace-scenario-count': '2',
+      'data-active-workspace-scenario-id': 'scenario-0002',
+    });
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-action"]')
+    ).toHaveLength(0);
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-runtime-event-marker"]')
+    ).toHaveLength(0);
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-row"][data-lane-kind="actor-energy-curve"]'
+      )
+    ).toHaveLength(3);
+    expect(
+      wrapper.findAll(
+        '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"]'
+      )
+    ).toHaveLength(3);
+    const curves = wrapper.findAll(
+      '[data-testid="workbench-timeline-state-curve"]'
+    );
+    expect(curves).toHaveLength(8);
+    curves.forEach(curve => {
+      expect(curve.attributes('data-point-count')).toBe('0');
+      const points = curve
+        .get('[data-testid="workbench-timeline-state-curve-line"]')
+        .attributes('points')
+        .split(' ')
+        .map(point => point.split(',').map(Number));
+      expect(points).toHaveLength(2);
+      expect(points[0][1]).toBe(points[1][1]);
+    });
+
+    await wrapper
+      .get('[data-testid="workbench-add-resource-action"]')
+      .trigger('click');
+    await nextTick();
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-action"]')
+    ).toHaveLength(1);
+    expect(
+      wrapper
+        .get(
+          '[data-testid="workbench-timeline-row"][data-lane-id="energy-actor-109001"] [data-testid="workbench-timeline-state-curve"]'
+        )
+        .attributes('data-point-count')
+    ).toBe('1');
+  });
+
+  it('returns all state curves to flat lines after deleting the final action', async () => {
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: { template: '<a><slot /></a>' },
+        },
+      },
+    });
+    await settleWorkbenchAsyncPanels();
+
+    await wrapper
+      .get('[data-testid="workbench-delete-action"]')
+      .trigger('click');
+    await nextTick();
+
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-action"]')
+    ).toHaveLength(0);
+    expect(
+      wrapper.findAll('[data-testid="workbench-timeline-runtime-event-marker"]')
+    ).toHaveLength(0);
+    const curves = wrapper.findAll(
+      '[data-testid="workbench-timeline-state-curve"]'
+    );
+    expect(curves).toHaveLength(8);
+    curves.forEach(curve => {
+      expect(curve.attributes('data-point-count')).toBe('0');
+      const points = curve
+        .get('[data-testid="workbench-timeline-state-curve-line"]')
+        .attributes('points')
+        .split(' ')
+        .map(point => point.split(',').map(Number));
+      expect(points[0][1]).toBe(points[1][1]);
+    });
+  });
+
   it('switches to a workspace baseline and locates its runtime contribution', async () => {
     const wrapper = mount(Workbench, {
       attachTo: document.body,
