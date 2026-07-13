@@ -190,6 +190,90 @@ describe('TimelineGridPreview', () => {
     });
   });
 
+  it('links hit and resource events to one exact-frame review flow', async () => {
+    const surface = createInjectedMainFlowCommandSurface();
+    const runtimeStatePointContexts = [
+      createRuntimeEventContext({
+        sourceDeltaId: 'delta-hp',
+        statePointId: 'state-hp',
+        actionId: 'action-a',
+        trackKey: 'enemyHpDamage',
+        hpDelta: 100,
+      }),
+      createRuntimeEventContext({
+        sourceDeltaId: 'delta-toughness',
+        statePointId: 'state-toughness',
+        actionId: 'action-a',
+        trackKey: 'enemyToughnessDamage',
+        toughnessDelta: 20,
+      }),
+      createRuntimeEventContext({
+        sourceDeltaId: 'delta-energy',
+        statePointId: 'state-energy',
+        actionId: 'action-a',
+        trackKey: 'selfEnergyChange',
+        energyDelta: 15,
+      }),
+      createRuntimeEventContext({
+        sourceDeltaId: 'resource-energy',
+        statePointId: 'state-resource',
+        actionId: 'action-b',
+        actorId: 'actor-b',
+        actorName: '寒悠悠',
+        trackKey: 'selfEnergyChange',
+        frameIndex: 90,
+        timeMs: 1500,
+        energyDelta: 50,
+        stateSnapshot: {
+          before: { selfEnergy: { currentValue: 0 } },
+          after: { selfEnergy: { currentValue: 50 } },
+        },
+      }),
+    ];
+    const wrapper = mount(TimelineGridPreview, {
+      props: createTimelineProps({
+        runtimeStatePointContexts,
+        mainFlowCommandSurface: surface,
+      }),
+    });
+
+    const markers = wrapper.findAll(
+      '[data-testid="workbench-timeline-runtime-event-marker"]'
+    );
+    expect(markers).toHaveLength(2);
+    expect(markers.map(marker => marker.classes()[1])).toEqual([
+      'event-hit',
+      'event-resource',
+    ]);
+    expect(markers[0].element.parentElement.dataset.laneId).toBe('actor-a');
+    expect(markers[1].element.parentElement.dataset.laneId).toBe('actor-b');
+    expect(markers[0].attributes('title')).toBe('普通攻击 · 命中 · 30F');
+
+    await markers[0].trigger('click');
+    expect(wrapper.emitted('select-timeline-frame')?.at(-1)?.[0]).toEqual({
+      frameIndex: 30,
+      timeMs: 500,
+      statePointId: 'state-hp',
+      source: 'timeline-runtime-event',
+    });
+    expect(getLastDispatchedFlowAction(wrapper)).toMatchObject({
+      kind: 'select-runtime-state-point',
+      source: 'timeline-surface-test',
+      actionId: 'action-a',
+      statePointId: 'state-hp',
+      payload: {
+        statePointIds: ['state-hp', 'state-toughness', 'state-energy'],
+        preserveStateCurveFilters: true,
+      },
+    });
+
+    await wrapper.setProps({ selectedStateCurvePointId: 'state-toughness' });
+    const selectedMarker = wrapper.findAll(
+      '[data-testid="workbench-timeline-runtime-event-marker"]'
+    )[0];
+    expect(selectedMarker.classes()).toContain('selected');
+  });
+
   it('renders action readiness and legal skill cooldown windows on the timeline', () => {
     const wrapper = mount(TimelineGridPreview, {
       props: createTimelineProps({
@@ -1228,6 +1312,42 @@ function createRuntimeTimelineStateCurves() {
       ],
     },
   };
+}
+
+function createRuntimeEventContext({
+  sourceDeltaId,
+  statePointId,
+  actionId,
+  actorId = 'actor-a',
+  actorName = '末音',
+  trackKey,
+  frameIndex = 30,
+  timeMs = 500,
+  hpDelta = null,
+  toughnessDelta = null,
+  energyDelta = null,
+  stateSnapshot = null,
+  hitKey = actionId === 'action-a' ? 'hit-1' : '',
+  hitIndex = actionId === 'action-a' ? 1 : null,
+}) {
+  const row = {
+    sourceDeltaId,
+    actionId,
+    actionName: actionId === 'action-a' ? '普通攻击' : '重击',
+    actorId,
+    actorName,
+    hitKey,
+    hitIndex,
+    trackKey,
+    layerKey: 'applied',
+    frameIndex,
+    timeMs,
+    hpDelta,
+    toughnessDelta,
+    energyDelta,
+    stateSnapshot,
+  };
+  return { statePointId, row, point: { ...row } };
 }
 
 function createInjectedMainFlowCommandSurface() {

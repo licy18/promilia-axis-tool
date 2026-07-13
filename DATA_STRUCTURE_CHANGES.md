@@ -27298,3 +27298,20 @@ WorkbenchActionVisualIdentity (derived, not persisted as a second model)
 ```
 
 `scripts/sync-workbench-action-icons.mjs` 从 AzPr Extractor 的官方 `SkillIcon` 目录把生成数据实际引用的文件复制到 `public/assets/actions/`；文件名必须是不含路径分隔符的 `.png`，避免项目载体写入任意资源路径。奇波动作在复制、本地草稿、JSON、分享链接和 PNG 中保留可选 `icon`，旧载体缺失时使用通用动作图标；角色动作从正式技能目录按 `skillId` 重新获得图标和类型。该合同只影响展示身份，不进入 compiler/calculator，不改变六条能量轴、敌人 HP/韧性或 applied/unapplied 结果。
+
+## 420. Runtime timeline event projection
+
+本阶段没有修改 Workbench v16 schema，也没有新增 runtime output contract。时间轴只从现有 `runtimeStatePointContexts` 派生瞬态事件投影：
+
+```text
+RuntimeTimelineEventMarker (derived, not persisted)
+  actionId
+  kind = hit | resource
+  frameIndex
+  statePointIds[]
+  title
+```
+
+同一动作、同一准确帧的 HP、韧性与能量 state point 按 `actionId + frameIndex` 聚合为一个命中节点；独立资源 state point 继续按自身 identity 形成资源节点。点击节点复用既有 `select-runtime-state-point` 主流程，统一驱动帧游标、曲线断点选中和检查器详情，不引入第二套选择状态或帧归一化。
+
+`AnalysisPanel` 不再显示重复的逐段 `damageTimeline` 原始列表，但 simulation 仍保留该输出供兼容 consumer 和 summary 使用。`runtimeOutputs.resourceCurves` 的 3 条角色能量曲线与 3 条奇波能量曲线均未变化；本阶段没有新增 mechanics、calculator 或 applied delta。

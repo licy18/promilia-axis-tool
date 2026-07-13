@@ -28,20 +28,6 @@
       </div>
     </div>
 
-    <div class="damage-list">
-      <div
-        v-for="damage in damageTimeline"
-        :key="damage.actionId"
-        class="damage-row"
-      >
-        <div class="damage-row-main">
-          <span>{{ damage.segmentLabel }}</span>
-          <small>{{ formatDamageFormula(damage) }}</small>
-        </div>
-        <strong>{{ formatNumber(damage.rawDamage) }}</strong>
-      </div>
-    </div>
-
     <div
       class="action-result-list"
       data-testid="workbench-action-result-sources"
@@ -1099,10 +1085,6 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  damageTimeline: {
-    type: Array,
-    required: true,
-  },
   actionResultTimeline: {
     type: Array,
     default: () => [],
@@ -1591,22 +1573,6 @@ function formatEnergyNumber(value) {
   return (Number(value) || 0).toLocaleString('zh-CN', {
     maximumFractionDigits: 6,
   });
-}
-
-function formatDamageFormula(damage) {
-  const layers = damage.formulaBreakdown?.layers;
-  if (!layers) {
-    return `攻击 ${formatNumber(damage.attack)} × 倍率 ${formatMultiplier(damage.multiplier)}`;
-  }
-
-  const attack = formatNumber(layers.baseAttack?.value);
-  const multiplier =
-    layers.actionMultiplier?.rawValue ??
-    formatMultiplier(layers.actionMultiplier?.value);
-  const pending = damage.formulaBreakdown.unappliedLayerKeys?.length
-    ? ' / 防御、抗性、暴击未应用'
-    : '';
-  return `攻击 ${attack} × 倍率 ${multiplier}${pending}`;
 }
 
 function formatMultiplier(value) {

@@ -134,7 +134,6 @@ describe('Workbench view', () => {
     );
     expect(text).toContain('DAMAGE_PROJECTED');
     expect(text).toContain('stage5-damage-layer-breakdown-v1');
-    expect(text).toContain('攻击 1,920 × 倍率 649%');
     expect(text).toContain('三值来源');
     expect(text).toContain(
       '三值框架 3轨 · 曲线 3条/15点 · 状态 16点 · 细节后补'
@@ -1899,7 +1898,11 @@ describe('Workbench view', () => {
         )
         .attributes('data-active')
     ).toBe('true');
-    expect(text).toContain('候选三值');
+    expect(
+      wrapper
+        .find('[data-testid="workbench-timeline-runtime-event-marker"]')
+        .exists()
+    ).toBe(true);
     expect(text).toContain(
       '候选模式 1 动作 · f2 缩放 ×40.6 / 每 hit ×8.1 / 行为节点 5 候选 · 帧 12f/13f/16f/19f · Skill0_6/Skill0_1 · 绑定候选 普攻->Skill0_1 12f/13f · 状态证据 Skill0_1 动画+命中 / Skill0_6 动画+命中 · 普攻链 10900102->Skill0_2 / 10900103->Skill0_3 / +2 · 命中候选 5/5段 · 三值候选 5/5段 · 目标缺失 80102'
     );
@@ -7859,7 +7862,6 @@ describe('Workbench view', () => {
         .value
     ).toBe('1');
     expect(wrapper.find('.selection-note').text()).toContain('190%');
-    expect(wrapper.find('.damage-row').text()).toContain('重击');
     expect(
       wrapper.find('.action-item[data-action-id="action-0001"]').text()
     ).toContain('190%');
@@ -7963,10 +7965,6 @@ describe('Workbench view', () => {
     expect(
       wrapper.find('.action-item[data-action-id="action-0002"]').text()
     ).toContain('1s30f');
-    expect(
-      wrapper.findAll('.damage-row').some(row => row.text().includes('星鸣技'))
-    ).toBe(true);
-
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     const savedDraft = JSON.parse(
       window.localStorage.getItem(WORKBENCH_DRAFT_STORAGE_KEY)
@@ -8692,11 +8690,8 @@ describe('Workbench view', () => {
         .attributes('data-lane-id')
     ).toBe('actor-109001');
     expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-timeline-damage-marker"][data-action-id="action-0001"]'
-        )
-        .attributes('data-lane-id')
+      wrapper.find('[data-testid="workbench-timeline-runtime-event-marker"]')
+        .element.parentElement.dataset.laneId
     ).toBe('actor-109001');
 
     await wrapper
@@ -8891,11 +8886,8 @@ describe('Workbench view', () => {
         .attributes('data-lane-id')
     ).toBe('actor-101003');
     expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-timeline-damage-marker"][data-action-id="action-0001"]'
-        )
-        .attributes('data-lane-id')
+      wrapper.find('[data-testid="workbench-timeline-runtime-event-marker"]')
+        .element.parentElement.dataset.laneId
     ).toBe('actor-101003');
 
     const optionValues = Array.from(

@@ -426,7 +426,6 @@
           :timeline-entry-catalog="timelineEntryCatalog"
           :timeline-entry-default-actor-id="actionLibraryActor.id"
           :active-actor-character-id="actionLibraryCharacterId"
-          :damage-timeline="simulationResult.damageTimeline"
           :candidate-value-chart="simulationResult.candidateValueSeries.chart"
           :three-value-curve-framework="
             simulationResult.threeValueCurveFramework
@@ -823,7 +822,6 @@
           <AnalysisPanel
             :summary="simulationResult.summary"
             :diagnostics="simulationResult.diagnostics"
-            :damage-timeline="simulationResult.damageTimeline"
             :action-result-timeline="simulationResult.actionResultTimeline"
             :runtime-projection="runtimeOutputs"
             :runtime-selected-detail="runtimeSelectedDetail"
@@ -900,7 +898,6 @@
         :timeline-topology="project.metadata.timelineTopology"
         :kibos="loadoutOptions.kibos"
         :actions="scenario.actions"
-        :damage-timeline="simulationResult.damageTimeline"
         :candidate-value-chart="simulationResult.candidateValueSeries.chart"
         :three-value-curve-framework="simulationResult.threeValueCurveFramework"
         :runtime-state-curves="simulationResult.runtimeOutputs.stateCurves"

@@ -2917,6 +2917,81 @@ test('[narrow-main-flow] completes runtime review, edit, and refresh without ove
   await expectPageWithoutHorizontalOverflow(page);
 });
 
+test('[m1-runtime-event-review] links source events, exact frames, three-value detail, and edit refresh across six energy axes', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/workbench');
+
+  const timeline = page.getByTestId('workbench-timeline-grid-preview');
+  const actorEnergyRows = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-kind="actor-energy-curve"]'
+  );
+  const kiboEnergyRows = timeline.locator(
+    '[data-testid="workbench-timeline-row"][data-lane-kind="kibo-energy-curve"]'
+  );
+  await expect(actorEnergyRows).toHaveCount(3);
+  await expect(kiboEnergyRows).toHaveCount(3);
+  await timeline.screenshot({
+    path: 'reports/m1-runtime-event-timeline-desktop.png',
+  });
+
+  const runtimeEvent = timeline
+    .getByTestId('workbench-timeline-runtime-event-marker')
+    .first();
+  await expect(runtimeEvent).toBeVisible();
+  await expect(runtimeEvent).toHaveAttribute('title', '普通攻击 · 命中 · 0F');
+  await expect(runtimeEvent.locator('..')).toHaveAttribute(
+    'data-lane-id',
+    'actor-109001'
+  );
+
+  await runtimeEvent.click();
+  await expect(timeline).toHaveAttribute('data-cursor-frame-index', '0');
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-action')
+  ).toHaveText('普通攻击');
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-frame')
+  ).toContainText('0s0f');
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-three-value-row')
+  ).toHaveCount(3);
+  await page.screenshot({
+    path: 'reports/m1-runtime-event-review-desktop.png',
+  });
+
+  await page
+    .getByTestId('workbench-runtime-selected-detail-action-focus')
+    .click();
+  await page.getByTestId('workbench-start-frame-input').fill('20');
+  await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
+    'data-flow-phase',
+    'edit-result-ready'
+  );
+  await expect(runtimeEvent).toHaveAttribute('title', '普通攻击 · 命中 · 20F');
+
+  await page.getByTestId('workbench-flow-return-edit-result').click();
+  await expect(timeline).toHaveAttribute('data-cursor-frame-index', '20');
+  await expect(
+    page.getByTestId('workbench-runtime-selected-detail-frame')
+  ).toContainText('0s20f');
+  await expect(runtimeEvent).toHaveClass(/selected/);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(actorEnergyRows).toHaveCount(3);
+  await expect(kiboEnergyRows).toHaveCount(3);
+  await expectPageWithoutHorizontalOverflow(page);
+  await page.getByTestId('workbench-close-side-inspector').click();
+  await timeline.scrollIntoViewIfNeeded();
+  await timeline.screenshot({
+    path: 'reports/m1-runtime-event-timeline-narrow.png',
+  });
+  await page.screenshot({
+    path: 'reports/m1-runtime-event-review-narrow.png',
+  });
+});
+
 function collectProductionAssetResponses(page) {
   const assets = [];
   page.on('response', response => {

@@ -821,20 +821,23 @@
               />
             </button>
 
-            <div
-              v-for="damage in lane.damageMarkers"
-              :key="`${damage.actionId}-${damage.timeMs}`"
-              class="damage-marker"
-              :class="{ 'batch-selected': isDamageInSelectedBatch(damage) }"
-              :style="markerStyle(damage, lane)"
-              :title="`${damage.segmentLabel}: ${damage.rawDamage}`"
-              :data-action-id="damage.actionId"
-              :data-lane-id="lane.id"
-              :data-batch-highlight="
-                isDamageInSelectedBatch(damage) ? 'true' : 'false'
-              "
-              data-testid="workbench-timeline-damage-marker"
-            />
+            <button
+              v-for="event in lane.runtimeEventMarkers"
+              :key="event.statePointIds[0]"
+              class="runtime-event-marker"
+              :class="[
+                `event-${event.kind}`,
+                { selected: isRuntimeEventMarkerSelected(event) },
+              ]"
+              type="button"
+              :style="runtimeEventMarkerStyle(event, lane)"
+              :title="event.title"
+              data-testid="workbench-timeline-runtime-event-marker"
+              @pointerdown.stop
+              @click.stop="selectRuntimeEventMarker(event)"
+            >
+              <Lightning aria-hidden="true" />
+            </button>
 
             <div
               v-if="lane.candidateValueCurves.length"
@@ -1053,20 +1056,6 @@
     <div v-if="timelineLanes.length === 0" class="empty-lane">
       暂无时间轴动作
     </div>
-
-    <div class="legend">
-      <span><i class="legend-action" /> 动作</span>
-      <span><i class="legend-damage" /> 伤害投影</span>
-      <span><i class="legend-candidate" /> 候选三值</span>
-      <span><i class="legend-state" /> 状态点</span>
-      <span><i class="legend-effect" /> 状态效果</span>
-      <span><i class="legend-system" /> 系统轨</span>
-      <span><i class="legend-overlap" /> 重叠</span>
-      <span><i class="legend-cooldown" /> 冷却窗口</span>
-      <span><i class="legend-blocked" /> 不可执行</span>
-      <span><i class="legend-delay" /> 自动推迟</span>
-      <span class="warning">时序为占位数据</span>
-    </div>
   </section>
 </template>
 
@@ -1256,10 +1245,6 @@ const props = defineProps({
   activeActorCharacterId: {
     type: [Number, String],
     default: '',
-  },
-  damageTimeline: {
-    type: Array,
-    required: true,
   },
   candidateValueChart: {
     type: Object,
@@ -1713,6 +1698,7 @@ const flowSelectedStateCurvePointId = computed(
 const flowRuntimeFocusSource = computed(
   () => runtimeReviewContextView.value.source || props.runtimeFocusSource
 );
+const runtimeEventMarkers = computed(createRuntimeTimelineEventMarkers);
 const stateCurveTimelineLayerOptions = computed(() =>
   STATE_CURVE_TIMELINE_LAYER_OPTIONS.map(layer => {
     const matchingLayers = (
@@ -1828,9 +1814,12 @@ const timelineLanes = computed(() => {
     });
   });
 
-  props.damageTimeline.forEach(damage => {
-    const lane = lanesById.get(resolveDamageLaneId(damage)) ?? systemLane;
-    lane.damageMarkers.push(damage);
+  runtimeEventMarkers.value.forEach(event => {
+    const action = actionsById.value.get(event.actionId);
+    const lane = action
+      ? (allLanesById.get(resolveActionLaneId(action)) ?? systemLane)
+      : systemLane;
+    lane.runtimeEventMarkers.push(event);
   });
 
   createCandidateValueTimelineMarkers().forEach(marker => {
@@ -1847,6 +1836,11 @@ const timelineLanes = computed(() => {
   });
 
   allLanes.forEach(lane => {
+    const runtimeEventLayout = createRuntimeEventLayout(
+      lane.runtimeEventMarkers
+    );
+    lane.runtimeEventMarkers = runtimeEventLayout.markers;
+    lane.runtimeEventSlotCount = runtimeEventLayout.slotCount;
     lane.candidateValueCurves = createCandidateValueTimelineCurves(
       lane.candidateValueMarkers
     );
@@ -1857,7 +1851,7 @@ const timelineLanes = computed(() => {
 
   const visibleLanes = allLanes.filter(lane => lane !== systemLane);
   return systemLane.actions.length > 0 ||
-    systemLane.damageMarkers.length > 0 ||
+    systemLane.runtimeEventMarkers.length > 0 ||
     systemLane.candidateValueMarkers.length > 0 ||
     systemLane.stateCurveMarkers.length > 0 ||
     systemLane.effectIntervals.length > 0
@@ -2113,7 +2107,8 @@ function createEmptyTimelineLane({
     identity,
     curve,
     actions: [],
-    damageMarkers: [],
+    runtimeEventMarkers: [],
+    runtimeEventSlotCount: 0,
     candidateValueMarkers: [],
     candidateValueCurves: [],
     candidateValueFrameGroups: [],
@@ -2268,6 +2263,40 @@ function compareRuntimeCurvePoints(left, right) {
   );
 }
 
+function createRuntimeTimelineEventMarkers() {
+  const markers = new Map();
+  props.runtimeStatePointContexts.forEach(({ row, statePointId }) => {
+    if (!row?.actionId || !statePointId) return;
+    const kind =
+      row.trackKey?.includes('Energy') && !row.hitKey && row.hitIndex == null
+        ? 'resource'
+        : 'hit';
+    const id =
+      kind === 'hit' ? `${row.actionId}|${row.frameIndex}` : statePointId;
+    const marker = markers.get(id);
+    if (marker) marker.statePointIds.push(statePointId);
+    else
+      markers.set(
+        id,
+        createRuntimeTimelineEventMarker(row, kind, statePointId)
+      );
+  });
+  return [...markers.values()];
+}
+
+function createRuntimeTimelineEventMarker(row, kind, statePointId) {
+  const frameIndex = row.frameIndex;
+  return {
+    statePointIds: [statePointId],
+    actionId: row.actionId,
+    kind,
+    frameIndex,
+    title: `${row.actionName || row.actionId} · ${
+      kind === 'hit' ? '命中' : '资源变化'
+    } · ${frameIndex}F`,
+  };
+}
+
 function curveValueToY(value, minimum, range) {
   return Number((100 - ((value - minimum) / range) * 100).toFixed(4));
 }
@@ -2338,9 +2367,8 @@ function isActionInSelectedBatch(action) {
   );
 }
 
-function isDamageInSelectedBatch(damage) {
-  const action = actionsById.value.get(damage.actionId);
-  return Boolean(action && isActionInSelectedBatch(action));
+function isRuntimeEventMarkerSelected(event) {
+  return event.statePointIds.includes(flowSelectedStateCurvePointId.value);
 }
 
 function isActionEditFocused(action) {
@@ -2532,11 +2560,19 @@ function selectEffectInterval(interval) {
   });
 }
 
-function markerStyle(damage, lane) {
-  const left = clampPercent((damage.timeMs / props.durationMs) * 100);
+function runtimeEventMarkerStyle(event, lane) {
+  const left = clampPercent(
+    (frameToMs(event.frameIndex) / props.durationMs) * 100
+  );
   return {
     left: `${left}%`,
-    top: `${getTimelineDataTop(lane)}px`,
+    top: `${getTimelineDataTop(lane) + event.timelineEventSlot * 20}px`,
+    transform:
+      left === 0
+        ? 'translateX(0)'
+        : left === 100
+          ? 'translateX(-100%)'
+          : 'translateX(-50%)',
   };
 }
 
@@ -2631,9 +2667,13 @@ function getTimelineLaneHeight(lane) {
     lane.candidateValueMarkers.length > 0 ||
     lane.candidateValueCurves.length > 0 ||
     lane.candidateValueFrameGroups.length > 0;
+  const runtimeEventBottom = lane.runtimeEventSlotCount
+    ? getTimelineDataTop(lane) + lane.runtimeEventSlotCount * 20 + 2
+    : 0;
   return Math.max(
     TIMELINE_LANE_MIN_HEIGHT_PX,
-    getTimelineDataTop(lane) + (hasCandidateData ? 48 : 12)
+    getTimelineDataTop(lane) + (hasCandidateData ? 48 : 12),
+    runtimeEventBottom
   );
 }
 
@@ -2698,6 +2738,19 @@ function createTimelineEffectLayout(intervals) {
     })),
     slotCount: slotEndTimes.length,
   };
+}
+
+function createRuntimeEventLayout(markers) {
+  const countByFrame = new Map();
+  let slotCount = 0;
+  const laidOutMarkers = [...markers].map(marker => {
+    const frameKey = String(marker.frameIndex);
+    const timelineEventSlot = countByFrame.get(frameKey) ?? 0;
+    countByFrame.set(frameKey, timelineEventSlot + 1);
+    slotCount = Math.max(slotCount, timelineEventSlot + 1);
+    return { ...marker, timelineEventSlot };
+  });
+  return { markers: laidOutMarkers, slotCount };
 }
 
 function getTimelineActionLayoutDurationMs(action) {
@@ -2780,15 +2833,6 @@ function resolveActionLaneId(action) {
     actorLaneIds.value,
     kiboLaneIdByActorId.value
   );
-}
-
-function resolveDamageLaneId(damage) {
-  if (damage.actorId && actorLaneIds.value.has(damage.actorId)) {
-    return damage.actorId;
-  }
-
-  const action = actionsById.value.get(damage.actionId);
-  return action ? resolveActionLaneId(action) : 'system';
 }
 
 function resolveCandidateValueLaneId(marker) {
@@ -3274,6 +3318,27 @@ function selectRuntimeCurveBreakpoint(point) {
       actionId: point.actionId,
       statePointId: point.statePointId,
       payload: {
+        preserveStateCurveFilters: true,
+      },
+    })
+  );
+}
+
+function selectRuntimeEventMarker(event) {
+  emitTimelineFrame({
+    frameIndex: event.frameIndex,
+    timeMs: frameToMs(event.frameIndex),
+    statePointId: event.statePointIds[0],
+    source: 'timeline-runtime-event',
+  });
+  emit(
+    'dispatch-flow-action',
+    mainFlowActionSurface.value.createRuntimeSelectionFlowAction({
+      source: 'timeline-runtime-event',
+      actionId: event.actionId,
+      statePointId: event.statePointIds[0],
+      payload: {
+        statePointIds: event.statePointIds,
         preserveStateCurveFilters: true,
       },
     })
@@ -6075,20 +6140,38 @@ h2 {
   outline-offset: 1px;
 }
 
-.damage-marker {
+.runtime-event-marker {
   position: absolute;
-  top: 54px;
-  width: 10px;
-  height: 14px;
-  border-radius: 5px;
-  background: #e6a23c;
-  box-shadow: 0 0 18px rgba(230, 162, 60, 0.42);
+  z-index: 8;
+  display: grid;
+  width: 18px;
+  height: 18px;
+  padding: 3px;
+  place-items: center;
+  border: 1px solid rgba(242, 179, 102, 0.8);
+  border-radius: 4px;
+  background: #2b2317;
+  color: #f2b366;
+  box-shadow: 0 0 8px rgba(230, 162, 60, 0.28);
   transform: translateX(-50%);
+  cursor: pointer;
 }
 
-.damage-marker.batch-selected {
-  background: #79c7b9;
-  box-shadow: 0 0 18px rgba(121, 199, 185, 0.62);
+.runtime-event-marker.event-resource {
+  border-color: rgba(166, 183, 255, 0.82);
+  background: #1c2237;
+  color: #a6b7ff;
+  box-shadow: 0 0 8px rgba(166, 183, 255, 0.28);
+}
+
+.runtime-event-marker.selected {
+  border-color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(121, 199, 185, 0.55);
+}
+
+.runtime-event-marker:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 1px;
 }
 
 .candidate-value-curve-track {

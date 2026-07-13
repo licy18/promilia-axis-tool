@@ -1380,6 +1380,14 @@ Workbench 现为全部 122 只奇波提供 3 个可编排动作，共 366 个动
 
 下一阶段目标：M1 动作事件定位与复盘可读闭环。让动作块、命中节点、资源节点和曲线断点共享动作身份与准确帧定位，用户从任一节点都能查看对应三值详情、返回动作修改并看到响应式刷新；继续保持六条能量轴独立，不新增公式、校准或碎片提示阶段。
 
+### M1 动作事件定位与复盘可读闭环（2026-07-14）
+
+时间轴现直接把标准 `runtimeStatePointContexts` 按动作和准确帧聚合为命中或资源事件节点。用户点击节点即可把统一帧游标移动到对应 60fps 帧，并在既有检查器查看该事件关联的 HP、韧性和能量变化；从详情回到源动作修改起始帧后，事件节点、曲线断点、日志、帧游标和详情会同步刷新。旧的 projection 圆点及分析面板逐段原始伤害列表已移除，避免同一运行时结果出现两套定位入口。
+
+本阶段没有改变计算结果、项目载体或机制边界。3 个角色和 3 个奇波仍各自拥有独立能量轴，共 6 条能量轴；奇波能量继续保持 `tracking-only / unapplied`。验收为 85 个测试文件、470 条单元/组件测试、34/34 项必需 production preview 能力和 35/35 条 Playwright 测试全部通过；applied source 为 3 条、0 drift、0 compatible-unbound。Workbench 主块为 357,977B gzip，总 JavaScript 为 739,780B gzip，低于 370,000B/740,000B 发布硬门槛。桌面与窄屏证据为 `reports/m1-runtime-event-timeline-desktop.png`、`reports/m1-runtime-event-timeline-narrow.png`、`reports/m1-runtime-event-review-desktop.png` 与 `reports/m1-runtime-event-review-narrow.png`。
+
+下一阶段目标：M1 试用工作流 checkpoint。按真实用户视角完整走查默认方案、事件定位、三值复盘、回源编辑和五载体恢复，只选择一个最影响试用的完整流程阻塞项继续处理；不新增公式、校准、报告载体或碎片 UI。
+
 ## 10. 文档维护规则
 
 - `AGENTS.md` 记录协作规则、约束和对后续 Codex 的提醒。
