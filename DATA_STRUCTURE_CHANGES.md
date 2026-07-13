@@ -27321,3 +27321,9 @@ RuntimeTimelineEventMarker (derived, not persisted)
 `RuntimeTimelineEventMarker` 仍是非持久化投影，字段和 runtime contract 均未变化。仅布局阶段由“同帧计数”改为按准确帧百分比与当前 `timelineZoom` 分配最低可用层级：默认缩放下像素可能重叠的相邻事件进入不同 `timelineEventSlot`，放大后间距足够则复用同一层级。
 
 该布局只影响事件按钮的 `top` 与轨道所需显示高度，不改变 `frameIndex`、`statePointIds`、曲线点、日志、项目交换或 6 条能量轴。点击仍通过既有 `select-runtime-state-point` 合同选择准确 state point。
+
+## 422. Workbench viewport-preserving runtime review
+
+本阶段没有修改 Workbench v16、runtime output、选择状态或项目交换 schema。`EventLogPanel` 在同步选中日志时只调整 `.runtime-log-list.scrollTop`；Workbench 侧边检查器只调整自身滚动位置。动作编辑仍复用既有 `workbenchActionEditSource` 与 runtime sync request，但定位编辑控件后恢复文档原滚动坐标，避免复盘流程离开时间轴主视口。
+
+该变化只约束 UI 容器的滚动所有权，不改变 `statePointId`、`frameIndex`、日志顺序、曲线断点、五载体回放或 6 条能量轴。

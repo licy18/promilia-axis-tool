@@ -1355,10 +1355,17 @@ function scrollRuntimeLogRowIntoView(statePointId = '') {
   const target = Array.from(
     panel.querySelectorAll('[data-testid="workbench-runtime-sim-log-row"]')
   ).find(row => row.getAttribute('data-state-point-id') === statePointId);
-  target?.scrollIntoView?.({
-    block: 'nearest',
-    inline: 'nearest',
-  });
+  const list = target?.closest?.('.runtime-log-list');
+  if (!target || !list) {
+    return;
+  }
+  const listRect = list.getBoundingClientRect();
+  const targetRect = target.getBoundingClientRect();
+  if (targetRect.top < listRect.top) {
+    list.scrollTop -= listRect.top - targetRect.top;
+  } else if (targetRect.bottom > listRect.bottom) {
+    list.scrollTop += targetRect.bottom - listRect.bottom;
+  }
 }
 
 function formatRuntimeTime(row) {

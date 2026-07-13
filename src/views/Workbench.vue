@@ -5746,12 +5746,12 @@ function scrollRuntimeSelectedDetailIntoView() {
   if (typeof document === 'undefined') {
     return;
   }
-  document
-    .querySelector('[data-testid="workbench-runtime-selected-detail"]')
-    ?.scrollIntoView?.({
-      block: 'nearest',
-      inline: 'nearest',
-    });
+  const sideInspector = document.querySelector(
+    '[data-testid="workbench-side-inspector"]'
+  );
+  if (sideInspector) {
+    sideInspector.scrollTop = 0;
+  }
 }
 
 function scrollActionEditFocusIntoView() {
@@ -5759,10 +5759,22 @@ function scrollActionEditFocusIntoView() {
     return;
   }
   const target = getActionEditFocusScrollTarget(actionEditFocus.value);
-  target?.scrollIntoView?.({
+  scrollWorkbenchPanelTargetIntoView(target, {
     block: 'center',
     inline: 'nearest',
   });
+}
+
+function scrollWorkbenchPanelTargetIntoView(target, options = {}) {
+  if (!target?.scrollIntoView || typeof window === 'undefined') {
+    return;
+  }
+  const pageScrollLeft = window.scrollX;
+  const pageScrollTop = window.scrollY;
+  target.scrollIntoView(options);
+  if (window.scrollX !== pageScrollLeft || window.scrollY !== pageScrollTop) {
+    window.scrollTo(pageScrollLeft, pageScrollTop);
+  }
 }
 
 function getActionEditFocusScrollTarget(focus = {}) {

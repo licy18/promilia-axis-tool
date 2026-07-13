@@ -2549,13 +2549,7 @@ describe('Workbench view', () => {
     const selectedRuntimePointId = wrapper
       .find('[data-testid="workbench-runtime-selected-detail-state-point"]')
       .text();
-    const scrolledRuntimeLogRow = runtimeLogScrollIntoView.mock.contexts.find(
-      element =>
-        element?.getAttribute('data-testid') ===
-          'workbench-runtime-sim-log-row' &&
-        element.getAttribute('data-state-point-id') === selectedRuntimePointId
-    );
-    expect(scrolledRuntimeLogRow).toBeTruthy();
+    expect(runtimeLogScrollIntoView).not.toHaveBeenCalled();
     const focusedFlowPanel = wrapper.find(
       '[data-testid="workbench-flow-panel"]'
     );
@@ -6546,14 +6540,7 @@ describe('Workbench view', () => {
     );
     expect(returnedRuntimeLogRow.exists()).toBe(true);
     expect(returnedRuntimeLogRow.attributes('data-selected')).toBe('true');
-    const scrolledReturnedRuntimeLogRow =
-      logReturnScrollIntoView.mock.contexts.find(
-        element =>
-          element?.getAttribute('data-testid') ===
-            'workbench-runtime-sim-log-row' &&
-          element.getAttribute('data-state-point-id') === refreshedStatePointId
-      );
-    expect(scrolledReturnedRuntimeLogRow).toBeTruthy();
+    expect(logReturnScrollIntoView).not.toHaveBeenCalled();
 
     const curveSelection = wrapper.find(
       '[data-testid="workbench-runtime-resource-chart-selection"]'
@@ -6892,21 +6879,7 @@ describe('Workbench view', () => {
         )
         .attributes('data-selected')
     ).toBe('true');
-    const curveScrolledRuntimeLogRow =
-      runtimeCurveScrollIntoView.mock.contexts.find(
-        element =>
-          element?.getAttribute('data-testid') ===
-            'workbench-runtime-sim-log-row' &&
-          element.getAttribute('data-state-point-id') === statePointId
-      );
-    expect(curveScrolledRuntimeLogRow).toBeTruthy();
-    const curveScrolledRuntimeDetail =
-      runtimeCurveScrollIntoView.mock.contexts.find(
-        element =>
-          element?.getAttribute('data-testid') ===
-          'workbench-runtime-selected-detail'
-      );
-    expect(curveScrolledRuntimeDetail).toBeTruthy();
+    expect(runtimeCurveScrollIntoView).not.toHaveBeenCalled();
     expect(
       wrapper
         .find(

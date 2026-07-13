@@ -2940,6 +2940,7 @@ test('[m1-runtime-event-review] links source events, exact frames, three-value d
   await timeline.screenshot({
     path: 'reports/m1-runtime-event-timeline-desktop.png',
   });
+  const timelinePageScrollY = await page.evaluate(() => window.scrollY);
 
   const runtimeEvent = timeline
     .getByTestId('workbench-timeline-runtime-event-marker')
@@ -2962,6 +2963,9 @@ test('[m1-runtime-event-review] links source events, exact frames, three-value d
   await expect(
     page.getByTestId('workbench-runtime-selected-detail-three-value-row')
   ).toHaveCount(3);
+  await expect
+    .poll(() => page.evaluate(() => window.scrollY))
+    .toBe(timelinePageScrollY);
 
   const secondRuntimeEvent = timeline.getByRole('button', {
     name: '普通攻击 · 命中 · 36F',
@@ -2984,6 +2988,9 @@ test('[m1-runtime-event-review] links source events, exact frames, three-value d
   await page
     .getByTestId('workbench-runtime-selected-detail-action-focus')
     .click();
+  await expect
+    .poll(() => page.evaluate(() => window.scrollY))
+    .toBe(timelinePageScrollY);
   await page.getByTestId('workbench-start-frame-input').fill('20');
   await expect(page.getByTestId('workbench-flow-panel')).toHaveAttribute(
     'data-flow-phase',
@@ -2991,12 +2998,17 @@ test('[m1-runtime-event-review] links source events, exact frames, three-value d
   );
   await expect(runtimeEvent).toHaveAttribute('title', '普通攻击 · 命中 · 20F');
 
-  await page.getByTestId('workbench-flow-return-edit-result').click();
+  await page
+    .getByTestId('workbench-runtime-selected-detail-return-result')
+    .click();
   await expect(timeline).toHaveAttribute('data-cursor-frame-index', '20');
   await expect(
     page.getByTestId('workbench-runtime-selected-detail-frame')
   ).toContainText('0s20f');
   await expect(runtimeEvent).toHaveClass(/selected/);
+  await expect
+    .poll(() => page.evaluate(() => window.scrollY))
+    .toBe(timelinePageScrollY);
 
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(actorEnergyRows).toHaveCount(3);
