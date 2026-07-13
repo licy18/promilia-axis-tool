@@ -1,6 +1,6 @@
 # promilia-axis-tool 项目手册
 
-最后更新：2026-07-11
+最后更新：2026-07-14
 
 当前策略是以 Endaxis 为架构和交互参考，对 `promilia-axis-tool` 进行从头重构。真实 Workbench 已成为唯一生产排轴入口，旧页面、旧 editor/timeline 组件、旧项目 store 和旧计算工具已经按引用审计退役。完整任务拆解见 `DEVELOPMENT_PLAN.md`，本文件保留最终目标、阶段目标、项目状态和当前事实。
 
@@ -43,9 +43,9 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 
 - 根路径、旧编辑器路径和预设路径统一进入真实 Workbench。
 - 真实 AzPr 生成数据、版本化项目模型和无 UI 模拟运行时。
-- 60fps 多角色动作轴、动作属性编辑、批次操作、撤销重做和草稿恢复。
+- 60fps 的 3 角色主轴、3 奇波子轴和敌人轴，以及动作属性编辑、批次操作、撤销重做和草稿恢复。
 - 队伍、敌人、装备、奇波、灵子和初始资源配置，以及按方案绑定的可复用配置实例。
-- `Action -> Hit -> ThreeValueDelta` 生成合同、统一可注册 mechanics adapter，以及 HP、韧性、每角色能量曲线、日志、详情和贡献分析。
+- `Action -> Hit -> ThreeValueDelta` 生成合同、统一可注册 mechanics adapter，以及 HP、韧性、3 条角色能量和 3 条奇波能量曲线、日志、详情和贡献分析。奇波能量当前仍为 `tracking-only / unapplied`。
 - 冷却/执行计划、效果命令和运行时复盘联动。
 - JSON、PNG 元数据、分享链接、runtime capture 和本地预设轴库。
 - 受控 runtime capture manifest、规范化、production audit 和显式 PID host。
@@ -53,10 +53,10 @@ Endaxis 用于参考成熟排轴工具的架构分层、交互密度、数据访
 
 当前验证基线：
 
-- `npm run build`：通过。
-- `npm run test -- --run`：通过；72 个测试文件、403 条测试通过。
-- `npm run test:e2e:workbench-flow`：通过；39 条 Workbench 浏览器主流程通过。
-- `npm run test:e2e:production-preview`：通过；15 项真实 `dist` 验收全部通过，报告结论为 `trial-ready`。
+- `npm run test:trial-release`：候选发布完整守门一次通过。
+- `npm run test -- --run`：85 个测试文件、476 条测试通过。
+- `npm run test:e2e:production-preview`：37/37 项必需能力通过，报告结论为 `trial-ready`。
+- 生产引用、生产数据、applied source 和包体审计通过；总 JavaScript 为 739,969B gzip，低于 740,000B 发布硬门槛。
 
 ## 3. 目录速览
 
@@ -75,7 +75,7 @@ src/
 
 - `src/views/Workbench.vue`：生产页面编排和项目交换入口。
 - `src/domain/projectSchema.js`：标准项目、角色、敌人、动作和动作关系模型。
-- `src/domain/workbenchDraftStorage.js`：v15 草稿、项目 JSON 和分享合同。
+- `src/domain/workbenchDraftStorage.js`：v16 草稿、项目 JSON 和分享合同。
 - `src/domain/workbenchConfigurationLibrary.js`：角色/敌人配置实例与方案绑定合同。
 - `src/domain/workbenchScenarioWorkspace.js`：项目内多方案快照、迁移和管理合同。
 - `src/simulation/`：无 UI 编译、执行、三值生成、机制和结果投影。
@@ -1421,6 +1421,18 @@ Workbench 现为全部 122 只奇波提供 3 个可编排动作，共 366 个动
 阶段验收为 85 个测试文件、476 条单元/组件测试与 37/37 项 production preview 全部通过；生产构建、数据投影、生产引用和 applied source 审计通过。Workbench 主块为 358,175B gzip，总 JavaScript 为 739,969B gzip，低于 370,000B/740,000B 发布硬门槛。
 
 下一阶段目标：M1 试用候选发布 checkpoint。冻结示例方案和空方案的两条核心流程，整理可试用入口、已知限制与真实用户反馈通道；只处理会阻断完整排轴任务的问题，不新增公式、校准、报告合同或碎片 UI。
+
+### M1 试用候选发布 checkpoint（2026-07-14）
+
+候选发布现有单一可复现入口：`npm run test:trial-release`。该命令串行执行单元/组件测试、生产引用审计、Workbench 数据投影审计、包体守门、applied source 审计、生产构建、完整 production Playwright 和 `git diff --check`。生产 reporter 已把示例方案主流程、空方案从零编排与六能量轴事件复盘列为必需能力，不再出现“测试运行但不影响 trial-ready”的弱守门。
+
+`README.md` 已从旧的双角色/v15 描述更新为当前 3 角色、3 奇波、6 条独立能量轴和 Workbench v16。新的 `TRIAL_RELEASE.md` 固定启动步骤、示例/空方案两条必试流程、当前 `applied / preview / tracking-only / unapplied` 边界，以及浏览器、方案载体、动作/轨道/帧位和验收报告的反馈材料清单。
+
+完整候选守门一次通过：85 个测试文件、476 条单元/组件测试；生产引用 125/121/4/0；数据投影全部一致；applied source 为 3 条、0 drift、0 compatible-unbound；37/37 项必需 production capability 全部通过，`reports/production-preview-acceptance.json` 记录为 `trial-ready`。Workbench 主块为 358,175B gzip，总 JavaScript 为 739,969B gzip，仍低于 370,000B/740,000B 发布硬门槛。
+
+本阶段没有修改 UI、Workbench v16、runtime、calculator 或六能量轴结果。当前结论是“核心排轴工作流可试用”，不是“已精确复刻蓝原最终战斗公式”。
+
+下一阶段目标：M1 对标完成度审计。按 Endaxis 核心功能层级和 `DEVELOPMENT_PLAN.md` 逐项检查工作区、队伍/轨道拓扑、编辑、运行时、项目回放和复盘证据，明确已完成、已延期与仍缺失的大能力；审计本身不新增 UI、公式、校准或报告合同。
 
 ## 10. 文档维护规则
 

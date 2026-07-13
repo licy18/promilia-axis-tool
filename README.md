@@ -6,15 +6,27 @@
 
 ## 当前能力
 
-- 真实 AzPr 数据生成管线：角色、技能、敌人、属性、装备、奇波和灵子数据进入 `src/data/generated/`，Workbench 使用可追溯的 v2 生产投影。
+- 真实 AzPr 数据生成管线：角色、技能、敌人、属性、装备、奇波和灵子数据进入 `src/data/generated/`，Workbench 使用可追溯的 v3 生产投影。
 - 60fps 时间轴：动作起始、持续时间、命中候选和状态曲线统一以 1 帧为最小颗粒度。
 - Workbench 编辑闭环：动作库、角色/敌人轨、框选与多选、动作前后关系、状态效果区间、批次操作、撤销重做、草稿恢复和规则诊断。
-- 配置闭环：双角色、敌人、等级、属性覆盖、装备、奇波、灵子和初始角色资源可保存为命名配置实例；每条工作区方案明确选择实际参与模拟的实例。
+- 配置闭环：3 个唯一角色槽、各自奇波、敌人、等级、属性覆盖、装备、灵子和初始资源可保存为命名配置实例；每条工作区方案明确选择实际参与模拟的实例。
 - 机制配置来源：当前方案所选实例会先校验实例值与解析值，生成稳定回放身份，再绑定标准 mechanics configuration、profile 与 runtime adapter；HP operands 绑定受信任 skill/variant identity，显式能量事件和 validated sample 绑定事件/capture identity。本地草稿、JSON、分享链接和 PNG 回导保持同一来源与三值结果，未确认培养效果仍不可应用。
-- 三值运行时：每个动作追踪敌人 HP、敌人韧性和每名角色自身能量，输出曲线、日志、状态快照和统计摘要。
+- 同轴状态运行时：每个动作追踪敌人 HP、敌人韧性和所属角色能量；3 个角色与 3 只奇波各有独立能量轴，合计 6 条能量轴。奇波能量当前只追踪所有者与初始状态，不参与 calculator。
 - 规则与效果：冷却、执行计划、效果命令和运行时复盘共享同一模拟结果。
-- 项目交换：v15 JSON、带项目元数据的 PNG、窗口拖放恢复、分享链接和本地预设轴库；mechanics profile、角色/敌人/培养配置以及动作的技能 ID、施放角色、变体索引与倍率来源身份都由带版本和来源的生产 catalog 校验，不兼容项目会在替换当前工作区之前被拒绝。
+- 项目交换：v16 JSON、带项目元数据的 PNG、窗口拖放恢复、分享链接和本地预设轴库；mechanics profile、角色/敌人/培养配置以及动作的技能 ID、施放角色、变体索引与倍率来源身份都由带版本和来源的生产 catalog 校验，不兼容项目会在替换当前工作区之前被拒绝。
 - 受控采样工具链：runtime capture manifest、JSONL 规范化、production audit 和显式 PID Frida host。
+
+## M1 试用候选
+
+当前 Workbench 已同时守住“默认示例直接复盘”和“空方案从零编排”两条主流程。完整试用步骤、已知数值边界和问题反馈材料见 [`TRIAL_RELEASE.md`](./TRIAL_RELEASE.md)。
+
+候选发布的单命令守门：
+
+```powershell
+npm run test:trial-release
+```
+
+命令只有在单元/组件测试、生产引用、生产数据、包体、applied source、生产构建和全部必需 Playwright 能力通过时才会成功。
 
 ## 精度边界
 
@@ -41,6 +53,14 @@ npm run preview
 ```
 
 ## 验证
+
+试用候选完整守门：
+
+```powershell
+npm run test:trial-release
+```
+
+分项验证：
 
 ```powershell
 npm run test -- --run
@@ -105,7 +125,7 @@ e2e/                     Workbench 浏览器主流程
 
 构建组成审计会生成 `reports/bundle-composition.json`，并守住首屏入口、Workbench 主包和全部 JavaScript 的 gzip 预算，同时检查技能诊断数据必须位于独立按需包。Element Plus 组件由各页面按需引用，PNG 截图库只在实际导出时加载。
 
-`npm run test:e2e:production-preview` 会重新构建 `dist`，用独立端口启动 Vite production preview，并检查路由与哈希资源、诊断动态包、项目交换与兼容性门禁、配置实例、多动作与关系编辑、状态效果区间复盘和 390px 窄屏主流程。最终十八项能力的试用判定写入 `reports/production-preview-acceptance.json`。
+`npm run test:e2e:production-preview` 会重新构建 `dist`，用独立端口启动 Vite production preview，并检查路由与哈希资源、6 条能量轴、默认示例、空方案从零编排、项目交换与兼容性门禁、多轨编辑、运行时复盘、方案比较、分析报告和 390px 窄屏主流程。当前 37 项必需能力的试用判定写入 `reports/production-preview-acceptance.json`。
 
 三值运行时统一通过 `AzPrThreeValueMechanicsAdapter v9` 调用 HP、韧性和角色能量 adapter；compiler 为 Scenario 绑定 `AzPrMechanicsProfile v2`，generation 以 `AzPrThreeValueMechanicsOperands v3` 和 `AzPrThreeValueMechanicsLayerInputs v1` 固定来源。HP 预览使用 `AzPrHpOperandSourceBinding v1` 校验角色攻击、动作倍率与 skill/variant identity；显式角色能量事件及 validated 韧性/能量 sample 使用 `AzPrThreeValueAppliedSourceBinding v1` 校验事件或 capture、作用实体、Element/path、帧位和 before/after。runtime 绑定 `stateBefore` 后由 `AzPrThreeValueMechanicsEvaluation v5` 按有序 `steps` 产生 delta；来源统一标记为正式绑定、兼容未绑定或漂移，异常不会静默换值。每条结果再生成 `AzPrThreeValueStateEffectProposal v1`，runtime snapshot 只应用验证通过的 proposal，未确认机制仍不参与计算。
 
@@ -117,6 +137,7 @@ e2e/                     Workbench 浏览器主流程
 - `ARCHITECTURE.md`：当前生产架构和数据流。
 - `DATA_STRUCTURE_CHANGES.md`：版本化结构与迁移记录。
 - `TIMELINE_FEATURES.md`：时间轴能力和交互约定。
+- `TRIAL_RELEASE.md`：M1 试用候选的启动、主流程、边界和反馈清单。
 
 ## 许可
 
